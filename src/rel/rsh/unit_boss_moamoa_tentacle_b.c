@@ -1,0 +1,2 @@
+#include "rel/rsh/unit_boss_moamoa_tentacle_b.h"
+

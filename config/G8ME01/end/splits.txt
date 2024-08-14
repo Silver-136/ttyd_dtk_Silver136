@@ -6,10 +6,10 @@ Sections:
 	.data       type:data align:8
 	.bss        type:bss align:8
 
-end.o:
+end.c:
 	.data       start:0x00000000 end:0x00000060
 
-end_unknown.o:
+end_unknown.c:
 	.text       start:0x00000000 end:0x00002584
 	.rodata     start:0x00000000 end:0x00000BD7
 	.data       start:0x00000060 end:0x000020A0
