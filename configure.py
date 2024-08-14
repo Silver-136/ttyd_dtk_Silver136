@@ -40,6 +40,7 @@ parser.add_argument(
     nargs="?",
 )
 parser.add_argument(
+    "-v",
     "--version",
     choices=VERSIONS,
     type=str.upper,
@@ -71,11 +72,6 @@ parser.add_argument(
     help="generate map file(s)",
 )
 parser.add_argument(
-    "--no-asm",
-    action="store_true",
-    help="don't incorporate .s files from asm directory",
-)
-parser.add_argument(
     "--debug",
     action="store_true",
     help="build with debug info (non-matching)",
@@ -94,6 +90,12 @@ parser.add_argument(
     help="path to decomp-toolkit binary or source (optional)",
 )
 parser.add_argument(
+    "--objdiff",
+    metavar="BINARY | DIR",
+    type=Path,
+    help="path to objdiff-cli binary or source (optional)",
+)
+parser.add_argument(
     "--sjiswrap",
     metavar="EXE",
     type=Path,
@@ -104,31 +106,41 @@ parser.add_argument(
     action="store_true",
     help="print verbose output",
 )
+parser.add_argument(
+    "--non-matching",
+    dest="non_matching",
+    action="store_true",
+    help="builds equivalent (but non-matching) or modded objects",
+)
 args = parser.parse_args()
 
 config = ProjectConfig()
-config.version = args.version
+config.version = str(args.version)
 version_num = VERSIONS.index(config.version)
 
 # Apply arguments
 config.build_dir = args.build_dir
 config.dtk_path = args.dtk
+config.objdiff_path = args.objdiff
 config.binutils_path = args.binutils
 config.compilers_path = args.compilers
 config.debug = args.debug
 config.generate_map = args.map
+config.non_matching = args.non_matching
 config.sjiswrap_path = args.sjiswrap
 if not is_windows():
     config.wrapper = args.wrapper
-if args.no_asm:
+# Don't build asm unless we're --non-matching
+if not config.non_matching:
     config.asm_dir = None
 
 # Tool versions
 config.binutils_tag = "2.42-1"
-config.compilers_tag = "20231018"
-config.dtk_tag = "v0.9.2"
+config.compilers_tag = "20240706"
+config.dtk_tag = "v0.9.4"
+config.objdiff_tag = "v2.0.0-beta.3"
 config.sjiswrap_tag = "v1.1.1"
-config.wibo_tag = "0.6.14"
+config.wibo_tag = "0.6.11"
 
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
@@ -178,7 +190,7 @@ cflags_base = [
 if config.debug:
     cflags_base.extend(["-sym on", "-DDEBUG=1"])
 else:
-    cflags_base.append("-DNDEBUG=1")
+    cflags_base.extend(["-sym on", "-DNDEBUG=1"])
 
 # Metrowerks library flags
 cflags_runtime = [

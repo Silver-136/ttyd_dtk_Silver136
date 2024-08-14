@@ -24,6 +24,7 @@ include_dirs = [
 ]
 
 include_pattern = re.compile(r'^#include\s*[<"](.+?)[>"]$')
+guard_pattern = re.compile(r"^#ifndef\s+(.*)$")
 
 defines = set()
 
@@ -58,10 +59,12 @@ def import_c_file(in_file: str, deps: List[str]) -> str:
 def process_file(in_file: str, lines: List[str], deps: List[str]) -> str:
     out_text = ""
     for idx, line in enumerate(lines):
+        guard_match = guard_pattern.match(line.strip())
         if idx == 0:
-            if in_file in defines:
-                break
-            defines.add(in_file)
+            if guard_match:
+                if guard_match[1] in defines:
+                    break
+                defines.add(guard_match[1])
             print("Processing file", in_file)
         include_match = include_pattern.match(line.strip())
         if include_match and not include_match[1].endswith(".s"):
