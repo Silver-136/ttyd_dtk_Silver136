@@ -29,8 +29,6 @@ extern const f64 double_0p5_802bf1f8;
 extern const f64 double_3_802bf200;
 extern const f64 double_0_802bf208;
 extern f32 __float_nan[];
-extern void GXResetOverflowCount(void);
-extern s32 dbg_lotteryinfo;
 extern f64 __frsqrte(f64);
 
 
@@ -1009,8 +1007,4 @@ exp &= 0x7F800000;
     }
 
     return ax;
-}
-void seq_mapChangeExit(void) {
-    GXResetOverflowCount();
-    dbg_lotteryinfo = 0;
 }
