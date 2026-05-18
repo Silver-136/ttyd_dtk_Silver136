@@ -367,17 +367,37 @@ typedef struct PouchPartyData {
 
 typedef struct PouchData {
     PouchPartyData partyData[8]; //0x0
-    s16 currentHP;               //0x70
-    s16 maxHP;                   //0x72
-    s16 currentFP;               //0x74
-    s16 maxFP;                   //0x76
-    u8 unk78[0x8A - 0x78];       //0x78
-    s16 level;                   //0x8A
-    u8 unk8C[0x8E - 0x8C];       //0x8C
-    s16 baseMaxHP;               //0x8E
-    s16 baseMaxFP;               //0x90
-    u8 unk92[0x5D4 - 0x92];      //0x92
+
+    s16 currentHP;                //0x70
+    s16 maxHP;                    //0x72
+    s16 currentFP;                //0x74
+    s16 maxFP;                    //0x76
+    s16 mCoins;                   //0x78
+    s16 currentSP;                //0x7A
+    s16 maxSP;                    //0x7C
+    u8 unk7E[0x84 - 0x7E];        //0x7E
+    f32 lastAudienceCount;        //0x84
+    u8 unk88[0x8A - 0x88];        //0x88
+    s16 level;                    //0x8A
+    u8 unk8C[0x8E - 0x8C];        //0x8C
+   s16 baseMaxHP;                 //0x8E
+    s16 baseMaxFP;                //0x90
+    s16 availableBP;              //0x92
+    s16 totalBP;                  //0x94
+    s16 starPoints;               //0x96
+    s8 jumpLevel;                 //0x98
+    s8 hammerLevel;               //0x99
+    s16 mStarPieceCount;          //0x9A
+    s16 mShineSpriteCount;        //0x9C
+    u8 unk9E[0xA0 - 0x9E];        //0x9E
+    s16 mKeyItems[0x79];          //0xA0
+    s16 mItems[20];               //0x192
+    s16 mStoredItems[32];         //0x1BA
+    s16 mBadges[200];             //0x1FA
+    s16 mEquippedBadges[200];     //0x38A
+    u8 unk51A[0x5D4 - 0x51A];     //0x51A
 } PouchData;
+
 STATIC_ASSERT_SIZEOF(PouchData, 0x5D4);
 
 PouchData* pouchGetPtr(void);
