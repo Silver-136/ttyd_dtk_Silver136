@@ -1736,3 +1736,180 @@ BOOL BtlUnit_CheckShadowGuard(BattleWorkUnit* unit) {
 
     return FALSE;
 }
+
+BattleWorkUnit* BattleGetMarioPtr(struct BattleWork* battleWork);
+BattleWorkUnit* BattleGetUnitPtr(struct BattleWork* battleWork, s32 unitId);
+BattleWorkUnit* BattleGetMarioPtr(struct BattleWork* battleWork);
+s32 BtlUnit_GetWeaponCost(BattleWorkUnit* unit, void* weapon);
+s32 pouchGetAP(void);
+s32 irand(s32 max);
+
+void BtlUnit_PoseSoundInit(void* unit) {
+    f32 zero;
+
+    zero = 0.0f;
+
+    *(s32*)((s32)unit + 0x4D4) = 0;
+    *(f32*)((s32)unit + 0x4D8) = zero;
+    *(f32*)((s32)unit + 0x4DC) = zero;
+}
+
+void BtlUnit_SetSeMode(void* se, s32 a, s32 b, s16 c, s16 d, s16 unused, s16 e, s16 f) {
+    *(s32*)((s32)se + 0x0) = a;
+    *(s32*)((s32)se + 0x4) = b;
+    *(s16*)((s32)se + 0xC) = c;
+    *(s16*)((s32)se + 0xE) = d;
+    *(s16*)((s32)se + 0x10) = d;
+    *(s16*)((s32)se + 0x14) = 0;
+    *(s16*)((s32)se + 0x8) = e;
+    *(s16*)((s32)se + 0xA) = f;
+    *(s32*)((s32)se + 0x18) = -1;
+}
+
+void BtlUnit_RecoverHp(void* unit, s32 amount) {
+    *(s16*)((s32)unit + 0x10C) += amount;
+
+    if (*(s16*)((s32)unit + 0x10C) > *(s16*)((s32)unit + 0x108)) {
+        *(s16*)((s32)unit + 0x10C) = *(s16*)((s32)unit + 0x108);
+    }
+}
+
+s32 BtlUnit_GetMaxFp(void* unit) {
+    s32 kind;
+    struct BattleWork* battleWork;
+    s32 fp;
+
+    kind = *(s32*)((s32)unit + 0x8);
+    battleWork = _battleWorkPointer;
+    fp = *(s16*)((s32)unit + 0x10E);
+
+    if (kind >= 0xE0 && kind < 0xE7) {
+        unit = BattleGetMarioPtr(battleWork);
+        fp = *(s16*)((s32)unit + 0x10E);
+    }
+
+    return fp;
+}
+
+void BtlUnit_SetMaxFp(void* unit, s32 fp) {
+    s32 kind;
+    struct BattleWork* battleWork;
+    s16 fp16;
+
+    kind = *(s32*)((s32)unit + 0x8);
+    battleWork = _battleWorkPointer;
+
+    if (kind >= 0xE0 && kind < 0xE7) {
+        fp16 = fp;
+        unit = BattleGetMarioPtr(battleWork);
+        *(s16*)((s32)unit + 0x10E) = fp16;
+    } else {
+        *(s16*)((s32)unit + 0x10E) = fp;
+    }
+}
+
+void BtlUnit_SetFp(void* unit, s32 fp) {
+    s32 kind;
+    struct BattleWork* battleWork;
+    s16 fp16;
+
+    kind = *(s32*)((s32)unit + 0x8);
+    battleWork = _battleWorkPointer;
+
+    if (kind >= 0xE0 && kind < 0xE7) {
+        fp16 = fp;
+        unit = BattleGetMarioPtr(battleWork);
+        *(s16*)((s32)unit + 0x112) = fp16;
+    } else {
+        *(s16*)((s32)unit + 0x112) = fp;
+    }
+}
+
+s32 BtlUnit_GetFp(void* unit) {
+    s32 kind;
+    struct BattleWork* battleWork;
+    s32 fp;
+
+    kind = *(s32*)((s32)unit + 0x8);
+    battleWork = _battleWorkPointer;
+    fp = *(s16*)((s32)unit + 0x112);
+
+    if (kind >= 0xE0 && kind < 0xE7) {
+        unit = BattleGetMarioPtr(battleWork);
+        fp = *(s16*)((s32)unit + 0x112);
+    }
+
+    return fp;
+}
+
+s32 BtlUnit_CheckWeaponCost(void* unit, void* weapon) {
+    s32 fp;
+    s32 cost;
+    s32 ap;
+    s32 required;
+
+    fp = BtlUnit_GetFp(unit);
+    cost = BtlUnit_GetWeaponCost(unit, weapon);
+
+    if (fp < cost) {
+        return 0;
+    }
+
+    ap = pouchGetAP();
+    required = *(u8*)((s32)weapon + 0x12) * 100;
+
+    return ap >= required;
+}
+
+void* BtlUnit_GetGuardKouraPtr(void* data) {
+    void* battleWork;
+    s32 i;
+    s32 id;
+    void* unit;
+
+    i = 0;
+    battleWork = _battleWorkPointer;
+    id = *(s32*)((s32)data + 0x0);
+
+    while (i < 0x40) {
+        unit = BattleGetUnitPtr(battleWork, i);
+
+        if (unit != 0) {
+            if (*(s32*)((s32)unit + 0x8) == 0xDF) {
+                if (*(s32*)((s32)unit + 0x218) == id) {
+                    break;
+                }
+            }
+        }
+
+        i++;
+    }
+
+    if (i >= 0x40) {
+        unit = 0;
+    }
+
+    return unit;
+}
+
+s32 BtlUnit_GetCoin(void* unit) {
+    s32 coin;
+    s32 i;
+
+    if (unit == 0) {
+        return 0;
+    }
+
+    i = 0;
+    coin = *(u8*)((s32)*(void**)((s32)unit + 0x10) + 0x12);
+
+    while (i < *(u8*)((s32)*(void**)((s32)unit + 0x10) + 0x10)) {
+        if (irand(100) < *(u8*)((s32)*(void**)((s32)unit + 0x10) + 0x11)) {
+            coin++;
+        }
+
+        i++;
+    }
+
+    return coin;
+}
