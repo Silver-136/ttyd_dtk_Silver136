@@ -1,16 +1,19 @@
 #include "driver/bgdrv.h"
-
 #include "mario/mariost.h"
-
 #include "driver/arcdrv.h"
 
-//.bss
+// .bss
 BackgroundWork work[2];
 
 // Helper Macros
 #define bgGetWork() (gp->inBattle ? &work[1] : &work[0])
 
+#define FIFO_U16 (*(volatile u16*)0xCC008000)
+#define FIFO_F32_BG (*(volatile f32*)0xCC008000)
+#define READ_F32_BG(addr) (*(volatile const f32*)&(addr))
+
 void bgMain(void);
+
 extern void* camGetPtr(s32 cameraId);
 extern void GXSetAlphaUpdate(s32 enable);
 extern void GXSetCullMode(s32 mode);
@@ -49,6 +52,7 @@ extern f32 reviseAngle(f32 angle);
 extern f64 sin(f64 angle);
 extern f64 cos(f64 angle);
 extern void dispEntry(s32 cameraId, s32 order, void* callback, s32 param, f32 z);
+
 extern const f32 float_6p2832_8041f60c;
 extern const f32 float_360_8041f610;
 extern const f32 float_0p001_8041f614;
@@ -59,6 +63,7 @@ extern const f32 float_608_8041f5fc;
 extern const f32 float_1_8041f604;
 extern const f32 float_0_8041f608;
 extern const f64 double_to_int_mask_802bf530;
+
 extern void* mapalloc_base_ptr;
 extern void _mapFree(void* heap, void* ptr);
 extern void* _mapAlloc(void* heap, u32 size);
@@ -76,10 +81,6 @@ extern u32 dat_8041f5f0;
 extern u32 dat_8041f5f4;
 extern u32 dat_8041f5f8;
 
-#define FIFO_U16 (*(volatile u16*)0xCC008000)
-#define FIFO_F32_BG (*(volatile f32*)0xCC008000)
-#define READ_F32_BG(addr) (*(volatile const f32*)&(addr))
-
 void bgInit(void) {
     memset(&work[0], 0, sizeof(BackgroundWork));
     memset(&work[1], 0, sizeof(BackgroundWork));
@@ -87,10 +88,11 @@ void bgInit(void) {
 
 void bgReInit(void) {
     BackgroundWork* wp = bgGetWork();
+
     memset(wp, 0, sizeof(BackgroundWork));
 }
+
 void bgDisp(s32 cameraId) {
-    
     u8* bg;
     void* cam;
     u32 blendColor;
@@ -104,7 +106,6 @@ void bgDisp(s32 cameraId) {
     f32 scaleY;
 
     bg = (u8*)bgGetWork();
-
     cam = camGetPtr(cameraId);
 
     if ((*(u16*)bg & 1) == 0) {
@@ -224,7 +225,8 @@ void bgDisp(s32 cameraId) {
     FIFO_U16 = 0;
     FIFO_F32_BG = READ_F32_BG(float_0_8041f608);
     FIFO_F32_BG = READ_F32_BG(float_1_8041f604);
-    }
+}
+
 void bgMain(void) {
     u8* bg;
     void* cam;
@@ -235,6 +237,7 @@ void bgMain(void) {
     u8 texObj[0x20];
     s32 width;
     f32 angle;
+
     bg = (u8*)bgGetWork();
 
     if ((*(u16*)bg & 1) == 0) {
@@ -260,51 +263,60 @@ void bgMain(void) {
 
     if ((*(u16*)bg & 8) == 0) {
         offset += float_0p001_8041f614 *
-    ((sinValue * *(f32*)((s32)cam + 0x18)) -
-     (cosValue * *(f32*)((s32)cam + 0x20)));
+            ((sinValue * *(f32*)((s32)cam + 0x18)) -
+             (cosValue * *(f32*)((s32)cam + 0x20)));
     }
 
-   cam = camGetPtr(4);
+    cam = camGetPtr(4);
 
-angle = *(f32*)((s32)cam + 0x114) / float_360_8041f610;
-angle = float_4_8041f618 * angle;
+    angle = *(f32*)((s32)cam + 0x114) / float_360_8041f610;
+    angle = float_4_8041f618 * angle;
 
-offset += (f32)tileCount * angle;
+    offset += (f32)tileCount * angle;
 
-*(f32*)(bg + 0x04) = offset;
+    *(f32*)(bg + 0x04) = offset;
 
-dispEntry(3, 3, bgDisp, 0, float_0_8041f608);
+    dispEntry(3, 3, bgDisp, 0, float_0_8041f608);
 }
+
 void bgTransOffsetOn(void) {
     *(u16*)bgGetWork() &= ~8;
 }
+
 void bgTransOffsetOff(void) {
     *(u16*)bgGetWork() |= 8;
 }
+
 void bgAutoScrollOn(void) {
     *(u16*)bgGetWork() &= ~4;
 }
+
 void bgAutoScrollOff(void) {
     *(u16*)bgGetWork() |= 4;
 }
+
 void bgSetScrlOffset(f32 x, f32 y) {
     void* wp = bgGetWork();
 
     *(f32*)((s32)wp + 0xC) = x;
     *(f32*)((s32)wp + 0x10) = y;
 }
+
 void bgDispOff(void) {
     *(u16*)bgGetWork() &= ~1;
 }
+
 void bgDispOn(void) {
     *(u16*)bgGetWork() |= 1;
 }
+
 void bgSetColor(void* color) {
     void* wp;
 
     wp = bgGetWork();
     *(u32*)((s32)wp + 0x14) = *(volatile u32*)color;
 }
+
 void bgReEntry(char* name) {
     void* wp;
     unsigned long length;
@@ -360,6 +372,7 @@ void bgReEntry(char* name) {
         *(u32*)((s32)wp + 0x14) = dat_8041f5f8;
     }
 }
+
 void bgEntry(char* name) {
     void* wp;
     unsigned long length;

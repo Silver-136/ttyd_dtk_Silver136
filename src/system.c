@@ -23,20 +23,18 @@ extern const f32 float_360_8041f45c;
 extern f64 fmod(f64 x, f64 y);
 extern const f64 double_360_802bf240;
 extern const f32 float_0_8041f448;
-extern u8 DemoPad[];
-extern void U_PADControlMotor(s32 channel, s32 command);
 extern const f64 double_0p5_802bf1f8;
 extern const f64 double_3_802bf200;
 extern const f64 double_0_802bf208;
 extern f32 __float_nan[];
 extern f64 __frsqrte(f64);
 
-
 u16 sysGetToken(void) {
     static u16 token;
 
     return token++;
 }
+
 s32 irand(s32 range) {
     s32 value;
 
@@ -47,6 +45,7 @@ s32 irand(s32 range) {
     value = rand();
     return value % range;
 }
+
 void movePos(f32* x, f32* z, f32 distance, f32 angle) {
     f32 sinValue;
     f32 radians;
@@ -60,6 +59,7 @@ void movePos(f32* x, f32* z, f32 distance, f32 angle) {
     *x += distance * sinValue;
     *z -= distance * cosValue;
 }
+
 void sincosf(f32 angle, f32* outSin, f32* outCos) {
     f32 radians;
     f32 sinValue;
@@ -73,11 +73,13 @@ void sincosf(f32 angle, f32* outSin, f32* outCos) {
     cosValue = cos(radians);
     *outCos = -cosValue;
 }
+
 u8 padGetRumbleStatus(s32 controller) {
     controller = gp + controller;
 
     return *(u8*)(controller + 0x13D0);
 }
+
 void padRumbleHardOff(s32 controller) {
     s32 value;
 
@@ -86,61 +88,73 @@ void padRumbleHardOff(s32 controller) {
 
     *(u8*)(controller + 0x13D0) = value;
 }
+
 void padRumbleOff(s32 controller) {
     controller = gp + controller;
 
     *(u8*)(controller + 0x13D0) = 0;
 }
+
 void padRumbleOn(s32 controller) {
     controller = gp + controller;
 
     *(u8*)(controller + 0x13D0) = 1;
 }
+
 u8 keyGetSubStickY(s32 controller) {
     controller = gp + controller;
 
     return *(u8*)(controller + 0x13C4);
 }
+
 u8 keyGetStickY(s32 controller) {
     controller = gp + controller;
 
     return *(u8*)(controller + 0x13BC);
 }
+
 u8 keyGetStickX(s32 controller) {
     controller = gp + controller;
 
     return *(u8*)(controller + 0x13B8);
 }
+
 u32 keyGetButtonTrg(s32 controller) {
     controller = gp + controller * 4;
 
     return *(u32*)(controller + 0x1338);
 }
+
 u32 keyGetDirTrg(s32 controller) {
     controller = gp + controller * 4;
 
     return *(u32*)(controller + 0x1388);
 }
+
 u32 keyGetButtonRep(s32 controller) {
     controller = gp + controller * 4;
 
     return *(u32*)(controller + 0x1348);
 }
+
 u32 keyGetDirRep(s32 controller) {
     controller = gp + controller * 4;
 
     return *(u32*)(controller + 0x1398);
 }
+
 u32 keyGetButton(s32 controller) {
     controller = gp + controller * 4;
 
     return *(u32*)(controller + 0x1328);
 }
+
 u32 keyGetDir(s32 controller) {
     controller = gp + controller * 4;
 
     return *(u32*)(controller + 0x1378);
 }
+
 void qqsort(void* base, u32 count, u32 size, QSortCompareFunc compare) {
     void** tableBase;
     void** table;
@@ -235,6 +249,7 @@ void qqsort(void* base, u32 count, u32 size, QSortCompareFunc compare) {
         table++;
     }
 }
+
 f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end) {
     f32 cur;
     f32 len;
@@ -252,120 +267,121 @@ f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end) {
     len = total;
 
     switch (type) {
-        case 0:
-            return start + ((cur * (end - start)) / len);
+    case 0:
+        return start + ((cur * (end - start)) / len);
 
-        case 1:
-            return start + ((cur * cur * (end - start)) / (len * len));
+    case 1:
+        return start + ((cur * cur * (end - start)) / (len * len));
 
-        case 2:
-            return start + ((cur * cur * cur * (end - start)) / (len * len * len));
+    case 2:
+        return start + ((cur * cur * cur * (end - start)) / (len * len * len));
 
-        case 3:
-            return start + ((cur * cur * cur * cur * (end - start)) / (len * len * len * len));
+    case 3:
+        return start + ((cur * cur * cur * cur * (end - start)) / (len * len * len * len));
 
-         case 4:
-            angle = 4.0f * (3.1416f * (cur / len));
-            value = cos(angle);
-            delta = end - start;
-            rem = len - cur;
-            period = len * len;
-            value = delta * value;
-            value = rem * value;
-            value = rem * value;
-            return end - (value / period);
+    case 4:
+        angle = 4.0f * (3.1416f * (cur / len));
+        value = cos(angle);
+        delta = end - start;
+        rem = len - cur;
+        period = len * len;
+        value = delta * value;
+        value = rem * value;
+        value = rem * value;
+        return end - (value / period);
 
-        case 5:
-            period = (15.0f * len) / 100.0f;
-            angle = (4.0f * (3.1416f * ((cur * cur) / len))) / period;
-            value = cos(angle);
-            delta = end - start;
-            rem = len - cur;
-            period = len * len;
-            value = delta * value;
-            value = rem * value;
-            value = rem * value;
-            return end - (value / period);
+    case 5:
+        period = (15.0f * len) / 100.0f;
+        angle = (4.0f * (3.1416f * ((cur * cur) / len))) / period;
+        value = cos(angle);
+        delta = end - start;
+        rem = len - cur;
+        period = len * len;
+        value = delta * value;
+        value = rem * value;
+        value = rem * value;
+        return end - (value / period);
 
-        case 6:
-            period = (15.0f * len) / 100.0f;
-            angle = (4.0f * (3.1416f * ((cur * cur) / len))) / period;
-            value = cos(angle);
-            delta = end - start;
-            period = len * len;
-            value = delta * value;
-            value = cur * value;
-            value = cur * value;
-            return end - (value / period);
+    case 6:
+        period = (15.0f * len) / 100.0f;
+        angle = (4.0f * (3.1416f * ((cur * cur) / len))) / period;
+        value = cos(angle);
+        delta = end - start;
+        period = len * len;
+        value = delta * value;
+        value = cur * value;
+        value = cur * value;
+        return end - (value / period);
 
-        case 7:
-            rem = len - cur;
-            delta = end - start;
-            period = len * len;
-            value = start + delta;
-            rem = rem * rem;
-            rem = rem * delta;
-            return value - (rem / period);
+    case 7:
+        rem = len - cur;
+        delta = end - start;
+        period = len * len;
+        value = start + delta;
+        rem = rem * rem;
+        rem = rem * delta;
+        return value - (rem / period);
 
-        case 8:
-            rem = len - cur;
-            delta = end - start;
-            period = len * len;
-            value = start + delta;
-            period = len * period;
-            rem = rem * rem;
-            rem = (len - cur) * rem;
-            rem = rem * delta;
-            return value - (rem / period);
+    case 8:
+        rem = len - cur;
+        delta = end - start;
+        period = len * len;
+        value = start + delta;
+        period = len * period;
+        rem = rem * rem;
+        rem = (len - cur) * rem;
+        rem = rem * delta;
+        return value - (rem / period);
 
-        case 9:
-            rem = len - cur;
-            delta = end - start;
-            period = len * len;
-            value = start + delta;
-            period = len * period;
-            rem = rem * rem;
-            period = len * period;
-            rem = (len - cur) * rem;
-            rem = (len - cur) * rem;
-            rem = rem * delta;
-            return value - (rem / period);
+    case 9:
+        rem = len - cur;
+        delta = end - start;
+        period = len * len;
+        value = start + delta;
+        period = len * period;
+        rem = rem * rem;
+        period = len * period;
+        rem = (len - cur) * rem;
+        rem = (len - cur) * rem;
+        rem = rem * delta;
+        return value - (rem / period);
 
-        case 10:
-            period = (40.0f * len) / 100.0f;
-            angle = (4.0f * (3.1416f * ((cur * cur) / len))) / period;
-            value = cos(angle);
-            rem = len - cur;
-            period = len * len;
-            value = rem * value;
-            value = rem * value;
-            value = value / period;
+    case 10:
+        period = (40.0f * len) / 100.0f;
+        angle = (4.0f * (3.1416f * ((cur * cur) / len))) / period;
+        value = cos(angle);
+        rem = len - cur;
+        period = len * len;
+        value = rem * value;
+        value = rem * value;
+        value = value / period;
 
-            if (value < 0.0f) {
-                value = -value;
-            }
+        if (value < 0.0f) {
+            value = -value;
+        }
 
-            return end - (value * (end - start));
+        return end - (value * (end - start));
 
-        case 11:
-            angle = (3.1416f * cur) / len;
-            value = cos(angle);
-            return start + (((end - start) * (1.0f - value)) * 0.5f);
+    case 11:
+        angle = (3.1416f * cur) / len;
+        value = cos(angle);
+        return start + (((end - start) * (1.0f - value)) * 0.5f);
 
-        case 12:
-            angle = (1.5708f * cur) / len;
-            value = sin(angle);
-            return start + ((end - start) * value);
+    case 12:
+        angle = (1.5708f * cur) / len;
+        value = sin(angle);
+        return start + ((end - start) * value);
 
-        case 13:
-            angle = (1.5708f * cur) / len;
-            value = cos(angle);
-            return start + ((end - start) * (1.0f - value));
+    case 13:
+        angle = (1.5708f * cur) / len;
+        value = cos(angle);
+        return start + ((end - start) * (1.0f - value));
 
-        default:
-            return ((IntplCallback)type)(current, total, start, end);
+    default:
+        return ((IntplCallback)type)(current, total, start, end);
     }
 }
+
 f32 angleABf(f32 ax, f32 ay, f32 bx, f32 by) {
     f32 dx;
     f32 dy;
@@ -414,32 +430,33 @@ f32 angleABf(f32 ax, f32 ay, f32 bx, f32 by) {
         }
 
         ratio = absX / absY;
-indexValue = 45.0f * ratio;
-angle = 2.0f * indexValue;
+        indexValue = 45.0f * ratio;
+        angle = 2.0f * indexValue;
 
-if (angle >= 0.0f) {
-    index = (s32)(angle + 0.5);
-} else {
-    index = -(s32)(0.5 - angle);
+        if (angle >= 0.0f) {
+            index = (s32)(angle + 0.5);
+        } else {
+            index = -(s32)(0.5 - angle);
+        }
+
+        indexValue = indexValue * angleABTBL[index];
+
+        if (dy >= 0.0f) {
+            if (dx >= 0.0f) {
+                return 180.0f - indexValue;
+            } else {
+                return 180.0f + indexValue;
+            }
+        } else {
+            if (dx >= 0.0f) {
+                return indexValue;
+            } else {
+                return 360.0f - indexValue;
+            }
+        }
+    }
 }
 
-indexValue = indexValue * angleABTBL[index];
-
-if (dy >= 0.0f) {
-    if (dx >= 0.0f) {
-        return 180.0f - indexValue;
-    } else {
-        return 180.0f + indexValue;
-    }
-} else {
-    if (dx >= 0.0f) {
-        return indexValue;
-    } else {
-        return 360.0f - indexValue;
-    }
-}
-    }
-}
 f32 compAngle(f32 angleA, f32 angleB) {
     if (__fabsf(angleB - angleA) >= float_180_8041f464) {
         if (angleB < angleA) {
@@ -451,6 +468,7 @@ f32 compAngle(f32 angleA, f32 angleB) {
 
     return angleB - angleA;
 }
+
 f32 reviseAngle(f32 angle) {
     f32 value;
 
@@ -471,9 +489,11 @@ f32 reviseAngle(f32 angle) {
 
     return angle;
 }
+
 char* getMarioStDvdRoot(void) {
     return "";
 }
+
 void makeKey(void) {
     s32 padOfs;
     s32 wordOfs;
@@ -649,6 +669,7 @@ void makeKey(void) {
 
     *(s32*)(gp + 0x1324) = 1;
 }
+
 void fsort(void** base, u32 count) {
     static void** lo;
     static void** hi;
@@ -695,41 +716,41 @@ void fsort(void** base, u32 count) {
             pivot = (void**)((s32)base + ((count & 0x7FFFFFFE) * 2));
 
             cmpResult = FSORT_COMP(*base, *tail);
-if (cmpResult > 0) {
-    cmpResult = FSORT_COMP(*base, *pivot);
-    if (cmpResult < 0) {
-        p = *tail;
-        *tail = *pivot;
-        *pivot = *base;
-        *base = p;
-    } else {
-        cmpResult = FSORT_COMP(*pivot, *tail);
-        if (cmpResult < 0) {
-            p = *base;
-            *base = *pivot;
-            *pivot = *tail;
-            *tail = p;
-        } else {
-            p = *base;
-            *base = *tail;
-            *tail = p;
-        }
-    }
-} else {
-    cmpResult = FSORT_COMP(*base, *pivot);
-    if (cmpResult > 0) {
-        p = *base;
-        *base = *pivot;
-        *pivot = p;
-    } else {
-        cmpResult = FSORT_COMP(*pivot, *tail);
-        if (cmpResult > 0) {
-            p = *pivot;
-            *pivot = *tail;
-            *tail = p;
-        }
-    }
-}
+            if (cmpResult > 0) {
+                cmpResult = FSORT_COMP(*base, *pivot);
+                if (cmpResult < 0) {
+                    p = *tail;
+                    *tail = *pivot;
+                    *pivot = *base;
+                    *base = p;
+                } else {
+                    cmpResult = FSORT_COMP(*pivot, *tail);
+                    if (cmpResult < 0) {
+                        p = *base;
+                        *base = *pivot;
+                        *pivot = *tail;
+                        *tail = p;
+                    } else {
+                        p = *base;
+                        *base = *tail;
+                        *tail = p;
+                    }
+                }
+            } else {
+                cmpResult = FSORT_COMP(*base, *pivot);
+                if (cmpResult > 0) {
+                    p = *base;
+                    *base = *pivot;
+                    *pivot = p;
+                } else {
+                    cmpResult = FSORT_COMP(*pivot, *tail);
+                    if (cmpResult > 0) {
+                        p = *pivot;
+                        *pivot = *tail;
+                        *tail = p;
+                    }
+                }
+            }
 
             if (count == 3) {
                 return;
@@ -783,8 +804,8 @@ if (cmpResult > 0) {
                 lo = work;
 
                 pivot = work + (stepCount *
-                    ((u32)(((s32)dist >> 2) + ((s32)dist < 0 && (dist & 3) != 0)) / 2)) /
-                    stepCount;
+                ((u32)(((s32)dist >> 2) + ((s32)dist < 0 && (dist & 3) != 0)) / 2)) /
+                stepCount;
 
                 while (lo <= hi) {
                     cmpResult = FSORT_COMP(*hi, *pivot);
@@ -912,7 +933,7 @@ partition_done:
         rightSize = (s32)tail - (s32)gt;
 
         if ((s32)(((s32)leftSize >> 2) + ((s32)leftSize < 0 && (leftSize & 3) != 0)) <
-            (s32)(((s32)rightSize >> 2) + ((s32)rightSize < 0 && (rightSize & 3) != 0))) {
+        (s32)(((s32)rightSize >> 2) + ((s32)rightSize < 0 && (rightSize & 3) != 0))) {
             lo = hi;
             saveTail = gt;
             hi = base;
@@ -938,69 +959,70 @@ partition_done:
         }
     } while (1);
 }
+
 f32 distABf(f32 ax, f32 ay, f32 bx, f32 by) {
     f32 dx;
-f32 dy;
-f64 dvalue;
-f64 inv;
-u32 bits;
-u32 exp;
-s32 type;
-f32 classifyValue;
-f64 square;
-dy = by - ay;
-dx = bx - ax;
+    f32 dy;
+    f64 dvalue;
+    f64 inv;
+    u32 bits;
+    u32 exp;
+    s32 type;
+    f32 classifyValue;
+    f64 square;
+    dy = by - ay;
+    dx = bx - ax;
 
-ax = dy * dy;
-ax = dx * dx + ax;
+    ax = dy * dy;
+    ax = dx * dx + ax;
 
-dvalue = ax;
+    dvalue = ax;
 
     if (dvalue > (f64)float_0_8041f448) {
-    inv = __frsqrte(dvalue);
+        inv = __frsqrte(dvalue);
 
-    square = inv * inv;
-    inv = double_0p5_802bf1f8 * inv *
-          (double_3_802bf200 - dvalue * square);
+        square = inv * inv;
+        inv = double_0p5_802bf1f8 * inv *
+        (double_3_802bf200 - dvalue * square);
 
-    square = inv * inv;
-    inv = double_0p5_802bf1f8 * inv *
-          (double_3_802bf200 - dvalue * square);
+        square = inv * inv;
+        inv = double_0p5_802bf1f8 * inv *
+        (double_3_802bf200 - dvalue * square);
 
-    square = inv * inv;
-    inv = double_0p5_802bf1f8 * inv *
-          (double_3_802bf200 - dvalue * square);
+        square = inv * inv;
+        inv = double_0p5_802bf1f8 * inv *
+        (double_3_802bf200 - dvalue * square);
 
-    return (f32)(dvalue * inv);
-}
+        return (f32)(dvalue * inv);
+    }
 
     if (dvalue < double_0_802bf208) {
         return __float_nan[0];
     }
 
     classifyValue = ax;
-bits = *(u32*)&classifyValue;
-exp = bits;
-exp &= 0x7F800000;
+    bits = *(u32*)&classifyValue;
+    exp = bits;
+    exp &= 0x7F800000;
     if (exp >= 0x7F800000) {
-    if (exp == 0x7F800000) {
-        if ((bits & 0x7FFFFF) != 0) {
-            type = 1;
+        if (exp == 0x7F800000) {
+            if ((bits & 0x7FFFFF) != 0) {
+                type = 1;
+            } else {
+                type = 2;
+            }
         } else {
-            type = 2;
+            type = 4;
+        }
+    } else if (exp == 0) {
+        if ((bits & 0x7FFFFF) != 0) {
+            type = 5;
+        } else {
+            type = 3;
         }
     } else {
         type = 4;
     }
-} else if (exp == 0) {
-    if ((bits & 0x7FFFFF) != 0) {
-        type = 5;
-    } else {
-        type = 3;
-    }
-} else {
-    type = 4;
-}
 
     if (type == 1) {
         return __float_nan[0];

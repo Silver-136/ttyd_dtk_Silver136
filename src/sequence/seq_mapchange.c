@@ -1,133 +1,38 @@
 #include "sequence/seq_mapchange.h"
-extern s32 gp;
-extern void* mapalloc_base_ptr;
 
-extern void OSUnlink(void* module);
-extern void _mapFree(void* heap, void* ptr);
+// Types
+
 typedef struct SeqMapVec {
     f32 x;
     f32 y;
     f32 z;
 } SeqMapVec;
 
+typedef struct SeqMapVecRaw {
+    u32 x;
+    u32 y;
+    u32 z;
+} SeqMapVecRaw;
+
+// Data
+
 extern s32 gp;
 extern void* mapalloc_base_ptr;
+extern char rel_bss[];
+extern void* nanNPCWork;
+
+extern s32 bdsw;
+extern s32 dbg_lotteryinfo;
 
 extern s32 zero_8041f508;
 extern char lbl_802BF268[];
 extern char* dir_str[];
-extern char lbl_802BF268[];
-extern s32 bdsw;
 
 extern s32 _next_area;
 extern s32 _next_map;
 extern s32 _next_bero;
 
 extern char str_gor_01_802bf2d4[];
-extern char* strncpy(char* dst, const char* src, u32 n);
-extern s32 strcmp(const char* s1, const char* s2);
-
-extern void psndENVOff(s32 envId);
-extern void badgeShop_bargainGeneration(void);
-extern void badgeShop_bottakuruGeneration(void);
-extern void marioReInit(void);
-extern void marioInitCamId(void);
-extern void mapUnLoad(void);
-extern void npcReset(s32);
-extern void extReset(void);
-extern void mobjReset(s32);
-extern void offscreenReset(s32);
-extern void imgAutoRelease(s32);
-extern void effAutoRelease(s32);
-extern void animPoseAutoRelease(s32);
-extern void evtmgrReInit(void);
-extern void caseReInit(void);
-extern void itemReInit(void);
-extern void iconReInit(void);
-extern void windowReInit(void);
-extern void winReInit(void);
-extern void statusWinReInit(void);
-extern void bgReInit(void);
-extern void winMgrReInit(void);
-extern s32 seqGetPrevSeq(void);
-extern void fadeReset(s32);
-extern void padRumbleHardOff(s32);
-extern void swReInit(void);
-extern void memClear(s32);
-extern void smartAutoFree(s32);
-extern void GXResetOverflowCount(void);
-extern s32 dbg_lotteryinfo;
-extern s32 strncmp(const char*, const char*, size_t);
-extern s32 strcmp(const char*, const char*);
-
-extern void* nanNPCWork;
-
-extern const f32 float_1E05_8041f50c;
-extern const f32 float_3p1416_8041f510;
-extern const f32 float_2_8041f514;
-extern const f32 float_0p125_8041f518;
-extern const f32 float_neg30_8041f51c;
-extern const f32 float_30_8041f520;
-extern const f32 float_0_8041f524;
-extern const f32 float_10_8041f528;
-extern const f32 float_neg1_8041f52c;
-extern const f32 float_0p01_8041f530;
-extern const f32 float_1_8041f534;
-
-extern const SeqMapVec vec3_802bf290;
-extern const SeqMapVec vec3_802bf29c;
-extern const SeqMapVec vec3_802bf2a8;
-
-extern f64 sin(f64 x);
-extern f64 cos(f64 x);
-
-extern char** mapDataPtr(char* mapName);
-extern char* strcpy(char* dst, const char* src);
-extern char* strncpy(char* dst, const char* src, size_t count);
-extern s32 strcmp(const char* a, const char* b);
-extern s32 strncmp(const char* a, const char* b, size_t count);
-extern size_t strlen(const char* str);
-extern s32 sprintf(char* dst, const char* fmt, ...);
-
-extern void mapLoad(char* name);
-extern void camCtrlOff(s32 id);
-extern void msgLoad(char* name, s32 unk);
-extern void setupDataLoad(char* name);
-extern void bgEntry(char* name);
-
-extern void* marioGetPtr(void);
-extern s32 marioGetPartyId(void);
-extern s32 marioGetExtraPartyId(void);
-extern void* partyGetPtr(s32 id);
-
-extern void hitObjGetPos(char* name, SeqMapVec* outPos);
-extern s32 hitCheckFilter(
-    f32 x, f32 y, f32 z,
-    f32 vx, f32 vy, f32 vz,
-    s32 flags,
-    f32* outZ, f32* outY, f32* outX,
-    f32* outDist,
-    void* outA, void* outB, void* outC
-);
-
-extern void camRoadReset(void);
-extern void camShiftReset(void);
-extern void* camGetPtr(s32 id);
-extern void camRoadMain(
-    f32 x1, f32 y1, f32 z1,
-    f32 x2, f32 y2, f32 z2,
-    void* work
-);
-
-extern s32 gp;
-
-extern s32 _next_area;
-extern s32 _next_map;
-extern s32 _next_bero;
-
-extern char lbl_802BF268[];
-
-extern s32 zero_8041f508;
 extern s32 str_title_8041f538;
 extern s32 str_tou_8041f4f4;
 extern s32 str_tou2_8041f4f8;
@@ -145,50 +50,116 @@ extern u32 dat_8041f4c8;
 extern u32 dat_8041f4cc;
 extern u32 dat_8041f4d0;
 
-extern const f32 float_30_8041f520;
+extern const f32 float_1E05_8041f50c;
+extern const f32 float_3p1416_8041f510;
+extern const f32 float_2_8041f514;
+extern const f32 float_0p125_8041f518;
 extern const f32 float_neg30_8041f51c;
+extern const f32 float_30_8041f520;
+extern const f32 float_0_8041f524;
 extern const f32 float_10_8041f528;
+extern const f32 float_neg1_8041f52c;
+extern const f32 float_0p01_8041f530;
+extern const f32 float_1_8041f534;
 extern const f32 float_5_8041f550;
 
-extern void* mapalloc_base_ptr;
-extern char rel_bss[];
+extern const SeqMapVec vec3_802bf290;
+extern const SeqMapVec vec3_802bf29c;
+extern const SeqMapVec vec3_802bf2a8;
 
-extern s32 strcmp(const char*, const char*);
-extern s32 strncmp(const char*, const char*, size_t);
-extern char* strcpy(char*, const char*);
-extern void* memset(void*, int, size_t);
-extern void* memcpy(void*, const void*, size_t);
+// Standard/library helpers
 
-extern void fadeEntry(s32 type, s32 time, void* data);
-extern s32 fadeIsFinish(void);
-extern void fadeReset(s32 type);
+extern char* strcpy(char* dst, const char* src);
+extern char* strncpy(char* dst, const char* src, size_t count);
+extern s32 strcmp(const char* a, const char* b);
+extern s32 strncmp(const char* a, const char* b, size_t count);
+extern size_t strlen(const char* str);
+extern s32 sprintf(char* dst, const char* fmt, ...);
+extern void* memset(void* dst, int value, size_t size);
+extern void* memcpy(void* dst, const void* src, size_t size);
 
-extern void psndSFXAllOff(void);
-extern u32 psndGetFlag(void);
-extern s32 psndBGMPlayTime(s32 id);
-extern void psndClearFlag(u32 flags);
-extern void psndMapChange(void);
+extern f64 sin(f64 x);
+extern f64 cos(f64 x);
 
-extern s32 seqGetSeq(void);
-extern void seqSetSeq(s32 seq, void* arg1, void* arg2);
-
-extern char* getMarioStDvdRoot(void);
-extern s32 fileAsyncf(s32, s32, const char*, ...);
-extern void* fileAllocf(s32, const char*, ...);
-extern void fileFree(void* file);
-
-extern s32 mapPreLoad(char* map);
-extern char** mapDataPtr(char* map);
-extern void setupDataBase(char* area, char* map);
-extern s32 setupDataCheck(void);
+// External functions
 
 extern void OSUnlink(void* module);
 extern void OSLink(void* module, void* bss);
 extern void _mapFree(void* heap, void* ptr);
 extern void* _mapAlloc(void* heap, u32 size);
 
-extern void _unload(char* oldMap, char* newMap);
-extern void _load(char* oldMap, char* newMap, char* bero);
+extern void psndENVOff(s32 envId);
+extern void psndSFXAllOff(void);
+extern u32 psndGetFlag(void);
+extern s32 psndBGMPlayTime(s32 id);
+extern void psndClearFlag(u32 flags);
+extern void psndMapChange(void);
+
+extern void badgeShop_bargainGeneration(void);
+extern void badgeShop_bottakuruGeneration(void);
+
+extern void marioReInit(void);
+extern void marioInitCamId(void);
+extern void* marioGetPtr(void);
+extern s32 marioGetPartyId(void);
+extern s32 marioGetExtraPartyId(void);
+extern s32 marioChkKey(void);
+extern s32 marioChkCtrl(void);
+extern void marioKeyOff(void);
+extern void marioStSystemLevel(s32 level);
+extern void marioEntry(void);
+extern void N_marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z);
+extern void* partyGetPtr(s32 id);
+
+extern void mapLoad(char* name);
+extern void msgLoad(char* name, s32 unk);
+extern void mapUnLoad(void);
+extern s32 mapPreLoad(char* map);
+extern char** mapDataPtr(char* map);
+extern void setupDataLoad(char* name);
+extern void setupDataBase(char* area, char* map);
+extern s32 setupDataCheck(void);
+extern void bgEntry(char* name);
+extern void bgReInit(void);
+
+extern void npcReset(s32 value);
+extern void npcExecAllInitEvt(void);
+extern s32 npcWaitAllInitEvtEnd(void);
+extern void npcExecAllReglEvt(void);
+extern void extReset(void);
+extern void mobjReset(s32 value);
+extern void offscreenReset(s32 value);
+extern void imgAutoRelease(s32 value);
+extern void effAutoRelease(s32 value);
+extern void animPoseAutoRelease(s32 value);
+extern void evtmgrReInit(void);
+extern void caseReInit(void);
+extern void itemReInit(void);
+extern void iconReInit(void);
+extern void windowReInit(void);
+extern void winReInit(void);
+extern void statusWinReInit(void);
+extern void statusWinForceUpdate(void);
+extern void winMgrReInit(void);
+
+extern s32 seqGetPrevSeq(void);
+extern s32 seqGetSeq(void);
+extern void seqSetSeq(s32 seq, void* arg1, void* arg2);
+extern void fadeEntry(s32 type, s32 time, void* data);
+extern s32 fadeIsFinish(void);
+extern void fadeReset(s32 type);
+
+extern void padRumbleHardOff(s32 controller);
+extern void swReInit(void);
+extern s32 swByteGet(s32 id);
+extern void memClear(s32 heap);
+extern void smartAutoFree(s32 heap);
+extern void GXResetOverflowCount(void);
+
+extern char* getMarioStDvdRoot(void);
+extern s32 fileAsyncf(s32, s32, const char*, ...);
+extern void* fileAllocf(s32, const char*, ...);
+extern void fileFree(void* file);
 
 extern u32 OSGetSoundMode(void);
 extern void SoundSetOutputMode(s32 mode);
@@ -196,49 +167,51 @@ extern void SoundSetOutputMode(s32 mode);
 extern void* evtEntry(void* script, s32 type, s32 flags);
 extern s32 evtCheckID(s32 id);
 extern void evtEntryType(void* script, s32 type, s32 a, s32 b);
+extern void evt_cam_road_reset(s32 a, s32 b);
 
+extern void camCtrlOff(s32 id);
 extern void camCtrlOn(s32 id);
 extern void* camGetPtr(s32 id);
+extern void camRoadReset(void);
+extern void camShiftReset(void);
+extern void camRoadMain(
+    f32 x1,
+    f32 y1,
+    f32 z1,
+    f32 x2,
+    f32 y2,
+    f32 z2,
+    void* work
+);
 
-extern void npcExecAllInitEvt(void);
-extern s32 npcWaitAllInitEvtEnd(void);
-extern void npcExecAllReglEvt(void);
+extern void hitObjGetPos(char* name, SeqMapVec* outPos);
+extern s32 hitCheckFilter(
+    f32 x,
+    f32 y,
+    f32 z,
+    f32 vx,
+    f32 vy,
+    f32 vz,
+    s32 flags,
+    f32* outZ,
+    f32* outY,
+    f32* outX,
+    f32* outDist,
+    void* outA,
+    void* outB,
+    void* outC
+);
 
 extern s32 bero_get_BeroEXEC(void);
-extern s32 marioChkKey(void);
-extern s32 marioChkCtrl(void);
-
-extern void* marioGetPtr(void);
-extern s32 marioGetPartyId(void);
-extern s32 marioGetExtraPartyId(void);
-extern void* partyGetPtr(s32 id);
-extern s32 swByteGet(s32 id);
-
-extern void evt_cam_road_reset(s32 a, s32 b);
-extern f64 cos(f64 x);
-extern f64 sin(f64 x);
-
-extern void N_marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z);
-extern void marioKeyOff(void);
-extern void statusWinForceUpdate(void);
-extern void marioStSystemLevel(s32 level);
-extern void marioEntry(void);
-
 extern void animGroupBaseAsync(char* name, s32 a, s32 b);
 extern void effNiceAsync(s32 a);
 
 #define NEXT_AREA ((char*)&_next_area)
-#define NEXT_MAP  ((char*)&_next_map)
+#define NEXT_MAP ((char*)&_next_map)
 #define NEXT_BERO ((char*)&_next_bero)
-#define ZERO_STR  ((char*)&zero_8041f508)
+#define ZERO_STR ((char*)&zero_8041f508)
 
 #define STATE(seq) (*(s32*)((s32)(seq) + 4))
-
-typedef struct SeqMapVecRaw {
-    u32 x;
-    u32 y;
-    u32 z;
-} SeqMapVecRaw;
 
 void _relUnLoad(void) {
     void* module;
@@ -257,6 +230,7 @@ void _relUnLoad(void) {
         *(void**)(gp + 0x15C) = NULL;
     }
 }
+
 void _load(char* oldMap, char* mapName, char* beroName) {
     char* map;
     char* bero;
@@ -450,6 +424,7 @@ void _load(char* oldMap, char* mapName, char* beroName) {
         (void)zero;
     }
 }
+
 void _unload(char* oldMap, char* newMap) {
     s32 changedArea;
     char* rodata;
@@ -515,6 +490,7 @@ void _unload(char* oldMap, char* newMap) {
 
     nanNPCWork = NULL;
 }
+
 void seq_mapChangeMain(void* seq) {
     char* rodata;
     s32 areaChanged;
@@ -828,11 +804,11 @@ void seq_mapChangeMain(void* seq) {
                 extraParty = partyGetPtr(marioGetExtraPartyId());
 
                 switch (swByteGet(4)) {
-    case 0:
-        goto restoreSavedPosition;
-    default:
-        goto savedPositionFade;
-}
+                    case 0:
+                        goto restoreSavedPosition;
+                    default:
+                        goto savedPositionFade;
+                }
 
 restoreSavedPosition:
                 *(SeqMapVecRaw*)((s32)mario + 0x8C) = *(SeqMapVecRaw*)(gp + 0x11D4);
@@ -910,10 +886,12 @@ savedPositionDone:
             break;
     }
 }
+
 void seq_mapChangeExit(void) {
     GXResetOverflowCount();
     dbg_lotteryinfo = 0;
 }
+
 void seq_mapChangeInit(void* seq) {
     s32 oldMapEmptyCmp;
     s32 oldMapGorCmp;
@@ -924,13 +902,13 @@ void seq_mapChangeInit(void* seq) {
     strcpy((char*)&_next_bero, (char*)&zero_8041f508);
 
     if (*(char**)((s32)seq + 0x8) != 0) {
-    strncpy((char*)&_next_area, *(char**)((s32)seq + 0x8), 3);
-    strncpy((char*)&_next_map, *(char**)((s32)seq + 0x8), 0x20);
-}
+        strncpy((char*)&_next_area, *(char**)((s32)seq + 0x8), 3);
+        strncpy((char*)&_next_map, *(char**)((s32)seq + 0x8), 0x20);
+    }
 
-if (*(char**)((s32)seq + 0xC) != 0) {
-    strncpy((char*)&_next_bero, *(char**)((s32)seq + 0xC), 0x20);
-}
+    if (*(char**)((s32)seq + 0xC) != 0) {
+        strncpy((char*)&_next_bero, *(char**)((s32)seq + 0xC), 0x20);
+    }
 
     psndENVOff(0x200);
     psndENVOff(0x201);

@@ -187,11 +187,11 @@ void pressStartGX_80008888(u8 alpha, f32 x, f32 y) {
     PSMTXScale(scaleMtx, float_1_8041f594, float_1_8041f594, float_1_8041f594);
 
     PSMTXTrans(
-    workMtx,
-    (f32)*(s32*)(wp2 + 0x2C) / float_neg200_8041f598,
-    float_0_8041f59c,
-    float_0_8041f59c
-);
+        workMtx,
+        (f32)*(s32*)(wp2 + 0x2C) / float_neg200_8041f598,
+        float_0_8041f59c,
+        float_0_8041f59c
+    );
 
     PSMTXConcat(scaleMtx, workMtx, workMtx);
     GXLoadTexMtxImm(workMtx, 0x1E, 1);
@@ -225,7 +225,7 @@ void pressStartGX_80008888(u8 alpha, f32 x, f32 y) {
     GXLoadPosMtxImm(workMtx, 0);
     GXSetCurrentMtx(0);
 
-     GXBegin(0x80, 0, 4);
+    GXBegin(0x80, 0, 4);
 
     FIFO_F32 = READ_F32(float_neg0p5_8041f5a0);
     FIFO_F32 = READ_F32(float_neg0p5_8041f5a0);
@@ -253,6 +253,7 @@ void pressStartGX_80008888(u8 alpha, f32 x, f32 y) {
 
     GXSetTevSwapModeTable(1, 0, 1, 2, 3);
 }
+
 void disp2(s32 cameraId) {
     void* cam8;
     void* cam;
@@ -289,11 +290,11 @@ void disp2(s32 cameraId) {
     vecMsg = vec;
 
     msgTbl[0] = vecMsg[6];
-msgTbl[1] = vecMsg[7];
-msgTbl[2] = vecMsg[8];
-msgTbl[3] = vecMsg[9];
-msgTbl[4] = vecMsg[10];
-msgTbl[5] = vecMsg[11];
+    msgTbl[1] = vecMsg[7];
+    msgTbl[2] = vecMsg[8];
+    msgTbl[3] = vecMsg[9];
+    msgTbl[4] = vecMsg[10];
+    msgTbl[5] = vecMsg[11];
 
     cam = camGetPtr(cameraId);
     copySrc = (u32*)((s32)cam - 4);
@@ -307,7 +308,7 @@ msgTbl[5] = vecMsg[11];
         copyDst[0] = copyB;
     };
 
-     camAgain = camGetPtr(cameraId);
+    camAgain = camGetPtr(cameraId);
     copySrc = (u32*)((s32)cam8 - 4);
     copyDst = (u32*)((s32)camAgain - 4);
     for (i = 0; i < 0x4C; i++) {
@@ -422,6 +423,7 @@ msgTbl[5] = vecMsg[11];
         viewportBackup[5]
     );
 }
+
 void disp1(s32 cameraId) {
     void* cam8;
     void* cam;
@@ -430,8 +432,8 @@ void disp1(s32 cameraId) {
     f32 viewportBackup[6];
 
     u32 color;
-u32 pos[3];
-u32 size[3];
+    u32 pos[3];
+    u32 size[3];
 
     u32* copySrc;
     u32* copyDst;
@@ -442,9 +444,9 @@ u32 size[3];
     cam8 = camGetPtr(8);
 
     cam = camGetPtr(cameraId);
-for (i = 0; i < 0x98; i++) {
-    camBackup[i] = ((u32*)cam)[i];
-}
+    for (i = 0; i < 0x98; i++) {
+        camBackup[i] = ((u32*)cam)[i];
+    }
 
     cam = camGetPtr(cameraId);
     copySrc = (u32*)((s32)cam8 - 4);
@@ -507,6 +509,7 @@ for (i = 0; i < 0x98; i++) {
         viewportBackup[5]
     );
 }
+
 void titleMain(void* seq) {
     u32* vec;
     s32 state;
@@ -597,17 +600,17 @@ void titleMain(void* seq) {
             if (fadeIsFinish() != 0) {
                 prev = seqGetPrevSeq();
 
-if (prev != 6) {
-    color6 = dat_8041f570;
-    fadeEntry(0x14, 0x1F4, &color6);
-    *(s32*)(wp2 + 0x8) = *(s32*)(wp2 + 0x8) + 1;
-} else {
-    *(f32*)(wp2 + 0x10) = float_120_8041f5b0;
-    *(f32*)(wp2 + 0x18) = float_neg170_8041f5cc;
-    *(s32*)(wp2 + 0x20) = 0;
-    *(s32*)(wp2 + 0x2C) = 0;
-    *(s32*)(wp2 + 0x8) = 3;
-}
+                if (prev != 6) {
+                    color6 = dat_8041f570;
+                    fadeEntry(0x14, 0x1F4, &color6);
+                    *(s32*)(wp2 + 0x8) = *(s32*)(wp2 + 0x8) + 1;
+                } else {
+                    *(f32*)(wp2 + 0x10) = float_120_8041f5b0;
+                    *(f32*)(wp2 + 0x18) = float_neg170_8041f5cc;
+                    *(s32*)(wp2 + 0x20) = 0;
+                    *(s32*)(wp2 + 0x2C) = 0;
+                    *(s32*)(wp2 + 0x8) = 3;
+                }
             }
             break;
 
@@ -653,8 +656,8 @@ if (prev != 6) {
             *(s32*)(wp2 + 0x20) = *(s32*)(wp2 + 0x20) + 1;
 
             counter = *(s32*)(wp2 + 0x20);
-fps = *(s32*)(gp + 0x4);
-if (counter > fps) {
+            fps = *(s32*)(gp + 0x4);
+            if (counter > fps) {
                 root = getMarioStDvdRoot();
                 fileAsyncf(4, 0, (void*)((s32)vec + 0x60), root);
 
@@ -676,13 +679,13 @@ if (counter > fps) {
             *(s32*)(wp2 + 0x20) = *(s32*)(wp2 + 0x20) + 1;
 
             counter = *(s32*)(wp2 + 0x20);
-fps = *(s32*)(gp + 0x4);
-if (counter > fps) {
+            fps = *(s32*)(gp + 0x4);
+            if (counter > fps) {
                 *(f32*)(wp2 + 0x1C) = *(f32*)(wp2 + 0x1C) + float_0p1_8041f5d8;
 
-if (*(f32*)(wp2 + 0x1C) > float_1_8041f594) {
-    *(f32*)(wp2 + 0x1C) = float_1_8041f594;
-}
+                if (*(f32*)(wp2 + 0x1C) > float_1_8041f594) {
+                    *(f32*)(wp2 + 0x1C) = float_1_8041f594;
+                }
 
                 buttons = keyGetButtonTrg(0);
                 if ((buttons & (PAD_A | PAD_START)) != 0) {
@@ -693,7 +696,7 @@ if (*(f32*)(wp2 + 0x1C) > float_1_8041f594) {
                     *(s32*)(wp2 + 0x28) = counter;
 
                     fps = *(s32*)(gp + 0x4);
-if (counter > ((fps * 0x14) - fps)) {
+                    if (counter > ((fps * 0x14) - fps)) {
                         *(s32*)(wp2 + 0x8) = 0x14;
                     }
                 }
@@ -860,6 +863,7 @@ if (counter > ((fps * 0x14) - fps)) {
         }
     }
 }
+
 void seq_titleExit(void) {
     fileFree(*(void**)wp2);
 
@@ -867,6 +871,7 @@ void seq_titleExit(void) {
         psndStopAllFadeOut();
     }
 }
+
 void seq_titleInit(void) {
     L_titleInit();
 
@@ -875,15 +880,19 @@ void seq_titleInit(void) {
     *(u32*)gp &= ~0x20;
     *(u32*)gp &= ~0x1000;
 }
+
 void seq_titleMain(void* seq) {
     titleMain(seq);
 }
+
 s32 N_getDebugMode(void) {
     return *(s32*)(wp2 + 0x30);
 }
+
 void* DbgBtlSel_GetMsgDataPtr(void) {
     return 0;
 }
+
 void L_titleInit(void) {
     u32* vec;
     s32 root;
