@@ -897,3 +897,163 @@ void stg3_20_init_4(void) {
     swSet(0x974);
     swSet(0x995);
 }
+
+void stg3_20_init_6(void) {
+    extern void swSet(s32 flag);
+    extern void swClear(s32 flag);
+    extern void swByteSet(s32 flag, s32 value);
+    s32 i;
+    for (i = 0; i < 0xE; i++) {
+        swSet(0x9B4 - i);
+    }
+    swByteSet(0x1FB, 0x14 - i);
+    swSet(0x972);
+    swClear(0x994);
+}
+
+void stg3_21_init(void) {
+    extern void swSet(s32 flag);
+    extern void swByteSet(s32 flag, s32 value);
+    swSet(0x954);
+    swByteSet(0x1F5, 0);
+    swSet(0x94F);
+    swByteSet(0x1F6, 6);
+    swByteSet(0x1F7, 1);
+    swByteSet(0x1F8, 1);
+}
+
+void stg3_20_init_2(void) {
+    extern void swSet(s32 flag);
+    extern void swByteSet(s32 flag, s32 value);
+    s32 i;
+    for (i = 0; i < 0x12; i++) {
+        swSet(0x9B4 - i);
+    }
+    swByteSet(0x1FB, 0x14 - i);
+    swSet(0x976);
+    swSet(0x990);
+    swSet(0x993);
+}
+
+void stg3_20_init_3(void) {
+    extern void swSet(s32 flag);
+    extern void swByteSet(s32 flag, s32 value);
+    extern void pouchReceiveMail(s32 mail);
+    extern void pouchOpenMail(s32 mail);
+    s32 i;
+    for (i = 0; i < 0x11; i++) {
+        swSet(0x9B4 - i);
+    }
+    swByteSet(0x1FB, 0x14 - i);
+    swSet(0x975);
+    pouchReceiveMail(0xD);
+    pouchOpenMail(0xD);
+}
+
+void stg3_20_12_init(void) {
+    extern void pouchRemoveItem(s32 item);
+    extern void swSet(s32 flag);
+    pouchRemoveItem(0x12);
+    swSet(0x979);
+    swSet(0x97A);
+    swSet(0x97B);
+    swSet(0x97C);
+    swSet(0x97D);
+    swSet(0x97E);
+    swSet(0x97F);
+    swSet(0x980);
+}
+
+void stg3_20_init_10(void) {
+    extern void swSet(s32 flag);
+    extern void swByteSet(s32 flag, s32 value);
+    extern void pouchReceiveMail(s32 mail);
+    extern void pouchOpenMail(s32 mail);
+    s32 i;
+    for (i = 0; i < 0xA; i++) {
+        swSet(0x9B4 - i);
+    }
+    swByteSet(0x1FB, 0x14 - i);
+    swSet(0x96E);
+    swSet(0x95E);
+    pouchReceiveMail(6);
+    pouchOpenMail(6);
+}
+
+void stg3_20_init_1(void) {
+    extern void swSet(s32 flag);
+    extern void swByteSet(s32 flag, s32 value);
+    extern void pouchReceiveMail(s32 mail);
+    extern void pouchOpenMail(s32 mail);
+    s32 i;
+    for (i = 0; i < 0x13; i++) {
+        swSet(0x9B4 - i);
+    }
+    swByteSet(0x1FB, 0x14 - i);
+    swSet(0x977);
+    swSet(0x95A);
+    swSet(0x996);
+    pouchReceiveMail(0xE);
+    pouchOpenMail(0xE);
+}
+
+void stg3_20_init_7(void) {
+    extern void swSet(s32 flag);
+    extern void swByteSet(s32 flag, s32 value);
+    extern void pouchReceiveMail(s32 mail);
+    extern void pouchOpenMail(s32 mail);
+    s32 i;
+    for (i = 0; i < 0xD; i++) {
+        swSet(0x9B4 - i);
+    }
+    swByteSet(0x1FB, 0x14 - i);
+    swSet(0x971);
+    swSet(0x994);
+    swSet(0x9D5);
+    pouchReceiveMail(9);
+    pouchOpenMail(9);
+}
+
+void stg6_34_init(void) {
+    extern void swSet(s32 flag);
+    swSet(0xE95);
+    swSet(0xE96);
+    swSet(0xE97);
+    swSet(0xE98);
+    swSet(0xE99);
+    swSet(0xE9A);
+    swSet(0xE9B);
+    swSet(0xE9C);
+    swSet(0xE9D);
+    swSet(0xE9E);
+    swSet(0xE9F);
+}
+
+void stg0_00_init(void) {
+    extern void* pouchGetPtr(void);
+    extern void pouchInit(void* pouch);
+    extern void pouchGetItem(s32 item);
+    extern void pouchSetCoin(s32 coins);
+    extern void pouchReviseMarioParam(void);
+    extern void badgeShop_init(void);
+    extern void yuugijou_init(void);
+    extern void johoya_init(void);
+    extern void marioSetCharMode(s32 mode);
+    extern void statusWinForceUpdate(void);
+    extern void* gp;
+    void* gpPtr;
+    pouchInit(pouchGetPtr());
+    pouchGetItem(6);
+    pouchGetItem(0x32);
+    pouchGetItem(9);
+    pouchSetCoin(0x64);
+    pouchReviseMarioParam();
+    badgeShop_init();
+    yuugijou_init();
+    johoya_init();
+    gpPtr = gp;
+    *(s32*)((s32)gpPtr + 0x24) = 0;
+    *(s32*)((s32)gpPtr + 0x20) = 0;
+    marioSetCharMode(0);
+    statusWinForceUpdate();
+}

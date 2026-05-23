@@ -350,8 +350,6 @@ USER_FUNC(btlevtcmd_GetRandomValue) {
     return EVT_RETURN_DONE;
 }
 
-
-
 USER_FUNC(btlevtcmd_DrawLots) {
     s32* args;
     s32* weights;
@@ -931,9 +929,6 @@ USER_FUNC(btlevtcmd_GetWidth) {
     return EVT_RETURN_DONE;
 }
 
-
-
-
 USER_FUNC(btlevtcmd_GetHeight) {
     s32* args;
     BattleWork* battleWork;
@@ -955,9 +950,6 @@ USER_FUNC(btlevtcmd_GetHeight) {
 
     return EVT_RETURN_DONE;
 }
-
-
-
 
 USER_FUNC(btlevtcmd_SetHeight) {
     s32* args;
@@ -4649,11 +4641,6 @@ USER_FUNC(btlevtcmd_SetEventDamage) {
     return EVT_RETURN_DONE;
 }
 
-
-
-
-
-
 USER_FUNC(btlevtcmd_SetEventWait) {
     s32* args;
     BattleWorkUnit* unit;
@@ -4668,11 +4655,6 @@ USER_FUNC(btlevtcmd_SetEventWait) {
 
     return EVT_RETURN_DONE;
 }
-
-
-
-
-
 
 USER_FUNC(btlevtcmd_SetEventEntry) {
     s32* args;
@@ -4689,11 +4671,6 @@ USER_FUNC(btlevtcmd_SetEventEntry) {
     return EVT_RETURN_DONE;
 }
 
-
-
-
-
-
 USER_FUNC(btlevtcmd_SetEventPhase) {
     s32* args;
     BattleWorkUnit* unit;
@@ -4709,11 +4686,6 @@ USER_FUNC(btlevtcmd_SetEventPhase) {
     return EVT_RETURN_DONE;
 }
 
-
-
-
-
-
 USER_FUNC(btlevtcmd_SetEventUnisonPhase) {
     s32* args;
     BattleWorkUnit* unit;
@@ -4728,11 +4700,6 @@ USER_FUNC(btlevtcmd_SetEventUnisonPhase) {
 
     return EVT_RETURN_DONE;
 }
-
-
-
-
-
 
 USER_FUNC(btlevtcmd_SetEventAttack) {
     s32* args;
@@ -4769,11 +4736,6 @@ USER_FUNC(btlevtcmd_SetEventConfusion) {
     return EVT_RETURN_DONE;
 }
 
-
-
-
-
-
 USER_FUNC(btlevtcmd_SetEventCeilFall) {
     s32* args;
     BattleWorkUnit* unit;
@@ -4788,11 +4750,6 @@ USER_FUNC(btlevtcmd_SetEventCeilFall) {
 
     return EVT_RETURN_DONE;
 }
-
-
-
-
-
 
 USER_FUNC(btlevtcmd_StartWaitEvent) {
     BattleWorkUnit* unit;
@@ -5172,10 +5129,6 @@ USER_FUNC(btlevtcmd_AcGetDifficulty) {
     return EVT_RETURN_DONE;
 }
 
-
-
-
-
 USER_FUNC(btlevtcmd_AcSetFlag) {
     s32* args = event->args;
 
@@ -5225,7 +5178,6 @@ USER_FUNC(btlevtcmd_AcSetParam) {
     return EVT_RETURN_DONE;
 }
 
-
 USER_FUNC(btlevtcmd_AcGetParam) {
     BattleWork* battleWork;
     s32* args;
@@ -5246,8 +5198,6 @@ USER_FUNC(btlevtcmd_AcGetParam) {
 
     return EVT_RETURN_DONE;
 }
-
-
 
 USER_FUNC(btlevtcmd_AcSetGaugeParam) {
     BattleWork* battleWork;
@@ -5287,8 +5237,6 @@ USER_FUNC(btlevtcmd_AcGetOutputParam) {
     return EVT_RETURN_DONE;
 }
 
-
-
 USER_FUNC(btlevtcmd_AcSetOutputParam) {
     s32* args;
     BattleWork* battleWork;
@@ -5305,7 +5253,6 @@ USER_FUNC(btlevtcmd_AcSetOutputParam) {
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_SetupAC) {
     s32* args;
@@ -5525,7 +5472,6 @@ USER_FUNC(btlevtcmd_ac_timing_get_success_frame) {
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_ACHelpSet) {
     s32* args = event->args;
@@ -5865,8 +5811,6 @@ USER_FUNC(btlevtcmd_SetTalkPose) {
     return EVT_RETURN_DONE;
 }
 
-
-
 USER_FUNC(btlevtcmd_SetStayPose) {
     s32* args;
     BattleWorkUnit* unit;
@@ -5883,8 +5827,6 @@ USER_FUNC(btlevtcmd_SetStayPose) {
 
     return EVT_RETURN_DONE;
 }
-
-
 
 USER_FUNC(btlevtcmd_SetTalkPoseType) {
     s32* args;
@@ -6452,7 +6394,6 @@ USER_FUNC(btlevtcmd_OnUnitFlag) {
     return EVT_RETURN_DONE;
 }
 
-
 USER_FUNC(btlevtcmd_OffUnitFlag) {
     s32* args;
     BattleWorkUnit* unit;
@@ -6472,7 +6413,6 @@ USER_FUNC(btlevtcmd_OffUnitFlag) {
     return EVT_RETURN_DONE;
 }
 
-
 USER_FUNC(btlevtcmd_AfterReactionEntry) {
     s32* args;
     s32 type;
@@ -6490,7 +6430,6 @@ USER_FUNC(btlevtcmd_AfterReactionEntry) {
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_CheckWeaponPluralTarget) {
     s32* args;
@@ -6510,7 +6449,6 @@ USER_FUNC(btlevtcmd_CheckWeaponPluralTarget) {
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_PayWeaponCost) {
     s32* args;
@@ -6566,7 +6504,6 @@ USER_FUNC(btlevtcmd_GetWeaponActionLv) {
     return EVT_RETURN_DONE;
 }
 
-
 USER_FUNC(btlevtcmd_CommandGetWeaponActionLv) {
     s32* args;
     BattleWork* battleWork;
@@ -6582,8 +6519,6 @@ USER_FUNC(btlevtcmd_CommandGetWeaponActionLv) {
 
     return EVT_RETURN_DONE;
 }
-
-
 
 USER_FUNC(btlevtcmd_CommandGetWeaponAddress) {
     s32* args;
@@ -6633,7 +6568,6 @@ USER_FUNC(btlevtcmd_CommandGetWeaponItemId) {
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_GetItemRecoverParam) {
     s32* args;
@@ -7257,8 +7191,6 @@ USER_FUNC(btlevtcmd_EnemyItemUseCheck) {
 
     return EVT_RETURN_DONE;
 }
-
-
 
 USER_FUNC(btlevtcmd_PadCheckTrigger) {
     s32* args;

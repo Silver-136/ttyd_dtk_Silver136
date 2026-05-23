@@ -37,10 +37,58 @@ static const char str__8041f494[] = "";
 extern const f32 float_0_8041f448;
 extern const f32 float_360_8041f45c[1];
 extern const char str_LINEAR_802bf178[];
+extern const f32 float_1000_8041f44c;
+extern const f32 float_60_8041f450;
+extern u32 OSGetTick(void);
+extern void GXSetDrawSync(u16 token);
+extern u16 GXReadDrawSync(void);
+extern s32 __mapdrv_make_dl;
+extern f32 __cvt_ull_flt(u64 value);
+extern const u32 dat_8041f440;
+extern const f32 float_0_8041f448;
+extern const f32 float_20_8041f454;
+static u16 token;
+extern void GXLoadPosMtxImm(void* mtx, u32 id);
+extern void GXSetCurrentMtx(u32 id);
+extern void GXSetNumChans(u8 num);
+extern void GXSetNumTexGens(u8 num);
+extern void GXSetNumTevStages(u8 num);
+extern void GXSetTexCoordGen2(u16 dst, u32 func, u32 src, u32 mtx, u32 normalize, u32 postmtx);
+extern void GXSetTevOrder(u8 stage, u32 texCoord, u32 texMap, u32 colorChan);
+extern void GXSetTevColorOp(u8 stage, u8 op, u8 bias, u8 scale, u8 clamp, u8 outReg);
+extern void GXSetTevAlphaOp(u8 stage, u8 op, u8 bias, u8 scale, u8 clamp, u8 outReg);
+extern void GXSetTevColorIn(u8 stage, u8 a, u8 b, u8 c, u8 d);
+extern void GXSetTevAlphaIn(u8 stage, u8 a, u8 b, u8 c, u8 d);
+extern void GXSetZMode(u8 enable, u8 func, u8 update);
+extern void GXSetColorUpdate(u8 enable);
+extern void GXSetAlphaUpdate(u8 enable);
+extern void GXSetBlendMode(u8 type, u8 srcFactor, u8 dstFactor, u8 op);
+extern void GXSetZCompLoc(u8 beforeTex);
+extern void GXSetAlphaCompare(u8 comp0, u8 ref0, u8 op, u8 comp1, u8 ref1);
+extern void GXSetTevColor(u8 reg, void* color);
+extern void GXClearVtxDesc(void);
+extern void GXSetVtxDesc(u8 attr, u8 type);
+extern void GXSetVtxAttrFmt(u8 vtxfmt, u8 attr, u8 compCnt, u8 compType, u8 frac);
+extern void GXBegin(u8 primitive, u8 vtxfmt, u16 nverts);
+extern const f32 float_0_8041f448;
+extern const f32 float_1_8041f444;
+extern const f32 float_3p1416_8041f46c;
+extern const f32 float_4_8041f468;
+extern const f32 float_15_8041f470;
+extern const f32 float_100_8041f474;
+extern const f32 float_40_8041f478;
+extern const f32 float_0p5_8041f47c;
+extern const f32 float_1p5708_8041f480;
+typedef struct Vec {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec;
+
+extern void PSVECNormalize(Vec* src, Vec* dst);
+extern void PSVECCrossProduct(Vec* a, Vec* b, Vec* out);
 
 u16 sysGetToken(void) {
-    static u16 token;
-
     return token++;
 }
 
@@ -289,19 +337,28 @@ f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end) {
         return start + ((cur * cur * cur * cur * (end - start)) / (len * len * len * len));
 
     case 4:
-        angle = 4.0f * (3.1416f * (cur / len));
+        angle = cur / len;
+        angle = float_3p1416_8041f46c * angle;
+        angle = float_4_8041f468 * angle;
         value = cos(angle);
-        delta = end - start;
         rem = len - cur;
+        delta = end - start;
         period = len * len;
         value = delta * value;
         value = rem * value;
         value = rem * value;
         return end - (value / period);
 
-    case 5:
-        period = (15.0f * len) / 100.0f;
-        angle = (4.0f * (3.1416f * ((cur * cur) / len))) / period;
+     case 5:
+        angle = cur * cur;
+        period = float_15_8041f470 * len;
+        value = float_100_8041f474;
+        period = period / value;
+        angle = angle / len;
+        angle = float_3p1416_8041f46c * angle;
+        angle = float_4_8041f468 * angle;
+        angle = angle / period;
+
         value = cos(angle);
         delta = end - start;
         rem = len - cur;
@@ -312,8 +369,15 @@ f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end) {
         return end - (value / period);
 
     case 6:
-        period = (15.0f * len) / 100.0f;
-        angle = (4.0f * (3.1416f * ((cur * cur) / len))) / period;
+        angle = cur * cur;
+        period = float_15_8041f470 * len;
+        value = float_100_8041f474;
+        period = period / value;
+        angle = angle / len;
+        angle = float_3p1416_8041f46c * angle;
+        angle = float_4_8041f468 * angle;
+        angle = angle / period;
+
         value = cos(angle);
         delta = end - start;
         period = len * len;
@@ -355,9 +419,16 @@ f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end) {
         rem = rem * delta;
         return value - (rem / period);
 
-    case 10:
-        period = (40.0f * len) / 100.0f;
-        angle = (4.0f * (3.1416f * ((cur * cur) / len))) / period;
+     case 10:
+        angle = cur * cur;
+        period = float_40_8041f478 * len;
+        value = float_100_8041f474;
+        period = period / value;
+        angle = angle / len;
+        angle = float_3p1416_8041f46c * angle;
+        angle = float_4_8041f468 * angle;
+        angle = angle / period;
+
         value = cos(angle);
         rem = len - cur;
         period = len * len;
@@ -365,26 +436,29 @@ f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end) {
         value = rem * value;
         value = value / period;
 
-        if (value < 0.0f) {
+        if (value < float_0_8041f448) {
             value = -value;
         }
 
         return end - (value * (end - start));
 
-    case 11:
-        angle = (3.1416f * cur) / len;
+        case 11:
+        angle = (float_3p1416_8041f46c * cur) / len;
         value = cos(angle);
-        return start + (((end - start) * (1.0f - value)) * 0.5f);
+        delta = end - start;
+        value = float_1_8041f444 - value;
+        value = delta * value;
+        return start + (value * float_0p5_8041f47c);
 
     case 12:
-        angle = (1.5708f * cur) / len;
+        angle = (float_1p5708_8041f480 * cur) / len;
         value = sin(angle);
         return start + ((end - start) * value);
 
     case 13:
-        angle = (1.5708f * cur) / len;
+        angle = (float_1p5708_8041f480 * cur) / len;
         value = cos(angle);
-        return start + ((end - start) * (1.0f - value));
+        return start + ((end - start) * (float_1_8041f444 - value));
 
     default:
         return ((IntplCallback)type)(current, total, start, end);
@@ -1042,4 +1116,275 @@ f32 distABf(f32 ax, f32 ay, f32 bx, f32 by) {
     }
 
     return ax;
+}
+
+void memcpy_as4(void* dst, void* src, u32 size) {
+    u32 count;
+    u32* d;
+    u32* s;
+
+    d = (u32*)dst - 1;
+    s = (u32*)src - 1;
+    count = size >> 2;
+
+    while (count != 0) {
+        *++d = *++s;
+        count--;
+    }
+}
+
+f32 sysMsec2FrameFloat(f32 msec) {
+    return (msec * (f32)*(s32*)(gp + 0x4)) / float_1000_8041f44c;
+}
+
+s32 sysMsec2Frame(s32 msec) {
+    return (msec * *(s32*)(gp + 0x4)) / 1000;
+}
+
+f32 sysFrame2SecFloat(f32 frame) {
+    return frame / float_60_8041f450;
+}
+
+f32 getV60FPS(f32 scale, u64 start, u64 end) {
+    u32 tickRate;
+    u64 startFrame;
+    u64 endFrame;
+    u64 diff;
+
+    tickRate = (*(u32*)0x800000F8 >> 2) / 1000;
+
+    startFrame = start / tickRate;
+    endFrame = end / tickRate;
+
+    if (endFrame >= startFrame) {
+        diff = endFrame - startFrame;
+    } else {
+        diff = endFrame + (0xFFFFFFFFFFFFFFFFULL - startFrame);
+    }
+
+    return (float_60_8041f450 * scale * (f32)diff) / float_1000_8041f44c;
+}
+
+void sysWaitDrawSync(void) {
+    u16 drawToken;
+    u32 startTick;
+    u32 elapsed;
+    u32 tickRate;
+    u32 magic;
+    volatile u32* tickBase;
+
+    drawToken = token;
+    token = drawToken + 1;
+
+    startTick = OSGetTick();
+
+    if (__mapdrv_make_dl == 0) {
+        GXSetDrawSync(drawToken);
+
+        magic = 0x10624DD3;
+        tickBase = (volatile u32*)0x800000F8;
+        drawToken = (u16)drawToken;
+
+        while ((u16)GXReadDrawSync() != drawToken) {
+            elapsed = OSGetTick() - startTick;
+            tickRate = (u32)(((u64)(*tickBase >> 2) * magic) >> 32);
+            tickRate >>= 6;
+
+            if ((elapsed / tickRate) > 100) {
+                break;
+            }
+        }
+    }
+}
+
+void mtxGetRotationElement(f32* mtx, f32* out, s8 axis, s8 up) {
+    f32 zero;
+    Vec xVec;
+    Vec yVec;
+    Vec zVec;
+
+    if (axis == 'x') {
+        goto axis_x;
+    }
+
+    if (axis < 'x') {
+        if (axis == 'Y') {
+            goto axis_y;
+        }
+
+        if (axis >= 'Y') {
+            goto axis_z;
+        }
+
+        if (axis >= 'X') {
+            goto axis_x;
+        }
+
+        goto axis_z;
+    }
+
+    if (axis >= 'z') {
+        goto axis_z;
+    }
+
+    goto axis_y;
+
+axis_x:
+    xVec.x = mtx[0];
+    xVec.y = mtx[4];
+    xVec.z = mtx[8];
+    PSVECNormalize(&xVec, &xVec);
+
+    if ((up == 'z') || ((up < 'z') && (up == 'Z'))) {
+        zVec.x = mtx[2];
+        zVec.y = mtx[6];
+        zVec.z = mtx[10];
+        PSVECNormalize(&zVec, &zVec);
+
+        PSVECCrossProduct(&zVec, &xVec, &yVec);
+        PSVECCrossProduct(&xVec, &yVec, &zVec);
+    } else {
+        yVec.x = mtx[1];
+        yVec.y = mtx[5];
+        yVec.z = mtx[9];
+        PSVECNormalize(&yVec, &yVec);
+
+        PSVECCrossProduct(&xVec, &yVec, &zVec);
+        PSVECCrossProduct(&zVec, &xVec, &yVec);
+    }
+
+    goto done;
+
+axis_y:
+    yVec.x = mtx[1];
+    yVec.y = mtx[5];
+    yVec.z = mtx[9];
+    PSVECNormalize(&yVec, &yVec);
+
+    if ((up == 'x') || ((up < 'x') && (up == 'X'))) {
+        xVec.x = mtx[0];
+        xVec.y = mtx[4];
+        xVec.z = mtx[8];
+        PSVECNormalize(&xVec, &xVec);
+
+        PSVECCrossProduct(&xVec, &yVec, &zVec);
+        PSVECCrossProduct(&yVec, &zVec, &xVec);
+    } else {
+        zVec.x = mtx[2];
+        zVec.y = mtx[6];
+        zVec.z = mtx[10];
+        PSVECNormalize(&zVec, &zVec);
+
+        PSVECCrossProduct(&yVec, &zVec, &xVec);
+        PSVECCrossProduct(&xVec, &yVec, &zVec);
+    }
+
+    goto done;
+
+axis_z:
+    zVec.x = mtx[2];
+    zVec.y = mtx[6];
+    zVec.z = mtx[10];
+    PSVECNormalize(&zVec, &zVec);
+
+    if ((up == 'y') || ((up < 'y') && (up == 'Y'))) {
+        yVec.x = mtx[1];
+        yVec.y = mtx[5];
+        yVec.z = mtx[9];
+        PSVECNormalize(&yVec, &yVec);
+
+        PSVECCrossProduct(&yVec, &zVec, &xVec);
+        PSVECCrossProduct(&zVec, &xVec, &yVec);
+    } else {
+        xVec.x = mtx[0];
+        xVec.y = mtx[4];
+        xVec.z = mtx[8];
+        PSVECNormalize(&xVec, &xVec);
+
+        PSVECCrossProduct(&zVec, &xVec, &yVec);
+        PSVECCrossProduct(&yVec, &zVec, &xVec);
+    }
+
+done:
+    zero = float_0_8041f448;
+
+    out[0] = xVec.x;
+    out[4] = xVec.y;
+    out[8] = xVec.z;
+
+    out[1] = yVec.x;
+    out[5] = yVec.y;
+    out[9] = yVec.z;
+
+    out[2] = zVec.x;
+    out[6] = zVec.y;
+    out[10] = zVec.z;
+
+    out[3] = zero;
+    out[7] = zero;
+    out[11] = zero;
+}
+
+void sysDummyDraw(void* mtx) {
+    u32 color[2];
+    volatile f32* fifo;
+    const volatile f32* zeroPtr;
+    f32 twenty;
+    f32 zero;
+
+    GXLoadPosMtxImm(mtx, 0);
+    GXSetCurrentMtx(0);
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetNumTevStages(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetTevOrder(0, 0xFF, 0xFF, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 2);
+    GXSetTevAlphaIn(0, 7, 7, 7, 1);
+    GXSetZMode(0, 7, 0);
+    GXSetColorUpdate(0);
+    GXSetAlphaUpdate(0);
+    GXSetBlendMode(1, 0, 1, 7);
+    GXSetZCompLoc(0);
+    GXSetAlphaCompare(6, 0x80, 1, 0, 0);
+
+    color[0] = dat_8041f440;
+    GXSetTevColor(1, color);
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+
+    GXBegin(0x90, 0, 3);
+
+    fifo = (volatile f32*)0xCC008000;
+    zeroPtr = (const volatile f32*)&float_0_8041f448;
+
+    zero = float_0_8041f448;
+    twenty = float_20_8041f454;
+
+    *fifo = zero;
+    *fifo = zero;
+
+    *fifo = *zeroPtr;
+    *fifo = *zeroPtr;
+    *fifo = *zeroPtr;
+
+    *fifo = twenty;
+    *fifo = zero;
+
+    *fifo = *zeroPtr;
+    *fifo = *zeroPtr;
+    *fifo = *zeroPtr;
+
+    *fifo = twenty;
+    *fifo = twenty;
+
+    *fifo = *zeroPtr;
+    *fifo = *zeroPtr;
+    *fifo = *zeroPtr;
 }
