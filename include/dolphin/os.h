@@ -1,5 +1,7 @@
 #pragma once
 
+#include <dolphin/types.h>
+
 typedef s64 OSTime;
 typedef u32 OSTick;
 typedef int OSHeapHandle;

@@ -75,7 +75,7 @@ extern void DVDMgrRead(void* dvd, void* dst, u32 size, s32 offset);
 extern void DVDMgrClose(void* dvd);
 extern void* UnpackTexPalette(void* data);
 
-extern const char str_PCTs_PCTs_8041f61c[];
+extern const char str_PCTs_PCTs_8041f61c[6];
 
 extern u32 dat_8041f5f0;
 extern u32 dat_8041f5f4;
@@ -318,38 +318,47 @@ void bgSetColor(void* color) {
 }
 
 void bgReEntry(char* name) {
-    void* wp;
+    typedef struct BgEntryWork {
+        u16 flags;          // 0x00
+        u8 pad_02[0x12];    // 0x02
+        u32 color;          // 0x14
+        u32 failColor;      // 0x18
+        void* texData;      // 0x1C
+    } BgEntryWork;
+
+    BgEntryWork* wp;
     unsigned long length;
+    s32 root;
     char path[0x100];
 
-    wp = bgGetWork();
-    _mapFree(mapalloc_base_ptr, (void*)*(volatile void**)((s32)wp + 0x1C));
+    wp = (BgEntryWork*)bgGetWork();
+    _mapFree(mapalloc_base_ptr, wp->texData);
 
-    wp = bgGetWork();
+    wp = (BgEntryWork*)bgGetWork();
     length = 0;
 
     if (name == NULL) {
-        *(u16*)wp &= ~1;
+        wp->flags &= ~1;
         return;
     }
 
-    *(volatile void**)((s32)wp + 0x1C) = NULL;
+    wp->texData = NULL;
 
-    arcOpen(name, (void**)((s32)wp + 0x1C), &length);
+    arcOpen(name, &wp->texData, &length);
 
-    if (*(volatile void**)((s32)wp + 0x1C) == NULL) {
-        sprintf(path, str_PCTs_PCTs_8041f61c, getMarioStDvdRoot(), name);
+    if (wp->texData == NULL) {
+        root = getMarioStDvdRoot();
+        sprintf(path, str_PCTs_PCTs_8041f61c, root, name);
 
         name = DVDMgrOpen(path, 2, 0);
         if (name != NULL) {
             length = DVDMgrGetLength(name);
 
-            *(volatile void**)((s32)wp + 0x1C) =
-                _mapAlloc(mapalloc_base_ptr, (length + 0x1F) & ~0x1F);
+            wp->texData = _mapAlloc(mapalloc_base_ptr, (length + 0x1F) & ~0x1F);
 
             DVDMgrRead(
                 name,
-                (void*)*(volatile void**)((s32)wp + 0x1C),
+                wp->texData,
                 (length + 0x1F) & ~0x1F,
                 0
             );
@@ -358,51 +367,60 @@ void bgReEntry(char* name) {
         }
     }
 
-    if (*(volatile void**)((s32)wp + 0x1C) != NULL) {
-        UnpackTexPalette((void*)*(volatile void**)((s32)wp + 0x1C));
+    if (wp->texData != NULL) {
+        UnpackTexPalette(wp->texData);
 
-        *(u16*)wp |= 1;
-        *(u16*)wp &= ~2;
-        *(u16*)wp &= ~4;
-        *(u32*)((s32)wp + 0x14) = dat_8041f5f0;
+        wp->flags |= 1;
+        wp->flags &= ~2;
+        wp->flags &= ~4;
+        wp->color = dat_8041f5f0;
     } else {
-        *(u16*)wp |= 2;
-        *(u32*)((s32)wp + 0x18) = dat_8041f5f4;
-        *(u16*)wp |= 1;
-        *(u32*)((s32)wp + 0x14) = dat_8041f5f8;
+        wp->flags |= 2;
+        wp->failColor = dat_8041f5f4;
+        wp->flags |= 1;
+        wp->color = dat_8041f5f8;
     }
 }
 
 void bgEntry(char* name) {
-    void* wp;
+    typedef struct BgEntryWork {
+        u16 flags;          // 0x00
+        u8 pad_02[0x12];    // 0x02
+        u32 color;          // 0x14
+        u32 failColor;      // 0x18
+        void* texData;      // 0x1C
+    } BgEntryWork;
+
+    BgEntryWork* wp;
     unsigned long length;
+    s32 root;
     char path[0x100];
 
-    wp = bgGetWork();
+    wp = (BgEntryWork*)bgGetWork();
     length = 0;
 
     if (name == NULL) {
-        *(u16*)wp &= ~1;
+        wp->flags &= ~1;
         return;
     }
 
-    *(void**)((s32)wp + 0x1C) = NULL;
+    wp->texData = NULL;
 
-    arcOpen(name, (void**)((s32)wp + 0x1C), &length);
+    arcOpen(name, &wp->texData, &length);
 
-    if (*(void**)((s32)wp + 0x1C) == NULL) {
-        sprintf(path, str_PCTs_PCTs_8041f61c, getMarioStDvdRoot(), name);
+    if (wp->texData == NULL) {
+        root = getMarioStDvdRoot();
+        sprintf(path, str_PCTs_PCTs_8041f61c, root, name);
 
         name = DVDMgrOpen(path, 2, 0);
         if (name != NULL) {
             length = DVDMgrGetLength(name);
 
-            *(void**)((s32)wp + 0x1C) =
-                _mapAlloc(mapalloc_base_ptr, (length + 0x1F) & ~0x1F);
+            wp->texData = _mapAlloc(mapalloc_base_ptr, (length + 0x1F) & ~0x1F);
 
             DVDMgrRead(
                 name,
-                *(void**)((s32)wp + 0x1C),
+                wp->texData,
                 (length + 0x1F) & ~0x1F,
                 0
             );
@@ -411,17 +429,17 @@ void bgEntry(char* name) {
         }
     }
 
-    if (*(void**)((s32)wp + 0x1C) != NULL) {
-        UnpackTexPalette(*(void**)((s32)wp + 0x1C));
+    if (wp->texData != NULL) {
+        UnpackTexPalette(wp->texData);
 
-        *(u16*)wp |= 1;
-        *(u16*)wp &= ~2;
-        *(u16*)wp &= ~4;
-        *(u32*)((s32)wp + 0x14) = dat_8041f5f0;
+        wp->flags |= 1;
+        wp->flags &= ~2;
+        wp->flags &= ~4;
+        wp->color = dat_8041f5f0;
     } else {
-        *(u16*)wp |= 2;
-        *(u32*)((s32)wp + 0x18) = dat_8041f5f4;
-        *(u16*)wp |= 1;
-        *(u32*)((s32)wp + 0x14) = dat_8041f5f8;
+        wp->flags |= 2;
+        wp->failColor = dat_8041f5f4;
+        wp->flags |= 1;
+        wp->color = dat_8041f5f8;
     }
 }

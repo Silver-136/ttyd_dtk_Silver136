@@ -9,8 +9,8 @@ extern f32 angleABTBL[];
 extern void DEMOPadRead(void);
 extern void U_PADControlMotor(s32 controller, s32 command);
 extern f32 fabsf(f32 x);
-static const f32 float_6p2832_8041f458 = 6.2832f;
-static const f32 float_360_8041f45c = 360.0f;
+extern const f32 float_6p2832_8041f458[1];
+extern const f32 float_360_8041f45c[1];
 extern void* memcpy(void* dst, const void* src, u32 size);
 extern void fsort(void** table, u32 count);
 typedef f32 (*IntplCallback)(s32 current, s32 total, f32 start, f32 end);
@@ -19,7 +19,6 @@ static void* tmp0[256];
 static u8 tmp1[0x400];
 static QSortCompareFunc comp;
 extern const f32 float_180_8041f464;
-extern const f32 float_360_8041f45c;
 extern f64 fmod(f64 x, f64 y);
 extern const f64 double_360_802bf240;
 extern const f32 float_0_8041f448;
@@ -28,6 +27,16 @@ extern const f64 double_3_802bf200;
 extern const f64 double_0_802bf208;
 extern f32 __float_nan[];
 extern f64 __frsqrte(f64);
+extern const f32 float_3p1416_8041f460;
+extern const f32 float_45_8041f484;
+extern const f32 float_2_8041f488;
+extern const f32 float_90_8041f48c;
+extern const f32 float_270_8041f490;
+extern const f64 double_0p5_802bf1f8;
+static const char str__8041f494[] = "";
+extern const f32 float_0_8041f448;
+extern const f32 float_360_8041f45c[1];
+extern const char str_LINEAR_802bf178[];
 
 u16 sysGetToken(void) {
     static u16 token;
@@ -51,7 +60,7 @@ void movePos(f32* x, f32* z, f32 distance, f32 angle) {
     f32 radians;
     f32 cosValue;
 
-    radians = (float_6p2832_8041f458 * angle) / float_360_8041f45c;
+    radians = (float_6p2832_8041f458[0] * angle) / float_360_8041f45c[0];
 
     sinValue = sin(radians);
     cosValue = cos(radians);
@@ -65,7 +74,7 @@ void sincosf(f32 angle, f32* outSin, f32* outCos) {
     f32 sinValue;
     f32 cosValue;
 
-    radians = (3.1416f * angle) / 180.0f;
+    radians = (float_3p1416_8041f460 * angle) / float_180_8041f464;
 
     sinValue = sin(radians);
     *outSin = sinValue;
@@ -400,29 +409,29 @@ f32 angleABf(f32 ax, f32 ay, f32 bx, f32 by) {
 
     if (absX > absY) {
         ratio = absY / absX;
-        angle = 45.0f * ratio;
+        angle = float_45_8041f484 * ratio;
         indexValue = 2.0f * angle;
 
         if (indexValue >= 0.0f) {
-            index = (s32)(indexValue + 0.5);
+            index = (s32)(double_0p5_802bf1f8 + indexValue);
         } else {
-            index = -(s32)(0.5 - indexValue);
+            index = -(s32)(double_0p5_802bf1f8 - indexValue);
         }
 
         angle = angle * angleABTBL[index];
 
         if (dx >= 0.0f) {
             if (dy >= 0.0f) {
-                return 90.0f + angle;
+                return float_90_8041f48c + angle;
             } else {
-                return 90.0f - angle;
+                return float_90_8041f48c - angle;
             }
         } else {
             if (dy >= 0.0f) {
-                return 270.0f - angle;
-            } else {
-                return 270.0f + angle;
-            }
+            return float_270_8041f490 - angle;
+        } else {
+            return float_270_8041f490 + angle;
+        }
         }
     } else {
         if (absY == 0.0f) {
@@ -430,28 +439,28 @@ f32 angleABf(f32 ax, f32 ay, f32 bx, f32 by) {
         }
 
         ratio = absX / absY;
-        indexValue = 45.0f * ratio;
-        angle = 2.0f * indexValue;
+        indexValue = float_45_8041f484 * ratio;
+        angle = float_2_8041f488 * indexValue;
 
         if (angle >= 0.0f) {
-            index = (s32)(angle + 0.5);
+            index = (s32)(double_0p5_802bf1f8 + angle);
         } else {
-            index = -(s32)(0.5 - angle);
+            index = -(s32)(double_0p5_802bf1f8 - angle);
         }
 
         indexValue = indexValue * angleABTBL[index];
 
         if (dy >= 0.0f) {
             if (dx >= 0.0f) {
-                return 180.0f - indexValue;
+                return float_180_8041f464 - indexValue;
             } else {
-                return 180.0f + indexValue;
+                return float_180_8041f464 + indexValue;
             }
         } else {
             if (dx >= 0.0f) {
                 return indexValue;
             } else {
-                return 360.0f - indexValue;
+                return float_360_8041f45c[0] - indexValue;
             }
         }
     }
@@ -460,9 +469,9 @@ f32 angleABf(f32 ax, f32 ay, f32 bx, f32 by) {
 f32 compAngle(f32 angleA, f32 angleB) {
     if (__fabsf(angleB - angleA) >= float_180_8041f464) {
         if (angleB < angleA) {
-            angleB += float_360_8041f45c;
+            angleB += float_360_8041f45c[0];
         } else {
-            angleB -= float_360_8041f45c;
+            angleB -= float_360_8041f45c[0];
         }
     }
 
@@ -480,9 +489,9 @@ f32 reviseAngle(f32 angle) {
     }
 
     if (angle < float_0_8041f448) {
-        angle += float_360_8041f45c;
+        angle += float_360_8041f45c[0];
 
-        if (angle >= float_360_8041f45c) {
+        if (angle >= float_360_8041f45c[0]) {
             angle = float_0_8041f448;
         }
     }
@@ -491,7 +500,7 @@ f32 reviseAngle(f32 angle) {
 }
 
 char* getMarioStDvdRoot(void) {
-    return "";
+    return (char*)str__8041f494;
 }
 
 void makeKey(void) {
@@ -921,7 +930,7 @@ partition_again:
             goto partition_again;
         }
 
-partition_done:
+    partition_done:
         if (gt < pivot) {
             p = *gt;
             *gt = *pivot;
@@ -965,9 +974,10 @@ f32 distABf(f32 ax, f32 ay, f32 bx, f32 by) {
     f32 dy;
     f64 dvalue;
     f64 inv;
+    s32 exp;
     u32 bits;
-    u32 exp;
     s32 type;
+    const char* linear;
     f32 classifyValue;
     f64 square;
     dy = by - ay;
@@ -975,6 +985,9 @@ f32 distABf(f32 ax, f32 ay, f32 bx, f32 by) {
 
     ax = dy * dy;
     ax = dx * dx + ax;
+    dy = by - ay;
+    linear = str_LINEAR_802bf178;
+    dx = bx - ax;
 
     dvalue = ax;
 
@@ -982,21 +995,21 @@ f32 distABf(f32 ax, f32 ay, f32 bx, f32 by) {
         inv = __frsqrte(dvalue);
 
         square = inv * inv;
-        inv = double_0p5_802bf1f8 * inv *
-        (double_3_802bf200 - dvalue * square);
+        inv = *(const f64*)(linear + 0x80) * inv *
+    (*(const f64*)(linear + 0x88) - dvalue * square);
 
         square = inv * inv;
-        inv = double_0p5_802bf1f8 * inv *
-        (double_3_802bf200 - dvalue * square);
+        inv = *(const f64*)(linear + 0x80) * inv *
+    (*(const f64*)(linear + 0x88) - dvalue * square);
 
         square = inv * inv;
-        inv = double_0p5_802bf1f8 * inv *
-        (double_3_802bf200 - dvalue * square);
+        inv = *(const f64*)(linear + 0x80) * inv *
+    (*(const f64*)(linear + 0x88) - dvalue * square);
 
         return (f32)(dvalue * inv);
     }
 
-    if (dvalue < double_0_802bf208) {
+    if (dvalue < *(const f64*)(linear + 0x90)) {
         return __float_nan[0];
     }
 

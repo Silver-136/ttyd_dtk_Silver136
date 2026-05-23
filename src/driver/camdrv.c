@@ -923,22 +923,48 @@ void camDraw(void) {
 }
 
 void camEvalNearFar(void* cam) {
+    typedef struct CamEvalWork {
+        u8 pad_00[0x0C];
+        Vec3 pos;               // 0x0C
+        u8 pad_18[0x30 - 0x18];
+        f32 nearClip;           // 0x30
+        f32 farClip;            // 0x34
+        u8 pad_38[0x10C - 0x38];
+        f32 screenNear;         // 0x10C
+        f32 screenFar;          // 0x110
+        u8 pad_114[0x11C - 0x114];
+        f32 viewMtx[3][4];      // 0x11C
+        u8 pad_14C[0x184 - 0x14C];
+        f32 scale;              // 0x184
+        f32 bias;               // 0x188
+    } CamEvalWork;
+
+    typedef struct CamEvalMap {
+        u8 pad_00[0xB0];
+        Vec3 point;             // 0xB0
+    } CamEvalMap;
+
+    CamEvalWork* camWork;
     void* map;
     s32 i;
-    f32 nearDepth;
-    f32 farDepth;
-    f32 minValue;
-    f32 maxValue;
-    f32 screenFar;
-    f32 screenNear;
-    f32 screenRange;
+
+    f32 zero;
     f32 scale;
     f32 bias;
+    f32 screenFar;
+    f32 nearDepth;
+    f32 farDepth;
+    f32 screenRange;
+    f32 minValue;
+    f32 maxValue;
+
+    f32 screenNear;
     f32 z;
     f32 value;
-    f32 zero;
     Vec3 diff;
     Vec3 transformed;
+
+    camWork = (CamEvalWork*)cam;
 
     nearDepth = float_1_8041f6c0;
     farDepth = float_32768_8041f6d0;
@@ -947,29 +973,29 @@ void camEvalNearFar(void* cam) {
 
     map = mapGetWork();
 
-    screenFar = *(f32*)((s32)cam + 0x110);
-    screenNear = *(f32*)((s32)cam + 0x10C);
-    scale = *(f32*)((s32)cam + 0x184);
-    bias = *(f32*)((s32)cam + 0x188);
+    screenFar = camWork->screenFar;
+    screenNear = camWork->screenNear;
+    scale = camWork->scale;
     screenRange = screenFar - screenNear;
+    bias = camWork->bias;
     zero = float_0_8041f6b4;
 
     for (i = 0; i < 8; i++, map = (void*)((s32)map + 0xC)) {
         PSVECSubtract(
             (void*)((s32)map + 0xB0),
-            (void*)((s32)cam + 0x0C),
+            &camWork->pos,
             &diff
         );
 
-        if (PSVECDotProduct(&diff, (void*)((s32)cam + 0x13C)) >= zero) {
-            if (minValue != zero) {
+        if (PSVECDotProduct(&diff, (void*)&camWork->viewMtx[2][0]) >= zero) {
+            if (zero != minValue) {
                 minValue = zero;
                 nearDepth = float_neg1_8041f6ec;
             }
         } else {
             PSMTXMultVec(
-                (void*)((s32)cam + 0x11C),
-                (void*)((s32)map + 0xB0),
+                camWork->viewMtx,
+                &((CamEvalMap*)map)->point,
                 &transformed
             );
 
@@ -996,9 +1022,9 @@ void camEvalNearFar(void* cam) {
         farDepth = float_1_8041f6c0;
     }
 
-    *(f32*)((s32)cam + 0x30) = float_1_8041f6c0;
-    *(f32*)((s32)cam + 0x30) = nearDepth;
-    *(f32*)((s32)cam + 0x34) = farDepth;
+    camWork->nearClip = *(volatile f32*)&float_1_8041f6c0;
+    camWork->nearClip = nearDepth;
+    camWork->farClip = farDepth;
 }
 
 void camMain(void) {

@@ -2,22 +2,18 @@
 extern void* _battleWorkPointer;
 
 void _mapobj_data_touch_scale(s32 id) {
+    s32 offset = 0;
+    void* battleWork = _battleWorkPointer;
     s32 i;
-    s32 offset;
-    void* entry;
-    void* data;
 
-    offset = 0;
-    for (i = 0; i < 0x20; i++) {
-        entry = (void*)((s32)_battleWorkPointer + 0x1715C + offset);
+    for (i = 0; i < 0x20; i++, offset += 0x7C) {
+        void* entry = (void*)((s32)battleWork + offset + 0x1715C);
 
-        if (*(s32*)((s32)entry + 0x0) > 0) {
-            data = *(void**)((s32)entry + 0x64);
-            if (*(u16*)((s32)data + 0x6) == id) {
-                *(s32*)((s32)entry + 0x68) |= 2;
+        if (*(s32*)entry > 0) {
+            void* data = *(void**)((s32)entry + 0x64);
+            if (*(u16*)((s32)data + 6) == id) {
+                *(u32*)((s32)entry + 0x68) |= 2;
             }
         }
-
-        offset += 0x7C;
     }
 }
