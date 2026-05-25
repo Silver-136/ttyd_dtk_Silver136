@@ -1095,3 +1095,79 @@ s32 pouchRemoveKeepItem(s32 item, s32 index) {
 
     return 0;
 }
+
+s16 pouchHaveBadge(s32 index) {
+    return *(s16*)(mpp + 0x1FA + index * 2);
+}
+
+s16 pouchKeepItem(s32 index) {
+    return *(s16*)(mpp + 0x1BA + index * 2);
+}
+
+s16 pouchKeyItem(s32 index) {
+    return *(s16*)(mpp + 0xA0 + index * 2);
+}
+
+s32 pouchGetKpaCoin(void) {
+    return *(u8*)(mpp + 0x5BB);
+}
+
+s32 pouchGetKpaScore(void) {
+    return *(s32*)(mpp + 0x5BC);
+}
+
+s32 pouchGetPartyColor(s32 partyId) {
+    return *(u16*)(mpp + partyId * 0xE) >> 13;
+}
+
+void pouchMajinaiInit(s32 value) {
+    if (*(u8*)(mpp + 0x5B8) < value) {
+        *(u8*)(mpp + 0x5B8) = value;
+        *(s8*)(mpp + 0x5B9) = -1;
+        *(u8*)(mpp + 0x5BA) = 0;
+    }
+}
+
+void pouchSetYoshiName(char* name) {
+    extern char* strcpy(char* dest, const char* src);
+    strcpy((char*)(mpp + 0x5C0), name);
+}
+
+void pouchAddKpaScore(s32 value) {
+    *(u32*)(mpp + 0x5BC) += value;
+    if (*(u32*)(mpp + 0x5BC) > 999999) {
+        *(u32*)(mpp + 0x5BC) = 999999;
+    }
+}
+
+s32 pouchAddKpaCoin(s32 value) {
+    s32 ret = 0;
+    *(u8*)(mpp + 0x5BB) += value;
+    if (*(u8*)(mpp + 0x5BB) >= 100) {
+        *(u8*)(mpp + 0x5BB) -= 100;
+        ret = 1;
+    }
+    return ret;
+}
+
+void pouchArriveBadge(s32 badge) {
+    extern void* bdsw;
+    extern void badgeShop_add(void* work, s16 badge, s32 flag);
+    badgeShop_add(bdsw, badge, 1);
+}
+
+void pouchOpenMail(s32 mail) {
+    s32 word = mail / 32;
+    s32 bit = mail % 32;
+    *(u32*)(mpp + 0x590 + word * 4) |= 1 << bit;
+}
+
+char* pouchGetYoshiName(void) {
+    extern u32 strlen(const char* str);
+    extern char* msgSearch(const char* msg);
+    extern const char str_name_party3_802cc728[];
+    if (strlen((char*)(mpp + 0x5C0)) < 1) {
+        return msgSearch(str_name_party3_802cc728);
+    }
+    return (char*)(mpp + 0x5C0);
+}

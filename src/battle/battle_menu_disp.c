@@ -183,16 +183,19 @@ void BattleMenuDisp_WeaponSelect_Init(void* work, void* commonInfo, s32 value, s
 }
 
 void GetRingOffset(f32* x, f32* y, f32 angle) {
+    extern double cos(double);
+    extern double sin(double);
+    extern f32 float_4p7124_80422540;
+    extern f32 float_80_80422530;
+    extern f32 float_35_80422504;
     f32 a;
     f32 value;
 
-    a = 4.7124f - angle;
-
+    a = float_4p7124_80422540 - angle;
     value = cos(a);
-    *x = 80.0f * value;
-
+    *x = float_80_80422530 * value;
     value = sin(a);
-    *y = 35.0f * value;
+    *y = float_35_80422504 * value;
 }
 
 void InitSubMenuCommonProcess2(void* proc, void* common) {
@@ -260,6 +263,10 @@ void InitSubMenuCommonProcess3(void* proc, void* common) {
 }
 
 void BattleMenuDisp_Operation_Init(void* work, s32 flags) {
+    extern void InitSubMenuCommonProcess(void*, void*, void*);
+    extern void InitSubMenuCommonProcess2(void*, void*);
+    extern void InitSubMenuCommonProcess3(void*, void*);
+    extern void* BattleGetUnitPtr(void*, s32);
     void* proc;
     void* common;
     void* unit;
@@ -267,12 +274,14 @@ void BattleMenuDisp_Operation_Init(void* work, s32 flags) {
 
     unit = BattleGetUnitPtr(work, *(s32*)((s32)work + 0x420));
 
-    if (*(s32*)((s32)unit + 0x8) == 0xDE) {
-        info = (void*)((s32)work + 0x1C14);
-    } else {
-        info = (void*)((s32)work + 0x1C20);
+    if (*(s32*)((s32)unit + 0x8) != 0xDE) {
+        goto not_mario;
     }
-
+    info = (void*)((s32)work + 0x1C14);
+    goto got_info;
+not_mario:
+    info = (void*)((s32)work + 0x1C20);
+got_info:
     InitSubMenuCommonProcess(&proc, &common, info);
 
     if (flags & 1) {
@@ -281,3 +290,4 @@ void BattleMenuDisp_Operation_Init(void* work, s32 flags) {
         InitSubMenuCommonProcess3(proc, common);
     }
 }
+

@@ -56,7 +56,8 @@ USER_FUNC(evt_btl_camera_set_prilimit) {
 }
 
 USER_FUNC(evt_btl_camera_wait_move_end) {
-    if (battleCameraGetPosMoveSpeed() >= 2.0f) {
+    extern f32 float_2_80422738;
+    if (battleCameraGetPosMoveSpeed() >= float_2_80422738) {
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;
@@ -99,15 +100,15 @@ void btl_camera_set_posoffset(s32 priority, f32 x, f32 y, f32 z) {
 }
 
 void btl_camera_off_posoffset_manual(s32 priority) {
-    void* work;
+    extern f32 float_0_8042273c;
+    void* work = _battleWorkPointer;
     f32 zero;
 
-    work = _battleWorkPointer;
     if (priority < *(s32*)((s32)work + 0x275C)) {
         return;
     }
 
-    zero = 0.0f;
+    zero = float_0_8042273c;
     *(u32*)((s32)work + 0x2754) &= ~0x20;
     *(f32*)((s32)work + 0x27B0) = zero;
     *(f32*)((s32)work + 0x27B4) = zero;
@@ -115,33 +116,42 @@ void btl_camera_off_posoffset_manual(s32 priority) {
 }
 
 void btl_camera_set_zoomSpeedLv(s32 priority, s32 level) {
-    void* work;
+    void* work = _battleWorkPointer;
 
-    work = _battleWorkPointer;
     if (priority < *(s32*)((s32)work + 0x275C)) {
         return;
     }
 
-    if (level < 0 || level > 5) {
-        level = 1;
+    if (level < 0) {
+        goto invalid;
     }
-
+    if (level > 5) {
+        goto invalid;
+    }
     *(s16*)((s32)work + 0x277E) = level;
+    return;
+invalid:
+    *(s16*)((s32)work + 0x277E) = 1;
 }
 
 void btl_camera_set_moveSpeedLv(s32 priority, s32 level) {
-    void* work;
+    void* work = _battleWorkPointer;
 
-    work = _battleWorkPointer;
     if (priority < *(s32*)((s32)work + 0x275C)) {
         return;
     }
 
-    if (level < 0 || level > 5) {
-        level = 1;
+    if (level < 0) {
+        goto invalid;
     }
-
+    if (level > 5) {
+        goto invalid;
+    }
     *(s16*)((s32)work + 0x277C) = level;
+    goto done;
+invalid:
+    *(s16*)((s32)work + 0x277C) = 1;
+done:
     *(s16*)((s32)work + 0x277E) = *(s16*)((s32)work + 0x277C);
 }
 

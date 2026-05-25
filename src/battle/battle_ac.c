@@ -10,6 +10,9 @@ void BtlPad_WorkUpdate(void* work, s32 flags);
 s32 psndSFXOn(const char* name);
 void psndSFXOff(s32 id);
 void dispEntry(s32 cameraId, s32 priority, void* callback, f32 z, void* param);
+extern const char str_SFX_AC_POWER_GAUGE1_802ee034[20];
+extern f32 float_0_80422188;
+extern f32 float_900_804221a8;
 
 s32 BattleActionCommandGetDifficulty(void* work) {
     return *(u8*)((s32)work + 0x1CBD);
@@ -81,8 +84,8 @@ void BattleAcGaugeSeInit(void) {
     void* work;
 
     work = _battleWorkPointer;
-    *(s32*)((s32)work + 0x1F18) = psndSFXOn("SFX_AC_POWER_GAUGE1");
-    *(f32*)((s32)work + 0x1F1C) = 0.0f;
+    *(s32*)((s32)work + 0x1F18) = psndSFXOn(str_SFX_AC_POWER_GAUGE1_802ee034);
+    *(f32*)((s32)work + 0x1F1C) = float_0_80422188;
 }
 
 void BattleAcGaugeSeDelete(void) {
@@ -148,6 +151,6 @@ void BattleActionCommandManager(struct BattleWork* work) {
 
     dispCallback = *(void**)((s32)work + 0x1CA8);
     if (dispCallback != 0) {
-        dispEntry(8, 1, dispCallback, 900.0f, work);
+        dispEntry(8, 1, dispCallback, float_900_804221a8, work);
     }
 }

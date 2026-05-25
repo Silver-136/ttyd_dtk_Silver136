@@ -8,3 +8,4 @@ s32 battleAcResult_TimingWide(void* obj) {
 void battleAcDelete_TimingWide(void* obj) {
     *(s32*)((s32)obj + 0x1C9C) = 0x3EC;
 }
+

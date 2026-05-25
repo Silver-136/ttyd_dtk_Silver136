@@ -4,6 +4,7 @@ void* partyPtrTbl[2];
 void animPoseSetMaterialLightFlagOff(void* pose, s32 flag);
 s32 marioGetCamId(void);
 void partyChgRunMode(void* party, s32 mode);
+extern f32 float_18p5_804212d4;
 
 void partyKeyOff(void) {
 }
@@ -50,7 +51,7 @@ void partyInit(void) {
 f32 partyGetHeight(void* party) {
     if ((s32)*(u8*)((s32)party + 0x31) == 4) {
         if ((*(u32*)((s32)party + 0x0) & 0x100) != 0) {
-            return 18.5f + *(f32*)((s32)party + 0xF0);
+            return float_18p5_804212d4 + *(f32*)((s32)party + 0xF0);
         }
     }
 

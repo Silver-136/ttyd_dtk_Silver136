@@ -4,6 +4,9 @@ s32 readId[2];
 s32 writeId[2];
 
 extern u8 footmarkBuf[];
+extern f32 float_0_804215b8;
+extern f32 float_0p75_80421608;
+extern f32 float_1_804215f8;
 
 void partyMoveMain(void* party, s32 hosei);
 f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
@@ -24,7 +27,7 @@ s32 partyGetFootmarkWriteId(s32 id) {
 void partyClearJumpPara(void* party) {
     f32 zero;
 
-    zero = 0.0f;
+    zero = float_0_804215b8;
     *(u32*)((s32)party + 0x0) &= ~0x70;
     *(f32*)((s32)party + 0x114) = zero;
     *(f32*)((s32)party + 0x118) = zero;
@@ -112,9 +115,9 @@ void unk_800cbf84(void* party, f32 value) {
     base = value * *(f32*)((s32)move + 0x228);
 
     if ((*(u32*)((s32)party + 0x0) & 0x80) != 0) {
-        mult = 0.75f;
+        mult = float_0p75_80421608;
     } else {
-        mult = 1.0f;
+        mult = float_1_804215f8;
     }
 
     *(f32*)((s32)party + 0x108) = base * mult;

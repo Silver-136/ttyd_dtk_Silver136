@@ -7,3 +7,4 @@ s32 battleAcResult_ButtonDown(void* obj) {
 void battleAcDelete_ButtonDown(void* obj) {
     *(s32*)((s32)obj + 0x1C9C) = 0x3EB;
 }
+

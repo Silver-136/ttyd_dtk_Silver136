@@ -20,7 +20,7 @@ extern s32 gp;
 extern void* mapalloc_base_ptr;
 extern char rel_bss[];
 extern void* nanNPCWork;
-
+extern char* dir_str[8];
 extern s32 bdsw;
 extern s32 dbg_lotteryinfo;
 
@@ -181,6 +181,7 @@ extern void camRoadMain(
     f32 x2,
     f32 y2,
     f32 z2,
+    f32 unkZero,
     void* work
 );
 
@@ -232,9 +233,9 @@ void _relUnLoad(void) {
 }
 
 void _load(char* oldMap, char* mapName, char* beroName) {
-    char* map;
     char* bero;
     char* rodata;
+    char* map;
     char** mapData;
     char* srcBero;
 
@@ -246,8 +247,11 @@ void _load(char* oldMap, char* mapName, char* beroName) {
     void* cam;
 
     SeqMapVec hitPos;
+    SeqMapVec hitTempVec;
+    SeqMapVec failHitVec;
+    SeqMapVec noDirVec;
+    SeqMapVec noBeroVec;
     SeqMapVec outVec;
-    SeqMapVec tempVec;
     SeqMapVec camRoadWork[3];
 
     f32 hitDist;
@@ -267,13 +271,14 @@ void _load(char* oldMap, char* mapName, char* beroName) {
     (void)oldMap;
 
     map = mapName;
-    bero = beroName;
     rodata = lbl_802BF268;
+    bero = beroName;
 
     mapData = mapDataPtr(map);
 
-    srcBero = bero;
-    if (srcBero == NULL) {
+    if (bero != NULL) {
+        srcBero = bero;
+    } else {
         srcBero = (char*)&zero_8041f508;
     }
 
@@ -330,9 +335,7 @@ void _load(char* oldMap, char* mapName, char* beroName) {
             dirPtr = dir_str;
 
             while (dirIndex < 8) {
-                dirLen = strlen(*dirPtr);
-
-                if (strncmp(*dirPtr, bero, dirLen) == 0) {
+                if (strncmp(*dirPtr, bero, strlen(*dirPtr)) == 0) {
                     angle = float_3p1416_8041f510 *
                             float_2_8041f514 *
                             (f32)dirIndex *
@@ -355,7 +358,7 @@ void _load(char* oldMap, char* mapName, char* beroName) {
                 outVec.y = float_0_8041f524;
                 outVec.z = float_0_8041f524;
 
-                if (hitCheckFilter(
+                if ((u32)hitCheckFilter(
                         hitPos.x,
                         float_10_8041f528 + hitPos.y,
                         hitPos.z,
@@ -371,23 +374,27 @@ void _load(char* oldMap, char* mapName, char* beroName) {
                         &outB,
                         &outC
                     ) != 0) {
-                    tempVec = outVec;
+                    hitTempVec = *(SeqMapVec*)(rodata + 0x1C);
+                    hitTempVec.x = outVec.z;
+                    hitTempVec.y = outVec.y;
+                    hitTempVec.z = outVec.x;
+
                     mario = marioGetPtr();
-                    *(SeqMapVec*)((s32)mario + 0x8C) = tempVec;
+                    *(SeqMapVec*)((s32)mario + 0x8C) = hitTempVec;
                 } else {
-                    tempVec = vec3_802bf290;
+                    failHitVec = *(SeqMapVec*)(rodata + 0x28);
                     mario = marioGetPtr();
-                    *(SeqMapVec*)((s32)mario + 0x8C) = tempVec;
+                    *(SeqMapVec*)((s32)mario + 0x8C) = failHitVec;
                 }
             } else {
-                tempVec = vec3_802bf29c;
+                noDirVec = *(SeqMapVec*)(rodata + 0x34);
                 mario = marioGetPtr();
-                *(SeqMapVec*)((s32)mario + 0x8C) = tempVec;
+                *(SeqMapVec*)((s32)mario + 0x8C) = noDirVec;
             }
         } else {
-            tempVec = vec3_802bf2a8;
+            noBeroVec = *(SeqMapVec*)(rodata + 0x40);
             mario = marioGetPtr();
-            *(SeqMapVec*)((s32)mario + 0x8C) = tempVec;
+            *(SeqMapVec*)((s32)mario + 0x8C) = noBeroVec;
         }
     }
 
@@ -418,6 +425,7 @@ void _load(char* oldMap, char* mapName, char* beroName) {
             one + *(f32*)((s32)cam + 0xAC),
             one + *(f32*)((s32)cam + 0xB0),
             one + *(f32*)((s32)cam + 0xB4),
+            zero,
             camRoadWork
         );
 

@@ -247,9 +247,11 @@ f32 camRoadGetCurrentShiftXRate(void) {
 
     return float_0_8041f62c;
 }
+
 void* camRoadGetWorkPtr(void) {
     return wp;
 }
+
 void camRoadMain(void* cam, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f) {
     void* hit;
     f32 value;

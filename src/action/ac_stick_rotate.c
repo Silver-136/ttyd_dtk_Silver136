@@ -30,3 +30,4 @@ s32 _get_icon_id(s8 id) {
             return 0x81;
     }
 }
+

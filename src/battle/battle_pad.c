@@ -17,23 +17,28 @@ s32 BattlePadGetTrigger(void) {
 }
 
 s32 BattlePadMultiCheckNow(s32 controller, s32 mask) {
-    return *(s32*)((s32)_battleWorkPointer + controller * 0x1FC + 0x1034) & mask;
+    s32 value = *(s32*)((s32)_battleWorkPointer + controller * 0x1FC + 0x1034);
+    return value & mask;
 }
 
 s32 BattlePadMultiCheckRepeat(s32 controller, s32 mask) {
-    return *(s32*)((s32)_battleWorkPointer + controller * 0x1FC + 0xFBC) & mask;
+    s32 value = *(s32*)((s32)_battleWorkPointer + controller * 0x1FC + 0xFBC);
+    return value & mask;
 }
 
 s32 BattlePadMultiCheckTrigger(s32 controller, s32 mask) {
-    return *(s32*)((s32)_battleWorkPointer + controller * 0x1FC + 0xF44) & mask;
+    s32 value = *(s32*)((s32)_battleWorkPointer + controller * 0x1FC + 0xF44);
+    return value & mask;
 }
 
 s32 BattlePadMultiCheckUp(s32 controller, s32 mask) {
-    return *(s32*)((s32)_battleWorkPointer + controller * 0x1FC + 0x10AC) & mask;
+    s32 value = *(s32*)((s32)_battleWorkPointer + controller * 0x1FC + 0x10AC);
+    return value & mask;
 }
 
 s32 BattlePadMultiCheckRecordTrigger(s32 controller, s32 recordIndex, s32 mask) {
-    return *(s32*)((s32)_battleWorkPointer + controller * 0x1FC + 0xF44 + recordIndex * 4) & mask;
+    s32 value = *(s32*)((s32)_battleWorkPointer + controller * 0x1FC + 0xF44 + recordIndex * 4);
+    return value & mask;
 }
 
 s32 BattlePadCheckNow(s32 mask) {

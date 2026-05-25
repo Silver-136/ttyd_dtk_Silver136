@@ -2,6 +2,13 @@
 
 #include <dolphin/os.h>
 
+extern void* mapalloc_base_ptr;
+extern void* R_battlemapalloc_base_ptr;
+
+void _mapFree(void* base, void* ptr);
+void GXInitTexObjData(void* texObj, void* data);
+void OSFreeToHeap(OSHeapHandle heap, void* ptr);
+
 //.sdata
 s32 size_table[6][2] = {
 	{1, 0x1C84}, //0x721000, 7300 KiB/7.13 MiB
@@ -176,4 +183,20 @@ void memInit(void) {
         var_r27_2 += 4;
     }
     while (var_r24 < 5);*/
+}
+
+void __memFree(s32 heap, void* ptr) {
+    OSFreeToHeap(heapHandle[heap], ptr);
+}
+
+void N_battleMapFree(void) {
+    _mapFree(mapalloc_base_ptr, R_battlemapalloc_base_ptr);
+    R_battlemapalloc_base_ptr = 0;
+}
+
+void* smartTexObj(void* texObj, void** data) {
+    if (data != 0) {
+        GXInitTexObjData(texObj, *data);
+    }
+    return texObj;
 }

@@ -62,3 +62,4 @@ void* arcOpen(const char* filename, void** address, u32* length) {
     }
     return NULL;
 }
+
