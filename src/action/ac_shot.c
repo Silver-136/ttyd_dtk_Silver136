@@ -21,17 +21,20 @@ void _ac_disp_init(void* wp) {
     s8 alpha;
 
     memset(disp, 0, 0x2C);
+
     y = float_neg200_80424840;
     zero = float_0_80424828;
-    alpha = -0x10;
+
     *(f32*)((s32)disp + 0x14) = y;
+
+    alpha = -0x10;
+
     *(f32*)((s32)disp + 0x18) = zero;
     *(s32*)((s32)disp + 0x20) = 0x14;
     *(u32*)((s32)disp + 0xC) = dat_80424818;
     *(u8*)((s32)disp + 0x10) = 0;
-    *(u8*)((s32)disp + 0x11) = alpha;
-    *(u8*)((s32)disp + 0x12) = alpha;
+    *(s8*)((s32)disp + 0x11) = alpha;
+    *(s8*)((s32)disp + 0x12) = alpha;
     *(u8*)((s32)disp + 0x13) = 0;
     *(f32*)((s32)disp + 0x28) = zero;
 }
-

@@ -7,13 +7,20 @@ void* get_ptr(void) {
     return (void*)((s32)_battleWorkPointer + 0x1F4C);
 }
 
-s32 star_stone_appear(void) {
-    *(s32*)((s32)get_ptr() + 0x3B4) = 1;
+USER_FUNC(star_stone_appear) {
+    void* wp;
+
+    wp = get_ptr();
+    *(s32*)((s32)wp + 0x3B4) = 1;
     return 2;
 }
 
-s32 start_game(void) {
-    *(s32*)((s32)get_ptr() + 4) = 1;
+USER_FUNC(start_game) {
+    void* wp;
+
+    wp = get_ptr();
+    *(s32*)((s32)wp + 0x4) = 1;
+
     return 2;
 }
 

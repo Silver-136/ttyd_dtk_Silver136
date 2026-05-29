@@ -109,14 +109,14 @@ s32 _bgset_iron_frame_check(void* evt) {
 s32 _get_mario_hammer_lv(void* evt) {
     s32* args;
     s32 dst;
-    s32 value;
+    u8 value;
 
     args = *(s32**)((s32)evt + 0x18);
     dst = args[0];
 
-    value = *(s8*)((s32)pouchGetPtr() + 0x99);
+    value = *(u8*)((s32)pouchGetPtr() + 0x99);
 
-    evtSetValue(evt, dst, value);
+    evtSetValue(evt, dst, (s8)value);
 
     return 2;
 }

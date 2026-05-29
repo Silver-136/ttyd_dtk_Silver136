@@ -254,6 +254,9 @@ void pressStartGX_80008888(u8 alpha, f32 x, f32 y) {
     GXSetTevSwapModeTable(1, 0, 1, 2, 3);
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
 void disp2(s32 cameraId) {
     void* cam8;
     void* cam;
@@ -424,6 +427,9 @@ void disp2(s32 cameraId) {
     );
 }
 
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
 void disp1(s32 cameraId) {
     void* cam8;
     void* cam;
@@ -509,6 +515,9 @@ void disp1(s32 cameraId) {
         viewportBackup[5]
     );
 }
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 void titleMain(void* seq) {
     u32* vec;
@@ -863,6 +872,9 @@ void titleMain(void* seq) {
         }
     }
 }
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
 void seq_titleExit(void) {
     fileFree(*(void**)wp2);

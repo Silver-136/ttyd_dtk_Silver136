@@ -45,11 +45,20 @@ USER_FUNC(scissor_init) {
 }
 
 USER_FUNC(scissor_timer_get) {
-    void* work = GetScissorPtr();
-    if (*(s32*)((s32)work + 0x104) <= 0x3B) {
+    void* work;
+    s32* args;
+    s32 timer;
+
+    work = GetScissorPtr();
+    args = event->args;
+
+    timer = *(s32*)((s32)work + 0x104);
+    if (timer <= 0x3B) {
         *(s32*)((s32)work + 0x11C) = 6;
     }
-    evtSetValue(event, event->args[0], *(s32*)((s32)work + 0x104));
+
+    evtSetValue(event, args[0], *(s32*)((s32)work + 0x104));
+
     return 2;
 }
 

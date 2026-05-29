@@ -9,6 +9,9 @@ s32 evt_hit_bind_update(void* event, s32 isFirstCall) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
 s32 evt_hitobj_name_callback(void* event, s32 isFirstCall) {
     extern s32 evtGetValue(void* event, s32 value);
     extern void name_callback_sub(s32 name, s32 callback, s32 value);
@@ -19,6 +22,12 @@ s32 evt_hitobj_name_callback(void* event, s32 isFirstCall) {
     name_callback_sub(name, callback, 0);
     return 2;
 }
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 s32 evt_hit_get_position(void* event, s32 isFirstCall) {
     typedef struct Vec {
@@ -39,3 +48,6 @@ s32 evt_hit_get_position(void* event, s32 isFirstCall) {
     evtSetFloat(event, args[3], pos.z);
     return 2;
 }
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset

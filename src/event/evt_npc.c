@@ -1,5 +1,7 @@
 #include "event/evt_npc.h"
 
+void _npc_check_coin_group(void* group, s32* coin);
+
 void _npc_check_coin(void* npc, s32* coin) {
     *coin += *(u8*)((s32)npc + 0x315);
 }
@@ -325,5 +327,130 @@ USER_FUNC(evt_npc_set_btlsetup_work) {
     s32 idx = evtGetValue(event, args[1]);
     s32 value = evtGetValue(evt, args[2]);
     npcSetBtlSetupWork(npc, idx, value);
+    return 2;
+}
+
+void _npc_check_coin_group(void* group, s32* coin) {
+    void* child;
+    s32 offset;
+    s32 i;
+    s32 entryOffset;
+
+    child = *(void**)((s32)group + 0x328);
+    if (child != 0) {
+        _npc_check_coin_group(child, coin);
+    }
+
+    i = 0;
+    offset = 0;
+    while (i < 4) {
+        entryOffset = offset;
+        entryOffset += 0x330;
+        child = *(void**)((s32)group + entryOffset);
+
+        if (child != 0) {
+            _npc_check_coin(child, coin);
+        }
+
+        i++;
+        offset += 4;
+    }
+
+    _npc_check_coin(group, coin);
+}
+
+USER_FUNC(evt_get_target_dir) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
+    extern f32 _get_target_dir(EventEntry* event, void* npc, s32 target);
+    extern void evtSetFloat(EventEntry* event, s32 index, f32 value);
+
+    s32* args;
+    s32 name;
+    s32 target;
+    s32 dst;
+    void* npc;
+
+    args = event->args;
+
+    name = evtGetValue(event, args[0]);
+    target = evtGetValue(event, args[1]);
+    dst = args[2];
+
+    npc = evtNpcNameToPtr(event, name);
+
+    evtSetFloat(event, dst, _get_target_dir(event, npc, target));
+    return 2;
+}
+
+USER_FUNC(evt_set_dir_to_home) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+
+    s32* args;
+    s32 name;
+    void* npc;
+
+    args = event->args;
+
+    name = evtGetValue(event, args[0]);
+    evtGetValue(event, args[1]);
+
+    npc = evtNpcNameToPtr(event, name);
+
+    *(f32*)((s32)npc + 0x144) = angleABf(
+        *(f32*)((s32)npc + 0x8C),
+        *(f32*)((s32)npc + 0x94),
+        *(f32*)((s32)npc + 0x1FC),
+        *(f32*)((s32)npc + 0x204)
+    );
+
+    return 2;
+}
+
+USER_FUNC(evt_set_dir_to_target) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
+    extern f32 _get_target_dir(EventEntry* event, void* npc, s32 target);
+
+    s32* args;
+    s32 name;
+    s32 target;
+    void* npc;
+
+    args = event->args;
+
+    name = evtGetValue(event, args[0]);
+    target = evtGetValue(event, args[1]);
+
+    npc = evtNpcNameToPtr(event, name);
+
+    *(f32*)((s32)npc + 0x144) = _get_target_dir(event, npc, target);
+
+    return 2;
+}
+
+USER_FUNC(evt_npc_set_paper) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
+    extern void animPoseSetPaperAnimGroup(void* pose, s32 anim, s32 enabled);
+    extern void animPosePaperPeraOn(void* pose);
+
+    s32* args;
+    s32 name;
+    s32 anim;
+    void* npc;
+
+    args = event->args;
+
+    name = evtGetValue(event, args[0]);
+    anim = evtGetValue(event, args[1]);
+
+    npc = evtNpcNameToPtr(event, name);
+
+    animPoseSetPaperAnimGroup(*(void**)((s32)npc + 0x104), anim, 1);
+    animPosePaperPeraOn(*(void**)((s32)npc + 0x104));
+
     return 2;
 }

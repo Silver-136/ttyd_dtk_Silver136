@@ -33,32 +33,81 @@ void* btlataudGetMoveEventPtr(void) {
 }
 
 USER_FUNC(_get_present_target_id) {
-    s32* args = event->args;
+    s32* args;
+    s32 dst;
 
-    evtSetValue(event, args[0], BattleAudience_GetPresentTargetUnitId());
+    args = event->args;
+    dst = args[0];
+
+    evtSetValue(event, dst, BattleAudience_GetPresentTargetUnitId());
     return 2;
 }
 
 USER_FUNC(_get_present_item) {
-    void* battleWork = _battleWorkPointer;
-    s32 itemNo = BattleAudience_GetPresentItemNo();
-    void* unit = BattleGetUnitPtr(battleWork, BattleAudience_GetPresentTargetUnitId());
+    void* battleWork;
+    s32 itemNo;
+    s32 targetId;
+    void* unit;
+
+    battleWork = _battleWorkPointer;
+    itemNo = BattleAudience_GetPresentItemNo();
+
+    targetId = BattleAudience_GetPresentTargetUnitId();
+    unit = BattleGetUnitPtr(battleWork, targetId);
 
     if (*(s8*)((s32)unit + 0xC) == 0) {
         pouchGetItem(itemNo);
     } else if (*(s32*)((s32)unit + 0x308) == 0) {
         *(s32*)((s32)unit + 0x308) = itemNo;
     }
+
     return 2;
 }
 
 USER_FUNC(_delete_present_item) {
-    s32* args = event->args;
-    s32 itemNo = BattleAudience_GetPresentItemNo();
+    s32* args;
+    s32 dst;
+    s32 itemNo;
 
-    if (args[0] != 0x1194D80) {
-        evtSetValue(event, args[0], itemNo);
+    args = event->args;
+    dst = args[0];
+
+    itemNo = BattleAudience_GetPresentItemNo();
+
+    if (dst != -0x0EE6B280) {
+        evtSetValue(event, dst, itemNo);
     }
+
     BattleAudience_SetPresentItemNo(0);
     return 2;
+}
+
+
+u8 _get_item_announce_disp(void) {
+    return 0;
+}
+
+
+s32 _get_item_announce(int param_1, int param_2, s32 param_3, s32 param_4, u32 param_5, u32 param_6) {
+    return 0;
+}
+
+
+s32 _get_attack_aud_no(int param_1) {
+    return 0;
+}
+
+
+s32 _attack_aud(int param_1) {
+    return 0;
+}
+
+
+s32 _check_aud_item_type(int param_1) {
+    return 0;
+}
+
+
+s32 _damage(void* pEvt) {
+    return 0;
 }

@@ -52,7 +52,6 @@ extern f32 reviseAngle(f32 angle);
 extern f64 sin(f64 angle);
 extern f64 cos(f64 angle);
 extern void dispEntry(s32 cameraId, s32 order, void* callback, s32 param, f32 z);
-
 extern const f32 float_6p2832_8041f60c;
 extern const f32 float_360_8041f610;
 extern const f32 float_0p001_8041f614;
@@ -63,7 +62,6 @@ extern const f32 float_608_8041f5fc;
 extern const f32 float_1_8041f604;
 extern const f32 float_0_8041f608;
 extern const f64 double_to_int_mask_802bf530;
-
 extern void* mapalloc_base_ptr;
 extern void _mapFree(void* heap, void* ptr);
 extern void* _mapAlloc(void* heap, u32 size);
@@ -74,9 +72,7 @@ extern u32 DVDMgrGetLength(void* dvd);
 extern void DVDMgrRead(void* dvd, void* dst, u32 size, s32 offset);
 extern void DVDMgrClose(void* dvd);
 extern void* UnpackTexPalette(void* data);
-
 extern const char str_PCTs_PCTs_8041f61c[6];
-
 extern u32 dat_8041f5f0;
 extern u32 dat_8041f5f4;
 extern u32 dat_8041f5f8;

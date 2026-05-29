@@ -8,6 +8,8 @@
 #include "pmario_sound.h"
 #include "system.h"
 
+extern f32 dat_804226c4;
+
 //.data
 s32 _enemy_can_use_item_table[33] = {
     ITEM_THUNDER_BOLT,  ITEM_FIRE_FLOWER,  ITEM_POW_BLOCK,     ITEM_THUNDER_RAGE, ITEM_SHOOTING_STAR,
@@ -389,27 +391,27 @@ void BtlUnit_GetPartsBaseRotate(BattleWorkUnitPart* part, f32* x, f32* y, f32* z
 }
 
 void BtlUnit_SetRotateOffset(BattleWorkUnit* unit, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         unit->rotationOffset.x = x;
     }
 
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         unit->rotationOffset.y = y;
     }
 
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         unit->rotationOffset.z = z;
     }
 }
 
 void BtlUnit_SetPartsRotateOffset(BattleWorkUnitPart* part, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         part->rotationOffset.x = x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         part->rotationOffset.y = y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         part->rotationOffset.z = z;
     }
 }
@@ -421,13 +423,13 @@ void BtlUnit_AddPartsRotateOffset(BattleWorkUnitPart* part, f32 x, f32 y, f32 z)
 }
 
 void BtlUnit_SetBaseScale(BattleWorkUnit* unit, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         unit->baseScale.x = x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         unit->baseScale.y = y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         unit->baseScale.z = z;
     }
 }
@@ -439,61 +441,61 @@ void BtlUnit_GetScale(BattleWorkUnit* unit, f32* x, f32* y, f32* z) {
 }
 
 void BtlUnit_SetScale(BattleWorkUnit* unit, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         unit->scale.x = x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         unit->scale.y = y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         unit->scale.z = z;
     }
 }
 
 void BtlUnit_AddScale(BattleWorkUnit* unit, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         unit->scale.x += x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         unit->scale.y += y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         unit->scale.z += z;
     }
 }
 
 void BtlUnit_SetPartsBaseScale(BattleWorkUnitPart* part, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         part->baseScale.x = x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         part->baseScale.y = y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         part->baseScale.z = z;
     }
 }
 
 void BtlUnit_SetPartsScale(BattleWorkUnitPart* part, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         part->scale.x = x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         part->scale.y = y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         part->scale.z = z;
     }
 }
 
 void BtlUnit_AddPartsScale(BattleWorkUnitPart* part, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         part->scale.x += x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         part->scale.y += y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         part->scale.z += z;
     }
 }
@@ -511,13 +513,13 @@ void BtlUnit_SetHeight(BattleWorkUnit* unit, s32 height) {
 }
 
 void BtlUnit_SetOffsetPos(BattleWorkUnit* unit, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         unit->positionOffset.x = x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         unit->positionOffset.y = y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         unit->positionOffset.z = z;
     }
 }
@@ -529,13 +531,13 @@ void BtlUnit_GetPartsOffsetPos(BattleWorkUnitPart* part, f32* x, f32* y, f32* z)
 }
 
 void BtlUnit_SetPartsOffsetPos(BattleWorkUnitPart* part, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         part->positionOffset.x = x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         part->positionOffset.y = y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         part->positionOffset.z = z;
     }
 }
@@ -547,109 +549,109 @@ void BtlUnit_AddPartsOffsetPos(BattleWorkUnitPart* part, f32 x, f32 y, f32 z) {
 }
 
 void BtlUnit_SetDispOffset(BattleWorkUnit* unit, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         unit->displayOffset.x = x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         unit->displayOffset.y = y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         unit->displayOffset.z = z;
     }
 }
 
 void BtlUnit_SetPartsDispOffset(BattleWorkUnitPart* part, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         part->displayOffset.x = x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         part->displayOffset.y = y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         part->displayOffset.z = z;
     }
 }
 
 void BtlUnit_AddPartsDispOffset(BattleWorkUnitPart* part, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         part->displayOffset.x += x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         part->displayOffset.y += y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         part->displayOffset.z += z;
     }
 }
 
 void BtlUnit_SetMoveStartPos(BattleWorkUnit* unit, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         unit->moveStartPosition.x = x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         unit->moveStartPosition.y = y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         unit->moveStartPosition.z = z;
     }
 }
 
 void BtlUnit_SetPartsMoveStartPos(BattleWorkUnitPart* part, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         part->moveStartPosition.x = x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         part->moveStartPosition.y = y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         part->moveStartPosition.z = z;
     }
 }
 
 void BtlUnit_SetMoveCurrentPos(BattleWorkUnit* unit, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         unit->moveCurrentPosition.x = x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         unit->moveCurrentPosition.y = y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         unit->moveCurrentPosition.z = z;
     }
 }
 
 void BtlUnit_SetPartsMoveCurrentPos(BattleWorkUnitPart* part, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         part->moveCurrentPosition.x = x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         part->moveCurrentPosition.y = y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         part->moveCurrentPosition.z = z;
     }
 }
 
 void BtlUnit_SetMoveTargetPos(BattleWorkUnit* unit, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         unit->moveTargetPosition.x = x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         unit->moveTargetPosition.y = y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         unit->moveTargetPosition.z = z;
     }
 }
 
 void BtlUnit_SetPartsMoveTargetPos(BattleWorkUnitPart* part, f32 x, f32 y, f32 z) {
-    if (-250000000.0f != x) {
+    if (dat_804226c4 != x) {
         part->moveTargetPosition.x = x;
     }
-    if (-250000000.0f != y) {
+    if (dat_804226c4 != y) {
         part->moveTargetPosition.y = y;
     }
-    if (-250000000.0f != z) {
+    if (dat_804226c4 != z) {
         part->moveTargetPosition.z = z;
     }
 }
@@ -1794,15 +1796,14 @@ s32 BtlUnit_GetMaxFp(void* unit) {
 void BtlUnit_SetMaxFp(void* unit, s32 fp) {
     s32 kind;
     struct BattleWork* battleWork;
-    s16 fp16;
 
     kind = *(s32*)((s32)unit + 0x8);
     battleWork = _battleWorkPointer;
 
     if (kind >= 0xE0 && kind < 0xE7) {
-        fp16 = fp;
+        fp = (s16)fp;
         unit = BattleGetMarioPtr(battleWork);
-        *(s16*)((s32)unit + 0x10E) = fp16;
+        *(s16*)((s32)unit + 0x10E) = fp;
     } else {
         *(s16*)((s32)unit + 0x10E) = fp;
     }
@@ -1811,15 +1812,14 @@ void BtlUnit_SetMaxFp(void* unit, s32 fp) {
 void BtlUnit_SetFp(void* unit, s32 fp) {
     s32 kind;
     struct BattleWork* battleWork;
-    s16 fp16;
 
     kind = *(s32*)((s32)unit + 0x8);
     battleWork = _battleWorkPointer;
 
     if (kind >= 0xE0 && kind < 0xE7) {
-        fp16 = fp;
+        fp = (s16)fp;
         unit = BattleGetMarioPtr(battleWork);
-        *(s16*)((s32)unit + 0x112) = fp16;
+        *(s16*)((s32)unit + 0x112) = fp;
     } else {
         *(s16*)((s32)unit + 0x112) = fp;
     }

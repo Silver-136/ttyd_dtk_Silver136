@@ -232,6 +232,9 @@ void _relUnLoad(void) {
     }
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
 void _load(char* oldMap, char* mapName, char* beroName) {
     char* bero;
     char* rodata;
@@ -433,6 +436,12 @@ void _load(char* oldMap, char* mapName, char* beroName) {
     }
 }
 
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
 void _unload(char* oldMap, char* newMap) {
     s32 changedArea;
     char* rodata;
@@ -498,6 +507,12 @@ void _unload(char* oldMap, char* newMap) {
 
     nanNPCWork = NULL;
 }
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 void seq_mapChangeMain(void* seq) {
     char* rodata;
@@ -895,10 +910,16 @@ savedPositionDone:
     }
 }
 
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
 void seq_mapChangeExit(void) {
     GXResetOverflowCount();
     dbg_lotteryinfo = 0;
 }
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 void seq_mapChangeInit(void* seq) {
     s32 oldMapEmptyCmp;
@@ -935,3 +956,6 @@ void seq_mapChangeInit(void* seq) {
         }
     }
 }
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset

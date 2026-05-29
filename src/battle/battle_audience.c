@@ -1413,3 +1413,290 @@ s32 BattleAudience_NoUsedHaitiRand(void) {
 
     return -1;
 }
+
+
+s32 BattleAudience_CheckReactionPerPhase(void) {
+    return 0;
+}
+
+
+u8 BattleAudienceSettingAudience(void) {
+    return 0;
+}
+
+
+u8 BattleAudienceItemCtrlProcess(void) {
+    return 0;
+}
+
+
+u8 BattleAudienceDispAudience(void) {
+    return 0;
+}
+
+
+u8 BattleAudienceApSrcCtrlProcess(void) {
+    return 0;
+}
+
+
+u8 BattleAudience_PerAct(void) {
+    return 0;
+}
+
+
+u8 BattleAudienceCtrlProcess(void) {
+    return 0;
+}
+
+
+void BattleAudience_Case_FallObject_Aud(int memberIdx, u8 objectType) {
+}
+
+
+void BattleAudience_ApRecoveryBuild(void* apInfo) {
+}
+
+
+s32 BattleAudienceApSrcEntry(void) {
+    return 0;
+}
+
+
+s32 unk_801a21e0(void) {
+    return 0;
+}
+
+
+s32 unk_801a23e0(void) {
+    return 0;
+}
+
+
+u8 BattleAudienceSoundMain(void) {
+    return 0;
+}
+
+
+u8 BattleAudienceAnimProcess(void) {
+    return 0;
+}
+
+
+u8 BattleAudienceWinCtrlProcess(void) {
+    return 0;
+}
+
+
+s32 BattleAudience_Entry(s32 id, s32 type, s32 arg) {
+    return 0;
+}
+
+
+u8 BattleAudienceNoiseMain(void) {
+    return 0;
+}
+
+
+void BattleAudienceAddAudienceNum(s32 num) {
+}
+
+
+void BattleAudience_Init(void) {
+}
+
+
+u8 BattleAudienceAddTargetNumSub(void) {
+    return 0;
+}
+
+
+void BattleAudienceJoy(s32 kind) {
+}
+
+
+void BattleAudienceAddTargetNum(f32 value, f32 unused) {
+}
+
+
+void BattleAudienceSoundWhistleKind(s32 kind) {
+}
+
+
+void BattleAudience_Case_TurnEnd(void) {
+}
+
+
+u8 BattleAudienceGXInit(void) {
+    return 0;
+}
+
+
+u8 BattleAudienceSoundNoiseAlways(void) {
+    return 0;
+}
+
+
+u8 BattleAudienceSoundHandBeat(void) {
+    return 0;
+}
+
+
+u8 BattleAudienceDispApSrc(void) {
+    return 0;
+}
+
+
+u8 BattleAudienceSoundSleep(int param_1) {
+    return 0;
+}
+
+
+u8 BattleAudienceJoy_Sub(int param_1, int param_2, int param_3, int param_4) {
+    return 0;
+}
+
+
+void BattleAudience_PerPhase(int phaseId) {
+}
+
+
+u8 BattleAudienceDispItem(void) {
+    return 0;
+}
+
+
+void BattleAudience_End(void) {
+}
+
+
+void BattleAudience_ChangeStatus(s32 id, s32 status) {
+}
+
+
+s32 BattleAudience_GetEscapeChangeOK(s32 id) {
+    return 0;
+}
+
+
+u8 BattleAudienceDispWin(void) {
+    return 0;
+}
+
+
+u8 BattleAudienceSoundItemThrow(int param_1, int param_2) {
+    return 0;
+}
+
+
+u8 BattleAudienceSoundCallKind(int param_1) {
+    return 0;
+}
+
+
+s32 BattleAudienceDetectTargetAll(void) {
+    return 0;
+}
+
+
+s32 BattleAudienceDetectTargetPlayer(void) {
+    return 0;
+}
+
+
+u8 BattleAudience_Disp(void) {
+    return 0;
+}
+
+
+u8 BattleAudienceSoundRun(int param_1) {
+    return 0;
+}
+
+
+u32 check_exe_phase_evt_status(int param_1, u32 param_2) {
+    return 0;
+}
+
+
+void BattleAudience_SetAnim(s32 id, s32 anim, s32 pose) {
+}
+
+
+u8 BattleAudienceCheer(int param_1) {
+    return 0;
+}
+
+
+u8 BattleAudience_Entry_Sub(u32 memberIdx, u32 audienceKind, u8 param_3) {
+    return 0;
+}
+
+
+s32 BattleAudienceItemOn(u32 memberIdx, u16 itemType, int numberItems) {
+    return 0;
+}
+
+
+void BattleAudience_GetItemOn(int* outMemberIdx, float* outXPos, float* outYPos, float* outZPos, u32* outItemType) {
+}
+
+
+void BattleAudience_Case_Appeal(void* unit) {
+}
+
+
+void BattleAudience_GetItemOn2(int* outMemberIdx, float* outPosX, float* outPosY, float* outPosZ, u32* outItemType) {
+}
+
+
+s32 BattleAudience_CheckReaction(void) {
+    return 0;
+}
+
+
+u8 BattleAudienceSetThrowItemMax(void) {
+    return 0;
+}
+
+
+u8 BattleAudience_SetTarget(int param_1) {
+    return 0;
+}
+
+
+u32 BattleAudience_GetFront(int param_1) {
+    return 0;
+}
+
+
+u8 BattleAudience_ActInit(void) {
+    return 0;
+}
+
+
+int BattleAudience_HaitiRandForFallObject(void) {
+    return 0;
+}
+
+
+void BattleAudience_Main(void) {
+}
+
+
+s32 BattleAudience_GetAudienceNoFromOffset(s32 id, s32 offset, s32 arg) {
+    return 0;
+}
+
+
+void BattleAudienceGuestTPLRead(int index, u32 memberKind, char* tplName) {
+}
+
+
+void tplRead(char* tplName) {
+}
+
+
+u8 BattleAudienceJoySACLecture(void) {
+    return 0;
+}

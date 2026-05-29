@@ -17,21 +17,39 @@
         }                                           \
     } while (0)
 
+#define COPY_CAMROAD_BLOCK_O4P_TEST(dstBase, srcBase)       \
+    do {                                                    \
+        u32* copySrc = (u32*)((s32)(srcBase));              \
+        u32 copyA;                                          \
+        u32 copyB;                                          \
+        u32* copyDst = (u32*)((s32)(dstBase));              \
+        volatile s32 copyI;                                 \
+        for (copyI = 0; copyI < 0xC; copyI++) {             \
+            copyA = copySrc[1];                             \
+            copySrc += 2;                                   \
+            copyB = copySrc[0];                             \
+            copyDst[1] = copyA;                             \
+            copyDst += 2;                                   \
+            copyDst[0] = copyB;                             \
+        }                                                   \
+    } while (0)
+
 #define UPDATE_CAMROAD_CC()                                                                 \
     do {                                                                                    \
-        if (((*(s32*)((s32)wp + 0xE0) == 0) && (*(s32*)((s32)wp + 0x140) == 0)) &&           \
-            (((u32)*(s32*)((s32)wp + 0x1D0) != 0x65) ||                                     \
-             (((*(void**)((s32)wp + 0xFC) == 0) ||                                         \
-               (*(u32*)((s32)*(void**)((s32)wp + 0xFC) + 0x20) == 0)) &&                    \
-              ((*(void**)((s32)wp + 0x15C) == 0) ||                                        \
-               (*(u32*)((s32)*(void**)((s32)wp + 0x15C) + 0x20) == 0)))) &&                 \
-            (((*(void**)((s32)wp + 0xFC) == 0) ||                                          \
-              (*(f32*)((s32)*(void**)((s32)wp + 0xFC) + 0x7C) == float_0_8041f62c)) &&      \
-             ((*(void**)((s32)wp + 0x15C) == 0) ||                                         \
-              (*(f32*)((s32)*(void**)((s32)wp + 0x15C) + 0x7C) == float_0_8041f62c)))) {    \
-            *(s32*)((s32)wp + 0xCC) = 0;                                                    \
-        } else {                                                                            \
+        if ((*(s32*)((s32)wp + 0xE0) != 0) ||                                                \
+            (*(s32*)((s32)wp + 0x140) != 0) ||                                               \
+            (((u32)*(s32*)((s32)wp + 0x1D0) == 0x65) &&                                      \
+             (((*(void**)((s32)wp + 0xFC) != 0) &&                                          \
+               (*(u32*)((s32)*(void**)((s32)wp + 0xFC) + 0x20) != 0)) ||                    \
+              ((*(void**)((s32)wp + 0x15C) != 0) &&                                         \
+               (*(u32*)((s32)*(void**)((s32)wp + 0x15C) + 0x20) != 0)))) ||                 \
+            (((*(void**)((s32)wp + 0xFC) != 0) &&                                           \
+              (*(f32*)((s32)*(void**)((s32)wp + 0xFC) + 0x7C) != float_0_8041f62c)) ||      \
+             ((*(void**)((s32)wp + 0x15C) != 0) &&                                          \
+              (*(f32*)((s32)*(void**)((s32)wp + 0x15C) + 0x7C) != float_0_8041f62c)))) {    \
             *(s32*)((s32)wp + 0xCC) = 1;                                                    \
+        } else {                                                                            \
+            *(s32*)((s32)wp + 0xCC) = 0;                                                    \
         }                                                                                   \
     } while (0)
 
@@ -168,6 +186,9 @@ extern const f32 float_3_8041f640;
 extern char str_PCTs_PCTs_8041f6a0;
 extern char str_1_01_8041f6a8;
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
 void camRoadCurveOff(char* name) {
     void* entry;
     s32 i;
@@ -187,6 +208,13 @@ void camRoadCurveOff(char* name) {
         }
     }
 }
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
 void camRoadCurveOn(char* name) {
     void* entry;
     s32 i;
@@ -206,6 +234,13 @@ void camRoadCurveOn(char* name) {
         }
     }
 }
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
 void camRoadReset(void) {
     s32 saved204;
     s32 saved0;
@@ -240,6 +275,10 @@ void camRoadReset(void) {
     *(s32*)wp = saved0;
     *(s32*)((s32)wp + 0x1D0) = saved1D0;
 }
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
 f32 camRoadGetCurrentShiftXRate(void) {
     if (*(s32*)((s32)wp + 0x68) != 0) {
         return *(f32*)((s32)wp + 0xC4);
@@ -274,7 +313,7 @@ void camRoadMain(void* cam, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f) {
     e / float_10_8041f644,
     f / float_10_8041f644,
     float_0_8041f62c,
-    (void*)((s32)wp + 0x3C),
+    (void*)((s32)wp + 0x68),
     (void*)((s32)wp + 0xD8)
 );
 
@@ -375,6 +414,10 @@ void camRoadMain(void* cam, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f) {
     *(f32*)((s32)cam + 0x10) = *(f32*)((s32)cam + 0x10) * float_10_8041f644;
     *(f32*)((s32)cam + 0x14) = *(f32*)((s32)cam + 0x14) * float_10_8041f644;
 }
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
 void calcHokanCamRoad(s32 useInterp, f32 t, void* a, void* b, void* unused, void* out) {
     f32 cosA;
     f32 cosB;
@@ -453,6 +496,10 @@ void calcHokanCamRoad(s32 useInterp, f32 t, void* a, void* b, void* unused, void
     *(f32*)((s32)out + 0x48) = rate * (*(f32*)((s32)b + 0x48) - *(f32*)((s32)a + 0x48)) + *(f32*)((s32)a + 0x48);
     *(f32*)((s32)out + 0x5C) = rate * (*(f32*)((s32)b + 0x5C) - *(f32*)((s32)a + 0x5C)) + *(f32*)((s32)a + 0x5C);
 }
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
 void* compareCamRoad(void* a, void* b, void* outRate) {
     const char* rodata;
     u32 flags;
@@ -688,6 +735,7 @@ changed:
 
     return (void*)flags;
 }
+
 void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 checkWidth, void* out, void* prev) {
     void* work0;
     void* road;
@@ -1192,6 +1240,7 @@ if (__fabsf(dirX) <= __fabsf(sideX)) {
     *(f32*)((s32)out + 0x58) = checkWidth;
     *(f32*)((s32)out + 0x5C) = *(f32*)((s32)chosenRoad + 0x7C);
 }
+
 void calcCurrentCamState(void* out) {
     void* work0;
     void* baseVec;
@@ -1270,6 +1319,7 @@ void calcCurrentCamState(void* out) {
     *(f32*)((s32)out + 0x1C) = *(f32*)((s32)out + 0x10) + dst.y;
     *(f32*)((s32)out + 0x20) = *(f32*)((s32)out + 0x14) + dst.z;
 }
+
 s32 camRoadSetup(const char* name) {
     void* file;
     void* data;

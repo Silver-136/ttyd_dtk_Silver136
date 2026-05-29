@@ -29,23 +29,30 @@ USER_FUNC(star_stone_attack) {
 }
 
 USER_FUNC(star_stone_appear) {
-    *(s32*)((s32)get_ptr() + 0x3F0) = 1;
+    void* wp;
+
+    wp = get_ptr();
+    *(s32*)((s32)wp + 0x3F0) = 1;
     return 2;
 }
 
 USER_FUNC(wait_game_end) {
     s32 value = *(s32*)((s32)get_ptr() + 0x30);
-    return value > 5 ? 2 : 0;
+    return value == 5 ? 2 : 0;
 }
 
 USER_FUNC(start_game) {
-    *(s32*)((s32)get_ptr() + 0x30) = 1;
+    void* wp;
+
+    wp = get_ptr();
+    *(s32*)((s32)wp + 0x30) = 1;
+
     return 2;
 }
 
 USER_FUNC(wait_star_stone_take_on) {
     s32 value = *(s32*)((s32)get_ptr() + 0x3F0);
-    return value > 4 ? 2 : 0;
+    return value == 4 ? 2 : 0;
 }
 
 s32 weaponGetPower_Deka(void) {

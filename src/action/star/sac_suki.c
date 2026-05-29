@@ -18,9 +18,18 @@ void* get_ptr(void) {
 }
 
 USER_FUNC(get_img_name) {
-    s32* args = event->args;
-    s32 index = (s8)evtGetValue(event, args[0]);
-    evtSetValue(event, args[1], (s32)get_ptr() + 0x70 + index * 0x10);
+    s32 index;
+    s32* args;
+    void* base;
+    s32 offset;
+
+    args = event->args;
+    index = (s8)evtGetValue(event, args[0]);
+
+    base = get_ptr();
+    offset = (index << 4) + 0x70;
+
+    evtSetValue(event, args[1], (s32)base + offset);
     return 2;
 }
 

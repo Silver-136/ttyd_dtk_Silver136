@@ -24,8 +24,8 @@ void BSE_TurnFirstProcessEffectEntry(BattleWorkUnit* unit, s32 value) {
 s32 _get_pri(s32 status) {
     s32 target;
     s32 pri;
-    s8* data;
     s32 value;
+    s8* data;
 
     target = (s8)status;
     pri = 0x18;

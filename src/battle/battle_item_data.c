@@ -13,3 +13,58 @@ void _disp_item_icon(void* unused, void* work) {
 
     iconDispGx(pos, 0, icon, scale);
 }
+
+
+u8 _throw_item_icon(void) {
+    return 0;
+}
+
+
+u32 _naniga_okorukana_check(int param_1, int param_2) {
+    return 0;
+}
+
+
+u8 _nancy_disp(void) {
+    return 0;
+}
+
+
+s32 _nancy_mirage(int param_1, int param_2) {
+    return 0;
+}
+
+
+s32 _get_throw_first_pos(int param_1) {
+    return 0;
+}
+
+
+s32 _sampling_random_target(int param_1) {
+    return 0;
+}
+
+
+s32 _hpfp_change_declare_2(int param_1) {
+    return 0;
+}
+
+
+u8 _cam_rot(void) {
+    return 0;
+}
+
+
+s32 _hpfp_change_declare_1(int param_1) {
+    return 0;
+}
+
+
+s32 _rank_up(int param_1) {
+    return 0;
+}
+
+
+s32 _full_ap_recover(int param_1) {
+    return 0;
+}

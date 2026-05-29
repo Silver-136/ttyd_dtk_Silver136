@@ -176,17 +176,22 @@ s32 psndBGMChk(s32 index) {
 
 s32 psndBGMChkSilent(s32 index) {
     PaperSoundBGM* bgm = &psbgm[index & 0xF];
-    if (*(s32*)bgm == -1) {
+    s32 value = *(s32*)bgm;
+
+    if ((u32)(value + 0x10000) == 0xFFFF) {
         return 0;
     }
+
     return *(u8*)((s32)bgm + 0x26) == 8;
 }
-
 s32 psndBGMStartCheck(s32 index) {
     extern s32 SoundSSCheck(s32 id);
     PaperSoundBGM* bgm = &psbgm[index & 0xF];
-    if (*(s32*)bgm == -1) {
+    s32 value = *(s32*)bgm;
+
+    if ((u32)(value + 0x10000) == 0xFFFF) {
         return 1;
     }
+
     return (SoundSSCheck(*(s32*)((s32)bgm + 4)) >> 3) & 1;
 }
