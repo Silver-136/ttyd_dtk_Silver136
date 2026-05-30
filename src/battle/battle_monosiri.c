@@ -5,3 +5,12 @@ void* battleGetUnitMonosiriPtr(s32 id) {
 
     return &monosiriMessageTable[id * 0x18];
 }
+
+
+void battleSetUnitMonosiriFlag(void* unit) {
+}
+
+
+s32 battleCheckUnitMonosiriFlag(void* unit) {
+    return 0;
+}

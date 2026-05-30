@@ -32,3 +32,25 @@ s32 BattleCheckEndUnitInitEvent(void* battleWork) {
 
     return result;
 }
+
+
+void BattleRunHitEventDirect(void* unit, s32 flags, s32 arg) {
+}
+
+
+s32 BattleRunPhaseEvent(void* unit, int bUnisonPhase) {
+    return 0;
+}
+
+
+s32 BattleRunHitEvent(void* unit, u32 param_2) {
+    return 0;
+}
+
+
+void BattlePhaseEventStartDeclare(void* unit) {
+}
+
+
+void BattleRunWaitEvent(void* unit) {
+}

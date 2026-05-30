@@ -29,3 +29,27 @@ void btlsubResetMoveColorLvAll(void* battleWork) {
         }
     }
 }
+
+
+double intpl_sub(double outStart, double outEnd, u32 intplType, u32 inStart, u32 inEnd) {
+    return 0.0;
+}
+
+
+s32 BattleTransID(EventEntry* event, s32 type) {
+    return 0;
+}
+
+
+void btlMovePos(double distance, double angle, float* moveXPos, float* moveZPos) {
+}
+
+
+double atan2f_safety(double y, double x) {
+    return 0.0;
+}
+
+
+int BtlCompForwardLv(double position, int direction) {
+    return 0;
+}

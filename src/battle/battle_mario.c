@@ -120,3 +120,53 @@ s32 _get_mario_hammer_lv(void* evt) {
 
     return 2;
 }
+
+
+u8 _tatsumaki_effect(void) {
+    return 0;
+}
+
+
+u8 _hammer_star_effect(void) {
+    return 0;
+}
+
+
+s32 _kaiten_hammer_acrobat_rotate(int param_1, int param_2) {
+    return 0;
+}
+
+
+u8 _jump_star_effect(void) {
+    return 0;
+}
+
+
+u8 _fire_wave(void) {
+    return 0;
+}
+
+
+s32 mario_get_renzoku_count_max(int param_1) {
+    return 0;
+}
+
+
+s32 _wait_jyabara_hit_iron_frame(int param_1) {
+    return 0;
+}
+
+
+s32 _mario_fire_ball_controll(int param_1, int param_2) {
+    return 0;
+}
+
+
+s32 _whirlwind_effect(int param_1) {
+    return 0;
+}
+
+
+s32 _battle_majinai_effect(int param_1, int param_2) {
+    return 0;
+}

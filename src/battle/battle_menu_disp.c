@@ -291,3 +291,109 @@ got_info:
     }
 }
 
+
+u8 DrawSubIconSub(u8 param_1, u8 param_2, u8 param_3, u8 param_4, u8 param_5, u8 param_6, u8 param_7, u8 param_8, s32 param_9, s32 param_10) {
+    return 0;
+}
+
+
+void DrawMainMenu(void) {
+}
+
+
+u8 DrawMainIconCircle(void) {
+    return 0;
+}
+
+
+u8 DrawMainIconHukidasi(void) {
+    return 0;
+}
+
+
+void DrawWeaponWin(void) {
+}
+
+
+u8 N_DrawMenuPartyPinchMark(void) {
+    return 0;
+}
+
+
+u8 N_DrawMenuMarioPinchMark(void) {
+    return 0;
+}
+
+
+void DrawMenuHelpWin(double x, double y, char* helpMsg) {
+}
+
+
+u8 DrawMenuPartyChangeButton(void) {
+    return 0;
+}
+
+
+u8 DrawMainIcon(int param_1, int param_2, int param_3, int param_4, int param_5) {
+    return 0;
+}
+
+
+u8 DrawMenuCursorAndScrollArrow(void) {
+    return 0;
+}
+
+
+void DrawOperationWin(void) {
+}
+
+
+void DrawMultiItemWin(void) {
+}
+
+
+void DrawChangePartyWin(void) {
+}
+
+
+u8 DrawSubIcon(u8 param_1, u8 param_2, u8 param_3, u8 param_4, u8 param_5, u8 param_6, u8 param_7, u8 param_8, s32 param_9) {
+    return 0;
+}
+
+
+u8 SelectedItemCoordinateColorUpDate(void) {
+    return 0;
+}
+
+
+void InitSubMenuCommonProcess(void*, void*, void*) {
+}
+
+
+u8 DrawMenuPartyChangeButton_Sub(void) {
+    return 0;
+}
+
+
+u8 GetRingCenter(float* param_1) {
+    return 0;
+}
+
+
+u8 DrawMenuPinchMark(void) {
+    return 0;
+}
+
+
+u8 DrawSubMenuCommonProcess(s32 param_1, s32 param_2, void* param_3, s32 param_4, s32 param_5, void* param_6) {
+    return 0;
+}
+
+
+u8 DrawSubMenuCommonProcessSub1(void* windowWork, void* cursor, u32 relativePos, int numOptions) {
+    return 0;
+}
+
+
+void BattleMenuDisp_ActSelect_Init(void* battleWork, void* cursor, void* actionTable, u32 param_4) {
+}

@@ -12,3 +12,13 @@ s32 btlevtcmd_AnnounceSetParam(void* evt) {
     params[index + 1] = evtGetValue(evt, args[1]);
     return 2;
 }
+
+
+u32 btlevtcmd_AnnounceMessage(int param_1, int param_2) {
+    return 0;
+}
+
+
+u8 _disp(void) {
+    return 0;
+}

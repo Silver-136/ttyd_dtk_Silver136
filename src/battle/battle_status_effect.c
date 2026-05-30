@@ -178,3 +178,62 @@ void BattleStatusChangeMsgSetAnnouce(void* info, s32 index, s32 value) {
 
     *(u8*)(entry + 0x1) |= 4;
 }
+
+
+int BattleStatusChangeMsgMain(void* battleWork) {
+    return 0;
+}
+
+
+s32 BSE_TurnFirstProcessEffectMain(void* unit) {
+    return 0;
+}
+
+
+u8 BattleStatusChangeInfoSetAnnouce(void* unit, int param_2, u8 param_3, u32 param_4) {
+    return 0;
+}
+
+
+void BSE_Sleep(void* unit) {
+}
+
+
+u8 BattleStatusChangeMsgAdjust(void* battleWork) {
+    return 0;
+}
+
+
+u8 BSE_Freeze(void* unit) {
+    return 0;
+}
+
+
+u8 BSE_Biribiri(void* unit) {
+    return 0;
+}
+
+
+u8 _st_chg_msg_disp(void) {
+    return 0;
+}
+
+
+u8 BSE_Fire(void* unit) {
+    return 0;
+}
+
+
+u8 BSE_Kagegakure(void* unit) {
+    return 0;
+}
+
+
+s32 BattleStatusChangeAnnouceMain(void* battleWork) {
+    return 0;
+}
+
+
+u8 BattleStatusEffectMain(void* unit) {
+    return 0;
+}

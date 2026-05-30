@@ -177,3 +177,106 @@ s32 BattleStageGetLightNumberByName(const char* name) {
 
     return -1;
 }
+
+
+void BattleStageMain(void) {
+}
+
+
+u8 tou_gamen_screen_tev(int param_1) {
+    return 0;
+}
+
+
+void BattleStageDispLight(void) {
+}
+
+
+void BattleStageDispDark(void) {
+}
+
+
+u8 batSpotInit(void) {
+    return 0;
+}
+
+
+s32 tou_gamen_screen_tev_init(int param_1) {
+    return 0;
+}
+
+
+void BattleStageInit(void) {
+}
+
+
+void BattleStageLightSetTargetByUnit(s32 lightId, f32 x, f32 y, f32 z, s32 unitId, s32 fadeFrames, s32 unk) {
+}
+
+
+s32 BattleStageSysLightEntry(char* name) {
+    return 0;
+}
+
+
+double getSpline(int param_1, int param_2, int param_3, int param_4, int param_5, int param_6, int param_7) {
+    return 0.0;
+}
+
+
+void BattleStageLightSetTarget(s32 lightId, f32 x, f32 y, f32 z, s32 unk1, s32 unk2) {
+}
+
+
+u8 DarkBySquare(s64 param_1, double param_2, double param_3, double param_4, double param_5) {
+    return 0;
+}
+
+
+void BattleStageLightSetLightColor(s32 lightId, u8 r, u8 g, u8 b, s32 fadeFrames, s32 unk) {
+}
+
+
+void BattleStageLightSetUpVec(s32 lightId, f32 x, f32 y, f32 z, s32 unk1, s32 unk2) {
+}
+
+
+void BattleStageLightSetPosition(s32 lightId, f32 x, f32 y, f32 z, s32 unk1, s32 unk2) {
+}
+
+
+void BattleStageLightRelease(s32 lightId, s32 fadeFrames, s32 unk) {
+}
+
+
+double randf(double min, double max) {
+    return 0.0;
+}
+
+
+void BattleStageEnd(void) {
+}
+
+
+void screen_capture(void) {
+}
+
+
+u8 batSpotMain(void) {
+    return 0;
+}
+
+
+u8 batSpotDisp(s32 cameraId) {
+    return 0;
+}
+
+
+u8 drawCone(s32 param_1, void* param_2) {
+    return 0;
+}
+
+
+void* batSpotEntry(void) {
+    return 0;
+}

@@ -74,3 +74,15 @@ void BattlePadInit(void) {
         offset += 0x1FC;
     }
 }
+
+
+void BtlPad_WorkUpdate(void* work, s32 flags) {
+}
+
+
+void BtlPad_WorkInit(void* work) {
+}
+
+
+void BattlePadManager(void) {
+}

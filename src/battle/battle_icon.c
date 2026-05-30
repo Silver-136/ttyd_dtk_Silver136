@@ -57,3 +57,32 @@ USER_FUNC(btlevtcmd_BtlIconSetFallAccel) {
     *(f32*)((s32)icon + 0x4C) = evtGetFloat(event, args[1]);
     return 2;
 }
+
+
+u8 btlevtcmd_BtlIconJumpPosition(void) {
+    return 0;
+}
+
+
+u8 BtlIcon_Entry(void) {
+    return 0;
+}
+
+
+u8 btlevtcmd_BtlIconEntryItemId(void) {
+    return 0;
+}
+
+
+u8 btlevtcmd_BtlIconEntry(void) {
+    return 0;
+}
+
+
+void BattleIconMain(void) {
+}
+
+
+s32 btlevtcmd_BtlIconSetPosition(int param_1) {
+    return 0;
+}

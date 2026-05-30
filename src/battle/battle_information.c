@@ -36,3 +36,7 @@ void BattleInformationInit(void* info) {
     *(u8*)((s32)info + 0x1A) = 0;
     *(u8*)((s32)info + 0x1B) = 0;
 }
+
+
+void BattleInformationSetDropMaterial(void* fbatBattleInfo) {
+}

@@ -187,3 +187,125 @@ void statusPoseControl(void* part) {
             break;
     }
 }
+
+
+void btlUnitPartsDisp(s32 param_1, void* part) {
+}
+
+
+void btlDispMain(void) {
+}
+
+
+u8 btlDispTex4(void) {
+    return 0;
+}
+
+
+u8 btlDispTexPlainGX(void) {
+    return 0;
+}
+
+
+void _pose_two_pattern(void* part) {
+}
+
+
+void _btlStockExpDisp(void) {
+}
+
+
+void btlUnitPartsBlurDisp(s32 param_1, void* part) {
+}
+
+
+u8 _btlDispTex4(s32 param_1, float* param_2, float* param_3, float* param_4, float* param_5, float* param_6, void* param_7) {
+    return 0;
+}
+
+
+u8 btlDispGXInit2D(void) {
+    return 0;
+}
+
+
+u8 btlDispGXQuads2D(void) {
+    return 0;
+}
+
+
+void btlDispTexPlane(s32 tpl, void* color, s32 flags, f32 x, f32 y, f32 z, f32 rx, f32 scale) {
+}
+
+
+void btlUnitItemDisp(s32 param_1, void* unit) {
+}
+
+
+u8 btlDispGXInit2DRasta(void) {
+    return 0;
+}
+
+
+u8 btlDispTexPlaneInit(void) {
+    return 0;
+}
+
+
+void _pose_one_pattern(void* part) {
+}
+
+
+u8 btlDispGXQuads2DRasta(double x1, double y1, double x2, double y2, s32 r, s32 g, u8 b, u8 a) {
+    return 0;
+}
+
+
+void _partsBlurControl(void* part, s32 enable, s32 a3, void* color) {
+}
+
+
+u8 floatOffsetControl(void* part) {
+    return 0;
+}
+
+
+void btlUnitStolenItemDisp(s32 param_1, void* unit) {
+}
+
+
+u8 btlDispTexPlane3(s32 param_1, s32 param_2, void* param_3, void* param_4, void* param_5, void* param_6) {
+    return 0;
+}
+
+
+void btlGetScreenPoint(void* inPos, void* outScreenSpacePos) {
+}
+
+
+u8 gravityOffsetControl(void* part) {
+    return 0;
+}
+
+
+u8 btlDispGXInit2DSub(void) {
+    return 0;
+}
+
+
+u8 btlDispEntAnime(void* unit) {
+    return 0;
+}
+
+
+void btlUnitItemDisp2(s32 param_1, void* unit) {
+}
+
+
+u8 btlDispTexPlane2(s32 param_1, s32 param_2, void* param_3) {
+    return 0;
+}
+
+
+void btlDispChangeAnime(BattleWorkUnitPart* part, const char*name, BOOL a3) {
+}

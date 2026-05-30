@@ -7445,3 +7445,16 @@ USER_FUNC(btlevtcmd_ftof) {
     return EVT_RETURN_DONE;
 }
 
+
+u8 _PartsMoveSoundControl(void* part) {
+    return 0;
+}
+
+
+u8 _UnitMoveSoundControl(void* unit) {
+    return 0;
+}
+
+
+void _MoveSoundControlCore(double x, double y, double z, void* unit, void* moveSoundWork, void* part) {
+}

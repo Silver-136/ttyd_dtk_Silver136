@@ -149,3 +149,13 @@ s32 _anime_load(void) {
 
     return 2;
 }
+
+
+s32 _backfire(int param_1, int param_2) {
+    return 0;
+}
+
+
+s32 _check_pose_stay(int param_1) {
+    return 0;
+}

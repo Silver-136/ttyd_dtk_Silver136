@@ -299,3 +299,143 @@ void BattleCommandDisplay_WeaponSelectMenuSetup(void* work, s32 cursorId, s32 fl
     BattleMenuDisp_WeaponSelect_Init(work, cursor, (void*)((s32)base + 0x80), flags);
     *(u32*)((s32)base + 0x4) |= 0x01000010;
 }
+
+
+void _btlcmd_MakeSelectWeaponTable() {
+}
+
+
+s32 BattleCommandInput(void* battleWork) {
+    return 0;
+}
+
+
+void _btlcmd_MakeActClassTable(void* battleWork) {
+}
+
+
+void _btlcmd_SetAttackEvent(void* unit, void* commandWork) {
+}
+
+
+void BattleCommandDisplay_TargetSelectMenuDisp(s32 param_1, void* battleWork) {
+}
+
+
+s32 BattleCommandDisplay_ActMenuMain(void* battleWork) {
+    return 0;
+}
+
+
+void _btlcmd_MakeOperationTable() {
+}
+
+
+s32 BattleCommandDisplay_WeaponSelectMenuMain(void* battleWork, int param_2) {
+    return 0;
+}
+
+
+void _btlcmd_MakeMultiItemTable() {
+}
+
+
+s32 BattleCommandDisplay_OperationMenuMain(void* battleWork) {
+    return 0;
+}
+
+
+s32 BattleCommandDisplay_MultiItemMenuMain(void* battleWork) {
+    return 0;
+}
+
+
+u8 BattleDrawEnemyHP(s32 param_1, int param_2) {
+    return 0;
+}
+
+
+s32 BattleCommandDisplay_ChangePartySelectMenuMain(void* battleWork) {
+    return 0;
+}
+
+
+s32 _check_present_item(void) {
+    return 0;
+}
+
+
+int _btlcmd_MakePartyTable(void* battleWork) {
+    return 0;
+}
+
+
+u32 BattleCommandCheckChangePositionEnable(void* battleWork) {
+    return 0;
+}
+
+
+u8 BattleDrawEnemyHPBar(float* param_1, int param_2, void* param_3) {
+    return 0;
+}
+
+
+int BattleCommandDisplay_WeaponMultiItemCancelCheckMain(void* battleWork) {
+    return 0;
+}
+
+
+void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(s32 param_1, void* battleWork) {
+}
+
+
+u8 BattleCommandDisplay(void* battleWork) {
+    return 0;
+}
+
+
+s32 _btlcmd_SelectWeaponDecide(void* battleWork, int param_2, int weaponIndex) {
+    return 0;
+}
+
+
+void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(s32 param_1, void* battleWork) {
+}
+
+
+void _btlcmd_UpdateSelectWeaponTable(void* battleWork, int param_2) {
+}
+
+
+void _btlcmd_GetCursorPtr() {
+}
+
+
+s32 BattleCommandAttackAudienceCheck(void) {
+    return 0;
+}
+
+
+u8 BattleCommandDisplay_ActMenuSetup(void* battleWork, u32 param_2) {
+    return 0;
+}
+
+
+int _btlcmd_CheckWeaponTargetNum(void* battleWork, void* unit, void* weapon) {
+    return 0;
+}
+
+
+s32 _get_msg(int param_1) {
+    return 0;
+}
+
+
+void* BattleSetConfuseAct(void* battleWork, void* unit) {
+    return 0;
+}
+
+
+u32 _battleGetPartyIcon(s32 unitKind) {
+    return 0;
+}

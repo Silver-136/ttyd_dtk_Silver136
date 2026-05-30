@@ -1913,3 +1913,38 @@ s32 BtlUnit_GetCoin(void* unit) {
 
     return coin;
 }
+
+
+void BtlUnit_ControlPoseSoundMain(void* part) {
+}
+
+
+void BtlUnit_PayWeaponCost(void* unit, void* weapon) {
+}
+
+
+void BtlUnit_RecoverFp(void* unit, s32 fp) {
+}
+
+
+u8 BtlUnit_SetCommandAnimPose(void* unit) {
+    return 0;
+}
+
+
+BOOL BtlUnit_Delete(BattleWorkUnit* unit) {
+    return 0;
+}
+
+
+s32 BtlUnit_GetWeaponCost(BattleWorkUnit* unit, void* weapon) {
+    return 0;
+}
+
+
+void BtlUnit_LoadSeMode(int param_1, int param_2, void* soundDataTable, void* moveSoundWork) {
+}
+
+
+void BtlUnit_ResetMoveStatus(BattleWorkUnit* unit) {
+}
