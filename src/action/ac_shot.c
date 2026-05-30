@@ -38,3 +38,31 @@ void _ac_disp_init(void* wp) {
     *(u8*)((s32)disp + 0x13) = 0;
     *(f32*)((s32)disp + 0x28) = zero;
 }
+
+
+s32 battleAcMain_Shot(void* battleWork) {
+    return 0;
+}
+
+
+void actionCommandDisp(f32 x, f32 y) {
+}
+
+
+u8 _draw_target_mark(double param_1, double param_2, double param_3, double param_4, void* param_5) {
+    return 0;
+}
+
+
+u8 _disp_target_mark_afterimage(void) {
+    return 0;
+}
+
+
+void battleAcDisp_Shot(s32 param_1, void* battleWork) {
+}
+
+
+u8 _disp_target_mark(s32 param_1, int param_2) {
+    return 0;
+}

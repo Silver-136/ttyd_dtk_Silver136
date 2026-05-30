@@ -11,3 +11,16 @@ void battleAcDelete_RepeatedlyLv(void* wp) {
     BattleAcGaugeSeDelete(wp);
 }
 
+
+void actionCommandDisp(f32 x, f32 y) {
+}
+
+
+s32 battleAcMain_RepeatedlyLv(void* battleWork) {
+    return 0;
+}
+
+
+u8 battleAcDisp_RepeatedlyLv(s32 param_1, int param_2) {
+    return 0;
+}

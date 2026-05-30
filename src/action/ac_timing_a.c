@@ -38,3 +38,21 @@ done:
 
     return result;
 }
+
+
+s32 battleAcResult_TimingA(void* battleWork) {
+    return 0;
+}
+
+
+void actionCommandDisp(f32 x, f32 y) {
+}
+
+
+s32 battleAcMain_TimingA(int param_1) {
+    return 0;
+}
+
+
+void battleAcDisp_TimingA(s32 param_1, void* battleWork) {
+}

@@ -14,3 +14,15 @@ void battleAcDelete_Repeatedly(void* wp) {
     *(s32*)((s32)wp + 0x1C9C) = 1002;
 }
 
+
+s32 battleAcMain_Repeatedly(void* battleWork) {
+    return 0;
+}
+
+
+void actionCommandDisp(f32 x, f32 y) {
+}
+
+
+void battleAcDisp_Repeatedly(s32 param_1, void* battleWork) {
+}
