@@ -84,3 +84,48 @@ f32 cloudGetBreathDir(void) {
     }
     return toMovedir(*(f32*)((s32)party + 4));
 }
+
+
+u8 cloudGetBreathPower(void) {
+    return 0;
+}
+
+
+s32 cloudGetHitBreathout(int param_1) {
+    return 0;
+}
+
+
+u8 cloudGetAt(void* param_1) {
+    return 0;
+}
+
+
+u8 cloudResetAt(void) {
+    return 0;
+}
+
+
+u8 mot_cloud(void) {
+    return 0;
+}
+
+
+u8 getHitBreatheout2(s64 param_1, void* pParty) {
+    return 0;
+}
+
+
+u8 cloud_use(void* pParty) {
+    return 0;
+}
+
+
+u8 cloud_exit(void* pParty) {
+    return 0;
+}
+
+
+u8 cloud_move(void* pParty) {
+    return 0;
+}

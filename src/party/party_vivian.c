@@ -60,3 +60,42 @@ void vivian_init(void* party) {
     vivian_cancel_req = zero;
 }
 
+
+u8 vivian_use(void* pParty) {
+    return 0;
+}
+
+
+u8 mot_vivian_post(void) {
+    return 0;
+}
+
+
+u8 vivian_move(void* pParty) {
+    return 0;
+}
+
+
+u8 vivianShadow(void* pParty) {
+    return 0;
+}
+
+
+s32 N_vivianDisplayTailCheck(void* pParty) {
+    return 0;
+}
+
+
+u8 N_marioForceVivianAnime(void) {
+    return 0;
+}
+
+
+s32 vivianGetStatus(void) {
+    return 0;
+}
+
+
+u8 mot_vivian(void) {
+    return 0;
+}

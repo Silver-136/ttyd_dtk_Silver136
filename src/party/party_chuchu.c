@@ -29,3 +29,28 @@ s32 post_msg(void* party) {
     }
     return 2;
 }
+
+
+u8 set_msg(void* pEvt) {
+    return 0;
+}
+
+
+u8 chuchu_searchObject(void) {
+    return 0;
+}
+
+
+s32 search_result(void* pEvt, int param_2) {
+    return 0;
+}
+
+
+u8 chuchu_use(void* pParty) {
+    return 0;
+}
+
+
+u8 chuchu_move(void* pParty) {
+    return 0;
+}

@@ -32,3 +32,82 @@ void yoshi_init(void* party) {
     *(s32*)((s32)party + 0x168) = -1;
 }
 
+
+u8 yoshi_use(s32 pParty) {
+    return 0;
+}
+
+
+u8 searchGround(s32 pParty) {
+    return 0;
+}
+
+
+u8 checkWall(s64 speed, s64 direction, s32 pParty) {
+    return 0;
+}
+
+
+u8 searchGround2(void* pParty) {
+    return 0;
+}
+
+
+u8 inertia(void* pParty) {
+    return 0;
+}
+
+
+u8 yoshi_exit(void* pParty) {
+    return 0;
+}
+
+
+u8 marioYoshiForceCancel(void) {
+    return 0;
+}
+
+
+u8 L_getStick(void* pParty, s32 param_2, s32 param_3) {
+    return 0;
+}
+
+
+u8 yoshi_bye(void* pParty) {
+    return 0;
+}
+
+
+u8 L_yoshiFlyMove(void* pParty) {
+    return 0;
+}
+
+
+u32 marioGetoffYoshi(void) {
+    return 0;
+}
+
+
+u8 L_sweatEntry(void* pParty, void* hitobjStandOn) {
+    return 0;
+}
+
+
+s32 yoshiGetStatus(void) {
+    return 0;
+}
+
+
+u8 marioRideYoshi(void) {
+    return 0;
+}
+
+
+u8 L_sweatMain(void* pParty) {
+    return 0;
+}
+
+
+u8 yoshi_jumpStand(void) {
+    return 0;
+}

@@ -52,3 +52,52 @@ s32 nokonoko_holdItem(void) {
     return ((u32)(-item) | (u32)item) >> 31;
 }
 
+
+u8 nokonoko_use(void* party) {
+    return 0;
+}
+
+
+u8 ccwall(void* party, s32 param_2) {
+    return 0;
+}
+
+
+u8 lookupSafetyPos(void) {
+    return 0;
+}
+
+
+u8 lookupSafetyPos2(void) {
+    return 0;
+}
+
+
+u8 lookupSafetyPos3(void) {
+    return 0;
+}
+
+
+u8 lookupSafetyPosSub(void) {
+    return 0;
+}
+
+
+u8 nokonoko_finish(void* party) {
+    return 0;
+}
+
+
+u8 nokonoko_use_post(void* party) {
+    return 0;
+}
+
+
+s32 nokonokoGetStatus(void* party) {
+    return 0;
+}
+
+
+u8 nokonoko_move(void* party) {
+    return 0;
+}

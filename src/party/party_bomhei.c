@@ -33,3 +33,63 @@ void bomhei_init(void* party) {
     *(s32*)((s32)party + 0x180) = -1;
     *(s32*)((s32)party + 0x184) = -1;
 }
+
+
+u8 bomhei_use_main(void* party) {
+    return 0;
+}
+
+
+u8 partyGetReturnPos(void) {
+    return 0;
+}
+
+
+u8 bomhei_use(void* pParty) {
+    return 0;
+}
+
+
+u8 check_front(void* pParty) {
+    return 0;
+}
+
+
+u8 mario_controll(void* pParty) {
+    return 0;
+}
+
+
+u8 bomhei_use_post(void* party) {
+    return 0;
+}
+
+
+u8 bomhei_use_cancel2(void) {
+    return 0;
+}
+
+
+u8 bomhei_exit(void* pParty) {
+    return 0;
+}
+
+
+u8 bomhei_use_cancel(void) {
+    return 0;
+}
+
+
+s32 mario_bomhei_keychk(void) {
+    return 0;
+}
+
+
+u8 bomhei_bye(void* pParty) {
+    return 0;
+}
+
+
+s32 mario_bomhei_keychk2(void) {
+    return 0;
+}
