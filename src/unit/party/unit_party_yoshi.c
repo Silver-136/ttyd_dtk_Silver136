@@ -21,3 +21,56 @@ void _btlYoshiDisp(void* camera, void* work) {
                     *(f32*)work, float_20_804240b8 + *(f32*)((s32)work + 4),
                     *(f32*)((s32)work + 8), rx, float_0p4_804240ac);
 }
+
+
+u8 _gundan_yoshi_run_effect(void) {
+    return 0;
+}
+
+
+u8 btl_yoshi_yoroyoro_jump_move(void) {
+    return 0;
+}
+
+
+void __makeTechMenuFunc(void* commandWork, s32 param_2) {
+}
+
+
+u8 btl_yoshi_yoroyoro_jump_calc_param(void) {
+    return 0;
+}
+
+
+s32 yoshi_original_color_anim_set(int param_1, int param_2) {
+    return 0;
+}
+
+
+s32 _get_nomikomi_hit_position(int param_1) {
+    return 0;
+}
+
+
+s32 _check_swallow_attribute(int param_1) {
+    return 0;
+}
+
+
+s32 _wait_yoshig_run(int param_1) {
+    return 0;
+}
+
+
+s32 _get_swallow_param(int param_1) {
+    return 0;
+}
+
+
+u32 _wait_yoshig_complete(int param_1) {
+    return 0;
+}
+
+
+void _yoshi_slide_move_sound(void* unit, s32 param_2) {
+}
