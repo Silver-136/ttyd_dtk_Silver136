@@ -632,3 +632,35 @@ void _callback(void* unused, void* fileInfo) {
     *(s32*)((s32)wp + 0x35C) = 1;
 }
 
+
+u8 fadeMain(void) {
+    return 0;
+}
+
+
+void fadeEntry(s32 type, s32 time, void* data) {
+}
+
+
+u8 disp_texture(void) {
+    return 0;
+}
+
+
+void zFill(void) {
+}
+
+
+u8 fadeInit(void) {
+    return 0;
+}
+
+
+f32 z(void) {
+    return 0.0f;
+}
+
+
+u8 fadeTexSetup(void) {
+    return 0;
+}

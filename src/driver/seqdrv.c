@@ -37,3 +37,8 @@ void seqInit_MARIOSTORY(void) {
     next_seq = -1;
     prev_seq = -1;
 }
+
+
+u8 seqMain(void) {
+    return 0;
+}

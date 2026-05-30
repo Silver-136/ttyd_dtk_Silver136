@@ -89,3 +89,74 @@ void envBlurOff(void) {
     _mapFree(mapalloc_base_ptr, *(void**)((s32)entry + 0x4C));
 }
 
+
+u8 envAddTev(int param_1, int param_2) {
+    return 0;
+}
+
+
+void envDisp_DepthOfField(void) {
+}
+
+
+u8 envTevLoadTexMtxImm(void) {
+    return 0;
+}
+
+
+u8 envSetWater(void) {
+    return 0;
+}
+
+
+u8 envGlare(void) {
+    return 0;
+}
+
+
+void envDisp_FF(void) {
+}
+
+
+void envDisp_Blur(void) {
+}
+
+
+u8 envSetYami(int param_1) {
+    return 0;
+}
+
+
+u8 envCapture(void) {
+    return 0;
+}
+
+
+u8 envCapture2(void) {
+    return 0;
+}
+
+
+u8 envBlurOn(int param_1, u32 param_2) {
+    return 0;
+}
+
+
+u8 envGlareFilter(int param_1, u16 param_2, u16 param_3, u16 param_4, u16 param_5) {
+    return 0;
+}
+
+
+u8 envDisp2(void) {
+    return 0;
+}
+
+
+u8 envTexSetup(void) {
+    return 0;
+}
+
+
+u8 envMain(void) {
+    return 0;
+}

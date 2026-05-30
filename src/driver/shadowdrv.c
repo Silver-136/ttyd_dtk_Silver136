@@ -121,3 +121,78 @@ void U_shadowSetMode(s32 id, u8 mode) {
 void shadowSetType(s32 id, u8 type) {
     *(u8*)((s32)*(void**)((s32)cswp + 0x108) + id * 0x5C + 3) = type;
 }
+
+
+u8 shadowDisp(int param_1, s32 param_2) {
+    return 0;
+}
+
+
+u8 shadowCharShadowDisp_Projection(void) {
+    return 0;
+}
+
+
+u8 shadowInit(void) {
+    return 0;
+}
+
+
+u8 shadowCharShadowDisp_Texture(void) {
+    return 0;
+}
+
+
+u8 cylinderShadowDraw(void) {
+    return 0;
+}
+
+
+u8 depthShadowEnd(void) {
+    return 0;
+}
+
+
+u8 shadowCharShadowDisp_Polygon(void) {
+    return 0;
+}
+
+
+u8 projShadowEnd(s32 param_1, u32* param_2) {
+    return 0;
+}
+
+
+u8 shadowCharShadowDisp_Collision(void) {
+    return 0;
+}
+
+
+u8 cylinder(void) {
+    return 0;
+}
+
+
+u8 shadowMain(void) {
+    return 0;
+}
+
+
+u8 shadowEntry(double param_1, double param_2, double param_3, double param_4) {
+    return 0;
+}
+
+
+int shadowEntryMode(double param_1, double param_2, double param_3, double param_4, u8 param_5) {
+    return 0;
+}
+
+
+u32 shadowGetDepthShadowColor(void) {
+    return 0;
+}
+
+
+s32 _filter(s32 param_1, int param_2) {
+    return 0;
+}

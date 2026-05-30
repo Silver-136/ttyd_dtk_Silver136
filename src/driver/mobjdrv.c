@@ -76,3 +76,81 @@ s32 mobjCheckExec(void) {
     return 0;
 }
 
+
+u8 mobjMain(void) {
+    return 0;
+}
+
+
+u32* mobjNearDistCheck2(double param_1, double param_2, double param_3, double param_4, char** param_5) {
+    return 0;
+}
+
+
+int mobjEntry(char* name, char* pAnimPoseName) {
+    return 0;
+}
+
+
+u8 mobjDisp_OffscreenXLU(s32 param_1, u32* param_2) {
+    return 0;
+}
+
+
+u8 mobjDisp(s32 param_1, u32* param_2) {
+    return 0;
+}
+
+
+u8 mobjDispXLU(s32 param_1, u32* param_2) {
+    return 0;
+}
+
+
+u8 mobjCalcMtx2(int param_1) {
+    return 0;
+}
+
+
+u8 mobjSetPosition(float posX, float posY, float posZ, s32 mobjName) {
+    return 0;
+}
+
+
+void mobjDelete(s32 name) {
+}
+
+
+void* mobjNameToPtrNoAssert(s32 name) {
+    return 0;
+}
+
+
+void* mobjNameToPtr(s32 name) {
+    return 0;
+}
+
+
+int mobjCheckItemboxOpen(int param_1) {
+    return 0;
+}
+
+
+u8 mobjInit(void) {
+    return 0;
+}
+
+
+u8 mobjCalcMtx(void* pMobj) {
+    return 0;
+}
+
+
+u8 mobjHitEntry(void* pMobj, int param_2) {
+    return 0;
+}
+
+
+void* mobjRunEvent(void* pMobj, void* evtCode) {
+    return 0;
+}

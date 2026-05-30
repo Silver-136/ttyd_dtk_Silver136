@@ -197,3 +197,60 @@ void kpaSetFallPara(void) {
     }
 }
 
+
+u8 kpaFireAttack(void) {
+    return 0;
+}
+
+
+u8 kpaFireMain(void) {
+    return 0;
+}
+
+
+void kpa2DMain(void* mario) {
+}
+
+
+u8 kpaFall(void) {
+    return 0;
+}
+
+
+void kpa3DMain(void* mario) {
+}
+
+
+u8 kpaPreInit(void) {
+    return 0;
+}
+
+
+u8 kpa_jumpNpc(void) {
+    return 0;
+}
+
+
+double kpaSetJumpPara(void) {
+    return 0.0;
+}
+
+
+s32 kpaGetBodyStatus(void) {
+    return 0;
+}
+
+
+s32 kpaCamFollow(void) {
+    return 0;
+}
+
+
+u8 kpaCancelAttackMode(void) {
+    return 0;
+}
+
+
+u8 kpaAttackStart(void) {
+    return 0;
+}

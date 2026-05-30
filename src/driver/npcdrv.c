@@ -251,3 +251,217 @@ void* fbatNpcTalkCheck(void) {
     }
     return 0;
 }
+
+
+void fbatHitCheck(s32, s32) {
+}
+
+
+u8 npcMain(void) {
+    return 0;
+}
+
+
+u8 fbatEncountCheck(void) {
+    return 0;
+}
+
+
+u8 npcHitCheckSide(void) {
+    return 0;
+}
+
+
+u8 fbatBattleMode(void) {
+    return 0;
+}
+
+
+u8 npcCheckHitMarioSide(s32 pNpc) {
+    return 0;
+}
+
+
+u8 _npcHitCheckHammerAllMotion(void) {
+    return 0;
+}
+
+
+u8 _npcGroupDead(u32* param_1, s16 param_2) {
+    return 0;
+}
+
+
+u8 npcDisp_offscreen(void) {
+    return 0;
+}
+
+
+u8 npcDisp_blur(void) {
+    return 0;
+}
+
+
+u8 npcDisp_offscreen_xlu(void) {
+    return 0;
+}
+
+
+u8 npcDisp(void) {
+    return 0;
+}
+
+
+u8 mtx_setup(void) {
+    return 0;
+}
+
+
+void _npcDeleteGroup(void* npc) {
+}
+
+
+u8 npcDisp_xlu(void) {
+    return 0;
+}
+
+
+u8 fbatTalkMode(void) {
+    return 0;
+}
+
+
+u8 npcKoopaModeEncountCheck(void) {
+    return 0;
+}
+
+
+int _npcHitCheckSphere(double param_1, double param_2, double param_3, double param_4, int param_5, float* param_6) {
+    return 0;
+}
+
+
+u32* npcNearDistCheck(double param_1, s64 param_2, double param_3, double param_4) {
+    return 0;
+}
+
+
+void npcSetStayPose(char* stayPose) {
+}
+
+
+void npcSetTalkPose(char* talkPose) {
+}
+
+
+u8 npcRecoveryFiledNpc(void) {
+    return 0;
+}
+
+
+void npcBlurOn(char* name) {
+}
+
+
+u8 npcReleaseFiledNpc(void) {
+    return 0;
+}
+
+
+void npcSetBattleInfo(void* npc, s32 info) {
+}
+
+
+u8 fbatSetAttackAnnounce(s32 param_1) {
+    return 0;
+}
+
+
+s32 npcWaitAllInitEvtEnd(void) {
+    return 0;
+}
+
+
+void npcExecAllInitEvt(void) {
+}
+
+
+void npcExecAllReglEvt(void) {
+}
+
+
+s32 _majinai_effect(void* pEvt, int param_2) {
+    return 0;
+}
+
+
+void npcStartForEvent(void) {
+}
+
+
+void* npcNameToPtr_NoAssert(s32 name) {
+    return 0;
+}
+
+
+void npcStopForEvent(void) {
+}
+
+
+void npcBlurOff(char* name) {
+}
+
+
+void npcGetBackItemEntry(void* npc) {
+}
+
+
+void* npcNameToPtr(s32 name) {
+    return 0;
+}
+
+
+u8 _npcDead(u32* param_1, s16 param_2) {
+    return 0;
+}
+
+
+u8 _fbatFirstAttackAnnouceDisp(s32 param_1, void* param_2) {
+    return 0;
+}
+
+
+u8 npcMoveG(void* pNpc) {
+    return 0;
+}
+
+
+void npcSetupBattleInfo(void* npc, void* battleInfo) {
+}
+
+
+void npcDelete(void* npc) {
+}
+
+
+void npcSetColor(char* name, void* color) {
+}
+
+
+s32 npcEntry(char* name, char* modelName) {
+    return 0;
+}
+
+
+s32 npcCalcScore(void* npc) {
+    return 0;
+}
+
+
+s32 npcKoopaModeMobjBoundDeadCheck(void* hit) {
+    return 0;
+}
+
+
+void npcGroupDead(void* npc, s32 wKpaScoreType) {
+}

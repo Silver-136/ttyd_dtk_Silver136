@@ -104,3 +104,28 @@ void lightReInit(void) {
     LightWorkSet* set = currentLightWork();
     memset(set->entries, 0, set->count * sizeof(LightEntry));
 }
+
+
+int lightEntry(char* pName, int lightType, void* pos, void* rot, GXColor* color, int distanceAttenType, u32 flags, double spotAngle, double angleAtten) {
+    return 0;
+}
+
+
+u8 lightInit(void) {
+    return 0;
+}
+
+
+u8 lightGetNearObj(void* pPos, LightEntry** pDst, int count, LightEntryFlags flags) {
+    return 0;
+}
+
+
+u8 lightMain(void) {
+    return 0;
+}
+
+
+void* lightNameToPtr(char* name) {
+    return 0;
+}

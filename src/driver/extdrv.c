@@ -71,3 +71,71 @@ void extLoadShadowMtx(void* dst) {
     PSMTXCopy(dst, (void*)(wp + 0x3C));
 }
 
+
+u8 extMain(void) {
+    return 0;
+}
+
+
+u8 extMakeTexture(void) {
+    return 0;
+}
+
+
+u8 extEntry(int param_1, int* param_2, void* initFunc, int param_4, int param_5) {
+    return 0;
+}
+
+
+u8 extDrawShadow(void) {
+    return 0;
+}
+
+
+u8 extLoadShadowTev(void) {
+    return 0;
+}
+
+
+u8 extLoadTexture(void) {
+    return 0;
+}
+
+
+u8 extPoseDraw(int param_1) {
+    return 0;
+}
+
+
+u8 extLoadTev(void) {
+    return 0;
+}
+
+
+u8 extDraw(void) {
+    return 0;
+}
+
+
+void extReset(void) {
+}
+
+
+u8 extLoadVertex(void) {
+    return 0;
+}
+
+
+u8 extLoadShadowVertex(void) {
+    return 0;
+}
+
+
+u8 extLoadShadowRenderMode(void) {
+    return 0;
+}
+
+
+u8 extLoadRenderMode(void) {
+    return 0;
+}

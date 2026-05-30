@@ -105,3 +105,62 @@ void _callback_tpl(void* unk, void* dvdEntry) {
     DVDMgrClose(closeEntry);
     wp->unkC = 1;
 }
+
+
+u8 effCalcMayaAnimMatrix(int param_1, int* param_2, s32 param_3, float* param_4) {
+    return 0;
+}
+
+
+u8 effDrawMayaPoly(int param_1) {
+    return 0;
+}
+
+
+u8 effMain(void) {
+    return 0;
+}
+
+
+u8 effTexSetup(void) {
+    return 0;
+}
+
+
+u8 effGetTexObj(int param_1, u32* param_2) {
+    return 0;
+}
+
+
+void* effNameToPtr(char* name) {
+    return 0;
+}
+
+
+void* effGetSet(char* param_1) {
+    return 0;
+}
+
+
+void effAutoRelease(s32 value) {
+}
+
+
+u8 effInit(void) {
+    return 0;
+}
+
+
+int* effMayaAnimAlloc(void* effData) {
+    return 0;
+}
+
+
+u8 effCalcMayaAnim(void* param_1) {
+    return 0;
+}
+
+
+u8 effPlayMayaAnim(void* param_1) {
+    return 0;
+}

@@ -82,3 +82,47 @@ void windowInit(void) {
     winTpl = 0;
     unk_8041ea1c = 0;
 }
+
+
+u8 _windowDispGX_Message(void) {
+    return 0;
+}
+
+
+u8 windowDispGX_System(void) {
+    return 0;
+}
+
+
+u8 windowDispGX_Kanban(void) {
+    return 0;
+}
+
+
+u8 windowDispGX2_Waku_col(s64 param_1, s64 param_2, s64 param_3, s64 param_4, s64 param_5, s32 param_6, s16 param_7, s32 color) {
+    return 0;
+}
+
+
+void windowDispGX_Waku_col(double x, double y, double width, double height, double curve, u16 gxTexMapID, u32* color) {
+}
+
+
+u8 windowDispGX_Message(void) {
+    return 0;
+}
+
+
+u8 windowTexSetup(void) {
+    return 0;
+}
+
+
+int windowEntry(s16 param_1) {
+    return 0;
+}
+
+
+u8 windowMain(void) {
+    return 0;
+}

@@ -114,3 +114,91 @@ void winHelpDisp(void* win) {
 s32 winHelpMain(void* win) {
     return winMgrHelpMain(win);
 }
+
+
+s32 itemEntry(s32 a, s32 item, s32 mode, s32 c, s32 d, f32 x, f32 y, f32 z) {
+    return 0;
+}
+
+
+u8 itemMain(void) {
+    return 0;
+}
+
+
+u8 itemHitCheckSide(void) {
+    return 0;
+}
+
+
+u8 itemHitCheck(s64 posX, s64 posY, s64 posZ, s64 param_4) {
+    return 0;
+}
+
+
+u8 winNameDisp(int param_1) {
+    return 0;
+}
+
+
+u8 winNameDisp2(int param_1) {
+    return 0;
+}
+
+
+void itemDelete(void* item) {
+}
+
+
+void itemReInit(void) {
+}
+
+
+void* itemNameToPtr(s32 name) {
+    return 0;
+}
+
+
+u8 itemInit(void) {
+    return 0;
+}
+
+
+u8 itemCoinDrop(float* param_1) {
+    return 0;
+}
+
+
+u8 itemseq_GetItem(void* pItem, s32 param_2, s32 param_3, s32 param_4, u32* param_5, u32 param_6) {
+    return 0;
+}
+
+
+u8 itemseq_Bound(void* itemEntry) {
+    return 0;
+}
+
+
+s32 itemGetCheck(void* itemEntry) {
+    return 0;
+}
+
+
+void* itemNearDistCheck(float posX, float posY, float posZ, s64 param_4) {
+    return 0;
+}
+
+
+u32 itemGetNokoCheck(void* itemEntry) {
+    return 0;
+}
+
+
+u8 winFullDisp(void* winMgrEntry) {
+    return 0;
+}
+
+
+u8 itemNokoForceGet(void* itemEntry) {
+    return 0;
+}

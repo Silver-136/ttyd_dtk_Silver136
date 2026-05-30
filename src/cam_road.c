@@ -1405,3 +1405,13 @@ s32 camRoadSetup(const char* name) {
 
     return 1;
 }
+
+
+s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
+    return 0;
+}
+
+
+s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
+    return 0;
+}

@@ -552,3 +552,51 @@ void iconInit(void) {
         DVDMgrReadAsync(entry, icon_bin, size, 0, _callback_bin);
     }
 }
+
+
+void iconGX(void* mtx, void* icon) {
+}
+
+
+u8 iconMain(void) {
+    return 0;
+}
+
+
+void iconDispGxAlpha(void* icon, s32 x, s32 y, s32 alpha) {
+}
+
+
+u8 iconNumberDispGx3D(void) {
+    return 0;
+}
+
+
+u8 iconNumberDispGx(void) {
+    return 0;
+}
+
+
+u8 iconEntry(char* param_1, u16 param_2) {
+    return 0;
+}
+
+
+u8 iconDispGx2(s32 param_1, s16 param_2, u16 param_3) {
+    return 0;
+}
+
+
+u8 iconDispGxCol(s32 param_1, s16 someBitfield, u16 iconId, void* param_4) {
+    return 0;
+}
+
+
+u8 iconGetTexObj(u32* param_1, u16 param_2) {
+    return 0;
+}
+
+
+u8 iconEntry2D(char* param_1, u16 param_2) {
+    return 0;
+}

@@ -70,3 +70,91 @@ void msgDispKeyWait_render(void* anim) {
     GXSetAlphaCompare(6, 0x80, 1, 0, 0);
     *(void**)((s32)ptr + 0xE0) = anim;
 }
+
+
+u8 msgDisp(void) {
+    return 0;
+}
+
+
+s32 msgMain(int* param_1) {
+    return 0;
+}
+
+
+u8 msgWindow_Disp(void) {
+    return 0;
+}
+
+
+int msgWindow_Entry(char* param_1, s32 param_2, short param_3) {
+    return 0;
+}
+
+
+u8 selectWindow_Main(s32 param_1) {
+    return 0;
+}
+
+
+void msgLoad(char* name, s32 unk) {
+}
+
+
+u8 selectWindow_Disp(s32 param_1, int param_2) {
+    return 0;
+}
+
+
+void* msgSearch(void* msgId) {
+    return 0;
+}
+
+
+void msgWindow_ForceClose(s32 id) {
+}
+
+
+u8 msgInit(void) {
+    return 0;
+}
+
+
+char* msgGetCommand(char* param_1, char* param_2, char* param_3) {
+    return 0;
+}
+
+
+s32 msgIconStr2ID(char* param_1) {
+    return 0;
+}
+
+
+u8 msgWindow_Repeat(int param_1) {
+    return 0;
+}
+
+
+u8 msgWindow_Add(s32 param_1, int param_2) {
+    return 0;
+}
+
+
+int msg_compare(int* param_1, int* param_2) {
+    return 0;
+}
+
+
+u8 msgAnalize(void* param_1, s32 param_2) {
+    return 0;
+}
+
+
+u8 msgWindow_Main(void* pWindow) {
+    return 0;
+}
+
+
+u8 msgWindow_Clear_Main(void* param_1) {
+    return 0;
+}
