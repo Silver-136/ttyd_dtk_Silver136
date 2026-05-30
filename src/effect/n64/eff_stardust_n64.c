@@ -15,3 +15,17 @@ void effStardustN64SetColor(void* effect, f32 r, f32 g, f32 b) {
     *(f32*)((s32)work + 0x30) = b;
 }
 
+
+u8 effStardustN64Entry(void) {
+    return 0;
+}
+
+
+u8 effStardustDisp(void) {
+    return 0;
+}
+
+
+u8 effStardustMain(void) {
+    return 0;
+}

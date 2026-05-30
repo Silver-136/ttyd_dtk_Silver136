@@ -439,3 +439,8 @@ void* BattleSetConfuseAct(void* battleWork, void* unit) {
 u32 _battleGetPartyIcon(s32 unitKind) {
     return 0;
 }
+
+
+s32 _check_weapon_type_attack(void* weapon) {
+    return 0;
+}

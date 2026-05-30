@@ -465,3 +465,13 @@ s32 npcKoopaModeMobjBoundDeadCheck(void* hit) {
 
 void npcGroupDead(void* npc, s32 wKpaScoreType) {
 }
+
+
+s32 npcCheckInterrupt(void* pNpc) {
+    return 0;
+}
+
+
+s32 npcCheckBlow(void* npc) {
+    return 0;
+}

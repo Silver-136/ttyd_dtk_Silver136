@@ -8,3 +8,18 @@ void effSmallStarN64CamChg(void* effect, s8 camId) {
         *(s8*)((s32)work + 0x30) = camId;
     }
 }
+
+
+u8 effSmallStarN64Entry(void) {
+    return 0;
+}
+
+
+u8 effSmallStarMain(void* effEntry) {
+    return 0;
+}
+
+
+u8 effSmallStarDisp(s32 param_1, void* effEntry) {
+    return 0;
+}

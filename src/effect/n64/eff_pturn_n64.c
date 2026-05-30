@@ -13,3 +13,21 @@ void effPturnDisp(void* camera, void* effect) {
         }
     }
 }
+
+
+void pturn_num_dispp(void* camera, void* effect) {
+}
+
+
+void pturn_main_dispp(void* camera, void* effect) {
+}
+
+
+u8 effPturnMain(void) {
+    return 0;
+}
+
+
+u8 effPturnN64Entry(void) {
+    return 0;
+}

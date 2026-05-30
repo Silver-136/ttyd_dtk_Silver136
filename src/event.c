@@ -1057,3 +1057,43 @@ void stg0_00_init(void) {
     marioSetCharMode(0);
     statusWinForceUpdate();
 }
+
+
+u8 stg8_06_init(void) {
+    return 0;
+}
+
+
+u8 stg2_21_06_init00(void) {
+    return 0;
+}
+
+
+u8 stg2_21_01_init(void) {
+    return 0;
+}
+
+
+u8 stg3_12_init__4(void) {
+    return 0;
+}
+
+
+u8 stg3_30_init(void) {
+    return 0;
+}
+
+
+u8 stg3_34_init(void) {
+    return 0;
+}
+
+
+u8 stg6_71_01_init(void) {
+    return 0;
+}
+
+
+u8 stg3_07_init__9(void) {
+    return 0;
+}

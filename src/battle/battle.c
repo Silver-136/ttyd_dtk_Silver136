@@ -459,3 +459,8 @@ s32 BattleGetSeq(BattleWork* wp, BattleSequence seq) {
 
 void BattleSetSeq(BattleWork* wp, BattleSequence seq, s32 value) {
 }
+
+
+s32 BattleTransPartyIdToUnitKind(int partyId) {
+    return 0;
+}

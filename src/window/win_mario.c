@@ -17,3 +17,28 @@ char* winZenkakuStr(s32 value) {
 void winMarioExit(void* wp) {
     animPoseRelease(*(s32*)((s32)wp + 0x188));
 }
+
+
+u8 winMarioDisp(void) {
+    return 0;
+}
+
+
+u8 fukidashi(double x, double y, void* menu, int type) {
+    return 0;
+}
+
+
+s32 winMarioMain(void* pWin) {
+    return 0;
+}
+
+
+u8 winMarioInit(void* pWin) {
+    return 0;
+}
+
+
+u8 winMarioInit2(void* pWin) {
+    return 0;
+}
