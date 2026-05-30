@@ -154,3 +154,30 @@ void BattleActionCommandManager(struct BattleWork* work) {
         dispEntry(8, 1, dispCallback, float_900_804221a8, work);
     }
 }
+
+
+u8 BattleAcDrawGauge(s64 ratioFilled, s32 x, s32 y, s32 innerBarWidth, s32 param_5, s32 bar1EndPercent, s32 bar2EndPercent, s32 bar3EndPercent, s32 flags_) {
+    return 0;
+}
+
+
+void BattleActionCommandCheckDefence(void* unit, s32 value) {
+}
+
+
+s32 BattleACGetButtonIcon(int param_1, int param_2) {
+    return 0;
+}
+
+
+void BattleActionCommandSetup(void* battleWork, s32 param, void* unit, s32 rawArg, s32 value) {
+}
+
+
+void BattleActionCommandDeclareACResult(void* battleWork, s32 result) {
+}
+
+
+u8 BattleAcGaugeSeUpdate(double param_1) {
+    return 0;
+}

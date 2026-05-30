@@ -328,3 +328,68 @@ s32 evt_btl_camera_set_zoom(void* evt) {
 
     return 2;
 }
+
+
+void battleCameraMain(void) {
+}
+
+
+u8 battleCameraMoveTo(void) {
+    return 0;
+}
+
+
+s32 evt_btl_camera_set_homing_unitparts(int param_1) {
+    return 0;
+}
+
+
+s32 evt_btl_camera_set_homing_unit_audience(int param_1) {
+    return 0;
+}
+
+
+s32 evt_btl_camera_set_homing_unit(int param_1) {
+    return 0;
+}
+
+
+void btl_camera_set_moveto(float param_1, float param_2, float param_3, float param_4, float param_5, float param_6, int priority, s32 param_8, s32 param_9) {
+}
+
+
+u8 evt_btl_camera_shake_h(void) {
+    return 0;
+}
+
+
+u8 evt_btl_camera_shake_w(void) {
+    return 0;
+}
+
+
+u8 evt_btl_camera_set_moveto(void) {
+    return 0;
+}
+
+
+s32 evt_btl_camera_set_posoffset(int param_1) {
+    return 0;
+}
+
+
+void btl_camera_set_mode(s32 priority, s32 mode) {
+}
+
+
+s32 evt_btl_camera_add_zoom(int param_1) {
+    return 0;
+}
+
+
+void btl_camera_shake_h(double param_1, double param_2, int priority, s32 param_4, s32 param_5) {
+}
+
+
+void btl_camera_shake_w(double param_1, double param_2, int priority, s32 param_4, s32 param_5) {
+}

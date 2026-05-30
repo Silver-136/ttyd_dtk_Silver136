@@ -392,3 +392,70 @@ void* BattleGetPartyPtr(BattleWork* wp) {
     }
     return NULL;
 }
+
+
+void _EquipItem(void* unit, u32 param_2, u32 item) {
+}
+
+
+void* BattleChangeParty(void* battleWork) {
+    return 0;
+}
+
+
+u32 BattleMajinaiCheck(void) {
+    return 0;
+}
+
+
+s32 BattleTransPartyId(BattleUnitType type) {
+    return 0;
+}
+
+
+s32 BattleAfterReactionMain(void) {
+    return 0;
+}
+
+
+void BtlUnit_EquipItem(void* unit, u32 param_2, u32 item) {
+}
+
+
+void BattleStatusWindowCheck(void) {
+}
+
+
+u8 BattleAfterReactionRelease(int param_1, int param_2) {
+    return 0;
+}
+
+
+void BattleAfterReactionEntry(s32 unitId, s32 arg) {
+}
+
+
+u8 BattleConsumeReserveItem(void) {
+    return 0;
+}
+
+
+void BattleIncSeq(void* battleWork, s32 seqType) {
+}
+
+
+void BattleAfterReactionQueueInit(void) {
+}
+
+
+void BattlePartyInfoWorkInit(BattleWork* wp) {
+}
+
+
+s32 BattleGetSeq(BattleWork* wp, BattleSequence seq) {
+    return 0;
+}
+
+
+void BattleSetSeq(BattleWork* wp, BattleSequence seq, s32 value) {
+}
