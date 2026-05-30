@@ -255,3 +255,213 @@ void partyPaperOff(void* party) {
         *(s32*)((s32)party + 0x14) = -1;
     }
 }
+
+
+
+u8 partyRideMain(s32 pParty) {
+    return 0;
+}
+
+
+s32 partyDokanInit(void* pParty) {
+    return 0;
+}
+
+
+
+u8 partyReInit(void) {
+    return 0;
+}
+
+
+u8 partyHelloMain(void* pParty) {
+    return 0;
+}
+
+
+u8 driveParty(void* party) {
+    return 0;
+}
+
+
+
+u8 party_damage_return(void* pParty) {
+    return 0;
+}
+
+
+s32 partyGoodbyeMain(void* party) {
+    return 0;
+}
+
+
+s32 partyDokanMain(void* pParty) {
+    return 0;
+}
+
+
+
+s32 partyRideYoshiMain(void* pParty) {
+    return 0;
+}
+
+
+u8 partyDisp(s32 param_1, void* pParty) {
+    return 0;
+}
+
+
+u8 partySetFamicomMode(void* pParty, int param_2) {
+    return 0;
+}
+
+
+u8 partyEntry2Pos(void) {
+    return 0;
+}
+
+
+u8 N__partyChgRunMode(void* pParty, int currRunModeId, int newRunModeId) {
+    return 0;
+}
+
+
+s32 partyEntryMain(void) {
+    return 0;
+}
+
+
+int partyEntry2(int partyMemberId) {
+    return 0;
+}
+
+
+u8 partyMakeDispDir(void* pParty) {
+    return 0;
+}
+
+
+u8 partyPreDisp(s32 pParty) {
+    return 0;
+}
+
+
+u8 getRidePos(void* pParty, void* param_2) {
+    return 0;
+}
+
+
+u8 partyEntryPos(double param_1, double param_2, double param_3, s32 param_4) {
+    return 0;
+}
+
+
+int partyEntry(int partyMemberId) {
+    return 0;
+}
+
+
+u8 party_force_ride_yoshi(void* pParty) {
+    return 0;
+}
+
+
+u8 partyHello(void* pParty) {
+    return 0;
+}
+
+
+void partyChgPoseId(void* party, s32 poseId) {
+}
+
+
+s32 partyPaperOn(void* pParty, char* param_2) {
+    return 0;
+}
+
+
+u8 partyUpdateKeyData(void* pParty) {
+    return 0;
+}
+
+
+u8 partyMain(void) {
+    return 0;
+}
+
+
+u8 allPartyForceRideOn(void) {
+    return 0;
+}
+
+
+void partyGoodbyeInit(void* party) {
+}
+
+
+u8 allPartyRideOff2(void) {
+    return 0;
+}
+
+
+u8 allPartyRideOff(void) {
+    return 0;
+}
+
+
+u8 partyDokanEnd(int partyId, u8 param_2) {
+    return 0;
+}
+
+
+u8 partyDoWork(void) {
+    return 0;
+}
+
+
+void yoshiSetColor(void) {
+}
+
+
+u8 allPartyRideShip(void) {
+    return 0;
+}
+
+
+u8 allPartyRidePlane(void) {
+    return 0;
+}
+
+
+u8 party_ride_yoshi_force_move(void) {
+    return 0;
+}
+
+
+u8 N_partyForceChgRunMode(void* pParty, int newRunMode, u8 subMotionId) {
+    return 0;
+}
+
+
+u8 partyChgPaper(void* pParty, char* param_2) {
+    return 0;
+}
+
+
+void partyChgRunMode(void* party, s32 mode) {
+}
+
+
+s32 partyGoodbye(void* pParty) {
+    return 0;
+}
+
+
+s32 partyKill(s32 id) {
+    return 0;
+}
+
+
+s32 partyEntry2Hello(s32 id) {
+    return 0;
+}
