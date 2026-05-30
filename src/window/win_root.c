@@ -344,3 +344,8 @@ int N_compare_func4_2_r(int param_1, int param_2) {
 int N_compare_func4_2(int param_1, int param_2) {
     return 0;
 }
+
+
+u8 winHalfBookGX(double x, double y, void* file, int param_4) {
+    return 0;
+}
