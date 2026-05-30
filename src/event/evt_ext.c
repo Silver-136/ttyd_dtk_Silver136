@@ -6,3 +6,8 @@ s32 evt_ext_reset(void) {
     extReset();
     return 2;
 }
+
+
+s32 evt_ext_entry(void* pEvt) {
+    return 0;
+}

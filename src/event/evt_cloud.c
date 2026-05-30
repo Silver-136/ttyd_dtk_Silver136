@@ -25,3 +25,18 @@ s32 evt_cloud_set_cap_size(void* event, s32 isFirstCall) {
     *(u16*)((s32)cloud_p + 0xC2) = height;
     return 2;
 }
+
+
+s32 evt_cloud_main(void* pEvt, int param_2) {
+    return 0;
+}
+
+
+s32 evt_cloud_ent(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_cloud_init(void) {
+    return 0;
+}

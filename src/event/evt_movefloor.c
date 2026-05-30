@@ -47,3 +47,72 @@ USER_FUNC(moving_floor_getf_xz_scale) {
     return 2;
 }
 
+
+s32 evt_moving_floor_alloc(void* pEvt) {
+    return 0;
+}
+
+
+u8 evt_moving_floor_init(s32 pEvt) {
+    return 0;
+}
+
+
+s32 evt_moving_floor_main(int param_1) {
+    return 0;
+}
+
+
+s32 moving_floor_getf_pos(int param_1) {
+    return 0;
+}
+
+
+s32 moving_floor_set_se(void* param_1) {
+    return 0;
+}
+
+
+s32 moving_floor_get_end(int param_1) {
+    return 0;
+}
+
+
+s32 evt_moving_floor_delete(int param_1) {
+    return 0;
+}
+
+
+s32 moving_floor_reverse(void* pEvt) {
+    return 0;
+}
+
+
+s32 moving_floor_getf_now_bpoint(int param_1) {
+    return 0;
+}
+
+
+s32 moving_floor_update_turn(int param_1) {
+    return 0;
+}
+
+
+s32 moving_floor_get_stmsec(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_moving_floor_free(int param_1) {
+    return 0;
+}
+
+
+s32 moving_floor_stop_se(int param_1) {
+    return 0;
+}
+
+
+s32 evt_moving_floor_main2(void* param_1) {
+    return 0;
+}

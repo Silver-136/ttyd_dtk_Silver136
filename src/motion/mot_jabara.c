@@ -26,3 +26,33 @@ s32 marioPriCheckJabara(void) {
     item = pouchCheckItem(8);
     return ((u32)(-item) | (u32)item) >> 31;
 }
+
+
+u8 mot_jabara(void) {
+    return 0;
+}
+
+
+u8 swingMain(void) {
+    return 0;
+}
+
+
+u8 mot_jabara_post(void) {
+    return 0;
+}
+
+
+int marioChkJabara(void) {
+    return 0;
+}
+
+
+s32 marioGetJabaraState(void) {
+    return 0;
+}
+
+
+s32 jabaraNoHitChk(void) {
+    return 0;
+}

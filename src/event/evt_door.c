@@ -63,3 +63,82 @@ USER_FUNC(evt_door_set_param) {
     }
     return 2;
 }
+
+
+u8 door_position_sub(void) {
+    return 0;
+}
+
+
+s32 evt_door_param(void* pEvt) {
+    return 0;
+}
+
+
+s32 door_entry(void* pEvt) {
+    return 0;
+}
+
+
+void door_dark_flag_sub(s32 unk0, s32 unk1, s32 unk2, s32 unk3) {
+}
+
+
+s32 npc_light(int param_1) {
+    return 0;
+}
+
+
+s32 npc_dark(void* pEvt) {
+    return 0;
+}
+
+
+s32 npc_hide_onoff(int param_1) {
+    return 0;
+}
+
+
+s32 get_noclip_map(int param_1) {
+    return 0;
+}
+
+
+s32 animation(int param_1) {
+    return 0;
+}
+
+
+s32 inout_hit(int param_1) {
+    return 0;
+}
+
+
+s32 evt_door_data_copy(void* pEvt) {
+    return 0;
+}
+
+
+s32 in_pos(int param_1) {
+    return 0;
+}
+
+
+s32 out_pos(int param_1) {
+    return 0;
+}
+
+
+s32 inside_group(int param_1) {
+    return 0;
+}
+
+
+s32 door_group(int param_1) {
+    return 0;
+}
+
+
+s32 outside_group(int param_1) {
+    return 0;
+}

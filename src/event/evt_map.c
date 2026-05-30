@@ -81,3 +81,113 @@ USER_FUNC(evt_map_checkanim) {
     evtSetValue(event, args[2], (s32)frame);
     return 2;
 }
+
+
+s32 evt_map_blend_set_flag(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_map_entry_airport_harbor(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mapobj_color(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_map_set_fog(int param_1) {
+    return 0;
+}
+
+
+s32 evt_map_replace_mapobj(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_map_set_blend(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mapobj_scale(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mapobj_rotate(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mapobj_trans(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mapobj_get_position(int param_1) {
+    return 0;
+}
+
+
+s32 evt_map_set_flush_color(int param_1) {
+    return 0;
+}
+
+
+s32 evt_map_get_fog(int param_1) {
+    return 0;
+}
+
+
+s32 evt_mapobj_flag_onoff(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_map_set_flush_onoff(int param_1) {
+    return 0;
+}
+
+
+s32 evt_map_blend_set_mobj_flag(int param_1) {
+    return 0;
+}
+
+
+s32 evt_map_get_flush_color(int param_1) {
+    return 0;
+}
+
+
+s32 check2(void* pEvt) {
+    return 0;
+}
+
+
+s32 check(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mapobj_set_offscreen(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_map_playanim(int param_1) {
+    return 0;
+}
+
+
+s32 evt_map_replayanim(int param_1) {
+    return 0;
+}
+
+
+s32 evt_map_pauseanim(int param_1) {
+    return 0;
+}

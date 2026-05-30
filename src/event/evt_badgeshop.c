@@ -62,3 +62,74 @@ s32 getBadgeStarmaniacTableMaxCount(void) {
 s32 getBadgeBottakuru100TableMaxCount(void) {
     return 6;
 }
+
+
+void badgeShop_bargainGeneration(void) {
+}
+
+
+void badgeShop_bottakuruGeneration(void) {
+}
+
+
+u8 badgeShop_bteresaGeneration(void) {
+    return 0;
+}
+
+
+void badgeShop_init(void) {
+}
+
+
+s32 evt_badgeShop_starmaniac_get_kind_cnt(int param_1, s32 param_2, s32 param_3, u32 param_4, u32 param_5) {
+    return 0;
+}
+
+
+s32 evt_badgeShop_throw_get_kind_cnt(int param_1, s32 param_2, s32 param_3, u32 param_4, u32 param_5) {
+    return 0;
+}
+
+
+void badgeShop_add(void* shop, s16 item, s32 count) {
+}
+
+
+s32 U_evt_badgeShop_get_special_zaiko(int param_1, s32 param_2, s32 param_3, u32 param_4, u32 param_5) {
+    return 0;
+}
+
+
+s32 evt_badgeShop_bteresa_get_kind_cnt(int param_1, s32 param_2, s32 param_3, u32 param_4, u32 param_5) {
+    return 0;
+}
+
+
+s32 badgeShop_set(int param_1, short param_2, s32 param_3, s32 param_4, u8 param_5, int param_6) {
+    return 0;
+}
+
+
+int badgeShop_get(int param_1, short param_2) {
+    return 0;
+}
+
+
+u8 evt_badgeShop_bottakuru_dec(void) {
+    return 0;
+}
+
+
+s32 evt_badgeShop_bottakuru_get_kind_cnt(int param_1) {
+    return 0;
+}
+
+
+u8 evt_badgeShop_throw_dec(void) {
+    return 0;
+}
+
+
+u8 evt_badgeShop_throw_inc(void) {
+    return 0;
+}

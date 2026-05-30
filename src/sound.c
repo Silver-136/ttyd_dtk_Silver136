@@ -220,3 +220,179 @@ void SoundEfxSetPitch(s32 index, u32 value) {
         sndFXCtrl14(id, 0x80, (u16)(value + 0x2000));
     }
 }
+
+
+u8 SoundSSPlayChEx_main(void) {
+    return 0;
+}
+
+
+int _sscallback(void* param_1, u32 param_2, void* param_3, u32 param_4, u32 param_5) {
+    return 0;
+}
+
+
+u8 SoundSSMain(void) {
+    return 0;
+}
+
+
+u8 SoundInit(void) {
+    return 0;
+}
+
+
+void SoundDropData(void) {
+}
+
+
+void SoundSSMainInt(void) {
+}
+
+
+void _ssDVDReadAsync_activeChk(s32 zero, void* ptr) {
+}
+
+
+u8 SoundDVDMain(void) {
+    return 0;
+}
+
+
+s32 SoundSLibLoadDVD(s32 param_1) {
+    return 0;
+}
+
+
+u8 _ssDVDReadAsync_cache_aram(int param_1) {
+    return 0;
+}
+
+
+u8 SoundEfxMain(void) {
+    return 0;
+}
+
+
+s32 SoundLoadDVD2(s32 param_1) {
+    return 0;
+}
+
+
+u32 SoundEfxPlayEx(s32 param_1, u16 param_2, u32 param_3, u32 param_4) {
+    return 0;
+}
+
+
+void SoundSSPlayChEx(s32 a, s32 b, s32 c) {
+}
+
+
+void* ssDecodeDPCM(void* param_1, int param_2, void* param_3, int param_4, void* param_5) {
+    return 0;
+}
+
+
+u8 SoundSSSetVolCh(void) {
+    return 0;
+}
+
+
+u8 SoundSSSetSrndPanCh(void) {
+    return 0;
+}
+
+
+u8 SoundSSSetPanCh(void) {
+    return 0;
+}
+
+
+u8 SoundCloseCover(void) {
+    return 0;
+}
+
+
+s32 SoundLoadDVD2PushGroup(void* param_1) {
+    return 0;
+}
+
+
+u8 SoundAIDMACallback(void) {
+    return 0;
+}
+
+
+u8 SoundSSStopCh(int param_1) {
+    return 0;
+}
+
+
+u8 _ssDVDReadAsync_cache_next(int param_1, int param_2) {
+    return 0;
+}
+
+
+u8 SoundSongPlayCh(int param_1, u32 param_2) {
+    return 0;
+}
+
+
+u8 SoundEfxSetSrndPan(int param_1, u32 param_2) {
+    return 0;
+}
+
+
+u8 SoundSSSetPlayFreqCh(int param_1, u16 param_2) {
+    return 0;
+}
+
+
+u8 SoundEfxSetVolume(int param_1, u32 param_2) {
+    return 0;
+}
+
+
+u8 SoundEfxSetLPF(int param_1, short param_2) {
+    return 0;
+}
+
+
+u8 SoundMain(void) {
+    return 0;
+}
+
+
+u8 SoundSSFadeoutCh(int param_1) {
+    return 0;
+}
+
+
+s32 SoundEfxCheck(int param_1) {
+    return 0;
+}
+
+
+s32 loadDVD_callback(u32 param_1, int param_2) {
+    return 0;
+}
+
+
+u8 SoundEfxSetPan(int param_1, u32 param_2) {
+    return 0;
+}
+
+
+u8 SoundSongSetVolCh(int param_1, u8 param_2) {
+    return 0;
+}
+
+
+u8 SoundEfxStop(int param_1) {
+    return 0;
+}
+
+
+u8 SoundLoadDVD2Free(void) {
+    return 0;
+}

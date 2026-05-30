@@ -146,3 +146,48 @@ USER_FUNC(evt_item_set_scale) {
     *(f32*)((s32)item + 0x48) = scale;
     return 2;
 }
+
+
+u8 evt_item_get_important_item(s32 pEvt, s32 param_2) {
+    return 0;
+}
+
+
+u8 evt_item_move_3d_position(void) {
+    return 0;
+}
+
+
+s32 evt_item_entry(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_item_set_position(void* pEvt) {
+    return 0;
+}
+
+
+u32 evt_item_get_item(void* pEvt, int param_2) {
+    return 0;
+}
+
+
+u32 evt_item_get_item_end_wait(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_item_get_position(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_item_set_move_dir_speed(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_item_change_mode(int param_1) {
+    return 0;
+}

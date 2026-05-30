@@ -135,3 +135,47 @@ s32 evt_snd_sfxon__(void* evt) {
     return 2;
 }
 
+
+s32 evt_snd_sfxon_3d_ex(int param_1) {
+    return 0;
+}
+
+
+s32 evt_snd_sfxon_3d(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_snd_sfx_pos(int param_1) {
+    return 0;
+}
+
+
+s32 evt_snd_sfx_vol(int param_1) {
+    return 0;
+}
+
+
+s32 evt_snd_sfx_pit(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_snd_sfxchk(int param_1) {
+    return 0;
+}
+
+
+s32 evt_snd_bgm_scope(int param_1) {
+    return 0;
+}
+
+
+s32 evt_snd_bgm_freq(int param_1) {
+    return 0;
+}
+
+
+s32 evt_snd_env_lpf(int param_1) {
+    return 0;
+}

@@ -150,3 +150,144 @@ void partyNextReadId(s32 id) {
         readId[id] = 0;
     }
 }
+
+
+u8 partyWalkMain(void* pParty) {
+    return 0;
+}
+
+
+u8 partyRecordFootmark(void* pParty) {
+    return 0;
+}
+
+
+u8 walkMain(void* pParty) {
+    return 0;
+}
+
+
+u8 partyGetMoveDirSpd(s32 pParty, s32 param_2, s32 param_3) {
+    return 0;
+}
+
+
+u8 partyMoveFlyInit(void* pParty, s32 param_2) {
+    return 0;
+}
+
+
+u8 partyMoveWalk(void* pParty) {
+    return 0;
+}
+
+
+void partyFlyMain(void* pParty) {
+}
+
+
+u8 partyForceWalk(void* pParty) {
+    return 0;
+}
+
+
+void partyMoveMain(void* party, s32 hosei) {
+}
+
+
+u8 partyWalkInit(void* pParty) {
+    return 0;
+}
+
+
+u8 partyMarioHosei(void* pParty) {
+    return 0;
+}
+
+
+u8 party_move_mode_stay(void* party) {
+    return 0;
+}
+
+
+u8 party_move_mode_walk(void* party) {
+    return 0;
+}
+
+
+u8 partyGetTargetDist(void) {
+    return 0;
+}
+
+
+u8 partyClearFootmark2(void) {
+    return 0;
+}
+
+
+u8 partyGetTargetDist3D(u32 param_1, s32 param_2) {
+    return 0;
+}
+
+
+u8 partyGetTargetDir(void) {
+    return 0;
+}
+
+
+u8 partyMoveCheckWall(void* pParty) {
+    return 0;
+}
+
+
+double partyGetTargetMovespd2(void* pParty) {
+    return 0.0;
+}
+
+
+u8 partyMoveBehindMario3(void* pParty, u8 param_2) {
+    return 0;
+}
+
+
+double partyGetTargetDistY(void* pParty) {
+    return 0.0;
+}
+
+
+u8 partyClearFootmark(void) {
+    return 0;
+}
+
+
+u8 party_move_mode_behind_mario(void* pParty) {
+    return 0;
+}
+
+
+u8 L_getTargetPos(u32 param_1, u32* param_2) {
+    return 0;
+}
+
+
+u8 party_move_mode_beside_mario(void* pParty) {
+    return 0;
+}
+
+
+void partyMoveBesideMario(void* pParty, u8 param_2) {
+}
+
+
+u8 partyMoveBehindMario(void* pParty, u8 param_2) {
+    return 0;
+}
+
+
+u8 partyChkWall(void* pParty) {
+    return 0;
+}
+
+
+void partyChgMot(void* party, s32 mot) {
+}

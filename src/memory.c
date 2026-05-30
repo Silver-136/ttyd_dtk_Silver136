@@ -200,3 +200,59 @@ void* smartTexObj(void* texObj, void** data) {
     }
     return texObj;
 }
+
+
+void* smartAlloc(u32 param_1, u8 param_2) {
+    return 0;
+}
+
+
+u8 smartInit(void) {
+    return 0;
+}
+
+
+u8 smartGarbage(void) {
+    return 0;
+}
+
+
+u8 L_smartReInit(void) {
+    return 0;
+}
+
+
+void smartFree(void*) {
+}
+
+
+int** _mapAllocTail(int** param_1, int param_2) {
+    return 0;
+}
+
+
+void* _mapAlloc(void*, u32) {
+    return 0;
+}
+
+
+void memClear(s32 heap) {
+}
+
+
+void smartAutoFree(s32 heap) {
+}
+
+
+void _mapFree(void*, void*) {
+}
+
+
+void* __memAlloc(s32, u32) {
+    return 0;
+}
+
+
+u8 N_battleMapAlloc(void) {
+    return 0;
+}

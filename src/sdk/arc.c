@@ -29,3 +29,27 @@ u32 myStrncpy(char* dst, char* src, u32 maxlen) {
     }
     return maxlen - len;
 }
+
+
+u32 ARCConvertPathToEntrynum(int param_1, char* param_2) {
+    return 0;
+}
+
+
+int entryToPath(int param_1, int param_2, int param_3, int param_4) {
+    return 0;
+}
+
+
+void ARCConvertEntrynumToPath(ARCHandle* handle, u32 entryNum, char* path, u32 maxlen) {
+}
+
+
+BOOL ARCOpen(ARCHandle* handle, const char* filename, ARCFileInfo* info) {
+    return 0;
+}
+
+
+BOOL ARCInitHandle(void* data, ARCHandle* handle) {
+    return 0;
+}

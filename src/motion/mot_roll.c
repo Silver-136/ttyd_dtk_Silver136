@@ -56,3 +56,57 @@ void marioRollFixOn(void) {
     }
 }
 
+
+u8 mot_roll(void) {
+    return 0;
+}
+
+
+u8 marioSetRollDispDir(void) {
+    return 0;
+}
+
+
+u8 marioRollForceCancel(void) {
+    return 0;
+}
+
+
+u8 mot_roll_post(void) {
+    return 0;
+}
+
+
+u8 marioReInit_roll(void) {
+    return 0;
+}
+
+
+u8 roll_upstairs_on(void) {
+    return 0;
+}
+
+
+u8 mot_fall_roll(void) {
+    return 0;
+}
+
+
+u8 marioResetRollSpd(void) {
+    return 0;
+}
+
+
+u8 marioForceRollAnime(void) {
+    return 0;
+}
+
+
+s32 marioRollCancel(void) {
+    return 0;
+}
+
+
+u8 roll_upstairs(void) {
+    return 0;
+}

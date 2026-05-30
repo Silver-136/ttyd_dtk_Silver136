@@ -53,3 +53,101 @@ void allPartySlitOff(void) {
     }
 }
 
+
+u8 party_motion_homing_walk(s32 pParty) {
+    return 0;
+}
+
+
+u8 party_motion_homing_fly(s32 pParty) {
+    return 0;
+}
+
+
+u8 party_motion_jump(s32 pParty) {
+    return 0;
+}
+
+
+u8 party_motion_behind_mario(s32 pParty) {
+    return 0;
+}
+
+
+u8 party_motion_stay(s32 pParty) {
+    return 0;
+}
+
+
+s32 party_slit(void* pParty) {
+    return 0;
+}
+
+
+u8 party_motion_behind_mario_fly(s32 pParty) {
+    return 0;
+}
+
+
+u8 party_motion_behind_mario_continue(s32 pParty) {
+    return 0;
+}
+
+
+u8 party_force_reset_outofscreen(void* pParty) {
+    return 0;
+}
+
+
+u8 party_motion_beside_mario(s32 pParty) {
+    return 0;
+}
+
+
+u8 getFrontFloor(void) {
+    return 0;
+}
+
+
+s32 party_roll(void* pParty) {
+    return 0;
+}
+
+
+s32 party_motion_fall(void* pParty) {
+    return 0;
+}
+
+
+u8 party_motion_jump2(void* pParty) {
+    return 0;
+}
+
+
+u8 party_motion_damage(void* pParty) {
+    return 0;
+}
+
+
+void allPartyForceSlitOff(void) {
+}
+
+
+u8 U_allPartySlitOffReq(void) {
+    return 0;
+}
+
+
+u8 L_partyForceSlitOff(void* pParty) {
+    return 0;
+}
+
+
+u8 party_motion_upstairs(void* pParty) {
+    return 0;
+}
+
+
+u8 allPartySlitOn(void) {
+    return 0;
+}

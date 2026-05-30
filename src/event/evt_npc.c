@@ -454,3 +454,364 @@ USER_FUNC(evt_npc_set_paper) {
 
     return 2;
 }
+
+
+u8 evt_npc_kamek_move_position(void) {
+    return 0;
+}
+
+
+u8 evt_npc_homing_target(void) {
+    return 0;
+}
+
+
+u8 evt_npc_move_position(s32 pEvt, s32 param_2) {
+    return 0;
+}
+
+
+u8 evt_npc_jump_position(s32 pEvt, s32 param_2) {
+    return 0;
+}
+
+
+u8 evt_npc_glide_position(s32 pEvt, s32 param_2) {
+    return 0;
+}
+
+
+u8 evt_npc_jump_position_nohit(s32 pEvt, s32 param_2) {
+    return 0;
+}
+
+
+u8 evt_npc_majo_disp_on(void) {
+    return 0;
+}
+
+
+s32 evt_npc_setup(void* pEvt, int param_2) {
+    return 0;
+}
+
+
+s32 evt_npc_majo_disp_off(void* pEvt, int param_2) {
+    return 0;
+}
+
+
+u8 _intplGetFloat(void) {
+    return 0;
+}
+
+
+void* evtNpcNameToPtr_NoAssert(EventEntry* event, s32 name) {
+    return 0;
+}
+
+
+void* evtNpcNameToPtr(EventEntry* event, s32 name) {
+    return 0;
+}
+
+
+u8 evt_npc_set_rotate_offset(s32 pEvt) {
+    return 0;
+}
+
+
+u8 evt_npc_set_rotate(s32 pEvt) {
+    return 0;
+}
+
+
+u8 evt_fbat_trans_floor_position(s32 pEvt) {
+    return 0;
+}
+
+
+u8 evt_npc_add_rotate(s32 pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_slave_entry(void* pEvt) {
+    return 0;
+}
+
+
+u8 evt_npc_add_dirdist(void) {
+    return 0;
+}
+
+
+s32 evt_npc_sound_data_set(int param_1) {
+    return 0;
+}
+
+
+u8 _kamek_houki_kemuri(int param_1, int param_2) {
+    return 0;
+}
+
+
+s32 evt_npc_set_tribe(void* pEvt) {
+    return 0;
+}
+
+
+u8 evt_npc_kamek_kemuri2(void) {
+    return 0;
+}
+
+
+u8 evt_npc_facedirection_add(void) {
+    return 0;
+}
+
+
+s32 evt_npc_set_ry_lr(void* pEvt) {
+    return 0;
+}
+
+
+u8 evt_npc_get_loiter_dir(void) {
+    return 0;
+}
+
+
+s32 evt_npc_set_home_position(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_set_position(void* pEvt) {
+    return 0;
+}
+
+
+int evt_npc_wait_msec(void* pEvt, int param_2) {
+    return 0;
+}
+
+
+f32 _get_target_dir(EventEntry* event, void* npc, s32 target) {
+    return 0.0f;
+}
+
+
+s32 evt_npc_get_drop_flower(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_get_drop_heart(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_set_autotalkpose(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_battle_start(void* pEvt, int param_2) {
+    return 0;
+}
+
+
+s32 evt_npc_set_color(void* pEvt) {
+    return 0;
+}
+
+
+void evt_npc_change_interrupt(void* pEvt) {
+}
+
+
+s32 evt_npc_status_onoff(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_reaction_flag_onoff(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_flag_onoff(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_kamek_kemuri1(int param_1, int param_2) {
+    return 0;
+}
+
+
+u8 evt_npc_set_scale(void) {
+    return 0;
+}
+
+
+s32 evt_npc_get_drop_coin(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_sound_data_reset(int param_1) {
+    return 0;
+}
+
+
+s32 evt_npc_set_battle_rule(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_pera_onoff(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_get_rotate(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_get_home_position(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_get_position(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_get_scale(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_set_link(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_set_offscreen(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_entry(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_wait_battle_end(void) {
+    return 0;
+}
+
+
+s32 evt_npc_wait_anim(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_set_force_regl_anim(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_set_run_anim(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_set_walk_anim(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_set_talk_anim(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_set_stay_anim(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_set_stop_anim(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_set_confuse_anim(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_set_damage_anim(int param_1) {
+    return 0;
+}
+
+
+s32 evt_npc_get_drop_item(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_blur_onoff(void* pEvt) {
+    return 0;
+}
+
+
+void evt_npc_release_filednpc(void* pEvt) {
+}
+
+
+s32 evt_npc_reverse_ry(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_get_kpencount_type(void* pEvt) {
+    return 0;
+}
+
+
+u32 evt_npc_wait_pera(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_get_height(void* pEvt) {
+    return 0;
+}
+
+
+void evt_npc_restart_regular_event(void* pEvt) {
+}
+
+
+s32 evt_npc_clear_paper(void* pEvt) {
+    return 0;
+}
+
+
+void evt_npc_return_interrupt(void* pEvt) {
+}
+
+
+s32 evt_npc_calc_score(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_npc_set_anim(void* evt, s32 isFirstCall) {
+    return 0;
+}

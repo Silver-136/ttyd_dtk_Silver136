@@ -74,3 +74,47 @@ USER_FUNC(uranaisi_ryokin) {
     return 2;
 }
 
+
+int uranaisi_data_make_supercoin(s32 param_1, u32 param_2) {
+    return 0;
+}
+
+
+int uranaisi_data_make_starpiece(s32 param_1, u32 param_2) {
+    return 0;
+}
+
+
+int uranaisi_data_make_next(s32 param_1, u32 param_2) {
+    return 0;
+}
+
+
+s32 uranaisi_data_alloc(int param_1) {
+    return 0;
+}
+
+
+s32 uranaisi_supercoin_makelabel(int param_1, s32 param_2, s32 param_3, u32 param_4, u32 param_5) {
+    return 0;
+}
+
+
+s32 uranaisi_starpiece_makelabel(int param_1, s32 param_2, s32 param_3, u32 param_4, u32 param_5) {
+    return 0;
+}
+
+
+s32 uranaisi_supercoin_check(int param_1, s32 param_2, s32 param_3, u32 param_4, u32 param_5) {
+    return 0;
+}
+
+
+s32 uranaisi_starpiece_check(int param_1, s32 param_2, s32 param_3, u32 param_4, u32 param_5) {
+    return 0;
+}
+
+
+s32 uranaisi_next_makelabel(int param_1) {
+    return 0;
+}

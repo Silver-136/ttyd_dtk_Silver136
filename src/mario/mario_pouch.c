@@ -1171,3 +1171,83 @@ char* pouchGetYoshiName(void) {
     }
     return (char*)(mpp + 0x5C0);
 }
+
+
+u8 pouchSortItem(u32 sortType) {
+    return 0;
+}
+
+
+void pouchInit(void* pouch) {
+}
+
+
+void pouchGetItem(s32 itemNo) {
+}
+
+
+s32 pouchRemoveItemIndex(u32 itemType, int itemIndex) {
+    return 0;
+}
+
+
+void pouchRemoveItem(s32 item) {
+}
+
+
+u8 comp_aiueo_r(short* param_1, short* param_2) {
+    return 0;
+}
+
+
+u8 comp_aiueo(short* param_1, short* param_2) {
+    return 0;
+}
+
+
+void pouchReceiveMail(s32 mail) {
+}
+
+
+int pouchReceiveMailCount(void) {
+    return 0;
+}
+
+
+int pouchGetEmptyKeepItemCnt(void) {
+    return 0;
+}
+
+
+int pouchGetKeepItemCnt(void) {
+    return 0;
+}
+
+
+void pouchGetStarStone(s32 id) {
+}
+
+
+u32 pouchCheckMail(u32 param_1) {
+    return 0;
+}
+
+
+int comp_kind_r(short* param_1, short* param_2) {
+    return 0;
+}
+
+
+int comp_kind(short* param_1, short* param_2) {
+    return 0;
+}
+
+
+u8 pouchSetPartyColor(int param_1, int param_2) {
+    return 0;
+}
+
+
+u16 L_pouchEquipBadge(int param_1) {
+    return 0;
+}

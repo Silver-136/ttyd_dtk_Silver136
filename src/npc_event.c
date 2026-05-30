@@ -71,3 +71,83 @@ USER_FUNC(npc_check_wall_stop) {
     }
     return 2;
 }
+
+
+u8 _2d_dead_jump(void) {
+    return 0;
+}
+
+
+u8 chain_main(void) {
+    return 0;
+}
+
+
+u8 zakoEntryDokan(void) {
+    return 0;
+}
+
+
+u8 piders_draw_yarn_sub(s32 param_1, int param_2) {
+    return 0;
+}
+
+
+u8 zakoEntryFall(void) {
+    return 0;
+}
+
+
+u8 cliffCheck(void) {
+    return 0;
+}
+
+
+s32 kamec_fire_magic(int param_1) {
+    return 0;
+}
+
+
+s32 upperCheck(int param_1) {
+    return 0;
+}
+
+
+s32 pressCheck(int param_1) {
+    return 0;
+}
+
+
+s32 dokanCheck(int param_1) {
+    return 0;
+}
+
+
+s32 gesso_ground_check(int param_1) {
+    return 0;
+}
+
+
+s32 _2d_get_dead_jump_offset(int param_1) {
+    return 0;
+}
+
+
+s32 killer_make_name(void* pEvt) {
+    return 0;
+}
+
+
+s32 _wait_blow_end(void* pEvt) {
+    return 0;
+}
+
+
+s32 limitSpd(int param_1) {
+    return 0;
+}
+
+
+s32 piders_draw_yawn(int param_1) {
+    return 0;
+}

@@ -109,3 +109,87 @@ void evtmgrReInit(void) {
     runMainF = 0;
     evt_msg_init();
 }
+
+
+u8 evtStart(void* pEvt, u32 param_2) {
+    return 0;
+}
+
+
+u8 evtStop(int param_1, u32 param_2) {
+    return 0;
+}
+
+
+void* evtChildEntry(void* event, void* script, s32 flags) {
+    return 0;
+}
+
+
+void* evtBrotherEntry(void* parentEvt, void* evtCode, u32 flags) {
+    return 0;
+}
+
+
+void evtEntryType(void* script, s32 a, s32 b, s32 type) {
+}
+
+
+void* evtEntry(void* script, s32 priority, s32 flags) {
+    return 0;
+}
+
+
+u8 evtmgrMain(void) {
+    return 0;
+}
+
+
+void evtDelete(void* evt) {
+}
+
+
+void* evtRestart(void* pEvt) {
+    return 0;
+}
+
+
+u8 make_pri_table(void) {
+    return 0;
+}
+
+
+u8 evtmgrInit(void) {
+    return 0;
+}
+
+
+void evtStartID(s32 id) {
+}
+
+
+void evtStopID(s32 id) {
+}
+
+
+void evtDeleteID(s32 id) {
+}
+
+
+u8 evtStartAll(u32 param_1) {
+    return 0;
+}
+
+
+void evtStopAll(s32 type) {
+}
+
+
+u8 evtStartOther(void* param_1, u32 param_2) {
+    return 0;
+}
+
+
+u8 evtStopOther(int param_1, u32 param_2) {
+    return 0;
+}

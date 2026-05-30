@@ -116,3 +116,33 @@ void marioResetCamShiftRate(void) {
     *(s32*)((s32)mario + 0x70) = vec[1];
     *(s32*)((s32)mario + 0x74) = vec[2];
 }
+
+
+u8 marioCamZoomUp(void) {
+    return 0;
+}
+
+
+u8 marioCamZoomUpLevelMain(void) {
+    return 0;
+}
+
+
+u8 marioUpdateCam(void) {
+    return 0;
+}
+
+
+u8 marioCamMain(void) {
+    return 0;
+}
+
+
+s32 marioCamZoomOff(void) {
+    return 0;
+}
+
+
+u8 marioPreCamera(void) {
+    return 0;
+}

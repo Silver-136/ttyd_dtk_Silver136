@@ -30,3 +30,33 @@ s32 marioGetPlaneStatus(void) {
     }
     return 1;
 }
+
+
+u8 mot_plane(void) {
+    return 0;
+}
+
+
+u8 flyMain(void) {
+    return 0;
+}
+
+
+u8 chkCollision(void) {
+    return 0;
+}
+
+
+u8 mot_plane_post(void) {
+    return 0;
+}
+
+
+u8 marioForcePlaneAnime(void) {
+    return 0;
+}
+
+
+s32 mario_plane_cancel(void) {
+    return 0;
+}

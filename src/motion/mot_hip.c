@@ -35,3 +35,18 @@ void mot_hip_post(void) {
         *(s32*)((s32)mario + 0x28C) = -1;
     }
 }
+
+
+u8 mot_hip(void) {
+    return 0;
+}
+
+
+s32 U_chkground(void) {
+    return 0;
+}
+
+
+s32 marioChkHipAttack(void) {
+    return 0;
+}

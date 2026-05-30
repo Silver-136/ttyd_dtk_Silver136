@@ -169,3 +169,412 @@ void kpa_disp_pole_score(void) {
     FontDrawStringMtx(trans, psw);
 }
 
+
+u8 mobj_kururing_floor(void* pMobj) {
+    return 0;
+}
+
+
+s32 mobj_switch_float_blk(void* pMobj) {
+    return 0;
+}
+
+
+s32 mobj_recovery_blk(void* pMobj) {
+    return 0;
+}
+
+
+u8 mobj_koopa_fireber_dodai_evt(void) {
+    return 0;
+}
+
+
+s32 mobj_itembox(void* pMobj) {
+    return 0;
+}
+
+
+s32 mobj_lv_blk_evt(void* pMobj) {
+    return 0;
+}
+
+
+s32 mobj_lock(void* pMobj) {
+    return 0;
+}
+
+
+s32 mobj_koopa_pole_evt(void* pMobj) {
+    return 0;
+}
+
+
+s32 mobj_koopa_sango_evt(u32* param_1) {
+    return 0;
+}
+
+
+u8 evt_mobj_itembox(s32 pEvt) {
+    return 0;
+}
+
+
+s32 mobj_koopa_brickblk(u32* param_1) {
+    return 0;
+}
+
+
+u8 kururing_capture(int param_1, int param_2) {
+    return 0;
+}
+
+
+s32 evt_mobj_brick(void* pEvt) {
+    return 0;
+}
+
+
+s32 mobj_timerswitch(void* pMobj) {
+    return 0;
+}
+
+
+u8 evt_mobj_koopa_fireber_dodai(s32 pEvt) {
+    return 0;
+}
+
+
+s32 mobj_koopa_badgeblk(u32* param_1) {
+    return 0;
+}
+
+
+s32 mobj_badgeblk(void* pMobj) {
+    return 0;
+}
+
+
+s32 mobj_brickblk(void* pMobj) {
+    return 0;
+}
+
+
+u8 evt_mobj_float_blk(void) {
+    return 0;
+}
+
+
+u8 mobj_rideswitch_lightblue(void* pMobj) {
+    return 0;
+}
+
+
+s32 mobj_powerupblk(void* pMobj) {
+    return 0;
+}
+
+
+u8 evt_mobj_koopa_pole(s32 pEvt) {
+    return 0;
+}
+
+
+u8 evt_mobj_switch_float_blk(s32 pEvt) {
+    return 0;
+}
+
+
+s32 mobj_jumpstand_red(void* pMobj) {
+    return 0;
+}
+
+
+s32 mobj_10countblk(void* pMobj) {
+    return 0;
+}
+
+
+s32 mobj_koopa_ojama_blk_evt(u32* param_1) {
+    return 0;
+}
+
+
+s32 evt_mobj_timerswitch(void* pEvt) {
+    return 0;
+}
+
+
+s32 mobj_jumpstand_blue(void* pMobj) {
+    return 0;
+}
+
+
+s32 mobj_koopa_dokan_evt(u32* param_1) {
+    return 0;
+}
+
+
+u8 evt_mobj_kururing_floor(s32 pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_koopa_dokan(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_koopa_brick(int param_1) {
+    return 0;
+}
+
+
+s32 evt_mobj_breaking_floor(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_badgeblk(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_lv_blk(void* pEvt) {
+    return 0;
+}
+
+
+u8 evt_mobj_lock(void) {
+    return 0;
+}
+
+
+s32 evt_mobj_switch_blue(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_koopa_hidden_blk(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_recovery_blk(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_blk(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_koopa_sango(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_koopa_badgeblk(int param_1) {
+    return 0;
+}
+
+
+s32 mobj_save_blk(void* pMobj) {
+    return 0;
+}
+
+
+s32 evt_mobj_switch_red(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_koopa_ojama_blk(void* pEvt) {
+    return 0;
+}
+
+
+s32 mobj_breaking_floor(void* pMobj) {
+    return 0;
+}
+
+
+s32 evt_mobj_save_blk(void* pEvt) {
+    return 0;
+}
+
+
+u8 evt_mobj_jumpstand_blue(void) {
+    return 0;
+}
+
+
+u8 evt_mobj_rideswitch_lightblue(s32 pEvt) {
+    return 0;
+}
+
+
+u8 evt_mobj_powerupblk(void) {
+    return 0;
+}
+
+
+s32 evt_mobj_jumpstand_red(int param_1) {
+    return 0;
+}
+
+
+s32 mobj_float_blk(void* pMobj) {
+    return 0;
+}
+
+
+u8 fire_func(s32 pEvt, s32 param_2) {
+    return 0;
+}
+
+
+s32 evt_mobj_koopa_blk(int param_1) {
+    return 0;
+}
+
+
+s32 evt_mobj_floatswitch_red(int param_1) {
+    return 0;
+}
+
+
+s32 evt_mobj_tornadoswitch_blue(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_floatswitch_blue(int param_1) {
+    return 0;
+}
+
+
+s32 evt_mobj_koopa_stone_blk(void* pEvt) {
+    return 0;
+}
+
+
+s32 kpa_score_to_str(int param_1) {
+    return 0;
+}
+
+
+s32 mobj_blk(void* pMobj) {
+    return 0;
+}
+
+
+s32 mobj_koopa_blk(u32* param_1) {
+    return 0;
+}
+
+
+s32 evt_mobj_signboard(void* pEvt) {
+    return 0;
+}
+
+
+s32 mobj_switch_red(void* pMobj) {
+    return 0;
+}
+
+
+s32 mobj_switch_blue(void* pMobj) {
+    return 0;
+}
+
+
+u8 kpa_disp_pole_score_main(void) {
+    return 0;
+}
+
+
+s32 evt_mobj_set_position(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_set_scale(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_hit_onoff(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_set_z_position(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_set_y_position(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_set_x_position(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_set_gravity_bound(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_hitevt_onoff(void* pEvt) {
+    return 0;
+}
+
+
+s32 mobj_signboard(void* pMobj) {
+    return 0;
+}
+
+
+s32 evt_mobj_get_position(int param_1) {
+    return 0;
+}
+
+
+s32 evt_mobj_lock_unlock(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_set_anim(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_entry(void* pEvt) {
+    return 0;
+}
+
+
+s32 kpa_powerup(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_set_camid(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_mobj_flag_onoff(void* param_1) {
+    return 0;
+}
+
+
+s32 evt_mobj_exec_cancel(void* pEvt) {
+    return 0;
+}

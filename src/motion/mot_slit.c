@@ -80,3 +80,68 @@ s32 marioSlitKeyDisable(void) {
     }
     return 1;
 }
+
+
+u8 mot_slit(void) {
+    return 0;
+}
+
+
+u8 marioCreviceWallChk(void) {
+    return 0;
+}
+
+
+u8 mot_slit_post(void) {
+    return 0;
+}
+
+
+u8 marioReInit_slit(void) {
+    return 0;
+}
+
+
+u32 U_marioSlitContinueChk(void) {
+    return 0;
+}
+
+
+u8 marioSlitForceCancel(void) {
+    return 0;
+}
+
+
+s32 marioSlitButton(void) {
+    return 0;
+}
+
+
+u32 marioSlitAbilityChk(void) {
+    return 0;
+}
+
+
+u8 marioForceSlitAnime(void) {
+    return 0;
+}
+
+
+s32 marioChkSlitThrouhEnd(void) {
+    return 0;
+}
+
+
+s32 marioChkSlitThrouh(void) {
+    return 0;
+}
+
+
+int marioChkSlitEnd(void) {
+    return 0;
+}
+
+
+u8 motSlitCancel2(void) {
+    return 0;
+}

@@ -220,3 +220,133 @@ USER_FUNC(evt_bero_get_info_nextarea) {
     evtSetValue(event, args[2], info->nextMap);
     return EVT_RETURN_DONE;
 }
+
+
+u8 bero_get_position_normal(void) {
+    return 0;
+}
+
+
+s32 evt_bero_get_into_info(void* pEvt) {
+    return 0;
+}
+
+
+u8 bero_get_position_pipe_sub(void) {
+    return 0;
+}
+
+
+u8 evt_bero_move_mario_speed(void) {
+    return 0;
+}
+
+
+s32 evt_camera_change_event_from_road(void) {
+    return 0;
+}
+
+
+s32 bero_get_position_pipe2(int param_1) {
+    return 0;
+}
+
+
+s32 evt_bero_cam3d_change(int param_1) {
+    return 0;
+}
+
+
+s32 evt_bero_switch_off(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_bero_switch_on(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_bero_get_info_length(void* pEvt) {
+    return 0;
+}
+
+
+s32 bero_get_position_pipe_pure(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_bero_overwrite(void* pEvt) {
+    return 0;
+}
+
+
+s32 bero_set_disp_position_pipe(int param_1) {
+    return 0;
+}
+
+
+s32 evt_bero_id_filter(int param_1) {
+    return 0;
+}
+
+
+s32 evt_bero_get_number(void* pEvt) {
+    return 0;
+}
+
+
+u32 evt_bero_read_mario_pera(int param_1, int param_2) {
+    return 0;
+}
+
+
+s32 N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry(void* pEvt) {
+    return 0;
+}
+
+
+char* bero_id_filter(char* param_1) {
+    return 0;
+}
+
+
+s32 evt_bero_get_info_anime(int param_1) {
+    return 0;
+}
+
+
+s32 evt_bero_get_info_kinddir(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_bero_mapchange(void* pEvt, int param_2) {
+    return 0;
+}
+
+
+s32 evt_bero_case_id_save(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_bero_case_id_load(void* pEvt) {
+    return 0;
+}
+
+
+u32 evt_bero_exec_wait(int param_1) {
+    return 0;
+}
+
+
+s32 evt_bero_get_info(void* evt, s32 isFirstCall) {
+    return 0;
+}
+
+
+s32 evt_bero_get_info_num(void* evt, s32 isFirstCall) {
+    return 0;
+}

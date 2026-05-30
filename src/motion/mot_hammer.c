@@ -22,3 +22,28 @@ f32 marioGetAngleKaitenHammer(void) {
     }
     return revise360(float_270_80420ac4 - *(f32*)((s32)mario + 0x1AC));
 }
+
+
+u8 mot_hammer2(void) {
+    return 0;
+}
+
+
+u8 mot_hammer(void) {
+    return 0;
+}
+
+
+u8 hitEstimate(void) {
+    return 0;
+}
+
+
+s32 marioChkHammer2(void) {
+    return 0;
+}
+
+
+u8 mot_ham2_post(void) {
+    return 0;
+}

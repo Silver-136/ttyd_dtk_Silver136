@@ -77,3 +77,80 @@ f32 marioGetMoveRate(f32 angle) {
     f32 value = (angle - *(f32*)((s32)mario + 0x19C)) * float_3p1416_80420a9c / float_180_80420a70;
     return (f32)cos(value) * float_0p19_80420aa0 + float_1_80420a74;
 }
+
+
+u8 marioGetRub(s32 buttonFlags, s32 param_2, s32 param_3, s32 param_4) {
+    return 0;
+}
+
+
+u8 marioSetDirEventMain(void) {
+    return 0;
+}
+
+
+void marioAdjustMoveDir(void) {
+}
+
+
+double toMovedir2(double param_1, double param_2) {
+    return 0.0;
+}
+
+
+u8 marioUpdateKeyData(void) {
+    return 0;
+}
+
+
+u8 marioGetStick(void) {
+    return 0;
+}
+
+
+s32 chkRevolveDir(int* param_1, int* param_2) {
+    return 0;
+}
+
+
+f32 toMovedir(f32 angle) {
+    return 0.0f;
+}
+
+
+u8 partyToMovedir(double param_1, void* pParty) {
+    return 0;
+}
+
+
+s32 checkOneRevolution(int param_1) {
+    return 0;
+}
+
+
+u8 marioBottomless(void) {
+    return 0;
+}
+
+
+u8 marioSetForceMove(s64 angle, s64 spd, s16 time) {
+    return 0;
+}
+
+
+u8 toMovedirSimple(void) {
+    return 0;
+}
+
+
+void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
+}
+
+
+u8 marioForceMoveMain(void) {
+    return 0;
+}
+
+
+void N_marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z) {
+}

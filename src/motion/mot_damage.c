@@ -35,3 +35,33 @@ void marioSetSplash(s32 type, f32* pos) {
         psndSFXOn_3D(0xBA, pos);
     }
 }
+
+
+u8 mot_damage(void) {
+    return 0;
+}
+
+
+u8 mot_damageToge(void) {
+    return 0;
+}
+
+
+s32 marioWaitDamageTogeReturnFall(void) {
+    return 0;
+}
+
+
+s32 marioWaitDamageReturnFall(void) {
+    return 0;
+}
+
+
+s32 gazigazi(void* pEvt) {
+    return 0;
+}
+
+
+s32 marioChkDamageSink(void) {
+    return 0;
+}

@@ -11,3 +11,35 @@ void marioStDisp(void) {
     camDraw();
     g_bFirstSmartAlloc = 0;
 }
+
+
+u8 viPostCallback(s32 param_1) {
+    return 0;
+}
+
+
+void marioStInit(void) {
+}
+
+
+u8 gcRumbleCheck(void) {
+    return 0;
+}
+
+
+void marioStMain(void) {
+}
+
+
+u8 gcDvdCheckThread(void) {
+    return 0;
+}
+
+
+u8 L_gcResetCheck(void) {
+    return 0;
+}
+
+
+void marioStSystemLevel(s32 level) {
+}

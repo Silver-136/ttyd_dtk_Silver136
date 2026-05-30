@@ -40,3 +40,63 @@ s32 N_evt_img_set_z(void* event, s32 isFirstCall) {
     *(f32*)((s32)img + 0xFC) = z;
     return 2;
 }
+
+
+s32 evt_img_alloc_capture(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_img_set_virtual_point(int param_1) {
+    return 0;
+}
+
+
+s32 evt_img_set_color(int param_1) {
+    return 0;
+}
+
+
+s32 evt_img_set_paper(int param_1) {
+    return 0;
+}
+
+
+s32 evt_img_set_position(int param_1) {
+    return 0;
+}
+
+
+s32 evt_img_onoff(int param_1) {
+    return 0;
+}
+
+
+s32 evt_img_set_paper_anim(int param_1) {
+    return 0;
+}
+
+
+s32 evt_img_set_paper_timerate(int param_1) {
+    return 0;
+}
+
+
+s32 evt_img_wait_animend(int param_1, int param_2) {
+    return 0;
+}
+
+
+s32 evt_img_free_capture(int param_1) {
+    return 0;
+}
+
+
+s32 evt_img_release(int param_1) {
+    return 0;
+}
+
+
+s32 evt_img_clear_virtual_point(int param_1) {
+    return 0;
+}

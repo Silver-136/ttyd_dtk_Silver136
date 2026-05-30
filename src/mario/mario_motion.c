@@ -65,3 +65,145 @@ void marioMotion(void) {
         marioMotTbl[*(u16*)((s32)mario + 0x2E)][0]();
     } while (*(u32*)((s32)mario + 0xC) & 1);
 }
+
+
+u8 marioLandOn(void) {
+    return 0;
+}
+
+
+u8 mot_bottomless(void) {
+    return 0;
+}
+
+
+u8 marioFall(void) {
+    return 0;
+}
+
+
+u8 marioJump(void) {
+    return 0;
+}
+
+
+u8 marioChgMoveMotion(void) {
+    return 0;
+}
+
+
+u8 mot_kaze(void) {
+    return 0;
+}
+
+
+s32 marioChkJump(void) {
+    return 0;
+}
+
+
+u8 mot_talk(void) {
+    return 0;
+}
+
+
+s32 marioChkTransform(void) {
+    return 0;
+}
+
+
+u8 marioSetJumpPara(void) {
+    return 0;
+}
+
+
+s32 marioChkItemMotion(void) {
+    return 0;
+}
+
+
+u8 marioChgJumpStandMotion(void) {
+    return 0;
+}
+
+
+u8 marioBoots(void) {
+    return 0;
+}
+
+
+s32 marioRollChgChk(void) {
+    return 0;
+}
+
+
+u8 mot_forceReset(void) {
+    return 0;
+}
+
+
+u8 mot_shadow(void) {
+    return 0;
+}
+
+
+u8 marioChgSmallJumpMotion(void) {
+    return 0;
+}
+
+
+u8 marioChgMotSub(s16 newMotionId, int param_2) {
+    return 0;
+}
+
+
+u8 marioChgGetItemMotion(void) {
+    return 0;
+}
+
+
+u8 marioChgStayMotion(void) {
+    return 0;
+}
+
+
+u8 marioChgMotJump2(void) {
+    return 0;
+}
+
+
+void marioChgMot(s32 motion) {
+}
+
+
+s32 marioChkTalkable(void) {
+    return 0;
+}
+
+
+void marioChgTalkMotion(void) {
+}
+
+
+double marioGetFallSpd(void) {
+    return 0.0;
+}
+
+
+u8 marioSetFallPara(void) {
+    return 0;
+}
+
+
+u32 marioChkItemGetMotion(void) {
+    return 0;
+}
+
+
+double marioMakeJumpPara(void) {
+    return 0.0;
+}
+
+
+void marioChgMot2(s32 motionId) {
+}

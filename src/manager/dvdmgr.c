@@ -55,3 +55,26 @@ void proc_main(void) {
         OSYieldThread();
     }
 }
+
+
+void DVDMgrMain(void) {
+}
+
+
+void* DVDMgrOpen(const char* path, s32 mode, s32 unk) {
+    return 0;
+}
+
+
+u8 DVDMgrInit(void) {
+    return 0;
+}
+
+
+void DVDMgrRead(void* handle, void* dst, u32 size, s32 offset) {
+}
+
+
+int compare(void* param_1, void* param_2) {
+    return 0;
+}

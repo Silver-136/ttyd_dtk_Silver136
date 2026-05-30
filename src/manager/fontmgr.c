@@ -113,3 +113,98 @@ u8 kanjiGetWidth(u16 code) {
     return *(u8*)1;
 }
 
+
+u8 FontDrawMessage(u32 param_1, u32 param_2, char* param_3) {
+    return 0;
+}
+
+
+u8 FontDrawMessageMtx(s32 param_1, char* param_2) {
+    return 0;
+}
+
+
+u8 _JUTFont_DrawPos(u16 param_1, s16 param_2, s16 param_3) {
+    return 0;
+}
+
+
+void FontDrawStringMtx(f32* mtx, void* string) {
+}
+
+
+u8 FontDrawStringVecPitch(void) {
+    return 0;
+}
+
+
+u8 FontDrawStringShake(void) {
+    return 0;
+}
+
+
+f32 FontGetMessageWidthLine(const char* msg, s32 line) {
+    return 0.0f;
+}
+
+
+void JUTFontSetup(s32 language) {
+}
+
+
+u8 FontDrawStringCenterMtx(void) {
+    return 0;
+}
+
+
+u8 JUTFont_DrawStart(u32* param_1) {
+    return 0;
+}
+
+
+u8 HSV2RGB(void) {
+    return 0;
+}
+
+
+u8 FontDrawCode(void) {
+    return 0;
+}
+
+
+s32 JUTFont_CodeToGlyph(s32 code) {
+    return 0;
+}
+
+
+u8 FontDrawCodeMtx(s32 param_1, s32 param_2) {
+    return 0;
+}
+
+
+u8 FontDrawNoise(void) {
+    return 0;
+}
+
+
+u8 FontDrawRainbowColor(void) {
+    return 0;
+}
+
+
+void FontDrawStart(void) {
+}
+
+
+u8 FontDrawStart_alpha(u8 param_1) {
+    return 0;
+}
+
+
+u8 FontDrawStringPitch(double param_1, double param_2, s64 param_3, s32 param_4) {
+    return 0;
+}
+
+
+void FontDrawString(f32 x, f32 y, s32 str) {
+}

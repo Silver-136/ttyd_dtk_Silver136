@@ -85,3 +85,83 @@ void unk_800b2c2c(void) {
     *(s32*)((s32)wp + 0xEC) = 10;
     *(u16*)wp |= 0x8000;
 }
+
+
+u8 write_main(void) {
+    return 0;
+}
+
+
+u8 read_all_main(void) {
+    return 0;
+}
+
+
+u8 read_main(void) {
+    return 0;
+}
+
+
+u8 create_main(void) {
+    return 0;
+}
+
+
+u8 cardMain(void) {
+    return 0;
+}
+
+
+u8 cardInit(void) {
+    return 0;
+}
+
+
+u8 write_header_main(void) {
+    return 0;
+}
+
+
+void cardBufReset(void) {
+}
+
+
+u8 memcard_open(void) {
+    return 0;
+}
+
+
+u8 cardWrite(int param_1) {
+    return 0;
+}
+
+
+void cardWriteHeader(void) {
+}
+
+
+void cardErase(s32 fileNo) {
+}
+
+
+u8 cardCopy2Main(int param_1) {
+    return 0;
+}
+
+
+u8 cardCopy(int param_1, s32 param_2) {
+    return 0;
+}
+
+
+void cardCreate(void) {
+}
+
+
+u8 cardReadAll(void) {
+    return 0;
+}
+
+
+void cardFormat(void) {
+}

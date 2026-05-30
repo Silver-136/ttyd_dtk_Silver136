@@ -111,3 +111,91 @@ void winLectureOn(void) {
     *(s32*)((s32)wp + 0x14) = 0;
     *(s32*)((s32)wp + 0x18) = evtEntry(evt_lecture_msg, 0, 0);
 }
+
+
+u8 winMain(void) {
+    return 0;
+}
+
+
+u8 winIconGrayInit(void) {
+    return 0;
+}
+
+
+s32 itemUseFunc(void* pEvt, int param_2) {
+    return 0;
+}
+
+
+u8 winIconSet(void) {
+    return 0;
+}
+
+
+u8 winTexSetRot(void) {
+    return 0;
+}
+
+
+u8 winTexInit_x2(s32 param_1) {
+    return 0;
+}
+
+
+void winTexSet(s32 texId, void* pos, void* size, void* color) {
+}
+
+
+u8 winTexSet_x2(void) {
+    return 0;
+}
+
+
+void unk_8017c9bc(s32 msg, void* pos, void* size, void* color) {
+}
+
+
+u8 winDispKoopa(void) {
+    return 0;
+}
+
+
+u8 winLectureKeyMask(void) {
+    return 0;
+}
+
+
+u8 winIconInit(void) {
+    return 0;
+}
+
+
+void winTexInit(s32 texData) {
+}
+
+
+void winFontSetR(void* position, void* scale, void* color, char* format) {
+}
+
+
+void winFontSetEdge(void* position, void* scale, void* color, char* format) {
+}
+
+
+void winFontSet(void* position, void* scale, void* color, char* format) {
+}
+
+
+u8 cam_r(void) {
+    return 0;
+}
+
+
+void winFontSetLabel(void* position, void* scale, void* color, char* label) {
+}
+
+
+u32 winGhostDiaryChk(void) {
+    return 0;
+}

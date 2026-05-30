@@ -184,3 +184,33 @@ USER_FUNC(evt_pouch_check_item) {
     evtSetValue(event, args[1], pouchCheckItem(evtGetValue(event, args[0])));
     return 2;
 }
+
+
+s32 N_evt_pouch_remove_item_index(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_pouch_remove_keepitem(int param_1) {
+    return 0;
+}
+
+
+s32 evt_pouch_remove_item(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_pouch_add_keepitem(int param_1) {
+    return 0;
+}
+
+
+s32 evt_pouch_add_item(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_pouch_all_party_recovery(void) {
+    return 0;
+}

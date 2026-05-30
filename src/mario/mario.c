@@ -254,3 +254,180 @@ void marioOfsRotReset(void) {
     *(WordVec*)((s32)mario + 0xA4) = *(WordVec*)((s32)base + 0xAC);
 }
 
+
+u8 marioMove(void) {
+    return 0;
+}
+
+
+u8 marioMain(void) {
+    return 0;
+}
+
+
+void marioSetCharMode(s32 mode) {
+}
+
+
+u8 marioSetFamicomMode(int param_1) {
+    return 0;
+}
+
+
+u8 marioRearAnime(void) {
+    return 0;
+}
+
+
+u8 marioDispBlurSub(s32 param_1, int param_2) {
+    return 0;
+}
+
+
+u8 marioMoveMain(void) {
+    return 0;
+}
+
+
+u8 marioMakeDispDir(void) {
+    return 0;
+}
+
+
+u8 marioDisp(void) {
+    return 0;
+}
+
+
+char* toFrontPose(char* param_1) {
+    return 0;
+}
+
+
+char* toRearPose(char* param_1) {
+    return 0;
+}
+
+
+u8 marioInit(void) {
+    return 0;
+}
+
+
+u8 marioPreDisp(void) {
+    return 0;
+}
+
+
+s32 marioCheckMenuDisable(void) {
+    return 0;
+}
+
+
+void marioReInit(void) {
+}
+
+
+void marioEntry(void) {
+}
+
+
+u8 marioReset(void) {
+    return 0;
+}
+
+
+void marioChgPose(void* pose) {
+}
+
+
+u8 marioCtrlOff2Main(void) {
+    return 0;
+}
+
+
+u8 marioResetHitObj(char* pObjName) {
+    return 0;
+}
+
+
+void* toDotMarioPose(char* param_1) {
+    return 0;
+}
+
+
+u8 marioDispBlur(s32 param_1, int param_2) {
+    return 0;
+}
+
+
+s32 marioChkKey(void) {
+    return 0;
+}
+
+
+s32 marioPaperOn(char* param_1) {
+    return 0;
+}
+
+
+void marioBgmodeOff(void) {
+}
+
+
+void marioBgmodeOn(void) {
+}
+
+
+u8 marioSetPaperAnimeLocalTime(u32 param_1) {
+    return 0;
+}
+
+
+u8 marioFBattlePost(void) {
+    return 0;
+}
+
+
+s32 marioChkSts(u32 param_1) {
+    return 0;
+}
+
+
+u8 marioPoseInit(void) {
+    return 0;
+}
+
+
+u8 marioSetSpec(void) {
+    return 0;
+}
+
+
+u8 marioChgPoseTime(char* param_1, s16 param_2) {
+    return 0;
+}
+
+
+void marioChgEvtPose(const char* pose) {
+}
+
+
+u8 marioChgPaper(char* param_1) {
+    return 0;
+}
+
+
+u8 marioGetScreenPos(float* param_1, float* param_2, float* param_3, float* param_4) {
+    return 0;
+}
+
+
+s32 marioChkPushAnime(void) {
+    return 0;
+}
+
+
+u8 marioFBattlePrepare(void) {
+    return 0;
+}

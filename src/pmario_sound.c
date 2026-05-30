@@ -195,3 +195,118 @@ s32 psndBGMStartCheck(s32 index) {
 
     return (SoundSSCheck(*(s32*)((s32)bgm + 4)) >> 3) & 1;
 }
+
+
+u8 psndENVMain(void) {
+    return 0;
+}
+
+
+u8 psndSFXMain(void) {
+    return 0;
+}
+
+
+void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 unk1, s32 unk2) {
+}
+
+
+u8 calc3D(void) {
+    return 0;
+}
+
+
+u8 psndBGMMain(void) {
+    return 0;
+}
+
+
+void psndENVOn_f_d(s32 name, s32 flags, s32 frames, s32 extra) {
+}
+
+
+u8 psndENV_stop(u32 param_1) {
+    return 0;
+}
+
+
+void psndBGMOff_f_d(s32 name, s32 frames, s32 flags) {
+}
+
+
+void psndENVOff_f_d(s32 name, s32 frames, s32 flags) {
+}
+
+
+f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2) {
+    return 0.0f;
+}
+
+
+void psndMapChange(void) {
+}
+
+
+u8 psndInit(void) {
+    return 0;
+}
+
+
+void psndStopAllFadeOut(void) {
+}
+
+
+void psndSFXAllOff(void) {
+}
+
+
+void L_psndBGM_stop(void) {
+}
+
+
+void psndSFXOff(s32 id) {
+}
+
+
+s32 psndBGMPlayTime(s32 id) {
+    return 0;
+}
+
+
+void psndSetFlag(s32 flag) {
+}
+
+
+s32 psndPushGroup(void) {
+    return 0;
+}
+
+
+char* searchPSSFXList(char* param_1) {
+    return 0;
+}
+
+
+u8 psndBGM_rate(u32 param_1, u16 param_2) {
+    return 0;
+}
+
+
+int psndSFXChk(u32 param_1) {
+    return 0;
+}
+
+
+u8 psndBGMScope(u32 param_1, int param_2) {
+    return 0;
+}
+
+
+u8 psndMain(void) {
+    return 0;
+}
+
+
+s32 psndENV_LPF(u32 param_1, short param_2) {
+    return 0;
+}

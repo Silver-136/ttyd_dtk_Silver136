@@ -138,3 +138,58 @@ s32 evt_audience_base_flag_on(void* evt) {
 
     return 2;
 }
+
+
+u8 evt_audience_move_position_speed(void) {
+    return 0;
+}
+
+
+u8 evt_audience_jump_position_firstsp(void) {
+    return 0;
+}
+
+
+u8 evt_audience_jump_position_gravity(void) {
+    return 0;
+}
+
+
+u8 evt_audience_move_position_frame(void) {
+    return 0;
+}
+
+
+s32 evt_audience_abnormal_natural_all(int param_1) {
+    return 0;
+}
+
+
+s32 evt_audience_reflesh_natural_all(int param_1) {
+    return 0;
+}
+
+
+s32 evt_audience_set_rotate_offset(int param_1) {
+    return 0;
+}
+
+
+s32 evt_audience_set_rotate(int param_1) {
+    return 0;
+}
+
+
+s32 evt_audience_set_position(int param_1) {
+    return 0;
+}
+
+
+s32 evt_audience_flag_check(int param_1) {
+    return 0;
+}
+
+
+s32 evt_audience_sound_cheer(int param_1) {
+    return 0;
+}

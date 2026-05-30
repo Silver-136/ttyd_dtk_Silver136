@@ -78,3 +78,54 @@ void statusWinForceOpen(void) {
     *(u16*)((s32)wp + 4) &= ~0xA0;
     *(u16*)((s32)wp + 4) |= 0x50;
 }
+
+
+u8 statusWinDisp(void) {
+    return 0;
+}
+
+
+u8 statusWinMain(void) {
+    return 0;
+}
+
+
+u8 valueUpdate(void) {
+    return 0;
+}
+
+
+u8 gaugeDisp(void) {
+    return 0;
+}
+
+
+s32 valueCheck(void) {
+    return 0;
+}
+
+
+void statusGetValue(void* out) {
+}
+
+
+void statusWinReInit(void) {
+}
+
+
+void statusWinForceOff(void) {
+}
+
+
+void statusWinForceUpdate(void) {
+}
+
+
+u8 statusWinInit(void) {
+    return 0;
+}
+
+
+u8 statusGetApPos(float* param_1) {
+    return 0;
+}

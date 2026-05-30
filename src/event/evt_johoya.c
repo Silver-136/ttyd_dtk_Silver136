@@ -56,3 +56,51 @@ s32 johoya_keti_newjoho_setreadflag(void) {
     return 2;
 }
 
+
+int johoya_data_make(s32 param_1, u32 param_2) {
+    return 0;
+}
+
+
+s32 johoya_keti_newjoho_makelabel(int param_1) {
+    return 0;
+}
+
+
+s32 johoya_keti_oldspeak_makelabel(int param_1) {
+    return 0;
+}
+
+
+u8 johoya_keti_oldspeak_check(void) {
+    return 0;
+}
+
+
+u8 johoya_keti_newjoho_check(void) {
+    return 0;
+}
+
+
+void johoya_set(void* flags, s32 value, s32 set) {
+}
+
+
+s32 johoya_data_alloc(void* pEvt) {
+    return 0;
+}
+
+
+int johoya_get(int param_1, short param_2) {
+    return 0;
+}
+
+
+int search_evt_no(void* pEvt) {
+    return 0;
+}
+
+
+s32 johoya_data_free(void) {
+    return 0;
+}

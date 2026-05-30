@@ -38,3 +38,8 @@ s32 N_evt_snd_bgm_unpause(void) {
     }
     return 2;
 }
+
+
+u8 seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 param_5, u32 param_6) {
+    return 0;
+}

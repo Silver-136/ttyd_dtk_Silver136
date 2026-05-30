@@ -34,3 +34,18 @@ s32 evt_light_party_lighting_onoff(void* event, s32 isFirstCall) {
     }
     return 2;
 }
+
+
+s32 evt_light_bind_mapobj(int param_1, int param_2) {
+    return 0;
+}
+
+
+s32 evt_light_charalight_all_onoff(int param_1) {
+    return 0;
+}
+
+
+s32 evt_light_mario_lighting_onoff(int param_1) {
+    return 0;
+}

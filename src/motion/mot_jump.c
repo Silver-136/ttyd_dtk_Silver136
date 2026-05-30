@@ -30,3 +30,48 @@ void N_mot_jumpNpc_post(void) {
         }
     }
 }
+
+
+u8 mot_jumpNpc(void) {
+    return 0;
+}
+
+
+u8 mot_jumpSw(void) {
+    return 0;
+}
+
+
+u8 mot_jumpStand(void) {
+    return 0;
+}
+
+
+u8 mot_fall(void) {
+    return 0;
+}
+
+
+u8 mot_jump(void) {
+    return 0;
+}
+
+
+u8 mot_jumpSmall(void) {
+    return 0;
+}
+
+
+u8 mot_upstairs(void) {
+    return 0;
+}
+
+
+u8 mot_land(void) {
+    return 0;
+}
+
+
+u8 marioPreJump(void) {
+    return 0;
+}

@@ -37,3 +37,67 @@ s32 evt_msg_continue(EvtEntry* evt, s32 first) {
     return 2;
 }
 
+
+s32 _evt_msg_print(void* param_1, int param_2, u32 param_3, char* param_4, s32 param_5, char* param_6) {
+    return 0;
+}
+
+
+u8 evt_msg_print_insert(int param_1, int param_2) {
+    return 0;
+}
+
+
+s32 evt_msg_print_add_insert(int param_1, int param_2) {
+    return 0;
+}
+
+
+s32 evt_msg_select(void* pEvt, int param_2) {
+    return 0;
+}
+
+
+s32 evt_msg_print_party_add(int param_1, int param_2) {
+    return 0;
+}
+
+
+s32 evt_msg_print_battle_party(int param_1, int param_2) {
+    return 0;
+}
+
+
+u8 evt_msg_print_party(void* pEvt, int param_2) {
+    return 0;
+}
+
+
+u32 evt_msg_print_add(void* pEvt, int param_2) {
+    return 0;
+}
+
+
+s32 evt_msg_togelr(int param_1) {
+    return 0;
+}
+
+
+s32 evt_msg_toge(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_msg_print(void* evtEntry, int param_2) {
+    return 0;
+}
+
+
+s32 evt_msg_npc(int param_1) {
+    return 0;
+}
+
+
+s32 evt_msg_repeat(void* pEvt, int param_2) {
+    return 0;
+}

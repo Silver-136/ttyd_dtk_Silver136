@@ -51,3 +51,32 @@ s32 evt_hit_get_position(void* event, s32 isFirstCall) {
 
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
+
+
+void name_callback_sub(s32 name, s32 callback, s32 value) {
+}
+
+
+u8 evt_hit_damage_return_set(void) {
+    return 0;
+}
+
+
+s32 evt_hitobj_onoff(void* pEvt) {
+    return 0;
+}
+
+
+s32 L_evt_hitobj_flag_onoff(int param_1) {
+    return 0;
+}
+
+
+s32 evt_hitobj_attr_onoff(int param_1) {
+    return 0;
+}
+
+
+s32 evt_hit_bind_mapobj(void* pEvt) {
+    return 0;
+}

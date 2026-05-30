@@ -465,3 +465,8 @@ s32 partyKill(s32 id) {
 s32 partyEntry2Hello(s32 id) {
     return 0;
 }
+
+
+s32 partyKill2(s32 id) {
+    return 0;
+}

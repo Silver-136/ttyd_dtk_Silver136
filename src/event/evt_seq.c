@@ -12,3 +12,8 @@ s32 evt_seq_set_seq(void* evt) {
     seqSetSeq(seq, arg1, arg2);
     return 0;
 }
+
+
+u32 evt_seq_wait(void* pEvt) {
+    return 0;
+}

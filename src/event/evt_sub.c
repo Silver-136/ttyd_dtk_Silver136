@@ -154,3 +154,143 @@ USER_FUNC(evt_sub_countdown_flag_onoff) {
     }
     return 2;
 }
+
+
+s32 evt_sub_get_coin(void* evt, int param_2) {
+    return 0;
+}
+
+
+s32 irai_mail_check(void* pEvt) {
+    return 0;
+}
+
+
+u8 evt_sub_check_intersect(s32 pEvt) {
+    return 0;
+}
+
+
+u8 evt_sub_spline_get_value(void) {
+    return 0;
+}
+
+
+u8 evt_sub_area_check(s32 pEvt) {
+    return 0;
+}
+
+
+s32 evt_sub_spline_get_value_manual(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_sub_load_progresstime(void* pEvt) {
+    return 0;
+}
+
+
+u8 evt_sub_get_dir(void) {
+    return 0;
+}
+
+
+u8 evt_sub_get_dist(s32 pEvt) {
+    return 0;
+}
+
+
+u8 coingetDisp(int param_1) {
+    return 0;
+}
+
+
+s32 evt_sub_intpl_msec_get_value_para(int param_1) {
+    return 0;
+}
+
+
+s32 evt_sub_spline_init(u32* param_1) {
+    return 0;
+}
+
+
+s32 evt_sub_intpl_get_float(int param_1) {
+    return 0;
+}
+
+
+u8 evt_sub_intpl_init_float(void) {
+    return 0;
+}
+
+
+s32 evt_sub_intpl_msec_get_value(void* pEvt) {
+    return 0;
+}
+
+
+s32 stone_bg(int param_1) {
+    return 0;
+}
+
+
+s32 evt_sub_intpl_get_value_para(int param_1) {
+    return 0;
+}
+
+
+u8 evt_sub_get_sincos(void) {
+    return 0;
+}
+
+
+s32 stone_ry(int param_1) {
+    return 0;
+}
+
+
+s32 evt_sub_save_playtime(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_sub_intpl_get_value(void* param_1) {
+    return 0;
+}
+
+
+s32 evt_sub_intpl_msec_init(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_sub_intpl_init(void* param_1) {
+    return 0;
+}
+
+
+s32 evt_sub_get_stopwatch(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_sub_rumble_onoff(int param_1) {
+    return 0;
+}
+
+
+s32 evt_sub_random(void* param_1) {
+    return 0;
+}
+
+
+s32 evt_sub_animgroup_async(int param_1) {
+    return 0;
+}
+
+
+s32 evt_sub_spline_free(int param_1) {
+    return 0;
+}

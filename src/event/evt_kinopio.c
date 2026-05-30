@@ -84,3 +84,48 @@ USER_FUNC(get_bed) {
     evtSetFloat(event, args[2], *(f32*)((s32)data + 0x1C));
     return 2;
 }
+
+
+u8 paper_on(s32 pEvt, s32 param_2) {
+    return 0;
+}
+
+
+s32 power_chk(int param_1) {
+    return 0;
+}
+
+
+u8 offset(s32 pEvt) {
+    return 0;
+}
+
+
+s32 get_cam(void* pEvt) {
+    return 0;
+}
+
+
+s32 evt_kinopio_setup(void* pEvt) {
+    return 0;
+}
+
+
+s32 breakfast(void) {
+    return 0;
+}
+
+
+s32 coin_chk(void* pEvt) {
+    return 0;
+}
+
+
+s32 msg_no(void* pEvt) {
+    return 0;
+}
+
+
+s32 N_cameraman_on(void) {
+    return 0;
+}

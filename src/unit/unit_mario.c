@@ -39,3 +39,13 @@ void mario_pinch_pose_sound_callback(void* unit) {
 void faker_mario_makkuro_set(void) {
     mapSetTevCallback(0xB, callback);
 }
+
+
+s32 _mario_super_emblem_anim_set(int param_1, int param_2) {
+    return 0;
+}
+
+
+s32 _mario_makkuro_set(void) {
+    return 0;
+}

@@ -46,3 +46,52 @@ void marioSetSwirlPower(s32 msec, f32 a, f32 b) {
     *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x2C) = a;
     *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x28) = b;
 }
+
+
+u8 mot_ship(void) {
+    return 0;
+}
+
+
+u8 shipMove(void) {
+    return 0;
+}
+
+
+s32 checkHarbor(float* param_1) {
+    return 0;
+}
+
+
+void marioReInit_ship(void) {
+}
+
+
+u8 mot_ship_post(void) {
+    return 0;
+}
+
+
+s32 marioShipChanging(void) {
+    return 0;
+}
+
+
+u8 marioForceShipAnime(void) {
+    return 0;
+}
+
+
+u8 marioShipForceStop(void) {
+    return 0;
+}
+
+
+s32 marioChkShipMoveMode(void) {
+    return 0;
+}
+
+
+u8 marioShipChgFall(void) {
+    return 0;
+}

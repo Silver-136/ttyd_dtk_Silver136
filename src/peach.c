@@ -56,3 +56,47 @@ void peachSetStsUneasy(void) {
     *(u32*)((s32)mario + 0x10) |= 0x80;
     peachChgPose(str_P_S_1_804265cc);
 }
+
+
+void peachChgPose(void* pose) {
+}
+
+
+u8 peach_dash(void) {
+    return 0;
+}
+
+
+u8 peach_stay(void) {
+    return 0;
+}
+
+
+s32 peachMain(void) {
+    return 0;
+}
+
+
+u8 peach_walk(void) {
+    return 0;
+}
+
+
+u8 peachSetStsNormal(void) {
+    return 0;
+}
+
+
+u8 peachTransformOff(void) {
+    return 0;
+}
+
+
+u8 peachTransformOn(void) {
+    return 0;
+}
+
+
+u8 peach_talk(void) {
+    return 0;
+}

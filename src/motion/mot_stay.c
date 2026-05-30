@@ -25,3 +25,23 @@ void marioVoiceGlareOn(void) {
         *(u32*)((s32)mario + 0x280) = psndSFXOn_3D(0xDC, position);
     }
 }
+
+
+u8 mot_stay(void) {
+    return 0;
+}
+
+
+u8 mot_stay_post(void) {
+    return 0;
+}
+
+
+u8 marioChgMotAuto(void) {
+    return 0;
+}
+
+
+s32 marioChkDeepSleep(void) {
+    return 0;
+}
