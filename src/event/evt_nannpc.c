@@ -1,5 +1,16 @@
 #include "event/evt_nannpc.h"
 
+extern void extLoadShadowMtx(void*);
+extern u8 extLoadShadowRenderMode(void);
+extern u8 extLoadShadowVertex(void);
+extern u8 extLoadShadowTev(void);
+extern u8 extDrawShadow(void);
+
+typedef struct NanNpcSortEntry {
+    f32 unk0;
+    f32 z;
+} NanNpcSortEntry;
+
 
 u8 nanNPCOption(void) {
     return 0;
@@ -132,15 +143,41 @@ u8 nannpc_ext_main(void) {
 
 
 u8 evt_nannpc_set_animtbl_sub(int param_1, short* param_2) {
-    return 0;
+    s32 count = 0;
+
+    *(short**)(param_1 + 0x58) = param_2;
+loop:
+    if (*param_2 == -1) {
+        goto done;
+    }
+    param_2++;
+    count++;
+    goto loop;
+done:
+    *(s16*)(param_1 + 0x5C) = count;
+    if (*(s16*)(param_1 + 0x5C) == 0) {
+        *(s32*)(param_1 + 0x58) = 0;
+    }
 }
 
 
 u8 nannpc_ext_shadow_disp(void) {
-    return 0;
+    static f32 mt[3][4];
+
+    extLoadShadowMtx(mt);
+    extLoadShadowRenderMode();
+    extLoadShadowVertex();
+    extLoadShadowTev();
+    return extDrawShadow();
 }
 
 
-s32 nannpc_zcompare(int param_1, int param_2) {
+s32 nannpc_zcompare(NanNpcSortEntry* param_1, NanNpcSortEntry* param_2) {
+    if (param_1->z < param_2->z) {
+        return 1;
+    }
+    if (param_1->z > param_2->z) {
+        return -1;
+    }
     return 0;
 }
