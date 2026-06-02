@@ -4,11 +4,13 @@ extern void* memset(void* dst, int value, unsigned long size);
 
 
 u8 _swByteGet(s32 index) {
-    return *(u8*)((s32)gp + index + 0xDB8);
+    index = (s32)gp + index;
+    return *(u8*)(index + 0xDB8);
 }
 
 void _swByteSet(s32 index, u8 value) {
-    *(u8*)((s32)gp + index + 0xDB8) = value;
+    index = (s32)gp + index;
+    *(u8*)(index + 0xDB8) = value;
 }
 
 void _swClear(s32 index) {
@@ -53,7 +55,7 @@ s32 swByteGet(s32 index) {
         return *(s32*)((s32)gp + 0x174);
     }
 
-    return *(u8*)((s32)gp + index + 0x578);
+    return *((u8*)gp + index + 0x578);
 }
 
 void swByteSet(s32 index, s32 value) {
@@ -62,7 +64,7 @@ void swByteSet(s32 index, s32 value) {
         return;
     }
 
-    *(u8*)((s32)gp + index + 0x578) = value;
+    *((u8*)gp + index + 0x578) = value;
 }
 
 void swClear(s32 index) {

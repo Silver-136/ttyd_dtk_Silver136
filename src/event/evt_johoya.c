@@ -49,9 +49,10 @@ s32 johoya_keti_oldspeak_setreadflag(void) {
 
 s32 johoya_keti_newjoho_setreadflag(void) {
     s32 offset = _jdt.index << 4;
-    JohoyaEntry* entry = (JohoyaEntry*)((s32)_jdt.entries + offset);
+    void* entry = _jdt.entries;
 
-    johoya_set(_jdt.flags, entry->unkC, 1);
+    entry = (void*)((s32)entry + offset);
+    johoya_set(_jdt.flags, *(s16*)((s32)entry + 0xC), 1);
     *(u16*)((s32)_jdt.entries + offset) |= 1;
     return 2;
 }

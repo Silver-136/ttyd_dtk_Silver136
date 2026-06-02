@@ -30,10 +30,15 @@ u32 FontGetDrawColor(void) {
 
 void FontDrawColor_(void) {
     u32 color;
+    u32 oldColor;
+    u32 gxColor;
 
     color = fontColor;
+    oldColor = color;
     ((u8*)&color)[3] = (((u8*)&color)[3] * fontAlpha) / 255;
-    GXSetTevColor(1, &color);
+    fontColor = oldColor;
+    gxColor = color;
+    GXSetTevColor(1, &gxColor);
 }
 
 void FontDrawColor(void* colorPtr) {
@@ -47,11 +52,13 @@ void FontDrawColor(void* colorPtr) {
 
 void FontDrawColorIDX(s32 idx) {
     u32 color;
+    u32 gxColor;
 
     color = fontColTbl[idx];
     fontColor = color;
     ((u8*)&color)[3] = (((u8*)&color)[3] * fontAlpha) / 255;
-    GXSetTevColor(1, &color);
+    gxColor = color;
+    GXSetTevColor(1, &gxColor);
 }
 
 void FontDrawEdgeOff(void) {
@@ -99,18 +106,26 @@ void fontmgrTexSetup(void) {
 
 u8 kanjiGetWidth(u16 code) {
     void* entry;
-    s32 count;
+    void* found;
+    u32 magic;
+    u32 count;
     s32 i;
 
     entry = (void*)((s32)pfh + 0x20);
+    magic = 0x57494431;
     count = *(s32*)((s32)pfh + 0xC);
+    found = 0;
     for (i = 0; i < count; i++) {
-        if (*(u32*)entry == 0x57494431 && code >= *(u16*)((s32)entry + 8) && code <= *(u16*)((s32)entry + 0xA)) {
-            return *(u8*)((s32)entry + ((code - *(u16*)((s32)entry + 8)) * 2) + 0xD);
+        if (*(u32*)entry == magic) {
+            u16 start = *(u16*)((s32)entry + 8);
+            if (code >= start && code <= *(u16*)((s32)entry + 0xA)) {
+                found = (void*)((s32)entry + ((code - start) * 2) + 0xC);
+                break;
+            }
         }
         entry = (void*)((s32)entry + *(s32*)((s32)entry + 4));
     }
-    return *(u8*)1;
+    return *(u8*)((s32)found + 1);
 }
 
 

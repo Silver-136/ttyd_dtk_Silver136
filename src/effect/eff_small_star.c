@@ -2,10 +2,14 @@
 
 
 u8 effSmallStarCamChg(int param_1, u8 param_2) {
-    return 0;
-}
+    u8 effSmallStarN64CamChg(int param_1, u8 param_2);
 
+    return effSmallStarN64CamChg(param_1, param_2);
+}
 
 u8 effSmallStarEntry(void) {
-    return 0;
+    u8 effSmallStarN64Entry(void);
+
+    return effSmallStarN64Entry();
 }
+

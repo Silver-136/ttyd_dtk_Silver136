@@ -7,6 +7,7 @@ void nameEntOff(void);
 s32 nameEntWait(void);
 s32 nameEntPrepare(void);
 void nameEntOn(s32 value);
+s32 nameEntGetName(void);
 void winOpenDisable(void);
 void winOpenEnable(void);
 void _mapFree(void* heap, void* ptr);
@@ -42,6 +43,18 @@ USER_FUNC(evt_win_nameent_on) {
     nameEntOn(value);
     return 2;
 }
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_win_nameent_name) {
+    s32* args = event->args;
+    s32 name = nameEntGetName();
+
+    evtSetValue(event, args[0], name);
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 USER_FUNC(evt_win_item_desttable) {
     void* ptr = (void*)evtGetValue(event, event->args[0]);

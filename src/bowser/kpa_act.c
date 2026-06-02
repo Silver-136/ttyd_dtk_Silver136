@@ -17,3 +17,20 @@ void kpaAddScore(s32 score) {
     }
     pouchAddKpaScore(score);
 }
+
+void kpaAddCoin(s32 coin) {
+    extern s32 pouchAddKpaCoin(s32 coin);
+    extern void pouchAddKpaScore(s32 score);
+
+    if (pouchAddKpaCoin(coin) != 0) {
+        pouchAddKpaScore(1000);
+    }
+    {
+        s32 score = coin * 500;
+
+        if (score > 10000) {
+            score = 10000;
+        }
+        pouchAddKpaScore(score);
+    }
+}

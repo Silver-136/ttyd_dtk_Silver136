@@ -11,8 +11,7 @@ void mapErrorEntry(s32 type, s32 value);
 void door_dark_flag_sub(s32 unk0, s32 unk1, s32 unk2, s32 unk3);
 
 s32 evt_door_end_wait(void) {
-    s32 flag = DoorFLAG;
-    return 2 & ~((-flag | flag) >> 31);
+    return DoorFLAG ? 0 : 2;
 }
 
 USER_FUNC(evt_door_load_mapflag) {
@@ -37,6 +36,8 @@ USER_FUNC(evt_door_save_mapflag) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(door_dark_flag) {
     s32* args = event->args;
     void* info = (void*)evtGetValue(event, args[0]);
@@ -45,6 +46,11 @@ USER_FUNC(door_dark_flag) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(init_inside_group) {
     s32* args = event->args;
     void* info = (void*)evtGetValue(event, args[0]);
@@ -53,16 +59,25 @@ USER_FUNC(init_inside_group) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_door_set_param) {
     s32* args = event->args;
     void* info = (void*)evtGetValue(event, args[0]);
     s32 flag = evtGetValue(event, args[1]);
     s32 value = evtGetValue(event, args[2]);
-    if (flag == 0) {
+    if (flag != 0) {
+    } else {
         *(s32*)((s32)info + 0x34) = value;
     }
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 u8 door_position_sub(void) {

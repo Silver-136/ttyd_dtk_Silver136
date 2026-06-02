@@ -2,7 +2,7 @@
 #include "event/evt_cmd.h"
 
 extern void* _battleWorkPointer;
-extern void* btlataudevtDummy[];
+extern u8 btlataudevtDummy[];
 extern u8 btlataudevtPresentItem_Damage[];
 extern u8 btlataudevtPresentItem_Get[];
 
@@ -18,7 +18,7 @@ void* btlataudGetAttackEventPtr(s32 unitId) {
     void* data = BtlUnit_GetData(BattleGetUnitPtr(_battleWorkPointer, unitId), 6);
 
     if (data == 0) {
-        data = &btlataudevtDummy[1];
+        data = btlataudevtDummy + 4;
     }
     return data;
 }
@@ -27,17 +27,16 @@ void* btlataudGetMoveEventPtr(void) {
     switch (BattleAudience_GetPresentItemType()) {
         case 1:
             return btlataudevtPresentItem_Damage;
+        case 0:
         default:
             return btlataudevtPresentItem_Get;
     }
 }
 
 USER_FUNC(_get_present_target_id) {
-    s32* args;
     s32 dst;
 
-    args = event->args;
-    dst = args[0];
+    dst = event->args[0];
 
     evtSetValue(event, dst, BattleAudience_GetPresentTargetUnitId());
     return 2;
@@ -81,7 +80,6 @@ USER_FUNC(_delete_present_item) {
     BattleAudience_SetPresentItemNo(0);
     return 2;
 }
-
 
 u8 _get_item_announce_disp(void) {
     return 0;

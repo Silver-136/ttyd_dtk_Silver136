@@ -15,8 +15,8 @@ void imgClearVirtualPoint(void* img) {
 
 void imgSetVirtualPoint(void* img, void* point) {
     u32 flags;
-    u32 x;
     u32 y;
+    u32 x;
     u32 z;
 
     flags = *(u32*)((s32)img + 0xCC);

@@ -14,9 +14,14 @@ void chuchu_reinit(void) {
 
 void chuchu_init(void* party) {
     *(u8*)((s32)party + 0x33) = 7;
-    *(u8*)((s32)party + 0x32) = 0;
-    *(f32*)((s32)party + 0xF0) = float_20_80424374;
-    *(f32*)((s32)party + 0xF4) = float_24_80424378;
+    {
+        f32 f24;
+        f32 f20 = float_20_80424374;
+        *(u8*)((s32)party + 0x32) = 0;
+        f24 = float_24_80424378;
+        *(f32*)((s32)party + 0xF0) = f20;
+        *(f32*)((s32)party + 0xF4) = f24;
+    }
 }
 
 s32 post_msg(void* party) {

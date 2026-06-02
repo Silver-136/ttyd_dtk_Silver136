@@ -14,7 +14,7 @@ void effRippleSetRxRz(void* effect, f32 rx, f32 rz) {
 }
 
 void* effRippleEntry(f32 x, f32 y, f32 z, f32 scale, s32 time) {
-    return effRippleN64Entry(x, y, z, scale, time);
+    return effRippleN64Entry(x, y, z, 0.0f, time);
 }
 
 void effRippleSetPosition(void* effect, f32 x, f32 y, f32 z) {
@@ -24,4 +24,3 @@ void effRippleSetPosition(void* effect, f32 x, f32 y, f32 z) {
         *(f32*)((s32)*(void**)((s32)effect + 0xC) + 0xC) = z;
     }
 }
-

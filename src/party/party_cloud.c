@@ -31,17 +31,24 @@ void N_cloudLockAnimationsOn(void* party) {
 }
 
 void cloud_init(void* party) {
+    f32 y;
+    f32 x;
+    s32 zero;
+
     *(u8*)((s32)party + 0x33) = 5;
+    zero = 0;
+    x = float_38_80424348;
     *(u8*)((s32)party + 0x32) = 1;
-    *(f32*)((s32)party + 0xF0) = float_38_80424348;
-    *(f32*)((s32)party + 0xF4) = float_24_804242f8;
-    *(s32*)((s32)party + 0x174) = 0;
-    *(s32*)((s32)party + 0x178) = 0;
-    *(s32*)((s32)party + 0x17C) = 0;
-    *(s32*)((s32)party + 0x180) = 0;
-    *(s32*)((s32)party + 0x184) = 0;
-    *(s32*)((s32)party + 0x170) = 0;
-    *(s32*)((s32)party + 0x178) = 0;
+    y = float_24_804242f8;
+    *(f32*)((s32)party + 0xF0) = x;
+    *(f32*)((s32)party + 0xF4) = y;
+    *(s32*)((s32)party + 0x174) = zero;
+    *(s32*)((s32)party + 0x178) = zero;
+    *(s32*)((s32)party + 0x17C) = zero;
+    *(s32*)((s32)party + 0x180) = zero;
+    *(s32*)((s32)party + 0x184) = zero;
+    *(s32*)((s32)party + 0x170) = zero;
+    *(s32*)((s32)party + 0x178) = zero;
 }
 
 f32 cloudGetBreathDist(void) {
@@ -49,22 +56,40 @@ f32 cloudGetBreathDist(void) {
     if (party == 0) {
         return float_0_804242e0;
     }
-    if (*(u8*)((s32)party + 0x31) == 5 && (*(u32*)party & 0x100) != 0) {
-        if (*(u8*)((s32)party + 0x39) < 10) {
-            return float_0_804242e0;
-        }
-        return *(f32*)(*(s32*)((s32)party + 0x170) + 8);
+    if (*(s8*)((s32)party + 0x31) != 5) {
+        goto fail;
     }
+    if ((*(u32*)party & 0x100) == 0) {
+        goto fail;
+    }
+    if (*(u8*)((s32)party + 0x39) >= 10) {
+        goto success;
+    }
+fail:
     return float_0_804242e0;
+success:
+    return *(f32*)(*(s32*)((s32)party + 0x170) + 8);
 }
 
 s32 cloudGetStatus(void) {
-    s32 ret = 2;
     void* party = partyGetPtr(marioGetPartyId());
-    if (party == 0 || (*(u8*)((s32)party + 0x31) == 5 && (*(u32*)party & 0x100) == 0)) {
-        return 0;
+    s32 ret = 2;
+    u8 status;
+
+    if (party == 0) {
+        goto fail;
     }
-    if (*(u8*)((s32)party + 0x39) == 10) {
+    if (*(s8*)((s32)party + 0x31) != 5) {
+        goto check_status;
+    }
+    if (*(u32*)party & 0x100) {
+        goto check_status;
+    }
+fail:
+    return 0;
+check_status:
+    status = *(u8*)((s32)party + 0x39);
+    if (status == 10 && status < 20) {
         ret = 1;
     }
     return ret;

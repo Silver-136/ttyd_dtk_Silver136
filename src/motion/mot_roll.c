@@ -2,6 +2,7 @@
 
 void* marioGetPtr(void);
 void camFollowYOff(void);
+s32 marioSlitChkWallAround(void);
 
 void clrRollEvtFlag(void) {
     void* mario = marioGetPtr();
@@ -56,6 +57,23 @@ void marioRollFixOn(void) {
     }
 }
 
+s32 unk_800a1748(void) {
+    void* mario = marioGetPtr();
+
+    if (*(u32*)((s32)mario + 0x2BC) & 0x200) {
+        return 1;
+    }
+    if (*(u32*)mario & 0x08000000) {
+        return 1;
+    }
+    if (*(void**)((s32)mario + 0x1E8) == 0) {
+        return 1;
+    }
+    {
+        s32 check = marioSlitChkWallAround();
+        return ((u32)(-check) | (u32)check) >> 31;
+    }
+}
 
 u8 mot_roll(void) {
     return 0;

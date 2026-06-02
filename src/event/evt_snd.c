@@ -74,6 +74,8 @@ s32 evt_snd_envoff_f(void* evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_snd_bgmon_f(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = args[0];
@@ -83,6 +85,11 @@ s32 evt_snd_bgmon_f(void* evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_snd_envon_f(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = args[0];
@@ -92,12 +99,20 @@ s32 evt_snd_envon_f(void* evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_snd_sfx_dist(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
     psndSFX_dist(name, evtGetValue(evt, args[1]));
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_snd_sfxon(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
@@ -123,6 +138,8 @@ s32 evt_snd_sfxon_(void* evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_snd_sfxon__(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
@@ -134,6 +151,9 @@ s32 evt_snd_sfxon__(void* evt) {
     }
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 s32 evt_snd_sfxon_3d_ex(int param_1) {

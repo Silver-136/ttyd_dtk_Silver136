@@ -31,11 +31,11 @@ void* evtGetWork(void) {
 
 void* evtGetPtr(s32 index) {
     void* set = work;
-    void* entry = (void*)((s32)*(void**)((s32)set + 0x90) + index * 0x1B0);
+    void* entry;
     if (*(s32*)((s32)gp + 0x14) != 0) {
         set = work + 0xA0;
-        entry = (void*)((s32)*(void**)((s32)set + 0x90) + index * 0x1B0);
     }
+    entry = (void*)((s32)*(void**)((s32)set + 0x90) + index * 0x1B0);
     if ((*(u8*)((s32)entry + 8) & 1) != 0) {
         return entry;
     }
@@ -81,28 +81,38 @@ void* evtGetPtrID(s32 eventId) {
 }
 
 void evtEntryRunCheck(void) {
-    if (_mariostSystemLevel == 2) {
-        evtStopAll(2);
-    } else if (_mariostSystemLevel < 2) {
-        if (_mariostSystemLevel == 1) {
+    switch (_mariostSystemLevel) {
+        case 0:
+            break;
+        case 1:
             evtStopAll(1);
-        }
-    } else if (_mariostSystemLevel < 4) {
-        evtStopAll(0x10);
-    } else if (_mariostSystemLevel == 4) {
-        evtStopAll(0xEF);
+            break;
+        case 2:
+            evtStopAll(2);
+            break;
+        case 3:
+            evtStopAll(0x10);
+            break;
+        case 4:
+            evtStopAll(0xEF);
+            break;
     }
 }
 
 void evtmgrReInit(void) {
     void* set = work;
+    void* gpPtr = gp;
+    s32 field38;
+    s32 field3C;
     s32 count;
 
-    if (*(s32*)((s32)gp + 0x14) != 0) {
+    if (*(s32*)((s32)gpPtr + 0x14) != 0) {
         set = work + 0xA0;
     }
-    *(s32*)((s32)set + 0x98) = *(s32*)((s32)gp + 0x38);
-    *(s32*)((s32)set + 0x9C) = *(s32*)((s32)gp + 0x3C);
+    field38 = *(s32*)((s32)gpPtr + 0x38);
+    field3C = *(s32*)((s32)gpPtr + 0x3C);
+    *(s32*)((s32)set + 0x9C) = field3C;
+    *(s32*)((s32)set + 0x98) = field38;
     count = *(s32*)set;
     memset(*(void**)((s32)set + 0x90), 0, count * 0x1B0);
     evtMax = 0;

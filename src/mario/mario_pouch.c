@@ -210,6 +210,7 @@ s32 pouchSetCoin(s16 value) {
 
     return ((PouchData*)mpp)->mCoins;
 }
+
 s32 pouchAddCoin(s16 coins) {
     ((PouchData*)mpp)->mCoins = ((PouchData*)mpp)->mCoins + coins;
 
@@ -291,9 +292,9 @@ s32 pouchGetFP(void) {
     return ((PouchData*)mpp)->currentFP;
 }
 void pouchSetPartyHP(s32 partyId, s16 hp) {
+    PouchPartyData* party;
     s32 offset;
     s32 base;
-    PouchPartyData* party;
 
     offset = partyId * 0xE;
     base = mpp;
@@ -309,6 +310,7 @@ void pouchSetPartyHP(s32 partyId, s16 hp) {
 
     party->currentHP = party->currentMaxHP;
 }
+
 s32 pouchGetPartyHP(s32 partyId) {
     s32 offset;
     s32 addr;
@@ -332,6 +334,7 @@ void pouchSetAP(s16 sp) {
 
     ((PouchData*)mpp)->currentSP = ((PouchData*)mpp)->maxSP;
 }
+
 void pouchAddAP(s16 amount) {
     ((PouchData*)mpp)->currentSP = ((PouchData*)mpp)->currentSP + amount;
 
@@ -1225,11 +1228,35 @@ int pouchGetKeepItemCnt(void) {
 
 
 void pouchGetStarStone(s32 id) {
+    extern f32 float_2_80421878;
+
+    if (*(u16*)(mpp + 0x8C) == 0) {
+        *(f32*)(mpp + 0x84) = float_2_80421878;
+    }
+
+    *(u16*)(mpp + 0x8C) |= 1 << id;
+    *(s16*)(mpp + 0x7C) = (id + 1) * 100;
+
+    if (*(s16*)(mpp + 0x7C) < 0) {
+        *(s16*)(mpp + 0x7C) = 0;
+    }
+
+    if (*(s16*)(mpp + 0x7C) > 0x320) {
+        *(s16*)(mpp + 0x7C) = 0x320;
+    }
 }
 
+s32 pouchCheckMail(s32 mail) {
+    register s32 word = mail / 32;
+    s32 bit = mail % 32;
+    u32 mask = 1 << bit;
+    u32 value;
 
-u32 pouchCheckMail(u32 param_1) {
-    return 0;
+    if (*(u32*)(mpp + 0x590 + word * 4) & mask) {
+        return 2;
+    }
+    value = *(u32*)(mpp + 0x580 + word * 4) & mask;
+    return ((u32)(-value) | value) >> 31;
 }
 
 
@@ -1248,6 +1275,6 @@ u8 pouchSetPartyColor(int param_1, int param_2) {
 }
 
 
-u16 L_pouchEquipBadge(int param_1) {
-    return 0;
+s16 L_pouchEquipBadge(int param_1) {
+    return *(s16*)(mpp + 0x38A + param_1 * 2);
 }

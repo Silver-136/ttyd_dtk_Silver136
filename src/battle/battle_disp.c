@@ -126,12 +126,14 @@ void btlDispGetTexSize(s32 id, u16* width, u16* height) {
 
 f32 getFloatDispOffset(void* part) {
     s32 value = ((*(u16*)((s32)part + 0x1A8) << 2) + 0x10E) % 0x168;
-    return float_2_80422250 + float_2_80422250 * sinfd((f64)value);
+    f32 sin = sinfd((f32)value);
+    return float_2_80422250 + float_2_80422250 * sin;
 }
 
 f32 getGravityDispOffset(void* part) {
     s32 value = (*(u16*)((s32)part + 0x1A6) * 3 + 0x10E) % 0x168;
-    return float_4_80422224 + float_4_80422224 * sinfd((f64)value);
+    f32 sin = sinfd((f32)value);
+    return float_4_80422224 + float_4_80422224 * sin;
 }
 
 void _pose_def(void* part) {

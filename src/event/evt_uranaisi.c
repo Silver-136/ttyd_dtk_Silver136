@@ -55,15 +55,17 @@ USER_FUNC(uranaisi_table_clear) {
 }
 
 USER_FUNC(uranaisi_data_free) {
-    if (_udt.table == 0) {
+    UranaisiData* data = &_udt;
+
+    if (data->table == 0) {
         return 2;
     }
-    _mapFree(mapalloc_base_ptr, _udt.table);
-    _udt.table = 0;
-    _udt.next = 0;
-    _udt.unk8 = 0;
-    _udt.unkC = 0;
-    _udt.index = 0;
+    _mapFree(mapalloc_base_ptr, data->table);
+    data->table = 0;
+    data->next = 0;
+    data->unk8 = 0;
+    data->unkC = 0;
+    data->index = 0;
     return 2;
 }
 

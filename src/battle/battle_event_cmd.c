@@ -970,9 +970,6 @@ USER_FUNC(btlevtcmd_SetHeight) {
     return EVT_RETURN_DONE;
 }
 
-
-
-
 USER_FUNC(btlevtcmd_GetStatusMg) {
     s32* args;
     BattleWork* battleWork;
@@ -1108,8 +1105,6 @@ USER_FUNC(btlevtcmd_SetAlpha) {
 
     return EVT_RETURN_DONE;
 }
-
-
 
 USER_FUNC(btlevtcmd_GetRGB) {
     s32* args;
@@ -1511,14 +1506,17 @@ USER_FUNC(btlevtcmd_AddPartsRotateOffset) {
 
 
 USER_FUNC(btlevtcmd_SetRotateOffsetFromCenterOffset) {
+    s32* args;
     BattleWorkUnit* unit;
+    s32 type;
 
-    unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, evtGetValue(event, event->args[0])));
+    args = event->args;
+    type = evtGetValue(event, args[0]);
+    unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, type));
     BtlUnit_SetRotateOffset(unit, *(f32*)((s32)unit + 0x84), *(f32*)((s32)unit + 0x88), *(f32*)((s32)unit + 0x8C));
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_SetCutBaseOffset) {
     s32* args;
@@ -1901,7 +1899,6 @@ USER_FUNC(btlevtcmd_GetHp) {
     return EVT_RETURN_DONE;
 }
 
-
 USER_FUNC(btlevtcmd_GetFp) {
     s32* args;
     BattleWork* battleWork;
@@ -1950,7 +1947,6 @@ USER_FUNC(btlevtcmd_GetMaxHp) {
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_GetMaxFp) {
     s32* args;
@@ -2090,9 +2086,6 @@ USER_FUNC(btlevtcmd_SetSwallowParam) {
     return EVT_RETURN_DONE;
 }
 
-
-
-
 USER_FUNC(btlevtcmd_SetSwallowAttribute) {
     s32* args;
     BattleWork* battleWork;
@@ -2114,9 +2107,6 @@ USER_FUNC(btlevtcmd_SetSwallowAttribute) {
 
     return EVT_RETURN_DONE;
 }
-
-
-
 
 USER_FUNC(btlevtcmd_SetMaxMoveCount) {
     s32* args;
@@ -2256,7 +2246,6 @@ USER_FUNC(btlevtcmd_GetHpDamageCount) {
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_RecoverHp) {
     s32* args;
@@ -2555,8 +2544,6 @@ USER_FUNC(btlevtcmd_GetTotalDamage) {
     return EVT_RETURN_DONE;
 }
 
-
-
 USER_FUNC(btlevtcmd_GetDamageCode) {
     s32* args;
     BattleWorkUnit* unit;
@@ -2575,7 +2562,6 @@ USER_FUNC(btlevtcmd_GetDamageCode) {
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_CheckDamageCode) {
     s32* args;
@@ -2956,8 +2942,6 @@ USER_FUNC(btlevtcmd_GetBodyId) {
     return EVT_RETURN_DONE;
 }
 
-
-
 USER_FUNC(btlevtcmd_GetUnitId) {
     s32* args;
     BattleWork* battleWork;
@@ -3174,8 +3158,6 @@ USER_FUNC(btlevtcmd_GetFaceDirection) {
     return EVT_RETURN_DONE;
 }
 
-
-
 USER_FUNC(btlevtcmd_ChangeFaceDirection) {
     s32* args = event->args;
     s32 type;
@@ -3221,15 +3203,13 @@ USER_FUNC(btlevtcmd_ResetFaceDirection) {
     BattleWorkUnit* unit;
     void* row;
     s32 type;
-    s32 id;
     s32 belong;
 
     battleWork = _battleWorkPointer;
 
     type = evtGetValue(event, args[0]);
-    id = BattleTransID(event, type);
 
-    unit = BattleGetUnitPtr(battleWork, id);
+    unit = BattleGetUnitPtr(battleWork, BattleTransID(event, type));
     belong = *(s8*)((s32)unit + 0xC);
     row = (void*)((s32)battleWork + belong * 8);
     *(u8*)((s32)unit + 0x189) = *(u8*)((s32)row + 0xA);
@@ -3531,7 +3511,7 @@ USER_FUNC(btlevtcmd_OnToken) {
     unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, type));
 
     mask = args[1];
-    *(u32*)((s32)unit + 0x27C) = *(u32*)((s32)unit + 0x27C) | mask;
+    *(u32*)((s32)unit + 0x27C) = mask | *(u32*)((s32)unit + 0x27C);
 
     return EVT_RETURN_DONE;
 }
@@ -3848,7 +3828,6 @@ USER_FUNC(btlevtcmd_SetMoveSpeed) {
     return EVT_RETURN_DONE;
 }
 
-
 USER_FUNC(btlevtcmd_SetJumpSpeed) {
     s32* args;
     BattleWorkUnit* unit;
@@ -3868,7 +3847,6 @@ USER_FUNC(btlevtcmd_SetJumpSpeed) {
     return EVT_RETURN_DONE;
 }
 
-
 USER_FUNC(btlevtcmd_SetFallAccel) {
     s32* args;
     BattleWorkUnit* unit;
@@ -3887,7 +3865,6 @@ USER_FUNC(btlevtcmd_SetFallAccel) {
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_JumpSetting) {
     s32* args;
@@ -4212,21 +4189,22 @@ USER_FUNC(btlevtcmd_GetFirstAttackTarget) {
     return EVT_RETURN_DONE;
 }
 
-
-
 USER_FUNC(btlevtcmd_GetConsumeItem) {
     BattleWork* battleWork;
     s32* args;
     s32 index;
     s32 base;
+    s32 value;
 
     battleWork = _battleWorkPointer;
     args = event->args;
 
     index = *(s32*)((s32)battleWork + 0x1C38);
     base = (s32)battleWork + 0x171C;
+    base += index * 0x1C;
+    value = *(s32*)(base + 0x94);
 
-    evtSetValue(event, args[0], *(s32*)(base + index * 0x1C + 0x94));
+    evtSetValue(event, args[0], value);
 
     return EVT_RETURN_DONE;
 }
@@ -5095,27 +5073,23 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
 }
 
 USER_FUNC(btlevtcmd_AcSetDifficulty) {
-    s32* args;
     BattleWork* battleWork;
+    s32* args;
     BattleWorkUnit* unit;
     s32 type;
-    s32 id;
     s32 difficulty;
 
-    args = event->args;
     battleWork = _battleWorkPointer;
+    args = event->args;
 
     type = evtGetValue(event, args[0]);
     difficulty = evtGetValue(event, args[1]);
 
-    id = BattleTransID(event, type);
-    unit = BattleGetUnitPtr(battleWork, id);
-
+    unit = BattleGetUnitPtr(battleWork, BattleTransID(event, type));
     BattleActionCommandSetDifficulty(battleWork, unit, difficulty);
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_AcGetDifficulty) {
     s32* args;
@@ -5142,6 +5116,7 @@ USER_FUNC(btlevtcmd_AcSetParamAll) {
     BattleWork* battleWork;
     s32 i;
     s32 offset;
+    s32 addrOffset;
     s32 value;
 
     args = event->args;
@@ -5151,7 +5126,8 @@ USER_FUNC(btlevtcmd_AcSetParamAll) {
     for (i = 0; i < 8; i++) {
         value = evtGetValue(event, *args++);
         if (value != -250000000) {
-            *(s32*)((s32)battleWork + 0x1CC8 + offset) = value;
+            addrOffset = offset + 0x1CC8;
+            *(s32*)((s32)battleWork + addrOffset) = value;
         }
         offset += 4;
     }
@@ -5455,7 +5431,6 @@ USER_FUNC(btlevtcmd_ac_timing_flag_onoff) {
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_ac_timing_get_success_frame) {
     s32* args;
@@ -5777,22 +5752,22 @@ USER_FUNC(btlevtcmd_AnimeWaitPlayLoopTiming) {
 
 USER_FUNC(btlevtcmd_SetTalkBodyId) {
     s32* args;
+    BattleWork* battleWork;
     BattleWorkUnit* unit;
     s32 type;
     s32 pose;
 
     args = event->args;
+    battleWork = _battleWorkPointer;
 
     type = evtGetValue(event, args[0]);
     pose = evtGetValue(event, args[1]);
 
-    unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, type));
+    unit = BattleGetUnitPtr(battleWork, BattleTransID(event, type));
     *(s32*)((s32)unit + 0x2D4) = pose;
 
     return EVT_RETURN_DONE;
 }
-
-
 
 USER_FUNC(btlevtcmd_SetTalkPose) {
     s32* args;
@@ -5939,7 +5914,6 @@ USER_FUNC(btlevtcmd_AnimeChangePoseFromTable) {
     return EVT_RETURN_DONE;
 }
 
-
 USER_FUNC(btlevtcmd_AnimeSetPoseTable) {
     BattleWorkUnitPart* part;
     s32* args;
@@ -6047,11 +6021,11 @@ USER_FUNC(btlevtcmd_CheckDefinePosetype) {
 
 
 USER_FUNC(btlevtcmd_AnimeSetMotionSpeed) {
-    BattleWorkUnitPart* part;
-    s32* args;
     s32 type;
     s32 id;
+    s32* args;
     s32 partId;
+    BattleWorkUnitPart* part;
     f32 speed;
 
     args = event->args;
@@ -6067,8 +6041,6 @@ USER_FUNC(btlevtcmd_AnimeSetMotionSpeed) {
 
     return EVT_RETURN_DONE;
 }
-
-
 
 USER_FUNC(btlevtcmd_AnimeChangePaperGroup) {
     s32* args;
@@ -6276,7 +6248,6 @@ USER_FUNC(btlevtcmd_OnStatusFlag) {
     return EVT_RETURN_DONE;
 }
 
-
 USER_FUNC(btlevtcmd_OffStatusFlag) {
     s32* args;
     BattleWorkUnit* unit;
@@ -6295,7 +6266,6 @@ USER_FUNC(btlevtcmd_OffStatusFlag) {
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_CheckActStatus) {
     s32* args;
@@ -6470,10 +6440,8 @@ USER_FUNC(btlevtcmd_PayWeaponCost) {
     return EVT_RETURN_DONE;
 }
 
-
 USER_FUNC(btlevtcmd_CommandPayWeaponCost) {
     s32 type;
-    s32 id;
     BattleWork* battleWork;
     BattleWorkUnit* unit;
     void* weapon;
@@ -6481,16 +6449,14 @@ USER_FUNC(btlevtcmd_CommandPayWeaponCost) {
     battleWork = _battleWorkPointer;
 
     type = evtGetValue(event, event->args[0]);
-    id = BattleTransID(event, type);
 
-    unit = BattleGetUnitPtr(battleWork, id);
+    unit = BattleGetUnitPtr(battleWork, BattleTransID(event, type));
     weapon = BattleGetSelectWeapon(battleWork);
 
     BtlUnit_PayWeaponCost(unit, weapon);
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_GetWeaponActionLv) {
     s32* args;
@@ -7000,17 +6966,17 @@ USER_FUNC(btlevtcmd_SetPartsDiveSound) {
 
 USER_FUNC(btlevtcmd_SetJumpSound) {
     s32* args;
+    BattleWork* battleWork;
     BattleWorkUnit* unit;
     s32 type;
-    s32 id;
     s32 a;
     s32 b;
 
     args = event->args;
+    battleWork = _battleWorkPointer;
 
     type = evtGetValue(event, args[0]);
-    id = BattleTransID(event, type);
-    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    unit = BattleGetUnitPtr(battleWork, BattleTransID(event, type));
 
     a = evtGetValue(event, args[1]);
     b = evtGetValue(event, args[2]);
@@ -7020,7 +6986,6 @@ USER_FUNC(btlevtcmd_SetJumpSound) {
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_SetPartsJumpSound) {
     s32* args;
@@ -7384,22 +7349,22 @@ USER_FUNC(btlevtcmd_StatusWindowOnOff) {
     battleWork = _battleWorkPointer;
     state = evtGetValue(event, event->args[0]);
 
-    if (state == 1) {
-        *(s32*)((s32)battleWork + 0x2748) = 1;
-    } else if (state < 1) {
-        if (state >= 0) {
+    switch (state) {
+        case 2:
+            *(s32*)((s32)battleWork + 0x2744) = 1;
+            break;
+        case 1:
+            *(s32*)((s32)battleWork + 0x2748) = 1;
+            break;
+        case 0:
             *(s32*)((s32)battleWork + 0x2748) = 0;
-        }
-    } else if (state < 3) {
-        *(s32*)((s32)battleWork + 0x2744) = 1;
+            break;
     }
 
     BattleStatusWindowCheck();
 
     return EVT_RETURN_DONE;
 }
-
-
 
 USER_FUNC(btlevtcmd_StageDispellFog) {
     BattleFogForceStop();
@@ -7446,15 +7411,26 @@ USER_FUNC(btlevtcmd_ftof) {
 }
 
 
-u8 _PartsMoveSoundControl(void* part) {
-    return 0;
+void _PartsMoveSoundControl(void* part) {
+    extern void _MoveSoundControlCore();
+    f32 x;
+    f32 y;
+    f32 z;
+
+    BtlUnit_GetPartsPos(part, &x, &y, &z);
+    _MoveSoundControlCore(x, y, z, *(void**)((s32)part + 0x4EC), (void*)((s32)part + 0xC0), part);
 }
 
 
-u8 _UnitMoveSoundControl(void* unit) {
-    return 0;
-}
+void _UnitMoveSoundControl(void* unit) {
+    extern void _MoveSoundControlCore();
+    f32 x;
+    f32 y;
+    f32 z;
 
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    _MoveSoundControlCore(x, y, z, unit, (void*)((s32)unit + 0x18C), NULL);
+}
 
 void _MoveSoundControlCore(double x, double y, double z, void* unit, void* moveSoundWork, void* part) {
 }

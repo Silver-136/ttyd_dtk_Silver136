@@ -16,8 +16,10 @@ void battleAcDelete_MonosiriTarget(void* wp) {
 }
 
 void battleAcDisp_MonosiriTarget(void) {
-    if (*(s32*)((s32)_battleWorkPointer + 0x1C9C) == 1000) {
-        actionCommandDisp(float_0_80428604, float_0_80428604);
+    switch (*(s32*)((s32)_battleWorkPointer + 0x1C9C)) {
+        case 1000:
+            actionCommandDisp(float_0_80428604, float_0_80428604);
+            break;
     }
 }
 

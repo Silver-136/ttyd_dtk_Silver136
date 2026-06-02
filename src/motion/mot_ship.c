@@ -12,11 +12,12 @@ s32 marioChkShipPlace(void* hit) {
 }
 
 s32 marioChkSwirlPower(void) {
+    void* mario;
     s32 value;
 
     marioGetPtr();
-    marioGetPtr();
-    value = *(s32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x30);
+    mario = marioGetPtr();
+    value = *(s32*)(*(s32*)((s32)mario + 0x294) + 0x30);
     return (u32)(-value | value) >> 31;
 }
 
@@ -29,15 +30,17 @@ s32 N_marioShipGetDir(void) {
 }
 
 void marioShipSetDispDir(void) {
-    f32 zero1;
     f32 zero2;
+    f32 zero1;
+    void* mario;
 
     marioGetPtr();
     zero1 = float_0_80420eb8;
-    marioGetPtr();
+    mario = marioGetPtr();
     zero2 = float_0_80420eb8;
-    *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x14) = zero1;
-    *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x18) = zero2;
+    *(f32*)(*(s32*)((s32)mario + 0x294) + 0x14) = zero1;
+    mario = marioGetPtr();
+    *(f32*)(*(s32*)((s32)mario + 0x294) + 0x18) = zero2;
 }
 
 void marioSetSwirlPower(s32 msec, f32 a, f32 b) {

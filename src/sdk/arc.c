@@ -21,15 +21,15 @@ void ARCGetCurrentDir(ARCHandle* handle, char* path, u32 maxlen) {
 u32 myStrncpy(char* dst, char* src, u32 maxlen) {
     u32 len = maxlen;
 
-    while (len != 0 && *src != 0) {
-        *dst = *src;
+    while (len != 0 && *(s8*)src != 0) {
+        char value = *src;
         len--;
         src++;
+        *dst = value;
         dst++;
     }
     return maxlen - len;
 }
-
 
 u32 ARCConvertPathToEntrynum(int param_1, char* param_2) {
     return 0;

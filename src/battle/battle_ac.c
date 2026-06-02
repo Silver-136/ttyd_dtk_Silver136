@@ -147,14 +147,13 @@ void BattleActionCommandManager(struct BattleWork* work) {
         if (mainCallback(work) == 0) {
             *(s32*)((s32)work + 0x1CA0) = 0;
         }
-    }
 
-    dispCallback = *(void**)((s32)work + 0x1CA8);
-    if (dispCallback != 0) {
-        dispEntry(8, 1, dispCallback, float_900_804221a8, work);
+        dispCallback = *(void**)((s32)work + 0x1CA8);
+        if (dispCallback != 0) {
+            dispEntry(8, 1, dispCallback, float_900_804221a8, work);
+        }
     }
 }
-
 
 u8 BattleAcDrawGauge(s64 ratioFilled, s32 x, s32 y, s32 innerBarWidth, s32 param_5, s32 bar1EndPercent, s32 bar2EndPercent, s32 bar3EndPercent, s32 flags_) {
     return 0;

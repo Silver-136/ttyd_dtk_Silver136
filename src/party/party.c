@@ -213,7 +213,10 @@ void partyUsePost(void* party) {
     }
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void partyChgPose(void* party, const char* pose) {
+    const char* newPose = pose;
     const char* current;
 
     if ((*(u32*)((s32)party + 0x4) & 2) != 0) {
@@ -221,7 +224,7 @@ void partyChgPose(void* party, const char* pose) {
     }
 
     current = *(const char**)((s32)party + 0x18);
-    if (current != 0 && strcmp(current, pose) == 0) {
+    if (current != 0 && strcmp(current, newPose) == 0) {
         return;
     }
 
@@ -229,10 +232,13 @@ void partyChgPose(void* party, const char* pose) {
         return;
     }
 
-    *(const char**)((s32)party + 0x18) = pose;
+    *(const char**)((s32)party + 0x18) = newPose;
     *(s16*)((s32)party + 0x20) = 0;
     *(u32*)((s32)party + 0x8) |= 0x2000;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void partyPaperOff(void* party) {
     s32 paperId;

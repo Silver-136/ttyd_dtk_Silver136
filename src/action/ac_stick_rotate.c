@@ -26,8 +26,8 @@ s32 _get_icon_id(s8 id) {
             return 0x80;
         case 7:
             return 0x83;
+        case 8:
         default:
             return 0x81;
     }
 }
-

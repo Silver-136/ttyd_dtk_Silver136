@@ -44,17 +44,21 @@ void motSlitCancel3(void) {
 s32 marioGetSlitFloorPos(SlitVecCopy* out) {
     void* mario = marioGetPtr();
     if (*(s32*)((s32)mario + 0x26C) != 0) {
-        out->x = *(s32*)((s32)mario + 0x270);
-        out->y = *(s32*)((s32)mario + 0x274);
-        out->z = *(s32*)((s32)mario + 0x278);
+        s32 x = *(s32*)((s32)mario + 0x270);
+        s32 y = *(s32*)((s32)mario + 0x274);
+        s32 z;
+        out->x = x;
+        out->y = y;
+        z = *(s32*)((s32)mario + 0x278);
+        out->z = z;
         return 1;
     }
     return 0;
 }
 
 s32 marioGetMotSlitCancel3(void) {
+    register s32 ret = 0;
     void* mario = marioGetPtr();
-    s32 ret = 0;
     if (*(u16*)((s32)mario + 0x2E) == 0x15) {
         s32 timer = *(s16*)((s32)mario + 0x2F0);
         if ((timer >= 0x78 && timer <= 0x7A) || (timer >= 0x6E && timer <= 0x70)) {
@@ -81,6 +85,13 @@ s32 marioSlitKeyDisable(void) {
     return 1;
 }
 
+void unk_800a6ac8(void) {
+    void* mario = marioGetPtr();
+
+    marioChgMot2(0x15);
+    *(s16*)((s32)mario + 0x2F0) = 0xA;
+    *(u32*)mario &= ~0xF0000;
+}
 
 u8 mot_slit(void) {
     return 0;

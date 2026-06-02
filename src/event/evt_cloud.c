@@ -14,6 +14,8 @@ s32 evt_cloud_get_mode(void* event, s32 isFirstCall) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_cloud_set_cap_size(void* event, s32 isFirstCall) {
     extern s32 evtGetValue(void* event, s32 value);
     extern void* cloud_p;
@@ -25,6 +27,9 @@ s32 evt_cloud_set_cap_size(void* event, s32 isFirstCall) {
     *(u16*)((s32)cloud_p + 0xC2) = height;
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 s32 evt_cloud_main(void* pEvt, int param_2) {

@@ -166,7 +166,7 @@ void unk_800db778(s32 id, s32 a2, s32 a3, s32 a4) {
 }
 
 s32 psndSFXOnEx_3D(s32 lookup, u8 volume, u8 a3, u16 a4, Vec* position, u16 distance) {
-    return __psndSFXOn(lookup, volume, a3, a4, position, 0, distance, 0);
+    return __psndSFXOn(lookup, a3, a4, (u16)(s32)position, (Vec*)(s32)volume, 0, distance, 0);
 }
 
 s32 psndBGMChk(s32 index) {
@@ -184,6 +184,7 @@ s32 psndBGMChkSilent(s32 index) {
 
     return *(u8*)((s32)bgm + 0x26) == 8;
 }
+
 s32 psndBGMStartCheck(s32 index) {
     extern s32 SoundSSCheck(s32 id);
     PaperSoundBGM* bgm = &psbgm[index & 0xF];
@@ -195,7 +196,6 @@ s32 psndBGMStartCheck(s32 index) {
 
     return (SoundSSCheck(*(s32*)((s32)bgm + 4)) >> 3) & 1;
 }
-
 
 u8 psndENVMain(void) {
     return 0;

@@ -9,6 +9,8 @@ USER_FUNC(moving_floor_halt_se) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(moving_floor_get_mode) {
     s32* args = event->args;
     void* floor = (void*)evtGetValue(event, args[0]);
@@ -17,6 +19,11 @@ USER_FUNC(moving_floor_get_mode) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(moving_floor_get_kind) {
     s32* args = event->args;
     void* floor = (void*)evtGetValue(event, args[0]);
@@ -25,6 +32,11 @@ USER_FUNC(moving_floor_get_kind) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(moving_floor_get_pause) {
     s32* args = event->args;
     void* floor = (void*)evtGetValue(event, args[0]);
@@ -37,6 +49,11 @@ USER_FUNC(moving_floor_get_pause) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(moving_floor_getf_xz_scale) {
     s32* args = event->args;
     void* floor = (void*)evtGetValue(event, args[0]);
@@ -46,6 +63,9 @@ USER_FUNC(moving_floor_getf_xz_scale) {
     evtSetFloat(event, args[1], (float_500_8042658c - scale) / float_500_8042658c);
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 s32 evt_moving_floor_alloc(void* pEvt) {

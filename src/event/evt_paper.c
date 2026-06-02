@@ -13,6 +13,8 @@ s32 evt_paper_delete(void* event, s32 isFirstCall) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_paper_entry(void* event, s32 isFirstCall) {
     extern s32 evtGetValue(void* event, s32 value);
     extern s32 animGroupBaseAsync(s32 name, s32 flag, s32 value);
@@ -29,3 +31,6 @@ s32 evt_paper_entry(void* event, s32 isFirstCall) {
     animPaperPoseEntry(name, normalized);
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on

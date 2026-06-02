@@ -5,7 +5,7 @@ typedef struct LightWorkSet {
     LightEntry* entries;
 } LightWorkSet;
 
-extern LightWorkSet work[];
+extern LightWorkSet work[2];
 extern LightEntry paperCraft;
 extern LightEntry paperLight3D;
 extern LightEntry paperLight3DImg;
@@ -21,19 +21,23 @@ static LightWorkSet* currentLightWork(void) {
 }
 
 s32 _sort(void* a, void* b) {
-    f32 lhs = *(f32*)((s32)a + 4);
-    f32 rhs = *(f32*)((s32)b + 4);
-    if (lhs > rhs) {
+    if (*(f32*)((s32)a + 4) > *(f32*)((s32)b + 4)) {
         return 1;
     }
-    if (lhs < rhs) {
+    if (*(f32*)((s32)a + 4) < *(f32*)((s32)b + 4)) {
         return -1;
     }
     return 0;
 }
 
 LightEntry* lightNumberToPtr(s32 index) {
-    LightEntry* entry = &currentLightWork()->entries[index];
+    s32 group = mapGetActiveGroup();
+    LightWorkSet* set = work;
+    LightEntry* entry;
+    if (group == 1) {
+        set++;
+    }
+    entry = &set->entries[index];
     if (entry->flags & LIGHT_ENABLED) {
         return entry;
     }
@@ -41,11 +45,19 @@ LightEntry* lightNumberToPtr(s32 index) {
 }
 
 s32 lightGetEntryNum(void) {
-    LightWorkSet* set = currentLightWork();
-    LightEntry* entry = set->entries;
+    s32 group = mapGetActiveGroup();
+    LightWorkSet* set = work;
+    LightEntry* entry;
     s32 i;
-    s32 count = 0;
-    for (i = 0; i < set->count; i++, entry++) {
+    s32 entryCount;
+    s32 count;
+    if (group == 1) {
+        set++;
+    }
+    entryCount = set->count;
+    count = 0;
+    entry = set->entries;
+    for (i = 0; i < entryCount; i++, entry++) {
         if (entry->flags & LIGHT_ENABLED) {
             count++;
         }
@@ -58,16 +70,25 @@ LightEntry* lightGetPaperCraft(void) {
 }
 
 LightEntry* lightGetPaper(void) {
-    if (camGetCurNo() == 4) {
+    s32 cam = camGetCurNo();
+    if (cam == 4) {
         return &paperLight3D;
+    }
+    if (cam == 6) {
+        return &paperLight3DImg;
     }
     return &paperLight3DImg;
 }
 
 s32 lightCheckCharaLight(void) {
-    LightWorkSet* set = currentLightWork();
-    LightEntry* entry = set->entries;
+    s32 group = mapGetActiveGroup();
+    LightWorkSet* set = work;
+    LightEntry* entry;
     s32 i;
+    if (group == 1) {
+        set++;
+    }
+    entry = set->entries;
     for (i = 0; i < set->count; i++, entry++) {
         if ((entry->flags & LIGHT_ENABLED) && (entry->flags & LIGHT_CHARA)) {
             return 1;
@@ -77,9 +98,14 @@ s32 lightCheckCharaLight(void) {
 }
 
 LightEntry* lightGetCharaAmbient(void) {
-    LightWorkSet* set = currentLightWork();
-    LightEntry* entry = set->entries;
+    s32 group = mapGetActiveGroup();
+    LightWorkSet* set = work;
+    LightEntry* entry;
     s32 i;
+    if (group == 1) {
+        set++;
+    }
+    entry = set->entries;
     for (i = 0; i < set->count; i++, entry++) {
         if ((entry->flags & LIGHT_ENABLED) && (entry->flags & LIGHT_CHARA) && (entry->flags & LIGHT_AMBIENT)) {
             return entry;
@@ -89,9 +115,14 @@ LightEntry* lightGetCharaAmbient(void) {
 }
 
 LightEntry* lightGetAmbient(void) {
-    LightWorkSet* set = currentLightWork();
-    LightEntry* entry = set->entries;
+    s32 group = mapGetActiveGroup();
+    LightWorkSet* set = work;
+    LightEntry* entry;
     s32 i;
+    if (group == 1) {
+        set++;
+    }
+    entry = set->entries;
     for (i = 0; i < set->count; i++, entry++) {
         if ((entry->flags & LIGHT_ENABLED) && !(entry->flags & LIGHT_CHARA) && (entry->flags & LIGHT_AMBIENT)) {
             return entry;
@@ -101,10 +132,13 @@ LightEntry* lightGetAmbient(void) {
 }
 
 void lightReInit(void) {
-    LightWorkSet* set = currentLightWork();
+    s32 group = mapGetActiveGroup();
+    LightWorkSet* set = work;
+    if (group == 1) {
+        set++;
+    }
     memset(set->entries, 0, set->count * sizeof(LightEntry));
 }
-
 
 int lightEntry(char* pName, int lightType, void* pos, void* rot, GXColor* color, int distanceAttenType, u32 flags, double spotAngle, double angleAtten) {
     return 0;

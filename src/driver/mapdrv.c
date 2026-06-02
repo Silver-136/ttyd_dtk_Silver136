@@ -459,44 +459,116 @@ u8 mapSetMaterialFog(void) {
 }
 
 
-void mapErrorEntry(s32 type, s32 value) {
-}
+void mapErrorEntry(s32 type, char* message) {
+    extern char error_data[];
+    extern s32 error_count;
+    extern s32 error_flag;
+    extern char* strncpy(char* dst, const char* src, u32 n);
+    char* entry;
 
+    entry = error_data;
+    entry += error_count * 0x24;
+    *(s32*)(entry + 0x20) = type;
+    strncpy(entry, message, 0x1F);
+    error_flag = 1;
+    error_count++;
+    error_count %= 32;
+}
 
 void mapLoad(char* name) {
 }
 
 
-u8 mapReStartAnimationAll(void) {
-    return 0;
+void mapReStartAnimationAll(void) {
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    void* work;
+    void* group;
+    s32 j;
+    s32 i;
+    void* anim;
+
+    work = (void*)(mapWork + activeGroup * 0x2F4);
+    group = work;
+    i = 0;
+    while (i < *(s32*)work) {
+        anim = *(void**)((s32)group + 0x164);
+        j = 0;
+        while (j < *(s32*)((s32)group + 0x160)) {
+            *(u16*)anim |= 0x20;
+            j++;
+            anim = (void*)((s32)anim + 0x20);
+        }
+        group = (void*)((s32)group + 0x178);
+        i++;
+    }
 }
 
 
-u8 mapPauseAnimationAll(void) {
-    return 0;
+void mapPauseAnimationAll(void) {
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    void* work;
+    void* group;
+    s32 j;
+    s32 i;
+    void* anim;
+
+    work = (void*)(mapWork + activeGroup * 0x2F4);
+    group = work;
+    i = 0;
+    while (i < *(s32*)work) {
+        anim = *(void**)((s32)group + 0x164);
+        j = 0;
+        while (j < *(s32*)((s32)group + 0x160)) {
+            *(u16*)anim |= 0x10;
+            j++;
+            anim = (void*)((s32)anim + 0x20);
+        }
+        group = (void*)((s32)group + 0x178);
+        i++;
+    }
 }
 
 
-u8 mapSetFog(double param_1, double param_2, s32 param_3, void* param_4) {
-    return 0;
+void mapSetFog(s32 type, f32 start, f32 end, void* color) {
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    s32 rgba;
+    s32 work;
+
+    rgba = *(s32*)color;
+    work = mapWork + activeGroup * 0x2F4;
+    *(s32*)(work + 0x28) = type;
+    *(f32*)(work + 0x2C) = start;
+    *(f32*)(work + 0x30) = end;
+    *(s32*)(work + 0x34) = rgba;
 }
 
 
 void mapBlendOff2(void) {
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    ((u16*)mapWork)[activeGroup * 0x17A + 2] &= ~4;
 }
-
 
 void mapBlendOff(void) {
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    ((u16*)mapWork)[activeGroup * 0x17A + 2] &= ~2;
 }
-
 
 void mapFogOff(void) {
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    ((u16*)mapWork)[activeGroup * 0x17A + 2] &= ~1;
 }
-
 
 void mapFogOn(void) {
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    ((u16*)mapWork)[activeGroup * 0x17A + 2] |= 1;
 }
-
 
 u8 mapSetMaterial(void* param_1, void* param_2) {
     return 0;

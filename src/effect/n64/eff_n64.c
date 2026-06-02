@@ -29,7 +29,7 @@ u8 effGetTexObjN64(int param_1, u32* param_2) {
     if (*(s32*)((s32)work + 4) == 0) {
         GXInitTexObj(param_2, dummy_425, 1, 1, 0, 0, 0, 0);
     } else {
-        TEXGetGXTexObjFromPalette(*(void**)work, param_1, param_2);
+        TEXGetGXTexObjFromPalette(*(void**)work, param_2, param_1);
     }
 }
 

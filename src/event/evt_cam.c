@@ -41,6 +41,8 @@ USER_FUNC(evt_cam_letter_box_disable) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_cam_get_at) {
     s32* args = event->args;
     void* cam = camGetPtr(evtGetValue(event, args[0]));
@@ -51,6 +53,11 @@ USER_FUNC(evt_cam_get_at) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_cam_get_pos) {
     s32* args = event->args;
     void* cam = camGetPtr(evtGetValue(event, args[0]));
@@ -61,6 +68,11 @@ USER_FUNC(evt_cam_get_pos) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_cam_ctrl_onoff) {
     s32* args = event->args;
     s32 camId = evtGetValue(event, args[0]);
@@ -72,6 +84,9 @@ USER_FUNC(evt_cam_ctrl_onoff) {
     }
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 u8 evt_cam_shake(s32 pEvt, s32 param_2) {

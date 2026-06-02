@@ -432,11 +432,59 @@ u8 BattleAfterReactionRelease(int param_1, int param_2) {
 
 
 void BattleAfterReactionEntry(s32 unitId, s32 arg) {
+    s32 i;
+    s32 count;
+    s32 offset;
+    s32* queue;
+
+    queue = (s32*)((s32)_battleWorkPointer + 0x16F5C);
+    offset = 0;
+    for (i = 0; i < 64; i++, offset += 8) {
+        s32 value = *(s32*)((s32)queue + offset);
+        if (value != -1 && value == unitId) {
+            return;
+        }
+    }
+
+    offset = 0;
+    count = 0;
+    for (i = 0; i < 64; i++, offset += 8) {
+        if (*(s32*)((s32)queue + offset) == -1) {
+            break;
+        }
+        count++;
+    }
+
+    if (count < 64) {
+        queue[count * 2] = unitId;
+        queue[count * 2 + 1] = arg;
+    }
 }
 
 
-u8 BattleConsumeReserveItem(void) {
-    return 0;
+void BattleConsumeReserveItem(void) {
+    extern void pouchRemoveItem(s32 item);
+    s32 i;
+    BattleWork* wp;
+    s32 entryOffset;
+    s32 zero;
+    s32 offset;
+    s32 item;
+
+    offset = 0;
+    zero = offset;
+    i = 0;
+    wp = _battleWorkPointer;
+    do {
+        entryOffset = offset + 0x19060;
+        item = *(s32*)((s32)wp + entryOffset);
+        if (item != 0) {
+            pouchRemoveItem(item);
+        }
+        i++;
+        *(s32*)((s32)wp + entryOffset) = zero;
+        offset += 4;
+    } while (i < 4);
 }
 
 
@@ -445,6 +493,19 @@ void BattleIncSeq(void* battleWork, s32 seqType) {
 
 
 void BattleAfterReactionQueueInit(void) {
+    s32 i;
+    s32 offset;
+    s32* base;
+    s32* entry;
+
+    offset = 0;
+    base = (s32*)((s32)_battleWorkPointer + 0x16F5C);
+    for (i = 0; i < 64; i++) {
+        entry = (s32*)((s32)base + offset);
+        offset += 8;
+        entry[0] = -1;
+        entry[1] = 0;
+    }
 }
 
 
@@ -453,11 +514,55 @@ void BattlePartyInfoWorkInit(BattleWork* wp) {
 
 
 s32 BattleGetSeq(BattleWork* wp, BattleSequence seq) {
+    switch (seq) {
+        case SEQ_UNKNOWN:
+            return *(s32*)((s32)wp + 0x4);
+        case SEQ_INIT:
+            return *(s32*)((s32)wp + 0xF0C);
+        case SEQ_FIRST_ACT:
+            return *(s32*)((s32)wp + 0xF10);
+        case SEQ_TURN:
+            return *(s32*)((s32)wp + 0xF14);
+        case SEQ_PHASE:
+            return *(s32*)((s32)wp + 0xF18);
+        case SEQ_MOVE:
+            return *(s32*)((s32)wp + 0xF1C);
+        case SEQ_ACT:
+            return *(s32*)((s32)wp + 0xF20);
+        case SEQ_END:
+            return *(s32*)((s32)wp + 0xF24);
+    }
     return 0;
 }
 
 
 void BattleSetSeq(BattleWork* wp, BattleSequence seq, s32 value) {
+    switch (seq) {
+        case SEQ_UNKNOWN:
+            *(s32*)((s32)wp + 0x4) = value;
+            break;
+        case SEQ_INIT:
+            *(s32*)((s32)wp + 0xF0C) = value;
+            break;
+        case SEQ_FIRST_ACT:
+            *(s32*)((s32)wp + 0xF10) = value;
+            break;
+        case SEQ_TURN:
+            *(s32*)((s32)wp + 0xF14) = value;
+            break;
+        case SEQ_PHASE:
+            *(s32*)((s32)wp + 0xF18) = value;
+            break;
+        case SEQ_MOVE:
+            *(s32*)((s32)wp + 0xF1C) = value;
+            break;
+        case SEQ_ACT:
+            *(s32*)((s32)wp + 0xF20) = value;
+            break;
+        case SEQ_END:
+            *(s32*)((s32)wp + 0xF24) = value;
+            break;
+    }
 }
 
 

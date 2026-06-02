@@ -30,11 +30,13 @@ void countDownEnd(void) {
 }
 
 s32 countDownGetStatus(void) {
-    u16 flags = *(u16*)wp;
+    u32 flags = *(u16*)wp;
     if (flags & 1) {
-        return (flags >> 1) & 1;
+        goto active;
     }
     return -1;
+active:
+    return (flags >> 1) & 1;
 }
 
 void countDownInit(void) {

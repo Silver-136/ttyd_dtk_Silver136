@@ -135,6 +135,8 @@ s32 SoundSongGetVolCh(s32 index) {
     return *(u32*)((s32)entry + 4) & 0xFF;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void SoundSongStopCh(s32 index) {
     extern char sound[];
     extern u32 sndSeqGetValid(void* seq);
@@ -147,6 +149,9 @@ void SoundSongStopCh(s32 index) {
         *(s32*)((s32)table + offset) = -1;
     }
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void SoundSongContinueCh(s32 index) {
     extern char sound[];
@@ -172,6 +177,8 @@ void SoundSongFadeinCh(s32 index) {
     }
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void SoundSongFadeoutCh(s32 index) {
     extern char sound[];
     extern u32 sndSeqGetValid(void* seq);
@@ -184,6 +191,9 @@ void SoundSongFadeoutCh(s32 index) {
         *(s32*)((s32)table + offset) = -1;
     }
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void SoundEfxSetAux1(s32 index, s32 value) {
     extern char sound[];

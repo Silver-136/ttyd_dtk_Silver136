@@ -52,6 +52,8 @@ USER_FUNC(get_ryoukin) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(get_npctalk) {
     s32* args = event->args;
     void* data = *(void**)wp;
@@ -62,7 +64,11 @@ USER_FUNC(get_npctalk) {
     evtSetFloat(event, args[2], *(f32*)((s32)data + 0x50));
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(get_bedside) {
     s32* args = event->args;
     void* data = *(void**)wp;
@@ -73,7 +79,11 @@ USER_FUNC(get_bedside) {
     evtSetFloat(event, args[2], *(f32*)((s32)data + 0x28));
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(get_bed) {
     s32* args = event->args;
     void* data = *(void**)wp;
@@ -84,6 +94,8 @@ USER_FUNC(get_bed) {
     evtSetFloat(event, args[2], *(f32*)((s32)data + 0x1C));
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 u8 paper_on(s32 pEvt, s32 param_2) {

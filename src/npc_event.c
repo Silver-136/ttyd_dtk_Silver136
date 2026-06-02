@@ -2,11 +2,11 @@
 #include "event/evt_cmd.h"
 
 extern char str_slave_0_802ed598[];
-char str_me_80421f30[] = "me";
+const char str_me_80421f30[] = "me";
 
 s32 evtSetValue(EventEntry* event, s32 target, s32 value);
 f32 evtSetFloat(EventEntry* event, s32 target, f32 value);
-void* evtNpcNameToPtr(EventEntry* event, void* name);
+void* evtNpcNameToPtr(EventEntry* event, const void* name);
 void* effNameToPtr(void* name);
 void* camGetPtr(s32 camId);
 
@@ -26,6 +26,8 @@ USER_FUNC(set_bottle_flag_init) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(camGetPos) {
     s32* args = event->args;
     void* cam = camGetPtr(4);
@@ -33,34 +35,55 @@ USER_FUNC(camGetPos) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(getSpdRun) {
     s32* args = event->args;
     void* npc = evtNpcNameToPtr(event, str_me_80421f30);
     evtSetFloat(event, args[0], *(f32*)((s32)npc + 0x21C));
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(getSpdWalk) {
     s32* args = event->args;
     void* npc = evtNpcNameToPtr(event, str_me_80421f30);
     evtSetFloat(event, args[0], *(f32*)((s32)npc + 0x210));
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(piders_get_height) {
     s32* args = event->args;
     void* npc = evtNpcNameToPtr(event, str_me_80421f30);
     evtSetFloat(event, args[0], *(f32*)((s32)npc + 0x210));
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(mahoon_get_groupname) {
     s32* args = event->args;
     void* npc = evtNpcNameToPtr(event, str_me_80421f30);
     evtSetValue(event, args[0], *(s32*)(*(s32*)((s32)npc + 0x28) + 4));
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(npc_check_wall_stop) {
     s32* args = event->args;
     void* npc = evtNpcNameToPtr(event, str_me_80421f30);
@@ -71,6 +94,8 @@ USER_FUNC(npc_check_wall_stop) {
     }
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 u8 _2d_dead_jump(void) {

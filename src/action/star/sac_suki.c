@@ -6,6 +6,7 @@ s32 evtGetValue(EventEntry* event, s32 value);
 s32 evtSetValue(EventEntry* event, s32 target, s32 value);
 void* mapGetMapObj(s32 name);
 void* BattleAudienceBaseGetPtr(void);
+void effDelete(void* effect);
 
 void disp_3D(void) {
 }
@@ -50,8 +51,9 @@ USER_FUNC(flash_update) {
 }
 
 USER_FUNC(aud_set_draw) {
+    s32* args = event->args;
     void* base = BattleAudienceBaseGetPtr();
-    s32 value = evtGetValue(event, event->args[0]);
+    s32 value = evtGetValue(event, args[0]);
     if (value == 0) {
         *(u32*)base |= 0x20000;
     } else {
@@ -62,20 +64,48 @@ USER_FUNC(aud_set_draw) {
 
 USER_FUNC(wait_star_stone_attack_end) {
     s32 value = *(s32*)((s32)get_ptr() + 0x22C);
-    return value > 8 ? 2 : 0;
+    return value == 8 ? 2 : 0;
 }
 
 USER_FUNC(wait_star_stone_up_end) {
     s32 value = *(s32*)((s32)get_ptr() + 0x22C);
-    return value > 4 ? 2 : 0;
+    return value == 4 ? 2 : 0;
 }
 
 USER_FUNC(star_stone_appear) {
-    *(s32*)((s32)get_ptr() + 0x22C) = 1;
+    void* wp;
+
+    wp = get_ptr();
+    *(s32*)((s32)wp + 0x22C) = 1;
     return 2;
 }
 
 USER_FUNC(start_game) {
-    *(s32*)get_ptr() = 1;
+    void* wp;
+
+    wp = get_ptr();
+    *(s32*)wp = 1;
+    return 2;
+}
+
+USER_FUNC(wait_game_end) {
+    void* wp;
+    s32* args;
+
+    wp = get_ptr();
+    args = event->args;
+    if (*(s32*)wp == 5) {
+        evtSetValue(event, args[0], *(s32*)((s32)wp + 0xC) + 1);
+        return 2;
+    }
+    return 0;
+}
+
+USER_FUNC(end_suki) {
+    void* wp;
+
+    wp = get_ptr();
+    effDelete(*(void**)(*(s32*)(*(s32*)((s32)wp + 0x27C) + 0xC) + 0x34));
+    effDelete(*(void**)((s32)wp + 0x27C));
     return 2;
 }

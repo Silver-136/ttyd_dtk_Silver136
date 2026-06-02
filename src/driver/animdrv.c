@@ -1,6 +1,7 @@
 #include "driver/animdrv.h"
 
 extern s32 wp;
+f32 __fabsf(f32 value);
 
 f32 animPoseGetLoopTimes(s32 poseId) {
     return *(f32*)(*(s32*)((s32)wp + 0x10) + poseId * 0x170 + 0x84);
@@ -261,57 +262,154 @@ void animPoseDraw(int poseIdx, double x, double y, double z, double rot, double 
 }
 
 
-double animPoseGetHeight(int param_1) {
-    return 0.0;
+f32 animPoseGetHeight(s32 poseId) {
+    extern f32 float_2_8041fb64;
+    s32 base;
+    s32 pose;
+    s32 group;
+    s32 data;
+
+    pose = *(s32*)(wp + 0x10);
+    pose += poseId * 0x170;
+    base = *(s32*)wp;
+    group = *(s32*)(pose + 0x10);
+    base += group * 0x10;
+    data = *(s32*)(*(s32*)(*(s32*)(base + 8) + 0xA0) + 0);
+    return float_2_8041fb64 * (f32)*(s32*)(data + 0xCC);
 }
 
 
-double animPoseGetRadius(int param_1) {
-    return 0.0;
+f32 animPoseGetRadius(s32 poseId) {
+    extern f32 float_2_8041fb64;
+    s32 base;
+    s32 pose;
+    s32 group;
+    s32 data;
+
+    pose = *(s32*)(wp + 0x10);
+    pose += poseId * 0x170;
+    base = *(s32*)wp;
+    group = *(s32*)(pose + 0x10);
+    base += group * 0x10;
+    data = *(s32*)(*(s32*)(*(s32*)(base + 8) + 0xA0) + 0);
+    return float_2_8041fb64 * (f32)*(s32*)(data + 0xC8);
 }
 
 
-u32 animPoseGetPeraEnd(int param_1) {
-    return 0;
+u32 animPoseGetPeraEnd(int poseId) {
+    s32 pose;
+
+    pose = *(s32*)(wp + 0x10) + poseId * 0x170;
+    if ((*(u32*)pose & 8) == 0) {
+        return 1;
+    }
+    return __fabsf(*(f32*)(pose + 0x7C) - *(f32*)(pose + 0x74)) < 10.0;
 }
 
 
-s32 animPoseGetAnimDataPtr(int poseIdx) {
-    return 0;
+s32 animPoseGetAnimDataPtr(s32 poseIdx) {
+    s32 base;
+    s32 pose;
+    s32 group;
+    s32 anim;
+    s32 data;
+
+    pose = *(s32*)(wp + 0x10);
+    pose += poseIdx * 0x170;
+    base = *(s32*)wp;
+    group = *(s32*)(pose + 0x10);
+    anim = *(s32*)(pose + 0x14);
+    base += group * 0x10;
+    data = *(s32*)(*(s32*)(*(s32*)(base + 8) + 0xA0) + 0);
+    data = *(s32*)(data + 0x1AC);
+    data += anim * 0x40;
+    return *(s32*)(data + 0x3C);
 }
 
 
-void animPosePaperPeraOn(void* pose) {
+void animPosePaperPeraOn(s32 poseId) {
+    s32 base;
+    void* pose;
+    void* paper;
+
+    base = *(s32*)(wp + 0x10);
+    pose = (void*)(base + poseId * 0x170);
+    paper = (void*)(base + *(s32*)((s32)pose + 0x90) * 0x170);
+    *(u32*)paper |= 8;
+    *(f32*)((s32)paper + 0x70) = *(f32*)((s32)pose + 0x70);
+    *(f32*)((s32)paper + 0x74) = *(f32*)((s32)pose + 0x74);
+    *(f32*)((s32)paper + 0x7C) = *(f32*)((s32)pose + 0x7C);
+}
+
+char* animPoseGetGroupName(s32 poseIdx, s32 groupIdx) {
+    s32 base;
+    s32 pose;
+    s32 group;
+    s32 offset;
+    s32 data;
+
+    pose = *(s32*)(wp + 0x10);
+    pose += poseIdx * 0x170;
+    base = *(s32*)wp;
+    offset = groupIdx * 0x58;
+    group = *(s32*)(pose + 0x10);
+    base += group * 0x10;
+    data = *(s32*)(*(s32*)(*(s32*)(base + 8) + 0xA0) + 0);
+    return (char*)(*(s32*)(data + 0x1A8) + offset);
 }
 
 
-char* animPoseGetGroupName(int poseIdx, int groupIdx) {
-    return 0;
+u32 animPoseTestXLU(s32 poseId) {
+    s32 base;
+    s32 pose;
+    s32 group;
+    s32 flags;
+
+    pose = *(s32*)(wp + 0x10);
+    pose += poseId * 0x170;
+    base = *(s32*)wp;
+    group = *(s32*)(pose + 0x10);
+    base += group * 0x10;
+    flags = *(s32*)(*(s32*)(*(s32*)(*(s32*)(base + 8) + 0xA0) + 0) + 0xC4);
+    return (flags >> 3) & 1;
 }
 
 
-u32 animPoseTestXLU(int param_1) {
-    return 0;
+void animMain(void) {
+    extern void dispEntry(s32 cameraId, s32 layer, void* callback, f32 z, void* param);
+    extern f32 float_0_8041fb28;
+    extern u8 animPaperPoseDisp(void);
+    dispEntry(0, 1, animPaperPoseDisp, float_0_8041fb28, 0);
 }
 
 
-u8 animMain(void) {
-    return 0;
+void animPosePaperPeraOff(s32 poseId) {
+    s32 work;
+    s32 offset;
+    s32 base;
+    s32 pose;
+    s32 paper;
+
+    work = wp;
+    offset = poseId * 0x170;
+    base = *(s32*)(work + 0x10);
+    pose = base;
+    pose += offset;
+    paper = *(s32*)(pose + 0x90) * 0x170;
+    *(u32*)(base + paper) &= ~8;
+}
+
+void animPoseSetStartTime(int poseId, s32 unused, s32 start, s32 end) {
+    s32 ptr;
+
+    ptr = *(s32*)(wp + 0x10) + poseId * 0x170 + 0x18;
+    *(s32*)(ptr + 4) = end;
+    *(s32*)ptr = start;
 }
 
 
-u8 animPosePaperPeraOff(int param_1) {
-    return 0;
-}
-
-
-u8 animPoseSetStartTime(int param_1, s32 param_2, s32 param_3, s32 param_4) {
-    return 0;
-}
-
-
-u8 animPoseSetMaterialEvtColor(int param_1, void* param_2) {
-    return 0;
+void animPoseSetMaterialEvtColor(s32 poseId, void* color) {
+    *(s32*)(*(s32*)(wp + 0x10) + poseId * 0x170 + 0xF0) = *(s32*)color;
 }
 
 
@@ -338,14 +436,40 @@ u8 pushGXModelMtx_TransformNode__(void* pNode) {
 
 
 void animSetPaperTexObj(void* param_1, void* param_2, void* param_3, void* param_4, void* param_5, void* param_6, s32 param_7) {
+    *(void**)(wp + 0x30) = param_4 != 0 ? param_1 : 0;
+    *(void**)(wp + 0x34) = param_5 != 0 ? param_2 : 0;
+    *(void**)(wp + 0x38) = param_6 != 0 ? param_3 : 0;
+    *(void**)(wp + 0x24) = param_4;
+    *(void**)(wp + 0x28) = param_5;
+    *(void**)(wp + 0x2C) = param_6;
+    *(s32*)(wp + 0xD8) = param_7;
+    *(s32*)(wp + 0xDC) = param_7;
 }
-
 
 void* animPoseGetCurrentAnim(int poseIdx) {
-    return 0;
+    s32 base;
+    s32 pose;
+    s32 group;
+    s32 anim;
+
+    pose = *(s32*)(wp + 0x10) + poseIdx * 0x170;
+    base = *(s32*)wp;
+    group = *(s32*)(pose + 0x10);
+    anim = *(s32*)(pose + 0x14);
+    base += group * 0x10;
+    return (void*)(*(s32*)(*(s32*)(*(s32*)(*(s32*)(base + 8) + 0xA0) + 0) + 0x1AC) + anim * 0x40);
 }
 
 
-void* animPoseGetAnimBaseDataPtr(int param_1) {
-    return 0;
+void* animPoseGetAnimBaseDataPtr(s32 poseId) {
+    s32 base;
+    s32 pose;
+    s32 group;
+
+    pose = *(s32*)(wp + 0x10);
+    pose += poseId * 0x170;
+    base = *(s32*)wp;
+    group = *(s32*)(pose + 0x10);
+    base += group * 0x10;
+    return *(void**)(*(s32*)(*(s32*)(base + 8) + 0xA0) + 0);
 }

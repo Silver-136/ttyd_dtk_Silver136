@@ -1,5 +1,7 @@
 #include "event/evt_light.h"
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_light_npc_lighting_onoff(void* event, s32 isFirstCall) {
     extern s32 evtGetValue(void* event, s32 value);
     extern void* npcNameToPtr(s32 name);
@@ -16,6 +18,9 @@ s32 evt_light_npc_lighting_onoff(void* event, s32 isFirstCall) {
     }
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_light_party_lighting_onoff(void* event, s32 isFirstCall) {
     extern s32 evtGetValue(void* event, s32 value);

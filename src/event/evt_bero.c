@@ -154,6 +154,8 @@ USER_FUNC(evt_bero_mario_go_wait) {
     return BeroMarioGO ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_bero_get_end_position) {
     extern f32 BeroEX;
     extern f32 BeroEY;
@@ -166,6 +168,11 @@ USER_FUNC(evt_bero_get_end_position) {
     return EVT_RETURN_DONE;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_bero_get_start_position) {
     extern f32 BeroSX;
     extern f32 BeroSY;
@@ -178,6 +185,11 @@ USER_FUNC(evt_bero_get_start_position) {
     return EVT_RETURN_DONE;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_bero_exec_onoff) {
     extern s32 BeroEXEC;
     s32* args = event->args;
@@ -192,6 +204,11 @@ USER_FUNC(evt_bero_exec_onoff) {
     return EVT_RETURN_DONE;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_bero_1stcheck) {
     extern s32 strcmp(const char* a, const char* b);
     extern const char str_sys_01_802c304c[7];
@@ -205,6 +222,11 @@ USER_FUNC(evt_bero_1stcheck) {
     return EVT_RETURN_DONE;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_bero_get_info_nextarea) {
     typedef struct BeroInfo {
         u8 pad[0x28];
@@ -221,6 +243,8 @@ USER_FUNC(evt_bero_get_info_nextarea) {
     return EVT_RETURN_DONE;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 bero_get_position_normal(void) {
     return 0;

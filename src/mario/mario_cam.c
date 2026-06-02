@@ -79,9 +79,12 @@ void marioCamZoomOffReq2(s32 value) {
 
 void marioUpdateCamCollision(void* pos) {
     void* mario = marioGetPtr();
-    *(s32*)((s32)mario + 0xF8) = *(s32*)((s32)pos + 0);
-    *(s32*)((s32)mario + 0xFC) = *(s32*)((s32)pos + 4);
-    *(s32*)((s32)mario + 0x100) = *(s32*)((s32)pos + 8);
+    s32 x = *(s32*)((s32)pos + 0);
+    s32 y = *(s32*)((s32)pos + 4);
+    *(s32*)((s32)mario + 0xF8) = x;
+    x = *(s32*)((s32)pos + 8);
+    *(s32*)((s32)mario + 0xFC) = y;
+    *(s32*)((s32)mario + 0x100) = x;
     *(u32*)((s32)mario + 4) |= 0x40000;
 }
 
@@ -104,14 +107,18 @@ void marioResetCamShiftRate(void) {
     void* mario = marioGetPtr();
     f32 a = float_0p03_80424ae0;
     f32 b = float_0p06_80424ae4;
-    f32 zero = float_0_80424aa4;
-    f32 two = float_2_80424ae8;
     u32* vec = vec3_802fa754;
     *(f32*)((s32)mario + 0x150) = a;
-    *(f32*)((s32)mario + 0x154) = b;
-    *(f32*)((s32)mario + 0x158) = b;
-    *(f32*)((s32)mario + 0x64) = zero;
-    *(f32*)((s32)mario + 0x68) = two;
+    {
+        f32 zero = float_0_80424aa4;
+        *(f32*)((s32)mario + 0x154) = b;
+        {
+            f32 two = float_2_80424ae8;
+            *(f32*)((s32)mario + 0x158) = b;
+            *(f32*)((s32)mario + 0x64) = zero;
+            *(f32*)((s32)mario + 0x68) = two;
+        }
+    }
     *(s32*)((s32)mario + 0x6C) = vec[0];
     *(s32*)((s32)mario + 0x70) = vec[1];
     *(s32*)((s32)mario + 0x74) = vec[2];

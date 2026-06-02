@@ -36,11 +36,14 @@ void BtlIcon_Delete(void* icon) {
 }
 
 void BattleIconEnd(void) {
-    s32 work = (s32)_battleWorkPointer;
+    s32 offset;
+    s32 work;
     s32 i;
-    s32 offset = 0;
 
-    for (i = 0; i < 0x10; i++, offset += 0x9C) {
+    i = 0;
+    offset = 0;
+    work = (s32)_battleWorkPointer;
+    for (; i < 0x10; i++, offset += 0x9C) {
         BtlIcon_Delete((void*)(work + offset + 0x182CC));
     }
 }

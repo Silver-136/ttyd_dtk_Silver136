@@ -89,11 +89,16 @@ s32 famicom_check(void* evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 party_color(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     evtSetValue(evt, args[0], pouchGetPartyColor(4));
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 winLectureCheck(void) {
     void* work = wp;

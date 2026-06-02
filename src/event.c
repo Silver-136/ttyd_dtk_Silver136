@@ -1089,11 +1089,32 @@ u8 stg3_34_init(void) {
 }
 
 
-u8 stg6_71_01_init(void) {
-    return 0;
+void stg6_71_01_init(void) {
+    extern void swSet(s32 flag);
+    extern void pouchReceiveMail(s32 mail);
+    extern void* gp;
+    u64 ticks;
+
+    swSet(0xE);
+    pouchReceiveMail(0x17);
+    ticks = *(u32*)0x800000F8;
+    ticks >>= 2;
+    ticks *= 0xB4;
+    *(u64*)((s32)gp + 0x20) += ticks;
 }
 
 
-u8 stg3_07_init__9(void) {
-    return 0;
+void stg3_07_init__9(void) {
+    extern void swSet(s32 flag);
+    extern void swClear(s32 flag);
+    extern void swByteSet(s32 byte, s32 value);
+
+    swSet(0x9B4);
+    swByteSet(0x1FB, 0x13);
+    swClear(0x954);
+    swSet(0x958);
+    swSet(0x95B);
+    swSet(0x95C);
+    swSet(0x9CD);
+    swSet(0x98B);
 }

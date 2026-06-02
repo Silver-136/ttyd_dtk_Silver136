@@ -6,13 +6,21 @@ s32 evtSetValue(EventEntry* evt, s32 target, s32 value);
 s32 evtGetValue(EventEntry* evt, s32 value);
 void evtEntryType(void* script, s32 a, s32 b, s32 type);
 extern s32 minigame_end[];
+extern s32 window_open[];
 
 void unk_802295a8(void* value) {
     unk_8041ed24 = value;
 }
 
-u32 evtYuuWindowEndChk(void* work) {
-    return (*(u32*)work >> 3) & 1;
+void evtYuuWindow(void) {
+    void* script = window_open;
+
+    *(u32*)yuwp &= ~8;
+    evtEntryType(script, 0, 0, 0);
+}
+
+u32 evtYuuWindowEndChk(void) {
+    return (*(u32*)yuwp >> 3) & 1;
 }
 
 USER_FUNC(unk_802295b0) {
@@ -91,6 +99,8 @@ USER_FUNC(yuugijou_montemedal_disp_onoff) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(yuugijou_add_montemedal_moto) {
     s32* args = event->args;
     evtGetValue(event, args[0]);
@@ -99,6 +109,9 @@ USER_FUNC(yuugijou_add_montemedal_moto) {
     }
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 USER_FUNC(yuugijou_get_montemedal_keep) {
     s32* args = event->args;
@@ -114,4 +127,3 @@ USER_FUNC(yuugijou_get_montemedal) {
     evtSetValue(event, event->args[0], *(s32*)((s32)yuwp + 8));
     return 2;
 }
-

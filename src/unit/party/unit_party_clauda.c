@@ -1,5 +1,7 @@
 #include "unit/party/unit_party_clauda.h"
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 _check_blow_rate(void* evt) {
     extern void* _battleWorkPointer;
     extern s32 evtGetValue(void* evt, s32 arg);
@@ -15,6 +17,9 @@ s32 _check_blow_rate(void* evt) {
     evtSetValue(evt, out, *(u8*)((s32)*(void**)((s32)unit + 0x144) + 0x10));
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 void __makeTechMenuFunc(void* commandWork, s32 param_2) {

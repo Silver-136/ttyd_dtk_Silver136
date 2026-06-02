@@ -7,13 +7,18 @@ s32 battleAcResult_Repeatedly(void* wp) {
 }
 
 void battleAcDelete_Repeatedly(void* wp) {
-    if (*(s32*)((s32)wp + 0x1CC8) == 10) {
-        *(u32*)((s32)wp + 0xEF4) &= ~0x20000000;
+    void* callArg;
+
+    switch (*(s32*)((s32)wp + 0x1CC8)) {
+        case 10:
+            *(u32*)((s32)wp + 0xEF4) &= ~0x20000000;
+            break;
+        default:
+            break;
     }
-    BattleAcGaugeSeDelete(wp);
+    BattleAcGaugeSeDelete(callArg);
     *(s32*)((s32)wp + 0x1C9C) = 1002;
 }
-
 
 s32 battleAcMain_Repeatedly(void* battleWork) {
     return 0;

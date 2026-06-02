@@ -46,6 +46,8 @@ s32 evt_audience_delete(void* evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_audience_entry(void* evt) {
     s32* args;
     s32 id;
@@ -61,6 +63,11 @@ s32 evt_audience_entry(void* evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_audience_set_animpose(void* evt) {
     s32* args;
     s32 id;
@@ -78,6 +85,11 @@ s32 evt_audience_set_animpose(void* evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_audience_get_position(void* evt) {
     s32* args;
     void* audience;
@@ -93,6 +105,11 @@ s32 evt_audience_get_position(void* evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_audience_flag_off(void* evt) {
     s32* args;
     s32 id;
@@ -105,11 +122,16 @@ s32 evt_audience_flag_off(void* evt) {
     flag = evtGetValue(evt, args[1]);
 
     audience = BattleAudienceGetPtr(id);
-    *(u32*)audience &= ~flag;
+    *(s32*)audience = *(s32*)audience & ~flag;
 
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_audience_flag_on(void* evt) {
     s32* args;
     s32 id;
@@ -126,6 +148,9 @@ s32 evt_audience_flag_on(void* evt) {
 
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_audience_base_flag_on(void* evt) {
     s32 flag;

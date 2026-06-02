@@ -76,20 +76,23 @@ ok:
 }
 
 void* npcGetBtlSetupWork(void* npc, s32 index) {
-    s32 addr = (s32)npc + index * 4;
-    return *(void**)(addr + 0x2CC);
+    s32 offset = index << 2;
+    npc = (void*)((s32)npc + offset);
+    return *(void**)((s32)npc + 0x2CC);
 }
 
 void npcSetBtlSetupWork(void* npc, s32 index, void* value) {
-    s32 addr = (s32)npc + index * 4;
-    *(void**)(addr + 0x2CC) = value;
+    s32 offset = index << 2;
+    npc = (void*)((s32)npc + offset);
+    *(void**)((s32)npc + 0x2CC) = value;
 }
 
 void npcSetSlave(void* master, void* slave, s32 index) {
-    s32 addr;
+    s32 offset;
     *(void**)((s32)slave + 0x32C) = master;
-    addr = (s32)master + index * 4;
-    *(void**)(addr + 0x330) = slave;
+    offset = index << 2;
+    master = (void*)((s32)master + offset);
+    *(void**)((s32)master + 0x330) = slave;
 }
 
 f32 npcTransRytoFaceDir(void* npc) {

@@ -12,6 +12,8 @@ s32 evt_img_entry(void* event, s32 isFirstCall) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_img_set_shadow(void* event, s32 isFirstCall) {
     extern s32 evtGetValue(void* event, s32 value);
     extern void* imgNameToPtr(s32 name, s32 flag);
@@ -26,6 +28,11 @@ s32 evt_img_set_shadow(void* event, s32 isFirstCall) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 N_evt_img_set_z(void* event, s32 isFirstCall) {
     extern s32 evtGetValue(void* event, s32 value);
     extern f32 evtGetFloat(void* event, s32 value);
@@ -40,6 +47,9 @@ s32 N_evt_img_set_z(void* event, s32 isFirstCall) {
     *(f32*)((s32)img + 0xFC) = z;
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 s32 evt_img_alloc_capture(void* pEvt) {

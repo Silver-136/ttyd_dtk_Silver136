@@ -104,6 +104,8 @@ USER_FUNC(evt_pouch_mario_recovery) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(L_evt_pouch_get_hp) {
     extern void evtSetValue(EventEntry* event, s32 dst, s32 value);
     extern s32 pouchGetHP(void);
@@ -176,6 +178,11 @@ USER_FUNC(evt_pouch_get_yoshiname) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_pouch_check_item) {
     extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void evtSetValue(EventEntry* event, s32 dst, s32 value);
@@ -184,6 +191,9 @@ USER_FUNC(evt_pouch_check_item) {
     evtSetValue(event, args[1], pouchCheckItem(evtGetValue(event, args[0])));
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 s32 N_evt_pouch_remove_item_index(void* pEvt) {

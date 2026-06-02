@@ -60,16 +60,22 @@ USER_FUNC(evt_sub_countdown_set_restart_time) {
 
 USER_FUNC(bgm_start_wait) {
     extern s32 psndBGMStartCheck(s32);
-    return psndBGMStartCheck(1) ? 2 : 0;
+    s32 done = psndBGMStartCheck(1);
+    done = (-done | done) >> 31;
+    return 2 & done;
 }
 
 USER_FUNC(stageclear_wait) {
     extern void* effNameToPtr(const char* name);
     extern s32 effStageClearEndChk(void* eff);
     extern const char str_sub_clear_802c16ec[];
-    return effStageClearEndChk(effNameToPtr(str_sub_clear_802c16ec)) ? 2 : 0;
+    s32 done = effStageClearEndChk(effNameToPtr(str_sub_clear_802c16ec));
+    done = (-done | done) >> 31;
+    return 2 & done;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_key_get_button) {
     extern s32 keyGetButton(s32);
     s32* args = event->args;
@@ -77,6 +83,11 @@ USER_FUNC(evt_key_get_button) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_key_get_buttontrg) {
     extern s32 keyGetButtonTrg(s32);
     s32* args = event->args;
@@ -84,6 +95,11 @@ USER_FUNC(evt_key_get_buttontrg) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_key_get_dir) {
     extern s32 keyGetDir(s32);
     s32* args = event->args;
@@ -91,6 +107,11 @@ USER_FUNC(evt_key_get_dir) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_sub_countdown_start) {
     extern void countDownStart(s32 time, s32 flags);
     s32* args = event->args;
@@ -100,6 +121,11 @@ USER_FUNC(evt_sub_countdown_start) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_sub_countdown_get_status) {
     extern s32 countDownGetStatus(void);
     s32* args = event->args;
@@ -107,11 +133,14 @@ USER_FUNC(evt_sub_countdown_get_status) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
 USER_FUNC(evt_sub_system_flag_onoff) {
     extern void* gp;
     s32* args = event->args;
     s32 on = evtGetValue(event, args[0]);
-    s32 flag = args[1];
+    u32 flag = args[1];
     if (on) {
         *(u32*)gp |= flag;
     } else {
@@ -120,6 +149,8 @@ USER_FUNC(evt_sub_system_flag_onoff) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_sub_status_gauge_check_update) {
     extern s32 statusWinCheckUpdate(void);
     s32* args = event->args;
@@ -131,6 +162,11 @@ USER_FUNC(evt_sub_status_gauge_check_update) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(mail_evt_gor_04_keyoff_check) {
     extern s32 marioCtrlOffChk(void);
     extern s32 marioKeyOffChk(void);
@@ -141,6 +177,11 @@ USER_FUNC(mail_evt_gor_04_keyoff_check) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_sub_countdown_flag_onoff) {
     extern void countDownFlagOn(u16 flag);
     extern void countDownFlagOff(u16 flag);
@@ -154,6 +195,9 @@ USER_FUNC(evt_sub_countdown_flag_onoff) {
     }
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 s32 evt_sub_get_coin(void* evt, int param_2) {

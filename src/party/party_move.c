@@ -108,8 +108,8 @@ void N_partyPlaySfxPartyLanding1(void* party) {
 
 void unk_800cbf84(void* party, f32 value) {
     void* move;
-    f32 base;
     f32 mult;
+    f32 base;
 
     move = *(void**)((s32)party + 0x160);
     base = value * *(f32*)((s32)move + 0x228);

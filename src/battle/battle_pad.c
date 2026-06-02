@@ -62,19 +62,20 @@ s32 BattlePadCheckRecordTrigger(s32 recordIndex, s32 mask) {
 }
 
 void BattlePadInit(void) {
-    s32 i;
     s32 offset;
-    void* battleWork;
+    s32 i;
+    s32 addr;
 
-    battleWork = _battleWorkPointer;
+    i = 0;
     offset = 0;
 
-    for (i = 0; i < 4; i++) {
-        BtlPad_WorkInit((void*)((s32)battleWork + 0xF2C + offset));
+    for (; i < 4; i++) {
+        addr = offset + 0xF2C;
+        addr = (s32)_battleWorkPointer + addr;
+        BtlPad_WorkInit((void*)addr);
         offset += 0x1FC;
     }
 }
-
 
 void BtlPad_WorkUpdate(void* work, s32 flags) {
 }

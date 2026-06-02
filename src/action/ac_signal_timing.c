@@ -15,9 +15,10 @@ void battleAcDelete_SignalTiming(void* wp) {
 s32 _get_ok_frame_range(s32 idx) {
     void* wp = _battleWorkPointer;
 
-    if (*(s32*)((s32)wp + 0x1CCC) == 1) {
-        return *(s32*)((s32)wp + 0x1CE4) + ac_signaltiming_ok_frame_range_2[idx];
+    switch (*(s32*)((s32)wp + 0x1CCC)) {
+        case 1:
+            return *(s32*)((s32)wp + 0x1CE4) + ac_signaltiming_ok_frame_range_2[idx];
+        default:
+            return *(s32*)((s32)wp + 0x1CE4) + ac_signaltiming_ok_frame_range[idx];
     }
-    return *(s32*)((s32)wp + 0x1CE4) + ac_signaltiming_ok_frame_range[idx];
 }
-

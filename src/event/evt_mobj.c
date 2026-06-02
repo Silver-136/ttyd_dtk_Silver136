@@ -43,11 +43,16 @@ s32 kpa_clear_jump_data(void) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_mobj_check(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     evtSetValue(evt, args[1], (s32)mobjNameToPtrNoAssert(evtGetValue(evt, args[0])));
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 kpa_get_hata_name(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
@@ -60,11 +65,16 @@ s32 kpa_get_hata_name(void* evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 kpa_get_level(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     evtSetValue(evt, args[0], kpaGetLevel());
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 kpa_get_pole_name(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
@@ -77,11 +87,16 @@ s32 kpa_get_pole_name(void* evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 kpa_get_width(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     evtSetValue(evt, args[0], (s32)*(f32*)((s32)marioGetPtr() + 0x1B8));
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 kpa_disp_pole_init(void) {
     f32 zero;
@@ -94,6 +109,8 @@ s32 kpa_disp_pole_init(void) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_mobj_get_kindname(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     void* mobj = mobjNameToPtr(evtGetValue(evt, args[0]));
@@ -101,6 +118,11 @@ s32 evt_mobj_get_kindname(void* evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_mobj_get_x_position(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
@@ -114,6 +136,11 @@ s32 evt_mobj_get_x_position(void* evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_mobj_get_y_position(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
@@ -127,6 +154,11 @@ s32 evt_mobj_get_y_position(void* evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_mobj_get_z_position(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
@@ -140,6 +172,11 @@ s32 evt_mobj_get_z_position(void* evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_mobj_wait_animation_end(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
@@ -154,6 +191,9 @@ s32 evt_mobj_wait_animation_end(void* evt) {
     }
     return 0;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void kpa_disp_pole_score(void) {
     u32 color;

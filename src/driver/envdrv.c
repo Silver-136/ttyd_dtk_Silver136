@@ -42,8 +42,8 @@ void envInit(void) {
 }
 
 void envDisp(void) {
-    f32 proj[7];
     f32 vp[6];
+    f32 proj[7];
     GXGetViewportv(vp);
     GXGetProjectionv(proj);
     envDisp_DepthOfField();

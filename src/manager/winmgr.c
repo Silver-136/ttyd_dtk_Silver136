@@ -99,8 +99,11 @@ void winMgrSelectDelete(void* select) {
 }
 
 s32 unk_8023d5e4(void* a, void* b) {
-    u16 av = *(u16*)(itemDataTable + (*(u16*)((s32)a + 2) * 0x28) + 0x18);
-    u16 bv = *(u16*)(itemDataTable + (*(u16*)((s32)b + 2) * 0x28) + 0x18);
+    u16 ai = *(u16*)((s32)a + 2);
+    u16 bi = *(u16*)((s32)b + 2);
+    u8* values = itemDataTable + 0x18;
+    u16 av = *(u16*)(values + ai * 0x28);
+    u16 bv = *(u16*)(values + bi * 0x28);
     if (av > bv) {
         return 1;
     }
@@ -118,4 +121,25 @@ void select_disp3(void* win) {
         *(char**)((s32)win + 0x34) = msgSearch(*(char**)(itemDataTable + item * 0x28 + 8));
         winMgrHelpDraw(win);
     }
+}
+
+s32 winMgrSelect(void* select) {
+    u16 flags = *(u16*)select;
+
+    if (flags & 0x1000) {
+        if (flags & 0x2000) {
+            return -1;
+        }
+        if (*(s32*)((s32)select + 0x38) != 0 && *(s32*)((s32)select + 0xC) == 0 && (flags & 0x100)) {
+            return -1;
+        }
+        {
+            s32 offset = *(s32*)((s32)select + 0xC) << 2;
+            void* list = *(void**)((s32)select + 0x30);
+
+            list = (void*)((s32)list + offset);
+            return *(u16*)((s32)list + 2);
+        }
+    }
+    return 0;
 }

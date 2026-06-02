@@ -13,12 +13,19 @@ extern char str_SFX_VOICE_MARIO_RELI_802f4250[];
 extern char str_SFX_VOICE_MARIO_RELI_802f4268[];
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 _get_mario_hammer_lv(void* event) {
-    s32* args = *(s32**)((s32)event + 0x18);
-    evtSetValue(event, args[0], *(s8*)((s32)pouchGetPtr() + 0x99));
+    s32 arg0 = **(s32**)((s32)event + 0x18);
+    evtSetValue(event, arg0, *(s8*)((s32)pouchGetPtr() + 0x99));
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 _get_local_frame(void* event) {
     s32 arg0 = **(s32**)((s32)event + 0x18);
     void* parts = BattleGetUnitPartsPtr(BattleTransID(event, -2), 1);
@@ -26,6 +33,9 @@ s32 _get_local_frame(void* event) {
     evtSetValue(event, arg0, (s32)*(f32*)((s32)pose + 0x24));
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void mario_pinch_pose_sound_callback(void* unit) {
     if (*(s32*)((s32)unit + 0x238) & 1) {

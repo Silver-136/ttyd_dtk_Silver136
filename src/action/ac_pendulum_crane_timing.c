@@ -29,7 +29,17 @@ s32 _get_angle_hp(s32 hp) {
 }
 
 s32 _get_angle_rate(f32 angle) {
-    s32 value = (s32)((float_100_80426ec0 * (compAngle(float_0_80426eb8, angle) + float_45_80426ebc)) / float_90_80426ec4);
+    f32 base;
+    f32 diff;
+    f32 sum;
+    f32 scale;
+    s32 value;
+
+    base = float_0_80426eb8;
+    diff = compAngle(base, angle);
+    sum = diff + float_45_80426ebc;
+    scale = float_100_80426ec0;
+    value = (s32)((scale * sum) / float_90_80426ec4);
 
     if (value < 0) {
         value = 0;

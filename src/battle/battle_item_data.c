@@ -7,10 +7,14 @@ void _disp_item_icon(void* unused, void* work) {
 
     void* pos = (void*)((s32)*(void**)((s32)work + 0x78) + 0xC);
     s32 item = *(s32*)((s32)work + 0x7C);
+    s32 offset;
     u8* data = itemDataTable;
-    s32 icon = *(u16*)(data + item * 0x28 + 0x20);
+    s32 icon;
     f32 scale = float_1_80422800;
 
+    offset = item * 0x28;
+    data += offset;
+    icon = *(u16*)(data + 0x20);
     iconDispGx(pos, 0, icon, scale);
 }
 

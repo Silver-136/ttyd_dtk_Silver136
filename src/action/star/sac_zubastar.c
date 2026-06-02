@@ -3,6 +3,10 @@
 extern void* _battleWorkPointer;
 
 void* memset(void* dst, int value, u32 size);
+void GXSetTexCopySrc(s32 left, s32 top, s32 wd, s32 ht);
+void GXSetTexCopyDst(s32 wd, s32 ht, s32 fmt, s32 mipmap);
+void GXCopyTex(void* dest, s32 clear);
+void GXPixModeSync(void);
 
 void* GetZubaStarPtr(void) {
     return (void*)((s32)_battleWorkPointer + 0x1F4C);
@@ -30,4 +34,13 @@ s32 star_stone_appear(void) {
 
 s32 weaponGetPower_ZubaStar(void* unit, s32* weapon) {
     return weapon[8 + *(s32*)((s32)GetZubaStarPtr() + 0x10)];
+}
+
+void zubastar_capture(void) {
+    void* work = GetZubaStarPtr();
+
+    GXSetTexCopySrc(0xD0, 0, 0x190, 0x1E0);
+    GXSetTexCopyDst(0x190, 0x1E0, 4, 0);
+    GXCopyTex(*(void**)*(s32*)((s32)work + 0x588), 0);
+    GXPixModeSync();
 }

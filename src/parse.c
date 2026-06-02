@@ -12,20 +12,45 @@ u32 parsePush(char* param_1) {
 
 
 int parseTagGet1(char* param_1, int param_2, char* param_3, int param_4) {
-    return 0;
+    extern char parse[];
+    int ret;
+
+    if ((int)parsePush(param_1) != 0) {
+        ret = ((int (*)())parseGet1Next)(param_2, param_3);
+        *(s32*)(parse + 0x54) = *(s32*)(parse + 0x54) - 1;
+    } else {
+        ret = 0;
+    }
+
+    return ret;
 }
 
 
-u8 parsePopNext(void) {
-    return 0;
+void parsePopNext(void) {
+    extern char parse[];
+    char* base;
+    s32 index;
+
+    base = parse;
+    index = *(s32*)(base + 0x54) - 1;
+    *(s32*)(base + 0x54) = index;
+    *(s32*)(base + index * 4 + 4) = *(s32*)(base + index * 4 + 0x30);
 }
 
 
 u8 parseInit(s32 param_1, s32 param_2) {
-    return 0;
+    extern char parse[];
+
+    *(s32*)(parse + 0) = param_1;
+    *(s32*)(parse + 0x54) = 0;
+    *(s32*)(parse + 4) = 0;
+    *(s32*)(parse + 0x2C) = param_2;
 }
 
+void parsePop(void) {
+    extern char parse[];
+    s32 count;
 
-u8 parsePop(void) {
-    return 0;
+    count = *(s32*)(parse + 0x54);
+    *(s32*)(parse + 0x54) = count - 1;
 }

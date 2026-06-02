@@ -46,10 +46,12 @@ void mobjReset(s32 alt) {
 
 void mobjKoopaOn(void) {
     if (koopaRunFlag == 0) {
+        MobjSet* set = &work.koopa;
+
         koopaRunFlag = 1;
-        work.koopa.count = 0x80;
-        work.koopa.entries = _mapAlloc(mapalloc_base_ptr, 0x80 * 0x23C);
-        memset(work.koopa.entries, 0, work.koopa.count * 0x23C);
+        set->count = 0x80;
+        set->entries = _mapAlloc(mapalloc_base_ptr, set->count * 0x23C);
+        memset(set->entries, 0, set->count * 0x23C);
     }
 }
 

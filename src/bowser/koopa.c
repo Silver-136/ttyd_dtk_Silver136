@@ -85,8 +85,8 @@ void kpaPauseSE2(void) {
 }
 
 s32 kpaHipAttackCheck(void) {
-    void* mario = marioGetPtr();
     register s32 ret = 0;
+    void* mario = marioGetPtr();
 
     if ((s32)*(u8*)((s32)mario + 0x3C) != 2) {
         return 0;
@@ -98,8 +98,8 @@ s32 kpaHipAttackCheck(void) {
 }
 
 s32 kpaGetLevel(void) {
-    void* mario = marioGetPtr();
     register s32 level = 0;
+    void* mario = marioGetPtr();
 
     if ((s32)*(u8*)((s32)mario + 0x3C) == 2) {
         level = *(s32*)((s32)*(void**)((s32)mario + 0x298) + 4);
@@ -110,8 +110,8 @@ s32 kpaGetLevel(void) {
 void kpaSetLevel(s32 level) {
     void* mario = marioGetPtr();
     void* work;
-    f32 scale;
     f32 one;
+    f32 scale;
 
     if ((s32)*(u8*)((s32)mario + 0x3C) == 2) {
         work = *(void**)((s32)mario + 0x298);
@@ -151,16 +151,23 @@ void kpaMutekiOn(void) {
     *(u32*)work |= 0x10000;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void kpaChgPose(void* pose3d, void* pose2d) {
+    void* p2d = pose2d;
+    void* p3d = pose3d;
     void* pose;
 
     if ((s32)((*(u32*)((s32)marioGetPtr() + 0x14) & 1) ^ 1) == 1) {
-        pose = pose3d;
+        pose = p3d;
     } else {
-        pose = pose2d;
+        pose = p2d;
     }
     marioChgPose(pose);
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 kpaFireAttackCheck(void) {
     void* mario = marioGetPtr();
@@ -178,22 +185,27 @@ s32 kpaFireAttackCheck(void) {
 
 void kpaSetFallPara(void) {
     void* mario = marioGetPtr();
-    f32 value;
+    f32 valueB;
+    f32 valueA;
 
     if ((*(u16*)((s32)mario + 0x24A) & 0x100) != 0) {
-        value = float_neg0p05_80426750;
-        *(f32*)((s32)mario + 0x7C) = value;
-        *(f32*)((s32)mario + 0x80) = float_neg0p08_80426754;
-        value = float_neg0p006_80426758;
-        *(f32*)((s32)mario + 0x84) = value;
-        *(f32*)((s32)mario + 0x88) = float_neg0p002_8042675c;
+        valueB = float_neg0p08_80426754;
+        valueA = float_neg0p05_80426750;
+        *(f32*)((s32)mario + 0x7C) = valueA;
+        valueA = float_neg0p006_80426758;
+        *(f32*)((s32)mario + 0x80) = valueB;
+        valueB = float_neg0p002_8042675c;
+        *(f32*)((s32)mario + 0x84) = valueA;
+        *(f32*)((s32)mario + 0x88) = valueB;
     } else {
-        value = float_neg0p1_80426760;
-        *(f32*)((s32)mario + 0x7C) = value;
-        *(f32*)((s32)mario + 0x80) = float_neg0p2_80426764;
-        value = float_neg0p024_80426768;
-        *(f32*)((s32)mario + 0x84) = value;
-        *(f32*)((s32)mario + 0x88) = float_neg0p01_8042676c;
+        valueB = float_neg0p2_80426764;
+        valueA = float_neg0p1_80426760;
+        *(f32*)((s32)mario + 0x7C) = valueA;
+        valueA = float_neg0p024_80426768;
+        *(f32*)((s32)mario + 0x80) = valueB;
+        valueB = float_neg0p01_8042676c;
+        *(f32*)((s32)mario + 0x84) = valueA;
+        *(f32*)((s32)mario + 0x88) = valueB;
     }
 }
 

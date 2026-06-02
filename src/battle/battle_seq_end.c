@@ -19,6 +19,8 @@ extern void* BattleSearchObjectPtr();
 extern void iconDelete();
 extern s32 irand();
 extern void BattleAudienceSoundWhistle();
+extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
+extern void* BtlUnit_GetData(void* unit, s32 dataId);
 
 typedef struct RankUpData {
     s16 level;
@@ -196,6 +198,25 @@ void _audience_Whistle_control(void) {
         if (timer < 0) {
             *(s32*)((s32)work + 0x2A0) = irand(120) + 60;
             BattleAudienceSoundWhistle();
+        }
+    }
+}
+
+void _ExecAllUnitBattleEndEvent(void) {
+    void* battleWork = _battleWorkPointer;
+    s32 i;
+
+    for (i = 0; i < 0x40; i++) {
+        void* unit = BattleGetUnitPtr(battleWork, i);
+
+        if (unit != NULL) {
+            void* data = BtlUnit_GetData(unit, 0x3F);
+
+            if (data != NULL) {
+                void* evt = evtEntry(data, 10, 0);
+
+                *(s32*)((s32)evt + 0x160) = *(s32*)unit;
+            }
         }
     }
 }

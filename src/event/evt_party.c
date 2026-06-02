@@ -66,9 +66,11 @@ USER_FUNC(evt_party_sleep_on) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_party_set_breed_pose) {
-    s32* args = event->args;
     void* party;
+    s32* args = event->args;
     s32 poseId;
     s32 partyId = 1;
     if (args[0] == 0) {
@@ -82,6 +84,11 @@ USER_FUNC(evt_party_set_breed_pose) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_party_get_dispdir) {
     s32* args = event->args;
     void* party;
@@ -98,9 +105,14 @@ USER_FUNC(evt_party_get_dispdir) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_party_set_camid) {
-    s32* args = event->args;
     void* party;
+    s32* args = event->args;
     s32 partyId = 1;
     if (args[0] == 0) {
         partyId = partyCtrlNo;
@@ -112,6 +124,9 @@ USER_FUNC(evt_party_set_camid) {
     partySetCamId(party, evtGetValue(event, args[1]));
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 USER_FUNC(evt_party_init_camid) {
     s32* args = event->args;
@@ -128,6 +143,8 @@ USER_FUNC(evt_party_init_camid) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_party_cont_onoff) {
     s32* args = event->args;
     void* party;
@@ -146,6 +163,9 @@ USER_FUNC(evt_party_cont_onoff) {
     }
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 u8 evt_party_jump_pos(s32 pEvt, s32 param_2) {

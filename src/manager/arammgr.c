@@ -74,9 +74,10 @@ void* aramMgrToAram(u32 param_1, int param_2) {
     void* entry = aramMgrToAramAsync(param_1, param_2);
 
     while (1) {
-        if (*(u16*)entry & 4) {
+        if (*(volatile u16*)entry & 4) {
             break;
         }
     }
     return entry;
 }
+

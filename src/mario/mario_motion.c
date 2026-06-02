@@ -1,13 +1,13 @@
 #include "mario/mario_motion.h"
 
 extern f32 float_0_804209a0;
-char str_M_I_U_80420a14[] = "M_I_U";
+const char str_M_I_U_80420a14[] = "M_I_U";
 extern void (*marioMotTbl[][3])(void);
 
 void* marioGetPtr(void);
 void marioReInit_ship(void);
 void marioAdjustMoveDir(void);
-void marioChgPose(void* pose);
+void marioChgPose(const void* pose);
 
 s32 L_marioChkRub(void) {
     return 0;
@@ -58,6 +58,8 @@ void mot_getItem(void) {
     }
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void marioMotion(void) {
     void* mario = marioGetPtr();
     *(s32*)((s32)mario + 0x200) = 0;
@@ -65,6 +67,9 @@ void marioMotion(void) {
         marioMotTbl[*(u16*)((s32)mario + 0x2E)][0]();
     } while (*(u32*)((s32)mario + 0xC) & 1);
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 u8 marioLandOn(void) {

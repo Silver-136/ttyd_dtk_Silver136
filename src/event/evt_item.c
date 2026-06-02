@@ -47,6 +47,8 @@ USER_FUNC(evt_item_flag_on) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_item_set_bound_limit) {
     s32* args = event->args;
     void* item = itemNameToPtr(evtGetValue(event, args[0]));
@@ -58,6 +60,11 @@ USER_FUNC(evt_item_set_bound_limit) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_item_set_bound_next_dir) {
     s32* args = event->args;
     void* item = itemNameToPtr(evtGetValue(event, args[0]));
@@ -69,6 +76,11 @@ USER_FUNC(evt_item_set_bound_next_dir) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_item_set_bound_next_speed) {
     s32* args = event->args;
     void* item = itemNameToPtr(evtGetValue(event, args[0]));
@@ -80,6 +92,11 @@ USER_FUNC(evt_item_set_bound_next_speed) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_item_set_bound_rate) {
     s32* args = event->args;
     void* item = itemNameToPtr(evtGetValue(event, args[0]));
@@ -91,6 +108,11 @@ USER_FUNC(evt_item_set_bound_rate) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_item_set_gravity) {
     s32* args = event->args;
     void* item = itemNameToPtr(evtGetValue(event, args[0]));
@@ -102,6 +124,11 @@ USER_FUNC(evt_item_set_gravity) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_item_set_jump_power) {
     s32* args = event->args;
     void* item = itemNameToPtr(evtGetValue(event, args[0]));
@@ -113,6 +140,11 @@ USER_FUNC(evt_item_set_jump_power) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_item_delete_check) {
     s32* args = event->args;
     if (itemNameToPtr(evtGetValue(event, args[0])) != 0) {
@@ -123,6 +155,11 @@ USER_FUNC(evt_item_delete_check) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_item_set_alpha) {
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
@@ -135,6 +172,11 @@ USER_FUNC(evt_item_set_alpha) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_item_set_scale) {
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
@@ -146,6 +188,9 @@ USER_FUNC(evt_item_set_scale) {
     *(f32*)((s32)item + 0x48) = scale;
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 u8 evt_item_get_important_item(s32 pEvt, s32 param_2) {

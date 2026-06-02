@@ -25,8 +25,8 @@ s32 post_kurio_use(void) {
     *(u8*)((s32)party + 0x39) = 0x14;
     marioStSystemLevel(0);
     psndClearFlag(0x80);
-    *(u32*)party &= ~0x2000000;
     *(u32*)party &= ~0x4000000;
+    *(u32*)party &= ~0x2000000;
     return 2;
 }
 
@@ -56,6 +56,7 @@ u8 kuribo_init(void* pParty) {
 
 
 void kuribo_use_post(void* pParty) {
-    *(u32*)pParty &= ~0x2000000;
     *(u32*)pParty &= ~0x4000000;
+    *(u32*)pParty &= ~0x2000000;
 }
+

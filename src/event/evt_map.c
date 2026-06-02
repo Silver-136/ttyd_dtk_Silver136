@@ -43,6 +43,8 @@ USER_FUNC(evt_map_fog_onoff) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_map_set_playrate) {
     s32* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -51,6 +53,11 @@ USER_FUNC(evt_map_set_playrate) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_map_set_tevcallback) {
     s32* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -59,6 +66,11 @@ USER_FUNC(evt_map_set_tevcallback) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_mapobj_clear_offscreen) {
     s32* args = event->args;
     s32 group = evtGetValue(event, args[0]);
@@ -71,6 +83,11 @@ USER_FUNC(evt_mapobj_clear_offscreen) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_map_checkanim) {
     s32* args = event->args;
     s32 done;
@@ -81,6 +98,9 @@ USER_FUNC(evt_map_checkanim) {
     evtSetValue(event, args[2], (s32)frame);
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 s32 evt_map_blend_set_flag(void* pEvt) {

@@ -11,7 +11,11 @@ void cardWriteHeader(void);
 void cardCreate(void);
 void cardFormat(void);
 void cardErase(s32 fileNo);
+void cardWrite(void* saveData);
+void cardReadAll(void);
 s32 cardIsExec(void);
+s32 unk_800b2bdc(void);
+s32 cardGetCode(void);
 
 s32 memcard_ipl(void) {
     *(s32*)((s32)gp + 0x1278) = 2;
@@ -74,3 +78,56 @@ s32 memcard_delete(EventEntry* event, BOOL firstRun) {
     return 2;
 }
 
+s32 memcard_write(EventEntry* event, BOOL firstRun) {
+    if (firstRun != 0) {
+        cardWrite(*(void**)((s32)gp + 0x11D0));
+    }
+    if (cardIsExec() != 0) {
+        return 0;
+    }
+    return 2;
+}
+
+s32 memcard_load(EventEntry* event, BOOL firstRun) {
+    if (firstRun != 0) {
+        cardBufReset();
+        cardReadAll();
+    }
+    if (cardIsExec() != 0) {
+        return 0;
+    }
+    return 2;
+}
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(unk_8025c3a4) {
+    s32* args;
+
+    args = event->args;
+    if (unk_800b2bdc() != 0) {
+        evtSetValue(event, args[0], 1);
+    } else {
+        evtSetValue(event, args[0], 0);
+    }
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(memcard_code) {
+    s32* args;
+    s32 code;
+
+    args = event->args;
+    code = cardGetCode();
+    if (cardIsExec() != 0) {
+        return 0;
+    }
+    evtSetValue(event, args[0], code);
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on

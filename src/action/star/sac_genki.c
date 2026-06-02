@@ -5,6 +5,8 @@ extern void* _battleWorkPointer;
 s32 evtSetValue(EventEntry* event, s32 target, s32 value);
 void statusWinOpen(void);
 void* BattleGetPartyPtr(void* battleWork);
+void main_star0(s32 index);
+void main_star1(void);
 
 void disp_2D(void) {
 }
@@ -42,6 +44,23 @@ USER_FUNC(star_stone_appear) {
     return 2;
 }
 
+USER_FUNC(star_appear) {
+    void* work = get_ptr();
+    s32 offset = 0;
+    s32 zero = offset;
+    s32 one = 1;
+    s32 i;
+
+    for (i = 0; i < 7; i++) {
+        void* entry = (void*)((s32)work + offset + 0x510);
+
+        offset += 0x64;
+        *(s32*)entry = one;
+        *(s32*)((s32)entry + 8) = zero;
+    }
+    return 2;
+}
+
 USER_FUNC(start_game) {
     void* wp;
 
@@ -64,13 +83,14 @@ s32 object_get_num(void) {
     s32 entryOffset;
 
     work = get_ptr();
-    offset = 0;
     count = 0;
+    offset = 0;
 
     for (i = 0; i < 10; i++) {
-        entryOffset = offset + 0x358;
+        entryOffset = offset;
+        entryOffset += 0x358;
 
-        if (*(s32*)((s32)work + entryOffset) == 2) {
+        if (*(s32*)((char*)work + entryOffset) == 2) {
             count++;
         }
 
@@ -119,4 +139,17 @@ USER_FUNC(get_score) {
     evtSetValue(event, args[2], value);
 
     return 2;
+}
+
+void main_star(void) {
+    void* work = get_ptr();
+    s32 i;
+
+    if (*(s32*)((s32)work + 0xC) == 0) {
+        for (i = 0; i < 7; i++) {
+            main_star0(i);
+        }
+    } else {
+        main_star1();
+    }
 }

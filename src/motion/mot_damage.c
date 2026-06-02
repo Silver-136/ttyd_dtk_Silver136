@@ -17,24 +17,34 @@ void set_damage_root_ypos(f32 y) {
 }
 
 void marioDmgRetQuakeOn(void) {
-    void* script = quake_bgmode_evt;
+    void* script;
+
     if (marioBgmodeChk() == 0) {
         script = quake_evt;
+    } else {
+        script = quake_bgmode_evt;
     }
     evtEntry(script, 0, 0);
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void marioSetSplash(s32 type, f32* pos) {
+    f32* p = pos;
+
     if (type == 0) {
-        psndSFXOn_3D(0x194, pos);
+        psndSFXOn_3D(0x194, p);
     }
     if (marioBgmodeChk() != 1) {
-        effSplashEntry(((u32)(-type) | (u32)type) >> 31, pos[0], pos[1], pos[2], float_1_80422b78);
+        effSplashEntry(((u32)(-type) | (u32)type) >> 31, p[0], p[1], p[2], float_1_80422b78);
     }
     if (type == 1) {
-        psndSFXOn_3D(0xBA, pos);
+        psndSFXOn_3D(0xBA, p);
     }
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 u8 mot_damage(void) {
