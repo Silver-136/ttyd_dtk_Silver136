@@ -197,24 +197,95 @@ u8 FontDrawCodeMtx(s32 param_1, s32 param_2) {
 }
 
 
-u8 FontDrawNoise(void) {
-    return 0;
+void FontDrawNoise(void) {
+    extern void GXSetNumTexGens(s32 count);
+    extern void GXSetNumTevStages(s32 count);
+    extern void GXSetTevKAlphaSel(s32 stage, s32 sel);
+    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 color);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXLoadTexObj(void* obj, s32 mapId);
+    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
+    extern void GXLoadTexMtxImm(void* mtx, s32 id, s32 type);
+    extern void GXSetTexCoordGen2(s32 coord, s32 type, s32 src, s32 mtx, s32 normalize, s32 postMtx);
+    extern void* wakuTexObj;
+    extern f32 float_0p015625_80420438;
+    extern f32 float_1_804203e4;
+    f32 mtx[12];
+
+    GXSetNumTexGens(2);
+    GXSetNumTevStages(2);
+    GXSetTevKAlphaSel(1, 0);
+    GXSetTevOrder(1, 1, 2, 0xFF);
+    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(1, 0xF, 0xF, 0xF, 0);
+    GXSetTevAlphaIn(1, 7, 0, 4, 7);
+    GXLoadTexObj((void*)((s32)wakuTexObj + 0x640), 2);
+    PSMTXScale(mtx, float_0p015625_80420438, float_0p015625_80420438, float_1_804203e4);
+    GXLoadTexMtxImm(mtx, 0x21, 1);
+    GXSetTexCoordGen2(1, 1, 5, 0x21, 0, 0x7D);
 }
 
+void FontDrawRainbowColor(void) {
+    extern void GXSetNumTevStages(s32 count);
+    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 color);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
 
-u8 FontDrawRainbowColor(void) {
-    return 0;
+    GXSetNumTevStages(2);
+    GXSetTevOrder(1, 0xFF, 0xFF, 4);
+    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(1, 0xF, 0, 0xA, 0xF);
+    GXSetTevAlphaIn(1, 7, 0, 5, 7);
 }
-
 
 void FontDrawStart(void) {
+    extern u32 fontColor;
+    extern u8 fontAlpha;
+    extern u32 fontColTbl[8];
+    extern s32 fontEdge;
+    extern Vec fontScale;
+    extern Vec vec3_802c2b6c;
+    extern void JUTFont_DrawStart(void* color);
+    u32 color;
+    u32 gxColor;
+
+    color = fontColTbl[0];
+    fontScale = vec3_802c2b6c;
+    fontEdge = 0;
+    fontColor = color;
+    fontAlpha = 0xFF;
+    ((u8*)&color)[3] = (((u8*)&color)[3] * 0xFF) / 255;
+    gxColor = color;
+    JUTFont_DrawStart(&gxColor);
 }
 
+void FontDrawStart_alpha(u8 alpha) {
+    extern u32 fontColor;
+    extern u8 fontAlpha;
+    extern u32 fontColTbl[8];
+    extern s32 fontEdge;
+    extern Vec fontScale;
+    extern Vec vec3_802c2b6c;
+    extern void JUTFont_DrawStart(void* color);
+    u32 color;
+    u32 gxColor;
 
-u8 FontDrawStart_alpha(u8 param_1) {
-    return 0;
+    color = fontColTbl[0];
+    fontScale = vec3_802c2b6c;
+    fontAlpha = alpha;
+    fontEdge = 0;
+    fontColor = color;
+    ((u8*)&color)[3] = (((u8*)&color)[3] * alpha) / 255;
+    gxColor = color;
+    JUTFont_DrawStart(&gxColor);
 }
-
 
 u8 FontDrawStringPitch(double param_1, double param_2, s64 param_3, s32 param_4) {
     return 0;

@@ -196,15 +196,67 @@ USER_FUNC(evt_pouch_check_item) {
 #pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 N_evt_pouch_remove_item_index(void* pEvt) {
-    return 0;
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern void evtSetValue(EventEntry* event, s32 dst, s32 value);
+    extern s32 pouchRemoveItemIndex(s32 itemId, s32 index);
+    extern void pouchReviseMarioParam(void);
+    extern void pouchRevisePartyParam(void);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 item = evtGetValue(pEvt, args[0]);
+    s32 index = evtGetValue(pEvt, args[1]);
+
+    if (pouchRemoveItemIndex(item, index) == 1) {
+        pouchReviseMarioParam();
+        pouchRevisePartyParam();
+        evtSetValue(pEvt, args[2], 0);
+    } else {
+        evtSetValue(pEvt, args[2], -1);
+    }
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_pouch_remove_keepitem(int param_1) {
-    return 0;
-}
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern void evtSetValue(EventEntry* event, s32 dst, s32 value);
+    extern s32 pouchRemoveKeepItem(s32 itemId, s32 index);
+    s32* args = *(s32**)(param_1 + 0x18);
+    s32 item = evtGetValue((void*)param_1, args[0]);
+    s32 index = evtGetValue((void*)param_1, args[1]);
 
+    if (pouchRemoveKeepItem(item, index) != 0) {
+        evtSetValue((void*)param_1, args[2], 0);
+    } else {
+        evtSetValue((void*)param_1, args[2], -1);
+    }
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_pouch_remove_item(void* pEvt) {
     return 0;

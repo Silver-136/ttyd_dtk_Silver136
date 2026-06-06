@@ -70,15 +70,72 @@ void marioReInit_ship(void) {
 }
 
 
-u8 mot_ship_post(void) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void mot_ship_post(void) {
+    extern void* marioGetPtr(void);
+    extern void allPartyRideOff(void);
+    extern void marioPaperOff(void);
+    extern void psndSFXOff(s32 id);
+    extern void marioOfsRotReset(void);
+    extern void __memFree(s32 heap, void* ptr);
+    extern f32 float_20_80420eb4;
+    extern f32 float_37_80420f7c;
+    void* mario = marioGetPtr();
+    allPartyRideOff();
+    if (*(u32*)((s32)mario + 0x4) & 0x40000000) {
+        marioPaperOff();
+    }
+    {
+        f32 z = float_37_80420f7c;
+        f32 y = float_20_80420eb4;
+        *(f32*)((s32)mario + 0x1B8) = y;
+        *(f32*)((s32)mario + 0x1BC) = z;
+    }
+    marioGetPtr();
+    if (*(void**)((s32)marioGetPtr() + 0x294) != 0) {
+        s32 sound = *(s32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x38);
+        if ((u32)(sound + 0x10000) != 0xFFFF) {
+            psndSFXOff(*(s32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x38));
+            *(s32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x38) = -1;
+        }
+    }
+    *(u32*)((s32)mario + 0x4) &= ~0x4;
+    *(u32*)((s32)mario + 0x4) &= ~0x100;
+    *(u32*)((s32)mario + 0x4) &= ~0x8;
+    marioOfsRotReset();
+    if (*(void**)((s32)marioGetPtr() + 0x294) != 0) {
+        __memFree(0, *(void**)((s32)marioGetPtr() + 0x294));
+        *(void**)((s32)marioGetPtr() + 0x294) = 0;
+    }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 marioShipChanging(void) {
+    extern void* marioGetPtr(void);
+    void* mario = marioGetPtr();
+    s32 state;
+    if (*(u16*)((s32)mario + 0x2E) != 0x19) {
+        return 0;
+    }
+    state = *(s32*)((s32)mario + 0x44);
+    if (state == 10) {
+        return 2;
+    }
+    if ((state >= 0 && state <= 12) || (state >= 0x1E && state <= 0x30)) {
+        return 1;
+    }
+    if (state == 0x32 || state == 0x34) {
+        return 3;
+    }
     return 0;
 }
-
 
 u8 marioForceShipAnime(void) {
     return 0;

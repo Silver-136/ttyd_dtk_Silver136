@@ -16,6 +16,8 @@ void cardReadAll(void);
 s32 cardIsExec(void);
 s32 unk_800b2bdc(void);
 s32 cardGetCode(void);
+void* cardGetFilePtr(void);
+void cardCopy(s32 srcFile, s32 dstFile);
 
 s32 memcard_ipl(void) {
     *(s32*)((s32)gp + 0x1278) = 2;
@@ -87,6 +89,47 @@ s32 memcard_write(EventEntry* event, BOOL firstRun) {
     }
     return 2;
 }
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(memcard_file_existance) {
+    s32* args;
+    s32 fileNo;
+    void* filePtr;
+
+    args = event->args;
+    fileNo = evtGetValue(event, args[0]) - 1;
+    filePtr = cardGetFilePtr();
+    if (*(u16*)((s32)filePtr + (fileNo << 14) + 0x2000) & 1) {
+        evtSetValue(event, args[1], 0);
+    } else {
+        evtSetValue(event, args[1], 1);
+    }
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(memcard_copy) {
+    s32* args;
+    s32 srcFile;
+    s32 dstFile;
+
+    args = event->args;
+    srcFile = evtGetValue(event, args[0]) - 1;
+    dstFile = evtGetValue(event, args[1]) - 1;
+    if (isFirstCall != 0) {
+        cardCopy(srcFile, dstFile);
+    }
+    if (cardIsExec() != 0) {
+        return 0;
+    }
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 memcard_load(EventEntry* event, BOOL firstRun) {
     if (firstRun != 0) {

@@ -5,6 +5,8 @@ extern u8 extLoadShadowRenderMode(void);
 extern u8 extLoadShadowVertex(void);
 extern u8 extLoadShadowTev(void);
 extern u8 extDrawShadow(void);
+extern void* nanNPCWork;
+s32 evtGetValue(void* event, s32 arg);
 
 typedef struct NanNpcSortEntry {
     f32 unk0;
@@ -128,7 +130,23 @@ u8 nannpc_ext_dispent(void) {
 
 
 s32 evt_nannpcwork_flag_onoff(void* pEvt) {
-    return 0;
+    s32* args;
+    void* work;
+    s32 onoff;
+    u32 mask;
+
+    args = *(s32**)((s32)pEvt + 0x18);
+    onoff = evtGetValue(pEvt, args[0]);
+    work = nanNPCWork;
+    mask = (u16)evtGetValue(pEvt, args[1]);
+
+    if (onoff != 0) {
+        *(u32*)((s32)work + 0x10) &= ~mask;
+    } else {
+        *(u32*)((s32)work + 0x10) |= mask;
+    }
+
+    return 2;
 }
 
 

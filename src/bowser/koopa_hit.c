@@ -97,3 +97,42 @@ void kpaClearHitobjRide(void) {
     *(void**)(*(s32*)((s32)mario + 0x298) + 0x6C) = 0;
     *(void**)(*(s32*)((s32)mario + 0x298) + 0x70) = 0;
 }
+
+void* kpaChkHitobjRide(void) {
+    void* work = *(void**)((s32)marioGetPtr() + 0x298);
+    void* obj;
+
+    obj = *(void**)((s32)work + 0x4C);
+    if (obj == 0) {
+        obj = *(void**)((s32)work + 0x50);
+        if (obj == 0) {
+            obj = *(void**)((s32)work + 0x54);
+            if (obj == 0) {
+                obj = *(void**)((s32)work + 0x58);
+                if (obj == 0) {
+                    obj = *(void**)((s32)work + 0x5C);
+                    if (obj == 0) {
+                        obj = *(void**)((s32)work + 0x60);
+                        if (obj == 0) {
+                            obj = *(void**)((s32)work + 0x64);
+                            if (obj == 0) {
+                                obj = *(void**)((s32)work + 0x68);
+                                if (obj == 0) {
+                                    obj = *(void**)((s32)work + 0x6C);
+                                    if (obj == 0) {
+                                        obj = *(void**)((s32)work + 0x70);
+                                        if (obj != 0) {
+                                            return obj;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return obj;
+}
+

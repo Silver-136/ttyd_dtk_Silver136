@@ -260,29 +260,131 @@ u8 partyClearFootmark(void) {
 }
 
 
-u8 party_move_mode_behind_mario(void* pParty) {
-    return 0;
-}
+void party_move_mode_behind_mario(void* pParty) {
+    extern void party_motion_behind_mario(void* party);
+    extern void party_motion_behind_mario_fly(void* party);
+    extern void party_motion_jump2(void* party);
+    extern void party_motion_fall(void* party);
+    extern void party_motion_upstairs(void* party);
+    extern void party_motion_damage(void* party);
 
+    if ((*(u32*)((s32)pParty + 8) & 4) != 0) {
+        *(u32*)((s32)pParty + 8) &= ~4;
+    }
+    switch (*(u8*)((s32)pParty + 0x36)) {
+        case 0:
+        case 1:
+            if (*(u8*)((s32)pParty + 0x32) == 0) {
+                party_motion_behind_mario(pParty);
+            } else {
+                party_motion_behind_mario_fly(pParty);
+            }
+            break;
+        case 2:
+            party_motion_jump2(pParty);
+            break;
+        case 3:
+            party_motion_fall(pParty);
+            break;
+        case 6:
+            party_motion_upstairs(pParty);
+            break;
+        case 7:
+            party_motion_damage(pParty);
+            break;
+        default:
+            break;
+    }
+    *(f32*)((s32)pParty + 0xFC) = *(f32*)((s32)pParty + 0x100);
+}
 
 u8 L_getTargetPos(u32 param_1, u32* param_2) {
     return 0;
 }
 
 
-u8 party_move_mode_beside_mario(void* pParty) {
-    return 0;
-}
+void party_move_mode_beside_mario(void* pParty) {
+    extern void party_motion_beside_mario(void* party);
+    extern void party_motion_jump2(void* party);
+    extern void party_motion_fall(void* party);
+    extern void party_motion_upstairs(void* party);
+    extern void party_motion_damage(void* party);
 
+    if ((*(u32*)((s32)pParty + 8) & 4) != 0) {
+        *(u32*)((s32)pParty + 8) &= ~4;
+    }
+    switch (*(u8*)((s32)pParty + 0x36)) {
+        case 0:
+        case 1:
+            party_motion_beside_mario(pParty);
+            break;
+        case 2:
+            party_motion_jump2(pParty);
+            break;
+        case 3:
+            party_motion_fall(pParty);
+            break;
+        case 6:
+            party_motion_upstairs(pParty);
+            break;
+        case 7:
+            party_motion_damage(pParty);
+            break;
+        default:
+            break;
+    }
+    *(f32*)((s32)pParty + 0xFC) = *(f32*)((s32)pParty + 0x100);
+}
 
 void partyMoveBesideMario(void* pParty, u8 param_2) {
+    if (*(s8*)((s32)pParty + 0x31) == 4 && *(u8*)((s32)pParty + 0x34) == 3) {
+        return;
+    }
+    *(u8*)((s32)pParty + 0x3D) = param_2;
+    switch (*(u8*)((s32)pParty + 0x3B)) {
+        case 6:
+            *(u32*)pParty &= ~0x8000;
+            break;
+        case 4:
+        case 5:
+        default:
+            break;
+    }
+    *(u8*)((s32)pParty + 0x3B) = 3;
+    *(u32*)((s32)pParty + 8) |= 4;
+    if (*(u8*)((s32)pParty + 0x36) == 3) {
+        *(u32*)pParty &= ~0x70;
+        *(u32*)pParty &= ~0x3000000;
+        *(u32*)pParty &= ~0x4000000;
+    }
+    *(u8*)((s32)pParty + 0x36) = 1;
+    *(u32*)((s32)pParty + 8) |= 2;
 }
 
-
-u8 partyMoveBehindMario(void* pParty, u8 param_2) {
-    return 0;
+void partyMoveBehindMario(void* pParty, u8 param_2) {
+    if (*(s8*)((s32)pParty + 0x31) == 4 && *(u8*)((s32)pParty + 0x34) == 3) {
+        return;
+    }
+    *(u8*)((s32)pParty + 0x3D) = param_2;
+    switch (*(u8*)((s32)pParty + 0x3B)) {
+        case 6:
+            *(u32*)pParty &= ~0x8000;
+            break;
+        case 4:
+        case 5:
+        default:
+            break;
+    }
+    *(u8*)((s32)pParty + 0x3B) = 2;
+    *(u32*)((s32)pParty + 8) |= 4;
+    if (*(u8*)((s32)pParty + 0x36) == 3) {
+        *(u32*)pParty &= ~0x70;
+        *(u32*)pParty &= ~0x3000000;
+        *(u32*)pParty &= ~0x4000000;
+    }
+    *(u8*)((s32)pParty + 0x36) = 1;
+    *(u32*)((s32)pParty + 8) |= 2;
 }
-
 
 u8 partyChkWall(void* pParty) {
     return 0;
@@ -290,4 +392,110 @@ u8 partyChkWall(void* pParty) {
 
 
 void partyChgMot(void* party, s32 mot) {
+}
+
+void unk_800cbc30(void* party) {
+    extern s32 marioChkDeepSleep(void);
+    extern s32 chuchu_searchObject(void);
+    extern void partyChgPoseId(void* party, s32 poseId);
+
+    if (*(u8*)((s32)party + 0x34) != 0) {
+        if (marioChkDeepSleep() == 1 || (*(u32*)party & 0x400000) != 0) {
+            partyChgPoseId(party, 6);
+        } else if (*(s8*)((s32)party + 0x31) != 7) {
+            partyChgPoseId(party, 1);
+        } else if (chuchu_searchObject() == 0) {
+            partyChgPoseId(party, 1);
+        }
+    }
+}
+
+f32 unk_800cbeb0(void* party) {
+    extern f32 float_0p5_80421610;
+    extern f32 float_0p05_8042160c;
+    extern f32 float_neg1_804215c4;
+    extern f32 float_0p1_80421614;
+    void* move;
+    f32 current;
+    f32 target;
+    f32 result;
+
+    if (*(s16*)((s32)party + 0x28) != 0 ||
+        *(u8*)((s32)party + 0x36) == 2 ||
+        *(u8*)((s32)party + 0x36) == 3 ||
+        *(u8*)((s32)party + 0x36) == 6) {
+        return *(f32*)((s32)party + 0x104);
+    }
+    move = *(void**)((s32)party + 0x160);
+    current = *(f32*)((s32)party + 0x104);
+    if ((*(u32*)move & 0x8000) != 0) {
+        target = *(f32*)((s32)move + 0x180);
+    } else {
+        target = *(f32*)((s32)party + 0x108) * *(f32*)((s32)move + 0x228);
+        if ((*(u32*)party & 0x80) != 0) {
+            target *= float_0p75_80421608;
+        } else {
+            target *= float_1_804215f8;
+        }
+    }
+    if (target > float_0_804215b8) {
+        result = current + float_0p05_8042160c * ((float_0p5_80421610 + target) - current);
+        if (result >= target) {
+            result = target;
+        }
+    } else {
+        result = current + float_0p1_80421614 * (float_neg1_804215c4 - current);
+        if (result <= float_0_804215b8) {
+            result = float_0_804215b8;
+        }
+    }
+    *(f32*)((s32)party + 0x104) = result;
+    return result;
+}
+
+void unk_800cbfbc(void* party, f32 speed) {
+    extern f32 float_0p5_80421610;
+    extern f32 float_0p05_8042160c;
+    extern f32 float_neg1_804215c4;
+    extern f32 float_0p1_80421614;
+    void* move;
+    f32 current;
+    f32 target;
+    f32 result;
+
+    if (speed == float_0_804215b8) {
+        *(f32*)((s32)party + 0x108) = speed;
+        return;
+    }
+    *(f32*)((s32)party + 0x108) = speed;
+    if (*(s16*)((s32)party + 0x28) != 0 ||
+        *(u8*)((s32)party + 0x36) == 2 ||
+        *(u8*)((s32)party + 0x36) == 3 ||
+        *(u8*)((s32)party + 0x36) == 6) {
+        return;
+    }
+    move = *(void**)((s32)party + 0x160);
+    current = *(f32*)((s32)party + 0x104);
+    if ((*(u32*)move & 0x8000) != 0) {
+        target = *(f32*)((s32)move + 0x180);
+    } else {
+        target = *(f32*)((s32)party + 0x108) * *(f32*)((s32)move + 0x228);
+        if ((*(u32*)party & 0x80) != 0) {
+            target *= float_0p75_80421608;
+        } else {
+            target *= float_1_804215f8;
+        }
+    }
+    if (target > float_0_804215b8) {
+        result = current + float_0p05_8042160c * ((float_0p5_80421610 + target) - current);
+        if (result >= target) {
+            result = target;
+        }
+    } else {
+        result = current + float_0p1_80421614 * (float_neg1_804215c4 - current);
+        if (result <= float_0_804215b8) {
+            result = float_0_804215b8;
+        }
+    }
+    *(f32*)((s32)party + 0x104) = result;
 }

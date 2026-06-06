@@ -7,6 +7,7 @@ extern void hitEntrySub(void* mapObj, s32 arg1, void* arg2, s32 arg3, s32 arg4);
 extern void hitReCalcMatrix2(void* hit, void* arg, s32 flag);
 extern void PSMTXMultVec(void* mtx, void* src, void* dst);
 extern f32 PSVECDistance(void* a, void* b);
+extern s32 strcmp(const char* str1, const char* str2);
 
 s32 chkFilterAttr(void* a, void* b) {
     return ((*(u32*)((s32)b + 0x4) & *(u32*)((s32)a + 0x4)) == 0);
@@ -188,8 +189,41 @@ u8 hitObjFlagOn(char* param_1, u16 param_2) {
 }
 
 
-u8 hitGrpDamageReturnSet(char* param_1, s32 param_2) {
-    return 0;
+void hitGrpDamageReturnSet(char* name, s32 value) {
+    void* map;
+    void* group;
+    void* hit;
+    s32 groupIndex;
+    s32 hitIndex;
+
+    map = mapGetWork();
+    if (name == NULL) {
+        hit = NULL;
+    } else {
+        group = map;
+        groupIndex = 0;
+        hit = NULL;
+        while (groupIndex < *(s32*)map) {
+            hit = *(void**)((s32)group + 0x15C);
+            hitIndex = 0;
+            while (hitIndex < *(s32*)((s32)group + 0x158)) {
+                if ((*(u16*)hit & 0x80) == 0 &&
+                    strcmp(**(char***)((s32)hit + 0x8), name) == 0) {
+                    goto found;
+                }
+                hitIndex++;
+                hit = (void*)((s32)hit + 0xE4);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        hit = NULL;
+    }
+
+found:
+    if (hit != NULL) {
+        hitDamageReturnSet((s32)hit, value, 0);
+    }
 }
 
 
@@ -199,7 +233,34 @@ u8 hitReInit(void) {
 
 
 s32 hitGetName(void* pHit) {
-    return 0;
+    void* map;
+    s32 groupCount;
+    s32 groupIndex;
+
+    if (pHit == NULL) {
+        return 0;
+    }
+
+    map = mapGetWork();
+    groupCount = *(s32*)map;
+    groupIndex = 0;
+    if (groupCount > 0) {
+        do {
+            void* hitBase = *(void**)((s32)map + 0x15C);
+            u32 size = (*(s32*)((s32)map + 0x158) + 0x80) * 0xE4;
+            size = (size + 0x1F) & ~0x1F;
+            if ((u32)pHit >= (u32)hitBase && (u32)pHit < (u32)hitBase + size) {
+                break;
+            }
+            map = (void*)((s32)map + 0x178);
+            groupIndex++;
+        } while (groupIndex < groupCount);
+    }
+
+    if (groupIndex >= groupCount) {
+        return 0;
+    }
+    return **(s32**)((s32)pHit + 0x8);
 }
 
 
@@ -224,5 +285,32 @@ u8 hitFlgOn(void* param_1, s32 param_2, int param_3) {
 
 
 void* hitNameToPtr(char* hitName) {
-    return 0;
+    void* map;
+    void* group;
+    void* hit;
+    s32 groupIndex;
+    s32 hitIndex;
+
+    map = mapGetWork();
+    if (hitName == NULL) {
+        return NULL;
+    }
+
+    group = map;
+    groupIndex = 0;
+    while (groupIndex < *(s32*)map) {
+        hit = *(void**)((s32)group + 0x15C);
+        hitIndex = 0;
+        while (hitIndex < *(s32*)((s32)group + 0x158)) {
+            if ((*(u16*)hit & 0x80) == 0 &&
+                strcmp(**(char***)((s32)hit + 0x8), hitName) == 0) {
+                return hit;
+            }
+            hitIndex++;
+            hit = (void*)((s32)hit + 0xE4);
+        }
+        group = (void*)((s32)group + 0x178);
+        groupIndex++;
+    }
+    return NULL;
 }

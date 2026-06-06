@@ -73,40 +73,230 @@ u8 L_getStick(void* pParty, s32 param_2, s32 param_3) {
 }
 
 
-u8 yoshi_bye(void* pParty) {
-    return 0;
-}
+void yoshi_bye(void* pParty) {
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32 id);
+    extern void partyGoodbyeInit(void* party);
+    extern s32 partyGoodbyeMain(void* party);
+    extern void partyChgRunMode(void* party, s32 mode);
+    void* party;
+    s32 status;
+    u8 state;
 
+    if ((*(u32*)((s32)pParty + 8) & 8) != 0) {
+        *(u32*)((s32)pParty + 8) &= ~8;
+        partyGoodbyeInit(pParty);
+    }
+    if ((*(u32*)pParty & 0x100) != 0) {
+        party = partyGetPtr(marioGetPartyId());
+        status = 5;
+        if (party == 0 || *(s8*)((s32)party + 0x31) != 4 || (*(u32*)party & 0x100) == 0) {
+            status = 0;
+        } else {
+            state = *(u8*)((s32)party + 0x39);
+            if (state >= 0xA && state <= 0xD) {
+                status = 1;
+            } else if (state >= 0x14 && state <= 0x16) {
+                status = 2;
+            } else if (state >= 0x64 && state <= 0x65) {
+                status = 5;
+            } else if (state >= 0x3C && state <= 0x41) {
+                status = 3;
+            } else if (state >= 0x32 && state <= 0x34) {
+                status = 4;
+            }
+        }
+        if (status == 1) {
+            *(u8*)((s32)pParty + 0x39) = 0x64;
+        }
+        yoshi_use((s32)pParty);
+    } else if (partyGoodbyeMain(pParty) != 0) {
+        partyChgRunMode(pParty, 0xE);
+    }
+}
 
 u8 L_yoshiFlyMove(void* pParty) {
+    extern void* marioGetPtr(void);
+    extern f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2);
+    extern f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2);
+    extern f32 revise360(f32 angle);
+    extern f32 float_0_80421138;
+    extern f32 float_0p1_80421188;
+    extern f32 float_1_80421160;
+    extern f32 float_0p01_8042117c;
+    void* mario;
+    f32 x;
+    f32 z;
+    f32 speed;
+    f32 angle;
+    f32 max;
+
+    mario = marioGetPtr();
+    inertia(pParty);
+    z = -*(f32*)((s32)mario + 0x2CC);
+    x = *(f32*)((s32)mario + 0x2C8);
+    speed = float_0p1_80421188 * distABf(x, float_0_80421138, float_0_80421138, z);
+    max = *(f32*)((s32)mario + 0x188) * float_1_80421160;
+    if (speed >= max) {
+        speed = max;
+    }
+    angle = angleABf(x, float_0_80421138, float_0_80421138, z);
+    if (speed < float_0p01_8042117c) {
+        speed = float_0_80421138;
+    }
+    *(f32*)((s32)pParty + 0x104) = speed;
+    if (speed != float_0_80421138) {
+        *(f32*)((s32)pParty + 0x100) = revise360(angle + *(f32*)((s32)pParty + 0xF8));
+        *(f32*)((s32)pParty + 0xFC) = revise360(angle + *(f32*)((s32)pParty + 0xF8));
+    }
+    *(f32*)((s32)mario + 0x18C) = speed;
     return 0;
 }
-
 
 u32 marioGetoffYoshi(void) {
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32 id);
+    void* party;
+    void* party2;
+    s32 status;
+    u8 state;
+
+    party = partyGetPtr(marioGetPartyId());
+    if ((*(u32*)party & 0x100) == 0) {
+        return 0;
+    }
+    party2 = partyGetPtr(marioGetPartyId());
+    status = 5;
+    if (party2 == 0 || *(s8*)((s32)party2 + 0x31) != 4 || (*(u32*)party2 & 0x100) == 0) {
+        status = 0;
+    } else {
+        state = *(u8*)((s32)party2 + 0x39);
+        if (state >= 0xA && state <= 0xD) {
+            status = 1;
+        } else if (state >= 0x14 && state <= 0x16) {
+            status = 2;
+        } else if (state >= 0x64 && state <= 0x65) {
+            status = 5;
+        } else if (state >= 0x3C && state <= 0x41) {
+            status = 3;
+        } else if (state >= 0x32 && state <= 0x34) {
+            status = 4;
+        }
+    }
+    if (status == 1) {
+        *(u8*)((s32)party + 0x39) = 0x64;
+        return 1;
+    }
     return 0;
 }
 
 
-u8 L_sweatEntry(void* pParty, void* hitobjStandOn) {
-    return 0;
-}
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void L_sweatEntry(void* pParty, void* hitobjStandOn) {
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32 id);
+    void* party;
+    s32 status;
+
+    *(void**)((s32)pParty + 0x138) = hitobjStandOn;
+    party = partyGetPtr(marioGetPartyId());
+    status = 5;
+    if (party == 0 || *(s8*)((s32)party + 0x31) != 4 || (*(u32*)party & 0x100) == 0) {
+        status = 0;
+    } else if (*(u8*)((s32)party + 0x39) >= 0xA && *(u8*)((s32)party + 0x39) <= 0xD) {
+        status = 1;
+    } else if (*(u8*)((s32)party + 0x39) >= 0x14 && *(u8*)((s32)party + 0x39) <= 0x16) {
+        status = 2;
+    } else if (*(u8*)((s32)party + 0x39) >= 0x64 && *(u8*)((s32)party + 0x39) <= 0x65) {
+        status = 5;
+    } else if (*(u8*)((s32)party + 0x39) >= 0x3C && *(u8*)((s32)party + 0x39) <= 0x41) {
+        status = 3;
+    } else if (*(u8*)((s32)party + 0x39) >= 0x32 && *(u8*)((s32)party + 0x39) <= 0x34) {
+        status = 4;
+    }
+    if (status == 1 && (*(u32*)*(void**)((s32)pParty + 0x160) & 0xF0000) == 0) {
+        *(void**)((s32)*(void**)((s32)pParty + 0x160) + 0x1E8) = hitobjStandOn;
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 yoshiGetStatus(void) {
-    return 0;
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32 id);
+    void* party;
+    u8 state;
+    s32 status;
+
+    party = partyGetPtr(marioGetPartyId());
+    status = 5;
+    if (party == 0 || *(s8*)((s32)party + 0x31) != 4 || (*(u32*)party & 0x100) == 0) {
+        return 0;
+    }
+    state = *(u8*)((s32)party + 0x39);
+    if (state >= 0xA && state <= 0xD) {
+        status = 1;
+    } else if (state >= 0x14 && state <= 0x16) {
+        status = 2;
+    } else if (state >= 0x64 && state <= 0x65) {
+        status = 5;
+    } else if (state >= 0x3C && state <= 0x41) {
+        status = 3;
+    } else if (state >= 0x32 && state <= 0x34) {
+        status = 4;
+    }
+    return status;
 }
 
+void marioRideYoshi(void) {
+    extern s32 marioGetPartyId(void);
+    extern s32 marioGetExtraPartyId(void);
+    extern void* partyGetPtr(s32 id);
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void* memset(void* ptr, s32 value, u32 size);
+    extern void party_force_ride_yoshi(void* party);
+    void* party;
 
-u8 marioRideYoshi(void) {
-    return 0;
+    party = partyGetPtr(marioGetPartyId());
+    *(u32*)((s32)party + 8) &= ~8;
+    *(u32*)((s32)party + 8) &= ~4;
+    *(u32*)((s32)party + 8) &= ~2;
+    *(u32*)party |= 0x100;
+    *(u8*)((s32)party + 0x34) = 3;
+    *(u8*)((s32)party + 0x39) = 0xB;
+    if (*(void**)((s32)party + 0x170) == 0) {
+        *(void**)((s32)party + 0x170) = __memAlloc(0, 0x18);
+        memset(*(void**)((s32)party + 0x170), 0, 0x18);
+        *(s32*)((s32)*(void**)((s32)party + 0x170) + 0x14) = 0;
+    }
+    party = partyGetPtr(marioGetExtraPartyId());
+    if (party != 0) {
+        party_force_ride_yoshi(party);
+    }
 }
 
+void L_sweatMain(void* pParty) {
+    extern void effDelete(void* eff);
+    extern f32 float_18_804211c4;
+    void* effect;
 
-u8 L_sweatMain(void* pParty) {
-    return 0;
+    if (*(void**)((s32)pParty + 0x170) != 0) {
+        effect = *(void**)((s32)*(void**)((s32)pParty + 0x170) + 0x14);
+        if (effect != 0) {
+            *(f32*)((s32)*(void**)((s32)effect + 0xC) + 4) = *(f32*)((s32)pParty + 0x58);
+            *(f32*)((s32)*(void**)((s32)*(void**)((s32)*(void**)((s32)pParty + 0x170) + 0x14) + 0xC) + 8) = float_18_804211c4 + *(f32*)((s32)pParty + 0x5C);
+            *(f32*)((s32)*(void**)((s32)*(void**)((s32)*(void**)((s32)pParty + 0x170) + 0x14) + 0xC) + 0xC) = *(f32*)((s32)pParty + 0x60);
+            if (--*(s32*)((s32)*(void**)((s32)pParty + 0x170) + 0x10) <= 0) {
+                effDelete(*(void**)((s32)*(void**)((s32)pParty + 0x170) + 0x14));
+                *(s32*)((s32)*(void**)((s32)pParty + 0x170) + 0x14) = 0;
+            }
+        }
+    }
 }
-
 
 u8 yoshi_jumpStand(void) {
     return 0;

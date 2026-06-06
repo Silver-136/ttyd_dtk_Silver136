@@ -153,3 +153,101 @@ void main_star(void) {
         main_star1();
     }
 }
+
+void weapon_entry(void) {
+    extern void* BattleGetMarioPtr(void* battleWork);
+    extern s32 BtlUnit_GetBodyPartsId(void* unit);
+    extern void* BtlUnit_GetPartsPtr(void* unit, s32 partsId);
+    extern s32 irand(s32 max);
+    extern void BtlUnit_SetAnim(void* parts, const char* anim, s32 force);
+    extern const char str_M_C_2C_80300dfc[];
+
+    void* work;
+    void* mario;
+    void* parts;
+    s32 ids[10];
+    s32 count;
+    s32 stackOffset;
+    s32 id;
+    s32 offset;
+    s32 i;
+    s32 chosen;
+    void* entry;
+
+    work = get_ptr();
+    mario = BattleGetMarioPtr(_battleWorkPointer);
+    parts = BtlUnit_GetPartsPtr(mario, BtlUnit_GetBodyPartsId(mario));
+    count = 0;
+    stackOffset = 0;
+    id = 0;
+    offset = 0;
+    for (i = *(s32*)((s32)work + 0x58); i > 0; i--) {
+        if (*(s32*)((s32)work + offset + 0x10C) == 0) {
+            *(volatile s32*)((s32)ids + stackOffset) = id;
+            count++;
+            stackOffset += 4;
+        }
+        id++;
+        offset += 0x54;
+    }
+    if (count >= 1) {
+        chosen = *(s32*)((s32)ids + (irand(count) << 2));
+        entry = (void*)((s32)work + chosen * 0x54 + 0x10C);
+        *(s32*)entry = 1;
+        *(s32*)((s32)entry + 4) = 7;
+        BtlUnit_SetAnim(parts, str_M_C_2C_80300dfc, 1);
+    }
+}
+
+USER_FUNC(end_genki) {
+    extern void effDelete(void* effect);
+    extern void BattleFree(void* ptr);
+
+    void* work;
+    void* entry;
+    s32 i;
+    s32 offset;
+    s32 j;
+    s32 objectOffset;
+    s32 k;
+    s32 childOffset;
+
+    work = get_ptr();
+    i = 0;
+    offset = 0;
+    while (i < 7) {
+        entry = (void*)((s32)work + offset + 0x510);
+        if (*(void**)((s32)entry + 0x60) != NULL) {
+            effDelete(*(void**)((s32)*(void**)((s32)*(void**)((s32)entry + 0x60) + 0xC) + 0x34));
+            effDelete(*(void**)((s32)entry + 0x60));
+        }
+        i++;
+        offset += 0x64;
+    }
+
+    j = 0;
+    objectOffset = 0;
+    while (j < 7) {
+        entry = (void*)((s32)work + objectOffset + 0x10C);
+        if (*(void**)((s32)entry + 0x44) != NULL) {
+            effDelete(*(void**)((s32)*(void**)((s32)*(void**)((s32)entry + 0x44) + 0xC) + 0x34));
+            effDelete(*(void**)((s32)entry + 0x44));
+            k = 0;
+            childOffset = 0;
+            while (k < 3) {
+                effDelete(*(void**)((s32)*(void**)((s32)*(void**)((s32)entry + childOffset + 0x48) + 0xC) + 0x34));
+                effDelete(*(void**)((s32)entry + childOffset + 0x48));
+                k++;
+                childOffset += 4;
+            }
+        }
+        j++;
+        objectOffset += 0x54;
+    }
+    effDelete(*(void**)((s32)work + 0x34));
+    effDelete(*(void**)((s32)work + 0x38));
+    effDelete(*(void**)((s32)work + 0x3C));
+    BattleFree(*(void**)((s32)work + 0x5C));
+    return 2;
+}
+

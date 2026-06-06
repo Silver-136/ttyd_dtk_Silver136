@@ -154,19 +154,73 @@ s32 evt_cam3d_evt_off(void* pEvt) {
 }
 
 
-s32 evt_cam_letter_box_onoff(void* pEvt) {
-    return 0;
+USER_FUNC(evt_cam_letter_box_onoff) {
+    s32* args = event->args;
+    s32 on = evtGetValue(event, args[0]);
+    s32 hide = evtGetValue(event, args[1]);
+    void* cam = camGetPtr(8);
+    if (on != 0) {
+        *(u16*)cam |= 0x100;
+        psndSetFlag(0x20);
+        *(u16*)((s32)cam + 0x1E0) = 0xFF;
+        *(u16*)((s32)cam + 0x1E2) = 0;
+        *(u16*)((s32)cam + 0x1E4) = 0;
+        *(s32*)((s32)cam + 0x1E8) = 8;
+    } else {
+        *(u16*)cam &= ~0x100;
+        psndClearFlag(0x20);
+    }
+    if (hide != 0) {
+        *(u16*)cam |= 0x400;
+    }
+    return 2;
 }
 
-
-s32 evt_cam3d_evt_set_now(void) {
-    return 0;
+USER_FUNC(evt_cam3d_evt_set_now) {
+    extern void* gp;
+    void* cam = camGetPtr(4);
+    *(u32*)((s32)cam + 0x40) = *(u32*)((s32)cam + 0xC);
+    *(u32*)((s32)cam + 0x44) = *(u32*)((s32)cam + 0x10);
+    *(u32*)((s32)cam + 0x48) = *(u32*)((s32)cam + 0x14);
+    *(u32*)((s32)cam + 0x58) = *(u32*)((s32)cam + 0x40);
+    *(u32*)((s32)cam + 0x5C) = *(u32*)((s32)cam + 0x44);
+    *(u32*)((s32)cam + 0x60) = *(u32*)((s32)cam + 0x48);
+    *(u32*)((s32)cam + 0x4C) = *(u32*)((s32)cam + 0x18);
+    *(u32*)((s32)cam + 0x50) = *(u32*)((s32)cam + 0x1C);
+    *(u32*)((s32)cam + 0x54) = *(u32*)((s32)cam + 0x20);
+    *(u32*)((s32)cam + 0x64) = *(u32*)((s32)cam + 0x4C);
+    *(u32*)((s32)cam + 0x68) = *(u32*)((s32)cam + 0x50);
+    *(u32*)((s32)cam + 0x6C) = *(u32*)((s32)cam + 0x54);
+    *(u32*)((s32)cam + 0x70) = *(u32*)((s32)gp + 0x38);
+    *(u32*)((s32)cam + 0x74) = *(u32*)((s32)gp + 0x3C);
+    *(s32*)((s32)cam + 0x7C) = 0;
+    *(s32*)((s32)cam + 0x78) = 0;
+    *(u16*)((s32)cam + 0x4) = 3;
+    *(u8*)((s32)cam + 0x80) = 0xB;
+    return 2;
 }
 
-
-void evt_cam_road_reset(s32 a, s32 b) {
+USER_FUNC(evt_cam_road_reset) {
+    extern f32 float_0p01_80421040;
+    extern void camRoadReset(void);
+    void* mario = marioGetPtr();
+    void* cam = camGetPtr(4);
+    *(f32*)((s32)cam + 0x94) = *(f32*)((s32)mario + 0x8C);
+    *(f32*)((s32)cam + 0x98) = *(f32*)((s32)mario + 0x90) + float_0p01_80421040;
+    *(f32*)((s32)cam + 0x9C) = *(f32*)((s32)mario + 0x94);
+    *(f32*)((s32)cam + 0xAC) = *(f32*)((s32)cam + 0x94);
+    *(f32*)((s32)cam + 0xB0) = *(f32*)((s32)cam + 0x98);
+    *(f32*)((s32)cam + 0xB4) = *(f32*)((s32)cam + 0x9C);
+    *(u32*)((s32)mario + 0xEC) = *(u32*)((s32)mario + 0x8C);
+    *(u32*)((s32)mario + 0xF0) = *(u32*)((s32)mario + 0x90);
+    *(u32*)((s32)mario + 0xF4) = *(u32*)((s32)mario + 0x94);
+    *(u32*)((s32)mario + 0xF8) = *(u32*)((s32)mario + 0x8C);
+    *(u32*)((s32)mario + 0xFC) = *(u32*)((s32)mario + 0x90);
+    *(u32*)((s32)mario + 0x100) = *(u32*)((s32)mario + 0x94);
+    camRoadReset();
+    camShiftReset(cam);
+    return 2;
 }
-
 
 s32 evt_cam_type_change(void* pEvt) {
     return 0;

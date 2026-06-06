@@ -1,5 +1,9 @@
 #include "window/win_badge.h"
 
+extern f32 float_184_804236f8;
+extern f32 float_0p25_804236fc;
+void* pouchGetPtr(void);
+
 void winBadgeExit(void) {
 }
 
@@ -29,16 +33,167 @@ u8 winBadgeInit2(void* pWin) {
 }
 
 
-u8 winBadgeInit(void* pWin) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void winBadgeInit(void* pWin) {
+    void* pouch;
+    void* out;
+    s32 count = 0;
+    s32 index;
+    s32 one = 1;
+    s32 i;
+    s16 badge;
+
+    *(s32*)((s32)pWin + 0x3DC) = 0;
+    *(s32*)((s32)pWin + 0x3E0) = 0;
+    *(s32*)((s32)pWin + 0x3E4) = 0;
+    *(s32*)((s32)pWin + 0x3EC) = 0;
+    *(s32*)((s32)pWin + 0x3E8) = 0;
+    *(s32*)((s32)pWin + 0x3F0) = 0;
+
+    pouch = pouchGetPtr();
+    out = pWin;
+    index = 0;
+    for (i = 0; i < 0x28; i++) {
+        badge = *(s16*)((s32)pouch + 0x38A);
+        if (badge != 0) {
+            *(s32*)((s32)out + 0x404) = one;
+            count++;
+            *(s32*)((s32)out + 0x408) = index;
+            *(s32*)((s32)out + 0x40C) = badge;
+            out = (void*)((s32)out + 0xC);
+        }
+        badge = *(s16*)((s32)pouch + 0x38C);
+        index++;
+        if (badge != 0) {
+            *(s32*)((s32)out + 0x404) = one;
+            count++;
+            *(s32*)((s32)out + 0x408) = index;
+            *(s32*)((s32)out + 0x40C) = badge;
+            out = (void*)((s32)out + 0xC);
+        }
+        badge = *(s16*)((s32)pouch + 0x38E);
+        index++;
+        if (badge != 0) {
+            *(s32*)((s32)out + 0x404) = one;
+            count++;
+            *(s32*)((s32)out + 0x408) = index;
+            *(s32*)((s32)out + 0x40C) = badge;
+            out = (void*)((s32)out + 0xC);
+        }
+        badge = *(s16*)((s32)pouch + 0x390);
+        index++;
+        if (badge != 0) {
+            *(s32*)((s32)out + 0x404) = one;
+            count++;
+            *(s32*)((s32)out + 0x408) = index;
+            *(s32*)((s32)out + 0x40C) = badge;
+            out = (void*)((s32)out + 0xC);
+        }
+        badge = *(s16*)((s32)pouch + 0x392);
+        index++;
+        if (badge != 0) {
+            *(s32*)((s32)out + 0x404) = one;
+            count++;
+            *(s32*)((s32)out + 0x408) = index;
+            *(s32*)((s32)out + 0x40C) = badge;
+            out = (void*)((s32)out + 0xC);
+        }
+        pouch = (void*)((s32)pouch + 0xA);
+        index++;
+    }
+    *(s32*)((s32)pWin + 0xD64) = count;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-u8 winMakeEquipList(void* pWin) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void winMakeEquipList(void* pWin) {
+    void* pouch = pouchGetPtr();
+    void* out = pWin;
+    s32 index = 0;
+    s32 one = 1;
+    s32 i;
+    s32 count = 0;
+
+    for (i = 0; i < 0x28; i++) {
+        if (*(s16*)((s32)pouch + 0x38A) != 0) {
+            *(s32*)((s32)out + 0x404) = one;
+            count++;
+            *(s32*)((s32)out + 0x408) = index;
+            *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x38A);
+            out = (void*)((s32)out + 0xC);
+        }
+        if (*(s16*)((s32)pouch + 0x38C) != 0) {
+            *(s32*)((s32)out + 0x404) = one;
+            count++;
+            index++;
+            *(s32*)((s32)out + 0x408) = index;
+            *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x38C);
+            out = (void*)((s32)out + 0xC);
+        } else {
+            index++;
+        }
+        if (*(s16*)((s32)pouch + 0x38E) != 0) {
+            *(s32*)((s32)out + 0x404) = one;
+            count++;
+            index++;
+            *(s32*)((s32)out + 0x408) = index;
+            *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x38E);
+            out = (void*)((s32)out + 0xC);
+        } else {
+            index++;
+        }
+        if (*(s16*)((s32)pouch + 0x390) != 0) {
+            *(s32*)((s32)out + 0x404) = one;
+            count++;
+            index++;
+            *(s32*)((s32)out + 0x408) = index;
+            *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x390);
+            out = (void*)((s32)out + 0xC);
+        } else {
+            index++;
+        }
+        if (*(s16*)((s32)pouch + 0x392) != 0) {
+            *(s32*)((s32)out + 0x404) = one;
+            count++;
+            index++;
+            *(s32*)((s32)out + 0x408) = index;
+            *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x392);
+            out = (void*)((s32)out + 0xC);
+        } else {
+            index++;
+        }
+        pouch = (void*)((s32)pouch + 0xA);
+        index++;
+    }
+    *(s32*)((s32)pWin + 0xD64) = count;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-u8 winBadgeMain2(void* pWin) {
-    return 0;
+void winBadgeMain2(void* pWin) {
+    f32 scale = float_184_804236f8;
+    s32 xIndex = *(s32*)((s32)pWin + 0x3EC);
+    f32 rate = float_0p25_804236fc;
+    f32 target;
+    f32 current;
+    f32 diff;
+
+    target = scale * (f32)xIndex;
+    *(f32*)((s32)pWin + 0x3FC) = target;
+    target = *(f32*)((s32)pWin + 0x3FC);
+    current = *(f32*)((s32)pWin + 0x3F4);
+    diff = target - current;
+    *(f32*)((s32)pWin + 0x3F4) = diff * rate + current;
+
+    target = scale * (f32)*(s32*)((s32)pWin + 0x3F0);
+    *(f32*)((s32)pWin + 0x400) = target;
+    target = *(f32*)((s32)pWin + 0x400);
+    current = *(f32*)((s32)pWin + 0x3F8);
+    diff = target - current;
+    *(f32*)((s32)pWin + 0x3F8) = diff * rate + current;
 }

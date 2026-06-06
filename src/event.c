@@ -1059,35 +1059,164 @@ void stg0_00_init(void) {
 }
 
 
-u8 stg8_06_init(void) {
-    return 0;
+void stg8_06_init(void) {
+    extern void pouchRemoveItem(s32 item);
+    extern void swSet(s32 flag);
+    extern void evtSetValue(void* event, s32 variable, s32 value);
+
+    pouchRemoveItem(0x25);
+    swSet(0x10EA);
+    swSet(0x10EB);
+    swSet(0x10EC);
+    swSet(0x10ED);
+    swSet(0x10EE);
+    swSet(0x10EF);
+    swSet(0x10F0);
+    swSet(0x10F1);
+    swSet(0x10F2);
+    evtSetValue(0, 0xF5DE05E2, 8);
+    swSet(0x10F3);
+    swSet(0x10F4);
+    swSet(0x10F5);
+    swSet(0x10F6);
+    swSet(0x10F7);
+    swSet(0x10F8);
+    swSet(0x10F9);
+    swSet(0x10FA);
+    swSet(0x10FB);
+    swSet(0x10FC);
+    swSet(0x10FD);
+    swSet(0x10FE);
+    swSet(0x10FF);
+    swSet(0x1100);
+    evtSetValue(0, 0xF5DE05E3, 4);
+    swSet(0x110A);
+    swSet(0x110B);
+    swSet(0x110C);
+    swSet(0x110D);
+    swSet(0x110E);
+    swSet(0x110F);
+    swSet(0x1110);
+    swSet(0x1111);
 }
 
+void stg2_21_06_init00(void) {
+    extern void swByteSet(s32 byte, s32 value);
 
-u8 stg2_21_06_init00(void) {
-    return 0;
+    swByteSet(0x28C, 0);
+    swByteSet(0x28D, 0);
+    swByteSet(0x28E, 0);
+    swByteSet(0x28F, 0);
+    swByteSet(0x290, 0);
+    swByteSet(0x291, 0);
+    swByteSet(0x292, 0);
+    swByteSet(0x293, 0);
+    swByteSet(0x294, 0);
+    swByteSet(0x295, 0);
+    swByteSet(0x296, 0);
+    swByteSet(0x297, 0);
+    swByteSet(0x298, 0);
 }
 
+void stg2_21_01_init(void) {
+    extern void swByteSet(s32 byte, s32 value);
 
-u8 stg2_21_01_init(void) {
-    return 0;
+    swByteSet(0x28C, 0xF6);
+    swByteSet(0x28D, 0xFF);
+    swByteSet(0x28E, 0xFF);
+    swByteSet(0x28F, 0xFF);
+    swByteSet(0x290, 0xFF);
+    swByteSet(0x291, 0xFF);
+    swByteSet(0x292, 0xFF);
+    swByteSet(0x293, 0xFF);
+    swByteSet(0x294, 0xFF);
+    swByteSet(0x295, 0xFF);
+    swByteSet(0x296, 0xFF);
+    swByteSet(0x297, 0xFF);
+    swByteSet(0x298, 0x7F);
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void stg3_12_init__4(void) {
+    extern void swSet(s32 flag);
+    extern void swByteSet(s32 byte, s32 value);
+    extern void pouchReceiveMail(s32 mail);
+    extern void* gp;
+    s32 i;
+    u8* time;
+    void* gpPtr;
+    u32 timeWords[2];
 
-u8 stg3_12_init__4(void) {
-    return 0;
+    for (i = 0; i < 6; i++) {
+        swSet(0x9B4 - i);
+    }
+    swByteSet(0x1FB, 0x14 - i);
+    swSet(0x96A);
+    swSet(0x957);
+    gpPtr = gp;
+    timeWords[0] = *(u32*)((s32)gpPtr + 0x20);
+    timeWords[1] = *(u32*)((s32)gpPtr + 0x24);
+    time = (u8*)timeWords;
+    for (i = 0; i < 8; i++) {
+        swByteSet(i + 0x1FC, time[i]);
+    }
+    swSet(0x12);
+    pouchReceiveMail(0x1C);
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+void stg3_30_init(void) {
+    extern void swSet(s32 flag);
+    extern void swClear(s32 flag);
+    extern void swByteSet(s32 byte, s32 value);
+    s32 i;
+
+    for (i = 0; i < 20; i++) {
+        swSet(0x9B4 - i);
+    }
+    swByteSet(0x1FB, 0x14 - i);
+    swSet(0x978);
+    swClear(0x94F);
+    swClear(0x954);
+    swByteSet(0x1F5, 0);
+    swSet(0x955);
+    swSet(0x95F);
+    swSet(0x960);
+    swSet(0x9D1);
+    swSet(0x9D2);
+    swSet(0x9D3);
+    swSet(0x9D4);
 }
 
+void stg3_34_init(void) {
+    extern void swSet(s32 flag);
+    extern void swClear(s32 flag);
+    extern void marioSetCharMode(s32 mode);
+    extern void pouchRemoveItem(s32 item);
+    s32 i;
 
-u8 stg3_30_init(void) {
-    return 0;
+    swSet(0x962);
+    swSet(0x963);
+    marioSetCharMode(0);
+    pouchRemoveItem(0x41);
+    for (i = 0; i < 20; i++) {
+        swClear(i + 0x9A1);
+    }
+    swClear(0x958);
+    swClear(0x95F);
+    swClear(0x960);
+    swClear(0x94F);
+    swClear(0x9E1);
+    swClear(0x9E4);
+    swClear(0x963);
 }
-
-
-u8 stg3_34_init(void) {
-    return 0;
-}
-
 
 void stg6_71_01_init(void) {
     extern void swSet(s32 flag);

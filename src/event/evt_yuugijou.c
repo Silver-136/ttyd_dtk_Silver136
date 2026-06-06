@@ -127,3 +127,24 @@ USER_FUNC(yuugijou_get_montemedal) {
     evtSetValue(event, event->args[0], *(s32*)((s32)yuwp + 8));
     return 2;
 }
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(yuugijou_add_montemedal) {
+    s32* args = event->args;
+    s32 update = evtGetValue(event, args[0]);
+    s32 add = evtGetValue(event, args[1]);
+    s32 value = *(s32*)((s32)yuwp + 8) + add;
+
+    if (value < 99999) {
+        *(s32*)((s32)yuwp + 8) = value;
+    } else {
+        *(s32*)((s32)yuwp + 8) = 99999;
+    }
+    if (update != 0) {
+        *(s32*)((s32)yuwp + 0x10) = *(s32*)((s32)yuwp + 8);
+    }
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on

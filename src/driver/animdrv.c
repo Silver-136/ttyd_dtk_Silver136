@@ -215,43 +215,203 @@ u8 animPoseSetLocalTime(double param_1, int param_2) {
 
 
 s32 animPaperPoseGetId(s32 name, s32 flag) {
-    return 0;
+    extern s32 wp;
+    extern s32 strcmp(const char*, const char*);
+    s32 i = 0;
+    s32 step = 0;
+    s32 pose;
+
+    while (i < *(s32*)(wp + 0x14)) {
+        pose = *(s32*)(wp + 0x10) + step;
+        if ((*(u32*)pose & 1) && (*(u32*)(pose + 4) & 1) && (*(u32*)(pose + 4) & 2) &&
+            *(s32*)(pose + 0xC) == flag) {
+            s32 data = *(s32*)wp;
+            s32 idx = *(s32*)(pose + 0x10);
+            char* poseName = (char*)(**(s32**)(*(s32*)(data + (idx << 4) + 8) + 0xA0) + 4);
+            if (strcmp(poseName, (char*)name) == 0) {
+                break;
+            }
+        }
+        step += 0x170;
+        i++;
+    }
+    if (i == *(s32*)(wp + 0x14)) {
+        i = -1;
+    }
+    return i;
 }
 
 
 void animPaperPoseRelease(s32 poseId) {
+    extern s32 wp;
+    extern void fileFree(void*);
+    s32 pose = *(s32*)(wp + 0x10) + poseId * 0x170;
+    s32 file;
+    s32 group;
+
+    *(s32*)(pose + 8) = *(s32*)(pose + 8) - 1;
+    if (*(s32*)(pose + 8) < 0) {
+        group = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
+        *(s32*)(group + 4) = *(s32*)(group + 4) - 1;
+        if (*(s32*)(group + 4) <= 0) {
+            *(s32*)group = 0;
+            file = *(s32*)(wp + 8) + *(s32*)(group + 0xC) * 0xC;
+            *(s32*)(file + 4) = *(s32*)(file + 4) - 1;
+            if (*(s32*)(file + 4) <= 0) {
+                fileFree(*(void**)(file + 8));
+                *(s32*)file = 0;
+            }
+            fileFree(*(void**)(group + 8));
+        }
+        *(s32*)pose = 0;
+    }
+}
+
+void animSetPaperTexMtx(void* param_1, void* param_2, void* param_3) {
+    extern s32 wp;
+    extern void PSMTXCopy(void* src, void* dst);
+
+    if (param_1 == 0) {
+        *(s32*)(wp + 0xCC) = 0;
+    } else {
+        PSMTXCopy(param_1, (void*)(wp + 0x3C));
+        *(s32*)(wp + 0xCC) = wp + 0x3C;
+    }
+    if (param_2 == 0) {
+        *(s32*)(wp + 0xD0) = 0;
+    } else {
+        PSMTXCopy(param_2, (void*)(wp + 0x6C));
+        *(s32*)(wp + 0xD0) = wp + 0x6C;
+    }
+    if (param_3 == 0) {
+        *(s32*)(wp + 0xD4) = 0;
+    } else {
+        PSMTXCopy(param_3, (void*)(wp + 0x9C));
+        *(s32*)(wp + 0xD4) = wp + 0x9C;
+    }
+}
+
+void animPoseWorldMatrixEvalOn(int poseIdx, u8 param_2) {
+    extern s32 wp;
+    extern void* smartAlloc(s32 size, s32 mode);
+    s32 offset = poseIdx * 0x170;
+    s32 pose;
+    s32 data;
+    s32 group;
+    s32 mode;
+
+    pose = *(s32*)(wp + 0x10) + offset;
+    data = *(s32*)wp;
+    group = **(s32**)(*(s32*)(data + (*(s32*)(pose + 0x10) << 4) + 8) + 0xA0);
+    if ((*(u32*)pose & 0x80) == 0) {
+        *(u32*)pose |= 0x80;
+        switch (*(s32*)(pose + 0xC)) {
+            case 0:
+                mode = 1;
+                break;
+            case 1:
+                mode = 2;
+                break;
+            case 2:
+                mode = 0;
+                break;
+        }
+        *(s32*)(pose + 0x168) = *(s32*)(group + 0x144);
+        *(void**)(pose + 0x164) = smartAlloc(*(s32*)(group + 0x144) * 0x30, mode);
+    }
 }
 
 
-u8 animSetPaperTexMtx(void* param_1, void* param_2, void* param_3) {
-    return 0;
-}
+void animPoseWorldPositionEvalOn(int poseIdx, u8 param_2) {
+    extern s32 wp;
+    extern void* smartAlloc(s32 size, s32 mode);
+    s32 offset = poseIdx * 0x170;
+    s32 pose;
+    s32 data;
+    s32 group;
+    s32 mode;
 
-
-u8 animPoseWorldMatrixEvalOn(int poseIdx, u8 param_2) {
-    return 0;
-}
-
-
-u8 animPoseWorldPositionEvalOn(int poseIdx, u8 param_2) {
-    return 0;
+    pose = *(s32*)(wp + 0x10) + offset;
+    data = *(s32*)wp;
+    group = **(s32**)(*(s32*)(data + (*(s32*)(pose + 0x10) << 4) + 8) + 0xA0);
+    if ((*(u32*)pose & 0x40) == 0) {
+        *(u32*)pose |= 0x40;
+        switch (*(s32*)(pose + 0xC)) {
+            case 0:
+                mode = 1;
+                break;
+            case 1:
+                mode = 2;
+                break;
+            case 2:
+                mode = 0;
+                break;
+        }
+        *(s32*)(pose + 0x160) = *(s32*)(group + 0x144);
+        *(void**)(pose + 0x15C) = smartAlloc(*(s32*)(group + 0x144) * 0xC, mode);
+    }
 }
 
 
 int animPoseGetGroupIdx(int poseIdx, char* pGroupName) {
-    return 0;
+    extern s32 wp;
+    extern s32 strcmp(const char*, const char*);
+    s32 group;
+    s32 entry;
+    s32 i = 0;
+    register s32 offset = poseIdx * 0x170;
+    s32 data = *(s32*)wp;
+    s32 base = *(s32*)(wp + 0x10);
+
+    base += offset;
+    data += *(s32*)(base + 0x10) << 4;
+    group = **(s32**)(*(s32*)(data + 8) + 0xA0);
+    entry = *(s32*)(group + 0x1A8);
+    while (i < *(s32*)(group + 0x144)) {
+        if (strcmp((char*)entry, pGroupName) == 0) {
+            return i;
+        }
+        i++;
+        entry += 0x58;
+    }
+    return -1;
 }
 
+int animPoseGetShapeIdx(int poseIdx, char* pShapeName) {
+    extern s32 wp;
+    extern s32 strcmp(const char*, const char*);
+    s32 group;
+    s32 entry;
+    s32 i = 0;
+    register s32 offset = poseIdx * 0x170;
+    s32 data = *(s32*)wp;
+    s32 base = *(s32*)(wp + 0x10);
 
-int animPoseGetShapeIdx(int param_1, char* param_2) {
-    return 0;
+    base += offset;
+    data += *(s32*)(base + 0x10) << 4;
+    group = **(s32**)(*(s32*)(data + 8) + 0xA0);
+    entry = *(s32*)(group + 0x14C);
+    while (i < *(s32*)(group + 0xE8)) {
+        if (strcmp((char*)entry, pShapeName) == 0) {
+            return i;
+        }
+        i++;
+        entry += 0xA8;
+    }
+    return -1;
 }
-
 
 s64 animTimeGetTime(int param_1) {
-    return 0;
-}
+    extern s32 gp;
 
+    if (param_1 == 0) {
+        u32 ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+        return *(s64*)(gp + 0x40) / ticks;
+    } else {
+        u32 ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+        return *(s64*)(gp + 0x38) / ticks;
+    }
+}
 
 u8 animPaperPoseDisp(void) {
     return 0;
@@ -263,11 +423,11 @@ void animPoseDraw(int poseIdx, double x, double y, double z, double rot, double 
 
 
 f32 animPoseGetHeight(s32 poseId) {
-    extern f32 float_2_8041fb64;
     s32 base;
     s32 pose;
     s32 group;
     s32 data;
+    s32 value;
 
     pose = *(s32*)(wp + 0x10);
     pose += poseId * 0x170;
@@ -275,16 +435,18 @@ f32 animPoseGetHeight(s32 poseId) {
     group = *(s32*)(pose + 0x10);
     base += group * 0x10;
     data = *(s32*)(*(s32*)(*(s32*)(base + 8) + 0xA0) + 0);
-    return float_2_8041fb64 * (f32)*(s32*)(data + 0xCC);
+    value = *(s32*)(data + 0xCC);
+
+    return 2.0f * (f32)value;
 }
 
 
 f32 animPoseGetRadius(s32 poseId) {
-    extern f32 float_2_8041fb64;
     s32 base;
     s32 pose;
     s32 group;
     s32 data;
+    s32 value;
 
     pose = *(s32*)(wp + 0x10);
     pose += poseId * 0x170;
@@ -292,7 +454,9 @@ f32 animPoseGetRadius(s32 poseId) {
     group = *(s32*)(pose + 0x10);
     base += group * 0x10;
     data = *(s32*)(*(s32*)(*(s32*)(base + 8) + 0xA0) + 0);
-    return float_2_8041fb64 * (f32)*(s32*)(data + 0xC8);
+    value = *(s32*)(data + 0xC8);
+
+    return 2.0f * (f32)value;
 }
 
 
@@ -376,10 +540,10 @@ u32 animPoseTestXLU(s32 poseId) {
 
 
 void animMain(void) {
-    extern void dispEntry(s32 cameraId, s32 layer, void* callback, f32 z, void* param);
-    extern f32 float_0_8041fb28;
-    extern u8 animPaperPoseDisp(void);
-    dispEntry(0, 1, animPaperPoseDisp, float_0_8041fb28, 0);
+    extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
+    extern void animPaperPoseDisp(void);
+
+    dispEntry(0, 1, animPaperPoseDisp, 0, 0.0f);
 }
 
 

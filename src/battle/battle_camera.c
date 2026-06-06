@@ -213,6 +213,10 @@ void btl_camera_noshake(s32 priority) {
 }
 
 void btl_camera_set_mode(s32 priority, s32 mode);
+void* camGetPtr(s32 cameraId);
+void btl_camera_shake_h(s32 priority, f32 a, f32 b, s32 time, s32 type);
+void btl_camera_shake_w(s32 priority, f32 a, f32 b, s32 time, s32 type);
+void btl_camera_set_moveto(s32 priority, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz, s32 frames, s32 type);
 
 s32 evt_btl_camera_off_posoffset_manual(void* evt) {
     s32* args;
@@ -354,31 +358,138 @@ s32 evt_btl_camera_set_homing_unit(int param_1) {
 }
 
 
-void btl_camera_set_moveto(float param_1, float param_2, float param_3, float param_4, float param_5, float param_6, int priority, s32 param_8, s32 param_9) {
+void btl_camera_set_moveto(s32 priority, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz, s32 frames, s32 type) {
+    void* work;
+    void* cam;
+
+    work = _battleWorkPointer;
+    cam = camGetPtr(4);
+
+    if (priority < *(s32*)((s32)work + 0x275C)) {
+        return;
+    }
+
+    *(f32*)((s32)work + 0x27E0) = *(f32*)((s32)cam + 0xC);
+    *(f32*)((s32)work + 0x27E4) = *(f32*)((s32)cam + 0x10);
+    *(f32*)((s32)work + 0x27E8) = *(f32*)((s32)cam + 0x14);
+    *(f32*)((s32)work + 0x27EC) = x;
+    *(f32*)((s32)work + 0x27F0) = y;
+    *(f32*)((s32)work + 0x27F4) = z;
+    *(f32*)((s32)work + 0x27F8) = *(f32*)((s32)cam + 0x18);
+    *(f32*)((s32)work + 0x27FC) = *(f32*)((s32)cam + 0x1C);
+    *(f32*)((s32)work + 0x2800) = *(f32*)((s32)cam + 0x20);
+    *(f32*)((s32)work + 0x2804) = tx;
+    *(f32*)((s32)work + 0x2808) = ty;
+    *(f32*)((s32)work + 0x280C) = tz;
+    *(s32*)((s32)work + 0x27D8) = frames;
+    *(s32*)((s32)work + 0x27DC) = frames;
+    *(s32*)((s32)work + 0x27D4) = type;
 }
 
 
-u8 evt_btl_camera_shake_h(void) {
-    return 0;
+u8 evt_btl_camera_shake_h(void* event) {
+    s32* args;
+    s32 priority;
+    f32 a;
+    f32 b;
+    s32 frames;
+    s32 type;
+
+    args = *(s32**)((s32)event + 0x18);
+    priority = evtGetValue(event, args[0]);
+    a = evtGetValue(event, args[1]);
+    b = evtGetValue(event, args[2]);
+    frames = evtGetValue(event, args[3]);
+    type = evtGetValue(event, args[4]);
+    btl_camera_shake_h(priority, a, b, frames, type);
+
+    return 2;
 }
 
 
-u8 evt_btl_camera_shake_w(void) {
-    return 0;
+u8 evt_btl_camera_shake_w(void* event) {
+    s32* args;
+    s32 priority;
+    f32 a;
+    f32 b;
+    s32 frames;
+    s32 type;
+
+    args = *(s32**)((s32)event + 0x18);
+    priority = evtGetValue(event, args[0]);
+    a = evtGetValue(event, args[1]);
+    b = evtGetValue(event, args[2]);
+    frames = evtGetValue(event, args[3]);
+    type = evtGetValue(event, args[4]);
+    btl_camera_shake_w(priority, a, b, frames, type);
+
+    return 2;
 }
 
 
-u8 evt_btl_camera_set_moveto(void) {
-    return 0;
+u8 evt_btl_camera_set_moveto(void* event) {
+    s32* args;
+    s32 priority;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 tx;
+    f32 ty;
+    f32 tz;
+    s32 frames;
+    s32 type;
+
+    args = *(s32**)((s32)event + 0x18);
+    priority = evtGetValue(event, args[0]);
+    x = evtGetFloat(event, args[1]);
+    y = evtGetFloat(event, args[2]);
+    z = evtGetFloat(event, args[3]);
+    tx = evtGetFloat(event, args[4]);
+    ty = evtGetFloat(event, args[5]);
+    tz = evtGetFloat(event, args[6]);
+    frames = evtGetValue(event, args[7]);
+    type = evtGetValue(event, args[8]);
+    btl_camera_set_moveto(priority, x, y, z, tx, ty, tz, frames, type);
+
+    return 2;
 }
 
 
-s32 evt_btl_camera_set_posoffset(int param_1) {
-    return 0;
+s32 evt_btl_camera_set_posoffset(void* event) {
+    s32* args;
+    s32 priority;
+    f32 x;
+    f32 y;
+    f32 z;
+
+    args = *(s32**)((s32)event + 0x18);
+    priority = evtGetValue(event, args[0]);
+    x = evtGetFloat(event, args[1]);
+    y = evtGetFloat(event, args[2]);
+    z = evtGetFloat(event, args[3]);
+    btl_camera_set_posoffset(priority, x, y, z);
+
+    return 2;
 }
 
 
 void btl_camera_set_mode(s32 priority, s32 mode) {
+    void* work;
+
+    work = _battleWorkPointer;
+    if (priority < *(s32*)((s32)work + 0x275C)) {
+        return;
+    }
+
+    *(s32*)((s32)work + 0x2760) = mode;
+    *(f32*)((s32)work + 0x2778) = 0.0f;
+    *(s16*)((s32)work + 0x277C) = 1;
+    *(s16*)((s32)work + 0x277E) = 1;
+    *(s32*)((s32)work + 0x2758) = 0;
+    btl_camera_nomove_x_onoff(0, 0);
+    btl_camera_nomove_y_onoff(0, 0);
+    btl_camera_nomove_z_onoff(0, 0);
+    *(u32*)((s32)work + 0x2754) &= ~0x41;
 }
 
 
@@ -387,9 +498,33 @@ s32 evt_btl_camera_add_zoom(int param_1) {
 }
 
 
-void btl_camera_shake_h(double param_1, double param_2, int priority, s32 param_4, s32 param_5) {
+void btl_camera_shake_h(s32 priority, f32 a, f32 b, s32 frames, s32 type) {
+    void* work = _battleWorkPointer;
+
+    if (priority < *(s32*)((s32)work + 0x275C)) {
+        return;
+    }
+
+    *(u32*)((s32)work + 0x2754) |= 1;
+    *(f32*)((s32)work + 0x2780) = a;
+    *(f32*)((s32)work + 0x2784) = b;
+    *(s32*)((s32)work + 0x2788) = frames;
+    *(s32*)((s32)work + 0x278C) = frames;
+    *(s32*)((s32)work + 0x2790) = type;
 }
 
 
-void btl_camera_shake_w(double param_1, double param_2, int priority, s32 param_4, s32 param_5) {
+void btl_camera_shake_w(s32 priority, f32 a, f32 b, s32 frames, s32 type) {
+    void* work = _battleWorkPointer;
+
+    if (priority < *(s32*)((s32)work + 0x275C)) {
+        return;
+    }
+
+    *(u32*)((s32)work + 0x2754) |= 2;
+    *(f32*)((s32)work + 0x2794) = a;
+    *(f32*)((s32)work + 0x2798) = b;
+    *(s32*)((s32)work + 0x279C) = frames;
+    *(s32*)((s32)work + 0x27A0) = frames;
+    *(s32*)((s32)work + 0x27A4) = type;
 }

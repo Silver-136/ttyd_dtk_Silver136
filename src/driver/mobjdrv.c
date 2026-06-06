@@ -123,15 +123,79 @@ void mobjDelete(s32 name) {
 }
 
 
-void* mobjNameToPtrNoAssert(s32 name) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void* mobjNameToPtrNoAssert(char* name) {
+    extern MobjWork work;
+    extern void* gp;
+    extern s32 koopaRunFlag;
+    extern s32 strcmp(const char* a, const char* b);
+    MobjSet* set;
+    s32 i;
+    s32 count;
+    void* entry;
+    if (koopaRunFlag != 0) {
+        set = &work.koopa;
+    } else {
+        set = &work.normal;
+        if (*(s32*)((s32)gp + 0x14) != 0) {
+            set = &work.alt;
+        }
+    }
+    count = set->count;
+    i = 0;
+    entry = set->entries;
+    while (i < count) {
+        if ((*(u32*)entry & 1) && strcmp((char*)((s32)entry + 5), name) == 0) {
+            break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x23C);
+    }
+    if (i >= count) {
+        return 0;
+    }
+    return entry;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-void* mobjNameToPtr(s32 name) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void* mobjNameToPtr(char* name) {
+    extern MobjWork work;
+    extern void* gp;
+    extern s32 koopaRunFlag;
+    extern s32 strcmp(const char* a, const char* b);
+    MobjSet* set;
+    s32 count;
+    s32 i;
+    void* entry;
+    if (koopaRunFlag != 0) {
+        set = &work.koopa;
+    } else {
+        set = &work.normal;
+        if (*(s32*)((s32)gp + 0x14) != 0) {
+            set = &work.alt;
+        }
+    }
+    count = set->count;
+    i = 0;
+    entry = set->entries;
+    while (i < count) {
+        if ((*(u32*)entry & 1) && strcmp((char*)((s32)entry + 5), name) == 0) {
+            break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x23C);
+    }
+    return entry;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 int mobjCheckItemboxOpen(int param_1) {
     return 0;

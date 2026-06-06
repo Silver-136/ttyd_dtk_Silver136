@@ -35,6 +35,8 @@ extern void BtlUnit_SetAnimType();
 extern void btl_camera_set_mode();
 extern void _btlcmd_MakeSelectWeaponTable();
 extern void BattleMenuDisp_WeaponSelect_Init();
+extern void evtSetValue(void* evt, s32 var, s32 value);
+extern const char str_btl_wn_dummy_noitem_802efc28[];
 
 /* [high] BattleCommandDisplay_ProtectPartnerSelectMenuEnd: battle command flag clear
  */
@@ -426,8 +428,40 @@ int _btlcmd_CheckWeaponTargetNum(void* battleWork, void* unit, void* weapon) {
 }
 
 
-s32 _get_msg(int param_1) {
-    return 0;
+s32 _get_msg(void* evt) {
+    void* battleWork;
+    s32* args;
+    s32 dst;
+    const char* msg;
+
+    msg = str_btl_wn_dummy_noitem_802efc28;
+    battleWork = _battleWorkPointer;
+    args = *(s32**)((s32)evt + 0x18);
+    dst = args[0];
+
+    switch (*(s32*)((s32)battleWork + 0x1C80)) {
+        case 1:
+            msg += 0x1A0;
+            break;
+        case 2:
+            msg += 0x1B8;
+            break;
+        case 4:
+            msg += 0x1D0;
+            break;
+        case 5:
+            msg += 0x1F0;
+            break;
+        case 6:
+            msg += 0x214;
+            break;
+        default:
+            msg += 0x230;
+            break;
+    }
+
+    evtSetValue(evt, dst, (s32)msg);
+    return 2;
 }
 
 

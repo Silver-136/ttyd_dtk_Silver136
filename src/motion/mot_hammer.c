@@ -44,6 +44,30 @@ s32 marioChkHammer2(void) {
 }
 
 
-u8 mot_ham2_post(void) {
-    return 0;
+void mot_ham2_post(void) {
+    extern void* marioGetPtr(void);
+    extern void marioPaperOff(void);
+    extern void marioAdjustMoveDir(void);
+    extern f32 float_0_80420ab8;
+    extern f32 float_0p01_80420b00;
+    void* mario = marioGetPtr();
+    u32 flags = *(u32*)((s32)mario + 0x4);
+    if (flags & 0x40000000) {
+        marioPaperOff();
+    }
+    {
+        void* mario2 = marioGetPtr();
+        f32 small = float_0p01_80420b00;
+        f32 zero = float_0_80420ab8;
+        *(f32*)((s32)mario2 + 0x148) = zero;
+        *(f32*)((s32)mario2 + 0x158) = small;
+    }
+    marioPaperOff();
+    *(u32*)((s32)mario + 0x4) &= ~0x100;
+    *(u32*)((s32)mario + 0x4) &= ~0x8;
+    *(u32*)((s32)mario + 0x4) &= ~0x10;
+    *(u32*)((s32)mario + 0x4) &= ~0x4;
+    *(u32*)((s32)mario + 0x0) &= ~0x80;
+    marioAdjustMoveDir();
 }
+

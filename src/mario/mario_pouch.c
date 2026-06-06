@@ -1208,22 +1208,95 @@ u8 comp_aiueo(short* param_1, short* param_2) {
 }
 
 
+void unk_800d48b0(u16* src, u16* dst) {
+    extern s32 strlen(const char* str);
+    extern char* strcpy(char* dst, const char* src);
+    extern void* gp;
+    s32 count;
+    s32 i;
+    u16 value;
+
+    count = strlen((const char*)src) >> 1;
+    if (*(u32*)((s32)gp + 0x16C) == 0) {
+        for (i = 0; i < count; i++) {
+            value = src[i];
+            if (value >= 0x829F && value < 0x82DE) {
+                value += 0xA1;
+            } else if (value >= 0x82DE && value <= 0x82F1) {
+                value += 0xA2;
+            }
+            dst[i] = value;
+        }
+        *(u8*)((s32)dst + i * 2) = 0;
+    } else {
+        strcpy((char*)dst, (const char*)src);
+    }
+}
+
+
 void pouchReceiveMail(s32 mail) {
+    s32 i;
+    s32 count;
+    s32 base;
+
+    count = 0;
+    base = mpp;
+    for (i = 0; i < 99; i++) {
+        if (*(u32*)(base + 0x580 + (i / 32) * 4) & (1 << (i % 32))) {
+            count++;
+        }
+    }
+
+    *(u32*)(base + 0x580 + (mail / 32) * 4) |= 1 << (mail % 32);
+    *(u8*)(mpp + 0x51A + count) = mail;
 }
 
 
 int pouchReceiveMailCount(void) {
-    return 0;
+    s32 i;
+    s32 count;
+    s32 base;
+
+    count = 0;
+    base = mpp;
+    for (i = 0; i < 99; i++) {
+        if (*(u32*)(base + 0x580 + (i / 32) * 4) & (1 << (i % 32))) {
+            count++;
+        }
+    }
+    return count;
 }
 
 
 int pouchGetEmptyKeepItemCnt(void) {
-    return 0;
+    s16* items;
+    s32 count;
+    s32 i;
+
+    count = 0;
+    items = (s16*)(mpp + 0x1BA);
+    for (i = 0; i < 32; i++) {
+        if (items[i] == 0) {
+            count++;
+        }
+    }
+    return count;
 }
 
 
 int pouchGetKeepItemCnt(void) {
-    return 0;
+    s16* items;
+    s32 count;
+    s32 i;
+
+    count = 0;
+    items = (s16*)(mpp + 0x1BA);
+    for (i = 0; i < 32; i++) {
+        if (items[i] != 0) {
+            count++;
+        }
+    }
+    return count;
 }
 
 

@@ -404,14 +404,93 @@ void* BattleChangeParty(void* battleWork) {
 
 
 u32 BattleMajinaiCheck(void) {
-    return 0;
-}
+    extern void* pouchGetPtr(void);
+    extern s32 irand(s32);
+    void* pouch = pouchGetPtr();
+    BattleWork* wp = _battleWorkPointer;
+    u8 turn;
+    s32 value;
 
+    if (*(u8*)((s32)pouch + 0x5B8) == 0) {
+        return 0;
+    }
+
+    turn = *(u8*)((s32)pouch + 0x5B9);
+    if ((s8)turn < 0) {
+        *(u8*)((s32)pouch + 0x5BA) = 0;
+        *(u8*)((s32)pouch + 0x5B9) = irand(5) + 6;
+        *(u8*)((s32)pouch + 0x5B9) = *(u8*)((s32)pouch + 0x5B9) - 1;
+        return 0;
+    }
+
+    value = *(u8*)((s32)pouch + 0x5BA);
+    if (value != 0) {
+        return value;
+    }
+
+    *(u8*)((s32)pouch + 0x5B9) = turn - 1;
+    if (*(s8*)((s32)pouch + 0x5B9) > 0) {
+        return 0;
+    }
+
+    *(u8*)((s32)pouch + 0x5B9) = 0;
+    if ((*(u32*)(*(s32*)(*(s32*)((s32)wp + 0x2738) + 0xC) + 4) & 0x20) != 0) {
+        value = irand(100);
+        if (value < 45) {
+            *(u8*)((s32)pouch + 0x5BA) = 1;
+        } else if (value < 90) {
+            *(u8*)((s32)pouch + 0x5BA) = 2;
+        } else {
+            *(u8*)((s32)pouch + 0x5BA) = 3;
+        }
+    } else {
+        value = irand(100);
+        if (value < 30) {
+            *(u8*)((s32)pouch + 0x5BA) = 1;
+        } else if (value < 60) {
+            *(u8*)((s32)pouch + 0x5BA) = 2;
+        } else if (value < 80) {
+            *(u8*)((s32)pouch + 0x5BA) = 3;
+        } else {
+            *(u8*)((s32)pouch + 0x5BA) = 4;
+        }
+    }
+    return *(u8*)((s32)pouch + 0x5BA);
+}
 
 s32 BattleTransPartyId(BattleUnitType type) {
-    return 0;
+    switch (type) {
+        case 0x50:
+        case 0x89:
+        case UNIT_GOOMBELLA:
+            return 1;
+        case 0x51:
+        case 0x8A:
+        case UNIT_KOOPS:
+            return 2;
+        case 0x52:
+        case 0x8B:
+        case UNIT_YOSHI:
+            return 4;
+        case 0x53:
+        case 0x8C:
+        case UNIT_FLURRIE:
+            return 5;
+        case 0x8D:
+        case UNIT_VIVIAN:
+            return 6;
+        case 0x8E:
+        case UNIT_BOBBERY:
+            return 3;
+        case 0x8F:
+        case UNIT_MS_MOWZ:
+            return 7;
+        case 0:
+            return 0;
+        default:
+            return 0;
+    }
 }
-
 
 s32 BattleAfterReactionMain(void) {
     return 0;
@@ -419,17 +498,95 @@ s32 BattleAfterReactionMain(void) {
 
 
 void BtlUnit_EquipItem(void* unit, u32 param_2, u32 item) {
+    extern void* pouchGetPtr(void);
+    extern void BtlUnit_ReviseHpFp(void*);
+    void* pouch;
+    void* unitLocal;
+    u32 flags;
+    u32 itemLocal;
+    s32 i;
+    s32 offset;
+
+    unitLocal = unit;
+    flags = param_2;
+    itemLocal = item;
+    pouch = pouchGetPtr();
+    if (unitLocal != NULL) {
+        if (flags & 1) {
+            for (i = 0; i < 40; i++) {
+                *(u8*)((s32)unitLocal + 0x2E0 + i) = 0;
+            }
+        }
+        if (*(s32*)((s32)unitLocal + 8) != 0xDC) {
+            if (flags & 6) {
+                itemLocal = 0;
+                flags &= ~1;
+                offset = itemLocal;
+                for (i = 0; i < 200; i++, offset += 2) {
+                    _EquipItem(unitLocal, flags, *(s16*)((s32)pouch + 0x38A + offset));
+                }
+            } else {
+                _EquipItem(unitLocal, flags, itemLocal);
+            }
+            BtlUnit_ReviseHpFp(unitLocal);
+        }
+    }
 }
 
+s32 BattleStatusWindowCheck(void) {
+    extern s32 statusWinCheck(void);
+    extern void statusWinOpen(void);
+    extern void statusWinClose(void);
+    BattleWork* wp = _battleWorkPointer;
+    s32 flag;
 
-void BattleStatusWindowCheck(void) {
+    if (*(s32*)((s32)wp + 0x273C) != 0) {
+        flag = 0;
+    } else if (*(s32*)((s32)wp + 0x2740) != 0) {
+        flag = 0;
+    } else if (*(s32*)((s32)wp + 0x274C) != 0) {
+        flag = 1;
+    } else if (*(s32*)((s32)wp + 0x2748) != 0 && *(s32*)((s32)wp + 0x2744) != 0) {
+        flag = 1;
+    } else {
+        flag = 0;
+    }
+
+    if (flag != 0) {
+        if (statusWinCheck() == 0) {
+            statusWinOpen();
+        }
+    } else {
+        if (statusWinCheck() != 0) {
+            statusWinClose();
+        }
+    }
+    return flag;
 }
 
+void BattleAfterReactionRelease(int param_1, int param_2) {
+    s32 i;
+    s32 j;
+    s32 offset;
+    s32* queue;
 
-u8 BattleAfterReactionRelease(int param_1, int param_2) {
-    return 0;
+    queue = (s32*)((s32)_battleWorkPointer + 0x16F5C);
+    for (i = 0; i < 64; i++) {
+        offset = i * 8;
+        if (*(s32*)((s32)queue + offset) != -1 &&
+            param_1 == *(s32*)((s32)queue + offset) &&
+            param_2 == *(s32*)((s32)queue + offset + 4)) {
+            for (j = i; j < 63; j++) {
+                offset = j * 8;
+                *(s32*)((s32)queue + offset) = *(s32*)((s32)queue + offset + 8);
+                *(s32*)((s32)queue + offset + 4) = *(s32*)((s32)queue + offset + 12);
+            }
+            queue[126] = -1;
+            i--;
+            queue[127] = 0;
+        }
+    }
 }
-
 
 void BattleAfterReactionEntry(s32 unitId, s32 arg) {
     s32 i;
@@ -510,8 +667,23 @@ void BattleAfterReactionQueueInit(void) {
 
 
 void BattlePartyInfoWorkInit(BattleWork* wp) {
-}
+    extern f32 float_1_80422174;
+    f32 size;
+    s32 type;
+    s32 zero;
+    BattleWorkPartyInfo* info;
 
+    size = float_1_80422174;
+    zero = 0;
+    for (type = UNIT_GOOMBELLA; type < UNIT_MAX; type++) {
+        info = (BattleWorkPartyInfo*)((s32)wp + 0x162A0 + ((type - UNIT_GOOMBELLA) * sizeof(BattleWorkPartyInfo)));
+        info->sizeMultiplier = size;
+        info->statusFlags = zero;
+        memset(&info->statusEffects, zero, sizeof(BattleWorkStatus));
+        info->unk28 = zero;
+        info->unk2A = zero;
+    }
+}
 
 s32 BattleGetSeq(BattleWork* wp, BattleSequence seq) {
     switch (seq) {

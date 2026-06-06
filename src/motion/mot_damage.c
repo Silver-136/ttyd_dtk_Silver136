@@ -9,6 +9,14 @@ s32 marioBgmodeChk(void);
 void* evtEntry(void* script, s32 priority, s32 flags);
 void psndSFXOn_3D(s32 id, void* pos);
 void effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
+void marioGetScreenPos(void* pos, f32* x, f32* y, f32* z);
+s32 marioChkInScreen(s32 x, s32 y);
+
+typedef struct DamageVec {
+    f32 x;
+    f32 y;
+    f32 z;
+} DamageVec;
 
 void set_damage_root_ypos(f32 y) {
     f32 temp = y;
@@ -58,11 +66,55 @@ u8 mot_damageToge(void) {
 
 
 s32 marioWaitDamageTogeReturnFall(void) {
+    s32 mario = (s32)marioGetPtr();
+    DamageVec pos;
+    f32 x;
+    f32 y;
+    f32 z;
+    u32 px;
+    u32 py;
+
+    if (*(u16*)(mario + 0x2E) != 0x20) {
+        return -1;
+    }
+    if (*(s32*)(mario + 0x44) >= 20) {
+        px = *(u32*)(mario + 0x8C);
+        py = *(u32*)(mario + 0x90);
+        *(u32*)&pos.x = px;
+        *(u32*)&pos.y = py;
+        *(u32*)&pos.z = *(u32*)(mario + 0x94);
+        marioGetScreenPos(&pos, &x, &y, &z);
+        if (marioChkInScreen((s32)x, (s32)y) != 0) {
+            return 1;
+        }
+    }
     return 0;
 }
 
 
 s32 marioWaitDamageReturnFall(void) {
+    s32 mario = (s32)marioGetPtr();
+    DamageVec pos;
+    f32 x;
+    f32 y;
+    f32 z;
+    u32 px;
+    u32 py;
+
+    if (*(u16*)(mario + 0x2E) != 0x1F) {
+        return -1;
+    }
+    if (*(s32*)(mario + 0x44) >= 20) {
+        px = *(u32*)(mario + 0x8C);
+        py = *(u32*)(mario + 0x90);
+        *(u32*)&pos.x = px;
+        *(u32*)&pos.y = py;
+        *(u32*)&pos.z = *(u32*)(mario + 0x94);
+        marioGetScreenPos(&pos, &x, &y, &z);
+        if (marioChkInScreen((s32)x, (s32)y) != 0) {
+            return 1;
+        }
+    }
     return 0;
 }
 

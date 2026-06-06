@@ -193,145 +193,1357 @@ u8 evt_party_move_pos(s32 pEvt, s32 param_2) {
 }
 
 
-s32 evt_party_nokotaro_hold_cancel(void* pEvt, int param_2) {
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_party_nokotaro_hold_cancel(EventEntry* event, s32 first) {
+    extern s32 nokonokoGetStatus(void* party);
+    extern void nokotaro_hold_cancel(void* party);
+
+    void* party;
+    s32 ret = 0;
+    s32* args = event->args;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    if (first != 0) {
+        if ((s32)*(u8*)((s32)party + 0x31) != 2) {
+            return 2;
+        }
+        if (nokonokoGetStatus(party) == 0) {
+            return 2;
+        }
+        *(s32*)((s32)event + 0x78) = 0;
+    }
+    switch (*(s32*)((s32)event + 0x78)) {
+        case 0:
+            if (nokonokoGetStatus(party) != 3) {
+                ret = 0;
+            } else {
+                nokotaro_hold_cancel(party);
+                *(s32*)((s32)event + 0x78) = 1;
+            }
+            break;
+        case 1:
+            if (nokonokoGetStatus(party) != 0) {
+                ret = 0;
+            } else {
+                *(u32*)party &= 0x7FFFFFFF;
+                ret = 2;
+            }
+            break;
+    }
+    return ret;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_set_dir_pos) {
+    extern void* camGetPtr(s32 id);
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern f32 revise360(f32 angle);
+    extern f32 float_180_80421d58;
+
+    s32* args = event->args;
+    void* party = partyGetPtr(args[0]);
+    f32 x;
+    f32 z;
+    f32 angle;
+    f32 bucket;
+    if (party == 0) {
+        return 2;
+    }
+    x = (f32)evtGetValue(event, args[1]);
+    z = (f32)evtGetValue(event, args[2]);
+    angle = revise360(angleABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60), x, z) - *(f32*)((s32)camGetPtr(4) + 0x114));
+    if (angle < float_180_80421d58) {
+        bucket = float_180_80421d58;
+    } else {
+        bucket = float_0_80421d4c;
+    }
+    *(f32*)((s32)party + 0x110) = bucket;
+    *(f32*)((s32)party + 0x100) = angle;
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_party_yoshi_ride(EventEntry* event, s32 first) {
+    extern void partyChgRunMode(void* party, s32 mode);
+    extern s32 yoshiGetStatus(void);
+    extern u32 marioGetoffYoshi(void);
+
+    s32* args = event->args;
+    void* party;
+    s32 ride;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    ride = args[1];
+    if (first != 0) {
+        if (ride != 0) {
+            if (yoshiGetStatus() != 0) {
+                return 2;
+            }
+            *(u32*)party |= 0x80000000;
+            *(u32*)party |= 0x100;
+            partyChgRunMode(party, 3);
+        } else {
+            marioGetoffYoshi();
+        }
+    }
+    if (ride != 0) {
+        if (yoshiGetStatus() == 1) {
+            *(u32*)party &= 0x7FFFFFFF;
+            return 2;
+        }
+    } else if (yoshiGetStatus() == 0) {
+        *(u32*)party &= 0x7FFFFFFF;
+        return 2;
+    }
     return 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-u8 evt_party_set_dir_pos(void) {
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_party_set_dir_npc(EventEntry* event, s32 first) {
+    extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
+    extern void* camGetPtr(s32 id);
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern f32 revise360(f32 angle);
+    extern f32 float_180_80421d58;
+
+    s32* args = event->args;
+    void* party = partyGetPtr(args[0]);
+    void* npc;
+    s32 name;
+    f32 x;
+    f32 z;
+    f32 angle;
+    f32 bucket;
+    if (party == 0) {
+        return 2;
+    }
+    if (first != 0) {
+        name = evtGetValue(event, args[1]);
+        npc = evtNpcNameToPtr(event, name);
+        if (npc == 0) {
+            return 2;
+        }
+        x = *(f32*)((s32)npc + 0x8C);
+        z = *(f32*)((s32)npc + 0x94);
+        angle = revise360(angleABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60), x, z) - *(f32*)((s32)camGetPtr(4) + 0x114));
+        if (angle < float_180_80421d58) {
+            bucket = float_180_80421d58;
+        } else {
+            bucket = float_0_80421d4c;
+        }
+        *(f32*)((s32)party + 0x110) = bucket;
+        *(f32*)((s32)party + 0x100) = angle;
+    }
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+u32 evt_party_nokotaro_kick_hold(EventEntry* event, s32 first) {
+    extern void partyChgRunMode(void* party, s32 mode);
+    extern s32 nokonokoGetStatus(void* party);
+
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    if (first != 0) {
+        if ((s32)*(u8*)((s32)party + 0x31) != 2) {
+            return 2;
+        }
+        if ((*(u32*)party & 0x100) != 0) {
+            return 2;
+        }
+        *(s32*)((s32)party + 0x16C) = 0x1388;
+        *(u32*)party |= 0x80000000;
+        *(u32*)party |= 0x100;
+        partyChgRunMode(party, 3);
+    }
+    if (nokonokoGetStatus(party) == 0) {
+        *(u32*)party &= 0x7FFFFFFF;
+        return 2;
+    }
+    return nokonokoGetStatus(party) == 3 ? 2 : 0;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_party_cloud_breathout(EventEntry* event, s32 first) {
+    extern void partyChgRunMode(void* party, s32 mode);
+    extern s32 cloudGetStatus(void);
+
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    if (first != 0) {
+        if ((s32)*(u8*)((s32)party + 0x31) != 5) {
+            return 2;
+        }
+        if ((*(u32*)party & 0x100) != 0) {
+            return 2;
+        }
+        *(s32*)((s32)party + 0x16C) = args[1];
+        *(u32*)party |= 0x80000000;
+        *(u32*)party |= 0x100;
+        partyChgRunMode(party, 3);
+    }
+    if (cloudGetStatus() == 0) {
+        *(u32*)party &= 0x7FFFFFFF;
+        return 2;
+    }
     return 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_yoshi_ride(void* pEvt, int param_2) {
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_party_yoshi_fly(EventEntry* event, s32 first) {
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+    extern s32 sysMsec2Frame(s32 msec);
+    extern void evt_set_yoshi_spd(f32 speed);
+    extern void evt_set_yoshi_frm(s32 frame);
+    extern s32 evt_get_yoshi_frm(void);
+    extern s32 yoshiGetStatus(void);
+
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    if (first != 0) {
+        if (yoshiGetStatus() != 1) {
+            return 2;
+        }
+        *(u32*)party |= 0x80000000;
+        evt_set_yoshi_spd(evtGetFloat(event, args[1]));
+        evt_set_yoshi_frm(sysMsec2Frame(evtGetValue(event, args[2])));
+    }
+    if (evt_get_yoshi_frm() >= 0) {
+        return 0;
+    }
+    *(u32*)party &= 0x7FFFFFFF;
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_party_nokotaro_kick(EventEntry* event, s32 first) {
+    extern void partyChgRunMode(void* party, s32 mode);
+    extern s32 nokonokoGetStatus(void* party);
+
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    if (first != 0) {
+        if ((s32)*(u8*)((s32)party + 0x31) != 2) {
+            return 2;
+        }
+        if ((*(u32*)party & 0x100) != 0) {
+            return 2;
+        }
+        *(s32*)((s32)party + 0x16C) = 0;
+        *(u32*)party |= 0x80000000;
+        *(u32*)party |= 0x100;
+        partyChgRunMode(party, 3);
+    }
+    if (nokonokoGetStatus(party) == 0) {
+        *(u32*)party &= 0x7FFFFFFF;
+        return 2;
+    }
     return 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-u8 evt_party_set_dir_npc(s32 pEvt, s32 param_2) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_get_pos) {
+    extern f32 evtSetFloat(EventEntry* event, s32 target, f32 value);
+    extern f32 float_neg5000_80421d60;
+
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        evtSetFloat(event, args[1], float_neg5000_80421d60);
+        evtSetFloat(event, args[2], float_neg5000_80421d60);
+        evtSetFloat(event, args[3], float_neg5000_80421d60);
+        return 2;
+    }
+    evtSetFloat(event, args[1], *(f32*)((s32)party + 0x58));
+    evtSetFloat(event, args[2], *(f32*)((s32)party + 0x5C));
+    evtSetFloat(event, args[3], *(f32*)((s32)party + 0x60));
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-u32 evt_party_nokotaro_kick_hold(void* pEvt, int param_2) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_party_vivian_hold(EventEntry* event, s32 first) {
+    extern void partyChgRunMode(void* party, s32 mode);
+    extern s32 vivianGetStatus(void);
+
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    if (first != 0) {
+        if (vivianGetStatus() != 0) {
+            return 2;
+        }
+        *(u32*)party |= 0x80000000;
+        *(u32*)party |= 0x100;
+        partyChgRunMode(party, 3);
+    }
+    if (vivianGetStatus() != 2) {
+        return 0;
+    }
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_cloud_breathout(void* pEvt, int param_2) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_party_thunders_use(EventEntry* event, s32 first) {
+    extern void partyChgRunMode(void* party, s32 mode);
+    extern s32 bomheiGetStatus(void);
+
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    if (first != 0) {
+        if (bomheiGetStatus() != 0) {
+            return 2;
+        }
+        *(u32*)party |= 0x80000000;
+        *(u32*)party |= 0x100;
+        partyChgRunMode(party, 3);
+    }
+    if (bomheiGetStatus() != 0) {
+        return 0;
+    }
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_yoshi_fly(void* pEvt, int param_2) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 N_evt_party_cloud_lock_animations_on_off(EventEntry* event, s32 first) {
+    extern void N_cloudLockAnimationsOn(void* party);
+    extern void N_cloudLockAnimationsOff(void* party);
+
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    if (first != 0) {
+        if ((s32)*(u8*)((s32)party + 0x31) != 5) {
+            return 2;
+        }
+        if ((*(u32*)party & 0x100) != 0) {
+            return 2;
+        }
+        if (args[1] != 0) {
+            N_cloudLockAnimationsOn(party);
+        } else {
+            N_cloudLockAnimationsOff(party);
+        }
+    }
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_nokotaro_kick(void* pEvt, int param_2) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_dispflg_onoff) {
+    s32 mask;
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    mask = args[1];
+    if (evtGetValue(event, args[2]) != 0) {
+        *(u32*)((s32)party + 4) |= mask;
+    } else {
+        *(u32*)((s32)party + 4) &= ~mask;
+    }
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_get_pos(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_flg_onoff) {
+    s32 mask;
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    mask = args[1];
+    if (evtGetValue(event, args[2]) != 0) {
+        *(u32*)party |= mask;
+    } else {
+        *(u32*)party &= ~mask;
+    }
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_vivian_hold(void* pEvt, int param_2) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_set_homing_dist) {
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    *(f32*)((s32)party + 0x40) = (f32)evtGetValue(event, args[1]);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_thunders_use(void* pEvt, int param_2) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_set_hosei_xyz) {
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    *(f32*)((s32)party + 0xAC) = evtGetFloat(event, args[1]);
+    *(f32*)((s32)party + 0xB0) = evtGetFloat(event, args[2]);
+    *(f32*)((s32)party + 0xB4) = evtGetFloat(event, args[3]);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 N_evt_party_cloud_lock_animations_on_off(void* pEvt, int param_2) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_set_pos) {
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    *(f32*)((s32)party + 0x58) = evtGetFloat(event, args[1]);
+    *(f32*)((s32)party + 0x5C) = evtGetFloat(event, args[2]);
+    *(f32*)((s32)party + 0x60) = evtGetFloat(event, args[3]);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_dispflg_onoff(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_outofscreen) {
+    extern f32 evtSetFloat(EventEntry* event, s32 target, f32 value);
+
+    s32* args = event->args;
+    void* party;
+    s32 out;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    out = (s32)(((*(u32*)((s32)party + 4) >> 23) & 1) ^ 1);
+    evtSetFloat(event, args[1], (f32)out);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_flg_onoff(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_get_name_hitobj_ride) {
+    extern s32 hitGetName(void* hit);
+
+    s32* args = event->args;
+    s32 name = 0;
+    void* party;
+    void* hit;
+    s32 dst;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    hit = *(void**)((s32)party + 0x138);
+    dst = args[1];
+    if (hit != 0) {
+        name = hitGetName(hit);
+    }
+    evtSetValue(event, dst, name);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_set_homing_dist(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_get_name_hitobj_head) {
+    extern s32 hitGetName(void* hit);
+
+    s32* args = event->args;
+    s32 name = 0;
+    void* party;
+    void* hit;
+    s32 dst;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    hit = *(void**)((s32)party + 0x140);
+    dst = args[1];
+    if (hit != 0) {
+        name = hitGetName(hit);
+    }
+    evtSetValue(event, dst, name);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_set_hosei_xyz(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+u32 evt_party_vivian_unhold(EventEntry* event, s32 first) {
+    extern s32 vivianGetStatus(void);
+    extern void vivianUnhold(void* party);
+
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    if (first != 0 && vivianGetStatus() == 2) {
+        vivianUnhold(party);
+    }
+    return vivianGetStatus() == 0 ? 2 : 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_set_pos(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_nokotaro_get_status) {
+    extern s32 nokonokoGetStatus(void* party);
+
+    s32* args = event->args;
+    void* party;
+    s32 dst;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    if ((s32)*(u8*)((s32)party + 0x31) != 2) {
+        return 2;
+    }
+    dst = args[1];
+    evtSetValue(event, dst, nokonokoGetStatus(party));
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_outofscreen(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(L_evt_party_dokan) {
+    s32* args = event->args;
+    void* party;
+    s32 dst;
+    s32 value;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    dst = args[1];
+    if (*(u8*)((s32)party + 0x34) == 0xB || *(u8*)((s32)party + 0x34) == 0xC) {
+        value = 0;
+    } else {
+        value = 1;
+    }
+    evtSetValue(event, dst, value);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_get_name_hitobj_ride(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_get_status) {
+    extern s32 vivianGetStatus(void);
+    extern s32 bomheiGetStatus(void);
+
+    s32* args = event->args;
+    s32 kind = args[0];
+    s32 dst = args[1];
+    s32 status;
+
+    switch (kind) {
+        case 6:
+            status = vivianGetStatus();
+            evtSetValue(event, dst, status);
+            break;
+        case 3:
+            evtSetValue(event, dst, bomheiGetStatus());
+            break;
+    }
+
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_get_name_hitobj_head(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_set_pose) {
+    extern void partyChgPose(void* party, void* pose);
+
+    void* party;
+    s32* args = event->args;
+    s32 pose;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    pose = evtGetValue(event, args[1]);
+    partyChgPose(party, (void*)pose);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-u32 evt_party_vivian_unhold(void* pEvt, int param_2) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_move_beside_mario) {
+    extern void partyMoveBesideMario(void* party, s32 mode);
+
+    void* party;
+    s32* args = event->args;
+    s32 mode;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    mode = evtGetValue(event, args[1]);
+    partyMoveBesideMario(party, mode);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_party_nokotaro_get_status(void* pParty) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_move_behind_mario) {
+    extern void partyMoveBehindMario(void* party, s32 mode);
+
+    void* party;
+    s32* args = event->args;
+    s32 mode;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    mode = evtGetValue(event, args[1]);
+    partyMoveBehindMario(party, mode);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 L_evt_party_dokan(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_party_set_dispdir) {
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+    extern f32 reviseAngle(f32 angle);
+
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    *(f32*)((s32)party + 0x110) = reviseAngle(evtGetFloat(event, args[1]));
+    *(f32*)((s32)party + 0x10C) = *(f32*)((s32)party + 0x110);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-
-s32 evt_party_get_status(void* pEvt) {
-    return 0;
-}
-
-
-s32 evt_party_set_pose(void* pEvt) {
-    return 0;
-}
-
-
-s32 evt_party_move_beside_mario(void* pEvt) {
-    return 0;
-}
-
-
-s32 evt_party_move_behind_mario(void* pEvt) {
-    return 0;
-}
-
-
-s32 evt_party_set_dispdir(int param_1) {
-    return 0;
-}
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 s32 L_evt_party_vivian_tail(void* pEvt) {
     return 0;
@@ -346,3 +1558,39 @@ s32 evt_party_run(void* pEvt) {
 s32 evt_party_stop(void* pEvt) {
     return 0;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(unk_800eb9cc) {
+    s32 mask;
+    s32* args = event->args;
+    void* party;
+    s32 partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    mask = args[1];
+    if (evtGetValue(event, args[2]) != 0) {
+        *(u32*)((s32)party + 8) |= mask;
+    } else {
+        *(u32*)((s32)party + 8) &= ~mask;
+    }
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on

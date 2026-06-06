@@ -6,6 +6,10 @@ extern f32 float_490_804268ac;
 void BattleBreakSlotDispReel(void);
 void dispEntry(s32 cameraId, s32 renderMode, void* callback, s32 param, f32 priority);
 void BattleFree(void* ptr);
+s32 evtCheckID(s32 id);
+void btl_camera_set_mode(s32 cameraId, s32 mode);
+void btl_camera_set_moveSpeedLv(s32 cameraId, s32 level);
+void BattleAudienceNumToTarget(void);
 
 void* BattleBreakSlotGetPtr(void) {
     return (void*)((s32)_battleWorkPointer + 0x1616C);
@@ -90,4 +94,25 @@ void BattleBreakSlot_End(void) {
     BattleFree(*(void**)((s32)BattleBreakSlotReelGetPtr(0) + 0x14));
     BattleFree(*(void**)((s32)BattleBreakSlotReelGetPtr(1) + 0x14));
     BattleFree(*(void**)((s32)BattleBreakSlotReelGetPtr(2) + 0x14));
+}
+
+s32 BattleBreakSlot_CheckReaction(void) {
+    void* work = BattleBreakSlotGetPtr();
+    void* event;
+
+    BattleBreakSlot_Start();
+    if (*(s32*)((s32)work + 4) >= 1 && *(s32*)((s32)work + 4) <= 8) {
+        return 1;
+    }
+
+    event = *(void**)((s32)work + 0x130);
+    if (event != NULL && evtCheckID(*(s32*)((s32)event + 0x15C)) != 0) {
+        return 1;
+    }
+
+    btl_camera_set_mode(0, 0);
+    btl_camera_set_moveSpeedLv(0, 2);
+    BattleAudienceNumToTarget();
+    *(s32*)((s32)work + 0x130) = 0;
+    return 0;
 }

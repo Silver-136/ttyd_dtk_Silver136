@@ -386,34 +386,112 @@ s32 partyPaperOn(void* pParty, char* param_2) {
 }
 
 
-u8 partyUpdateKeyData(void* pParty) {
-    return 0;
-}
+void partyUpdateKeyData(void* party) {
+    extern void* gp;
+    s32 port;
+    s32 offset;
 
+    port = (s8)*(u8*)((s32)party + 0x30);
+    if ((*(u32*)party & 0x60000000) != 0) {
+        L_partyClearCont(party);
+        return;
+    }
+    *(u8*)((s32)party + 0x158) = *(u8*)((s32)gp + port + 0x13B8);
+    *(u8*)((s32)party + 0x159) = -*(u8*)((s32)gp + port + 0x13BC);
+    *(u8*)((s32)party + 0x15A) = *(u8*)((s32)gp + port + 0x13C0);
+    *(u8*)((s32)party + 0x15B) = -*(u8*)((s32)gp + port + 0x13C4);
+    *(u8*)((s32)party + 0x15C) = *(u8*)((s32)gp + port + 0x13C8);
+    *(u8*)((s32)party + 0x15D) = *(u8*)((s32)gp + port + 0x13CC);
+    *(u8*)((s32)party + 0x15E) = 0;
+    *(u8*)((s32)party + 0x15F) = 0;
+    offset = port << 2;
+    *(u16*)((s32)party + 0x150) = *(u32*)((s32)gp + offset + 0x1328);
+    *(u16*)((s32)party + 0x152) = *(u32*)((s32)gp + offset + 0x1338);
+    *(u16*)((s32)party + 0x154) = *(u32*)((s32)gp + offset + 0x1348);
+    *(u16*)((s32)party + 0x156) = *(u32*)((s32)gp + offset + 0x1368);
+}
 
 u8 partyMain(void) {
     return 0;
 }
 
 
-u8 allPartyForceRideOn(void) {
-    return 0;
-}
+void allPartyForceRideOn(void) {
+    extern u8 N_partyForceChgRunMode(void* party, int newRunMode, u8 subMotionId);
+    s32 id;
+    void* party;
 
+    id = marioGetPartyId();
+    party = id >= 0 ? partyPtrTbl[id] : 0;
+    if (party != 0) {
+        N_partyForceChgRunMode(party, 0xB, 0xB);
+        *(u32*)((s32)party + 4) |= 1;
+        if (party != 0) {
+            *(u32*)((s32)party + 4) |= 0x100000;
+        }
+    }
+    id = marioGetExtraPartyId();
+    party = id >= 0 ? partyPtrTbl[id] : 0;
+    if (party != 0) {
+        N_partyForceChgRunMode(party, 0xB, 0xB);
+        *(u32*)((s32)party + 4) |= 1;
+        if (party != 0) {
+            *(u32*)((s32)party + 4) |= 0x100000;
+        }
+    }
+}
 
 void partyGoodbyeInit(void* party) {
 }
 
 
-u8 allPartyRideOff2(void) {
-    return 0;
+void allPartyRideOff2(void) {
+    s32 id;
+    void* party;
+
+    id = marioGetPartyId();
+    party = id >= 0 ? partyPtrTbl[id] : 0;
+    if (party != 0 && *(u8*)((s32)party + 0x34) == 0xB) {
+        if ((*(u32*)((s32)party + 8) & 8) == 0) {
+            *(u8*)((s32)party + 0x38) = 0x65;
+        } else {
+            *(u8*)((s32)party + 0x34) = 1;
+        }
+    }
+    id = marioGetExtraPartyId();
+    party = id >= 0 ? partyPtrTbl[id] : 0;
+    if (party != 0 && *(u8*)((s32)party + 0x34) == 0xB) {
+        if ((*(u32*)((s32)party + 8) & 8) == 0) {
+            *(u8*)((s32)party + 0x38) = 0x65;
+        } else {
+            *(u8*)((s32)party + 0x34) = 1;
+        }
+    }
 }
 
+void allPartyRideOff(void) {
+    s32 id;
+    void* party;
 
-u8 allPartyRideOff(void) {
-    return 0;
+    id = marioGetPartyId();
+    party = id >= 0 ? partyPtrTbl[id] : 0;
+    if (party != 0 && *(u8*)((s32)party + 0x34) == 0xB) {
+        if ((*(u32*)((s32)party + 8) & 8) == 0) {
+            *(u8*)((s32)party + 0x38) = 0x64;
+        } else {
+            *(u8*)((s32)party + 0x34) = 1;
+        }
+    }
+    id = marioGetExtraPartyId();
+    party = id >= 0 ? partyPtrTbl[id] : 0;
+    if (party != 0 && *(u8*)((s32)party + 0x34) == 0xB) {
+        if ((*(u32*)((s32)party + 8) & 8) == 0) {
+            *(u8*)((s32)party + 0x38) = 0x64;
+        } else {
+            *(u8*)((s32)party + 0x34) = 1;
+        }
+    }
 }
-
 
 u8 partyDokanEnd(int partyId, u8 param_2) {
     return 0;
@@ -429,20 +507,62 @@ void yoshiSetColor(void) {
 }
 
 
-u8 allPartyRideShip(void) {
-    return 0;
+void allPartyRideShip(void) {
+    extern void bomhei_use_cancel(void);
+    s32 id;
+    void* party;
+
+    id = marioGetPartyId();
+    party = id >= 0 ? partyPtrTbl[id] : 0;
+    if (party != 0) {
+        bomhei_use_cancel();
+        *(u32*)party |= 0x20000;
+        partyChgRunMode(party, 0xB);
+    }
+    party = partyPtrTbl[1];
+    if (party != 0) {
+        *(u32*)party |= 0x20000;
+        partyChgRunMode(party, 0xB);
+    }
 }
 
+void allPartyRidePlane(void) {
+    extern void bomhei_use_cancel(void);
+    s32 id;
+    void* party;
 
-u8 allPartyRidePlane(void) {
-    return 0;
+    id = marioGetPartyId();
+    party = id >= 0 ? partyPtrTbl[id] : 0;
+    if (party != 0) {
+        bomhei_use_cancel();
+        *(u32*)party |= 0x10000;
+        partyChgRunMode(party, 0xB);
+    }
+    party = partyPtrTbl[1];
+    if (party != 0) {
+        *(u32*)party |= 0x10000;
+        partyChgRunMode(party, 0xB);
+    }
 }
 
+void party_ride_yoshi_force_move(void) {
+    extern void getRidePos(void* party, void* pos);
+    extern f32 toMovedir(f32 angle);
+    s32 id;
+    void* party;
+    u32 pos[3];
 
-u8 party_ride_yoshi_force_move(void) {
-    return 0;
+    id = marioGetExtraPartyId();
+    party = id >= 0 ? partyPtrTbl[id] : 0;
+    if (party != 0) {
+        getRidePos(party, pos);
+        *(u32*)((s32)party + 0x58) = pos[0];
+        *(u32*)((s32)party + 0x5C) = pos[1];
+        *(u32*)((s32)party + 0x60) = pos[2];
+        *(f32*)((s32)party + 0x110) = *(f32*)((s32)*(void**)((s32)party + 0x160) + 0x1B0);
+        *(f32*)((s32)party + 0xFC) = toMovedir(*(f32*)((s32)party + 0x110));
+    }
 }
-
 
 u8 N_partyForceChgRunMode(void* pParty, int newRunMode, u8 subMotionId) {
     return 0;

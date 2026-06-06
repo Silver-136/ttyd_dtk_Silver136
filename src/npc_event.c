@@ -153,10 +153,34 @@ s32 gesso_ground_check(int param_1) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 _2d_get_dead_jump_offset(int param_1) {
-    return 0;
-}
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern void* marioGetPtr(void);
+    extern f32 float_0_80421f8c;
+    extern f32 float_neg1_80421f90;
+    extern f32 float_1_80421f88;
+    extern f32 float_20_80421fcc;
+    s32* args = *(s32**)(param_1 + 0x18);
+    s32 npcName = evtGetValue((void*)param_1, args[0]);
+    void* npc = evtNpcNameToPtr((void*)param_1, (void*)npcName);
+    s32 dst = args[1];
+    void* mario = marioGetPtr();
+    f32 dir;
 
+    if (*(f32*)((s32)mario + 0x8C) == *(f32*)((s32)npc + 0x8C)) {
+        dir = float_0_80421f8c;
+    } else if (*(f32*)((s32)mario + 0x8C) > *(f32*)((s32)npc + 0x8C)) {
+        dir = float_neg1_80421f90;
+    } else {
+        dir = float_1_80421f88;
+    }
+    evtSetValue((void*)param_1, dst, (s32)(float_20_80421fcc * dir));
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 killer_make_name(void* pEvt) {
     return 0;

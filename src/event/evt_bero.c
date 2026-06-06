@@ -282,19 +282,72 @@ s32 evt_bero_cam3d_change(int param_1) {
 
 
 s32 evt_bero_switch_off(void* pEvt) {
-    return 0;
-}
+    extern char* bero_id_filter(char* id);
+    extern s32 BeroSW[];
+    EventEntry* event = pEvt;
+    s32* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
 
+    id = (s32)bero_id_filter((char*)id);
+    if (BeroSW[id] != 1) {
+        *(s32*)((s32)event + 0x9C) = 1;
+    } else {
+        *(s32*)((s32)event + 0x9C) = 0;
+    }
+    BeroSW[id] = 0;
+    *(s32*)((s32)event + 0xA0) = id;
+    return EVT_RETURN_DONE;
+}
 
 s32 evt_bero_switch_on(void* pEvt) {
-    return 0;
-}
+    extern char* bero_id_filter(char* id);
+    extern s32 BeroSW[];
+    EventEntry* event = pEvt;
+    s32* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
 
+    id = (s32)bero_id_filter((char*)id);
+    if (BeroSW[id] != 0) {
+        *(s32*)((s32)event + 0x9C) = 1;
+    } else {
+        *(s32*)((s32)event + 0x9C) = 0;
+    }
+    BeroSW[id] = 1;
+    *(s32*)((s32)event + 0xA0) = id;
+    return EVT_RETURN_DONE;
+}
 
 s32 evt_bero_get_info_length(void* pEvt) {
-    return 0;
-}
+    typedef struct BeroInfo {
+        u8 pad0[4];
+        u16 kind;
+        u16 dir;
+        u8 pad8[0x10];
+        s32 length;
+    } BeroInfo;
+    extern BeroInfo* BeroINFOARR[];
+    extern f32 float_30_80420518;
+    extern f32 float_60_80420520;
+    EventEntry* event = pEvt;
+    s32* args = event->args;
+    BeroInfo* info = BeroINFOARR[evtGetValue(event, args[0])];
 
+    if (info->length != -1) {
+        evtSetFloat(event, args[1], (f32)info->length);
+        return EVT_RETURN_DONE;
+    }
+    switch (info->kind & 0xFFF) {
+        case 0:
+        case 3:
+        case 0xF00:
+            evtSetFloat(event, args[1], float_30_80420518);
+            break;
+        default:
+            evtSetFloat(event, args[1], float_60_80420520);
+            break;
+    }
+    return EVT_RETURN_DONE;
+}
 
 s32 bero_get_position_pipe_pure(void* pEvt) {
     return 0;
@@ -312,39 +365,131 @@ s32 bero_set_disp_position_pipe(int param_1) {
 
 
 s32 evt_bero_id_filter(int param_1) {
-    return 0;
-}
+    extern char* bero_id_filter(char* id);
+    EventEntry* event = (EventEntry*)param_1;
+    s32* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
 
+    evtSetValue(event, args[0], (s32)bero_id_filter((char*)id));
+    return EVT_RETURN_DONE;
+}
 
 s32 evt_bero_get_number(void* pEvt) {
-    return 0;
-}
+    extern char* bero_id_filter(char* id);
+    EventEntry* event = pEvt;
+    s32* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
 
+    *(s32*)((s32)event + 0xA0) = (s32)bero_id_filter((char*)id);
+    return EVT_RETURN_DONE;
+}
 
 u32 evt_bero_read_mario_pera(int param_1, int param_2) {
-    return 0;
+    extern BOOL animGroupBaseAsync(const char* name, int a, int b);
+    extern const char str_p_dokan_x_802c3060[];
+    extern const char str_p_dokan_y_802c306c[];
+    EventEntry* event = (EventEntry*)param_1;
+    s32 state;
+
+    if (param_2 != 0) {
+        *(s32*)((s32)event + 0x78) = 0;
+    }
+    switch (*(s32*)((s32)event + 0x78)) {
+        case 0:
+            if (animGroupBaseAsync(str_p_dokan_x_802c3060, 0, 0)) {
+                *(s32*)((s32)event + 0x78) = 1;
+            }
+            break;
+        case 1:
+            if (animGroupBaseAsync(str_p_dokan_y_802c306c, 0, 0)) {
+                *(s32*)((s32)event + 0x78) = 100;
+            }
+            break;
+    }
+    state = *(s32*)((s32)event + 0x78);
+    return ((~((state - 100) | (100 - state))) >> 31) & EVT_RETURN_DONE;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry(EventEntry* event) {
+    extern void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z);
+    s32* args = event->args;
+    s32 x = evtGetValue(event, args[0]);
+    s32 y = evtGetValue(event, args[1]);
+    s32 z = evtGetValue(event, args[2]);
 
-s32 N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry(void* pEvt) {
-    return 0;
+    N_marioSetBottomlessRespawnPosOnBeroEntry((f32)x, (f32)y, (f32)z);
+    return EVT_RETURN_DONE;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 char* bero_id_filter(char* param_1) {
-    return 0;
+    extern s32 strcmp(const char* a, const char* b);
+    extern void* BeroINFOARR[];
+    s32 id = (s32)param_1;
+    void** info = BeroINFOARR;
+
+    if (id < 0 || id >= 16) {
+        if (&id != NULL) {
+            id = 0;
+        }
+        while (*(char**)*info != NULL && strcmp(*(char**)*info, (char*)param_1) != 0) {
+            if (&id != NULL) {
+                id++;
+            }
+            info++;
+        }
+    }
+    return (char*)id;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_bero_get_info_anime(EventEntry* event) {
+    typedef struct BeroInfo {
+        u8 pad0[0x30];
+        u16 anime0;
+        u16 anime1;
+        s32 anime2;
+        s32 anime3;
+    } BeroInfo;
+    extern BeroInfo* BeroINFOARR[];
+    BeroInfo* info;
+    s32* args = event->args;
 
-s32 evt_bero_get_info_anime(int param_1) {
-    return 0;
+    info = BeroINFOARR[evtGetValue(event, args[0])];
+    evtSetValue(event, args[1], info->anime0);
+    evtSetValue(event, args[2], info->anime1);
+    evtSetValue(event, args[3], info->anime2);
+    evtSetValue(event, args[4], info->anime3);
+    return EVT_RETURN_DONE;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_bero_get_info_kinddir(EventEntry* event) {
+    typedef struct BeroInfo {
+        u8 pad0[4];
+        u16 kind;
+        u16 dir;
+        s32 value;
+    } BeroInfo;
+    extern BeroInfo* BeroINFOARR[];
+    BeroInfo* info;
+    s32* args = event->args;
 
-s32 evt_bero_get_info_kinddir(void* pEvt) {
-    return 0;
+    info = BeroINFOARR[evtGetValue(event, args[0])];
+    evtSetValue(event, args[1], info->kind);
+    evtSetValue(event, args[2], info->dir);
+    evtSetValue(event, args[3], info->value);
+    return EVT_RETURN_DONE;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_bero_mapchange(void* pEvt, int param_2) {
     return 0;
@@ -367,9 +512,46 @@ u32 evt_bero_exec_wait(int param_1) {
 
 
 s32 evt_bero_get_info(void* evt, s32 isFirstCall) {
-    return 0;
-}
+    typedef struct BeroInfo {
+        const char* name;
+        u8 data[0x38];
+    } BeroInfo;
+    extern BeroInfo* BeroINFOARR[];
+    extern s32 BeroSW[];
+    extern s32 BeroNUM;
+    extern s32 BeroEXEC;
+    extern void* hitNameToPtr(const char* name);
+    extern void mapErrorEntry(s32);
+    EventEntry* event = evt;
+    BeroInfo* info;
+    BeroInfo** infoArr = BeroINFOARR;
+    s32* sw = BeroSW;
+    s32 count = 0;
+    int i;
 
+    for (i = 0; i < 16; i++) {
+        infoArr[i] = NULL;
+    }
+    info = *(BeroInfo**)((s32)event + 0x9C);
+    while (info->name != NULL) {
+        if (hitNameToPtr(info->name) == NULL) {
+            mapErrorEntry(1);
+        }
+        info++;
+    }
+    info = *(BeroInfo**)((s32)event + 0x9C);
+    while (info->name != NULL) {
+        *infoArr = info;
+        infoArr++;
+        count++;
+        info++;
+        *sw = -1;
+        sw++;
+    }
+    BeroNUM = count;
+    BeroEXEC = 0;
+    return EVT_RETURN_DONE;
+}
 
 s32 evt_bero_get_info_num(void* evt, s32 isFirstCall) {
     return 0;

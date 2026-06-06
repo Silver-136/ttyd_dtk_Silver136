@@ -1,6 +1,7 @@
 #include "event/evt_snd.h"
 
 s32 evtGetValue(void* evt, s32 value);
+f32 evtGetFloat(void* evt, s32 value);
 s32 evtSetValue(void* evt, s32 var, s32 value);
 void psndBGMOff(s32 name);
 void psndENVOff(s32 name);
@@ -16,6 +17,9 @@ void psndENVOn_f_d(s32 name, s32 flags, s32 frames, s32 extra);
 void psndSFX_dist(s32 name, u16 distance);
 s32 psndSFXOn(s32 name);
 s32 psndSFXOn_(s32 name);
+s32 psndSFXOn_3D(s32 name, void* pos);
+s32 psndSFXOnEx_3D(s32 name, void* pos, u8 volume, u8 pitch, u16 span, u16 flags);
+void psndSFX_pos(s32 name, void* pos);
 
 s32 evt_snd_bgmoff(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
@@ -156,19 +160,72 @@ s32 evt_snd_sfxon__(void* evt) {
 #pragma use_lmw_stmw on
 
 
-s32 evt_snd_sfxon_3d_ex(int param_1) {
-    return 0;
+s32 evt_snd_sfxon_3d_ex(void* evt) {
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = args[0];
+    f32 pos[3];
+    u16 volume;
+    u16 pitch;
+    u16 span;
+    u16 flags;
+    s32 out;
+
+    pos[0] = evtGetFloat(evt, args[1]);
+    pos[1] = evtGetFloat(evt, args[2]);
+    pos[2] = evtGetFloat(evt, args[3]);
+    volume = evtGetValue(evt, args[4]);
+    pitch = evtGetValue(evt, args[5]);
+    span = evtGetValue(evt, args[6]);
+    flags = evtGetValue(evt, args[7]);
+    out = args[8];
+    if (out == 0) {
+        psndSFXOnEx_3D(name, pos, (u8)volume, (u8)pitch, span, flags);
+    } else {
+        evtSetValue(evt, out, psndSFXOnEx_3D(name, pos, (u8)volume, (u8)pitch, span, flags));
+    }
+    return 2;
 }
 
 
-s32 evt_snd_sfxon_3d(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_snd_sfxon_3d(void* evt) {
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = args[0];
+    f32 pos[3];
+    s32 out;
+
+    pos[0] = evtGetFloat(evt, args[1]);
+    pos[1] = evtGetFloat(evt, args[2]);
+    pos[2] = evtGetFloat(evt, args[3]);
+    out = args[4];
+    if (out == 0 || out == -0x0EE6B280) {
+        psndSFXOn_3D(name, pos);
+    } else {
+        evtSetValue(evt, out, psndSFXOn_3D(name, pos));
+    }
+    return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-s32 evt_snd_sfx_pos(int param_1) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_snd_sfx_pos(void* evt) {
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = evtGetValue(evt, args[0]);
+    f32 pos[3];
+
+    pos[0] = evtGetFloat(evt, args[1]);
+    pos[1] = evtGetFloat(evt, args[2]);
+    pos[2] = evtGetFloat(evt, args[3]);
+    psndSFX_pos(name, pos);
+    return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 s32 evt_snd_sfx_vol(int param_1) {

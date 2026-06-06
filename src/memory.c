@@ -8,6 +8,9 @@ extern void* R_battlemapalloc_base_ptr;
 void _mapFree(void* base, void* ptr);
 void GXInitTexObjData(void* texObj, void* data);
 void OSFreeToHeap(OSHeapHandle heap, void* ptr);
+void* OSAllocFromHeap(OSHeapHandle heap, u32 size);
+void DCFlushRange(void* ptr, u32 size);
+void* memset(void* ptr, int value, u32 size);
 
 //.sdata
 s32 size_table[6][2] = {
@@ -237,6 +240,25 @@ void* _mapAlloc(void*, u32) {
 
 
 void memClear(s32 heap) {
+    u32 size;
+    void* ptr;
+
+    OSDestroyHeap(heapHandle[heap]);
+    OSCreateHeap(heapStart[heap], heapEnd[heap]);
+
+    if (heap == 1) {
+        size = (u32)heapEnd[1] - (u32)heapStart[1] - 0x20;
+        mapalloc_size = size;
+        ptr = OSAllocFromHeap(heapHandle[1], size);
+        if (ptr != NULL) {
+            memset(ptr, 0, size);
+            DCFlushRange(ptr, size);
+        }
+        mapalloc_base_ptr = ptr;
+        *(s32*)ptr = 0;
+        *(u32*)((s32)ptr + 4) = mapalloc_size - 0x20;
+        *(u16*)((s32)ptr + 8) = 0;
+    }
 }
 
 

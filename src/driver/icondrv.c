@@ -355,12 +355,10 @@ loop:
         goto next;
     }
 
-    if (strcmp((const char*)((s32)icon + 0x18), name) == 0) {
-} else {
-    goto next;
-}
-
-goto found;
+    if (strcmp((const char*)((s32)icon + 0x18), name) != 0) {
+        goto next;
+    }
+    goto found;
 
 next:
     i++;
@@ -449,12 +447,10 @@ change_loop:
         goto change_next;
     }
 
-    if (strcmp((const char*)((s32)icon + 0x18), name) == 0) {
-} else {
-    goto change_next;
-}
-
-goto change_found;
+    if (strcmp((const char*)((s32)icon + 0x18), name) != 0) {
+        goto change_next;
+    }
+    goto change_found;
 
 change_next:
     i++;

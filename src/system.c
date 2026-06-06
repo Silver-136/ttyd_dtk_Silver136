@@ -103,6 +103,8 @@ s32 irand(s32 range) {
     return value % range;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void movePos(f32* x, f32* z, f32 distance, f32 angle) {
     f32 sinValue;
     f32 radians;
@@ -116,6 +118,8 @@ void movePos(f32* x, f32* z, f32 distance, f32 angle) {
     *x += distance * sinValue;
     *z -= distance * cosValue;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void sincosf(f32 angle, f32* outSin, f32* outCos) {
     f32 radians;
@@ -1165,6 +1169,8 @@ f32 getV60FPS(f32 scale, u64 start, u64 end) {
     return (float_60_8041f450 * scale * (f32)diff) / float_1000_8041f44c;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void sysWaitDrawSync(void) {
     u16 drawToken;
     u32 startTick;
@@ -1196,6 +1202,8 @@ void sysWaitDrawSync(void) {
         }
     }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void mtxGetRotationElement(f32* mtx, f32* out, s8 axis, s8 up) {
     f32 zero;

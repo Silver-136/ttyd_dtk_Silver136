@@ -15,10 +15,12 @@ typedef struct DVDEntry {
 u8 dvdmgr_thread[0x318];
 s32 dvdmgr_thread_on;
 void* _callback;
+void* dvdq;
 
 void DVDMgrMain(void);
 void OSYieldThread(void);
 void OSCancelThread(void* thread);
+void OSResumeThread(void* thread);
 
 s32 DVDMgrGetLength(DVDEntry* entry) {
     return entry->length;
@@ -67,7 +69,18 @@ void* DVDMgrOpen(const char* path, s32 mode, s32 unk) {
 
 
 u8 DVDMgrInit(void) {
-    return 0;
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern u8 stack[];
+    extern s32 OSCreateThread(void* thread, void* func, void* param, void* stack, u32 stackSize, s32 priority, s16 attr);
+
+    dvdq = __memAlloc(0, 0x9800);
+    memset(dvdq, 0, 0x9800);
+    if (OSCreateThread(dvdmgr_thread, proc_main, 0, stack + 0x4000, 0x4000, 0x10, 1) == 0) {
+        while (1) {
+        }
+    }
+    dvdmgr_thread_on = 1;
+    OSResumeThread(dvdmgr_thread);
 }
 
 

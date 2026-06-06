@@ -19,6 +19,7 @@ extern void InitSubMenuCommonProcess2(void*, void*);
 extern void InitSubMenuCommonProcess3(void*, void*);
 
 extern void* BattleGetUnitPtr(void*, s32);
+extern void btlGetScreenPoint(f32* pos, f32* out);
 
 extern double cos(double);
 extern double sin(double);
@@ -375,8 +376,19 @@ u8 DrawMenuPartyChangeButton_Sub(void) {
 }
 
 
-u8 GetRingCenter(float* param_1) {
-    return 0;
+void GetRingCenter(f32* out) {
+    void* battleWork;
+    void* unit;
+
+    battleWork = _battleWorkPointer;
+    unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
+    btlGetScreenPoint((f32*)((s32)unit + 0x3C), out);
+    out[0] += 22.5f;
+    out[1] += 105.0f;
+    out[2] = 0.0f;
+    if (out[0] <= -180.0f) {
+        out[0] = -180.0f;
+    }
 }
 
 

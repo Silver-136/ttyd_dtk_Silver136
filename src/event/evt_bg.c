@@ -9,10 +9,45 @@ extern void bgDispOff();
 extern void bgSetScrlOffset(f32, f32);
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_bg_set_color(int param_1) {
-    return 0;
-}
+    extern void bgSetColor(void* color);
+    extern s32 unk_80429590;
+    s32* args = *(s32**)(param_1 + 0x18);
+    s32 r = evtGetValue(param_1, args[0]);
+    s32 g = evtGetValue(param_1, args[1]);
+    s32 b = evtGetValue(param_1, args[2]);
+    s32 a = evtGetValue(param_1, args[3]);
+    u32 color = unk_80429590;
+    u32 sendColor;
 
+    ((u8*)&color)[0] = r;
+    ((u8*)&color)[1] = g;
+    ((u8*)&color)[2] = b;
+    ((u8*)&color)[3] = a;
+    sendColor = color;
+    bgSetColor(&sendColor);
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

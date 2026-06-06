@@ -62,15 +62,86 @@ u8 mot_jumpSmall(void) {
 }
 
 
-u8 mot_upstairs(void) {
-    return 0;
+void mot_upstairs(void) {
+    extern void* marioGetPtr(void);
+    extern void marioClearJumpPara(void);
+    extern void motSlitContinue(void);
+    extern void marioChgMot2(s32 motion);
+    extern void marioChgMotAuto(void);
+    void* mario = marioGetPtr();
+    u32 flags = *(u32*)((s32)mario + 0xC);
+    if (flags & 1) {
+        *(u32*)((s32)mario + 0xC) = flags & ~1;
+        *(u32*)((s32)mario + 0x0) |= 0x40000;
+        *(u32*)((s32)mario + 0x0) |= 0x80;
+        marioClearJumpPara();
+        *(s32*)((s32)mario + 0x48) = 3;
+        *(f32*)((s32)mario + 0x7C) = (*(f32*)((s32)mario + 0x1C8) - *(f32*)((s32)mario + 0x90)) / (f32)*(s32*)((s32)mario + 0x48);
+        *(s32*)((s32)mario + 0x44) = 0;
+    }
+    switch (*(s32*)((s32)mario + 0x44)) {
+        case 0:
+            break;
+        default:
+            return;
+    }
+    *(f32*)((s32)mario + 0x90) += *(f32*)((s32)mario + 0x7C);
+    if (--*(s32*)((s32)mario + 0x48) <= 0) {
+            *(u32*)((s32)mario + 0x0) &= ~0x80;
+            *(u32*)((s32)mario + 0x0) &= ~0x40;
+            *(u32*)((s32)mario + 0x0) &= ~0x40000;
+            if (*(u32*)((s32)mario + 0x0) & 0x100000) {
+                motSlitContinue();
+            } else if (*(u32*)((s32)mario + 0x4) & 0x1000000) {
+                marioChgMot2(0x15);
+            } else {
+                marioChgMotAuto();
+            }
+    }
 }
 
-
-u8 mot_land(void) {
-    return 0;
+void mot_land(void) {
+    extern void* marioGetPtr(void);
+    extern void marioResetCamFollowRate(void);
+    extern void psndSFXOff(s32 id);
+    extern void marioChgMot(s32 motion);
+    extern f32 float_0_80420cc8;
+    void* mario = marioGetPtr();
+    u32 flags = *(u32*)((s32)mario + 0xC);
+    if (flags & 1) {
+        s32 sound;
+        *(u32*)((s32)mario + 0xC) = flags & ~1;
+        {
+            f32 zero = float_0_80420cc8;
+        *(u32*)((s32)mario + 0x0) &= ~0xF0000;
+        *(s16*)((s32)mario + 0x50) = 0;
+        *(s16*)((s32)mario + 0x52) = 0;
+        *(s32*)((s32)mario + 0x44) = 0;
+        *(f32*)((s32)mario + 0x180) = zero;
+        }
+        marioResetCamFollowRate();
+        sound = *(s32*)((s32)mario + 0x284);
+        if ((u32)(sound + 0x10000) != 0xFFFF) {
+            psndSFXOff(sound);
+            *(s32*)((s32)mario + 0x284) = -1;
+        }
+    }
+    switch (*(s32*)((s32)mario + 0x44)) {
+        case 0:
+            marioChgMot(0);
+            break;
+        case 1:
+            if (--*(s32*)((s32)mario + 0x48) <= 0) {
+                marioChgMot(0);
+            }
+            break;
+        case 10:
+            if (--*(s32*)((s32)mario + 0x48) <= 0) {
+                marioChgMot(0);
+            }
+            break;
+    }
 }
-
 
 u8 marioPreJump(void) {
     return 0;

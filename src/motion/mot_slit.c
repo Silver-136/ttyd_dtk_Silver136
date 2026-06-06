@@ -113,20 +113,116 @@ u8 marioReInit_slit(void) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u32 U_marioSlitContinueChk(void) {
-    return 0;
+    extern void* marioGetPtr(void);
+    extern s32 marioKeyOffChk(void);
+    extern s32 marioBgmodeChk(void);
+    extern s32 marioSlitChkWallAround(void);
+    extern s32 marioCreviceWallChk(void* pos);
+    SlitVecCopy pos;
+    void* mario = marioGetPtr();
+    void* mario2 = marioGetPtr();
+    s32 button;
+
+    if (*(u32*)((s32)mario2 + 0xC) & 2) {
+        button = 0;
+    } else if (marioKeyOffChk() != 0) {
+        button = 0;
+    } else if (marioBgmodeChk() == 1) {
+        button = 0;
+    } else if (!(*(u32*)((s32)mario2 + 0x4) & 0x1000000)) {
+        button = (*(u16*)((s32)mario2 + 0x24A) & 0x20) ? 1 : 0;
+    } else if (*(u16*)((s32)mario2 + 0x24A) & 0x20) {
+        button = 2;
+    } else if (*(u8*)((s32)mario2 + 0x257) >= 0x32) {
+        button = 2;
+    } else {
+        button = 0;
+    }
+    if (button != 0) {
+        return 1;
+    }
+    if (marioSlitChkWallAround() != 0) {
+        return 1;
+    }
+    pos.x = *(s32*)((s32)mario + 0x8C);
+    pos.y = *(s32*)((s32)mario + 0x90);
+    pos.z = *(s32*)((s32)mario + 0x94);
+    button = marioCreviceWallChk(&pos);
+    return ((u32)(-button) | (u32)button) >> 31;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-u8 marioSlitForceCancel(void) {
-    return 0;
+void marioSlitForceCancel(void) {
+    extern void* marioGetPtr(void);
+    extern void marioPaperOff(void);
+    extern void mapResetPaperAmbColor(void);
+    extern void marioAdjustMoveDir(void);
+    extern void allPartyForceSlitOff(void);
+    extern f32 float_180_80420fa8;
+    extern f32 float_0_80420f9c;
+    extern f32 float_10_80421000;
+    extern f32 float_0p004_80420fbc;
+    void* mario = marioGetPtr();
+    u32 flags = *(u32*)mario;
+    if (flags & 0x100000) {
+        *(u32*)mario = flags & ~0x200000;
+        if (*(f32*)((s32)mario + 0x1A4) >= float_180_80420fa8) {
+            *(f32*)((s32)mario + 0x1AC) = float_0_80420f9c;
+        } else {
+            *(f32*)((s32)mario + 0x1AC) = float_180_80420fa8;
+        }
+        *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
+        *(u32*)((s32)mario + 0x4) &= 0xFEFFFFFE;
+        *(u32*)mario &= ~0x400000;
+        *(u32*)mario &= ~0x100000;
+        *(f32*)((s32)mario + 0x1B8) = float_10_80421000;
+        *(u32*)((s32)mario + 0x4) &= 0xFEFFFFFE;
+        marioPaperOff();
+        mapResetPaperAmbColor();
+        *(u32*)((s32)mario + 0x4) &= ~0x4;
+        marioAdjustMoveDir();
+        mario = marioGetPtr();
+        *(f32*)((s32)mario + 0x148) = float_0_80420f9c;
+        *(f32*)((s32)mario + 0x158) = float_0p004_80420fbc;
+        allPartyForceSlitOff();
+    }
 }
-
 
 s32 marioSlitButton(void) {
+    extern void* marioGetPtr(void);
+    extern s32 marioKeyOffChk(void);
+    extern s32 marioBgmodeChk(void);
+    void* mario = marioGetPtr();
+    if (*(u32*)((s32)mario + 0xC) & 2) {
+        return 0;
+    }
+    if (marioKeyOffChk() != 0) {
+        return 0;
+    }
+    if (marioBgmodeChk() == 1) {
+        return 0;
+    }
+    if (!(*(u32*)((s32)mario + 0x4) & 0x1000000)) {
+        if (*(u16*)((s32)mario + 0x24A) & 0x20) {
+            return 1;
+        }
+    } else {
+        if (*(u16*)((s32)mario + 0x24A) & 0x20) {
+            return 2;
+        }
+        if (*(u8*)((s32)mario + 0x257) >= 0x32) {
+            return 2;
+        }
+    }
     return 0;
 }
-
 
 u32 marioSlitAbilityChk(void) {
     return 0;

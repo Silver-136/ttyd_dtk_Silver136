@@ -42,6 +42,13 @@ extern f32 float_900_80422594;
 extern u8 subsetevt_status_recovery[];
 extern char str_SFX_REST_CONDITION1_802efb80[];
 extern u8 subsetevt_regeneration[];
+extern u8 marioDefaultWeapon_Jump[];
+extern u8 marioWeapon_KururinJump[];
+extern u8 marioDefaultWeapon_Hammer[];
+extern u8 marioDefaultWeapon_FirstAttackKaitenHammer[];
+extern u8 marioDefaultWeapon_FirstAttackUltraHammer[];
+extern u8 partyWeapon_NokotarouFirstAttack[];
+extern u8 partyWeapon_SandersFirstAttack[];
 
 #define BTLSEQ_STATUS_RECOVERY_RECURSE(statusValue) \
 do { \
@@ -1050,7 +1057,31 @@ void BattleSequenceManager(void) {
 
 
 u32 BattlePhaseEndCheck(void) {
-    return 0;
+    s32 i;
+    s32 offset;
+    void* battleWork;
+    void* unit;
+    s32 unitId;
+
+    i = 0;
+    offset = 0;
+    battleWork = _battleWorkPointer;
+    while (i < 0x40) {
+        unitId = *(s32*)((s32)battleWork + offset + 0x120);
+        if (unitId != -1) {
+            unit = BattleGetUnitPtr(battleWork, unitId);
+            if (unit != 0 &&
+                *(u8*)((s32)unit + 0x20) != 0xA &&
+                *(s8*)((s32)unit + 0x22) > 0 &&
+                BtlUnit_CheckStatus(unit, 0x1B) == 0) {
+                break;
+            }
+        }
+        i++;
+        offset += 4;
+    }
+
+    return i >= 0x40;
 }
 
 
@@ -1059,7 +1090,26 @@ void btlseqPhase(void* battleWork) {
 
 
 void* _GetFirstAttackWeapon(u32 firstAttackType) {
-    return 0;
+    switch (firstAttackType) {
+        case 0:
+            return marioDefaultWeapon_Jump;
+        case 1:
+            return marioWeapon_KururinJump;
+        case 2:
+            return marioDefaultWeapon_Jump;
+        case 3:
+            return marioDefaultWeapon_Hammer;
+        case 4:
+            return marioDefaultWeapon_FirstAttackKaitenHammer;
+        case 5:
+            return marioDefaultWeapon_FirstAttackUltraHammer;
+        case 6:
+            return partyWeapon_NokotarouFirstAttack;
+        case 7:
+            return partyWeapon_SandersFirstAttack;
+        default:
+            return 0;
+    }
 }
 
 

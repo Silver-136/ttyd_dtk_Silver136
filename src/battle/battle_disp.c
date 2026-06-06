@@ -255,8 +255,33 @@ u8 btlDispTexPlaneInit(void) {
 
 
 void _pose_one_pattern(void* part) {
-}
+    extern u8 vec3_802ee3a0[];
+    u8* base;
 
+    base = vec3_802ee3a0;
+    if ((s32)*(u8*)((s32)part + 0x214) == 0) {
+        goto body;
+    }
+    goto done;
+body:
+    *(u8*)((s32)part + 0x214) = 1;
+    switch (*(u8*)((s32)part + 0x215)) {
+        case 2:
+            animPoseSetEffect(*(void**)((s32)part + 0x1C0), (s32)(base + 0x68), 1);
+            animPoseSetEffectAnim(*(void**)((s32)part + 0x1C0), (s32)(base + 0x78), 1);
+            break;
+        case 3:
+            animPoseSetEffect(*(void**)((s32)part + 0x1C0), (s32)(base + 0x68), 1);
+            animPoseSetEffectAnim(*(void**)((s32)part + 0x1C0), (s32)(base + 0x98), 1);
+            break;
+        case 7:
+            animPoseSetEffect(*(void**)((s32)part + 0x1C0), (s32)(base + 0x68), 1);
+            animPoseSetEffectAnim(*(void**)((s32)part + 0x1C0), (s32)(base + 0xA0), 1);
+            break;
+    }
+done:
+    return;
+}
 
 u8 btlDispGXQuads2DRasta(double x1, double y1, double x2, double y2, s32 r, s32 g, u8 b, u8 a) {
     return 0;
@@ -267,10 +292,36 @@ void _partsBlurControl(void* part, s32 enable, s32 a3, void* color) {
 }
 
 
-u8 floatOffsetControl(void* part) {
-    return 0;
-}
+void floatOffsetControl(void* part) {
+    s32 active;
+    u16 value;
+    void* unit;
 
+    active = 1;
+    unit = *(void**)((s32)part + 0x4EC);
+    if ((*(u32*)((s32)unit + 0x1C) & 0x100000) == 0) {
+        active = 0;
+    } else if ((*(u32*)((s32)unit + 0x1C) & 0x200000) == 0) {
+        active = 0;
+    } else if (BtlUnit_CheckStatus(unit, 0x1B) != 0) {
+        active = 0;
+    }
+
+    if (active != 0) {
+        *(u16*)((s32)part + 0x1A8) = *(u16*)((s32)part + 0x1A8) + 1;
+    } else {
+        value = *(u16*)((s32)part + 0x1A8);
+        if (value != 0) {
+            *(u16*)((s32)part + 0x1A8) = value % 90;
+            value = *(u16*)((s32)part + 0x1A8);
+            if (value >= 45) {
+                *(u16*)((s32)part + 0x1A8) = value + 1;
+            } else if (value != 0) {
+                *(u16*)((s32)part + 0x1A8) = value - 1;
+            }
+        }
+    }
+}
 
 void btlUnitStolenItemDisp(s32 param_1, void* unit) {
 }
@@ -285,24 +336,103 @@ void btlGetScreenPoint(void* inPos, void* outScreenSpacePos) {
 }
 
 
-u8 gravityOffsetControl(void* part) {
-    return 0;
-}
+void gravityOffsetControl(void* part) {
+    s32 active;
+    void* unit;
+    void* battleWork;
+    u16 value;
 
+    battleWork = _battleWorkPointer;
+    active = 1;
+    unit = *(void**)((s32)part + 0x4EC);
+    if ((*(u32*)((s32)battleWork + 0xEF4) & 0x40000000) == 0) {
+        active = 0;
+    } else if ((*(u32*)((s32)unit + 0x104) & 0x1004) != 0) {
+        active = 0;
+    }
+
+    if (active != 0) {
+        *(u16*)((s32)part + 0x1A6) = *(u16*)((s32)part + 0x1A6) + 1;
+        return;
+    }
+
+    value = *(u16*)((s32)part + 0x1A6);
+    if (value != 0) {
+        *(u16*)((s32)part + 0x1A6) = value % 120;
+        value = *(u16*)((s32)part + 0x1A6);
+        if (value >= 60) {
+            *(u16*)((s32)part + 0x1A6) = value + 1;
+            return;
+        }
+        if (value != 0) {
+            *(u16*)((s32)part + 0x1A6) = value - 1;
+        }
+    }
+}
 
 u8 btlDispGXInit2DSub(void) {
     return 0;
 }
 
 
-u8 btlDispEntAnime(void* unit) {
-    return 0;
-}
+void btlDispEntAnime(void* unit) {
+    extern s32 animPoseEntry(void*, s32);
+    extern char* strcpy(char*, const char*);
+    void* part;
+    void* poseTable;
+    void* animData;
+    void* poseName;
 
+    part = *(void**)((s32)unit + 0x14);
+    while (part != NULL) {
+        poseTable = *(void**)((s32)part + 0x1BC);
+        if (poseTable == NULL) {
+            *(s32*)((s32)part + 0x1C0) = -1;
+        } else {
+            animData = *(void**)(*(s32*)((s32)part + 4) + 8);
+            if (animData == NULL) {
+                *(s32*)((s32)part + 0x1C0) = -1;
+            } else {
+                strcpy((char*)((s32)part + 0x1C4), searchPoseTbl(poseTable, 0x1C));
+                *(s32*)((s32)part + 0x1C0) = animPoseEntry(animData, 1);
+            }
+        }
+        part = *(void**)part;
+    }
+}
 
 void btlUnitItemDisp2(s32 param_1, void* unit) {
-}
+    void* battleWork;
+    s32 type;
+    u32 flags;
 
+    type = *(s32*)((s32)unit + 8);
+    battleWork = _battleWorkPointer;
+    if (type >= 1 && type < 0xD8) {
+        goto display;
+    }
+    if (type >= 0xDE && type < 0xE0) {
+        goto display;
+    }
+    if (type >= 0xE0) {
+        if (type < 0xE7) {
+            goto display;
+        }
+        goto done;
+    }
+    goto done;
+display:
+    flags = *(u32*)((s32)battleWork + 0xEF4);
+    if ((flags & 0x20000) != 0) {
+        btlUnitItemDisp(param_1, unit);
+    } else {
+        *(u32*)((s32)battleWork + 0xEF4) = flags | 0x20000;
+        btlUnitItemDisp(param_1, unit);
+        *(u32*)((s32)battleWork + 0xEF4) &= ~0x20000;
+    }
+done:
+    return;
+}
 
 u8 btlDispTexPlane2(s32 param_1, s32 param_2, void* param_3) {
     return 0;
@@ -310,4 +440,18 @@ u8 btlDispTexPlane2(s32 param_1, s32 param_2, void* param_3) {
 
 
 void btlDispChangeAnime(BattleWorkUnitPart* part, const char*name, BOOL a3) {
+    extern char* strcpy(char*, const char*);
+
+    strcpy((char*)((s32)part + 0x1C4), name);
+    *(u32*)((s32)part + 0x204) |= 2;
+    *(u32*)((s32)part + 0x204) |= 1;
+    *(u32*)((s32)part + 0x204) &= ~0x80;
+    *(u32*)((s32)part + 0x204) &= ~0x200;
+    *(u32*)((s32)part + 0x204) &= ~0x10;
+    if (a3 != 0) {
+        *(u32*)((s32)part + 0x204) |= 8;
+    } else {
+        *(u32*)((s32)part + 0x204) &= ~8;
+    }
 }
+

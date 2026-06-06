@@ -23,25 +23,117 @@ u8 offscreenMain(void) {
 }
 
 
-u8 offscreenDelete(char* param_1) {
-    return 0;
+void offscreenDelete(char* name) {
+    extern void* gp;
+    extern s32 work;
+    extern s32 strcmp(const char* a, const char* b);
+    void* set = &work;
+    void* entry;
+    s32 count;
+    s32 i;
+
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = (void*)((s32)set + 8);
+    }
+    count = *(s32*)set;
+    i = 0;
+    entry = *(void**)((s32)set + 4);
+    while (i < count) {
+        if ((*(u32*)entry & 1) != 0) {
+            if (strcmp((char*)((s32)entry + 4), name) == 0) {
+                break;
+            }
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x50);
+    }
+    *(u32*)entry = 0;
 }
 
+void* offscreenNameToPtr(char* name) {
+    extern void* gp;
+    extern s32 work;
+    extern s32 strcmp(const char* a, const char* b);
+    void* set = &work;
+    void* entry;
+    s32 count;
+    s32 i;
 
-u32* offscreenNameToPtr(char* param_1) {
-    return 0;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = (void*)((s32)set + 8);
+    }
+    count = *(s32*)set;
+    i = 0;
+    entry = *(void**)((s32)set + 4);
+    while (i < count) {
+        if ((*(u32*)entry & 1) != 0) {
+            if (strcmp((char*)((s32)entry + 4), name) == 0) {
+                break;
+            }
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x50);
+    }
+    return entry;
 }
 
+s32 offscreenNameToId(char* name) {
+    extern void* gp;
+    extern s32 work;
+    extern s32 strcmp(const char* a, const char* b);
+    void* set = &work;
+    void* entry;
+    s32 count;
+    s32 i;
 
-int offscreenNameToId(char* param_1) {
-    return 0;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = (void*)((s32)set + 8);
+    }
+    count = *(s32*)set;
+    i = 0;
+    entry = *(void**)((s32)set + 4);
+    while (i < count) {
+        if ((*(u32*)entry & 1) != 0) {
+            if (strcmp((char*)((s32)entry + 4), name) == 0) {
+                break;
+            }
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x50);
+    }
+    return i;
 }
 
+void offscreenGetTexObj(s32 id, void** texObj, u32* size) {
+    extern void* gp;
+    extern s32 work;
+    void* set = &work;
+    void* entry;
+    u32 flags;
 
-u8 offscreenGetTexObj(int param_1, u32** param_2, u32* param_3) {
-    return 0;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = (void*)((s32)set + 8);
+    }
+    entry = (void*)((s32)*(void**)((s32)set + 4) + id * 0x50);
+    flags = *(u32*)entry;
+    if ((flags & 1) == 0) {
+        *texObj = 0;
+        *size = 0;
+        return;
+    }
+    if ((flags & 2) == 0) {
+        *texObj = 0;
+        *size = 0;
+        return;
+    }
+    if ((flags & 4) == 0) {
+        *texObj = 0;
+        *size = 0;
+        return;
+    }
+    *texObj = (void*)((s32)entry + 0x1C);
+    *size = *(u32*)((s32)entry + 0x44);
 }
-
 
 u8 offscreenInit(void) {
     void* base = &work;

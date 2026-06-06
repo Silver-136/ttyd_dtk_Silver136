@@ -363,6 +363,41 @@ u8 npcRecoveryFiledNpc(void) {
 
 
 void npcBlurOn(char* name) {
+    extern s32 strcmp(const char*, const char*);
+    s32 wp = (s32)&work;
+    void* npc;
+    s32 count;
+    s32 i;
+
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), name) == 0) {
+            break;
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+    *(u32*)npc |= 0x100;
+    *(s32*)((s32)npc + 0xA4) = *(s32*)((s32)npc + 0x8C);
+    *(s32*)((s32)npc + 0xA8) = *(s32*)((s32)npc + 0x90);
+    *(s32*)((s32)npc + 0xAC) = *(s32*)((s32)npc + 0x94);
+    *(s32*)((s32)npc + 0xB0) = *(s32*)((s32)npc + 0x8C);
+    *(s32*)((s32)npc + 0xB4) = *(s32*)((s32)npc + 0x90);
+    *(s32*)((s32)npc + 0xB8) = *(s32*)((s32)npc + 0x94);
+    *(s32*)((s32)npc + 0xBC) = *(s32*)((s32)npc + 0x8C);
+    *(s32*)((s32)npc + 0xC0) = *(s32*)((s32)npc + 0x90);
+    *(s32*)((s32)npc + 0xC4) = *(s32*)((s32)npc + 0x94);
+    *(s32*)((s32)npc + 0xC8) = *(s32*)((s32)npc + 0x8C);
+    *(s32*)((s32)npc + 0xCC) = *(s32*)((s32)npc + 0x90);
+    *(s32*)((s32)npc + 0xD0) = *(s32*)((s32)npc + 0x94);
+    *(s32*)((s32)npc + 0xD4) = *(s32*)((s32)npc + 0x8C);
+    *(s32*)((s32)npc + 0xD8) = *(s32*)((s32)npc + 0x90);
+    *(s32*)((s32)npc + 0xDC) = *(s32*)((s32)npc + 0x94);
 }
 
 
@@ -381,17 +416,105 @@ u8 fbatSetAttackAnnounce(s32 param_1) {
 
 
 s32 npcWaitAllInitEvtEnd(void) {
-    return 0;
-}
+    extern s32 evtCheckID(s32 id);
+    s32 wp = (s32)&work;
+    s32 ret;
+    s32 i;
+    s32 count;
+    void* npc;
 
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    ret = 1;
+    npc = *(void**)(wp + 0xC);
+    i = 0;
+    while (i < count) {
+        if (npc != 0 && (*(u32*)npc & 1) && !(*(u32*)npc & 2)) {
+            u32 flags = *(u32*)npc;
+            s32 id = *(s32*)((s32)npc + 0x118);
+            if (id != 0) {
+                ret = 0;
+                if (evtCheckID(id) == 0) {
+                    *(s32*)((s32)npc + 0x118) = 0;
+                    *(u32*)npc |= 2;
+                }
+            } else {
+                *(u32*)npc = flags | 2;
+            }
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+    return ret;
+}
 
 void npcExecAllInitEvt(void) {
-}
+    extern s32 evtEntry(void* script, s32 type, s32 flags);
+    extern void evtDeleteID(s32 id);
+    s32 wp = (s32)&work;
+    s32 i;
+    s32 count;
+    void* npc;
 
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if (npc != 0 && (*(u32*)npc & 1)) {
+            if (*(void**)((s32)npc + 0x120) != 0) {
+                if (*(s32*)((s32)npc + 0x118) != 0) {
+                    evtDeleteID(*(s32*)((s32)npc + 0x118));
+                }
+                {
+                    s32 evt = evtEntry(*(void**)((s32)npc + 0x120), 0, 0);
+                    *(u8*)(evt + 0x10) = 0;
+                    *(void**)(evt + 0x170) = npc;
+                    *(s32*)((s32)npc + 0x118) = *(s32*)(evt + 0x15C);
+                }
+            } else {
+                *(s32*)((s32)npc + 0x118) = 0;
+            }
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+}
 
 void npcExecAllReglEvt(void) {
-}
+    extern s32 evtEntry(void* script, s32 type, s32 flags);
+    extern void evtDeleteID(s32 id);
+    s32 wp = (s32)&work;
+    s32 i;
+    s32 count;
+    void* npc;
 
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if (npc != 0 && (*(u32*)npc & 1) && *(void**)((s32)npc + 0x124) != 0) {
+            if (*(s32*)((s32)npc + 0x11C) != 0) {
+                evtDeleteID(*(s32*)((s32)npc + 0x11C));
+            }
+            {
+                s32 evt = evtEntry(*(void**)((s32)npc + 0x124), 0, 0x20);
+                *(u8*)(evt + 0x10) = 1;
+                *(void**)(evt + 0x170) = npc;
+                *(s32*)((s32)npc + 0x11C) = *(s32*)(evt + 0x15C);
+            }
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+}
 
 s32 _majinai_effect(void* pEvt, int param_2) {
     return 0;
@@ -399,30 +522,133 @@ s32 _majinai_effect(void* pEvt, int param_2) {
 
 
 void npcStartForEvent(void) {
-}
+    extern void evtStartID(s32 id);
+    extern void animPoseSetLocalTimeRate(void* pose, f32 rate);
+    extern f32 float_1_8041fc94;
+    s32 wp = (s32)&work;
+    s32 i;
+    s32 count;
+    void* npc;
 
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if (npc != 0 && (*(u32*)npc & 2) && (*(u32*)npc & 0x10000000) &&
+            (*(u32*)((s32)npc + 0x1D4) & 0x10000)) {
+            *(u32*)((s32)npc + 0x1D4) &= ~0x10000;
+            evtStartID(*(s32*)((s32)npc + 0x11C));
+            animPoseSetLocalTimeRate(*(void**)((s32)npc + 0x104), float_1_8041fc94);
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+}
 
 void* npcNameToPtr_NoAssert(s32 name) {
-    return 0;
-}
+    extern s32 strcmp(const char*, const char*);
+    s32 wp = (s32)&work;
+    s32 i;
+    s32 count;
+    void* npc;
 
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), (char*)name) == 0) {
+            break;
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+    if (i >= count) {
+        return 0;
+    }
+    return npc;
+}
 
 void npcStopForEvent(void) {
-}
+    extern void evtStopID(s32 id);
+    extern void animPoseSetLocalTimeRate(void* pose, f32 rate);
+    extern f32 float_0_8041fc7c;
+    s32 wp = (s32)&work;
+    s32 i;
+    s32 count;
+    void* npc;
 
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if (npc != 0 && (*(u32*)npc & 2) && (*(u32*)npc & 0x10000000)) {
+            *(u32*)((s32)npc + 0x1D4) |= 0x10000;
+            evtStopID(*(s32*)((s32)npc + 0x11C));
+            animPoseSetLocalTimeRate(*(void**)((s32)npc + 0x104), float_0_8041fc7c);
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+}
 
 void npcBlurOff(char* name) {
-}
+    extern s32 strcmp(const char*, const char*);
+    s32 wp = (s32)&work;
+    void* npc;
+    s32 count;
+    s32 i;
 
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), name) == 0) {
+            break;
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+    *(u32*)npc &= ~0x100;
+}
 
 void npcGetBackItemEntry(void* npc) {
 }
 
 
 void* npcNameToPtr(s32 name) {
-    return 0;
-}
+    extern s32 strcmp(const char*, const char*);
+    s32 wp = (s32)&work;
+    s32 i;
+    s32 count;
+    void* npc;
 
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), (char*)name) == 0) {
+            break;
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+    return npc;
+}
 
 u8 _npcDead(u32* param_1, s16 param_2) {
     return 0;
@@ -448,8 +674,27 @@ void npcDelete(void* npc) {
 
 
 void npcSetColor(char* name, void* color) {
-}
+    extern s32 strcmp(const char*, const char*);
+    s32 wp = (s32)&work;
+    void* npc;
+    s32 count;
+    s32 i;
 
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), name) == 0) {
+            break;
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+    *(s32*)((s32)npc + 0x114) = *(s32*)color;
+}
 
 s32 npcEntry(char* name, char* modelName) {
     return 0;

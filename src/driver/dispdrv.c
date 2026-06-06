@@ -21,7 +21,7 @@ extern DispWork** pSortWork;
 extern s32 entry_n;
 extern void* currentWorkPtr;
 extern DispWork* pDispWork;
-extern const f32 offset_tbl[];
+extern const f32 offset_tbl[11];
 extern void* camGetPtr(s32 cameraId);
 extern void PSMTXMultVec(void* mtx, void* src, void* dst);
 extern void PSMTX44MultVec(void* mtx, void* src, void* dst);
@@ -181,7 +181,7 @@ void dispEntry(s32 cameraId, s32 mode, void* callback, void* param, f32 z) {
     work->callback = callback;
     work->param = param;
 
-    if ((mode == 2) || (mode == 5) || ((mode >= 9) && (mode < 11))) {
+    if ((mode == 5) || (mode == 2) || ((mode >= 9) && (mode < 11))) {
         work->z = z + offset_tbl[mode];
     } else {
         work->z = offset_tbl[mode] - z;

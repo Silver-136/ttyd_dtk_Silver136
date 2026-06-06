@@ -13,12 +13,62 @@ u8 BtlActRec_JudgeTurnRuleKeep(void) {
 
 
 u32 _check_turn_count_0_end(int param_1) {
-    return 0;
+    void* battleWork = _battleWorkPointer;
+    u8* work = *(u8**)((s32)battleWork + 0x2738);
+    u8* count = (u8*)((s32)battleWork + 0x16F57);
+    u32 value;
+
+    value = *count;
+    if (value <= work[0x1B] || work[0x1B] == 0xFF) {
+        if (param_1 == 0) {
+            work[0x19] = 2;
+        }
+        else {
+            work[0x19] = 1;
+        }
+    }
+
+    value = *count;
+    if (value <= work[0x1A] || work[0x1A] == 0xFF) {
+        if (param_1 == 0) {
+            work[0x19] = 6;
+        }
+        else if (!(work[0x19] & 2)) {
+            work[0x19] = 1;
+        }
+    }
+
+    return work[0x19];
 }
 
 
 u32 _check_turn_count_0_turn(int param_1) {
-    return 0;
+    void* battleWork = _battleWorkPointer;
+    u8* work = *(u8**)((s32)battleWork + 0x2738);
+    u8* count = (u8*)((s32)battleWork + 0x16F57);
+    u32 value;
+
+    value = *count;
+    if (value <= work[0x1B] || work[0x1B] == 0xFF) {
+        if (param_1 == 0) {
+            work[0x19] = 2;
+        }
+        else {
+            work[0x19] = 1;
+        }
+    }
+
+    value = *count;
+    if (value <= work[0x1A] || work[0x1A] == 0xFF) {
+        if (param_1 == 0) {
+            work[0x19] = 6;
+        }
+        else if (!(work[0x19] & 2)) {
+            work[0x19] = 1;
+        }
+    }
+
+    return work[0x19];
 }
 
 

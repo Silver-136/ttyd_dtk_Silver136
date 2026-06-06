@@ -112,23 +112,109 @@ void* msgSearch(void* msgId) {
 
 
 void msgWindow_ForceClose(s32 id) {
-}
+    extern s32 strcmp(const char* a, const char* b);
+    extern void BtlUnit_ChangeStayAnim(void* unit);
+    extern void npcSetStayPose(void* npc);
+    s32 i;
+    void* win;
+    void* obj;
 
+    for (i = 0; i < 7; i++) {
+        win = windowGetPointer(i);
+        if (*(u16*)((s32)win + 2) != 0 && *(u16*)win != 0 && *(void**)((s32)win + 0x28) != NULL) {
+            obj = *(void**)(*(void**)((s32)win + 0x28));
+            if (*(void**)obj != NULL && strcmp(*(char**)obj, (char*)id) == 0) {
+                *(u16*)win = 7;
+                obj = *(void**)(*(void**)((s32)win + 0x28));
+                if (*(u32*)((s32)obj + 4) & 8) {
+                    BtlUnit_ChangeStayAnim(*(void**)((s32)obj + 0xF224));
+                } else {
+                    npcSetStayPose((void*)((s32)obj + 0xF204));
+                }
+            }
+        }
+    }
+}
 
 u8 msgInit(void) {
-    return 0;
-}
+    extern void* msgw;
+    extern s32 animPoseEntry(const char* name, s32 type);
+    extern void animPoseSetAnim(s32 pose, const char* name, s32 loop);
+    extern void animPoseSetMaterialFlagOn(s32 pose, s32 flags);
+    extern void animPoseSetMaterialFlagOff(s32 pose, s32 flags);
+    extern void animPoseSetGXFunc(s32 pose, void* func, s32 param);
+    extern const char R_no_messages_JP[];
+    char* base = (char*)R_no_messages_JP;
+    void* work;
+    s32 pose;
 
+    pose = animPoseEntry(base + 0x390, 2);
+    *(s32*)((s32)msgw + 0x20) = pose;
+    animPoseSetAnim(*(s32*)((s32)msgw + 0x20), base + 0x398, 1);
+    animPoseSetMaterialFlagOn(*(s32*)((s32)msgw + 0x20), 0x1800);
+    animPoseSetMaterialFlagOff(*(s32*)((s32)msgw + 0x20), 0x40);
+    animPoseSetGXFunc(*(s32*)((s32)msgw + 0x20), msgDispKeyWait_render, 0);
+    work = msgw;
+    *(s32*)((s32)work + 4) = 0;
+    *(s32*)((s32)msgw + 0xC) = 0;
+    *(s32*)((s32)msgw + 0x14) = 0;
+    *(s32*)((s32)msgw + 0x1C) = 0;
+    msgLoad(base + 0x3A0, 1);
+}
 
 char* msgGetCommand(char* param_1, char* param_2, char* param_3) {
-    return 0;
-}
+    char c;
+    s32 mode = 0;
+    s32 i;
 
+    for (i = 0; i < 0x80; i++) {
+        c = *param_1;
+        switch (c) {
+            case '>':
+                if (mode == 0) {
+                    *param_2 = 0;
+                } else {
+                    *param_3 = 0;
+                }
+                return param_1 + 1;
+            case ' ':
+                if (mode == 0) {
+                    *param_2 = 0;
+                    mode = 1;
+                } else {
+                    *param_3++ = c;
+                }
+                break;
+            default:
+                if (mode == 0) {
+                    *param_2++ = c;
+                } else {
+                    *param_3++ = c;
+                }
+                break;
+        }
+        param_1++;
+    }
+    return NULL;
+}
 
 s32 msgIconStr2ID(char* param_1) {
-    return 0;
-}
+    typedef struct MsgIcon {
+        const char* name;
+        s32 id;
+    } MsgIcon;
+    extern MsgIcon msgIcon[];
+    extern s32 strcmp(const char* a, const char* b);
+    register MsgIcon* icon = msgIcon;
+    u32 i;
 
+    for (i = 0; i < 0x12; i++, icon++) {
+        if (strcmp(icon->name, param_1) == 0) {
+            return msgIcon[i].id;
+        }
+    }
+    return -1;
+}
 
 u8 msgWindow_Repeat(int param_1) {
     return 0;

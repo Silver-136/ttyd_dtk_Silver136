@@ -3198,21 +3198,26 @@ USER_FUNC(btlevtcmd_ChangePartsFaceDirection) {
 
 
 USER_FUNC(btlevtcmd_ResetFaceDirection) {
-    s32* args = event->args;
+    s32* args;
     BattleWork* battleWork;
     BattleWorkUnit* unit;
-    void* row;
     s32 type;
     s32 belong;
+    u8* row;
+    u8 faceDir;
 
+    args = event->args;
     battleWork = _battleWorkPointer;
 
     type = evtGetValue(event, args[0]);
-
     unit = BattleGetUnitPtr(battleWork, BattleTransID(event, type));
+
     belong = *(s8*)((s32)unit + 0xC);
-    row = (void*)((s32)battleWork + belong * 8);
-    *(u8*)((s32)unit + 0x189) = *(u8*)((s32)row + 0xA);
+    row = (u8*)battleWork;
+    row += belong << 3;
+
+    faceDir = *(u8*)(row + 0xA);
+    *(volatile u8*)((s32)unit + 0x189) = faceDir;
 
     return EVT_RETURN_DONE;
 }

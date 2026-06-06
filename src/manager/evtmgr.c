@@ -175,31 +175,147 @@ u8 evtmgrInit(void) {
 
 
 void evtStartID(s32 id) {
+    void* set;
+    void* entry;
+    s32 i;
+
+    set = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = (void*)((s32)set + 0xA0);
+    }
+    entry = *(void**)((s32)set + 0x90);
+    i = 0;
+    while (i < *(s32*)set) {
+        if ((*(u8*)((s32)entry + 8) & 1) != 0 && *(s32*)((s32)entry + 0x15C) == id) {
+            evtStart(entry, 0xEF);
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x1B0);
+    }
 }
 
 
 void evtStopID(s32 id) {
+    void* set;
+    void* entry;
+    s32 i;
+
+    set = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = (void*)((s32)set + 0xA0);
+    }
+    entry = *(void**)((s32)set + 0x90);
+    i = 0;
+    while (i < *(s32*)set) {
+        if ((*(u8*)((s32)entry + 8) & 1) != 0 && *(s32*)((s32)entry + 0x15C) == id) {
+            evtStop((s32)entry, 0xEF);
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x1B0);
+    }
 }
 
 
 void evtDeleteID(s32 id) {
+    void* set;
+    void* entry;
+    s32 i;
+
+    set = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = (void*)((s32)set + 0xA0);
+    }
+    entry = *(void**)((s32)set + 0x90);
+    i = 0;
+    while (i < *(s32*)set) {
+        if ((*(u8*)((s32)entry + 8) & 1) != 0 && *(s32*)((s32)entry + 0x15C) == id) {
+            evtDelete(entry);
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x1B0);
+    }
 }
 
 
-u8 evtStartAll(u32 param_1) {
-    return 0;
+void evtStartAll(u32 flags) {
+    void* set;
+    void* entry;
+    s32 i;
+
+    set = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = (void*)((s32)set + 0xA0);
+    }
+    entry = *(void**)((s32)set + 0x90);
+    i = 0;
+    while (i < *(s32*)set) {
+        if ((*(u8*)((s32)entry + 8) & 1) != 0) {
+            evtStart(entry, flags);
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x1B0);
+    }
 }
 
 
 void evtStopAll(s32 type) {
+    void* set;
+    void* entry;
+    s32 i;
+
+    set = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = (void*)((s32)set + 0xA0);
+    }
+    entry = *(void**)((s32)set + 0x90);
+    i = 0;
+    while (i < *(s32*)set) {
+        if ((*(u8*)((s32)entry + 8) & 1) != 0) {
+            evtStop((s32)entry, type);
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x1B0);
+    }
 }
 
 
-u8 evtStartOther(void* param_1, u32 param_2) {
-    return 0;
+void evtStartOther(void* except, u32 flags) {
+    void* set;
+    void* entry;
+    s32 i;
+
+    set = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = (void*)((s32)set + 0xA0);
+    }
+    entry = *(void**)((s32)set + 0x90);
+    i = 0;
+    while (i < *(s32*)set) {
+        if ((*(u8*)((s32)entry + 8) & 1) != 0 && entry != except) {
+            evtStart(entry, flags);
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x1B0);
+    }
 }
 
 
-u8 evtStopOther(int param_1, u32 param_2) {
-    return 0;
+void evtStopOther(void* except, u32 flags) {
+    void* set;
+    void* entry;
+    s32 i;
+
+    set = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = (void*)((s32)set + 0xA0);
+    }
+    entry = *(void**)((s32)set + 0x90);
+    i = 0;
+    while (i < *(s32*)set) {
+        if ((*(u8*)((s32)entry + 8) & 1) != 0 && entry != except) {
+            evtStop((s32)entry, flags);
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x1B0);
+    }
 }

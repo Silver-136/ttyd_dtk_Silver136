@@ -12,6 +12,7 @@ extern LightEntry paperLight3DImg;
 void* memset(void* dst, int value, u32 size);
 s32 mapGetActiveGroup(void);
 s32 camGetCurNo(void);
+s32 strcmp(const char* str1, const char* str2);
 
 static LightWorkSet* currentLightWork(void) {
     if (mapGetActiveGroup() == 1) {
@@ -161,5 +162,34 @@ u8 lightMain(void) {
 
 
 void* lightNameToPtr(char* name) {
+    LightWorkSet* set;
+    void* entry;
+    s32 i;
+    s32 group;
+
+    group = mapGetActiveGroup();
+    set = work;
+    if (group == 1) {
+        set++;
+    }
+
+    entry = set->entries;
+    i = 0;
+    goto check;
+
+loop:
+    if ((*(u16*)entry & 1) != 0) {
+        if (strcmp(name, (const char*)((s32)entry + 2)) == 0) {
+            return entry;
+        }
+    }
+    i++;
+    entry = (void*)((s32)entry + 0x60);
+
+check:
+    if (i < set->count) {
+        goto loop;
+    }
+
     return 0;
 }

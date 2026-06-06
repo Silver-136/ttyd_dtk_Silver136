@@ -189,7 +189,17 @@ int shadowEntryMode(double param_1, double param_2, double param_3, double param
 
 
 u32 shadowGetDepthShadowColor(void) {
-    return 0;
+    void* wp;
+    u8 color[4];
+    s32 alpha;
+
+    wp = dswp;
+    color[3] = 0;
+    alpha = *(u8*)((s32)wp + 0x103);
+    color[0] = ((0xFF - *(u8*)((s32)wp + 0x100)) * alpha) / 0xFF;
+    color[1] = ((0xFF - *(u8*)((s32)wp + 0x101)) * alpha) / 0xFF;
+    color[2] = ((0xFF - *(u8*)((s32)wp + 0x102)) * alpha) / 0xFF;
+    return *(u32*)color;
 }
 
 

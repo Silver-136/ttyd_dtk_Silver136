@@ -1,6 +1,7 @@
 #include "pmario_sound.h"
 
 //.bss
+u8 _buf[0x80];
 PaperSoundWork psnd;
 PaperSoundEnv psenv[16];
 PaperSoundEffect pssfx[40];
@@ -247,45 +248,401 @@ void psndMapChange(void) {
 }
 
 
-u8 psndInit(void) {
-    return 0;
-}
+void psndInit(void) {
+    extern void SoundInit(void);
+    extern void SoundLoadDVD2(const char* path);
+    extern void SoundSLibLoadDVD(const char* path);
+    extern char* strcpy(char* dst, const char* src);
+    extern const f32 float_0_804218d0;
+    extern const char str__802e3c78[];
+    extern const char str_sound_proj_pmario_802e3c80[];
+    u8* buf;
+    u8* sfx;
+    u8* env;
+    u8* work;
+    s32 i;
+    s32 neg;
+    s32 zero;
 
+    buf = _buf;
+    SoundInit();
+
+    neg = -1;
+    zero = 0;
+    *(s32*)(buf + 0x960) = neg;
+    work = buf + 0x960;
+    *(u8*)(work + 0x20) = zero;
+    *(s32*)(work + 0x38) = neg;
+    *(u8*)(work + 0x58) = zero;
+
+    sfx = buf + 0x320;
+    i = 5;
+    do {
+        *(s32*)(sfx + 0x0) = neg;
+        *(s32*)(sfx + 0x18) = neg;
+        *(u16*)(sfx + 0x6) = zero;
+        *(s32*)(sfx + 0x28) = neg;
+        *(s32*)(sfx + 0x40) = neg;
+        *(u16*)(sfx + 0x2E) = zero;
+        *(s32*)(sfx + 0x50) = neg;
+        *(s32*)(sfx + 0x68) = neg;
+        *(u16*)(sfx + 0x56) = zero;
+        *(s32*)(sfx + 0x78) = neg;
+        *(s32*)(sfx + 0x90) = neg;
+        *(u16*)(sfx + 0x7E) = zero;
+        *(s32*)(sfx + 0xA0) = neg;
+        *(s32*)(sfx + 0xB8) = neg;
+        *(u16*)(sfx + 0xA6) = zero;
+        *(s32*)(sfx + 0xC8) = neg;
+        *(s32*)(sfx + 0xE0) = neg;
+        *(u16*)(sfx + 0xCE) = zero;
+        *(s32*)(sfx + 0xF0) = neg;
+        *(s32*)(sfx + 0x108) = neg;
+        *(u16*)(sfx + 0xF6) = zero;
+        *(s32*)(sfx + 0x118) = neg;
+        *(s32*)(sfx + 0x130) = neg;
+        *(u16*)(sfx + 0x11E) = zero;
+        sfx += 0x140;
+        i--;
+    } while (i != 0);
+
+    env = buf + 0xE0;
+    work = buf + 0x80;
+    *(u16*)(env + 0x4) = zero;
+    *(u16*)(env + 0x28) = zero;
+    *(u16*)(env + 0x4C) = zero;
+    *(u16*)(env + 0x70) = zero;
+    *(u16*)(env + 0x94) = zero;
+    *(u16*)(env + 0xB8) = zero;
+    *(u16*)(env + 0xDC) = zero;
+    *(u16*)(env + 0x100) = zero;
+    *(u16*)(env + 0x124) = zero;
+    *(u16*)(env + 0x148) = zero;
+    *(u16*)(env + 0x16C) = zero;
+    *(u16*)(env + 0x190) = zero;
+    *(u16*)(env + 0x1B4) = zero;
+    *(u16*)(env + 0x1D8) = zero;
+    *(u16*)(env + 0x1FC) = zero;
+    *(u16*)(env + 0x220) = zero;
+
+    *(u16*)(work + 0x18) = zero;
+    work[0] = zero;
+    *(u16*)(work + 0x1A) = zero;
+    work[0xC] = zero;
+    *(f32*)(work + 0x3C) = float_0_804218d0;
+    *(u16*)(work + 0x50) = zero;
+    *(u16*)(work + 0x54) = zero;
+    *(u16*)(work + 0x56) = zero;
+    work[0x5C] = zero;
+    work[0x5A] = 0x64;
+    work[0x59] = 0x64;
+    work[0x58] = 0x64;
+
+    strcpy((char*)(work + 0x40), str__802e3c78);
+    SoundLoadDVD2(str_sound_proj_pmario_802e3c80);
+    SoundSLibLoadDVD(str_sound_proj_pmario_802e3c80);
+}
 
 void psndStopAllFadeOut(void) {
-}
+    extern void* gp;
+    extern const f32 float_1000_804218cc;
+    extern const f32 float_750_804218dc;
+    u8* sfx;
+    u8* work;
+    s32 i;
+    s32 fade;
+    u16 flags;
 
+    work = (u8*)&psnd;
+    psndBGMOff_f_d(0x200, 1000, 0);
+    psndBGMOff_f_d(0x201, 1000, 0);
+    psndENVOff_f_d(0x200, 1000, 0);
+    psndENVOff_f_d(0x201, 1000, 0);
+
+    sfx = (u8*)pssfx;
+    i = 8;
+    do {
+        if ((u32)(*(s32*)sfx + 0x10000) != 0xFFFF) {
+            flags = *(u16*)(sfx + 6);
+            *(u16*)(sfx + 6) = flags | 0x40;
+        }
+        sfx += 0x28;
+        if ((u32)(*(s32*)sfx + 0x10000) != 0xFFFF) {
+            flags = *(u16*)(sfx + 6);
+            *(u16*)(sfx + 6) = flags | 0x40;
+        }
+        sfx += 0x28;
+        if ((u32)(*(s32*)sfx + 0x10000) != 0xFFFF) {
+            flags = *(u16*)(sfx + 6);
+            *(u16*)(sfx + 6) = flags | 0x40;
+        }
+        sfx += 0x28;
+        if ((u32)(*(s32*)sfx + 0x10000) != 0xFFFF) {
+            flags = *(u16*)(sfx + 6);
+            *(u16*)(sfx + 6) = flags | 0x40;
+        }
+        sfx += 0x28;
+        if ((u32)(*(s32*)sfx + 0x10000) != 0xFFFF) {
+            flags = *(u16*)(sfx + 6);
+            *(u16*)(sfx + 6) = flags | 0x40;
+        }
+        sfx += 0x28;
+        i--;
+    } while (i != 0);
+
+    work[0x24] = 2;
+    fade = (s32)(float_750_804218dc / (float_1000_804218cc / (f32)*(s32*)((s32)gp + 4)));
+    *(u16*)(work + 0x26) = fade;
+    *(u16*)(work + 0x28) = fade;
+}
 
 void psndSFXAllOff(void) {
+    extern void* gp;
+    extern const f32 float_1000_804218cc;
+    extern const f32 float_750_804218dc;
+    extern const f64 double_to_int_802e3c60;
+    u8* sfx;
+    u8* work;
+    s32 i;
+    s32 fade;
+    u16 flags;
+
+    work = (u8*)&psnd;
+    sfx = (u8*)pssfx;
+    i = 8;
+    do {
+        if ((u32)(*(s32*)sfx + 0x10000) != 0xFFFF) {
+            flags = *(u16*)(sfx + 6);
+            if ((flags & 0xA0) == 0) {
+                *(u16*)(sfx + 6) = flags | 0x40;
+            }
+        }
+        sfx += 0x28;
+        if ((u32)(*(s32*)sfx + 0x10000) != 0xFFFF) {
+            flags = *(u16*)(sfx + 6);
+            if ((flags & 0xA0) == 0) {
+                *(u16*)(sfx + 6) = flags | 0x40;
+            }
+        }
+        sfx += 0x28;
+        if ((u32)(*(s32*)sfx + 0x10000) != 0xFFFF) {
+            flags = *(u16*)(sfx + 6);
+            if ((flags & 0xA0) == 0) {
+                *(u16*)(sfx + 6) = flags | 0x40;
+            }
+        }
+        sfx += 0x28;
+        if ((u32)(*(s32*)sfx + 0x10000) != 0xFFFF) {
+            flags = *(u16*)(sfx + 6);
+            if ((flags & 0xA0) == 0) {
+                *(u16*)(sfx + 6) = flags | 0x40;
+            }
+        }
+        sfx += 0x28;
+        if ((u32)(*(s32*)sfx + 0x10000) != 0xFFFF) {
+            flags = *(u16*)(sfx + 6);
+            if ((flags & 0xA0) == 0) {
+                *(u16*)(sfx + 6) = flags | 0x40;
+            }
+        }
+        sfx += 0x28;
+        i--;
+    } while (i != 0);
+
+    if (work[0x24] != 2) {
+        work[0x24] = 2;
+        fade = (s32)(float_750_804218dc / (float_1000_804218cc / (f32)*(s32*)((s32)gp + 4)));
+        *(u16*)(work + 0x26) = fade;
+        *(u16*)(work + 0x28) = fade;
+    }
 }
 
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void L_psndBGM_stop(void) {
-}
+    extern void SoundSSStopCh(s32 id);
+    extern void SoundSongStopCh(s32 id);
+    extern void SoundEfxStop(s32 id);
+    PaperSoundEffect* sfx;
+    PaperSoundEffect* off;
+    PaperSoundEffectData* data;
+    s32 i;
+    s32 listIndex;
+    s32 effectId;
+    u32 flags;
 
+    *(u16*)((s32)&psnd + 0x56) &= ~0x10;
+
+    sfx = pssfx;
+    i = 0;
+    while (i < 0x28) {
+        if ((u32)(sfx->listIndex + 0x10000) != 0xFFFF) {
+            if ((sfx->unk6 & 0x10) != 0) {
+                if ((sfx->unk6 & 0x820) == 0) {
+                    if ((u32)(i + 0x10000) != 0xFFFF) {
+                        off = &pssfx[(u8)i];
+                        listIndex = off->listIndex;
+                        if ((u32)(listIndex + 0x10000) != 0xFFFF) {
+                            if ((off->unk6 & 1) != 0) {
+                                off->listIndex = -1;
+                                off->effectId = -1;
+                            } else {
+                                effectId = off->effectId;
+                                data = &pssfxlist[listIndex & 0x1FFF];
+                                if ((u32)(effectId + 0x10000) != 0xFFFF) {
+                                    flags = data->unk4;
+                                    if ((flags & 0x80000000) != 0) {
+                                        SoundSSStopCh(effectId);
+                                    } else if ((flags & 0x40000000) != 0) {
+                                        SoundSongStopCh(effectId);
+                                    } else {
+                                        SoundEfxStop(effectId);
+                                    }
+                                }
+                                off->listIndex = -1;
+                                off->effectId = -1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        i++;
+        sfx++;
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void psndSFXOff(s32 id) {
-}
+    extern void SoundSSStopCh(s32 id);
+    extern void SoundSongStopCh(s32 id);
+    extern void SoundEfxStop(s32 id);
+    PaperSoundEffect* sfx;
+    PaperSoundEffectData* data;
+    s32 listIndex;
+    s32 effectId;
+    u32 flags;
 
+    if ((u32)(id + 0x10000) != 0xFFFF) {
+        sfx = &pssfx[(u8)id];
+        listIndex = sfx->listIndex;
+        if ((u32)(listIndex + 0x10000) != 0xFFFF) {
+            if ((sfx->unk6 & 1) != 0) {
+                sfx->listIndex = -1;
+                sfx->effectId = -1;
+            } else {
+                effectId = sfx->effectId;
+                data = &pssfxlist[listIndex & 0x1FFF];
+                if ((u32)(effectId + 0x10000) != 0xFFFF) {
+                    flags = data->unk4;
+                    if ((flags & 0x80000000) != 0) {
+                        SoundSSStopCh(effectId);
+                    } else if ((flags & 0x40000000) != 0) {
+                        SoundSongStopCh(effectId);
+                    } else {
+                        SoundEfxStop(effectId);
+                    }
+                }
+                sfx->listIndex = -1;
+                sfx->effectId = -1;
+            }
+        }
+    }
+}
 
 s32 psndBGMPlayTime(s32 id) {
-    return 0;
-}
+    extern void* gp;
+    PaperSoundBGM* bgm;
+    u32 ticks;
+    u64 now;
+    u64 start;
 
+    bgm = &psbgm[id & 0xF];
+    if (*(s32*)bgm == -1) {
+        return 600000;
+    }
+
+    ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+    now = *(u64*)((s32)gp + 0x38);
+    start = *(u64*)((s32)bgm + 0x30);
+    return (s32)((now - start) / ticks);
+}
 
 void psndSetFlag(s32 flag) {
-}
+    u16* flags;
+    u16 value;
 
+    flags = (u16*)((s32)&psnd + 0x56);
+    value = *flags | flag;
+    *flags = value;
+
+    if ((value & 1) != 0) {
+        psndBGMOff_f_d(0, 1000, 0);
+        psndBGMOff_f_d(1, 1000, 0);
+    }
+
+    if ((*flags & 2) != 0) {
+        psndENVOff_f_d(0, 1000, 0);
+        psndENVOff_f_d(1, 1000, 0);
+    }
+}
 
 s32 psndPushGroup(void) {
-    return 0;
+    extern s32 _psndPushGroup_trg;
+    extern void SoundLoadDVD2Free(void);
+    extern void SoundLoadDVD2PushGroup(void* tbl);
+    extern s32 init_f;
+    static s32 group;
+    static u8 tbl[2];
+
+    if (_psndPushGroup_trg != 0) {
+        return 1;
+    }
+
+    if (group > 0xB) {
+        init_f = 1;
+        SoundLoadDVD2Free();
+        return 0;
+    }
+
+    _psndPushGroup_trg = 1;
+    tbl[0] = group;
+    tbl[1] = 0xFF;
+    SoundLoadDVD2PushGroup(tbl);
+    _psndPushGroup_trg = 0;
+    group++;
+    return 1;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 searchPSSFXList(s32 name) {
+    extern s32 strcmp(const char* a, const char* b);
+    PaperSoundEffectData* entry;
+    s32 i;
 
-char* searchPSSFXList(char* param_1) {
-    return 0;
+    entry = pssfxlist;
+    if (name >= 0) {
+        return name;
+    }
+
+    i = 0;
+    while (i < 0x1092) {
+        if (strcmp(*(char**)entry, (char*)name) == 0) {
+            break;
+        }
+        i++;
+        entry++;
+    }
+
+    if (i >= 0x1092) {
+        i = 0;
+    }
+    return i;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 psndBGM_rate(u32 param_1, u16 param_2) {
     return 0;

@@ -82,6 +82,37 @@ void BtlPad_WorkUpdate(void* work, s32 flags) {
 
 
 void BtlPad_WorkInit(void* work) {
+    s32 i;
+    s32 offset;
+    void* entry;
+
+    offset = 0;
+    for (i = 0; i < 2; i++) {
+        entry = (void*)((s32)work + offset);
+        *(u16*)((s32)entry + 0) = 0;
+        *(u8*)((s32)entry + 2) = 0;
+        *(u8*)((s32)entry + 3) = 0;
+        *(u8*)((s32)entry + 4) = 0;
+        *(u8*)((s32)entry + 5) = 0;
+        *(u8*)((s32)entry + 6) = 0;
+        *(u8*)((s32)entry + 7) = 0;
+        *(u8*)((s32)entry + 8) = 0;
+        *(u8*)((s32)entry + 9) = 0;
+        *(u8*)((s32)entry + 0xA) = 0;
+        offset += 0xC;
+    }
+
+    offset = 0;
+    for (i = 0; i < 30; i++) {
+        entry = (void*)((s32)work + offset);
+        *(s32*)((s32)entry + 0x18) = 0;
+        *(s32*)((s32)entry + 0x90) = 0;
+        *(s32*)((s32)entry + 0x108) = 0;
+        offset += 4;
+    }
+
+    *(u8*)((s32)work + 0x1F8) = 0;
+    *(u8*)((s32)work + 0x1F9) = 0;
 }
 
 

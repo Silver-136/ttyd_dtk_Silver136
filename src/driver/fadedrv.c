@@ -16,6 +16,15 @@ extern void animPoseRelease(s32 poseId);
 extern void animPaperPoseRelease(s32 poseId);
 extern void imgRelease(s32 imageId, void* heap);
 extern void* memset(void* dst, int value, unsigned long size);
+extern void* __memAlloc(s32 heap, u32 size);
+extern void* arcOpen(const char* name, s32 unused0, s32 unused1);
+extern char* getMarioStDvdRoot(void);
+extern int sprintf(char* str, const char* format, ...);
+extern s32 DVDMgrOpen(const char* path, s32 a, s32 b);
+extern s32 DVDMgrGetLength(s32 entry);
+extern void DVDMgrReadAsync(s32 entry, void* dst, s32 size, s32 offset, void* callback);
+extern const char str_fade_tpl_802bf79c[];
+extern const char str_PCTs_fade_tpl_802bf7a8[];
 
 extern const f32 float_0_8041f7a8;
 extern const f32 float_1_8041f7ac;
@@ -102,6 +111,7 @@ extern f32 PSVECMag(void* vec);
 extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
 extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
 extern void PSMTXConcat(void* a, void* b, void* ab);
+extern void PSMTXMultVec(void* mtx, void* src, void* dst);
 
 extern void animPoseSetGXFunc(s32 poseId, void* callback, void* param);
 extern void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, f32 a, f32 b);
@@ -651,16 +661,128 @@ void zFill(void) {
 }
 
 
-u8 fadeInit(void) {
-    return 0;
+void fadeInit(void) {
+    void* work;
+    s32 minusOne;
+    s32 zero;
+    f32 oneFloat;
+    f32 zeroFloat;
+
+    work = __memAlloc(0, 0x360);
+    wp = work;
+    memset(work, 0, 0x360);
+
+    work = wp;
+    minusOne = -1;
+    zero = 0;
+    oneFloat = float_1_8041f7ac;
+    zeroFloat = float_0_8041f7a8;
+
+    *(s32*)((s32)work + 0x74) = minusOne;
+    *(s32*)((s32)work + 0x78) = minusOne;
+    *(f32*)((s32)work + 0x24) = zeroFloat;
+    *(f32*)((s32)work + 0x28) = zeroFloat;
+    *(f32*)((s32)work + 0x80) = zeroFloat;
+    *(f32*)((s32)work + 0x84) = zeroFloat;
+    *(f32*)((s32)work + 0x98) = oneFloat;
+    *(s32*)((s32)work + 0xAC) = zero;
+
+    work = wp;
+    *(s32*)((s32)work + 0x11C) = minusOne;
+    *(s32*)((s32)work + 0x120) = minusOne;
+    *(f32*)((s32)work + 0xCC) = zeroFloat;
+    *(f32*)((s32)work + 0xD0) = zeroFloat;
+    *(f32*)((s32)work + 0x128) = zeroFloat;
+    *(f32*)((s32)work + 0x12C) = zeroFloat;
+    *(f32*)((s32)work + 0x140) = oneFloat;
+    *(s32*)((s32)work + 0x154) = zero;
+
+    work = wp;
+    *(s32*)((s32)work + 0x1C4) = minusOne;
+    *(s32*)((s32)work + 0x1C8) = minusOne;
+    *(f32*)((s32)work + 0x174) = zeroFloat;
+    *(f32*)((s32)work + 0x178) = zeroFloat;
+    *(f32*)((s32)work + 0x1D0) = zeroFloat;
+    *(f32*)((s32)work + 0x1D4) = zeroFloat;
+    *(f32*)((s32)work + 0x1E8) = oneFloat;
+    *(s32*)((s32)work + 0x1FC) = zero;
+
+    work = wp;
+    *(s32*)((s32)work + 0x26C) = minusOne;
+    *(s32*)((s32)work + 0x270) = minusOne;
+    *(f32*)((s32)work + 0x21C) = zeroFloat;
+    *(f32*)((s32)work + 0x220) = zeroFloat;
+    *(f32*)((s32)work + 0x278) = zeroFloat;
+    *(f32*)((s32)work + 0x27C) = zeroFloat;
+    *(f32*)((s32)work + 0x290) = oneFloat;
+    *(s32*)((s32)work + 0x2A4) = zero;
+
+    work = wp;
+    *(s32*)((s32)work + 0x314) = minusOne;
+    *(s32*)((s32)work + 0x318) = minusOne;
+    *(f32*)((s32)work + 0x2C4) = zeroFloat;
+    *(f32*)((s32)work + 0x2C8) = zeroFloat;
+    *(f32*)((s32)work + 0x320) = zeroFloat;
+    *(f32*)((s32)work + 0x324) = zeroFloat;
+    *(f32*)((s32)work + 0x338) = oneFloat;
+    *(s32*)((s32)work + 0x34C) = zero;
+
+    work = wp;
+    *(s32*)((s32)work + 0x350) = minusOne;
+    work = wp;
+    *(s32*)((s32)work + 0x358) = zero;
+    work = wp;
+    *(s32*)((s32)work + 0x35C) = zero;
 }
 
 
 f32 z(void) {
-    return 0.0f;
+    void* work;
+    void* cam;
+    FadeVec pos;
+    f32 divisor;
+    f32 value;
+
+    work = wp;
+    cam = camGetPtr(4);
+    if (*(s32*)((s32)cam + 0x19C) == 0) {
+        return float_1_8041f7ac;
+    }
+
+    cam = camGetPtr(9);
+    PSMTXMultVec((void*)((s32)cam + 0x11C), (void*)((s32)work + 0x130), &pos);
+    value = ((*(f32*)((s32)cam + 0x110) - *(f32*)((s32)cam + 0x10C)) *
+        ((float_1_8041f7ac / -pos.z) *
+        (*(f32*)((s32)cam + 0x184) * pos.z + *(f32*)((s32)cam + 0x188)))) +
+        *(f32*)((s32)cam + 0x110);
+    divisor = value;
+
+    cam = camGetPtr(4);
+    PSMTXMultVec((void*)((s32)cam + 0x11C), (void*)((s32)work + 0x130), &pos);
+    value = ((*(f32*)((s32)cam + 0x110) - *(f32*)((s32)cam + 0x10C)) *
+        (float_1_8041f7ac * (*(f32*)((s32)cam + 0x184) * pos.z + *(f32*)((s32)cam + 0x188)))) +
+        *(f32*)((s32)cam + 0x110);
+    return value / divisor;
 }
 
 
-u8 fadeTexSetup(void) {
-    return 0;
+void fadeTexSetup(void) {
+    s32 length;
+    s32 entry;
+    char path[0x80];
+
+    *(void**)((s32)wp + 0x358) = NULL;
+    *(void**)((s32)wp + 0x358) = arcOpen(str_fade_tpl_802bf79c, 0, 0);
+    if (*(void**)((s32)wp + 0x358) == NULL) {
+        sprintf(path, str_PCTs_fade_tpl_802bf7a8, getMarioStDvdRoot());
+        entry = DVDMgrOpen(path, 2, 0);
+        length = DVDMgrGetLength(entry);
+        length = (length + 0x1F) & ~0x1F;
+        *(void**)((s32)wp + 0x358) = __memAlloc(0, length);
+        *(s32*)((s32)entry + 0x6C) = entry;
+        DVDMgrReadAsync(entry, *(void**)((s32)wp + 0x358), length, 0, _callback);
+    } else {
+        UnpackTexPalette(*(void**)((s32)wp + 0x358));
+        *(s32*)((s32)wp + 0x35C) = 1;
+    }
 }

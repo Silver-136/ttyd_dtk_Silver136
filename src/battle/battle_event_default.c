@@ -156,6 +156,23 @@ s32 _backfire(int param_1, int param_2) {
 }
 
 
-s32 _check_pose_stay(int param_1) {
-    return 0;
+s32 _check_pose_stay(void* evt) {
+    s32* args = *(s32**)((s32)evt + 0x18);
+    void* battleWork = _battleWorkPointer;
+    s32 dst = args[0];
+    s32 unitId = BattleTransID(evt, -2);
+    void* unit = BattleGetUnitPtr(battleWork, unitId);
+    s32 value = 0;
+
+    if (*(s32*)((s32)unit + 8) == 0xDE) {
+        value = 1;
+        if ((*(u32*)((s32)battleWork + 0x163F4) & 1) != 0 &&
+            (*(u32*)((s32)unit + 0x27C) & 0x10) == 0) {
+            value = 0;
+        }
+    }
+    evtSetValue(evt, dst, value);
+
+    return 2;
 }
+

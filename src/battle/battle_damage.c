@@ -231,6 +231,28 @@ void BattleAttackDeclareAll(BattleWork* battleWork) {
 /* AUTOSTUB _checkDamageCode_EmergencyRevival size 0xC0 */
 /* signature source: manual_signatures */
 s32 _checkDamageCode_EmergencyRevival(int param_1, u32* param_2) {
+    extern s32 pouchCheckItem(s32 item);
+    s32 kind;
+
+    kind = *(s32*)((s32)param_1 + 8);
+    if (kind == UNIT_MARIO) {
+        if (pouchCheckItem(0x97) > 0) {
+            *param_2 |= 0x800;
+            return 1;
+        }
+        return 0;
+    }
+    if (kind >= UNIT_GOOMBELLA && kind < UNIT_MAX) {
+        if (pouchCheckItem(0x97) > 0) {
+            *param_2 |= 0x800;
+            return 1;
+        }
+        return 0;
+    }
+    if (*(s32*)((s32)param_1 + 0x308) == 0x97) {
+        *param_2 |= 0x800;
+        return 1;
+    }
     return 0;
 }
 
@@ -244,7 +266,62 @@ s32 _checkDamageCode_EmergencyRevival(int param_1, u32* param_2) {
 /* AUTOSTUB _getRegistStatus size 0xDC */
 /* signature source: manual_signatures */
 u32 _getRegistStatus(BattleWorkUnit* unit, StatusEffectType statusType) {
-    return 0;
+    u8* rates = *(u8**)((s32)unit + 0x144);
+
+    switch (statusType) {
+        case 0:
+            return rates[0];
+        case 1:
+            return rates[1];
+        case 2:
+            return rates[2];
+        case 3:
+            return rates[3];
+        case 4:
+            return rates[4];
+        case 5:
+            return rates[5];
+        case 6:
+            return rates[6];
+        case 7:
+            return rates[7];
+        case 8:
+            return rates[8];
+        case 9:
+            return rates[9];
+        case 10:
+            return rates[10];
+        case 11:
+            return rates[11];
+        case 12:
+            return rates[12];
+        case 13:
+            return rates[13];
+        case 14:
+            return rates[14];
+        case 15:
+            return rates[21];
+        case 16:
+            return rates[17];
+        case 17:
+            return rates[18];
+        case 18:
+            return rates[15];
+        case 19:
+            return rates[16];
+        case 20:
+            return rates[19];
+        case 21:
+            return rates[20];
+        case 22:
+        case 23:
+        case 24:
+        case 25:
+        case 26:
+        case 27:
+        default:
+            return 100;
+    }
 }
 
 /* MANUAL_AUTOMATION_STUBS_END main/battle/battle_damage */
@@ -283,7 +360,56 @@ u32 BattleCheckPikkyoro(void* weapon, u32* param_2) {
 /* AUTOSTUB BattleCalculateFpDamage size 0x110 */
 /* signature source: manual_signatures */
 int BattleCalculateFpDamage(BattleWorkUnit* unit1, BattleWorkUnit* unit2, BattleWorkUnitPart* part, void* weapon, u32* param_5, u32 param_6) {
-    return 0;
+    s32 (*callback)(BattleWorkUnit*, void*, BattleWorkUnit*, BattleWorkUnitPart*);
+    BattleWork* battleWork;
+    BattleWorkUnit* target;
+    BattleWorkUnitPart* targetPart;
+    s32 damage;
+    s32 sub;
+    u32 code;
+
+    target = unit2;
+    targetPart = part;
+    sub = 0;
+    battleWork = _battleWorkPointer;
+    damage = 0;
+    code = *param_5;
+    if ((code & 0x2000) != 0) {
+        return 0;
+    }
+
+    callback = *(s32 (**)(BattleWorkUnit*, void*, BattleWorkUnit*, BattleWorkUnitPart*))((s32)weapon + 0x40);
+    if (callback == NULL) {
+        return 0;
+    }
+    if ((*(u32*)((s32)targetPart + 0x1AC) & 0x20000000) != 0) {
+        return 0;
+    }
+
+    if (unit1 != NULL &&
+        ((*(u32*)((s32)weapon + 0x74) & 1) != 0) &&
+        (*(u8*)((s32)unit1 + 0x2E6) != 0) &&
+        ((*(u32*)((s32)battleWork + 0x1CB8) & 2) == 0)) {
+        return 0;
+    }
+
+    if (callback != NULL) {
+        damage = callback(unit1, weapon, target, targetPart);
+    }
+    if ((param_6 & 0x40000) != 0) {
+        sub = 1;
+    }
+    damage -= sub;
+    if (damage < 0) {
+        damage = 0;
+    }
+    if (damage > 0) {
+        code = *param_5;
+        if ((code & 0xFF) == 0x1E) {
+            *param_5 = (code & ~0xFF) | 0x17;
+        }
+    }
+    return damage;
 }
 
 /* MANUAL_AUTOMATION_STUBS_END main/battle/battle_damage */
@@ -308,8 +434,58 @@ u32 BattleSetStatusDamageFromWeapon(BattleWorkUnit* unit1, BattleWorkUnit* unit2
 
 /* AUTOSTUB __declare size 0x15C */
 /* signature source: manual_signatures */
-u8 __declare(int param_1, s32 param_2, int* param_3, int* param_4) {
-    return 0;
+void __declare(int param_1, s32 param_2, int* param_3, int* param_4) {
+    extern s32 BtlUnit_CanGuardStatus(BattleWorkUnit*);
+    extern void BattleRunHitEvent(void*, s32);
+    BattleWork* battleWork;
+    BattleWorkUnit* unit;
+    BattleWorkUnitPart* part;
+    s32 i;
+    s32 count;
+    s32 partCount;
+
+    *param_3 = -1;
+    *param_4 = 0;
+    battleWork = _battleWorkPointer;
+    for (i = 0; i < 64; i++) {
+        if (i != param_1) {
+            unit = BattleGetUnitPtr(battleWork, i);
+            if (unit != NULL &&
+                *(s32*)((s32)unit + 0x140) == param_1 &&
+                ((*(u32*)((s32)unit + 0x27C) & 1) == 0) &&
+                ((*(u32*)((s32)unit + 0x27C) & 4) == 0) &&
+                BtlUnit_CanGuardStatus(unit) != 0) {
+                part = *(BattleWorkUnitPart**)((s32)unit + 0x14);
+                partCount = *(u8*)(*(s32*)((s32)unit + 0x10) + 0xB4);
+                count = 0;
+                while (count < partCount) {
+                    if ((*(u32*)((s32)part + 0x1AC) & 8) != 0) {
+                        break;
+                    }
+                    part = *(BattleWorkUnitPart**)part;
+                    count++;
+                }
+                if (count < partCount) {
+                    break;
+                }
+            }
+        }
+    }
+
+    if (i < 64) {
+        BattleWorkUnit* target = BattleGetUnitPtr(battleWork, param_1);
+        *(s32*)((s32)target + 0x274) = 0;
+        target = BattleGetUnitPtr(battleWork, param_1);
+        BattleRunHitEvent(target, 0x1029);
+        target = BattleGetUnitPtr(battleWork, param_1);
+        *(u32*)((s32)target + 0x27C) |= 4;
+        battleWork->flags |= 1;
+        *(s32*)((s32)unit + 0x274) = 0;
+        BattleRunHitEvent(unit, 0x1038);
+        *(u32*)((s32)unit + 0x27C) |= 2;
+        *param_3 = i;
+        *param_4 = **(s32**)((s32)part + 4);
+    }
 }
 
 /* MANUAL_AUTOMATION_STUBS_END main/battle/battle_damage */
@@ -322,6 +498,55 @@ u8 __declare(int param_1, s32 param_2, int* param_3, int* param_4) {
 /* AUTOSTUB BattleAttackDeclare size 0x150 */
 /* signature source: manual_signatures */
 void BattleAttackDeclare(int* unitIdx, int* partIdx) {
+    extern s32 BtlUnit_CanGuardStatus(BattleWorkUnit*);
+    extern void BattleRunHitEvent(void*, s32);
+    BattleWork* battleWork;
+    BattleWorkUnit* unit;
+    BattleWorkUnitPart* part;
+    s32 i;
+    s32 count;
+    s32 partCount;
+
+    battleWork = _battleWorkPointer;
+    for (i = 0; i < 64; i++) {
+        if (i != *unitIdx) {
+            unit = BattleGetUnitPtr(battleWork, i);
+            if (unit != NULL &&
+                *(s32*)((s32)unit + 0x140) == *unitIdx &&
+                ((*(u32*)((s32)unit + 0x27C) & 1) == 0) &&
+                ((*(u32*)((s32)unit + 0x27C) & 4) == 0) &&
+                BtlUnit_CanGuardStatus(unit) != 0) {
+                part = *(BattleWorkUnitPart**)((s32)unit + 0x14);
+                partCount = *(u8*)(*(s32*)((s32)unit + 0x10) + 0xB4);
+                count = 0;
+                while (count < partCount) {
+                    if ((*(u32*)((s32)part + 0x1AC) & 8) != 0) {
+                        break;
+                    }
+                    part = *(BattleWorkUnitPart**)part;
+                    count++;
+                }
+                if (count < partCount) {
+                    break;
+                }
+            }
+        }
+    }
+
+    if (i < 64) {
+        BattleWorkUnit* target = BattleGetUnitPtr(battleWork, *unitIdx);
+        *(s32*)((s32)target + 0x274) = 0;
+        target = BattleGetUnitPtr(battleWork, *unitIdx);
+        BattleRunHitEvent(target, 0x1029);
+        target = BattleGetUnitPtr(battleWork, *unitIdx);
+        *(u32*)((s32)target + 0x27C) |= 4;
+        battleWork->flags |= 1;
+        *(s32*)((s32)unit + 0x274) = 0;
+        BattleRunHitEvent(unit, 0x1038);
+        *(u32*)((s32)unit + 0x27C) |= 2;
+        *unitIdx = i;
+        *partIdx = **(s32**)((s32)part + 4);
+    }
 }
 
 /* MANUAL_AUTOMATION_STUBS_END main/battle/battle_damage */

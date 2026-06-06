@@ -87,3 +87,114 @@ s32 sac_wao(void) {
     }
     return 2;
 }
+
+s32 sac_cheer(void* event, s32 isFirstCall) {
+    extern s32 evtGetValue(void* event, s32 target);
+    extern s32 BattleAudienceSoundCheck(s32 id);
+    extern void BattleAudienceSoundStop(s32 id);
+    extern void BattleAudienceSoundCheer(s32 kind, s32 flags);
+    extern void BattleAudienceSoundSetVol(s32 id, s32 volume, s32 flags);
+    extern void* BattleAudienceSoundGetPtr(s32 id);
+    extern s32 irand(s32 max);
+    extern s32 count;
+    extern s32 count2;
+    extern u8 volPer;
+
+    s32 value;
+    s32 newVol;
+    void* sound;
+
+    value = evtGetValue(event, *(s32*)*(void**)((s32)event + 0x18));
+    if (isFirstCall != 0) {
+        count = 0;
+        count2 = 0x3C;
+        cheerEnable = 1;
+        volPer = 0;
+        if (BattleAudienceSoundCheck(4) == 1) {
+            BattleAudienceSoundStop(4);
+        }
+        if (BattleAudienceSoundCheck(5) == 1) {
+            BattleAudienceSoundStop(5);
+        }
+        BattleAudienceSoundCheer(-1, 0);
+        BattleAudienceSoundSetVol(4, 0, 1);
+    }
+    if (value == 0) {
+        BattleAudienceSoundSetVol(4, volPer, 1);
+    }
+    if (cheerEnable == 0) {
+        sound = BattleAudienceSoundGetPtr(4);
+        *(s32*)((s32)sound + 0xC) = 0xB4;
+        *(s32*)((s32)sound + 0x10) = 0xB4;
+        return 2;
+    }
+    if (count < 0) {
+        count = count2;
+        count += irand(2);
+        count2 -= 4;
+        if (count2 < 0x14) {
+            count2 = 0x14;
+        }
+        newVol = volPer + 5;
+        volPer = newVol;
+        if ((u8)newVol > 0x64) {
+            volPer = 0x64;
+        }
+    }
+    count--;
+    return 0;
+}
+
+s32 sac_handbeat(void* event, s32 isFirstCall) {
+    extern s32 BattleAudienceSoundCheck(s32 id);
+    extern void BattleAudienceSoundStop(s32 id);
+    extern void BattleAudienceSoundCheer(s32 kind, s32 flags);
+    extern void BattleAudienceSoundSetVol(s32 id, s32 volume, s32 flags);
+    extern void* BattleAudienceSoundGetPtr(s32 id);
+    extern void BattleAudienceSoundHandBeat(void);
+    extern s32 irand(s32 max);
+    extern s32 count;
+    extern s32 count2;
+    extern u8 volPer;
+
+    s32 newVol;
+    void* sound;
+
+    if (isFirstCall != 0) {
+        count = 0;
+        count2 = 0x3C;
+        handBeatEnable = 1;
+        volPer = 0;
+        if (BattleAudienceSoundCheck(4) == 1) {
+            BattleAudienceSoundStop(4);
+        }
+        if (BattleAudienceSoundCheck(5) == 1) {
+            BattleAudienceSoundStop(5);
+        }
+        BattleAudienceSoundCheer(-1, 0);
+        BattleAudienceSoundSetVol(4, 0, 1);
+    }
+    BattleAudienceSoundSetVol(4, volPer, 1);
+    if (handBeatEnable == 0) {
+        sound = BattleAudienceSoundGetPtr(4);
+        *(s32*)((s32)sound + 0xC) = 0xB4;
+        *(s32*)((s32)sound + 0x10) = 0xB4;
+        return 2;
+    }
+    if (count < 0) {
+        BattleAudienceSoundHandBeat();
+        count = count2;
+        count += irand(2);
+        count2 -= 4;
+        if (count2 < 0x14) {
+            count2 = 0x14;
+        }
+        newVol = volPer + 5;
+        volPer = newVol;
+        if ((u8)newVol > 0x64) {
+            volPer = 0x64;
+        }
+    }
+    count--;
+    return 0;
+}

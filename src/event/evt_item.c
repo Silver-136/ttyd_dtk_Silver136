@@ -208,30 +208,77 @@ s32 evt_item_entry(void* pEvt) {
 }
 
 
-s32 evt_item_set_position(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_item_set_position) {
+    s32* args = event->args;
+    s32 name = evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+    void* item = itemNameToPtr(name);
+    if (item == 0) {
+        return 2;
+    }
+    *(f32*)((s32)item + 0x3C) = x;
+    *(f32*)((s32)item + 0x40) = y;
+    *(f32*)((s32)item + 0x44) = z;
+    return 2;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u32 evt_item_get_item(void* pEvt, int param_2) {
     return 0;
 }
 
 
-u32 evt_item_get_item_end_wait(void* pEvt) {
-    return 0;
+USER_FUNC(evt_item_get_item_end_wait) {
+    extern void* itemStatus(void* item, s32 status);
+    void* item = itemNameToPtr(evtGetValue(event, event->args[0]));
+    s32 value;
+    if (item == 0) {
+        return 2;
+    }
+    if (!(*(u16*)item & 1)) {
+        return 2;
+    }
+    if (itemStatus(item, 2) != 0) {
+        return 2;
+    }
+    value = (s32)itemStatus(item, 0x10000);
+    return 2 & ((-value | value) >> 31);
 }
 
-
-s32 evt_item_get_position(void* pEvt) {
-    return 0;
+USER_FUNC(evt_item_get_position) {
+    s32* args = event->args;
+    s32 name = evtGetValue(event, args[0]);
+    s32 x = args[1];
+    s32 y = args[2];
+    s32 z = args[3];
+    void* item = itemNameToPtr(name);
+    if (item == 0) {
+        return 2;
+    }
+    evtSetFloat(event, x, *(f32*)((s32)item + 0x3C));
+    evtSetFloat(event, y, *(f32*)((s32)item + 0x40));
+    evtSetFloat(event, z, *(f32*)((s32)item + 0x44));
+    return 2;
 }
-
 
 s32 evt_item_set_move_dir_speed(void* pEvt) {
-    return 0;
+    EventEntry* event = pEvt;
+    s32* args = event->args;
+    void* item = itemNameToPtr(evtGetValue(event, args[0]));
+    s32 dir = evtGetValue(event, args[1]);
+    f32 speed = evtGetFloat(event, args[2]);
+    if (item == 0) {
+        return 2;
+    }
+    *(s32*)((s32)item + 0x54) = dir;
+    *(f32*)((s32)item + 0x50) = speed;
+    return 2;
 }
-
 
 s32 evt_item_change_mode(int param_1) {
     return 0;

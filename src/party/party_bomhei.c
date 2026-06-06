@@ -81,9 +81,23 @@ u8 bomhei_use_cancel(void) {
 
 
 s32 mario_bomhei_keychk(void) {
-    return 0;
-}
+    extern void* marioGetPtr(void);
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32 partyId);
+    void* party;
+    u8 state;
 
+    marioGetPtr();
+    party = partyGetPtr(marioGetPartyId());
+    if (party == 0) return 1;
+    if (*(s8*)((s32)party + 0x31) != 3) return 1;
+    if ((*(u32*)party & 0x100) == 0) return 1;
+    state = *(u8*)((s32)party + 0x17A);
+    if (state == 0xA || (state >= 0x14 && state <= 0x15) || state == 0x65 || (state >= 0x28 && state <= 0x29) || (state >= 0x1E && state <= 0x24)) return 0;
+    state = *(u8*)((s32)party + 0x39);
+    if ((state >= 0x32 && state <= 0x33) || state == 0x3C || (state >= 0x46 && state <= 0x47)) return 0;
+    return 1;
+}
 
 u8 bomhei_bye(void* pParty) {
     return 0;
@@ -91,5 +105,19 @@ u8 bomhei_bye(void* pParty) {
 
 
 s32 mario_bomhei_keychk2(void) {
-    return 0;
+    extern void* marioGetPtr(void);
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32 partyId);
+    void* party;
+    u8 state;
+
+    marioGetPtr();
+    party = partyGetPtr(marioGetPartyId());
+    if (party == 0) return 1;
+    if (*(s8*)((s32)party + 0x31) != 3) return 1;
+    if ((*(u32*)party & 0x100) == 0) return 1;
+    state = *(u8*)((s32)party + 0x17A);
+    if (state == 0xA || state == 0x65 || (state >= 0x1E && state <= 0x24)) return 0;
+    return 1;
 }
+

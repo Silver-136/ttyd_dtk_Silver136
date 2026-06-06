@@ -26,29 +26,234 @@ s32 marioUseParty(void) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 int marioPartyEntry(int partyMemberId) {
-    return 0;
+    extern void* marioGetPtr(void);
+    extern void* pouchGetPtr(void);
+    extern s32 partyEntry(s32 partyId);
+    extern s32 partyEntry2(s32 partyId);
+    extern s32 partyKill(s32 partyId);
+    extern void* partyGetPtr(s32 partyId);
+    extern void partyHello(void* party);
+    void* mario;
+    s32 result;
+    s32 joined;
+
+    mario = marioGetPtr();
+    if (partyMemberId < 8) {
+        joined = 0;
+        if (partyMemberId < 8) {
+            joined = ((u16*)pouchGetPtr())[partyMemberId * 7] & 1;
+        }
+        if (joined == 0) {
+            return -1;
+        }
+        if (*(s8*)((s32)mario + 0x245) >= 0) {
+            void* mario2 = marioGetPtr();
+            u32 partyId = *(u8*)((s32)mario2 + 0x245);
+
+            if ((s8)partyId >= 0) {
+                partyKill((s8)partyId);
+                *(s8*)((s32)mario2 + 0x245) = -1;
+            }
+        }
+        result = partyEntry(partyMemberId);
+        if (result >= 0) {
+            *(u8*)((s32)mario + 0x245) = result;
+            partyHello(partyGetPtr(result));
+        }
+    } else {
+        if (*(s8*)((s32)mario + 0x246) >= 0) {
+            void* mario2 = marioGetPtr();
+            u32 partyId = *(u8*)((s32)mario2 + 0x246);
+
+            if ((s8)partyId >= 0) {
+                partyKill((s8)partyId);
+                *(s8*)((s32)mario2 + 0x246) = -1;
+            }
+        }
+        result = partyEntry2(partyMemberId);
+        if (result >= 0) {
+            *(u8*)((s32)mario + 0x246) = result;
+            partyHello(partyGetPtr(result));
+        }
+    }
+    return result;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 int marioGetParty(void) {
+    extern void* marioGetPtr(void);
+    extern void* partyGetPtr(s32 partyId);
+    void* mario = marioGetPtr();
+    s32 partyId = *(s8*)((s32)mario + 0x245);
+    void* party;
+
+    if (partyId < 0) {
+        goto second;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        goto second;
+    }
+    if ((*(u32*)party & 8) != 0) {
+    } else {
+        goto done;
+    }
+second:
+    partyId = *(s8*)((s32)mario + 0x246);
+    if (partyId < 0) {
+        goto fail;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        goto fail;
+    }
+    if ((*(u32*)party & 8) != 0) {
+fail:
+        partyId = -1;
+    } else {
+        goto done;
+    }
+
+done:
+    if (partyId >= 0) {
+        return *(s8*)((s32)partyGetPtr(partyId) + 0x31);
+    }
     return 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 int marioPartyHello(int partyMemberId) {
-    return 0;
+    extern void* marioGetPtr(void);
+    extern void* pouchGetPtr(void);
+    extern s32 partyEntryHello(s32 partyId);
+    extern s32 partyEntry2Hello(s32 partyId);
+    void* mario;
+    s32 result = -1;
+    s32 joined;
+
+    mario = marioGetPtr();
+    if (partyMemberId < 8) {
+        joined = 0;
+        if (partyMemberId < 8) {
+            joined = ((u16*)pouchGetPtr())[partyMemberId * 7] & 1;
+        }
+        if (joined == 0) {
+            return -1;
+        }
+        if (*(s8*)((s32)mario + 0x245) < 0) {
+            result = partyEntryHello(partyMemberId);
+            if (result >= 0) {
+                *(u8*)((s32)mario + 0x245) = result;
+            }
+        }
+    } else {
+        result = partyEntry2Hello(partyMemberId);
+        if (result >= 0) {
+            *(u8*)((s32)mario + 0x246) = result;
+        }
+    }
+    return result;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 marioGetExtraPartyId(void) {
-    return 0;
+    extern void* marioGetPtr(void);
+    extern void* partyGetPtr(s32 partyId);
+    void* mario = marioGetPtr();
+    s32 partyId = *(s8*)((s32)mario + 0x245);
+    void* party;
+
+    if (partyId >= 0) {
+        party = partyGetPtr(partyId);
+        if (party != 0 && (*(u32*)party & 8) != 0) {
+            return partyId;
+        }
+    }
+
+    partyId = *(s8*)((s32)mario + 0x246);
+    if (partyId >= 0) {
+        party = partyGetPtr(partyId);
+        if (party != 0 && (*(u32*)party & 8) != 0) {
+            return partyId;
+        }
+    }
+    return -1;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 marioGetPartyId(void) {
+    extern void* marioGetPtr(void);
+    extern void* partyGetPtr(s32 partyId);
+    void* mario = marioGetPtr();
+    s32 partyId = *(s8*)((s32)mario + 0x245);
+    void* party;
+
+    if (partyId >= 0) {
+        party = partyGetPtr(partyId);
+        if (party != 0 && (*(u32*)party & 8) == 0) {
+            return partyId;
+        }
+    }
+
+    partyId = *(s8*)((s32)mario + 0x246);
+    if (partyId >= 0) {
+        party = partyGetPtr(partyId);
+        if (party != 0 && (*(u32*)party & 8) == 0) {
+            return partyId;
+        }
+    }
+    return -1;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 unk_8014140c(void) {
+    extern void* marioGetPtr(void);
+    extern s32 marioKeyOffChk(void);
+    extern s32 partyDoWork(void);
+    void* mario = marioGetPtr();
+    s32 timer;
+
+    if ((*(u32*)((s32)mario + 0xC) & 2) != 0) {
+        if (marioKeyOffChk() != 0) {
+            *(u8*)((s32)mario + 0x3B) = 0;
+            *(u32*)((s32)mario + 0xC) &= ~2;
+            return 0;
+        }
+        timer = *(u8*)((s32)mario + 0x3B) - 1;
+        *(u8*)((s32)mario + 0x3B) = timer;
+        if ((s8)timer <= 0) {
+            *(u8*)((s32)mario + 0x3B) = 0;
+            *(u32*)((s32)mario + 0xC) &= ~2;
+            return partyDoWork();
+        }
+    }
     return 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 u8 marioPartyKill(void) {

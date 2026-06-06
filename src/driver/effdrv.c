@@ -132,24 +132,92 @@ u8 effGetTexObj(int param_1, u32* param_2) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effNameToPtr(char* name) {
+    extern EffWork* wp;
+    extern s32 strcmp(const char* s1, const char* s2);
+    s32 i = 0;
+    s32 count = wp->count;
+    EffEntry* entry = wp->entries;
+    while (i < count) {
+        if (entry->flags != 0 && strcmp(entry->name, name) == 0) {
+            break;
+        }
+        i++;
+        entry++;
+    }
+    if (i >= count) {
+        return 0;
+    }
+    return entry;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void* effGetSet(char* name) {
+    extern s32 strcmp(const char* s1, const char* s2);
+    typedef struct EffSetEntry {
+        s16 id;
+        s16 pad;
+        char* name;
+    } EffSetEntry;
+    extern EffSetEntry eff_set_table[];
+    EffSetEntry* entry = eff_set_table;
+    s32 i = 0;
+    while (entry->id != -1) {
+        if (strcmp(entry->name, name) == 0) {
+            return &eff_set_table[i];
+        }
+        entry++;
+        i++;
+    }
     return 0;
 }
-
-
-void* effGetSet(char* param_1) {
-    return 0;
-}
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void effAutoRelease(s32 value) {
+    extern EffWork* wp;
+    extern void __memFree(s32 heap, void* ptr);
+    s32 i = 0;
+    s32 zero = 0;
+    s32 count = wp->count;
+    EffEntry* entry = wp->entries;
+    while (i < count) {
+        if ((entry->flags & 1) && entry->unk4 == value) {
+            if (entry != 0 && entry->flags != 0) {
+                __memFree(3, entry->data);
+                entry->flags = zero;
+            }
+        }
+        i++;
+        entry++;
+    }
 }
 
-
-u8 effInit(void) {
-    return 0;
+void effInit(void) {
+    extern EffWork* wp;
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void* memset(void* dst, s32 value, u32 size);
+    extern void effInit64(void);
+    wp->count = 0x200;
+    wp->entries = __memAlloc(0, wp->count * 0x28);
+    memset(wp->entries, 0, wp->count * 0x28);
+    *(s32*)((s32)wp + 0x10) = 0;
+    *(s32*)((s32)wp + 0x14) = -1;
+    wp->unk8 = 0;
+    wp->unkC = 0;
+    effInit64();
 }
-
 
 int* effMayaAnimAlloc(void* effData) {
     return 0;
@@ -161,6 +229,21 @@ u8 effCalcMayaAnim(void* param_1) {
 }
 
 
-u8 effPlayMayaAnim(void* param_1) {
-    return 0;
+void effPlayMayaAnim(void* anim) {
+    extern EffGp* gp;
+    extern const f32 float_0_804201a0;
+    u64* t;
+    u32 bus;
+    u32 ticks;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        t = (u64*)((s32)gp + 0x38);
+    } else {
+        t = (u64*)((s32)gp + 0x40);
+    }
+    bus = *(u32*)0x800000F8 >> 2;
+    ticks = ((u64)bus * 0x10624DD3U) >> 38;
+    *(s64*)((s32)anim + 8) = *t / ticks;
+    *(f32*)((s32)anim + 4) = float_0_804201a0;
+    *(u16*)anim |= 1;
 }
+

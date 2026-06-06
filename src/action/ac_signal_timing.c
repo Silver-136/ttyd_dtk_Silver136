@@ -22,3 +22,71 @@ s32 _get_ok_frame_range(s32 idx) {
             return *(s32*)((s32)wp + 0x1CE4) + ac_signaltiming_ok_frame_range[idx];
     }
 }
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void battleAcDisp_SignalTiming(void* camera, void* wp) {
+    typedef struct SignalTimingDispWork {
+        u8 pad_00[0x14];
+        f32 x;
+        f32 y;
+        u8 pad_1C[4];
+        s32 timer;
+    } SignalTimingDispWork;
+    SignalTimingDispWork* disp;
+    s32 state;
+    s32 timer;
+
+    extern f32 float_neg300_80427c70;
+    extern f32 float_30_80427c74;
+    extern f32 float_0_80427c54;
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+    extern void actionCommandDisp(f32 x, f32 y);
+
+    disp = (SignalTimingDispWork*)((s32)wp + 0x1F20);
+    state = *(s32*)((s32)wp + 0x1C9C);
+
+    switch (state) {
+        case 99:
+        case 100:
+            disp->x = intplGetValue(
+                4,
+                0x14 - disp->timer,
+                0x14,
+                float_neg300_80427c70,
+                float_30_80427c74);
+            actionCommandDisp(disp->x, disp->y);
+            timer = disp->timer;
+            if (timer > 0) {
+                disp->timer = timer - 1;
+            }
+            break;
+        case 1000:
+        case 1001:
+        case 1002:
+        case 1003:
+            actionCommandDisp(float_30_80427c74, float_0_80427c54);
+            break;
+        case 1004:
+        case 1005:
+            timer = disp->timer;
+            if (timer >= 0x28) {
+                disp->x = intplGetValue(
+                    4,
+                    timer - 0x28,
+                    0x14,
+                    float_30_80427c74,
+                    float_neg300_80427c70);
+            } else {
+                disp->x = float_30_80427c74;
+            }
+            actionCommandDisp(disp->x, disp->y);
+            timer = disp->timer;
+            if (timer < 0x3C) {
+                disp->timer = timer + 1;
+            }
+            break;
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on

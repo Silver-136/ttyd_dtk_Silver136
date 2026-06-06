@@ -190,15 +190,53 @@ void marioChgTalkMotion(void) {
 }
 
 
-double marioGetFallSpd(void) {
-    return 0.0;
+f32 marioGetFallSpd(void) {
+    extern void* marioGetPtr(void);
+    extern f32 marioJumpData[];
+    extern f32 float_0_804209a0;
+    void* mario = marioGetPtr();
+
+    *(f32*)((s32)mario + 0x84) += *(f32*)((s32)mario + 0x88);
+    if (*(f32*)((s32)mario + 0x84) > float_0_804209a0) {
+        *(f32*)((s32)mario + 0x84) = float_0_804209a0;
+    }
+    *(f32*)((s32)mario + 0x80) += *(f32*)((s32)mario + 0x84);
+    *(f32*)((s32)mario + 0x7C) += *(f32*)((s32)mario + 0x80);
+    if (*(f32*)((s32)mario + 0x7C) <= marioJumpData[9]) {
+        *(f32*)((s32)mario + 0x7C) = marioJumpData[9];
+        *(f32*)((s32)mario + 0x80) = float_0_804209a0;
+        *(f32*)((s32)mario + 0x84) = float_0_804209a0;
+        *(f32*)((s32)mario + 0x88) = float_0_804209a0;
+    }
+    return *(f32*)((s32)mario + 0x7C);
 }
 
+void marioSetFallPara(void) {
+    extern void* marioGetPtr(void);
+    extern f32 marioJumpData[];
+    extern f32 marioJumpSwData[];
+    extern f32 float_1_804209b4;
+    extern f32 float_0p34_804209cc;
+    extern f32 float_neg0p002_804209d0;
+    extern f32 float_neg0p01_804209d4;
+    extern f32 float_0_804209a0;
+    void* mario = marioGetPtr();
+    f32* data = &marioJumpData[4];
 
-u8 marioSetFallPara(void) {
-    return 0;
+    if (*(u16*)((s32)mario + 0x2E) == 5) {
+        data = &marioJumpSwData[4];
+    }
+    *(f32*)((s32)mario + 0x7C) = data[0];
+    *(f32*)((s32)mario + 0x80) = data[1];
+    *(f32*)((s32)mario + 0x84) = data[2];
+    *(f32*)((s32)mario + 0x88) = data[3];
+    if (*(f32*)((s32)mario + 0x228) != float_1_804209b4) {
+        *(f32*)((s32)mario + 0x7C) = float_0p34_804209cc;
+        *(f32*)((s32)mario + 0x80) = float_neg0p002_804209d0;
+        *(f32*)((s32)mario + 0x84) = float_neg0p01_804209d4;
+        *(f32*)((s32)mario + 0x88) = float_0_804209a0;
+    }
 }
-
 
 u32 marioChkItemGetMotion(void) {
     return 0;

@@ -170,12 +170,72 @@ s32 BattleACGetButtonIcon(int param_1, int param_2) {
 
 
 void BattleActionCommandSetup(void* battleWork, s32 param, void* unit, s32 rawArg, s32 value) {
+    typedef struct ActionCommandEntry {
+        s32 id;
+        void* mainCallback;
+        void* resultCallback;
+        void* dispCallback;
+        void* stopCallback;
+    } ActionCommandEntry;
+    extern ActionCommandEntry ActionCommandList[];
+    ActionCommandEntry* entry;
+    s32 zero;
+    s32 id;
+
+    *(void**)((s32)battleWork + 0x1C90) = unit;
+    entry = ActionCommandList;
+    zero = 0;
+    *(s32*)((s32)battleWork + 0x1C94) = rawArg;
+    *(s32*)((s32)battleWork + 0x1C9C) = zero;
+    *(s32*)((s32)battleWork + 0x1CB4) = zero;
+    *(s32*)((s32)battleWork + 0x1CB8) = 1;
+    *(s32*)((s32)battleWork + 0x1CA0) = zero;
+    *(s32*)((s32)battleWork + 0x1CA8) = zero;
+    *(s32*)((s32)battleWork + 0x1CA4) = zero;
+    *(s32*)((s32)battleWork + 0x1CAC) = zero;
+    *(s32*)((s32)battleWork + 0x1C98) = value;
+    *(s32*)((s32)battleWork + 0x1CC0) = zero;
+
+    while ((id = entry->id) != 0) {
+        if (id == param) {
+            *(void**)((s32)battleWork + 0x1CA0) = entry->mainCallback;
+            unit = *(void**)((s32)battleWork + 0x1C90);
+            if ((*(u32*)((s32)unit + 0x27C) & 0x10) == 0) {
+                *(void**)((s32)battleWork + 0x1CA8) = entry->dispCallback;
+            }
+            *(void**)((s32)battleWork + 0x1CA4) = entry->resultCallback;
+            *(void**)((s32)battleWork + 0x1CAC) = entry->stopCallback;
+            return;
+        }
+        entry++;
+    }
 }
 
+void BattleActionCommandDeclareACResult(void* battleWork, void* unit, s32 result) {
+    extern void BattleAudience_Case_ActionCommandBad(void*);
+    extern void BattleAudience_Case_ActionCommandGood(void*);
+    extern f64 double_to_int_802ee048;
+    extern f32 float_0p25_804221a4;
+    extern f32 float_0p5_804221a0;
+    void* base;
 
-void BattleActionCommandDeclareACResult(void* battleWork, s32 result) {
+    base = (void*)((s32)battleWork + 0x20000);
+    if (result == -1) {
+        goto bad;
+    }
+    goto good;
+
+bad:
+    BattleAudience_Case_ActionCommandBad(unit);
+    return;
+
+good:
+    *(void**)((s32)base - 0x7004) = unit;
+    *(f32*)((s32)base - 0x7000) = (f32)result * float_0p25_804221a4 + float_0p5_804221a0;
+    *(u8*)((s32)base - 0x6FFB) = *(u8*)((s32)unit + 0x19);
+    *(u8*)((s32)base - 0x6FFA) = *(u8*)((s32)unit + 0x1A);
+    BattleAudience_Case_ActionCommandGood(unit);
 }
-
 
 u8 BattleAcGaugeSeUpdate(double param_1) {
     return 0;

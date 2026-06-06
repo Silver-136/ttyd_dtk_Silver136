@@ -1,5 +1,14 @@
 #include "action/ac_stick_rotate.h"
 
+extern void* _battleWorkPointer;
+extern f32 float_neg300_8042683c;
+extern f32 float_30_80426840;
+
+f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+s32 BattlePadCheckNow(s32 mask);
+void actionCommandDisp(f32 x, f32 y);
+void actionCommandDisp2(f32 x, f32 y);
+
 s32 battleAcResult_StickRotate(void* obj) {
     return *(s32*)((s32)obj + 0x1CB8);
 }
@@ -30,4 +39,128 @@ s32 _get_icon_id(s8 id) {
         default:
             return 0x81;
     }
+}
+
+void battleAcDisp_StickRotate(void* camera, void* obj) {
+    void (*disp)(f32, f32);
+    register s32 work;
+    s32 state;
+    s32 timer;
+
+    disp = actionCommandDisp2;
+    work = (s32)obj + 0x1F20;
+    if (*(s32*)((s32)obj + 0x1CC4) & 2) {
+        disp = actionCommandDisp;
+    }
+
+    state = *(s32*)((s32)obj + 0x1C9C);
+    if (state >= 0x3E8) {
+        if (state >= 0x3EF) {
+            return;
+        }
+        if (state >= 0x3EC) {
+            goto outro;
+        }
+        goto steady;
+    } else {
+        if (state == 0x64) {
+            goto steady;
+        }
+        if (state < 0x63) {
+            return;
+        }
+
+intro:
+        timer = *(s32*)(work + 0x20);
+        *(f32*)(work + 0x14) = intplGetValue(4, 0x14 - timer, 0x14, float_neg300_8042683c, float_30_80426840);
+        disp(*(f32*)(work + 0x14), *(f32*)(work + 0x18));
+        timer = *(s32*)(work + 0x20);
+        if (timer > 0) {
+            *(s32*)(work + 0x20) = timer - 1;
+        }
+    }
+    return;
+
+steady:
+    *(f32*)(work + 0x14) = float_30_80426840;
+    disp(*(f32*)(work + 0x14), *(f32*)(work + 0x18));
+    return;
+
+outro:
+    timer = *(s32*)(work + 0x20);
+    if (timer > 0) {
+        *(s32*)(work + 0x20) = timer - 1;
+    }
+    timer = *(s32*)(work + 0x20);
+    if (timer <= 0x28) {
+        *(f32*)(work + 0x14) = intplGetValue(4, timer, 0x28, float_neg300_8042683c, float_30_80426840);
+    } else {
+        *(f32*)(work + 0x14) = float_30_80426840;
+    }
+    disp(*(f32*)(work + 0x14), *(f32*)(work + 0x18));
+}
+
+s32 _CalcRollDir(void) {
+    void* battleWork = _battleWorkPointer;
+    s8 current = *(s8*)((s32)battleWork + 0x1F4C);
+    s8 previous = *(s8*)((s32)battleWork + 0x1F4D);
+    s32 diff;
+
+    if (current <= 0) {
+        return 0;
+    }
+    if (previous <= 0) {
+        return 0;
+    }
+    if (current == previous) {
+        return *(u8*)((s32)battleWork + 0x1F50);
+    }
+    if (current == 1 && previous == 8) {
+        return 1;
+    }
+    if (previous == 1 && current == 8) {
+        return -1;
+    }
+
+    diff = current - previous;
+    if (diff < 0) {
+        diff = -diff;
+    }
+    if (diff <= 1) {
+        return current - previous;
+    }
+    return 0;
+}
+
+s32 _GetInputDir(void) {
+    void* battleWork = _battleWorkPointer;
+
+    if (*(void**)((s32)battleWork + 0x1CD0) != 0 && BattlePadCheckNow((s32)*(void**)((s32)battleWork + 0x1CD0)) == 0) {
+        return -1;
+    }
+    if (BattlePadCheckNow(0x10000) != 0) {
+        if (BattlePadCheckNow(0x80000) != 0) {
+            return 2;
+        }
+        if (BattlePadCheckNow(0x40000) != 0) {
+            return 8;
+        }
+        return 1;
+    }
+    if (BattlePadCheckNow(0x20000) != 0) {
+        if (BattlePadCheckNow(0x80000) != 0) {
+            return 4;
+        }
+        if (BattlePadCheckNow(0x40000) != 0) {
+            return 6;
+        }
+        return 5;
+    }
+    if (BattlePadCheckNow(0x80000) != 0) {
+        return 3;
+    }
+    if (BattlePadCheckNow(0x40000) != 0) {
+        return 7;
+    }
+    return 0;
 }

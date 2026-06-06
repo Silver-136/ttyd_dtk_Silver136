@@ -39,6 +39,30 @@ void seqInit_MARIOSTORY(void) {
 }
 
 
-u8 seqMain(void) {
-    return 0;
+void seqMain(void) {
+    extern void sysWaitDrawSync(void);
+    extern void (*seq_data_80304400[][3])(void*);
+    void (*func)(void*);
+
+    if (now_seq != next_seq) {
+        if (now_seq != -1) {
+            sysWaitDrawSync();
+            func = seq_data_80304400[now_seq][2];
+            func(seqWork);
+        }
+
+        prev_seq = now_seq;
+        memset(seqWork, 0, 0x20);
+        now_seq = next_seq;
+        *(s32*)seqWork = next_seq;
+        *(s32*)((s32)seqWork + 4) = 0;
+        *(s32*)((s32)seqWork + 8) = next_p0;
+        *(s32*)((s32)seqWork + 0xC) = next_p1;
+
+        func = seq_data_80304400[next_seq][0];
+        func(seqWork);
+    }
+
+    func = seq_data_80304400[now_seq][1];
+    func(seqWork);
 }

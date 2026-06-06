@@ -602,17 +602,87 @@ f32 _get_target_dir(EventEntry* event, void* npc, s32 target) {
 
 
 s32 evt_npc_get_drop_flower(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    extern void evtSetValue(void* event, s32 dst, s32 value);
+    extern s32 pouchEquipCheckBadge(s32 badge);
+    extern s32 irand(s32 max);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    void* npc = evtNpcNameToPtr(pEvt, name);
+    s32 dst = args[1];
+    s32 badge;
+    s32 value;
 
+    if (*(u32*)((s32)npc + 0x234) & 4) {
+        evtSetValue(pEvt, dst, 0);
+    } else {
+        badge = pouchEquipCheckBadge(0x138);
+        value = *(s32*)((s32)npc + 0x244);
+        if (badge > 0) {
+            if (badge == 1) {
+                value += irand(3) + 1;
+            } else {
+                value += irand(badge + 3) + 1;
+            }
+        }
+        evtSetValue(pEvt, dst, value);
+    }
+    return 2;
+}
 
 s32 evt_npc_get_drop_heart(void* pEvt) {
-    return 0;
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    extern void evtSetValue(void* event, s32 dst, s32 value);
+    extern s32 pouchEquipCheckBadge(s32 badge);
+    extern s32 irand(s32 max);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    void* npc = evtNpcNameToPtr(pEvt, name);
+    s32 dst = args[1];
+    s32 badge;
+    s32 value;
+
+    if (*(u32*)((s32)npc + 0x234) & 2) {
+        evtSetValue(pEvt, dst, 0);
+    } else {
+        badge = pouchEquipCheckBadge(0x137);
+        value = *(s32*)((s32)npc + 0x240);
+        if (badge > 0) {
+            if (badge == 1) {
+                value += irand(3) + 1;
+            } else {
+                value += irand(badge + 3) + 1;
+            }
+        }
+        evtSetValue(pEvt, dst, value);
+    }
+    return 2;
 }
 
-
 s32 evt_npc_set_autotalkpose(void* pEvt) {
-    return 0;
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    extern void npcSetMarioAutoTalkPose(const char* stay, const char* talk);
+    extern char* strcpy(char* dst, const char* src);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    s32 stay = evtGetValue(pEvt, args[1]);
+    s32 talk = evtGetValue(pEvt, args[2]);
+    void* npc = evtNpcNameToPtr(pEvt, name);
+
+    if ((u32)((s32)npc + 0x10000) == 0xFFFD) {
+        npcSetMarioAutoTalkPose((const char*)stay, (const char*)talk);
+        return 1;
+    }
+    if (stay != 0) {
+        strcpy((char*)((s32)npc + 0x4C), (char*)stay);
+    }
+    if (talk != 0) {
+        strcpy((char*)((s32)npc + 0x6C), (char*)talk);
+    }
+    return 1;
 }
 
 
@@ -622,18 +692,53 @@ s32 evt_npc_battle_start(void* pEvt, int param_2) {
 
 
 s32 evt_npc_set_color(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    extern void npcSetColor(char* name, void* color);
+    extern u32 unk_80429560;
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    u8 r = evtGetValue(pEvt, args[1]);
+    u8 g = evtGetValue(pEvt, args[2]);
+    u8 b = evtGetValue(pEvt, args[3]);
+    u8 a = evtGetValue(pEvt, args[4]);
+    void* npc = evtNpcNameToPtr(pEvt, name);
+    u32 copy;
+    u32 color = unk_80429560;
 
+    npc = (void*)((s32)npc + 8);
+    ((u8*)&color)[0] = r;
+    ((u8*)&color)[1] = g;
+    ((u8*)&color)[2] = b;
+    ((u8*)&color)[3] = a;
+    copy = color;
+    npcSetColor(npc, &copy);
+    return 2;
+}
 
 void evt_npc_change_interrupt(void* pEvt) {
 }
 
 
 s32 evt_npc_status_onoff(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 onoff = evtGetValue(pEvt, args[0]);
+    s32 name = evtGetValue(pEvt, args[1]);
+    u32 flag = evtGetValue(pEvt, args[2]);
+    void* npc = evtNpcNameToPtr(pEvt, name);
 
+    switch (onoff) {
+        case 0:
+            *(u32*)((s32)npc + 0x1D4) &= ~flag;
+            break;
+        case 1:
+            *(u32*)((s32)npc + 0x1D4) |= flag;
+            break;
+    }
+    return 2;
+}
 
 s32 evt_npc_reaction_flag_onoff(void* pEvt) {
     return 0;
@@ -641,7 +746,23 @@ s32 evt_npc_reaction_flag_onoff(void* pEvt) {
 
 
 s32 evt_npc_flag_onoff(void* pEvt) {
-    return 0;
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 onoff = evtGetValue(pEvt, args[0]);
+    s32 name = evtGetValue(pEvt, args[1]);
+    u32 flag = evtGetValue(pEvt, args[2]);
+    void* npc = evtNpcNameToPtr(pEvt, name);
+
+    switch (onoff) {
+        case 0:
+            *(u32*)npc &= ~flag;
+            break;
+        case 1:
+            *(u32*)npc |= flag;
+            break;
+    }
+    return 2;
 }
 
 
@@ -656,9 +777,24 @@ u8 evt_npc_set_scale(void) {
 
 
 s32 evt_npc_get_drop_coin(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    extern void evtSetValue(void* event, s32 dst, s32 value);
+    extern void _npc_check_coin_group(void* group, s32* coin);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    void* npc = evtNpcNameToPtr(pEvt, name);
+    s32 dst = args[1];
+    s32 coin = 0;
 
+    if (*(u32*)((s32)npc + 0x234) & 1) {
+        evtSetValue(pEvt, dst, 0);
+        return 2;
+    }
+    _npc_check_coin_group(npc, &coin);
+    evtSetValue(pEvt, dst, coin);
+    return 2;
+}
 
 s32 evt_npc_sound_data_reset(int param_1) {
     return 0;
@@ -666,14 +802,41 @@ s32 evt_npc_sound_data_reset(int param_1) {
 
 
 s32 evt_npc_set_battle_rule(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    void* npc = evtNpcNameToPtr(pEvt, name);
+    s32 v0 = evtGetValue(pEvt, args[1]);
+    s32 v1 = evtGetValue(pEvt, args[2]);
+    s32 v2 = evtGetValue(pEvt, args[3]);
 
+    *(u8*)((s32)npc + 0x2F4) = v0;
+    *(u8*)((s32)npc + 0x2F5) = v1;
+    *(u8*)((s32)npc + 0x2F6) = v2;
+    return 2;
+}
 
 s32 evt_npc_pera_onoff(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    extern void animPosePeraOff(s32 poseId);
+    extern void animPosePeraOn(s32 poseId);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    s32 onoff = evtGetValue(pEvt, args[1]);
+    void* npc = evtNpcNameToPtr(pEvt, name);
 
+    switch (onoff) {
+        case 0:
+            animPosePeraOff(*(s32*)((s32)npc + 0x104));
+            break;
+        case 1:
+            animPosePeraOn(*(s32*)((s32)npc + 0x104));
+            break;
+    }
+    return 2;
+}
 
 s32 evt_npc_get_rotate(void* pEvt) {
     return 0;
@@ -1029,5 +1192,18 @@ s32 evt_npc_calc_score(void* pEvt) {
 
 
 s32 evt_npc_set_anim(void* evt, s32 isFirstCall) {
-    return 0;
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    extern char* strcpy(char* dst, const char* src);
+    extern void animPoseSetAnim(s32 poseId, void* name, s32 force);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = evtGetValue(evt, args[0]);
+    s32 anim = evtGetValue(evt, args[1]);
+    void* npc = evtNpcNameToPtr(evt, name);
+
+    if (*(u8*)((s32)evt + 0x10) == 1) {
+        strcpy((char*)((s32)npc + 0x2C), (char*)anim);
+    }
+    animPoseSetAnim(*(s32*)((s32)npc + 0x104), (void*)anim, 1);
+    return 2;
 }

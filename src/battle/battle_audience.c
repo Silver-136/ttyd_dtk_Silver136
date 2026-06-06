@@ -31,9 +31,11 @@ extern const f32 float_26_804249c0;
 extern const f32 float_100_804249bc;
 extern const f32 float_200_804249b8;
 extern const f32 float_250_804249c4;
+extern const f32 float_75_804249c8;
 extern void BattleAudienceSoundClap(s32 vol, s32 frames);
 extern void BattleAudienceSoundCheerKind(s32 kind, s32 vol, s32 frames);
 extern void BattleAudienceSoundBooingKind(s32 kind);
+extern void BattleStatusWindowAPRecoveryOn(void);
 
 extern const char str_SFX_AUDIENCE_PAKU_EA_802fa338[];
 extern const char str_SFX_AUDIENCE_BOMB_BU_802fa350[];
@@ -41,6 +43,9 @@ extern const char str_SFX_AUDIENCE_BOMB_RE_802fa36c[];
 extern const char str_SFX_AUDIENCE_SHELL_T_802fa388[];
 extern const char str_SFX_AUDIENCE_PANSY_S_802fa3a8[];
 extern const char str_SFX_AUDIENCE_ZZZ1_802fa3c4[];
+extern const char str_SFX_AUDIENCE_HANDBEA_802fa474[];
+extern const char str_SFX_AUDIENCE_CALL_AL_802fa48c[];
+extern const char str_SFX_AUDIENCE_CALL_AL_802fa4a4[];
 
 extern void weaponGetPowerFromMarioHammerLv(void);
 extern void BattleAudienceJoy(s32 kind);
@@ -64,6 +69,22 @@ extern void BattleAudienceSoundWhistleKind(s32 kind);
 extern const f32 float_0_80424988;
 extern const f32 float_0p05_80424994;
 extern const f32 float_neg0p1_804249a4;
+
+typedef struct BattleAudienceWorkPartial {
+    u8 pad_000[0x48];
+    f32 posX;          // 0x48
+    f32 posY;          // 0x4C
+    f32 posZ;          // 0x50
+
+    u8 pad_054[0x9C - 0x54];
+    f32 rotX;          // 0x9C
+    f32 rotY;          // 0xA0
+    f32 rotZ;          // 0xA4
+
+    f32 rotOffsetX;    // 0xA8
+    f32 rotOffsetY;    // 0xAC
+    f32 rotOffsetZ;    // 0xB0
+} BattleAudienceWorkPartial;
 
 void BattleAudience_Case_Escape(void) {
 }
@@ -126,12 +147,19 @@ void BattleAudience_Case_MarioBigDamage(void) {
 
 void BattleAudience_Case_HaikeiSet(void) {
     void* base;
+    f32 scale;
+    f32 value;
+    f32 zero;
 
     base = BattleAudienceBaseGetPtr();
-    BattleAudienceAddTargetNum(
-        *(f32*)((s32)base + 0x13778) * float_0p05_80424994,
-        float_0_80424988
-    );
+
+    scale = float_0p05_80424994;
+    value = *(f32*)((s32)base + 0x13778);
+    zero = float_0_80424988;
+
+    value = scale * value;
+
+    BattleAudienceAddTargetNum(value, zero);
 }
 
 void BattleAudience_Case_Countered(void) {
@@ -194,7 +222,8 @@ void BattleAudience_SetPresentTargetUnitId(s32 unitId) {
 }
 
 void BattleAudience_WinSetActive(s32 active) {
-    *(u8*)BattleAudienceWinGetPtr() = active;
+    void* win = BattleAudienceWinGetPtr();
+    *(u8*)win = active;
 }
 
 s32 BattleAudienceSound1(const char* name, s32 kind, s32 arg) {
@@ -475,33 +504,33 @@ s32 BattleAudience_GetWaiting(s32 id) {
 }
 
 void BattleAudience_SetRotateOffset(s32 id, f32 x, f32 y, f32 z) {
-    void* audience;
+    BattleAudienceWorkPartial* audience;
 
     audience = BattleAudienceGetPtr(id);
 
-    *(f32*)((s32)audience + 0xA8) = x;
-    *(f32*)((s32)audience + 0xAC) = y;
-    *(f32*)((s32)audience + 0xB0) = z;
+    audience->rotOffsetX = x;
+    audience->rotOffsetY = y;
+    audience->rotOffsetZ = z;
 }
 
 void BattleAudience_SetRotate(s32 id, f32 x, f32 y, f32 z) {
-    void* audience;
+    BattleAudienceWorkPartial* audience;
 
     audience = BattleAudienceGetPtr(id);
 
-    *(f32*)((s32)audience + 0x9C) = x;
-    *(f32*)((s32)audience + 0xA0) = y;
-    *(f32*)((s32)audience + 0xA4) = z;
+    audience->rotX = x;
+    audience->rotY = y;
+    audience->rotZ = z;
 }
 
 void BattleAudience_SetPosition(s32 id, f32 x, f32 y, f32 z) {
-    void* audience;
+    BattleAudienceWorkPartial* audience;
 
     audience = BattleAudienceGetPtr(id);
 
-    *(f32*)((s32)audience + 0x48) = x;
-    *(f32*)((s32)audience + 0x4C) = y;
-    *(f32*)((s32)audience + 0x50) = z;
+    audience->posX = x;
+    audience->posY = y;
+    audience->posZ = z;
 }
 
 void BattleAudience_GetRotate(s32 id, f32* x, f32* y, f32* z) {
@@ -533,6 +562,7 @@ void BattleAudience_GetPosition(s32 id, f32* x, f32* y, f32* z) {
     *y = *(f32*)((s32)audience + 0x4C);
     *z = *(f32*)((s32)audience + 0x50);
 }
+
 s32 BattleAudience_GetAnimEnd(s32 id) {
     void* audience;
     void* anim;
@@ -560,6 +590,7 @@ void BattleAudience_Delete(s32 id) {
 
     *(s32*)audience = 0;
 }
+
 s32 BattleAudienceDetectPakkunEatTargetSub2(s32 id, s32 offset) {
     s32 audienceNo;
 
@@ -1157,11 +1188,13 @@ void BattleAudienceAddPuni(s32 count) {
 
 void BattleAudiencePuniAllEscape(void) {
     void* base;
-    void* audience;
-    s32 count;
+    void* highBase;
     s32 i;
+    s32 count;
+    void* audience;
 
     base = BattleAudienceBaseGetPtr();
+    highBase = (void*)((s32)base + 0x10000);
 
     count = 0;
     i = 0;
@@ -1172,7 +1205,7 @@ void BattleAudiencePuniAllEscape(void) {
         if ((u8)BattleAudience_GetEscapeChangeOK(i) != 0) {
             if (*(u8*)((s32)audience + 0x1B) == 7) {
                 BattleAudience_ChangeStatus(i, 0xC);
-                *(f32*)((s32)base + 0x13780) -= float_1_80424990;
+                *(f32*)((s32)highBase + 0x3780) -= float_1_80424990;
                 count++;
             }
         }
@@ -1186,6 +1219,8 @@ void BattleAudiencePuniAllEscape(void) {
 }
 
 void BattleAudienceSoundClap(s32 vol, s32 frames) {
+    s32 vol2;
+    s32 frames2;
     char name[0x3C];
     void* sound;
     s32 right;
@@ -1193,6 +1228,8 @@ void BattleAudienceSoundClap(s32 vol, s32 frames) {
     s32 total;
     const char* baseName;
 
+    vol2 = vol;
+    frames2 = frames;
     baseName = str_btl_msg_audience_pun_802f9e28;
     BattleAudienceBaseGetPtr();
 
@@ -1227,7 +1264,7 @@ void BattleAudienceSoundClap(s32 vol, s32 frames) {
     *(s32*)((s32)sound + 0x4) = BattleAudienceSound1(name, right, left);
 
     if (*(s32*)((s32)sound + 0x4) != -1) {
-        BA_SOUND_INIT(sound, vol + frames, frames);
+        BA_SOUND_INIT(sound, vol2 + frames2, frames2);
     }
 }
 
@@ -1555,8 +1592,45 @@ u8 BattleAudienceSoundNoiseAlways(void) {
 }
 
 
-u8 BattleAudienceSoundHandBeat(void) {
-    return 0;
+void BattleAudienceSoundHandBeat(void) {
+    s32 right;
+    void* sound;
+    s32 left;
+    s32 total;
+
+    BattleAudienceBaseGetPtr();
+
+    sound = BattleAudienceSoundGetPtr(9);
+
+    right = BattleAudience_GetPPAudienceNum_R();
+    left = BattleAudience_GetPPAudienceNum_L();
+    total = right + left;
+
+    BattleAudienceSoundStop(9);
+
+    *(s32*)((s32)sound + 0x4) = BattleAudienceSound1(
+        str_SFX_AUDIENCE_HANDBEA_802fa474,
+        right,
+        left
+    );
+
+    if (*(s32*)((s32)sound + 0x4) != -1) {
+        *(u32*)sound |= 1;
+        *(s32*)((s32)sound + 0xC) = -1;
+        *(s32*)((s32)sound + 0x10) = 0;
+        *(s32*)((s32)sound + 0x18) = 0;
+        *(s32*)((s32)sound + 0x14) = 0;
+
+        right = 0;
+        if (total != 0) {
+            right = (s32)(float_75_804249c8 + (((irand(0x1A) + float_26_804249c0) * total) / float_200_804249b8));
+        }
+
+        psndSFX_vol(*(s32*)((s32)sound + 0x4), right);
+        *(u8*)((s32)sound + 0x1D) = right;
+        *(u8*)((s32)sound + 0x1C) = right;
+        *(u8*)((s32)sound + 0x1E) = 0x64;
+    }
 }
 
 
@@ -1607,8 +1681,40 @@ u8 BattleAudienceSoundItemThrow(int param_1, int param_2) {
 }
 
 
-u8 BattleAudienceSoundCallKind(int param_1) {
-    return 0;
+void BattleAudienceSoundCallKind(s32 kind) {
+    void* sound;
+    s32 right;
+    s32 left;
+
+    BattleAudienceBaseGetPtr();
+
+    sound = BattleAudienceSoundGetPtr(8);
+
+    right = BattleAudience_GetPPAudienceNum_R();
+    left = BattleAudience_GetPPAudienceNum_L();
+
+    BattleAudienceSoundStop(8);
+
+    switch (kind) {
+        case 1:
+            *(s32*)((s32)sound + 0x4) = BattleAudienceSound1(
+                str_SFX_AUDIENCE_CALL_AL_802fa48c,
+                right,
+                left
+            );
+            break;
+        case 2:
+            *(s32*)((s32)sound + 0x4) = BattleAudienceSound1(
+                str_SFX_AUDIENCE_CALL_AL_802fa4a4,
+                right,
+                left
+            );
+            break;
+    }
+
+    if (*(s32*)((s32)sound + 0x4) != -1) {
+        BA_SOUND_INIT(sound, -1, 0);
+    }
 }
 
 
@@ -1641,8 +1747,28 @@ void BattleAudience_SetAnim(s32 id, s32 anim, s32 pose) {
 }
 
 
-u8 BattleAudienceCheer(int param_1) {
-    return 0;
+void BattleAudienceCheer(s32 kind) {
+    void* base;
+
+    base = BattleAudienceBaseGetPtr();
+
+    if (*(s32*)((s32)base + 0x137C4) > 0x320) {
+        *(s32*)((s32)base + 0x137C4) = 0x320;
+    }
+
+    if (*(s32*)((s32)base + 0x137C4) > 0) {
+        if (*(s16*)((s32)pouchGetPtr() + 0x7C) == 0) {
+            *(s32*)((s32)base + 0x137C4) = 0;
+        } else {
+            *(u32*)base |= 2;
+        }
+
+        BattleAudienceJoy(kind);
+
+        if (*(s32*)((s32)base + 0x137C4) != 0) {
+            BattleStatusWindowAPRecoveryOn();
+        }
+    }
 }
 
 
@@ -1684,8 +1810,25 @@ s32 BattleAudience_CheckReaction(void) {
     return 0;
 }
 
-u8 BattleAudienceSetThrowItemMax(void) {
-    return 0;
+void BattleAudienceSetThrowItemMax(void) {
+    void* base;
+    s32 value;
+
+    base = BattleAudienceBaseGetPtr();
+    value = irand(0x64);
+
+    if (value < 0x50) {
+        *(s32*)((s32)base + 0x137F4) = 0;
+    } else if (value < 0x5A) {
+        *(s32*)((s32)base + 0x137F4) = 1;
+    } else if (value < 0x5F) {
+        *(s32*)((s32)base + 0x137F4) = 2;
+    } else if (value < 0x64) {
+        *(s32*)((s32)base + 0x137F4) = 3;
+    }
+
+    *(s32*)((s32)base + 0x137F0) = 0;
+    *(s32*)((s32)base + 0x137F8) = 0;
 }
 
 
@@ -1699,8 +1842,20 @@ u32 BattleAudience_GetFront(int param_1) {
 }
 
 
-u8 BattleAudience_ActInit(void) {
-    return 0;
+void BattleAudience_ActInit(void) {
+    void* base;
+
+    base = BattleAudienceBaseGetPtr();
+    *(s32*)((s32)base + 0x137D4) = 0;
+    *(u32*)base &= ~0x10;
+    *(u32*)base &= ~0x20;
+    *(u32*)base &= ~0x40;
+    *(u32*)base &= ~0x80;
+    *(u32*)base &= ~0x100;
+    *(u32*)base &= ~0x200;
+    *(u32*)base &= ~0x400;
+    *(u32*)base &= ~0x800;
+    *(u32*)base &= ~0x1000;
 }
 
 

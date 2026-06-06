@@ -69,10 +69,15 @@ USER_FUNC(evt_door_set_param) {
     void* info = (void*)evtGetValue(event, args[0]);
     s32 flag = evtGetValue(event, args[1]);
     s32 value = evtGetValue(event, args[2]);
-    if (flag != 0) {
-    } else {
-        *(s32*)((s32)info + 0x34) = value;
+
+    switch (flag) {
+        case 0:
+            *(s32*)((s32)info + 0x34) = value;
+            break;
+        default:
+            break;
     }
+
     return 2;
 }
 
@@ -99,50 +104,361 @@ void door_dark_flag_sub(s32 unk0, s32 unk1, s32 unk2, s32 unk3) {
 }
 
 
-s32 npc_light(int param_1) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(npc_light) {
+    extern void* marioGetPtr(void);
+    extern void* partyGetPtr(s32 id);
+    extern void animPoseSetMaterialFlagOff(s32 poseId, u32 flag);
+    extern void* npcNameToPtr_NoAssert(void* name);
+    extern void* mobjNameToPtrNoAssert(void* name);
+    extern void* itemNameToPtr(void* name);
+    extern void iconFlagOff(void* icon, u32 flag);
+
+    void* info = (void*)evtGetValue(event, event->args[0]);
+    void* mario = marioGetPtr();
+    void* party0 = partyGetPtr(0);
+    void* party1 = partyGetPtr(1);
+    void** names;
+    void* name;
+
+    if (mario != 0) {
+        animPoseSetMaterialFlagOff(*(s32*)((s32)marioGetPtr() + 0x22C), 0x1800);
+        animPoseSetMaterialFlagOff(*(s32*)((s32)marioGetPtr() + 0x230), 0x1800);
+        animPoseSetMaterialFlagOff(*(s32*)((s32)marioGetPtr() + 0x234), 0x1800);
+    }
+    if (party0 != 0) {
+        animPoseSetMaterialFlagOff(*(s32*)((s32)party0 + 0xC), 0x1800);
+    }
+    if (party1 != 0) {
+        animPoseSetMaterialFlagOff(*(s32*)((s32)party1 + 0xC), 0x1800);
+    }
+
+    names = *(void***)(*(s32*)info + 0x3C);
+    if (names != 0) {
+        while ((name = *names) != 0) {
+            void* npc = npcNameToPtr_NoAssert(name);
+
+            if (npc != 0) {
+                animPoseSetMaterialFlagOff(*(s32*)((s32)npc + 0x104), 0x1800);
+            }
+            names++;
+        }
+    }
+
+    names = *(void***)(*(s32*)info + 0x44);
+    if (names != 0) {
+        while ((name = *names) != 0) {
+            void* mobj = mobjNameToPtrNoAssert(name);
+
+            if (mobj != 0) {
+                animPoseSetMaterialFlagOff(*(s32*)((s32)mobj + 0x70), 0x1800);
+            }
+            names++;
+        }
+    }
+
+    names = *(void***)(*(s32*)info + 0x48);
+    if (names != 0) {
+        while ((name = *names) != 0) {
+            void* item = itemNameToPtr(name);
+
+            if (item != 0) {
+                iconFlagOff((void*)((s32)item + 0xC), 0x40);
+            }
+            names++;
+        }
+    }
+
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 npc_dark(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(npc_dark) {
+    extern void* marioGetPtr(void);
+    extern void* partyGetPtr(s32 id);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
+    extern void* npcNameToPtr_NoAssert(void* name);
+    extern void* mobjNameToPtrNoAssert(void* name);
+    extern void* itemNameToPtr(void* name);
+    extern void iconFlagOn(void* icon, u32 flag);
+
+    void* info = (void*)evtGetValue(event, event->args[0]);
+    void* mario = marioGetPtr();
+    void* party0 = partyGetPtr(0);
+    void* party1 = partyGetPtr(1);
+    void** names;
+    void* name;
+
+    if (mario != 0) {
+        animPoseSetMaterialFlagOn(*(s32*)((s32)marioGetPtr() + 0x22C), 0x1800);
+        animPoseSetMaterialFlagOn(*(s32*)((s32)marioGetPtr() + 0x230), 0x1800);
+        animPoseSetMaterialFlagOn(*(s32*)((s32)marioGetPtr() + 0x234), 0x1800);
+    }
+    if (party0 != 0) {
+        animPoseSetMaterialFlagOn(*(s32*)((s32)party0 + 0xC), 0x1800);
+    }
+    if (party1 != 0) {
+        animPoseSetMaterialFlagOn(*(s32*)((s32)party1 + 0xC), 0x1800);
+    }
+
+    names = *(void***)(*(s32*)info + 0x3C);
+    if (names != 0) {
+        while ((name = *names) != 0) {
+            void* npc = npcNameToPtr_NoAssert(name);
+
+            if (npc != 0) {
+                animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), 0x1800);
+            }
+            names++;
+        }
+    }
+
+    names = *(void***)(*(s32*)info + 0x44);
+    if (names != 0) {
+        while ((name = *names) != 0) {
+            void* mobj = mobjNameToPtrNoAssert(name);
+
+            if (mobj != 0) {
+                animPoseSetMaterialFlagOn(*(s32*)((s32)mobj + 0x70), 0x1800);
+            }
+            names++;
+        }
+    }
+
+    names = *(void***)(*(s32*)info + 0x48);
+    if (names != 0) {
+        while ((name = *names) != 0) {
+            void* item = itemNameToPtr(name);
+
+            if (item != 0) {
+                iconFlagOn((void*)((s32)item + 0xC), 0x40);
+            }
+            names++;
+        }
+    }
+
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-s32 npc_hide_onoff(int param_1) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(npc_hide_onoff) {
+    extern void* npcNameToPtr_NoAssert(void* name);
+
+    EventEntry* evt = event;
+    s32* args = evt->args;
+    void* info = (void*)evtGetValue(evt, args[0]);
+    s32 on = evtGetValue(evt, args[1]);
+    void** names = *(void***)((s32)info + 0x34);
+    void* name;
+
+    while ((name = *names) != 0) {
+        void* npc = npcNameToPtr_NoAssert(name);
+
+        if (npc != 0) {
+            if (on != 0) {
+                *(u32*)npc |= 0x800;
+            } else {
+                *(u32*)npc &= ~0x800;
+            }
+        }
+        names++;
+    }
+
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-s32 get_noclip_map(int param_1) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(get_noclip_map) {
+    s32* args = event->args;
+    void* info = (void*)evtGetValue(event, args[0]);
+    s32 index = evtGetValue(event, args[1]);
+    void** table = *(void***)(*(s32*)info + 0x40);
+
+    if (table != 0 && table[index] != 0) {
+        evtSetValue(event, args[2], (s32)table[index]);
+        return 2;
+    }
+
+    evtSetValue(event, args[2], -1);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 animation(int param_1) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(animation) {
+    s32* args = event->args;
+    void* info = (void*)evtGetValue(event, args[0]);
+
+    evtSetValue(event, args[1], *(s32*)(*(s32*)info + 0x14));
+    evtSetValue(event, args[2], *(s32*)(*(s32*)info + 0x18));
+    evtSetValue(event, args[3], *(s32*)(*(s32*)info + 0x1C));
+    evtSetValue(event, args[4], *(s32*)(*(s32*)info + 0x20));
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 inout_hit(int param_1) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(inout_hit) {
+    s32* args = event->args;
+    void* info = (void*)evtGetValue(event, args[0]);
+
+    evtSetValue(event, args[1], *(s32*)(*(s32*)info + 4));
+    evtSetValue(event, args[2], *(s32*)(*(s32*)info + 8));
+    evtSetValue(event, args[3], *(s32*)(*(s32*)info + 0xC));
+    evtSetValue(event, args[4], *(s32*)(*(s32*)info + 0x10));
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_door_data_copy) {
+    typedef struct DoorCopyData {
+        s32 word[18];
+    } DoorCopyData;
 
-s32 evt_door_data_copy(void* pEvt) {
-    return 0;
+    extern void* mapalloc_base_ptr;
+    extern void* _mapAlloc(void* heap, u32 size);
+
+    s32* args = event->args;
+    DoorCopyData* src = (DoorCopyData*)evtGetValue(event, args[0]);
+    DoorCopyData* dst = (DoorCopyData*)_mapAlloc(mapalloc_base_ptr, 0x48);
+
+    *dst = *src;
+    evtSetValue(event, args[1], (s32)dst);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 in_pos(int param_1) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(in_pos) {
+    s32* args = event->args;
+    void* info = (void*)evtGetValue(event, args[0]);
+
+    evtSetValue(event, args[1], (s32)*(f32*)((s32)info + 4));
+    evtSetValue(event, args[2], (s32)*(f32*)((s32)info + 0xC));
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 out_pos(int param_1) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(out_pos) {
+    s32* args = event->args;
+    void* info = (void*)evtGetValue(event, args[0]);
+
+    evtSetValue(event, args[1], (s32)*(f32*)((s32)info + 0x10));
+    evtSetValue(event, args[2], (s32)*(f32*)((s32)info + 0x18));
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 s32 inside_group(int param_1) {
     return 0;

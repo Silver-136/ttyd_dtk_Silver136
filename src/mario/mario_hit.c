@@ -177,10 +177,46 @@ s32 chkfilterVecVivian(s32 param_1, int param_2) {
 }
 
 
-u8 marioHitCheckWidth(void) {
-    return 0;
-}
+void marioHitCheckWidth(void) {
+    extern void* marioGetPtr(void);
+    extern f32 float_18_80420960;
+    extern f32 float_1_804208c4;
+    extern f32 float_6_8042099c;
+    void* mario = marioGetPtr();
+    u32 flags = *(u32*)mario;
+    f32 target;
+    f32 width;
 
+    if (!(flags & 0x100000)) {
+        if (flags & 0x1000000) {
+            target = float_18_80420960;
+        } else {
+            target = *(f32*)((s32)mario + 0x1B8);
+        }
+        width = *(f32*)((s32)mario + 0x1C0) + float_1_804208c4;
+        *(f32*)((s32)mario + 0x1C0) = width;
+        if (width > target) {
+            *(f32*)((s32)mario + 0x1C0) = target;
+        }
+    } else {
+        width = *(f32*)((s32)mario + 0x1C0);
+        if (width > float_6_8042099c) {
+            width -= float_1_804208c4;
+            *(f32*)((s32)mario + 0x1C0) = width;
+            if (width < float_6_8042099c) {
+                *(f32*)((s32)mario + 0x1C0) = float_6_8042099c;
+            }
+        }
+        width = *(f32*)((s32)mario + 0x1C0);
+        if (width < float_6_8042099c) {
+            width += float_1_804208c4;
+            *(f32*)((s32)mario + 0x1C0) = width;
+            if (width > float_6_8042099c) {
+                *(f32*)((s32)mario + 0x1C0) = float_6_8042099c;
+            }
+        }
+    }
+}
 
 u8 marioChkLandon(float velocityY, s32 param_2) {
     return 0;
