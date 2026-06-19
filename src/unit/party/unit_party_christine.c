@@ -103,6 +103,8 @@ s32 krb_get_dir(void* evt) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 _set_hustle(void* evt) {
     extern void* _battleWorkPointer;
     extern s32 evtGetValue(void* evt, s32 arg);
@@ -113,7 +115,8 @@ s32 _set_hustle(void* evt) {
 
     s32* args = *(s32**)((s32)evt + 0x18);
     void* battleWork = _battleWorkPointer;
-    void* unit = BattleGetUnitPtr(battleWork, BattleTransID(evt, evtGetValue(evt, args[0])));
+    s32 id = evtGetValue(evt, args[0]);
+    void* unit = BattleGetUnitPtr(battleWork, BattleTransID(evt, id));
 
     if (unit != 0) {
         if (*(s8*)((s32)unit + 0x22) <= 0) {
@@ -132,7 +135,11 @@ s32 _set_hustle(void* evt) {
     }
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 s32 btlevtcmd_get_monosiri_msg_no(void* evt) {
     extern void* _battleWorkPointer;

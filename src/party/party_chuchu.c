@@ -49,6 +49,8 @@ u8 chuchu_searchObject(void) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 search_result(void* pEvt, int param_2) {
     extern s32 sysMsec2Frame(s32 msec);
     extern void effFukidashiEntry(s32 type, s32 a, s32 b, s32 frames, f32 x, f32 y, f32 z, f32 w, f32 v);
@@ -86,7 +88,8 @@ s32 search_result(void* pEvt, int param_2) {
     }
     return 2;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 chuchu_use(void* pParty) {
     return 0;

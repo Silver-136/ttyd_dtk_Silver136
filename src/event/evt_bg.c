@@ -13,6 +13,8 @@ extern void bgSetScrlOffset(f32, f32);
 #pragma use_lmw_stmw off
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_bg_set_color(int param_1) {
     extern void bgSetColor(void* color);
     extern s32 unk_80429590;
@@ -21,8 +23,8 @@ s32 evt_bg_set_color(int param_1) {
     s32 g = evtGetValue(param_1, args[1]);
     s32 b = evtGetValue(param_1, args[2]);
     s32 a = evtGetValue(param_1, args[3]);
-    u32 color = unk_80429590;
     u32 sendColor;
+    u32 color = unk_80429590;
 
     ((u8*)&color)[0] = r;
     ((u8*)&color)[1] = g;
@@ -32,6 +34,9 @@ s32 evt_bg_set_color(int param_1) {
     bgSetColor(&sendColor);
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

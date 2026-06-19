@@ -222,11 +222,34 @@ USER_FUNC(evt_cam_road_reset) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_cam_type_change(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void camSetTypePersp(s32 camId);
+    extern void camSetTypeOrtho(s32 camId);
+    void* event = pEvt;
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 type = evtGetValue(event, args[0]);
+    s32 camId = evtGetValue(event, args[1]);
 
+    if (type == 0) {
+        camSetTypePersp(camId);
+    } else {
+        camSetTypeOrtho(camId);
+    }
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_cam_letter_box_camid(void* pEvt) {
-    return 0;
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* camGetPtr(s32 camId);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 id = evtGetValue(pEvt, args[0]);
+
+    *(s32*)((s32)camGetPtr(8) + 0x1E8) = id;
+    return 2;
 }
+

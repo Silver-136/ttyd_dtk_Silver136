@@ -268,16 +268,45 @@ USER_FUNC(moving_floor_get_stmsec) {
 #pragma no_register_save_helpers off
 
 
-s32 evt_moving_floor_free(int param_1) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_moving_floor_free) {
+    s32* args = event->args;
+    void* floor = (void*)evtGetValue(event, args[0]);
+
+    if (floor == NULL) {
+        return 2;
+    }
+    _mapFree(mapalloc_base_ptr, floor);
+    evtSetValue(event, args[0], 0);
+    return 2;
+}
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
+
+USER_FUNC(moving_floor_stop_se) {
+    void* floor = (void*)evtGetValue(event, event->args[0]);
+
+    if (*(u32*)((s32)floor + 0x78) == 0) {
+        u32 handle = *(u32*)((s32)floor + 0x7C);
+        if (handle != 0) {
+            psndSFXOff(handle);
+            *(s32*)((s32)floor + 0x7C) = 0;
+        }
+    }
+    return 2;
 }
 
+USER_FUNC(evt_moving_floor_main2) {
+    volatile s32* floor = (volatile s32*)evtGetValue(event, event->args[0]);
+    s32 value0 = *(volatile s32*)event;
+    s32 value4 = *(volatile s32*)((s32)event + 4);
 
-s32 moving_floor_stop_se(int param_1) {
-    return 0;
+    floor[7] = value4;
+    floor[6] = value0;
+    return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_moving_floor_main2(void* param_1) {
-    return 0;
-}

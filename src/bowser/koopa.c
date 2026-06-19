@@ -457,3 +457,23 @@ u8 kpaCancelAttackMode(void) {
 u8 kpaAttackStart(void) {
     return 0;
 }
+
+void unk_801fd110(void) {
+    extern void effSoftDelete(void* effect);
+    extern void psndSFXOff(s32 soundId);
+    void* mario;
+    void* work;
+    s32 soundId;
+
+    if (fireefp != NULL) {
+        effSoftDelete(fireefp);
+        fireefp = NULL;
+        mario = marioGetPtr();
+        work = *(void**)((s32)mario + 0x298);
+        soundId = *(s32*)((s32)work + 0x14C);
+        if ((u32)(soundId + 0x10000) != 0xFFFF) {
+            psndSFXOff(soundId);
+            *(s32*)((s32)*(void**)((s32)mario + 0x298) + 0x14C) = -1;
+        }
+    }
+}

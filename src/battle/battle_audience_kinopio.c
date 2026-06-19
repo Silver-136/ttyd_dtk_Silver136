@@ -510,6 +510,16 @@ void BattleAudienceCtrlProcessKinopioFireSub(s32 param_1) {
 }
 
 
-u8 BattleAudienceCtrlProcessKinopioSingSub(int param_1) {
-    return 0;
+void BattleAudienceCtrlProcessKinopioSingSub(s32 param_1) {
+    u8* audience;
+
+    audience = BattleAudienceGetPtr(param_1);
+    if (*(u32*)audience & 0x100) {
+        BattleAudienceCtrlProcessKinopioSingSub(param_1 - 1);
+    }
+    else if (audience[0x19] != 0x11) {
+        BattleAudience_ChangeStatus(param_1, 0xD);
+        *(s32*)(audience + 0xF4) = 3;
+    }
 }
+

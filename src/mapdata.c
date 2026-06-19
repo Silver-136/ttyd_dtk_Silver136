@@ -11,53 +11,71 @@ char** mapDataPtr(char* map) {
 }
 
 
-void relSetBtlAddr(char* param_1, s32 param_2, s32 param_3) {
-    extern s32 world_data[];
-    extern s32 strcmp(const char*, const char*);
+void relSetBtlAddr(char* name, int btl1, int btl2) {
+    extern void* world_data[];
+    extern int strcmp(const char*, const char*);
+    char* key;
+    void** base;
+    void** scan;
     void* data;
-    s32 count;
-    s32 i;
+    int count;
+    int i;
 
+    key = name;
+    base = &world_data[2];
+    scan = base;
     count = 0;
-    while (world_data[count + 2] != 0) {
+    while (*scan != 0) {
+        scan++;
         count++;
     }
 
     data = 0;
+    scan = base;
     i = 0;
     while (i < count) {
-        if (strcmp(**(const char***)(world_data + i + 2), param_1) == 0) {
-            data = *(void**)(world_data + i + 2);
+        if (strcmp(*(const char**)*scan, key) == 0) {
+            data = base[i];
             break;
         }
+        scan++;
         i++;
     }
 
     if (data != 0) {
-        *(s32*)((s32)data + 8) = param_2;
-        *(s32*)((s32)data + 0xC) = param_3;
+        *(int*)((int)data + 8) = btl1;
+        *(int*)((int)data + 0xC) = btl2;
     }
 }
 
-
 void* areaDataPtr(char* name) {
-    extern s32 world_data[];
-    extern s32 strcmp(const char*, const char*);
-    s32 count;
-    s32 i;
+    extern void* world_data[];
+    extern int strcmp(const char*, const char*);
+    char* key;
+    void** base;
+    void** scan;
+    int count;
+    int i;
 
+    key = name;
+    base = &world_data[2];
+    scan = base;
     count = 0;
-    while (world_data[count + 2] != 0) {
+    while (*scan != 0) {
+        scan++;
         count++;
     }
 
+    scan = base;
     i = 0;
     while (i < count) {
-        if (strcmp(**(const char***)(world_data + i + 2), name) == 0) {
-            return *(void**)(world_data + i + 2);
+        if (strcmp(*(const char**)*scan, key) == 0) {
+            return base[i];
         }
+        scan++;
         i++;
     }
 
     return 0;
 }
+

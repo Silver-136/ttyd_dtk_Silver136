@@ -73,12 +73,23 @@ USER_FUNC(uranaisi_data_free) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(uranaisi_ryokin) {
     s32* args = event->args;
     s32 type = evtGetValue(event, args[0]);
-    evtSetValue(event, args[1], uranaisi_ryokin_rtn(type));
+    s32 value;
+
+    if (type != 0) {
+        value = uranaisi_ryokin_tbl[type];
+    } else {
+        value = *(s16*)((s32)pouchGetPtr() + 0x8A) * 2;
+    }
+    evtSetValue(event, args[1], value);
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 int uranaisi_data_make_supercoin(s32 param_1, u32 param_2) {

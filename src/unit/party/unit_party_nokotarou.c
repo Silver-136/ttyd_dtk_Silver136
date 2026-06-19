@@ -23,6 +23,8 @@ s32 _tsuranuki_effect_control(int param_1, int param_2) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 _check_guard_koura(void* evt) {
     extern void* _battleWorkPointer;
     extern s32 evtGetValue(void* evt, s32 arg);
@@ -50,7 +52,8 @@ s32 _check_guard_koura(void* evt) {
     evtSetValue(evt, out, *(s32*)guard);
     return 2;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 _color_lv_set(void* evt) {
     extern void* _battleWorkPointer;

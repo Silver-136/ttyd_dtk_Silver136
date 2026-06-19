@@ -790,3 +790,24 @@ s32 N_compare_func4_2(void* param_1, void* param_2) {
 u8 winHalfBookGX(double x, double y, void* file, int param_4) {
     return 0;
 }
+
+void unk_80152e80(s32 cameraId, void* win) {
+    extern void* gp;
+    extern void GXSetTexCopySrc(s32 x, s32 y, s32 width, s32 height);
+    extern void GXSetTexCopyDst(s32 width, s32 height, s32 format, s32 mipmap);
+    extern void GXCopyTex(void* dst, s32 clear);
+    extern void GXTexModeSync(void);
+    extern void N_mapDispOff(void);
+    extern void L_camDispOff(s32 cameraId);
+    void* gpWork;
+
+    gpWork = gp;
+    GXSetTexCopySrc(0, 0, *(u16*)((s32)gpWork + 0x170), *(u16*)((s32)gpWork + 0x172));
+    gpWork = gp;
+    GXSetTexCopyDst(*(u16*)((s32)gpWork + 0x170), *(u16*)((s32)gpWork + 0x172), 4, 0);
+    GXCopyTex(**(void***)((s32)win + 0x34), 0);
+    GXTexModeSync();
+    *(s32*)((s32)win + 0x38) = 1;
+    N_mapDispOff();
+    L_camDispOff(4);
+}

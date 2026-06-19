@@ -225,30 +225,92 @@ s32 marioSlitButton(void) {
 }
 
 u32 marioSlitAbilityChk(void) {
-    return 0;
-}
+    extern void* marioGetPtr(void);
+    extern s32 pouchCheckItem(s32 item);
+    extern s32 marioBgmodeChk(void);
+    void* mario = marioGetPtr();
+    s32 mode;
 
+    if (*(u32*)mario & 0x800000) {
+        return 0;
+    }
+    if (pouchCheckItem(2) == 0) {
+        return 0;
+    }
+    if (*(u32*)mario & 0x80000000) {
+        return 0;
+    }
+    mode = marioBgmodeChk();
+    return (u32)((1 - mode) | (mode - 1)) >> 31;
+}
 
 u8 marioForceSlitAnime(void) {
-    return 0;
-}
+    extern void* marioGetPtr(void);
+    extern void marioPaperOff(void);
+    extern void marioChgPaper(void* paper);
+    extern void marioPaperOn(void* paper);
+    extern void marioChgPose(void* pose);
+    extern char str_p_slit_802c433c[];
+    extern char str_M_S_1_80420fa0[6];
+    extern char str_PM_S_1A_802c4344[];
+    void* mario = marioGetPtr();
 
+    marioPaperOff();
+    marioChgPaper(0);
+    marioPaperOn(str_p_slit_802c433c);
+    marioChgPose(str_M_S_1_80420fa0);
+    marioChgPaper(str_PM_S_1A_802c4344);
+    *(u32*)((s32)mario + 4) |= 4;
+}
 
 s32 marioChkSlitThrouhEnd(void) {
+    extern void* marioGetPtr(void);
+    void* mario = marioGetPtr();
+    s32 timer;
+
+    if (*(u16*)((s32)mario + 0x2E) != 0x15) {
+        return 0;
+    }
+    timer = *(s16*)((s32)mario + 0x2F0);
+    if (timer == 0x52 || timer == 0x5E) {
+        return 1;
+    }
     return 0;
 }
-
 
 s32 marioChkSlitThrouh(void) {
+    extern void* marioGetPtr(void);
+    void* mario = marioGetPtr();
+    s32 timer;
+
+    if (*(u16*)((s32)mario + 0x2E) != 0x15) {
+        return 0;
+    }
+    timer = *(s16*)((s32)mario + 0x2F0);
+    if (timer >= 0x50 && timer <= 0x5E) {
+        return 1;
+    }
     return 0;
 }
-
 
 int marioChkSlitEnd(void) {
-    return 0;
-}
+    extern void* marioGetPtr(void);
+    void* mario = marioGetPtr();
 
+    if (*(u16*)((s32)mario + 0x2E) != 0x15) {
+        return 0;
+    }
+    return *(s16*)((s32)mario + 0x2F0) >= 0x64;
+}
 
 u8 motSlitCancel2(void) {
-    return 0;
+    extern void* marioGetPtr(void);
+    extern void allPartyForceSlitOff(void);
+    void* mario = marioGetPtr();
+
+    if (*(u32*)mario & 0x100000) {
+        allPartyForceSlitOff();
+        *(s16*)((s32)mario + 0x2F0) = 0x6E;
+    }
 }
+

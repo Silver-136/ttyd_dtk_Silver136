@@ -218,5 +218,20 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
 
 
 void* mobjRunEvent(void* pMobj, void* evtCode) {
-    return 0;
+    extern s32 evtCheckID(s32 id);
+    extern void* evtEntryType(void* evtCode, s32 priority, s32 flags, s32 type);
+    void* event;
+
+    if (evtCode == 0) {
+        return 0;
+    }
+    if (evtCheckID(*(s32*)((s32)pMobj + 0x1CC)) != 0) {
+        return 0;
+    }
+    *(s32*)((s32)pMobj + 0x1CC) = 0;
+    event = evtEntryType(evtCode, 0x1E, 0, 0x1A);
+    *(void**)((s32)event + 0x174) = pMobj;
+    *(s32*)((s32)pMobj + 0x1CC) = *(s32*)((s32)event + 0x15C);
+    return event;
 }
+

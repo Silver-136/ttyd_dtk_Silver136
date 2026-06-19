@@ -231,10 +231,26 @@ s32 _get_swallow_param(void* evt) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-u32 _wait_yoshig_complete(int param_1) {
-    return 0;
+u32 _wait_yoshig_complete(void* evt) {
+    extern void* _battleWorkPointer;
+    extern s32 evtGetValue(void* evt, s32 arg);
+    extern s32 BattleTransID(void* evt, s32 id);
+    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
+    s32 id;
+    void* unit;
+    void* weapon;
+
+    id = evtGetValue(evt, **(s32**)((s32)evt + 0x18));
+    id = BattleTransID(evt, id);
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    weapon = *(void**)((s32)unit + 0x314);
+    return weapon == NULL ? 2 : 0;
 }
 
+void _yoshi_slide_move_sound(void* unit, void* move) {
+    extern void BtlUnit_snd_se(void* unit, s32 soundId, s32 unk0, s32 volume, s32 unk1);
+    s32 volume = (s16)((*(s32*)((s32)unit + 0x228) * *(s32*)((s32)unit + 0x22C)) / 100);
 
-void _yoshi_slide_move_sound(void* unit, s32 param_2) {
+    BtlUnit_snd_se(unit, *(s32*)((s32)move + 0xC), -250000000, volume, 0x51EB851F);
 }
+

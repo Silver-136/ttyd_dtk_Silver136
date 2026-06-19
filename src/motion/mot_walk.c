@@ -24,8 +24,8 @@ f32 marioGetDashSpd(void) {
     f32 speed = *(f32*)((s32)mario + 0x188);
 
     if (*(u32*)mario & 0x100000) {
-        register s32 x = *(s8*)((s32)mario + 0x252);
-        register s32 y = *(s8*)((s32)mario + 0x253);
+        s32 x = *(s8*)((s32)mario + 0x252);
+        s32 y = *(s8*)((s32)mario + 0x253);
         speed = *(f32*)((s32)mario + 0x184);
         if (x * x + y * y <= 0xBD1) {
             speed *= float_0p5_8042088c;

@@ -256,3 +256,23 @@ s32 evt_snd_bgm_freq(int param_1) {
 s32 evt_snd_env_lpf(int param_1) {
     return 0;
 }
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 unk_801524c8(void* evt) {
+    extern void psndBGMOn_f_d(s32 name, s32 flags, s32 frames, s32 fade, s32 mode);
+    s32* args;
+    s32 name;
+    s32 flags;
+    s32 frames;
+
+    args = *(s32**)((s32)evt + 0x18);
+    name = args[0];
+    flags = args[1];
+    frames = evtGetValue(evt, args[2]);
+    evtGetValue(evt, args[3]);
+    psndBGMOn_f_d(name, flags, frames, frames, 0);
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on

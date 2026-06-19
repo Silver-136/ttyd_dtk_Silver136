@@ -220,9 +220,17 @@ void effInit(void) {
 }
 
 int* effMayaAnimAlloc(void* effData) {
-    return 0;
-}
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void* memset(void* ptr, s32 value, u32 size);
+    u32 size;
+    void* anim;
 
+    size = *(s32*)(*(s32*)((s32)effData + 8)) * 0x34 + 0x18;
+    anim = __memAlloc(3, size);
+    memset(anim, 0, size);
+    *(void**)((s32)anim + 0x10) = effData;
+    return anim;
+}
 
 u8 effCalcMayaAnim(void* param_1) {
     return 0;

@@ -115,12 +115,12 @@ u8 renderProc(int shapeIdx) {
 }
 
 
-u8 animPaperPoseDispSub(void) {
+u8 animPaperPoseDispSub(s32 cameraId, void* pose) {
     return 0;
 }
 
 
-void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, f32 a, f32 b) {
+void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double a, double b) {
 }
 
 
@@ -217,10 +217,12 @@ u8 animPoseSetLocalTime(double param_1, int param_2) {
 s32 animPaperPoseGetId(s32 name, s32 flag) {
     extern s32 wp;
     extern s32 strcmp(const char*, const char*);
-    s32 i = 0;
-    s32 step = 0;
+    s32 i;
     s32 pose;
+    s32 step;
 
+    i = 0;
+    step = 0;
     while (i < *(s32*)(wp + 0x14)) {
         pose = *(s32*)(wp + 0x10) + step;
         if ((*(u32*)pose & 1) && (*(u32*)(pose + 4) & 1) && (*(u32*)(pose + 4) & 2) &&
@@ -240,7 +242,6 @@ s32 animPaperPoseGetId(s32 name, s32 flag) {
     }
     return i;
 }
-
 
 void animPaperPoseRelease(s32 poseId) {
     extern s32 wp;
@@ -297,12 +298,14 @@ void animPoseWorldMatrixEvalOn(int poseIdx, u8 param_2) {
     s32 offset = poseIdx * 0x170;
     s32 pose;
     s32 data;
+    s32 groupEntry;
     s32 group;
     s32 mode;
 
     pose = *(s32*)(wp + 0x10) + offset;
     data = *(s32*)wp;
-    group = **(s32**)(*(s32*)(data + (*(s32*)(pose + 0x10) << 4) + 8) + 0xA0);
+    groupEntry = data + (*(s32*)(pose + 0x10) << 4);
+    group = **(s32**)(*(s32*)(groupEntry + 8) + 0xA0);
     if ((*(u32*)pose & 0x80) == 0) {
         *(u32*)pose |= 0x80;
         switch (*(s32*)(pose + 0xC)) {
@@ -320,7 +323,6 @@ void animPoseWorldMatrixEvalOn(int poseIdx, u8 param_2) {
         *(void**)(pose + 0x164) = smartAlloc(*(s32*)(group + 0x144) * 0x30, mode);
     }
 }
-
 
 void animPoseWorldPositionEvalOn(int poseIdx, u8 param_2) {
     extern s32 wp;
@@ -413,13 +415,34 @@ s64 animTimeGetTime(int param_1) {
     }
 }
 
-u8 animPaperPoseDisp(void) {
-    return 0;
+void animPaperPoseDisp(void) {
+    s32 i;
+    s32 pose;
+
+    i = 0;
+    pose = *(s32*)(wp + 0x10);
+    while (i < *(s32*)(wp + 0x14)) {
+        if ((*(u32*)pose & 1) != 0 && *(s32*)(pose + 0x90) != -1) {
+            animPaperPoseDispSub(0, (void*)pose);
+        }
+        i++;
+        pose += 0x170;
+    }
 }
 
 
+extern void PSMTXTrans(void* mtx, double x, double y, double z);
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void animPoseDraw(int poseIdx, double x, double y, double z, double rot, double scale, int param_7) {
+    f32 mtx[3][4];
+
+    PSMTXTrans(mtx, x, y, z);
+    animPoseDrawMtx(poseIdx, mtx, param_7, rot, scale);
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 f32 animPoseGetHeight(s32 poseId) {

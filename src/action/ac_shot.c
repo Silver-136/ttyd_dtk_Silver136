@@ -145,12 +145,15 @@ void _disp_target_mark_afterimage(s32 unused, void* battleWork) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void battleAcDisp_Shot(s32 unused, AcShotDisp* disp) {
+    AcShotDisp* work;
     s32 state;
     s32 timer;
 
+    work = (AcShotDisp*)((s32)disp + 0x1F20);
     state = *(s32*)((s32)disp + 0x1C9C);
-    disp = (AcShotDisp*)((s32)disp + 0x1F20);
     if (state >= 1000) {
         goto ge_1000;
     }
@@ -170,28 +173,31 @@ ge_1000:
         goto disp_out;
     }
 disp_in:
-    timer = disp->timer;
-    disp->x = intplGetValue(4, 0x14 - timer, float_neg200_80424840, float_30_80424834, 0x14);
-    actionCommandDisp(disp->x, disp->y);
-    timer = disp->timer;
+    timer = work->timer;
+    work->x = intplGetValue(4, 0x14 - timer, float_neg200_80424840, float_30_80424834, 0x14);
+    actionCommandDisp(work->x, work->y);
+    timer = work->timer;
     if (timer > 0) {
-        disp->timer = timer - 1;
+        work->timer = timer - 1;
     }
     return;
 
 disp_out:
-    timer = disp->timer;
+    timer = work->timer;
     if (timer >= 40) {
-        disp->x = intplGetValue(4, timer - 40, float_30_80424834, float_neg200_80424840, 0x14);
+        work->x = intplGetValue(4, timer - 40, float_30_80424834, float_neg200_80424840, 0x14);
     } else {
-        disp->x = float_30_80424834;
+        work->x = float_30_80424834;
     }
-    actionCommandDisp(disp->x, disp->y);
-    timer = disp->timer;
+    actionCommandDisp(work->x, work->y);
+    timer = work->timer;
     if (timer < 60) {
-        disp->timer = timer + 1;
+        work->timer = timer + 1;
     }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

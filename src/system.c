@@ -121,6 +121,11 @@ void movePos(f32* x, f32* z, f32 distance, f32 angle) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void sincosf(f32 angle, f32* outSin, f32* outCos) {
     f32 radians;
     f32 sinValue;
@@ -134,6 +139,8 @@ void sincosf(f32 angle, f32* outSin, f32* outCos) {
     cosValue = cos(radians);
     *outCos = -cosValue;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 padGetRumbleStatus(s32 controller) {
     controller = gp + controller;

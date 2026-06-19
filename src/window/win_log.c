@@ -229,6 +229,25 @@ void winLogInit2(void* pWin) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 winLogExit(void* pWin) {
-    return 0;
+    extern void effSoftDelete(s32 id);
+    s32 i;
+
+    if (*(void**)((s32)pWin + 0x30) != NULL) {
+        fileFree(*(void**)((s32)pWin + 0x30));
+        *(void**)((s32)pWin + 0x30) = NULL;
+    }
+    if (*(s32*)((s32)pWin + 0xE1C) != -1) {
+        animPoseRelease(*(s32*)((s32)pWin + 0xE1C));
+        *(s32*)((s32)pWin + 0xE1C) = -1;
+    }
+    for (i = 0; i < 7; i++) {
+        effSoftDelete(*(s32*)((s32)pWin + 0xE44));
+        pWin = (void*)((s32)pWin + 4);
+    }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+

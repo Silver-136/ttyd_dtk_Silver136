@@ -625,10 +625,45 @@ u8 marioGetScreenPos(float* param_1, float* param_2, float* param_3, float* para
 
 
 s32 marioChkPushAnime(void) {
-    return 0;
-}
+    extern void* mp;
+    extern s32 strcmp(const char* s1, const char* s2);
+    extern char str_M_O_1_8041ffe0;
+    extern char str_M_O_2_8042009c;
+    extern char str_M_O_2R_802c1b6c[];
+    void* mario;
+    s32 result;
 
+    result = 0;
+    mario = mp;
+    if (strcmp(*(char**)((s32)mario + 0x18), &str_M_O_1_8041ffe0) == 0 ||
+        strcmp(*(char**)((s32)mario + 0x18), &str_M_O_2_8042009c) == 0 ||
+        strcmp(*(char**)((s32)mario + 0x18), str_M_O_2R_802c1b6c) == 0) {
+        result = 1;
+    }
+    return result;
+}
 
 u8 marioFBattlePrepare(void) {
-    return 0;
+    typedef struct Vec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
+    extern void* mp;
+    extern Vec R_last_position;
+    extern void marioAdjustMoveDir(void);
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32 partyId);
+    extern void partyUsePost(void* party);
+    extern void partyCtrlOff(void);
+    void* mario = mp;
+
+    R_last_position = *(Vec*)((s32)mario + 0x8C);
+    marioAdjustMoveDir();
+    if (*(u16*)((s32)mario + 0x2E) != 0x14) {
+        *(u32*)mario |= 0x1000;
+    }
+    partyUsePost(partyGetPtr(marioGetPartyId()));
+    partyCtrlOff();
 }
+

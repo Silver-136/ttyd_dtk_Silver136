@@ -322,6 +322,8 @@ s32 evt_sub_spline_init(u32* param_1) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_sub_intpl_get_float(void* event) {
     extern f32 evtGetFloat(void* event, s32 value);
     extern void evtSetFloat(void* event, s32 id, f32 value);
@@ -333,10 +335,10 @@ s32 evt_sub_intpl_get_float(void* event) {
     f32 start = evtGetFloat(event, 0xFE363C8C);
     f32 end = evtGetFloat(event, 0xFE363C8D);
     f32 value = intplGetValue(*(s32*)((s32)event + 0xC8), start, end, *(s32*)((s32)event + 0xD4), *(s32*)((s32)event + 0xD8));
-    if (out != 0x118B4D80) {
+    if (out != -0xEE6B280) {
         evtSetFloat(event, out, value);
     }
-    if (flag != 0x118B4D80) {
+    if (flag != -0xEE6B280) {
         if (*(s32*)((s32)event + 0xD4) >= *(s32*)((s32)event + 0xD8)) {
             evtSetValue(event, flag, 0);
         } else {
@@ -346,6 +348,9 @@ s32 evt_sub_intpl_get_float(void* event) {
     *(s32*)((s32)event + 0xD4) = *(s32*)((s32)event + 0xD4) + 1;
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -605,16 +610,49 @@ s32 evt_sub_rumble_onoff(void* pEvt) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-s32 evt_sub_random(void* param_1) {
-    return 0;
-}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_sub_random(void* param_1) {
+    extern s32 evtGetValue(void* event, s32 value);
+    extern s32 evtSetValue(void* event, s32 index, s32 value);
+    extern s32 rand(void);
+    s32* args;
+    s32 max;
+    s32 value;
+
+    args = *(s32**)((s32)param_1 + 0x18);
+    max = evtGetValue(param_1, args[0]);
+    value = rand() % (max + 1);
+    evtSetValue(param_1, args[1], value);
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_sub_animgroup_async(int param_1) {
-    return 0;
+    extern s32 evtGetValue(void* event, s32 value);
+    extern s32 animGroupBaseAsync(s32 name, s32 mode, s32 flags);
+    extern s32 gp;
+    s32 name = evtGetValue((void*)param_1, **(s32**)(param_1 + 0x18));
+    s32 mode = (*(s32*)(gp + 0x14) != 0);
+
+    if (animGroupBaseAsync(name, mode, 0) == 0) {
+        return 0;
+    }
+    return 2;
 }
 
 
 s32 evt_sub_spline_free(int param_1) {
-    return 0;
+    extern void _mapFree(void* heap, void* ptr);
+    extern void* mapalloc_base_ptr;
+    void* spline = *(void**)(param_1 + 0xD8);
+
+    _mapFree(mapalloc_base_ptr, *(void**)((s32)spline + 4));
+    _mapFree(mapalloc_base_ptr, *(void**)((s32)spline + 0xC));
+    _mapFree(mapalloc_base_ptr, spline);
+    return 2;
 }

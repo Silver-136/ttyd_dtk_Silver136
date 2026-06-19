@@ -57,6 +57,8 @@ void nameEntMain(void) {
     s32 loaded;
 
     switch (*(s32*)((s32)wp + 4)) {
+        case 0:
+            break;
         case 1:
             table[0] = lbl_802FE318[0];
             table[1] = lbl_802FE318[1];
@@ -64,7 +66,7 @@ void nameEntMain(void) {
             table[3] = lbl_802FE318[3];
             table[4] = lbl_802FE318[4];
             table[5] = lbl_802FE318[5];
-            if (fileAsyncf(4, 0, str_PCTs_w_PCTs_name_tpl_802fe4ac, getMarioStDvdRoot(), table[*(s32*)((s32)gp + 0x16C)]) != 0) {
+            if ((u32)fileAsyncf(4, 0, str_PCTs_w_PCTs_name_tpl_802fe4ac, getMarioStDvdRoot(), table[*(s32*)((s32)gp + 0x16C)]) != 0) {
                 *(void**)((s32)wp + 0x60) = fileAllocf(4, str_PCTs_w_PCTs_name_tpl_802fe4ac, getMarioStDvdRoot(), table[*(s32*)((s32)gp + 0x16C)]);
                 loaded = 1;
             } else {
@@ -73,7 +75,6 @@ void nameEntMain(void) {
             if (loaded != 0) {
                 *(s32*)((s32)wp + 4) = *(s32*)((s32)wp + 4) + 1;
             }
-            /* fallthrough */
         case 2:
             nameMain();
             break;

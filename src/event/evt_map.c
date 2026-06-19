@@ -15,6 +15,11 @@ void mapSetTevCallback(s32 id, s32 callback);
 void mapObjClearOffScreen(s32 id);
 void mapGrpClearOffScreen(s32 id);
 void mapCheckAnimation(s32 id, s32* outDone, f32* outFrame);
+void mapReStartAnimation(s32 id);
+void mapReStartAnimationAll(void);
+void mapPauseAnimation(s32 id);
+void mapPauseAnimationAll(void);
+void mapPlayAnimationLv(s32 id, s32 anim, s32 level);
 
 USER_FUNC(N_evt_mapdisp_onoff) {
     if (evtGetValue(event, event->args[0]) != 0) {
@@ -198,16 +203,77 @@ s32 evt_mapobj_set_offscreen(void* pEvt) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_map_playanim(int param_1) {
-    return 0;
+    s32* args;
+    EventEntry* event;
+    s32 id;
+    s32 anim;
+    s32 level;
+
+    event = (EventEntry*)param_1;
+    args = event->args;
+    id = evtGetValue(event, args[0]);
+    anim = evtGetValue(event, args[1]);
+    level = evtGetValue(event, args[2]);
+    mapPlayAnimationLv(id, anim, level);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_map_replayanim(int param_1) {
-    return 0;
+    EventEntry* event;
+    s32* args;
+    s32 all;
+    s32 id;
+
+    event = (EventEntry*)param_1;
+    args = event->args;
+    all = evtGetValue(event, args[0]);
+    id = evtGetValue(event, args[1]);
+    if (all != 0) {
+        mapReStartAnimationAll();
+    } else {
+        mapReStartAnimation(id);
+    }
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_map_pauseanim(int param_1) {
-    return 0;
+    EventEntry* event;
+    s32* args;
+    s32 all;
+    s32 id;
+
+    event = (EventEntry*)param_1;
+    args = event->args;
+    all = evtGetValue(event, args[0]);
+    id = evtGetValue(event, args[1]);
+    if (all != 0) {
+        mapPauseAnimationAll();
+    } else {
+        mapPauseAnimation(id);
+    }
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on

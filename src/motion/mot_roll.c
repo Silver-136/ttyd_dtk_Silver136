@@ -163,17 +163,52 @@ void marioResetRollSpd(void) {
 }
 
 u8 marioForceRollAnime(void) {
-    return 0;
+    extern void* marioGetPtr(void);
+    extern void marioPaperOff(void);
+    extern void marioChgPaper(void* paper);
+    extern void marioPaperOn(void* paper);
+    extern void marioChgPose(void* pose);
+    extern char str_p_roll_802c4248[];
+    extern char str_M_I_U_80420e1c[6];
+    extern char str_PM_R_1B_802c4258[];
+    void* mario = marioGetPtr();
+
+    marioPaperOff();
+    marioChgPaper(0);
+    marioPaperOn(str_p_roll_802c4248);
+    marioChgPose(str_M_I_U_80420e1c);
+    marioChgPaper(str_PM_R_1B_802c4258);
+    *(u32*)((s32)mario + 4) |= 8;
+    *(u32*)((s32)mario + 4) |= 0x100;
 }
 
-
 s32 marioRollCancel(void) {
-    return 0;
+    extern void* marioGetPtr(void);
+    extern void* camGetPtr(s32 camId);
+    void* mario = marioGetPtr();
+
+    if (!(*(u32*)mario & 0x1000000)) {
+        return 0;
+    }
+    if (*(u32*)((s32)mario + 0x2BC) & 0x200) {
+        return 0;
+    }
+    *(s32*)((s32)mario + 0x44) = 0x14;
+    *(u16*)camGetPtr(8) |= 0x200;
+    return 1;
 }
 
 
 u8 roll_upstairs(void) {
-    return 0;
+    extern void* marioGetPtr(void);
+    void* mario = marioGetPtr();
+
+    *(f32*)((s32)mario + 0x90) += *(f32*)((s32)mario + 0x7C);
+    if (--*(s32*)((s32)mario + 0x48) <= 0) {
+        *(u32*)mario &= ~0x80;
+        *(u32*)mario &= ~0x40;
+        *(u32*)mario &= ~0x40000;
+    }
 }
 
 s32 unk_800a1454(void) {

@@ -34,13 +34,18 @@ void effLaserDisp(s32 cameraId, void* entry) {
     s32 poseId = *(s32*)((s32)work + 0x20);
     void* cam;
     f32 scale;
+    f32 angle;
+    f32 deg;
 
     if (poseId != -1) {
         PSMTXTrans(trans, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
         scale = *(f32*)((s32)work + 0x1C);
         PSMTXScale(scaleMtx, scale, scale, scale);
         cam = camGetPtr(cameraId);
-        PSMTXRotRad(rot, 0x79, float_deg2rad_80428950 * -(*(f32*)((s32)cam + 0x114)));
+        angle = *(f32*)((s32)cam + 0x114);
+        angle = -angle;
+        deg = float_deg2rad_80428950;
+        PSMTXRotRad(rot, 0x79, deg * angle);
         PSMTXConcat(trans, rot, trans);
         PSMTXConcat(trans, scaleMtx, trans);
 
@@ -55,6 +60,7 @@ void effLaserDisp(s32 cameraId, void* entry) {
         animPoseDrawMtx(*(s32*)((s32)work + 0x20), trans, float_0_80428954, 3, float_10_80428958);
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

@@ -309,33 +309,265 @@ u8 mapPlayAnimationLv(char* param_1, int param_2, int param_3) {
 }
 
 
-u8 bmapUnLoad(void) {
-    return 0;
-}
+void bmapUnLoad(void) {
+    extern void sysWaitDrawSync(void);
+    extern void _mapFree(void* heap, void* ptr);
+    extern void* _mapAllocTail(void* heap, u32 size);
+    extern void hitReInit(void);
+    extern void lightReInit(void);
+    extern void envReInit(void);
+    extern s32 arcDataCheck(u32 ptr);
+    extern void strncpy(char* dst, const char* src, u32 n);
+    extern void arcDelete(s32 type);
+    extern void arcEntry(s32 type, void* data, u32 size);
+    extern void aramMgrToMram(void* aram, void* mram);
+    extern void makeDisplayList(s32 index);
+    extern void* mapWork;
+    extern s32 activeGroup;
+    extern s32 unk_8041e678;
+    extern void* mapalloc_base_ptr;
+    extern char float_0_8041f9ac[];
+    void* group;
+    void* work;
+    void* entry;
+    s32 i;
 
+    sysWaitDrawSync();
+    work = mapWork;
+    activeGroup = 1;
+    group = (void*)((s32)work + 0x2F4);
+
+    entry = group;
+    for (i = 0; i < *(s32*)group; i++, entry = (void*)((s32)entry + 0x178)) {
+        if (*(void**)((s32)entry + 0x154) != NULL) {
+            _mapFree(mapalloc_base_ptr, *(void**)((s32)entry + 0x154));
+            *(s32*)((s32)entry + 0x150) = 0;
+            *(void**)((s32)entry + 0x154) = NULL;
+        }
+        if (*(void**)((s32)entry + 0x164) != NULL) {
+            _mapFree(mapalloc_base_ptr, *(void**)((s32)entry + 0x164));
+            *(s32*)((s32)entry + 0x160) = 0;
+            *(void**)((s32)entry + 0x164) = NULL;
+        }
+        if (*(void**)((s32)entry + 0x16C) != NULL) {
+            _mapFree(mapalloc_base_ptr, *(void**)((s32)entry + 0x16C));
+            *(void**)((s32)entry + 0x16C) = NULL;
+            *(s32*)((s32)entry + 0x168) = 0;
+        }
+    }
+
+    unk_8041e678 = 0;
+    hitReInit();
+    lightReInit();
+    envReInit();
+
+    entry = group;
+    for (i = 0; i < *(s32*)group; i++, entry = (void*)((s32)entry + 0x178)) {
+        if (*(void**)((s32)entry + 0x7C) != NULL) {
+            if (arcDataCheck((u32)*(void**)((s32)entry + 0x7C)) == 0) {
+                _mapFree(mapalloc_base_ptr, *(void**)((s32)entry + 0x7C));
+            }
+            *(void**)((s32)entry + 0x7C) = NULL;
+        }
+        if (*(void**)((s32)entry + 0x84) != NULL) {
+            if (arcDataCheck((u32)*(void**)((s32)entry + 0x84)) == 0) {
+                _mapFree(mapalloc_base_ptr, *(void**)((s32)entry + 0x84));
+            }
+            *(void**)((s32)entry + 0x84) = NULL;
+        }
+        if (*(void**)((s32)entry + 0x8C) != NULL) {
+            _mapFree(mapalloc_base_ptr, *(void**)((s32)entry + 0x8C));
+            *(void**)((s32)entry + 0x8C) = NULL;
+        }
+        strncpy((char*)((s32)entry + 0x6), float_0_8041f9ac, 0x10);
+    }
+
+    arcDelete(1);
+    arcDelete(2);
+    memset(group, 0, 0x2F4);
+
+    activeGroup = 0;
+    entry = work;
+    for (i = 0; i < *(s32*)work; i++, entry = (void*)((s32)entry + 0x178)) {
+        if (*(void**)((s32)entry + 0x170) != NULL) {
+            *(void**)((s32)entry + 0x7C) = _mapAllocTail(mapalloc_base_ptr, *(u32*)((s32)entry + 0x80));
+            *(void**)((s32)entry + 0x84) = _mapAllocTail(mapalloc_base_ptr, *(u32*)((s32)entry + 0x88));
+            aramMgrToMram(*(void**)((s32)entry + 0x170), *(void**)((s32)entry + 0x7C));
+            aramMgrToMram(*(void**)((s32)entry + 0x178), *(void**)((s32)entry + 0x84));
+            *(void**)((s32)entry + 0x170) = NULL;
+            *(void**)((s32)entry + 0x178) = NULL;
+        } else {
+            *(void**)((s32)entry + 0x8C) = _mapAllocTail(mapalloc_base_ptr, *(u32*)((s32)entry + 0x90));
+            aramMgrToMram(*(void**)((s32)entry + 0x174), *(void**)((s32)entry + 0x8C));
+            *(void**)((s32)entry + 0x174) = NULL;
+        }
+        makeDisplayList(i);
+    }
+
+    if (*(void**)((s32)work + 0x8C) != NULL) {
+        arcEntry(1, *(void**)((s32)work + 0x8C), *(u32*)((s32)work + 0x90));
+    }
+}
 
 u8 makeDisplayList(int param_1) {
     return 0;
 }
 
 
-u8 mapObjSetFlushColor(char* param_1, u8 param_2, u8 param_3, u8 param_4, u8 param_5) {
-    return 0;
+void mapObjSetFlushColor(char* name, u8 r, u8 g, u8 b, u8 a) {
+    extern void* mapGetMapObj(char* name);
+    extern void mapErrorEntry(s32 type, char* message);
+    void* obj;
+    u32 color;
+
+    color = 0;
+    *((u8*)&color + 0) = r;
+    *((u8*)&color + 1) = g;
+    *((u8*)&color + 2) = b;
+    *((u8*)&color + 3) = a;
+
+    obj = mapGetMapObj(name);
+    if (obj != NULL) {
+        *(u32*)((s32)obj + 0xC) = color;
+        *(u32*)obj |= 0x40;
+    }
+
+    obj = mapGetMapObj(name);
+    if (obj == NULL) {
+        mapErrorEntry(0, name);
+    } else {
+        *(u32*)obj &= ~0x40;
+    }
 }
 
+void mapSetPolygonVtxDesc(int obj, int poly) {
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 cnt, s32 type, s32 frac);
+    extern void GXSetArray(s32 attr, void* base, s32 stride);
+    extern s32 activeGroup;
+    extern void* mapWork;
+    void* group;
+    void* vcd;
+    void* arrays;
+    u32 flags;
+    s32 i;
+    s32 offset;
 
-u8 mapSetPolygonVtxDesc(int param_1, int param_2) {
-    return 0;
+    arrays = *(void**)((s32)poly + 0xC);
+    flags = *(u32*)((s32)poly + 0x8);
+    group = (void*)((s32)mapWork + activeGroup * 0x2F4);
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 3);
+    vcd = *(void**)((s32)group + (*(s16*)((s32)obj + 0xDE) * 0x178) + 0xA4);
+    GXSetVtxAttrFmt(0, 9, 1, 3, *(u32*)((s32)vcd + 0x44) & 0xFF);
+    GXSetArray(9, (void*)(*(s32*)arrays + 4), 6);
+
+    GXSetVtxDesc(0xA, 3);
+    GXSetVtxAttrFmt(0, 0xA, 0, 1, 6);
+    GXSetArray(0xA, (void*)(*(s32*)((s32)arrays + 4) + 4), 3);
+
+    offset = 0;
+    for (i = 0; i < 2; i++, offset += 4) {
+        if ((flags & (1 << (i + 2))) == 0) {
+            break;
+        }
+        GXSetVtxDesc(0xB, 3);
+        GXSetVtxAttrFmt(0, 0xB, 1, 5, 0);
+        GXSetArray(0xB, (void*)(*(s32*)((s32)arrays + offset + 0xC) + 4), 4);
+    }
+
+    offset = 0;
+    for (i = 0; i < 8; i++, offset += 4) {
+        if ((flags & (1 << (i + 4))) == 0) {
+            break;
+        }
+        GXSetVtxDesc(i + 0xD, 3);
+        vcd = *(void**)((s32)group + (*(s16*)((s32)obj + 0xDE) * 0x178) + 0xA4);
+        GXSetVtxAttrFmt(0, i + 0xD, 1, 3, *(u32*)((s32)vcd + offset + 0x48) & 0xFF);
+        GXSetArray(i + 0xD, (void*)(*(s32*)((s32)arrays + offset + 0x18) + 4), 4);
+    }
 }
-
 
 void mapGetBoundingBox(void* pMin, void* pMax) {
 }
 
 
 void mapUnLoad(void) {
-}
+    extern void sysWaitDrawSync(void);
+    extern void _mapFree(void* heap, void* ptr);
+    extern void hitReInit(void);
+    extern void lightReInit(void);
+    extern void envReInit(void);
+    extern void camUnLoadRoad(s32 cameraId);
+    extern void camSetTypePersp(s32 cameraId);
+    extern s32 arcDataCheck(u32 ptr);
+    extern void strncpy(char* dst, const char* src, u32 n);
+    extern void arcDelete(s32 type);
+    extern void* mapWork;
+    extern s32 activeGroup;
+    extern s32 unk_8041e678;
+    extern void* mapalloc_base_ptr;
+    extern char float_0_8041f9ac[];
+    void* work;
+    void* entry;
+    s32 i;
 
+    sysWaitDrawSync();
+    work = mapWork;
+    activeGroup = 0;
+
+    entry = work;
+    for (i = 0; i < *(s32*)work; i++, entry = (void*)((s32)entry + 0x178)) {
+        if (*(void**)((s32)entry + 0x154) != NULL) {
+            _mapFree(mapalloc_base_ptr, *(void**)((s32)entry + 0x154));
+            *(s32*)((s32)entry + 0x150) = 0;
+            *(void**)((s32)entry + 0x154) = NULL;
+        }
+        if (*(void**)((s32)entry + 0x164) != NULL) {
+            _mapFree(mapalloc_base_ptr, *(void**)((s32)entry + 0x164));
+            *(s32*)((s32)entry + 0x160) = 0;
+            *(void**)((s32)entry + 0x164) = NULL;
+        }
+        if (*(void**)((s32)entry + 0x16C) != NULL) {
+            _mapFree(mapalloc_base_ptr, *(void**)((s32)entry + 0x16C));
+            *(void**)((s32)entry + 0x16C) = NULL;
+            *(s32*)((s32)entry + 0x168) = 0;
+        }
+    }
+
+    unk_8041e678 = 0;
+    hitReInit();
+    lightReInit();
+    envReInit();
+    camUnLoadRoad(4);
+    camSetTypePersp(4);
+
+    entry = work;
+    for (i = 0; i < *(s32*)work; i++, entry = (void*)((s32)entry + 0x178)) {
+        if (*(void**)((s32)entry + 0x7C) != NULL) {
+            if (arcDataCheck((u32)*(void**)((s32)entry + 0x7C)) == 0) {
+                _mapFree(mapalloc_base_ptr, *(void**)((s32)entry + 0x7C));
+            }
+            *(void**)((s32)entry + 0x7C) = NULL;
+        }
+        if (*(void**)((s32)entry + 0x84) != NULL) {
+            if (arcDataCheck((u32)*(void**)((s32)entry + 0x84)) == 0) {
+                _mapFree(mapalloc_base_ptr, *(void**)((s32)entry + 0x84));
+            }
+            *(void**)((s32)entry + 0x84) = NULL;
+        }
+        if (*(void**)((s32)entry + 0x8C) != NULL) {
+            _mapFree(mapalloc_base_ptr, *(void**)((s32)entry + 0x8C));
+            *(void**)((s32)entry + 0x8C) = NULL;
+        }
+        strncpy((char*)((s32)entry + 0x6), float_0_8041f9ac, 0x10);
+    }
+
+    arcDelete(1);
+    memset(work, 0, 0x2F4);
+}
 
 u8 mapObjRotate(s64 x, s64 y, s64 z, s32 pName) {
     return 0;
@@ -637,8 +869,20 @@ void mapErrorEntry(s32 type, char* message) {
 }
 
 void mapLoad(char* name) {
-}
+    extern void sysWaitDrawSync(void);
+    extern void* memset(void*, s32, u32);
+    extern void _mapLoad(void*, int, char*);
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    void* work;
 
+    sysWaitDrawSync();
+    work = (void*)mapWork;
+    activeGroup = 0;
+    memset(work, 0, 0x2F4);
+    _mapLoad(work, 0, name);
+    *(s32*)work = 1;
+}
 
 void mapReStartAnimationAll(void) {
     extern s32 activeGroup;
@@ -1153,9 +1397,74 @@ u8 mapBuildTexture(void* param_1, int param_2, int* param_3) {
 
 
 int mapSetLight(void* param_1, void** param_2) {
-    return 0;
-}
+    extern void PSMTXMultVec(void* mtx, void* src, void* dst);
+    extern int lightGetNearObj(void* pos, void** dst, int count, int flags);
+    extern u16* lightNameToPtr(char* name);
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    f32 pos[3];
+    void* drawMode;
+    u16* light;
+    register int count;
+    register int i;
+    register void** out;
+    register int offset;
 
+    count = 0;
+    PSMTXMultVec((void*)((s32)param_1 + 0x1C), (void*)((s32)param_1 + 0x10), pos);
+    drawMode = *(void**)(*(s32*)((s32)param_1 + 8) + 0x58);
+    if ((*(u8*)((s32)drawMode + 2) & 8) != 0) {
+        if (*(u32*)((s32)drawMode + 4) == 0) {
+            count = lightGetNearObj(pos, param_2, 8, 0);
+        } else {
+            out = param_2;
+            i = 0;
+            offset = 0;
+            do {
+                if ((*(u32*)(*(s32*)(*(s32*)((s32)param_1 + 8) + 0x58) + 4) & (1 << i)) != 0) {
+                    void* table = *(void**)(mapWork + activeGroup * 0x2F4 + *(s16*)((s32)param_1 + 0xDE) * 0x178 + 0x98);
+                    light = lightNameToPtr(*(char**)*(s32*)((s32)table + offset + 4));
+                    if ((*light & 0x8000) == 0) {
+                        count++;
+                        *out = light;
+                        out++;
+                        if (count >= 8) {
+                            break;
+                        }
+                    }
+                }
+                i++;
+                offset += 4;
+            } while (i < 0x20);
+            if (count < 8) {
+                count += lightGetNearObj(pos, param_2 + count, 8 - count, 0);
+            }
+        }
+    } else {
+        if (*(u32*)((s32)drawMode + 4) != 0) {
+            i = 0;
+            out = param_2;
+            offset = 0;
+            do {
+                if ((*(u32*)(*(s32*)(*(s32*)((s32)param_1 + 8) + 0x58) + 4) & (1 << i)) != 0) {
+                    void* table = *(void**)(mapWork + activeGroup * 0x2F4 + *(s16*)((s32)param_1 + 0xDE) * 0x178 + 0x98);
+                    light = lightNameToPtr(*(char**)*(s32*)((s32)table + offset + 4));
+                    if ((*light & 0x8000) == 0) {
+                        count++;
+                        *out = light;
+                        out++;
+                        if (count >= 8) {
+                            break;
+                        }
+                    }
+                }
+                i++;
+                offset += 4;
+            } while (i < 0x20);
+        }
+    }
+    return count;
+}
 
 void _mapDispMapObj_NoMaterial(s32 param_1, void* param_2) {
 }

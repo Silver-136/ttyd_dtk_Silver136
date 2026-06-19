@@ -280,6 +280,24 @@ s32 evt_item_set_move_dir_speed(void* pEvt) {
     return 2;
 }
 
-s32 evt_item_change_mode(int param_1) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_item_change_mode(void* pEvt) {
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* itemNameToPtr(s32 name);
+    extern void itemModeChange(void* item, u16 mode);
+    void* event = pEvt;
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name = evtGetValue(event, args[0]);
+    s32 mode = evtGetValue(event, args[1]);
+    void* item = itemNameToPtr(name);
+
+    if (item == 0) {
+        return 2;
+    }
+    itemModeChange(item, mode);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+

@@ -337,3 +337,18 @@ u8 cloud_move(void* pParty) {
         }
     }
 }
+
+void unk_80187d10(void* party) {
+    extern f32 revise360(f32 angle);
+    extern f64 sin(f64 x);
+    f32 angle;
+    f32 s;
+    f32 three;
+
+    angle = revise360(*(f32*)((s32)party + 0x17C) - *(f32*)((s32)party + 0x180));
+    *(f32*)((s32)party + 0x17C) = angle;
+    angle = *(f32*)((s32)party + 0x17C);
+    s = (f32)sin((float_3p1416_80424350 * angle) / float_180_804242e8);
+    three = float_3_80424354;
+    *(f32*)((s32)party + 0x80) = (three * s) + three;
+}

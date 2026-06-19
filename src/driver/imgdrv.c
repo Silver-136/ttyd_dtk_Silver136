@@ -139,11 +139,16 @@ s32 imgCapture(s32 layer) {
     extern void* wp;
     extern void* gp;
     extern void imgCapture_Prim(void* img, s32 index);
-    s32 flag = *(s32*)((s32)gp + 0x14);
-    s32 localFlag = ((u32)(-flag) | (u32)flag) >> 31;
-    s32 count = *(s32*)wp;
-    void* entry = *(void**)((s32)wp + 4);
     s32 i = 0;
+    s32 count;
+    void* entry;
+    s32 flag;
+    s32 localFlag;
+
+    flag = *(s32*)((s32)gp + 0x14);
+    count = *(s32*)wp;
+    entry = *(void**)((s32)wp + 4);
+    localFlag = ((u32)(-flag) | (u32)flag) >> 31;
 
     while (i < count) {
         if ((*(u32*)((s32)entry + 0xCC) & 1) != 0 &&
@@ -168,8 +173,8 @@ void* imgNameToPtr(s32 name, s32 flag) {
     extern void* wp;
     extern s32 strcmp(const char* a, const char* b);
     s32 count;
-    void* entry;
     s32 i;
+    void* entry;
 
     i = 0;
     count = *(s32*)wp;
@@ -189,6 +194,20 @@ void* imgNameToPtr(s32 name, s32 flag) {
     return entry;
 }
 
-u8 imgFreeCapture(int param_1, int param_2) {
-    return 0;
+void imgFreeCapture(void* img, s32 index) {
+    extern void smartFree(void* ptr);
+    s32 part = (s32)img + index * 0x44;
+    u32 flags = *(u32*)part;
+
+    if ((flags & 4) != 0) {
+        *(u32*)part = flags & ~0x10;
+        if ((*(u32*)part & 0x100) != 0) {
+            *(u32*)part = 0;
+        } else if (*(s32*)(part + 0x40) == 0) {
+            *(u32*)part = 0;
+        } else {
+            *(u32*)part = 0;
+            smartFree(*(void**)(part + 0x3C));
+        }
+    }
 }

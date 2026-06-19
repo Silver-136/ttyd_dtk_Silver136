@@ -82,6 +82,20 @@ void marioChgMotAuto(void) {
     }
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 marioChkDeepSleep(void) {
-    return 0;
+    extern void* marioGetPtr(void);
+    extern s32 sysMsec2Frame(s32 msec);
+    register s32 result = 0;
+    void* mario = marioGetPtr();
+
+    if (*(u16*)((s32)mario + 0x2E) == 0) {
+        if (*(s32*)((s32)mario + 0x2B4) >= sysMsec2Frame(10000)) {
+            result = 1;
+        }
+    }
+    return result;
 }
+#pragma no_register_save_helpers off
+

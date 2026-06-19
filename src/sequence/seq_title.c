@@ -430,6 +430,8 @@ void disp2(s32 cameraId) {
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void disp1(s32 cameraId) {
     void* cam8;
     void* cam;
@@ -450,8 +452,15 @@ void disp1(s32 cameraId) {
     cam8 = camGetPtr(8);
 
     cam = camGetPtr(cameraId);
-    for (i = 0; i < 0x98; i++) {
-        camBackup[i] = ((u32*)cam)[i];
+    copySrc = (u32*)((s32)cam - 4);
+    copyDst = (u32*)((s32)camBackup - 4);
+    for (i = 0; i < 0x4C; i++) {
+        copyA = copySrc[1];
+        copySrc += 2;
+        copyB = copySrc[0];
+        copyDst[1] = copyA;
+        copyDst += 2;
+        copyDst[0] = copyB;
     }
 
     cam = camGetPtr(cameraId);
@@ -515,6 +524,8 @@ void disp1(s32 cameraId) {
         viewportBackup[5]
     );
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

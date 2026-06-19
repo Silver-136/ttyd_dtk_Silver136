@@ -81,3 +81,13 @@ void winMarioInit2(void* pWin) {
     *(s32*)((s32)pWin + 0x190) = 0;
     *(s32*)((s32)pWin + 0x194) = 0;
 }
+
+char* unk_801703e8(s32 value, s32 width) {
+    extern const char str_PCTPCT0PCTdd_802f6688[];
+    extern char unk_803e5f78[];
+    char buffer[0x100];
+
+    sprintf(buffer, str_PCTPCT0PCTdd_802f6688, width);
+    sprintf(unk_803e5f78, buffer, value);
+    return unk_803e5f78;
+}

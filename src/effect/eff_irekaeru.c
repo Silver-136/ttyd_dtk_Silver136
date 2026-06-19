@@ -33,8 +33,9 @@ void effIrekaeruDisp(s32 cameraId, void* effect) {
         PSMTXScale(scaleMtx, *(f32*)((s32)work + 0x10), *(f32*)((s32)work + 0x10), *(f32*)((s32)work + 0x10));
         cam = camGetPtr(cameraId);
         angle = *(f32*)((s32)cam + 0x114);
+        angle = -angle;
         deg = float_deg2rad_8042819c;
-        PSMTXRotRad(rotMtx, 0x79, deg * -angle);
+        PSMTXRotRad(rotMtx, 0x79, deg * angle);
         PSMTXConcat(transMtx, rotMtx, transMtx);
         PSMTXConcat(transMtx, scaleMtx, transMtx);
         animPoseSetMaterialFlagOn(*(s32*)((s32)work + 0x14), 0x40);
@@ -48,6 +49,7 @@ void effIrekaeruDisp(s32 cameraId, void* effect) {
         animPoseDrawMtx(*(s32*)((s32)work + 0x14), transMtx, 3, float_0_804281a0, float_2_804281a4);
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

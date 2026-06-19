@@ -163,12 +163,12 @@ u8 msgInit(void) {
 }
 
 char* msgGetCommand(char* param_1, char* param_2, char* param_3) {
-    char c;
+    s8 c;
     s32 mode = 0;
     s32 i;
 
     for (i = 0; i < 0x80; i++) {
-        c = *param_1;
+        c = *(s8*)param_1;
         switch (c) {
             case '>':
                 if (mode == 0) {

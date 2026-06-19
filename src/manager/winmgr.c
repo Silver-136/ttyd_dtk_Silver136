@@ -457,3 +457,16 @@ s32 unk_8023f8d0(void* event, s32 isFirstCall) {
     evtSetValue(event, args[0], 0);
     return 2;
 }
+
+s32 unk_8023d59c(void* a, void* b) {
+    u16 ai = *(u16*)((s32)a + 2);
+    u16 bi = *(u16*)((s32)b + 2);
+    s16* values = (s16*)(itemDataTable + 0x12);
+    s32 av = *(s16*)((s32)values + ai * 0x28);
+    s32 bv = *(s16*)((s32)values + bi * 0x28);
+
+    if (av > bv) {
+        return 1;
+    }
+    return av < bv ? -1 : 0;
+}

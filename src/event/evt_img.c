@@ -233,21 +233,59 @@ s32 evt_img_set_paper_timerate(void* event) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-s32 evt_img_wait_animend(int param_1, int param_2) {
-    return 0;
+s32 evt_img_wait_animend(void* event, s32 isFirstCall) {
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* imgNameToPtr(s32 name, s32 flag);
+    extern void* gp;
+    extern f32 float_1_80420360;
+    s32* args = *(s32**)((s32)event + 0x18);
+    void* img = imgNameToPtr(evtGetValue(event, args[0]), ((u32)(-*(s32*)((s32)gp + 0x14)) | (u32)*(s32*)((s32)gp + 0x14)) >> 31);
+
+    if (isFirstCall != 0) {
+        return 0;
+    }
+    if (*(f32*)((s32)img + 0x118) < float_1_80420360) {
+        return 0;
+    }
+    return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_img_free_capture(void* event) {
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* imgNameToPtr(s32 name, s32 flag);
+    extern void imgFreeCapture(void* img, s32 capture);
+    extern void* gp;
+    s32* args = *(s32**)((s32)event + 0x18);
+    s32 name = evtGetValue(event, args[0]);
+    s32 capture = evtGetValue(event, args[1]);
+    s32 flag = *(s32*)((s32)gp + 0x14);
 
-s32 evt_img_free_capture(int param_1) {
-    return 0;
+    imgFreeCapture(imgNameToPtr(name, ((u32)(-flag) | (u32)flag) >> 31), capture);
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+s32 evt_img_release(void* event) {
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* imgNameToPtr(s32 name, s32 flag);
+    extern void imgRelease(void* img, s32 flag);
+    extern void* gp;
+    s32* args = *(s32**)((s32)event + 0x18);
+    void* img = imgNameToPtr(evtGetValue(event, args[0]), ((u32)(-*(s32*)((s32)gp + 0x14)) | (u32)*(s32*)((s32)gp + 0x14)) >> 31);
+    imgRelease(img, ((u32)(-*(s32*)((s32)gp + 0x14)) | (u32)*(s32*)((s32)gp + 0x14)) >> 31);
+    return 2;
 }
 
+s32 evt_img_clear_virtual_point(void* event) {
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* imgNameToPtr(s32 name, s32 flag);
+    extern void imgClearVirtualPoint(void* img);
+    extern void* gp;
+    s32* args = *(s32**)((s32)event + 0x18);
 
-s32 evt_img_release(int param_1) {
-    return 0;
-}
-
-
-s32 evt_img_clear_virtual_point(int param_1) {
-    return 0;
+    imgClearVirtualPoint(imgNameToPtr(evtGetValue(event, args[0]), ((u32)(-*(s32*)((s32)gp + 0x14)) | (u32)*(s32*)((s32)gp + 0x14)) >> 31));
+    return 2;
 }

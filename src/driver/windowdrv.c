@@ -128,8 +128,8 @@ void windowTexSetup(void) {
     char path[128];
     void* entry;
     u32 length;
-    u32 offset;
     u32 i;
+    u32 offset;
 
     winTpl = NULL;
     unk_8041ea1c = 0;
@@ -144,7 +144,7 @@ void windowTexSetup(void) {
     } else {
         UnpackTexPalette(winTpl);
         wakuTexObj = __memAlloc(0, *(u32*)((s32)winTpl + 4) << 5);
-        for (i = 0, offset = 0; i < *(u32*)((s32)winTpl + 4); i++, offset += 0x20) {
+        for (i = 0, offset = 0; i < *(u32*)((s32)winTpl + 4); offset += 0x20, i++) {
             TEXGetGXTexObjFromPalette(winTpl, (void*)((s32)wakuTexObj + offset), i);
         }
     }
@@ -189,4 +189,3 @@ void unk_8007fcf0(void* param_1, void* param_2) {
     }
     unk_8041ea1c = 1;
 }
-

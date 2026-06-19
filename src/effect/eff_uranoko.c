@@ -33,13 +33,18 @@ void effUranokoDisp(s32 cameraId, void* entry) {
     s32 poseId = *(s32*)((s32)work + 0x20);
     void* cam;
     f32 scale;
+    f32 angle;
+    f32 deg;
 
     if (poseId != -1) {
         PSMTXTrans(trans, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
         scale = *(f32*)((s32)work + 0x10) * *(f32*)((s32)work + 0x14);
         PSMTXScale(scaleMtx, scale, scale, scale);
         cam = camGetPtr(cameraId);
-        PSMTXRotRad(rot, 0x79, float_deg2rad_804288c4 * -(*(f32*)((s32)cam + 0x114)));
+        angle = *(f32*)((s32)cam + 0x114);
+        angle = -angle;
+        deg = float_deg2rad_804288c4;
+        PSMTXRotRad(rot, 0x79, deg * angle);
         PSMTXConcat(trans, rot, trans);
         PSMTXConcat(trans, scaleMtx, trans);
 
@@ -54,6 +59,7 @@ void effUranokoDisp(s32 cameraId, void* entry) {
         animPoseDrawMtx(*(s32*)((s32)work + 0x20), trans, float_0_804288c8, 3, float_6_804288cc);
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

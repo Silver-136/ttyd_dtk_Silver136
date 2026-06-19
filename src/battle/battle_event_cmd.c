@@ -580,32 +580,42 @@ USER_FUNC(btlevtcmd_GetPartsPos) {
 
 
 USER_FUNC(btlevtcmd_SetPartsPos) {
-    BattleWorkUnit* unit;
-    f32 ux, uy, uz;
     s32* args;
+    BattleWorkUnit* unit;
     BattleWorkUnitPart* part;
+    s32 type;
     s32 id;
     s32 partId;
-    f32 x, y, z;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 ux;
+    f32 uy;
+    f32 uz;
 
     args = event->args;
-    id = BattleTransID(event, evtGetValue(event, args[0]));
+    type = evtGetValue(event, args[0]);
+    id = BattleTransID(event, type);
     partId = evtGetValue(event, args[1]);
     x = (f32)evtGetValue(event, args[2]);
     y = (f32)evtGetValue(event, args[3]);
     z = (f32)evtGetValue(event, args[4]);
+
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     part = BattleGetUnitPartsPtr(id, partId);
+
     if ((*(u32*)((s32)part + 0x1AC) & 0x10000000) != 0) {
         BtlUnit_SetPartsPos(part, x, y, z);
     } else {
         BtlUnit_GetPos(unit, &ux, &uy, &uz);
-        BtlUnit_SetPartsOffsetPos(part, x - ux, y - uy, z - uz);
+        x -= ux;
+        y -= uy;
+        z -= uz;
+        BtlUnit_SetPartsOffsetPos(part, x, y, z);
     }
 
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_AddPartsPos) {
     s32* args;

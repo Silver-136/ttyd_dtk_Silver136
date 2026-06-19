@@ -138,20 +138,70 @@ s32 marioShipChanging(void) {
 }
 
 u8 marioForceShipAnime(void) {
-    return 0;
+    extern void* marioGetPtr(void);
+    extern void marioPaperOff(void);
+    extern void marioChgPaper(void* paper);
+    extern s32 marioGetColor(void);
+    extern void marioPaperOn(void* paper);
+    extern void marioChgPose(void* pose);
+    extern void* paper_ship[4];
+    extern char str_PM_H_1B_802c42e0[];
+    extern char str_M_Z_1_80420f14[6];
+    void* mario = marioGetPtr();
+
+    marioPaperOff();
+    marioChgPaper(0);
+    marioPaperOn(paper_ship[marioGetColor()]);
+    marioChgPaper(str_PM_H_1B_802c42e0);
+    marioChgPose(str_M_Z_1_80420f14);
+    *(u32*)((s32)mario + 4) |= 8;
 }
 
-
 u8 marioShipForceStop(void) {
-    return 0;
+    extern void* marioGetPtr(void);
+    extern f32 float_0_80420eb8;
+    f32 zeroB;
+    f32 zeroA;
+    void* ship;
+
+    marioGetPtr();
+    zeroA = float_0_80420eb8;
+    ship = *(void**)((s32)marioGetPtr() + 0x294);
+    zeroB = float_0_80420eb8;
+    *(f32*)((s32)ship + 0x14) = zeroA;
+    *(f32*)((s32)*(void**)((s32)marioGetPtr() + 0x294) + 0x18) = zeroB;
 }
 
 
 s32 marioChkShipMoveMode(void) {
+    extern void* marioGetPtr(void);
+    void* mario = marioGetPtr();
+    s32 mode;
+
+    if (*(u16*)((s32)mario + 0x2E) != 0x19) {
+        return 0;
+    }
+    mode = *(s32*)((s32)mario + 0x44);
+    if (mode >= 0x32 && mode <= 0x34) {
+        return 1;
+    }
     return 0;
 }
 
-
 u8 marioShipChgFall(void) {
-    return 0;
+    extern void* marioGetPtr(void);
+    extern f32 float_neg0p1_80420eec;
+    extern f32 float_neg0p2_80420ef0;
+    extern f32 float_0p024_80420ef4;
+    extern f32 float_neg0p004_80420ef8;
+    void* mario = marioGetPtr();
+    u32 flags = *(u32*)mario;
+
+    if (!(flags & 0x20000)) {
+        *(u32*)mario = flags | 0x20000;
+        *(f32*)((s32)mario + 0x7C) = float_neg0p1_80420eec;
+        *(f32*)((s32)mario + 0x80) = float_neg0p2_80420ef0;
+        *(f32*)((s32)mario + 0x84) = float_0p024_80420ef4;
+        *(f32*)((s32)mario + 0x88) = float_neg0p004_80420ef8;
+    }
 }

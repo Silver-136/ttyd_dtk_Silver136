@@ -201,6 +201,19 @@ s32 _make_breath_weapon(void* pEvt) {
     return 2;
 }
 
-s32 _clauda_make_extra_work_area(int param_1) {
-    return 0;
+s32 _clauda_make_extra_work_area(void* evt) {
+    extern void* _battleWorkPointer;
+    extern s32 BattleTransID(void* evt, s32 id);
+    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
+    extern void* BattleAlloc(u32 size);
+    void* battleWork;
+    s32 id;
+    void* unit;
+
+    battleWork = _battleWorkPointer;
+    id = BattleTransID(evt, -2);
+    unit = BattleGetUnitPtr(battleWork, id);
+    *(void**)((s32)unit + 0x314) = BattleAlloc(0xC0);
+    return 2;
 }
+

@@ -153,3 +153,20 @@ s32 _check_at_dm_event_wait(void* evt) {
 
     return 2;
 }
+
+s32 unk_80113f1c(void* evt) {
+    s32* args;
+    void* battleWork;
+    s32 type;
+    void* unit;
+
+    args = *(s32**)((s32)evt + 0x18);
+    battleWork = _battleWorkPointer;
+    type = evtGetValue(evt, args[0]);
+    unit = BattleGetUnitPtr(battleWork, BattleTransID(evt, type));
+    if (unit != 0) {
+        *(u16*)((s32)unit + 0x1FE) |= 1;
+    }
+
+    return 2;
+}

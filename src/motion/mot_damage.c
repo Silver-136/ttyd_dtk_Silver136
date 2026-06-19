@@ -120,10 +120,25 @@ s32 marioWaitDamageReturnFall(void) {
 
 
 s32 gazigazi(void* pEvt) {
-    return 0;
+    void* mario = marioGetPtr();
+
+    *(s32*)((s32)pEvt + 0x9C) = (s32)*(f32*)((s32)mario + 0x8C);
+    *(s32*)((s32)pEvt + 0xA0) = (s32)*(f32*)((s32)mario + 0x2B8);
+    *(s32*)((s32)pEvt + 0xA4) = (s32)*(f32*)((s32)mario + 0x94);
+    return 2;
 }
 
 
 s32 marioChkDamageSink(void) {
+    extern void* marioGetPtr(void);
+    void* mario = marioGetPtr();
+    s32 state;
+
+    if (*(u16*)((s32)mario + 0x2E) == 0x1F) {
+        state = *(s32*)((s32)mario + 0x44);
+        if (state >= 0 && state < 10) {
+            return 1;
+        }
+    }
     return 0;
 }

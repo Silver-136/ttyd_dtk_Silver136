@@ -23,10 +23,6 @@ u8 seq_logoInit(void) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 void dummy_draw(void) {
     extern s32 OSGetProgressiveMode(void);
     extern u16 GXGetYScaleFactor(u16 efbHeight, u16 xfbHeight);
@@ -57,12 +53,6 @@ void dummy_draw(void) {
     GXSetScissor(0, 0, 0x260, 0x1E0);
     GXSetViewport(float_0_80420824, float_0_80420824, float_608_80420828, float_480_8042082c, float_0_80420824, float_1_80420818);
 }
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

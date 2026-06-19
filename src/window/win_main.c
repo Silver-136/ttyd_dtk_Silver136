@@ -8,6 +8,7 @@ void statusWinForceOff(void);
 void allPartyForceSlitOff(void);
 void winRootDisp(s32 cameraId, void* work);
 s32 evtSetValue(void* evt, s32 var, s32 value);
+s32 evtGetValue(void* evt, s32 var);
 s32 evtCheckID(s32 id);
 s32 pouchGetPartyColor(s32 partyId);
 s32 evtEntry(void* script, s32 priority, s32 flags);
@@ -153,6 +154,22 @@ void winLectureOn(void) {
     *(u16*)wp |= 0x800;
     *(s32*)((s32)wp + 0x14) = 0;
     *(s32*)((s32)wp + 0x18) = evtEntry(evt_lecture_msg, 0, 0);
+}
+
+s32 unk_8017b864(void* evt, s32 flag) {
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 value = evtGetValue(evt, args[0]);
+    void* work;
+
+    if (flag != 0) {
+        *(u16*)wp &= ~0x800;
+    }
+    work = wp;
+    if (*(s32*)((s32)work + 0x14) < value) {
+        return 0;
+    }
+    *(u16*)work |= 0x800;
+    return 2;
 }
 
 
@@ -314,5 +331,10 @@ void winFontSetLabel(void* position, void* scale, void* color, char* label) {
 #pragma use_lmw_stmw on
 
 u32 winGhostDiaryChk(void) {
-    return 0;
+    extern s32 seqGetSeq(void);
+
+    if (*(s32*)((s32)wp + 0x20) == 0x12D) {
+        return 1;
+    }
+    return seqGetSeq() == 5;
 }

@@ -99,10 +99,42 @@ void mot_plane_post(void) {
 }
 
 u8 marioForcePlaneAnime(void) {
-    return 0;
+    extern void* marioGetPtr(void);
+    extern void marioPaperOff(void);
+    extern void marioChgPaper(void* paper);
+    extern s32 marioGetColor(void);
+    extern void marioPaperOn(void* paper);
+    extern void marioChgPose(void* pose);
+    extern void* paper_plane[4];
+    extern char str_PM_P_1B_802c4180[];
+    extern char str_M_Z_1_80420d88[6];
+    void* mario = marioGetPtr();
+
+    marioPaperOff();
+    marioChgPaper(0);
+    marioPaperOn(paper_plane[marioGetColor()]);
+    marioChgPaper(str_PM_P_1B_802c4180);
+    marioChgPose(str_M_Z_1_80420d88);
+    *(u32*)((s32)mario + 4) |= 8;
 }
 
-
 s32 mario_plane_cancel(void) {
-    return 0;
+    extern void* marioGetPtr(void);
+    void* mario = marioGetPtr();
+    s32 state;
+    s32 result;
+
+    if (*(u16*)((s32)mario + 0x2E) != 0x18) {
+        result = 0;
+    } else {
+        state = *(s32*)((s32)mario + 0x44);
+        if (state >= 0xC && state < 0x14) {
+            *(s32*)((s32)mario + 0x44) = 0x32;
+            *(f32*)((s32)mario + 0x2C4) = *(f32*)((s32)mario + 0x90);
+            result = 1;
+        } else {
+            result = 0;
+        }
+    }
+    return result;
 }

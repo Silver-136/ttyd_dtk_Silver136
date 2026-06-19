@@ -144,5 +144,23 @@ void mot_land(void) {
 }
 
 u8 marioPreJump(void) {
-    return 0;
+    extern void clear_hitobj_ride(void);
+    extern u8 marioSetJumpPara(void);
+    void* mario = marioGetPtr();
+    s32 x;
+    s32 y;
+
+    *(u32*)mario &= ~0x20000;
+    *(u32*)mario |= 0x10000;
+    *(s16*)((s32)mario + 0x50) = 0;
+    *(s16*)((s32)mario + 0x52) = 0;
+    *(s32*)((s32)mario + 0x1EC) = *(s32*)((s32)mario + 0x1E8);
+    clear_hitobj_ride();
+    marioSetJumpPara();
+    x = *(s32*)((s32)mario + 0x8C);
+    y = *(s32*)((s32)mario + 0x90);
+    *(s32*)((s32)mario + 0x11C) = x;
+    *(s32*)((s32)mario + 0x120) = y;
+    *(s32*)((s32)mario + 0x124) = *(s32*)((s32)mario + 0x94);
+    *(f32*)((s32)mario + 0x190) = *(f32*)((s32)mario + 0x180);
 }

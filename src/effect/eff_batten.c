@@ -33,8 +33,9 @@ void effBattenDisp2(s32 cameraId, void* effect) {
         PSMTXScale(scaleMtx, *(f32*)((s32)work + 0x10), *(f32*)((s32)work + 0x10), *(f32*)((s32)work + 0x10));
         cam = camGetPtr(cameraId);
         angle = *(f32*)((s32)cam + 0x114);
+        angle = -angle;
         deg = float_deg2rad_80427ee8;
-        PSMTXRotRad(rotMtx, 0x79, deg * -angle);
+        PSMTXRotRad(rotMtx, 0x79, deg * angle);
         PSMTXConcat(mtx, rotMtx, mtx);
         PSMTXConcat(mtx, scaleMtx, mtx);
         PSMTXConcat(mtx, (f32(*)[4])((s32)work + 0x28), mtx);
@@ -49,6 +50,7 @@ void effBattenDisp2(s32 cameraId, void* effect) {
         animPoseDrawMtx(*(s32*)((s32)work + 0x24), mtx, 3, float_0_80427eec, float_2_80427ef0);
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

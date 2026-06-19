@@ -668,8 +668,8 @@ s32 evt_npc_set_autotalkpose(void* pEvt) {
     extern char* strcpy(char* dst, const char* src);
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 name = evtGetValue(pEvt, args[0]);
-    s32 stay = evtGetValue(pEvt, args[1]);
-    s32 talk = evtGetValue(pEvt, args[2]);
+    u32 stay = evtGetValue(pEvt, args[1]);
+    u32 talk = evtGetValue(pEvt, args[2]);
     void* npc = evtNpcNameToPtr(pEvt, name);
 
     if ((u32)((s32)npc + 0x10000) == 0xFFFD) {
@@ -684,7 +684,6 @@ s32 evt_npc_set_autotalkpose(void* pEvt) {
     }
     return 1;
 }
-
 
 s32 evt_npc_battle_start(void* pEvt, int param_2) {
     return 0;
@@ -1140,9 +1139,17 @@ void evt_npc_release_filednpc(void* pEvt) {
 
 
 s32 evt_npc_reverse_ry(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    extern f32 reviseAngle(f32 angle);
+    extern f32 float_180_8041fdb0;
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    void* npc = evtNpcNameToPtr(pEvt, name);
 
+    *(f32*)((s32)npc + 0x144) = reviseAngle(float_180_8041fdb0 + *(f32*)((s32)npc + 0x144));
+    return 2;
+}
 
 USER_FUNC(evt_npc_get_kpencount_type) {
     extern s32 evtGetValue(EventEntry* event, s32 value);
@@ -1157,7 +1164,14 @@ USER_FUNC(evt_npc_get_kpencount_type) {
 }
 
 u32 evt_npc_wait_pera(void* pEvt) {
-    return 0;
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    extern u32 animPoseGetPeraEnd(s32 poseId);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    void* npc = evtNpcNameToPtr(pEvt, name);
+
+    return animPoseGetPeraEnd(*(s32*)((s32)npc + 0x104)) != 0 ? 2 : 0;
 }
 
 
@@ -1178,13 +1192,27 @@ void evt_npc_restart_regular_event(void* pEvt) {
 
 
 s32 evt_npc_clear_paper(void* pEvt) {
-    return 0;
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    extern void animPoseSetPaperAnimGroup(s32 poseId, s32 anim, s32 enabled);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    void* npc = evtNpcNameToPtr(pEvt, name);
+
+    animPoseSetPaperAnimGroup(*(s32*)((s32)npc + 0x104), 0, 1);
+    return 2;
 }
 
+s32 evt_npc_return_interrupt(void* pEvt) {
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    void* npc = evtNpcNameToPtr(pEvt, name);
 
-void evt_npc_return_interrupt(void* pEvt) {
+    *(u32*)((s32)npc + 0x140) |= 0x10000000;
+    return 1;
 }
-
 
 s32 evt_npc_calc_score(void* pEvt) {
     return 0;

@@ -658,8 +658,89 @@ u8 disp_texture(void) {
 
 
 void zFill(void) {
-}
+    extern void* camGetCurPtr(void);
+    extern void GXInitTexObj(void* obj, void* image, u16 width, u16 height, s32 format, s32 wrapS, s32 wrapT, s32 mipmap);
+    extern void GXSetZTexture(s32 op, s32 fmt, u32 bias);
+    extern void GXSetColorUpdate(s32 enable);
+    extern void GXSetAlphaUpdate(s32 enable);
+    extern void PSMTXIdentity(void* mtx);
+    extern const f32 float_6p2832_8041f7e8;
+    extern const f32 float_360_8041f7ec;
+    extern const f32 float_neg10000_8041f7f0;
+    extern const u8 depth_image_995[];
 
+    void* cam;
+    u8 texObj[0x20];
+    f32 mtx[3][4];
+    f32 halfDepth;
+    f32 width;
+    f32 height;
+    f32 angle;
+    f32 farX;
+    f32 negFarX;
+    f32 negHalfDepth;
+
+    cam = camGetCurPtr();
+    angle = (float_6p2832_8041f7e8 * *(f32*)((s32)cam + 0x38)) / float_360_8041f7ec;
+    halfDepth = (*(f32*)((s32)cam + 0x30) + *(f32*)((s32)cam + 0x34)) * float_0p5_8041f7c0;
+    halfDepth *= (f32)tan(float_0p5_8041f7c0 * angle);
+    farX = halfDepth * *(f32*)((s32)cam + 0x3C);
+    negHalfDepth = -halfDepth;
+    negFarX = -farX;
+
+    GXInitTexObj(texObj, (void*)depth_image_995, 4, 4, 0x11, 1, 1, 0);
+    GXLoadTexObj(texObj, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevOp(0, 4);
+    GXSetZTexture(2, 0x11, 0);
+    GXSetNumChans(0);
+    GXSetAlphaCompare(7, 0, 1, 7, 0);
+    GXSetZCompLoc(1);
+    GXSetBlendMode(2, 1, 0, 3);
+    GXSetZMode(1, 7, 1);
+    GXSetColorUpdate(0);
+    GXSetAlphaUpdate(0);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 0, 0);
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    PSMTXIdentity(mtx);
+    GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
+    GXSetCurrentMtx(0);
+    GXBegin(0x80, 0, 4);
+
+    FIFO_F32_FADE = negFarX;
+    FIFO_F32_FADE = halfDepth;
+    FIFO_F32_FADE = READ_F32_FADE(float_neg10000_8041f7f0);
+    *(volatile u8*)0xCC008000 = 0;
+    *(volatile u8*)0xCC008000 = 0;
+
+    FIFO_F32_FADE = farX;
+    FIFO_F32_FADE = halfDepth;
+    FIFO_F32_FADE = READ_F32_FADE(float_neg10000_8041f7f0);
+    *(volatile u8*)0xCC008000 = 1;
+    *(volatile u8*)0xCC008000 = 0;
+
+    FIFO_F32_FADE = farX;
+    FIFO_F32_FADE = negHalfDepth;
+    FIFO_F32_FADE = READ_F32_FADE(float_neg10000_8041f7f0);
+    *(volatile u8*)0xCC008000 = 1;
+    *(volatile u8*)0xCC008000 = 1;
+
+    FIFO_F32_FADE = negFarX;
+    FIFO_F32_FADE = negHalfDepth;
+    FIFO_F32_FADE = READ_F32_FADE(float_neg10000_8041f7f0);
+    *(volatile u8*)0xCC008000 = 0;
+    *(volatile u8*)0xCC008000 = 1;
+
+    GXSetZTexture(0, 0x11, 0);
+    GXSetColorUpdate(1);
+}
 
 void fadeInit(void) {
     void* work;

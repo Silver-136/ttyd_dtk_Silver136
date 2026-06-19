@@ -210,9 +210,24 @@ s32 unitwin_setpartylank(void* pEvt) {
 
 
 s32 evt_unitwin_main_func(void* pEvt) {
+    extern f32 float_1000_80423f3c;
+    extern void dispEntry(s32 cameraId, s32 order, void* callback, f32 priority);
+    extern void evt_unitwin_disp_func(s32 param_1, void* param_2);
+    void* work = *(void**)((s32)pEvt + 0x9C);
+    u16 flags = *(u16*)((s32)work + 0x54);
+
+    if ((flags & 1) != 0) {
+        *(u16*)((s32)work + 0x54) = flags | 2;
+        return 2;
+    }
+    if (*(s32*)((s32)work + 0x28) > 0) {
+        *(s32*)((s32)work + 0x28) = *(s32*)((s32)work + 0x28) - 1;
+    } else {
+        *(u16*)work = *(u16*)work & ~1;
+    }
+    dispEntry(8, 0, evt_unitwin_disp_func, float_1000_80423f3c);
     return 0;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -263,9 +278,23 @@ s32 unitwin_getpartylank(void* pEvt) {
 
 
 u32 unitwincoin_wait(void) {
-    return 0;
+    extern s32 pouchGetCoin(void);
+    void* work;
+    s32 coin;
+    s32 stored;
+    s32 result;
+
+    work = _wp;
+    pouchGetPtr();
+    coin = pouchGetCoin();
+    stored = *(s32*)((s32)work + 0x2C);
+    result = (stored - coin) | (coin - stored);
+    result >>= 31;
+    return 2 & ~result;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 s32 unitwin_get_work_ptr(void* pEvt) {
     extern s32 evtSetValue(void* entry, s32 index, s32 value);
@@ -274,3 +303,54 @@ s32 unitwin_get_work_ptr(void* pEvt) {
     evtSetValue(pEvt, **(s32**)((s32)pEvt + 0x18), (s32)_wp);
     return 2;
 }
+
+s32 unk_8017abf8(void* pEvt) {
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 value = evtGetValue(pEvt, args[0]);
+    void* work = _wp;
+
+    if (value != 0) {
+        *(u16*)work |= 0x100;
+    } else {
+        *(u16*)work &= ~0x100;
+    }
+    return 2;
+}
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 unk_8017aba4(void* pEvt) {
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    void* work = (void*)evtGetValue(pEvt, args[0]);
+
+    *(s32*)((s32)work + 0xE4) = evtGetValue(pEvt, args[1]);
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void unk_8017b2b0(void* pWin) {
+    extern s32 winMgrAction(s32 winId);
+    extern char* msgSearch(s32 msgId);
+    extern void winMgrHelpDraw(void* pWin);
+    s32 index;
+    s32* itemTable;
+    void* work;
+    s32 item;
+    void* itemData;
+
+    work = _wp;
+    index = *(s32*)((s32)work + 0x24) << 2;
+    itemTable = *(s32**)((s32)work + 0x8);
+    if (winMgrAction(*(s32*)((s32)work + 0x64)) == 0) {
+        item = *(s32*)((s32)itemTable + index);
+        itemData = itemDataTable;
+        itemData = (void*)((s32)itemData + item * 0x28);
+        *(char**)((s32)pWin + 0x34) = msgSearch(*(s32*)((s32)itemData + 8));
+        winMgrHelpDraw(pWin);
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on

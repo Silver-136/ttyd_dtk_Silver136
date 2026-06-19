@@ -196,10 +196,11 @@ s32 evt_mobj_wait_animation_end(void* evt) {
 #pragma use_lmw_stmw on
 
 void kpa_disp_pole_score(void) {
+    f32 z = float_300_80420248;
     u32 color;
     f32 trans[12];
     f32 scale[12];
-    f32 z = float_300_80420248;
+
     PSMTXTrans(trans, *(f32*)((s32)psw + 8), *(f32*)((s32)psw + 0xC), z);
     PSMTXScale(scale, float_0p5_8042024c, float_0p5_8042024c, float_0p5_8042024c);
     PSMTXConcat(trans, scale, trans);
@@ -208,7 +209,6 @@ void kpa_disp_pole_score(void) {
     FontDrawColor(&color);
     FontDrawStringMtx(trans, psw);
 }
-
 
 u8 mobj_kururing_floor(void* pMobj) {
     return 0;
@@ -500,8 +500,41 @@ s32 evt_mobj_koopa_stone_blk(void* pEvt) {
 }
 
 
-s32 kpa_score_to_str(int param_1) {
-    return 0;
+s32 kpa_score_to_str(void* evt) {
+    extern s32 evtGetValue(void* evt, s32 value);
+    extern void* psw;
+    s32 score = evtGetValue(evt, **(s32**)((s32)evt + 0x18));
+    s32 thousands;
+    s32 rest;
+    s32 hundreds;
+    s32 tens;
+    s32 ones;
+    s32 pos = 0;
+
+    thousands = score / 1000;
+    rest = score % 1000;
+    hundreds = rest / 100;
+    rest = rest % 100;
+    tens = rest / 10;
+    ones = rest % 10;
+
+    if (pos != 0 || thousands != 0) {
+        *(u8*)((s32)psw + pos) = thousands + '0';
+        pos++;
+    }
+    if (pos != 0 || hundreds != 0) {
+        *(u8*)((s32)psw + pos) = hundreds + '0';
+        pos++;
+    }
+    if (pos != 0 || tens != 0) {
+        *(u8*)((s32)psw + pos) = tens + '0';
+        pos++;
+    }
+    if (pos != 0 || ones != 0) {
+        *(u8*)((s32)psw + pos) = ones + '0';
+    }
+    *(u8*)((s32)psw + 4) = 0;
+    return 2;
 }
 
 
@@ -515,9 +548,53 @@ s32 mobj_koopa_blk(u32* param_1) {
 }
 
 
-s32 evt_mobj_signboard(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma no_register_save_helpers on
+#pragma no_register_save_helpers on
+s32 evt_mobj_signboard(void* evt) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
+    extern void mobjEntry(s32 name, const char* kind);
+    extern void mobjSetPosition(s32 name, f32 x, f32 y, f32 z);
+    extern s32 mobj_signboard(void* mobj);
+    extern s32* gp;
+    extern const char str_MOBJ_Signboard_802c26e8[];
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = evtGetValue(evt, args[0]);
+    f32 x = evtGetFloat(evt, args[1]);
+    f32 y = evtGetFloat(evt, args[2]);
+    f32 z = evtGetFloat(evt, args[3]);
+    s32 script;
+    const char* kind;
+    s32 eventCode;
+    void* mobj;
+    s32 mode;
+
+    eventCode = evtGetValue(evt, args[4]);
+    kind = str_MOBJ_Signboard_802c26e8;
+    script = args[5];
+    mode = gp[5];
+    mode = ((u32)(-mode) | (u32)mode) >> 31;
+
+    if (animGroupBaseAsync(kind, mode, 0) == 0) {
+        return 0;
+    }
+    mobjEntry(name, kind);
+    mobj = mobjNameToPtr(name);
+    mobjSetPosition(name, x, y, z);
+    *(void**)((s32)mobj + 0x1D0) = mobj_signboard;
+    *(s32*)((s32)mobj + 0x1D4) = eventCode;
+    *(u32*)mobj |= 0x24;
+    *(u32*)mobj |= 0x40000;
+    *(s32*)((s32)mobj + 0x1E4) = script;
+    *(s32*)((s32)mobj + 0x1DC) = 0;
+    return 2;
 }
+#pragma no_register_save_helpers off
+
+#pragma no_register_save_helpers off
+
+#pragma no_register_save_helpers off
 
 
 s32 mobj_switch_red(void* pMobj) {
@@ -535,16 +612,88 @@ u8 kpa_disp_pole_score_main(void) {
 }
 
 
-s32 evt_mobj_set_position(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_mobj_set_position(void* evt) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern const u32 vec3_802c2064[3];
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = evtGetValue(evt, args[0]);
+    f32 x = evtGetFloat(evt, args[1]);
+    f32 y = evtGetFloat(evt, args[2]);
+    f32 z = evtGetFloat(evt, args[3]);
+    void* mobj;
+    u32 pos[3];
+
+    if (strcmp((const char*)name, str_me_80420324) != 0) {
+        mobj = mobjNameToPtr(name);
+    } else {
+        mobj = *(void**)((s32)evt + 0x174);
+    }
+    pos[0] = vec3_802c2064[0];
+    pos[1] = vec3_802c2064[1];
+    *(f32*)&pos[0] = x;
+    pos[2] = vec3_802c2064[2];
+    *(f32*)&pos[1] = y;
+    *(f32*)&pos[2] = z;
+    *(u32*)((s32)mobj + 0x38) = pos[0];
+    *(u32*)((s32)mobj + 0x3C) = pos[1];
+    *(u32*)((s32)mobj + 0x40) = pos[2];
+    *(u32*)mobj |= 4;
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
-s32 evt_mobj_set_scale(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_mobj_set_scale(void* evt) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern const u32 vec3_802c2058[3];
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = evtGetValue(evt, args[0]);
+    void* mobj;
+    f32 x;
+    f32 y;
+    f32 z;
+    u32 scale[3];
+
+    if (strcmp((const char*)name, str_me_80420324) == 0) {
+        mobj = *(void**)((s32)evt + 0x174);
+    } else {
+        mobj = mobjNameToPtr(name);
+    }
+    x = evtGetFloat(evt, args[1]);
+    y = evtGetFloat(evt, args[2]);
+    z = evtGetFloat(evt, args[3]);
+    scale[0] = vec3_802c2058[0];
+    scale[1] = vec3_802c2058[1];
+    *(f32*)&scale[0] = x;
+    scale[2] = vec3_802c2058[2];
+    *(f32*)&scale[1] = y;
+    *(f32*)&scale[2] = z;
+    *(u32*)((s32)mobj + 0x44) = scale[0];
+    *(u32*)((s32)mobj + 0x48) = scale[1];
+    *(u32*)((s32)mobj + 0x4C) = scale[2];
+    *(u32*)mobj |= 4;
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_hit_onoff(void* evt) {
@@ -553,20 +702,22 @@ s32 evt_mobj_hit_onoff(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
     s32 on = evtGetValue(evt, args[1]);
-    void* mobj = mobjNameToPtr(name);
+    register void* hit = mobjNameToPtr(name);
     s32 i;
-    void* hit;
+
     if (on) {
-        for (i = 0, hit = mobj; i < 2; i++, hit = (void*)((s32)hit + 0x88)) {
+        for (i = 0; i < 2; i++) {
             if ((s32)hit + 0x78 != 0) {
                 hitGrpFlagOff((void*)((s32)hit + 0x78), 1);
             }
+            hit = (void*)((s32)hit + 0x88);
         }
     } else {
-        for (i = 0, hit = mobj; i < 2; i++, hit = (void*)((s32)hit + 0x88)) {
+        for (i = 0; i < 2; i++) {
             if ((s32)hit + 0x78 != 0) {
                 hitGrpFlagOn((void*)((s32)hit + 0x78), 1);
             }
+            hit = (void*)((s32)hit + 0x88);
         }
     }
     return 2;
@@ -574,19 +725,77 @@ s32 evt_mobj_hit_onoff(void* evt) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-s32 evt_mobj_set_z_position(void* pEvt) {
-    return 0;
-}
-
-
-s32 evt_mobj_set_y_position(void* pEvt) {
-    return 0;
-}
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_mobj_set_z_position(void* evt) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = evtGetValue(evt, args[0]);
+    void* mobj;
+    u32 pos[3];
+
+    if (strcmp((const char*)name, str_me_80420324) != 0) {
+        mobj = mobjNameToPtr(name);
+    } else {
+        mobj = *(void**)((s32)evt + 0x174);
+    }
+    pos[0] = *(u32*)((s32)mobj + 0x38);
+    pos[1] = *(u32*)((s32)mobj + 0x3C);
+    pos[2] = *(u32*)((s32)mobj + 0x40);
+    *(f32*)&pos[2] = evtGetFloat(evt, args[1]);
+    *(u32*)((s32)mobj + 0x38) = pos[0];
+    *(u32*)((s32)mobj + 0x3C) = pos[1];
+    *(u32*)((s32)mobj + 0x40) = pos[2];
+    *(u32*)mobj |= 4;
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_mobj_set_y_position(void* evt) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = evtGetValue(evt, args[0]);
+    void* mobj;
+    u32 pos[3];
+
+    if (strcmp((const char*)name, str_me_80420324) != 0) {
+        mobj = mobjNameToPtr(name);
+    } else {
+        mobj = *(void**)((s32)evt + 0x174);
+    }
+    pos[0] = *(u32*)((s32)mobj + 0x38);
+    pos[1] = *(u32*)((s32)mobj + 0x3C);
+    pos[2] = *(u32*)((s32)mobj + 0x40);
+    *(f32*)&pos[1] = evtGetFloat(evt, args[1]);
+    *(u32*)((s32)mobj + 0x38) = pos[0];
+    *(u32*)((s32)mobj + 0x3C) = pos[1];
+    *(u32*)((s32)mobj + 0x40) = pos[2];
+    *(u32*)mobj |= 4;
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_set_x_position(void* evt) {
@@ -594,39 +803,115 @@ s32 evt_mobj_set_x_position(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
     void* mobj;
-    f32 pos[3];
+    u32 pos[3];
+
     if (strcmp((const char*)name, str_me_80420324) != 0) {
         mobj = mobjNameToPtr(name);
     } else {
         mobj = *(void**)((s32)evt + 0x174);
     }
-    pos[0] = *(f32*)((s32)mobj + 0x38);
-    pos[1] = *(f32*)((s32)mobj + 0x3C);
-    pos[2] = *(f32*)((s32)mobj + 0x40);
-    pos[0] = evtGetFloat(evt, args[1]);
-    *(f32*)((s32)mobj + 0x38) = pos[0];
-    *(f32*)((s32)mobj + 0x3C) = pos[1];
-    *(f32*)((s32)mobj + 0x40) = pos[2];
+    pos[0] = *(u32*)((s32)mobj + 0x38);
+    pos[1] = *(u32*)((s32)mobj + 0x3C);
+    pos[2] = *(u32*)((s32)mobj + 0x40);
+    *(f32*)&pos[0] = evtGetFloat(evt, args[1]);
+    *(u32*)((s32)mobj + 0x38) = pos[0];
+    *(u32*)((s32)mobj + 0x3C) = pos[1];
+    *(u32*)((s32)mobj + 0x40) = pos[2];
     *(u32*)mobj |= 4;
     return 2;
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-s32 evt_mobj_set_gravity_bound(void* pEvt) {
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_mobj_set_gravity_bound(void* evt) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = evtGetValue(evt, args[0]);
+    f32 gravity = evtGetFloat(evt, args[1]);
+    f32 bound = evtGetFloat(evt, args[2]);
+    void* mobj;
+
+    if (strcmp((const char*)name, str_me_80420324) != 0) {
+        mobj = mobjNameToPtr(name);
+    } else {
+        mobj = *(void**)((s32)evt + 0x174);
+    }
+    *(f32*)((s32)mobj + 0x68) = gravity;
+    *(f32*)((s32)mobj + 0x6C) = bound;
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_mobj_hitevt_onoff(void* evt) {
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = evtGetValue(evt, args[0]);
+    s32 on = evtGetValue(evt, args[1]);
+    void* mobj;
+
+    if (strcmp((const char*)name, str_me_80420324) != 0) {
+        mobj = mobjNameToPtr(name);
+    } else {
+        mobj = *(void**)((s32)evt + 0x174);
+    }
+    if (on != 0) {
+        *(u32*)mobj &= ~0x10;
+    } else {
+        *(u32*)mobj |= 0x10;
+    }
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+s32 mobj_signboard(void* mobj) {
+    extern void marioKeyOff(void);
+    extern void marioKeyOn(void);
+    extern s32 evtCheckID(s32 id);
+    extern void* mobjRunEvent(void* mobj, void* code);
+    s32 state = *(s32*)((s32)mobj + 0x1DC);
+
+    switch (state) {
+        case 0:
+            if ((*(u32*)mobj & 8) != 0) {
+                marioKeyOff();
+                mobjRunEvent(mobj, *(void**)((s32)mobj + 0x1D4));
+                *(s32*)((s32)mobj + 0x1DC) += 1;
+            }
+            break;
+        case 1:
+            if (evtCheckID(*(s32*)((s32)mobj + 0x1CC)) != 1) {
+                marioKeyOn();
+                *(s32*)((s32)mobj + 0x1CC) = 0;
+                *(u32*)mobj &= ~8;
+                *(s32*)((s32)mobj + 0x1DC) = 0;
+            }
+            break;
+    }
     return 0;
 }
-
-
-s32 evt_mobj_hitevt_onoff(void* pEvt) {
-    return 0;
-}
-
-
-s32 mobj_signboard(void* pMobj) {
-    return 0;
-}
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -650,10 +935,35 @@ s32 evt_mobj_get_position(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
-s32 evt_mobj_lock_unlock(void* pEvt) {
-    return 0;
-}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_mobj_lock_unlock(void* evt) {
+    extern void marioKeyOff(void);
+    extern void partyKeyOff(void);
+    extern void marioStSystemLevel(s32 level);
+    extern s32 strcmp(const char* a, const char* b);
+    extern const char str_MOBJ_Lock_802c2770[];
+    s32* args = *(s32**)((s32)evt + 0x18);
+    void* mobj = mobjNameToPtr(evtGetValue(evt, args[0]));
+
+    if (strcmp((const char*)((s32)mobj + 0x15), str_MOBJ_Lock_802c2770) != 0) {
+        return 2;
+    }
+    if (*(void**)((s32)mobj + 0x1D0) == 0) {
+        *(void**)((s32)mobj + 0x1D0) = mobj_lock;
+    }
+    *(u32*)mobj |= 8;
+    marioKeyOff();
+    partyKeyOff();
+    marioStSystemLevel(1);
+    *(s32*)((s32)mobj + 0x1DC) = 3;
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
@@ -708,11 +1018,41 @@ s32 evt_mobj_set_camid(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
-s32 evt_mobj_flag_onoff(void* param_1) {
-    return 0;
-}
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_mobj_flag_onoff(void* evt) {
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 on = evtGetValue(evt, args[0]);
+    s32 name = evtGetValue(evt, args[1]);
+    u32 flag = args[2];
+    void* mobj = mobjNameToPtr(name);
 
+    if (on != 0) {
+        *(u32*)mobj |= flag;
+    } else {
+        *(u32*)mobj = *(u32*)mobj & ~flag;
+    }
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 s32 evt_mobj_exec_cancel(void* pEvt) {
-    return 0;
+    extern s32 evtGetValue(void* event, s32 value);
+    extern s32 strcmp(const char* s1, const char* s2);
+    extern void* mobjNameToPtr(s32 name);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    void* mobj;
+
+    if (strcmp((const char*)name, str_me_80420324) != 0) {
+        mobj = mobjNameToPtr(name);
+    } else {
+        mobj = *(void**)((s32)pEvt + 0x174);
+    }
+    *(u32*)mobj |= 0x1000;
+    return 2;
 }

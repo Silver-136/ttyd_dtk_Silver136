@@ -153,6 +153,8 @@ s32 evt_hitobj_onoff(void* event) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 L_evt_hitobj_flag_onoff(void* event) {
     extern s32 evtGetValue(void* event, s32 value);
     extern void hitObjFlagOff(s32 name, unsigned short flag);
@@ -161,8 +163,8 @@ s32 L_evt_hitobj_flag_onoff(void* event) {
     extern void hitGrpFlagOn(s32 name, unsigned short flag);
     s32* args = *(s32**)((s32)event + 0x18);
     s32 isGroup = evtGetValue(event, args[0]);
-    s32 name = evtGetValue(event, args[1]);
-    s32 on = evtGetValue(event, args[2]);
+    s32 on = evtGetValue(event, args[1]);
+    s32 name = evtGetValue(event, args[2]);
     s32 flag = args[3];
 
     if (isGroup == 0) {
@@ -189,6 +191,12 @@ s32 L_evt_hitobj_flag_onoff(void* event) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -201,6 +209,11 @@ s32 L_evt_hitobj_flag_onoff(void* event) {
 #pragma use_lmw_stmw off
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_hitobj_attr_onoff(void* event) {
     extern s32 evtGetValue(void* event, s32 value);
     extern void hitObjAttrOff(s32 name, s32 attr);
@@ -209,8 +222,8 @@ s32 evt_hitobj_attr_onoff(void* event) {
     extern void hitGrpAttrOn(s32 name, s32 attr);
     s32* args = *(s32**)((s32)event + 0x18);
     s32 isGroup = evtGetValue(event, args[0]);
-    s32 name = evtGetValue(event, args[1]);
-    s32 on = evtGetValue(event, args[2]);
+    s32 on = evtGetValue(event, args[1]);
+    s32 name = evtGetValue(event, args[2]);
     s32 attr = args[3];
 
     if (isGroup == 0) {
@@ -228,6 +241,9 @@ s32 evt_hitobj_attr_onoff(void* event) {
     }
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

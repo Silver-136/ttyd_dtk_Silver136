@@ -34,8 +34,9 @@ void effSandarsDisp(s32 cameraId, void* effect) {
         PSMTXTrans(transMtx, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
         cam = camGetPtr(cameraId);
         angle = *(f32*)((s32)cam + 0x114);
+        angle = -angle;
         deg = float_deg2rad_80428138;
-        PSMTXRotRad(rotMtx, 0x79, deg * -angle);
+        PSMTXRotRad(rotMtx, 0x79, deg * angle);
         PSMTXScale(scaleMtx, *(f32*)((s32)work + 0x10), *(f32*)((s32)work + 0x10), *(f32*)((s32)work + 0x10));
         PSMTXConcat(transMtx, rotMtx, transMtx);
         PSMTXConcat(transMtx, scaleMtx, mtx);
@@ -52,5 +53,6 @@ void effSandarsDisp(s32 cameraId, void* effect) {
         animPoseDrawMtx(*(s32*)((s32)work + 0x1C), mtx, 3, float_0_80428148, float_4_80428150);
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on

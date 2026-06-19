@@ -42,17 +42,12 @@ s32 caseEntry(void* param) {
     void* work = wp;
     s32 count = *(s32*)work;
     void* entry = *(void**)((s32)work + 4);
-    s32 id = 0;
+    s32 id;
 
-    if (count > 0) {
-        do {
-            if ((*(u16*)entry & 1) == 0) {
-                break;
-            }
-            id++;
-            entry = (void*)((s32)entry + 0xA0);
-            count--;
-        } while (count != 0);
+    for (id = 0; id < count; id++, entry = (void*)((s32)entry + 0xA0)) {
+        if ((*(u16*)entry & 1) == 0) {
+            break;
+        }
     }
 
     memset(entry, 0, 0xA0);

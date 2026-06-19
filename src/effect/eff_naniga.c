@@ -33,8 +33,9 @@ void effNanigaDisp3(s32 cameraId, void* effect) {
     PSMTXTrans(transMtx, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8) - float_16_804280ec, *(f32*)((s32)work + 0xC));
     cam = camGetPtr(cameraId);
     angle = *(f32*)((s32)cam + 0x114);
+    angle = -angle;
     deg = float_deg2rad_804280f0;
-    PSMTXRotRad(rotMtx, 0x79, deg * -angle);
+    PSMTXRotRad(rotMtx, 0x79, deg * angle);
     PSMTXScale(scaleMtx, *(f32*)((s32)work + 0x1C), *(f32*)((s32)work + 0x1C), *(f32*)((s32)work + 0x1C));
     PSMTXConcat(transMtx, rotMtx, transMtx);
     PSMTXConcat(transMtx, scaleMtx, mtx);
@@ -46,6 +47,7 @@ void effNanigaDisp3(s32 cameraId, void* effect) {
         iconDispGxCol(mtx, 0, *(u16*)((s32)item + 0x20), &color1);
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -83,8 +85,9 @@ void effNanigaDisp2(s32 cameraId, void* effect) {
     PSMTXTrans(transMtx, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8) - float_20_804280f4, *(f32*)((s32)work + 0xC));
     cam = camGetPtr(cameraId);
     angle = *(f32*)((s32)cam + 0x114);
+    angle = -angle;
     deg = float_deg2rad_804280f0;
-    PSMTXRotRad(rotMtx, 0x79, deg * -angle);
+    PSMTXRotRad(rotMtx, 0x79, deg * angle);
     PSMTXScale(scaleMtx, *(f32*)((s32)work + 0x1C), *(f32*)((s32)work + 0x1C), *(f32*)((s32)work + 0x1C));
     PSMTXConcat(transMtx, rotMtx, transMtx);
     PSMTXConcat(transMtx, scaleMtx, mtx);
@@ -98,5 +101,6 @@ void effNanigaDisp2(s32 cameraId, void* effect) {
     animPoseDrawMtx(*(s32*)((s32)work + 0x40), mtx, 2, float_0_804280f8, float_10_804280fc);
     animPoseDrawMtx(*(s32*)((s32)work + 0x40), mtx, 3, float_0_804280f8, float_10_804280fc);
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on

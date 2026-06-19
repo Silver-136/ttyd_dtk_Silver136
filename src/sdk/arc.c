@@ -79,6 +79,7 @@ BOOL ARCOpen(ARCHandle* handle, const char* filename, ARCFileInfo* info) {
     } ARCEntry;
     ARCEntry* entries;
     s32 entryNum;
+    u32 isDir;
     char path[128];
 
     entries = (ARCEntry*)handle->FSTStart;
@@ -87,7 +88,8 @@ BOOL ARCOpen(ARCHandle* handle, const char* filename, ARCFileInfo* info) {
         ARCGetCurrentDir(handle, path, sizeof(path));
         return FALSE;
     }
-    if (entryNum < 0 || (entries[entryNum].flags & 0xFF000000)) {
+    isDir = entries[entryNum].flags & 0xFF000000;
+    if (entryNum < 0 || (((u32)(-isDir) | isDir) >> 31) != 0) {
         return FALSE;
     }
     info->handle = handle;

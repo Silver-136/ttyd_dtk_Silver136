@@ -28,8 +28,9 @@ void effScanningDisp(s32 cameraId, void* effect) {
         PSMTXScale(scaleMtx, *(f32*)((s32)work + 0x10), *(f32*)((s32)work + 0x10), *(f32*)((s32)work + 0x10));
         cam = camGetPtr(cameraId);
         angle = *(f32*)((s32)cam + 0x114);
+        angle = -angle;
         deg = float_deg2rad_804281e8;
-        PSMTXRotRad(rotMtx, 0x79, deg * -angle);
+        PSMTXRotRad(rotMtx, 0x79, deg * angle);
         PSMTXConcat(transMtx, rotMtx, transMtx);
         PSMTXConcat(transMtx, scaleMtx, transMtx);
         animPoseMain(*(s32*)((s32)work + 0x14));
@@ -38,6 +39,7 @@ void effScanningDisp(s32 cameraId, void* effect) {
         animPoseDrawMtx(*(s32*)((s32)work + 0x14), transMtx, 3, float_0_804281ec, float_10_804281f0);
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
