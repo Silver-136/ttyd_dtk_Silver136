@@ -76,10 +76,12 @@ s32 getBadgeBottakuru100TableMaxCount(void) {
 
 
 void badgeShop_bargainGeneration(void) {
+    ;
 }
 
 
 void badgeShop_bottakuruGeneration(void) {
+    ;
 }
 
 

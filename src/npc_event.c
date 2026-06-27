@@ -200,3 +200,11 @@ s32 limitSpd(int param_1) {
 s32 piders_draw_yawn(int param_1) {
     return 0;
 }
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/npc_event 20260624_191429 */
+
+/* fallback stub-fill: map=unk_800f1ac8 addr=0x800f1ac8 size=0x00000184 */
+int unk_800f1ac8() {
+    return 0;
+}

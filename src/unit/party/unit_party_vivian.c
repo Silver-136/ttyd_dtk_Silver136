@@ -24,6 +24,7 @@ u8 battle_evt_majo_disp_on(void) {
 
 
 void __makeTechMenuFunc(void* commandWork, s32 param_2) {
+    ;
 }
 
 
@@ -208,3 +209,11 @@ s32 _vivian_make_extra_work_area(void* evt) {
     return 2;
 }
 
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/unit/party/unit_party_vivian 20260624_191429 */
+
+/* fallback stub-fill: map=unk_80182cc4 addr=0x80182cc4 size=0x00000260 */
+int unk_80182cc4() {
+    return 0;
+}

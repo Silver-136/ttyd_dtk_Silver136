@@ -73,3 +73,16 @@ void* effMahornEntry(s32 kind, s32 count, s32 timer, f32 x, f32 y, f32 z, f32 sc
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_mahorn 20260624_184929 */
+
+/* stub-fill: effMahornDisp | missing_definition | ghidra_signature */
+u8 effMahornDisp(void) {
+    return 0;
+}
+
+/* stub-fill: effMahornMain | prototype_only | source_prototype */
+void effMahornMain(void) {
+    return;
+}

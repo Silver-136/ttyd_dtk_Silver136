@@ -39,4 +39,5 @@ void BattleInformationInit(void* info) {
 
 
 void BattleInformationSetDropMaterial(void* fbatBattleInfo) {
+    ;
 }

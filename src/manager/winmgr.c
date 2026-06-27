@@ -8,282 +8,7 @@ extern u8 itemDataTable[];
 char* msgSearch(char* msg);
 void winMgrHelpDraw(void* win);
 
-s32 unk_8023cf04(void* win) {
-    return *(s32*)((s32)win + 0xC);
-}
-
-void winMgrHelpInit(void* win) {
-    *(s32*)((s32)win + 0x38) = 0;
-    *(s32*)((s32)win + 0x3C) = 0;
-    *(s32*)((s32)win + 0x34) = 0;
-}
-
-void* winMgrGetPtr(s32 id) {
-    return (void*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
-}
-
-s32 winMgrAction(s32 id) {
-    return (*(u32*)((s32)*(void**)((s32)wp + 4) + id * 0x44) >> 2) & 1;
-}
-
-void winMgrDelete(s32 id) {
-    u32* flags = (u32*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
-    *flags &= ~1;
-}
-
-void winMgrSetPriority(s32 id, s32 priority) {
-    void* win = (void*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
-    if ((*(u32*)win & 1) != 0) {
-        *(s32*)((s32)win + 0x30) = priority;
-    }
-}
-
-void winMgrSetParam(s32 id, s32 param) {
-    void* win = (void*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
-    if ((*(u32*)win & 1) != 0) {
-        *(s32*)((s32)win + 0x2C) = param;
-    }
-}
-
-void winMgrSetSize(s32 id, s32 x, s32 y, s32 w, s32 h) {
-    void* win = (void*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
-    if ((*(u32*)win & 1) != 0) {
-        *(s32*)((s32)win + 0x18) = x;
-        *(s32*)((s32)win + 0x1C) = y;
-        *(s32*)((s32)win + 0x20) = w;
-        *(s32*)((s32)win + 0x24) = h;
-    }
-}
-
-void winMgrClose(s32 id) {
-    void* win = (void*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
-    if ((*(u32*)win & 1) != 0) {
-        *(s32*)((s32)win + 4) = 2;
-        *(s32*)((s32)win + 8) = 0;
-    }
-}
-
-void winMgrCloseAutoDelete(s32 id) {
-    void* win = (void*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
-    if ((*(u32*)win & 1) != 0) {
-        *(s32*)((s32)win + 4) = 2;
-        *(s32*)((s32)win + 8) = 0;
-        *(u32*)win |= 8;
-    }
-}
-
-void winMgrOpen(s32 id) {
-    void* win = (void*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
-    if ((*(u32*)win & 1) != 0) {
-        *(s32*)((s32)win + 4) = 1;
-        *(s32*)((s32)win + 8) = 0;
-        *(s32*)((s32)win + 0x38) = 0;
-        *(s32*)((s32)win + 0x3C) = 0;
-        *(s32*)((s32)win + 0x34) = 0;
-    }
-}
-
-void winMgrInit(void) {
-    *(s32*)wp = 0x20;
-    *(void**)((s32)wp + 4) = __memAlloc(0, *(s32*)wp * 0x44);
-    memset(*(void**)((s32)wp + 4), 0, *(s32*)wp * 0x44);
-}
-
-void winMgrReInit(void) {
-    memset(*(void**)((s32)wp + 4), 0, *(s32*)wp * 0x44);
-}
-
-void winMgrSelectDelete(void* select) {
-    register s32 keep = (s32)select;
-
-    __memFree(0, *(void**)(keep + 0x30));
-    __memFree(0, (void*)keep);
-}
-
-s32 unk_8023d5e4(void* a, void* b) {
-    u16 ai = *(u16*)((s32)a + 2);
-    u16 bi = *(u16*)((s32)b + 2);
-    u8* values = itemDataTable + 0x18;
-    u16 av = *(u16*)(values + ai * 0x28);
-    u16 bv = *(u16*)(values + bi * 0x28);
-    if (av > bv) {
-        return 1;
-    }
-    return av < bv ? -1 : 0;
-}
-
-void select_disp3(void* win) {
-    typedef struct SelectEntry {
-        u16 unk0;
-        u16 item;
-    } SelectEntry;
-
-    void* data = *(void**)((s32)win + 0x2C);
-    s32 id = *(s32*)((s32)data + 0x2C);
-    void* mgr = *(void**)((s32)wp + 4);
-
-    if ((*(u32*)((s32)mgr + id * 0x44) & 4) == 0) {
-        s32 index = *(s32*)((s32)data + 0xC);
-        u8* table = (u8*)itemDataTable;
-        SelectEntry* list = *(SelectEntry**)((s32)data + 0x30);
-        u16 item = list[index].item;
-
-        *(char**)((s32)win + 0x34) = msgSearch(*(char**)(table + item * 0x28 + 8));
-        winMgrHelpDraw(win);
-    }
-}
-
-s32 winMgrSelect(void* select) {
-    u16 flags = *(u16*)select;
-
-    if (flags & 0x1000) {
-        if (flags & 0x2000) {
-            return -1;
-        }
-        if (*(s32*)((s32)select + 0x38) != 0 && *(s32*)((s32)select + 0xC) == 0 && (flags & 0x100)) {
-            return -1;
-        }
-        {
-            s32 offset = *(s32*)((s32)select + 0xC) << 2;
-            void* list = *(void**)((s32)select + 0x30);
-
-            list = (void*)((s32)list + offset);
-            return *(u16*)((s32)list + 2);
-        }
-    }
-    return 0;
-}
-
-void select_main3(void* win) {
-    extern void FontGetMessageWidthLine(char* msg, u16* lines);
-    extern u32 keyGetDirTrg(s32 controller);
-
-    u16 lines;
-    s32 b;
-    s32 a;
-
-    lines = 0;
-    if ((*(u32*)win & 4) == 0) {
-        if (*(char**)((s32)win + 0x34) != 0) {
-            FontGetMessageWidthLine(*(char**)((s32)win + 0x34), &lines);
-            *(s32*)((s32)win + 0x3C) = lines + 1;
-        }
-        if (*(s32*)((s32)win + 0x3C) > 2) {
-            if (keyGetDirTrg(0) & 0x100) {
-                *(s32*)((s32)win + 0x38) = *(s32*)((s32)win + 0x38) - 2;
-                if (*(s32*)((s32)win + 0x38) < 0) {
-                    *(s32*)((s32)win + 0x38) = 0;
-                }
-            } else if (keyGetDirTrg(0) & 0x200) {
-                a = *(s32*)((s32)win + 0x3C) + 1;
-                b = *(s32*)((s32)win + 0x38) + 1;
-                if (((s32)(a + ((u32)a >> 31)) >> 1) - 1 > ((s32)(b + ((u32)b >> 31)) >> 1)) {
-                    *(s32*)((s32)win + 0x38) = *(s32*)((s32)win + 0x38) + 2;
-                }
-            }
-        }
-    }
-}
-
-void winMgrHelpMain(void* win) {
-    extern void FontGetMessageWidthLine(char* msg, u16* lines);
-    extern u32 keyGetDirTrg(s32 controller);
-
-    u16 lines;
-    s32 b;
-    s32 a;
-
-    lines = 0;
-    if ((*(u32*)win & 4) == 0) {
-        if (*(char**)((s32)win + 0x34) != 0) {
-            FontGetMessageWidthLine(*(char**)((s32)win + 0x34), &lines);
-            *(s32*)((s32)win + 0x3C) = lines + 1;
-        }
-        if (*(s32*)((s32)win + 0x3C) > 2) {
-            if (keyGetDirTrg(0) & 0x100) {
-                *(s32*)((s32)win + 0x38) = *(s32*)((s32)win + 0x38) - 2;
-                if (*(s32*)((s32)win + 0x38) < 0) {
-                    *(s32*)((s32)win + 0x38) = 0;
-                }
-            } else if (keyGetDirTrg(0) & 0x200) {
-                a = *(s32*)((s32)win + 0x3C) + 1;
-                b = *(s32*)((s32)win + 0x38) + 1;
-                if (((s32)(a + ((u32)a >> 31)) >> 1) - 1 > ((s32)(b + ((u32)b >> 31)) >> 1)) {
-                    *(s32*)((s32)win + 0x38) = *(s32*)((s32)win + 0x38) + 2;
-                }
-            }
-        }
-    }
-}
-
-s32 winMgrEntry(void* tpl) {
-    void* win;
-    s32 id;
-    s32 zero;
-    void* savedTpl;
-
-    id = 0;
-    win = *(void**)((s32)wp + 4);
-    for (id = 0; id < *(s32*)wp; id++, win = (void*)((s32)win + 0x44)) {
-        if ((*(u32*)win & 1) == 0) {
-            break;
-        }
-    }
-
-    zero = 0;
-    *(s32*)((s32)win + 0) = zero;
-    *(u32*)win |= 1;
-    *(s32*)((s32)win + 4) = zero;
-    *(s32*)((s32)win + 8) = zero;
-    *(void**)((s32)win + 0x28) = tpl;
-    savedTpl = *(void**)((s32)win + 0x28);
-    *(s32*)((s32)win + 0x18) = *(s32*)((s32)savedTpl + 0xC);
-    savedTpl = *(void**)((s32)win + 0x28);
-    *(s32*)((s32)win + 0x1C) = *(s32*)((s32)savedTpl + 0x10);
-    savedTpl = *(void**)((s32)win + 0x28);
-    *(s32*)((s32)win + 0x20) = *(s32*)((s32)savedTpl + 0x14);
-    savedTpl = *(void**)((s32)win + 0x28);
-    *(s32*)((s32)win + 0x24) = *(s32*)((s32)savedTpl + 0x18);
-    *(s32*)((s32)win + 0x30) = zero;
-    *(s32*)((s32)win + 0x2C) = zero;
-    *(s32*)((s32)win + 0x38) = zero;
-    *(s32*)((s32)win + 0x3C) = zero;
-    return id;
-}
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void winMgrMain(void) {
-    extern void winMgrSeq(void* win);
-    extern void winMgrDisp(s32 cameraId, s32 unused, void* win);
-    extern void dispEntry(s32 cameraId, s32 layer, void* dispFunc, void* param, f32 z);
-
-    void* win;
-    void* tpl;
-    void (*mainFunc)(void*);
-    s32 i;
-
-    i = 0;
-    win = *(void**)((s32)wp + 4);
-    while (i < *(s32*)wp) {
-        if ((*(u32*)win & 1) != 0) {
-            winMgrSeq(win);
-            tpl = *(void**)((s32)win + 0x28);
-            mainFunc = *(void (**)(void*))((s32)tpl + 0x20);
-            if (mainFunc != 0) {
-                mainFunc(win);
-            }
-            if ((*(u32*)win & 2) != 0) {
-                tpl = *(void**)((s32)win + 0x28);
-                dispEntry(*(s32*)((s32)tpl + 8), 0, winMgrDisp, win, (f32)(*(s32*)((s32)win + 0x30) + 0x12C));
-            }
-        }
-        i++;
-        win = (void*)((s32)win + 0x44);
-    }
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
+/* Reorder pilot candidate: functions arranged in _main.map order for main/manager/winmgr. */
 
 void select_disp3_mario(void* win) {
     extern void* pouchGetPtr(void);
@@ -374,6 +99,344 @@ void select_disp3_party(void* win) {
     }
 }
 
+void select_disp3(void* win) {
+    typedef struct SelectEntry {
+        u16 unk0;
+        u16 item;
+    } SelectEntry;
+
+    void* data = *(void**)((s32)win + 0x2C);
+    s32 id = *(s32*)((s32)data + 0x2C);
+    void* mgr = *(void**)((s32)wp + 4);
+
+    if ((*(u32*)((s32)mgr + id * 0x44) & 4) == 0) {
+        s32 index = *(s32*)((s32)data + 0xC);
+        u8* table = (u8*)itemDataTable;
+        SelectEntry* list = *(SelectEntry**)((s32)data + 0x30);
+        u16 item = list[index].item;
+
+        *(char**)((s32)win + 0x34) = msgSearch(*(char**)(table + item * 0x28 + 8));
+        winMgrHelpDraw(win);
+    }
+}
+
+void select_main3(void* win) {
+    extern void FontGetMessageWidthLine(char* msg, u16* lines);
+    extern u32 keyGetDirTrg(s32 controller);
+
+    u16 lines;
+    s32 b;
+    s32 a;
+
+    lines = 0;
+    if ((*(u32*)win & 4) == 0) {
+        if (*(char**)((s32)win + 0x34) != 0) {
+            FontGetMessageWidthLine(*(char**)((s32)win + 0x34), &lines);
+            *(s32*)((s32)win + 0x3C) = lines + 1;
+        }
+        if (*(s32*)((s32)win + 0x3C) > 2) {
+            if (keyGetDirTrg(0) & 0x100) {
+                *(s32*)((s32)win + 0x38) = *(s32*)((s32)win + 0x38) - 2;
+                if (*(s32*)((s32)win + 0x38) < 0) {
+                    *(s32*)((s32)win + 0x38) = 0;
+                }
+            } else if (keyGetDirTrg(0) & 0x200) {
+                a = *(s32*)((s32)win + 0x3C) + 1;
+                b = *(s32*)((s32)win + 0x38) + 1;
+                if (((s32)(a + ((u32)a >> 31)) >> 1) - 1 > ((s32)(b + ((u32)b >> 31)) >> 1)) {
+                    *(s32*)((s32)win + 0x38) = *(s32*)((s32)win + 0x38) + 2;
+                }
+            }
+        }
+    }
+}
+
+int select_disp2() {
+    return 0;
+}
+
+int select_disp_luigi() {
+    return 0;
+}
+
+int select_disp_mario() {
+    return 0;
+}
+
+int select_disp_party() {
+    return 0;
+}
+
+int select_disp() {
+    return 0;
+}
+
+int select_main() {
+    return 0;
+}
+
+s32 unk_8023cf04(void* win) {
+    return *(s32*)((s32)win + 0xC);
+}
+
+void winMgrSelectDelete(void* select) {
+    register s32 keep = (s32)select;
+
+    __memFree(0, *(void**)(keep + 0x30));
+    __memFree(0, (void*)keep);
+}
+
+int winMgrSelectOther() {
+    return 0;
+}
+
+s32 winMgrSelect(void* select) {
+    u16 flags = *(u16*)select;
+
+    if (flags & 0x1000) {
+        if (flags & 0x2000) {
+            return -1;
+        }
+        if (*(s32*)((s32)select + 0x38) != 0 && *(s32*)((s32)select + 0xC) == 0 && (flags & 0x100)) {
+            return -1;
+        }
+        {
+            s32 offset = *(s32*)((s32)select + 0xC) << 2;
+            void* list = *(void**)((s32)select + 0x30);
+
+            list = (void*)((s32)list + offset);
+            return *(u16*)((s32)list + 2);
+        }
+    }
+    return 0;
+}
+
+int unk_8023d524() {
+    return 0;
+}
+
+s32 unk_8023d59c(void* a, void* b) {
+    u16 ai = *(u16*)((s32)a + 2);
+    u16 bi = *(u16*)((s32)b + 2);
+    s16* values = (s16*)(itemDataTable + 0x12);
+    s32 av = *(s16*)((s32)values + ai * 0x28);
+    s32 bv = *(s16*)((s32)values + bi * 0x28);
+
+    if (av > bv) {
+        return 1;
+    }
+    return av < bv ? -1 : 0;
+}
+
+s32 unk_8023d5e4(void* a, void* b) {
+    u16 ai = *(u16*)((s32)a + 2);
+    u16 bi = *(u16*)((s32)b + 2);
+    u8* values = itemDataTable + 0x18;
+    u16 av = *(u16*)(values + ai * 0x28);
+    u16 bv = *(u16*)(values + bi * 0x28);
+    if (av > bv) {
+        return 1;
+    }
+    return av < bv ? -1 : 0;
+}
+
+int* winMgrSelectEntry(u32 selectType, int newItem, int isCancellable) {
+    return 0;
+}
+
+void winMgrHelpDraw(void* win) {
+    return;
+}
+
+void winMgrHelpMain(void* win) {
+    extern void FontGetMessageWidthLine(char* msg, u16* lines);
+    extern u32 keyGetDirTrg(s32 controller);
+
+    u16 lines;
+    s32 b;
+    s32 a;
+
+    lines = 0;
+    if ((*(u32*)win & 4) == 0) {
+        if (*(char**)((s32)win + 0x34) != 0) {
+            FontGetMessageWidthLine(*(char**)((s32)win + 0x34), &lines);
+            *(s32*)((s32)win + 0x3C) = lines + 1;
+        }
+        if (*(s32*)((s32)win + 0x3C) > 2) {
+            if (keyGetDirTrg(0) & 0x100) {
+                *(s32*)((s32)win + 0x38) = *(s32*)((s32)win + 0x38) - 2;
+                if (*(s32*)((s32)win + 0x38) < 0) {
+                    *(s32*)((s32)win + 0x38) = 0;
+                }
+            } else if (keyGetDirTrg(0) & 0x200) {
+                a = *(s32*)((s32)win + 0x3C) + 1;
+                b = *(s32*)((s32)win + 0x38) + 1;
+                if (((s32)(a + ((u32)a >> 31)) >> 1) - 1 > ((s32)(b + ((u32)b >> 31)) >> 1)) {
+                    *(s32*)((s32)win + 0x38) = *(s32*)((s32)win + 0x38) + 2;
+                }
+            }
+        }
+    }
+}
+
+void winMgrHelpInit(void* win) {
+    *(s32*)((s32)win + 0x38) = 0;
+    *(s32*)((s32)win + 0x3C) = 0;
+    *(s32*)((s32)win + 0x34) = 0;
+}
+
+void* winMgrGetPtr(s32 id) {
+    return (void*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
+}
+
+void winMgrSetPriority(s32 id, s32 priority) {
+    void* win = (void*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
+    if ((*(u32*)win & 1) != 0) {
+        *(s32*)((s32)win + 0x30) = priority;
+    }
+}
+
+void winMgrSetSize(s32 id, s32 x, s32 y, s32 w, s32 h) {
+    void* win = (void*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
+    if ((*(u32*)win & 1) != 0) {
+        *(s32*)((s32)win + 0x18) = x;
+        *(s32*)((s32)win + 0x1C) = y;
+        *(s32*)((s32)win + 0x20) = w;
+        *(s32*)((s32)win + 0x24) = h;
+    }
+}
+
+s32 winMgrAction(s32 id) {
+    return (*(u32*)((s32)*(void**)((s32)wp + 4) + id * 0x44) >> 2) & 1;
+}
+
+void winMgrDelete(s32 id) {
+    u32* flags = (u32*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
+    *flags &= ~1;
+}
+
+void winMgrCloseAutoDelete(s32 id) {
+    void* win = (void*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
+    if ((*(u32*)win & 1) != 0) {
+        *(s32*)((s32)win + 4) = 2;
+        *(s32*)((s32)win + 8) = 0;
+        *(u32*)win |= 8;
+    }
+}
+
+void winMgrClose(s32 id) {
+    void* win = (void*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
+    if ((*(u32*)win & 1) != 0) {
+        *(s32*)((s32)win + 4) = 2;
+        *(s32*)((s32)win + 8) = 0;
+    }
+}
+
+void winMgrOpen(s32 id) {
+    void* win = (void*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
+    if ((*(u32*)win & 1) != 0) {
+        *(s32*)((s32)win + 4) = 1;
+        *(s32*)((s32)win + 8) = 0;
+        *(s32*)((s32)win + 0x38) = 0;
+        *(s32*)((s32)win + 0x3C) = 0;
+        *(s32*)((s32)win + 0x34) = 0;
+    }
+}
+
+void winMgrSetParam(s32 id, s32 param) {
+    void* win = (void*)((s32)*(void**)((s32)wp + 4) + id * 0x44);
+    if ((*(u32*)win & 1) != 0) {
+        *(s32*)((s32)win + 0x2C) = param;
+    }
+}
+
+s32 winMgrEntry(void* tpl) {
+    void* win;
+    s32 id;
+    s32 zero;
+    void* savedTpl;
+
+    id = 0;
+    win = *(void**)((s32)wp + 4);
+    for (id = 0; id < *(s32*)wp; id++, win = (void*)((s32)win + 0x44)) {
+        if ((*(u32*)win & 1) == 0) {
+            break;
+        }
+    }
+
+    zero = 0;
+    *(s32*)((s32)win + 0) = zero;
+    *(u32*)win |= 1;
+    *(s32*)((s32)win + 4) = zero;
+    *(s32*)((s32)win + 8) = zero;
+    *(void**)((s32)win + 0x28) = tpl;
+    savedTpl = *(void**)((s32)win + 0x28);
+    *(s32*)((s32)win + 0x18) = *(s32*)((s32)savedTpl + 0xC);
+    savedTpl = *(void**)((s32)win + 0x28);
+    *(s32*)((s32)win + 0x1C) = *(s32*)((s32)savedTpl + 0x10);
+    savedTpl = *(void**)((s32)win + 0x28);
+    *(s32*)((s32)win + 0x20) = *(s32*)((s32)savedTpl + 0x14);
+    savedTpl = *(void**)((s32)win + 0x28);
+    *(s32*)((s32)win + 0x24) = *(s32*)((s32)savedTpl + 0x18);
+    *(s32*)((s32)win + 0x30) = zero;
+    *(s32*)((s32)win + 0x2C) = zero;
+    *(s32*)((s32)win + 0x38) = zero;
+    *(s32*)((s32)win + 0x3C) = zero;
+    return id;
+}
+
+void winMgrSeq(void* win) {
+    return;
+}
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void winMgrMain(void) {
+    extern void winMgrSeq(void* win);
+    extern void winMgrDisp(s32 cameraId, s32 unused, void* win);
+    extern void dispEntry(s32 cameraId, s32 layer, void* dispFunc, void* param, f32 z);
+
+    void* win;
+    void* tpl;
+    void (*mainFunc)(void*);
+    s32 i;
+
+    i = 0;
+    win = *(void**)((s32)wp + 4);
+    while (i < *(s32*)wp) {
+        if ((*(u32*)win & 1) != 0) {
+            winMgrSeq(win);
+            tpl = *(void**)((s32)win + 0x28);
+            mainFunc = *(void (**)(void*))((s32)tpl + 0x20);
+            if (mainFunc != 0) {
+                mainFunc(win);
+            }
+            if ((*(u32*)win & 2) != 0) {
+                tpl = *(void**)((s32)win + 0x28);
+                dispEntry(*(s32*)((s32)tpl + 8), 0, winMgrDisp, win, (f32)(*(s32*)((s32)win + 0x30) + 0x12C));
+            }
+        }
+        i++;
+        win = (void*)((s32)win + 0x44);
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+void winMgrDisp(s32 cameraId, s32 unused, void* win) {
+    return;
+}
+
+void winMgrReInit(void) {
+    memset(*(void**)((s32)wp + 4), 0, *(s32*)wp * 0x44);
+}
+
+void winMgrInit(void) {
+    *(s32*)wp = 0x20;
+    *(void**)((s32)wp + 4) = __memAlloc(0, *(s32*)wp * 0x44);
+    memset(*(void**)((s32)wp + 4), 0, *(s32*)wp * 0x44);
+}
+
 s32 unk_8023f79c(void* event, s32 isFirstCall) {
     extern void* pouchGetPtr(void);
     extern s32 partyChkJoin(s32 partyId);
@@ -458,15 +521,3 @@ s32 unk_8023f8d0(void* event, s32 isFirstCall) {
     return 2;
 }
 
-s32 unk_8023d59c(void* a, void* b) {
-    u16 ai = *(u16*)((s32)a + 2);
-    u16 bi = *(u16*)((s32)b + 2);
-    s16* values = (s16*)(itemDataTable + 0x12);
-    s32 av = *(s16*)((s32)values + ai * 0x28);
-    s32 bv = *(s16*)((s32)values + bi * 0x28);
-
-    if (av > bv) {
-        return 1;
-    }
-    return av < bv ? -1 : 0;
-}

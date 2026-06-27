@@ -293,3 +293,19 @@ USER_FUNC(evt_win_item_select) {
     }
     return 2;
 }
+
+
+/* CHATGPT STUB FILL: main/event/evt_window 20260624_184128 */
+
+/* stub-fill: evt_win_one_message | missing_definition | ghidra_signature */
+s32 evt_win_one_message(void* pEvt, int param_2) {
+    return 0;
+}
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/event/evt_window 20260624_191429 */
+
+/* fallback stub-fill: map=coin_disp addr=0x80209c44 size=0x000001fc */
+int coin_disp() {
+    return 0;
+}

@@ -10,9 +10,11 @@ s32 marioGetPartyId(void);
 void* partyGetPtr(s32 id);
 
 void chuchu_exit(void) {
+    ;
 }
 
 void chuchu_reinit(void) {
+    ;
 }
 
 void chuchu_init(void* party) {

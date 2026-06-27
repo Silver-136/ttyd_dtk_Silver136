@@ -24,21 +24,27 @@ extern u32 dat_80422ad0;
 extern u32 dat_80422ad4;
 
 void BattleStageOffLightEnemyInCommand(void) {
+    ;
 }
 
 void BattleStageOffLightFriendInCommand(void) {
+    ;
 }
 
 void BattleStageOffLightInCommand(void) {
+    ;
 }
 
 void BattleStageOnLightEnemyInCommand(void) {
+    ;
 }
 
 void BattleStageOnLightFriendInCommand(void) {
+    ;
 }
 
 void BattleStageOnLightInCommand(void) {
+    ;
 }
 
 void* BatSpotGetPtr(void) {
@@ -198,6 +204,7 @@ s32 BattleStageGetLightNumberByName(const char* name) {
 
 
 void BattleStageMain(void) {
+    ;
 }
 
 
@@ -207,10 +214,12 @@ u8 tou_gamen_screen_tev(int param_1) {
 
 
 void BattleStageDispLight(void) {
+    ;
 }
 
 
 void BattleStageDispDark(void) {
+    ;
 }
 
 
@@ -571,10 +580,12 @@ double randf(double min, double max) {
 
 
 void BattleStageEnd(void) {
+    ;
 }
 
 
 void screen_capture(void) {
+    ;
 }
 
 

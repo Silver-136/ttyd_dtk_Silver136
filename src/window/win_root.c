@@ -107,6 +107,7 @@ void winSortEntry(void* win, s32 type, f32 a, f32 b) {
 
 
 void winKirinukiGX(double param_1, double param_2, double param_3, double param_4, void* pWin, int param_6) {
+    ;
 }
 
 
@@ -116,10 +117,12 @@ u8 winMailGX(void) {
 
 
 void winHakoGX(double param_1, double param_2, void* pWin, int param_4) {
+    ;
 }
 
 
 void winBookGX(double param_1, double param_2, void* pWin, int param_4) {
+    ;
 }
 
 
@@ -169,6 +172,7 @@ u8 winBgMain(void* pWin) {
 
 
 void winRootDisp(s32 cameraId, void* work) {
+    ;
 }
 
 
@@ -810,4 +814,12 @@ void unk_80152e80(s32 cameraId, void* win) {
     *(s32*)((s32)win + 0x38) = 1;
     N_mapDispOff();
     L_camDispOff(4);
+}
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/window/win_root 20260624_191429 */
+
+/* fallback stub-fill: map=unk_80152bdc addr=0x80152bdc size=0x000002a4 */
+int unk_80152bdc() {
+    return 0;
 }

@@ -23,6 +23,7 @@ s32 evt_twoddisp_init(int param_1) {
 
 
 void twoddisp_disp(void) {
+    ;
 }
 
 

@@ -48,3 +48,35 @@ void EmitterEmit(void* emitter, void* data) {
         *(u32*)((s32)particles + (index << 5)) = temp;
     }
 }
+
+
+/* CHATGPT STUB FILL: main/effect/eff_particle 20260624_184929 */
+
+/* stub-fill: effParticleDisp | missing_definition | ghidra_signature */
+u8 effParticleDisp(void) {
+    return 0;
+}
+
+
+/* CHATGPT STUB FILL: main/effect/eff_particle 20260624_184929 */
+
+/* stub-fill: effParticleEntry | missing_definition | ghidra_signature */
+u8 effParticleEntry(void) {
+    return 0;
+}
+
+
+/* CHATGPT STUB FILL: main/effect/eff_particle 20260624_184929 */
+
+/* stub-fill: ParticleEmit | prototype_only | source_prototype */
+void ParticleEmit(void* emitter, void* particle, void* data) {
+    return;
+}
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/effect/eff_particle 20260624_191429 */
+
+/* fallback stub-fill: map=effParticleMain addr=0x80244f78 size=0x000001d8 */
+int effParticleMain() {
+    return 0;
+}

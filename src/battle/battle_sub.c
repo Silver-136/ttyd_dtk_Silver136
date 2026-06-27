@@ -74,6 +74,7 @@ s32 BattleTransID(EventEntry* event, s32 type) {
 
 
 void btlMovePos(double distance, double angle, float* moveXPos, float* moveZPos) {
+    ;
 }
 
 

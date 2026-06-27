@@ -27,18 +27,23 @@ extern double sin(double);
 extern const char str_PCTs_battle_common_b_802ef810[];
 
 void BattleMenuDisp_ActSelect_Main(void) {
+    ;
 }
 
 void BattleMenuDisp_ChangePartySelect_Main(void) {
+    ;
 }
 
 void BattleMenuDisp_MultiItem_Main(void) {
+    ;
 }
 
 void BattleMenuDisp_Operation_Main(void) {
+    ;
 }
 
 void BattleMenuDisp_WeaponSelect_Main(void) {
+    ;
 }
 
 void BattleMenuDisp_ActSelect_Disp(void) {
@@ -299,6 +304,7 @@ u8 DrawSubIconSub(u8 param_1, u8 param_2, u8 param_3, u8 param_4, u8 param_5, u8
 
 
 void DrawMainMenu(void) {
+    ;
 }
 
 
@@ -313,6 +319,7 @@ u8 DrawMainIconHukidasi(void) {
 
 
 void DrawWeaponWin(void) {
+    ;
 }
 
 
@@ -327,6 +334,7 @@ u8 N_DrawMenuMarioPinchMark(void) {
 
 
 void DrawMenuHelpWin(double x, double y, char* helpMsg) {
+    ;
 }
 
 
@@ -346,14 +354,17 @@ u8 DrawMenuCursorAndScrollArrow(void) {
 
 
 void DrawOperationWin(void) {
+    ;
 }
 
 
 void DrawMultiItemWin(void) {
+    ;
 }
 
 
 void DrawChangePartyWin(void) {
+    ;
 }
 
 
@@ -368,6 +379,7 @@ u8 SelectedItemCoordinateColorUpDate(void) {
 
 
 void InitSubMenuCommonProcess(void*, void*, void*) {
+    ;
 }
 
 
@@ -408,4 +420,5 @@ u8 DrawSubMenuCommonProcessSub1(void* windowWork, void* cursor, u32 relativePos,
 
 
 void BattleMenuDisp_ActSelect_Init(void* battleWork, void* cursor, void* actionTable, u32 param_4) {
+    ;
 }

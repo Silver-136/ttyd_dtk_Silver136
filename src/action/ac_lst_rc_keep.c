@@ -29,6 +29,7 @@ s32 battleAcMain_LstRcKeep(void* battleWork) {
 
 
 void actionCommandDisp(f32 x, f32 y, s32 icon) {
+    ;
 }
 
 

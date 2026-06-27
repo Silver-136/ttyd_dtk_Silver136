@@ -359,3 +359,474 @@ s32 scissor_damage_sub2(f32* pos) {
     }
     return 0;
 }
+
+s32 scissor_control(s32 param_1, s32 reset) {
+    extern f32 sqrt(f64 x);
+    extern s32 keyGetStickX(s32 pad);
+    extern s32 keyGetStickY(s32 pad);
+    extern void psndSFXOn(const char* name);
+    extern void smartFree(void* ptr);
+    extern s32 GXGetTexBufferSize(s32 width, s32 height, s32 format, s32 mipmap, s32 roundUp);
+    extern void* smartAlloc(s32 size, s32 group);
+    extern void scissor_disp_control(void);
+    extern f32 float_0_80427c94;
+    extern f32 float_42_80427ccc;
+    extern f32 float_50_80427cd0;
+    extern f32 float_0p86_80427cd4;
+    extern f32 float_neg300_80427cd8;
+    extern f32 float_300_80427cdc;
+    extern f32 float_neg200_80427ce0;
+    extern f32 float_200_80427ce4;
+    extern f64 double_5_802fff48;
+    extern const char str_SFX_BTL_SAC_KAKONDEP_802fff50[];
+    extern void* gp;
+
+    void* work;
+    f32* points;
+    s32 count;
+    s32 i;
+    s32 j;
+    s32 off;
+    f32 oldLen;
+    f32 newLen;
+    f32 dx;
+    f32 dy;
+    f32 ix;
+    f32 iy;
+    f32 adx;
+    f32 ady;
+    f32* cur;
+    f32* last;
+    s32 (*intersect)(f32*, f32*, f32, f32, f32, f32, f32, f32, f32, f32);
+
+    work = GetScissorPtr();
+    points = *(f32**)((s32)work + 0x114);
+
+    if (reset != 0) {
+        *(s32*)((s32)work + 0x9C) = 0;
+        *(f32*)((s32)work + 0xA8) = float_0_80427c94;
+        *(f32*)((s32)work + 0xA4) = float_0_80427c94;
+        *(f32*)((s32)work + 0xB0) = float_0_80427c94;
+        *(f32*)((s32)work + 0xAC) = float_0_80427c94;
+        *(s32*)((s32)work + 0xA0) = 0;
+        *(f32*)((s32)work + 0xD4) = float_0_80427c94;
+        *(f32*)((s32)work + 0xD8) = float_0_80427c94;
+        memset(points, 0, 0x1000);
+        *(u32*)work &= ~1u;
+    }
+
+    *(f32*)((s32)work + 0xA4) = *(f32*)((s32)work + 0xAC);
+    *(f32*)((s32)work + 0xA8) = *(f32*)((s32)work + 0xB0);
+    *(f32*)((s32)work + 0xAC) = (f32)(s8)keyGetStickX(0);
+    *(f32*)((s32)work + 0xB0) = (f32)(s8)keyGetStickY(0);
+
+    oldLen = sqrt((*(f32*)((s32)work + 0xA4) * *(f32*)((s32)work + 0xA4)) +
+                  (*(f32*)((s32)work + 0xA8) * *(f32*)((s32)work + 0xA8)));
+    (void)oldLen;
+    newLen = sqrt((*(f32*)((s32)work + 0xAC) * *(f32*)((s32)work + 0xAC)) +
+                  (*(f32*)((s32)work + 0xB0) * *(f32*)((s32)work + 0xB0)));
+    if (newLen > float_42_80427ccc) {
+        *(f32*)((s32)work + 0xD4) += *(f32*)((s32)work + 0xAC) / float_50_80427cd0;
+        *(f32*)((s32)work + 0xD8) += *(f32*)((s32)work + 0xB0) / float_50_80427cd0;
+    }
+
+    *(f32*)((s32)work + 0xD4) *= float_0p86_80427cd4;
+    *(f32*)((s32)work + 0xD8) *= float_0p86_80427cd4;
+    *(f32*)((s32)work + 0xB4) += *(f32*)((s32)work + 0xD4);
+    *(f32*)((s32)work + 0xB8) += *(f32*)((s32)work + 0xD8);
+
+    if (*(f32*)((s32)work + 0xB4) < float_neg300_80427cd8) {
+        *(f32*)((s32)work + 0xB4) = float_neg300_80427cd8;
+    }
+    if (*(f32*)((s32)work + 0xB4) > float_300_80427cdc) {
+        *(f32*)((s32)work + 0xB4) = float_300_80427cdc;
+    }
+    if (*(f32*)((s32)work + 0xB8) < float_neg200_80427ce0) {
+        *(f32*)((s32)work + 0xB8) = float_neg200_80427ce0;
+    }
+    if (*(f32*)((s32)work + 0xB8) > float_200_80427ce4) {
+        *(f32*)((s32)work + 0xB8) = float_200_80427ce4;
+    }
+
+    if (*(s32*)((s32)work + 0x104) <= 0x3B) {
+        *(s32*)((s32)work + 0x11C) = 6;
+        return 2;
+    }
+
+    if (((*(s32*)((s32)gp + 0x1C) % 6) == 0) && (*(s32*)((s32)work + 0x9C) < 0x200)) {
+        if ((*(f32*)((s32)work + 0xBC) != *(f32*)((s32)work + 0xB4)) ||
+            (*(f32*)((s32)work + 0xC0) != *(f32*)((s32)work + 0xB8))) {
+            dx = *(f32*)((s32)work + 0xB4) - *(f32*)((s32)work + 0xBC);
+            dy = *(f32*)((s32)work + 0xB8) - *(f32*)((s32)work + 0xC0);
+            adx = dx;
+            if (adx < float_0_80427c94) {
+                adx = -adx;
+            }
+            ady = dy;
+            if (ady < float_0_80427c94) {
+                ady = -ady;
+            }
+            if ((f64)adx >= double_5_802fff48 || (f64)ady >= double_5_802fff48) {
+                psndSFXOn(str_SFX_BTL_SAC_KAKONDEP_802fff50);
+            }
+            count = *(s32*)((s32)work + 0x9C);
+            points[count * 2] = *(f32*)((s32)work + 0xB4);
+            points[count * 2 + 1] = *(f32*)((s32)work + 0xB8);
+            *(f32*)((s32)work + 0xBC) = *(f32*)((s32)work + 0xB4);
+            *(f32*)((s32)work + 0xC0) = *(f32*)((s32)work + 0xB8);
+            *(s32*)((s32)work + 0x9C) = count + 1;
+        }
+    }
+
+    count = *(s32*)((s32)work + 0x9C);
+    if (count > 3) {
+        intersect = (s32 (*)(f32*, f32*, f32, f32, f32, f32, f32, f32, f32, f32))scissor_intersection;
+        off = 0;
+        for (i = 0; i < count - 3; i++) {
+            cur = (f32*)((s32)points + off);
+            last = &points[count * 2];
+            if (intersect(&ix, &iy, cur[0], cur[1], cur[2], cur[3], last[-2], last[-1], last[0], last[1])) {
+                last[-2] = ix;
+                cur[0] = ix;
+                last[-1] = iy;
+                cur[1] = iy;
+                for (j = 0; j < i; j++) {
+                    points[j * 2] = cur[0];
+                    points[j * 2 + 1] = cur[1];
+                }
+                if (*(void**)((s32)work + 0x170) != 0) {
+                    smartFree(*(void**)((s32)work + 0x170));
+                    *(void**)((s32)work + 0x170) = 0;
+                }
+                *(void**)((s32)work + 0x170) = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, 4, 0, 0), 1);
+                dispEntry(8, 0, scissor_capture, float_0_80427c94, 0);
+                return 2;
+            }
+            off += 8;
+        }
+    }
+
+    dispEntry(8, 0, scissor_disp_control, float_0_80427c94, 0);
+    return 0;
+}
+
+s32 star_control(void) {
+    extern void* BattleGetMarioPtr(void* battleWork);
+    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+    extern void* effStarStoneEntry(f32 x, f32 y, f32 z, f32 scale, s32 type);
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+    extern void* gp;
+    extern void* _battleWorkPointer;
+    extern f32 float_0_80427c94;
+    extern f32 float_neg1000_80427cfc;
+    extern f32 float_1_80427cb4;
+    extern f32 float_37_80427d00;
+    extern f32 float_50_80427cd0;
+    extern f32 float_neg1_80427cb0;
+    extern f32 float_2_80427d04;
+    extern f32 float_2160_80427d08;
+    extern f32 float_300_80427cdc;
+    extern f32 float_1p5_80427d0c;
+    extern char str_btl_wn_sac_scissor_802ffe78[];
+
+    void* work;
+    void* mario;
+    void* eff;
+    void* effWork;
+    f32* hist;
+    char* ro;
+    s32 state;
+    s32 i;
+    s32 offset;
+
+    ro = str_btl_wn_sac_scissor_802ffe78;
+    work = GetScissorPtr();
+    hist = (f32*)((s32)work + 0x9C);
+    mario = BattleGetMarioPtr(_battleWorkPointer);
+
+    if ((*(u32*)((s32)gp + 0x1C) & 3) == 0) {
+        offset = 0x0C;
+        for (i = 0; i < 3; i++) {
+            *(f32*)((s32)hist + offset + 0x40) = *(f32*)((s32)hist + offset + 0x3C);
+            *(f32*)((s32)hist + offset + 0x50) = *(f32*)((s32)hist + offset + 0x4C);
+            offset -= 4;
+        }
+        hist[0x10] = *(f32*)((s32)work + 0xB4);
+        hist[0x14] = *(f32*)((s32)work + 0xB8);
+    }
+
+    state = *(s32*)((s32)work + 0x11C);
+    switch (state) {
+        case 1:
+            *(s32*)((s32)work + 0x11C) = 2;
+            *(s32*)((s32)work + 0x120) = 0;
+            *(void**)((s32)work + 0x16C) = effStarStoneEntry(float_0_80427c94, float_neg1000_80427cfc, float_0_80427c94, float_1_80427cb4, 3);
+
+            BtlUnit_GetPos(mario, (f32*)((s32)work + 0x124), (f32*)((s32)work + 0x128), (f32*)((s32)work + 0x12C));
+
+            *(f32*)((s32)work + 0x128) +=
+                (*(f32*)((s32)mario + 0x114) * (f32)*(s16*)((s32)mario + 0xCE)) + float_37_80427d00;
+
+            *(u32*)((s32)work + 0x130) = *(u32*)((s32)work + 0x124);
+            *(u32*)((s32)work + 0x134) = *(u32*)((s32)work + 0x128);
+            *(u32*)((s32)work + 0x138) = *(u32*)((s32)work + 0x12C);
+            *(u32*)((s32)work + 0x13C) = *(u32*)((s32)work + 0x124);
+            *(u32*)((s32)work + 0x140) = *(u32*)((s32)work + 0x128);
+            *(u32*)((s32)work + 0x144) = *(u32*)((s32)work + 0x12C);
+            *(f32*)((s32)work + 0x140) += float_50_80427cd0;
+            *(f32*)((s32)work + 0x144) += float_neg1_80427cb0;
+
+            *(u32*)((s32)work + 0x154) = *(u32*)((s32)ro + 0x2C);
+            *(u32*)((s32)work + 0x158) = *(u32*)((s32)ro + 0x30);
+            *(u32*)((s32)work + 0x15C) = *(u32*)((s32)ro + 0x34);
+            *(u32*)((s32)work + 0x160) = *(u32*)((s32)ro + 0x38);
+            *(u32*)((s32)work + 0x164) = *(u32*)((s32)ro + 0x3C);
+            *(u32*)((s32)work + 0x168) = *(u32*)((s32)ro + 0x40);
+
+            /* fall through into state 2 update like target */
+        case 2:
+            *(s32*)((s32)work + 0x120) = *(s32*)((s32)work + 0x120) + 1;
+            if (*(s32*)((s32)work + 0x120) <= 0x64) {
+                *(f32*)((s32)work + 0x124) = intplGetValue(0, *(s32*)((s32)work + 0x120), 0x64, *(f32*)((s32)work + 0x130), *(f32*)((s32)work + 0x13C));
+                *(f32*)((s32)work + 0x128) = intplGetValue(0, *(s32*)((s32)work + 0x120), 0x64, *(f32*)((s32)work + 0x134), *(f32*)((s32)work + 0x140));
+                *(f32*)((s32)work + 0x12C) = intplGetValue(0, *(s32*)((s32)work + 0x120), 0x64, *(f32*)((s32)work + 0x138), *(f32*)((s32)work + 0x144));
+                *(f32*)((s32)work + 0x154) = intplGetValue(0, *(s32*)((s32)work + 0x120), 0x64, float_0_80427c94, float_2_80427d04);
+                *(f32*)((s32)work + 0x158) = *(f32*)((s32)work + 0x154);
+                *(f32*)((s32)work + 0x15C) = *(f32*)((s32)work + 0x154);
+            } else {
+                *(u32*)((s32)work + 0x124) = *(u32*)((s32)work + 0x13C);
+                *(u32*)((s32)work + 0x128) = *(u32*)((s32)work + 0x140);
+                *(u32*)((s32)work + 0x12C) = *(u32*)((s32)work + 0x144);
+                *(f32*)((s32)work + 0x154) = float_2_80427d04;
+                *(f32*)((s32)work + 0x158) = float_2_80427d04;
+                *(f32*)((s32)work + 0x15C) = float_2_80427d04;
+            }
+            *(f32*)((s32)work + 0x164) = intplGetValue(4, *(s32*)((s32)work + 0x120), 0x78, float_0_80427c94, float_2160_80427d08);
+            if (*(s32*)((s32)work + 0x120) >= 0x78) {
+                *(s32*)((s32)work + 0x11C) = 3;
+                *(s32*)((s32)work + 0x120) = 0;
+                *(u32*)((s32)work + 0x130) = *(u32*)((s32)work + 0x124);
+                *(u32*)((s32)work + 0x134) = *(u32*)((s32)work + 0x128);
+                *(u32*)((s32)work + 0x138) = *(u32*)((s32)work + 0x12C);
+                *(f32*)((s32)work + 0x140) = float_300_80427cdc;
+            }
+            break;
+
+        case 3:
+            *(s32*)((s32)work + 0x120) = *(s32*)((s32)work + 0x120) + 1;
+            *(f32*)((s32)work + 0x128) = intplGetValue(1, *(s32*)((s32)work + 0x120), 0x3C, *(f32*)((s32)work + 0x134), *(f32*)((s32)work + 0x140));
+            if (*(s32*)((s32)work + 0x120) >= 0x3C) {
+                *(s32*)((s32)work + 0x11C) = 4;
+                *(s32*)((s32)work + 0x120) = 0;
+                *(u32*)((s32)work + 0x124) = *(u32*)((s32)ro + 0x44);
+                *(u32*)((s32)work + 0x128) = *(u32*)((s32)ro + 0x48);
+                *(u32*)((s32)work + 0x12C) = *(u32*)((s32)ro + 0x4C);
+                *(u32*)((s32)work + 0x154) = *(u32*)((s32)ro + 0x50);
+                *(u32*)((s32)work + 0x158) = *(u32*)((s32)ro + 0x54);
+                *(u32*)((s32)work + 0x15C) = *(u32*)((s32)ro + 0x58);
+                *(u32*)((s32)work + 0x160) = *(u32*)((s32)ro + 0x5C);
+                *(u32*)((s32)work + 0x164) = *(u32*)((s32)ro + 0x60);
+                *(u32*)((s32)work + 0x168) = *(u32*)((s32)ro + 0x64);
+                *(f32*)((s32)work + 0x134) = *(f32*)((s32)work + 0x128);
+                *(f32*)((s32)work + 0x140) = float_0_80427c94;
+                hist[6] = *(f32*)((s32)work + 0x124);
+                hist[7] = *(f32*)((s32)work + 0x128);
+                offset = 0;
+                for (i = 0; i < 4; i++) {
+                    *(f32*)((s32)hist + offset + 0x40) = float_0_80427c94;
+                    *(f32*)((s32)hist + offset + 0x50) = float_neg1000_80427cfc;
+                    offset += 4;
+                }
+            }
+            break;
+
+        case 4:
+            *(s32*)((s32)work + 0x120) = *(s32*)((s32)work + 0x120) + 1;
+            *(f32*)((s32)work + 0x128) = intplGetValue(4, *(s32*)((s32)work + 0x120), 0x3C, *(f32*)((s32)work + 0x134), *(f32*)((s32)work + 0x140));
+            hist[6] = *(f32*)((s32)work + 0x124);
+            hist[7] = *(f32*)((s32)work + 0x128);
+            if (*(s32*)((s32)work + 0x120) >= 0x3C) {
+                *(s32*)((s32)work + 0x11C) = 5;
+                *(s32*)((s32)work + 0x120) = 0;
+            }
+            break;
+
+        default:
+            break;
+    }
+
+    eff = *(void**)((s32)work + 0x16C);
+    if (eff != 0) {
+        effWork = *(void**)((s32)eff + 0xC);
+        if (*(s32*)((s32)work + 0x11C) < 4) {
+            *(f32*)((s32)effWork + 0x08) = *(f32*)((s32)work + 0x124);
+            *(f32*)((s32)effWork + 0x0C) = *(f32*)((s32)work + 0x128);
+            *(f32*)((s32)effWork + 0x10) = *(f32*)((s32)work + 0x12C);
+        } else {
+            *(f32*)((s32)effWork + 0x08) = float_0_80427c94;
+            *(f32*)((s32)effWork + 0x0C) = float_neg1000_80427cfc;
+            *(f32*)((s32)effWork + 0x10) = float_0_80427c94;
+        }
+        *(f32*)((s32)effWork + 0x18) = *(f32*)((s32)work + 0x160);
+        *(f32*)((s32)effWork + 0x1C) = *(f32*)((s32)work + 0x164);
+        *(f32*)((s32)effWork + 0x20) = *(f32*)((s32)work + 0x168);
+        *(f32*)((s32)effWork + 0x14) = float_1p5_80427d0c * *(f32*)((s32)work + 0x154);
+    }
+
+    if (*(s32*)((s32)work + 0x11C) >= 4 && *(s32*)((s32)work + 0x11C) <= 6) {
+        dispEntry(8, 2, star_disp2D, float_0_80427c94, 0);
+    }
+
+    return 0;
+}
+
+s32 scissor_cross(f32* pos1, f32* pos2, f32* poly, s32 count) {
+    extern f32 float_neg1000_80427cfc;
+    extern f32 float_1_80427cb4;
+    extern f32 float_1000_80427d10;
+    extern f32 float_0p5_80427ca8;
+
+    f32 outX;
+    f32 outY;
+    f32 xs[512];
+    f32 ys[512];
+    s32 num;
+    s32 i;
+    s32 j;
+    s32 k;
+    s32 next;
+    s32 found;
+    f32* cur;
+    f32* nxt;
+    f32* prev;
+    f32 mid;
+    f32 tx;
+    f32 ty;
+    f32 tmp;
+
+    for (i = 0; i < count; i++) {
+        next = (i + 1) % count;
+        cur = &poly[i * 2];
+        nxt = &poly[next * 2];
+        if (scissor_intersection2(pos1[0], pos1[1], pos2[0], pos2[1], cur[0], cur[1], nxt[0], nxt[1]) != 0) {
+            return 0;
+        }
+    }
+
+    ys[0] = float_neg1000_80427cfc;
+    xs[0] = float_neg1000_80427cfc;
+    num = 1;
+
+    for (i = 0; i < count; i++) {
+        cur = &poly[i * 2];
+        next = (i + 1) % count;
+        nxt = &poly[next * 2];
+        if (scissor_intersection4(&outX, &outY,
+                                  pos1[0] + float_1_80427cb4, pos1[1],
+                                  pos2[0] + float_1_80427cb4, pos2[1],
+                                  cur[0], cur[1], nxt[0], nxt[1]) != 0) {
+            found = 0;
+            if (cur[0] == outX && cur[1] == outY) {
+                if (i == 0) {
+                    prev = &poly[(count - 1) * 2];
+                } else {
+                    prev = &poly[(i - 1) * 2];
+                }
+                if (scissor_intersection3(&tx, &ty, pos1[0], pos1[1], pos2[0], pos2[1], prev[0], prev[1], nxt[0], nxt[1]) != 0) {
+                    found = 1;
+                }
+            }
+            if (found != 0) {
+                for (j = 0; j < count; j++) {
+                    if (xs[j] == outX && ys[j] == outY) {
+                        break;
+                    }
+                }
+                if (j == count) {
+                    xs[num] = outX;
+                    ys[num] = outY;
+                    num++;
+                }
+            } else {
+                xs[num] = outX;
+                ys[num] = outY;
+                num++;
+            }
+        }
+    }
+
+    ys[num] = float_1000_80427d10;
+    xs[num] = float_1000_80427d10;
+
+    if (pos1[0] != pos2[0]) {
+        for (i = 0; i < num; i++) {
+            for (j = i + 1; j < num + 1; j++) {
+                if (xs[i] > xs[j]) {
+                    tmp = xs[i]; xs[i] = xs[j]; xs[j] = tmp;
+                    tmp = ys[i]; ys[i] = ys[j]; ys[j] = tmp;
+                }
+            }
+        }
+        mid = float_0p5_80427ca8 * (pos1[0] + pos2[0]);
+        for (i = 0; i < num; i++) {
+            if (xs[i] <= mid && mid < xs[i + 1]) {
+                return i & 1;
+            }
+        }
+    } else {
+        for (i = 0; i < num; i++) {
+            for (j = i + 1; j < num + 1; j++) {
+                if (ys[i] > ys[j]) {
+                    tmp = ys[i]; ys[i] = ys[j]; ys[j] = tmp;
+                    tmp = xs[i]; xs[i] = xs[j]; xs[j] = tmp;
+                }
+            }
+        }
+        mid = float_0p5_80427ca8 * (pos1[1] + pos2[1]);
+        for (i = 0; i < num; i++) {
+            if (ys[i] <= mid && mid < ys[i + 1]) {
+                return i & 1;
+            }
+        }
+    }
+
+    return 0;
+}
+
+
+/* CHATGPT STUB FILL: main/action/star/sac_scissor 20260624_184823 */
+
+/* stub-fill: scissor_disp_region | prototype_only | source_prototype */
+void scissor_disp_region(void) {
+    return;
+}
+
+/* stub-fill: scissor_disp_control | prototype_only | source_prototype */
+void scissor_disp_control(void) {
+    return;
+}
+
+/* stub-fill: scissor_damage_sub | missing_definition | ghidra_signature */
+u8 scissor_damage_sub(void) {
+    return 0;
+}
+
+/* stub-fill: scissor_damage | missing_definition | ghidra_signature */
+s32 scissor_damage(int param_1) {
+    return 0;
+}
+
+/* stub-fill: star_disp2D_sub | prototype_only | source_prototype */
+void star_disp2D_sub(s32 id, s32 alpha) {
+    return;
+}
+
+/* stub-fill: tess | prototype_only | source_prototype */
+void tess(void* entries, s32 count) {
+    return;
+}
+
+/* stub-fill: scissor_intersection | prototype_only | source_prototype */
+s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4) {
+    return 0;
+}

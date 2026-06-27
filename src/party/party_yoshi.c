@@ -53,10 +53,95 @@ u8 searchGround2(void* pParty) {
 }
 
 
-u8 inertia(void* pParty) {
-    return 0;
-}
+void inertia(void* pParty) {
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32 id);
+    extern f32 float_0_80421138;
+    extern f32 float_neg0p07_80421174;
+    extern f32 float_neg0p5_80421178;
+    extern f32 float_0p01_8042117c;
+    extern f32 float_256_80421180;
+    extern f32 float_16_80421184;
 
+    void* player = *(void**)((s32)pParty + 0x160);
+    f32 speedX = *(f32*)((s32)player + 0x2C8);
+    f32 speedZ = *(f32*)((s32)player + 0x2CC);
+    f32 stickX = (f32)*(s8*)((s32)pParty + 0x158);
+    f32 x;
+    f32 z;
+    void* party;
+    s32 status;
+    u8 motion;
+    f32 drag;
+    f32 limit;
+    s32 dir;
+
+    if (stickX == float_0_80421138) {
+        party = partyGetPtr(marioGetPartyId());
+        status = 5;
+        if (party == 0 || *(s8*)((s32)party + 0x31) != 4 || (*(u32*)party & 0x100) == 0) {
+            status = 0;
+        } else {
+            motion = *(u8*)((s32)party + 0x39);
+            if (motion >= 0xA && motion <= 0xD) {
+                status = 1;
+            } else if (motion >= 0x14 && motion <= 0x16) {
+                status = 2;
+            } else if (motion >= 0x64 && motion <= 0x65) {
+                status = 5;
+            } else if (motion >= 0x3C && motion <= 0x41) {
+                status = 3;
+            } else if (motion >= 0x32 && motion <= 0x34) {
+                status = 4;
+            }
+        }
+        if (status != 2) {
+            speedX = float_0_80421138;
+            speedZ = float_0_80421138;
+        } else {
+            drag = float_neg0p07_80421174;
+            if (*(void**)((s32)player + 0x1F4) != 0) {
+                drag = float_neg0p5_80421178;
+            }
+            speedX = speedX * drag + speedX;
+            speedZ = speedZ * drag + speedZ;
+            if (__fabsf(speedX) < float_0p01_8042117c) {
+                speedX = float_0_80421138;
+            }
+            if (__fabsf(speedZ) < float_0p01_8042117c) {
+                speedZ = float_0_80421138;
+            }
+        }
+    } else if (speedX * speedX + speedZ * speedZ <= float_256_80421180) {
+        dir = *(s32*)(*(s32*)((s32)pParty + 0x170) + 4);
+        speedX = stickX * float_0p01_8042117c + speedX;
+        if (dir > 0 && speedX <= float_0_80421138) {
+            speedX = float_0_80421138;
+        }
+        if (dir < 0 && speedX >= float_0_80421138) {
+            speedX = float_0_80421138;
+        }
+        speedZ = speedZ - float_0_80421138;
+    } else {
+        speedX = stickX * float_0p01_8042117c + speedX;
+        limit = -float_16_80421184;
+        if (speedX < limit) {
+            speedX = limit;
+        }
+        if (speedX > float_16_80421184) {
+            speedX = float_16_80421184;
+        }
+        speedZ = speedZ - float_0_80421138;
+        if (speedZ < limit) {
+            speedZ = limit;
+        }
+        if (speedZ > float_16_80421184) {
+            speedZ = float_16_80421184;
+        }
+    }
+    *(f32*)((s32)player + 0x2C8) = speedX;
+    *(f32*)((s32)player + 0x2CC) = speedZ;
+}
 
 u8 yoshi_exit(void* pParty) {
     return 0;
@@ -299,5 +384,18 @@ void L_sweatMain(void* pParty) {
 }
 
 u8 yoshi_jumpStand(void) {
+    return 0;
+}
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/party/party_yoshi 20260624_191429 */
+
+/* fallback stub-fill: map=unk_800b6468 addr=0x800b6468 size=0x0000016c */
+int unk_800b6468() {
+    return 0;
+}
+
+/* fallback stub-fill: map=unk_800b65d4 addr=0x800b65d4 size=0x00000164 */
+int unk_800b65d4() {
     return 0;
 }

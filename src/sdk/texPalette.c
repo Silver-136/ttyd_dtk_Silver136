@@ -11,4 +11,5 @@ void* UnpackTexPalette(void* data) {
 
 
 void TEXGetGXTexObjFromPalette(void* palette, void* texObj, s32 id) {
+    ;
 }

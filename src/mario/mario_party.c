@@ -272,8 +272,10 @@ u32 marioPartyGoodbye(void) {
 
 
 void partyLeft(s32 partyId) {
+    ;
 }
 
 
 void partyJoin(s32 partyId) {
+    ;
 }

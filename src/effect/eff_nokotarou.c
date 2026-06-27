@@ -46,3 +46,16 @@ void* effNokotarouEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 field1C) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_nokotarou 20260624_185035 */
+
+/* stub-fill: effNokotarouDisp | missing_definition | ghidra_signature */
+u8 effNokotarouDisp(void) {
+    return 0;
+}
+
+/* stub-fill: effNokotarouMain | prototype_only | source_prototype */
+void effNokotarouMain(void* entry) {
+    return;
+}

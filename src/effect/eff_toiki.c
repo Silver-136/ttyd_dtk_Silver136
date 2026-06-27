@@ -47,3 +47,16 @@ void* effToikiEntry(s32 type, s32 arg1, f32 x, f32 y, f32 z) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_toiki 20260624_184929 */
+
+/* stub-fill: effToikiDisp | missing_definition | ghidra_signature */
+u8 effToikiDisp(int param_1, int param_2) {
+    return 0;
+}
+
+/* stub-fill: effToikiMain | prototype_only | source_prototype */
+void effToikiMain(void) {
+    return;
+}

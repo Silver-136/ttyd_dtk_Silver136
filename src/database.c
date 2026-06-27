@@ -2,6 +2,7 @@
 
 
 void setupDataBase(char* area, char* map) {
+    ;
 }
 
 

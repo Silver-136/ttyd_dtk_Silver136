@@ -296,6 +296,7 @@ u8 L_smartReInit(void) {
 
 
 void smartFree(void*) {
+    ;
 }
 
 
@@ -333,10 +334,12 @@ void memClear(s32 heap) {
 
 
 void smartAutoFree(s32 heap) {
+    ;
 }
 
 
 void _mapFree(void*, void*) {
+    ;
 }
 
 

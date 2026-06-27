@@ -6,6 +6,7 @@ void effConfettiN64SetCamId(void* effect, s32 camId) {
 
 
 void effConfettiN64Entry(void) {
+    ;
 }
 
 

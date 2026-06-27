@@ -304,6 +304,7 @@ void BattleCommandDisplay_WeaponSelectMenuSetup(void* work, s32 cursorId, s32 fl
 
 
 void _btlcmd_MakeSelectWeaponTable() {
+    ;
 }
 
 
@@ -313,14 +314,17 @@ s32 BattleCommandInput(void* battleWork) {
 
 
 void _btlcmd_MakeActClassTable(void* battleWork) {
+    ;
 }
 
 
 void _btlcmd_SetAttackEvent(void* unit, void* commandWork) {
+    ;
 }
 
 
 void BattleCommandDisplay_TargetSelectMenuDisp(s32 param_1, void* battleWork) {
+    ;
 }
 
 
@@ -330,6 +334,7 @@ s32 BattleCommandDisplay_ActMenuMain(void* battleWork) {
 
 
 void _btlcmd_MakeOperationTable() {
+    ;
 }
 
 
@@ -339,6 +344,7 @@ s32 BattleCommandDisplay_WeaponSelectMenuMain(void* battleWork, int param_2) {
 
 
 void _btlcmd_MakeMultiItemTable() {
+    ;
 }
 
 
@@ -388,6 +394,7 @@ int BattleCommandDisplay_WeaponMultiItemCancelCheckMain(void* battleWork) {
 
 
 void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(s32 param_1, void* battleWork) {
+    ;
 }
 
 
@@ -402,14 +409,17 @@ s32 _btlcmd_SelectWeaponDecide(void* battleWork, int param_2, int weaponIndex) {
 
 
 void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(s32 param_1, void* battleWork) {
+    ;
 }
 
 
 void _btlcmd_UpdateSelectWeaponTable(void* battleWork, int param_2) {
+    ;
 }
 
 
 void _btlcmd_GetCursorPtr() {
+    ;
 }
 
 

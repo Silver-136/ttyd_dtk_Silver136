@@ -105,6 +105,7 @@ u8 windowDispGX2_Waku_col(s64 param_1, s64 param_2, s64 param_3, s64 param_4, s6
 
 
 void windowDispGX_Waku_col(double x, double y, double width, double height, double curve, u16 gxTexMapID, u32* color) {
+    ;
 }
 
 

@@ -101,6 +101,7 @@ s32 door_entry(void* pEvt) {
 
 
 void door_dark_flag_sub(s32 unk0, s32 unk1, s32 unk2, s32 unk3) {
+    ;
 }
 
 
@@ -471,5 +472,18 @@ s32 door_group(int param_1) {
 
 
 s32 outside_group(int param_1) {
+    return 0;
+}
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/event/evt_door 20260624_191429 */
+
+/* fallback stub-fill: map=?snd_door_out addr=0x800e96e0 size=0x00000028 */
+static int snd_door_out() {
+    return 0;
+}
+
+/* fallback stub-fill: map=?snd_door_in addr=0x800e9708 size=0x00000028 */
+static int snd_door_in() {
     return 0;
 }

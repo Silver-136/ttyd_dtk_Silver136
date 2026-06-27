@@ -17,9 +17,66 @@ u8 progDisp(int param_1) {
 
 
 u8 seq_logoInit(void) {
-    return 0;
-}
+    extern void* memset(void* dst, s32 value, u32 size);
+    extern char* getMarioStDvdRoot(void);
+    extern void* fileAllocf(s32 heap, const char* fmt, ...);
+    extern u32 OSGetResetCode(void);
+    extern u32 U_VIGetDTVStatus(void);
+    extern u32 OSGetProgressiveMode(void);
+    extern void OSSetProgressiveMode(s32 progressive);
+    extern u32 keyGetButton(s32 controller);
+    extern void VIConfigure(void* mode);
+    extern void VIFlush(void);
+    extern void VIWaitForRetrace(void);
+    extern void* wp;
+    extern void* gp;
+    extern const char str_PCTs_mariost_tpl_802c3b68[];
+    extern u8 sRMObjHReso[];
+    extern u8 sRMObjHReso_prog[];
 
+    memset(wp, 0, 0x20);
+    *(s32*)((s32)wp + 4) = -1;
+    *(void**)wp = fileAllocf(4, str_PCTs_mariost_tpl_802c3b68, getMarioStDvdRoot());
+
+    if ((OSGetResetCode() >> 31) == 0 || (OSGetResetCode() & 2) != 0) {
+        if (U_VIGetDTVStatus() != 0) {
+            if (OSGetProgressiveMode() == 1) {
+                *(s32*)((s32)wp + 0x18) = 1;
+            } else if ((keyGetButton(0) & 0x200) != 0) {
+                *(s32*)((s32)wp + 0x18) = 1;
+            } else {
+                *(s32*)((s32)wp + 0x18) = 0;
+            }
+        } else {
+            if (OSGetProgressiveMode() == 1) {
+                OSSetProgressiveMode(0);
+            }
+            *(s32*)((s32)wp + 0x18) = 0;
+        }
+    }
+
+    if ((OSGetResetCode() >> 31) == 0 || (OSGetResetCode() & 2) != 0) {
+        VIConfigure(sRMObjHReso);
+        VIFlush();
+        VIWaitForRetrace();
+    } else {
+        switch (OSGetResetCode() & 1) {
+            case 0:
+                VIConfigure(sRMObjHReso);
+                VIFlush();
+                VIWaitForRetrace();
+                break;
+            case 1:
+                VIConfigure(sRMObjHReso_prog);
+                VIFlush();
+                VIWaitForRetrace();
+                VIWaitForRetrace();
+                *(u32*)gp |= 8;
+                break;
+        }
+        *(u32*)gp |= 4;
+    }
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

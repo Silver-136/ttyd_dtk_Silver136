@@ -57,6 +57,7 @@ extern s32 icon_tpl_ok;
 extern void* TEXGet(void* tpl, s32 id);
 
 void iconTexSetup(void) {
+    ;
 }
 
 void iconReInit(void) {
@@ -551,6 +552,7 @@ void iconInit(void) {
 
 
 void iconGX(void* mtx, void* icon) {
+    ;
 }
 
 

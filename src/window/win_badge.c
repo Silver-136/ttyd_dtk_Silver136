@@ -5,6 +5,7 @@ extern f32 float_0p25_804236fc;
 void* pouchGetPtr(void);
 
 void winBadgeExit(void) {
+    ;
 }
 
 

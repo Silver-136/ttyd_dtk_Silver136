@@ -22,6 +22,7 @@ void GXSetTevColor(s32 reg, void* color);
 void JUTFontSetup(s32 language);
 
 void fontmgrInit(void) {
+    ;
 }
 
 u32 FontGetDrawColor(void) {
@@ -145,6 +146,7 @@ u8 _JUTFont_DrawPos(u16 param_1, s16 param_2, s16 param_3) {
 
 
 void FontDrawStringMtx(f32* mtx, void* string) {
+    ;
 }
 
 
@@ -164,6 +166,7 @@ f32 FontGetMessageWidthLine(const char* msg, s32 line) {
 
 
 void JUTFontSetup(s32 language) {
+    ;
 }
 
 
@@ -177,10 +180,77 @@ u8 JUTFont_DrawStart(u32* param_1) {
 }
 
 
-u8 HSV2RGB(void) {
-    return 0;
-}
+u32 HSV2RGB(u8* hsv) {
+    extern f64 floor(f64 x);
+    extern const f32 float_360_80420400;
+    extern const f32 float_0p0039062_804203f4;
+    extern const f32 float_60_80420404;
+    extern const f32 float_255_804203fc;
+    extern const f32 float_1_804203e4;
+    f32 h;
+    f32 s;
+    f32 v;
+    f32 f;
+    f32 p;
+    f32 q;
+    f32 r;
+    f32 g;
+    f32 b;
+    s32 i;
+    u32 color;
+    u8* out;
 
+    h = ((float_360_80420400 * hsv[0]) * float_0p0039062_804203f4) / float_60_80420404;
+    s = hsv[1] / float_255_804203fc;
+    v = hsv[2] / float_255_804203fc;
+    i = (s32)floor(h);
+    f = h - (f32)i;
+    if ((i & 1) == 0) {
+        f = float_1_804203e4 - f;
+    }
+    p = v * (float_1_804203e4 - s);
+    q = v * (float_1_804203e4 - (s * f));
+
+    switch (i) {
+        case 0:
+            r = v;
+            g = q;
+            b = p;
+            break;
+        case 1:
+            r = q;
+            g = v;
+            b = p;
+            break;
+        case 2:
+            r = p;
+            g = v;
+            b = q;
+            break;
+        case 3:
+            r = p;
+            g = q;
+            b = v;
+            break;
+        case 4:
+            r = q;
+            g = p;
+            b = v;
+            break;
+        case 5:
+            r = v;
+            g = p;
+            b = q;
+            break;
+    }
+
+    out = (u8*)&color;
+    out[0] = (u8)(r * float_255_804203fc);
+    out[1] = (u8)(g * float_255_804203fc);
+    out[2] = (u8)(b * float_255_804203fc);
+    out[3] = hsv[3];
+    return color;
+}
 
 u8 FontDrawCode(void) {
     return 0;
@@ -293,4 +363,5 @@ u8 FontDrawStringPitch(double param_1, double param_2, s64 param_3, s32 param_4)
 
 
 void FontDrawString(f32 x, f32 y, s32 str) {
+    ;
 }

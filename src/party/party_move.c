@@ -183,6 +183,7 @@ u8 partyMoveWalk(void* pParty) {
 
 
 void partyFlyMain(void* pParty) {
+    ;
 }
 
 
@@ -192,6 +193,7 @@ u8 partyForceWalk(void* pParty) {
 
 
 void partyMoveMain(void* party, s32 hosei) {
+    ;
 }
 
 
@@ -392,6 +394,7 @@ u8 partyChkWall(void* pParty) {
 
 
 void partyChgMot(void* party, s32 mot) {
+    ;
 }
 
 void unk_800cbc30(void* party) {
@@ -498,4 +501,45 @@ void unk_800cbfbc(void* party, f32 speed) {
         }
     }
     *(f32*)((s32)party + 0x104) = result;
+}
+
+
+/* CHATGPT STUB FILL: main/party/party_move 20260624_183901 */
+
+/* stub-fill: flyMain | missing_definition | ghidra_signature */
+u8 flyMain(void* pParty) {
+    return 0;
+}
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/party/party_move 20260624_191429 */
+
+/* fallback stub-fill: map=unk_800ca884 addr=0x800ca884 size=0x000001e8 */
+int unk_800ca884() {
+    return 0;
+}
+
+/* fallback stub-fill: map=unk_800cb9bc addr=0x800cb9bc size=0x000000a4 */
+int unk_800cb9bc() {
+    return 0;
+}
+
+/* fallback stub-fill: map=unk_800cba60 addr=0x800cba60 size=0x000000b0 */
+int unk_800cba60() {
+    return 0;
+}
+
+/* fallback stub-fill: map=unk_800cbb10 addr=0x800cbb10 size=0x00000120 */
+int unk_800cbb10() {
+    return 0;
+}
+
+/* fallback stub-fill: map=unk_800cbcc0 addr=0x800cbcc0 size=0x000001c4 */
+int unk_800cbcc0() {
+    return 0;
+}
+
+/* fallback stub-fill: map=unk_800ccb34 addr=0x800ccb34 size=0x00000160 */
+int unk_800ccb34() {
+    return 0;
 }

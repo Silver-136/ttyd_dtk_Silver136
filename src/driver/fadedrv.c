@@ -649,13 +649,201 @@ u8 fadeMain(void) {
 
 
 void fadeEntry(s32 type, s32 time, void* data) {
+    ;
 }
 
 
-u8 disp_texture(void) {
-    return 0;
-}
+void disp_texture(void) {
+    extern void PSMTXRotRad(void* mtx, s32 axis, f32 rad);
+    extern void PSMTXIdentity(void* mtx);
+    extern void GXInitTexObj(void* obj, const void* image, u16 width, u16 height, s32 format, s32 wrapS, s32 wrapT, s32 mipmap);
+    extern void GXLoadTexMtxImm(void* mtx, s32 id, s32 type);
+    extern const f32 float_100_8041f7f4;
+    extern const f32 float_neg0p5_8041f7f8;
+    extern const f32 float_deg2rad_8041f7fc;
+    extern const f32 float_304_8041f800;
+    extern const u8 i4tex_949;
 
+    void* fade;
+    void* cam;
+    void* texPalette;
+    u32 tevColor;
+    f32 proj[7];
+    u8 texObj[0x20];
+    f32 rotMtx[3][4];
+    f32 scaleMtx[3][4];
+    f32 transMtx[3][4];
+    f32 baseMtx[3][4];
+    f32 value;
+    f32 radius;
+    f32 negSize;
+    s32 alpha;
+
+    cam = camGetPtr(8);
+    fade = wp;
+
+    switch (*(u32*)((s32)fade + 0xC)) {
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+            if ((*(u16*)((s32)fade + 0x8) & 2) != 0) {
+                return;
+            }
+            break;
+        case 0:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+        case 14:
+        default:
+            break;
+    }
+
+    GXGetProjectionv(proj);
+    GXSetProjection((void*)((s32)cam + 0x15C), *(s32*)((s32)cam + 0x19C));
+
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetBlendMode(1, 4, 5, 7);
+    GXSetZMode(0, 7, 0);
+
+    GXSetNumChans(0);
+    GXSetNumTevStages(1);
+    GXSetNumTexGens(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 2, 8, 0xF);
+    GXSetTevAlphaIn(0, 7, 1, 4, 7);
+
+    GXSetCullMode(2);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+
+    if (*(s32*)((s32)fade + 0xC) < 9) {
+        if (*(s32*)((s32)fade + 0xC) < 3) {
+            if (*(s32*)((s32)fade + 0xC) > 0) {
+                GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
+                GXSetCurrentMtx(0);
+
+                texPalette = *(void**)((s32)wp + 0x358);
+                TEXGetGXTexObjFromPalette(texPalette, texObj, 0);
+                GXLoadTexObj(texObj, 0);
+
+                if ((*(u16*)((s32)fade + 0x8) & 2) == 0) {
+                    value = *(f32*)((s32)fade + 0x2C);
+                    radius = float_100_8041f7f4 * value;
+                    radius = radius * value;
+                    radius = value * radius;
+                    radius = value * radius;
+                    radius = value * radius;
+
+                    PSMTXTrans(baseMtx, float_0p5_8041f7c0, float_0p5_8041f7c0, float_0_8041f7a8);
+                    PSMTXScale(scaleMtx, radius, radius, float_1_8041f7ac);
+                    PSMTXTrans(transMtx, float_neg0p5_8041f7f8, float_neg0p5_8041f7f8, float_0_8041f7a8);
+                    PSMTXConcat(baseMtx, scaleMtx, scaleMtx);
+                    PSMTXConcat(scaleMtx, transMtx, (void*)((s32)fade + 0x34));
+                } else if (*(s32*)((s32)fade + 0xC) == 2) {
+                    PSMTXTrans((void*)((s32)fade + 0x34), float_1_8041f7ac, float_1_8041f7ac, float_0_8041f7a8);
+                }
+            }
+        } else if (*(s32*)((s32)fade + 0xC) < 7) {
+            GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
+            GXSetCurrentMtx(0);
+
+            texPalette = *(void**)((s32)wp + 0x358);
+            TEXGetGXTexObjFromPalette(texPalette, texObj, 1);
+            GXLoadTexObj(texObj, 0);
+
+            if ((*(u16*)((s32)fade + 0x8) & 2) == 0) {
+                value = *(f32*)((s32)fade + 0x2C);
+                radius = float_100_8041f7f4 * value;
+                radius = radius * value;
+                radius = value * radius;
+                radius = value * radius;
+                radius = value * radius;
+
+                PSMTXTrans(baseMtx, float_0p5_8041f7c0, float_0p5_8041f7c0, float_0_8041f7a8);
+                PSMTXScale(scaleMtx, radius, radius, float_1_8041f7ac);
+                PSMTXRotRad(rotMtx, 'z', float_deg2rad_8041f7fc * *(f32*)((s32)fade + 0x30));
+
+                PSMTXTrans(
+                    transMtx,
+                    float_neg0p5_8041f7f8 - (*(f32*)((s32)fade + 0x24) / (f32)*(u16*)((s32)gp + 0x170)),
+                    float_neg0p5_8041f7f8 + (*(f32*)((s32)fade + 0x28) / (f32)*(u16*)((s32)gp + 0x172)),
+                    float_0_8041f7a8
+                );
+
+                PSMTXConcat(baseMtx, scaleMtx, scaleMtx);
+                PSMTXConcat(scaleMtx, rotMtx, scaleMtx);
+                PSMTXConcat(scaleMtx, transMtx, (void*)((s32)fade + 0x34));
+            } else if (*(s32*)((s32)fade + 0xC) == 4 || *(s32*)((s32)fade + 0xC) == 6) {
+                PSMTXTrans((void*)((s32)fade + 0x34), float_1_8041f7ac, float_1_8041f7ac, float_0_8041f7a8);
+            }
+        }
+    } else if (*(s32*)((s32)fade + 0xC) == 13) {
+        GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
+        GXSetCurrentMtx(0);
+        GXInitTexObj(texObj, &i4tex_949, 1, 1, 0, 0, 0, 0);
+        GXLoadTexObj(texObj, 0);
+        PSMTXIdentity((void*)((s32)fade + 0x34));
+    } else if (*(s32*)((s32)fade + 0xC) < 16) {
+        GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
+        GXSetCurrentMtx(0);
+        GXInitTexObj(texObj, &i4tex_949, 1, 1, 0, 0, 0, 0);
+        GXLoadTexObj(texObj, 0);
+        PSMTXIdentity((void*)((s32)fade + 0x34));
+
+        alpha = (s32)(float_255_8041f7b4 * *(f32*)((s32)fade + 0x2C));
+        *(u8*)((s32)fade + 0x23) = (u8)alpha;
+    }
+
+    GXLoadTexMtxImm((void*)((s32)fade + 0x34), 0x1E, 1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+
+    tevColor = *(u32*)((s32)fade + 0x20);
+    GXSetTevColor(1, &tevColor);
+
+    GXBegin(0x80, 0, 4);
+
+    negSize = -float_304_8041f800;
+
+    FIFO_F32_FADE = negSize;
+    FIFO_F32_FADE = float_304_8041f800;
+    FIFO_F32_FADE = float_0_8041f7a8;
+    FIFO_F32_FADE = float_0_8041f7a8;
+    FIFO_F32_FADE = float_0_8041f7a8;
+
+    FIFO_F32_FADE = float_304_8041f800;
+    FIFO_F32_FADE = float_304_8041f800;
+    FIFO_F32_FADE = float_0_8041f7a8;
+    FIFO_F32_FADE = float_1_8041f7ac;
+    FIFO_F32_FADE = float_0_8041f7a8;
+
+    FIFO_F32_FADE = float_304_8041f800;
+    FIFO_F32_FADE = negSize;
+    FIFO_F32_FADE = float_0_8041f7a8;
+    FIFO_F32_FADE = float_1_8041f7ac;
+    FIFO_F32_FADE = float_1_8041f7ac;
+
+    FIFO_F32_FADE = negSize;
+    FIFO_F32_FADE = negSize;
+    FIFO_F32_FADE = float_0_8041f7a8;
+    FIFO_F32_FADE = float_0_8041f7a8;
+    FIFO_F32_FADE = float_1_8041f7ac;
+
+    GXSetProjectionv(proj);
+}
 
 void zFill(void) {
     extern void* camGetCurPtr(void);

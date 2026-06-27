@@ -103,10 +103,69 @@ u8 marioCreviceWallChk(void) {
 }
 
 
-u8 mot_slit_post(void) {
-    return 0;
-}
+void mot_slit_post(void) {
+    extern void* marioGetPtr(void);
+    extern void marioPaperOff(void);
+    extern void mapResetPaperAmbColor(void);
+    extern void marioAdjustMoveDir(void);
+    extern void allPartyForceSlitOff(void);
+    extern void U_allPartySlitOffReq(void);
+    extern f32 float_20_80420ff4;
+    extern f32 float_180_80420fa8;
+    extern f32 float_0_80420f9c;
 
+    void* mario = marioGetPtr();
+    u16 motion;
+
+    motion = *(u16*)((s32)mario + 0x2E);
+    if (*(s16*)((s32)mario + 0x2F0) >= 10 &&
+        (motion == 0x15 || ((u16)(motion - 0x17) <= 1) || motion <= 0x14 || motion == 0x16)) {
+        return;
+    }
+    if ((*(u32*)mario & 0x100000) == 0) {
+        if ((*(u32*)((s32)mario + 4) & 0x1000000) == 0) {
+            return;
+        }
+        *(f32*)((s32)mario + 0x1B4) = float_20_80420ff4;
+        if (*(f32*)((s32)mario + 0x1A4) < float_180_80420fa8) {
+            *(f32*)((s32)mario + 0x1AC) = float_180_80420fa8;
+        } else {
+            *(f32*)((s32)mario + 0x1AC) = float_0_80420f9c;
+        }
+        *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
+        *(u32*)mario &= ~0x200000;
+        *(u32*)mario &= ~0x400000;
+        *(u32*)((s32)mario + 4) &= 0xFEFFF3FF;
+        *(u32*)((s32)mario + 4) &= 0xFEFFF3FF;
+        marioPaperOff();
+        mapResetPaperAmbColor();
+        *(u32*)((s32)mario + 4) &= ~4;
+        marioAdjustMoveDir();
+        allPartyForceSlitOff();
+    } else if (*(u16*)((s32)mario + 0x2E) != 2) {
+        *(u32*)mario &= ~0x100000;
+        *(f32*)((s32)mario + 0x1B4) = float_20_80420ff4;
+        if (*(f32*)((s32)mario + 0x1A4) < float_180_80420fa8) {
+            *(f32*)((s32)mario + 0x1AC) = float_180_80420fa8;
+        } else {
+            *(f32*)((s32)mario + 0x1AC) = float_0_80420f9c;
+        }
+        *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
+        *(u32*)mario &= ~0x200000;
+        *(u32*)mario &= ~0x400000;
+        *(u32*)((s32)mario + 4) &= 0xFEFFF3FF;
+        *(u32*)((s32)mario + 4) &= 0xFEFFF3FF;
+        marioPaperOff();
+        mapResetPaperAmbColor();
+        *(u32*)((s32)mario + 4) &= ~4;
+        marioAdjustMoveDir();
+        if (*(u16*)((s32)mario + 0x2E) == 0x16) {
+            U_allPartySlitOffReq();
+        } else {
+            allPartyForceSlitOff();
+        }
+    }
+}
 
 u8 marioReInit_slit(void) {
     return 0;

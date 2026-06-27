@@ -35,6 +35,7 @@ void unk_8017b330(void) {
 
 
 void evt_unitwin_disp_func(s32 param_1, void* param_2) {
+    ;
 }
 
 
@@ -354,3 +355,21 @@ void unk_8017b2b0(void* pWin) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/event/evt_win 20260624_191429 */
+
+/* fallback stub-fill: map=unk_8017a844 addr=0x8017a844 size=0x00000360 */
+int unk_8017a844() {
+    return 0;
+}
+
+/* fallback stub-fill: map=unk_8017b0c4 addr=0x8017b0c4 size=0x000001ec */
+int unk_8017b0c4() {
+    return 0;
+}
+
+/* fallback stub-fill: map=unk_8017b350 addr=0x8017b350 size=0x00000260 */
+int unk_8017b350() {
+    return 0;
+}

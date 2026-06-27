@@ -109,28 +109,354 @@ u8 marioSetDirEventMain(void) {
 
 
 void marioAdjustMoveDir(void) {
+    extern void* marioGetPtr(void);
+    extern f32 float_0_80420a60;
+    extern f32 float_360_80420a68;
+    extern f32 float_180_80420a70;
+    extern f32 float_270_80420a90;
+    extern f32 float_90_80420a98;
+    extern f32 float_0p5_80420a88;
+    extern f32 float_neg0p5_80420a8c;
+    extern f32 float_1000_80420a94;
+    extern f32 float_280_80420a78;
+    extern f32 float_460_80420a7c;
+    extern f32 float_260_80420a80;
+    extern f32 float_440_80420a84;
+
+    void* mario = marioGetPtr();
+    f32 out;
+    void* mario2;
+    f32 dir;
+    f32 angle;
+
+    if (*(f32*)((s32)mario + 0x1AC) < float_90_80420a98 ||
+        *(f32*)((s32)mario + 0x1AC) > float_270_80420a90) {
+        out = float_180_80420a70;
+        mario2 = marioGetPtr();
+        if ((*(u32*)((s32)mario2 + 0x0) & 0x100000) != 0) {
+            dir = *(f32*)((s32)mario2 + 0x1AC);
+            if (dir == float_280_80420a78 || dir == float_460_80420a7c) {
+                out = float_0_80420a60;
+            } else if (dir == float_260_80420a80 || dir == float_440_80420a84) {
+                out = float_180_80420a70;
+            } else {
+                while (dir < float_0_80420a60) {
+                    dir += float_360_80420a68;
+                }
+                while (dir >= float_360_80420a68) {
+                    dir -= float_360_80420a68;
+                }
+                out = float_180_80420a70;
+                if (dir >= out) {
+                    out = float_0_80420a60;
+                }
+            }
+        }
+        angle = (float_270_80420a90 - out) + *(f32*)((s32)mario2 + 0x19C);
+        angle = (f32)((s32)(angle * float_1000_80420a94 + (angle >= float_0_80420a60 ? float_0p5_80420a88 : float_neg0p5_80420a8c))) / float_1000_80420a94;
+        while (angle < float_0_80420a60) {
+            angle += float_360_80420a68;
+        }
+        while (angle >= float_360_80420a68) {
+            angle -= float_360_80420a68;
+        }
+        *(f32*)((s32)mario + 0x1A0) = angle;
+        *(f32*)((s32)mario + 0x1A4) = *(f32*)((s32)mario + 0x1A0);
+        *(f32*)((s32)mario + 0x1AC) = float_180_80420a70;
+        *(f32*)((s32)mario + 0x1B0) = float_180_80420a70;
+    } else {
+        out = float_0_80420a60;
+        mario2 = marioGetPtr();
+        if ((*(u32*)((s32)mario2 + 0x0) & 0x100000) != 0) {
+            dir = *(f32*)((s32)mario2 + 0x1AC);
+            if (dir == float_280_80420a78 || dir == float_460_80420a7c) {
+                out = float_0_80420a60;
+            } else if (dir == float_260_80420a80 || dir == float_440_80420a84) {
+                out = float_180_80420a70;
+            } else {
+                while (dir < float_0_80420a60) {
+                    dir += float_360_80420a68;
+                }
+                while (dir >= float_360_80420a68) {
+                    dir -= float_360_80420a68;
+                }
+                out = float_180_80420a70;
+                if (dir >= out) {
+                    out = float_0_80420a60;
+                }
+            }
+        }
+        angle = (float_270_80420a90 - out) + *(f32*)((s32)mario2 + 0x19C);
+        angle = (f32)((s32)(angle * float_1000_80420a94 + (angle >= float_0_80420a60 ? float_0p5_80420a88 : float_neg0p5_80420a8c))) / float_1000_80420a94;
+        while (angle < float_0_80420a60) {
+            angle += float_360_80420a68;
+        }
+        while (angle >= float_360_80420a68) {
+            angle -= float_360_80420a68;
+        }
+        *(f32*)((s32)mario + 0x1A0) = angle;
+        *(f32*)((s32)mario + 0x1A4) = *(f32*)((s32)mario + 0x1A0);
+        *(f32*)((s32)mario + 0x1AC) = float_0_80420a60;
+        *(f32*)((s32)mario + 0x1B0) = float_0_80420a60;
+    }
 }
 
+double toMovedir2(double angle, double add) {
+    extern void* marioGetPtr(void);
+    extern f32 float_0_80420a60;
+    extern f32 float_360_80420a68;
+    extern f32 float_180_80420a70;
+    extern f32 float_270_80420a90;
+    extern f32 float_0p5_80420a88;
+    extern f32 float_neg0p5_80420a8c;
+    extern f32 float_1000_80420a94;
+    extern f32 float_280_80420a78;
+    extern f32 float_460_80420a7c;
+    extern f32 float_260_80420a80;
+    extern f32 float_440_80420a84;
 
-double toMovedir2(double param_1, double param_2) {
-    return 0.0;
+    void* mario = marioGetPtr();
+    f32 dir;
+    f32 diff;
+
+    if ((*(u32*)((s32)mario + 0x0) & 0x100000) != 0) {
+        dir = *(f32*)((s32)mario + 0x1AC);
+        if ((double)float_280_80420a78 == (double)dir || (double)float_460_80420a7c == (double)dir) {
+            angle = (double)float_0_80420a60;
+        } else if ((double)float_260_80420a80 == (double)dir || (double)float_440_80420a84 == (double)dir) {
+            angle = (double)float_180_80420a70;
+        } else {
+            while ((double)dir < (double)float_0_80420a60) {
+                dir = (f32)((double)dir + (double)float_360_80420a68);
+            }
+            while ((double)dir >= (double)float_360_80420a68) {
+                dir = (f32)((double)dir - (double)float_360_80420a68);
+            }
+            angle = (double)float_180_80420a70;
+            if (angle <= (double)dir) {
+                angle = (double)float_0_80420a60;
+            }
+        }
+    }
+
+    dir = (f32)((double)(f32)((double)float_270_80420a90 - angle) + (double)*(f32*)((s32)mario + 0x19C));
+    dir = (f32)((s32)(float_1000_80420a94 * dir + (dir >= float_0_80420a60 ? float_0p5_80420a88 : float_neg0p5_80420a8c))) / float_1000_80420a94;
+    while ((double)dir < (double)float_0_80420a60) {
+        dir = (f32)((double)dir + (double)float_360_80420a68);
+    }
+    while ((double)dir >= (double)float_360_80420a68) {
+        dir = (f32)((double)dir - (double)float_360_80420a68);
+    }
+
+    diff = (f32)((double)dir - (double)*(f32*)((s32)mario + 0x19C));
+    while (diff < float_0_80420a60) {
+        diff += float_360_80420a68;
+    }
+    while (diff >= float_360_80420a68) {
+        diff -= float_360_80420a68;
+    }
+    if (diff >= float_180_80420a70) {
+        add = -add;
+    }
+    angle = (double)dir + add;
+    while ((double)(f32)angle < (double)float_0_80420a60) {
+        angle = (double)(f32)angle + (double)float_360_80420a68;
+    }
+    while ((double)(f32)angle >= (double)float_360_80420a68) {
+        angle = (double)(f32)angle - (double)float_360_80420a68;
+    }
+    return (double)(f32)angle;
 }
 
+void marioUpdateKeyData(void) {
+    extern void* marioGetPtr(void);
+    extern s32 marioChkKey(void);
+    extern s32 marioGetMotSlitCancel3(void);
+    extern void* gp;
+    extern u8 DemoPad[];
 
-u8 marioUpdateKeyData(void) {
-    return 0;
+    void* mario = marioGetPtr();
+    u32 filter;
+    void* globals = gp;
+    u32 buttons;
+    u32 dirs;
+
+    *(u8*)((s32)mario + 0x252) = *(u8*)((s32)globals + 0x13B8);
+    *(u8*)((s32)mario + 0x253) = -*(u8*)((s32)gp + 0x13BC);
+    *(u8*)((s32)mario + 0x254) = *(u8*)((s32)gp + 0x13C0);
+    *(u8*)((s32)mario + 0x255) = -*(u8*)((s32)gp + 0x13C4);
+    *(u8*)((s32)mario + 0x256) = *(u8*)((s32)gp + 0x13C8);
+    *(u8*)((s32)mario + 0x257) = *(u8*)((s32)gp + 0x13CC);
+    *(u8*)((s32)mario + 0x258) = 0;
+    *(u8*)((s32)mario + 0x259) = 0;
+
+    filter = 0xFFFFFFFF;
+    buttons = *(u32*)((s32)mario + 0x290);
+    if (buttons != 0) {
+        filter = buttons;
+    }
+    *(u16*)((s32)mario + 0x24A) = *(u32*)((s32)gp + 0x1328) & filter;
+    *(u16*)((s32)mario + 0x24C) = *(u32*)((s32)gp + 0x1338) & filter;
+    *(u16*)((s32)mario + 0x24E) = *(u32*)((s32)gp + 0x1348) & filter;
+    *(u16*)((s32)mario + 0x250) = *(u32*)((s32)gp + 0x1368) & filter;
+
+    if ((*(u32*)mario & 0xE) == 0) {
+        if ((*(u32*)((s32)mario + 0xC) & 0x08000000) != 0) {
+            *(u8*)((s32)mario + 0x252) = 0;
+            *(u8*)((s32)mario + 0x253) = 0;
+        }
+        if ((*(u32*)((s32)mario + 0xC) & 0x04000000) != 0) {
+            *(u8*)((s32)mario + 0x254) = 0;
+            *(u8*)((s32)mario + 0x255) = 0;
+        }
+        if ((*(u32*)((s32)mario + 0xC) & 0x02000000) != 0) {
+            *(u8*)((s32)mario + 0x256) = 0;
+            *(u8*)((s32)mario + 0x257) = 0;
+        }
+        if ((*(u32*)((s32)mario + 0xC) & 0x01000000) != 0) {
+            *(u8*)((s32)mario + 0x258) = 0;
+            *(u8*)((s32)mario + 0x259) = 0;
+        }
+    }
+
+    if ((*(u32*)mario & 0xE) != 0 || marioChkKey() == 0) {
+        *(u8*)((s32)mario + 0x252) = 0;
+        *(u8*)((s32)mario + 0x253) = 0;
+        *(u8*)((s32)mario + 0x254) = 0;
+        *(u8*)((s32)mario + 0x255) = 0;
+        *(u8*)((s32)mario + 0x256) = 0;
+        *(u8*)((s32)mario + 0x257) = 0;
+        *(u8*)((s32)mario + 0x258) = 0;
+        *(u8*)((s32)mario + 0x259) = 0;
+        if (*(u32*)((s32)mario + 0x290) == 0) {
+            *(u16*)((s32)mario + 0x24A) = 0;
+            *(u16*)((s32)mario + 0x24C) = 0;
+            *(u16*)((s32)mario + 0x24E) = 0;
+            *(u16*)((s32)mario + 0x250) = 0;
+        }
+        if (marioGetMotSlitCancel3() == 0 && (*(u32*)((s32)mario + 4) & 0x01000000) != 0) {
+            *(u16*)((s32)mario + 0x24A) = 0x20;
+        }
+    }
+    dirs = *(u16*)(DemoPad + 0x10);
+    *(u32*)((s32)mario + 0x260) = dirs & (dirs ^ *(u32*)((s32)mario + 0x25C));
+    *(u32*)((s32)mario + 0x25C) = dirs;
 }
 
+void marioGetStick(float* param_1, float* param_2) {
+    extern s32 kpaGetStageViewType(void);
+    extern s32 yoshiGetStatus(void);
+    extern f32 distABf(double, double, double, double);
+    extern f32 angleABf(double, double, double, double);
+    extern f32 float_0_80420a60;
+    extern f32 float_70_80420a64;
+    extern f32 float_360_80420a68;
 
-u8 marioGetStick(void) {
-    return 0;
+    void* mario = marioGetPtr();
+    if ((*(u32*)mario & 0x20) != 0) {
+        *param_1 = *(f32*)((s32)mario + 0x1A4);
+        *param_2 = *(f32*)((s32)mario + 0x180);
+    } else {
+        s32 stickX = *(s8*)((s32)mario + 0x252);
+        s32 stickY;
+        f32 dist;
+        f32 angle;
+
+        if ((*(u32*)mario & 0x02000000) != 0 || kpaGetStageViewType() == 0) {
+            stickY = 0;
+        } else {
+            stickY = -*(s8*)((s32)mario + 0x253);
+        }
+        if (yoshiGetStatus() == 2) {
+            stickY = 0;
+        }
+        stickY = -stickY;
+        dist = distABf(float_0_80420a60, float_0_80420a60, (f32)stickX, (f32)stickY);
+        if (dist > float_70_80420a64) {
+            dist = float_70_80420a64;
+        }
+        angle = angleABf(float_0_80420a60, float_0_80420a60, (f32)stickX, (f32)stickY);
+        if (dist == float_0_80420a60) {
+            angle = *(f32*)((s32)mario + 0x1A0);
+        }
+        angle += *(f32*)((s32)mario + 0x19C);
+        while (angle < float_0_80420a60) {
+            angle += float_360_80420a68;
+        }
+        while (angle >= float_360_80420a68) {
+            angle -= float_360_80420a68;
+        }
+        *param_1 = angle;
+        *param_2 = dist;
+    }
 }
-
 
 s32 chkRevolveDir(int* param_1, int* param_2) {
-    return 0;
-}
+    extern s32 DAT_803dc234;
+    extern s16 DAT_803dc264[];
+    extern s32 int32_t_803dc248;
+    extern f32 float_180_80420a70;
+    extern f32 __fabsf(f32);
 
+    s32 left = 0;
+    s32 right = 0;
+    s32 i;
+    s32 offset = 0;
+
+    for (i = 0; i < 10; i++) {
+        s32 idx = DAT_803dc234 + offset;
+        s32 prev;
+        s32 a;
+        s32 b;
+        s32 diff;
+
+        while (idx < 0) {
+            idx += 20;
+        }
+        idx %= 20;
+        prev = DAT_803dc234 + offset - 1;
+        while (prev < 0) {
+            prev += 20;
+        }
+        prev %= 20;
+        offset--;
+        a = DAT_803dc264[idx];
+        b = DAT_803dc264[prev];
+        if (i != 0 || a != b) {
+            diff = a - b;
+            if (__fabsf((f32)diff) > float_180_80420a70) {
+                if (diff > 0) {
+                    a += 0x168;
+                } else {
+                    a -= 0x168;
+                }
+                diff = a - b;
+            }
+            if (diff > -0x5A && diff < 0) {
+                left++;
+            }
+            if (diff > 0 && diff < 0x5A) {
+                right++;
+            }
+        }
+    }
+    if (left == 0 && right > 3) {
+        int32_t_803dc248 = 0;
+        *param_1 = 0;
+        *param_2 = right;
+        return 0;
+    }
+    if (right == 0 && left > 3) {
+        int32_t_803dc248 = 1;
+        *param_1 = left;
+        *param_2 = 0;
+        return 1;
+    }
+    *param_1 = left;
+    *param_2 = right;
+    int32_t_803dc248 = -1;
+    return -1;
+}
 
 f32 toMovedir(f32 angle) {
     extern void* marioGetPtr(void);

@@ -105,3 +105,11 @@ void* effLaserEntry(s32 type, f32 x, f32 y, f32 z) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_laser 20260624_184929 */
+
+/* stub-fill: effLaserMain | prototype_only | source_prototype */
+void effLaserMain(void* entry) {
+    return;
+}

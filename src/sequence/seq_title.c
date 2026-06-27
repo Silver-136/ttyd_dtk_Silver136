@@ -130,6 +130,9 @@ extern void FontDrawColor(void* color);
 extern void FontDrawScale(f32 scale);
 extern void FontDrawString(f32 x, f32 y, s32 str);
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
 void pressStartGX_80008888(u8 alpha, f32 x, f32 y) {
     void* cam;
     u8 tex0[0x20];
@@ -141,8 +144,8 @@ void pressStartGX_80008888(u8 alpha, f32 x, f32 y) {
     s32 work;
     s32 texData;
     s32 language;
-    s32 height;
-    u32 width;
+    u16 height;
+    u16 width;
     f32 h;
     f32 w;
 
@@ -211,12 +214,10 @@ void pressStartGX_80008888(u8 alpha, f32 x, f32 y) {
     PSMTXTrans(workMtx, x, y, float_0_8041f59c);
 
     height = GXGetTexObjHeight(&tex0);
-    height &= 0xFFFF;
-    h = (f32)((f64)height - double_to_int_mask_802bf4c8);
+    h = (f32)height;
 
     width = GXGetTexObjWidth(&tex0);
-    width &= 0xFFFF;
-    w = (f32)((f64)width - double_to_int_mask_802bf4c8);
+    w = (f32)width;
 
     PSMTXScale(scaleMtx, w, h, float_1_8041f594);
     PSMTXConcat(workMtx, scaleMtx, workMtx);
@@ -253,6 +254,9 @@ void pressStartGX_80008888(u8 alpha, f32 x, f32 y) {
 
     GXSetTevSwapModeTable(1, 0, 1, 2, 3);
 }
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -993,4 +997,12 @@ void L_titleInit(void) {
 
     cam = camGetPtr(8);
     *(u16*)cam |= 0x400;
+}
+
+
+/* CHATGPT STUB FILL: main/sequence/seq_title 20260624_183901 */
+
+/* stub-fill: pressStartGX | missing_definition | ghidra_signature */
+u8 pressStartGX(void) {
+    return 0;
 }

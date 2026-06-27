@@ -148,3 +148,16 @@ USER_FUNC(yuugijou_add_montemedal) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/event/evt_yuugijou 20260624_184823 */
+
+/* stub-fill: monteCountDisp | missing_definition | ghidra_signature */
+u8 monteCountDisp(void) {
+    return 0;
+}
+
+/* stub-fill: yuugijou_init | missing_definition | ghidra_signature */
+u8 yuugijou_init(void) {
+    return 0;
+}

@@ -61,3 +61,16 @@ void effUltraHammerMain(void* entry) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_ultra_hammer 20260624_185035 */
+
+/* stub-fill: effUltraHammerDisp | prototype_only | source_prototype */
+void effUltraHammerDisp(void* camera, void* entry) {
+    return;
+}
+
+/* stub-fill: effUltraHammerEntry | missing_definition | ghidra_signature */
+u8 effUltraHammerEntry(void) {
+    return 0;
+}

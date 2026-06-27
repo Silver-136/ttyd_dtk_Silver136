@@ -87,12 +87,15 @@ typedef struct BattleAudienceWorkPartial {
 } BattleAudienceWorkPartial;
 
 void BattleAudience_Case_Escape(void) {
+    ;
 }
 
 void BattleAudience_Case_FinalAttack(void) {
+    ;
 }
 
 void BattleAudience_Case_JumpNewRecord(void) {
+    ;
 }
 
 void* BattleAudienceBaseGetPtr(void) {
@@ -1506,10 +1509,12 @@ u8 BattleAudienceCtrlProcess(void) {
 
 
 void BattleAudience_Case_FallObject_Aud(int memberIdx, u8 objectType) {
+    ;
 }
 
 
 void BattleAudience_ApRecoveryBuild(void* apInfo) {
+    ;
 }
 
 
@@ -1554,10 +1559,12 @@ u8 BattleAudienceNoiseMain(void) {
 
 
 void BattleAudienceAddAudienceNum(s32 num) {
+    ;
 }
 
 
 void BattleAudience_Init(void) {
+    ;
 }
 
 
@@ -1567,18 +1574,22 @@ u8 BattleAudienceAddTargetNumSub(void) {
 
 
 void BattleAudienceJoy(s32 kind) {
+    ;
 }
 
 
 void BattleAudienceAddTargetNum(f32 value, f32 unused) {
+    ;
 }
 
 
 void BattleAudienceSoundWhistleKind(s32 kind) {
+    ;
 }
 
 
 void BattleAudience_Case_TurnEnd(void) {
+    ;
 }
 
 
@@ -1650,6 +1661,7 @@ u8 BattleAudienceJoy_Sub(int param_1, int param_2, int param_3, int param_4) {
 
 
 void BattleAudience_PerPhase(int phaseId) {
+    ;
 }
 
 
@@ -1659,10 +1671,12 @@ u8 BattleAudienceDispItem(void) {
 
 
 void BattleAudience_End(void) {
+    ;
 }
 
 
 void BattleAudience_ChangeStatus(s32 id, s32 status) {
+    ;
 }
 
 
@@ -1744,6 +1758,7 @@ u32 check_exe_phase_evt_status(int param_1, u32 param_2) {
 
 
 void BattleAudience_SetAnim(s32 id, s32 anim, s32 pose) {
+    ;
 }
 
 
@@ -1783,14 +1798,17 @@ s32 BattleAudienceItemOn(u32 memberIdx, u16 itemType, int numberItems) {
 
 
 void BattleAudience_GetItemOn(int* outMemberIdx, float* outXPos, float* outYPos, float* outZPos, u32* outItemType) {
+    ;
 }
 
 
 void BattleAudience_Case_Appeal(void* unit) {
+    ;
 }
 
 
 void BattleAudience_GetItemOn2(int* outMemberIdx, float* outPosX, float* outPosY, float* outPosZ, u32* outItemType) {
+    ;
 }
 
 
@@ -1865,6 +1883,7 @@ int BattleAudience_HaitiRandForFallObject(void) {
 
 
 void BattleAudience_Main(void) {
+    ;
 }
 
 
@@ -1892,10 +1911,12 @@ s32 BattleAudience_GetAudienceNoFromOffset(s32 id, s32 offset, s32 arg) {
 
 
 void BattleAudienceGuestTPLRead(int index, u32 memberKind, char* tplName) {
+    ;
 }
 
 
 void tplRead(char* tplName) {
+    ;
 }
 
 

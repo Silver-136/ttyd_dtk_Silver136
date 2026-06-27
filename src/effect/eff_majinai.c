@@ -104,3 +104,11 @@ void* effMajinaiEntry(f32 x, f32 y, f32 z, s32 type) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_majinai 20260624_185035 */
+
+/* stub-fill: effMajinaiMain | prototype_only | source_prototype */
+void effMajinaiMain(void* entry) {
+    return;
+}

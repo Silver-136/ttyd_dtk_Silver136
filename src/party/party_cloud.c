@@ -352,3 +352,11 @@ void unk_80187d10(void* party) {
     three = float_3_80424354;
     *(f32*)((s32)party + 0x80) = (three * s) + three;
 }
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/party/party_cloud 20260624_191429 */
+
+/* fallback stub-fill: map=N_cloud_use addr=0x80186ee0 size=0x00000b64 */
+int N_cloud_use() {
+    return 0;
+}

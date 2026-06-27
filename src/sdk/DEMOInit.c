@@ -81,6 +81,7 @@ void __DEMODiagnoseHang(void) {
 }
 
 void DEMOBeforeRender(void) {
+    ;
 }
 
 
@@ -90,6 +91,7 @@ u8 DEMOEnableGPHangWorkaround(int param_1) {
 
 
 void DEMODoneRender(void) {
+    ;
 }
 
 

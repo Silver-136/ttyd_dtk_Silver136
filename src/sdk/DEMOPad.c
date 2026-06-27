@@ -2,6 +2,7 @@
 
 
 void DEMOPadRead(void) {
+    ;
 }
 
 

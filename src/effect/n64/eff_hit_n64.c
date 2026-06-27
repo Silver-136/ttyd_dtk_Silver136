@@ -7,6 +7,7 @@ u8 effHitDisp(void) {
 
 
 void effHitN64Entry(void) {
+    ;
 }
 
 

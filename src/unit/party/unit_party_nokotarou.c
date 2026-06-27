@@ -15,6 +15,7 @@ s32 _check_mario_move_count(void* evt) {
 
 
 void __makeTechMenuFunc(void* commandWork, s32 param_2) {
+    ;
 }
 
 

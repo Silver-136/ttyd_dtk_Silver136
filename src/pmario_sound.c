@@ -14,6 +14,7 @@ PaperSoundEffectData pssfxlist[3042];
 s32 __psndSFXOn(s32 lookup, u8 volume, u8 a3, u16 a4, Vec* position, u32 a6, u16 distance, s32 a8);
 
 s32 __psndSFXOn(s32 lookup, u8 volume, u8 a3, u16 a4, Vec* position, u32 a6, u16 distance, s32 a8) {
+    ;
 }
 
 u32 psndSFXOn_3D(s32 lookup, Vec* position) {
@@ -209,6 +210,7 @@ u8 psndSFXMain(void) {
 
 
 void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 unk1, s32 unk2) {
+    ;
 }
 
 
@@ -223,6 +225,7 @@ u8 psndBGMMain(void) {
 
 
 void psndENVOn_f_d(s32 name, s32 flags, s32 frames, s32 extra) {
+    ;
 }
 
 
@@ -232,10 +235,12 @@ u8 psndENV_stop(u32 param_1) {
 
 
 void psndBGMOff_f_d(s32 name, s32 frames, s32 flags) {
+    ;
 }
 
 
 void psndENVOff_f_d(s32 name, s32 frames, s32 flags) {
+    ;
 }
 
 
@@ -245,6 +250,7 @@ f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2) {
 
 
 void psndMapChange(void) {
+    ;
 }
 
 

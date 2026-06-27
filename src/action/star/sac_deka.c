@@ -9,9 +9,11 @@ void mapGrpFlagOff(const char* name, s32 flag);
 extern const char str_stg_b_yuka_80301050[];
 
 void disp_3D(void) {
+    ;
 }
 
 void disp_3D_alpha(void) {
+    ;
 }
 
 void* get_ptr(void) {
@@ -209,4 +211,57 @@ USER_FUNC(main_deka) {
     dispEntry(4, 2, disp_3D_alpha, float_0_80428424, NULL);
     dispEntry(4, 0, yuka_disp, float_0_80428424, NULL);
     return 0;
+}
+
+
+/* CHATGPT STUB FILL: main/action/star/sac_deka 20260624_184929 */
+
+/* stub-fill: create_timing | missing_definition | ghidra_signature */
+u8 create_timing(void) {
+    return 0;
+}
+
+/* stub-fill: yuka_disp | prototype_only | source_prototype */
+void yuka_disp(void) {
+    return;
+}
+
+/* stub-fill: yuka_capture | missing_definition | ghidra_signature */
+u8 yuka_capture(int param_1) {
+    return 0;
+}
+
+/* stub-fill: disp_2D | prototype_only | source_prototype */
+void disp_2D(void) {
+    return;
+}
+
+/* stub-fill: main_enemy_sub | prototype_only | source_prototype */
+void main_enemy_sub(void* unit, s32* count) {
+    return;
+}
+
+/* stub-fill: main_star | prototype_only | source_prototype */
+void main_star(void) {
+    return;
+}
+
+/* stub-fill: main_gauge | prototype_only | source_prototype */
+void main_gauge(void) {
+    return;
+}
+
+/* stub-fill: main_base | prototype_only | source_prototype */
+void main_base(void) {
+    return;
+}
+
+/* stub-fill: yuka_main | prototype_only | source_prototype */
+void yuka_main(void) {
+    return;
+}
+
+/* stub-fill: yuka_init | prototype_only | source_prototype */
+void yuka_init(void) {
+    return;
 }

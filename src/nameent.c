@@ -144,3 +144,168 @@ s32 nameEntPrepare(void) {
     result = fileAsyncf(4, 0, str_PCTs_w_PCTs_name_tpl_802fe4ac, getMarioStDvdRoot(), table[*(s32*)((s32)gp + 0x16C)]);
     return (u32)(-result | result) >> 31;
 }
+
+void nameMaskGX(f32 scale) {
+    typedef f32 Mtx[3][4];
+
+    extern f32 float_1000_80426de8;
+    extern f32 float_0_80426ddc;
+    extern f32 float_1_80426de4;
+    extern f32 float_0p5_80426dec;
+    extern f32 float_neg0p5_80426df0;
+    extern u32 dat_80426dd0;
+
+    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
+    extern void GXSetZMode(s32 compareEnable, s32 func, s32 updateEnable);
+    extern void GXSetNumChans(s32 num);
+    extern void GXSetNumTevStages(s32 num);
+    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 colorChan);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevColor(s32 reg, void* color);
+    extern s32 fadeGetTpl(void);
+    extern void TEXGetGXTexObjFromPalette(s32 tpl, void* texObj, s32 index);
+    extern void GXInitTexObjLOD(void* texObj, s32 minFilt, s32 magFilt, f32 minLod, f32 maxLod, f32 lodBias, s32 biasClamp, s32 doEdgeLod, s32 maxAniso);
+    extern void GXLoadTexObj(void* texObj, s32 mapId);
+    extern void GXSetNumTexGens(s32 num);
+    extern void PSMTXTrans(Mtx m, double x, double y, double z);
+    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(Mtx a, Mtx b, Mtx out);
+    extern void GXLoadTexMtxImm(Mtx m, s32 id, s32 type);
+    extern void GXSetTexCoordGen2(s32 dstCoord, s32 func, s32 srcParam, s32 mtx, s32 normalize, s32 postMtx);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+    extern void* camGetPtr(s32 cameraId);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void GXSetCurrentMtx(s32 id);
+    extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
+
+    u32 color;
+    u8 texObj[0x20];
+    Mtx transA;
+    Mtx scaleMtx;
+    Mtx transB;
+    f32 amount;
+    f32 zero;
+    f32 one;
+    volatile u16* fifo16;
+    volatile f32* fifoF;
+    void* cam;
+
+    amount = float_1000_80426de8 * scale;
+    amount = amount * scale;
+    amount = scale * amount;
+    amount = scale * amount;
+    amount = scale * amount;
+
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetBlendMode(1, 4, 5, 7);
+    GXSetZMode(0, 7, 0);
+    GXSetNumChans(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 2, 8, 0xF);
+    GXSetTevAlphaIn(0, 7, 1, 4, 7);
+
+    color = dat_80426dd0;
+    GXSetTevColor(1, &color);
+
+    TEXGetGXTexObjFromPalette(fadeGetTpl(), texObj, 1);
+
+    zero = float_0_80426ddc;
+    GXInitTexObjLOD(texObj, 1, 1, zero, zero, zero, 0, 0, 0);
+    GXLoadTexObj(texObj, 0);
+    GXSetNumTexGens(1);
+
+    PSMTXTrans(transA, (double)float_0p5_80426dec, (double)float_0p5_80426dec, (double)zero);
+    PSMTXScale(scaleMtx, amount, amount, zero);
+    PSMTXTrans(transB, (double)float_neg0p5_80426df0, (double)float_neg0p5_80426df0, (double)zero);
+    PSMTXConcat(transA, scaleMtx, transA);
+    PSMTXConcat(transA, transB, transA);
+
+    GXLoadTexMtxImm(transA, 0x1E, 1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 3, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+
+    cam = camGetPtr(8);
+    GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
+    GXSetCurrentMtx(0);
+
+    GXBegin(0x80, 0, 4);
+
+    fifo16 = (volatile u16*)0xCC008000;
+    fifoF = (volatile f32*)0xCC008000;
+    one = float_1_80426de4;
+
+    *fifo16 = (u16)-0x130;
+    *fifo16 = 0xF0;
+    *fifo16 = 0;
+    *fifoF = zero;
+    *fifoF = zero;
+
+    *fifo16 = 0x130;
+    *fifo16 = 0xF0;
+    *fifo16 = 0;
+    *fifoF = one;
+    *fifoF = zero;
+
+    *fifo16 = 0x130;
+    *fifo16 = (u16)-0xF0;
+    *fifo16 = 0;
+    *fifoF = one;
+    *fifoF = one;
+
+    *fifo16 = (u16)-0x130;
+    *fifo16 = (u16)-0xF0;
+    *fifo16 = 0;
+    *fifoF = zero;
+    *fifoF = one;
+}
+
+
+/* CHATGPT STUB FILL: main/nameent 20260624_184008 */
+
+/* stub-fill: nameWinGX | missing_definition | ghidra_signature */
+u8 nameWinGX(void) {
+    return 0;
+}
+
+/* stub-fill: nameKirinukiGX | missing_definition | ghidra_signature */
+u8 nameKirinukiGX(void) {
+    return 0;
+}
+
+/* stub-fill: nameBG | missing_definition | ghidra_signature */
+u8 nameBG(void) {
+    return 0;
+}
+
+/* stub-fill: nameEntDisp | prototype_only | source_prototype */
+void nameEntDisp(void) {
+    return;
+}
+
+/* stub-fill: nameMain | prototype_only | source_prototype */
+void nameMain(void) {
+    return;
+}
+
+/* stub-fill: nameEntOn | missing_definition | ghidra_signature */
+u8 nameEntOn(int param_1) {
+    return 0;
+}

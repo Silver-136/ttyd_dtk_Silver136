@@ -108,15 +108,134 @@ USER_FUNC(evt_map_checkanim) {
 #pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_map_blend_set_flag(void* pEvt) {
-    return 0;
+    extern s32 strcmp(char* lhs, char* rhs);
+    extern void* marioGetPtr(void);
+    extern s32 marioGetPartyId(void);
+    extern s32 marioGetExtraPartyId(void);
+    extern void* partyGetPtr(s32 id);
+    extern void* evtNpcNameToPtr(EventEntry* event, char* name);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
+    extern void animPoseSetMaterialFlagOff(s32 poseId, u32 flag);
+    extern char str_mario_8041fa4c[6];
+    extern char str_party_8041fa54[6];
+    extern char str_extparty_802c019c[];
+
+    s32* args = ((EventEntry*)pEvt)->args;
+    s32 mode = evtGetValue((EventEntry*)pEvt, args[0]);
+    char* name = (char*)evtGetValue((EventEntry*)pEvt, args[1]);
+    u32 flag = evtGetValue((EventEntry*)pEvt, args[2]);
+
+    if (strcmp(name, str_mario_8041fa4c) == 0) {
+        void* mario = marioGetPtr();
+        if (mode == 1) {
+            if (*(s32*)((s32)mario + 0x22C) != -1) {
+                animPoseSetMaterialFlagOn(*(s32*)((s32)mario + 0x22C), flag);
+            }
+            if (*(s32*)((s32)mario + 0x230) != -1) {
+                animPoseSetMaterialFlagOn(*(s32*)((s32)mario + 0x230), flag);
+            }
+            if (*(s32*)((s32)mario + 0x234) != -1) {
+                animPoseSetMaterialFlagOn(*(s32*)((s32)mario + 0x234), flag);
+            }
+        } else {
+            if (*(s32*)((s32)mario + 0x22C) != -1) {
+                animPoseSetMaterialFlagOff(*(s32*)((s32)mario + 0x22C), flag);
+            }
+            if (*(s32*)((s32)mario + 0x230) != -1) {
+                animPoseSetMaterialFlagOff(*(s32*)((s32)mario + 0x230), flag);
+            }
+            if (*(s32*)((s32)mario + 0x234) != -1) {
+                animPoseSetMaterialFlagOff(*(s32*)((s32)mario + 0x234), flag);
+            }
+        }
+    } else if (strcmp(name, str_party_8041fa54) == 0) {
+        void* party = partyGetPtr(marioGetPartyId());
+        if (mode == 1) {
+            animPoseSetMaterialFlagOn(*(s32*)((s32)party + 0xC), flag);
+        } else {
+            animPoseSetMaterialFlagOff(*(s32*)((s32)party + 0xC), flag);
+        }
+    } else if (strcmp(name, str_extparty_802c019c) == 0) {
+        void* party = partyGetPtr(marioGetExtraPartyId());
+        if (mode == 1) {
+            animPoseSetMaterialFlagOn(*(s32*)((s32)party + 0xC), flag);
+        } else {
+            animPoseSetMaterialFlagOff(*(s32*)((s32)party + 0xC), flag);
+        }
+    } else {
+        void* npc = evtNpcNameToPtr((EventEntry*)pEvt, name);
+        if (mode == 1) {
+            animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), flag);
+        } else {
+            animPoseSetMaterialFlagOff(*(s32*)((s32)npc + 0x104), flag);
+        }
+    }
+
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_map_entry_airport_harbor(void* pEvt) {
-    return 0;
-}
+    extern void* mapGetMapObj(char* name);
+    extern s32 animGroupBaseAsync(char* name, s32 mode, s32 flags);
+    extern s32 pouchCheckItem(s32 itemId);
+    extern void evtRunCaseEntry(s32 type, s32 flag, s32 caseId, s32 unk, s32* script, void* data);
+    extern char str_p_hikohki_802c0188[];
+    extern char str_p_hune_802c0194[];
+    extern s32 evt_ride_airport[];
+    extern s32 evt_nonride_airport[];
 
+    s32* args = ((EventEntry*)pEvt)->args;
+    s32 mode = evtGetValue((EventEntry*)pEvt, args[0]);
+    char* name = (char*)evtGetValue((EventEntry*)pEvt, args[1]);
+    s32 id = evtGetValue((EventEntry*)pEvt, args[2]);
+    struct {
+        char* name;
+        s32 id;
+        u8 pad[0x40];
+    } local;
+
+    mapGetMapObj(name);
+
+    switch (mode) {
+        case 0:
+            if (animGroupBaseAsync(str_p_hikohki_802c0188, 0, 0) == 0) {
+                return 0;
+            }
+            if (pouchCheckItem(4) == 1) {
+                local.name = name;
+                local.id = id;
+                evtRunCaseEntry(0, 0, id, 0, evt_ride_airport, &local);
+                local.name = name;
+                local.id = id;
+                evtRunCaseEntry(1, 0, id, 0, evt_nonride_airport, &local);
+            }
+            break;
+        case 1:
+            if (animGroupBaseAsync(str_p_hune_802c0194, 0, 0) == 0) {
+                return 0;
+            }
+            if (pouchCheckItem(5) == 1) {
+                local.name = name;
+                local.id = id;
+                evtRunCaseEntry(0, 0, id, 0, evt_ride_airport, &local);
+                local.name = name;
+                local.id = id;
+                evtRunCaseEntry(1, 0, id, 0, evt_nonride_airport, &local);
+            }
+            break;
+    }
+
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_mapobj_color(void* pEvt) {
     return 0;

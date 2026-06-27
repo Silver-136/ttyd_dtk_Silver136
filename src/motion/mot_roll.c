@@ -85,15 +85,178 @@ u8 marioSetRollDispDir(void) {
 }
 
 
-u8 marioRollForceCancel(void) {
-    return 0;
+void marioRollForceCancel(void) {
+    extern void* marioGetPtr(void);
+    extern void psndSFXOff(s32);
+    extern f32 revise360(f32);
+    extern void marioSetSpec(void);
+    extern void marioPaperOff(void);
+    extern void marioAdjustMoveDir(void);
+    extern void marioChgPose(char*);
+    extern void __memFree(s32, void*);
+    extern void allPartyRideOff(void);
+    extern void marioChgMotSub(s16, s32);
+    extern f32 float_0_80420dd4;
+    extern f32 float_180_80420de0;
+    extern f32 float_90_80420df0;
+    extern f32 float_270_80420df4;
+    extern f32 float_0p004_80420e48;
+    extern f32 vec3_802c41bc;
+    extern f32 DAT_802c41c0;
+    extern f32 DAT_802c41c4;
+    extern f32 vec3_802c41c8;
+    extern f32 DAT_802c41cc;
+    extern f32 DAT_802c41d0;
+    extern f32 vec3_802c41d4;
+    extern f32 DAT_802c41d8;
+    extern f32 DAT_802c41dc;
+    extern char str_M_S_1_80420e4c;
+
+    void* mario = marioGetPtr();
+    void* tmp;
+    f32 angle;
+
+    if (*(u16*)((s32)mario + 0x2E) != 0x16) {
+        return;
+    }
+    marioGetPtr();
+    tmp = marioGetPtr();
+    if (*(void**)((s32)tmp + 0x294) != 0) {
+        tmp = marioGetPtr();
+        if (*(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14) != -1) {
+            tmp = marioGetPtr();
+            psndSFXOff(*(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14));
+            tmp = marioGetPtr();
+            *(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14) = -1;
+        }
+    }
+    tmp = marioGetPtr();
+    *(f32*)((s32)tmp + 0x148) = float_0_80420dd4;
+    *(f32*)((s32)tmp + 0x158) = float_0p004_80420e48;
+
+    angle = revise360(*(f32*)((s32)mario + 0x1A4) - *(f32*)((s32)mario + 0x19C));
+    if (angle < float_180_80420de0) {
+        *(f32*)((s32)mario + 0x1AC) = float_180_80420de0;
+        *(f32*)((s32)mario + 0x1B0) = float_180_80420de0;
+        *(f32*)((s32)mario + 0x1A0) = float_90_80420df0;
+        *(f32*)((s32)mario + 0x1A4) = float_90_80420df0;
+    } else {
+        *(f32*)((s32)mario + 0x1AC) = float_0_80420dd4;
+        *(f32*)((s32)mario + 0x1B0) = float_0_80420dd4;
+        *(f32*)((s32)mario + 0x1A0) = float_270_80420df4;
+        *(f32*)((s32)mario + 0x1A4) = float_270_80420df4;
+    }
+    marioSetSpec();
+    *(u32*)((s32)mario + 0x8) = 0;
+    *(f32*)((s32)mario + 0xB0) = vec3_802c41bc;
+    *(f32*)((s32)mario + 0xB4) = DAT_802c41c0;
+    *(f32*)((s32)mario + 0xB8) = DAT_802c41c4;
+    *(f32*)((s32)mario + 0x98) = vec3_802c41c8;
+    *(f32*)((s32)mario + 0x9C) = DAT_802c41cc;
+    *(f32*)((s32)mario + 0xA0) = DAT_802c41d0;
+    *(f32*)((s32)mario + 0xBC) = vec3_802c41d4;
+    *(f32*)((s32)mario + 0xC0) = DAT_802c41d8;
+    *(f32*)((s32)mario + 0xC4) = DAT_802c41dc;
+    *(u32*)((s32)mario + 0x4) &= ~0x100;
+    *(u32*)((s32)mario + 0x4) &= ~0x8;
+    *(u32*)mario &= ~0x1000000;
+    marioPaperOff();
+    marioAdjustMoveDir();
+    marioChgPose(&str_M_S_1_80420e4c);
+    tmp = marioGetPtr();
+    if (*(void**)((s32)tmp + 0x294) != 0) {
+        tmp = marioGetPtr();
+        __memFree(0, *(void**)((s32)tmp + 0x294));
+        tmp = marioGetPtr();
+        *(void**)((s32)tmp + 0x294) = 0;
+    }
+    allPartyRideOff();
+    marioChgMotSub(0, 0);
 }
 
+void mot_roll_post(void) {
+    extern void* marioGetPtr(void);
+    extern void psndSFXOff(s32);
+    extern f32 revise360(f32);
+    extern void marioSetSpec(void);
+    extern void marioPaperOff(void);
+    extern void marioAdjustMoveDir(void);
+    extern void marioChgPose(char*);
+    extern void __memFree(s32, void*);
+    extern void allPartyRideOff(void);
+    extern f32 float_0_80420dd4;
+    extern f32 float_180_80420de0;
+    extern f32 float_90_80420df0;
+    extern f32 float_270_80420df4;
+    extern f32 float_0p004_80420e48;
+    extern f32 vec3_802c41bc;
+    extern f32 DAT_802c41c0;
+    extern f32 DAT_802c41c4;
+    extern f32 vec3_802c41c8;
+    extern f32 DAT_802c41cc;
+    extern f32 DAT_802c41d0;
+    extern f32 vec3_802c41d4;
+    extern f32 DAT_802c41d8;
+    extern f32 DAT_802c41dc;
+    extern char str_M_S_1_80420e4c;
 
-u8 mot_roll_post(void) {
-    return 0;
+    void* mario = marioGetPtr();
+    void* tmp;
+    f32 angle;
+
+    marioGetPtr();
+    tmp = marioGetPtr();
+    if (*(void**)((s32)tmp + 0x294) != 0) {
+        tmp = marioGetPtr();
+        if (*(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14) != -1) {
+            tmp = marioGetPtr();
+            psndSFXOff(*(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14));
+            tmp = marioGetPtr();
+            *(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14) = -1;
+        }
+    }
+    tmp = marioGetPtr();
+    *(f32*)((s32)tmp + 0x148) = float_0_80420dd4;
+    *(f32*)((s32)tmp + 0x158) = float_0p004_80420e48;
+
+    angle = revise360(*(f32*)((s32)mario + 0x1A4) - *(f32*)((s32)mario + 0x19C));
+    if (angle < float_180_80420de0) {
+        *(f32*)((s32)mario + 0x1AC) = float_180_80420de0;
+        *(f32*)((s32)mario + 0x1B0) = float_180_80420de0;
+        *(f32*)((s32)mario + 0x1A0) = float_90_80420df0;
+        *(f32*)((s32)mario + 0x1A4) = float_90_80420df0;
+    } else {
+        *(f32*)((s32)mario + 0x1AC) = float_0_80420dd4;
+        *(f32*)((s32)mario + 0x1B0) = float_0_80420dd4;
+        *(f32*)((s32)mario + 0x1A0) = float_270_80420df4;
+        *(f32*)((s32)mario + 0x1A4) = float_270_80420df4;
+    }
+    marioSetSpec();
+    *(u32*)((s32)mario + 0x8) = 0;
+    *(f32*)((s32)mario + 0xB0) = vec3_802c41bc;
+    *(f32*)((s32)mario + 0xB4) = DAT_802c41c0;
+    *(f32*)((s32)mario + 0xB8) = DAT_802c41c4;
+    *(f32*)((s32)mario + 0x98) = vec3_802c41c8;
+    *(f32*)((s32)mario + 0x9C) = DAT_802c41cc;
+    *(f32*)((s32)mario + 0xA0) = DAT_802c41d0;
+    *(f32*)((s32)mario + 0xBC) = vec3_802c41d4;
+    *(f32*)((s32)mario + 0xC0) = DAT_802c41d8;
+    *(f32*)((s32)mario + 0xC4) = DAT_802c41dc;
+    *(u32*)((s32)mario + 0x4) &= ~0x100;
+    *(u32*)((s32)mario + 0x4) &= ~0x8;
+    *(u32*)mario &= ~0x1000000;
+    marioPaperOff();
+    marioAdjustMoveDir();
+    marioChgPose(&str_M_S_1_80420e4c);
+    tmp = marioGetPtr();
+    if (*(void**)((s32)tmp + 0x294) != 0) {
+        tmp = marioGetPtr();
+        __memFree(0, *(void**)((s32)tmp + 0x294));
+        tmp = marioGetPtr();
+        *(void**)((s32)tmp + 0x294) = 0;
+    }
+    allPartyRideOff();
 }
-
 
 u8 marioReInit_roll(void) {
     return 0;

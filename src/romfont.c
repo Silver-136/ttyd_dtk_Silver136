@@ -25,3 +25,21 @@ char* romFontGetMessage(s32 messageId) {
     }
     return msg_tbl[*(s32*)((s32)gp + 0x16C)][messageId];
 }
+
+
+/* CHATGPT STUB FILL: main/romfont 20260624_184929 */
+
+/* stub-fill: romFontGetWidth | missing_definition | ghidra_signature */
+int romFontGetWidth(int param_1, int param_2) {
+    return 0;
+}
+
+/* stub-fill: romFontPrintGX | missing_definition | ghidra_signature */
+u8 romFontPrintGX(void) {
+    return 0;
+}
+
+/* stub-fill: romFontMake | prototype_only | source_prototype */
+void romFontMake(void) {
+    return;
+}

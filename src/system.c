@@ -1212,6 +1212,8 @@ void sysWaitDrawSync(void) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void mtxGetRotationElement(f32* mtx, f32* out, s8 axis, s8 up) {
     f32 zero;
     Vec xVec;
@@ -1226,15 +1228,12 @@ void mtxGetRotationElement(f32* mtx, f32* out, s8 axis, s8 up) {
         if (axis == 'Y') {
             goto axis_y;
         }
-
         if (axis >= 'Y') {
             goto axis_z;
         }
-
-        if (axis >= 'X') {
+        if (axis == 'X') {
             goto axis_x;
         }
-
         goto axis_z;
     }
 
@@ -1250,24 +1249,32 @@ axis_x:
     xVec.z = mtx[8];
     PSVECNormalize(&xVec, &xVec);
 
-    if ((up == 'z') || ((up < 'z') && (up == 'Z'))) {
-        zVec.x = mtx[2];
-        zVec.y = mtx[6];
-        zVec.z = mtx[10];
-        PSVECNormalize(&zVec, &zVec);
-
-        PSVECCrossProduct(&zVec, &xVec, &yVec);
-        PSVECCrossProduct(&xVec, &yVec, &zVec);
-    } else {
-        yVec.x = mtx[1];
-        yVec.y = mtx[5];
-        yVec.z = mtx[9];
-        PSVECNormalize(&yVec, &yVec);
-
-        PSVECCrossProduct(&xVec, &yVec, &zVec);
-        PSVECCrossProduct(&zVec, &xVec, &yVec);
+    if (up == 'z') {
+        goto axis_x_use_z;
+    }
+    if (up < 'z') {
+        if (up == 'Z') {
+            goto axis_x_use_z;
+        }
     }
 
+    yVec.x = mtx[1];
+    yVec.y = mtx[5];
+    yVec.z = mtx[9];
+    PSVECNormalize(&yVec, &yVec);
+
+    PSVECCrossProduct(&xVec, &yVec, &zVec);
+    PSVECCrossProduct(&zVec, &xVec, &yVec);
+    goto done;
+
+axis_x_use_z:
+    zVec.x = mtx[2];
+    zVec.y = mtx[6];
+    zVec.z = mtx[10];
+    PSVECNormalize(&zVec, &zVec);
+
+    PSVECCrossProduct(&zVec, &xVec, &yVec);
+    PSVECCrossProduct(&xVec, &yVec, &zVec);
     goto done;
 
 axis_y:
@@ -1276,24 +1283,32 @@ axis_y:
     yVec.z = mtx[9];
     PSVECNormalize(&yVec, &yVec);
 
-    if ((up == 'x') || ((up < 'x') && (up == 'X'))) {
-        xVec.x = mtx[0];
-        xVec.y = mtx[4];
-        xVec.z = mtx[8];
-        PSVECNormalize(&xVec, &xVec);
-
-        PSVECCrossProduct(&xVec, &yVec, &zVec);
-        PSVECCrossProduct(&yVec, &zVec, &xVec);
-    } else {
-        zVec.x = mtx[2];
-        zVec.y = mtx[6];
-        zVec.z = mtx[10];
-        PSVECNormalize(&zVec, &zVec);
-
-        PSVECCrossProduct(&yVec, &zVec, &xVec);
-        PSVECCrossProduct(&xVec, &yVec, &zVec);
+    if (up == 'x') {
+        goto axis_y_use_x;
+    }
+    if (up < 'x') {
+        if (up == 'X') {
+            goto axis_y_use_x;
+        }
     }
 
+    zVec.x = mtx[2];
+    zVec.y = mtx[6];
+    zVec.z = mtx[10];
+    PSVECNormalize(&zVec, &zVec);
+
+    PSVECCrossProduct(&yVec, &zVec, &xVec);
+    PSVECCrossProduct(&xVec, &yVec, &zVec);
+    goto done;
+
+axis_y_use_x:
+    xVec.x = mtx[0];
+    xVec.y = mtx[4];
+    xVec.z = mtx[8];
+    PSVECNormalize(&xVec, &xVec);
+
+    PSVECCrossProduct(&xVec, &yVec, &zVec);
+    PSVECCrossProduct(&yVec, &zVec, &xVec);
     goto done;
 
 axis_z:
@@ -1302,23 +1317,32 @@ axis_z:
     zVec.z = mtx[10];
     PSVECNormalize(&zVec, &zVec);
 
-    if ((up == 'y') || ((up < 'y') && (up == 'Y'))) {
-        yVec.x = mtx[1];
-        yVec.y = mtx[5];
-        yVec.z = mtx[9];
-        PSVECNormalize(&yVec, &yVec);
-
-        PSVECCrossProduct(&yVec, &zVec, &xVec);
-        PSVECCrossProduct(&zVec, &xVec, &yVec);
-    } else {
-        xVec.x = mtx[0];
-        xVec.y = mtx[4];
-        xVec.z = mtx[8];
-        PSVECNormalize(&xVec, &xVec);
-
-        PSVECCrossProduct(&zVec, &xVec, &yVec);
-        PSVECCrossProduct(&yVec, &zVec, &xVec);
+    if (up == 'y') {
+        goto axis_z_use_y;
     }
+    if (up < 'y') {
+        if (up == 'Y') {
+            goto axis_z_use_y;
+        }
+    }
+
+    xVec.x = mtx[0];
+    xVec.y = mtx[4];
+    xVec.z = mtx[8];
+    PSVECNormalize(&xVec, &xVec);
+
+    PSVECCrossProduct(&zVec, &xVec, &yVec);
+    PSVECCrossProduct(&yVec, &zVec, &xVec);
+    goto done;
+
+axis_z_use_y:
+    yVec.x = mtx[1];
+    yVec.y = mtx[5];
+    yVec.z = mtx[9];
+    PSVECNormalize(&yVec, &yVec);
+
+    PSVECCrossProduct(&yVec, &zVec, &xVec);
+    PSVECCrossProduct(&zVec, &xVec, &yVec);
 
 done:
     zero = float_0_8041f448;
@@ -1339,6 +1363,8 @@ done:
     out[7] = zero;
     out[11] = zero;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void sysDummyDraw(void* mtx) {
     u32 color[2];

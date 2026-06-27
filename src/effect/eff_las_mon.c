@@ -84,3 +84,11 @@ void* effLasMonEntry(s32 type, f32 x, f32 y, f32 z) {
     return entry;
 }
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_las_mon 20260624_184929 */
+
+/* stub-fill: effLasMonMain | prototype_only | source_prototype */
+void effLasMonMain(void* entry) {
+    return;
+}

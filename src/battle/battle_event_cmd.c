@@ -451,6 +451,7 @@ USER_FUNC(btlevtcmd_KillUnit) {
 
 
 USER_FUNC(btlevtcmd_ReplaceParts) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_ChangeParty) {
@@ -2601,6 +2602,7 @@ USER_FUNC(btlevtcmd_CheckDamageCode) {
 
 
 USER_FUNC(btlevtcmd_StartAvoid) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_RunHitEventDirect) {
@@ -3909,15 +3911,19 @@ USER_FUNC(btlevtcmd_JumpSetting) {
 
 
 USER_FUNC(btlevtcmd_JumpPosition) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_JumpContinue) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_FallPosition) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_MovePosition) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_GetMoveFrame) {
@@ -3979,9 +3985,11 @@ USER_FUNC(btlevtcmd_GetMoveFrame) {
 
 
 USER_FUNC(btlevtcmd_DivePosition) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_EllipseMovePosition) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_MoveDirectionAdd) {
@@ -4112,9 +4120,11 @@ USER_FUNC(btlevtcmd_PartsFaceDirectionSub) {
 
 
 USER_FUNC(btlevtcmd_SamplingEnemy) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_ChoiceSamplingEnemy) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_GetSelectEnemy) {
@@ -4258,15 +4268,19 @@ USER_FUNC(btlevtcmd_DispItemIcon) {
 
 
 USER_FUNC(btlevtcmd_CommandFlyItem) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_ConsumeItem) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_ConsumeItemReserve) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_AttackDeclare) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_AttackDeclareAll) {
@@ -4984,12 +4998,15 @@ USER_FUNC(btlevtcmd_GetConfuseActEvent) {
 
 
 USER_FUNC(btlevtcmd_MarioJumpParam) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_MarioJumpPosition) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_GetTakeoffPosition) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_SetPartsMoveSpeed) {
@@ -5045,6 +5062,7 @@ USER_FUNC(btlevtcmd_SetPartsFallAccel) {
 
 
 USER_FUNC(btlevtcmd_JumpPartsPosition) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_JumpPartsSetting) {
@@ -5079,12 +5097,15 @@ USER_FUNC(btlevtcmd_JumpPartsSetting) {
 
 
 USER_FUNC(btlevtcmd_JumpPartsContinue) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_FallPartsPosition) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_DivePartsPosition) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_AcSetDifficulty) {
@@ -5421,9 +5442,11 @@ USER_FUNC(btlevtcmd_AudienceDeclareACResult) {
 
 
 USER_FUNC(btlevtcmd_AudienceDeclareAcrobatResult) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_ACSuccessEffect) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_ac_timing_flag_onoff) {
@@ -6582,6 +6605,7 @@ USER_FUNC(btlevtcmd_GetItemRecoverParam) {
 
 
 USER_FUNC(btlevtcmd_WeaponAftereffect) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_SetGuard) {
@@ -7233,6 +7257,7 @@ USER_FUNC(btlevtcmd_InviteApInfoReport) {
 
 
 USER_FUNC(btlevtcmd_SacBgsetMove) {
+    ;
 }
 
 USER_FUNC(btlevtcmd_BtlStageObjFlagOnOff) {
@@ -7448,4 +7473,5 @@ void _UnitMoveSoundControl(void* unit) {
 }
 
 void _MoveSoundControlCore(double x, double y, double z, void* unit, void* moveSoundWork, void* part) {
+    ;
 }

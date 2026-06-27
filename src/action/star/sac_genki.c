@@ -9,9 +9,11 @@ void main_star0(s32 index);
 void main_star1(void);
 
 void disp_2D(void) {
+    ;
 }
 
 void disp_3D_alpha(void) {
+    ;
 }
 
 void* get_ptr(void) {
@@ -251,3 +253,51 @@ USER_FUNC(end_genki) {
     return 2;
 }
 
+
+
+/* CHATGPT STUB FILL: main/action/star/sac_genki 20260624_184929 */
+
+/* stub-fill: disp_3D | missing_definition | ghidra_signature */
+u8 disp_3D(void) {
+    return 0;
+}
+
+/* stub-fill: main_star1 | prototype_only | source_prototype */
+void main_star1(void) {
+    return;
+}
+
+/* stub-fill: main_star0 | prototype_only | source_prototype */
+void main_star0(s32 index) {
+    return;
+}
+
+/* stub-fill: main_object | missing_definition | ghidra_signature */
+u8 main_object(u32 param_1) {
+    return 0;
+}
+
+/* stub-fill: main_weapon | missing_definition | ghidra_signature */
+u8 main_weapon(void) {
+    return 0;
+}
+
+/* stub-fill: main_target | missing_definition | ghidra_signature */
+u8 main_target(void) {
+    return 0;
+}
+
+/* stub-fill: main_mario | missing_definition | ghidra_signature */
+u8 main_mario(void) {
+    return 0;
+}
+
+/* stub-fill: main_base | missing_definition | ghidra_signature */
+u8 main_base(void) {
+    return 0;
+}
+
+/* stub-fill: main_genki | missing_definition | ghidra_signature */
+s32 main_genki(int param_1, int param_2) {
+    return 0;
+}

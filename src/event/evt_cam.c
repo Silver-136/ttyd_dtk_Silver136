@@ -104,30 +104,263 @@ u8 evt_cam3d_evt_set_npc_rel(s32 pEvt) {
 }
 
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 evt_cam3d_evt_set(s32 pEvt) {
-    return 0;
+    extern void* gp;
+
+    s32* args = *(s32**)(pEvt + 0x18);
+    f32 x = (f32)evtGetValue((void*)pEvt, args[0]);
+    f32 y = (f32)evtGetValue((void*)pEvt, args[1]);
+    f32 z = (f32)evtGetValue((void*)pEvt, args[2]);
+    f32 targetX = (f32)evtGetValue((void*)pEvt, args[3]);
+    f32 targetY = (f32)evtGetValue((void*)pEvt, args[4]);
+    f32 targetZ = (f32)evtGetValue((void*)pEvt, args[5]);
+    s32 time = evtGetValue((void*)pEvt, args[6]);
+    s32 type = evtGetValue((void*)pEvt, args[7]);
+    void* cam = camGetPtr(4);
+
+    *(u32*)((s32)cam + 0x58) = *(u32*)((s32)cam + 0x0C);
+    *(u32*)((s32)cam + 0x5C) = *(u32*)((s32)cam + 0x10);
+    *(u32*)((s32)cam + 0x60) = *(u32*)((s32)cam + 0x14);
+    *(u32*)((s32)cam + 0x64) = *(u32*)((s32)cam + 0x18);
+    *(u32*)((s32)cam + 0x68) = *(u32*)((s32)cam + 0x1C);
+    *(u32*)((s32)cam + 0x6C) = *(u32*)((s32)cam + 0x20);
+
+    *(f32*)((s32)cam + 0x40) = x;
+    *(f32*)((s32)cam + 0x44) = y;
+    *(f32*)((s32)cam + 0x48) = z;
+    *(f32*)((s32)cam + 0x4C) = targetX;
+    *(f32*)((s32)cam + 0x50) = targetY;
+    *(f32*)((s32)cam + 0x54) = targetZ;
+
+    *(u32*)((s32)cam + 0x70) = *(u32*)((s32)gp + 0x38);
+    *(u32*)((s32)cam + 0x74) = *(u32*)((s32)gp + 0x3C);
+    *(u32*)((s32)cam + 0x78) = 0;
+    *(u32*)((s32)cam + 0x7C) = time * ((*(u32*)0x800000F8) / 4000);
+    *(u16*)((s32)cam + 0x04) = 3;
+    *(u8*)((s32)cam + 0x80) = type;
+
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 evt_cam3d_evt_set_rel(s32 pEvt) {
-    return 0;
-}
+    extern void* gp;
 
+    s32* args = *(s32**)(pEvt + 0x18);
+    f32 xOff = (f32)evtGetValue((void*)pEvt, args[0]);
+    f32 yOff = (f32)evtGetValue((void*)pEvt, args[1]);
+    f32 zOff = (f32)evtGetValue((void*)pEvt, args[2]);
+    f32 targetXOff = (f32)evtGetValue((void*)pEvt, args[3]);
+    f32 targetYOff = (f32)evtGetValue((void*)pEvt, args[4]);
+    f32 targetZOff = (f32)evtGetValue((void*)pEvt, args[5]);
+    s32 time = evtGetValue((void*)pEvt, args[6]);
+    s32 type = evtGetValue((void*)pEvt, args[7]);
+    void* cam = camGetPtr(4);
+    void* mario = marioGetPtr();
+
+    f32 targetX = *(f32*)((s32)mario + 0x8C) + targetXOff;
+    f32 targetY = *(f32*)((s32)mario + 0x90) + targetYOff;
+    f32 targetZ = *(f32*)((s32)mario + 0x94) + targetZOff;
+
+    *(u32*)((s32)cam + 0x58) = *(u32*)((s32)cam + 0x0C);
+    *(u32*)((s32)cam + 0x5C) = *(u32*)((s32)cam + 0x10);
+    *(u32*)((s32)cam + 0x60) = *(u32*)((s32)cam + 0x14);
+    *(u32*)((s32)cam + 0x64) = *(u32*)((s32)cam + 0x18);
+    *(u32*)((s32)cam + 0x68) = *(u32*)((s32)cam + 0x1C);
+    *(u32*)((s32)cam + 0x6C) = *(u32*)((s32)cam + 0x20);
+
+    *(f32*)((s32)cam + 0x40) = targetX + xOff;
+    *(f32*)((s32)cam + 0x44) = targetY + yOff;
+    *(f32*)((s32)cam + 0x48) = targetZ + zOff;
+    *(f32*)((s32)cam + 0x4C) = targetX;
+    *(f32*)((s32)cam + 0x50) = targetY;
+    *(f32*)((s32)cam + 0x54) = targetZ;
+
+    *(u32*)((s32)cam + 0x70) = *(u32*)((s32)gp + 0x38);
+    *(u32*)((s32)cam + 0x74) = *(u32*)((s32)gp + 0x3C);
+    *(u32*)((s32)cam + 0x78) = 0;
+    *(u32*)((s32)cam + 0x7C) = time * ((*(u32*)0x800000F8) / 4000);
+    *(u16*)((s32)cam + 0x04) = 3;
+    *(u8*)((s32)cam + 0x80) = type;
+
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 s32 evt_cam3d_evt_zoom_in(void* pEvt) {
-    return 0;
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+
+    extern void* gp;
+    extern f32 float_100_80421048;
+    extern void PSVECSubtract(void* a, void* b, void* out);
+    extern void PSVECScale(void* src, void* dst, f32 scale);
+    extern void PSVECAdd(void* a, void* b, void* out);
+    extern double cos(double);
+    extern double sin(double);
+
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 percent = evtGetValue(pEvt, args[0]);
+    s32 time = evtGetValue(pEvt, args[1]);
+    s32 dist = evtGetValue(pEvt, args[2]);
+    s32 type = evtGetValue(pEvt, args[3]);
+    void* cam = camGetPtr(4);
+    Vec3 pos;
+
+    PSVECSubtract((void*)((s32)cam + 0x18), (void*)((s32)cam + 0x0C), &pos);
+    PSVECScale(&pos, &pos, (f32)percent / float_100_80421048);
+    PSVECAdd(&pos, (void*)((s32)cam + 0x0C), &pos);
+
+    *(u32*)((s32)cam + 0x58) = *(u32*)((s32)cam + 0x0C);
+    *(u32*)((s32)cam + 0x5C) = *(u32*)((s32)cam + 0x10);
+    *(u32*)((s32)cam + 0x60) = *(u32*)((s32)cam + 0x14);
+    *(u32*)((s32)cam + 0x64) = *(u32*)((s32)cam + 0x18);
+    *(u32*)((s32)cam + 0x68) = *(u32*)((s32)cam + 0x1C);
+    *(u32*)((s32)cam + 0x6C) = *(u32*)((s32)cam + 0x20);
+
+    *(u32*)((s32)cam + 0x40) = *(u32*)&pos.x;
+    *(u32*)((s32)cam + 0x44) = *(u32*)&pos.y;
+    *(u32*)((s32)cam + 0x48) = *(u32*)&pos.z;
+    *(u32*)((s32)cam + 0x4C) = *(u32*)((s32)cam + 0x18);
+    *(u32*)((s32)cam + 0x50) = *(u32*)((s32)cam + 0x1C);
+    *(u32*)((s32)cam + 0x54) = *(u32*)((s32)cam + 0x20);
+
+    *(f32*)((s32)cam + 0x40) += (f32)dist * (f32)cos(*(f32*)((s32)cam + 0x114));
+    *(f32*)((s32)cam + 0x48) += (f32)dist * (f32)sin(*(f32*)((s32)cam + 0x114));
+    *(f32*)((s32)cam + 0x4C) += (f32)dist * (f32)cos(*(f32*)((s32)cam + 0x114));
+    *(f32*)((s32)cam + 0x54) += (f32)dist * (f32)sin(*(f32*)((s32)cam + 0x114));
+
+    *(u32*)((s32)cam + 0x70) = *(u32*)((s32)gp + 0x38);
+    *(u32*)((s32)cam + 0x74) = *(u32*)((s32)gp + 0x3C);
+    *(u32*)((s32)cam + 0x78) = 0;
+    *(u32*)((s32)cam + 0x7C) = time * ((*(u32*)0x800000F8) / 4000);
+    *(u16*)((s32)cam + 0x04) = 3;
+    *(u8*)((s32)cam + 0x80) = type;
+
+    return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_cam3d_evt_set_at(void* pEvt) {
-    return 0;
-}
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
 
+    extern void* gp;
+    extern f32 float_100_80421048;
+    extern void PSVECSubtract(void* a, void* b, void* out);
+    extern void PSVECScale(void* src, void* dst, f32 scale);
+    extern void PSVECAdd(void* a, void* b, void* out);
+
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 x = evtGetValue(pEvt, args[0]);
+    s32 y = evtGetValue(pEvt, args[1]);
+    s32 z = evtGetValue(pEvt, args[2]);
+    s32 percent = evtGetValue(pEvt, args[3]);
+    s32 time = evtGetValue(pEvt, args[4]);
+    s32 type = evtGetValue(pEvt, args[5]);
+    void* cam = camGetPtr(4);
+    Vec3 pos;
+    Vec3 target;
+    Vec3 targetWork = { 0.0f, 0.0f, 0.0f };
+
+    targetWork.x = (f32)x;
+    targetWork.y = (f32)y;
+    targetWork.z = (f32)z;
+    target = targetWork;
+
+    PSVECSubtract(&target, (void*)((s32)cam + 0x0C), &pos);
+    PSVECScale(&pos, &pos, (f32)percent / float_100_80421048);
+    PSVECAdd(&pos, (void*)((s32)cam + 0x0C), &pos);
+
+    *(u32*)((s32)cam + 0x58) = *(u32*)((s32)cam + 0x0C);
+    *(u32*)((s32)cam + 0x5C) = *(u32*)((s32)cam + 0x10);
+    *(u32*)((s32)cam + 0x60) = *(u32*)((s32)cam + 0x14);
+    *(u32*)((s32)cam + 0x64) = *(u32*)((s32)cam + 0x18);
+    *(u32*)((s32)cam + 0x68) = *(u32*)((s32)cam + 0x1C);
+    *(u32*)((s32)cam + 0x6C) = *(u32*)((s32)cam + 0x20);
+
+    *(u32*)((s32)cam + 0x40) = *(u32*)&pos.x;
+    *(u32*)((s32)cam + 0x44) = *(u32*)&pos.y;
+    *(u32*)((s32)cam + 0x48) = *(u32*)&pos.z;
+    *(u32*)((s32)cam + 0x4C) = *(u32*)&target.x;
+    *(u32*)((s32)cam + 0x50) = *(u32*)&target.y;
+    *(u32*)((s32)cam + 0x54) = *(u32*)&target.z;
+
+    *(u32*)((s32)cam + 0x70) = *(u32*)((s32)gp + 0x38);
+    *(u32*)((s32)cam + 0x74) = *(u32*)((s32)gp + 0x3C);
+    *(u32*)((s32)cam + 0x78) = 0;
+    *(u32*)((s32)cam + 0x7C) = time * ((*(u32*)0x800000F8) / 4000);
+    *(u16*)((s32)cam + 0x04) = 3;
+    *(u8*)((s32)cam + 0x80) = type;
+
+    return 2;
+}
 
 s32 evt_cam3d_evt_set_xyz(void* pEvt) {
-    return 0;
-}
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
 
+    extern void* gp;
+
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 x = evtGetValue(pEvt, args[0]);
+    s32 y = evtGetValue(pEvt, args[1]);
+    s32 z = evtGetValue(pEvt, args[2]);
+    s32 dist = evtGetValue(pEvt, args[3]);
+    s32 time = evtGetValue(pEvt, args[4]);
+    s32 type = evtGetValue(pEvt, args[5]);
+    void* cam = camGetPtr(4);
+    Vec3 old;
+    Vec3 next;
+
+    old.x = *(f32*)((s32)cam + 0x88);
+    old.y = *(f32*)((s32)cam + 0x8C);
+    old.z = *(f32*)((s32)cam + 0x90);
+    *(u32*)((s32)cam + 0xC4) = *(u32*)&old.x;
+    *(u32*)((s32)cam + 0xC8) = *(u32*)&old.y;
+    *(u32*)((s32)cam + 0xCC) = *(u32*)&old.z;
+
+    next.x = (f32)x;
+    next.y = (f32)y;
+    next.z = (f32)z;
+    *(u32*)((s32)cam + 0xB8) = *(u32*)&next.x;
+    *(u32*)((s32)cam + 0xBC) = *(u32*)&next.y;
+    *(u32*)((s32)cam + 0xC0) = *(u32*)&next.z;
+
+    *(f32*)((s32)cam + 0xF0) = *(f32*)((s32)cam + 0xE4);
+    *(f32*)((s32)cam + 0xEC) = (f32)dist;
+    *(u32*)((s32)cam + 0xD0) = *(u32*)((s32)gp + 0x38);
+    *(u32*)((s32)cam + 0xD4) = *(u32*)((s32)gp + 0x3C);
+    *(u32*)((s32)cam + 0xD8) = 0;
+    *(u32*)((s32)cam + 0xDC) = time * ((*(u32*)0x800000F8) / 4000);
+    *(u16*)((s32)cam + 0x82) = 3;
+    *(u8*)((s32)cam + 0xE0) = type;
+
+    return 2;
+}
 
 u8 evt_cam_road_reset2(s32 pEvt) {
     return 0;

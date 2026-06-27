@@ -19,3 +19,21 @@ USER_FUNC(evt_lottery_flag) {
     return EVT_RETURN_DONE;
 }
 
+
+
+/* CHATGPT STUB FILL: main/event/evt_lottery 20260624_184929 */
+
+/* stub-fill: evt_lottery_error_check | missing_definition | ghidra_signature */
+s32 evt_lottery_error_check(int param_1) {
+    return 0;
+}
+
+/* stub-fill: evt_lottery_buy | missing_definition | ghidra_signature */
+s32 evt_lottery_buy(void* pEvt) {
+    return 0;
+}
+
+/* stub-fill: evt_lottery | missing_definition | ghidra_signature */
+s32 evt_lottery(void* pEvt) {
+    return 0;
+}

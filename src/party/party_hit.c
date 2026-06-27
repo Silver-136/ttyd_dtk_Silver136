@@ -67,3 +67,11 @@ s32 chkfilter(s32 param_1, int param_2) {
 void* partySearchWallFront(s64 param_1, s64 param_2, s32 pParty, void* partyPos) {
     return 0;
 }
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/party/party_hit 20260624_191429 */
+
+/* fallback stub-fill: map=unk_800c2010 addr=0x800c2010 size=0x000007b0 */
+int unk_800c2010() {
+    return 0;
+}

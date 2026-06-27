@@ -78,6 +78,7 @@ void BattlePadInit(void) {
 }
 
 void BtlPad_WorkUpdate(void* work, s32 flags) {
+    ;
 }
 
 
@@ -117,4 +118,5 @@ void BtlPad_WorkInit(void* work) {
 
 
 void BattlePadManager(void) {
+    ;
 }

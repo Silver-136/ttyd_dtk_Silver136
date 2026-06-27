@@ -256,6 +256,7 @@ u8 kpaFireMain(void) {
 
 
 void kpa2DMain(void* mario) {
+    ;
 }
 
 
@@ -265,6 +266,7 @@ u8 kpaFall(void) {
 
 
 void kpa3DMain(void* mario) {
+    ;
 }
 
 

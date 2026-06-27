@@ -233,3 +233,11 @@ void nokonoko_move(void* party) {
             break;
     }
 }
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/party/party_nokonoko 20260624_191429 */
+
+/* fallback stub-fill: map=unk_800d058c addr=0x800d058c size=0x000001a8 */
+int unk_800d058c() {
+    return 0;
+}

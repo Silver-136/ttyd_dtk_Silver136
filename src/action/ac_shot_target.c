@@ -135,3 +135,16 @@ void _ac_rumble_param_set(u32 type, s16* frame1, s16* frame2, f32* strength) {
             break;
     }
 }
+
+
+/* CHATGPT STUB FILL: main/action/ac_shot_target 20260624_184929 */
+
+/* stub-fill: actionCommandDisp | prototype_only | source_prototype */
+void actionCommandDisp(f32 x, f32 y) {
+    return;
+}
+
+/* stub-fill: battleAcMain_ShotTarget | missing_definition | ghidra_signature */
+u8 battleAcMain_ShotTarget(void) {
+    return 0;
+}

@@ -5,6 +5,7 @@ extern s32 work;
 extern void* __memAlloc();
 
 void offscreenAddBoundingBox(s32, u16, u16, u16, u16) {
+    ;
 }
 
 

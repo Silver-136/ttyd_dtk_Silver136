@@ -56,3 +56,27 @@ void effSandarsDisp(s32 cameraId, void* effect) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_sandars 20260624_184929 */
+
+/* stub-fill: effSandarsDisp2 | missing_definition | ghidra_signature */
+u8 effSandarsDisp2(void) {
+    return 0;
+}
+
+
+/* CHATGPT STUB FILL: main/effect/eff_sandars 20260624_184929 */
+
+/* stub-fill: effSandarsEntry | missing_definition | ghidra_signature */
+u8 effSandarsEntry(void) {
+    return 0;
+}
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/effect/eff_sandars 20260624_191429 */
+
+/* fallback stub-fill: map=effSandarsMain addr=0x80241d68 size=0x000002dc */
+int effSandarsMain() {
+    return 0;
+}

@@ -11,10 +11,59 @@ u8 mot_walk(void) {
 }
 
 
-u8 marioWalkDashSe(void* pHit, u32 param_2) {
-    return 0;
-}
+u8 marioWalkDashSe(void* pHit, u32 interval) {
+    extern void* marioGetPtr(void);
+    extern u32 hitGetAttr(void* hit);
+    extern void psndSFXOn_3D(s32 sfx, void* pos);
+    extern s32 strncmp(const char* a, const char* b, u32 n);
+    extern void* gp;
+    extern const char str_mri_804208a4[];
+    void* mario;
+    u32 attr;
+    u32 frame;
 
+    mario = marioGetPtr();
+    attr = hitGetAttr(pHit);
+    frame = *(u32*)((s32)mario + 0x48);
+
+    if ((frame % interval) == 0) {
+        if (attr & 0x100) {
+            psndSFXOn_3D(0x143, (void*)((s32)mario + 0x8C));
+        } else if (attr & 0x200000) {
+            psndSFXOn_3D(0x145, (void*)((s32)mario + 0x8C));
+        } else if (attr & 0x100000) {
+            psndSFXOn_3D(0x147, (void*)((s32)mario + 0x8C));
+        } else if (attr & 0x1000) {
+            if (strncmp((char*)((s32)gp + 0x12C), str_mri_804208a4, 3) != 0) {
+                psndSFXOn_3D(0x149, (void*)((s32)mario + 0x8C));
+            } else {
+                psndSFXOn_3D(0x143, (void*)((s32)mario + 0x8C));
+            }
+        } else if (attr & 0x400000) {
+            psndSFXOn_3D(0x14B, (void*)((s32)mario + 0x8C));
+        } else {
+            psndSFXOn_3D(0x141, (void*)((s32)mario + 0x8C));
+        }
+    } else if ((frame % (interval >> 1)) == 0) {
+        if (attr & 0x100) {
+            psndSFXOn_3D(0x142, (void*)((s32)mario + 0x8C));
+        } else if (attr & 0x200000) {
+            psndSFXOn_3D(0x144, (void*)((s32)mario + 0x8C));
+        } else if (attr & 0x100000) {
+            psndSFXOn_3D(0x146, (void*)((s32)mario + 0x8C));
+        } else if (attr & 0x1000) {
+            if (strncmp((char*)((s32)gp + 0x12C), str_mri_804208a4, 3) != 0) {
+                psndSFXOn_3D(0x148, (void*)((s32)mario + 0x8C));
+            } else {
+                psndSFXOn_3D(0x142, (void*)((s32)mario + 0x8C));
+            }
+        } else if (attr & 0x400000) {
+            psndSFXOn_3D(0x14A, (void*)((s32)mario + 0x8C));
+        } else {
+            psndSFXOn_3D(0x140, (void*)((s32)mario + 0x8C));
+        }
+    }
+}
 
 f32 marioGetDashSpd(void) {
     extern void* marioGetPtr(void);

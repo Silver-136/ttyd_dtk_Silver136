@@ -139,3 +139,46 @@ USER_FUNC(main_muki) {
     dispEntry(4, 2, disp_3D_alpha, float_0_8042854c, NULL);
     return 0;
 }
+
+
+/* CHATGPT STUB FILL: main/action/star/sac_muki 20260624_184929 */
+
+/* stub-fill: disp_3D_alpha | prototype_only | source_prototype */
+void disp_3D_alpha(void) {
+    return;
+}
+
+/* stub-fill: disp_3D | prototype_only | source_prototype */
+void disp_3D(void) {
+    return;
+}
+
+/* stub-fill: disp_2D | prototype_only | source_prototype */
+void disp_2D(void) {
+    return;
+}
+
+/* stub-fill: main_star | prototype_only | source_prototype */
+void main_star(void) {
+    return;
+}
+
+/* stub-fill: main_icon | prototype_only | source_prototype */
+void main_icon(s32 index) {
+    return;
+}
+
+/* stub-fill: main_point | prototype_only | source_prototype */
+void main_point(s32 index) {
+    return;
+}
+
+/* stub-fill: main_cursor | prototype_only | source_prototype */
+void main_cursor(void) {
+    return;
+}
+
+/* stub-fill: main_base | prototype_only | source_prototype */
+void main_base(void) {
+    return;
+}

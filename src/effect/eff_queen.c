@@ -108,3 +108,11 @@ void* effQueenEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_queen 20260624_185035 */
+
+/* stub-fill: effQueenMain | prototype_only | source_prototype */
+void effQueenMain(void* entry) {
+    return;
+}

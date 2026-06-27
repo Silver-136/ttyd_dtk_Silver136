@@ -31,6 +31,7 @@ extern f32 float_0_80422fd0;
 extern f32 float_5_80422fdc;
 
 void BattleObjectConfig(void) {
+    ;
 }
 
 void _rate_mix(s8* maxValue, s8* total, s8* current, s8* add) {
@@ -103,6 +104,7 @@ u8 _nozzle_work_effect(void) {
 
 
 void BattleStageObjectMain(void) {
+    ;
 }
 
 
@@ -117,6 +119,7 @@ u8 _nozzle_turn(void) {
 
 
 void _combine_nozzle_weapon(int copyBaseOnly, void* tempWeapon, void* baseWeapon) {
+    ;
 }
 
 
@@ -739,6 +742,7 @@ s32 _nozzle_work_get_weapon_address(void* event) {
 
 
 void BattleFogForceStop(void) {
+    ;
 }
 
 

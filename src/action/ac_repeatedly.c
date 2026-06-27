@@ -26,6 +26,7 @@ s32 battleAcMain_Repeatedly(void* battleWork) {
 
 
 void actionCommandDisp(f32 x, f32 y) {
+    ;
 }
 
 typedef struct AcRepeatedlyDispWork {
@@ -99,3 +100,11 @@ closing:
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/action/ac_repeatedly 20260624_184008 */
+
+/* stub-fill: _init_param | missing_definition | ghidra_signature */
+u8 _init_param(int param_1) {
+    return 0;
+}

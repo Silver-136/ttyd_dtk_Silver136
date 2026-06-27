@@ -123,19 +123,196 @@ u8 marioCheckWall(s64 speed, s64 angle) {
 
 
 int marioHitCheckVec(void* param_1, void* param_2, float* param_3, void* param_4, float* param_5) {
-    return 0;
+    typedef struct Vec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
+    typedef struct HitCheckArg {
+        u8 pad[0xC];
+        Vec start;
+        Vec end;
+        Vec normal;
+        Vec hitPos;
+        f32 radius;
+    } HitCheckArg;
+    extern void* marioGetPtr(void);
+    extern s32 hitCheckVecFilter(HitCheckArg*, void*);
+    extern s32 chkfilterVecVivian(s32, int);
+    extern s32 chkfilterVecRoll(s32, int);
+    extern s32 chkfilterVec(s32, int);
+    extern f32 float_0p5_804208cc;
+    extern f32 float_neg0p5_804208d0;
+    extern f32 float_1000_804208a8;
+
+    HitCheckArg hit;
+    s32 result;
+
+    hit.start = *(Vec*)param_1;
+    hit.end = *(Vec*)param_2;
+    hit.radius = *param_5;
+
+    if (*(u16*)((s32)marioGetPtr() + 0x2E) == 0x1C) {
+        result = hitCheckVecFilter(&hit, chkfilterVecVivian);
+    } else if ((*(u32*)marioGetPtr() & 0x01000000) != 0) {
+        result = hitCheckVecFilter(&hit, chkfilterVecRoll);
+    } else {
+        result = hitCheckVecFilter(&hit, chkfilterVec);
+    }
+
+    if (result != 0) {
+        f32 radius = *param_5;
+        *param_5 = (f32)(s32)(radius * float_1000_804208a8 + (radius >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+        if (param_3 != 0) {
+            f32 x;
+            f32 y;
+            f32 z;
+
+            *(Vec*)param_3 = hit.normal;
+            x = param_3[0];
+            param_3[0] = (f32)(s32)(x * float_1000_804208a8 + (x >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+            y = param_3[1];
+            param_3[1] = (f32)(s32)(y * float_1000_804208a8 + (y >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+            z = param_3[2];
+            param_3[2] = (f32)(s32)(z * float_1000_804208a8 + (z >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+        }
+        if (param_4 != 0) {
+            *(Vec*)param_4 = hit.hitPos;
+        }
+    }
+    return result;
 }
 
-
 u8 searchUnder2(double param_1, double param_2, double param_3, float* param_4) {
-    return 0;
+    typedef struct Vec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
+    typedef struct HitCheckArg {
+        u8 pad[0xC];
+        Vec start;
+        Vec end;
+        Vec normal;
+        Vec hitPos;
+        f32 radius;
+    } HitCheckArg;
+    extern void* marioGetPtr(void);
+    extern s32 hitCheckVecFilter(HitCheckArg*, void*);
+    extern s32 chkfilterVecVivian(s32, int);
+    extern s32 chkfilterVecRoll(s32, int);
+    extern s32 chkfilterVec(s32, int);
+    extern Vec vec3_802c3ba8;
+    extern Vec vec3_802c3bb4;
+    extern f32 float_37_8042097c;
+    extern f32 float_1037_80420998;
+    extern f32 float_0p5_804208cc;
+    extern f32 float_neg0p5_804208d0;
+    extern f32 float_1000_804208a8;
+    extern f32 float_neg1_804208e4;
+
+    Vec pos = vec3_802c3ba8;
+    HitCheckArg hit;
+    s32 result;
+
+    pos.x = (f32)param_1;
+    pos.y = (f32)param_2;
+    pos.z = (f32)param_3;
+    pos.y += float_37_8042097c;
+    hit.start = pos;
+    hit.end = vec3_802c3bb4;
+    hit.radius = float_1037_80420998;
+
+    if (*(u16*)((s32)marioGetPtr() + 0x2E) == 0x1C) {
+        result = hitCheckVecFilter(&hit, chkfilterVecVivian);
+    } else if ((*(u32*)marioGetPtr() & 0x01000000) != 0) {
+        result = hitCheckVecFilter(&hit, chkfilterVecRoll);
+    } else {
+        result = hitCheckVecFilter(&hit, chkfilterVec);
+    }
+
+    if (result != 0) {
+        f32 x = hit.normal.x;
+        f32 y = hit.normal.y;
+        f32 z = hit.normal.z;
+
+        hit.normal.x = (f32)(s32)(x * float_1000_804208a8 + (x >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+        hit.normal.y = (f32)(s32)(y * float_1000_804208a8 + (y >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+        hit.normal.z = (f32)(s32)(z * float_1000_804208a8 + (z >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+    }
+
+    if (result != 0) {
+        *param_4 = hit.normal.y;
+    } else {
+        *param_4 = float_neg1_804208e4;
+    }
+    return result;
 }
 
 
 u8 marioSearchUnder(void) {
-    return 0;
-}
+    typedef struct Vec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
+    typedef struct HitCheckArg {
+        u8 pad[0xC];
+        Vec start;
+        Vec end;
+        Vec normal;
+        Vec hitPos;
+        f32 radius;
+    } HitCheckArg;
+    extern void* marioGetPtr(void);
+    extern s32 hitCheckVecFilter(HitCheckArg*, void*);
+    extern s32 chkfilterVecVivian(s32, int);
+    extern s32 chkfilterVecRoll(s32, int);
+    extern s32 chkfilterVec(s32, int);
+    extern Vec vec3_802c3b9c;
+    extern f32 float_0p5_804208cc;
+    extern f32 float_1000_804208a8;
+    extern f32 float_neg0p5_804208d0;
+    extern f32 float_neg3000_80420980;
 
+    void* mario = marioGetPtr();
+    f32 height = *(f32*)((s32)mario + 0x1BC);
+    HitCheckArg hit;
+    Vec pos;
+    s32 result;
+
+    if ((*(u32*)mario & 0x01000000) != 0) {
+        height *= float_0p5_804208cc;
+    }
+
+    pos.x = *(f32*)((s32)mario + 0x8C);
+    pos.y = *(f32*)((s32)mario + 0x90) + height;
+    pos.z = *(f32*)((s32)mario + 0x94);
+    hit.start = pos;
+    hit.end = vec3_802c3b9c;
+    hit.radius = float_1000_804208a8;
+
+    if (*(u16*)((s32)marioGetPtr() + 0x2E) == 0x1C) {
+        result = hitCheckVecFilter(&hit, chkfilterVecVivian);
+    } else if ((*(u32*)marioGetPtr() & 0x01000000) != 0) {
+        result = hitCheckVecFilter(&hit, chkfilterVecRoll);
+    } else {
+        result = hitCheckVecFilter(&hit, chkfilterVec);
+    }
+
+    if (result != 0) {
+        f32 x = hit.normal.x;
+        f32 y = hit.normal.y;
+        f32 z = hit.normal.z;
+
+        hit.normal.x = (f32)(s32)(x * float_1000_804208a8 + (x >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+        hit.normal.y = (f32)(s32)(y * float_1000_804208a8 + (y >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+        hit.normal.z = (f32)(s32)(z * float_1000_804208a8 + (z >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+    }
+
+    *(f32*)((s32)mario + 0x1C4) = result != 0 ? hit.normal.y : float_neg3000_80420980;
+    return result;
+}
 
 u8 N_dou10_yoko_yari3(void) {
     return 0;

@@ -80,4 +80,5 @@ u8 rendermodeFunc(s32 param_1) {
 
 
 void effNiceAsync(s32 a) {
+    ;
 }

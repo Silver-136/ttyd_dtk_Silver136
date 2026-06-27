@@ -58,3 +58,16 @@ void* effTreasureMapEntry(s32 kind, f32 x, f32 y, f32 z) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_treasure_map 20260624_184823 */
+
+/* stub-fill: effTreasureMapDisp | missing_definition | ghidra_signature */
+u8 effTreasureMapDisp(void) {
+    return 0;
+}
+
+/* stub-fill: effTreasureMapMain | prototype_only | source_prototype */
+void effTreasureMapMain(void) {
+    return;
+}

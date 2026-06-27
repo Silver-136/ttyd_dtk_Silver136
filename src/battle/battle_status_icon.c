@@ -37,6 +37,7 @@ extern BSITriplet vec3_803028b0;
 extern BSITriplet vec3_803028bc;
 
 void BattleStatusIconDelete(void) {
+    ;
 }
 
 void BattleStatusIconInit(BattleWorkUnit* unit) {
@@ -151,3 +152,32 @@ s32 _bsi_default_turn(BattleWorkUnit* unit, s32* desc, s32* out) {
     return 1;
 }
 
+
+
+/* CHATGPT STUB FILL: main/battle/battle_status_icon 20260624_184929 */
+
+/* stub-fill: BattleStatusIconDisp | missing_definition | ghidra_signature */
+void BattleStatusIconDisp(s32 param_1, void* unit) {
+    return;
+}
+
+
+/* CHATGPT STUB FILL: main/battle/battle_status_icon 20260624_184929 */
+
+/* stub-fill: BattleStatusIconMain | missing_definition | ghidra_signature */
+u8 BattleStatusIconMain(void* unit) {
+    return 0;
+}
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/battle/battle_status_icon 20260624_191429 */
+
+/* fallback stub-fill: map=_bsi_regeneration addr=0x802530fc size=0x00000280 */
+int _bsi_regeneration() {
+    return 0;
+}
+
+/* fallback stub-fill: map=_bsi_biribiri addr=0x8025337c size=0x000001e8 */
+int _bsi_biribiri() {
+    return 0;
+}

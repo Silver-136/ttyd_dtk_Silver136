@@ -137,8 +137,10 @@ s32 BattleRunHitEvent(void* unit, u32 param_2) {
 
 
 void BattlePhaseEventStartDeclare(void* unit) {
+    ;
 }
 
 
 void BattleRunWaitEvent(void* unit) {
+    ;
 }

@@ -12,4 +12,5 @@ u8 effBreathFireMain(int* param_1) {
 
 
 void effBreathFireN64Entry(void) {
+    ;
 }

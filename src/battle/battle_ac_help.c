@@ -8,6 +8,7 @@ void _ac_help_disp(void);
 void dispEntry(s32 cameraId, s32 renderMode, void* callback, s32 param, f32 priority);
 
 void BattleAcHelpInit(void) {
+    ;
 }
 
 void BattleAcHelpSetDispType(s32 type) {

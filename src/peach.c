@@ -23,6 +23,7 @@ s32 animPoseEntry(const char* name, s32 mode);
 void npcSetMarioAutoTalkPose(const char* stay, const char* talk);
 
 void peachPreInit(void) {
+    ;
 }
 
 void peachSetStsAftershower(void) {
@@ -76,6 +77,7 @@ void peachSetStsUneasy(void) {
 
 
 void peachChgPose(void* pose) {
+    ;
 }
 
 

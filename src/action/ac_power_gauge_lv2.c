@@ -62,3 +62,16 @@ void battleAcDisp_PowerGaugeLv2(void* camera, void* wp) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/action/ac_power_gauge_lv2 20260624_184929 */
+
+/* stub-fill: actionCommandDisp | prototype_only | source_prototype */
+void actionCommandDisp(f32 x, f32 y) {
+    return;
+}
+
+/* stub-fill: battleAcMain_PowerGaugeLv2 | missing_definition | ghidra_signature */
+s32 battleAcMain_PowerGaugeLv2(int param_1) {
+    return 0;
+}

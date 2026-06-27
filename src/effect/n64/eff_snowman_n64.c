@@ -37,6 +37,7 @@ extern f32 float_200_804260f0;
 extern f32 float_neg8_804260f4;
 
 void effSnowmanDisp(void) {
+    ;
 }
 
 

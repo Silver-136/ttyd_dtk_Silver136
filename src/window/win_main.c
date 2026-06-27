@@ -204,6 +204,7 @@ u8 winTexInit_x2(s32 param_1) {
 
 
 void winTexSet(s32 texId, void* pos, void* size, void* color) {
+    ;
 }
 
 
@@ -213,6 +214,7 @@ u8 winTexSet_x2(void) {
 
 
 void unk_8017c9bc(s32 msg, void* pos, void* size, void* color) {
+    ;
 }
 
 
@@ -277,14 +279,17 @@ void winTexInit(s32 texData) {
 }
 
 void winFontSetR(void* position, void* scale, void* color, char* format) {
+    ;
 }
 
 
 void winFontSetEdge(void* position, void* scale, void* color, char* format) {
+    ;
 }
 
 
 void winFontSet(void* position, void* scale, void* color, char* format) {
+    ;
 }
 
 
@@ -337,4 +342,17 @@ u32 winGhostDiaryChk(void) {
         return 1;
     }
     return seqGetSeq() == 5;
+}
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/window/win_main 20260624_191429 */
+
+/* fallback stub-fill: map=unk_8017d10c addr=0x8017d10c size=0x00000180 */
+int unk_8017d10c() {
+    return 0;
+}
+
+/* fallback stub-fill: map=winFontSetPitch addr=0x8017d52c size=0x00000180 */
+int winFontSetPitch() {
+    return 0;
 }

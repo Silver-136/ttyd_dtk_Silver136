@@ -10,6 +10,7 @@ s32 battleAcResult_StickKeepLeft(void* obj) {
 
 
 void actionCommandDisp(f32 x, f32 y) {
+    ;
 }
 
 
@@ -19,4 +20,5 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
 
 
 void battleAcDisp_StickKeepLeft(s32 param_1, void* battleWork) {
+    ;
 }

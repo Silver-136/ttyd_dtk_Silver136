@@ -136,10 +136,57 @@ u8 itemHitCheck(s64 posX, s64 posY, s64 posZ, s64 param_4) {
 }
 
 
-u8 winNameDisp(int param_1) {
-    return 0;
-}
+void winNameDisp(int param_1) {
+    extern u32 FontGetMessageWidthLine(char* msg, s16* lineCount);
+    extern void FontDrawStart(void);
+    extern void FontDrawColor(void* color);
+    extern u8 FontDrawMessage(u32 x, u32 y, char* msg);
+    extern s32 sprintf(char* buf, const char* fmt, ...);
+    extern char* strcpy(char* dst, const char* src);
+    extern void unk_800d1364(char* dst, char* src);
+    extern u32 dat_804210a8;
+    extern char str_msg_window_badge_get_802c92a8[];
+    extern char str_msg_window_item_get_802c92c0[];
 
+    u32 color;
+    u16 lines[2];
+    char buf[0x400];
+    void* data = *(void**)(param_1 + 0x2C);
+    char* itemMsg;
+    u32 width;
+
+    itemMsg = msgSearch(*(void**)((s32)itemDataTable + *(s32*)((s32)data + 4) * 0x28 + 4));
+
+    if (*(void**)((s32)gp + 0x16C) == 0) {
+        if (*(s32*)((s32)data + 4) >= 0xF0 && *(s32*)((s32)data + 4) < 0x153) {
+            sprintf(buf, msgSearch(str_msg_window_badge_get_802c92a8), itemMsg);
+        } else {
+            sprintf(buf, msgSearch(str_msg_window_item_get_802c92c0), itemMsg);
+        }
+    } else {
+        if (*(s32*)((s32)data + 4) >= 0xF0 && *(s32*)((s32)data + 4) < 0x153) {
+            strcpy(buf, msgSearch(str_msg_window_badge_get_802c92a8));
+        } else {
+            strcpy(buf, msgSearch(str_msg_window_item_get_802c92c0));
+        }
+        unk_800d1364(buf, itemMsg);
+    }
+
+    width = FontGetMessageWidthLine(buf, (s16*)lines) & 0xFFFF;
+    if ((s32)(width + 0x14) > *(s32*)(param_1 + 0x20)) {
+        *(s32*)(param_1 + 0x20) = width + 0x14;
+        *(s32*)(param_1 + 0x18) = -*(s32*)(param_1 + 0x20) / 2;
+    }
+
+    *(s32*)(param_1 + 0x24) = *(s32*)(*(s32*)(param_1 + 0x28) + 0x18) + lines[0] * 0x18;
+
+    if (winMgrAction(*(void**)((s32)data + 0x28)) == 0) {
+        FontDrawStart();
+        color = dat_804210a8;
+        FontDrawColor(&color);
+        FontDrawMessage((u32)(-(s32)width / 2), *(s32*)(param_1 + 0x1C) - 8, buf);
+    }
+}
 
 u8 winNameDisp2(int param_1) {
     extern f32 FontGetMessageWidthLine(const char* msg, s32 line);
@@ -300,19 +347,230 @@ u8 itemseq_Bound(void* itemEntry) {
 
 
 s32 itemGetCheck(void* itemEntry) {
+    extern void* marioGetPtr(void);
+    extern s32 marioStGetSystemLevel(void);
+    extern s32 seqGetSeq(void);
+    extern s32 vivianGetStatus(void);
+    extern s32 nokonoko_holdItem(void);
+    extern s32 N_fbatPreventMarioEventChk(void);
+
+    void* player = marioGetPtr();
+    void* workSet;
+    void* item;
+    s32 count;
+    s32 mode;
+
+    if (itemEntry == 0) {
+        return 0;
+    }
+    if ((*(u32*)((s32)itemEntry + 0x38) & 0x100000) != 0) {
+        return 0;
+    }
+
+    if ((s32)*(u8*)((s32)player + 0x3C) == 2) {
+        if ((*(u32*)((s32)player + 0x14) & 1) == 0) {
+            if ((u32)marioStGetSystemLevel() != 0) {
+                return 0;
+            }
+            if ((*(u32*)player & 0xA) != 0) {
+                return 0;
+            }
+        }
+    } else {
+        if ((u32)marioStGetSystemLevel() != 0) {
+            return 0;
+        }
+        if ((*(u32*)player & 0xA) != 0) {
+            return 0;
+        }
+    }
+
+    if (*(s32*)((s32)gp + 0x164) != 0) {
+        return 0;
+    }
+    if (seqGetSeq() != 2) {
+        return 0;
+    }
+    if (*(u16*)((s32)player + 0x2E) == 0x19) {
+        return 0;
+    }
+    if (*(u16*)((s32)player + 0x2E) == 0x18) {
+        return 0;
+    }
+    if (vivianGetStatus() != 0) {
+        return 0;
+    }
+    if (*(u16*)((s32)player + 0x2E) == 0x1F || *(u16*)((s32)player + 0x2E) == 0x20) {
+        return 0;
+    }
+    if (nokonoko_holdItem() != 0) {
+        return 0;
+    }
+
+    workSet = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        workSet = (void*)((s32)work + 0x1C);
+    }
+
+    count = *(s32*)workSet;
+    item = *(void**)((s32)workSet + 4);
+    while (count > 0) {
+        if ((*(u16*)item & 1) != 0 && *(u16*)((s32)item + 0x24) == 2) {
+            return 0;
+        }
+        item = (void*)((s32)item + 0x98);
+        count--;
+    }
+
+    if (N_fbatPreventMarioEventChk() != 0) {
+        return 0;
+    }
+
+    mode = *(u16*)((s32)itemEntry + 0x24);
+    if (mode < 5) {
+        if (mode != 2) {
+            if (mode < 2) {
+                if (mode != 0) {
+                    return 1;
+                }
+            } else if ((*(u32*)((s32)itemEntry + 0x38) & 8) == 0) {
+                return 1;
+            }
+        }
+    } else {
+        if (mode == 7) {
+            return 1;
+        }
+        if (mode < 7 && *(u16*)((s32)itemEntry + 0x26) != 0 &&
+            (*(u32*)((s32)itemEntry + 0x38) & 4) == 0 &&
+            (*(u32*)((s32)itemEntry + 0x38) & 8) == 0) {
+            return 1;
+        }
+    }
+
     return 0;
 }
 
+void* itemNearDistCheck(float posX, float posY, float posZ, float maxDist) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
 
-void* itemNearDistCheck(float posX, float posY, float posZ, s64 param_4) {
-    return 0;
+    extern void* marioGetPtr(void);
+    extern void PSVECSubtract(void* a, void* b, void* out);
+    extern f32 PSVECMag(void* v);
+
+    void* workSet;
+    void* item;
+    void* nearest;
+    Vec3 pos;
+    Vec3 itemPos;
+    Vec3 delta;
+    f32 dist;
+    s32 i;
+
+    marioGetPtr();
+
+    workSet = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        workSet = (void*)((s32)workSet + 0x1C);
+    }
+
+    item = *(void**)((s32)workSet + 4);
+    nearest = 0;
+
+    pos.x = posX;
+    pos.y = posY;
+    pos.z = posZ;
+
+    for (i = 0; i < *(s32*)workSet; i++, item = (void*)((s32)item + 0x98)) {
+        if ((*(u16*)item & 1) != 0) {
+            u32 status = *(u32*)((s32)item + 0x38);
+            if ((status & 0x1000) == 0 && (status & 0x100000) == 0 &&
+                *(u16*)((s32)item + 0x24) != 2 && (status & 0x2000000) == 0) {
+                itemPos.x = *(f32*)((s32)item + 0x3C);
+                itemPos.y = *(f32*)((s32)item + 0x40);
+                itemPos.z = *(f32*)((s32)item + 0x44);
+                PSVECSubtract(&itemPos, &pos, &delta);
+                dist = PSVECMag(&delta);
+                if (dist < maxDist) {
+                    nearest = item;
+                    maxDist = dist;
+                }
+            }
+        }
+    }
+
+    return nearest;
 }
-
 
 u32 itemGetNokoCheck(void* itemEntry) {
-    return 0;
-}
+    extern void* marioGetPtr(void);
+    extern s32 marioStGetSystemLevel(void);
+    extern s32 seqGetSeq(void);
+    extern s32 vivianGetStatus(void);
+    extern s32 N_fbatPreventMarioEventChk(void);
 
+    void* player = marioGetPtr();
+    void* workSet;
+    void* item;
+    s32 count;
+
+    if (itemEntry == 0) {
+        return 0;
+    }
+    if ((*(u32*)((s32)itemEntry + 0x38) & 0x100000) != 0) {
+        return 0;
+    }
+    if ((u32)marioStGetSystemLevel() != 0) {
+        return 0;
+    }
+    if ((*(u32*)player & 0xA) != 0) {
+        return 0;
+    }
+    if ((*(u32*)((s32)itemEntry + 0x38) & 0x2000000) != 0) {
+        return 0;
+    }
+    if (*(s32*)((s32)gp + 0x164) != 0) {
+        return 0;
+    }
+    if (seqGetSeq() != 2) {
+        return 0;
+    }
+    if (*(u16*)((s32)player + 0x2E) == 0x19) {
+        return 0;
+    }
+    if (vivianGetStatus() != 0) {
+        return 0;
+    }
+    if (*(u16*)((s32)player + 0x2E) == 0x1F || *(u16*)((s32)player + 0x2E) == 0x20) {
+        return 0;
+    }
+    if ((u16)(*(u16*)((s32)player + 0x2E) - 5) <= 3 ||
+        *(u16*)((s32)player + 0x2E) == 0xF ||
+        *(u16*)((s32)player + 0x2E) == 0xE) {
+        return 0;
+    }
+
+    workSet = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        workSet = (void*)((s32)work + 0x1C);
+    }
+
+    count = *(s32*)workSet;
+    item = *(void**)((s32)workSet + 4);
+    while (count > 0) {
+        if ((*(u16*)item & 1) != 0 && *(u16*)((s32)item + 0x24) == 2) {
+            return 0;
+        }
+        item = (void*)((s32)item + 0x98);
+        count--;
+    }
+
+    return N_fbatPreventMarioEventChk() == 0;
+}
 
 u8 winFullDisp(void* winMgrEntry) {
     extern s32 FontGetMessageWidth(const char* msg);

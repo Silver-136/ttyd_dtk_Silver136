@@ -192,10 +192,12 @@ void statusPoseControl(void* part) {
 
 
 void btlUnitPartsDisp(s32 param_1, void* part) {
+    ;
 }
 
 
 void btlDispMain(void) {
+    ;
 }
 
 
@@ -210,14 +212,17 @@ u8 btlDispTexPlainGX(void) {
 
 
 void _pose_two_pattern(void* part) {
+    ;
 }
 
 
 void _btlStockExpDisp(void) {
+    ;
 }
 
 
 void btlUnitPartsBlurDisp(s32 param_1, void* part) {
+    ;
 }
 
 
@@ -237,10 +242,12 @@ u8 btlDispGXQuads2D(void) {
 
 
 void btlDispTexPlane(s32 tpl, void* color, s32 flags, f32 x, f32 y, f32 z, f32 rx, f32 scale) {
+    ;
 }
 
 
 void btlUnitItemDisp(s32 param_1, void* unit) {
+    ;
 }
 
 
@@ -289,6 +296,7 @@ u8 btlDispGXQuads2DRasta(double x1, double y1, double x2, double y2, s32 r, s32 
 
 
 void _partsBlurControl(void* part, s32 enable, s32 a3, void* color) {
+    ;
 }
 
 
@@ -324,6 +332,7 @@ void floatOffsetControl(void* part) {
 }
 
 void btlUnitStolenItemDisp(s32 param_1, void* unit) {
+    ;
 }
 
 
@@ -333,6 +342,7 @@ u8 btlDispTexPlane3(s32 param_1, s32 param_2, void* param_3, void* param_4, void
 
 
 void btlGetScreenPoint(void* inPos, void* outScreenSpacePos) {
+    ;
 }
 
 

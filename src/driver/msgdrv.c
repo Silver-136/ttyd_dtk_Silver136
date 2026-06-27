@@ -98,6 +98,7 @@ u8 selectWindow_Main(s32 param_1) {
 
 
 void msgLoad(char* name, s32 unk) {
+    ;
 }
 
 

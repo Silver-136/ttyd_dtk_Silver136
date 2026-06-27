@@ -15,6 +15,7 @@ void msgWindow_Continue(s32 id);
 s32 windowCheckID(s32 id);
 
 void evt_msg_init(void) {
+    ;
 }
 
 s32 evt_msg_pri(EvtEntry* evt) {
@@ -385,4 +386,17 @@ s32 evt_msg_npc(int param_1) {
 
 s32 evt_msg_repeat(void* pEvt, int param_2) {
     return 0;
+}
+
+
+/* CHATGPT STUB FILL: main/event/evt_msg 20260624_184008 */
+
+/* stub-fill: unk_800d0a4c | prototype_only | source_prototype */
+void unk_800d0a4c(char* dst, char* value) {
+    return;
+}
+
+/* stub-fill: unk_800d1364 | prototype_only | source_prototype */
+void unk_800d1364(char* dst, char* value) {
+    return;
 }

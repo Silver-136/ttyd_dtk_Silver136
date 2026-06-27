@@ -66,3 +66,11 @@ void* effMachinegunEntry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 speed, f3
     return entry;
 }
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_machinegun 20260624_184929 */
+
+/* stub-fill: effMachinegunDisp | prototype_only | source_prototype */
+void effMachinegunDisp(void* camera, void* entry) {
+    return;
+}

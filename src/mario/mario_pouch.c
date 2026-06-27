@@ -1182,10 +1182,12 @@ u8 pouchSortItem(u32 sortType) {
 
 
 void pouchInit(void* pouch) {
+    ;
 }
 
 
 void pouchGetItem(s32 itemNo) {
+    ;
 }
 
 
@@ -1195,6 +1197,7 @@ s32 pouchRemoveItemIndex(u32 itemType, int itemIndex) {
 
 
 void pouchRemoveItem(s32 item) {
+    ;
 }
 
 

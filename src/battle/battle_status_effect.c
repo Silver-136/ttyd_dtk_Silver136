@@ -45,6 +45,7 @@ extern u32 dat_8042470c;
 const char str_biK_PCT02x_802f9a60[] = "biK_%02x";
 
 void BattleStatusEffectInit(BattleWorkUnit* unit) {
+    ;
 }
 
 s32 BattleStatusChangeAnnouceMain_Unit(BattleWorkUnit* unit) {

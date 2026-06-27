@@ -154,6 +154,7 @@ void BattleEnd(void) {
 }
 
 BOOL Btl_UnitSetup(BattleWork* wp) {
+    ;
 }
 
 void BattleStoreExp(BattleWork* wp, s32 exp) {
@@ -395,6 +396,7 @@ void* BattleGetPartyPtr(BattleWork* wp) {
 
 
 void _EquipItem(void* unit, u32 param_2, u32 item) {
+    ;
 }
 
 
@@ -646,6 +648,7 @@ void BattleConsumeReserveItem(void) {
 
 
 void BattleIncSeq(void* battleWork, s32 seqType) {
+    ;
 }
 
 

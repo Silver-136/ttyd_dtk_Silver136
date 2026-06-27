@@ -254,3 +254,21 @@ void allPartySlitOn(void) {
         }
     }
 }
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/party/party_motion 20260624_191429 */
+
+/* fallback stub-fill: map=unk_80150fac addr=0x80150fac size=0x00000334 */
+int unk_80150fac() {
+    return 0;
+}
+
+/* fallback stub-fill: map=unk_801512e0 addr=0x801512e0 size=0x0000018c */
+int unk_801512e0() {
+    return 0;
+}
+
+/* fallback stub-fill: map=unk_8015146c addr=0x8015146c size=0x000001e0 */
+int unk_8015146c() {
+    return 0;
+}

@@ -27,6 +27,7 @@ u8 effFireSmokeDisp(void) {
 
 
 void effFireEntry(f32 x, f32 y, f32 z, f32 scale, s32 arg4, s32 duration) {
+    ;
 }
 
 

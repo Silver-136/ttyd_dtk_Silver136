@@ -491,20 +491,291 @@ u8 evt_npc_majo_disp_on(void) {
 }
 
 
-s32 evt_npc_setup(void* pEvt, int param_2) {
+s32 evt_npc_setup(EventEntry* event, s32 isFirstCall) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern void* fbatGetPointer(void);
+    extern void* npcNameToPtr_NoAssert(void* name);
+    extern void* npcNameToPtr(void* name);
+    extern void evtDeleteID(s32 id);
+    extern void* evtEntry(void* code, s32 order, u32 flags);
+    extern void npcSetBattleInfo(void* npc, s32 battleInfoId);
+    extern char* strcpy(char* dst, char* src);
+    extern void animPoseSetAnim(s32 poseId, char* anim, s32 force);
+    extern void fbatChangeMode(s16 mode);
+    extern s32 evtCheckID(s32 id);
+    void* setup;
+    void* iter;
+    void* tribe;
+    void* npc;
+    void* evt;
+
+    setup = (void*)evtGetValue(event, event->args[0]);
+    fbatGetPointer();
+
+    if (isFirstCall != 0) {
+        iter = setup;
+        while (*(void**)iter != 0) {
+            npc = npcNameToPtr_NoAssert(*(void**)iter);
+            if (npc != 0) {
+                *(u32*)npc |= *(u32*)((s32)iter + 4);
+                *(u32*)((s32)npc + 4) |= *(u32*)((s32)iter + 8);
+                tribe = *(void**)((s32)npc + 0x28);
+                if (*(void**)((s32)iter + 0xC) != 0) {
+                    if (*(s32*)((s32)npc + 0x118) != 0) {
+                        evtDeleteID(*(s32*)((s32)npc + 0x118));
+                    }
+                    evt = evtEntry(*(void**)((s32)iter + 0xC), 0, 0);
+                    *(u8*)((s32)evt + 0x10) = 0;
+                    *(void**)((s32)evt + 0x170) = npc;
+                    *(s32*)((s32)npc + 0x118) = *(s32*)((s32)evt + 0x15C);
+                } else {
+                    *(s32*)((s32)npc + 0x118) = 0;
+                }
+
+                *(void**)((s32)npc + 0x128) = *(void**)((s32)iter + 0x14);
+                *(void**)((s32)npc + 0x12C) = *(void**)((s32)iter + 0x18);
+                *(void**)((s32)npc + 0x124) = *(void**)((s32)iter + 0x10);
+                *(void**)((s32)npc + 0x130) = *(void**)((s32)iter + 0x1C);
+                *(void**)((s32)npc + 0x134) = *(void**)((s32)iter + 0x20);
+                *(void**)((s32)npc + 0x138) = *(void**)((s32)iter + 0x24);
+                *(void**)((s32)npc + 0x13C) = *(void**)((s32)iter + 0x28);
+                *(s32*)((s32)npc + 0x1F8) = *(s32*)((s32)iter + 0x2C);
+
+                *(s32*)((s32)npc + 0x1FC) = *(s32*)((s32)iter + 0x30);
+                *(s32*)((s32)npc + 0x200) = *(s32*)((s32)iter + 0x34);
+                *(s32*)((s32)npc + 0x204) = *(s32*)((s32)iter + 0x38);
+                *(s32*)((s32)npc + 0x208) = *(s32*)((s32)iter + 0x3C);
+                *(s32*)((s32)npc + 0x20C) = *(s32*)((s32)iter + 0x40);
+                *(s32*)((s32)npc + 0x210) = *(s32*)((s32)iter + 0x44);
+                *(s32*)((s32)npc + 0x214) = *(s32*)((s32)iter + 0x3C);
+                *(s32*)((s32)npc + 0x218) = *(s32*)((s32)iter + 0x40);
+                *(s32*)((s32)npc + 0x21C) = *(s32*)((s32)iter + 0x44);
+                *(f32*)((s32)npc + 0x220) = *(f32*)((s32)iter + 0x48);
+                *(f32*)((s32)npc + 0x224) = *(f32*)((s32)iter + 0x4C);
+                *(f32*)((s32)npc + 0x228) = *(f32*)((s32)iter + 0x50);
+                *(f32*)((s32)npc + 0x22C) = *(f32*)((s32)iter + 0x54);
+                npcSetBattleInfo(npc, *(s32*)((s32)iter + 0x58));
+
+                if (*(void**)((s32)tribe + 0x10) != 0) {
+                    strcpy((char*)((s32)npc + 0x4C), *(char**)((s32)tribe + 0x10));
+                }
+                if (*(void**)((s32)tribe + 0x14) != 0) {
+                    strcpy((char*)((s32)npc + 0x6C), *(char**)((s32)tribe + 0x14));
+                }
+                if (*(void**)((s32)tribe + 8) != 0) {
+                    strcpy((char*)((s32)npc + 0x2C), *(char**)((s32)tribe + 8));
+                    animPoseSetAnim(*(s32*)((s32)npc + 0x104), (char*)((s32)npc + 0x2C), 1);
+                }
+            }
+            iter = (void*)((s32)iter + 0x5C);
+        }
+        fbatChangeMode(1);
+        return 0;
+    }
+
+    iter = setup;
+    while (*(void**)iter != 0) {
+        npc = npcNameToPtr(*(void**)iter);
+        if (*(s32*)((s32)npc + 0x118) != 0 && evtCheckID(*(s32*)((s32)npc + 0x118)) != 0) {
+            return 0;
+        }
+        iter = (void*)((s32)iter + 0x5C);
+    }
+
+    iter = setup;
+    while (*(void**)iter != 0) {
+        npc = npcNameToPtr(*(void**)iter);
+        if (*(void**)((s32)npc + 0x124) != 0) {
+            if (*(s32*)((s32)npc + 0x11C) != 0) {
+                evtDeleteID(*(s32*)((s32)npc + 0x11C));
+            }
+            evt = evtEntry(*(void**)((s32)npc + 0x124), 0, 0x20);
+            *(u8*)((s32)evt + 0x10) = 1;
+            *(void**)((s32)evt + 0x170) = npc;
+            *(s32*)((s32)npc + 0x11C) = *(s32*)((s32)evt + 0x15C);
+        }
+        iter = (void*)((s32)iter + 0x5C);
+    }
+    return 2;
+}
+
+s32 evt_npc_majo_disp_off(EventEntry* event, s32 isFirstCall) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
+    extern s32 psndSFXOn_3D(s32 id, void* pos);
+    extern s32 animGroupBaseAsync(void* name, s32 mode, s32 flags);
+    extern s32 animPoseGetVivianType(s32 poseId);
+    extern void animPoseSetEffect(s32 poseId, void* name, s32 flag);
+    extern void animPoseSetEffectAnim(s32 poseId, void* name, s32 flag);
+    extern void animPosePaperPeraOn(s32 poseId);
+    extern void* animPoseGetAnimPosePtr(s32 poseId);
+    extern void animPoseSetLocalTime(s32 poseId, f32 time);
+    extern f32 animPoseGetLoopTimes(s32 poseId);
+    extern void* gp;
+    extern char str_p_bibi_802c14d8[];
+    extern char str_PM_B_1_802c14e0[];
+    extern f32 float_0_8041fd84;
+    extern f32 float_1_8041fd88;
+    extern f32 float_3_8041fdbc;
+    extern f32 float_10_8041fdc0;
+    extern f32 float_8_8041fdc4;
+    s32 name;
+    s32 battle;
+    void* npc;
+    s32 state;
+    s32 vivianType;
+    s32 effectPose;
+    s32 first;
+    void* pose;
+    EventEntry* evt;
+
+    first = isFirstCall;
+    evt = event;
+    name = evtGetValue(evt, evt->args[0]);
+    battle = (*(s32*)((s32)gp + 0x14) != 0);
+    npc = evtNpcNameToPtr(evt, name);
+    if (first != 0) {
+        *(s32*)((s32)evt + 0x78) = 0;
+        *(s32*)((s32)evt + 0x7C) = 0;
+        psndSFXOn_3D(0x275, (void*)((s32)npc + 0x8C));
+    }
+
+    if (animGroupBaseAsync(str_p_bibi_802c14d8, battle, 0) == 0) {
+        return 0;
+    }
+
+    state = *(s32*)((s32)evt + 0x78);
+    switch (state) {
+        case 0:
+            *(f32*)((s32)npc + 0x154) += (float_3_8041fdbc - *(f32*)((s32)npc + 0x154)) / float_10_8041fdc0;
+            *(s32*)((s32)evt + 0x7C) += 1;
+            if (*(s32*)((s32)evt + 0x7C) > 0x1E) {
+                *(s32*)((s32)evt + 0x78) += 1;
+                *(s32*)((s32)evt + 0x7C) = 0;
+                vivianType = animPoseGetVivianType(*(s32*)((s32)npc + 0x104));
+                switch (vivianType) {
+                    case 0:
+                        break;
+                    case 1:
+                        psndSFXOn_3D(0x936, (void*)((s32)npc + 0x8C));
+                        break;
+                    case 2:
+                        psndSFXOn_3D(0x27A, (void*)((s32)npc + 0x8C));
+                        break;
+                    case 3:
+                        psndSFXOn_3D(0x277, (void*)((s32)npc + 0x8C));
+                        break;
+                }
+            }
+            break;
+        case 1:
+            animPoseSetEffect(*(s32*)((s32)npc + 0x104), str_p_bibi_802c14d8, 1);
+            animPoseSetEffectAnim(*(s32*)((s32)npc + 0x104), str_PM_B_1_802c14e0, 1);
+            animPosePaperPeraOn(*(s32*)((s32)npc + 0x104));
+            pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
+            effectPose = *(s32*)((s32)pose + 0x90);
+            animPoseSetLocalTime(effectPose, float_8_8041fdc4);
+            *(s32*)((s32)evt + 0x78) += 1;
+            break;
+        case 2:
+            pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
+            if (animPoseGetLoopTimes(*(s32*)((s32)pose + 0x90)) >= float_1_8041fd88) {
+                *(s32*)((s32)evt + 0x78) += 1;
+            }
+            break;
+        case 3:
+            *(f32*)((s32)npc + 0x154) += -*(f32*)((s32)npc + 0x154) / float_10_8041fdc0;
+            *(s32*)((s32)evt + 0x7C) += 1;
+            if (*(s32*)((s32)evt + 0x7C) > 0x1E) {
+                *(f32*)((s32)npc + 0x154) = float_0_8041fd84;
+                return 2;
+            }
+            break;
+    }
     return 0;
 }
 
+f32 _intplGetFloat(f32 value, s32 kind) {
+    extern f64 cos(f64 x);
+    extern f64 sin(f64 x);
+    extern f32 float_0_8041fd84;
+    extern volatile f32 float_1_8041fd88;
+    extern f32 float_0p5_8041fd90;
+    extern f32 float_3p1416_8041fda8;
+    extern f32 float_4_8041fde8;
+    extern f32 float_15_8041fdec;
+    extern f32 float_40_8041fdf0;
+    extern f32 float_1p5708_8041fdf4;
+    f32 t;
+    f32 inv;
+    f32 temp;
+    f32 one;
 
-s32 evt_npc_majo_disp_off(void* pEvt, int param_2) {
-    return 0;
+    t = value;
+    if (t > float_1_8041fd88) {
+        t = float_1_8041fd88;
+    }
+
+    switch (kind) {
+        case 0:
+            return t;
+        case 1:
+            return t * t;
+        case 2:
+            return t * (t * t);
+        case 3:
+            return t * (t * (t * t));
+        case 7:
+            temp = (f32)cos(float_4_8041fde8 * (t / float_3p1416_8041fda8));
+            one = float_1_8041fd88;
+            inv = one - t;
+            temp = inv * temp;
+            temp = inv * temp;
+            return one - temp;
+        case 8:
+            temp = (f32)cos((float_4_8041fde8 * ((t * t) / float_3p1416_8041fda8)) / float_15_8041fdec);
+            one = float_1_8041fd88;
+            inv = one - t;
+            temp = inv * temp;
+            temp = inv * temp;
+            return one - temp;
+        case 4:
+            one = float_1_8041fd88;
+            inv = one - t;
+            return one - inv * inv;
+        case 5:
+            one = float_1_8041fd88;
+            inv = one - t;
+            temp = inv * inv;
+            return one - inv * temp;
+        case 6:
+            one = float_1_8041fd88;
+            inv = one - t;
+            temp = inv * inv;
+            temp = inv * temp;
+            return one - inv * temp;
+        case 10:
+            temp = (f32)cos((float_4_8041fde8 * ((t * t) / float_3p1416_8041fda8)) / float_40_8041fdf0);
+            one = float_1_8041fd88;
+            inv = one - t;
+            temp = inv * temp;
+            temp = inv * temp;
+            if (temp < float_0_8041fd84) {
+                temp = -temp;
+            }
+            return float_1_8041fd88 - temp;
+        case 11:
+            temp = (f32)cos(float_3p1416_8041fda8 * t);
+            return (float_1_8041fd88 - temp) * float_0p5_8041fd90;
+        case 12:
+            return (f32)sin(float_1p5708_8041fdf4 * t);
+        case 13:
+            temp = (f32)cos(float_1p5708_8041fdf4 * t);
+            return float_1_8041fd88 - temp;
+        default:
+            return float_0_8041fd84;
+    }
 }
-
-
-u8 _intplGetFloat(void) {
-    return 0;
-}
-
 
 void* evtNpcNameToPtr_NoAssert(EventEntry* event, s32 name) {
     return 0;
@@ -716,6 +987,7 @@ s32 evt_npc_set_color(void* pEvt) {
 }
 
 void evt_npc_change_interrupt(void* pEvt) {
+    ;
 }
 
 
@@ -1135,6 +1407,7 @@ s32 evt_npc_blur_onoff(EventEntry* event) {
 }
 
 void evt_npc_release_filednpc(void* pEvt) {
+    ;
 }
 
 
@@ -1188,6 +1461,7 @@ USER_FUNC(evt_npc_get_height) {
 }
 
 void evt_npc_restart_regular_event(void* pEvt) {
+    ;
 }
 
 
@@ -1233,5 +1507,68 @@ s32 evt_npc_set_anim(void* evt, s32 isFirstCall) {
         strcpy((char*)((s32)npc + 0x2C), (char*)anim);
     }
     animPoseSetAnim(*(s32*)((s32)npc + 0x104), (void*)anim, 1);
+    return 2;
+}
+
+s32 unk_8004d180(EventEntry* event) {
+    extern f32 evtGetFloat(EventEntry* event, s32 index);
+    extern void evtSetFloat(EventEntry* event, s32 index, f32 value);
+    extern s32 hitCheckFilter(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, s32 flags, void* out0, f32* outY, void* out2, f32* out3, void* out4, void* out5, void* out6);
+    extern f32 float_0_8041fd84;
+    extern f32 float_1_8041fd88;
+    extern f32 float_neg1_8041fd8c;
+    extern f32 float_0p5_8041fd90;
+    s32* args;
+    s32 xVar;
+    s32 yVar;
+    s32 zVar;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 addY;
+    f32 out3;
+    f32 width;
+    f32 bestY;
+    f32 checkY;
+    f32 halfWidth;
+    s32 out0;
+    s32 out2;
+    s32 out4;
+    s32 out5;
+    s32 out6;
+
+    args = event->args;
+    xVar = args[0];
+    x = evtGetFloat(event, xVar);
+    yVar = args[1];
+    y = evtGetFloat(event, yVar);
+    zVar = args[2];
+    z = evtGetFloat(event, zVar);
+    addY = evtGetFloat(event, args[3]);
+    out3 = evtGetFloat(event, args[4]);
+    width = evtGetFloat(event, args[5]);
+
+    bestY = y;
+    y += float_1_8041fd88;
+    if (hitCheckFilter(x, y, z, float_0_8041fd84, float_neg1_8041fd8c, float_0_8041fd84, 0, &out0, &checkY, &out2, &out3, &out4, &out5, &out6) != 0) {
+        bestY = checkY + addY;
+    }
+
+    halfWidth = float_0p5_8041fd90 * width;
+    if (hitCheckFilter(x + halfWidth, y, z, float_0_8041fd84, float_neg1_8041fd8c, float_0_8041fd84, 0, &out0, &checkY, &out2, &out3, &out4, &out5, &out6) != 0) {
+        if (bestY < checkY + addY) {
+            bestY = checkY + addY;
+        }
+    }
+
+    if (hitCheckFilter(x - halfWidth, y, z, float_0_8041fd84, float_neg1_8041fd8c, float_0_8041fd84, 0, &out0, &checkY, &out2, &out3, &out4, &out5, &out6) != 0) {
+        if (bestY < checkY + addY) {
+            bestY = checkY + addY;
+        }
+    }
+
+    evtSetFloat(event, xVar, x);
+    evtSetFloat(event, yVar, bestY);
+    evtSetFloat(event, zVar, z);
     return 2;
 }

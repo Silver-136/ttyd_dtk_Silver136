@@ -23,6 +23,7 @@ s32 _check_blow_rate(void* evt) {
 
 
 void __makeTechMenuFunc(void* commandWork, s32 param_2) {
+    ;
 }
 
 

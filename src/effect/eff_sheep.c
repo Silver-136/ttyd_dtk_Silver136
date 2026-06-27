@@ -38,3 +38,19 @@ void effSheepDisp(s32 cameraId, void* effect) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_sheep 20260624_184929 */
+
+/* stub-fill: effSheepEntry | missing_definition | ghidra_signature */
+u8 effSheepEntry(void) {
+    return 0;
+}
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/effect/eff_sheep 20260624_191429 */
+
+/* fallback stub-fill: map=effSheepMain addr=0x802385dc size=0x000004b4 */
+int effSheepMain() {
+    return 0;
+}

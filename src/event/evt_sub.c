@@ -210,20 +210,174 @@ s32 irai_mail_check(void* pEvt) {
 }
 
 
-u8 evt_sub_check_intersect(s32 pEvt) {
-    return 0;
+s32 evt_sub_check_intersect(EventEntry* event) {
+    extern f32 evtGetFloat(EventEntry* event, s32 index);
+    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
+    extern f32 float_0_8041fe38;
+    s32* args;
+    f32 startX;
+    f32 startZ;
+    f32 endX;
+    f32 endZ;
+    f32 targetX0;
+    f32 targetZ0;
+    f32 targetX1;
+    f32 targetZ1;
+    f32 a;
+    f32 b;
+
+    args = event->args;
+    startX = evtGetFloat(event, args[0]);
+    startZ = evtGetFloat(event, args[1]);
+    endX = evtGetFloat(event, args[2]);
+    endZ = evtGetFloat(event, args[3]);
+    targetX0 = evtGetFloat(event, args[4]);
+    targetZ0 = evtGetFloat(event, args[5]);
+    targetX1 = evtGetFloat(event, args[6]);
+    targetZ1 = evtGetFloat(event, args[7]);
+
+    if (startX < endX) {
+        if (((endX < targetX0) && (endX < targetX1)) || ((targetX0 < startX) && (targetX1 < startX))) {
+            evtSetValue(event, args[8], 0);
+            return 2;
+        }
+    } else if (((startX < targetX0) && (startX < targetX1)) || ((targetX0 < endX) && (targetX1 < endX))) {
+        evtSetValue(event, args[8], 0);
+        return 2;
+    }
+
+    if (startZ < endZ) {
+        if (((endZ < targetZ0) && (endZ < targetZ1)) || ((targetZ0 < startZ) && (targetZ1 < startZ))) {
+            evtSetValue(event, args[8], 0);
+            return 2;
+        }
+    } else if (((startZ < targetZ0) && (startZ < targetZ1)) || ((targetZ0 < endZ) && (targetZ1 < endZ))) {
+        evtSetValue(event, args[8], 0);
+        return 2;
+    }
+
+    a = ((startX - endX) * (targetZ0 - startZ)) + ((startZ - endZ) * (startX - targetX0));
+    b = ((startX - endX) * (targetZ1 - startZ)) + ((startZ - endZ) * (startX - targetX1));
+    if (a * b <= float_0_8041fe38) {
+        a = ((targetX0 - targetX1) * (startZ - targetZ0)) + ((targetZ0 - targetZ1) * (targetX0 - startX));
+        b = ((targetX0 - targetX1) * (endZ - targetZ0)) + ((targetZ0 - targetZ1) * (targetX0 - endX));
+        if (a * b <= float_0_8041fe38) {
+            evtSetValue(event, args[8], 1);
+        } else {
+            evtSetValue(event, args[8], 0);
+        }
+    } else {
+        evtSetValue(event, args[8], 0);
+    }
+    return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_sub_spline_get_value(EventEntry* event) {
+    extern f32 intplGetValue(s32 type, f32 start, f32 end, s32 time, s32 duration);
+    extern void spline_getvalue(f32 time, f32* out, s32 count, f32* points, s32 unk4, s32 unkC);
+    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
+    extern void _mapFree(void* heap, void* ptr);
+    extern void* mapalloc_base_ptr;
+    extern f32 float_0_8041fe38;
+    extern f32 float_1_8041fe58;
+    extern f32 float_1024_8041fe84;
+    s32* args;
+    s32* work;
+    f32 out[3];
+    f32 elapsed;
+    f32 value;
 
-u8 evt_sub_spline_get_value(void) {
-    return 0;
+    work = *(s32**)((s32)event + 0xD8);
+    args = event->args;
+
+    if (work[10] == 0) {
+        value = intplGetValue(work[6], float_0_8041fe38, float_1_8041fe58, work[4], work[5]);
+    } else {
+        u32 bus = *(u32*)0x800000F8 >> 2;
+        u32 ticks = ((u64)bus * 0x10624DD3U) >> 38;
+        elapsed = (f32)((*(u64*)event - *(u64*)&work[8]) / ticks);
+        value = intplGetValue(work[6], float_0_8041fe38, float_1_8041fe58, (s32)elapsed, work[7]);
+    }
+
+    spline_getvalue(value, out, work[0], (f32*)work[2], work[1], work[3]);
+    evtSetValue(event, args[0], (s32)(float_1024_8041fe84 * out[0]) - 230000000);
+    evtSetValue(event, args[1], (s32)(float_1024_8041fe84 * out[1]) - 230000000);
+    evtSetValue(event, args[2], (s32)(float_1024_8041fe84 * out[2]) - 230000000);
+
+    work[4]++;
+    if (work[10] == 0) {
+        if (work[4] <= work[5]) {
+            evtSetValue(event, args[3], 1);
+            return 2;
+        }
+    } else {
+        if (elapsed <= (f32)work[7]) {
+            evtSetValue(event, args[3], 1);
+            return 2;
+        }
+    }
+
+    _mapFree(mapalloc_base_ptr, (void*)work[1]);
+    _mapFree(mapalloc_base_ptr, (void*)work[3]);
+    _mapFree(mapalloc_base_ptr, work);
+    evtSetValue(event, args[3], 0);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-u8 evt_sub_area_check(s32 pEvt) {
-    return 0;
+s32 evt_sub_area_check(EventEntry* event) {
+    extern s32 evtGetValue(EventEntry* event, s32 index);
+    extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
+    s32* args;
+    s32 type;
+    f32 x;
+    f32 z;
+    f32 radius;
+    f32 targetX;
+    f32 targetZ;
+    s32 result;
+
+    args = event->args;
+    type = evtGetValue(event, args[0]);
+    x = (f32)evtGetValue(event, args[1]);
+    z = (f32)evtGetValue(event, args[2]);
+    radius = (f32)evtGetValue(event, args[3]);
+    targetX = (f32)evtGetValue(event, args[4]);
+    targetZ = (f32)evtGetValue(event, args[5]);
+
+    if (type == 1) {
+        result = ((x - radius) <= targetX);
+        if ((x + radius) < targetX) {
+            result = 0;
+        }
+        if (targetZ < (z - radius)) {
+            result = 0;
+        }
+        if ((z + radius) < targetZ) {
+            result = 0;
+        }
+    } else if (type == 0) {
+        if (distABf(x, z, targetX, targetZ) <= radius) {
+            result = 1;
+        } else {
+            result = 0;
+        }
+    } else {
+        result = 0;
+    }
+
+    evtSetValue(event, args[6], result);
+    return 2;
 }
-
 
 s32 evt_sub_spline_get_value_manual(void* pEvt) {
     return 0;
@@ -655,4 +809,12 @@ s32 evt_sub_spline_free(int param_1) {
     _mapFree(mapalloc_base_ptr, *(void**)((s32)spline + 0xC));
     _mapFree(mapalloc_base_ptr, spline);
     return 2;
+}
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/event/evt_sub 20260624_191429 */
+
+/* fallback stub-fill: map=unk_80053f10 addr=0x80053f10 size=0x000000c8 */
+int unk_80053f10() {
+    return 0;
 }

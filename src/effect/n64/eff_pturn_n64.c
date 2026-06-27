@@ -16,10 +16,12 @@ void effPturnDisp(void* camera, void* effect) {
 
 
 void pturn_num_dispp(void* camera, void* effect) {
+    ;
 }
 
 
 void pturn_main_dispp(void* camera, void* effect) {
+    ;
 }
 
 

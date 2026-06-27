@@ -2,6 +2,7 @@
 
 
 void __makeTechMenuFunc(void* commandWork, s32 param_2) {
+    ;
 }
 
 

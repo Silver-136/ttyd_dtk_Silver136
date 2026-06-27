@@ -43,3 +43,16 @@ void* effPointGetEntry(s32 kind, f32 x, f32 y, f32 z, s32 arg4, s32 arg5) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_pointget 20260624_184823 */
+
+/* stub-fill: effPointGetDisp | missing_definition | ghidra_signature */
+u8 effPointGetDisp(void) {
+    return 0;
+}
+
+/* stub-fill: effPointGetMain | prototype_only | source_prototype */
+void effPointGetMain(void) {
+    return;
+}

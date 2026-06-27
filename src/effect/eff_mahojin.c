@@ -102,3 +102,225 @@ void callback(void* data) {
     *(s32*)((s32)data + 0x18) = v18;
     *(s32*)((s32)data + 0x10) = v10;
 }
+
+void effMahojinMain(void* entry) {
+    typedef struct Vec_s {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
+    typedef struct MahojinWork_s {
+        s32 kind;
+        f32 x;
+        f32 y;
+        f32 z;
+        s32 timer;
+        s32 unk14;
+        s32 pose1;
+        s32 pose2;
+        s32 alpha;
+        s32 state;
+        s32 unk28;
+        s32 unk2c;
+    } MahojinWork;
+
+    extern s32 animGroupBaseAsync(void* name, s32 mode, s32 flags);
+    extern s32 animPoseEntry(void* name, s32 mode);
+    extern void animPoseSetAnim(s32 poseId, void* name, s32 force);
+    extern void animPoseRelease(s32 poseId);
+    extern f32 animPoseGetLoopTimes(s32 poseId);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
+    extern void effDelete(void* entry);
+    extern void mapSetTevCallback(s32 idx, void* callback);
+    extern f32 dispCalcZ(void* pos);
+    extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 priority);
+    extern void callback(void* data);
+    extern void effMahojinDisp(void);
+    extern void* gp;
+    extern char vec3_802fef78[];
+    extern void* name_tbl[];
+    extern s32 mahojin_rate;
+    extern char str_A_1_8042776c[];
+    extern char str_A_4_80427770[];
+    extern char str_S_1_80427778[];
+    extern char str_S_4_8042777c[];
+    extern f32 float_0_80427764;
+    extern f32 float_1_80427774;
+    extern f32 float_0p6_80427780;
+    extern f32 float_0p8_80427784;
+
+    MahojinWork* work = *(MahojinWork**)((s32)entry + 0xC);
+    MahojinWork* cur;
+    Vec zpos;
+    Vec pos;
+    s32 gpBattle;
+    s32 inBattle;
+    s32 kind;
+    s32 count;
+    s32 i;
+    s32 state;
+    s32 value;
+    f32 loopTimes;
+    void** row;
+
+    pos = *(Vec*)vec3_802fef78;
+    pos.x = work->x;
+    pos.y = work->y;
+    pos.z = work->z;
+    zpos = pos;
+
+    gpBattle = *(s32*)((s32)gp + 0x14);
+    kind = work->kind;
+    inBattle = ((u32)(-gpBattle) | (u32)gpBattle) >> 31;
+    loopTimes = float_0_80427764;
+
+    if (work->pose1 == -1) {
+        if (animGroupBaseAsync((void*)(vec3_802fef78 + 0xC), inBattle, 0) == 0) {
+            return;
+        }
+        if (animGroupBaseAsync((void*)(vec3_802fef78 + 0x24), inBattle, 0) == 0) {
+            return;
+        }
+        work->pose1 = animPoseEntry((void*)(vec3_802fef78 + 0xC), inBattle);
+        work->pose2 = animPoseEntry((void*)(vec3_802fef78 + 0x24), inBattle);
+        animPoseSetAnim(work->pose1, str_A_1_8042776c, 1);
+        animPoseSetAnim(work->pose2, str_A_1_8042776c, 1);
+        (work + 1)->pose1 = animPoseEntry((void*)(vec3_802fef78 + 0xC), inBattle);
+        (work + 1)->pose2 = animPoseEntry((void*)(vec3_802fef78 + 0x24), inBattle);
+        animPoseSetAnim((work + 1)->pose1, str_A_4_80427770, 1);
+        animPoseSetAnim((work + 1)->pose2, str_A_4_80427770, 1);
+        work = *(MahojinWork**)((s32)entry + 0xC);
+    }
+
+    if ((*(u32*)entry & 4) != 0) {
+        *(u32*)entry &= ~4;
+        work->timer = 0x10;
+    }
+
+    if (work->timer < 1000) {
+        work->timer--;
+    }
+    if (work->timer < 0x10) {
+        value = work->timer << 4;
+        if (work->alpha > value) {
+            work->alpha = value;
+        }
+    }
+
+    if (work->timer < 0) {
+        cur = *(MahojinWork**)((s32)entry + 0xC);
+        i = 0;
+        while (i < *(s32*)((s32)entry + 8)) {
+            if (cur->pose1 != -1) {
+                animPoseRelease(cur->pose1);
+            }
+            if (cur->pose2 != -1) {
+                animPoseRelease(cur->pose2);
+            }
+            i++;
+            cur++;
+        }
+        effDelete(entry);
+        return;
+    }
+
+    work = *(MahojinWork**)((s32)entry + 0xC);
+    state = work->state;
+    switch (state) {
+        case 0:
+            loopTimes = animPoseGetLoopTimes(work->pose1);
+            if (loopTimes > float_1_80427774) {
+                animPoseSetAnim(work->pose1, str_S_1_80427778, 1);
+                animPoseSetAnim(work->pose2, str_S_1_80427778, 1);
+                animPoseSetAnim((work + 1)->pose1, str_S_4_8042777c, 1);
+                animPoseSetAnim((work + 1)->pose2, str_S_4_8042777c, 1);
+                work->state++;
+            }
+            break;
+        case 1:
+            if (kind == 7) {
+                count = *(s32*)((s32)entry + 8);
+                if (animPoseGetLoopTimes(*(s32*)((s32)work + count * 0x30 - 0x18)) > float_1_80427774) {
+                    mapSetTevCallback(10, callback);
+                    cur = work;
+                    i = 0;
+                    while (i < *(s32*)((s32)entry + 8)) {
+                        animPoseSetMaterialFlagOn(cur->pose1, 0x0A000000);
+                        animPoseSetMaterialFlagOn(cur->pose2, 0x0A000000);
+                        cur++;
+                        i++;
+                    }
+                    mahojin_rate = 0;
+                    work->state++;
+                }
+            }
+            break;
+        case 2:
+            mahojin_rate += 2;
+            if (mahojin_rate > 0xFF) {
+                mahojin_rate = 0xFF;
+                work->state++;
+            }
+            break;
+    }
+
+    cur = (MahojinWork*)((s32)*(MahojinWork**)((s32)entry + 0xC) + 0x60);
+    i = 2;
+    while (i < *(s32*)((s32)entry + 8)) {
+        state = cur->state;
+        if (state == 0) {
+            if (i - 1 < kind) {
+                if (loopTimes > float_0p6_80427780) {
+                    cur->pose1 = animPoseEntry((void*)(vec3_802fef78 + 0xC), inBattle);
+                    cur->pose2 = animPoseEntry((void*)(vec3_802fef78 + 0x24), inBattle);
+                    row = &name_tbl[(i - 2) * 3];
+                    if (kind == 7 || kind == 8) {
+                        animPoseSetAnim(cur->pose1, row[1], 1);
+                        animPoseSetAnim(cur->pose2, row[1], 1);
+                    } else {
+                        animPoseSetAnim(cur->pose1, row[2], 1);
+                        animPoseSetAnim(cur->pose2, row[2], 1);
+                    }
+                    cur->alpha = 0;
+                    cur->state = 1;
+                }
+            } else {
+                if (loopTimes > float_0p8_80427784) {
+                    cur->pose1 = animPoseEntry((void*)(vec3_802fef78 + 0xC), inBattle);
+                    cur->pose2 = animPoseEntry((void*)(vec3_802fef78 + 0x24), inBattle);
+                    row = &name_tbl[(i - 2) * 3];
+                    animPoseSetAnim(cur->pose1, row[0], 1);
+                    animPoseSetAnim(cur->pose2, row[0], 1);
+                    cur->alpha = 0xFF;
+                    cur->state = 10;
+                }
+            }
+        } else if (state == 1) {
+            cur->alpha += 10;
+            if (cur->alpha > 0xFF) {
+                cur->alpha = 0xFF;
+                cur->state = 2;
+            }
+        } else if (state == 10) {
+            if (animPoseGetLoopTimes(cur->pose1) > float_1_80427774) {
+                row = &name_tbl[(i - 2) * 3];
+                animPoseSetAnim(cur->pose1, row[1], 1);
+                animPoseSetAnim(cur->pose2, row[1], 1);
+                cur->state = 11;
+            }
+        }
+        i++;
+        cur++;
+    }
+
+    dispEntry(4, 2, effMahojinDisp, entry, dispCalcZ(&zpos));
+}
+
+
+
+/* CHATGPT STUB FILL: main/effect/eff_mahojin 20260624_184823 */
+
+/* stub-fill: effMahojinDisp | prototype_only | source_prototype */
+void effMahojinDisp(void) {
+    return;
+}

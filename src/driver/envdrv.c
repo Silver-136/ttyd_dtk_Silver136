@@ -125,6 +125,7 @@ u8 envAddTev(int param_1, int param_2) {
 
 
 void envDisp_DepthOfField(void) {
+    ;
 }
 
 
@@ -139,14 +140,17 @@ u8 envSetWater(void) {
 
 
 void envGlare(void* data) {
+    ;
 }
 
 
 void envDisp_FF(void) {
+    ;
 }
 
 
 void envDisp_Blur(void) {
+    ;
 }
 
 
@@ -156,6 +160,7 @@ u8 envSetYami(int param_1) {
 
 
 void envCapture(void) {
+    ;
 }
 
 

@@ -106,3 +106,16 @@ outro:
     }
 }
 
+
+
+/* CHATGPT STUB FILL: main/action/ac_pendulum_crane_timing 20260624_184128 */
+
+/* stub-fill: actionCommandDisp | prototype_only | source_prototype */
+void actionCommandDisp(f32 x, f32 y) {
+    return;
+}
+
+/* stub-fill: battleAcMain_PendulumCraneTiming | missing_definition | ghidra_signature */
+u8 battleAcMain_PendulumCraneTiming(void) {
+    return 0;
+}

@@ -161,6 +161,7 @@ u8 BattleAcDrawGauge(s64 ratioFilled, s32 x, s32 y, s32 innerBarWidth, s32 param
 
 
 void BattleActionCommandCheckDefence(void* unit, s32 value) {
+    ;
 }
 
 

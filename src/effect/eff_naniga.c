@@ -104,3 +104,21 @@ void effNanigaDisp2(s32 cameraId, void* effect) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_naniga 20260624_184929 */
+
+/* stub-fill: effNanigaDisp | missing_definition | ghidra_signature */
+u8 effNanigaDisp(void) {
+    return 0;
+}
+
+/* stub-fill: effNanigaMain | missing_definition | ghidra_signature */
+u8 effNanigaMain(void) {
+    return 0;
+}
+
+/* stub-fill: effNanigaEntry | missing_definition | ghidra_signature */
+u8 effNanigaEntry(void) {
+    return 0;
+}

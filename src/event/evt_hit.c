@@ -54,6 +54,7 @@ s32 evt_hit_get_position(void* event, s32 isFirstCall) {
 
 
 void name_callback_sub(s32 name, s32 callback, s32 value) {
+    ;
 }
 
 

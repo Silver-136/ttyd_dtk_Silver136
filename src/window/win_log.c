@@ -164,6 +164,7 @@ u8 winLogDisp(s32 param_1, void* pWin, s32 param_3) {
 
 
 void monosiri_disp(s32 param_1, void* monosiriWork) {
+    ;
 }
 
 

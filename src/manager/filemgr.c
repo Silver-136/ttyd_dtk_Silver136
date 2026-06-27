@@ -40,6 +40,7 @@ char* fileAsync(char* param_1, s32 param_2, s32 param_3) {
 
 
 void _fileAlloc() {
+    ;
 }
 
 
@@ -182,4 +183,5 @@ s32 fileAsyncf(s32 id, s32 flags, const char* fmt, ...) {
 
 
 void fileFree(void*) {
+    ;
 }

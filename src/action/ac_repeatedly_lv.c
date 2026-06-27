@@ -16,6 +16,7 @@ void battleAcDelete_RepeatedlyLv(void* wp) {
 
 
 void actionCommandDisp(f32 x, f32 y) {
+    ;
 }
 
 
@@ -82,3 +83,11 @@ closing:
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/action/ac_repeatedly_lv 20260624_184008 */
+
+/* stub-fill: _init_param | missing_definition | ghidra_signature */
+u8 _init_param(int param_1) {
+    return 0;
+}

@@ -127,3 +127,16 @@ void countDownSaveReStart(void) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/countdown 20260624_184008 */
+
+/* stub-fill: countDownDisp | missing_definition | ghidra_signature */
+u8 countDownDisp(void) {
+    return 0;
+}
+
+/* stub-fill: countDownMain | missing_definition | ghidra_signature */
+u8 countDownMain(void) {
+    return 0;
+}

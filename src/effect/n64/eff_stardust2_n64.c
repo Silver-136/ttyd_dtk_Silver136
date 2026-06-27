@@ -6,6 +6,7 @@ void effStardust2N64SetDrawCam(void* effect, s32 camId) {
 
 
 void effStardust2N64Entry(void) {
+    ;
 }
 
 

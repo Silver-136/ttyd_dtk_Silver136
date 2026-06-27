@@ -75,6 +75,7 @@ s32 battleAcMain_Shot(void* battleWork) {
 
 
 void actionCommandDisp(f32 x, f32 y) {
+    ;
 }
 
 

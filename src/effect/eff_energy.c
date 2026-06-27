@@ -107,3 +107,11 @@ void* effEnergyEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 field10, f32 
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_energy 20260624_184929 */
+
+/* stub-fill: effEnergyDisp | prototype_only | source_prototype */
+void effEnergyDisp(void* camera, void* entry) {
+    return;
+}

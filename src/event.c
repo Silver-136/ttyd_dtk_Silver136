@@ -1,6 +1,7 @@
 #include "event.h"
 
 void stage4_00_init(void) {
+    ;
 }
 
 s32 eventStgNum(void) {
@@ -18,27 +19,35 @@ void stage4_04_init(void) {
 }
 
 void stg1_09_02_init(void) {
+    ;
 }
 
 void stg1_10_init(void) {
+    ;
 }
 
 void stg2_03_03_init(void) {
+    ;
 }
 
 void stg3_end_init(void) {
+    ;
 }
 
 void stg5_19_01_init(void) {
+    ;
 }
 
 void stg5_19_init00(void) {
+    ;
 }
 
 void stg6_72_init(void) {
+    ;
 }
 
 void stg7_52_init(void) {
+    ;
 }
 
 void stage4_09_05_init(void) {

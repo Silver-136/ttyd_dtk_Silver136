@@ -8,10 +8,12 @@ void BattleSamplingEnemyUpdate(void) {
 
 
 void _btlSamplingEnemy(void) {
+    ;
 }
 
 
 void BattleChoiceSamplingEnemy(void* targetWork, u32 targetWeightingFlags, int* unitIdx, int* param_4) {
+    ;
 }
 
 

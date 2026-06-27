@@ -164,3 +164,21 @@ s32 _GetInputDir(void) {
     }
     return 0;
 }
+
+
+/* CHATGPT STUB FILL: main/action/ac_stick_rotate 20260624_184008 */
+
+/* stub-fill: actionCommandDisp2 | prototype_only | source_prototype */
+void actionCommandDisp2(f32 x, f32 y) {
+    return;
+}
+
+/* stub-fill: actionCommandDisp | prototype_only | source_prototype */
+void actionCommandDisp(f32 x, f32 y) {
+    return;
+}
+
+/* stub-fill: battleAcMain_StickRotate | missing_definition | ghidra_signature */
+s32 battleAcMain_StickRotate(int param_1) {
+    return 0;
+}

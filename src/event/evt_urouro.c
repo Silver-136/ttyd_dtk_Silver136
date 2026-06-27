@@ -47,3 +47,11 @@ s32 urouro_init_func(void* event, s32 isFirstCall) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/event/evt_urouro 20260624_184929 */
+
+/* stub-fill: urouro_main_func | missing_definition | ghidra_signature */
+u8 urouro_main_func(void) {
+    return 0;
+}

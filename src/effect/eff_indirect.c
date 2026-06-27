@@ -119,3 +119,11 @@ void* effIndirectEntry(s32 type, s32 timer, f32 x, f32 y, f32 z) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_indirect 20260624_184929 */
+
+/* stub-fill: effIndirectDisp | prototype_only | source_prototype */
+void effIndirectDisp(void) {
+    return;
+}

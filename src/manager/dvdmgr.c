@@ -60,6 +60,7 @@ void proc_main(void) {
 
 
 void DVDMgrMain(void) {
+    ;
 }
 
 
@@ -85,6 +86,7 @@ u8 DVDMgrInit(void) {
 
 
 void DVDMgrRead(void* handle, void* dst, u32 size, s32 offset) {
+    ;
 }
 
 

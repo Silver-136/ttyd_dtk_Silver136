@@ -40,9 +40,66 @@ u8 hitEstimate(void) {
 
 
 s32 marioChkHammer2(void) {
-    return 0;
-}
+    extern void* marioGetPtr(void);
+    extern void* pouchGetPtr(void);
+    extern s32 strcmp(char*, char*);
+    extern void marioChgPose(char*);
+    extern void marioVoiceGlareOff(void);
+    extern void marioVoiceGlareOn(void);
+    extern s32 marioGetRub(s32, void*, void*, void*);
+    extern f32 float_0_80420ab8;
+    extern char str_M_I_Y_80420b74;
+    extern char str_M_S_1_80420b6c;
 
+    void* mario = marioGetPtr();
+    void* pouch = pouchGetPtr();
+    s32 count;
+    s32 dir;
+    s32 stack8;
+
+    if (*(s8*)((s32)pouch + 0x99) < 2) {
+        return 0;
+    }
+    if ((*(u16*)((s32)mario + 0x24A) & 0x200) == 0) {
+        if ((*(u16*)((s32)mario + 0x24A) & 0x100) == 0) {
+            if (strcmp(*(char**)((s32)mario + 0x18), &str_M_I_Y_80420b74) == 0 &&
+                *(u16*)((s32)mario + 0x2E) == 0) {
+                marioChgPose(&str_M_S_1_80420b6c);
+                marioVoiceGlareOff();
+            }
+            *(u8*)((s32)mario + 0x40) = 0;
+        }
+        return 0;
+    }
+    if ((*(u32*)((s32)mario + 0x0) & 0x02000000) != 0) {
+        *(u8*)((s32)mario + 0x40) = 0;
+    } else {
+        *(u8*)((s32)mario + 0x40) = *(u8*)((s32)mario + 0x40) + 1;
+    }
+    if (*(f32*)((s32)mario + 0x194) != float_0_80420ab8 &&
+        *(s8*)((s32)mario + 0x40) > 10) {
+        if (*(u16*)((s32)mario + 0x2E) == 0 && (*(u32*)((s32)mario + 0x4) & 0x40000000) == 0) {
+            marioChgPose(&str_M_I_Y_80420b74);
+            marioVoiceGlareOn();
+        }
+    }
+    if (*(s8*)((s32)mario + 0x40) >= 0x32) {
+        *(u8*)((s32)mario + 0x40) = 0x32;
+        if (*(u16*)((s32)mario + 0x2E) == 0 && (*(u32*)((s32)mario + 0x4) & 0x40000000) == 0) {
+            marioChgPose(&str_M_I_Y_80420b74);
+            marioVoiceGlareOn();
+        }
+    }
+    if (marioGetRub(0x200, &dir, &count, &stack8) != 1) {
+        return 0;
+    }
+    *(f32*)((s32)mario + 0x180) = float_0_80420ab8;
+    if (count < 1) {
+        return 0;
+    }
+    *(u8*)((s32)mario + 0x43) = dir;
+    return 1;
+}
 
 void mot_ham2_post(void) {
     extern void* marioGetPtr(void);

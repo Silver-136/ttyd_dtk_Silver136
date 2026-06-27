@@ -34,6 +34,7 @@ u8 btl_yoshi_yoroyoro_jump_move(void) {
 
 
 void __makeTechMenuFunc(void* commandWork, s32 param_2) {
+    ;
 }
 
 

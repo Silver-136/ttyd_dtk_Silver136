@@ -10,10 +10,12 @@ extern void dispEntry(s32, s32, void*, void*, f32);
 
 
 void mono_disp(int param_1, void* unit) {
+    ;
 }
 
 
 void __makeTechMenuFunc(void* commandWork, s32 param_2) {
+    ;
 }
 
 

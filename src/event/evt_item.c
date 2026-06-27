@@ -193,15 +193,152 @@ USER_FUNC(evt_item_set_scale) {
 #pragma use_lmw_stmw on
 
 
-u8 evt_item_get_important_item(s32 pEvt, s32 param_2) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+
+s32 evt_item_get_important_item(s32 pEvt, s32 param_2) {
+    extern void* marioGetPtr(void);
+    extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+
+    extern f32 float_0p5_80421070;
+    extern f32 float_0p1_80421074;
+    extern f32 float_6p2832_80421078;
+    extern f32 float_360_8042107c;
+    extern f32 float_0p00761_80421080;
+    extern f32 float_0p16605_80421084;
+    extern f32 float_1_80421088;
+    extern f32 float_3p1416_8042108c;
+    extern f32 float_1p5708_80421090;
+    extern f32 float_4p7124_80421094;
+    extern f32 float_0p03705_80421098;
+    extern f32 float_0p4967_8042109c;
+    extern f32 float_0_804210a0;
+
+    s32* args = *(s32**)(pEvt + 0x18);
+    void* item = itemNameToPtr(evtGetValue((EventEntry*)pEvt, args[0]));
+    void* mario = marioGetPtr();
+    f32 marioY = *(f32*)((s32)mario + 0x90) + *(f32*)((s32)mario + 0x1BC);
+    f32 marioX = *(f32*)((s32)mario + 0x8C);
+    f32 marioZ = *(f32*)((s32)mario + 0x94);
+    f32 angle;
+    f32 t;
+    f32 t2;
+    f32 value;
+
+    if (param_2 != 0) {
+        t = distABf(marioX, marioZ, *(f32*)((s32)item + 0x3C), *(f32*)((s32)item + 0x44)) / float_0p5_80421070;
+        *(f32*)(pEvt + 0x78) = t;
+        *(f32*)(pEvt + 0x7C) = (float_0p1_80421074 * t) * float_0p5_80421070
+            + (marioY - *(f32*)((s32)item + 0x40)) / t;
+        *(f32*)(pEvt + 0x80) = float_0p5_80421070;
+        *(s32*)(pEvt + 0x84) = 0;
+    }
+
+    angle = (float_6p2832_80421078 * angleABf(*(f32*)((s32)item + 0x3C),
+                                                *(f32*)((s32)item + 0x44),
+                                                marioX,
+                                                marioZ)) / float_360_8042107c;
+
+    if (angle <= float_3p1416_8042108c) {
+        if (angle <= float_1p5708_80421090) {
+            t = angle;
+            t2 = t * t;
+            value = ((float_0p00761_80421080 * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t;
+        } else {
+            t = float_1p5708_80421090 - (angle - float_1p5708_80421090);
+            t2 = t * t;
+            value = ((float_0p00761_80421080 * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t;
+        }
+    } else if (angle >= float_4p7124_80421094) {
+        t = float_1p5708_80421090 - (angle - float_4p7124_80421094);
+        t2 = t * t;
+        value = -(((float_0p00761_80421080 * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t);
+    } else {
+        t = angle - float_3p1416_8042108c;
+        t2 = t * t;
+        value = -(((float_0p00761_80421080 * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t);
+    }
+
+    *(f32*)((s32)item + 0x3C) += *(f32*)(pEvt + 0x80) * value;
+
+    if (angle <= float_3p1416_8042108c) {
+        if (angle <= float_1p5708_80421090) {
+            t = angle;
+            t2 = t * t;
+            value = (float_0p03705_80421098 * t2 - float_0p4967_8042109c) * t2 + float_1_80421088;
+        } else {
+            t = float_1p5708_80421090 - (angle - float_1p5708_80421090);
+            t2 = t * t;
+            value = -((float_0p03705_80421098 * t2 - float_0p4967_8042109c) * t2 + float_1_80421088);
+        }
+    } else if (angle >= float_4p7124_80421094) {
+        t = float_1p5708_80421090 - (angle - float_4p7124_80421094);
+        t2 = t * t;
+        value = (float_0p03705_80421098 * t2 - float_0p4967_8042109c) * t2 + float_1_80421088;
+    } else {
+        t = angle - float_3p1416_8042108c;
+        t2 = t * t;
+        value = -((float_0p03705_80421098 * t2 - float_0p4967_8042109c) * t2 + float_1_80421088);
+    }
+
+    *(f32*)((s32)item + 0x44) -= *(f32*)(pEvt + 0x80) * value;
+    *(f32*)((s32)item + 0x40) += *(f32*)(pEvt + 0x7C);
+
+    *(f32*)(pEvt + 0x78) -= float_1_80421088;
+    if (*(f32*)(pEvt + 0x78) >= float_0_804210a0) {
+        *(f32*)(pEvt + 0x7C) -= float_0p1_80421074;
+        return 0;
+    }
+
+    *(f32*)((s32)item + 0x3C) = marioX;
+    *(f32*)((s32)item + 0x40) = marioY;
+    *(f32*)((s32)item + 0x44) = marioZ;
+    return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-u8 evt_item_move_3d_position(void) {
-    return 0;
+u8 evt_item_move_3d_position(s32 pEvt, s32 param_2) {
+    extern void* gp;
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+
+    s32* args = *(s32**)(pEvt + 0x18);
+    s32 name = evtGetValue((EventEntry*)pEvt, args[0]);
+    f32 x = (f32)evtGetValue((EventEntry*)pEvt, args[1]);
+    f32 y = (f32)evtGetValue((EventEntry*)pEvt, args[2]);
+    f32 z = (f32)evtGetValue((EventEntry*)pEvt, args[3]);
+    s32 duration = evtGetValue((EventEntry*)pEvt, args[4]);
+    s32 type = evtGetValue((EventEntry*)pEvt, args[5]);
+    void* item = itemNameToPtr(name);
+    s32 elapsed;
+
+    if (param_2 != 0) {
+        if (item == 0) {
+            return 2;
+        }
+        *(s32*)(pEvt + 0x78) = *(s32*)((s32)gp + 0x3C);
+        *(f32*)(pEvt + 0x7C) = *(f32*)((s32)item + 0x3C);
+        *(f32*)(pEvt + 0x80) = *(f32*)((s32)item + 0x40);
+        *(f32*)(pEvt + 0x84) = *(f32*)((s32)item + 0x44);
+    }
+
+    elapsed = (*(s32*)((s32)gp + 0x3C) - *(s32*)(pEvt + 0x78)) / (((*(u32*)0x800000F8) >> 2) / 1000);
+
+    if (elapsed < duration) {
+        *(f32*)((s32)item + 0x3C) = intplGetValue(type, elapsed, duration, *(f32*)(pEvt + 0x7C), x);
+        *(f32*)((s32)item + 0x40) = intplGetValue(type, elapsed, duration, *(f32*)(pEvt + 0x80), y);
+        *(f32*)((s32)item + 0x44) = intplGetValue(type, elapsed, duration, *(f32*)(pEvt + 0x84), z);
+        return 0;
+    }
+
+    *(f32*)((s32)item + 0x3C) = x;
+    *(f32*)((s32)item + 0x40) = y;
+    *(f32*)((s32)item + 0x44) = z;
+    return 2;
 }
-
 
 s32 evt_item_entry(void* pEvt) {
     return 0;

@@ -20,6 +20,7 @@ s32 pouchGetJumpLv(void);
 void winMsgEntry(void* pWin, s32 param_2, char* msg, s32 param_4);
 
 void winMarioMain2(void) {
+    ;
 }
 
 char* winZenkakuStr(s32 value) {

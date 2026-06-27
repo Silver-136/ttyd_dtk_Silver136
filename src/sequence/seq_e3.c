@@ -89,3 +89,27 @@ void seq_e3Init(void* seq) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/sequence/seq_e3 20260624_184929 */
+
+/* stub-fill: pressStartGX | missing_definition | ghidra_signature */
+u8 pressStartGX(void) {
+    return 0;
+}
+
+
+/* CHATGPT STUB FILL: main/sequence/seq_e3 20260624_184929 */
+
+/* stub-fill: e3Disp | prototype_only | source_prototype */
+void e3Disp(s32 camera, void* param) {
+    return;
+}
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/sequence/seq_e3 20260624_191429 */
+
+/* fallback stub-fill: map=seq_e3Main addr=0x80252818 size=0x00000748 */
+int seq_e3Main() {
+    return 0;
+}

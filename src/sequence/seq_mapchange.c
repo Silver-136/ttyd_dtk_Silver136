@@ -339,10 +339,10 @@ void _load(char* oldMap, char* mapName, char* beroName) {
 
             while (dirIndex < 8) {
                 if (strncmp(*dirPtr, bero, strlen(*dirPtr)) == 0) {
-                    angle = float_3p1416_8041f510 *
-                            float_2_8041f514 *
-                            (f32)dirIndex *
-                            float_0p125_8041f518;
+                    angle = (f32)dirIndex;
+                    angle = float_2_8041f514 * angle;
+                    angle = float_3p1416_8041f510 * angle;
+                    angle = angle * float_0p125_8041f518;
 
                     dirCos = cos(angle);
                     hitPos.x = float_neg30_8041f51c * dirCos + hitPos.x;

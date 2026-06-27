@@ -26,3 +26,16 @@ void battleAcDisp_MonosiriTarget(void) {
 s32 _getmaxcount(void) {
     return _frame_table[BattleActionCommandGetDifficulty(_battleWorkPointer)];
 }
+
+
+/* CHATGPT STUB FILL: main/action/ac_monosiri_target 20260624_184929 */
+
+/* stub-fill: actionCommandDisp | prototype_only | source_prototype */
+void actionCommandDisp(f32 x, f32 y) {
+    return;
+}
+
+/* stub-fill: battleAcMain_MonosiriTarget | missing_definition | ghidra_signature */
+s32 battleAcMain_MonosiriTarget(int param_1) {
+    return 0;
+}

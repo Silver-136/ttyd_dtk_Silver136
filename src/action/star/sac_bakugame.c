@@ -26,6 +26,7 @@ typedef struct BakuGameWork {
 } BakuGameWork;
 
 void bakuGameDispStar(void) {
+    ;
 }
 
 s32 bakuGameAudienceCanThrowPos(s32 pos) {
@@ -303,3 +304,299 @@ USER_FUNC(bakuGameDecideWeapon) {
     return 2;
 }
 
+void bakuGameDisp3D(void) {
+    typedef f32 Mtx[3][4];
+    extern void* camGetPtr(s32 cameraId);
+    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(void* a, void* b, void* c);
+    extern void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, f32 rot, f32 scale);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 comptype, s32 compsize, s32 frac);
+    extern void GXSetNumChans(s32 num);
+    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
+    extern void GXSetChanMatColor(s32 chan, void* color);
+    extern void GXSetNumTexGens(s32 num);
+    extern void GXSetTexCoordGen2(s32 texgen, s32 type, s32 src, s32 mtxsrc, s32 normalize, s32 postmtx);
+    extern void GXSetNumTevStages(s32 num);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevOrder(s32 stage, s32 texcoord, s32 texmap, s32 color);
+    extern void* BattleAudienceBaseGetPtr(void);
+    extern void TEXGetGXTexObjFromPalette(void* palette, void* texObj, s32 id);
+    extern void GXLoadTexObj(void* texObj, s32 mapid);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void GXBegin(s32 primitive, s32 vtxfmt, s32 nverts);
+    extern u32 dat_80427b58;
+    extern u32 dat_802ff570[16];
+    extern f32 float_neg1_80427b5c;
+    extern f32 float_1_80427b60;
+    extern f32 float_180_80427b64;
+    extern f32 float_neg20_80427b68;
+    extern f32 float_40_80427b6c;
+    extern f32 float_0_80427b70;
+    extern f32 float_20_80427b74;
+
+    u8* work;
+    void* cam;
+    Mtx modelMtx;
+    Mtx transMtx;
+    Mtx scaleMtx;
+    u32 color;
+    u32 texObj[8];
+    u32 uvWords[16];
+    void* audience;
+    void* tpl;
+    s32 i;
+    s32 base;
+    volatile f32* fifo;
+    f32* uv;
+
+    work = (u8*)GetBakuGamePtr();
+    cam = camGetPtr(4);
+
+    PSMTXScale(scaleMtx, float_neg1_80427b5c, float_1_80427b60, float_1_80427b60);
+    PSMTXTrans(transMtx, *(f32*)(work + 0x88), *(f32*)(work + 0x8C), *(f32*)(work + 0x90));
+    PSMTXConcat(transMtx, scaleMtx, modelMtx);
+
+    if (*(s32*)(work + 0xEC) != -1) {
+        animPoseDrawMtx(*(s32*)(work + 0xEC), modelMtx, 2, float_180_80427b64, *(f32*)(work + 0xC4));
+    }
+
+    if ((*(u32*)work & 1) != 0) {
+        GXSetCullMode(0);
+        GXClearVtxDesc();
+        GXSetVtxDesc(9, 1);
+        GXSetVtxDesc(0xD, 1);
+        GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+        GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+        GXSetNumChans(1);
+        GXSetChanCtrl(4, 0, 1, 0, 0, 2, 2);
+        color = dat_80427b58;
+        GXSetChanMatColor(4, &color);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+        GXSetNumTevStages(1);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 0xF, 0xC, 8, 0xA);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaIn(0, 7, 5, 4, 7);
+        GXSetTevOrder(0, 0, 0, 4);
+
+        audience = BattleAudienceBaseGetPtr();
+        tpl = *(void**)(*(s32*)(*(s32*)((s32)audience + 0xC) + 0xA0) + 0);
+        TEXGetGXTexObjFromPalette(tpl, texObj, *(s32*)(work + 0x200));
+        GXLoadTexObj(texObj, 0);
+
+        PSMTXTrans(transMtx, *(f32*)(work + 0x1D0), *(f32*)(work + 0x1D4), *(f32*)(work + 0x1D8));
+        PSMTXConcat((void*)((s32)cam + 0x11C), transMtx, modelMtx);
+        GXLoadPosMtxImm(modelMtx, 0);
+
+        for (i = 0; i < 16; i++) {
+            uvWords[i] = dat_802ff570[i];
+        }
+        uv = (f32*)uvWords;
+        if (*(s8*)(work + 0x1CC) == 1) {
+            base = 4;
+        } else {
+            base = 0;
+        }
+
+        GXBegin(0x80, 0, 4);
+        fifo = (volatile f32*)0xCC008000;
+        *fifo = float_neg20_80427b68;
+        *fifo = float_40_80427b6c;
+        *fifo = float_0_80427b70;
+        *fifo = uv[base * 2];
+        *fifo = uv[base * 2 + 1];
+        *fifo = float_20_80427b74;
+        *fifo = float_40_80427b6c;
+        *fifo = float_0_80427b70;
+        *fifo = uv[(base + 1) * 2];
+        *fifo = uv[(base + 1) * 2 + 1];
+        *fifo = float_20_80427b74;
+        *fifo = float_0_80427b70;
+        *fifo = float_0_80427b70;
+        *fifo = uv[(base + 2) * 2];
+        *fifo = uv[(base + 2) * 2 + 1];
+        *fifo = float_neg20_80427b68;
+        *fifo = float_0_80427b70;
+        *fifo = float_0_80427b70;
+        *fifo = uv[(base + 3) * 2];
+        *fifo = uv[(base + 3) * 2 + 1];
+    }
+}
+
+s32 main_star(void) {
+    extern void* BattleGetMarioPtr(void* battleWork);
+    extern void* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
+    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+    extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, s32 param, f32 order);
+    extern void* _battleWorkPointer;
+    extern f32 float_0_80427b70;
+    extern f32 float_neg1000_80427bd8;
+    extern f32 float_1_80427b60;
+    extern f32 float_37_80427c24;
+    extern f32 float_50_80427bd4;
+    extern f32 float_neg1_80427b5c;
+    extern f32 float_2_80427bb4;
+    extern f32 float_2160_80427c28;
+    extern f32 float_300_80427b9c;
+    extern f32 float_1p5_80427ba0;
+    extern u32 vec3_802ff3d0[3];
+    extern u32 vec3_802ff3dc[3];
+
+    u8* work;
+    u8* mario;
+    u8* starWork;
+    s32 state;
+    s32 timer;
+    f32 value;
+    f32 start;
+    f32 end;
+    u32* srcA;
+    u32* srcB;
+
+    work = (u8*)GetBakuGamePtr();
+    mario = (u8*)BattleGetMarioPtr(_battleWorkPointer);
+    state = *(s32*)(work + 0x204);
+
+    switch (state) {
+        case 0:
+            break;
+        case 1:
+            value = float_0_80427b70;
+            *(s32*)(work + 0x204) = 2;
+            *(s32*)(work + 0x208) = 0;
+            *(void**)(work + 0x254) = effStarStoneEntry(1, value, float_neg1000_80427bd8, value, float_1_80427b60);
+
+            BtlUnit_GetPos(mario, (f32*)(work + 0x20C), (f32*)(work + 0x210), (f32*)(work + 0x214));
+            *(f32*)(work + 0x210) += (*(f32*)(mario + 0x114) * (f32)*(s16*)(mario + 0xCE)) + float_37_80427c24;
+
+            srcA = vec3_802ff3d0;
+            srcB = vec3_802ff3dc;
+
+            *(u32*)(work + 0x218) = *(u32*)(work + 0x20C);
+            *(u32*)(work + 0x21C) = *(u32*)(work + 0x210);
+            *(u32*)(work + 0x220) = *(u32*)(work + 0x214);
+
+            *(u32*)(work + 0x224) = *(u32*)(work + 0x20C);
+            *(u32*)(work + 0x228) = *(u32*)(work + 0x210);
+            *(u32*)(work + 0x22C) = *(u32*)(work + 0x214);
+            *(f32*)(work + 0x228) += float_50_80427bd4;
+            *(f32*)(work + 0x22C) += float_neg1_80427b5c;
+
+            *(u32*)(work + 0x23C) = srcA[0];
+            *(u32*)(work + 0x240) = srcA[1];
+            *(u32*)(work + 0x244) = srcA[2];
+            *(u32*)(work + 0x248) = srcB[0];
+            *(u32*)(work + 0x24C) = srcB[1];
+            *(u32*)(work + 0x250) = srcB[2];
+            /* fall through */
+        case 2:
+            timer = *(s32*)(work + 0x208) + 1;
+            *(s32*)(work + 0x208) = timer;
+            if (timer <= 100) {
+                start = *(f32*)(work + 0x218);
+                end = *(f32*)(work + 0x224);
+                timer = *(s32*)(work + 0x208);
+                *(f32*)(work + 0x20C) = intplGetValue(0, timer, 100, start, end);
+
+                start = *(f32*)(work + 0x21C);
+                end = *(f32*)(work + 0x228);
+                timer = *(s32*)(work + 0x208);
+                *(f32*)(work + 0x210) = intplGetValue(0, timer, 100, start, end);
+
+                start = *(f32*)(work + 0x220);
+                end = *(f32*)(work + 0x22C);
+                timer = *(s32*)(work + 0x208);
+                *(f32*)(work + 0x214) = intplGetValue(0, timer, 100, start, end);
+
+                start = float_0_80427b70;
+                end = float_2_80427bb4;
+                timer = *(s32*)(work + 0x208);
+                value = intplGetValue(0, timer, 100, start, end);
+                *(f32*)(work + 0x244) = value;
+                *(f32*)(work + 0x240) = value;
+                *(f32*)(work + 0x23C) = value;
+            } else {
+                value = float_2_80427bb4;
+                *(f32*)(work + 0x20C) = *(f32*)(work + 0x224);
+                *(f32*)(work + 0x210) = *(f32*)(work + 0x228);
+                *(f32*)(work + 0x214) = *(f32*)(work + 0x22C);
+                *(f32*)(work + 0x244) = value;
+                *(f32*)(work + 0x240) = value;
+                *(f32*)(work + 0x23C) = value;
+            }
+
+            start = float_0_80427b70;
+            end = float_2160_80427c28;
+            timer = *(s32*)(work + 0x208);
+            *(f32*)(work + 0x24C) = intplGetValue(4, timer, 0x78, start, end);
+            if (*(s32*)(work + 0x208) >= 0x78) {
+                *(s32*)(work + 0x204) = 3;
+                *(s32*)(work + 0x208) = 0;
+                value = float_300_80427b9c;
+                *(u32*)(work + 0x218) = *(u32*)(work + 0x20C);
+                *(u32*)(work + 0x21C) = *(u32*)(work + 0x210);
+                *(u32*)(work + 0x220) = *(u32*)(work + 0x214);
+                *(f32*)(work + 0x228) = value;
+            }
+            break;
+        case 3:
+            timer = *(s32*)(work + 0x208);
+            timer++;
+            *(s32*)(work + 0x208) = timer;
+            start = *(f32*)(work + 0x21C);
+            end = *(f32*)(work + 0x228);
+            timer = *(s32*)(work + 0x208);
+            *(f32*)(work + 0x210) = intplGetValue(1, timer, 0x3C, start, end);
+            if (*(s32*)(work + 0x208) >= 0x3C) {
+                *(s32*)(work + 0x204) = 4;
+                *(s32*)(work + 0x208) = 0;
+            }
+            break;
+        case 4:
+        default:
+            break;
+    }
+
+    if (*(void**)(work + 0x254) != 0) {
+        starWork = *(u8**)((s32)*(void**)(work + 0x254) + 0xC);
+        value = float_1p5_80427ba0;
+        *(f32*)(starWork + 0x8) = *(f32*)(work + 0x20C);
+        *(f32*)(starWork + 0xC) = *(f32*)(work + 0x210);
+        *(f32*)(starWork + 0x10) = *(f32*)(work + 0x214);
+        *(f32*)(starWork + 0x18) = *(f32*)(work + 0x248);
+        *(f32*)(starWork + 0x1C) = *(f32*)(work + 0x24C);
+        *(f32*)(starWork + 0x20) = *(f32*)(work + 0x250);
+        *(f32*)(starWork + 0x14) = value * *(f32*)(work + 0x23C);
+    }
+
+    dispEntry(4, 2, bakuGameDispStar, 0, float_0_80427b70);
+    return 0;
+}
+
+
+
+/* CHATGPT STUB FILL: main/action/star/sac_bakugame 20260624_184823 */
+
+/* stub-fill: bakuGameDisp2D | missing_definition | ghidra_signature */
+u8 bakuGameDisp2D(void) {
+    return 0;
+}
+
+/* stub-fill: bakuGameHeihoReturn | missing_definition | ghidra_signature */
+s32 bakuGameHeihoReturn(s32 param_1, int param_2) {
+    return 0;
+}
+
+/* stub-fill: bakuGameMain | missing_definition | ghidra_signature */
+u8 bakuGameMain(void) {
+    return 0;
+}

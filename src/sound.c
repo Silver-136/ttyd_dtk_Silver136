@@ -253,14 +253,17 @@ u8 SoundInit(void) {
 
 
 void SoundDropData(void) {
+    ;
 }
 
 
 void SoundSSMainInt(void) {
+    ;
 }
 
 
 void _ssDVDReadAsync_activeChk(s32 zero, void* ptr) {
+    ;
 }
 
 
@@ -295,6 +298,7 @@ u32 SoundEfxPlayEx(s32 param_1, u16 param_2, u32 param_3, u32 param_4) {
 
 
 void SoundSSPlayChEx(s32 a, s32 b, s32 c) {
+    ;
 }
 
 

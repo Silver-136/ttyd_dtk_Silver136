@@ -96,3 +96,11 @@ s32 lect_cam_save(void) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/event/evt_lecture 20260624_184929 */
+
+/* stub-fill: lect_cam_load | missing_definition | ghidra_signature */
+s32 lect_cam_load(int param_1) {
+    return 0;
+}

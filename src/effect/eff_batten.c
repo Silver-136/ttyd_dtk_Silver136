@@ -122,3 +122,16 @@ void* effBattenEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/effect/eff_batten 20260624_184929 */
+
+/* stub-fill: effBattenDisp | missing_definition | ghidra_signature */
+u8 effBattenDisp(void) {
+    return 0;
+}
+
+/* stub-fill: effBattenMain | prototype_only | source_prototype */
+void effBattenMain(void) {
+    return;
+}

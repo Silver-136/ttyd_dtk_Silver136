@@ -202,6 +202,7 @@ s32 BattleCheckDamage(BattleWorkUnit* attacker, BattleWorkUnit* target, BattleWo
 
 /* AUTOSTUB BattleDamageDirect size 0xB24 */
 void BattleDamageDirect(s32 unk, BattleWorkUnit* unit, BattleWorkUnitPart* part, s32 damage, s32 zero, s32 flags, s32 arg5, s32 arg6) {
+    ;
 }
 
 /* AUTOSTUB BattleCheckCounter size 0x5A4 */
@@ -219,6 +220,7 @@ s32 BattleCheckCounter(void* work, BattleWorkUnit* attacker, BattleWorkUnit* tar
 /* AUTOSTUB BattleAttackDeclareAll size 0x118 */
 /* signature source: prototype_search */
 void BattleAttackDeclareAll(BattleWork* battleWork) {
+    ;
 }
 
 /* MANUAL_AUTOMATION_STUBS_END main/battle/battle_damage */
@@ -559,6 +561,7 @@ void BattleAttackDeclare(int* unitIdx, int* partIdx) {
 /* AUTOSTUB _getSickStatusParam size 0x460 */
 /* signature source: manual_signatures */
 void _getSickStatusParam(BattleWorkUnit* unit, void* weapon, StatusEffectType statusType, int* turns, int* strength) {
+    ;
 }
 
 /* MANUAL_AUTOMATION_STUBS_END main/battle/battle_damage */

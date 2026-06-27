@@ -67,8 +67,60 @@ s32 checkHarbor(float* param_1) {
 
 
 void marioReInit_ship(void) {
-}
+    extern void* marioGetPtr(void);
+    extern void* __memAlloc(s32, u32);
+    extern void* memset(void*, s32, u32);
+    extern s32 marioGetColor(void);
+    extern void marioPaperOn(void*);
+    extern void marioChgPaper(void*);
+    extern void marioChgPose(void*);
+    extern void marioSetPaperAnimeLocalTime(u32);
+    extern void* effFunemizuEntry(double, double, double, double, double, s32);
+    extern void allPartyForceRideOn(void);
+    extern void* paper_ship[];
+    extern char str_PM_H_1A_802c42d0[];
+    extern char str_M_Z_1_80420f14[];
+    extern f32 float_40_80420eb0;
+    extern f32 float_0_80420eb8;
+    extern f32 float_4p25_80420efc;
+    extern f32 float_neg15_80420f28;
 
+    void* mario = marioGetPtr();
+    void* ship;
+    void* eff;
+    s32 camId;
+
+    *(u32*)((s32)mario + 0xC) &= ~1;
+    ship = __memAlloc(0, 0x48);
+    *(void**)((s32)marioGetPtr() + 0x294) = ship;
+    memset(*(void**)((s32)marioGetPtr() + 0x294), 0, 0x48);
+    *(u16*)((s32)mario + 0x2E) = 0x19;
+    *(f32*)((s32)mario + 0x9C) = float_neg15_80420f28;
+    *(s32*)((s32)mario + 0x44) = 0x32;
+    *(f32*)((s32)mario + 0x1B4) = float_40_80420eb0;
+    *(f32*)((s32)mario + 0x1B8) = float_40_80420eb0;
+    marioPaperOn(paper_ship[marioGetColor()]);
+    marioChgPaper(str_PM_H_1A_802c42d0);
+    marioChgPose(str_M_Z_1_80420f14);
+    *(u32*)((s32)mario + 0x4) |= 8;
+    *(s32*)((s32)mario + 0x48) = 0x58;
+    marioSetPaperAnimeLocalTime(*(u32*)((s32)mario + 0x48));
+    *(s32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x38) = -1;
+    *(s32*)*(s32*)((s32)marioGetPtr() + 0x294) = 0;
+    *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 4) = float_0_80420eb8;
+    *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x14) = float_0_80420eb8;
+    *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x18) = float_0_80420eb8;
+    *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x1C) = float_0_80420eb8;
+    *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x20) = float_0_80420eb8;
+    *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 8) = float_0_80420eb8;
+    *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0xC) = float_4p25_80420efc;
+    eff = effFunemizuEntry(float_0_80420eb8, float_0_80420eb8, float_0_80420eb8, float_0_80420eb8, float_0_80420eb8, 0);
+    *(void**)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x24) = eff;
+    camId = *(s32*)((s32)mario + 0x134);
+    mario = marioGetPtr();
+    *(s32*)(*(s32*)(*(s32*)(*(s32*)((s32)mario + 0x294) + 0x24) + 0xC) + 0x48) = camId;
+    allPartyForceRideOn();
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

@@ -647,3 +647,226 @@ void _LvupParamConfirmDisp(void* disp, void* battleWork) {
     pos[2] = float_0_804271c0;
     iconDispGx(pos, 0x10, 0x194, float_1_804271a8);
 }
+
+s32 _lvup_spot_move(void* event, s32 init) {
+    typedef struct Vec3f_LvupSpotMove {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3f_LvupSpotMove;
+    typedef struct BattleWorkStageSpotEntry_LvupSpotMove {
+        u16 flags;
+        u16 pad;
+        Vec3f_LvupSpotMove translation;
+        Vec3f_LvupSpotMove rotation;
+        Vec3f_LvupSpotMove scale;
+        u32 color;
+    } BattleWorkStageSpotEntry_LvupSpotMove;
+    typedef struct BattleWorkStageSpot_LvupSpotMove {
+        s32 count;
+        BattleWorkStageSpotEntry_LvupSpotMove* entries;
+        s32 pad;
+    } BattleWorkStageSpot_LvupSpotMove;
+
+    extern BattleWorkStageSpot_LvupSpotMove* BatSpotGetPtr(void);
+    extern void* BattleGetMarioPtr(void* battleWork);
+    extern f32 reviseAngle(f32 angle);
+    extern f32 sinfd(f32 angle);
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+    extern f32 float_0p5_804271d0;
+    extern f32 float_neg20_804271d4;
+    extern f32 float_3_804271b0;
+    extern f32 float_1p1_804271dc;
+    extern f32 float_50_804271d8;
+    extern f32 float_2p5_804271e8;
+    extern f32 float_90_804271e4;
+    extern f32 float_25_804271e0;
+    extern f32 float_180_804271f0;
+    extern f32 float_65_804271ec;
+    extern f32 float_7p5_804271f4;
+    extern f32 float_4_804271bc;
+    extern f32 float_270_804271f8;
+    extern f32 float_4p5_804271fc;
+    extern f32 float_0_804271c0;
+    extern f32 float_neg25_80427200;
+    extern f32 float_255_804271cc;
+    extern f32 float_128_80427204;
+    extern u32 dat_80427170;
+
+    BattleWorkStageSpot_LvupSpotMove* spot;
+    BattleWorkStageSpotEntry_LvupSpotMove* entries;
+    BattleWorkStageSpotEntry_LvupSpotMove* entry;
+    void* mario;
+    s32 id;
+    s32 state;
+    s32 timer;
+    u32 color;
+    f32 angle;
+    f32 value;
+    f32 wave;
+
+    spot = BatSpotGetPtr();
+    id = evtGetValue(event, **(s32**)((s32)event + 0x18));
+    entries = spot->entries;
+    entry = &entries[id];
+
+    if (init != 0) {
+        *(s32*)((s32)event + 0x78) = 0;
+        *(s32*)((s32)event + 0x7C) = 0;
+        *(s32*)((s32)event + 0x80) = (s32)entry->translation.x;
+        *(s32*)((s32)event + 0x84) = (s32)entry->translation.y;
+        *(s32*)((s32)event + 0x88) = 0;
+    }
+
+    *(s32*)((s32)event + 0x78) += 1;
+    state = *(s32*)((s32)event + 0x7C);
+
+    switch (state) {
+        case 0:
+            *(s32*)((s32)event + 0x78) = 1;
+            *(s32*)((s32)event + 0x7C) += 1;
+            /* fallthrough */
+        case 1:
+            switch (id) {
+                case 0:
+                    mario = BattleGetMarioPtr(_battleWorkPointer);
+                    entry->translation.x = float_0p5_804271d0 * *(f32*)((s32)mario + 0x3C);
+                    entry->translation.y = float_neg20_804271d4;
+                    break;
+                case 1:
+                    angle = reviseAngle(float_1p1_804271dc * (float_3_804271b0 * (f32)*(s32*)((s32)event + 0x78)));
+                    wave = sinfd(angle);
+                    value = (f32)*(s32*)((s32)event + 0x80);
+                    entry->translation.x = value + float_50_804271d8 * wave;
+                    angle = reviseAngle(float_1p1_804271dc * (float_2p5_804271e8 * (f32)*(s32*)((s32)event + 0x78)) + float_90_804271e4);
+                    wave = sinfd(angle);
+                    value = (f32)(*(s32*)((s32)event + 0x84) + 25);
+                    entry->translation.y = value - float_25_804271e0 * wave;
+                    break;
+                case 2:
+                    angle = reviseAngle(float_1p1_804271dc * (float_2p5_804271e8 * (f32)*(s32*)((s32)event + 0x78)) + float_180_804271f0);
+                    wave = sinfd(angle);
+                    value = (f32)*(s32*)((s32)event + 0x80);
+                    entry->translation.x = value + float_65_804271ec * wave;
+                    angle = reviseAngle(float_1p1_804271dc * (float_7p5_804271f4 * (f32)*(s32*)((s32)event + 0x78)) + float_90_804271e4);
+                    wave = sinfd(angle);
+                    value = (f32)(*(s32*)((s32)event + 0x84) - 25);
+                    entry->translation.y = value + float_25_804271e0 * wave;
+                    break;
+                case 3:
+                    angle = reviseAngle(float_1p1_804271dc * (float_4_804271bc * (f32)*(s32*)((s32)event + 0x78)));
+                    wave = sinfd(angle);
+                    value = (f32)*(s32*)((s32)event + 0x80);
+                    entry->translation.x = value - float_50_804271d8 * wave;
+                    angle = reviseAngle(float_1p1_804271dc * (float_2p5_804271e8 * (f32)*(s32*)((s32)event + 0x78)) + float_90_804271e4);
+                    wave = sinfd(angle);
+                    value = (f32)(*(s32*)((s32)event + 0x84) + 25);
+                    entry->translation.y = value - float_25_804271e0 * wave;
+                    break;
+                case 4:
+                    angle = reviseAngle(float_1p1_804271dc * (float_3_804271b0 * (f32)*(s32*)((s32)event + 0x78)) + float_270_804271f8);
+                    wave = sinfd(angle);
+                    value = (f32)(*(s32*)((s32)event + 0x80) - 50);
+                    entry->translation.x = value - float_50_804271d8 * wave;
+                    angle = reviseAngle(float_1p1_804271dc * (float_4p5_804271fc * (f32)*(s32*)((s32)event + 0x78)) + float_90_804271e4);
+                    wave = sinfd(angle);
+                    value = (f32)(*(s32*)((s32)event + 0x84) - 25);
+                    entry->translation.y = value + float_25_804271e0 * wave;
+                    break;
+            }
+            break;
+        case 2:
+            *(s32*)((s32)event + 0x88) = 20;
+            *(s32*)((s32)event + 0x80) = (s32)entry->translation.x;
+            *(s32*)((s32)event + 0x84) = (s32)entry->translation.y;
+            *(s32*)((s32)event + 0x7C) += 1;
+            /* fallthrough */
+        case 3:
+            timer = *(s32*)((s32)event + 0x88) - 1;
+            *(s32*)((s32)event + 0x88) = timer;
+            entry->translation.x = intplGetValue(2, timer, 21, float_0_804271c0, (f32)*(s32*)((s32)event + 0x80));
+            entry->translation.y = intplGetValue(2, timer, 21, float_neg25_80427200, (f32)*(s32*)((s32)event + 0x84));
+            color = dat_80427170;
+            ((u8*)&color)[3] = (s32)intplGetValue(0, timer, 21, float_255_804271cc, float_128_80427204);
+            entry->color = color;
+            if (*(s32*)((s32)event + 0x88) <= 0) {
+                *(s32*)((s32)event + 0x7C) += 1;
+            }
+            break;
+    }
+
+    state = *(s32*)((s32)event + 0x7C);
+    return (state >= 4) ? 2 : 0;
+}
+
+
+/* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
+
+/* stub-fill: _lvup_select_object_disp | prototype_only | source_prototype */
+void _lvup_select_object_disp(void* battleWork) {
+    return;
+}
+
+
+/* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
+
+/* stub-fill: _lvup_select_object_init | missing_definition | ghidra_signature */
+s32 _lvup_select_object_init(void) {
+    return 0;
+}
+
+
+/* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
+
+/* stub-fill: _lvup_object_decide_bound | missing_definition | ghidra_signature */
+s32 _lvup_object_decide_bound(int param_1, int param_2) {
+    return 0;
+}
+
+
+/* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
+
+/* stub-fill: _lvup_object_select_move | missing_definition | ghidra_signature */
+s32 _lvup_object_select_move(int param_1, int param_2) {
+    return 0;
+}
+
+
+/* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
+
+/* stub-fill: _lvup_spot_on | missing_definition | ghidra_signature */
+s32 _lvup_spot_on(void* evtEntry) {
+    return 0;
+}
+
+
+/* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
+
+/* stub-fill: _GetExpIcon_Main | prototype_only | source_prototype */
+void _GetExpIcon_Main(void* battleWork) {
+    return;
+}
+
+
+/* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
+
+/* stub-fill: L__LvupParamHelpMsgDisp | prototype_only | source_prototype */
+void L__LvupParamHelpMsgDisp(void* battleWork) {
+    return;
+}
+
+
+/* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
+
+/* stub-fill: btlseqEnd | missing_definition | ghidra_signature */
+u8 btlseqEnd(void* battleWork) {
+    return 0;
+}
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/battle/battle_seq_end 20260624_191429 */
+
+/* fallback stub-fill: map=_GetExpIcon_Init addr=0x802149ec size=0x0000025c */
+int _GetExpIcon_Init() {
+    return 0;
+}

@@ -1600,7 +1600,7 @@ void BtlUnit_CheckPinchStatus(BattleWorkUnit* unit, BOOL a2) {
 }
 
 s32 BtlUnit_GetExp(BattleWorkUnit *unit) {
-    
+    ;
 }
 
 u32 BtlUnit_snd_se(BattleWorkUnit* unit, s32 lookup, s32 volume, s16 add_pitch) {
@@ -1916,14 +1916,17 @@ s32 BtlUnit_GetCoin(void* unit) {
 
 
 void BtlUnit_ControlPoseSoundMain(void* part) {
+    ;
 }
 
 
 void BtlUnit_PayWeaponCost(void* unit, void* weapon) {
+    ;
 }
 
 
 void BtlUnit_RecoverFp(void* unit, s32 fp) {
+    ;
 }
 
 
@@ -1943,8 +1946,10 @@ s32 BtlUnit_GetWeaponCost(BattleWorkUnit* unit, void* weapon) {
 
 
 void BtlUnit_LoadSeMode(int param_1, int param_2, void* soundDataTable, void* moveSoundWork) {
+    ;
 }
 
 
 void BtlUnit_ResetMoveStatus(BattleWorkUnit* unit) {
+    ;
 }

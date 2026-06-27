@@ -992,14 +992,17 @@ void btlseqTurn(void* battleWork) {
 
 
 void btlseqAct(void* battleWork) {
+    ;
 }
 
 
 void btlseqFirstAct(void* battleWork) {
+    ;
 }
 
 
 void btlseqMove(void* battleWork) {
+    ;
 }
 
 
@@ -1009,6 +1012,7 @@ u8 _set_haikei_entry_scale(void) {
 
 
 void BattleCheckAllPinchStatus(void* battleWork, int param_2) {
+    ;
 }
 
 
@@ -1018,10 +1022,12 @@ s32 _set_effect_luck(void) {
 
 
 void _rule_disp(void) {
+    ;
 }
 
 
 void btlseqInit(void* battleWork) {
+    ;
 }
 
 
@@ -1031,6 +1037,7 @@ s32 BattleCheckConcluded(void* battleWork) {
 
 
 void battleMakePhaseEvtTable(void* battleWork) {
+    ;
 }
 
 
@@ -1040,6 +1047,7 @@ int BattleWaitAllActiveEvtEnd_NoBgSetEndWait(void* battleWork) {
 
 
 void btlseqPhaseFirstProcess(void* battleWork) {
+    ;
 }
 
 
@@ -1049,10 +1057,12 @@ s32 BattleWaitAllActiveEvtEnd(void* battleWork) {
 
 
 void btlseqTurnFirstProcess(void* battleWork) {
+    ;
 }
 
 
 void BattleSequenceManager(void) {
+    ;
 }
 
 
@@ -1086,6 +1096,7 @@ u32 BattlePhaseEndCheck(void) {
 
 
 void btlseqPhase(void* battleWork) {
+    ;
 }
 
 
@@ -1114,4 +1125,5 @@ void* _GetFirstAttackWeapon(u32 firstAttackType) {
 
 
 void battleSortPhaseMoveTable(void* battleWork, s32 arg) {
+    ;
 }

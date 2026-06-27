@@ -14,6 +14,7 @@ s32 _monosiri_flag_on(void* evt) {
 
 
 void __makeTechMenuFunc(void* commandWork, s32 param_2) {
+    ;
 }
 
 

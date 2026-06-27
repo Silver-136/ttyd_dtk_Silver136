@@ -51,9 +51,11 @@ extern f32 float_215_8042868c;
 extern void* gp;
 
 void disp_3D(void) {
+    ;
 }
 
 void disp_3D_alpha(void) {
+    ;
 }
 
 void* get_ptr(void) {
@@ -357,4 +359,22 @@ USER_FUNC(main_suki) {
     dispEntry(4, 1, disp_3D, float_0_80428680, NULL);
     dispEntry(4, 2, disp_3D_alpha, float_0_80428680, NULL);
     return 0;
+}
+
+
+/* CHATGPT STUB FILL: main/action/star/sac_suki 20260624_184929 */
+
+/* stub-fill: N__disp_2D | prototype_only | source_prototype */
+void N__disp_2D(s32 type, s32 index) {
+    return;
+}
+
+/* stub-fill: main_star | prototype_only | source_prototype */
+void main_star(void) {
+    return;
+}
+
+/* stub-fill: main_base | prototype_only | source_prototype */
+void main_base(void) {
+    return;
 }

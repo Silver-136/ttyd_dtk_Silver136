@@ -62,3 +62,16 @@ void battleAcDisp_GaugeTiming2(void* camera, void* wp) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+
+/* CHATGPT STUB FILL: main/action/ac_gauge_timing2 20260624_184929 */
+
+/* stub-fill: actionCommandDisp | prototype_only | source_prototype */
+void actionCommandDisp(f32 x, f32 y) {
+    return;
+}
+
+/* stub-fill: battleAcMain_GaugeTiming2 | missing_definition | ghidra_signature */
+u8 battleAcMain_GaugeTiming2(void) {
+    return 0;
+}
