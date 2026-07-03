@@ -90,5 +90,63 @@ void* effLasMonEntry(s32 type, f32 x, f32 y, f32 z) {
 
 /* stub-fill: effLasMonMain | prototype_only | source_prototype */
 void effLasMonMain(void* entry) {
-    return;
+    extern void* gp;
+    extern BOOL animGroupBaseAsync(char* name, s32 language, s32 unused);
+    extern s32 animPoseEntry(char* name, s32 language);
+    extern void animPoseSetAnim(s32 poseId, const char* animName, s32 loop);
+    extern f32 animPoseGetLoopTimes(s32 poseId);
+    extern void animPoseRelease(s32 poseId);
+    extern void effDelete(void* entry);
+    extern f32 dispCalcZ(Vec* pos);
+    extern void dispEntry(s32 cameraId, s32 order, void* callback, f32 priority, void* param);
+    extern void effLasMonDisp(s32 cameraId, void* entry);
+    extern char str_MOBJ_EFF_las_mon_80302aa4[];
+    extern const char str_A_1_804289bc[];
+    extern const char str_S_1_804289c4[];
+    extern f32 float_1_804289c0;
+
+    void* work;
+    Vec pos;
+    s32 language;
+
+    work = *(void**)((s32)entry + 0xC);
+    pos.x = *(f32*)((s32)work + 4);
+    pos.y = *(f32*)((s32)work + 8);
+    pos.z = *(f32*)((s32)work + 0xC);
+    language = *(s32*)((s32)gp + 0x14) != 0;
+
+    if (*(u32*)entry & 4) {
+        *(u32*)entry &= ~4;
+        *(s32*)((s32)work + 0x20) = 0x10;
+    }
+    if (*(s32*)((s32)work + 0x20) < 1000) {
+        *(s32*)((s32)work + 0x20) -= 1;
+    }
+    if (*(s32*)((s32)work + 0x20) < 0x10) {
+        *(s32*)((s32)work + 0x1C) = *(s32*)((s32)work + 0x20) << 4;
+    }
+    if (*(s32*)((s32)work + 0x20) < 0) {
+        if (*(s32*)((s32)work + 0x14) != -1) {
+            animPoseRelease(*(s32*)((s32)work + 0x14));
+        }
+        effDelete(entry);
+        return;
+    }
+
+    if (!animGroupBaseAsync(str_MOBJ_EFF_las_mon_80302aa4, language, 0)) {
+        return;
+    }
+    if (*(s32*)((s32)work + 0x14) == -1) {
+        *(s32*)((s32)work + 0x14) = animPoseEntry(str_MOBJ_EFF_las_mon_80302aa4, language);
+        animPoseSetAnim(*(s32*)((s32)work + 0x14), str_A_1_804289bc, 1);
+        *(s32*)((s32)work + 0x18) = 0;
+    }
+    if (*(s32*)((s32)work + 0x18) == 0 &&
+        animPoseGetLoopTimes(*(s32*)((s32)work + 0x14)) >= float_1_804289c0) {
+        animPoseSetAnim(*(s32*)((s32)work + 0x14), str_S_1_804289c4, 1);
+        *(s32*)((s32)work + 0x18) += 1;
+    }
+    dispCalcZ(&pos);
+    dispEntry(4, 2, effLasMonDisp, 0.0f, entry);
 }
+

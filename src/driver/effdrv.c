@@ -187,20 +187,103 @@ void effDrawMayaPoly(void* data) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-u8 effMain(void) {
-    return 0;
+void effMain(void) {
+    typedef void (*EffCallback)(void*);
+    extern void fileFree(void*);
+    extern void* getMarioStDvdRoot(void);
+    extern void* fileAsyncf(s32, s32, const char*, ...);
+    extern void* fileAllocf(s32, const char*, ...);
+    extern char* prefix_tbl[];
+    s32 i;
+    s32 count;
+    void* entry;
+    char* prefix;
+
+    count = wp->count;
+    entry = wp->entries;
+    for (i = 0; i < count; i++, entry = (void*)((s32)entry + 0x28)) {
+        if (gp->unk14 != 0) {
+            if (*(s32*)((s32)entry + 4) != 1) {
+                continue;
+            }
+        } else if (*(s32*)((s32)entry + 4) != 0) {
+            continue;
+        }
+        if ((*(u32*)entry & 1) && *(EffCallback*)((s32)entry + 0x10) != 0) {
+            (*(EffCallback*)((s32)entry + 0x10))(entry);
+        }
+    }
+
+    if (*(s32*)((s32)wp + 0x14) != *(s32*)((s32)gp + 0x16C)) {
+        if (*(void**)((s32)wp + 0x10) != 0) {
+            fileFree(*(void**)((s32)wp + 0x10));
+            *(void**)((s32)wp + 0x10) = 0;
+        }
+        prefix = prefix_tbl[*(s32*)((s32)gp + 0x16C)];
+        if (fileAsyncf(4, 0, (const char*)0x802C1F20, getMarioStDvdRoot(), prefix, prefix) != 0) {
+            prefix = prefix_tbl[*(s32*)((s32)gp + 0x16C)];
+            *(void**)((s32)wp + 0x10) = fileAllocf(4, (const char*)0x802C1F20, getMarioStDvdRoot(), prefix, prefix);
+            *(s32*)((s32)wp + 0x14) = *(s32*)((s32)gp + 0x16C);
+        }
+    }
 }
 
+void effTexSetup(void) {
+    extern void* arcOpen(const char*, s32, s32);
+    extern void* getMarioStDvdRoot(void);
+    extern s32 sprintf(char*, const char*, ...);
+    extern void* DVDMgrOpen(char*, s32, s32);
+    extern s32 DVDMgrGetLength(void*);
+    extern void* __memAlloc(s32, u32);
+    extern void DVDMgrReadAsync(void*, void*, u32, s32, void (*)(void*, void*));
+    extern void _callback_tpl(void*, void*);
+    extern void UnpackTexPalette(void*);
+    extern void effTexSetupN64(void);
+    char path[0x80];
+    char* lang;
+    void* dvd;
+    u32 len;
 
-u8 effTexSetup(void) {
-    return 0;
+    wp->unk8 = 0;
+    wp->unkC = 0;
+    wp->unk8 = arcOpen((const char*)0x802C1F38, 0, 0);
+    if (wp->unk8 == 0) {
+        lang = (char*)0x80420184;
+        if (*(u32*)((s32)gp + 0x16C) == 0) {
+            lang = (char*)0x80420180;
+        }
+        sprintf(path, (const char*)0x802C1F44, getMarioStDvdRoot(), lang);
+        dvd = DVDMgrOpen(path, 2, 0);
+        len = (DVDMgrGetLength(dvd) + 0x1F) & ~0x1F;
+        wp->unk8 = __memAlloc(0, len);
+        *(void**)((s32)dvd + 0x6C) = dvd;
+        DVDMgrReadAsync(dvd, wp->unk8, len, 0, _callback_tpl);
+    } else {
+        UnpackTexPalette(wp->unk8);
+        wp->unkC = 1;
+    }
+    effTexSetupN64();
 }
 
+void effGetTexObj(s32 id, void* texObj) {
+    extern void GXInitTexObj(void*, void*, s32, s32, s32, s32, s32, s32);
+    extern void TEXGetGXTexObjFromPalette(void*, s32, void*);
 
-u8 effGetTexObj(int param_1, u32* param_2) {
-    return 0;
+    if (id < 0x76) {
+        if (wp->unkC == 0) {
+            GXInitTexObj(texObj, (void*)0x80420188, 1, 1, 0, 0, 0, 0);
+        } else {
+            TEXGetGXTexObjFromPalette(wp->unk8, id, texObj);
+        }
+    } else {
+        void* file = *(void**)((s32)wp + 0x10);
+        if (file == 0) {
+            GXInitTexObj(texObj, (void*)0x8042018C, 1, 1, 0, 0, 0, 0);
+        } else {
+            TEXGetGXTexObjFromPalette(*(void**)*(void**)((s32)file + 0xA0), id - 0x76, texObj);
+        }
+    }
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

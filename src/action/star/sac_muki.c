@@ -165,12 +165,196 @@ void main_star(void) {
 
 /* stub-fill: main_icon | prototype_only | source_prototype */
 void main_icon(s32 index) {
-    return;
+    extern void* get_ptr(void);
+    extern s32 irand(s32 max);
+    extern f32 intplGetValue(s32 type, s32 current, f32 start, f32 end, s32 max);
+    extern u32 vec3_803010e4[];
+    extern u32 vec3_803010f0[];
+    extern f32 float_0_8042854c;
+    extern f32 float_180_80428598;
+    extern f32 float_1080_8042859c;
+    extern f32 float_255_804285a0;
+    extern f32 float_900_804285a4;
+    extern f32 float_9_804285a8;
+
+    void* icon;
+    void* effWork;
+
+    icon = (void*)((s32)get_ptr() + index * 0x38 + 0x1BC);
+    switch (*(s32*)icon) {
+        case 0:
+            *(u32*)((s32)icon + 0xC) = vec3_803010e4[0];
+            *(u32*)((s32)icon + 0x10) = vec3_803010e4[1];
+            *(u32*)((s32)icon + 0x14) = vec3_803010e4[2];
+            *(u8*)((s32)icon + 0x34) = 0xFF;
+            break;
+        case 1:
+            *(s32*)icon = 2;
+            *(s32*)((s32)icon + 4) = 0;
+            *(s32*)((s32)icon + 8) = irand(3);
+            *(f32*)((s32)icon + 0x28) = float_0_8042854c;
+            *(u32*)((s32)icon + 0x18) = vec3_803010f0[0];
+            *(u32*)((s32)icon + 0x1C) = vec3_803010f0[1];
+            *(u32*)((s32)icon + 0x20) = vec3_803010f0[2];
+            /* fallthrough */
+        case 2:
+            *(s32*)((s32)icon + 4) += 1;
+            *(f32*)((s32)icon + 0x28) = intplGetValue(4, *(s32*)((s32)icon + 4), float_180_80428598, float_1080_8042859c, 0x1E);
+            *(u8*)((s32)icon + 0x34) = (s32)intplGetValue(0, *(s32*)((s32)icon + 4), float_0_8042854c, float_255_804285a0, 0x1E);
+            if (*(s32*)((s32)icon + 4) >= 0x1E) {
+                *(s32*)icon = 7;
+            }
+            break;
+        case 3:
+            *(s32*)icon = 4;
+            *(s32*)((s32)icon + 4) = 0;
+            *(f32*)((s32)icon + 0x28) = float_0_8042854c;
+            /* fallthrough */
+        case 4:
+            *(s32*)((s32)icon + 4) += 1;
+            *(f32*)((s32)icon + 0x28) = intplGetValue(1, *(s32*)((s32)icon + 4), float_0_8042854c, float_900_804285a4, 0x1E);
+            *(u8*)((s32)icon + 0x34) = (s32)intplGetValue(0, *(s32*)((s32)icon + 4), float_255_804285a0, float_0_8042854c, 0x1E);
+            if (*(s32*)((s32)icon + 4) >= 0x1E) {
+                *(s32*)icon = 0;
+            }
+            break;
+        case 5:
+            *(s32*)icon = 6;
+            /* fallthrough */
+        case 6:
+            *(s32*)icon = 0;
+            break;
+        case 7:
+            *(s32*)icon = 8;
+            *(s32*)((s32)icon + 4) = 0;
+            *(f32*)((s32)icon + 0x28) = float_0_8042854c;
+            break;
+        case 8:
+            *(s32*)((s32)icon + 4) += 1;
+            *(u8*)((s32)icon + 0x34) = 0xFF;
+            if (*(s32*)((s32)icon + 4) >= 0x5A) {
+                *(s32*)icon = 3;
+            }
+            break;
+        case 9:
+            if (*(u8*)((s32)icon + 0x34) >= 8) {
+                *(u8*)((s32)icon + 0x34) -= 8;
+            } else {
+                *(u8*)((s32)icon + 0x34) = 0;
+            }
+            break;
+    }
+
+    if (*(void**)((s32)icon + 0x30) != 0) {
+        effWork = *(void**)((s32)*(void**)((s32)icon + 0x30) + 0xC);
+        *(f32*)((s32)effWork + 8) = *(f32*)((s32)icon + 0xC);
+        *(f32*)((s32)effWork + 0xC) = *(f32*)((s32)icon + 0x10);
+        *(f32*)((s32)effWork + 0x10) = *(f32*)((s32)icon + 0x14);
+        *(f32*)((s32)effWork + 0x18) = *(f32*)((s32)icon + 0x24);
+        *(f32*)((s32)effWork + 0x1C) = *(f32*)((s32)icon + 0x28);
+        *(f32*)((s32)effWork + 0x20) = *(f32*)((s32)icon + 0x2C);
+        *(f32*)((s32)effWork + 0x14) = float_9_804285a8 * *(f32*)((s32)icon + 0x18);
+        *(u8*)((s32)effWork + 0x5F) = *(u8*)((s32)icon + 0x34);
+    }
 }
 
 /* stub-fill: main_point | prototype_only | source_prototype */
 void main_point(s32 index) {
-    return;
+    extern void* get_ptr(void);
+    extern s32 irand(s32 max);
+    extern f32 intplGetValue(s32 type, s32 current, f32 start, f32 end, s32 max);
+    extern char str_btl_wn_sac_mukimuki__80301078[];
+    extern f32 float_0_8042854c;
+    extern f32 float_0p5_80428568;
+
+    void* work;
+    void* point;
+    void* icon;
+    char* ro;
+    s32 row;
+    s32 col;
+    s32 i;
+    s32 timer;
+    f32 value;
+
+    ro = str_btl_wn_sac_mukimuki__80301078;
+    work = get_ptr();
+    point = (void*)((s32)work + index * 0x24 + 0x78);
+
+    switch (*(s32*)point) {
+        case 1:
+            *(s32*)point = 2;
+            *(s32*)((s32)point + 4) = irand(0x1E) + 0x1E;
+            row = index / 3;
+            col = index - row * 3;
+            *(f32*)((s32)point + 8) = (f32)(col * 0x30 - 0x30);
+            *(f32*)((s32)point + 0xC) = (f32)(0x7D - row * 0x30);
+            *(u32*)((s32)point + 0x10) = *(u32*)(ro + 0x50);
+            *(u32*)((s32)point + 0x14) = *(u32*)(ro + 0x54);
+            *(u32*)((s32)point + 0x18) = *(u32*)(ro + 0x58);
+            *(u32*)((s32)point + 0x1C) = *(u32*)(ro + 0x5C);
+            *(void**)((s32)point + 0x20) = 0;
+            /* fallthrough */
+        case 2:
+            timer = *(s32*)((s32)point + 4) - 1;
+            *(s32*)((s32)point + 4) = timer;
+            if (timer <= 0x1E) {
+                value = intplGetValue(0, 0x1E - timer, float_0_8042854c, float_0p5_80428568, 0x1E);
+                *(f32*)((s32)point + 0x18) = value;
+                *(f32*)((s32)point + 0x14) = value;
+            }
+            if (*(s32*)((s32)point + 4) <= 0) {
+                *(s32*)point = 3;
+                *(s32*)((s32)point + 4) = 0;
+            }
+            break;
+        case 3:
+            *(s32*)point = 4;
+            *(s32*)((s32)point + 4) = 0;
+            *(u32*)((s32)point + 0x14) = *(u32*)(ro + 0x60);
+            *(u32*)((s32)point + 0x18) = *(u32*)(ro + 0x64);
+            *(u32*)((s32)point + 0x1C) = *(u32*)(ro + 0x68);
+            break;
+        case 4:
+            icon = *(void**)((s32)point + 0x20);
+            if (icon != 0) {
+                if (*(s32*)icon == 0) {
+                    *(void**)((s32)point + 0x20) = 0;
+                }
+            } else if (irand(0x41) == 0) {
+                for (i = 0; i < 9; i++) {
+                    icon = (void*)((s32)work + i * 0x38 + 0x1BC);
+                    if (*(s32*)icon == 0) {
+                        *(s32*)icon = 1;
+                        *(u32*)((s32)icon + 0xC) = *(u32*)((s32)point + 8);
+                        *(u32*)((s32)icon + 0x10) = *(u32*)((s32)point + 0xC);
+                        *(u32*)((s32)icon + 0x14) = *(u32*)((s32)point + 0x10);
+                        *(f32*)((s32)icon + 0x14) = float_0_8042854c;
+                        *(void**)((s32)point + 0x20) = icon;
+                        break;
+                    }
+                }
+            }
+            break;
+        case 6:
+            *(s32*)point = 7;
+            *(s32*)((s32)point + 4) = irand(0x1E) + 0x1E;
+            *(void**)((s32)point + 0x20) = 0;
+            /* fallthrough */
+        case 7:
+            timer = *(s32*)((s32)point + 4) - 1;
+            *(s32*)((s32)point + 4) = timer;
+            if (timer <= 0x1E) {
+                value = intplGetValue(0, 0x1E - timer, float_0p5_80428568, float_0_8042854c, 0x1E);
+                *(f32*)((s32)point + 0x18) = value;
+                *(f32*)((s32)point + 0x14) = value;
+            }
+            if (*(s32*)((s32)point + 4) <= 0) {
+                *(s32*)point = 8;
+                *(s32*)((s32)point + 4) = 0;
+            }
+            break;
+    }
 }
 
 /* stub-fill: main_cursor | prototype_only | source_prototype */

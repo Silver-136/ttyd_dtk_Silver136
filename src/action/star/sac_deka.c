@@ -248,7 +248,60 @@ void main_star(void) {
 
 /* stub-fill: main_gauge | prototype_only | source_prototype */
 void main_gauge(void) {
-    return;
+    extern void* get_ptr(void);
+    extern f32 intplGetValue(s32 type, s32 current, f32 start, f32 end, s32 max);
+    extern f32 float_500_80428470;
+    extern f32 float_neg1000_8042844c;
+    extern f32 float_0_80428424;
+    extern u32 vec3_80300ec8[];
+
+    void* work = get_ptr();
+    s32 blink;
+
+    switch (*(s32*)((s32)work + 0x50)) {
+        case 1:
+            *(s32*)((s32)work + 0x50) = 2;
+            *(s32*)((s32)work + 0x54) = 0;
+            *(f32*)((s32)work + 0x58) = float_500_80428470;
+            *(u32*)((s32)work + 0x5C) = vec3_80300ec8[0];
+            *(u32*)((s32)work + 0x60) = vec3_80300ec8[1];
+            *(u32*)((s32)work + 0x64) = vec3_80300ec8[2];
+            *(u8*)((s32)work + 0x68) = 0xFF;
+            /* fallthrough */
+        case 2:
+            *(s32*)((s32)work + 0x54) += 1;
+            *(f32*)((s32)work + 0x5C) = intplGetValue(4, *(s32*)((s32)work + 0x54), float_neg1000_8042844c, float_0_80428424, 0x1E);
+            if (*(s32*)((s32)work + 0x54) >= 0x1E) {
+                *(s32*)((s32)work + 0x50) = 3;
+                *(s32*)((s32)work + 0x54) = 0;
+            }
+            break;
+        case 3:
+            *(s32*)((s32)work + 0x54) = 0;
+            break;
+        case 4:
+            *(s32*)((s32)work + 0x54) += 1;
+            blink = *(s32*)((s32)work + 0x54) % 12;
+            if (blink >= 0 && blink <= 5) {
+                *(u8*)((s32)work + 0x68) = 0;
+            } else {
+                *(u8*)((s32)work + 0x68) = 0xFF;
+            }
+            if (*(s32*)((s32)work + 0x54) >= 0x50) {
+                *(s32*)((s32)work + 0x50) = 5;
+                *(s32*)((s32)work + 0x54) = 0;
+                *(u8*)((s32)work + 0x68) = 0xFF;
+            }
+            break;
+        case 5:
+            *(s32*)((s32)work + 0x54) += 1;
+            *(f32*)((s32)work + 0x5C) = intplGetValue(4, *(s32*)((s32)work + 0x54), float_0_80428424, float_neg1000_8042844c, 0x1E);
+            if (*(s32*)((s32)work + 0x54) >= 0x1E) {
+                *(s32*)((s32)work + 0x50) = 3;
+                *(s32*)((s32)work + 0x54) = 0;
+            }
+            break;
+    }
 }
 
 /* stub-fill: main_base | prototype_only | source_prototype */

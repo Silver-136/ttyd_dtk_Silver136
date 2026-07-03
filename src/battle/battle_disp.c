@@ -212,9 +212,77 @@ u8 btlDispTexPlainGX(void) {
 
 
 void _pose_two_pattern(void* part) {
-    ;
-}
+    extern u8 vec3_802ee3a0[];
+    extern s32 sysMsec2Frame(s32 msec);
+    extern s32 irand(s32 max);
+    u8* base;
+    s32 frame;
 
+    base = vec3_802ee3a0;
+    switch (*(u8*)((s32)part + 0x214)) {
+        case 0:
+            *(u8*)((s32)part + 0x214) = 1;
+            switch (*(u8*)((s32)part + 0x215)) {
+                case 4:
+                    animPoseSetEffect(*(void**)((s32)part + 0x1C0), (s32)(base + 0x68), 1);
+                    animPoseSetEffectAnim(*(void**)((s32)part + 0x1C0), (s32)(base + 0x70), 1);
+                    *(u16*)((s32)part + 0x216) = sysMsec2Frame(0x898);
+                    break;
+                case 5:
+                    animPoseSetEffect(*(void**)((s32)part + 0x1C0), (s32)(base + 0x68), 1);
+                    animPoseSetEffectAnim(*(void**)((s32)part + 0x1C0), (s32)(base + 0x78), 1);
+                    frame = sysMsec2Frame(0x898);
+                    *(u16*)((s32)part + 0x216) = (irand(4) + 6) * frame;
+                    break;
+                case 6:
+                    animPoseSetEffect(*(void**)((s32)part + 0x1C0), (s32)(base + 0x68), 1);
+                    animPoseSetEffectAnim(*(void**)((s32)part + 0x1C0), (s32)(base + 0x80), 1);
+                    *(u16*)((s32)part + 0x216) = (irand(4) + 7) * 0x16;
+                    break;
+            }
+            break;
+        case 1:
+            switch (*(u8*)((s32)part + 0x215)) {
+                case 4:
+                    *(u16*)((s32)part + 0x216) = *(u16*)((s32)part + 0x216) - 1;
+                    if (*(u16*)((s32)part + 0x216) == 0) {
+                        animPoseSetEffectAnim(*(void**)((s32)part + 0x1C0), (s32)(base + 0x70), 1);
+                        *(u16*)((s32)part + 0x216) = sysMsec2Frame(0x898);
+                    }
+                    break;
+                case 5:
+                    *(u16*)((s32)part + 0x216) = *(u16*)((s32)part + 0x216) - 1;
+                    if (*(u16*)((s32)part + 0x216) == 0) {
+                        *(u8*)((s32)part + 0x214) = 2;
+                        animPoseSetEffectAnim(*(void**)((s32)part + 0x1C0), (s32)(base + 0x88), 1);
+                        *(u16*)((s32)part + 0x216) = 0x16;
+                    }
+                    break;
+                case 6:
+                    *(u16*)((s32)part + 0x216) = *(u16*)((s32)part + 0x216) - 1;
+                    if (*(u16*)((s32)part + 0x216) == 0) {
+                        *(u8*)((s32)part + 0x214) = 2;
+                        animPoseSetEffectAnim(*(void**)((s32)part + 0x1C0), (s32)(base + 0x90), 1);
+                        *(u16*)((s32)part + 0x216) = 0x16;
+                    }
+                    break;
+            }
+            break;
+        case 2:
+            switch (*(u8*)((s32)part + 0x215)) {
+                case 4:
+                case 5:
+                case 6:
+                    *(u16*)((s32)part + 0x216) = *(u16*)((s32)part + 0x216) - 1;
+                    if (*(u16*)((s32)part + 0x216) == 0) {
+                        *(u8*)((s32)part + 0x214) = 0;
+                        _pose_two_pattern(part);
+                    }
+                    break;
+            }
+            break;
+    }
+}
 
 void _btlStockExpDisp(void) {
     ;
@@ -222,9 +290,53 @@ void _btlStockExpDisp(void) {
 
 
 void btlUnitPartsBlurDisp(s32 param_1, void* part) {
-    ;
-}
+    extern void animPoseSetMaterialEvtColor(s32 poseId, void* color);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
+    extern void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, f32 rot, f32 scale);
+    s32 i;
+    s32 offset;
+    s32 base;
+    s32 entry;
+    u32 color;
+    u32 colorCopy;
+    u8* colorBytes;
+    s32 inv;
+    s32 r;
+    s32 g;
+    s32 b;
+    s32 a;
 
+    base = (s32)part + 0x21C;
+    for (i = 0, offset = 0; i < 10; i++, offset += 0x44) {
+        entry = base + offset + 0xC;
+        color = *(u32*)(entry + 0x38);
+        if ((*(u32*)entry & 1) != 0) {
+            inv = 10 - i;
+            colorBytes = (u8*)&color;
+
+            r = (((*(u8*)(entry + 0x3C) * inv) / 10) + ((*(u8*)(entry + 0x40) * i) / 10)) & 0xFF;
+            colorBytes[0] = (u8)((colorBytes[0] * r) / 255);
+
+            g = (((*(u8*)(entry + 0x3D) * inv) / 10) + ((*(u8*)(entry + 0x41) * i) / 10)) & 0xFF;
+            colorBytes[1] = (u8)((colorBytes[1] * g) / 255);
+
+            a = (((*(u8*)(entry + 0x3F) * inv) / 10) + ((*(u8*)(entry + 0x43) * i) / 10)) & 0xFF;
+            colorBytes[3] = (u8)((colorBytes[3] * a) / 255);
+
+            b = (((*(u8*)(entry + 0x3E) * inv) / 10) + ((*(u8*)(entry + 0x42) * i) / 10)) & 0xFF;
+            colorBytes[2] = (u8)((colorBytes[2] * b) / 255);
+
+            if (colorBytes[3] != 0) {
+                colorCopy = color;
+                animPoseSetMaterialEvtColor(*(s32*)((s32)part + 0x1C0), &colorCopy);
+                animPoseSetMaterialFlagOn(*(s32*)((s32)part + 0x1C0), 0x40);
+                animPoseDrawMtx(*(s32*)((s32)part + 0x1C0), (void*)(entry + 4), 1, *(f32*)(entry + 0x34), float_2_80422250);
+                animPoseDrawMtx(*(s32*)((s32)part + 0x1C0), (void*)(entry + 4), 2, *(f32*)(entry + 0x34), float_2_80422250);
+                animPoseDrawMtx(*(s32*)((s32)part + 0x1C0), (void*)(entry + 4), 3, *(f32*)(entry + 0x34), float_2_80422250);
+            }
+        }
+    }
+}
 
 u8 _btlDispTex4(s32 param_1, float* param_2, float* param_3, float* param_4, float* param_5, float* param_6, void* param_7) {
     return 0;

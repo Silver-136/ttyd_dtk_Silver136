@@ -2233,10 +2233,59 @@ void mapUnLoad(void) {
     memset(work, 0, 0x2F4);
 }
 
-u8 mapObjRotate(s64 x, s64 y, s64 z, s32 pName) {
-    return 0;
-}
+u8 mapObjRotate(char* name, f32 x, f32 y, f32 z) {
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    extern s32 strcmp(const char*, const char*);
+    extern void PSMTXIdentity(void*);
+    extern void PSMTXRotRad(void*, s8, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern f32 float_deg2rad_8041f948;
+    void* work;
+    void* group;
+    void* obj;
+    s32 groupIndex;
+    s32 objIndex;
+    f32 mtxX[3][4];
+    f32 mtxY[3][4];
+    f32 mtxZ[3][4];
 
+    work = (void*)(mapWork + activeGroup * 0x2F4);
+    if (name == 0) {
+        obj = 0;
+    } else {
+        group = work;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)work) {
+            obj = *(void**)((s32)group + 0x154);
+            objIndex = 0;
+            while (objIndex < *(s32*)((s32)group + 0x150)) {
+                if (strcmp(*(const char**)*(s32*)((s32)obj + 8), name) == 0) {
+                    goto found;
+                }
+                objIndex++;
+                obj = (void*)((s32)obj + 0x134);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        obj = 0;
+    }
+
+found:
+    if (obj != 0) {
+        if ((*(u32*)obj & 0x200) == 0) {
+            PSMTXIdentity((void*)((s32)obj + 0xAC));
+        }
+        PSMTXRotRad(mtxX, 'x', float_deg2rad_8041f948 * x);
+        PSMTXRotRad(mtxY, 'y', float_deg2rad_8041f948 * y);
+        PSMTXRotRad(mtxZ, 'z', float_deg2rad_8041f948 * z);
+        PSMTXConcat((void*)((s32)obj + 0xAC), mtxZ, (void*)((s32)obj + 0xAC));
+        PSMTXConcat((void*)((s32)obj + 0xAC), mtxY, (void*)((s32)obj + 0xAC));
+        PSMTXConcat((void*)((s32)obj + 0xAC), mtxX, (void*)((s32)obj + 0xAC));
+        *(u32*)obj |= 0x2000200;
+    }
+}
 
 u8 bmapLoad(char* rankStageName, char* battleStageName) {
     return 0;
@@ -2254,14 +2303,107 @@ u8 mapDispMapObj_bbox(int param_1, int param_2) {
 
 
 u8 mapObjGetPos(char* param_1, void* param_2) {
-    return 0;
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    extern s32 strcmp(const char*, const char*);
+    extern void mapObjGetPosSub(void*, void*, s32*, s32);
+    extern void PSVECScale(void*, void*, f32);
+    extern f32 float_1_8041f940;
+    extern f32 vec3_802bfb74[3];
+    extern f32 vec3_802bfb80[3];
+    void* work;
+    void* group;
+    void* obj;
+    s32 groupIndex;
+    s32 objIndex;
+    s32 count;
+    f32 pos[3];
+
+    count = 0;
+    pos[0] = vec3_802bfb74[0];
+    pos[1] = vec3_802bfb74[1];
+    pos[2] = vec3_802bfb74[2];
+    work = (void*)(mapWork + activeGroup * 0x2F4);
+
+    if (param_1 == 0) {
+        obj = 0;
+    } else {
+        group = work;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)work) {
+            obj = *(void**)((s32)group + 0x154);
+            objIndex = 0;
+            while (objIndex < *(s32*)((s32)group + 0x150)) {
+                if (strcmp(*(const char**)*(s32*)((s32)obj + 8), param_1) == 0) {
+                    goto found;
+                }
+                objIndex++;
+                obj = (void*)((s32)obj + 0x134);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        obj = 0;
+    }
+
+found:
+    if (obj == 0) {
+        ((f32*)param_2)[0] = vec3_802bfb80[0];
+        ((f32*)param_2)[1] = vec3_802bfb80[1];
+        ((f32*)param_2)[2] = vec3_802bfb80[2];
+    } else {
+        mapObjGetPosSub(obj, pos, &count, 0);
+        PSVECScale(pos, param_2, float_1_8041f940 / (f32)count);
+    }
 }
 
+u8 mapObjTranslate(char* name, f32 x, f32 y, f32 z) {
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    extern s32 strcmp(const char*, const char*);
+    extern void PSMTXIdentity(void*);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern f32 float_10_8041f944;
+    void* work;
+    void* group;
+    void* obj;
+    s32 groupIndex;
+    s32 objIndex;
+    f32 mtx[3][4];
 
-u8 mapObjTranslate(void) {
-    return 0;
+    work = (void*)(mapWork + activeGroup * 0x2F4);
+    if (name == 0) {
+        obj = 0;
+    } else {
+        group = work;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)work) {
+            obj = *(void**)((s32)group + 0x154);
+            objIndex = 0;
+            while (objIndex < *(s32*)((s32)group + 0x150)) {
+                if (strcmp(*(const char**)*(s32*)((s32)obj + 8), name) == 0) {
+                    goto found;
+                }
+                objIndex++;
+                obj = (void*)((s32)obj + 0x134);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        obj = 0;
+    }
+
+found:
+    if (obj != 0) {
+        if ((*(u32*)obj & 0x200) == 0) {
+            PSMTXIdentity((void*)((s32)obj + 0xAC));
+        }
+        PSMTXTrans(mtx, x / float_10_8041f944, y / float_10_8041f944, z / float_10_8041f944);
+        PSMTXConcat((void*)((s32)obj + 0xAC), mtx, (void*)((s32)obj + 0xAC));
+        *(u32*)obj |= 0x2000200;
+    }
 }
-
 
 void mapObjGetFlushColor(char* pName, void* param_2, void* param_3, void* param_4, void* param_5) {
     extern s32 activeGroup;
@@ -2387,10 +2529,52 @@ done:
     }
 }
 
-u8 mapObjScale(s64 param_1, s64 param_2, s64 param_3, char* param_4) {
-    return 0;
-}
+u8 mapObjScale(char* name, f32 x, f32 y, f32 z) {
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    extern s32 strcmp(const char*, const char*);
+    extern void PSMTXIdentity(void*);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    void* work;
+    void* group;
+    void* obj;
+    s32 groupIndex;
+    s32 objIndex;
+    f32 mtx[3][4];
 
+    work = (void*)(mapWork + activeGroup * 0x2F4);
+    if (name == 0) {
+        obj = 0;
+    } else {
+        group = work;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)work) {
+            obj = *(void**)((s32)group + 0x154);
+            objIndex = 0;
+            while (objIndex < *(s32*)((s32)group + 0x150)) {
+                if (strcmp(*(const char**)*(s32*)((s32)obj + 8), name) == 0) {
+                    goto found;
+                }
+                objIndex++;
+                obj = (void*)((s32)obj + 0x134);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        obj = 0;
+    }
+
+found:
+    if (obj != 0) {
+        if ((*(u32*)obj & 0x200) == 0) {
+            PSMTXIdentity((void*)((s32)obj + 0xAC));
+        }
+        PSMTXScale(mtx, x, y, z);
+        PSMTXConcat((void*)((s32)obj + 0xAC), mtx, (void*)((s32)obj + 0xAC));
+        *(u32*)obj |= 0x2000200;
+    }
+}
 
 void mapGrpFlagOff(s32 param_1, u32 param_2) {
     extern s32 activeGroup;
@@ -3043,9 +3227,41 @@ void* mapGetMapObj(s32 name) {
 
 
 u8 test_kururing_mapdisp(s32 cam) {
-    return 0;
-}
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    extern void _mapDispMapObj(s32 cam, void* obj);
 
+    void* work;
+    void* group;
+    void* obj;
+    s32 groupCount;
+    s32 objCount;
+    s32 i;
+    s32 j;
+    u32 flags;
+
+    work = (void*)(mapWork + activeGroup * 0x2F4);
+    group = work;
+    groupCount = *(s32*)work;
+
+    for (i = 0; i < groupCount; i++) {
+        obj = *(void**)((s32)group + 0x154);
+        objCount = *(s32*)((s32)group + 0x150);
+
+        for (j = 0; j < objCount; j++) {
+            flags = *(u32*)obj;
+            if ((flags & 0x400000) != 0) {
+                *(u32*)obj = flags & 0xFFFFFFFD;
+                _mapDispMapObj(cam, obj);
+                *(u32*)obj = flags;
+            }
+
+            obj = (void*)((s32)obj + 0x134);
+        }
+
+        group = (void*)((s32)group + 0x178);
+    }
+}
 
 void mapSetMaterialFog(void) {
     extern s32 activeGroup;
@@ -4229,9 +4445,34 @@ done:
 }
 
 s32 mapTestXLU(u32 materialFlag, void* param_2, void* param_3) {
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    void* work;
+
+    if ((materialFlag & 0x40) && (*(u8*)((s32)param_2 + 3) != 0xFF)) {
+        return 1;
+    }
+
+    if (*(u8*)((s32)param_3 + 3) != 0xFF) {
+        return 1;
+    }
+
+    if ((materialFlag & 0x800) == 0) {
+        work = (void*)(mapWork + activeGroup * 0x2F4);
+        if ((*(u16*)((s32)work + 4) & 2) && (*(u8*)((s32)work + 0x19) != 0xFF)) {
+            return 1;
+        }
+    }
+
+    if ((materialFlag & 0x1000) == 0) {
+        work = (void*)(mapWork + activeGroup * 0x2F4);
+        if ((*(u16*)((s32)work + 4) & 4) && (*(u8*)((s32)work + 0x1D) != 0xFF)) {
+            return 1;
+        }
+    }
+
     return 0;
 }
-
 
 void* mapSearchAnmObj(char* name) {
     extern s32 activeGroup;

@@ -1027,9 +1027,55 @@ void _rule_disp(void) {
 
 
 void btlseqInit(void* battleWork) {
-    ;
-}
+    extern u8 N_weapon_lucky_start[];
+    extern void* marioGetPtr(void);
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32);
+    extern void Btl_UnitSetup(void*);
+    extern s32 BattleCheckEndUnitInitEvent(void*);
+    extern s32 animEffectAsync(void*, s32);
+    extern s32 effNiceAsync(s32);
+    extern void BattleStatusWindowEventOn(void);
+    extern void BattleStatusWindowSystemOn(void);
+    void* ptr;
 
+    switch (BattleGetSeq(battleWork, 1)) {
+        case 0x1000000:
+            BattleSetSeq(battleWork, 1, 1);
+        case 0x1000001:
+            ptr = marioGetPtr();
+            *(u32*)((s32)ptr + 4) |= 1;
+            ptr = partyGetPtr(marioGetPartyId());
+            if (ptr != 0) {
+                *(u32*)((s32)ptr + 4) |= 1;
+            }
+            Btl_UnitSetup(battleWork);
+            BattleSetSeq(battleWork, 1, 0x1000002);
+            break;
+        case 0x1000002:
+            if (BattleCheckEndUnitInitEvent(battleWork) != 0) {
+                BattleSetSeq(battleWork, 1, 0x1000003);
+            }
+            break;
+        case 0x1000003:
+            if (animEffectAsync(N_weapon_lucky_start + 0x3AC, 1) != 0 &&
+                animEffectAsync(N_weapon_lucky_start + 0x3B4, 1) != 0 &&
+                animEffectAsync(N_weapon_lucky_start + 0x3C0, 1) != 0 &&
+                effNiceAsync(1) != 0) {
+                BattleSetSeq(battleWork, 1, 0x1000004);
+            }
+            break;
+        case 0x1000004:
+            BattleSetSeq(battleWork, 1, 1);
+            break;
+        case 0x1000005:
+            BattleStatusWindowEventOn();
+            BattleStatusWindowSystemOn();
+            BattleSetSeq(battleWork, 0, 1);
+            BattleSetSeq(battleWork, 2, 0x2000000);
+            break;
+    }
+}
 
 s32 BattleCheckConcluded(void* battleWork) {
     return 0;
@@ -1125,5 +1171,62 @@ void* _GetFirstAttackWeapon(u32 firstAttackType) {
 
 
 void battleSortPhaseMoveTable(void* battleWork, s32 arg) {
-    ;
+    extern void BtlUnit_GetHomePos(void*, f32*, f32*, f32*);
+    void* unitA;
+    void* unitB;
+    s32 count;
+    s32 i;
+    s32 j;
+    s32 offset;
+    s32 temp;
+    f32 ax;
+    f32 ay;
+    f32 az;
+    f32 bx;
+    f32 by;
+    f32 bz;
+
+    count = arg;
+    if (count <= 0) {
+        count = 0;
+        offset = 0;
+        for (i = 0; i < 0x40; i++) {
+            if (*(s32*)((s32)battleWork + 0x120 + offset) == -1) {
+                break;
+            }
+            count++;
+            offset += 4;
+        }
+    }
+
+    for (i = 0; i < count - 1; i++) {
+        offset = 0;
+        for (j = 0; j < count - i - 1; j++) {
+            unitA = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x120 + offset));
+            unitB = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x124 + offset));
+            BtlUnit_GetHomePos(unitA, &ax, &ay, &az);
+            BtlUnit_GetHomePos(unitB, &bx, &by, &bz);
+            if (__fabsf(ax) > __fabsf(bx)) {
+                temp = *(s32*)((s32)battleWork + 0x120 + offset);
+                *(s32*)((s32)battleWork + 0x120 + offset) = *(s32*)((s32)battleWork + 0x124 + offset);
+                *(s32*)((s32)battleWork + 0x124 + offset) = temp;
+            }
+            offset += 4;
+        }
+    }
+
+    for (i = 0; i < count - 1; i++) {
+        offset = 0;
+        for (j = 0; j < count - i - 1; j++) {
+            unitA = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x120 + offset));
+            unitB = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x124 + offset));
+            if (*(s32*)((s32)unitA + 0x28) < *(s32*)((s32)unitB + 0x28)) {
+                temp = *(s32*)((s32)battleWork + 0x120 + offset);
+                *(s32*)((s32)battleWork + 0x120 + offset) = *(s32*)((s32)battleWork + 0x124 + offset);
+                *(s32*)((s32)battleWork + 0x124 + offset) = temp;
+            }
+            offset += 4;
+        }
+    }
 }
+

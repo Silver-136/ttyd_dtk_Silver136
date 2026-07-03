@@ -807,23 +807,322 @@ void scissor_disp_control(void) {
 }
 
 /* stub-fill: scissor_damage_sub | missing_definition | ghidra_signature */
-u8 scissor_damage_sub(void) {
-    return 0;
+void scissor_damage_sub(void* unit, s32* out) {
+    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+    extern void btlGetScreenPoint(f32* in, f32* out);
+    extern s32 scissor_damage_sub2(f32* pos);
+    extern f32 float_neg1_80427cb0;
+    extern f32 float_1_80427cb4;
+    extern f32 float_0p5_80427ca8;
+    extern f32 float_9_80427cb8;
+    extern f32 float_100_80427cbc;
+    extern f32 float_0p3_80427cc0;
+    extern f32 float_0p6_80427cc4;
+    extern f32 float_0p9_80427cc8;
+
+    f32 pos[3];
+    f32 test[3];
+    f32 screen[3];
+    f32 side;
+    f32 width;
+    f32 height;
+    f32 halfWidth;
+    f32 halfHeight;
+    f32 ratio;
+    s32 hits;
+    s32 i;
+    s32 j;
+
+    hits = 0;
+    if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
+        side = float_neg1_80427cb0;
+    } else {
+        side = float_1_80427cb4;
+    }
+
+    width = *(f32*)((s32)unit + 0xE4) * *(f32*)((s32)unit + 0x114);
+    height = *(f32*)((s32)unit + 0xE8) * *(f32*)((s32)unit + 0x114);
+    BtlUnit_GetPos(unit, &pos[0], &pos[1], &pos[2]);
+    pos[0] += *(f32*)((s32)unit + 0xD8) * *(f32*)((s32)unit + 0x114);
+    pos[1] += side * (*(f32*)((s32)unit + 0xDC) * *(f32*)((s32)unit + 0x114));
+
+    halfHeight = float_0p5_80427ca8 * -height;
+    halfWidth = float_0p5_80427ca8 * width;
+
+    for (i = 0; i < 10; i++) {
+        f32 xStep = ((f32)i * width) / float_9_80427cb8;
+        for (j = 0; j < 10; j++) {
+            test[0] = (pos[0] - halfWidth) + xStep;
+            test[1] = pos[1] + side * (halfHeight + (((f32)j * height) / float_9_80427cb8));
+            test[2] = pos[2];
+            btlGetScreenPoint(test, test);
+            screen[0] = test[0];
+            screen[1] = test[1];
+            screen[2] = test[2];
+            if (scissor_damage_sub2(screen) != 0) {
+                hits++;
+            }
+        }
+    }
+
+    ratio = (f32)hits / float_100_80427cbc;
+    *out = 0;
+    if (ratio >= float_0p3_80427cc0) {
+        *out = 1;
+    }
+    if (ratio >= float_0p6_80427cc4) {
+        *out = 2;
+    }
+    if (ratio >= float_0p9_80427cc8) {
+        *out = 3;
+    }
 }
 
 /* stub-fill: scissor_damage | missing_definition | ghidra_signature */
-s32 scissor_damage(int param_1) {
-    return 0;
+s32 scissor_damage(EventEntry* event) {
+    extern void* _battleWorkPointer;
+    extern void* GetScissorPtr(void);
+    extern void* BattleGetMarioPtr(void* battleWork);
+    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
+    extern s8 BtlUnit_GetBelong(void* unit);
+    extern s32 BtlUnit_GetBodyPartsId(void* unit);
+    extern void* BtlUnit_GetPartsPtr(void* unit, s32 partsId);
+    extern s32 BtlUnit_CheckStatus(void* unit, s32 status);
+    extern void scissor_damage_sub(void* unit, s32* out);
+    extern void BattleCheckDamage(void* attacker, void* target, void* parts, void* weapon, s32 flags);
+    extern s32 BattleAudience_GetAudienceNum(void);
+    extern void BattleAudienceSoundCallKind(s32 kind);
+    extern void BattleAudienceSoundHandBeat(void);
+    extern void BattleAudienceSoundSetVol(s32 kind, u8 volume, s32 frames);
+    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
+    extern void weapon_scissor;
+
+    void* battleWork;
+    void* mario;
+    void* work;
+    void* unit;
+    void* parts;
+    s32* args;
+    s32 total;
+    s32 allHit;
+    s32 didDamage;
+    s32 audience;
+    s32 damage;
+    s32 i;
+    s32 offset;
+
+    battleWork = _battleWorkPointer;
+    args = event->args;
+    mario = BattleGetMarioPtr(battleWork);
+    work = GetScissorPtr();
+    total = 0;
+    offset = 0;
+    allHit = 1;
+    audience = BattleAudience_GetAudienceNum();
+    didDamage = 0;
+
+    for (i = 0; i < 0x40; i++) {
+        unit = BattleGetUnitPtr(battleWork, i);
+        if (unit != 0 && BtlUnit_GetBelong(unit) == 1) {
+            parts = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
+            if (BtlUnit_CheckStatus(unit, 0x1B) != 1 &&
+                ((*(u32*)((s32)parts + 0x1AC) & 0x00004000) == 0) &&
+                ((*(u32*)((s32)parts + 0x1AC) & 0x20000000) == 0) &&
+                ((*(u32*)((s32)parts + 0x1AC) & 0x00010000) == 0) &&
+                (s8)**(u8**)((s32)parts + 0x1B8) != 4 &&
+                (s8)**(u8**)((s32)parts + 0x1B8) != 2) {
+                scissor_damage_sub(unit, &damage);
+                *(s32*)((s32)work + offset + 0x18) = i;
+                *(s32*)((s32)work + offset + 0x58) = damage;
+                total++;
+                offset += 4;
+                if (damage < 1) {
+                    allHit = 0;
+                }
+            }
+        }
+    }
+
+    if (total == 0) {
+        allHit = 0;
+    }
+
+    offset = 0;
+    for (i = 0; i < total; i++) {
+        s32 id = *(s32*)((s32)work + offset + 0x18);
+        if (id != -1 && *(s32*)((s32)work + offset + 0x58) >= 1) {
+            unit = BattleGetUnitPtr(battleWork, id);
+            parts = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
+            BattleCheckDamage(mario, unit, parts, &weapon_scissor, 0);
+            didDamage = 1;
+        }
+        offset += 4;
+    }
+
+    if (allHit == 1) {
+        s32 value = *(s32*)((s32)work + 0xC) + 1;
+        *(s32*)((s32)work + 0xC) = value;
+        value++;
+        if (value >= 7) {
+            value = 6;
+        }
+        evtSetValue(event, args[0], value);
+    } else {
+        evtSetValue(event, args[0], -1);
+    }
+
+    if (didDamage == 1) {
+        if (audience >= 1 && audience <= 0x31) {
+            BattleAudienceSoundCallKind(1);
+        }
+        if (audience >= 0x32 && audience <= 0x63) {
+            BattleAudienceSoundCallKind(1);
+            BattleAudienceSoundHandBeat();
+        }
+        if (audience >= 0x64 && audience <= 0x95) {
+            BattleAudienceSoundCallKind(2);
+        }
+        if (audience >= 0x96) {
+            BattleAudienceSoundCallKind(2);
+            BattleAudienceSoundHandBeat();
+        }
+        *(u8*)((s32)work + 0x98) += 0x14;
+        if (*(u8*)((s32)work + 0x98) >= 0x64) {
+            *(u8*)((s32)work + 0x98) = 0x64;
+        }
+        BattleAudienceSoundSetVol(4, *(u8*)((s32)work + 0x98), 0x1E);
+    }
+
+    return 2;
 }
 
 /* stub-fill: star_disp2D_sub | prototype_only | source_prototype */
 void star_disp2D_sub(s32 id, s32 alpha) {
-    return;
+    extern void* GetScissorPtr(void);
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+    extern void PSMTXTrans(f32 mtx[3][4], f32 x, f32 y, f32 z);
+    extern void PSMTXScale(f32 mtx[3][4], f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(f32 mtx[3][4], s32 axis, f32 rad);
+    extern void PSMTXConcat(f32 a[3][4], f32 b[3][4], f32 out[3][4]);
+    extern void iconDispGxCol(f32 mtx[3][4], s32 size, s32 iconId, void* color);
+    extern u32 dat_80427c78;
+    extern f32 float_0_80427c94;
+    extern f32 float_20_80427cf4;
+    extern f32 float_deg2rad_80427cf8;
+
+    void* work;
+    f32* hist;
+    f32 trans[3][4];
+    f32 scale[3][4];
+    f32 rotX[3][4];
+    f32 rotY[3][4];
+    f32 rotZ[3][4];
+    f32 mtx[3][4];
+    u32 color;
+    f32 x;
+    f32 y;
+
+    work = GetScissorPtr();
+    hist = (f32*)((s32)work + 0x9C);
+    if (*(s32*)((s32)work + 0x11C) >= 6) {
+        *(s32*)((s32)work + 0x120) = *(s32*)((s32)work + 0x120) + 1;
+        if (*(s32*)((s32)work + 0x120) > 0x1E) {
+            *(s32*)((s32)work + 0x120) = 0x1E;
+        }
+        alpha = (s32)intplGetValue(0, *(s32*)((s32)work + 0x120), 0x1E,
+                                   float_0_80427c94, (f32)(u8)alpha);
+    }
+
+    color = dat_80427c78;
+    ((u8*)&color)[3] = alpha;
+
+    if (id == 0) {
+        x = hist[6];
+        y = hist[7];
+    } else {
+        x = *(f32*)((s32)hist + (id * 4) + 0x3C);
+        y = *(f32*)((s32)hist + (id * 4) + 0x4C);
+    }
+
+    PSMTXTrans(trans, x, y - float_20_80427cf4, float_0_80427c94);
+    PSMTXScale(scale, *(f32*)((s32)work + 0x154), *(f32*)((s32)work + 0x158), *(f32*)((s32)work + 0x15C));
+    PSMTXRotRad(rotX, 0x78, float_deg2rad_80427cf8 * *(f32*)((s32)work + 0x160));
+    PSMTXRotRad(rotY, 0x79, float_deg2rad_80427cf8 * *(f32*)((s32)work + 0x164));
+    PSMTXRotRad(rotZ, 0x7A, float_deg2rad_80427cf8 * *(f32*)((s32)work + 0x168));
+    PSMTXConcat(rotZ, rotY, mtx);
+    PSMTXConcat(rotX, mtx, mtx);
+    PSMTXConcat(scale, mtx, mtx);
+    PSMTXConcat(trans, mtx, mtx);
+    iconDispGxCol(mtx, 0x10, 0x1A4, &color);
 }
 
 /* stub-fill: tess | prototype_only | source_prototype */
 void tess(void* entries, s32 count) {
-    return;
+    extern void* GetScissorPtr(void);
+    extern void* BattleAlloc(u32 size);
+    extern void BattleFree(void* ptr);
+    extern s32 scissor_cross(f32* pos1, f32* pos2, f32* poly, s32 count);
+
+    void* work;
+    f32* src;
+    f32* dst;
+    s32 i;
+    s32 j;
+
+    work = GetScissorPtr();
+    src = (f32*)entries;
+    if (count == 3) {
+        dst = (f32*)((s32)*(void**)((s32)work + 0x118) + (*(s32*)((s32)work + 0x14) * 0x18));
+        for (i = 0; i < 3; i++) {
+            dst[i] = src[i * 2];
+            dst[i + 3] = src[(i * 2) + 1];
+        }
+        *(s32*)((s32)work + 0x14) = *(s32*)((s32)work + 0x14) + 1;
+        BattleFree(entries);
+        return;
+    }
+
+    for (i = 0; i < count; i++) {
+        f32* pos1 = &src[i * 2];
+        for (j = 2; j < count - 1; j++) {
+            s32 end = (i + j) % count;
+            f32* pos2 = &src[end * 2];
+            if (scissor_cross(pos1, pos2, src, count) == 1) {
+                s32 count1 = j + 1;
+                s32 count2 = (count - j) + 1;
+                f32* poly1 = BattleAlloc(count1 * 8);
+                f32* poly2 = BattleAlloc(count2 * 8);
+                s32 k;
+
+                for (k = 0; k < count1; k++) {
+                    s32 idx = (i + k) % count;
+                    poly1[k * 2] = src[idx * 2];
+                    poly1[k * 2 + 1] = src[idx * 2 + 1];
+                }
+
+                poly2[0] = pos1[0];
+                poly2[1] = pos1[1];
+                for (k = 0; k < count2 - 1; k++) {
+                    s32 idx = (end + k) % count;
+                    poly2[(k + 1) * 2] = src[idx * 2];
+                    poly2[(k + 1) * 2 + 1] = src[idx * 2 + 1];
+                }
+
+                BattleFree(entries);
+                tess(poly1, count1);
+                tess(poly2, count2);
+                return;
+            }
+        }
+    }
+
+    dst = (f32*)((s32)*(void**)((s32)work + 0x118) + (*(s32*)((s32)work + 0x14) * 0x18));
+    for (i = 0; i < 3; i++) {
+        dst[i] = src[i * 2];
+        dst[i + 3] = src[(i * 2) + 1];
+    }
+    *(s32*)((s32)work + 0x14) = *(s32*)((s32)work + 0x14) + 1;
+    BattleFree(entries);
 }
 
 /* stub-fill: scissor_intersection | prototype_only | source_prototype */

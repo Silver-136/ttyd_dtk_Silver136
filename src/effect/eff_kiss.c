@@ -343,6 +343,98 @@ void effKissDisp(s32 cameraId, void* effect) {
 }
 
 /* stub-fill: effKissEntry | missing_definition | ghidra_signature */
-u8 effKissEntry(void) {
-    return 0;
+void* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angleRate) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void* effStampN64Entry(s32 type, f32 x, f32 y, f32 z);
+    extern void effKissMain(void* effect);
+    extern const char str_kiss_804279b0[];
+    extern f64 sin(f64 x);
+    extern f64 cos(f64 x);
+    extern f32 float_1_8042795c;
+    extern f32 float_0_80427964;
+    extern f32 float_6p2832_80427990;
+    extern f32 float_360_8042799c;
+    extern f32 float_3_804279b8;
+    extern f32 float_1p5_80427970;
+    extern f32 float_neg1_804279bc;
+
+    void* effect = effEntry();
+    void* work;
+    void* child;
+    s32 count = 2;
+    s32 i;
+    f32 phase = float_6p2832_80427990 * angleRate;
+
+    if (type == 5) {
+        effStampN64Entry(2, x, y, z);
+        count = 7;
+    }
+
+    *(const char**)((s32)effect + 0x14) = str_kiss_804279b0;
+    *(s32*)((s32)effect + 8) = count;
+    work = __memAlloc(3, count * 0x38);
+    *(void**)((s32)effect + 0xC) = work;
+    *(void**)((s32)effect + 0x10) = effKissMain;
+
+    *(s32*)work = type;
+    *(f32*)((s32)work + 4) = x;
+    *(f32*)((s32)work + 8) = y;
+    *(f32*)((s32)work + 0xC) = z;
+    *(f32*)((s32)work + 0x20) = float_1_8042795c;
+    *(f32*)((s32)work + 0x24) = float_1_8042795c;
+    *(s32*)((s32)work + 0x28) = (type == 4) ? 0x3C : 0x28;
+    *(s32*)((s32)work + 0x2C) = 0;
+    *(s32*)((s32)work + 0x30) = 0xFF;
+    *(f32*)((s32)work + 0x18) = angleRate;
+    *(f32*)((s32)work + 0x1C) = float_0_80427964;
+
+    child = (void*)((s32)work + 0x38);
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, child = (void*)((s32)child + 0x38)) {
+        *(f32*)((s32)child + 4) = float_0_80427964;
+        *(f32*)((s32)child + 8) = float_0_80427964;
+        *(f32*)((s32)child + 0xC) = float_0_80427964;
+        *(f32*)((s32)child + 0x1C) = float_0_80427964;
+        *(s32*)((s32)child + 0x28) = 0;
+        *(s32*)((s32)child + 0x2C) = 0;
+
+        switch (type) {
+            case 0:
+            case 3: {
+                f32 angle = phase / float_360_8042799c;
+                *(f32*)((s32)child + 0x20) = float_1_8042795c;
+                *(f32*)((s32)child + 0x24) = float_1_8042795c;
+                *(f32*)((s32)child + 0x10) = float_3_804279b8 * (f32)sin(angle);
+                *(f32*)((s32)child + 0x14) = float_3_804279b8 * (f32)cos(angle);
+                break;
+            }
+            case 1:
+            case 2: {
+                f32 angle = phase / float_360_8042799c;
+                *(f32*)((s32)child + 0x20) = float_0_80427964;
+                *(f32*)((s32)child + 0x24) = float_0_80427964;
+                *(f32*)((s32)child + 0x10) = float_3_804279b8 * (f32)sin(angle);
+                *(f32*)((s32)child + 0x14) = float_3_804279b8 * (f32)cos(angle);
+                break;
+            }
+            case 4:
+                *(f32*)((s32)child + 0x20) = float_1_8042795c;
+                *(f32*)((s32)child + 0x24) = float_1_8042795c;
+                break;
+            case 5: {
+                f32 span = float_360_8042799c * (f32)i / (f32)(*(s32*)((s32)effect + 8) - 1);
+                f32 angle = (float_6p2832_80427990 * span) / float_360_8042799c;
+                *(f32*)((s32)child + 0x20) = float_1p5_80427970;
+                *(f32*)((s32)child + 0x24) = float_1p5_80427970;
+                *(f32*)((s32)child + 0x1C) = span;
+                *(f32*)((s32)child + 0x10) = float_3_804279b8 * (f32)sin(angle);
+                *(f32*)((s32)child + 0x14) = float_3_804279b8 * (f32)cos(angle);
+                *(f32*)((s32)child + 0x1C) *= float_neg1_804279bc;
+                break;
+            }
+        }
+    }
+
+    return effect;
 }
+

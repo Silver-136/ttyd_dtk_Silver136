@@ -68,6 +68,62 @@ u8 effTreasureMapDisp(void) {
 }
 
 /* stub-fill: effTreasureMapMain | prototype_only | source_prototype */
-void effTreasureMapMain(void) {
-    return;
+void effTreasureMapMain(void* effect) {
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+
+    extern void* gp;
+    extern s32 animGroupBaseAsync(void* name, s32 battle, s32 flags);
+    extern s32 animPoseEntry(void* name, s32 battle);
+    extern void animPoseSetAnim(s32 poseId, void* animName, s32 force);
+    extern void animPoseRelease(s32 poseId);
+    extern void effDelete(void* effect);
+    extern f32 dispCalcZ(VecLocal* pos);
+    extern void dispEntry(s32 cameraId, s32 layer, void* dispFunc, void* data, f32 z);
+    extern void effTreasureMapDisp(s32 cameraId, void* effect);
+    extern VecLocal vec3_802ff058;
+    extern char str_EFF_treasure_map_802ff064[];
+    extern char str_Z_1_8042793c[];
+
+    void* work = *(void**)((s32)effect + 0xC);
+    VecLocal pos = vec3_802ff058;
+    s32 flag = *(s32*)((s32)gp + 0x14);
+    s32 inBattle = ((u32)(-flag) | (u32)flag) >> 31;
+
+    pos.x = *(f32*)((s32)work + 4);
+    pos.y = *(f32*)((s32)work + 8);
+    pos.z = *(f32*)((s32)work + 0xC);
+
+    if (*(s32*)((s32)work + 0x24) == -1) {
+        if (animGroupBaseAsync(str_EFF_treasure_map_802ff064, inBattle, 0) == 0) {
+            return;
+        }
+        *(s32*)((s32)work + 0x24) = animPoseEntry(str_EFF_treasure_map_802ff064, inBattle);
+        animPoseSetAnim(*(s32*)((s32)work + 0x24), str_Z_1_8042793c, 1);
+    }
+
+    if ((*(u32*)effect & 4) != 0) {
+        *(u32*)effect &= ~4U;
+        *(s32*)((s32)work + 0x18) = 0x10;
+    }
+    if (*(s32*)((s32)work + 0x18) < 1000) {
+        *(s32*)((s32)work + 0x18) -= 1;
+    }
+    if (*(s32*)((s32)work + 0x18) < 0x10) {
+        *(s32*)((s32)work + 0x14) = *(s32*)((s32)work + 0x18) << 4;
+    }
+
+    if (*(s32*)((s32)work + 0x18) < 0) {
+        if (*(s32*)((s32)work + 0x24) != -1) {
+            animPoseRelease(*(s32*)((s32)work + 0x24));
+        }
+        effDelete(effect);
+    } else {
+        *(s32*)((s32)work + 0x1C) += 1;
+        dispEntry(*(s32*)((s32)work + 0x28), 2, effTreasureMapDisp, effect, dispCalcZ(&pos));
+    }
 }
+

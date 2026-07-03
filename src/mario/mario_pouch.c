@@ -1192,24 +1192,233 @@ void pouchGetItem(s32 itemNo) {
 
 
 s32 pouchRemoveItemIndex(u32 itemType, int itemIndex) {
+    s16* list;
+    s16* equipped;
+    s32 count;
+    s32 i;
+    s32 shiftCount;
+
+    list = 0;
+    equipped = 0;
+    count = 0;
+    if ((s32)itemType >= 0x79 && (s32)itemType <= 0xEB) {
+        list = (s16*)(mpp + 0x192);
+        count = 10;
+        if (pouchCheckItem(0x80) != 0) {
+            count = 20;
+        }
+    } else if ((s32)itemType >= 1 && (s32)itemType <= 0x78) {
+        list = (s16*)(mpp + 0xA0);
+        count = 0x79;
+    } else if ((s32)itemType >= 0xF0 && (s32)itemType <= 0x152) {
+        list = (s16*)(mpp + 0x1FA);
+        equipped = (s16*)(mpp + 0x38A);
+        count = 200;
+    } else {
+        return 0;
+    }
+
+    if (itemIndex >= count) {
+        return 0;
+    }
+    for (i = itemIndex; i < count; i++) {
+        if ((s32)list[i] == (s32)itemType) {
+            list[i] = 0;
+            if (equipped != 0) {
+                equipped[i] = 0;
+            }
+            shiftCount = count - i - 1;
+            while (shiftCount > 0) {
+                list[i] = list[i + 1];
+                list[i + 1] = 0;
+                if (equipped != 0) {
+                    equipped[i] = equipped[i + 1];
+                    equipped[i + 1] = 0;
+                }
+                i++;
+                shiftCount--;
+            }
+            return 1;
+        }
+    }
     return 0;
 }
 
+s32 pouchRemoveItem(s32 item) {
+    s16* list;
+    s16* equipped;
+    s32 count;
+    s32 i;
+    s32 shiftCount;
 
-void pouchRemoveItem(s32 item) {
-    ;
-}
+    list = 0;
+    equipped = 0;
+    count = 0;
+    if (item >= 0x79 && item <= 0xEB) {
+        list = (s16*)(mpp + 0x192);
+        count = 10;
+        if (pouchCheckItem(0x80) != 0) {
+            count = 20;
+        }
+    } else if (item >= 1 && item <= 0x78) {
+        list = (s16*)(mpp + 0xA0);
+        count = 0x79;
+    } else if (item >= 0xF0 && item <= 0x152) {
+        list = (s16*)(mpp + 0x1FA);
+        equipped = (s16*)(mpp + 0x38A);
+        count = 200;
+    } else {
+        return 0;
+    }
 
-
-u8 comp_aiueo_r(short* param_1, short* param_2) {
+    for (i = 0; i < count; i++) {
+        if ((s32)list[i] == item) {
+            list[i] = 0;
+            if (equipped != 0) {
+                equipped[i] = 0;
+            }
+            shiftCount = count - i - 1;
+            while (shiftCount > 0) {
+                list[i] = list[i + 1];
+                list[i + 1] = 0;
+                if (equipped != 0) {
+                    equipped[i] = equipped[i + 1];
+                    equipped[i + 1] = 0;
+                }
+                i++;
+                shiftCount--;
+            }
+            return 1;
+        }
+    }
     return 0;
 }
 
+s32 comp_aiueo_r(short* param_1, short* param_2) {
+    extern char* msgSearch(char* msg);
+    extern u32 strlen(char* str);
+    extern char* strcpy(char* dst, char* src);
+    extern s32 strcmp(char* s1, char* s2);
+    extern void* gp;
 
-u8 comp_aiueo(short* param_1, short* param_2) {
-    return 0;
+    u16 name1[64];
+    u16 name2[64];
+    u16* src;
+    u16* dst;
+    u32 count;
+    u16 value;
+    s32 i;
+
+    src = (u16*)msgSearch(*(char**)(itemDataTable + *param_1 * 0x28 + 4));
+    count = strlen((char*)src) >> 1;
+    if (*(u32*)((s32)gp + 0x16C) == 0) {
+        dst = name1;
+        i = 0;
+        while (count != 0) {
+            value = *src;
+            if (value >= 0x829F && value <= 0x82DD) {
+                value += 0xA1;
+            } else if (value > 0x82DD && value < 0x82F2) {
+                value += 0xA2;
+            }
+            *dst = value;
+            src++;
+            dst++;
+            i++;
+            count--;
+        }
+        *(u8*)(name1 + i) = 0;
+    } else {
+        strcpy((char*)name1, (char*)src);
+    }
+
+    src = (u16*)msgSearch(*(char**)(itemDataTable + *param_2 * 0x28 + 4));
+    count = strlen((char*)src) >> 1;
+    if (*(u32*)((s32)gp + 0x16C) == 0) {
+        dst = name2;
+        i = 0;
+        while (count != 0) {
+            value = *src;
+            if (value >= 0x829F && value <= 0x82DD) {
+                value += 0xA1;
+            } else if (value > 0x82DD && value < 0x82F2) {
+                value += 0xA2;
+            }
+            *dst = value;
+            src++;
+            dst++;
+            i++;
+            count--;
+        }
+        *(u8*)(name2 + i) = 0;
+    } else {
+        strcpy((char*)name2, (char*)src);
+    }
+    return strcmp((char*)name2, (char*)name1);
 }
 
+s32 comp_aiueo(short* param_1, short* param_2) {
+    extern char* msgSearch(char* msg);
+    extern u32 strlen(char* str);
+    extern char* strcpy(char* dst, char* src);
+    extern s32 strcmp(char* s1, char* s2);
+    extern void* gp;
+
+    u16 name1[64];
+    u16 name2[64];
+    u16* src;
+    u16* dst;
+    u32 count;
+    u16 value;
+    s32 i;
+
+    src = (u16*)msgSearch(*(char**)(itemDataTable + *param_1 * 0x28 + 4));
+    count = strlen((char*)src) >> 1;
+    if (*(u32*)((s32)gp + 0x16C) == 0) {
+        dst = name1;
+        i = 0;
+        while (count != 0) {
+            value = *src;
+            if (value >= 0x829F && value <= 0x82DD) {
+                value += 0xA1;
+            } else if (value > 0x82DD && value < 0x82F2) {
+                value += 0xA2;
+            }
+            *dst = value;
+            src++;
+            dst++;
+            i++;
+            count--;
+        }
+        *(u8*)(name1 + i) = 0;
+    } else {
+        strcpy((char*)name1, (char*)src);
+    }
+
+    src = (u16*)msgSearch(*(char**)(itemDataTable + *param_2 * 0x28 + 4));
+    count = strlen((char*)src) >> 1;
+    if (*(u32*)((s32)gp + 0x16C) == 0) {
+        dst = name2;
+        i = 0;
+        while (count != 0) {
+            value = *src;
+            if (value >= 0x829F && value <= 0x82DD) {
+                value += 0xA1;
+            } else if (value > 0x82DD && value < 0x82F2) {
+                value += 0xA2;
+            }
+            *dst = value;
+            src++;
+            dst++;
+            i++;
+            count--;
+        }
+        *(u8*)(name2 + i) = 0;
+    } else {
+        strcpy((char*)name2, (char*)src);
+    }
+    return strcmp((char*)name1, (char*)name2);
+}
 
 void unk_800d48b0(u16* src, u16* dst) {
     extern s32 strlen(const char* str);

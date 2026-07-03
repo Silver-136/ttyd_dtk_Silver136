@@ -1357,15 +1357,120 @@ u8 hitMain(void) {
 }
 
 
-void hitObjGetPos(s32 name, void* pos) {
-    ;
+void hitObjGetPos(char* name, f32* out) {
+    extern void* mapGetWork(void);
+    extern s32 strcmp(const char* str1, const char* str2);
+    extern void hitObjGetPosSub(void* hit, void* pos, s32* count, s32 recursive);
+    extern void PSVECScale(void* src, void* dst, f32 scale);
+    extern f32 float_1_8041f844;
+
+    void* map;
+    void* group;
+    void* hit;
+    s32 groupIndex;
+    s32 hitIndex;
+    s32 count;
+    f32 pos[3];
+
+    count = 0;
+    pos[0] = 0.0f;
+    pos[1] = 0.0f;
+    pos[2] = 0.0f;
+
+    map = mapGetWork();
+    if (name == NULL) {
+        hit = NULL;
+    } else {
+        group = map;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)map) {
+            hit = *(void**)((s32)group + 0x15C);
+            hitIndex = 0;
+            while (hitIndex < *(s32*)((s32)group + 0x158)) {
+                if ((*(u16*)hit & 0x80) == 0 &&
+                    strcmp(**(char***)((s32)hit + 0x8), name) == 0) {
+                    goto found;
+                }
+                hitIndex++;
+                hit = (void*)((s32)hit + 0xE4);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        hit = NULL;
+    }
+
+found:
+    if (hit == NULL) {
+        out[0] = 0.0f;
+        out[1] = -1000.0f;
+        out[2] = 0.0f;
+    } else {
+        hitObjGetPosSub(hit, pos, &count, 0);
+        PSVECScale(pos, out, float_1_8041f844 / (f32)count);
+    }
 }
 
+void hitDelete(char* name) {
+    extern void* mapGetWork(void);
+    extern s32 strcmp(const char* str1, const char* str2);
+    extern void* unk_8041e628;
 
-u8 hitDelete(char* param_1) {
-    return 0;
+    void* map;
+    void* group;
+    void* hit;
+    void* last;
+    s32 groupIndex;
+    s32 hitIndex;
+
+    map = mapGetWork();
+    group = map;
+    groupIndex = 0;
+    while (groupIndex < *(s32*)map) {
+        hit = *(void**)((s32)group + 0x15C);
+        hitIndex = 0;
+        while (hitIndex < *(s32*)((s32)group + 0x158)) {
+            if ((*(u16*)hit & 0x80) == 0 &&
+                strcmp(name, **(char***)((s32)hit + 0x8)) == 0) {
+                *(u16*)hit |= 0x80;
+
+                map = mapGetWork();
+                unk_8041e628 = NULL;
+                last = NULL;
+                group = map;
+                groupIndex = 0;
+                while (groupIndex < *(s32*)map) {
+                    hit = *(void**)((s32)group + 0x15C);
+                    hitIndex = 0;
+                    while (hitIndex < *(s32*)((s32)group + 0x158)) {
+                        if (*(s32*)(*(s32*)((s32)hit + 0x8) + 0x5C) != 0 &&
+                            (*(u16*)hit & 0x81) == 0) {
+                            if (last == NULL) {
+                                unk_8041e628 = hit;
+                                last = hit;
+                            } else {
+                                *(void**)((s32)last + 0xE0) = hit;
+                                last = hit;
+                            }
+                        }
+                        hitIndex++;
+                        hit = (void*)((s32)hit + 0xE4);
+                    }
+                    group = (void*)((s32)group + 0x178);
+                    groupIndex++;
+                }
+                if (last != NULL) {
+                    *(void**)((s32)last + 0xE0) = NULL;
+                }
+                return;
+            }
+            hitIndex++;
+            hit = (void*)((s32)hit + 0xE4);
+        }
+        group = (void*)((s32)group + 0x178);
+        groupIndex++;
+    }
 }
-
 
 int hitCheckAttr(double param_1, double param_2, double param_3, double param_4, double param_5, double param_6, s32 param_7, void* param_8, void* param_9, void* param_10, void* param_11, void* param_12, void* param_13, void* param_14) {
     return 0;
@@ -1377,65 +1482,495 @@ s32 hitCheckFilter(f32 x, f32 y, f32 z, f32 vx, f32 vy, f32 vz, s32 flags, f32* 
 }
 
 
-void hitBindUpdate(s32 name) {
-    ;
+void hitBindUpdate(char* name) {
+    extern void* mapGetWork(void);
+    extern s32 strcmp(const char* str1, const char* str2);
+    extern void mapErrorEntry(s32 type, char* message);
+    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
+    extern void hitReCalcMatrix(void* hit, void* arg);
+    extern f32 float_10_8041f840;
+
+    void* map;
+    void* group;
+    void* hit;
+    s32 groupIndex;
+    s32 hitIndex;
+    f32 scale[3][4];
+
+    map = mapGetWork();
+    if (name == NULL) {
+        hit = NULL;
+    } else {
+        group = map;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)map) {
+            hit = *(void**)((s32)group + 0x15C);
+            hitIndex = 0;
+            while (hitIndex < *(s32*)((s32)group + 0x158)) {
+                if ((*(u16*)hit & 0x80) == 0 &&
+                    strcmp(**(char***)((s32)hit + 0x8), name) == 0) {
+                    goto found;
+                }
+                hitIndex++;
+                hit = (void*)((s32)hit + 0xE4);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        hit = NULL;
+    }
+
+found:
+    if (hit == NULL) {
+        mapErrorEntry(1, name);
+        return;
+    }
+
+    if ((*(u16*)hit & 0x20) != 0) {
+        void* mapObj = *(void**)((s32)hit + 0xD4);
+        if (mapObj != NULL) {
+            hitReCalcMatrix(hit, (void*)((s32)mapObj + 0xC));
+        } else {
+            PSMTXScale(scale, float_10_8041f840, float_10_8041f840, float_10_8041f840);
+            hitReCalcMatrix(hit, scale);
+        }
+    }
 }
 
+void hitBindMapObj(char* hitName, char* mapObjName) {
+    extern void* mapGetWork(void);
+    extern void* mapGetMapObj(char* name);
+    extern void mapErrorEntry(s32 type, char* message);
+    extern s32 strcmp(const char* str1, const char* str2);
 
-u8 hitBindMapObj(char* param_1, char* param_2) {
-    return 0;
+    void* map;
+    void* group;
+    void* hit;
+    void* mapObj;
+    s32 groupIndex;
+    s32 hitIndex;
+
+    map = mapGetWork();
+    if (hitName == NULL) {
+        hit = NULL;
+    } else {
+        group = map;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)map) {
+            hit = *(void**)((s32)group + 0x15C);
+            hitIndex = 0;
+            while (hitIndex < *(s32*)((s32)group + 0x158)) {
+                if ((*(u16*)hit & 0x80) == 0 &&
+                    strcmp(**(char***)((s32)hit + 0x8), hitName) == 0) {
+                    goto found;
+                }
+                hitIndex++;
+                hit = (void*)((s32)hit + 0xE4);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        hit = NULL;
+    }
+
+found:
+    mapObj = mapGetMapObj(mapObjName);
+    if (mapObj == NULL) {
+        mapErrorEntry(0, mapObjName);
+    } else if (hit == NULL) {
+        mapErrorEntry(1, hitName);
+    } else {
+        *(void**)((s32)hit + 0xD0) = mapObj;
+        *(u16*)hit |= 0x20;
+    }
 }
-
 
 u8 hitCheckVecHitObjXZ(void) {
     return 0;
 }
 
 
-u8 hitObjGetNormal(char* param_1, s32 param_2) {
-    return 0;
+void hitObjGetNormal(char* name, void* out) {
+    extern void* mapGetWork(void);
+    extern s32 strcmp(const char* str1, const char* str2);
+    extern void PSVECNormalize(void* src, void* dst);
+
+    void* map;
+    void* group;
+    void* hit;
+    s32 groupIndex;
+    s32 hitIndex;
+
+    map = mapGetWork();
+    if (name == NULL) {
+        hit = NULL;
+    } else {
+        group = map;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)map) {
+            hit = *(void**)((s32)group + 0x15C);
+            hitIndex = 0;
+            while (hitIndex < *(s32*)((s32)group + 0x158)) {
+                if ((*(u16*)hit & 0x80) == 0 &&
+                    strcmp(**(char***)((s32)hit + 0x8), name) == 0) {
+                    goto found;
+                }
+                hitIndex++;
+                hit = (void*)((s32)hit + 0xE4);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        hit = NULL;
+    }
+
+found:
+    if (hit != NULL) {
+        if (*(s32*)(*(s32*)((s32)hit + 0x8) + 0x5C) > 0) {
+            PSVECNormalize((void*)(*(s32*)((s32)hit + 0xAC) + 0x48), out);
+        }
+    }
 }
 
+void hitGrpAttrOff(char* name, u32 attr) {
+    extern void* mapGetWork(void);
+    extern s32 strcmp(const char* str1, const char* str2);
+    extern void mapErrorEntry(s32 type, char* message);
+    extern void hitAtrOff(void* hit, u32 attr, s32 recursive);
 
-u8 hitGrpAttrOff(char* param_1, u32 param_2) {
-    return 0;
+    void* map;
+    void* group;
+    void* hit;
+    s32 groupIndex;
+    s32 hitIndex;
+
+    map = mapGetWork();
+    if (name == NULL) {
+        hit = NULL;
+    } else {
+        group = map;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)map) {
+            hit = *(void**)((s32)group + 0x15C);
+            hitIndex = 0;
+            while (hitIndex < *(s32*)((s32)group + 0x158)) {
+                if ((*(u16*)hit & 0x80) == 0 &&
+                    strcmp(**(char***)((s32)hit + 0x8), name) == 0) {
+                    goto found;
+                }
+                hitIndex++;
+                hit = (void*)((s32)hit + 0xE4);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        hit = NULL;
+    }
+
+found:
+    if (hit == NULL) {
+        mapErrorEntry(1, name);
+    } else {
+        hitAtrOff(hit, attr, 0);
+    }
 }
 
+void hitGrpAttrOn(char* name, u32 attr) {
+    extern void* mapGetWork(void);
+    extern s32 strcmp(const char* str1, const char* str2);
+    extern void mapErrorEntry(s32 type, char* message);
+    extern void hitAtrOn(void* hit, u32 attr, s32 recursive);
 
-u8 hitGrpAttrOn(char* param_1, u32 param_2) {
-    return 0;
+    void* map;
+    void* group;
+    void* hit;
+    s32 groupIndex;
+    s32 hitIndex;
+
+    map = mapGetWork();
+    if (name == NULL) {
+        hit = NULL;
+    } else {
+        group = map;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)map) {
+            hit = *(void**)((s32)group + 0x15C);
+            hitIndex = 0;
+            while (hitIndex < *(s32*)((s32)group + 0x158)) {
+                if ((*(u16*)hit & 0x80) == 0 &&
+                    strcmp(**(char***)((s32)hit + 0x8), name) == 0) {
+                    goto found;
+                }
+                hitIndex++;
+                hit = (void*)((s32)hit + 0xE4);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        hit = NULL;
+    }
+
+found:
+    if (hit == NULL) {
+        mapErrorEntry(1, name);
+    } else {
+        hitAtrOn(hit, attr, 0);
+    }
 }
 
+void hitGrpFlagOff(char* name, u16 flag) {
+    extern void* mapGetWork(void);
+    extern s32 strcmp(const char* str1, const char* str2);
+    extern void mapErrorEntry(s32 type, char* message);
+    extern void hitFlgOff(void* hit, u16 flag, s32 recursive);
 
-u8 hitGrpFlagOff(char* param_1, s32 param_2) {
-    return 0;
+    void* map;
+    void* group;
+    void* hit;
+    s32 groupIndex;
+    s32 hitIndex;
+
+    map = mapGetWork();
+    if (name == NULL) {
+        hit = NULL;
+    } else {
+        group = map;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)map) {
+            hit = *(void**)((s32)group + 0x15C);
+            hitIndex = 0;
+            while (hitIndex < *(s32*)((s32)group + 0x158)) {
+                if ((*(u16*)hit & 0x80) == 0 &&
+                    strcmp(**(char***)((s32)hit + 0x8), name) == 0) {
+                    goto found;
+                }
+                hitIndex++;
+                hit = (void*)((s32)hit + 0xE4);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        hit = NULL;
+    }
+
+found:
+    if (hit == NULL) {
+        mapErrorEntry(1, name);
+    } else {
+        hitFlgOff(hit, flag, 0);
+    }
 }
 
+void hitGrpFlagOn(char* name, u16 flag) {
+    extern void* mapGetWork(void);
+    extern s32 strcmp(const char* str1, const char* str2);
+    extern void mapErrorEntry(s32 type, char* message);
+    extern void hitFlgOn(void* hit, u16 flag, s32 recursive);
 
-u8 hitGrpFlagOn(char* param_1, s32 param_2) {
-    return 0;
+    void* map;
+    void* group;
+    void* hit;
+    s32 groupIndex;
+    s32 hitIndex;
+
+    map = mapGetWork();
+    if (name == NULL) {
+        hit = NULL;
+    } else {
+        group = map;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)map) {
+            hit = *(void**)((s32)group + 0x15C);
+            hitIndex = 0;
+            while (hitIndex < *(s32*)((s32)group + 0x158)) {
+                if ((*(u16*)hit & 0x80) == 0 &&
+                    strcmp(**(char***)((s32)hit + 0x8), name) == 0) {
+                    goto found;
+                }
+                hitIndex++;
+                hit = (void*)((s32)hit + 0xE4);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        hit = NULL;
+    }
+
+found:
+    if (hit == NULL) {
+        mapErrorEntry(1, name);
+    } else {
+        hitFlgOn(hit, flag, 0);
+    }
 }
 
+void hitObjAttrOff(char* name, u32 attr) {
+    extern void* mapGetWork(void);
+    extern s32 strcmp(const char* str1, const char* str2);
+    extern void mapErrorEntry(s32 type, char* message);
 
-u8 hitObjAttrOff(char* param_1, u32 param_2) {
-    return 0;
+    void* map;
+    void* group;
+    void* hit;
+    s32 groupIndex;
+    s32 hitIndex;
+
+    map = mapGetWork();
+    if (name == NULL) {
+        hit = NULL;
+    } else {
+        group = map;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)map) {
+            hit = *(void**)((s32)group + 0x15C);
+            hitIndex = 0;
+            while (hitIndex < *(s32*)((s32)group + 0x158)) {
+                if ((*(u16*)hit & 0x80) == 0 &&
+                    strcmp(**(char***)((s32)hit + 0x8), name) == 0) {
+                    goto found;
+                }
+                hitIndex++;
+                hit = (void*)((s32)hit + 0xE4);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        hit = NULL;
+    }
+
+found:
+    if (hit == NULL) {
+        mapErrorEntry(1, name);
+    } else {
+        *(u32*)((s32)hit + 0x4) &= ~attr;
+    }
 }
 
+void hitObjAttrOn(char* name, u32 attr) {
+    extern void* mapGetWork(void);
+    extern s32 strcmp(const char* str1, const char* str2);
+    extern void mapErrorEntry(s32 type, char* message);
 
-u8 hitObjAttrOn(char* param_1, u32 param_2) {
-    return 0;
+    void* map;
+    void* group;
+    void* hit;
+    s32 groupIndex;
+    s32 hitIndex;
+
+    map = mapGetWork();
+    if (name == NULL) {
+        hit = NULL;
+    } else {
+        group = map;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)map) {
+            hit = *(void**)((s32)group + 0x15C);
+            hitIndex = 0;
+            while (hitIndex < *(s32*)((s32)group + 0x158)) {
+                if ((*(u16*)hit & 0x80) == 0 &&
+                    strcmp(**(char***)((s32)hit + 0x8), name) == 0) {
+                    goto found;
+                }
+                hitIndex++;
+                hit = (void*)((s32)hit + 0xE4);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        hit = NULL;
+    }
+
+found:
+    if (hit == NULL) {
+        mapErrorEntry(1, name);
+    } else {
+        *(u32*)((s32)hit + 0x4) |= attr;
+    }
 }
 
+void hitObjFlagOff(char* name, u16 flag) {
+    extern void* mapGetWork(void);
+    extern s32 strcmp(const char* str1, const char* str2);
+    extern void mapErrorEntry(s32 type, char* message);
 
-u8 hitObjFlagOff(char* param_1, u16 param_2) {
-    return 0;
+    void* map;
+    void* group;
+    void* hit;
+    s32 groupIndex;
+    s32 hitIndex;
+
+    map = mapGetWork();
+    if (name == NULL) {
+        hit = NULL;
+    } else {
+        group = map;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)map) {
+            hit = *(void**)((s32)group + 0x15C);
+            hitIndex = 0;
+            while (hitIndex < *(s32*)((s32)group + 0x158)) {
+                if ((*(u16*)hit & 0x80) == 0 &&
+                    strcmp(**(char***)((s32)hit + 0x8), name) == 0) {
+                    goto found;
+                }
+                hitIndex++;
+                hit = (void*)((s32)hit + 0xE4);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        hit = NULL;
+    }
+
+found:
+    if (hit == NULL) {
+        mapErrorEntry(1, name);
+    } else {
+        *(u16*)hit &= ~flag;
+    }
 }
 
+void hitObjFlagOn(char* name, u16 flag) {
+    extern void* mapGetWork(void);
+    extern s32 strcmp(const char* str1, const char* str2);
+    extern void mapErrorEntry(s32 type, char* message);
 
-u8 hitObjFlagOn(char* param_1, u16 param_2) {
-    return 0;
+    void* map;
+    void* group;
+    void* hit;
+    s32 groupIndex;
+    s32 hitIndex;
+
+    map = mapGetWork();
+    if (name == NULL) {
+        hit = NULL;
+    } else {
+        group = map;
+        groupIndex = 0;
+        while (groupIndex < *(s32*)map) {
+            hit = *(void**)((s32)group + 0x15C);
+            hitIndex = 0;
+            while (hitIndex < *(s32*)((s32)group + 0x158)) {
+                if ((*(u16*)hit & 0x80) == 0 &&
+                    strcmp(**(char***)((s32)hit + 0x8), name) == 0) {
+                    goto found;
+                }
+                hitIndex++;
+                hit = (void*)((s32)hit + 0xE4);
+            }
+            group = (void*)((s32)group + 0x178);
+            groupIndex++;
+        }
+        hit = NULL;
+    }
+
+found:
+    if (hit == NULL) {
+        mapErrorEntry(1, name);
+    } else {
+        *(u16*)hit |= flag;
+    }
 }
-
 
 void hitGrpDamageReturnSet(char* name, s32 value) {
     void* map;
@@ -1475,10 +2010,39 @@ found:
 }
 
 
-u8 hitReInit(void) {
-    return 0;
-}
+void hitReInit(void) {
+    extern void* mapGetWork(void);
+    extern void* mapalloc_base_ptr;
+    extern void _mapFree(void* heap, void* ptr);
 
+    void* map;
+    void* group;
+    void* hit;
+    s32 groupIndex;
+    s32 hitIndex;
+
+    map = mapGetWork();
+    group = map;
+    groupIndex = 0;
+    while (groupIndex < *(s32*)map) {
+        hit = *(void**)((s32)group + 0x15C);
+        if (hit != NULL) {
+            hitIndex = 0;
+            while (hitIndex < *(s32*)((s32)group + 0x158)) {
+                if (*(void**)((s32)hit + 0xAC) != NULL) {
+                    _mapFree(mapalloc_base_ptr, *(void**)((s32)hit + 0xAC));
+                }
+                hitIndex++;
+                hit = (void*)((s32)hit + 0xE4);
+            }
+            _mapFree(mapalloc_base_ptr, *(void**)((s32)group + 0x15C));
+            *(void**)((s32)group + 0x15C) = NULL;
+            *(s32*)((s32)group + 0x158) = 0;
+        }
+        group = (void*)((s32)group + 0x178);
+        groupIndex++;
+    }
+}
 
 s32 hitGetName(void* pHit) {
     void* map;
@@ -1512,10 +2076,27 @@ s32 hitGetName(void* pHit) {
 }
 
 
-void* hitEntry(void* param_1, void* param_2, int idx) {
-    return 0;
-}
+void hitEntry(void* mapObj, void* arg, s32 idx) {
+    extern void* mapGetWork(void);
+    extern s32 mapGetJoints(void* mapObj);
+    extern void* _mapAlloc(void* heap, u32 size);
+    extern void* mapalloc_base_ptr;
+    extern void memset(void* dst, s32 value, u32 size);
 
+    void* map;
+    void* group;
+    s32 joints;
+    u32 size;
+
+    map = mapGetWork();
+    joints = mapGetJoints(mapObj);
+    group = (void*)((s32)map + idx * 0x178);
+    *(s32*)((s32)group + 0x158) = joints;
+    size = (u32)((joints + 0x80) * 0xE4 + 0x1F) & ~0x1F;
+    *(void**)((s32)group + 0x15C) = _mapAlloc(mapalloc_base_ptr, size);
+    memset(*(void**)((s32)group + 0x15C), 0, size);
+    hitEntrySub(mapObj, 0, arg, 1, idx);
+}
 
 void* _hitEnt(void* param_1, s32 param_2, s32 param_3, int param_4) {
     extern void* mapGetWork(void);

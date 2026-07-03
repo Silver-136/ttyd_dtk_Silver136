@@ -1072,19 +1072,165 @@ u32* npcNearDistCheck(double param_1, s64 param_2, double param_3, double param_
 
 
 void npcSetStayPose(char* stayPose) {
-    ;
-}
+    extern s32 strcmp(const char*, const char*);
+    extern s32 marioGetPartyId(void);
+    extern s32 marioGetExtraPartyId(void);
+    extern void* partyGetPtr(s32);
+    extern void partyChgPoseId(void*, s32);
+    extern void marioChgPose(char*);
+    extern void animPoseSetAnim(s32, char*, s32);
+    extern char str_x_party_802c1444[];
+    extern char str_party_8041fd40[];
+    extern char str_extparty_802c1450[];
+    extern char str_mario_8041fd48[];
+    s32 wp;
+    s32 count;
+    s32 i;
+    void* npc;
+    void* party;
 
+    if (*stayPose == 0 || strcmp(stayPose, str_x_party_802c1444) == 0) {
+        return;
+    }
+    if (strcmp(stayPose, str_party_8041fd40) == 0) {
+        party = partyGetPtr(marioGetPartyId());
+        if (party != 0) {
+            partyChgPoseId(party, 1);
+        }
+        return;
+    }
+    if (strcmp(stayPose, str_extparty_802c1450) == 0) {
+        party = partyGetPtr(marioGetExtraPartyId());
+        if (party != 0) {
+            partyChgPoseId(party, 1);
+        }
+        return;
+    }
+    if (strcmp(stayPose, str_mario_8041fd48) == 0) {
+        marioChgPose(MarioStayPose);
+        return;
+    }
+    wp = (s32)&work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), stayPose) == 0) {
+            break;
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+    if ((*(u32*)npc & 0x200) != 0) {
+        animPoseSetAnim(*(s32*)((s32)npc + 0x104), (char*)((s32)npc + 0x4C), 1);
+    }
+}
 
 void npcSetTalkPose(char* talkPose) {
-    ;
-}
+    extern s32 strcmp(const char*, const char*);
+    extern s32 marioGetPartyId(void);
+    extern s32 marioGetExtraPartyId(void);
+    extern void* partyGetPtr(s32);
+    extern void partyChgPoseId(void*, s32);
+    extern void marioChgPose(char*);
+    extern void animPoseSetAnim(s32, char*, s32);
+    extern char str_x_party_802c1444[];
+    extern char str_party_8041fd40[];
+    extern char str_extparty_802c1450[];
+    extern char str_mario_8041fd48[];
+    s32 wp;
+    s32 count;
+    s32 i;
+    void* npc;
+    void* party;
 
+    if (*talkPose == 0 || strcmp(talkPose, str_x_party_802c1444) == 0) {
+        return;
+    }
+    if (strcmp(talkPose, str_party_8041fd40) == 0) {
+        party = partyGetPtr(marioGetPartyId());
+        if (party != 0) {
+            partyChgPoseId(party, 7);
+        }
+        return;
+    }
+    if (strcmp(talkPose, str_extparty_802c1450) == 0) {
+        party = partyGetPtr(marioGetExtraPartyId());
+        if (party != 0) {
+            partyChgPoseId(party, 7);
+        }
+        return;
+    }
+    if (strcmp(talkPose, str_mario_8041fd48) == 0) {
+        marioChgPose(MarioTalkPose);
+        return;
+    }
+    wp = (s32)&work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), talkPose) == 0) {
+            break;
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+    if ((*(u32*)npc & 0x200) != 0) {
+        animPoseSetAnim(*(s32*)((s32)npc + 0x104), (char*)((s32)npc + 0x6C), 1);
+    }
+}
 
 u8 npcRecoveryFiledNpc(void) {
-    return 0;
-}
+    extern void* release_wp;
+    extern s32 animPoseEntry(char*, s32);
+    extern void animPoseSetAnim(s32, char*, s32);
+    extern void* animPoseGetAnimPosePtr(s32);
+    extern void animPoseWorldPositionEvalOn(s32);
+    extern void animPoseWorldMatrixEvalOn(s32);
+    extern void animPoseMain(s32);
+    s32 wp = (s32)&work;
+    char* release = release_wp;
+    void* npc;
+    void* pose;
+    s32 i;
 
+    if ((*(u32*)(wp + 8) & 2) != 0) {
+        npc = *(void**)(wp + 0xC);
+        i = 0;
+        while (i < *(s32*)(wp + 4)) {
+            if ((*(u32*)npc & 1) && (*(u32*)npc & 2) && *(s32*)((s32)npc + 0x104) == -1) {
+                *(s32*)((s32)npc + 0x104) = animPoseEntry(release, 0);
+                animPoseSetAnim(*(s32*)((s32)npc + 0x104), release + 0x40, 1);
+                pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
+                *(s32*)pose = *(s32*)(release + 0x80);
+                *(f32*)((s32)pose + 0x70) = *(f32*)(release + 0x84);
+                *(f32*)((s32)pose + 0x74) = *(f32*)(release + 0x88);
+                *(f32*)((s32)pose + 0x78) = *(f32*)(release + 0x8C);
+                *(f32*)((s32)pose + 0x7C) = *(f32*)(release + 0x90);
+                if ((*(u32*)pose & 0x40) != 0) {
+                    *(u32*)pose &= ~0x40;
+                    animPoseWorldPositionEvalOn(*(s32*)((s32)npc + 0x104));
+                }
+                if ((*(u32*)pose & 0x80) != 0) {
+                    *(u32*)pose &= ~0x80;
+                    animPoseWorldMatrixEvalOn(*(s32*)((s32)npc + 0x104));
+                }
+                animPoseMain(*(s32*)((s32)npc + 0x104));
+                release += 0x94;
+            }
+            i++;
+            npc = (void*)((s32)npc + 0x340);
+        }
+        *(u32*)(wp + 8) &= ~2;
+    }
+}
 
 void npcBlurOn(char* name) {
     extern s32 strcmp(const char*, const char*);
@@ -1126,19 +1272,84 @@ void npcBlurOn(char* name) {
 
 
 u8 npcReleaseFiledNpc(void) {
-    return 0;
-}
+    extern void* release_wp;
+    extern void* animPoseGetAnimPosePtr(s32);
+    extern void* animPoseGetAnimBaseDataPtr(s32);
+    extern char* animPoseGetCurrentAnim(s32);
+    extern void animPoseRelease(s32);
+    extern char* strcpy(char*, const char*);
+    s32 wp = (s32)&work;
+    char* release = release_wp;
+    void* npc;
+    void* pose;
+    s32 i;
 
+    if ((*(u32*)(wp + 8) & 2) != 0) {
+        npc = *(void**)(wp + 0xC);
+        i = 0;
+        while (i < *(s32*)(wp + 4)) {
+            if ((*(u32*)npc & 1) && (*(u32*)npc & 2)) {
+                pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
+                if (*(s32*)((s32)pose + 0x90) == -1 && *(s32*)((s32)npc + 0x104) >= 0) {
+                    pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
+                    *(s32*)(release + 0x80) = *(s32*)pose;
+                    *(f32*)(release + 0x84) = *(f32*)((s32)pose + 0x70);
+                    *(f32*)(release + 0x88) = *(f32*)((s32)pose + 0x74);
+                    *(f32*)(release + 0x8C) = *(f32*)((s32)pose + 0x78);
+                    *(f32*)(release + 0x90) = *(f32*)((s32)pose + 0x7C);
+                    strcpy(release, (char*)animPoseGetAnimBaseDataPtr(*(s32*)((s32)npc + 0x104)) + 4);
+                    strcpy(release + 0x40, animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104)));
+                    animPoseRelease(*(s32*)((s32)npc + 0x104));
+                    release += 0x94;
+                    *(s32*)((s32)npc + 0x104) = -1;
+                }
+            }
+            i++;
+            npc = (void*)((s32)npc + 0x340);
+        }
+    }
+}
 
 void npcSetBattleInfo(void* npc, s32 info) {
     ;
 }
 
 
-u8 fbatSetAttackAnnounce(s32 param_1) {
-    return 0;
-}
+u8 fbatSetAttackAnnounce(s32 flag) {
+    extern char str_fb_sensei_shita_802c13e8[];
+    extern char str_fb_sensei_sareta_802c13f8[];
+    extern s32 dat_8041fc70;
+    extern s32 dat_8041fc74;
+    s32 data;
 
+    data = *(s32*)((s32)gp + 0x168);
+    *(s32*)(data + 0x550) = 0;
+    *(s32*)(data + 0x554) = flag;
+    *(s32*)(data + 0x55C) = 0;
+    switch (*(s32*)(data + 0x554)) {
+        case 0x20000:
+        case 0x40000:
+        case 0x80000:
+        case 0x100000:
+        case 0x200000:
+        case 0x400000:
+        case 0x800000:
+        case 0x1000000:
+        case 0x2000000:
+            *(char**)(data + 0x568) = str_fb_sensei_shita_802c13e8;
+            *(s32*)(data + 0x558) = 2;
+            *(s32*)(data + 0x56C) = dat_8041fc70;
+            break;
+        case 0x10000000:
+            *(char**)(data + 0x568) = str_fb_sensei_sareta_802c13f8;
+            *(s32*)(data + 0x558) = 1;
+            *(s32*)(data + 0x56C) = dat_8041fc74;
+            break;
+        default:
+            *(s32*)(data + 0x558) = 0;
+            break;
+    }
+}
 
 s32 npcWaitAllInitEvtEnd(void) {
     extern s32 evtCheckID(s32 id);

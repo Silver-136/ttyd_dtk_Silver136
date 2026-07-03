@@ -298,14 +298,151 @@ USER_FUNC(evt_win_item_select) {
 /* CHATGPT STUB FILL: main/event/evt_window 20260624_184128 */
 
 /* stub-fill: evt_win_one_message | missing_definition | ghidra_signature */
-s32 evt_win_one_message(void* pEvt, int param_2) {
+s32 evt_win_one_message(EventEntry* event, s32 isFirstCall) {
+    extern void* memset(void* dst, int value, u32 size);
+    extern void* one_msg_desc;
+    extern u16 keyGetButtonTrg(s32 controller);
+    extern void* marioGetPtr(void);
+    extern u32 psndSFXOn_3D(const char* id, void* position);
+    extern const char str_SFX_MAIL_RECEPTION1_802fe4c0[];
+    extern void winMgrClose(void* win);
+    extern void winMgrDelete(void* win);
+    s32 value;
+    s32* work;
+    s32 state;
+
+    value = evtGetValue(event, *(s32*)event->args);
+    if (isFirstCall != 0) {
+        work = _mapAlloc(mapalloc_base_ptr, 0xC);
+        *(s32**)((s32)event + 0x78) = work;
+        memset(work, 0, 0xC);
+        work[2] = (s32)winMgrEntry(&one_msg_desc);
+        work[0] = 0;
+        work[1] = value;
+        winMgrSetParam((void*)work[2], work);
+    }
+
+    work = *(s32**)((s32)event + 0x78);
+    state = work[0];
+    if (state == 3) {
+        winMgrClose((void*)work[2]);
+        work[0]++;
+    } else if (state < 3) {
+        if (state == 1) {
+            if (winMgrAction((void*)work[2]) == 0) {
+                work[0]++;
+            }
+        } else if (state < 1) {
+            if (state >= 0) {
+                winMgrOpen((void*)work[2]);
+                work[0]++;
+            }
+        } else if ((keyGetButtonTrg(0) & 0x100) != 0) {
+            if (work[1] == 0) {
+                psndSFXOn_3D(str_SFX_MAIL_RECEPTION1_802fe4c0, (void*)((s32)marioGetPtr() + 0x8C));
+            }
+            work[0]++;
+        }
+    } else {
+        if (state == 5) {
+            winMgrDelete((void*)work[2]);
+            _mapFree(mapalloc_base_ptr, work);
+            return 2;
+        }
+        if (state < 5 && winMgrAction((void*)work[2]) == 0) {
+            work[0]++;
+        }
+    }
     return 0;
 }
-
 
 /* CHATGPT FALLBACK MISSING STUBS: main/event/evt_window 20260624_191429 */
 
 /* fallback stub-fill: map=coin_disp addr=0x80209c44 size=0x000001fc */
-int coin_disp() {
-    return 0;
+void coin_disp(void* win) {
+    typedef f32 Mtx[3][4];
+    extern void* pouchGetPtr(void);
+    extern void PSMTXTrans(Mtx m, double x, double y, double z);
+    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(Mtx a, Mtx b, Mtx out);
+    extern void iconDispGx2(Mtx m, s32 flags, u16 icon);
+    extern void iconNumberDispGx(Mtx m, s32 number, s32 flags, void* color);
+    extern void statusWinForceUpdateCoin(void);
+    extern s32 psndSFXOn(const char* name);
+    extern s32 unk_8041ed08;
+    extern u32 dat_80426e9c;
+    extern f32 float_neg220_80426ea0;
+    extern f32 float_neg113_80426ea4;
+    extern f32 float_0_80426ea8;
+    extern f32 float_0p7_80426eac;
+    extern f32 float_neg192_80426eb0;
+    extern f32 float_neg126_80426eb4;
+    void* work;
+    s32 current;
+    u16 icon;
+    Mtx trans;
+    Mtx scale;
+    u32 color;
+    s32 diff;
+    s32 step;
+    s32 timer;
+
+    pouchGetPtr();
+    work = *(void**)((s32)win + 0x2C);
+    if ((*(u32*)win & 4) != 0) {
+        return;
+    }
+
+    switch (*(s32*)((s32)work + 0xC)) {
+        case 1:
+            current = pouchGetSuperCoin();
+            icon = 0x10A;
+            break;
+        case 0:
+            current = pouchGetCoin();
+            icon = 0x193;
+            break;
+        case 2:
+            current = pouchGetStarPiece();
+            icon = 0x195;
+            break;
+    }
+
+    PSMTXTrans(trans, (double)float_neg220_80426ea0, (double)float_neg113_80426ea4, (double)float_0_80426ea8);
+    PSMTXScale(scale, float_0p7_80426eac, float_0p7_80426eac, float_0p7_80426eac);
+    PSMTXConcat(trans, scale, trans);
+    iconDispGx2(trans, 0x10, icon);
+    PSMTXTrans(trans, (double)float_neg192_80426eb0, (double)float_neg113_80426ea4, (double)float_0_80426ea8);
+    iconDispGx2(trans, 0x10, 0x1DE);
+    PSMTXTrans(trans, (double)float_neg126_80426eb4, (double)float_neg113_80426ea4, (double)float_0_80426ea8);
+    color = dat_80426e9c;
+    iconNumberDispGx(trans, *(s32*)((s32)work + 4), 0, &color);
+
+    diff = current - *(s32*)((s32)work + 4);
+    if (diff != 0) {
+        step = (diff / 10) + (diff >> 31);
+        step -= step >> 31;
+        if (step == 0) {
+            step = -1;
+            if (*(s32*)((s32)work + 4) < current) {
+                step = 1;
+            }
+        }
+        if ((*(u32*)((s32)work + 8) & 1) != 0) {
+            *(s32*)((s32)work + 4) += step;
+            statusWinForceUpdateCoin();
+        }
+        *(s32*)((s32)work + 8) += 1;
+        timer = *(s32*)((s32)work + 8);
+        step = (timer / 0x4B0) + (timer >> 31);
+        *(s32*)((s32)work + 8) = timer + (step - (step >> 31)) * -0x4B0;
+        if (unk_8041ed08 == 0) {
+            psndSFXOn((const char*)0x2005B);
+            unk_8041ed08 = 7;
+        }
+    }
+    if (unk_8041ed08 > 0) {
+        unk_8041ed08--;
+    }
 }
+

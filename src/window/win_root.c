@@ -177,29 +177,356 @@ void winRootDisp(s32 cameraId, void* work) {
 
 
 u8 winSortMain(void* pWin) {
+    extern void psndSFXOn(s32 soundId);
+    extern char* msgSearch(char* msg);
+    extern void FontGetMessageWidthLine(char* msg, u16* width);
+    extern s32 strcmp(char* a, char* b);
+    extern char* strncpy(char* dst, char* src, u32 n);
+    extern void* sort_data[8];
+    extern char _tmp_1042[];
+    extern f32 float_neg600_804233d0;
+    extern f32 float_30_804233d4;
+    extern f32 float_40_804233bc;
+    extern f32 float_0p125_804233d8;
+    u32 buttons;
+    u32 dirs;
+    char* msg;
+    s32 changed;
+    u16 width[4];
+
+    buttons = *(u32*)((s32)pWin + 4);
+    dirs = *(u32*)((s32)pWin + 0x10);
+    if (*(s32*)((s32)pWin + 0x17C) == 0) {
+        buttons = 0;
+        dirs = 0;
+    }
+    if ((buttons & 0x1000) != 0) {
+        *(s32*)((s32)pWin + 0x17C) = 0;
+        *(f32*)((s32)pWin + 0x16C) = float_neg600_804233d0;
+    } else if ((buttons & 0x200) != 0) {
+        psndSFXOn(0x20013);
+        *(s32*)((s32)pWin + 0x17C) = 0;
+        *(f32*)((s32)pWin + 0x16C) = float_neg600_804233d0;
+    } else if ((dirs & 0x1000) != 0) {
+        psndSFXOn(0x20005);
+        (*(s32*)((s32)pWin + 0x174))--;
+        if (*(s32*)((s32)pWin + 0x174) < 0) {
+            *(s32*)((s32)pWin + 0x174) = *(s32*)((s32)pWin + 0x178) - 1;
+        }
+    } else if ((dirs & 0x2000) != 0) {
+        psndSFXOn(0x20005);
+        (*(s32*)((s32)pWin + 0x174))++;
+        if (*(s32*)((s32)pWin + 0x174) >= *(s32*)((s32)pWin + 0x178)) {
+            *(s32*)((s32)pWin + 0x174) = 0;
+        }
+    } else if ((buttons & 0x100) != 0) {
+        void (**entry)(void*);
+        psndSFXOn(0x20012);
+        entry = (void (**)(void*))((s32)sort_data[*(s32*)((s32)pWin + 0x184)] + (*(s32*)((s32)pWin + 0x174) << 3));
+        entry[1](pWin);
+    }
+
+    if (*(s32*)((s32)pWin + 0x17C) != 0) {
+        *(f32*)((s32)pWin + 0x158) = *(f32*)((s32)pWin + 0x16C) + float_30_804233d4;
+        *(f32*)((s32)pWin + 0x15C) = (*(f32*)((s32)pWin + 0x170) - float_40_804233bc) - (f32)(*(s32*)((s32)pWin + 0x174) * 0x28);
+        msg = *(char**)((s32)sort_data[*(s32*)((s32)pWin + 0x184)] + (*(s32*)((s32)pWin + 0x174) << 3));
+        if (msg != 0) {
+            changed = 0;
+            if (*(char**)((s32)pWin + 0x144) != msg) {
+                changed = 1;
+            } else if (strcmp(_tmp_1042, msg) != 0) {
+                changed = 1;
+            }
+            if (changed != 0) {
+                *(s32*)((s32)pWin + 0x138) = 0;
+                *(char**)((s32)pWin + 0x13C) = msg;
+                *(s32*)((s32)pWin + 0x140) = 0;
+                FontGetMessageWidthLine(msgSearch(*(char**)((s32)pWin + 0x13C)), width);
+                *(s32*)((s32)pWin + 0x148) = 0;
+                *(s32*)((s32)pWin + 0x14C) = width[0] + 1;
+                *(char**)((s32)pWin + 0x144) = msg;
+                strncpy(_tmp_1042, msg, 0x3C);
+            }
+        }
+    }
+
+    *(f32*)((s32)pWin + 0x164) = ((*(f32*)((s32)pWin + 0x16C) - *(f32*)((s32)pWin + 0x164)) * float_0p125_804233d8) + *(f32*)((s32)pWin + 0x164);
+    *(f32*)((s32)pWin + 0x168) = ((*(f32*)((s32)pWin + 0x170) - *(f32*)((s32)pWin + 0x168)) * float_0p125_804233d8) + *(f32*)((s32)pWin + 0x168);
     return 0;
 }
-
 
 u8 winMsgMain(void* pWin) {
+    extern f32 intplGetValue(f32 start, f32 end, s32 type, s32 time, s32 duration);
+    extern u32 keyGetDirTrg(s32 controller);
+    extern void psndSFXOn(s32 soundId);
+    extern void* gp;
+    extern f32 float_neg800_8042347c;
+    extern f32 float_neg170_80423480;
+    extern f32 float_0_80423338;
+    s32 duration;
+    s32 timer;
+    s32 line;
+    s32 max;
+
+    switch (*(s32*)((s32)pWin + 0x130)) {
+        case 0:
+            *(f32*)((s32)pWin + 0x128) = float_neg800_8042347c;
+            *(f32*)((s32)pWin + 0x12C) = float_neg170_80423480;
+            *(s32*)((s32)pWin + 0x134) = 0;
+            (*(s32*)((s32)pWin + 0x130))++;
+            break;
+        case 1:
+            timer = *(s32*)((s32)pWin + 0x134);
+            (*(s32*)((s32)pWin + 0x134))++;
+            duration = (*(s32*)((s32)gp + 4) << 4) / 60;
+            *(f32*)((s32)pWin + 0x128) = intplGetValue(float_neg800_8042347c, float_0_80423338, 0xB, timer, duration);
+            duration = (*(s32*)((s32)gp + 4) << 4) / 60;
+            if (*(s32*)((s32)pWin + 0x134) > duration) {
+                (*(s32*)((s32)pWin + 0x130))++;
+            }
+            break;
+        case 2:
+            if (*(s32*)((s32)pWin + 0x20C) != 0xCA) {
+                if ((keyGetDirTrg(0) & 0x100) != 0) {
+                    *(s32*)((s32)pWin + 0x148) -= 2;
+                    if (*(s32*)((s32)pWin + 0x148) < 0) {
+                        *(s32*)((s32)pWin + 0x148) = 0;
+                    } else {
+                        psndSFXOn(0x20006);
+                    }
+                } else if ((keyGetDirTrg(0) & 0x200) != 0) {
+                    line = *(s32*)((s32)pWin + 0x148);
+                    max = *(s32*)((s32)pWin + 0x14C);
+                    if (line / 2 < ((max + 1) / 2) - 1) {
+                        *(s32*)((s32)pWin + 0x148) = line + 2;
+                        psndSFXOn(0x20006);
+                    }
+                }
+            }
+            break;
+        case 10:
+            *(s32*)((s32)pWin + 0x134) = 0;
+            (*(s32*)((s32)pWin + 0x130))++;
+            break;
+        case 11:
+            timer = *(s32*)((s32)pWin + 0x134);
+            (*(s32*)((s32)pWin + 0x134))++;
+            duration = (*(s32*)((s32)gp + 4) << 4) / 60;
+            *(f32*)((s32)pWin + 0x128) = intplGetValue(float_0_80423338, float_neg800_8042347c, 0xB, timer, duration);
+            duration = (*(s32*)((s32)gp + 4) << 4) / 60;
+            if (*(s32*)((s32)pWin + 0x134) > duration) {
+                (*(s32*)((s32)pWin + 0x130))++;
+            }
+            break;
+    }
     return 0;
 }
-
 
 u8 sort_4_3_func(void* pWin) {
+    extern u8 itemDataTable[];
+    s32 i;
+    s32 j;
+    s32* a;
+    s32* b;
+    s32 t0;
+    s32 t1;
+    s32 t2;
+    s32 swap;
+    s32 idA;
+    s32 idB;
+
+    if (*(s32*)((s32)pWin + 0x180) == 0) {
+        for (i = 0; i < *(s32*)((s32)pWin + 0xD64) - 1; i++) {
+            a = (s32*)((s32)pWin + 0x404 + (i * 0xC));
+            b = a + 3;
+            for (j = i + 1; j < *(s32*)((s32)pWin + 0xD64); j++) {
+                swap = 0;
+                idA = (s16)a[2];
+                idB = (s16)b[2];
+                if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] > *(s8*)&itemDataTable[idB * 0x28 + 0x1C]) {
+                    swap = 1;
+                } else if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] == *(s8*)&itemDataTable[idB * 0x28 + 0x1C] &&
+                           *(s16*)&itemDataTable[idA * 0x28 + 0x12] > *(s16*)&itemDataTable[idB * 0x28 + 0x12]) {
+                    swap = 1;
+                }
+                if (swap != 0) {
+                    t0 = a[0];
+                    t1 = a[1];
+                    t2 = a[2];
+                    a[0] = b[0];
+                    a[1] = b[1];
+                    a[2] = b[2];
+                    b[0] = t0;
+                    b[1] = t1;
+                    b[2] = t2;
+                }
+                b += 3;
+            }
+        }
+    } else {
+        for (i = 0; i < *(s32*)((s32)pWin + 0xD64) - 1; i++) {
+            a = (s32*)((s32)pWin + 0x404 + (i * 0xC));
+            b = a + 3;
+            for (j = i + 1; j < *(s32*)((s32)pWin + 0xD64); j++) {
+                swap = 0;
+                idA = (s16)a[2];
+                idB = (s16)b[2];
+                if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] < *(s8*)&itemDataTable[idB * 0x28 + 0x1C]) {
+                    swap = 1;
+                } else if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] == *(s8*)&itemDataTable[idB * 0x28 + 0x1C] &&
+                           *(s16*)&itemDataTable[idA * 0x28 + 0x12] < *(s16*)&itemDataTable[idB * 0x28 + 0x12]) {
+                    swap = 1;
+                }
+                if (swap != 0) {
+                    t0 = a[0];
+                    t1 = a[1];
+                    t2 = a[2];
+                    a[0] = b[0];
+                    a[1] = b[1];
+                    a[2] = b[2];
+                    b[0] = t0;
+                    b[1] = t1;
+                    b[2] = t2;
+                }
+                b += 3;
+            }
+        }
+    }
+    *(s32*)((s32)pWin + 0x180) = 1 - *(s32*)((s32)pWin + 0x180);
+    *(s32*)((s32)pWin + 0xD68) = 0;
+    *(s32*)((s32)pWin + 0xD6C) = *(s32*)((s32)pWin + 0xD68) / 8;
     return 0;
 }
-
 
 u8 sort_5_3_func(void* pWin) {
+    extern u8 itemDataTable[];
+    s32 i;
+    s32 j;
+    s16* a;
+    s16* b;
+    s16 tmp;
+    s32 swap;
+    s32 idA;
+    s32 idB;
+
+    if (*(s32*)((s32)pWin + 0x180) == 0) {
+        for (i = 0; i < *(s32*)((s32)pWin + 0xE94) - 1; i++) {
+            a = (s16*)((s32)pWin + 0xEBC + (i * 2));
+            b = a + 1;
+            for (j = i + 1; j < *(s32*)((s32)pWin + 0xE94); j++) {
+                tmp = *a;
+                swap = 0;
+                idA = (s16)(tmp + 0xF0);
+                idB = (s16)(*b + 0xF0);
+                if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] > *(s8*)&itemDataTable[idB * 0x28 + 0x1C]) {
+                    swap = 1;
+                } else if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] == *(s8*)&itemDataTable[idB * 0x28 + 0x1C] &&
+                           *(s16*)&itemDataTable[idA * 0x28 + 0x12] > *(s16*)&itemDataTable[idB * 0x28 + 0x12]) {
+                    swap = 1;
+                }
+                if (swap != 0) {
+                    *a = *b;
+                    *b = tmp;
+                }
+                b++;
+            }
+        }
+    } else {
+        for (i = 0; i < *(s32*)((s32)pWin + 0xE94) - 1; i++) {
+            a = (s16*)((s32)pWin + 0xEBC + (i * 2));
+            b = a + 1;
+            for (j = i + 1; j < *(s32*)((s32)pWin + 0xE94); j++) {
+                tmp = *a;
+                swap = 0;
+                idA = (s16)(tmp + 0xF0);
+                idB = (s16)(*b + 0xF0);
+                if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] < *(s8*)&itemDataTable[idB * 0x28 + 0x1C]) {
+                    swap = 1;
+                } else if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] == *(s8*)&itemDataTable[idB * 0x28 + 0x1C] &&
+                           *(s16*)&itemDataTable[idA * 0x28 + 0x12] < *(s16*)&itemDataTable[idB * 0x28 + 0x12]) {
+                    swap = 1;
+                }
+                if (swap != 0) {
+                    *a = *b;
+                    *b = tmp;
+                }
+                b++;
+            }
+        }
+    }
+    *(s32*)((s32)pWin + 0x180) = 1 - *(s32*)((s32)pWin + 0x180);
+    *(s32*)((s32)pWin + 0xE9C) = 0;
+    *(s32*)((s32)pWin + 0xEA0) = *(s32*)((s32)pWin + 0xE9C) / 28;
     return 0;
 }
-
 
 u8 winZClear(void) {
+    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+    extern void* camGetCurPtr(void);
+    extern void PSMTXConcat(void* a, void* b, void* out);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void GXSetCurrentMtx(s32 id);
+    extern void GXSetAlphaUpdate(s32 update);
+    extern void GXSetColorUpdate(s32 update);
+    extern void GXSetNumChans(s32 count);
+    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
+    extern void GXSetNumTevStages(s32 count);
+    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 colorChan);
+    extern void GXSetTevOp(s32 stage, s32 mode);
+    extern void GXSetNumTexGens(s32 count);
+    extern void GXSetZMode(s32 enable, s32 func, s32 update);
+    extern void GXSetBlendMode(s32 type, s32 srcFact, s32 dstFact, s32 op);
+    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxAttrFmt(s32 vtxFmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
+    extern f32 float_0_80423338;
+    extern f32 float_neg1000_804233a0;
+    extern f32 float_neg500_804233a4;
+    extern f32 float_300_804233a8;
+    extern f32 float_neg100_804233ac;
+    volatile f32* fifo = (volatile f32*)0xCC008000;
+    f32 mtx[3][4];
+
+    PSMTXTrans(mtx, float_0_80423338, float_0_80423338, float_neg1000_804233a0);
+    PSMTXConcat((void*)((s32)camGetCurPtr() + 0x11C), mtx, mtx);
+    GXLoadPosMtxImm(mtx, 0);
+    GXSetCurrentMtx(0);
+    GXSetAlphaUpdate(0);
+    GXSetColorUpdate(0);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 2, 2);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0xFF, 0xFF, 4);
+    GXSetTevOp(0, 4);
+    GXSetNumTexGens(0);
+    GXSetZMode(1, 7, 1);
+    GXSetBlendMode(0, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxDesc(9, 1);
+    GXBegin(0x80, 0, 4);
+    *fifo = float_neg500_804233a4;
+    *fifo = float_300_804233a8;
+    *fifo = float_0_80423338;
+    *fifo = float_0_80423338;
+    *fifo = float_300_804233a8;
+    *fifo = float_0_80423338;
+    *fifo = float_0_80423338;
+    *fifo = float_neg100_804233ac;
+    *fifo = float_0_80423338;
+    *fifo = float_neg500_804233a4;
+    *fifo = float_neg100_804233ac;
+    *fifo = float_0_80423338;
+    GXSetColorUpdate(1);
     return 0;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -820,6 +1147,87 @@ void unk_80152e80(s32 cameraId, void* win) {
 /* CHATGPT FALLBACK MISSING STUBS: main/window/win_root 20260624_191429 */
 
 /* fallback stub-fill: map=unk_80152bdc addr=0x80152bdc size=0x000002a4 */
-int unk_80152bdc() {
-    return 0;
+void unk_80152bdc(s32 cameraId, void* win) {
+    extern void GXSetFog(s32 type, f32 startz, f32 endz, f32 nearz, f32 farz, void* color);
+    extern void GXSetNumChans(s32 count);
+    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
+    extern void GXSetNumTevStages(s32 count);
+    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 colorChan);
+    extern void GXSetTevOp(s32 stage, s32 mode);
+    extern void GXSetNumTexGens(s32 count);
+    extern void GXSetTexCoordGen2(s32 texCoord, s32 func, s32 srcParam, s32 mtx, s32 normalize, s32 postMtx);
+    extern void GXSetBlendMode(s32 type, s32 srcFact, s32 dstFact, s32 op);
+    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+    extern void GXSetZMode(s32 enable, s32 func, s32 update);
+    extern void* camGetPtr(s32 cameraId);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void GXSetCurrentMtx(s32 id);
+    extern void GXInitTexObj(void* texObj, void* image, u16 width, u16 height, s32 fmt, s32 wrapS, s32 wrapT, s32 mipmap);
+    extern void GXLoadTexObj(void* texObj, s32 mapId);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxFmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+    extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
+    extern void* gp;
+    extern u32 dat_80423334;
+    extern f32 float_0_80423338;
+    extern f32 float_0p5_8042333c;
+    extern f32 float_1_80423340;
+    volatile f32* fifo = (volatile f32*)0xCC008000;
+    u32 color;
+    s32 texObj[8];
+    f32 halfW;
+    f32 halfH;
+
+    if (*(s32*)((s32)win + 0x38) != 0) {
+        color = dat_80423334;
+        GXSetFog(0, float_0_80423338, float_0_80423338, float_0_80423338, float_0_80423338, &color);
+        GXSetNumChans(0);
+        GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevOp(0, 3);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+        GXSetBlendMode(1, 4, 5, 0);
+        GXSetZCompLoc(1);
+        GXSetAlphaCompare(7, 0, 0, 7, 0);
+        GXSetZMode(0, 7, 0);
+        GXLoadPosMtxImm((void*)((s32)camGetPtr(8) + 0x11C), 0);
+        GXSetCurrentMtx(0);
+        GXInitTexObj(texObj, **(void***)((s32)win + 0x34), *(u16*)((s32)gp + 0x170), *(u16*)((s32)gp + 0x172), 4, 0, 0, 0);
+        GXLoadTexObj(texObj, 0);
+        GXSetCullMode(0);
+        GXClearVtxDesc();
+        GXSetVtxDesc(9, 1);
+        GXSetVtxDesc(0xD, 1);
+        GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+        GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+        GXBegin(0x80, 0, 4);
+        halfW = (f32)*(u16*)((s32)gp + 0x170) * float_0p5_8042333c;
+        halfH = (f32)*(u16*)((s32)gp + 0x172) * float_0p5_8042333c;
+        *fifo = -halfW;
+        *fifo = -halfH;
+        *fifo = float_0_80423338;
+        *fifo = float_0_80423338;
+        *fifo = float_1_80423340;
+        *fifo = halfW;
+        *fifo = -halfH;
+        *fifo = float_0_80423338;
+        *fifo = float_1_80423340;
+        *fifo = float_1_80423340;
+        *fifo = halfW;
+        *fifo = halfH;
+        *fifo = float_0_80423338;
+        *fifo = float_1_80423340;
+        *fifo = float_0_80423338;
+        *fifo = -halfW;
+        *fifo = halfH;
+        *fifo = float_0_80423338;
+        *fifo = float_0_80423338;
+        *fifo = float_0_80423338;
+    }
 }
+

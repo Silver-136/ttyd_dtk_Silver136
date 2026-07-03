@@ -46,9 +46,121 @@ u8 winItemDisp(s32 param_1, void* pWin, s32 param_3) {
 
 
 u8 winItemInit(void* pWin) {
+    extern f32 float_0_804237b8;
+    extern void* window_desc;
+    extern void* gp;
+    extern char str_jp_80423870[];
+    extern char str_us_80423874[];
+    extern char str_PCTs_w_PCTs_mail_tpl_802f5e70[];
+    extern s32 pouchCheckItem(s32 itemId);
+    extern s32 pouchGetItem(s32 itemId);
+    extern s32 pouchReceiveMailCount(void);
+    extern void* pouchGetPtr(void);
+    extern s32 winMgrEntry(void* desc);
+    extern void winMgrSetPriority(s32 entryId, s32 priority);
+    extern s32 getMarioStDvdRoot(void);
+    extern u32 fileAsyncf(s32, s32, char*, s32, char*);
+    s32 i;
+    void* out;
+    s32 count;
+    u16 item;
+    u16* skip;
+    s32 skipIndex;
+    s32 loop;
+    s32 langRoot;
+    char* lang;
+
+    *(s32*)((s32)pWin + 0x20C) = 0;
+    *(s32*)((s32)pWin + 0x210) = 0;
+    *(s32*)((s32)pWin + 0x214) = 0;
+    *(s32*)((s32)pWin + 0x21C) = 0;
+    *(s32*)((s32)pWin + 0x218) = 0;
+    *(s32*)((s32)pWin + 0x220) = 0;
+    *(f32*)((s32)pWin + 0x238) = float_320_8042382c;
+    *(f32*)((s32)pWin + 0x234) = float_320_8042382c;
+    *(f32*)((s32)pWin + 0x240) = float_neg240_804237f4;
+    *(f32*)((s32)pWin + 0x23C) = float_neg240_804237f4;
+    *(f32*)((s32)pWin + 0x248) = float_320_8042382c;
+    *(f32*)((s32)pWin + 0x244) = float_320_8042382c;
+    *(f32*)((s32)pWin + 0x250) = float_neg240_804237f4;
+    *(f32*)((s32)pWin + 0x24C) = float_neg240_804237f4;
+
+    if (pouchCheckItem(0x36) == 0) {
+        pouchGetItem(0x36);
+    }
+
+    *(s32*)((s32)pWin + 0x254) = pouchReceiveMailCount();
+    *(s32*)((s32)pWin + 0x258) = 0;
+    *(s32*)((s32)pWin + 0x25C) = 0;
+    *(f32*)((s32)pWin + 0x264) = float_0_804237b8;
+    *(f32*)((s32)pWin + 0x260) = float_0_804237b8;
+
+    out = pWin;
+    i = 0;
+    while (i < *(s32*)((s32)pWin + 0x254)) {
+        *(u8*)((s32)out + 0x26E) = (u8)(*(s32*)((s32)pWin + 0x254) - i - 1);
+        *(u8*)((s32)out + 0x26F) = *(u8*)((s32)pouchGetPtr() + (*(s32*)((s32)pWin + 0x254) - i) + 0x519);
+        i++;
+        out = (void*)((s32)out + 2);
+    }
+
+    count = 0;
+    *(s32*)((s32)pWin + 0x2D4) = 0;
+    *(u16*)((s32)pWin + 0x3DA) = 0;
+    while (count < 0x79) {
+        item = pouchKeyItem(count);
+        if (item != 0) {
+            skipIndex = 0;
+            skip = menu_skip_list;
+            for (loop = 0; loop < 2; loop++) {
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+            }
+            if ((u32)skipIndex >= 0x12) {
+                *(u16*)((s32)pWin + 0x2E8 + (*(s16*)((s32)pWin + 0x3DA) * 2)) = item;
+                *(u16*)((s32)pWin + 0x3DA) = *(s16*)((s32)pWin + 0x3DA) + 1;
+            }
+        }
+        count++;
+    }
+
+    *(s32*)((s32)pWin + 0x1210) = winMgrEntry(&window_desc);
+    *(s32*)((s32)pWin + 0x1214) = winMgrEntry((void*)((s32)&window_desc + 0x28));
+    winMgrSetPriority(*(s32*)((s32)pWin + 0x1210), -0xC8);
+    winMgrSetPriority(*(s32*)((s32)pWin + 0x1214), -0x64);
+    lang = str_us_80423874;
+    if (*(u32*)((s32)gp + 0x16C) == 0) {
+        lang = str_jp_80423870;
+    }
+    langRoot = getMarioStDvdRoot();
+    fileAsyncf(4, 0, str_PCTs_w_PCTs_mail_tpl_802f5e70, langRoot, lang);
     return 0;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

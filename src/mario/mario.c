@@ -800,14 +800,88 @@ void marioDispBlur(s32 param_1, void* mario) {
 #pragma use_lmw_stmw on
 
 s32 marioChkKey(void) {
-    return 0;
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32);
+    extern s32 seqGetSeq(void);
+    extern void* mp;
+    extern s32 marioShipChanging(void);
+    extern s32 marioRollKeyDisable(void);
+    extern s32 marioSlitKeyDisable(void);
+    extern s32 christineGetStatus(void);
+    extern s32 mario_bomhei_keychk2(void);
+    extern s32 yoshiGetStatus(void);
+    extern s32 nokonoko_holdItem(void);
+    void* party;
+
+    party = partyGetPtr(marioGetPartyId());
+    if (seqGetSeq() != 2) {
+        return 0;
+    }
+    if (*(s8*)((s32)mp + 0x39) != 0) {
+        return 0;
+    }
+    if (marioShipChanging() == 1 || marioShipChanging() == 2) {
+        return 0;
+    }
+    if (marioRollKeyDisable() == 0) {
+        return 0;
+    }
+    if (marioSlitKeyDisable() == 0) {
+        return 0;
+    }
+    if (party == 0) {
+        return 1;
+    }
+    if (christineGetStatus() == 1) {
+        return 0;
+    }
+    if (mario_bomhei_keychk2() == 0) {
+        return 0;
+    }
+    if (yoshiGetStatus() != 0) {
+        return 0;
+    }
+    if ((*(u32*)party & 0x100) != 0) {
+        s32 mode = *(s8*)((s32)party + 0x31);
+        if (mode == 7 || mode == 5 || mode == 6) {
+            return 0;
+        }
+    }
+    if (nokonoko_holdItem() != 0) {
+        return 0;
+    }
+    return 1;
 }
 
+s32 marioPaperOn(char* name) {
+    extern void* mp;
+    extern s32 strcmp(const char*, const char*);
+    extern void animPaperPoseRelease(s32);
+    extern s32 animPaperPoseEntry(char*, s32);
+    extern void animPoseSetPaperAnimGroup(s32, char*, s32);
+    extern char str_a_mario_802c18a0[];
+    void* mario;
+    char* base;
+    s32 special;
 
-s32 marioPaperOn(char* param_1) {
-    return 0;
+    base = str_a_mario_802c18a0;
+    mario = mp;
+    if (*(s32*)((s32)mario + 0x240) >= 0) {
+        animPaperPoseRelease(*(s32*)((s32)mario + 0x240));
+        *(s32*)((s32)mario + 0x240) = -1;
+    }
+    *(u32*)((s32)mario + 4) |= 0x40000000;
+    *(s32*)((s32)mario + 0x240) = animPaperPoseEntry(name, 2);
+
+    special = 0;
+    if (strcmp(name, base + 0x300) == 0 || strcmp(name, base + 0x308) == 0 ||
+        strcmp(name, base + 0x310) == 0 || strcmp(name, base + 0x318) == 0 ||
+        strcmp(name, base + 0x324) == 0 || strcmp(name, base + 0x330) == 0) {
+        special = 1;
+    }
+    animPoseSetPaperAnimGroup(*(s32*)((s32)mario + 0x22C), name, special == 0);
+    return 1;
 }
-
 
 void marioBgmodeOff(void) {
     extern void* mp;
@@ -907,10 +981,42 @@ void marioSetPaperAnimeLocalTime(s32 time) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-u8 marioFBattlePost(void) {
-    return 0;
-}
+void marioFBattlePost(void) {
+    typedef struct Vec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
+    extern void* mp;
+    extern Vec R_last_position;
+    extern void marioYoshiForceCancel(void);
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32);
+    extern void partyGetAppearPos(void*, Vec*);
+    extern void partyCtrlOn(void);
+    extern void marioChgMot(s32);
+    void* mario;
+    void* party;
+    Vec pos;
 
+    mario = mp;
+    *(u32*)mario &= ~0x1000;
+    if (*(u16*)((s32)mario + 0x2E) == 0x14) {
+        *(Vec*)((s32)mario + 0x8C) = R_last_position;
+    }
+    if (*(u16*)((s32)mario + 0x2E) == 0x1A) {
+        marioYoshiForceCancel();
+    }
+    party = partyGetPtr(marioGetPartyId());
+    if (party != 0) {
+        partyGetAppearPos(party, &pos);
+        *(Vec*)((s32)party + 0x58) = pos;
+    }
+    partyCtrlOn();
+    if (*(u16*)((s32)mario + 0x2E) == 0x12 || *(u16*)((s32)mario + 0x2E) == 0x14) {
+        marioChgMot(0);
+    }
+}
 
 s32 marioChkSts(u32 flags) {
     extern void* mp;
@@ -1053,14 +1159,26 @@ void marioChgPaper(char* name) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+void marioGetScreenPos(f32* pos, f32* x, f32* y, f32* z) {
+    extern void* camGetPtr(s32 id);
+    extern void GXSetProjection(void* proj, s32 type);
+    extern void GXGetProjectionv(f32* proj);
+    extern void GXGetViewportv(f32* viewport);
+    extern void GXProject(f32 x, f32 y, f32 z, void* model, f32* proj, f32* viewport, f32* outX, f32* outY, f32* outZ);
+    f32 proj[7];
+    f32 viewport[6];
+    void* cam;
 
-u8 marioGetScreenPos(float* param_1, float* param_2, float* param_3, float* param_4) {
-    return 0;
+    cam = camGetPtr(4);
+    GXSetProjection((void*)((s32)cam + 0x15C), *(s32*)((s32)cam + 0x19C));
+    GXGetProjectionv(proj);
+    GXGetViewportv(viewport);
+    GXProject(pos[0], pos[1], pos[2], (void*)((s32)cam + 0x11C), proj, viewport, x, y, z);
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 marioChkPushAnime(void) {
     extern void* mp;

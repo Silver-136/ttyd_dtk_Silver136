@@ -777,50 +777,277 @@ f32 _intplGetFloat(f32 value, s32 kind) {
     }
 }
 
-void* evtNpcNameToPtr_NoAssert(EventEntry* event, s32 name) {
-    return 0;
+void* evtNpcNameToPtr_NoAssert(void* event, s32 name) {
+    extern s32 strcmp(const char*, const char*);
+    extern void* npcNameToPtr_NoAssert(void*);
+    extern char vec3_802c1470[];
+    extern char str_me_8041fd80[];
+    extern char str_party_8041fdcc[];
+    extern char str_mario_8041fdd4[];
+
+    if (strcmp((char*)name, str_me_8041fd80) == 0) {
+        return *(void**)((s32)event + 0x170);
+    }
+    if (strcmp((char*)name, str_party_8041fdcc) == 0) {
+        return (void*)-1;
+    }
+    if (strcmp((char*)name, vec3_802c1470 + 0x80) == 0) {
+        return (void*)-1;
+    }
+    if (strcmp((char*)name, vec3_802c1470 + 0x8C) == 0) {
+        return (void*)-2;
+    }
+    if (strcmp((char*)name, str_mario_8041fdd4) == 0) {
+        return (void*)-3;
+    }
+    if (strcmp((char*)name, vec3_802c1470 + 0x98) == 0) {
+        return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x32C);
+    }
+    if (strcmp((char*)name, vec3_802c1470 + 0xA0) == 0) {
+        return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x330);
+    }
+    if (strcmp((char*)name, vec3_802c1470 + 0xA8) == 0) {
+        return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x334);
+    }
+    if (strcmp((char*)name, vec3_802c1470 + 0xB0) == 0) {
+        return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x338);
+    }
+    if (strcmp((char*)name, vec3_802c1470 + 0xB8) == 0) {
+        return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x33C);
+    }
+    return npcNameToPtr_NoAssert((void*)name);
 }
 
+void* evtNpcNameToPtr(void* event, s32 name) {
+    extern s32 strcmp(const char*, const char*);
+    extern void* npcNameToPtr(void*);
+    extern char vec3_802c1470[];
+    extern char str_me_8041fd80[];
+    extern char str_party_8041fdcc[];
+    extern char str_mario_8041fdd4[];
 
-void* evtNpcNameToPtr(EventEntry* event, s32 name) {
-    return 0;
+    if (strcmp((char*)name, str_me_8041fd80) == 0) {
+        return *(void**)((s32)event + 0x170);
+    }
+    if (strcmp((char*)name, str_party_8041fdcc) == 0) {
+        return (void*)-1;
+    }
+    if (strcmp((char*)name, vec3_802c1470 + 0x80) == 0) {
+        return (void*)-1;
+    }
+    if (strcmp((char*)name, vec3_802c1470 + 0x8C) == 0) {
+        return (void*)-2;
+    }
+    if (strcmp((char*)name, str_mario_8041fdd4) == 0) {
+        return (void*)-3;
+    }
+    if (strcmp((char*)name, vec3_802c1470 + 0x98) == 0) {
+        return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x32C);
+    }
+    if (strcmp((char*)name, vec3_802c1470 + 0xA0) == 0) {
+        return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x330);
+    }
+    if (strcmp((char*)name, vec3_802c1470 + 0xA8) == 0) {
+        return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x334);
+    }
+    if (strcmp((char*)name, vec3_802c1470 + 0xB0) == 0) {
+        return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x338);
+    }
+    if (strcmp((char*)name, vec3_802c1470 + 0xB8) == 0) {
+        return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x33C);
+    }
+    return npcNameToPtr((void*)name);
 }
-
 
 u8 evt_npc_set_rotate_offset(s32 pEvt) {
     return 0;
 }
 
 
-u8 evt_npc_set_rotate(s32 pEvt) {
-    return 0;
-}
+s32 evt_npc_set_rotate(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    extern char vec3_802c147c[];
+    s32* args;
+    s32 name;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 rot[3];
+    void* npc;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    name = evtGetValue(pEvt, args[0]);
+    x = evtGetValue(pEvt, args[1]);
+    y = evtGetValue(pEvt, args[2]);
+    z = evtGetValue(pEvt, args[3]);
+    npc = evtNpcNameToPtr(pEvt, name);
+    *(s32*)&rot[0] = *(s32*)(vec3_802c147c + 0);
+    *(s32*)&rot[1] = *(s32*)(vec3_802c147c + 4);
+    *(s32*)&rot[2] = *(s32*)(vec3_802c147c + 8);
+    rot[0] = x;
+    rot[1] = y;
+    rot[2] = z;
+    *(s32*)((s32)npc + 0xEC) = *(s32*)&rot[0];
+    *(s32*)((s32)npc + 0xF0) = *(s32*)&rot[1];
+    *(s32*)((s32)npc + 0xF4) = *(s32*)&rot[2];
+    return 2;
+}
 
 u8 evt_fbat_trans_floor_position(s32 pEvt) {
     return 0;
 }
 
 
-u8 evt_npc_add_rotate(s32 pEvt) {
-    return 0;
-}
+s32 evt_npc_add_rotate(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    s32* args;
+    s32 name;
+    f32 x;
+    f32 y;
+    f32 z;
+    void* npc;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    name = evtGetValue(pEvt, args[0]);
+    x = evtGetValue(pEvt, args[1]);
+    y = evtGetValue(pEvt, args[2]);
+    z = evtGetValue(pEvt, args[3]);
+    npc = evtNpcNameToPtr(pEvt, name);
+    *(f32*)((s32)npc + 0xEC) += x;
+    *(f32*)((s32)npc + 0xF0) += y;
+    *(f32*)((s32)npc + 0xF4) += z;
+    return 2;
+}
 
 s32 evt_npc_slave_entry(void* pEvt) {
-    return 0;
+    extern s32 evtGetValue(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    extern void* npcNameToPtr(void*);
+    extern void* memset(void*, s32, u32);
+    extern s32 sprintf(char*, const char*, ...);
+    extern char* strcpy(char*, const char*);
+    extern char* strcat(char*, const char*);
+    extern s32 npcEntry(char*, s32);
+    extern void npcSetSlave(void*, void*, s32);
+    extern void evtSetValue(void*, s32, s32);
+    extern char str_sPCTd_8041fe08[];
+    s32* args;
+    void* parent;
+    s32 index;
+    s32 model;
+    s32 dst;
+    s32 interrupt;
+    void* slave;
+    char suffix[4];
+    char name[0xBC];
+    s32 i;
+
+    args = *(s32**)((s32)pEvt + 0x18);
+    parent = evtNpcNameToPtr(pEvt, evtGetValue(pEvt, args[0]));
+    index = evtGetValue(pEvt, args[1]);
+    model = evtGetValue(pEvt, args[2]);
+    dst = args[3];
+    interrupt = evtGetValue(pEvt, args[4]);
+    memset(name, 0, 0xB8);
+    sprintf(suffix, str_sPCTd_8041fe08, index);
+    strcpy(name, (char*)((s32)parent + 8));
+    strcat(name, suffix);
+    npcEntry(name, model);
+    slave = npcNameToPtr(name);
+    *(u32*)slave |= 0x120018;
+    *(s32*)((s32)slave + 0x12C) = interrupt;
+    for (i = 0; i < 0x32; i++) {
+        ((s32*)((s32)slave + 0x230))[i] = ((s32*)((s32)parent + 0x230))[i];
+    }
+    npcSetSlave(parent, slave, index);
+    evtSetValue(pEvt, dst, (s32)slave + 8);
+    return 2;
 }
 
+s32 evt_npc_add_dirdist(void* pEvt) {
+    extern f32 evtGetFloat(void*, s32);
+    extern void evtSetFloat(void*, s32, f32);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern f32 float_6p2832_8041fda0;
+    extern f32 float_360_8041fda4;
+    s32* args;
+    s32 xArg;
+    s32 zArg;
+    f32 dir;
+    f32 dist;
+    f32 x;
+    f32 z;
+    f32 radians;
+    f32 s;
+    f32 c;
 
-u8 evt_npc_add_dirdist(void) {
-    return 0;
+    args = *(s32**)((s32)pEvt + 0x18);
+    xArg = args[0];
+    zArg = args[1];
+    dir = evtGetFloat(pEvt, args[2]);
+    dist = evtGetFloat(pEvt, args[3]);
+    x = evtGetFloat(pEvt, xArg);
+    z = evtGetFloat(pEvt, zArg);
+    radians = (float_6p2832_8041fda0 * dir) / float_360_8041fda4;
+    s = (f32)sin(radians);
+    c = (f32)cos(radians);
+    evtSetFloat(pEvt, xArg, x + dist * s);
+    evtSetFloat(pEvt, zArg, z - dist * c);
+    return 2;
 }
 
+s32 evt_npc_sound_data_set(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    extern f32 float_0_8041fd84;
+    s32* args;
+    void* npc;
+    s32 arg1;
+    s32 arg2;
+    s32 arg3;
+    s32 arg4;
+    s32 arg5;
+    s32 value1;
+    s32 value2;
+    s32 value3;
+    u16 value4;
+    s32 value5;
 
-s32 evt_npc_sound_data_set(int param_1) {
-    return 0;
+    args = *(s32**)((s32)pEvt + 0x18);
+    npc = evtNpcNameToPtr(pEvt, evtGetValue(pEvt, args[0]));
+    arg1 = args[1];
+    value1 = evtGetValue(pEvt, arg1);
+    arg2 = args[2];
+    value2 = evtGetValue(pEvt, arg2);
+    arg3 = args[3];
+    value4 = evtGetValue(pEvt, arg3);
+    arg4 = args[4];
+    value3 = evtGetValue(pEvt, arg4);
+    arg5 = args[5];
+    value5 = evtGetValue(pEvt, arg5);
+
+    if ((u32)arg1 != 0xF1194D80) {
+        *(s32*)((s32)npc + 0x1E0) = value1;
+    }
+    if ((u32)arg2 != 0xF1194D80) {
+        *(s32*)((s32)npc + 0x1E4) = value2;
+    }
+    if ((u32)arg4 != 0xF1194D80) {
+        *(s32*)((s32)npc + 0x1EC) = value3;
+    }
+    if ((u32)arg5 != 0xF1194D80) {
+        *(s32*)((s32)npc + 0x1F0) = value5;
+    }
+    if ((u32)arg3 != 0xF1194D80) {
+        *(u16*)((s32)npc + 0x1E8) = value4;
+    }
+    *(u16*)((s32)npc + 0x1D8) = 1;
+    *(f32*)((s32)npc + 0x1DC) = float_0_8041fd84;
+    return 2;
 }
-
 
 u8 _kamek_houki_kemuri(int param_1, int param_2) {
     return 0;
@@ -828,49 +1055,212 @@ u8 _kamek_houki_kemuri(int param_1, int param_2) {
 
 
 s32 evt_npc_set_tribe(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    extern void* npcGetTribe(s32);
+    extern char* strcpy(char*, const char*);
+    extern void animPoseSetAnim(s32, char*, s32);
+    extern f32 float_0_8041fd84;
+    s32* args;
+    s32 name;
+    s32 tribeName;
+    void* npc;
+    void* tribe;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    name = evtGetValue(pEvt, args[0]);
+    tribeName = evtGetValue(pEvt, args[1]);
+    npc = evtNpcNameToPtr(pEvt, name);
+    tribe = npcGetTribe(tribeName);
+    *(void**)((s32)npc + 0x28) = tribe;
+    *(f32*)((s32)npc + 0x14C) = *(f32*)((s32)tribe + 0x28);
+    *(f32*)((s32)npc + 0x150) = *(f32*)((s32)tribe + 0x2C);
+    if (*(void**)((s32)tribe + 0x10) != 0) {
+        strcpy((char*)((s32)npc + 0x4C), *(char**)((s32)tribe + 0x10));
+    }
+    if (*(void**)((s32)tribe + 0x14) != 0) {
+        strcpy((char*)((s32)npc + 0x6C), *(char**)((s32)tribe + 0x14));
+    }
+    if (*(void**)((s32)tribe + 8) != 0) {
+        strcpy((char*)((s32)npc + 0x2C), *(char**)((s32)tribe + 8));
+        animPoseSetAnim(*(s32*)((s32)npc + 0x104), (char*)((s32)npc + 0x2C), 1);
+    }
+    *(s32*)((s32)npc + 0x1E0) = *(s32*)((s32)tribe + 0x40);
+    *(s32*)((s32)npc + 0x1E4) = *(s32*)((s32)tribe + 0x44);
+    *(s32*)((s32)npc + 0x1EC) = *(s32*)((s32)tribe + 0x4C);
+    *(s32*)((s32)npc + 0x1F0) = *(s32*)((s32)tribe + 0x50);
+    *(u16*)((s32)npc + 0x1E8) = *(u16*)((s32)tribe + 0x48);
+    *(u16*)((s32)npc + 0x1D8) = 1;
+    *(f32*)((s32)npc + 0x1DC) = float_0_8041fd84;
+    return 1;
+}
 
 u8 evt_npc_kamek_kemuri2(void) {
     return 0;
 }
 
 
-u8 evt_npc_facedirection_add(void) {
-    return 0;
-}
+s32 evt_npc_facedirection_add(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern f32 evtGetFloat(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    extern void* marioGetPtr(void);
+    extern s32 strcmp(const char*, const char*);
+    extern f32 npcTransRytoFaceDir(void*);
+    extern void evtSetValue(void*, s32, s32);
+    extern char str_mario_8041fdd4[];
+    extern f32 float_180_8041fdb0;
+    extern f32 float_90_8041fddc;
+    extern f32 float_1_8041fd88;
+    extern f32 float_neg1_8041fd8c;
+    s32* args;
+    s32 name;
+    f32 base;
+    f32 add;
+    f32 dir;
+    s32 value;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    name = evtGetValue(pEvt, args[0]);
+    base = evtGetFloat(pEvt, args[1]);
+    add = evtGetFloat(pEvt, args[2]);
+    if (strcmp((char*)name, str_mario_8041fdd4) == 0) {
+        if (*(f32*)((s32)marioGetPtr() + 0x1AC) == float_180_8041fdb0) {
+            dir = float_1_8041fd88;
+        } else {
+            dir = float_neg1_8041fd8c;
+        }
+    } else if (npcTransRytoFaceDir(evtNpcNameToPtr(pEvt, name)) == float_90_8041fddc) {
+        dir = float_1_8041fd88;
+    } else {
+        dir = float_neg1_8041fd8c;
+    }
+    value = (s32)(base + add * dir);
+    evtSetValue(pEvt, args[1], value);
+    return 2;
+}
 
 s32 evt_npc_set_ry_lr(void* pEvt) {
     return 0;
 }
 
 
-u8 evt_npc_get_loiter_dir(void) {
-    return 0;
-}
+s32 evt_npc_get_loiter_dir(void* pEvt) {
+    extern f32 evtGetFloat(void*, s32);
+    extern void evtSetFloat(void*, s32, f32);
+    extern s32 rand(void);
+    extern f32 reviseAngle(f32);
+    extern f32 float_0_8041fd84;
+    s32* args;
+    s32 dst;
+    f32 min;
+    f32 max;
+    f32 base;
+    f32 range;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    dst = args[0];
+    min = evtGetFloat(pEvt, args[1]);
+    max = evtGetFloat(pEvt, args[2]);
+    base = evtGetFloat(pEvt, dst);
+    range = max - min;
+    if (range <= float_0_8041fd84) {
+        evtSetFloat(pEvt, dst, reviseAngle(base + min));
+    } else {
+        evtSetFloat(pEvt, dst, reviseAngle(base + min + (f32)rand() / range));
+    }
+    return 2;
+}
 
 s32 evt_npc_set_home_position(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void*, s32);
+    extern f32 evtGetFloat(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    s32* args;
+    s32 name;
+    s32 x;
+    s32 y;
+    s32 z;
+    void* npc;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    name = evtGetValue(pEvt, args[0]);
+    x = (s32)evtGetFloat(pEvt, args[1]);
+    y = (s32)evtGetFloat(pEvt, args[2]);
+    z = (s32)evtGetFloat(pEvt, args[3]);
+    npc = evtNpcNameToPtr(pEvt, name);
+    *(f32*)((s32)npc + 0x1FC) = x;
+    *(f32*)((s32)npc + 0x200) = y;
+    *(f32*)((s32)npc + 0x204) = z;
+    return 2;
+}
 
 s32 evt_npc_set_position(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void*, s32);
+    extern f32 evtGetFloat(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    extern char vec3_802c1470[];
+    s32* args;
+    s32 name;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 pos[3];
+    void* npc;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    name = evtGetValue(pEvt, args[0]);
+    x = evtGetFloat(pEvt, args[1]);
+    y = evtGetFloat(pEvt, args[2]);
+    z = evtGetFloat(pEvt, args[3]);
+    npc = evtNpcNameToPtr(pEvt, name);
+    *(s32*)&pos[0] = *(s32*)(vec3_802c1470 + 0);
+    *(s32*)&pos[1] = *(s32*)(vec3_802c1470 + 4);
+    *(s32*)&pos[2] = *(s32*)(vec3_802c1470 + 8);
+    pos[0] = x;
+    pos[1] = y;
+    pos[2] = z;
+    *(s32*)((s32)npc + 0x98) = *(s32*)&pos[0];
+    *(s32*)((s32)npc + 0x9C) = *(s32*)&pos[1];
+    *(s32*)((s32)npc + 0xA0) = *(s32*)&pos[2];
+    *(s32*)((s32)npc + 0x8C) = *(s32*)((s32)npc + 0x98);
+    *(s32*)((s32)npc + 0x90) = *(s32*)((s32)npc + 0x9C);
+    *(s32*)((s32)npc + 0x94) = *(s32*)((s32)npc + 0xA0);
+    return 2;
+}
 
 int evt_npc_wait_msec(void* pEvt, int param_2) {
     return 0;
 }
 
 
-f32 _get_target_dir(EventEntry* event, void* npc, s32 target) {
-    return 0.0f;
-}
+f32 _get_target_dir(void* pEvt, void* npc, s32 target) {
+    extern s32 strcmp(const char*, const char*);
+    extern void* marioGetPtr(void);
+    extern void* evtNpcNameToPtr(void*, s32);
+    extern void PSVECSubtract(void*, void*, void*);
+    extern f32 angleABf(f32, f32, f32, f32);
+    extern char str_mario_8041fdd4[];
+    extern f32 float_0_8041fd84;
+    f32 targetPos[3];
+    f32 npcPos[3];
+    f32 diff[3];
+    void* ptr;
 
+    if (strcmp((char*)target, str_mario_8041fdd4) == 0) {
+        ptr = marioGetPtr();
+    } else {
+        ptr = evtNpcNameToPtr(pEvt, target);
+    }
+    targetPos[0] = *(f32*)((s32)ptr + 0x8C);
+    targetPos[1] = *(f32*)((s32)ptr + 0x90);
+    targetPos[2] = *(f32*)((s32)ptr + 0x94);
+    npcPos[0] = *(f32*)((s32)npc + 0x8C);
+    npcPos[1] = *(f32*)((s32)npc + 0x90);
+    npcPos[2] = *(f32*)((s32)npc + 0x94);
+    PSVECSubtract(targetPos, npcPos, diff);
+    return angleABf(float_0_8041fd84, float_0_8041fd84, diff[0], diff[2]);
+}
 
 s32 evt_npc_get_drop_flower(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
@@ -956,10 +1346,46 @@ s32 evt_npc_set_autotalkpose(void* pEvt) {
     return 1;
 }
 
-s32 evt_npc_battle_start(void* pEvt, int param_2) {
-    return 0;
-}
+s32 evt_npc_battle_start(void* pEvt, s32 isFirstCall) {
+    extern s32 evtGetValue(void*, s32);
+    extern void* fbatGetPointer(void);
+    extern void* evtNpcNameToPtr(void*, s32);
+    extern void marioFBattlePrepare(void);
+    extern void marioCtrlOff(void);
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32);
+    extern void partyCtrlOff(void*);
+    extern void BattleInformationSetResult(void*, s32);
+    extern void psndSetFlag(s32);
+    extern void seqSetSeq(s32, s32, s32);
+    s32* args;
+    s32 name;
+    void* fbat;
+    void* info;
+    void* npc;
+    void* party;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    name = evtGetValue(pEvt, args[0]);
+    evtGetValue(pEvt, args[1]);
+    fbat = fbatGetPointer();
+    npc = evtNpcNameToPtr(pEvt, name);
+    info = (void*)((s32)fbat + 0x20);
+    if (isFirstCall != 0) {
+        *(void**)((s32)fbat + 8) = npc;
+        marioFBattlePrepare();
+        marioCtrlOff();
+        party = partyGetPtr(marioGetPartyId());
+        if (party != 0) {
+            partyCtrlOff(party);
+        }
+        BattleInformationSetResult(info, 0);
+        psndSetFlag(0x10);
+        seqSetSeq(4, 0, 0);
+        return 0;
+    }
+    return 2;
+}
 
 s32 evt_npc_set_color(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
@@ -986,10 +1412,45 @@ s32 evt_npc_set_color(void* pEvt) {
     return 2;
 }
 
-void evt_npc_change_interrupt(void* pEvt) {
-    ;
-}
+s32 evt_npc_change_interrupt(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    s32* args;
+    s32 name;
+    s32 type;
+    s32 value;
+    void* npc;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    name = evtGetValue(pEvt, args[0]);
+    type = evtGetValue(pEvt, args[1]);
+    value = args[2];
+    npc = evtNpcNameToPtr(pEvt, name);
+    switch (type) {
+        case 0:
+            *(s32*)((s32)npc + 0x124) = value;
+            break;
+        case 1:
+            *(s32*)((s32)npc + 0x130) = value;
+            break;
+        case 2:
+            *(s32*)((s32)npc + 0x134) = value;
+            break;
+        case 3:
+            *(s32*)((s32)npc + 0x138) = value;
+            break;
+        case 4:
+            *(s32*)((s32)npc + 0x13C) = value;
+            break;
+        case 7:
+            *(s32*)((s32)npc + 0x128) = value;
+            break;
+        case 8:
+            *(s32*)((s32)npc + 0x12C) = value;
+            break;
+    }
+    return 2;
+}
 
 s32 evt_npc_status_onoff(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
@@ -1012,9 +1473,29 @@ s32 evt_npc_status_onoff(void* pEvt) {
 }
 
 s32 evt_npc_reaction_flag_onoff(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    s32* args;
+    s32 onoff;
+    s32 name;
+    u32 flag;
+    void* npc;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    onoff = evtGetValue(pEvt, args[0]);
+    name = evtGetValue(pEvt, args[1]);
+    flag = evtGetValue(pEvt, args[2]);
+    npc = evtNpcNameToPtr(pEvt, name);
+    switch (onoff) {
+        case 0:
+            *(u32*)((s32)npc + 4) &= ~flag;
+            break;
+        case 1:
+            *(u32*)((s32)npc + 4) |= flag;
+            break;
+    }
+    return 2;
+}
 
 s32 evt_npc_flag_onoff(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
@@ -1042,10 +1523,28 @@ s32 evt_npc_kamek_kemuri1(int param_1, int param_2) {
 }
 
 
-u8 evt_npc_set_scale(void) {
-    return 0;
-}
+s32 evt_npc_set_scale(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern f32 evtGetFloat(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    s32* args;
+    s32 name;
+    f32 x;
+    f32 y;
+    f32 z;
+    void* npc;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    name = evtGetValue(pEvt, args[0]);
+    x = evtGetFloat(pEvt, args[1]);
+    y = evtGetFloat(pEvt, args[2]);
+    z = evtGetFloat(pEvt, args[3]);
+    npc = evtNpcNameToPtr(pEvt, name);
+    *(f32*)((s32)npc + 0xE0) = x;
+    *(f32*)((s32)npc + 0xE4) = y;
+    *(f32*)((s32)npc + 0xE8) = z;
+    return 2;
+}
 
 s32 evt_npc_get_drop_coin(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
@@ -1067,10 +1566,30 @@ s32 evt_npc_get_drop_coin(void* pEvt) {
     return 2;
 }
 
-s32 evt_npc_sound_data_reset(int param_1) {
-    return 0;
-}
+s32 evt_npc_sound_data_reset(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    extern f32 float_0_8041fd84;
+    s32 name;
+    void* npc;
+    void* tribe;
+    f32 zero;
 
+    name = evtGetValue(pEvt, *(s32*)*(void**)((s32)pEvt + 0x18));
+    npc = evtNpcNameToPtr(pEvt, name);
+    tribe = *(void**)((s32)npc + 0x28);
+    if (tribe != 0) {
+        zero = float_0_8041fd84;
+        *(s32*)((s32)npc + 0x1E0) = *(s32*)((s32)tribe + 0x40);
+        *(s32*)((s32)npc + 0x1E4) = *(s32*)((s32)tribe + 0x44);
+        *(s32*)((s32)npc + 0x1EC) = *(s32*)((s32)tribe + 0x4C);
+        *(s32*)((s32)npc + 0x1F0) = *(s32*)((s32)tribe + 0x50);
+        *(u16*)((s32)npc + 0x1E8) = *(u16*)((s32)tribe + 0x48);
+        *(u16*)((s32)npc + 0x1D8) = 1;
+        *(f32*)((s32)npc + 0x1DC) = zero;
+    }
+    return 2;
+}
 
 s32 evt_npc_set_battle_rule(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
@@ -1110,24 +1629,88 @@ s32 evt_npc_pera_onoff(void* pEvt) {
 }
 
 s32 evt_npc_get_rotate(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    extern void evtSetFloat(void*, s32, f32);
+    s32* args;
+    s32 dstX;
+    s32 dstY;
+    s32 dstZ;
+    void* npc;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    npc = evtNpcNameToPtr(pEvt, evtGetValue(pEvt, args[0]));
+    dstX = args[1];
+    dstY = args[2];
+    dstZ = args[3];
+    evtSetFloat(pEvt, dstX, *(f32*)((s32)npc + 0xEC));
+    evtSetFloat(pEvt, dstY, *(f32*)((s32)npc + 0xF0));
+    evtSetFloat(pEvt, dstZ, *(f32*)((s32)npc + 0xF4));
+    return 2;
+}
 
 s32 evt_npc_get_home_position(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    extern void evtSetFloat(void*, s32, f32);
+    s32* args;
+    s32 dstX;
+    s32 dstY;
+    s32 dstZ;
+    void* npc;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    npc = evtNpcNameToPtr(pEvt, evtGetValue(pEvt, args[0]));
+    dstX = args[1];
+    dstY = args[2];
+    dstZ = args[3];
+    evtSetFloat(pEvt, dstX, *(f32*)((s32)npc + 0x1FC));
+    evtSetFloat(pEvt, dstY, *(f32*)((s32)npc + 0x200));
+    evtSetFloat(pEvt, dstZ, *(f32*)((s32)npc + 0x204));
+    return 2;
+}
 
 s32 evt_npc_get_position(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    extern void evtSetFloat(void*, s32, f32);
+    s32* args;
+    s32 dstX;
+    s32 dstY;
+    s32 dstZ;
+    void* npc;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    npc = evtNpcNameToPtr(pEvt, evtGetValue(pEvt, args[0]));
+    dstX = args[1];
+    dstY = args[2];
+    dstZ = args[3];
+    evtSetFloat(pEvt, dstX, *(f32*)((s32)npc + 0x8C));
+    evtSetFloat(pEvt, dstY, *(f32*)((s32)npc + 0x90));
+    evtSetFloat(pEvt, dstZ, *(f32*)((s32)npc + 0x94));
+    return 2;
+}
 
 s32 evt_npc_get_scale(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    extern void evtSetFloat(void*, s32, f32);
+    s32* args;
+    s32 dstX;
+    s32 dstY;
+    s32 dstZ;
+    void* npc;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    npc = evtNpcNameToPtr(pEvt, evtGetValue(pEvt, args[0]));
+    dstX = args[1];
+    dstY = args[2];
+    dstZ = args[3];
+    evtSetFloat(pEvt, dstX, *(f32*)((s32)npc + 0xE0));
+    evtSetFloat(pEvt, dstY, *(f32*)((s32)npc + 0xE4));
+    evtSetFloat(pEvt, dstZ, *(f32*)((s32)npc + 0xE8));
+    return 2;
+}
 
 s32 evt_npc_set_link(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
@@ -1180,14 +1763,54 @@ s32 evt_npc_entry(void* pEvt) {
 }
 
 s32 evt_npc_wait_battle_end(void) {
-    return 0;
-}
+    extern void* fbatGetPointer(void);
+    extern s32 seqGetSeq(void);
+    extern s32 BattleInformationGetResult(void*);
+    extern void marioCtrlOn(void);
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32);
+    extern void partyCtrlOn(void*);
+    extern void L_psndBGM_stop(void);
+    extern void marioFBattlePost(void);
+    void* info;
+    void* party;
 
+    info = (void*)((s32)fbatGetPointer() + 0x20);
+    if (seqGetSeq() != 2) {
+        return 0;
+    }
+    if (BattleInformationGetResult(info) == 0) {
+        return 0;
+    }
+    marioCtrlOn();
+    party = partyGetPtr(marioGetPartyId());
+    if (party != 0) {
+        partyCtrlOn(party);
+    }
+    L_psndBGM_stop();
+    marioFBattlePost();
+    return 2;
+}
 
 s32 evt_npc_wait_anim(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern f32 evtGetFloat(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    extern f32 animPoseGetLoopTimes(s32);
+    s32* args;
+    s32 name;
+    f32 wait;
+    void* npc;
+
+    args = *(s32**)((s32)pEvt + 0x18);
+    name = evtGetValue(pEvt, args[0]);
+    wait = evtGetFloat(pEvt, args[1]);
+    npc = evtNpcNameToPtr(pEvt, name);
+    if (animPoseGetLoopTimes(*(s32*)((s32)npc + 0x104)) >= wait) {
+        return 2;
+    }
     return 0;
 }
-
 
 s32 evt_npc_set_force_regl_anim(EventEntry* event) {
     extern s32 evtGetValue(EventEntry* event, s32 value);
@@ -1406,10 +2029,21 @@ s32 evt_npc_blur_onoff(EventEntry* event) {
     return 2;
 }
 
-void evt_npc_release_filednpc(void* pEvt) {
-    ;
-}
+s32 evt_npc_release_filednpc(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern void* npcGetWorkPtr(void);
+    s32 value;
+    void* work;
 
+    value = evtGetValue(pEvt, *(s32*)*(void**)((s32)pEvt + 0x18));
+    work = npcGetWorkPtr();
+    if (value != 0) {
+        *(u32*)((s32)work + 8) |= 2;
+    } else {
+        *(u32*)((s32)work + 8) &= ~2;
+    }
+    return 2;
+}
 
 s32 evt_npc_reverse_ry(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
@@ -1460,10 +2094,19 @@ USER_FUNC(evt_npc_get_height) {
     return 2;
 }
 
-void evt_npc_restart_regular_event(void* pEvt) {
-    ;
-}
+s32 evt_npc_restart_regular_event(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern void* evtNpcNameToPtr(void*, s32);
+    extern void npcCheckInterrupt(void*);
+    s32 name;
+    void* npc;
 
+    name = evtGetValue(pEvt, *(s32*)*(void**)((s32)pEvt + 0x18));
+    npc = evtNpcNameToPtr(pEvt, name);
+    *(u32*)((s32)npc + 0x140) |= 0x10000000;
+    npcCheckInterrupt(npc);
+    return 2;
+}
 
 s32 evt_npc_clear_paper(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
@@ -1489,9 +2132,21 @@ s32 evt_npc_return_interrupt(void* pEvt) {
 }
 
 s32 evt_npc_calc_score(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    extern s32 npcCalcScore(void* npc);
 
+    s32* args;
+    s32 name;
+    void* npc;
+
+    args = *(s32**)((s32)pEvt + 0x18);
+    name = evtGetValue(pEvt, args[0]);
+    npc = evtNpcNameToPtr(pEvt, name);
+    npcCalcScore(npc);
+
+    return 2;
+}
 
 s32 evt_npc_set_anim(void* evt, s32 isFirstCall) {
     extern s32 evtGetValue(void* event, s32 value);

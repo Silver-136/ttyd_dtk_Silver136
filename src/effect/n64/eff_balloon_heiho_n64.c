@@ -29,10 +29,85 @@ extern char str_BalloonHeihoN64_802fab3c[];
 extern f32 float_0_80424cb0;
 extern f32 float_2_80424cb4;
 
-u8 effBalloonHeihoDisp(int param_1, int param_2) {
-    return 0;
-}
+void effBalloonHeihoDisp(int param_1, void* param_2) {
+    extern void* camGetPtr(s32 id);
+    extern void mapSetMaterialFog(void);
+    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(void* mtx, s32 axis, f32 rad);
+    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(void* a, void* b, void* out);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void GXSetCurrentMtx(s32 id);
+    extern void effGetTexObjN64(s32 id, void* texObj);
+    extern void GXLoadTexObj(void* texObj, s32 id);
+    extern void GXSetNumChans(s32 count);
+    extern void GXSetNumTexGens(s32 count);
+    extern void GXSetTexCoordGen2(s32 coord, s32 type, s32 src, s32 mtx, s32 normalize, s32 postMtx);
+    extern void GXLoadTexMtxImm(void* mtx, s32 id, s32 type);
+    extern void GXSetNumTevStages(s32 count);
+    extern void GXSetTevOrder(s32 stage, s32 coord, s32 map, s32 color);
+    extern void GXSetTevOp(s32 stage, s32 mode);
+    extern void GXSetCullMode(s32 mode);
+    extern void effSetVtxDescN64(void* vtx);
+    extern void GXBegin(s32 primitive, s32 vtxfmt, s32 count);
+    extern void tri2(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g, s32 h);
+    extern f32 float_deg2rad_80424ca0;
+    extern f32 float_1_80424ca4;
+    extern f32 float_0p03125_80424ca8;
+    extern f32 float_0p015625_80424cac;
+    extern f32 float_0_80424cb0;
+    extern u8 size32x64_tex32x64_vtx[];
+    f32 mtxA[3][4];
+    f32 mtxB[3][4];
+    f32 mtxC[3][4];
+    u8 texObj[0x20];
+    void* cam;
+    EffBalloonHeihoWork* work;
+    s32 type;
 
+    cam = camGetPtr(param_1);
+    work = *(EffBalloonHeihoWork**)((s32)param_2 + 0xC);
+    type = work->type;
+    mapSetMaterialFog();
+
+    PSMTXTrans(mtxA, work->x, work->y, work->z);
+    PSMTXRotRad(mtxB, 0x79, -(*(f32*)((s32)camGetPtr(4) + 0x114) * float_deg2rad_80424ca0));
+    PSMTXScale(mtxC, work->scale, work->scale, float_1_80424ca4);
+    PSMTXConcat(mtxA, mtxB, mtxA);
+    PSMTXConcat(mtxA, mtxC, mtxA);
+    PSMTXConcat((void*)((s32)cam + 0x11C), mtxA, mtxA);
+    GXLoadPosMtxImm(mtxA, 0);
+    GXSetCurrentMtx(0);
+
+    switch (type) {
+        case 0:
+            effGetTexObjN64(0x60, texObj);
+            break;
+        case 1:
+            effGetTexObjN64(0x61, texObj);
+            break;
+        case 2:
+            effGetTexObjN64(0x62, texObj);
+            break;
+    }
+
+    GXLoadTexObj(texObj, 0);
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    PSMTXScale(mtxC, float_0p03125_80424ca8, float_0p015625_80424cac, float_0_80424cb0);
+    GXLoadTexMtxImm(mtxC, 0x1E, 1);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevOp(0, 3);
+    GXSetCullMode(0);
+    effSetVtxDescN64(size32x64_tex32x64_vtx);
+    GXBegin(0x90, 0, 0x18);
+    tri2(0, 1, 2, 0, 1, 2, 3, 0);
+    tri2(0, 1, 2, 0, 1, 2, 3, 0);
+    tri2(2, 3, 4, 0, 3, 4, 5, 0);
+    tri2(4, 5, 6, 0, 5, 6, 7, 0);
+}
 
 void effBalloonHeihoMain(void* effect) {
     void* entry = effect;

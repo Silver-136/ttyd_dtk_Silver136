@@ -29,10 +29,64 @@ u8 effSnowDisp(int param_1, int param_2) {
 }
 
 
-u8 effSnowMain(int* param_1) {
-    return 0;
-}
+void effSnowMain(void* effect) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(Vec3*);
+    extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
+    extern void effSnowDisp(void);
+    extern void* marioGetPtr(void);
+    extern const Vec3 vec3_802fbf78;
+    extern f32 float_10_8042606c;
+    extern f32 float_45_80426070;
+    extern f32 float_200_80426074;
+    extern f32 float_400_80426078;
+    u8* work;
+    u8* mario;
+    Vec3 pos;
+    Vec3 dispPos;
 
+    work = *(u8**)((s32)effect + 0xC);
+    pos = vec3_802fbf78;
+    pos.x = *(f32*)(work + 0);
+    pos.y = *(f32*)(work + 4);
+    pos.z = *(f32*)(work + 8);
+    dispPos = pos;
+    *(s32*)(work + 0x28) -= 1;
+    if (*(s32*)(work + 0x28) < 0) {
+        effDelete(effect);
+        return;
+    }
+    *(f32*)(work + 0) += *(f32*)(work + 0xC);
+    *(f32*)(work + 4) += *(f32*)(work + 0x10);
+    *(f32*)(work + 8) += *(f32*)(work + 0x14);
+    *(f32*)(work + 0x18) += *(f32*)(work + 0x20);
+    if (*(f32*)(work + 0x18) < float_10_8042606c) {
+        *(f32*)(work + 0x18) = float_10_8042606c;
+        *(f32*)(work + 0x20) = -*(f32*)(work + 0x20);
+    }
+    if (*(f32*)(work + 0x18) > float_45_80426070) {
+        *(f32*)(work + 0x18) = float_45_80426070;
+        *(f32*)(work + 0x20) = -*(f32*)(work + 0x20);
+    }
+    *(f32*)(work + 0x1C) += *(f32*)(work + 0x24);
+    mario = marioGetPtr();
+    if (*(f32*)work - *(f32*)(mario + 0x8C) > float_200_80426074) {
+        *(f32*)work -= float_400_80426078;
+    } else if (*(f32*)(mario + 0x8C) - *(f32*)work > float_200_80426074) {
+        *(f32*)work += float_400_80426078;
+    }
+    if (*(f32*)(work + 8) - *(f32*)(mario + 0x94) > float_200_80426074) {
+        *(f32*)(work + 8) -= float_400_80426078;
+    } else if (*(f32*)(mario + 0x94) - *(f32*)(work + 8) > float_200_80426074) {
+        *(f32*)(work + 8) += float_400_80426078;
+    }
+    dispEntry(4, 2, effSnowDisp, effect, dispCalcZ(&dispPos));
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

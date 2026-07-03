@@ -13,10 +13,60 @@ s32 _monosiri_flag_on(void* evt) {
 }
 
 
-void __makeTechMenuFunc(void* commandWork, s32 param_2) {
-    ;
-}
+void __makeTechMenuFunc(void* commandWork, s32* count) {
+    extern void* _battleWorkPointer;
+    extern void* BattleGetPartyPtr(void* battleWork);
+    extern s32 BattleTransPartyId(s32 id);
+    extern s32 partyGetTechLv(s32 partyId);
+    extern char* msgSearch(char* msg);
+    extern u8 lbl_80393A58[];
+    s32 techLv;
+    void* party;
+    u8* entry;
 
+    party = BattleGetPartyPtr(_battleWorkPointer);
+    techLv = partyGetTechLv(BattleTransPartyId(*(s32*)((s32)party + 8)));
+
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(s32*)(entry + 0x90) = -1;
+    *(s32*)(entry + 0x94) = 0;
+    *(void**)(entry + 0x80) = lbl_80393A58 + 0x450;
+    *(s32*)(entry + 0x84) = 0;
+    *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+    *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+    *count = *count + 1;
+
+    if (techLv >= 0) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_80393A58 + 0x510;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
+    if (techLv >= 1) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_80393A58 + 0x5D0;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
+    if (techLv >= 2) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_80393A58 + 0x690;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
+}
 
 s32 _dictionary(void* evt) {
     extern void* _battleWorkPointer;

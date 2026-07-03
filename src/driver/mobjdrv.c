@@ -279,35 +279,186 @@ int mobjEntry(char* name, char* pAnimPoseName) {
     return index;
 }
 
-u8 mobjDisp_OffscreenXLU(s32 param_1, u32* param_2) {
-    return 0;
+void mobjDisp_OffscreenXLU(s32 param_1, void* entry) {
+    extern void sysWaitDrawSync(void);
+    extern void GXClearBoundingBox(void);
+    extern void GXReadBoundingBox(u16* top, u16* bottom, u16* left, u16* right);
+    extern void offscreenAddBoundingBox(s32 id, u16 top, u16 bottom, u16 left, u16 right);
+    extern void mobjDispXLU(s32 param_1, void* entry);
+    u16 top;
+    u16 bottom;
+    u16 left;
+    u16 right;
+
+    sysWaitDrawSync();
+    GXClearBoundingBox();
+    mobjDispXLU(param_1, entry);
+    sysWaitDrawSync();
+    GXReadBoundingBox(&top, &bottom, &left, &right);
+    offscreenAddBoundingBox(*(s32*)((s32)entry + 0x19C), top, bottom, left, right);
 }
 
+void mobjDisp(s32 param_1, void* entry) {
+    extern void animSetPaperTexMtx(void* mtx, s32 a, s32 b);
+    extern void animSetPaperTexObj(void* texObj, s32 a, s32 b, s32 texMap, s32 d, s32 e, s32 f, s32 g);
+    extern void* dispGetCurWork(void);
+    extern void animPoseDraw(s32 poseId, s32 mode, f32 x, f32 y, f32 z, f32 rotY, f32 scale);
+    extern f32 float_10_804201bc;
+    s32 mode;
 
-u8 mobjDisp(s32 param_1, u32* param_2) {
-    return 0;
+    if (*(u32*)entry & 0x400) {
+        animSetPaperTexMtx((void*)((s32)entry + 0x20C), 0, 0);
+        animSetPaperTexObj((void*)((s32)entry + 0x1E8), 0, 0, *(s32*)((s32)entry + 0x208), 0, 0, 1, 1);
+    }
+
+    mode = *(u8*)((s32)dispGetCurWork() + 1);
+    if (mode == 0) {
+        animPoseDraw(*(s32*)((s32)entry + 0x70), 1, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                     *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
+    } else if (mode == 1) {
+        animPoseDraw(*(s32*)((s32)entry + 0x70), 2, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                     *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
+    } else {
+        animPoseDraw(*(s32*)((s32)entry + 0x70), 3, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                     *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
+    }
+
+    if (*(u32*)entry & 0x400) {
+        animSetPaperTexMtx(0, 0, 0);
+        animSetPaperTexObj(0, 0, 0, 0, 0, 0, 1, 1);
+    }
 }
 
+void mobjDispXLU(s32 param_1, void* entry) {
+    extern void animSetPaperTexMtx(void* mtx, s32 a, s32 b);
+    extern void animSetPaperTexObj(void* texObj, s32 a, s32 b, s32 texMap, s32 d, s32 e, s32 f, s32 g);
+    extern void animPoseDraw(s32 poseId, s32 mode, f32 x, f32 y, f32 z, f32 rotY, f32 scale);
+    extern f32 float_10_804201bc;
 
-u8 mobjDispXLU(s32 param_1, u32* param_2) {
-    return 0;
+    if (*(u32*)entry & 0x400) {
+        animSetPaperTexMtx((void*)((s32)entry + 0x20C), 0, 0);
+        animSetPaperTexObj((void*)((s32)entry + 0x1E8), 0, 0, *(s32*)((s32)entry + 0x208), 0, 0, 1, 1);
+    }
+
+    animPoseDraw(*(s32*)((s32)entry + 0x70), 1, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
+    animPoseDraw(*(s32*)((s32)entry + 0x70), 2, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
+    animPoseDraw(*(s32*)((s32)entry + 0x70), 3, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
+
+    if (*(u32*)entry & 0x400) {
+        animSetPaperTexMtx(0, 0, 0);
+        animSetPaperTexObj(0, 0, 0, 0, 0, 0, 1, 1);
+    }
 }
 
+void mobjCalcMtx2(void* pMobj) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+    typedef f32 Mtx34[3][4];
+    extern void PSVECAdd(Vec3* a, Vec3* b, Vec3* out);
+    extern void PSMTXTrans(Mtx34 m, f32 x, f32 y, f32 z);
+    extern void PSMTXScale(Mtx34 m, f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(Mtx34 m, char axis, f32 rad);
+    extern void PSMTXConcat(Mtx34 a, Mtx34 b, Mtx34 out);
+    extern void hitReCalcMatrix(void* hitEntry, Mtx34 mtx);
+    extern f32 float_deg2rad_804201cc;
+    Vec3 trans;
+    Mtx34 transMtx;
+    Mtx34 scaleMtx;
+    Mtx34 rotXMtx;
+    Mtx34 rotYMtx;
+    Mtx34 rotZMtx;
+    Mtx34 outMtx;
+    s32 i;
 
-u8 mobjCalcMtx2(int param_1) {
-    return 0;
+    PSVECAdd((Vec3*)((s32)pMobj + 0x38), (Vec3*)((s32)pMobj + 0x190), &trans);
+    PSMTXTrans(transMtx, trans.x, trans.y, trans.z);
+    PSMTXScale(scaleMtx, *(f32*)((s32)pMobj + 0x184), *(f32*)((s32)pMobj + 0x188), *(f32*)((s32)pMobj + 0x18C));
+    PSMTXRotRad(rotXMtx, 'x', float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x50));
+    PSMTXRotRad(rotYMtx, 'y', float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x54));
+    PSMTXRotRad(rotZMtx, 'z', float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x58));
+    PSMTXConcat(transMtx, rotZMtx, transMtx);
+    PSMTXConcat(transMtx, rotYMtx, transMtx);
+    PSMTXConcat(transMtx, rotXMtx, transMtx);
+    PSMTXConcat(transMtx, scaleMtx, outMtx);
+
+    for (i = 0; i < 2; i++) {
+        if (*(void**)((s32)pMobj + 0x74) != 0) {
+            hitReCalcMatrix(*(void**)((s32)pMobj + 0x74), outMtx);
+        }
+        pMobj = (void*)((s32)pMobj + 0x88);
+    }
 }
 
+void mobjSetPosition(f32 posX, f32 posY, f32 posZ, char* mobjName) {
+    extern f32 float_0p1_804201e8;
+    extern s32 strcmp(const char* a, const char* b);
+    MobjSet* set;
+    s32 i;
+    void* entry;
 
-u8 mobjSetPosition(float posX, float posY, float posZ, s32 mobjName) {
-    return 0;
+    if (koopaRunFlag != 0) {
+        set = &work.koopa;
+    } else {
+        set = &work.normal;
+        if (*(s32*)((s32)gp + 0x14) != 0) {
+            set = &work.alt;
+        }
+    }
+
+    entry = set->entries;
+    for (i = 0; i < set->count; i++, entry = (void*)((s32)entry + 0x23C)) {
+        if ((*(u32*)entry & 1) && strcmp((char*)((s32)entry + 5), mobjName) == 0) {
+            break;
+        }
+    }
+
+    *(f32*)((s32)entry + 0x38) = posX;
+    *(f32*)((s32)entry + 0x3C) = posY + float_0p1_804201e8;
+    *(f32*)((s32)entry + 0x40) = posZ;
 }
 
+void mobjDelete(char* name) {
+    extern s32 strcmp(const char* a, const char* b);
+    extern void marioResetHitObj(void* hitObj);
+    extern void hitDelete(void* hitObj);
+    MobjSet* set;
+    s32 i;
+    s32 j;
+    void* entry;
+    void* hitObj;
 
-void mobjDelete(s32 name) {
-    ;
+    if (koopaRunFlag != 0) {
+        set = &work.koopa;
+    } else {
+        set = &work.normal;
+        if (*(s32*)((s32)gp + 0x14) != 0) {
+            set = &work.alt;
+        }
+    }
+
+    entry = set->entries;
+    for (i = 0; i < set->count; i++, entry = (void*)((s32)entry + 0x23C)) {
+        if ((*(u32*)entry & 1) && strcmp((char*)((s32)entry + 5), name) == 0) {
+            hitObj = (void*)((s32)entry + 0x78);
+            for (j = 0; j < 2; j++, hitObj = (void*)((s32)hitObj + 0x88)) {
+                if (hitObj != 0) {
+                    if (*(s32*)((s32)gp + 0x14) == 0) {
+                        marioResetHitObj(hitObj);
+                    }
+                    hitDelete(hitObj);
+                }
+            }
+            *(u32*)entry &= ~1U;
+            break;
+        }
+    }
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -383,15 +534,38 @@ void* mobjNameToPtr(char* name) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-int mobjCheckItemboxOpen(int param_1) {
+s32 mobjCheckItemboxOpen(void* entry) {
+    extern s32 strcmp(const char* a, const char* b);
+    extern const char str_MOBJ_TreasureBox_802c1fe4[];
+    extern const char str_MOBJ_BigTreasureBox_802c1ff8[];
+    extern const char str_MOBJ_GrayTreasureBox_802c200c[];
+    extern const char str_MOBJ_BlackTreasureBo_802c2024[];
+
+    if (strcmp((char*)((s32)entry + 0x15), str_MOBJ_TreasureBox_802c1fe4) == 0 ||
+        strcmp((char*)((s32)entry + 0x15), str_MOBJ_BigTreasureBox_802c1ff8) == 0 ||
+        strcmp((char*)((s32)entry + 0x15), str_MOBJ_GrayTreasureBox_802c200c) == 0 ||
+        strcmp((char*)((s32)entry + 0x15), str_MOBJ_BlackTreasureBo_802c2024) == 0) {
+        return (*(s32*)((s32)entry + 0x1DC) == 99) + 1;
+    }
     return 0;
 }
 
+void mobjInit(void) {
+    extern void* __memAlloc(s32 heap, u32 size);
+    s32 count;
 
-u8 mobjInit(void) {
-    return 0;
+    count = 0x10;
+    work.normal.count = count;
+    work.normal.entries = __memAlloc(0, count * 0x23C);
+    memset(work.normal.entries, 0, work.normal.count * 0x23C);
+
+    count = 8;
+    work.alt.count = count;
+    work.alt.entries = __memAlloc(0, count * 0x23C);
+    memset(work.alt.entries, 0, work.alt.count * 0x23C);
+
+    koopaRunFlag = 0;
 }
-
 
 void mobjCalcMtx(void* pMobj) {
     typedef struct Vec3 {

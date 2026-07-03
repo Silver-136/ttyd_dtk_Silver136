@@ -14,10 +14,98 @@ u8 effMagicHoraoDisp(void) {
 }
 
 
-u8 effMagicHoraoMain(int* param_1) {
-    return 0;
-}
+void effMagicHoraoMain(void* effect) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(Vec3*);
+    extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
+    extern void effMagicHoraoDisp(void);
+    extern void* effHokoriN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z);
+    extern const Vec3 vec3_802fb4b8;
+    extern f32 float_0p02_80425af4;
+    extern f32 float_0_80425ae8;
+    extern f32 float_1_80425af8;
+    extern f32 float_5_80425afc;
+    extern f32 float_0p05_80425b00;
+    u8* work;
+    Vec3 pos;
+    Vec3 dispPos;
+    s32 timer;
+    s32 state;
 
+    work = *(u8**)((s32)effect + 0xC);
+    pos = vec3_802fb4b8;
+    pos.x = *(f32*)(work + 4);
+    pos.y = *(f32*)(work + 8);
+    pos.z = *(f32*)(work + 0xC);
+    dispPos = pos;
+
+    *(s32*)(work + 0x40) -= 1;
+    *(s32*)(work + 0x44) += 1;
+    timer = *(s32*)(work + 0x40);
+    if (timer < 0) {
+        effDelete(effect);
+        return;
+    }
+
+    state = *(s32*)(work + 0x2C);
+    switch (state) {
+        case 0:
+            *(f32*)(work + 0x24) += *(f32*)(work + 0x28) * (*(f32*)(work + 0x18) - *(f32*)(work + 0x24));
+            *(s32*)(work + 0x3C) = (s32)((f32)*(s32*)(work + 0x3C) +
+                                          (*(f32*)(work + 0x28) * (f32)(*(s32*)(work + 0x20) - *(s32*)(work + 0x3C))));
+            *(f32*)(work + 0x34) -= float_0p02_80425af4;
+            if (*(f32*)(work + 0x34) < float_0_80425ae8) {
+                *(f32*)(work + 0x34) = float_0_80425ae8;
+                *(f32*)(work + 0x10) = float_0_80425ae8;
+                *(s32*)(work + 0x30) = 10;
+                *(s32*)(work + 0x2C) = 1;
+            }
+            break;
+        case 1:
+            *(s32*)(work + 0x30) -= 1;
+            if (*(s32*)(work + 0x30) <= 0) {
+                *(s32*)(work + 0x2C) = 2;
+                *(s32*)(work + 0x30) = 10;
+            }
+            break;
+        case 2:
+            *(s32*)(work + 0x30) -= 1;
+            if (*(s32*)(work + 0x30) <= 0) {
+                *(s32*)(work + 0x2C) = 3;
+            }
+            break;
+        case 3:
+            *(f32*)(work + 0x10) -= float_1_80425af8;
+            *(f32*)(work + 8) += *(f32*)(work + 0x10);
+            if (*(f32*)(work + 8) < float_0_80425ae8) {
+                *(f32*)(work + 8) = float_0_80425ae8;
+                effHokoriN64Entry(2, 0x1E, *(f32*)(work + 4) + float_5_80425afc, *(f32*)(work + 8), *(f32*)(work + 0xC));
+                effHokoriN64Entry(2, 0x1E, *(f32*)(work + 4) - float_5_80425afc, *(f32*)(work + 8), *(f32*)(work + 0xC));
+                *(s32*)(work + 0x2C) = 4;
+                *(s32*)(work + 0x30) = 0x14;
+            }
+            break;
+        case 4:
+            *(s32*)(work + 0x30) -= 1;
+            if (*(s32*)(work + 0x30) <= 0) {
+                *(s32*)(work + 0x2C) = 5;
+            }
+            break;
+        case 5:
+            if (timer < 10) {
+                *(s32*)(work + 0x3C) = timer * 0x19;
+            }
+            *(f32*)(work + 0x34) -= float_0p05_80425b00;
+            break;
+    }
+
+    dispEntry(4, 2, effMagicHoraoDisp, effect, dispCalcZ(&dispPos));
+}
 
 #pragma no_register_save_helpers on
 void* effMagicHoraoN64Entry(s32 type, f32 x, f32 y, f32 z, s32 param4, s32 param5, f32 param6, f32 param7, f32 param8, s32 param9) {

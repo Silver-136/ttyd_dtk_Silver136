@@ -14,15 +14,155 @@ void mono_disp(int param_1, void* unit) {
 }
 
 
-void __makeTechMenuFunc(void* commandWork, s32 param_2) {
-    ;
+void __makeTechMenuFunc(void* commandWork, s32* count) {
+    extern void* BattleGetPartyPtr(void* battleWork);
+    extern s32 BattleTransPartyId(s32 id);
+    extern s32 partyGetTechLv(s32 partyId);
+    extern char* msgSearch(char* msg);
+    extern u8 lbl_80381650[];
+    s32 techLv;
+    void* party;
+    u8* entry;
+
+    party = BattleGetPartyPtr(_battleWorkPointer);
+    techLv = partyGetTechLv(BattleTransPartyId(*(s32*)((s32)party + 8)));
+
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(s32*)(entry + 0x90) = -1;
+    *(s32*)(entry + 0x94) = 0;
+    *(void**)(entry + 0x80) = lbl_80381650 + 0x6A0;
+    *(s32*)(entry + 0x84) = 0;
+    *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+    *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+    *count = *count + 1;
+
+    if (techLv >= 0) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_80381650 + 0x8E0;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
+    if (techLv >= 1) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_80381650 + 0x820;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
+    if (techLv >= 2) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_80381650 + 0x9A0;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
 }
 
+s32 _chuchu_item_steal(void* evt) {
+    extern s32 evtGetValue(void* evt, s32 arg);
+    extern void evtSetValue(void* evt, s32 arg, s32 value);
+    extern s32 BattleTransID(void* evt, s32 id);
+    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
+    extern s32 irand(s32 max);
+    extern s32 pouchGetItem(s32 itemId);
+    extern s32 BtlUnit_CheckUnitFlag(void* unit, u32 flag);
+    extern void BtlUnit_OffUnitFlag(void* unit, u32 flag);
+    extern void BtlUnit_EquipItem(void* unit, s32 itemType, s32 itemId);
+    s32* args;
+    s32 id;
+    s32 out;
+    s32 flags;
+    void* battleWork;
+    void* unit;
+    u16 itemId;
+    void* itemTbl;
+    s32 total;
+    s16 weight;
+    s32 roll;
+    s32 unitId;
+    void* battleUnitWork;
 
-s32 _chuchu_item_steal(void* pEvt) {
-    return 0;
+    args = *(s32**)((s32)evt + 0x18);
+    battleWork = _battleWorkPointer;
+    id = evtGetValue(evt, args[0]);
+    out = args[1];
+    flags = evtGetValue(evt, args[2]);
+    unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(evt, id));
+    itemId = *(u16*)((s32)unit + 0x308);
+    if (itemId == 0) {
+        if (*(void**)((s32)unit + 0x30C) != 0) {
+            irand(100);
+        }
+        itemTbl = *(void**)((s32)unit + 0x30C);
+        if (itemTbl == 0) {
+            itemId = 0;
+        } else {
+            total = 0;
+            while ((weight = *(s16*)((s32)itemTbl + 4)) > 0 || *(s32*)itemTbl != 0) {
+                total += weight;
+                itemTbl = (void*)((s32)itemTbl + 8);
+            }
+            itemTbl = *(void**)((s32)unit + 0x30C);
+            if (total <= 0) {
+                itemId = 0;
+            } else {
+                roll = irand(total);
+                while ((roll -= *(s16*)((s32)itemTbl + 4)) >= 0) {
+                    itemTbl = (void*)((s32)itemTbl + 8);
+                }
+                itemId = *(u16*)itemTbl;
+            }
+        }
+        if (itemId == 0) {
+            itemId = 0x79;
+        }
+    }
+    if ((flags & 2) == 0) {
+        evtSetValue(evt, out, 0);
+        return 2;
+    }
+    if (pouchGetItem(itemId) == 0) {
+        evtSetValue(evt, out, 0);
+        return 2;
+    }
+    *(s32*)((s32)unit + 0x308) = 0;
+    if (BtlUnit_CheckUnitFlag(unit, 0x40000000) != 0) {
+        BtlUnit_OffUnitFlag(unit, 0x40000000);
+        unitId = *(s8*)((s32)unit + 0xE);
+        if (unitId >= 0) {
+            battleUnitWork = *(void**)(*(s32*)((s32)battleWork + 0x2738) + 0xC);
+            *(s32*)((s32)battleUnitWork + unitId * 4 + 0x1C) = 0;
+            *(s32*)((s32)battleUnitWork + unitId * 4 + 0x5C) = 0;
+        }
+    } else {
+        unitId = *(s8*)((s32)unit + 0xE);
+        if (unitId >= 0) {
+            battleUnitWork = *(void**)(*(s32*)((s32)battleWork + 0x2738) + 0xC);
+            *(s32*)((s32)battleUnitWork + unitId * 4 + 0x1C) = 0;
+        }
+    }
+    if (itemId >= 0xF0 && itemId < 0x153) {
+        if (*(s32*)((s32)unit + 8) == 0xDE) {
+            BtlUnit_EquipItem(unit, 3, 0);
+        } else if (*(s32*)((s32)unit + 8) >= 0xE0 && *(s32*)((s32)unit + 8) < 0xE7) {
+            BtlUnit_EquipItem(unit, 5, 0);
+        } else {
+            BtlUnit_EquipItem(unit, 1, 0);
+        }
+    }
+    evtSetValue(evt, out, itemId);
+    return 2;
 }
-
 
 s32 _get_binta_hit_position(int param_1) {
     extern f32 evtSetFloat(void* evt, s32 arg, f32 value);

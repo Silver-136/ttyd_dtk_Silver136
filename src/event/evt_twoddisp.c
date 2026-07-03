@@ -22,10 +22,75 @@ s32 evt_twoddisp_init(int param_1) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void twoddisp_disp(void) {
-    ;
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+    extern void GXSetFog(s32 type, f32 start, f32 end, f32 nearZ, f32 farZ, void* color);
+    extern void iconDispGx(f32 scale, void* pos, s32 flags, u16 iconId);
+    extern void FontDrawStart(void);
+    extern void FontDrawScale(f32 scale);
+    extern int sprintf(char* str, char* fmt, ...);
+    extern void FontDrawColor(void* color);
+    extern void FontDrawString(f32 x, f32 y, char* str);
+    extern f32 float_0_80422f80;
+    extern f32 float_1_80422f84;
+    extern u32 unk_804295f0;
+    extern u32 unk_804295f4;
+    extern u32 dat_80422f78;
+    extern u32 dat_80422f7c;
+    extern void* twodPtr;
+    u32 color2;
+    u32 color1;
+    u32 fogColor2;
+    u32 fogColor1;
+    VecLocal pos;
+    char buf[0x100];
+    s32 offset;
+    s32 i;
+    void* entry;
+
+    offset = 0;
+    i = 0;
+    do {
+        entry = (void*)((s32)twodPtr + offset);
+        if (*(s8*)entry != 0 && (*(u16*)((s32)entry + 0x10) & 1) != 0) {
+            if ((*(u32*)((s32)entry + 0x24) & 0x80000000) == 0) {
+                pos.x = *(f32*)((s32)entry + 0x1C) + *(f32*)((s32)entry + 0x14);
+                pos.y = *(f32*)((s32)entry + 0x20) + *(f32*)((s32)entry + 0x18);
+                pos.z = float_0_80422f80;
+                fogColor1 = unk_804295f0;
+                GXSetFog(0, float_0_80422f80, float_0_80422f80, float_0_80422f80, float_0_80422f80, &fogColor1);
+                iconDispGx(*(f32*)((s32)entry + 0x28), &pos, 0x10, (u16)*(u32*)((s32)entry + 0x24));
+            } else {
+                FontDrawStart();
+                FontDrawScale(*(f32*)((s32)entry + 0x28));
+                fogColor2 = unk_804295f4;
+                GXSetFog(0, float_0_80422f80, float_0_80422f80, float_0_80422f80, float_0_80422f80, &fogColor2);
+                sprintf(buf, *(char**)((s32)entry + 0x24));
+                color1 = dat_80422f78;
+                FontDrawColor(&color1);
+                FontDrawString(*(f32*)((s32)entry + 0x1C) + *(f32*)((s32)entry + 0x14),
+                               *(f32*)((s32)entry + 0x20) + *(f32*)((s32)entry + 0x18),
+                               buf);
+                color2 = dat_80422f7c;
+                FontDrawColor(&color2);
+                FontDrawString(float_1_80422f84 + (*(f32*)((s32)entry + 0x1C) + *(f32*)((s32)entry + 0x14)),
+                               (*(f32*)((s32)entry + 0x20) + *(f32*)((s32)entry + 0x18)) - float_1_80422f84,
+                               buf);
+            }
+        }
+        i++;
+        offset += 0x34;
+    } while (i < 100);
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_twoddisp_flag_onoff(int param_1) {
     extern s32 evtGetValue(void* event, s32 value);

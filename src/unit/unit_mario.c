@@ -84,10 +84,95 @@ void faker_mario_makkuro_set(void) {
 }
 
 
-s32 _mario_super_emblem_anim_set(int param_1, int param_2) {
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 _mario_super_emblem_anim_set(void* event, s32 releaseOld) {
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* _battleWorkPointer;
+    extern s32 BattleTransID(void* event, s32 id);
+    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
+    extern void* BattleGetUnitPartsPtr(s32 unitId, s32 partId);
+    extern void* animPoseGetAnimPosePtr(s32 poseId);
+    extern void animPoseRelease(s32 poseId);
+    extern s32 animEffectAsync(char* name, s32 battle);
+    extern s32 animPoseEntry(char* name, s32 battle);
+    extern s32 pouchEquipCheckBadge(s32 badge);
+    extern char str_M_Z_10_802f3f70[];
+    char* base;
+    s32 unitId;
+    char* poseName;
+    void* part;
+    void* battleWork;
+    s32 badgeFlags;
+    s32 id;
+
+    base = str_M_Z_10_802f3f70;
+    battleWork = _battleWorkPointer;
+    id = evtGetValue(event, **(s32**)((s32)event + 0x18));
+    unitId = BattleTransID(event, id);
+    BattleGetUnitPtr(battleWork, unitId);
+
+    badgeFlags = 0;
+    if (pouchEquipCheckBadge(0x147) != 0) {
+        badgeFlags = 1;
+    }
+    if (pouchEquipCheckBadge(0x148) != 0) {
+        badgeFlags += 2;
+    }
+
+    switch (badgeFlags) {
+        case 1:
+            poseName = base + 0x2BC;
+            break;
+        case 2:
+            poseName = base + 0x2C8;
+            break;
+        case 3:
+            poseName = base + 0x2D4;
+            break;
+        default:
+            poseName = 0;
+            break;
+    }
+
+    if (releaseOld != 0) {
+        if (poseName == 0) {
+            return 2;
+        }
+        part = BattleGetUnitPartsPtr(unitId, 1);
+        animPoseGetAnimPosePtr(*(s32*)((s32)part + 0x1C0));
+        if (*(s32*)((s32)part + 0x1C0) != -1) {
+            animPoseRelease(*(s32*)((s32)part + 0x1C0));
+            *(s32*)((s32)part + 0x1C0) = -1;
+        }
+        part = BattleGetUnitPartsPtr(unitId, 2);
+        animPoseGetAnimPosePtr(*(s32*)((s32)part + 0x1C0));
+        if (*(s32*)((s32)part + 0x1C0) != -1) {
+            animPoseRelease(*(s32*)((s32)part + 0x1C0));
+            *(s32*)((s32)part + 0x1C0) = -1;
+        }
+        part = BattleGetUnitPartsPtr(unitId, 3);
+        animPoseGetAnimPosePtr(*(s32*)((s32)part + 0x1C0));
+        if (*(s32*)((s32)part + 0x1C0) != -1) {
+            animPoseRelease(*(s32*)((s32)part + 0x1C0));
+            *(s32*)((s32)part + 0x1C0) = -1;
+        }
+    }
+
+    if (animEffectAsync(poseName, 1) != 0) {
+        part = BattleGetUnitPartsPtr(unitId, 1);
+        *(s32*)((s32)part + 0x1C0) = animPoseEntry(poseName, 1);
+        part = BattleGetUnitPartsPtr(unitId, 2);
+        *(s32*)((s32)part + 0x1C0) = animPoseEntry(poseName, 1);
+        part = BattleGetUnitPartsPtr(unitId, 3);
+        *(s32*)((s32)part + 0x1C0) = animPoseEntry(poseName, 1);
+        return 2;
+    }
     return 0;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 _mario_makkuro_set(void) {
     extern void* _battleWorkPointer;

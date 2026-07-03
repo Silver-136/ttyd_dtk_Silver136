@@ -587,12 +587,132 @@ s32 main_star(void) {
 /* CHATGPT STUB FILL: main/action/star/sac_bakugame 20260624_184823 */
 
 /* stub-fill: bakuGameDisp2D | missing_definition | ghidra_signature */
-u8 bakuGameDisp2D(void) {
-    return 0;
+void bakuGameDisp2D(void) {
+    extern void* GetBakuGamePtr(void);
+    extern void* _battleWorkPointer;
+    extern void btlGetScreenPoint(void* pos, void* out);
+    extern void iconDispGx(void* pos, s32 size, s32 iconId, f32 scale);
+    extern void BattleAcDrawGauge(s32 x, s32 y, s32 icon, s32 unk1, s32 unk2, s32 unk3, s32 unk4, f32 value);
+    extern f32 float_100_80427b78;
+
+    void* work = GetBakuGamePtr();
+    void* battle = _battleWorkPointer;
+    f32 screen[2];
+    s32 i;
+    s32 offset;
+    s32 icon;
+
+    for (i = 0, offset = 0; i < 3; i++, offset += 0x24) {
+        void* item = (void*)((s32)work + offset + 0xC);
+        switch (*(s32*)((s32)item + 8)) {
+            case 0x100:
+                icon = 0x6C;
+                break;
+            case 0x200:
+                icon = 0x6E;
+                break;
+            case 0x400:
+                icon = 0x70;
+                break;
+            default:
+                icon = 0;
+                break;
+        }
+        if ((u16)icon != 0) {
+            btlGetScreenPoint((void*)((s32)item + 0x14), screen);
+            iconDispGx(screen, 0x10, icon, *(f32*)((s32)item + 0x20));
+        }
+    }
+
+    if (*(f32*)((s32)work + 0xD0) >= float_100_80427b78) {
+        *(u8*)((s32)battle + 0x1F2C) = 0;
+        *(u8*)((s32)battle + 0x1F2F) = 0xFF;
+        *(u8*)((s32)battle + 0x1F2D) += *(u8*)((s32)battle + 0x1F31);
+        *(u8*)((s32)battle + 0x1F2E) += *(u8*)((s32)battle + 0x1F32);
+        if (*(u8*)((s32)battle + 0x1F2D) <= 0x80 && *(s8*)((s32)battle + 0x1F31) <= 0) {
+            *(u8*)((s32)battle + 0x1F31) = 0x10;
+            *(u8*)((s32)battle + 0x1F32) = 0x10;
+        }
+        if (*(u8*)((s32)battle + 0x1F2D) >= 0xF5 && *(s8*)((s32)battle + 0x1F31) >= 0) {
+            *(u8*)((s32)battle + 0x1F31) = -0x10;
+            *(u8*)((s32)battle + 0x1F32) = -0x10;
+        }
+    }
+
+    BattleAcDrawGauge((s32)*(f32*)((s32)work + 0xDC), (s32)*(f32*)((s32)work + 0xE0),
+                      0xB1, 3, 0x21, 0x42, 0x64, *(f32*)((s32)work + 0xE8));
 }
 
 /* stub-fill: bakuGameHeihoReturn | missing_definition | ghidra_signature */
-s32 bakuGameHeihoReturn(s32 param_1, int param_2) {
+s32 bakuGameHeihoReturn(s32 unused, s32 reset) {
+    extern void* GetBakuGamePtr(void);
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+    extern void dispEntry(s32 cameraId, s32 layer, void* func, s32 param, f32 z);
+    extern void bakuGameDisp3D(void);
+    extern u32 vec3_802ff4f8[3];
+    extern f32 float_0_80427b70;
+    extern f32 float_neg2_80427b8c;
+
+    void* work = GetBakuGamePtr();
+    s32 phase;
+    s32 frameMod;
+
+    if ((*(u32*)work & 1) == 0) {
+        return 2;
+    }
+
+    if (reset != 0) {
+        *(s32*)((s32)work + 0x1C0) = 0;
+    }
+
+    switch (*(s32*)((s32)work + 0x1C0)) {
+        case 0:
+            if (*(f32*)((s32)work + 0x1D4) != float_0_80427b70) {
+                *(f32*)((s32)work + 0x1D4) += *(f32*)((s32)work + 0x1F8);
+                *(f32*)((s32)work + 0x1F8) += float_neg2_80427b8c;
+            }
+            if (*(f32*)((s32)work + 0x1D4) <= float_0_80427b70) {
+                *(f32*)((s32)work + 0x1D4) = float_0_80427b70;
+                *(s32*)((s32)work + 0x1C0) = 5;
+            }
+            break;
+        case 5:
+            *(s32*)((s32)work + 0x1C0) = 10;
+            *(s8*)((s32)work + 0x1CC) = 1;
+            *(s32*)((s32)work + 0x1DC) = *(s32*)((s32)work + 0x1D0);
+            *(s32*)((s32)work + 0x1E0) = *(s32*)((s32)work + 0x1D4);
+            *(s32*)((s32)work + 0x1E4) = *(s32*)((s32)work + 0x1D8);
+            *(s32*)((s32)work + 0x1E8) = vec3_802ff4f8[0];
+            *(s32*)((s32)work + 0x1EC) = vec3_802ff4f8[1];
+            *(s32*)((s32)work + 0x1F0) = vec3_802ff4f8[2];
+            *(f32*)((s32)work + 0x1F0) = *(f32*)((s32)work + 0x1D8);
+            *(s32*)((s32)work + 0x1C4) = 0;
+            *(s32*)((s32)work + 0x1C8) = 0x1E;
+            break;
+        case 10:
+            *(f32*)((s32)work + 0x1D0) = intplGetValue(0, *(s32*)((s32)work + 0x1C4),
+                                                        *(s32*)((s32)work + 0x1C8),
+                                                        *(f32*)((s32)work + 0x1DC),
+                                                        *(f32*)((s32)work + 0x1E8));
+            frameMod = *(s32*)((s32)work + 0x1C4) % 12;
+            if (frameMod >= 0 && frameMod <= 3) {
+                *(s32*)((s32)work + 0x200) = 0x5A;
+            }
+            if (frameMod >= 4 && frameMod <= 7) {
+                *(s32*)((s32)work + 0x200) = 0x5B;
+            }
+            if (frameMod >= 8 && frameMod <= 11) {
+                *(s32*)((s32)work + 0x200) = 0x5C;
+            }
+            phase = *(s32*)((s32)work + 0x1C4) + 1;
+            *(s32*)((s32)work + 0x1C4) = phase;
+            if (phase > *(s32*)((s32)work + 0x1C8)) {
+                return 2;
+            }
+            break;
+    }
+
+    dispEntry(4, 1, bakuGameDisp3D, 0, float_0_80427b70);
     return 0;
 }
 

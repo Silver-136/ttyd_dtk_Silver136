@@ -47,9 +47,59 @@ u8 set_msg(void* pEvt) {
 
 
 u8 chuchu_searchObject(void) {
-    return 0;
-}
+    extern void* gp;
+    extern u8 mobj_list[];
+    extern s32 itemNearDistCheck(f32 x, f32 y, f32 z, f32 dist);
+    extern s32 mobjNearDistCheck2(void* list, f32 x, f32 y, f32 z, f32 dist);
+    extern s32 strcmp(char* a, char* b);
+    extern s32 evtGetValue(void* evt, s32 value);
+    extern f32 PSVECDistance(f32* a, f32* b);
+    extern u32 unk_8038e994[];
+    extern f32 vec3_802f8c4c[3];
+    extern f32 float_150_8042437c;
+    extern f32 float_10000_80424380;
+    void* party;
+    void* mario;
+    u32* entry;
+    f32 best;
+    f32 pos[3];
+    f32 obj[3];
+    f32 dist;
+    s32 found;
+    s32 i;
 
+    party = partyGetPtr(marioGetPartyId());
+    mario = *(void**)((s32)party + 0x160);
+    if (itemNearDistCheck(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x90), *(f32*)((s32)mario + 0x94), float_150_8042437c) != 0) {
+        return 1;
+    }
+    if (mobjNearDistCheck2(mobj_list, *(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x90), *(f32*)((s32)mario + 0x94), float_150_8042437c) != 0) {
+        return 1;
+    }
+
+    entry = unk_8038e994;
+    found = 0;
+    best = float_10000_80424380;
+    for (i = 0; i < 0x28; i++, entry += 5) {
+        if (strcmp((char*)gp + 0x12C, (char*)entry[0]) == 0 && evtGetValue(0, entry[1]) == 0) {
+            obj[0] = (f32)(s32)entry[2];
+            obj[1] = (f32)(s32)entry[3];
+            obj[2] = (f32)(s32)entry[4];
+            pos[0] = vec3_802f8c4c[0];
+            pos[1] = vec3_802f8c4c[1];
+            pos[2] = vec3_802f8c4c[2];
+            pos[0] = obj[0];
+            pos[1] = obj[1];
+            pos[2] = obj[2];
+            dist = PSVECDistance((f32*)((s32)mario + 0x8C), pos);
+            if (dist <= float_150_8042437c && dist < best) {
+                best = dist;
+                found = 1;
+            }
+        }
+    }
+    return found != 0;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

@@ -29,10 +29,64 @@ u8 effWangFlushDisp(int param_1, int param_2) {
 }
 
 
-u8 effWangFlushMain(int* param_1) {
-    return 0;
-}
+void effWangFlushMain(void* effect) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(Vec3*);
+    extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
+    extern void effWangFlushDisp(void);
+    extern const Vec3 vec3_802fc240;
+    extern f32 float_0p5_804264a0;
+    extern f32 float_0p78_804264a4;
+    extern f32 float_0p29_804264a8;
+    extern f32 float_0p93_804264ac;
+    extern f32 float_6p2832_804264b0;
+    extern f32 float_360_804264b4;
+    extern f32 float_0p9_804264b8;
+    extern f32 float_144_804264bc;
+    extern f32 float_64_804264c0;
+    extern double sin(double);
+    u8* work;
+    Vec3 pos;
+    Vec3 dispPos;
+    s32 timer;
+    s32 frame;
+    f32 angle;
 
+    work = *(u8**)((s32)effect + 0xC);
+    pos = vec3_802fc240;
+    pos.x = *(f32*)(work + 4);
+    pos.y = *(f32*)(work + 8);
+    pos.z = *(f32*)(work + 0xC);
+    dispPos = pos;
+    *(s32*)(work + 0x2C) -= 1;
+    *(s32*)(work + 0x30) += 1;
+    timer = *(s32*)(work + 0x2C);
+    if (timer < 0) {
+        effDelete(effect);
+        return;
+    }
+    frame = *(s32*)(work + 0x30);
+    if (frame <= 6) {
+        *(s32*)(work + 0x24) = (s32)((f32)*(s32*)(work + 0x24) + float_0p5_804264a0 * (f32)(0xDA - *(s32*)(work + 0x24)));
+    }
+    if (frame > 6) {
+        *(s32*)(work + 0x24) = (s32)((f32)*(s32*)(work + 0x24) * float_0p78_804264a4);
+    }
+    *(f32*)(work + 0x18) += *(f32*)(work + 0x1C);
+    *(f32*)(work + 0x1C) += float_0p29_804264a8;
+    *(f32*)(work + 0x10) += *(f32*)(work + 0x14);
+    *(f32*)(work + 0x14) *= float_0p93_804264ac;
+    angle = ((f32)(timer * 50) * float_6p2832_804264b0) / float_360_804264b4;
+    *(f32*)(work + 0x20) = float_0p9_804264b8 + float_0p5_804264a0 * (f32)sin(angle);
+    angle = ((f32)(timer * 40) * float_6p2832_804264b0) / float_360_804264b4;
+    *(s32*)(work + 0x28) = (s32)(float_144_804264bc + float_64_804264c0 * (f32)sin(angle));
+    dispEntry(4, 2, effWangFlushDisp, effect, dispCalcZ(&dispPos));
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

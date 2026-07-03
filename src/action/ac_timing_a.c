@@ -70,9 +70,71 @@ done:
 
 
 s32 battleAcResult_TimingA(void* battleWork) {
-    return 0;
-}
+    extern s32 BattlePadCheckRecordTrigger(s32, s32);
+    extern s32 irand(s32);
+    s32 successFrame;
+    s32 count;
+    s32 i;
 
+    successFrame = battleAcTimingA_GetSuccessFrame(battleWork);
+    count = 0;
+
+    if ((*(u32*)((s32)battleWork + 0x1C94) & 1) != 0 &&
+        (*(u32*)((s32)*(void**)((s32)battleWork + 0x1C90) + 0x27C) & 0x10) != 0) {
+        if (irand(100) >= 0) {
+            *(s32*)((s32)battleWork + 0x1CB8) = 0;
+        } else {
+            *(s32*)((s32)battleWork + 0x1CB8) = 2;
+            *(s32*)((s32)battleWork + 0x1CB4) = *(s32*)((s32)battleWork + 0x1CB4) + 1;
+        }
+        return *(s32*)((s32)battleWork + 0x1CB8);
+    }
+
+    if (*(u8*)((s32)*(void**)((s32)battleWork + 0x1C90) + 0x307) != 0) {
+        *(s32*)((s32)battleWork + 0x1CB8) = 2;
+        *(s32*)((s32)battleWork + 0x1CB4) = *(s32*)((s32)battleWork + 0x1CB4) + 1;
+        return *(s32*)((s32)battleWork + 0x1CB8);
+    }
+
+    *(s32*)((s32)battleWork + 0x1CB8) = 0;
+    if ((*(u32*)((s32)battleWork + 0xEF4) & 0x01000000) != 0) {
+        *(s32*)((s32)battleWork + 0x1CE8) = 3;
+        *(s32*)((s32)battleWork + 0x1CB8) = 2;
+        *(s32*)((s32)battleWork + 0x1CB4) = *(s32*)((s32)battleWork + 0x1CB4) + 1;
+        return *(s32*)((s32)battleWork + 0x1CB8);
+    }
+
+    for (i = 0; i < 0x14; i++) {
+        if (BattlePadCheckRecordTrigger(i, 0x100) != 0) {
+            count++;
+        }
+    }
+
+    if (count >= 2) {
+        *(s32*)((s32)battleWork + 0x1CE8) = 1;
+        return *(s32*)((s32)battleWork + 0x1CB8);
+    }
+
+    for (i = 0; i < successFrame; i++) {
+        if (BattlePadCheckRecordTrigger(i, 0x100) != 0) {
+            break;
+        }
+    }
+
+    if (i >= successFrame) {
+        if (count > 0) {
+            *(s32*)((s32)battleWork + 0x1CE8) = 1;
+        } else {
+            *(s32*)((s32)battleWork + 0x1CE8) = 2;
+        }
+        return *(s32*)((s32)battleWork + 0x1CB8);
+    }
+
+    *(s32*)((s32)battleWork + 0x1CE8) = 3;
+    *(s32*)((s32)battleWork + 0x1CB8) = 2;
+    *(s32*)((s32)battleWork + 0x1CB4) = *(s32*)((s32)battleWork + 0x1CB4) + 1;
+    return *(s32*)((s32)battleWork + 0x1CB8);
+}
 
 void actionCommandDisp(f32 x, f32 y) {
     void* battleWork;

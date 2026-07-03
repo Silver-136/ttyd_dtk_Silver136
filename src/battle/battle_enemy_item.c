@@ -11,17 +11,171 @@ s32 BtlUnit_GetMaxFp(void* unit);
 s32 BtlUnit_GetFp(void* unit);
 s32 irand(s32 range);
 
-s32 _check_status_recover_item(void* param_1) {
+s32 _check_status_recover_item(void* unit) {
+    extern u8 itemDataTable[];
+    extern void* _battleWorkPointer;
+    extern s32 BtlUnit_GetEnemyBelong(void*);
+    extern void BattleSamplingEnemy(void*, void*, s32, s32, s32, s32, s32);
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern s32 BtlUnit_CheckStatus(void*, s32);
+    s32 itemId;
+    u8* item;
+    void* battleWork;
+    void* sampleWork;
+    void* weapon;
+    void* target;
+    s32 i;
+
+    itemId = *(s32*)((s32)unit + 0x308);
+    battleWork = _battleWorkPointer;
+    sampleWork = (u8*)battleWork + 0x428;
+    item = itemDataTable + itemId * 0x28;
+    weapon = *(void**)(item + 0x24);
+    BattleSamplingEnemy(sampleWork, weapon, *(s32*)unit, (s8)BtlUnit_GetEnemyBelong(unit),
+                        *(s32*)((s32)weapon + 0x64), *(s32*)((s32)weapon + 0x68),
+                        *(s8*)((s32)battleWork + ((s8)*(u8*)((s32)unit + 0xC)) * 8 + 0xA));
+    if (*(s8*)((s32)sampleWork + 0xA6C) <= 0) {
+        return 0;
+    }
+    for (i = 0; i < *(s8*)((s32)sampleWork + 0xA6C); i++) {
+        target = BattleGetUnitPtr(battleWork, *(s16*)((s32)sampleWork + (*(s8*)((s32)sampleWork + i + 0xA6D)) * 0x24 + 4));
+        if (!(*(s32*)((s32)unit + 0x104) & 0x20000) && itemId == 0x99) {
+            if (BtlUnit_CheckStatus(target, 1) || BtlUnit_CheckStatus(target, 2) ||
+                BtlUnit_CheckStatus(target, 3) || BtlUnit_CheckStatus(target, 4) ||
+                BtlUnit_CheckStatus(target, 5) || BtlUnit_CheckStatus(target, 6) ||
+                BtlUnit_CheckStatus(target, 8) || BtlUnit_CheckStatus(target, 9) ||
+                BtlUnit_CheckStatus(target, 0xB) || BtlUnit_CheckStatus(target, 0xF) ||
+                BtlUnit_CheckStatus(target, 0x14)) {
+                return *(s32*)((s32)*(void**)(item + 0x24) + 0xB0);
+            }
+        }
+    }
     return 0;
 }
 
+s32 _check_status_attack_item(void* unit) {
+    extern u8 itemDataTable[];
+    extern void* _battleWorkPointer;
+    extern s32 BtlUnit_GetEnemyBelong(void*);
+    extern void BattleSamplingEnemy(void*, void*, s32, s32, s32, s32, s32);
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern s32 BtlUnit_CheckStatus(void*, s32);
+    extern s32 BtlUnit_CanActStatus(void*);
+    s32 itemId;
+    u8* item;
+    void* battleWork;
+    void* sampleWork;
+    void* weapon;
+    void* target;
+    s32 i;
 
-s32 _check_status_attack_item(void* param_1) {
+    itemId = *(s32*)((s32)unit + 0x308);
+    battleWork = _battleWorkPointer;
+    sampleWork = (u8*)battleWork + 0x428;
+    item = itemDataTable + itemId * 0x28;
+    weapon = *(void**)(item + 0x24);
+    BattleSamplingEnemy(sampleWork, weapon, *(s32*)unit, (s8)BtlUnit_GetEnemyBelong(unit),
+                        *(s32*)((s32)weapon + 0x64), *(s32*)((s32)weapon + 0x68),
+                        *(s8*)((s32)battleWork + ((s8)*(u8*)((s32)unit + 0xC)) * 8 + 0xA));
+    if (*(s8*)((s32)sampleWork + 0xA6C) <= 0) {
+        return 0;
+    }
+    for (i = 0; i < *(s8*)((s32)sampleWork + 0xA6C); i++) {
+        target = BattleGetUnitPtr(battleWork, *(s16*)((s32)sampleWork + (*(s8*)((s32)sampleWork + i + 0xA6D)) * 0x24 + 4));
+        if (*(s32*)((s32)unit + 0x104) & 0x20000) {
+            continue;
+        }
+        switch (itemId) {
+            case 0x89:
+                if (BtlUnit_CanActStatus(target)) {
+                    return *(s32*)((s32)*(void**)(item + 0x24) + 0xB0);
+                }
+                break;
+            case 0x8A:
+                if (BtlUnit_CanActStatus(target) && !BtlUnit_CheckStatus(target, 0xB)) {
+                    return *(s32*)((s32)*(void**)(item + 0x24) + 0xB0);
+                }
+                break;
+            case 0x8C:
+                if (BtlUnit_CanActStatus(target) && !BtlUnit_CheckStatus(target, 0xF)) {
+                    return *(s32*)((s32)*(void**)(item + 0x24) + 0xB0);
+                }
+                break;
+            case 0x8D:
+                if (BtlUnit_CanActStatus(target) && !BtlUnit_CheckStatus(target, 5)) {
+                    return *(s32*)((s32)*(void**)(item + 0x24) + 0xB0);
+                }
+                break;
+            case 0x92:
+                if (BtlUnit_CanActStatus(target) && !BtlUnit_CheckStatus(target, 3)) {
+                    return *(s32*)((s32)*(void**)(item + 0x24) + 0xB0);
+                }
+                break;
+        }
+    }
     return 0;
 }
 
+s32 _check_status_support_item(void* unit) {
+    extern u8 itemDataTable[];
+    extern void* _battleWorkPointer;
+    extern s32 BtlUnit_GetEnemyBelong(void*);
+    extern void BattleSamplingEnemy(void*, void*, s32, s32, s32, s32, s32);
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern s32 BtlUnit_CheckStatus(void*, s32);
+    extern s32 BtlUnit_CanActStatus(void*);
+    s32 itemId;
+    u8* item;
+    void* battleWork;
+    void* sampleWork;
+    void* weapon;
+    void* target;
+    s32 i;
 
-s32 _check_status_support_item(void* param_1) {
+    itemId = *(s32*)((s32)unit + 0x308);
+    battleWork = _battleWorkPointer;
+    sampleWork = (u8*)battleWork + 0x428;
+    item = itemDataTable + itemId * 0x28;
+    weapon = *(void**)(item + 0x24);
+    BattleSamplingEnemy(sampleWork, weapon, *(s32*)unit, (s8)BtlUnit_GetEnemyBelong(unit),
+                        *(s32*)((s32)weapon + 0x64), *(s32*)((s32)weapon + 0x68),
+                        *(s8*)((s32)battleWork + ((s8)*(u8*)((s32)unit + 0xC)) * 8 + 0xA));
+    if (*(s8*)((s32)sampleWork + 0xA6C) <= 0) {
+        return 0;
+    }
+    for (i = 0; i < *(s8*)((s32)sampleWork + 0xA6C); i++) {
+        target = BattleGetUnitPtr(battleWork, *(s16*)((s32)sampleWork + (*(s8*)((s32)sampleWork + i + 0xA6D)) * 0x24 + 4));
+        if (*(s32*)((s32)unit + 0x104) & 0x20000) {
+            continue;
+        }
+        switch (itemId) {
+            case 0x8E:
+                if (BtlUnit_CanActStatus(target) && !BtlUnit_CheckStatus(target, 0xA)) {
+                    return *(s32*)((s32)*(void**)(item + 0x24) + 0xB0);
+                }
+                break;
+            case 0x8F:
+                if (!BtlUnit_CheckStatus(target, 0xE)) {
+                    return *(s32*)((s32)*(void**)(item + 0x24) + 0xB0);
+                }
+                break;
+            case 0x86:
+                if (!BtlUnit_CheckStatus(target, 0x12)) {
+                    return *(s32*)((s32)*(void**)(item + 0x24) + 0xB0);
+                }
+                break;
+            case 0x87:
+                if (!BtlUnit_CheckStatus(target, 6)) {
+                    return *(s32*)((s32)*(void**)(item + 0x24) + 0xB0);
+                }
+                break;
+            case 0x88:
+                if (!BtlUnit_CheckStatus(target, 7)) {
+                    return *(s32*)((s32)*(void**)(item + 0x24) + 0xB0);
+                }
+                break;
+        }
+    }
     return 0;
 }
 

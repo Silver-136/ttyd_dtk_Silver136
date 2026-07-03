@@ -141,7 +141,82 @@ void _ac_rumble_param_set(u32 type, s16* frame1, s16* frame2, f32* strength) {
 
 /* stub-fill: actionCommandDisp | prototype_only | source_prototype */
 void actionCommandDisp(f32 x, f32 y) {
-    return;
+    extern void* _battleWorkPointer;
+    extern void btlGetScreenPoint(f32* in, f32* out);
+    extern void btlDispTex4(s32 tex, f32* pos, f32* v0, f32* v1, u32* color);
+    extern f32 vec3_80300258[];
+    extern u32 dat_80427e5c;
+    extern u32 dat_80427e60;
+    extern u32 dat_80427e64;
+    extern u32 dat_80427e68;
+    extern f32 float_2_80427e6c;
+    extern f32 float_4_80427e70;
+
+    void* battleWork;
+    void* work;
+    f32 p0[3];
+    f32 p1[3];
+    f32 a[3];
+    f32 b[3];
+    f32 pos[3];
+    u32 color;
+    s32 state;
+
+    battleWork = _battleWorkPointer;
+    work = (void*)((s32)battleWork + 0x1F4C);
+    state = *(s32*)((s32)battleWork + 0x1C9C);
+    if (state >= 1000) {
+        if (state >= 1003) {
+            return;
+        }
+    } else if (state != 100) {
+        return;
+    }
+
+    *(f32*)((s32)work + 0x24) += float_2_80427e6c;
+    btlGetScreenPoint((f32*)((s32)work + 0x14), p0);
+    a[0] = vec3_80300258[3];
+    a[1] = vec3_80300258[4];
+    a[2] = vec3_80300258[5];
+    b[0] = vec3_80300258[6];
+    b[1] = vec3_80300258[7];
+    b[2] = vec3_80300258[8];
+    color = dat_80427e5c;
+    btlDispTex4(0x58, p0, b, a, &color);
+
+    p0[0] += float_4_80427e70;
+    p0[1] -= float_4_80427e70;
+    p0[2] -= float_2_80427e6c;
+    a[0] = vec3_80300258[9];
+    a[1] = vec3_80300258[10];
+    a[2] = vec3_80300258[11];
+    b[0] = vec3_80300258[12];
+    b[1] = vec3_80300258[13];
+    b[2] = vec3_80300258[14];
+    color = dat_80427e60;
+    btlDispTex4(0x58, p0, b, a, &color);
+
+    btlGetScreenPoint((f32*)((s32)work + 8), p1);
+    a[0] = vec3_80300258[15];
+    a[1] = vec3_80300258[16];
+    a[2] = *(f32*)((s32)work + 0x24);
+    b[0] = vec3_80300258[18];
+    b[1] = vec3_80300258[19];
+    b[2] = *(f32*)((s32)work + 0x24);
+    color = dat_80427e64;
+    btlDispTex4(0x57, p1, b, a, &color);
+
+    p1[0] += float_4_80427e70;
+    p1[1] -= float_4_80427e70;
+    p1[2] -= float_2_80427e6c;
+    a[0] = vec3_80300258[21];
+    a[1] = vec3_80300258[22];
+    a[2] = *(f32*)((s32)work + 0x24);
+    b[0] = vec3_80300258[24];
+    b[1] = vec3_80300258[25];
+    b[2] = *(f32*)((s32)work + 0x24);
+    color = dat_80427e68;
+    btlDispTex4(0x57, p1, b, a, &color);
 }
 
 /* stub-fill: battleAcMain_ShotTarget | missing_definition | ghidra_signature */

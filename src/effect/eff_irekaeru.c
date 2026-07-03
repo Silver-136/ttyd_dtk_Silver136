@@ -92,6 +92,71 @@ void* effIrekaeruEntry(s32 type, f32 x, f32 y, f32 z) {
 /* CHATGPT STUB FILL: main/effect/eff_irekaeru 20260624_184929 */
 
 /* stub-fill: effIrekaeruMain | prototype_only | source_prototype */
-void effIrekaeruMain(void) {
-    return;
+void effIrekaeruMain(void* effect) {
+    extern void* gp;
+    extern void animPoseRelease(s32 poseId);
+    extern void effDelete(void* effect);
+    extern s32 animGroupBaseAsync(const char* name, s32 heap, s32 flags);
+    extern s32 animPoseEntry(const char* name, s32 heap);
+    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
+    extern f32 animPoseGetLoopTimes(s32 poseId);
+    extern f32 dispCalcZ(f32* pos);
+    extern void dispEntry(s32 cameraId, s32 layer, void* callback, f32 z, void* param);
+    extern void effIrekaeruDisp(s32 cameraId, void* effect);
+    extern char* eff_irekae_str_tbl[];
+    extern char str_Z_1_804281a8[];
+    extern f32 float_1_804281ac;
+    extern f32 float_0p75_804281b0;
+
+    void* work;
+    f32 pos[3];
+    s32 heap;
+
+    work = *(void**)((s32)effect + 0xC);
+    pos[0] = *(f32*)((s32)work + 4);
+    pos[1] = *(f32*)((s32)work + 8);
+    pos[2] = *(f32*)((s32)work + 0xC);
+    heap = (*(s32*)((s32)gp + 0x14) != 0);
+
+    if ((*(u32*)effect & 4) != 0) {
+        *(u32*)effect &= ~4u;
+        if (*(s32*)((s32)work + 0x14) != -1) {
+            animPoseRelease(*(s32*)((s32)work + 0x14));
+        }
+        effDelete(effect);
+        return;
+    }
+
+    switch (*(s32*)((s32)work + 0x18)) {
+        case 0:
+            if (animGroupBaseAsync(eff_irekae_str_tbl[*(s32*)((s32)gp + 0x16C)], heap, 0) == 0) {
+                return;
+            }
+            *(s32*)((s32)work + 0x14) = animPoseEntry(eff_irekae_str_tbl[*(s32*)((s32)gp + 0x16C)], heap);
+            animPoseSetAnim(*(s32*)((s32)work + 0x14), str_Z_1_804281a8, 1);
+            *(s32*)((s32)work + 0x18) += 1;
+            break;
+        case 1:
+            if (animPoseGetLoopTimes(*(s32*)((s32)work + 0x14)) > float_1_804281ac) {
+                animPoseRelease(*(s32*)((s32)work + 0x14));
+                effDelete(effect);
+                return;
+            }
+            break;
+    }
+
+    if (animPoseGetLoopTimes(*(s32*)((s32)work + 0x14)) < float_0p75_804281b0) {
+        *(s32*)((s32)work + 0x20) += 0x14;
+        if (*(s32*)((s32)work + 0x20) > 0xFF) {
+            *(s32*)((s32)work + 0x20) = 0xFF;
+        }
+    } else {
+        *(s32*)((s32)work + 0x20) -= 0x14;
+        if (*(s32*)((s32)work + 0x20) < 0) {
+            *(s32*)((s32)work + 0x20) = 0;
+        }
+    }
+
+    dispEntry(4, 2, effIrekaeruDisp, dispCalcZ(pos), effect);
 }
+

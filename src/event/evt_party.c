@@ -173,31 +173,253 @@ u8 evt_party_jump_pos(s32 pEvt, s32 param_2) {
 }
 
 
-u8 evt_party_force_reset_outofscreen(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_party_force_reset_outofscreen(EventEntry* event) {
+    extern void marioGetScreenPos(float* pos, float* x, float* y, float* z);
+    extern s32 marioChkInScreen(s32 x, s32 y);
+    extern void partyClearFootmark(void);
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern void movePos(f32* x, f32* z, f32 distance, f32 angle);
+    extern void* partyHitCheck(void* party, float* pos, float* dir, float* hitPos, float* out, float* dist);
+    extern f32 vec3_802e7bf0[3];
+    extern f32 float_1_80421d40;
+    extern f32 float_100_80421d64;
+    extern f32 float_50_80421d68;
+
+    s32* args = event->args;
+    void* party;
+    void* work;
+    f32 pos[3];
+    f32 dir[3];
+    f32 hitPos[3];
+    f32 out[3];
+    f32 dist;
+    f32 sx;
+    f32 sy;
+    f32 sz;
+    s32 partyId = 1;
+
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == NULL) {
+        return 2;
+    }
+    pos[0] = *(f32*)((s32)party + 0x58);
+    pos[1] = *(f32*)((s32)party + 0x5C);
+    pos[2] = *(f32*)((s32)party + 0x60);
+    marioGetScreenPos(pos, &sx, &sy, &sz);
+    if (marioChkInScreen((s32)sy, (s32)sx) != 0) {
+        return 2;
+    }
+    partyClearFootmark();
+    work = *(void**)((s32)party + 0x160);
+    dir[0] = vec3_802e7bf0[0];
+    dir[1] = vec3_802e7bf0[1];
+    dir[2] = vec3_802e7bf0[2];
+    do {
+        pos[0] = *(f32*)((s32)party + 0x58);
+        pos[1] = *(f32*)((s32)party + 0x5C);
+        pos[2] = *(f32*)((s32)party + 0x60);
+        marioGetScreenPos(pos, &sx, &sy, &sz);
+        if (marioChkInScreen((s32)sy, (s32)sx) != 0) {
+            break;
+        }
+        movePos((f32*)((s32)party + 0x58), (f32*)((s32)party + 0x60), float_1_80421d40,
+                angleABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60),
+                         *(f32*)((s32)work + 0x8C), *(f32*)((s32)work + 0x94)));
+        dist = float_100_80421d64;
+        hitPos[0] = *(f32*)((s32)party + 0x58);
+        hitPos[1] = *(f32*)((s32)party + 0x5C) + float_50_80421d68;
+        hitPos[2] = *(f32*)((s32)party + 0x60);
+        if (partyHitCheck(party, hitPos, dir, out, pos, &dist) != NULL) {
+            *(f32*)((s32)party + 0x5C) = out[1];
+        } else {
+            *(f32*)((s32)party + 0x5C) = *(f32*)((s32)work + 0x90);
+        }
+    } while (1);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_party_set_dir(EventEntry* event, s32 first) {
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+    extern s32 sysMsec2Frame(s32 msec);
+    extern f32 revise360(f32 angle);
+    extern f32 toMovedirSimple(f32 angle);
+    extern f32 float_270_80421d5c;
 
-u8 evt_party_set_dir(s32 pEvt, s32 param_2) {
-    return 0;
+    void* party;
+    s32* args = event->args;
+    f32 dir;
+    s32 frames;
+    s32 partyId;
+
+    if (first != 0) {
+        partyId = 1;
+        if (args[0] == 0) {
+            partyId = partyCtrlNo;
+        }
+        args++;
+        *(s32*)((s32)event + 0x78) = partyId;
+        party = partyGetPtr(*(s32*)((s32)event + 0x78));
+        if (party == NULL) {
+            return 2;
+        }
+        *(s32*)((s32)event + 0x80) = 0;
+        *(f32*)((s32)event + 0x7C) = *(f32*)((s32)party + 0x10C);
+    } else {
+        args++;
+    }
+    dir = evtGetFloat(event, args[0]);
+    frames = evtGetValue(event, args[1]);
+    if (frames >= 0) {
+        frames = sysMsec2Frame(frames);
+    }
+    party = partyGetPtr(*(s32*)((s32)event + 0x78));
+    if (party == NULL) {
+        return 2;
+    }
+    if (frames > 0) {
+        f32 target = revise360(float_270_80421d5c - dir);
+        f32 start = *(f32*)((s32)event + 0x7C);
+        f32 delta = target - start;
+        f32 ratio = (f32)*(s32*)((s32)event + 0x80) / (f32)frames;
+        *(f32*)((s32)party + 0x10C) = revise360(start + (delta * ratio));
+        *(f32*)((s32)party + 0x110) = *(f32*)((s32)party + 0x10C);
+        *(f32*)((s32)party + 0x100) = toMovedirSimple(*(f32*)((s32)party + 0x110));
+        *(s32*)((s32)event + 0x80) = *(s32*)((s32)event + 0x80) + 1;
+        return *(s32*)((s32)event + 0x80) == frames;
+    }
+    if (frames < 0) {
+        *(f32*)((s32)party + 0x110) = revise360(float_270_80421d5c - dir);
+        *(f32*)((s32)party + 0x100) = toMovedirSimple(*(f32*)((s32)party + 0x110));
+        return 2;
+    }
+    *(f32*)((s32)party + 0x10C) = revise360(float_270_80421d5c - dir);
+    *(f32*)((s32)party + 0x110) = *(f32*)((s32)party + 0x10C);
+    *(f32*)((s32)party + 0x100) = toMovedirSimple(*(f32*)((s32)party + 0x110));
+    return 2;
 }
-
-
-u8 evt_party_move_pos2(s32 pEvt, s32 param_2) {
-    return 0;
-}
-
-
-u8 evt_party_move_pos(s32 pEvt, s32 param_2) {
-    return 0;
-}
-
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+s32 evt_party_move_pos2(EventEntry* event, s32 first) {
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern void partySetForceMove(void* party, f32 angle, s32 frames, f32 speed);
+    extern void* gp;
+
+    void* party;
+    s32* args = event->args;
+    f32 x;
+    f32 z;
+    f32 dist;
+    f32 speed;
+    s32 partyId;
+
+    if (first != 0) {
+        *(s32*)((s32)event + 0x80) = 0;
+    }
+    partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    *(s32*)((s32)event + 0x78) = partyId;
+    party = partyGetPtr(*(s32*)((s32)event + 0x78));
+    if (party == NULL) {
+        return 2;
+    }
+    if (*(s32*)((s32)event + 0x80) == 0) {
+        u8 status = *(u8*)((s32)party + 0x34);
+        if (status != 0 && (u8)(status - 1) > 1) {
+            return 0;
+        }
+        *(s32*)((s32)event + 0x80) = 1;
+        x = evtGetFloat(event, args[1]);
+        z = evtGetFloat(event, args[2]);
+        speed = evtGetFloat(event, args[3]);
+        dist = distABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60), x, z);
+        *(f32*)((s32)party + 0x100) = angleABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60), x, z);
+        partySetForceMove(
+            party,
+            *(f32*)((s32)party + 0x100),
+            (s32)((f32)*(s32*)((s32)gp + 4) * (dist / speed)),
+            speed / (f32)*(s32*)((s32)gp + 4));
+    }
+    if (*(s16*)((s32)party + 0x28) == 0) {
+        return 2;
+    }
+    return 0;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_party_move_pos(EventEntry* event, s32 first) {
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+    extern s32 sysMsec2Frame(s32 msec);
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern void partySetForceMove(void* party, f32 angle, s32 frames, f32 speed);
+
+    void* party;
+    s32* args = event->args;
+    f32 x;
+    f32 z;
+    f32 speed;
+    s32 partyId;
+    s32 timer;
+
+    if (first != 0) {
+        *(s32*)((s32)event + 0x80) = 0;
+    }
+    partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    *(s32*)((s32)event + 0x78) = partyId;
+    party = partyGetPtr(*(s32*)((s32)event + 0x78));
+    if (party == NULL) {
+        return 2;
+    }
+    if (*(s32*)((s32)event + 0x80) == 0) {
+        u8 status = *(u8*)((s32)party + 0x34);
+        if (status != 0 && (u8)(status - 1) > 1) {
+            return 0;
+        }
+        *(s32*)((s32)event + 0x80) = 1;
+        x = evtGetFloat(event, args[1]);
+        z = evtGetFloat(event, args[2]);
+        *(s32*)((s32)event + 0x7C) = sysMsec2Frame(evtGetValue(event, args[3]));
+        *(f32*)((s32)party + 0x100) = angleABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60), x, z);
+        if (*(s32*)((s32)event + 0x7C) == 0) {
+            timer = (s32)(distABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60), x, z) / *(f32*)((s32)party + 0x104));
+            *(s32*)((s32)event + 0x7C) = timer;
+            speed = *(f32*)((s32)party + 0x104);
+        } else {
+            speed = distABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60), x, z) / (f32)*(s32*)((s32)event + 0x7C);
+        }
+        partySetForceMove(party, *(f32*)((s32)party + 0x100), *(s32*)((s32)event + 0x7C), speed);
+    }
+    timer = *(s32*)((s32)event + 0x7C) - 1;
+    *(s32*)((s32)event + 0x7C) = timer;
+    if (timer < 0) {
+        return 1;
+    }
+    return 0;
+}
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

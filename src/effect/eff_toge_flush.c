@@ -14,10 +14,57 @@ u8 effTogeFlushDisp(int param_1, int param_2) {
 }
 
 
-u8 effTogeFlushMain(int* param_1) {
-    return 0;
-}
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+u8 effTogeFlushMain(void* effect) {
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
+    typedef struct TogeFlushWork {
+        s32 type;
+        Vec3 pos;
+        f32 rot;
+        f32 rotStep;
+        f32 spin;
+        f32 scale;
+        f32 alphaScale;
+        s32 alpha;
+        s32 unk28;
+        s32 life;
+        s32 frame;
+    } TogeFlushWork;
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(Vec3*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void effTogeFlushDisp(void);
+    extern f64 sin(f64);
 
+    TogeFlushWork* work;
+    s32 life;
+
+    work = *(TogeFlushWork**)((s32)effect + 0xC);
+    work->life--;
+    work->frame++;
+    life = work->life;
+    if (life < 0) {
+        effDelete(effect);
+        return 0;
+    }
+    if (work->frame <= 6) {
+        work->alpha = (s32)((f32)(218 - work->alpha) * 0.5f + (f32)work->alpha);
+    }
+    if (work->frame > 6) {
+        work->alpha = (s32)((f32)work->alpha * 0.78f);
+    }
+
+    work->spin += work->scale;
+    work->scale += 0.29f;
+    work->rot += work->rotStep;
+    work->rotStep *= 0.93f;
+    work->alphaScale = (0.5f * (f32)sin((6.2832f * (f32)(life * 50)) / 360.0f)) + 0.9f;
+    work->unk28 = (s32)((64.0f * (f32)sin((6.2832f * (f32)(life * 40)) / 360.0f)) + 144.0f);
+    dispEntry(4, 2, effTogeFlushDisp, effect, dispCalcZ(&work->pos));
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

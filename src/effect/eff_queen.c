@@ -114,5 +114,64 @@ void* effQueenEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
 
 /* stub-fill: effQueenMain | prototype_only | source_prototype */
 void effQueenMain(void* entry) {
-    return;
+    extern void* gp;
+    extern BOOL animGroupBaseAsync(char* name, s32 language, s32 unused);
+    extern s32 animPoseEntry(char* name, s32 language);
+    extern void animPoseSetAnim(s32 poseId, const char* animName, s32 loop);
+    extern void animPoseRelease(s32 poseId);
+    extern void effDelete(void* entry);
+    extern f32 dispCalcZ(Vec* pos);
+    extern void dispEntry(s32 cameraId, s32 order, void* callback, f32 priority, void* param);
+    extern void effQueenDisp(s32 cameraId, void* entry);
+    extern char str_MOBJ_EFF_queen_torna_80302b34[];
+    extern const char str_S_1_80428a60[];
+    extern f32 float_0p8_80428a64;
+
+    void* work;
+    Vec pos;
+    s32 language;
+    s32 limit;
+
+    work = *(void**)((s32)entry + 0xC);
+    pos.x = *(f32*)((s32)work + 4);
+    pos.y = *(f32*)((s32)work + 8);
+    pos.z = *(f32*)((s32)work + 0xC);
+    language = *(s32*)((s32)gp + 0x14) != 0;
+
+    if (*(u32*)entry & 4) {
+        *(u32*)entry &= ~4;
+        *(s32*)((s32)work + 0x20) = 0x64;
+    }
+    if (!animGroupBaseAsync(str_MOBJ_EFF_queen_torna_80302b34, language, 0)) {
+        return;
+    }
+    if (*(s32*)((s32)work + 0x18) == -1) {
+        *(s32*)((s32)work + 0x18) = animPoseEntry(str_MOBJ_EFF_queen_torna_80302b34, language);
+        animPoseSetAnim(*(s32*)((s32)work + 0x18), str_S_1_80428a60, 1);
+    }
+    if (*(s32*)((s32)work + 0x20) < 1000) {
+        *(s32*)((s32)work + 0x20) -= 1;
+    }
+    if (*(s32*)((s32)work + 0x20) < 0) {
+        if (*(s32*)((s32)work + 0x18) != -1) {
+            animPoseRelease(*(s32*)((s32)work + 0x18));
+        }
+        effDelete(entry);
+        return;
+    }
+    if (*(s32*)((s32)work + 0x20) < 0x64) {
+        *(s32*)((s32)work + 0x24) -= 3;
+    } else {
+        *(s32*)((s32)work + 0x24) += 3;
+    }
+    limit = (s32)((f32)*(s32*)((s32)work + 0x28) * float_0p8_80428a64);
+    if (*(s32*)((s32)work + 0x24) > limit) {
+        *(s32*)((s32)work + 0x24) = limit;
+    }
+    if (*(s32*)((s32)work + 0x24) < 0) {
+        *(s32*)((s32)work + 0x24) = 0;
+    }
+    dispCalcZ(&pos);
+    dispEntry(4, 2, effQueenDisp, 0.0f, entry);
 }
+

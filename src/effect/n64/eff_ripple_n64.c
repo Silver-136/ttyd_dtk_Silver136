@@ -39,10 +39,68 @@ u8 effRippleDisp(int param_1, int param_2) {
 }
 
 
-u8 effRippleMain(void* effEntry) {
-    return 0;
-}
+void effRippleMain(void* effect) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(Vec3*);
+    extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
+    extern void effRippleDisp(void);
+    extern void* effRippleN64Entry(f32 x, f32 y, f32 z, f32 height, s32 type);
+    extern const Vec3 vec3_802fbe48;
+    extern f32 float_0_80425f20;
+    extern f32 float_0p3_80425f30;
+    extern f32 float_1p05_80425f34;
+    extern f32 float_0p1_80425f38;
+    u8* work;
+    Vec3 pos;
+    Vec3 dispPos;
+    s32 timer;
+    s32 type;
+    void* child;
 
+    work = *(u8**)((s32)effect + 0xC);
+    pos = vec3_802fbe48;
+    pos.x = *(f32*)(work + 4);
+    pos.y = *(f32*)(work + 8);
+    pos.z = *(f32*)(work + 0xC);
+    dispPos = pos;
+
+    timer = *(s32*)(work + 0x1C);
+    type = *(s32*)work;
+    *(s32*)(work + 0x1C) = timer - 1;
+    *(s32*)(work + 0x20) += 1;
+    if (*(s32*)(work + 0x1C) < 0) {
+        effDelete(effect);
+        return;
+    }
+    if (timer > 5) {
+        *(s32*)(work + 0x18) = (s32)((f32)(120 - *(s32*)(work + 0x18)) * float_0p3_80425f30 + (f32)*(s32*)(work + 0x18));
+    }
+    if (((u32)(type - 1) <= 1 || type == 3) && timer == 15) {
+        child = effRippleN64Entry(type * 10, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC), float_0_80425f20);
+        *(f32*)((s32)*(void**)((s32)child + 0xC) + 0x2C) = *(f32*)(work + 0x2C);
+        *(f32*)((s32)*(void**)((s32)child + 0xC) + 0x30) = *(f32*)(work + 0x30);
+    }
+    if (type == 2 || type == 20) {
+        *(f32*)(work + 0x10) *= float_1p05_80425f34;
+    }
+    if (type == 3 || type == 30) {
+        *(f32*)(work + 0x10) *= float_1p05_80425f34;
+    }
+    if (timer < 0x20) {
+        *(s32*)(work + 0x18) = timer << 3;
+    }
+    *(s32*)(work + 0x24) += 1;
+    if (*(s32*)(work + 0x24) >= 0x20) {
+        *(s32*)(work + 0x24) -= 0x20;
+    }
+    *(f32*)(work + 0x10) += float_0p1_80425f38;
+    dispEntry(*(s32*)(work + 0x34), 2, effRippleDisp, effect, dispCalcZ(&dispPos));
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

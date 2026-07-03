@@ -369,9 +369,71 @@ s32 BattleCommandDisplay_ChangePartySelectMenuMain(void* battleWork) {
 
 
 s32 _check_present_item(void) {
-    return 0;
-}
+    extern s32 BattleAudience_GetPresentItemNo(void);
+    extern s32 BattleAudience_GetPresentTargetUnitId(void);
+    extern void BattleAudience_SetPresentItemNo(s32);
+    extern void BtlUnit_RecoverHp(void*, s16);
+    extern void BtlUnit_RecoverFp(void*, s16);
+    extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
+    extern s32 BtlUnit_GetHeight(void*);
+    extern void effRecoveryEntry(s32, s32, f32, f32, f32);
+    void* battleWork;
+    void* unit;
+    s32 itemNo;
+    s32 targetId;
+    f32 x;
+    f32 y;
+    f32 z;
 
+    battleWork = _battleWorkPointer;
+    itemNo = BattleAudience_GetPresentItemNo();
+    if (itemNo >= 0x153) {
+        return 0;
+    }
+
+    targetId = BattleAudience_GetPresentTargetUnitId();
+    if (targetId < 0 || targetId >= 0x40) {
+        return 0;
+    }
+    unit = BattleGetUnitPtr(battleWork, targetId);
+
+    if (itemNo == 0) {
+        return 0;
+    }
+    if (itemNo == 0x7B) {
+        BtlUnit_RecoverHp(unit, 1);
+        BtlUnit_GetPos(unit, &x, &y, &z);
+        y += *(f32*)((s32)unit + 0x114) * BtlUnit_GetHeight(unit) + 5.0f;
+        effRecoveryEntry(0, 1, x, y, z);
+        BattleAudience_SetPresentItemNo(0);
+        return 0;
+    }
+    if (itemNo >= 0x7D) {
+        goto present_item;
+    }
+    if (itemNo >= 0x7B) {
+        BtlUnit_RecoverFp(unit, 1);
+        BtlUnit_GetPos(unit, &x, &y, &z);
+        y += *(f32*)((s32)unit + 0x114) * BtlUnit_GetHeight(unit) + 5.0f;
+        effRecoveryEntry(1, 1, x, y, z);
+        BattleAudience_SetPresentItemNo(0);
+        return 0;
+    }
+
+present_item:
+    if (itemNo < 0 || itemNo >= 0x153) {
+        return 0;
+    }
+    *(u8*)((s32)battleWork + 0x1C74) = 1;
+    if (*(s32*)((s32)battleWork + 0x171C) == 0xC || *(s32*)((s32)battleWork + 0x171C) == 0xD) {
+        *(u8*)((s32)battleWork + 0x1C74) = 2;
+    }
+    BattleCommandDisplay_AllEnd(battleWork);
+    *(s32*)((s32)battleWork + 0x1C60) = *(s32*)((s32)battleWork + 0x1C5C);
+    *(s32*)((s32)battleWork + 0x1C5C) = 0xC;
+    *(s32*)((s32)battleWork + 0x171C) = 0x1D;
+    return 1;
+}
 
 int _btlcmd_MakePartyTable(void* battleWork) {
     return 0;
@@ -486,5 +548,57 @@ u32 _battleGetPartyIcon(s32 unitKind) {
 
 
 s32 _check_weapon_type_attack(void* weapon) {
+    if (weapon == 0) {
+        return 0;
+    }
+    if (*(void**)((s32)weapon + 0x1C) != 0) {
+        return 1;
+    }
+    if (*(s8*)((s32)weapon + 0x80) > 0 && *(s8*)((s32)weapon + 0x81) > 0) {
+        return 1;
+    }
+    if (*(s8*)((s32)weapon + 0x82) > 0 && *(s8*)((s32)weapon + 0x83) > 0) {
+        return 1;
+    }
+    if (*(s8*)((s32)weapon + 0x84) > 0 && *(s8*)((s32)weapon + 0x85) > 0) {
+        return 1;
+    }
+    if (*(s8*)((s32)weapon + 0x86) > 0 && *(s8*)((s32)weapon + 0x87) > 0) {
+        return 1;
+    }
+    if (*(s8*)((s32)weapon + 0x89) > 0 && *(s8*)((s32)weapon + 0x8A) > 0) {
+        return 1;
+    }
+    if (*(s8*)((s32)weapon + 0x8F) > 0 && *(s8*)((s32)weapon + 0x90) > 0) {
+        return 1;
+    }
+    if (*(s8*)((s32)weapon + 0x91) > 0 && *(s8*)((s32)weapon + 0x92) > 0) {
+        return 1;
+    }
+    if (*(s8*)((s32)weapon + 0x93) > 0 && *(s8*)((s32)weapon + 0x94) > 0 &&
+        *(s8*)((s32)weapon + 0x95) < 0) {
+        return 1;
+    }
+    if (*(s8*)((s32)weapon + 0x96) > 0 && *(s8*)((s32)weapon + 0x97) > 0 &&
+        *(s8*)((s32)weapon + 0x98) < 0) {
+        return 1;
+    }
+    if (*(s8*)((s32)weapon + 0x99) > 0 && *(s8*)((s32)weapon + 0x9A) > 0 &&
+        *(s8*)((s32)weapon + 0x9B) < 0) {
+        return 1;
+    }
+    if (*(s8*)((s32)weapon + 0x9E) > 0) {
+        return 1;
+    }
+    if (*(s8*)((s32)weapon + 0xA4) > 0) {
+        return 1;
+    }
+    if (*(s8*)((s32)weapon + 0xA5) > 0) {
+        return 1;
+    }
+    if (*(s8*)((s32)weapon + 0xA2) > 0 && *(s8*)((s32)weapon + 0xA3) > 0) {
+        return 1;
+    }
     return 0;
 }
+

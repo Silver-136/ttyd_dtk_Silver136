@@ -98,10 +98,67 @@ s32 _evt_msg_print(void* param_1, int param_2, u32 param_3, char* param_4, s32 p
 }
 
 
-u8 evt_msg_print_insert(int param_1, int param_2) {
-    return 0;
-}
+s32 evt_msg_print_insert(int param_1, int param_2) {
+    extern int sprintf(char* str, const char* format, ...);
+    extern char* msgSearch(char* msg);
 
+    s32 values[4];
+    char buffer[0xA00];
+    EvtEntry* evt;
+    s32 first;
+    s32* args;
+    s32* extraArgs;
+    s32 count;
+    s32 flags;
+    char* msg;
+    s32 value1;
+    s32 value2;
+    s32 i;
+
+    evt = (EvtEntry*)param_1;
+    first = param_2;
+    args = evt->args;
+    count = (args[-2] >> 16) - 5;
+    flags = evtGetValue(evt, args[0]);
+    msg = (char*)evtGetValue(evt, args[1]);
+    extraArgs = args + 2;
+    value1 = evtGetValue(evt, extraArgs[0]);
+    value2 = evtGetValue(evt, extraArgs[1]);
+    extraArgs += 2;
+    args = values;
+    i = 0;
+    while (i < count) {
+        *args = evtGetValue(evt, *extraArgs);
+        extraArgs++;
+        args++;
+        i++;
+    }
+    if (first != 0) {
+        if ((flags & 1) != 0) {
+            msg = msg;
+        } else {
+            msg = msgSearch(msg);
+        }
+        switch (count) {
+            case 1:
+                sprintf(buffer, msg, values[0]);
+                break;
+            case 2:
+                sprintf(buffer, msg, values[0], values[1]);
+                break;
+            case 3:
+                sprintf(buffer, msg, values[0], values[1], values[2]);
+                break;
+            case 4:
+                sprintf(buffer, msg, values[0], values[1], values[2], values[3]);
+                break;
+            case 0:
+            default:
+                break;
+        }
+    }
+    return _evt_msg_print(evt, first, flags | 1, buffer, value1, (char*)value2);
+}
 
 s32 evt_msg_print_add_insert(int param_1, int param_2) {
     extern int sprintf(char* str, const char* format, ...);

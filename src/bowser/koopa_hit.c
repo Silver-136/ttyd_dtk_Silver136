@@ -298,8 +298,101 @@ s32 kpaSearchHead(void* param2, f32* outValue, f32 height) {
 /* CHATGPT STUB FILL: main/bowser/koopa_hit 20260624_184128 */
 
 /* stub-fill: kpaHitCheck | missing_definition | ghidra_signature */
-u8 kpaHitCheck(void) {
-    return 0;
+void* kpaHitCheck(void) {
+    extern void* marioGetPtr(void);
+    extern s32 kpaFireAttackCheck(void);
+    extern s32 kpaGetLevel(void);
+    extern f64 sin(f64 x);
+    extern f64 cos(f64 x);
+    extern void* hitCheckSphereFilter(void* filter, f32 x, f32 y, f32 z, f32 radius);
+    extern u32 hitGetAttr(void* hitObj);
+    extern void* mobjHitObjPtrToPtr(void* hitObj);
+    extern s32* head_sphere_data[4];
+    extern f32 float_1000_804273b4;
+    extern f32 float_3p1416_804273b8;
+    extern f32 float_180_804273bc;
+
+    void* result = 0;
+    void* mario = marioGetPtr();
+    void* hitObj;
+    void* mobj;
+    s32 i;
+    s32 offset;
+    s32* data;
+    s32 count;
+    f32 angle;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 radius;
+    f32 sinValue;
+    f32 cosValue;
+    s32 xOff;
+    s32 yOff;
+    s32 zOff;
+    s32 type;
+
+    if (*(s8*)((s32)mario + 0x3C) != 2) {
+        return 0;
+    }
+
+    *(void**)(*(s32*)((s32)mario + 0x298) + 0x1C) = 0;
+    for (i = 0, offset = 0; i < 10; i++, offset += 4) {
+        *(void**)(*(s32*)((s32)marioGetPtr() + 0x298) + offset + 0x20) = 0;
+        *(f32*)(*(s32*)((s32)marioGetPtr() + 0x298) + offset + 0x78) = float_1000_804273b4;
+    }
+
+    if (kpaFireAttackCheck() == 1) {
+        return 0;
+    }
+
+    data = head_sphere_data[kpaGetLevel()];
+    count = *data++;
+    angle = (float_3p1416_804273b8 * *(f32*)((s32)mario + 0x1A4)) / float_180_804273bc;
+    for (i = 0, offset = 0; i < count; i++, offset += 4) {
+        sinValue = (f32)sin(angle);
+        xOff = data[0];
+        x = *(f32*)((s32)mario + 0x8C) + ((f32)xOff * sinValue);
+        cosValue = (f32)cos(angle);
+        xOff = data[0];
+        yOff = data[1];
+        zOff = data[2];
+        type = data[3];
+        data += 4;
+        z = *(f32*)((s32)mario + 0x94) - ((f32)xOff * cosValue);
+        y = *(f32*)((s32)mario + 0x90) + (f32)yOff;
+        radius = (f32)zOff;
+
+        if (type == 1) {
+            if ((*(u32*)((s32)mario + 0x0) & 0x00010000) == 0) {
+                continue;
+            }
+        } else if (type == 2) {
+            if ((*(u32*)((s32)mario + 0x0) & 0x00010000) != 0) {
+                continue;
+            }
+        } else if (type == 3) {
+            if ((*(u32*)((s32)mario + 0x0) & 0x00030000) != 0) {
+                continue;
+            }
+        }
+
+        hitObj = hitCheckSphereFilter(0, x, y, z, radius);
+        if ((*(u32*)((s32)mario + 0x0) & 0x00010000) != 0) {
+            if ((hitGetAttr(hitObj) & 0xFFFFFFFE) != 0) {
+                mobj = mobjHitObjPtrToPtr(hitObj);
+                if (*(f32*)((s32)mobj + 0x3C) > y) {
+                    *(void**)(*(s32*)((s32)marioGetPtr() + 0x298) + offset + 0x20) = hitObj;
+                }
+            }
+        }
+        if (hitObj != 0) {
+            result = hitObj;
+        }
+    }
+
+    *(void**)(*(s32*)((s32)mario + 0x298) + 0x1C) = result;
+    return result;
 }
 
 /* stub-fill: kpaSearchGround | missing_definition | ghidra_signature */
@@ -308,11 +401,142 @@ u8 kpaSearchGround(void) {
 }
 
 /* stub-fill: kpaEnemyHitChk | missing_definition | ghidra_signature */
-u8 kpaEnemyHitChk(void) {
+u8 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 height, f32 width) {
+    extern void* marioGetPtr(void);
+    extern s32 kpaEnemyFireHitChk(f32 x, f32 y, f32 z, f32 height, f32 width);
+    extern s32 kpaGetLevel(void);
+    extern s32 kpaGetStageType(void);
+    extern s32 kpaMutekiCheck(void);
+    extern void marioChgMot(s32 mot);
+    extern f32 float_0p5_804273b0;
+    extern f32 float_50_804273f0;
+
+    void* mario = marioGetPtr();
+    f32 ySize;
+    f32 xSize;
+    f32 yDiff;
+    f32 xDiff;
+
+    if (kpaEnemyFireHitChk(x, y, z, height, width) != 0) {
+        return 2;
+    }
+
+    ySize = *(f32*)((s32)mario + 0x1BC) + height;
+    xSize = *(f32*)((s32)mario + 0x1B8) + width;
+    yDiff = ((*(f32*)((s32)mario + 0x90) + (float_0p5_804273b0 * *(f32*)((s32)mario + 0x1BC))) - y) -
+            (float_0p5_804273b0 * height);
+    xDiff = *(f32*)((s32)mario + 0x8C) - x;
+
+    if (__fabsf(yDiff) <= (float_0p5_804273b0 * ySize) &&
+        __fabsf(xDiff) <= (float_0p5_804273b0 * xSize)) {
+        if ((*(u32*)((s32)mario + 0x0) & 0x00020000) != 0) {
+            if (*(f32*)((s32)mario + 0x90) > y) {
+                if (kpaGetLevel() == 0 && kpaGetStageType() != 1 &&
+                    *(s16*)((s32)mario + 0x4C) == 0 && z < float_50_804273f0) {
+                    marioChgMot(4);
+                }
+                return 1;
+            }
+        } else {
+            if (kpaMutekiCheck() == 1) {
+                return 3;
+            }
+            if (*(s16*)((s32)mario + 0x4C) != 0) {
+                return 3;
+            }
+            if (*(s16*)((s32)mario + 0x78) == 0) {
+                return 4;
+            }
+        }
+    }
+
     return 0;
 }
 
 /* stub-fill: kpaEnemyFireHitChk | missing_definition | ghidra_signature */
-u8 kpaEnemyFireHitChk(void) {
+u8 kpaEnemyFireHitChk(f32 x, f32 y, f32 z, f32 height, f32 width) {
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+
+    extern void* getKoopaFireEfp(void);
+    extern void* camGetPtr(s32 cameraId);
+    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(void* mtx, s32 axis, f32 rad);
+    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(void* a, void* b, void* out);
+    extern void PSMTXMultVec(void* mtx, void* src, void* dst);
+    extern void PSVECSubtract(void* a, void* b, void* out);
+    extern f32 PSVECMag(void* v);
+    extern f32 float_0p5_804273b0;
+    extern f32 float_deg2rad_804273f4;
+    extern f32 float_90_804273f8;
+    extern f32 float_270_804273fc;
+    extern f32 float_7_80427400;
+    extern VecLocal vec3_802fec78;
+    extern VecLocal vec3_802fec84;
+
+    f32 transMtx[3][4];
+    f32 rotMtx[3][4];
+    f32 scaleMtx[3][4];
+    f32 concatMtx[3][4];
+    VecLocal src;
+    VecLocal target;
+    VecLocal pos;
+    VecLocal diff;
+    void* effect;
+    void* work;
+    s32 i;
+    f32 baseScale;
+    f32 radius;
+
+    effect = getKoopaFireEfp();
+    camGetPtr(4);
+    src = vec3_802fec78;
+    src.x = x;
+    src.y = y + (float_0p5_804273b0 * height);
+    src.z = z;
+    target = src;
+
+    if (effect == 0) {
+        return 0;
+    }
+
+    work = *(void**)((s32)effect + 0xC);
+    baseScale = *(f32*)((s32)work + 0x40);
+    PSMTXTrans(transMtx, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
+    camGetPtr(4);
+    PSMTXRotRad(rotMtx, 0x79, float_deg2rad_804273f4 * (*(f32*)((s32)work + 0x48) - *(f32*)((s32)camGetPtr(4) + 0x114)));
+
+    if (*(f32*)((s32)work + 0x48) > float_90_804273f8 && *(f32*)((s32)work + 0x48) < float_270_804273fc) {
+        PSMTXScale(scaleMtx, *(f32*)((s32)work + 0x40), *(f32*)((s32)work + 0x40), -*(f32*)((s32)work + 0x40));
+    } else {
+        PSMTXScale(scaleMtx, *(f32*)((s32)work + 0x40), *(f32*)((s32)work + 0x40), *(f32*)((s32)work + 0x40));
+    }
+
+    PSMTXConcat(transMtx, rotMtx, transMtx);
+    PSMTXConcat(transMtx, scaleMtx, concatMtx);
+
+    radius = float_0p5_804273b0 * width;
+    work = (void*)((s32)work + 0x50);
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, work = (void*)((s32)work + 0x50)) {
+        if (*(s32*)((s32)work + 0x44) == 0) {
+            PSMTXTrans(transMtx, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
+            baseScale = float_7_80427400 * *(f32*)((s32)work + 0x40);
+            PSMTXScale(scaleMtx, baseScale, baseScale, baseScale);
+            PSMTXConcat(transMtx, scaleMtx, transMtx);
+            PSMTXConcat(concatMtx, transMtx, transMtx);
+            pos = vec3_802fec84;
+            PSMTXMultVec(transMtx, &pos, &pos);
+            PSVECSubtract(&target, &pos, &diff);
+            if (PSVECMag(&diff) < ((baseScale * baseScale) + radius)) {
+                return 1;
+            }
+        }
+    }
+
     return 0;
 }
+

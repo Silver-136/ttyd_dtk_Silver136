@@ -407,11 +407,150 @@ u8 kpa_dash(void) {
 }
 
 /* stub-fill: kpa_stay | missing_definition | ghidra_signature */
-u8 kpa_stay(void) {
-    return 0;
+void kpa_stay(void) {
+    extern void* marioGetPtr(void);
+    extern s32 kpaGetAttackMode(void);
+    extern s32 kpaGetStageViewType(void);
+    extern s32 kpaGetBodyStatus(void);
+    extern void kpaChgPose(char* pose3d, char* pose2d);
+    extern void marioChgMot(s32 mot);
+    extern void kpaAttackStart(void);
+    extern f32 kpaStickSpd(s32 stick);
+    extern char str_SFX_KUPPA_SWIM1_802feb70[];
+    extern f32 float_0_804272e0;
+    char* base;
+    void* mario;
+    void* work;
+    s32 changed;
+    f32 speed;
+
+    base = str_SFX_KUPPA_SWIM1_802feb70;
+    mario = marioGetPtr();
+    if ((*(u32*)((s32)mario + 0xC) & 1) != 0) {
+        *(u32*)((s32)mario + 0xC) &= ~1;
+        *(u32*)mario &= ~0xF0000;
+        *(s16*)((s32)mario + 0x50) = 0;
+        *(s32*)((s32)mario + 0x48) = 0;
+        *(s32*)((s32)mario + 0x44) = 0;
+        if (kpaGetAttackMode() == 0) {
+            work = *(void**)((s32)mario + 0x298);
+            if ((*(u32*)work & 0x01000000) == 0) {
+                kpaChgPose(base + 0xEC, base + 0xF4);
+            } else {
+                kpaChgPose(base + 0x100, base + 0xF4);
+            }
+        }
+        if ((*(u32*)mario & 0x20) == 0) {
+            *(f32*)((s32)mario + 0x180) = float_0_804272e0;
+        }
+    }
+
+    if (kpaGetAttackMode() == 0) {
+        mario = marioGetPtr();
+        if (kpaGetStageViewType() == 1) {
+            changed = 0;
+        } else if ((*(u16*)((s32)mario + 0x24C) & 0x100) == 0) {
+            changed = 0;
+        } else if (kpaGetBodyStatus() == 2) {
+            marioChgMot(0x25);
+            changed = 1;
+        } else {
+            marioChgMot(3);
+            changed = 1;
+        }
+
+        if (changed == 0) {
+            if ((*(u16*)((s32)mario + 0x24C) & 0x200) != 0) {
+                kpaAttackStart();
+            } else {
+                if (*(s16*)((s32)mario + 0x4E) == 0) {
+                    speed = kpaStickSpd(0);
+                } else {
+                    speed = *(f32*)((s32)mario + 0x180);
+                }
+                if (kpaGetStageViewType() == 0) {
+                    *(f32*)((s32)mario + 0x180) = speed;
+                    if (speed > float_0_804272e0) {
+                        marioChgMot(1);
+                    }
+                } else if (*(f32*)((s32)mario + 0x194) > float_0_804272e0) {
+                    marioChgMot(1);
+                }
+            }
+        }
+    }
 }
 
 /* stub-fill: kpaStickSpd | prototype_only | source_prototype */
 f32 kpaStickSpd(s32 stick) {
-    return 0.0f;
+    extern void* marioGetPtr(void);
+    extern s32 kpaGetBodyStatus(void);
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern f32 float_70_80427390;
+    extern f32 float_0_804272e0;
+    extern f32 float_neg0p2_80427394;
+    extern f32 float_neg0p7_80427398;
+    extern f32 float_0p01_80427354;
+    extern f32 float_0p2_8042739c;
+    extern f32 float_1p3_804273a0;
+    extern f32 float_0p633_804273a4;
+    extern f32 float_2p3_804273a8;
+    extern f32 float_0p002_804273ac;
+    void* mario;
+    f32 dir;
+    f32 speed;
+    f32 limit;
+    f32 negLimit;
+
+    mario = marioGetPtr();
+    dir = (f32)*(s8*)((s32)mario + 0x252);
+    if (dir >= float_70_80427390) {
+        dir = float_70_80427390;
+    }
+    if (dir <= -float_70_80427390) {
+        dir = -float_70_80427390;
+    }
+
+    speed = *(f32*)((s32)mario + 0x2DC);
+    if (dir == float_0_804272e0) {
+        if (*(u32*)((s32)mario + 0x1F4) != 0) {
+            speed += speed * float_neg0p7_80427398;
+        } else {
+            speed += speed * float_neg0p2_80427394;
+        }
+        if (__fabs(speed) < float_0p01_80427354) {
+            speed = float_0_804272e0;
+        }
+    } else {
+        if (stick == 0) {
+            if (kpaGetBodyStatus() == 2) {
+                limit = float_0p2_8042739c;
+            } else {
+                limit = float_1p3_804273a0;
+            }
+        } else {
+            if (kpaGetBodyStatus() == 2) {
+                limit = float_0p633_804273a4;
+            } else {
+                limit = float_2p3_804273a8;
+            }
+        }
+        speed += float_0p002_804273ac * dir;
+        if (speed >= limit) {
+            speed = limit;
+        }
+        negLimit = -limit;
+        if (speed <= negLimit) {
+            speed = negLimit;
+        }
+    }
+
+    *(f32*)((s32)mario + 0x2DC) = speed;
+    *(f32*)((s32)mario + 0x180) = __fabs(speed);
+    dir = angleABf(float_0_804272e0, float_0_804272e0, speed, float_0_804272e0);
+    if (*(f32*)((s32)mario + 0x180) != float_0_804272e0) {
+        *(f32*)((s32)mario + 0x1A4) = dir;
+    }
+    return *(f32*)((s32)mario + 0x180);
 }
+

@@ -109,5 +109,56 @@ void* effUranokoEntry(s32 type, s32 timer, f32 x, f32 y, f32 z) {
 
 /* stub-fill: effUranokoMain | prototype_only | source_prototype */
 void effUranokoMain(void* entry) {
-    return;
+    extern void* gp;
+    extern BOOL animGroupBaseAsync(char* name, s32 language, s32 unused);
+    extern s32 animPoseEntry(char* name, s32 language);
+    extern void animPoseSetAnim(s32 poseId, const char* animName, s32 loop);
+    extern void animPoseRelease(s32 poseId);
+    extern void effDelete(void* entry);
+    extern f32 dispCalcZ(Vec* pos);
+    extern void dispEntry(s32 cameraId, s32 order, void* callback, f32 priority, void* param);
+    extern void effUranokoDisp(s32 cameraId, void* entry);
+    extern char str_MOBJ_EFF_uranoko_803029fc[];
+    extern const char str_A_1_804288d0[];
+    extern f32 float_1_804288d4;
+    extern f32 float_0p125_804288d8;
+
+    void* work;
+    Vec pos;
+    s32 language;
+
+    work = *(void**)((s32)entry + 0xC);
+    pos.x = *(f32*)((s32)work + 4);
+    pos.y = *(f32*)((s32)work + 8);
+    pos.z = *(f32*)((s32)work + 0xC);
+    language = *(s32*)((s32)gp + 0x14) != 0;
+
+    if (animGroupBaseAsync(str_MOBJ_EFF_uranoko_803029fc, language, 0)) {
+        if (*(s32*)((s32)work + 0x20) == -1) {
+            *(s32*)((s32)work + 0x20) = animPoseEntry(str_MOBJ_EFF_uranoko_803029fc, language);
+            animPoseSetAnim(*(s32*)((s32)work + 0x20), str_A_1_804288d0, 1);
+        }
+        if (*(u32*)entry & 4) {
+            *(u32*)entry &= ~4;
+            *(s32*)((s32)work + 0x1C) = 0x10;
+        }
+        if (*(s32*)((s32)work + 0x1C) < 1000) {
+            *(s32*)((s32)work + 0x1C) -= 1;
+        }
+        if (*(s32*)((s32)work + 0x1C) < 0x10) {
+            *(s32*)((s32)work + 0x24) = *(s32*)((s32)work + 0x1C) << 4;
+        }
+        if (*(s32*)((s32)work + 0x1C) < 0) {
+            if (*(s32*)((s32)work + 0x20) != -1) {
+                animPoseRelease(*(s32*)((s32)work + 0x20));
+            }
+            effDelete(entry);
+        } else {
+            *(s32*)((s32)work + 0x18) += 1;
+            *(f32*)((s32)work + 0x10) += (float_1_804288d4 - *(f32*)((s32)work + 0x10)) * float_0p125_804288d8;
+            dispCalcZ(&pos);
+            dispEntry(4, 2, effUranokoDisp, 0.0f, entry);
+        }
+    }
 }
+

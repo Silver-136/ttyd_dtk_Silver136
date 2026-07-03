@@ -249,6 +249,73 @@ void effTeresaDisp(s32 cameraId, void* effect) {
 /* CHATGPT STUB FILL: main/effect/eff_teresa 20260624_184823 */
 
 /* stub-fill: effTeresaMain | prototype_only | source_prototype */
-void effTeresaMain(void) {
-    return;
+void effTeresaMain(void* effect) {
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+
+    extern void* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
+    extern void effDelete(void* effect);
+    extern u32 psndSFXOn_3D(s32 lookup, VecLocal* position);
+    extern f32 dispCalcZ(VecLocal* pos);
+    extern void dispEntry(s32 cameraId, s32 layer, void* dispFunc, void* data, f32 z);
+    extern void effTeresaDisp(s32 cameraId, void* effect);
+    extern VecLocal vec3_802ff234;
+    extern VecLocal vec3_802ff240;
+    extern f32 float_0p1_80427abc;
+    extern f32 float_0p8_80427ac0;
+    extern f32 float_1_80427ac4;
+    extern f32 float_10_80427ac8;
+    extern f32 float_178p5_80427acc;
+    extern f32 float_0_80427ab4;
+    extern f32 float_20_80427ad0;
+    extern f32 float_30_80427ad4;
+    extern f32 float_3_80427ad8;
+    extern f32 float_0p98_80427adc;
+
+    void* work = *(void**)((s32)effect + 0xC);
+    VecLocal pos = vec3_802ff234;
+
+    pos.x = *(f32*)((s32)work + 4);
+    pos.y = *(f32*)((s32)work + 8);
+    pos.z = *(f32*)((s32)work + 0xC);
+
+    if (*(s32*)work == 0) {
+        if (*(s32*)((s32)work + 0x3C) == 0) {
+            if (*(f32*)((s32)work + 0x34) > float_0p1_80427abc) {
+                *(f32*)((s32)work + 0x34) *= float_0p8_80427ac0;
+            } else {
+                VecLocal sndPos = vec3_802ff240;
+                *(s32*)((s32)work + 0x3C) = 1;
+                effKemuTestEntry(8, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8),
+                                 *(f32*)((s32)work + 0xC), float_1_80427ac4);
+                sndPos.x = *(f32*)((s32)work + 4);
+                sndPos.y = *(f32*)((s32)work + 8);
+                sndPos.z = *(f32*)((s32)work + 0xC);
+                psndSFXOn_3D(0x5D6, &sndPos);
+            }
+            *(f32*)((s32)work + 0x38) += float_10_80427ac8;
+            *(f32*)((s32)work + 0x28) = float_178p5_80427acc;
+        } else {
+            *(f32*)((s32)work + 0x38) = float_0_80427ab4;
+            *(f32*)((s32)work + 0x34) += (float_20_80427ad0 - *(f32*)((s32)work + 0x34)) / float_30_80427ad4;
+            *(f32*)((s32)work + 0x28) *= float_0p8_80427ac0;
+            if (*(f32*)((s32)work + 0x28) < float_3_80427ad8) {
+                effDelete(effect);
+                return;
+            }
+        }
+    } else {
+        *(f32*)((s32)work + 0x34) += (float_20_80427ad0 - *(f32*)((s32)work + 0x34)) / float_30_80427ad4;
+        *(f32*)((s32)work + 0x28) *= float_0p98_80427adc;
+        if (*(f32*)((s32)work + 0x28) < float_3_80427ad8) {
+            effDelete(effect);
+            return;
+        }
+    }
+
+    dispEntry(4, 2, effTeresaDisp, effect, dispCalcZ(&pos));
 }
+

@@ -137,11 +137,159 @@ void effBreakDisp(s32 cameraId, void* effect) {
 /* CHATGPT STUB FILL: main/effect/eff_break 20260624_184823 */
 
 /* stub-fill: effBreakMain | missing_definition | ghidra_signature */
-u8 effBreakMain(void) {
-    return 0;
+void effBreakMain(void* effect) {
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+
+    extern void* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale);
+    extern void effStardustN64SetDrawCam(void* effect, s32 cam);
+    extern f32 dispCalcZ(VecLocal* pos);
+    extern void dispEntry(s32 cameraId, s32 layer, void* dispFunc, void* data, f32 z);
+    extern void effDelete(void* effect);
+    extern void effBreakDisp(s32 cameraId, void* effect);
+    extern VecLocal vec3_802fef20;
+    extern f32 ty_data[];
+    extern f32 ty_data2[];
+    extern f32 float_20_80427610;
+    extern f32 float_0_80427600;
+
+    void* workBase = *(void**)((s32)effect + 0xC);
+    void* work = (void*)((s32)workBase + 0x24);
+    VecLocal pos = vec3_802fef20;
+    s32 done = 0;
+    s32 i;
+    f32 starScale;
+
+    pos.x = *(f32*)((s32)workBase + 4);
+    pos.y = *(f32*)((s32)workBase + 8);
+    pos.z = *(f32*)((s32)workBase + 0xC);
+    starScale = float_20_80427610 * *(f32*)((s32)workBase + 0x20);
+
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, work = (void*)((s32)work + 0x24)) {
+        switch (*(s32*)((s32)work + 0x1C)) {
+            case 0:
+            case 2:
+                *(s32*)((s32)work + 0x10) -= 1;
+                if (*(s32*)((s32)work + 0x10) <= 0) {
+                    *(s32*)((s32)work + 0x10) = 0;
+                    *(s32*)((s32)work + 0x1C) += 1;
+                }
+                break;
+            case 1:
+                if (*(u32*)((s32)work + 0x10) < 0x15U) {
+                    *(f32*)((s32)work + 0x14) = ty_data[*(s32*)((s32)work + 0x10)];
+                    *(s32*)((s32)work + 0x10) += 1;
+                    if (*(f32*)((s32)work + 0x14) == float_0_80427600) {
+                        void* dust = effStardustN64Entry(1,
+                            pos.x + *(f32*)((s32)work + 4),
+                            pos.y + *(f32*)((s32)work + 8),
+                            pos.z + *(f32*)((s32)work + 0xC),
+                            starScale);
+                        effStardustN64SetDrawCam(dust, 8);
+                    }
+                } else {
+                    *(s32*)((s32)work + 0x10) = ((*(s32*)((s32)effect + 8) - 1) - i) * 0x15;
+                    *(s32*)((s32)work + 0x1C) += 1;
+                }
+                break;
+            case 3:
+                *(s32*)((s32)work + 0x10) += 1;
+                if (*(s32*)((s32)work + 0x10) > *(s32*)((s32)workBase + 0x10)) {
+                    *(s32*)((s32)work + 0x10) = 0;
+                    *(s32*)((s32)work + 0x1C) += 1;
+                }
+                break;
+            case 4:
+                if (*(u32*)((s32)work + 0x10) < 0x15U) {
+                    *(f32*)((s32)work + 0x14) = ty_data2[*(s32*)((s32)work + 0x10)];
+                    if ((i & 1) == 0) {
+                        *(f32*)((s32)work + 0x14) = -*(f32*)((s32)work + 0x14);
+                    }
+                    *(s32*)((s32)work + 0x10) += 1;
+                } else {
+                    *(s32*)((s32)work + 0x1C) += 1;
+                }
+                break;
+            case 5:
+                done++;
+                break;
+        }
+    }
+
+    if (done >= *(s32*)((s32)effect + 8) - 1) {
+        effDelete(effect);
+    } else {
+        dispEntry(8, 2, effBreakDisp, effect, dispCalcZ(&pos));
+    }
 }
 
 /* stub-fill: effBreakEntry | missing_definition | ghidra_signature */
-u8 effBreakEntry(void) {
-    return 0;
+void* effBreakEntry(s32 kind, f32 x, f32 y, f32 z, s32 timer) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void effGetTexObj(s32 texId, void* texObj);
+    extern void effBreakMain(void* effect);
+    extern void* gp;
+    extern s16* texid_tbl[];
+    extern const char str_Break_80427614[];
+    extern f32 float_2_8042761c;
+    extern f32 float_36_80427624;
+    extern f32 float_72_80427620;
+    extern f32 float_0_80427600;
+    extern f32 float_10_80427628;
+
+    void* effect = effEntry();
+    s32 language = *(s32*)((s32)gp + 0x16C);
+    s32 count = texid_tbl[language][2] + 1;
+    void* work;
+    void* item;
+    u8 texObj[0x20];
+    s32 i;
+    s32 j;
+    f32 left;
+    f32 total;
+
+    *(const char**)((s32)effect + 0x14) = str_Break_80427614;
+    *(s32*)((s32)effect + 8) = count;
+    work = __memAlloc(3, count * 0x24);
+    *(void**)((s32)effect + 0xC) = work;
+    *(void**)((s32)effect + 0x10) = effBreakMain;
+
+    *(s32*)work = kind;
+    *(f32*)((s32)work + 4) = x;
+    *(f32*)((s32)work + 8) = y;
+    *(f32*)((s32)work + 0xC) = z;
+    *(s32*)((s32)work + 0x10) = timer;
+    *(f32*)((s32)work + 0x20) = float_2_8042761c;
+
+    item = (void*)((s32)work + 0x24);
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, item = (void*)((s32)item + 0x24)) {
+        left = float_0_80427600;
+        for (j = 0; j < i - 1; j++) {
+            effGetTexObj(texid_tbl[*(s32*)((s32)gp + 0x16C)][j], texObj);
+            left += float_72_80427620;
+        }
+        effGetTexObj(texid_tbl[*(s32*)((s32)gp + 0x16C)][j], texObj);
+        left += float_36_80427624;
+
+        total = float_0_80427600;
+        for (j = 0; j < *(s32*)((s32)effect + 8) - 1; j++) {
+            effGetTexObj(texid_tbl[*(s32*)((s32)gp + 0x16C)][j], texObj);
+            total += float_36_80427624;
+        }
+
+        *(f32*)((s32)item + 4) = left - total;
+        *(f32*)((s32)item + 8) = float_0_80427600;
+        *(f32*)((s32)item + 0xC) = float_0_80427600;
+        *(f32*)((s32)item + 0x14) = float_10_80427628;
+        *(s32*)((s32)item + 0x18) = 0;
+        *(s32*)((s32)item + 0x10) = (i - 1) * 0x15;
+        *(s32*)((s32)item + 0x1C) = 0;
+    }
+
+    return effect;
 }
+

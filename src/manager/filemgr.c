@@ -42,12 +42,94 @@ char* fileAsync(char* param_1, s32 param_2, s32 param_3) {
 void _fileAlloc() {
     ;
 }
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+u8 _fileGarbage(int mode) {
+    extern void* afp;
+    extern char dvdmgr_thread[];
+    extern void* OSGetCurrentThread(void);
+    extern void OSYieldThread(void);
+    extern void smartFree(void*);
 
+    u8* file;
+    u8* prev;
+    u8* first;
+    u8* next;
 
-u8 _fileGarbage(int param_1) {
-    return 0;
+    if (mode == 0) {
+        file = *(u8**)((s32)afp + 8);
+        while (file != NULL) {
+            if (*file == 3 && *(void**)(file + 0xAC) != NULL) {
+                if (OSGetCurrentThread() == dvdmgr_thread) {
+                    *(s16*)((s32)*(void**)(file + 0xAC) + 0x90) = 8;
+                }
+                else {
+                    while (*(void**)(file + 0xAC) != NULL) {
+                        OSYieldThread();
+                    }
+                }
+                *file = 2;
+            }
+            file = *(u8**)(file + 0xA4);
+        }
+    }
+    else if (mode == 1) {
+        file = *(u8**)((s32)afp + 8);
+        while (file != NULL) {
+            if (*file == 3) {
+                if (*(void**)(file + 0xAC) != NULL) {
+                    if (OSGetCurrentThread() != dvdmgr_thread) {
+                        while (*(void**)(file + 0xAC) != NULL) {
+                            OSYieldThread();
+                        }
+                    }
+                }
+                else {
+                    (*(s16*)(file + 2))--;
+                    if (*(s16*)(file + 2) <= -2) {
+                        *file = 2;
+                    }
+                }
+            }
+            file = *(u8**)(file + 0xA4);
+        }
+    }
+
+    prev = NULL;
+    first = NULL;
+    file = *(u8**)((s32)afp + 8);
+    while (file != NULL) {
+        next = *(u8**)(file + 0xA4);
+        if (*file == 2) {
+            *file = 0;
+            if (file + 4 != *(u8**)(file + 0xA0)) {
+                smartFree(*(void**)(file + 0xA0));
+            }
+            if (prev != NULL) {
+                *(u8**)(prev + 0xA4) = *(u8**)(file + 0xA4);
+            }
+            if (*(void**)((s32)afp + 0x10) == NULL) {
+                *(u8**)((s32)afp + 0x10) = file;
+            }
+            else {
+                *(u8**)(*(s32*)((s32)afp + 0x14) + 0xA4) = file;
+            }
+            *(u8**)(file + 0xA4) = NULL;
+            *(u8**)((s32)afp + 0x14) = file;
+        }
+        else {
+            if (prev == NULL) {
+                first = file;
+            }
+            prev = file;
+        }
+        file = next;
+    }
+    *(u8**)((s32)afp + 8) = first;
+    *(u8**)((s32)afp + 0xC) = prev;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 fileInit(void) {
     void* mem;

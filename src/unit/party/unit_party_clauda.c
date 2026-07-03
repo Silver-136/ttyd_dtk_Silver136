@@ -22,15 +22,112 @@ s32 _check_blow_rate(void* evt) {
 #pragma use_lmw_stmw on
 
 
-void __makeTechMenuFunc(void* commandWork, s32 param_2) {
-    ;
+void __makeTechMenuFunc(void* commandWork, s32* count) {
+    extern void* _battleWorkPointer;
+    extern void* BattleGetPartyPtr(void* battleWork);
+    extern s32 BattleTransPartyId(s32 id);
+    extern s32 partyGetTechLv(s32 partyId);
+    extern char* msgSearch(char* msg);
+    extern u8 lbl_80378D60[];
+    s32 techLv;
+    void* party;
+    u8* entry;
+
+    party = BattleGetPartyPtr(_battleWorkPointer);
+    techLv = partyGetTechLv(BattleTransPartyId(*(s32*)((s32)party + 8)));
+
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(s32*)(entry + 0x90) = -1;
+    *(s32*)(entry + 0x94) = 0;
+    *(void**)(entry + 0x80) = lbl_80378D60 + 0x40;
+    *(s32*)(entry + 0x84) = 0;
+    *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+    *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+    *count = *count + 1;
+
+    if (techLv >= 0) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_80378D60 + 0x100;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
+    if (techLv >= 1) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_80378D60 + 0x1C0;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
+    if (techLv >= 2) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_80378D60 + 0x280;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
 }
 
+s32 _get_clauda_kiss_hit_position(void* evt) {
+    extern void* _battleWorkPointer;
+    extern s32 evtGetValue(void* evt, s32 arg);
+    extern s32 BattleTransID(void* evt, s32 id);
+    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
+    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+    extern f32 BattleGetFloorHeight(void* battleWork, f32 x, f32 y, f32 z);
+    extern void evtSetFloat(void* evt, s32 arg, f32 value);
+    extern f32 float_30_8042406c;
+    s32* args;
+    void* battleWork;
+    s32 ownerId;
+    s32 targetId;
+    s32 outX;
+    s32 outY;
+    s32 outZ;
+    void* owner;
+    void* target;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 floor;
+    s8 dir;
+    f32 scale;
 
-s32 _get_clauda_kiss_hit_position(int param_1) {
-    return 0;
+    args = *(s32**)((s32)evt + 0x18);
+    battleWork = _battleWorkPointer;
+    ownerId = evtGetValue(evt, args[0]);
+    targetId = evtGetValue(evt, args[1]);
+    evtGetValue(evt, args[2]);
+    outX = args[3];
+    outY = args[4];
+    outZ = args[5];
+    owner = BattleGetUnitPtr(battleWork, BattleTransID(evt, ownerId));
+    target = BattleGetUnitPtr(battleWork, BattleTransID(evt, targetId));
+    dir = *(s8*)((s32)target + 0x189);
+    BtlUnit_GetPos(target, &x, &y, &z);
+    scale = *(f32*)((s32)target + 0x114);
+    x += (f32)dir * (*(f32*)((s32)target + 0xF8) * scale);
+    y += *(f32*)((s32)target + 0xFC) * scale;
+    z += *(f32*)((s32)target + 0x100) * scale;
+    y -= float_30_8042406c * *(f32*)((s32)owner + 0x114);
+    floor = BattleGetFloorHeight(battleWork, x, y, z);
+    if (floor > y) {
+        y = floor;
+    }
+    evtSetFloat(evt, outX, x);
+    evtSetFloat(evt, outY, y);
+    evtSetFloat(evt, outZ, z);
+    return 2;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

@@ -81,14 +81,94 @@ void badgeShop_bargainGeneration(void) {
 
 
 void badgeShop_bottakuruGeneration(void) {
-    ;
-}
+    typedef struct BottakuruEntry {
+        s32 item;
+        s32 sort;
+    } BottakuruEntry;
+    extern s32 irand(s32 max);
+    extern void qqsort(void* base, s32 count, s32 size, void* compare);
+    BottakuruEntry entries[17] = {
+        { 0, 200 }, { 0, 200 }, { 0, 200 }, { 0, 200 },
+        { 0, 200 }, { 0, 200 }, { 0, 200 }, { 0, 200 },
+        { 0, 200 }, { 0, 200 }, { 0, 200 }, { 0, 200 },
+        { 0, 200 }, { 0, 200 }, { 0, 200 }, { 0, 200 },
+        { 0, 200 }
+    };
+    s32 item;
+    s32 count = 0;
+    s32 stock;
+    s32 i;
+    s32 j;
+    s32* table;
 
+    for (item = 0; item < 0x152 && count < 0x10; item++) {
+        stock = badgeShop_get((void*)((s32)bdsw + 0x4B), (s16)(item + 1));
+        for (j = 0; j < stock; j++) {
+            entries[count].sort = irand(100);
+            entries[count].item = item + 1;
+            count++;
+            if (count >= 0x10) {
+                break;
+            }
+        }
+    }
+
+    qqsort(entries, 0x11, 8, bottakuruComp);
+
+    table = badge_bottakuru_table;
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 0x11; j++) {
+            if (entries[i].item == table[j]) {
+                evtSetValue(NULL, GSW(i + 0x76), j);
+            }
+        }
+    }
+}
 
 u8 badgeShop_bteresaGeneration(void) {
-    return 0;
-}
+    extern s32 pouchCheckItem(s32 item);
+    extern s32 badge_bteresa_table_card_special[];
+    extern s32 badge_bteresa_table_card_silver[];
+    extern s32 badge_bteresa_table_card_gold[];
+    extern s32 badge_bteresa_table_card_platinum[];
+    s32* table;
 
+    if (pouchCheckItem(0x5B) != 0 && evtGetValue(NULL, GSW(0x76)) == 0) {
+        evtSetValue(NULL, GSW(0x76), 1);
+        table = badge_bteresa_table_card_special;
+        while (*table != 0) {
+            badgeShop_add((void*)((s32)bdsw + 0xA0), (s16)*table, 1);
+            table++;
+        }
+    }
+
+    if (pouchCheckItem(0x5E) != 0 && evtGetValue(NULL, GSW(0x77)) == 0) {
+        evtSetValue(NULL, GSW(0x77), 1);
+        table = badge_bteresa_table_card_silver;
+        while (*table != 0) {
+            badgeShop_add((void*)((s32)bdsw + 0xA0), (s16)*table, 1);
+            table++;
+        }
+    }
+
+    if (pouchCheckItem(0x5D) != 0 && evtGetValue(NULL, GSW(0x78)) == 0) {
+        evtSetValue(NULL, GSW(0x78), 1);
+        table = badge_bteresa_table_card_gold;
+        while (*table != 0) {
+            badgeShop_add((void*)((s32)bdsw + 0xA0), (s16)*table, 1);
+            table++;
+        }
+    }
+
+    if (pouchCheckItem(0x5C) != 0 && evtGetValue(NULL, GSW(0x79)) == 0) {
+        evtSetValue(NULL, GSW(0x79), 1);
+        table = badge_bteresa_table_card_platinum;
+        while (*table != 0) {
+            badgeShop_add((void*)((s32)bdsw + 0xA0), (s16)*table, 1);
+            table++;
+        }
+    }
+}
 
 void badgeShop_init(void) {
     s32* table;

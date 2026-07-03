@@ -53,6 +53,61 @@ u8 effPointGetDisp(void) {
 }
 
 /* stub-fill: effPointGetMain | prototype_only | source_prototype */
-void effPointGetMain(void) {
-    return;
+void effPointGetMain(void* effect) {
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+
+    extern f32 intplGetValue(s32 type, f32 start, f32 end, s32 frame, s32 maxFrame);
+    extern f32 dispCalcZ(VecLocal* pos);
+    extern void dispEntry(s32 cameraId, s32 layer, void* dispFunc, void* data, f32 z);
+    extern void effDelete(void* effect);
+    extern void effPointGetDisp(s32 cameraId, void* effect);
+    extern VecLocal vec3_802fece8;
+    extern f32 float_neg1000_80427434;
+    extern f32 float_0_80427414;
+    extern f32 float_1000_80427438;
+
+    void* work = *(void**)((s32)effect + 0xC);
+    VecLocal pos = vec3_802fece8;
+    pos.x = *(f32*)((s32)work + 4);
+    pos.y = *(f32*)((s32)work + 8);
+    pos.z = *(f32*)((s32)work + 0xC);
+
+    *(s32*)((s32)work + 0x1C) += 1;
+    switch (*(s32*)((s32)work + 0x20)) {
+        case 0:
+            *(f32*)((s32)work + 4) = intplGetValue(0xB, float_neg1000_80427434, float_0_80427414,
+                                                    *(s32*)((s32)work + 0x1C), 0x2D);
+            if (*(s32*)((s32)work + 0x1C) >= 0x2D) {
+                *(s32*)((s32)work + 0x1C) = 0;
+                *(s32*)((s32)work + 0x20) += 1;
+            }
+            break;
+        case 1:
+            if (*(s32*)((s32)work + 0x18) == 0) {
+                if ((*(u32*)effect & 4) != 0) {
+                    *(u32*)effect &= ~4U;
+                    *(s32*)((s32)work + 0x1C) = 0;
+                    *(s32*)((s32)work + 0x20) += 1;
+                }
+            } else if (*(s32*)((s32)work + 0x1C) >= *(s32*)((s32)work + 0x18)) {
+                *(s32*)((s32)work + 0x1C) = 0;
+                *(s32*)((s32)work + 0x20) += 1;
+            }
+            break;
+        case 2:
+            *(f32*)((s32)work + 4) = intplGetValue(0xB, float_0_80427414, float_1000_80427438,
+                                                    *(s32*)((s32)work + 0x1C), 0x3C);
+            if (*(s32*)((s32)work + 0x1C) >= 0x3C) {
+                effDelete(effect);
+                return;
+            }
+            break;
+    }
+
+    dispEntry(8, 2, effPointGetDisp, effect, dispCalcZ(&pos));
 }
+

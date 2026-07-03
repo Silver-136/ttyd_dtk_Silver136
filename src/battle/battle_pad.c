@@ -78,9 +78,94 @@ void BattlePadInit(void) {
 }
 
 void BtlPad_WorkUpdate(void* work, s32 flags) {
-    ;
-}
+    extern void* gp;
+    void* pad;
+    s32 i;
+    s32 offset;
+    s32 now;
+    s32 previous;
+    s32 repeat;
+    s32 trigger;
 
+    *(s32*)((s32)work + 0xC) = *(s32*)work;
+    *(s32*)((s32)work + 0x10) = *(s32*)((s32)work + 4);
+    *(s32*)((s32)work + 0x14) = *(s32*)((s32)work + 8);
+
+    offset = 0x70;
+    for (i = 0; i < 29; i++) {
+        pad = (void*)((s32)work + offset);
+        offset -= 4;
+        *(s32*)((s32)pad + 0x1C) = *(s32*)((s32)pad + 0x18);
+        *(s32*)((s32)pad + 0x94) = *(s32*)((s32)pad + 0x90);
+        *(s32*)((s32)pad + 0x10C) = *(s32*)((s32)pad + 0x108);
+    }
+
+    *(u16*)work = *(s32*)((s32)gp + flags * 4 + 0x1328);
+    *(u8*)((s32)work + 2) = *(u8*)((s32)gp + flags + 0x13B8);
+    *(u8*)((s32)work + 3) = *(u8*)((s32)gp + flags + 0x13BC);
+    *(u8*)((s32)work + 4) = *(u8*)((s32)gp + flags + 0x13C0);
+    *(u8*)((s32)work + 5) = *(u8*)((s32)gp + flags + 0x13C4);
+    *(u8*)((s32)work + 6) = *(u8*)((s32)gp + flags + 0x13C8);
+    *(u8*)((s32)work + 7) = *(u8*)((s32)gp + flags + 0x13CC);
+    *(u8*)((s32)work + 8) = 0;
+    *(u8*)((s32)work + 9) = 0;
+
+    *(s32*)((s32)work + 0x108) = *(u16*)work;
+    *(s32*)((s32)work + 0x90) = *(s32*)((s32)gp + flags * 4 + 0x1348);
+    *(s32*)((s32)work + 0x18) = *(s32*)((s32)gp + flags * 4 + 0x1338);
+    *(s32*)((s32)work + 0x180) = *(s32*)((s32)gp + flags * 4 + 0x1368);
+
+    if (*(s8*)((s32)work + 3) >= 30) {
+        *(s32*)((s32)work + 0x108) |= 0x10000;
+    }
+    if (*(s8*)((s32)work + 3) <= -30) {
+        *(s32*)((s32)work + 0x108) |= 0x20000;
+    }
+    if (*(s8*)((s32)work + 2) <= -30) {
+        *(s32*)((s32)work + 0x108) |= 0x40000;
+    }
+    if (*(s8*)((s32)work + 2) >= 30) {
+        *(s32*)((s32)work + 0x108) |= 0x80000;
+    }
+    if (*(s8*)((s32)work + 5) >= 30) {
+        *(s32*)((s32)work + 0x108) |= 0x100000;
+    }
+    if (*(s8*)((s32)work + 5) <= -30) {
+        *(s32*)((s32)work + 0x108) |= 0x200000;
+    }
+    if (*(s8*)((s32)work + 4) <= -30) {
+        *(s32*)((s32)work + 0x108) |= 0x400000;
+    }
+    if (*(s8*)((s32)work + 4) >= 30) {
+        *(s32*)((s32)work + 0x108) |= 0x800000;
+    }
+
+    now = *(s32*)((s32)work + 0x108);
+    previous = *(s32*)((s32)work + 0x10C);
+    *(s32*)((s32)work + 0x18) |= (now & ~previous) & 0xFFFF0000;
+
+    if (now == 0) {
+        *(s32*)((s32)work + 0x90) = 0;
+        *(u8*)((s32)work + 0x1F8) = 0;
+        *(u8*)((s32)work + 0x1F9) = 0;
+    } else if (now != previous) {
+        repeat = *(s32*)((s32)work + 0x90);
+        *(s32*)((s32)work + 0x90) = repeat | (now & 0xFFFF0000);
+        trigger = *(s32*)((s32)work + 0x18) & 0xFFFF0000;
+        *(s32*)((s32)work + 0x90) &= trigger | 0xFFFF;
+        *(u8*)((s32)work + 0x1F8) = 1;
+        *(u8*)((s32)work + 0x1F9) = 0;
+    } else {
+        *(u8*)((s32)work + 0x1F9) += 1;
+        if (*(s8*)((s32)work + 0x1F9) >= (*(s8*)((s32)work + 0x1F8) == 1 ? 16 : 8)) {
+            *(s32*)((s32)work + 0x90) |= now & 0xFFFF0000;
+            *(u8*)((s32)work + 0x1F8) = 2;
+            *(u8*)((s32)work + 0x1F9) = 0;
+        }
+    }
+
+    *(s32*)((s32)work + 0x180) |= (previous & (previous ^ now)) & 0xFFFF0000;
+}
 
 void BtlPad_WorkInit(void* work) {
     s32 i;

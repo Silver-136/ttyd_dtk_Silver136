@@ -144,20 +144,191 @@ u8 _tatsumaki_effect(void) {
 }
 
 
-u8 _hammer_star_effect(void) {
-    return 0;
+s32 _hammer_star_effect(void* evt, s32 first) {
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+    extern f32 sinfd(f32 angle);
+    extern f32 cosfd(f32 angle);
+    extern void* effEnergyEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 field10, f32 field20, f32 field18);
+    extern f32 float_210_804223bc;
+    extern f32 float_420_804223c0;
+    extern f32 float_neg10_804223c4;
+    extern f32 float_150_804223c8;
+    extern f32 float_neg60_804223cc;
+    extern f32 float_10_804223d0;
+    extern f32 float_0p85_804223d4;
+    extern f32 float_26_804223d8;
+    extern f32 float_0p1_804223dc;
+    extern f32 float_0p08_804223e0;
+    extern f32 float_0p05_804223e4;
+    s32* args;
+    void* battleWork;
+    void* unit;
+    s32 type;
+    s32 effectType;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 angle;
+    f32 side;
+    f32 scale;
+
+    args = *(s32**)((s32)evt + 0x18);
+    battleWork = _battleWorkPointer;
+    type = evtGetValue(evt, args[0]);
+    effectType = evtGetValue(evt, args[1]);
+    unit = BattleGetUnitPtr(battleWork, BattleTransID(evt, type));
+
+    if (first != 0) {
+        *(s32*)((s32)evt + 0x78) = 0;
+    }
+
+    if ((s8)*(u8*)((s32)unit + 0x189) >= 0) {
+        angle = intplGetValue(1, *(s32*)((s32)evt + 0x78), 0xC, float_210_804223bc, float_420_804223c0);
+        side = float_neg10_804223c4;
+    } else {
+        angle = intplGetValue(1, *(s32*)((s32)evt + 0x78), 0xC, float_150_804223c8, float_neg60_804223cc);
+        side = float_10_804223d0;
+    }
+
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    y += *(f32*)((s32)unit + 0x114) * (float_0p85_804223d4 * (f32)BtlUnit_GetHeight(unit));
+    x += *(f32*)((s32)unit + 0x114) * (float_26_804223d8 * -sinfd(angle));
+    y += *(f32*)((s32)unit + 0x114) * (float_26_804223d8 * cosfd(angle));
+
+    scale = float_0p1_804223dc + (float_0p08_804223e0 * (f32)*(s32*)((s32)evt + 0x78));
+    effEnergyEntry(effectType, 0x1E, x, y, z, scale, side, float_0p05_804223e4);
+
+    if (*(s32*)((s32)evt + 0x78) < 0xC) {
+        *(s32*)((s32)evt + 0x78) += 1;
+        return 0;
+    }
+    return 2;
 }
 
+s32 _kaiten_hammer_acrobat_rotate(void* evt, s32 first) {
+    extern f32 reviseAngle(f32 angle);
+    extern void BtlUnit_GetRotate(void* unit, f32* x, f32* y, f32* z);
+    extern void BtlUnit_AddRotate(void* unit, f32 x, f32 y, f32 z);
+    extern void BtlUnit_SetRotate(void* unit, f32 x, f32 y, f32 z);
+    extern void BtlUnit_SetAnim(void* part, s32 anim);
+    extern f32 float_360_804223b8;
+    extern f32 float_0_804223b4;
+    s32* args;
+    void* battleWork;
+    void* unit;
+    void* part;
+    s32 type;
+    s32 partsId;
+    s32 frames;
+    s32 anim;
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 angle;
 
-s32 _kaiten_hammer_acrobat_rotate(int param_1, int param_2) {
-    return 0;
+    args = *(s32**)((s32)evt + 0x18);
+    battleWork = _battleWorkPointer;
+
+    type = evtGetValue(evt, args[0]);
+    unit = BattleGetUnitPtr(battleWork, BattleTransID(evt, type));
+    partsId = evtGetValue(evt, args[1]);
+    part = BtlUnit_GetPartsPtr(unit, partsId);
+    frames = evtGetValue(evt, args[2]);
+    anim = evtGetValue(evt, args[3]);
+
+    if (first != 0) {
+        BtlUnit_GetRotate(unit, &x, &y, &z);
+        *(s32*)((s32)evt + 0x78) = frames;
+        if ((s8)*(u8*)((s32)unit + 0x189) >= 0) {
+            angle = (s32)(float_360_804223b8 + (float_360_804223b8 - reviseAngle(y)));
+        } else {
+            angle = (s32)(float_360_804223b8 + reviseAngle(y));
+        }
+        *(s32*)((s32)evt + 0x7C) = angle;
+        *(s32*)((s32)evt + 0x80) = ((s8)*(u8*)((s32)unit + 0x189) * angle) / frames;
+        *(s32*)((s32)evt + 0x84) = 0;
+    }
+
+    BtlUnit_AddRotate(unit, float_0_804223b4, (f32)*(s32*)((s32)evt + 0x80), float_0_804223b4);
+
+    *(s32*)((s32)evt + 0x78) -= 1;
+    if (*(s32*)((s32)evt + 0x84) == 0) {
+        *(s32*)((s32)evt + 0x7C) -= *(s32*)((s32)evt + 0x80);
+        if (*(s32*)((s32)evt + 0x7C) <= 0x10E) {
+            *(s32*)((s32)evt + 0x84) = 1;
+            BtlUnit_SetAnim(part, anim);
+        }
+    }
+
+    if (*(s32*)((s32)evt + 0x78) > 0) {
+        return 0;
+    }
+
+    BtlUnit_SetRotate(unit, float_0_804223b4, float_0_804223b4, float_0_804223b4);
+    return 2;
 }
 
+s32 _jump_star_effect(void* evt, s32 first) {
+    extern void* effEnergyEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 field10, f32 field20, f32 field18);
+    extern f32 float_neg10_804223c4;
+    extern f32 float_10_804223d0;
+    extern f32 float_0p1_804223dc;
+    extern f32 float_0p05_804223e4;
+    extern f32 float_0p8_804223f4;
+    extern f32 float_2_804223f8;
+    s32* args;
+    void* battleWork;
+    void* unit;
+    s32 type;
+    s32 effectType;
+    s32 timer;
+    s32 step;
+    s32 rise;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 left;
+    f32 right;
+    f32 scale;
 
-u8 _jump_star_effect(void) {
-    return 0;
+    args = *(s32**)((s32)evt + 0x18);
+    battleWork = _battleWorkPointer;
+    type = evtGetValue(evt, args[0]);
+    effectType = evtGetValue(evt, args[1]);
+    unit = BattleGetUnitPtr(battleWork, BattleTransID(evt, type));
+
+    if (first != 0) {
+        *(s32*)((s32)evt + 0x78) = 0;
+    }
+
+    timer = *(s32*)((s32)evt + 0x78);
+    step = timer / 4;
+    if ((timer % 4) == 0) {
+        if ((s8)*(u8*)((s32)unit + 0x189) >= 0) {
+            left = float_10_804223d0;
+            right = float_neg10_804223c4;
+        } else {
+            left = float_neg10_804223c4;
+            right = float_10_804223d0;
+        }
+
+        BtlUnit_GetPos(unit, &x, &y, &z);
+        rise = (step * 8) / 10;
+        x += right * *(f32*)((s32)unit + 0x114);
+        y += (f32)rise;
+        scale = float_0p8_804223f4 + (float_0p1_804223dc * (f32)step);
+        if (scale > float_2_804223f8) {
+            scale = float_2_804223f8;
+        }
+        effEnergyEntry(effectType, 0x32, x, y, x, scale, left, float_0p05_804223e4);
+    }
+
+    if (*(s32*)((s32)evt + 0x78) <= 0x18) {
+        *(s32*)((s32)evt + 0x78) += 1;
+        return 0;
+    }
+    return 2;
 }
-
 
 s32 _fire_wave(void* evt, s32 first) {
     s32* args;

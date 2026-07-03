@@ -896,34 +896,252 @@ void animPoseSetEffectAnim(s32 poseId, void* anim, s32 force) {
 }
 
 void animPoseSetAnim(s32 poseId, void* name, s32 force) {
-    ;
+    extern s32 strcmp(const char*, const char*);
+    extern s32 wp;
+    extern s32 gp;
+    extern f32 float_0_8041fb28;
+    s32 pose;
+    s32 file;
+    s32 data;
+    s32 animCount;
+    s32 animIdx;
+    s32 offset;
+    s64 time;
+
+    pose = *(s32*)(wp + 0x10) + poseId * 0x170;
+    file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
+    data = **(s32**)(*(s32*)(file + 8) + 0xA0);
+    animCount = *(s32*)(data + 0x148);
+    animIdx = (s32)name;
+    if (animIdx < 0) {
+        animIdx = 0;
+        offset = 0;
+        while (animIdx < animCount) {
+            if (strcmp((char*)(*(s32*)(data + 0x1AC) + offset), name) == 0) {
+                break;
+            }
+            offset += 0x40;
+            animIdx++;
+        }
+    } else if (animIdx >= animCount) {
+        animIdx = 0;
+    }
+
+    if (force != 0 || animIdx != *(s32*)(pose + 0x14)) {
+        *(s32*)(pose + 0x14) = animIdx;
+        if (*(s32*)(pose + 0x90) != -1 && (*(u32*)pose & 2) != 0) {
+            *(u32*)pose |= 4;
+        }
+        if (*(s32*)(pose + 0xC) == 0) {
+            u32 ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+            time = *(s64*)(gp + 0x40) / ticks;
+        } else {
+            u32 ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+            time = *(s64*)(gp + 0x38) / ticks;
+        }
+        *(s64*)(pose + 0x18) = time;
+        *(s32*)(pose + 0x3C) = -1;
+        *(f32*)(pose + 0x40) = float_0_8041fb28;
+        *(s32*)(pose + 0x80) = 0;
+        *(f32*)(pose + 0x84) = float_0_8041fb28;
+    }
 }
 
+void animPoseSetPaperAnim(s32 poseId, void* name, s32 enabled) {
+    extern s32 strcmp(const char*, const char*);
+    extern s32 wp;
+    extern s32 gp;
+    extern u8 animPoseMain(s32 poseIdx);
+    s32 pose;
+    s32 paper;
+    s32 file;
+    s32 data;
+    s32 animCount;
+    s32 animIdx;
+    s32 offset;
+    s64 time;
 
-void animPoseSetPaperAnim(void* pose, s32 anim, s32 enabled) {
-    ;
+    pose = *(s32*)(wp + 0x10) + poseId * 0x170;
+    paper = *(s32*)(wp + 0x10) + *(s32*)(pose + 0x90) * 0x170;
+    file = *(s32*)wp + (*(s32*)(paper + 0x10) << 4);
+    data = **(s32**)(*(s32*)(file + 8) + 0xA0);
+    animCount = *(s32*)(data + 0x148);
+    animIdx = (s32)name;
+    if (animIdx < 0) {
+        animIdx = 0;
+        offset = 0;
+        while (animIdx < animCount) {
+            if (strcmp((char*)(*(s32*)(data + 0x1AC) + offset), name) == 0) {
+                break;
+            }
+            offset += 0x40;
+            animIdx++;
+        }
+    } else if (animIdx >= animCount) {
+        animIdx = 0;
+    }
+
+    *(s32*)(pose + 0x94) = animIdx;
+    if (*(s32*)(pose + 0xC) == 0) {
+        u32 ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+        time = *(s64*)(gp + 0x40) / ticks;
+    } else {
+        u32 ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+        time = *(s64*)(gp + 0x38) / ticks;
+    }
+    *(s64*)(pose + 0x88) = time;
+    if (*(s32*)(pose + 0x90) != -1 && (*(u32*)(paper + 4) & 2) == 0) {
+        animPoseMain(*(s32*)(pose + 0x90));
+    }
 }
-
 
 void animPaperPoseEntry(s32 name, s32 flag) {
     ;
 }
 
 
-s32 animEffectAsync(void*, s32) {
-    return 0;
-}
+s32 animEffectAsync(void* name, s32 mode) {
+    extern void fileSetCurrentArchiveType(s32 type);
+    extern s32 fileAsyncf(s32 type, s32 flags, char* fmt, char* ext, ...);
+    extern s32 strcmp(const char*, const char*);
+    extern s32 wp;
+    extern char str_PCTs_PCTs_8041fb34[];
+    extern char str_PCTs_PCTs_802c1068[];
+    extern char str_a_8041fb3c[];
+    extern char zero_8041fb30[];
+    s32 first;
+    s32 second;
+    s32 count;
+    char* entry;
+    char* found;
+    s32 offset;
 
+    switch (mode) {
+        case 0:
+            fileSetCurrentArchiveType(1);
+            break;
+        case 1:
+            fileSetCurrentArchiveType(2);
+            break;
+        case 2:
+            fileSetCurrentArchiveType(0);
+            break;
+    }
+
+    first = fileAsyncf(5, 0, str_PCTs_PCTs_8041fb34, str_a_8041fb3c, name);
+    entry = *(char**)(*(s32*)(*(s32*)(wp + 0x100) + 0xA0));
+    count = *(s32*)(*(s32*)(*(s32*)(wp + 0x100) + 0xA0) + 4);
+    offset = 0;
+    while (offset < count) {
+        if (strcmp(entry, name) == 0) {
+            found = entry + 0x20;
+            goto found_name;
+        }
+        entry += 0x20;
+        offset += 0x20;
+    }
+    found = zero_8041fb30;
+found_name:
+    second = fileAsyncf(4, 0, str_PCTs_PCTs_802c1068, str_a_8041fb3c, found);
+    if (first == -1) {
+        return 1;
+    }
+    if (first == 0) {
+        return 0;
+    }
+    if (second == -1) {
+        return 1;
+    }
+    if (second == 0) {
+        return 0;
+    }
+    return 1;
+}
 
 s32 animGroupBaseAsync(void* name, s32 mode, s32 flags) {
-    return 0;
+    extern void fileSetCurrentArchiveType(s32 type);
+    extern s32 fileAsyncf(s32 type, s32 flags, char* fmt, char* ext, ...);
+    extern s32 strcmp(const char*, const char*);
+    extern s32 wp;
+    extern char str_PCTs_PCTs_8041fb34[];
+    extern char str_PCTs_PCTs_802c1068[];
+    extern char str_a_8041fb3c[];
+    extern char zero_8041fb30[];
+    s32 first;
+    s32 second;
+    s32 count;
+    char* entry;
+    char* found;
+    s32 offset;
+
+    switch (mode) {
+        case 0:
+            fileSetCurrentArchiveType(1);
+            break;
+        case 1:
+            fileSetCurrentArchiveType(2);
+            break;
+        case 2:
+            fileSetCurrentArchiveType(0);
+            break;
+    }
+
+    first = fileAsyncf(5, flags, str_PCTs_PCTs_8041fb34, str_a_8041fb3c, name);
+    entry = *(char**)(*(s32*)(*(s32*)(wp + 0x100) + 0xA0));
+    count = *(s32*)(*(s32*)(*(s32*)(wp + 0x100) + 0xA0) + 4);
+    offset = 0;
+    while (offset < count) {
+        if (strcmp(entry, name) == 0) {
+            found = entry + 0x20;
+            goto found_name;
+        }
+        entry += 0x20;
+        offset += 0x20;
+    }
+    found = zero_8041fb30;
+found_name:
+    second = fileAsyncf(4, 0, str_PCTs_PCTs_802c1068, str_a_8041fb3c, found);
+    if (first == -1) {
+        return 1;
+    }
+    if (first == 0) {
+        return 0;
+    }
+    if (second == -1) {
+        return 1;
+    }
+    return second != 0;
 }
 
+void animPoseSetLocalTime(s32 poseId, f32 frame) {
+    extern s32 wp;
+    extern s32 gp;
+    extern f32 float_16p667_8041fb40;
+    s32 pose;
+    s64 local;
+    s64 time;
+    s64 result;
+    s32 paper;
 
-u8 animPoseSetLocalTime(double param_1, int param_2) {
-    return 0;
+    pose = *(s32*)(wp + 0x10) + poseId * 0x170;
+    local = (u64)(float_16p667_8041fb40 * frame);
+    if (*(s32*)(pose + 0xC) == 0) {
+        u32 ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+        time = *(s64*)(gp + 0x40) / ticks;
+    } else {
+        u32 ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+        time = *(s64*)(gp + 0x38) / ticks;
+    }
+    result = time - local;
+    *(s64*)(pose + 0x18) = result;
+    *(s64*)(pose + 0x88) = result;
+    if (*(s32*)(pose + 0x90) != -1) {
+        paper = *(s32*)(wp + 0x10) + *(s32*)(pose + 0x90) * 0x170;
+        if ((*(u32*)(paper + 4) & 2) == 0) {
+            *(s64*)(paper + 0x18) = result;
+        }
+    }
 }
-
 
 s32 animPaperPoseGetId(s32 name, s32 flag) {
     extern s32 wp;

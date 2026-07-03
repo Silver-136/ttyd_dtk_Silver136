@@ -4268,7 +4268,72 @@ USER_FUNC(btlevtcmd_DispItemIcon) {
 
 
 USER_FUNC(btlevtcmd_CommandFlyItem) {
-    ;
+    extern f32 float_10_804222dc;
+    extern f32 float_12_804222e4;
+    extern f32 float_5_804222e0;
+    extern char vec3_802ee458[];
+    extern void* effItemGetEntry(s32 type, f32 x, f32 y, f32 z);
+    extern void psndSFXOn_3D(char* name, void* pos);
+    s32* args;
+    BattleWork* battleWork;
+    BattleWorkUnit* unit;
+    s32 type;
+    s32 unitId;
+    s32 frames;
+    s32 item;
+    s32 kind;
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 base;
+
+    args = event->args;
+    type = evtGetValue(event, args[0]);
+    frames = evtGetValue(event, args[1]);
+    unitId = BattleTransID(event, type);
+
+    if (isFirstCall != 0) {
+        battleWork = _battleWorkPointer;
+        unit = BattleGetUnitPtr(battleWork, unitId);
+        kind = *(s32*)((s32)unit + 8);
+        if (kind == 0xDE || (kind >= 0xE0 && kind < 0xE7)) {
+            base = (s32)battleWork + 0x171C;
+            item = *(s32*)(base + (*(s32*)((s32)battleWork + 0x1C38) * 0x1C) + 0x94);
+        } else {
+            item = *(s32*)((s32)unit + 0x308);
+        }
+
+        *(s32*)((s32)event + 0x78) = frames;
+        BtlUnit_GetPos(unit, &x, &y, &z);
+        y += float_10_804222dc;
+        if ((*(u32*)((s32)unit + 0x104) & 0x10) == 0) {
+            if (*(u32*)((s32)unit + 0x104) & 2) {
+                y -= float_5_804222e0;
+            } else {
+                y += *(f32*)((s32)unit + 0x114) * (f32)BtlUnit_GetHeight(unit);
+            }
+        }
+
+        *(s32*)((s32)event + 0x7C) = itemEntry(0, item, 0x11, -1, 0, x, y, z);
+        effItemGetEntry(0xA, x, y + float_12_804222e4, z - float_5_804222e0);
+
+        if (kind == 0xDE) {
+            psndSFXOn_3D(vec3_802ee458 + 0x2F0, &x);
+        } else if (kind >= 0xE0 && kind < 0xE7) {
+            psndSFXOn_3D(vec3_802ee458 + 0x304, &x);
+        } else {
+            psndSFXOn_3D(vec3_802ee458 + 0x318, &x);
+        }
+        return 0;
+    }
+
+    *(s32*)((s32)event + 0x78) -= 1;
+    if (*(s32*)((s32)event + 0x78) > 0) {
+        return 0;
+    }
+
+    itemDelete((void*)(*(s32*)((s32)event + 0x7C) + 0xC));
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(btlevtcmd_ConsumeItem) {
@@ -4276,7 +4341,59 @@ USER_FUNC(btlevtcmd_ConsumeItem) {
 }
 
 USER_FUNC(btlevtcmd_ConsumeItemReserve) {
-    ;
+    extern s32 pouchAddCoin(s32 coins);
+    extern void effCoinN64Entry(s32 a, s32 b, f32 x, f32 y, f32 z, f32 scale);
+    extern f32 float_100_804222d8;
+    extern f32 float_1_8042228c;
+    s32* args;
+    BattleWork* battleWork;
+    BattleWorkUnit* unit;
+    s32 type;
+    s32 item;
+    s32 unitId;
+    s32 kind;
+    u8* data;
+    s32 i;
+    s32 coin;
+    f32 x;
+    f32 y;
+    f32 z;
+
+    args = event->args;
+    battleWork = _battleWorkPointer;
+    type = evtGetValue(event, args[0]);
+    item = evtGetValue(event, args[1]);
+    unitId = BattleTransID(event, type);
+    unit = BattleGetUnitPtr(battleWork, unitId);
+
+    kind = *(s32*)((s32)unit + 8);
+    if (kind == 0xDE || (kind >= 0xE0 && kind < 0xE7)) {
+        data = itemDataTable + item * 0x28;
+        if ((*(u16*)(data + 0x10) & 1) != 0) {
+            for (i = 0; i < 4; i++) {
+                if (*(s32*)((s32)battleWork + 0x19060 + i * 4) == item) {
+                    break;
+                }
+                if (*(s32*)((s32)battleWork + 0x19060 + i * 4) == 0) {
+                    *(s32*)((s32)battleWork + 0x19060 + i * 4) = item;
+                    break;
+                }
+            }
+        }
+
+        if (*(u8*)((s32)unit + 0x2FB) != 0) {
+            coin = (s32)(((f32)(*(u8*)((s32)unit + 0x2FB) * 5 + 0x46) * (f32)*(u16*)(data + 0x1A)) / float_100_804222d8);
+            if (coin > 0) {
+                pouchAddCoin(coin);
+                BtlUnit_GetPos(unit, &x, &y, &z);
+                effCoinN64Entry(0, 0, x, y, z, float_1_8042228c);
+            }
+        }
+    } else if (*(s32*)((s32)unit + 0x308) == 0x97) {
+        *(s32*)((s32)unit + 0x308) = 0;
+    }
+
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(btlevtcmd_AttackDeclare) {
@@ -4998,7 +5115,52 @@ USER_FUNC(btlevtcmd_GetConfuseActEvent) {
 
 
 USER_FUNC(btlevtcmd_MarioJumpParam) {
-    ;
+    extern f32 float_60_804222d4;
+    extern f32 float_0p15_804222d0;
+    s32* args;
+    s32 type;
+    s32 unitId;
+    f32 targetX;
+    f32 targetZ;
+    s32 outArg;
+    s32 frame;
+    s32 computed;
+    BattleWorkUnit* unit;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 dist;
+
+    args = event->args;
+
+    type = evtGetValue(event, args[0]);
+    unitId = BattleTransID(event, type);
+    targetX = (f32)evtGetValue(event, args[1]);
+    evtGetValue(event, args[2]);
+    targetZ = (f32)evtGetValue(event, args[3]);
+    outArg = args[4];
+    frame = evtGetValue(event, outArg);
+
+    unit = BattleGetUnitPtr(_battleWorkPointer, unitId);
+    BtlUnit_GetPos(unit, &x, &y, &z);
+
+    dist = distABf(x, z, targetX, targetZ);
+    if (frame != 0) {
+        computed = frame;
+    } else {
+        computed = (s32)(dist / *(f32*)((s32)unit + 0x170));
+    }
+    if (dist > float_60_804222d4) {
+        computed += (s32)(float_0p15_804222d0 * (dist - float_60_804222d4));
+    }
+    if (frame == 0 || computed > frame) {
+        frame = computed;
+    }
+    if (outArg != -250000000) {
+        evtSetValue(event, outArg, frame);
+    }
+
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(btlevtcmd_MarioJumpPosition) {
@@ -5442,7 +5604,56 @@ USER_FUNC(btlevtcmd_AudienceDeclareACResult) {
 
 
 USER_FUNC(btlevtcmd_AudienceDeclareAcrobatResult) {
-    ;
+    extern void BattleAudience_Case_AcrobatGood(void);
+    extern void BattleAudience_Case_AcrobatBad(void);
+    extern void* effNiceEntry(s32 type, f32 x, f32 y, f32 z);
+    extern void psndSFXOn_3D(char* name, void* pos);
+    extern char str_SFX_BTL_ACROBAT_MISS_802ee6bc[];
+    extern f32 float_150_804222b4;
+    extern f32 float_0p75_80422290;
+    s32* args;
+    BattleWork* battleWork;
+    BattleWorkUnit* unit;
+    u8* result;
+    s32 success;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 addX;
+    f32 addY;
+    f32 addZ;
+    void* effect;
+
+    args = event->args;
+    result = (u8*)evtGetValue(event, args[0]);
+    success = evtGetValue(event, args[1]);
+    battleWork = _battleWorkPointer;
+    unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)event + 0x160));
+
+    addX = evtGetFloat(event, args[2]);
+    addY = evtGetFloat(event, args[3]);
+    addZ = evtGetFloat(event, args[4]);
+
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    if (success != 0) {
+        *(u8*)((s32)battleWork + 0x19004) = result[0x18];
+        *(u8*)((s32)battleWork + 0x19007) = result[0x1B];
+        BattleAudience_Case_AcrobatGood();
+
+        y += (f32)BtlUnit_GetHeight(unit);
+        x += (f32)(BtlUnit_GetWidth(unit) / 2);
+        if (x > float_150_804222b4) {
+            x = float_150_804222b4;
+        }
+
+        effect = effNiceEntry(7, x + addX, y + addY, z + addZ);
+        *(f32*)((s32)*(void**)((s32)effect + 0xC) + 0x1C) = float_0p75_80422290;
+    } else {
+        BattleAudience_Case_AcrobatBad();
+        psndSFXOn_3D(str_SFX_BTL_ACROBAT_MISS_802ee6bc, &x);
+    }
+
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(btlevtcmd_ACSuccessEffect) {
@@ -6605,7 +6816,102 @@ USER_FUNC(btlevtcmd_GetItemRecoverParam) {
 
 
 USER_FUNC(btlevtcmd_WeaponAftereffect) {
-    ;
+    extern void BattleStage_DestroyA1(void);
+    extern void BattleStage_DestroyA2(void);
+    extern void BattleStage_DestroyB(void);
+    extern void BattleStage_NozzleDirChangeCheck(void);
+    extern void BattleStage_NozzleWorkCheck(s32 force);
+    extern void BattleStage_IronFrameFallCheck(void);
+    extern void BattleStage_ObjectFallCheck(void);
+    s32* args;
+    BattleWork* battleWork;
+    u8* weapon;
+    s32 destroyB;
+    s32 destroyA2;
+    s32 destroyA1;
+    s32 value;
+    u8 stageFlags;
+
+    args = event->args;
+    battleWork = _battleWorkPointer;
+    weapon = (u8*)evtGetValue(event, args[0]);
+
+    destroyB = 0;
+    destroyA2 = 0;
+    destroyA1 = 0;
+    value = irand(weapon[0xB4] + weapon[0xB5] + weapon[0xB6] + weapon[0xB7]);
+
+    if (*(u32*)((s32)battleWork + 0x19078) & 0x10) {
+        destroyA1 = 1;
+    }
+    if (*(u32*)((s32)battleWork + 0x19078) & 0x20) {
+        destroyA2 = 1;
+    }
+
+    value -= weapon[0xB4];
+    if (value < 0) {
+        destroyA2 = 1;
+        destroyA1 = 1;
+    } else {
+        value -= weapon[0xB5];
+        if (value < 0) {
+            destroyA1 = 1;
+        } else {
+            value -= weapon[0xB6];
+            if (value < 0) {
+                destroyA2 = 1;
+            }
+        }
+    }
+
+    stageFlags = *(u8*)((s32)battleWork + 0x180F8);
+    if (stageFlags & 4) {
+        destroyA2 = 0;
+    }
+    if (stageFlags & 2) {
+        destroyA1 = 0;
+    }
+
+    if ((stageFlags & 2) != 0) {
+        if ((stageFlags & 8) == 0) {
+            if (irand(100) < weapon[0xB8] || (*(u32*)((s32)battleWork + 0x19078) & 0x40)) {
+                destroyB = 1;
+                if ((*(u8*)((s32)battleWork + 0x180F8) & 4) == 0) {
+                    destroyA2 = 1;
+                }
+            }
+        }
+    }
+
+    if (destroyA1 != 0) {
+        BattleStage_DestroyA1();
+    }
+    if (destroyA2 != 0) {
+        BattleStage_DestroyA2();
+    }
+    if (destroyB != 0) {
+        BattleStage_DestroyB();
+    }
+
+    if (irand(100) < weapon[0xB9] || (*(u32*)((s32)battleWork + 0x19078) & 0x200)) {
+        BattleStage_NozzleDirChangeCheck();
+    }
+    if (irand(100) < weapon[0xBA] || (*(u32*)((s32)battleWork + 0x19078) & 0x100)) {
+        BattleStage_NozzleWorkCheck(1);
+    }
+    if (irand(100) < weapon[0xBB] || (*(u32*)((s32)battleWork + 0x19078) & 0x80)) {
+        BattleStage_IronFrameFallCheck();
+    }
+
+    if (*(u8*)((s32)battleWork + 0x180F8) & 0x20) {
+        if (*(u32*)((s32)battleWork + 0x19078) & 1) {
+            BattleStage_ObjectFallCheck();
+        } else if (irand(100) < weapon[0xBC]) {
+            BattleStage_ObjectFallCheck();
+        }
+    }
+
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(btlevtcmd_SetGuard) {

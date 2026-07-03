@@ -258,20 +258,91 @@ s32 evt_pouch_remove_keepitem(int param_1) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
 s32 evt_pouch_remove_item(void* pEvt) {
-    return 0;
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void evtSetValue(void* event, s32 dst, s32 value);
+    extern s32 pouchRemoveItem(s32 item);
+    extern void pouchReviseMarioParam(void);
+    extern void pouchRevisePartyParam(void);
+
+    s32* args;
+    s32 itemType;
+    s32 result;
+
+    args = *(s32**)((s32)pEvt + 0x18);
+    itemType = evtGetValue(pEvt, args[0]);
+    result = pouchRemoveItem(itemType);
+
+    if (result == 1) {
+        pouchReviseMarioParam();
+        pouchRevisePartyParam();
+        evtSetValue(pEvt, args[1], 0);
+    } else {
+        evtSetValue(pEvt, args[1], -1);
+    }
+
+    return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 s32 evt_pouch_add_keepitem(int param_1) {
-    return 0;
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void evtSetValue(void* event, s32 dst, s32 value);
+    extern s32 pouchAddKeepItem(s32 item);
+
+    int* args;
+    s32 item;
+    s32 result;
+
+    args = *(int**)((s32)param_1 + 0x18);
+    item = evtGetValue((void*)param_1, *args);
+    result = pouchAddKeepItem(item);
+
+    if (result != 0) {
+        evtSetValue((void*)param_1, args[1], 0);
+    } else {
+        evtSetValue((void*)param_1, args[1], -1);
+    }
+
+    return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_pouch_add_item(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void evtSetValue(void* event, s32 dst, s32 value);
+    extern s32 pouchGetItem(s32 item);
 
+    s32* args;
+    s32 itemType;
+    s32 result;
+
+    args = *(s32**)((s32)pEvt + 0x18);
+    itemType = evtGetValue(pEvt, args[0]);
+    result = pouchGetItem(itemType);
+
+    if (result == 1) {
+        evtSetValue(pEvt, args[1], 0);
+    } else {
+        evtSetValue(pEvt, args[1], -1);
+    }
+
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_pouch_all_party_recovery(void) {
     return 0;

@@ -108,25 +108,350 @@ void BattleStageObjectMain(void) {
 }
 
 
-u32 _set_mobj_rotate_x(void* param_1, int param_2) {
+u32 _set_mobj_rotate_x(void* event, s32 isFirstCall) {
+    extern void* _battleWorkPointer;
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void _mobj_shake_main(void* stageObject);
+    extern void psndSFXOn_3D(char* name, void* pos);
+    extern f32 intpl_sub(s32 type, f32 start, f32 end, s32 current, s32 duration);
+    extern char vec3_802f42b8[];
+    extern f32 float_0_80422fd0;
+    extern f32 float_90_80422fd4;
+    s32 type;
+    void* battleWork;
+    void* base;
+    char* snd0;
+    char* snd1;
+    s32 active;
+    s32 i;
+    s32 offset;
+    void* obj;
+    void* data;
+    s32 timer;
+    f32 angle;
+    s32 value;
+    f32 pos[3];
+
+    type = evtGetValue(event, **(s32**)((s32)event + 0x18));
+    battleWork = _battleWorkPointer;
+    base = (void*)((s32)battleWork + 0x20000);
+    active = 0;
+
+    if (isFirstCall != 0) {
+        if (type == 2) {
+            *(s32*)((s32)event + 0x7C) = 0;
+            *(s32*)((s32)event + 0x80) = 0x3C;
+            *(s32*)((s32)event + 0x84) = 0;
+        } else if (type >= 0 && type < 2) {
+            offset = 0;
+            for (i = 0; i < 0x20; i++) {
+                obj = (void*)((s32)battleWork + offset + 0x1715C);
+                if (*(s32*)obj > 0 && *(u16*)((s32)*(void**)((s32)obj + 0x64) + 6) == type) {
+                    *(u8*)((s32)obj + 0x70) = *(u8*)((s32)*(void**)((s32)obj + 0x64) + 0x14);
+                    *(u8*)((s32)obj + 0x71) = 0;
+                }
+                offset += 0x7C;
+            }
+        }
+    }
+
+    if (type >= 0 && type < 2) {
+        snd0 = vec3_802f42b8 + 0x240;
+        snd1 = vec3_802f42b8 + 0x258;
+        offset = 0;
+        for (i = 0; i < 0x20; i++) {
+            obj = (void*)((s32)battleWork + offset + 0x1715C);
+            if (*(s32*)obj > 0 && *(u16*)((s32)*(void**)((s32)obj + 0x64) + 6) == type) {
+                if (*(u8*)((s32)obj + 0x70) != 0) {
+                    *(u8*)((s32)obj + 0x70) -= 1;
+                    active = 1;
+                    _mobj_shake_main(obj);
+                } else {
+                    if (*(u8*)((s32)obj + 0x71) == 0) {
+                        if (type == 0) {
+                            psndSFXOn_3D(snd0, (void*)((s32)obj + 4));
+                        } else {
+                            psndSFXOn_3D(snd1, (void*)((s32)obj + 4));
+                        }
+                    }
+                    *(u8*)((s32)obj + 0x71) += 1;
+                    data = *(void**)((s32)obj + 0x64);
+                    angle = intpl_sub(2, *(f32*)((s32)obj + 0x78), float_90_80422fd4,
+                                      *(u8*)((s32)obj + 0x71), *(u8*)((s32)data + 0x15));
+                    *(f32*)((s32)obj + 0x1C) = angle;
+                    if (*(u8*)((s32)obj + 0x71) < *(u8*)((s32)data + 0x15)) {
+                        active = 1;
+                    }
+                }
+            }
+            offset += 0x7C;
+        }
+    } else if (type == 2) {
+        timer = *(s32*)((s32)event + 0x7C);
+        if (timer != 0) {
+            *(s32*)((s32)event + 0x7C) = timer - 1;
+            active = 1;
+        } else {
+            if (*(s32*)((s32)event + 0x84) == 0) {
+                pos[0] = *(f32*)(vec3_802f42b8 + 0xFC);
+                pos[1] = *(f32*)(vec3_802f42b8 + 0x100);
+                pos[2] = *(f32*)(vec3_802f42b8 + 0x104);
+                psndSFXOn_3D(vec3_802f42b8 + 0x270, pos);
+            }
+            *(s32*)((s32)event + 0x84) += 1;
+            value = (s32)intpl_sub(2, float_0_80422fd0, float_90_80422fd4,
+                                   *(s32*)((s32)event + 0x84), *(s32*)((s32)event + 0x80));
+            *(f32*)((s32)base - 0x7F20) = (f32)value;
+            if (*(s32*)((s32)event + 0x84) < *(s32*)((s32)event + 0x80)) {
+                active = 1;
+            }
+        }
+    }
+
+    return ((u32)(-active) | (u32)active) >> 31 ? 0 : 2;
+}
+
+s32 _nozzle_turn(void* event, s32 isFirstCall) {
+    extern void* _battleWorkPointer;
+    extern void* BattleSearchObjectPtr(char* name);
+    extern f32 intpl_sub(s32 type, f32 start, f32 end, s32 current, s32 duration);
+    extern void mapObjRotate(f32 x, f32 y, f32 z, char* name);
+    extern char vec3_802f42b8[];
+    extern f32 float_0_80422fd0;
+    extern f32 float_neg80_80423008;
+    extern f32 float_45_80422ff8;
+    extern f32 float_neg45_80423018;
+    void* battleWork;
+    void* work;
+    void* nozzleWork;
+    char* base;
+    char* name;
+    s32 nozzle;
+    u8 dir;
+    f32 xrot;
+    f32 yrot;
+    f32 start;
+    f32 end;
+
+    battleWork = _battleWorkPointer;
+    base = vec3_802f42b8;
+    nozzle = *(s32*)((s32)event + 0x160);
+    work = (void*)((s32)battleWork + 0x20000 - 0x7F24);
+
+    if (isFirstCall != 0) {
+        *(s32*)((s32)event + 0x80) = 0;
+        nozzleWork = (void*)((s32)work + nozzle);
+        *(s32*)((s32)event + 0x84) = 0;
+        if (*(u8*)((s32)nozzleWork + 0x1C4) != 0) {
+            *(s32*)((s32)event + 0x80) = 0x1E;
+        }
+    }
+
+    switch (nozzle) {
+        case 0:
+            name = base + 0xC0;
+            break;
+        case 1:
+            name = base + 0xCC;
+            break;
+        case 2:
+            name = base + 0xD8;
+            break;
+        default:
+            return 2;
+    }
+
+    BattleSearchObjectPtr(name);
+
+    if (*(s32*)((s32)event + 0x80) < 0x1E) {
+        *(s32*)((s32)event + 0x80) += 1;
+        xrot = intpl_sub(2, float_0_80422fd0, float_neg80_80423008, *(s32*)((s32)event + 0x80), 0x1E);
+    } else {
+        xrot = float_neg80_80423008;
+    }
+
+    if (*(s32*)((s32)event + 0x84) < 0x1E) {
+        *(s32*)((s32)event + 0x84) += 1;
+        nozzleWork = (void*)((s32)work + nozzle);
+        dir = *(u8*)((s32)nozzleWork + 0x1C4);
+        switch (dir) {
+            case 0:
+                start = float_0_80422fd0;
+                break;
+            case 1:
+                start = float_45_80422ff8;
+                break;
+            case 2:
+                start = float_0_80422fd0;
+                break;
+            case 3:
+                start = float_neg45_80423018;
+                break;
+            default:
+                start = float_0_80422fd0;
+                break;
+        }
+
+        nozzleWork = (void*)((s32)work + nozzle);
+        dir = *(u8*)((s32)nozzleWork + 0x1C7);
+        switch (dir) {
+            case 0:
+                end = float_0_80422fd0;
+                break;
+            case 1:
+                end = float_45_80422ff8;
+                break;
+            case 2:
+                end = float_0_80422fd0;
+                break;
+            case 3:
+                end = float_neg45_80423018;
+                break;
+            default:
+                end = float_0_80422fd0;
+                break;
+        }
+        yrot = intpl_sub(0xC, start, end, *(s32*)((s32)event + 0x84), 0x1E);
+    }
+
+    switch (nozzle) {
+        case 0:
+            mapObjRotate(xrot, yrot, float_0_80422fd0, base + 0x1D4);
+            break;
+        case 1:
+            mapObjRotate(xrot, yrot, float_0_80422fd0, base + 0x1E0);
+            break;
+        case 2:
+            mapObjRotate(xrot, yrot, float_0_80422fd0, base + 0x1EC);
+            break;
+    }
+
+    if (*(s32*)((s32)event + 0x80) >= 0x1E && *(s32*)((s32)event + 0x84) >= 0x1E) {
+        nozzleWork = (void*)((s32)work + nozzle);
+        *(u8*)((s32)nozzleWork + 0x1C4) = *(u8*)((s32)nozzleWork + 0x1C7);
+        *(s32*)((s32)work + (nozzle << 2) + 0x1CC) = 0;
+        return 2;
+    }
     return 0;
 }
 
+void _combine_nozzle_weapon(s32 copyBaseOnly, void* tempWeapon, void* baseWeapon) {
+    extern void _rate_mix(s8* maxValue, s8* total, s8* current, s8* add);
+    extern u8 _rate_mix_3(char* param_1, char* param_2, char* param_3, char* param_4, char* param_5, char* param_6);
+    s32 i;
+    s32 offset;
+    s32* dst;
+    s32* src;
 
-u8 _nozzle_turn(void) {
-    return 0;
+    if (copyBaseOnly != 0) {
+        dst = (s32*)((s32)tempWeapon - 4);
+        src = (s32*)((s32)baseWeapon - 4);
+        for (i = 0; i < 0x18; i++) {
+            dst[1] = src[1];
+            dst[2] = src[2];
+            dst += 2;
+            src += 2;
+        }
+        return;
+    }
+
+    *(u8*)((s32)tempWeapon + 0x11) += *(u8*)((s32)baseWeapon + 0x11);
+    *(u8*)((s32)tempWeapon + 0x12) += *(u8*)((s32)baseWeapon + 0x12);
+    if (*(void**)((s32)tempWeapon + 0x1C) == 0) {
+        *(void**)((s32)tempWeapon + 0x1C) = *(void**)((s32)baseWeapon + 0x1C);
+    }
+
+    offset = 0;
+    for (i = 0; i < 8; i++) {
+        *(s32*)((s32)tempWeapon + offset + 0x20) += *(s32*)((s32)baseWeapon + offset + 0x20);
+        offset += 4;
+    }
+
+    *(u8*)((s32)tempWeapon + 0x6C) = *(u8*)((s32)baseWeapon + 0x6C);
+    tempWeapon = (void*)((s32)tempWeapon + 0x80);
+    baseWeapon = (void*)((s32)baseWeapon + 0x80);
+
+    _rate_mix((s8*)tempWeapon, (s8*)((s32)tempWeapon + 1), (s8*)baseWeapon, (s8*)((s32)baseWeapon + 1));
+    _rate_mix((s8*)((s32)tempWeapon + 2), (s8*)((s32)tempWeapon + 3), (s8*)((s32)baseWeapon + 2), (s8*)((s32)baseWeapon + 3));
+    _rate_mix((s8*)((s32)tempWeapon + 4), (s8*)((s32)tempWeapon + 5), (s8*)((s32)baseWeapon + 4), (s8*)((s32)baseWeapon + 5));
+    _rate_mix((s8*)((s32)tempWeapon + 6), (s8*)((s32)tempWeapon + 7), (s8*)((s32)baseWeapon + 6), (s8*)((s32)baseWeapon + 8));
+    _rate_mix((s8*)((s32)tempWeapon + 9), (s8*)((s32)tempWeapon + 0xA), (s8*)((s32)baseWeapon + 9), (s8*)((s32)baseWeapon + 0xA));
+    _rate_mix((s8*)((s32)tempWeapon + 0xB), (s8*)((s32)tempWeapon + 0xC), (s8*)((s32)baseWeapon + 0xB), (s8*)((s32)baseWeapon + 0xC));
+    _rate_mix((s8*)((s32)tempWeapon + 0xD), (s8*)((s32)tempWeapon + 0xE), (s8*)((s32)baseWeapon + 0xD), (s8*)((s32)baseWeapon + 0xE));
+    _rate_mix((s8*)((s32)tempWeapon + 0xF), (s8*)((s32)tempWeapon + 0x10), (s8*)((s32)baseWeapon + 0xF), (s8*)((s32)baseWeapon + 0x10));
+    _rate_mix((s8*)((s32)tempWeapon + 0x11), (s8*)((s32)tempWeapon + 0x12), (s8*)((s32)baseWeapon + 0x11), (s8*)((s32)baseWeapon + 0x12));
+    _rate_mix_3((char*)((s32)tempWeapon + 0x13), (char*)((s32)tempWeapon + 0x14), (char*)((s32)tempWeapon + 0x15),
+                (char*)((s32)baseWeapon + 0x13), (char*)((s32)baseWeapon + 0x14), (char*)((s32)baseWeapon + 0x15));
+    _rate_mix_3((char*)((s32)tempWeapon + 0x19), (char*)((s32)tempWeapon + 0x1A), (char*)((s32)tempWeapon + 0x1B),
+                (char*)((s32)baseWeapon + 0x19), (char*)((s32)baseWeapon + 0x1A), (char*)((s32)baseWeapon + 0x1B));
+    _rate_mix((s8*)((s32)tempWeapon + 0x1C), (s8*)((s32)tempWeapon + 0x1D), (s8*)((s32)baseWeapon + 0x1C), (s8*)((s32)baseWeapon + 0x1D));
+    *(u8*)((s32)tempWeapon + 0x1F) += *(u8*)((s32)baseWeapon + 0x1F);
+    _rate_mix((s8*)((s32)tempWeapon + 0x20), (s8*)((s32)tempWeapon + 0x21), (s8*)((s32)baseWeapon + 0x20), (s8*)((s32)baseWeapon + 0x21));
+    _rate_mix((s8*)((s32)tempWeapon + 0x22), (s8*)((s32)tempWeapon + 0x23), (s8*)((s32)baseWeapon + 0x22), (s8*)((s32)baseWeapon + 0x23));
+    *(u8*)((s32)tempWeapon + 0x2A) += *(u8*)((s32)baseWeapon + 0x2A);
+    *(u8*)((s32)tempWeapon + 0x2B) += *(u8*)((s32)baseWeapon + 0x2B);
+    *(u8*)((s32)tempWeapon + 0x2C) += *(u8*)((s32)baseWeapon + 0x2C);
+    *(u8*)((s32)tempWeapon + 0x2D) += *(u8*)((s32)baseWeapon + 0x2D);
 }
 
+s32 _bgset_kemuri_effect(void* event) {
+    extern void* _battleWorkPointer;
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 arg4);
+    extern void psndSFXOn_3D(char* name, void* pos);
+    extern char vec3_802f42b8[];
+    extern f32 float_0_80422fd0;
+    extern f32 float_15_80422fe4;
+    extern f32 float_30_80423024;
+    void* battleWork;
+    char* snd0;
+    char* snd1;
+    char* snd2;
+    s32 type;
+    s32 i;
+    s32 offset;
+    void* obj;
+    f32 x;
+    f32 y;
+    f32 z;
 
-void _combine_nozzle_weapon(int copyBaseOnly, void* tempWeapon, void* baseWeapon) {
-    ;
+    type = evtGetValue(event, **(s32**)((s32)event + 0x18));
+    battleWork = _battleWorkPointer;
+    snd0 = vec3_802f42b8 + 0x1F8;
+    snd1 = vec3_802f42b8 + 0x210;
+    snd2 = vec3_802f42b8 + 0x228;
+    i = 0;
+    offset = 0;
+    do {
+        obj = (void*)((s32)battleWork + offset + 0x1715C);
+        if (*(s32*)obj > 0 && *(u16*)((s32)*(void**)((s32)obj + 0x64) + 6) == type) {
+            x = *(f32*)((s32)obj + 4);
+            y = *(f32*)((s32)obj + 8);
+            z = *(f32*)((s32)obj + 0xC);
+            switch (type) {
+                case 0:
+                    z += float_30_80423024;
+                    effKemuri1N64Entry(3, x, y, z, float_0_80422fd0);
+                    psndSFXOn_3D(snd0, (void*)((s32)obj + 4));
+                    break;
+                case 1:
+                    z += float_15_80422fe4;
+                    effKemuri1N64Entry(0, x, y, z, float_0_80422fd0);
+                    psndSFXOn_3D(snd1, (void*)((s32)obj + 4));
+                    break;
+                case 2:
+                    z += float_30_80423024;
+                    effKemuri1N64Entry(3, x, y, z, float_0_80422fd0);
+                    effKemuri1N64Entry(4, x, y, z, float_0_80422fd0);
+                    psndSFXOn_3D(snd2, (void*)((s32)obj + 4));
+                    break;
+            }
+        }
+        i++;
+        offset += 0x7C;
+    } while (i < 0x20);
+    return 2;
 }
-
-
-u8 _bgset_kemuri_effect(void) {
-    return 0;
-}
-
 
 s32 _mobj_set_alpha(void* event) {
     extern void* mapGetMapObj(void* name);

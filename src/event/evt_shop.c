@@ -35,25 +35,242 @@ u8 evt_shop_setup(s32 pEvt) {
 }
 
 
-u8 name_disp(void) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void name_disp(void) {
+    extern s32 FontGetMessageWidth(void* msg);
+    extern void FontDrawStart(void);
+    extern void FontDrawEdge(void);
+    extern void FontDrawColor(void* color);
+    extern void FontDrawString(void* msg, f32 x, f32 y);
+    extern void FontDrawEdgeOff(void);
+    extern void mapObjGetPos(void* obj, void* pos);
+    extern void* camGetPtr(s32 id);
+    extern void PSMTXMultVec(void* mtx, void* src, void* dst);
+    extern void PSMTX44MultVec(void* mtx, void* src, void* dst);
+    extern s32 sprintf(char* str, const char* format, ...);
+    extern s32 strlen(char* str);
+    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+    extern void iconNumberDispGx(void* mtx, s32 number, s32 flags, void* color);
+    extern u32 dat_80421e78;
+    extern u32 dat_80421e7c;
+    extern char str_PCTd_80421f04[];
+    u32 iconColor;
+    u32 textColor;
+    f32 pos[3];
+    f32 mtx[3][4];
+    char buf[64];
+    void* wp;
+    void* msg;
+    void* flagPtr;
+    s32 i;
+    s32 offset;
+    s32 width;
+    s32 half;
+
+    wp = _wp;
+    msg = msgSearch(*(void**)(itemDataTable + *(s32*)((s32)*(void**)((s32)wp + 8) +
+                                                     *(s32*)((s32)wp + 0x2C) * 8) *
+                                        0x28 +
+                                    4));
+    if (winMgrAction(*(void**)((s32)wp + 0x50)) == 0) {
+        FontDrawStart();
+        FontDrawEdge();
+        textColor = dat_80421e78;
+        FontDrawColor(&textColor);
+        width = (u16)FontGetMessageWidth(msg);
+        half = -width;
+        half = (half + ((u32)half >> 31)) >> 1;
+        FontDrawString(msg, (f32)half, 108.0f);
+        FontDrawEdgeOff();
+    }
+
+    flagPtr = wp;
+    i = 0;
+    offset = 0;
+    while (i < *(s32*)((s32)wp + 0x20)) {
+        if (!(*(u16*)((s32)flagPtr + 0x14) & 1)) {
+            mapObjGetPos(*(void**)((s32)*(void**)((s32)wp + 4) + offset), pos);
+            pos[1] += 30.0f;
+            PSMTXMultVec((void*)((s32)camGetPtr(4) + 0x11C), pos, pos);
+            PSMTX44MultVec((void*)((s32)camGetPtr(4) + 0x15C), pos, pos);
+            pos[0] *= (f32)*(u16*)((s32)gp + 0x170) * 0.5f;
+            pos[1] *= (f32)*(u16*)((s32)gp + 0x172) * 0.5f;
+            sprintf(buf, str_PCTd_80421f04, *(s32*)((s32)*(void**)((s32)wp + 8) + offset + 4));
+            PSMTXTrans(mtx, pos[0] + (12.0f * (f32)(strlen(buf) - 1)), pos[1], pos[2]);
+            iconColor = dat_80421e7c;
+            iconNumberDispGx(mtx, *(s32*)((s32)*(void**)((s32)wp + 8) + offset + 4), 0, &iconColor);
+        }
+        flagPtr = (void*)((s32)flagPtr + 2);
+        offset += 8;
+        i++;
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void title_disp(void* win) {
+    extern char str_msg_shop_point_list4_802ed350[];
+    extern s32 FontGetMessageWidth(void* msg);
+    extern void FontDrawStart(void);
+    extern void FontDrawEdge(void);
+    extern void FontDrawColor(void* color);
+    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(void* a, void* b, void* out);
+    extern void FontDrawMessageMtx(void* mtx, void* msg);
+    extern void FontDrawEdgeOff(void);
+    extern u32 dat_80421e84;
+    f32 trans[3][4];
+    f32 scale[3][4];
+    u32 color;
+    void* msg;
+    f32 width;
+
+    if ((*(u32*)win & 4) == 0) {
+        msg = msgSearch(str_msg_shop_point_list4_802ed350);
+        width = (f32)(u16)FontGetMessageWidth(msg);
+        FontDrawStart();
+        FontDrawEdge();
+        color = dat_80421e84;
+        FontDrawColor(&color);
+        if (width > (f32)(*(s32*)((s32)win + 0x20) - 20)) {
+            PSMTXTrans(trans, (f32)(*(s32*)((s32)win + 0x18) + 10),
+                       (f32)(*(s32*)((s32)win + 0x1C) - 12), 0.0f);
+            PSMTXScale(scale, (f32)(*(s32*)((s32)win + 0x20) - 20) / width, 1.0f, 1.0f);
+        } else {
+            PSMTXTrans(trans,
+                       ((f32)(*(s32*)((s32)win + 0x20) - 20) - width) * 0.5f +
+                           (f32)*(s32*)((s32)win + 0x18),
+                       (f32)(*(s32*)((s32)win + 0x1C) - 12), 0.0f);
+            PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
+        }
+        PSMTXConcat(trans, scale, trans);
+        FontDrawMessageMtx(trans, msg);
+        FontDrawEdgeOff();
+    }
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-u8 title_disp(void) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void point_disp(void* win) {
+    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(void* a, void* b, void* out);
+    extern void iconDispGx2(void* mtx, s32 flags, s32 icon);
+    extern void iconNumberDispGx(void* mtx, s32 number, s32 flags, void* color);
+    extern u16 point_disp_icons[];
+    extern u32 dat_80421e80;
+    f32 trans[3][4];
+    f32 scale[3][4];
+    u32 color;
+    void* wp = _wp;
+    void* pouch = pouchGetPtr();
+    s32 shown;
+    s32 target;
+    s32 delta;
+    s32 step;
+    f32 xScale;
+
+    if ((*(u32*)win & 4) == 0) {
+        PSMTXTrans(trans, 10.0f + (30.0f + (f32)*(s32*)((s32)win + 0x18)),
+                   (f32)*(s32*)((s32)win + 0x1C) - 36.0f, 0.0f);
+        if (*(void**)((s32)gp + 0x16C) != 0) {
+            xScale = 0.8f;
+        } else {
+            xScale = 1.1f;
+        }
+        PSMTXScale(scale, xScale, 1.1f, 1.1f);
+        PSMTXConcat(trans, scale, trans);
+        iconDispGx2(trans, 0x10, point_disp_icons[*(s32*)((s32)gp + 0x16C)]);
+
+        PSMTXTrans(trans, 124.0f + (f32)*(s32*)((s32)win + 0x18),
+                   (f32)*(s32*)((s32)win + 0x1C) - 38.0f, 0.0f);
+        color = dat_80421e80;
+        iconNumberDispGx(trans, *(s32*)((s32)wp + 0x38), 0, &color);
+
+        shown = *(s32*)((s32)wp + 0x38);
+        target = *(s16*)((s32)pouch + 0x5B0);
+        delta = target - shown;
+        if (delta != 0) {
+            step = delta / 10;
+            if (step == 0) {
+                if (target > shown) {
+                    step = 1;
+                } else {
+                    step = -1;
+                }
+            }
+            *(s32*)((s32)wp + 0x38) = shown + step;
+        }
+    }
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-u8 point_disp(u32* param_1) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 chk_shop_point(void* event) {
+    extern s32 shopPointList[];
+    s32* args = *(s32**)((s32)event + 0x18);
+    void* pouch = pouchGetPtr();
+    s32 point;
+    s32 index = 0;
+    s32* list = shopPointList;
+    s32 listPoint;
+    s32 specialIndex;
+    s32* scan;
+
+    goto check;
+
+loop:
+    point = *(s16*)((s32)pouch + 0x5B0);
+    if (listPoint <= point && !(*(u32*)((s32)pouch + 0x5B4) & (1 << index))) {
+        if (point != 300) {
+            evtSetValue(event, args[0], 0);
+            evtSetValue(event, args[1], list[1]);
+            evtSetValue(event, args[2], msgSearch(*(void**)(itemDataTable + list[1] * 0x28 + 4)));
+        } else {
+            specialIndex = 0;
+            scan = shopPointList;
+            goto special_check;
+special_loop:
+            scan += 2;
+            specialIndex++;
+special_check:
+            if (scan[0] != 300) {
+                goto special_loop;
+            }
+            evtSetValue(event, args[0], 0);
+            list = shopPointList + specialIndex * 2;
+            evtSetValue(event, args[1], *++list);
+            evtSetValue(event, args[2], msgSearch(*(void**)(itemDataTable + list[0] * 0x28 + 4)));
+        }
+        return 2;
+    }
+    index++;
+    list += 2;
+
+check:
+    listPoint = list[0];
+    if (listPoint != -1) {
+        goto loop;
+    }
+
+    evtSetValue(event, args[0], -1);
+    evtSetValue(event, args[1], -1);
+    evtSetValue(event, args[2], -1);
+    return 2;
 }
 
-
-s32 chk_shop_point(void* pEvt) {
-    return 0;
-}
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 add_shop_point(void* pEvt) {
     return 0;

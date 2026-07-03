@@ -93,19 +93,310 @@ USER_FUNC(uranaisi_ryokin) {
 
 
 int uranaisi_data_make_supercoin(s32 param_1, u32 param_2) {
-    return 0;
-}
+    extern int strcmp(const char* s1, const char* s2);
+    extern char* msgSearch(char* key);
+    extern s32 _ismbblead(s32 c);
+    extern int search_evt_no(void* pEvt);
+    extern void* uranai_table_supercoin[];
+    char label[64];
+    char key[76];
+    char* scan;
+    char* body;
+    s16 bodyLen;
+    s32 maxLabel = evtGetValue(NULL, GSW(0));
+    s32 count = 0;
+    s32 index = 0;
+    s32 offset = 0;
+    s32 field;
+    s32 pos;
+    s32 done;
+    s32 labelNo;
+    s32 found;
+    s32 tableIndex;
+    char saved;
+    void** table;
 
+    while (1) {
+        sprintf(key, str_PCTs_PCT04d_802fdda0, param_1, index);
+        scan = msgSearch(key);
+        if (scan[0] != '<' || scan[1] != '!') {
+            return count;
+        }
+
+        scan += 2;
+        field = 0;
+        pos = 0;
+        done = 0;
+        while (!done) {
+            if (_ismbblead(*scan) != 0) {
+                if (field == 0) {
+                    label[pos] = scan[0];
+                    label[pos + 1] = scan[1];
+                    pos += 2;
+                } else {
+                    pos += 2;
+                }
+                scan += 2;
+            } else {
+                if (*scan == '>') {
+                    done = 1;
+                } else if (*scan != ',') {
+                    if (field == 0) {
+                        label[pos] = *scan;
+                        pos++;
+                    } else {
+                        pos++;
+                    }
+                    scan++;
+                    continue;
+                }
+                scan++;
+                if (field == 0) {
+                    label[pos] = 0;
+                    body = scan;
+                } else {
+                    bodyLen = pos;
+                }
+                pos = 0;
+                field++;
+            }
+        }
+
+        if (strcmp(label, "enddata") == 0) {
+            return count;
+        }
+
+        if (strcmp(label, "") != 0) {
+            labelNo = search_evt_no(label);
+            if (labelNo != -1 && labelNo <= maxLabel) {
+                saved = body[bodyLen];
+                body[bodyLen] = 0;
+                found = -1;
+                table = uranai_table_supercoin;
+                tableIndex = 0;
+                while (table[0] != 0) {
+                    if (strcmp(body, table[0]) == 0) {
+                        found = ((s32*)uranai_table_supercoin)[tableIndex * 2 + 1];
+                        break;
+                    }
+                    table += 2;
+                    tableIndex++;
+                }
+                body[bodyLen] = saved;
+
+                if (found != -1 && evtGetValue(NULL, found) == 0) {
+                    if (param_2 & 1) {
+                        *(s16*)((s32)_udt.table + offset + 2) = labelNo;
+                        *(s16*)((s32)_udt.table + offset + 4) = index;
+                    }
+                    offset += 6;
+                    count++;
+                }
+            }
+        }
+        index++;
+    }
+}
 
 int uranaisi_data_make_starpiece(s32 param_1, u32 param_2) {
-    return 0;
-}
+    extern int strcmp(const char* s1, const char* s2);
+    extern char* msgSearch(char* key);
+    extern s32 _ismbblead(s32 c);
+    extern int search_evt_no(void* pEvt);
+    extern void* uranai_table_starpiece[];
+    char label[64];
+    char key[76];
+    char* scan;
+    char* body;
+    s16 bodyLen;
+    s32 maxLabel = evtGetValue(NULL, GSW(0));
+    s32 count = 0;
+    s32 index = 0;
+    s32 offset = 0;
+    s32 field;
+    s32 pos;
+    s32 done;
+    s32 labelNo;
+    s32 found;
+    s32 tableIndex;
+    char saved;
+    void** table;
 
+    while (1) {
+        sprintf(key, str_PCTs_PCT04d_802fdda0, param_1, index);
+        scan = msgSearch(key);
+        if (scan[0] != '<' || scan[1] != '!') {
+            return count;
+        }
+
+        scan += 2;
+        field = 0;
+        pos = 0;
+        done = 0;
+        while (!done) {
+            if (_ismbblead(*scan) != 0) {
+                if (field == 0) {
+                    label[pos] = scan[0];
+                    label[pos + 1] = scan[1];
+                    pos += 2;
+                } else {
+                    pos += 2;
+                }
+                scan += 2;
+            } else {
+                if (*scan == '>') {
+                    done = 1;
+                } else if (*scan != ',') {
+                    if (field == 0) {
+                        label[pos] = *scan;
+                        pos++;
+                    } else {
+                        pos++;
+                    }
+                    scan++;
+                    continue;
+                }
+                scan++;
+                if (field == 0) {
+                    label[pos] = 0;
+                    body = scan;
+                } else {
+                    bodyLen = pos;
+                }
+                pos = 0;
+                field++;
+            }
+        }
+
+        if (strcmp(label, "enddata") == 0) {
+            return count;
+        }
+
+        if (strcmp(label, "") != 0) {
+            labelNo = search_evt_no(label);
+            if (labelNo != -1 && labelNo <= maxLabel) {
+                saved = body[bodyLen];
+                body[bodyLen] = 0;
+                found = -1;
+                table = uranai_table_starpiece;
+                tableIndex = 0;
+                while (table[0] != 0) {
+                    if (strcmp(body, table[0]) == 0) {
+                        found = ((s32*)uranai_table_starpiece)[tableIndex * 2 + 1];
+                        break;
+                    }
+                    table += 2;
+                    tableIndex++;
+                }
+                body[bodyLen] = saved;
+
+                if (found != -1 && evtGetValue(NULL, found) == 0) {
+                    if (param_2 & 1) {
+                        *(s16*)((s32)_udt.table + offset + 2) = labelNo;
+                        *(s16*)((s32)_udt.table + offset + 4) = index;
+                    }
+                    offset += 6;
+                    count++;
+                }
+            }
+        }
+        index++;
+    }
+}
 
 int uranaisi_data_make_next(s32 param_1, u32 param_2) {
-    return 0;
-}
+    extern int strcmp(const char* s1, const char* s2);
+    extern char* msgSearch(char* key);
+    extern s32 _ismbblead(s32 c);
+    extern int search_evt_no(void* pEvt);
+    char label[64];
+    char key[72];
+    char* scan;
+    s32 maxLabel = evtGetValue(NULL, GSW(0));
+    s32 count;
+    s32 index;
+    s32 field;
+    s32 pos;
+    s32 done;
+    s32 labelNo;
+    s32* nextBest = (s32*)((s32)&_udt + 0x34);
 
+    if ((param_2 & 1) == 0) {
+        *nextBest = -1;
+    } else if (*nextBest == -1) {
+        return 0;
+    }
+
+    count = 0;
+    index = 0;
+    while (1) {
+        sprintf(key, str_PCTs_PCT04d_802fdda0, param_1, index);
+        scan = msgSearch(key);
+        if (scan[0] != '<' || scan[1] != '!') {
+            return count;
+        }
+
+        scan += 2;
+        field = 0;
+        pos = 0;
+        done = 0;
+        while (!done) {
+            if (_ismbblead(*scan) != 0) {
+                if (field == 0) {
+                    label[pos] = scan[0];
+                    label[pos + 1] = scan[1];
+                    pos += 2;
+                } else {
+                    pos += 2;
+                }
+                scan += 2;
+            } else {
+                if (*scan == '>') {
+                    done = 1;
+                } else if (*scan != ',') {
+                    if (field == 0) {
+                        label[pos] = *scan;
+                        pos++;
+                    } else {
+                        pos++;
+                    }
+                    scan++;
+                    continue;
+                }
+                scan++;
+                if (field == 0) {
+                    label[pos] = 0;
+                }
+                pos = 0;
+                field++;
+            }
+        }
+
+        if (strcmp(label, "enddata") == 0) {
+            return count;
+        }
+
+        if (strcmp(label, "") != 0) {
+            labelNo = search_evt_no(label);
+            if (labelNo != -1) {
+                if ((param_2 & 1) == 0) {
+                    if (labelNo <= maxLabel && *nextBest <= labelNo) {
+                        if (*nextBest < labelNo) {
+                            count = 0;
+                            *nextBest = labelNo;
+                        }
+                        count++;
+                    }
+                } else if (labelNo == *nextBest) {
+                    *(s16*)((s32)_udt.table + count * 6 + 2) = labelNo;
+                    *(s16*)((s32)_udt.table + count * 6 + 4) = index;
+                    count++;
+                }
+            }
+        }
+        index++;
+    }
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

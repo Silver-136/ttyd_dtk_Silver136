@@ -118,5 +118,97 @@ void* effQueen2Entry(s32 type, f32 x, f32 y, f32 z) {
 
 /* stub-fill: effQueen2Main | prototype_only | source_prototype */
 void effQueen2Main(void* entry) {
-    return;
+    extern f32 intplGetValue(s32 type, s32 current, f32 start, f32 end, s32 max);
+    extern void* effAkariChargeN64Entry(s32 type, s32 unused, f32 x, f32 y, f32 z, f32 scale);
+    extern void* effTeresaEntry(s32 type, f32 x, f32 y, f32 z);
+    extern void* effIndirectEntry(s32 type, s32 timer, f32 x, f32 y, f32 z);
+    extern void effSoftDelete(void* entry);
+    extern void effDelete(void* entry);
+    extern f32 dispCalcZ(Vec* pos);
+    extern void dispEntry(s32 cameraId, s32 order, void* callback, f32 priority, void* param);
+    extern void effQueen2Disp(s32 cameraId, void* entry);
+    extern f32 float_0_80428a7c;
+    extern f32 float_128_80428a80;
+    extern f32 float_3_80428a84;
+    extern f32 float_1_80428a88;
+
+    void* work;
+    void* child;
+    Vec pos;
+
+    work = *(void**)((s32)entry + 0xC);
+    pos.x = *(f32*)((s32)work + 4);
+    pos.y = *(f32*)((s32)work + 8);
+    pos.z = *(f32*)((s32)work + 0xC);
+
+    if (*(u32*)entry & 4) {
+        *(u32*)entry &= ~4;
+        if (*(void**)((s32)work + 0x28) != 0) {
+            effDelete(*(void**)((s32)work + 0x28));
+        }
+        effDelete(entry);
+        return;
+    }
+
+    switch (*(s32*)((s32)work + 0x24)) {
+        case 0:
+            *(s32*)((s32)work + 0x20) += 1;
+            *(s32*)((s32)work + 0x18) =
+                (s32)intplGetValue(0xB, *(s32*)((s32)work + 0x20), float_0_80428a7c, float_128_80428a80, 0x3C);
+            if (*(s32*)((s32)work + 0x20) > 0x3C) {
+                *(s32*)((s32)work + 0x20) = 0;
+                *(s32*)((s32)work + 0x24) += 1;
+            }
+            break;
+        case 1:
+            *(s32*)((s32)work + 0x20) += 1;
+            *(f32*)((s32)work + 0x10) =
+                intplGetValue(0xB, *(s32*)((s32)work + 0x20), *(f32*)((s32)work + 0x14), float_3_80428a84, 0x78);
+            if (*(s32*)((s32)work + 0x20) > 0x78) {
+                *(s32*)((s32)work + 0x20) = 0;
+                *(s32*)((s32)work + 0x24) += 1;
+                child = effAkariChargeN64Entry(0, 0, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8),
+                                               *(f32*)((s32)work + 0xC), float_1_80428a88);
+                *(void**)((s32)work + 0x28) = child;
+                child = *(void**)((s32)child + 0xC);
+                *(s32*)((s32)child + 0x18) = 0;
+                *(s32*)((s32)child + 0x1C) = 0x9A;
+                *(s32*)((s32)child + 0x20) = 0xFF;
+                *(s32*)((s32)child + 0x28) = 0xFF;
+                *(s32*)((s32)child + 0x2C) = 0xFF;
+                *(s32*)((s32)child + 0x30) = 0xFF;
+            }
+            break;
+        case 2:
+            *(s32*)((s32)work + 0x20) += 1;
+            if (*(s32*)((s32)work + 0x20) > 0x78) {
+                *(s32*)((s32)work + 0x20) = 0;
+                *(s32*)((s32)work + 0x24) += 1;
+                effTeresaEntry(1, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
+                effIndirectEntry(1, 0x3C, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
+            }
+            break;
+        case 3:
+            *(s32*)((s32)work + 0x20) += 1;
+            if (*(s32*)((s32)work + 0x20) > 0x1E) {
+                *(s32*)((s32)work + 0x20) = 0;
+                *(s32*)((s32)work + 0x24) += 1;
+                effTeresaEntry(1, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
+                effIndirectEntry(1, 0x3C, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
+                effSoftDelete(*(void**)((s32)work + 0x28));
+            }
+            break;
+        case 4:
+            effDelete(entry);
+            return;
+    }
+    if (*(s32*)((s32)work + 0x24) >= 3) {
+        *(s32*)((s32)work + 0x18) -= 2;
+        if (*(s32*)((s32)work + 0x18) < 0) {
+            *(s32*)((s32)work + 0x18) = 0;
+        }
+    }
+    dispCalcZ(&pos);
+    dispEntry(4, 2, effQueen2Disp, 0.0f, entry);
 }
+

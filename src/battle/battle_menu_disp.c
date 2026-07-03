@@ -348,10 +348,56 @@ u8 DrawMainIcon(int param_1, int param_2, int param_3, int param_4, int param_5)
 }
 
 
-u8 DrawMenuCursorAndScrollArrow(void) {
-    return 0;
-}
+u8 DrawMenuCursorAndScrollArrow(f32* pos) {
+    extern void* gp;
+    extern f32 intplGetValue(s32, s32, f32, f32, s32);
+    extern void iconDispGx(f32*, s32, s32, f32);
+    void* battleWork;
+    void* cursor;
+    void* common;
+    f32 work[3];
+    f32 value;
+    s32 limit;
+    s32 visible;
 
+    battleWork = _battleWorkPointer;
+    cursor = *(void**)((s32)battleWork + 0x1C78);
+    common = *(void**)cursor;
+    value = intplGetValue(4, *(s32*)((s32)cursor + 0x11C), 0.0f, 10.0f, 6);
+    *(s32*)((s32)cursor + 0x11C) += 1;
+
+    limit = *(s32*)((s32)gp + 4) * 12 / 60;
+    if (*(s32*)((s32)cursor + 0x11C) >= limit) {
+        *(s32*)((s32)cursor + 0x11C) = 0;
+    }
+
+    if (*(s32*)((s32)common + 4) > 0) {
+        work[0] = pos[0] + 155.0f;
+        work[1] = pos[1] + 15.0f + value;
+        work[2] = 0.0f;
+        iconDispGx(work, 0x10, 0x1BD, 0.75f);
+    }
+
+    if (*(s32*)((s32)common + 4) < *(s32*)((s32)common + 8) - 6) {
+        work[0] = pos[0] + 155.0f;
+        work[1] = pos[1] + 20.0f - 164.0f - value;
+        work[2] = 0.0f;
+        iconDispGx(work, 0x10, 0x1BE, 0.75f);
+    }
+
+    visible = *(s32*)common - *(s32*)((s32)common + 4);
+    if (visible < 0) {
+        visible = 0;
+    }
+    if (visible >= 6) {
+        visible = 5;
+    }
+
+    work[0] = pos[0];
+    work[1] = pos[1] - 24.0f * visible;
+    work[2] = 0.0f;
+    iconDispGx(work, 0x14, 0x1F8, 1.0f);
+}
 
 void DrawOperationWin(void) {
     ;
@@ -415,9 +461,61 @@ u8 DrawSubMenuCommonProcess(s32 param_1, s32 param_2, void* param_3, s32 param_4
 
 
 u8 DrawSubMenuCommonProcessSub1(void* windowWork, void* cursor, u32 relativePos, int numOptions) {
-    return 0;
-}
+    s32 count;
+    s32 current;
+    s32 value;
+    s32 i;
 
+    if (numOptions == 6) {
+        count = *(s32*)((s32)cursor + 8);
+        if (count > 6 && relativePos == count - 6 && *(s32*)((s32)cursor + 4) == 0 &&
+            *(s32*)cursor != 1) {
+            *(s32*)((s32)windowWork + 0xC) = 0x1E;
+            *(s32*)((s32)windowWork + 0x10) = 0;
+            *(f32*)((s32)windowWork + 0x9C) = count - 6;
+            *(f32*)((s32)windowWork + 0xA0) = 0.0f;
+            for (i = 0; i < 7; i++) {
+                *(s32*)((s32)windowWork + 0xC0 + i * 4) = 0x1E;
+                *(s32*)((s32)windowWork + 0xDC + i * 4) = 0;
+            }
+        } else if (count > 6 && relativePos == 0 && *(s32*)((s32)cursor + 4) == count - 6 &&
+                   *(s32*)cursor != 5) {
+            *(s32*)((s32)windowWork + 0xC) = 0x28;
+            *(s32*)((s32)windowWork + 0x10) = 0;
+            *(f32*)((s32)windowWork + 0x9C) = 0.0f;
+            *(f32*)((s32)windowWork + 0xA0) = count - 6;
+            for (i = 0; i < 7; i++) {
+                *(s32*)((s32)windowWork + 0xC0 + i * 4) = 0x28;
+                *(s32*)((s32)windowWork + 0xDC + i * 4) = 0;
+            }
+        }
+    }
+
+    current = *(s32*)((s32)cursor + 4);
+    value = relativePos + 1;
+    if (current == value) {
+        *(s32*)((s32)windowWork + 0xC) = 0xA;
+        *(s32*)((s32)windowWork + 0x10) = 0;
+        *(f32*)((s32)windowWork + 0x9C) = relativePos;
+        *(f32*)((s32)windowWork + 0xA0) = value;
+        for (i = 0; i < 7; i++) {
+            *(s32*)((s32)windowWork + 0xC0 + i * 4) = 0xA;
+            *(s32*)((s32)windowWork + 0xDC + i * 4) = 0;
+        }
+    } else {
+        value = relativePos - 1;
+        if (current == value) {
+            *(s32*)((s32)windowWork + 0xC) = 0x14;
+            *(s32*)((s32)windowWork + 0x10) = 0;
+            *(f32*)((s32)windowWork + 0x9C) = relativePos;
+            *(f32*)((s32)windowWork + 0xA0) = value;
+            for (i = 0; i < 7; i++) {
+                *(s32*)((s32)windowWork + 0xC0 + i * 4) = 0x14;
+                *(s32*)((s32)windowWork + 0xDC + i * 4) = 0;
+            }
+        }
+    }
+}
 
 void BattleMenuDisp_ActSelect_Init(void* battleWork, void* cursor, void* actionTable, u32 param_4) {
     ;

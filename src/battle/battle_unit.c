@@ -1936,9 +1936,97 @@ u8 BtlUnit_SetCommandAnimPose(void* unit) {
 
 
 BOOL BtlUnit_Delete(BattleWorkUnit* unit) {
-    return 0;
-}
+    extern void evtDeleteID(s32);
+    extern void BattleStatusEffectDelete(void*);
+    extern void BattleStatusIconDelete(void*);
+    extern void BattleFree(void*);
+    extern void smartFree(void*);
+    extern void animPoseSetEffect(s32, s32, s32);
+    extern void animPoseRelease(s32);
+    extern void BattleSetUnitPtr(void*, s32, void*);
+    void* battleWork;
+    void* part;
+    void* data;
+    void (*freeFunc)(void*);
+    s32 i;
+    s32 unitId;
 
+    battleWork = _battleWorkPointer;
+    if (unit == 0) {
+        return 0;
+    }
+
+    for (i = 0; i < 0x40; i++) {
+        if (BattleGetUnitPtr(battleWork, i) == unit) {
+            break;
+        }
+    }
+    if (i >= 0x40) {
+        return 0;
+    }
+
+    if (*(s32*)((s32)unit + 0x290) != 0) {
+        evtDeleteID(*(s32*)((s32)unit + 0x290));
+        *(s32*)((s32)unit + 0x290) = 0;
+    }
+    if (*(s32*)((s32)unit + 0x29C) != 0) {
+        evtDeleteID(*(s32*)((s32)unit + 0x29C));
+        *(s32*)((s32)unit + 0x29C) = 0;
+    }
+    if (*(s32*)((s32)unit + 0x2B4) != 0) {
+        evtDeleteID(*(s32*)((s32)unit + 0x2B4));
+        *(s32*)((s32)unit + 0x2B4) = 0;
+    }
+
+    unitId = *(s32*)unit;
+    for (i = 0; i < 0x40; i++) {
+        if (*(s32*)((s32)battleWork + 0x120 + i * 4) == unitId) {
+            *(s32*)((s32)battleWork + 0x120 + i * 4) = -1;
+        }
+    }
+
+    if (*(u32*)((s32)unit + 0x1C) & 0x40000000) {
+        if (*(s8*)((s32)unit + 0xE) >= 0) {
+            data = *(void**)((s32)*(void**)((s32)battleWork + 0x2738) + 0xC);
+            *(s32*)((s32)data + *(s8*)((s32)unit + 0xE) * 4 + 0x5C) = *(s32*)((s32)unit + 0x308);
+        }
+    }
+
+    BattleStatusEffectDelete(unit);
+    BattleStatusIconDelete(unit);
+
+    data = *(void**)((s32)unit + 0x314);
+    if (data != 0) {
+        freeFunc = *(void (**)(void*))((s32)unit + 0x318);
+        if (freeFunc != 0) {
+            freeFunc(unit);
+        } else {
+            BattleFree(data);
+        }
+    }
+
+    if (*(void**)((s32)unit + 0x31C) != 0) {
+        smartFree(*(void**)((s32)unit + 0x31C));
+        *(void**)((s32)unit + 0x31C) = 0;
+    }
+
+    part = *(void**)((s32)unit + 0x14);
+    while (part != 0) {
+        if (*(s32*)((s32)part + 0x4E8) != -1) {
+            *(s32*)((s32)part + 0x4E8) = -1;
+        }
+        if (*(s32*)((s32)part + 0x1C0) != -1) {
+            animPoseSetEffect(*(s32*)((s32)part + 0x1C0), 0, 0);
+            animPoseRelease(*(s32*)((s32)part + 0x1C0));
+        }
+        part = *(void**)part;
+    }
+
+    BattleFree(*(void**)((s32)unit + 0x14));
+    BattleFree(unit);
+    BattleSetUnitPtr(battleWork, i, 0);
+    return 1;
+}
 
 s32 BtlUnit_GetWeaponCost(BattleWorkUnit* unit, void* weapon) {
     return 0;

@@ -64,19 +64,210 @@ s32 johoya_keti_newjoho_setreadflag(void) {
 
 
 int johoya_data_make(s32 param_1, u32 param_2) {
-    return 0;
-}
+    extern int sprintf(char* str, const char* format, ...);
+    extern int strcmp(const char* s1, const char* s2);
+    extern char* msgSearch(char* key);
+    extern s32 _ismbblead(s32 c);
+    char label[64];
+    char key[76];
+    char* scan;
+    char* body;
+    s16 bodyLen;
+    s32 maxLabel = evtGetValue(NULL, GSW(0));
+    s32 count = 0;
+    s32 index = 0;
+    s32 offset = 0;
+    s32 copyField;
+    s32 pos;
+    s32 done;
+    s32 labelIndex;
+    char** table;
 
+    while (1) {
+        sprintf(key, "%s%04d", param_1, index);
+        scan = msgSearch(key);
+        if (scan[0] != '<' || scan[1] != '!') {
+            return count;
+        }
+
+        scan += 2;
+        copyField = 0;
+        pos = 0;
+        done = 0;
+        while (!done) {
+            if (_ismbblead(*scan) != 0) {
+                if (copyField == 0) {
+                    label[pos++] = scan[0];
+                    label[pos++] = scan[1];
+                } else {
+                    pos += 2;
+                }
+                scan += 2;
+            } else {
+                if (*scan == '>') {
+                    done = 1;
+                } else if (*scan != ',') {
+                    if (copyField == 0) {
+                        label[pos++] = *scan++;
+                    } else {
+                        pos++;
+                        scan++;
+                    }
+                    continue;
+                }
+
+                scan++;
+                if (copyField == 0) {
+                    label[pos] = 0;
+                    body = scan;
+                } else {
+                    bodyLen = (s16)pos;
+                }
+                pos = 0;
+                copyField++;
+            }
+        }
+
+        if (strcmp(label, "enddata") == 0) {
+            return count;
+        }
+
+        if (strcmp(label, "") != 0) {
+            labelIndex = 0;
+            table = evtNoLabel;
+            while (labelIndex < 0x197) {
+                if (strcmp(label, *table) == 0) {
+                    break;
+                }
+                labelIndex++;
+                table++;
+            }
+            if (labelIndex >= 0x197) {
+                labelIndex = -1;
+            }
+
+            if (labelIndex != -1 && labelIndex <= maxLabel) {
+                if ((param_2 & 1) != 0) {
+                    *(s16*)((s32)_jdt.entries + offset + 2) = (s16)labelIndex;
+                    *(char**)((s32)_jdt.entries + offset + 4) = body;
+                    *(s16*)((s32)_jdt.entries + offset + 8) = bodyLen;
+                    *(s16*)((s32)_jdt.entries + offset + 0xA) = 5;
+                    *(s16*)((s32)_jdt.entries + offset + 0xC) = (s16)index;
+                }
+                offset += 0x10;
+                count++;
+            }
+        }
+
+        index++;
+    }
+}
 
 s32 johoya_keti_newjoho_makelabel(int param_1) {
-    return 0;
-}
+    extern int sprintf(char* str, const char* format, ...);
+    extern char* msgSearch(char* key);
+    extern u32 strlen(const char* str);
+    EventEntry* event = (EventEntry*)param_1;
+    s32* args = event->args;
+    s32 target = evtGetValue(event, args[0]);
+    s32 seen = 0;
+    s32 i;
+    s32 offset = 0;
+    char titleKey[64];
+    JohoyaEntry* entries = _jdt.entries;
+    u8* flags = _jdt.flags;
 
+    for (i = 0; i < _jdt.count; i++, offset += 0x10) {
+        JohoyaEntry* entry = (JohoyaEntry*)((s32)entries + offset);
+        s32 index = entry->unkC;
+        s32 mask;
+        s32 shift;
+
+        switch (index & 7) {
+            case 0: mask = 1; shift = 0; break;
+            case 1: mask = 2; shift = 1; break;
+            case 2: mask = 4; shift = 2; break;
+            case 3: mask = 8; shift = 3; break;
+            case 4: mask = 0x10; shift = 4; break;
+            case 5: mask = 0x20; shift = 5; break;
+            case 6: mask = 0x40; shift = 6; break;
+            case 7: mask = 0x80; shift = 7; break;
+        }
+
+        if ((s16)((flags[index / 8] & (u8)mask) >> shift) == 0) {
+            if (target == seen) {
+                char* title;
+                sprintf((char*)_jdt.end, "%s%04d", _jdt.unk8, entry->unkC);
+                sprintf(titleKey, "jketi_title_%04d", entry->unkC);
+                title = msgSearch(titleKey);
+                evtSetValue(event, args[1], (s32)_jdt.end);
+                evtSetValue(event, args[2], (s32)title);
+                evtSetValue(event, args[3], strlen(title));
+                evtSetValue(event, args[4], *(s16*)((s32)entry + 0xA));
+                _jdt.index = i;
+                return 2;
+            }
+            seen++;
+        }
+    }
+
+    *(char*)_jdt.end = 0;
+    evtSetValue(event, args[1], (s32)_jdt.end);
+    evtSetValue(event, args[2], (s32)_jdt.end);
+    evtSetValue(event, args[3], 0);
+    evtSetValue(event, args[4], 0);
+    return 2;
+}
 
 s32 johoya_keti_oldspeak_makelabel(int param_1) {
-    return 0;
-}
+    extern int sprintf(char* str, const char* format, ...);
+    EventEntry* event = (EventEntry*)param_1;
+    s32* args = event->args;
+    s32 target = evtGetValue(event, args[0]);
+    s32 seen = 0;
+    s32 i;
+    s32 offset = 0;
+    JohoyaEntry* entries = _jdt.entries;
+    u8* flags = _jdt.flags;
 
+    for (i = 0; i < _jdt.count; i++, offset += 0x10) {
+        JohoyaEntry* entry = (JohoyaEntry*)((s32)entries + offset);
+        s32 index = entry->unkC;
+        s32 mask;
+        s32 shift;
+
+        switch (index & 7) {
+            case 0: mask = 1; shift = 0; break;
+            case 1: mask = 2; shift = 1; break;
+            case 2: mask = 4; shift = 2; break;
+            case 3: mask = 8; shift = 3; break;
+            case 4: mask = 0x10; shift = 4; break;
+            case 5: mask = 0x20; shift = 5; break;
+            case 6: mask = 0x40; shift = 6; break;
+            case 7: mask = 0x80; shift = 7; break;
+        }
+
+        if ((s16)((flags[index / 8] & (u8)mask) >> shift) != 0 && (entry->flags & 1) == 0) {
+            if (target == seen) {
+                sprintf((char*)_jdt.end, "%s%04d", _jdt.unk8, entry->unkC);
+                evtSetValue(event, args[1], (s32)_jdt.end);
+                evtSetValue(event, args[2], *(s32*)((s32)entry + 4));
+                evtSetValue(event, args[3], *(s16*)((s32)entry + 8));
+                evtSetValue(event, args[4], 0);
+                _jdt.index = i;
+                return 2;
+            }
+            seen++;
+        }
+    }
+
+    *(char*)_jdt.end = 0;
+    evtSetValue(event, args[1], (s32)_jdt.end);
+    evtSetValue(event, args[2], (s32)_jdt.end);
+    evtSetValue(event, args[3], 0);
+    evtSetValue(event, args[4], 0);
+    return 2;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

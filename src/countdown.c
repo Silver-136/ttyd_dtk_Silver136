@@ -137,6 +137,72 @@ u8 countDownDisp(void) {
 }
 
 /* stub-fill: countDownMain | missing_definition | ghidra_signature */
-u8 countDownMain(void) {
-    return 0;
+void countDownMain(void) {
+    extern f32 intplGetValue(f32 start, f32 end, s32 type, s32 time, s32 maxTime);
+    extern s32 marioStGetSystemLevel(void);
+    extern void dispEntry(s32 cameraId, s32 mode, void* callback, void* param, f32 z);
+    extern void countDownDisp(void);
+    extern f32 float_300_8042681c;
+    extern f32 float_1000_80426820;
+    void* work = wp;
+    s32 state;
+    s32 frame;
+    s32 delta;
+    u64 elapsed;
+    u32 ticksPerMs;
+
+    if ((*(u16*)work & 1) == 0) {
+        return;
+    }
+
+    state = *(s32*)((s32)work + 0x30);
+    switch (state) {
+        case 0:
+            frame = *(s32*)((s32)work + 0x34) + 1;
+            *(s32*)((s32)work + 0x34) = frame;
+            if (frame < 30) {
+                *(f32*)((s32)work + 0x28) =
+                    intplGetValue(float_300_8042681c, float_0_80426800, 0xB, frame, 30);
+            } else {
+                *(s32*)((s32)work + 0x34) = 0;
+                *(s32*)((s32)work + 0x30) += 1;
+            }
+            break;
+        case 1:
+            if ((*(u16*)work & 2) != 0) {
+                psndSFXOff(*(s32*)((s32)work + 0x38));
+                *(s32*)((s32)work + 0x38) = -1;
+            }
+            break;
+        case 2:
+            frame = *(s32*)((s32)work + 0x34) + 1;
+            *(s32*)((s32)work + 0x34) = frame;
+            if (frame < 30) {
+                *(f32*)((s32)work + 0x28) =
+                    intplGetValue(float_0_80426800, float_300_8042681c, 0xB, frame, 30);
+            } else {
+                *(s32*)((s32)work + 0x34) = 0;
+                *(s32*)((s32)work + 0x30) += 1;
+                *(u16*)work &= ~1;
+                psndSFXOff(*(s32*)((s32)work + 0x38));
+            }
+            break;
+    }
+
+    if ((*(u16*)wp & 8) == 0 && marioStGetSystemLevel() == 0) {
+        work = wp;
+        delta = *(s32*)((s32)gp + 0x3C) - *(s32*)((s32)work + 0x14);
+        *(u64*)((s32)work + 8) += (s64)delta;
+    }
+
+    work = wp;
+    *(s32*)((s32)work + 0x10) = *(s32*)((s32)gp + 0x38);
+    *(s32*)((s32)work + 0x14) = *(s32*)((s32)gp + 0x3C);
+    ticksPerMs = (((*(u32*)0x800000F8 >> 2) * 0x10624DD3U) >> 6);
+    elapsed = *(u64*)((s32)work + 8) / ticksPerMs;
+    if (elapsed >= (u32)*(s32*)((s32)work + 0x18)) {
+        *(u16*)work |= 2;
+    }
+    dispEntry(8, 0, countDownDisp, 0, float_1000_80426820);
 }
+

@@ -2570,35 +2570,258 @@ u8 evt_mobj_rideswitch_lightblue(void* pEvt) {
     return 2;
 }
 
-u8 evt_mobj_powerupblk(void) {
+s32 evt_mobj_powerupblk(void* evt) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
+    extern void mobjEntry(s32 name, const char* kind);
+    extern void* mobjNameToPtr(s32 name);
+    extern void mobjSetPosition(s32 name, f32 x, f32 y, f32 z);
+    extern void mobjCalcMtx(void* mobj);
+    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
+    extern s32* gp;
+    extern const char str_MOBJ_PowerUpBlock_802c2630[];
+    extern const char str_S_1_8042021c[];
+    extern const char str_A_2_8042020c[];
+    extern s32 mobj_powerupblk(void* mobj);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = evtGetValue(evt, args[0]);
+    f32 x = evtGetFloat(evt, args[1]);
+    f32 y = evtGetFloat(evt, args[2]);
+    f32 z = evtGetFloat(evt, args[3]);
+    s32 eventCode = evtGetValue(evt, args[4]);
+    s32 switchVar = args[5];
+    f32 rotY = evtGetFloat(evt, args[6]);
+    void* mobj;
+
+    if (animGroupBaseAsync(str_MOBJ_PowerUpBlock_802c2630, ((u32)(-gp[5]) | (u32)gp[5]) >> 31, 0) == 0) {
+        return 0;
+    }
+    mobjEntry(name, str_MOBJ_PowerUpBlock_802c2630);
+    mobj = mobjNameToPtr(name);
+    mobjSetPosition(name, x, y, z);
+    *(void**)((s32)mobj + 0x1D0) = mobj_powerupblk;
+    *(s32*)((s32)mobj + 0x1D4) = eventCode;
+    *(u32*)mobj |= 4;
+    *(u32*)mobj |= 0xC10000;
+    *(s32*)((s32)mobj + 0x1E4) = switchVar;
+    *(s32*)((s32)mobj + 0x1DC) = 0;
+    *(f32*)((s32)mobj + 0x54) = rotY;
+    mobjCalcMtx(mobj);
+    animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_1_8042021c, 1);
+    if (evtGetValue(evt, switchVar) != 0) {
+        *(s32*)((s32)mobj + 0x1DC) = 0x5A;
+        animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_A_2_8042020c, 1);
+    }
+    return 2;
+}
+
+s32 evt_mobj_jumpstand_red(void* evt) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
+    extern void mobjEntry(s32 name, const char* kind);
+    extern void* mobjNameToPtr(s32 name);
+    extern void mobjSetPosition(s32 name, f32 x, f32 y, f32 z);
+    extern void mobjCalcMtx(void* mobj);
+    extern s32* gp;
+    extern const char* lbl_802C2120[];
+    extern s32 mobj_jumpstand_red(void* mobj);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 kind = evtGetValue(evt, args[0]);
+    s32 name = evtGetValue(evt, args[1]);
+    f32 x = evtGetFloat(evt, args[2]);
+    f32 y = evtGetFloat(evt, args[3]);
+    f32 z = evtGetFloat(evt, args[4]);
+    s32 eventCode = evtGetValue(evt, args[5]);
+    s32 script = args[6];
+    const char* pose = lbl_802C2120[kind];
+    void* mobj;
+
+    if (animGroupBaseAsync(pose, ((u32)(-gp[5]) | (u32)gp[5]) >> 31, 0) == 0) {
+        return 0;
+    }
+    mobjEntry(name, pose);
+    mobj = mobjNameToPtr(name);
+    mobjSetPosition(name, x, y, z);
+    *(void**)((s32)mobj + 0x1D0) = mobj_jumpstand_red;
+    *(s32*)((s32)mobj + 0x1D4) = eventCode;
+    *(u32*)mobj |= 0x44;
+    *(u32*)mobj |= 0x200000;
+    *(s32*)((s32)mobj + 0x1E4) = script;
+    *(s32*)((s32)mobj + 0x1DC) = 0;
+    mobjCalcMtx(mobj);
+    return 2;
+}
+
+s32 mobj_float_blk(void* mobj) {
+    extern s32 hitCheckFilter(s32 flags, f32* outX, f32* outY, f32* outZ, f32* radius, f32* minY, f32* maxY);
+    extern char* animPoseGetCurrentAnim(s32 poseId);
+    extern s32 strcmp(const char* a, const char* b);
+    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
+    extern void* mobjNameToPtr(char* name);
+    extern f32 __fabsf(f32 value);
+    extern const char str_S_1_8042021c[];
+    extern const char str_A_1_80420208[];
+    extern f32 float_0_80420240;
+    extern f32 float_1_80420250;
+    extern f32 float_0p5_8042024c;
+    extern f32 float_neg1_80420304;
+    f32 outX;
+    f32 outY;
+    f32 outZ;
+    f32 radius;
+    f32 minY;
+    f32 maxY;
+    char* anim;
+
+    if (*(s32*)((s32)mobj + 0x1DC) == 99) {
+        if (*(s8*)((s32)mobj + 0x1B8) == 0) {
+            radius = float_1_80420250 + __fabsf(*(f32*)((s32)mobj + 0x60));
+            if (hitCheckFilter(0, &outX, &outY, &outZ, &radius, &minY, &maxY) != 0) {
+                anim = animPoseGetCurrentAnim(*(s32*)((s32)mobj + 0x70));
+                if (strcmp(anim, str_S_1_8042021c) != 0) {
+                    animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_1_8042021c, 1);
+                    *(u32*)mobj |= 2;
+                }
+            } else {
+                anim = animPoseGetCurrentAnim(*(s32*)((s32)mobj + 0x70));
+                if (strcmp(anim, str_A_1_80420208) != 0) {
+                    animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_A_1_80420208, 1);
+                    *(u32*)mobj &= ~2U;
+                }
+            }
+        } else {
+            anim = animPoseGetCurrentAnim(*(s32*)((s32)mobjNameToPtr((char*)((s32)mobj + 0x1B8)) + 0x70));
+            if ((anim[0] == 'A') && (anim[2] >= '1') && (anim[2] <= '3')) {
+                animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_A_1_80420208, 0);
+            } else {
+                animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_1_8042021c, 1);
+            }
+        }
+    }
     return 0;
 }
 
+s32 fire_func(void* evt, s32 init) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern s32 irand(s32 max);
+    extern void* effFireEntry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 arg);
+    extern f32 float_1_80420250;
+    extern f32 float_10_80420294;
+    extern f32 float_0p8_804202a0;
+    extern f32 float_0p125_804202a4;
+    extern f32 float_0p99_804202a8;
+    s32* args = *(s32**)((s32)evt + 0x18);
+    f32 x = evtGetFloat(evt, args[0]);
+    f32 y = evtGetFloat(evt, args[1]);
+    f32 z = evtGetFloat(evt, args[2]);
+    s32 arg = evtGetValue(evt, args[3]);
+    void* fire;
+    void* inner;
+    f32 sx;
+    f32 sy;
 
-s32 evt_mobj_jumpstand_red(int param_1) {
+    if (init != 0) {
+        *(void**)((s32)evt + 0x78) = effFireEntry(5, x, y, z, float_0p8_804202a0 + ((f32)irand(10) / float_10_80420294), arg);
+    }
+
+    fire = *(void**)((s32)evt + 0x78);
+    sx = *(f32*)((s32)evt + 0x7C) + ((float_1_80420250 - *(f32*)((s32)evt + 0x7C)) * float_0p125_804202a4);
+    sy = *(f32*)((s32)evt + 0x80) + ((float_1_80420250 - *(f32*)((s32)evt + 0x80)) * float_0p125_804202a4);
+    inner = *(void**)((s32)fire + 0xC);
+    *(f32*)((s32)inner + 0x78) = sx;
+    inner = *(void**)((s32)fire + 0xC);
+    *(f32*)((s32)inner + 0x7C) = sy;
+
+    if (sx >= float_0p99_804202a8) {
+        inner = *(void**)((s32)fire + 0xC);
+        *(f32*)((s32)inner + 0x78) = float_1_80420250;
+        inner = *(void**)((s32)fire + 0xC);
+        *(f32*)((s32)inner + 0x7C) = float_1_80420250;
+        return 2;
+    }
+
+    *(f32*)((s32)evt + 0x7C) = sx;
+    *(f32*)((s32)evt + 0x80) = sy;
     return 0;
 }
 
+s32 evt_mobj_koopa_blk(void* evt) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
+    extern void mobjEntry(s32 name, const char* kind);
+    extern void mobjSetPosition(s32 name, f32 x, f32 y, f32 z);
+    extern void* mobjNameToPtr(s32 name);
+    extern void mobjCalcMtx(void* mobj);
+    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
+    extern s32* gp;
+    extern const char str_MOBJ_Block_802c24a8[];
+    extern const char str_S_1_8042021c[];
+    extern s32 mobj_koopa_blk(void* mobj);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = evtGetValue(evt, args[0]);
+    f32 x = evtGetFloat(evt, args[1]);
+    f32 y = evtGetFloat(evt, args[2]);
+    f32 z = evtGetFloat(evt, args[3]);
+    s32 eventCode = evtGetValue(evt, args[5]);
+    s32 script = args[6];
+    void* mobj;
 
-s32 mobj_float_blk(void* pMobj) {
-    return 0;
+    if (animGroupBaseAsync(str_MOBJ_Block_802c24a8, ((u32)(-gp[5]) | (u32)gp[5]) >> 31, 0) == 0) {
+        return 0;
+    }
+
+    mobjEntry(name, str_MOBJ_Block_802c24a8);
+    mobj = mobjNameToPtr(name);
+    mobjSetPosition(name, x, y, z);
+    *(void**)((s32)mobj + 0x1D0) = mobj_koopa_blk;
+    *(s32*)((s32)mobj + 0x1D4) = eventCode;
+    *(u32*)mobj |= 4;
+    *(u32*)mobj |= 0x3C0000;
+    *(s32*)((s32)mobj + 0x1E4) = script;
+    *(s32*)((s32)mobj + 0x1DC) = 0;
+    mobjCalcMtx(mobj);
+    animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_1_8042021c, 1);
+    return 2;
 }
 
+s32 evt_mobj_floatswitch_red(void* evt) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
+    extern void mobjEntry(s32 name, const char* kind);
+    extern void* mobjNameToPtr(s32 name);
+    extern void mobjSetPosition(s32 name, f32 x, f32 y, f32 z);
+    extern void mobjCalcMtx(void* mobj);
+    extern s32* gp;
+    extern const char str_MOBJ_RedSwitchBlock_802c29c8[];
+    extern s32 mobj_switch_red(void* mobj);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 unused = evtGetValue(evt, args[0]);
+    s32 name = evtGetValue(evt, args[1]);
+    f32 x = evtGetFloat(evt, args[2]);
+    f32 y = evtGetFloat(evt, args[3]);
+    f32 z = evtGetFloat(evt, args[4]);
+    s32 eventCode = evtGetValue(evt, args[5]);
+    s32 switchVar = args[6];
+    void* mobj;
 
-u8 fire_func(s32 pEvt, s32 param_2) {
-    return 0;
+    if (animGroupBaseAsync(str_MOBJ_RedSwitchBlock_802c29c8, ((u32)(-gp[5]) | (u32)gp[5]) >> 31, 0) == 0) {
+        return 0;
+    }
+    mobjEntry(name, str_MOBJ_RedSwitchBlock_802c29c8);
+    mobj = mobjNameToPtr(name);
+    mobjSetPosition(name, x, y, z);
+    *(void**)((s32)mobj + 0x1D0) = mobj_switch_red;
+    *(s32*)((s32)mobj + 0x1D4) = eventCode;
+    *(u32*)mobj |= 4;
+    *(u32*)mobj |= 0x400000;
+    *(s32*)((s32)mobj + 0x1E4) = switchVar;
+    *(s32*)((s32)mobj + 0x1DC) = 0;
+    if (evtGetValue(evt, switchVar) != 0) {
+        *(s32*)((s32)mobj + 0x1DC) = 99;
+    }
+    mobjCalcMtx(mobj);
+    return 2;
 }
-
-
-s32 evt_mobj_koopa_blk(int param_1) {
-    return 0;
-}
-
-
-s32 evt_mobj_floatswitch_red(int param_1) {
-    return 0;
-}
-
 
 s32 evt_mobj_tornadoswitch_blue(void* pEvt) {
     return 0;
@@ -2610,10 +2833,48 @@ s32 evt_mobj_floatswitch_blue(int param_1) {
 }
 
 
-s32 evt_mobj_koopa_stone_blk(void* pEvt) {
-    return 0;
-}
+s32 evt_mobj_koopa_stone_blk(void* evt) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
+    extern void mobjEntry(s32 name, const char* kind);
+    extern void* mobjNameToPtr(s32 name);
+    extern s32* gp;
+    extern const u32 vec3_802c233c[3];
+    extern s32 mobj_koopa_stone_blk_evt(void);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = evtGetValue(evt, args[0]);
+    f32 x = evtGetFloat(evt, args[1]);
+    f32 y = evtGetFloat(evt, args[2]);
+    f32 z = evtGetFloat(evt, args[3]);
+    s32 eventCode = evtGetValue(evt, args[4]);
+    s32 script = args[5];
+    s32 kind = evtGetValue(evt, args[6]);
+    void* mobj;
+    u32 pos[3];
 
+    if (animGroupBaseAsync((const char*)kind, ((u32)(-gp[5]) | (u32)gp[5]) >> 31, 0) == 0) {
+        return 0;
+    }
+
+    mobjEntry(name, (const char*)kind);
+    mobj = mobjNameToPtr(name);
+    *(u32*)mobj |= 4;
+    pos[0] = vec3_802c233c[0];
+    pos[1] = vec3_802c233c[1];
+    pos[2] = vec3_802c233c[2];
+    *(f32*)&pos[0] = x;
+    *(f32*)&pos[1] = y;
+    *(f32*)&pos[2] = z;
+    *(u32*)((s32)mobj + 0x38) = pos[0];
+    *(u32*)((s32)mobj + 0x3C) = pos[1];
+    *(u32*)((s32)mobj + 0x40) = pos[2];
+    *(void**)((s32)mobj + 0x1D0) = mobj_koopa_stone_blk_evt;
+    *(s32*)((s32)mobj + 0x1D4) = eventCode;
+    *(s32*)((s32)mobj + 0x1D8) = 0;
+    *(s32*)((s32)mobj + 0x1E4) = script;
+    *(s32*)((s32)mobj + 0x1DC) = 99;
+    return 2;
+}
 
 s32 kpa_score_to_str(void* evt) {
     extern s32 evtGetValue(void* evt, s32 value);
@@ -2653,10 +2914,52 @@ s32 kpa_score_to_str(void* evt) {
 }
 
 
-s32 mobj_blk(void* pMobj) {
+s32 mobj_blk(void* mobj) {
+    extern u32 psndSFXOn_3D(s32 id, void* pos);
+    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
+    extern void* mobjRunEvent(void* mobj, void* evtCode);
+    extern s32 evtCheckID(s32 id);
+    extern f32 animPoseGetLoopTimes(s32 poseId);
+    extern const char str_A_1_80420208[];
+    extern const char str_S_1_8042021c[];
+    extern f32 float_1_80420250;
+    s32 action = *(s32*)((s32)mobj + 0x1DC);
+
+    switch (action) {
+        case 0:
+            if ((*(u32*)mobj & 8) != 0) {
+                psndSFXOn_3D(0x1B7, (void*)((s32)mobj + 0x38));
+                animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_A_1_80420208, 1);
+                *(u32*)mobj &= ~8;
+                *(s32*)((s32)mobj + 0x1DC) = *(s32*)((s32)mobj + 0x1DC) + 1;
+            }
+            break;
+        case 1:
+            if (*(void**)((s32)mobj + 0x1D4) != 0) {
+                mobjRunEvent(mobj, *(void**)((s32)mobj + 0x1D4));
+                *(s32*)((s32)mobj + 0x1DC) = *(s32*)((s32)mobj + 0x1DC) + 1;
+            } else {
+                *(s32*)((s32)mobj + 0x1DC) = 3;
+            }
+            break;
+        case 2:
+            if (evtCheckID(*(s32*)((s32)mobj + 0x1CC)) != 1) {
+                *(s32*)((s32)mobj + 0x1CC) = 0;
+                *(s32*)((s32)mobj + 0x1DC) = *(s32*)((s32)mobj + 0x1DC) + 1;
+            }
+            break;
+        case 3:
+            if ((*(u32*)mobj & 8) == 0) {
+                *(s32*)((s32)mobj + 0x1DC) = 0;
+            } else if (animPoseGetLoopTimes(*(s32*)((s32)mobj + 0x70)) >= float_1_80420250) {
+                animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_1_8042021c, 1);
+                *(s32*)((s32)mobj + 0x1DC) = 0;
+                *(u32*)mobj &= ~8;
+            }
+            break;
+    }
     return 0;
 }
-
 
 s32 mobj_koopa_blk(u32* param_1) {
     return 0;

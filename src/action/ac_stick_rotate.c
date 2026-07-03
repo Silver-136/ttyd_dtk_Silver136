@@ -170,12 +170,121 @@ s32 _GetInputDir(void) {
 
 /* stub-fill: actionCommandDisp2 | prototype_only | source_prototype */
 void actionCommandDisp2(f32 x, f32 y) {
-    return;
+    extern void iconDispGx(f32* pos, s32 flags, s32 iconId, f32 scale);
+    extern f32 float_neg200_80426830;
+    extern f32 float_70_80426834;
+    extern f32 float_1_80426838;
+    void* battle = _battleWorkPointer;
+    s32 state = *(s32*)((s32)battle + 0x1C9C);
+    s8* extra = (s8*)((s32)battle + 0x1F4C);
+    f32 pos[3];
+    s32 dir;
+    s32 current;
+    s32 threshold;
+
+    if (state < 0x3E8) {
+        if (state >= 0x63 && state < 0x65) {
+            pos[0] = float_neg200_80426830 + x;
+            pos[1] = float_70_80426834 + y;
+            pos[2] = 0.0f;
+            iconDispGx(pos, 0x10, 0x81, float_1_80426838);
+        }
+        return;
+    }
+
+    if (state >= 0x3EF) {
+        return;
+    }
+
+    if (state < 0x3EA) {
+        extra[7]++;
+        threshold = (*(s32*)((s32)battle + 0x1CD8) + *(s32*)((s32)battle + 0x1CDC)) / 2;
+        if ((u8)extra[7] >= threshold) {
+            extra[7] = 0;
+            dir = extra[4];
+            if (dir == 0) {
+                dir = -1;
+            }
+            current = extra[6];
+            if (current == 0) {
+                extra[6] = 1;
+            } else {
+                current += dir;
+                extra[6] = current;
+                if (extra[6] >= 9) {
+                    extra[6] = 1;
+                } else if (extra[6] <= 0) {
+                    extra[6] = 8;
+                }
+            }
+        }
+        pos[0] = float_neg200_80426830 + x;
+        pos[1] = float_70_80426834 + y;
+        pos[2] = 0.0f;
+        iconDispGx(pos, 0x10, _get_icon_id(extra[6]), float_1_80426838);
+    } else {
+        pos[0] = float_neg200_80426830 + x;
+        pos[1] = float_70_80426834 + y;
+        pos[2] = 0.0f;
+        iconDispGx(pos, 0x10, 0x81, float_1_80426838);
+    }
 }
 
 /* stub-fill: actionCommandDisp | prototype_only | source_prototype */
 void actionCommandDisp(f32 x, f32 y) {
-    return;
+    extern void iconDispGx(f32* pos, s32 flags, s32 iconId, f32 scale);
+    extern f32 float_neg200_80426830;
+    extern f32 float_70_80426834;
+    extern f32 float_1_80426838;
+    void* battle = _battleWorkPointer;
+    s32 state = *(s32*)((s32)battle + 0x1C9C);
+    s8* extra = (s8*)((s32)battle + 0x1F4C);
+    f32 pos[3];
+    s32 icon;
+
+    if (state == 0x3E8) {
+        icon = _get_icon_id(extra[2]);
+        pos[0] = float_neg200_80426830 + x;
+        pos[1] = float_70_80426834 + y;
+        pos[2] = 0.0f;
+        iconDispGx(pos, 0x10, icon, float_1_80426838);
+        return;
+    }
+
+    if (state < 0x3E8) {
+        if (state >= 0x63 && state < 0x65) {
+            pos[0] = float_neg200_80426830 + x;
+            pos[1] = float_70_80426834 + y;
+            pos[2] = 0.0f;
+            iconDispGx(pos, 0x10, 0x81, float_1_80426838);
+        }
+        return;
+    }
+
+    if (state >= 0x3EF) {
+        return;
+    }
+
+    if (state < 0x3EA) {
+        if (extra[5] < *(s32*)((s32)battle + 0x1CD8)) {
+            if (*(u16*)(extra + 8) < 2) {
+                icon = _get_icon_id(extra[2]);
+            } else {
+                icon = _get_icon_id(extra[1]);
+            }
+        } else {
+            icon = _get_icon_id(extra[2]);
+        }
+        pos[0] = float_neg200_80426830 + x;
+        pos[1] = float_70_80426834 + y;
+        pos[2] = 0.0f;
+        iconDispGx(pos, 0x10, icon, float_1_80426838);
+    } else {
+        pos[0] = float_neg200_80426830 + x;
+        pos[1] = float_70_80426834 + y;
+        pos[2] = 0.0f;
+        iconDispGx(pos, 0x10, 0x81, float_1_80426838);
+    }
 }
 
 /* stub-fill: battleAcMain_StickRotate | missing_definition | ghidra_signature */

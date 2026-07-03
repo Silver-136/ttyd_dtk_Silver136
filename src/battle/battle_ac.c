@@ -161,14 +161,231 @@ u8 BattleAcDrawGauge(s64 ratioFilled, s32 x, s32 y, s32 innerBarWidth, s32 param
 
 
 void BattleActionCommandCheckDefence(void* unit, s32 value) {
-    ;
+    extern u8 N_normal_guard_frames[];
+    extern u8 N_superguard_frames[];
+    u8 normalFrames[7];
+    u8 superFrames[7];
+    void* work;
+    void* padWork;
+    s32 guarded;
+    s32 difficulty;
+    s32 superCount;
+    s32 normalCount;
+    s32 count;
+    s32 i;
+
+    normalFrames[0] = N_normal_guard_frames[0];
+    normalFrames[1] = N_normal_guard_frames[1];
+    normalFrames[2] = N_normal_guard_frames[2];
+    normalFrames[3] = N_normal_guard_frames[3];
+    normalFrames[4] = N_normal_guard_frames[4];
+    normalFrames[5] = N_normal_guard_frames[5];
+    normalFrames[6] = N_normal_guard_frames[6];
+    superFrames[0] = N_superguard_frames[0];
+    superFrames[1] = N_superguard_frames[1];
+    superFrames[2] = N_superguard_frames[2];
+    superFrames[3] = N_superguard_frames[3];
+    superFrames[4] = N_superguard_frames[4];
+    superFrames[5] = N_superguard_frames[5];
+    superFrames[6] = N_superguard_frames[6];
+
+    work = _battleWorkPointer;
+    padWork = (void*)((s32)work + 0x1D1C);
+    guarded = 0;
+    *(s32*)((s32)work + 0x1CB0) = 0;
+
+    difficulty = *(u8*)((s32)unit + 0x306) + 3 - *(u8*)((s32)unit + 0x305);
+    if (difficulty < 0) {
+        difficulty = 0;
+    }
+    if (difficulty > 6) {
+        difficulty = 6;
+    }
+
+    superCount = superFrames[difficulty];
+    normalCount = normalFrames[difficulty];
+
+    if (*(u8*)(value + 0x13) != 0 && *(s16*)((s32)unit + 0x10C) > 0) {
+        if (*(s16*)((s32)work + 0x1D18) > 0) {
+            *(s16*)((s32)work + 0x1D18) = *(s16*)((s32)work + 0x1D18) - 1;
+            guarded = 1;
+            *(s32*)((s32)work + 0x1CB0) = 5;
+        } else if (*(u8*)((s32)unit + 0x307) != 0) {
+            guarded = 1;
+            *(s32*)((s32)work + 0x1CB0) = 5;
+        } else {
+            for (i = 0; i < superCount; i++) {
+                if (BattleACPadCheckRecordTrigger(i, 0x200) != 0) {
+                    break;
+                }
+            }
+            if (i < superCount) {
+                count = 0;
+                for (i = 0; i < 15; i++) {
+                    if (BattleACPadCheckRecordTrigger(i, 0x100) != 0) {
+                        count++;
+                    }
+                    if (BattleACPadCheckRecordTrigger(i, 0x200) != 0) {
+                        count++;
+                    }
+                }
+                if (count < 2) {
+                    guarded = 1;
+                    *(s32*)((s32)work + 0x1CB0) = 5;
+                }
+            }
+        }
+    }
+
+    if (guarded == 0) {
+        if (*(s16*)((s32)work + 0x1D18) > 0) {
+            *(s16*)((s32)work + 0x1D18) = *(s16*)((s32)work + 0x1D18) - 1;
+            *(s32*)((s32)work + 0x1CB0) = 4;
+        } else {
+            count = 0;
+            for (i = 0; i < 15; i++) {
+                if (BattleACPadCheckRecordTrigger(i, 0x100) != 0) {
+                    count++;
+                }
+                if (BattleACPadCheckRecordTrigger(i, 0x200) != 0) {
+                    count++;
+                }
+            }
+            if (count >= 2) {
+                *(s32*)((s32)work + 0x1CB0) = 1;
+            } else {
+                for (i = 0; i < normalCount; i++) {
+                    if (BattleACPadCheckRecordTrigger(i, 0x100) != 0) {
+                        break;
+                    }
+                }
+                if (i < normalCount) {
+                    *(s32*)((s32)work + 0x1CB0) = 4;
+                } else if (count > 0) {
+                    *(s32*)((s32)work + 0x1CB0) = 1;
+                } else {
+                    *(s32*)((s32)work + 0x1CB0) = 2;
+                }
+            }
+        }
+    }
+
+    BtlPad_WorkInit(padWork);
 }
 
+s32 BattleACGetButtonIcon(int button, int pressed) {
+    s32 icon;
 
-s32 BattleACGetButtonIcon(int param_1, int param_2) {
-    return 0;
+    icon = 0;
+    switch (button) {
+        case 0x100:
+            if (pressed != 0) {
+                icon = 0x6D;
+            } else {
+                icon = 0x6C;
+            }
+            break;
+        case 0x200:
+            if (pressed != 0) {
+                icon = 0x6F;
+            } else {
+                icon = 0x6E;
+            }
+            break;
+        case 0x400:
+            if (pressed != 0) {
+                icon = 0x71;
+            } else {
+                icon = 0x70;
+            }
+            break;
+        case 0x800:
+            if (pressed != 0) {
+                icon = 0x73;
+            } else {
+                icon = 0x72;
+            }
+            break;
+        case 0x20:
+            if (pressed != 0) {
+                icon = 0x89;
+            } else {
+                icon = 0x88;
+            }
+            break;
+        case 0x40:
+            if (pressed != 0) {
+                icon = 0x87;
+            } else {
+                icon = 0x86;
+            }
+            break;
+        case 0x10:
+            if (pressed != 0) {
+                icon = 0x8B;
+            } else {
+                icon = 0x8A;
+            }
+            break;
+        case 0x10000:
+            if (pressed != 0) {
+                icon = 0x84;
+            } else {
+                icon = 0x81;
+            }
+            break;
+        case 0x20000:
+            if (pressed != 0) {
+                icon = 0x7E;
+            } else {
+                icon = 0x81;
+            }
+            break;
+        case 0x40000:
+            if (pressed != 0) {
+                icon = 0x80;
+            } else {
+                icon = 0x81;
+            }
+            break;
+        case 0x80000:
+            if (pressed != 0) {
+                icon = 0x82;
+            } else {
+                icon = 0x81;
+            }
+            break;
+        case 0x90000:
+            if (pressed != 0) {
+                icon = 0x85;
+            } else {
+                icon = 0x81;
+            }
+            break;
+        case 0xA0000:
+            if (pressed != 0) {
+                icon = 0x7F;
+            } else {
+                icon = 0x81;
+            }
+            break;
+        case 0x50000:
+            if (pressed != 0) {
+                icon = 0x83;
+            } else {
+                icon = 0x81;
+            }
+            break;
+        case 0x60000:
+            if (pressed != 0) {
+                icon = 0x7D;
+            } else {
+                icon = 0x81;
+            }
+            break;
+    }
+    return icon;
 }
-
 
 void BattleActionCommandSetup(void* battleWork, s32 param, void* unit, s32 rawArg, s32 value) {
     typedef struct ActionCommandEntry {

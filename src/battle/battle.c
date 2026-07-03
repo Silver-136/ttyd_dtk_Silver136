@@ -154,7 +154,124 @@ void BattleEnd(void) {
 }
 
 BOOL Btl_UnitSetup(BattleWork* wp) {
-    ;
+    typedef struct PartyEntry {
+        void* data;
+        u8 pad[0x30 - 0x4];
+    } PartyEntry;
+    extern BattleUnitSetup entryunit_system;
+    extern BattleUnitSetup entryunit_mario;
+    extern PartyEntry entryunit_party[];
+    extern BattleWorkUnit* BtlUnit_Entry(BattleUnitSetup* setup);
+    extern void BtlUnit_EquipItem(void* unit, u32 flags, u32 item);
+    extern void BtlUnit_SetParamFromPouch(BattleWorkUnit* unit);
+    extern void BtlUnit_GetHomePos(BattleWorkUnit* unit, f32* x, f32* y, f32* z);
+    extern void BtlUnit_SetHomePos(BattleWorkUnit* unit, f32 x, f32 y, f32 z);
+    extern f32 float_neg140_80422178;
+    extern f32 float_5_8042217c;
+    void* setupRoot;
+    void* enemyList;
+    BattleUnitSetup* enemySetup;
+    BattleWorkUnit* unit;
+    BattleWorkUnit* mario;
+    PouchData* pouch;
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 i;
+    s32 offset;
+    s16 badge;
+    s32 partyId;
+
+    setupRoot = *(void**)(*(s32*)((s32)wp + 0x2738) + 0xC);
+    enemyList = *(void**)((s32)setupRoot + 0x18);
+    pouch = pouchGetPtr();
+
+    *(s16*)((s32)wp + 0x8) = 2;
+    *(s16*)((s32)wp + 0x10) = 1;
+    *(s16*)((s32)wp + 0x18) = 0;
+    *(s8*)((s32)wp + 0xA) = 1;
+    *(s8*)((s32)wp + 0x12) = -1;
+    *(s8*)((s32)wp + 0x1A) = 1;
+    *(s32*)((s32)wp + 0xC) = 0;
+    *(s32*)((s32)wp + 0x14) = 0;
+    *(s32*)((s32)wp + 0x1C) = 0;
+
+    unit = BtlUnit_Entry(&entryunit_system);
+    BtlUnit_EquipItem(unit, 3, 0);
+
+    mario = BtlUnit_Entry(&entryunit_mario);
+    BtlUnit_EquipItem(mario, 3, 0);
+    BtlUnit_SetParamFromPouch(mario);
+
+    partyId = *(s32*)(*(s32*)((s32)wp + 0x2738) + 4);
+    if (partyId != 0) {
+        unit = BtlUnit_Entry((BattleUnitSetup*)&entryunit_party[partyId - 0xE0]);
+        BtlUnit_GetHomePos(unit, &x, &y, &z);
+        BtlUnit_SetHomePos(unit, float_neg140_80422178, y, float_5_8042217c);
+        BtlUnit_SetPos(unit, float_neg140_80422178, y, float_5_8042217c);
+        BtlUnit_EquipItem(unit, 5, 0);
+        BtlUnit_SetParamFromPouch(unit);
+    }
+
+    enemySetup = *(BattleUnitSetup**)((s32)enemyList + 4);
+    for (i = 0, offset = 0; i < *(s32*)enemyList; i++, offset += 4) {
+        unit = BtlUnit_Entry(enemySetup);
+        unit->groupId = i;
+        *(s32*)((s32)unit + 0x308) = 0;
+        if (*(s32*)((s32)setupRoot + 0x5C + unit->groupId * 4) != 0) {
+            *(s32*)((s32)unit + 0x308) = *(s32*)((s32)setupRoot + 0x5C + unit->groupId * 4);
+            unit->flags |= 0x40000000;
+        } else {
+            *(s32*)((s32)unit + 0x308) = *(s32*)((s32)setupRoot + 0x1C + offset);
+            BtlUnit_EquipItem(unit, 1, *(s32*)((s32)setupRoot + 0x1C + offset));
+        }
+        *(s32*)((s32)unit + 0x30C) = *(s32*)((s32)setupRoot + 0x3C + offset);
+        enemySetup = (BattleUnitSetup*)((s32)enemySetup + 0x30);
+        unit->currentHP = unit->currentMaxHP;
+        unit->currentFP = unit->currentMaxFP;
+    }
+
+    *(s32*)((s32)wp + 0x420) = -1;
+    *(s32*)((s32)wp + 0x163F4) = 0;
+    for (i = 0, offset = 0; i < 200; i++, offset += 2) {
+        badge = *(s16*)((s32)pouch + 0x38A + offset);
+        switch (badge) {
+            case 0x134:
+                *(s32*)((s32)wp + 0x163F4) |= 1;
+                break;
+            case 0x135:
+                *(s32*)((s32)wp + 0x163F4) |= 2;
+                break;
+            case 0x136:
+                *(s32*)((s32)wp + 0x163F4) |= 4;
+                break;
+            case 0x137:
+                *(s32*)((s32)wp + 0x163F4) |= 8;
+                break;
+            case 0x138:
+                *(s32*)((s32)wp + 0x163F4) |= 0x10;
+                break;
+            case 0x13A:
+                *(s32*)((s32)wp + 0x163F4) |= 0x80;
+                break;
+            case 0x13B:
+                *(s32*)((s32)wp + 0x163F4) |= 0x100;
+                break;
+            case 0x13C:
+                *(s32*)((s32)wp + 0x163F4) |= 0x400;
+                break;
+            case 0x13D:
+                *(s32*)((s32)wp + 0x163F4) |= 0x800;
+                break;
+            case 0x13E:
+                *(s32*)((s32)wp + 0x163F4) |= 0x200;
+                break;
+            case 0x13F:
+                *(s32*)((s32)wp + 0x163F4) |= 0x1000;
+                break;
+        }
+    }
+    return TRUE;
 }
 
 void BattleStoreExp(BattleWork* wp, s32 exp) {

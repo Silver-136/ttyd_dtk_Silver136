@@ -48,10 +48,108 @@ s32 winMarioMain(void* pWin) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 winMarioInit(void* pWin) {
-    return 0;
-}
+    extern void* pouchGetPtr(void);
+    extern void* marioGetPtr(void);
+    extern s32 marioGetColor(void);
+    extern s32 animPoseEntry(char* name, s32 mode);
+    extern void animPoseSetAnim(s32 poseId, char* anim, s32 force);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
+    extern char str_msg_menu_mario_lv_802f5e88[];
+    extern char str_S_1_80423890[];
+    extern char str_S_2_80423a1c[];
+    extern char str_S_3_80423a20[];
+    extern char str_S_4_80423a24[];
+    extern char str_M_S_1_80423888[];
+    void* pouch;
+    char* base;
+    char* name;
+    s32 color;
+    s32 count;
+    u16 powers;
 
+    base = str_msg_menu_mario_lv_802f5e88;
+    pouch = pouchGetPtr();
+    if ((*(u16*)pWin & 0x2000) != 0) {
+        name = str_S_1_80423890;
+        color = marioGetColor();
+        if (color == 2) {
+            name = str_S_3_80423a20;
+        } else if (color < 2) {
+            if (color == 0) {
+                name = str_S_1_80423890;
+            } else if (color >= 0) {
+                name = str_S_2_80423a1c;
+            }
+        } else if (color < 4) {
+            name = str_S_4_80423a24;
+        }
+        *(s32*)((s32)pWin + 0x188) = animPoseEntry(base + 0x848, 0);
+        animPoseSetAnim(*(s32*)((s32)pWin + 0x188), name, 1);
+    } else {
+        name = base + 0x850;
+        color = marioGetColor();
+        if (color == 2) {
+            name = base + 0x864;
+        } else if (color < 2) {
+            if (color >= 0 && color != 0) {
+                name = base + 0x858;
+            }
+        } else if (color < 4) {
+            name = base + 0x870;
+        }
+        *(s32*)((s32)pWin + 0x188) = animPoseEntry(name, 0);
+        animPoseSetAnim(*(s32*)((s32)pWin + 0x188), str_M_S_1_80423888, 1);
+    }
+
+    animPoseSetMaterialFlagOn(*(s32*)((s32)pWin + 0x188), 0x1800);
+    if ((*(u32*)marioGetPtr() & 0x40000000) != 0) {
+        animPoseSetMaterialFlagOn(*(s32*)((s32)pWin + 0x188), 0x0A000000);
+    }
+
+    count = 0;
+    *(s32*)((s32)pWin + 0x18C) = 0;
+    *(s32*)((s32)pWin + 0x190) = 0;
+    *(s32*)((s32)pWin + 0x194) = 0;
+    *(s32*)((s32)pWin + 0x198) = 0;
+    powers = *(u16*)((s32)pouch + 0x8C);
+    if ((powers & (1 << 0)) != 0) {
+        count = *(s32*)((s32)pWin + 0x198);
+        *(s32*)((s32)pWin + 0x198) = count + 1;
+    }
+    if ((powers & (1 << 1)) != 0) {
+        count = *(s32*)((s32)pWin + 0x198);
+        *(s32*)((s32)pWin + 0x198) = count + 1;
+    }
+    if ((powers & (1 << 2)) != 0) {
+        count = *(s32*)((s32)pWin + 0x198);
+        *(s32*)((s32)pWin + 0x198) = count + 1;
+    }
+    if ((powers & (1 << 3)) != 0) {
+        count = *(s32*)((s32)pWin + 0x198);
+        *(s32*)((s32)pWin + 0x198) = count + 1;
+    }
+    if ((powers & (1 << 4)) != 0) {
+        count = *(s32*)((s32)pWin + 0x198);
+        *(s32*)((s32)pWin + 0x198) = count + 1;
+    }
+    if ((powers & (1 << 5)) != 0) {
+        count = *(s32*)((s32)pWin + 0x198);
+        *(s32*)((s32)pWin + 0x198) = count + 1;
+    }
+    if ((powers & (1 << 6)) != 0) {
+        count = *(s32*)((s32)pWin + 0x198);
+        *(s32*)((s32)pWin + 0x198) = count + 1;
+    }
+    if ((powers & (1 << 7)) != 0) {
+        count = *(s32*)((s32)pWin + 0x198);
+        *(s32*)((s32)pWin + 0x198) = count + 1;
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void winMarioInit2(void* pWin) {
     s32 index;

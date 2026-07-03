@@ -153,8 +153,85 @@ USER_FUNC(yuugijou_add_montemedal) {
 /* CHATGPT STUB FILL: main/event/evt_yuugijou 20260624_184823 */
 
 /* stub-fill: monteCountDisp | missing_definition | ghidra_signature */
-u8 monteCountDisp(void) {
-    return 0;
+void monteCountDisp(void) {
+    extern void* yuwp;
+    extern void windowDispGX_Waku_col(s32 type, void* color, f32 x, f32 y, f32 w, f32 h, f32 unk);
+    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+    extern void iconDispGxCol(void* mtx, s32 size, s32 iconId, void* color);
+    extern void iconNumberDispGx(void* mtx, s32 value, s32 flags, void* color);
+    extern void psndSFXOn(s32 soundId);
+    extern u32 dat_80427a08;
+    extern u32 dat_80427a0c;
+    extern u32 dat_80427a10;
+    extern u32 dat_80427a14;
+    extern f32 float_neg288_80427a18;
+    extern f32 float_200_80427a1c;
+    extern f32 float_44_80427a20;
+    extern f32 float_16_80427a24;
+    extern f32 float_neg260_80427a28;
+    extern f32 float_0_80427a2c;
+    extern f32 float_neg230_80427a30;
+    extern f32 float_neg128_80427a34;
+
+    static s32 monte_snd_flag_484;
+
+    f32 mtx[3][4];
+    u32 color;
+    s32 x = -0xB4;
+    s32 diff;
+
+    if ((*(u32*)yuwp & 4) != 0) {
+        x = -0x78;
+    }
+    if (((*(u32*)yuwp & 1) == 0) || ((*(u32*)yuwp & 2) == 0)) {
+        if (monte_snd_flag_484 != 0) {
+            monte_snd_flag_484--;
+        }
+        return;
+    }
+
+    color = dat_80427a08;
+    windowDispGX_Waku_col(0, &color, float_neg288_80427a18, (f32)(x + 0x2C),
+                          float_200_80427a1c, float_44_80427a20, float_16_80427a24);
+
+    PSMTXTrans(mtx, float_neg260_80427a28, (f32)(x + 2), float_0_80427a2c);
+    color = dat_80427a0c;
+    iconDispGxCol(mtx, 0x10, 0x147, &color);
+
+    PSMTXTrans(mtx, float_neg230_80427a30, (f32)(x + 2), float_0_80427a2c);
+    color = dat_80427a10;
+    iconDispGxCol(mtx, 0x10, 0x1DE, &color);
+
+    PSMTXTrans(mtx, float_neg128_80427a34, (f32)(x + 2), float_0_80427a2c);
+    color = dat_80427a14;
+    iconNumberDispGx(mtx, *(s32*)((s32)yuwp + 0x10), 0, &color);
+
+    *(s32*)((s32)yuwp + 0xC) += 1;
+    if ((*(u32*)((s32)yuwp + 0xC) & 3) == 0) {
+        *(s32*)((s32)yuwp + 0xC) = 0;
+        diff = *(s32*)((s32)yuwp + 8) - *(s32*)((s32)yuwp + 0x10);
+
+        if (monte_snd_flag_484 == 0 && diff != 0) {
+            psndSFXOn(0x8CA);
+            monte_snd_flag_484 = 8;
+        }
+
+        if (diff != 0) {
+            diff /= 10;
+            if (diff == 0) {
+                if (*(s32*)((s32)yuwp + 8) > *(s32*)((s32)yuwp + 0x10)) {
+                    diff = 1;
+                } else {
+                    diff = -1;
+                }
+            }
+            *(s32*)((s32)yuwp + 0x10) += diff;
+        }
+    }
+
+    if (monte_snd_flag_484 != 0) {
+        monte_snd_flag_484--;
+    }
 }
 
 /* stub-fill: yuugijou_init | missing_definition | ghidra_signature */

@@ -75,9 +75,81 @@ s32 battleAcMain_Shot(void* battleWork) {
 
 
 void actionCommandDisp(f32 x, f32 y) {
-    ;
-}
+    typedef f32 Mtx[3][4];
+    extern void* _battleWorkPointer;
+    extern void iconDispGx(void* pos, s32 icon, s32 pal, f32 scale);
+    extern void iconDispGxCol(void* mtx, s32 icon, s32 pal, u32* color);
+    extern void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(Mtx a, Mtx b, Mtx out);
+    extern f32 float_25_80424844;
+    extern f32 float_100_80424848;
+    extern f32 float_0p01_8042484c;
+    extern f32 float_88_80424850;
+    extern f32 float_33_80424854;
+    extern u32 unk_80429620;
+    void* battleWork;
+    u8* aimWork;
+    u8* disp;
+    AcShotVec pos;
+    Mtx trans;
+    Mtx scale;
+    Mtx mtx;
+    u32 color;
+    f32 drawX;
+    f32 cur;
+    f32 target;
 
+    battleWork = _battleWorkPointer;
+    drawX = float_neg200_80424840 + x;
+    aimWork = (u8*)((s32)battleWork + 0x1F4C);
+    disp = (u8*)((s32)battleWork + 0x1F20);
+    if ((*(u32*)((s32)battleWork + 0x1CC4) & 1) == 0) {
+        pos = vec3_802f9b68[0];
+        pos.x = drawX;
+        pos.y = float_25_80424844 + y;
+        iconDispGx(&pos, 0x10, 0x94, float_1_8042482c);
+
+        target = *(f32*)(aimWork + 0x1C) / float_100_80424848;
+        cur = *(f32*)(disp + 0x28);
+        if (cur <= target) {
+            cur += float_0p01_8042484c;
+            *(f32*)(disp + 0x28) = cur;
+            if (*(f32*)(disp + 0x28) > target) {
+                *(f32*)(disp + 0x28) = target;
+            }
+        } else {
+            cur -= float_0p01_8042484c;
+            *(f32*)(disp + 0x28) = cur;
+            if (*(f32*)(disp + 0x28) < target) {
+                *(f32*)(disp + 0x28) = target;
+            }
+        }
+
+        if (*(f32*)(disp + 0x28) >= float_1_8042482c) {
+            disp[0xD] += disp[0x11];
+            disp[0xE] += disp[0x12];
+            if (disp[0xD] <= 0x80 && *(s8*)(disp + 0x11) < 0) {
+                disp[0x11] = 0x10;
+                disp[0x12] = 0x10;
+            }
+            if (disp[0xD] >= 0xF5 && *(s8*)(disp + 0x11) > 0) {
+                disp[0x11] = -0x10;
+                disp[0x12] = -0x10;
+            }
+        }
+
+        PSMTXTrans(trans, drawX - (float_88_80424850 * (float_1_8042482c - *(f32*)(disp + 0x28))), float_33_80424854 + y, float_0_80424828);
+        PSMTXScale(scale, *(f32*)(disp + 0x28), float_1_8042482c, float_1_8042482c);
+        PSMTXConcat(trans, scale, mtx);
+        color = unk_80429620;
+        ((u8*)&color)[0] = disp[0xC];
+        ((u8*)&color)[1] = disp[0xD];
+        ((u8*)&color)[2] = disp[0xE];
+        ((u8*)&color)[3] = disp[0xF];
+        iconDispGxCol(mtx, 0x10, 0x95, &color);
+    }
+}
 
 void _draw_target_mark(u32* color, f32 x, f32 y, f32 z, f32 angle) {
     AcShotVec pos;

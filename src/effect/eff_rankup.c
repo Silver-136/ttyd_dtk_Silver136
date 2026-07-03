@@ -92,6 +92,66 @@ void* effRankupEntry(s32 type, f32 x, f32 y, f32 z) {
 /* CHATGPT STUB FILL: main/effect/eff_rankup 20260624_184929 */
 
 /* stub-fill: effRankupMain | prototype_only | source_prototype */
-void effRankupMain(void) {
-    return;
+void effRankupMain(void* effect) {
+    extern void* gp;
+    extern void animPoseRelease(s32 poseId);
+    extern void effDelete(void* effect);
+    extern s32 animGroupBaseAsync(const char* name, s32 heap, s32 flags);
+    extern s32 animPoseEntry(const char* name, s32 heap);
+    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
+    extern f32 animPoseGetLoopTimes(s32 poseId);
+    extern f32 dispCalcZ(f32* pos);
+    extern void dispEntry(s32 cameraId, s32 layer, void* callback, f32 z, void* param);
+    extern void effRankupDisp(s32 cameraId, void* effect);
+    extern char* eff_rankup_str_tbl[];
+    extern char str_Z_1_80428188[];
+    extern f32 float_1_8042818c;
+    extern f32 float_0p61538_80428190;
+
+    void* work;
+    f32 pos[3];
+    s32 heap;
+
+    work = *(void**)((s32)effect + 0xC);
+    pos[0] = *(f32*)((s32)work + 4);
+    pos[1] = *(f32*)((s32)work + 8);
+    pos[2] = *(f32*)((s32)work + 0xC);
+    heap = (*(s32*)((s32)gp + 0x14) != 0);
+
+    if ((*(u32*)effect & 4) != 0) {
+        *(u32*)effect &= ~4u;
+        if (*(s32*)((s32)work + 0x14) != -1) {
+            animPoseRelease(*(s32*)((s32)work + 0x14));
+        }
+        effDelete(effect);
+        return;
+    }
+
+    switch (*(s32*)((s32)work + 0x18)) {
+        case 0:
+            if (animGroupBaseAsync(eff_rankup_str_tbl[*(s32*)((s32)gp + 0x16C)], heap, 0) == 0) {
+                return;
+            }
+            *(s32*)((s32)work + 0x14) = animPoseEntry(eff_rankup_str_tbl[*(s32*)((s32)gp + 0x16C)], heap);
+            animPoseSetAnim(*(s32*)((s32)work + 0x14), str_Z_1_80428188, 1);
+            *(s32*)((s32)work + 0x18) += 1;
+            break;
+        case 1:
+            if (animPoseGetLoopTimes(*(s32*)((s32)work + 0x14)) > float_1_8042818c) {
+                animPoseRelease(*(s32*)((s32)work + 0x14));
+                effDelete(effect);
+                return;
+            }
+            break;
+    }
+
+    if (animPoseGetLoopTimes(*(s32*)((s32)work + 0x14)) >= float_0p61538_80428190) {
+        *(s32*)((s32)work + 0x20) -= 0x14;
+        if (*(s32*)((s32)work + 0x20) < 0) {
+            *(s32*)((s32)work + 0x20) = 0;
+        }
+    }
+
+    dispEntry(4, 2, effRankupDisp, dispCalcZ(pos), effect);
 }
+

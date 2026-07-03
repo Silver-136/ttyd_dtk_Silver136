@@ -111,5 +111,89 @@ void* effLaserEntry(s32 type, f32 x, f32 y, f32 z) {
 
 /* stub-fill: effLaserMain | prototype_only | source_prototype */
 void effLaserMain(void* entry) {
-    return;
+    extern void* gp;
+    extern BOOL animGroupBaseAsync(char* name, s32 language, s32 unused);
+    extern s32 animPoseEntry(char* name, s32 language);
+    extern void animPoseSetAnim(s32 poseId, const char* animName, s32 loop);
+    extern void animPoseSetLocalTimeRate(s32 poseId, f32 rate);
+    extern void animPoseRelease(s32 poseId);
+    extern void effDelete(void* entry);
+    extern f32 intplGetValue(s32 type, s32 current, f32 start, f32 end, s32 max);
+    extern BOOL fadeIsFinish(void);
+    extern void fadeEntry(s32 type, s32 time, void* color);
+    extern f32 dispCalcZ(Vec* pos);
+    extern void dispEntry(s32 cameraId, s32 order, void* callback, f32 priority, void* param);
+    extern void effLaserDisp(s32 cameraId, void* entry);
+    extern char str_MOBJ_EFF_laser_80302a6c[];
+    extern const char str_S_1_8042895c[];
+    extern const char str_A_1_80428968[];
+    extern f32 float_0p5_80428960;
+    extern f32 float_500_80428964;
+    extern u32 dat_80428948;
+
+    void* work;
+    Vec pos;
+    s32 language;
+    u32 color;
+
+    work = *(void**)((s32)entry + 0xC);
+    pos.x = *(f32*)((s32)work + 4);
+    pos.y = *(f32*)((s32)work + 8);
+    pos.z = *(f32*)((s32)work + 0xC);
+    language = *(s32*)((s32)gp + 0x14) != 0;
+
+    if (*(u32*)entry & 4) {
+        *(u32*)entry &= ~4;
+        if (*(s32*)((s32)work + 0x20) != -1) {
+            animPoseRelease(*(s32*)((s32)work + 0x20));
+        }
+        effDelete(entry);
+        return;
+    }
+    if (!animGroupBaseAsync(str_MOBJ_EFF_laser_80302a6c, language, 0)) {
+        return;
+    }
+
+    switch (*(s32*)((s32)work + 0x2C)) {
+        case 0:
+            if (*(s32*)((s32)work + 0x20) == -1) {
+                *(s32*)((s32)work + 0x20) = animPoseEntry(str_MOBJ_EFF_laser_80302a6c, language);
+                animPoseSetAnim(*(s32*)((s32)work + 0x20), str_S_1_8042895c, 1);
+                animPoseSetLocalTimeRate(*(s32*)((s32)work + 0x20), float_0p5_80428960);
+            }
+            *(s32*)((s32)work + 0x2C) += 1;
+            break;
+        case 1:
+            *(s32*)((s32)work + 0x28) += 1;
+            *(f32*)((s32)work + 8) = intplGetValue(1, *(s32*)((s32)work + 0x28),
+                                                   float_500_80428964 + *(f32*)((s32)work + 0x14),
+                                                   *(f32*)((s32)work + 0x14), 0x3C);
+            if (*(s32*)((s32)work + 0x28) >= 0x3C) {
+                animPoseSetAnim(*(s32*)((s32)work + 0x20), str_A_1_80428968, 1);
+                animPoseSetLocalTimeRate(*(s32*)((s32)work + 0x20), float_0p5_80428960);
+                *(s32*)((s32)work + 0x2C) += 2;
+            }
+            break;
+        case 2:
+            if (fadeIsFinish()) {
+                color = dat_80428948;
+                fadeEntry(0x10, 0x64, &color);
+                animPoseSetAnim(*(s32*)((s32)work + 0x20), str_A_1_80428968, 1);
+                animPoseSetLocalTimeRate(*(s32*)((s32)work + 0x20), float_0p5_80428960);
+                *(s32*)((s32)work + 0x2C) += 1;
+            }
+            break;
+        case 3:
+            *(s32*)((s32)work + 0x30) -= 1;
+            if (*(s32*)((s32)work + 0x30) < 0) {
+                animPoseRelease(*(s32*)((s32)work + 0x20));
+                effDelete(entry);
+                return;
+            }
+            break;
+    }
+
+    dispCalcZ(&pos);
+    dispEntry(4, 2, effLaserDisp, 0.0f, entry);
 }
+

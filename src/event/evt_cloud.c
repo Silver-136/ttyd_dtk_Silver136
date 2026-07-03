@@ -45,9 +45,59 @@ s32 evt_cloud_main(void* pEvt, int param_2) {
 
 
 s32 evt_cloud_ent(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void* event, s32 value);
+    extern s32 evtEntry(void* script, s32 priority, s32 flags);
+    extern void* evt_cloud_main_evt;
+    extern char str_P_oof_cloud_1_802f73c8[];
+    extern char* strncpy(char* dest, const char* src, unsigned long n);
+    s32* args;
+    s32 indirectName;
+    s32 name;
+    s32 outName;
+    s32 mode;
+    s32 i;
+    u8* entry;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    indirectName = evtGetValue(pEvt, args[0]);
+    name = evtGetValue(pEvt, args[1]);
+    outName = evtGetValue(pEvt, args[2]);
+    mode = evtGetValue(pEvt, args[3]);
+
+    entry = cloud;
+    for (i = 0; i < 0x10; i++, entry += 0xC8) {
+        if ((*(u16*)entry & 1) == 0) {
+            break;
+        }
+    }
+    if (i >= 0x10) {
+        return 2;
+    }
+
+    *(u16*)entry |= 1;
+    strncpy((char*)entry + 8, str_P_oof_cloud_1_802f73c8, 0x20);
+    if (indirectName == 0) {
+        strncpy((char*)entry + 0x68, (char*)name, 0x20);
+    } else {
+        strncpy((char*)entry + 0x68, *(char**)name, 0x20);
+    }
+    strncpy((char*)entry + 0x88, (char*)outName, 0x20);
+    *(s32*)(entry + 0xB4) = mode;
+    *(s32*)(entry + 0xA8) = 0xB4;
+    *(s32*)(entry + 0xAC) = 0;
+    *(s32*)(entry + 4) = 0;
+    *(s32*)(entry + 0xB8) = 0;
+    *(u16*)(entry + 0xC0) = 0;
+    *(u16*)(entry + 0xC2) = 0;
+    *(s32*)(entry + 0xB0) = evtEntry(evt_cloud_main_evt, 0, 0);
+    *(s32*)(*(s32*)(entry + 0xB0) + 0x9C) = (s32)entry;
+    cloud_p = entry;
+    if (indirectName != 0) {
+        *(s32*)(entry + 0xBC) = name;
+        *(u16*)entry |= 2;
+    }
+    return 2;
+}
 
 s32 evt_cloud_init(void) {
     char* iName;

@@ -23,15 +23,158 @@ u8 battle_evt_majo_disp_on(void) {
 }
 
 
-void __makeTechMenuFunc(void* commandWork, s32 param_2) {
-    ;
+void __makeTechMenuFunc(void* commandWork, s32* count) {
+    extern void* _battleWorkPointer;
+    extern void* BattleGetPartyPtr(void* battleWork);
+    extern s32 BattleTransPartyId(s32 id);
+    extern s32 partyGetTechLv(s32 partyId);
+    extern char* msgSearch(char* msg);
+    extern u8 lbl_8038B6B0[];
+    s32 techLv;
+    void* party;
+    u8* entry;
+
+    party = BattleGetPartyPtr(_battleWorkPointer);
+    techLv = partyGetTechLv(BattleTransPartyId(*(s32*)((s32)party + 8)));
+
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(s32*)(entry + 0x90) = -1;
+    *(s32*)(entry + 0x94) = 0;
+    *(void**)(entry + 0x80) = lbl_8038B6B0 + 0x830;
+    *(s32*)(entry + 0x84) = 0;
+    *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+    *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+    *count = *count + 1;
+
+    if (techLv >= 0) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_8038B6B0 + 0x8F0;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
+    if (techLv >= 1) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_8038B6B0 + 0x9B0;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
+    if (techLv >= 2) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_8038B6B0 + 0xA70;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
 }
 
+s32 battle_evt_majo_disp_off(void* evt, s32 isFirstCall) {
+    extern void* _battleWorkPointer;
+    extern s32 evtGetValue(void* evt, s32 arg);
+    extern s32 BattleTransID(void* evt, s32 id);
+    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
+    extern void* BattleGetUnitPartsPtr(s32 unitId, s32 partsId);
+    extern s32 animEffectAsync(char* name, s32 flags);
+    extern f32 intplGetValue(s32 type, f32 start, f32 end, s32 frame, s32 duration);
+    extern void animPoseSetEffect(s32 poseId, char* name, s32 flags);
+    extern void animPoseSetEffectAnim(s32 poseId, char* name, s32 flags);
+    extern void* animPoseGetAnimPosePtr(s32 poseId);
+    extern void animPoseSetLocalTime(void* anim, f32 time);
+    extern f32 animPoseGetLoopTimes(void* anim);
+    extern void psndSFXOn_3D(char* name, void* pos);
+    extern void animPoseSetPaperAnimGroup(s32 poseId, s32 group, s32 flags);
+    extern char str_PTR_D_4_802f84d0[];
+    extern f32 float_0_804241fc;
+    extern f32 float_1_80424204;
+    extern f32 float_2_8042421c;
+    extern f32 float_8_80424220;
+    extern f32 float_500_80424224;
+    s32* args;
+    s32 unitId;
+    s32 partsId;
+    s32 setFlag;
+    s32 partsFlag;
+    void* unit;
+    void* parts;
+    s32 poseId;
 
-s32 battle_evt_majo_disp_off(int param_1, int param_2) {
+    args = *(s32**)((s32)evt + 0x18);
+    unitId = BattleTransID(evt, evtGetValue(evt, args[0]));
+    partsId = evtGetValue(evt, args[1]);
+    setFlag = evtGetValue(evt, args[2]);
+    partsFlag = evtGetValue(evt, args[3]);
+    unit = BattleGetUnitPtr(_battleWorkPointer, unitId);
+    parts = BattleGetUnitPartsPtr(unitId, partsId);
+    poseId = *(s32*)((s32)parts + 0x1C0);
+
+    if (isFirstCall != 0) {
+        *(s32*)((s32)evt + 0x78) = 0;
+        *(s32*)((s32)evt + 0x7C) = 0;
+        animEffectAsync(str_PTR_D_4_802f84d0 + 0x3E8, 1);
+    }
+
+    switch (*(s32*)((s32)evt + 0x78)) {
+        case 0:
+            *(f32*)((s32)parts + 0x78) = intplGetValue(0, float_1_80424204, float_2_8042421c, *(s32*)((s32)evt + 0x7C), 0x1E);
+            if (setFlag != 0) {
+                *(u32*)((s32)unit + 0x1C) |= 0x10000;
+            }
+            *(s32*)((s32)evt + 0x7C) = *(s32*)((s32)evt + 0x7C) + 1;
+            if (*(s32*)((s32)evt + 0x7C) > 0xF) {
+                *(s32*)((s32)evt + 0x78) = *(s32*)((s32)evt + 0x78) + 1;
+            }
+            break;
+        case 1:
+            if (*(s32*)((s32)evt + 0x7C) <= 0x1E) {
+                *(f32*)((s32)parts + 0x78) = intplGetValue(0, float_1_80424204, float_2_8042421c, *(s32*)((s32)evt + 0x7C), 0x1E);
+                *(s32*)((s32)evt + 0x7C) = *(s32*)((s32)evt + 0x7C) + 1;
+            }
+            if (animEffectAsync(str_PTR_D_4_802f84d0 + 0x3E8, 1) == 0) {
+                return 0;
+            }
+            animPoseSetEffect(poseId, str_PTR_D_4_802f84d0 + 0x3E8, 1);
+            animPoseSetEffectAnim(poseId, str_PTR_D_4_802f84d0 + 0x3F0, 1);
+            animPoseSetLocalTime(*(void**)((s32)animPoseGetAnimPosePtr(poseId) + 0x90), float_8_80424220);
+            *(s32*)((s32)evt + 0x78) = *(s32*)((s32)evt + 0x78) + 1;
+            break;
+        case 2:
+            if (*(s32*)((s32)evt + 0x7C) <= 0x1E) {
+                *(f32*)((s32)parts + 0x78) = intplGetValue(0, float_1_80424204, float_2_8042421c, *(s32*)((s32)evt + 0x7C), 0x1E);
+                *(s32*)((s32)evt + 0x7C) = *(s32*)((s32)evt + 0x7C) + 1;
+            }
+            if (animPoseGetLoopTimes(*(void**)((s32)animPoseGetAnimPosePtr(poseId) + 0x90)) >= float_1_80424204) {
+                *(s32*)((s32)evt + 0x78) = *(s32*)((s32)evt + 0x78) + 1;
+                *(s32*)((s32)evt + 0x7C) = 0;
+                psndSFXOn_3D(str_PTR_D_4_802f84d0 + 0x3F8, (void*)((s32)unit + 0x3C));
+                if (partsFlag != 0) {
+                    *(u32*)((s32)parts + 0x1AC) |= 0x1000000;
+                }
+            }
+            break;
+        case 3:
+            *(f32*)((s32)parts + 0x78) = intplGetValue(0, float_2_8042421c, float_0_804241fc, *(s32*)((s32)evt + 0x7C), 0x14);
+            *(s32*)((s32)evt + 0x7C) = *(s32*)((s32)evt + 0x7C) + 1;
+            if (*(s32*)((s32)evt + 0x7C) > 0x14) {
+                *(f32*)((s32)parts + 0x78) = float_0_804241fc;
+                *(f32*)((s32)unit + 0x40) -= float_500_80424224;
+                animPoseSetEffect(poseId, 0, 1);
+                animPoseSetPaperAnimGroup(poseId, 0, 1);
+                return 2;
+            }
+            break;
+    }
     return 0;
 }
-
 
 void _disp_heart(s32 unused, void* work) {
     extern void* _battleWorkPointer;
@@ -214,6 +357,63 @@ s32 _vivian_make_extra_work_area(void* evt) {
 /* CHATGPT FALLBACK MISSING STUBS: main/unit/party/unit_party_vivian 20260624_191429 */
 
 /* fallback stub-fill: map=unk_80182cc4 addr=0x80182cc4 size=0x00000260 */
-int unk_80182cc4() {
-    return 0;
+int unk_80182cc4(void* evt) {
+    extern void* _battleWorkPointer;
+    extern s32 evtGetValue(void* evt, s32 arg);
+    extern s32 BattleTransID(void* evt, s32 id);
+    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
+    extern void BtlUnit_GetScale(void* unit, f32* x, f32* y, f32* z);
+    extern f32 BattleGetFloorHeight(void* battleWork, f32 x, f32 y, f32 z);
+    extern void evtSetValue(void* evt, s32 arg, s32 value);
+    extern f32 float_neg30_80424214;
+    extern f32 float_20_80424218;
+    s32* args;
+    void* battleWork;
+    s32 targetId;
+    s32 outX;
+    s32 outY;
+    s32 outZ;
+    s32 addZ;
+    void* owner;
+    void* target;
+    f32 sx;
+    f32 sy;
+    f32 sz;
+    s32 x;
+    s32 y;
+    s32 z;
+    f32 floor;
+    s8 targetDir;
+    s8 ownerDir;
+    f32 ownerScale;
+    void* parts;
+
+    args = *(s32**)((s32)evt + 0x18);
+    battleWork = _battleWorkPointer;
+    targetId = evtGetValue(evt, args[0]);
+    outX = args[1];
+    evtGetValue(evt, outX);
+    outY = args[2];
+    evtGetValue(evt, outY);
+    outZ = args[3];
+    addZ = evtGetValue(evt, outZ);
+    owner = BattleGetUnitPtr(battleWork, BattleTransID(evt, -2));
+    target = BattleGetUnitPtr(battleWork, BattleTransID(evt, targetId));
+    BtlUnit_GetScale(target, &sx, &sy, &sz);
+    targetDir = *(s8*)((s32)target + 0x189);
+    parts = *(void**)((s32)target + 0x10);
+    ownerDir = *(s8*)((s32)owner + 0x189);
+    ownerScale = *(f32*)((s32)owner + 0x114);
+    x = (s32)((f32)ownerDir * (float_neg30_80424214 * ownerScale) + (f32)targetDir * (*(f32*)((s32)parts + 0x54) * sx));
+    y = (s32)(-float_20_80424218 * ownerScale);
+    z = addZ + (s32)(*(f32*)((s32)parts + 0x58) * sz);
+    floor = BattleGetFloorHeight(battleWork, (f32)x, (f32)y, (f32)z);
+    if (floor > (f32)y) {
+        y = (s32)floor;
+    }
+    evtSetValue(evt, outX, x);
+    evtSetValue(evt, outY, y);
+    evtSetValue(evt, outZ, z);
+    return 2;
 }
+

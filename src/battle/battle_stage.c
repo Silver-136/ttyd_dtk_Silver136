@@ -219,9 +219,78 @@ void BattleStageDispLight(void) {
 
 
 void BattleStageDispDark(void) {
-    ;
-}
+    extern void* camGetPtr(s32 cameraId);
+    extern void DarkBySquare(s32 alpha, f32 x0, f32 y0, f32 x1, f32 y1, f32 z);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+    extern void GXSetNumChans(s32 nChans);
+    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
+    extern void GXSetNumTexGens(s32 nTexGens);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void GXSetNumTevStages(s32 nStages);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 color);
+    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
+    extern f32 float_neg640_80422b28;
+    extern f32 float_640_80422b2c;
+    extern f32 float_105_80422b30;
+    void* cam;
+    void* battleHi;
+    void* dark;
 
+    battleHi = (void*)((s32)_battleWorkPointer + 0x10000);
+    cam = camGetPtr(4);
+    GXSetCullMode(2);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetBlendMode(1, 4, 5, 5);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xB, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xB, 1, 5, 0);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 1, 1, 0, 2, 2);
+    GXSetNumTexGens(0);
+    GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
+    GXSetNumTevStages(1);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xA);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaIn(0, 7, 7, 7, 5);
+    GXSetTevOrder(0, 0xFF, 0xFF, 4);
+
+    dark = (void*)((s32)battleHi + 0x6F00);
+    GXSetZMode(1, 6, 0);
+    DarkBySquare(*(u8*)((s32)dark + 4),
+                 float_neg640_80422b28,
+                 float_neg640_80422b28,
+                 float_640_80422b2c,
+                 float_640_80422b2c,
+                 float_105_80422b30);
+    GXSetZMode(1, 1, 0);
+    DarkBySquare(*(u8*)((s32)dark + 4),
+                 float_640_80422b2c,
+                 float_640_80422b2c,
+                 float_neg640_80422b28,
+                 float_neg640_80422b28,
+                 float_105_80422b30);
+    GXSetZMode(1, 1, 0);
+    DarkBySquare(*(u8*)((s32)battleHi + 0x6EE4),
+                 float_neg640_80422b28,
+                 float_neg640_80422b28,
+                 float_640_80422b2c,
+                 float_640_80422b2c,
+                 float_105_80422b30);
+}
 
 void* batSpotEntry(void) {
     void* work = wp;
@@ -595,11 +664,159 @@ u8 batSpotMain(void) {
 
 
 u8 batSpotDisp(s32 cameraId) {
+    extern void* wp;
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+    extern void GXSetNumTexGens(s32 nTexGens);
+    extern void GXSetNumTevStages(s32 nStages);
+    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 color);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+    extern void GXSetNumChans(s32 nChans);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXSetAlphaUpdate(s32 update);
+    extern void GXSetColorUpdate(s32 update);
+    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
+    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
+    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
+    extern void GXSetChanMatColor(s32 chan, void* color);
+    extern u8 drawCone(s32 cameraId, void* spot);
+    extern u32 unk_804295d0;
+    void* spot;
+    s32 i;
+    u32 color;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xB, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xB, 1, 5, 0);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0xFF, 0xFF, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xA);
+    GXSetTevAlphaIn(0, 7, 7, 7, 5);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetNumChans(1);
+
+    spot = *(void**)((s32)wp + 4);
+    for (i = 0; i < *(s32*)wp; i++, spot = (void*)((s32)spot + 0x2C)) {
+        if (((*(u16*)spot & 1) != 0) && ((*(u16*)spot & 2) != 0)) {
+            GXSetCullMode(2);
+            GXSetAlphaUpdate(1);
+            GXSetColorUpdate(0);
+            GXSetZMode(1, 3, 0);
+            GXSetBlendMode(0, 4, 5, 0);
+            GXSetChanCtrl(4, 0, 0, 1, 0, 2, 2);
+            drawCone(cameraId, spot);
+
+            GXSetCullMode(1);
+            GXSetAlphaUpdate(1);
+            GXSetColorUpdate(0);
+            GXSetZMode(1, 3, 0);
+            GXSetBlendMode(0, 4, 5, 0);
+            GXSetChanCtrl(4, 0, 0, 0, 0, 2, 2);
+            color = unk_804295d0;
+            GXSetChanMatColor(4, &color);
+            drawCone(cameraId, spot);
+
+            GXSetCullMode(2);
+            GXSetAlphaUpdate(0);
+            GXSetColorUpdate(1);
+            GXSetZMode(1, 3, 0);
+            GXSetBlendMode(1, 6, 7, 0);
+            GXSetChanCtrl(4, 0, 0, 0, 0, 2, 2);
+            color = *(u32*)((s32)spot + 0x28);
+            GXSetChanMatColor(4, &color);
+            drawCone(cameraId, spot);
+        }
+    }
     return 0;
 }
 
+u8 drawCone(s32 cameraId, void* spot) {
+    typedef f32 MtxLocal[3][4];
+    extern void* camGetPtr(s32 cameraId);
+    extern void PSMTXTrans(void* m, f32 x, f32 y, f32 z);
+    extern void PSMTXScale(void* m, f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(void* m, s32 axis, f32 rad);
+    extern void PSMTXConcat(void* a, void* b, void* out);
+    extern void GXLoadPosMtxImm(void* m, s32 id);
+    extern void GXSetCurrentMtx(s32 id);
+    extern void GXBegin(s32 primitive, s32 vtxfmt, s32 nverts);
+    extern double sin(double x);
+    extern double cos(double x);
+    extern f32 float_deg2rad_80422b08;
+    extern f32 float_0_80422ad8;
+    extern f32 float_neg1_80422b00;
+    extern f32 float_6p2832_80422b0c;
+    extern f32 float_30_80422b10;
+    MtxLocal trans;
+    MtxLocal scale;
+    MtxLocal rx;
+    MtxLocal ry;
+    MtxLocal rz;
+    MtxLocal rot;
+    MtxLocal mtx;
+    void* cam;
+    volatile f32* fifoF;
+    volatile u8* fifoB;
+    s32 i;
+    f32 rad;
+    f32 s;
+    f32 c;
+    u8 alpha;
 
-u8 drawCone(s32 param_1, void* param_2) {
+    cam = camGetPtr(cameraId);
+    PSMTXTrans(trans, *(f32*)((s32)spot + 0x4), *(f32*)((s32)spot + 0x8), *(f32*)((s32)spot + 0xC));
+    PSMTXScale(scale, *(f32*)((s32)spot + 0x1C), *(f32*)((s32)spot + 0x20), *(f32*)((s32)spot + 0x24));
+    PSMTXRotRad(rx, 'x', float_deg2rad_80422b08 * *(f32*)((s32)spot + 0x10));
+    PSMTXRotRad(ry, 'y', float_deg2rad_80422b08 * *(f32*)((s32)spot + 0x14));
+    PSMTXRotRad(rz, 'z', float_deg2rad_80422b08 * *(f32*)((s32)spot + 0x18));
+    PSMTXConcat(rz, ry, ry);
+    PSMTXConcat(ry, rx, rot);
+    PSMTXConcat((void*)((s32)cam + 0x11C), trans, trans);
+    PSMTXConcat(trans, rot, rot);
+    PSMTXConcat(rot, scale, rot);
+    GXLoadPosMtxImm(rot, 0);
+    GXSetCurrentMtx(0);
+    GXBegin(0xA0, 0, 0x20);
+
+    fifoF = (volatile f32*)0xCC008000;
+    fifoB = (volatile u8*)0xCC008000;
+    alpha = *(u8*)((s32)spot + 0x2B);
+    *fifoF = float_0_80422ad8;
+    *fifoF = float_0_80422ad8;
+    *fifoF = float_0_80422ad8;
+    *fifoB = 0;
+    *fifoB = 0;
+    *fifoB = 0;
+    *fifoB = alpha;
+
+    for (i = 0; i < 31; i++) {
+        if (i == 30) {
+            rad = float_0_80422ad8;
+        } else {
+            rad = (float_6p2832_80422b0c * (f32)-i) / float_30_80422b10;
+        }
+        s = (f32)sin(rad);
+        c = (f32)cos(rad);
+        *fifoF = c;
+        *fifoF = s;
+        *fifoF = float_neg1_80422b00;
+        *fifoB = 0;
+        *fifoB = 0;
+        *fifoB = 0;
+        *fifoB = alpha / 3;
+    }
     return 0;
 }
 

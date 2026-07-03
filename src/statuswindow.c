@@ -103,15 +103,142 @@ u8 valueUpdate(void) {
 }
 
 
-u8 gaugeDisp(void) {
+u8 gaugeDisp(s32 value, f32 x, f32 y) {
+    typedef struct LocalVec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } LocalVec3;
+    extern void* pouchGetPtr(void);
+    extern void iconDispGx(LocalVec3* pos, s32 size, s32 iconId, f32 scale);
+    extern u16 gauge_wakka[];
+    extern u16 gauge_back[];
+    extern f32 float_0_80422be8;
+    extern f32 float_1_80422bf4;
+    extern f32 float_12_80422c58;
+    s32 max;
+    s32 i;
+    s32 enabled;
+    s32 full;
+    s32 rest;
+    s32 fill;
+    LocalVec3 pos;
+
+    max = 0;
+    for (i = 0; i < 8; i++) {
+        if ((*(u16*)((s32)pouchGetPtr() + 0x8C) & (1 << i)) != 0) {
+            max += 100;
+        }
+    }
+    if (value > max) {
+        value = max;
+    }
+    if (value < 0) {
+        value = 0;
+    }
+
+    full = value / 100;
+    rest = value % 100;
+    fill = (rest * 15) / 100;
+    if (rest != 0 && value != 0 && fill == 0) {
+        fill = 1;
+    }
+
+    if (fill != 0) {
+        pos.x = x + (f32)(full << 5);
+        pos.y = y;
+        pos.z = float_0_80422be8;
+        iconDispGx(&pos, 0x10, gauge_wakka[fill], float_1_80422bf4);
+    }
+
+    y += float_12_80422c58;
+    for (i = 0; i < 8; i++) {
+        if ((*(u16*)((s32)pouchGetPtr() + 0x8C) & (1 << i)) != 0) {
+            pos.x = x + (f32)(i << 5);
+            pos.y = y;
+            pos.z = float_0_80422be8;
+            if (i < full) {
+                enabled = gauge_back[i];
+            } else {
+                enabled = 0x1C7;
+            }
+            iconDispGx(&pos, 0x10, enabled, float_1_80422bf4);
+        }
+    }
     return 0;
 }
-
 
 s32 valueCheck(void) {
-    return 0;
-}
+    extern void* gp;
+    s16 values[12];
+    void* work;
+    s32 changed;
+    s32 value;
 
+    changed = 0;
+    statusGetValue(values);
+
+    work = wp;
+    if (*(s16*)((s32)work + 0x50) != values[0]) {
+        *(u32*)((s32)work + 0x84) |= 1;
+        changed = 1;
+    }
+
+    work = wp;
+    if (*(s16*)((s32)work + 0x52) != values[1]) {
+        changed = 1;
+    }
+    if (*(s16*)((s32)work + 0x54) != values[2]) {
+        *(u32*)((s32)work + 0x84) |= 2;
+        changed = 1;
+    }
+
+    work = wp;
+    if (*(s16*)((s32)work + 0x56) != values[3]) {
+        changed = 1;
+    }
+    if (*(s16*)((s32)work + 0x62) != values[9]) {
+        changed = 1;
+    }
+    if (*(s16*)((s32)work + 0x64) != values[10]) {
+        changed = 1;
+    }
+
+    if (*(s16*)((s32)work + 0x58) != values[4]) {
+        *(s16*)((s32)work + 0x58) = values[4];
+    } else if (*(s16*)((s32)work + 0x58) != 0) {
+        if (*(s16*)((s32)work + 0x5A) != values[5]) {
+            *(u32*)((s32)work + 0x84) |= 8;
+            changed = 1;
+        }
+        if (*(s16*)((s32)wp + 0x5C) != values[6]) {
+            changed = 1;
+        }
+    }
+
+    work = wp;
+    if (*(s16*)((s32)work + 0x5E) != values[7]) {
+        changed = 1;
+    }
+    if (*(s16*)((s32)work + 0x60) != values[8]) {
+        *(u32*)((s32)work + 0x84) |= 0x10;
+        changed = 1;
+    }
+
+    if (changed == 0) {
+        work = wp;
+        value = *(s32*)((s32)work + 0x84);
+        if (value != 0) {
+            *(s32*)((s32)work + 0x80) = value;
+            *(s32*)((s32)wp + 0x84) = 0;
+            *(s32*)((s32)wp + 0x88) = *(s32*)((s32)gp + 4) << 1;
+        }
+    } else {
+        *(s32*)((s32)wp + 0x80) = 0;
+    }
+
+    return changed;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

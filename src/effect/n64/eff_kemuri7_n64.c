@@ -40,10 +40,64 @@ u8 effKemuri7Disp(int param_1, void* effEntry) {
 }
 
 
-u8 effKemuri7N64Entry(void) {
-    return 0;
-}
+void* effKemuri7N64Entry(f32 x, f32 y, f32 z, f32 angle, f32 scale) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, s32 size);
+    extern void effKemuri7Main(void*);
+    extern f32 reviseAngle(f32);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern char str_Kemuri7N64_802fb28c[];
+    extern f32 float_0_80425768;
+    extern f32 float_1_80425770;
+    extern f32 float_30_80425778;
+    extern f32 float_15_8042577c;
+    extern f32 float_180_80425780;
+    extern f32 float_6p2832_80425784;
+    extern f32 float_360_80425788;
+    extern f32 float_45_8042578c;
+    extern f32 float_5_80425790;
+    void* entry;
+    u8* work;
+    f32 revised;
+    f32 rad;
+    f32 adjusted;
 
+    entry = effEntry();
+    *(char**)((s32)entry + 0x14) = str_Kemuri7N64_802fb28c;
+    *(s32*)((s32)entry + 8) = 1;
+    work = __memAlloc(3, 0x88);
+    *(u8**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effKemuri7Main;
+    *(s32*)work = 1;
+    *(f32*)(work + 0x6C) = float_0_80425768;
+    *(f32*)(work + 0xC) = x;
+    *(f32*)(work + 0x10) = y;
+    *(f32*)(work + 0x14) = z;
+    *(f32*)(work + 0x18) = float_1_80425770;
+    *(f32*)(work + 0x1C) = float_1_80425770;
+    *(f32*)(work + 0x20) = float_1_80425770;
+    *(u8*)(work + 8) = 0xFF;
+    *(f32*)(work + 0x60) = scale;
+    *(f32*)(work + 0x70) = float_0_80425768;
+    *(f32*)(work + 0x74) = float_0_80425768;
+    *(s16*)(work + 6) = 0xFF;
+    *(f32*)(work + 0x24) = float_0_80425768;
+    *(f32*)(work + 0x28) = angle + (float_30_80425778 * scale) - float_15_8042577c;
+    *(f32*)(work + 0x2C) = float_0_80425768;
+
+    revised = reviseAngle(angle);
+    rad = (float_6p2832_80425784 * revised) / float_360_80425788;
+    *(f32*)(work + 0x80) = (f32)sin(rad);
+    *(f32*)(work + 0x84) = (f32)cos(rad);
+
+    adjusted = float_45_8042578c + revised - (float_180_80425780 * scale);
+    rad = (float_6p2832_80425784 * adjusted) / float_360_80425788;
+    *(f32*)(work + 0xC) += float_5_80425790 * (f32)sin(rad);
+    *(f32*)(work + 0x14) += float_5_80425790 * (f32)cos(rad);
+    *(u8*)(work + 8) = 0xFF;
+    return entry;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

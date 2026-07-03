@@ -36,10 +36,48 @@ u8 effCoinDisp(void) {
 }
 
 
-u8 effCoinN64Entry(void) {
-    return 0;
-}
+void* effCoinN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, s32 size);
+    extern void effCoinMain(void*);
+    extern char str_CoinN64_802fad58[];
+    extern s32 _data[];
+    extern f32 float_0p01_80424f64;
+    void* entry;
+    u8* work;
+    u8* sub;
+    s32 i;
+    s32* data;
 
+    entry = effEntry();
+    *(char**)((s32)entry + 0x14) = str_CoinN64_802fad58;
+    *(s32*)((s32)entry + 8) = 5;
+    work = __memAlloc(3, 0xB4);
+    *(void**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effCoinMain;
+
+    *(s32*)work = type;
+    *(s32*)(work + 0x18) = 0;
+    *(s32*)(work + 0x14) = 0xE;
+    *(f32*)(work + 8) = x;
+    *(f32*)(work + 0xC) = y;
+    *(f32*)(work + 0x10) = z;
+
+    sub = work + 0x24;
+    data = _data;
+    for (i = 1; i < 5; i++) {
+        *(f32*)(sub + 8) = (f32)data[1];
+        *(f32*)(sub + 0xC) = (f32)data[2];
+        *(f32*)(sub + 0x10) = (f32)data[3];
+        *(s32*)(sub + 4) = -1;
+        *(s32*)(sub + 0x20) = data[0];
+        *(f32*)(sub + 0x1C) = scale * (f32)data[4] * float_0p01_80424f64;
+        data += 5;
+        sub += 0x24;
+    }
+
+    return entry;
+}
 
 void effCoinMain(void* effect) {
     Vec3 dispPos;

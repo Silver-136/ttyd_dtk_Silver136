@@ -549,20 +549,145 @@ void evtDelete(void* evt) {
     }
 }
 
-void* evtRestart(void* pEvt) {
-    return 0;
+void* evtRestart(void* entry) {
+    extern f32 evtSpd;
+    extern void* evtEntryRunCheck(void);
+    unsigned int* ip;
+    unsigned int cmd;
+    s32 opcode;
+    s32 count;
+    s32 i;
+    void* slotBase;
+    float zero;
+
+    zero = 0.0f;
+    ip = *(unsigned int**)((s32)entry + 0x1A0);
+    *(unsigned int**)((s32)entry + 0x14) = ip;
+    *(unsigned int**)((s32)entry + 0x1A8) = ip;
+    *(u8*)((s32)entry + 0xA) = 0;
+    *(f32*)((s32)entry + 0x164) = 1.0f;
+    *(f32*)((s32)entry + 0x168) = zero;
+    *(s8*)((s32)entry + 0xE) = -1;
+    *(s8*)((s32)entry + 0xF) = -1;
+    *(f32*)((s32)entry + 0x164) = evtSpd;
+    *(f32*)((s32)entry + 0x168) = zero;
+    *(s32*)((s32)entry + 4) = 0;
+    *(s32*)entry = 0;
+
+    slotBase = entry;
+    for (i = 0; i < 0x10; i++) {
+        *(s8*)((s32)entry + 0x1C + i) = -1;
+        *(void**)((s32)slotBase + 0x2C) = 0;
+        slotBase = (void*)((s32)slotBase + 4);
+    }
+
+    ip = *(unsigned int**)((s32)entry + 0x14);
+    slotBase = entry;
+    count = 0;
+    while (1) {
+        cmd = *ip++;
+        opcode = cmd & 0xFFFF;
+        ip += (s32)cmd >> 0x10;
+        if (opcode == 1) {
+            break;
+        }
+        if (opcode >= 2 && opcode < 4) {
+            *(s8*)((s32)entry + 0x1C + count) = *(s8*)ip;
+            *(unsigned int**)((s32)slotBase + 0x2C) = ip;
+            slotBase = (void*)((s32)slotBase + 4);
+            count++;
+        }
+        if (count >= 0x10) {
+            continue;
+        }
+    }
+    evtEntryRunCheck();
+    return entry;
 }
 
+void make_pri_table(void) {
+    extern unsigned char work[];
+    extern void* gp;
+    extern s32 priTblNum;
+    extern s32 priTbl[];
+    extern s32 priTblIndex[];
+    void* set;
+    void* entry;
+    s32 count;
+    s32 i;
+    s32 j;
 
-u8 make_pri_table(void) {
-    return 0;
+    set = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = work + 0xA0;
+    }
+
+    entry = *(void**)((s32)set + 0x90);
+    count = 0;
+    for (i = 0; i < *(s32*)set; i++) {
+        if ((*(u8*)((s32)entry + 8) & 1) != 0) {
+            priTblIndex[count] = i;
+            priTbl[count] = *(s32*)((s32)entry + 0x15C);
+            count++;
+        }
+        entry = (void*)((s32)entry + 0x1B0);
+    }
+    priTblNum = count;
+
+    for (i = 0; i < count - 1; i++) {
+        for (j = i + 1; j < count; j++) {
+            s32 idxA = priTblIndex[i];
+            s32 idxB = priTblIndex[j];
+            void* base = *(void**)((s32)set + 0x90);
+            if (*(u8*)((s32)base + idxA * 0x1B0 + 0xB) < *(u8*)((s32)base + idxB * 0x1B0 + 0xB)) {
+                s32 idA = priTbl[i];
+                s32 idB = priTbl[j];
+                priTblIndex[i] = idxB;
+                priTbl[j] = idA;
+                priTblIndex[j] = idxA;
+                priTbl[i] = idB;
+            }
+        }
+    }
 }
 
+void evtmgrInit(void) {
+    extern unsigned char work[];
+    extern void* gp;
+    extern s32 evtMax;
+    extern s32 priTblNum;
+    extern s32 runMainF;
+    extern void* __memAlloc(s32, u32);
+    extern void* memset(void*, int, u32);
+    extern void evt_msg_init(void);
+    void* ptr;
+    void* gpPtr;
 
-u8 evtmgrInit(void) {
-    return 0;
+    *(s32*)work = 0x100;
+    ptr = __memAlloc(0, 0x100 * 0x1B0);
+    *(void**)(work + 0x90) = ptr;
+    gpPtr = gp;
+    *(s32*)(work + 0x9C) = *(s32*)((s32)gpPtr + 0x3C);
+    *(s32*)(work + 0x98) = *(s32*)((s32)gpPtr + 0x38);
+    memset(ptr, 0, *(s32*)work * 0x1B0);
+    memset(work + 4, 0, 0x80);
+    memset(work + 0x84, 0, 0xC);
+
+    *(s32*)(work + 0xA0) = 0x100;
+    ptr = __memAlloc(0, 0x100 * 0x1B0);
+    *(void**)(work + 0x130) = ptr;
+    gpPtr = gp;
+    *(s32*)(work + 0x13C) = *(s32*)((s32)gpPtr + 0x3C);
+    *(s32*)(work + 0x138) = *(s32*)((s32)gpPtr + 0x38);
+    memset(ptr, 0, *(s32*)(work + 0xA0) * 0x1B0);
+    memset(work + 0xA4, 0, 0x80);
+    memset(work + 0x124, 0, 0xC);
+
+    evtMax = 0;
+    priTblNum = 0;
+    runMainF = 0;
+    evt_msg_init();
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

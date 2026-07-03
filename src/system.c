@@ -1130,18 +1130,15 @@ f32 distABf(f32 ax, f32 ay, f32 bx, f32 by) {
 }
 
 void memcpy_as4(void* dst, void* src, u32 size) {
-    u32 count;
-    u32* d;
-    u32* s;
-
-    d = (u32*)dst - 1;
-    s = (u32*)src - 1;
-    count = size >> 2;
-
-    while (count != 0) {
-        *++d = *++s;
-        count--;
-    }
+    dst = (void*)((s32)dst - 4);
+    src = (void*)((s32)src - 4);
+    size >>= 2;
+    do {
+        dst = (void*)((s32)dst + 4);
+        src = (void*)((s32)src + 4);
+        *(u32*)dst = *(u32*)src;
+        size--;
+    } while (size != 0);
 }
 
 f32 sysMsec2FrameFloat(f32 msec) {

@@ -202,11 +202,167 @@ void effLevelupDisp(s32 cameraId, void* effect) {
 /* CHATGPT STUB FILL: main/effect/eff_levelup 20260624_184823 */
 
 /* stub-fill: effLevelupMain | missing_definition | ghidra_signature */
-u8 effLevelupMain(int* param_1) {
-    return 0;
+void effLevelupMain(void* effect) {
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+
+    extern s32 evtEntry(void* evt, s32 flags, s32 prio);
+    extern void psndSFXOn(s32 soundId);
+    extern f32 intplGetValue(s32 type, f32 start, f32 end, s32 frame, s32 maxFrame);
+    extern f32 dispCalcZ(VecLocal* pos);
+    extern void dispEntry(s32 cameraId, s32 layer, void* dispFunc, void* data, f32 z);
+    extern void effDelete(void* effect);
+    extern void effLevelupDisp(s32 cameraId, void* effect);
+    extern VecLocal vec3_802feef8;
+    extern s16 y_trans[];
+    extern u8 y_scale[];
+    extern void* evt_shake;
+    extern f32 float_0_804275e8;
+    extern f32 float_100_804275ec;
+    extern f32 float_400_804275f0;
+    extern f32 float_neg400_804275f4;
+
+    void* base = *(void**)((s32)effect + 0xC);
+    void* work = (void*)((s32)base + 0x24);
+    VecLocal pos = vec3_802feef8;
+    s32 done = 0;
+    s32 i;
+
+    pos.x = *(f32*)((s32)base + 4);
+    pos.y = *(f32*)((s32)base + 8);
+    pos.z = *(f32*)((s32)base + 0xC);
+
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, work = (void*)((s32)work + 0x24)) {
+        switch (*(s32*)((s32)work + 0x18)) {
+            case 0:
+                *(s32*)((s32)work + 0x14) += 1;
+                if (*(u32*)((s32)work + 0x14) < 0x2EU) {
+                    *(f32*)((s32)work + 8) = (f32)(u16)y_trans[*(s32*)((s32)work + 0x14)];
+                    if (i == 1 && *(f32*)((s32)work + 8) == float_0_804275e8) {
+                        evtEntry(evt_shake, 0, 0);
+                        psndSFXOn(0xA57);
+                    }
+                } else {
+                    *(s32*)((s32)work + 0x18) += 1;
+                    *(s32*)((s32)work + 0x14) = 0;
+                }
+                break;
+            case 1:
+                *(s32*)((s32)work + 0x14) += 1;
+                if (*(u32*)((s32)work + 0x14) < 0x13U) {
+                    if (i > 2) {
+                        *(f32*)((s32)work + 0x20) =
+                            (f32)y_scale[*(s32*)((s32)work + 0x14)] / float_100_804275ec;
+                    }
+                } else {
+                    *(s32*)((s32)work + 0x18) += 1;
+                    *(s32*)((s32)work + 0x14) = 0;
+                }
+                break;
+            case 2:
+                *(s32*)((s32)work + 0x14) += 1;
+                if (*(s32*)((s32)work + 0x14) > *(s32*)((s32)base + 0x14)) {
+                    *(s32*)((s32)work + 0x14) = 0;
+                    *(s32*)((s32)work + 0x18) += 1;
+                }
+                break;
+            case 3:
+                if (i < 2) {
+                    *(f32*)((s32)work + 0x10) = intplGetValue(1, float_0_804275e8, float_400_804275f0,
+                                                               *(s32*)((s32)work + 0x14), 0x1E);
+                } else {
+                    *(f32*)((s32)work + 0x10) = intplGetValue(1, float_0_804275e8, float_neg400_804275f4,
+                                                               *(s32*)((s32)work + 0x14), 0x1E);
+                }
+                *(s32*)((s32)work + 0x14) += 1;
+                if (*(s32*)((s32)work + 0x14) > 0x1E) {
+                    *(s32*)((s32)work + 0x18) += 1;
+                    *(s32*)((s32)work + 0x14) = 0;
+                }
+                break;
+            case 4:
+                done++;
+                break;
+        }
+    }
+
+    if (done >= *(s32*)((s32)effect + 8) - 1) {
+        effDelete(effect);
+    } else {
+        dispEntry(8, 2, effLevelupDisp, effect, dispCalcZ(&pos));
+    }
 }
 
 /* stub-fill: effLevelupEntry | missing_definition | ghidra_signature */
-u8 effLevelupEntry(void) {
-    return 0;
+void* effLevelupEntry(s32 type, f32 x, f32 y, f32 z, s32 wait) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void effGetTexObj(s32 texId, void* texObj);
+    extern u32 GXGetTexObjWidth(void* texObj);
+    extern void effLevelupMain(void* effect);
+    extern void* gp;
+    extern s32 texid_tbl[];
+    extern s16 y_trans[];
+    extern const char str_Levelup_802fef18[];
+    extern f32 float_0p5_804275e4;
+    extern f32 float_0p9_804275e0;
+    extern f32 float_1_804275dc;
+    extern f32 float_0_804275e8;
+
+    void* effect = effEntry();
+    void* work;
+    void* item;
+    u8 texObj[0x20];
+    s32 i;
+    s32 j;
+    s32 lang;
+    f32 scale;
+    f32 left;
+    f32 total;
+
+    *(const char**)((s32)effect + 0x14) = str_Levelup_802fef18;
+    *(s32*)((s32)effect + 8) = 4;
+    work = __memAlloc(3, *(s32*)((s32)effect + 8) * 0x24);
+    *(void**)((s32)effect + 0xC) = work;
+    *(void**)((s32)effect + 0x10) = effLevelupMain;
+
+    *(s32*)work = type;
+    *(f32*)((s32)work + 4) = x;
+    *(f32*)((s32)work + 8) = y;
+    *(f32*)((s32)work + 0xC) = z;
+    *(s32*)((s32)work + 0x14) = wait;
+    *(s32*)((s32)work + 0x18) = 0;
+
+    item = (void*)((s32)work + 0x24);
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, item = (void*)((s32)item + 0x24)) {
+        lang = *(s32*)((s32)gp + 0x16C);
+        scale = (lang == 3) ? float_0p9_804275e0 : float_1_804275dc;
+        left = float_0_804275e8;
+        for (j = 0; j < i - 1; j++) {
+            effGetTexObj(*(s32*)((s32)texid_tbl + (lang * 0x18) + (j * 4)), texObj);
+            left += scale * (f32)(GXGetTexObjWidth(texObj) & 0xFFFF);
+        }
+        effGetTexObj(*(s32*)((s32)texid_tbl + (lang * 0x18) + (j * 4)), texObj);
+        left += scale * ((f32)(GXGetTexObjWidth(texObj) & 0xFFFF) * float_0p5_804275e4);
+
+        total = float_0_804275e8;
+        for (j = 0; j < 3; j++) {
+            effGetTexObj(*(s32*)((s32)texid_tbl + (lang * 0x18) + (j * 4)), texObj);
+            total += scale * ((f32)(GXGetTexObjWidth(texObj) & 0xFFFF) * float_0p5_804275e4);
+        }
+
+        *(f32*)((s32)item + 4) = left - total;
+        *(f32*)((s32)item + 8) = (f32)(u16)y_trans[0];
+        *(f32*)((s32)item + 0xC) = float_0_804275e8;
+        *(f32*)((s32)item + 0x10) = float_0_804275e8;
+        *(s32*)((s32)item + 0x18) = 0;
+        *(f32*)((s32)item + 0x1C) = float_1_804275dc;
+        *(f32*)((s32)item + 0x20) = (i < 3) ? float_1_804275dc : float_0_804275e8;
+    }
+
+    return effect;
 }
+

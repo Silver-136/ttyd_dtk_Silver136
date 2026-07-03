@@ -28,10 +28,56 @@ u8 effStoneSmokeDisp(void) {
 }
 
 
-u8 effStoneSmokeMain(u32* param_1) {
-    return 0;
-}
+void effStoneSmokeMain(void* effect) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(Vec3*);
+    extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
+    extern void effStoneSmokeDisp(void);
+    extern const Vec3 vec3_802fc0c8;
+    extern f32 float_0p6_804262d8;
+    extern f32 float_0p01_804262dc;
+    extern u8 scale_data[];
+    extern u8 scale_data2[];
+    u8* work;
+    Vec3 pos;
+    Vec3 dispPos;
+    s32 frame;
 
+    work = *(u8**)((s32)effect + 0xC);
+    pos = vec3_802fc0c8;
+    pos.x = *(f32*)(work + 4);
+    pos.y = *(f32*)(work + 8);
+    pos.z = *(f32*)(work + 0xC);
+    dispPos = pos;
+    if (*(s32*)effect & 4) {
+        *(s32*)effect &= ~4;
+        *(s32*)(work + 0x10) = 0x10;
+    }
+    if (*(s32*)(work + 0x10) < 1000) {
+        *(s32*)(work + 0x10) -= 1;
+    }
+    *(s32*)(work + 0x14) += 1;
+    if (*(s32*)(work + 0x10) < 0) {
+        effDelete(effect);
+        return;
+    }
+    if (*(s32*)(work + 0x10) < 0x10) {
+        *(s32*)(work + 0x24) = *(s32*)(work + 0x10) << 4;
+    }
+    frame = *(s32*)(work + 0x14);
+    *(f32*)(work + 8) += float_0p6_804262d8;
+    if (frame < 7) {
+        *(f32*)(work + 0x38) = (f32)scale_data[frame] * float_0p01_804262dc;
+    } else {
+        *(f32*)(work + 0x38) = (f32)scale_data2[(frame - 7) % 7] * float_0p01_804262dc;
+    }
+    dispEntry(4, 2, effStoneSmokeDisp, effect, dispCalcZ(&dispPos));
+}
 
 #pragma use_lmw_stmw off
 void* effStoneSmokeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {

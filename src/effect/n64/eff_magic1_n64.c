@@ -16,15 +16,121 @@ u8 main_dl(void* effEntry, Mtx mtx) {
 }
 
 
-u8 effMagic1Main(u32* param_1) {
-    return 0;
+void effMagic1Main(void* effect) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+    extern s32 marioStGetSystemLevel(void);
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(Vec3*);
+    extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
+    extern void effMagic1Disp(s32, void*);
+    extern void* effMagic1N64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 targetX, f32 targetY, f32 targetZ);
+    extern const Vec3 vec3_802fb418;
+    extern f32 float_0_804259cc;
+    extern f32 float_0p83_80425a14;
+    extern f32 float_0p9_80425a18;
+    u8* work;
+    Vec3 pos;
+    Vec3 dispPos;
+    s32 type;
+    void* spawned;
+
+    work = *(u8**)((s32)effect + 0xC);
+    pos = vec3_802fb418;
+    pos.x = *(f32*)(work + 0x10);
+    pos.y = *(f32*)(work + 0x14);
+    pos.z = *(f32*)(work + 0x18);
+    dispPos = pos;
+
+    if (marioStGetSystemLevel() != 0) {
+        dispEntry(4, 2, effMagic1Disp, effect, dispCalcZ(&dispPos));
+        return;
+    }
+
+    if (*(s32*)effect & 4) {
+        *(s32*)effect &= ~4;
+        *(s32*)(work + 0x30) = 0;
+    }
+    *(s32*)(work + 0x30) -= 1;
+    *(s32*)(work + 0x2C) += 1;
+    if (*(s32*)(work + 0x30) < 0) {
+        effDelete(effect);
+        return;
+    }
+
+    type = *(s32*)work;
+    if (type == 0 && *(s32*)(work + 0x30) == 0) {
+        spawned = effMagic1N64Entry(1, 0x30,
+                                    *(f32*)(work + 4) + *(f32*)(work + 0x10),
+                                    *(f32*)(work + 8) + *(f32*)(work + 0x14),
+                                    *(f32*)(work + 0xC) + *(f32*)(work + 0x18),
+                                    float_0_804259cc, float_0_804259cc, float_0_804259cc);
+        *(f32*)((s32)*(void**)((s32)spawned + 0xC) + 0x28) = *(f32*)(work + 0x28);
+    }
+
+    if (type == 1) {
+        *(f32*)(work + 0x1C) *= float_0p83_80425a14;
+        *(s32*)(work + 0x34) = (s32)((f32)*(s32*)(work + 0x34) * float_0p9_80425a18);
+    }
+
+    *(f32*)(work + 0x10) += *(f32*)(work + 0x1C);
+    *(f32*)(work + 0x14) += *(f32*)(work + 0x20);
+    *(f32*)(work + 0x18) += *(f32*)(work + 0x24);
+    dispEntry(4, 2, effMagic1Disp, effect, dispCalcZ(&dispPos));
 }
 
+void* effMagic1N64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 targetX, f32 targetY, f32 targetZ) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, s32 size);
+    extern void effMagic1Main(void*);
+    extern char str_Magic1N64_802fb430[];
+    extern f32 float_0_804259cc;
+    extern f32 float_1_80425a04;
+    extern f32 float_29_80425a1c;
+    extern f32 float_6p2_80425a20;
+    void* entry;
+    u8* work;
+    f32 invTime;
 
-void* effMagic1N64Entry(double param_1, double param_2, double param_3, double param_4, double param_5, double param_6, int param_7, u32 param_8) {
-    return 0;
+    entry = effEntry();
+    *(char**)((s32)entry + 0x14) = str_Magic1N64_802fb430;
+    *(s32*)((s32)entry + 8) = 1;
+    work = __memAlloc(3, 0x38);
+    *(u8**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effMagic1Main;
+    *(s32*)entry |= 2;
+
+    *(s32*)(work + 0x2C) = 0;
+    *(s32*)work = type;
+    *(s32*)(work + 0x34) = 0xFF;
+    *(f32*)(work + 4) = x;
+    *(f32*)(work + 8) = y;
+    *(f32*)(work + 0xC) = z;
+    *(f32*)(work + 0x28) = float_1_80425a04;
+
+    if (type == 0) {
+        invTime = float_1_80425a04 / (f32)time;
+        *(f32*)(work + 0x10) = float_0_804259cc;
+        *(f32*)(work + 0x14) = float_0_804259cc;
+        *(f32*)(work + 0x18) = float_0_804259cc;
+        *(f32*)(work + 0x1C) = invTime * (targetX - x);
+        *(f32*)(work + 0x20) = invTime * (targetY - y);
+        *(f32*)(work + 0x24) = invTime * (targetZ - z);
+        *(s32*)(work + 0x30) = time;
+    } else {
+        *(f32*)(work + 0x10) = float_29_80425a1c;
+        *(f32*)(work + 0x14) = float_0_804259cc;
+        *(f32*)(work + 0x18) = float_0_804259cc;
+        *(f32*)(work + 0x1C) = float_6p2_80425a20;
+        *(f32*)(work + 0x20) = float_0_804259cc;
+        *(f32*)(work + 0x24) = float_0_804259cc;
+        *(s32*)(work + 0x30) = 0x18;
+    }
+    return entry;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

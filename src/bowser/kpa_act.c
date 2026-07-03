@@ -250,11 +250,140 @@ s32 kpa_score_disp_init(s32 evt) {
 /* CHATGPT STUB FILL: main/bowser/kpa_act 20260624_184128 */
 
 /* stub-fill: kpaAddScorePos | missing_definition | ghidra_signature */
-u8 kpaAddScorePos(int param_1, float* param_2) {
-    return 0;
+void kpaAddScorePos(s32 score, f32* pos) {
+    extern void* ksdp;
+    extern void pouchAddKpaScore(s32 score);
+    extern s32 strlen(const char* str);
+    extern f32 float_10_804272c8;
+    extern f32 float_0p5_804272c4;
+    extern f32 float_20_804272cc;
+    extern f32 float_0_804272d0;
+    s32 i;
+    s32 digit;
+    s32 started;
+    s32 value;
+    s32 offset;
+    char* out;
+
+    if (score > 10000) {
+        score = 10000;
+    }
+    pouchAddKpaScore(score);
+
+    for (i = 0; i < 50; i++) {
+        offset = i * 0x18;
+        if (*(u8*)((s32)ksdp + offset + 8) == 0) {
+            out = (char*)((s32)ksdp + offset);
+            value = score;
+            started = 0;
+
+            digit = value / 10000;
+            value -= digit * 10000;
+            if (digit != 0) {
+                *out++ = digit + '0';
+                started = 1;
+            }
+            digit = value / 1000;
+            value -= digit * 1000;
+            if (started != 0 || digit != 0) {
+                *out++ = digit + '0';
+                started++;
+            }
+            digit = value / 100;
+            value -= digit * 100;
+            if (started != 0 || digit != 0) {
+                *out++ = digit + '0';
+                started++;
+            }
+            digit = value / 10;
+            value -= digit * 10;
+            if (started != 0 || digit != 0) {
+                *out++ = digit + '0';
+                started++;
+            }
+            if (started != 0 || value != 0) {
+                *out++ = value + '0';
+            }
+            *out = 0;
+
+            *(u8*)((s32)ksdp + offset + 8) = 0x1E;
+            *(f32*)((s32)ksdp + offset + 0xC) = pos[0] - float_0p5_804272c4 * (float_10_804272c8 * (f32)strlen((char*)((s32)ksdp + offset)));
+            *(f32*)((s32)ksdp + offset + 0x10) = pos[1] + float_20_804272cc;
+            *(f32*)((s32)ksdp + offset + 0x14) = float_0_804272d0;
+            break;
+        }
+    }
 }
 
 /* stub-fill: kpaAddCoinPos | missing_definition | ghidra_signature */
-u8 kpaAddCoinPos(int param_1, float* param_2) {
-    return 0;
+void kpaAddCoinPos(s32 coin, f32* pos) {
+    extern void* ksdp;
+    extern s32 pouchAddKpaCoin(s32 coin);
+    extern void pouchAddKpaScore(s32 score);
+    extern s32 strlen(const char* str);
+    extern f32 float_10_804272c8;
+    extern f32 float_0p5_804272c4;
+    extern f32 float_20_804272cc;
+    extern f32 float_0_804272d0;
+    s32 score;
+    s32 i;
+    s32 digit;
+    s32 started;
+    s32 value;
+    s32 offset;
+    char* out;
+
+    if (pouchAddKpaCoin(coin) != 0) {
+        pouchAddKpaScore(1000);
+    }
+    score = coin * 500;
+    if (score > 10000) {
+        score = 10000;
+    }
+    pouchAddKpaScore(score);
+
+    for (i = 0; i < 50; i++) {
+        offset = i * 0x18;
+        if (*(u8*)((s32)ksdp + offset + 8) == 0) {
+            out = (char*)((s32)ksdp + offset);
+            value = score;
+            started = 0;
+
+            digit = value / 10000;
+            value -= digit * 10000;
+            if (digit != 0) {
+                *out++ = digit + '0';
+                started = 1;
+            }
+            digit = value / 1000;
+            value -= digit * 1000;
+            if (started != 0 || digit != 0) {
+                *out++ = digit + '0';
+                started++;
+            }
+            digit = value / 100;
+            value -= digit * 100;
+            if (started != 0 || digit != 0) {
+                *out++ = digit + '0';
+                started++;
+            }
+            digit = value / 10;
+            value -= digit * 10;
+            if (started != 0 || digit != 0) {
+                *out++ = digit + '0';
+                started++;
+            }
+            if (started != 0 || value != 0) {
+                *out++ = value + '0';
+            }
+            *out = 0;
+
+            *(u8*)((s32)ksdp + offset + 8) = 0x1E;
+            *(f32*)((s32)ksdp + offset + 0xC) = pos[0] - float_0p5_804272c4 * (float_10_804272c8 * (f32)strlen((char*)((s32)ksdp + offset)));
+            *(f32*)((s32)ksdp + offset + 0x10) = pos[1] + float_20_804272cc;
+            *(f32*)((s32)ksdp + offset + 0x14) = float_0_804272d0;
+            break;
+        }
+    }
 }
+

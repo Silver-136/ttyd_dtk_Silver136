@@ -292,30 +292,424 @@ s32 SoundLoadDVD2(s32 param_1) {
 }
 
 
-u32 SoundEfxPlayEx(s32 param_1, u16 param_2, u32 param_3, u32 param_4) {
-    return 0;
+u32 SoundEfxPlayEx(s32 id, u16 priority, u32 volume, u32 pan) {
+    extern char sound[];
+    extern void sndFXKeyOff(u32 id);
+    extern void sndRemoveEmitter(void* emitter);
+    extern s32 OSDisableInterrupts(void);
+    extern void OSRestoreInterrupts(s32 level);
+    extern u32 sndFXStartEx(s32 id, u32 volume, u32 pan, u8 zero);
+    extern void sndFXCtrl(u32 id, s32 ctrl, u32 value);
+    extern u32 sndFXCheck(u32 id);
+    extern u32 sndEmitterVoiceID(void* emitter);
+    extern u32 sndCheckEmitter(void* emitter);
+    s32 i;
+    void* entry;
+    u16 flags;
+    u32 voice;
+
+    i = 0;
+    entry = *(void**)(sound + 0xF4);
+    while (i < 0x28) {
+        if (*(u16*)entry == 0) {
+            break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x88);
+    }
+    if (i > 0x27) {
+        i = 0;
+        entry = *(void**)(sound + 0xF4);
+        while (i < 0x28) {
+            if (*(u16*)((s32)entry + 2) <= (priority & 0xFF)) {
+                if (*(u16*)entry != 0) {
+                    sndFXKeyOff(*(u32*)((s32)entry + 0xC));
+                    if ((*(u16*)entry & 0x10) != 0) {
+                        sndRemoveEmitter((void*)((s32)entry + 0x14));
+                    }
+                    *(u16*)entry = 0;
+                }
+                break;
+            }
+            i++;
+            entry = (void*)((s32)entry + 0x88);
+        }
+        if (i > 0x27) {
+            return -1;
+        }
+    }
+
+    *(u16*)entry = 0;
+    if (*(u16*)(sound + 0x20C) == 0) {
+        *(s32*)(sound + 0x210) = OSDisableInterrupts();
+    }
+    *(u16*)(sound + 0x20C) = *(u16*)(sound + 0x20C) + 1;
+    *(u32*)((s32)entry + 0xC) = sndFXStartEx(id, 0x7F, pan, 0);
+    sndFXCtrl(*(u32*)((s32)entry + 0xC), 7, volume);
+    if (*(u16*)(sound + 0x20C) != 0) {
+        *(u16*)(sound + 0x20C) = *(u16*)(sound + 0x20C) - 1;
+        if (*(u16*)(sound + 0x20C) == 0) {
+            OSRestoreInterrupts(*(s32*)(sound + 0x210));
+        }
+    }
+    if (*(s32*)((s32)entry + 0xC) == -1) {
+        return -1;
+    }
+    *(u16*)entry = 1;
+    *(u16*)((s32)entry + 2) = priority & 0xFF;
+    *(u16*)((s32)entry + 4) = volume & 0xFF;
+    *(u16*)((s32)entry + 6) = pan & 0xFF;
+    *(u16*)((s32)entry + 8) = 0;
+    *(u16*)((s32)entry + 0x10) = id;
+
+    if (*(u16*)(sound + 0x214) != 0) {
+        sndFXCtrl(*(u32*)((s32)entry + 0xC), 7, 0);
+    }
+
+    flags = *(u16*)entry;
+    if (flags == 0) {
+        return -1;
+    }
+    if ((flags & 0x10) != 0) {
+        if (sndCheckEmitter((void*)((s32)entry + 0x14)) == 0) {
+            return -1;
+        }
+    } else {
+        if ((flags & 0x10) == 0) {
+            voice = sndFXCheck(*(u32*)((s32)entry + 0xC));
+        } else {
+            voice = sndFXCheck(sndEmitterVoiceID((void*)((s32)entry + 0x14)));
+        }
+        voice = sndFXCheck(voice);
+        if ((u32)(voice + 0x10000) == 0xFFFF) {
+            return -1;
+        }
+    }
+    return i;
 }
 
+void SoundSSPlayChEx(s32 index, char* name, s32 useSlot) {
+    extern char sound[];
+    extern f32 float_0_80421908;
+    extern f32 float_127_80421918;
+    extern char str_436[];
+    extern char str_PCTs_PCTsPCTs_802e3cd0[];
+    extern char str_stm_8042191c[];
+    extern s32 OSDisableInterrupts(void);
+    extern void OSRestoreInterrupts(s32 level);
+    extern void DVDMgrClose(void* handle);
+    extern void sndStreamFree(void* stream);
+    extern char* getMarioStDvdRoot(void);
+    extern int sprintf(char* s, char* format, ...);
+    extern void* DVDMgrOpen(char* path, s32 zero, s32 zero2);
+    extern void DVDMgrReadAsync(void* handle, void* dst, s32 size, s32 offset, void* callback);
+    void* entry;
+    s32 slot;
+    char* base;
+    u16 zero;
 
-void SoundSSPlayChEx(s32 a, s32 b, s32 c) {
-    ;
+    entry = (void*)((s32)*(void**)(sound + 0x100) + index * 0x138);
+    if (*(u16*)entry != 0) {
+        if (*(u16*)(sound + 0x20C) == 0) {
+            *(s32*)(sound + 0x210) = OSDisableInterrupts();
+        }
+        *(u16*)(sound + 0x20C) = *(u16*)(sound + 0x20C) + 1;
+        if ((*(u16*)entry & 0x400) != 0) {
+            slot = *(u16*)((s32)entry + 2);
+            base = sound;
+            zero = 0;
+            slot <<= 1;
+            *(u16*)((s32)base + slot + 0x226) = zero;
+        }
+        *(u16*)entry = 0;
+        DVDMgrClose(*(void**)((s32)entry + 0x28));
+        DVDMgrClose(*(void**)((s32)entry + 0xB0));
+        sndStreamFree(*(void**)((s32)entry + 0x4C));
+        if (*(u16*)((s32)entry + 0x1A) == 2) {
+            sndStreamFree(*(void**)((s32)entry + 0xD4));
+        }
+        if (*(u16*)(sound + 0x20C) != 0) {
+            *(u16*)(sound + 0x20C) = *(u16*)(sound + 0x20C) - 1;
+            if (*(u16*)(sound + 0x20C) == 0) {
+                OSRestoreInterrupts(*(s32*)(sound + 0x210));
+            }
+        }
+        *(s32*)(sound + 0x104) = -1;
+    }
+
+    if (useSlot != 0) {
+        slot = 0;
+        base = sound;
+        while (slot < *(u16*)(sound + 0x224)) {
+            if (*(u16*)((s32)base + 0x226) == 0) {
+                *(u16*)(sound + 0x226 + (slot * 2)) = 1;
+                *(u16*)((s32)entry + 2) = slot;
+                break;
+            }
+            base += 2;
+            slot++;
+        }
+        if (slot >= *(u16*)(sound + 0x224)) {
+            return;
+        }
+    }
+
+    *(s32*)(sound + 0x104) = index;
+    *(u16*)((s32)entry + 0x74) = 0;
+    *(s32*)((s32)entry + 0x6C) = 0;
+    *(s32*)((s32)entry + 0x5C) = 0;
+    *(s32*)((s32)entry + 0x60) = 0;
+    *(u16*)((s32)entry + 0x7C) = 0;
+    *(u16*)((s32)entry + 0x7E) = 0;
+    *(u16*)((s32)entry + 0x80) = 0;
+    *(u16*)((s32)entry + 0x82) = 0;
+    *(u16*)((s32)entry + 0x84) = 0;
+    *(u16*)((s32)entry + 0xFC) = 0;
+    *(s32*)((s32)entry + 0xF4) = 0;
+    *(s32*)((s32)entry + 0xE4) = 0;
+    *(s32*)((s32)entry + 0xE8) = 0;
+    *(u16*)((s32)entry + 0x104) = 0;
+    *(u16*)((s32)entry + 0x106) = 0;
+    *(u16*)((s32)entry + 0x108) = 0;
+    *(u16*)((s32)entry + 0x10A) = 0;
+    *(u16*)((s32)entry + 0x10C) = 0;
+    *(u16*)((s32)entry + 6) = 0x40;
+    *(u16*)((s32)entry + 8) = 0;
+    *(f32*)((s32)entry + 0x10) = float_0_80421908;
+    *(f32*)((s32)entry + 0xC) = float_127_80421918;
+    *(u16*)entry = 1;
+    if (useSlot != 0) {
+        *(u16*)entry = *(u16*)entry | 0x400;
+    }
+    sprintf(str_436, str_PCTs_PCTsPCTs_802e3cd0, getMarioStDvdRoot(), name, str_stm_8042191c);
+    *(void**)((s32)entry + 0x28) = DVDMgrOpen(str_436, 0, 0);
+    if (*(void**)((s32)entry + 0x28) == 0) {
+        *(u16*)entry = 0;
+        return;
+    }
+    *(void**)((s32)entry + 0xB0) = DVDMgrOpen(str_436, 0, 0);
+    if (*(void**)((s32)entry + 0xB0) == 0) {
+        *(u16*)entry = 0;
+        return;
+    }
+    DVDMgrReadAsync(*(void**)((s32)entry + 0x28), *(void**)((s32)entry + 0x50), 0x100, 0, SoundSSPlayChEx_main);
 }
 
+u8* ssDecodeDPCM(u16* ctrl, s32 state, s16* out, u32 count, u8* src) {
+    extern s16 dtbl[];
+    u8 byte;
+    u32 header;
+    s32 nibble;
+    s32 sample;
 
-void* ssDecodeDPCM(void* param_1, int param_2, void* param_3, int param_4, void* param_5) {
-    return 0;
+    goto check_count;
+
+loop:
+    byte = *src;
+    if (*(u16*)(state + 0x5C) != 0) {
+        nibble = (s8)(byte >> 4);
+        if ((*(u16*)(state + 0x5A) & 1) != 0) {
+            nibble = byte & 0xF;
+        }
+        header = *(u16*)(state + 0x58);
+        *(u16*)(state + 0x5A) = *(u16*)(state + 0x5A) + 1;
+        nibble = (s8)((s8)(nibble << 4) >> 4);
+        if (*(u16*)(state + 0x5A) >= *(u16*)(state + 0x5C)) {
+            src++;
+            *(u16*)(state + 0x5C) = 0;
+            *(s32*)(state + 0x44) = *(s32*)(state + 0x44) + 1;
+        } else if ((*(u16*)(state + 0x5A) & 1) == 0) {
+            src++;
+            *(s32*)(state + 0x44) = *(s32*)(state + 0x44) + 1;
+        }
+    } else {
+        header = byte & 0xF;
+        src++;
+        *(s32*)(state + 0x44) = *(s32*)(state + 0x44) + 1;
+        if (header == 8) {
+            *(u16*)(state + 0x5C) = (byte >> 4) + 4;
+            *(u16*)(state + 0x5A) = 0;
+            goto check_count;
+        }
+        nibble = (s8)((s8)(header << 4) >> 4);
+        header = byte >> 4;
+        *(u16*)(state + 0x58) = header;
+    }
+
+    sample = *(s16*)(state + 0x52) + ((s8)nibble * dtbl[header]);
+    if (sample > 0x7FFF) {
+        sample = 0x7FFF;
+    }
+    if (sample < -0x8000) {
+        sample = -0x8000;
+    }
+    *(u16*)(state + 0x52) = sample;
+    count--;
+    *out = sample;
+    out++;
+    *(s32*)((s32)ctrl + 0x24) = *(s32*)((s32)ctrl + 0x24) + 1;
+
+    if (*(u32*)(state + (*(u16*)(state + 0x4C) * 4) + 0x3C) <= *(u32*)(state + 0x44)) {
+        if (*(s16*)(state + 0x54) == 0 && ((*ctrl & 0x4000) == 0)) {
+            *(u32*)(state + 0x38) = *(u32*)(state + 0x38) - *(u32*)(state + 0x44);
+            *(u32*)(state + 0x44) = 0;
+            src = *(u8**)(state + (*(u16*)(state + 0x4C) * 4) + 0x2C);
+            goto check_count;
+        }
+        *(u16*)(state + 0x54) = 0;
+        *(u32*)(state + 0x44) = 0;
+        *(u16*)(state + 0x4C) = 1 - *(u16*)(state + 0x4C);
+        src = *(u8**)(state + (*(u16*)(state + 0x4C) * 4) + 0x2C);
+    }
+    *(u32*)(state + 0x38) = *(u32*)(state + 0x38) + 2;
+    if (*(u32*)(state + 0x38) >= *(u32*)((s32)ctrl + 0x1C)) {
+        *(u32*)(state + 0x38) = *(u32*)((s32)ctrl + 0x20);
+        *(u16*)(state + 0x52) = *(u16*)(state + 0x50);
+        if ((*ctrl & 0x200) == 0) {
+            *ctrl |= 4;
+            return src;
+        }
+    }
+
+check_count:
+    if (count != 0) {
+        goto loop;
+    }
+    return src;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void SoundSSSetVolCh(s32 index, u8 volume) {
+    extern char sound[];
+    extern f32 float_63_8042190c;
+    extern void sndStreamMixParameter(void* stream, s32 volume, s32 pan, s32 aux, s32 zero);
+    void* entry;
+    s32 offset;
+    void* table;
+    u32 pan8;
+    s32 rightPan;
+    f32 left;
+    f32 right;
 
-u8 SoundSSSetVolCh(void) {
-    return 0;
+    offset = index * 0x138;
+    entry = (void*)((s32)*(void**)(sound + 0x100) + offset);
+    if (*(u16*)entry != 0) {
+        right = (f32)(u8)volume;
+        *(f32*)((s32)entry + 0x10) = right;
+        *(f32*)((s32)entry + 0xC) = right;
+        if ((*(u16*)entry & 8) != 0) {
+            table = *(void**)(sound + 0x100);
+            pan8 = *(u16*)((s32)entry + 6) & 0xFF;
+            entry = (void*)((s32)table + offset);
+            if (*(u16*)entry != 0) {
+                *(u16*)((s32)entry + 6) = pan8;
+                if ((*(u16*)entry & 8) != 0) {
+                    if (*(u16*)((s32)entry + 0x1A) == 1) {
+                        sndStreamMixParameter(*(void**)((s32)entry + 0x4C), (s32)*(f32*)((s32)entry + 0x10), pan8, *(u16*)((s32)entry + 8) & 0xFF, 0);
+                    } else {
+                        right = *(f32*)((s32)entry + 0x10);
+                        left = right;
+                        if (pan8 < 0x40) {
+                            left = ((f32)pan8 * right) / float_63_8042190c;
+                        }
+                        if (((u32)(pan8 - 0x40) >> 31) == 0) {
+                            rightPan = 0x7F - pan8;
+                            right = ((f32)rightPan * right) / float_63_8042190c;
+                        }
+                        sndStreamMixParameter(*(void**)((s32)entry + 0x4C), (s32)right, 0, *(u16*)((s32)entry + 8) & 0xFF, 0);
+                        sndStreamMixParameter(*(void**)((s32)entry + 0xD4), (s32)left, 0x7F, *(u16*)((s32)entry + 8) & 0xFF, 0);
+                    }
+                }
+            }
+        }
+    }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-u8 SoundSSSetSrndPanCh(void) {
-    return 0;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void SoundSSSetSrndPanCh(s32 index, u8 pan) {
+    extern char sound[];
+    extern f32 float_63_8042190c;
+    extern void sndStreamMixParameter(void* stream, s32 volume, s32 pan, s32 aux, s32 zero);
+    s32 offset;
+    void* entry;
+    void* table;
+    u32 pan8;
+    s32 rightPan;
+    f32 left;
+    f32 right;
+
+    offset = index * 0x138;
+    entry = (void*)((s32)*(void**)(sound + 0x100) + offset);
+    if (*(u16*)entry != 0) {
+        *(u16*)((s32)entry + 8) = (u8)pan;
+        if ((*(u16*)entry & 8) != 0) {
+            table = *(void**)(sound + 0x100);
+            pan8 = *(u16*)((s32)entry + 6) & 0xFF;
+            entry = (void*)((s32)table + offset);
+            if (*(u16*)entry != 0) {
+                *(u16*)((s32)entry + 6) = pan8;
+                if ((*(u16*)entry & 8) != 0) {
+                    if (*(u16*)((s32)entry + 0x1A) == 1) {
+                        sndStreamMixParameter(*(void**)((s32)entry + 0x4C), (s32)*(f32*)((s32)entry + 0x10), pan8, *(u16*)((s32)entry + 8) & 0xFF, 0);
+                    } else {
+                        right = *(f32*)((s32)entry + 0x10);
+                        left = right;
+                        if (pan8 < 0x40) {
+                            left = ((f32)pan8 * right) / float_63_8042190c;
+                        }
+                        if (((u32)(pan8 - 0x40) >> 31) == 0) {
+                            rightPan = 0x7F - pan8;
+                            right = ((f32)rightPan * right) / float_63_8042190c;
+                        }
+                        sndStreamMixParameter(*(void**)((s32)entry + 0x4C), (s32)right, 0, *(u16*)((s32)entry + 8) & 0xFF, 0);
+                        sndStreamMixParameter(*(void**)((s32)entry + 0xD4), (s32)left, 0x7F, *(u16*)((s32)entry + 8) & 0xFF, 0);
+                    }
+                }
+            }
+        }
+    }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on

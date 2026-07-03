@@ -95,15 +95,177 @@ s32 evt_door_param(void* pEvt) {
 }
 
 
-s32 door_entry(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 door_entry(EventEntry* event) {
+    typedef struct Vec3 { f32 x; f32 y; f32 z; } Vec3;
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
+    extern void* mapalloc_base_ptr;
+    extern void* _mapAlloc(void* heap, s32 size);
+    extern void hitObjGetPos(void* hit, Vec3* pos);
+    extern void hitObjGetNormal(void* hit, Vec3* normal);
+    extern const f32 float_10_80421b58;
+    extern const f32 float_30_80421b60;
+    extern const f32 float_40_80421b5c;
+    extern Vec3 vec3_802e4164;
+    extern Vec3 vec3_802e4170;
+    s32* args;
+    void* data;
+    void* entry;
+    Vec3 normal;
+    Vec3 pos;
+
+    args = event->args;
+    data = (void*)evtGetValue(event, args[0]);
+    pos = vec3_802e4164;
+    normal = vec3_802e4170;
+    entry = _mapAlloc(mapalloc_base_ptr, 0x1C);
+    *(void**)entry = data;
+    switch (*(s32*)data) {
+        case 0:
+        case 1:
+            hitObjGetPos(*(void**)((s32)data + 8), &pos);
+            hitObjGetNormal(*(void**)((s32)data + 8), &normal);
+            *(f32*)((s32)entry + 0x10) = (float_40_80421b5c * normal.x + pos.x) - float_10_80421b58 * normal.z;
+            *(f32*)((s32)entry + 0x18) = float_40_80421b5c * normal.z + pos.z + float_10_80421b58 * normal.x;
+            hitObjGetPos(*(void**)((s32)data + 0x10), &pos);
+            hitObjGetNormal(*(void**)((s32)data + 0x10), &normal);
+            *(f32*)((s32)entry + 4) = float_30_80421b60 * normal.x + pos.x;
+            *(f32*)((s32)entry + 0xC) = float_30_80421b60 * normal.z + pos.z;
+            break;
+        case 2:
+            hitObjGetPos(*(void**)((s32)data + 8), &pos);
+            hitObjGetNormal(*(void**)((s32)data + 8), &normal);
+            *(f32*)((s32)entry + 0x10) = float_40_80421b5c * normal.x + pos.x + float_10_80421b58 * normal.z;
+            *(f32*)((s32)entry + 0x18) = (float_40_80421b5c * normal.z + pos.z) - float_10_80421b58 * normal.x;
+            hitObjGetPos(*(void**)((s32)data + 0x10), &pos);
+            hitObjGetNormal(*(void**)((s32)data + 0x10), &normal);
+            *(f32*)((s32)entry + 4) = float_30_80421b60 * normal.x + pos.x;
+            *(f32*)((s32)entry + 0xC) = float_30_80421b60 * normal.z + pos.z;
+            break;
+        case 3:
+            hitObjGetPos(*(void**)((s32)data + 8), &pos);
+            hitObjGetNormal(*(void**)((s32)data + 8), &normal);
+            *(f32*)((s32)entry + 0x10) = float_40_80421b5c * normal.x + pos.x;
+            *(f32*)((s32)entry + 0x18) = float_40_80421b5c * normal.z + pos.z;
+            hitObjGetPos(*(void**)((s32)data + 0x10), &pos);
+            hitObjGetNormal(*(void**)((s32)data + 0x10), &normal);
+            *(f32*)((s32)entry + 4) = float_40_80421b5c * normal.x + pos.x;
+            *(f32*)((s32)entry + 0xC) = float_40_80421b5c * normal.z + pos.z;
+            break;
+    }
+    evtSetValue(event, args[1], (s32)entry);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+void door_dark_flag_sub(s32 flag, s32 npcNames, s32 mobjNames, s32 itemNames) {
+    extern void* marioGetPtr(void);
+    extern void* partyGetPtr(s32 id);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
+    extern void animPoseSetMaterialFlagOff(s32 poseId, u32 flag);
+    extern void* npcNameToPtr_NoAssert(void* name);
+    extern void* mobjNameToPtrNoAssert(void* name);
+    extern void* itemNameToPtr(void* name);
+    extern void iconFlagOn(void* icon, u32 flag);
+    extern void iconFlagOff(void* icon, u32 flag);
+    void* mario;
+    void* party0;
+    void* party1;
+    void** names;
+    void* name;
 
-void door_dark_flag_sub(s32 unk0, s32 unk1, s32 unk2, s32 unk3) {
-    ;
+    mario = marioGetPtr();
+    party0 = partyGetPtr(0);
+    party1 = partyGetPtr(1);
+    if (flag != 0) {
+        if (mario != 0) {
+            animPoseSetMaterialFlagOn(*(s32*)((s32)mario + 0x22C), 0x1800);
+            animPoseSetMaterialFlagOn(*(s32*)((s32)mario + 0x230), 0x1800);
+            animPoseSetMaterialFlagOn(*(s32*)((s32)mario + 0x234), 0x1800);
+        }
+        if (party0 != 0) {
+            animPoseSetMaterialFlagOn(*(s32*)((s32)party0 + 0xC), 0x1800);
+        }
+        if (party1 != 0) {
+            animPoseSetMaterialFlagOn(*(s32*)((s32)party1 + 0xC), 0x1800);
+        }
+        if ((u32)npcNames != 0) {
+            names = (void**)npcNames;
+            while (*names != 0) {
+                name = npcNameToPtr_NoAssert(*names);
+                if (name != 0) {
+                    animPoseSetMaterialFlagOn(*(s32*)((s32)name + 0x104), 0x1800);
+                }
+                names++;
+            }
+        }
+        if ((u32)mobjNames != 0) {
+            names = (void**)mobjNames;
+            while (*names != 0) {
+                name = mobjNameToPtrNoAssert(*names);
+                if (name != 0) {
+                    animPoseSetMaterialFlagOn(*(s32*)((s32)name + 0x70), 0x1800);
+                }
+                names++;
+            }
+        }
+        if ((u32)itemNames != 0) {
+            names = (void**)itemNames;
+            while (*names != 0) {
+                name = itemNameToPtr(*names);
+                if (name != 0) {
+                    iconFlagOn((void*)((s32)name + 0xC), 0x40);
+                }
+                names++;
+            }
+        }
+    } else {
+        if (mario != 0) {
+            animPoseSetMaterialFlagOff(*(s32*)((s32)mario + 0x22C), 0x1800);
+            animPoseSetMaterialFlagOff(*(s32*)((s32)mario + 0x230), 0x1800);
+            animPoseSetMaterialFlagOff(*(s32*)((s32)mario + 0x234), 0x1800);
+        }
+        if (party0 != 0) {
+            animPoseSetMaterialFlagOff(*(s32*)((s32)party0 + 0xC), 0x1800);
+        }
+        if (party1 != 0) {
+            animPoseSetMaterialFlagOff(*(s32*)((s32)party1 + 0xC), 0x1800);
+        }
+        if ((u32)npcNames != 0) {
+            names = (void**)npcNames;
+            while (*names != 0) {
+                name = npcNameToPtr_NoAssert(*names);
+                if (name != 0) {
+                    animPoseSetMaterialFlagOff(*(s32*)((s32)name + 0x104), 0x1800);
+                }
+                names++;
+            }
+        }
+        if ((u32)mobjNames != 0) {
+            names = (void**)mobjNames;
+            while (*names != 0) {
+                name = mobjNameToPtrNoAssert(*names);
+                if (name != 0) {
+                    animPoseSetMaterialFlagOff(*(s32*)((s32)name + 0x70), 0x1800);
+                }
+                names++;
+            }
+        }
+        if ((u32)itemNames != 0) {
+            names = (void**)itemNames;
+            while (*names != 0) {
+                name = itemNameToPtr(*names);
+                if (name != 0) {
+                    iconFlagOff((void*)((s32)name + 0xC), 0x40);
+                }
+                names++;
+            }
+        }
+    }
 }
-
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on

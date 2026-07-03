@@ -14,15 +14,122 @@ s32 _check_mario_move_count(void* evt) {
 }
 
 
-void __makeTechMenuFunc(void* commandWork, s32 param_2) {
-    ;
+void __makeTechMenuFunc(void* commandWork, s32* count) {
+    extern void* _battleWorkPointer;
+    extern void* BattleGetPartyPtr(void* battleWork);
+    extern s32 BattleTransPartyId(s32 id);
+    extern s32 partyGetTechLv(s32 partyId);
+    extern char* msgSearch(char* msg);
+    extern u8 lbl_8038ED18[];
+    s32 techLv;
+    void* party;
+    u8* entry;
+
+    party = BattleGetPartyPtr(_battleWorkPointer);
+    techLv = partyGetTechLv(BattleTransPartyId(*(s32*)((s32)party + 8)));
+
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(s32*)(entry + 0x90) = -1;
+    *(s32*)(entry + 0x94) = 0;
+    *(void**)(entry + 0x80) = lbl_8038ED18 + 0x844;
+    *(s32*)(entry + 0x84) = 0;
+    *(u16*)(entry + 0x8C) = 0x158;
+    *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+    *count = *count + 1;
+
+    if (techLv >= 0) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_8038ED18 + 0x904;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = 0x159;
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
+    if (techLv >= 1) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_8038ED18 + 0x9C4;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
+    if (techLv >= 2) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_8038ED18 + 0xA84;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
 }
 
+s32 _tsuranuki_effect_control(void* evt, s32 isFirstCall) {
+    extern void* _battleWorkPointer;
+    extern s32 evtGetValue(void* evt, s32 arg);
+    extern s32 BattleTransID(void* evt, s32 id);
+    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
+    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+    extern void* BtlUnit_GetPartsPtr(void* unit, s32 partsId);
+    extern void* effNokotarouEntry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
+    extern void effSoftDelete(void* eff);
+    extern f32 float_2_804243a8;
+    extern f32 float_0p006_804243ac;
+    s32* args;
+    void* battleWork;
+    void* unit;
+    void* parts;
+    void* eff;
+    s32 target;
+    s32 current;
+    f32 x;
+    f32 y;
+    f32 z;
 
-s32 _tsuranuki_effect_control(int param_1, int param_2) {
+    args = *(s32**)((s32)evt + 0x18);
+    battleWork = _battleWorkPointer;
+    target = evtGetValue(evt, args[0]);
+    unit = BattleGetUnitPtr(battleWork, BattleTransID(evt, target));
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    parts = BtlUnit_GetPartsPtr(unit, 1);
+    if (isFirstCall != 0) {
+        *(void**)((s32)evt + 0x78) = effNokotarouEntry(0, 0x3E8, x, y, z, *(f32*)((s32)unit + 0x114));
+        *(s32*)((s32)parts + 0x138) = 0;
+        *(s32*)((s32)parts + 0x134) = 0;
+        *(s32*)((s32)evt + 0x7C) = 0;
+    }
+    target = *(s32*)((s32)parts + 0x134) * 100;
+    current = *(s32*)((s32)evt + 0x7C);
+    if (current < target) {
+        current += 10;
+        *(s32*)((s32)evt + 0x7C) = current;
+        if (current > target) {
+            *(s32*)((s32)evt + 0x7C) = target;
+        }
+    } else if (current > target) {
+        current -= 10;
+        *(s32*)((s32)evt + 0x7C) = current;
+        if (current < target) {
+            *(s32*)((s32)evt + 0x7C) = target;
+        }
+    }
+    eff = *(void**)((s32)evt + 0x78);
+    *(f32*)((s32)*(void**)((s32)eff + 0xC) + 0x10) = x;
+    *(f32*)((s32)*(void**)((s32)eff + 0xC) + 0x14) = y;
+    *(f32*)((s32)*(void**)((s32)eff + 0xC) + 0x18) = z;
+    *(f32*)((s32)*(void**)((s32)eff + 0xC) + 0x1C) = (float_2_804243a8 + float_0p006_804243ac * (f32)*(s32*)((s32)evt + 0x7C)) * *(f32*)((s32)unit + 0x114);
+    if (*(s32*)((s32)parts + 0x138) != 0) {
+        *(s32*)((s32)parts + 0x138) = 0;
+        effSoftDelete(eff);
+        return 2;
+    }
     return 0;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

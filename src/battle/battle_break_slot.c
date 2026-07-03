@@ -287,10 +287,61 @@ void BattleBreakSlotDispReel(void) {
 /* CHATGPT STUB FILL: main/battle/battle_break_slot 20260624_184008 */
 
 /* stub-fill: BattleBreakSlot_PointInc | missing_definition | ghidra_signature */
-u8 BattleBreakSlot_PointInc(void) {
-    return 0;
-}
+void BattleBreakSlot_PointInc(void) {
+    extern void* pouchGetPtr(void);
+    extern s32 irand(s32 range);
+    void* battle = _battleWorkPointer;
+    void* work = BattleBreakSlotGetPtr();
+    void* reel;
+    void* reel1;
+    s32 index;
 
+    if (*(u16*)((s32)pouchGetPtr() + 0x8C) == 0) {
+        return;
+    }
+
+    reel = BattleBreakSlotReelGetPtr(*(s32*)((s32)work + 0xC));
+    *(s32*)((s32)reel + 8) = 1;
+    *(s32*)((s32)reel + 0xC) = 0;
+    *(s32*)((s32)work + 0xC) = *(s32*)((s32)work + 0xC) + 1;
+
+    if (*(s32*)((s32)work + 0xC) > 3) {
+        *(s32*)((s32)work + 0xC) = 3;
+        return;
+    }
+
+    index = *(s32*)reel;
+    switch (index) {
+        case 0:
+        case 1:
+            index = irand(*(s32*)((s32)reel + 0x18));
+            *(s32*)((s32)reel + 0x1C) = index - 1;
+            if (*(s32*)((s32)reel + 0x1C) == -1) {
+                *(s32*)((s32)reel + 0x1C) = *(s32*)((s32)reel + 0x18) - 1;
+            }
+            *(s32*)((s32)reel + 0x10) =
+                ((s32*)*(void**)((s32)reel + 0x14))[*(s32*)((s32)reel + 0x1C)];
+            if ((*(u32*)((s32)battle + 0x19078) & 0x80000) != 0) {
+                item_appear_force(reel, *(s32*)((s32)battle + 0x1908C));
+            }
+            if ((*(u32*)work & 1) != 0) {
+                item_appear_force(reel, 3);
+            }
+            if ((*(u32*)work & 4) != 0) {
+                item_appear_force(reel, 3);
+            }
+            break;
+        case 2:
+            do {
+                reel1 = BattleBreakSlotReelGetPtr(1);
+                index = irand(*(s32*)((s32)reel + 0x18));
+                *(s32*)((s32)reel + 0x1C) = index;
+                *(s32*)((s32)reel + 0x10) =
+                    ((s32*)*(void**)((s32)reel + 0x14))[*(s32*)((s32)reel + 0x1C)];
+            } while (*(s32*)((s32)reel + 0x10) == *(s32*)((s32)reel1 + 0x10));
+            break;
+    }
+}
 
 /* CHATGPT STUB FILL: main/battle/battle_break_slot 20260624_185954 */
 
@@ -301,5 +352,39 @@ void BattleBreakSlot_Main(void) {
 
 /* stub-fill: BattleBreakSlot_Init | missing_definition | header_prototype */
 void BattleBreakSlot_Init(void) {
-    return;
+    extern void* BattleAlloc(u32 size);
+    extern void* memset(void* dst, int value, u32 size);
+    extern void* memcpy(void* dst, const void* src, u32 size);
+    extern const s32 R_slot_1_cards[];
+    extern const s32 R_slot_2_cards[];
+    extern const s32 R_slot_3_cards[];
+    void* work = BattleBreakSlotGetPtr();
+    void* reel;
+    s32 i;
+
+    memset(work, 0, 0x134);
+    *(s32*)((s32)work + 4) = 0;
+
+    reel = BattleBreakSlotReelGetPtr(0);
+    for (i = 0; i < 3; i++) {
+        *(s32*)reel = i;
+        *(s32*)((s32)reel + 8) = 0;
+        reel = (void*)((s32)reel + 0x5C);
+    }
+
+    reel = BattleBreakSlotReelGetPtr(0);
+    *(s32*)((s32)reel + 0x18) = 8;
+    *(void**)((s32)reel + 0x14) = BattleAlloc(*(s32*)((s32)reel + 0x18) * 4);
+    memcpy(*(void**)((s32)reel + 0x14), R_slot_1_cards, *(s32*)((s32)reel + 0x18) * 4);
+
+    reel = BattleBreakSlotReelGetPtr(1);
+    *(s32*)((s32)reel + 0x18) = 8;
+    *(void**)((s32)reel + 0x14) = BattleAlloc(*(s32*)((s32)reel + 0x18) * 4);
+    memcpy(*(void**)((s32)reel + 0x14), R_slot_2_cards, *(s32*)((s32)reel + 0x18) * 4);
+
+    reel = BattleBreakSlotReelGetPtr(2);
+    *(s32*)((s32)reel + 0x18) = 5;
+    *(void**)((s32)reel + 0x14) = BattleAlloc(*(s32*)((s32)reel + 0x18) * 4);
+    memcpy(*(void**)((s32)reel + 0x14), R_slot_3_cards, *(s32*)((s32)reel + 0x18) * 4);
 }
+

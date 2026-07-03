@@ -142,11 +142,191 @@ u8 marioCamZoomUp(void) {
 
 
 u8 marioCamZoomUpLevelMain(void) {
-    return 0;
+    extern s32 marioBgmodeChk(void);
+    extern void PSVECSubtract(void* a, void* b, void* out);
+    extern void PSVECNormalize(void* src, void* dst);
+    extern void PSVECScale(void* src, void* dst, f32 scale);
+    extern void PSVECAdd(void* a, void* b, void* out);
+    extern s32 evt_cam3d_evt_set(void* event);
+    extern f32 float_0_80424aa4;
+    extern f32 float_3p5_80424aac;
+    extern f32 float_5_80424aa0;
+    extern f32 float_320_80424aa8;
+    extern f32 float_440_80424a98;
+    extern f32 float_450_80424a9c;
+    extern f32 float_475_80424a94;
+    extern f32 float_520_80424a90;
+    extern const u32 vec3_802fa76c[];
+    void* mario;
+    void* cam;
+    f32 pos[3];
+    f32 target[3];
+    f32 dir[3];
+    s32 args[8];
+    u8 event[0x1B0];
+    f32 distance;
+    f32 xOff;
+    f32 yOff;
+
+    mario = marioGetPtr();
+    if ((*(u32*)((s32)mario + 0xC) & 0x10) == 0) {
+        return 0;
+    }
+    *(u32*)((s32)mario + 0xC) &= ~0x10;
+
+    if (marioBgmodeChk() == 1) {
+        return 0;
+    }
+
+    *(u32*)((s32)mario + 4) |= 0x100000;
+    *(s16*)((s32)mario + 0x5E) = 0;
+
+    switch (*(s16*)((s32)mario + 0x60)) {
+        case 1:
+            distance = float_520_80424a90;
+            break;
+        case 2:
+            distance = float_475_80424a94;
+            break;
+        case 3:
+            distance = float_440_80424a98;
+            break;
+        default:
+            distance = float_450_80424a9c;
+            break;
+    }
+
+    xOff = (f32)(*(s32*)((s32)mario + 0x168) - 0x12F) / float_5_80424aa0;
+    yOff = float_0_80424aa4;
+    if ((f32)*(s32*)((s32)mario + 0x16C) > float_320_80424aa8) {
+        yOff = (float_320_80424aa8 - (f32)*(s32*)((s32)mario + 0x16C)) / float_3p5_80424aac;
+    }
+
+    cam = camGetPtr(4);
+    pos[0] = *(f32*)((s32)cam + 0x18) + xOff;
+    pos[1] = *(f32*)((s32)cam + 0x1C) + yOff;
+    pos[2] = *(f32*)((s32)cam + 0x20);
+
+    target[0] = pos[0];
+    target[1] = pos[1];
+    target[2] = pos[2];
+    dir[0] = pos[0];
+    dir[1] = pos[1];
+    dir[2] = pos[2];
+
+    PSVECSubtract((void*)((s32)cam + 0xC), (void*)((s32)cam + 0x18), dir);
+    PSVECNormalize(dir, dir);
+    PSVECScale(dir, dir, distance);
+    PSVECAdd(target, dir, target);
+
+    args[0] = (s16)(s32)target[0];
+    args[1] = (s16)(s32)target[1];
+    args[2] = (s16)(s32)target[2];
+    args[3] = (s16)(s32)pos[0];
+    args[4] = (s16)(s32)pos[1];
+    args[5] = (s16)(s32)pos[2];
+    args[6] = 0x5DC;
+    args[7] = 3;
+    *(s32**)((s32)event + 0x18) = args;
+    evt_cam3d_evt_set(event);
+    return 1;
 }
 
-
 u8 marioUpdateCam(void) {
+    extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
+    extern const f32 float_1_80424ac4;
+    extern const f32 float_10_80424acc;
+    extern const f32 float_90_80424ac8;
+    void* mario;
+    void* cam;
+    f32 sinVal;
+    f32 cosVal;
+    f32 cur;
+    f32 target;
+    f32 rate;
+
+    mario = marioGetPtr();
+
+    cur = *(f32*)((s32)mario + 0x13C);
+    target = *(f32*)((s32)mario + 0x138);
+    rate = *(f32*)((s32)mario + 0x150);
+    if (cur > target) {
+        cur += ((target - float_1_80424ac4) - cur) * rate;
+        *(f32*)((s32)mario + 0x13C) = cur;
+        if (*(f32*)((s32)mario + 0x13C) < target) {
+            *(f32*)((s32)mario + 0x13C) = target;
+        }
+    } else if (cur < target) {
+        cur += ((target + float_1_80424ac4) - cur) * rate;
+        *(f32*)((s32)mario + 0x13C) = cur;
+        if (*(f32*)((s32)mario + 0x13C) > target) {
+            *(f32*)((s32)mario + 0x13C) = target;
+        }
+    }
+
+    cur = *(f32*)((s32)mario + 0x144);
+    target = *(f32*)((s32)mario + 0x140);
+    rate = *(f32*)((s32)mario + 0x154);
+    if (cur > target) {
+        cur += ((target - float_1_80424ac4) - cur) * rate;
+        *(f32*)((s32)mario + 0x144) = cur;
+        if (*(f32*)((s32)mario + 0x144) < target) {
+            *(f32*)((s32)mario + 0x144) = target;
+        }
+    } else if (cur < target) {
+        cur += ((target + float_1_80424ac4) - cur) * rate;
+        *(f32*)((s32)mario + 0x144) = cur;
+        if (*(f32*)((s32)mario + 0x144) > target) {
+            *(f32*)((s32)mario + 0x144) = target;
+        }
+    }
+
+    cur = *(f32*)((s32)mario + 0x14C);
+    target = *(f32*)((s32)mario + 0x148);
+    rate = *(f32*)((s32)mario + 0x158);
+    if (cur > target) {
+        cur += ((target - float_1_80424ac4) - cur) * rate;
+        *(f32*)((s32)mario + 0x14C) = cur;
+        if (*(f32*)((s32)mario + 0x14C) < target) {
+            *(f32*)((s32)mario + 0x14C) = target;
+        }
+    } else if (cur < target) {
+        cur += ((target + float_1_80424ac4) - cur) * rate;
+        *(f32*)((s32)mario + 0x14C) = cur;
+        if (*(f32*)((s32)mario + 0x14C) > target) {
+            *(f32*)((s32)mario + 0x14C) = target;
+        }
+    }
+
+    if ((*(u32*)((s32)mario + 4) & 0x10000) == 0) {
+        camGetPtr(4);
+        cam = camGetPtr(4);
+        sincosf(*(f32*)((s32)cam + 0x114) - float_90_80424ac8, &sinVal, &cosVal);
+        if ((*(u32*)((s32)mario + 4) & 0x20000) == 0) {
+            *(f32*)((s32)mario + 0xEC) =
+                (*(f32*)((s32)mario + 0x13C) * sinVal) + *(f32*)((s32)mario + 0x8C);
+            *(f32*)((s32)mario + 0xF4) =
+                (*(f32*)((s32)mario + 0x13C) * cosVal) + *(f32*)((s32)mario + 0x94);
+            *(f32*)((s32)mario + 0xF0) =
+                *(f32*)((s32)mario + 0x90) + *(f32*)((s32)mario + 0x9C) +
+                *(f32*)((s32)mario + 0x144);
+            if (*(u16*)((s32)mario + 0x2E) == 0x19) {
+                *(f32*)((s32)mario + 0xF0) += float_10_80424acc;
+            }
+            *(f32*)((s32)mario + 0x64) = *(f32*)((s32)mario + 0x14C);
+        } else {
+            *(f32*)((s32)mario + 0xEC) =
+                (*(f32*)((s32)mario + 0x13C) * sinVal) +
+                (*(f32*)((s32)mario + 0x14C) * sinVal) +
+                *(f32*)((s32)mario + 0x8C);
+            *(f32*)((s32)mario + 0xF4) =
+                (*(f32*)((s32)mario + 0x13C) * cosVal) +
+                (*(f32*)((s32)mario + 0x14C) * cosVal) +
+                *(f32*)((s32)mario + 0x94);
+            *(f32*)((s32)mario + 0x64) = *(f32*)((s32)mario + 0x14C);
+        }
+    }
+
     return 0;
 }
 

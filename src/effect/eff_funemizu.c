@@ -398,6 +398,68 @@ void effFunemizuDisp(s32 cameraId, void* effect) {
 }
 
 /* stub-fill: effFunemizuEntry | prototype_only | source_prototype */
-void effFunemizuEntry(double x, double y, double z, double scale, double angle, s32 type) {
-    return;
+void* effFunemizuEntry(double x, double y, double z, double scale, double angle, s32 type) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern s32 irand(s32 range);
+    extern void effFunemizuMain(void* effect);
+    extern const char str_funemizu_802ff1c0[];
+    extern f32 float_0p5_804279d4;
+    extern f32 float_0_804279d0;
+    extern f32 float_1_804279dc;
+    extern f32 float_0p1_804279f0;
+    extern f32 float_100_80427a00;
+
+    void* effect = effEntry();
+    s32 count = 1;
+    void* work;
+    void* child;
+    s32 i;
+    f32 halfScale;
+    f32 zero;
+
+    if (type == 1) {
+        count = ((s32)scale * 3) + 1;
+    }
+    if (count > 10) {
+        count = 10;
+    }
+
+    *(const char**)((s32)effect + 0x14) = str_funemizu_802ff1c0;
+    *(s32*)((s32)effect + 8) = count;
+    work = __memAlloc(3, count * 0x4C);
+    *(void**)((s32)effect + 0xC) = work;
+    *(void**)((s32)effect + 0x10) = effFunemizuMain;
+
+    zero = float_0_804279d0;
+    halfScale = (f32)scale * float_0p5_804279d4;
+    *(s32*)work = type;
+    *(f32*)((s32)work + 4) = (f32)x;
+    *(f32*)((s32)work + 8) = (f32)y;
+    *(f32*)((s32)work + 0xC) = (f32)z;
+    *(f32*)((s32)work + 0x18) = zero;
+    *(f32*)((s32)work + 0x1C) = zero;
+    *(f32*)((s32)work + 0x20) = zero;
+    *(f32*)((s32)work + 0x24) = zero;
+    *(f32*)((s32)work + 0x2C) = zero;
+    *(f32*)((s32)work + 0x28) = zero;
+    *(s32*)((s32)work + 0x30) = 0;
+    *(f32*)((s32)work + 0x44) = float_1_804279dc;
+    *(s32*)((s32)work + 0x48) = 4;
+
+    child = (void*)((s32)work + 0x4C);
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, child = (void*)((s32)child + 0x4C)) {
+        *(f32*)((s32)child + 4) = zero;
+        *(f32*)((s32)child + 8) = zero;
+        *(f32*)((s32)child + 0xC) = zero;
+        *(f32*)((s32)child + 0x10) = halfScale;
+        *(f32*)((s32)child + 0x14) = (f32)angle;
+        *(f32*)((s32)child + 0x34) = halfScale + (f32)irand(2);
+        *(f32*)((s32)child + 0x38) = float_0p1_804279f0 + ((f32)irand(10) / float_100_80427a00);
+        *(s32*)((s32)child + 0x3C) = irand(5);
+        *(s32*)((s32)child + 0x40) = 0xFF;
+    }
+
+    return effect;
 }
+

@@ -33,15 +33,130 @@ u8 btl_yoshi_yoroyoro_jump_move(void) {
 }
 
 
-void __makeTechMenuFunc(void* commandWork, s32 param_2) {
-    ;
+void __makeTechMenuFunc(void* commandWork, s32* count) {
+    extern void* _battleWorkPointer;
+    extern void* BattleGetPartyPtr(void* battleWork);
+    extern s32 BattleTransPartyId(s32 id);
+    extern s32 partyGetTechLv(s32 partyId);
+    extern char* msgSearch(char* msg);
+    extern u8 lbl_8037C440[];
+    s32 techLv;
+    void* party;
+    u8* entry;
+
+    party = BattleGetPartyPtr(_battleWorkPointer);
+    techLv = partyGetTechLv(BattleTransPartyId(*(s32*)((s32)party + 8)));
+
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(s32*)(entry + 0x90) = -1;
+    *(s32*)(entry + 0x94) = 0;
+    *(void**)(entry + 0x80) = lbl_8037C440 + 0x624;
+    *(s32*)(entry + 0x84) = 0;
+    *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+    *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+    *count = *count + 1;
+
+    if (techLv >= 0) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_8037C440 + 0x6E4;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
+    if (techLv >= 1) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_8037C440 + 0xAA4;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
+    if (techLv >= 2) {
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        *(s32*)(entry + 0x94) = 0;
+        *(void**)(entry + 0x80) = lbl_8037C440 + 0xB64;
+        *(s32*)(entry + 0x84) = 0;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
+        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *count = *count + 1;
+    }
 }
 
+u8 btl_yoshi_yoroyoro_jump_calc_param(void* evt) {
+    extern void* _battleWorkPointer;
+    extern s32 evtGetValue(void* evt, s32 arg);
+    extern f32 evtGetFloat(void* evt, s32 arg);
+    extern void evtSetFloat(void* evt, s32 arg, f32 value);
+    extern void evtSetValue(void* evt, s32 arg, s32 value);
+    extern s32 BattleTransID(void* evt, s32 id);
+    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
+    extern void BtlUnit_SetMoveTargetPos(void* unit, f32 x, f32 y, f32 z);
+    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+    extern void BtlUnit_SetMoveStartPos(void* unit, f32 x, f32 y, f32 z);
+    extern void BtlUnit_SetMoveCurrentPos(void* unit, f32 x, f32 y, f32 z);
+    extern f32 angleABf(f32 x0, f32 z0, f32 x1, f32 z1);
+    extern f32 distABf(f32 x0, f32 z0, f32 x1, f32 z1);
+    extern f32 float_0_804240b4;
+    extern f32 float_1_804240d8;
+    s32* args;
+    void* battleWork;
+    s32 unitId;
+    void* unit;
+    f32 targetX;
+    f32 targetY;
+    f32 targetZ;
+    f32 moveSpeed;
+    s32 speedArg;
+    s32 durationOut;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 dx;
 
-u8 btl_yoshi_yoroyoro_jump_calc_param(void) {
-    return 0;
+    args = *(s32**)((s32)evt + 0x18);
+    battleWork = _battleWorkPointer;
+    unitId = BattleTransID(evt, evtGetValue(evt, args[0]));
+    targetX = (f32)evtGetValue(evt, args[1]);
+    targetY = (f32)evtGetValue(evt, args[2]);
+    targetZ = (f32)evtGetValue(evt, args[3]);
+    speedArg = args[4];
+    moveSpeed = evtGetFloat(evt, speedArg);
+    unit = BattleGetUnitPtr(battleWork, unitId);
+    durationOut = args[5];
+
+    if (moveSpeed > float_0_804240b4) {
+        *(f32*)((s32)unit + 0x170) = moveSpeed;
+    }
+    if (*(f32*)((s32)unit + 0x170) <= float_0_804240b4) {
+        *(f32*)((s32)unit + 0x170) = float_1_804240d8;
+    }
+    BtlUnit_SetMoveTargetPos(unit, targetX, targetY, targetZ);
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    BtlUnit_SetMoveStartPos(unit, x, y, z);
+    BtlUnit_SetMoveCurrentPos(unit, x, y, z);
+    *(f32*)((s32)unit + 0x17C) = angleABf(x, z, targetX, targetZ);
+    *(f32*)((s32)unit + 0x180) = distABf(x, z, targetX, targetZ);
+    dx = targetX - x;
+    if (dx > float_0_804240b4) {
+        *(s8*)((s32)unit + 0x188) = 1;
+    } else if (dx < float_0_804240b4) {
+        *(s8*)((s32)unit + 0x188) = -1;
+    }
+    *(f32*)((s32)unit + 0x180) = (dx < float_0_804240b4) ? -dx : dx;
+    *(s32*)((s32)unit + 0x16C) = 0xB4;
+    *(f32*)((s32)unit + 0x184) = (f32)*(s32*)((s32)unit + 0x16C);
+    *(f32*)((s32)unit + 0x178) = float_0_804240b4;
+    *(f32*)((s32)unit + 0x170) = *(f32*)((s32)unit + 0x180) / (f32)*(s32*)((s32)unit + 0x16C);
+    evtSetFloat(evt, speedArg, *(f32*)((s32)unit + 0x170));
+    evtSetValue(evt, durationOut, *(s32*)((s32)unit + 0x16C));
+    return 2;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

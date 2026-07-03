@@ -15,10 +15,89 @@ u8 aramMgrGarbage(void);
 void arqCallbackToAram(void* arq);
 void arqCallbackToMram(void* arq);
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 aramMgrGarbage(void) {
+    extern void* wp;
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void __memFree(s32 heap, void* ptr);
+    extern void ARQPostRequest(void* request, u32 owner, s32 type, s32 priority, u32 source, u32 dest, u32 length, void* callback);
+    extern void aramCallbackGarbage(void);
+    void* head;
+    void* entry;
+    void* prev;
+    void* tail;
+    u32 aramAddr;
+    s32 chunks;
+    s32 i;
+    u32 offset;
+
+    head = *(void**)((s32)wp + 0x34);
+    entry = head;
+    while (entry != 0) {
+        if ((*(volatile u16*)entry & 2) != 0) {
+            while ((*(volatile u16*)entry & 4) == 0) {
+            }
+        }
+        if ((*(volatile u16*)entry & 8) != 0) {
+            while ((*(volatile u16*)entry & 0x10) == 0) {
+            }
+        }
+        entry = *(void**)((s32)entry + 0x34);
+    }
+
+    entry = head;
+    prev = 0;
+    tail = 0;
+    while (entry != 0) {
+        if ((*(u16*)entry & 0x20) != 0) {
+            *(u16*)entry = 0;
+            if (prev != 0) {
+                *(void**)((s32)prev + 0x34) = *(void**)((s32)entry + 0x34);
+            }
+            entry = *(void**)((s32)entry + 0x34);
+        } else {
+            if (prev == 0) {
+                tail = entry;
+            }
+            prev = entry;
+            entry = *(void**)((s32)entry + 0x34);
+        }
+    }
+    *(void**)((s32)wp + 0x34) = tail;
+    *(void**)((s32)wp + 0x38) = prev;
+
+    aramAddr = *(u32*)((s32)wp + 0x24);
+    entry = *(void**)((s32)wp + 0x34);
+    while (entry != 0) {
+        if (*(u32*)((s32)entry + 0x28) != aramAddr) {
+            *(u32*)((s32)wp + 0x64) = 0x8000;
+            *(void**)((s32)wp + 0x60) = __memAlloc(0, *(u32*)((s32)wp + 0x64));
+            offset = 0;
+            chunks = (*(u32*)((s32)entry + 0x24) + *(u32*)((s32)wp + 0x64) - 1) / *(u32*)((s32)wp + 0x64);
+            for (i = 0; i < chunks; i++) {
+                *(s32*)((s32)wp + 0x5C) = 1;
+                ARQPostRequest((void*)((s32)wp + 0x3C), 0x19751128, 1, 0, *(u32*)((s32)entry + 0x28) + offset, *(u32*)((s32)wp + 0x60), *(u32*)((s32)wp + 0x64), aramCallbackGarbage);
+                while (*(volatile s32*)((s32)wp + 0x5C) != 0) {
+                }
+                *(s32*)((s32)wp + 0x5C) = 1;
+                ARQPostRequest((void*)((s32)wp + 0x3C), 0x19751128, 0, 0, *(u32*)((s32)wp + 0x60), aramAddr + offset, *(u32*)((s32)wp + 0x64), aramCallbackGarbage);
+                while (*(volatile s32*)((s32)wp + 0x5C) != 0) {
+                }
+                offset += 0x8000;
+            }
+            __memFree(0, *(void**)((s32)wp + 0x60));
+            *(void**)((s32)wp + 0x60) = 0;
+        }
+        *(u32*)((s32)entry + 0x28) = aramAddr;
+        aramAddr = *(u32*)((s32)entry + 0x28) + *(u32*)((s32)entry + 0x24);
+        entry = *(void**)((s32)entry + 0x34);
+    }
+    *(u32*)((s32)wp + 0x20) = aramAddr;
     return 0;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

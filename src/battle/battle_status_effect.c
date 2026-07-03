@@ -217,19 +217,227 @@ void BattleStatusChangeMsgSetAnnouce(void* info, s32 index, s32 value) {
 
 
 int BattleStatusChangeMsgMain(void* battleWork) {
-    return 0;
-}
+    extern s32 BattlePadCheckTrigger(u32 buttons);
+    extern char* msgSearch(char* msg);
+    extern void* dispEntry(s32 cameraId, s32 order, void* callback, s32 param, f32 priority);
+    extern void _st_chg_msg_disp(void);
+    extern u8 _st_chg_msg_data[];
+    extern char zero_80424708[];
+    extern f32 float_900_80424724;
+    u8* work;
+    u8* entry;
+    s8* pri;
+    u8 status;
+    s32 found;
+    s32 offset;
+    s32 i;
+    void* unit;
+    u8* data;
+    char* msg;
 
+    work = (u8*)((s32)battleWork + 0x18DA0);
+    found = 0;
+    pri = _st_pri_data;
+    while (*pri != -1) {
+        status = *pri;
+        entry = work + (s8)status * 0xC;
+        if ((s8)entry[0] != -1) {
+            BattleGetUnitPtr(battleWork, *(s32*)(entry + 4));
+            found = 1;
+            if (entry[2] != 0) {
+                entry[2]--;
+                if (BattlePadCheckTrigger(0x300) != 0) {
+                    entry[2] = 0;
+                }
+                if (entry[2] == 0) {
+                    entry[0] = -1;
+                }
+            } else {
+                sprintf((char*)(work + 0x150), zero_80424708);
+                data = _st_chg_msg_data;
+                offset = 0;
+                for (i = 0; i < 0x1C; i++) {
+                    if ((s8)entry[0] == (s8)data[offset] || (s8)data[offset] == -1) {
+                        if (*(s32*)(entry + 8) != 0) {
+                            msg = msgSearch(*(char**)(data + offset + 8));
+                        } else {
+                            msg = msgSearch(*(char**)(data + offset + 0xC));
+                        }
+                        sprintf((char*)(work + 0x150), msg);
+                        break;
+                    }
+                    offset += 0x10;
+                }
+                entry[2] = 0x5A;
+            }
+            dispEntry(8, 1, _st_chg_msg_disp, 0, float_900_80424724);
+            break;
+        }
+        pri++;
+    }
+
+    if (found != 0) {
+        for (i = 0; i < 0x40; i++) {
+            unit = BattleGetUnitPtr(battleWork, i);
+            if (unit != 0) {
+                BattleStatusChangeInfoWorkInit(unit);
+            }
+        }
+    }
+    return found;
+}
 
 s32 BSE_TurnFirstProcessEffectMain(void* unit) {
-    return 0;
-}
+    extern f32 sinfd(f32 value);
+    extern s32 BtlUnit_CheckShadowGuard(void* unit);
+    extern void BattleDamageDirect(s32 attacker, void* unit, s32 a, s32 b, s32 c, s32 flags, s32 d, s32 e);
+    extern f32 float_0p4_80424730;
+    extern f32 float_1p6_80424734;
+    void* part;
+    void* effect;
+    void* work;
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 counter;
+    u16 state;
+    u16 mode;
 
+    part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
+    state = *(u16*)((s32)unit + 0x338);
+    if (state == 0) {
+        return 0;
+    }
+    mode = *(u16*)((s32)unit + 0x33A);
+    if (mode == 0) {
+        return 0;
+    }
+    if (mode != 1) {
+        return 0;
+    }
+
+    switch (state) {
+        case 1:
+            *(u16*)((s32)unit + 0x338) = state + 1;
+            *(f32*)((s32)unit + 0x340) = float_1_80424728;
+            BtlUnit_GetPartsWorldPos(part, &x, &y, &z);
+            z += float_5_8042472c;
+            effect = effFireEntry(x, y, z, *(f32*)((s32)unit + 0x340), 0, 0);
+            *(void**)((s32)unit + 0x344) = effect;
+            *(s32*)((s32)unit + 0x33C) = 0;
+            break;
+        case 2:
+            effect = *(void**)((s32)unit + 0x344);
+            counter = *(s32*)((s32)unit + 0x33C) + 1;
+            work = *(void**)((s32)effect + 0xC);
+            *(s32*)((s32)unit + 0x33C) = counter;
+            *(f32*)((s32)unit + 0x340) = float_1p6_80424734 * sinfd((f32)(counter * 3)) + float_0p4_80424730;
+            *(f32*)((s32)work + 0x24) = *(f32*)((s32)unit + 0x340);
+            if (*(s32*)((s32)unit + 0x33C) >= 60) {
+                *(u16*)((s32)unit + 0x338) = *(u16*)((s32)unit + 0x338) + 1;
+            }
+            break;
+        case 3:
+            effDelete(*(void**)((s32)unit + 0x344));
+            *(void**)((s32)unit + 0x344) = 0;
+            *(u16*)((s32)unit + 0x338) = 0;
+            if (BtlUnit_CheckShadowGuard(unit) == 0) {
+                BattleDamageDirect(-5, unit, 0, 1, 0, 0x118, 0, 1);
+            }
+            return 0;
+        default:
+            return 0;
+    }
+    return 1;
+}
 
 u8 BattleStatusChangeInfoSetAnnouce(void* unit, int param_2, u8 param_3, u32 param_4) {
+    u8* base;
+    u8* entry;
+    s32 insert;
+    s32 offset;
+    s32 newPri;
+    s32 count;
+    s32 delay;
+    s32 y;
+    s32 i;
+    u8 temp[12];
+    u32 save0;
+    u32 save4;
+    u32 save8;
+
+    base = (u8*)((s32)unit + 0xAE8);
+    newPri = (s8)_get_pri((s8)param_2);
+    insert = 0;
+    offset = 0;
+    while (insert < 6) {
+        if (newPri >= (s8)_get_pri((s8)base[offset])) {
+            break;
+        }
+        insert++;
+        offset += 0xC;
+    }
+
+    if (insert < 6) {
+        temp[0] = param_2;
+        temp[1] = param_3;
+        temp[2] = 0;
+        temp[3] = 0;
+        *(s32*)(temp + 4) = 0;
+        *(u32*)(temp + 8) = param_4;
+
+        entry = base + insert * 0xC;
+        if ((s8)param_2 == (s8)entry[0]) {
+            *(u32*)(entry + 0) = *(u32*)(temp + 0);
+            *(u32*)(entry + 4) = *(u32*)(temp + 4);
+            *(u32*)(entry + 8) = *(u32*)(temp + 8);
+        } else {
+            for (i = insert; i < 6; i++) {
+                entry = base + i * 0xC;
+                save0 = *(u32*)(entry + 0);
+                save4 = *(u32*)(entry + 4);
+                save8 = *(u32*)(entry + 8);
+                *(u32*)(entry + 0) = *(u32*)(temp + 0);
+                *(u32*)(entry + 4) = *(u32*)(temp + 4);
+                *(u32*)(entry + 8) = *(u32*)(temp + 8);
+                *(u32*)(temp + 0) = save0;
+                *(u32*)(temp + 4) = save4;
+                *(u32*)(temp + 8) = save8;
+            }
+        }
+
+        count = 0;
+        delay = 0;
+        offset = 0;
+        for (i = 0; i < 6; i++) {
+            entry = base + offset;
+            if ((s8)entry[0] == -1) {
+                break;
+            }
+            entry[2] = delay;
+            delay += 10;
+            count++;
+            offset += 0xC;
+            *(s32*)(entry + 4) = 0;
+        }
+
+        if ((u8)delay != 0) {
+            y = 0x50;
+        } else {
+            y = 0x3C;
+        }
+        offset = count * 0xC;
+        for (i = count; i >= 0; i--) {
+            entry = base + offset;
+            if ((s8)entry[0] != -1) {
+                entry[3] = y;
+                y += 10;
+            }
+            offset -= 0xC;
+        }
+    }
     return 0;
 }
-
 
 void BSE_Sleep(BattleWorkUnit* unit) {
     void* effect;

@@ -238,92 +238,406 @@ s32 evt_map_entry_airport_harbor(void* pEvt) {
 #pragma use_lmw_stmw on
 
 s32 evt_mapobj_color(void* pEvt) {
-    return 0;
+    extern s32 evtGetValue(void*, s32);
+    extern void mapObjSetColor(s32, u8*);
+    extern void mapGrpSetColor(s32, u8*);
+    s32* args;
+    s32 group;
+    s32 id;
+    u8 color[4];
+
+    args = *(s32**)((s32)pEvt + 0x18);
+    group = evtGetValue(pEvt, args[0]);
+    id = evtGetValue(pEvt, args[1]);
+    color[0] = evtGetValue(pEvt, args[2]);
+    color[1] = evtGetValue(pEvt, args[3]);
+    color[2] = evtGetValue(pEvt, args[4]);
+    color[3] = evtGetValue(pEvt, args[5]);
+    if (group == 0) {
+        mapObjSetColor(id, color);
+    } else {
+        mapGrpSetColor(id, color);
+    }
+    return 2;
 }
 
+s32 evt_map_set_fog(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern f32 evtGetFloat(void*, s32);
+    extern void mapSetFog(s32, f32, f32, unsigned char*);
+    s32* args;
+    s32 mode;
+    f32 start;
+    f32 end;
+    unsigned char color[4];
 
-s32 evt_map_set_fog(int param_1) {
-    return 0;
+    args = *(s32**)((s32)pEvt + 0x18);
+    mode = evtGetValue(pEvt, args[0]);
+    start = evtGetFloat(pEvt, args[1]);
+    end = evtGetFloat(pEvt, args[2]);
+    color[0] = evtGetValue(pEvt, args[3]);
+    color[1] = evtGetValue(pEvt, args[4]);
+    color[2] = evtGetValue(pEvt, args[5]);
+    color[3] = 0;
+    mapSetFog(mode, start, end, color);
+    return 2;
 }
-
 
 s32 evt_map_replace_mapobj(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void*, s32);
+    extern void mapObjGetPos(s32, f32*);
+    extern void mapObjFlagOn(s32, u32);
+    extern void effTorchEntry(s32, f32, f32, f32, f32);
+    extern void* effFireEntry(s32, s32, f32, f32, f32, f32);
+    s32* args;
+    s32 id;
+    s32 kind;
+    f32 pos[3];
+    void* eff;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    id = evtGetValue(pEvt, args[0]);
+    kind = evtGetValue(pEvt, args[1]);
+    mapObjGetPos(id, pos);
+    mapObjFlagOn(id, 0x4000);
+    switch (kind) {
+        case 0:
+            effTorchEntry(0, pos[0], pos[1] - 3.0f, pos[2], 0.6f);
+            break;
+        case 1:
+            eff = effFireEntry(5, 0, pos[0], pos[1], pos[2], 0.4f);
+            *(s32*)((s32)*(void**)((s32)eff + 0xC) + 0x88) = 1;
+            break;
+    }
+    return 2;
+}
 
 s32 evt_map_set_blend(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void*, s32);
+    extern void mapSetBlend(u8*);
+    extern void mapSetBlend2(u8*);
+    s32* args;
+    s32 mode;
+    u8 color[4];
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    mode = evtGetValue(pEvt, args[0]);
+    color[0] = evtGetValue(pEvt, args[1]);
+    color[1] = evtGetValue(pEvt, args[2]);
+    color[2] = evtGetValue(pEvt, args[3]);
+    color[3] = evtGetValue(pEvt, args[4]);
+    if (mode == 0) {
+        mapSetBlend(color);
+    } else {
+        mapSetBlend2(color);
+    }
+    return 2;
+}
 
 s32 evt_mapobj_scale(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void*, s32);
+    extern f32 evtGetFloat(void*, s32);
+    extern void mapObjScale(s32, f32, f32, f32);
+    s32* args;
+    s32 group;
+    s32 id;
+    f32 x;
+    f32 y;
+    f32 z;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    group = evtGetValue(pEvt, args[0]);
+    id = evtGetValue(pEvt, args[1]);
+    x = evtGetFloat(pEvt, args[2]);
+    y = evtGetFloat(pEvt, args[3]);
+    z = evtGetFloat(pEvt, args[4]);
+    if (group == 0) {
+        mapObjScale(id, x, y, z);
+    } else {
+        mapObjScale(id, x, y, z);
+    }
+    return 2;
+}
 
 s32 evt_mapobj_rotate(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void*, s32);
+    extern f32 evtGetFloat(void*, s32);
+    extern void mapObjRotate(s32, f32, f32, f32);
+    s32* args;
+    s32 group;
+    s32 id;
+    f32 x;
+    f32 y;
+    f32 z;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    group = evtGetValue(pEvt, args[0]);
+    id = evtGetValue(pEvt, args[1]);
+    x = evtGetFloat(pEvt, args[2]);
+    y = evtGetFloat(pEvt, args[3]);
+    z = evtGetFloat(pEvt, args[4]);
+    if (group == 0) {
+        mapObjRotate(id, x, y, z);
+    } else {
+        mapObjRotate(id, x, y, z);
+    }
+    return 2;
+}
 
 s32 evt_mapobj_trans(void* pEvt) {
-    return 0;
+    extern s32 evtGetValue(void*, s32);
+    extern f32 evtGetFloat(void*, s32);
+    extern void mapObjTranslate(s32, f32, f32, f32);
+    s32* args;
+    s32 group;
+    s32 id;
+    f32 x;
+    f32 y;
+    f32 z;
+
+    args = *(s32**)((s32)pEvt + 0x18);
+    group = evtGetValue(pEvt, args[0]);
+    id = evtGetValue(pEvt, args[1]);
+    x = evtGetFloat(pEvt, args[2]);
+    y = evtGetFloat(pEvt, args[3]);
+    z = evtGetFloat(pEvt, args[4]);
+    if (group == 0) {
+        mapObjTranslate(id, x, y, z);
+    } else {
+        mapObjTranslate(id, x, y, z);
+    }
+    return 2;
 }
 
+s32 evt_mapobj_get_position(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern s32 evtSetValue(void*, s32, s32);
+    extern void mapObjGetPos(s32, float*);
+    s32* args;
+    float pos[3];
 
-s32 evt_mapobj_get_position(int param_1) {
-    return 0;
+    args = *(s32**)((s32)pEvt + 0x18);
+    mapObjGetPos(evtGetValue(pEvt, args[0]), pos);
+    evtSetValue(pEvt, args[1], (s32)(pos[0] * 1024.0f));
+    evtSetValue(pEvt, args[2], (s32)(pos[1] * 1024.0f));
+    evtSetValue(pEvt, args[3], (s32)(pos[2] * 1024.0f));
+    return 2;
 }
 
+s32 evt_map_set_flush_color(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern void mapObjSetFlushColor(s32, u8, u8, u8, u8);
+    extern void mapGrpSetFlushColor(s32, u8, u8, u8, u8);
+    s32* args;
+    s32 group;
+    s32 id;
+    s32 r;
+    s32 g;
+    s32 b;
+    s32 a;
 
-s32 evt_map_set_flush_color(int param_1) {
-    return 0;
+    args = *(s32**)((s32)pEvt + 0x18);
+    group = evtGetValue(pEvt, args[0]);
+    id = evtGetValue(pEvt, args[1]);
+    r = evtGetValue(pEvt, args[2]);
+    g = evtGetValue(pEvt, args[3]);
+    b = evtGetValue(pEvt, args[4]);
+    a = evtGetValue(pEvt, args[5]);
+    if (group == 0) {
+        mapObjSetFlushColor(id, r, g, b, a);
+    } else {
+        mapGrpSetFlushColor(id, r, g, b, a);
+    }
+    return 2;
 }
 
+s32 evt_map_get_fog(void* pEvt) {
+    extern s32 evtSetValue(void*, s32, s32);
+    extern f32 evtSetFloat(void*, s32, f32);
+    extern void mapGetFog(s32*, f32*, f32*, unsigned char*);
+    s32* args;
+    s32 mode;
+    f32 start;
+    f32 end;
+    unsigned char color[4];
 
-s32 evt_map_get_fog(int param_1) {
-    return 0;
+    args = *(s32**)((s32)pEvt + 0x18);
+    mapGetFog(&mode, &start, &end, color);
+    evtSetValue(pEvt, args[0], mode);
+    evtSetFloat(pEvt, args[1], start);
+    evtSetFloat(pEvt, args[2], end);
+    evtSetValue(pEvt, args[3], color[0]);
+    evtSetValue(pEvt, args[4], color[1]);
+    evtSetValue(pEvt, args[5], color[2]);
+    return 2;
 }
-
 
 s32 evt_mapobj_flag_onoff(void* pEvt) {
-    return 0;
+    extern s32 evtGetValue(void*, s32);
+    extern void mapObjFlagOff(s32, s32);
+    extern void mapObjFlagOn(s32, s32);
+    extern void mapGrpFlagOff(s32, s32);
+    extern void mapGrpFlagOn(s32, s32);
+    s32* args;
+    s32 group;
+    s32 onoff;
+    s32 id;
+    s32 flag;
+
+    args = *(s32**)((s32)pEvt + 0x18);
+    group = evtGetValue(pEvt, args[0]);
+    onoff = evtGetValue(pEvt, args[1]);
+    id = evtGetValue(pEvt, args[2]);
+    flag = args[3];
+    if (group == 0) {
+        if (onoff == 0) {
+            mapObjFlagOff(id, flag);
+        } else {
+            mapObjFlagOn(id, flag);
+        }
+    } else {
+        if (onoff == 0) {
+            mapGrpFlagOff(id, flag);
+        } else {
+            mapGrpFlagOn(id, flag);
+        }
+    }
+    return 2;
 }
 
+s32 evt_map_set_flush_onoff(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern void mapObjFlushOn(s32);
+    extern void mapObjFlushOff(s32);
+    extern void mapGrpFlushOn(s32);
+    extern void mapGrpFlushOff(s32);
+    s32* args;
+    s32 group;
+    s32 id;
+    s32 onoff;
 
-s32 evt_map_set_flush_onoff(int param_1) {
-    return 0;
+    args = *(s32**)((s32)pEvt + 0x18);
+    group = evtGetValue(pEvt, args[0]);
+    id = evtGetValue(pEvt, args[1]);
+    onoff = evtGetValue(pEvt, args[2]);
+    if (group == 0) {
+        if (onoff != 0) {
+            mapObjFlushOn(id);
+        } else {
+            mapObjFlushOff(id);
+        }
+    } else {
+        if (onoff != 0) {
+            mapGrpFlushOn(id);
+        } else {
+            mapGrpFlushOff(id);
+        }
+    }
+    return 2;
 }
 
+s32 evt_map_blend_set_mobj_flag(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern void* mobjNameToPtr(char*);
+    extern void animPoseSetMaterialFlagOn(s32, u32);
+    extern void animPoseSetMaterialFlagOff(s32, u32);
+    s32* args;
+    s32 mode;
+    char* name;
+    u32 flag;
+    void* mobj;
 
-s32 evt_map_blend_set_mobj_flag(int param_1) {
-    return 0;
+    args = *(s32**)((s32)pEvt + 0x18);
+    mode = evtGetValue(pEvt, args[0]);
+    name = (char*)evtGetValue(pEvt, args[1]);
+    flag = evtGetValue(pEvt, args[2]);
+    mobj = mobjNameToPtr(name);
+    if (mode == 1) {
+        animPoseSetMaterialFlagOn(*(s32*)((s32)mobj + 0x70), flag);
+    } else {
+        animPoseSetMaterialFlagOff(*(s32*)((s32)mobj + 0x70), flag);
+    }
+    return 2;
 }
 
+s32 evt_map_get_flush_color(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern s32 evtSetValue(void*, s32, s32);
+    extern void mapObjGetFlushColor(s32, u8*, u8*, u8*, u8*);
+    s32* args;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
 
-s32 evt_map_get_flush_color(int param_1) {
-    return 0;
+    args = *(s32**)((s32)pEvt + 0x18);
+    mapObjGetFlushColor(evtGetValue(pEvt, args[0]), &r, &g, &b, &a);
+    evtSetValue(pEvt, args[1], r);
+    evtSetValue(pEvt, args[2], g);
+    evtSetValue(pEvt, args[3], b);
+    evtSetValue(pEvt, args[4], a);
+    return 2;
 }
-
 
 s32 check2(void* pEvt) {
-    return 0;
-}
+    extern void* marioGetPtr(void);
+    extern char* hitGetName(void*);
+    extern s32 strcmp(char*, char*);
+    extern s32 evtSetValue(void*, s32, s32);
+    s32* args;
+    void* mario;
+    void* hit;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    mario = marioGetPtr();
+    evtSetValue(pEvt, args[0], 0);
+    hit = *(void**)((s32)mario + 0x1E8);
+    if (hit != 0 && strcmp(*(char**)((s32)pEvt + 0xA0), hitGetName(hit)) != 0) {
+        evtSetValue(pEvt, args[0], 1);
+    }
+    return 2;
+}
 
 s32 check(void* pEvt) {
-    return 0;
-}
+    extern void* marioGetPtr(void);
+    extern char* hitGetName(void*);
+    extern s32 strcmp(char*, char*);
+    extern s32 evtSetValue(void*, s32, s32);
+    s32* args;
+    void* mario;
+    void* hit;
 
+    args = *(s32**)((s32)pEvt + 0x18);
+    mario = marioGetPtr();
+    evtSetValue(pEvt, args[0], 0);
+    hit = *(void**)((s32)mario + 0x1E8);
+    if (hit != 0 && strcmp(*(char**)((s32)pEvt + 0xA0), hitGetName(hit)) == 0) {
+        evtSetValue(pEvt, args[0], 1);
+    }
+    return 2;
+}
 
 s32 evt_mapobj_set_offscreen(void* pEvt) {
-    return 0;
+    extern s32 evtGetValue(void*, s32);
+    extern void mapObjSetOffScreen(s32, s32);
+    extern void mapGrpSetOffScreen(s32, s32);
+    s32* args;
+    s32 group;
+    s32 id;
+    s32 onoff;
+
+    args = *(s32**)((s32)pEvt + 0x18);
+    group = evtGetValue(pEvt, args[0]);
+    id = evtGetValue(pEvt, args[1]);
+    onoff = evtGetValue(pEvt, args[2]);
+    if (group == 0) {
+        mapObjSetOffScreen(id, onoff);
+    } else {
+        mapGrpSetOffScreen(id, onoff);
+    }
+    return 2;
 }
 
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_map_playanim(int param_1) {
@@ -341,13 +655,6 @@ s32 evt_map_playanim(int param_1) {
     mapPlayAnimationLv(id, anim, level);
     return 2;
 }
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

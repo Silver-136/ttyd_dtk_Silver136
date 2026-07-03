@@ -336,7 +336,99 @@ u32 _getRegistStatus(BattleWorkUnit* unit, StatusEffectType statusType) {
 /* AUTOSTUB _getSickStatusRate size 0x1F0 */
 /* signature source: manual_signatures */
 u32 _getSickStatusRate(void* weapon, StatusEffectType statusType) {
-    return 0;
+    switch (statusType) {
+        case 0:
+            return *(u8*)((s32)weapon + 0x80);
+        case 1:
+            return *(u8*)((s32)weapon + 0x82);
+        case 2:
+            return *(u8*)((s32)weapon + 0x84);
+        case 3:
+            return *(u8*)((s32)weapon + 0x86);
+        case 4:
+            return *(u8*)((s32)weapon + 0x89);
+        case 5:
+            return *(u8*)((s32)weapon + 0x8B);
+        case 6:
+            return *(u8*)((s32)weapon + 0x8D);
+        case 7:
+            return *(u8*)((s32)weapon + 0x8F);
+        case 8:
+            return *(u8*)((s32)weapon + 0x91);
+        case 9:
+            if (*(s8*)((s32)weapon + 0x95) > 0) {
+                return *(u8*)((s32)weapon + 0x93);
+            }
+            return 0;
+        case 10:
+            if (*(s8*)((s32)weapon + 0x95) <= 0) {
+                return *(u8*)((s32)weapon + 0x93);
+            }
+            return 0;
+        case 11:
+            if (*(s8*)((s32)weapon + 0x98) > 0) {
+                return *(u8*)((s32)weapon + 0x96);
+            }
+            return 0;
+        case 12:
+            if (*(s8*)((s32)weapon + 0x98) <= 0) {
+                return *(u8*)((s32)weapon + 0x96);
+            }
+            return 0;
+        case 13:
+            if (*(s8*)((s32)weapon + 0x9B) > 0) {
+                return *(u8*)((s32)weapon + 0x99);
+            }
+            return 0;
+        case 14:
+            if (*(s8*)((s32)weapon + 0x9B) <= 0) {
+                return *(u8*)((s32)weapon + 0x99);
+            }
+            return 0;
+        case 15:
+            return *(u8*)((s32)weapon + 0x9C);
+        case 16:
+            return *(u8*)((s32)weapon + 0xA0);
+        case 17:
+            return *(u8*)((s32)weapon + 0xA2);
+        case 18:
+            return *(u8*)((s32)weapon + 0xA4);
+        case 19:
+            return *(u8*)((s32)weapon + 0xA5);
+        case 20:
+            return *(u8*)((s32)weapon + 0x9E);
+        case 21:
+            return *(u8*)((s32)weapon + 0xA8);
+        case 22:
+            if (*(s8*)((s32)weapon + 0xAA) > 0) {
+                return 100;
+            }
+            return 0;
+        case 23:
+            if (*(s8*)((s32)weapon + 0xAC) > 0) {
+                return 100;
+            }
+            return 0;
+        case 24:
+            if (*(s8*)((s32)weapon + 0x9F) != 0) {
+                return 100;
+            }
+            return 0;
+        case 25:
+            if (*(s8*)((s32)weapon + 0xA6) != 0) {
+                return 100;
+            }
+            return 0;
+        case 26:
+            if (*(s8*)((s32)weapon + 0xA7) > 0) {
+                return 100;
+            }
+            return 0;
+        case 27:
+            return 0;
+        default:
+            return 0;
+    }
 }
 
 /* MANUAL_AUTOMATION_STUBS_END main/battle/battle_damage */
@@ -349,7 +441,90 @@ u32 _getSickStatusRate(void* weapon, StatusEffectType statusType) {
 /* AUTOSTUB BattleCheckPikkyoro size 0x1A8 */
 /* signature source: manual_signatures */
 u32 BattleCheckPikkyoro(void* weapon, u32* param_2) {
-    return 0;
+    s32 flags[5] = { 0, 0, 0, 0, 0 };
+    void* battleWork;
+    u32 result;
+    s32 count;
+    s32 chosen;
+    s32 value;
+    s32 offset;
+    s32 i;
+
+    battleWork = _battleWorkPointer;
+    count = 0;
+    chosen = 0;
+    result = 0;
+    if (param_2 != 0) {
+        result = *param_2;
+    }
+
+    if ((*(u32*)((s32)weapon + 0x74) & 0x800) != 0) {
+        value = *(s32*)((s32)battleWork + 0x163F4);
+        if ((value & 0x100) != 0) {
+            flags[0] = 1;
+            chosen = 0;
+            count++;
+        }
+        if ((value & 0x200) != 0) {
+            flags[1] = 1;
+            chosen = 1;
+            count++;
+        }
+        if ((value & 0x400) != 0) {
+            flags[2] = 1;
+            chosen = 2;
+            count++;
+        }
+        if ((value & 0x800) != 0) {
+            flags[3] = 1;
+            chosen = 3;
+            count++;
+        }
+        if ((value & 0x1000) != 0) {
+            flags[4] = 1;
+            chosen = 4;
+            count++;
+        }
+    }
+
+    if (count > 0) {
+        if (count >= 2) {
+            value = irand(count);
+            chosen = 4;
+            offset = 4;
+            for (i = 0; i < 4; i++) {
+                value -= flags[offset];
+                if (value < 0) {
+                    break;
+                }
+                chosen--;
+                offset--;
+            }
+        }
+
+        switch (chosen) {
+            case 0:
+                result |= 0x01000000;
+                break;
+            case 1:
+                result |= 0x02000000;
+                break;
+            case 2:
+                result |= 0x04000000;
+                break;
+            case 3:
+                result |= 0x08000000;
+                break;
+            case 4:
+                result |= 0x10000000;
+                break;
+        }
+    }
+
+    if (param_2 != 0) {
+        *param_2 = result;
+    }
+    return result;
 }
 
 /* MANUAL_AUTOMATION_STUBS_END main/battle/battle_damage */

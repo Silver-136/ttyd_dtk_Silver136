@@ -239,20 +239,222 @@ void psndBGMOff_f_d(s32 name, s32 frames, s32 flags) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void psndENVOff_f_d(s32 name, s32 frames, s32 flags) {
-    ;
-}
+    extern void* gp;
+    extern u32 silent_tbl[];
+    extern const f32 float_1000_804218cc;
 
+    u8* work;
+    u8* env;
+    u16* envIdPtr;
+    s32 index;
+    s32 fade;
+    s32 volume;
+    u16 envId;
+
+    work = (u8*)&psnd;
+    index = name & 0xF;
+    envIdPtr = (u16*)(work + 0x18 + index * 2);
+    envId = *envIdPtr;
+    volume = silent_tbl[(name >> 10) & 0xF];
+
+    if (envId == 0) {
+        return;
+    }
+
+    env = work + index * 0xC;
+    if ((name & 0x200) != 0) {
+        if (env[0] != 2) {
+            if (env[0] == 4) {
+                env[0] = 2;
+            } else {
+                env[0] = 2;
+                fade = (s32)((f32)frames / (float_1000_804218cc / (f32)*(s32*)((s32)gp + 4)));
+                *(u16*)(env + 2) = fade;
+                *(u16*)(env + 4) = *(s16*)(env + 2);
+            }
+        }
+    } else if ((name & 0x400) != 0) {
+        if (env[0] != 2 && env[0] != 4) {
+            env[0] = 4;
+            fade = (s32)((f32)frames / (float_1000_804218cc / (f32)*(s32*)((s32)gp + 4)));
+            *(u16*)(env + 2) = fade;
+            *(u16*)(env + 4) = *(s16*)(env + 2);
+        }
+    } else if ((name & 0x800) != 0) {
+        env[6] = 8;
+        fade = (s32)((f32)frames / (float_1000_804218cc / (f32)*(s32*)((s32)gp + 4)));
+        *(u16*)(env + 8) = fade;
+        *(u16*)(env + 0xA) = *(s16*)(env + 8);
+        env[7] = volume;
+        if ((name & 0x40) != 0) {
+            *(u16*)(env + 0xA) = ((s32)*(s16*)(env + 8) * (u8)env[7]) / 100;
+        }
+    } else {
+        psndENV_stop(envId);
+        *envIdPtr = 0;
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2) {
-    return 0.0f;
+    extern f32 angleABTBL[];
+    extern const f32 float_0_804218d0;
+    extern const f32 float_2_804218fc;
+    extern const f32 float_45_804218f8;
+    extern const f32 float_90_80421900;
+    extern const f32 float_180_804218e0;
+    extern const f32 float_270_80421904;
+    extern const f32 float_360_804218d8;
+    extern const f64 double_0p5_802e3c98;
+
+    f32 dx;
+    f32 dz;
+    f32 absX;
+    f32 absZ;
+    f32 ratio;
+    f32 angle;
+    f32 indexValue;
+    s32 index;
+
+    dx = x2 - x1;
+    dz = z2 - z1;
+    absX = __fabsf(dx);
+    absZ = __fabsf(dz);
+
+    if (absX > absZ) {
+        ratio = absZ / absX;
+        angle = float_45_804218f8 * ratio;
+        indexValue = float_2_804218fc * angle;
+
+        if (indexValue >= float_0_804218d0) {
+            index = (s32)(double_0p5_802e3c98 + indexValue);
+        } else {
+            index = -(s32)(double_0p5_802e3c98 - indexValue);
+        }
+
+        angle = angle * angleABTBL[index];
+        if (dx >= float_0_804218d0) {
+            if (dz >= float_0_804218d0) {
+                return float_90_80421900 + angle;
+            } else {
+                return float_90_80421900 - angle;
+            }
+        } else {
+            if (dz >= float_0_804218d0) {
+                return float_270_80421904 - angle;
+            } else {
+                return float_270_80421904 + angle;
+            }
+        }
+    } else {
+        if (absZ == float_0_804218d0) {
+            return float_0_804218d0;
+        }
+
+        ratio = absX / absZ;
+        indexValue = float_45_804218f8 * ratio;
+        angle = float_2_804218fc * indexValue;
+
+        if (angle >= float_0_804218d0) {
+            index = (s32)(double_0p5_802e3c98 + angle);
+        } else {
+            index = -(s32)(double_0p5_802e3c98 - angle);
+        }
+
+        indexValue = indexValue * angleABTBL[index];
+        if (dz >= float_0_804218d0) {
+            if (dx >= float_0_804218d0) {
+                return float_180_804218e0 - indexValue;
+            } else {
+                return float_180_804218e0 + indexValue;
+            }
+        } else {
+            if (dx >= float_0_804218d0) {
+                return indexValue;
+            } else {
+                return float_360_804218d8 - indexValue;
+            }
+        }
+    }
 }
 
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void psndMapChange(void) {
-    ;
-}
+    extern void* gp;
+    extern char* strcpy(char* dst, const char* src);
+    extern s32 strcmp(const char* s1, const char* s2);
+    extern const f32 float_1000_804218cc;
+    extern const f32 float_750_804218dc;
 
+    u8* work;
+    u8* sfx;
+    s32 i;
+    s32 fade;
+    u16 flags;
+
+    work = (u8*)&psnd;
+    if (strcmp((char*)(work + 0x40), (char*)((s32)gp + 0x12C)) != 0) {
+        *(u16*)(work + 0x52) = 0;
+    }
+    strcpy((char*)(work + 0x40), (char*)((s32)gp + 0x12C));
+
+    *(u16*)(work + 0x56) &= ~0x100;
+
+    sfx = (u8*)pssfx;
+    i = 8;
+    do {
+        if ((u32)(*(s32*)sfx + 0x10000) != 0xFFFF) {
+            flags = *(u16*)(sfx + 6);
+            if ((flags & 0xA0) == 0) {
+                *(u16*)(sfx + 6) = flags | 0x40;
+            }
+        }
+        sfx += 0x28;
+        if ((u32)(*(s32*)sfx + 0x10000) != 0xFFFF) {
+            flags = *(u16*)(sfx + 6);
+            if ((flags & 0xA0) == 0) {
+                *(u16*)(sfx + 6) = flags | 0x40;
+            }
+        }
+        sfx += 0x28;
+        if ((u32)(*(s32*)sfx + 0x10000) != 0xFFFF) {
+            flags = *(u16*)(sfx + 6);
+            if ((flags & 0xA0) == 0) {
+                *(u16*)(sfx + 6) = flags | 0x40;
+            }
+        }
+        sfx += 0x28;
+        if ((u32)(*(s32*)sfx + 0x10000) != 0xFFFF) {
+            flags = *(u16*)(sfx + 6);
+            if ((flags & 0xA0) == 0) {
+                *(u16*)(sfx + 6) = flags | 0x40;
+            }
+        }
+        sfx += 0x28;
+        if ((u32)(*(s32*)sfx + 0x10000) != 0xFFFF) {
+            flags = *(u16*)(sfx + 6);
+            if ((flags & 0xA0) == 0) {
+                *(u16*)(sfx + 6) = flags | 0x40;
+            }
+        }
+        sfx += 0x28;
+        i--;
+    } while (i != 0);
+
+    if (work[0x24] != 2) {
+        work[0x24] = 2;
+        fade = (s32)(float_750_804218dc / (float_1000_804218cc / (f32)*(s32*)((s32)gp + 4)));
+        *(u16*)(work + 0x26) = fade;
+        *(u16*)(work + 0x28) = fade;
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void psndInit(void) {
     extern void SoundInit(void);

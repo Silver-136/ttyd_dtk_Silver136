@@ -283,13 +283,140 @@ u8 main_weapon(void) {
 }
 
 /* stub-fill: main_target | missing_definition | ghidra_signature */
-u8 main_target(void) {
-    return 0;
+void main_target(void) {
+    extern void* get_ptr(void);
+    extern f32 float_30_80428318;
+    extern f32 float_1p25_80428304;
+    extern f32 float_60_804282e8;
+    extern f32 float_360_80428380;
+    extern f32 float_neg1p25_804283a4;
+    extern f32 float_0_8042831c;
+
+    void* work = get_ptr();
+
+    switch (*(s32*)((s32)work + 0x64)) {
+        case 1:
+            *(s32*)((s32)work + 0x68) = 0;
+            *(f32*)((s32)work + 0x6C) = float_30_80428318;
+            *(f32*)((s32)work + 0x70) = float_1p25_80428304;
+            *(s32*)((s32)work + 0x64) = 2;
+            /* fallthrough */
+        case 2:
+            *(s32*)((s32)work + 0x68) += 1;
+            if (*(s32*)((s32)work + 0x68) >= 0x168) {
+                *(s32*)((s32)work + 0x68) = (s32)((f32)*(s32*)((s32)work + 0x68) - float_360_80428380);
+            }
+            *(f32*)((s32)work + 0x6C) += *(f32*)((s32)work + 0x70);
+            if (*(f32*)((s32)work + 0x6C) >= float_60_804282e8) {
+                *(f32*)((s32)work + 0x6C) = float_60_804282e8;
+                *(f32*)((s32)work + 0x70) = float_neg1p25_804283a4;
+                *(s32*)((s32)work + 0x64) = 3;
+            }
+            break;
+        case 3:
+            *(s32*)((s32)work + 0x68) += 1;
+            if (*(s32*)((s32)work + 0x68) >= 0x168) {
+                *(s32*)((s32)work + 0x68) = (s32)((f32)*(s32*)((s32)work + 0x68) - float_360_80428380);
+            }
+            *(f32*)((s32)work + 0x6C) += *(f32*)((s32)work + 0x70);
+            if (*(f32*)((s32)work + 0x6C) <= float_0_8042831c) {
+                *(f32*)((s32)work + 0x6C) = float_0_8042831c;
+                *(f32*)((s32)work + 0x70) = float_1p25_80428304;
+                *(s32*)((s32)work + 0x64) = 2;
+            }
+            break;
+    }
 }
 
 /* stub-fill: main_mario | missing_definition | ghidra_signature */
-u8 main_mario(void) {
-    return 0;
+void main_mario(void) {
+    extern void* get_ptr(void);
+    extern s32 keyGetStickX(s32 pad);
+    extern void* _battleWorkPointer;
+    extern void* BattleGetMarioPtr(void* battleWork);
+    extern s32 BtlUnit_GetBodyPartsId(void* unit);
+    extern void* BtlUnit_GetPartsPtr(void* unit, s32 partsId);
+    extern void BtlUnit_SetAnim(void* parts, const char* anim, s32 force);
+    extern s32 object_get_num(void);
+    extern void weapon_entry(void);
+    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+    extern void* effStampN64Entry(s32 type, f32 x, f32 y, f32 z);
+    extern char str_M_S_1_804283a8[];
+    extern char str_M_C_2A_80300e2c[];
+    extern char str_M_C_2B_80300e34[];
+    extern char str_M_D_1_804283b0[];
+    extern char str_M_X_1_804283b8[];
+    extern char str_M_I_Y_804282d4[];
+    extern f32 float_20_80428310;
+    extern f32 float_10_804282ec;
+
+    void* work = get_ptr();
+    s32 stick = (s8)keyGetStickX(0);
+    void* mario = BattleGetMarioPtr(_battleWorkPointer);
+    void* parts = BtlUnit_GetPartsPtr(mario, BtlUnit_GetBodyPartsId(mario));
+    f32 x;
+    f32 y;
+    f32 z;
+    void* eff;
+    void* effWork;
+
+    if (*(s32*)((s32)work + 0x44) >= 1 && *(s32*)((s32)work + 0x44) <= 4 &&
+        *(s32*)((s32)work + 0x40) <= 0 && object_get_num() == 0) {
+        *(s32*)((s32)work + 0x44) = 5;
+        *(s32*)((s32)work + 0x64) = 4;
+        BtlUnit_SetAnim(parts, str_M_S_1_804283a8, 1);
+    }
+
+    switch (*(s32*)((s32)work + 0x44)) {
+        case 1:
+            if (stick < -0x28) {
+                *(s32*)((s32)work + 0x44) = 2;
+                *(s32*)((s32)work + 0x48) = 0;
+                *(s32*)((s32)work + 0x54) = 0xA;
+                BtlUnit_SetAnim(parts, str_M_C_2A_80300e2c, 0);
+            }
+            break;
+        case 2:
+            if (stick > -0x14) {
+                *(s32*)((s32)work + 0x44) = 1;
+                weapon_entry();
+            } else {
+                *(s32*)((s32)work + 0x54) -= 1;
+                if (*(s32*)((s32)work + 0x54) == 2) {
+                    BtlUnit_SetAnim(parts, str_M_C_2B_80300e34, 1);
+                }
+                if (*(s32*)((s32)work + 0x54) <= 0 && *(s32*)((s32)work + 0xC) == 1) {
+                    *(s32*)((s32)work + 0x54) = 0xA;
+                    weapon_entry();
+                }
+            }
+            break;
+        case 3:
+            *(s32*)((s32)work + 0x44) = 4;
+            *(s32*)((s32)work + 0x48) = 0;
+            BtlUnit_SetAnim(parts, str_M_D_1_804283b0, 0);
+            BtlUnit_GetPos(mario, &x, &y, &z);
+            eff = effStampN64Entry(2, x, y + float_20_80428310, z + float_10_804282ec);
+            effWork = *(void**)((s32)eff + 0xC);
+            *(u8*)((s32)effWork + 0x38) = 0;
+            *(u8*)((s32)effWork + 0x39) = 0xC8;
+            *(u8*)((s32)effWork + 0x3A) = 0;
+            *(u8*)((s32)effWork + 0x3B) = 0;
+            *(u8*)((s32)effWork + 0x3C) = 0xA;
+            *(u8*)((s32)effWork + 0x3D) = 0;
+            break;
+        case 4:
+            *(s32*)((s32)work + 0x48) += 1;
+            if (*(s32*)((s32)work + 0x48) == 0x1E) {
+                BtlUnit_SetAnim(parts, str_M_X_1_804283b8, 0);
+            }
+            if (*(s32*)((s32)work + 0x48) == 0xB4) {
+                BtlUnit_SetAnim(parts, str_M_I_Y_804282d4, 0);
+                *(s32*)((s32)work + 0x44) = 1;
+                *(s32*)((s32)work + 0x48) = 0;
+            }
+            break;
+    }
 }
 
 /* stub-fill: main_base | missing_definition | ghidra_signature */
@@ -298,6 +425,72 @@ u8 main_base(void) {
 }
 
 /* stub-fill: main_genki | missing_definition | ghidra_signature */
-s32 main_genki(int param_1, int param_2) {
+s32 main_genki(EventEntry* event, s32 isFirstCall) {
+    extern void* get_ptr(void);
+    extern void* memset(void* dest, s32 value, u32 size);
+    extern s32 evtGetValue(EventEntry* event, s32 target);
+    extern void* BattleAlloc(u32 size);
+    extern void* effRecoveryEntry(s32 type, s32 arg, f32 x, f32 y, f32 z);
+    extern void* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
+    extern void main_base(void);
+    extern void main_mario(void);
+    extern void main_target(void);
+    extern void main_weapon(s32 index);
+    extern void main_object(s32 index);
+    extern void main_star(void);
+    extern void dispEntry(s32 cameraId, s32 layer, void* callback, f32 z, void* param);
+    extern void disp_2D(void);
+    extern void disp_3D(void);
+    extern void disp_3D_alpha(void);
+    extern f32 float_0_8042831c;
+    extern f32 float_neg1000_80428320;
+    extern f32 float_1_8042830c;
+    extern f32 float_901_804283c0;
+
+    void* work = get_ptr();
+    s32* args;
+    s32 i;
+    s32 j;
+
+    if (isFirstCall != 0) {
+        args = event->args;
+        memset(work, 0, 0x7CC);
+        *(s32*)((s32)work + 0x50) = evtGetValue(event, args[0]);
+        *(s32*)((s32)work + 0xC) = evtGetValue(event, args[1]);
+        *(s32*)((s32)work + 0x40) = 0x384;
+        *(s32*)((s32)work + 0x10) = 0;
+        *(s32*)((s32)work + 0x14) = 0;
+        *(s32*)((s32)work + 0x18) = 0;
+        *(f32*)((s32)work + 0x1C) = float_0_8042831c;
+        *(f32*)((s32)work + 0x20) = float_0_8042831c;
+        *(f32*)((s32)work + 0x24) = float_0_8042831c;
+        *(s32*)((s32)work + 0x58) = (*(s32*)((s32)work + 0xC) == 0) ? 3 : 7;
+        *(void**)((s32)work + 0x5C) = BattleAlloc((*(s32*)((s32)work + 0xC) == 0) ? 0x64 : 0xC8);
+        *(void**)((s32)work + 0x34) = effRecoveryEntry(2, 0, float_0_8042831c, float_neg1000_80428320, float_0_8042831c);
+        *(void**)((s32)work + 0x38) = effRecoveryEntry(2, 0, float_0_8042831c, float_neg1000_80428320, float_0_8042831c);
+        *(void**)((s32)work + 0x3C) = effRecoveryEntry(3, 0, float_0_8042831c, float_neg1000_80428320, float_0_8042831c);
+        for (i = 0; i < 7; i++) {
+            void* entry = (void*)((s32)work + (i * 0x54));
+            *(void**)((s32)entry + 0x150) = effStarStoneEntry(i, float_0_8042831c, float_neg1000_80428320, float_0_8042831c, float_1_8042830c);
+            for (j = 0; j < 3; j++) {
+                *(void**)((s32)entry + 0x154 + (j * 4)) = effStarStoneEntry(i + 7, float_0_8042831c, float_neg1000_80428320, float_0_8042831c, float_1_8042830c);
+            }
+        }
+    }
+
+    main_base();
+    main_mario();
+    main_target();
+    for (i = 0; i < *(s32*)((s32)work + 0x58); i++) {
+        main_weapon(i);
+    }
+    for (i = 0; i < 10; i++) {
+        main_object(i);
+    }
+    main_star();
+    dispEntry(8, 1, disp_2D, float_901_804283c0, 0);
+    dispEntry(4, 1, disp_3D, float_0_8042831c, 0);
+    dispEntry(4, 2, disp_3D_alpha, float_0_8042831c, 0);
     return 0;
 }
+

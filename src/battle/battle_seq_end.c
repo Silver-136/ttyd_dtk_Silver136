@@ -812,33 +812,198 @@ void _lvup_select_object_disp(void* battleWork) {
 
 /* stub-fill: _lvup_select_object_init | missing_definition | ghidra_signature */
 s32 _lvup_select_object_init(void) {
-    return 0;
-}
+    extern char str_msg_menu_mario_name__802fe738[];
+    extern u32 dat_80427178;
+    extern u32 dat_8042717c;
+    extern u32 dat_80427180;
+    void* battleWork;
+    u8* work;
+    char* base;
+    u16 hp;
+    u16 fp;
+    u16 bp;
 
+    base = str_msg_menu_mario_name__802fe738;
+    battleWork = _battleWorkPointer;
+    work = *(u8**)((s32)battleWork + 0xF28);
+    pouchGetPtr();
+
+    *(u32*)(work + 0x200) = *(u32*)(base + 0x1F0);
+    *(u32*)(work + 0x204) = *(u32*)(base + 0x1F4);
+    *(u32*)(work + 0x208) = *(u32*)(base + 0x1F8);
+    *(u32*)(work + 0x20C) = *(u32*)(base + 0x1FC);
+    *(u32*)(work + 0x210) = *(u32*)(base + 0x200);
+    *(u32*)(work + 0x214) = *(u32*)(base + 0x204);
+
+    *(u32*)(work + 0x234) = *(u32*)(base + 0x208);
+    *(u32*)(work + 0x238) = *(u32*)(base + 0x20C);
+    *(u32*)(work + 0x23C) = *(u32*)(base + 0x210);
+    *(u32*)(work + 0x240) = *(u32*)(base + 0x214);
+    *(u32*)(work + 0x244) = *(u32*)(base + 0x218);
+    *(u32*)(work + 0x248) = *(u32*)(base + 0x21C);
+
+    *(u32*)(work + 0x268) = *(u32*)(base + 0x220);
+    *(u32*)(work + 0x26C) = *(u32*)(base + 0x224);
+    *(u32*)(work + 0x270) = *(u32*)(base + 0x228);
+    *(u32*)(work + 0x274) = *(u32*)(base + 0x22C);
+    *(u32*)(work + 0x278) = *(u32*)(base + 0x230);
+    *(u32*)(work + 0x27C) = *(u32*)(base + 0x234);
+
+    work[0x228] = 0;
+    *(u32*)(work + 0x230) = dat_80427178;
+    hp = *(s16*)((s32)battleWork + 0x8E);
+    *(u16*)(work + 0x224) = hp;
+    *(u32*)(work + 0x218) = *(u32*)(base + 0x238);
+    *(u32*)(work + 0x21C) = *(u32*)(base + 0x23C);
+    *(u32*)(work + 0x220) = *(u32*)(base + 0x240);
+    *(u16*)(work + 0x226) = (hp >= 0xC8) ? hp : hp + 5;
+
+    work[0x25C] = 0;
+    *(u32*)(work + 0x264) = dat_8042717c;
+    fp = *(s16*)((s32)battleWork + 0x90);
+    *(u16*)(work + 0x258) = fp;
+    *(u32*)(work + 0x24C) = *(u32*)(base + 0x244);
+    *(u32*)(work + 0x250) = *(u32*)(base + 0x248);
+    *(u32*)(work + 0x254) = *(u32*)(base + 0x24C);
+    *(u16*)(work + 0x25A) = (fp >= 0xC8) ? fp : fp + 5;
+
+    work[0x290] = 0;
+    *(u32*)(work + 0x298) = dat_80427180;
+    bp = *(s16*)((s32)battleWork + 0x94);
+    *(u16*)(work + 0x28C) = bp;
+    *(u32*)(work + 0x280) = *(u32*)(base + 0x250);
+    *(u32*)(work + 0x284) = *(u32*)(base + 0x254);
+    *(u32*)(work + 0x288) = *(u32*)(base + 0x258);
+    *(u16*)(work + 0x28E) = (bp >= 0x63) ? bp : bp + 3;
+
+    *(u32*)(work + 0x30) |= 8;
+    return 2;
+}
 
 /* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
 
 /* stub-fill: _lvup_object_decide_bound | missing_definition | ghidra_signature */
-s32 _lvup_object_decide_bound(int param_1, int param_2) {
-    return 0;
-}
+s32 _lvup_object_decide_bound(void* event, s32 isFirstCall) {
+    extern f32 float_0_804271c0;
+    extern f32 float_1p5_804271c4;
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+    extern void* effPokopiPchargeN64Entry(s32 type, s32 duration, s32 unused, f32 x, f32 y, f32 z, f32 scale);
+    void* work;
+    s32 selected;
+    u8* entry;
+    s32 timer;
+    s32 half;
+    s32 startY;
 
+    work = *(void**)((s32)_battleWorkPointer + 0xF28);
+    selected = *(s32*)((s32)work + 0x10);
+    entry = (u8*)((s32)work + selected * 0x34 + 0x200);
+    if (isFirstCall != 0) {
+        *(s32*)((s32)event + 0x78) = 0;
+        *(s32*)((s32)event + 0x7C) = (s32)*(f32*)(entry + 4);
+        *(s32*)((s32)event + 0x80) = 0x10;
+        *(s32*)((s32)event + 0x84) = 0x1E;
+        entry[0x28] = 2;
+    }
+
+    *(s32*)((s32)event + 0x78) += 1;
+    timer = *(s32*)((s32)event + 0x78);
+    if (timer < *(s32*)((s32)event + 0x80)) {
+        half = *(s32*)((s32)event + 0x80) / 2;
+        startY = *(s32*)((s32)event + 0x7C);
+        if (timer < half) {
+            *(f32*)(entry + 4) = (f32)startY + intplGetValue(5, timer, *(s32*)((s32)event + 0x84), float_0_804271c0, (f32)*(s32*)((s32)event + 0x84));
+        } else {
+            *(f32*)(entry + 4) = (f32)startY + intplGetValue(5, timer - half, *(s32*)((s32)event + 0x84), (f32)*(s32*)((s32)event + 0x84), float_0_804271c0);
+        }
+        return 0;
+    }
+
+    *(f32*)(entry + 4) = (f32)*(s32*)((s32)event + 0x7C);
+    entry[0x28] = 4;
+    effPokopiPchargeN64Entry(3, 0x78, 0, *(f32*)entry, *(f32*)(entry + 4), *(f32*)(entry + 8), float_1p5_804271c4);
+    return 2;
+}
 
 /* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
 
 /* stub-fill: _lvup_object_select_move | missing_definition | ghidra_signature */
-s32 _lvup_object_select_move(int param_1, int param_2) {
-    return 0;
-}
+s32 _lvup_object_select_move(void* event, s32 isFirstCall) {
+    extern f32 float_0_804271c0;
+    extern f32 float_2160_804271c8;
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+    extern f32 reviseAngle(f32 angle);
+    void* battleWork;
+    void* work;
+    void* mario;
+    s32 selected;
+    u8* entry;
+    s32 timer;
+    s32 total;
 
+    battleWork = _battleWorkPointer;
+    work = *(void**)((s32)battleWork + 0xF28);
+    selected = *(s32*)((s32)work + 0x10);
+    mario = BattleGetMarioPtr(battleWork);
+    entry = (u8*)((s32)work + selected * 0x34 + 0x200);
+    if (isFirstCall != 0) {
+        *(s32*)((s32)event + 0x78) = 0;
+        *(s32*)((s32)event + 0x7C) = 0x3C;
+        *(s32*)((s32)event + 0x80) = (s32)*(f32*)entry;
+        *(s32*)((s32)event + 0x84) = (s32)*(f32*)(entry + 8);
+        *(s32*)((s32)event + 0x88) = (s32)*(f32*)((s32)mario + 0x3C);
+        *(s32*)((s32)event + 0x8C) = (s32)*(f32*)((s32)mario + 0x44);
+    }
+
+    *(s32*)((s32)event + 0x78) += 1;
+    timer = *(s32*)((s32)event + 0x78);
+    total = *(s32*)((s32)event + 0x7C);
+    if (timer < total) {
+        *(f32*)entry = intplGetValue(5, timer, total, (f32)*(s32*)((s32)event + 0x80), (f32)*(s32*)((s32)event + 0x88));
+        *(f32*)(entry + 8) = intplGetValue(5, timer, total, (f32)*(s32*)((s32)event + 0x84), (f32)*(s32*)((s32)event + 0x8C));
+        *(f32*)(entry + 0x1C) = reviseAngle(intplGetValue(5, timer, total, float_0_804271c0, float_2160_804271c8));
+        return 0;
+    }
+
+    *(f32*)entry = (f32)*(s32*)((s32)event + 0x88);
+    *(f32*)(entry + 8) = (f32)*(s32*)((s32)event + 0x8C);
+    return 2;
+}
 
 /* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
 
 /* stub-fill: _lvup_spot_on | missing_definition | ghidra_signature */
-s32 _lvup_spot_on(void* evtEntry) {
-    return 0;
-}
+s32 _lvup_spot_on(void* event) {
+    extern char str_msg_menu_mario_name__802fe738[];
+    extern u32 dat_8042716c;
+    extern f32 float_25_804271e0;
+    extern f32 float_neg50_80427208;
+    extern void* BatSpotGetPtr(void);
+    void* spot;
+    u8* entry;
+    s32 id;
+    char* base;
 
+    base = str_msg_menu_mario_name__802fe738;
+    spot = BatSpotGetPtr();
+    *(s32*)((s32)spot + 8) = 1;
+    id = evtGetValue(event, **(s32**)((s32)event + 0x18));
+    entry = (u8*)((s32)*(void**)((s32)spot + 4) + id * 0x2C);
+
+    *(u32*)(entry + 4) = *(u32*)(base + 0x19C + id * 0xC);
+    *(f32*)(entry + 4) = float_neg50_80427208 + float_25_804271e0 * (f32)id;
+    *(u32*)(entry + 8) = *(u32*)(base + 0x1A0 + id * 0xC);
+    *(u32*)(entry + 0xC) = *(u32*)(base + 0x1A4 + id * 0xC);
+    *(u32*)(entry + 0x10) = *(u32*)(base + 0x1D8);
+    *(u32*)(entry + 0x14) = *(u32*)(base + 0x1DC);
+    *(u32*)(entry + 0x18) = *(u32*)(base + 0x1E0);
+    *(u32*)(entry + 0x1C) = *(u32*)(base + 0x1E4);
+    *(u32*)(entry + 0x20) = *(u32*)(base + 0x1E8);
+    *(u32*)(entry + 0x24) = *(u32*)(base + 0x1EC);
+    *(u32*)(entry + 0x28) = dat_8042716c;
+    *(u16*)entry |= 2;
+    return 2;
+}
 
 /* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
 
@@ -851,10 +1016,70 @@ void _GetExpIcon_Main(void* battleWork) {
 /* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
 
 /* stub-fill: L__LvupParamHelpMsgDisp | prototype_only | source_prototype */
-void L__LvupParamHelpMsgDisp(void* battleWork) {
-    return;
-}
+void L__LvupParamHelpMsgDisp(void* disp, void* battleWork) {
+    extern char str_msg_menu_mario_name__802fe738[];
+    extern u32 dat_80427154;
+    extern f32 float_0_804271c0;
+    extern f32 float_20_8042718c;
+    extern f32 float_neg145_80427210;
+    extern f32 float_10_80427214;
+    extern f32 float_neg148_80427218;
+    extern void* pouchGetPtr(void);
+    extern const char* msgSearch(const char* msg);
+    extern u32 FontGetMessageWidthLine(const char* msg, u16* lines);
+    extern void FontDrawStart_alpha(s32 alpha);
+    extern void FontDrawMessage(s32 x, s32 y, const char* msg);
+    void* work;
+    void* pouch;
+    char* base;
+    const char* msg;
+    u16 lines;
+    u32 color;
+    s32 width;
+    s32 lineCount;
+    f32 x;
 
+    base = str_msg_menu_mario_name__802fe738;
+    work = *(void**)((s32)battleWork + 0xF28);
+    pouch = pouchGetPtr();
+
+    switch (*(s32*)((s32)work + 0x10)) {
+        case 0:
+            msg = msgSearch(base + 0x290);
+            if (*(s16*)((s32)pouch + 0x8E) >= 0xC8) {
+                msg = msgSearch(base + 0x2A4);
+            }
+            break;
+        case 1:
+            msg = msgSearch(base + 0x2BC);
+            if (*(s16*)((s32)pouch + 0x90) >= 0xC8) {
+                msg = msgSearch(base + 0x2D0);
+            }
+            break;
+        case 2:
+            msg = msgSearch(base + 0x2E8);
+            if (*(s16*)((s32)pouch + 0x94) >= 0x63) {
+                msg = msgSearch(base + 0x2FC);
+            }
+            break;
+    }
+
+    width = FontGetMessageWidthLine(msg, &lines) & 0xFFFF;
+    lineCount = (u16)(lines + 1);
+    color = dat_80427154;
+    x = float_0_804271c0 - (f32)(width / 2);
+    lines = lineCount;
+    windowDispGX_Waku_col(
+        0,
+        &color,
+        x - float_20_8042718c,
+        float_neg145_80427210 + (f32)((lineCount - 1) * 0x1D),
+        (f32)(width + 0x28),
+        (f32)(lineCount * 0x1D + 1),
+        float_10_80427214);
+    FontDrawStart_alpha(0xFF);
+    FontDrawMessage((s32)x, (s32)float_neg148_80427218 + ((s32)lines - 1) * 0x1D, msg);
+}
 
 /* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
 

@@ -11,6 +11,58 @@ u8 effFireworksMain(u32* param_1) {
 }
 
 
-u8 effFireworksN64Entry(void) {
-    return 0;
+void* effFireworksN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 vx, f32 vy, f32 vz, f32 scale) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, s32 size);
+    extern void effFireworksMain(void*);
+    extern char str_FireworksN64_802faf78[];
+    extern f32 float_0_804252b0;
+    extern f32 float_1000_804252dc;
+    void* entry;
+    u8* work;
+    s32 i;
+
+    entry = effEntry();
+    *(char**)((s32)entry + 0x14) = str_FireworksN64_802faf78;
+    *(s32*)((s32)entry + 8) = 1;
+    work = __memAlloc(3, 0xB0);
+    *(void**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effFireworksMain;
+
+    *(s32*)work = type;
+    *(s32*)(work + 0x20) = 0;
+    if (timer <= 0) {
+        *(s32*)(work + 0x1C) = 1000;
+    } else {
+        *(s32*)(work + 0x1C) = timer + 0x20;
+    }
+    *(s32*)(work + 0x4C) = 0;
+    *(s32*)(work + 0x30) = 0xFF;
+    *(f32*)(work + 4) = x;
+    *(f32*)(work + 8) = y;
+    *(f32*)(work + 0xC) = z;
+    *(f32*)(work + 0x44) = float_0_804252b0;
+    *(f32*)(work + 0x10) = vx;
+    *(f32*)(work + 0x14) = vy;
+    *(f32*)(work + 0x18) = vz;
+    *(f32*)(work + 0x48) = scale;
+    *(s32*)(work + 0x24) = 0xFF;
+    *(s32*)(work + 0x28) = 0xFF;
+    *(s32*)(work + 0x2C) = 100;
+    *(s32*)(work + 0x34) = 0xFF;
+    *(s32*)(work + 0x38) = 100;
+    *(s32*)(work + 0x3C) = 0x96;
+    *(s32*)(work + 0x40) = 0xFF;
+
+    for (i = 0; i < 4; i++) {
+        *(f32*)(work + 0x50 + i * 4) = x;
+        *(f32*)(work + 0x60 + i * 4) = y - float_1000_804252dc;
+        *(f32*)(work + 0x70 + i * 4) = z;
+        *(f32*)(work + 0x80 + i * 4) = float_0_804252b0;
+        *(f32*)(work + 0x90 + i * 4) = float_0_804252b0;
+        *(f32*)(work + 0xA0 + i * 4) = float_0_804252b0;
+    }
+
+    return entry;
 }
+

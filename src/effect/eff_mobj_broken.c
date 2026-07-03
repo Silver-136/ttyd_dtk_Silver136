@@ -443,5 +443,68 @@ void* effMObjBrokenEntry(double x, double y, double z, u32 typeId) {
 
 /* stub-fill: effMObjBrokenDisp2 | prototype_only | source_prototype */
 void effMObjBrokenDisp2(s32 cameraId, void* effect) {
-    return;
+    typedef f32 MtxLocal[3][4];
+
+    extern void* camGetPtr(s32 cameraId);
+    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(void* mtx, s32 axis, f32 rad);
+    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(void* a, void* b, void* out);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, s32 flag);
+    extern void animPoseSetMaterialEvtColor(s32 poseId, void* color);
+    extern void animPoseSetGXFunc(s32 poseId, void* func, s32 user);
+    extern void animPoseMain(s32 poseId);
+    extern void animPoseDrawMtx(s32 poseId, void* mtx, f32 arg2, s32 layer, f32 arg4);
+    extern void rendermodeFunc(s32 mode);
+    extern u32 dat_80427638;
+    extern u32 dat_8042763c;
+    extern f32 float_deg2rad_80427640;
+    extern f32 float_0_80427644;
+    extern f32 float_0p8_80427648;
+
+    void* workBase = *(void**)((s32)effect + 0xC);
+    void* cam;
+    void* work;
+    MtxLocal transMtx;
+    MtxLocal rotMtx;
+    MtxLocal scaleMtx;
+    MtxLocal baseMtx;
+    MtxLocal modelMtx;
+    s32 pass;
+    s32 i;
+    s32 offset;
+    u32 color;
+
+    cam = camGetPtr(cameraId);
+    PSMTXTrans(transMtx, *(f32*)((s32)workBase + 4), *(f32*)((s32)workBase + 8), *(f32*)((s32)workBase + 0xC));
+    PSMTXRotRad(rotMtx, 0x79, float_deg2rad_80427640 * -*(f32*)((s32)camGetPtr(cameraId) + 0x114));
+    PSMTXScale(scaleMtx, *(f32*)((s32)workBase + 0x10), *(f32*)((s32)workBase + 0x10), *(f32*)((s32)workBase + 0x10));
+    PSMTXConcat(transMtx, rotMtx, transMtx);
+    PSMTXConcat(transMtx, scaleMtx, baseMtx);
+
+    for (pass = 0; pass < 2; pass++) {
+        work = (void*)((s32)*(void**)((s32)effect + 0xC) + 0x30);
+        offset = (1 - pass) * 4;
+        for (i = 1; i < *(s32*)((s32)effect + 8); i++, work = (void*)((s32)work + 0x30)) {
+            s32 poseId = *(s32*)((s32)work + 0x2C);
+            if (poseId != -1) {
+                animPoseSetMaterialFlagOn(poseId, 0x40);
+                color = (pass == 0) ? dat_80427638 : dat_8042763c;
+                animPoseSetMaterialEvtColor(poseId, &color);
+                PSMTXTrans(transMtx,
+                           *(f32*)((s32)work + 4) + (f32)offset,
+                           *(f32*)((s32)work + 8) - (f32)offset,
+                           *(f32*)((s32)work + 0xC));
+                PSMTXScale(scaleMtx, *(f32*)((s32)work + 0x10), *(f32*)((s32)work + 0x10), *(f32*)((s32)work + 0x10));
+                PSMTXConcat(baseMtx, transMtx, transMtx);
+                PSMTXConcat(transMtx, scaleMtx, modelMtx);
+                animPoseSetGXFunc(poseId, rendermodeFunc, 0);
+                animPoseMain(poseId);
+                animPoseDrawMtx(poseId, modelMtx, float_0_80427644, 1, float_0p8_80427648);
+                animPoseDrawMtx(poseId, modelMtx, float_0_80427644, 2, float_0p8_80427648);
+                animPoseDrawMtx(poseId, modelMtx, float_0_80427644, 3, float_0p8_80427648);
+            }
+        }
+    }
 }
+

@@ -264,9 +264,76 @@ u8 getHitBreatheout2(s64 param_1, void* pParty) {
 
 
 u8 cloud_use(void* pParty) {
-    return 0;
-}
+    extern void N_cloud_use(void* party);
+    extern void psndSFXOff(s32 soundId);
+    extern void effSoftDelete(void* effect);
+    extern void __memFree(s32 heap, void* ptr);
+    extern void movePos(f32* x, f32* z, f32 speed, f32 dir);
+    extern void partyChgRunMode(void* party, s32 mode);
+    extern s32 partyChgPoseId(void* party, s32 poseId);
+    extern void partyChgPose(void* party, s32 pose);
+    extern void partyChgMot(void* party, s32 mot);
+    extern f32 float_90_80424304;
+    extern f32 float_270_80424308;
+    extern f32 float_neg90_8042432c;
+    extern f32 float_3p3_80424330;
+    void* mario;
+    void* work;
+    u16 state;
+    f32 dir;
+    s32 useNeg;
 
+    mario = *(void**)((s32)pParty + 0x160);
+    N_cloud_use(pParty);
+    state = *(u16*)((s32)mario + 0x2E);
+    if (state == 0x1B || state <= 1 || state == 2) {
+        return;
+    }
+
+    *(u32*)pParty &= ~0x100;
+    work = *(void**)((s32)pParty + 0x170);
+    if (work != 0 && (u32)(*(s32*)((s32)work + 0x34) + 0x10000) != 0xFFFF) {
+        psndSFXOff(*(s32*)((s32)work + 0x34));
+        *(s32*)((s32)*(void**)((s32)pParty + 0x170) + 0x34) = -1;
+    }
+    if (*(void**)((s32)pParty + 0x178) != 0) {
+        effSoftDelete(*(void**)((s32)pParty + 0x178));
+        *(s32*)((s32)pParty + 0x178) = 0;
+    }
+
+    *(s32*)((s32)pParty + 0x94) = *(s32*)((s32)mario + 0x8C);
+    *(s32*)((s32)pParty + 0x98) = *(s32*)((s32)mario + 0x90);
+    *(s32*)((s32)pParty + 0x9C) = *(s32*)((s32)mario + 0x94);
+    dir = *(f32*)((s32)mario + 0x1B0);
+    useNeg = 0;
+    if (dir < float_90_80424304 || dir >= float_270_80424308) {
+        useNeg = 1;
+    }
+    if (useNeg != 0) {
+        dir += float_neg90_8042432c;
+    } else {
+        dir += float_90_80424304;
+    }
+    movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C), float_3p3_80424330, toMovedir(dir));
+    *(f32*)((s32)pParty + 0x98) += float_10_80424334;
+    *(s32*)((s32)pParty + 0x58) = *(s32*)((s32)pParty + 0x94);
+    *(s32*)((s32)pParty + 0x5C) = *(s32*)((s32)pParty + 0x98);
+    *(s32*)((s32)pParty + 0x60) = *(s32*)((s32)pParty + 0x9C);
+    *(u32*)((s32)pParty + 4) |= 0x10;
+    *(u32*)pParty &= 0x7FFFFFFF;
+    if (*(void**)((s32)pParty + 0x170) != 0) {
+        __memFree(0, *(void**)((s32)pParty + 0x170));
+        *(s32*)((s32)pParty + 0x170) = 0;
+    }
+    state = *(u16*)((s32)mario + 0x2E);
+    if (state == 0x1F || state == 0x20) {
+        partyChgRunMode(pParty, 0xD);
+    } else {
+        partyChgPose(pParty, partyChgPoseId(pParty, 1));
+        partyChgRunMode(pParty, 2);
+        partyChgMot(pParty, 0);
+    }
+}
 
 u8 cloud_exit(void* pParty) {
     extern void psndSFXOff(s32 soundId);

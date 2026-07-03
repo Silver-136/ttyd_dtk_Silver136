@@ -221,10 +221,78 @@ int evt_mario_normalize(void* pEvt, int param_2) {
 }
 
 
-u8 evt_mario_set_dir(s32 pEvt, s32 param_2) {
-    return 0;
-}
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_mario_set_dir(EventEntry* event, s32 first) {
+    extern void* marioGetPtr(void);
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern s32 sysMsec2Frame(s32 msec);
+    extern f32 revise360(f32 angle);
+    extern f32 toMovedirSimple(f32 angle);
+    extern const f32 float_270_80421b1c;
+    extern const f32 float_360_80421b44;
+    extern const f32 float_0_80421adc;
+    EventEntry* evt;
+    s32 firstCall;
+    s32* args;
+    void* mario;
+    f32 dir;
+    s32 frames;
+    s32 wait;
+    f32 angle;
 
+    evt = event;
+    firstCall = first;
+    args = event->args;
+    mario = marioGetPtr();
+    dir = evtGetFloat(evt, args[0]);
+    frames = sysMsec2Frame(evtGetValue(evt, args[1]));
+    wait = evtGetValue(evt, args[2]);
+
+    if (firstCall != 0) {
+        *(s32*)((s32)evt + 0x78) = 0;
+        *(s32*)((s32)evt + 0x80) = 0;
+        *(f32*)((s32)evt + 0x7C) = *(f32*)((s32)mario + 0x1AC);
+        if (dir > float_270_80421b1c) {
+            dir -= float_360_80421b44;
+        }
+    }
+
+    if (*(s32*)((s32)evt + 0x80) == 1) {
+        *(f32*)((s32)mario + 0x1A4) = float_0_80421adc;
+        *(f32*)((s32)mario + 0x1A0) = float_0_80421adc;
+        return 2;
+    }
+
+    if (frames > 0) {
+        angle = revise360(float_270_80421b1c - dir);
+        if (angle > float_270_80421b1c) {
+            angle -= float_360_80421b44;
+        }
+        angle = revise360(*(f32*)((s32)evt + 0x7C) + ((angle - *(f32*)((s32)evt + 0x7C)) * ((f32)*(s32*)((s32)evt + 0x78) / (f32)frames)));
+        *(f32*)((s32)mario + 0x1AC) = angle;
+        *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
+        *(f32*)((s32)mario + 0x1A4) = toMovedirSimple(*(f32*)((s32)mario + 0x1AC));
+        *(f32*)((s32)mario + 0x1A0) = *(f32*)((s32)mario + 0x1A4);
+        *(s32*)((s32)evt + 0x78) = *(s32*)((s32)evt + 0x78) + 1;
+        if (*(s32*)((s32)evt + 0x78) > frames) {
+            if (wait == 0) {
+                return 1;
+            }
+            *(s32*)((s32)evt + 0x80) = 1;
+        }
+        return 0;
+    }
+
+    *(f32*)((s32)mario + 0x1AC) = revise360(float_270_80421b1c - dir);
+    *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
+    *(f32*)((s32)mario + 0x1A4) = toMovedirSimple(*(f32*)((s32)mario + 0x1AC));
+    *(f32*)((s32)mario + 0x1A0) = *(f32*)((s32)mario + 0x1A4);
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on

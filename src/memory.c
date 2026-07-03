@@ -290,25 +290,207 @@ next:
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-u8 L_smartReInit(void) {
-    return 0;
+void L_smartReInit(void) {
+    extern u32* wp;
+    extern s32 g_bFirstSmartAlloc;
+    extern void* memset(void* ptr, int value, u32 size);
+    u32* p;
+    s32 i;
+
+    wp[0x3802] = 0;
+    wp[0x3803] = 0;
+    wp[0x3801] = (u32)heapEnd[4] - (u32)heapStart[4] - 0x20;
+    memset((void*)wp[0], 0, (u32)heapEnd[4] - (u32)heapStart[4] - 0x20);
+    memset(wp + 1, 0, 0xE000);
+
+    p = wp + 1;
+    i = 0x100;
+    do {
+        p[5] = (u32)(p + 7);
+        p[6] = (u32)(p - 7);
+        p[0xC] = (u32)(p + 0xE);
+        p[0xD] = (u32)p;
+        p[0x13] = (u32)(p + 0x15);
+        p[0x14] = (u32)(p + 7);
+        p[0x1A] = (u32)(p + 0x1C);
+        p[0x1B] = (u32)(p + 0xE);
+        p[0x21] = (u32)(p + 0x23);
+        p[0x22] = (u32)(p + 0x15);
+        p[0x28] = (u32)(p + 0x2A);
+        p[0x29] = (u32)(p + 0x1C);
+        p[0x2F] = (u32)(p + 0x31);
+        p[0x30] = (u32)(p + 0x23);
+        p[0x36] = (u32)(p + 0x38);
+        p[0x37] = (u32)(p + 0x2A);
+        p += 0x38;
+        i--;
+    } while (i != 0);
+
+    wp[0x3804] = (u32)(wp + 1);
+    *(u32*)(wp[0x3804] + 0x18) = 0;
+    wp[0x3805] = (u32)(wp + 0x37FA);
+    *(u32*)(wp[0x3805] + 0x14) = 0;
+    g_bFirstSmartAlloc = 0;
 }
 
+void smartFree(void* entry) {
+    extern u32* wp;
+    void* prev;
+    void* next;
+    u32 size;
 
-void smartFree(void*) {
-    ;
+    if (*(u8*)((s32)entry + 0x0E) == 4) {
+        *(u8*)((s32)entry + 0x0E) = 3;
+        return;
+    }
+
+    prev = *(void**)((s32)entry + 0x18);
+    if (prev == 0) {
+        wp[0x3802] = *(u32*)((s32)entry + 0x14);
+        prev = (void*)wp[0x3802];
+        if (prev != 0) {
+            *(u32*)((s32)prev + 0x18) = 0;
+        }
+    } else {
+        *(u32*)((s32)prev + 0x14) = *(u32*)((s32)entry + 0x14);
+    }
+
+    next = *(void**)((s32)entry + 0x14);
+    if (next == 0) {
+        wp[0x3803] = *(u32*)((s32)entry + 0x18);
+        next = (void*)wp[0x3803];
+        if (next != 0) {
+            *(u32*)((s32)next + 0x14) = 0;
+        }
+    } else {
+        *(u32*)((s32)next + 0x18) = *(u32*)((s32)entry + 0x18);
+    }
+
+    prev = *(void**)((s32)entry + 0x18);
+    size = *(u32*)((s32)entry + 4) + *(u32*)((s32)entry + 0x10);
+    if (prev != 0) {
+        *(u32*)((s32)prev + 0x10) += size;
+    } else {
+        wp[0x3801] += size;
+    }
+
+    if (wp[0x3804] == 0) {
+        wp[0x3804] = (u32)entry;
+        *(u32*)((s32)entry + 0x18) = 0;
+    } else {
+        *(u32*)(wp[0x3805] + 0x14) = (u32)entry;
+        *(u32*)((s32)entry + 0x18) = wp[0x3805];
+    }
+
+    *(u16*)((s32)entry + 0x0C) = 0;
+    *(u32*)((s32)entry + 0x14) = 0;
+    *(u32*)((s32)entry + 4) = 0;
+    *(u32*)((s32)entry + 0x10) = 0;
+    *(u32*)((s32)entry + 8) = 0;
+    wp[0x3805] = (u32)entry;
+    wp[0x3806]++;
 }
 
+void* _mapAllocTail(void* base, u32 size) {
+    extern void* memset(void* ptr, int value, u32 size);
+    extern void DCFlushRange(void* ptr, u32 size);
+    u32 aligned;
+    u32 need;
+    u32 bestSize;
+    void* bestNext;
+    void* best;
+    void* block;
+    void* result;
+    u32 remain;
 
-int** _mapAllocTail(int** param_1, int param_2) {
-    return 0;
+    aligned = (size + 0x1F) & ~0x1F;
+    if (aligned == 0) {
+        return 0;
+    }
+
+    need = aligned + 0x20;
+    bestSize = 0;
+    bestNext = 0;
+    best = 0;
+
+    while (base != 0) {
+        if (*(u16*)((s32)base + 8) == 0 && *(u32*)((s32)base + 4) >= need) {
+            bestNext = *(void**)base;
+            best = base;
+            bestSize = *(u32*)((s32)base + 4);
+        }
+        base = *(void**)base;
+    }
+
+    if (bestSize == 0) {
+        return 0;
+    }
+
+    memset(best, 0, need);
+    DCFlushRange(best, need);
+    remain = bestSize - need;
+    block = (void*)((s32)best + remain);
+    *(void**)best = block;
+    *(u32*)((s32)best + 4) = remain;
+    *(u16*)((s32)best + 8) = 0;
+    *(void**)block = bestNext;
+    result = (void*)((s32)block + 0x20);
+    *(u32*)((s32)block + 4) = aligned;
+    *(u16*)((s32)block + 8) = 1;
+    memset(result, 0, aligned);
+    DCFlushRange(result, aligned);
+    return result;
 }
 
+void* _mapAlloc(void* base, u32 size) {
+    extern void* memset(void* ptr, int value, u32 size);
+    extern void DCFlushRange(void* ptr, u32 size);
+    u32 aligned;
+    u32 need;
+    u32 bestSize;
+    void* next;
+    void* bestNext;
+    void* best;
+    void* result;
+    u32 remain;
 
-void* _mapAlloc(void*, u32) {
-    return 0;
+    aligned = (size + 0x1F) & ~0x1F;
+    if (aligned == 0) {
+        return 0;
+    }
+
+    need = aligned + 0x20;
+    bestSize = 0;
+    bestNext = 0;
+    best = 0;
+
+    while (base != 0) {
+        if (*(u16*)((s32)base + 8) == 0 && *(u32*)((s32)base + 4) >= need) {
+            if (bestSize >= *(u32*)((s32)base + 4) || bestSize == 0) {
+                bestNext = *(void**)base;
+                best = base;
+                bestSize = *(u32*)((s32)base + 4);
+            }
+        }
+        base = *(void**)base;
+    }
+
+    if (bestSize == 0) {
+        return 0;
+    }
+
+    *(void**)best = (void*)((s32)best + need);
+    result = (void*)((s32)best + 0x20);
+    remain = bestSize - need;
+    *(u32*)((s32)best + 4) = aligned;
+    *(u16*)((s32)best + 8) = 1;
+    **(void***)best = bestNext;
+    *(u32*)(*(s32*)best + 4) = remain;
+    *(u16*)(*(s32*)best + 8) = 0;
+    memset(result, 0, aligned);
+    DCFlushRange(result, aligned);
+    return result;
 }
-
 
 void memClear(s32 heap) {
     u32 size;
@@ -333,15 +515,74 @@ void memClear(s32 heap) {
 }
 
 
-void smartAutoFree(s32 heap) {
-    ;
+void smartAutoFree(s32 kind) {
+    extern u32* wp;
+    extern void smartFree(void*);
+    void* entry;
+    void* next;
+    u16 id;
+
+    id = kind;
+    entry = (void*)wp[0x3802];
+    while (entry != 0) {
+        next = *(void**)((s32)entry + 0x14);
+        if (*(u8*)((s32)entry + 0x0E) == id) {
+            smartFree(entry);
+        }
+        entry = next;
+    }
+
+    if (kind == 3) {
+        entry = (void*)wp[0x3802];
+        while (entry != 0) {
+            next = *(void**)((s32)entry + 0x14);
+            if (*(u8*)((s32)entry + 0x0E) == 4) {
+                smartFree(entry);
+            }
+            entry = next;
+        }
+    }
 }
 
+void _mapFree(void* base, void* ptr) {
+    void* block;
+    void* next;
+    u32 size;
 
-void _mapFree(void*, void*) {
-    ;
+    if (ptr == 0) {
+        return;
+    }
+
+    block = (void*)((s32)ptr - 0x20);
+    if (*(u16*)((s32)ptr - 0x18) == 0) {
+        return;
+    }
+
+    next = *(void**)block;
+    size = *(u32*)((s32)block + 4);
+    if (next != 0 && *(u16*)((s32)next + 8) == 0) {
+        size += *(u32*)((s32)next + 4) + 0x20;
+        next = *(void**)next;
+    }
+
+    while (1) {
+        if (*(void**)base == block) {
+            if (*(u16*)((s32)base + 8) == 0) {
+                block = base;
+                size += *(u32*)((s32)base + 4) + 0x20;
+            }
+            break;
+        }
+        if (base > block || *(void**)base == 0) {
+            break;
+        }
+        base = *(void**)base;
+    }
+
+    *(void**)block = next;
+    *(u32*)((s32)block + 4) = size;
+    *(u16*)((s32)block + 8) = 0;
 }
-
 
 void* __memAlloc(s32 heap, u32 size) {
     void* ptr;
@@ -354,6 +595,22 @@ void* __memAlloc(s32 heap, u32 size) {
     return ptr;
 }
 
-u8 N_battleMapAlloc(void) {
-    return 0;
+void N_battleMapAlloc(void) {
+    extern void* mapalloc_base_ptr;
+    extern void* R_battlemapalloc_base_ptr;
+    extern unsigned int R_battlemapalloc_size;
+    extern void* _mapAlloc(void*, unsigned int);
+    void* ptr;
+    unsigned int size;
+    unsigned int zero;
+
+    R_battlemapalloc_size = 0x64000;
+    ptr = _mapAlloc(mapalloc_base_ptr, R_battlemapalloc_size);
+    size = R_battlemapalloc_size;
+    zero = 0;
+    R_battlemapalloc_base_ptr = ptr;
+    *(unsigned int*)ptr = zero;
+    *(unsigned int*)((int)ptr + 4) = size - 0x20;
+    *(unsigned short*)((int)ptr + 8) = (unsigned short)zero;
 }
+

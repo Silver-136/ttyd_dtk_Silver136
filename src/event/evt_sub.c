@@ -379,10 +379,31 @@ s32 evt_sub_area_check(EventEntry* event) {
     return 2;
 }
 
-s32 evt_sub_spline_get_value_manual(void* pEvt) {
-    return 0;
-}
+s32 evt_sub_spline_get_value_manual(void* event) {
+    extern s32 evtGetValue(void*, s32);
+    extern void spline_getvalue(f32, f32*, s32, f32*, s32, s32);
+    extern void evtSetValue(void*, s32, s32);
+    extern f32 float_1024_8041fe84;
+    s32* args;
+    s32* work;
+    f32 out[3];
+    f32 denom;
+    f32 t;
 
+    args = *(s32**)((s32)event + 0x18);
+    work = *(s32**)((s32)event + 0xD8);
+    t = (f32)evtGetValue(event, args[0]);
+    if (work[10] != 0) {
+        denom = (f32)work[7];
+    } else {
+        denom = (f32)work[5];
+    }
+    spline_getvalue(t / denom, out, work[0], (f32*)work[2], work[1], work[3]);
+    evtSetValue(event, args[1], (s32)(float_1024_8041fe84 * out[0]) - 230000000);
+    evtSetValue(event, args[2], (s32)(float_1024_8041fe84 * out[1]) - 230000000);
+    evtSetValue(event, args[3], (s32)(float_1024_8041fe84 * out[2]) - 230000000);
+    return 2;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -461,15 +482,72 @@ u8 coingetDisp(int param_1) {
 }
 
 
-s32 evt_sub_intpl_msec_get_value_para(int param_1) {
-    return 0;
+s32 evt_sub_intpl_msec_get_value_para(void* event) {
+    extern f32 intplGetValue(s32, f32, f32, s32, s32);
+    extern void evtSetFloat(void*, s32, f32);
+    extern void evtSetValue(void*, s32, s32);
+    s32* args;
+    u32 bus;
+    u32 ticks;
+    u64 elapsed;
+    u32 msec;
+    s32 start;
+    s32 end;
+
+    bus = *(u32*)0x800000F8 >> 2;
+    ticks = ((u64)bus * 0x10624DD3U) >> 38;
+    elapsed = *(u64*)event - *(u64*)((s32)event + 0x198);
+    msec = elapsed / ticks;
+    args = *(s32**)((s32)event + 0x18);
+    if ((s32)msec < *(s32*)((s32)event + 0xD8)) {
+        start = *(s32*)((s32)event + 0xCC);
+        end = *(s32*)((s32)event + 0xD0);
+        evtSetFloat(event, args[0], intplGetValue(*(s32*)((s32)event + 0xC8), (f32)start, (f32)end, msec, *(s32*)((s32)event + 0xD8)));
+        evtSetValue(event, args[1], 1);
+    } else {
+        evtSetFloat(event, args[0], (f32)*(s32*)((s32)event + 0xD0));
+        evtSetValue(event, args[1], 0);
+    }
+    return 2;
 }
 
+s32 evt_sub_spline_init(void* event) {
+    extern s32 evtGetValue(void*, s32);
+    extern void* _mapAlloc(void*, u32);
+    extern void spline_maketable(s32 count, s32 unk4, void* table4, void* tableC);
+    extern void* mapalloc_base_ptr;
+    s32* args;
+    s32 v0;
+    s32 v1;
+    s32 v2;
+    s32 count;
+    s32 v4;
+    s32 v5;
+    s32* work;
 
-s32 evt_sub_spline_init(u32* param_1) {
-    return 0;
+    args = *(s32**)((s32)event + 0x18);
+    v0 = evtGetValue(event, args[0]);
+    v1 = evtGetValue(event, args[1]);
+    v2 = evtGetValue(event, args[2]);
+    count = evtGetValue(event, args[3]);
+    v4 = evtGetValue(event, args[4]);
+    v5 = evtGetValue(event, args[5]);
+    work = _mapAlloc(mapalloc_base_ptr, 0x30);
+    *(s32**)((s32)event + 0xD8) = work;
+    work[0] = count;
+    work[1] = (s32)_mapAlloc(mapalloc_base_ptr, count * 4);
+    work[2] = v2;
+    work[3] = (s32)_mapAlloc(mapalloc_base_ptr, count * 0xC);
+    spline_maketable(count, work[2], (void*)work[1], (void*)work[3]);
+    work[10] = v0;
+    work[6] = v1;
+    work[4] = 0;
+    work[5] = v4;
+    work[7] = v5;
+    work[8] = *(s32*)event;
+    work[9] = *(s32*)((s32)event + 4);
+    return 2;
 }
-
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
@@ -556,10 +634,31 @@ s32 evt_sub_intpl_msec_get_value(void* event) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-s32 stone_bg(int param_1) {
-    return 0;
-}
+s32 stone_bg(void* event) {
+    extern s32 evtGetValue(void*, s32);
+    extern void* camGetPtr(s32);
+    extern void* effNameToPtr(const char*);
+    extern void* itemNameToPtr(s32);
+    extern void* npcNameToPtr_NoAssert(const char*);
+    extern void marioSetCamId(s32);
+    extern char str_sub_bg_802c162c[];
+    s32* args;
+    s32 item;
+    void* ptr;
 
+    args = *(s32**)((s32)event + 0x18);
+    item = evtGetValue(event, args[0]);
+    *(s32*)((s32)camGetPtr(8) + 0x1E8) = 5;
+    *(s32*)((s32)*(void**)((s32)effNameToPtr(str_sub_bg_802c162c) + 0xC) + 0x38) = 5;
+    *(s32*)((s32)*(void**)((s32)*(void**)((s32)itemNameToPtr(item) + 0x1C) + 0xC) + 0x38) = 5;
+    ptr = npcNameToPtr_NoAssert((const char*)0x802C15B0);
+    if (ptr != 0 && evtGetValue(event, 0xF5DE0180) < 0xD3) {
+        *(s32*)((s32)npcNameToPtr_NoAssert((const char*)0x802C15B0) + 0x1F4) = 5;
+    } else {
+        marioSetCamId(5);
+    }
+    return 2;
+}
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
@@ -815,6 +914,26 @@ s32 evt_sub_spline_free(int param_1) {
 /* CHATGPT FALLBACK MISSING STUBS: main/event/evt_sub 20260624_191429 */
 
 /* fallback stub-fill: map=unk_80053f10 addr=0x80053f10 size=0x000000c8 */
-int unk_80053f10() {
-    return 0;
+s32 unk_80053f10(void* event) {
+    extern f32 evtGetFloat(void*, s32);
+    extern void evtSetFloat(void*, s32, f32);
+    extern void* gp;
+    extern f32 float_60_8041fe3c;
+    s32* args;
+    s32 xArg;
+    s32 yArg;
+    f32 x;
+    f32 y;
+    f32 scale;
+
+    args = *(s32**)((s32)event + 0x18);
+    xArg = args[0];
+    yArg = args[1];
+    x = evtGetFloat(event, xArg);
+    y = evtGetFloat(event, yArg);
+    scale = float_60_8041fe3c / (f32)*(s32*)((s32)gp + 4);
+    evtSetFloat(event, xArg, x * scale);
+    evtSetFloat(event, yArg, y * scale);
+    return 2;
 }
+

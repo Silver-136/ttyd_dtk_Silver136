@@ -160,9 +160,50 @@ u8 envSetYami(int param_1) {
 
 
 void envCapture(void) {
-    ;
-}
+    extern void* smartAlloc(u32 size, s32 mode);
+    typedef void (*TexCopySrc4Fn)(s32 left, s32 top, u16 width, u16 height);
+    TexCopySrc4Fn setTexCopySrc;
+    void* entry;
+    void* gpPtr;
+    u16 width;
+    u16 height;
+    u16 halfWidth;
+    u16 halfHeight;
+    u32 size;
 
+    entry = work;
+    gpPtr = gp;
+    if (*(s32*)((s32)gpPtr + 0x14) != 0) {
+        entry = (void*)((s32)entry + 0xF0);
+    }
+    width = *(u16*)((s32)gpPtr + 0x170);
+    height = *(u16*)((s32)gpPtr + 0x172);
+    halfWidth = width >> 1;
+    halfHeight = height >> 1;
+    setTexCopySrc = (TexCopySrc4Fn)GXSetTexCopySrc;
+
+    if ((*(u32*)entry & 1) != 0) {
+        setTexCopySrc(0, 0, width, height);
+        GXSetTexCopyDst(halfWidth, halfHeight, 6, 1);
+        size = GXGetTexBufferSize(halfWidth, halfHeight, 6, 0, 0);
+        *(void**)((s32)entry + 4) = smartAlloc(size, 3);
+        GXCopyTex(**(void***)((s32)entry + 4), 0);
+        GXPixModeSync();
+        GXInitTexObj((void*)((s32)entry + 0xC), **(void***)((s32)entry + 4), halfWidth, halfHeight, 6, 0, 0, 0);
+        GXInitTexObjLOD((void*)((s32)entry + 0xC), 1, 1, float_0_804248ac, float_0_804248ac, float_0_804248ac, 0, 0, 0);
+    }
+
+    if ((*(u32*)entry & 2) != 0) {
+        setTexCopySrc(0, 0, width, height);
+        GXSetTexCopyDst(halfWidth, halfHeight, 0x39, 1);
+        size = GXGetTexBufferSize(halfWidth, halfHeight, 0x39, 0, 0);
+        *(void**)((s32)entry + 8) = smartAlloc(size, 3);
+        GXCopyTex(**(void***)((s32)entry + 8), 0);
+        GXPixModeSync();
+        GXInitTexObj((void*)((s32)entry + 0x2C), **(void***)((s32)entry + 8), halfWidth, halfHeight, 1, 0, 0, 0);
+        GXInitTexObjLOD((void*)((s32)entry + 0x2C), 1, 1, float_0_804248ac, float_0_804248ac, float_0_804248ac, 0, 0, 0);
+    }
+}
 
 void envCapture2(void) {
     void* entry = work;
