@@ -383,10 +383,26 @@ void L_sweatMain(void* pParty) {
     }
 }
 
-u8 yoshi_jumpStand(void) {
-    return 0;
-}
+void yoshi_jumpStand(void) {
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32 id);
 
+    void* party = partyGetPtr(marioGetPartyId());
+    u8 state;
+
+    if (party != 0) {
+        if (*(s8*)((s32)party + 0x31) == 4) {
+            if ((*(u32*)party & 0x100) == 0) {
+                ;
+            } else {
+                state = *(u8*)((s32)party + 0x39);
+                if (state < 0x3C || state > 0x42) {
+                    *(u8*)((s32)party + 0x39) = 0x3C;
+                }
+            }
+        }
+    }
+}
 
 /* CHATGPT FALLBACK MISSING STUBS: main/party/party_yoshi 20260624_191429 */
 

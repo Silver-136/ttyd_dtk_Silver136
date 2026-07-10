@@ -1450,67 +1450,137 @@ void pouchReceiveMail(s32 mail) {
     s32 i;
     s32 count;
     s32 base;
+    s32 loops;
 
     count = 0;
+    i = 0;
     base = mpp;
-    for (i = 0; i < 99; i++) {
+    loops = 0x21;
+    do {
         if (*(u32*)(base + 0x580 + (i / 32) * 4) & (1 << (i % 32))) {
             count++;
         }
-    }
+        i++;
+        if (*(u32*)(base + 0x580 + (i / 32) * 4) & (1 << (i % 32))) {
+            count++;
+        }
+        i++;
+        if (*(u32*)(base + 0x580 + (i / 32) * 4) & (1 << (i % 32))) {
+            count++;
+        }
+        i++;
+        loops--;
+    } while (loops != 0);
 
     *(u32*)(base + 0x580 + (mail / 32) * 4) |= 1 << (mail % 32);
     *(u8*)(mpp + 0x51A + count) = mail;
 }
 
-
 int pouchReceiveMailCount(void) {
     s32 i;
     s32 count;
     s32 base;
+    s32 loops;
 
     count = 0;
+    i = 0;
     base = mpp;
-    for (i = 0; i < 99; i++) {
+    loops = 0x21;
+    do {
         if (*(u32*)(base + 0x580 + (i / 32) * 4) & (1 << (i % 32))) {
             count++;
         }
-    }
+        i++;
+        if (*(u32*)(base + 0x580 + (i / 32) * 4) & (1 << (i % 32))) {
+            count++;
+        }
+        i++;
+        if (*(u32*)(base + 0x580 + (i / 32) * 4) & (1 << (i % 32))) {
+            count++;
+        }
+        i++;
+        loops--;
+    } while (loops != 0);
     return count;
 }
-
 
 int pouchGetEmptyKeepItemCnt(void) {
-    s16* items;
+    PouchData* pouch;
     s32 count;
-    s32 i;
+    s32 loops;
 
+    pouch = (PouchData*)mpp;
     count = 0;
-    items = (s16*)(mpp + 0x1BA);
-    for (i = 0; i < 32; i++) {
-        if (items[i] == 0) {
+    loops = 4;
+    do {
+        if (*(s16*)((s32)pouch + 0x1BA) == 0) {
             count++;
         }
-    }
+        if (*(s16*)((s32)pouch + 0x1BC) == 0) {
+            count++;
+        }
+        if (*(s16*)((s32)pouch + 0x1BE) == 0) {
+            count++;
+        }
+        if (*(s16*)((s32)pouch + 0x1C0) == 0) {
+            count++;
+        }
+        if (*(s16*)((s32)pouch + 0x1C2) == 0) {
+            count++;
+        }
+        if (*(s16*)((s32)pouch + 0x1C4) == 0) {
+            count++;
+        }
+        if (*(s16*)((s32)pouch + 0x1C6) == 0) {
+            count++;
+        }
+        if (*(s16*)((s32)pouch + 0x1C8) == 0) {
+            count++;
+        }
+        pouch = (PouchData*)((s32)pouch + 0x10);
+        loops--;
+    } while (loops != 0);
     return count;
 }
-
 
 int pouchGetKeepItemCnt(void) {
-    s16* items;
+    PouchData* pouch;
     s32 count;
-    s32 i;
+    s32 loops;
 
+    pouch = (PouchData*)mpp;
     count = 0;
-    items = (s16*)(mpp + 0x1BA);
-    for (i = 0; i < 32; i++) {
-        if (items[i] != 0) {
+    loops = 4;
+    do {
+        if (*(s16*)((s32)pouch + 0x1BA) != 0) {
             count++;
         }
-    }
+        if (*(s16*)((s32)pouch + 0x1BC) != 0) {
+            count++;
+        }
+        if (*(s16*)((s32)pouch + 0x1BE) != 0) {
+            count++;
+        }
+        if (*(s16*)((s32)pouch + 0x1C0) != 0) {
+            count++;
+        }
+        if (*(s16*)((s32)pouch + 0x1C2) != 0) {
+            count++;
+        }
+        if (*(s16*)((s32)pouch + 0x1C4) != 0) {
+            count++;
+        }
+        if (*(s16*)((s32)pouch + 0x1C6) != 0) {
+            count++;
+        }
+        if (*(s16*)((s32)pouch + 0x1C8) != 0) {
+            count++;
+        }
+        pouch = (PouchData*)((s32)pouch + 0x10);
+        loops--;
+    } while (loops != 0);
     return count;
 }
-
 
 void pouchGetStarStone(s32 id) {
     extern f32 float_2_80421878;
@@ -1546,14 +1616,34 @@ s32 pouchCheckMail(s32 mail) {
 
 
 int comp_kind_r(short* param_1, short* param_2) {
+    s16 kind1;
+    s16 kind2;
+
+    kind1 = *(s16*)(itemDataTable + (*param_1 * 0x28) + 0x12);
+    kind2 = *(s16*)(itemDataTable + (*param_2 * 0x28) + 0x12);
+    if (kind1 < kind2) {
+        return 1;
+    }
+    if (kind1 > kind2) {
+        return -1;
+    }
     return 0;
 }
-
 
 int comp_kind(short* param_1, short* param_2) {
+    s16 kind1;
+    s16 kind2;
+
+    kind1 = *(s16*)(itemDataTable + (*param_1 * 0x28) + 0x12);
+    kind2 = *(s16*)(itemDataTable + (*param_2 * 0x28) + 0x12);
+    if (kind1 > kind2) {
+        return 1;
+    }
+    if (kind1 < kind2) {
+        return -1;
+    }
     return 0;
 }
-
 
 u8 pouchSetPartyColor(int param_1, int param_2) {
     return 0;

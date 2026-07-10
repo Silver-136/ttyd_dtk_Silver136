@@ -28,12 +28,13 @@ void effPeachDustMain(void* effect) {
     extern f32 float_0p1_80425cec;
     u8* work;
     u8* part;
-    Vec3 pos;
     Vec3 dispPos;
+    Vec3 pos;
     s32 i;
     s32 dead;
     s32 frame;
     s32 count;
+    f32 scale;
 
     dead = 0;
     i = 0;
@@ -63,7 +64,8 @@ void effPeachDustMain(void* effect) {
                 *(f32*)(part + 0x24) =
                     float_0p4_80425ce4 * (float_0p01_80425ce8 * (f32)scale_data[*(s32*)(part + 0x20) - 1]);
             } else {
-                *(f32*)(part + 0x24) += float_0p1_80425cec * (float_0p1_80425cec - *(f32*)(part + 0x24));
+                scale = *(f32*)(part + 0x24);
+                *(f32*)(part + 0x24) = scale + float_0p1_80425cec * (float_0p1_80425cec - scale);
             }
             *(f32*)(part + 4) += *(f32*)(part + 0x10);
             *(f32*)(part + 8) += *(f32*)(part + 0x14);

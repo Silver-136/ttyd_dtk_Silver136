@@ -126,19 +126,22 @@ void monosiriExit(void* work) {
         _mapFree(mapalloc_base_ptr, work);
     }
 }
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 MonosiriWork* monosiriInit(s32 param, f32 x, f32 y) {
     MonosiriWork* work = _mapAlloc(mapalloc_base_ptr, sizeof(MonosiriWork));
+    f32 closeX;
+    f32 closeY;
 
     memset(work, 0, sizeof(MonosiriWork));
+    closeX = float_500_80423b40;
+    closeY = float_neg300_80423b44;
     work->state = 0;
     work->param = param;
     work->x = x;
     work->y = y;
-    work->closeX = float_500_80423b40;
-    work->closeY = float_neg300_80423b44;
+    work->closeX = closeX;
+    work->closeY = closeY;
     work->flags = 0;
     work->pose0 = -1;
     work->pose1 = -1;
@@ -146,7 +149,6 @@ MonosiriWork* monosiriInit(s32 param, f32 x, f32 y) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
 
 u8 winLogInit(void* pWin) {
     return 0;

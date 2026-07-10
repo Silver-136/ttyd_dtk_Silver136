@@ -338,40 +338,174 @@ void btlUnitPartsBlurDisp(s32 param_1, void* part) {
     }
 }
 
-u8 _btlDispTex4(s32 param_1, float* param_2, float* param_3, float* param_4, float* param_5, float* param_6, void* param_7) {
-    return 0;
+void _btlDispTex4(s32 texId, f32* trans0, f32* scale0, f32* rot, f32* trans1, f32* scale1, void* color) {
+    extern f32 float_deg2rad_8042223c;
+    extern void PSMTXIdentity(void* mtx);
+    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(void* mtx, s32 axis, f32 radians);
+    extern void PSMTXConcat(void* a, void* b, void* ab);
+    extern void btlDispTexPlane2(void* mtx, s32 texId, void* color);
+    f32 mtx[3][4];
+    f32 trans0Mtx[3][4];
+    f32 scale0Mtx[3][4];
+    f32 rotXMtx[3][4];
+    f32 rotYMtx[3][4];
+    f32 rotZMtx[3][4];
+    f32 trans1Mtx[3][4];
+    f32 scale1Mtx[3][4];
+    u32 colorCopy;
+
+    PSMTXIdentity(mtx);
+    PSMTXTrans(trans0Mtx, trans0[0], trans0[1], trans0[2]);
+    PSMTXTrans(trans1Mtx, trans1[0], trans1[1], trans1[2]);
+    PSMTXScale(scale0Mtx, scale0[0], scale0[1], scale0[2]);
+    PSMTXScale(scale1Mtx, scale1[0], scale1[1], scale1[2]);
+    PSMTXRotRad(rotXMtx, 0x78, float_deg2rad_8042223c * rot[0]);
+    PSMTXRotRad(rotYMtx, 0x79, float_deg2rad_8042223c * rot[1]);
+    PSMTXRotRad(rotZMtx, 0x7A, float_deg2rad_8042223c * rot[2]);
+    PSMTXConcat(scale0Mtx, mtx, mtx);
+    PSMTXConcat(scale1Mtx, mtx, mtx);
+    PSMTXConcat(trans1Mtx, mtx, mtx);
+    PSMTXConcat(rotZMtx, mtx, mtx);
+    PSMTXConcat(rotXMtx, mtx, mtx);
+    PSMTXConcat(rotYMtx, mtx, mtx);
+    PSMTXConcat(trans0Mtx, mtx, mtx);
+    colorCopy = *(u32*)color;
+    btlDispTexPlane2(mtx, texId, &colorCopy);
 }
 
+void btlDispGXInit2D(void) {
+    extern void btlDispGXInit2DSub(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxFmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+    extern void GXSetNumTexGens(s32 nTexGens);
+    extern void GXSetTexCoordGen2(s32 dstCoord, s32 func, s32 srcParam, s32 mtx, s32 normalize, s32 postMtx);
+    extern void GXSetNumTevStages(s32 nStages);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 chan);
 
-u8 btlDispGXInit2D(void) {
-    return 0;
+    btlDispGXInit2DSub();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xB, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xB, 1, 5, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 0xA, 8, 0xF);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaIn(0, 7, 5, 4, 7);
+    GXSetTevOrder(0, 0, 0, 4);
 }
 
+void btlDispGXQuads2D(f32 x1, f32 y1, f32 x2, f32 y2, u8 r, u8 g, u8 b, u8 a) {
+    extern f32 float_0_80422240;
+    extern f32 float_1_8042224c;
+    extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
+    extern void btlDispGXPoint2D(u8 r, u8 g, u8 b, u8 a, f32 x, f32 y, f32 s, f32 t);
 
-u8 btlDispGXQuads2D(void) {
-    return 0;
+    GXBegin(0x80, 0, 4);
+    btlDispGXPoint2D(r, g, b, a, x1, y1, float_0_80422240, float_0_80422240);
+    btlDispGXPoint2D(r, g, b, a, x2, y1, float_1_8042224c, float_0_80422240);
+    btlDispGXPoint2D(r, g, b, a, x2, y2, float_1_8042224c, float_1_8042224c);
+    btlDispGXPoint2D(r, g, b, a, x1, y2, float_0_80422240, float_1_8042224c);
 }
 
+void btlDispTexPlane(s32 tpl, void* color, s32 flags, f32 x, f32 y, f32 z, f32 scaleX, f32 scaleY) {
+    extern f32 float_1_8042224c;
+    extern void btlDispTexPlaneInit(void);
+    extern void* camGetCurPtr(void);
+    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(void* a, void* b, void* ab);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void btlDispTexPlainGX(s32 texId, void* color0, void* color1, void* color2, void* color3);
+    f32 scaleMtx[3][4];
+    f32 transMtx[3][4];
+    f32 outMtx[3][4];
+    u32 colorCopy0;
+    u32 colorCopy1;
+    u32 colorCopy2;
+    u32 colorCopy3;
+    void* cam;
 
-void btlDispTexPlane(s32 tpl, void* color, s32 flags, f32 x, f32 y, f32 z, f32 rx, f32 scale) {
-    ;
+    btlDispTexPlaneInit();
+    cam = camGetCurPtr();
+    PSMTXScale(scaleMtx, scaleX, scaleY, float_1_8042224c);
+    PSMTXTrans(transMtx, x, y, z);
+    PSMTXConcat(transMtx, scaleMtx, outMtx);
+    PSMTXConcat((void*)((s32)cam + 0x11C), outMtx, outMtx);
+    GXLoadPosMtxImm(outMtx, 0);
+
+    colorCopy3 = *(u32*)color;
+    colorCopy2 = colorCopy3;
+    colorCopy1 = colorCopy3;
+    colorCopy0 = colorCopy3;
+
+    btlDispTexPlainGX(tpl, &colorCopy0, &colorCopy1, &colorCopy2, &colorCopy3);
 }
-
 
 void btlUnitItemDisp(s32 param_1, void* unit) {
     ;
 }
 
 
-u8 btlDispGXInit2DRasta(void) {
-    return 0;
+void btlDispGXInit2DRasta(void) {
+    extern void btlDispGXInit2DSub(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxFmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+    extern void GXSetNumTexGens(s32 nTexGens);
+    extern void GXSetNumTevStages(s32 nStages);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 chan);
+
+    btlDispGXInit2DSub();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xB, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xB, 1, 5, 0);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xA);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaIn(0, 7, 7, 7, 5);
+    GXSetTevOrder(0, 0xFF, 0xFF, 4);
 }
 
+void btlDispTexPlaneInit(void) {
+    extern void GXSetCullMode(s32 mode);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxFmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+    extern void GXSetNumChans(s32 nChans);
+    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
+    extern void GXSetNumTexGens(s32 nTexGens);
+    extern void GXSetTexCoordGen2(s32 dstCoord, s32 func, s32 srcParam, s32 mtx, s32 normalize, s32 postMtx);
 
-u8 btlDispTexPlaneInit(void) {
-    return 0;
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xB, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xB, 1, 5, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 1, 0, 2, 2);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
 }
-
 
 void _pose_one_pattern(void* part) {
     extern u8 vec3_802ee3a0[];
@@ -402,10 +536,16 @@ done:
     return;
 }
 
-u8 btlDispGXQuads2DRasta(double x1, double y1, double x2, double y2, s32 r, s32 g, u8 b, u8 a) {
-    return 0;
-}
+void btlDispGXQuads2DRasta(f32 x1, f32 y1, f32 x2, f32 y2, u8 r, u8 g, u8 b, u8 a) {
+    extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
+    extern void btlDispGXPoint2DRasta(u8 r, u8 g, u8 b, u8 a, f32 x, f32 y);
 
+    GXBegin(0x80, 0, 4);
+    btlDispGXPoint2DRasta(r, g, b, a, x1, y1);
+    btlDispGXPoint2DRasta(r, g, b, a, x2, y1);
+    btlDispGXPoint2DRasta(r, g, b, a, x2, y2);
+    btlDispGXPoint2DRasta(r, g, b, a, x1, y2);
+}
 
 void _partsBlurControl(void* part, s32 enable, s32 a3, void* color) {
     ;
@@ -448,15 +588,61 @@ void btlUnitStolenItemDisp(s32 param_1, void* unit) {
 }
 
 
-u8 btlDispTexPlane3(s32 param_1, s32 param_2, void* param_3, void* param_4, void* param_5, void* param_6) {
-    return 0;
-}
+void btlDispTexPlane3(void* mtx, s32 texId, void* color0, void* color1, void* color2, void* color3) {
+    extern void btlDispTexPlaneInit(void);
+    extern void PSMTXCopy(void* src, void* dst);
+    extern void* camGetCurPtr(void);
+    extern void PSMTXConcat(void* a, void* b, void* ab);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void btlDispTexPlainGX(s32 texId, void* color0, void* color1, void* color2, void* color3);
+    f32 localMtx[3][4];
+    u32 local0;
+    u32 local1;
+    u32 local2;
+    u32 local3;
+    u32 value3;
+    u32 value2;
+    u32 value1;
+    u32 value0;
 
+    btlDispTexPlaneInit();
+    PSMTXCopy(mtx, localMtx);
+    PSMTXConcat((void*)((s32)camGetCurPtr() + 0x11C), localMtx, localMtx);
+    GXLoadPosMtxImm(localMtx, 0);
+
+    value3 = *(u32*)color3;
+    value2 = *(u32*)color2;
+    value1 = *(u32*)color1;
+    value0 = *(u32*)color0;
+
+    local3 = value3;
+    local2 = value2;
+    local1 = value1;
+    local0 = value0;
+
+    btlDispTexPlainGX(texId, &local0, &local1, &local2, &local3);
+}
 
 void btlGetScreenPoint(void* inPos, void* outScreenSpacePos) {
-    ;
-}
+    extern f32 float_0_80422240;
+    extern f32 float_240_80422248;
+    extern f32 float_304_80422244;
+    extern void* camGetPtr(s32 id);
+    extern void PSMTXMultVec(void* mtx, void* src, void* dst);
+    extern void PSMTX44MultVec(void* mtx, void* src, void* dst);
+    void* cam;
+    f32 pos[3];
 
+    cam = camGetPtr(4);
+    pos[0] = *(f32*)((s32)inPos + 0);
+    pos[1] = *(f32*)((s32)inPos + 4);
+    pos[2] = *(f32*)((s32)inPos + 8);
+    PSMTXMultVec((void*)((s32)cam + 0x11C), pos, pos);
+    PSMTX44MultVec((void*)((s32)cam + 0x15C), pos, pos);
+    *(f32*)((s32)outScreenSpacePos + 0) = float_304_80422244 * pos[0];
+    *(f32*)((s32)outScreenSpacePos + 4) = float_240_80422248 * pos[1];
+    *(f32*)((s32)outScreenSpacePos + 8) = float_0_80422240;
+}
 
 void gravityOffsetControl(void* part) {
     s32 active;
@@ -492,10 +678,25 @@ void gravityOffsetControl(void* part) {
     }
 }
 
-u8 btlDispGXInit2DSub(void) {
-    return 0;
-}
+void btlDispGXInit2DSub(void) {
+    extern void GXSetCullMode(s32 mode);
+    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
+    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetNumChans(s32 nChans);
+    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
 
+    GXSetCullMode(0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetBlendMode(1, 4, 5, 5);
+    GXSetZMode(1, 7, 0);
+    GXClearVtxDesc();
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 1, 1, 0, 2, 2);
+}
 
 void btlDispEntAnime(void* unit) {
     extern s32 animPoseEntry(void*, s32);
@@ -556,10 +757,31 @@ done:
     return;
 }
 
-u8 btlDispTexPlane2(s32 param_1, s32 param_2, void* param_3) {
-    return 0;
-}
+void btlDispTexPlane2(void* mtx, s32 texId, void* color) {
+    extern void btlDispTexPlaneInit(void);
+    extern void PSMTXCopy(void* src, void* dst);
+    extern void* camGetCurPtr(void);
+    extern void PSMTXConcat(void* a, void* b, void* ab);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void btlDispTexPlainGX(s32 texId, void* color0, void* color1, void* color2, void* color3);
+    u32 colorCopy0;
+    u32 colorCopy1;
+    u32 colorCopy2;
+    u32 colorCopy3;
+    f32 localMtx[3][4];
 
+    btlDispTexPlaneInit();
+    PSMTXCopy(mtx, localMtx);
+    PSMTXConcat((void*)((s32)camGetCurPtr() + 0x11C), localMtx, localMtx);
+    GXLoadPosMtxImm(localMtx, 0);
+
+    colorCopy3 = *(u32*)color;
+    colorCopy2 = colorCopy3;
+    colorCopy1 = colorCopy3;
+    colorCopy0 = colorCopy3;
+
+    btlDispTexPlainGX(texId, &colorCopy0, &colorCopy1, &colorCopy2, &colorCopy3);
+}
 
 void btlDispChangeAnime(BattleWorkUnitPart* part, const char*name, BOOL a3) {
     extern char* strcpy(char*, const char*);

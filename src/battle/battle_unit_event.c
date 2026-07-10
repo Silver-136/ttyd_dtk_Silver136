@@ -137,10 +137,43 @@ s32 BattleRunHitEvent(void* unit, u32 param_2) {
 
 
 void BattlePhaseEventStartDeclare(void* unit) {
-    ;
+    s32 eventId;
+
+    eventId = *(s32*)((s32)unit + 0x2B4);
+    if (eventId != 0) {
+        evtDeleteID(eventId);
+        *(s32*)((s32)unit + 0x2B4) = 0;
+    }
+
+    eventId = *(s32*)((s32)unit + 0x290);
+    if (eventId != 0) {
+        evtDeleteID(eventId);
+        *(s32*)((s32)unit + 0x290) = 0;
+    }
+
+    eventId = *(s32*)((s32)unit + 0x2A8);
+    if (eventId != 0) {
+        evtDeleteID(eventId);
+        *(s32*)((s32)unit + 0x2A8) = 0;
+    }
 }
 
+s32 BattleRunWaitEvent(void* unit) {
+    void* event;
+    s32 eventId;
 
-void BattleRunWaitEvent(void* unit) {
-    ;
+    eventId = *(s32*)((s32)unit + 0x290);
+    if (eventId != 0) {
+        evtDeleteID(eventId);
+        *(s32*)((s32)unit + 0x290) = 0;
+    }
+
+    if (*(void**)((s32)unit + 0x28C) != 0) {
+        event = evtEntry(*(void**)((s32)unit + 0x28C), 10, 0);
+        *(s32*)((s32)event + 0x160) = *(s32*)unit;
+        *(s32*)((s32)unit + 0x290) = *(s32*)((s32)event + 0x15C);
+    }
+
+    return 0;
 }
+

@@ -14,8 +14,8 @@ extern f32 float_deg2rad_804259d0;
 u8 main_dl(void* effEntry, Mtx mtx) {
     return 0;
 }
-
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effMagic1Main(void* effect) {
     typedef struct Vec3 {
         f32 x;
@@ -33,9 +33,10 @@ void effMagic1Main(void* effect) {
     extern f32 float_0p83_80425a14;
     extern f32 float_0p9_80425a18;
     u8* work;
-    Vec3 pos;
     Vec3 dispPos;
+    Vec3 pos;
     s32 type;
+    u32 systemLevel;
     void* spawned;
 
     work = *(u8**)((s32)effect + 0xC);
@@ -45,7 +46,8 @@ void effMagic1Main(void* effect) {
     pos.z = *(f32*)(work + 0x18);
     dispPos = pos;
 
-    if (marioStGetSystemLevel() != 0) {
+    systemLevel = (u32)marioStGetSystemLevel();
+    if (systemLevel != 0U) {
         dispEntry(4, 2, effMagic1Disp, effect, dispCalcZ(&dispPos));
         return;
     }
@@ -81,7 +83,11 @@ void effMagic1Main(void* effect) {
     *(f32*)(work + 0x18) += *(f32*)(work + 0x24);
     dispEntry(4, 2, effMagic1Disp, effect, dispCalcZ(&dispPos));
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effMagic1N64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 targetX, f32 targetY, f32 targetZ) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -94,6 +100,8 @@ void* effMagic1N64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 targetX, f3
     void* entry;
     u8* work;
     f32 invTime;
+    f32 one;
+    f32 zero;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_Magic1N64_802fb430;
@@ -103,34 +111,39 @@ void* effMagic1N64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 targetX, f3
     *(void**)((s32)entry + 0x10) = effMagic1Main;
     *(s32*)entry |= 2;
 
+    one = float_1_80425a04;
     *(s32*)(work + 0x2C) = 0;
     *(s32*)work = type;
     *(s32*)(work + 0x34) = 0xFF;
     *(f32*)(work + 4) = x;
     *(f32*)(work + 8) = y;
     *(f32*)(work + 0xC) = z;
-    *(f32*)(work + 0x28) = float_1_80425a04;
+    *(f32*)(work + 0x28) = one;
 
     if (type == 0) {
-        invTime = float_1_80425a04 / (f32)time;
-        *(f32*)(work + 0x10) = float_0_804259cc;
-        *(f32*)(work + 0x14) = float_0_804259cc;
-        *(f32*)(work + 0x18) = float_0_804259cc;
+        zero = float_0_804259cc;
+        invTime = one / (f32)time;
+        *(f32*)(work + 0x10) = zero;
+        *(f32*)(work + 0x14) = zero;
+        *(f32*)(work + 0x18) = zero;
         *(f32*)(work + 0x1C) = invTime * (targetX - x);
         *(f32*)(work + 0x20) = invTime * (targetY - y);
         *(f32*)(work + 0x24) = invTime * (targetZ - z);
         *(s32*)(work + 0x30) = time;
     } else {
+        zero = float_0_804259cc;
         *(f32*)(work + 0x10) = float_29_80425a1c;
-        *(f32*)(work + 0x14) = float_0_804259cc;
-        *(f32*)(work + 0x18) = float_0_804259cc;
+        *(f32*)(work + 0x14) = zero;
+        *(f32*)(work + 0x18) = zero;
         *(f32*)(work + 0x1C) = float_6p2_80425a20;
-        *(f32*)(work + 0x20) = float_0_804259cc;
-        *(f32*)(work + 0x24) = float_0_804259cc;
+        *(f32*)(work + 0x20) = zero;
+        *(f32*)(work + 0x24) = zero;
         *(s32*)(work + 0x30) = 0x18;
     }
     return entry;
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

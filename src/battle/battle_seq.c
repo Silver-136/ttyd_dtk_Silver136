@@ -1113,9 +1113,9 @@ void BattleSequenceManager(void) {
 
 
 u32 BattlePhaseEndCheck(void) {
-    s32 i;
     s32 offset;
     void* battleWork;
+    s32 i;
     void* unit;
     s32 unitId;
 
@@ -1127,7 +1127,7 @@ u32 BattlePhaseEndCheck(void) {
         if (unitId != -1) {
             unit = BattleGetUnitPtr(battleWork, unitId);
             if (unit != 0 &&
-                *(u8*)((s32)unit + 0x20) != 0xA &&
+                *(s8*)((s32)unit + 0x20) != 0xA &&
                 *(s8*)((s32)unit + 0x22) > 0 &&
                 BtlUnit_CheckStatus(unit, 0x1B) == 0) {
                 break;
@@ -1137,9 +1137,11 @@ u32 BattlePhaseEndCheck(void) {
         offset += 4;
     }
 
-    return i >= 0x40;
+    if (i >= 0x40) {
+        return 1;
+    }
+    return 0;
 }
-
 
 void btlseqPhase(void* battleWork) {
     ;

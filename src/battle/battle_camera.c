@@ -239,18 +239,25 @@ u8 evt_btl_camera_shake_h(void* event) {
 }
 
 void btl_camera_shake_h(s32 priority, f32 a, f32 b, s32 frames, s32 type) {
-    void* work = _battleWorkPointer;
+    extern void padRumbleOn(s32);
 
+    void* work;
+
+    work = _battleWorkPointer;
     if (priority < *(s32*)((s32)work + 0x275C)) {
         return;
     }
 
-    *(u32*)((s32)work + 0x2754) |= 1;
-    *(f32*)((s32)work + 0x2780) = a;
-    *(f32*)((s32)work + 0x2784) = b;
-    *(s32*)((s32)work + 0x2788) = frames;
-    *(s32*)((s32)work + 0x278C) = frames;
-    *(s32*)((s32)work + 0x2790) = type;
+    *(u32*)((s32)work + 0x2754) |= 2;
+    *(f32*)((s32)work + 0x2848) = a;
+    *(f32*)((s32)work + 0x284C) = b;
+    *(s32*)((s32)work + 0x282C) = type;
+    *(s32*)((s32)work + 0x2834) = frames;
+    *(s32*)((s32)work + 0x283C) = frames;
+
+    if ((*(u32*)((s32)work + 0x2754) & 0x40) == 0) {
+        padRumbleOn(0);
+    }
 }
 
 u8 evt_btl_camera_shake_w(void* event) {
@@ -273,18 +280,25 @@ u8 evt_btl_camera_shake_w(void* event) {
 }
 
 void btl_camera_shake_w(s32 priority, f32 a, f32 b, s32 frames, s32 type) {
-    void* work = _battleWorkPointer;
+    extern void padRumbleOn(s32);
 
+    void* work;
+
+    work = _battleWorkPointer;
     if (priority < *(s32*)((s32)work + 0x275C)) {
         return;
     }
 
-    *(u32*)((s32)work + 0x2754) |= 2;
-    *(f32*)((s32)work + 0x2794) = a;
-    *(f32*)((s32)work + 0x2798) = b;
-    *(s32*)((s32)work + 0x279C) = frames;
-    *(s32*)((s32)work + 0x27A0) = frames;
-    *(s32*)((s32)work + 0x27A4) = type;
+    *(u32*)((s32)work + 0x2754) |= 1;
+    *(f32*)((s32)work + 0x2840) = a;
+    *(f32*)((s32)work + 0x2844) = b;
+    *(s32*)((s32)work + 0x2828) = type;
+    *(s32*)((s32)work + 0x2830) = frames;
+    *(s32*)((s32)work + 0x2838) = frames;
+
+    if ((*(u32*)((s32)work + 0x2754) & 0x40) == 0) {
+        padRumbleOn(0);
+    }
 }
 
 u8 evt_btl_camera_set_moveto(void* event) {
@@ -409,7 +423,18 @@ done:
 }
 
 s32 evt_btl_camera_add_zoom(int param_1) {
-    return 0;
+    s32* args;
+    s32 priority;
+    s32 zoom;
+    void* event;
+
+    event = (void*)param_1;
+    args = *(s32**)((s32)event + 0x18);
+    priority = evtGetValue(event, args[0]);
+    zoom = evtGetFloat(event, args[1]);
+    btl_camera_add_zoom(priority, zoom);
+
+    return 2;
 }
 
 s32 evt_btl_camera_set_zoom(void* evt) {

@@ -11,6 +11,8 @@ u8 effThunderMain(u32* param_1) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effThunderN64Entry(s32 type, f32 x, f32 y, f32 z, f32 sx, f32 sy) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -33,7 +35,6 @@ void* effThunderN64Entry(s32 type, f32 x, f32 y, f32 z, f32 sx, f32 sy) {
     extern f32 float_72_804263f8;
     void* entry;
     u8* work;
-    u8* childWork;
     s32 shockType;
 
     entry = effEntry();
@@ -72,13 +73,12 @@ void* effThunderN64Entry(s32 type, f32 x, f32 y, f32 z, f32 sx, f32 sy) {
         }
         if (type != 1) {
             *(void**)(work + 0x48) = effAkariChargeN64Entry(0, 0, float_neg120_804263f0, float_189_804263f4, float_72_804263f8, float_1_804263c4);
-            childWork = *(u8**)((s32)*(void**)(work + 0x48) + 0xC);
-            *(s32*)(childWork + 0x28) = 0xFF;
-            *(s32*)(childWork + 0x2C) = 0xFF;
-            *(s32*)(childWork + 0x30) = 0xFF;
-            *(s32*)(childWork + 0x18) = 0xFF;
-            *(s32*)(childWork + 0x1C) = 0;
-            *(s32*)(childWork + 0x20) = 0xFF;
+            *(s32*)((s32)*(void**)((s32)*(void**)(work + 0x48) + 0xC) + 0x28) = 0xFF;
+            *(s32*)((s32)*(void**)((s32)*(void**)(work + 0x48) + 0xC) + 0x2C) = 0xFF;
+            *(s32*)((s32)*(void**)((s32)*(void**)(work + 0x48) + 0xC) + 0x30) = 0xFF;
+            *(s32*)((s32)*(void**)((s32)*(void**)(work + 0x48) + 0xC) + 0x18) = 0xFF;
+            *(s32*)((s32)*(void**)((s32)*(void**)(work + 0x48) + 0xC) + 0x1C) = 0;
+            *(s32*)((s32)*(void**)((s32)*(void**)(work + 0x48) + 0xC) + 0x20) = 0xFF;
         }
     }
     if (type >= 3) {
@@ -90,4 +90,6 @@ void* effThunderN64Entry(s32 type, f32 x, f32 y, f32 z, f32 sx, f32 sy) {
     }
     return entry;
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 

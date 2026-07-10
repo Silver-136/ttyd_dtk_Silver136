@@ -199,35 +199,190 @@ u8 zakoEntryFall(void) {
 }
 
 
-u8 cliffCheck(void) {
-    return 0;
-}
+s32 cliffCheck(int param_1) {
+    extern void* hitCheckFilter(s32 flags, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz,
+                                f32* outX, f32* outY, f32* outZ, f32* radius,
+                                f32* outA, f32* outB, f32* outC);
+    extern f32 npcTransRytoFaceDir(void* npc);
+    extern f32 float_90_80421fbc;
+    extern f32 float_5_80421f84;
+    extern f32 float_0_80421f8c;
+    extern f32 float_1_80421f88;
+    extern f32 float_neg1_80421f90;
+    s32* args = *(s32**)(param_1 + 0x18);
+    void* npc = evtNpcNameToPtr((void*)param_1, str_me_80421f30);
+    f32 dir;
+    f32 a;
+    f32 b;
+    f32 c;
+    f32 radius = float_5_80421f84;
+    f32 d;
+    f32 e;
+    f32 f;
+    void* down;
+    void* ahead;
+    s32 result;
 
+    if (npcTransRytoFaceDir(npc) == float_90_80421fbc) {
+        dir = float_1_80421f88;
+    } else {
+        dir = float_neg1_80421f90;
+    }
+    down = hitCheckFilter(0, *(f32*)((s32)npc + 0x8C),
+                          *(f32*)((s32)npc + 0x90) + float_1_80421f88,
+                          *(f32*)((s32)npc + 0x94), float_0_80421f8c,
+                          float_neg1_80421f90, float_0_80421f8c,
+                          &a, &b, &c, &radius, &d, &e, &f);
+    ahead = hitCheckFilter(0, *(f32*)((s32)npc + 0x8C),
+                           *(f32*)((s32)npc + 0x90) + float_1_80421f88,
+                           *(f32*)((s32)npc + 0x94), dir, float_neg1_80421f90,
+                           float_0_80421f8c, &a, &b, &c, &radius, &d, &e, &f);
+    if (down != NULL && ahead != NULL) {
+        result = 0;
+    } else if (down != NULL && ahead == NULL) {
+        result = 1;
+    } else {
+        result = 2;
+    }
+    evtSetValue((void*)param_1, args[0], result);
+    return 2;
+}
 
 s32 kamec_fire_magic(int param_1) {
-    return 0;
-}
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern void* effMagic1N64Entry(s32 arg0, s32 time, f32 x, f32 y, f32 z, f32 a, f32 b, f32 c);
+    extern void effSetName(void* eff, void* name);
+    s32* args = *(s32**)(param_1 + 0x18);
+    s32 x = evtGetValue((void*)param_1, args[0]);
+    s32 y = evtGetValue((void*)param_1, args[1]);
+    s32 z = evtGetValue((void*)param_1, args[2]);
+    s32 a = evtGetValue((void*)param_1, args[3]);
+    s32 b = evtGetValue((void*)param_1, args[4]);
+    s32 c = evtGetValue((void*)param_1, args[5]);
+    void* npc = evtNpcNameToPtr((void*)param_1, str_me_80421f30);
+    void* eff = effMagic1N64Entry(0, 60, (f32)x, (f32)y, (f32)z, (f32)a, (f32)b, (f32)c);
 
+    effSetName(eff, (void*)((s32)npc + 8));
+    evtSetValue((void*)param_1, args[6], (s32)eff);
+    return 2;
+}
 
 s32 upperCheck(int param_1) {
-    return 0;
-}
+    extern void* hitCheckFilter(s32 flags, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz,
+                                f32* outX, f32* outY, f32* outZ, f32* radius,
+                                f32* outA, f32* outB, f32* outC);
+    extern f32 float_5_80421f84;
+    extern f32 float_0_80421f8c;
+    extern f32 float_15_80421fb0;
+    extern f32 float_30_80421fb4;
+    extern f32 float_2_80421fb8;
+    s32* args = *(s32**)(param_1 + 0x18);
+    void* npc = evtNpcNameToPtr((void*)param_1, str_me_80421f30);
+    f32 a;
+    f32 b;
+    f32 c;
+    f32 radius = float_5_80421f84;
+    f32 d;
+    f32 e;
+    f32 f;
+    void* hit1;
+    void* hit2;
 
+    hit1 = hitCheckFilter(0, *(f32*)((s32)npc + 0x8C) - float_15_80421fb0,
+                          *(f32*)((s32)npc + 0x90) + float_30_80421fb4,
+                          *(f32*)((s32)npc + 0x94), float_0_80421f8c,
+                          float_2_80421fb8, float_0_80421f8c,
+                          &a, &b, &c, &radius, &d, &e, &f);
+    hit2 = hitCheckFilter(0, *(f32*)((s32)npc + 0x8C) + float_15_80421fb0,
+                          *(f32*)((s32)npc + 0x90) + float_30_80421fb4,
+                          *(f32*)((s32)npc + 0x94), float_0_80421f8c,
+                          float_2_80421fb8, float_0_80421f8c,
+                          &a, &b, &c, &radius, &d, &e, &f);
+    evtSetValue((void*)param_1, args[0], hit1 != NULL || hit2 != NULL);
+    return 2;
+}
 
 s32 pressCheck(int param_1) {
-    return 0;
-}
+    extern void* hitCheckFilter(s32 flags, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz,
+                                f32* outX, f32* outY, f32* outZ, f32* radius,
+                                f32* outA, f32* outB, f32* outC);
+    extern s32 kpaGetLevel(void);
+    extern f32 float_5_80421f84;
+    extern f32 float_0_80421f8c;
+    extern f32 float_1_80421f88;
+    extern f32 float_neg1_80421f90;
+    s32* args = *(s32**)(param_1 + 0x18);
+    void* npc = evtNpcNameToPtr((void*)param_1, str_me_80421f30);
+    f32 a;
+    f32 b;
+    f32 c;
+    f32 radius = float_5_80421f84;
+    f32 d;
+    f32 e;
+    f32 f;
+    void* hit;
 
+    if (kpaGetLevel() == 0) {
+        evtSetValue((void*)param_1, args[0], 0);
+        return 2;
+    }
+    hit = hitCheckFilter(0, *(f32*)((s32)npc + 0x8C),
+                         *(f32*)((s32)npc + 0x90) + float_1_80421f88,
+                         *(f32*)((s32)npc + 0x94), float_0_80421f8c,
+                         float_neg1_80421f90, float_0_80421f8c,
+                         &a, &b, &c, &radius, &d, &e, &f);
+    evtSetValue((void*)param_1, args[0], hit != NULL);
+    return 2;
+}
 
 s32 dokanCheck(int param_1) {
-    return 0;
-}
+    extern s32 strcmp(const char* a, const char* b);
+    extern char* strcpy(char* dst, const char* src);
+    extern void* mobjNameToPtrNoAssert(char* name);
+    extern char str_kemuri_test_802ed438[];
+    extern char str_mobj9_80421fa4[];
+    char name[32];
+    s32* args = *(s32**)(param_1 + 0x18);
+    void* npc = evtNpcNameToPtr((void*)param_1, str_me_80421f30);
+    void* mobj;
 
+    if (strcmp((char*)((s32)npc + 8), str_kemuri_test_802ed438 + 0x690) == 0) {
+        strcpy(name, str_mobj9_80421fa4);
+    }
+    if (strcmp((char*)((s32)npc + 8), str_kemuri_test_802ed438 + 0x6A8) == 0) {
+        strcpy(name, str_kemuri_test_802ed438 + 0x6C0);
+    }
+    mobj = mobjNameToPtrNoAssert(name);
+    evtSetValue((void*)param_1, args[0], mobj != NULL);
+    return 2;
+}
 
 s32 gesso_ground_check(int param_1) {
-    return 0;
-}
+    extern void* hitCheckFilter(s32 flags, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz,
+                                f32* outX, f32* outY, f32* outZ, f32* radius,
+                                f32* outA, f32* outB, f32* outC);
+    extern f32 float_5_80421f84;
+    extern f32 float_0_80421f8c;
+    extern f32 float_1_80421f88;
+    extern f32 float_neg1_80421f90;
+    s32* args = *(s32**)(param_1 + 0x18);
+    void* npc = evtNpcNameToPtr((void*)param_1, str_me_80421f30);
+    f32 a;
+    f32 b;
+    f32 c;
+    f32 radius = float_5_80421f84;
+    f32 d;
+    f32 e;
+    f32 f;
+    void* hit = hitCheckFilter(0, *(f32*)((s32)npc + 0x8C),
+                               *(f32*)((s32)npc + 0x90) + float_1_80421f88,
+                               *(f32*)((s32)npc + 0x94), float_0_80421f8c,
+                               float_neg1_80421f90, float_0_80421f8c,
+                               &a, &b, &c, &radius, &d, &e, &f);
 
+    evtSetValue((void*)param_1, args[0], hit != NULL);
+    return 2;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -259,24 +414,58 @@ s32 _2d_get_dead_jump_offset(int param_1) {
 #pragma use_lmw_stmw on
 
 s32 killer_make_name(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern char* strcpy(char* dst, const char* src);
+    extern s32 strlen(const char* str);
+    static char name[64];
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    void* npc = evtNpcNameToPtr(pEvt, str_me_80421f30);
+    s32 index = evtGetValue(pEvt, args[0]);
+    s32 len;
 
+    strcpy(name, (char*)((s32)npc + 8));
+    len = strlen(name);
+    name[len] = index + 0x31;
+    name[len + 1] = 0;
+    evtSetValue(pEvt, args[1], (s32)name);
+    return 2;
+}
 
 s32 _wait_blow_end(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern s32 npcCheckBlow(void* npc);
+    extern f32 float_18_80421fe4;
+    extern f32 float_0_80421f8c;
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    void* npc = evtNpcNameToPtr(pEvt, (void*)name);
 
+    if (npcCheckBlow(npc) != 0) {
+        *(f32*)((s32)npc + 0xF0) += float_18_80421fe4;
+        return 0;
+    }
+    *(f32*)((s32)npc + 0xF0) = float_0_80421f8c;
+    return 2;
+}
 
 s32 limitSpd(int param_1) {
-    return 0;
-}
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+    s32* args = *(s32**)(param_1 + 0x18);
+    f32 speed = evtGetFloat((void*)param_1, args[0]);
+    void* npc = evtNpcNameToPtr((void*)param_1, str_me_80421f30);
 
+    *(f32*)((s32)npc + 0x1D0) = speed;
+    return 2;
+}
 
 s32 piders_draw_yawn(int param_1) {
-    return 0;
-}
+    extern s32 dispEntry(s32 camera, s32 order, void* callback, void* data, f32 priority);
+    extern f32 float_0_80421f8c;
+    void* npc = evtNpcNameToPtr((void*)param_1, str_me_80421f30);
 
+    dispEntry(4, 1, piders_draw_yarn_sub, npc, float_0_80421f8c);
+    return 2;
+}
 
 /* CHATGPT FALLBACK MISSING STUBS: main/npc_event 20260624_191429 */
 

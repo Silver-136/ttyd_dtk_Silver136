@@ -108,6 +108,8 @@ void* effUranokoEntry(s32 type, s32 timer, f32 x, f32 y, f32 z) {
 /* CHATGPT STUB FILL: main/effect/eff_uranoko 20260624_184929 */
 
 /* stub-fill: effUranokoMain | prototype_only | source_prototype */
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effUranokoMain(void* entry) {
     extern void* gp;
     extern BOOL animGroupBaseAsync(char* name, s32 language, s32 unused);
@@ -116,26 +118,33 @@ void effUranokoMain(void* entry) {
     extern void animPoseRelease(s32 poseId);
     extern void effDelete(void* entry);
     extern f32 dispCalcZ(Vec* pos);
-    extern void dispEntry(s32 cameraId, s32 order, void* callback, f32 priority, void* param);
+    extern void dispEntry(s32 cameraId, s32 order, void* callback, void* param, f32 z);
     extern void effUranokoDisp(s32 cameraId, void* entry);
-    extern char str_MOBJ_EFF_uranoko_803029fc[];
+    extern u32 vec3_803029f0[];
     extern const char str_A_1_804288d0[];
     extern f32 float_1_804288d4;
     extern f32 float_0p125_804288d8;
 
     void* work;
     Vec pos;
+    Vec dispPos;
+    s32 languageRaw;
     s32 language;
+    char* name;
 
     work = *(void**)((s32)entry + 0xC);
+    name = (char*)((s32)vec3_803029f0 + 0xC);
+    pos = *(Vec*)vec3_803029f0;
     pos.x = *(f32*)((s32)work + 4);
     pos.y = *(f32*)((s32)work + 8);
     pos.z = *(f32*)((s32)work + 0xC);
-    language = *(s32*)((s32)gp + 0x14) != 0;
+    dispPos = pos;
+    languageRaw = *(s32*)((s32)gp + 0x14);
+    language = (s32)(((u32)(-languageRaw | languageRaw)) >> 31);
 
-    if (animGroupBaseAsync(str_MOBJ_EFF_uranoko_803029fc, language, 0)) {
+    if (animGroupBaseAsync(name, language, 0)) {
         if (*(s32*)((s32)work + 0x20) == -1) {
-            *(s32*)((s32)work + 0x20) = animPoseEntry(str_MOBJ_EFF_uranoko_803029fc, language);
+            *(s32*)((s32)work + 0x20) = animPoseEntry(name, language);
             animPoseSetAnim(*(s32*)((s32)work + 0x20), str_A_1_804288d0, 1);
         }
         if (*(u32*)entry & 4) {
@@ -155,10 +164,12 @@ void effUranokoMain(void* entry) {
             effDelete(entry);
         } else {
             *(s32*)((s32)work + 0x18) += 1;
-            *(f32*)((s32)work + 0x10) += (float_1_804288d4 - *(f32*)((s32)work + 0x10)) * float_0p125_804288d8;
-            dispCalcZ(&pos);
-            dispEntry(4, 2, effUranokoDisp, 0.0f, entry);
+            *(f32*)((s32)work + 0x10) +=
+                (float_1_804288d4 - *(f32*)((s32)work + 0x10)) * float_0p125_804288d8;
+            dispEntry(4, 2, effUranokoDisp, entry, dispCalcZ(&dispPos));
         }
     }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 

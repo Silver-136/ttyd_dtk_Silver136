@@ -11,6 +11,8 @@ u8 effThruHammerDisp(int param_1, int param_2) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effThruHammerN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -23,11 +25,22 @@ void* effThruHammerN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     s32 i;
 
     entry = effEntry();
-    if (type == 0) {
-        count = 4;
-    } else {
-        count = 1;
+    if (type == 1) {
+        goto count_one;
     }
+    if (type >= 1) {
+        goto count_one;
+    }
+    if (type >= 0) {
+        goto count_four;
+    }
+    goto count_one;
+count_four:
+    count = 4;
+    goto count_done;
+count_one:
+    count = 1;
+count_done:
     *(char**)((s32)entry + 0x14) = str_ThruHammerN64_802fc180;
     *(s32*)((s32)entry + 8) = count + 1;
     work = __memAlloc(3, (count + 1) * 0x58);
@@ -54,6 +67,8 @@ void* effThruHammerN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     }
     return entry;
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 void effThruHammerMain(void* effect) {
     typedef struct Vec3 {
@@ -65,7 +80,7 @@ void effThruHammerMain(void* effect) {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effThruHammerDisp(void);
-    extern const Vec3 vec3_802fc168;
+    extern Vec3 vec3_802fc168[];
     extern f32 float_0_80426370;
     extern f32 float_0p8_8042637c;
     extern f32 float_6p2832_80426380;
@@ -81,13 +96,15 @@ void effThruHammerMain(void* effect) {
     extern double cos(double);
     u8* work;
     u8* part;
-    Vec3 pos;
     Vec3 dispPos;
+    Vec3 pos;
+    Vec3* base;
     s32 i;
     f32 angle;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos = vec3_802fc168;
+    base = vec3_802fc168;
+    pos = *base;
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);

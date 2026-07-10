@@ -267,15 +267,164 @@ u8 imgDisp_ProjPlane(s32 param_1, int param_2) {
     *(volatile u8*)0xCC008000 = 0;
 }
 
-u8 imgMain(void) {
-    return 0;
+void imgMain(void) {
+    extern void* gp;
+    extern void* wp;
+    extern void dispEntry(s32 layer, s32 order, void* callback, f32 z, void* user);
+    extern void animPoseSetMaterialFlagOff(void* pose, u32 flag);
+    extern void animPoseSetMaterialFlagOn(void* pose, u32 flag);
+    extern u8 imgDisp(void);
+    extern u8 imgShadowDisp(void);
+    extern u8 imgDisp_ProjPlane(s32 param_1, int param_2);
+    extern s32 imgCapture(s32 layer);
+    extern const f32 float_0_80420370;
+    s32 i;
+    s32 count;
+    void* entry;
+    s32 localFlag;
+
+    localFlag = ((u32)(-*(s32*)((s32)gp + 0x14)) | *(u32*)((s32)gp + 0x14)) >> 31;
+    i = 0;
+    count = *(s32*)wp;
+    entry = *(void**)((s32)wp + 4);
+    while (i < count) {
+        u32 flags = *(u32*)((s32)entry + 0xCC);
+        if ((flags & 1) != 0 &&
+            *(s32*)((s32)entry + 0x104) != -1 &&
+            (flags & 2) == 0) {
+            s32 entryFlag = *(s32*)((s32)entry + 0xD0);
+            if (entryFlag == 2 || entryFlag == localFlag) {
+                s32 part = 0;
+                if ((*(u32*)((s32)entry + 0x0) & 4) != 0) {
+                    part = 0;
+                } else if ((*(u32*)((s32)entry + 0x44) & 4) != 0) {
+                    part = 1;
+                } else if ((*(u32*)((s32)entry + 0x88) & 4) != 0) {
+                    part = 2;
+                } else {
+                    part = 3;
+                }
+
+                if (part != 3) {
+                    dispEntry(*(s32*)((s32)entry + 0x150), 1, imgDisp, *(f32*)((s32)entry + 0xFC), entry);
+                    switch (*(s32*)((s32)entry + 0x100)) {
+                        case 0:
+                            animPoseSetMaterialFlagOff(*(void**)((s32)entry + 0x104), 0x10000);
+                            break;
+                        case 1:
+                            dispEntry(2, 1, imgShadowDisp, float_0_80420370, entry);
+                            dispEntry(6, 5, imgDisp_ProjPlane, float_0_80420370, entry);
+                            break;
+                        case 2:
+                            animPoseSetMaterialFlagOn(*(void**)((s32)entry + 0x104), 0x10000);
+                            dispEntry(2, 6, imgShadowDisp, float_0_80420370, entry);
+                            dispEntry(6, 5, imgDisp_ProjPlane, float_0_80420370, entry);
+                            break;
+                    }
+                }
+            }
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x158);
+    }
+
+    i = 0;
+    while (i < 13) {
+        dispEntry(i, 7, imgCapture, float_0_80420370, 0);
+        i++;
+    }
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 imgEntry(s32 name, s32 flag) {
+    extern void* wp;
+    extern s32 strcmp(const char* a, const char* b);
+    extern char* strcpy(char* dst, const char* src);
+    extern void PSMTXIdentity(void* mtx);
+    extern const f32 float_0_80420370;
+    s32 count;
+    void* entry;
+    s32 i;
+    s32 ret;
+    s32 zero;
+    s32 negOne;
+    s32 six;
 
-void imgEntry(s32 name, s32 flag) {
-    ;
+    i = 0;
+    count = *(s32*)wp;
+    entry = *(void**)((s32)wp + 4);
+    while (i < count) {
+        if ((*(u32*)((s32)entry + 0xCC) & 1) != 0 &&
+            *(s32*)((s32)entry + 0xD0) == flag &&
+            strcmp((char*)((s32)entry + 0xD4), (char*)name) == 0) {
+            break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x158);
+    }
+
+    ret = 0;
+    entry = *(void**)((s32)wp + 4);
+    if (count > 0) {
+        do {
+            if ((*(u32*)((s32)entry + 0xCC) & 1) == 0) {
+                break;
+            }
+            ret++;
+            entry = (void*)((s32)entry + 0x158);
+            count--;
+        } while (count != 0);
+    }
+
+    *(u32*)((s32)entry + 0xCC) = 9;
+    *(s32*)((s32)entry + 0xD0) = flag;
+    strcpy((char*)((s32)entry + 0xD4), (char*)name);
+
+    zero = 0;
+    negOne = -1;
+    six = 6;
+    *(s32*)((s32)entry + 0x104) = negOne;
+    *(s32*)((s32)entry + 0x108) = zero;
+    *(u16*)((s32)entry + 0xE4) = zero;
+    *(u16*)((s32)entry + 0xE6) = zero;
+    *(f32*)((s32)entry + 0xE8) = float_0_80420370;
+    *(f32*)((s32)entry + 0xEC) = float_0_80420370;
+    *(f32*)((s32)entry + 0xFC) = float_0_80420370;
+    *(f32*)((s32)entry + 0x118) = float_0_80420370;
+    *(s32*)((s32)entry + 0x100) = zero;
+    *(f32*)((s32)entry + 0x11C) = float_0_80420370;
+    PSMTXIdentity((void*)((s32)entry + 0x120));
+
+    *(s32*)((s32)entry + 0x150) = six;
+    *(s32*)((s32)entry + 0x154) = 4;
+    *(s32*)((s32)entry + 0x0) = zero;
+    *(u16*)((s32)entry + 0x4) = zero;
+    *(u16*)((s32)entry + 0x6) = zero;
+    *(s32*)((s32)entry + 0x10) = negOne;
+    *(s32*)((s32)entry + 0x14) = six;
+    *(s32*)((s32)entry + 0x18) = six;
+    *(s32*)((s32)entry + 0x40) = zero;
+    *(s32*)((s32)entry + 0x44) = zero;
+    *(u16*)((s32)entry + 0x48) = zero;
+    *(u16*)((s32)entry + 0x4A) = zero;
+    *(s32*)((s32)entry + 0x54) = negOne;
+    *(s32*)((s32)entry + 0x58) = six;
+    *(s32*)((s32)entry + 0x5C) = six;
+    *(s32*)((s32)entry + 0x84) = zero;
+    *(s32*)((s32)entry + 0x88) = zero;
+    *(u16*)((s32)entry + 0x8C) = zero;
+    *(u16*)((s32)entry + 0x8E) = zero;
+    *(s32*)((s32)entry + 0x98) = negOne;
+    *(s32*)((s32)entry + 0x9C) = six;
+    *(s32*)((s32)entry + 0xA0) = six;
+    *(s32*)((s32)entry + 0xC8) = zero;
+    *(s32*)((s32)entry + 0x9C) = 0x27;
+    *(s32*)((s32)entry + 0xA0) = 1;
+    return ret;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void imgAutoRelease(s32 value) {
     extern void* wp;

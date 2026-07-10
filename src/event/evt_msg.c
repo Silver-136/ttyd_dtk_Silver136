@@ -437,14 +437,34 @@ s32 evt_msg_print(void* evtEntry, int param_2) {
 
 
 s32 evt_msg_npc(int param_1) {
-    return 0;
-}
+    extern void* windowGetPointer(s32 id);
+    extern char* strcpy(char* dst, const char* src);
+    EvtEntry* evt = (EvtEntry*)param_1;
+    char* msg;
+    void* window;
+    void* work;
 
+    msg = (char*)evtGetValue(evt, evt->args[0]);
+    window = windowGetPointer(*(s32*)((s32)evt + 0x178));
+    work = *(void**)((s32)window + 0x28);
+    strcpy((char*)(*(s32*)work + 0xF204), msg);
+    return 2;
+}
 
 s32 evt_msg_repeat(void* pEvt, int param_2) {
-    return 0;
-}
+    extern void msgWindow_Repeat(s32 windowId);
+    EvtEntry* evt = pEvt;
+    s32 status;
 
+    if (param_2 != 0) {
+        msgWindow_Repeat(*(s32*)((s32)evt + 0x178));
+    }
+    status = windowCheckID(*(s32*)((s32)evt + 0x178));
+    if (status != 0) {
+        return 0;
+    }
+    return 2;
+}
 
 /* CHATGPT STUB FILL: main/event/evt_msg 20260624_184008 */
 

@@ -994,34 +994,36 @@ s32 evt_mario_set_prev_party(EventEntry* event, s32 first) {
 s32 evt_mario_wait_rideon(void) {
     extern void* marioGetPtr(void);
     void* mario;
-    u32 motion;
+    s32 motion;
     s32 ok;
+    s32 result;
 
-    if (*(void**)((s32)marioGetPtr() + 0x1E8) == 0) {
-        return 0;
+    result = 0;
+    if (*(void**)((s32)marioGetPtr() + 0x1E8) != 0) {
+        mario = marioGetPtr();
+        motion = *(u16*)((s32)mario + 0x2E);
+        if (motion <= 1) {
+            ok = 1;
+        } else if (motion == 2) {
+            ok = 1;
+        } else if (motion == 0x16 && *(s16*)((s32)mario + 0x50) == 0) {
+            ok = 1;
+        } else if (motion == 0x15 && *(s16*)((s32)mario + 0x50) == 0) {
+            ok = 1;
+        } else if (motion == 0x19 && *(s16*)((s32)mario + 0x50) == 0) {
+            ok = 1;
+        } else if (motion == 0x1A) {
+            ok = 1;
+        } else {
+            ok = 0;
+        }
+        if (ok != 0) {
+            result = 2;
+        }
     }
-    mario = marioGetPtr();
-    motion = *(u16*)((s32)mario + 0x2E);
-    if (motion <= 1) {
-        ok = 1;
-    } else if (motion == 2) {
-        ok = 1;
-    } else if (motion == 0x16 && *(s16*)((s32)mario + 0x50) == 0) {
-        ok = 1;
-    } else if (motion == 0x15 && *(s16*)((s32)mario + 0x50) == 0) {
-        ok = 1;
-    } else if (motion == 0x19 && *(s16*)((s32)mario + 0x50) == 0) {
-        ok = 1;
-    } else if (motion == 0x1A) {
-        ok = 1;
-    } else {
-        ok = 0;
-    }
-    if (ok != 0) {
-        return 2;
-    }
-    return 0;
+    return result;
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -1036,34 +1038,36 @@ s32 evt_mario_wait_rideon(void) {
 s32 evt_mario_wait_landon(void) {
     extern void* marioGetPtr(void);
     void* mario;
-    u32 motion;
+    s32 motion;
     s32 ok;
+    s32 result;
 
-    if (*(void**)((s32)marioGetPtr() + 0x1E8) == 0) {
-        return 0;
+    result = 0;
+    if (*(void**)((s32)marioGetPtr() + 0x1E8) != 0) {
+        mario = marioGetPtr();
+        motion = *(u16*)((s32)mario + 0x2E);
+        if (motion <= 1) {
+            ok = 1;
+        } else if (motion == 2) {
+            ok = 1;
+        } else if (motion == 0x16 && *(s16*)((s32)mario + 0x50) == 0) {
+            ok = 1;
+        } else if (motion == 0x15 && *(s16*)((s32)mario + 0x50) == 0) {
+            ok = 1;
+        } else if (motion == 0x19 && *(s16*)((s32)mario + 0x50) == 0) {
+            ok = 1;
+        } else if (motion == 0x1A) {
+            ok = 1;
+        } else {
+            ok = 0;
+        }
+        if (ok != 0) {
+            result = 2;
+        }
     }
-    mario = marioGetPtr();
-    motion = *(u16*)((s32)mario + 0x2E);
-    if (motion <= 1) {
-        ok = 1;
-    } else if (motion == 2) {
-        ok = 1;
-    } else if (motion == 0x16 && *(s16*)((s32)mario + 0x50) == 0) {
-        ok = 1;
-    } else if (motion == 0x15 && *(s16*)((s32)mario + 0x50) == 0) {
-        ok = 1;
-    } else if (motion == 0x19 && *(s16*)((s32)mario + 0x50) == 0) {
-        ok = 1;
-    } else if (motion == 0x1A) {
-        ok = 1;
-    } else {
-        ok = 0;
-    }
-    if (ok != 0) {
-        return 2;
-    }
-    return 0;
+    return result;
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -1431,8 +1435,23 @@ s32 evt_mario_party_use_check(EventEntry* event) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-s32 evt_mario_chk_hipbump(void* pEvt) {
-    return 0;
+s32 evt_mario_chk_hipbump(EventEntry* event) {
+    extern void* marioGetPtr(void);
+    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
+    void* mario;
+    s32 dst;
+    s32 result;
+
+    mario = marioGetPtr();
+    result = 0;
+    dst = event->args[0];
+    if ((*(u32*)((s32)mario + 0xC) & 1) == 0) {
+        if (*(u16*)((s32)mario + 0x2E) == 0x11) {
+            result = 1;
+        }
+    }
+    evtSetValue(event, dst, result);
+    return 2;
 }
 
 #pragma no_register_save_helpers on
@@ -1676,13 +1695,43 @@ s32 evt_mario_set_mov_spd(EventEntry* event) {
 }
 
 
-s32 evt_mario_clear_party(void* pEvt) {
-    return 0;
+s32 evt_mario_clear_party(EventEntry* event) {
+    extern void* marioGetPtr(void);
+    extern void partyKill(s32 id);
+    extern void partyKill2(s32 id);
+    s32 offset;
+    s8 partyId;
+
+    offset = event->args[0];
+    partyId = *(s8*)((s32)marioGetPtr() + offset + 0x245);
+    if (partyId < 0) {
+        return 2;
+    }
+    if (offset == 0) {
+        partyKill(partyId);
+    } else {
+        partyKill2(1);
+    }
+    return 2;
 }
 
+s32 evt_mario_kill_party(EventEntry* event) {
+    extern void* marioGetPtr(void);
+    extern void partyKill(s32 id);
+    s32 offset;
+    s8 partyId;
 
-s32 evt_mario_kill_party(void* pEvt) {
-    return 0;
+    offset = event->args[0];
+    partyId = *(s8*)((s32)marioGetPtr() + offset + 0x245);
+    if (partyId < 0) {
+        return 2;
+    }
+    if (offset == 0) {
+        partyKill(partyId);
+    } else {
+        partyKill(1);
+    }
+    return 2;
 }
 
 #pragma no_register_save_helpers on
@@ -1737,8 +1786,21 @@ s32 evt_mario_get_party(EventEntry* event) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-s32 evt_mario_dokan_end(s32 param_1, int param_2) {
-    return 0;
+s32 evt_mario_dokan_end(EventEntry* event, s32 first) {
+    extern void* marioGetPtr(void);
+    void* mario;
+
+    mario = marioGetPtr();
+    if (first != 0) {
+        if (*(u16*)((s32)mario + 0x2E) == 0x1D) {
+            *(s32*)((s32)mario + 0x44) = 100;
+            return 0;
+        }
+    }
+    if (*(u16*)((s32)mario + 0x2E) == 0x1D) {
+        return 0;
+    }
+    return 2;
 }
 
 #pragma no_register_save_helpers on
@@ -1784,8 +1846,21 @@ s32 evt_mario_sleep_off(EventEntry* event, s32 first) {
     return 2;
 }
 
-s32 evt_koopa_weary(void* pEvt) {
-    return 0;
+s32 evt_koopa_weary(EventEntry* event) {
+    extern void* marioGetPtr(void);
+    s32* args;
+    void* mario;
+    u32* flags;
+
+    args = event->args;
+    mario = marioGetPtr();
+    flags = *(u32**)((s32)mario + 0x298);
+    if (args[0] != 0) {
+        *flags |= 0x01000000;
+    } else {
+        *flags &= ~0x01000000;
+    }
+    return 2;
 }
 
 #pragma no_register_save_helpers on
@@ -1809,13 +1884,38 @@ s32 evt_mario_set_dispdir(EventEntry* event) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-s32 evt_mario_chk_join_party(void* pEvt) {
-    return 0;
+s32 evt_mario_chk_join_party(EventEntry* event) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
+    extern s32 partyChkJoin(s32 partyId);
+    s32* args;
+    s32 dst;
+    s32 partyId;
+    s32 result;
+
+    args = event->args;
+    dst = args[0];
+    partyId = evtGetValue(event, args[1]);
+    result = partyChkJoin(partyId);
+    evtSetValue(event, dst, result);
+    return 2;
 }
 
-
 s32 N_evt_mario_party_door_halve_hitbox(void) {
-    return 0;
+    extern s32 marioGetPartyId(void);
+    extern s32 marioGetExtraPartyId(void);
+    extern void* partyGetPtr(s32 partyId);
+    void* party;
+
+    party = partyGetPtr(marioGetPartyId());
+    if (party != 0) {
+        *(u32*)((s32)party + 8) |= 0x00040000;
+    }
+    party = partyGetPtr(marioGetExtraPartyId());
+    if (party != 0) {
+        *(u32*)((s32)party + 8) |= 0x00040000;
+    }
+    return 2;
 }
 
 #pragma no_register_save_helpers on
@@ -1836,10 +1936,21 @@ s32 evt_mario_get_mode(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
-s32 evt_koopa_chk_dead(void* pEvt) {
-    return 0;
-}
+s32 evt_koopa_chk_dead(EventEntry* event) {
+    extern void* marioGetPtr(void);
+    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
+    s32* args;
+    void* mario;
+    u32 flags;
+    s32 dead;
 
+    args = event->args;
+    mario = marioGetPtr();
+    flags = **(u32**)((s32)mario + 0x298);
+    dead = (flags >> 0x1C) & 1;
+    evtSetValue(event, args[0], dead);
+    return 2;
+}
 
 s32 evt_mario_get_dispdir(EventEntry* event) {
     extern void* marioGetPtr(void);

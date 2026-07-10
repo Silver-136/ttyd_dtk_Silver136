@@ -118,6 +118,8 @@ s32 evt_snd_sfx_dist(void* evt) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_snd_sfxon(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 out = args[1];
@@ -129,7 +131,11 @@ s32 evt_snd_sfxon(void* evt) {
     }
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_snd_sfxon_(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 out = args[1];
@@ -141,6 +147,8 @@ s32 evt_snd_sfxon_(void* evt) {
     }
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -228,33 +236,67 @@ s32 evt_snd_sfx_pos(void* evt) {
 #pragma use_lmw_stmw on
 
 
-s32 evt_snd_sfx_vol(int param_1) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_snd_sfx_vol(void* evt) {
+    extern void psndSFX_vol(s32 id, u8 volume);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 id = evtGetValue(evt, args[0]);
+    s32 volume = evtGetValue(evt, args[1]);
+    psndSFX_vol(id, volume);
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_snd_sfx_pit(void* evt) {
+    extern void psndSFX_pit(s32 id, s16 pitch);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 id = evtGetValue(evt, args[0]);
+    s32 pitch = evtGetValue(evt, args[1]);
+    psndSFX_pit(id, pitch);
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_snd_sfxchk(void* evt) {
+    extern s32 psndSFXChk(s32 id);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    evtSetValue(evt, args[1], psndSFXChk(evtGetValue(evt, args[0])));
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+s32 evt_snd_bgm_scope(void* evt) {
+    extern void psndBGMScope(s32 id, s32 scope);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 id = args[0];
+    s32 scope = evtGetValue(evt, args[1]);
+    psndBGMScope(id, scope);
+    return 2;
 }
 
-
-s32 evt_snd_sfx_pit(void* pEvt) {
-    return 0;
+s32 evt_snd_bgm_freq(void* evt) {
+    extern void psndBGM_rate(s32 id, u16 rate);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 id = args[0];
+    s32 rate = evtGetValue(evt, args[1]);
+    psndBGM_rate(id, rate);
+    return 2;
 }
 
-
-s32 evt_snd_sfxchk(int param_1) {
-    return 0;
-}
-
-
-s32 evt_snd_bgm_scope(int param_1) {
-    return 0;
-}
-
-
-s32 evt_snd_bgm_freq(int param_1) {
-    return 0;
-}
-
-
-s32 evt_snd_env_lpf(int param_1) {
-    return 0;
+s32 evt_snd_env_lpf(void* evt) {
+    extern void psndENV_LPF(s32 id, u16 value);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 id = args[0];
+    psndENV_LPF(id, evtGetValue(evt, args[1]));
+    return 2;
 }
 
 #pragma no_register_save_helpers on

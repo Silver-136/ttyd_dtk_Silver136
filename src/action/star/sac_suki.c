@@ -367,7 +367,7 @@ USER_FUNC(main_suki) {
 /* stub-fill: N__disp_2D | prototype_only | source_prototype */
 void N__disp_2D(s32 type, s32 index) {
     extern void* get_ptr(void);
-    extern void iconDispGx(Vec* pos, s32 flags, s32 iconId, f32 scale);
+    extern void iconDispGx(f32 scale, Vec* pos, s32 flags, s32 iconId);
     extern Vec vec3_80301430;
     extern f32 float_0_80428680;
     extern f32 float_1_80428670;
@@ -378,7 +378,7 @@ void N__disp_2D(s32 type, s32 index) {
     void* entry;
     Vec pos;
     s32 selected;
-    s32 icon;
+    u16 icon;
 
     work = get_ptr();
     if (type == 0) {
@@ -399,28 +399,55 @@ void N__disp_2D(s32 type, s32 index) {
         }
     }
 
-    icon = 0;
     switch (*(s32*)((s32)entry + 8)) {
         case 0x100:
-            icon = (index < selected) ? 0x6D : 0x6C;
+            if (index < selected) {
+                icon = 0x6D;
+            } else {
+                icon = 0x6C;
+            }
             break;
         case 0x200:
-            icon = (index < selected) ? 0x6F : 0x6E;
+            if (index < selected) {
+                icon = 0x6F;
+            } else {
+                icon = 0x6E;
+            }
             break;
         case 0x400:
-            icon = (index < selected) ? 0x71 : 0x70;
+            if (index < selected) {
+                icon = 0x71;
+            } else {
+                icon = 0x70;
+            }
             break;
         case 0x800:
-            icon = (index < selected) ? 0x73 : 0x72;
+            if (index < selected) {
+                icon = 0x73;
+            } else {
+                icon = 0x72;
+            }
             break;
         case 0x40:
-            icon = (index < selected) ? 0x87 : 0x86;
+            if (index < selected) {
+                icon = 0x87;
+            } else {
+                icon = 0x86;
+            }
             break;
         case 0x20:
-            icon = (index < selected) ? 0x89 : 0x88;
+            if (index < selected) {
+                icon = 0x89;
+            } else {
+                icon = 0x88;
+            }
             break;
         case 0x10:
-            icon = (index < selected) ? 0x8B : 0x8A;
+            if (index < selected) {
+                icon = 0x8B;
+            } else {
+                icon = 0x8A;
+            }
             break;
     }
 
@@ -433,7 +460,7 @@ void N__disp_2D(s32 type, s32 index) {
             pos.y = *(f32*)((s32)entry + 0x10) + *(f32*)((s32)work + 0x24) + float_60_80428684 + float_0_80428680;
         }
         pos.z = *(f32*)((s32)entry + 0x14);
-        iconDispGx(&pos, 0x10, icon, float_1_80428670);
+        iconDispGx(float_1_80428670, &pos, 0x10, icon);
     }
 }
 

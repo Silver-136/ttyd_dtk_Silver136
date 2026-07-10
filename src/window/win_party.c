@@ -57,5 +57,19 @@ void winPartyInit2(void* pWin) {
 
 
 u8 winPartyExit(void* pWin) {
-    return 0;
+    extern void animPoseRelease(s32 poseId);
+    s32 i;
+    void* scan;
+
+    i = 0;
+    scan = pWin;
+    while (i < *(s32*)((s32)pWin + 0x1E0)) {
+        s32 poseId = *(s32*)((s32)scan + 0x1A0);
+        if (poseId != -1) {
+            animPoseRelease(poseId);
+        }
+        scan = (void*)((s32)scan + 4);
+        i++;
+    }
 }
+

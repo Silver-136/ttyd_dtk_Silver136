@@ -2,7 +2,7 @@
 
 void* effEntry(void);
 void* __memAlloc(s32 heap, u32 size);
-void effMahornMain(void);
+void effMahornMain(void* entry);
 
 extern char str_Mahorn_80302968[];
 extern f32 float_0_804287f8;
@@ -83,6 +83,78 @@ u8 effMahornDisp(void) {
 }
 
 /* stub-fill: effMahornMain | prototype_only | source_prototype */
-void effMahornMain(void) {
-    return;
+#pragma optimize_for_size off
+void effMahornMain(void* entry) {
+    extern void effDelete(void* effect);
+    extern f32 dispCalcZ(void* pos);
+    extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
+    extern void effMahornDisp(void);
+    extern u32 vec3_80302950[];
+    extern u8 scale_dt[];
+    extern u8 scale_dt2[];
+    extern f32 float_100_80428800;
+    extern f32 float_20_80428804;
+    extern f32 float_0p125_80428808;
+
+    void* work;
+    void* child;
+    u32 i;
+    u32 v;
+    u32 idx;
+    u32 neg;
+    u32 pos[3];
+    u32 dispPos[3];
+
+    work = *(void**)((s32)entry + 0xC);
+    pos[0] = vec3_80302950[0];
+    pos[1] = vec3_80302950[1];
+    pos[2] = vec3_80302950[2];
+    *(f32*)&pos[0] = *(f32*)((s32)work + 4);
+    *(f32*)&pos[1] = *(f32*)((s32)work + 8);
+    *(f32*)&pos[2] = *(f32*)((s32)work + 0xC);
+    dispPos[0] = pos[0];
+    dispPos[1] = pos[1];
+    dispPos[2] = pos[2];
+
+    if (*(s32*)((s32)work + 0x1C) < 1000) {
+        *(s32*)((s32)work + 0x1C) -= 1;
+    }
+    *(s32*)((s32)work + 0x20) += 1;
+    if (*(s32*)((s32)work + 0x1C) < 0x10) {
+        *(s32*)((s32)work + 0x18) = *(s32*)((s32)work + 0x1C) << 4;
+    }
+    if (*(s32*)((s32)work + 0x1C) < 0) {
+        effDelete(entry);
+        return;
+    }
+
+    i = 1;
+    child = (void*)((s32)work + 0x28);
+    while ((s32)i < *(s32*)((s32)entry + 8)) {
+        if (*(s32*)((s32)child + 0x24) == 0) {
+            *(s32*)((s32)child + 0x20) += 1;
+            idx = *(u32*)((s32)child + 0x20) % 0x15;
+            if (i & 1) {
+                v = scale_dt[idx];
+            } else {
+                v = scale_dt2[idx];
+            }
+            *(f32*)((s32)child + 0x10) = (f32)v / float_100_80428800;
+            *(f32*)((s32)child + 0x14) =
+                (float_20_80428804 - *(f32*)((s32)child + 0x14)) * float_0p125_80428808 +
+                *(f32*)((s32)child + 0x14);
+            neg = -*(s32*)((s32)child + 0x18);
+            *(s32*)((s32)child + 0x18) =
+                *(s32*)((s32)child + 0x18) + ((s32)neg >> 6) +
+                ((s32)neg < 0 && (neg & 0x3F) != 0);
+        } else {
+            *(s32*)((s32)child + 0x24) -= 1;
+        }
+        i++;
+        child = (void*)((s32)child + 0x28);
+    }
+
+    dispEntry(4, 2, effMahornDisp, entry, dispCalcZ(dispPos));
 }
+#pragma optimize_for_size on
+

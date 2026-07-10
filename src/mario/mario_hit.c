@@ -329,30 +329,211 @@ double marioChkOverheadJabara(void* param_1, float* param_2) {
 }
 
 
-u8 marioChkGnd2(void) {
-    return 0;
+void marioChkGnd2(void) {
+    extern void* marioGetPtr(void);
+    extern void* marioSearchGround(f32 param_1, void* yOut, f32 velocityY, void* param_4, void* param_5);
+    extern void* kpaSearchGround(f32 param_1, void* yOut, void* param_3, void* param_4);
+    extern s32 kpaFireAttackCheck(void);
+    extern void marioChgMot(s32 motion);
+    extern void quake_kpaLandOn(void);
+    extern s32 marioBgmodeChk(void);
+    extern void camFollowYOn(void);
+    extern void kpaCamFollow(void);
+    extern f32 float_0p1_804208ec;
+    extern f32 float_0_804208ac;
+    extern f32 float_neg10_8042090c;
+    void* mario;
+    void* hit;
+    u8 stack_18[4];
+    f32 groundY;
+    u8 stack_10[12];
+    f32 diff;
+    s32 x;
+    s32 y;
+
+    mario = marioGetPtr();
+    if ((*(u32*)mario & 0x10000) == 0) {
+        if (*(s8*)((s32)mario + 0x3C) == 2) {
+            hit = kpaSearchGround(float_0p1_804208ec, &groundY, stack_10, stack_18);
+        } else {
+            hit = marioSearchGround(float_0p1_804208ec, &groundY, *(f32*)((s32)mario + 0x7C), stack_10, stack_18);
+        }
+        if (hit != 0) {
+            diff = *(f32*)((s32)mario + 0x90) - groundY;
+            if (diff < float_0_804208ac && diff >= float_neg10_8042090c) {
+                *(void**)((s32)mario + 0x1E8) = hit;
+                *(f32*)((s32)mario + 0x90) = groundY;
+                *(u32*)mario &= ~0xC0;
+                *(u16*)((s32)mario + 0x50) = 0;
+                *(u16*)((s32)mario + 0x52) = 0;
+                if (*(s8*)((s32)mario + 0x3C) == 2) {
+                    if (*(f32*)((s32)mario + 0x194) == float_0_804208ac && kpaFireAttackCheck() != 0) {
+                        marioChgMot(0);
+                    } else {
+                        x = *(s8*)((s32)mario + 0x252);
+                        y = *(s8*)((s32)mario + 0x253);
+                        if (x * x + y * y <= 0xBD1) {
+                            marioChgMot(1);
+                        } else {
+                            marioChgMot(2);
+                        }
+                    }
+                    quake_kpaLandOn();
+                } else {
+                    marioChgMot(0);
+                }
+                if (*(s8*)((s32)mario + 0x3C) == 2) {
+                    kpaCamFollow();
+                } else if (marioBgmodeChk() == 0) {
+                    camFollowYOn();
+                }
+            }
+        }
+    }
 }
 
+void marioChkToge(void) {
+    extern void* marioGetPtr(void);
+    extern s32 vivianGetStatus(void);
+    extern u32 hitGetAttr(void* hit);
+    extern void set_damage_root_ypos(f64 y);
+    extern void marioChgMot(s32 motion);
+    extern f32 float_0p5_804208cc;
+    void* mario;
+    void* hit;
+    u32 attr;
+    s32 status;
 
-u8 marioChkToge(void) {
-    return 0;
+    mario = marioGetPtr();
+    status = vivianGetStatus();
+    if (status != 2 && vivianGetStatus() != 1) {
+        if (vivianGetStatus() == 3) {
+            return;
+        }
+        hit = *(void**)((s32)mario + 0x1E4);
+        if (hit != 0) {
+            attr = hitGetAttr(hit);
+            if (*(u16*)((s32)mario + 0x2E) != 0x20 &&
+                (attr & 0x800) != 0 &&
+                *(f32*)((s32)mario + 0x214) < float_0p5_804208cc * *(f32*)((s32)mario + 0x1B8)) {
+                set_damage_root_ypos(*(f32*)((s32)mario + 0x90));
+                marioChgMot(0x20);
+            }
+        }
+        hit = *(void**)((s32)mario + 0x1F4);
+        if (hit != 0) {
+            attr = hitGetAttr(hit);
+            if (*(u16*)((s32)mario + 0x2E) != 0x20 && (attr & 0x800) != 0) {
+                set_damage_root_ypos(*(f32*)((s32)mario + 0x90));
+                marioChgMot(0x20);
+            }
+        }
+        hit = *(void**)((s32)mario + 0x1F8);
+        if (hit != 0) {
+            attr = hitGetAttr(hit);
+            if (*(u16*)((s32)mario + 0x2E) != 0x20 && (attr & 0x800) != 0) {
+                set_damage_root_ypos(*(f32*)((s32)mario + 0x90));
+                marioChgMot(0x20);
+            }
+        }
+    }
 }
-
 
 s32 chkfilterVecRoll(s32 param_1, int param_2) {
-    return 0;
-}
+    typedef struct MobjEntry {
+        u8 pad[0x15];
+        char mAnimPoseName[16];
+    } MobjEntry;
+    extern MobjEntry* mobjHitObjPtrToPtr(int hit);
+    extern s32 strcmp(char* a, char* b);
+    extern char str_MOBJ_HiddenHatenaBlo_802c3dec[];
+    extern char str_MOBJ_HiddenBadgeBloc_802c3e04[];
+    extern char str_MOBJ_Hidden10CountBl_802c3e1c[];
+    u32 attr;
+    MobjEntry* mobj;
 
+    attr = *(u32*)(param_2 + 4);
+    if ((attr & 0x80) != 0) {
+        return 1;
+    }
+    if ((attr & 0x800000) == 0 && (attr & 0x80004) != 0) {
+        return 0;
+    }
+    if ((attr & 0x80000000) == 0) {
+        return 1;
+    }
+    mobj = mobjHitObjPtrToPtr(param_2);
+    if (strcmp(mobj->mAnimPoseName, str_MOBJ_HiddenHatenaBlo_802c3dec) == 0 ||
+        strcmp(mobj->mAnimPoseName, str_MOBJ_HiddenBadgeBloc_802c3e04) == 0 ||
+        strcmp(mobj->mAnimPoseName, str_MOBJ_Hidden10CountBl_802c3e1c) == 0) {
+        mobjHitObjPtrToPtr(param_2);
+        return 0;
+    }
+    return 1;
+}
 
 s32 chkfilterVec(s32 param_1, int param_2) {
-    return 0;
-}
+    typedef struct MobjEntry {
+        u8 pad[0x15];
+        char mAnimPoseName[16];
+    } MobjEntry;
+    extern MobjEntry* mobjHitObjPtrToPtr(int hit);
+    extern s32 strcmp(char* a, char* b);
+    extern char str_MOBJ_HiddenHatenaBlo_802c3dec[];
+    extern char str_MOBJ_HiddenBadgeBloc_802c3e04[];
+    extern char str_MOBJ_Hidden10CountBl_802c3e1c[];
+    u32 attr;
+    MobjEntry* mobj;
 
+    attr = *(u32*)(param_2 + 4);
+    if ((attr & 0x80080) != 0) {
+        return 1;
+    }
+    if ((attr & 0x800000) == 0 && (attr & 4) != 0) {
+        return 0;
+    }
+    if ((attr & 0x80000000) == 0) {
+        return 1;
+    }
+    mobj = mobjHitObjPtrToPtr(param_2);
+    if (strcmp(mobj->mAnimPoseName, str_MOBJ_HiddenHatenaBlo_802c3dec) == 0 ||
+        strcmp(mobj->mAnimPoseName, str_MOBJ_HiddenBadgeBloc_802c3e04) == 0 ||
+        strcmp(mobj->mAnimPoseName, str_MOBJ_Hidden10CountBl_802c3e1c) == 0) {
+        mobjHitObjPtrToPtr(param_2);
+        return 0;
+    }
+    return 1;
+}
 
 s32 chkfilterVecVivian(s32 param_1, int param_2) {
-    return 0;
-}
+    typedef struct MobjEntry {
+        u8 pad[0x15];
+        char mAnimPoseName[16];
+    } MobjEntry;
+    extern MobjEntry* mobjHitObjPtrToPtr(int hit);
+    extern s32 strcmp(char* a, char* b);
+    extern char str_MOBJ_HiddenHatenaBlo_802c3dec[];
+    extern char str_MOBJ_HiddenBadgeBloc_802c3e04[];
+    extern char str_MOBJ_Hidden10CountBl_802c3e1c[];
+    u32 attr;
+    MobjEntry* mobj;
 
+    attr = *(u32*)(param_2 + 4);
+    if ((attr & 0x80804) != 0 && (attr & 0x800000) == 0) {
+        return 0;
+    }
+    if ((attr & 0x80000000) == 0) {
+        return 1;
+    }
+    mobj = mobjHitObjPtrToPtr(param_2);
+    if (strcmp(mobj->mAnimPoseName, str_MOBJ_HiddenHatenaBlo_802c3dec) == 0 ||
+        strcmp(mobj->mAnimPoseName, str_MOBJ_HiddenBadgeBloc_802c3e04) == 0 ||
+        strcmp(mobj->mAnimPoseName, str_MOBJ_Hidden10CountBl_802c3e1c) == 0) {
+        mobjHitObjPtrToPtr(param_2);
+        return 0;
+    }
+    return 1;
+}
 
 void marioHitCheckWidth(void) {
     extern void* marioGetPtr(void);
@@ -395,11 +576,41 @@ void marioHitCheckWidth(void) {
     }
 }
 
-u8 marioChkLandon(float velocityY, s32 param_2) {
-    return 0;
-}
+void marioChkLandon(f32 velocityY, s32 param_2) {
+    extern void* marioGetPtr(void);
+    extern void marioLandonChk_old(f32 velocityY, s32 param_1);
+    extern void marioSearchGround(s32 param_1, f32 velocityY1, f32 velocityY2, void* param_4, void* param_5);
+    extern void marioSearchGroundRoll(s32 param_1, f32 velocityY1, f32 velocityY2, void* param_4, void* param_5);
+    void* mario;
+    u8 stack_18[4];
+    u8 stack_14[8];
 
+    mario = marioGetPtr();
+    if (*(s8*)((s32)mario + 0x3C) != 2) {
+        if ((*(u32*)mario & 0x1000000) == 0) {
+            marioSearchGround(param_2, velocityY, velocityY, stack_14, stack_18);
+        } else {
+            marioSearchGroundRoll(param_2, velocityY, velocityY, stack_14, stack_18);
+        }
+    } else {
+        marioLandonChk_old(velocityY, param_2);
+    }
+}
 
 u32 marioChkBero(int param_1) {
-    return 0;
+    extern u32 hitGetAttr(void* hit);
+    extern void* marioGetPtr(void);
+    void* mario;
+    u32 attr;
+
+    attr = hitGetAttr((void*)param_1);
+    mario = marioGetPtr();
+    if ((attr & 0x80000) != 0 && (*(u32*)mario & 0x1000000) == 0) {
+        return 0;
+    }
+    if ((attr & 0x80) == 0) {
+        return (attr >> 23) & 1;
+    }
+    return *(u16*)((s32)mario + 0x2E) == 0x19;
 }
+

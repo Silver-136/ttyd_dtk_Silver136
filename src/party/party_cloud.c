@@ -122,6 +122,8 @@ f32 cloudGetBreathDir(void) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 f32 cloudGetBreathPower(void* pos, f32 radius) {
     extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
@@ -157,7 +159,8 @@ f32 cloudGetBreathPower(void* pos, f32 radius) {
     }
     return ret;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 cloudGetHitBreathout(int param_1) {
     void* party;
@@ -184,6 +187,8 @@ s32 cloudGetHitBreathout(int param_1) {
     return ret;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 cloudGetAt(void* param_1) {
     extern void* marioGetPtr(void);
     extern void* camGetPtr(s32 cameraId);
@@ -219,7 +224,8 @@ check_mario:
 done:
     ;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 cloudResetAt(void) {
     extern void* marioGetPtr(void);
@@ -254,9 +260,18 @@ u8 cloudResetAt(void) {
 
 
 u8 mot_cloud(void) {
-    return 0;
-}
+    extern void* marioGetPtr(void);
 
+    void* mario = marioGetPtr();
+    u32 flags = *(u32*)((s32)mario + 0xC);
+    if (flags & 1) {
+        *(u32*)((s32)mario + 0xC) = flags & ~1;
+        *(u32*)mario &= ~0xF0000;
+        *(s32*)((s32)mario + 0x48) = 0;
+        *(s16*)((s32)mario + 0x50) = 0;
+        *(s32*)((s32)mario + 0x44) = 0;
+    }
+}
 
 u8 getHitBreatheout2(s64 param_1, void* pParty) {
     return 0;
@@ -334,7 +349,8 @@ u8 cloud_use(void* pParty) {
         partyChgMot(pParty, 0);
     }
 }
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 cloud_exit(void* pParty) {
     extern void psndSFXOff(s32 soundId);
     extern void effSoftDelete(void* effect);
@@ -344,8 +360,8 @@ u8 cloud_exit(void* pParty) {
     void* work;
     void* mario;
     s32 soundId;
-    f32 small;
     f32 zero;
+    f32 small;
 
     work = *(void**)((s32)pParty + 0x170);
     mario = *(void**)((s32)pParty + 0x160);
@@ -373,7 +389,8 @@ u8 cloud_exit(void* pParty) {
     *(f32*)((s32)mario + 0x150) = small;
     *(f32*)((s32)mario + 0x138) = zero;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 cloud_move(void* pParty) {
     extern void partyMoveFlyInit(void* party, s32 param);

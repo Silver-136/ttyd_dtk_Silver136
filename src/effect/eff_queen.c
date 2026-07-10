@@ -113,30 +113,42 @@ void* effQueenEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
 /* CHATGPT STUB FILL: main/effect/eff_queen 20260624_185035 */
 
 /* stub-fill: effQueenMain | prototype_only | source_prototype */
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effQueenMain(void* entry) {
     extern void* gp;
     extern BOOL animGroupBaseAsync(char* name, s32 language, s32 unused);
     extern s32 animPoseEntry(char* name, s32 language);
-    extern void animPoseSetAnim(s32 poseId, const char* animName, s32 loop);
+    extern void animPoseSetAnim(s32 poseId, char* animName, s32 loop);
     extern void animPoseRelease(s32 poseId);
     extern void effDelete(void* entry);
-    extern f32 dispCalcZ(Vec* pos);
-    extern void dispEntry(s32 cameraId, s32 order, void* callback, f32 priority, void* param);
+    extern f32 dispCalcZ(void* pos);
+    extern void dispEntry(s32 cameraId, s32 order, void* callback, void* param, f32 priority);
     extern void effQueenDisp(s32 cameraId, void* entry);
+    extern u32 vec3_80302b28[];
     extern char str_MOBJ_EFF_queen_torna_80302b34[];
-    extern const char str_S_1_80428a60[];
+    extern char str_S_1_80428a60;
     extern f32 float_0p8_80428a64;
 
     void* work;
-    Vec pos;
+    u32 dispPos[3];
+    u32 pos[3];
+    s32 rawLanguage;
     s32 language;
     s32 limit;
 
     work = *(void**)((s32)entry + 0xC);
-    pos.x = *(f32*)((s32)work + 4);
-    pos.y = *(f32*)((s32)work + 8);
-    pos.z = *(f32*)((s32)work + 0xC);
-    language = *(s32*)((s32)gp + 0x14) != 0;
+    pos[0] = vec3_80302b28[0];
+    pos[1] = vec3_80302b28[1];
+    pos[2] = vec3_80302b28[2];
+    *(f32*)&pos[0] = *(f32*)((s32)work + 4);
+    *(f32*)&pos[1] = *(f32*)((s32)work + 8);
+    *(f32*)&pos[2] = *(f32*)((s32)work + 0xC);
+    dispPos[0] = pos[0];
+    dispPos[1] = pos[1];
+    dispPos[2] = pos[2];
+    rawLanguage = *(s32*)((s32)gp + 0x14);
+    language = (s32)(((u32)(-rawLanguage | rawLanguage)) >> 0x1F);
 
     if (*(u32*)entry & 4) {
         *(u32*)entry &= ~4;
@@ -147,7 +159,7 @@ void effQueenMain(void* entry) {
     }
     if (*(s32*)((s32)work + 0x18) == -1) {
         *(s32*)((s32)work + 0x18) = animPoseEntry(str_MOBJ_EFF_queen_torna_80302b34, language);
-        animPoseSetAnim(*(s32*)((s32)work + 0x18), str_S_1_80428a60, 1);
+        animPoseSetAnim(*(s32*)((s32)work + 0x18), &str_S_1_80428a60, 1);
     }
     if (*(s32*)((s32)work + 0x20) < 1000) {
         *(s32*)((s32)work + 0x20) -= 1;
@@ -171,7 +183,8 @@ void effQueenMain(void* entry) {
     if (*(s32*)((s32)work + 0x24) < 0) {
         *(s32*)((s32)work + 0x24) = 0;
     }
-    dispCalcZ(&pos);
-    dispEntry(4, 2, effQueenDisp, 0.0f, entry);
+    dispEntry(4, 2, effQueenDisp, entry, dispCalcZ(dispPos));
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 

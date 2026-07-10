@@ -30,6 +30,8 @@ u8 effPturnMain(void) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effPturnN64Entry(s32 type, s32 number, f32 x, f32 y, f32 z) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -39,6 +41,8 @@ void* effPturnN64Entry(s32 type, s32 number, f32 x, f32 y, f32 z) {
     extern f32 float_0_80425de8;
     void* entry;
     u8* work;
+    f32 one;
+    f32 zero;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_PturnN64_802fbd90;
@@ -46,9 +50,10 @@ void* effPturnN64Entry(s32 type, s32 number, f32 x, f32 y, f32 z) {
     work = __memAlloc(3, 0x90);
     *(u8**)((s32)entry + 0xC) = work;
     *(void**)((s32)entry + 0x10) = effPturnMain;
+    one = float_1_80425de4;
     *(s32*)entry |= 2;
     *(s32*)work = type;
-    *(f32*)(work + 0x34) = float_1_80425de4;
+    *(f32*)(work + 0x34) = one;
     if (type == 1) {
         *(s32*)(work + 0x38) = 1;
         *(s32*)(work + 0x3C) = 0;
@@ -59,28 +64,31 @@ void* effPturnN64Entry(s32 type, s32 number, f32 x, f32 y, f32 z) {
     *(f32*)(work + 8) = x;
     *(f32*)(work + 0xC) = y;
     *(f32*)(work + 0x10) = z;
-    switch (type) {
-        case 0:
-        case 1:
-            *(s32*)(work + 0x28) = 0x64;
-            break;
-        case 10:
+    if (type == 1) {
+        *(s32*)(work + 0x28) = 0x64;
+    } else if (type >= 1) {
+        if (type == 10) {
             *(s32*)(work + 0x28) = 0x15;
-            break;
+        }
+    } else if (type >= 0) {
+        *(s32*)(work + 0x28) = 0x64;
     }
     *(s32*)(work + 0x2C) = 0;
     *(s32*)(work + 0x44) = 0;
     *(s32*)(work + 4) = 1;
-    *(f32*)(work + 0x58) = float_0_80425de8;
-    *(f32*)(work + 0x54) = float_0_80425de8;
-    *(f32*)(work + 0x50) = float_0_80425de8;
-    *(f32*)(work + 0x68) = float_0_80425de8;
-    *(f32*)(work + 0x64) = float_0_80425de8;
-    *(f32*)(work + 0x60) = float_0_80425de8;
-    *(f32*)(work + 0x5C) = float_0_80425de8;
-    *(f32*)(work + 0x88) = float_0_80425de8;
+    zero = float_0_80425de8;
+    *(f32*)(work + 0x58) = zero;
+    *(f32*)(work + 0x54) = zero;
+    *(f32*)(work + 0x50) = zero;
+    *(f32*)(work + 0x68) = zero;
+    *(f32*)(work + 0x64) = zero;
+    *(f32*)(work + 0x60) = zero;
+    *(f32*)(work + 0x5C) = zero;
+    *(f32*)(work + 0x88) = zero;
     *(s32*)(work + 0x70) = 0;
     *(s32*)(work + 0x6C) = 0xFF;
     return entry;
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 

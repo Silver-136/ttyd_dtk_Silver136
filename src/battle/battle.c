@@ -518,9 +518,59 @@ void _EquipItem(void* unit, u32 param_2, u32 item) {
 
 
 void* BattleChangeParty(void* battleWork) {
-    return 0;
-}
+    typedef struct PartyEntry {
+        void* data;
+        u8 pad[0x30 - 0x4];
+    } PartyEntry;
+    extern PartyEntry entryunit_party[];
+    extern void* BattleGetPartyPtr(void);
+    extern void* BtlUnit_Spawn(void* setup, s32 flag);
+    extern void BtlUnit_GetHomePos(void* unit, f32* x, f32* y, f32* z);
+    extern void BtlUnit_EquipItem(void* unit, u32 flags, u32 item);
+    extern f32 BattleGetFloorHeight(void* wp, f32 x, f32 y, f32 z);
+    extern void BtlUnit_SetHomePos(void* unit, f32 x, f32 y, f32 z);
+    extern void BtlUnit_SetParamToPouch(void* unit);
+    s32 kind = *(s32*)((s32)battleWork + 0x1C68);
+    void* oldUnit = BattleGetPartyPtr();
+    s32 oldId = *(s32*)oldUnit;
+    void* newUnit;
+    s32 i;
+    f32 x;
+    f32 y;
+    f32 z;
 
+    if (kind < 0xE0 || kind >= 0xE7) {
+        return NULL;
+    }
+    newUnit = BtlUnit_Spawn(&entryunit_party[kind - 0xE0], 1);
+    for (i = 0; i < 64; i++) {
+        s32* slot = (s32*)((s32)battleWork + 0x120 + i * 4);
+        if (*slot != -1) {
+            if (*slot == oldId) {
+                *slot = *(s32*)newUnit;
+            } else if (*slot == *(s32*)newUnit) {
+                *slot = oldId;
+            }
+        }
+    }
+    BtlUnit_GetHomePos(newUnit, &x, &y, &z);
+    BtlUnit_GetHomePos(oldUnit, &x, &y, &z);
+    BtlUnit_EquipItem(newUnit, 5, 0);
+    y += BattleGetFloorHeight(_battleWorkPointer, x, y, z);
+    BtlUnit_SetHomePos(newUnit, x, y, z);
+    if (*(s32*)((s32)battleWork + 0x420) == oldId) {
+        *(s32*)((s32)battleWork + 0x420) = *(s32*)newUnit;
+    }
+    *(u8*)((s32)newUnit + 0x20) = *(u8*)((s32)oldUnit + 0x20);
+    *(u8*)((s32)newUnit + 0x22) = *(u8*)((s32)oldUnit + 0x22);
+    *(u8*)((s32)newUnit + 0x23) = *(u8*)((s32)oldUnit + 0x23);
+    *(u8*)((s32)newUnit + 0x24) = *(u8*)((s32)oldUnit + 0x24);
+    BtlUnit_SetParamToPouch(oldUnit);
+    *(u32*)((s32)oldUnit + 0x1C) |= 8;
+    *(u8*)((s32)newUnit + 0x311) = *(u8*)((s32)oldUnit + 0x311);
+    *(u8*)((s32)newUnit + 0x312) = *(u8*)((s32)oldUnit + 0x312);
+    return newUnit;
+}
 
 u32 BattleMajinaiCheck(void) {
     extern void* pouchGetPtr(void);
@@ -612,9 +662,45 @@ s32 BattleTransPartyId(BattleUnitType type) {
 }
 
 s32 BattleAfterReactionMain(void) {
+    extern BattleWorkUnit* BattleGetUnitPtr(BattleWork* wp, s32 index);
+    extern void BattleConsumeReserveItem(void);
+    extern s32 BattleCheckConcluded(BattleWork* wp);
+    extern void BattleAfterReactionRelease(int unitId, int arg);
+    extern void* BtlUnit_GetData(void* unit, s32 arg);
+    extern void* evtEntry(void* script, s32 type, s32 flags);
+    BattleWork* wp = _battleWorkPointer;
+    s32* queue = (s32*)((s32)wp + 0x16F5C);
+    s32 i;
+
+    for (i = 0; i < 64; i++) {
+        s32 unitId = queue[i * 2];
+        s32 arg;
+        void* unit;
+        void* evt;
+
+        if (unitId == -1) {
+            continue;
+        }
+        arg = queue[i * 2 + 1];
+        unit = BattleGetUnitPtr(wp, unitId);
+        if (unit == NULL) {
+            BattleAfterReactionRelease(unitId, arg);
+            return BattleAfterReactionMain();
+        }
+        BattleConsumeReserveItem();
+        if (BattleCheckConcluded(wp) != 0) {
+            return 0;
+        }
+        BattleAfterReactionRelease(unitId, arg);
+        evt = evtEntry(BtlUnit_GetData(unit, arg), 10, 0);
+        if (evt != NULL) {
+            *(s32*)((s32)unit + 0x2A8) = *(s32*)((s32)evt + 0x15C);
+            *(s32*)((s32)evt + 0x160) = *(s32*)unit;
+        }
+        return 1;
+    }
     return 0;
 }
-
 
 void BtlUnit_EquipItem(void* unit, u32 param_2, u32 item) {
     extern void* pouchGetPtr(void);
@@ -765,9 +851,8 @@ void BattleConsumeReserveItem(void) {
 
 
 void BattleIncSeq(void* battleWork, s32 seqType) {
-    ;
+    BattleSetSeq(battleWork, seqType, BattleGetSeq(battleWork, seqType) + 1);
 }
-
 
 void BattleAfterReactionQueueInit(void) {
     s32 i;
@@ -859,5 +944,23 @@ void BattleSetSeq(BattleWork* wp, BattleSequence seq, s32 value) {
 
 
 s32 BattleTransPartyIdToUnitKind(int partyId) {
-    return 0;
+    switch (partyId) {
+        case 1:
+            return 0xE0;
+        case 2:
+            return 0xE1;
+        case 3:
+            return 0xE2;
+        case 4:
+            return 0xE3;
+        case 5:
+            return 0xE4;
+        case 6:
+            return 0xE5;
+        case 7:
+            return 0xE6;
+        default:
+            return 0;
+    }
 }
+

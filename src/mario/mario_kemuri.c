@@ -433,10 +433,20 @@ u8 mario_kemuri(void) {
     return 0;
 }
 
-u8 mario_simple_kemuri(void) {
-    return 0;
-}
+void mario_simple_kemuri(void) {
+    void* mario;
+    void* effect;
 
+    mario = marioGetPtr();
+    effect = effKemuriEntry(0,
+                            *(f32*)((s32)mario + 0x8C),
+                            *(f32*)((s32)mario + 0x90),
+                            *(f32*)((s32)mario + 0x94),
+                            float_0_80422a38);
+    if ((*(u32*)mario & 0x02000000) != 0) {
+        *(f32*)((s32)*(void**)((s32)effect + 0xC) + 0x74) = float_0p6_80422a3c;
+    }
+}
 
 void unk_8013587c(void) {
     void* mario;

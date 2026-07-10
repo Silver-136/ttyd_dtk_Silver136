@@ -218,13 +218,13 @@ s32 unitwin_setmariolevel(void* pEvt) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 set_new_goods_list(void* pEvt) {
     s32* args;
     void* work;
     s32 item;
+    void* itemData;
     char name[0x20];
 
     args = *(s32**)((s32)pEvt + 0x18);
@@ -234,7 +234,9 @@ s32 set_new_goods_list(void* pEvt) {
     if (*(s32*)((s32)work + 0x24) < *(s32*)((s32)work + 0x18)) {
         sprintf(name, &str_uwnPCTd_80423e18, *(s32*)((s32)work + 0x24));
         if (item != 0) {
-            iconChange(name, *(u16*)((s32)itemDataTable + item * 0x28 + 0x20));
+            itemData = itemDataTable;
+            itemData = (void*)((s32)itemData + item * 0x28);
+            iconChange(name, *(u16*)((s32)itemData + 0x20));
         } else {
             iconDelete(name);
         }
@@ -243,7 +245,6 @@ s32 set_new_goods_list(void* pEvt) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

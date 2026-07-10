@@ -643,10 +643,239 @@ void _callback(void* unused, void* fileInfo) {
 }
 
 
-u8 fadeMain(void) {
-    return 0;
-}
+void fadeMain(void) {
+    extern f64 __cvt_sll_flt(u32 hi, u32 lo);
+    extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
+    extern void disp_texture(void);
+    extern void disp_maku(s32 cameraId, void* fade);
+    extern void disp_tec(s32 cameraId);
+    extern void disp_dummy_black(void);
+    extern s32 animGroupBaseAsync(char* name, s32 heapType, s32 unused);
+    extern s32 animPoseEntry(char* name, u32 heapType);
+    extern void animPoseRelease(s32 poseId);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
+    extern void animPoseSetMaterialFlagOff(s32 poseId, u32 flags);
+    extern void animPoseSetAnim(s32 poseId, char* animName, s32 mode);
+    extern void animPoseMain(s32 poseId);
+    extern f64 animPoseGetLoopTimes(s32 poseId);
+    extern void psndSFXOff(s32 sfxId);
+    extern const f32 float_0_8041f7a8;
+    extern const f32 float_1_8041f7ac;
+    extern const f32 float_10_8041f808;
+    extern const f32 float_1000_8041f804;
+    extern const f32 float_999_8041f81c;
+    extern const f32 float_neg100_8041f820;
 
+    u8* work;
+    u8* entry;
+    s32 i;
+    s32 type;
+    s32 state;
+    s32 poseId;
+    f64 total;
+    f64 loops;
+    f32 value;
+    u16 flags;
+
+    work = (u8*)wp;
+    entry = work + 8;
+
+    for (i = 0; i < 5; i++, entry += 0xA8) {
+        if ((*(u16*)entry & 1) != 0) {
+            type = *(s32*)(entry + 4);
+            state = *(s32*)(entry + 8);
+
+            switch (type) {
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 9:
+                case 11:
+                    if (state == 0) {
+                        if ((*(s32*)(entry + 0x10) == 0) && (*(s32*)(entry + 0x14) == 0)) {
+                            *(f32*)(entry + 0x24) = float_0_8041f7a8;
+                            *(u16*)entry |= 2;
+                            *(s32*)(entry + 8) = state + 1;
+                        } else {
+                            if (*(s32*)(entry + 0xA4) == 0) {
+                                *(f32*)(entry + 0x5C) = *(f32*)(entry + 0x5C) +
+                                    (float_1000_8041f804 / (f32)*(u32*)((s32)gp + 4));
+                            } else {
+                                *(s32*)(entry + 0xA4) = *(s32*)(entry + 0xA4) - 1;
+                            }
+
+                            total = __cvt_sll_flt(*(u32*)(entry + 0x10), *(u32*)(entry + 0x14));
+                            value = (f32)((f64)*(f32*)(entry + 0x5C) / total);
+                            *(f32*)(entry + 0x24) = float_1_8041f7ac - value;
+                            *(f32*)(entry + 0x28) = *(f32*)(entry + 0x28) + float_10_8041f808;
+                            if (*(f32*)(entry + 0x24) < float_0_8041f7a8) {
+                                *(f32*)(entry + 0x24) = float_0_8041f7a8;
+                                *(u16*)entry |= 2;
+                                *(s32*)(entry + 8) = state + 1;
+                            }
+                        }
+                    }
+                    break;
+
+                case 0:
+                case 2:
+                case 4:
+                case 6:
+                case 8:
+                case 10:
+                case 12:
+                case 13:
+                case 14:
+                case 15:
+                    if (state == 0) {
+                        if ((*(s32*)(entry + 0x10) == 0) && (*(s32*)(entry + 0x14) == 0)) {
+                            *(f32*)(entry + 0x24) = float_1_8041f7ac;
+                            *(u16*)entry |= 2;
+                            *(s32*)(entry + 8) = state + 1;
+                        } else {
+                            *(f32*)(entry + 0x5C) = *(f32*)(entry + 0x5C) +
+                                (float_1000_8041f804 / (f32)*(u32*)((s32)gp + 4));
+                            total = __cvt_sll_flt(*(u32*)(entry + 0x10), *(u32*)(entry + 0x14));
+                            *(f32*)(entry + 0x24) = (f32)((f64)*(f32*)(entry + 0x5C) / total);
+                            *(f32*)(entry + 0x28) = *(f32*)(entry + 0x28) - float_10_8041f808;
+                            if (float_1_8041f7ac < *(f32*)(entry + 0x24)) {
+                                *(f32*)(entry + 0x24) = float_1_8041f7ac;
+                                *(u16*)entry |= 2;
+                                *(s32*)(entry + 8) = state + 1;
+                            }
+                        }
+                    }
+                    break;
+
+                case 0x16:
+                case 0x17:
+                case 0x18:
+                case 0x19:
+                case 0x1A:
+                case 0x1B:
+                case 0x1C:
+                case 0x1D:
+                case 0x1E:
+                case 0x1F:
+                case 0x20:
+                case 0x21:
+                case 0x22:
+                case 0x23:
+                case 0x24:
+                case 0x25:
+                case 0x26:
+                case 0x27:
+                case 0x28:
+                case 0x33:
+                case 0x3F:
+                case 0x40:
+                    if (state == 0) {
+                        if (animGroupBaseAsync(*(char**)(entry + 0x60), *(s32*)(entry + 0x68), 0) != 0) {
+                            if (*(s32*)(entry + 0x6C) > -1) {
+                                animPoseRelease(*(s32*)(entry + 0x6C));
+                            }
+                            poseId = animPoseEntry(*(char**)(entry + 0x60), *(u32*)(entry + 0x68));
+                            *(s32*)(entry + 0x6C) = poseId;
+                            animPoseSetMaterialFlagOn(poseId, 0x1800);
+                            animPoseSetAnim(*(s32*)(entry + 0x6C), *(char**)(entry + 0x64), 1);
+                            animPoseSetMaterialFlagOff(*(s32*)(entry + 0x6C), 0x40);
+                            *(s32*)(entry + 8) = 1;
+                            state = 1;
+                        }
+                    }
+                    if ((state == 1) || (state == 2)) {
+                        if (*(s32*)(entry + 0x6C) > -1) {
+                            animPoseMain(*(s32*)(entry + 0x6C));
+                            loops = animPoseGetLoopTimes(*(s32*)(entry + 0x6C));
+                            if (loops >= (f64)float_1_8041f7ac) {
+                                *(u16*)entry |= 2;
+                                *(s32*)(entry + 8) = *(s32*)(entry + 8) + 1;
+                                if ((type == 0x17) || (type == 0x19) || (type == 0x40)) {
+                                    psndSFXOff(*(s32*)(entry + 0x98));
+                                    animPoseRelease(*(s32*)(entry + 0x6C));
+                                    *(s32*)(entry + 0x6C) = -1;
+                                }
+                            }
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (type < 0x1D) {
+                if (type < 0x10) {
+                    if (type < 0x0B) {
+                        if ((type < 7) && (type > 4)) {
+                            dispEntry(4, 7, disp_texture, wp, float_0_8041f7a8);
+                        } else {
+                            dispEntry(9, 0, disp_texture, wp, float_0_8041f7a8);
+                        }
+                    } else {
+                        if (type > 0x0D) {
+                            dispEntry(4, 7, disp_texture, wp, float_0_8041f7a8);
+                        } else {
+                            dispEntry(8, 0, disp_texture, wp, float_1000_8041f804);
+                        }
+                    }
+                } else if (type < 0x18) {
+                    if (type < 0x16) {
+                        dispEntry(9, 0, disp_texture, wp, float_0_8041f7a8);
+                    } else {
+                        dispEntry(9, 0, disp_maku, entry, float_0_8041f7a8);
+                    }
+                } else {
+                    if (type < 0x1B) {
+                        dispEntry(6, 0, disp_maku, entry, float_0_8041f7a8);
+                    } else {
+                        dispEntry(10, 0, disp_maku, entry, float_0_8041f7a8);
+                    }
+                }
+            } else if (type == 0x33) {
+                dispEntry(6, 0, disp_maku, entry, float_0_8041f7a8);
+            } else {
+                if (type < 0x33) {
+                    if (type < 0x29) {
+                        if (type > 0x22) {
+                            dispEntry(9, 0, disp_maku, entry, float_0_8041f7a8);
+                        } else {
+                            dispEntry(6, 0, disp_maku, entry, float_0_8041f7a8);
+                        }
+                    } else {
+                        if (type < 0x31) {
+                            if ((*(s32*)(entry + 0x70) > -1) && (*(void**)(entry + 0x9C) != NULL)) {
+                                dispEntry(1, 0, *(void**)(entry + 0x9C), *(void**)(entry + 0xA0), float_0_8041f7a8);
+                            }
+                        }
+                    }
+                } else {
+                    if (type > 0x40) {
+                        dispEntry(9, 0, disp_texture, wp, float_0_8041f7a8);
+                    } else if (type > 0x3E) {
+                        dispEntry(10, 0, disp_maku, entry, float_0_8041f7a8);
+                    } else {
+                        if ((*(s32*)(entry + 0x70) > -1) && (*(void**)(entry + 0x9C) != NULL)) {
+                            dispEntry(1, 0, *(void**)(entry + 0x9C), *(void**)(entry + 0xA0), float_0_8041f7a8);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    flags = *(u16*)work;
+    if ((flags & 0x3000) != 0) {
+        dispEntry(8, 0, disp_tec, wp, float_999_8041f81c);
+    }
+    if ((flags & 0x8000) != 0) {
+        dispEntry(9, 0, disp_dummy_black, wp, float_neg100_8041f820);
+    }
+    if ((flags & 0x4000) != 0) {
+        dispEntry(4, 7, disp_dummy_black, wp, float_1000_8041f804);
+    }
+}
 
 void fadeEntry(s32 type, s32 time, void* data) {
     ;

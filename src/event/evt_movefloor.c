@@ -96,10 +96,43 @@ u8 evt_moving_floor_init(s32 pEvt) {
 }
 
 
-s32 evt_moving_floor_main(int param_1) {
-    return 0;
-}
+s32 evt_moving_floor_main(void* event) {
+    extern f32 float_0_80426584;
+    extern f32 float_3_80426590;
+    extern f32 float_5p625_80426594;
+    extern f32 float_1000_8042659c;
+    extern f32 sintbl[];
+    extern void* gp;
+    s32* args = *(s32**)((s32)event + 0x18);
+    void* floor = (void*)evtGetValue(event, args[0]);
+    u32 ticks;
+    u32 elapsed;
+    f32 frame;
+    s32 phase;
+    s32 index;
 
+    ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+    elapsed = ((*(u32*)((s32)event + 4) - *(u32*)((s32)floor + 0x1C)) << 3) / ticks;
+    frame = (f32)(s32)elapsed;
+    *(f32*)((s32)floor + 0xC) += (*(f32*)((s32)floor + 8) * frame) / float_1000_8042659c;
+    *(f32*)((s32)floor + 0x10) += frame / float_1000_8042659c;
+    *(f32*)((s32)floor + 0x50) = *(f32*)((s32)floor + 0x44);
+    *(f32*)((s32)floor + 0x54) = *(f32*)((s32)floor + 0x48);
+    *(f32*)((s32)floor + 0x58) = *(f32*)((s32)floor + 0x4C);
+    *(f32*)((s32)floor + 0x60) = *(f32*)((s32)floor + 0x5C);
+    if (*(s32*)((s32)floor + 4) == 1) {
+        phase = (*(s32*)((s32)*(void**)gp + 0x1C) + *(s32*)((s32)event + 0x15C) * 0x27) & 0x3F;
+        index = (s32)(float_5p625_80426594 * (f32)(u32)phase);
+        *(f32*)((s32)floor + 0x5C) = float_3_80426590 * sintbl[index];
+    } else {
+        *(f32*)((s32)floor + 0x5C) = float_0_80426584;
+    }
+    *(f32*)((s32)floor + 0x44 + *(s32*)((s32)floor + 0x28) * 4) = *(f32*)((s32)floor + 0xC);
+    evtSetFloat(event, args[1], *(f32*)((s32)floor + 0x44));
+    evtSetFloat(event, args[2], *(f32*)((s32)floor + 0x48) + *(f32*)((s32)floor + 0x5C));
+    evtSetFloat(event, args[3], *(f32*)((s32)floor + 0x4C));
+    return 2;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -137,10 +170,10 @@ USER_FUNC(moving_floor_set_se) {
     void* obj;
     s32 flags;
 
-    if (*(s32*)((s32)floor + 0x78) != 0) {
+    if (*(u32*)((s32)floor + 0x78) != 0) {
         return 2;
     }
-    if (*(s32*)((s32)floor + 0x7C) == 0) {
+    if (*(u32*)((s32)floor + 0x7C) == 0) {
         mapObjGetPos(objId, pos);
         obj = mapGetMapObj(objId);
         if (obj == NULL) {
@@ -155,7 +188,6 @@ USER_FUNC(moving_floor_set_se) {
     }
     return 2;
 }
-
 
 USER_FUNC(moving_floor_get_end) {
     s32* args = event->args;
@@ -178,8 +210,8 @@ USER_FUNC(evt_moving_floor_delete) {
     void* evt = evtGetPtrID(id);
     void* floor = *(void**)((s32)evt + 0xC0);
 
-    if (*(s32*)((s32)floor + 0x78) == 0) {
-        s32 handle = *(s32*)((s32)floor + 0x7C);
+    if (*(u32*)((s32)floor + 0x78) == 0) {
+        u32 handle = *(u32*)((s32)floor + 0x7C);
         if (handle != 0) {
             psndSFXOff(handle);
             *(s32*)((s32)floor + 0x7C) = 0;
@@ -194,7 +226,6 @@ USER_FUNC(evt_moving_floor_delete) {
     }
     return 2;
 }
-
 
 USER_FUNC(moving_floor_reverse) {
     void* floor = (void*)evtGetValue(event, event->args[0]);

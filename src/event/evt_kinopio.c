@@ -22,7 +22,20 @@ USER_FUNC(snd_off) {
 }
 
 s32 breakfast(void) {
-    return 0;
+    extern void* itemNameToPtr(void* name);
+    extern void itemEntry(void* name, f32 x, f32 y, f32 z, s32 flags, s32 id, s32 unused);
+    extern char str_breakfast_802ed418[];
+    void* item = itemNameToPtr(str_breakfast_802ed418);
+    void* data;
+
+    if (item == NULL || (*(u16*)item & 1) == 0) {
+        data = *(void**)wp;
+        if (*(s32*)data != 0) {
+            itemEntry(str_breakfast_802ed418, *(f32*)((s32)data + 4), *(f32*)((s32)data + 8),
+                      *(f32*)((s32)data + 0xC), 0x10, -1, 0);
+        }
+    }
+    return 2;
 }
 
 #pragma no_register_save_helpers on
@@ -51,7 +64,45 @@ USER_FUNC(paper_off) {
     return 2;
 }
 
-u8 paper_on(s32 pEvt, s32 param_2) {
+u8 paper_on(s32 pEvt, s32 isFirstCall) {
+    extern void* gp;
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+    extern void* marioGetPtr(void);
+    extern void marioPaperOn(void* name);
+    extern void marioChgPose(void* name);
+    extern void marioChgPaper(void* name);
+    extern s32 strcmp(void* a, void* b);
+    extern f64 sin(f64 value);
+    extern f64 cos(f64 value);
+    extern char str_BGM_FF_GO_SLEEPING1_802ed368[];
+    extern char str_M_S_1_80421f24[];
+    extern f32 float_6p2832_80421f18;
+    extern f32 float_360_80421f20;
+    extern f32 float_0p2_80421f2c;
+    s32* args = *(s32**)(pEvt + 0x18);
+    f32 angle = evtGetFloat((void*)pEvt, args[0]);
+    void* mario = marioGetPtr();
+    f32 rad;
+
+    if (isFirstCall != 0) {
+        marioPaperOn(str_BGM_FF_GO_SLEEPING1_802ed368 + 0xBC);
+        marioChgPose(str_M_S_1_80421f24);
+        marioChgPaper(str_BGM_FF_GO_SLEEPING1_802ed368 + 0xC4);
+        *(s32*)(pEvt + 0x78) = 0;
+    }
+    if (*(s32*)(pEvt + 0x78) < 30) {
+        rad = (float_6p2832_80421f18 * angle) / float_360_80421f20;
+        if (strcmp((void*)((s32)gp + 0x12C), str_BGM_FF_GO_SLEEPING1_802ed368 + 0x60) == 0) {
+            *(f32*)((s32)mario + 0x8C) -= float_0p2_80421f2c * (f32)cos(rad);
+            *(f32*)((s32)mario + 0x94) -= float_0p2_80421f2c * (f32)sin(rad);
+        } else {
+            *(f32*)((s32)mario + 0x8C) += float_0p2_80421f2c * (f32)cos(rad);
+            *(f32*)((s32)mario + 0x94) += float_0p2_80421f2c * (f32)sin(rad);
+        }
+        *(s32*)(pEvt + 0x78) += 1;
+    }
+    *(f32*)((s32)mario + 0x1B0) = angle;
+    *(f32*)((s32)mario + 0x1AC) = angle;
     return 0;
 }
 
@@ -152,15 +203,73 @@ USER_FUNC(get_ryoukin) {
 }
 
 s32 coin_chk(void* pEvt) {
-    return 0;
+    extern s32 pouchGetCoin(void);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+
+    if (pouchGetCoin() < *(s32*)((s32)*(void**)wp + 0x10)) {
+        evtSetValue(pEvt, args[0], 1);
+    } else {
+        evtSetValue(pEvt, args[0], 0);
+    }
+    return 2;
 }
 
-s32 power_chk(int param_1) {
-    return 0;
+s32 power_chk(void* pEvt) {
+    extern void* pouchGetPtr(void);
+    extern s32 pouchGetMaxHP(void);
+    extern s32 pouchGetHP(void);
+    extern s32 pouchGetMaxFP(void);
+    extern s32 pouchGetFP(void);
+    extern s32 pouchGetMaxAP(void);
+    extern s32 pouchGetAP(void);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    void* pouch = pouchGetPtr();
+    s32 ok = 1;
+    s32 i;
+
+    for (i = 0; i < 2; i++) {
+        if ((*(u16*)((s32)pouch + 0x0) & 1) &&
+            *(s16*)((s32)pouch + 0x6) != *(s16*)((s32)pouch + 0x2)) {
+            ok = 0;
+            break;
+        }
+        if ((*(u16*)((s32)pouch + 0xE) & 1) &&
+            *(s16*)((s32)pouch + 0x14) != *(s16*)((s32)pouch + 0x10)) {
+            ok = 0;
+            break;
+        }
+        if ((*(u16*)((s32)pouch + 0x1C) & 1) &&
+            *(s16*)((s32)pouch + 0x22) != *(s16*)((s32)pouch + 0x1E)) {
+            ok = 0;
+            break;
+        }
+        if ((*(u16*)((s32)pouch + 0x2A) & 1) &&
+            *(s16*)((s32)pouch + 0x30) != *(s16*)((s32)pouch + 0x2C)) {
+            ok = 0;
+            break;
+        }
+        pouch = (void*)((s32)pouch + 0x38);
+    }
+    if (pouchGetHP() != pouchGetMaxHP() || pouchGetFP() != pouchGetMaxFP() ||
+        pouchGetAP() != pouchGetMaxAP()) {
+        ok = 0;
+    }
+    if (ok != 0) {
+        evtSetValue(pEvt, args[0], 1);
+    } else {
+        evtSetValue(pEvt, args[0], 0);
+    }
+    return 2;
 }
 
 s32 msg_no(void* pEvt) {
-    return 0;
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 index = evtGetValue(pEvt, args[0]);
+    void* data = *(void**)wp;
+
+    evtSetValue(pEvt, args[1], *(s32*)((s32)data + index * 4 + 0x58));
+    return 2;
 }
 
 #pragma no_register_save_helpers on

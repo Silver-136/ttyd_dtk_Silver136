@@ -10,11 +10,9 @@ const char str_Updown_802f9708[] = "Updown";
 u8 effUpdownDisp(int param_1, int param_2) {
     return 0;
 }
-
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void polygon(s32 type, u8 alpha, f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+void polygon(s32 type, s32 alpha, f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
     extern void GXBegin(s32 primitive, s32 vtxfmt, s32 nverts);
 
     volatile f32* gxFifoF = (volatile f32*)0xCC008000;
@@ -22,6 +20,7 @@ void polygon(s32 type, u8 alpha, f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
     u8 r1;
     u8 g1;
     u8 b1;
+    u8 a;
     u8 r2;
     u8 g2;
     u8 b2;
@@ -30,17 +29,19 @@ void polygon(s32 type, u8 alpha, f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
 
     switch (type) {
         case 0:
-            r1 = 255;
-            g1 = 255;
             b1 = 255;
-            r2 = 255;
-            g2 = 255;
+            g1 = 255;
+            r1 = 255;
+            a = alpha;
             b2 = 255;
+            g2 = 255;
+            r2 = 255;
             break;
         case 1:
             r1 = 233;
             g1 = 74;
             b1 = 63;
+            a = alpha;
             r2 = 254;
             g2 = 230;
             b2 = 62;
@@ -49,6 +50,7 @@ void polygon(s32 type, u8 alpha, f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
             r1 = 63;
             g1 = 63;
             b1 = 233;
+            a = alpha;
             r2 = 116;
             g2 = 201;
             b2 = 255;
@@ -64,7 +66,7 @@ void polygon(s32 type, u8 alpha, f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
     *gxFifoB = r1;
     *gxFifoB = g1;
     *gxFifoB = b1;
-    *gxFifoB = alpha;
+    *gxFifoB = a;
     *gxFifoF = 0.0f;
     *gxFifoF = 0.0f;
     *gxFifoF = x2;
@@ -73,7 +75,7 @@ void polygon(s32 type, u8 alpha, f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
     *gxFifoB = r1;
     *gxFifoB = g1;
     *gxFifoB = b1;
-    *gxFifoB = alpha;
+    *gxFifoB = a;
     *gxFifoF = s;
     *gxFifoF = 0.0f;
     *gxFifoF = x2;
@@ -82,7 +84,7 @@ void polygon(s32 type, u8 alpha, f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
     *gxFifoB = r2;
     *gxFifoB = g2;
     *gxFifoB = b2;
-    *gxFifoB = alpha;
+    *gxFifoB = a;
     *gxFifoF = s;
     *gxFifoF = t;
     *gxFifoF = x;
@@ -91,10 +93,11 @@ void polygon(s32 type, u8 alpha, f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
     *gxFifoB = r2;
     *gxFifoB = g2;
     *gxFifoB = b2;
-    *gxFifoB = alpha;
+    *gxFifoB = a;
     *gxFifoF = 0.0f;
     *gxFifoF = t;
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

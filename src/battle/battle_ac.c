@@ -455,6 +455,25 @@ good:
     BattleAudience_Case_ActionCommandGood(unit);
 }
 
-u8 BattleAcGaugeSeUpdate(double param_1) {
-    return 0;
+void BattleAcGaugeSeUpdate(f32 value) {
+    extern f32 float_0_80422188;
+    extern f32 float_100_8042218c;
+    extern f32 float_0p01_80422190;
+    extern f32 float_4092_80422194;
+    extern void psndSFX_pit(u32 index, u32 pitch);
+    void* work = _battleWorkPointer;
+    u32 sfx;
+
+    if (value < float_0_80422188) {
+        value = float_0_80422188;
+    }
+    if (value > float_100_8042218c) {
+        value = float_100_8042218c;
+    }
+    *(f32*)((s32)work + 0x1F1C) = value;
+    sfx = *(u32*)((s32)work + 0x1F18);
+    if (sfx != 0xFFFFFFFF) {
+        psndSFX_pit(sfx, (s32)(float_4092_80422194 * *(f32*)((s32)work + 0x1F1C) * float_0p01_80422190));
+    }
 }
+

@@ -21,15 +21,17 @@ void effGlassMain(void* effect) {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effGlassDisp(s32, s32);
-    extern Vec3 vec3_802fb020;
+    extern Vec3 vec3_802fb020[];
     extern f32 float_0_8042540c;
     extern f32 float_1_80425410;
     u8* work;
+    Vec3* base;
     Vec3 pos;
     Vec3 dispPos;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos = vec3_802fb020;
+    base = vec3_802fb020;
+    pos = *base;
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);

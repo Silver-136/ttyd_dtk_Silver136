@@ -6,6 +6,8 @@ u8 effShockDisp(int param_1, int param_2) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effShockMain(void* effect) {
     typedef struct Vec3 {
         f32 x;
@@ -23,8 +25,8 @@ void effShockMain(void* effect) {
     extern f32 float_0p9_80425ff4;
     extern f32 float_0p8_80425ff8;
     u8* work;
-    Vec3 pos;
     Vec3 dispPos;
+    Vec3 pos;
     s32 timer;
     s32 type;
     s32 frame;
@@ -66,7 +68,10 @@ void effShockMain(void* effect) {
     }
     dispEntry(4, 2, effShockDisp, effect, dispCalcZ(&dispPos));
 }
-
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 sx, f32 sy) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -77,6 +82,7 @@ void* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 sx, f32 sy) {
     extern f32 float_0p5_80425ffc;
     void* entry;
     u8* work;
+    f32 half;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_ShockN64_802fbf08;
@@ -98,16 +104,33 @@ void* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 sx, f32 sy) {
     } else {
         *(f32*)(work + 0x24) = float_0_80425fd8;
     }
-    *(f32*)(work + 0x28) = float_0p5_80425ffc * sx;
-    *(f32*)(work + 0x2C) = float_0p5_80425ffc * sy;
-    if (type >= 0 && type < 4 && type != 2) {
+    half = float_0p5_80425ffc;
+    *(f32*)(work + 0x28) = half * sx;
+    *(f32*)(work + 0x2C) = half * sy;
+    if (type == 2) {
+        goto colored;
+    }
+    if (type < 2) {
+        if (type >= 0) {
+            goto white;
+        }
+        goto colored;
+    }
+    if (type >= 4) {
+        goto colored;
+    }
+white:
+    {
         *(s32*)(work + 0x30) = 0xFF;
         *(s32*)(work + 0x34) = 0xFF;
         *(s32*)(work + 0x38) = 0;
         *(s32*)(work + 0x3C) = 0xFF;
         *(s32*)(work + 0x40) = 0xFF;
         *(s32*)(work + 0x44) = 0xFF;
-    } else {
+    }
+    goto done;
+colored:
+    {
         *(s32*)(work + 0x30) = 0x46;
         *(s32*)(work + 0x34) = 0xB4;
         *(s32*)(work + 0x38) = 0x78;
@@ -115,6 +138,9 @@ void* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 sx, f32 sy) {
         *(s32*)(work + 0x40) = 0xFF;
         *(s32*)(work + 0x44) = 0xFF;
     }
+done:
     return entry;
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 

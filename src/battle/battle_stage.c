@@ -80,33 +80,35 @@ void BattleStageSetDarkBase(void* dark, s32 value, s32 frames, s32 type) {
 }
 
 void BattleStageSetAudDark(s32 value, s32 frames, s32 type) {
-    BattleStageSetDark((void*)((s32)_battleWorkPointer + 0x16F00), value, frames, type);
+    void* workHi = (void*)((s32)_battleWorkPointer + 0x10000);
+    BattleStageSetDark((void*)((s32)workHi + 0x6F00), value, frames, type);
 }
 
 void BattleStageSetAudDarkBase(s32 value, s32 frames, s32 type) {
-    BattleStageSetDarkBase((void*)((s32)_battleWorkPointer + 0x16F00), value, frames, type);
+    void* workHi = (void*)((s32)_battleWorkPointer + 0x10000);
+    BattleStageSetDarkBase((void*)((s32)workHi + 0x6F00), value, frames, type);
 }
 
 void BattleStageSetStgDark(s32 value, s32 frames, s32 type) {
-    BattleStageSetDark((void*)((s32)_battleWorkPointer + 0x16EE0), value, frames, type);
+    void* workHi = (void*)((s32)_battleWorkPointer + 0x10000);
+    BattleStageSetDark((void*)((s32)workHi + 0x6EE0), value, frames, type);
 }
 
 void BattleStageSetStgDarkBase(s32 value, s32 frames, s32 type) {
-    BattleStageSetDarkBase((void*)((s32)_battleWorkPointer + 0x16EE0), value, frames, type);
+    void* workHi = (void*)((s32)_battleWorkPointer + 0x10000);
+    BattleStageSetDarkBase((void*)((s32)workHi + 0x6EE0), value, frames, type);
 }
 
 void BattleStageReturnAudDarkBase(s32 frames, s32 type) {
-    void* dark;
-
-    dark = (void*)((s32)_battleWorkPointer + 0x16F00);
-    BattleStageSetDark(dark, *(u8*)((s32)dark + 0x5), frames, type);
+    void* workHi = (void*)((s32)_battleWorkPointer + 0x10000);
+    void* dark = (void*)((s32)workHi + 0x6F00);
+    BattleStageSetDark(dark, *(u8*)((s32)dark + 5), frames, type);
 }
 
 void BattleStageReturnStgDarkBase(s32 frames, s32 type) {
-    void* dark;
-
-    dark = (void*)((s32)_battleWorkPointer + 0x16EE0);
-    BattleStageSetDark(dark, *(u8*)((s32)dark + 0x5), frames, type);
+    void* workHi = (void*)((s32)_battleWorkPointer + 0x10000);
+    void* dark = (void*)((s32)workHi + 0x6EE0);
+    BattleStageSetDark(dark, *(u8*)((s32)dark + 5), frames, type);
 }
 
 void unk_80137fe4(void) {
@@ -142,14 +144,16 @@ s32 screen_evt_func(void) {
 }
 
 void BattleStageDisp(void) {
+    extern f32 float_5000_80422b34;
+    extern f32 float_6000_80422b38;
     void* battleWork;
 
     battleWork = _battleWorkPointer;
 
     BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
 
-    dispEntry(4, 2, BattleStageDispDark, 5000.0f, 0);
-    dispEntry(4, 2, BattleStageDispLight, 6000.0f, 0);
+    dispEntry(4, 2, BattleStageDispDark, float_5000_80422b34, 0);
+    dispEntry(4, 2, BattleStageDispLight, float_6000_80422b38, 0);
 }
 
 s32 strcmp(const char* s1, const char* s2);
@@ -644,9 +648,11 @@ void BattleStageLightRelease(s32 lightId, s32 fadeFrames, s32 unk) {
 
 
 double randf(double min, double max) {
-    return 0.0;
-}
+    extern s32 rand(void);
+    extern f32 float_32767_80422b04;
 
+    return (f32)(((f32)rand() / float_32767_80422b04) * (f32)(max - min) + (f32)min);
+}
 
 void BattleStageEnd(void) {
     ;
@@ -654,14 +660,33 @@ void BattleStageEnd(void) {
 
 
 void screen_capture(void) {
-    ;
+    extern void GXSetTexCopySrc(u32 left, u32 top, u32 width, u32 height);
+    extern void GXSetTexCopyDst(u16 width, u16 height, u32 format, u32 mipmap);
+    extern void GXCopyTex(void* dest, s32 clear);
+    extern void GXPixModeSync(void);
+    extern void* screen_wp;
+
+    GXSetTexCopySrc(0, 0, 0x260, 0x1E0);
+    GXSetTexCopyDst(0x130, 0xF0, 4, 1);
+    GXCopyTex(*(void**)screen_wp, 0);
+    GXPixModeSync();
+    *(s32*)((s32)screen_wp + 4) = 1;
 }
 
+void batSpotMain(void) {
+    extern f32 float_neg1000_80422b14;
+    extern u8 batSpotDisp(s32 cameraId);
+    s32 count;
 
-u8 batSpotMain(void) {
-    return 0;
+    count = *(s32*)wp;
+    while (count > 0) {
+        count--;
+    }
+
+    if (*(s32*)((s32)wp + 8) > 0) {
+        dispEntry(6, 0, batSpotDisp, float_neg1000_80422b14, 0);
+    }
 }
-
 
 u8 batSpotDisp(s32 cameraId) {
     extern void* wp;

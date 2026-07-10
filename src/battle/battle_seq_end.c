@@ -1009,9 +1009,102 @@ s32 _lvup_spot_on(void* event) {
 
 /* stub-fill: _GetExpIcon_Main | prototype_only | source_prototype */
 void _GetExpIcon_Main(void* battleWork) {
-    return;
-}
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+    extern void iconFlagOff(char* name, u16 flags);
+    extern void iconFlagOn(char* name, u16 flags);
+    extern void iconSetAlpha(char* name, u8 alpha);
+    extern void iconSetPos(f32 x, f32 y, f32 z, char* name);
+    extern f32 float_0_804271c0;
+    extern f32 float_24_8042722c;
+    extern f32 float_18_80427230;
+    extern f32 float_36_80427234;
 
+    void* seqEndWork;
+    s16 remaining;
+    s32 tens;
+    s32 ones;
+    s32 i;
+    s32 iconOffset;
+    s32 posOffset;
+    s32 alpha;
+    f32 baseY;
+
+    seqEndWork = *(void**)((s32)battleWork + 0xF28);
+    remaining = *(s16*)((s32)seqEndWork + 0xA);
+    tens = remaining / 10;
+    iconOffset = 0;
+    posOffset = 0;
+    for (i = 0; i < tens; i++) {
+        iconFlagOff((char*)((s32)*(void**)((s32)seqEndWork + 0x34 + iconOffset) + 0x18), 2);
+        alpha = *(s32*)((s32)seqEndWork + 0x80 + iconOffset);
+        if (alpha < 1) {
+            *(s32*)((s32)seqEndWork + 0x80 + iconOffset) = 0x40;
+        } else {
+            alpha += 0x40;
+            if (alpha > 0xFF) {
+                alpha = 0xFF;
+            }
+            *(s32*)((s32)seqEndWork + 0x80 + iconOffset) = alpha;
+        }
+        if (*(s32*)((s32)seqEndWork + 0xCC + iconOffset) < 0x10) {
+            *(s32*)((s32)seqEndWork + 0xCC + iconOffset) += 1;
+        }
+        *(f32*)((s32)seqEndWork + 0x118 + posOffset) =
+            float_36_80427234 * (f32)i - (float_18_80427230 * (f32)tens - float_24_8042722c);
+        iconOffset += 4;
+        posOffset += 0xC;
+    }
+
+    iconOffset = i << 2;
+    for (; i < 10; i++) {
+        iconFlagOn((char*)((s32)*(void**)((s32)seqEndWork + 0x34 + iconOffset) + 0x18), 2);
+        *(s32*)((s32)seqEndWork + 0x80 + iconOffset) = 0;
+        *(s32*)((s32)seqEndWork + 0xCC + iconOffset) = 0;
+        iconOffset += 4;
+    }
+
+    iconOffset = 0x28;
+    ones = remaining % 10;
+    for (i = 10; i - 10U < ones; i++) {
+        iconFlagOff((char*)((s32)*(void**)((s32)seqEndWork + 0x34 + iconOffset) + 0x18), 2);
+        alpha = *(s32*)((s32)seqEndWork + 0x80 + iconOffset);
+        if (alpha < 1) {
+            *(s32*)((s32)seqEndWork + 0x80 + iconOffset) = 0x40;
+        } else {
+            alpha += 0x40;
+            if (alpha > 0xFF) {
+                alpha = 0xFF;
+            }
+            *(s32*)((s32)seqEndWork + 0x80 + iconOffset) = alpha;
+        }
+        iconOffset += 4;
+    }
+
+    iconOffset = i << 2;
+    for (; i < 0x13; i++) {
+        iconFlagOn((char*)((s32)*(void**)((s32)seqEndWork + 0x34 + iconOffset) + 0x18), 2);
+        *(s32*)((s32)seqEndWork + 0x80 + iconOffset) = 0;
+        iconOffset += 4;
+    }
+
+    baseY = float_0_804271c0;
+    iconOffset = 0;
+    posOffset = 0;
+    for (i = 0; i < 0x13; i++) {
+        iconSetAlpha((char*)((s32)*(void**)((s32)seqEndWork + 0x34 + iconOffset) + 0x18),
+                     (u8)*(s32*)((s32)seqEndWork + 0x80 + iconOffset));
+        iconSetPos(*(f32*)((s32)seqEndWork + 0x118 + posOffset),
+                   *(f32*)((s32)seqEndWork + 0x11C + posOffset) + baseY,
+                   *(f32*)((s32)seqEndWork + 0x120 + posOffset),
+                   (char*)((s32)*(void**)((s32)seqEndWork + 0x34 + iconOffset) + 0x18));
+        iconOffset += 4;
+        posOffset += 0xC;
+    }
+}
 
 /* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
 
@@ -1092,6 +1185,80 @@ u8 btlseqEnd(void* battleWork) {
 /* CHATGPT FALLBACK MISSING STUBS: main/battle/battle_seq_end 20260624_191429 */
 
 /* fallback stub-fill: map=_GetExpIcon_Init addr=0x802149ec size=0x0000025c */
-int _GetExpIcon_Init() {
-    return 0;
+void _GetExpIcon_Init(void* seqEndWork) {
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+    extern int sprintf(char* s, const char* fmt, ...);
+    extern void iconEntry2D(char* name, s32 id);
+    extern void* iconNameToPtr(char* name);
+    extern void iconSetScale(f32 scale, char* name);
+    extern void iconFlagOn(char* name, u16 flags);
+    extern void iconSetPos(f32 x, f32 y, f32 z, char* name);
+    extern const char str_BgspPCTd_802fe9c0[];
+    extern f32 float_0_804271c0;
+    extern f32 float_25_804271e0;
+    extern f32 float_24_8042722c;
+    extern f32 float_18_80427230;
+    extern f32 float_36_80427234;
+    extern f32 float_0p9_80427238;
+    extern f32 float_0p45_8042723c;
+    extern f32 float_86p9_80427240;
+    extern f32 float_16p2_80427244;
+
+    char iconEntryName[16];
+    void* iconEntry;
+    s32 i;
+    s32 iconOffset;
+    s32 posOffset;
+    s32 remainTens;
+
+    remainTens = *(s16*)((s32)seqEndWork + 0xA) / 10;
+    iconOffset = 0;
+    posOffset = 0;
+    for (i = 0; i < 10; i++) {
+        sprintf(iconEntryName, str_BgspPCTd_802fe9c0, i);
+        iconEntry2D(iconEntryName, 0x194);
+        iconEntry = iconNameToPtr(iconEntryName);
+        *(void**)((s32)seqEndWork + 0x34 + iconOffset) = iconEntry;
+        iconSetScale(float_0p9_80427238, iconEntryName);
+        iconFlagOn(iconEntryName, 2);
+        *(s32*)((s32)seqEndWork + 0xCC + iconOffset) = 0;
+        ((VecLocal*)((s32)seqEndWork + 0x118))[i].x =
+            float_36_80427234 * (f32)i - (float_18_80427230 * (f32)remainTens - float_24_8042722c);
+        ((VecLocal*)((s32)seqEndWork + 0x118))[i].y = float_25_804271e0;
+        ((VecLocal*)((s32)seqEndWork + 0x118))[i].z = float_0_804271c0;
+        iconSetPos(((VecLocal*)((s32)seqEndWork + 0x118))[i].x,
+                   ((VecLocal*)((s32)seqEndWork + 0x118))[i].y,
+                   ((VecLocal*)((s32)seqEndWork + 0x118))[i].z,
+                   iconEntryName);
+        iconOffset += 4;
+        posOffset += 0xC;
+    }
+
+    iconOffset = 0x28;
+    posOffset = 0x78;
+    for (i = 10; i < 0x13; i++) {
+        sprintf(iconEntryName, str_BgspPCTd_802fe9c0, i);
+        iconEntry2D(iconEntryName, 0x194);
+        iconEntry = iconNameToPtr(iconEntryName);
+        *(void**)((s32)seqEndWork + 0x34 + iconOffset) = iconEntry;
+        iconSetScale(float_0p45_8042723c, iconEntryName);
+        iconFlagOn(iconEntryName, 2);
+        *(s32*)((s32)seqEndWork + 0xCC + iconOffset) = 0;
+        *(f32*)((s32)seqEndWork + 0x118 + posOffset) =
+            -(float_16p2_80427244 * (f32)(i - 9) - float_86p9_80427240);
+        *(f32*)((s32)seqEndWork + 0x11C + posOffset) = float_0_804271c0;
+        *(f32*)((s32)seqEndWork + 0x120 + posOffset) = float_0_804271c0;
+        iconSetPos(*(f32*)((s32)seqEndWork + 0x118 + posOffset),
+                   *(f32*)((s32)seqEndWork + 0x11C + posOffset),
+                   *(f32*)((s32)seqEndWork + 0x120 + posOffset),
+                   iconEntryName);
+        iconOffset += 4;
+        posOffset += 0xC;
+    }
+    *(u32*)((s32)seqEndWork + 0x30) |= 2;
 }
+

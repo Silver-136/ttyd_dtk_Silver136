@@ -21,6 +21,8 @@ u8 effMagic2Main(int* param_1) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effMagic2N64Entry(s32 type, s32 arg, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -80,4 +82,6 @@ void* effMagic2N64Entry(s32 type, s32 arg, f32 x, f32 y, f32 z, f32 scale) {
     }
     return entry;
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 

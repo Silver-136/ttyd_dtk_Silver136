@@ -1,10 +1,76 @@
 #include "effect/n64/eff_pokopi_pipo_n64.h"
 
 
-u8 effPokopiPipoN64Entry(void) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma optimize_for_size off
+
+void* effPokopiPipoN64Entry(s32 type, s32 time, f32 x0, f32 y0, f32 z0, f32 x1, f32 y1, f32 z1, f32 scale) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, s32 size);
+    extern void effPokopiPipoMain(void*);
+    extern s32 rand(void);
+    extern const char str_PokopiPipoN64_802fbd10[];
+    extern f32 float_neg0p1_80425d94;
+    extern f32 float_0_80425d74;
+    extern f32 float_1_80425d98;
+    void* entry;
+    u8* work;
+    f32 duration;
+
+    entry = effEntry();
+    *(const char**)((s32)entry + 0x14) = str_PokopiPipoN64_802fbd10;
+    *(s32*)((s32)entry + 8) = 1;
+    work = __memAlloc(3, 0x6C);
+    *(u8**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effPokopiPipoMain;
+    *(u32*)entry |= 2;
+
+    *(s32*)work = type;
+    *(s32*)(work + 0x2C) = 0;
+    if (time <= 0) {
+        *(s32*)(work + 0x28) = 0x3E8;
+    } else {
+        *(s32*)(work + 0x28) = time + 0x3C;
+    }
+
+    duration = (f32)time;
+    *(s32*)(work + 0x68) = time;
+    *(s32*)(work + 0x3C) = 0xFF;
+    *(f32*)(work + 0x10) = x0;
+    *(f32*)(work + 0x14) = y0;
+    *(f32*)(work + 0x18) = z0;
+    *(f32*)(work + 0x1C) = x1;
+    *(f32*)(work + 0x20) = y1;
+    *(f32*)(work + 0x24) = z1;
+    *(f32*)(work + 4) = x0;
+    *(f32*)(work + 8) = y0;
+    *(f32*)(work + 0xC) = z0;
+    *(f32*)(work + 0x44) = (x1 - x0) / duration;
+    *(f32*)(work + 0x48) = ((y1 - y0) / duration) - (float_neg0p1_80425d94 * duration);
+    *(f32*)(work + 0x4C) = (z1 - z0) / duration;
+    if (y1 - y0 < float_0_80425d74) {
+        *(s32*)(work + 0x64) = 1;
+    } else {
+        *(s32*)(work + 0x64) = 0;
+    }
+    *(f32*)(work + 0x40) = scale;
+    *(s32*)(work + 0x30) = 0x46;
+    *(s32*)(work + 0x34) = 0xB4;
+    *(s32*)(work + 0x38) = 0x78;
+    *(f32*)(work + 0x50) = (f32)(rand() % 0x168);
+    *(f32*)(work + 0x54) = (f32)((rand() % 10) + 5);
+    *(s32*)(work + 0x60) = -1;
+    *(f32*)(work + 0x58) = float_1_80425d98;
+    *(f32*)(work + 0x5C) = float_1_80425d98;
+
+    return entry;
 }
 
+#pragma optimize_for_size on
+
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 
 u8 effPokopiPipoDisp(void) {
     return 0;

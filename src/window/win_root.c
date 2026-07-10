@@ -1059,14 +1059,28 @@ void sort_3_1_func(void* pWin) {
 
 
 s32 N_compare_func4_1_r(void* param_1, void* param_2) {
-    return 0;
-}
+    char bufA[0x80];
+    char bufB[0x80];
+    s32 idxA = *(s32*)((s32)param_1 + 8);
+    s32 idxB = *(s32*)((s32)param_2 + 8);
+    char** names = (char**)(itemDataTable + 4);
 
+    unk_800d48b0(msgSearch(names[(s16)idxA * 0xA]), bufA);
+    unk_800d48b0(msgSearch(names[(s16)idxB * 0xA]), bufB);
+    return strcmp(bufB, bufA);
+}
 
 s32 N_compare_func4_1(void* param_1, void* param_2) {
-    return 0;
-}
+    char bufA[0x80];
+    char bufB[0x80];
+    s32 idxA = *(s32*)((s32)param_1 + 8);
+    s32 idxB = *(s32*)((s32)param_2 + 8);
+    char** names = (char**)(itemDataTable + 4);
 
+    unk_800d48b0(msgSearch(names[(s16)idxA * 0xA]), bufA);
+    unk_800d48b0(msgSearch(names[(s16)idxB * 0xA]), bufB);
+    return strcmp(bufA, bufB);
+}
 
 u8 sort_2_2_func(void* pWin) {
     return 0;
@@ -1079,44 +1093,128 @@ u8 sort_2_1_func(void* pWin) {
 
 
 s32 compare_func4(void* param_1, void* param_2) {
-    return 0;
-}
+    extern void* mailGetPtr(s32 id);
+    void* mailA;
+    void* mailB;
+    char* msgA;
+    char* msgB;
 
+    mailA = mailGetPtr(*(u8*)((s32)param_1 + 1));
+    mailB = mailGetPtr(*(u8*)((s32)param_2 + 1));
+    msgA = msgSearch(*(char**)((s32)mailA + 8));
+    msgB = msgSearch(*(char**)((s32)mailB + 8));
+    return strcmp(msgA, msgB);
+}
 
 s32 compare_func4_r(void* param_1, void* param_2) {
-    return 0;
-}
+    extern void* mailGetPtr(s32 id);
+    void* mailA;
+    void* mailB;
+    char* msgA;
+    char* msgB;
 
+    mailA = mailGetPtr(*(u8*)((s32)param_1 + 1));
+    mailB = mailGetPtr(*(u8*)((s32)param_2 + 1));
+    msgA = msgSearch(*(char**)((s32)mailA + 8));
+    msgB = msgSearch(*(char**)((s32)mailB + 8));
+    return strcmp(msgB, msgA);
+}
 
 s32 compare_func6_2_r(void* param_1, void* param_2) {
+    s32 idxA = (s16)((s16)*(s16*)param_1 + 0xB3);
+    s32 idxB = (s16)((s16)*(s16*)param_2 + 0xB3);
+    s16* values = (s16*)(itemDataTable + 0x12);
+    s32 valueA = values[idxA * 0x14];
+    s32 valueB = values[idxB * 0x14];
+
+    if (valueA < valueB) {
+        return 1;
+    }
+    if (valueA > valueB) {
+        return -1;
+    }
     return 0;
 }
-
 
 s32 compare_func6_2(void* param_1, void* param_2) {
+    s32 idxA = (s16)((s16)*(s16*)param_1 + 0xB3);
+    s32 idxB = (s16)((s16)*(s16*)param_2 + 0xB3);
+    s16* values = (s16*)(itemDataTable + 0x12);
+    s32 valueA = values[idxA * 0x14];
+    s32 valueB = values[idxB * 0x14];
+
+    if (valueA > valueB) {
+        return 1;
+    }
+    if (valueA < valueB) {
+        return -1;
+    }
     return 0;
 }
-
 
 s32 compare_func5_2_r(void* param_1, void* param_2) {
+    s32 idxA = (s16)((s16)*(s16*)param_1 + 0xF0);
+    s32 idxB = (s16)((s16)*(s16*)param_2 + 0xF0);
+    s16* values = (s16*)(itemDataTable + 0x12);
+    s32 valueA = values[idxA * 0x14];
+    s32 valueB = values[idxB * 0x14];
+
+    if (valueA < valueB) {
+        return 1;
+    }
+    if (valueA > valueB) {
+        return -1;
+    }
     return 0;
 }
-
 
 s32 compare_func5_2(void* param_1, void* param_2) {
+    s32 idxA = (s16)((s16)*(s16*)param_1 + 0xF0);
+    s32 idxB = (s16)((s16)*(s16*)param_2 + 0xF0);
+    s16* values = (s16*)(itemDataTable + 0x12);
+    s32 valueA = values[idxA * 0x14];
+    s32 valueB = values[idxB * 0x14];
+
+    if (valueA > valueB) {
+        return 1;
+    }
+    if (valueA < valueB) {
+        return -1;
+    }
     return 0;
 }
-
 
 s32 N_compare_func4_2_r(void* param_1, void* param_2) {
+    s32 idxA = *(s32*)((s32)param_1 + 8);
+    s32 idxB = *(s32*)((s32)param_2 + 8);
+    s16* values = (s16*)(itemDataTable + 0x12);
+    s32 valueA = values[(s16)idxA * 0x14];
+    s32 valueB = values[(s16)idxB * 0x14];
+
+    if (valueA < valueB) {
+        return 1;
+    }
+    if (valueA > valueB) {
+        return -1;
+    }
     return 0;
 }
-
 
 s32 N_compare_func4_2(void* param_1, void* param_2) {
+    s32 idxA = *(s32*)((s32)param_1 + 8);
+    s32 idxB = *(s32*)((s32)param_2 + 8);
+    s16* values = (s16*)(itemDataTable + 0x12);
+    s32 valueA = values[(s16)idxA * 0x14];
+    s32 valueB = values[(s16)idxB * 0x14];
+
+    if (valueA > valueB) {
+        return 1;
+    }
+    if (valueA < valueB) {
+        return -1;
+    }
     return 0;
 }
-
 
 u8 winHalfBookGX(double x, double y, void* file, int param_4) {
     return 0;

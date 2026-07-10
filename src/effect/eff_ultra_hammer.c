@@ -71,6 +71,8 @@ void effUltraHammerDisp(void* camera, void* entry) {
 }
 
 /* stub-fill: effUltraHammerEntry | missing_definition | ghidra_signature */
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effUltraHammerEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
@@ -119,4 +121,6 @@ void* effUltraHammerEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
     }
     return entry;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 

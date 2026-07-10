@@ -173,7 +173,7 @@ s32 valueCheck(void) {
     s16 values[12];
     void* work;
     s32 changed;
-    s32 value;
+    u32 value;
 
     changed = 0;
     statusGetValue(values);
@@ -227,9 +227,9 @@ s32 valueCheck(void) {
 
     if (changed == 0) {
         work = wp;
-        value = *(s32*)((s32)work + 0x84);
-        if (value != 0) {
-            *(s32*)((s32)work + 0x80) = value;
+        value = *(u32*)((s32)work + 0x84);
+        if (value != 0U) {
+            *(u32*)((s32)work + 0x80) = value;
             *(s32*)((s32)wp + 0x84) = 0;
             *(s32*)((s32)wp + 0x88) = *(s32*)((s32)gp + 4) << 1;
         }

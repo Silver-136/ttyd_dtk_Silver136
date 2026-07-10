@@ -57,6 +57,8 @@ u8 effKemuri2Entry(f32 x, f32 y, f32 z, f32 vx, f32 vz) {
     return 0;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effKemuriEntry(s32 kind, f32 x, f32 y, f32 z) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
@@ -133,6 +135,8 @@ void* effKemuriEntry(s32 kind, f32 x, f32 y, f32 z) {
 
     return entry;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 effKemuri2Disp(s32 param_1, void* effEntry) {
     return 0;
@@ -149,6 +153,8 @@ u8 effKemuriMain(void* effEntry) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 effKemuri2Main(void* effEntry) {
     typedef struct LocalVec3 {
         f32 x;
@@ -166,18 +172,19 @@ u8 effKemuri2Main(void* effEntry) {
     extern f32 float_0p95_804229d4;
     extern f32 float_0p8_804229d8;
     extern double sin(double x);
-    extern double cos(double x);
     LocalVec3 dispPos;
+    LocalVec3 pos;
     void* work;
     void* cur;
     s32 i;
     f32 wave;
 
     work = *(void**)((s32)effEntry + 0xC);
-    dispPos = vec3_802f3704;
-    dispPos.x = *(f32*)((s32)work + 0x4);
-    dispPos.y = *(f32*)((s32)work + 0x8);
-    dispPos.z = *(f32*)((s32)work + 0xC);
+    pos = vec3_802f3704;
+    pos.x = *(f32*)((s32)work + 0x4);
+    pos.y = *(f32*)((s32)work + 0x8);
+    pos.z = *(f32*)((s32)work + 0xC);
+    dispPos = pos;
 
     wave = (f32)sin((float_3p1416_804229c8 * (f32)*(s32*)((s32)work + 0x3C)) / float_30_804229cc);
     *(s32*)((s32)work + 0x3C) += 1;
@@ -205,4 +212,6 @@ u8 effKemuri2Main(void* effEntry) {
     dispEntry(4, 2, effKemuri2Disp, effEntry, dispCalcZ(&dispPos));
     return 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 

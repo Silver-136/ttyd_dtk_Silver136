@@ -65,10 +65,12 @@ void* effCrystalN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
         case 6:
             *(s32*)(work + 0x1C) = 9;
             break;
-        default:
+        default: {
+            f32 rate = -(scale - float_0p1_80425064) / (f32)timer;
             *(s32*)(work + 0x1C) = 10;
-            *(f32*)(work + 0x34) = -(scale - float_0p1_80425064) / (f32)timer;
+            *(f32*)(work + 0x34) = rate;
             break;
+        }
     }
 
     return entry;

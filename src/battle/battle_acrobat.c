@@ -1,8 +1,6 @@
 #include "battle/battle_acrobat.h"
-
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 s32 BattleAcrobatMain(void* battleWork) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
     extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);

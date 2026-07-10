@@ -1599,8 +1599,45 @@ void BtlUnit_CheckPinchStatus(BattleWorkUnit* unit, BOOL a2) {
     }
 }
 
-s32 BtlUnit_GetExp(BattleWorkUnit *unit) {
-    ;
+s32 BtlUnit_GetExp(BattleWorkUnit* unit) {
+    void* pouch;
+    void* battleWork;
+    void* stage;
+    void* table;
+    s32 marioLevel;
+    s32 unitLevel;
+    s32 levelDiff;
+    f32 factor;
+
+    battleWork = _battleWorkPointer;
+    pouch = pouchGetPtr();
+    marioLevel = *(s16*)((s32)pouch + 0x8A);
+    unitLevel = *(u8*)((s32)unit + 0xD);
+    if (marioLevel > unitLevel) {
+        return 0;
+    }
+
+    stage = *(void**)((s32)battleWork + 0x2738);
+    table = *(void**)((s32)*(void**)((s32)stage + 0xC) + 0x18);
+    switch (*(s32*)table) {
+        case 0:
+        case 1:
+        case 2:
+            factor = 1.0f;
+            break;
+        case 3:
+            factor = 1.1f;
+            break;
+        case 4:
+            factor = 1.3f;
+            break;
+        default:
+            factor = 1.5f;
+            break;
+    }
+
+    levelDiff = unitLevel - marioLevel;
+    return (s32)(factor * (f32)levelDiff * 0.5f) + *(u8*)((s32)*(void**)((s32)unit + 0x10) + 0xF);
 }
 
 u32 BtlUnit_snd_se(BattleWorkUnit* unit, s32 lookup, s32 volume, s16 add_pitch) {
@@ -1921,14 +1958,53 @@ void BtlUnit_ControlPoseSoundMain(void* part) {
 
 
 void BtlUnit_PayWeaponCost(void* unit, void* weapon) {
-    ;
-}
+    extern void BtlActRec_AddPoint(void*, u32);
+    extern void BtlActRec_AddCount(void*);
+    extern void pouchAddAP(s32);
+    void* battleWork;
+    s32 fp;
+    s32 cost;
+    s32 type;
 
+    battleWork = _battleWorkPointer;
+    fp = BtlUnit_GetFp(unit);
+    cost = BtlUnit_GetWeaponCost(unit, weapon);
+    BtlUnit_SetFp(unit, fp - cost);
+
+    type = *(s32*)((s32)unit + 8);
+    if (type == 0xDE) {
+        BtlActRec_AddPoint((void*)((s32)battleWork + 0x16F4B), (u8)cost);
+        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F4C));
+    } else if (type >= 0xE0 && type < 0xE7) {
+        BtlActRec_AddPoint((void*)((s32)battleWork + 0x16F4D), (u8)cost);
+        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F4E));
+    }
+
+    pouchAddAP((s32)(-(s32)*(u8*)((s32)weapon + 0x12)) * 100);
+}
 
 void BtlUnit_RecoverFp(void* unit, s32 fp) {
-    ;
-}
+    void* battleWork;
+    void* mario;
+    s16 maxFp;
+    s16* currentFp;
 
+    battleWork = _battleWorkPointer;
+    if (*(s32*)((s32)unit + 8) >= 0xE0 && *(s32*)((s32)unit + 8) < 0xE7) {
+        mario = BattleGetMarioPtr(battleWork);
+        maxFp = BtlUnit_GetMaxFp(mario);
+        mario = BattleGetMarioPtr(battleWork);
+        currentFp = (s16*)((s32)mario + 0x112);
+    } else {
+        maxFp = BtlUnit_GetMaxFp(unit);
+        currentFp = (s16*)((s32)unit + 0x112);
+    }
+
+    *currentFp += fp;
+    if (*currentFp > maxFp) {
+        *currentFp = maxFp;
+    }
+}
 
 u8 BtlUnit_SetCommandAnimPose(void* unit) {
     return 0;
@@ -2033,11 +2109,107 @@ s32 BtlUnit_GetWeaponCost(BattleWorkUnit* unit, void* weapon) {
 }
 
 
-void BtlUnit_LoadSeMode(int param_1, int param_2, void* soundDataTable, void* moveSoundWork) {
-    ;
-}
+void BtlUnit_LoadSeMode(s32 mode, s32 selector, void* soundDataTable, void* moveSoundWork) {
+    s32 zero;
 
+    zero = 0;
+    *(s16*)((s32)moveSoundWork + 0x14) = zero;
+    *(s32*)((s32)moveSoundWork + 0x18) = -1;
+
+    if (selector != -1) {
+        if (selector >= -1) {
+            goto clear;
+        }
+        if (selector >= -2) {
+            goto done;
+        }
+        goto clear;
+    }
+
+    if (selector == -1) {
+        switch (mode) {
+            case 0:
+                *(s32*)((s32)moveSoundWork + 0) = *(s32*)((s32)soundDataTable + 8);
+                *(s32*)((s32)moveSoundWork + 4) = *(s32*)((s32)soundDataTable + 0xC);
+                *(s16*)((s32)moveSoundWork + 0xC) = *(s16*)((s32)soundDataTable + 0x10);
+                *(s16*)((s32)moveSoundWork + 0xE) = *(s16*)((s32)soundDataTable + 0x12);
+                *(s16*)((s32)moveSoundWork + 0x10) = *(s16*)((s32)soundDataTable + 0x14);
+                break;
+            case 1:
+                *(s32*)((s32)moveSoundWork + 0) = *(s32*)((s32)soundDataTable + 0x18);
+                *(s32*)((s32)moveSoundWork + 4) = *(s32*)((s32)soundDataTable + 0x1C);
+                *(s16*)((s32)moveSoundWork + 0xC) = *(s16*)((s32)soundDataTable + 0x20);
+                *(s16*)((s32)moveSoundWork + 0xE) = *(s16*)((s32)soundDataTable + 0x22);
+                *(s16*)((s32)moveSoundWork + 0x10) = *(s16*)((s32)soundDataTable + 0x24);
+                break;
+            case 2:
+                *(s32*)((s32)moveSoundWork + 0) = *(s32*)((s32)soundDataTable + 0);
+                *(s32*)((s32)moveSoundWork + 4) = *(s32*)((s32)soundDataTable + 4);
+                *(s16*)((s32)moveSoundWork + 0xC) = zero;
+                *(s16*)((s32)moveSoundWork + 0xE) = zero;
+                *(s16*)((s32)moveSoundWork + 0x10) = zero;
+                break;
+            case 3:
+                *(s32*)((s32)moveSoundWork + 0) = *(s32*)((s32)soundDataTable + 0x28);
+                *(s32*)((s32)moveSoundWork + 4) = *(s32*)((s32)soundDataTable + 0x2C);
+                *(s16*)((s32)moveSoundWork + 0xC) = *(s16*)((s32)soundDataTable + 0x30);
+                *(s16*)((s32)moveSoundWork + 0xE) = *(s16*)((s32)soundDataTable + 0x32);
+                *(s16*)((s32)moveSoundWork + 0x10) = *(s16*)((s32)soundDataTable + 0x34);
+                break;
+            default:
+                *(s32*)((s32)moveSoundWork + 0) = zero;
+                *(s32*)((s32)moveSoundWork + 4) = zero;
+                *(s16*)((s32)moveSoundWork + 0xC) = zero;
+                *(s16*)((s32)moveSoundWork + 0xE) = zero;
+                *(s16*)((s32)moveSoundWork + 0x10) = zero;
+                break;
+        }
+    }
+    goto done;
+
+clear:
+        *(s32*)((s32)moveSoundWork + 0) = zero;
+        *(s32*)((s32)moveSoundWork + 4) = zero;
+        *(s16*)((s32)moveSoundWork + 0xC) = zero;
+        *(s16*)((s32)moveSoundWork + 0xE) = zero;
+        *(s16*)((s32)moveSoundWork + 0x10) = zero;
+
+done:
+    *(s16*)((s32)moveSoundWork + 0x12) = *(s16*)((s32)moveSoundWork + 0xC);
+}
 
 void BtlUnit_ResetMoveStatus(BattleWorkUnit* unit) {
-    ;
+    s32 value;
+    s32 temp;
+
+    *(u8*)((s32)unit + 0x20) = 0;
+    *(u8*)((s32)unit + 0x22) = *(u8*)((s32)unit + 0x21);
+    if (BtlUnit_CheckStatus(unit, 0x13) != 0) {
+        temp = *(u8*)((s32)unit + 0x22);
+        temp <<= 1;
+        *(u8*)((s32)unit + 0x22) = temp;
+    }
+    if (BtlUnit_CheckStatus(unit, 0x14) != 0) {
+        if (*(s8*)((s32)unit + 0x22) >= 2) {
+            *(u8*)((s32)unit + 0x22) = *(s8*)((s32)unit + 0x22) / 2;
+        } else {
+            value = 2;
+            if (*(s8*)((s32)unit + 0x21) < 1) {
+                value <<= 1;
+            }
+            if (*(s8*)((s32)unit + 0x24) >= value) {
+                *(u8*)((s32)unit + 0x22) = 1;
+                *(u8*)((s32)unit + 0x20) = 0;
+            } else {
+                *(u8*)((s32)unit + 0x22) = 0;
+                *(u8*)((s32)unit + 0x20) = 10;
+            }
+        }
+    }
+    *(u8*)((s32)unit + 0x23) = *(u8*)((s32)unit + 0x22);
+    if (*(s8*)((s32)unit + 0x23) == 0) {
+        *(u8*)((s32)unit + 0x22) = 0;
+        *(u8*)((s32)unit + 0x20) = 10;
+    }
 }
+

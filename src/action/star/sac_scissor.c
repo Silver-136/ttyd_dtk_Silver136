@@ -798,12 +798,197 @@ s32 scissor_cross(f32* pos1, f32* pos2, f32* poly, s32 count) {
 
 /* stub-fill: scissor_disp_region | prototype_only | source_prototype */
 void scissor_disp_region(void) {
-    return;
+    extern void* GetScissorPtr(void);
+    extern void sysWaitDrawSync(void);
+    extern void GXClearBoundingBox(void);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 type, s32 frac, s32 shift);
+    extern void GXInitTexObj(void* obj, void* image, s32 width, s32 height, s32 format, s32 wrapS, s32 wrapT, s32 mipmap);
+    extern void GXInitTexObjLOD(void* obj, s32 minFilt, s32 magFilt, f32 minLod, f32 maxLod, f32 lodBias, s32 biasClamp, s32 doEdgeLod, s32 maxAniso);
+    extern void GXLoadTexObj(void* obj, s32 mapid);
+    extern void GXSetNumChans(s32 count);
+    extern void GXSetNumTexGens(s32 count);
+    extern void C_MTXLightOrtho(f32 t, f32 b, f32 l, f32 r, f32 scaleS, f32 scaleT, f32 transS, f32 transT, void* mtx);
+    extern void* camGetPtr(s32 id);
+    extern void PSMTXConcat(void* a, void* b, void* out);
+    extern void GXLoadTexMtxImm(void* mtx, s32 id, s32 type);
+    extern void GXSetTexCoordGen2(s32 coord, s32 func, s32 src, s32 mtx, s32 normalize, s32 postmtx);
+    extern void GXSetNumTevStages(s32 count);
+    extern void GXSetTevOrder(s32 stage, s32 coord, s32 map, s32 color);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 out);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 out);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevKAlphaSel(s32 stage, s32 sel);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
+    extern void smartFree(void* ptr);
+    extern void GXReadBoundingBox(u16* left, u16* top, u16* right, u16* bottom);
+    extern s32 offscreenNameToId(char* name);
+    extern void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom);
+    extern f32 float_0_80427c94;
+    extern f32 float_0p5_80427ca8;
+    extern f32 float_neg240_80427c98;
+    extern f32 float_240_80427c9c;
+    extern f32 float_neg304_80427ca0;
+    extern f32 float_304_80427ca4;
+    extern char str_ofs_80427c88[];
+
+    void* work;
+    void* texObj[8];
+    f32 mtx[3][4];
+    void* cam;
+    f32* tri;
+    s32 i;
+    u16 left;
+    u16 top;
+    u16 right;
+    u16 bottom;
+    volatile f32* fifo;
+
+    work = GetScissorPtr();
+    sysWaitDrawSync();
+    GXClearBoundingBox();
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXInitTexObj(texObj, *(void**)((s32)work + 0x170), 0x260, 0x1E0, 4, 0, 0, 0);
+    GXInitTexObjLOD(texObj, 1, 1, float_0_80427c94, float_0_80427c94, float_0_80427c94, 0, 0, 0);
+    GXLoadTexObj(texObj, 0);
+    GXSetNumChans(1);
+    GXSetNumTexGens(1);
+    C_MTXLightOrtho(float_neg240_80427c98, float_240_80427c9c,
+                    float_neg304_80427ca0, float_304_80427ca4,
+                    float_0p5_80427ca8, float_0p5_80427ca8,
+                    float_0p5_80427ca8, float_0p5_80427ca8, mtx);
+    cam = camGetPtr(4);
+    PSMTXConcat(mtx, (void*)((s32)cam + 0xA0), mtx);
+    GXLoadTexMtxImm(mtx, 0x1E, 0);
+    GXSetTexCoordGen2(0, 0, 0, 0x1E, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 8);
+    GXSetTevAlphaIn(0, 7, 7, 7, 6);
+    GXSetTevKAlphaSel(0, 0);
+    cam = camGetPtr(4);
+    GXLoadPosMtxImm((void*)((s32)cam + 0xA0), 0);
+    tri = *(f32**)((s32)work + 0x118);
+    GXBegin(0x90, 0, (s16)(*(s32*)((s32)work + 0x14) * 3));
+    fifo = (volatile f32*)0xCC008000;
+    for (i = 0; i < *(s32*)((s32)work + 0x14); i++) {
+        *fifo = tri[0];
+        *fifo = tri[3];
+        *fifo = float_0_80427c94;
+        *fifo = tri[1];
+        *fifo = tri[4];
+        *fifo = float_0_80427c94;
+        *fifo = tri[2];
+        *fifo = tri[5];
+        *fifo = float_0_80427c94;
+        tri += 6;
+    }
+    sysWaitDrawSync();
+    if (*(void**)((s32)work + 0x170) != 0) {
+        smartFree(*(void**)((s32)work + 0x170));
+        *(void**)((s32)work + 0x170) = 0;
+    }
+    GXReadBoundingBox(&left, &top, &right, &bottom);
+    if (left == 0x3FF && right == 0 && top == 0x3FF && bottom == 0) {
+        *(u32*)work &= ~1;
+    } else {
+        *(u32*)work |= 1;
+    }
+    offscreenAddBoundingBox(offscreenNameToId(str_ofs_80427c88), left, top, right, bottom);
 }
 
 /* stub-fill: scissor_disp_control | prototype_only | source_prototype */
-void scissor_disp_control(void) {
-    return;
+void scissor_disp_control(s32 cameraId) {
+    extern void* GetScissorPtr(void);
+    extern f32 intplGetValue(f32 start, f32 end, s32 type, s32 current, s32 total);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 type, s32 frac, s32 shift);
+    extern void GXSetNumChans(s32 count);
+    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
+    extern void GXSetNumTexGens(s32 count);
+    extern void GXSetNumTevStages(s32 count);
+    extern void GXSetTevOrder(s32 stage, s32 coord, s32 map, s32 color);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 out);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 out);
+    extern void GXSetTevOp(s32 stage, s32 mode);
+    extern void* camGetPtr(s32 id);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void GXSetCurrentMtx(s32 id);
+    extern void GXSetLineWidth(s32 width, s32 fmt);
+    extern u32 HSV2RGB(void* hsv);
+    extern void GXSetChanMatColor(s32 chan, void* color);
+    extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
+    extern void* gpGlobals;
+    extern f32 float_0_80427c94;
+    extern f32 float_255_80427cac;
+
+    void* work;
+    f32* verts;
+    void* cam;
+    u32 hsv;
+    u32 color;
+    s32 timer;
+    s32 i;
+    s32 offset;
+    s32 hueAdd;
+    volatile f32* fifo;
+
+    work = GetScissorPtr();
+    verts = *(f32**)((s32)work + 0x114);
+    *(s32*)((s32)work + 0x10) = *(s32*)((s32)work + 0x10) + 1;
+    if (*(s32*)((s32)work + 0x10) > 0x3B) {
+        *(s32*)((s32)work + 0x10) = *(s32*)((s32)work + 0x10) - 0x3C;
+    }
+    timer = *(s32*)((s32)work + 0x10);
+    if (timer < 0x1E) {
+        intplGetValue(float_0_80427c94, float_255_80427cac, 0, timer, 0x1D);
+    } else {
+        intplGetValue(float_255_80427cac, float_0_80427c94, 0, timer - 0x1E, 0x3B);
+    }
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0xFF, 0xFF, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevOp(0, 4);
+    cam = camGetPtr(cameraId);
+    GXLoadPosMtxImm((void*)((s32)cam + 0xA0), 0);
+    GXSetCurrentMtx(0);
+    GXSetLineWidth(0x10, 0);
+    fifo = (volatile f32*)0xCC008000;
+    offset = 0;
+    hueAdd = 0;
+    for (i = 0; i < *(s32*)((s32)work + 0x9C) - 1U; i++) {
+        hsv = (((*(u32*)((s32)gpGlobals + 0x1C) + hueAdd) % 0x7F) << 1) << 24;
+        color = HSV2RGB(&hsv);
+        GXSetChanMatColor(4, &color);
+        GXBegin(0xA8, 0, 2);
+        *fifo = *(f32*)((s32)verts + offset);
+        *fifo = *(f32*)((s32)verts + offset + 4);
+        *fifo = float_0_80427c94;
+        *fifo = *(f32*)((s32)verts + offset + 8);
+        *fifo = *(f32*)((s32)verts + offset + 0xC);
+        *fifo = float_0_80427c94;
+        offset += 8;
+        hueAdd += 2;
+    }
 }
 
 /* stub-fill: scissor_damage_sub | missing_definition | ghidra_signature */

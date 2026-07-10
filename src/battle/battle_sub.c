@@ -73,10 +73,20 @@ s32 BattleTransID(EventEntry* event, s32 type) {
 }
 
 
-void btlMovePos(double distance, double angle, float* moveXPos, float* moveZPos) {
-    ;
-}
+void btlMovePos(f32 distance, f32 angle, f32* moveXPos, f32* moveZPos) {
+    f32 s;
+    f32 radians;
+    f32 c;
+    f32 delta;
 
+    radians = (float_6p2832_80422690 * angle) / float_360_80422694;
+    s = sin(radians);
+    c = cos(radians);
+    delta = distance * s;
+    *moveXPos = *moveXPos + delta;
+    delta = -distance * c;
+    *moveZPos = *moveZPos + delta;
+}
 
 f32 atan2f_safety(f32 y, f32 x) {
     f32 abs;
@@ -103,6 +113,22 @@ f32 atan2f_safety(f32 y, f32 x) {
 }
 
 
-int BtlCompForwardLv(double position, int direction) {
-    return 0;
+s32 BtlCompForwardLv(f32 position, s32 direction) {
+    s32 level;
+    s32 result;
+
+    level = 0;
+    if (position > -800.0f) {
+        level = (s32)((position + 800.0f) / 40.0f);
+        if (level > 0x30) {
+            level = 0x30;
+        }
+    }
+
+    result = 0x30 - level;
+    if (direction >= 0) {
+        result = level;
+    }
+    return result;
 }
+

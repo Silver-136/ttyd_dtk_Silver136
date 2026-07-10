@@ -330,7 +330,8 @@ void cardErase(s32 fileNo) {
     extern void* memset(void* ptr, s32 value, u32 size);
     extern char* strcpy(char* dst, const char* src);
     extern void* version;
-    void* buf;
+
+    char* buf;
     s32 i;
     u32 checksum;
 
@@ -342,19 +343,36 @@ void cardErase(s32 fileNo) {
         *(u16*)wp |= 2;
         *(u16*)wp &= ~0x300;
         *(u16*)wp |= 0x800;
-        buf = *(void**)((s32)wp + 0xB0);
+        buf = *(char**)((s32)wp + 0xB0);
         memset(buf, 0, 0x2260);
         *(u16*)buf |= 1;
-        strcpy((char*)((s32)buf + 0x3FF0), version);
-        *(s32*)((s32)buf + 0x3FF4) = 0x2260;
-        *(s32*)((s32)buf + 0x3FF8) = 0;
-        *(s32*)((s32)buf + 0x3FFC) = -1;
+        strcpy(buf + 0x3FF0, version);
+        *(s32*)(buf + 0x3FF4) = 0x2260;
+        *(s32*)(buf + 0x3FF8) = 0;
+        *(s32*)(buf + 0x3FFC) = -1;
         checksum = 0;
-        for (i = 0; i < 0x2260; i++) {
-            checksum += *(u8*)((s32)buf + i);
+        for (i = 0; i < 0x2260;) {
+            checksum += *(u8*)(buf + i + 0);
+            checksum += *(u8*)(buf + i + 1);
+            checksum += *(u8*)(buf + i + 2);
+            checksum += *(u8*)(buf + i + 3);
+            checksum += *(u8*)(buf + i + 4);
+            checksum += *(u8*)(buf + i + 5);
+            checksum += *(u8*)(buf + i + 6);
+            checksum += *(u8*)(buf + i + 7);
+            i += 8;
+            checksum += *(u8*)(buf + i + 0);
+            checksum += *(u8*)(buf + i + 1);
+            checksum += *(u8*)(buf + i + 2);
+            checksum += *(u8*)(buf + i + 3);
+            checksum += *(u8*)(buf + i + 4);
+            checksum += *(u8*)(buf + i + 5);
+            checksum += *(u8*)(buf + i + 6);
+            checksum += *(u8*)(buf + i + 7);
+            i += 8;
         }
-        *(u32*)((s32)buf + 0x3FF8) = checksum;
-        *(u32*)((s32)buf + 0x3FFC) = ~checksum;
+        *(u32*)(buf + 0x3FF8) = checksum;
+        *(u32*)(buf + 0x3FFC) = ~checksum;
     }
 }
 
@@ -433,15 +451,37 @@ void cardCopy(s32 fileNo, s32 dataNo) {
 }
 
 void cardCreate(void) {
-    ;
+    if ((*(u16*)wp & 2) == 0) {
+        *(s32*)((s32)wp + 0xE0) = 5;
+        *(s32*)((s32)wp + 0xD8) = 0;
+        *(s32*)((s32)wp + 0x9C) = 0;
+        *(u16*)wp |= 2;
+        *(u16*)wp &= ~0x700;
+        *(u16*)wp &= ~0x2000;
+        *(u16*)wp &= ~0x800;
+    }
 }
 
-
-u8 cardReadAll(void) {
-    return 0;
+void cardReadAll(void) {
+    if ((*(u16*)wp & 2) == 0) {
+        *(s32*)((s32)wp + 0xE0) = 4;
+        *(s32*)((s32)wp + 0xA4) = 0;
+        *(s32*)((s32)wp + 0xD8) = 0;
+        *(s32*)((s32)wp + 0x9C) = 0;
+        *(u16*)wp |= 2;
+        *(u16*)wp &= ~0x700;
+        *(u16*)wp &= ~0x2000;
+    }
 }
-
 
 void cardFormat(void) {
-    ;
+    if ((*(u16*)wp & 2) == 0) {
+        *(s32*)((s32)wp + 0xE0) = 6;
+        *(s32*)((s32)wp + 0xD8) = 0;
+        *(s32*)((s32)wp + 0x9C) = 0;
+        *(u16*)wp |= 2;
+        *(u16*)wp &= ~0x700;
+        *(u16*)wp &= ~0x2000;
+    }
 }
+

@@ -480,25 +480,149 @@ void _btlcmd_UpdateSelectWeaponTable(void* battleWork, int param_2) {
 }
 
 
-void _btlcmd_GetCursorPtr() {
-    ;
-}
+void _btlcmd_GetCursorPtr(void* base, u32 cursorId, void** out) {
+    void* battleWork;
+    void* unit;
 
+    battleWork = _battleWorkPointer;
+    unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
+
+    switch (cursorId) {
+        case 0:
+            if (*(s32*)((s32)unit + 8) == 0xDE) {
+                *out = (void*)((s32)base + 0x498);
+            } else {
+                *out = (void*)((s32)base + 0x4A4);
+            }
+            break;
+        case 1:
+            *out = (void*)((s32)base + 0x4B0);
+            break;
+        case 2:
+            *out = (void*)((s32)base + 0x4BC);
+            break;
+        case 3:
+            *out = (void*)((s32)base + 0x51C);
+            break;
+        case 4:
+            *out = (void*)((s32)base + 0x528);
+            break;
+        case 5:
+            *out = (void*)((s32)base + 0x4EC);
+            break;
+        case 6:
+            if (*(s32*)((s32)unit + 8) == 0xDE) {
+                *out = (void*)((s32)base + 0x4F8);
+            } else {
+                *out = (void*)((s32)base + 0x504);
+            }
+            break;
+        case 7:
+            *out = (void*)((s32)base + 0x4C8);
+            break;
+        case 8:
+            *out = (void*)((s32)base + 0x4D4);
+            break;
+        case 9:
+            *out = (void*)((s32)base + 0x4E0);
+            break;
+        case 0xE:
+            *out = (void*)((s32)base + 0x510);
+            break;
+    }
+}
 
 s32 BattleCommandAttackAudienceCheck(void) {
+    extern s32 BattlePadCheckTrigger(u32);
+    extern void* BattleGetMarioPtr(void*);
+    extern void BattleAudience_GetItemOn(s32*, s32, s32, s32, s32);
+    extern void BattleAudience_SetTarget(s32);
+    extern void BattleCommandDisplay_ActMenuEnd(void*);
+    extern void BattleStageOffLightInCommand(s32, s32);
+    void* battleWork;
+    void* mario;
+    s32 target;
+
+    battleWork = _battleWorkPointer;
+    if (BattlePadCheckTrigger(0x400) == 0) {
+        goto fail;
+    }
+    if ((*(u32*)((s32)battleWork + 0xEF4) & 0x40000000) != 0) {
+        goto fail;
+    }
+
+    mario = BattleGetMarioPtr(battleWork);
+    if ((*(u32*)((s32)mario + 0x104) & 0x10) != 0) {
+        return 0;
+    }
+
+    BattleAudience_GetItemOn(&target, 0, 0, 0, 0);
+    if (target == -1) {
+        goto fail;
+    }
+
+    BattleAudience_SetTarget(target);
+    BattleCommandDisplay_ActMenuEnd(battleWork);
+    *(s32*)((s32)battleWork + 0x1C60) = *(s32*)((s32)battleWork + 0x1C5C);
+    *(s32*)((s32)battleWork + 0x1C5C) = 0xB;
+    *(s32*)((s32)battleWork + 0x171C) = 0x1D;
+    BattleStageOffLightInCommand(0, 1);
+    *(u32*)((s32)battleWork + 0xEF4) |= 4;
+    return 1;
+
+fail:
     return 0;
 }
 
+void BattleCommandDisplay_ActMenuSetup(void* battleWork, u32 flags) {
+    extern void _btlcmd_MakeActClassTable(void*);
+    extern void BattleMenuDisp_ActSelect_Init(void*, void*, void*, u32);
+    void* base;
+    void* cursor;
 
-u8 BattleCommandDisplay_ActMenuSetup(void* battleWork, u32 param_2) {
-    return 0;
+    base = (void*)((s32)battleWork + 0x171C);
+    _btlcmd_MakeActClassTable(battleWork);
+    _btlcmd_GetCursorPtr(base, 0xE, &cursor);
+    BattleMenuDisp_ActSelect_Init(battleWork, cursor, (void*)((s32)base + 8), flags);
+    *(s32*)((s32)base + 0x560) = 0;
+    *(u32*)((s32)base + 4) |= 0x01000001;
+
+    if (flags == 0 && *(u8*)((s32)base + 0x558) == 0) {
+        _cursor_init((void*)((s32)base + 0x4B0));
+        _cursor_init((void*)((s32)base + 0x4BC));
+        _cursor_init((void*)((s32)base + 0x4C8));
+        _cursor_init((void*)((s32)base + 0x4D4));
+        _cursor_init((void*)((s32)base + 0x4E0));
+        _cursor_init((void*)((s32)base + 0x4EC));
+        _cursor_init((void*)((s32)base + 0x4F8));
+        _cursor_init((void*)((s32)base + 0x504));
+        _cursor_init((void*)((s32)base + 0x51C));
+    }
 }
-
 
 int _btlcmd_CheckWeaponTargetNum(void* battleWork, void* unit, void* weapon) {
-    return 0;
-}
+    extern s32 BtlUnit_CheckWeaponCost(void*, void*);
+    extern s32 BtlUnit_GetEnemyBelong(void*);
+    extern void BattleSamplingEnemy(void*, void*, void*, s32, void*, void*, s8, s8);
+    u8 sample[0xA6D];
+    s32 belong;
 
+    if (weapon == 0) {
+        return 0;
+    }
+    if (*(void**)((s32)weapon + 0xB0) == 0) {
+        return 0;
+    }
+    if (BtlUnit_CheckWeaponCost(unit, weapon) == 0) {
+        return -1;
+    }
+
+    belong = BtlUnit_GetEnemyBelong(unit);
+    BattleSamplingEnemy(sample, weapon, *(void**)unit, belong, *(void**)((s32)weapon + 0x64),
+                        *(void**)((s32)weapon + 0x68),
+                        (s8)belong, (s8)-(*(s8*)((s32)battleWork + belong * 8 + 0xA)));
+    return (s8)sample[0xA6C];
+}
 
 s32 _get_msg(void* evt) {
     void* battleWork;
@@ -543,9 +667,41 @@ void* BattleSetConfuseAct(void* battleWork, void* unit) {
 
 
 u32 _battleGetPartyIcon(s32 unitKind) {
+    extern s32 pouchGetPartyColor(s32);
+    extern u8 _checkPartyTable[];
+    void* entry;
+    s32 i;
+    s32 color;
+
+    for (i = 0; i < 8; i++) {
+        entry = (void*)((s32)_checkPartyTable + ((i + 1) << 4));
+        if (*(s32*)entry == unitKind) {
+            if (*(s32*)entry == 0xE2) {
+                color = pouchGetPartyColor(4);
+                switch (color) {
+                    case 0:
+                        return 0x161;
+                    case 1:
+                        return 0x162;
+                    case 2:
+                        return 0x163;
+                    case 3:
+                        return 0x164;
+                    case 4:
+                        return 0x165;
+                    case 5:
+                        return 0x166;
+                    case 6:
+                        return 0x160;
+                    default:
+                        return 0x160;
+                }
+            }
+            return *(u16*)((s32)entry + 8);
+        }
+    }
     return 0;
 }
-
 
 s32 _check_weapon_type_attack(void* weapon) {
     if (weapon == 0) {

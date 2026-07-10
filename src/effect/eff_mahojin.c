@@ -321,6 +321,96 @@ void effMahojinMain(void* entry) {
 /* CHATGPT STUB FILL: main/effect/eff_mahojin 20260624_184823 */
 
 /* stub-fill: effMahojinDisp | prototype_only | source_prototype */
-void effMahojinDisp(void) {
-    return;
+void effMahojinDisp(s32 cameraId, void* effect) {
+    typedef f32 MtxLocal[3][4];
+    typedef struct MapEntryLocal {
+        u16 dataFlags;
+    } MapEntryLocal;
+    typedef struct MapWorkLocal {
+        MapEntryLocal entries[2];
+    } MapWorkLocal;
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+
+    extern void camGetPtr(s32 cameraId);
+    extern MapWorkLocal* mapGetWork(void);
+    extern f32 dispCalcZ(VecLocal* pos);
+    extern void PSMTXTrans(MtxLocal mtx, f32 x, f32 y, f32 z);
+    extern void animPoseMain(s32 poseId);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
+    extern void animPoseSetMaterialEvtColor(s32 poseId, void* color);
+    extern void animPoseDrawMtx(s32 poseId, MtxLocal mtx, s32 mode, f32 rot, f32 scale);
+    extern VecLocal pos_tbl[];
+    extern u32 dat_80427754;
+    extern f32 float_neg9999_80427758;
+    extern f32 float_neg10000_8042775c;
+    extern f32 float_10000_80427760;
+    extern f32 float_0_80427764;
+    extern f32 float_10_80427768;
+
+    void* base = *(void**)((s32)effect + 0xC);
+    s32 rate = *(s32*)((s32)base + 0x20);
+    MapWorkLocal* map = mapGetWork();
+    u16 oldFlags = map->entries[0].dataFlags;
+    f32 zs[16];
+    s32 order[16];
+    MtxLocal mtx;
+    s32 pass;
+    s32 i;
+    s32 j;
+
+    camGetPtr(cameraId);
+    for (pass = 0; pass < 2; pass++) {
+        if (pass == 0) {
+            zs[0] = float_neg9999_80427758;
+            zs[1] = float_neg10000_8042775c;
+        } else {
+            zs[0] = float_neg10000_8042775c;
+            zs[1] = float_10000_80427760;
+        }
+        order[0] = 0;
+        order[1] = 1;
+        for (i = 2; i < *(s32*)((s32)effect + 8); i++) {
+            zs[i] = dispCalcZ(&pos_tbl[i - 2]);
+            order[i] = i;
+        }
+        for (i = 0; i < *(s32*)((s32)effect + 8) - 1; i++) {
+            for (j = i + 1; j < *(s32*)((s32)effect + 8); j++) {
+                if (zs[j] < zs[i]) {
+                    f32 tmpZ = zs[i];
+                    s32 tmpIdx = order[i];
+                    zs[i] = zs[j];
+                    order[i] = order[j];
+                    zs[j] = tmpZ;
+                    order[j] = tmpIdx;
+                }
+            }
+        }
+        map->entries[0].dataFlags &= 0xFFFE;
+        PSMTXTrans(mtx, *(f32*)((s32)base + 4), *(f32*)((s32)base + 8), *(f32*)((s32)base + 0xC));
+        for (i = 0; i < *(s32*)((s32)effect + 8); i++) {
+            void* work = (void*)((s32)base + order[i] * 0x30);
+            s32 poseId = *(s32*)((s32)work + 0x18 + pass * 4);
+            if (pass == 1 && *(s32*)((s32)work + 0x28) != 0) {
+                ((void (*)(s32))(*(void**)((s32)work + 0x2C)))(cameraId);
+            }
+            if (poseId != -1) {
+                u32 color = dat_80427754;
+                u32 colorCopy;
+                s32 alpha = *(s32*)((s32)work + 0x20) * rate;
+                alpha = alpha / 0xFF + (alpha >> 31);
+                animPoseMain(poseId);
+                animPoseSetMaterialFlagOn(poseId, 0x40);
+                ((u8*)&color)[3] = (u8)(alpha - (alpha >> 31));
+                colorCopy = color;
+                animPoseSetMaterialEvtColor(poseId, &colorCopy);
+                animPoseDrawMtx(poseId, mtx, 3, float_0_80427764, float_10_80427768);
+            }
+        }
+        map->entries[0].dataFlags = oldFlags;
+    }
 }
+

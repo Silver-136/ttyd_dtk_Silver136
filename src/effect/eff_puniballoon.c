@@ -145,6 +145,8 @@ void balloon_0(void* camera, void* effect) {
     GXSetTevDirect(0);
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void balloon_1(void* camera, void* effect) {
     typedef f32 Mtx[3][4];
 
@@ -274,7 +276,10 @@ void balloon_1(void* camera, void* effect) {
         child += 0x30;
     }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma optimize_for_size off
 void* effPuniBalloonEntry(s32 type, double x, double y, double z, double scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
@@ -372,6 +377,7 @@ void* effPuniBalloonEntry(s32 type, double x, double y, double z, double scale) 
 
     return entry;
 }
+#pragma optimize_for_size on
 
 void effPuniBalloonMain(void* effect) {
     typedef struct Vec {

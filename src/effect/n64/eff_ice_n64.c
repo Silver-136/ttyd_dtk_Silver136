@@ -11,6 +11,10 @@ u8 effIceDisp(int param_1, int param_2) {
 }
 
 
+#pragma optimize_for_size off
+
+#pragma optimize_for_size off
+
 void* effIceN64Entry(s32 type, f32 x, f32 y, f32 z) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -24,6 +28,9 @@ void* effIceN64Entry(s32 type, f32 x, f32 y, f32 z) {
     u8* work;
     u8* part;
     s32 i;
+    f32 ten;
+    f32 zero;
+    f32 two;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_IceN64_802fb160;
@@ -40,19 +47,27 @@ void* effIceN64Entry(s32 type, f32 x, f32 y, f32 z) {
     *(s32*)(work + 0x2C) = 0;
     *(s32*)(work + 0x24) = 0;
 
+    ten = float_10_80425544;
+    zero = float_0_8042551c;
+    two = float_2_80425530;
+
     part = work + 0x30;
     for (i = 1; i < 9; i++) {
         *(f32*)(part + 4) = (f32)(rand() % 10 - 5);
         *(f32*)(part + 8) = (f32)(rand() % 10 + 5);
-        *(f32*)(part + 0xC) = float_10_80425544;
+        *(f32*)(part + 0xC) = ten;
         *(f32*)(part + 0x18) = (f32)(rand() % 0x168);
         *(f32*)(part + 0x20) = (f32)(rand() % 0x168);
         *(f32*)(part + 0x1C) = (f32)((rand() % 100) / 10);
-        *(f32*)(part + 0x10) = float_0_8042551c;
-        *(f32*)(part + 0x14) = float_2_80425530;
+        *(f32*)(part + 0x10) = zero;
+        *(f32*)(part + 0x14) = two;
         part += 0x30;
     }
 
     return entry;
 }
+
+#pragma optimize_for_size on
+
+#pragma optimize_for_size on
 

@@ -6,7 +6,7 @@ u8 effMissStarDisp(void) {
 }
 
 
-void* effMissStarEntry(f64 x, f64 y, f64 z, s32 count, f32 delay, s32 seed) {
+void* effMissStarEntry(f64 x, f64 y, f64 z, s32 count, s32 delay, s32 seed) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
     extern void* camGetPtr(s32 cameraId);
@@ -73,9 +73,9 @@ void* effMissStarEntry(f64 x, f64 y, f64 z, s32 count, f32 delay, s32 seed) {
         *(f32*)((s32)work + 0x30) = dir * 107.0f;
         cam = camGetPtr(4);
         *(f32*)((s32)work + 0x34) = -*(f32*)((s32)cam + 0x114);
-        *(f32*)((s32)work + 0x24) = 14.0f;
-        *(f32*)((s32)work + 0x28) = delay;
-        *(f32*)((s32)work + 0x3C) = 10.0f;
+        *(s32*)((s32)work + 0x24) = 14;
+        *(s32*)((s32)work + 0x28) = delay;
+        *(s32*)((s32)work + 0x3C) = 10;
         *(f32*)((s32)work + 0x40) = float_255_80422e78;
     }
     return entry;
@@ -107,14 +107,14 @@ u8 effMissStarMain(void* effEntry) {
 
     i = 0;
     while (i < *(s32*)((s32)effEntry + 0x8)) {
-        if (*(f32*)((s32)work + 0x28) != 0.0f) {
-            *(f32*)((s32)work + 0x28) = (f32)((s32)*(f32*)((s32)work + 0x28) - 1);
-            if (*(f32*)((s32)work + 0x28) == 0.0f) {
+        if (*(s32*)((s32)work + 0x28) != 0) {
+            *(s32*)((s32)work + 0x28) -= 1;
+            if (*(s32*)((s32)work + 0x28) == 0) {
                 break;
             }
         }
 
-        if ((s32)*(f32*)((s32)work + 0x24) > -1) {
+        if (*(s32*)((s32)work + 0x24) > -1) {
             *(f32*)((s32)work + 0x0) += *(f32*)((s32)work + 0x18);
             *(f32*)((s32)work + 0x4) += *(f32*)((s32)work + 0x1C);
             *(f32*)((s32)work + 0x8) += *(f32*)((s32)work + 0x20);
@@ -125,7 +125,7 @@ u8 effMissStarMain(void* effEntry) {
         *(f32*)((s32)work + 0x2C) = reviseAngle(*(f32*)((s32)work + 0x2C));
         *(f32*)((s32)work + 0x30) *= float_0p8_80422e64;
 
-        if ((s32)*(f32*)((s32)work + 0x24) < 10) {
+        if (*(s32*)((s32)work + 0x24) < 10) {
             *(f32*)((s32)work + 0xC) *= float_0p5_80422e68;
             *(f32*)((s32)work + 0x10) *= float_0p5_80422e68;
             *(f32*)((s32)work + 0x14) *= float_0p5_80422e68;
@@ -134,10 +134,10 @@ u8 effMissStarMain(void* effEntry) {
             *(f32*)((s32)work + 0x20) = *(f32*)((s32)work + 0x14);
         }
 
-        *(f32*)((s32)work + 0x24) = (f32)((s32)*(f32*)((s32)work + 0x24) - 1);
-        if ((s32)*(f32*)((s32)work + 0x24) < 0) {
-            *(f32*)((s32)work + 0x3C) = (f32)((s32)*(f32*)((s32)work + 0x3C) - 1);
-            if ((s32)*(f32*)((s32)work + 0x3C) < 0) {
+        *(s32*)((s32)work + 0x24) -= 1;
+        if (*(s32*)((s32)work + 0x24) < 0) {
+            *(s32*)((s32)work + 0x3C) -= 1;
+            if (*(s32*)((s32)work + 0x3C) < 0) {
                 effDelete(effEntry);
                 return 0;
             }

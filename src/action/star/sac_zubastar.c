@@ -53,7 +53,6 @@ s32 zubastar_end(void) {
     extern void smartFree(void* ptr);
 
     void* work;
-    void* obj;
     s32 i;
     s32 offset;
 
@@ -62,13 +61,12 @@ s32 zubastar_end(void) {
     effDelete(*(void**)((s32)work + 0x5DC));
     offset = 0;
     for (i = 0; i < 0xC8; i++) {
-        obj = *(void**)((s32)work + offset + 0xA8);
-        if (obj != 0) {
-            if (*(void**)((s32)obj + 8) != 0) {
-                BattleFree(*(void**)((s32)obj + 8));
-                *(void**)((s32)obj + 8) = 0;
+        if (*(void**)((s32)work + offset + 0xA8) != 0) {
+            if (*(void**)((s32)*(void**)((s32)work + offset + 0xA8) + 8) != 0) {
+                BattleFree(*(void**)((s32)*(void**)((s32)work + offset + 0xA8) + 8));
+                *(void**)((s32)*(void**)((s32)work + offset + 0xA8) + 8) = 0;
             }
-            BattleFree(obj);
+            BattleFree(*(void**)((s32)work + offset + 0xA8));
             *(void**)((s32)work + offset + 0xA8) = 0;
         }
         offset += 4;

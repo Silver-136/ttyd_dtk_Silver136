@@ -276,10 +276,43 @@ s32 bero_get_position_pipe2(int param_1) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_bero_cam3d_change(int param_1) {
-    return 0;
-}
+    extern void* gp;
+    extern f32 BeroPT[];
+    extern f32 BeroAT[];
+    extern void* camGetPtr(s32 camId);
+    EventEntry* event = (EventEntry*)param_1;
+    s32* args = event->args;
+    s32 time = evtGetValue(event, args[0]);
+    s32 type = evtGetValue(event, args[1]);
+    void* cam = camGetPtr(4);
 
+    *(u32*)((s32)cam + 0x58) = *(u32*)((s32)cam + 0x0C);
+    *(u32*)((s32)cam + 0x5C) = *(u32*)((s32)cam + 0x10);
+    *(u32*)((s32)cam + 0x60) = *(u32*)((s32)cam + 0x14);
+    *(u32*)((s32)cam + 0x64) = *(u32*)((s32)cam + 0x18);
+    *(u32*)((s32)cam + 0x68) = *(u32*)((s32)cam + 0x1C);
+    *(u32*)((s32)cam + 0x6C) = *(u32*)((s32)cam + 0x20);
+
+    *(u32*)((s32)cam + 0x40) = *(u32*)&BeroPT[0];
+    *(u32*)((s32)cam + 0x44) = *(u32*)&BeroPT[1];
+    *(u32*)((s32)cam + 0x48) = *(u32*)&BeroPT[2];
+    *(u32*)((s32)cam + 0x4C) = *(u32*)&BeroAT[0];
+    *(u32*)((s32)cam + 0x50) = *(u32*)&BeroAT[1];
+    *(u32*)((s32)cam + 0x54) = *(u32*)&BeroAT[2];
+
+    *(u32*)((s32)cam + 0x70) = *(u32*)((s32)gp + 0x38);
+    *(u32*)((s32)cam + 0x74) = *(u32*)((s32)gp + 0x3C);
+    *(u32*)((s32)cam + 0x78) = 0;
+    *(u32*)((s32)cam + 0x7C) = time * ((*(u32*)0x800000F8) / 4000);
+    *(u16*)((s32)cam + 0x04) = 3;
+    *(u8*)((s32)cam + 0x80) = type;
+    return EVT_RETURN_DONE;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_bero_switch_off(void* pEvt) {
     extern char* bero_id_filter(char* id);

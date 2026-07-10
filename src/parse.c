@@ -11,6 +11,8 @@ u32 parsePush(char* param_1) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 int parseTagGet1(char* param_1, int param_2, char* param_3, int param_4) {
     extern char parse[];
     int ret;
@@ -24,7 +26,8 @@ int parseTagGet1(char* param_1, int param_2, char* param_3, int param_4) {
 
     return ret;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void parsePopNext(void) {
     extern char parse[];

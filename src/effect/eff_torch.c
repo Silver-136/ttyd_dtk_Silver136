@@ -58,5 +58,15 @@ void* effTorchEntry(f32 x, f32 y, f32 z, f32 scale, s32 type) {
 
 
 u8 effTorchMain(int param_1) {
-    return 0;
+    extern f32 dispCalcZ(void*);
+    extern void dispEntry(s32 cameraId, s32 order, void* callback, void* param, f32 priority);
+    extern void effTorchDisp(void);
+
+    void* effect;
+    void* work;
+
+    effect = (void*)param_1;
+    work = *(void**)(param_1 + 0xC);
+    dispEntry(4, 2, effTorchDisp, effect, dispCalcZ((void*)((s32)work + 4)));
 }
+

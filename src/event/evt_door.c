@@ -623,29 +623,52 @@ USER_FUNC(out_pos) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
-s32 inside_group(int param_1) {
-    return 0;
+s32 inside_group(EventEntry* event) {
+    s32* args;
+    void* info;
+
+    args = event->args;
+    info = (void*)evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], *(s32*)(*(s32*)info + 0x2C));
+    evtSetValue(event, args[2], *(s32*)(*(s32*)info + 0x30));
+    return 2;
 }
 
+s32 door_group(EventEntry* event) {
+    s32* args;
+    void* info;
 
-s32 door_group(int param_1) {
-    return 0;
+    args = event->args;
+    info = (void*)evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], *(s32*)(*(s32*)info + 0x28));
+    return 2;
 }
 
+s32 outside_group(EventEntry* event) {
+    s32* args;
+    void* info;
 
-s32 outside_group(int param_1) {
-    return 0;
+    args = event->args;
+    info = (void*)evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], *(s32*)(*(s32*)info + 0x24));
+    return 2;
 }
-
 
 /* CHATGPT FALLBACK MISSING STUBS: main/event/evt_door 20260624_191429 */
 
 /* fallback stub-fill: map=?snd_door_out addr=0x800e96e0 size=0x00000028 */
-static int snd_door_out() {
-    return 0;
+static s32 snd_door_out(void) {
+    extern void psndClearFlag(s32 flag);
+
+    psndClearFlag(0x100);
+    return 2;
 }
 
 /* fallback stub-fill: map=?snd_door_in addr=0x800e9708 size=0x00000028 */
-static int snd_door_in() {
-    return 0;
+static s32 snd_door_in(void) {
+    extern void psndSetFlag(s32 flag);
+
+    psndSetFlag(0x100);
+    return 2;
 }
+

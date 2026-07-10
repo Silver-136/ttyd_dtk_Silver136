@@ -11,6 +11,8 @@ u8 effBushDisp(void) {
 }
 
 
+#pragma optimize_for_size off
+
 void* effBushN64Entry(s32 type, f32 x, f32 y, f32 z) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -62,4 +64,6 @@ void* effBushN64Entry(s32 type, f32 x, f32 y, f32 z) {
 
     return entry;
 }
+
+#pragma optimize_for_size on
 

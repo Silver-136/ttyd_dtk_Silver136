@@ -397,11 +397,27 @@ void extLoadShadowVertex(void) {
     GXSetCullMode(0);
 }
 
-u8 extLoadShadowRenderMode(void) {
-    return 0;
+void extLoadShadowRenderMode(void) {
+    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
+    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 aop, s32 comp1, s32 ref1);
+    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
+
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(1, 3, 0);
 }
 
+void extLoadRenderMode(void) {
+    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
+    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 aop, s32 comp1, s32 ref1);
+    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
 
-u8 extLoadRenderMode(void) {
-    return 0;
+    GXSetBlendMode(0, 1, 0, 0);
+    GXSetZCompLoc(0);
+    GXSetAlphaCompare(6, 0x80, 1, 0, 0);
+    GXSetZMode(1, 3, 1);
 }
+

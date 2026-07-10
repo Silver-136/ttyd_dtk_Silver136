@@ -23,8 +23,8 @@ void effKumokumoChipMain(void* effect) {
     extern void effKumokumoChipDisp(s32, s32);
     extern const Vec3 vec3_802fb378;
     u8* work;
-    Vec3 pos;
     Vec3 dispPos;
+    Vec3 pos;
     s32 type;
     s32 timer;
     s32 frame;

@@ -273,9 +273,37 @@ check:
 #pragma use_lmw_stmw on
 
 s32 add_shop_point(void* pEvt) {
-    return 0;
-}
+    extern char str_item_first_hit_802ed268[];
+    extern s32 strcmp(void* a, void* b);
+    extern s32 strncmp(void* a, void* b, s32 n);
+    extern s32 swGet(s32 flag);
+    char* base = str_item_first_hit_802ed268;
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 points = evtGetValue(pEvt, args[0]);
+    s32 check1 = evtGetValue(pEvt, args[1]);
+    s32 check2 = evtGetValue(pEvt, args[2]);
+    s32 check3 = evtGetValue(pEvt, args[3]);
+    void* pouch = pouchGetPtr();
+    s32 limit = 900000;
 
+    if (strcmp((void*)((s32)gp + 0x12C), base + 0x10) == 0 &&
+        swGet(0xFA) != 0 && check1 < limit) {
+        points *= 2;
+    }
+    if (strcmp((void*)((s32)gp + 0x12C), base + 0x28) == 0 &&
+        swGet(0xFB) != 0 && check2 < limit) {
+        points *= 2;
+    }
+    if (strncmp((void*)((s32)gp + 0x12C), base + 0x90, 6) == 0 &&
+        swGet(0xFC) != 0 && check3 < limit) {
+        points *= 2;
+    }
+    *(s16*)((s32)pouch + 0x5B0) += points;
+    if (*(s16*)((s32)pouch + 0x5B0) > 300) {
+        *(s16*)((s32)pouch + 0x5B0) = 300;
+    }
+    return 2;
+}
 
 s32 shop_point_item(void* pEvt) {
     extern s32 shopPointList[];
@@ -407,9 +435,24 @@ void help_disp(void* work) {
 
 
 s32 exchange_shop_point(void) {
-    return 0;
-}
+    extern s32 shopPointList[];
+    void* pouch = pouchGetPtr();
+    s32* list = shopPointList;
+    s32 index = 0;
+    s32 mask = 1;
+    s32 point;
 
+    while ((point = list[0]) != -1) {
+        if (point <= *(s16*)((s32)pouch + 0x5B0) &&
+            !(*(u32*)((s32)pouch + 0x5B4) & (mask << index))) {
+            *(u32*)((s32)pouch + 0x5B4) |= mask << index;
+            return 2;
+        }
+        index++;
+        list += 2;
+    }
+    return 2;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -436,11 +479,13 @@ s32 get_msg(void* event) {
     void* args = *(void**)((s32)event + 0x18);
     s32 shop = evtGetValue(event, *(s32*)args);
     s32 index = evtGetValue(event, *(s32*)((s32)args + 4));
-    void* item = (void*)((s32)*(void**)((s32)shop + 0xC) + index * 4);
+    void* item = *(void**)((s32)shop + 0xC);
 
+    item = (void*)((s32)item + index * 4);
     evtSetValue(event, *(s32*)((s32)args + 8), *(void**)((s32)item + 0xC));
     return 2;
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -462,9 +507,22 @@ s32 point_disp_onoff(void* event) {
 
 
 s32 item_data_db_arrange(void) {
-    return 0;
-}
+    void* p;
+    s32 item;
+    s16 value;
 
+    p = *(void**)((s32)_wp + 0x10);
+    if (p != NULL) {
+        while ((item = *(s32*)p) != 0) {
+            *(u16*)((s32)p + 6) = *(u16*)(itemDataTable + item * 0x28 + 0x1A);
+            item = *(s32*)p;
+            value = *(s16*)((s32)p + 4);
+            p = (void*)((s32)p + 8);
+            *(s16*)(itemDataTable + item * 0x28 + 0x1A) = value;
+        }
+    }
+    return 2;
+}
 
 s32 evtShopIsActive(void) {
     void* wp;
@@ -480,9 +538,16 @@ s32 evtShopIsActive(void) {
 
 
 s32 point_wait(void) {
-    return 0;
-}
+    extern void psndSFXOn(s32 id);
+    void* wp = _wp;
+    void* pouch = pouchGetPtr();
 
+    if (*(s32*)((s32)wp + 0x38) != *(s16*)((s32)pouch + 0x5B0)) {
+        psndSFXOn(0x8CA);
+        return 0;
+    }
+    return 2;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -498,9 +563,18 @@ s32 get_shop_point(void* event) {
 
 
 s32 item_data_db_restore(void) {
-    return 0;
-}
+    void* p;
+    s32 item;
 
+    p = *(void**)((s32)_wp + 0x10);
+    if (p != NULL) {
+        while ((item = *(s32*)p) != 0) {
+            *(s16*)(itemDataTable + item * 0x28 + 0x1A) = *(s16*)((s32)p + 6);
+            p = (void*)((s32)p + 8);
+        }
+    }
+    return 2;
+}
 
 s32 unkeep_pouchcheck_func(void* work) {
     pouchGetPtr();

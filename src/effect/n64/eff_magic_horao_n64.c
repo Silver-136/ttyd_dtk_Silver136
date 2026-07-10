@@ -14,6 +14,8 @@ u8 effMagicHoraoDisp(void) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effMagicHoraoMain(void* effect) {
     typedef struct Vec3 {
         f32 x;
@@ -106,8 +108,12 @@ void effMagicHoraoMain(void* effect) {
 
     dispEntry(4, 2, effMagicHoraoDisp, effect, dispCalcZ(&dispPos));
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 
 #pragma no_register_save_helpers on
+#pragma optimize_for_size off
+
 void* effMagicHoraoN64Entry(s32 type, f32 x, f32 y, f32 z, s32 param4, s32 param5, f32 param6, f32 param7, f32 param8, s32 param9) {
     void* entry;
     void* work;
@@ -143,4 +149,7 @@ void* effMagicHoraoN64Entry(s32 type, f32 x, f32 y, f32 z, s32 param4, s32 param
 
     return entry;
 }
+
+#pragma optimize_for_size on
+
 #pragma no_register_save_helpers off

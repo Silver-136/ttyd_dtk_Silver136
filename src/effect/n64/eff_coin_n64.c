@@ -106,18 +106,18 @@ void effCoinMain(void* effect) {
             if (sub->delay > 0) {
                 sub->delay--;
                 if (sub->delay > 0) {
-                    i++;
-                    sub++;
-                    continue;
+                    goto next;
                 }
             }
             sub->frame++;
             if (sub->frame >= 10) {
                 sub->delay = -1;
             }
+        next:
             i++;
             sub++;
         }
         dispEntry(4, 2, effCoinDisp, effect, dispCalcZ(&dispPos));
     }
 }
+

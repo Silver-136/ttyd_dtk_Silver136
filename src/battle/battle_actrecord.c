@@ -14,41 +14,47 @@ u8 BtlActRec_JudgeTurnRuleKeep(void) {
     u8* battleWork = _battleWorkPointer;
     u8* work = *(u8**)(battleWork + 0x2738);
     u8* record = battleWork + 0x16F38;
-    u32 rule = work[0x18];
+    s32 rule = work[0x18];
     int value;
 
-    if ((s32)rule >= 0x3F) {
-        if ((s32)rule >= 0x42) {
-            return 0;
-        }
-        if (rule == 0x41) {
-            value = record[2] + record[1] + record[9] + record[0x1D] + record[0xB] + record[0];
-        }
-        else if (rule == 0x3F) {
-            value = record[2] + record[1] + record[9] + record[0];
-        }
-        else {
-            value = record[0x1D] + record[0xB];
-        }
-        return _check_turn_count_0_turn(value);
+    if (rule >= 0x3F) {
+        goto high_dispatch;
     }
-    if ((s32)rule >= 0x3C) {
-        if (rule == 0x3E) {
-            value = record[2] + record[1] + record[3] + record[9] + record[0xA] + record[0xD] +
-                    record[0x17] + record[0x19] + record[0x1B] + record[0x1D] + record[0x1E] +
-                    record[0xB] + record[0xC] + record[0xE] + record[0x18] + record[0x1A] +
-                    record[0x1C] + record[0];
-        }
-        else if (rule == 0x3C) {
-            value = record[2] + record[1] + record[3] + record[9] + record[0xA] + record[0xD] +
-                    record[0x17] + record[0x19] + record[0x1B] + record[0];
-        }
-        else {
-            value = record[0xB] + record[0x1E] + record[0xC] + record[0xE] + record[0x18] +
-                    record[0x1A] + record[0x1C] + record[0x1D];
-        }
-        return _check_turn_count_0_turn(value);
+    if (rule < 0x3C) {
+        return 0;
     }
+
+low_dispatch:
+    if ((u32)rule == 0x3E) {
+        value = record[2] + record[1] + record[3] + record[9] + record[0xA] + record[0xD] +
+                record[0x17] + record[0x19] + record[0x1B] + record[0x1D] + record[0x1E] +
+                record[0xB] + record[0xC] + record[0xE] + record[0x18] + record[0x1A] +
+                record[0x1C] + record[0];
+    }
+    else if ((u32)rule == 0x3C) {
+        value = record[2] + record[1] + record[3] + record[9] + record[0xA] + record[0xD] +
+                record[0x17] + record[0x19] + record[0x1B] + record[0];
+    }
+    else {
+        value = record[0xB] + record[0x1E] + record[0xC] + record[0xE] + record[0x18] +
+                record[0x1A] + record[0x1C] + record[0x1D];
+    }
+    return _check_turn_count_0_turn(value);
+
+high_dispatch:
+    if (rule >= 0x42) {
+        return 0;
+    }
+    if ((u32)rule == 0x41) {
+        value = record[2] + record[1] + record[9] + record[0x1D] + record[0xB] + record[0];
+    }
+    else if ((u32)rule == 0x3F) {
+        value = record[2] + record[1] + record[9] + record[0];
+    }
+    else {
+        value = record[0x1D] + record[0xB];
+    }
+    return _check_turn_count_0_turn(value);
 }
 
 u32 _check_turn_count_0_end(int param_1) {

@@ -1399,13 +1399,11 @@ void BattleAudienceSoundCheerKind(s32 kind, s32 vol, s32 frames) {
         *(u8*)((s32)sound + 0x8) = 4;
     }
 
-    *(s32*)((s32)sound + 0x4) = BattleAudienceSound1(name, right, left);
-
     if (usePitch == 1) {
-    *(s32*)((s32)sound + 0x4) = BattleAudienceSound1(name, right, left);
-    psndSFX_pit(*(s32*)((s32)sound + 0x4), 0x7F);
-        } else {
-    *(s32*)((s32)sound + 0x4) = BattleAudienceSound1(name, right, left);
+        *(s32*)((s32)sound + 0x4) = BattleAudienceSound1(name, right, left);
+        psndSFX_pit(*(s32*)((s32)sound + 0x4), 0x7F);
+    } else {
+        *(s32*)((s32)sound + 0x4) = BattleAudienceSound1(name, right, left);
     }
 
     if (*(s32*)((s32)sound + 0x4) != -1) {
@@ -1940,7 +1938,7 @@ void BattleAudience_Init(void) {
     for (row = 0; row < 10; row++) {
         for (col = 0; col < 10; col++) {
             id = (row * 20) + col + 10;
-            if (BattleAudience_GetExist(id) == 1) {
+            if ((u8)BattleAudience_GetExist(id) == 1) {
                 audience = BattleAudienceGetPtr(id);
                 if (*(u8*)((s32)audience + 0x19) != 0xC && *(u8*)((s32)audience + 0x19) != 0xB) {
                     (*(s32*)((s32)base + 0x13788))++;
@@ -1952,7 +1950,7 @@ void BattleAudience_Init(void) {
     for (row = 0; row < 10; row++) {
         for (col = 0; col < 10; col++) {
             id = (row * 20) + col;
-            if (BattleAudience_GetExist(id) == 1) {
+            if ((u8)BattleAudience_GetExist(id) == 1) {
                 audience = BattleAudienceGetPtr(id);
                 if (*(u8*)((s32)audience + 0x19) != 0xC && *(u8*)((s32)audience + 0x19) != 0xB) {
                     (*(s32*)((s32)base + 0x1378C))++;

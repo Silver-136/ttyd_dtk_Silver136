@@ -101,6 +101,9 @@ s32 lect_cam_save(void) {
 /* CHATGPT STUB FILL: main/event/evt_lecture 20260624_184929 */
 
 /* stub-fill: lect_cam_load | missing_definition | ghidra_signature */
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma optimize_for_size off
 s32 lect_cam_load(int param_1) {
     extern s32 evtGetValue(void* event, s32 value);
     extern void* camGetPtr(s32 cameraId);
@@ -187,4 +190,7 @@ s32 lect_cam_load(int param_1) {
     }
     return 2;
 }
+#pragma optimize_for_size on
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 

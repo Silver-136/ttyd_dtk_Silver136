@@ -26,10 +26,12 @@ void effPikkyoloMain(void* effect) {
     extern f32 float_0_80425d08;
     extern f32 float_neg0p7_80425d14;
     u8* work;
-    Vec3 pos;
     Vec3 dispPos;
+    Vec3 pos;
     s32 i;
     s32 offset;
+    f32 half;
+    f32 zero;
 
     work = *(u8**)((s32)effect + 0xC);
     pos = vec3_802fbc98;
@@ -54,13 +56,15 @@ void effPikkyoloMain(void* effect) {
         *(s16*)(work + 0x32) = *(s32*)(work + 0x1C) << 5;
     }
 
+    half = float_0p5_80425d0c;
+    zero = float_0_80425d08;
     for (i = 0; i < *(s32*)((s32)effect + 8); i++, work += 0x3C) {
-        *(f32*)(work + 0x14) -= float_0p5_80425d0c;
+        *(f32*)(work + 0x14) -= half;
         *(f32*)(work + 4) += *(f32*)(work + 0x10);
         *(f32*)(work + 8) += *(f32*)(work + 0x14);
         *(f32*)(work + 0xC) += *(f32*)(work + 0x18);
-        if (*(f32*)(work + 8) < float_0_80425d08 && *(f32*)(work + 0x14) < float_0_80425d08) {
-            *(f32*)(work + 8) = float_0_80425d08;
+        if (*(f32*)(work + 8) < zero && *(f32*)(work + 0x14) < zero) {
+            *(f32*)(work + 8) = zero;
             *(f32*)(work + 0x14) *= float_neg0p7_80425d14;
         }
         offset = (((i & 1) << 1) - 1) * 0xE;

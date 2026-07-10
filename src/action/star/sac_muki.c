@@ -150,7 +150,83 @@ void disp_3D_alpha(void) {
 
 /* stub-fill: disp_3D | prototype_only | source_prototype */
 void disp_3D(void) {
-    return;
+    typedef f32 Mtx[3][4];
+
+    extern void* get_ptr(void);
+    extern void* memcpy(void* dest, const void* src, u32 size);
+    extern void PSMTXScale(Mtx mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXTransApply(Mtx src, Mtx dst, f32 x, f32 y, f32 z);
+    extern void btlDispTexPlane2(Mtx mtx, s32 texId, void* color);
+    extern s32 dat_8030112c[];
+    extern s32 dat_8030114c[];
+    extern u32 dat_8030116c[];
+    extern u32 dat_80428518;
+    extern f32 float_0_8042854c;
+
+    void* work;
+    Mtx mtx;
+    s32 scaleOffsets[8];
+    s32 transOffsetsA[8];
+    u32 color[8];
+    void* point;
+    s32 i;
+    s32 j;
+
+    work = get_ptr();
+    memcpy(scaleOffsets, dat_8030112c, sizeof(scaleOffsets));
+    memcpy(transOffsetsA, dat_8030114c, sizeof(transOffsetsA));
+    memcpy(color, dat_8030116c, sizeof(color));
+
+    for (i = 0; i < 9; i++) {
+        point = (void*)((s32)work + i * 0x24 + 0x78);
+        if (*(s32*)point >= 2 && *(s32*)point < 8) {
+            for (j = 0; j < 4; j++) {
+                PSMTXScale(
+                    mtx,
+                    *(f32*)((s32)point + 0x14) * scaleOffsets[j * 2],
+                    *(f32*)((s32)point + 0x18) * scaleOffsets[j * 2 + 1],
+                    *(f32*)((s32)point + 0x1C));
+                PSMTXTransApply(
+                    mtx,
+                    mtx,
+                    *(f32*)((s32)point + 8),
+                    *(f32*)((s32)point + 0xC),
+                    *(f32*)((s32)point + 0x10));
+                PSMTXTransApply(
+                    mtx,
+                    mtx,
+                    *(f32*)((s32)point + 0x14) * transOffsetsA[j * 2],
+                    *(f32*)((s32)point + 0x18) * transOffsetsA[j * 2 + 1],
+                    float_0_8042854c);
+                color[0] = dat_80428518;
+                btlDispTexPlane2(mtx, 0x58, color);
+            }
+        }
+    }
+
+    if (*(s32*)((s32)work + 0x38) >= 2 && *(s32*)((s32)work + 0x38) < 7) {
+        for (j = 0; j < 4; j++) {
+            PSMTXScale(
+                mtx,
+                *(f32*)((s32)work + 0x68) * scaleOffsets[j * 2],
+                *(f32*)((s32)work + 0x6C) * scaleOffsets[j * 2 + 1],
+                *(f32*)((s32)work + 0x70));
+            PSMTXTransApply(
+                mtx,
+                mtx,
+                *(f32*)((s32)work + 0x44),
+                *(f32*)((s32)work + 0x48),
+                *(f32*)((s32)work + 0x4C));
+            PSMTXTransApply(
+                mtx,
+                mtx,
+                *(f32*)((s32)work + 0x68) * transOffsetsA[j * 2],
+                *(f32*)((s32)work + 0x6C) * transOffsetsA[j * 2 + 1],
+                float_0_8042854c);
+            color[0] = *(u32*)((s32)work + 0x74);
+            btlDispTexPlane2(mtx, 0x57, color);
+        }
+    }
 }
 
 /* stub-fill: disp_2D | prototype_only | source_prototype */

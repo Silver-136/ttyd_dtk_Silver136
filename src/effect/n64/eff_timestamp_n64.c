@@ -16,19 +16,21 @@ void effTimestampMain(void* effect) {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effTimestampDisp(void);
-    extern const Vec3 vec3_802fc1e0;
+    extern Vec3 vec3_802fc1e0[];
     extern f32 float_0_80426438;
     extern f32 float_0p05_80426450;
     u8* work;
     u8* part;
-    Vec3 pos;
     Vec3 dispPos;
+    Vec3 pos;
+    Vec3* base;
     s32 timer;
     s32 frame;
     s32 i;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos = vec3_802fc1e0;
+    base = vec3_802fc1e0;
+    pos = *base;
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);
@@ -93,6 +95,8 @@ second:
     dispEntry(4, 2, effTimestampDisp, effect, dispCalcZ(&dispPos));
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effTimestampN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -151,4 +155,6 @@ void* effTimestampN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scal
     }
     return entry;
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 

@@ -306,6 +306,7 @@ void nameMain(void) {
 }
 
 /* stub-fill: nameEntOn | missing_definition | ghidra_signature */
+#pragma optimize_for_size off
 void nameEntOn(int param_1) {
     extern char* strcpy(char* dst, const char* src);
     extern char* strcat(char* dst, const char* src);
@@ -373,4 +374,5 @@ void nameEntOn(int param_1) {
         *(char**)(lbl_803AE790 + 0x4EC) = str_p_80426c8c;
     }
 }
+#pragma optimize_for_size on
 

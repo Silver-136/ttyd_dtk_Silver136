@@ -17,6 +17,8 @@ void* effRippleEntry(f32 x, f32 y, f32 z, f32 scale, s32 time) {
     return effRippleN64Entry(x, y, z, 0.0f, time);
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effRippleSetPosition(void* effect, f32 x, f32 y, f32 z) {
     if (strcmp(*(char**)((s32)effect + 0x14), str_RippleN64_802f9bd8) == 0) {
         *(f32*)((s32)*(void**)((s32)effect + 0xC) + 0x4) = x;
@@ -24,3 +26,6 @@ void effRippleSetPosition(void* effect, f32 x, f32 y, f32 z) {
         *(f32*)((s32)*(void**)((s32)effect + 0xC) + 0xC) = z;
     }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+

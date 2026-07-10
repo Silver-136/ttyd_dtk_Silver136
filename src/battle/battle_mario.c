@@ -331,6 +331,7 @@ s32 _jump_star_effect(void* evt, s32 first) {
 }
 
 s32 _fire_wave(void* evt, s32 first) {
+    extern f32 float_0p6_804223b0;
     s32* args;
     f32 x;
     f32 y;
@@ -341,14 +342,13 @@ s32 _fire_wave(void* evt, s32 first) {
     x = (f32)evtGetValue(evt, args[0]);
     y = (f32)evtGetValue(evt, args[1]);
     z = (f32)evtGetValue(evt, args[2]);
-    scale = (f32)evtGetValue(evt, args[3]) * 0.6f;
+    scale = (f32)evtGetValue(evt, args[3]) * float_0p6_804223b0;
     if (first != 0) {
         *(void**)((s32)evt + 0x78) = effHibashiraEntry(x, y, z, x, y, z, scale, 0, 1, 0x5A);
     }
 
     return 2;
 }
-
 
 s32 mario_get_renzoku_count_max(void* evt) {
     s32* args;
@@ -394,6 +394,7 @@ s32 mario_get_renzoku_count_max(void* evt) {
 
 
 s32 _wait_jyabara_hit_iron_frame(void* evt) {
+    extern f32 float_130_804223f0;
     s32* args;
     s32 type;
     void* unit;
@@ -407,14 +408,13 @@ s32 _wait_jyabara_hit_iron_frame(void* evt) {
     unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(evt, type));
     BtlUnit_GetPos(unit, &x, &y, &z);
     height = (f32)BtlUnit_GetHeight(unit);
-    if (y + height < 130.0f) {
+    if (y + height < float_130_804223f0) {
         return 0;
     }
 
     BtlUnit_SetPos(unit, x, (f32)(130 - BtlUnit_GetHeight(unit)), z);
     return 2;
 }
-
 
 s32 _mario_fire_ball_controll(void* evt, s32 first) {
     s32* args;
@@ -481,16 +481,22 @@ s32 _whirlwind_effect(void* evt) {
 
 
 s32 _battle_majinai_effect(void* evt, s32 first) {
+    f32 pos[3];
+
     BattleGetMarioPtr(_battleWorkPointer);
     if (first != 0) {
-        *(void**)((s32)evt + 0x78) = effMajinaiEntry(vec3_802ef5d8[0], vec3_802ef5d8[1], vec3_802ef5d8[2], 0);
+        ((s32*)pos)[0] = ((s32*)vec3_802ef5d8)[0];
+        ((s32*)pos)[1] = ((s32*)vec3_802ef5d8)[1];
+        ((s32*)pos)[2] = ((s32*)vec3_802ef5d8)[2];
+        *(void**)((s32)evt + 0x78) = effMajinaiEntry(pos[0], pos[1], pos[2], 0);
         effSetName(*(void**)((s32)evt + 0x78), str_mjef_coinup_802ef624);
     }
 
-    if (*(void**)((s32)evt + 0x78) != 0 &&
+    if (*(s32*)((s32)evt + 0x78) != 0 &&
         effNameToPtr(str_mjef_coinup_802ef624) != 0) {
         return 0;
     }
 
     return 2;
 }
+

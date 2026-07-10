@@ -13,14 +13,6 @@ void battleAcDelete_PowerGauge(void* wp) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 void battleAcDisp_PowerGauge(void* camera, void* wp) {
     typedef struct PowerGaugeDispWork {
         u8 pad_00[0x14];
@@ -81,18 +73,6 @@ void battleAcDisp_PowerGauge(void* camera, void* wp) {
             break;
     }
 }
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

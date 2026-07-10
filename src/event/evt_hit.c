@@ -263,6 +263,14 @@ s32 evt_hitobj_attr_onoff(void* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
-s32 evt_hit_bind_mapobj(void* pEvt) {
-    return 0;
+s32 evt_hit_bind_mapobj(void* event) {
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void hitBindMapObj(s32 name, s32 mapObjName);
+    s32* args = *(s32**)((s32)event + 0x18);
+    s32 name = evtGetValue(event, args[0]);
+    s32 mapObjName = evtGetValue(event, args[1]);
+
+    hitBindMapObj(name, mapObjName);
+    return 2;
 }
+

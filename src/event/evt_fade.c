@@ -148,14 +148,38 @@ s32 evt_fade_set_anim_virtual_pos(int param_1) {
 
 
 s32 evt_fade_out(void* pEvt, int param_2) {
-    return 0;
-}
+    extern u32 dat_80422a84;
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 duration = evtGetValue(pEvt, args[0]);
+    u32 color;
 
+    if (param_2 != 0) {
+        color = dat_80422a84;
+        fadeEntry(10, duration, &color);
+    }
+
+    if (fadeIsFinish() != 1) {
+        return 0;
+    }
+    return 2;
+}
 
 s32 evt_fade_in(void* pEvt, int param_2) {
-    return 0;
-}
+    extern u32 dat_80422a80;
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 duration = evtGetValue(pEvt, args[0]);
+    u32 color;
 
+    if (param_2 != 0) {
+        color = dat_80422a80;
+        fadeEntry(9, duration, &color);
+    }
+
+    if (fadeIsFinish() != 1) {
+        return 0;
+    }
+    return 2;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

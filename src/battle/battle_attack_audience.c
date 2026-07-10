@@ -202,6 +202,8 @@ s32 _attack_aud(void* event) {
     extern void effHitEntry(s32 cameraId, s32 type, f32 x, f32 y, f32 z, f32 scale);
     extern s32 psndSFXOn_3D(char* name, f32* pos);
     extern void psndSFX_pit(s32 id, s32 pitch);
+    void* evt;
+    s32* args;
     f32 z;
     f32 y;
     f32 x;
@@ -210,10 +212,11 @@ s32 _attack_aud(void* event) {
     f32* yPtr;
     f32* zPtr;
     char* soundName;
-    s32* args = *(s32**)((s32)event + 0x18);
 
-    audienceId = evtGetValue(event, args[0]);
-    itemType = evtGetValue(event, args[1]);
+    evt = event;
+    args = *(s32**)((s32)evt + 0x18);
+    audienceId = evtGetValue(evt, args[0]);
+    itemType = evtGetValue(evt, args[1]);
     yPtr = &y;
     zPtr = &z;
     soundName = 0;
@@ -230,7 +233,6 @@ s32 _attack_aud(void* event) {
     BattleAudience_Attack(audienceId);
     return 2;
 }
-
 
 s32 _check_aud_item_type(int param_1) {
     extern void BattleAudience_GetItemOn2(void* itemNo, f32* x, f32* y, f32* z, s32 flag);

@@ -1767,18 +1767,70 @@ USER_FUNC(evt_party_set_dispdir) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
-s32 L_evt_party_vivian_tail(void* pEvt) {
-    return 0;
+s32 L_evt_party_vivian_tail(EventEntry* event) {
+    extern s32 partyCtrlNo;
+    extern void* partyGetPtr(s32 partyId);
+    extern void L_partyVivianTailStop(void* party);
+    extern void L_partyVivianTailStart(void* party);
+    s32* args;
+    s32 partyId;
+    void* party;
+
+    args = event->args;
+    partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 2;
+    }
+    if (args[1] == 0) {
+        L_partyVivianTailStop(party);
+    } else {
+        L_partyVivianTailStart(party);
+    }
+    return 2;
 }
 
+s32 evt_party_run(EventEntry* event) {
+    extern s32 partyCtrlNo;
+    extern void* partyGetPtr(s32 partyId);
+    extern void partyRun(void* party);
+    s32* args;
+    s32 partyId;
+    void* party;
 
-s32 evt_party_run(void* pEvt) {
-    return 0;
+    args = event->args;
+    partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party != 0) {
+        partyRun(party);
+    }
+    return 2;
 }
 
+s32 evt_party_stop(EventEntry* event) {
+    extern s32 partyCtrlNo;
+    extern void* partyGetPtr(s32 partyId);
+    extern void partyStop(void* party);
+    s32* args;
+    s32 partyId;
+    void* party;
 
-s32 evt_party_stop(void* pEvt) {
-    return 0;
+    args = event->args;
+    partyId = 1;
+    if (args[0] == 0) {
+        partyId = partyCtrlNo;
+    }
+    party = partyGetPtr(partyId);
+    if (party != 0) {
+        partyStop(party);
+    }
+    return 2;
 }
 
 #pragma no_register_save_helpers off

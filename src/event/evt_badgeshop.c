@@ -375,11 +375,10 @@ s32 badgeShop_set(void* shop, s16 item, s32 count) {
     }
 
     old = *(u8*)((s32)shop + byteIndex);
-    old = old & mask;
+    old = mask & old;
     *(u8*)((s32)shop + byteIndex) = (u8)old + (u8)((s16)count << shift);
     return count;
 }
-
 
 s32 badgeShop_get(void* shop, s16 item) {
     s32 base;
@@ -453,11 +452,27 @@ s32 evt_badgeShop_bottakuru_get_kind_cnt(int param_1) {
     return 2;
 }
 
-u8 evt_badgeShop_throw_dec(void) {
-    return 0;
-}
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_badgeShop_throw_dec) {
+    s32 item = evtGetValue(event, event->args[0]);
 
-
-u8 evt_badgeShop_throw_inc(void) {
-    return 0;
+    badgeShop_add((void*)((s32)bdsw + 0x19), (s16)item, -1);
+    badgeShop_add(bdsw, (s16)item, -1);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_badgeShop_throw_inc) {
+    s32 item = evtGetValue(event, event->args[0]);
+
+    badgeShop_add((void*)((s32)bdsw + 0x19), (s16)item, 1);
+    badgeShop_add(bdsw, (s16)item, 1);
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+

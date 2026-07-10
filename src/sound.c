@@ -725,9 +725,11 @@ void SoundSSSetSrndPanCh(s32 index, u8 pan) {
 #pragma use_lmw_stmw off
 void SoundSSSetPanCh(s32 index, u8 pan) {
     extern char sound[];
+    extern f32 float_63_8042190c;
     extern void sndStreamMixParameter(void* stream, s32 volume, s32 pan, s32 aux, s32 zero);
     void* entry;
     u32 pan8;
+    s32 panArg;
     f32 left;
     f32 right;
 
@@ -737,15 +739,16 @@ void SoundSSSetPanCh(s32 index, u8 pan) {
         *(u16*)((s32)entry + 6) = pan8;
         if ((*(u16*)entry & 8) != 0) {
             if (*(u16*)((s32)entry + 0x1A) == 1) {
-                sndStreamMixParameter(*(void**)((s32)entry + 0x4C), (s32)*(f32*)((s32)entry + 0x10), pan, *(u16*)((s32)entry + 8) & 0xFF, 0);
+                panArg = pan;
+                sndStreamMixParameter(*(void**)((s32)entry + 0x4C), (s32)*(f32*)((s32)entry + 0x10), panArg, *(u16*)((s32)entry + 8) & 0xFF, 0);
             } else {
                 right = *(f32*)((s32)entry + 0x10);
                 left = right;
                 if (pan8 < 0x40) {
-                    left = ((f32)pan8 * right) / 63.0f;
+                    left = ((f32)pan8 * right) / float_63_8042190c;
                 }
-                if ((u8)pan >= 0x40) {
-                    right = ((f32)(0x7F - (u8)pan) * right) / 63.0f;
+                if ((s32)((u8)pan - 0x40) >= 0) {
+                    right = ((f32)(0x7F - (u8)pan) * right) / float_63_8042190c;
                 }
                 sndStreamMixParameter(*(void**)((s32)entry + 0x4C), (s32)right, 0, *(u16*)((s32)entry + 8) & 0xFF, 0);
                 sndStreamMixParameter(*(void**)((s32)entry + 0xD4), (s32)left, 0x7F, *(u16*)((s32)entry + 8) & 0xFF, 0);
@@ -753,6 +756,7 @@ void SoundSSSetPanCh(s32 index, u8 pan) {
         }
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -1502,11 +1506,31 @@ void SoundSongSetVolCh(s32 index, u8 volume) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
-u8 SoundEfxStop(int param_1) {
-    return 0;
+void SoundEfxStop(s32 index) {
+    extern char sound[];
+    extern void sndFXKeyOff(s32 id);
+    extern void sndRemoveEmitter(void* emitter);
+    void* entry;
+
+    entry = (void*)((s32)*(void**)(sound + 0xF4) + index * 0x88);
+    if (*(u16*)entry != 0) {
+        sndFXKeyOff(*(s32*)((s32)entry + 0xC));
+        if ((*(u16*)entry & 0x10) != 0) {
+            sndRemoveEmitter((void*)((s32)entry + 0x14));
+        }
+        *(u16*)entry = 0;
+    }
 }
 
+void SoundLoadDVD2Free(void) {
+    extern char sound[];
+    extern void __memFree(s32 heap, void* ptr);
+    void* ptr;
 
-u8 SoundLoadDVD2Free(void) {
-    return 0;
+    ptr = *(void**)(sound + 0x32C);
+    if (ptr != 0) {
+        __memFree(0, ptr);
+        *(void**)(sound + 0x32C) = 0;
+    }
 }
+

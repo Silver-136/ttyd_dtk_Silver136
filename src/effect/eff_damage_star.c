@@ -43,6 +43,7 @@ u8 effDamageStarMain(void* effEntry) {
     s32 timer;
     s32 i;
     f32 scale;
+    f32 velScale = float_0p75_80422cd8;
 
     work = *(void**)((s32)effEntry + 0xC);
     dispPos = vec3_802f3a60;
@@ -95,9 +96,9 @@ u8 effDamageStarMain(void* effEntry) {
                 *(f32*)((s32)part + 0x34) = float_0_80422c80;
             }
 
-            *(f32*)((s32)part + 0x10) *= float_0p75_80422cd8;
-            *(f32*)((s32)part + 0x14) *= float_0p75_80422cd8;
-            *(f32*)((s32)part + 0x18) *= float_0p75_80422cd8;
+            *(f32*)((s32)part + 0x10) *= velScale;
+            *(f32*)((s32)part + 0x14) *= velScale;
+            *(f32*)((s32)part + 0x18) *= velScale;
             *(f32*)((s32)part + 0x4) += *(f32*)((s32)part + 0x10);
             *(f32*)((s32)part + 0x8) += *(f32*)((s32)part + 0x14);
             *(f32*)((s32)part + 0xC) += *(f32*)((s32)part + 0x18);

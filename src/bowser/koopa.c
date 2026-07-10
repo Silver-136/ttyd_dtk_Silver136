@@ -778,17 +778,45 @@ s32 kpaGetBodyStatus(void) {
 #pragma use_lmw_stmw on
 
 s32 kpaCamFollow(void) {
-    return 0;
-}
+    extern s32 marioBgmodeChk(void);
+    extern void camFollowYOn(void);
+    extern f32 float_76_804267b8;
+    void* mario = marioGetPtr();
 
+    if (marioBgmodeChk() == 1 || (((*(u32*)((s32)marioGetPtr() + 0x14) & 1) ^ 1) == 1)) {
+        return 0;
+    }
+    if (*(f32*)((s32)mario + 0x90) > float_76_804267b8) {
+        camFollowYOn();
+    }
+    return 1;
+}
 
 u8 kpaCancelAttackMode(void) {
-    return 0;
+    extern void psndSFXOff(s32 soundId);
+    void* mario = marioGetPtr();
+    void* work = *(void**)((s32)mario + 0x298);
+    s32 soundId;
+
+    *(s32*)((s32)work + 0x13C) = 0;
+    mario = marioGetPtr();
+    work = *(void**)((s32)mario + 0x298);
+    soundId = *(s32*)((s32)work + 0x14C);
+    if ((u32)(soundId + 0x10000) != 0xFFFF) {
+        psndSFXOff(soundId);
+        *(s32*)((s32)*(void**)((s32)mario + 0x298) + 0x14C) = -1;
+    }
 }
 
-
 u8 kpaAttackStart(void) {
-    return 0;
+    extern void marioChgMot(s32 motion);
+    void* mario = marioGetPtr();
+    void* work = *(void**)((s32)mario + 0x298);
+
+    if (*(s32*)((s32)work + 0x13C) == 0) {
+        marioChgMot(0);
+        *(s32*)((s32)*(void**)((s32)mario + 0x298) + 0x13C) = 1;
+    }
 }
 
 void unk_801fd110(void) {

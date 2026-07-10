@@ -264,6 +264,19 @@ s32 fileAsyncf(s32 id, s32 flags, const char* fmt, ...) {
 }
 
 
-void fileFree(void*) {
-    ;
+void fileFree(void* file) {
+    if (file == 0) {
+        return;
+    }
+    if (*(void**)((s32)file + 0xA0) == 0) {
+        return;
+    }
+    if (*(u8*)file != 1) {
+        return;
+    }
+    (*(s16*)((s32)file + 2))--;
+    if (*(s16*)((s32)file + 2) == 0) {
+        *(u8*)file = 2;
+    }
 }
+

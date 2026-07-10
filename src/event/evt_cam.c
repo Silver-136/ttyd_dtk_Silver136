@@ -362,36 +362,164 @@ s32 evt_cam3d_evt_set_xyz(void* pEvt) {
     return 2;
 }
 
-u8 evt_cam_road_reset2(s32 pEvt) {
-    return 0;
-}
+s32 evt_cam_road_reset2(void* pEvt) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
 
+    extern void* marioGetPtr(void);
+    extern void* camGetPtr(s32 camId);
+    extern f32 evtGetFloat(void* event, s32 arg);
+    extern void camRoadReset(void);
+    extern void camShiftReset(void* cam);
+    extern f32 float_0p01_80421040;
+    extern f32 float_0_80421044;
+
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    f32 x = evtGetFloat(pEvt, args[0]);
+    f32 y = evtGetFloat(pEvt, args[1]);
+    f32 z = evtGetFloat(pEvt, args[2]);
+    void* mario = marioGetPtr();
+    void* cam = camGetPtr(4);
+    Vec3 a;
+    Vec3 b;
+
+    *(f32*)((s32)cam + 0x94) = x;
+    *(f32*)((s32)cam + 0x98) = y + float_0p01_80421040;
+    *(f32*)((s32)cam + 0x9C) = z;
+    *(f32*)((s32)cam + 0xE8) = float_0_80421044;
+    *(f32*)((s32)cam + 0xAC) = *(f32*)((s32)cam + 0x94);
+    *(f32*)((s32)cam + 0xB0) = *(f32*)((s32)cam + 0x98);
+    *(f32*)((s32)cam + 0xB4) = *(f32*)((s32)cam + 0x9C);
+
+    a.x = x;
+    a.y = y;
+    a.z = z;
+    *(u32*)((s32)mario + 0xEC) = *(u32*)&a.x;
+    *(u32*)((s32)mario + 0xF0) = *(u32*)&a.y;
+    *(u32*)((s32)mario + 0xF4) = *(u32*)&a.z;
+
+    b.x = x;
+    b.y = y;
+    b.z = z;
+    *(u32*)((s32)mario + 0xF8) = *(u32*)&b.x;
+    *(u32*)((s32)mario + 0xFC) = *(u32*)&b.y;
+    *(u32*)((s32)mario + 0x100) = *(u32*)&b.z;
+
+    camRoadReset();
+    camShiftReset(cam);
+    return 2;
+}
 
 u8 evt_cam3d_event_from_road(s32 pEvt) {
     return 0;
 }
 
 
-u8 evt_cam3d_get_shift(s32 pEvt) {
-    return 0;
-}
+s32 evt_cam3d_get_shift(void* pEvt) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
 
+    extern void* marioGetPtr(void);
+    extern void* camGetPtr(s32 camId);
+    extern f32 evtGetFloat(void* event, s32 arg);
+    extern void evtSetFloat(void* event, s32 arg, f32 value);
+    extern void camShiftMain(void* cam, void* mario, void* out);
+
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    void* mario = marioGetPtr();
+    void* cam = camGetPtr(4);
+    f32 x = evtGetFloat(pEvt, args[0]);
+    f32 y = evtGetFloat(pEvt, args[1]);
+    f32 z = evtGetFloat(pEvt, args[2]);
+    f32 oldX = *(f32*)((s32)mario + 0x8C);
+    f32 oldY = *(f32*)((s32)mario + 0x90);
+    f32 oldZ = *(f32*)((s32)mario + 0x94);
+    Vec3 out;
+
+    *(f32*)((s32)mario + 0x8C) = x;
+    *(f32*)((s32)mario + 0x90) = y;
+    *(f32*)((s32)mario + 0x94) = z;
+    camShiftMain(cam, mario, &out);
+    *(f32*)((s32)mario + 0x8C) = oldX;
+    *(f32*)((s32)mario + 0x90) = oldY;
+    *(f32*)((s32)mario + 0x94) = oldZ;
+    evtSetFloat(pEvt, args[3], out.x);
+    return 2;
+}
 
 s32 evt_cam3d_evt_xyz_off(void* pEvt) {
-    return 0;
-}
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
 
+    extern void* gp;
+    extern void* camGetPtr(s32 camId);
+    extern s32 evtGetValue(void* event, s32 arg);
+    extern f32 float_0_80421044;
+
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 time = evtGetValue(pEvt, args[0]);
+    s32 type = evtGetValue(pEvt, args[1]);
+    void* cam = camGetPtr(4);
+    Vec3 old;
+
+    old.x = *(f32*)((s32)cam + 0x88);
+    old.y = *(f32*)((s32)cam + 0x8C);
+    old.z = *(f32*)((s32)cam + 0x90);
+    *(u32*)((s32)cam + 0xC4) = *(u32*)&old.x;
+    *(u32*)((s32)cam + 0xC8) = *(u32*)&old.y;
+    *(u32*)((s32)cam + 0xCC) = *(u32*)&old.z;
+    *(f32*)((s32)cam + 0xF0) = *(f32*)((s32)cam + 0xE4);
+    *(u32*)((s32)cam + 0xD0) = *(u32*)((s32)gp + 0x38);
+    *(u32*)((s32)cam + 0xD4) = *(u32*)((s32)gp + 0x3C);
+    *(u32*)((s32)cam + 0xD8) = 0;
+    *(u32*)((s32)cam + 0xDC) = time * ((*(u32*)0x800000F8) / 4000);
+    *(u16*)((s32)cam + 0x82) = 1;
+    *(u8*)((s32)cam + 0xE0) = type;
+    return 2;
+}
 
 s32 evt_cam3d_evt_off(void* pEvt) {
-    return 0;
+    extern void* gp;
+    extern void* camGetPtr(s32 camId);
+    extern s32 evtGetValue(void* event, s32 arg);
+
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 time = evtGetValue(pEvt, args[0]);
+    s32 type = evtGetValue(pEvt, args[1]);
+    void* cam = camGetPtr(4);
+
+    *(u32*)((s32)cam + 0x58) = *(u32*)((s32)cam + 0x0C);
+    *(u32*)((s32)cam + 0x5C) = *(u32*)((s32)cam + 0x10);
+    *(u32*)((s32)cam + 0x60) = *(u32*)((s32)cam + 0x14);
+    *(u32*)((s32)cam + 0x64) = *(u32*)((s32)cam + 0x18);
+    *(u32*)((s32)cam + 0x68) = *(u32*)((s32)cam + 0x1C);
+    *(u32*)((s32)cam + 0x6C) = *(u32*)((s32)cam + 0x20);
+    *(u32*)((s32)cam + 0x70) = *(u32*)((s32)gp + 0x38);
+    *(u32*)((s32)cam + 0x74) = *(u32*)((s32)gp + 0x3C);
+    *(u32*)((s32)cam + 0x78) = 0;
+    *(u32*)((s32)cam + 0x7C) = time * ((*(u32*)0x800000F8) / 4000);
+    *(u16*)((s32)cam + 0x04) = 1;
+    *(u8*)((s32)cam + 0x80) = type;
+    return 2;
 }
 
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_cam_letter_box_onoff) {
     s32* args = event->args;
     s32 on = evtGetValue(event, args[0]);
     s32 hide = evtGetValue(event, args[1]);
     void* cam = camGetPtr(8);
+
     if (on != 0) {
         *(u16*)cam |= 0x100;
         psndSetFlag(0x20);
@@ -403,11 +531,15 @@ USER_FUNC(evt_cam_letter_box_onoff) {
         *(u16*)cam &= ~0x100;
         psndClearFlag(0x20);
     }
+
     if (hide != 0) {
         *(u16*)cam |= 0x400;
     }
+
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 USER_FUNC(evt_cam3d_evt_set_now) {
     extern void* gp;

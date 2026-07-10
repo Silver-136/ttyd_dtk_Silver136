@@ -16,7 +16,7 @@ u8 effTogeFlushDisp(int param_1, int param_2) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-u8 effTogeFlushMain(void* effect) {
+void effTogeFlushMain(void* effect) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
     typedef struct TogeFlushWork {
         s32 type;
@@ -46,7 +46,7 @@ u8 effTogeFlushMain(void* effect) {
     life = work->life;
     if (life < 0) {
         effDelete(effect);
-        return 0;
+        return;
     }
     if (work->frame <= 6) {
         work->alpha = (s32)((f32)(218 - work->alpha) * 0.5f + (f32)work->alpha);
@@ -63,6 +63,7 @@ u8 effTogeFlushMain(void* effect) {
     work->unk28 = (s32)((64.0f * (f32)sin((6.2832f * (f32)(life * 40)) / 360.0f)) + 144.0f);
     dispEntry(4, 2, effTogeFlushDisp, effect, dispCalcZ(&work->pos));
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

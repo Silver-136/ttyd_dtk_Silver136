@@ -537,11 +537,38 @@ s32 johoya_get(void* flags, s16 value) {
     return (s16)((((u8*)flags)[index / 8] & (u8)mask) >> shift);
 }
 
-int search_evt_no(void* pEvt) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+int search_evt_no(char* label) {
+    extern int strcmp(const char* s1, const char* s2);
+    char** table = evtNoLabel;
+    s32 i;
+
+    for (i = 0; i < 0x197; i++, table++) {
+        if (strcmp(label, *table) == 0) {
+            return i;
+        }
+    }
+    return -1;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 johoya_data_free(void) {
-    return 0;
+    extern void _mapFree(void* heap, void* ptr);
+    JohoyaData* data = &_jdt;
+
+    if (data->entries == NULL) {
+        return 2;
+    }
+    _mapFree(mapalloc_base_ptr, data->entries);
+    data->entries = NULL;
+    data->count = 0;
+    data->unk8 = 0;
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+

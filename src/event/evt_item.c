@@ -341,9 +341,22 @@ u8 evt_item_move_3d_position(s32 pEvt, s32 param_2) {
 }
 
 s32 evt_item_entry(void* pEvt) {
-    return 0;
-}
+    extern s32 itemEntry(s32 name, s32 item, u16 mode, s32 script, s32 arg, f32 x, f32 y, f32 z);
 
+    EventEntry* event = pEvt;
+    s32* args = event->args;
+    s32 name = evtGetValue(event, args[0]);
+    s32 item = evtGetValue(event, args[1]);
+    s32 x = evtGetValue(event, args[2]);
+    s32 y = evtGetValue(event, args[3]);
+    s32 z = evtGetValue(event, args[4]);
+    s32 mode = evtGetValue(event, args[5]);
+    s32 script = args[6];
+    s32 arg = evtGetValue(event, args[7]);
+
+    itemEntry(name, item, mode, script, arg, (f32)x, (f32)y, (f32)z);
+    return 2;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -366,9 +379,29 @@ USER_FUNC(evt_item_set_position) {
 #pragma use_lmw_stmw on
 
 u32 evt_item_get_item(void* pEvt, int param_2) {
-    return 0;
-}
+    extern void itemForceGet(void* item);
+    extern void* itemStatus(void* item, s32 status);
 
+    EventEntry* event = pEvt;
+    void* item = itemNameToPtr(evtGetValue(event, event->args[0]));
+    s32 value;
+
+    if (param_2 != 0) {
+        itemForceGet(item);
+        return 0;
+    }
+    if (item == 0) {
+        return 2;
+    }
+    if (!(*(u16*)item & 1)) {
+        return 2;
+    }
+    if (itemStatus(item, 2) != 0) {
+        return 2;
+    }
+    value = (s32)itemStatus(item, 0x10000);
+    return 2 & ((-value | value) >> 31);
+}
 
 USER_FUNC(evt_item_get_item_end_wait) {
     extern void* itemStatus(void* item, s32 status);
@@ -403,6 +436,8 @@ USER_FUNC(evt_item_get_position) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_item_set_move_dir_speed(void* pEvt) {
     EventEntry* event = pEvt;
     s32* args = event->args;
@@ -416,6 +451,8 @@ s32 evt_item_set_move_dir_speed(void* pEvt) {
     *(f32*)((s32)item + 0x50) = speed;
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

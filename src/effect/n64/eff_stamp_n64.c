@@ -6,6 +6,8 @@ u8 effStampDisp(void) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effStampN64Entry(s32 type, f32 x, f32 y, f32 z) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -39,21 +41,41 @@ void* effStampN64Entry(s32 type, f32 x, f32 y, f32 z) {
     *(f32*)(work + 8) = y;
     *(f32*)(work + 0xC) = z;
     *(s32*)(work + 0x34) = 0xFF;
-    if (type == 0) {
+    if (type == 1) {
+        goto type1;
+    }
+    if (type >= 1) {
+        if (type >= 3) {
+            goto colors_done;
+        }
+        goto type2;
+    }
+    if (type >= 0) {
+        goto type0;
+    }
+    goto colors_done;
+type0:
+    {
         *(u8*)(work + 0x3B) = 0x14;
         *(u8*)(work + 0x38) = 0x14;
         *(u8*)(work + 0x3C) = 0x15;
         *(u8*)(work + 0x39) = 0x15;
         *(u8*)(work + 0x3D) = 0xF2;
         *(u8*)(work + 0x3A) = 0xF2;
-    } else if (type == 1) {
+    }
+    goto colors_done;
+type1:
+    {
         *(u8*)(work + 0x3B) = 0xC8;
         *(u8*)(work + 0x38) = 0xC8;
         *(u8*)(work + 0x3C) = 0x15;
         *(u8*)(work + 0x39) = 0x15;
         *(u8*)(work + 0x3D) = 0xD4;
         *(u8*)(work + 0x3A) = 0xD4;
-    } else if (type == 2) {
+    }
+    goto colors_done;
+type2:
+    {
         *(u8*)(work + 0x3B) = 0xFF;
         *(u8*)(work + 0x38) = 0xFF;
         *(u8*)(work + 0x3C) = 0xB5;
@@ -61,6 +83,7 @@ void* effStampN64Entry(s32 type, f32 x, f32 y, f32 z) {
         *(u8*)(work + 0x3D) = 0xDA;
         *(u8*)(work + 0x3A) = 0xDA;
     }
+colors_done:
     part = work + 0x40;
     for (i = 1; i < 8; i++, part += 0x40) {
         degrees = (f32)(((i - 1) * 360) / 7);
@@ -78,7 +101,11 @@ void* effStampN64Entry(s32 type, f32 x, f32 y, f32 z) {
     }
     return entry;
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effStampMain(void* effect) {
     typedef struct Vec3 {
         f32 x;
@@ -108,8 +135,8 @@ void effStampMain(void* effect) {
     extern double sin(double);
     u8* work;
     u8* part;
-    Vec3 pos;
     Vec3 dispPos;
+    Vec3 pos;
     s32 frame;
     s32 i;
     f32 angle;
@@ -148,4 +175,6 @@ void effStampMain(void* effect) {
     }
     dispEntry(4, 2, effStampDisp, effect, dispCalcZ(&dispPos));
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 

@@ -6,6 +6,8 @@ u8 effGuruguruDisp(void) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effGuruguruN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 radius) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -52,6 +54,8 @@ void* effGuruguruN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 radius) 
 
     return entry;
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 
 void effGuruguruMain(void* effect) {
     typedef struct Vec3 {
@@ -64,13 +68,14 @@ void effGuruguruMain(void* effect) {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effGuruguruDisp(void);
-    extern Vec3 vec3_802fb048;
+    extern Vec3 vec3_802fb048[];
     extern f32 float_0p1_80425428;
     extern f32 float_6p2832_8042542c;
     extern f32 float_360_80425430;
     extern f32 float_0_80425434;
     u8* work;
     u8* part;
+    Vec3* base;
     Vec3 pos;
     Vec3 dispPos;
     s32 i;
@@ -79,7 +84,8 @@ void effGuruguruMain(void* effect) {
     f32 angle1;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos = vec3_802fb048;
+    base = vec3_802fb048;
+    pos = *base;
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);

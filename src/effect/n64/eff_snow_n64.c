@@ -29,6 +29,8 @@ u8 effSnowDisp(int param_1, int param_2) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effSnowMain(void* effect) {
     typedef struct Vec3 {
         f32 x;
@@ -47,8 +49,8 @@ void effSnowMain(void* effect) {
     extern f32 float_400_80426078;
     u8* work;
     u8* mario;
-    Vec3 pos;
     Vec3 dispPos;
+    Vec3 pos;
 
     work = *(u8**)((s32)effect + 0xC);
     pos = vec3_802fbf78;
@@ -87,6 +89,8 @@ void effSnowMain(void* effect) {
     }
     dispEntry(4, 2, effSnowDisp, effect, dispCalcZ(&dispPos));
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

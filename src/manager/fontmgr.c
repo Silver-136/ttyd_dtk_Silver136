@@ -43,11 +43,12 @@ void FontDrawColor_(void) {
 }
 
 void FontDrawColor(void* colorPtr) {
+    extern void GXSetTevColor(s32 reg, void* color);
     u32 color;
 
     fontColor = *(u32*)colorPtr;
+    ((u8*)colorPtr)[3] = (((u8*)colorPtr)[3] * fontAlpha) / 255;
     color = *(u32*)colorPtr;
-    ((u8*)&color)[3] = (((u8*)&color)[3] * fontAlpha) / 255;
     GXSetTevColor(1, &color);
 }
 
@@ -258,9 +259,75 @@ u8 FontDrawCode(void) {
 
 
 s32 JUTFont_CodeToGlyph(s32 code) {
-    return 0;
-}
+    extern void* pfh;
+    extern void* pfi;
+    void* entry;
+    u16 c;
+    s32 count;
+    s32 glyph;
 
+    c = code;
+    entry = (void*)((s32)pfh + 0x20);
+    count = *(s32*)((s32)pfh + 0xC);
+    glyph = *(u16*)((s32)pfi + 0x12);
+    while (count > 0) {
+        if (*(u32*)entry == 0x4D415031 &&
+            c >= *(u16*)((s32)entry + 0xA) &&
+            c <= *(u16*)((s32)entry + 0xC)) {
+            u16 kind = *(u16*)((s32)entry + 8);
+            switch (kind) {
+                case 0:
+                    glyph = (u16)(code - *(u16*)((s32)entry + 0xA));
+                    break;
+                case 1: {
+                    u16 hi;
+                    u16 lo;
+                    s32 offset;
+
+                    *(u16*)((s32)&lo) = code;
+                    hi = ((u8*)&lo)[1];
+                    lo = ((u8*)&lo)[0];
+                    if (hi >= 0x80) {
+                        offset = hi - 0x41;
+                    } else {
+                        offset = hi - 0x40;
+                    }
+                    if (*(u16*)((s32)entry + 0xE) == 0) {
+                        glyph = (u16)((lo - 0x88) * 0xBC + 0x2BE + offset);
+                    } else {
+                        glyph = (u16)((lo - 0x88) * 0xBC - 0x5E + *(u16*)((s32)entry + 0x10) + offset);
+                    }
+                    break;
+                }
+                case 2:
+                    glyph = *(u16*)((s32)entry + 0x10 + ((c - *(u16*)((s32)entry + 0xA)) * 2));
+                    break;
+                case 3: {
+                    s32 low = 0;
+                    s32 high = *(u16*)((s32)entry + 0xE);
+                    while (high >= low) {
+                        s32 mid = (low + high) / 2;
+                        u16 value = *(u16*)((s32)entry + 0x10 + mid * 4);
+                        if (c == value) {
+                            glyph = *(u16*)((s32)entry + 0x12 + mid * 4);
+                            break;
+                        }
+                        if (c < value) {
+                            high = mid - 1;
+                        } else {
+                            low = mid + 1;
+                        }
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+        entry = (void*)((s32)entry + *(s32*)((s32)entry + 4));
+        count--;
+    }
+    return glyph;
+}
 
 u8 FontDrawCodeMtx(s32 param_1, s32 param_2) {
     return 0;
@@ -357,11 +424,38 @@ void FontDrawStart_alpha(u8 alpha) {
     JUTFont_DrawStart(&gxColor);
 }
 
-u8 FontDrawStringPitch(double param_1, double param_2, s64 param_3, s32 param_4) {
-    return 0;
-}
+void FontDrawStringPitch(f32 x, f32 y, s32 str, f32 pitch) {
+    extern void FontDrawStringVecPitch(void* pos, s32 str, f32 pitch);
+    extern const u32 vec3_802c2b84[3];
+    u32 vec[3];
+    u32 out[3];
 
+    vec[0] = vec3_802c2b84[0];
+    vec[1] = vec3_802c2b84[1];
+    vec[2] = vec3_802c2b84[2];
+    *(f32*)&vec[0] = x;
+    *(f32*)&vec[1] = y;
+    out[0] = vec[0];
+    out[1] = vec[1];
+    out[2] = vec[2];
+    FontDrawStringVecPitch(out, str, pitch);
+}
 
 void FontDrawString(f32 x, f32 y, s32 str) {
-    ;
+    extern void FontDrawStringVecPitch(void* pos, s32 str, f32 pitch);
+    extern const u32 vec3_802c2b78[3];
+    extern const f32 float_neg1_80420430;
+    u32 vec[3];
+    u32 out[3];
+
+    vec[0] = vec3_802c2b78[0];
+    vec[1] = vec3_802c2b78[1];
+    vec[2] = vec3_802c2b78[2];
+    *(f32*)&vec[0] = x;
+    *(f32*)&vec[1] = y;
+    out[0] = vec[0];
+    out[1] = vec[1];
+    out[2] = vec[2];
+    FontDrawStringVecPitch(out, str, float_neg1_80420430);
 }
+

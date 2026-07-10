@@ -99,6 +99,8 @@ void* effSyuryouEntry(s32 type, s32 timer, f32 x, f32 y, f32 z) {
 /* CHATGPT STUB FILL: main/effect/eff_syuryou 20260624_184929 */
 
 /* stub-fill: effSyuryouMain | prototype_only | source_prototype */
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effSyuryouMain(void* entry) {
     extern void* gp;
     extern BOOL animGroupBaseAsync(char* name, s32 language, s32 unused);
@@ -108,29 +110,37 @@ void effSyuryouMain(void* entry) {
     extern void animPoseRelease(s32 poseId);
     extern void effDelete(void* entry);
     extern f32 dispCalcZ(Vec* pos);
-    extern void dispEntry(s32 cameraId, s32 order, void* callback, f32 priority, void* param);
+    extern void dispEntry(s32 cameraId, s32 order, void* callback, void* param, f32 z);
     extern void effSyuryouDisp(s32 cameraId, void* entry);
-    extern char str_MOBJ_EFF_hanyaA_803029c4[];
-    extern char str_MOBJ_EFF_hanyaB_803029d4[];
+    extern u32 vec3_803029b8[];
     extern const char str_A_1_804288b0[];
     extern const char str_S_1_804288b8[];
     extern f32 float_1_804288b4;
 
     void* work;
     Vec pos;
+    Vec dispPos;
+    s32 languageRaw;
     s32 language;
+    char* nameA;
+    char* nameB;
 
     work = *(void**)((s32)entry + 0xC);
+    pos = *(Vec*)vec3_803029b8;
     pos.x = *(f32*)((s32)work + 4);
     pos.y = *(f32*)((s32)work + 8);
     pos.z = *(f32*)((s32)work + 0xC);
-    language = *(s32*)((s32)gp + 0x14) != 0;
+    dispPos = pos;
+    languageRaw = *(s32*)((s32)gp + 0x14);
+    language = (s32)(((u32)(-languageRaw | languageRaw)) >> 31);
+    nameA = (char*)((s32)vec3_803029b8 + 0xC);
+    nameB = (char*)((s32)vec3_803029b8 + 0x1C);
 
     switch (*(s32*)work) {
         case 0:
-            if (animGroupBaseAsync(str_MOBJ_EFF_hanyaA_803029c4, language, 0)) {
+            if (animGroupBaseAsync(nameA, language, 0)) {
                 if (*(s32*)((s32)work + 0x14) == -1) {
-                    *(s32*)((s32)work + 0x14) = animPoseEntry(str_MOBJ_EFF_hanyaA_803029c4, language);
+                    *(s32*)((s32)work + 0x14) = animPoseEntry(nameA, language);
                     animPoseSetAnim(*(s32*)((s32)work + 0x14), str_A_1_804288b0, 1);
                 }
                 if (animPoseGetLoopTimes(*(s32*)((s32)work + 0x14)) >= float_1_804288b4) {
@@ -143,9 +153,9 @@ void effSyuryouMain(void* entry) {
             }
             break;
         case 1:
-            if (animGroupBaseAsync(str_MOBJ_EFF_hanyaB_803029d4, language, 0)) {
+            if (animGroupBaseAsync(nameB, language, 0)) {
                 if (*(s32*)((s32)work + 0x14) == -1) {
-                    *(s32*)((s32)work + 0x14) = animPoseEntry(str_MOBJ_EFF_hanyaB_803029d4, language);
+                    *(s32*)((s32)work + 0x14) = animPoseEntry(nameB, language);
                     animPoseSetAnim(*(s32*)((s32)work + 0x14), str_A_1_804288b0, 1);
                 }
                 if (animPoseGetLoopTimes(*(s32*)((s32)work + 0x14)) >= float_1_804288b4) {
@@ -173,8 +183,9 @@ void effSyuryouMain(void* entry) {
         }
         effDelete(entry);
     } else {
-        dispCalcZ(&pos);
-        dispEntry(4, 2, effSyuryouDisp, 0.0f, entry);
+        dispEntry(4, 2, effSyuryouDisp, entry, dispCalcZ(&dispPos));
     }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 

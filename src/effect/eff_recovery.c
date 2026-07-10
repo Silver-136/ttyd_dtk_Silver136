@@ -26,7 +26,7 @@ void effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
 }
 
 
-u8 effRecoveryDisp2(s32 cameraId, void* effEntry) {
+void effRecoveryDisp2(s32 cameraId, void* effEntry) {
     typedef f32 LocalMtx[3][4];
     extern void* camGetPtr(s32 cameraId);
     extern s32 sprintf(char* str, char* fmt, ...);
@@ -45,51 +45,50 @@ u8 effRecoveryDisp2(s32 cameraId, void* effEntry) {
     extern f32 float_10_80422de4;
     extern f32 float_0p035_80422dfc;
     extern f32 float_24_80422e00;
-    LocalMtx mtx;
-    LocalMtx tmp;
+    LocalMtx textMtx;
+    LocalMtx rotMtx;
+    LocalMtx tmpMtx;
     void* work;
-    void* cam;
     char buf[32];
     s32 type;
     s32 value;
     u32 len;
 
     work = *(void**)((s32)effEntry + 0xC);
-    cam = camGetPtr(cameraId);
-    type = *(u8*)((s32)work + 0x0);
+    camGetPtr(cameraId);
     value = *(s8*)((s32)work + 0x1);
+    type = *(s8*)((s32)work + 0x0);
 
     sprintf(buf, str_PCTd_80422df8, value);
     len = strlen(buf);
 
-    PSMTXTrans(mtx, *(f32*)((s32)work + 0x8), *(f32*)((s32)work + 0xC), *(f32*)((s32)work + 0x10));
-    PSMTXRotRad(tmp, float_deg2rad_80422dc0 * -*(f32*)((s32)cam + 0x114), 'y');
-    PSMTXConcat(mtx, tmp, mtx);
-    PSMTXTrans(tmp, float_0_80422dcc, float_0_80422dcc, float_1_80422dd0);
-    PSMTXConcat(mtx, tmp, mtx);
-    PSMTXScale(tmp, float_10_80422de4, float_10_80422de4, float_10_80422de4);
-    PSMTXConcat(mtx, tmp, mtx);
-    PSMTXTrans(tmp, float_0_80422dcc, float_2_80422dd8, float_0_80422dcc);
-    PSMTXConcat(mtx, tmp, mtx);
-    PSMTXConcat(mtx, (void*)(*(s32*)((s32)work + 0x38) + 0x14), mtx);
-    PSMTXScale(tmp, float_0p035_80422dfc, float_0p035_80422dfc, float_0p035_80422dfc);
-    PSMTXConcat(mtx, tmp, mtx);
-    PSMTXTrans(tmp, float_24_80422e00 * (f32)-(s32)(len - 1) * float_0p5_80422ddc, float_0_80422dcc, float_0_80422dcc);
-    PSMTXConcat(mtx, tmp, mtx);
+    PSMTXTrans(textMtx, *(f32*)((s32)work + 0x8), *(f32*)((s32)work + 0xC), *(f32*)((s32)work + 0x10));
+    PSMTXRotRad(rotMtx, float_deg2rad_80422dc0 * -*(f32*)((s32)camGetPtr(cameraId) + 0x114), 'y');
+    PSMTXConcat(textMtx, rotMtx, textMtx);
+    PSMTXTrans(tmpMtx, float_0_80422dcc, float_0_80422dcc, float_1_80422dd0);
+    PSMTXConcat(textMtx, tmpMtx, textMtx);
+    PSMTXScale(tmpMtx, float_10_80422de4, float_10_80422de4, float_10_80422de4);
+    PSMTXConcat(textMtx, tmpMtx, textMtx);
+    PSMTXTrans(tmpMtx, float_0_80422dcc, float_2_80422dd8, float_0_80422dcc);
+    PSMTXConcat(textMtx, tmpMtx, textMtx);
+    PSMTXConcat(textMtx, (void*)(*(s32*)((s32)work + 0x38) + 0x14), textMtx);
+    PSMTXScale(tmpMtx, float_0p035_80422dfc, float_0p035_80422dfc, float_0p035_80422dfc);
+    PSMTXConcat(textMtx, tmpMtx, textMtx);
+    PSMTXTrans(tmpMtx, float_24_80422e00 * (f32)-(s32)(len - 1) * float_0p5_80422ddc, float_0_80422dcc, float_0_80422dcc);
+    PSMTXConcat(textMtx, tmpMtx, textMtx);
 
     switch (type) {
         case 0:
         case 2:
         case 7:
-            effNumberGX(mtx, 0, value, 0xFF, 1);
+            effNumberGX(textMtx, 0, value, 0xFF, 1);
             break;
         case 1:
         case 3:
         case 8:
-            effNumberGX(mtx, 1, value, 0xFF, 1);
+            effNumberGX(textMtx, 1, value, 0xFF, 1);
             break;
     }
-    return 0;
 }
 
 u8 effRecoveryMain2(void* effEntry) {

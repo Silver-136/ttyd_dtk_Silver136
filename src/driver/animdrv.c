@@ -125,10 +125,287 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double a, double b) {
 }
 
 
-u8 animPoseDisp_MakeExtTexture(void) {
-    return 0;
-}
+void animPoseDisp_MakeExtTexture(char* name, void* anim, void* texObj, void** outAlloc,
+                                 s32* outLeft, s32* outTop, s32* outRight, s32* outBottom,
+                                 f32 frame, f32 scale) {
+    extern s32 wp;
+    extern s32 gp;
+    extern s32 strcmp(const char*, const char*);
+    extern void* DEMOGetRenderModeObj(void);
+    extern void sysWaitDrawSync(void);
+    extern void GXClearBoundingBox(void);
+    extern void PSMTXTrans(void* mtx, double x, double y, double z);
+    extern void _animPoseDrawMtx(void* pPose, void* pMtx, int dispMode, double rot, double scale);
+    extern void GXReadBoundingBox(u16* left, u16* top, u16* right, u16* bottom);
+    extern void GXSetTexCopySrc(u32 left, u32 top, u32 width, u32 height);
+    extern void GXSetTexCopyDst(u16 width, u16 height, u32 format, u32 mipmap);
+    extern u32 GXGetTexBufferSize(u32 width, u32 height, u32 format, u8 mipmap, u32 max_lod);
+    extern void* smartAlloc(u32 size, s32 mode);
+    extern void GXCopyTex(void* dest, u8 clear);
+    extern void GXPixModeSync(void);
+    extern void GXInitTexObj(void* obj, void* data, u16 width, u16 height, u32 format, u32 wrapS, u32 wrapT, u8 mipmap);
+    extern f32 float_0_8041fb28;
+    extern f32 float_16p667_8041fb40;
+    extern f32 float_0p5_8041fb44;
+    extern f32 float_0p75_8041fb48;
+    extern f32 float_0p25_8041fb4c;
+    extern u32 dat_8041fb1c;
+    extern u32 dat_8041fb20;
+    extern u32 anim_ext_tex_size;
 
+    s32 work;
+    s32 poses;
+    s32 pose;
+    s32 poseIdx;
+    s32 offset;
+    s32 battleFlag;
+    s32 fileIdx;
+    s32 file;
+    s32 data;
+    s32 animCount;
+    s32 animIdx;
+    s32 nameOffset;
+    s32 effectIdx;
+    s64 now;
+    s64 local;
+    u32 ticks;
+    s32 backup[0x5C];
+    f32 mtx[3][4];
+    u16 left;
+    u16 top;
+    u16 right;
+    u16 bottom;
+    u32 flags;
+    u32 materialColor;
+    u32 materialColor2;
+    s32 materialFlag;
+    void* renderMode;
+    f32 centerX;
+    f32 centerY;
+    u32 copyWidth32;
+    u32 copyHeight32;
+    u16 copyWidth;
+    u16 copyHeight;
+    u32 texSize;
+    void* alloc;
+    s32 i;
+
+    work = wp;
+    poses = *(s32*)(work + 0x10);
+    battleFlag = (*(s32*)(gp + 0x14) != 0);
+
+    poseIdx = 0;
+    offset = 0;
+    while (poseIdx < *(s32*)(work + 0x14)) {
+        pose = poses + offset;
+        if ((*(u32*)pose & 1) != 0 && *(s32*)(pose + 0xC) == battleFlag) {
+            fileIdx = *(s32*)(pose + 0x10);
+            file = *(s32*)(*(s32*)work + (fileIdx << 4) + 8);
+            data = *(s32*)(file + 0xA0);
+            data = *(s32*)data;
+            if (strcmp((const char*)(data + 4), name) == 0) {
+                break;
+            }
+        }
+        offset += 0x170;
+        poseIdx++;
+    }
+
+    if (poseIdx == *(s32*)(work + 0x14)) {
+        poseIdx = -1;
+    }
+    if (poseIdx < 0) {
+        return;
+    }
+
+    pose = poses + poseIdx * 0x170;
+    {
+        s32* srcWords = (s32*)pose;
+        s32* dstWords = backup;
+        for (i = 0x2E; i > 0; i--) {
+            dstWords[0] = srcWords[0];
+            dstWords[1] = srcWords[1];
+            srcWords += 2;
+            dstWords += 2;
+        }
+    }
+
+    *(s32*)(pose + 0x90) = -1;
+
+    work = wp;
+    poses = *(s32*)(work + 0x10);
+    pose = poses + poseIdx * 0x170;
+    fileIdx = *(s32*)(pose + 0x10);
+    file = *(s32*)(*(s32*)work + (fileIdx << 4) + 8);
+    data = *(s32*)(file + 0xA0);
+    data = *(s32*)data;
+    animCount = *(s32*)(data + 0x148);
+
+    if ((s32)anim < 0) {
+        animIdx = 0;
+        nameOffset = 0;
+        while (animIdx < animCount) {
+            if (strcmp((const char*)(*(s32*)(data + 0x1AC) + nameOffset), (const char*)anim) == 0) {
+                break;
+            }
+            nameOffset += 0x40;
+            animIdx++;
+        }
+        if (animIdx >= animCount) {
+            animIdx = 0;
+        }
+    } else {
+        animIdx = (s32)anim;
+        if (animIdx >= animCount) {
+            animIdx = 0;
+        }
+    }
+
+    if (animIdx != *(s32*)(pose + 0x14)) {
+        *(s32*)(pose + 0x14) = animIdx;
+        if (*(s32*)(pose + 0x90) != -1 && (*(u32*)pose & 2) != 0) {
+            *(u32*)pose |= 4;
+        }
+        ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+        if (*(s32*)(pose + 0xC) == 0) {
+            now = *(s64*)(gp + 0x40) / ticks;
+        } else {
+            now = *(s64*)(gp + 0x38) / ticks;
+        }
+        *(s64*)(pose + 0x18) = now;
+        *(s32*)(pose + 0x3C) = -1;
+        *(f32*)(pose + 0x40) = float_0_8041fb28;
+        *(s32*)(pose + 0x80) = 0;
+        *(f32*)(pose + 0x84) = float_0_8041fb28;
+    }
+
+    ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+    if (*(s32*)(pose + 0xC) == 0) {
+        now = *(s64*)(gp + 0x40) / ticks;
+    } else {
+        now = *(s64*)(gp + 0x38) / ticks;
+    }
+    *(s64*)(pose + 0x18) = now;
+    *(s32*)(pose + 0x3C) = -1;
+    *(f32*)(pose + 0x40) = float_0_8041fb28;
+    *(s32*)(pose + 0x80) = 0;
+    *(f32*)(pose + 0x84) = float_0_8041fb28;
+
+    local = (u64)(float_16p667_8041fb40 * frame);
+    ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+    if (*(s32*)(pose + 0xC) == 0) {
+        now = *(s64*)(gp + 0x40) / ticks;
+    } else {
+        now = *(s64*)(gp + 0x38) / ticks;
+    }
+    now = now - local;
+    *(s64*)(pose + 0x18) = now;
+    *(s64*)(pose + 0x88) = now;
+    effectIdx = *(s32*)(pose + 0x90);
+    if (effectIdx != -1) {
+        s32 effectPose = *(s32*)(wp + 0x10) + effectIdx * 0x170;
+        if ((*(u32*)(effectPose + 4) & 2) == 0) {
+            *(s64*)(effectPose + 0x18) = now;
+        }
+    }
+
+    animPoseMain(poseIdx);
+
+    renderMode = DEMOGetRenderModeObj();
+    centerX = float_0p5_8041fb44 * (f32)*(u16*)((s32)renderMode + 4);
+    renderMode = DEMOGetRenderModeObj();
+    centerY = float_0p75_8041fb48 * (f32)*(u16*)((s32)renderMode + 6);
+
+    sysWaitDrawSync();
+    GXClearBoundingBox();
+
+    renderMode = DEMOGetRenderModeObj();
+    PSMTXTrans(mtx, (double)float_0_8041fb28,
+               (double)(float_0p25_8041fb4c * -(f32)*(u16*)((s32)renderMode + 6)),
+               (double)float_0_8041fb28);
+
+    flags = *(u32*)pose;
+    materialColor = *(u32*)(pose + 0xF0);
+    materialColor2 = *(u32*)(pose + 0xF4);
+    materialFlag = *(s32*)(pose + 0xE8);
+    *(u32*)pose = flags & ~8;
+    *(s32*)(pose + 0xE8) = 0;
+    *(u32*)(pose + 0xF0) = dat_8041fb1c;
+    *(u32*)(pose + 0xF4) = dat_8041fb20;
+
+    _animPoseDrawMtx((void*)pose, mtx, 1, (double)float_0_8041fb28, (double)scale);
+    _animPoseDrawMtx((void*)pose, mtx, 2, (double)float_0_8041fb28, (double)scale);
+    _animPoseDrawMtx((void*)pose, mtx, 3, (double)float_0_8041fb28, (double)scale);
+
+    *(u32*)(pose + 0xF0) = materialColor;
+    *(u32*)(pose + 0xF4) = materialColor2;
+    *(u32*)pose = flags;
+    *(s32*)(pose + 0xE8) = materialFlag;
+
+    sysWaitDrawSync();
+    GXReadBoundingBox(&left, &top, &right, &bottom);
+
+    if (right < left) {
+        left = 0;
+        top = 0;
+        right = 0x10;
+        bottom = 0x10;
+    }
+    if (left < 2) {
+        left = 2;
+    }
+    if (top < 2) {
+        top = 2;
+    }
+
+    renderMode = DEMOGetRenderModeObj();
+    if ((s32)(*(u16*)((s32)renderMode + 4) - 2) < (s32)(u32)right) {
+        renderMode = DEMOGetRenderModeObj();
+        right = *(u16*)((s32)renderMode + 4) - 2;
+    }
+    renderMode = DEMOGetRenderModeObj();
+    if ((s32)(*(u16*)((s32)renderMode + 6) - 2) < (s32)(u32)top) {
+        renderMode = DEMOGetRenderModeObj();
+        top = *(u16*)((s32)renderMode + 6) - 2;
+    }
+
+    left = left - (left & 1);
+    right = right + (right & 1);
+    top = top - (top & 1);
+    bottom = bottom + (bottom & 1);
+
+    copyWidth32 = ((u32)right & 0xFFFF) - (u32)left;
+    copyHeight32 = ((u32)bottom & 0xFFFF) - (u32)top;
+    copyWidth = (u16)copyWidth32;
+    copyHeight = (u16)copyHeight32;
+
+    GXSetTexCopySrc((u32)left, (u32)top, copyWidth32 & 0xFFFF, copyHeight32 & 0xFFFF);
+    GXSetTexCopyDst(copyWidth, copyHeight, 5, 0);
+    texSize = GXGetTexBufferSize(copyWidth32 & 0xFFFF, copyHeight32 & 0xFFFF, 5, 0, 0);
+    anim_ext_tex_size += texSize;
+    texSize = GXGetTexBufferSize(copyWidth32 & 0xFFFF, copyHeight32 & 0xFFFF, 5, 0, 0);
+    alloc = smartAlloc(texSize, 1);
+    *outAlloc = alloc;
+    GXCopyTex(*(void**)alloc, 1);
+    GXPixModeSync();
+    GXInitTexObj(texObj, *(void**)*outAlloc, copyWidth, copyHeight, 5, 0, 0, 0);
+
+    *outLeft = (u32)left - (s32)centerX;
+    *outTop = (u32)top - (s32)centerY;
+    *outRight = (u32)right - (s32)centerX;
+    *outBottom = (u32)bottom - (s32)centerY;
+
+    {
+        s32* srcWords = backup;
+        s32* dstWords = (s32*)pose;
+        for (i = 0x2E; i > 0; i--) {
+            dstWords[0] = srcWords[0];
+            dstWords[1] = srcWords[1];
+            srcWords += 2;
+            dstWords += 2;
+        }
+    }
+}
 
 u8 materialProc(int shapeIdx) {
     return 0;

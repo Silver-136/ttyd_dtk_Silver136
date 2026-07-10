@@ -256,26 +256,63 @@ s32 unk_8014140c(void) {
 #pragma use_lmw_stmw on
 
 
-u8 marioPartyKill(void) {
-    return 0;
+void marioPartyKill(void) {
+    extern void* marioGetPtr(void);
+    extern void partyKill(s32 partyId);
+    void* mario;
+    u32 partyId;
+
+    mario = marioGetPtr();
+    partyId = *(u8*)((s32)mario + 0x245);
+    if ((s8)partyId >= 0) {
+        partyKill((s8)partyId);
+        *(s8*)((s32)mario + 0x245) = -1;
+    }
+
+    mario = marioGetPtr();
+    partyId = *(u8*)((s32)mario + 0x246);
+    if ((s8)partyId >= 0) {
+        partyKill((s8)partyId);
+        *(s8*)((s32)mario + 0x246) = -1;
+    }
 }
 
+u32 partyChkJoin(s32 partyId) {
+    extern void* pouchGetPtr(void);
 
-u32 partyChkJoin(int param_1) {
-    return 0;
+    u32 joined = 0;
+    if (partyId < 8) {
+        joined = ((u16*)pouchGetPtr())[partyId * 7] & 1;
+    }
+    return joined;
 }
-
 
 u32 marioPartyGoodbye(void) {
-    return 0;
-}
+    extern void* marioGetPtr(void);
+    extern void partyGoodbye(s32 partyId);
+    s32 result = 0;
+    u32 partyId = *(u8*)((s32)marioGetPtr() + 0x245);
 
+    if ((s8)partyId >= 0) {
+        partyGoodbye((s8)partyId);
+        result = 1;
+    }
+    return result;
+}
 
 void partyLeft(s32 partyId) {
-    ;
-}
+    extern void* pouchGetPtr(void);
 
+    if (partyId < 8) {
+        ((u16*)pouchGetPtr())[partyId * 7] &= ~1;
+    }
+}
 
 void partyJoin(s32 partyId) {
-    ;
+    extern void* pouchGetPtr(void);
+
+    if (partyId < 8) {
+        ((u16*)pouchGetPtr())[partyId * 7] |= 1;
+    }
 }
+

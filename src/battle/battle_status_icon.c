@@ -165,10 +165,82 @@ void BattleStatusIconDisp(s32 param_1, void* unit) {
 /* CHATGPT STUB FILL: main/battle/battle_status_icon 20260624_184929 */
 
 /* stub-fill: BattleStatusIconMain | missing_definition | ghidra_signature */
-u8 BattleStatusIconMain(void* unit) {
-    return 0;
-}
+void BattleStatusIconMain(BattleWorkUnit* unit) {
+    typedef s32 (*StatusIconFunc)(BattleWorkUnit*, s32*, s32*);
 
+    extern void* _battleWorkPointer;
+    extern void* gp;
+    extern void BtlUnit_GetPos(BattleWorkUnit* unit, f32* x, f32* y, f32* z);
+    extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
+    extern void BattleStatusIconDisp(s32 param_1, void* unit);
+    extern u8 lbl_803B9538[];
+    extern f32 float_0_804287b4;
+    extern f32 float_13p44_804287d0;
+    extern f32 float_19p2_804287d8;
+    extern f32 float_25p6_804287d4;
+    extern f32 float_901_804287dc;
+
+    void* work;
+    u8* iconWork;
+    s32 i;
+    s32 offset;
+    s32* table;
+    s32* entry;
+    s32 language;
+    s32 count;
+
+    iconWork = (u8*)unit + 0x348;
+    *(s16*)((s32)unit + 0xADC) = 0;
+    work = _battleWorkPointer;
+    if ((*(u32*)((s32)work + 0xEF4) & 0x10000) || (*(u32*)((s32)work + 0xEF8) & 1)) {
+        BtlUnit_GetPos(unit, (f32*)iconWork, (f32*)(iconWork + 4), (f32*)(iconWork + 8));
+        *(f32*)iconWork += (f32)*(s16*)((s32)unit + 0xD0) * *(f32*)((s32)unit + 0x114);
+        *(f32*)(iconWork + 4) += (f32)*(s16*)((s32)unit + 0xD2) * *(f32*)((s32)unit + 0x114);
+        *(f32*)(iconWork + 0xC) = float_13p44_804287d0;
+        *(f32*)(iconWork + 0x14) = float_0_804287b4;
+        *(s32*)(iconWork + 0x1C) = 0;
+        *(f32*)(iconWork + 0x18) = float_25p6_804287d4;
+        if (*(u32*)((s32)unit + 0x104) & 2) {
+            *(f32*)(iconWork + 0x10) = float_0_804287b4;
+        } else {
+            *(f32*)(iconWork + 0x10) = float_19p2_804287d8;
+        }
+
+        i = 0;
+        offset = 0;
+        do {
+            language = *(s32*)((s32)gp + 0x16C);
+            if (language == 5) {
+                table = (s32*)(lbl_803B9538 + 0x490 + offset);
+            } else if (language < 5) {
+                if (language == 2) {
+                    table = (s32*)(lbl_803B9538 + 0x1B0 + offset);
+                } else if (language >= 2) {
+                    table = (s32*)(lbl_803B9538 + 0x320 + offset);
+                } else {
+                    table = (s32*)(lbl_803B9538 + 0x40 + offset);
+                }
+            } else {
+                table = (s32*)(lbl_803B9538 + 0x40 + offset);
+            }
+
+            count = *(s16*)(iconWork + 0x794);
+            entry = (s32*)(iconWork + 0x20 + count * 0x44);
+            if (table[0] == -1) {
+                break;
+            }
+            if (((StatusIconFunc)table[1])(unit, table, entry)) {
+                *(s16*)(iconWork + 0x794) += 1;
+            }
+            i++;
+            offset += 0x10;
+        } while ((u32)i < 0x17);
+
+        if (*(s16*)(iconWork + 0x794) > 0) {
+            dispEntry(8, 1, BattleStatusIconDisp, unit, float_901_804287dc);
+        }
+    }
+}
 
 /* CHATGPT FALLBACK MISSING STUBS: main/battle/battle_status_icon 20260624_191429 */
 
@@ -190,12 +262,12 @@ s32 _bsi_regeneration(BattleWorkUnit* unit, s32* desc, s32* out) {
     s32 turnCount;
     s32 phase;
     s16* counter;
-    u32* base;
+    BSITriplet* base;
     u8* from;
     u8* to;
     u32 color;
 
-    base = vec3_80302838;
+    base = (BSITriplet*)vec3_80302838;
     status = desc[0];
     if (status == 0x17) {
         counter = (s16*)((s32)unit + 0xAE0);
@@ -228,15 +300,9 @@ s32 _bsi_regeneration(BattleWorkUnit* unit, s32* desc, s32* out) {
     }
     out[1] = turnCount;
     out[2] = desc[2];
-    out[3] = base[0x36];
-    out[4] = base[0x37];
-    out[5] = base[0x38];
-    out[6] = base[0x39];
-    out[7] = base[0x3A];
-    out[8] = base[0x3B];
-    out[9] = base[0x3C];
-    out[10] = base[0x3D];
-    out[11] = base[0x3E];
+    *(BSITriplet*)&out[3] = base[0x12];
+    *(BSITriplet*)&out[6] = base[0x13];
+    *(BSITriplet*)&out[9] = base[0x14];
     out[15] = dat_804287b0;
 
     color = 0;
@@ -245,9 +311,7 @@ s32 _bsi_regeneration(BattleWorkUnit* unit, s32* desc, s32* out) {
     ((u8*)&color)[2] = (u8)(s32)intplGetValue(0xB, phase, (f32)from[2], (f32)to[2], 0x168);
     out[15] = color;
     out[16] = desc[3];
-    out[12] = base[0x3F];
-    out[13] = base[0x40];
-    out[14] = base[0x41];
+    *(BSITriplet*)&out[12] = base[0x15];
     return 1;
 }
 
@@ -263,9 +327,9 @@ s32 _bsi_biribiri(BattleWorkUnit* unit, s32* desc, s32* out) {
     s8 strength;
     s32 status;
     s32 turnCount;
-    u32* base;
+    BSITriplet* base;
 
-    base = vec3_80302838;
+    base = (BSITriplet*)vec3_80302838;
     status = desc[0];
     if (!BtlUnit_CheckStatus(unit, status)) {
         *(s16*)((s32)unit + 0xAE4) = 0;
@@ -273,9 +337,7 @@ s32 _bsi_biribiri(BattleWorkUnit* unit, s32* desc, s32* out) {
         return 0;
     }
 
-    out[3] = base[0x24];
-    out[4] = base[0x25];
-    out[5] = base[0x26];
+    *(BSITriplet*)&out[3] = base[0xC];
 
     switch (*(s16*)((s32)unit + 0xAE4)) {
         case 0:
@@ -283,9 +345,7 @@ s32 _bsi_biribiri(BattleWorkUnit* unit, s32* desc, s32* out) {
             *(s16*)((s32)unit + 0xAE6) = irand(6) + 4;
             /* fallthrough */
         case 1:
-            out[3] = base[0x27];
-            out[4] = base[0x28];
-            out[5] = base[0x29];
+            *(BSITriplet*)&out[3] = base[0xD];
             *(s16*)((s32)unit + 0xAE6) -= 1;
             if (*(s16*)((s32)unit + 0xAE6) < 0) {
                 *(s16*)((s32)unit + 0xAE4) += 1;
@@ -293,9 +353,7 @@ s32 _bsi_biribiri(BattleWorkUnit* unit, s32* desc, s32* out) {
             }
             break;
         case 2:
-            out[3] = base[0x2A];
-            out[4] = base[0x2B];
-            out[5] = base[0x2C];
+            *(BSITriplet*)&out[3] = base[0xE];
             *(s16*)((s32)unit + 0xAE6) -= 1;
             if (*(s16*)((s32)unit + 0xAE6) < 0) {
                 *(s16*)((s32)unit + 0xAE6) = irand(6) + 4;
@@ -312,17 +370,11 @@ s32 _bsi_biribiri(BattleWorkUnit* unit, s32* desc, s32* out) {
     }
     out[1] = turnCount;
     out[2] = desc[2];
-    out[6] = base[0x2D];
-    out[7] = base[0x2E];
-    out[8] = base[0x2F];
-    out[9] = base[0x30];
-    out[10] = base[0x31];
-    out[11] = base[0x32];
+    *(BSITriplet*)&out[6] = base[0xF];
+    *(BSITriplet*)&out[9] = base[0x10];
     out[15] = dat_8042879c;
     out[16] = desc[3];
-    out[12] = base[0x33];
-    out[13] = base[0x34];
-    out[14] = base[0x35];
+    *(BSITriplet*)&out[12] = base[0x11];
     return 1;
 }
 

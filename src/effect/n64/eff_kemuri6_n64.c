@@ -80,7 +80,6 @@ void effKemuri6Main(void* effect) {
     Vec3 dispPos;
     s32 i;
     s32 alive;
-    f32 angle;
 
     work = *(u8**)((s32)effect + 0xC);
     pos = vec3_802fb260;
@@ -97,10 +96,13 @@ void effKemuri6Main(void* effect) {
                 *(s32*)work = 0;
             } else {
                 alive = 1;
-                angle = reviseAngle(float_12_80425730 + *(f32*)(work + 0x30));
-                *(f32*)(work + 0x30) = angle;
-                *(f32*)(work + 0x1C) = *(f32*)(work + 0x28) + float_0p1_8042573c * (f32)sin(float_6p2832_80425734 * angle / float_360_80425738);
-                *(f32*)(work + 0x20) = *(f32*)(work + 0x2C) + float_0p1_8042573c * (f32)cos(float_6p2832_80425734 * angle / float_360_80425738);
+                *(f32*)(work + 0x30) = reviseAngle(float_12_80425730 + *(f32*)(work + 0x30));
+                *(f32*)(work + 0x1C) = *(f32*)(work + 0x28) +
+                    float_0p1_8042573c *
+                    (f32)sin(float_6p2832_80425734 * *(f32*)(work + 0x30) / float_360_80425738);
+                *(f32*)(work + 0x20) = *(f32*)(work + 0x2C) +
+                    float_0p1_8042573c *
+                    (f32)cos(float_6p2832_80425734 * *(f32*)(work + 0x30) / float_360_80425738);
                 if (*(u16*)(work + 4) == 0 && *(s16*)(work + 6) > 4 && *(s16*)(work + 6) <= 5) {
                     if (*(u16*)((s32)marioGetPtr() + 0x2E) == 0) {
                         *(s16*)(work + 6) += 1;

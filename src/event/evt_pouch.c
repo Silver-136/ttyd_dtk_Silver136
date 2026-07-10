@@ -345,5 +345,17 @@ s32 evt_pouch_add_item(void* pEvt) {
 #pragma use_lmw_stmw on
 
 s32 evt_pouch_all_party_recovery(void) {
-    return 0;
+    extern void* pouchGetPtr(void);
+    void* pouch = pouchGetPtr();
+
+    *(s16*)((s32)pouch + 0x6) = *(s16*)((s32)pouch + 0x2);
+    *(s16*)((s32)pouch + 0x14) = *(s16*)((s32)pouch + 0x10);
+    *(s16*)((s32)pouch + 0x22) = *(s16*)((s32)pouch + 0x1E);
+    *(s16*)((s32)pouch + 0x30) = *(s16*)((s32)pouch + 0x2C);
+    *(s16*)((s32)pouch + 0x3E) = *(s16*)((s32)pouch + 0x3A);
+    *(s16*)((s32)pouch + 0x4C) = *(s16*)((s32)pouch + 0x48);
+    *(s16*)((s32)pouch + 0x5A) = *(s16*)((s32)pouch + 0x56);
+    *(s16*)((s32)pouch + 0x68) = *(s16*)((s32)pouch + 0x64);
+    return 2;
 }
+

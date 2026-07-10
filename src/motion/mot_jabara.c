@@ -155,5 +155,21 @@ s32 marioGetJabaraState(void) {
 }
 
 s32 jabaraNoHitChk(void) {
+    extern void* marioGetPtr(void);
+
+    void* mario = marioGetPtr();
+    u16 motion = *(u16*)((s32)mario + 0x2E);
+    s32 pose;
+
+    if (motion != 0x14) {
+        return 0;
+    }
+
+    pose = *(s32*)((s32)mario + 0x44);
+    if (pose >= 0x28 && pose < 0x32) {
+        return 1;
+    }
+
     return 0;
 }
+

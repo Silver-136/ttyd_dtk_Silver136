@@ -151,10 +151,59 @@ s32 _anime_load(void) {
 }
 
 
-s32 _backfire(int param_1, int param_2) {
+s32 _backfire(void* evt, s32 firstCall) {
+    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+    extern void* effFireEntry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 duration);
+    extern void effDelete(void* effect);
+    extern void BattleDamageDirect(s32 attacker, void* unit, s32 part, s32 damage, s32 zero, s32 flags, s32 arg7, s32 arg8);
+    extern s32 evtGetValue(void* evt, s32 value);
+    extern f32 sinfd(f32 value);
+    extern f32 float_1_804222fc;
+    extern f32 float_0p4_80422300;
+    extern f32 float_1p6_80422304;
+    s32* args;
+    void* battleWork;
+    s32 unitId;
+    void* unit;
+    void* effectWork;
+    s32 counter;
+    s32 value;
+    f32 x;
+    f32 y;
+    f32 z;
+
+    args = *(s32**)((s32)evt + 0x18);
+    battleWork = _battleWorkPointer;
+
+    value = evtGetValue(evt, args[0]);
+    unitId = BattleTransID(evt, value);
+    unit = BattleGetUnitPtr(battleWork, unitId);
+    if (unit == 0) {
+        return 2;
+    }
+
+    if (firstCall != 0) {
+        BtlUnit_GetPos(unit, &x, &y, &z);
+        *(void**)((s32)evt + 0x78) = effFireEntry(x, y, z, float_1_804222fc, 0, 0);
+        *(s32*)((s32)evt + 0x7C) = 0;
+    }
+
+    effectWork = *(void**)((s32)*(void**)((s32)evt + 0x78) + 0xC);
+    *(s32*)((s32)evt + 0x7C) = *(s32*)((s32)evt + 0x7C) + 1;
+    counter = *(s32*)((s32)evt + 0x7C);
+
+    if (*(s32*)((s32)evt + 0x7C) >= 60) {
+        effDelete(*(void**)((s32)evt + 0x78));
+        BattleDamageDirect(-5, unit, 0, 1, 0, 0x118, 0, 1);
+        if (BattleTransID(evt, *(s32*)((s32)evt + 0x160)) != unitId) {
+            return 2;
+        }
+        return 0xFF;
+    }
+
+    *(f32*)((s32)effectWork + 0x24) = float_1p6_80422304 * sinfd((f32)(counter * 3)) + float_0p4_80422300;
     return 0;
 }
-
 
 s32 _check_pose_stay(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);

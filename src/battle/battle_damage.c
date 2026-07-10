@@ -220,7 +220,37 @@ s32 BattleCheckCounter(void* work, BattleWorkUnit* attacker, BattleWorkUnit* tar
 /* AUTOSTUB BattleAttackDeclareAll size 0x118 */
 /* signature source: prototype_search */
 void BattleAttackDeclareAll(BattleWork* battleWork) {
-    ;
+    extern void __declare(int param_1, s32 param_2, s32* param_3, s32* param_4);
+    s32 unitId;
+    s32 partId;
+    s32 i;
+
+    for (i = 0; i < *(s8*)((s32)battleWork + 0xE94); i++) {
+        s32 index = *(s8*)((s32)battleWork + 0xE95 + i);
+        s16* entry = (s16*)((s32)battleWork + 0x428 + index * 0x24 + 4);
+        __declare(entry[0], entry[1], &unitId, &partId);
+        if (unitId != -1) {
+            s32 j;
+            for (j = 0; j < *(s8*)((s32)battleWork + 0xE94); j++) {
+                s32 otherIndex = *(s8*)((s32)battleWork + 0xE95 + j);
+                s16* other = (s16*)((s32)battleWork + 0x428 + otherIndex * 0x24 + 4);
+                if (other[0] == unitId) {
+                    s32 k;
+                    for (k = j; k < *(s8*)((s32)battleWork + 0xE94) - 1; k++) {
+                        *(u8*)((s32)battleWork + 0xE95 + k) = *(u8*)((s32)battleWork + 0xE96 + k);
+                    }
+                    if (j <= i) {
+                        i--;
+                    }
+                    *(u8*)((s32)battleWork + 0xE94) = *(u8*)((s32)battleWork + 0xE94) - 1;
+                    break;
+                }
+            }
+            entry[0] = unitId;
+            entry[1] = partId;
+        }
+    }
+    *(u8*)((s32)battleWork + 0xEDF) = 0;
 }
 
 /* MANUAL_AUTOMATION_STUBS_END main/battle/battle_damage */
@@ -599,7 +629,45 @@ int BattleCalculateFpDamage(BattleWorkUnit* unit1, BattleWorkUnit* unit2, Battle
 /* AUTOSTUB BattleSetStatusDamageFromWeapon size 0x14C */
 /* signature source: manual_signatures */
 u32 BattleSetStatusDamageFromWeapon(BattleWorkUnit* unit1, BattleWorkUnit* unit2, BattleWorkUnitPart* part, void* weapon, u32 param_5) {
-    return 0;
+    extern void _getSickStatusParam(BattleWorkUnit* unit, void* weapon, StatusEffectType statusType, s8* turns, s8* strength);
+    extern u32 _getSickStatusRate(void* weapon, StatusEffectType statusType);
+    extern s32 BattleSetStatusDamage(u32* param_1, BattleWorkUnit* unit, BattleWorkUnitPart* part, u32 attackPropertyFlags, StatusEffectType statusType, int rate, int galeFactor, char turns, char strength);
+    extern void btlDispPoseAnime(void* part);
+    u32 result = 0;
+    s32 status;
+
+    if ((param_5 & 0x20000000) == 0) {
+        for (status = 0; status < 28; status++) {
+            s8 turns;
+            s8 strength;
+            s32 rate;
+            s32 galeFactor = 0;
+            s32 doApply = 1;
+
+            _getSickStatusParam(unit1, weapon, status, &turns, &strength);
+            rate = _getSickStatusRate(weapon, status);
+            switch (status) {
+                case 10:
+                case 11:
+                case 12:
+                    if (turns == 0 && strength == 0) {
+                        doApply = 0;
+                    }
+                    break;
+                case 26:
+                    if (rate > 0) {
+                        galeFactor = *(u8*)((s32)unit1 + 0xD) - *(u8*)((s32)unit2 + 0xD);
+                    }
+                    break;
+            }
+            if (doApply && BattleSetStatusDamage(&result, unit2, part, *(u32*)((s32)weapon + 0x74), status, rate, galeFactor, turns, strength) != 0) {
+                if (status == 18) {
+                    btlDispPoseAnime(part);
+                }
+            }
+        }
+    }
+    return result;
 }
 
 /* MANUAL_AUTOMATION_STUBS_END main/battle/battle_damage */

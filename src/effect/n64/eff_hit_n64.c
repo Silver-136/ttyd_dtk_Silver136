@@ -106,7 +106,7 @@ void effHitMain(void* effect) {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effHitDisp(void);
-    extern Vec3 vec3_802fb0a0;
+    extern Vec3 vec3_802fb0a0[];
     extern u8 cnt_table[];
     extern u8 anim_data[];
     extern u8 radius_data[];
@@ -115,15 +115,17 @@ void effHitMain(void* effect) {
     extern f32 float_0_80425468;
     u8* work;
     u8* part;
-    Vec3 pos;
+    Vec3* base;
     Vec3 dispPos;
+    Vec3 pos;
     s32 i;
     s32 frame;
     s32 type;
     s32 idx;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos = vec3_802fb0a0;
+    base = vec3_802fb0a0;
+    pos = *base;
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);

@@ -16,6 +16,8 @@ u8 effFukidashiEntry(void) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 effFukidashiMain(void* effect) {
     typedef struct LocalVec3 {
         f32 x;
@@ -35,8 +37,8 @@ u8 effFukidashiMain(void* effect) {
     extern f32 float_9_80422944;
     extern f32 float_neg90_80422948;
     void* work;
-    LocalVec3 pos;
     LocalVec3 dispPos;
+    LocalVec3 pos;
     s8* anim;
     s32 value;
     s32 frame;
@@ -106,7 +108,13 @@ u8 effFukidashiMain(void* effect) {
     if (*(void**)((s32)work + 0x44) != 0) {
         calc_pos(work, 1);
     }
-    dispEntry(*(s32*)((s32)work + 0x4C), kind == 4 ? 2 : 8, effFukidashiDisp, effect, dispCalcZ(&dispPos));
+    if (kind == 4) {
+        dispEntry(*(s32*)((s32)work + 0x4C), 2, effFukidashiDisp, effect, dispCalcZ(&dispPos));
+    } else {
+        dispEntry(*(s32*)((s32)work + 0x4C), 8, effFukidashiDisp, effect, dispCalcZ(&dispPos));
+    }
     return 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 

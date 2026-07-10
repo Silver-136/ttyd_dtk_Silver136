@@ -277,34 +277,34 @@ void nokonoko_use_post(void* party) {
 
 s32 nokonokoGetStatus(void* party) {
     u8 state;
+    s32 ret;
 
     if (party == 0) {
         return 0;
     }
-    if (*(s8*)((s32)party + 0x31) != 2 || !(*(u32*)party & 0x100)) {
+    if (*(s8*)((s32)party + 0x31) != 2) {
+        return 0;
+    }
+    if ((*(u32*)party & 0x100) == 0) {
         return 0;
     }
 
     state = *(u8*)((s32)party + 0x39);
+    ret = 7;
     if (state <= 2) {
-        return 1;
+        ret = 1;
+    } else if (state >= 0xA && state <= 0xD) {
+        ret = 2;
+    } else if (state >= 0x14 && state <= 0x15) {
+        ret = 3;
+    } else if (state >= 0x32 && state <= 0x47) {
+        ret = 4;
+    } else if (state >= 0x50 && state <= 0x64) {
+        ret = 5;
+    } else if (state >= 0x6E && state <= 0x72) {
+        ret = 6;
     }
-    if (state >= 0xA && state <= 0xD) {
-        return 2;
-    }
-    if (state >= 0x14 && state <= 0x15) {
-        return 3;
-    }
-    if (state >= 0x32 && state <= 0x47) {
-        return 4;
-    }
-    if (state >= 0x50 && state <= 0x64) {
-        return 5;
-    }
-    if (state >= 0x6E && state <= 0x72) {
-        return 6;
-    }
-    return 7;
+    return ret;
 }
 
 void nokonoko_move(void* party) {

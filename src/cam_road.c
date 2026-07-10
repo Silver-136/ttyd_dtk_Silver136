@@ -1413,5 +1413,149 @@ s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
 
 
 s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
-    return 0;
+    f32* p;
+    f32* v0;
+    f32* v1;
+    f32* v2;
+    f32* outY;
+    f32 pX;
+    f32 pY;
+    f32 pZ;
+    f32 v0X;
+    f32 v0Y;
+    f32 v0Z;
+    f32 v1X;
+    f32 v1Y;
+    f32 v1Z;
+    f32 v2X;
+    f32 v2Y;
+    f32 v2Z;
+    f32 e0X;
+    f32 e0Y;
+    f32 e0Z;
+    f32 e1X;
+    f32 e1Y;
+    f32 e1Z;
+    f32 e2X;
+    f32 e2Y;
+    f32 e2Z;
+    f32 nX;
+    f32 nY;
+    f32 nZ;
+    f32 dist;
+    f32 denom;
+    f32 hitY;
+    f32 oldY;
+    f32 vx;
+    f32 vy;
+    f32 vz;
+    f32 t0;
+    f32 t1;
+    f32 t2;
+
+    p = (f32*)a;
+    v0 = (f32*)b;
+    v1 = (f32*)c;
+    v2 = (f32*)d;
+    outY = (f32*)e;
+
+    vx = 0.0f;
+    vy = -1.0f;
+    vz = 0.0f;
+
+    v0X = v0[0];
+    v0Y = v0[1];
+    v0Z = v0[2];
+    v1X = v1[0];
+    v1Y = v1[1];
+    v1Z = v1[2];
+    v2X = v2[0];
+    v2Y = v2[1];
+    v2Z = v2[2];
+
+    e0X = v0X - v1X;
+    e0Y = v0Y - v1Y;
+    e0Z = v0Z - v1Z;
+    e1X = v2X - v0X;
+    e1Y = v2Y - v0Y;
+    e1Z = v2Z - v0Z;
+    e2X = v1X - v2X;
+    e2Y = v1Y - v2Y;
+    e2Z = v1Z - v2Z;
+
+    nX = (e1Y * e0Z) - (e1Z * e0Y);
+    nY = (e1Z * e0X) - (e1X * e0Z);
+    nZ = (e1X * e0Y) - (e1Y * e0X);
+
+    if ((nX == 0.0f) && (nY == 0.0f) && (nZ == 0.0f)) {
+        return 0;
+    }
+
+    pX = p[0];
+    pY = p[1];
+    pZ = p[2];
+
+    dist = (nX * (pX - v0X)) + (nY * (pY - v0Y)) + (nZ * (pZ - v0Z));
+    denom = (nX * vx) + (nY * vy) + (nZ * vz);
+
+    if (dist <= 0.0f) {
+        if ((f64)denom <= 0.0) {
+            return 0;
+        }
+
+        t0 = ((pZ - v0Z) * ((e1X * vz) - (e1Y * vx))) +
+             ((pX - v0X) * ((e1Y * vy) - (e1Z * vz))) +
+             ((pY - v0Y) * ((e1Z * vx) - (e1X * vy)));
+        if ((f64)t0 < 0.0) {
+            return 0;
+        }
+
+        t1 = ((pZ - v1Z) * ((e0X * vz) - (e0Y * vx))) +
+             ((pX - v1X) * ((e0Y * vy) - (e0Z * vz))) +
+             ((pY - v1Y) * ((e0Z * vx) - (e0X * vy)));
+        if ((f64)t1 < 0.0) {
+            return 0;
+        }
+
+        t2 = ((pZ - v2Z) * ((e2X * vz) - (e2Y * vx))) +
+             ((pX - v2X) * ((e2Y * vy) - (e2Z * vz))) +
+             ((pY - v2Y) * ((e2Z * vx) - (e2X * vy)));
+        if ((f64)t2 < 0.0) {
+            return 0;
+        }
+    } else {
+        if (0.0 <= (f64)denom) {
+            return 0;
+        }
+
+        t0 = ((pZ - v0Z) * ((e1X * vz) - (e1Y * vx))) +
+             ((pX - v0X) * ((e1Y * vy) - (e1Z * vz))) +
+             ((pY - v0Y) * ((e1Z * vx) - (e1X * vy)));
+        if (0.0 < (f64)t0) {
+            return 0;
+        }
+
+        t1 = ((pZ - v1Z) * ((e0X * vz) - (e0Y * vx))) +
+             ((pX - v1X) * ((e0Y * vy) - (e0Z * vz))) +
+             ((pY - v1Y) * ((e0Z * vx) - (e0X * vy)));
+        if (0.0 < (f64)t1) {
+            return 0;
+        }
+
+        t2 = ((pZ - v2Z) * ((e2X * vz) - (e2Y * vx))) +
+             ((pX - v2X) * ((e2Y * vy) - (e2Z * vz))) +
+             ((pY - v2Y) * ((e2Z * vx) - (e2X * vy)));
+        if (0.0 < (f64)t2) {
+            return 0;
+        }
+    }
+
+    oldY = *outY;
+    hitY = pY + (vy * (-dist / denom));
+    if (oldY <= hitY) {
+        *outY = hitY;
+    }
+
+    return oldY <= hitY;
 }
+

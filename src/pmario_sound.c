@@ -172,8 +172,10 @@ s32 psndSFXOnEx_3D(s32 lookup, u8 volume, u8 a3, u16 a4, Vec* position, u16 dist
 }
 
 s32 psndBGMChk(s32 index) {
-    s32 value = *(s32*)((s32)&psbgm[index & 0xF] + 0);
-    return value != -1;
+    s32 value;
+
+    value = *(s32*)((s32)&psbgm[index & 0xF] + 0);
+    return (u32)(~((value + 1) | (-1 - value))) >> 31;
 }
 
 s32 psndBGMChkSilent(s32 index) {
@@ -852,26 +854,86 @@ s32 searchPSSFXList(s32 name) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-u8 psndBGM_rate(u32 param_1, u16 param_2) {
-    return 0;
-}
+void psndBGM_rate(u32 param_1, u16 param_2) {
+    extern void SoundSSSetPlayFreqCh(s32 id);
+    extern u8 psbgmlist[];
+    PaperSoundBGM* bgm;
+    s32 listIndex;
 
+    bgm = &psbgm[param_1 & 0xF];
+    listIndex = *(s32*)bgm;
+    if ((u32)(listIndex + 0x10000) != 0xFFFF) {
+        if ((*(u32*)(psbgmlist + listIndex * 0x10 + 4) & 0x80000000) != 0) {
+            SoundSSSetPlayFreqCh(*(s32*)((s32)bgm + 4));
+        }
+    }
+}
 
 int psndSFXChk(u32 param_1) {
-    return 0;
+    PaperSoundEffect* sfx;
+    s32 listIndex;
+
+    if ((u32)(param_1 + 0x10000) == 0xFFFF) {
+        return -1;
+    }
+    sfx = &pssfx[(u8)param_1];
+    if (((param_1 >> 8) & 0xFFFF) != *(u16*)((s32)sfx + 4)) {
+        return -1;
+    }
+    listIndex = *(s32*)sfx;
+    return ((listIndex + 1) & ~(-1 - listIndex)) >> 31;
 }
 
+void psndBGMScope(u32 param_1, int param_2) {
+    PaperSoundBGM* bgm;
 
-u8 psndBGMScope(u32 param_1, int param_2) {
-    return 0;
+    bgm = &psbgm[param_1 & 0xF];
+    if (*(s32*)bgm == -1) {
+        return;
+    }
+    if (param_2 > 0) {
+        *(u8*)((s32)bgm + 0x10) = 0xFF;
+    }
+    if (param_2 < 0) {
+        *(u8*)((s32)bgm + 0x10) = 0;
+    }
+    if (param_2 == 0) {
+        *(u8*)((s32)bgm + 0x10) = 0x1E;
+    }
 }
 
+void psndMain(void) {
+    extern s32 init_f;
+    extern void SoundMain(void);
+    u8* work;
+    s8 count;
 
-u8 psndMain(void) {
-    return 0;
+    if (init_f != 0) {
+        work = (u8*)&psnd;
+        count = *(s8*)(work + 0x5C);
+        if (count != 0) {
+            work[0x5C] = count - 1;
+        }
+        psndBGMMain();
+        psndENVMain();
+        psndSFXMain();
+        SoundMain();
+    }
 }
-
 
 s32 psndENV_LPF(u32 param_1, short param_2) {
-    return 0;
+    u8* work;
+    u32 offset;
+
+    offset = (param_1 & 0xF) * 2;
+    work = (u8*)&psnd;
+    if (*(u16*)(work + 0x18 + offset) == 0) {
+        return 0;
+    }
+    if ((u16)param_2 == 0) {
+        param_2 = 0x7D00;
+    }
+    *(u16*)(work + 0x20 + offset) = param_2;
+    return 1;
 }
+

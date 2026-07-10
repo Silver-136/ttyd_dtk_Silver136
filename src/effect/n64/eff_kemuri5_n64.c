@@ -39,9 +39,6 @@ void effKemuri5Main(void* effect) {
     Vec3 dispPos;
     s32 i;
     s32 alive;
-    f32 angle;
-    f32 s;
-    f32 c;
 
     work = *(u8**)((s32)effect + 0xC);
     pos = vec3_802fb240;
@@ -58,12 +55,13 @@ void effKemuri5Main(void* effect) {
                 *(s32*)work = 0;
             } else {
                 alive = 1;
-                angle = reviseAngle(float_12_804256e0 + *(f32*)(work + 0x2C));
-                *(f32*)(work + 0x2C) = angle;
-                s = (f32)sin(float_6p2832_804256e4 * angle / float_360_804256e8);
-                *(f32*)(work + 0x18) = *(f32*)(work + 0x24) + float_0p1_804256ec * s;
-                c = (f32)cos(float_6p2832_804256e4 * angle / float_360_804256e8);
-                *(f32*)(work + 0x1C) = *(f32*)(work + 0x28) + float_0p1_804256ec * c;
+                *(f32*)(work + 0x2C) = reviseAngle(float_12_804256e0 + *(f32*)(work + 0x2C));
+                *(f32*)(work + 0x18) = *(f32*)(work + 0x24) +
+                    float_0p1_804256ec *
+                    (f32)sin(float_6p2832_804256e4 * *(f32*)(work + 0x2C) / float_360_804256e8);
+                *(f32*)(work + 0x1C) = *(f32*)(work + 0x28) +
+                    float_0p1_804256ec *
+                    (f32)cos(float_6p2832_804256e4 * *(f32*)(work + 0x2C) / float_360_804256e8);
                 *(f32*)(work + 0x30) *= float_0p83_804256f0;
                 *(f32*)(work + 0xC) += *(f32*)(work + 0x30) * *(f32*)(work + 0x44);
                 *(f32*)(work + 0x14) += *(f32*)(work + 0x30) * *(f32*)(work + 0x48);

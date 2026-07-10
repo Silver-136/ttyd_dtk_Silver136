@@ -23,6 +23,9 @@ void* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     u8* work;
     u8* entry;
     f32 radius;
+    f32 step;
+    f32 deg2rad;
+    f32 zero;
     f32 angle;
     s32 i;
 
@@ -33,29 +36,32 @@ void* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     *(u8**)((s32)effect + 0xC) = work;
     *(void**)((s32)effect + 0x10) = effBombMain;
     radius = float_10_804247f0 * scale;
-
     *(s32*)(work + 0) = type;
+    entry = work + 0x28;
+    step = float_90_804247f4;
+    i = 1;
     *(f32*)(work + 4) = x;
+    deg2rad = float_deg2rad_804247c8;
     *(f32*)(work + 8) = y;
+    zero = float_0_804247d8;
     *(f32*)(work + 0xC) = z;
     *(f32*)(work + 0x18) = scale;
     *(s32*)(work + 0x20) = 0;
     *(s32*)(work + 0x24) = 0;
 
-    entry = work + 0x28;
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
-        angle = float_90_804247f4 * (f32)(i - 1);
+    for (; i < *(s32*)((s32)effect + 8); i++) {
+        angle = step * (f32)(i - 1);
         if (i > 4) {
             angle += float_45_804247f8;
         } else {
-            angle += float_0_804247d8;
+            angle += zero;
         }
         *(f32*)(entry + 0x1C) = angle;
-        *(f32*)(entry + 4) = radius * (f32)sin(float_deg2rad_804247c8 * angle);
-        *(f32*)(entry + 8) = radius * (f32)cos(float_deg2rad_804247c8 * angle);
-        *(f32*)(entry + 0xC) = float_0_804247d8;
-        *(f32*)(entry + 0x10) = float_0_804247d8;
-        *(f32*)(entry + 0x14) = float_0_804247d8;
+        *(f32*)(entry + 4) = radius * (f32)sin(deg2rad * *(f32*)(entry + 0x1C));
+        *(f32*)(entry + 8) = radius * (f32)cos(deg2rad * *(f32*)(entry + 0x1C));
+        *(f32*)(entry + 0xC) = zero;
+        *(f32*)(entry + 0x10) = zero;
+        *(f32*)(entry + 0x14) = zero;
         *(s32*)(entry + 0x24) = 0;
         *(s32*)(entry + 0x20) = 0;
         entry += 0x28;
@@ -76,7 +82,12 @@ void effBombMain(void* effect) {
     extern f32 vec3_802f9aa0[3];
     u8* work;
     u8* entry;
-    u8* table;
+    u8* table1;
+    u8* table2;
+    u8* table1_1;
+    u8* table1_2;
+    u8* table2_1;
+    u8* table2_2;
     f32 pos[3];
     f32 dispPos[3];
     s32 oldFrame;
@@ -100,17 +111,26 @@ void effBombMain(void* effect) {
         return;
     }
 
+    table1 = scale_dt + oldFrame * 3;
+    table2 = scale_dt2 + oldFrame * 3;
+    table1_1 = table1 + 1;
+    table1_2 = table1 + 2;
+    table2_1 = table2 + 1;
+    table2_2 = table2 + 2;
     entry = work + 0x28;
     for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
-        if (oldFrame < 0x36) {
-            if (i < 5) {
-                table = scale_dt + oldFrame * 3;
-            } else {
-                table = scale_dt2 + oldFrame * 3;
+        if (i < 5) {
+            if ((u32)oldFrame < 0x36U) {
+                *(u32*)(entry + 0x24) = table1[0];
+                *(f32*)(entry + 0x10) = (f32)table1_1[0] / float_100_804247e4;
+                *(f32*)(entry + 0x14) = (f32)table1_2[0] / float_100_804247e4;
             }
-            *(u32*)(entry + 0x24) = table[0];
-            *(f32*)(entry + 0x10) = (f32)table[1] / float_100_804247e4;
-            *(f32*)(entry + 0x14) = (f32)table[2] / float_100_804247e4;
+        } else {
+            if ((u32)oldFrame < 0x36U) {
+                *(u32*)(entry + 0x24) = table2[0];
+                *(f32*)(entry + 0x10) = (f32)table2_1[0] / float_100_804247e4;
+                *(f32*)(entry + 0x14) = (f32)table2_2[0] / float_100_804247e4;
+            }
         }
         entry += 0x28;
     }

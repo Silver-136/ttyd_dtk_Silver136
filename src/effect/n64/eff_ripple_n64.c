@@ -39,6 +39,8 @@ u8 effRippleDisp(int param_1, int param_2) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effRippleMain(void* effect) {
     typedef struct Vec3 {
         f32 x;
@@ -49,15 +51,15 @@ void effRippleMain(void* effect) {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effRippleDisp(void);
-    extern void* effRippleN64Entry(f32 x, f32 y, f32 z, f32 height, s32 type);
+    extern void* effRippleN64Entry(s32 type, f32 x, f32 y, f32 z, f32 height);
     extern const Vec3 vec3_802fbe48;
     extern f32 float_0_80425f20;
     extern f32 float_0p3_80425f30;
     extern f32 float_1p05_80425f34;
     extern f32 float_0p1_80425f38;
     u8* work;
-    Vec3 pos;
     Vec3 dispPos;
+    Vec3 pos;
     s32 timer;
     s32 type;
     void* child;
@@ -101,6 +103,8 @@ void effRippleMain(void* effect) {
     *(f32*)(work + 0x10) += float_0p1_80425f38;
     dispEntry(*(s32*)(work + 0x34), 2, effRippleDisp, effect, dispCalcZ(&dispPos));
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

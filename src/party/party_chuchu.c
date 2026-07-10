@@ -46,6 +46,8 @@ u8 set_msg(void* pEvt) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 chuchu_searchObject(void) {
     extern void* gp;
     extern u8 mobj_list[];
@@ -100,6 +102,8 @@ u8 chuchu_searchObject(void) {
     }
     return found != 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -149,5 +153,16 @@ u8 chuchu_use(void* pParty) {
 
 
 u8 chuchu_move(void* pParty) {
-    return 0;
+    extern void partyWalkInit(void* party, s32 param);
+    extern void unk_800cbeb0(void* party);
+    extern void partyWalkMain(void* party);
+
+    if (*(u32*)((s32)pParty + 8) & 8) {
+        *(u32*)((s32)pParty + 8) &= ~8;
+        *(u32*)pParty &= ~0x100;
+        partyWalkInit(pParty, 1);
+    }
+    unk_800cbeb0(pParty);
+    partyWalkMain(pParty);
 }
+

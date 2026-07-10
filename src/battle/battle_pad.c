@@ -203,5 +203,14 @@ void BtlPad_WorkInit(void* work) {
 
 
 void BattlePadManager(void) {
-    ;
+    s32 offset;
+    s32 i;
+
+    i = 0;
+    offset = 0;
+    for (; i < 4; i++) {
+        BtlPad_WorkUpdate((void*)((s32)_battleWorkPointer + offset + 0xF2C), i);
+        offset += 0x1FC;
+    }
 }
+

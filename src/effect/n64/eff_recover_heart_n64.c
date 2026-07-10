@@ -6,11 +6,99 @@ u8 effRecoverHeartDisp(int param_1, int param_2) {
 }
 
 
-u8 effRecoverHeartMain(void) {
-    return 0;
+void effRecoverHeartMain(void* effect) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(Vec3*);
+    extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
+    extern void effRecoverHeartDisp(void);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern const Vec3 vec3_802fbdf0;
+    extern f32 scale_w_dat[];
+    extern f32 scale_h_dat[];
+    extern f32 float_0p05_80425e9c;
+    extern f32 float_6p2832_80425ea0;
+    extern f32 float_360_80425ea4;
+    extern f32 float_neg30_80425ea8;
+    extern f32 float_8_80425eac;
+    extern f32 float_0p9_80425eb0;
+    extern f32 float_1_80425e94;
+    u8* work;
+    u8* part;
+    Vec3 pos;
+    Vec3 dispPos;
+    f32 angle;
+    f32 fadeScale;
+    s32 i;
+    s32 timer;
+    s32 angleCounter;
+    s32 alphaValue;
+
+    work = *(u8**)((s32)effect + 0xC);
+    pos = vec3_802fbdf0;
+    pos.x = *(f32*)(work + 4);
+    pos.y = *(f32*)(work + 8);
+    pos.z = *(f32*)(work + 0xC);
+    dispPos = pos;
+
+    *(s32*)(work + 0x2C) -= 1;
+    *(s32*)(work + 0x30) += 1;
+    timer = *(s32*)(work + 0x2C);
+    if (timer < 0) {
+        effDelete(effect);
+        return;
+    }
+
+    fadeScale = (f32)timer * float_0p05_80425e9c;
+    i = 1;
+    part = work + 0x48;
+    angleCounter = timer * 0xC + 0x26;
+    alphaValue = timer * 0x19;
+    for (; i < *(s32*)((s32)effect + 8); i++, part += 0x48, angleCounter += 0x26) {
+        s32 wait = *(s32*)(part + 0x34);
+        s32 frame = *(s32*)(part + 0x2C);
+        if (wait > 0) {
+            *(s32*)(part + 0x34) = wait - 1;
+            if (*(s32*)(part + 0x34) > 0) {
+                continue;
+            }
+        }
+
+        if (frame >= 7) {
+            *(f32*)(part + 0x3C) = float_1_80425e94;
+            *(f32*)(part + 0x38) = float_1_80425e94;
+        } else {
+            *(f32*)(part + 0x38) = scale_w_dat[frame];
+            *(f32*)(part + 0x3C) = scale_h_dat[frame];
+        }
+
+        angle = (float_6p2832_80425ea0 * (f32)angleCounter) / float_360_80425ea4;
+        *(f32*)(part + 4) += *(f32*)(part + 0x10);
+        *(f32*)(part + 8) += *(f32*)(part + 0x14);
+        *(f32*)(part + 0xC) += *(f32*)(part + 0x18);
+        *(f32*)(part + 0x1C) = float_neg30_80425ea8 * (f32)sin(angle);
+        *(f32*)(part + 0x24) = float_8_80425eac * (f32)cos(angle);
+        if (timer < 20) {
+            *(f32*)(part + 0x24) *= fadeScale;
+            *(f32*)(part + 0x1C) *= fadeScale;
+        }
+        if (timer < 10) {
+            *(s32*)(part + 0x28) = alphaValue;
+            *(f32*)(part + 0x14) *= float_0p9_80425eb0;
+        }
+        *(s32*)(part + 0x2C) += 1;
+    }
+
+    dispEntry(4, 2, effRecoverHeartDisp, effect, dispCalcZ(&dispPos));
 }
 
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effRecoverHeartN64Entry(s32 type, s32 direction, f32 x, f32 y, f32 z) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -21,6 +109,8 @@ void* effRecoverHeartN64Entry(s32 type, s32 direction, f32 x, f32 y, f32 z) {
     void* entry;
     u8* work;
     s32 mode;
+    f32 zero;
+    f32 onePointFour;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_RecoverHeartN64_802fbe08;
@@ -42,29 +132,36 @@ void* effRecoverHeartN64Entry(s32 type, s32 direction, f32 x, f32 y, f32 z) {
     }
     *(s32*)(work + 0x40) = direction;
     mode = 1;
-    *(f32*)(work + 0x4C) = float_0_80425e90;
-    *(f32*)(work + 0x50) = float_0_80425e90;
-    *(f32*)(work + 0x54) = float_0_80425e90;
-    *(f32*)(work + 0x6C) = float_0_80425e90;
-    *(f32*)(work + 0x58) = float_0_80425e90;
-    *(f32*)(work + 0x60) = float_0_80425e90;
-    *(f32*)(work + 0x68) = float_0_80425e90;
-    *(f32*)(work + 0x64) = float_0_80425e90;
+    zero = float_0_80425e90;
     if (mode == 1) {
-        *(f32*)(work + 0x4C) = float_0_80425e90;
+        *(f32*)(work + 0x4C) = zero;
+    }
+    *(f32*)(work + 0x50) = zero;
+    *(f32*)(work + 0x54) = zero;
+    *(f32*)(work + 0x6C) = zero;
+    *(f32*)(work + 0x58) = zero;
+    *(f32*)(work + 0x60) = zero;
+    *(f32*)(work + 0x68) = zero;
+    *(f32*)(work + 0x64) = zero;
+    if (mode == 1) {
+        *(f32*)(work + 0x4C) = zero;
         *(s32*)(work + 0x7C) = 0;
-        *(f32*)(work + 0x80) = float_0_80425e90;
-        *(f32*)(work + 0x84) = float_0_80425e90;
-        *(f32*)(work + 0x5C) = float_1p4_80425eb4;
+        onePointFour = float_1p4_80425eb4;
+        *(f32*)(work + 0x80) = zero;
+        *(f32*)(work + 0x84) = zero;
+        *(f32*)(work + 0x5C) = onePointFour;
     } else {
         *(f32*)(work + 0x4C) = (f32)(((((mode & 1) << 1) - 1) * (0 >> 1)) << 2);
-        *(f32*)(work + 0x5C) = float_1p4_80425eb4;
+        onePointFour = float_1p4_80425eb4;
+        *(f32*)(work + 0x5C) = onePointFour;
         *(s32*)(work + 0x7C) = 0xB;
-        *(f32*)(work + 0x80) = float_0_80425e90;
-        *(f32*)(work + 0x84) = float_0_80425e90;
+        *(f32*)(work + 0x80) = zero;
+        *(f32*)(work + 0x84) = zero;
     }
     *(s32*)(work + 0x74) = 0;
     *(s32*)(work + 0x70) = 0xFF;
     return entry;
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 

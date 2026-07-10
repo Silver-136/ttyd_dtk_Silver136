@@ -6,6 +6,8 @@ u8 effOnpuDisp(int param_1, int param_2) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effOnpuN64Entry(s32 type, f32 x, f32 y, f32 z) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -65,6 +67,8 @@ void* effOnpuN64Entry(s32 type, f32 x, f32 y, f32 z) {
     }
     return entry;
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 
 void effOnpuMain(void* effect) {
     typedef struct Vec3 {
@@ -81,10 +85,11 @@ void effOnpuMain(void* effect) {
     extern f32 float_1_80425b24;
     extern f32 float_0p04_80425b28;
     u8* work;
-    Vec3 pos;
     Vec3 dispPos;
+    Vec3 pos;
     s32 timer;
     s32 alpha;
+    f32 accel;
 
     work = *(u8**)((s32)effect + 0xC);
     pos = vec3_802fbb28;
@@ -109,10 +114,11 @@ void effOnpuMain(void* effect) {
         *(s32*)(work + 0x14) = timer * 0x19;
     }
 
+    accel = float_0p04_80425b28;
     *(f32*)(work + 4) += *(f32*)(work + 0x24);
     *(f32*)(work + 8) += *(f32*)(work + 0x28);
-    *(f32*)(work + 0x24) += float_0p04_80425b28 * (*(f32*)(work + 0x2C) - *(f32*)(work + 0x24));
-    *(f32*)(work + 0x28) += float_0p04_80425b28 * (*(f32*)(work + 0x30) - *(f32*)(work + 0x28));
+    *(f32*)(work + 0x24) += accel * (*(f32*)(work + 0x2C) - *(f32*)(work + 0x24));
+    *(f32*)(work + 0x28) += accel * (*(f32*)(work + 0x30) - *(f32*)(work + 0x28));
     dispEntry(4, 2, effOnpuDisp, effect, dispCalcZ(&dispPos));
 }
 

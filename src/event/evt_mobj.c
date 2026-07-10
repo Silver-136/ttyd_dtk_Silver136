@@ -2823,15 +2823,83 @@ s32 evt_mobj_floatswitch_red(void* evt) {
     return 2;
 }
 
-s32 evt_mobj_tornadoswitch_blue(void* pEvt) {
-    return 0;
+s32 evt_mobj_tornadoswitch_blue(void* evt) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
+    extern void mobjEntry(s32 name, const char* kind);
+    extern void* mobjNameToPtr(s32 name);
+    extern void mobjSetPosition(s32 name, f32 x, f32 y, f32 z);
+    extern void mobjCalcMtx(void* mobj);
+    extern s32* gp;
+    extern const char str_MOBJ_BlueTornadoSwit_802c2a00[];
+    extern s32 mobj_switch_blue(void* mobj);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 unused = evtGetValue(evt, args[0]);
+    s32 name = evtGetValue(evt, args[1]);
+    f32 x = evtGetFloat(evt, args[2]);
+    f32 y = evtGetFloat(evt, args[3]);
+    f32 z = evtGetFloat(evt, args[4]);
+    s32 eventCode = evtGetValue(evt, args[5]);
+    s32 switchVar = args[6];
+    void* mobj;
+
+    if (animGroupBaseAsync(str_MOBJ_BlueTornadoSwit_802c2a00, ((u32)(-gp[5]) | (u32)gp[5]) >> 31, 0) == 0) {
+        return 0;
+    }
+    mobjEntry(name, str_MOBJ_BlueTornadoSwit_802c2a00);
+    mobj = mobjNameToPtr(name);
+    mobjSetPosition(name, x, y, z);
+    *(void**)((s32)mobj + 0x1D0) = mobj_switch_blue;
+    *(s32*)((s32)mobj + 0x1D4) = eventCode;
+    *(u32*)mobj |= 4;
+    *(u32*)mobj |= 0x1000000;
+    *(s32*)((s32)mobj + 0x1E4) = switchVar;
+    *(s32*)((s32)mobj + 0x1DC) = 0;
+    if (evtGetValue(evt, switchVar) != 0) {
+        *(s32*)((s32)mobj + 0x1DC) = 99;
+    }
+    mobjCalcMtx(mobj);
+    return 2;
 }
 
+s32 evt_mobj_floatswitch_blue(void* evt) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
+    extern void mobjEntry(s32 name, const char* kind);
+    extern void* mobjNameToPtr(s32 name);
+    extern void mobjSetPosition(s32 name, f32 x, f32 y, f32 z);
+    extern void mobjCalcMtx(void* mobj);
+    extern s32* gp;
+    extern const char str_MOBJ_BlueSwitchBlock_802c2a18[];
+    extern s32 mobj_switch_blue(void* mobj);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 unused = evtGetValue(evt, args[0]);
+    s32 name = evtGetValue(evt, args[1]);
+    f32 x = evtGetFloat(evt, args[2]);
+    f32 y = evtGetFloat(evt, args[3]);
+    f32 z = evtGetFloat(evt, args[4]);
+    s32 eventCode = evtGetValue(evt, args[5]);
+    s32 switchVar = args[6];
+    void* mobj;
 
-s32 evt_mobj_floatswitch_blue(int param_1) {
-    return 0;
+    if (animGroupBaseAsync(str_MOBJ_BlueSwitchBlock_802c2a18, ((u32)(-gp[5]) | (u32)gp[5]) >> 31, 0) == 0) {
+        return 0;
+    }
+    mobjEntry(name, str_MOBJ_BlueSwitchBlock_802c2a18);
+    mobj = mobjNameToPtr(name);
+    mobjSetPosition(name, x, y, z);
+    *(void**)((s32)mobj + 0x1D0) = mobj_switch_blue;
+    *(s32*)((s32)mobj + 0x1D4) = eventCode;
+    *(u32*)mobj |= 4;
+    *(u32*)mobj |= 0x400000;
+    *(s32*)((s32)mobj + 0x1E4) = switchVar;
+    *(s32*)((s32)mobj + 0x1DC) = 0;
+    if (evtGetValue(evt, switchVar) != 0) {
+        *(s32*)((s32)mobj + 0x1DC) = 99;
+    }
+    mobjCalcMtx(mobj);
+    return 2;
 }
-
 
 s32 evt_mobj_koopa_stone_blk(void* evt) {
     extern f32 evtGetFloat(void* evt, s32 value);
@@ -3060,10 +3128,53 @@ s32 mobj_switch_red(void* pMobj) {
     return 0;
 }
 
-s32 mobj_switch_blue(void* pMobj) {
+s32 mobj_switch_blue(void* mobj) {
+    extern void* mobjRunEvent(void* mobj, void* evtCode);
+    extern void marioChgMot(s32 motionId);
+    extern u32 psndSFXOn_3D(s32 id, void* pos);
+    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
+    extern f32 animPoseGetLoopTimes(s32 poseId);
+    extern void* effSmallStarEntry(s32 flags, s32 type, f32 x, f32 y, f32 z, f32 a, f32 b, f32 c);
+    extern void effSmallStarCamChg(void* eff, u8 camId);
+    extern s32 evtSetValue(void* evt, s32 var, s32 value);
+    extern void mobjDelete(char* name);
+    extern const char str_A_1_80420208[];
+    extern const char str_S_1_8042021c[];
+    extern f32 float_1_80420250;
+    extern f32 float_0_80420240;
+    extern f32 float_12p5_80420268;
+    extern f32 float_neg1_80420304;
+    s32 action = *(s32*)((s32)mobj + 0x1DC);
+    void* eff;
+
+    switch (action) {
+        case 0:
+            if ((*(u32*)mobj & 8) != 0) {
+                mobjRunEvent(mobj, *(void**)((s32)mobj + 0x1D4));
+                if ((*(u32*)((s32)mobj + 0x1E0) == 0x200000) || (*(u32*)((s32)mobj + 0x1E0) == 0x1000000)) {
+                    marioChgMot(5);
+                }
+                psndSFXOn_3D(0x1D2, (void*)((s32)mobj + 0x38));
+                animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_A_1_80420208, 1);
+                *(s32*)((s32)mobj + 0x1DC) = *(s32*)((s32)mobj + 0x1DC) + 1;
+            }
+            break;
+        case 1:
+            if (animPoseGetLoopTimes(*(s32*)((s32)mobj + 0x70)) >= float_1_80420250) {
+                animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_1_8042021c, 1);
+                eff = effSmallStarEntry(0, 4, *(f32*)((s32)mobj + 0x38), *(f32*)((s32)mobj + 0x3C) + float_12p5_80420268,
+                                        *(f32*)((s32)mobj + 0x40), float_0_80420240, float_neg1_80420304, float_0_80420240);
+                effSmallStarCamChg(eff, *(u8*)((s32)mobj + 4));
+                evtSetValue(0, *(s32*)((s32)mobj + 0x1E4), 1);
+                *(s32*)((s32)mobj + 0x1DC) = 99;
+            }
+            break;
+        case 99:
+            mobjDelete((char*)((s32)mobj + 5));
+            break;
+    }
     return 0;
 }
-
 
 u8 kpa_disp_pole_score_main(void) {
     return 0;
@@ -3445,10 +3556,20 @@ s32 evt_mobj_set_anim(void* evt) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-s32 evt_mobj_entry(void* pEvt) {
-    return 0;
-}
+s32 evt_mobj_entry(void* evt) {
+    extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
+    extern void mobjEntry(s32 name, const char* kind);
+    extern s32* gp;
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = evtGetValue(evt, args[0]);
+    const char* kind = (const char*)evtGetValue(evt, args[1]);
 
+    if (animGroupBaseAsync(kind, ((u32)(-gp[5]) | (u32)gp[5]) >> 31, 0) == 0) {
+        return 0;
+    }
+    mobjEntry(name, kind);
+    return 2;
+}
 
 s32 kpa_powerup(void* pEvt) {
     return 0;

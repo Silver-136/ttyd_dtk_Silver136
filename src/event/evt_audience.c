@@ -172,25 +172,249 @@ s32 evt_audience_base_flag_on(void* evt) {
 }
 
 
-u8 evt_audience_move_position_speed(void) {
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_audience_move_position_speed(void* evt, s32 isFirstCall) {
+    extern double sqrt(double x);
+    extern const f32 float_180_80422b5c;
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 id = evtGetValue(evt, args[0]);
+    f32 x = evtGetFloat(evt, args[1]);
+    f32 y = evtGetFloat(evt, args[2]);
+    f32 z = evtGetFloat(evt, args[3]);
+    f32 speed = evtGetFloat(evt, args[4]);
+    void* audience = BattleAudienceGetPtr(id);
+    f32 dx;
+    f32 dy;
+    f32 dz;
+    f32 dist;
+
+    if (isFirstCall != 0) {
+        *(f32*)((s32)audience + 0x104) = x;
+        *(f32*)((s32)audience + 0x10C) = y;
+        *(f32*)((s32)audience + 0x114) = z;
+        dy = y - *(f32*)((s32)audience + 0x4C);
+        dx = x - *(f32*)((s32)audience + 0x48);
+        dz = z - *(f32*)((s32)audience + 0x50);
+        dist = sqrt(dx * dx + dy * dy + dz * dz);
+        if (float_0_80422b50 == dx) {
+            *(f32*)((s32)audience + 0x118) = float_0_80422b50;
+        } else {
+            *(f32*)((s32)audience + 0x118) = speed * (dx / dist);
+        }
+        if (float_0_80422b50 == dy) {
+            *(f32*)((s32)audience + 0x11C) = float_0_80422b50;
+        } else {
+            *(f32*)((s32)audience + 0x11C) = speed * (dy / dist);
+        }
+        if (float_0_80422b50 == dz) {
+            *(f32*)((s32)audience + 0x120) = float_0_80422b50;
+        } else {
+            *(f32*)((s32)audience + 0x120) = speed * (dz / dist);
+        }
+        *(s32*)((s32)audience + 0xF8) = (s32)(dist / speed);
+        *(s32*)((s32)audience + 0xFC) = (s32)(dist / speed);
+    }
+
+    dx = *(f32*)((s32)audience + 0x118);
+    if (dx > float_0_80422b50) {
+        *(f32*)((s32)audience + 0xE8) = float_180_80422b5c;
+    } else if (dx < float_0_80422b50) {
+        *(f32*)((s32)audience + 0xE8) = float_0_80422b50;
+    }
+    BattleAudience_SetPosition(id,
+        *(f32*)((s32)audience + 0x48) + *(f32*)((s32)audience + 0x118),
+        *(f32*)((s32)audience + 0x4C) + *(f32*)((s32)audience + 0x11C),
+        *(f32*)((s32)audience + 0x50) + *(f32*)((s32)audience + 0x120));
+    if (*(s32*)((s32)audience + 0xF8) > 0) {
+        *(s32*)((s32)audience + 0xF8) = *(s32*)((s32)audience + 0xF8) - 1;
+    }
+    if (*(s32*)((s32)audience + 0xF8) < 0) {
+        *(s32*)((s32)audience + 0xF8) = *(s32*)((s32)audience + 0xF8) + 1;
+    }
+    if (*(s32*)((s32)audience + 0xF8) == 0) {
+        BattleAudience_SetPosition(id,
+            *(f32*)((s32)audience + 0x104),
+            *(f32*)((s32)audience + 0x10C),
+            *(f32*)((s32)audience + 0x114));
+        return 2;
+    }
     return 0;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-u8 evt_audience_jump_position_firstsp(void) {
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_audience_jump_position_firstsp(void* evt, s32 isFirstCall) {
+    extern const f32 float_2_80422b58;
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 id = evtGetValue(evt, args[0]);
+    f32 x = evtGetFloat(evt, args[1]);
+    f32 y = evtGetFloat(evt, args[2]);
+    f32 z = evtGetFloat(evt, args[3]);
+    s32 frames = evtGetValue(evt, args[4]);
+    f32 firstSpeed = evtGetFloat(evt, args[5]);
+    void* audience = BattleAudienceGetPtr(id);
+    f32 framesF = (f32)frames;
+
+    if (isFirstCall != 0) {
+        *(f32*)((s32)audience + 0x104) = x;
+        *(f32*)((s32)audience + 0x10C) = y;
+        *(f32*)((s32)audience + 0x114) = z;
+        *(f32*)((s32)audience + 0x118) = (x - *(f32*)((s32)audience + 0x48)) / framesF;
+        *(f32*)((s32)audience + 0x11C) = firstSpeed;
+        *(f32*)((s32)audience + 0x120) = (z - *(f32*)((s32)audience + 0x50)) / framesF;
+        *(f32*)((s32)audience + 0x124) =
+            (float_2_80422b58 * -(firstSpeed * framesF - (y - *(f32*)((s32)audience + 0x4C)))) /
+            (f32)(frames * frames);
+        *(s32*)((s32)audience + 0xF8) = frames;
+        *(s32*)((s32)audience + 0xFC) = frames;
+    }
+
+    BattleAudience_SetPosition(id,
+        *(f32*)((s32)audience + 0x48) + *(f32*)((s32)audience + 0x118),
+        *(f32*)((s32)audience + 0x4C) + *(f32*)((s32)audience + 0x11C),
+        *(f32*)((s32)audience + 0x50) + *(f32*)((s32)audience + 0x120));
+    *(f32*)((s32)audience + 0x11C) = *(f32*)((s32)audience + 0x11C) + *(f32*)((s32)audience + 0x124);
+    *(s32*)((s32)audience + 0xF8) = *(s32*)((s32)audience + 0xF8) - 1;
+    if (*(s32*)((s32)audience + 0xF8) < 1) {
+        BattleAudience_SetPosition(id,
+            *(f32*)((s32)audience + 0x104),
+            *(f32*)((s32)audience + 0x10C),
+            *(f32*)((s32)audience + 0x114));
+        return 2;
+    }
     return 0;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-u8 evt_audience_jump_position_gravity(void) {
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_audience_jump_position_gravity(void* evt, s32 isFirstCall) {
+    extern const f32 float_0p5_80422b54;
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 id = evtGetValue(evt, args[0]);
+    f32 x = evtGetFloat(evt, args[1]);
+    f32 y = evtGetFloat(evt, args[2]);
+    f32 z = evtGetFloat(evt, args[3]);
+    s32 frames = evtGetValue(evt, args[4]);
+    f32 gravity = evtGetFloat(evt, args[5]);
+    void* audience = BattleAudienceGetPtr(id);
+    f32 framesF = (f32)frames;
+
+    if (isFirstCall != 0) {
+        *(f32*)((s32)audience + 0x104) = x;
+        *(f32*)((s32)audience + 0x10C) = y;
+        *(f32*)((s32)audience + 0x114) = z;
+        *(f32*)((s32)audience + 0x118) = (x - *(f32*)((s32)audience + 0x48)) / framesF;
+        *(f32*)((s32)audience + 0x11C) =
+            -((float_0p5_80422b54 * gravity) * framesF -
+            ((y - *(f32*)((s32)audience + 0x4C)) / framesF));
+        *(f32*)((s32)audience + 0x120) = (z - *(f32*)((s32)audience + 0x50)) / framesF;
+        *(f32*)((s32)audience + 0x124) = gravity;
+        *(s32*)((s32)audience + 0xF8) = frames;
+        *(s32*)((s32)audience + 0xFC) = frames;
+    }
+
+    BattleAudience_SetPosition(id,
+        *(f32*)((s32)audience + 0x48) + *(f32*)((s32)audience + 0x118),
+        *(f32*)((s32)audience + 0x4C) + *(f32*)((s32)audience + 0x11C),
+        *(f32*)((s32)audience + 0x50) + *(f32*)((s32)audience + 0x120));
+    *(f32*)((s32)audience + 0x11C) = *(f32*)((s32)audience + 0x11C) + *(f32*)((s32)audience + 0x124);
+    *(s32*)((s32)audience + 0xF8) = *(s32*)((s32)audience + 0xF8) - 1;
+    if (*(s32*)((s32)audience + 0xF8) < 1) {
+        BattleAudience_SetPosition(id,
+            *(f32*)((s32)audience + 0x104),
+            *(f32*)((s32)audience + 0x10C),
+            *(f32*)((s32)audience + 0x114));
+        return 2;
+    }
     return 0;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-u8 evt_audience_move_position_frame(void) {
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_audience_move_position_frame(void* evt, s32 isFirstCall) {
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+    extern const f32 float_180_80422b5c;
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 id = evtGetValue(evt, args[0]);
+    f32 x = evtGetFloat(evt, args[1]);
+    f32 y = evtGetFloat(evt, args[2]);
+    f32 z = evtGetFloat(evt, args[3]);
+    s32 type = evtGetValue(evt, args[4]);
+    s32 frames = evtGetValue(evt, args[5]);
+    void* audience = BattleAudienceGetPtr(id);
+    f32 diff;
+    f32 outX;
+    f32 outY;
+    f32 outZ;
+
+    if (isFirstCall != 0) {
+        *(f32*)((s32)audience + 0x100) = *(f32*)((s32)audience + 0x48);
+        *(f32*)((s32)audience + 0x108) = *(f32*)((s32)audience + 0x4C);
+        *(f32*)((s32)audience + 0x110) = *(f32*)((s32)audience + 0x50);
+        *(f32*)((s32)audience + 0x104) = x;
+        *(f32*)((s32)audience + 0x10C) = y;
+        *(f32*)((s32)audience + 0x114) = z;
+        *(s32*)((s32)audience + 0x128) = type;
+        *(s32*)((s32)audience + 0xF8) = frames;
+        *(s32*)((s32)audience + 0xFC) = frames;
+    }
+
+    diff = *(f32*)((s32)audience + 0x104) - *(f32*)((s32)audience + 0x100);
+    if (diff > float_0_80422b50) {
+        *(f32*)((s32)audience + 0xE8) = float_180_80422b5c;
+    } else if (diff < float_0_80422b50) {
+        *(f32*)((s32)audience + 0xE8) = float_0_80422b50;
+    }
+    outX = intplGetValue(*(s32*)((s32)audience + 0x128),
+        *(s32*)((s32)audience + 0xFC) - *(s32*)((s32)audience + 0xF8),
+        *(s32*)((s32)audience + 0xFC),
+        *(f32*)((s32)audience + 0x100),
+        *(f32*)((s32)audience + 0x104));
+    outY = intplGetValue(*(s32*)((s32)audience + 0x128),
+        *(s32*)((s32)audience + 0xFC) - *(s32*)((s32)audience + 0xF8),
+        *(s32*)((s32)audience + 0xFC),
+        *(f32*)((s32)audience + 0x108),
+        *(f32*)((s32)audience + 0x10C));
+    outZ = intplGetValue(*(s32*)((s32)audience + 0x128),
+        *(s32*)((s32)audience + 0xFC) - *(s32*)((s32)audience + 0xF8),
+        *(s32*)((s32)audience + 0xFC),
+        *(f32*)((s32)audience + 0x110),
+        *(f32*)((s32)audience + 0x114));
+    BattleAudience_SetPosition(id, outX, outY, outZ);
+    *(s32*)((s32)audience + 0xF8) = *(s32*)((s32)audience + 0xF8) - 1;
+    if (*(s32*)((s32)audience + 0xF8) < 1) {
+        BattleAudience_SetPosition(id,
+            *(f32*)((s32)audience + 0x104),
+            *(f32*)((s32)audience + 0x10C),
+            *(f32*)((s32)audience + 0x114));
+        return 2;
+    }
     return 0;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -320,6 +544,21 @@ s32 evt_audience_flag_check(void* evt) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-s32 evt_audience_sound_cheer(int param_1) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_audience_sound_cheer(void* evt) {
+    extern void BattleAudienceSoundCheer(s32 vol, s32 frames);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 vol = evtGetValue(evt, args[0]);
+    s32 frames = evtGetValue(evt, args[1]);
+
+    BattleAudienceSoundCheer(vol, frames);
+    return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+

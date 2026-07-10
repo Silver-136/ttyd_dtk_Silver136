@@ -138,6 +138,8 @@ void* effMugiKemuriEntry(f64 x, f64 y, f64 z, f64 angle) {
     return entry;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 effMugiKemuriDisp(s32 cameraId, void* effEntry) {
     typedef f32 LocalMtx[3][4];
     extern void PSMTXRotRad(LocalMtx mtx, f32 rad, s32 axis);
@@ -186,6 +188,8 @@ u8 effMugiKemuriDisp(s32 cameraId, void* effEntry) {
     }
     return 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 effMugiKemuri2Main(void* effEntry) {
     return 0;
@@ -301,6 +305,8 @@ u8 effMugiKemuriMain(void* effEntry) {
     return 0;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 effMugiKemuri2Disp(s32 cameraId, void* effEntry) {
     typedef f32 LocalMtx[3][4];
     extern void PSMTXRotRad(LocalMtx mtx, f32 rad, s32 axis);
@@ -349,4 +355,6 @@ u8 effMugiKemuri2Disp(s32 cameraId, void* effEntry) {
     }
     return 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 

@@ -61,15 +61,18 @@ void marioChgMotAuto(void) {
     extern void* marioGetPtr(void);
     extern void marioChgMot(s32 motion);
     extern s32 pouchEquipCheckBadge(s32 badge);
+
     void* mario = marioGetPtr();
     u8 ux = *(u8*)((s32)mario + 0x252);
     s32 x = ux;
     s32 y;
+
     if ((s8)x == 0 && *(s8*)((s32)mario + 0x253) == 0) {
         marioChgMot(0);
     } else {
+        y = *(u8*)((s32)mario + 0x253);
         x = (s8)x;
-        y = *(s8*)((s32)mario + 0x253);
+        y = (s8)y;
         if (x * x + y * y > 0xBD1) {
             if (pouchEquipCheckBadge(0x143) == 0) {
                 marioChgMot(2);

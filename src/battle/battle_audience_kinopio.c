@@ -1150,6 +1150,9 @@ void BattleAudienceCtrlProcessKinopioFireSub(s32 param_1) {
             if (audience[0x19] != 0x13) {
                 BattleAudience_ChangeStatus(param_1, 0x13);
             }
+            else {
+                return;
+            }
         }
         else if (audience[0x19] != 0x11) {
             BattleAudience_Delete(param_1);
@@ -1157,7 +1160,6 @@ void BattleAudienceCtrlProcessKinopioFireSub(s32 param_1) {
         }
     }
 }
-
 
 void BattleAudienceCtrlProcessKinopioSingSub(s32 param_1) {
     u8* audience;

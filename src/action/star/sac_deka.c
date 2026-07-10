@@ -222,8 +222,99 @@ u8 create_timing(void) {
 }
 
 /* stub-fill: yuka_disp | prototype_only | source_prototype */
-void yuka_disp(void) {
-    return;
+void yuka_disp(s32 cameraId) {
+    typedef struct LocalCamera {
+        u8 pad[0x11C];
+        f32 viewMtx[3][4];
+    } LocalCamera;
+    typedef struct LocalAlloc {
+        void* pMemory;
+    } LocalAlloc;
+
+    extern void* get_ptr(void);
+    extern LocalCamera* camGetPtr(s32 cameraId);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 type, s32 frac, s32 shift);
+    extern void GXSetNumChans(s32 count);
+    extern void GXSetNumTexGens(s32 count);
+    extern void GXSetTexCoordGen2(s32 dst, s32 func, s32 src, s32 mtx, s32 normalize, s32 postMtx);
+    extern void GXSetNumTevStages(s32 count);
+    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 color);
+    extern void GXSetTevOp(s32 stage, s32 mode);
+    extern void GXInitTexObj(void* obj, void* data, s16 width, s16 height, s32 fmt, s32 wrapS, s32 wrapT, s32 mipmap);
+    extern void GXLoadTexObj(void* obj, s32 mapId);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void GXSetCurrentMtx(s32 id);
+    extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
+
+    void* work = get_ptr();
+    LocalCamera* camera = camGetPtr(cameraId);
+    LocalAlloc* texture = *(LocalAlloc**)work;
+    void* image = texture->pMemory;
+    void* capture;
+    u8 texObj[0x20];
+    volatile f32* fifo;
+    s32 posOff;
+    s32 texOff;
+    s32 i;
+
+    if (image != NULL) {
+        capture = (*(LocalAlloc**)((s32)work + 0x2C))->pMemory;
+        if (capture != NULL) {
+            GXSetCullMode(0);
+            GXClearVtxDesc();
+            GXSetVtxDesc(9, 1);
+            GXSetVtxDesc(0xD, 1);
+            GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+            GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+            GXSetNumChans(0);
+            GXSetNumTexGens(1);
+            GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+            GXSetNumTevStages(1);
+            GXSetTevOrder(0, 0, 0, 0xFF);
+            GXSetTevOp(0, 3);
+            GXInitTexObj(texObj, image, (u16)*(s32*)((s32)work + 0x24), (u16)*(s32*)((s32)work + 0x28), 4, 0, 0, 0);
+            GXLoadTexObj(texObj, 0);
+            GXLoadPosMtxImm(camera->viewMtx, 0);
+            GXSetCurrentMtx(0);
+
+            fifo = (volatile f32*)0xCC008000;
+            posOff = 0;
+            texOff = 0;
+            for (i = 0; i < 0x80; i++) {
+                GXBegin(0x80, 0, 4);
+
+                fifo[0] = *(f32*)((s32)capture + posOff + 0xC18);
+                fifo[0] = *(f32*)((s32)capture + posOff + 0xC1C);
+                fifo[0] = *(f32*)((s32)capture + posOff + 0xC20);
+                fifo[0] = *(f32*)((s32)capture + texOff + 0x3060);
+                fifo[0] = *(f32*)((s32)capture + texOff + 0x3468);
+
+                fifo[0] = *(f32*)((s32)capture + posOff + 0x1224);
+                fifo[0] = *(f32*)((s32)capture + posOff + 0x1228);
+                fifo[0] = *(f32*)((s32)capture + posOff + 0x122C);
+                fifo[0] = *(f32*)((s32)capture + texOff + 0x3264);
+                fifo[0] = *(f32*)((s32)capture + texOff + 0x366C);
+
+                fifo[0] = *(f32*)((s32)capture + posOff + 0x1230);
+                fifo[0] = *(f32*)((s32)capture + posOff + 0x1234);
+                fifo[0] = *(f32*)((s32)capture + posOff + 0x1238);
+                fifo[0] = *(f32*)((s32)capture + texOff + 0x3268);
+                fifo[0] = *(f32*)((s32)capture + texOff + 0x3670);
+
+                fifo[0] = *(f32*)((s32)capture + posOff + 0xC24);
+                fifo[0] = *(f32*)((s32)capture + posOff + 0xC28);
+                fifo[0] = *(f32*)((s32)capture + posOff + 0xC2C);
+                fifo[0] = *(f32*)((s32)capture + texOff + 0x3064);
+                fifo[0] = *(f32*)((s32)capture + texOff + 0x346C);
+
+                posOff += 0xC;
+                texOff += 4;
+            }
+        }
+    }
 }
 
 /* stub-fill: yuka_capture | missing_definition | ghidra_signature */

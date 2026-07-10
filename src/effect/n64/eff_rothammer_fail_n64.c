@@ -66,9 +66,11 @@ void effRotHammerFailMain(void* effect) {
     extern f32 float_0p9_80425f70;
     u8* work;
     u8* part;
-    Vec3 pos;
     Vec3 dispPos;
+    Vec3 pos;
     f32 scale;
+    f32 accel;
+    f32 drag;
     s32 i;
 
     work = *(u8**)((s32)effect + 0xC);
@@ -86,10 +88,13 @@ void effRotHammerFailMain(void* effect) {
     }
     *(f32*)(work + 0x1C) += float_0p1_80425f68 * (*(f32*)(work + 0x20) - *(f32*)(work + 0x1C));
     scale = *(f32*)(work + 0x1C);
+    accel = float_0p04_80425f6c;
+    drag = float_0p9_80425f70;
+    i = 1;
     part = work + 0x34;
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++, part += 0x34) {
-        *(f32*)(part + 0x14) += float_0p04_80425f6c;
-        *(f32*)(part + 0x14) *= float_0p9_80425f70;
+    for (; i < *(s32*)((s32)effect + 8); i++, part += 0x34) {
+        *(f32*)(part + 0x14) += accel;
+        *(f32*)(part + 0x14) *= drag;
         *(f32*)(part + 4) = scale * *(f32*)(part + 0x10);
         *(f32*)(part + 8) += *(f32*)(part + 0x14);
         *(f32*)(part + 0xC) = scale * *(f32*)(part + 0x18);

@@ -266,5 +266,24 @@ s32 vivianGetStatus(void) {
 }
 
 u8 mot_vivian(void) {
-    return 0;
+    extern void* marioGetPtr(void);
+    extern f32 float_0_80424274;
+
+    void* mario = marioGetPtr();
+    u32 flags = *(u32*)((s32)mario + 0xC);
+    if (flags & 1) {
+        f32 zero;
+        *(u32*)((s32)mario + 0xC) = flags & ~1;
+        zero = float_0_80424274;
+        *(u32*)mario &= ~0xF0000;
+        *(s32*)((s32)mario + 0x48) = 0;
+        *(s16*)((s32)mario + 0x50) = 0;
+        *(s32*)((s32)mario + 0x44) = 0;
+        *(f32*)((s32)mario + 0x180) = zero;
+        *(s32*)((s32)mario + 0x1E4) = 0;
+        *(s32*)((s32)mario + 0x1E0) = 0;
+        *(s32*)((s32)mario + 0x1F0) = 0;
+        *(s32*)((s32)mario + 0x1F4) = 0;
+    }
 }
+

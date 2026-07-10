@@ -631,10 +631,50 @@ s32 _fall_frame_wait_unit_ready(void* event, s32 isFirstCall) {
 }
 
 
-u8 _Nozzle_Change_Check(u32 nozzleIdx, void* turnWeights) {
-    return 0;
-}
+void _Nozzle_Change_Check(u32 nozzleIdx, u8* turnWeights) {
+    extern s32 irand(s32 max);
+    void* work = (void*)((s32)_battleWorkPointer + 0x20000 - 0x7F24);
+    u32 idx = nozzleIdx & 0xFF;
+    u8* weights;
+    s32 total;
+    s32 roll;
+    u8 direction;
+    s32 evtId;
+    void* evt;
 
+    total = 0;
+    weights = turnWeights;
+    total += *weights++;
+    total += *weights++;
+    total += *weights++;
+    total += *weights++;
+
+    roll = irand(total);
+    direction = 0;
+    while ((u8)direction < 4) {
+        roll -= *turnWeights;
+        if (roll < 0) {
+            break;
+        }
+        turnWeights++;
+        direction++;
+    }
+
+    if ((u8)direction != *(u8*)((s32)work + idx + 0x1C4)) {
+        evtId = *(s32*)((s32)work + idx * 4 + 0x1CC);
+        if (evtId != 0 && evtCheckID(evtId) == 0) {
+            *(s32*)((s32)work + idx * 4 + 0x1CC) = 0;
+        }
+        if (*(s32*)((s32)work + idx * 4 + 0x1CC) == 0) {
+            *(u8*)((s32)work + idx + 0x1C7) = direction;
+            evt = evtEntry(&_nozzle_turn_event, 0xA, 0);
+            *(s32*)((s32)work + idx * 4 + 0x1CC) = *(s32*)((s32)evt + 0x15C);
+            if (evt != 0) {
+                *(s32*)((s32)evt + 0x160) = nozzleIdx & 0xFF;
+            }
+        }
+    }
+}
 
 s32 _nozzle_work_attack_set(void) {
     extern void* memset(void* ptr, s32 value, u32 size);
@@ -993,14 +1033,39 @@ s32 BattleFogEndCheck(void) {
 }
 
 s32 _fall_frame_wait(void) {
-    return 0;
+    extern s32 BattleWaitAllActiveEvtEnd_NoBgSetEndWait(void* battleWork);
+    void* battleWork = _battleWorkPointer;
+    void* base = (void*)((s32)battleWork + 0x20000);
+    s32 evtId;
+
+    if (BattleWaitAllActiveEvtEnd_NoBgSetEndWait(battleWork) == 0) {
+        return 0;
+    }
+
+    evtId = *(s32*)((s32)base - 0x7D4C);
+    if (evtId != 0) {
+        if (evtCheckID(evtId) != 0) {
+            return 0;
+        }
+        *(s32*)((s32)base - 0x7D4C) = 0;
+    }
+    return 1;
 }
 
+void BattleStage_DestroyA2(void) {
+    extern s32 _object_turn_event_A2;
+    void* battleWork = _battleWorkPointer;
+    void* data = *(void**)((s32)battleWork + 0x2738);
+    void* script;
 
-u8 BattleStage_DestroyA2(void) {
-    return 0;
+    script = *(void**)((s32)**(void***)((s32)data + 0xC) + 0x198);
+    evtDeleteID(*(s32*)((s32)battleWork + 0x20000 - 0x7EFC));
+    *(s32*)((s32)battleWork + 0x20000 - 0x7EFC) = 0;
+    if (script == 0) {
+        script = &_object_turn_event_A2;
+    }
+    evtEntry(script, 0xA, 0);
 }
-
 
 void BattleStage_IronFrameFallCheck(void) {
     extern s32 _fall_frame_event[];
@@ -1044,10 +1109,23 @@ s32 BattleStage_ObjectFallCheck(void) {
     return *(s32*)((s32)event + 0x15C);
 }
 
-u8 _rate_mix_3(char* param_1, char* param_2, char* param_3, char* param_4, char* param_5, char* param_6) {
-    return 0;
-}
+void _rate_mix_3(s8* maxValue, s8* totalA, s8* totalB, s8* current, s8* addA, s8* addB) {
+    s8 value = *current;
 
+    if (value <= 0) {
+        return;
+    }
+    if (value > *maxValue) {
+        *maxValue = value;
+    }
+    *totalA += *addA;
+    *totalB += *addB;
+    if (*totalB != 0) {
+        return;
+    }
+    *maxValue = 0;
+    *totalA = 0;
+}
 
 s32 _nozzle_work_get_weapon_address(void* event) {
     extern s32 evtGetValue(void* event, s32 value);
@@ -1066,10 +1144,22 @@ s32 _nozzle_work_get_weapon_address(void* event) {
 }
 
 
-void BattleFogForceStop(void) {
-    ;
-}
+s32 BattleFogForceStop(void) {
+    extern void effSoftDelete(void* eff);
+    void* base = (void*)((s32)_battleWorkPointer + 0x20000);
+    void* eff;
 
+    if (*(s32*)((s32)base - 0x7D48) == 0) {
+        return 0;
+    }
+
+    eff = *(void**)((s32)base - 0x7D44);
+    if (eff != 0) {
+        effSoftDelete(eff);
+        *(void**)((s32)base - 0x7D44) = 0;
+    }
+    return 1;
+}
 
 void BattleStage_WallCloseCheck(void) {
     extern void* _battleWorkPointer;

@@ -229,6 +229,8 @@ u8 winNameDisp2(int param_1) {
     return 0;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void itemDelete(void* name) {
     extern s32 strcmp(const char* a, const char* b);
     extern void pouchArriveBadge(s32 itemId);
@@ -260,6 +262,8 @@ void itemDelete(void* name) {
         }
     }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void itemReInit(void) {
     extern void pouchArriveBadge(s32 itemId);
@@ -331,10 +335,21 @@ void itemInit(void) {
     *(s32*)(work + 0x24) = 0;
 }
 
-u8 itemCoinDrop(float* param_1) {
-    return 0;
-}
+void itemCoinDrop(float* param_1) {
+    extern s32 pouchGetCoin(void);
+    extern void pouchAddCoin(s32 coin);
+    extern void* itemEntry(s32 name, s32 item, s32 mode, s32 script, s32 arg, f32 x, f32 y, f32 z);
 
+    void* item;
+
+    if (pouchGetCoin() > 0) {
+        pouchAddCoin(-1);
+        item = itemEntry(0, 0x79, 8, -1, 0, param_1[0], param_1[1], param_1[2]);
+        if (item != 0) {
+            *(u32*)((s32)item + 0x38) |= 0x40;
+        }
+    }
+}
 
 u8 itemseq_GetItem(void* pItem, s32 param_2, s32 param_3, s32 param_4, u32* param_5, u32 param_6) {
     return 0;
@@ -572,7 +587,7 @@ u32 itemGetNokoCheck(void* itemEntry) {
     return N_fbatPreventMarioEventChk() == 0;
 }
 
-u8 winFullDisp(void* winMgrEntry) {
+void winFullDisp(void* winMgrEntry) {
     extern s32 FontGetMessageWidth(const char* msg);
     extern void FontDrawStart(void);
     extern void FontDrawEdge(void);
@@ -582,14 +597,15 @@ u8 winFullDisp(void* winMgrEntry) {
     extern u32 dat_804210b0;
     extern char str_msg_window_badge_ful_802c9260[];
     extern char str_msg_window_item_full_802c9278[];
+
+    s32 badge;
     void* data;
     char* msg;
     u16 width;
     u32 color;
-    s32 badge;
 
-    data = *(void**)((s32)winMgrEntry + 0x2C);
     badge = 0;
+    data = *(void**)((s32)winMgrEntry + 0x2C);
     if (*(s32*)((s32)data + 4) >= 0xF0 && *(s32*)((s32)data + 4) < 0x153) {
         badge = 1;
     }
@@ -611,7 +627,6 @@ u8 winFullDisp(void* winMgrEntry) {
         FontDrawMessage((u32)(-width / 2), *(s32*)((s32)winMgrEntry + 0x1C) - 10, msg);
         FontDrawEdgeOff();
     }
-    return 0;
 }
 
 void itemNokoForceGet(void* item) {

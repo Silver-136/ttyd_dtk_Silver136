@@ -89,6 +89,7 @@ s32 evt_lottery_error_check(int param_1) {
 }
 
 /* stub-fill: evt_lottery_buy | missing_definition | ghidra_signature */
+#pragma optimize_for_size off
 s32 evt_lottery_buy(void* pEvt) {
     extern void* gp;
     extern s64 OSGetTime(void);
@@ -146,6 +147,7 @@ s32 evt_lottery_buy(void* pEvt) {
     evtSetValue(pEvt, args[0], today);
     return 2;
 }
+#pragma optimize_for_size on
 
 /* stub-fill: evt_lottery | missing_definition | ghidra_signature */
 s32 evt_lottery(void* pEvt) {

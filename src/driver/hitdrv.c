@@ -59,10 +59,386 @@ void hitReCalcMatrix(void* hit, void* arg) {
 }
 
 
-u8 hitCheckVecFilter(void) {
-    return 0;
-}
+s32 hitCheckVecFilter(s32* work, void* filter) {
+    typedef s32 (*HitVecFilterFunc)(s32*, void*);
 
+    extern void* mapGetWork(void);
+    extern void* unk_8041e628;
+    extern f32 float_0_8041f838;
+    extern f32 float_1_8041f844;
+    extern f32 float_neg1_8041f848;
+    extern f32 float_0p5_8041f84c;
+    extern f32 PSVECSquareMag(void* v);
+    extern void PSVECScale(void* src, void* dst, f32 scale);
+    extern void PSVECAdd(void* a, void* b, void* out);
+    extern void PSVECSubtract(void* a, void* b, void* out);
+    extern f32 PSVECDistance(void* a, void* b);
+    extern f32 PSVECDotProduct(void* a, void* b);
+    extern void PSVECCrossProduct(void* a, void* b, void* out);
+    extern void PSVECNormalize(void* src, void* dst);
+    extern u8 checkTriVec_xz(void* ray, void* tri);
+
+    f32* fwork;
+    s32* iwork;
+    void* hit;
+    void* tri;
+    s32 triIndex;
+    s32 oneSided;
+    s32 hitFound;
+    s32 bestHit;
+    f32 halfLen;
+    f32 bestT;
+    f32 dirY;
+    f32 dot;
+    f32 denom;
+    f32 t;
+    f32 side;
+    f32 zero;
+    f32 scanPos[3];
+    f32 diff0[3];
+    f32 diff1[3];
+    f32 diff2[3];
+    f32 cross0[3];
+    f32 cross1[3];
+    f32 cross2[3];
+    f32 scaled[3];
+    s32 bestPos[3];
+    s32 bestNormal[3];
+    f32 norm[3];
+
+    fwork = (f32*)work;
+    iwork = work;
+
+    mapGetWork();
+
+    if (PSVECSquareMag((void*)(work + 6)) == float_0_8041f838) {
+        return 0;
+    }
+
+    zero = float_0_8041f838;
+    hitFound = 0;
+    bestHit = 0;
+    bestT = float_neg1_8041f848;
+    halfLen = fwork[15] * float_0p5_8041f84c;
+
+    PSVECScale((void*)(work + 6), scanPos, halfLen);
+    PSVECAdd((void*)(work + 3), scanPos, scanPos);
+
+    dirY = fwork[7];
+
+    hit = unk_8041e628;
+    if (dirY == zero) {
+        while (hit != NULL) {
+            if ((filter == NULL || ((HitVecFilterFunc)filter)(work, hit) != 0) &&
+                PSVECDistance(scanPos, (void*)((s32)hit + 0xC0)) <= halfLen + *(f32*)((s32)hit + 0xCC)) {
+                if (*(u8*)(*(s32*)(*(s32*)((s32)hit + 0x08) + 0x58) + 1) == 1) {
+                    iwork[0] = 1;
+                } else {
+                    iwork[0] = 0;
+                }
+
+                tri = *(void**)((s32)hit + 0xAC);
+                triIndex = 0;
+                while (triIndex < *(s16*)((s32)hit + 0xA8)) {
+                    if ((iwork[0] == 0 ||
+                         PSVECDotProduct((void*)((s32)tri + 0x48), (void*)(work + 6)) < zero) &&
+                        checkTriVec_xz(work, tri) != 0) {
+                        if (bestT < zero || fwork[15] < bestT) {
+                            bestT = fwork[15];
+                            bestHit = (s32)hit;
+                            hitFound = 1;
+                            bestPos[0] = iwork[9];
+                            bestPos[1] = iwork[10];
+                            bestPos[2] = iwork[11];
+                            bestNormal[0] = iwork[12];
+                            bestNormal[1] = iwork[13];
+                            bestNormal[2] = iwork[14];
+                        }
+                    }
+                    triIndex++;
+                    tri = (void*)((s32)tri + 0x54);
+                }
+            }
+            hit = *(void**)((s32)hit + 0xE0);
+        }
+    } else if (fwork[6] == zero && fwork[8] == zero && dirY == float_neg1_8041f848) {
+        while (hit != NULL) {
+            if ((filter == NULL || ((HitVecFilterFunc)filter)(work, hit) != 0) &&
+                PSVECDistance(scanPos, (void*)((s32)hit + 0xC0)) <= halfLen + *(f32*)((s32)hit + 0xCC)) {
+                if (*(u8*)(*(s32*)(*(s32*)((s32)hit + 0x08) + 0x58) + 1) == 1) {
+                    iwork[0] = 1;
+                } else {
+                    iwork[0] = 0;
+                }
+
+                tri = *(void**)((s32)hit + 0xAC);
+                triIndex = 0;
+                while (triIndex < *(s16*)((s32)hit + 0xA8)) {
+                    if (iwork[0] == 0 || *(f32*)((s32)tri + 0x4C) > zero) {
+                        PSVECSubtract((void*)(work + 3), tri, diff0);
+                        dot = PSVECDotProduct((void*)((s32)tri + 0x48), diff0);
+                        hitFound = 0;
+
+                        if (iwork[0] == 0) {
+                            if (*(f32*)((s32)tri + 0x4C) * dot > zero) {
+                                side = dot * (diff0[2] * *(f32*)((s32)tri + 0x24) -
+                                              diff0[0] * *(f32*)((s32)tri + 0x2C));
+                                if (side >= zero) {
+                                    PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x0C), diff1);
+                                    side = dot * (diff1[2] * *(f32*)((s32)tri + 0x30) -
+                                                  diff1[0] * *(f32*)((s32)tri + 0x38));
+                                    if (side >= zero) {
+                                        PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x18), diff2);
+                                        side = dot * (diff2[2] * *(f32*)((s32)tri + 0x3C) -
+                                                      diff2[0] * *(f32*)((s32)tri + 0x44));
+                                        if (side >= zero) {
+                                            hitFound = 1;
+                                        }
+                                    }
+                                }
+                            }
+                        } else if (dot >= zero) {
+                            side = diff0[2] * *(f32*)((s32)tri + 0x24) -
+                                   diff0[0] * *(f32*)((s32)tri + 0x2C);
+                            if (side >= zero) {
+                                PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x0C), diff1);
+                                side = diff1[2] * *(f32*)((s32)tri + 0x30) -
+                                       diff1[0] * *(f32*)((s32)tri + 0x38);
+                                if (side >= zero) {
+                                    PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x18), diff2);
+                                    side = diff2[2] * *(f32*)((s32)tri + 0x3C) -
+                                           diff2[0] * *(f32*)((s32)tri + 0x44);
+                                    if (side >= zero) {
+                                        hitFound = 1;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (hitFound != 0) {
+                            t = -dot / -*(f32*)((s32)tri + 0x4C);
+                            if (fwork[15] < zero || t < fwork[15]) {
+                                fwork[15] = t;
+                                fwork[9] = fwork[3];
+                                fwork[10] = fwork[4] - t;
+                                fwork[11] = fwork[5];
+                                if (dot < zero) {
+                                    PSVECScale((void*)((s32)tri + 0x48), (void*)(work + 12), float_neg1_8041f848);
+                                } else {
+                                    iwork[12] = *(s32*)((s32)tri + 0x48);
+                                    iwork[13] = *(s32*)((s32)tri + 0x4C);
+                                    iwork[14] = *(s32*)((s32)tri + 0x50);
+                                }
+                                if (bestT < zero || fwork[15] < bestT) {
+                                    bestT = fwork[15];
+                                    bestHit = (s32)hit;
+                                    bestPos[0] = iwork[9];
+                                    bestPos[1] = iwork[10];
+                                    bestPos[2] = iwork[11];
+                                    bestNormal[0] = iwork[12];
+                                    bestNormal[1] = iwork[13];
+                                    bestNormal[2] = iwork[14];
+                                }
+                            }
+                        }
+                    }
+                    triIndex++;
+                    tri = (void*)((s32)tri + 0x54);
+                }
+            }
+            hit = *(void**)((s32)hit + 0xE0);
+        }
+    } else if (fwork[6] == zero && fwork[8] == zero && dirY == float_1_8041f844) {
+        while (hit != NULL) {
+            if ((filter == NULL || ((HitVecFilterFunc)filter)(work, hit) != 0) &&
+                PSVECDistance(scanPos, (void*)((s32)hit + 0xC0)) <= halfLen + *(f32*)((s32)hit + 0xCC)) {
+                if (*(u8*)(*(s32*)(*(s32*)((s32)hit + 0x08) + 0x58) + 1) == 1) {
+                    iwork[0] = 1;
+                } else {
+                    iwork[0] = 0;
+                }
+
+                tri = *(void**)((s32)hit + 0xAC);
+                triIndex = 0;
+                while (triIndex < *(s16*)((s32)hit + 0xA8)) {
+                    if (iwork[0] == 0 || *(f32*)((s32)tri + 0x4C) < zero) {
+                        PSVECSubtract((void*)(work + 3), tri, diff0);
+                        dot = PSVECDotProduct((void*)((s32)tri + 0x48), diff0);
+                        hitFound = 0;
+
+                        if (iwork[0] == 0) {
+                            if (*(f32*)((s32)tri + 0x4C) * dot < zero) {
+                                side = dot * (diff0[2] * *(f32*)((s32)tri + 0x24) -
+                                              diff0[0] * *(f32*)((s32)tri + 0x2C));
+                                if (side <= zero) {
+                                    PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x0C), diff1);
+                                    side = dot * (diff1[2] * *(f32*)((s32)tri + 0x30) -
+                                                  diff1[0] * *(f32*)((s32)tri + 0x38));
+                                    if (side <= zero) {
+                                        PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x18), diff2);
+                                        side = dot * (diff2[2] * *(f32*)((s32)tri + 0x3C) -
+                                                      diff2[0] * *(f32*)((s32)tri + 0x44));
+                                        if (side <= zero) {
+                                            hitFound = 1;
+                                        }
+                                    }
+                                }
+                            }
+                        } else if (dot >= zero) {
+                            side = diff0[2] * *(f32*)((s32)tri + 0x24) -
+                                   diff0[0] * *(f32*)((s32)tri + 0x2C);
+                            if (side <= zero) {
+                                PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x0C), diff1);
+                                side = diff1[2] * *(f32*)((s32)tri + 0x30) -
+                                       diff1[0] * *(f32*)((s32)tri + 0x38);
+                                if (side <= zero) {
+                                    PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x18), diff2);
+                                    side = diff2[2] * *(f32*)((s32)tri + 0x3C) -
+                                           diff2[0] * *(f32*)((s32)tri + 0x44);
+                                    if (side <= zero) {
+                                        hitFound = 1;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (hitFound != 0) {
+                            t = -dot / *(f32*)((s32)tri + 0x4C);
+                            if (fwork[15] < zero || t < fwork[15]) {
+                                fwork[15] = t;
+                                fwork[9] = fwork[3];
+                                fwork[10] = fwork[4] + t;
+                                fwork[11] = fwork[5];
+                                if (dot < zero) {
+                                    PSVECScale((void*)((s32)tri + 0x48), (void*)(work + 12), float_neg1_8041f848);
+                                } else {
+                                    iwork[12] = *(s32*)((s32)tri + 0x48);
+                                    iwork[13] = *(s32*)((s32)tri + 0x4C);
+                                    iwork[14] = *(s32*)((s32)tri + 0x50);
+                                }
+                                if (bestT < zero || fwork[15] < bestT) {
+                                    bestT = fwork[15];
+                                    bestHit = (s32)hit;
+                                    bestPos[0] = iwork[9];
+                                    bestPos[1] = iwork[10];
+                                    bestPos[2] = iwork[11];
+                                    bestNormal[0] = iwork[12];
+                                    bestNormal[1] = iwork[13];
+                                    bestNormal[2] = iwork[14];
+                                }
+                            }
+                        }
+                    }
+                    triIndex++;
+                    tri = (void*)((s32)tri + 0x54);
+                }
+            }
+            hit = *(void**)((s32)hit + 0xE0);
+        }
+    } else {
+        while (hit != NULL) {
+            if ((filter == NULL || ((HitVecFilterFunc)filter)(work, hit) != 0) &&
+                PSVECDistance(scanPos, (void*)((s32)hit + 0xC0)) <= halfLen + *(f32*)((s32)hit + 0xCC)) {
+                if (*(u8*)(*(s32*)(*(s32*)((s32)hit + 0x08) + 0x58) + 1) == 1) {
+                    iwork[0] = 1;
+                } else {
+                    iwork[0] = 0;
+                }
+
+                tri = *(void**)((s32)hit + 0xAC);
+                triIndex = 0;
+                while (triIndex < *(s16*)((s32)hit + 0xA8)) {
+                    if (iwork[0] == 0 ||
+                        PSVECDotProduct((void*)((s32)tri + 0x48), (void*)(work + 6)) < zero) {
+                        PSVECSubtract((void*)(work + 3), tri, diff0);
+                        dot = PSVECDotProduct((void*)((s32)tri + 0x48), diff0);
+                        hitFound = 0;
+
+                        if (iwork[0] == 0) {
+                            denom = PSVECDotProduct((void*)((s32)tri + 0x48), (void*)(work + 6));
+                            if (denom * dot < zero) {
+                                PSVECCrossProduct((void*)(work + 6), (void*)((s32)tri + 0x24), cross0);
+                                side = dot * PSVECDotProduct(diff0, cross0);
+                                if (side >= zero) {
+                                    PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x0C), diff1);
+                                    PSVECCrossProduct((void*)(work + 6), (void*)((s32)tri + 0x30), cross1);
+                                    side = dot * PSVECDotProduct(diff1, cross1);
+                                    if (side >= zero) {
+                                        PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x18), diff2);
+                                        PSVECCrossProduct((void*)(work + 6), (void*)((s32)tri + 0x3C), cross2);
+                                        side = dot * PSVECDotProduct(diff2, cross2);
+                                        if (side >= zero) {
+                                            hitFound = 1;
+                                        }
+                                    }
+                                }
+                            }
+                        } else if (dot >= zero) {
+                            PSVECCrossProduct((void*)(work + 6), (void*)((s32)tri + 0x24), cross0);
+                            side = PSVECDotProduct(diff0, cross0);
+                            if (side >= zero) {
+                                PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x0C), diff1);
+                                PSVECCrossProduct((void*)(work + 6), (void*)((s32)tri + 0x30), cross1);
+                                side = PSVECDotProduct(diff1, cross1);
+                                if (side >= zero) {
+                                    PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x18), diff2);
+                                    PSVECCrossProduct((void*)(work + 6), (void*)((s32)tri + 0x3C), cross2);
+                                    side = PSVECDotProduct(diff2, cross2);
+                                    if (side >= zero) {
+                                        denom = PSVECDotProduct((void*)((s32)tri + 0x48), (void*)(work + 6));
+                                        hitFound = 1;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (hitFound != 0) {
+                            t = -dot / denom;
+                            if (fwork[15] < zero || t < fwork[15]) {
+                                fwork[15] = t;
+                                PSVECScale((void*)(work + 6), scaled, t);
+                                PSVECAdd((void*)(work + 3), scaled, (void*)(work + 9));
+                                if (dot < zero) {
+                                    PSVECScale((void*)((s32)tri + 0x48), (void*)(work + 12), float_neg1_8041f848);
+                                } else {
+                                    iwork[12] = *(s32*)((s32)tri + 0x48);
+                                    iwork[13] = *(s32*)((s32)tri + 0x4C);
+                                    iwork[14] = *(s32*)((s32)tri + 0x50);
+                                }
+                                if (bestT < zero || fwork[15] < bestT) {
+                                    bestT = fwork[15];
+                                    bestHit = (s32)hit;
+                                    bestPos[0] = iwork[9];
+                                    bestPos[1] = iwork[10];
+                                    bestPos[2] = iwork[11];
+                                    bestNormal[0] = iwork[12];
+                                    bestNormal[1] = iwork[13];
+                                    bestNormal[2] = iwork[14];
+                                }
+                            }
+                        }
+                    }
+                    triIndex++;
+                    tri = (void*)((s32)tri + 0x54);
+                }
+            }
+            hit = *(void**)((s32)hit + 0xE0);
+        }
+    }
+
+    if (bestHit != 0) {
+        PSVECNormalize(bestNormal, norm);
+        fwork[15] = bestT;
+        iwork[9] = bestPos[0];
+        iwork[10] = bestPos[1];
+        iwork[11] = bestPos[2];
+        iwork[12] = ((s32*)norm)[0];
+        iwork[13] = ((s32*)norm)[1];
+        iwork[14] = ((s32*)norm)[2];
+    }
+
+    return bestHit;
+}
 
 void* hitCheckSphereFilter(void* filter, f32 x, f32 y, f32 z, f32 radius) {
     extern void* mapGetWork(void);

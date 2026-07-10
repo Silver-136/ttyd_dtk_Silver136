@@ -39,7 +39,7 @@ void effWangFlushMain(void* effect) {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effWangFlushDisp(void);
-    extern const Vec3 vec3_802fc240;
+    extern Vec3 vec3_802fc240[];
     extern f32 float_0p5_804264a0;
     extern f32 float_0p78_804264a4;
     extern f32 float_0p29_804264a8;
@@ -51,14 +51,16 @@ void effWangFlushMain(void* effect) {
     extern f32 float_64_804264c0;
     extern double sin(double);
     u8* work;
-    Vec3 pos;
     Vec3 dispPos;
+    Vec3 pos;
+    Vec3* base;
     s32 timer;
     s32 frame;
     f32 angle;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos = vec3_802fc240;
+    base = vec3_802fc240;
+    pos = *base;
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);

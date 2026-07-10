@@ -112,9 +112,27 @@ u8 effGetTexObjN64(int param_1, u32* param_2) {
 
 
 u8 tri2(s16 param_1, s16 param_2, s16 param_3, s32 param_4, s16 param_5, s16 param_6, s16 param_7) {
-    return 0;
-}
+    volatile u16* fifo = (volatile u16*)0xCC008000;
 
+    *fifo = param_1;
+    *fifo = param_1;
+    *fifo = param_1;
+    *fifo = param_2;
+    *fifo = param_2;
+    *fifo = param_2;
+    *fifo = param_3;
+    *fifo = param_3;
+    *fifo = param_3;
+    *fifo = param_5;
+    *fifo = param_5;
+    *fifo = param_5;
+    *fifo = param_6;
+    *fifo = param_6;
+    *fifo = param_6;
+    *fifo = param_7;
+    *fifo = param_7;
+    *fifo = param_7;
+}
 
 void _callback_tpl(void* unused, void* fileInfo) {
     void* file = *(void**)((s32)fileInfo + 0x2C);
@@ -126,9 +144,15 @@ void _callback_tpl(void* unused, void* fileInfo) {
 
 
 int effTblRandN64(int param_1, int param_2) {
-    return 0;
-}
+    extern s32 _rand_table[];
+    s32 value;
 
+    value = _rand_table[param_2 % 128];
+    if (value < 0) {
+        value = -value;
+    }
+    return value % (param_1 + 1);
+}
 
 u8 effInit64(void) {
     memset(wp, 0, 8);

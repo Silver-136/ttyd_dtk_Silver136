@@ -26,9 +26,62 @@ u8 itemUseDisp(void* pWinMgr) {
 
 
 u8 itemUseDisp2(void* pWinMgr) {
+    typedef struct LocalVec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } LocalVec;
+    extern void* winGetPtr(void);
+    extern s32 winMgrAction(s32 entryId);
+    extern char* msgSearch(char* msg);
+    extern void FontGetMessageWidthLine(char* msg, u16* width);
+    extern void winMgrSetSize(s32 entryId, s32 x, s32 y, s32 width, s32 height);
+    extern void winFontInit(void);
+    extern void winFontSetPitch(LocalVec* position, LocalVec* scale, u32* color, char* msg, f32 pitch);
+    extern u32 dat_804237b0;
+    extern LocalVec vec3_802f5df0;
+    extern LocalVec vec3_802f5de4;
+    extern char str_msg_window_select_5_802f5dfc[];
+    extern f32 float_0p5_804237b4;
+    void* win;
+    char* msg;
+    u16 width[2];
+    u32 color;
+    LocalVec scale;
+    LocalVec position;
+    f32 msgWidth;
+    f32 maxWidth;
+
+    win = winGetPtr();
+    color = dat_804237b0;
+    if (winMgrAction(*(s32*)((s32)win + 0x1214)) == 0) {
+        msg = msgSearch(str_msg_window_select_5_802f5dfc);
+        FontGetMessageWidthLine(msg, width);
+        msgWidth = (f32)width[0];
+        winMgrSetSize(
+            *(s32*)((s32)win + 0x1214),
+            *(s32*)((s32)pWinMgr + 0x18),
+            *(s32*)((s32)pWinMgr + 0x1C),
+            *(s32*)((s32)pWinMgr + 0x20),
+            *(s32*)(*(s32*)((s32)pWinMgr + 0x28) + 0x18) + width[0] * 0x16
+        );
+        winFontInit();
+        maxWidth = (f32)(*(s32*)((s32)pWinMgr + 0x20) - 0x14);
+        if (maxWidth < msgWidth) {
+            msgWidth = maxWidth;
+        }
+        color = dat_804237b0;
+        scale.x = vec3_802f5df0.x;
+        scale.y = vec3_802f5df0.y;
+        scale.z = vec3_802f5df0.z;
+        position.x = ((f32)*(s32*)((s32)pWinMgr + 0x20) - msgWidth) * float_0p5_804237b4
+            + (f32)*(s32*)((s32)pWinMgr + 0x18);
+        position.y = vec3_802f5de4.y;
+        position.z = vec3_802f5de4.z;
+        winFontSetPitch(&position, &scale, &color, msg, maxWidth);
+    }
     return 0;
 }
-
 
 s32 winItemMain(void* pWin) {
     return 0;
@@ -199,38 +252,61 @@ void winItemInit2(void* pWin) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void winMakeSkipList(void* pWin) {
-    s32 i = 0;
+    s32 i;
     u16 item;
-    s32 j;
     u16* skip;
+    s32 skipIndex;
+    s32 loop;
     s32 count;
 
+    i = 0;
     *(u16*)((s32)pWin + 0x3DA) = 0;
-    for (; i < 0x79; i++) {
+    while (i < 0x79) {
         item = pouchKeyItem(i);
         if (item != 0) {
+            skipIndex = 0;
             skip = menu_skip_list;
-            j = 0;
-            while (j < 0x12) {
-                if (item == *skip) {
-                    break;
-                }
+            for (loop = 0; loop < 2; loop++) {
+                if (item == *skip) break;
                 skip++;
-                j++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
+                if (item == *skip) break;
+                skip++;
+                skipIndex++;
             }
-            if ((u32)j >= 0x12) {
+            if ((u32)skipIndex >= 0x12) {
                 count = *(s16*)((s32)pWin + 0x3DA);
                 *(u16*)((s32)pWin + 0x2E8 + count * 2) = item;
                 *(u16*)((s32)pWin + 0x3DA) = count + 1;
             }
         }
+        i++;
     }
 }
-
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

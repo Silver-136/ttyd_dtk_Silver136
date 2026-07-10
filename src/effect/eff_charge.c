@@ -85,18 +85,19 @@ void* effChargeEntry(s32 type, s32 arg, f32 x, f32 y, f32 z, f32 scale) {
         angle = 360.0f * (f32)prev;
         *(f32*)(particle + 0x20) = (angle * 9.0f) / 30.0f;
         *(f32*)(particle + 0x24) = 0.0f;
-        *(f32*)(particle + 0x2C) = (f32)(prev / 30);
+        *(f32*)(particle + 0x2C) = (f32)((prev * 100) / 30);
         angle = 360.0f * (f32)cur;
         *(s32*)particle = 0;
         *(f32*)(particle + 0x68) = (angle * 9.0f) / 30.0f;
         *(f32*)(particle + 0x6C) = 0.0f;
-        *(f32*)(particle + 0x74) = (f32)(cur / 30);
+        *(f32*)(particle + 0x74) = (f32)((cur * 100) / 30);
         *(s32*)(particle + 0x48) = 0;
         particle += 0x90;
     }
 
     return effect;
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

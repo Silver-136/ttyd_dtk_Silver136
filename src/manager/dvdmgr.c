@@ -226,11 +226,40 @@ u8 DVDMgrInit(void) {
 }
 
 
-void DVDMgrRead(void* handle, void* dst, u32 size, s32 offset) {
-    ;
+s32 DVDMgrRead(void* handle, void* dst, u32 size, s32 offset) {
+    extern void OSYieldThread(void);
+    s32 zero;
+
+    zero = 0;
+    *(void**)((s32)handle + 0x7C) = dst;
+    *(u32*)((s32)handle + 0x80) = size;
+    *(s32*)((s32)handle + 0x84) = offset;
+    *(u16*)((s32)handle + 0x90) |= 1;
+    *(u16*)((s32)handle + 0x90) &= ~2;
+    *(s32*)((s32)handle + 0x8C) = zero;
+    *(s32*)((s32)handle + 0x88) = zero;
+    while (1) {
+        if ((*(u16*)((s32)handle + 0x90) & 2) != 0) {
+            break;
+        }
+        OSYieldThread();
+    }
+    return *(s32*)((s32)handle + 0x74);
 }
 
+s32 compare(u8* lhs, u8* rhs) {
+    extern void* dvdq;
+    u32 left;
+    u32 right;
 
-int compare(void* param_1, void* param_2) {
+    left = *(u16*)((s32)dvdq + 0x92 + *lhs * 0x98) & 0xFF;
+    right = *(u16*)((s32)dvdq + 0x92 + *rhs * 0x98) & 0xFF;
+    if (left > right) {
+        return 1;
+    }
+    if (left < right) {
+        return -1;
+    }
     return 0;
 }
+

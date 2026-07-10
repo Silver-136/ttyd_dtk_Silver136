@@ -186,8 +186,8 @@ u8 winIconGrayInit(void) {
 s32 itemUseFunc(void* pEvt, int param_2) {
     return 0;
 }
-
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 winIconSet(s32 iconId, void* pos, void* size, void* color) {
     extern void iconGetTexObj(void* texObj, u16 iconId);
     extern void GXInitTexObjLOD(void* texObj, s32 minFilt, s32 magFilt, f32 minLod, f32 maxLod, f32 lodBias, s32 biasClamp, s32 doEdgeLod, s32 maxAniso);
@@ -216,15 +216,15 @@ u8 winIconSet(s32 iconId, void* pos, void* size, void* color) {
     GXInitTexObjLOD(texObj, 1, 1, float_0_80424004, float_0_80424004, float_0_80424004, 0, 0, 0);
     GXLoadTexObj(texObj, 0);
 
-    if (((u8*)color)[3] == 0xFF) {
-        GXSetBlendMode(0, 4, 5, 0);
-        GXSetZCompLoc(0);
-        GXSetAlphaCompare(6, 0x80, 1, 0, 0);
-        GXSetZMode(0, 7, 0);
-    } else {
+    if (((u8*)color)[3] != 0xFF) {
         GXSetBlendMode(1, 4, 5, 0);
         GXSetZCompLoc(1);
         GXSetAlphaCompare(7, 0, 0, 7, 0);
+        GXSetZMode(0, 7, 0);
+    } else {
+        GXSetBlendMode(0, 4, 5, 0);
+        GXSetZCompLoc(0);
+        GXSetAlphaCompare(6, 0x80, 1, 0, 0);
         GXSetZMode(0, 7, 0);
     }
 
@@ -247,7 +247,10 @@ u8 winIconSet(s32 iconId, void* pos, void* size, void* color) {
     GXSetTevSwapMode(1, 0, 0);
     GXSetTevSwapMode(2, 0, 0);
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 winTexSetRot(s32 texId, void* pos, void* size, void* color, f32 angle) {
     extern f32 float_deg2rad_80424010;
     extern void TEXGetGXTexObjFromPalette(s32 tpl, void* texObj, s32 id);
@@ -272,15 +275,15 @@ u8 winTexSetRot(s32 texId, void* pos, void* size, void* color, f32 angle) {
     s32 tevColor;
     volatile f32* fifo;
 
-    if (((u8*)color)[3] == 0xFF) {
-        GXSetBlendMode(0, 4, 5, 0);
-        GXSetZCompLoc(0);
-        GXSetAlphaCompare(6, 0x80, 1, 0, 0);
-        GXSetZMode(0, 7, 0);
-    } else {
+    if (((u8*)color)[3] != 0xFF) {
         GXSetBlendMode(1, 4, 5, 0);
         GXSetZCompLoc(1);
         GXSetAlphaCompare(7, 0, 0, 7, 0);
+        GXSetZMode(0, 7, 0);
+    } else {
+        GXSetBlendMode(0, 4, 5, 0);
+        GXSetZCompLoc(0);
+        GXSetAlphaCompare(6, 0x80, 1, 0, 0);
         GXSetZMode(0, 7, 0);
     }
 
@@ -305,6 +308,8 @@ u8 winTexSetRot(s32 texId, void* pos, void* size, void* color, f32 angle) {
     *fifo = 0.5f; *fifo = 0.5f; *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
     *fifo = -0.5f; *fifo = 0.5f; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 winTexInit_x2(s32 texData) {
     s32 color;
@@ -347,7 +352,8 @@ u8 winTexInit_x2(s32 texData) {
     GXSetTevAlphaIn(1, 7, 1, 4, 7);
     GXSetTevSwapMode(1, 0, 0);
 }
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void winTexSet(s32 texId, void* pos, void* size, void* color) {
     extern void TEXGetGXTexObjFromPalette(s32 tpl, void* texObj, s32 id);
     extern void GXInitTexObjLOD(void* texObj, s32 minFilt, s32 magFilt, f32 minLod, f32 maxLod, f32 lodBias, s32 biasClamp, s32 doEdgeLod, s32 maxAniso);
@@ -369,15 +375,15 @@ void winTexSet(s32 texId, void* pos, void* size, void* color) {
     s32 tevColor;
     volatile f32* fifo;
 
-    if (((u8*)color)[3] == 0xFF) {
-        GXSetBlendMode(0, 4, 5, 0);
-        GXSetZCompLoc(0);
-        GXSetAlphaCompare(6, 0x80, 1, 0, 0);
-        GXSetZMode(0, 7, 0);
-    } else {
+    if (((u8*)color)[3] != 0xFF) {
         GXSetBlendMode(1, 4, 5, 0);
         GXSetZCompLoc(1);
         GXSetAlphaCompare(7, 0, 0, 7, 0);
+        GXSetZMode(0, 7, 0);
+    } else {
+        GXSetBlendMode(0, 4, 5, 0);
+        GXSetZCompLoc(0);
+        GXSetAlphaCompare(6, 0x80, 1, 0, 0);
         GXSetZMode(0, 7, 0);
     }
 
@@ -400,6 +406,8 @@ void winTexSet(s32 texId, void* pos, void* size, void* color) {
     *fifo = 0.5f; *fifo = 0.5f; *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
     *fifo = -0.5f; *fifo = 0.5f; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 winTexSet_x2(s32 texId0, s32 texId1, void* pos, void* size, void* color) {
     extern void TEXGetGXTexObjFromPalette(s32 tpl, void* texObj, s32 id);
@@ -451,6 +459,8 @@ u8 winTexSet_x2(s32 texId0, s32 texId1, void* pos, void* size, void* color) {
     *fifo = -0.5f; *fifo = 0.5f; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void unk_8017c9bc(s32 texId, void* pos, void* size, void* color) {
     extern void TEXGetGXTexObjFromPalette(s32 tpl, void* texObj, s32 id);
     extern void GXInitTexObjLOD(void* texObj, s32 minFilt, s32 magFilt, f32 minLod, f32 maxLod, f32 lodBias, s32 biasClamp, s32 doEdgeLod, s32 maxAniso);
@@ -496,6 +506,8 @@ void unk_8017c9bc(s32 texId, void* pos, void* size, void* color) {
     *fifo = 0.5f; *fifo = 0.5f; *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
     *fifo = -0.5f; *fifo = 0.5f; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 winDispKoopa(void) {
     extern s32 dat_80423f58;

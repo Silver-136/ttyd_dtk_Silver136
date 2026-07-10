@@ -205,12 +205,16 @@ u8 effFireSmokeMain(void* effect) {
         work->pos.y += work->vel.y;
         work->pos.z += work->vel.z;
         work->rot += work->rotStep;
-        work->r = (u8)(work->r * 0.99f);
-        work->g = (u8)(work->g * 0.99f);
-        work->b = (u8)(work->b * 0.99f);
+        {
+            f32 fade = 0.99f;
+            work->r = (u8)((f32)work->r * fade);
+            work->g = (u8)((f32)work->g * fade);
+            work->b = (u8)((f32)work->b * fade);
+        }
         dispEntry(4, 2, effFireSmokeDisp, effect, dispCalcZ(&work->pos));
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

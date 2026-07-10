@@ -38,18 +38,20 @@ void effStoneSmokeMain(void* effect) {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effStoneSmokeDisp(void);
-    extern const Vec3 vec3_802fc0c8;
+    extern Vec3 vec3_802fc0c8[];
     extern f32 float_0p6_804262d8;
     extern f32 float_0p01_804262dc;
     extern u8 scale_data[];
     extern u8 scale_data2[];
     u8* work;
-    Vec3 pos;
     Vec3 dispPos;
+    Vec3 pos;
+    Vec3* base;
     s32 frame;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos = vec3_802fc0c8;
+    base = vec3_802fc0c8;
+    pos = *base;
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);

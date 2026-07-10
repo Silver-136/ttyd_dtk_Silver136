@@ -11,6 +11,8 @@ u8 effReleaseMain(u32* param_1) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effReleaseN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -22,6 +24,8 @@ void* effReleaseN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale)
     u8* work;
     s32 kind;
     s32 color;
+    f32 one;
+    f32 zero;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_ReleaseN64_802fbe38;
@@ -39,6 +43,8 @@ void* effReleaseN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale)
     } else {
         *(s32*)(work + 0x14) = lifetime;
     }
+    one = float_1_80425ee4;
+    zero = float_0_80425ec0;
     *(s32*)(work + 0x28) = 0xFF;
     *(f32*)(work + 8) = x;
     *(f32*)(work + 0xC) = y;
@@ -55,10 +61,10 @@ void* effReleaseN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale)
     *(s32*)(work + 0x64) = 0;
     *(s32*)(work + 0x68) = 0;
     *(s32*)(work + 0x6C) = 0;
-    *(f32*)(work + 0x40) = float_1_80425ee4;
-    *(f32*)(work + 0x44) = float_0_80425ec0;
-    *(f32*)(work + 0x48) = float_0_80425ec0;
-    *(f32*)(work + 0x4C) = float_0_80425ec0;
+    *(f32*)(work + 0x40) = one;
+    *(f32*)(work + 0x44) = zero;
+    *(f32*)(work + 0x48) = zero;
+    *(f32*)(work + 0x4C) = zero;
     *(s32*)(work + 0x50) = 0xFF;
     *(s32*)(work + 0x54) = 0;
     *(s32*)(work + 0x58) = 0;
@@ -71,4 +77,6 @@ void* effReleaseN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale)
     *(s32*)(work + 0x74) = 0;
     return entry;
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 

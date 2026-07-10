@@ -11,6 +11,8 @@ u8 effSnowfallN64Entry(void) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void cam_clip_chk(u8* work, s32 xRange, s32 yRange, s32 timer) {
     extern void* camGetPtr(s32 camera);
     extern f32 float_0p5_804260bc;
@@ -68,6 +70,8 @@ void cam_clip_chk(u8* work, s32 xRange, s32 yRange, s32 timer) {
         *(f32*)(work + 0x10) = centerZ + (f32)xRange - (f32)delta;
     }
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 
 void effSnowfallMain(void* effect) {
     typedef struct Vec3 {

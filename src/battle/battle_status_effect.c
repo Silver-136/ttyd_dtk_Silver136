@@ -607,6 +607,8 @@ void BSE_Biribiri(BattleWorkUnit* unit) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void _st_chg_msg_disp(void) {
     void* battleWork;
     char* msg;
@@ -631,7 +633,8 @@ void _st_chg_msg_disp(void) {
     FontDrawStart();
     FontDrawMessage((s32)x, (s32)float_neg120_80424720 + (lineCount - 1) * 0x1D, msg);
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void BSE_Fire(BattleWorkUnit* unit) {
     void* effect;
@@ -706,10 +709,25 @@ void BSE_Kagegakure(BattleWorkUnit* unit) {
 
 
 s32 BattleStatusChangeAnnouceMain(void* battleWork) {
-    return 0;
+    s32 i;
+    s32 found;
+    BattleWorkUnit* unit;
+
+    found = 0;
+    for (i = 0; i < 0x40; i++) {
+        unit = BattleGetUnitPtr(battleWork, i);
+        if (unit != 0 && BattleStatusChangeAnnouceMain_Unit(unit) != 0) {
+            found = 1;
+        }
+    }
+    return found;
 }
 
-
-u8 BattleStatusEffectMain(void* unit) {
-    return 0;
+void BattleStatusEffectMain(BattleWorkUnit* unit) {
+    BSE_Sleep(unit);
+    BSE_Biribiri(unit);
+    BSE_Fire(unit);
+    BSE_Freeze(unit);
+    BSE_Kagegakure(unit);
 }
+

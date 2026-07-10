@@ -21,17 +21,19 @@ void effHokoriMain(void* effect) {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effHokoriDisp(s32, s32);
-    extern Vec3 vec3_802fb0d0;
+    extern Vec3 vec3_802fb0d0[];
     extern f32 float_0p9_80425490;
     extern f32 float_0p005_80425494;
     u8* work;
     u8* part;
-    Vec3 pos;
+    Vec3* base;
     Vec3 dispPos;
+    Vec3 pos;
     s32 i;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos = vec3_802fb0d0;
+    base = vec3_802fb0d0;
+    pos = *base;
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);

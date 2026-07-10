@@ -27,7 +27,7 @@ void effWaterDamageMain(void* effect) {
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effWaterDamageDisp(void);
     extern void effWaterDamageDisp2(void);
-    extern const Vec3 vec3_802fc268;
+    extern Vec3 vec3_802fc268[];
     extern f32 float_0p98_804264e8;
     extern f32 float_neg0p8_804264ec;
     extern f32 float_neg0p1_804264f0;
@@ -35,14 +35,16 @@ void effWaterDamageMain(void* effect) {
     extern f32 float_0p9_804264f8;
     u8* work;
     u8* part;
-    Vec3 pos;
     Vec3 dispPos;
+    Vec3 pos;
+    Vec3* base;
     s32 type;
     s32 altDisp;
     s32 i;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos = vec3_802fc268;
+    base = vec3_802fc268;
+    pos = *base;
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);

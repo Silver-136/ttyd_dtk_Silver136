@@ -21,7 +21,7 @@ void effFlowerMain(void* effect) {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effFlowerDisp(s32, s32);
-    extern Vec3 vec3_802fafb0;
+    extern Vec3 vec3_802fafb0[];
     extern f32 float_0p001_80425350;
     extern f32 float_10_80425354;
     extern f32 float_45_80425358;
@@ -29,11 +29,13 @@ void effFlowerMain(void* effect) {
     extern f32 float_1_80425360;
     extern f32 float_0p0007_80425364;
     u8* work;
+    Vec3* base;
     Vec3 pos;
     Vec3 dispPos;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos = vec3_802fafb0;
+    base = vec3_802fafb0;
+    pos = *base;
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);

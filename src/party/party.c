@@ -750,10 +750,38 @@ void partyUpdateKeyData(void* party) {
     *(u16*)((s32)party + 0x156) = *(u32*)((s32)gp + offset + 0x1368);
 }
 
-u8 partyMain(void) {
-    return 0;
-}
+void partyMain(void) {
+    extern void* marioGetPtr(void);
+    extern void unk_8014140c(void);
+    extern s32 marioBgmodeChk(void);
+    extern void driveParty(void* party);
 
+    s32 active = 0;
+    s32 i;
+    void** ptr;
+    void* party;
+
+    marioGetPtr();
+    ptr = partyPtrTbl;
+    party = ptr[0];
+    if (party != 0 && (*(u32*)party & 1) != 0) {
+        active++;
+    }
+    party = ptr[1];
+    if (party != 0 && (*(u32*)party & 1) != 0) {
+        active++;
+    }
+    if (active != 0) {
+        unk_8014140c();
+        ptr = partyPtrTbl;
+        for (i = 0; i < 2; i++, ptr++) {
+            party = *ptr;
+            if (party != 0 && (*(u32*)party & 1) != 0 && marioBgmodeChk() != 1) {
+                driveParty(party);
+            }
+        }
+    }
+}
 
 void allPartyForceRideOn(void) {
     extern u8 N_partyForceChgRunMode(void* party, int newRunMode, u8 subMotionId);
@@ -833,20 +861,86 @@ void allPartyRideOff(void) {
     }
 }
 
-u8 partyDokanEnd(int partyId, u8 param_2) {
-    return 0;
+void partyDokanEnd(int partyId, u8 param_2) {
+    extern void L_partyVivianTailStart(void* party);
+
+    void* party;
+
+    if (partyId >= 0) {
+        party = partyPtrTbl[partyId];
+    } else {
+        party = 0;
+    }
+
+    if (party != 0 && *(u8*)((s32)party + 0x34) == 0xA) {
+        *(u8*)((s32)party + 0x38) = 0x64;
+        *(u8*)((s32)party + 0x2E) = param_2;
+        *(u32*)((s32)party + 0x4) &= ~8;
+        *(u32*)((s32)party + 0x4) &= ~0x10;
+        *(u32*)((s32)party + 0x4) &= ~0x100;
+        *(u32*)party &= ~0x2000000;
+        *(u32*)party &= ~0x1000000;
+        if (party != 0) {
+            *(u32*)((s32)party + 0x4) &= ~0x100000;
+        }
+        *(u32*)((s32)party + 0xB8) = *(u32*)((s32)party + 0x58);
+        *(u32*)((s32)party + 0xBC) = *(u32*)((s32)party + 0x5C);
+        *(u32*)((s32)party + 0xC0) = *(u32*)((s32)party + 0x60);
+        L_partyVivianTailStart(party);
+    }
 }
 
+s32 partyDoWork(void) {
+    extern void* marioGetPtr(void);
+    extern void partyChgRunMode(void* party, s32 mode);
+    extern f32 float_0_80421218;
 
-u8 partyDoWork(void) {
-    return 0;
+    void* mario = marioGetPtr();
+    void* party;
+
+    if (*(s8*)((s32)mario + 0x245) >= 0) {
+        party = partyPtrTbl[*(s8*)((s32)mario + 0x245)];
+    } else {
+        party = 0;
+    }
+    if (party == 0) {
+        return 0;
+    }
+    if (*(u8*)((s32)party + 0x34) != 0 &&
+        *(u8*)((s32)party + 0x34) != 1 &&
+        *(u8*)((s32)party + 0x34) != 2) {
+        return 0;
+    }
+    *(f32*)((s32)mario + 0x180) = float_0_80421218;
+    partyChgRunMode(party, 3);
+    return 1;
 }
 
+s32 yoshiSetColor(void) {
+    extern s32 irand(s32 max);
+    extern void pouchSetPartyColor(s32 partyId, s32 color);
 
-void yoshiSetColor(void) {
-    ;
+    s32 value = irand(1000);
+    s32 color;
+
+    if (value < 150) {
+        color = 0;
+    } else if (value < 300) {
+        color = 1;
+    } else if (value < 450) {
+        color = 2;
+    } else if (value < 600) {
+        color = 3;
+    } else if (value < 750) {
+        color = 4;
+    } else if (value < 900) {
+        color = 5;
+    } else {
+        color = 6;
+    }
+    pouchSetPartyColor(4, color);
+    return color;
 }
-
 
 void allPartyRideShip(void) {
     extern void bomhei_use_cancel(void);
@@ -905,25 +999,61 @@ void party_ride_yoshi_force_move(void) {
     }
 }
 
-u8 N_partyForceChgRunMode(void* pParty, int newRunMode, u8 subMotionId) {
-    return 0;
-}
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void N_partyForceChgRunMode(void* pParty, int newRunMode, u8 subMotionId) {
+    extern void N__partyChgRunMode(void* party, s32 currRunModeId, s32 newRunModeId);
 
+    u8 oldMode = *(u8*)((s32)pParty + 0x34);
+
+    if (oldMode != 9 && oldMode != 3) {
+        *(u8*)((s32)pParty + 0x35) = oldMode;
+    }
+    N__partyChgRunMode(pParty, oldMode, newRunMode);
+    *(u8*)((s32)pParty + 0x34) = newRunMode;
+    *(u32*)((s32)pParty + 0x8) &= ~8;
+    *(u8*)((s32)pParty + 0x38) = subMotionId;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 partyChgPaper(void* pParty, char* param_2) {
     return 0;
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void partyChgRunMode(void* party, s32 mode) {
-    ;
+    extern void N__partyChgRunMode(void* party, s32 currRunModeId, s32 newRunModeId);
+
+    u8 oldMode = *(u8*)((s32)party + 0x34);
+
+    if (oldMode != 9 && oldMode != 3) {
+        *(u8*)((s32)party + 0x35) = oldMode;
+    }
+    N__partyChgRunMode(party, oldMode, mode);
+    *(u8*)((s32)party + 0x34) = mode;
+    *(u32*)((s32)party + 0x8) |= 8;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+s32 partyGoodbye(s32 id) {
+    void* party;
+    s32 ret = 0;
 
-s32 partyGoodbye(void* pParty) {
-    return 0;
+    if (id >= 0) {
+        if (id >= 0) {
+            party = partyPtrTbl[id];
+        } else {
+            party = 0;
+        }
+        partyChgRunMode(party, 8);
+        ret = 1;
+    }
+    return ret;
 }
-
 
 s32 partyKill(s32 id) {
     return 0;

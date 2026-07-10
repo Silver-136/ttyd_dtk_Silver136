@@ -203,6 +203,112 @@ void* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
 /* CHATGPT STUB FILL: main/effect/eff_mizutama 20260624_184823 */
 
 /* stub-fill: effMizutamaDisp | prototype_only | source_prototype */
-void effMizutamaDisp(void) {
-    return;
+void effMizutamaDisp(s32 cameraId, void* effect) {
+    typedef f32 MtxLocal[3][4];
+    typedef struct CameraLocal {
+        char pad[0x58];
+        MtxLocal viewMtx;
+    } CameraLocal;
+
+    extern CameraLocal* camGetPtr(s32 cameraId);
+    extern void PSMTXTrans(MtxLocal mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXScale(MtxLocal mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(MtxLocal a, MtxLocal b, MtxLocal out);
+    extern void GXSetNumChans(u32 count);
+    extern void GXSetNumTexGens(u32 count);
+    extern void GXSetTexCoordGen2(s32 dst, s32 func, s32 src, u32 mtx, u32 normalize, s32 postMtx);
+    extern void GXSetNumTevStages(u32 count);
+    extern void GXSetTevOrder(u32 stage, u32 texCoord, u32 texMap, u32 color);
+    extern void GXSetTevColorOp(s32 stage, u32 op, u32 bias, u32 scale, u32 clamp, u32 outReg);
+    extern void GXSetTevAlphaOp(s32 stage, u32 op, u32 bias, u32 scale, u32 clamp, u32 outReg);
+    extern void GXSetTevOp(s32 stage, s32 mode);
+    extern void effGetTexObj(s32 texId, void* texObj);
+    extern void GXLoadTexObj(void* texObj, s32 mapId);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(u32 vtxfmt, s32 attr, u32 compCnt, u32 compType, u32 frac);
+    extern void GXLoadPosMtxImm(MtxLocal mtx, s32 id);
+    extern void GXSetCurrentMtx(u32 id);
+    extern void GXBegin(s32 prim, u8 vtxfmt, u16 nverts);
+    extern volatile f32 DAT_cc008000;
+    extern f32 float_8_804277c8;
+    extern f32 float_360_804277cc;
+    extern f32 float_0p5_804277d0;
+    extern f32 float_4_804277d4;
+    extern f32 float_0_804277d8;
+    extern f32 float_1_804277dc;
+
+    void* base = *(void**)((s32)effect + 0xC);
+    void* work = base;
+    CameraLocal* cam = camGetPtr(cameraId);
+    f32 y = *(f32*)((s32)base + 8);
+    MtxLocal trans;
+    MtxLocal scale;
+    MtxLocal baseMtx;
+    MtxLocal childMtx;
+    MtxLocal drawMtx;
+    u8 texObj[0x20];
+    s32 i;
+    f32 size;
+
+    PSMTXTrans(trans, *(f32*)((s32)base + 4), y, *(f32*)((s32)base + 0xC));
+    PSMTXScale(scale, *(f32*)((s32)base + 0x18), *(f32*)((s32)base + 0x18), *(f32*)((s32)base + 0x18));
+    PSMTXConcat(trans, scale, baseMtx);
+
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevOp(0, 3);
+    effGetTexObj(0x3F, texObj);
+    GXLoadTexObj(texObj, 0);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+
+    size = -float_8_804277c8;
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
+        work = (void*)((s32)work + 0x28);
+        if (*(s32*)((s32)work + 0x24) == 0) {
+            PSMTXTrans(trans, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
+            PSMTXScale(scale, *(f32*)((s32)work + 0x18), *(f32*)((s32)work + 0x18), *(f32*)((s32)work + 0x18));
+            PSMTXConcat(trans, scale, childMtx);
+            PSMTXConcat(baseMtx, childMtx, drawMtx);
+            if (y <= float_360_804277cc) {
+                f32 half = size * float_0p5_804277d0;
+                PSMTXConcat(cam->viewMtx, drawMtx, drawMtx);
+                GXLoadPosMtxImm(drawMtx, 0);
+                GXSetCurrentMtx(0);
+                GXBegin(0x80, 0, 4);
+                DAT_cc008000 = half;
+                DAT_cc008000 = float_4_804277d4;
+                DAT_cc008000 = float_0_804277d8;
+                DAT_cc008000 = float_0_804277d8;
+                DAT_cc008000 = float_0_804277d8;
+                DAT_cc008000 = float_4_804277d4;
+                DAT_cc008000 = float_4_804277d4;
+                DAT_cc008000 = float_0_804277d8;
+                DAT_cc008000 = float_1_804277dc;
+                DAT_cc008000 = float_0_804277d8;
+                DAT_cc008000 = float_4_804277d4;
+                DAT_cc008000 = half;
+                DAT_cc008000 = float_0_804277d8;
+                DAT_cc008000 = float_1_804277dc;
+                DAT_cc008000 = float_1_804277dc;
+                DAT_cc008000 = half;
+                DAT_cc008000 = half;
+                DAT_cc008000 = float_0_804277d8;
+                DAT_cc008000 = float_0_804277d8;
+                DAT_cc008000 = float_1_804277dc;
+            }
+        }
+    }
 }
+

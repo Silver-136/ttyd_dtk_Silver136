@@ -11,6 +11,8 @@ u8 gareki_dl(s32 param_1) {
 }
 
 
+#pragma optimize_for_size off
+
 void* effGarekiN64Entry(f32 x, f32 y, f32 z, f32 floorY) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -29,6 +31,12 @@ void* effGarekiN64Entry(f32 x, f32 y, f32 z, f32 floorY) {
     u8* work;
     u8* part;
     s32 i;
+    f32 neg2;
+    f32 zero;
+    f32 quarter;
+    f32 two;
+    f32 one;
+    f32 tenth;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_GarekiN64_802fb010;
@@ -37,36 +45,45 @@ void* effGarekiN64Entry(f32 x, f32 y, f32 z, f32 floorY) {
     *(void**)((s32)entry + 0xC) = work;
     *(void**)((s32)entry + 0x10) = effGarekiMain;
 
+    neg2 = float_neg2_804253e4;
+    zero = float_0_804253c0;
+    quarter = float_0p25_804253e8;
+    two = float_2_804253ec;
+    one = float_1_804253f0;
+    tenth = float_0p1_804253f4;
+
     *(s32*)(work + 0x24) = 0;
     *(f32*)work = x;
     *(f32*)(work + 4) = y;
     *(f32*)(work + 0xC) = floorY;
     *(f32*)(work + 8) = z;
-    *(f32*)(work + 0x14) = float_neg2_804253e4;
-    *(f32*)(work + 0x2C) = float_0_804253c0;
-    *(f32*)(work + 0x30) = float_0_804253c0;
+    *(f32*)(work + 0x14) = neg2;
+    *(f32*)(work + 0x2C) = zero;
+    *(f32*)(work + 0x30) = zero;
     *(f32*)(work + 0x34) = (f32)(rand() % 60 - 30);
     *(s32*)(work + 0x28) = 0xFF;
     *(f32*)(work + 0x38) = (f32)(rand() % 60 - 30);
-    *(f32*)(work + 0x3C) = float_0p25_804253e8 * *(f32*)(work + 0x38);
+    *(f32*)(work + 0x3C) = quarter * *(f32*)(work + 0x38);
     *(s32*)(work + 0x20) = 20;
 
     part = work + 0x40;
     for (i = 1; i < 9; i++) {
         *(f32*)(part + 0x18) = trans_data[(i - 1) * 2];
         *(f32*)(part + 0x1C) = trans_data[(i - 1) * 2 + 1];
-        *(f32*)part = float_0_804253c0;
-        *(f32*)(part + 4) = float_0_804253c0;
-        *(f32*)(part + 8) = float_0_804253c0;
-        *(f32*)(part + 0x10) = float_2_804253ec * vx_data[i - 1];
-        *(f32*)(part + 0x14) = float_1_804253f0 + float_2_804253ec * (float_0p1_804253f4 * (f32)(rand() % 10));
-        *(f32*)(part + 0x2C) = float_0_804253c0;
-        *(f32*)(part + 0x34) = float_0_804253c0;
+        *(f32*)part = zero;
+        *(f32*)(part + 4) = zero;
+        *(f32*)(part + 8) = zero;
+        *(f32*)(part + 0x10) = two * vx_data[i - 1];
+        *(f32*)(part + 0x14) = one + two * (tenth * (f32)(rand() % 10));
+        *(f32*)(part + 0x2C) = zero;
+        *(f32*)(part + 0x34) = zero;
         part += 0x40;
     }
 
     return entry;
 }
+
+#pragma optimize_for_size on
 
 void effGarekiMain(void* effect) {
     typedef struct Vec3 {
@@ -78,7 +95,7 @@ void effGarekiMain(void* effect) {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effGarekiDisp(void);
-    extern Vec3 vec3_802faff8;
+    extern Vec3 vec3_802faff8[];
     extern f32 float_neg0p1_804253cc;
     extern f32 float_0p8_804253d0;
     extern f32 float_neg0p2_804253d4;
@@ -87,12 +104,14 @@ void effGarekiMain(void* effect) {
     extern f32 float_20_804253e0;
     u8* work;
     u8* part;
-    Vec3 pos;
+    Vec3* base;
     Vec3 dispPos;
+    Vec3 pos;
     s32 i;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos = vec3_802faff8;
+    base = vec3_802faff8;
+    pos = *base;
     pos.x = *(f32*)work;
     pos.y = *(f32*)(work + 4);
     pos.z = *(f32*)(work + 8);

@@ -117,6 +117,8 @@ void* effQueen2Entry(s32 type, f32 x, f32 y, f32 z) {
 /* CHATGPT STUB FILL: main/effect/eff_queen2 20260624_185035 */
 
 /* stub-fill: effQueen2Main | prototype_only | source_prototype */
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effQueen2Main(void* entry) {
     extern f32 intplGetValue(s32 type, s32 current, f32 start, f32 end, s32 max);
     extern void* effAkariChargeN64Entry(s32 type, s32 unused, f32 x, f32 y, f32 z, f32 scale);
@@ -131,12 +133,16 @@ void effQueen2Main(void* entry) {
     extern f32 float_128_80428a80;
     extern f32 float_3_80428a84;
     extern f32 float_1_80428a88;
+    extern const Vec vec3_80302b64;
 
     void* work;
     void* child;
+    const Vec* base;
     Vec pos;
 
     work = *(void**)((s32)entry + 0xC);
+    base = &vec3_80302b64;
+    pos = *base;
     pos.x = *(f32*)((s32)work + 4);
     pos.y = *(f32*)((s32)work + 8);
     pos.z = *(f32*)((s32)work + 0xC);
@@ -211,4 +217,6 @@ void effQueen2Main(void* entry) {
     dispCalcZ(&pos);
     dispEntry(4, 2, effQueen2Disp, 0.0f, entry);
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 

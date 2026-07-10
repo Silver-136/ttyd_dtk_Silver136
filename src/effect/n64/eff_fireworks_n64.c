@@ -11,6 +11,8 @@ u8 effFireworksMain(u32* param_1) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effFireworksN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 vx, f32 vy, f32 vz, f32 scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -20,7 +22,8 @@ void* effFireworksN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 vx, f32
     extern f32 float_1000_804252dc;
     void* entry;
     u8* work;
-    s32 i;
+    f32 zero;
+    f32 yOff;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_FireworksN64_802faf78;
@@ -38,10 +41,12 @@ void* effFireworksN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 vx, f32
     }
     *(s32*)(work + 0x4C) = 0;
     *(s32*)(work + 0x30) = 0xFF;
+    zero = float_0_804252b0;
+    yOff = y - float_1000_804252dc;
     *(f32*)(work + 4) = x;
     *(f32*)(work + 8) = y;
     *(f32*)(work + 0xC) = z;
-    *(f32*)(work + 0x44) = float_0_804252b0;
+    *(f32*)(work + 0x44) = zero;
     *(f32*)(work + 0x10) = vx;
     *(f32*)(work + 0x14) = vy;
     *(f32*)(work + 0x18) = vz;
@@ -54,15 +59,33 @@ void* effFireworksN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 vx, f32
     *(s32*)(work + 0x3C) = 0x96;
     *(s32*)(work + 0x40) = 0xFF;
 
-    for (i = 0; i < 4; i++) {
-        *(f32*)(work + 0x50 + i * 4) = x;
-        *(f32*)(work + 0x60 + i * 4) = y - float_1000_804252dc;
-        *(f32*)(work + 0x70 + i * 4) = z;
-        *(f32*)(work + 0x80 + i * 4) = float_0_804252b0;
-        *(f32*)(work + 0x90 + i * 4) = float_0_804252b0;
-        *(f32*)(work + 0xA0 + i * 4) = float_0_804252b0;
-    }
+    *(f32*)(work + 0x50) = x;
+    *(f32*)(work + 0x60) = yOff;
+    *(f32*)(work + 0x70) = z;
+    *(f32*)(work + 0x80) = zero;
+    *(f32*)(work + 0x90) = zero;
+    *(f32*)(work + 0xA0) = zero;
+    *(f32*)(work + 0x54) = x;
+    *(f32*)(work + 0x64) = yOff;
+    *(f32*)(work + 0x74) = z;
+    *(f32*)(work + 0x84) = zero;
+    *(f32*)(work + 0x94) = zero;
+    *(f32*)(work + 0xA4) = zero;
+    *(f32*)(work + 0x58) = x;
+    *(f32*)(work + 0x68) = yOff;
+    *(f32*)(work + 0x78) = z;
+    *(f32*)(work + 0x88) = zero;
+    *(f32*)(work + 0x98) = zero;
+    *(f32*)(work + 0xA8) = zero;
+    *(f32*)(work + 0x5C) = x;
+    *(f32*)(work + 0x6C) = yOff;
+    *(f32*)(work + 0x7C) = z;
+    *(f32*)(work + 0x8C) = zero;
+    *(f32*)(work + 0x9C) = zero;
+    *(f32*)(work + 0xAC) = zero;
 
     return entry;
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 

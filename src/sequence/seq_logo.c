@@ -113,6 +113,24 @@ void dummy_draw(void) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-u8 seq_logoExit(void) {
-    return 0;
+void seq_logoExit(void) {
+    extern void fontmgrTexSetup(void);
+    extern void windowTexSetup(void);
+    extern void fadeTexSetup(void);
+    extern void iconTexSetup(void);
+    extern void envTexSetup(void);
+    extern void effTexSetup(void);
+    extern void marioPoseInit(void);
+    extern void fileFree(void* file);
+    extern void* wp;
+
+    fontmgrTexSetup();
+    windowTexSetup();
+    fadeTexSetup();
+    iconTexSetup();
+    envTexSetup();
+    effTexSetup();
+    marioPoseInit();
+    fileFree(*(void**)wp);
 }
+

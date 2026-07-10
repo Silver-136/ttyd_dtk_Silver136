@@ -221,11 +221,50 @@ u8 effNiceDisp(int cameraId, int entry) {
 #pragma use_lmw_stmw on
 
 
-u8 rendermodeFunc(s32 param_1) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void rendermodeFunc(s32 param) {
+    extern void* animGetPtr(s32 id);
+    extern void GXSetBlendMode(s32 type, s32 src, s32 dst, s32 op);
+    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+    extern void GXSetZMode(s32 enable, s32 func, s32 update);
+    void* anim;
+
+    anim = animGetPtr(param);
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(0, 3, 0);
+    *(s32*)((s32)anim + 0xE0) = param;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+s32 effNiceAsync(char* name) {
+    extern void* gp;
+    extern char** anim_tbl[];
+    extern s32 animGroupBaseAsync(char* animName, char* groupName, s32 unused);
+    s32 result;
+    s32 i;
+    s32 offset;
+    char*** tbl;
+    char* animName;
+
+    result = 1;
+    i = 0;
+    offset = 0;
+    tbl = anim_tbl;
+    do {
+        animName = tbl[*(s32*)((s32)gp + 0x16C)][offset / 4];
+        if (animName != 0) {
+            if (animGroupBaseAsync(animName, name, 0) == 0) {
+                result = 0;
+            }
+        }
+        i++;
+        offset += 4;
+    } while (i < 7);
+    return result;
 }
 
-
-void effNiceAsync(s32 a) {
-    ;
-}
