@@ -512,10 +512,91 @@ void* BattleGetPartyPtr(BattleWork* wp) {
 }
 
 
-void _EquipItem(void* unit, u32 param_2, u32 item) {
-    ;
+void _EquipItem(void* unit, u32 flags, u32 item) {
+    u8* data = unit;
+    #define ADD_BADGE(value, offset) if (item == (value)) { data[offset]++; return; }
+    if (item == 0) return;
+    ADD_BADGE(0x131, 0x2FB)
+    ADD_BADGE(0x144, 0x305)
+    ADD_BADGE(0x145, 0x306)
+    if ((flags & 4) == 0) {
+        ADD_BADGE(0x11C, 0x302)
+        ADD_BADGE(0x11B, 0x301)
+        ADD_BADGE(0x12B, 0x2E0)
+        ADD_BADGE(0x12D, 0x2E1)
+        ADD_BADGE(0x12F, 0x2E2)
+        ADD_BADGE(0x114, 0x2ED)
+        ADD_BADGE(0x104, 0x2E4)
+        ADD_BADGE(0x106, 0x2E5)
+        ADD_BADGE(0x108, 0x2E6)
+        ADD_BADGE(0x10A, 0x2E7)
+        ADD_BADGE(0x10C, 0x2E8)
+        ADD_BADGE(0x10E, 0x2E9)
+        ADD_BADGE(0x120, 0x2EA)
+        ADD_BADGE(0x110, 0x2EB)
+        ADD_BADGE(0x112, 0x2EC)
+        ADD_BADGE(0x124, 0x2EE)
+        ADD_BADGE(0x126, 0x2EF)
+        ADD_BADGE(0x123, 0x2F0)
+        ADD_BADGE(0x116, 0x2F1)
+        ADD_BADGE(0x118, 0x2F2)
+        ADD_BADGE(0x11D, 0x2F6)
+        ADD_BADGE(0x11F, 0x2F7)
+        ADD_BADGE(0x132, 0x2F8)
+        ADD_BADGE(0x127, 0x2F9)
+        ADD_BADGE(0x129, 0x2FA)
+        ADD_BADGE(0x14F, 0x2FE)
+        ADD_BADGE(0x100, 0x2FC)
+        ADD_BADGE(0x151, 0x2FD)
+        ADD_BADGE(0x119, 0x2F5)
+        ADD_BADGE(0x102, 0x303)
+        ADD_BADGE(0x146, 0x304)
+    }
+    if ((flags & 2) == 0) {
+        ADD_BADGE(0x12C, 0x2E0)
+        ADD_BADGE(0x12E, 0x2E1)
+        ADD_BADGE(0x130, 0x2E2)
+        ADD_BADGE(0x115, 0x2ED)
+        ADD_BADGE(0x109, 0x2E6)
+        ADD_BADGE(0x105, 0x2E4)
+        ADD_BADGE(0x10D, 0x2E8)
+        ADD_BADGE(0x113, 0x2EC)
+        ADD_BADGE(0x150, 0x2FE)
+        ADD_BADGE(0x10F, 0x2E9)
+        ADD_BADGE(0x133, 0x2F8)
+        ADD_BADGE(0x128, 0x2F9)
+        ADD_BADGE(0x12A, 0x2FA)
+        ADD_BADGE(0x101, 0x2FC)
+        ADD_BADGE(0x152, 0x2FD)
+        ADD_BADGE(0x125, 0x2EE)
+        ADD_BADGE(0x117, 0x2F1)
+        ADD_BADGE(0x111, 0x2EB)
+        ADD_BADGE(0x10B, 0x2E7)
+        ADD_BADGE(0x107, 0x2E5)
+        ADD_BADGE(0x11A, 0x2F5)
+        ADD_BADGE(0x11E, 0x2F6)
+        ADD_BADGE(0x103, 0x303)
+        ADD_BADGE(0x14A, 0x304)
+    }
+    if ((flags & 4) == 0) {
+        ADD_BADGE(0x121, 0x2FF)
+        ADD_BADGE(0x122, 0x300)
+    }
+    if ((flags & 2) == 0 && item == 0xFF) {
+        data[0x2F3]++;
+        if (data[0x2F3] >= 2 && data[0x2F4] == 0) data[0x2F4] = 1;
+        return;
+    }
+    if ((flags & 4) == 0 && item == 0xFE) {
+        data[0x2F3]++;
+        if (data[0x2F3] >= 2 && data[0x2F4] == 0) data[0x2F4] = 1;
+        return;
+    }
+    if ((flags & 6) != 0) {
+        ADD_BADGE(0x14B, 0x307)
+    }
+    #undef ADD_BADGE
 }
-
 
 void* BattleChangeParty(void* battleWork) {
     typedef struct PartyEntry {

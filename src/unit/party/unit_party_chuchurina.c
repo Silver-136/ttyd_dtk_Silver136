@@ -7,12 +7,131 @@ extern s32 BattleTransID();
 extern void* BattleGetUnitPtr(void*, s32);
 extern void* BtlUnit_GetPartsPtr(void*, s32);
 extern void dispEntry(s32, s32, void*, void*, f32);
-
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void mono_disp(int param_1, void* unit) {
-    ;
-}
+    extern void* camGetPtr(s32 camId);
+    extern void GXInitTexObj(void* obj, void* image, u16 width, u16 height, s32 format, s32 wrapS, s32 wrapT, s32 mipmap);
+    extern void GXInitTexObjLOD(void* obj, s32 minFilt, s32 magFilt, f32 minLod, f32 maxLod, f32 lodBias, s32 biasClamp, s32 edgeLod, s32 maxAniso);
+    extern void GXLoadTexObj(void* obj, s32 mapId);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void GXSetCurrentMtx(u32 id);
+    extern void GXSetNumChans(u32 num);
+    extern void GXSetNumTexGens(u32 num);
+    extern void GXSetTexCoordGen2(s32 dst, s32 func, s32 src, u32 mtx, u32 normalize, s32 postMtx);
+    extern void GXSetTevColor(s32 id, void* color);
+    extern void GXSetNumTevStages(u32 num);
+    extern void GXSetTevOrder(u32 stage, u32 texCoord, u32 texMap, u32 colorChan);
+    extern void GXSetTevColorOp(s32 stage, u32 op, u32 bias, u32 scale, u32 clamp, u32 outReg);
+    extern void GXSetTevAlphaOp(s32 stage, u32 op, u32 bias, u32 scale, u32 clamp, u32 outReg);
+    extern void GXSetTevColorIn(s32 stage, u32 a, u32 b, u32 c, u32 d);
+    extern void GXSetTevAlphaIn(s32 stage, u32 a, u32 b, u32 c, u32 d);
+    extern void GXSetTevSwapMode(s32 stage, u32 rasSel, u32 texSel);
+    extern void GXSetBlendMode(u32 type, u32 src, u32 dst, u32 op);
+    extern void GXSetZCompLoc(u32 beforeTex);
+    extern void GXSetAlphaCompare(u32 comp0, u32 ref0, u32 op, u32 comp1, u32 ref1);
+    extern void GXSetZMode(u32 enable, u32 func, u32 update);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(u32 attr, u32 type);
+    extern void GXSetVtxAttrFmt(u32 vtxFmt, u32 attr, u32 compCnt, u32 compType, u32 frac);
+    extern void GXBegin(u32 prim, u32 vtxFmt, u16 nverts);
+    extern void* BattleGetPartyPtr(void* battleWork);
+    extern void* BtlUnit_GetPartsPtr(void* unit, s32 partId);
+    extern s32 camGetCurNo(void);
+    extern void camSetCurNo(s32 camNo);
+    extern void btlUnitPartsDisp(s32 cameraId, void* part);
+    extern void* _battleWorkPointer;
+    extern s32 mono_alpha;
+    extern u32 dat_80424128;
+    extern f32 float_0_80424130;
+    extern f32 float_neg304_80424134;
+    extern f32 float_240_80424138;
+    extern f32 float_304_8042413c;
+    extern f32 float_1_80424140;
+    extern f32 float_neg240_80424144;
 
+    u32 colorTemp;
+    u32 color;
+    u8 texObj[0x20];
+    void* camera;
+    void* texture;
+    void* party;
+    void* part;
+    s32 oldCam;
+    volatile f32* fifo;
+
+    camera = camGetPtr(param_1);
+    texture = 0;
+    if (*(void**)((s32)unit + 0x31C) != 0) {
+        texture = **(void***)((s32)unit + 0x31C);
+    }
+    if (texture == 0) {
+        return;
+    }
+
+    GXInitTexObj(texObj, texture, 0x260, 0x1E0, 1, 0, 0, 0);
+    GXInitTexObjLOD(texObj, 1, 1, float_0_80424130, float_0_80424130, float_0_80424130, 0, 0, 0);
+    GXLoadTexObj(texObj, 0);
+    GXLoadPosMtxImm((void*)((s32)camera + 0x11C), 0);
+    GXSetCurrentMtx(0);
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+
+    colorTemp = (dat_80424128 & 0xFFFFFF00) | (mono_alpha & 0xFF);
+    color = colorTemp;
+    GXSetTevColor(1, &color);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 8);
+    GXSetTevAlphaIn(0, 7, 7, 7, 1);
+    GXSetTevSwapMode(0, 0, 0);
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(0, 3, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+    GXBegin(0x80, 0, 4);
+
+    fifo = (volatile f32*)0xCC008000;
+    *fifo = float_neg304_80424134;
+    *fifo = float_240_80424138;
+    *fifo = float_0_80424130;
+    *fifo = float_0_80424130;
+    *fifo = float_0_80424130;
+    *fifo = float_304_8042413c;
+    *fifo = float_240_80424138;
+    *fifo = float_0_80424130;
+    *fifo = float_1_80424140;
+    *fifo = float_0_80424130;
+    *fifo = float_304_8042413c;
+    *fifo = float_neg240_80424144;
+    *fifo = float_0_80424130;
+    *fifo = float_1_80424140;
+    *fifo = float_1_80424140;
+    *fifo = float_neg304_80424134;
+    *fifo = float_neg240_80424144;
+    *fifo = float_0_80424130;
+    *fifo = float_0_80424130;
+    *fifo = float_1_80424140;
+
+    party = BattleGetPartyPtr(_battleWorkPointer);
+    if (party != 0) {
+        part = BtlUnit_GetPartsPtr(party, 1);
+        oldCam = camGetCurNo();
+        camSetCurNo(4);
+        btlUnitPartsDisp(4, part);
+        camSetCurNo(oldCam);
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

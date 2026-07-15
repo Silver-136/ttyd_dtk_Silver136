@@ -544,7 +544,59 @@ u8 battleCameraMoveTo(void) {
 }
 
 void battleCameraMain(void) {
-    ;
+    extern f32 intplGetValue(f32 start, f32 end, s32 type, s32 current, s32 total);
+    BattleWork* battleWork;
+    BattleWorkCamera* camera;
+    void* view;
+    f32* currentPos;
+    f32* currentTarget;
+    f32 targetPos[3];
+    f32 targetLook[3];
+    s32 i;
+
+    battleWork = _battleWorkPointer;
+    camera = &battleWork->camera;
+    view = camGetPtr(4);
+    currentPos = (f32*)((s32)camera + 0x2C);
+    currentTarget = (f32*)((s32)camera + 0x44);
+
+    targetPos[0] = 0.0f;
+    targetPos[1] = 110.0f;
+    targetPos[2] = 750.0f;
+    targetLook[0] = 0.0f;
+    targetLook[1] = 60.0f;
+    targetLook[2] = 0.0f;
+
+    switch (camera->mode) {
+    case 1:
+        targetPos[2] -= camera->zoom * 0.5f;
+        targetLook[2] -= camera->zoom * 0.5f;
+        break;
+    case 2:
+        targetPos[1] = 160.0f;
+        targetLook[1] = 110.0f;
+        break;
+    case 4:
+        targetPos[2] = -750.0f;
+        break;
+    case 5:
+        targetPos[1] = 400.0f;
+        targetPos[2] = -617.0f;
+        break;
+    default:
+        break;
+    }
+
+    for (i = 0; i < 3; i++) {
+        currentPos[i] += (targetPos[i] - currentPos[i]) * 0.1f;
+        currentTarget[i] += (targetLook[i] - currentTarget[i]) * 0.1f;
+    }
+    *(f32*)((s32)view + 0x34) = currentPos[0] + camera->offset.x;
+    *(f32*)((s32)view + 0x38) = currentPos[1] + camera->offset.y;
+    *(f32*)((s32)view + 0x3C) = currentPos[2] + camera->offset.z;
+    *(f32*)((s32)view + 0x40) = currentTarget[0];
+    *(f32*)((s32)view + 0x44) = currentTarget[1];
+    *(f32*)((s32)view + 0x48) = currentTarget[2];
 }
 
 void battleCameraInit(void) {

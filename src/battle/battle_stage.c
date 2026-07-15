@@ -208,19 +208,434 @@ s32 BattleStageGetLightNumberByName(const char* name) {
 
 
 void BattleStageMain(void) {
-    ;
+    extern void batSpotMain(void);
+    extern f64 intplGetValue(f64, f64, s32, s32, s32);
+    extern f64 getSpline(f32*, f32*, f32*, f32*, s32, s32, s32);
+    void* stage;
+    u8* light;
+    s32* spline;
+    s32 i;
+    s32 remain;
+    s32 total;
+    s32 frame;
+
+    batSpotMain();
+    stage = (void*)((s32)_battleWorkPointer + 0x163FC);
+    for (i = 0; i < 12; i++) {
+        light = (u8*)stage + (i * 0xE8) + 4;
+        if ((*(u32*)light & 1) == 0) {
+            if (*(void**)(light + 0xE4) != 0) {
+                BattleFree(*(void**)(light + 0xE4));
+                *(void**)(light + 0xE4) = 0;
+            }
+            continue;
+        }
+        remain = *(s32*)(light + 0x30);
+        total = *(s32*)(light + 0x34);
+        if (remain > 0) {
+            *(s32*)(light + 0x30) = --remain;
+            light[0x24] = (u8)(s32)intplGetValue(light[0x28], light[0x2C], (s8)light[0x38], total-remain, total);
+            light[0x25] = (u8)(s32)intplGetValue(light[0x29], light[0x2D], (s8)light[0x38], total-remain, total);
+            light[0x26] = (u8)(s32)intplGetValue(light[0x2A], light[0x2E], (s8)light[0x38], total-remain, total);
+            if (((*(u32*)light & 2) != 0) && light[0x24] == 0 && light[0x25] == 0 && light[0x26] == 0) {
+                *(u32*)light = 0;
+                continue;
+            }
+        }
+        remain = *(s32*)(light + 0x48);
+        total = *(s32*)(light + 0x4C);
+        if (remain > 0) {
+            *(s32*)(light + 0x48) = --remain;
+            *(f32*)(light + 0x3C) = (f32)intplGetValue(*(f32*)(light + 0x40), *(f32*)(light + 0x44),
+                (s8)light[0x50], total-remain, total);
+        }
+        remain = *(s32*)(light + 0x78);
+        total = *(s32*)(light + 0x7C);
+        if (remain > 0) {
+            *(s32*)(light + 0x78) = --remain;
+            *(f32*)(light + 0x54) = (f32)intplGetValue(*(f32*)(light + 0x60), *(f32*)(light + 0x6C), (s8)light[0x80], total-remain, total);
+            *(f32*)(light + 0x58) = (f32)intplGetValue(*(f32*)(light + 0x64), *(f32*)(light + 0x70), (s8)light[0x80], total-remain, total);
+            *(f32*)(light + 0x5C) = (f32)intplGetValue(*(f32*)(light + 0x68), *(f32*)(light + 0x74), (s8)light[0x80], total-remain, total);
+        }
+        if ((*(u32*)light & 4) == 0) {
+            remain = *(s32*)(light + 0xA8);
+            total = *(s32*)(light + 0xAC);
+            if (remain > 0) {
+                *(s32*)(light + 0xA8) = --remain;
+                *(f32*)(light + 0x84) = (f32)intplGetValue(*(f32*)(light + 0x90), *(f32*)(light + 0x9C), (s8)light[0xB0], total-remain, total);
+                *(f32*)(light + 0x88) = (f32)intplGetValue(*(f32*)(light + 0x94), *(f32*)(light + 0xA0), (s8)light[0xB0], total-remain, total);
+                *(f32*)(light + 0x8C) = (f32)intplGetValue(*(f32*)(light + 0x98), *(f32*)(light + 0xA4), (s8)light[0xB0], total-remain, total);
+            }
+            if (*(void**)(light + 0xE4) != 0) {
+                BattleFree(*(void**)(light + 0xE4));
+                *(void**)(light + 0xE4) = 0;
+            }
+        } else {
+            spline = *(s32**)(light + 0xE4);
+            frame = *(s32*)(light + 0xA8);
+            *(f32*)(light + 0x84) = (f32)getSpline((f32*)(spline + 9), (f32*)(spline + 0x11),
+                (f32*)(spline + 0x19), (f32*)(spline + 0x21), spline[1], spline[0], frame);
+            *(f32*)(light + 0x88) = (f32)getSpline((f32*)(spline + 0x29), (f32*)(spline + 0x31),
+                (f32*)(spline + 0x39), (f32*)(spline + 0x41), spline[1], spline[0], frame);
+            *(f32*)(light + 0x8C) = (f32)getSpline((f32*)(spline + 0x49), (f32*)(spline + 0x51),
+                (f32*)(spline + 0x59), (f32*)(spline + 0x61), spline[1], spline[0], frame);
+            frame++;
+            if (frame >= spline[spline[0]]) {
+                if ((*(u32*)light & 8) == 0) frame = spline[spline[0]];
+                else frame -= spline[spline[0]];
+            }
+            *(s32*)(light + 0xA8) = frame;
+        }
+        remain = *(s32*)(light + 0xD8);
+        total = *(s32*)(light + 0xDC);
+        if (remain > 0) {
+            *(s32*)(light + 0xD8) = --remain;
+            *(f32*)(light + 0xB4) = (f32)intplGetValue(*(f32*)(light + 0xC0), *(f32*)(light + 0xCC), (s8)light[0xE0], total-remain, total);
+            *(f32*)(light + 0xB8) = (f32)intplGetValue(*(f32*)(light + 0xC4), *(f32*)(light + 0xD0), (s8)light[0xE0], total-remain, total);
+            *(f32*)(light + 0xBC) = (f32)intplGetValue(*(f32*)(light + 0xC8), *(f32*)(light + 0xD4), (s8)light[0xE0], total-remain, total);
+        }
+    }
+
+    light = (u8*)stage + 0xAE8;
+    remain = *(s32*)(light + 8);
+    total = *(s32*)(light + 0x10);
+    if (remain > 0) {
+        *(s32*)(light + 8) = --remain;
+        light[0] = (u8)(s32)intplGetValue(light[2], light[4], (s8)light[0x18], total-remain, total);
+    }
+    remain = *(s32*)(light + 0xC);
+    total = *(s32*)(light + 0x14);
+    if (remain > 0) {
+        *(s32*)(light + 0xC) = --remain;
+        light[1] = (u8)(s32)intplGetValue(light[3], light[5], (s8)light[0x19], total-remain, total);
+    }
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+u8 tou_gamen_screen_tev(void* tevWork) {
+    typedef struct GXTexObjRaw {
+        u32 data[8];
+    } GXTexObjRaw;
+    typedef f32 Mtx[3][4];
 
-u8 tou_gamen_screen_tev(int param_1) {
+    extern void* screen_wp;
+    extern u8 inta_tex[];
+    extern s32 rand(void);
+    extern f64 randf(f64 min, f64 max);
+    extern void DCFlushRange(void* start, s32 len);
+    extern void GXInitTexObj(GXTexObjRaw* obj, void* image_ptr, s32 width, s32 height, s32 format, s32 wrap_s, s32 wrap_t, s32 mipmap);
+    extern void GXInitTexObjLOD(GXTexObjRaw* obj, s32 min_filt, s32 mag_filt, f32 min_lod, f32 max_lod, f32 lod_bias, s32 bias_clamp, s32 do_edge_lod, s32 max_aniso);
+    extern void GXLoadTexObj(GXTexObjRaw* obj, s32 texmapid);
+    extern void GXSetTevOrder(s32 stage, s32 texcoord, s32 texmap, s32 color);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 out_reg);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 out_reg);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(Mtx a, Mtx b, Mtx out);
+    extern void GXSetTexCoordGen2(s32 texcoord, s32 tgen_typ, s32 tgen_src, s32 mtxsrc, s32 normalize, s32 postmtx);
+    extern void GXLoadTexMtxImm(Mtx m, s32 id, s32 type);
+    extern void* camGetPtr(s32 cameraId);
+    extern f32 float_0_80422ad8;
+    extern f32 float_1_80422adc;
+    extern f32 float_0p25_80422ae0;
+    extern f32 float_60_80422ae4;
+    extern f32 float_4p75_80422ae8;
+    extern f32 float_3p75_80422aec;
+    extern f32 float_16_80422af0;
+    extern f32 float_6_80422af4;
+    extern f32 float_100_80422af8;
+    extern f32 float_1000_80422afc;
+
+    GXTexObjRaw texObj;
+    Mtx scaleMtx;
+    Mtx transMtx;
+    Mtx texMtx;
+    void* sw;
+    void* data;
+    void* cam;
+    s32 row;
+    s32 x;
+    s32 count;
+    s32 start;
+    s32 len;
+    s32 color;
+    s32 r;
+    s32 mode;
+    f32 limit;
+    f32 tx;
+    f32 ty;
+
+    sw = screen_wp;
+    if (*(s32*)((s32)sw + 4) != 0) {
+        mode = *(s32*)((s32)sw + 0x24);
+        if (mode == 0) {
+            GXInitTexObj(&texObj, *(void**)sw, 0x130, 0xF0, 4, 0, 0, 0);
+            GXInitTexObjLOD(&texObj, 0, 0, float_0_80422ad8, float_0_80422ad8, float_0_80422ad8, 0, 0, 0);
+        } else {
+            data = *(void**)sw;
+            row = 0;
+            while (row < 0x40) {
+                x = 0;
+                while (x < 0x40) {
+                    *(u8*)((s32)data + ((x >> 3) * 0x20) + ((row >> 2) * 0x100) + (x & 7) + ((row & 3) * 8)) =
+                        (row & 1) ? 0xFF : 0;
+                    x++;
+                }
+                count = (rand() % 100) + 100;
+                while (count > 0) {
+                    len = (rand() % 4) + 2;
+                    start = rand() % (0x41 - len);
+                    color = (u8)rand();
+                    x = start;
+                    while (x < start + len) {
+                        *(u8*)((s32)data + ((x >> 3) * 0x20) + ((row >> 2) * 0x100) + (x & 7) + ((row & 3) * 8)) = color;
+                        x++;
+                    }
+                    count--;
+                }
+                row++;
+            }
+            DCFlushRange(data, 0x1000);
+            GXInitTexObj(&texObj, data, 0x40, 0x40, 1, 1, 1, 0);
+            GXInitTexObjLOD(&texObj, 0, 0, float_0_80422ad8, float_0_80422ad8, float_0_80422ad8, 0, 0, 0);
+            GXLoadTexObj(&texObj, 0);
+        }
+        GXLoadTexObj(&texObj, 0);
+        GXInitTexObj(&texObj, inta_tex, 4, 8, 0, 1, 1, 0);
+        GXInitTexObjLOD(&texObj, 1, 1, float_0_80422ad8, float_0_80422ad8, float_0_80422ad8, 0, 0, 0);
+        GXLoadTexObj(&texObj, 1);
+
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 0xF, 0xF, 0xF, 8);
+        GXSetTevAlphaIn(0, 7, 7, 7, 7);
+        GXSetTevOrder(1, 1, 1, 0xFF);
+        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(1, 0xF, 8, 0, 0xF);
+        GXSetTevAlphaIn(1, 7, 7, 7, 6);
+
+        if (mode == 0) {
+            *(s32*)((s32)sw + 0x20) += 1;
+            if (*(s32*)((s32)sw + 0x20) == (*(s32*)((s32)sw + 0x20) / 200) * 200) {
+                r = rand() % 3;
+                if (r == 1) {
+                    *(f32*)((s32)sw + 0x0C) = (f32)randf(float_1_80422adc, float_0p25_80422ae0);
+                } else if (r == 0) {
+                    *(f32*)((s32)sw + 0x14) =
+                        (f32)randf(float_0_80422ad8,
+                                   (float_1_80422adc - *(f32*)((s32)sw + 8)) / *(f32*)((s32)sw + 8));
+                    *(f32*)((s32)sw + 0x1C) =
+                        (f32)randf(float_0_80422ad8,
+                                   (float_1_80422adc - *(f32*)((s32)sw + 8)) / *(f32*)((s32)sw + 8));
+                }
+            }
+            *(f32*)((s32)sw + 8) += (*(f32*)((s32)sw + 0x0C) - *(f32*)((s32)sw + 8)) / float_60_80422ae4;
+            *(f32*)((s32)sw + 0x10) += (*(f32*)((s32)sw + 0x14) - *(f32*)((s32)sw + 0x10)) / float_60_80422ae4;
+            *(f32*)((s32)sw + 0x18) += (*(f32*)((s32)sw + 0x1C) - *(f32*)((s32)sw + 0x18)) / float_60_80422ae4;
+            PSMTXScale(scaleMtx, *(f32*)((s32)sw + 8), *(f32*)((s32)sw + 8), float_1_80422adc);
+            limit = (float_1_80422adc - *(f32*)((s32)sw + 8)) / *(f32*)((s32)sw + 8);
+            tx = *(f32*)((s32)sw + 0x10);
+            ty = *(f32*)((s32)sw + 0x18);
+            if (limit < tx) {
+                tx = limit;
+            }
+            if (limit < ty) {
+                ty = limit;
+            }
+            PSMTXTrans(transMtx, tx, ty, float_0_80422ad8);
+            PSMTXConcat(scaleMtx, transMtx, texMtx);
+        } else {
+            PSMTXScale(texMtx, float_4p75_80422ae8, float_3p75_80422aec, float_0_80422ad8);
+        }
+
+        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+        GXLoadTexMtxImm(texMtx, 0x1E, 1);
+        cam = camGetPtr(4);
+        PSMTXScale(texMtx, float_1_80422adc,
+                   float_6_80422af4 *
+                       ((float_100_80422af8 - *(f32*)((s32)cam + 0x14)) / float_1000_80422afc) +
+                       float_16_80422af0,
+                   float_1_80422adc);
+        GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
+        GXLoadTexMtxImm(texMtx, 0x21, 1);
+        *(s32*)((s32)tevWork + 0x0C) = 2;
+        *(s32*)((s32)tevWork + 0x14) = 2;
+        *(s32*)((s32)tevWork + 0x10) = 2;
+    }
     return 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void BattleStageDispLight(void) {
-    ;
-}
+    typedef struct Vec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
 
+    extern void* camGetPtr(s32 cameraId);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
+    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+    extern void GXSetNumChans(s32 nChans);
+    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
+    extern void GXSetNumTexGens(s32 nTexGens);
+    extern void GXSetNumTevStages(s32 nStages);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 color);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void PSMTXRotAxisRad(f32 mtx[3][4], Vec* axis, f32 rad);
+    extern void PSMTXMultVec(f32 mtx[3][4], Vec* src, Vec* dst);
+    extern void PSVECNormalize(Vec* src, Vec* dst);
+    extern void GXBegin(s32 primitive, s32 vtxfmt, s32 nverts);
+    extern void* _battleWorkPointer;
+    extern f32 float_2_80422b20;
+    extern f32 float_0p34907_80422b24;
+
+    volatile f32* fifoF;
+    volatile u8* fifoB;
+    void* battleWork;
+    void* cam;
+    void* stage;
+    void* light;
+    f32 mtx[3][4];
+    Vec axis;
+    Vec up;
+    f32 diffX;
+    f32 diffY;
+    f32 diffZ;
+    f32 baseX;
+    f32 baseY;
+    f32 baseZ;
+    f32 oldX;
+    f32 oldY;
+    f32 oldZ;
+    f32 radius;
+    f32 p0x;
+    f32 p0y;
+    f32 p0z;
+    f32 p1x;
+    f32 p1y;
+    f32 p1z;
+    f32 two;
+    s32 i;
+    s32 j;
+    s32 offset;
+    u8 r;
+    u8 g;
+    u8 b;
+
+    fifoF = (volatile f32*)0xCC008000;
+    fifoB = (volatile u8*)0xCC008000;
+    battleWork = _battleWorkPointer;
+    stage = (void*)((s32)battleWork + 0x163FC);
+    cam = camGetPtr(4);
+
+    GXSetCullMode(2);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetBlendMode(1, 2, 1, 5);
+    GXSetZMode(1, 3, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xB, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xB, 1, 5, 0);
+    GXSetNumChans(1);
+    GXSetChanCtrl(2, 0, 1, 1, 0, 2, 2);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xA);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaIn(0, 7, 7, 7, 7);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXLoadPosMtxImm((void*)((s32)cam + 0x13C), 0);
+
+    offset = 0;
+    i = 0;
+    while (i < 0xC) {
+        light = (void*)((s32)stage + offset + 4);
+        two = float_2_80422b20;
+        if ((*(u32*)light & 1) != 0) {
+            diffX = *(f32*)((s32)light + 0x88) - *(f32*)((s32)light + 0x80);
+            diffY = *(f32*)((s32)light + 0x8C) - *(f32*)((s32)light + 0x84);
+            diffZ = *(f32*)((s32)light + 0x90) - *(f32*)((s32)light + 0x88);
+            radius = *(f32*)((s32)light + 0x68);
+            up.x = *(f32*)((s32)light + 0xB8);
+            up.y = *(f32*)((s32)light + 0xBC);
+            up.z = *(f32*)((s32)light + 0xC0);
+            axis.x = diffX;
+            axis.y = diffY;
+            axis.z = diffZ;
+            j = 0;
+            while (j < 0x12) {
+                baseX = *(f32*)((s32)light + 0x80);
+                baseY = *(f32*)((s32)light + 0x84);
+                baseZ = *(f32*)((s32)light + 0x88);
+                p0x = two * (*(f32*)((s32)light + 0x88) - baseX) + baseX;
+                p0y = two * (*(f32*)((s32)light + 0x8C) - baseY) + baseY;
+                p0z = two * (*(f32*)((s32)light + 0x90) - baseZ) + baseZ;
+                oldX = up.x * radius;
+                oldY = up.y * radius;
+                oldZ = up.z * radius;
+                PSMTXRotAxisRad(mtx, &axis, float_0p34907_80422b24);
+                PSMTXMultVec(mtx, &up, &up);
+                PSVECNormalize(&up, &up);
+                p1x = up.x * radius;
+                p1y = up.y * radius;
+                p1z = up.z * radius;
+                r = *(u8*)((s32)light + 0x50);
+                g = *(u8*)((s32)light + 0x51);
+                b = *(u8*)((s32)light + 0x52);
+
+                GXBegin(0x90, 0, 3);
+                *fifoF = baseX;
+                *fifoF = baseY;
+                *fifoF = baseZ;
+                *fifoB = r;
+                *fifoB = g;
+                *fifoB = b;
+                *fifoB = 0;
+                *fifoF = oldX + p0x;
+                *fifoF = oldY + p0y;
+                *fifoF = oldZ + p0z;
+                *fifoB = r;
+                *fifoB = g;
+                *fifoB = b;
+                *fifoB = 0;
+                *fifoF = p1x + p0x;
+                *fifoF = p1y + p0y;
+                *fifoF = p1z + p0z;
+                *fifoB = r;
+                *fifoB = g;
+                *fifoB = b;
+                *fifoB = 0;
+                j++;
+            }
+        }
+        i++;
+        offset += 0xE8;
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void BattleStageDispDark(void) {
     extern void* camGetPtr(s32 cameraId);

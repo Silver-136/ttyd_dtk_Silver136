@@ -24,10 +24,10 @@ extern f32 float_0_8042649c;
 extern f32 float_30_804264c4;
 extern f32 float_0p8_804264c8;
 
-u8 effWangFlushDisp(int param_1, int param_2) {
-    return 0;
+u8 effWangFlushDisp(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32); extern void PSMTXTrans(void*,f32,f32,f32); extern void PSMTXRotRad(void*,s32,f32); extern void PSMTXScale(void*,f32,f32,f32); extern void PSMTXConcat(void*,void*,void*); extern void GXSetNumChans(s32); extern void GXSetNumTexGens(s32); extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetCullMode(s32); extern void GXLoadPosMtxImm(void*,s32); extern void GXSetCurrentMtx(s32); extern void GXBegin(s32,s32,s32);
+    u8* w=*(u8**)((s32)effect+0xC);f32 a[3][4],b[3][4],m[3][4]; PSMTXTrans(a,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC));PSMTXRotRad(b,0x79,-0.017453292f**(f32*)((s32)camGetPtr(4)+0x114));PSMTXConcat(a,b,a);PSMTXConcat((u8*)camGetPtr(cameraId)+0x11C,a,m);GXSetNumChans(0);GXSetNumTexGens(1);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetCullMode(0);GXLoadPosMtxImm(m,0);GXSetCurrentMtx(0);GXBegin(0x90,0,6);return 0;
 }
-
 
 void effWangFlushMain(void* effect) {
     typedef struct Vec3 {

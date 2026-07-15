@@ -466,10 +466,364 @@ void N__disp_2D(s32 type, s32 index) {
 
 /* stub-fill: main_star | prototype_only | source_prototype */
 void main_star(void) {
-    return;
+    extern void* _battleWorkPointer;
+    extern void* get_ptr(void);
+    extern void* BattleGetMarioPtr(void* battleWork);
+    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+    extern void* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
+    extern void* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale);
+    extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
+    extern u32 psndSFXOn(const char* name);
+    extern const char str_SFX_BTL_SAC_SUKKIRI3_803014e0[];
+    extern u32 vec3_803013a0[];
+    extern u32 vec3_803013ac[];
+    extern u32 vec3_803013b8[];
+    extern u32 vec3_803013c4[];
+    extern u32 vec3_803013d0[];
+    extern u32 vec3_803013dc[];
+    extern u32 vec3_803013e8[];
+    extern u32 vec3_803013f4[];
+    extern u32 vec3_80301400[];
+    extern u32 vec3_8030140c[];
+
+    u8* work = get_ptr();
+    void* mario = BattleGetMarioPtr(_battleWorkPointer);
+
+    switch (*(s32*)(work + 0x22C)) {
+        case 1:
+            *(s32*)(work + 0x22C) = 2;
+            *(s32*)(work + 0x230) = 0;
+            *(void**)(work + 0x27C) = effStarStoneEntry(5, 0.0f, -1000.0f, 0.0f, 1.0f);
+            BtlUnit_GetPos(mario,
+                           (f32*)(work + 0x234),
+                           (f32*)(work + 0x238),
+                           (f32*)(work + 0x23C));
+            *(f32*)(work + 0x238) +=
+                *(f32*)((s32)mario + 0x114) * (f32)*(s16*)((s32)mario + 0xCE) + 37.0f;
+            *(u32*)(work + 0x240) = *(u32*)(work + 0x234);
+            *(u32*)(work + 0x244) = *(u32*)(work + 0x238);
+            *(u32*)(work + 0x248) = *(u32*)(work + 0x23C);
+            *(u32*)(work + 0x24C) = *(u32*)(work + 0x234);
+            *(u32*)(work + 0x250) = *(u32*)(work + 0x238);
+            *(u32*)(work + 0x254) = *(u32*)(work + 0x23C);
+            *(f32*)(work + 0x250) += 50.0f;
+            *(f32*)(work + 0x254) -= 1.0f;
+            *(u32*)(work + 0x264) = vec3_803013a0[0];
+            *(u32*)(work + 0x268) = vec3_803013a0[1];
+            *(u32*)(work + 0x26C) = vec3_803013a0[2];
+            *(u32*)(work + 0x270) = vec3_803013ac[0];
+            *(u32*)(work + 0x274) = vec3_803013ac[1];
+            *(u32*)(work + 0x278) = vec3_803013ac[2];
+            *(s32*)(work + 0x280) = 4;
+            /* fallthrough */
+        case 2:
+            *(s32*)(work + 0x230) += 1;
+            if (*(s32*)(work + 0x230) < 0x65) {
+                f32 scale = (f32)intplGetValue(0.0, 2.0, 0,
+                                               *(s32*)(work + 0x230), 100);
+                *(f32*)(work + 0x234) =
+                    (f32)intplGetValue(*(f32*)(work + 0x240), *(f32*)(work + 0x24C),
+                                       0, *(s32*)(work + 0x230), 100);
+                *(f32*)(work + 0x238) =
+                    (f32)intplGetValue(*(f32*)(work + 0x244), *(f32*)(work + 0x250),
+                                       0, *(s32*)(work + 0x230), 100);
+                *(f32*)(work + 0x23C) =
+                    (f32)intplGetValue(*(f32*)(work + 0x248), *(f32*)(work + 0x254),
+                                       0, *(s32*)(work + 0x230), 100);
+                *(f32*)(work + 0x264) = scale;
+                *(f32*)(work + 0x268) = scale;
+                *(f32*)(work + 0x26C) = scale;
+            } else {
+                *(u32*)(work + 0x234) = *(u32*)(work + 0x24C);
+                *(u32*)(work + 0x238) = *(u32*)(work + 0x250);
+                *(u32*)(work + 0x23C) = *(u32*)(work + 0x254);
+                *(f32*)(work + 0x264) = 2.0f;
+                *(f32*)(work + 0x268) = 2.0f;
+                *(f32*)(work + 0x26C) = 2.0f;
+            }
+            *(f32*)(work + 0x274) =
+                (f32)intplGetValue(0.0, 2160.0, 4,
+                                   *(s32*)(work + 0x230), 0x78);
+            if (*(s32*)(work + 0x230) > 0x77) {
+                *(s32*)(work + 0x22C) = 3;
+                *(s32*)(work + 0x230) = 0;
+                *(u32*)(work + 0x240) = *(u32*)(work + 0x234);
+                *(u32*)(work + 0x244) = *(u32*)(work + 0x238);
+                *(u32*)(work + 0x248) = *(u32*)(work + 0x23C);
+                *(f32*)(work + 0x250) = 300.0f;
+            }
+            break;
+        case 3:
+            *(s32*)(work + 0x230) += 1;
+            *(f32*)(work + 0x238) =
+                (f32)intplGetValue(*(f32*)(work + 0x244), *(f32*)(work + 0x250),
+                                   1, *(s32*)(work + 0x230), 0x3C);
+            if (*(s32*)(work + 0x230) > 0x3B) {
+                *(s32*)(work + 0x22C) = 4;
+                *(s32*)(work + 0x230) = 0;
+                *(u32*)(work + 0x234) = vec3_803013b8[0];
+                *(u32*)(work + 0x238) = vec3_803013b8[1];
+                *(u32*)(work + 0x23C) = vec3_803013b8[2];
+                *(u32*)(work + 0x264) = vec3_803013c4[0];
+                *(u32*)(work + 0x268) = vec3_803013c4[1];
+                *(u32*)(work + 0x26C) = vec3_803013c4[2];
+                *(u32*)(work + 0x270) = vec3_803013d0[0];
+                *(u32*)(work + 0x274) = vec3_803013d0[1];
+                *(u32*)(work + 0x278) = vec3_803013d0[2];
+            }
+            break;
+        case 5:
+            *(s32*)(work + 0x22C) = 6;
+            *(s32*)(work + 0x230) = 0;
+            BtlUnit_GetPos(mario,
+                           (f32*)(work + 0x234),
+                           (f32*)(work + 0x238),
+                           (f32*)(work + 0x23C));
+            *(f32*)(work + 0x238) += 100.0f;
+            *(u32*)(work + 0x264) = vec3_803013dc[0];
+            *(u32*)(work + 0x268) = vec3_803013dc[1];
+            *(u32*)(work + 0x26C) = vec3_803013dc[2];
+            *(u32*)(work + 0x270) = vec3_803013e8[0];
+            *(u32*)(work + 0x274) = vec3_803013e8[1];
+            *(u32*)(work + 0x278) = vec3_803013e8[2];
+            *(u32*)(work + 0x244) = *(u32*)(work + 0x238);
+            *(f32*)(work + 0x250) = 300.0f;
+            effStardustN64Entry(0,
+                                *(f32*)(work + 0x234),
+                                *(f32*)(work + 0x238),
+                                *(f32*)(work + 0x23C), 32.0f);
+            break;
+        case 6:
+            *(s32*)(work + 0x230) += 1;
+            *(f32*)(work + 0x274) =
+                (f32)intplGetValue(0.0, 1440.0, 0,
+                                   *(s32*)(work + 0x230), 0x28);
+            if (*(s32*)(work + 0x230) > 0x27) {
+                f32 px = *(f32*)(work + 0x234);
+                f32 py = *(f32*)(work + 0x238);
+                f32 pz = *(f32*)(work + 0x23C);
+
+                *(s32*)(work + 0x22C) = 7;
+                *(s32*)(work + 0x230) = 0;
+                effStardustN64Entry(4, px, py - 5.0f, pz, 40.0f);
+                effStardustN64Entry(4, px + 30.0f, py, pz, 40.0f);
+                effStardustN64Entry(4, px - 30.0f, py, pz, 40.0f);
+                psndSFXOn(str_SFX_BTL_SAC_SUKKIRI3_803014e0);
+            }
+            break;
+        case 7:
+            *(s32*)(work + 0x230) += 1;
+            *(f32*)(work + 0x238) =
+                (f32)intplGetValue(*(f32*)(work + 0x244), *(f32*)(work + 0x250),
+                                   4, *(s32*)(work + 0x230), 0x1E);
+            if (*(s32*)(work + 0x230) > 0x1D) {
+                *(s32*)(work + 0x22C) = 4;
+                *(s32*)(work + 0x230) = 0;
+                *(u32*)(work + 0x234) = vec3_803013f4[0];
+                *(u32*)(work + 0x238) = vec3_803013f4[1];
+                *(u32*)(work + 0x23C) = vec3_803013f4[2];
+                *(u32*)(work + 0x264) = vec3_80301400[0];
+                *(u32*)(work + 0x268) = vec3_80301400[1];
+                *(u32*)(work + 0x26C) = vec3_80301400[2];
+                *(u32*)(work + 0x270) = vec3_8030140c[0];
+                *(u32*)(work + 0x274) = vec3_8030140c[1];
+                *(u32*)(work + 0x278) = vec3_8030140c[2];
+            }
+            break;
+        case 8:
+            *(s32*)(work + 0x280) = 4;
+            break;
+        case 9:
+            *(s32*)(work + 0x230) += 1;
+            *(f32*)(work + 0x234) =
+                (f32)intplGetValue(*(f32*)(work + 0x240), *(f32*)(work + 0x24C),
+                                   0, *(s32*)(work + 0x230), 0x14);
+            *(f32*)(work + 0x238) =
+                (f32)intplGetValue(*(f32*)(work + 0x244), *(f32*)(work + 0x250),
+                                   1, *(s32*)(work + 0x230), 0x14);
+            *(f32*)(work + 0x23C) =
+                (f32)intplGetValue(*(f32*)(work + 0x248), *(f32*)(work + 0x254),
+                                   0, *(s32*)(work + 0x230), 0x14);
+            *(s32*)(work + 0x280) = 7;
+            if (*(s32*)(work + 0x230) > 0x13) {
+                *(s32*)(work + 0x22C) = 8;
+                *(s32*)(work + 0x230) = 0;
+            }
+            break;
+    }
+
+    if (*(void**)(work + 0x27C) != NULL) {
+        u8* effectWork = *(u8**)((s32)*(void**)(work + 0x27C) + 0xC);
+        *(u32*)(effectWork + 8) = *(u32*)(work + 0x234);
+        *(u32*)(effectWork + 0xC) = *(u32*)(work + 0x238);
+        *(u32*)(effectWork + 0x10) = *(u32*)(work + 0x23C);
+        *(f32*)(effectWork + 0x14) = 1.5f * *(f32*)(work + 0x264);
+        *(u32*)(effectWork + 0x18) = *(u32*)(work + 0x270);
+        *(u32*)(effectWork + 0x1C) = *(u32*)(work + 0x274);
+        *(u32*)(effectWork + 0x20) = *(u32*)(work + 0x278);
+        *(u32*)(effectWork + 0x38) = *(u32*)(work + 0x280);
+    }
 }
 
 /* stub-fill: main_base | prototype_only | source_prototype */
 void main_base(void) {
-    return;
+    extern void* get_ptr(void);
+    extern s32 BattleAudience_GetAudienceNum(void);
+    extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
+    extern void* memcpy(void* dst, const void* src, u32 size);
+    extern u32 psndSFXOn(const char* name);
+    extern u16 keyGetButtonTrg(s32 controller);
+    extern void* evtEntry(const void* code, s32 priority, u32 flags);
+    extern void BattleAudienceSoundCallKind(s32 kind);
+    extern void BattleAudienceSoundWhistleKind(s32 kind);
+    extern const char str_SFX_BTL_SAC_SUKKIRI1_80301518[];
+    extern const char str_SFX_BTL_SAC_SUKKIRI2_80301500[];
+    extern const s32 nice_event[];
+    extern u32 DAT_80301364;
+    extern u32 DAT_80301368;
+    extern u32 vec3_8030136c[];
+    extern u32 vec3_80301378[];
+
+    u8* work = get_ptr();
+    s32 audience = BattleAudience_GetAudienceNum();
+    s32 state = *(s32*)work;
+    s32 i;
+
+    if (state == 3) {
+        if (*(s32*)(work + 4) == 0) {
+            if (*(s32*)(work + 0x22C) != 4) {
+                return;
+            }
+            psndSFXOn(str_SFX_BTL_SAC_SUKKIRI2_80301500);
+            memcpy(work + 0x184, work + 0xDC, 0xA8);
+            *(u32*)(work + 0x14) = *(u32*)(work + 0x10);
+            for (i = 0; i < 7; i++) {
+                *(s32*)(work + 0xDC + i * 0x18) = 0;
+            }
+        }
+        *(f32*)(work + 0x24) =
+            (f32)intplGetValue(-60.0, 0.0, 0,
+                               *(s32*)(work + 4), 0xF);
+        *(s32*)(work + 4) += 1;
+        if (*(s32*)(work + 4) > 0xE) {
+            *(s32*)work = 5;
+            *(s32*)(work + 4) = 0;
+            *(s32*)(work + 0x22C) = 8;
+        }
+    } else if (state < 3) {
+        if (state == 1) {
+            *(s32*)work = 2;
+            *(s32*)(work + 4) = 0;
+        } else if (state < 1) {
+            return;
+        }
+
+        if (*(s32*)(work + 0xC) == 0) {
+            *(f32*)(work + 0xD0) =
+                (f32)intplGetValue(-1000.0, 0.0, 4,
+                                   *(s32*)(work + 4), 0xF);
+            *(u32*)(work + 0xD4) = DAT_80301364;
+            *(u32*)(work + 0xD8) = DAT_80301368;
+        }
+
+        if (*(s32*)(work + 4) == 0) {
+            if (*(s32*)(work + 0x22C) != 4) {
+                return;
+            }
+            memcpy(work + 0x184, work + 0xDC, 0xA8);
+            *(u32*)(work + 0x14) = *(u32*)(work + 0x10);
+
+            if (*(s32*)(work + 0xC) < 5) {
+                *(s32*)(work + 0x10) = 0;
+                *(s32*)(work + 0x18) = *(s32*)(work + 0xC) + 3;
+                *(s32*)(work + 0x1C) = *(s32*)(work + 0xC) * 10 + 0xB4;
+                for (i = 0; i < 7; i++) {
+                    *(s32*)(work + 0xDC + i * 0x18) =
+                        i < *(s32*)(work + 0x18) ? 1 : 0;
+                }
+            } else {
+                for (i = 0; i < 7; i++) {
+                    *(s32*)(work + 0xDC + i * 0x18) = 0;
+                }
+            }
+        }
+
+        *(f32*)(work + 0x24) =
+            (f32)intplGetValue(-80.0, 0.0, 0,
+                               *(s32*)(work + 4), 0xF);
+        *(s32*)(work + 4) += 1;
+        if (*(s32*)(work + 4) > 0xE) {
+            if (*(s32*)(work + 0xC) < 5) {
+                *(s32*)work = 4;
+            } else {
+                *(s32*)work = 5;
+                *(s32*)(work + 4) = 0;
+                *(s32*)(work + 0x22C) = 8;
+            }
+            *(u32*)(work + 0xD0) = vec3_8030136c[0];
+            *(u32*)(work + 0xD4) = vec3_8030136c[1];
+            *(u32*)(work + 0xD8) = vec3_8030136c[2];
+        }
+    } else if (state == 5) {
+        *(s32*)(work + 4) += 1;
+        if (*(s32*)(work + 4) < 0x1F) {
+            *(f32*)(work + 0xD0) =
+                (f32)intplGetValue(0.0, -1000.0, 4,
+                                   *(s32*)(work + 4), 0x1E);
+            *(u32*)(work + 0xD4) = vec3_80301378[1];
+            *(u32*)(work + 0xD8) = vec3_80301378[2];
+        }
+    } else if (state < 5) {
+        *(s32*)(work + 0x1C) -= 1;
+        if (*(s32*)(work + 0x1C) < 1) {
+            *(s32*)work = 3;
+            *(s32*)(work + 4) = 0;
+        } else {
+            u16 buttons = keyGetButtonTrg(0);
+
+            if ((buttons & 0xF00) != 0) {
+                buttons = keyGetButtonTrg(0);
+                if ((*(u32*)(work + 0xE4 + *(s32*)(work + 0x10) * 0x18) & buttons) == 0) {
+                    *(s32*)work = 3;
+                    *(s32*)(work + 4) = 0;
+                } else {
+                    *(s32*)(work + 0x10) += 1;
+                    psndSFXOn(str_SFX_BTL_SAC_SUKKIRI1_80301518);
+
+                    if (*(s32*)(work + 0x10) >= *(s32*)(work + 0x18)) {
+                        void* event;
+                        s32 value;
+
+                        *(s32*)work = 2;
+                        *(s32*)(work + 4) = 0;
+                        *(s32*)(work + 0xC) += 1;
+                        *(s32*)(work + 0x22C) = 5;
+                        event = evtEntry(nice_event, 0, 0x20);
+                        value = *(s32*)(work + 0xC) + 1;
+                        if (value >= 6) {
+                            value = 6;
+                        }
+                        *(s32*)((s32)event + 0x9C) = value;
+
+                        if (audience > 0 && audience < 0x32) {
+                            BattleAudienceSoundCallKind(1);
+                        }
+                        if (audience > 0x31 && audience < 100) {
+                            BattleAudienceSoundCallKind(1);
+                            BattleAudienceSoundWhistleKind(1);
+                        }
+                        if (audience > 99 && audience < 0x96) {
+                            BattleAudienceSoundCallKind(2);
+                            BattleAudienceSoundWhistleKind(2);
+                        }
+                        if (audience > 0x95) {
+                            BattleAudienceSoundCallKind(2);
+                            BattleAudienceSoundWhistleKind(3);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
+

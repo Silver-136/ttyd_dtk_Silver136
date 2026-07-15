@@ -366,16 +366,122 @@ void* effFallEntry(f32 x, s32 type, f32 y, s32 count, f32 z, s32 param, f32 rot,
 /* CHATGPT STUB FILL: main/effect/eff_fall 20260624_184823 */
 
 /* stub-fill: effFallDispWater | missing_definition | ghidra_signature */
-u8 effFallDispWater(void) {
-    return 0;
+void effFallDispWater(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4]; typedef u8 TexObj[0x20];
+    extern void* camGetPtr(s32); extern void PSMTXTrans(Mtx,f64,f64,f64); extern void PSMTXScale(Mtx,f32,f32,f32); extern void PSMTXRotRad(Mtx,f64,char); extern void PSMTXConcat(void*,void*,void*);
+    extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevOp(s32,s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+    extern void GXSetNumChans(s32); extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32); extern void GXSetCullMode(s32); extern void GXClearVtxDesc(void); extern void GXSetVtxDesc(s32,s32); extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
+    extern void effGetTexObj(s32,void*); extern void GXLoadTexObj(void*,s32); extern void GXLoadTexMtxImm(void*,s32,s32); extern void GXLoadPosMtxImm(void*,s32); extern void GXBegin(s32,s32,s32); extern void GXCallDisplayList(void*,u32); extern volatile f32 DAT_cc008000;
+    u8* w=*(u8**)((u8*)effect+0xC); void* cam=camGetPtr(cameraId); Mtx trans,scale,rot,base; TexObj tex; f32 halfW=32.0f; f32 height=352.0f;
+    PSMTXTrans(trans,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC));PSMTXRotRad(rot,-0.017453292f**(f32*)((u8*)camGetPtr(cameraId)+0x114),'y');
+    PSMTXConcat(trans,rot,base);PSMTXConcat((u8*)cam+0x11C,base,base);GXSetNumTevStages(2);GXSetTevOrder(0,0,0,4);GXSetTevOp(0,0);
+    GXSetTevOrder(1,0xFF,0xFF,0xFF);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);GXSetNumChans(1);GXSetChanCtrl(4,0,0,1,0,0,2);GXSetCullMode(2);
+    GXClearVtxDesc();GXSetVtxDesc(9,1);GXSetVtxDesc(11,1);GXSetVtxDesc(13,1);GXSetVtxAttrFmt(0,9,1,4,0);GXSetVtxAttrFmt(0,11,1,5,0);GXSetVtxAttrFmt(0,13,1,4,0);
+    effGetTexObj(0x35,tex);GXLoadTexObj(tex,0);PSMTXTrans(trans,*(f32*)(w+0xB8),*(f32*)(w+0xBC),*(f32*)(w+0xC0));PSMTXScale(scale,1.0f,height/704.0f,1.0f);PSMTXConcat(trans,scale,trans);GXLoadTexMtxImm(trans,0x1E,1);
+    PSMTXTrans(trans,*(f32*)(w+0x6C),*(f32*)(w+0x70),*(f32*)(w+0x74));PSMTXScale(scale,*(f32*)(w+0x94),1.0f,1.0f);PSMTXConcat(trans,scale,trans);PSMTXConcat(base,trans,trans);GXLoadPosMtxImm(trans,0);
+    GXBegin(0x80,0,4);DAT_cc008000=-halfW;DAT_cc008000=height;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;
+    DAT_cc008000=halfW;DAT_cc008000=height;DAT_cc008000=0;DAT_cc008000=2;DAT_cc008000=0;
+    DAT_cc008000=halfW;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=2;DAT_cc008000=1;
+    DAT_cc008000=-halfW;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=1;
+    if(*(s32*)(w+0xA0)>0){effGetTexObj(0x37,tex);GXLoadTexObj(tex,0);PSMTXTrans(trans,*(f32*)(w+0x6C),*(f32*)(w+0x70),*(f32*)(w+0x74));PSMTXScale(scale,0.56f,0.4f,0.8f);PSMTXConcat(base,trans,trans);PSMTXConcat(trans,scale,trans);GXLoadPosMtxImm(trans,0);}
 }
 
 /* stub-fill: effFallDisp | missing_definition | ghidra_signature */
-u8 effFallDisp(void) {
-    return 0;
+void effFallDisp(s32 cameraId, void* effect) {
+    extern void mapSetMaterialFog(void);
+    extern void effGetTexObj(void*, s32, s32);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXBegin(s32, s32, s32);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXLoadPosMtxImm(void*, s32);
+    u8* base = *(u8**)((u8*)effect + 0xC);
+    s32 count = *(s32*)((u8*)effect + 8);
+    s32 type = *(s32*)base;
+    u8 tex[64];
+    f32 trans[3][4], scale[3][4], model[3][4];
+    s32 i;
+    mapSetMaterialFog();
+    effGetTexObj(tex, type == 2 ? 0x33 : 0x32, 0);
+    GXLoadTexObj(tex, 0);
+    for (i = 1; i < count; i++) {
+        u8* p = base + i * 0x68;
+        u32 color;
+        if (*(s32*)(p + 0x38) < 0) continue;
+        PSMTXTrans(trans, *(f32*)(p + 8), *(f32*)(p + 0xC), *(f32*)(p + 0x10));
+        PSMTXScale(scale, *(f32*)(p + 0x28), *(f32*)(p + 0x28), *(f32*)(p + 0x28));
+        PSMTXConcat(trans, scale, model);
+        GXLoadPosMtxImm(model, 0);
+        color = *(u32*)(p + 0x34);
+        GXBegin(0x80, 0, 4);
+        *(volatile f32*)0xCC008000=-1.0f; *(volatile f32*)0xCC008000=1.0f; *(volatile f32*)0xCC008000=0.0f; *(volatile u32*)0xCC008000=color;
+        *(volatile f32*)0xCC008000=1.0f; *(volatile f32*)0xCC008000=1.0f; *(volatile f32*)0xCC008000=0.0f; *(volatile u32*)0xCC008000=color;
+        *(volatile f32*)0xCC008000=1.0f; *(volatile f32*)0xCC008000=-1.0f; *(volatile f32*)0xCC008000=0.0f; *(volatile u32*)0xCC008000=color;
+        *(volatile f32*)0xCC008000=-1.0f; *(volatile f32*)0xCC008000=-1.0f; *(volatile f32*)0xCC008000=0.0f; *(volatile u32*)0xCC008000=color;
+    }
 }
 
 /* stub-fill: effFallMain | prototype_only | source_prototype */
-void effFallMain(void) {
-    return;
+void effFallMain(void* effect) {
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(void*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void effFallDisp(void);
+    extern void psndSFXOn(s32);
+    u8* base = *(u8**)((u8*)effect + 0xC);
+    s32 count = *(s32*)((u8*)effect + 8);
+    s32 type = *(s32*)base;
+    s32 alive = 0;
+    s32 i;
+    f32 pos[3];
+
+    pos[0] = *(f32*)(base + 4);
+    pos[1] = *(f32*)(base + 8);
+    pos[2] = *(f32*)(base + 0xC);
+
+    for (i = 1; i < count; i++) {
+        u8* p = base + i * 0x68;
+        s32* state = (s32*)(p + 0x38);
+        s32* timer = (s32*)(p + 0x24);
+        f32* y = (f32*)(p + 0x0C);
+        f32* vy = (f32*)(p + 0x30);
+        f32* gravity = (f32*)(p + 0x2C);
+        s32* alpha = (s32*)(p + 0x34);
+        if (*state < 0) continue;
+        alive++;
+        switch (*state) {
+            case 0:
+                if (--*timer <= 0) { *timer = 0; *state = 1; }
+                break;
+            case 1:
+                *y += *vy;
+                *vy -= *gravity;
+                if (*y <= *(f32*)(base + 0x14)) {
+                    *y = *(f32*)(base + 0x14);
+                    *vy = -*vy * 0.4f;
+                    *state = 2;
+                    if (type < 2) psndSFXOn(0x8CF);
+                }
+                break;
+            case 2:
+                *y += *vy;
+                *vy -= *gravity;
+                if (*vy < 0.0f && *y <= *(f32*)(base + 0x14)) {
+                    *y = *(f32*)(base + 0x14);
+                    *state = 3;
+                }
+                break;
+            case 3:
+                *alpha -= 8;
+                if (*alpha <= 0) { *alpha = 0; *state = -1; alive--; }
+                break;
+        }
+    }
+    if (alive == 0) {
+        effDelete(effect);
+    } else {
+        dispEntry(4, 1, effFallDisp, effect, dispCalcZ(pos));
+    }
 }
+

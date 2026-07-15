@@ -169,8 +169,59 @@ void effNozleMain(void* effEntry) {
 /* CHATGPT STUB FILL: main/effect/eff_nozle 20260624_184823 */
 
 /* stub-fill: effNozleDisp | prototype_only | source_prototype */
-void effNozleDisp(void) {
-    return;
+void effNozleDisp(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32);
+    extern void GXSetBlendMode(s32, s32, s32, s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
+    extern void GXSetZMode(s32, s32, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetCullMode(s32);
+    extern void GXLoadTexObj(void*, s32);
+    extern void effGetTexObj(s32, void*);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXRotRad(void*, f32, s32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXLoadPosMtxImm(void*, s32);
+    s32* work = *(s32**)((u8*)effect + 0xC);
+    u8* camera = camGetPtr(cameraId);
+    u8 tex[32];
+    f32 m0[3][4], m1[3][4], m2[3][4], model[3][4];
+    f32 scale = *(f32*)(work + 10);
+
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(1, 3, 0);
+    PSMTXTrans(m0, *(f32*)(work + 1), *(f32*)(work + 2), *(f32*)(work + 3));
+    PSMTXRotRad(m1, 0.017453292f * *(f32*)(work + 0x10), 'y');
+    PSMTXConcat(m0, m1, m0);
+    PSMTXRotRad(m1, 0.017453292f * *(f32*)(work + 0xF), 'x');
+    PSMTXConcat(m0, m1, m0);
+    PSMTXScale(m2, scale * *(f32*)(work + 4), scale * *(f32*)(work + 5), scale);
+    PSMTXConcat(m0, m2, m0);
+    PSMTXConcat(camera + 0x30, m0, model);
+    GXLoadPosMtxImm(model, 0);
+    GXSetCurrentMtx(0);
+    GXSetNumChans(1);
+    GXSetNumTexGens(2);
+    PSMTXTrans(m0, *(f32*)(work + 6), -*(f32*)(work + 7), 0.0f);
+    PSMTXTrans(m0, *(f32*)(work + 8), -*(f32*)(work + 9), 0.0f);
+    effGetTexObj(0x3C, tex);
+    GXLoadTexObj(tex, 0);
+    if (*work == 2) {
+        effGetTexObj(0x3E, tex);
+        GXLoadTexObj(tex, 1);
+    } else if (*work == 0 || *work == 3) {
+        effGetTexObj(0x3D, tex);
+        GXLoadTexObj(tex, 1);
+    }
+    GXSetNumTevStages(3);
+    GXSetCullMode(0);
 }
 
 /* stub-fill: effNozleEntry | missing_definition | ghidra_signature */

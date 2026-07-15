@@ -34,10 +34,11 @@ void effRippleN64SetRxRz(void* effect, f32 rx, f32 rz) {
 }
 
 
-u8 effRippleDisp(int param_1, int param_2) {
-    return 0;
+void effRippleDisp(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32);extern void effGetTexObj(s32,void*);extern void effGetTexObjN64(s32,void*);extern void GXLoadTexObj(void*,s32);extern void GXSetNumChans(s32);extern void GXSetNumTexGens(s32);extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);extern void PSMTXScale(void*,f32,f32,f32);extern void GXLoadTexMtxImm(void*,s32,s32);extern void GXSetNumTevStages(s32);extern void GXSetTevOrder(s32,s32,s32,s32);extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevColorIn(s32,s32,s32,s32,s32);extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);extern void GXSetTevColor(s32,void*);extern void PSMTXTrans(void*,f32,f32,f32);extern void PSMTXRotRad(void*,s32,f32);extern void PSMTXConcat(void*,void*,void*);extern void GXLoadPosMtxImm(void*,s32);extern void GXSetCurrentMtx(s32);extern void GXSetCullMode(s32);extern void effSetVtxDescN64(void*);extern void GXBegin(s32,s32,s32);extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);extern f32 float_0p0625_80425f1c,float_0_80425f20,float_0p03125_80425f24,float_deg2rad_80425f28,float_1_80425f2c;
+    u8 texObj[0x20];f32 base[3][4],rot[3][4],scale[3][4],mtx[3][4];u8* work=*(u8**)((s32)effect+0xC);s32 type=*(s32*)work;u32 color;
+    if(type==10||type==20||(type>=1&&type<=3)||type==30)effGetTexObj(0x5B,texObj);else effGetTexObjN64(0x21,texObj);GXLoadTexObj(texObj,0);effGetTexObjN64(0x22,texObj);GXLoadTexObj(texObj,1);GXSetNumChans(0);GXSetNumTexGens(2);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);GXSetTexCoordGen2(1,1,4,0x21,0,0x7D);PSMTXScale(scale,float_0p0625_80425f1c,float_0p0625_80425f1c,float_0_80425f20);GXLoadTexMtxImm(scale,0x1E,1);GXLoadTexMtxImm(scale,0x21,1);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,0,0,0,2);GXSetTevAlphaIn(0,0,7,1,7);color=*(u32*)(work+0x18);GXSetTevColor(1,&color);PSMTXScale(scale,float_0p03125_80425f24,float_0p03125_80425f24,float_0_80425f20);PSMTXTrans(rot,float_0_80425f20,(f32)*(s32*)(work+0x24),float_0_80425f20);PSMTXConcat(scale,rot,scale);GXLoadTexMtxImm(scale,0x21,1);PSMTXTrans(mtx,*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC));PSMTXRotRad(rot,0x78,float_deg2rad_80425f28**(f32*)(work+0x2C));PSMTXConcat(mtx,rot,mtx);PSMTXRotRad(rot,0x7A,float_deg2rad_80425f28**(f32*)(work+0x30));PSMTXConcat(mtx,rot,mtx);PSMTXScale(scale,*(f32*)(work+0x14)**(f32*)(work+0x10),float_1_80425f2c,*(f32*)(work+0x14)**(f32*)(work+0x10));PSMTXConcat(mtx,scale,mtx);PSMTXConcat((void*)((s32)camGetPtr(cameraId)+0x11C),mtx,mtx);GXLoadPosMtxImm(mtx,0);GXSetCurrentMtx(0);GXSetCullMode(0);effSetVtxDescN64((void*)0x803A8008);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3,0);
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

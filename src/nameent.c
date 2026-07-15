@@ -281,28 +281,398 @@ void nameMaskGX(f32 scale) {
 /* CHATGPT STUB FILL: main/nameent 20260624_184008 */
 
 /* stub-fill: nameWinGX | missing_definition | ghidra_signature */
-u8 nameWinGX(void) {
+u8 nameWinGX(f64 x, f64 y, f64 width, f64 height, s32 palette, s32 texture) {
+    typedef f32 Mtx[3][4];
+    extern void* camGetPtr(s32);
+    extern void TEXGetGXTexObjFromPalette(s32, void*, s32);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
+    extern void GXSetBlendMode(s32, s32, s32, s32);
+    extern void GXSetZMode(s32, s32, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXLoadPosMtxImm(void*, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void PSMTXScale(Mtx, f32, f32, f32);
+    extern void GXLoadTexMtxImm(Mtx, s32, s32);
+    extern void GXBegin(s32, s32, s32);
+    u8 texObj[0x20];
+    Mtx texMtx;
+    volatile f32* fifo = (volatile f32*)0xCC008000;
+    f32 right = (f32)(x + width - 16.0);
+    f32 bottom = (f32)(y - height + 16.0);
+    s32 ids[4] = { 4, 7, 6, 3 };
+    s32 i;
+
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetBlendMode(1, 4, 5, 7);
+    GXSetZMode(0, 7, 0);
+    GXSetNumChans(0);
+    GXSetNumTevStages(3);
+    for (i = 0; i < 3; i++) {
+        GXSetTevOrder(i, i == 0 ? 0 : 1, i, 0xFF);
+        GXSetTevColorOp(i, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(i, 0, 0, 0, 1, 0);
+    }
+    GXSetTevColorIn(0, 0, 0, 0, 8);
+    GXSetTevAlphaIn(0, 0, 0, 0, 7);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+    GXLoadPosMtxImm((u8*)camGetPtr(1) + 0x118, 0);
+    GXSetCurrentMtx(0);
+
+    for (i = 0; i < 4; i++) {
+        f32 left = i == 1 || i == 3 ? right : (f32)x;
+        f32 top = i >= 2 ? bottom + 16.0f : (f32)y;
+        f32 quadRight = left + (i == 1 || i == 3 ? 16.0f : (f32)width - 16.0f);
+        f32 quadBottom = top - (i >= 2 ? 16.0f : (f32)height - 16.0f);
+        TEXGetGXTexObjFromPalette(palette, texObj, texture + ids[i]);
+        GXLoadTexObj(texObj, 0);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+        PSMTXScale(texMtx, 1.0f, 1.0f, 1.0f);
+        GXLoadTexMtxImm(texMtx, 0x1E, 1);
+        GXBegin(0x80, 0, 4);
+        *fifo = left; *fifo = top; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
+        *fifo = left; *fifo = quadBottom; *fifo = 0.0f; *fifo = 0.0f; *fifo = 1.0f;
+        *fifo = quadRight; *fifo = quadBottom; *fifo = 0.0f; *fifo = 1.0f; *fifo = 1.0f;
+        *fifo = quadRight; *fifo = top; *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
+    }
     return 0;
 }
 
 /* stub-fill: nameKirinukiGX | missing_definition | ghidra_signature */
-u8 nameKirinukiGX(void) {
+u8 nameKirinukiGX(f64 x, f64 y, f64 width, f64 height) {
+    typedef f32 Mtx[3][4];
+    extern void* wp;
+    extern void* camGetPtr(s32);
+    extern void TEXGetGXTexObjFromPalette(s32, void*, s32);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetBlendMode(s32, s32, s32, s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
+    extern void GXSetZMode(s32, s32, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevOp(s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXLoadPosMtxImm(void*, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void PSMTXScale(Mtx, f32, f32, f32);
+    extern void GXLoadTexMtxImm(Mtx, s32, s32);
+    extern void GXBegin(s32, s32, s32);
+    u8 texObj[0x20];
+    Mtx texMtx;
+    volatile f32* fifo = (volatile f32*)0xCC008000;
+    s32 textureIds[8] = { 0x2F, 0x2D, 0x31, 0x2E, 0x32, 0x30, 0x34, 0x33 };
+    s32 palette = ***(s32***)((u8*)wp + 0x60);
+    s32 i;
+
+    GXSetBlendMode(0, 1, 0, 0);
+    GXSetZCompLoc(0);
+    GXSetAlphaCompare(6, 0x80, 1, 0, 0);
+    GXSetZMode(0, 7, 0);
+    GXSetNumChans(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevOp(0, 3);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+    GXLoadPosMtxImm((u8*)camGetPtr(1) + 0x118, 0);
+    GXSetCurrentMtx(0);
+
+    for (i = 0; i < 8; i++) {
+        f32 left = (f32)x + ((i & 1) ? (f32)width - 8.0f : 0.0f);
+        f32 top = (f32)y - ((i & 2) ? (f32)height - 8.0f : 0.0f);
+        f32 right = left + ((i & 1) ? 8.0f : (f32)width - 8.0f);
+        f32 bottom = top - ((i & 2) ? 8.0f : (f32)height - 8.0f);
+        TEXGetGXTexObjFromPalette(palette, texObj, textureIds[i]);
+        GXLoadTexObj(texObj, 0);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+        PSMTXScale(texMtx, 1.0f, 1.0f, 1.0f);
+        GXLoadTexMtxImm(texMtx, 0x1E, 1);
+        GXBegin(0x80, 0, 4);
+        *fifo = left; *fifo = top; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
+        *fifo = left; *fifo = bottom; *fifo = 0.0f; *fifo = 0.0f; *fifo = 1.0f;
+        *fifo = right; *fifo = bottom; *fifo = 0.0f; *fifo = 1.0f; *fifo = 1.0f;
+        *fifo = right; *fifo = top; *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
+    }
     return 0;
 }
 
 /* stub-fill: nameBG | missing_definition | ghidra_signature */
-u8 nameBG(void) {
-    return 0;
+void nameBG(void)  {
+    extern void* wp;
+    extern void* camGetPtr(s32);
+    extern void GXSetBlendMode(s32,s32,s32,s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);
+    extern void GXSetZMode(s32,s32,s32);
+    extern void GXSetFog(s32,f32,f32,f32,f32,void*);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32,s32,s32,s32);
+    extern void GXSetTevOp(s32,s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32,s32);
+    extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
+    extern void GXLoadPosMtxImm(void*,s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void TEXGetGXTexObjFromPalette(void*,void*,s32);
+    extern void GXInitTexObjLOD(void*,s32,s32,f32,f32,f32,s32,s32,s32);
+    extern void GXLoadTexObj(void*,s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+    extern u32 GXGetTexObjHeight(void*);
+    extern u32 GXGetTexObjWidth(void*);
+    extern void PSMTXScale(void*,f32,f32,f32);
+    extern void GXLoadTexMtxImm(void*,s32,s32);
+    extern void GXBegin(s32,s32,s32);
+    f32 texMtx[3][4];
+    u8 texObj[0x20];
+    u32 fog=0;
+    void* camera;
+    void* palette;
+    volatile f32* fifo=(volatile f32*)0xCC008000;
+    f32 left[3]= {
+        -304.0f,-272.0f,272.0f
+    }
+    ;
+    f32 right[3]= {
+        -272.0f,272.0f,304.0f
+    }
+    ;
+    s32 indices[3]= {
+        0x22,0x21,0x23
+    }
+    ;
+    f32 widths[3]= {
+        32.0f,544.0f,32.0f
+    }
+    ;
+    s32 i;
+    f32 sx,sy;
+    GXSetBlendMode(0,1,0,0);
+    GXSetZCompLoc(0);
+    GXSetAlphaCompare(6,0x80,1,0,0);
+    GXSetZMode(0,7,0);
+    GXSetFog(0,0.0f,0.0f,0.0f,0.0f,&fog);
+    GXSetNumChans(0);
+    GXSetChanCtrl(4,0,0,0,0,0,2);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0,0,0,0xFF);
+    GXSetTevOp(0,3);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9,1);
+    GXSetVtxDesc(13,1);
+    GXSetVtxAttrFmt(0,9,1,4,0);
+    GXSetVtxAttrFmt(0,13,1,4,0);
+    camera=camGetPtr(1);
+    GXLoadPosMtxImm((u8*)camera+0x11C,0);
+    GXSetCurrentMtx(0);
+    palette=*(void**)(*(s32*)((s32)wp+0x60));
+    for(i=0;i<3;i++) {
+        TEXGetGXTexObjFromPalette(palette,texObj,indices[i]);
+        GXInitTexObjLOD(texObj,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj,0);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        sx=widths[i]/(f32)(GXGetTexObjWidth(texObj)&0xFFFF);
+        sy=480.0f/(f32)(GXGetTexObjHeight(texObj)&0xFFFF);
+        PSMTXScale(texMtx,sx,sy,1.0f);
+        GXLoadTexMtxImm(texMtx,0x1E,1);
+        GXBegin(0x80,0,4);
+        *fifo=left[i];
+        *fifo=240.0f;
+        *fifo=0.0f;
+        *fifo=0.0f;
+        *fifo=0.0f;
+        *fifo=left[i];
+        *fifo=-240.0f;
+        *fifo=0.0f;
+        *fifo=0.0f;
+        *fifo=1.0f;
+        *fifo=right[i];
+        *fifo=-240.0f;
+        *fifo=0.0f;
+        *fifo=1.0f;
+        *fifo=1.0f;
+        *fifo=right[i];
+        *fifo=240.0f;
+        *fifo=0.0f;
+        *fifo=1.0f;
+        *fifo=0.0f;
+    }
 }
 
 /* stub-fill: nameEntDisp | prototype_only | source_prototype */
 void nameEntDisp(void) {
-    return;
+    typedef f32 Mtx[3][4];
+    typedef struct Vec { f32 x, y, z; } Vec;
+    extern void* wp;
+    extern void* camGetCurPtr(void);
+    extern void* camGetPtr(s32);
+    extern void GXGetProjectionv(f32*);
+    extern void GXGetViewportv(f32*);
+    extern void GXSetProjection(void*, s32);
+    extern void GXSetProjectionv(f32*);
+    extern void GXSetViewport(f32, f32, f32, f32, f32, f32);
+    extern void winTexInit(s32);
+    extern void winTexSet(s32, Vec*, Vec*, void*);
+    extern void FontDrawStart(void);
+    extern void FontDrawString(f32, f32, const char*);
+    extern void* memset(void*, s32, u32);
+    extern char* strncpy(char*, const char*, u32);
+    extern u32 strlen(const char*);
+    u8* work = wp;
+    f32 projection[7];
+    f32 viewport[6];
+    Mtx saved;
+    Vec pos, scale;
+    u32 color = 0xFFFFFFFF;
+    char glyph[16];
+    s32 file = ***(s32***)(work + 0x60);
+    s32 i;
+
+    GXGetProjectionv(projection);
+    GXGetViewportv(viewport);
+    for (i = 0; i < 12; i++) {
+        ((f32*)saved)[i] = *(f32*)((u8*)camGetCurPtr() + 0x118 + i * 4);
+    }
+    GXSetProjection((u8*)camGetPtr(1) + 0x160, *(s32*)((u8*)camGetPtr(1) + 0x1A0));
+
+    winTexInit(file);
+    pos.x = -240.0f; pos.y = 120.0f; pos.z = 0.0f;
+    scale.x = 480.0f; scale.y = 270.0f; scale.z = 1.0f;
+    winTexSet(0x2A, &pos, &scale, &color);
+    for (i = 0; i < 8; i++) {
+        pos.x = -250.0f + 40.0f * (f32)i;
+        pos.y = 20.0f;
+        scale.x = 28.0f; scale.y = 28.0f; scale.z = 1.0f;
+        winTexSet(0x29, &pos, &scale, &color);
+    }
+    pos.x = -160.0f; pos.y = -160.0f;
+    scale.x = 500.0f; scale.y = 40.0f;
+    winTexSet(0x2B, &pos, &scale, &color);
+
+    FontDrawStart();
+    for (i = 0; i < 8; i++) {
+        memset(glyph, 0, sizeof(glyph));
+        if (*(u8*)(work + 0x3C + i) >= 0x80) {
+            strncpy(glyph, (char*)work + 0x3C + i, 2);
+            i++;
+        } else {
+            strncpy(glyph, (char*)work + 0x3C + i, 1);
+        }
+        if (strlen(glyph) != 0) {
+            FontDrawString(-220.0f + 40.0f * (f32)i, -100.0f, glyph);
+        }
+    }
+    GXSetProjectionv(projection);
+    GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
 }
 
 /* stub-fill: nameMain | prototype_only | source_prototype */
 void nameMain(void) {
-    return;
+    extern void* wp;
+    extern void* gp;
+    extern f64 distABf(f64, f64, f64, f64);
+    extern u32 keyGetButtonTrg(s32);
+    extern u32 keyGetDirRep(s32);
+    extern void psndSFXOn(void*);
+    u8* work = wp;
+    f32 dist = (f32)distABf(*(f32*)(work + 0x24), *(f32*)(work + 0x28),
+                            *(f32*)(work + 0x1C), *(f32*)(work + 0x20));
+    u32 buttons;
+    u32 direction;
+    s32 state = *(s32*)(work + 8);
+
+    if (state == 100) {
+        buttons = keyGetButtonTrg(0);
+        if ((buttons & 0x100) != 0) {
+            if (*(s32*)(work + 0x5C) == 0) {
+                *(s32*)(work + 8) = 101;
+                psndSFXOn((void*)0x12);
+            } else {
+                *(s32*)(work + 8) = 0;
+                psndSFXOn((void*)0x13);
+            }
+        } else if ((buttons & 0x200) != 0) {
+            *(s32*)(work + 8) = 0;
+            psndSFXOn((void*)0x13);
+        } else {
+            direction = keyGetDirRep(0);
+            if ((direction & 0x3000) != 0) {
+                *(s32*)(work + 0x5C) = 1 - *(s32*)(work + 0x5C);
+                psndSFXOn((void*)5);
+            }
+        }
+        *(f32*)(work + 0x24) = -60.0f;
+        *(f32*)(work + 0x28) = 30.0f - 40.0f * (f32)*(s32*)(work + 0x5C);
+        *(f32*)(work + 0x54) += 0.05f;
+        if (*(f32*)(work + 0x54) > 1.0f) *(f32*)(work + 0x54) = 1.0f;
+    } else if (state == 0 && (*(u16*)work & 1) != 0 && *(s32*)((u8*)gp + 8) == 0) {
+        buttons = keyGetButtonTrg(0);
+        direction = keyGetDirRep(0);
+        if ((buttons & 0x100) != 0 || (buttons & 0x1000) != 0) {
+            *(s32*)(work + 8) = 100;
+            *(s32*)(work + 0x5C) = 0;
+            psndSFXOn((void*)0x12);
+        } else if ((buttons & 0x200) != 0) {
+            *(s32*)(work + 8) = 100;
+            *(s32*)(work + 0x5C) = 1;
+            psndSFXOn((void*)0x13);
+        } else if ((direction & 0x4000) != 0 && dist < 10.0f) {
+            (*(s32*)(work + 0x14))--;
+            if (*(s32*)(work + 0x14) < 0) *(s32*)(work + 0x14) = 8;
+            psndSFXOn((void*)5);
+        } else if ((direction & 0x8000) != 0 && dist < 10.0f) {
+            (*(s32*)(work + 0x14))++;
+            if (*(s32*)(work + 0x14) > 8) *(s32*)(work + 0x14) = 0;
+            psndSFXOn((void*)5);
+        } else if ((direction & 0x1000) != 0 && dist < 10.0f) {
+            (*(s32*)(work + 0x18))--;
+            if (*(s32*)(work + 0x18) < 0) *(s32*)(work + 0x18) = 13;
+            psndSFXOn((void*)5);
+        } else if ((direction & 0x2000) != 0 && dist < 10.0f) {
+            (*(s32*)(work + 0x18))++;
+            if (*(s32*)(work + 0x18) > 13) *(s32*)(work + 0x18) = 0;
+            psndSFXOn((void*)5);
+        }
+    }
+    *(f32*)(work + 0x24) += (*(f32*)(work + 0x1C) - *(f32*)(work + 0x24)) * 0.5f;
+    *(f32*)(work + 0x28) += (*(f32*)(work + 0x20) - *(f32*)(work + 0x28)) * 0.5f;
 }
 
 /* stub-fill: nameEntOn | missing_definition | ghidra_signature */

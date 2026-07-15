@@ -343,6 +343,93 @@ void* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
 /* CHATGPT STUB FILL: main/effect/eff_minigame 20260624_184823 */
 
 /* stub-fill: effMiniGameMain | prototype_only | source_prototype */
-void effMiniGameMain(void) {
-    return;
+void effMiniGameMain(u32* effect) {
+    extern void psndSFXOn(s32 id);
+    extern void effDelete(void* effect);
+    extern f32 dispCalcZ(void* pos);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void effMiniGameDisp(void);
+    u8* work = (u8*)effect[3];
+    f32 pos[3];
+    s32 done = 0;
+    s32 i;
+
+    pos[0] = *(f32*)(work + 4);
+    pos[1] = *(f32*)(work + 8);
+    pos[2] = *(f32*)(work + 0xC);
+    for (i = 1; i < (s32)effect[2]; i++, work += 0x38) {
+        s32* timer = (s32*)(work + 0x60);
+        s32* state = (s32*)(work + 0x68);
+        s32* alpha = (s32*)(work + 0x6C);
+        f32* y = (f32*)(work + 0x3C);
+        f32* sx = (f32*)(work + 0x48);
+        f32* sy = (f32*)(work + 0x4C);
+        f32* vy = (f32*)(work + 0x58);
+        f32* gravity = (f32*)(work + 0x5C);
+        switch (*state) {
+            case 0:
+            case 3:
+            case 10:
+            case 0x17:
+                if (--*timer < 0) {
+                    *timer = 0;
+                    (*state)++;
+                    if (*state == 1) psndSFXOn(0x8D1);
+                }
+                break;
+            case 1:
+            case 0x15:
+                *sx += (1.0f - *sx) * 0.25f;
+                *sy += (1.0f - *sy) * 0.25f;
+                *alpha += (s32)((255 - *alpha) * 0.25f);
+                if (*alpha > 250) { *alpha = 255; (*state)++; }
+                break;
+            case 2:
+                *timer = 42;
+                (*state)++;
+                break;
+            case 4:
+                *sx += (10.0f - *sx) * 0.25f;
+                *sy += (10.0f - *sy) * 0.25f;
+                *alpha += (s32)((0 - *alpha) * 0.25f);
+                if (*alpha < 5) { *alpha = 0; (*state)++; }
+                break;
+            case 5:
+            case 0xF:
+            case 0x19:
+                done++;
+                break;
+            case 0xB:
+            case 0xE:
+            case 0x18:
+                *y += *vy;
+                *vy -= *gravity;
+                if (*y < -1000.0f) (*state)++;
+                break;
+            case 0xC:
+                if (*timer < 20) {
+                    (*timer)++;
+                } else {
+                    *gravity = 2.0f;
+                    *vy = 0.0f;
+                    *timer = 120;
+                    (*state)++;
+                }
+                break;
+            case 0x14:
+                if (*timer == 0) psndSFXOn(0x8D2);
+                if (--*timer < 0) { *timer = 0; (*state)++; }
+                break;
+            case 0x16:
+                *timer = 60;
+                (*state)++;
+                break;
+        }
+    }
+    if (done == (s32)effect[2] - 1) {
+        effDelete(effect);
+    } else {
+        dispEntry(2, 2, effMiniGameDisp, effect, dispCalcZ(pos));
+    }
 }
+

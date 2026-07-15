@@ -90,19 +90,209 @@ USER_FUNC(evt_cam_ctrl_onoff) {
 
 
 u8 evt_cam_shake(s32 pEvt, s32 param_2) {
+    extern f32 evtGetFloat(void* event, s32 arg);
+    extern void PSMTX44Trans(void* mtx, f32 x, f32 y, f32 z);
+    extern void padRumbleOn(s32 controller);
+    extern void padRumbleOff(s32 controller);
+    extern double sqrt(double value);
+    extern f32 float_0_80421044;
+    extern f32 float_13000_80421050;
+    extern f32 float_50_80421054;
+    extern f32 float_1_80421058;
+
+    s32* args = *(s32**)(pEvt + 0x18);
+    s32 camId = evtGetValue((void*)pEvt, args[0]);
+    f32 x = evtGetFloat((void*)pEvt, args[1]);
+    f32 y = evtGetFloat((void*)pEvt, args[2]);
+    s32 duration = evtGetValue((void*)pEvt, args[3]);
+    u64 now = *(u64*)pEvt;
+    s32 ticks = (*(u32*)0x800000F8) / 4000;
+    void* cam;
+    f32 len;
+    u32 onTime;
+    u32 offTime;
+    u64 elapsed;
+
+    if (param_2 != 0) {
+        *(s32*)(pEvt + 0x78) = 0;
+        *(u64*)(pEvt + 0x7C) = now;
+        *(s32*)(pEvt + 0x84) = 0;
+        *(u64*)(pEvt + 0x88) = now;
+    }
+
+    *(s32*)(pEvt + 0x78) = (*(s32*)(pEvt + 0x78) + 1) % 4;
+    if (*(s32*)(pEvt + 0x78) < 2) {
+        cam = camGetPtr(camId);
+        PSMTX44Trans((void*)((s32)cam + 0x1A0), x, y, float_0_80421044);
+    } else {
+        cam = camGetPtr(camId);
+        PSMTX44Trans((void*)((s32)cam + 0x1A0), -x, -y, float_0_80421044);
+    }
+
+    cam = camGetPtr(camId);
+    *(u16*)cam |= 8;
+
+    elapsed = now - *(u64*)(pEvt + 0x7C);
+    if ((duration != 0) && ((u32)(elapsed / ticks) > (u32)duration)) {
+        cam = camGetPtr(camId);
+        *(u16*)cam &= ~8;
+        padRumbleOff(0);
+        return 2;
+    }
+
+    len = (f32)sqrt((double)((x * x) + (y * y)));
+    onTime = (u32)(float_13000_80421050 * len);
+    offTime = (u32)(float_50_80421054 * (float_1_80421058 - len));
+    if ((onTime != 0) && (offTime != 0)) {
+        elapsed = now - *(u64*)(pEvt + 0x88);
+        if (*(s32*)(pEvt + 0x84) == 0) {
+            padRumbleOn(0);
+            if ((u32)(elapsed / ticks) > onTime) {
+                *(s32*)(pEvt + 0x84) = 1;
+                *(u64*)(pEvt + 0x88) = now;
+            }
+        } else {
+            padRumbleOff(0);
+            if ((u32)(elapsed / ticks) > offTime) {
+                *(s32*)(pEvt + 0x84) = 0;
+                *(u64*)(pEvt + 0x88) = now;
+            }
+        }
+    }
+
     return 0;
 }
-
 
 u8 evt_cam3d_evt_set_rel_dir(s32 pEvt) {
-    return 0;
-}
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+    typedef f32 Mtx[3][4];
 
+    extern void* gp;
+    extern f32 float_deg2rad_8042104c;
+    extern void PSMTXRotRad(Mtx m, double angle, char axis);
+    extern void PSMTXMultVec(Mtx m, Vec3* src, Vec3* dst);
+    extern void PSVECAdd(Vec3* a, Vec3* b, Vec3* out);
+
+    s32* args = *(s32**)(pEvt + 0x18);
+    f32 posX = (f32)evtGetValue((void*)pEvt, args[0]);
+    f32 posY = (f32)evtGetValue((void*)pEvt, args[1]);
+    f32 posZ = (f32)evtGetValue((void*)pEvt, args[2]);
+    f32 targetX = (f32)evtGetValue((void*)pEvt, args[3]);
+    f32 targetY = (f32)evtGetValue((void*)pEvt, args[4]);
+    f32 targetZ = (f32)evtGetValue((void*)pEvt, args[5]);
+    s32 time = evtGetValue((void*)pEvt, args[6]);
+    s32 type = evtGetValue((void*)pEvt, args[7]);
+    f32 angle = -*(f32*)((s32)camGetPtr(4) + 0x114);
+    void* cam = camGetPtr(4);
+    void* mario = marioGetPtr();
+    Vec3 target = { 0.0f, 0.0f, 0.0f };
+    Vec3 pos = { 0.0f, 0.0f, 0.0f };
+    Vec3 finalTarget;
+    Vec3 finalPos;
+    Mtx rot;
+
+    target.x = targetX;
+    target.y = targetY;
+    target.z = targetZ;
+    pos.x = posX;
+    pos.y = posY;
+    pos.z = posZ;
+
+    PSMTXRotRad(rot, (double)(float_deg2rad_8042104c * angle), 'Y');
+    PSMTXMultVec(rot, &pos, &pos);
+    PSMTXMultVec(rot, &target, &target);
+    PSVECAdd((Vec3*)((s32)mario + 0x8C), &target, &finalTarget);
+    PSVECAdd(&finalTarget, &pos, &finalPos);
+
+    *(u32*)((s32)cam + 0x58) = *(u32*)((s32)cam + 0x0C);
+    *(u32*)((s32)cam + 0x5C) = *(u32*)((s32)cam + 0x10);
+    *(u32*)((s32)cam + 0x60) = *(u32*)((s32)cam + 0x14);
+    *(u32*)((s32)cam + 0x64) = *(u32*)((s32)cam + 0x18);
+    *(u32*)((s32)cam + 0x68) = *(u32*)((s32)cam + 0x1C);
+    *(u32*)((s32)cam + 0x6C) = *(u32*)((s32)cam + 0x20);
+
+    *(u32*)((s32)cam + 0x40) = *(u32*)&finalPos.x;
+    *(u32*)((s32)cam + 0x44) = *(u32*)&finalPos.y;
+    *(u32*)((s32)cam + 0x48) = *(u32*)&finalPos.z;
+    *(u32*)((s32)cam + 0x4C) = *(u32*)&finalTarget.x;
+    *(u32*)((s32)cam + 0x50) = *(u32*)&finalTarget.y;
+    *(u32*)((s32)cam + 0x54) = *(u32*)&finalTarget.z;
+
+    *(u32*)((s32)cam + 0x70) = *(u32*)((s32)gp + 0x38);
+    *(u32*)((s32)cam + 0x74) = *(u32*)((s32)gp + 0x3C);
+    *(u32*)((s32)cam + 0x7C) = time * ((*(u32*)0x800000F8) / 4000);
+    *(u32*)((s32)cam + 0x78) = 0;
+    *(u16*)((s32)cam + 0x04) = 3;
+    *(u8*)((s32)cam + 0x80) = type;
+
+    return 2;
+}
 
 u8 evt_cam3d_evt_set_npc_rel(s32 pEvt) {
-    return 0;
-}
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
 
+    extern void* gp;
+    extern void* evtNpcNameToPtr(void* evt, char* name);
+    extern void PSVECAdd(Vec3* a, Vec3* b, Vec3* out);
+
+    s32* args = *(s32**)(pEvt + 0x18);
+    char* npcName = (char*)evtGetValue((void*)pEvt, args[0]);
+    f32 posX = (f32)evtGetValue((void*)pEvt, args[1]);
+    f32 posY = (f32)evtGetValue((void*)pEvt, args[2]);
+    f32 posZ = (f32)evtGetValue((void*)pEvt, args[3]);
+    f32 targetX = (f32)evtGetValue((void*)pEvt, args[4]);
+    f32 targetY = (f32)evtGetValue((void*)pEvt, args[5]);
+    f32 targetZ = (f32)evtGetValue((void*)pEvt, args[6]);
+    s32 time = evtGetValue((void*)pEvt, args[7]);
+    s32 type = evtGetValue((void*)pEvt, args[8]);
+    void* cam = camGetPtr(4);
+    void* npc = evtNpcNameToPtr((void*)pEvt, npcName);
+    Vec3 target;
+    Vec3 pos;
+    Vec3 finalTarget;
+    Vec3 finalPos;
+
+    target.x = targetX;
+    target.y = targetY;
+    target.z = targetZ;
+    pos.x = posX;
+    pos.y = posY;
+    pos.z = posZ;
+
+    PSVECAdd((Vec3*)((s32)npc + 0x8C), &target, &finalTarget);
+    PSVECAdd(&finalTarget, &pos, &finalPos);
+
+    *(u32*)((s32)cam + 0x58) = *(u32*)((s32)cam + 0x0C);
+    *(u32*)((s32)cam + 0x5C) = *(u32*)((s32)cam + 0x10);
+    *(u32*)((s32)cam + 0x60) = *(u32*)((s32)cam + 0x14);
+    *(u32*)((s32)cam + 0x64) = *(u32*)((s32)cam + 0x18);
+    *(u32*)((s32)cam + 0x68) = *(u32*)((s32)cam + 0x1C);
+    *(u32*)((s32)cam + 0x6C) = *(u32*)((s32)cam + 0x20);
+
+    *(u32*)((s32)cam + 0x40) = *(u32*)&finalPos.x;
+    *(u32*)((s32)cam + 0x44) = *(u32*)&finalPos.y;
+    *(u32*)((s32)cam + 0x48) = *(u32*)&finalPos.z;
+    *(u32*)((s32)cam + 0x4C) = *(u32*)&finalTarget.x;
+    *(u32*)((s32)cam + 0x50) = *(u32*)&finalTarget.y;
+    *(u32*)((s32)cam + 0x54) = *(u32*)&finalTarget.z;
+
+    *(u32*)((s32)cam + 0x70) = *(u32*)((s32)gp + 0x38);
+    *(u32*)((s32)cam + 0x74) = *(u32*)((s32)gp + 0x3C);
+    *(u32*)((s32)cam + 0x7C) = time * ((*(u32*)0x800000F8) / 4000);
+    *(u32*)((s32)cam + 0x78) = 0;
+    *(u16*)((s32)cam + 0x04) = 3;
+    *(u8*)((s32)cam + 0x80) = type;
+
+    return 2;
+}
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on

@@ -34,10 +34,95 @@ void _disp_item_icon(void* unused, void* work) {
 }
 
 
-u8 _throw_item_icon(void) {
-    return 0;
-}
+u8 _throw_item_icon(void* event, s32 isFirstCall) {
+    typedef struct Vec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
 
+    extern s32 evtGetValue(void* event, s32 arg);
+    extern f32 evtGetFloat(void* event, s32 arg);
+    extern void* BattleAlloc(s32 size);
+    extern void BattleFree(void* ptr);
+    extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern void btlMovePos(f32 distance, f32 angle, f32* x, f32* z);
+    extern s32 psndSFXOn_3D(char* name, Vec* pos);
+    extern void psndSFXOff(s32 sound);
+    extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
+    extern void _disp_item_icon(void* unused, void* work);
+    extern char str_SFX_ITEM_COOKING_THR_802f0730[];
+
+    s32* args;
+    s32 item;
+    f32 startX;
+    f32 startY;
+    f32 startZ;
+    f32 endX;
+    f32 endY;
+    f32 endZ;
+    f32* work;
+    f32 dist;
+    Vec pos;
+
+    args = *(s32**)((s32)event + 0x18);
+    item = evtGetValue(event, args[0]);
+    startX = evtGetFloat(event, args[1]);
+    startY = evtGetFloat(event, args[2]);
+    startZ = evtGetFloat(event, args[3]);
+    endX = evtGetFloat(event, args[4]);
+    endY = evtGetFloat(event, args[5]);
+    endZ = evtGetFloat(event, args[6]);
+
+    if (isFirstCall != 0) {
+        work = BattleAlloc(0x7C);
+        *(void**)((s32)event + 0x78) = work;
+        work[6] = endX;
+        work[7] = endY;
+        work[8] = endZ;
+        work[3] = startX;
+        work[4] = startY;
+        work[5] = startZ;
+        work[0] = startX;
+        work[1] = startY;
+        work[2] = startZ;
+        pos.x = startX;
+        pos.y = startY;
+        pos.z = startZ;
+        dist = distABf(work[0], work[2], work[6], work[8]);
+        work[9] = (f32)((s32)(dist / 15.0f) + 30);
+        work[11] = 0.5f;
+        work[12] = work[11] * -work[9] * 0.5f + (work[7] - work[1]) / -work[9];
+        work[10] = distABf(work[0], work[2], work[6], work[8]) / -work[9];
+        *(s32*)((s32)event + 0x7C) = item;
+        *(s32*)((s32)event + 0x80) = 0;
+        *(s32*)((s32)event + 0x84) = psndSFXOn_3D(str_SFX_ITEM_COOKING_THR_802f0730, &pos);
+    }
+
+    work = *(f32**)((s32)event + 0x78);
+    if (*(s32*)((s32)event + 0x80) == 0) {
+        work[4] += work[12];
+        work[12] -= work[11];
+        if (work[12] < 0.0f && work[4] < work[7]) {
+            work[4] = work[7];
+        }
+        btlMovePos(work[10], angleABf(work[0], work[2], work[6], work[8]), &work[3], &work[5]);
+        work[9] = (f32)((s32)work[9] - 1);
+        if ((s32)work[9] < 1) {
+            *(s32*)((s32)event + 0x80) = 0x01000000;
+            work[3] = work[6];
+            work[4] = work[7];
+            work[5] = work[8];
+        }
+        dispEntry(4, 1, _disp_item_icon, event, 900.0f);
+        return 0;
+    }
+
+    psndSFXOff(*(s32*)((s32)event + 0x84));
+    BattleFree(work);
+    return 2;
+}
 
 u32 _naniga_okorukana_check(void* event, s32 isFirstCall) {
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);

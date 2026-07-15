@@ -139,10 +139,88 @@ s32 _get_mario_hammer_lv(void* evt) {
 }
 
 
-u8 _tatsumaki_effect(void) {
+s32 _tatsumaki_effect(void* evt, s32 first) {
+    extern void* effKamekiTornadeN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale);
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+    extern f32 sinfd(f32 angle);
+    extern f32 cosfd(f32 angle);
+    extern s32 psndSFXOn(const char* name);
+    extern void psndSFX_pos(s32 id, void* pos);
+    extern void psndSFXOff(s32 id);
+    extern f32 float_0_804223b4;
+    extern f32 float_3_804223e8;
+    extern f32 float_80_804223ec;
+    extern const char str_SFX_BTL_JUMP_TATUMAK_802ef638[];
+    s32* args = *(s32**)((s32)evt + 0x18);
+    void* unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(evt, evtGetValue(evt, args[0])));
+    s32 state;
+    s32 timer;
+    f32 radius;
+    f32 angle;
+    f32 dx;
+    f32 dz;
+
+    if (first != 0) {
+        *(s32*)((s32)evt + 0x78) = 0;
+    }
+
+    state = *(s32*)((s32)evt + 0x78);
+    switch (state) {
+        case 0: {
+            f32 pos[3];
+
+            *(s32*)((s32)evt + 0x78) = state + 1;
+            *(s32*)((s32)evt + 0x7C) = 0;
+            *(s32*)((s32)evt + 0x80) = (s32)*(f32*)((s32)unit + 0x3C);
+            *(s32*)((s32)evt + 0x84) = (s32)*(f32*)((s32)unit + 0x40) - 40;
+            *(s32*)((s32)evt + 0x88) = (s32)*(f32*)((s32)unit + 0x44);
+            *(void**)((s32)evt + 0x8C) = effKamekiTornadeN64Entry(
+                0,
+                0x5A,
+                (f32)*(s32*)((s32)evt + 0x80),
+                (f32)*(s32*)((s32)evt + 0x84),
+                (f32)*(s32*)((s32)evt + 0x88),
+                float_3_804223e8);
+            *(void**)((s32)evt + 0x90) = effKamekiTornadeN64Entry(
+                0,
+                0x5A,
+                (f32)*(s32*)((s32)evt + 0x80),
+                (f32)*(s32*)((s32)evt + 0x84),
+                (f32)*(s32*)((s32)evt + 0x88),
+                float_3_804223e8);
+            *(s32*)((s32)evt + 0x94) = psndSFXOn(str_SFX_BTL_JUMP_TATUMAK_802ef638);
+            pos[0] = (f32)*(s32*)((s32)evt + 0x80);
+            pos[1] = (f32)*(s32*)((s32)evt + 0x84);
+            pos[2] = (f32)*(s32*)((s32)evt + 0x88);
+            psndSFX_pos(*(s32*)((s32)evt + 0x94), pos);
+            break;
+        }
+        case 1:
+            break;
+        default:
+            return 2;
+    }
+
+    timer = *(s32*)((s32)evt + 0x7C) + 1;
+    *(s32*)((s32)evt + 0x7C) = timer;
+    radius = intplGetValue(5, timer, 0x5A, float_0_804223b4, float_80_804223ec);
+    angle = (f32)(timer * 4);
+    dx = radius * cosfd(angle);
+    dz = radius * sinfd(angle);
+
+    *(f32*)((s32)*(void**)((s32)*(void**)((s32)evt + 0x8C) + 0xC) + 4) = (f32)*(s32*)((s32)evt + 0x80) + dx;
+    *(f32*)((s32)*(void**)((s32)*(void**)((s32)evt + 0x8C) + 0xC) + 8) = (f32)*(s32*)((s32)evt + 0x84);
+    *(f32*)((s32)*(void**)((s32)*(void**)((s32)evt + 0x8C) + 0xC) + 0xC) = (f32)*(s32*)((s32)evt + 0x88) + dz;
+    *(f32*)((s32)*(void**)((s32)*(void**)((s32)evt + 0x90) + 0xC) + 4) = (f32)*(s32*)((s32)evt + 0x80) - dx;
+    *(f32*)((s32)*(void**)((s32)*(void**)((s32)evt + 0x90) + 0xC) + 8) = (f32)*(s32*)((s32)evt + 0x84);
+    *(f32*)((s32)*(void**)((s32)*(void**)((s32)evt + 0x90) + 0xC) + 0xC) = (f32)*(s32*)((s32)evt + 0x88) - dz;
+
+    if (*(s32*)((s32)evt + 0x7C) >= 0x5A) {
+        psndSFXOff(*(s32*)((s32)evt + 0x94));
+        return 2;
+    }
     return 0;
 }
-
 
 s32 _hammer_star_effect(void* evt, s32 first) {
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);

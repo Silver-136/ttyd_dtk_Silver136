@@ -380,7 +380,6 @@ s32 scissor_control(s32 param_1, s32 reset) {
     extern f64 double_5_802fff48;
     extern const char str_SFX_BTL_SAC_KAKONDEP_802fff50[];
     extern void* gp;
-
     void* work;
     f32* points;
     s32 count;
@@ -397,29 +396,27 @@ s32 scissor_control(s32 param_1, s32 reset) {
     f32 ady;
     f32* cur;
     f32* last;
+    f32 zero;
     s32 (*intersect)(f32*, f32*, f32, f32, f32, f32, f32, f32, f32, f32);
-
     work = GetScissorPtr();
     points = *(f32**)((s32)work + 0x114);
-
     if (reset != 0) {
+        zero = float_0_80427c94;
         *(s32*)((s32)work + 0x9C) = 0;
-        *(f32*)((s32)work + 0xA8) = float_0_80427c94;
-        *(f32*)((s32)work + 0xA4) = float_0_80427c94;
-        *(f32*)((s32)work + 0xB0) = float_0_80427c94;
-        *(f32*)((s32)work + 0xAC) = float_0_80427c94;
+        *(f32*)((s32)work + 0xA8) = zero;
+        *(f32*)((s32)work + 0xA4) = zero;
+        *(f32*)((s32)work + 0xB0) = zero;
+        *(f32*)((s32)work + 0xAC) = zero;
         *(s32*)((s32)work + 0xA0) = 0;
-        *(f32*)((s32)work + 0xD4) = float_0_80427c94;
-        *(f32*)((s32)work + 0xD8) = float_0_80427c94;
+        *(f32*)((s32)work + 0xD4) = zero;
+        *(f32*)((s32)work + 0xD8) = zero;
         memset(points, 0, 0x1000);
         *(u32*)work &= ~1u;
     }
-
     *(f32*)((s32)work + 0xA4) = *(f32*)((s32)work + 0xAC);
     *(f32*)((s32)work + 0xA8) = *(f32*)((s32)work + 0xB0);
     *(f32*)((s32)work + 0xAC) = (f32)(s8)keyGetStickX(0);
     *(f32*)((s32)work + 0xB0) = (f32)(s8)keyGetStickY(0);
-
     oldLen = sqrt((*(f32*)((s32)work + 0xA4) * *(f32*)((s32)work + 0xA4)) +
                   (*(f32*)((s32)work + 0xA8) * *(f32*)((s32)work + 0xA8)));
     (void)oldLen;
@@ -429,46 +426,28 @@ s32 scissor_control(s32 param_1, s32 reset) {
         *(f32*)((s32)work + 0xD4) += *(f32*)((s32)work + 0xAC) / float_50_80427cd0;
         *(f32*)((s32)work + 0xD8) += *(f32*)((s32)work + 0xB0) / float_50_80427cd0;
     }
-
     *(f32*)((s32)work + 0xD4) *= float_0p86_80427cd4;
     *(f32*)((s32)work + 0xD8) *= float_0p86_80427cd4;
     *(f32*)((s32)work + 0xB4) += *(f32*)((s32)work + 0xD4);
     *(f32*)((s32)work + 0xB8) += *(f32*)((s32)work + 0xD8);
-
-    if (*(f32*)((s32)work + 0xB4) < float_neg300_80427cd8) {
-        *(f32*)((s32)work + 0xB4) = float_neg300_80427cd8;
-    }
-    if (*(f32*)((s32)work + 0xB4) > float_300_80427cdc) {
-        *(f32*)((s32)work + 0xB4) = float_300_80427cdc;
-    }
-    if (*(f32*)((s32)work + 0xB8) < float_neg200_80427ce0) {
-        *(f32*)((s32)work + 0xB8) = float_neg200_80427ce0;
-    }
-    if (*(f32*)((s32)work + 0xB8) > float_200_80427ce4) {
-        *(f32*)((s32)work + 0xB8) = float_200_80427ce4;
-    }
-
+    if (*(f32*)((s32)work + 0xB4) < float_neg300_80427cd8) *(f32*)((s32)work + 0xB4) = float_neg300_80427cd8;
+    if (*(f32*)((s32)work + 0xB4) > float_300_80427cdc) *(f32*)((s32)work + 0xB4) = float_300_80427cdc;
+    if (*(f32*)((s32)work + 0xB8) < float_neg200_80427ce0) *(f32*)((s32)work + 0xB8) = float_neg200_80427ce0;
+    if (*(f32*)((s32)work + 0xB8) > float_200_80427ce4) *(f32*)((s32)work + 0xB8) = float_200_80427ce4;
     if (*(s32*)((s32)work + 0x104) <= 0x3B) {
         *(s32*)((s32)work + 0x11C) = 6;
         return 2;
     }
-
     if (((*(s32*)((s32)gp + 0x1C) % 6) == 0) && (*(s32*)((s32)work + 0x9C) < 0x200)) {
         if ((*(f32*)((s32)work + 0xBC) != *(f32*)((s32)work + 0xB4)) ||
             (*(f32*)((s32)work + 0xC0) != *(f32*)((s32)work + 0xB8))) {
             dx = *(f32*)((s32)work + 0xB4) - *(f32*)((s32)work + 0xBC);
             dy = *(f32*)((s32)work + 0xB8) - *(f32*)((s32)work + 0xC0);
             adx = dx;
-            if (adx < float_0_80427c94) {
-                adx = -adx;
-            }
+            if (adx < float_0_80427c94) adx = -adx;
             ady = dy;
-            if (ady < float_0_80427c94) {
-                ady = -ady;
-            }
-            if ((f64)adx >= double_5_802fff48 || (f64)ady >= double_5_802fff48) {
-                psndSFXOn(str_SFX_BTL_SAC_KAKONDEP_802fff50);
-            }
+            if (ady < float_0_80427c94) ady = -ady;
+            if ((f64)adx >= double_5_802fff48 || (f64)ady >= double_5_802fff48) psndSFXOn(str_SFX_BTL_SAC_KAKONDEP_802fff50);
             count = *(s32*)((s32)work + 0x9C);
             points[count * 2] = *(f32*)((s32)work + 0xB4);
             points[count * 2 + 1] = *(f32*)((s32)work + 0xB8);
@@ -477,7 +456,6 @@ s32 scissor_control(s32 param_1, s32 reset) {
             *(s32*)((s32)work + 0x9C) = count + 1;
         }
     }
-
     count = *(s32*)((s32)work + 0x9C);
     if (count > 3) {
         intersect = (s32 (*)(f32*, f32*, f32, f32, f32, f32, f32, f32, f32, f32))scissor_intersection;
@@ -486,18 +464,9 @@ s32 scissor_control(s32 param_1, s32 reset) {
             cur = (f32*)((s32)points + off);
             last = &points[count * 2];
             if (intersect(&ix, &iy, cur[0], cur[1], cur[2], cur[3], last[-2], last[-1], last[0], last[1])) {
-                last[-2] = ix;
-                cur[0] = ix;
-                last[-1] = iy;
-                cur[1] = iy;
-                for (j = 0; j < i; j++) {
-                    points[j * 2] = cur[0];
-                    points[j * 2 + 1] = cur[1];
-                }
-                if (*(void**)((s32)work + 0x170) != 0) {
-                    smartFree(*(void**)((s32)work + 0x170));
-                    *(void**)((s32)work + 0x170) = 0;
-                }
+                last[-2] = ix; cur[0] = ix; last[-1] = iy; cur[1] = iy;
+                for (j = 0; j < i; j++) { points[j * 2] = cur[0]; points[j * 2 + 1] = cur[1]; }
+                if (*(void**)((s32)work + 0x170) != 0) { smartFree(*(void**)((s32)work + 0x170)); *(void**)((s32)work + 0x170) = 0; }
                 *(void**)((s32)work + 0x170) = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, 4, 0, 0), 1);
                 dispEntry(8, 0, scissor_capture, float_0_80427c94, 0);
                 return 2;
@@ -505,7 +474,6 @@ s32 scissor_control(s32 param_1, s32 reset) {
             off += 8;
         }
     }
-
     dispEntry(8, 0, scissor_disp_control, float_0_80427c94, 0);
     return 0;
 }
@@ -1311,6 +1279,65 @@ void tess(void* entries, s32 count) {
 }
 
 /* stub-fill: scissor_intersection | prototype_only | source_prototype */
-s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4) {
+s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2,
+                         f32 x3, f32 y3, f32 x4, f32 y4) {
+    f32 outX, outY;
+    f32 minX1 = x1 < x2 ? x1 : x2;
+    f32 maxX1 = x1 < x2 ? x2 : x1;
+    f32 minY1 = y1 < y2 ? y1 : y2;
+    f32 maxY1 = y1 < y2 ? y2 : y1;
+    f32 minX2 = x3 < x4 ? x3 : x4;
+    f32 maxX2 = x3 < x4 ? x4 : x3;
+    f32 minY2 = y3 < y4 ? y3 : y4;
+    f32 maxY2 = y3 < y4 ? y4 : y3;
+    f32 dx1 = x2 - x1;
+    f32 dy1 = y2 - y1;
+    f32 dx2 = x4 - x3;
+    f32 dy2 = y4 - y3;
+    s32 kind1 = dx1 == 0.0f;
+    s32 kind2 = dx2 == 0.0f;
+
+    if (dy1 == 0.0f) kind1 = 2;
+    if (dy2 == 0.0f) kind2 = 2;
+
+    if (kind1 == 0 && kind2 == 0) {
+        f32 denominator = dx1 * dy2 - dy1 * dx2;
+        f32 t;
+        if (denominator == 0.0f) denominator = 0.000001f;
+        t = ((x3 - x1) * dy2 - (y3 - y1) * dx2) / denominator;
+        outX = x1 + dx1 * t;
+        outY = y1 + dy1 * t;
+        return outX >= minX1 && outX <= maxX1 && outY >= minY1 && outY <= maxY1 &&
+               outX >= minX2 && outX <= maxX2 && outY >= minY2 && outY <= maxY2;
+    }
+    if (kind1 == 1 && kind2 == 0) {
+        outX = x1;
+        outY = y3 + dy2 / dx2 * (outX - x3);
+        return outX >= minX2 && outX <= maxX2 && outY >= minY1 && outY <= maxY1;
+    }
+    if (kind1 == 0 && kind2 == 1) {
+        outX = x3;
+        outY = y1 + dy1 / dx1 * (outX - x1);
+        return outX >= minX1 && outX <= maxX1 && outY >= minY2 && outY <= maxY2;
+    }
+    if (kind1 == 2 && kind2 == 0) {
+        outY = y1;
+        outX = x3 + dx2 / dy2 * (outY - y3);
+        return outY >= minY2 && outY <= maxY2 && outX >= minX1 && outX <= maxX1;
+    }
+    if (kind1 == 0 && kind2 == 2) {
+        outY = y3;
+        outX = x1 + dx1 / dy1 * (outY - y1);
+        return outY >= minY1 && outY <= maxY1 && outX >= minX2 && outX <= maxX2;
+    }
+    if (kind1 == 1 && kind2 == 1)
+        return x1 == x3 && ((y1 >= minY2 && y1 <= maxY2) || (y2 >= minY2 && y2 <= maxY2));
+    if (kind1 == 2 && kind2 == 2)
+        return y1 == y3 && ((x1 >= minX2 && x1 <= maxX2) || (x2 >= minX2 && x2 <= maxX2));
+    if (kind1 == 1 && kind2 == 2)
+        return x1 >= minX2 && x1 <= maxX2 && y3 >= minY1 && y3 <= maxY1;
+    if (kind1 == 2 && kind2 == 1)
+        return x3 >= minX1 && x3 <= maxX1 && y1 >= minY2 && y1 <= maxY2;
     return 0;
 }
+

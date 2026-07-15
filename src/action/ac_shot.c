@@ -70,9 +70,62 @@ void _ac_disp_init(void* wp) {
 
 
 s32 battleAcMain_Shot(void* battleWork) {
-    return 0;
-}
+    extern s32 BattlePadCheckNow(u32);
+    extern s32 BattlePadCheckTrigger(u32);
+    extern s32 irand(s32);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void _disp_target_mark(s32, void*);
+    extern void _disp_target_mark_afterimage(s32, void*);
+    u8* ac = (u8*)battleWork + 0x1F20;
+    s32 state = *(s32*)(ac + 0x20);
+    s32 timer = *(s32*)(ac + 0x24);
+    s32 result = 0;
 
+    switch (state) {
+        case 0:
+            *(s32*)(ac + 0x00) = irand(3) - 1;
+            *(s32*)(ac + 0x04) = irand(7) + 3;
+            *(f32*)(ac + 0x14) = -200.0f;
+            *(f32*)(ac + 0x18) = 0.0f;
+            *(s32*)(ac + 0x24) = 0;
+            *(s32*)(ac + 0x20) = 1;
+            break;
+        case 1:
+            if (BattlePadCheckTrigger(0x100) != 0) {
+                *(s32*)(ac + 0x20) = 99;
+                *(s32*)(ac + 0x24) = 0;
+            } else {
+                *(s32*)(ac + 0x24) = timer + 1;
+                *(f32*)(ac + 0x14) += 4.0f;
+            }
+            break;
+        case 99:
+            if (BattlePadCheckNow(0x100) != 0) {
+                *(s32*)(ac + 0x24) = timer + 1;
+                *(f32*)(ac + 0x18) += 1.0f;
+            } else {
+                result = timer;
+                *(s32*)(ac + 0x20) = 1000;
+                *(s32*)(ac + 0x24) = 0;
+            }
+            break;
+        case 1000:
+            *(s32*)(ac + 0x24) = timer + 1;
+            if (timer > 20) {
+                *(s32*)(ac + 0x20) = 1001;
+            }
+            break;
+        case 1001:
+            result = *(s32*)(ac + 0x04);
+            break;
+    }
+
+    dispEntry(2, 1, _disp_target_mark, battleWork, 900.0f);
+    if (state == 99) {
+        dispEntry(2, 1, _disp_target_mark_afterimage, battleWork, 900.0f);
+    }
+    return result;
+}
 
 void actionCommandDisp(f32 x, f32 y) {
     typedef f32 Mtx[3][4];

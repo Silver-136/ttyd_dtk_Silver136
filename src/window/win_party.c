@@ -22,20 +22,343 @@ void winPartyMain2(void* work) {
 }
 
 
-u8 winPartyDisp(s32 param_1, void* pWin, s32 param_3) {
-    return 0;
-}
+void winPartyDisp(s32 cameraId, void* pWin, s32 index) {
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
+    extern void winBgGX(f32 x, f32 y, void* win, s32 type);
+    extern void winKirinukiGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
+    extern void winIconInit(void);
+    extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
+    extern void winFontInit(void);
+    extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* text);
+    extern char* msgSearch(char* key);
+    Vec3 pos;
+    Vec3 scale;
+    u32 white = 0xFFFFFFFF;
+    f32 x = *(f32*)((s32)pWin + 0x30 + index * 0x18);
+    f32 y = *(f32*)((s32)pWin + 0x34 + index * 0x18);
+    s32 member;
+    s32 row;
 
+    winBgGX(x, y, pWin, 1);
+    winKirinukiGX(x - 150.0f, y + 140.0f, 415.0f, 210.0f, pWin, 0);
+    winIconInit();
+    scale.x = 1.0f;
+    scale.y = 1.0f;
+    scale.z = 1.0f;
+    pos.z = 0.0f;
+    for (row = 0; row < 7; row++) {
+        member = *(s32*)((s32)pWin + 0x1D0 + row * 4);
+        if (member < 0) continue;
+        pos.x = x - 120.0f + (row & 1) * 180.0f;
+        pos.y = y + 90.0f - (row >> 1) * 50.0f;
+        winIconSet(0x120 + member, &pos, &scale, &white);
+        winFontInit();
+        pos.x += 42.0f;
+        winFontSet(&pos, &scale, &white,
+                   msgSearch(*(char**)((s32)&winPartyDt[0] + member * 0x20 + 8)));
+    }
+    (void)cameraId;
+}
 
 s32 winPartyMain(void* pWin) {
+    extern void psndSFXOn(s32 soundId);
+    extern s32 pouchGetPartyAttackLv(s32 partyId);
+    extern void winMsgEntry(void* pWin, s32 arg1, char* msg, s32 arg3);
+    extern f32 float_360_80423550;
+    extern f32 float_neg200_804235fc;
+    extern f32 float_20_804234fc;
+    extern f32 float_neg10_80423600;
+    extern f32 float_neg26_80423604;
+    extern f32 float_5_804235b4;
+    extern WinPartyDtEntry winPartyDt[];
+
+    s32 prev;
+    s32 count;
+    s32 cursor;
+    s32 active;
+    s32 i;
+    s32 partyId;
+    u32 buttons;
+    u32 dirs;
+    char* msg;
+    void* entry;
+
+    if (*(s32*)((s32)pWin + 0x1E0) == 0) {
+        return -1;
+    }
+
+    switch (*(s32*)((s32)pWin + 0x200)) {
+        case 0:
+            buttons = *(u32*)((s32)pWin + 4);
+            if ((buttons & 0x100) != 0) {
+                *(s32*)((s32)pWin + 0x19C) = 1;
+                return -2;
+            }
+            if ((buttons & 0x400) != 0) {
+                *(s32*)((s32)pWin + 0x200) = 1;
+                *(s32*)((s32)pWin + 0x208) = 0;
+                psndSFXOn(0x20012);
+            } else {
+                if ((buttons & 0x200) != 0) {
+                    psndSFXOn(0x20013);
+                    *(s32*)((s32)pWin + 0x19C) = 0;
+                    return -1;
+                }
+                if ((buttons & 0x1000) != 0) {
+                    *(s32*)((s32)pWin + 0x19C) = 0;
+                    return -2;
+                }
+                dirs = *(u32*)((s32)pWin + 0x10);
+                if ((dirs & 0x4000) != 0) {
+                    prev = *(s32*)((s32)pWin + 0x1DC);
+                    *(s32*)((s32)pWin + 0x1DC) = prev - 1;
+                    while (*(s32*)((s32)pWin + 0x1DC) < 0) {
+                        *(s32*)((s32)pWin + 0x1DC) += *(s32*)((s32)pWin + 0x1E0);
+                    }
+                    count = *(s32*)((s32)pWin + 0x1E0);
+                    cursor = *(s32*)((s32)pWin + 0x1DC);
+                    *(f32*)((s32)pWin + 0x1E8) =
+                        (float_360_80423550 / (f32)count) * (f32)cursor;
+                    while (*(f32*)((s32)pWin + 0x1E4) < *(f32*)((s32)pWin + 0x1E8)) {
+                        *(f32*)((s32)pWin + 0x1E4) += float_360_80423550;
+                    }
+                    if (prev != *(s32*)((s32)pWin + 0x1DC)) {
+                        psndSFXOn(0x209D6);
+                    }
+                } else if ((dirs & 0x8000) != 0) {
+                    prev = *(s32*)((s32)pWin + 0x1DC);
+                    *(s32*)((s32)pWin + 0x1DC) = prev + 1;
+                    count = *(s32*)((s32)pWin + 0x1E0);
+                    while (*(s32*)((s32)pWin + 0x1DC) > count - 1) {
+                        *(s32*)((s32)pWin + 0x1DC) -= count;
+                    }
+                    cursor = *(s32*)((s32)pWin + 0x1DC);
+                    *(f32*)((s32)pWin + 0x1E8) =
+                        (float_360_80423550 / (f32)count) * (f32)cursor;
+                    while (*(f32*)((s32)pWin + 0x1E8) < *(f32*)((s32)pWin + 0x1E4)) {
+                        *(f32*)((s32)pWin + 0x1E4) -= float_360_80423550;
+                    }
+                    if (prev != *(s32*)((s32)pWin + 0x1DC)) {
+                        psndSFXOn(0x209D6);
+                    }
+                }
+            }
+
+            partyId = *(s32*)((s32)pWin + 0x1BC + (*(s32*)((s32)pWin + 0x1DC) * 4));
+            entry = winPartyDt;
+            active = 0;
+            for (i = 0; i < 8; i++, active++, entry = (void*)((s32)entry + 0x24)) {
+                if (partyId == *(s32*)entry) {
+                    *(s32*)((s32)pWin + 0x1D8) = active;
+                    break;
+                }
+            }
+
+            *(f32*)((s32)pWin + 0x158) = float_neg200_804235fc;
+            *(f32*)((s32)pWin + 0x15C) = float_20_804234fc;
+            active = *(s32*)((s32)pWin + 0x1D8);
+            partyId = *(s32*)((s32)winPartyDt + active * 0x24);
+            *(s32*)((s32)pWin + 0x204) = pouchGetPartyAttackLv(partyId) + 2;
+            msg = *(char**)((s32)winPartyDt + active * 0x24 + 0xC);
+            winMsgEntry(pWin, 0, msg, 0);
+            break;
+
+        case 1:
+            dirs = *(u32*)((s32)pWin + 0x10);
+            if ((dirs & 0x1000) != 0) {
+                (*(s32*)((s32)pWin + 0x208))--;
+                if (*(s32*)((s32)pWin + 0x208) < 0) {
+                    *(s32*)((s32)pWin + 0x208) = *(s32*)((s32)pWin + 0x204) - 1;
+                }
+                psndSFXOn(0x20005);
+            } else if ((dirs & 0x2000) != 0) {
+                (*(s32*)((s32)pWin + 0x208))++;
+                if (*(s32*)((s32)pWin + 0x208) >= *(s32*)((s32)pWin + 0x204)) {
+                    *(s32*)((s32)pWin + 0x208) = 0;
+                }
+                psndSFXOn(0x20005);
+            } else {
+                buttons = *(u32*)((s32)pWin + 4);
+                if ((buttons & 0x200) != 0) {
+                    *(s32*)((s32)pWin + 0x200) = 0;
+                    psndSFXOn(0x20013);
+                } else if ((buttons & 0x1000) != 0) {
+                    *(s32*)((s32)pWin + 0x19C) = 0;
+                    return -2;
+                }
+            }
+            active = *(s32*)((s32)pWin + 0x1D8);
+            cursor = *(s32*)((s32)pWin + 0x208);
+            *(f32*)((s32)pWin + 0x158) = float_neg10_80423600;
+            *(f32*)((s32)pWin + 0x15C) = float_neg26_80423604 * (f32)cursor + float_5_804235b4;
+            msg = *(char**)(*(s32*)((s32)winPartyDt + active * 0x24 + 0x10) + cursor * 4 + 4);
+            winMsgEntry(pWin, 0, msg, 0);
+            break;
+    }
     return 0;
 }
 
+void winPartyInit(void* pWin) {
+    extern void* pouchGetPtr(void);
+    extern s32 pouchGetPartyColor(s32 id);
+    extern s32 animPoseEntry(char* name, s32 arg);
+    extern void animPoseSetAnim(s32 poseId, char* anim, s32 loop);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
+    extern s32 marioBgmodeChk(void);
+    extern s32 marioGetParty(void);
+    extern void* marioGetPtr(void);
+    extern s32 pouchGetPartyAttackLv(s32 partyId);
+    extern WinPartyDtEntry winPartyDt[];
+    extern f32 float_360_80423550;
+    extern char str_EFF_m_yoshi_802f4e90[];
+    extern char str_EFF_m_yoshi2_802f51f0[];
+    extern char str_EFF_m_yoshi3_802f5200[];
+    extern char str_EFF_m_yoshi4_802f5210[];
+    extern char str_EFF_m_yoshi5_802f5220[];
+    extern char str_EFF_m_yoshi6_802f5230[];
+    extern char str_EFF_m_yoshi7_802f5240[];
+    extern char str_W_1_804234b8[];
+    extern char str_R_5_804234c8[];
+    extern char str_R_6_80423568[];
+    extern char str_R_7_8042356c[];
+    extern char str_R_8_80423570[];
+    extern char str_R_9_80423574[];
+    extern char str_R_10_80423578[];
+    extern char str_R_11_80423580[];
 
-u8 winPartyInit(void* pWin) {
-    return 0;
+    void* pouch;
+    void* dt;
+    void* scan;
+    char* eff;
+    char* anim;
+    s32 i;
+    s32 j;
+    s32 partyId;
+    s32 poseId;
+    s32 color;
+    s32 active;
+    s32 currentParty;
+    f32 angle;
+
+    pouch = pouchGetPtr();
+    dt = winPartyDt;
+    *(s32*)((s32)pWin + 0x1E0) = 0;
+
+    for (i = 0; i < 7; i++) {
+        partyId = *(s32*)((s32)dt + i * 0x24);
+        scan = pouch;
+        for (j = 0; j < 8; j++) {
+            if (j == partyId &&
+                (*(u16*)((s32)scan + j * 0xE) & 1) != 0 &&
+                (*(u16*)((s32)scan + j * 0xE) & 2) == 0) {
+                if ((*(u16*)pWin & 0x2000) == 0) {
+                    if (j == 4) {
+                        color = pouchGetPartyColor(4);
+                        switch (color) {
+                            case 0:
+                                eff = str_EFF_m_yoshi_802f4e90;
+                                break;
+                            case 1:
+                                eff = str_EFF_m_yoshi2_802f51f0;
+                                break;
+                            case 2:
+                                eff = str_EFF_m_yoshi3_802f5200;
+                                break;
+                            case 3:
+                                eff = str_EFF_m_yoshi4_802f5210;
+                                break;
+                            case 4:
+                                eff = str_EFF_m_yoshi5_802f5220;
+                                break;
+                            case 5:
+                                eff = str_EFF_m_yoshi6_802f5230;
+                                break;
+                            default:
+                                eff = str_EFF_m_yoshi7_802f5240;
+                                break;
+                        }
+                        anim = str_W_1_804234b8;
+                    } else {
+                        eff = *(char**)((s32)dt + i * 0x24 + 0x10);
+                        anim = *(char**)((s32)dt + i * 0x24 + 0x14);
+                    }
+                } else {
+                    eff = *(char**)((s32)dt + i * 0x24 + 0x18);
+                    color = pouchGetPartyColor(4);
+                    switch (color) {
+                        case 0:
+                            anim = str_R_5_804234c8;
+                            break;
+                        case 1:
+                            anim = str_R_6_80423568;
+                            break;
+                        case 2:
+                            anim = str_R_7_8042356c;
+                            break;
+                        case 3:
+                            anim = str_R_8_80423570;
+                            break;
+                        case 4:
+                            anim = str_R_9_80423574;
+                            break;
+                        case 5:
+                            anim = str_R_10_80423578;
+                            break;
+                        default:
+                            anim = str_R_11_80423580;
+                            break;
+                    }
+                }
+                poseId = animPoseEntry(eff, 0);
+                *(s32*)((s32)pWin + 0x1A0 + *(s32*)((s32)pWin + 0x1E0) * 4) = poseId;
+                animPoseSetAnim(poseId, anim, 1);
+                animPoseSetMaterialFlagOn(poseId, 0x1800);
+                *(s32*)((s32)pWin + 0x1BC + *(s32*)((s32)pWin + 0x1E0) * 4) = j;
+                (*(s32*)((s32)pWin + 0x1E0))++;
+            }
+        }
+    }
+
+    *(s32*)((s32)pWin + 0x1DC) = 0;
+    for (i = 0; i < *(s32*)((s32)pWin + 0x1E0); i++) {
+        if (marioBgmodeChk() == 0) {
+            currentParty = marioGetParty();
+        } else {
+            currentParty = *(s8*)((s32)marioGetPtr() + 0x247);
+        }
+        if (currentParty == *(s32*)((s32)pWin + 0x1BC + i * 4)) {
+            *(s32*)((s32)pWin + 0x1DC) = i;
+            break;
+        }
+    }
+
+    active = 0;
+    for (i = 0; i < 8; i++) {
+        if (*(s32*)((s32)pWin + 0x1BC + *(s32*)((s32)pWin + 0x1DC) * 4) ==
+            *(s32*)((s32)dt + i * 0x24)) {
+            active = i;
+            break;
+        }
+    }
+    *(s32*)((s32)pWin + 0x1D8) = active;
+    *(s32*)((s32)pWin + 0x1FC) = *(s32*)((s32)pWin + 0x1DC);
+    angle = (float_360_80423550 / (f32)*(s32*)((s32)pWin + 0x1E0)) *
+            (f32)*(s32*)((s32)pWin + 0x1DC);
+    *(f32*)((s32)pWin + 0x1E8) = angle;
+    *(f32*)((s32)pWin + 0x1E4) = angle;
+    *(s32*)((s32)pWin + 0x200) = 0;
+    *(s32*)((s32)pWin + 0x204) =
+        pouchGetPartyAttackLv(*(s32*)((s32)dt + active * 0x24)) + 2;
+
+    color = pouchGetPartyColor(4);
+    if (color < 0) {
+        color = 6;
+    }
+    if (color > 6) {
+        color = 6;
+    }
+    *(s32*)((s32)winPartyDt + 0x70) = 0x160 + color;
 }
-
 
 void winPartyInit2(void* pWin) {
     f32 angle;

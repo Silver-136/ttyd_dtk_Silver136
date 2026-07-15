@@ -98,15 +98,193 @@ USER_FUNC(npc_check_wall_stop) {
 #pragma use_lmw_stmw on
 
 
-u8 _2d_dead_jump(void) {
-    return 0;
+s32 _2d_dead_jump(EventEntry* event, s32 first) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+    extern void* evtNpcNameToPtr(EventEntry* event, const void* name);
+    extern void PSVECSubtract(void* a, void* b, void* out);
+    extern f32 angleABf(f32 x0, f32 z0, f32 x1, f32 z1);
+    extern double sin(double);
+    extern double cos(double);
+    extern f32 float_1000_80421fd0;
+    extern f32 float_6p2832_80421fdc;
+    extern f32 float_360_80421fe0;
+    extern f32 float_0_80421f8c;
+    extern f32 float_1_80421f88;
+    extern f32 float_0p5_80421fd4;
+    extern f32 float_neg980_80421fd8;
+    s32* args = event->args;
+    void* name = (void*)evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+    f32 time = (f32)evtGetValue(event, args[4]) / float_1000_80421fd0;
+    f32 speed = evtGetFloat(event, args[5]);
+    f32 height = evtGetFloat(event, args[6]);
+    f32 floorY = (f32)evtGetValue(event, args[7]);
+    void* npc = evtNpcNameToPtr(event, name);
+    s32 ret = 0;
+
+    *(u32*)((s32)npc + 0x1D4) |= 0x10;
+    *(u32*)((s32)npc + 0x1D4) |= 0x1000;
+
+    if (first == 0) {
+        f32 angle = (float_6p2832_80421fdc * *(f32*)((s32)npc + 0x1AC)) / float_360_80421fe0;
+        *(f32*)((s32)npc + 0x1C0) += *(f32*)((s32)npc + 0x21C) * *(f32*)((s32)npc + 0x1B0) * (f32)sin(angle);
+        *(f32*)((s32)npc + 0x1C4) += *(f32*)((s32)npc + 0x21C) * *(f32*)((s32)npc + 0x1B0) * -(f32)cos(angle);
+        if (*(f32*)((s32)npc + 0x90) < floorY) {
+            *(f32*)((s32)npc + 0x1B0) = float_0_80421f8c;
+            *(f32*)((s32)npc + 0x1B8) = float_0_80421f8c;
+            *(f32*)((s32)npc + 0x1C8) = float_1_80421f88;
+            *(f32*)((s32)npc + 0x1C4) = float_1_80421f88;
+            ret = 1;
+        }
+    } else {
+        f32 diff[3];
+        f32 dy;
+
+        *(u32*)npc |= 0x20000;
+        *(u32*)npc &= 0xBFFFFFEF;
+        *(s32*)((s32)npc + 0x18C) = 0;
+        *(s32*)((s32)npc + 0x188) = 0;
+        *(s32*)((s32)npc + 0x17C) = 0;
+        *(s32*)((s32)npc + 0x178) = 0;
+        *(s32*)((s32)npc + 0x108) = 0;
+
+        *(f32*)((s32)npc + 0x164) = x;
+        *(f32*)((s32)npc + 0x168) = y;
+        *(f32*)((s32)npc + 0x16C) = z;
+        *(u32*)((s32)npc + 0x158) = *(u32*)((s32)npc + 0x8C);
+        *(u32*)((s32)npc + 0x15C) = *(u32*)((s32)npc + 0x90);
+        *(u32*)((s32)npc + 0x160) = *(u32*)((s32)npc + 0x94);
+        PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x158), diff);
+        *(f32*)((s32)npc + 0x1AC) = angleABf(float_0_80421f8c, float_0_80421f8c, diff[0], diff[2]);
+        if (time <= float_0_80421f8c) {
+            *(f32*)((s32)npc + 0x1B0) = speed;
+        } else {
+            f32 dx = x - *(f32*)((s32)npc + 0x8C);
+            if (dx < float_0_80421f8c) {
+                dx = -dx;
+            }
+            *(f32*)((s32)npc + 0x1B0) = dx / time;
+        }
+
+        *(f32*)((s32)npc + 0x1C0) = float_0_80421f8c;
+        *(f32*)((s32)npc + 0x1B8) = float_0_80421f8c;
+        *(f32*)((s32)npc + 0x1C4) = float_0_80421f8c;
+        *(f32*)((s32)npc + 0x1C8) = float_1_80421f88;
+        dy = *(f32*)((s32)npc + 0x168) - *(f32*)((s32)npc + 0x15C);
+        if (height == float_0_80421f8c) {
+            if (float_0_80421f8c <= dy) {
+                return 1;
+            }
+        } else {
+            f32 h = height;
+            if (float_0_80421f8c < dy) {
+                h = height + dy;
+            }
+            *(f32*)((s32)npc + 0x1B8) = float_0_80421f8c;
+            if (time == float_0_80421f8c) {
+                *(f32*)((s32)npc + 0x1B8) = height;
+            } else {
+                f32 half = float_0p5_80421fd4 * time;
+                f32 accel = -(time * float_neg980_80421fd8 * *(f32*)((s32)npc + 0x1C4) * time) / time;
+                f32 denom;
+                *(f32*)((s32)npc + 0x1B8) = accel;
+                denom = accel * half + half * float_neg980_80421fd8 * *(f32*)((s32)npc + 0x1C4) * half;
+                if (float_0_80421f8c != denom) {
+                    *(f32*)((s32)npc + 0x1C8) = h / denom;
+                }
+            }
+        }
+    }
+    return ret;
 }
 
+s32 chain_main(EventEntry* event) {
+    extern f32 float_0p25_80421fc0;
+    extern f32 float_10_80421fc4;
+    extern f32 float_300_80421fc8;
+    extern f32 float_1_80421f88;
+    extern double sqrt(double);
+    void* npc = evtNpcNameToPtr(event, str_me_80421f30);
+    void* tail = *(void**)((s32)npc + 0x33C);
+    f32 dx = *(f32*)((s32)npc + 0x8C) - *(f32*)((s32)tail + 0x8C);
+    f32 dy = *(f32*)((s32)npc + 0x90) - *(f32*)((s32)tail + 0x90);
+    f32 dz = *(f32*)((s32)npc + 0x94) - *(f32*)((s32)tail + 0x94);
+    f32 len = (f32)sqrt(dx * dx + dy * dy + dz * dz);
+    f32 step = len * float_0p25_80421fc0;
+    f32 fall;
+    s32 i;
+    void* base;
 
-u8 chain_main(void) {
-    return 0;
+    if (step < float_10_80421fc4) {
+        step = float_10_80421fc4;
+    }
+    fall = float_300_80421fc8 / (step * step);
+
+    {
+        void* seg = *(void**)((s32)npc + 0x330);
+        f32 x = *(f32*)((s32)seg + 0x8C);
+        f32 y = *(f32*)((s32)seg + 0x90) - fall;
+        f32 z = *(f32*)((s32)seg + 0x94);
+        f32 vx = *(f32*)((s32)npc + 0x8C) - x;
+        f32 vy = *(f32*)((s32)npc + 0x90) - y;
+        f32 vz = *(f32*)((s32)npc + 0x94) - z;
+        f32 dist = (f32)sqrt(vx * vx + vy * vy + vz * vz);
+        f32 scale = float_1_80421f88 - step / dist;
+        y += vy * scale;
+        if (y < *(f32*)((s32)npc + 0x200)) {
+            y = *(f32*)((s32)npc + 0x200);
+        }
+        *(f32*)((s32)seg + 0x8C) = x + vx * scale;
+        *(f32*)((s32)seg + 0x90) = y;
+        *(f32*)((s32)seg + 0x94) = z + vz * scale;
+    }
+
+    base = npc;
+    for (i = 0; i < 2; i++, base = (void*)((s32)base + 4)) {
+        void* prev = *(void**)((s32)base + 0x330);
+        void* seg = *(void**)((s32)base + 0x334);
+        f32 x = *(f32*)((s32)seg + 0x8C);
+        f32 y = *(f32*)((s32)seg + 0x90) - fall;
+        f32 z = *(f32*)((s32)seg + 0x94);
+        f32 vx = *(f32*)((s32)prev + 0x8C) - x;
+        f32 vy = *(f32*)((s32)prev + 0x90) - y;
+        f32 vz = *(f32*)((s32)prev + 0x94) - z;
+        f32 dist = (f32)sqrt(vx * vx + vy * vy + vz * vz);
+        f32 scale = float_1_80421f88 - step / dist;
+        y += vy * scale;
+        if (y < *(f32*)((s32)npc + 0x200)) {
+            y = *(f32*)((s32)npc + 0x200);
+        }
+        *(f32*)((s32)seg + 0x8C) = x + vx * scale;
+        *(f32*)((s32)seg + 0x90) = y;
+        *(f32*)((s32)seg + 0x94) = z + vz * scale;
+    }
+
+    base = (void*)((s32)npc + 0xC);
+    for (i = 3; i > 0; i--, base = (void*)((s32)base - 4)) {
+        void* seg = *(void**)((s32)base + 0x32C);
+        void* prev = *(void**)((s32)base + 0x330);
+        f32 x = *(f32*)((s32)seg + 0x8C);
+        f32 y = *(f32*)((s32)seg + 0x90) - fall;
+        f32 z = *(f32*)((s32)seg + 0x94);
+        f32 vx = *(f32*)((s32)prev + 0x8C) - x;
+        f32 vy = *(f32*)((s32)prev + 0x90) - y;
+        f32 vz = *(f32*)((s32)prev + 0x94) - z;
+        f32 dist = (f32)sqrt(vx * vx + vy * vy + vz * vz);
+        f32 scale = float_1_80421f88 - step / dist;
+        y += vy * scale;
+        if (y < *(f32*)((s32)npc + 0x200)) {
+            y = *(f32*)((s32)npc + 0x200);
+        }
+        *(f32*)((s32)seg + 0x8C) = x + vx * scale;
+        *(f32*)((s32)seg + 0x90) = y;
+        *(f32*)((s32)seg + 0x94) = z + vz * scale;
+    }
+    return 2;
 }
-
 
 u8 zakoEntryDokan(void) {
     return 0;

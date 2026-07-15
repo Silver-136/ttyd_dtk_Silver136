@@ -14,19 +14,331 @@ void marioStDisp(void) {
 
 
 u8 viPostCallback(s32 param_1) {
+    extern s64 OSGetTime(void);
+    extern s32 winCheck(void);
+    extern u32 battleDisableHResetCheck(void);
+    extern u32 OSGetResetButtonState(void);
+    extern u32 OSGetResetCode(void);
+    extern u32 keyGetButton(s32);
+    extern s32 DVDGetDriveStatus(void);
+    extern u8 gcRumbleCheck(void);
+    extern void psndMainInt(void);
+    s64 now;
+    s64 delta;
+    u32 buttons;
+
+    now = OSGetTime();
+    delta = now - *(s64*)((s32)gp + 0x30);
+    *(s64*)((s32)gp + 0x28) = delta;
+    *(s64*)((s32)gp + 0x20) += delta;
+    if (*(s64*)((s32)gp + 0x20) > ((s64)(*(u32*)0x800000F8 >> 2) * 359999999)) {
+        *(s64*)((s32)gp + 0x20) = (s64)(*(u32*)0x800000F8 >> 2) * 359999999;
+    }
+    if (*(s32*)((s32)gp + 0x10) == 0 && winCheck() == 0) {
+        if ((*(u32*)((s32)gp + 0x18) & 8) == 0) {
+            *(s64*)((s32)gp + 0x60) += *(s64*)((s32)gp + 0x28);
+        }
+        if ((*(u32*)((s32)gp + 0x18) & 4) == 0) {
+            *(s64*)((s32)gp + 0x58) += *(s64*)((s32)gp + 0x28);
+        }
+        if ((*(u32*)((s32)gp + 0x18) & 2) == 0) {
+            *(s64*)((s32)gp + 0x50) += *(s64*)((s32)gp + 0x28);
+        }
+        if ((*(u32*)((s32)gp + 0x18) & 1) == 0) {
+            *(s64*)((s32)gp + 0x48) += *(s64*)((s32)gp + 0x28);
+        }
+        *(s64*)((s32)gp + 0x38) += *(s64*)((s32)gp + 0x28);
+        if (*(s32*)((s32)gp + 0x14) == 0) {
+            *(s64*)((s32)gp + 0x40) += *(s64*)((s32)gp + 0x28);
+        }
+    }
+    *(s64*)((s32)gp + 0x30) = now;
+    *(s32*)((s32)gp + 0x1C) = param_1;
+    if (battleDisableHResetCheck() == 0) {
+        if (*(s32*)((s32)gp + 0x127C) == 0) {
+            if (OSGetResetButtonState() != 0) {
+                *(s32*)((s32)gp + 0x127C) = 1;
+            }
+        } else if (OSGetResetButtonState() == 0) {
+            *(s32*)((s32)gp + 0x1278) = 1;
+        }
+        if (*(s32*)((s32)gp + 0x1324) != 0) {
+            if ((s32)OSGetResetCode() < 0 && *(s32*)((s32)gp + 0x1290) == 0) {
+                buttons = keyGetButton(0);
+                if ((buttons & 0x1600) == 0x1600) {
+                    *(s32*)((s32)gp + 0x1278) = 0;
+                    gcRumbleCheck();
+                    psndMainInt();
+                    return 0;
+                }
+                *(s32*)((s32)gp + 0x1290) = 1;
+            }
+            buttons = keyGetButton(0);
+            if ((buttons & 0x1600) == 0x1600) {
+                if (*(s32*)((s32)gp + 0x1280) == 0) {
+                    *(s32*)((s32)gp + 0x1280) = 1;
+                    now = OSGetTime();
+                    *(s32*)((s32)gp + 0x1288) = (s32)(now >> 32);
+                    *(s32*)((s32)gp + 0x128C) = (s32)now;
+                }
+                now = OSGetTime();
+                if ((now - *(s64*)((s32)gp + 0x1288)) / (*(u32*)0x800000F8 / 4000) > 500) {
+                    *(s32*)((s32)gp + 0x1278) = 1;
+                }
+            } else {
+                *(s32*)((s32)gp + 0x1280) = 0;
+            }
+            if (DVDGetDriveStatus() == -1) {
+                *(s32*)((s32)gp + 0x1278) = 0;
+            }
+        }
+    } else {
+        *(s32*)((s32)gp + 0x127C) = 0;
+    }
+    gcRumbleCheck();
+    psndMainInt();
     return 0;
 }
-
 
 void marioStInit(void) {
-    ;
-}
+    extern u32 OSGetResetCode(void);
+    extern void DEMOInit(void*);
+    extern void DEMOEnableGPHangWorkaround(s32);
+    extern void N_setupErrorHandler(void);
+    extern void DEMOPadInit(void);
+    extern void GXSetCopyClear(void*, u32);
+    extern void __GXSetIndirectMask(u32);
+    extern void* memset(void*, s32, u32);
+    extern void* DEMOGetRenderModeObj(void);
+    extern s64 OSGetTime(void);
+    extern s32 VIGetTvFormat(void);
+    extern void badgeShop_init(void);
+    extern void yuugijou_init(void);
+    extern void johoya_init(void);
+    extern void* __memAlloc(s32, u32);
+    extern void VISetPostRetraceCallback(void*);
+    extern void romFontInit(void);
+    extern s32 OSCreateThread(void*, void*, void*, void*, u32, s32, s16);
+    extern s32 OSResumeThread(void*);
+    extern void DVDMgrInit(void);
+    extern void psndInit(void);
+    extern void aramMgrInit(void);
+    extern void fileInit(void);
+    extern void smartInit(void);
+    extern void dispInit(void);
+    extern void camInit(void);
+    extern void fontmgrInit(void);
+    extern void windowInit(void);
+    extern void mapInit(void);
+    extern void hitInit(void);
+    extern void itemInit(void);
+    extern void iconInit(void);
+    extern void fadeInit(void);
+    extern void bgInit(void);
+    extern void shadowInit(void);
+    extern void evtmgrInit(void);
+    extern void animInit(void);
+    extern void msgInit(void);
+    extern void npcInit(void);
+    extern void mobjInit(void);
+    extern void effInit(void);
+    extern void marioInit(void);
+    extern void caseInit(void);
+    extern void imgInit(void);
+    extern void lightInit(void);
+    extern void offscreenInit(void);
+    extern void arcInit(void);
+    extern void extInit(void);
+    extern void swInit(void);
+    extern void cardInit(void);
+    extern void winInit(void);
+    extern void statusWinInit(void);
+    extern void envInit(void);
+    extern void countDownInit(void);
+    extern void nameEntInit(void);
+    extern void winMgrInit(void);
+    extern void seqInit_MARIOSTORY(void);
+    extern void seqSetSeq(s32, void*, void*);
+    extern u32 OSGetSoundMode(void);
+    extern void SoundSetOutputMode(s32);
+    extern u8 GXNtsc480ProgMarioSt[];
+    extern u8 GXNtsc480IntDfMarioSt[];
+    extern u32 unk_80429568;
+    extern s32 DvdCheckTreadOn;
+    extern u8 DvdCheckThread[];
+    extern u8 gcDvdCheckThread(void);
+    extern u8 viPostCallback(s32);
+    void* rmode;
+    s64 now;
+    u32 reset;
+    u32 clear;
 
+    reset = OSGetResetCode();
+    if ((s32)reset < 0 && (OSGetResetCode() & 2) == 0) {
+        if (OSGetResetCode() & 1) {
+            rmode = GXNtsc480ProgMarioSt;
+        } else {
+            rmode = GXNtsc480IntDfMarioSt;
+        }
+    } else {
+        rmode = GXNtsc480IntDfMarioSt;
+    }
+    DEMOInit(rmode);
+    DEMOEnableGPHangWorkaround(5);
+    N_setupErrorHandler();
+    DEMOPadInit();
+    clear = unk_80429568;
+    GXSetCopyClear(&clear, 0xFFFFFF);
+    __GXSetIndirectMask(0);
+    memset(gp, 0, 0x13D8);
+    *(u16*)((s32)gp + 0x1268) = *(u16*)((s32)DEMOGetRenderModeObj() + 4);
+    *(u16*)((s32)gp + 0x126A) = *(u16*)((s32)DEMOGetRenderModeObj() + 6);
+    *(s32*)((s32)gp + 0x131C) = 1;
+    *(s32*)((s32)gp + 0x1274) = 0;
+    *(s64*)((s32)gp + 0x20) = 0;
+    *(s64*)((s32)gp + 0x28) = 0;
+    now = OSGetTime();
+    *(s64*)((s32)gp + 0x30) = now;
+    *(s64*)((s32)gp + 0x40) = 0;
+    *(s64*)((s32)gp + 0x38) = 0;
+    *(s64*)((s32)gp + 0x60) = 0;
+    *(s64*)((s32)gp + 0x58) = 0;
+    *(s64*)((s32)gp + 0x50) = 0;
+    *(s64*)((s32)gp + 0x48) = 0;
+    *(s32*)((s32)gp + 0x126C) = 9;
+    *(s32*)((s32)gp + 0x1270) = 300;
+    *(s32*)((s32)gp + 0x125C) = 10;
+    *(s32*)((s32)gp + 0x1260) = 300;
+    *(s32*)((s32)gp + 0x124C) = 1;
+    *(s32*)((s32)gp + 0x1250) = 300;
+    *(s32*)((s32)gp + 0x1254) = 2;
+    *(s32*)((s32)gp + 0x1258) = 300;
+    if (VIGetTvFormat() == 0) {
+        *(s32*)((s32)gp + 4) = 60;
+    } else {
+        *(s32*)((s32)gp + 4) = 50;
+    }
+    *(s32*)((s32)gp + 8) = 1;
+    *(s32*)((s32)gp + 0x18) = 0;
+    badgeShop_init();
+    yuugijou_init();
+    johoya_init();
+    *(void**)((s32)gp + 0x1284) = __memAlloc(0, 0xA7800);
+    VISetPostRetraceCallback(viPostCallback);
+    romFontInit();
+    OSCreateThread(DvdCheckThread, gcDvdCheckThread, 0, DvdCheckThread + 0x1000, 0x1000, 0x10, 1);
+    DvdCheckTreadOn = 1;
+    OSResumeThread(DvdCheckThread);
+    DVDMgrInit();
+    psndInit();
+    aramMgrInit();
+    fileInit();
+    smartInit();
+    dispInit();
+    camInit();
+    fontmgrInit();
+    windowInit();
+    mapInit();
+    hitInit();
+    itemInit();
+    iconInit();
+    fadeInit();
+    bgInit();
+    shadowInit();
+    evtmgrInit();
+    animInit();
+    msgInit();
+    npcInit();
+    mobjInit();
+    effInit();
+    marioInit();
+    caseInit();
+    imgInit();
+    lightInit();
+    offscreenInit();
+    arcInit();
+    extInit();
+    swInit();
+    cardInit();
+    winInit();
+    statusWinInit();
+    envInit();
+    countDownInit();
+    nameEntInit();
+    winMgrInit();
+    seqInit_MARIOSTORY();
+    seqSetSeq(0, 0, 0);
+    *(s32*)((s32)gp + 0x1274) = 0;
+    if (OSGetSoundMode() == 0) {
+        SoundSetOutputMode(0);
+    } else {
+        SoundSetOutputMode(1);
+    }
+}
 
 u8 gcRumbleCheck(void) {
+    extern s64 OSGetTime(void);
+    extern u32 padGetRumbleStatus(s32);
+    s32 local_flags[4];
+    static s32 off_trg[4];
+    static s64 off_time[4];
+    s64 now;
+    s32 i;
+
+    local_flags[0] = 0;
+    local_flags[1] = 0;
+    local_flags[2] = 0;
+    local_flags[3] = 0;
+    now = OSGetTime();
+    for (i = 0; i < 4; i++) {
+        if (*(u8*)((s32)gp + 0x12E8 + i) == 0) {
+            if ((padGetRumbleStatus(i) & 0xFF) == 1) {
+                if (*(u8*)((s32)gp + 0x12C0 + i) == 0) {
+                    *(u8*)((s32)gp + 0x12C0 + i) = 1;
+                    *(s64*)((s32)gp + 0x12C8 + i * 8) = now;
+                }
+                if (((now - *(s64*)((s32)gp + 0x12C8 + i * 8)) /
+                     (*(u32*)0x800000F8 / 4000) > 30000) &&
+                    *(u8*)((s32)gp + 0x12EC + i) == 0) {
+                    *(u8*)((s32)gp + 0x12EC + i) = 1;
+                    *(u8*)((s32)gp + 0x12E8 + i) = 1;
+                    *(s64*)((s32)gp + 0x12F0 + i * 8) = now;
+                }
+                off_trg[i] = 0;
+            } else if (*(u8*)((s32)gp + 0x12C0 + i) != 0) {
+                if (off_trg[i] == 0) {
+                    off_time[i] = now;
+                    off_trg[i] = 1;
+                }
+                if (off_trg[i] != 0 &&
+                    (now - off_time[i]) / (*(u32*)0x800000F8 / 4000) > 100) {
+                    off_trg[i] = 0;
+                    *(u8*)((s32)gp + 0x12C0 + i) = 0;
+                }
+            }
+        } else {
+            if ((now - *(s64*)((s32)gp + 0x12F0 + i * 8)) /
+                (*(u32*)0x800000F8 / 4000) > 30000) {
+                *(u8*)((s32)gp + 0x12EC + i) = 0;
+                *(u8*)((s32)gp + 0x12E8 + i) = 0;
+                *(u8*)((s32)gp + 0x12C0 + i) = 0;
+            }
+            local_flags[i] = 1;
+        }
+        if (*(s32*)((s32)gp + 0x10) != 0) {
+            local_flags[i] = 1;
+        }
+        if (*(s32*)((s32)gp + 0x18) != 0) {
+            local_flags[i] = 1;
+        }
+        if (local_flags[i] == 0) {
+            *(u8*)((s32)gp + 0x1310 + i) = 0;
+        } else {
+            *(u8*)((s32)gp + 0x1310 + i) = 1;
+        }
+    }
     return 0;
 }
-
 
 void marioStMain(void) {
     extern void OSYieldThread(void);

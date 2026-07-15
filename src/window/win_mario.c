@@ -33,15 +33,82 @@ void winMarioExit(void* wp) {
 }
 
 
-u8 winMarioDisp(void) {
-    return 0;
+void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
+    extern void* pouchGetPtr(void);
+    extern s32 pouchGetHP(void);
+    extern s32 pouchGetMaxHP(void);
+    extern s32 pouchGetFP(void);
+    extern s32 pouchGetMaxFP(void);
+    extern void winBgGX(f32 x, f32 y, void* win, s32 type);
+    extern void winNameGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
+    extern void winIconInit(void);
+    extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
+    extern void winFontInit(void);
+    extern void winFontSetR(Vec3* pos, Vec3* scale, void* color, char* format, ...);
+    Vec3 pos;
+    Vec3 scale;
+    u32 white = 0xFFFFFFFF;
+    void* pouch = pouchGetPtr();
+    f32 x = *(f32*)((s32)pWin + 0x30 + index * 0x18);
+    f32 y = *(f32*)((s32)pWin + 0x34 + index * 0x18);
+    s32 i;
+
+    winBgGX(x, y, pWin, 0);
+    winNameGX(x - 265.0f, y + 165.0f, 240.0f, 32.0f, pWin, 0);
+    scale.x = 1.0f;
+    scale.y = 1.0f;
+    scale.z = 1.0f;
+    pos.z = 0.0f;
+    winIconInit();
+    pos.x = x - 215.0f;
+    pos.y = y + 110.0f;
+    winIconSet(0x1A6, &pos, &scale, &white);
+    winFontInit();
+    pos.x += 55.0f;
+    winFontSetR(&pos, &scale, &white, "HP %d/%d", pouchGetHP(), pouchGetMaxHP());
+    pos.y -= 34.0f;
+    winFontSetR(&pos, &scale, &white, "FP %d/%d", pouchGetFP(), pouchGetMaxFP());
+    for (i = 0; i < 8; i++) {
+        pos.x = x - 205.0f + (i & 3) * 58.0f;
+        pos.y = y - 10.0f - (i >> 2) * 52.0f;
+        winIconSet(0x27 + i, &pos, &scale, &white);
+    }
+    pos.x = x + 80.0f;
+    pos.y = y + 110.0f;
+    winFontSetR(&pos, &scale, &white, "%d", *(s32*)((s32)pouch + 0x98));
+    (void)cameraId;
 }
 
+void fukidashi(double x, double y, void* menu, s32 type) {
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
+    extern s32 pouchGetHammerLv(void);
+    extern s32 pouchGetJumpLv(void);
+    extern s32 pouchCheckItem(s32 item);
+    extern void winTexInit(void* data);
+    extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
+    extern void winIconInit(void);
+    extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
+    Vec3 pos;
+    Vec3 scale;
+    u32 white = 0xFFFFFFFF;
+    s32 icon = -1;
+    s32 available = 0;
 
-u8 fukidashi(double x, double y, void* menu, int type) {
-    return 0;
+    if (type == 2) { available = pouchGetHammerLv(); icon = 0x1A0 + available; }
+    else if (type == 3) { available = pouchGetJumpLv(); icon = 0x1A4 + available; }
+    else if (type >= 7 && type <= 10) { available = pouchCheckItem(type + 0x70); icon = 0x1B0 + type; }
+    if (available == 0 || icon < 0) return;
+    winTexInit(**(void***)((s32)*(void**)((s32)menu + 0x28) + 0xA0));
+    pos.x = (f32)x - 32.0f; pos.y = (f32)y + 24.0f; pos.z = 0.0f;
+    scale.x = 1.0f; scale.y = 1.0f; scale.z = 1.0f;
+    winTexSet(0xB1, &pos, &scale, &white);
+    pos.x = (f32)x + 32.0f;
+    winTexSet(0xB1, &pos, &scale, &white);
+    winIconInit();
+    pos.x = (f32)x; pos.y = (f32)y;
+    winIconSet(icon, &pos, &scale, &white);
 }
-
 
 s32 winMarioMain(void* pWin) {
     return 0;

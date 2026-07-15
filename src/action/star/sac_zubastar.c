@@ -776,6 +776,78 @@ s32 main_star(void) {
 /* CHATGPT STUB FILL: main/action/star/sac_zubastar 20260624_184929 */
 
 /* stub-fill: zubastar_main | missing_definition | ghidra_signature */
-s32 zubastar_main(void* pEvt, int isFirstCall) {
+s32 zubastar_main(void* event, s32 isFirstCall) {
+    extern u8* GetZubaStarPtr(void);
+    extern s32 BattleAudience_GetAudienceNum(void);
+    extern s32 keyGetButtonTrg(s32);
+    extern void psndSFXOff(s32);
+    extern void BattleAudienceSoundCallKind(s32);
+    extern void BattleAudienceSoundWhistleKind(s32);
+    extern s32 irand(s32);
+    extern void* smartAlloc(s32, s32);
+    extern void zubastar_create_takaku(s32, void*);
+    u8* work = GetZubaStarPtr();
+    s32 audience = BattleAudience_GetAudienceNum();
+    s32* state = (s32*)work;
+
+    if (isFirstCall != 0) {
+        *(void**)(work + 0x5D8) = smartAlloc(audience, 1);
+        zubastar_create_takaku(4, work + 0x500);
+    }
+    switch (*state) {
+        case 0:
+            *state = 5;
+            *(s32*)(work + 0x94) = 5;
+            break;
+        case 5:
+            *state = 10;
+            *(s32*)(work + 4) = 0;
+            if (*(s32*)(work + 0x518) == 0) *(s32*)(work + 0x518) = 1;
+        case 10:
+            if (*(s32*)(work + 0x94) == 10 && *(s32*)(work + 0x518) == 2) *state = 15;
+            break;
+        case 15:
+            *state = 20;
+            *(s32*)(work + 0xC) = 300;
+        case 20:
+            if (*(f32*)(work + 0x520) < 100.0f) {
+                if (--*(s32*)(work + 0xC) < 1) {
+                    *state = 25;
+                    psndSFXOff(*(s32*)(work + 0x530));
+                } else if (keyGetButtonTrg(0) & 0x100) {
+                    *(f32*)(work + 0x524) = 2.8f;
+                }
+            } else {
+                *state = 30;
+                (*(s32*)(work + 8))++;
+                psndSFXOff(*(s32*)(work + 0x530));
+            }
+            break;
+        case 25:
+            *(s32*)(work + 0x518) = 5;
+            psndSFXOff(*(s32*)(work + 0x530));
+            *state = 0x1E;
+            break;
+        case 30:
+            *(s32*)(work + 0x518) = 4;
+            *(s32*)(work + 0x51C) = 0;
+            psndSFXOff(*(s32*)(work + 0x530));
+            if (audience > 0 && audience < 50) BattleAudienceSoundCallKind(1);
+            else if (audience < 100) { BattleAudienceSoundCallKind(1); BattleAudienceSoundWhistleKind(1); }
+            else { BattleAudienceSoundCallKind(2); BattleAudienceSoundWhistleKind(audience > 150 ? 3 : 2); }
+            *state = 35;
+            *(s32*)(work + 0x94) = 15;
+            break;
+        case 35:
+            if (*(s32*)(work + 0x94) == 20) { *state = 40; *(s32*)(work + 4) = 0; }
+            break;
+        case 40:
+            *state = 45;
+            *(s32*)(work + 0x94) = 25;
+            if (irand(2) == 0) *(f32*)(work + 0xA0) = -96.0f;
+            else *(f32*)(work + 0xA0) = 96.0f;
+            break;
+    }
     return 0;
 }
+

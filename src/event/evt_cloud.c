@@ -39,10 +39,17 @@ s32 evt_cloud_set_cap_size(void* event, s32 isFirstCall) {
 #pragma use_lmw_stmw on
 
 
-s32 evt_cloud_main(void* pEvt, int param_2) {
+s32 evt_cloud_main(void* pEvt,int firstCall){
+    typedef struct Vec3{f32 x,y,z;}Vec3;extern void* gp;extern void* marioGetPtr(void);extern void* partyGetPtr(s32);extern void* cloudGetHitBreathout(s32);extern void* hitNameToPtr(char*);extern void mapGrpFlagOff(char*,s32);extern void mapObjGetPos(char*,Vec3*);extern s32 animGroupBaseAsync(char*,s32,s32);extern void animPaperPoseEntry(char*,s32);extern void offscreenEntry(char*);extern void mapGrpSetOffScreen(char*,char*);extern char* strcpy(char*,const char*);extern void imgEntry(char*,s32);extern void* imgNameToPtr(char*,s32);extern s32 animPaperPoseGetId(char*,s32);extern void imgClearVirtualPoint(void*);extern void imgSetShadow(void*,s32);extern char str_P_oof_cloud_1_802f73c8[],str_P_oof_cloud_2_802f73f0[];extern u8 cloud_once_flag;
+    u8* cloud=*(u8**)((s32)pEvt+0x9C);void* player=marioGetPtr();void* party=partyGetPtr(0);s32 battle=*(s32*)((s32)gp+0x14)!=0; s32 state=*(s32*)(cloud+4),i;void* hit;Vec3 pos;
+    if(firstCall==0&&party!=0){
+        if(state==0&&cloud_once_flag!=1){hit=hitNameToPtr((char*)cloud+0x68);for(i=0;i<4;i++)if(cloudGetHitBreathout(i)==hit){*(s32*)(cloud+4)=1;break;}*(s32*)(cloud+0xAC)=0;}
+        else if(state==1){if(*(f32*)((s32)player+0x19C)<=90.0f||*(f32*)((s32)player+0x19C)>270.0f)strcpy((char*)cloud+8,str_P_oof_cloud_1_802f73c8);else strcpy((char*)cloud+8,str_P_oof_cloud_2_802f73f0);if(animGroupBaseAsync((char*)cloud+8,battle,0)!=0){cloud_once_flag=1;animPaperPoseEntry((char*)cloud+8,battle);offscreenEntry((char*)cloud+0x88);mapGrpSetOffScreen((char*)cloud+0x68,(char*)cloud+0x88);*(s32*)(cloud+4)=2;}}
+        else if(state==2){s32 width=*(u16*)(cloud+0xC0),height=*(u16*)(cloud+0xC2);mapObjGetPos((char*)cloud+0x68,&pos);if(width<0)width=0;if(height<0)height=0;imgEntry((char*)cloud+0x28,battle);hit=imgNameToPtr((char*)cloud+0x28,battle);*(u32*)hit|=2;*(s32*)((s32)hit+0x10C)=animPaperPoseGetId((char*)cloud+8,battle);imgClearVirtualPoint(hit);imgSetShadow(hit,2);*(s32*)(cloud+4)=3;}
+        else if(state==10){mapGrpFlagOff((char*)cloud+0x68,1);*(s32*)(cloud+4)=99;}
+    }
     return 0;
 }
-
 
 s32 evt_cloud_ent(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);

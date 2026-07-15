@@ -1,10 +1,33 @@
 #include "effect/n64/eff_thruhammer_n64.h"
 
 
-u8 main_dl(int param_1, s32 param_2) {
-    return 0;
+void main_dl(void* effect, void* view) {
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXRotRad(void*, s32, f32);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXLoadPosMtxImm(void*, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXLoadTexMtxImm(void*, s32, s32);
+    extern void GXBegin(s32, s32, s32);
+    extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);
+    u8* work = *(u8**)((s32)effect + 0xC);
+    f32 trans[3][4], rot[3][4], scale[3][4];
+    s32 i;
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
+        u8* part = work + i * 0x58;
+        if (*(s32*)(part + 0x4C) >= 0) {
+            PSMTXTrans(trans, *(f32*)(part + 4), *(f32*)(part + 8), *(f32*)(part + 0xC));
+            PSMTXRotRad(rot, 0x7A, 0.017453292f * *(f32*)(part + 0x34));
+            PSMTXConcat(trans, rot, trans);
+            PSMTXScale(scale, 0.3f * *(f32*)(part + 0x1C), 0.3f * *(f32*)(part + 0x20), 0.3f * *(f32*)(part + 0x24));
+            PSMTXConcat(trans, scale, trans); PSMTXConcat(view, trans, trans);
+            GXLoadPosMtxImm(trans, 0); GXSetCurrentMtx(0);
+            PSMTXScale(scale, 0.015873f, 0.032258f, 0.0f); GXLoadTexMtxImm(scale, 0x1E, 1);
+            GXBegin(0x90, 0, 0x36); tri2(0,1,2,0,2,3,4,0); tri2(2,4,5,0,1,3,2,0);
+        }
+    }
 }
-
 
 u8 effThruHammerDisp(int param_1, int param_2) {
     return 0;

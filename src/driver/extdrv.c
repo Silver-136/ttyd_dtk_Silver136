@@ -72,20 +72,283 @@ void extLoadShadowMtx(void* dst) {
 }
 
 
-u8 extMain(void) {
-    return 0;
+void extMain(void) {
+    extern s32 marioStGetSystemLevel(void);
+    extern void* camGetPtr(s32 id);
+    extern f64 atan2(f64 y, f64 x);
+    extern void qqsort(void* base, u32 count, u32 width, void* compareFunc);
+    extern s32 compare(void* a, void* b);
+    extern f32 sin(f32 x);
+    extern f32 cos(f32 x);
+    extern ExtWork work[2];
+    extern ExtGp* gp;
+    extern f32 float_rad2deg_8042188c;
+    extern f32 float_360_80421890;
+    extern f32 float_180_80421894;
+    extern f32 float_90_80421898;
+    extern f32 float_270_804218a0;
+    extern f32 float_neg90_804218a4;
+    extern f32 float_neg270_804218a8;
+    extern f32 float_neg360_8042189c;
+    extern f32 float_neg180_804218ac;
+    extern f32 float_0p1_804218b0;
+    extern f32 float_0_80421888;
+    s32 wp;
+    s32 count;
+    s32 i;
+    u32* pose;
+    s32* entry;
+    void (*callback)(void);
+    void* cam;
+    f32 angle;
+    f32 diff;
+    f32 target;
+    f32 s;
+    f32 c;
+
+    wp = (s32)work;
+    if (gp->useAlt != 0) {
+        wp += 0x70;
+    }
+
+    if (marioStGetSystemLevel() == 0) {
+        callback = *(void (**)(void))(wp + 0x30);
+        if (callback != 0) {
+            callback();
+        }
+    }
+    callback = *(void (**)(void))(wp + 0x34);
+    if (callback != 0) {
+        callback();
+    }
+
+    pose = *(u32**)(wp + 8);
+    entry = *(s32**)(wp + 0x24);
+    cam = camGetPtr(4);
+    angle = float_rad2deg_8042188c *
+            (f32)atan2(-((f32*)((s32)cam + 0x18))[0] + ((f32*)((s32)cam + 0xC))[0],
+                       -((f32*)((s32)cam + 0x20))[0] + ((f32*)((s32)cam + 0x14))[0]);
+    while (angle >= float_360_80421890) {
+        angle -= float_360_80421890;
+    }
+    if (angle < float_0_80421888) {
+        angle += float_360_80421890;
+    }
+    camGetPtr(4);
+    camGetPtr(4);
+
+    count = *(s32*)wp;
+    target = float_180_80421894 + angle;
+    for (i = count - 1; i >= 0; i--) {
+        entry[0] = i;
+        if ((pose[0] & 1) != 0) {
+            entry[1] = (s32)(f32)pose[4];
+        }
+        if ((pose[0] & 2) != 0) {
+            diff = float_90_80421898 + (angle - (f32)pose[1]);
+            while (diff < float_neg360_8042189c) {
+                diff += float_360_80421890;
+            }
+            while (diff >= float_360_80421890) {
+                diff -= float_360_80421890;
+            }
+            if ((float_90_80421898 < diff && diff <= float_270_804218a0) ||
+                (diff < float_neg90_804218a4 && float_neg270_804218a8 <= diff)) {
+                pose[7] = (u32)target;
+            } else {
+                cam = camGetPtr(4);
+                diff = float_rad2deg_8042188c *
+                       (f32)atan2(-((f32*)((s32)cam + 0x18))[0] + ((f32*)((s32)cam + 0xC))[0],
+                                  -((f32*)((s32)cam + 0x20))[0] + ((f32*)((s32)cam + 0x14))[0]);
+                while (diff >= float_360_80421890) {
+                    diff -= float_360_80421890;
+                }
+                if (diff < float_0_80421888) {
+                    diff += float_360_80421890;
+                }
+                pose[7] = (u32)diff;
+            }
+            while (float_180_80421894 < (f32)pose[7] - (f32)pose[5]) {
+                pose[5] = (u32)((f32)pose[5] + float_360_80421890);
+            }
+            while ((f32)pose[7] - (f32)pose[5] < float_neg180_804218ac) {
+                pose[5] = (u32)((f32)pose[5] - float_360_80421890);
+            }
+            pose[5] = (u32)((((f32)pose[7] - (f32)pose[5]) * float_0p1_804218b0) + (f32)pose[5]);
+            diff = (f32)pose[5];
+            while (diff < float_0_80421888) {
+                diff += float_360_80421890;
+            }
+            while (diff >= float_360_80421890) {
+                diff -= float_360_80421890;
+            }
+            s = sin(diff);
+            c = cos(diff);
+            *(f32*)pose[3] = c;
+            *(f32*)(pose[3] + 0x28) = c;
+            *(f32*)(pose[3] + 8) = s;
+            *(f32*)(pose[3] + 0x20) = -s;
+        }
+        pose += 8;
+        entry += 2;
+    }
+
+    if (*(s32*)wp != 0) {
+        qqsort(*(void**)(wp + 0x24), *(s32*)wp, 8, compare);
+    }
+    *(s32*)(wp + 0x38) = -1;
+    *(s32*)(wp + 0x6C) = 0;
 }
 
+void extMakeTexture(s32 unused, s32* texInfo) {
+    extern void* memcpy(void* dest, const void* src, u32 size);
+    extern void animPoseDisp_MakeExtTexture(f64 a, f64 b, s32 c, s32 d, s32* e, s32* f,
+                                            u32* g, s32* h, u32* i, s32* j);
+    extern void GXBeginDisplayList(void* list, u32 size);
+    extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nverts);
+    extern u32 GXEndDisplayList(void);
+    extern ExtWork work[2];
+    extern ExtGp* gp;
+    extern s32 anim_ext_tex_size;
+    extern f32 queen_uv[4];
+    extern f32 float_0_80421888;
+    extern f32 float_0p5_804218c0;
+    extern f32 float_4_804218bc;
+    extern f32 float_neg1_804218b8;
+    extern f32 float_neg2_804218b4;
+    s32 wp;
+    s32 tex;
+    s32 i;
+    s32 vtxBase;
+    s32 displayOffset;
+    s32 sizeOffset;
+    u32 left;
+    u32 right;
+    s32 top;
+    s32 bottom;
+    f32 uvSave[4];
+    f32* vtx;
+    volatile u16* fifo;
 
-u8 extMakeTexture(void) {
-    return 0;
+    wp = (s32)work;
+    if (gp->useAlt != 0) {
+        wp += 0x70;
+    }
+
+    anim_ext_tex_size = 0;
+    tex = *(s32*)(wp + 0xC);
+    memcpy(uvSave, queen_uv, 0x10);
+    queen_uv[0] = float_0_80421888;
+    queen_uv[2] = float_0_80421888;
+    queen_uv[1] = float_neg2_804218b4 / (f32)*(s32*)(wp + 4);
+    queen_uv[3] = float_neg1_804218b8 / (f32)*(s32*)(wp + 4);
+
+    vtxBase = 0;
+    displayOffset = 0;
+    sizeOffset = 0;
+    fifo = (volatile u16*)0xCC008000;
+    for (i = 0; i < *(s32*)(wp + 4); i++) {
+        animPoseDisp_MakeExtTexture((f64)(f32)texInfo[2], (f64)float_4_804218bc,
+                                    texInfo[0], texInfo[1], (s32*)(tex + 4),
+                                    (s32*)tex, &left, &top, &right, &bottom);
+        vtx = (f32*)(*(s32*)(wp + 0x14) + vtxBase);
+        vtx[0] = (f32)(s32)left * float_0p5_804218c0;
+        vtx[1] = (f32)-top * float_0p5_804218c0;
+        vtx[2] = float_0_80421888;
+        vtx[3] = (f32)(s32)right * float_0p5_804218c0;
+        vtx[4] = (f32)-top * float_0p5_804218c0;
+        vtx[5] = float_0_80421888;
+        vtx[6] = (f32)(s32)right * float_0p5_804218c0;
+        vtx[7] = (f32)-bottom * float_0p5_804218c0;
+        vtx[8] = float_0_80421888;
+        vtx[9] = (f32)(s32)left * float_0p5_804218c0;
+        vtx[10] = (f32)-bottom * float_0p5_804218c0;
+        vtx[11] = float_0_80421888;
+
+        GXBeginDisplayList((void*)(*(s32*)(wp + 0x28) + displayOffset), 0x80);
+        GXBegin(0x80, 0, 4);
+        *fifo = (u16)sizeOffset;
+        *fifo = 0;
+        *fifo = (u16)(sizeOffset + 1);
+        *fifo = 1;
+        *fifo = (u16)(sizeOffset + 2);
+        *fifo = 2;
+        *fifo = (u16)(sizeOffset + 3);
+        *fifo = 3;
+        *(u32*)(*(s32*)(wp + 0x2C) + sizeOffset) = GXEndDisplayList();
+
+        texInfo += 3;
+        tex += 0x34;
+        vtxBase += 0x30;
+        displayOffset += 0x80;
+        sizeOffset += 4;
+    }
+
+    memcpy(queen_uv, uvSave, 0x10);
 }
 
+void extEntry(int param_1, int* param_2, void* initFunc, int param_4, int param_5) {
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void* memset(void* dest, int ch, u32 count);
+    extern void DCInvalidateRange(void* ptr, u32 size);
+    extern void PSMTXIdentity(void* mtx);
+    extern void dispEntry(s32 cameraId, s32 order, void* callback, void* user, f32 priority);
+    extern void extMakeTexture(void);
+    extern f32 float_0_80421888;
+    extern ExtWork work[2];
+    extern ExtGp* gp;
+    static f32 localNormals[3];
+    static u32 localColors[1];
+    static f32 localUVs[2];
+    s32 wp;
+    s32 texCount;
+    s32 i;
+    int* scan;
+    void (*init)(void);
 
-u8 extEntry(int param_1, int* param_2, void* initFunc, int param_4, int param_5) {
-    return 0;
+    wp = (s32)work;
+    if (gp->useAlt != 0) {
+        wp += 0x70;
+    }
+
+    texCount = 0;
+    scan = param_2;
+    while (*scan != 0) {
+        scan += 3;
+        texCount++;
+    }
+
+    *(void**)(wp + 8) = __memAlloc(2, param_1 << 5);
+    *(s32*)wp = param_1;
+    *(void**)(wp + 0x30) = (void*)param_4;
+    *(void**)(wp + 0x34) = (void*)param_5;
+    *(void**)(wp + 0xC) = __memAlloc(2, texCount * 0x34);
+    *(s32*)(wp + 4) = texCount;
+    *(void**)(wp + 0x10) = __memAlloc(2, param_1 * 0x30);
+    *(void**)(wp + 0x14) = __memAlloc(2, texCount * 0x30);
+    *(void**)(wp + 0x18) = localNormals;
+    *(void**)(wp + 0x1C) = localColors;
+    *(void**)(wp + 0x20) = localUVs;
+    *(void**)(wp + 0x24) = __memAlloc(2, param_1 << 3);
+    *(void**)(wp + 0x28) = __memAlloc(2, texCount << 7);
+    DCInvalidateRange(*(void**)(wp + 0x28), texCount << 7);
+    *(void**)(wp + 0x2C) = __memAlloc(2, texCount << 2);
+
+    memset(*(void**)(wp + 8), 0, *(s32*)wp << 5);
+
+    for (i = 0; i < param_1; i++) {
+        *(s32*)(*(s32*)(wp + 0x24) + i * 8) = i;
+        *(void**)(*(s32*)(wp + 8) + i * 0x20 + 0xC) = (void*)(*(s32*)(wp + 0x10) + i * 0x30);
+    }
+
+    PSMTXIdentity((void*)(wp + 0x3C));
+    dispEntry(0, 1, extMakeTexture, param_2, float_0_80421888);
+
+    init = initFunc;
+    if (init != 0) {
+        init();
+    }
 }
-
 
 void extDrawShadow(void) {
     extern void* camGetCurPtr(void);

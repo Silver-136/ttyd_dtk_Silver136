@@ -30,10 +30,43 @@ extern const Vec3 vec3_802fae10;
 extern f32 float_1p25_804250d0;
 
 
-u8 effExpBomDisp(int param_1, int param_2) {
-    return 0;
+void effExpBomDisp(int cameraId, int effect) {
+    typedef f32 Mtx[3][4];
+    extern void* camGetPtr(s32); extern void PSMTXTrans(void*,f32,f32,f32);
+    extern void PSMTXRotRad(void*,s32,f32); extern void PSMTXScale(void*,f32,f32,f32);
+    extern void PSMTXConcat(void*,void*,void*); extern void GXLoadPosMtxImm(void*,s32);
+    extern void GXSetTevColor(s32,void*); extern void GXSetNumChans(s32);
+    extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+    extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32);
+    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevColorIn(s32,s32,s32,s32,s32); extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
+    extern void GXSetCullMode(s32); extern void GXClearVtxDesc(void); extern void GXSetVtxDesc(s32,s32);
+    extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32); extern void effGetTexObjN64(s32,void*);
+    extern void GXLoadTexObj(void*,s32); extern void GXBegin(s32,s32,s32); extern f64 sin(f64);
+    u8* work=*(u8**)(effect+0xC); u8* p=work; void* cam=camGetPtr(cameraId);
+    Mtx base,trans,rot,scale; u8 texObj[0x20]; u32 color; s32 i,frame,tex; f32 phase;
+    PSMTXTrans(base,*(f32*)(work+0xC),*(f32*)(work+0x10),*(f32*)(work+0x14));
+    PSMTXRotRad(rot,0x79,-*(f32*)((u8*)cam+0x114)*0.0174533f); PSMTXConcat(base,rot,base);
+    PSMTXConcat((u8*)cam+0x11C,base,base);
+    for(i=0;i<*(s32*)(effect+8);i++,p+=0x2C){
+        if(*(s16*)(p+2)<0||*(s32*)(p+8)>=0)continue;
+        frame=*(s16*)(p+2);if(frame>16)frame=16;
+        PSMTXTrans(trans,*(f32*)(p+0x18),*(f32*)(p+0x1C),0.0f);
+        PSMTXScale(scale,*(f32*)(p+0x28),*(f32*)(p+0x28),*(f32*)(p+0x28));
+        PSMTXRotRad(rot,0x7A,*(f32*)(p+0x24)*0.0174533f);
+        PSMTXConcat(trans,scale,trans);PSMTXConcat(trans,rot,trans);PSMTXConcat(base,trans,trans);GXLoadPosMtxImm(trans,0);
+        phase = 6.2832f * 90.0f * ((f32)*(s16*)p - 1.0f) / ((f32)*(s16*)(p + 4) * 360.0f);
+        tex = (s32)(7.0f * (f32)sin((f64)phase));
+        if(tex<0)tex=0;if(tex>6)tex=6;
+        color=0xFFFFFF00|(u8)((frame*210)>>4);GXSetTevColor(2,&color);
+        GXSetNumChans(0);GXSetNumTexGens(2);GXSetTexCoordGen2(0,1,4,0x3C,0,0x7D);GXSetTexCoordGen2(1,1,4,0x3C,0,0x7D);
+        GXSetNumTevStages(3);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,0,0,0,8);GXSetTevAlphaIn(0,0,0,0,4);
+        GXSetTevOrder(1,1,1,0xFF);GXSetTevColorOp(1,0,0,0,1,0);GXSetTevAlphaOp(1,0,0,0,1,0);GXSetTevColorIn(1,0,8,6,15);GXSetTevAlphaIn(1,0,4,6,7);
+        GXSetTevOrder(2,0xFF,0xFF,0xFF);GXSetTevColorOp(2,0,0,0,1,0);GXSetTevAlphaOp(2,0,0,0,1,0);GXSetTevColorIn(2,0,0,0,0);GXSetTevAlphaIn(2,0,6,1,7);
+        GXSetCullMode(0);GXClearVtxDesc();GXSetVtxDesc(9,1);GXSetVtxDesc(0xD,1);GXSetVtxAttrFmt(0,9,1,4,0);GXSetVtxAttrFmt(0,0xD,1,4,0);
+        effGetTexObjN64(tex,texObj);GXLoadTexObj(texObj,0);effGetTexObjN64(tex==6?6:tex+1,texObj);GXLoadTexObj(texObj,1);GXBegin(0x80,0,4);
+    }
 }
-
 
 void* effExpBomN64Entry(f32 x, f32 y, f32 z) {
     extern void* effEntry(void);

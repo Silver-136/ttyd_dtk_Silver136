@@ -377,8 +377,63 @@ void kpa_walk(void) {
 /* CHATGPT STUB FILL: main/bowser/koopa_motion 20260624_184128 */
 
 /* stub-fill: kpa_swim | missing_definition | ghidra_signature */
-u8 kpa_swim(void) {
-    return 0;
+void kpa_swim(void) {
+    extern void* marioGetPtr(void);
+    extern void marioChgMot(s32);
+    extern void marioMakeJumpPara(void);
+    extern void kpaSetFallPara(void);
+    extern void kpaGetHitobjHead2(void);
+    extern void psndSFXOn(s32);
+    u8* mario = marioGetPtr();
+    s32* state = (s32*)(mario + 0x78);
+    f32* y = (f32*)(mario + 0x90);
+    f32* vy = (f32*)(mario + 0xB8);
+    switch (*state) {
+        case 0:
+            *(u32*)mario |= 0x100;
+            *(f32*)(mario + 0xB4) = 0.0f;
+            *vy = 5.0f;
+            *(f32*)(mario + 0xBC) = 0.0f;
+            *state = 1;
+            psndSFXOn(0x1B4);
+            marioChgMot(0x1D);
+            break;
+        case 1:
+            kpaGetHitobjHead2();
+            marioMakeJumpPara();
+            if (*vy <= 0.0f) *state = 0x1E;
+            break;
+        case 10:
+            *vy = 7.0f;
+            *state = 11;
+            marioChgMot(0x1D);
+            break;
+        case 11:
+            marioMakeJumpPara();
+            if (*vy <= 0.0f) *state = 0x1E;
+            break;
+        case 0x14:
+            *(u32*)mario |= 0x100;
+            *vy = 8.0f;
+            *state = 0x15;
+            psndSFXOn(0x1B4);
+            marioChgMot(0x1D);
+            break;
+        case 0x15:
+            marioMakeJumpPara();
+            if (*vy <= 0.5f) {
+                *(u32*)mario &= ~0x100;
+                kpaSetFallPara();
+                marioChgMot(0x1E);
+                *state = 0x1E;
+            }
+            break;
+        case 0x1E:
+            *y += *vy;
+            *vy -= 0.5f;
+            if (*(u32*)(mario + 4) & 1) *state = 0;
+            break;
+    }
 }
 
 /* stub-fill: kpa_powdown | missing_definition | ghidra_signature */

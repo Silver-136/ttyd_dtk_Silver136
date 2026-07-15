@@ -48,8 +48,40 @@ void* effPointGetEntry(s32 kind, f32 x, f32 y, f32 z, s32 arg4, s32 arg5) {
 /* CHATGPT STUB FILL: main/effect/eff_pointget 20260624_184823 */
 
 /* stub-fill: effPointGetDisp | missing_definition | ghidra_signature */
-u8 effPointGetDisp(void) {
-    return 0;
+void effPointGetDisp(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4]; typedef struct Color {u8 r,g,b,a;} Color; typedef u8 TexObj[0x20];
+    extern void* camGetPtr(s32); extern void PSMTXTrans(Mtx,f64,f64,f64); extern void PSMTXScale(Mtx,f32,f32,f32);
+    extern void PSMTXConcat(void*,void*,void*); extern void PSMTXIdentity(Mtx); extern void effGetTexObj(s32,void*);
+    extern void GXLoadTexObj(void*,s32); extern u16 GXGetTexObjWidth(void*); extern u16 GXGetTexObjHeight(void*);
+    extern void GXSetNumChans(s32); extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32); extern void GXSetChanMatColor(s32,Color*);
+    extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32); extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevOp(s32,s32); extern void GXSetCullMode(s32); extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32,s32); extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32); extern void GXLoadPosMtxImm(void*,s32);
+    extern void GXSetCurrentMtx(s32); extern void GXLoadTexMtxImm(void*,s32,s32); extern void GXBegin(s32,s32,s32);
+    extern volatile f32 DAT_cc008000; extern void sprintf(char*,const char*,...); extern char str_PCTd_80427410[];
+    u8* work=*(u8**)((u8*)effect+0xC); void* cam=camGetPtr(cameraId); Mtx model,trans,scale,texMtx; TexObj tex;
+    Color color; char digits[32]; f32 total=0.0f; f32 x; f32 y; f32 w; f32 h; s32 pass; s32 i;
+    sprintf(digits,str_PCTd_80427410,*(s32*)(work+0x10)^1);
+    for(i=0;digits[i]!=0;i++){effGetTexObj(0x40+(digits[i]-'0'),tex);total+=(f32)GXGetTexObjWidth(tex)*0.05f;}
+    PSMTXTrans(trans,*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC));
+    PSMTXScale(scale,*(f32*)(work+0x14),*(f32*)(work+0x14),*(f32*)(work+0x14)); PSMTXConcat(trans,scale,model);
+    PSMTXConcat((u8*)cam+0x11C,model,model);
+    GXSetNumChans(1); GXSetChanCtrl(4,0,0,0,0,0,2); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+    GXSetNumTevStages(1); GXSetTevOrder(0,0,0,4); GXSetTevOp(0,0); GXSetCullMode(0); GXClearVtxDesc();
+    GXSetVtxDesc(9,1); GXSetVtxDesc(13,1); GXSetVtxAttrFmt(0,9,1,4,0); GXSetVtxAttrFmt(0,13,1,4,0);
+    for(pass=1;pass>=0;pass--){
+        color.r=color.g=color.b=0xFF;color.a=pass?0x80:0xFF;GXSetChanMatColor(4,&color);x=(f32)(pass*4)-total;y=(f32)(pass*-4);
+        for(i=0;digits[i]!=0;i++){
+            effGetTexObj(0x40+(digits[i]-'0'),tex);GXLoadTexObj(tex,0);w=(f32)GXGetTexObjWidth(tex)*0.5f;h=(f32)GXGetTexObjHeight(tex);
+            PSMTXTrans(trans,x+w-total,y,0.0);PSMTXConcat(model,trans,trans);GXLoadPosMtxImm(trans,0);GXSetCurrentMtx(0);
+            PSMTXIdentity(texMtx);GXLoadTexMtxImm(texMtx,0x1E,1);GXBegin(0x80,0,4);
+            DAT_cc008000=-w;DAT_cc008000=h;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;
+            DAT_cc008000=w;DAT_cc008000=h;DAT_cc008000=0;DAT_cc008000=1;DAT_cc008000=0;
+            DAT_cc008000=w;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=1;DAT_cc008000=1;
+            DAT_cc008000=-w;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=1;
+            x+=w;
+        }
+    }
 }
 
 /* stub-fill: effPointGetMain | prototype_only | source_prototype */

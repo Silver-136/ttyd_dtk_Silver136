@@ -582,8 +582,6 @@ s32 main_star(void) {
     return 0;
 }
 
-
-
 /* CHATGPT STUB FILL: main/action/star/sac_bakugame 20260624_184823 */
 
 /* stub-fill: bakuGameDisp2D | missing_definition | ghidra_signature */
@@ -717,6 +715,74 @@ s32 bakuGameHeihoReturn(s32 unused, s32 reset) {
 }
 
 /* stub-fill: bakuGameMain | missing_definition | ghidra_signature */
-u8 bakuGameMain(void) {
+s32 bakuGameMain(void* event, s32 isFirstCall) {
+    extern void* GetBakuGamePtr(void);
+    extern void* g_BattleWork;
+    extern s32 BattleTransID(void*, s32);
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern void bakuGameDecideButton(s32);
+    extern s32 bakuGameAudienceCanThrowPos(s32);
+    extern s32 BattleAudience_GetWaiting(s32);
+    extern s32 irand(s32);
+    extern void memcpy(void*, void*, u32);
+    extern u8 weapon[];
+    u32* work = GetBakuGamePtr();
+    s32 i;
+
+    BattleGetUnitPtr(g_BattleWork, BattleTransID(event, -3));
+    BattleGetUnitPtr(g_BattleWork, BattleTransID(event, -4));
+    if (isFirstCall != 0) {
+        s32 canThrow = 0;
+        work[1] = 0;
+        bakuGameDecideButton(1);
+        for (i = 0; i < 3; i++) {
+            u8* slot = (u8*)work + 0xC + i * 0x24;
+            *(s32*)slot = 0;
+            *(f32*)(slot + 0x10) = 100.0f;
+            *(f32*)(slot + 0x20) = 0.0f;
+        }
+        memcpy(work + 0x3E, weapon, 0xC0);
+        for (i = 0; i < 200; i++) {
+            if (bakuGameAudienceCanThrowPos(i) == 1 && BattleAudience_GetWaiting(i)) {
+                canThrow = 1;
+            }
+        }
+        if (canThrow) *work &= ~2U;
+        else *work |= 2;
+    }
+    switch (work[1]) {
+        case 0:
+            for (i = 0; i < 3; i++) {
+                if (*(s32*)((u8*)work + 0xC + i * 0x24) != 5) break;
+            }
+            if (i == 3 && work[0x1F] == 8 && (((*work & 1) == 0) || work[0x70] == 5)) {
+                work[1] = 5;
+            }
+            break;
+        case 5:
+            work[1] = 10;
+            work[2] = 0;
+            for (i = 0; i < 3; i++) {
+                u8* slot = (u8*)work + 0xC + i * 0x24;
+                *(s32*)slot = 10;
+                *(s32*)(slot + 4) = 0;
+            }
+            work[0x1F] = 10;
+            work[0x3C] = irand(0x78) + 0x21C;
+        case 10:
+            work[2]++;
+            if ((s32)work[2] > 60 && irand(0x96) == 0) {
+                for (i = 0; i < 3; i++) *(s32*)((u8*)work + 0xC + i * 0x24) = 10;
+                bakuGameDecideButton(0);
+                work[2] = 0;
+            }
+            if (work[2] == 180) {
+                for (i = 0; i < 3; i++) *(s32*)((u8*)work + 0xC + i * 0x24) = 10;
+                bakuGameDecideButton(0);
+                work[2] = 0;
+            }
+            break;
+    }
     return 0;
 }
+

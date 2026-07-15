@@ -974,10 +974,10 @@ void BattleAudienceSoundGetInfo1(s32 right, s32 left, u8* vol, void* pos) {
     out = (f32*)pos;
     total = right + left;
 
-    if (total != 0) {
-        *vol = (s32)(float_100_804249bc + ((float_26_804249c0 * total) / float_200_804249b8));
-    } else {
+    if (total == 0) {
         *vol = 0;
+    } else {
+        *vol = (s32)(float_100_804249bc + ((float_26_804249c0 * total) / float_200_804249b8));
     }
 
     if (left == 0 || total == 0) {
@@ -1340,10 +1340,12 @@ void BattleAudienceSoundCheerKind(s32 kind, s32 vol, s32 frames) {
     void* sound4;
     void* sound5;
     void* sound;
-    s32 usePitch;
     s32 right;
     s32 left;
+    s32 usePitch;
     const char* baseName;
+    s32 sfxVol;
+    s32 active4;
 
     baseName = str_btl_msg_audience_pun_802f9e28;
     BattleAudienceBaseGetPtr();
@@ -1357,8 +1359,8 @@ void BattleAudienceSoundCheerKind(s32 kind, s32 vol, s32 frames) {
     sound5 = BattleAudienceSoundGetPtr(5);
     sound = sound4;
 
-    if ((*(u32*)sound4 & 1) != 0) {
-    if ((*(u32*)sound5 & 1) != 0) {
+    active4 = *(u32*)sound4 & 1;
+    if (active4 != 0 && (*(u32*)sound5 & 1) != 0) {
         if (*(s32*)((s32)sound4 + 0xC) <= *(s32*)((s32)sound5 + 0xC)) {
             BattleAudienceSoundStop(4);
             sound = BattleAudienceSoundGetPtr(4);
@@ -1367,16 +1369,17 @@ void BattleAudienceSoundCheerKind(s32 kind, s32 vol, s32 frames) {
             sound = BattleAudienceSoundGetPtr(5);
         }
     } else {
-        sound = BattleAudienceSoundGetPtr(5);
-        usePitch = 1;
-    }
-    } else {
-    if ((*(u32*)sound5 & 1) != 0) {
-        sound = BattleAudienceSoundGetPtr(4);
-        usePitch = 1;
-    } else {
-        sound = BattleAudienceSoundGetPtr(4);
-    }
+        if (active4 != 0) {
+            sound = BattleAudienceSoundGetPtr(5);
+            usePitch = 1;
+        } else {
+            if ((*(u32*)sound5 & 1) != 0) {
+                sound = BattleAudienceSoundGetPtr(4);
+                usePitch = 1;
+            } else {
+                sound = BattleAudienceSoundGetPtr(4);
+            }
+        }
     }
 
     if (kind == 1) {
@@ -1407,7 +1410,15 @@ void BattleAudienceSoundCheerKind(s32 kind, s32 vol, s32 frames) {
     }
 
     if (*(s32*)((s32)sound + 0x4) != -1) {
-        BA_SOUND_INIT(sound, vol + frames, frames);
+        *(u32*)sound |= 1;
+        *(s32*)((s32)sound + 0xC) = vol + frames;
+        *(s32*)((s32)sound + 0x10) = frames;
+        sfxVol = psndSFX_get_vol(*(s32*)((s32)sound + 0x4));
+        *(u8*)((s32)sound + 0x1D) = sfxVol;
+        *(u8*)((s32)sound + 0x1C) = sfxVol;
+        *(s32*)((s32)sound + 0x18) = 0;
+        *(s32*)((s32)sound + 0x14) = 0;
+        *(u8*)((s32)sound + 0x1E) = 0x64;
     }
 }
 
@@ -1472,39 +1483,675 @@ s32 BattleAudience_NoUsedHaitiRand(void) {
 
 
 s32 BattleAudience_CheckReactionPerPhase(void) {
+    extern void* BattleAudienceBaseGetPtr(void);
+    extern void* BattleAudienceGetPtr(s32);
+    extern s32 irand(s32);
+    u8* base = BattleAudienceBaseGetPtr();
+    s32* state = (s32*)(base + 0x138E0);
+    s32 reactions[16];
+    s32 count = 0;
+    s32 id;
+
+    switch (*state) {
+        case 0:
+            for (id = 0; id < 200; id++) {
+                u8* audience = BattleAudienceGetPtr(id);
+                u32 flags = *(u32*)audience;
+                s32 kind = *(u8*)(audience + 0x19);
+                if ((flags & 1) == 0 || (flags & 0x100) != 0) {
+                    continue;
+                }
+                if (kind == 5 || kind == 9 || kind == 11 || kind == 12) {
+                    reactions[count++] = kind;
+                    if (count >= 16) {
+                        break;
+                    }
+                }
+            }
+            if (count != 0) {
+                *(s32*)(base + 0x138E4) = reactions[irand(count)];
+                *state = 1;
+            } else {
+                *state = 4;
+            }
+            break;
+        case 1:
+            *(s32*)(base + 0x138E8) = 0;
+            *state = 2;
+            break;
+        case 2:
+            if (++*(s32*)(base + 0x138E8) > 30) {
+                *state = 3;
+            }
+            break;
+        case 3:
+            *state = 4;
+            break;
+        case 4:
+            return 1;
+    }
     return 0;
 }
-
 
 u8 BattleAudienceSettingAudience(void) {
+    extern void* BattleAudienceBaseGetPtr(void);
+    extern void* BattleAudienceGetPtr(s32);
+    extern s32 irand(s32);
+    extern void* pouchGetPtr(void);
+    u8* base = BattleAudienceBaseGetPtr();
+    u8* pouch = pouchGetPtr();
+    s32 kindCounts[12];
+    s32 total;
+    s32 kind;
+    s32 id;
+
+    for (kind = 0; kind < 12; kind++) {
+        kindCounts[kind] = 0;
+    }
+    total = *(s32*)(pouch + 0x120);
+    if (total < 10) {
+        total = 10;
+    }
+    if (total > 200) {
+        total = 200;
+    }
+    for (id = 0; id < total; id++) {
+        kind = irand(12);
+        kindCounts[kind]++;
+    }
+    kind = 0;
+    for (id = 0; id < 200; id++) {
+        u8* audience = BattleAudienceGetPtr(id);
+        while (kind < 12 && kindCounts[kind] == 0) {
+            kind++;
+        }
+        if (id < total && kind < 12) {
+            *(u32*)audience = 1;
+            *(u8*)(audience + 0x19) = kind;
+            *(s32*)(audience + 0x20) = id;
+            *(f32*)(audience + 0x48) = (f32)((id % 20) - 10) * 22.0f;
+            *(f32*)(audience + 0x4C) = (f32)(id / 20) * 18.0f;
+            *(f32*)(audience + 0x50) = 0.0f;
+            kindCounts[kind]--;
+        } else {
+            *(u32*)audience = 0;
+        }
+    }
+    *(s32*)(base + 0x13788) = total;
+    *(s32*)(base + 0x1378C) = total;
     return 0;
 }
-
 
 u8 BattleAudienceItemCtrlProcess(void) {
+    extern void* BattleAudienceBaseGetPtr(void);
+    extern void* BattleAudienceItemGetPtr(s32);
+    extern s32 irand(s32);
+    u8* base = BattleAudienceBaseGetPtr();
+    s32 id;
+
+    for (id = 0; id < 16; id++) {
+        u8* item = BattleAudienceItemGetPtr(id);
+        s32 state = *(s32*)(item + 4);
+        s32 timer = *(s32*)(item + 8);
+        if ((*(u32*)item & 1) == 0) {
+            continue;
+        }
+        switch (state) {
+            case 0:
+                *(s32*)(item + 0x0C) = irand(32);
+                *(s32*)(item + 0x10) = irand(200);
+                *(f32*)(item + 0x20) = 0.0f;
+                *(f32*)(item + 0x24) = 120.0f;
+                *(f32*)(item + 0x28) = 0.0f;
+                *(s32*)(item + 8) = irand(30) + 15;
+                *(s32*)(item + 4) = 1;
+                break;
+            case 1:
+                if (timer > 0) {
+                    *(s32*)(item + 8) = timer - 1;
+                } else {
+                    *(f32*)(item + 0x2C) = (f32)(irand(9) - 4);
+                    *(f32*)(item + 0x30) = 8.0f;
+                    *(s32*)(item + 4) = 2;
+                }
+                break;
+            case 2:
+                *(f32*)(item + 0x20) += *(f32*)(item + 0x2C);
+                *(f32*)(item + 0x24) += *(f32*)(item + 0x30);
+                *(f32*)(item + 0x30) -= 0.5f;
+                if (*(f32*)(item + 0x24) < 0.0f) {
+                    *(f32*)(item + 0x24) = 0.0f;
+                    *(f32*)(item + 0x30) *= -0.5f;
+                    *(s32*)(item + 4) = 3;
+                }
+                break;
+            case 3:
+                if (++*(s32*)(item + 8) > 20) {
+                    *(s32*)(item + 4) = 4;
+                }
+                break;
+            case 4:
+                *(u32*)item = 0;
+                (*(s32*)(base + 0x137E0))--;
+                break;
+        }
+    }
     return 0;
 }
-
 
 u8 BattleAudienceDispAudience(void) {
+    typedef f32 Mtx[3][4];
+    extern void* BattleAudienceGetPtr(s32);
+    extern void* camGetPtr(s32);
+    extern void PSMTXTrans(Mtx, f32, f32, f32);
+    extern void PSMTXScale(Mtx, f32, f32, f32);
+    extern void PSMTXRotRad(Mtx, f32, char);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXLoadPosMtxImm(Mtx, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXBegin(s32, s32, s16);
+    char* cam = camGetPtr(4);
+    Mtx trans, rot, scale, model;
+    s32 id;
+    s32 vertex;
+
+    GXSetNumChans(1);
+    GXSetNumTexGens(1);
+    GXSetNumTevStages(1);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(11, 1);
+    GXSetVtxDesc(13, 1);
+    for (id = 0; id < 200; id++) {
+        u8* audience = BattleAudienceGetPtr(id);
+        u32 flags = *(u32*)audience;
+        f32 size;
+        if ((flags & 1) == 0 || (flags & 0x100) != 0) {
+            continue;
+        }
+        size = (*(u8*)(audience + 0x19) == 0xC) ? 1.25f : 1.0f;
+        PSMTXTrans(trans, *(f32*)(audience + 0x48), *(f32*)(audience + 0x4C), *(f32*)(audience + 0x50));
+        PSMTXRotRad(rot, *(f32*)(audience + 0xA0) * 0.017453292f, 'y');
+        PSMTXScale(scale, size, size, size);
+        PSMTXConcat(trans, rot, model);
+        PSMTXConcat(model, scale, model);
+        PSMTXConcat(cam + 0x118, model, model);
+        GXLoadPosMtxImm(model, 0);
+        GXSetCurrentMtx(0);
+        GXBegin(0x80, 0, 4);
+        for (vertex = 0; vertex < 4; vertex++) {
+            *(volatile f32*)0xCC008000 = (vertex & 1) ? 16.0f : -16.0f;
+            *(volatile f32*)0xCC008000 = (vertex & 2) ? 0.0f : 32.0f;
+            *(volatile f32*)0xCC008000 = 0.0f;
+            *(volatile u32*)0xCC008000 = 0xFFFFFFFF;
+            *(volatile f32*)0xCC008000 = (f32)(vertex & 1);
+            *(volatile f32*)0xCC008000 = (f32)((vertex >> 1) & 1);
+        }
+    }
     return 0;
 }
-
 
 u8 BattleAudienceApSrcCtrlProcess(void) {
+    extern s32 psndSFXChk(s32 id);
+    extern void psndSFX_vol(s32 id, s32 vol);
+    extern void BattleStatusWindowAPRecoveryOff(void);
+    extern s32 BattleAudienceApSrcEntry(void);
+    extern const char str_SFX_BTL_SYS_AP_STAR1_802fa6e4[];
+    extern s32 rand(void);
+    extern f32 intplGetValue(f32 start, f32 end, s32 type, s32 current, s32 max);
+    extern s32 statusGetApPos(void* pos);
+    extern f64 sqrt(f64 value);
+    extern f64 asin(f64 value);
+    extern f64 cos(f64 value);
+    extern f64 sin(f64 value);
+    extern s32 irand(s32 max);
+    extern const f32 float_64_80424a44;
+    extern const f32 float_63_804249b4;
+    extern const f32 float_50_80424a48;
+    extern const f32 float_32767_804249e4;
+    extern const f32 float_25_80424a4c;
+    extern const f32 float_0p9_80424a50;
+    extern const f32 float_0p8_80424a0c;
+    extern const f32 float_0p05_80424a54;
+    extern const f32 float_0p2_804249ec;
+    extern const f32 float_6p2832_80424a58;
+    extern const f32 float_128_80424a5c;
+
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+
+    u8* base;
+    u8* star;
+    s32 active;
+    s32 i;
+    s32 entry;
+    s32 state;
+    VecLocal pos;
+    f32 dx;
+    f32 dy;
+    f32 dist;
+    f32 angle;
+
+    base = BattleAudienceBaseGetPtr();
+    if ((*(u32*)base & 2) != 0) {
+        active = 0;
+        star = base + 0x10E7C;
+        for (i = 0; i < 100; i++, star += 0x60) {
+            if ((*(u32*)star & 1) != 0) {
+                active++;
+            }
+        }
+
+        if (psndSFXChk(*(s32*)(base + 8)) != -1) {
+            psndSFX_vol(*(s32*)(base + 8), (s32)(float_64_80424a44 + (float_63_804249b4 * (f32)active) / float_100_804249bc));
+        }
+
+        if (*(s32*)(base + 0x137BC) < 1) {
+            star = base + 0x10E7C;
+            for (i = 0; i < 100; i++, star += 0x60) {
+                if ((*(u32*)star & 1) != 0) {
+                    break;
+                }
+            }
+            if (i == 100) {
+                *(u32*)base &= ~2;
+                psndSFXOff(*(s32*)(base + 8));
+                *(s32*)(base + 8) = 0;
+                *(s32*)(base + 0x137BC) = 0;
+                BattleStatusWindowAPRecoveryOff();
+                return 0;
+            }
+        } else {
+            entry = BattleAudienceApSrcEntry();
+            if (entry == 1) {
+                *(s32*)(base + 0x137BC) = *(s32*)(base + 0x137BC) - 1;
+            }
+            if (active == 0 && psndSFXChk(*(s32*)(base + 8)) == -1) {
+                psndSFXOn(str_SFX_BTL_SYS_AP_STAR1_802fa6e4);
+                *(s32*)(base + 8) = 0;
+            }
+        }
+
+        star = base + 0x10E7C;
+        for (i = 0; i < 100; i++, star += 0x60) {
+            pouchGetPtr();
+            if ((*(u32*)star & 1) == 0) {
+                continue;
+            }
+            state = *(s32*)(star + 4);
+            switch (state) {
+                case 0:
+                    *(s32*)(star + 4) = 5;
+                    *(f32*)(star + 0x24) = *(f32*)(star + 0x18);
+                    *(f32*)(star + 0x28) = *(f32*)(star + 0x1C);
+                    *(f32*)(star + 0x2C) = *(f32*)(star + 0x20);
+                    *(f32*)(star + 0x30) = *(f32*)(star + 0x24);
+                    *(f32*)(star + 0x34) = *(f32*)(star + 0x28);
+                    *(f32*)(star + 0x38) = *(f32*)(star + 0x2C);
+                    *(f32*)(star + 0x24) += (float_50_80424a48 * (f32)rand()) / float_32767_804249e4 - float_25_80424a4c;
+                    *(f32*)(star + 0x28) += float_25_80424a4c;
+                    *(s32*)(star + 0x3C) = 0;
+                    *(s32*)(star + 0x40) = 0x1E;
+                    /* fallthrough */
+                case 5:
+                    *(s32*)(star + 0x3C) = *(s32*)(star + 0x3C) + 1;
+                    *(f32*)(star + 0x18) = intplGetValue(*(f32*)(star + 0x30), *(f32*)(star + 0x24), 5, *(s32*)(star + 0x3C), *(s32*)(star + 0x40));
+                    *(f32*)(star + 0x1C) = intplGetValue(*(f32*)(star + 0x34), *(f32*)(star + 0x28), 5, *(s32*)(star + 0x3C), *(s32*)(star + 0x40));
+                    if (*(s32*)(star + 0x3C) >= *(s32*)(star + 0x40) - 0x14) {
+                        *(f32*)(star + 0x10) = intplGetValue(float_0p9_80424a50, float_0p8_80424a0c, 4,
+                                                             *(s32*)(star + 0x3C) - (*(s32*)(star + 0x40) - 0x14), 10);
+                    }
+                    if (*(s32*)(star + 0x3C) >= *(s32*)(star + 0x40)) {
+                        *(s32*)(star + 4) = 10;
+                        *(s32*)(star + 0x3C) = 0;
+                        *(s32*)(star + 0x40) = irand(10) + 0xF;
+                    }
+                    break;
+                case 10:
+                    *(s32*)(star + 0x3C) = *(s32*)(star + 0x3C) + 1;
+                    if (*(s32*)(star + 0x3C) >= *(s32*)(star + 0x40)) {
+                        *(s32*)(star + 4) = 0xF;
+                        *(s32*)(star + 0x3C) = 0;
+                        *(s32*)(star + 0x40) = irand(0x14) + 0x14;
+                        *(f32*)(star + 0x30) = *(f32*)(star + 0x18);
+                        *(f32*)(star + 0x34) = *(f32*)(star + 0x1C);
+                        *(f32*)(star + 0x38) = *(f32*)(star + 0x20);
+                        statusGetApPos(&pos);
+                        *(f32*)(star + 0x24) = pos.x;
+                        *(f32*)(star + 0x28) = pos.y;
+                        *(f32*)(star + 0x2C) = pos.z;
+                        dx = *(f32*)(star + 0x30) - *(f32*)(star + 0x24);
+                        dy = *(f32*)(star + 0x34) - *(f32*)(star + 0x28);
+                        dist = (f32)sqrt(dx * dx + dy * dy);
+                        *(f32*)(star + 0x44) = dist;
+                        *(f32*)(star + 0x48) = dist;
+                        *(f32*)(star + 0x4C) = (f32)asin(dy / dist);
+                        *(f32*)(star + 0x50) = float_0p05_80424a54 + (float_0p2_804249ec * (f32)rand()) / float_32767_804249e4;
+                    }
+                    break;
+                case 0xF:
+                    *(s32*)(star + 0x3C) = *(s32*)(star + 0x3C) + 1;
+                    *(f32*)(star + 0x48) = intplGetValue(*(f32*)(star + 0x44), float_0_80424988, 4, *(s32*)(star + 0x3C), *(s32*)(star + 0x40));
+                    angle = *(f32*)(star + 0x4C) + *(f32*)(star + 0x50);
+                    if (angle < float_0_80424988) {
+                        angle += float_6p2832_80424a58;
+                    }
+                    *(f32*)(star + 0x4C) = angle;
+                    *(f32*)(star + 0x18) = *(f32*)(star + 0x48) * (f32)cos(angle) + *(f32*)(star + 0x24);
+                    *(f32*)(star + 0x1C) = *(f32*)(star + 0x48) * (f32)sin(angle) + *(f32*)(star + 0x28);
+                    if (*(s32*)(star + 0x3C) >= *(s32*)(star + 0x40)) {
+                        *(s32*)(star + 4) = 0x14;
+                        *(s32*)(star + 0x3C) = 0;
+                        *(s32*)(star + 0x40) = 0xF;
+                        statusGetApPos(&pos);
+                        *(f32*)(star + 0x18) = pos.x;
+                        *(f32*)(star + 0x1C) = pos.y;
+                        *(f32*)(star + 0x20) = pos.z;
+                    }
+                    break;
+                case 0x14:
+                    *(s32*)(star + 0x3C) = *(s32*)(star + 0x3C) + 1;
+                    if (*(s32*)(star + 0x3C) >= *(s32*)(star + 0x40)) {
+                        *(u32*)star &= ~1;
+                    }
+                    break;
+            }
+        }
+    }
     return 0;
 }
-
 
 u8 BattleAudience_PerAct(void) {
+    extern void BattleAudienceCheer(s32 kind);
+    extern void BattleAudienceAddPuni(s32 num);
+    extern void* evtEntry(void* evt, s32 order, u32 flags);
+    extern void BattleAudience_ActInit(void);
+    extern void* msg_puni_all_escape;
+    extern const f32 float_neg5_80424a80;
+    extern const f32 float_25_80424a4c;
+    extern const f32 float_40_80424a00;
+    extern const f32 float_20_80424a18;
+    extern const f32 float_15_80424a64;
+    extern const f32 float_neg15_80424a84;
+    extern const f32 float_neg20_80424a10;
+    extern const f32 float_neg10_80424a6c;
+    extern const f32 float_30_80424a60;
+
+    u8* base;
+    u8* apInfo;
+    u32 flags;
+    f32 delta;
+    f32 value;
+    s32 positive;
+    s32 streak;
+
+    base = BattleAudienceBaseGetPtr();
+    pouchGetPtr();
+    delta = float_0_80424988;
+    value = float_0_80424988;
+    positive = 0;
+
+    flags = *(u32*)base;
+    if ((flags & 0x100) == 0) {
+        BattleAudienceCheer(2);
+    } else if ((flags & 0x200) == 0) {
+        BattleAudienceCheer(3);
+    }
+
+    flags = *(u32*)base;
+    if ((flags & 0x40000) == 0) {
+        if (((flags & 0x400) == 0) && ((flags & 0x800) != 0)) {
+            delta -= float_5_8042499c;
+            BattleAudienceAddPhaseEvtList(5);
+        }
+
+        apInfo = *(u8**)(base + 0x137B4);
+        if (apInfo != 0) {
+            flags = *(u32*)base;
+            if ((flags & 0x10) != 0 || (flags & 0x20) != 0) {
+                if ((flags & 0x10) == 0) {
+                    if ((flags & 0x1000) == 0) {
+                        *(s32*)(base + 0x137AC) = 0;
+                        positive = 0;
+                        streak = *(s32*)(base + 0x137B0) + 1;
+                        if (streak > 5) {
+                            streak = 5;
+                        }
+                        *(s32*)(base + 0x137B0) = streak;
+                        delta += float_neg5_80424a80;
+                        value = float_neg5_80424a80;
+                    }
+                } else {
+                    positive = 1;
+                    streak = *(s32*)(base + 0x137AC) + 1;
+                    if (streak > 2) {
+                        streak = 2;
+                    }
+                    *(s32*)(base + 0x137AC) = streak;
+                    *(s32*)(base + 0x137B0) = 0;
+                    value = (f32)streak * *(f32*)(apInfo + 0x14);
+                    delta += value;
+                }
+            }
+        }
+
+        flags = *(u32*)base;
+        if ((flags & 0x40) != 0 || (flags & 0x80) != 0) {
+            if ((flags & 0x40) == 0) {
+                *(s32*)(base + 0x137AC) = 0;
+                positive = 0;
+            } else {
+                positive = 1;
+                streak = *(s32*)(base + 0x137AC) + 1;
+                if (streak > 2) {
+                    streak = 2;
+                }
+                *(s32*)(base + 0x137AC) = streak;
+                *(s32*)(base + 0x137B0) = 0;
+                value = (f32)streak;
+                delta += value;
+            }
+        }
+
+        if (positive == 1) {
+            if (value >= float_25_80424a4c) {
+                BattleAudienceAddPhaseEvtList(0);
+            }
+            if (value >= float_40_80424a00) {
+                BattleAudienceAddPhaseEvtList(3);
+            }
+            if (value >= float_20_80424a18) {
+                BattleAudienceAddPhaseEvtList(8);
+            }
+            if (value >= float_15_80424a64) {
+                BattleAudienceAddPhaseEvtList(0xD);
+            }
+        } else {
+            if (value <= float_neg15_80424a84) {
+                BattleAudienceAddPhaseEvtList(1);
+            }
+            if (value <= float_neg20_80424a10) {
+                BattleAudienceAddPhaseEvtList(2);
+            }
+            if (value <= float_neg20_80424a10) {
+                BattleAudienceAddPhaseEvtList(5);
+            }
+            if (value <= float_neg15_80424a84) {
+                BattleAudienceAddPhaseEvtList(9);
+            }
+            if (value <= float_neg20_80424a10) {
+                BattleAudienceAddPhaseEvtList(0xB);
+            }
+            if (value <= float_neg10_80424a6c) {
+                BattleAudienceAddPhaseEvtList(0xD);
+            }
+        }
+
+        apInfo = *(u8**)(base + 0x137B4);
+        if (apInfo != 0) {
+            flags = *(u32*)base;
+            if ((flags & 0x100) != 0 || (flags & 0x200) != 0) {
+                if ((flags & 0x100) != 0) {
+                    value = (f32)((u8)*(u8*)(apInfo + 0x18) * *(s32*)(base + 0x137A8) * 2);
+                    delta += value;
+                    if (value >= float_30_80424a60) {
+                        BattleAudienceAddPhaseEvtList(0);
+                    }
+                    if (value >= float_40_80424a00) {
+                        BattleAudienceAddPhaseEvtList(3);
+                    }
+                    if (value >= float_25_80424a4c) {
+                        BattleAudienceAddPhaseEvtList(8);
+                    }
+                    if (value >= float_20_80424a18) {
+                        BattleAudienceAddPhaseEvtList(0xD);
+                    }
+                    BattleAudienceAddPuni(10);
+                }
+                if ((*(u32*)base & 0x200) != 0) {
+                    delta -= float_5_8042499c;
+                }
+            }
+        }
+
+        if ((*(u32*)base & 0x8000) != 0) {
+            *(void**)(base + 4) = evtEntry(&msg_puni_all_escape, 0, 0x20);
+            *(u32*)base &= ~0x8000;
+        }
+
+        BattleAudienceAddTargetNum(*(f32*)(base + 0x13778) * float_0p01_80424998 * delta, float_0_80424988);
+        BattleAudience_ActInit();
+    }
     return 0;
 }
-
 
 u8 BattleAudienceCtrlProcess(void) {
+    extern s32 BattleAudience_GetExist(s32 id);
+    extern void* BattleAudienceGetPtr(s32 id);
+    extern void BattleAudienceCtrlProcessKinopio(s32 id);
+    extern s32 BattleAudienceItemOn(s32 memberIdx, s32 itemType, s32 num);
+
+    void* battleWork;
+    u8* base;
+    u8* audience;
+    s32 row;
+    s32 col;
+    s32 id;
+    s32 i;
+    s32 j;
+    s32 temp;
+    s32 chance;
+    s32 candidates[200];
+
+    battleWork = _battleWorkPointer;
+    base = BattleAudienceBaseGetPtr();
+    *(s32*)(base + 0x13784) = 0;
+    *(s32*)(base + 0x13788) = 0;
+    *(s32*)(base + 0x1378C) = 0;
+
+    for (row = 0; row < 10; row++) {
+        for (col = 0; col < 10; col++) {
+            id = row * 20 + col + 10;
+            if ((u8)BattleAudience_GetExist(id) == 1) {
+                audience = BattleAudienceGetPtr(id);
+                if (audience[0x19] != 0xC && audience[0x19] != 0xB) {
+                    (*(s32*)(base + 0x13788))++;
+                }
+            }
+        }
+    }
+
+    for (row = 0; row < 10; row++) {
+        for (col = 0; col < 10; col++) {
+            id = row * 20 + col;
+            if ((u8)BattleAudience_GetExist(id) == 1) {
+                audience = BattleAudienceGetPtr(id);
+                if (audience[0x19] != 0xC && audience[0x19] != 0xB) {
+                    (*(s32*)(base + 0x1378C))++;
+                }
+            }
+        }
+    }
+
+    *(s32*)(base + 0x13784) = *(s32*)(base + 0x13788) + *(s32*)(base + 0x1378C);
+
+    audience = BattleAudienceGetPtr(0);
+    for (i = 0; i < 200; i++, audience += 0x134) {
+        if ((*(u32*)audience & 0x10) == 0) {
+            if ((u8)BattleAudience_GetExist(i) != 0) {
+                switch (audience[0x18]) {
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                    case 11:
+                    case 12:
+                        BattleAudienceCtrlProcessKinopio(i);
+                        break;
+                }
+            }
+        } else {
+            *(f32*)(audience + 0x4C) += *(f32*)(audience + 0x58);
+            *(f32*)(audience + 0x58) += *(f32*)(audience + 0x5C);
+            if (*(f32*)(audience + 0x4C) <= float_0_80424988) {
+                *(f32*)(audience + 0x4C) = float_0_80424988;
+                *(f32*)(audience + 0x58) = float_0_80424988;
+                *(f32*)(audience + 0x5C) = float_0_80424988;
+            }
+        }
+    }
+
+    if ((*(u32*)((s32)battleWork + 0xEF4) & 0x20000) != 0) {
+        *(s32*)(base + 0x137C4) = 10000;
+    }
+    if (((*(u32*)((s32)battleWork + 0xF0) & 0x80) != 0) &&
+        (*(s32*)(base + 0x137C0) < *(s32*)(base + 0x137C4))) {
+        if (*(s32*)(base + 0x137C0) == 1) {
+            chance = 6000;
+        } else if (*(s32*)(base + 0x137C0) < 1) {
+            chance = 0x708;
+        } else {
+            chance = 30000;
+        }
+        if ((*(u32*)((s32)battleWork + 0xEF4) & 0x20000) != 0) {
+            chance = 0x3C;
+        }
+        if (irand(chance) == 0) {
+            for (i = 0; i < 200; i++) {
+                candidates[i] = i;
+            }
+            for (i = 0; i < 1000; i++) {
+                id = irand(200);
+                j = irand(200);
+                temp = candidates[id];
+                candidates[id] = candidates[j];
+                candidates[j] = temp;
+            }
+            for (i = 0; i < 200; i++) {
+                if (BattleAudienceItemOn(candidates[i], 0, 1) == 1) {
+                    *(s32*)(base + 0x137C0) = *(s32*)(base + 0x137C0) + 1;
+                    return 0;
+                }
+            }
+        }
+    }
     return 0;
 }
-
 
 void BattleAudience_Case_FallObject_Aud(int memberIdx, u8 objectType) {
     ;

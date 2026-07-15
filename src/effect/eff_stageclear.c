@@ -306,6 +306,36 @@ void* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
 /* CHATGPT STUB FILL: main/effect/eff_stageclear 20260624_184823 */
 
 /* stub-fill: effStageClearDisp | prototype_only | source_prototype */
-void effStageClearDisp(void) {
-    return;
+void effStageClearDisp(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4]; typedef u8 TexObj[0x20]; typedef struct Color{u8 r,g,b,a;}Color;
+    extern void* camGetPtr(s32); extern void PSMTXTrans(Mtx,f64,f64,f64); extern void PSMTXScale(Mtx,f32,f32,f32);
+    extern void PSMTXConcat(void*,void*,void*); extern void GXSetBlendMode(s32,s32,s32,s32); extern void GXSetZMode(s32,s32,s32);
+    extern void GXSetNumChans(s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+    extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevOp(s32,s32);
+    extern void GXSetCullMode(s32); extern void GXClearVtxDesc(void); extern void GXSetVtxDesc(s32,s32); extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
+    extern void effGetTexObj(s32,void*); extern void GXLoadTexObj(void*,s32); extern void GXLoadPosMtxImm(void*,s32); extern void GXSetCurrentMtx(s32);
+    extern void GXLoadTexMtxImm(void*,s32,s32); extern void GXBegin(s32,s32,s32); extern volatile f32 DAT_cc008000;
+    u8* base=*(u8**)((u8*)effect+0xC); void* cam=camGetPtr(3); Mtx baseMtx,trans,scale,model; TexObj tex;
+    s32 type=*(s32*)base; s32 frame=*(s32*)(base+0x1C); s32 i; s32 pass; u8* child; f32 size=0.9f*1.7f**(f32*)(base+0x14);
+    if(*(s32*)0x80000000!=0) size*=0.6f;
+    GXSetBlendMode(1,4,5,0);GXSetZMode(0,3,0);PSMTXTrans(trans,*(f32*)(base+4),*(f32*)(base+8),*(f32*)(base+0xC));
+    PSMTXScale(scale,size,size,size);PSMTXConcat(trans,scale,baseMtx);GXSetNumChans(0);GXSetNumTexGens(2);
+    GXSetTexCoordGen2(0,1,4,0x3C,0,0x7D);GXSetTexCoordGen2(1,1,0,0x1E,0,0x7D);GXSetCullMode(0);GXClearVtxDesc();
+    GXSetVtxDesc(9,1);GXSetVtxDesc(13,1);GXSetVtxAttrFmt(0,9,1,4,0);GXSetVtxAttrFmt(0,13,1,4,0);
+    for(pass=1;pass>=0;pass--){
+        child=base+0x2C;
+        for(i=1;i<*(s32*)((u8*)effect+8);i++,child+=0x2C){
+            if(type%10==0) effGetTexObj(0x40+i,tex); else effGetTexObj(0x49+i,tex);
+            GXLoadTexObj(tex,0);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetTevOp(0,type%10?3:0);
+            PSMTXTrans(trans,*(f32*)(child+4)+(pass?4.0f:0.0f),*(f32*)(child+8)-(pass?4.0f:0.0f),0.0f);
+            PSMTXScale(scale,*(f32*)(child+0x14),*(f32*)(child+0x14),*(f32*)(child+0x14));
+            PSMTXConcat(baseMtx,trans,model);PSMTXConcat(model,scale,model);PSMTXConcat((u8*)cam+0x11C,model,model);
+            GXLoadPosMtxImm(model,0);GXSetCurrentMtx(0);PSMTXTrans(trans,(f64)-frame,0.0,0.0);GXLoadTexMtxImm(trans,0x1E,1);
+            GXBegin(0x80,0,4);DAT_cc008000=-24;DAT_cc008000=24;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;
+            DAT_cc008000=24;DAT_cc008000=24;DAT_cc008000=0;DAT_cc008000=1;DAT_cc008000=0;
+            DAT_cc008000=24;DAT_cc008000=-24;DAT_cc008000=0;DAT_cc008000=1;DAT_cc008000=1;
+            DAT_cc008000=-24;DAT_cc008000=-24;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=1;
+        }
+    }
 }
+

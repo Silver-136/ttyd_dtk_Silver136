@@ -109,6 +109,129 @@ void* effMajinaiEntry(f32 x, f32 y, f32 z, s32 type) {
 /* CHATGPT STUB FILL: main/effect/eff_majinai 20260624_185035 */
 
 /* stub-fill: effMajinaiMain | prototype_only | source_prototype */
-void effMajinaiMain(void* entry) {
-    return;
+void effMajinaiMain(void* effect) {
+    extern void* gp;
+    extern void* _battleWorkPointer;
+    extern void* mapGetWork(void);
+    extern u32 animGroupBaseAsync(char*, s32, s32);
+    extern s32 animPoseEntry(char*, s32);
+    extern void animPoseSetAnim(s32, char*, s32);
+    extern f64 animPoseGetLoopTimes(s32);
+    extern void animPoseSetMaterialFlagOn(s32, u32);
+    extern void animPoseSetMaterialFlagOff(s32, u32);
+    extern void animPoseRelease(s32);
+    extern void* marioGetPtr(void);
+    extern void* BattleGetMarioPtr(void*);
+    extern s32 BtlUnit_GetBodyPartsId(void*);
+    extern void* BtlUnit_GetPartsPtr(void*, s32);
+    extern void effStardustEntry(f32, f32, f32, f32, f32, s32, s32, s32);
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(void*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void effMajinaiDisp(s32, void*);
+    extern char str_MOBJ_EFF_majinai_80302f8c[];
+    extern char str_A_1_80428b2c[];
+    extern u32 dat_80428b14;
+    extern u32 dat_80428b18;
+
+    u8* entry = effect;
+    u8* work = *(u8**)(entry + 0xC);
+    f32 pos[3];
+    s32 inBattle = *(s32*)((u8*)gp + 0x14) != 0;
+    s32 state;
+    void* mapWork;
+    u32 color;
+    s32 value;
+    s32 i;
+
+    pos[0] = *(f32*)(work + 4);
+    pos[1] = *(f32*)(work + 8);
+    pos[2] = *(f32*)(work + 0xC);
+    if ((*(u32*)entry & 4) != 0) {
+        *(u32*)entry &= ~4;
+        if (*(s32*)(work + 0x1C) != -1) {
+            animPoseRelease(*(s32*)(work + 0x1C));
+        }
+        mapWork = mapGetWork();
+        *(u32*)((u8*)mapWork + 0x18) &= ~8;
+        effDelete(effect);
+        return;
+    }
+
+    state = *(s32*)(work + 0x18);
+    if (state == 0) {
+        if (animGroupBaseAsync(str_MOBJ_EFF_majinai_80302f8c, inBattle, 0) == 0) {
+            return;
+        }
+        *(s32*)(work + 0x1C) = animPoseEntry(str_MOBJ_EFF_majinai_80302f8c, inBattle);
+        animPoseSetAnim(*(s32*)(work + 0x1C), str_A_1_80428b2c, 1);
+        (*(s32*)(work + 0x18))++;
+    } else if (state == 1) {
+        mapWork = mapGetWork();
+        value = *(u8*)((u8*)mapWork + 0x1E) - 5;
+        if (value < 0x40) {
+            value = 0x40;
+        }
+        ((u8*)&color)[0] = (u8)value;
+        ((u8*)&color)[1] = (u8)value;
+        ((u8*)&color)[2] = (u8)value;
+        ((u8*)&color)[3] = (u8)dat_80428b14;
+        *(u32*)((u8*)mapWork + 0x1E) = color;
+        *(u32*)((u8*)mapWork + 0x18) |= 8;
+        if (!inBattle) {
+            u8* player = marioGetPtr();
+            for (i = 0; i < 5; i++) {
+                animPoseSetMaterialFlagOn(*(s32*)(player + i * 4), 0x800);
+            }
+        } else {
+            void* unit = BattleGetMarioPtr(_battleWorkPointer);
+            void* part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
+            animPoseSetMaterialFlagOn(*(s32*)((u8*)part + 0x70), 0x800);
+        }
+        if (animPoseGetLoopTimes(*(s32*)(work + 0x1C)) >= 0.93) {
+            f32 radius = 45.0f * *(f32*)(work + 0x10);
+            effStardustEntry(*(f32*)(work + 4),
+                *(f32*)(work + 8) + 55.0f * *(f32*)(work + 0x10),
+                *(f32*)(work + 0xC), radius, radius, 0, 0x10, 0x3C);
+            (*(s32*)(work + 0x18))++;
+        }
+    } else if (state == 2) {
+        if (animPoseGetLoopTimes(*(s32*)(work + 0x1C)) >= 1.0) {
+            (*(s32*)(work + 0x18))++;
+        }
+    } else if (state == 3) {
+        mapWork = mapGetWork();
+        value = *(u8*)((u8*)mapWork + 0x1E) + 5;
+        if (value > 0xFF) {
+            value = 0xFF;
+        }
+        ((u8*)&color)[0] = (u8)value;
+        ((u8*)&color)[1] = (u8)value;
+        ((u8*)&color)[2] = (u8)value;
+        ((u8*)&color)[3] = (u8)dat_80428b18;
+        *(u32*)((u8*)mapWork + 0x1E) = color;
+        *(u32*)((u8*)mapWork + 0x18) |= 8;
+        if (!inBattle) {
+            u8* player = marioGetPtr();
+            for (i = 0; i < 5; i++) {
+                animPoseSetMaterialFlagOff(*(s32*)(player + i * 4), 0x800);
+            }
+        } else {
+            void* unit = BattleGetMarioPtr(_battleWorkPointer);
+            void* part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
+            animPoseSetMaterialFlagOff(*(s32*)((u8*)part + 0x70), 0x800);
+        }
+        *(s32*)(work + 0x14) -= 5;
+        if (*(s32*)(work + 0x14) < 0) {
+            if (*(s32*)(work + 0x1C) != -1) {
+                animPoseRelease(*(s32*)(work + 0x1C));
+            }
+            mapWork = mapGetWork();
+            *(u32*)((u8*)mapWork + 0x18) &= ~8;
+            effDelete(effect);
+            return;
+        }
+    }
+    dispEntry(4, 2, effMajinaiDisp, effect, dispCalcZ(pos));
 }
+

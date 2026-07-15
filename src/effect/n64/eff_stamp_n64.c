@@ -1,10 +1,12 @@
 #include "effect/n64/eff_stamp_n64.h"
 
 
-u8 effStampDisp(void) {
-    return 0;
+void effStampDisp(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32);extern void GXSetNumChans(s32);extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);extern void GXSetNumTevStages(s32);extern void GXSetTevOrder(s32,s32,s32,s32);extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevColorIn(s32,s32,s32,s32,s32);extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);extern void PSMTXTrans(void*,f32,f32,f32);extern void PSMTXRotRad(void*,s32,f32);extern void PSMTXConcat(void*,void*,void*);extern void GXSetTevColor(s32,void*);extern void GXSetNumTexGens(s32);extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);extern void PSMTXScale(void*,f32,f32,f32);extern void GXLoadTexMtxImm(void*,s32,s32);extern void effGetTexObjN64(s32,void*);extern void GXLoadTexObj(void*,s32);extern void GXSetCullMode(s32);extern void effSetVtxDescN64(void*);extern void GXLoadPosMtxImm(void*,s32);extern void GXSetCurrentMtx(s32);extern void GXBegin(s32,s32,s32);extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);extern f32 float_deg2rad_80426160,float_0p03125_80426164,float_0_80426168,float_1_8042616c;
+    f32 base[3][4],rot[3][4],scale[3][4],mtx[3][4];u8 texObj[0x20];u8* work=*(u8**)((s32)effect+0xC);u8* part=work+0x40;s32 i;u32 color;
+    GXSetNumChans(1);GXSetChanCtrl(4,0,0,1,0,0,2);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,4);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,2,3,1,0);GXSetTevAlphaIn(0,0,1,7,7);PSMTXTrans(base,*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC));PSMTXRotRad(rot,0x79,float_deg2rad_80426160*-*(f32*)((s32)camGetPtr(4)+0x114));PSMTXConcat(base,rot,base);PSMTXConcat((void*)((s32)camGetPtr(cameraId)+0x11C),base,base);color=*(u32*)(work+0x34);GXSetTevColor(1,&color);color=*(u32*)(work+0x38);GXSetTevColor(2,&color);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);PSMTXScale(scale,float_0p03125_80426164,float_0p03125_80426164,float_0_80426168);GXLoadTexMtxImm(scale,0x1E,1);effGetTexObjN64(0x2B,texObj);GXLoadTexObj(texObj,0);GXSetCullMode(0);effSetVtxDescN64((void*)0x803A8D80);
+    for(i=1;i<*(s32*)((s32)effect+8);i++,part+=0x40){PSMTXTrans(mtx,*(f32*)(part+4),*(f32*)(part+8),*(f32*)(part+0xC));PSMTXRotRad(rot,0x7A,float_deg2rad_80426160**(f32*)(part+0x2C));PSMTXScale(scale,*(f32*)(part+0x20),*(f32*)(part+0x1C),float_1_8042616c);PSMTXConcat(mtx,rot,mtx);PSMTXConcat(mtx,scale,mtx);PSMTXConcat(base,mtx,mtx);GXLoadPosMtxImm(mtx,0);GXSetCurrentMtx(0);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3,0);}
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

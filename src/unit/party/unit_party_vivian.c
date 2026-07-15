@@ -18,10 +18,121 @@ s32 _disp_heart_entry_stop(void* evt) {
 }
 
 
-u8 battle_evt_majo_disp_on(void) {
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 battle_evt_majo_disp_on(void* evt, s32 isFirstCall) {
+    extern void* _battleWorkPointer;
+    extern s32 evtGetValue(void* evt, s32 arg);
+    extern f32 evtGetFloat(void* evt, s32 arg);
+    extern s32 BattleTransID(void* evt, s32 id);
+    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
+    extern void* BattleGetUnitPartsPtr(s32 unitId, s32 partsId);
+    extern s32 animEffectAsync(char* name, s32 flags);
+    extern f32 intplGetValue(s32 type, f32 start, f32 end, s32 frame, s32 duration);
+    extern void animPoseSetEffect(s32 poseId, char* name, s32 flags);
+    extern void animPoseSetEffectAnim(s32 poseId, char* name, s32 flags);
+    extern void* animPoseGetAnimPosePtr(s32 poseId);
+    extern f32 animPoseGetLoopTimes(void* anim);
+    extern void psndSFXOn_3D(char* name, void* pos);
+    extern void animPoseSetPaperAnimGroup(s32 poseId, char* group, s32 flags);
+    extern char str_PTR_D_4_802f84d0[];
+    extern f32 float_0_804241fc;
+    extern f32 float_1_80424204;
+    extern f32 float_2_8042421c;
+    extern f32 float_200_80424228;
+    extern f32 float_0p66667_8042422c;
+    s32* args;
+    s32 unitId;
+    s32 partsId;
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 clearFlag;
+    void* unit;
+    void* parts;
+    s32 poseId;
+
+    args = *(s32**)((s32)evt + 0x18);
+    unitId = BattleTransID(evt, evtGetValue(evt, args[0]));
+    partsId = evtGetValue(evt, args[1]);
+    x = evtGetFloat(evt, args[2]);
+    y = evtGetFloat(evt, args[3]);
+    z = evtGetFloat(evt, args[4]);
+    clearFlag = evtGetValue(evt, args[5]);
+    unit = BattleGetUnitPtr(_battleWorkPointer, unitId);
+    parts = BattleGetUnitPartsPtr(unitId, partsId);
+    poseId = *(s32*)((s32)parts + 0x1C0);
+
+    if (isFirstCall != 0) {
+        *(s32*)((s32)evt + 0x78) = 0;
+        *(s32*)((s32)evt + 0x7C) = 0;
+        *(s32*)((s32)evt + 0x80) = 0;
+        *(s32*)((s32)evt + 0x84) = 0;
+        *(f32*)((s32)unit + 0x3C) = x;
+        *(f32*)((s32)unit + 0x40) = y - float_200_80424228;
+        *(f32*)((s32)unit + 0x44) = z;
+        animEffectAsync(str_PTR_D_4_802f84d0 + 0x3E8, 1);
+    }
+
+    switch (*(s32*)((s32)evt + 0x78)) {
+        case 0:
+            *(f32*)((s32)parts + 0x78) =
+                intplGetValue(0, float_0_804241fc, float_2_8042421c, *(s32*)((s32)evt + 0x7C), 0x1E);
+            if (*(s32*)((s32)evt + 0x7C) == 0) {
+                psndSFXOn_3D(str_PTR_D_4_802f84d0 + 0x414, (void*)((s32)unit + 0x3C));
+            }
+            *(s32*)((s32)evt + 0x7C) = *(s32*)((s32)evt + 0x7C) + 1;
+            if (*(s32*)((s32)evt + 0x7C) > 0xF) {
+                *(s32*)((s32)evt + 0x78) = *(s32*)((s32)evt + 0x78) + 1;
+            }
+            break;
+        case 1:
+            if (*(s32*)((s32)evt + 0x7C) < 0x1F) {
+                *(f32*)((s32)parts + 0x78) =
+                    intplGetValue(0, float_0_804241fc, float_2_8042421c, *(s32*)((s32)evt + 0x7C), 0x1E);
+                *(s32*)((s32)evt + 0x7C) = *(s32*)((s32)evt + 0x7C) + 1;
+            }
+            if (animEffectAsync(str_PTR_D_4_802f84d0 + 0x3E8, 1) == 0) {
+                return 0;
+            }
+            *(f32*)((s32)unit + 0x3C) = x;
+            *(f32*)((s32)unit + 0x40) = y;
+            *(f32*)((s32)unit + 0x44) = z;
+            animPoseSetEffect(poseId, str_PTR_D_4_802f84d0 + 0x3E8, 1);
+            animPoseSetEffectAnim(poseId, str_PTR_D_4_802f84d0 + 0x430, 1);
+            *(s32*)((s32)evt + 0x78) = *(s32*)((s32)evt + 0x78) + 1;
+            break;
+        case 2:
+            if (*(s32*)((s32)evt + 0x7C) < 0x1F) {
+                *(f32*)((s32)parts + 0x78) =
+                    intplGetValue(0, float_0_804241fc, float_2_8042421c, *(s32*)((s32)evt + 0x7C), 0x1E);
+                *(s32*)((s32)evt + 0x7C) = *(s32*)((s32)evt + 0x7C) + 1;
+            }
+            if (animPoseGetLoopTimes(*(void**)((s32)animPoseGetAnimPosePtr(poseId) + 0x90)) >= float_0p66667_8042422c) {
+                animPoseSetPaperAnimGroup(poseId, 0, 1);
+                *(s32*)((s32)evt + 0x78) = *(s32*)((s32)evt + 0x78) + 1;
+                *(s32*)((s32)evt + 0x7C) = 0;
+            }
+            break;
+        case 3:
+            *(f32*)((s32)parts + 0x78) =
+                intplGetValue(0, float_2_8042421c, float_1_80424204, *(s32*)((s32)evt + 0x7C), 0xF);
+            *(s32*)((s32)evt + 0x7C) = *(s32*)((s32)evt + 0x7C) + 1;
+            if (*(s32*)((s32)evt + 0x7C) > 0xF) {
+                *(f32*)((s32)parts + 0x78) = float_1_80424204;
+                animPoseSetEffect(poseId, 0, 1);
+                if (clearFlag != 0) {
+                    *(u32*)((s32)unit + 0x1C) &= ~0x10000;
+                }
+                return 2;
+            }
+            break;
+    }
+
     return 0;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

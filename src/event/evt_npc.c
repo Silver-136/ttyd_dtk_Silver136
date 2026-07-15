@@ -456,40 +456,1111 @@ USER_FUNC(evt_npc_set_paper) {
 }
 
 
-u8 evt_npc_kamek_move_position(void) {
+s32 evt_npc_kamek_move_position(EventEntry* event, s32 isFirstCall) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+    extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
+    extern void PSVECSubtract(void* a, void* b, void* out);
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern void* fbatGetPointer(void);
+    extern void npcTuningRy(void* npc, f32 ry);
+    extern f64 sin(f64 x);
+    extern f64 cos(f64 x);
+    extern f32 sqrtf(f32 x);
+    extern u8 _kamek_houki_kemuri(s32 npc, s32 animState);
+    extern f32 float_0_8041fd84;
+    extern f32 float_1_8041fd88;
+    extern f32 float_0p1_8041fd98;
+    extern f32 float_20_8041fd9c;
+    extern f32 float_1000_8041fd94;
+    extern f32 float_6p2832_8041fda0;
+    extern f32 float_360_8041fda4;
+    extern f32 float_3p1416_8041fda8;
+    extern f32 float_2_8041fdac;
+
+    s32* args;
+    void* npc;
+    void* fbat;
+    s32 name;
+    f32 targetX;
+    f32 targetZ;
+    f32 arc;
+    f32 duration;
+    f32 step;
+    s32 flags;
+    f32 delta[3];
+    f32 totalDist;
+    f32 remainDist;
+    f32 movedDist;
+    f32 angle;
+    f32 speed;
+    f32 phase0;
+    f32 phase1;
+    f32 s0;
+    f32 s1;
+    f32 c0;
+    f32 zero;
+
+    args = event->args;
+    name = evtGetValue(event, args[0]);
+    targetX = evtGetFloat(event, args[1]);
+    targetZ = evtGetFloat(event, args[2]);
+    arc = evtGetFloat(event, args[3]);
+    duration = (f32)evtGetValue(event, args[4]) / float_1000_8041fd94;
+    step = evtGetFloat(event, args[5]);
+    flags = args[6];
+    zero = float_0_8041fd84;
+
+    npc = evtNpcNameToPtr(event, name);
+    *(u32*)((s32)npc + 0x1D4) |= 0x10;
+    if ((flags & 2) != 0) {
+        *(u32*)((s32)npc + 0x1D4) |= 0x1000;
+    }
+
+    if (isFirstCall != 0) {
+        *(s32*)((s32)npc + 0x18C) = 0;
+        *(s32*)((s32)npc + 0x188) = 0;
+        *(s32*)((s32)npc + 0x108) = 0;
+
+        *(f32*)((s32)npc + 0x164) = targetX;
+        *(f32*)((s32)npc + 0x168) = *(f32*)((s32)npc + 0x90);
+        *(f32*)((s32)npc + 0x16C) = targetZ;
+
+        *(s32*)((s32)npc + 0x158) = *(s32*)((s32)npc + 0x8C);
+        *(s32*)((s32)npc + 0x15C) = *(s32*)((s32)npc + 0x90);
+        *(s32*)((s32)npc + 0x160) = *(s32*)((s32)npc + 0x94);
+
+        PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x158), delta);
+        totalDist = sqrtf(delta[0] * delta[0] + delta[2] * delta[2]);
+        *(f32*)((s32)npc + 0x1AC) = angleABf(zero, zero, delta[0], delta[2]);
+        *(f32*)((s32)npc + 0x1B0) = step;
+        *(f32*)((s32)npc + 0x1C0) = duration;
+        *(f32*)((s32)npc + 0x1B8) = zero;
+
+        if ((*(f32*)((s32)npc + 0x1B0) <= float_0p1_8041fd98) && (zero == *(f32*)((s32)npc + 0x1C0))) {
+            *(f32*)((s32)npc + 0x1B0) = float_1_8041fd88;
+        }
+        if (*(f32*)((s32)npc + 0x1B0) <= float_0p1_8041fd98) {
+            *(f32*)((s32)npc + 0x1B0) = totalDist / *(f32*)((s32)npc + 0x1C0);
+            *(f32*)((s32)npc + 0x1C0) = zero;
+        }
+    }
+
+    if (((flags & 4) == 0) || (*(s32*)((s32)npc + 0x2FC) == 0)) {
+        PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x158), delta);
+        totalDist = sqrtf(delta[0] * delta[0] + delta[2] * delta[2]);
+
+        PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x8C), delta);
+        remainDist = sqrtf(delta[0] * delta[0] + delta[2] * delta[2]);
+
+        if (*(f32*)((s32)npc + 0x1C0) == zero) {
+            if (remainDist <= (float_20_8041fd9c * *(f32*)((s32)npc + 0x1B0)) / float_1000_8041fd94) {
+                *(s32*)((s32)npc + 0x98) = *(s32*)((s32)npc + 0x164);
+                *(s32*)((s32)npc + 0x9C) = *(s32*)((s32)npc + 0x168);
+                *(s32*)((s32)npc + 0xA0) = *(s32*)((s32)npc + 0x16C);
+                *(s32*)((s32)npc + 0x8C) = *(s32*)((s32)npc + 0x98);
+                *(s32*)((s32)npc + 0x90) = *(s32*)((s32)npc + 0x9C);
+                *(s32*)((s32)npc + 0x94) = *(s32*)((s32)npc + 0xA0);
+                *(f32*)((s32)npc + 0x1B0) = zero;
+                return 2;
+            }
+        } else if (*(f32*)((s32)npc + 0x1C0) <= *(f32*)((s32)npc + 0x1A0)) {
+            *(s32*)((s32)npc + 0x98) = *(s32*)((s32)npc + 0x164);
+            *(s32*)((s32)npc + 0x9C) = *(s32*)((s32)npc + 0x168);
+            *(s32*)((s32)npc + 0xA0) = *(s32*)((s32)npc + 0x16C);
+            *(s32*)((s32)npc + 0x8C) = *(s32*)((s32)npc + 0x98);
+            *(s32*)((s32)npc + 0x90) = *(s32*)((s32)npc + 0x9C);
+            *(s32*)((s32)npc + 0x94) = *(s32*)((s32)npc + 0xA0);
+            *(f32*)((s32)npc + 0x1B0) = zero;
+            return 2;
+        }
+
+        if (((flags & 1) != 0) && ((*(u32*)((s32)npc + 0x1D4) & 1) == 0)) {
+            *(f32*)((s32)npc + 0x1AC) = angleABf(zero, zero, delta[0], delta[2]);
+        }
+
+        if (((*(u32*)((s32)npc + 0x1D4) & 2) != 0) && (*(f32*)((s32)npc + 0x1B0) > float_0p1_8041fd98)) {
+            fbat = fbatGetPointer();
+            if ((npc != *(void**)((s32)fbat + 8)) || ((*(s16*)fbat != 5) && (*(s16*)fbat != 6))) {
+                npcTuningRy(npc, *(f32*)((s32)npc + 0x1AC));
+            }
+        }
+
+        angle = *(f32*)((s32)npc + 0x1AC);
+        speed = *(f32*)((s32)npc + 0x1B0);
+        s0 = (f32)sin((f64)((float_6p2832_8041fda0 * angle) / float_360_8041fda4));
+        *(f32*)((s32)npc + 0x1B4) += *(f32*)((s32)npc + 0x1A4) * (speed * s0);
+        c0 = (f32)cos((f64)((float_6p2832_8041fda0 * angle) / float_360_8041fda4));
+        *(f32*)((s32)npc + 0x1BC) += *(f32*)((s32)npc + 0x1A4) * (speed * -c0);
+
+        movedDist = totalDist - remainDist;
+        phase0 = float_3p1416_8041fda8 * (float_2_8041fdac * (movedDist / totalDist));
+        s0 = (f32)sin((f64)phase0);
+        phase1 = float_3p1416_8041fda8 * (float_2_8041fdac * (((speed * *(f32*)((s32)npc + 0x1A4)) + movedDist) / totalDist));
+        s1 = (f32)sin((f64)phase1);
+        *(f32*)((s32)npc + 0x1B8) += arc * s1 - arc * s0;
+
+        if ((flags & 8) == 0) {
+            _kamek_houki_kemuri((s32)npc, *(s32*)((s32)npc + 0x108));
+        }
+        return 0;
+    }
+    return 2;
+}
+
+s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+    extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
+    extern s32 strcmp(const char* a, const char* b);
+    extern void* marioGetPtr(void);
+    extern f32 angleABf(f32 x0, f32 z0, f32 x1, f32 z1);
+    extern f32 compAngle(f32 a, f32 b);
+    extern f32 reviseAngle(f32 a);
+    extern void npcTuningRy(void* npc, f32 ry);
+    extern void PSVECSubtract(void* a, void* b, void* out);
+    extern void* fbatGetPointer(void);
+    extern f64 sin(f64 x);
+    extern f64 cos(f64 x);
+    extern f32 sqrtf(f32 x);
+    extern u32 psndGetFlag(void);
+    extern u32 animPoseGetMaterialFlag(s32 poseId);
+    extern s32 searchPSSFXList(s32 id);
+    extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
+    extern f32 float_0_8041fd84;
+    extern f32 float_1000_8041fd94;
+    extern f32 float_60_8041fdf8;
+    extern f32 float_6p2832_8041fda0;
+    extern f32 float_360_8041fda4;
+    extern char str_mario_8041fdd4[];
+
+    s32* args;
+    s32 npcName;
+    s32 targetName;
+    f32 durationSec;
+    f32 speedParam;
+    f32 stopDist;
+    f32 turnScale;
+    u32 flags;
+    void* npc;
+    void* target;
+    void* fbat;
+    f32 delta[3];
+    f32 dist;
+    f32 dx;
+    f32 dz;
+    f32 targetAngle;
+    f32 angleDiff;
+    f32 turnAmount;
+    s32 soundMask;
+    s32 sfx;
+    s32 userBase;
+
+    args = event->args;
+    npcName = evtGetValue(event, args[0]);
+    targetName = evtGetValue(event, args[1]);
+    durationSec = (f32)evtGetValue(event, args[2]) / float_1000_8041fd94;
+    speedParam = evtGetFloat(event, args[3]);
+    stopDist = evtGetFloat(event, args[4]);
+    turnScale = evtGetFloat(event, args[5]);
+    flags = args[6];
+    npc = evtNpcNameToPtr(event, npcName);
+    *(u32*)((s32)npc + 0x1D4) |= 0x10;
+    userBase = (s32)event + 0x78;
+
+    if (isFirstCall != 0) {
+        *(s32*)((s32)npc + 0x18C) = 0;
+        *(s32*)((s32)npc + 0x188) = 0;
+        *(s32*)((s32)npc + 0x108) = 0;
+
+        if (strcmp((const char*)targetName, str_mario_8041fdd4) == 0) {
+            *(s32*)userBase = 0;
+            target = marioGetPtr();
+            *(void**)(userBase + 4) = target;
+            target = *(void**)(userBase + 4);
+            dx = *(f32*)((s32)target + 0x8C) - *(f32*)((s32)npc + 0x8C);
+            dz = *(f32*)((s32)target + 0x94) - *(f32*)((s32)npc + 0x94);
+        } else {
+            *(s32*)userBase = 1;
+            target = evtNpcNameToPtr(event, targetName);
+            *(void**)(userBase + 4) = target;
+            target = *(void**)(userBase + 4);
+            dx = *(f32*)((s32)target + 0x8C) - *(f32*)((s32)npc + 0x8C);
+            dz = *(f32*)((s32)target + 0x94) - *(f32*)((s32)npc + 0x94);
+        }
+
+        targetAngle = angleABf(float_0_8041fd84, float_0_8041fd84, dx, dz);
+        *(f32*)((s32)npc + 0x1AC) = targetAngle;
+        *(f32*)((s32)npc + 0x1B0) = speedParam;
+        if (speedParam == float_0_8041fd84) {
+            return 2;
+        }
+        *(f32*)((s32)npc + 0x1C0) = durationSec;
+
+        if (((*(u32*)((s32)npc + 0x1D4) & 2) != 0) && (*(f32*)((s32)npc + 0x1B0) != float_0_8041fd84)) {
+            fbat = fbatGetPointer();
+            if ((npc != *(void**)((s32)fbat + 8)) || ((*(s16*)fbat != 5) && (*(s16*)fbat != 6))) {
+                npcTuningRy(npc, *(f32*)((s32)npc + 0x1AC));
+            }
+        }
+
+        *(f32*)((s32)npc + 0x1DC) = float_0_8041fd84;
+        *(s16*)((s32)npc + 0x1D8) = 1;
+        return 0;
+    }
+
+    if ((*(u32*)((s32)npc + 0x1D4) & 1) == 0) {
+        target = *(void**)(userBase + 4);
+        *(f32*)((s32)npc + 0x164) = *(f32*)((s32)target + 0x8C);
+        *(f32*)((s32)npc + 0x168) = *(f32*)((s32)target + 0x90);
+        *(f32*)((s32)npc + 0x16C) = *(f32*)((s32)target + 0x94);
+
+        *(s32*)((s32)npc + 0x158) = *(s32*)((s32)npc + 0x8C);
+        *(s32*)((s32)npc + 0x15C) = *(s32*)((s32)npc + 0x90);
+        *(s32*)((s32)npc + 0x160) = *(s32*)((s32)npc + 0x94);
+
+        PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x158), delta);
+        dist = sqrtf(delta[0] * delta[0] + delta[2] * delta[2]);
+        targetAngle = angleABf(float_0_8041fd84, float_0_8041fd84, delta[0], delta[2]);
+        angleDiff = compAngle(*(f32*)((s32)npc + 0x1AC), targetAngle);
+        turnAmount = float_60_8041fdf8 * turnScale * *(f32*)((s32)npc + 0x1B0);
+        if (turnAmount < ((angleDiff < float_0_8041fd84) ? -angleDiff : angleDiff)) {
+            if (angleDiff <= float_0_8041fd84) {
+                *(f32*)((s32)npc + 0x1AC) -= turnAmount;
+            } else {
+                *(f32*)((s32)npc + 0x1AC) += turnAmount;
+            }
+            *(f32*)((s32)npc + 0x1AC) = reviseAngle(*(f32*)((s32)npc + 0x1AC));
+        } else {
+            *(f32*)((s32)npc + 0x1AC) = targetAngle;
+        }
+
+        if (((*(u32*)((s32)npc + 0x1D4) & 2) != 0) && (*(f32*)((s32)npc + 0x1B0) != float_0_8041fd84)) {
+            fbat = fbatGetPointer();
+            if ((npc != *(void**)((s32)fbat + 8)) || ((*(s16*)fbat != 5) && (*(s16*)fbat != 6))) {
+                npcTuningRy(npc, *(f32*)((s32)npc + 0x1AC));
+            }
+        }
+    } else {
+        dist = float_1000_8041fd94;
+    }
+
+    PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x8C), delta);
+    dx = delta[0];
+    dz = delta[2];
+
+    if (((*(f32*)((s32)npc + 0x1C0) != float_0_8041fd84) && (*(f32*)((s32)npc + 0x1A0) >= *(f32*)((s32)npc + 0x1C0))) ||
+        ((stopDist > float_0_8041fd84) && (sqrtf(dx * dx + dz * dz) < stopDist)) ||
+        (((flags & 4) != 0) && (*(s32*)((s32)npc + 0x2FC) != 0))) {
+        *(f32*)((s32)npc + 0x1B0) = float_0_8041fd84;
+        return 1;
+    }
+
+    targetAngle = *(f32*)((s32)npc + 0x1AC);
+    *(f32*)((s32)npc + 0x1B4) += *(f32*)((s32)npc + 0x1B0) * (f32)sin((f64)((float_6p2832_8041fda0 * targetAngle) / float_360_8041fda4));
+    *(f32*)((s32)npc + 0x1BC) += *(f32*)((s32)npc + 0x1B0) * -(f32)cos((f64)((float_6p2832_8041fda0 * targetAngle) / float_360_8041fda4));
+
+    soundMask = 0;
+    if (((psndGetFlag() & 0x100) != 0) && ((animPoseGetMaterialFlag(*(s32*)((s32)npc + 0x104)) & 0x1800) == 0)) {
+        soundMask = 0x10000;
+    }
+    if ((f32)((f32)*(u16*)((s32)npc + 0x314) / *(f32*)((s32)npc + 0x1B0)) < *(f32*)((s32)npc + 0x1DC)) {
+        if (*(s16*)((s32)npc + 0x1D8) == 0) {
+            if (*(s32*)((s32)npc + 0x2F0) != 0) {
+                sfx = searchPSSFXList(*(s32*)((s32)npc + 0x2F0));
+                psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
+            }
+        } else if (*(s32*)((s32)npc + 0x2EC) != 0) {
+            sfx = searchPSSFXList(*(s32*)((s32)npc + 0x2EC));
+            psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
+        }
+        *(f32*)((s32)npc + 0x1DC) = float_0_8041fd84;
+        *(s16*)((s32)npc + 0x1D8) = (s16)(1 - *(s16*)((s32)npc + 0x1D8));
+    }
+    if ((*(s32*)((s32)npc + 0x2F0) != 0) || (*(s16*)((s32)npc + 0x1D8) != 0)) {
+        *(f32*)((s32)npc + 0x1DC) += float_1000_8041fd94 * *(f32*)((s32)npc + 0x1B0);
+    }
+
     return 0;
 }
 
+s32 evt_npc_move_position(EventEntry* event, s32 isFirstCall) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+    extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
+    extern void PSVECSubtract(void* a, void* b, void* out);
+    extern f32 angleABf(f32 x0, f32 z0, f32 x1, f32 z1);
+    extern void* fbatGetPointer(void);
+    extern void npcTuningRy(void* npc, f32 ry);
+    extern f64 sin(f64 x);
+    extern f64 cos(f64 x);
+    extern f64 __frsqrte(f64 x);
+    extern u32 psndGetFlag(void);
+    extern u32 animPoseGetMaterialFlag(s32 poseId);
+    extern s32 searchPSSFXList(s32 id);
+    extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
+    extern f32 float_0_8041fd84;
+    extern f32 float_1_8041fd88;
+    extern f32 float_20_8041fd9c;
+    extern f32 float_1000_8041fd94;
+    extern f32 float_0p1_8041fd98;
+    extern f32 float_6p2832_8041fda0;
+    extern f32 float_360_8041fda4;
+    extern f32 float_0p0005_8041fe04;
+    extern f32 __float_nan;
 
-u8 evt_npc_homing_target(void) {
+    s32* args;
+    s32 npcName;
+    f32 targetX;
+    f32 targetZ;
+    f32 duration;
+    f32 speed;
+    u32 flags;
+    void* npc;
+    f32 delta[3];
+    f32 dist;
+    f32 distSq;
+    f64 sqrtD;
+    f64 inv;
+    u32 bits;
+    s32 cls;
+    union { f32 f; u32 u; } bitsView;
+    f32 angle;
+    f32 s;
+    f32 c;
+    s32 soundMask;
+    s32 sfx;
+
+    args = event->args;
+    npcName = evtGetValue(event, args[0]);
+    targetX = evtGetFloat(event, args[1]);
+    targetZ = evtGetFloat(event, args[2]);
+    duration = (f32)evtGetValue(event, args[3]) / float_1000_8041fd94;
+    speed = evtGetFloat(event, args[4]);
+    flags = args[5];
+
+    npc = evtNpcNameToPtr(event, npcName);
+    *(u32*)((s32)npc + 0x1D4) |= 0x10;
+    if ((flags & 2) != 0) {
+        *(u32*)((s32)npc + 0x1D4) |= 0x1000;
+    }
+
+    if (isFirstCall != 0) {
+        *(s32*)((s32)npc + 0x18C) = 0;
+        *(s32*)((s32)npc + 0x188) = 0;
+        *(s32*)((s32)npc + 0x108) = 0;
+
+        *(f32*)((s32)npc + 0x164) = targetX;
+        *(f32*)((s32)npc + 0x168) = *(f32*)((s32)npc + 0x90);
+        *(f32*)((s32)npc + 0x16C) = targetZ;
+
+        *(s32*)((s32)npc + 0x158) = *(s32*)((s32)npc + 0x8C);
+        *(s32*)((s32)npc + 0x15C) = *(s32*)((s32)npc + 0x90);
+        *(s32*)((s32)npc + 0x160) = *(s32*)((s32)npc + 0x94);
+
+        PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x158), delta);
+        distSq = delta[0] * delta[0] + delta[2] * delta[2];
+        sqrtD = (f64)distSq;
+        if (sqrtD > (f64)float_0_8041fd84) {
+            inv = __frsqrte(sqrtD);
+            inv = 0.5 * inv * -((sqrtD * inv * inv) - 3.0);
+            inv = 0.5 * inv * -((sqrtD * inv * inv) - 3.0);
+            dist = (f32)(sqrtD * 0.5 * inv * -((sqrtD * inv * inv) - 3.0));
+        } else {
+            if ((f64)float_0_8041fd84 <= sqrtD) {
+                bitsView.f = distSq;
+                bits = bitsView.u & 0x7F800000;
+                if (bits == 0x7F800000) {
+                    if ((bitsView.u & 0x7FFFFF) == 0) {
+                        cls = 2;
+                    } else {
+                        cls = 1;
+                    }
+                } else if ((bits < 0x7F800000) && (bits == 0)) {
+                    if ((bitsView.u & 0x7FFFFF) == 0) {
+                        cls = 3;
+                    } else {
+                        cls = 5;
+                    }
+                } else {
+                    cls = 4;
+                }
+                if (cls == 1) {
+                    dist = __float_nan;
+                } else {
+                    dist = distSq;
+                }
+            } else {
+                dist = __float_nan;
+            }
+        }
+        *(f32*)((s32)npc + 0x1AC) = angleABf(float_0_8041fd84, float_0_8041fd84, delta[0], delta[2]);
+
+        *(f32*)((s32)npc + 0x1B0) = speed;
+        *(f32*)((s32)npc + 0x1C0) = duration;
+        *(f32*)((s32)npc + 0x1B8) = float_0_8041fd84;
+
+        if ((*(f32*)((s32)npc + 0x1B0) <= float_0p1_8041fd98) && (float_0_8041fd84 == *(f32*)((s32)npc + 0x1C0))) {
+            *(f32*)((s32)npc + 0x1B0) = float_1_8041fd88;
+        }
+        if (*(f32*)((s32)npc + 0x1B0) <= float_0p1_8041fd98) {
+            *(f32*)((s32)npc + 0x1B0) = dist / *(f32*)((s32)npc + 0x1C0);
+            *(f32*)((s32)npc + 0x1C0) = float_0_8041fd84;
+        }
+
+        *(f32*)((s32)npc + 0x1DC) = float_0_8041fd84;
+        *(s16*)((s32)npc + 0x1D8) = 1;
+        *(s32*)((s32)event + 0x78) = 0;
+    }
+
+    *(s32*)((s32)event + 0x78) = *(s32*)((s32)event + 0x78) + 1;
+    if (((flags & 4) != 0) && (*(s32*)((s32)npc + 0x2FC) != 0) && (*(s32*)((s32)event + 0x78) > 5)) {
+        return 2;
+    }
+
+    PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x8C), delta);
+    distSq = delta[0] * delta[0] + delta[2] * delta[2];
+    sqrtD = (f64)distSq;
+    if (sqrtD > (f64)float_0_8041fd84) {
+        inv = __frsqrte(sqrtD);
+        inv = 0.5 * inv * -((sqrtD * inv * inv) - 3.0);
+        inv = 0.5 * inv * -((sqrtD * inv * inv) - 3.0);
+        dist = (f32)(sqrtD * 0.5 * inv * -((sqrtD * inv * inv) - 3.0));
+    } else {
+        if ((f64)float_0_8041fd84 <= sqrtD) {
+            bitsView.f = distSq;
+            bits = bitsView.u & 0x7F800000;
+            if (bits == 0x7F800000) {
+                if ((bitsView.u & 0x7FFFFF) == 0) {
+                    cls = 2;
+                } else {
+                    cls = 1;
+                }
+            } else if ((bits < 0x7F800000) && (bits == 0)) {
+                if ((bitsView.u & 0x7FFFFF) == 0) {
+                    cls = 3;
+                } else {
+                    cls = 5;
+                }
+            } else {
+                cls = 4;
+            }
+            if (cls == 1) {
+                dist = __float_nan;
+            } else {
+                dist = distSq;
+            }
+        } else {
+            dist = __float_nan;
+        }
+    }
+
+    if (*(f32*)((s32)npc + 0x1C0) == float_0_8041fd84) {
+        if (dist <= (float_20_8041fd9c * *(f32*)((s32)npc + 0x1B0)) / float_1000_8041fd94) {
+            *(f32*)((s32)npc + 0x1B0) = float_0_8041fd84;
+            return 2;
+        }
+    } else if (*(f32*)((s32)npc + 0x1C0) <= *(f32*)((s32)npc + 0x1A0)) {
+        *(f32*)((s32)npc + 0x1B0) = float_0_8041fd84;
+        return 2;
+    }
+
+    if (dist < float_0p0005_8041fe04) {
+        *(f32*)((s32)npc + 0x1B0) = float_0_8041fd84;
+        return 2;
+    }
+
+    if (((*(u32*)((s32)npc + 0x0) & 1) != 0) && ((*(u32*)((s32)npc + 0x1D4) & 1) == 0)) {
+        *(f32*)((s32)npc + 0x1AC) = angleABf(float_0_8041fd84, float_0_8041fd84, delta[0], delta[2]);
+    }
+
+    if (((*(u32*)((s32)npc + 0x1D4) & 2) != 0) && (*(f32*)((s32)npc + 0x1B0) > float_0p1_8041fd98)) {
+        if ((npc != *(void**)((s32)fbatGetPointer() + 8)) ||
+            ((*(s16*)fbatGetPointer() != 5) && (*(s16*)fbatGetPointer() != 6))) {
+            npcTuningRy(npc, *(f32*)((s32)npc + 0x1AC));
+        }
+    }
+
+    if ((*(u32*)((s32)npc + 0x1D4) & 0x10000) == 0) {
+        angle = *(f32*)((s32)npc + 0x1AC);
+        s = (f32)sin((f64)((float_6p2832_8041fda0 * angle) / float_360_8041fda4));
+        *(f32*)((s32)npc + 0x1B4) += *(f32*)((s32)npc + 0x1A4) * (*(f32*)((s32)npc + 0x1B0) * s);
+        c = (f32)cos((f64)((float_6p2832_8041fda0 * angle) / float_360_8041fda4));
+        *(f32*)((s32)npc + 0x1BC) += *(f32*)((s32)npc + 0x1A4) * (*(f32*)((s32)npc + 0x1B0) * -c);
+    }
+
+    soundMask = 0;
+    if ((psndGetFlag() & 0x100) != 0) {
+        if ((animPoseGetMaterialFlag(*(s32*)((s32)npc + 0x104)) & 0x1800) == 0) {
+            soundMask = 0x10000;
+        }
+    }
+
+    if (((f32)*(u16*)((s32)npc + 0x1E8) / *(f32*)((s32)npc + 0x1B0)) < *(f32*)((s32)npc + 0x1DC)) {
+        if (*(s16*)((s32)npc + 0x1D8) != 0) {
+            if (*(s32*)((s32)npc + 0x1E0) != 0) {
+                sfx = searchPSSFXList(*(s32*)((s32)npc + 0x1E0));
+                psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
+            }
+        } else {
+            if (*(s32*)((s32)npc + 0x1E4) != 0) {
+                sfx = searchPSSFXList(*(s32*)((s32)npc + 0x1E4));
+                psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
+            }
+        }
+        *(f32*)((s32)npc + 0x1DC) = float_0_8041fd84;
+        *(s16*)((s32)npc + 0x1D8) = (s16)(1 - *(s16*)((s32)npc + 0x1D8));
+    }
+
+    if ((*(s32*)((s32)npc + 0x1E4) != 0) || (*(s16*)((s32)npc + 0x1D8) != 0)) {
+        *(f32*)((s32)npc + 0x1DC) += float_1000_8041fd94 * *(f32*)((s32)npc + 0x1B0);
+    }
+
     return 0;
 }
 
+s32 evt_npc_jump_position(EventEntry* event, s32 isFirstCall) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+    extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
+    extern void PSVECSubtract(void* a, void* b, void* out);
+    extern f32 angleABf(f32 x0, f32 z0, f32 x1, f32 z1);
+    extern u32 psndGetFlag(void);
+    extern u32 animPoseGetMaterialFlag(s32 poseId);
+    extern s32 searchPSSFXList(s32 id);
+    extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
+    extern void* fbatGetPointer(void);
+    extern void npcTuningRy(void* npc, f32 ry);
+    extern f64 sin(f64 x);
+    extern f64 cos(f64 x);
+    extern f32 sqrtf(f32 x);
+    extern f32 float_0_8041fd84;
+    extern f32 float_1_8041fd88;
+    extern f32 float_0p5_8041fd90;
+    extern f32 float_1000_8041fd94;
+    extern f32 float_0p1_8041fd98;
+    extern f32 float_6p2832_8041fda0;
+    extern f32 float_360_8041fda4;
+    extern f32 float_neg980_8041fe00;
 
-u8 evt_npc_move_position(s32 pEvt, s32 param_2) {
+    s32* args;
+    s32 npcName;
+    f32 targetX;
+    f32 targetY;
+    f32 targetZ;
+    f32 duration;
+    f32 speed;
+    f32 height;
+    s32 mode;
+    void* npc;
+    void* fbat;
+    f32 diff[3];
+    f32 dist;
+    f32 dy;
+    f32 halfTime;
+    f32 denom;
+    f32 angle;
+    f32 s;
+    f32 c;
+    s32 soundMask;
+    s32 sfx;
+    f32 zero;
+    f32 one;
+
+    args = event->args;
+    npcName = evtGetValue(event, args[0]);
+    targetX = evtGetFloat(event, args[1]);
+    targetY = evtGetFloat(event, args[2]);
+    targetZ = evtGetFloat(event, args[3]);
+    duration = (f32)evtGetValue(event, args[4]) / float_1000_8041fd94;
+    speed = evtGetFloat(event, args[5]);
+    height = evtGetFloat(event, args[6]);
+    mode = evtGetValue(event, args[7]);
+
+    npc = evtNpcNameToPtr(event, npcName);
+    *(u32*)((s32)npc + 0x1D4) |= 0x10;
+    *(u32*)((s32)npc + 0x1D4) |= 0x1000;
+
+    zero = float_0_8041fd84;
+    one = float_1_8041fd88;
+
+    if (isFirstCall != 0) {
+        *(s32*)((s32)npc + 0x18C) = 0;
+        *(s32*)((s32)npc + 0x188) = 0;
+        *(s32*)((s32)npc + 0x17C) = 0;
+        *(s32*)((s32)npc + 0x178) = 0;
+        *(s32*)((s32)npc + 0x108) = 0;
+
+        *(f32*)((s32)npc + 0x164) = targetX;
+        *(f32*)((s32)npc + 0x168) = targetY;
+        *(f32*)((s32)npc + 0x16C) = targetZ;
+
+        *(s32*)((s32)npc + 0x158) = *(s32*)((s32)npc + 0x8C);
+        *(s32*)((s32)npc + 0x15C) = *(s32*)((s32)npc + 0x90);
+        *(s32*)((s32)npc + 0x160) = *(s32*)((s32)npc + 0x94);
+
+        PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x158), diff);
+        dist = sqrtf(diff[0] * diff[0] + diff[2] * diff[2]);
+        *(f32*)((s32)npc + 0x1AC) = angleABf(zero, zero, diff[0], diff[2]);
+
+        *(f32*)((s32)npc + 0x1B0) = speed;
+        *(f32*)((s32)npc + 0x1C0) = zero;
+        *(f32*)((s32)npc + 0x1B8) = zero;
+
+        soundMask = 0;
+        if ((psndGetFlag() & 0x100) != 0) {
+            if ((animPoseGetMaterialFlag(*(s32*)((s32)npc + 0x104)) & 0x1800) == 0) {
+                soundMask = 0x10000;
+            }
+        }
+        if (*(s32*)((s32)npc + 0x1EC) != 0) {
+            sfx = searchPSSFXList(*(s32*)((s32)npc + 0x1EC));
+            psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
+        }
+
+        *(f32*)((s32)npc + 0x1C4) = zero;
+        *(f32*)((s32)npc + 0x1C8) = one;
+
+        dy = targetY - *(f32*)((s32)npc + 0x15C);
+        if (height == zero) {
+            if (zero <= dy) {
+                return 1;
+            }
+            if (mode != 1) {
+                if (mode != 0) {
+                    return 1;
+                }
+                if (*(f32*)((s32)npc + 0x1B0) <= float_0p1_8041fd98) {
+                    if (zero < duration) {
+                        *(f32*)((s32)npc + 0x1CC) = (dy / (duration * duration)) / float_neg980_8041fe00;
+                    }
+                } else {
+                    if (duration <= zero) {
+                        duration = dist / *(f32*)((s32)npc + 0x1B0);
+                    }
+                    if (duration <= zero) {
+                        *(f32*)((s32)npc + 0x1C8) = one;
+                    } else {
+                        denom = duration * (float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * duration);
+                        if (denom != zero) {
+                            *(f32*)((s32)npc + 0x1C8) = dy / denom;
+                        }
+                    }
+                }
+            }
+        } else {
+            if (zero < dy) {
+                height += dy;
+            }
+            *(f32*)((s32)npc + 0x1C4) = zero;
+            if (mode == 1) {
+                if (duration == zero) {
+                    *(f32*)((s32)npc + 0x1C4) = height;
+                } else {
+                    halfTime = float_0p5_8041fd90 * duration;
+                    *(f32*)((s32)npc + 0x1C4) = -(duration * (float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * duration)) / duration;
+                    denom = *(f32*)((s32)npc + 0x1C4) * halfTime + halfTime * float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * halfTime;
+                    if (denom != zero) {
+                        *(f32*)((s32)npc + 0x1C8) = height / denom;
+                    }
+                }
+            } else {
+                if (mode != 0) {
+                    return 1;
+                }
+                if (duration == zero) {
+                    *(f32*)((s32)npc + 0x1C4) = height;
+                } else {
+                    if (*(f32*)((s32)npc + 0x1B0) <= float_0p1_8041fd98) {
+                        *(f32*)((s32)npc + 0x1B0) = dist / duration;
+                        denom = duration;
+                    } else {
+                        denom = dist / *(f32*)((s32)npc + 0x1B0);
+                        if (denom == zero) {
+                            denom = duration;
+                        }
+                    }
+                    if (denom == zero) {
+                        denom = one;
+                    }
+                    halfTime = float_0p5_8041fd90 * denom;
+                    *(f32*)((s32)npc + 0x1C4) = -(denom * (float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * denom)) / denom;
+                    denom = *(f32*)((s32)npc + 0x1C4) * halfTime + halfTime * float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * halfTime;
+                    if (denom != zero) {
+                        *(f32*)((s32)npc + 0x1C8) = height / denom;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    if (((*(u32*)((s32)npc + 0x1D4) & 2) != 0) && (*(f32*)((s32)npc + 0x1B0) > float_0p1_8041fd98)) {
+        fbat = fbatGetPointer();
+        if ((npc != *(void**)((s32)fbat + 8)) || ((*(s16*)fbat != 5) && (*(s16*)fbat != 6))) {
+            npcTuningRy(npc, *(f32*)((s32)npc + 0x1AC));
+        }
+    }
+
+    angle = *(f32*)((s32)npc + 0x1AC);
+    s = (f32)sin((f64)((float_6p2832_8041fda0 * angle) / float_360_8041fda4));
+    *(f32*)((s32)npc + 0x1B4) += *(f32*)((s32)npc + 0x1A4) * (*(f32*)((s32)npc + 0x1B0) * s);
+    c = (f32)cos((f64)((float_6p2832_8041fda0 * angle) / float_360_8041fda4));
+    *(f32*)((s32)npc + 0x1BC) += *(f32*)((s32)npc + 0x1A4) * (*(f32*)((s32)npc + 0x1B0) * -c);
+
+    if ((*(u32*)((s32)npc + 0x1D4) & 1) != 0) {
+        return 0;
+    }
+
+    *(f32*)((s32)npc + 0x1B0) = zero;
+    *(f32*)((s32)npc + 0x1C4) = zero;
+    *(f32*)((s32)npc + 0x1C8) = one;
+    *(f32*)((s32)npc + 0x1CC) = one;
+
+    soundMask = 0;
+    if ((psndGetFlag() & 0x100) != 0) {
+        if ((animPoseGetMaterialFlag(*(s32*)((s32)npc + 0x104)) & 0x1800) == 0) {
+            soundMask = 0x10000;
+        }
+    }
+    if (*(s32*)((s32)npc + 0x1F0) != 0) {
+        sfx = searchPSSFXList(*(s32*)((s32)npc + 0x1F0));
+        psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
+    }
+    return 1;
+}
+
+s32 evt_npc_glide_position(EventEntry* event, s32 isFirstCall) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+    extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
+    extern void PSVECSubtract(void* a, void* b, void* out);
+    extern f32 _intplGetFloat(f32 value, s32 kind);
+    extern void* fbatGetPointer(void);
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern void npcTuningRy(void* npc, f32 ry);
+    extern f64 sin(f64 x);
+    extern u32 psndGetFlag(void);
+    extern u32 animPoseGetMaterialFlag(s32 poseId);
+    extern s32 searchPSSFXList(s32 id);
+    extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
+    extern f64 sqrt(f64);
+    extern f32 float_0_8041fd84;
+    extern f32 float_0p1_8041fd98;
+    extern f32 float_1000_8041fd94;
+    extern f32 float_3p1416_8041fda8;
+    s32* args;
+    void* npc;
+    void* fbat;
+    s32 name;
+    f32 targetX;
+    f32 targetY;
+    f32 targetZ;
+    f32 durationMs;
+    f32 speed;
+    f32 arc;
+    s32 mode;
+    s32 flags;
+    f32 delta[3];
+    f32 dist;
+    f32 denom;
+    f32 now;
+    f32 old;
+    f32 dt;
+    f32 dx;
+    f32 dz;
+    s32 soundMask;
+    s32 sfx;
+
+    args = event->args;
+    name = evtGetValue(event, args[0]);
+    targetX = evtGetFloat(event, args[1]);
+    targetY = evtGetFloat(event, args[2]);
+    targetZ = evtGetFloat(event, args[3]);
+    durationMs = (f32)evtGetValue(event, args[4]) / float_1000_8041fd94;
+    speed = evtGetFloat(event, args[5]);
+    arc = evtGetFloat(event, args[6]);
+    mode = evtGetValue(event, args[7]);
+    flags = args[8];
+    npc = evtNpcNameToPtr(event, name);
+
+    *(u32*)((s32)npc + 0x1D4) |= 0x10;
+    if ((flags & 2) == 0) {
+        *(u32*)((s32)npc + 0x1D4) |= 0x1000;
+    }
+    if (isFirstCall != 0) {
+        *(s32*)((s32)npc + 0x188) = 0;
+        *(s32*)((s32)npc + 0x18C) = 0;
+        *(s32*)((s32)npc + 0x108) = 0;
+        *(f32*)((s32)npc + 0x164) = targetX;
+        *(f32*)((s32)npc + 0x168) = targetY;
+        *(f32*)((s32)npc + 0x16C) = targetZ;
+        *(s32*)((s32)npc + 0x158) = *(s32*)((s32)npc + 0x8C);
+        *(s32*)((s32)npc + 0x15C) = *(s32*)((s32)npc + 0x90);
+        *(s32*)((s32)npc + 0x160) = *(s32*)((s32)npc + 0x94);
+        PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x158), delta);
+        dist = (f32)sqrt((double)(delta[0] * delta[0] + delta[1] * delta[1] + delta[2] * delta[2]));
+        if (durationMs <= float_0_8041fd84) {
+            if (speed == float_0_8041fd84) {
+                return 1;
+            }
+            if (dist == float_0_8041fd84) {
+                return 1;
+            }
+            durationMs = dist / speed;
+        }
+        *(f32*)((s32)npc + 0x178) = durationMs;
+        *(f32*)((s32)npc + 0x17C) = speed;
+        if (*(f32*)((s32)npc + 0x17C) <= float_0p1_8041fd98) {
+            *(f32*)((s32)npc + 0x17C) = dist / *(f32*)((s32)npc + 0x178);
+        }
+        *(f32*)((s32)npc + 0x198) = float_0_8041fd84;
+        *(s16*)((s32)npc + 0x1A6) = 1;
+        return 0;
+    }
+    if ((flags & 1) != 0 && *(s32*)((s32)npc + 0x18C) != 0) {
+        return 2;
+    }
+    now = *(f32*)((s32)npc + 0x1A0);
+    denom = *(f32*)((s32)npc + 0x178);
+    speed = *(f32*)((s32)npc + 0x170);
+    if (denom <= now) {
+        if (denom < now) {
+            speed -= denom - now;
+            if (speed <= float_0_8041fd84) {
+                return 2;
+            }
+        }
+        old = _intplGetFloat((now - speed) / denom, mode);
+        now = _intplGetFloat(now / denom, mode);
+    } else {
+        old = _intplGetFloat((now - speed) / denom, mode);
+        now = _intplGetFloat(now / denom, mode);
+    }
+    dt = now - old;
+    dx = *(f32*)((s32)npc + 0x164) - *(f32*)((s32)npc + 0x158);
+    dz = *(f32*)((s32)npc + 0x16C) - *(f32*)((s32)npc + 0x160);
+    *(f32*)((s32)npc + 0x180) += dx * dt;
+    *(f32*)((s32)npc + 0x184) += dz * dt;
+    if ((*(u32*)((s32)npc + 0x1D4) & 2) != 0 && (dx != float_0_8041fd84 || dz != float_0_8041fd84)) {
+        fbat = fbatGetPointer();
+        if (npc != *(void**)((s32)fbat + 0x48) || (*(s16*)fbat != 5 && *(s16*)fbat != 6)) {
+            npcTuningRy(npc, angleABf(float_0_8041fd84, float_0_8041fd84, dx, dz));
+        }
+    }
+    *(f32*)((s32)npc + 0x17C) += (*(f32*)((s32)npc + 0x168) - *(f32*)((s32)npc + 0x15C)) * dt;
+    *(f32*)((s32)npc + 0x17C) += arc * (f32)sin((double)(float_3p1416_8041fda8 * now)) - arc * (f32)sin((double)(float_3p1416_8041fda8 * old));
+    soundMask = 0;
+    if ((psndGetFlag() & 0x100) != 0 && (animPoseGetMaterialFlag(*(s32*)((s32)npc + 0x104)) & 0x1800) == 0) {
+        soundMask = 0x10000;
+    }
+    if ((f32)((f32)*(u16*)((s32)npc + 0x314) / *(f32*)((s32)npc + 0x17C)) < *(f32*)((s32)npc + 0x198)) {
+        if (*(s16*)((s32)npc + 0x1A6) == 0) {
+            if (*(s32*)((s32)npc + 0x2F0) != 0) {
+                sfx = searchPSSFXList(*(s32*)((s32)npc + 0x2F0));
+                psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
+            }
+        } else if (*(s32*)((s32)npc + 0x2EC) != 0) {
+            sfx = searchPSSFXList(*(s32*)((s32)npc + 0x2EC));
+            psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
+        }
+        *(f32*)((s32)npc + 0x198) = float_0_8041fd84;
+        *(s16*)((s32)npc + 0x1A6) = (s16)(1 - *(s16*)((s32)npc + 0x1A6));
+    }
+    if (*(s32*)((s32)npc + 0x2F0) != 0 || *(s16*)((s32)npc + 0x1A6) != 0) {
+        *(f32*)((s32)npc + 0x198) += float_1000_8041fd94 * *(f32*)((s32)npc + 0x170);
+    }
+    if (denom <= *(f32*)((s32)npc + 0x1A0)) {
+        return 1;
+    }
     return 0;
 }
 
+s32 evt_npc_jump_position_nohit(EventEntry* event, s32 isFirstCall) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
+    extern u32 psndGetFlag(void);
+    extern u32 animPoseGetMaterialFlag(s32 poseId);
+    extern s32 searchPSSFXList(s32 id);
+    extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
+    extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 cur, s32 max);
+    extern u32 DAT_800000f8;
+    extern f32 float_neg4_8041fdfc;
+    s32* args;
+    void* npc;
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 duration;
+    f32 gravityArg;
+    s32 elapsed;
+    f32 t;
+    u32 soundFlag;
+    u32 savedFlags;
+    s32 sfxMask;
+    s32 sfx;
 
-u8 evt_npc_jump_position(s32 pEvt, s32 param_2) {
-    return 0;
+    args = event->args;
+    npc = evtNpcNameToPtr(event, evtGetValue(event, args[0]));
+    x = (f32)evtGetValue(event, args[1]);
+    y = (f32)evtGetValue(event, args[2]);
+    z = (f32)evtGetValue(event, args[3]);
+    duration = evtGetValue(event, args[4]);
+    gravityArg = (f32)evtGetValue(event, args[5]);
+    if (isFirstCall != 0) {
+        *(s32*)((s32)event + 0x198) = *(s32*)((s32)event + 0);
+        *(s32*)((s32)event + 0x19C) = *(s32*)((s32)event + 4);
+        *(s32*)((s32)npc + 0x158) = *(s32*)((s32)npc + 0x8C);
+        *(s32*)((s32)npc + 0x15C) = *(s32*)((s32)npc + 0x90);
+        *(s32*)((s32)npc + 0x160) = *(s32*)((s32)npc + 0x94);
+        *(f32*)((s32)event + 0x7C) = float_neg4_8041fdfc * gravityArg;
+        *(f32*)((s32)event + 0x80) = (y - *(f32*)((s32)npc + 0x15C)) - *(f32*)((s32)event + 0x7C);
+        savedFlags = *(u32*)npc & 0x80000;
+        *(u32*)((s32)event + 0x84) = savedFlags;
+        *(u32*)npc &= ~0x80000;
+        sfxMask = 0;
+        soundFlag = psndGetFlag();
+        if ((soundFlag & 0x100) != 0 && (animPoseGetMaterialFlag(*(s32*)((s32)npc + 0x104)) & 0x1800) == 0) {
+            sfxMask = 0x10000;
+        }
+        if (*(s32*)((s32)npc + 0x300) != 0) {
+            sfx = searchPSSFXList(*(s32*)((s32)npc + 0x300));
+            psndSFXOnEx_3D(sfxMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
+        }
+    }
+    elapsed = (s32)((*(u32*)((s32)event + 0) - *(u32*)((s32)event + 0x198)) / (DAT_800000f8 / 4000));
+    if (elapsed < duration) {
+        t = (f32)elapsed / (f32)duration;
+        *(f32*)((s32)npc + 0x8C) = (f32)intplGetValue(*(f32*)((s32)npc + 0x158), x, 0, elapsed, duration);
+        *(f32*)((s32)npc + 0x94) = (f32)intplGetValue(*(f32*)((s32)npc + 0x160), z, 0, elapsed, duration);
+        *(f32*)((s32)npc + 0x90) = t * (*(f32*)((s32)event + 0x7C) * t + *(f32*)((s32)event + 0x80)) + *(f32*)((s32)npc + 0x15C);
+        return 0;
+    }
+    *(f32*)((s32)npc + 0x8C) = x;
+    *(f32*)((s32)npc + 0x90) = y;
+    *(f32*)((s32)npc + 0x94) = z;
+    *(u32*)npc |= *(u32*)((s32)event + 0x84);
+    sfxMask = 0;
+    soundFlag = psndGetFlag();
+    if ((soundFlag & 0x100) != 0 && (animPoseGetMaterialFlag(*(s32*)((s32)npc + 0x104)) & 0x1800) == 0) {
+        sfxMask = 0x10000;
+    }
+    if (*(s32*)((s32)npc + 0x2FC) != 0) {
+        sfx = searchPSSFXList(*(s32*)((s32)npc + 0x2FC));
+        psndSFXOnEx_3D(sfxMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
+    }
+    return 2;
 }
 
+s32 evt_npc_majo_disp_on(EventEntry* event, s32 isFirstCall) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern f32 evtGetFloat(EventEntry* event, s32 value);
+    extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
+    extern s32 animGroupBaseAsync(void* name, s32 battle, s32 flags);
+    extern void animPoseSetEffect(s32 poseId, void* name, s32 flag);
+    extern void animPoseSetEffectAnim(s32 poseId, void* name, s32 flag);
+    extern void animPosePaperPeraOn(s32 poseId);
+    extern void animPoseSetLocalTime(s32 poseId, f32 time);
+    extern s32 psndSFXOn_3D(s32 id, void* pos);
+    extern s32 animPoseGetVivianType(s32 poseId);
+    extern void* animPoseGetAnimPosePtr(s32 poseId);
+    extern f32 animPoseGetLoopTimes(s32 poseId);
+    extern void animPoseSetPaperAnimGroup(s32 poseId, s32 anim, s32 flag);
+    extern void* gp;
+    extern char str_p_bibi_802c14d8[];
+    extern char str_PM_B_2_802c14e8[];
+    extern f32 float_0_8041fd84;
+    extern f32 float_1_8041fd88;
+    extern f32 float_3_8041fdbc;
+    extern f32 float_10_8041fdc0;
+    extern f32 float_0p66667_8041fdc8;
+    s32* args;
+    s32 name;
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 skip;
+    s32 battle;
+    void* npc;
+    s32 state;
+    void* pose;
 
-u8 evt_npc_glide_position(s32 pEvt, s32 param_2) {
+    args = event->args;
+    name = evtGetValue(event, args[0]);
+    x = evtGetFloat(event, args[1]);
+    y = evtGetFloat(event, args[2]);
+    z = evtGetFloat(event, args[3]);
+    skip = evtGetValue(event, args[4]);
+    battle = (*(s32*)((s32)gp + 0x14) != 0);
+    npc = evtNpcNameToPtr(event, name);
+
+    if (isFirstCall != 0) {
+        *(s32*)((s32)event + 0x78) = -1;
+        *(s32*)((s32)event + 0x7C) = 0;
+    }
+    if (animGroupBaseAsync(str_p_bibi_802c14d8, battle, 0) == 0) {
+        return 0;
+    }
+    if (skip != 0) {
+        return 0;
+    }
+
+    state = *(s32*)((s32)event + 0x78);
+    switch (state) {
+        case -1:
+            *(f32*)((s32)npc + 0x98) = x;
+            *(f32*)((s32)npc + 0x9C) = y;
+            *(f32*)((s32)npc + 0xA0) = z;
+            *(s32*)((s32)npc + 0x8C) = *(s32*)((s32)npc + 0x98);
+            *(s32*)((s32)npc + 0x90) = *(s32*)((s32)npc + 0x9C);
+            *(s32*)((s32)npc + 0x94) = *(s32*)((s32)npc + 0xA0);
+            animPoseSetEffect(*(s32*)((s32)npc + 0x104), str_p_bibi_802c14d8, 1);
+            animPoseSetEffectAnim(*(s32*)((s32)npc + 0x104), str_PM_B_2_802c14e8, 1);
+            animPosePaperPeraOn(*(s32*)((s32)npc + 0x104));
+            animPoseSetLocalTime(*(s32*)((s32)npc + 0x104), float_0_8041fd84);
+            *(s32*)((s32)event + 0x78) += 1;
+            psndSFXOn_3D(0x275, (void*)((s32)npc + 0x8C));
+            break;
+        case 0:
+            *(f32*)((s32)npc + 0x154) += (float_3_8041fdbc - *(f32*)((s32)npc + 0x154)) / float_10_8041fdc0;
+            animPoseSetLocalTime(*(s32*)((s32)npc + 0x104), float_0_8041fd84);
+            *(s32*)((s32)event + 0x7C) += 1;
+            if (*(s32*)((s32)event + 0x7C) > 0x1E) {
+                *(s32*)((s32)event + 0x78) += 1;
+                *(s32*)((s32)event + 0x7C) = 0;
+                state = animPoseGetVivianType(*(s32*)((s32)npc + 0x104));
+                if (state == 1) {
+                    psndSFXOn_3D(0x937, (void*)((s32)npc + 0x8C));
+                } else if (state == 2) {
+                    psndSFXOn_3D(0x27B, (void*)((s32)npc + 0x8C));
+                } else if (state == 3) {
+                    psndSFXOn_3D(0x278, (void*)((s32)npc + 0x8C));
+                }
+            }
+            break;
+        case 1:
+            animPoseSetEffect(*(s32*)((s32)npc + 0x104), str_p_bibi_802c14d8, 1);
+            animPoseSetEffectAnim(*(s32*)((s32)npc + 0x104), str_PM_B_2_802c14e8, 1);
+            animPosePaperPeraOn(*(s32*)((s32)npc + 0x104));
+            *(s32*)((s32)event + 0x78) += 1;
+            break;
+        case 2:
+            pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
+            if (animPoseGetLoopTimes(*(s32*)((s32)pose + 0x90)) >= float_0p66667_8041fdc8) {
+                animPoseSetPaperAnimGroup(*(s32*)((s32)npc + 0x104), 0, 1);
+                *(s32*)((s32)event + 0x78) += 1;
+            }
+            break;
+        case 3:
+            *(f32*)((s32)npc + 0x154) += (float_1_8041fd88 - *(f32*)((s32)npc + 0x154)) / float_10_8041fdc0;
+            *(s32*)((s32)event + 0x7C) += 1;
+            if (*(s32*)((s32)event + 0x7C) > 0x1E) {
+                return 2;
+            }
+            break;
+    }
     return 0;
 }
-
-
-u8 evt_npc_jump_position_nohit(s32 pEvt, s32 param_2) {
-    return 0;
-}
-
-
-u8 evt_npc_majo_disp_on(void) {
-    return 0;
-}
-
 
 s32 evt_npc_setup(EventEntry* event, s32 isFirstCall) {
     extern s32 evtGetValue(EventEntry* event, s32 value);

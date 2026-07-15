@@ -61,10 +61,93 @@ void effSandarsDisp(s32 cameraId, void* effect) {
 /* CHATGPT STUB FILL: main/effect/eff_sandars 20260624_184929 */
 
 /* stub-fill: effSandarsDisp2 | missing_definition | ghidra_signature */
-u8 effSandarsDisp2(void) {
-    return 0;
-}
+void effSandarsDisp2(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32);
+    extern void PSMTXTrans(f32[3][4], f32, f32, f32);
+    extern void PSMTXRotRad(f32[3][4], s32, f32);
+    extern void PSMTXScale(f32[3][4], f32, f32, f32);
+    extern void PSMTXConcat(f32[3][4], f32[3][4], f32[3][4]);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void effGetTexObj(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXLoadPosMtxImm(f32[3][4], s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetChanMatColor(s32, u32*);
+    extern void GXBegin(s32, s32, s32);
+    extern f32 float_deg2rad_80428138;
+    extern u32 dat_80428134;
 
+    void* work = *(void**)((s32)effect + 0xC);
+    void* camera = camGetPtr(cameraId);
+    f32 base[3][4];
+    f32 trans[3][4];
+    f32 rot[3][4];
+    f32 scaleMtx[3][4];
+    f32 draw[3][4];
+    u8 texObj[0x20];
+    volatile f32* fifo = (volatile f32*)0xCC008000;
+    f32 half = -16.0f;
+    s32 i;
+
+    PSMTXTrans(trans, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
+    PSMTXRotRad(rot, 0x79, float_deg2rad_80428138 * -*(f32*)((s32)camGetPtr(cameraId) + 0x114));
+    PSMTXScale(scaleMtx, *(f32*)((s32)work + 0x10), *(f32*)((s32)work + 0x10), *(f32*)((s32)work + 0x10));
+    PSMTXConcat(trans, rot, trans);
+    PSMTXConcat(trans, scaleMtx, trans);
+    PSMTXConcat((f32(*)[4])((s32)camera + 0x34), trans, base);
+
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xA);
+    GXSetTevAlphaIn(0, 7, 4, 4, 7);
+    effGetTexObj(0x44, texObj);
+    GXLoadTexObj(texObj, 0);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
+        void* part = (void*)((s32)work + i * 0x44);
+        f32 size = *(f32*)((s32)part + 0x10) * *(f32*)((s32)part + 0x2C);
+        u32 color = (dat_80428134 & 0xFFFFFF00) | (*(u32*)((s32)part + 0x20) & 0xFF);
+        PSMTXTrans(trans, *(f32*)((s32)part + 4), *(f32*)((s32)part + 8), *(f32*)((s32)part + 0xC));
+        PSMTXRotRad(rot, 0x7A, float_deg2rad_80428138 * *(f32*)((s32)part + 0x38));
+        PSMTXScale(scaleMtx, size, size, size);
+        PSMTXConcat(trans, rot, trans);
+        PSMTXConcat(trans, scaleMtx, trans);
+        PSMTXConcat(base, trans, draw);
+        GXLoadPosMtxImm(draw, 0);
+        GXSetCurrentMtx(0);
+        GXSetChanMatColor(4, &color);
+        GXBegin(0x80, 0, 4);
+        fifo[0] = half; fifo[0] = 16.0f; fifo[0] = 0.0f; fifo[0] = 0.0f; fifo[0] = 0.0f;
+        fifo[0] = 16.0f; fifo[0] = 16.0f; fifo[0] = 0.0f; fifo[0] = 1.0f; fifo[0] = 0.0f;
+        fifo[0] = 16.0f; fifo[0] = half; fifo[0] = 0.0f; fifo[0] = 1.0f; fifo[0] = 1.0f;
+        fifo[0] = half; fifo[0] = half; fifo[0] = 0.0f; fifo[0] = 0.0f; fifo[0] = 1.0f;
+    }
+}
 
 /* CHATGPT STUB FILL: main/effect/eff_sandars 20260624_184929 */
 

@@ -74,8 +74,102 @@ void effSleepMain(void* entry) {
 /* CHATGPT STUB FILL: main/effect/eff_sleep 20260624_184929 */
 
 /* stub-fill: effSleepDisp | prototype_only | source_prototype */
-void effSleepDisp(void* camera, void* entry) {
-    return;
+void effSleepDisp(void* cameraArg, void* effect) {
+    extern void* camGetPtr(s32);
+    extern void PSMTXTrans(f32[3][4], f32, f32, f32);
+    extern void PSMTXScale(f32[3][4], f32, f32, f32);
+    extern void PSMTXRotRad(f32[3][4], s32, f32);
+    extern void PSMTXConcat(f32[3][4], f32[3][4], f32[3][4]);
+    extern void effGetTexObj(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetChanMatColor(s32, void*);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevOp(s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXLoadPosMtxImm(f32[3][4], s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXBegin(s32, s32, s32);
+    extern f64 sin(f64);
+    extern void* gp;
+    extern f32 float_deg2rad_804289cc;
+    extern u32 dat_804289c8;
+
+    u8 texObj[0x20];
+    Mtx baseTrans;
+    Mtx baseScale;
+    Mtx rot;
+    Mtx baseMtx;
+    u8* work = *(u8**)((u8*)effect + 0xC);
+    u8* child = work + 0x24;
+    s32 cameraId = (s32)cameraArg;
+    void* camera = camGetPtr(cameraId);
+    s32 baseAlpha = *(s32*)(work + 0x14);
+    s32 phase = 50;
+    s32 i;
+
+    PSMTXTrans(baseTrans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+    PSMTXScale(baseScale, *(f32*)(work + 0x10), *(f32*)(work + 0x10), *(f32*)(work + 0x10));
+    PSMTXRotRad(rot, 'y', float_deg2rad_804289cc * -*(f32*)((u8*)camera + 0x114));
+    PSMTXConcat(baseTrans, rot, baseTrans);
+    PSMTXConcat(baseTrans, baseScale, baseMtx);
+    PSMTXConcat((f32(*)[4])((u8*)camera + 0x11C), baseMtx, baseMtx);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevOp(0, 0);
+    effGetTexObj(0x70, texObj);
+    GXLoadTexObj(texObj, 0);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+
+    for (i = 1; i < *(s32*)((u8*)effect + 8); i++, child += 0x24, phase += 50) {
+        if (*(s32*)(child + 0x20) == 0) {
+            Mtx trans;
+            Mtx scaleMtx;
+            u32 color = dat_804289c8;
+            volatile f32* fifo = (volatile f32*)0xCC008000;
+            s32 alpha = (*(s32*)(child + 0x14) * baseAlpha) / 0xFF;
+            s32 j;
+
+            ((u8*)&color)[3] = (u8)alpha;
+            GXSetChanMatColor(4, &color);
+            PSMTXTrans(trans, *(f32*)(child + 4), *(f32*)(child + 8), *(f32*)(child + 0xC));
+            PSMTXScale(scaleMtx, *(f32*)(child + 0x10), *(f32*)(child + 0x10), *(f32*)(child + 0x10));
+            PSMTXConcat(trans, scaleMtx, trans);
+            PSMTXConcat(baseMtx, trans, trans);
+            GXLoadPosMtxImm(trans, 0);
+            GXSetCurrentMtx(0);
+            for (j = 0; j < 8; j++) {
+                f32 wave0 = 0.5f * (f32)sin(6.2832f * (f32)(*(s32*)((u8*)gp + 0x10) + phase + j * 10) * 0.015625f);
+                f32 wave1 = 0.5f * (f32)sin(6.2832f * (f32)(*(s32*)((u8*)gp + 0x10) + phase + (j + 1) * 10) * 0.015625f);
+                f32 left = -8.0f * 0.5f;
+                f32 u0 = (f32)j;
+                f32 u1 = (f32)(j + 1);
+                f32 v0 = (f32)(8 - j) * 0.125f;
+                f32 v1 = (f32)(7 - j) * 0.125f;
+                GXBegin(0x80, 0, 4);
+                *fifo = left + wave1; *fifo = u1; *fifo = 0.0f; *fifo = 0.0f; *fifo = v1;
+                *fifo = 4.0f + wave1; *fifo = u1; *fifo = 0.0f; *fifo = 1.0f; *fifo = v1;
+                *fifo = 4.0f + wave0; *fifo = u0; *fifo = 0.0f; *fifo = 1.0f; *fifo = v0;
+                *fifo = left + wave0; *fifo = u0; *fifo = 0.0f; *fifo = 0.0f; *fifo = v0;
+            }
+        }
+    }
 }
 
 /* stub-fill: effSleepEntry | missing_definition | ghidra_signature */

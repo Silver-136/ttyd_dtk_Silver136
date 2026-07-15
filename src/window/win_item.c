@@ -20,10 +20,47 @@ void winItemExit(void* work) {
 }
 
 
-u8 itemUseDisp(void* pWinMgr) {
-    return 0;
-}
+void itemUseDisp(void* pWinMgr) {
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
+    extern void* winGetPtr(void);
+    extern s32 winMgrAction(s32 id);
+    extern s32 pouchGetHP(void);
+    extern s32 pouchGetMaxHP(void);
+    extern s32 pouchGetFP(void);
+    extern s32 pouchGetMaxFP(void);
+    extern void winIconInit(void);
+    extern void winIconGrayInit(void);
+    extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
+    extern void winFontInit(void);
+    extern void winFontSetR(Vec3* pos, Vec3* scale, void* color, char* format, ...);
+    Vec3 pos;
+    Vec3 scale;
+    u32 white = 0xFFFFFFFF;
+    void* pWin = winGetPtr();
+    s32 count = *(s32*)((s32)pWin + 0x3D0);
+    s32 cursor = *(s32*)((s32)pWin + 0x3D4);
+    s32 i;
 
+    if (winMgrAction(*(s32*)((s32)pWin + 0x1A0)) == 0) return;
+    scale.x = 1.0f;
+    scale.y = 1.0f;
+    scale.z = 1.0f;
+    pos.z = 0.0f;
+    for (i = 0; i <= count; i++) {
+        pos.x = *(f32*)((s32)pWinMgr + 0x10) + 20.0f;
+        pos.y = *(f32*)((s32)pWinMgr + 0x14) - i * 31.0f;
+        if (i == cursor) winIconInit();
+        else winIconGrayInit();
+        winIconSet(i == 0 ? 0x1A6 : 0x120 + i, &pos, &scale, &white);
+        winFontInit();
+        pos.x += 52.0f;
+        if (i == 0) {
+            winFontSetR(&pos, &scale, &white, "%d/%d", pouchGetHP(), pouchGetMaxHP());
+            pos.x += 90.0f;
+            winFontSetR(&pos, &scale, &white, "%d/%d", pouchGetFP(), pouchGetMaxFP());
+        }
+    }
+}
 
 u8 itemUseDisp2(void* pWinMgr) {
     typedef struct LocalVec {
@@ -84,19 +121,188 @@ u8 itemUseDisp2(void* pWinMgr) {
 }
 
 s32 winItemMain(void* pWin) {
+    extern s32 pouchGetHaveItemCnt(void);
+    extern s32 pouchHaveItem(s32 index);
+    extern void winMsgEntry(void* win, s32 item, char* text, s32 type);
+    extern char* msgSearch(char* key);
+    extern u8 itemDataTable[];
+    extern void psndSFXOn(s32 id);
+    s32 state = *(s32*)((s32)pWin + 0x10);
+    s32 count;
+    s32 cursor = *(s32*)((s32)pWin + 0x1C0);
+    s32 item;
+    u32 pressed = *(u32*)((s32)pWin + 0x8C);
+    u32 repeat = *(u32*)((s32)pWin + 0x90);
+
+    if (state == 0) {
+        *(s32*)((s32)pWin + 0x1C0) = 0;
+        *(s32*)((s32)pWin + 0x1C4) = 0;
+        *(s32*)((s32)pWin + 0x10) = 10;
+        return 0;
+    }
+    if (state == 10) {
+        count = pouchGetHaveItemCnt();
+        if ((pressed & 0x200) != 0) return -1;
+        if ((repeat & 0x1000) != 0 && cursor > 0) cursor--;
+        if ((repeat & 0x2000) != 0 && cursor + 1 < count) cursor++;
+        if ((repeat & 0x4000) != 0 && cursor > 1) cursor -= 2;
+        if ((repeat & 0x8000) != 0 && cursor + 2 < count) cursor += 2;
+        *(s32*)((s32)pWin + 0x1C0) = cursor;
+        if ((pressed & 0x100) != 0 && count != 0) {
+            item = pouchHaveItem(cursor);
+            winMsgEntry(pWin, item,
+                        msgSearch(*(char**)((s32)itemDataTable + item * 0x28 + 0xC)), 0);
+            psndSFXOn(0x20013);
+            *(s32*)((s32)pWin + 0x10) = 78;
+        }
+    } else if (state == 78) {
+        if ((pressed & 0x300) != 0) *(s32*)((s32)pWin + 0x10) = 10;
+    } else if (state == 100) {
+        if ((pressed & 0x200) != 0) return -1;
+    }
     return 0;
 }
 
-
-u8 item_disp(s64 param_1, s64 param_2, void* pWin) {
-    return 0;
+void item_disp(double x, double y, void* pWin) {
+    typedef struct Vec3 { f32 x,y,z; } Vec3;
+    extern s32 pouchGetHaveItemCnt(void);
+    extern s32 pouchHaveItem(s32);
+    extern void GXSetScissor(s32,s32,s32,s32);
+    extern void winIconInit(void);
+    extern void winIconGrayInit(void);
+    extern void winIconSet(s32,Vec3*,Vec3*,void*);
+    extern void winFontInit(void);
+    extern void winFontSet(Vec3*,Vec3*,void*,char*);
+    extern char* msgSearch(char*);
+    extern u8 itemDataTable[];
+    extern u32 dat_80423758, dat_8042375c;
+    s32 sub = *(s32*)((s32)pWin + 0x210);
+    s32 count = sub ? *(u16*)((s32)pWin + 0x3DA) : pouchGetHaveItemCnt();
+    f32 scroll = *(f32*)((s32)pWin + 0x224 + sub * 4);
+    s32 i;
+    u32 color = dat_80423758;
+    Vec3 pos, scale;
+    GXSetScissor(0,0x6D,0x260,0xC0);
+    scale.x=1.0f; scale.y=1.0f; scale.z=1.0f;
+    for (i=0; i<count; i++) {
+        s32 item = sub ? *(u16*)((s32)pWin + 0x2E8 + i*2) : pouchHaveItem(i);
+        f32 rowY = (f32)y + 100.0f - (f32)(i/2)*38.0f;
+        f32 drawY = scroll + 20.0f + (rowY - 10.0f);
+        if (drawY > 240.0f) continue;
+        if (drawY < -240.0f) break;
+        if (sub == 0 && ((*(u16*)(itemDataTable + item*0x28 + 6) & 1) == 0)) winIconGrayInit();
+        else winIconInit();
+        pos.x = (f32)x + 20.0f + (f32)(i&1)*190.0f;
+        pos.y = drawY; pos.z = 0.0f;
+        winIconSet(*(s16*)(itemDataTable + item*0x28), &pos, &scale, &color);
+        winFontInit();
+        pos.x += 28.0f; pos.y -= 4.0f;
+        winFontSet(&pos, &scale, &color, msgSearch(*(char**)(itemDataTable + item*0x28 + 0x10)));
+    }
+    GXSetScissor(0,0,0x280,0x1E0);
 }
 
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 winItemDisp(s32 param_1, void* pWin, s32 param_3) {
+    typedef struct LocalVec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } LocalVec;
+
+    extern void winBgGX(f32 x, f32 y, void* pWin, s32 type);
+    extern void winKirinukiGX(f32 x, f32 y, f32 w, f32 h, void* pWin, s32 flag);
+    extern void winTexInit(void* tpl);
+    extern void winTexInit_x2(void* tpl);
+    extern void winTexSet(s32 texId, LocalVec* pos, LocalVec* size, u32* color);
+    extern void winTexSet_x2(s32 texId0, s32 texId1, LocalVec* pos, LocalVec* size, u32* color);
+    extern u32 dat_80423748;
+    extern u32 dat_8042374c;
+    extern u32 dat_80423750;
+    extern f32 float_20_804237e8;
+    extern f32 float_105_804237fc;
+    extern f32 float_120_80423834;
+    extern f32 float_150_80423830;
+    extern f32 float_210_8042383c;
+    extern f32 float_215_80423840;
+    extern f32 float_415_80423838;
+    extern f32 float_4_80423844;
+    extern LocalVec vec3_802f5ac0;
+    extern LocalVec vec3_802f5acc;
+    extern LocalVec vec3_802f5ad8;
+    extern LocalVec vec3_802f5ae4;
+    extern LocalVec vec3_802f5af0;
+    extern LocalVec vec3_802f5afc;
+
+    f32 x;
+    f32 y;
+    f32 baseY;
+    f32 selectedY;
+    f32 selectedX;
+    s32 i;
+    s32 yOffset;
+    u32 selectedColor;
+
+    x = *(f32*)((s32)pWin + param_3 * 0x14 + 0xC4);
+    y = *(f32*)((s32)pWin + param_3 * 0x14 + 0xC8);
+    selectedColor = dat_80423748;
+
+    winBgGX(x, y, pWin, 2);
+    winKirinukiGX(x - float_150_80423830,
+                  float_20_804237e8 + (float_120_80423834 + y),
+                  float_415_80423838,
+                  float_210_8042383c,
+                  pWin,
+                  0);
+
+    baseY = float_105_804237fc + y;
+    selectedY = float_4_80423844 + baseY;
+    selectedX = (x - float_215_80423840) - float_4_80423844;
+
+    for (i = 0, yOffset = 0; i < 2; i++, yOffset += 0x32) {
+        if (i == *(s32*)((s32)pWin + 0x210)) {
+            LocalVec pos;
+            LocalVec size;
+            u32 color;
+            LocalVec pos2;
+            LocalVec size2;
+
+            winTexInit(*(void**)(*(s32*)(*(s32*)((s32)pWin + 0x28) + 0xA0)));
+            color = dat_8042374c;
+            size = vec3_802f5acc;
+            pos.x = x - float_215_80423840;
+            pos.y = float_20_804237e8 + (baseY - (f32)yOffset);
+            pos.z = vec3_802f5ac0.z;
+            winTexSet(0xB3, &pos, &size, &color);
+
+            winTexInit_x2(*(void**)(*(s32*)(*(s32*)((s32)pWin + 0x28) + 0xA0)));
+            color = selectedColor;
+            size2 = vec3_802f5ae4;
+            pos2.x = selectedX;
+            pos2.y = float_20_804237e8 + (selectedY - (f32)yOffset);
+            pos2.z = vec3_802f5ad8.z;
+            winTexSet_x2(i + 0x18, 0xB3, &pos2, &size2, &color);
+        } else {
+            LocalVec pos;
+            LocalVec size;
+            u32 color;
+
+            winTexInit_x2(*(void**)(*(s32*)(*(s32*)((s32)pWin + 0x28) + 0xA0)));
+            color = dat_80423750;
+            size = vec3_802f5afc;
+            pos.x = x - float_215_80423840;
+            pos.y = float_20_804237e8 + (baseY - (f32)yOffset);
+            pos.z = vec3_802f5af0.z;
+            winTexSet_x2(i + 0x18, 0xB3, &pos, &size, &color);
+        }
+    }
+
+    item_disp((s64)x, (s64)y, pWin);
     return 0;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 winItemInit(void* pWin) {
     extern f32 float_0_804237b8;

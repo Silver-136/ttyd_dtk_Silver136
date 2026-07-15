@@ -1,14 +1,90 @@
 #include "effect/n64/eff_magic3_n64.h"
 
 
-u8 effMagic3N64Entry(void) {
-    return 0;
+void* effMagic3N64Entry(f32 x, f32 y, f32 z, s32 type, s32 arg) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, s32 size);
+    extern void effMagic3Main(void*);
+    extern char str_Magic3N64_802fb4a8[];
+    extern f32 float_18_80425ab4;
+    extern f32 float_0p6_80425aa4;
+    extern f32 float_0p5_80425ac4;
+    void* entry;
+    u8* work;
+    s32 i;
+
+    entry = effEntry();
+    if (entry == NULL) {
+        return NULL;
+    }
+    *(char**)((s32)entry + 0x14) = str_Magic3N64_802fb4a8;
+    *(s32*)((s32)entry + 8) = 5;
+    work = __memAlloc(3, 0xF0);
+    *(u8**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effMagic3Main;
+
+    for (i = 0; i < 5; i++, work += 0x30) {
+        *(s32*)(work + 0) = type;
+        *(f32*)(work + 4) = x;
+        *(f32*)(work + 8) = y;
+        *(f32*)(work + 0xC) = z;
+        *(f32*)(work + 0x10) = 0.0f;
+        *(f32*)(work + 0x14) = 0.0f;
+        *(f32*)(work + 0x18) = 0.0f;
+        *(f32*)(work + 0x1C) = (f32)(50 - i * 25);
+        *(f32*)(work + 0x20) = float_0p5_80425ac4;
+        *(s32*)(work + 0x24) = 0;
+        *(s32*)(work + 0x28) = arg;
+        *(s32*)(work + 0x2C) = 0;
+    }
+    return entry;
 }
 
+void effMagic3Main(void* effect) {
+    typedef struct Vec3 { f32 x; f32 y; f32 z; } Vec3;
+    extern void effDelete(void*);
+    extern f64 sin(f64);
+    extern f32 dispCalcZ(Vec3*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void effMagic3Disp(s32, s32);
+    extern f32 float_0p8_80425a94, float_0p4_80425a98, float_6p2832_80425a90;
+    extern f32 float_360_80425a9c, float_3_80425aa0, float_0p7_80425aa8;
+    extern f32 float_0p6_80425aa4, float_30_80425aac;
+    u8* work;
+    Vec3 pos;
+    s32 timer, i;
+    f32 phase;
 
-u8 effMagic3Main(void) {
-    return 0;
+    work = *(u8**)((s32)effect + 0xC);
+    pos.x = *(f32*)(work + 4); pos.y = *(f32*)(work + 8); pos.z = *(f32*)(work + 0xC);
+    *(s32*)(work + 0x28) -= 1;
+    *(s32*)(work + 0x2C) += 1;
+    timer = *(s32*)(work + 0x28);
+    if (timer < 0) { effDelete(effect); return; }
+    phase = float_6p2832_80425a90 * (f32)(*(s32*)(work + 0x2C) * 30) / float_360_80425a9c;
+    for (i = 0; i < *(s32*)((s32)effect + 8); i++) {
+        if (timer > 5) {
+            *(f32*)(work + 0x10) *= float_0p8_80425a94;
+            *(f32*)(work + 0x14) *= float_0p8_80425a94;
+            *(f32*)(work + 0x18) *= float_0p8_80425a94;
+            *(s32*)(work + 0x24) = (s32)(float_0p4_80425a98 * (255 - *(s32*)(work + 0x24)) + *(s32*)(work + 0x24));
+            *(f32*)(work + 0x20) = (f32)sin((f64)phase);
+        }
+        if (timer < 5) {
+            *(s32*)(work + 0x24) = (s32)((f32)*(s32*)(work + 0x24) * float_0p6_80425aa4);
+            *(f32*)(work + 0x10) *= float_0p7_80425aa8;
+            *(f32*)(work + 0x14) *= float_0p7_80425aa8;
+            *(f32*)(work + 0x18) *= float_0p7_80425aa8;
+            *(f32*)(work + 0x20) = (255 - *(s32*)(work + 0x24)) / float_30_80425aac + (f32)sin((f64)phase);
+        }
+        *(f32*)(work + 4) += *(f32*)(work + 0x10);
+        *(f32*)(work + 8) += *(f32*)(work + 0x14);
+        *(f32*)(work + 0xC) += *(f32*)(work + 0x18);
+        work += 0x30;
+    }
+    dispEntry(4, 2, effMagic3Disp, effect, dispCalcZ(&pos));
 }
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void effMagic3Disp(s32 cameraId, void* effect) {

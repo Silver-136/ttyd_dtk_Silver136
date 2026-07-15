@@ -75,10 +75,89 @@ s32 getBadgeBottakuru100TableMaxCount(void) {
 }
 
 
-void badgeShop_bargainGeneration(void) {
-    ;
+void badgeShop_bargainGeneration(void)  {
+    extern s32 evtGetValue(void*, s32);
+    extern s32 evtSetValue(void*, s32, s32);
+    extern s32 badgeShop_add(void*, s16, s32);
+    extern s32 badgeShop_get(void*, s16);
+    extern s32 badgeShop_set(void*, s16, s32);
+    extern s32 irand(s32);
+    extern void* bdsw;
+    extern s32 badge_special_table_stage_1_clear[];
+    extern s32 badge_special_table_stage_2_clear[];
+    extern s32 badge_special_table_stage_3_clear[];
+    extern s32 badge_special_table_stage_4_clear[];
+    extern s32 badge_special_table_stage_5_clear[];
+    extern s32 badge_special_table_stage_6_clear[];
+    s32* stageTables[6];
+    s32 thresholds[6];
+    s32 flags[6];
+    u8 available[25];
+    s32 candidates[99];
+    s32 candidateCount;
+    s32 desired;
+    s32 selected;
+    s32 item;
+    s32 index;
+    s32 pick;
+    s32 i;
+    s32* table;
+    stageTables[0]=badge_special_table_stage_1_clear;
+    stageTables[1]=badge_special_table_stage_2_clear;
+    stageTables[2]=badge_special_table_stage_3_clear;
+    stageTables[3]=badge_special_table_stage_4_clear;
+    stageTables[4]=badge_special_table_stage_5_clear;
+    stageTables[5]=badge_special_table_stage_6_clear;
+    thresholds[0]=0x36;
+    thresholds[1]=0x6F;
+    thresholds[2]=0xA3;
+    thresholds[3]=0xD3;
+    thresholds[4]=0xFC;
+    thresholds[5]=0x151;
+    flags[0]=-0x7BFA392;
+    flags[1]=-0x7BFA391;
+    flags[2]=-0x7BFA390;
+    flags[3]=-0x7BFA38F;
+    flags[4]=-0x7BFA38E;
+    flags[5]=-0x7BFA38D;
+    for(i=0;i<6;i++) {
+        if(evtGetValue(0,-170000000)>thresholds[i] && evtGetValue(0,flags[i])==0) {
+            evtSetValue(0,flags[i],1);
+            table=stageTables[i];
+            while(*table!=0) {
+                badgeShop_add(bdsw,(s16)*table,1);
+                table++;
+            }
+        }
+    }
+    if(evtGetValue(0,-170000000)>0x174 && evtGetValue(0,-0x7BFA38C)==0)evtSetValue(0,-0x7BFA38C,1);
+    if(evtGetValue(0,-170000000)>400 && evtGetValue(0,-0x7BFA38B)==0)evtSetValue(0,-0x7BFA38B,1);
+    for(i=0;i<25;i++)available[i]=0;
+    for(i=0;i<5;i++)*(s32*)((u8*)bdsw+0xF8+i*4)=0;
+    candidateCount=0;
+    for(item=0xF0;item<=0x152 && candidateCount<99;item++) {
+        if(badgeShop_get((u8*)bdsw+0x4B,(s16)item)!=0) {
+            available[candidateCount>>2]|=(u8)(3<<((candidateCount&3)*2));
+            candidates[candidateCount++]=item;
+        }
+    }
+    desired=candidateCount<6?candidateCount:5;
+    selected=0;
+    while(selected<desired && candidateCount>0) {
+        pick=irand(candidateCount);
+        item=candidates[pick];
+        *(s32*)((u8*)bdsw+0xF8+selected*4)=item;
+        badgeShop_set(available,(s16)item,0);
+        candidates[pick]=candidates[candidateCount-1];
+        candidateCount--;
+        selected++;
+    }
+    for(i=0;i<25;i++)*((u8*)bdsw+0x19+i)=*((u8*)bdsw+i);
+    for(index=0;index<5;index++) {
+        item=*(s32*)((u8*)bdsw+0xF8+index*4);
+        if(item!=0)badgeShop_add((u8*)bdsw+0x19,(s16)item,-1);
+    }
 }
-
 
 void badgeShop_bottakuruGeneration(void) {
     typedef struct BottakuruEntry {
@@ -244,7 +323,7 @@ s32 evt_badgeShop_throw_get_kind_cnt(EventEntry* event) {
 s32 badgeShop_add(void* shop, s16 item, s32 count) {
     s32 base;
     s32 index;
-    s32 mask;
+    u8 mask;
     s32 shift;
     s32 value;
     s32 byteIndex;
@@ -261,6 +340,7 @@ s32 badgeShop_add(void* shop, s16 item, s32 count) {
     }
 
     index = (s16)(item - base);
+
     switch (index & 3) {
         case 0:
             mask = 3;
@@ -281,21 +361,22 @@ s32 badgeShop_add(void* shop, s16 item, s32 count) {
     }
 
     byteIndex = index / 4;
-    mask = (u8)mask;
     old = *(u8*)((s32)shop + byteIndex);
+
     value = (s16)((old & mask) >> shift);
     value += count;
     value = (s16)value;
+
     if (value < 0) {
         value = 0;
     } else if (value > 3) {
         value = 3;
     }
 
-    *(u8*)((s32)shop + byteIndex) = (old & ~mask) + (u8)((s16)value << shift);
+    *(u8*)((s32)shop + byteIndex) = (u8)(old & ~mask) + (u8)((s16)value << shift);
+
     return value;
 }
-
 
 s32 U_evt_badgeShop_get_special_zaiko(EventEntry* event) {
     s32* args = event->args;

@@ -303,45 +303,1200 @@ void BattleCommandDisplay_WeaponSelectMenuSetup(void* work, s32 cursorId, s32 fl
 }
 
 
-void _btlcmd_MakeSelectWeaponTable() {
-    ;
-}
+void _btlcmd_MakeSelectWeaponTable(void* battleWork, s32 type) {
+    extern void* pouchGetPtr(void);
+    extern s32 pouchEquipCheckBadge(s32 item);
+    extern s32 _getJumpIconId(void);
+    extern s32 _getHammerIconId(void);
+    extern u8 marioDefaultWeapon_Jump[];
+    extern u8 marioDefaultWeapon_Hammer[];
+    extern s32 _jump_badge_table[];
+    extern s32 _hammer_badge_table[];
+    void* command;
+    u8* table;
+    s32* badges;
+    s32 count;
+    s32 i;
+    s32 item;
 
+    command = (void*)((s32)battleWork + 0x171C);
+    table = (u8*)((s32)command + 0x80);
+    count = 0;
+
+    *(s32*)(table + 0x00) = -1;
+    *(s32*)(table + 0x08) = 0;
+    *(void**)(table + 0x0C) = type == 0 ? marioDefaultWeapon_Jump : marioDefaultWeapon_Hammer;
+    *(u16*)(table + 0x14) = type == 0 ? _getJumpIconId() : _getHammerIconId();
+    count++;
+
+    badges = type == 0 ? _jump_badge_table : _hammer_badge_table;
+    for (i = 0; i < 9; i++) {
+        item = badges[i];
+        if (pouchEquipCheckBadge(item) > 0) {
+            u8* entry = table + count * 0x20;
+            *(s32*)(entry + 0x00) = i;
+            *(s32*)(entry + 0x08) = item;
+            *(s32*)(entry + 0x18) = 0;
+            count++;
+        }
+    }
+    *(s32*)((s32)command + 0x7C) = count;
+}
 
 s32 BattleCommandInput(void* battleWork) {
+    extern void BattleAcHelpSetDispType(s32);
+    extern void BattleAcHelpSetHelp(const char*);
+    extern void BattleStageOnLightInCommand(void);
+    extern void BattleStageOffLightInCommand(void);
+    extern void BattleStageOffLightFriendInCommand(void);
+    extern void BattleStageOffLightEnemyInCommand(void);
+    extern void BtlUnit_SetCommandAnimPose(void*);
+    extern void BattleCommandDisplay_ActMenuSetup(void*, u32);
+    extern s32 BattleCommandDisplay_ActMenuMain(void*);
+    extern void BattleCommandDisplay_WeaponSelectMenuSetup(void*, s32, s32);
+    extern s32 BattleCommandDisplay_WeaponSelectMenuMain(void*, s32);
+    extern void BattleCommandDisplay_TargetSelectMenuEnd(void*);
+    extern void BattleCommandDisplay_WeaponMultiItemCancelCheckSetup(void*);
+    extern s32 BattleCommandDisplay_WeaponMultiItemCancelCheckMain(void*);
+    extern s32 BattlePadCheckTrigger(s32);
+    u8* command = (u8*)battleWork + 0x171C;
+    void* unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
+    s32 state;
+    s32 result;
+    s32 loop;
+
+    if (command == NULL) {
+        return 1;
+    }
+    loop = 1;
+    while (loop) {
+        loop = 0;
+        state = *(s32*)command;
+        switch (state) {
+            case 0:
+                *(u8*)(command + 0x551) = 0;
+                *(u32*)((s32)battleWork + 0xEF8) |= 1;
+                BtlUnit_SetCommandAnimPose(unit);
+                if (*(s8*)((s32)unit + 0x20) < 5 || *(s8*)((s32)unit + 0x20) > 9) {
+                    BattleCommandDisplay_ActMenuSetup(battleWork, 0);
+                    *(s32*)command = 2;
+                } else {
+                    *(s32*)command = 5;
+                }
+                BattleStageOnLightInCommand();
+                BattleStageOffLightFriendInCommand();
+                BattleStageOffLightEnemyInCommand();
+                break;
+            case 1:
+                BattleCommandDisplay_ActMenuSetup(battleWork, 1);
+                *(s32*)command = 2;
+                break;
+            case 2:
+                if (BattleCommandDisplay_ActMenuMain(battleWork) != 0) {
+                    loop = 1;
+                }
+                break;
+            case 5:
+            case 6:
+                BattleCommandDisplay_WeaponSelectMenuSetup(
+                    battleWork, *(s32*)(command + 0x540), state == 5);
+                BattleStageOffLightFriendInCommand();
+                BattleStageOffLightEnemyInCommand();
+                *(s32*)command = 7;
+                loop = 1;
+                break;
+            case 7:
+                result = BattleCommandDisplay_WeaponSelectMenuMain(
+                    battleWork, *(s32*)(command + 0x540));
+                if (result != 0) {
+                    loop = 1;
+                }
+                break;
+            case 10:
+                BattleAcHelpSetDispType(1);
+                *(s32*)command = 11;
+                break;
+            case 11:
+                if (BattlePadCheckTrigger(0x200)) {
+                    BattleCommandDisplay_TargetSelectMenuEnd(battleWork);
+                    *(s32*)command = 6;
+                    *(u32*)((s32)battleWork + 0x1720) &= ~4;
+                    BattleAcHelpSetDispType(0);
+                    BtlUnit_SetCommandAnimPose(unit);
+                } else if (BattlePadCheckTrigger(0x100)) {
+                    BattleStageOffLightInCommand();
+                    BattleCommandDisplay_TargetSelectMenuEnd(battleWork);
+                    *(u32*)((s32)battleWork + 0x1720) |= 4;
+                    *(s32*)command = 0x1D;
+                    BattleAcHelpSetDispType(2);
+                }
+                break;
+            case 0xC:
+                *(s32*)command = 0xD;
+                BattleCommandDisplay_WeaponMultiItemCancelCheckSetup(battleWork);
+                break;
+            case 0xD:
+                if (BattleCommandDisplay_WeaponMultiItemCancelCheckMain(battleWork) != 0) {
+                    loop = 1;
+                }
+                break;
+            case 0x1D:
+                return 1;
+        }
+    }
     return 0;
 }
-
 
 void _btlcmd_MakeActClassTable(void* battleWork) {
-    ;
-}
+    typedef struct ActionEntry {
+        s32 type;
+        s32 enabled;
+        char* name;
+        u16 icon;
+        u16 pad;
+        s32 disabledGrey;
+    } ActionEntry;
 
+    extern char* msgSearch(const char* msg);
+    extern const char str_btl_cmd_act_item_802eff0c[];
+    extern const char str_btl_cmd_act_jump_802f0018[];
+    extern const char str_btl_cmd_act_tech_par_802f002c[];
+    extern const char str_btl_cmd_act_hammer_802f0044[];
+    extern const char str_btl_cmd_act_super_ac_802f0058[];
+    extern const char str_btl_cmd_act_operatio_802f0074[];
+    extern const char str_btl_cmd_act_lecture__802f008c[];
+
+    void* unit;
+    void* pouch;
+    void* info;
+    void* npcInfo;
+    void* commandWork;
+    void* cursor;
+    ActionEntry* table;
+    s32 count;
+    s32 next;
+    s32 kind;
+    s32 level;
+
+    unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
+    commandWork = (void*)((s32)battleWork + 0x171C);
+    pouch = pouchGetPtr();
+    info = *(void**)((s32)battleWork + 0x2738);
+    npcInfo = *(void**)((s32)info + 0xC);
+
+    if (commandWork != 0) {
+        kind = *(s32*)((s32)unit + 8);
+        if (kind == 0xDE) {
+            cursor = (void*)((s32)commandWork + 0x498);
+        } else {
+            cursor = (void*)((s32)commandWork + 0x4A4);
+        }
+        table = (ActionEntry*)((s32)commandWork + 8);
+        count = 0;
+
+        if (kind == 0xDE) {
+            table[0].type = 0;
+            table[0].enabled = 1;
+            table[0].disabledGrey = 0;
+            if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
+                table[0].enabled = 0;
+                table[0].disabledGrey = 3;
+            }
+            if (*(s8*)((s32)pouch + 0x98) < 1) {
+                table[0].enabled = 0;
+            }
+            if (*(u8*)((s32)unit + 0x300) != 0) {
+                table[0].enabled = 0;
+                table[0].disabledGrey = 3;
+            }
+            if (*(s32*)((s32)battleWork + 0x19050) > 0) {
+                table[0].enabled = 0;
+                table[0].disabledGrey = 3;
+            }
+            if ((*(u32*)((s32)npcInfo + 4) & 0x1000000) != 0) {
+                table[0].enabled = 0;
+                table[0].disabledGrey = 3;
+            }
+            if ((*(u32*)((s32)battleWork + 0xEF4) & 0x6800000) != 0) {
+                table[0].enabled = 0;
+                table[0].disabledGrey = 3;
+            }
+            table[0].name = msgSearch(str_btl_cmd_act_jump_802f0018);
+            level = *(s8*)((s32)pouch + 0x98);
+            if (level == 2) {
+                table[0].icon = 0x14F;
+            } else if (level > 0 && level < 2) {
+                table[0].icon = 0x14E;
+            } else {
+                table[0].icon = 0x150;
+            }
+            count = 1;
+        }
+
+        next = count;
+        if (kind > 0xDF && kind < 0xE7) {
+            table[count].type = 6;
+            if (*(s8*)((s32)unit + 0x12B) == 0) {
+                table[count].enabled = 1;
+                table[count].disabledGrey = 0;
+            } else {
+                table[count].enabled = 0;
+                table[count].disabledGrey = 3;
+            }
+            if (*(u16*)((s32)unit + 0x13C) != 0) {
+                table[count].enabled = 0;
+                table[count].disabledGrey = 3;
+            }
+            if ((*(u32*)((s32)battleWork + 0xEF4) & 0x4800000) != 0) {
+                table[count].enabled = 0;
+                table[count].disabledGrey = 3;
+            }
+            table[count].name = msgSearch(str_btl_cmd_act_tech_par_802f002c);
+            table[count].icon = 0x157;
+            next = count + 1;
+        }
+
+        if (kind == 0xDE && *(s8*)((s32)pouch + 0x99) > 0) {
+            table[next].type = 1;
+            table[next].enabled = 1;
+            table[next].disabledGrey = 0;
+            if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
+                table[next].enabled = 0;
+                table[next].disabledGrey = 3;
+            }
+            if (*(s8*)((s32)pouch + 0x99) < 1) {
+                table[next].enabled = 0;
+            }
+            if (*(u8*)((s32)unit + 0x2FF) != 0) {
+                table[next].enabled = 0;
+                table[next].disabledGrey = 3;
+            }
+            if (*(s32*)((s32)battleWork + 0x19054) > 0) {
+                table[next].enabled = 0;
+                table[next].disabledGrey = 3;
+            }
+            if ((*(u32*)((s32)npcInfo + 4) & 0x2000000) != 0) {
+                table[next].enabled = 0;
+                table[next].disabledGrey = 3;
+            }
+            if ((*(u32*)((s32)battleWork + 0xEF4) & 0x5800000) != 0) {
+                table[next].enabled = 0;
+                table[next].disabledGrey = 3;
+            }
+            table[next].name = msgSearch(str_btl_cmd_act_hammer_802f0044);
+            level = *(s8*)((s32)pouch + 0x99);
+            if (level == 2) {
+                table[next].icon = 0x152;
+            } else if (level > 0 && level < 2) {
+                table[next].icon = 0x151;
+            } else {
+                table[next].icon = 0x153;
+            }
+            next++;
+        }
+
+        count = next;
+        if (kind == 0xDE || (kind > 0xDF && kind < 0xE7)) {
+            table[next].type = 2;
+            if (*(s8*)((s32)unit + 0x12B) == 0) {
+                table[next].enabled = 1;
+                table[next].disabledGrey = 0;
+            } else {
+                table[next].enabled = 0;
+                table[next].disabledGrey = 3;
+            }
+            if (kind == 0xDE) {
+                if (*(s32*)((s32)battleWork + 0x19058) > 0) {
+                    table[next].enabled = 0;
+                    table[next].disabledGrey = 3;
+                }
+            } else if (*(u16*)((s32)unit + 0x13E) != 0) {
+                table[next].enabled = 0;
+                table[next].disabledGrey = 3;
+            }
+            if ((*(u32*)((s32)battleWork + 0xEF4) & 0x1F800000) != 0) {
+                table[next].enabled = 0;
+                table[next].disabledGrey = 3;
+            }
+            table[next].name = msgSearch(str_btl_cmd_act_item_802eff0c);
+            table[next].icon = 0x154;
+            count = next + 1;
+        }
+
+        next = count;
+        if (kind == 0xDE && *(u16*)((s32)pouch + 0x8C) != 0) {
+            table[count].type = 4;
+            table[count].enabled = 1;
+            table[count].disabledGrey = 0;
+            if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
+                table[count].enabled = 0;
+                table[count].disabledGrey = 3;
+            }
+            if ((*(u32*)((s32)battleWork + 0xEF4) & 0x1B800000) != 0) {
+                table[count].enabled = 0;
+                table[count].disabledGrey = 3;
+            }
+            table[count].name = msgSearch(str_btl_cmd_act_super_ac_802f0058);
+            table[count].icon = 0x155;
+            next = count + 1;
+        }
+
+        count = next;
+        if ((*(u32*)((s32)battleWork + 0xEF4) & 0x8000000) == 0) {
+            table[next].type = 5;
+            table[next].enabled = 1;
+            table[next].disabledGrey = 0;
+            if ((*(u32*)((s32)battleWork + 0xEF4) & 0x1F800000) != 0) {
+                table[next].enabled = 0;
+                table[next].disabledGrey = 3;
+            }
+            table[next].name = msgSearch(str_btl_cmd_act_operatio_802f0074);
+            table[next].icon = 0x156;
+            count = next + 1;
+        }
+
+        if ((*(u32*)((s32)battleWork + 0xEF4) & 0x8000000) != 0) {
+            table[count].type = 0xD;
+            table[count].enabled = 1;
+            table[count].disabledGrey = 0;
+            table[count].name = msgSearch(str_btl_cmd_act_lecture__802f008c);
+            table[count].icon = 0x156;
+            if ((*(u32*)((s32)battleWork + 0xEF4) & 0x10800000) != 0) {
+                table[count].enabled = 0;
+                table[count].disabledGrey = 3;
+            }
+            count++;
+        }
+
+        *(s32*)((s32)cursor + 8) = count;
+        if (*(s32*)((s32)cursor + 8) <= *(s32*)cursor) {
+            *(s32*)cursor = *(s32*)((s32)cursor + 8) - 1;
+        }
+    }
+}
 
 void _btlcmd_SetAttackEvent(void* unit, void* commandWork) {
-    ;
-}
+    extern void* _battleWorkPointer;
+    extern u8 btldefaultevt_Wait[];
+    extern u8 btldefaultevt_Defend[];
+    extern u8 btldefaultevt_DefendParty[];
+    extern u8 btldefaultevt_Appeal[];
+    extern u8 btldefaultevt_Escape[];
+    extern u8 btldefaultevt_ChangeParty[];
+    extern u8 btldefaultevt_ProtectPartner[];
+    extern u8 btldefaultevt_LectureEnd[];
+    extern u8 btldefaultevt_ChangePosition[];
+    extern u8 marioAttackEvent_NormalCharge[];
+    extern u8 marioAttackEvent_NormalChargeP[];
+    extern u8 marioAttackEvent_SuperCharge[];
+    extern u8 marioAttackEvent_SuperChargeP[];
+    extern u8 badgeWeapon_Charge[];
+    extern u8 badgeWeapon_ChargeP[];
+    extern u8 badgeWeapon_SuperCharge[];
+    extern u8 badgeWeapon_SuperChargeP[];
+    extern u8 ItemWeaponData_Naniga_Okorukana[];
+    extern void _btlcmd_GetCursorPtr(void* commandWork, s32 cursorType, void** out);
+    extern s32 _check_weapon_type_attack(void* weapon);
+    extern void BtlActRec_AddCount(void* count);
+    extern void* BtlUnit_GetData(void* unit, s32 id);
+    extern void* btlataudGetAttackEventPtr(s32 unitId);
+    extern void* btlataudGetMoveEventPtr(void);
+    extern void msgWindow_Continue(s32 windowId);
 
+    void* battleWork;
+    void* cursor;
+    void* weapon;
+    s32 cursorType;
+    u8 moveState;
+
+    battleWork = _battleWorkPointer;
+    cursorType = *(s32*)((s32)commandWork + 0x540);
+
+    if (*(u8*)((s32)commandWork + 0x551) != 0) {
+        *(u8*)((s32)unit + 0x20) = 0;
+        *(void**)((s32)unit + 0x2A0) = btldefaultevt_Wait;
+        *(s32*)((s32)unit + 0x2AC) = 1;
+        return;
+    }
+
+    switch (cursorType) {
+        case 5:
+            switch (*(s32*)((s32)commandWork + 0x548)) {
+                case 0:
+                    *(void**)((s32)unit + 0x2A0) = btldefaultevt_ChangeParty;
+                    *(s32*)((s32)unit + 0x2AC) = 1;
+                    *(s32*)((s32)commandWork + 0x4A4) = 0;
+                    if ((*(u32*)((s32)battleWork + 0x163F4) & 1) != 0) {
+                        *(u8*)((s32)unit + 0x20) = 3;
+                    }
+                    if (*(s32*)((s32)unit + 8) == 0xDE) {
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F45));
+                    } else {
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F46));
+                    }
+                    break;
+                case 1:
+                    *(s32*)((s32)unit + 0x2AC) = 0;
+                    if (*(s32*)((s32)unit + 8) == 0xDE) {
+                        *(void**)((s32)unit + 0x2A0) = *(void**)(badgeWeapon_Charge + 0xB0);
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F4F));
+                    } else {
+                        *(void**)((s32)unit + 0x2A0) = *(void**)(badgeWeapon_ChargeP + 0xB0);
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F50));
+                    }
+                    break;
+                case 2:
+                    *(s32*)((s32)unit + 0x2AC) = 0;
+                    if (*(s32*)((s32)unit + 8) == 0xDE) {
+                        *(void**)((s32)unit + 0x2A0) = *(void**)(badgeWeapon_SuperCharge + 0xB0);
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F51));
+                    } else {
+                        *(void**)((s32)unit + 0x2A0) = *(void**)(badgeWeapon_SuperChargeP + 0xB0);
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F52));
+                    }
+                    break;
+                case 3:
+                    *(void**)((s32)unit + 0x2A0) = btldefaultevt_Escape;
+                    *(s32*)((s32)unit + 0x2AC) = 1;
+                    if (*(s32*)((s32)unit + 8) == 0xDE) {
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F53));
+                    } else {
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F54));
+                    }
+                    break;
+                case 4:
+                    *(void**)((s32)unit + 0x2A0) = btldefaultevt_ProtectPartner;
+                    *(s32*)((s32)unit + 0x2AC) = 1;
+                    break;
+                case 5:
+                    *(void**)((s32)unit + 0x2A0) = btldefaultevt_Appeal;
+                    *(s32*)((s32)unit + 0x2AC) = 1;
+                    if (*(s32*)((s32)unit + 8) == 0xDE) {
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F49));
+                    } else {
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F4A));
+                    }
+                    break;
+                case 6:
+                    *(s32*)((s32)unit + 0x2AC) = 1;
+                    if (*(s32*)((s32)unit + 8) == 0xDE) {
+                        *(void**)((s32)unit + 0x2A0) = btldefaultevt_Defend;
+                    } else {
+                        *(void**)((s32)unit + 0x2A0) = btldefaultevt_DefendParty;
+                    }
+                    break;
+                case 7:
+                    *(void**)((s32)unit + 0x2A0) = btldefaultevt_Wait;
+                    *(s32*)((s32)unit + 0x2AC) = 1;
+                    if (*(s32*)((s32)unit + 8) == 0xDE) {
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F49));
+                    } else {
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F4A));
+                    }
+                    break;
+                case 8:
+                    *(void**)((s32)unit + 0x2A0) = BtlUnit_GetData(unit, 2);
+                    *(s32*)((s32)unit + 0x2AC) = 3;
+                    break;
+                default:
+                    *(void**)((s32)unit + 0x2A0) = btldefaultevt_Wait;
+                    *(s32*)((s32)unit + 0x2AC) = 1;
+                    break;
+            }
+            break;
+
+        case 0:
+        case 1:
+        case 2:
+        case 4:
+        case 6:
+            _btlcmd_GetCursorPtr(commandWork, cursorType, &cursor);
+            weapon = *(void**)((s32)commandWork + 0x80 + (*(s32*)cursor * 0x1C));
+            *(void**)((s32)unit + 0x2A0) = *(void**)((s32)weapon + 0xB0);
+            *(s32*)((s32)unit + 0x2AC) = 0;
+            if (*(void**)((s32)unit + 0x2A0) == 0) {
+                *(void**)((s32)unit + 0x2A0) = btldefaultevt_Wait;
+            }
+            switch (cursorType) {
+                case 0:
+                    BtlActRec_AddCount((void*)((s32)battleWork + 0x16F38));
+                    break;
+                case 1:
+                    BtlActRec_AddCount((void*)((s32)battleWork + 0x16F39));
+                    break;
+                case 2:
+                    if (weapon != ItemWeaponData_Naniga_Okorukana) {
+                        if (*(s32*)((s32)unit + 8) == 0xDE) {
+                            if (_check_weapon_type_attack(weapon) != 0) {
+                                BtlActRec_AddCount((void*)((s32)battleWork + 0x16F41));
+                            } else {
+                                BtlActRec_AddCount((void*)((s32)battleWork + 0x16F42));
+                            }
+                        } else {
+                            if (_check_weapon_type_attack(weapon) != 0) {
+                                BtlActRec_AddCount((void*)((s32)battleWork + 0x16F43));
+                            } else {
+                                BtlActRec_AddCount((void*)((s32)battleWork + 0x16F44));
+                            }
+                        }
+                    }
+                    break;
+                case 4:
+                    if (_check_weapon_type_attack(weapon) != 0) {
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F55));
+                    } else {
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F56));
+                    }
+                    break;
+                case 6:
+                    if (_check_weapon_type_attack(weapon) != 0) {
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F3A));
+                    } else {
+                        BtlActRec_AddCount((void*)((s32)battleWork + 0x16F3B));
+                    }
+                    break;
+            }
+            break;
+
+        case 9:
+            *(u8*)((s32)unit + 0x20) = 1;
+            *(void**)((s32)unit + 0x2A0) = btldefaultevt_ChangePosition;
+            *(s32*)((s32)unit + 0x2AC) = 7;
+            break;
+
+        case 0xB:
+            moveState = *(u8*)((s32)unit + 0x20);
+            if (moveState == 6) {
+                *(u8*)((s32)unit + 0x20) = 5;
+            } else if (moveState == 7) {
+                *(u8*)((s32)unit + 0x20) = 6;
+            } else if (moveState == 8 || moveState > 9 || moveState < 6) {
+                *(u8*)((s32)unit + 0x20) = 4;
+            } else {
+                *(u8*)((s32)unit + 0x20) = 8;
+            }
+            *(void**)((s32)unit + 0x2A0) = btlataudGetAttackEventPtr(*(s32*)unit);
+            *(s32*)((s32)unit + 0x2AC) = 3;
+            if (*(s32*)((s32)unit + 8) == 0xDE) {
+                BtlActRec_AddCount((void*)((s32)battleWork + 0x16F47));
+            } else {
+                BtlActRec_AddCount((void*)((s32)battleWork + 0x16F48));
+            }
+            if ((*(u32*)((s32)battleWork + 0x19090) & 1) != 0) {
+                msgWindow_Continue(*(s32*)((s32)battleWork + 0x19094));
+            }
+            break;
+
+        case 0xC:
+            moveState = *(u8*)((s32)unit + 0x20);
+            if (moveState == 6) {
+                *(u8*)((s32)unit + 0x20) = 5;
+            } else if (moveState == 7) {
+                *(u8*)((s32)unit + 0x20) = 6;
+            } else if (moveState == 8 || moveState > 9 || moveState < 6) {
+                *(u8*)((s32)unit + 0x20) = 4;
+            } else {
+                *(u8*)((s32)unit + 0x20) = 8;
+            }
+            *(void**)((s32)unit + 0x2A0) = btlataudGetMoveEventPtr();
+            *(s32*)((s32)unit + 0x2AC) = 3;
+            break;
+
+        case 0xD:
+            *(void**)((s32)unit + 0x2A0) = btldefaultevt_LectureEnd;
+            *(s32*)((s32)unit + 0x2AC) = 3;
+            break;
+
+        default:
+            *(void**)((s32)unit + 0x2A0) = btldefaultevt_Wait;
+            *(s32*)((s32)unit + 0x2AC) = 0;
+            break;
+    }
+}
 
 void BattleCommandDisplay_TargetSelectMenuDisp(s32 param_1, void* battleWork) {
-    ;
-}
+    extern f32 float_0_804225d8;
+    extern f32 float_1_804225dc;
+    extern f32 float_10_804225cc;
+    extern f32 float_16_80422618;
+    extern f32 float_32_804225f4;
+    extern f32 float_83_80422620;
+    extern f32 float_86_80422614;
+    extern f32 float_115_80422628;
+    extern f32 float_118_80422624;
+    extern f32 float_neg232_8042261c;
+    extern f32 float_neg240_80422610;
+    extern u32 dat_804225b0;
+    extern u32 dat_804225b4;
+    extern u32 dat_804225b8;
+    extern u32 dat_804225bc;
 
+    extern void _btlcmd_GetCursorPtr(void* base, s32 cursorId, void** out);
+    extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
+    extern void* BtlUnit_GetPartsPtr(void* unit, s32 partId);
+    extern void btlGetScreenPoint(f32* in, f32* out);
+    extern void iconDispGx(f32* pos, s32 flags, s32 iconId, f32 scale);
+    extern char* pouchGetYoshiName(void);
+    extern char* msgSearch(char* key);
+    extern u32 FontGetMessageWidth(char* msg);
+    extern void windowDispGX_Waku_col(f32 x, f32 y, f32 w, f32 h, f32 curve, s32 texId, void* color);
+    extern void FontDrawStart(void);
+    extern void FontDrawString(f32 x, f32 y, char* msg);
+    extern void btl_camera_set_mode(s32 cameraId, s32 mode);
+
+    void* base;
+    void* cursor;
+    void* weapon;
+    void* target;
+    void* unit;
+    void* part;
+    char* name;
+    f32 pos[3];
+    f32 screen[3];
+    f32 iconPos[3];
+    u32 color;
+    s32 i;
+    s32 lineY;
+    s32 selected;
+    s32 targetIndex;
+    u32 width;
+
+    base = (void*)((s32)battleWork + 0x171C);
+    _btlcmd_GetCursorPtr(base, *(s32*)((s32)battleWork + 0x1C5C), &cursor);
+    weapon = *(void**)((s32)base + 0x80 + (*(s32*)cursor * 0x1C));
+
+    if ((*(u32*)((s32)weapon + 0x64) & 0x01000000) != 0) {
+        selected = *(s8*)((s32)battleWork + 0xEDF);
+        targetIndex = *(s8*)((s32)battleWork + 0xE95 + selected);
+        target = (void*)((s32)battleWork + 0x42C + targetIndex * 0x24);
+        unit = BattleGetUnitPtr(battleWork, *(s16*)((s32)target + 0));
+        part = BtlUnit_GetPartsPtr(unit, *(s16*)((s32)target + 2));
+        pos[0] = (f32)*(s16*)((s32)target + 4);
+        pos[1] = (f32)*(s16*)((s32)target + 6);
+        pos[2] = (f32)*(s16*)((s32)target + 8);
+
+        btlGetScreenPoint(pos, screen);
+        iconPos[0] = screen[0];
+        iconPos[1] = screen[1];
+        iconPos[2] = float_0_804225d8;
+        if ((*(u32*)((s32)unit + 0x104) & 2) == 0) {
+            iconDispGx(iconPos, 0x10, 0x1F7, float_1_804225dc);
+            color = dat_804225b0;
+        } else {
+            iconDispGx(iconPos, 0x18, 0x1F7, float_1_804225dc);
+            color = dat_804225b4;
+        }
+
+        if (*(s32*)((s32)unit + 8) == 0xE2) {
+            name = pouchGetYoshiName();
+        } else {
+            name = msgSearch(*(char**)((s32)part + 8));
+        }
+        width = FontGetMessageWidth(name) & 0xFFFF;
+        windowDispGX_Waku_col(float_neg240_80422610, float_86_80422614,
+                              float_16_80422618 + (f32)width,
+                              float_32_804225f4, float_10_804225cc, 0, &color);
+        FontDrawStart();
+        FontDrawString(float_neg232_8042261c, float_83_80422620, name);
+    } else {
+        lineY = 0;
+        for (i = 0; i < *(s8*)((s32)battleWork + 0xE94); i++, lineY += 0x20) {
+            targetIndex = *(s8*)((s32)battleWork + 0xE95 + i);
+            target = (void*)((s32)battleWork + 0x42C + targetIndex * 0x24);
+            unit = BattleGetUnitPtr(battleWork, *(s16*)((s32)target + 0));
+            part = BtlUnit_GetPartsPtr(unit, *(s16*)((s32)target + 2));
+            pos[0] = (f32)*(s16*)((s32)target + 4);
+            pos[1] = (f32)*(s16*)((s32)target + 6);
+            pos[2] = (f32)*(s16*)((s32)target + 8);
+
+            btlGetScreenPoint(pos, screen);
+            iconPos[0] = screen[0];
+            iconPos[1] = screen[1];
+            iconPos[2] = float_0_804225d8;
+            if ((*(u32*)((s32)unit + 0x104) & 2) == 0) {
+                iconDispGx(iconPos, 0x10, 0x1F7, float_1_804225dc);
+                color = dat_804225b8;
+            } else {
+                iconDispGx(iconPos, 0x18, 0x1F7, float_1_804225dc);
+                color = dat_804225bc;
+            }
+
+            if (*(s32*)((s32)unit + 8) == 0xE2) {
+                name = pouchGetYoshiName();
+            } else {
+                name = msgSearch(*(char**)((s32)part + 8));
+            }
+            width = FontGetMessageWidth(name) & 0xFFFF;
+            windowDispGX_Waku_col(float_neg240_80422610, float_118_80422624 - (f32)lineY,
+                                  float_16_80422618 + (f32)width,
+                                  float_32_804225f4, float_10_804225cc, 0, &color);
+            FontDrawStart();
+            FontDrawString(float_neg232_8042261c, float_115_80422628 - (f32)lineY, name);
+        }
+    }
+
+    btl_camera_set_mode(0, 0);
+}
 
 s32 BattleCommandDisplay_ActMenuMain(void* battleWork) {
-    return 0;
+    extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
+    extern void _btlcmd_GetCursorPtr(void* base, s32 cursorId, void** out);
+    extern s32 BattlePadCheckTrigger(u32 button);
+    extern s32 BattlePadCheckRepeat(u32 button);
+    extern s32 BattlePadCheckNow(s32 button);
+    extern s32 BattleCommandCheckChangePositionEnable(void* battleWork);
+    extern void psndSFXOn();
+    extern void BattleCommandDisplay_ActMenuEnd(void* battleWork);
+    extern void BattleMenuDisp_ActSelect_Main(void* battleWork);
+    extern void _btlcmd_MakeSelectWeaponTable(void* battleWork, s32 type);
+    extern s32 _btlcmd_CheckWeaponTargetNum(void* battleWork, void* unit, void* weapon);
+    extern void btl_camera_set_mode(s32 cameraId, s32 mode);
+    extern void btl_camera_set_moveSpeedLv(s32 cameraId, s32 speed);
+    extern s32 BattleMenuKeyOKInACT(void* battleWork);
+    extern s32 BattleCommandAttackAudienceCheck(void);
+    extern char str_SFX_NOT_CHOICE1_802efe88[];
+    extern char str_SFX_BTL_CURSOR_MOVE1_802efef4[];
+
+    void* base;
+    void* unit;
+    void* cursor;
+    void* entry;
+    s32 result;
+    s32 i;
+    s32 type;
+
+    result = 0;
+    base = (void*)((s32)battleWork + 0x171C);
+    unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
+    _btlcmd_GetCursorPtr(base, 0xE, &cursor);
+
+    if (BattlePadCheckTrigger(0x800) != 0 && BattleCommandCheckChangePositionEnable(battleWork) != 0) {
+        psndSFXOn(0x9D8);
+        BattleCommandDisplay_ActMenuEnd(battleWork);
+        *(s32*)((s32)base + 0x540) = 9;
+        *(s32*)base = 0x1D;
+        BattleMenuDisp_ActSelect_Main(battleWork);
+        return 1;
+    }
+
+    while (BattleMenuKeyOKInACT(battleWork) != 0) {
+        i = 0;
+        while (i < *(s32*)((s32)cursor + 8)) {
+            entry = (void*)((s32)base + i * 0x14);
+            type = *(s32*)((s32)entry + 8);
+            if (type >= 0 && type < 2) {
+                if ((type != 0 || (*(u32*)((s32)battleWork + 0xEF4) & 0x200) == 0) &&
+                    (type != 1 || (*(u32*)((s32)battleWork + 0xEF4) & 0x400) != 0)) {
+                    _btlcmd_MakeSelectWeaponTable(battleWork, type);
+                    if (_btlcmd_CheckWeaponTargetNum(battleWork, unit, *(void**)((s32)base + 0x80)) <= 0) {
+                        *(s32*)((s32)entry + 0xC) = 0;
+                        if (*(s32*)((s32)entry + 0x18) == 0) {
+                            if (type == 0) {
+                                *(s32*)((s32)entry + 0x18) = 4;
+                            } else {
+                                *(s32*)((s32)entry + 0x18) = 5;
+                            }
+                        }
+                    }
+                }
+            }
+            i++;
+        }
+
+        if (BattlePadCheckNow(-1) != 0) {
+            *(s32*)((s32)base + 0x560) = 0;
+            btl_camera_set_mode(0, 0);
+        } else {
+            *(s32*)((s32)base + 0x560) = *(s32*)((s32)base + 0x560) + 1;
+            if (*(s32*)((s32)base + 0x560) >= 0x384) {
+                btl_camera_set_mode(0, 6);
+                btl_camera_set_moveSpeedLv(0, 5);
+            }
+        }
+
+        if (*(u8*)((s32)battleWork + 0x1C74) != 0) {
+            entry = (void*)((s32)base + *(s32*)cursor * 0x14);
+            type = *(s32*)((s32)entry + 8);
+            if ((type == 0 && (*(u32*)((s32)battleWork + 0xEF4) & 0x200) == 0) ||
+                (type == 1 && (*(u32*)((s32)battleWork + 0xEF4) & 0x400) != 0)) {
+                *(u8*)((s32)battleWork + 0x1C74) = 0;
+                *(s32*)((s32)battleWork + 0x1C70) = 0;
+            }
+        }
+
+        if (BattlePadCheckTrigger(0x100) != 0 || *(u8*)((s32)battleWork + 0x1C74) != 0) {
+            entry = (void*)((s32)base + *(s32*)cursor * 0x14);
+            if (*(s32*)((s32)entry + 0xC) != 0) {
+                psndSFXOn(0x9D8);
+                *(s32*)((s32)base + 0x540) = *(s32*)((s32)entry + 8);
+                switch (*(s32*)((s32)base + 0x540)) {
+                    case 0:
+                        *(s32*)base = 5;
+                        result = 1;
+                        break;
+                    case 1:
+                        *(s32*)base = 5;
+                        if (*(s8*)((s32)unit + 0x20) == 0) {
+                            *(u8*)((s32)base + 0x550) = 1;
+                            if (*(u8*)((s32)unit + 0x2F3) != 0 || *(u8*)((s32)unit + 0x2F4) != 0) {
+                                *(s32*)base = 0xE;
+                                result = 1;
+                            }
+                        }
+                        break;
+                    case 2:
+                        *(s32*)base = 0x13;
+                        result = 1;
+                        break;
+                    case 9:
+                        *(s32*)base = 0x1D;
+                        result = 1;
+                        break;
+                }
+                BattleCommandDisplay_ActMenuEnd(battleWork);
+                break;
+            }
+
+            if (*(u8*)((s32)battleWork + 0x1C74) == 0) {
+                psndSFXOn(str_SFX_NOT_CHOICE1_802efe88);
+            }
+            *(u8*)((s32)battleWork + 0x1C74) = 0;
+            if (*(s32*)((s32)entry + 0x18) != 0) {
+                BattleCommandDisplay_ActMenuEnd(battleWork);
+                *(s32*)base = 3;
+                result = 1;
+                *(s32*)((s32)base + 0x564) = *(s32*)((s32)entry + 0x18);
+                break;
+            }
+        } else if (BattlePadCheckRepeat(0x80000) != 0) {
+            if (*(s32*)cursor < *(s32*)((s32)cursor + 8) - 1) {
+                *(s32*)cursor = *(s32*)cursor + 1;
+            } else {
+                *(s32*)cursor = 0;
+            }
+            psndSFXOn(str_SFX_BTL_CURSOR_MOVE1_802efef4);
+            break;
+        } else if (BattlePadCheckRepeat(0x40000) != 0) {
+            if (*(s32*)cursor > 0) {
+                *(s32*)cursor = *(s32*)cursor - 1;
+            } else {
+                *(s32*)cursor = *(s32*)((s32)cursor + 8) - 1;
+            }
+            psndSFXOn(str_SFX_BTL_CURSOR_MOVE1_802efef4);
+            break;
+        } else {
+            BattleCommandAttackAudienceCheck();
+            if (BattlePadCheckTrigger(0x800) != 0 && BattleCommandCheckChangePositionEnable(battleWork) != 0) {
+                psndSFXOn(0x9D8);
+                BattleCommandDisplay_ActMenuEnd(battleWork);
+                *(s32*)((s32)base + 0x540) = 9;
+                result = 1;
+                *(s32*)base = 0x1D;
+                break;
+            }
+        }
+    }
+
+    BattleMenuDisp_ActSelect_Main(battleWork);
+    return result;
 }
 
+void _btlcmd_MakeOperationTable(void* battleWork) {
+    typedef struct OperationEntry {
+        s32 type;
+        s32 enabled;
+        char* name;
+        u16 icon;
+        u16 pad;
+        s32 disabledGrey;
+        s32 cost;
+        char* desc;
+    } OperationEntry;
 
-void _btlcmd_MakeOperationTable() {
-    ;
+    extern void _btlcmd_GetCursorPtr(void* base, s32 cursorId, void** out);
+    extern s32 _btlcmd_MakePartyTable(void* battleWork);
+    extern char* msgSearch(const char* msg);
+    extern void* BattleGetPartnerPtr(void* battleWork, void* unit);
+    extern s32 BtlUnit_CanActStatus(void* unit);
+    extern s32 _battleGetPartyIcon(s32 kind);
+    extern s32 BtlUnit_CheckWeaponCost(void* unit, void* weapon);
+    extern s32 BtlUnit_GetWeaponCost(void* unit, void* weapon);
+    extern u8 badgeWeapon_Charge[];
+    extern u8 badgeWeapon_ChargeP[];
+    extern u8 badgeWeapon_SuperCharge[];
+    extern u8 badgeWeapon_SuperChargeP[];
+    extern const char str_btl_cmd_op_chg_party_802eff40[];
+    extern const char str_btl_hlp_cmd_operatio_802eff58[];
+    extern const char str_btl_cmd_op_appeal_802eff7c[];
+    extern const char str_btl_hlp_cmd_operatio_802eff90[];
+    extern const char str_btl_cmd_op_defend_802effb0[];
+    extern const char str_btl_hlp_cmd_operatio_802effc4[];
+    extern const char str_btl_cmd_op_escape_802effe4[];
+    extern const char str_btl_hlp_cmd_operatio_802efff8[];
+
+    void* unit;
+    void* partner;
+    void* pouch;
+    void* info;
+    void* npcInfo;
+    void* cursor;
+    void* commandWork;
+    OperationEntry* table;
+    void* weapon;
+    s32 count;
+
+    unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
+    info = *(void**)((s32)battleWork + 0x2738);
+    commandWork = (void*)((s32)battleWork + 0x171C);
+    npcInfo = *(void**)((s32)info + 0xC);
+    pouch = pouchGetPtr();
+
+    if (commandWork != 0) {
+        _btlcmd_GetCursorPtr(commandWork, 5, &cursor);
+        table = (OperationEntry*)((s32)commandWork + 0x2CC);
+        count = 0;
+
+        if (_btlcmd_MakePartyTable(battleWork) >= 2) {
+            table[0].type = 0;
+            if (*(s8*)((s32)unit + 0x12B) == 0) {
+                table[0].enabled = 1;
+                table[0].disabledGrey = 0;
+            } else {
+                table[0].enabled = 0;
+                table[0].disabledGrey = 3;
+            }
+            table[0].name = msgSearch(str_btl_cmd_op_chg_party_802eff40);
+            partner = unit;
+            if (*(s32*)((s32)unit + 8) < 0xE0 || *(s32*)((s32)unit + 8) > 0xE6) {
+                partner = BattleGetPartnerPtr(battleWork, unit);
+            }
+            BtlUnit_CanActStatus(partner);
+            table[0].icon = _battleGetPartyIcon(*(s32*)((s32)partner + 8));
+            table[0].desc = (char*)str_btl_hlp_cmd_operatio_802eff58;
+            if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
+                table[0].enabled = 0;
+                table[0].disabledGrey = 3;
+            }
+            if ((*(u32*)((s32)npcInfo + 4) & 0x4000000) != 0) {
+                table[0].enabled = 0;
+                table[0].disabledGrey = 3;
+            }
+            table[0].cost = 0;
+            count = 1;
+        }
+
+        if (*(s16*)((s32)pouch + 0x7A) != 0) {
+            table[count].type = 5;
+            table[count].enabled = 1;
+            table[count].name = msgSearch(str_btl_cmd_op_appeal_802eff7c);
+            table[count].icon = 0x16C;
+            table[count].disabledGrey = 0;
+            table[count].cost = 0;
+            table[count].desc = (char*)str_btl_hlp_cmd_operatio_802eff90;
+            count++;
+        }
+
+        if (*(u8*)((s32)unit + 0x2F3) != 0) {
+            weapon = badgeWeapon_ChargeP;
+            if (*(s32*)((s32)unit + 8) == 0xDE) {
+                weapon = badgeWeapon_Charge;
+            }
+            table[count].type = 1;
+            table[count].enabled = BtlUnit_CheckWeaponCost(unit, weapon);
+            table[count].cost = BtlUnit_GetWeaponCost(unit, weapon);
+            table[count].disabledGrey = table[count].enabled == 0 ? 1 : 0;
+            table[count].name = msgSearch(*(char**)weapon);
+            table[count].icon = 0x16E;
+            table[count].desc = *(char**)((s32)weapon + 0xC);
+            if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
+                table[count].enabled = 0;
+                table[count].disabledGrey = 3;
+            }
+            count++;
+        }
+
+        if (*(u8*)((s32)unit + 0x2F4) != 0) {
+            weapon = badgeWeapon_SuperChargeP;
+            if (*(s32*)((s32)unit + 8) == 0xDE) {
+                weapon = badgeWeapon_SuperCharge;
+            }
+            table[count].type = 2;
+            table[count].enabled = BtlUnit_CheckWeaponCost(unit, weapon);
+            table[count].cost = BtlUnit_GetWeaponCost(unit, weapon);
+            table[count].disabledGrey = table[count].enabled == 0 ? 1 : 0;
+            table[count].name = msgSearch(*(char**)weapon);
+            table[count].icon = 0x16F;
+            table[count].desc = *(char**)((s32)weapon + 0xC);
+            if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
+                table[count].enabled = 0;
+                table[count].disabledGrey = 3;
+            }
+            count++;
+        }
+
+        table[count].type = 6;
+        table[count].enabled = 1;
+        table[count].name = msgSearch(str_btl_cmd_op_defend_802effb0);
+        table[count].icon = 0x16D;
+        table[count].disabledGrey = 0;
+        table[count].cost = 0;
+        table[count].desc = (char*)str_btl_hlp_cmd_operatio_802effc4;
+        if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
+            table[count].enabled = 0;
+            table[count].disabledGrey = 3;
+        }
+
+        table[count + 1].type = 3;
+        table[count + 1].enabled = BtlUnit_CanActStatus(unit);
+        table[count + 1].name = msgSearch(str_btl_cmd_op_escape_802effe4);
+        table[count + 1].icon = 0x16B;
+        table[count + 1].cost = 0;
+        table[count + 1].disabledGrey = table[count + 1].enabled == 0 ? 1 : 0;
+        table[count + 1].desc = (char*)str_btl_hlp_cmd_operatio_802efff8;
+        if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
+            table[count + 1].enabled = 0;
+            table[count + 1].disabledGrey = 3;
+        }
+        if ((*(u32*)((s32)(*(void**)((s32)battleWork + 0x2738)) + 0x10) & 0x10) != 0) {
+            table[count + 1].enabled = 0;
+            table[count + 1].disabledGrey = 3;
+        }
+
+        *(s32*)((s32)cursor + 8) = count + 2;
+        if (*(s32*)((s32)cursor + 8) <= *(s32*)cursor) {
+            *(s32*)cursor = *(s32*)((s32)cursor + 8) - 1;
+        }
+    }
 }
 
+s32 BattleCommandDisplay_WeaponSelectMenuMain(void* battleWork, s32 cursorId) {
+    extern void _btlcmd_GetCursorPtr(void* base, s32 cursorId, void** out);
+    extern void _btlcmd_UpdateSelectWeaponTable(void* battleWork, s32 cursorId);
+    extern s32 BattlePadCheckTrigger(u32 button);
+    extern s32 BattlePadCheckRepeat(u32 button);
+    extern void psndSFXOn();
+    extern void BattleCommandDisplay_WeaponSelectMenuEnd(void* battleWork);
+    extern s32 _btlcmd_SelectWeaponDecide(void* battleWork, s32 cursorId, s32 weaponIndex);
+    extern void BattleCommandDisplay_TargetSelectMenuSetup(void* battleWork);
+    extern void BattleStageOnLightFriendInCommand(void);
+    extern void BattleStageOnLightEnemyInCommand(void);
+    extern s32 BattleCommandAttackAudienceCheck(void);
+    extern s32 BattleMenuKeyOKInACT(void* battleWork);
+    extern void BattleMenuDisp_WeaponSelect_Main(void* battleWork);
+    extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
+    extern char str_SFX_NOT_CHOICE1_802efe88[];
+    extern char str_SFX_BTL_CURSOR_MOVE2_802efe98[];
 
-s32 BattleCommandDisplay_WeaponSelectMenuMain(void* battleWork, int param_2) {
-    return 0;
+    void* base;
+    void* cursor;
+    void* unit;
+    void* entry;
+    void* weapon;
+    u32 flags;
+    s32 result;
+    s32 pos;
+
+    result = 0;
+    base = (void*)((s32)battleWork + 0x171C);
+    unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
+
+    while (BattleMenuKeyOKInACT(battleWork) != 0) {
+        _btlcmd_GetCursorPtr(base, cursorId, &cursor);
+        _btlcmd_UpdateSelectWeaponTable(battleWork, cursorId);
+
+        if (*(u8*)((s32)battleWork + 0x1C74) != 0) {
+            *(u8*)((s32)battleWork + 0x1C74) = 0;
+            *(s32*)((s32)battleWork + 0x1C70) = 0;
+        }
+
+        if (BattlePadCheckTrigger(0x100) != 0 || *(u8*)((s32)battleWork + 0x1C74) != 0) {
+            pos = *(s32*)cursor;
+            entry = (void*)((s32)base + 0x80 + pos * 0x1C);
+            if (*(s32*)((s32)entry + 4) != 0) {
+                psndSFXOn(0x9D8);
+                BattleCommandDisplay_WeaponSelectMenuEnd(battleWork);
+                _btlcmd_SelectWeaponDecide(battleWork, cursorId, pos);
+                BattleCommandDisplay_TargetSelectMenuSetup(battleWork);
+                *(s32*)base = 0xA;
+                weapon = *(void**)entry;
+                flags = *(u32*)((s32)weapon + 0x64);
+                if ((flags & 0x200) == 0) {
+                    BattleStageOnLightFriendInCommand();
+                }
+                if ((flags & 0x4140) == 0) {
+                    BattleStageOnLightEnemyInCommand();
+                }
+                result = 1;
+                break;
+            }
+
+            if (*(u8*)((s32)battleWork + 0x1C74) == 0) {
+                psndSFXOn(str_SFX_NOT_CHOICE1_802efe88);
+            }
+            *(u8*)((s32)battleWork + 0x1C74) = 0;
+            if (*(s32*)((s32)entry + 0x18) != 0) {
+                BattleCommandDisplay_WeaponSelectMenuEnd(battleWork);
+                *(s32*)base = 8;
+                result = 1;
+                *(s32*)((s32)base + 0x564) = *(s32*)((s32)entry + 0x18);
+                break;
+            }
+        } else {
+            if (*(s32*)cursor < *(s32*)((s32)cursor + 8) - 1) {
+                if (BattlePadCheckRepeat(0x20000) != 0) {
+                    *(s32*)cursor = *(s32*)cursor + 1;
+                    psndSFXOn(str_SFX_BTL_CURSOR_MOVE2_802efe98);
+                    break;
+                }
+            } else if (BattlePadCheckTrigger(0x20000) != 0) {
+                *(s32*)cursor = 0;
+                psndSFXOn(str_SFX_BTL_CURSOR_MOVE2_802efe98);
+                break;
+            }
+
+            if (*(s32*)cursor > 0) {
+                if (BattlePadCheckRepeat(0x10000) != 0) {
+                    *(s32*)cursor = *(s32*)cursor - 1;
+                    psndSFXOn(str_SFX_BTL_CURSOR_MOVE2_802efe98);
+                    break;
+                }
+            } else if (BattlePadCheckTrigger(0x10000) != 0) {
+                *(s32*)cursor = *(s32*)((s32)cursor + 8) - 1;
+                psndSFXOn(str_SFX_BTL_CURSOR_MOVE2_802efe98);
+                break;
+            }
+
+            if (BattlePadCheckTrigger(0x200) != 0) {
+                if (cursorId == 2 && (*(u8*)((s32)unit + 0x2F3) != 0 || *(u8*)((s32)unit + 0x2F4) != 0)) {
+                    if (*(s8*)((s32)unit + 0x20) == 0) {
+                        psndSFXOn(0x9D9);
+                        BattleCommandDisplay_WeaponSelectMenuEnd(battleWork);
+                        *(s32*)base = 0xF;
+                    } else {
+                        BattleCommandDisplay_WeaponSelectMenuEnd(battleWork);
+                        *(s32*)base = 0xC;
+                    }
+                    result = 1;
+                    break;
+                }
+                psndSFXOn(0x9D9);
+                BattleCommandDisplay_WeaponSelectMenuEnd(battleWork);
+                *(s32*)base = 1;
+                result = 1;
+                break;
+            }
+
+            if (BattleCommandAttackAudienceCheck() != 0) {
+                BattleCommandDisplay_WeaponSelectMenuEnd(battleWork);
+                *(u8*)((s32)battleWork + 0x1C74) = 1;
+                break;
+            }
+        }
+    }
+
+    BattleMenuDisp_WeaponSelect_Main(battleWork);
+    return result;
 }
-
 
 void _btlcmd_MakeMultiItemTable() {
     ;
@@ -662,9 +1817,57 @@ s32 _get_msg(void* evt) {
 
 
 void* BattleSetConfuseAct(void* battleWork, void* unit) {
-    return 0;
-}
+    extern s32 subsetevt_confuse_flustered[];
+    extern void BattleAcHelpSetDispType(s32);
+    extern void _btlcmd_MakeActClassTable(void*);
+    extern void _btlcmd_GetCursorPtr(void*, s32, void**);
+    extern s32 irand(s32);
+    u8* command = (u8*)battleWork + 0x171C;
+    BattleWorkCommandCursor* cursor;
+    u16 choices[28];
+    s32 count = 0;
+    s32 i;
+    s32 type;
 
+    if (*(u8*)((s32)unit + 0x20) == 3) {
+        *(u8*)((s32)unit + 0x20) = 0;
+    }
+    BattleAcHelpSetDispType(0);
+    if (*(s8*)((s32)unit + 0xC) != 0) {
+        return subsetevt_confuse_flustered;
+    }
+    type = *(s32*)((s32)unit + 8);
+    if (type != 0 && (type < 0xE0 || type > 0xE6)) {
+        return subsetevt_confuse_flustered;
+    }
+    if (*(u8*)(command + 0x550) != 0) {
+        *(u8*)((s32)unit + 0x20) = 0;
+        *(u8*)(command + 0x550) = 0;
+    }
+    _btlcmd_MakeActClassTable(battleWork);
+    _btlcmd_GetCursorPtr(command, 0xE, (void**)&cursor);
+    for (i = 0; i < cursor->numOptions; i++) {
+        u8* action = command + 8 + i * 0x14;
+        type = *(s32*)action;
+        if (*(s32*)(action + 4) != 0 && type != 4 && type != 2) {
+            choices[count++] = (u16)i;
+        }
+    }
+    choices[count] = 0xFFFF;
+    if (count == 0) {
+        return subsetevt_confuse_flustered;
+    }
+    cursor->absolutePos = (s16)choices[irand(count)];
+    type = *(s32*)(command + 8 + cursor->absolutePos * 0x14);
+    *(s32*)(command + 0x540) = type;
+    if (*(s32*)(command + 8 + cursor->absolutePos * 0x14 + 4) == 0) {
+        return subsetevt_confuse_flustered;
+    }
+    if (type == 2 || type == 4 || type == 6 || type == 7 || type == 8) {
+        return subsetevt_confuse_flustered;
+    }
+    return NULL;
+}
 
 u32 _battleGetPartyIcon(s32 unitKind) {
     extern s32 pouchGetPartyColor(s32);

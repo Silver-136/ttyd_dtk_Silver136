@@ -16,10 +16,49 @@ u8 magic2_2_line_dl(void) {
 }
 
 
-u8 effMagic2Main(int* param_1) {
-    return 0;
-}
+void effMagic2Main(void* effect) {
+    typedef struct Vec3 { f32 x; f32 y; f32 z; } Vec3;
+    extern void effDelete(void*);
+    extern f64 sin(f64);
+    extern f32 dispCalcZ(Vec3*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void effMagic2Disp(s32, s32);
+    extern f32 float_0p7_80425a48;
+    extern f32 float_6p2832_80425a4c;
+    extern f32 float_360_80425a50;
+    extern f32 float_0p4_80425a54;
+    extern f32 float_0p1_80425a58;
+    extern f32 float_0p3_80425a5c;
+    u8* work;
+    Vec3 pos;
+    s32 timer;
+    s32 i;
 
+    work = *(u8**)((s32)effect + 0xC);
+    pos.x = *(f32*)(work + 0x10); pos.y = *(f32*)(work + 0x14); pos.z = *(f32*)(work + 0x18);
+    *(s32*)(work + 0x28) -= 1;
+    *(s32*)(work + 0x2C) += 1;
+    timer = *(s32*)(work + 0x28);
+    if (timer < 0) { effDelete(effect); return; }
+    if (*(s32*)(work + 0x2C) < 11) *(s32*)(work + 0x24) = (*(s32*)(work + 0x2C) * 0xFF) / 10;
+    if (timer < 6) *(s32*)(work + 0x24) = (timer * 0xFF) / 6;
+    if (timer < 10 && *(s32*)work == 0) *(s32*)(work + 0x1C) = (s32)((f32)*(s32*)(work + 0x1C) * float_0p7_80425a48);
+    for (i = 0; i < *(s32*)((s32)effect + 8); i++) {
+        f32 wave = (f32)sin((f64)(float_6p2832_80425a4c * (f32)(timer * 10) / float_360_80425a50));
+        if (*(s32*)work == 1)
+            *(s32*)(work + 0x1C) = (s32)(float_0p4_80425a54 * (((f32)*(s32*)(work + 0x20) * float_0p1_80425a58 * wave + (f32)*(s32*)(work + 0x20)) - (f32)*(s32*)(work + 0x1C)) + (f32)*(s32*)(work + 0x1C));
+        else
+            *(s32*)(work + 0x1C) = (s32)(float_0p3_80425a5c * (((f32)*(s32*)(work + 0x20) * float_0p1_80425a58 * wave + (f32)*(s32*)(work + 0x20)) - (f32)*(s32*)(work + 0x1C)) + (f32)*(s32*)(work + 0x1C));
+        *(s32*)(work + 0x58) += *(s32*)(work + 0x5C);
+        *(s32*)(work + 0x50) += *(s32*)(work + 0x54);
+        *(s32*)(work + 0x30) += *(s32*)(work + 0x34);
+        *(s32*)(work + 0x38) += *(s32*)(work + 0x3C);
+        if (*(s32*)(work + 0x30) < 0) *(s32*)(work + 0x30) += 0x100;
+        if (*(s32*)(work + 0x38) < 0) *(s32*)(work + 0x38) += 0x100;
+        work += 0x60;
+    }
+    dispEntry(4, 2, effMagic2Disp, effect, dispCalcZ(&pos));
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

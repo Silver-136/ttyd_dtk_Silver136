@@ -32,10 +32,15 @@ extern char str_HolographyN64_802fb110[];
 extern f32 float_0p1_804254bc;
 
 
-u8 effHolographyDisp(void) {
+u8 effHolographyDisp(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4]; extern void* camGetPtr(s32); extern void PSMTXTrans(void*,f32,f32,f32); extern void PSMTXRotRad(void*,s32,f32); extern void PSMTXScale(void*,f32,f32,f32); extern void PSMTXConcat(void*,void*,void*); extern void GXLoadPosMtxImm(void*,s32); extern void GXSetCurrentMtx(s32); extern void GXSetNumChans(s32); extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevColorIn(s32,s32,s32,s32,s32); extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32); extern void effGetTexObjN64(s32,void*); extern void GXLoadTexObj(void*,s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32); extern void GXSetTevColor(s32,void*); extern void GXLoadTexMtxImm(void*,s32,s32); extern void GXBegin(s32,s32,s32);
+    u8* w=*(u8**)((u8*)effect+0xC);void* cam=camGetPtr(cameraId);Mtx m,r,s;u8 tex[0x20];u32 color;s32 i,a,frame=*(s32*)(w+0x14);
+    PSMTXTrans(m,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC));PSMTXRotRad(r,0x79,-*(f32*)((u8*)camGetPtr(4)+0x114)*0.0174533f);PSMTXScale(s,-*(f32*)(w+0x28),*(f32*)(w+0x28),*(f32*)(w+0x28));PSMTXConcat(m,r,m);PSMTXConcat(m,s,m);PSMTXConcat((u8*)cam+0x11C,m,m);GXLoadPosMtxImm(m,0);GXSetCurrentMtx(0);
+    GXSetNumChans(0);GXSetNumTevStages(3);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,0,0,0,8);GXSetTevAlphaIn(0,0,0,0,4);GXSetTevOrder(1,1,1,0xFF);GXSetTevColorOp(1,0,0,0,1,0);GXSetTevAlphaOp(1,0,0,0,1,0);GXSetTevColorIn(1,8,0,6,15);GXSetTevAlphaIn(1,4,0,6,7);GXSetTevOrder(2,1,1,0xFF);GXSetTevColorOp(2,0,0,0,1,0);GXSetTevAlphaOp(2,0,0,0,1,0);GXSetTevColorIn(2,0,0,0,0);GXSetTevAlphaIn(2,0,6,6,7);
+    effGetTexObjN64(0x93,tex);GXLoadTexObj(tex,0);effGetTexObjN64(0x94,tex);GXLoadTexObj(tex,1);GXSetNumTexGens(2);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);GXSetTexCoordGen2(1,1,4,0x1E,0,0x7D);PSMTXScale(s,0.03125f,0.03125f,0.0f);GXLoadTexMtxImm(s,0x1E,1);
+    for(i=0;i<10;i++){a=(s32)(2.0f*(f32)*(s32*)(w+0x24)*(1.0f-0.1f*(f32)i));if(a>255)a=255;color=((u8)*(s32*)(w+0x18)<<24)|((u8)*(s32*)(w+0x1C)<<16)|((u8)*(s32*)(w+0x20)<<8)|(u8)a;GXSetTevColor(1,&color);GXBegin(0x90,0,6);frame++;}
     return 0;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

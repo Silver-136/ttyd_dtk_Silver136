@@ -61,10 +61,56 @@ void vivian_init(void* party) {
 }
 
 
-u8 vivian_use(void* pParty) {
-    return 0;
-}
+void vivian_use(void* pParty) {
+    extern void L_partyForceSlitOff(void* party);
+    extern void marioChgMot(s32 mot);
+    extern void marioPaperOn(char* name);
+    extern void marioChgPaper(char* name);
+    extern void marioChgPose(char* name);
+    extern void partyPaperOn(void* party, char* name);
+    extern void partyChgPaper(void* party, char* name);
+    extern void partyChgPose(void* party, char* name);
+    extern void movePos(f32 speed, f32 dir, f32* x, f32* z);
+    extern f32 toMovedirSimple(f32 dir);
+    extern void psndSFXOn_3D(s32 id, void* pos);
+    extern char str_PTR_A2_1_802f8974[];
+    extern char str_PTR_A2_3_802f8980[];
+    extern char str_p_bibi_802f898c[];
+    extern char str_PM_B_1_802f8994[];
+    void* player = *(void**)((s32)pParty + 0x160);
+    s32 state = *(u8*)((s32)pParty + 0x38);
+    f32 speed;
+    f32 dir;
 
+    if ((*(u32*)((s32)pParty + 8) & 2) != 0) {
+        *(u32*)((s32)pParty + 8) &= ~2;
+        L_partyForceSlitOff(pParty);
+        *(u8*)((s32)pParty + 0x38) = 0;
+        *(s32*)((s32)pParty + 0x24) = 30;
+        marioChgMot(0x1B);
+    }
+    speed = *(f32*)((s32)pParty + 0x118);
+    dir = toMovedirSimple(*(f32*)((s32)player + 0x188));
+    if (state == 0 || state == 1) {
+        movePos(speed, dir, (f32*)((s32)pParty + 0x58), (f32*)((s32)pParty + 0x60));
+        partyChgPose(pParty, str_PTR_A2_1_802f8974);
+        if (--*(s32*)((s32)pParty + 0x24) <= 0) {
+            *(u8*)((s32)pParty + 0x38) = 2;
+            partyPaperOn(pParty, str_p_bibi_802f898c);
+            partyChgPaper(pParty, str_PM_B_1_802f8994);
+            marioPaperOn(str_p_bibi_802f898c);
+            marioChgPaper(str_PM_B_1_802f8994);
+            psndSFXOn_3D(0x936, (void*)((s32)pParty + 0x58));
+        }
+    } else if (state == 2) {
+        partyChgPose(pParty, str_PTR_A2_3_802f8980);
+        *(f32*)((s32)pParty + 0x78) -= 0.5f;
+        if (*(f32*)((s32)pParty + 0x78) < -8.0f) {
+            *(u8*)((s32)pParty + 0x38) = 3;
+            marioChgPose(str_PM_B_1_802f8994);
+        }
+    }
+}
 
 u8 mot_vivian_post(void) {
     extern s32 marioGetPartyId(void);

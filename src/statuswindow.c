@@ -89,19 +89,367 @@ void statusWinForceOpen(void) {
 
 
 u8 statusWinDisp(void) {
+    extern void PSMTXTrans(f32 mtx[3][4], f32 x, f32 y, f32 z);
+    extern void iconNumberDispGx(f32 mtx[3][4], s32 value, s32 type, u32* color);
+    extern void gaugeDisp(f32 x, f32 y, s32 value);
+    f32 mtx[3][4];
+    f32 x;
+    f32 y;
+    u32 color;
+    s32 blink;
+
+    if (wp == 0) return 0;
+    x = *(f32*)((s32)wp + 0x20);
+    y = *(f32*)((s32)wp + 0x24);
+    blink = 1;
+    if (*(s32*)((s32)wp + 0x84) > 0) {
+        *(s32*)((s32)wp + 0x84) -= 1;
+        blink = ((*(s32*)((s32)wp + 0x84) >> 4) & 1) == 0;
+    }
+    color = 0xFFFFFFFF;
+    if ((*(u32*)((s32)wp + 0x80) & 1) == 0 || blink) {
+        PSMTXTrans(mtx, x + 104.0f, y - 36.0f, 0.0f);
+        iconNumberDispGx(mtx, *(s16*)((s32)wp + 0x50), 0, &color);
+    }
+    PSMTXTrans(mtx, x + 170.0f, y - 35.0f, 0.0f);
+    iconNumberDispGx(mtx, *(s16*)((s32)wp + 0x52), 1, &color);
+    if ((*(u32*)((s32)wp + 0x80) & 2) == 0 || blink) {
+        PSMTXTrans(mtx, x + 286.0f, y - 36.0f, 0.0f);
+        iconNumberDispGx(mtx, *(s16*)((s32)wp + 0x54), 0, &color);
+    }
+    PSMTXTrans(mtx, x + 352.0f, y - 35.0f, 0.0f);
+    iconNumberDispGx(mtx, *(s16*)((s32)wp + 0x56), 1, &color);
+    PSMTXTrans(mtx, x + 462.0f, y - 36.0f, 0.0f);
+    iconNumberDispGx(mtx, *(s16*)((s32)wp + 0x5E), 0, &color);
+    if ((*(u32*)((s32)wp + 0x80) & 4) == 0 || blink) {
+        gaugeDisp(x + 260.0f, y - 83.0f, *(s16*)((s32)wp + 0x62));
+    }
     return 0;
 }
 
+void statusWinMain(void) {
+    extern void* marioGetPtr(void);
+    extern s32 strcmp(const char*, const char*);
+    extern s32 seqGetSeq(void);
+    extern s32 marioChkCtrl(void);
+    extern s32 marioChkKey(void);
+    extern f32 PSVECDistance(void*, void*);
+    extern void psndSFXOn(s32);
+    extern double cos(double);
+    extern void dispEntry(s32, s32, void*, s32, f32);
+    extern void valueUpdate(void);
+    extern void* gp;
+    extern char str_yuu_80422c5c[];
+    extern f32 float_16_80422c48;
+    extern f32 float_28_80422c60;
+    extern f32 float_60_80422bec;
+    extern f32 float_3p1416_80422bf0;
+    extern f32 float_0p5_80422bf8;
+    extern f32 float_500_80422c64;
+    void* player;
+    s32 seq;
+    u16 flags;
+    f32 ratio;
+    f32 invRatio;
 
-u8 statusWinMain(void) {
-    return 0;
+    player = marioGetPtr();
+    if (*(s8*)((s32)player + 0x3C) != 0) {
+        *(u16*)((s32)wp + 4) = 2;
+        *(f32*)((s32)wp + 0x0C) = float_1_80422bf4;
+        *(f32*)((s32)wp + 0x08) = float_1_80422bf4;
+        *(f32*)((s32)wp + 0x18) = float_0_80422be8;
+        *(f32*)((s32)wp + 0x10) = float_0_80422be8;
+        return;
+    }
+
+    if (strcmp((const char*)((s32)gp + 0x13C), str_yuu_80422c5c) == 0) {
+        return;
+    }
+
+    seq = seqGetSeq();
+    if (seq != 4) {
+        if (seq >= 2 && seq < 4) {
+            if (marioChkCtrl() == 0 || marioChkKey() == 0 || (*(u32*)((s32)player + 0) & 1) == 0) {
+                flags = *(u16*)((s32)wp + 4);
+                if ((flags & 0x11) != 0) {
+                    *(u16*)((s32)wp + 4) = flags | 0xA;
+                    *(u16*)((s32)wp + 4) &= ~5;
+                }
+                valueCheck();
+                *(s32*)((s32)wp + 0x74) = 0;
+                *(s32*)((s32)wp + 0x78) = 0;
+            } else {
+                if (PSVECDistance((void*)((s32)wp + 0x68), (void*)((s32)player + 0x8C)) < float_1_80422bf4) {
+                    *(s32*)((s32)wp + 0x74) += 1;
+                    if (*(s32*)((s32)wp + 0x74) > *(s32*)((s32)gp + 4) * 10) {
+                        *(s32*)((s32)wp + 0x74) = *(s32*)((s32)gp + 4) * 10;
+                        if (*(s32*)((s32)wp + 0x7C) == 0 && *(s32*)((s32)wp + 0x78) == 0 &&
+                            (*(u16*)((s32)wp + 4) & 0x11) == 0) {
+                            *(u16*)((s32)wp + 4) &= ~0xA;
+                            *(u16*)((s32)wp + 4) |= 5;
+                            *(u16*)((s32)wp + 4) |= 0x100;
+                        }
+                    }
+                } else {
+                    *(s32*)((s32)wp + 0x74) = 0;
+                    *(s32*)((s32)wp + 0x7C) = 0;
+                    if (*(s32*)((s32)wp + 0x78) == 0 && (*(u16*)((s32)wp + 4) & 0x11) != 0) {
+                        *(u16*)((s32)wp + 4) |= 0xA;
+                        *(u16*)((s32)wp + 4) &= ~5;
+                    }
+                }
+
+                if ((*(u16*)((s32)player + 0x24C) & 0x10) != 0) {
+                    flags = *(u16*)((s32)wp + 4);
+                    if ((flags & 0x11) == 0) {
+                        *(u16*)((s32)wp + 4) = flags & ~0xA;
+                        *(u16*)((s32)wp + 4) |= 5;
+                        *(s32*)((s32)wp + 0x78) = *(s32*)((s32)gp + 4) * 10;
+                        psndSFXOn(0x2A);
+                        *(u16*)((s32)wp + 4) |= 0x100;
+                    } else {
+                        *(u16*)((s32)wp + 4) = flags | 0xA;
+                        *(u16*)((s32)wp + 4) &= ~5;
+                        *(s32*)((s32)wp + 0x78) = *(s32*)((s32)gp + 4) * 10;
+                        *(s32*)((s32)wp + 0x7C) = 1;
+                        psndSFXOn(0x2B);
+                    }
+                }
+
+                if (valueCheck() != 0) {
+                    *(s32*)((s32)wp + 0x78) = *(s32*)((s32)gp + 4) << 1;
+                    if ((*(u16*)((s32)wp + 4) & 0x11) == 0) {
+                        *(u16*)((s32)wp + 4) &= ~0xA;
+                        *(u16*)((s32)wp + 4) |= 5;
+                    }
+                }
+            }
+
+            if (*(s32*)((s32)wp + 0x78) != 0) {
+                *(s32*)((s32)wp + 0x78) -= 1;
+            }
+            *(f32*)((s32)wp + 0x68) = *(f32*)((s32)player + 0x8C);
+            *(f32*)((s32)wp + 0x6C) = *(f32*)((s32)player + 0x90);
+            *(f32*)((s32)wp + 0x70) = *(f32*)((s32)player + 0x94);
+            if ((*(u16*)((s32)wp + 4) & 0x10) != 0) {
+                *(u16*)((s32)wp + 4) &= ~0xA;
+            }
+            if ((*(u16*)((s32)wp + 4) & 0x20) != 0) {
+                *(u16*)((s32)wp + 4) &= ~5;
+            }
+        } else if ((*(u16*)((s32)wp + 4) & 0x11) != 0) {
+            *(u16*)((s32)wp + 4) |= 0xA;
+            *(u16*)((s32)wp + 4) &= ~5;
+        }
+    }
+
+    flags = *(u16*)((s32)wp + 4);
+    if ((flags & 4) != 0 || (flags & 8) != 0 || (flags & 0x40) != 0 || (flags & 0x80) != 0) {
+        *(f32*)((s32)wp + 0x14) = *(f32*)((s32)wp + 0x10);
+        if ((*(u16*)((s32)wp + 4) & 0x44) != 0) {
+            *(f32*)((s32)wp + 0x18) = float_1_80422bf4;
+            *(f32*)((s32)wp + 0x0C) = float_16_80422c48 / *(f32*)((s32)wp + 0x1C);
+        } else {
+            *(f32*)((s32)wp + 0x18) = float_0_80422be8;
+            *(f32*)((s32)wp + 0x0C) = float_28_80422c60 / *(f32*)((s32)wp + 0x1C);
+        }
+        *(f32*)((s32)wp + 0x08) = float_0_80422be8;
+        *(u16*)((s32)wp + 4) &= ~4;
+        *(u16*)((s32)wp + 4) &= ~8;
+        *(u16*)((s32)wp + 4) &= ~0x40;
+        *(u16*)((s32)wp + 4) &= ~0x80;
+    }
+
+    *(f32*)((s32)wp + 0x08) += float_60_80422bec / (f32)*(s32*)((s32)gp + 4);
+    if (*(f32*)((s32)wp + 0x08) < *(f32*)((s32)wp + 0x0C)) {
+        *(f32*)((s32)wp + 0x10) =
+            (*(f32*)((s32)wp + 0x18) - *(f32*)((s32)wp + 0x14)) *
+            (float_1_80422bf4 - (f32)cos((float_3p1416_80422bf0 * *(f32*)((s32)wp + 0x08)) / *(f32*)((s32)wp + 0x0C))) *
+            float_0p5_80422bf8 + *(f32*)((s32)wp + 0x14);
+    } else {
+        *(f32*)((s32)wp + 0x08) = *(f32*)((s32)wp + 0x0C);
+        *(f32*)((s32)wp + 0x10) = *(f32*)((s32)wp + 0x18);
+        if (*(f32*)((s32)wp + 0x10) == float_0_80422be8) {
+            *(u16*)((s32)wp + 4) &= ~0x100;
+        }
+    }
+
+    ratio = *(f32*)((s32)wp + 0x10);
+    invRatio = float_1_80422bf4 - ratio;
+    *(f32*)((s32)wp + 0x20) = *(f32*)((s32)wp + 0x30) * ratio + *(f32*)((s32)wp + 0x40) * invRatio;
+    *(f32*)((s32)wp + 0x24) = *(f32*)((s32)wp + 0x34) * ratio + *(f32*)((s32)wp + 0x44) * invRatio;
+    valueUpdate();
+    if ((*(u16*)((s32)wp + 4) & 0x1000) == 0) {
+        dispEntry(8, 0, statusWinDisp, 0, float_500_80422c64);
+    }
 }
 
+void valueUpdate(void) {
+    extern void psndSFXOn(const char*);
+    extern const char str_SFX_COUNT_COIN1_802f3a50[];
+    static s32 count;
+    s16 values[12];
+    s32 step;
+    s32 diff;
+    s32 target;
+    s32 current;
 
-u8 valueUpdate(void) {
-    return 0;
+    statusGetValue(values);
+
+    count = (count + 1) % 0x4B0;
+    if ((count & 1) != 0) {
+        return;
+    }
+    if ((*(u16*)((s32)wp + 4) & 0x11) == 0) {
+        return;
+    }
+
+    diff = values[8] - *(s16*)((s32)wp + 0x60);
+    step = 0;
+    if (diff != 0) {
+        step = diff / 10;
+        if (step == 0) {
+            if (*(s16*)((s32)wp + 0x60) < values[8]) {
+                step = 1;
+            } else {
+                step = -1;
+            }
+        }
+    }
+    if (step != 0 && (count % 8) == 0) {
+        psndSFXOn(str_SFX_COUNT_COIN1_802f3a50);
+    }
+
+    target = values[0];
+    current = *(s16*)((s32)wp + 0x50);
+    diff = target - current;
+    step = 0;
+    if (diff != 0) {
+        step = diff / 10;
+        if (step == 0) {
+            step = current < target ? 1 : -1;
+        }
+    }
+    *(s16*)((s32)wp + 0x50) += step;
+
+    target = values[1];
+    current = *(s16*)((s32)wp + 0x52);
+    diff = target - current;
+    step = 0;
+    if (diff != 0) {
+        step = diff / 10;
+        if (step == 0) {
+            step = current < target ? 1 : -1;
+        }
+    }
+    *(s16*)((s32)wp + 0x52) += step;
+
+    target = values[2];
+    current = *(s16*)((s32)wp + 0x54);
+    diff = target - current;
+    step = 0;
+    if (diff != 0) {
+        step = diff / 10;
+        if (step == 0) {
+            step = current < target ? 1 : -1;
+        }
+    }
+    *(s16*)((s32)wp + 0x54) += step;
+
+    target = values[3];
+    current = *(s16*)((s32)wp + 0x56);
+    diff = target - current;
+    step = 0;
+    if (diff != 0) {
+        step = diff / 10;
+        if (step == 0) {
+            step = current < target ? 1 : -1;
+        }
+    }
+    *(s16*)((s32)wp + 0x56) += step;
+
+    target = values[9];
+    current = *(s16*)((s32)wp + 0x62);
+    diff = target - current;
+    step = 0;
+    if (diff != 0) {
+        step = diff / 10;
+        if (step == 0) {
+            step = current < target ? 1 : -1;
+        }
+    }
+    *(s16*)((s32)wp + 0x62) += step;
+
+    target = values[10];
+    current = *(s16*)((s32)wp + 0x64);
+    diff = target - current;
+    step = 0;
+    if (diff != 0) {
+        step = diff / 10;
+        if (step == 0) {
+            step = current < target ? 1 : -1;
+        }
+    }
+    *(s16*)((s32)wp + 0x64) += step;
+
+    target = values[7];
+    current = *(s16*)((s32)wp + 0x5E);
+    diff = target - current;
+    step = 0;
+    if (diff != 0) {
+        step = diff / 10;
+        if (step == 0) {
+            step = current < target ? 1 : -1;
+        }
+    }
+    *(s16*)((s32)wp + 0x5E) += step;
+
+    target = values[8];
+    current = *(s16*)((s32)wp + 0x60);
+    diff = target - current;
+    step = 0;
+    if (diff != 0) {
+        step = diff / 10;
+        if (step == 0) {
+            step = current < target ? 1 : -1;
+        }
+    }
+    *(s16*)((s32)wp + 0x60) += step;
+
+    *(s16*)((s32)wp + 0x58) = values[4];
+    if (*(s16*)((s32)wp + 0x58) != 0) {
+        target = values[5];
+        current = *(s16*)((s32)wp + 0x5A);
+        diff = target - current;
+        step = 0;
+        if (diff != 0) {
+            step = diff / 10;
+            if (step == 0) {
+                step = current < target ? 1 : -1;
+            }
+        }
+        *(s16*)((s32)wp + 0x5A) += step;
+
+        target = values[6];
+        current = *(s16*)((s32)wp + 0x5C);
+        diff = target - current;
+        step = 0;
+        if (diff != 0) {
+            step = diff / 10;
+            if (step == 0) {
+                step = current < target ? 1 : -1;
+            }
+        }
+        *(s16*)((s32)wp + 0x5C) += step;
+    }
+
+    if (*(s16*)((s32)wp + 0x5E) > 99) {
+        *(s16*)((s32)wp + 0x5E) = 99;
+    }
+    if (*(s16*)((s32)wp + 0x60) > 999) {
+        *(s16*)((s32)wp + 0x60) = 999;
+    }
 }
-
 
 u8 gaugeDisp(s32 value, f32 x, f32 y) {
     typedef struct LocalVec3 {

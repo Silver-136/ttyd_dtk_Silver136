@@ -192,9 +192,126 @@ u8 effMugiKemuriDisp(s32 cameraId, void* effEntry) {
 #pragma use_lmw_stmw on
 
 u8 effMugiKemuri2Main(void* effEntry) {
+    typedef struct LocalVec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } LocalVec3;
+    extern s32 strncmp(char* s1, char* s2, u32 n);
+    extern u32 animGroupBaseAsync(char* name, s32 battle, s32 unused);
+    extern s32 animPoseEntry(char* name, s32 battle);
+    extern void animPoseSetAnim(s32 pose, char* anim, s32 force);
+    extern void animPoseRelease(s32 pose);
+    extern void effDelete(void* effect);
+    extern void* marioGetPtr(void);
+    extern f32 dispCalcZ(LocalVec3* pos);
+    extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
+    extern u8 effMugiKemuri2Disp(s32 camera, void* effEntry);
+    extern void* gpGlobals;
+    extern LocalVec3 vec3_802f3ab0;
+    extern char str_win_80422d6c[];
+    extern char str_Z_1_80422d70[];
+    extern char str_EFF_Hana_802f3ad4[];
+    extern char str_EFF_Mugi_802f3ae0[];
+    extern f32 float_0_80422d64;
+    LocalVec3 pos;
+    void* work;
+    void* cur;
+    char* name;
+    s32 battle;
+    s32 i;
+    s32 alive;
+    s32 fading;
+
+    work = *(void**)((s32)effEntry + 0xC);
+    pos = vec3_802f3ab0;
+    pos.x = *(f32*)((s32)work + 0x8);
+    pos.y = *(f32*)((s32)work + 0xC);
+    pos.z = *(f32*)((s32)work + 0x10);
+    battle = (*(s32*)((s32)gpGlobals + 0x14) != 0);
+
+    if ((*(u32*)((s32)effEntry + 0x0) & 4) != 0) {
+        *(u32*)((s32)effEntry + 0x0) &= ~4;
+        cur = work;
+        for (i = 0; i < *(s32*)((s32)effEntry + 0x8); i++, cur = (void*)((s32)cur + 100)) {
+            if (*(s32*)((s32)cur + 0x60) != -1) {
+                animPoseRelease(*(s32*)((s32)cur + 0x60));
+            }
+        }
+        effDelete(effEntry);
+        return 0;
+    }
+
+    cur = work;
+    for (i = 0; i < *(s32*)((s32)effEntry + 0x8); i++, cur = (void*)((s32)cur + 100)) {
+        if (*(s32*)((s32)cur + 0x60) == -1) {
+            name = str_EFF_Mugi_802f3ae0;
+            if (strncmp((char*)((s32)gpGlobals + 0x12C), str_win_80422d6c, 3) == 0) {
+                name = str_EFF_Hana_802f3ad4;
+            }
+            if (animGroupBaseAsync(name, battle, 0) == 0) {
+                return 0;
+            }
+            *(s32*)((s32)cur + 0x60) = animPoseEntry(name, battle);
+            animPoseSetAnim(*(s32*)((s32)cur + 0x60), str_Z_1_80422d70, 1);
+        }
+    }
+
+    alive = 0;
+    cur = work;
+    for (i = 0; i < *(s32*)((s32)effEntry + 0x8); i++, cur = (void*)((s32)cur + 100)) {
+        if (*(s32*)((s32)cur + 0x0) != 0) {
+            *(s32*)((s32)cur + 0x54) -= 1;
+            if (*(s32*)((s32)cur + 0x54) < 1) {
+                *(s32*)((s32)cur + 0x0) = 0;
+            } else {
+                alive = 1;
+                if (*(s32*)((s32)cur + 0x4) == 0 && *(f32*)((s32)cur + 0x34) != float_0_80422d64) {
+                    if (*(u16*)((s32)marioGetPtr() + 0x2E) == 0) {
+                        *(s32*)((s32)cur + 0x54) += 1;
+                        continue;
+                    }
+                }
+                *(f32*)((s32)cur + 0x44) += *(f32*)((s32)cur + 0x48);
+                *(f32*)((s32)cur + 0x40) += *(f32*)((s32)cur + 0x44);
+                *(f32*)((s32)cur + 0x3C) += *(f32*)((s32)cur + 0x40);
+                *(f32*)((s32)cur + 0x1C) += *(f32*)((s32)cur + 0x3C) * *(f32*)((s32)cur + 0x2C);
+                *(f32*)((s32)cur + 0x8) -= *(f32*)((s32)cur + 0x4C) * (*(f32*)((s32)cur + 0x3C) * *(f32*)((s32)cur + 0x30));
+                *(f32*)((s32)cur + 0x10) -= *(f32*)((s32)cur + 0x50) * (*(f32*)((s32)cur + 0x3C) * *(f32*)((s32)cur + 0x30));
+                *(s32*)((s32)cur + 0x58) -= 12;
+                if (*(f32*)((s32)cur + 0x3C) < float_0_80422d64) {
+                    *(f32*)((s32)cur + 0x34) = float_0_80422d64;
+                }
+            }
+        }
+    }
+
+    if (alive == 0) {
+        fading = 0;
+        cur = work;
+        for (i = 0; i < *(s32*)((s32)effEntry + 0x8); i++, cur = (void*)((s32)cur + 100)) {
+            *(s32*)((s32)cur + 0x58) -= 10;
+            if (*(s32*)((s32)cur + 0x58) < 0) {
+                *(s32*)((s32)cur + 0x58) = 0;
+            } else {
+                fading = 1;
+            }
+        }
+        if (fading == 0) {
+            cur = work;
+            for (i = 0; i < *(s32*)((s32)effEntry + 0x8); i++, cur = (void*)((s32)cur + 100)) {
+                if (*(s32*)((s32)cur + 0x60) != -1) {
+                    animPoseRelease(*(s32*)((s32)cur + 0x60));
+                }
+            }
+            effDelete(effEntry);
+            return 0;
+        }
+    }
+
+    dispEntry(4, 2, effMugiKemuri2Disp, effEntry, dispCalcZ(&pos));
     return 0;
 }
-
 
 u8 effMugiKemuriMain(void* effEntry) {
     typedef struct LocalVec3 {

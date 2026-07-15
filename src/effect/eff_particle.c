@@ -53,10 +53,95 @@ void EmitterEmit(void* emitter, void* data) {
 /* CHATGPT STUB FILL: main/effect/eff_particle 20260624_184929 */
 
 /* stub-fill: effParticleDisp | missing_definition | ghidra_signature */
-u8 effParticleDisp(void) {
-    return 0;
-}
+void effParticleDisp(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32);
+    extern void effGetTexObj(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void PSMTXTrans(f32[3][4], f32, f32, f32);
+    extern void PSMTXScale(f32[3][4], f32, f32, f32);
+    extern void PSMTXRotRad(f32[3][4], s32, f32);
+    extern void PSMTXConcat(f32[3][4], f32[3][4], f32[3][4]);
+    extern void GXSetChanMatColor(s32, u32*);
+    extern void GXLoadPosMtxImm(f32[3][4], s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXBegin(s32, s32, s32);
+    extern f32 float_deg2rad_80428280;
+    extern u32 hibana_col[];
+    extern void* gpGlobals;
 
+    u8* work = *(u8**)((u8*)effect + 0xC);
+    void* camera = camGetPtr(cameraId);
+    u8* particles = *(u8**)(work + 0xA0);
+    s32 max = *(s32*)(work + 0xA4);
+    s32 index = *(s32*)(particles + max * 0x20);
+    s32 baseAlpha = *(s32*)(work + 0x30);
+    f32 base[3][4];
+    f32 trans[3][4];
+    f32 rot[3][4];
+    f32 scaleMtx[3][4];
+    u8 texObj[0x20];
+    volatile f32* fifo = (volatile f32*)0xCC008000;
+
+    effGetTexObj(0x61, texObj);
+    GXLoadTexObj(texObj, 0);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xA);
+    GXSetTevAlphaIn(0, 7, 1, 4, 7);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+    PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+    PSMTXScale(scaleMtx, *(f32*)(work + 0x24), *(f32*)(work + 0x24), *(f32*)(work + 0x24));
+    PSMTXConcat(trans, scaleMtx, base);
+
+    while (index != max + 1) {
+        u8* particle = particles + index * 0x20;
+        u32 source = hibana_col[(*(s32*)(particle + 0x1C) >> 3)];
+        u32 alpha = baseAlpha * (source & 0xFF) / 255;
+        u32 color = (source & 0xFFFFFF00) | (alpha & 0xFF);
+        PSMTXTrans(trans, *(f32*)(particle + 4), *(f32*)(particle + 8), *(f32*)(particle + 0xC));
+        PSMTXConcat(base, trans, trans);
+        PSMTXConcat((f32(*)[4])((s32)camera + 0x34), trans, trans);
+        PSMTXRotRad(rot, 0x79, float_deg2rad_80428280 * -*(f32*)((s32)camGetPtr(cameraId) + 0x114));
+        PSMTXConcat(trans, rot, trans);
+        PSMTXRotRad(rot, 0x78,
+                    float_deg2rad_80428280 * (f32)(((*(u32*)((s32)gpGlobals + 0x1C) + index) % 360) * 10));
+        PSMTXConcat(trans, rot, trans);
+        GXSetChanMatColor(4, &color);
+        GXLoadPosMtxImm(trans, 0);
+        GXSetCurrentMtx(0);
+        GXBegin(0x80, 0, 4);
+        fifo[0] = -2.0f; fifo[0] = 4.0f; fifo[0] = 0.0f; fifo[0] = 0.0f; fifo[0] = 0.0f;
+        fifo[0] = 2.0f; fifo[0] = 4.0f; fifo[0] = 0.0f; fifo[0] = 1.0f; fifo[0] = 0.0f;
+        fifo[0] = 2.0f; fifo[0] = -4.0f; fifo[0] = 0.0f; fifo[0] = 1.0f; fifo[0] = 1.0f;
+        fifo[0] = -2.0f; fifo[0] = -4.0f; fifo[0] = 0.0f; fifo[0] = 0.0f; fifo[0] = 1.0f;
+        index = *(s32*)particle;
+    }
+}
 
 /* CHATGPT STUB FILL: main/effect/eff_particle 20260624_184929 */
 
@@ -143,10 +228,66 @@ void* effParticleEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, f32 z, f
 /* CHATGPT STUB FILL: main/effect/eff_particle 20260624_184929 */
 
 /* stub-fill: ParticleEmit | prototype_only | source_prototype */
-void ParticleEmit(void* emitter, void* particle, void* data) {
-    return;
-}
+void ParticleEmit(void* emitter, void* particle, f32 matrix[3][4]) {
+    extern s32 seed;
+    extern f64 log(f64);
+    extern f64 sqrt(f64);
+    extern void PSVECScale(f32*, f32*, f32);
+    extern void PSMTXMultVec(f32[3][4], f32*, f32*);
+    extern void PSVECAdd(f32*, f32*, f32*);
 
+    static s32 use_last_431;
+    static f32 y2_430;
+
+    void* work = *(void**)((s32)emitter + 0xC);
+    f32 gaussian;
+    f32 x;
+    f32 z;
+    f32 length;
+
+    if (use_last_431 == 0) {
+        f32 y;
+        f32 factor;
+        do {
+            seed = seed * 0x5EEDF715 + 0x1B0CB173;
+            x = (f32)seed / 2147483648.0f;
+            seed = seed * 0x5EEDF715 + 0x1B0CB173;
+            y = (f32)seed / 2147483648.0f;
+            length = x * x + y * y;
+        } while (length > 1.0f);
+        factor = (f32)sqrt((-2.0f * (f32)log(length)) / length);
+        y2_430 = y * factor;
+        gaussian = x * factor;
+        use_last_431 = 1;
+    } else {
+        use_last_431 = 0;
+        gaussian = y2_430;
+    }
+
+    *(s32*)((s32)particle + 0x1C) =
+        (s32)(((f32*)matrix)[0x18] * gaussian + ((f32*)matrix)[0x17]);
+    do {
+        seed = seed * 0x5EEDF715 + 0x1B0CB173;
+        x = (f32)seed / 2147483648.0f;
+        seed = seed * 0x5EEDF715 + 0x1B0CB173;
+        z = (f32)seed / 2147483648.0f;
+        length = x * x + z * z;
+    } while (length > 1.0f);
+
+    x *= 0.5f;
+    z *= 0.5f;
+    *(f32*)((s32)particle + 0x10) = x;
+    *(f32*)((s32)particle + 0x14) = (f32)sqrt(1.0f - length * 0.25f);
+    *(f32*)((s32)particle + 0x18) = z;
+    PSVECScale((f32*)((s32)particle + 0x10),
+               (f32*)((s32)particle + 0x10), *(f32*)((s32)work + 0xAC));
+    PSMTXMultVec(matrix, (f32*)((s32)particle + 0x10),
+                 (f32*)((s32)particle + 0x10));
+    PSVECScale((f32*)((s32)particle + 0x10),
+               (f32*)((s32)particle + 4), 2.5f);
+    PSVECAdd((f32*)((s32)matrix + 0x30),
+             (f32*)((s32)particle + 4), (f32*)((s32)particle + 4));
+}
 
 /* CHATGPT FALLBACK MISSING STUBS: main/effect/eff_particle 20260624_191429 */
 
@@ -211,4 +352,3 @@ void effParticleMain(void* effect) {
 
     dispEntry(4, 2, effParticleDisp, dispCalcZ(pos), effect);
 }
-

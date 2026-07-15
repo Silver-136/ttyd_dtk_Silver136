@@ -150,6 +150,48 @@ s32 evt_lottery_buy(void* pEvt) {
 #pragma optimize_for_size on
 
 /* stub-fill: evt_lottery | missing_definition | ghidra_signature */
-s32 evt_lottery(void* pEvt) {
-    return 0;
+s32 evt_lottery(void* event) {
+    extern void* gp;
+    extern s64 OSGetTime(void);
+    extern void OSTicksToCalendarTime(s64,void*);
+    extern s32 rand(void);
+    s32* args=*(s32**)((u8*)event+0xA4);
+    s32 mode=evtGetValue(event,args[0]);
+    s64 now=OSGetTime();
+    u8* global=(u8*)gp;
+    u8* work=global+0xA8;
+    u16* flags=(u16*)work;
+    s64* pickTimes=(s64*)(work+0x30);
+    s64* signTime=(s64*)(work+8);
+    s16* number=(s16*)(work+0x10);
+    s32 calOld[10],calNow[10];
+    *flags&=~0xF000;
+    if(*flags&8) {
+        OSTicksToCalendarTime(*(s64*)(work+0x18),calOld);
+        OSTicksToCalendarTime(now,calNow);
+        if(calOld[0]!=calNow[0]||calOld[1]!=calNow[1]||calOld[2]!=calNow[2]) *flags&=~0xC;
+    }
+    if((*flags&2)==0) {
+        pickTimes[mode]=0;
+    } else {
+        OSTicksToCalendarTime(pickTimes[mode],calOld);
+        OSTicksToCalendarTime(now,calNow);
+        if(calOld[0]==calNow[0]&&calOld[1]==calNow[1]&&calOld[2]==calNow[2]) *flags&=~0x10;
+        else { if((*flags&8)==0) *flags|=0x10; pickTimes[mode]=now; }
+    }
+    if((*flags&1)==0) {
+        *flags|=1;
+        *signTime=now;
+        *number=(s16)(rand()%10000);
+    } else {
+        OSTicksToCalendarTime(*signTime,calOld);
+        OSTicksToCalendarTime(now,calNow);
+        if(calOld[0]!=calNow[0]||calOld[1]!=calNow[1]||calOld[2]!=calNow[2]) {
+            if(mode==1) *signTime=now;
+            if((*flags&2)==0) *number=(s16)(rand()%10000);
+            else if(now<*(s64*)(work+0x18)) { *flags|=4; *number=-1; }
+        }
+    }
+    return 2;
 }
+

@@ -552,14 +552,186 @@ void iconInit(void) {
 
 
 void iconGX(void* mtx, void* icon) {
-    ;
+    typedef f32 Mtx[3][4];
+    typedef u32 TexObj[8];
+    extern void* icon_tpl;
+    extern s32 icon_tpl_ok, icon_bin_ok;
+    extern void* camGetPtr(s32 id);
+    extern void* camGetCurPtr(void);
+    extern void* mapGetWork(void);
+    extern void mapSetMaterialLight(u32 flags, void* pos);
+    extern void mapSetMaterialFog(void);
+    extern void mapGetBlend(void* color);
+    extern void TEXGetGXTexObjFromPalette(void* tpl, void* obj, u32 id);
+    extern void GXInitTexObj(void*, void*, u16, u16, s32, s32, s32, u8);
+    extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, u8, u8, s32);
+    extern void GXLoadTexObj(void*, s32);
+    extern void PSMTXScale(Mtx, f32, f32, f32);
+    extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void GXLoadPosMtxImm(Mtx, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32,s32,s32,s32);
+    extern void GXSetTevOp(s32,s32);
+    extern void GXSetTevColor(s32,void*);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+    extern void GXSetBlendMode(s32,s32,s32,s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);
+    extern void GXSetZMode(s32,s32,s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32,s32);
+    extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
+    extern void GXBegin(s32,s32,s32);
+    u16* data=icon;
+    Mtx scale, model;
+    TexObj tex;
+    f32 pos[3];
+    f32 sx=(*data&4)?-1.0f:1.0f;
+    f32 sy=(*data&8)?-1.0f:1.0f;
+    u32 color=*(u32*)(data+10);
+    PSMTXScale(scale,sx,sy,1.0f);
+    PSMTXConcat(mtx,scale,model);
+    if(camGetCurPtr()!=camGetPtr(8)&&(*data&0x10)){PSMTXScale(scale,1.0f,-1.0f,1.0f);PSMTXConcat(model,scale,model);}
+    GXLoadPosMtxImm(model,0); GXSetCurrentMtx(0);
+    if(!icon_tpl_ok||!icon_bin_ok) GXInitTexObj(tex,0,1,1,0,0,0,0);
+    else {TEXGetGXTexObjFromPalette(icon_tpl,tex,data[0x19]);GXInitTexObjLOD(tex,1,1,0.0f,0.0f,0.0f,0,0,0);}
+    GXLoadTexObj(tex,0);
+    pos[0]=((f32(*)[4])mtx)[0][3]; pos[1]=((f32(*)[4])mtx)[1][3]; pos[2]=((f32(*)[4])mtx)[2][3];
+    if(!(*data&0x10)) mapSetMaterialLight(4,pos); else GXSetNumChans(1);
+    GXSetNumTevStages((*data&0x20)?3:2); GXSetTevOrder(0,0,0,0); GXSetTevOp(0,0); GXSetTevColor(1,&color);
+    GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x3c,0,0x7d);
+    if(!(*data&0x10)) mapSetMaterialFog();
+    if(*(s8*)((u8*)data+0x17)==-1){GXSetBlendMode(0,4,5,0);GXSetZCompLoc(0);GXSetAlphaCompare(6,0x80,1,0,0);GXSetZMode(1,3,1);}
+    else {GXSetBlendMode(1,4,5,0);GXSetZCompLoc(1);GXSetAlphaCompare(7,0,0,7,0);GXSetZMode(1,3,0);}
+    GXSetCullMode((*data&0x400)?2:((*data&0x800)?1:0));
+    GXClearVtxDesc();GXSetVtxDesc(9,1);GXSetVtxDesc(13,1);GXSetVtxAttrFmt(0,9,1,4,0);GXSetVtxAttrFmt(0,13,1,4,0);
+    GXBegin(0x80,0,4);
 }
 
+void iconMain(void) {
+    extern void shadowEntry(f32 x, f32 y, f32 z, f32 size);
+    extern f32 dispCalcZ(void* pos);
+    extern void dispEntry(s32 prio, s32 mode, void* disp, f32 z, void* data);
+    extern void iconDisp(s32 cameraId, void* icon);
+    extern f32 float_10_8041f874;
+    extern f32 float_200_8041f8a8;
 
-u8 iconMain(void) {
-    return 0;
+    void* workSet;
+    u16* icon;
+    void* entry;
+    void* bin;
+    s32 i;
+    s32 id;
+    u32 flags;
+    u16 count;
+    u16 frame;
+
+    workSet = &work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        workSet = (void*)((s32)workSet + 0x8);
+    }
+
+    if (icon_tpl_ok == 0) {
+        return;
+    }
+    if (icon_bin_ok == 0) {
+        return;
+    }
+
+    icon = *(u16**)((s32)workSet + 0x4);
+    i = 0;
+    while (i < *(s32*)workSet) {
+        flags = icon[0];
+        if ((flags & 1) != 0) {
+            if ((flags & 0x2000) != 0) {
+                icon[0] = flags & ~0x2000;
+
+                id = icon[0x14];
+                bin = icon_bin;
+                if (icon_tpl_ok == 0 || icon_bin_ok == 0) {
+                    entry = NULL;
+                } else {
+                    id = (u16)id;
+                    if (id == 0x67) {
+                        id = ICON_SDA_U16_TABLE(unk_8041504c, *(s32*)((s32)gp + 0x16C));
+                    } else if (id < 0x67 && id == 0x49) {
+                        id = ICON_SDA_U16_TABLE(unk_80415040, *(s32*)((s32)gp + 0x16C));
+                    }
+                    entry = (void*)((s32)bin + (((u16)id) << 1));
+                    entry = (void*)((s32)bin + *(u16*)((s32)entry + 2));
+                }
+
+                icon[0x15] = *(u16*)((s32)entry + 0x2);
+                icon[0x16] = *(u16*)((s32)entry + 0x4);
+                icon[0x17] = *(u16*)((s32)entry + 0x6);
+                icon[0x18] = 0;
+                icon[0x19] = *(u16*)((s32)entry + 0x8);
+                icon[0x1A] = *(u16*)((s32)entry + 0xA);
+                if ((*(u16*)entry & 1) != 0) {
+                    icon[0] |= 0x1000;
+                }
+            }
+
+            flags = icon[0];
+            if ((flags & 0x1000) != 0) {
+                if (icon[0x1A] != 0) {
+                    icon[0x1A]--;
+                }
+                if (icon[0x1A] == 0) {
+                    icon[0x18]++;
+                    if (icon[0x18] >= icon[0x17]) {
+                        icon[0x18] = 0;
+                    }
+
+                    id = icon[0x14];
+                    bin = icon_bin;
+                    if (icon_tpl_ok == 0 || icon_bin_ok == 0) {
+                        entry = NULL;
+                    } else {
+                        id = (u16)id;
+                        if (id == 0x67) {
+                            id = ICON_SDA_U16_TABLE(unk_8041504c, *(s32*)((s32)gp + 0x16C));
+                        } else if (id < 0x67 && id == 0x49) {
+                            id = ICON_SDA_U16_TABLE(unk_80415040, *(s32*)((s32)gp + 0x16C));
+                        }
+                        entry = (void*)((s32)bin + (((u16)id) << 1));
+                        entry = (void*)((s32)bin + *(u16*)((s32)entry + 2));
+                    }
+
+                    frame = icon[0x18];
+                    icon[0x19] = *(u16*)((s32)entry + (frame * 4) + 0x8);
+                    icon[0x1A] = *(u16*)((s32)entry + (frame * 4) + 0xA);
+                }
+            }
+
+            flags = icon[0];
+            if ((flags & 2) == 0) {
+                if ((flags & 0x10) != 0) {
+                    dispEntry(8, 1, iconDisp, float_200_8041f8a8, icon);
+                } else if ((flags & 0x100) != 0) {
+                    shadowEntry(*(f32*)((s32)icon + 0x4), *(f32*)((s32)icon + 0x8), *(f32*)((s32)icon + 0xC), float_10_8041f874);
+                    dispEntry(5, 1, iconDisp, dispCalcZ((void*)((s32)icon + 0x4)), icon);
+                } else if ((flags & 0x200) != 0) {
+                    shadowEntry(*(f32*)((s32)icon + 0x4), *(f32*)((s32)icon + 0x8), *(f32*)((s32)icon + 0xC), float_10_8041f874);
+                    dispEntry(7, 1, iconDisp, dispCalcZ((void*)((s32)icon + 0x4)), icon);
+                } else {
+                    shadowEntry(*(f32*)((s32)icon + 0x4), *(f32*)((s32)icon + 0x8), *(f32*)((s32)icon + 0xC), float_10_8041f874);
+                    if (*(u8*)((s32)icon + 0x17) != 0xFF) {
+                        dispEntry(4, 2, iconDisp, dispCalcZ((void*)((s32)icon + 0x4)), icon);
+                    } else {
+                        dispEntry(4, 1, iconDisp, dispCalcZ((void*)((s32)icon + 0x4)), icon);
+                    }
+                }
+            }
+        }
+        i++;
+        icon = (u16*)((s32)icon + 0x38);
+    }
 }
-
 
 void iconDispGxAlpha(f32 scale, void* pos, s32 someBitfield, s32 iconId, s32 alpha) {
     extern void* camGetCurPtr(void);

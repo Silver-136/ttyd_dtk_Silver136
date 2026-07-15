@@ -7,15 +7,83 @@ void BattleSamplingEnemyUpdate(void) {
 }
 
 
-void _btlSamplingEnemy(void) {
-    ;
+void _btlSamplingEnemy(void* targetWork) {
+    extern void* _battleWorkPointer;
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern void* BtlUnit_GetPartsPtr(void*, s32);
+    extern s32 BtlUnit_CheckStatus(void*, s32);
+    s32 unitIdx;
+    s32 partIdx;
+    s32 count;
+    u8* target;
+    void* unit;
+    void* part;
+
+    count = 0;
+    target = (u8*)((s32)targetWork + 4);
+    if ((*(u32*)((s32)targetWork + 0xAC0) & 0x80000000) == 0) {
+        for (unitIdx = 0; unitIdx < 64; unitIdx++) {
+            unit = BattleGetUnitPtr(_battleWorkPointer, unitIdx);
+            if (unit == 0 || BtlUnit_CheckStatus(unit, 0x19) != 0 ||
+                (*(u32*)((s32)unit + 0x104) & 0x40) != 0) {
+                continue;
+            }
+            for (partIdx = 1; partIdx <= *(u8*)(*(s32*)((s32)unit + 0x10) + 1); partIdx++) {
+                part = BtlUnit_GetPartsPtr(unit, partIdx);
+                if (part == 0 || (*(u32*)((s32)part + 0x1AC) & 0x100) != 0) {
+                    continue;
+                }
+                *(s16*)(target + count * 0x24) = unitIdx;
+                *(s16*)(target + count * 0x24 + 2) = partIdx;
+                *((s8*)((s32)targetWork + 0xA70) + count) = count;
+                count++;
+            }
+        }
+    }
+    *(u8*)((s32)targetWork + 0xAC9) = count;
+    *(u8*)((s32)targetWork + 0xACA) = 0;
 }
 
+void BattleChoiceSamplingEnemy(void* targetWork, u32 weighting, int* unitIdx, int* partIdx) {
+    extern void* _battleWorkPointer;
+    extern void* BattleGetUnitPtr(void*, s32);
+    u32 weights[74];
+    s8* order;
+    u8 count;
+    s32 i;
+    s32 index;
+    s32 bestWeight;
 
-void BattleChoiceSamplingEnemy(void* targetWork, u32 targetWeightingFlags, int* unitIdx, int* param_4) {
-    ;
+    *unitIdx = -1;
+    *partIdx = 0;
+    count = *(u8*)((s32)targetWork + 0xAC9);
+    if (count == 0) {
+        return;
+    }
+    order = (s8*)((s32)targetWork + 0xA70);
+    for (i = 0; i < 74; i++) {
+        weights[i] = 0;
+    }
+    bestWeight = -1;
+    for (i = 0; i < count; i++) {
+        void* unit;
+        index = order[i];
+        weights[index] += 100;
+        unit = BattleGetUnitPtr(_battleWorkPointer,
+                                *(s16*)((s32)targetWork + 4 + index * 0x24));
+        if ((weighting & 1) != 0 && *(s32*)((s32)unit + 8) == 0) {
+            weights[index] = weights[index] * 3 / 2;
+        }
+        if ((weighting & 0x40) != 0) {
+            weights[index] += (count - i) * 10;
+        }
+        if ((s32)weights[index] > bestWeight) {
+            bestWeight = weights[index];
+            *unitIdx = *(s16*)((s32)targetWork + 4 + index * 0x24);
+            *partIdx = *(s16*)((s32)targetWork + 6 + index * 0x24);
+        }
+    }
 }
-
 
 s32 BattleSamplingEnemy(void* targetWork, void* weapon, int attackerIdx, int enemyBelong, u32 targetClassFlags, u32 targetPropertyFlags, u8 param_7) {
     extern void* _battleWorkPointer;

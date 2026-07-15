@@ -157,10 +157,100 @@ s32 _bsi_default_turn(BattleWorkUnit* unit, s32* desc, s32* out) {
 /* CHATGPT STUB FILL: main/battle/battle_status_icon 20260624_184929 */
 
 /* stub-fill: BattleStatusIconDisp | missing_definition | ghidra_signature */
-void BattleStatusIconDisp(s32 param_1, void* unit) {
-    return;
-}
+void BattleStatusIconDisp(s32 cameraId, void* unit) {
+    extern void btlGetScreenPoint(const f32* world, f32* screen);
+    extern void btlDispTexPlane(s32 texture, const u32* color, s32 flags,
+                                f32 x, f32 y, f32 z, f32 scaleX, f32 scaleY);
+    extern void PSMTXTrans(f32 matrix[3][4], f32 x, f32 y, f32 z);
+    extern void PSMTXScale(f32 matrix[3][4], f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(f32 matrix[3][4], s32 axis, f32 radians);
+    extern void PSMTXIdentity(f32 matrix[3][4]);
+    extern void PSMTXConcat(f32 a[3][4], f32 b[3][4], f32 out[3][4]);
+    extern void btlDispTexPlane2(f32 matrix[3][4], s32 texture, const u32* color);
+    extern void iconNumberDispGx(f32 matrix[3][4], s32 number, s32 flags, const u32* color);
+    extern u32 dat_80428788;
+    extern u32 dat_8042878c;
 
+    u8* work = (u8*)unit + 0x348;
+    f32 screen[3];
+    s32 index;
+
+    (void)cameraId;
+    btlGetScreenPoint((f32*)work, screen);
+
+    for (index = *(s16*)(work + 0x794) - 1; index >= 0; index--) {
+        u8* entry = work + 0x20 + index * 0x44;
+        f32 x = screen[0] + *(f32*)(work + 0xC);
+        f32 y = screen[1] + *(f32*)(work + 0x10) +
+                *(f32*)(work + 0x18) * (f32)index;
+        f32 z = screen[2] + *(f32*)(work + 0x14) + (f32)(index * 2);
+        u32 flags = *(u32*)(entry + 0x40);
+
+        if ((flags & 1) == 0) {
+            u32 color = dat_80428788;
+            f32 scaleY = (*(u32*)(work + 0x1C) & 1) == 0 ? 0.8f : 1.0f;
+            btlDispTexPlane(0x30, &color, 0, x, y, z, 0.8f, scaleY);
+        }
+
+        if (*(s32*)(entry + 8) != 0) {
+            if ((flags & 2) == 0) {
+                f32 position[3][4];
+                f32 scaling[3][4];
+                f32 negativePivot[3][4];
+                f32 positivePivot[3][4];
+                f32 rotateX[3][4];
+                f32 rotateY[3][4];
+                f32 rotateZ[3][4];
+                f32 matrix[3][4];
+                u32 color = *(u32*)(entry + 0x3C);
+
+                PSMTXTrans(position,
+                           x + *(f32*)(entry + 0x30),
+                           y + *(f32*)(entry + 0x34),
+                           z + *(f32*)(entry + 0x38));
+                PSMTXScale(scaling,
+                           0.8f * *(f32*)(entry + 0xC),
+                           0.8f * *(f32*)(entry + 0x10),
+                           *(f32*)(entry + 0x14));
+                PSMTXTrans(negativePivot,
+                           -*(f32*)(entry + 0x18),
+                           -*(f32*)(entry + 0x1C),
+                           -*(f32*)(entry + 0x20));
+                PSMTXTrans(positivePivot,
+                           *(f32*)(entry + 0x18),
+                           *(f32*)(entry + 0x1C),
+                           *(f32*)(entry + 0x20));
+                PSMTXRotRad(rotateX, 'x',
+                            0.017453292f * *(f32*)(entry + 0x24));
+                PSMTXRotRad(rotateY, 'y',
+                            0.017453292f * *(f32*)(entry + 0x28));
+                PSMTXRotRad(rotateZ, 'z',
+                            0.017453292f * *(f32*)(entry + 0x2C));
+
+                PSMTXIdentity(matrix);
+                PSMTXConcat(rotateZ, scaling, matrix);
+                PSMTXConcat(negativePivot, matrix, matrix);
+                PSMTXConcat(rotateZ, matrix, matrix);
+                PSMTXConcat(rotateY, matrix, matrix);
+                PSMTXConcat(rotateX, matrix, matrix);
+                PSMTXConcat(positivePivot, matrix, matrix);
+                PSMTXConcat(position, matrix, matrix);
+                btlDispTexPlane2(matrix, *(s32*)(entry + 8), &color);
+            }
+
+            if (*(s32*)(entry + 4) != 0) {
+                f32 matrix[3][4];
+                f32 translation[3][4];
+                u32 color = dat_8042878c;
+
+                PSMTXIdentity(matrix);
+                PSMTXTrans(translation, x + 21.6f, y - 16.0f, z);
+                PSMTXConcat(translation, matrix, matrix);
+                iconNumberDispGx(matrix, *(s32*)(entry + 4), 1, &color);
+            }
+        }
+    }
+}
 
 /* CHATGPT STUB FILL: main/battle/battle_status_icon 20260624_184929 */
 

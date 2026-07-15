@@ -878,9 +878,240 @@ void fadeMain(void) {
 }
 
 void fadeEntry(s32 type, s32 time, void* data) {
-    ;
-}
+    extern u32 dat_8041f778;
+    extern u32 dat_8041f77c;
+    extern u32 dat_8041f780;
+    extern u32 dat_8041f784;
+    extern u32 dat_8041f788;
+    extern u32 dat_8041f78c;
+    extern const f32 float_3_8041f814;
+    extern const char str_OFF_d_maku_up_down_802bf6fc[];
+    extern const char str_OFF_d_maku_left_righ_802bf710[];
+    extern const char str_OFF_d_maku_center_802bf728[];
+    extern const char str_OFF_d_dokan_up_802bf6c4[];
+    extern const char str_OFF_d_dokan_down_802bf6b0[];
+    extern const char str_OFF_d_dokan_left_802bf6d4[];
+    extern const char str_OFF_d_dokan_right_802bf6e8[];
+    extern const char str_OFF_d_meku_802bf73c[];
+    extern const char str_OFF_d_four_meku_5sec_802bf748[];
+    extern const char str_A_1_8041f824[];
+    extern const char str_A_2_8041f80c[];
+    extern const char str_Z_1_8041f828[];
+    extern const char str_Z_2_8041f82c[];
+    s32 work;
+    s32 entry;
+    s32 reset;
+    s32 slot;
+    s32 pose;
+    void* image;
 
+    if (type == 0) {
+        return;
+    }
+
+    if (type == 0x10) {
+        type = 9;
+        *(u32*)data = dat_8041f778;
+    }
+    if (type == 0x11) {
+        type = 10;
+        *(u32*)data = dat_8041f77c;
+    }
+    if (type == 0x12) {
+        type = 11;
+        *(u32*)data = dat_8041f780;
+    }
+    if (type == 0x13) {
+        type = 12;
+        *(u32*)data = dat_8041f784;
+    }
+    if (type == 0x14) {
+        type = 14;
+        *(u32*)data = dat_8041f788;
+    }
+    if (type == 0x15) {
+        type = 15;
+        *(u32*)data = dat_8041f78c;
+    }
+
+    if (((type == 1) || (type == 2)) && (time < 1000)) {
+        time = 1000;
+    }
+    if (type == 7) {
+        type = 3;
+    } else if (type == 8) {
+        type = 4;
+    } else if ((((u32)(type - 3) <= 2) || (type == 6)) && (time < 1000)) {
+        time = 1000;
+    }
+
+    work = (s32)wp;
+    reset = 0;
+    if (type < 0x16) {
+        slot = 0;
+        reset = work + 0x158;
+    } else if ((type < 0x29) || (type == 0x33)) {
+        slot = 1;
+    } else if (type < 0x31) {
+        slot = 2;
+        reset = work + 8;
+    } else if (type < 0x3F) {
+        slot = 3;
+        if ((u32)(type - 0x32) <= 8) {
+            reset = work + 8;
+        }
+    } else if (type < 0x41) {
+        slot = 4;
+    } else {
+        return;
+    }
+
+    entry = work + 8 + slot * 0xA8;
+    if (reset != 0) {
+        pose = *(s32*)(reset + 0x6C);
+        if (pose >= 0) {
+            animPoseRelease(pose);
+        }
+        pose = *(s32*)(reset + 0x70);
+        if (pose >= 0) {
+            animPaperPoseRelease(pose);
+        }
+        image = *(void**)(reset + 0x8C);
+        if (image != 0) {
+            imgRelease((s32)image, (void*)(reset + 0x68));
+        }
+        memset((void*)reset, 0, 0xA8);
+        *(s32*)(reset + 0x6C) = -1;
+        *(s32*)(reset + 0x70) = -1;
+        *(f32*)(reset + 0x1C) = float_0_8041f7a8;
+        *(f32*)(reset + 0x20) = float_0_8041f7a8;
+        *(f32*)(reset + 0x78) = float_0_8041f7a8;
+        *(f32*)(reset + 0x7C) = float_0_8041f7a8;
+        *(f32*)(reset + 0x90) = float_1_8041f7ac;
+        if ((slot == 0) && (type <= 14) && (time != 0)) {
+            *(s32*)(work + 0xAC) = 2;
+        }
+    }
+
+    *(u16*)entry = 0;
+    *(u16*)entry |= 1;
+    *(s32*)(entry + 4) = type;
+    *(s64*)(entry + 0x10) = time;
+    *(u32*)(entry + 0x18) = *(u32*)data;
+    *(f32*)(entry + 0x24) = float_0_8041f7a8;
+    *(f32*)(entry + 0x28) = float_0_8041f7a8;
+    *(f32*)(entry + 0x5C) = float_0_8041f7a8;
+    *(s32*)(entry + 8) = 0;
+    *(f32*)(entry + 0x78) = float_0_8041f7a8;
+    *(f32*)(entry + 0x7C) = float_0_8041f7a8;
+    *(f32*)(entry + 0x90) = float_1_8041f7ac;
+    if ((type != 0x32) && (type != 0x35)) {
+        *(s32*)(entry + 0x9C) = 0;
+    }
+    *(s32*)(work + 0x350) = slot;
+
+    if ((type == 0x22) || (type == 0x28)) {
+        *(f32*)(entry + 0x90) = float_3_8041f814;
+    }
+
+    switch (type) {
+        case 0x16:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_up_down_802bf6fc;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x17:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_up_down_802bf6fc;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            break;
+        case 0x18:
+        case 0x1A:
+        case 0x40:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x19:
+        case 0x1B:
+        case 0x3F:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            break;
+        case 0x1C:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
+            *(const char**)(entry + 0x64) = str_Z_1_8041f828;
+            break;
+        case 0x1D:
+        case 0x25:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x1E:
+        case 0x26:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            break;
+        case 0x1F:
+        case 0x21:
+        case 0x27:
+        case 0x28:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
+            *(const char**)(entry + 0x64) = str_Z_2_8041f82c;
+            break;
+        case 0x20:
+        case 0x24:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
+            *(const char**)(entry + 0x64) = str_Z_1_8041f828;
+            break;
+        case 0x29:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_up_802bf6c4;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x2A:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_up_802bf6c4;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            break;
+        case 0x2B:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_down_802bf6b0;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x2C:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_down_802bf6b0;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            break;
+        case 0x2D:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_left_802bf6d4;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x2E:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_left_802bf6d4;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            break;
+        case 0x2F:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_right_802bf6e8;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x30:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_right_802bf6e8;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            break;
+        case 0x31:
+        case 0x34:
+            *(const char**)(entry + 0x60) = str_OFF_d_meku_802bf73c;
+            *(const char**)(entry + 0x64) = str_Z_1_8041f828;
+            break;
+        case 0x32:
+        case 0x35:
+            *(const char**)(entry + 0x60) = str_OFF_d_meku_802bf73c;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x33:
+            *(const char**)(entry + 0x60) = str_OFF_d_four_meku_5sec_802bf748;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        default:
+            return;
+    }
+    *(s32*)(entry + 0x68) = 2;
+}
 
 void disp_texture(void) {
     extern void PSMTXRotRad(void* mtx, s32 axis, f32 rad);

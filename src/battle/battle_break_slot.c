@@ -347,7 +347,118 @@ void BattleBreakSlot_PointInc(void) {
 
 /* stub-fill: BattleBreakSlot_Main | missing_definition | header_prototype */
 void BattleBreakSlot_Main(void) {
-    return;
+    extern void* BattleBreakSlotGetPtr(void);
+    extern void* BattleBreakSlotReelGetPtr(s32);
+    extern s32 keyGetButtonTrg(s32);
+    extern s32 rand(void);
+    extern s32 psndSFXOn(void*);
+    extern void psndSFXOff(s32);
+    u8* work = BattleBreakSlotGetPtr();
+    u8* reel;
+    s32 state = *(s32*)(work + 4);
+    s32 count;
+    s32 i;
+
+    switch (state) {
+        case 0:
+            count = 0;
+            for (i = 0; i < 3; i++) {
+                reel = BattleBreakSlotReelGetPtr(i);
+                if (*(s32*)(reel + 8) == 2) count++;
+            }
+            if (count == 2 && *(s32*)((u8*)BattleBreakSlotReelGetPtr(0) + 0x1C) !=
+                              *(s32*)((u8*)BattleBreakSlotReelGetPtr(1) + 0x1C)) {
+                *(s32*)(work + 4) = 1;
+                *(s32*)(work + 8) = 0;
+            }
+            break;
+        case 1:
+            if (*(s32*)(work + 8) == 60) {
+                for (i = 0; i < 2; i++) {
+                    reel = BattleBreakSlotReelGetPtr(i);
+                    *(s32*)(reel + 8) = 3;
+                    *(s32*)(reel + 0xC) = 0;
+                }
+            }
+            count = 0;
+            for (i = 0; i < 3; i++) {
+                if (*(s32*)((u8*)BattleBreakSlotReelGetPtr(i) + 8) == 0) count++;
+            }
+            if (count == 3) {
+                *(s32*)(work + 4) = 8;
+                *(s32*)(work + 0xC) = 0;
+            }
+            (*(s32*)(work + 8))++;
+            break;
+        case 2:
+            count = 0;
+            for (i = 0; i < 3; i++) {
+                s32 reelState = *(s32*)((u8*)BattleBreakSlotReelGetPtr(i) + 8);
+                if (reelState == 6 || reelState == 10) count++;
+            }
+            if (count == 3) {
+                *(s32*)(work + 4) = 3;
+                *(s32*)(work + 8) = 0;
+                for (i = 0; i < 3; i++) {
+                    reel = BattleBreakSlotReelGetPtr(i);
+                    if (*(s32*)(reel + 8) == 6) *(s32*)(reel + 8) = 7;
+                }
+                *(s32*)(work + 0x14) = psndSFXOn((void*)"SFX_BTL_SLOT_START1");
+            }
+            break;
+        case 3:
+            count = 0;
+            for (i = 0; i < 3; i++) {
+                if (*(s32*)((u8*)BattleBreakSlotReelGetPtr(i) + 8) == 10) count++;
+            }
+            if (count == 3) {
+                *(s32*)(work + 4) = 4;
+                *(s32*)(work + 8) = 0;
+                psndSFXOff(*(s32*)(work + 0x14));
+            }
+            if ((keyGetButtonTrg(0) & 0x100) && *(s32*)(work + 8) > 14) {
+                for (i = 0; i < 3; i++) {
+                    reel = BattleBreakSlotReelGetPtr(i);
+                    if (*(s32*)(reel + 8) == 8) {
+                        *(s32*)(reel + 8) = 9;
+                        *(f32*)(reel + 0x54) = -1.0f;
+                        break;
+                    }
+                }
+            }
+            (*(s32*)(work + 8))++;
+            break;
+        case 4:
+            if (*(s32*)(work + 8) == 20) {
+                count = 0;
+                for (i = 0; i < 2; i++) {
+                    reel = BattleBreakSlotReelGetPtr(i);
+                    if (*(s32*)(reel + 0x1C) == *(s32*)(reel + 0x78)) count++;
+                }
+                *(s32*)(work + 4) = count == 2 ? 5 : 7;
+                for (i = 0; i < 3; i++) {
+                    reel = BattleBreakSlotReelGetPtr(i);
+                    *(s32*)(reel + 8) = count == 2 ? 11 : 12;
+                    *(s32*)(reel + 0xC) = 0;
+                }
+            }
+            (*(s32*)(work + 8))++;
+            break;
+        case 5:
+        case 7:
+            count = 0;
+            for (i = 0; i < 3; i++) {
+                if (*(s32*)((u8*)BattleBreakSlotReelGetPtr(i) + 8) == 0) count++;
+            }
+            if (count == 3) {
+                *(s32*)(work + 4) = state == 5 ? 6 : 8;
+                *(s32*)(work + 8) = 0;
+            }
+            break;
+        case 8:
+            *(s32*)(work + 4) = 0;
+            break;
+    }
 }
 
 /* stub-fill: BattleBreakSlot_Init | missing_definition | header_prototype */

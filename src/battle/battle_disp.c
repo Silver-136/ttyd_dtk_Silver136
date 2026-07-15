@@ -191,20 +191,201 @@ void statusPoseControl(void* part) {
 }
 
 
-void btlUnitPartsDisp(s32 param_1, void* part) {
-    ;
-}
+void btlUnitPartsDisp(s32 cameraId, void* part) {
+    extern void animPoseSetLocalTimeRate(void*, f32);
+    extern void animPoseSetEffect(void*, s32, s32);
+    extern void animPoseSetEffectAnim(void*, s32, s32);
+    extern void _partsBlurControl(void*, s32, s32, void*);
+    s32 poseId;
+    u32 flags;
 
+    if (part == 0) {
+        return;
+    }
+    poseId = *(s32*)((s32)part + 0x1D4);
+    if (poseId < 0) {
+        return;
+    }
+    flags = *(u32*)((s32)part + 0x204);
+    if ((flags & 0x10) != 0) {
+        animPoseSetLocalTimeRate((void*)poseId, 0.5f);
+    } else {
+        animPoseSetLocalTimeRate((void*)poseId, 1.0f);
+    }
+    if ((flags & 0x40) != 0) {
+        animPoseSetEffect((void*)poseId, 1, 0);
+    }
+    if ((flags & 0x80) != 0) {
+        animPoseSetEffectAnim((void*)poseId, 1, 0);
+    }
+    _partsBlurControl(part, (flags & 0x100) != 0, 0, (void*)((s32)part + 0x1F0));
+}
 
 void btlDispMain(void) {
-    ;
+    extern void* _battleWorkPointer;
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern void BtlUnit_OffUnitFlag(void*, u32);
+    extern void BtlUnit_OnUnitFlag(void*, u32);
+    extern void BtlUnit_HpGaugeMain(void*);
+    extern void BattleStatusEffectMain(void*);
+    extern void BattleStatusIconMain(void*);
+    extern void BattleStockExpDisp(void);
+    extern void BattleStageDisp(void);
+    extern void BattleCommandDisplay(void*);
+    extern void BattleAudience_Disp(void);
+    extern void BattleBreakSlot_Disp(void);
+    void* unit;
+    s32 i;
+    u8 shown;
+    u8 target;
+
+    for (i = 0; i < 64; i++) {
+        unit = BattleGetUnitPtr(_battleWorkPointer, i);
+        if (unit == 0) {
+            continue;
+        }
+        shown = *(u8*)((s32)unit + 0x304);
+        target = *(u8*)((s32)unit + 0x303);
+        BtlUnit_OffUnitFlag(unit, 2);
+        if (shown != target) {
+            BtlUnit_OnUnitFlag(unit, 2);
+            if (shown < target) {
+                shown += 12;
+                if (shown > target) shown = target;
+            } else {
+                shown -= 2;
+                if (shown < target) shown = target;
+            }
+            *(u8*)((s32)unit + 0x304) = shown;
+        }
+        BtlUnit_HpGaugeMain(unit);
+        *(f32*)((s32)unit + 0x34) = 1.0f;
+        BattleStatusEffectMain(unit);
+        BattleStatusIconMain(unit);
+    }
+    BattleStockExpDisp();
+    BattleStageDisp();
+    BattleCommandDisplay(_battleWorkPointer);
+    BattleAudience_Disp();
+    BattleBreakSlot_Disp();
 }
 
+void btlDispTex4(s32 texId, f32* trans, f32* scale, f32* rot, u32* color) {
+    extern void btlDispGetTexSize(s32 texId, u16* width, u16* height);
+    extern void _btlDispTex4(s32 texId, f32* trans0, f32* scale0, f32* rot, f32* trans1, f32* scale1, void* color);
+    extern f32 float_0_80422240;
+    extern f32 float_0p5_80422234;
+    extern u32 vec3_802ee3a0[];
+    u16 height;
+    u16 width;
+    u32 color0;
+    u32 color1;
+    u32 color2;
+    u32 color3;
+    u32 base0[3];
+    u32 size0[3];
+    u32 rot0[3];
+    u32 off0[3];
+    u32 one0[3];
+    u32 base1[3];
+    u32 size1[3];
+    u32 rot1[3];
+    u32 off1[3];
+    u32 one1[3];
+    u32 base2[3];
+    u32 size2[3];
+    u32 rot2[3];
+    u32 off2[3];
+    u32 one2[3];
+    u32 base3[3];
+    u32 size3[3];
+    u32 rot3[3];
+    u32 off3[3];
+    u32 one3[3];
+    f32 zero = float_0_80422240;
+    f32 halfW;
+    f32 halfH;
+    f32 negW;
+    f32 negH;
 
-u8 btlDispTex4(void) {
-    return 0;
+    btlDispGetTexSize(texId, &width, &height);
+    color0 = *color;
+    halfW = float_0p5_80422234 * (f32)width * scale[0];
+    halfH = float_0p5_80422234 * (f32)height * scale[1];
+    negW = -halfW;
+    negH = -halfH;
+
+    base0[0] = *(u32*)&trans[0];
+    base0[1] = *(u32*)&trans[1];
+    base0[2] = *(u32*)&trans[2];
+    size0[0] = *(u32*)&scale[0];
+    size0[1] = *(u32*)&scale[1];
+    size0[2] = *(u32*)&scale[2];
+    rot0[0] = *(u32*)&rot[0];
+    rot0[1] = *(u32*)&rot[1];
+    rot0[2] = *(u32*)&rot[2];
+    *(f32*)&off0[0] = negW;
+    *(f32*)&off0[1] = halfH;
+    *(f32*)&off0[2] = zero;
+    one0[0] = vec3_802ee3a0[3];
+    one0[1] = vec3_802ee3a0[4];
+    one0[2] = vec3_802ee3a0[5];
+    _btlDispTex4(texId, (f32*)base0, (f32*)size0, (f32*)rot0, (f32*)off0, (f32*)one0, &color0);
+
+    color1 = *color;
+    base1[0] = *(u32*)&trans[0];
+    base1[1] = *(u32*)&trans[1];
+    base1[2] = *(u32*)&trans[2];
+    size1[0] = *(u32*)&scale[0];
+    size1[1] = *(u32*)&scale[1];
+    size1[2] = *(u32*)&scale[2];
+    rot1[0] = *(u32*)&rot[0];
+    rot1[1] = *(u32*)&rot[1];
+    rot1[2] = *(u32*)&rot[2];
+    *(f32*)&off1[0] = halfW;
+    *(f32*)&off1[1] = halfH;
+    *(f32*)&off1[2] = zero;
+    one1[0] = vec3_802ee3a0[6];
+    one1[1] = vec3_802ee3a0[7];
+    one1[2] = vec3_802ee3a0[8];
+    _btlDispTex4(texId, (f32*)base1, (f32*)size1, (f32*)rot1, (f32*)off1, (f32*)one1, &color1);
+
+    color2 = *color;
+    base2[0] = *(u32*)&trans[0];
+    base2[1] = *(u32*)&trans[1];
+    base2[2] = *(u32*)&trans[2];
+    size2[0] = *(u32*)&scale[0];
+    size2[1] = *(u32*)&scale[1];
+    size2[2] = *(u32*)&scale[2];
+    rot2[0] = *(u32*)&rot[0];
+    rot2[1] = *(u32*)&rot[1];
+    rot2[2] = *(u32*)&rot[2];
+    *(f32*)&off2[0] = halfW;
+    *(f32*)&off2[1] = negH;
+    *(f32*)&off2[2] = zero;
+    one2[0] = vec3_802ee3a0[9];
+    one2[1] = vec3_802ee3a0[10];
+    one2[2] = vec3_802ee3a0[11];
+    _btlDispTex4(texId, (f32*)base2, (f32*)size2, (f32*)rot2, (f32*)off2, (f32*)one2, &color2);
+
+    color3 = *color;
+    base3[0] = *(u32*)&trans[0];
+    base3[1] = *(u32*)&trans[1];
+    base3[2] = *(u32*)&trans[2];
+    size3[0] = *(u32*)&scale[0];
+    size3[1] = *(u32*)&scale[1];
+    size3[2] = *(u32*)&scale[2];
+    rot3[0] = *(u32*)&rot[0];
+    rot3[1] = *(u32*)&rot[1];
+    rot3[2] = *(u32*)&rot[2];
+    *(f32*)&off3[0] = negW;
+    *(f32*)&off3[1] = negH;
+    *(f32*)&off3[2] = zero;
+    one3[0] = vec3_802ee3a0[12];
+    one3[1] = vec3_802ee3a0[13];
+    one3[2] = vec3_802ee3a0[14];
+    _btlDispTex4(texId, (f32*)base3, (f32*)size3, (f32*)rot3, (f32*)off3, (f32*)one3, &color3);
 }
-
 
 u8 btlDispTexPlainGX(void) {
     return 0;
@@ -345,7 +526,7 @@ void _btlDispTex4(s32 texId, f32* trans0, f32* scale0, f32* rot, f32* trans1, f3
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
     extern void PSMTXRotRad(void* mtx, s32 axis, f32 radians);
     extern void PSMTXConcat(void* a, void* b, void* ab);
-    extern void btlDispTexPlane2(void* mtx, s32 texId, void* color);
+    extern void btlDispTexPlane2(void* mtx, s32 texId, void* color, s32 flags);
     f32 mtx[3][4];
     f32 trans0Mtx[3][4];
     f32 scale0Mtx[3][4];
@@ -372,7 +553,7 @@ void _btlDispTex4(s32 texId, f32* trans0, f32* scale0, f32* rot, f32* trans1, f3
     PSMTXConcat(rotYMtx, mtx, mtx);
     PSMTXConcat(trans0Mtx, mtx, mtx);
     colorCopy = *(u32*)color;
-    btlDispTexPlane2(mtx, texId, &colorCopy);
+    btlDispTexPlane2(mtx, texId, &colorCopy, 0);
 }
 
 void btlDispGXInit2D(void) {
@@ -632,6 +813,11 @@ void btlGetScreenPoint(void* inPos, void* outScreenSpacePos) {
     extern void PSMTX44MultVec(void* mtx, void* src, void* dst);
     void* cam;
     f32 pos[3];
+    f32 xScale;
+    f32 yScale;
+    f32 zero;
+    f32 x;
+    f32 y;
 
     cam = camGetPtr(4);
     pos[0] = *(f32*)((s32)inPos + 0);
@@ -639,9 +825,17 @@ void btlGetScreenPoint(void* inPos, void* outScreenSpacePos) {
     pos[2] = *(f32*)((s32)inPos + 8);
     PSMTXMultVec((void*)((s32)cam + 0x11C), pos, pos);
     PSMTX44MultVec((void*)((s32)cam + 0x15C), pos, pos);
-    *(f32*)((s32)outScreenSpacePos + 0) = float_304_80422244 * pos[0];
-    *(f32*)((s32)outScreenSpacePos + 4) = float_240_80422248 * pos[1];
-    *(f32*)((s32)outScreenSpacePos + 8) = float_0_80422240;
+
+    xScale = float_304_80422244;
+    x = pos[0];
+    yScale = float_240_80422248;
+    xScale = xScale * x;
+    zero = float_0_80422240;
+    *(f32*)((s32)outScreenSpacePos + 0) = xScale;
+    y = pos[1];
+    y = yScale * y;
+    *(f32*)((s32)outScreenSpacePos + 4) = y;
+    *(f32*)((s32)outScreenSpacePos + 8) = zero;
 }
 
 void gravityOffsetControl(void* part) {

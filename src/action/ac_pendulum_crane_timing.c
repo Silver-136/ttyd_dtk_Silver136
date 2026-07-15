@@ -171,6 +171,119 @@ void actionCommandDisp(f32 x, f32 y) {
 }
 
 /* stub-fill: battleAcMain_PendulumCraneTiming | missing_definition | ghidra_signature */
-u8 battleAcMain_PendulumCraneTiming(void) {
-    return 0;
+s32 battleAcMain_PendulumCraneTiming(s32 work)  {
+    extern void* memset(void*,s32,s32);
+    extern void* BattleGetUnitPtr(void*,s32);
+    extern void* BtlUnit_GetPartsPtr(void*,s32);
+    extern void BtlUnit_SetRotateOffset(void*,f32,f32,f32);
+    extern void BtlUnit_GetPos(void*,f32*,f32*,f32*);
+    extern void BtlUnit_SetRotate(void*,f32,f32,f32);
+    extern f64 sinfd(f64);
+    extern f32 reviseAngle(f32);
+    extern s32 _get_angle_hp(s32);
+    extern s32 _get_angle_rate(f32);
+    extern s32 BattlePadCheckTrigger(s32);
+    extern void psndSFXOn(char*);
+    extern void psndSFXOff(s32);
+    extern char str_SFX_AC_GAUGE_MOVE1_802fe508[];
+    extern void* _battleWorkPointer;
+    void* unit;
+    u32 state=*(u32*)(work+0x1C9C);
+    s32 total;
+    f32 angle;
+    f32 sign;
+    f32 input=0.0f;
+    s32 rate;
+    s32 zone;
+    s32 oldZone;
+    u8 autoBadge=*(u8*)(work+0x1D00);
+    unit=BattleGetUnitPtr((void*)work,*(s32*)(work+0x1CC8));
+    BtlUnit_GetPartsPtr(unit,*(s32*)(work+0x1CCC));
+    if(state==0) {
+        memset((void*)(work+0x1F20),0,0x2C);
+        *(f32*)(work+0x1F34)=-300.0f;
+        *(f32*)(work+0x1F38)=0.0f;
+        *(s32*)(work+0x1F40)=20;
+        *(s32*)(work+0x1F24)=0;
+        *(f32*)(work+0x1F4C)=0.0f;
+        *(s32*)(work+0x1F54)=*(s32*)(work+0x1CD4);
+        *(s32*)(work+0x1F58)=0;
+        *(f32*)(work+0x1F48)=3.0f;
+        *(s32*)(work+0x1F68)=-1;
+        *(s32*)(work+0x1F20)=0x100;
+        *(s32*)(work+0x1CB8)=1;
+        *(s32*)(work+0x1CE8)=0;
+        *(s32*)(work+0x1CEC)=_get_angle_hp(50);
+        *(s32*)(work+0x1CF0)=_get_angle_hp(0);
+        *(s32*)(work+0x1F60)=50;
+        *(s32*)(work+0x1F6C)=-1;
+        *(s32*)(work+0x1C9C)=99;
+        return 1;
+    }
+    if(state==100) {
+        BtlUnit_SetRotateOffset(unit,0.0f,(f32)*(s32*)(work+0x1CCC),0.0f);
+        BtlUnit_GetPos(unit,(f32*)(work+0x1F34),(f32*)(work+0x1F38),(f32*)(work+0x1F3C));
+        *(f32*)(work+0x1F28)=*(f32*)(work+0x1F34);
+        *(f32*)(work+0x1F2C)=*(f32*)(work+0x1F38);
+        *(f32*)(work+0x1F30)=*(f32*)(work+0x1F3C);
+        *(s32*)(work+0x1F24)=0;
+        *(f32*)(work+0x1F40)=0.5f;
+        *(s32*)(work+0x1F5C)=1;
+        *(s32*)(work+0x1C9C)=1000;
+        state=1000;
+    }
+    if(state==1000) {
+        (*(s32*)(work+0x1F24))++;
+        total=*(s32*)(work+0x1CD4)*2;
+        *(f32*)(work+0x1F50)=(f32)((((*(s32*)(work+0x1F54)+*(s32*)(work+0x1F58))%total)*360)/total);
+        angle=reviseAngle(45.0f*(f32)sinfd(*(f32*)(work+0x1F50)));
+        *(f32*)(work+0x1F4C)=angle;
+        sign=(*(f32*)(work+0x1F50)>=90.0f&&*(f32*)(work+0x1F50)<270.0f)?-1.0f:1.0f;
+        *(s32*)(work+0x1F58)=(s32)((f32)*(s32*)(work+0x1F58)+input);
+        *(s32*)(work+0x1F54)=(s32)((f32)*(s32*)(work+0x1F54)+*(f32*)(work+0x1F48));
+        *(f32*)(work+0x1F50)=(f32)((((*(s32*)(work+0x1F54)+*(s32*)(work+0x1F58))%total)*360)/total);
+        angle=reviseAngle(45.0f*(f32)sinfd(*(f32*)(work+0x1F50)));
+        *(f32*)(work+0x1F4C)=angle;
+        BtlUnit_SetRotate(unit,0.0f,0.0f,angle);
+        if(sign!=((*(f32*)(work+0x1F50)>=90.0f&&*(f32*)(work+0x1F50)<270.0f)?-1.0f:1.0f))*(s32*)(work+0x1F5C)=0;
+        rate=_get_angle_rate(angle);
+        *(s32*)(work+0x1CEC)=_get_angle_hp(rate);
+        *(s32*)(work+0x1F60)=rate;
+        zone=rate<6?0:(rate>94?1:-1);
+        oldZone=*(s32*)(work+0x1F68);
+        if(zone!=-1&&zone!=oldZone) {
+            psndSFXOn(str_SFX_AC_GAUGE_MOVE1_802fe508);
+            *(s32*)(work+0x1F68)=zone;
+        }
+        if((autoBadge&&*(s32*)(work+0x1CEC)>=_get_angle_hp(50))||BattlePadCheckTrigger(*(s32*)(work+0x1F20))) {
+            *(s32*)(work+0x1CE8)=1;
+            *(s32*)(work+0x1CB8)=2;
+            (*(s32*)(work+0x1CB4))++;
+            *(s32*)(work+0x1C9C)=1002;
+        } else if(*(s32*)(work+0x1CD8)<*(s32*)(work+0x1F24)) {
+            *(s32*)(work+0x1CB8)=0;
+            *(s32*)(work+0x1C9C)=1002;
+        }
+        return 1;
+    }
+    if(state==1002) {
+        *(u32*)(work+0x1CB0)|=1;
+        *(s32*)(work+0x1F6C)=60;
+        if(*(s32*)(work+0x1F64)!=-1)psndSFXOff(*(s32*)(work+0x1F64));
+        *(s32*)(work+0x1C9C)=1003;
+        return 1;
+    }
+    if(state==1003) {
+        if(--*(s32*)(work+0x1F6C)<=0)*(s32*)(work+0x1C9C)=1004;
+        return 1;
+    }
+    if(state==1004) {
+        *(s32*)(work+0x1CA0)=0;
+        *(s32*)(work+0x1CA4)=0;
+        *(s32*)(work+0x1CA8)=0;
+        *(s32*)(work+0x1CAC)=0;
+        return 0;
+    }
+    return 1;
 }
+

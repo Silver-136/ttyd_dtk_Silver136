@@ -803,10 +803,68 @@ s32 _lvup_spot_move(void* event, s32 init) {
 /* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
 
 /* stub-fill: _lvup_select_object_disp | prototype_only | source_prototype */
-void _lvup_select_object_disp(void* battleWork) {
-    return;
-}
+void _lvup_select_object_disp(void) {
+    typedef f32 Mtx[3][4];
+    typedef struct VecLocal { f32 x,y,z; } VecLocal;
+    typedef struct ColorLocal { u8 r,g,b,a; } ColorLocal;
+    extern void* _battleWorkPointer;
+    extern void PSMTXIdentity(Mtx);
+    extern void PSMTXTrans(Mtx,f64,f64,f64);
+    extern void PSMTXScale(Mtx,f32,f32,f32);
+    extern void PSMTXRotRad(Mtx,f64,char);
+    extern void PSMTXConcat(void*,void*,void*);
+    extern void btlDispTexPlane2(void*,s32,ColorLocal*);
+    extern void btlDispTexPlane(f64,f64,f64,f64,f64,s32,ColorLocal*,s32);
+    extern void iconNumberDispGx3D(void*,s32,s32,ColorLocal*);
+    extern void iconDispGxCol(void*,s32,s32,ColorLocal*);
+    extern s32 _keta_get(u32);
+    u8* battle = (u8*)_battleWorkPointer;
+    u8* seq = *(u8**)(battle + 0xF28);
+    Mtx model, trans, scale, rx, ry, rz;
+    ColorLocal color;
+    s32 i;
+    u8* obj;
+    s32 texture;
 
+    for (i=0; i<3; i++) {
+        obj = seq + 0x34 + i*0x34;
+        if (obj[0x28] == 4) { obj[0x28]=5; obj[0x29]=1; }
+        if (obj[0x28] == 5) {
+            obj[0x29]--;
+            if (obj[0x29] == 0) { obj[0x29]=8; *(s32*)(obj+0x2C)^=1; }
+        } else {
+            *(s32*)(obj+0x2C)=1;
+        }
+    }
+    for (i=0; i<3; i++) {
+        obj = seq + 0x34 + i*0x34;
+        if (*(s32*)(obj+0x2C)==0) continue;
+        PSMTXIdentity(model);
+        PSMTXTrans(trans,*(f32*)(obj+0),*(f32*)(obj+4),*(f32*)(obj+8));
+        PSMTXScale(scale,*(f32*)(obj+0x18),*(f32*)(obj+0x1C),*(f32*)(obj+0x20));
+        PSMTXRotRad(rx,0.017453292f**(f32*)(obj+0xC),'x');
+        PSMTXRotRad(ry,0.017453292f**(f32*)(obj+0x10),'y');
+        PSMTXRotRad(rz,0.017453292f**(f32*)(obj+0x14),'z');
+        PSMTXConcat(rz,scale,model); PSMTXConcat(rz,model,model);
+        PSMTXConcat(rx,model,model); PSMTXConcat(ry,model,model); PSMTXConcat(trans,model,model);
+        color=*(ColorLocal*)(obj+0x30);
+        texture=0x31+i;
+        btlDispTexPlane2(model,texture,&color);
+        btlDispTexPlane(*(f32*)obj-16.0f,*(f32*)(obj+4)+20.0f,*(f32*)(obj+8)+2.0f,
+                        *(f32*)(obj+0x18),*(f32*)(obj+0x1C),texture,&color,0);
+        if (obj[0x28]==1 && *(u16*)(obj+0x24)!=*(u16*)(obj+0x26)) {
+            PSMTXTrans(trans,*(f32*)obj-14.0f,*(f32*)(obj+4)-96.0f**(f32*)(obj+0x1C)-2.0f,*(f32*)(obj+8)+5.0f);
+            PSMTXScale(scale,0.8f,0.8f,1.0f); PSMTXConcat(trans,scale,trans);
+            iconNumberDispGx3D(trans,*(u16*)(obj+0x24),0,&color);
+            PSMTXTrans(trans,*(f32*)obj,*(f32*)(obj+4)-96.0f**(f32*)(obj+0x1C),*(f32*)(obj+8)+5.0f);
+            PSMTXScale(scale,-0.6f,0.6f,1.0f); PSMTXConcat(trans,scale,trans);
+            iconDispGxCol(trans,0,0x16B,&color);
+        } else if (obj[0x28]==2 || obj[0x28]==5) {
+            PSMTXTrans(trans,*(f32*)obj,*(f32*)(obj+4)-96.0f**(f32*)(obj+0x1C)-2.0f,*(f32*)(obj+8)+5.0f);
+            iconNumberDispGx3D(trans,*(u16*)(obj+0x26),0,&color);
+        }
+    }
+}
 
 /* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
 
@@ -1177,10 +1235,69 @@ void L__LvupParamHelpMsgDisp(void* disp, void* battleWork) {
 /* CHATGPT STUB FILL: main/battle/battle_seq_end 20260624_184128 */
 
 /* stub-fill: btlseqEnd | missing_definition | ghidra_signature */
-u8 btlseqEnd(void* battleWork) {
-    return 0;
+void btlseqEnd(void* battleWork) {
+    extern s32 BattleGetSeq(void*, s32);
+    extern void BattleSetSeq(void*, s32, s32);
+    extern void* __memAlloc(s32, s32);
+    extern void memset(void*, s32, s32);
+    extern s32 evtEntry(void*, s32, s32);
+    extern s32 evtCheckID(s32);
+    extern void BattleCamSetMode(s32, s32);
+    extern void BattleCamSetMoveSpeedLv(s32, s32);
+    extern void BattleCamSetOffset(s32, f32, f32, f32);
+    extern void psndBGMOff(s32, s32);
+    extern void fadeEntry(s32, s32, u32);
+    s32 state = BattleGetSeq(battleWork, 7);
+    u8* work = *(u8**)((u8*)battleWork + 0x1C);
+    switch (state) {
+        case 0:
+            *(s32*)((u8*)battleWork + 0x10) = 0;
+            work = __memAlloc(0, 0x2AC);
+            memset(work, 0, 0x2AC);
+            *(void**)((u8*)battleWork + 0x1C) = work;
+            *(s32*)(work + 0x10) = 255;
+            BattleSetSeq(battleWork, 7, 1);
+            break;
+        case 1:
+            BattleCamSetMode(0, 0x11);
+            BattleCamSetMoveSpeedLv(0, 2);
+            BattleCamSetOffset(0, 0.0f, 0.0f, 0.0f);
+            fadeEntry(9, 30, 0x000000FF);
+            psndBGMOff(0x201, 1000);
+            BattleSetSeq(battleWork, 7, 2);
+            break;
+        case 2:
+            if (*(s32*)(work + 4) == 0) BattleSetSeq(battleWork, 7, 3);
+            break;
+        case 3:
+            *(s32*)(work + 8) = (s32)evtEntry(*(void**)(work + 0x20), 0, 0);
+            BattleSetSeq(battleWork, 7, 4);
+            break;
+        case 4:
+            if (evtCheckID(*(s32*)(work + 8)) == 0) BattleSetSeq(battleWork, 7, 5);
+            break;
+        case 5:
+            *(s32*)(work + 0xC) = 0;
+            BattleSetSeq(battleWork, 7, 6);
+            break;
+        case 6:
+            if (*(s32*)(work + 0xC) == 0) BattleSetSeq(battleWork, 7, 8);
+            break;
+        case 8:
+            *(s32*)(work + 0x30) = 0;
+            *(s32*)(work + 0x34) = 0;
+            *(s32*)(work + 0x38) = 0;
+            BattleCamSetMode(0, 0x11);
+            BattleSetSeq(battleWork, 7, 9);
+            break;
+        case 9:
+            if (++*(s32*)(work + 0x30) > 30) BattleSetSeq(battleWork, 7, 10);
+            break;
+        case 10:
+            if (*(s32*)(work + 0x34) == 0) BattleSetSeq(battleWork, 7, 0x1F);
+            break;
+    }
 }
-
 
 /* CHATGPT FALLBACK MISSING STUBS: main/battle/battle_seq_end 20260624_191429 */
 

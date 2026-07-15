@@ -5,10 +5,13 @@ void effKemuri8N64SetCamId(void* effect, s32 camId) {
 }
 
 
-u8 effKemuri8Disp(void) {
-    return 0;
+void effKemuri8Disp(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4]; extern void* camGetPtr(s32); extern void PSMTXTrans(void*,f32,f32,f32); extern void PSMTXRotRad(void*,s32,f32); extern void PSMTXScale(void*,f32,f32,f32); extern void PSMTXConcat(void*,void*,void*); extern void effGetTexObj(s32,void*); extern void GXLoadTexObj(void*,s32); extern void GXSetNumChans(s32); extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32); extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevColorIn(s32,s32,s32,s32,s32); extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32); extern void GXSetTevColor(s32,void*); extern void GXSetCullMode(s32); extern void GXClearVtxDesc(void); extern void GXSetVtxDesc(s32,s32); extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32); extern void GXLoadTexMtxImm(void*,s32,s32); extern void GXSetChanMatColor(s32,void*); extern void GXLoadPosMtxImm(void*,s32); extern void GXBegin(s32,s32,s32);
+    u8* w=*(u8**)((u8*)effect+0xC); u8* p=w+0x5C; void* cam=camGetPtr(cameraId); Mtx base,m,r,s; u8 tex[0x20]; u32 color; s32 i,j,type=*(s16*)w; f32 size,u0=0.0625f*(f32)*(s32*)(w+0x40),u1=0.0625f*(f32)*(s32*)(w+0x48);
+    PSMTXTrans(m,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC)); PSMTXRotRad(r,0x79,-*(f32*)((u8*)cam+0x114)*0.0174533f); PSMTXScale(s,1.0f,1.0f,1.0f); PSMTXConcat(m,r,m); PSMTXConcat(m,s,m); PSMTXConcat((u8*)cam+0x11C,m,base);
+    effGetTexObj(0x28,tex); GXLoadTexObj(tex,0); GXSetNumChans(1); GXSetChanCtrl(4,0,0,0,0,0,2); GXSetNumTexGens(2); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D); GXSetTexCoordGen2(1,1,4,0x21,0,0x7D); GXSetNumTevStages(3); GXSetTevOrder(0,0,0,0xFF); GXSetTevColorOp(0,0,0,0,1,0); GXSetTevAlphaOp(0,0,0,0,1,0); GXSetTevColorIn(0,0,0,0,8); GXSetTevAlphaIn(0,0,0,0,4); GXSetTevOrder(1,1,0,0xFF); GXSetTevColorOp(1,0,0,0,1,0); GXSetTevAlphaOp(1,0,0,0,1,0); GXSetTevColorIn(1,0,8,2,15); GXSetTevAlphaIn(1,0,4,1,7); color=0xFFFFFFFF; GXSetTevColor(1,&color); GXSetTevOrder(2,0xFF,0xFF,4); GXSetCullMode(0); GXClearVtxDesc(); GXSetVtxDesc(9,1); GXSetVtxDesc(0xD,1); GXSetVtxAttrFmt(0,9,1,4,0); GXSetVtxAttrFmt(0,0xD,1,4,0);
+    for(i=1;i<*(s32*)((u8*)effect+8);i++,p+=0x5C){if(*(s32*)(p+0x40)>=16)continue;PSMTXTrans(m,u0,0.0f,0.0f);PSMTXScale(s,0.0625f,1.0f,1.0f);PSMTXConcat(m,s,m);GXLoadTexMtxImm(m,0x1E,1);PSMTXTrans(m,u1,0.0f,0.0f);PSMTXConcat(m,s,m);GXLoadTexMtxImm(m,0x21,1);size=type?32.0f:24.0f;for(j=0;j<2;j++){if(j==0){color=0xFFFFFF60;GXSetChanMatColor(4,&color);PSMTXTrans(m,*(f32*)(p+4)+2.0f,*(f32*)(p+8)-2.0f,*(f32*)(p+0xC));}else{color=*(u32*)(p+0x44);GXSetChanMatColor(4,&color);PSMTXTrans(m,*(f32*)(p+4),*(f32*)(p+8),*(f32*)(p+0xC));}PSMTXConcat(base,m,m);GXLoadPosMtxImm(m,0);GXBegin(0x80,0,4);size*=0.5f;}}
 }
-
 
 void* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
     extern void* effEntry(void);

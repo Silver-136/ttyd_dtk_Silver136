@@ -1,15 +1,276 @@
 #include "effect/eff_nice.h"
 
 
-u8 acrobatMain(int* param_1) {
+u8 acrobatMain(void* entry) {
+    typedef struct LocalVec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } LocalVec3;
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+    extern void psndSFXOn(char* name);
+    extern void effDelete(void* effEntry);
+    extern f32 dispCalcZ(LocalVec3* pos);
+    extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
+    extern u8 effAcrobatDisp(s32 cameraId, void* entry);
+    extern char str_SFX_SYSTEM_ACROBAT1_802f3f54[];
+    extern f32 float_0_80422e94;
+    extern f32 float_0p1_80422eb0;
+    extern f32 float_0p2_80422eac;
+    extern f32 float_0p4_80422ea4;
+    extern f32 float_1_80422e9c;
+    extern f32 float_1p5_80422ea8;
+    extern f32 float_2_80422eb4;
+    extern f32 float_500_80422ea0;
+    LocalVec3 pos;
+    void* work;
+    s32 doneCount;
+    s32 i;
+    s32 valueA;
+    s32 valueB;
+
+    doneCount = 0;
+    i = 1;
+    valueA = 4;
+    valueB = 0xC;
+    work = *(void**)((s32)entry + 0xC);
+    pos.x = *(f32*)((s32)work + 0x4);
+    pos.y = *(f32*)((s32)work + 0x8);
+    pos.z = *(f32*)((s32)work + 0xC);
+    work = (void*)((s32)work + 0x64);
+
+    while (i < *(s32*)((s32)entry + 0x8)) {
+        switch (*(u32*)((s32)work + 0x28)) {
+            case 0:
+                *(s32*)((s32)work + 0x20) = valueA;
+                *(s32*)((s32)work + 0x28) += 1;
+                if (i == 1) {
+                    psndSFXOn(str_SFX_SYSTEM_ACROBAT1_802f3f54);
+                }
+                break;
+            case 1:
+                *(s32*)((s32)work + 0x20) -= 1;
+                if (*(s32*)((s32)work + 0x20) < 0) {
+                    *(s32*)((s32)work + 0x20) = 0;
+                    *(s32*)((s32)work + 0x28) += 1;
+                }
+                break;
+            case 2:
+                *(s32*)((s32)work + 0x20) += 1;
+                *(f32*)((s32)work + 0x4) = intplGetValue(0xC, *(s32*)((s32)work + 0x20), 0x1E, float_500_80422ea0, (f32)valueA);
+                if (*(s32*)((s32)work + 0x20) >= 0x1E) {
+                    *(s32*)((s32)work + 0x20) = 0;
+                    *(s32*)((s32)work + 0x28) += 1;
+                }
+                break;
+            case 3:
+                *(s32*)((s32)work + 0x20) += 1;
+                *(f32*)((s32)work + 0x10) = intplGetValue(0xC, *(s32*)((s32)work + 0x20), 8, float_1_80422e9c, float_0p4_80422ea4);
+                *(f32*)((s32)work + 0x14) = intplGetValue(0xC, *(s32*)((s32)work + 0x20), 8, float_1_80422e9c, float_1p5_80422ea8);
+                if (*(s32*)((s32)work + 0x20) >= 8) {
+                    *(s32*)((s32)work + 0x20) = 0;
+                    *(s32*)((s32)work + 0x28) += 1;
+                }
+                break;
+            case 4:
+                *(s32*)((s32)work + 0x20) += 1;
+                if (*(s32*)((s32)work + 0x20) > ((*(s32*)((s32)entry + 0x8) - i) - 1) * 4) {
+                    *(s32*)((s32)work + 0x20) = 0;
+                    *(s32*)((s32)work + 0x28) += 1;
+                }
+                break;
+            case 5:
+                *(s32*)((s32)work + 0x20) += 1;
+                *(f32*)((s32)work + 0x4) = intplGetValue(8, *(s32*)((s32)work + 0x20), 0x1E, (f32)valueA, (f32)valueB);
+                *(f32*)((s32)work + 0x10) = intplGetValue(0xC, *(s32*)((s32)work + 0x20), 0x1E, float_0p2_80422eac, float_1_80422e9c);
+                *(f32*)((s32)work + 0x14) = intplGetValue(0xC, *(s32*)((s32)work + 0x20), 0x1E, float_1p5_80422ea8, float_1_80422e9c);
+                if (*(s32*)((s32)work + 0x20) >= 0x1E) {
+                    *(s32*)((s32)work + 0x20) = 0;
+                    *(s32*)((s32)work + 0x28) += 1;
+                }
+                break;
+            case 6:
+                *(s32*)((s32)work + 0x20) += 1;
+                if (*(s32*)((s32)work + 0x20) > 0x10) {
+                    *(s32*)((s32)work + 0x20) = 0;
+                    *(s32*)((s32)work + 0x28) += 1;
+                }
+                break;
+            case 7:
+                *(s32*)((s32)work + 0x20) += 1;
+                *(f32*)((s32)work + 0x10) = intplGetValue(0xC, *(s32*)((s32)work + 0x20), 0xF, float_1_80422e9c, float_1p5_80422ea8);
+                *(f32*)((s32)work + 0x14) = intplGetValue(0xC, *(s32*)((s32)work + 0x20), 0xF, float_1_80422e9c, float_0p1_80422eb0);
+                if (*(s32*)((s32)work + 0x20) >= 0xF) {
+                    *(s32*)((s32)work + 0x20) = 0;
+                    *(s32*)((s32)work + 0x28) += 1;
+                }
+                break;
+            case 8:
+                *(s32*)((s32)work + 0x20) += 1;
+                *(f32*)((s32)work + 0x10) = intplGetValue(0xC, *(s32*)((s32)work + 0x20), 0xF, float_1p5_80422ea8, float_0p1_80422eb0);
+                *(f32*)((s32)work + 0x14) = intplGetValue(0xC, *(s32*)((s32)work + 0x20), 0xF, float_0p1_80422eb0, float_2_80422eb4);
+                if (*(s32*)((s32)work + 0x20) >= 0xF) {
+                    *(s32*)((s32)work + 0x20) = 0;
+                    *(s32*)((s32)work + 0x28) += 1;
+                }
+                break;
+            case 9:
+                doneCount++;
+                *(f32*)((s32)work + 0x18) = float_0_80422e94;
+                *(f32*)((s32)work + 0x14) = float_0_80422e94;
+                *(f32*)((s32)work + 0x10) = float_0_80422e94;
+                break;
+        }
+
+        valueA += 4;
+        valueB += 0xC;
+        i++;
+        work = (void*)((s32)work + 0x64);
+    }
+
+    if (doneCount >= *(s32*)((s32)entry + 0x8) - 1) {
+        effDelete(entry);
+    } else {
+        dispEntry(4, 8, effAcrobatDisp, entry, dispCalcZ(&pos));
+    }
     return 0;
 }
 
+u8 effAcrobatDisp(s32 cameraId, void* entry) {
+    typedef f32 Mtx[3][4];
+    extern void* camGetPtr(s32 cameraId);
+    extern void PSMTXTrans(Mtx mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXScale(Mtx mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(Mtx mtx, s32 axis, f32 rad);
+    extern void PSMTXConcat(Mtx a, Mtx b, Mtx out);
+    extern void GXSetBlendMode(s32 type, s32 src, s32 dst, s32 op);
+    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+    extern void GXSetZMode(s32 enable, s32 func, s32 update);
+    extern void GXSetNumChans(s32 num);
+    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
+    extern void GXSetChanMatColor(s32 chan, void* color);
+    extern void GXSetNumTexGens(s32 num);
+    extern void GXSetTexCoordGen2(s32 dstCoord, s32 func, s32 srcParam, s32 mtx, s32 normalize, s32 postMtx);
+    extern void GXSetNumTevStages(s32 num);
+    extern void GXSetTevOrder(s32 stage, s32 coord, s32 map, s32 color);
+    extern void GXSetTevOp(s32 stage, s32 mode);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+    extern void GXLoadPosMtxImm(Mtx mtx, s32 id);
+    extern void GXSetCurrentMtx(s32 id);
+    extern void effGetTexObj(s32 id, void* texObj);
+    extern void GXLoadTexObj(void* texObj, s32 mapId);
+    extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
+    extern void* gp;
+    extern s16* acrobat_tbl[];
+    extern u32 dat_80422e84;
+    extern f32 float_deg2rad_80422e88;
+    extern f32 float_20_80422e8c;
+    extern f32 float_0p5_80422e90;
+    extern f32 float_0_80422e94;
+    extern f32 float_10_80422e98;
+    extern f32 float_1_80422e9c;
+    Mtx trans;
+    Mtx rot;
+    Mtx scale;
+    Mtx mtx;
+    u8 texObj[0x20];
+    void* camera;
+    void* work;
+    s32 i;
+    s32 texIndex;
+    f32 base;
+    f32 xoff;
+    f32 yoff;
+    s32 texId;
+    u32 color;
+    volatile f32* fifo;
 
-u8 effAcrobatDisp(void) {
+    work = *(void**)((s32)entry + 0xC);
+    camera = camGetPtr(cameraId);
+    PSMTXTrans(trans, *(f32*)((s32)work + 0x4), *(f32*)((s32)work + 0x8), *(f32*)((s32)work + 0xC));
+    PSMTXScale(scale, *(f32*)((s32)work + 0x1C), *(f32*)((s32)work + 0x1C), *(f32*)((s32)work + 0x1C));
+    PSMTXRotRad(rot, 0x79, -*(f32*)((s32)camGetPtr(cameraId) + 0x114) * float_deg2rad_80422e88);
+    PSMTXConcat(trans, rot, mtx);
+    PSMTXConcat(mtx, scale, mtx);
+
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(0, 3, 0);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    color = dat_80422e84;
+    GXSetChanMatColor(4, &color);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevOp(0, 0);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+
+    base = -float_20_80422e8c;
+    work = (void*)((s32)work + 0x64);
+    for (i = 1, texIndex = 0; i < *(s32*)((s32)entry + 0x8); i++, texIndex++, work = (void*)((s32)work + 0x64)) {
+        if (*(s32*)((s32)work + 0x28) < 6) {
+            xoff = base * float_0p5_80422e90;
+            yoff = float_0_80422e94;
+        } else {
+            xoff = float_0_80422e94;
+            yoff = base * float_0p5_80422e90;
+        }
+
+        PSMTXTrans(trans, *(f32*)((s32)work + 0x4), *(f32*)((s32)work + 0x8), *(f32*)((s32)work + 0xC));
+        PSMTXTrans(rot, xoff, yoff, float_0_80422e94);
+        PSMTXScale(scale, *(f32*)((s32)work + 0x10), *(f32*)((s32)work + 0x14), *(f32*)((s32)work + 0x18));
+        PSMTXConcat(rot, scale, scale);
+        PSMTXTrans(rot, -xoff, -yoff, float_0_80422e94);
+        PSMTXConcat(scale, rot, scale);
+        PSMTXConcat(trans, scale, scale);
+        PSMTXConcat(mtx, scale, scale);
+        PSMTXConcat((void*)((s32)camera + 0x11C), scale, scale);
+        GXLoadPosMtxImm(scale, 0);
+        GXSetCurrentMtx(0);
+
+        texId = acrobat_tbl[*(s32*)((s32)gp + 0x16C)][texIndex];
+        if (texId != -1) {
+            effGetTexObj(texId, texObj);
+            GXLoadTexObj(texObj, 0);
+            GXBegin(0x80, 0, 4);
+            fifo = (volatile f32*)0xCC008000;
+            fifo[0] = base * float_0p5_80422e90;
+            fifo[0] = float_10_80422e98;
+            fifo[0] = float_0_80422e94;
+            fifo[0] = float_0_80422e94;
+            fifo[0] = float_0_80422e94;
+            fifo[0] = float_10_80422e98;
+            fifo[0] = float_10_80422e98;
+            fifo[0] = float_0_80422e94;
+            fifo[0] = float_1_80422e9c;
+            fifo[0] = float_0_80422e94;
+            fifo[0] = float_10_80422e98;
+            fifo[0] = base * float_0p5_80422e90;
+            fifo[0] = float_0_80422e94;
+            fifo[0] = float_1_80422e9c;
+            fifo[0] = float_1_80422e9c;
+            fifo[0] = base * float_0p5_80422e90;
+            fifo[0] = base * float_0p5_80422e90;
+            fifo[0] = float_0_80422e94;
+            fifo[0] = float_0_80422e94;
+            fifo[0] = float_1_80422e9c;
+        }
+    }
+
     return 0;
 }
-
 
 u8 effNiceMain(void* effEntry) {
     typedef struct LocalVec3 {

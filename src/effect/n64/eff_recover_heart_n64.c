@@ -1,10 +1,83 @@
 #include "effect/n64/eff_recover_heart_n64.h"
 
 
-u8 effRecoverHeartDisp(int param_1, int param_2) {
-    return 0;
-}
+void effRecoverHeartDisp(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXRotRad(void*, s32, f32);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void effGetTexObjN64(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXLoadTexMtxImm(void*, s32, s32);
+    extern void GXLoadPosMtxImm(void*, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void effSetVtxDescN64(void*);
+    extern void GXBegin(s32, s32, s32);
+    extern void tri2(s32, s32, s32, s32, s32, s32, s32, s32);
+    extern f32 float_deg2rad_80425e88;
+    u8* work = *(u8**)((s32)effect + 0xC);
+    u8* part = work + 0x48;
+    void* camera = camGetPtr(cameraId);
+    f32 base[3][4], rot[3][4], trans[3][4], scale[3][4], model[3][4];
+    u8 texObj[0x20];
+    s32 type = *(s32*)work;
+    s32 direction = *(s32*)(work + 0x44);
+    s32 i;
+    s32 texture;
 
+    PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+    PSMTXRotRad(rot, 0x79, float_deg2rad_80425e88 * -*(f32*)((u8*)camGetPtr(4) + 0x114));
+    PSMTXConcat(trans, rot, base);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    GXSetCullMode(0);
+
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, part += 0x48) {
+        u32 color;
+        if (*(s32*)(part + 0x34) > 0) continue;
+        color = 0xFFFFFF00 | (*(s32*)(part + 0x28) & 0xFF);
+        GXSetTevColor(1, &color);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(0, 0, 0, 4);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 0, 8, 10, 0);
+        GXSetTevAlphaIn(0, 0, 4, 7, 7);
+        texture = (type == 0 || type == 2) ? (direction == 0 ? 0x50 : 0x51) : 0x52;
+        effGetTexObjN64(texture, texObj);
+        GXLoadTexObj(texObj, 0);
+        PSMTXScale(scale, 0.03125f, 0.03125f, 0.0f);
+        GXLoadTexMtxImm(scale, 0x1E, 1);
+        PSMTXTrans(trans, *(f32*)(part + 4) + *(f32*)(part + 0x1C),
+                          *(f32*)(part + 8), *(f32*)(part + 0xC));
+        PSMTXScale(scale, *(f32*)(part + 0x38), *(f32*)(part + 0x3C), 1.0f);
+        PSMTXConcat(trans, scale, trans);
+        PSMTXConcat(base, trans, model);
+        PSMTXRotRad(rot, 0x7A, float_deg2rad_80425e88 * *(f32*)(part + 0x24));
+        PSMTXConcat(model, rot, model);
+        PSMTXConcat((u8*)camera + 0x11C, model, model);
+        GXLoadPosMtxImm(model, 0);
+        GXSetCurrentMtx(0);
+        effSetVtxDescN64((void*)0x803A7A78);
+        GXBegin(0x90, 0, 6);
+        tri2(0, 1, 2, 0, 0, 2, 3, 0);
+    }
+}
 
 void effRecoverHeartMain(void* effect) {
     typedef struct Vec3 {

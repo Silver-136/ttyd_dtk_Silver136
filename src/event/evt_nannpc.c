@@ -15,14 +15,221 @@ typedef struct NanNpcSortEntry {
 
 
 u8 nanNPCOption(void) {
+    typedef struct Vec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
+
+    extern void* nanNPCWork;
+    extern f32 PSVECDistance(Vec* a, Vec* b);
+    extern void PSVECSubtract(Vec* a, Vec* b, Vec* out);
+    extern f32 PSVECMag(Vec* v);
+    extern void PSVECNormalize(Vec* in, Vec* out);
+    extern void PSVECScale(Vec* in, f32 scale, Vec* out);
+    extern void PSVECAdd(Vec* a, Vec* b, Vec* out);
+    extern s32 hitCheckFilter(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, s32 flags,
+                              s32* outA, s32* outB, s32* outC, f32* length,
+                              Vec* hitPos, Vec* hitNormal, Vec* hitOther);
+    extern void C_VECReflect(Vec* in, Vec* normal, Vec* out);
+    extern f32 PSVECDotProduct(Vec* a, Vec* b);
+
+    s32* work;
+    char* entry;
+    char* other;
+    char* end;
+    Vec delta;
+    Vec oldPos;
+    Vec moveDir;
+    Vec normal;
+    Vec reflect;
+    Vec hitPos;
+    Vec hitNormal;
+    Vec hitOther;
+    s32 outA;
+    s32 outB;
+    s32 outC;
+    f32 dist;
+    f32 mag;
+    s32 didMove;
+
+    work = (s32*)nanNPCWork;
+    end = (char*)(work[0] + work[3] * 0xC0);
+
+    for (entry = (char*)work[0]; entry < end; entry += 0xC0) {
+        if ((*(u16*)(entry + 0x14) & 4) != 0) {
+            for (other = (char*)work[0]; other < end; other += 0xC0) {
+                if (entry != other && (*(u16*)(other + 0x14) & 4) != 0) {
+                    dist = PSVECDistance((Vec*)(entry + 0x18), (Vec*)(other + 0x18));
+                    PSVECSubtract((Vec*)(entry + 0x18), (Vec*)(other + 0x18), &delta);
+                    if (dist <= *(f32*)(entry + 0x4C)) {
+                        if (PSVECMag(&delta) == 0.0f) {
+                            delta.x = 1.0f;
+                        }
+                        PSVECNormalize(&delta, &delta);
+                        delta.y = 0.0f;
+                        PSVECScale(&delta, 0.5f, &delta);
+                        PSVECAdd((Vec*)(entry + 0x3C), &delta, (Vec*)(entry + 0x3C));
+                        PSVECSubtract((Vec*)(other + 0x3C), &delta, (Vec*)(other + 0x3C));
+                    }
+                }
+            }
+        }
+    }
+
+    for (entry = (char*)work[0]; entry < end; entry += 0xC0) {
+        if ((*(u16*)(entry + 0x14) & 4) != 0) {
+            PSVECSubtract((Vec*)(entry + 0x30), (Vec*)(entry + 0x18), &delta);
+            if (PSVECMag(&delta) > 0.8f * *(f32*)(entry + 0x4C)) {
+                PSVECNormalize(&delta, &delta);
+                delta.y = 0.0f;
+                PSVECScale(&delta, 0.5f, &delta);
+                PSVECAdd((Vec*)(entry + 0x3C), &delta, (Vec*)(entry + 0x3C));
+            }
+        }
+    }
+
+    for (entry = (char*)work[0]; entry < end; entry += 0xC0) {
+        if ((*(u16*)(entry + 0x14) & 4) != 0) {
+            mag = PSVECMag((Vec*)(entry + 0x3C));
+            if (mag != 0.0f) {
+                if (mag > 10.0f) {
+                    PSVECScale((Vec*)(entry + 0x3C), 5.0f / mag, (Vec*)(entry + 0x3C));
+                    mag = 5.0f;
+                }
+
+                oldPos = *(Vec*)(entry + 0x18);
+                moveDir = *(Vec*)(entry + 0x3C);
+                moveDir.y = 0.0f;
+                PSVECNormalize((Vec*)(entry + 0x3C), &normal);
+
+                if ((*(u16*)(entry + 0x14) & 8) != 0) {
+                    PSVECAdd((Vec*)(entry + 0x18), (Vec*)(entry + 0x3C), (Vec*)(entry + 0x18));
+                    PSVECScale((Vec*)(entry + 0x3C), 0.6f, (Vec*)(entry + 0x3C));
+                } else {
+                    oldPos.y += 1.0f;
+                    *(s32*)(entry + 0xB8) = 0;
+                    *(s32*)(entry + 0xB4) = 0;
+                    dist = mag;
+                    didMove = 1;
+                    *(s32*)(entry + 0xB4) = hitCheckFilter(oldPos.x, oldPos.y, oldPos.z,
+                                                           normal.x, normal.y, normal.z, 0,
+                                                           &outA, &outB, &outC, &dist,
+                                                           &hitPos, &hitNormal, &hitOther);
+                    if (*(s32*)(entry + 0xB4) == 0) {
+                        PSVECAdd((Vec*)(entry + 0x18), (Vec*)(entry + 0x3C), (Vec*)(entry + 0x18));
+                    } else {
+                        oldPos = *(Vec*)(entry + 0x18);
+                        PSVECAdd((Vec*)(entry + 0x18), (Vec*)(entry + 0x3C), (Vec*)(entry + 0x18));
+                        if (*(f32*)(entry + 0x40) == 0.0f) {
+                            hitNormal.y = 0.0f;
+                        }
+                        PSVECNormalize(&hitNormal, &hitNormal);
+                        C_VECReflect(&normal, &hitNormal, &reflect);
+                        PSVECScale(&reflect, mag, (Vec*)(entry + 0x3C));
+                        didMove = 0;
+                        PSVECScale(&hitNormal,
+                                   PSVECDotProduct(&normal, &hitNormal) * -(mag - dist) + 0.1f,
+                                   &hitNormal);
+                        PSVECAdd((Vec*)(entry + 0x18), &hitNormal, (Vec*)(entry + 0x18));
+                        PSVECSubtract((Vec*)(entry + 0x18), &oldPos, &delta);
+                        dist = PSVECMag(&delta);
+                        if (dist > 0.0f) {
+                            PSVECNormalize(&delta, &delta);
+                            oldPos.y += 1.0f;
+                            *(s32*)(entry + 0xB8) = hitCheckFilter(oldPos.x, oldPos.y, oldPos.z,
+                                                                   delta.x, delta.y, delta.z, 0,
+                                                                   &outA, &outB, &outC, &dist,
+                                                                   &hitPos, &hitNormal, &hitOther);
+                            if (*(s32*)(entry + 0xB8) != 0) {
+                                *(Vec*)(entry + 0x18) = oldPos;
+                                ((Vec*)(entry + 0x18))->y -= 1.0f;
+                            }
+                        }
+                    }
+                    if (didMove != 0) {
+                        PSVECScale((Vec*)(entry + 0x3C), 0.6f, (Vec*)(entry + 0x3C));
+                    }
+                }
+            }
+        }
+    }
+
     return 0;
 }
 
+u8 evt_nannpc_jump_position(void* event, s32 isFirstCall) {
+    extern s32 sprintf(char* buf, char* fmt, ...);
+    extern s32 strcmp(char* a, char* b);
+    extern s32 evtGetValue(void* event, s32 arg);
+    extern f32 intplGetValue(f32 start, f32 end, s32 mode, s32 curStep, s32 maxStep);
+    extern void* nanNPCWork;
+    extern void* gp;
+    extern char makestring[];
+    extern char str_PCT06x_8042285c[];
 
-u8 evt_nannpc_jump_position(void) {
-    return 0;
+    s32* args;
+    s32* work;
+    char* name;
+    char* entry;
+    s32 i;
+    s32 offset;
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 steps;
+    f32 peak;
+    s32 curStep;
+    f32 ratio;
+
+    args = *(s32**)((s32)event + 0x18);
+    name = (char*)evtGetValue(event, args[0]);
+    work = (s32*)nanNPCWork;
+    entry = NULL;
+    offset = 0;
+    for (i = 0; i < work[3]; i++, offset += 0xC0) {
+        entry = (char*)(work[0] + offset);
+        if ((s32)name >= 0) {
+            sprintf(makestring, str_PCT06x_8042285c, name);
+            name = makestring;
+        }
+        if (strcmp(entry, name) == 0) {
+            break;
+        }
+        entry = NULL;
+    }
+
+    x = (f32)evtGetValue(event, args[1]);
+    y = (f32)evtGetValue(event, args[2]);
+    z = (f32)evtGetValue(event, args[3]);
+    steps = evtGetValue(event, args[4]);
+    peak = (f32)evtGetValue(event, args[5]);
+
+    if (isFirstCall != 0) {
+        *(s32*)(entry + 0x54) = *(s32*)((s32)gp + 0x3C);
+        *(s32*)(entry + 0x50) = *(s32*)((s32)gp + 0x38);
+        *(s32*)(entry + 0x68) = (s32)*(f32*)(entry + 0x18);
+        *(s32*)(entry + 0x6C) = (s32)*(f32*)(entry + 0x1C);
+        *(s32*)(entry + 0x70) = (s32)*(f32*)(entry + 0x20);
+        *(f32*)((s32)event + 0x7C) = -4.0f * peak;
+        *(f32*)((s32)event + 0x80) = (y - (f32)*(s32*)(entry + 0x6C)) - *(f32*)((s32)event + 0x7C);
+    }
+
+    curStep = (*(s32*)((s32)gp + 0x3C) - *(s32*)(entry + 0x54)) / ((*(u32*)0x800000F8 >> 2) / 4000);
+    if (curStep < steps) {
+        ratio = (f32)curStep / (f32)steps;
+        *(f32*)(entry + 0x18) = intplGetValue((f32)*(s32*)(entry + 0x68), x, 0, curStep, steps);
+        *(f32*)(entry + 0x20) = intplGetValue((f32)*(s32*)(entry + 0x70), z, 0, curStep, steps);
+        *(f32*)(entry + 0x1C) = ratio * (*(f32*)((s32)event + 0x7C) * ratio + *(f32*)((s32)event + 0x80)) +
+                                (f32)*(s32*)(entry + 0x6C);
+        return 0;
+    }
+
+    *(f32*)(entry + 0x18) = x;
+    *(f32*)(entry + 0x1C) = y;
+    *(f32*)(entry + 0x20) = z;
+    return 2;
 }
-
 
 s32 evt_nannpc_init(void* param_1, int param_2) {
     return 0;
@@ -570,21 +777,22 @@ s32 evt_nannpcwork_flag_onoff(void* pEvt) {
     s32* args;
     void* work;
     s32 onoff;
-    u32 mask;
+    u16 mask;
 
     args = *(s32**)((s32)pEvt + 0x18);
     onoff = evtGetValue(pEvt, args[0]);
     work = nanNPCWork;
-    mask = (u16)evtGetValue(pEvt, args[1]);
+    mask = evtGetValue(pEvt, args[1]);
 
     if (onoff != 0) {
-        *(u32*)((s32)work + 0x10) &= ~mask;
+        *(u32*)((s32)work + 0x10) = *(u32*)((s32)work + 0x10) & ~mask;
     } else {
-        *(u32*)((s32)work + 0x10) |= mask;
+        *(u32*)((s32)work + 0x10) = *(u32*)((s32)work + 0x10) | mask;
     }
 
     return 2;
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

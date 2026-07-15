@@ -133,7 +133,8 @@ void countDownSaveReStart(void) {
 
 /* stub-fill: countDownDisp | missing_definition | ghidra_signature */
 u8 countDownDisp(void) {
-    return 0;
+    extern void PSMTXTrans(void*,f32,f32,f32);extern void PSMTXScale(void*,f32,f32,f32);extern void PSMTXConcat(void*,void*,void*);extern void iconDispGxCol(void*,s32,s32,void*);extern void* wp;u8* work=wp;f32 base[3][4],scale[3][4],mtx[3][4];s32 t=*(s32*)(work+0x18);s32 sec=t/1000; s32 digits[3];s32 i;u32 color=0xFFFFFFFF;
+    PSMTXTrans(base,*(f32*)(work+0x20)+*(f32*)(work+0x28),*(f32*)(work+0x24)+*(f32*)(work+0x2C),0.0f);PSMTXScale(scale,2.5f,1.0f,1.0f);PSMTXConcat(base,scale,mtx);iconDispGxCol(mtx,0x10,0x1FD,&color);digits[0]=sec/100;digits[1]=(sec/10)%10;digits[2]=sec%10;for(i=0;i<3;i++){PSMTXTrans(scale,-50.0f+i*30.0f,8.0f,0.0f);PSMTXConcat(base,scale,mtx);iconDispGxCol(mtx,0x10,0x1FE+digits[i],&color);}return 0;
 }
 
 /* stub-fill: countDownMain | missing_definition | ghidra_signature */

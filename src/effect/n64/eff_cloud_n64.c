@@ -1,10 +1,76 @@
 #include "effect/n64/eff_cloud_n64.h"
 
 
-u8 effCloudDisp(void) {
+u8 effCloudDisp(s32 camId, s32 effectAddress) {
+    typedef f32 Mtx[3][4];
+    typedef struct GXTexObj { u32 data[8]; } GXTexObj;
+    extern void* camGetPtr(s32);
+    extern void effGetTexObj(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXLoadPosMtxImm(Mtx, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void DCFlushRange(void*, u32);
+    extern void* smartAlloc(u32, s32);
+    extern void* memset(void*, s32, u32);
+    extern void GXBegin(s32, s32, s16);
+    u32* effect = (u32*)effectAddress;
+    u8* work = (u8*)effect[3];
+    char* cam = camGetPtr(camId);
+    GXTexObj tex;
+    f32* vertices;
+    s32 i;
+    s32 strip;
+
+    effGetTexObj(0x83, &tex);
+    GXLoadTexObj(&tex, 0);
+    GXSetNumChans(1);
+    GXSetNumTexGens(1);
+    GXSetNumTevStages(2);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevOrder(1, 0, 0, 4);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 2);
+    GXSetVtxDesc(11, 2);
+    GXSetVtxDesc(13, 2);
+    GXLoadPosMtxImm((f32(*)[4])(cam + 0x118), 0);
+    GXSetCurrentMtx(0);
+    vertices = smartAlloc(0x690, 0);
+    memset(vertices, 0, 0x690);
+    for (i = 0; i < 30; i++) {
+        s32 next = (i + *(s32*)(work + 0x2A8)) % 30;
+        f32 x = ((f32*)(work + 0x50))[next];
+        f32 y = ((f32*)(work + 0xC8))[next];
+        f32 z = ((f32*)(work + 0x140))[next];
+        f32 width = *(f32*)(work + 0x18) * (1.0f - (f32)i / 30.0f);
+        vertices[i * 6 + 0] = x - width;
+        vertices[i * 6 + 1] = y;
+        vertices[i * 6 + 2] = z;
+        vertices[i * 6 + 3] = x + width;
+        vertices[i * 6 + 4] = y;
+        vertices[i * 6 + 5] = z;
+    }
+    DCFlushRange(vertices, 0x690);
+    for (strip = 0; strip < 29; strip++) {
+        GXBegin(0x90, 0, 6);
+        *(volatile u16*)0xCC008000 = strip * 2;
+        *(volatile u16*)0xCC008000 = strip * 2 + 1;
+        *(volatile u16*)0xCC008000 = strip * 2 + 2;
+        *(volatile u16*)0xCC008000 = strip * 2 + 1;
+        *(volatile u16*)0xCC008000 = strip * 2 + 3;
+        *(volatile u16*)0xCC008000 = strip * 2 + 2;
+    }
     return 0;
 }
-
 
 #pragma optimize_for_size off
 

@@ -66,8 +66,128 @@ void effUltraHammerMain(void* entry) {
 /* CHATGPT STUB FILL: main/effect/eff_ultra_hammer 20260624_185035 */
 
 /* stub-fill: effUltraHammerDisp | prototype_only | source_prototype */
-void effUltraHammerDisp(void* camera, void* entry) {
-    return;
+void effUltraHammerDisp(void* cameraArg, void* effect) {
+    extern void* camGetPtr(s32 cameraId);
+    extern void PSMTXTrans(f32 matrix[3][4], f32 x, f32 y, f32 z);
+    extern void PSMTXScale(f32 matrix[3][4], f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(f32 matrix[3][4], s32 axis, f32 angle);
+    extern void PSMTXConcat(f32 a[3][4], f32 b[3][4], f32 out[3][4]);
+    extern void effGetTexObj(s32 textureId, void* textureObject);
+    extern void GXLoadTexObj(void* textureObject, s32 mapId);
+    extern void GXSetNumChans(s32 count);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTevStages(s32 count);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetNumTexGens(s32 count);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXSetTevColor(s32 stage, void* color);
+    extern void GXLoadPosMtxImm(f32 matrix[3][4], s32 id);
+    extern void GXSetCurrentMtx(s32 id);
+    extern void GXLoadTexMtxImm(f32 matrix[3][4], s32 id, s32 type);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXSetArray(s32 attr, void* base, s32 stride);
+    extern void GXCallDisplayList(void* list, u32 size);
+    extern f32 float_deg2rad_80428b8c;
+    extern u32 dat_80428b88;
+    extern f32 float_0p6_80428b90;
+    extern f32 float_neg1_80428b94;
+    extern f32 float_1_80428b98;
+    extern f32 float_0_80428b9c;
+    extern u8 wakka_vertex_tbl[];
+    extern u8 wakka_texcoord0_tbl[];
+    extern void* wakka_dl_0_tbl[];
+    extern u8 wakka_dl_0_size_tbl[];
+
+    u8 textureObject[0x20];
+    f32 base[3][4];
+    f32 transform[3][4];
+    f32 scaleMtx[3][4];
+    f32 rotation[3][4];
+    u8* work = *(u8**)((s32)effect + 0xC);
+    u8* child = work + 0x2C;
+    s32 cameraId = (s32)cameraArg;
+    void* camera = camGetPtr(cameraId);
+    s32 type = *(s32*)work;
+    s32 i;
+
+    PSMTXTrans(base, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+    PSMTXScale(scaleMtx, *(f32*)(work + 0x10), *(f32*)(work + 0x10),
+                *(f32*)(work + 0x10));
+    PSMTXRotRad(rotation, 'y', float_deg2rad_80428b8c *
+                -*(f32*)((u8*)camGetPtr(cameraId) + 0x114));
+    PSMTXConcat(base, rotation, base);
+    PSMTXConcat(base, scaleMtx, transform);
+
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
+    GXSetNumTevStages(2);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 15, 15, 15, 10);
+    GXSetTevAlphaIn(0, 7, 5, 4, 7);
+    GXSetTevOrder(1, 0xFF, 0xFF, 0xFF);
+    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(1, 15, 15, 15, 0);
+    GXSetTevAlphaIn(1, 7, 4, 6, 7);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    effGetTexObj(0x75, textureObject);
+    GXLoadTexObj(textureObject, 0);
+    GXSetCullMode(0);
+    {
+        u32 color = dat_80428b88;
+        ((u8*)&color)[3] = (u8)*(s32*)(work + 0x1C);
+        GXSetTevColor(1, &color);
+    }
+
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, child += 0x2C) {
+        s32 j;
+        f32 scale;
+        if (*(s32*)(child + 0x28) != 0) {
+            continue;
+        }
+        PSMTXTrans(base, *(f32*)(child + 4), *(f32*)(child + 8), *(f32*)(child + 0xC));
+        scale = float_0p6_80428b90 * *(f32*)(child + 0x10);
+        PSMTXScale(scaleMtx, scale, scale, scale);
+        PSMTXConcat(base, scaleMtx, base);
+        if (type != 0) {
+            PSMTXScale(scaleMtx, float_neg1_80428b94, float_1_80428b98,
+                        float_1_80428b98);
+            PSMTXConcat(base, scaleMtx, base);
+        }
+        PSMTXConcat(transform, base, base);
+        PSMTXConcat((f32(*)[4])((u8*)camera + 0x11C), base, base);
+        GXLoadPosMtxImm(base, 0);
+        GXSetCurrentMtx(0);
+        PSMTXTrans(base, *(f32*)(child + 0x14), *(f32*)(child + 0x18),
+                    float_0_80428b9c);
+        GXLoadTexMtxImm(base, 0x1E, 1);
+        GXClearVtxDesc();
+        GXSetVtxDesc(9, 2);
+        GXSetVtxAttrFmt(0, 9, 1, 3, 10);
+        GXSetArray(9, wakka_vertex_tbl, 6);
+        GXSetVtxDesc(10, 2);
+        GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+        GXSetArray(10, (void*)0x8041E0E0, 3);
+        GXSetVtxDesc(11, 2);
+        GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+        GXSetArray(11, (void*)0x8041E100, 4);
+        GXSetVtxDesc(13, 2);
+        GXSetVtxAttrFmt(0, 13, 1, 3, 13);
+        GXSetArray(13, wakka_texcoord0_tbl, 4);
+        for (j = 0; j < 20; j++) {
+            GXCallDisplayList(wakka_dl_0_tbl[j], (u32)wakka_dl_0_size_tbl[j] << 5);
+        }
+    }
 }
 
 /* stub-fill: effUltraHammerEntry | missing_definition | ghidra_signature */

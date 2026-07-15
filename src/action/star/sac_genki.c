@@ -258,28 +258,459 @@ USER_FUNC(end_genki) {
 /* CHATGPT STUB FILL: main/action/star/sac_genki 20260624_184929 */
 
 /* stub-fill: disp_3D | missing_definition | ghidra_signature */
-u8 disp_3D(void) {
-    return 0;
+void disp_3D(void) {
+    extern u8* get_ptr(void);
+    extern void* g_BattleWork;
+    extern void* BattleGetMarioPtr(void*);
+    extern void* BattleGetPartyPtr(void*);
+    extern void BtlUnit_GetHomePos(void*,f32*,f32*,f32*);
+    extern void PSMTXTrans(void*,f32,f32,f32);
+    extern void iconNumberDispGx3D(void*,s32,s32,void*);
+    u8* work=get_ptr();
+    void* mario=BattleGetMarioPtr(g_BattleWork);
+    void* party=BattleGetPartyPtr(g_BattleWork);
+    f32 mx,my,mz,px,py,pz;
+    f32 mtx[3][4];
+    u32 color=0xFFFFFFFF;
+    s32 frame;
+    BtlUnit_GetHomePos(mario,&mx,&my,&mz);
+    BtlUnit_GetHomePos(party,&px,&py,&pz);
+    if(*(s32*)(work+4)!=0) {
+        u8* effect=*(u8**)(work+0x34);
+        my+=60.0f;
+        *(f32*)(effect+0x0C+8)=mx;
+        *(f32*)(effect+0x0C+0xC)=my-10.0f;
+        *(f32*)(effect+0x0C+0x10)=mz+5.0f;
+        PSMTXTrans(mtx,mx,my,mz+8.0f);
+        frame=*(s32*)(work+0x28)%12;
+        if(frame>=0&&frame<6) iconNumberDispGx3D(mtx,(s32)*(f32*)(work+0x1C),0,&color);
+        if(*(s32*)(work+0x50)==-1) {
+            effect=*(u8**)(work+0x3C);
+            my+=30.0f;
+            *(f32*)(effect+0x14)=mx; *(f32*)(effect+0x18)=my-10.0f; *(f32*)(effect+0x1C)=mz+5.0f;
+            PSMTXTrans(mtx,mx,my,mz+8.0f);
+            frame=*(s32*)(work+0x30)%12;
+            if(frame>=0&&frame<6) iconNumberDispGx3D(mtx,(s32)*(f32*)(work+0x24),0,&color);
+        } else {
+            effect=*(u8**)(work+0x38);
+            py+=60.0f;
+            *(f32*)(effect+0x14)=px; *(f32*)(effect+0x18)=py-10.0f; *(f32*)(effect+0x1C)=pz+5.0f;
+            PSMTXTrans(mtx,px,py,pz+8.0f);
+            frame=*(s32*)(work+0x2C)%12;
+            if(frame>=0&&frame<6) iconNumberDispGx3D(mtx,(s32)*(f32*)(work+0x20),0,&color);
+        }
+    }
 }
 
 /* stub-fill: main_star1 | prototype_only | source_prototype */
 void main_star1(void) {
-    return;
+    extern void* get_ptr(void);
+    extern void* _battleWorkPointer;
+    extern void* BattleGetMarioPtr(void*);
+    extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
+    extern void* effStarStoneEntry(f32, f32, f32, f32, s32);
+    extern f64 intplGetValue(f64, f64, s32, s32, s32);
+    extern s32 rand(void);
+    extern s32 irand(s32);
+    extern f64 sin(f64);
+
+    u8* work = get_ptr();
+    void* mario = BattleGetMarioPtr(_battleWorkPointer);
+    s32 state = *(s32*)(work + 0x510);
+    s32 timer;
+
+    if (state == 1) {
+        *(s32*)(work + 0x510) = 2;
+        *(s32*)(work + 0x514) = 0;
+        *(void**)(work + 0x570) = effStarStoneEntry(0.0f, -1000.0f, 0.0f, 1.0f, 4);
+        BtlUnit_GetPos(mario, (f32*)(work + 0x51C), (f32*)(work + 0x520), (f32*)(work + 0x524));
+        *(f32*)(work + 0x520) += *(f32*)((s32)mario + 0x114) * (f32)*(s16*)((s32)mario + 0xCE) + 37.0f;
+        *(f32*)(work + 0x528) = *(f32*)(work + 0x51C);
+        *(f32*)(work + 0x52C) = *(f32*)(work + 0x520);
+        *(f32*)(work + 0x530) = *(f32*)(work + 0x524);
+        *(f32*)(work + 0x534) = *(f32*)(work + 0x51C);
+        *(f32*)(work + 0x538) = *(f32*)(work + 0x520) + 50.0f;
+        *(f32*)(work + 0x53C) = *(f32*)(work + 0x524) - 1.0f;
+        *(f32*)(work + 0x54C) = 0.0f;
+        *(f32*)(work + 0x550) = 0.0f;
+        *(f32*)(work + 0x554) = 0.0f;
+        *(f32*)(work + 0x558) = 0.0f;
+        *(f32*)(work + 0x55C) = 0.0f;
+        *(f32*)(work + 0x560) = 0.0f;
+        state = 2;
+    }
+    if (state == 2) {
+        timer = ++*(s32*)(work + 0x514);
+        if (timer < 101) {
+            *(f32*)(work + 0x51C) = (f32)intplGetValue(*(f32*)(work + 0x528), *(f32*)(work + 0x534), 0, timer, 100);
+            *(f32*)(work + 0x520) = (f32)intplGetValue(*(f32*)(work + 0x52C), *(f32*)(work + 0x538), 0, timer, 100);
+            *(f32*)(work + 0x524) = (f32)intplGetValue(*(f32*)(work + 0x530), *(f32*)(work + 0x53C), 0, timer, 100);
+            *(f32*)(work + 0x54C) = (f32)intplGetValue(0.0, 2.0, 0, timer, 100);
+            *(f32*)(work + 0x550) = *(f32*)(work + 0x54C);
+            *(f32*)(work + 0x554) = *(f32*)(work + 0x54C);
+        } else {
+            *(f32*)(work + 0x51C) = *(f32*)(work + 0x534);
+            *(f32*)(work + 0x520) = *(f32*)(work + 0x538);
+            *(f32*)(work + 0x524) = *(f32*)(work + 0x53C);
+            *(f32*)(work + 0x54C) = 2.0f;
+            *(f32*)(work + 0x550) = 2.0f;
+            *(f32*)(work + 0x554) = 2.0f;
+        }
+        *(f32*)(work + 0x55C) = (f32)intplGetValue(0.0, 2160.0, 4, timer, 120);
+        if (timer > 119) {
+            *(s32*)(work + 0x510) = 3;
+            *(s32*)(work + 0x514) = 0;
+            *(f32*)(work + 0x528) = *(f32*)(work + 0x51C);
+            *(f32*)(work + 0x52C) = *(f32*)(work + 0x520);
+            *(f32*)(work + 0x530) = *(f32*)(work + 0x524);
+            *(f32*)(work + 0x534) = 200.0f * (f32)rand() / 32767.0f;
+            *(f32*)(work + 0x538) = 0.0f;
+            *(f32*)(work + 0x53C) = *(f32*)(work + 0x530);
+            *(f32*)(work + 0x540) = 0.0f;
+            *(f32*)(work + 0x544) =
+                (2.0f * (*(f32*)(work + 0x538) - *(f32*)(work + 0x52C)) - 720.0f) / 120.0f;
+            *(f32*)(work + 0x548) = 0.0f;
+        }
+    } else if (state == 3) {
+        timer = ++*(s32*)(work + 0x514);
+        *(f32*)(work + 0x51C) = (f32)intplGetValue(*(f32*)(work + 0x528), *(f32*)(work + 0x534), 4, timer, 60);
+        *(f32*)(work + 0x520) += *(f32*)(work + 0x544);
+        *(f32*)(work + 0x544) += 0.2f;
+        *(f32*)(work + 0x54C) = 2.0f;
+        *(f32*)(work + 0x550) = 2.0f;
+        *(f32*)(work + 0x554) = 2.0f;
+        *(f32*)(work + 0x55C) = 0.0f;
+        if (timer > 59) {
+            *(s32*)(work + 0x510) = 4;
+            *(s32*)(work + 0x514) = 0;
+            *(f32*)(work + 0x540) = irand(2) == 0 ? -2.0f : 2.0f;
+            *(f32*)(work + 0x544) = 0.0f;
+        }
+    } else if (state == 4) {
+        *(f32*)(work + 0x51C) += *(f32*)(work + 0x540);
+        if (*(f32*)(work + 0x51C) < 0.0f) *(f32*)(work + 0x540) = 3.0f;
+        if (*(f32*)(work + 0x51C) > 200.0f) *(f32*)(work + 0x540) = -3.0f;
+        *(f32*)(work + 0x544) += 0.1f;
+        if (*(f32*)(work + 0x544) >= 6.2832f) *(f32*)(work + 0x544) -= 6.2832f;
+        *(f32*)(work + 0x520) = 10.0f * (f32)sin(*(f32*)(work + 0x544)) + 180.0f;
+        if (*(s32*)(work + 0x40) < 1) {
+            *(s32*)(work + 0x510) = 5;
+            *(s32*)(work + 0x514) = 0;
+            *(f32*)(work + 0x51C) = 0.0f;
+            *(f32*)(work + 0x520) = 0.0f;
+            *(f32*)(work + 0x524) = 0.0f;
+        }
+    }
+
+    if (*(void**)(work + 0x570) != 0) {
+        u8* effectWork = *(u8**)((s32)*(void**)(work + 0x570) + 0xC);
+        *(f32*)(effectWork + 8) = *(f32*)(work + 0x51C);
+        *(f32*)(effectWork + 0xC) = *(f32*)(work + 0x520);
+        *(f32*)(effectWork + 0x10) = *(f32*)(work + 0x524);
+        *(f32*)(effectWork + 0x18) = *(f32*)(work + 0x558);
+        *(f32*)(effectWork + 0x1C) = *(f32*)(work + 0x55C);
+        *(f32*)(effectWork + 0x20) = *(f32*)(work + 0x560);
+        *(f32*)(effectWork + 0x14) = 1.5f * *(f32*)(work + 0x54C);
+    }
 }
 
 /* stub-fill: main_star0 | prototype_only | source_prototype */
 void main_star0(s32 index) {
-    return;
+    extern void* get_ptr(void);
+    extern void* _battleWorkPointer;
+    extern void* BattleGetMarioPtr(void*);
+    extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
+    extern void* effStarStoneEntry(f32, f32, f32, f32, s32);
+    extern f64 intplGetValue(f64, f64, s32, s32, s32);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern s32 rand(void);
+    extern s32 irand(s32);
+    u8* work = (u8*)get_ptr();
+    s32* star = (s32*)(work + 0x510 + index * 100);
+    void* mario = BattleGetMarioPtr(_battleWorkPointer);
+    f32 marioX, marioY, marioZ;
+
+    if (star[0] == 1) {
+        star[0] = 2;
+        star[1] = 0;
+        star[24] = (s32)effStarStoneEntry(0.0f, -1000.0f, 0.0f, 1.0f, index);
+        BtlUnit_GetPos(mario, (f32*)&star[3], (f32*)&star[4], (f32*)&star[5]);
+        *(f32*)&star[4] += 37.0f;
+        star[6] = star[3]; star[7] = star[4]; star[8] = star[5];
+        star[9] = star[3]; star[10] = star[4]; star[11] = star[5];
+        *(f32*)&star[10] += 30.0f;
+        *(f32*)&star[15] = *(f32*)&star[16] = *(f32*)&star[17] = 0.0f;
+        *(f32*)&star[18] = *(f32*)&star[19] = *(f32*)&star[20] = 0.0f;
+        *(f32*)&star[21] = 0.0f;
+        *(f32*)&star[22] = 6.2832f * (f32)index / 7.0f;
+        *(f32*)&star[23] = 0.1f;
+    }
+    if (star[0] == 2) {
+        star[1]++;
+        BtlUnit_GetPos(mario, &marioX, &marioY, &marioZ);
+        if (star[1] < 101) {
+            *(f32*)&star[4] = (f32)intplGetValue(*(f32*)&star[7], *(f32*)&star[10], 0, star[1], 100);
+            *(f32*)&star[21] = (f32)intplGetValue(0.0, 40.0, 0, star[1], 100);
+            *(f32*)&star[22] += *(f32*)&star[23];
+            *(f32*)&star[3] = *(f32*)&star[21] * (f32)cos(*(f32*)&star[22]) + marioX;
+            *(f32*)&star[5] = *(f32*)&star[21] * (f32)sin(*(f32*)&star[22]) + marioZ;
+            *(f32*)&star[15] = *(f32*)&star[16] = *(f32*)&star[17] =
+                (f32)intplGetValue(0.0, 0.75, 0, star[1], 100);
+        } else {
+            *(f32*)&star[4] = *(f32*)&star[10];
+            *(f32*)&star[22] += *(f32*)&star[23];
+            *(f32*)&star[3] = *(f32*)&star[21] * (f32)cos(*(f32*)&star[22]) + marioX;
+            *(f32*)&star[5] = *(f32*)&star[21] * (f32)sin(*(f32*)&star[22]) + marioZ;
+            *(f32*)&star[15] = *(f32*)&star[16] = *(f32*)&star[17] = 0.75f;
+        }
+        *(f32*)&star[19] = (f32)intplGetValue(0.0, 2160.0, 4, star[1], 120);
+        if (star[1] > 119) {
+            star[0] = 3;
+            star[1] = 0;
+            star[6] = star[3]; star[7] = star[4]; star[8] = star[5];
+            *(f32*)&star[9] = 200.0f * (f32)rand() / 32767.0f;
+            *(f32*)&star[10] = 120.0f;
+            star[11] = star[8];
+            *(f32*)&star[12] = 2.0f;
+            *(f32*)&star[13] = (2.0f * (*(f32*)&star[10] - *(f32*)&star[7]) -
+                60.0f * 60.0f * -(0.01f * (f32)index - 0.2f)) / 120.0f;
+            *(f32*)&star[14] = 0.0f;
+        }
+    } else if (star[0] == 3) {
+        star[1]++;
+        *(f32*)&star[3] = (f32)intplGetValue(*(f32*)&star[6], *(f32*)&star[9], 4, star[1], 60);
+        *(f32*)&star[4] += *(f32*)&star[13];
+        *(f32*)&star[13] += -(0.01f * (f32)index - 0.2f);
+        *(f32*)&star[15] = *(f32*)&star[16] = *(f32*)&star[17] = 0.75f;
+        *(f32*)&star[19] = 0.0f;
+        if (star[1] > 59) {
+            star[0] = 4;
+            star[1] = 0;
+            *(f32*)&star[12] = irand(2) == 0 ? -(0.05f * (f32)index + 2.0f) : 0.05f * (f32)index + 2.0f;
+            *(f32*)&star[13] = 0.0f;
+        }
+    } else if (star[0] == 4) {
+        *(f32*)&star[3] += *(f32*)&star[12];
+        if (*(f32*)&star[3] < 0.0f) *(f32*)&star[12] = 0.05f * (f32)index + 3.0f;
+        if (*(f32*)&star[3] > 200.0f) *(f32*)&star[12] = -(0.05f * (f32)index + 3.0f);
+        *(f32*)&star[13] += 0.01f * (f32)index + 0.1f;
+        if (*(f32*)&star[13] >= 6.2832f) *(f32*)&star[13] -= 6.2832f;
+        *(f32*)&star[4] = 10.0f * (f32)sin(*(f32*)&star[13]) + 180.0f;
+        if (*(s32*)(work + 0x40) < 1) star[0] = 5;
+    }
+    if (star[24] != 0) {
+        u8* effectWork = *(u8**)((u8*)star[24] + 0xC);
+        *(f32*)(effectWork + 8) = *(f32*)&star[3];
+        *(f32*)(effectWork + 0xC) = *(f32*)&star[4];
+        *(f32*)(effectWork + 0x10) = *(f32*)&star[5];
+        *(f32*)(effectWork + 0x18) = *(f32*)&star[18];
+        *(f32*)(effectWork + 0x1C) = *(f32*)&star[19];
+        *(f32*)(effectWork + 0x20) = *(f32*)&star[20];
+        *(f32*)(effectWork + 0x14) = 1.5f * *(f32*)&star[15];
+    }
 }
 
 /* stub-fill: main_object | missing_definition | ghidra_signature */
-u8 main_object(u32 param_1) {
-    return 0;
+void main_object(u32 index) {
+    extern void* get_ptr(void);
+    extern void* _battleWorkPointer;
+    extern void* BattleGetMarioPtr(void*);
+    extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
+    extern s32 irand(s32);
+    extern void* effStardustEntry(f32, f32, f32, f32, f32, s32, s32, s32);
+
+    u8* work = get_ptr();
+    s32* object = (s32*)(work + 0x358 + index * 0x2C);
+    void* mario = BattleGetMarioPtr(_battleWorkPointer);
+    s32 choices[3] = {0, 2, 4};
+    f32 marioX, marioY, marioZ;
+    s32 state = object[0];
+
+    if (state == 1) {
+        u8* star;
+        s32 threshold = *(s32*)(work + 0xC) == 0 ? 25 : 50;
+        object[0] = 2;
+        object[1] = 0;
+        if (*(s32*)(work + 0x60) < threshold) {
+            object[2] = *(s32*)(*(s32*)(work + 0x5C) + *(s32*)(work + 0x60) * 4);
+        } else {
+            s32 divisor = *(s32*)(work + 0xC) == 0 ? 7 : 14;
+            if (irand(divisor) == 0) {
+                object[2] = 6;
+            } else {
+                object[2] = choices[irand(*(s32*)(work + 0x50) == -1 ? 2 : 3)];
+                if (irand(5) == 0 && *(s32*)(work + 0xC) == 1) {
+                    if (object[2] == 0) object[2] = 1;
+                    else if (object[2] == 2) object[2] = 3;
+                    else if (object[2] == 4) object[2] = 5;
+                }
+            }
+        }
+        if (*(s32*)(work + 0x50) == -1 && object[2] == 2) object[2] = 0;
+        if (*(s32*)(work + 0x50) == -1 && object[2] == 3) object[2] = 1;
+        *(s32*)(work + 0x60) += 1;
+        star = *(s32*)(work + 0xC) == 0
+            ? work + 0x510 + irand(7) * 0x64
+            : work + 0x510;
+        BtlUnit_GetPos(mario, &marioX, &marioY, &marioZ);
+        *(f32*)&object[3] = *(f32*)(star + 0xC);
+        *(f32*)&object[4] = *(f32*)(star + 0x10);
+        *(f32*)&object[5] = marioZ + (f32)index;
+        state = 2;
+    }
+    if (state == 2) {
+        if (*(s32*)(work + 0xC) == 0) {
+            *(f32*)&object[4] -= 1.32f;
+        } else {
+            *(f32*)&object[4] -= 1.98f;
+        }
+        BtlUnit_GetPos(mario, &marioX, &marioY, &marioZ);
+        if (*(f32*)&object[4] <= marioY + 15.0f) {
+            object[0] = 3;
+            effStardustEntry(*(f32*)&object[3], marioY + 15.0f, *(f32*)&object[5],
+                             30.0f, 30.0f, 5, 10, 60);
+        }
+        object[1]++;
+        if (object[1] > 120) object[1] = 0;
+    } else if (state == 3) {
+        object[0] = 0;
+    }
 }
 
 /* stub-fill: main_weapon | missing_definition | ghidra_signature */
-u8 main_weapon(void) {
-    return 0;
+void main_weapon(s32 index) {
+    typedef struct Vec { f32 x, y, z; } Vec;
+    extern void* get_ptr(void);
+    extern void* _battleWorkPointer;
+    extern void* BattleGetMarioPtr(void*);
+    extern s32 BattleAudience_GetAudienceNum(void);
+    extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
+    extern f64 cos(f64);
+    extern f64 sin(f64);
+    extern void BtlUnit_snd_se(void*, char*, s32, s16);
+    extern void effStardustN64Entry(f32, f32, f32, f32, s32);
+    extern void effHitEntry(void);
+    extern u32 psndSFXOn_3D(char*, Vec*);
+    extern void BattleAudienceSoundCallKind(s32);
+    extern void BattleAudienceSoundHandBeat(void);
+    extern void BattleAudienceSoundBooingKind(s32);
+    extern char str_SFX_BTL_SAC_HEART_SH_80300e10[];
+    u8* work = (u8*)get_ptr();
+    s32* weapon = (s32*)(work + 0x10C + index * 0x54);
+    void* mario = BattleGetMarioPtr(_battleWorkPointer);
+    s32 audience = BattleAudience_GetAudienceNum();
+    f32 angle = 3.1416f * 2.0f * *(f32*)(work + 0x6C) / 360.0f;
+    s32 i;
+
+    for (i = 2; i > 0; i--) {
+        weapon[5 + i * 3] = weapon[5 + (i - 1) * 3];
+        weapon[6 + i * 3] = weapon[6 + (i - 1) * 3];
+        weapon[7 + i * 3] = weapon[7 + (i - 1) * 3];
+    }
+    weapon[5] = weapon[2]; weapon[6] = weapon[3]; weapon[7] = weapon[4];
+    if (weapon[0] == 0) {
+        *(f32*)&weapon[2] = *(f32*)&weapon[3] = *(f32*)&weapon[4] = 0.0f;
+    } else if (weapon[0] == 1) {
+        if (--weapon[1] < 0) {
+            s32 off;
+            weapon[0] = 2;
+            BtlUnit_GetPos(mario, (f32*)&weapon[2], (f32*)&weapon[3], (f32*)&weapon[4]);
+            *(f32*)&weapon[2] += 20.0f;
+            *(f32*)&weapon[3] += 28.0f;
+            *(f32*)&weapon[14] = 10.0f * (f32)cos(angle);
+            *(f32*)&weapon[15] = 10.0f * (f32)sin(angle);
+            *(f32*)&weapon[16] = 0.0f;
+            for (off = 0; off < 7; off++) {
+                s32* trail = (s32*)(work + 0x80 + off * 0x14);
+                if (trail[0] < 1) {
+                    trail[0] = 0x1E;
+                    trail[1] = *(s32*)(work + 0x74);
+                    trail[2] = *(s32*)(work + 0x78);
+                    trail[3] = *(s32*)(work + 0x7C);
+                    *(f32*)&trail[4] = 2.0f * (f32)*(s32*)(work + 0x68);
+                    break;
+                }
+            }
+            BtlUnit_snd_se(mario, str_SFX_BTL_SAC_HEART_SH_80300e10, -250000000, 0);
+        }
+    }
+    if (weapon[0] == 2) {
+        f32 marioX, marioY, marioZ;
+        s32 nearest = -1;
+        f32 nearestDist = 10000000.0f;
+        *(f32*)&weapon[2] += *(f32*)&weapon[14];
+        *(f32*)&weapon[3] += *(f32*)&weapon[15];
+        *(f32*)&weapon[15] -= 0.15f;
+        BtlUnit_GetPos(mario, &marioX, &marioY, &marioZ);
+        if (*(f32*)&weapon[2] >= 250.0f || *(f32*)&weapon[3] >= 180.0f || *(f32*)&weapon[3] <= marioY) {
+            weapon[0] = 3;
+        } else {
+            for (i = 0; i < 10; i++) {
+                s32* object = (s32*)(work + 0x358 + i * 0x2C);
+                if (object[0] == 2) {
+                    f32 dx = *(f32*)&weapon[2] - *(f32*)&object[3];
+                    f32 dy = *(f32*)&weapon[3] - *(f32*)&object[4];
+                    f32 dist = dx * dx + dy * dy;
+                    if (dist < nearestDist) { nearestDist = dist; nearest = i; }
+                }
+            }
+            if (nearest != -1) {
+                s32* object = (s32*)(work + 0x358 + nearest * 0x2C);
+                f32 limit;
+                switch (object[2]) {
+                    case 0: case 2: case 4: limit = 576.0f; break;
+                    case 6: limit = 344.0f; break;
+                    default: limit = 1296.0f; break;
+                }
+                if (nearestDist <= limit && *(f32*)&object[4] <= 200.0f) {
+                    weapon[0] = 3;
+                    object[0] = 3;
+                    effStardustN64Entry(*(f32*)&object[3], *(f32*)&object[4], *(f32*)&object[5], 10.0f, 5);
+                    effHitEntry();
+                    if (object[2] == 0 || object[2] == 1) {
+                        *(s32*)(work + 0x10) += object[2] == 0 ? 1 : 3;
+                        if (*(s32*)(work + 0x10) > 98) *(s32*)(work + 0x10) = 99;
+                    } else if (object[2] == 2 || object[2] == 3) {
+                        *(s32*)(work + 0x14) += object[2] == 2 ? 1 : 3;
+                        if (*(s32*)(work + 0x14) > 98) *(s32*)(work + 0x14) = 99;
+                    } else if (object[2] == 4 || object[2] == 5) {
+                        *(s32*)(work + 0x18) += object[2] == 4 ? 1 : 3;
+                        if (*(s32*)(work + 0x18) > 98) *(s32*)(work + 0x18) = 99;
+                    } else if (object[2] == 6) {
+                        *(s32*)(work + 0x44) = 3;
+                    }
+                    psndSFXOn_3D((char*)(0xA64 + object[2]), (Vec*)&weapon[2]);
+                    if (object[2] == 6) {
+                        if (audience < 100) BattleAudienceSoundBooingKind(1);
+                        else BattleAudienceSoundBooingKind(audience < 150 ? 2 : 3);
+                    } else {
+                        BattleAudienceSoundCallKind(audience < 100 ? 1 : 2);
+                        if ((audience >= 50 && audience < 100) || audience >= 150)
+                            BattleAudienceSoundHandBeat();
+                    }
+                }
+            }
+        }
+    } else if (weapon[0] == 3) {
+        weapon[0] = 0;
+    }
+    if (weapon[17] != 0) {
+        u8* ew = *(u8**)((u8*)weapon[17] + 0xC);
+        *(f32*)(ew + 8) = *(f32*)&weapon[2];
+        *(f32*)(ew + 0xC) = *(f32*)&weapon[3];
+        *(f32*)(ew + 0x10) = *(f32*)&weapon[4];
+        *(f32*)(ew + 0x14) = 1.125f;
+        *(u8*)(ew + 0x5F) = 0xFF;
+    }
+    for (i = 0; i < 3; i++) {
+        u8* ew = *(u8**)((u8*)weapon[18 + i] + 0xC);
+        *(f32*)(ew + 8) = *(f32*)&weapon[5 + i * 3];
+        *(f32*)(ew + 0xC) = *(f32*)&weapon[6 + i * 3];
+        *(f32*)(ew + 0x10) = *(f32*)&weapon[7 + i * 3];
+        *(f32*)(ew + 0x14) = 1.125f;
+        *(u8*)(ew + 0x5F) = (u8)((i + 1) * -50 - 1);
+    }
 }
 
 /* stub-fill: main_target | missing_definition | ghidra_signature */
@@ -420,8 +851,94 @@ void main_mario(void) {
 }
 
 /* stub-fill: main_base | missing_definition | ghidra_signature */
-u8 main_base(void) {
-    return 0;
+void main_base(void) {
+    extern void* get_ptr(void);
+    extern s32 irand(s32);
+    extern void object_entry(void);
+    u8* work = get_ptr();
+    s32* table = *(s32**)(work + 0x5C);
+    s32 i;
+
+    if ((f32)*(s32*)(work + 0x10) < *(f32*)(work + 0x1C)) {
+        *(f32*)(work + 0x1C) -= 1.0f;
+        *(s32*)(work + 0x28) = 60;
+    }
+    if (*(f32*)(work + 0x1C) < (f32)*(s32*)(work + 0x10)) {
+        *(f32*)(work + 0x1C) += 1.0f;
+        *(s32*)(work + 0x28) = 60;
+    }
+    if ((f32)*(s32*)(work + 0x14) < *(f32*)(work + 0x20)) {
+        *(f32*)(work + 0x20) -= 1.0f;
+        *(s32*)(work + 0x2C) = 60;
+    }
+    if (*(f32*)(work + 0x20) < (f32)*(s32*)(work + 0x14)) {
+        *(f32*)(work + 0x20) += 1.0f;
+        *(s32*)(work + 0x2C) = 60;
+    }
+    if ((f32)*(s32*)(work + 0x18) < *(f32*)(work + 0x24)) {
+        *(f32*)(work + 0x24) -= 1.0f;
+        *(s32*)(work + 0x30) = 60;
+    }
+    if (*(f32*)(work + 0x24) < (f32)*(s32*)(work + 0x18)) {
+        *(f32*)(work + 0x24) += 1.0f;
+        *(s32*)(work + 0x30) = 60;
+    }
+    if (*(s32*)(work + 0x28) > 0) (*(s32*)(work + 0x28))--;
+    if (*(s32*)(work + 0x2C) > 0) (*(s32*)(work + 0x2C))--;
+    if (*(s32*)(work + 0x30) > 0) (*(s32*)(work + 0x30))--;
+
+    if (*(s32*)(work + 4) == 1) {
+        s32 pos = 0;
+        *(s32*)(work + 4) = 2;
+        *(s32*)(work + 0x44) = 1;
+        *(s32*)(work + 0x64) = 1;
+        *(s32*)(work + 0x60) = 0;
+        if (*(s32*)(work + 0xC) == 0) {
+            for (i = 0; i < 7; i++) table[pos++] = 0;
+            for (i = 0; i < 7; i++) table[pos++] = 2;
+            for (i = 0; i < 8; i++) table[pos++] = 4;
+            for (i = 0; i < 3; i++) table[pos++] = 6;
+            for (i = 0; i < 200; i++) {
+                s32 a = irand(25), b = irand(25), temp = table[a];
+                table[a] = table[b]; table[b] = temp;
+            }
+        } else {
+            for (i = 0; i < 12; i++) table[pos++] = 0;
+            for (i = 0; i < 4; i++) table[pos++] = 1;
+            for (i = 0; i < 12; i++) table[pos++] = 2;
+            for (i = 0; i < 4; i++) table[pos++] = 3;
+            for (i = 0; i < 12; i++) table[pos++] = 4;
+            for (i = 0; i < 4; i++) table[pos++] = 5;
+            for (i = 0; i < 2; i++) table[pos++] = 6;
+            for (i = 0; i < 200; i++) {
+                s32 a = irand(50), b = irand(50), temp = table[a];
+                table[a] = table[b]; table[b] = temp;
+            }
+        }
+    }
+    if (*(s32*)(work + 4) != 2) return;
+
+    *(s32*)(work + 0x4C) -= 1;
+    if (*(s32*)(work + 0x4C) < 1) {
+        *(s32*)(work + 0x4C) = *(s32*)(work + 0xC) == 0 ? 37 : 18;
+        if (*(s32*)(work + 0x40) > 0) object_entry();
+    }
+    if (*(s32*)(work + 0x40) < 1) {
+        s32 stars = *(s32*)(work + 0x58);
+        s32 doneStars = 0;
+        s32 doneObjects = 0;
+        for (i = 0; i < stars; i++) {
+            if (*(s32*)(work + 0x10C + i * 0x54) != 0) break;
+            doneStars++;
+        }
+        for (i = 0; i < 10; i++) {
+            if (*(s32*)(work + 0x358 + i * 0x2C) != 0) break;
+            doneObjects++;
+        }
+        if (doneStars == stars && doneObjects == 10) *(s32*)(work + 4) = 3;
+    } else {
+        *(s32*)(work + 0x40) -= 1;
+    }
 }
 
 /* stub-fill: main_genki | missing_definition | ghidra_signature */
@@ -493,4 +1010,3 @@ s32 main_genki(EventEntry* event, s32 isFirstCall) {
     dispEntry(4, 2, disp_3D_alpha, float_0_8042831c, 0);
     return 0;
 }
-

@@ -339,7 +339,22 @@ void effKissMain(void* effect) {
 
 /* stub-fill: effKissDisp | prototype_only | source_prototype */
 void effKissDisp(s32 cameraId, void* effect) {
-    return;
+    typedef f32 Mtx[3][4]; typedef u8 TexObj[0x20]; typedef struct Color{u8 r,g,b,a;}Color;
+    extern void* camGetPtr(s32); extern void PSMTXTrans(Mtx,f64,f64,f64); extern void PSMTXScale(Mtx,f32,f32,f32); extern void PSMTXRotRad(Mtx,f64,char); extern void PSMTXConcat(void*,void*,void*);
+    extern void GXSetNumChans(s32);extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);extern void GXSetNumTexGens(s32);extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);extern void GXSetNumTevStages(s32);extern void GXSetTevOrder(s32,s32,s32,s32);extern void GXSetCullMode(s32);extern void GXClearVtxDesc(void);extern void GXSetVtxDesc(s32,s32);extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);extern void GXSetChanMatColor(s32,Color*);
+    extern void effGetTexObj(s32,void*);extern void GXLoadTexObj(void*,s32);extern void GXLoadPosMtxImm(void*,s32);extern void GXSetCurrentMtx(s32);extern void GXBegin(s32,s32,s32);extern volatile f32 DAT_cc008000;
+    u8* base=*(u8**)((u8*)effect+0xC);void* cam=camGetPtr(cameraId);Mtx root,trans,rot,scale,model;TexObj tex;Color color;s32 type=*(s32*)base;s32 pass;s32 i;u8* child;f32 halfW;f32 top;
+    PSMTXTrans(trans,*(f32*)(base+4),*(f32*)(base+8),*(f32*)(base+0xC));PSMTXScale(scale,*(f32*)(base+0x20),*(f32*)(base+0x24),*(f32*)(base+0x24));PSMTXRotRad(rot,-0.017453292f**(f32*)((u8*)camGetPtr(4)+0x114),'y');PSMTXConcat(trans,rot,trans);PSMTXConcat(trans,scale,root);
+    GXSetNumChans(1);GXSetChanCtrl(4,0,0,0,0,0,2);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x3C,0,0x7D);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,4);GXSetCullMode(0);GXClearVtxDesc();GXSetVtxDesc(9,1);GXSetVtxDesc(13,1);GXSetVtxAttrFmt(0,9,1,4,0);GXSetVtxAttrFmt(0,13,1,4,0);
+    for(pass=0;pass<2;pass++){
+        child=base+0x38;
+        for(i=1;i<*(s32*)((u8*)effect+8);i++,child+=0x38){
+            if(type==3){effGetTexObj(pass?0x58:0x59,tex);halfW=pass?10.0f:16.0f;top=pass?16.0f:20.0f;}else{effGetTexObj(0x14,tex);halfW=4.0f;top=8.0f;}
+            GXLoadTexObj(tex,0);color.r=color.g=color.b=0xFF;color.a=(u8)*(s32*)(base+0x30);GXSetChanMatColor(4,&color);
+            PSMTXTrans(trans,*(f32*)(child+4),*(f32*)(child+8),*(f32*)(child+0xC));PSMTXRotRad(rot,-0.017453292f**(f32*)(base+0x18),'z');PSMTXConcat(trans,rot,trans);PSMTXRotRad(rot,0.017453292f**(f32*)(child+0x1C),'y');PSMTXConcat(trans,rot,trans);PSMTXScale(scale,*(f32*)(child+0x20),*(f32*)(child+0x24),*(f32*)(child+0x24));PSMTXConcat(trans,scale,trans);PSMTXConcat(root,trans,model);PSMTXConcat((u8*)cam+0x11C,model,model);GXLoadPosMtxImm(model,0);GXSetCurrentMtx(0);GXBegin(0x80,0,4);
+            DAT_cc008000=-halfW;DAT_cc008000=top;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=halfW;DAT_cc008000=top;DAT_cc008000=0;DAT_cc008000=1;DAT_cc008000=0;DAT_cc008000=halfW;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=1;DAT_cc008000=1;DAT_cc008000=-halfW;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=1;
+        }
+    }
 }
 
 /* stub-fill: effKissEntry | missing_definition | ghidra_signature */

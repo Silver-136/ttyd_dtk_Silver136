@@ -106,75 +106,742 @@ void winSortEntry(void* win, s32 type, f32 a, f32 b) {
 }
 
 
-void winKirinukiGX(double param_1, double param_2, double param_3, double param_4, void* pWin, int param_6) {
-    ;
+void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style) {
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
+    extern void GXSetBlendMode(s32, s32, s32, s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
+    extern void GXSetZMode(s32, s32, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevOp(s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void winTexInit(void* data);
+    extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
+    Vec3 pos;
+    Vec3 scale;
+    u32 white = 0xFFFFFFFF;
+    s32 row;
+    s32 column;
+
+    GXSetBlendMode(0, 1, 0, 0);
+    GXSetZCompLoc(0);
+    GXSetAlphaCompare(6, 0x80, 1, 0, 0);
+    GXSetZMode(0, 7, 0);
+    GXSetNumChans(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, -1);
+    GXSetTevOp(0, 3);
+    GXSetCullMode(0);
+    winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
+    pos.z = 0.0f;
+    scale.x = (f32)w / 300.0f;
+    scale.y = (f32)h / 180.0f;
+    scale.z = 1.0f;
+    for (row = 0; row < 3; row++) {
+        for (column = 0; column < 3; column++) {
+            pos.x = (f32)x + column * (f32)w * 0.5f;
+            pos.y = (f32)y - row * (f32)h * 0.5f;
+            winTexSet((style == 0 ? 8 : 11) + row * 3 + column,
+                      &pos, &scale, &white);
+        }
+    }
 }
 
+void winMailGX(double x, double y, s32 page) {
+    extern void* gp;
+    extern void winTexInit(void* data);
+    extern void winTexSet(s32 id, void* pos, void* scale, void* color);
+    f32 pos[3];
+    f32 scale[3];
+    u32 white = 0xFFFFFFFF;
+    s32 row;
 
-u8 winMailGX(void) {
-    return 0;
+    winTexInit(**(void***)((s32)gp + 0xA0));
+    pos[2] = 0.0f;
+    scale[0] = 1.0f;
+    scale[1] = 1.0f;
+    scale[2] = 1.0f;
+    for (row = 0; row < 9; row++) {
+        pos[0] = (f32)x;
+        pos[1] = (f32)y - row * 32.0f;
+        winTexSet(0xB0 + ((page + row) & 7), pos, scale, &white);
+        pos[0] += 220.0f;
+        winTexSet(0xB8 + ((page + row) & 7), pos, scale, &white);
+    }
+    pos[0] = (f32)x + 110.0f;
+    pos[1] = (f32)y + 24.0f;
+    scale[0] = 2.0f;
+    scale[1] = 1.2f;
+    winTexSet(0xAE, pos, scale, &white);
 }
 
+void winHakoGX(double x, double y, void* pWin, s32 type) {
+    extern void winTexInit(void* data);
+    extern void winTexSet(s32 id, void* pos, void* scale, void* color);
+    f32 pos[3];
+    f32 scale[3];
+    u32 white = 0xFFFFFFFF;
+    s32 i;
+    s32 j;
 
-void winHakoGX(double param_1, double param_2, void* pWin, int param_4) {
-    ;
+    winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
+    pos[2] = 0.0f;
+    scale[0] = 1.0f;
+    scale[1] = 1.0f;
+    scale[2] = 1.0f;
+    for (j = 0; j < 4; j++) {
+        for (i = 0; i < 5; i++) {
+            pos[0] = (f32)x + i * 48.0f;
+            pos[1] = (f32)y - j * 48.0f;
+            winTexSet(0x60 + type * 4 + ((i + j) & 3), pos, scale, &white);
+        }
+    }
+    scale[0] = 2.0f;
+    scale[1] = 2.0f;
+    pos[0] = (f32)x - 16.0f;
+    pos[1] = (f32)y + 16.0f;
+    winTexSet(0x70 + type, pos, scale, &white);
 }
 
+void winBookGX(double x, double y, void* pWin, s32 page) {
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
+    extern void winTexInit(void* data);
+    extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
+    extern void winFontInit(void);
+    extern void winFontSetLabel(Vec3* pos, Vec3* scale, void* color, char* label);
+    extern char* msgSearch(char* key);
+    extern char str_msg_menu_sort_narabi_802f4da8[];
+    Vec3 pos;
+    Vec3 scale;
+    u32 white = 0xFFFFFFFF;
+    u32 gray = 0xA0A0A0FF;
+    s32 row;
+    s32 column;
 
-void winBookGX(double param_1, double param_2, void* pWin, int param_4) {
-    ;
+    winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
+    scale.x = 1.0f;
+    scale.y = 1.0f;
+    scale.z = 1.0f;
+    pos.z = 0.0f;
+    for (row = 0; row < 4; row++) {
+        for (column = 0; column < 4; column++) {
+            pos.x = (f32)x + column * 56.0f;
+            pos.y = (f32)y - row * 56.0f;
+            winTexSet(0x27 + row * 4 + column, &pos, &scale,
+                      page == 0 ? &white : &gray);
+        }
+    }
+    winFontInit();
+    pos.x = (f32)x + 80.0f;
+    pos.y = (f32)y + 24.0f;
+    scale.x = 0.8f;
+    scale.y = 0.8f;
+    winFontSetLabel(&pos, &scale, &white,
+                    msgSearch(str_msg_menu_sort_narabi_802f4da8));
 }
 
+void winWazaGX(double x, double y, double w, double h, void* pWin) {
+    extern void winTexInit(void* data);
+    extern void winTexSet(s32 id, void* pos, void* scale, void* color);
+    f32 pos[3];
+    f32 scale[3];
+    u32 white = 0xFFFFFFFF;
+    s32 row;
+    s32 selected = *(s32*)((s32)pWin + 0x174);
 
-u8 winWazaGX(void) {
-    return 0;
+    winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
+    pos[2] = 0.0f;
+    scale[0] = 1.0f;
+    scale[1] = 1.0f;
+    scale[2] = 1.0f;
+    for (row = 0; row < 6; row++) {
+        pos[0] = (f32)x + 22.0f;
+        pos[1] = (f32)y - 34.0f * row;
+        winTexSet(0x98 + row, pos, scale, &white);
+        pos[0] += (f32)w - 44.0f;
+        winTexSet(0x9E + row, pos, scale, &white);
+    }
+    pos[0] = (f32)x + 8.0f;
+    pos[1] = (f32)y - selected * 34.0f;
+    scale[0] = (f32)w / 100.0f;
+    scale[1] = (f32)h / 100.0f;
+    winTexSet(0xA4, pos, scale, &white);
 }
-
 
 s32 winRootMain(void* pWin) {
-    return 0;
+    extern s32 winMarioMain(void* win);
+    extern s32 winPartyMain(void* win);
+    extern s32 winItemMain(void* win);
+    extern s32 winBadgeMain(void* win);
+    extern s32 winLogMain(void* win);
+    extern void winMarioInit2(void* win);
+    extern void winPartyInit2(void* win);
+    extern void winItemInit2(void* win);
+    extern void winBadgeInit2(void* win);
+    extern void winLogInit2(void* win);
+    extern void winBgMain(void* win);
+    extern void winMsgMain(void* win);
+    extern void winSortMain(void* win);
+    s32 state = *(s32*)((s32)pWin + 0x10);
+    s32 menu = *(s32*)((s32)pWin + 0x14);
+    s32 result = 0;
+
+    if (state == 0) {
+        *(s32*)((s32)pWin + 0x14) = 0;
+        *(s32*)((s32)pWin + 0x18) = 0;
+        *(void**)((s32)pWin + 0x128) = 0;
+        winMarioInit2(pWin);
+        *(s32*)((s32)pWin + 0x10) = 10;
+    } else if (state == 10) {
+        if ((*(u32*)((s32)pWin + 0x8C) & 0x200) != 0) return -1;
+        if ((*(u32*)((s32)pWin + 0x8C) & 0x100) != 0) {
+            if (menu == 0) winMarioInit2(pWin);
+            else if (menu == 1) winPartyInit2(pWin);
+            else if (menu == 2) winItemInit2(pWin);
+            else if (menu == 3) winBadgeInit2(pWin);
+            else winLogInit2(pWin);
+            *(s32*)((s32)pWin + 0x10) = 11 + menu;
+        }
+    } else if (state == 11) result = winMarioMain(pWin);
+    else if (state == 12) result = winPartyMain(pWin);
+    else if (state == 13) result = winItemMain(pWin);
+    else if (state == 14) result = winBadgeMain(pWin);
+    else if (state == 15) result = winLogMain(pWin);
+
+    if (result == -1) *(s32*)((s32)pWin + 0x10) = 10;
+    winBgMain(pWin);
+    winMsgMain(pWin);
+    winSortMain(pWin);
+    return result;
 }
 
+void winSortGX(void* pWin) {
+    extern void winTexInit(void* data);
+    extern void winTexSet(s32 id, void* pos, void* scale, void* color);
+    f32 pos[3];
+    f32 scale[3];
+    u32 white = 0xFFFFFFFF;
+    s32 type = *(s32*)((s32)pWin + 0x184);
+    s32 cursor = *(s32*)((s32)pWin + 0x174);
+    s32 i;
 
-u8 winSortGX(void* pWin) {
-    return 0;
+    winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
+    scale[0] = 1.0f;
+    scale[1] = 1.0f;
+    scale[2] = 1.0f;
+    pos[2] = 0.0f;
+    for (i = 0; i < 4; i++) {
+        pos[0] = *(f32*)((s32)pWin + 0x164) + i * 42.0f;
+        pos[1] = *(f32*)((s32)pWin + 0x168);
+        winTexSet(0xA3 + i, pos, scale, &white);
+    }
+    pos[0] = *(f32*)((s32)pWin + 0x164) + cursor * 42.0f;
+    pos[1] = *(f32*)((s32)pWin + 0x168) + 4.0f;
+    scale[0] = 1.15f;
+    scale[1] = 1.15f;
+    winTexSet(type == 7 ? 0xA7 : 0xA5, pos, scale, &white);
 }
 
+void winMailDisp(void* pWin) {
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
+    extern void winIconInit(void);
+    extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
+    extern void winFontInit(void);
+    extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* text);
+    extern char* msgSearch(char* key);
+    extern void windowDispGX_Waku_col(f32 x, f32 y, f32 w, f32 h, f32 r, s32 type, void* color);
+    Vec3 pos;
+    Vec3 scale;
+    u32 white = 0xFFFFFFFF;
+    u32 frame = 0xC0C0C0FF;
+    s32 page;
+    s32 count;
+    s32 i;
+    s32 entry;
+    char* text;
 
-u8 winMailDisp(void* pWin) {
-    return 0;
+    page = *(s32*)((s32)pWin + 0x130);
+    count = *(s32*)((s32)pWin + 0x134);
+    windowDispGX_Waku_col(-250.0f, 180.0f, 500.0f, 320.0f, 20.0f, 0, &frame);
+    winIconInit();
+    scale.x = 1.0f;
+    scale.y = 1.0f;
+    scale.z = 1.0f;
+    for (i = 0; i < count && i < 8; i++) {
+        entry = page * 8 + i;
+        pos.x = -220.0f;
+        pos.y = 145.0f - 36.0f * i;
+        pos.z = 0.0f;
+        winIconSet(*(u16*)((s32)pWin + 0x200 + entry * 2), &pos, &scale, &white);
+    }
+    winFontInit();
+    scale.x = 0.8f;
+    scale.y = 0.8f;
+    for (i = 0; i < count && i < 8; i++) {
+        entry = page * 8 + i;
+        text = msgSearch(*(char**)((s32)pWin + 0x300 + entry * 4));
+        pos.x = -178.0f;
+        pos.y = 142.0f - 36.0f * i;
+        pos.z = 0.0f;
+        winFontSet(&pos, &scale, &white, text);
+    }
 }
 
+void winNameGX(double x, double y, double w, double h, void* pWin, s32 type) {
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
+    extern void GXSetBlendMode(s32, s32, s32, s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
+    extern void GXSetZMode(s32, s32, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevOp(s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void winTexInit(void* data);
+    extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
+    Vec3 pos;
+    Vec3 scale;
+    u32 white = 0xFFFFFFFF;
 
-u8 winNameGX(void) {
-    return 0;
+    GXSetBlendMode(0, 1, 0, 0);
+    GXSetZCompLoc(0);
+    GXSetAlphaCompare(6, 0x80, 1, 0, 0);
+    GXSetZMode(0, 7, 0);
+    GXSetNumChans(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, -1);
+    GXSetTevOp(0, 3);
+    GXSetCullMode(0);
+    winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
+    pos.x = (f32)x;
+    pos.y = (f32)y;
+    pos.z = 0.0f;
+    scale.x = (f32)w / 100.0f;
+    scale.y = (f32)h / 100.0f;
+    scale.z = 1.0f;
+    winTexSet(8 + type * 2, &pos, &scale, &white);
+    pos.x += (f32)w * 0.5f;
+    winTexSet(9 + type * 2, &pos, &scale, &white);
 }
 
+void winMsgDisp(double x, double y, void* pWin) {
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
+    extern void windowDispGX_Waku_col(f32, f32, f32, f32, f32, s32, void*);
+    extern void winTexInit(void*);
+    extern void winTexSet(s32, Vec3*, Vec3*, void*);
+    extern void winIconInit(void);
+    extern void winIconSet(s32, Vec3*, Vec3*, void*);
+    extern char* msgSearch(char*);
+    extern void winNameGX(f32, f32, f32, f32, void*, s32);
+    extern u16 FontGetMessageWidth(char*);
+    extern void winFontInit(void);
+    extern void winFontSet(Vec3*, Vec3*, void*, char*);
+    extern u8 itemDataTable[];
+    extern u32 dat_804231f8, dat_80423200;
+    f32 px = (f32)x - 250.0f;
+    f32 py = (f32)y + 40.0f;
+    u32 frameColor = dat_80423200;
+    u32 color = dat_804231f8;
+    Vec3 pos, scale;
+    s32 item = *(s32*)((s32)pWin + 0x138);
 
-u8 winMsgDisp(double x, double y, void* pWin) {
-    return 0;
+    windowDispGX_Waku_col(px, py, 500.0f, 80.0f, 20.0f, 0, &frameColor);
+    if (item > 0) {
+        void* file = *(void**)((s32)pWin + 0x28);
+        winTexInit(**(void***)((s32)file + 0xA0));
+        pos.x = px; pos.y = py; pos.z = 0.0f;
+        scale.x = 1.0f; scale.y = 1.0f; scale.z = 1.0f;
+        winTexSet(0x25, &pos, &scale, &color);
+        winIconInit();
+        pos.x = px; pos.y = py;
+        winIconSet(*(s16*)(itemDataTable + item * 0x28), &pos, &scale, &color);
+    }
+    if (*(char**)((s32)pWin + 0x140) != 0) {
+        char* msg = msgSearch(*(char**)((s32)pWin + 0x140));
+        f32 width = (f32)FontGetMessageWidth(msg);
+        f32 offset = item == -2 ? -130.0f : 0.0f;
+        f32 nameY = (f32)y + 56.0f;
+        winNameGX((f32)x - 120.0f + offset, nameY, 240.0f, 32.0f, pWin, 1);
+        if (width > 210.0f) width = 210.0f;
+        winFontInit();
+        pos.x = (f32)x - 120.0f + offset + (240.0f - width) * 0.5f;
+        pos.y = nameY - 4.0f; pos.z = 0.0f;
+        scale.x = 1.0f; scale.y = 1.0f; scale.z = 1.0f;
+        winFontSet(&pos, &scale, &color, msg);
+    }
+    if (*(char**)((s32)pWin + 0x13C) != 0) {
+        char* body = msgSearch(*(char**)((s32)pWin + 0x13C));
+        winFontInit();
+        pos.x = px + 20.0f; pos.y = py - 20.0f; pos.z = 0.0f;
+        scale.x = 1.0f; scale.y = 1.0f; scale.z = 1.0f;
+        winFontSet(&pos, &scale, &color, body);
+    }
 }
 
-
-u8 winBgGX(void) {
-    return 0;
+void winBgGX(f32 x,f32 y,void* pWin,s32 type){
+    extern void GXSetTevColor(s32,void*);extern void GXSetBlendMode(s32,s32,s32,s32);extern void GXSetZCompLoc(s32);extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);extern void GXSetZMode(s32,s32,s32);extern void GXSetFog(s32,f32,f32,f32,f32,void*);extern void GXSetNumChans(s32);extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);extern void GXSetNumTevStages(s32);extern void GXSetTevOrder(s32,s32,s32,s32);extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevColorIn(s32,s32,s32,s32,s32);extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);extern void GXSetTevSwapMode(s32,s32,s32);
+    extern void PSMTXTrans(void*,f32,f32,f32);extern void PSMTXConcat(void*,void*,void*);extern void PSMTXScale(void*,f32,f32,f32);extern void* camGetPtr(s32);extern void GXLoadPosMtxImm(void*,s32);extern void GXLoadTexMtxImm(void*,s32,s32);extern void GXSetCurrentMtx(s32);extern void GXSetCullMode(s32);extern void GXClearVtxDesc(void);extern void GXSetVtxDesc(s32,s32);extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
+    extern void TEXGetGXTexObjFromPalette(void*,void*,s32);extern void GXInitTexObjLOD(void*,s32,s32,f32,f32,f32,s32,s32,s32);extern void GXLoadTexObj(void*,s32);extern void GXSetNumTexGens(s32);extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);extern s32 GXGetTexObjHeight(void*);extern s32 GXGetTexObjWidth(void*);extern void GXBegin(s32,s32,s32);extern volatile f32 DAT_cc008000;
+    extern u32 dat_804231b8,dat_804231bc,dat_804231c0,dat_804231c4,dat_804231c8,dat_804231cc,dat_804231d0,dat_804231d4,dat_804231d8,dat_804231dc,dat_804231e0,dat_804231e4,dat_804231e8,dat_804231ec,dat_804231f0,dat_804231f4;
+    u32 colors[3],texObj[8];f32 mtx[3][4];void* cam;void* file;void* tpl;f32 w,h;
+    if(type==0){colors[0]=dat_804231b8;colors[1]=dat_804231bc;colors[2]=dat_804231c0;}else if(type==1){colors[0]=dat_804231c4;colors[1]=dat_804231c8;colors[2]=dat_804231cc;}else if(type==2){colors[0]=dat_804231d0;colors[1]=dat_804231d4;colors[2]=dat_804231d8;}else if(type==3){colors[0]=dat_804231dc;colors[1]=dat_804231e0;colors[2]=dat_804231e4;}else{colors[0]=dat_804231e8;colors[1]=dat_804231ec;colors[2]=dat_804231f0;}
+    GXSetTevColor(1,&colors[0]);GXSetTevColor(2,&colors[1]);GXSetTevColor(3,&colors[2]);GXSetBlendMode(0,1,0,0);GXSetZCompLoc(0);GXSetAlphaCompare(6,0x80,1,0,0);GXSetZMode(0,7,0);GXSetFog(0,0.0f,0.0f,0.0f,0.0f,&dat_804231f4);GXSetNumChans(0);GXSetChanCtrl(4,0,0,0,0,0,2);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,15,15,15,2);GXSetTevAlphaIn(0,7,7,7,4);GXSetTevSwapMode(0,0,0);
+    PSMTXTrans(mtx,x,y+18.0f,0.0f);cam=camGetPtr(1);PSMTXConcat((void*)((s32)cam+0x30),mtx,mtx);GXLoadPosMtxImm(mtx,0);GXSetCurrentMtx(0);GXSetCullMode(0);GXClearVtxDesc();GXSetVtxDesc(9,1);GXSetVtxDesc(13,1);GXSetVtxAttrFmt(0,9,1,4,0);GXSetVtxAttrFmt(0,13,1,4,0);
+    file=*(void**)((s32)pWin+0x28);tpl=**(void***)((s32)file+0xA0);TEXGetGXTexObjFromPalette(tpl,texObj,7);GXInitTexObjLOD(texObj,0,0,0.0f,0.0f,0.0f,0,0,0);GXLoadTexObj(texObj,0);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);h=(f32)GXGetTexObjHeight(texObj);w=(f32)GXGetTexObjWidth(texObj);PSMTXScale(mtx,570.0f/w,320.0f/h,1.0f);GXLoadTexMtxImm(mtx,0x1E,1);
+    GXBegin(0x80,0,4);DAT_cc008000=-285.0f;DAT_cc008000=160.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=-285.0f;DAT_cc008000=-160.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=0.0f;DAT_cc008000=-160.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=1.0f;DAT_cc008000=0.0f;DAT_cc008000=160.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=0.0f;
 }
 
+void winKageGX(f32 x, f32 y, f32 z, f32 scale, void* pWin, u32* colorPtr) {
+    extern void GXSetFog(s32 type, f32 startz, f32 endz, f32 nearz, f32 farz, void* color);
+    extern void GXSetBlendMode(s32 type, s32 src, s32 dst, s32 op);
+    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+    extern void GXSetZMode(s32 enable, s32 func, s32 update);
+    extern void GXSetNumChans(s32 nChans);
+    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
+    extern void GXSetNumTevStages(s32 nStages);
+    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 color);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevSwapMode(s32 stage, s32 rasSel, s32 texSel);
+    extern void GXSetNumTexGens(s32 nGens);
+    extern void GXSetTexCoordGen2(s32 dstCoord, s32 func, s32 srcParam, s32 mtx, s32 normalize, s32 postMtx);
+    extern void TEXGetGXTexObjFromPalette(void* tpl, void* texObj, s32 id);
+    extern void GXInitTexObjLOD(void* texObj, s32 minFilt, s32 magFilt, f32 minLod, f32 maxLod, f32 lodBias,
+                                s32 biasClamp, s32 doEdgeLod, s32 maxAniso);
+    extern void GXLoadTexObj(void* texObj, s32 mapId);
+    extern void GXSetTevColor(s32 reg, void* color);
+    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+    extern s32 GXGetTexObjHeight(void* texObj);
+    extern s32 GXGetTexObjWidth(void* texObj);
+    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(void* mtx, s32 axis, f32 angle);
+    extern void PSMTXConcat(void* a, void* b, void* out);
+    extern void* camGetPtr(s32 id);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void GXSetCurrentMtx(s32 id);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxFmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+    extern void GXBegin(s32 prim, s32 vtxFmt, s32 nVerts);
+    extern volatile f32 DAT_cc008000;
+    extern u32 dat_804232e4;
+    extern f32 float_0_80423338;
+    extern f32 float_1_80423340;
+    extern f32 float_0p5_8042333c;
+    extern f32 float_2_80423360;
+    extern f32 float_neg1p3963_804233b0;
+    extern f32 float_neg0p5_804233b4;
 
-u8 winKageGX(void) {
-    return 0;
+    u32 fogColor = dat_804232e4;
+    u32 color = *colorPtr;
+    u32 texObj[8];
+    f32 transMtx[3][4];
+    f32 scaleMtx[3][4];
+    f32 rotMtx[3][4];
+    f32 modelMtx[3][4];
+    f32 texH;
+    f32 texW;
+    void* cam;
+
+    GXSetFog(0, float_0_80423338, float_0_80423338, float_0_80423338, float_0_80423338, &fogColor);
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(0, 7, 0);
+    GXSetNumChans(0);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 2, 8, 0xF);
+    GXSetTevAlphaIn(0, 7, 1, 4, 7);
+    GXSetTevSwapMode(0, 0, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+
+    TEXGetGXTexObjFromPalette(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0), texObj, 0x7A);
+    GXInitTexObjLOD(texObj, 1, 1, float_0_80423338, float_0_80423338, float_0_80423338, 0, 0, 0);
+    GXLoadTexObj(texObj, 0);
+    GXSetTevColor(1, &color);
+
+    PSMTXTrans(transMtx, x, y, z);
+    texH = float_2_80423360 * (f32)(u16)GXGetTexObjHeight(texObj);
+    texW = float_2_80423360 * (f32)(u16)GXGetTexObjWidth(texObj);
+    PSMTXScale(scaleMtx, scale * texW, scale * texH, float_1_80423340);
+    PSMTXRotRad(rotMtx, 0x78, float_neg1p3963_804233b0);
+    PSMTXConcat(transMtx, rotMtx, modelMtx);
+    PSMTXConcat(modelMtx, scaleMtx, modelMtx);
+    cam = camGetPtr(8);
+    PSMTXConcat((void*)((s32)cam + 0x11C), modelMtx, modelMtx);
+    GXLoadPosMtxImm(modelMtx, 0);
+    GXSetCurrentMtx(0);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+    GXBegin(0x80, 0, 4);
+
+    DAT_cc008000 = float_neg0p5_804233b4;
+    DAT_cc008000 = float_0p5_8042333c;
+    DAT_cc008000 = float_0_80423338;
+    DAT_cc008000 = float_0_80423338;
+    DAT_cc008000 = float_0_80423338;
+    DAT_cc008000 = float_neg0p5_804233b4;
+    DAT_cc008000 = float_neg0p5_804233b4;
+    DAT_cc008000 = float_0_80423338;
+    DAT_cc008000 = float_0_80423338;
+    DAT_cc008000 = float_1_80423340;
+    DAT_cc008000 = float_0p5_8042333c;
+    DAT_cc008000 = float_neg0p5_804233b4;
+    DAT_cc008000 = float_0_80423338;
+    DAT_cc008000 = float_1_80423340;
+    DAT_cc008000 = float_1_80423340;
+    DAT_cc008000 = float_0p5_8042333c;
+    DAT_cc008000 = float_0p5_8042333c;
+    DAT_cc008000 = float_0_80423338;
+    DAT_cc008000 = float_1_80423340;
+    DAT_cc008000 = float_0_80423338;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void winBgMain(void* pWin) {
+    extern f32 intplGetValue(f32 start, f32 end, s32 type, s32 time, s32 duration);
+    extern void* gp;
+    extern f32 float_0_80423338;
+    extern f32 float_800_804234a4;
+    extern f32 float_640_804234a8;
+    extern f32 float_neg640_804234ac;
 
-u8 winBgMain(void* pWin) {
-    return 0;
+    s32 i = 0;
+    s32 state;
+    s32 timer;
+    s32 duration;
+    void* entry = pWin;
+
+    do {
+        state = *(s32*)((s32)entry + 0xCC);
+        switch (state) {
+            case 0:
+                *(f32*)((s32)entry + 0xC4) = float_800_804234a4;
+                *(f32*)((s32)entry + 0xC8) = float_0_80423338;
+                *(s32*)((s32)entry + 0xD0) = 0;
+                *(s32*)((s32)entry + 0xCC) = state + 1;
+                break;
+            case 1:
+                timer = *(s32*)((s32)entry + 0xD0);
+                *(s32*)((s32)entry + 0xD0) = timer + 1;
+                duration = (*(s32*)((s32)gp + 4) << 4) / 60;
+                *(f32*)((s32)entry + 0xC4) =
+                    intplGetValue(float_800_804234a4, float_0_80423338, 0xB, timer, duration);
+                duration = (*(s32*)((s32)gp + 4) << 4) / 60;
+                if (*(s32*)((s32)entry + 0xD0) > duration) {
+                    *(s32*)((s32)entry + 0xCC) = 100;
+                }
+                break;
+            case 10:
+                *(f32*)((s32)entry + 0xC8) = float_0_80423338;
+                *(s32*)((s32)entry + 0xD0) = 0;
+                *(s32*)((s32)entry + 0xCC) = state + 1;
+                break;
+            case 11:
+                timer = *(s32*)((s32)entry + 0xD0);
+                *(s32*)((s32)entry + 0xD0) = timer + 1;
+                duration = (*(s32*)((s32)gp + 4) << 4) / 60;
+                *(f32*)((s32)entry + 0xC4) =
+                    intplGetValue(float_0_80423338, float_800_804234a4, 0xB, timer, duration);
+                duration = (*(s32*)((s32)gp + 4) << 4) / 60;
+                if (*(s32*)((s32)entry + 0xD0) > duration) {
+                    *(s32*)((s32)entry + 0xCC) = -1;
+                }
+                break;
+            case 20:
+                *(f32*)((s32)entry + 0xC8) = float_0_80423338;
+                *(s32*)((s32)entry + 0xD0) = 0;
+                *(s32*)((s32)entry + 0xCC) = state + 1;
+                break;
+            case 21:
+                timer = *(s32*)((s32)entry + 0xD0);
+                *(s32*)((s32)entry + 0xD0) = timer + 1;
+                duration = (*(s32*)((s32)gp + 4) * 0x18) / 60;
+                *(f32*)((s32)entry + 0xC4) =
+                    intplGetValue(float_640_804234a8, float_0_80423338, 0xB, timer, duration);
+                duration = (*(s32*)((s32)gp + 4) * 0x18) / 60;
+                if (*(s32*)((s32)entry + 0xD0) > duration) {
+                    *(s32*)((s32)entry + 0xCC) = 100;
+                }
+                break;
+            case 30:
+                *(f32*)((s32)entry + 0xC8) = float_0_80423338;
+                *(s32*)((s32)entry + 0xD0) = 0;
+                *(s32*)((s32)entry + 0xCC) = state + 1;
+                break;
+            case 31:
+                timer = *(s32*)((s32)entry + 0xD0);
+                *(s32*)((s32)entry + 0xD0) = timer + 1;
+                duration = (*(s32*)((s32)gp + 4) * 0x18) / 60;
+                *(f32*)((s32)entry + 0xC4) =
+                    intplGetValue(float_neg640_804234ac, float_0_80423338, 0xB, timer, duration);
+                duration = (*(s32*)((s32)gp + 4) * 0x18) / 60;
+                if (*(s32*)((s32)entry + 0xD0) > duration) {
+                    *(s32*)((s32)entry + 0xCC) = 100;
+                }
+                break;
+            case 40:
+                *(f32*)((s32)entry + 0xC8) = float_0_80423338;
+                *(s32*)((s32)entry + 0xD0) = 0;
+                *(s32*)((s32)entry + 0xCC) = state + 1;
+                break;
+            case 41:
+                timer = *(s32*)((s32)entry + 0xD0);
+                *(s32*)((s32)entry + 0xD0) = timer + 1;
+                duration = (*(s32*)((s32)gp + 4) * 0x18) / 60;
+                *(f32*)((s32)entry + 0xC4) =
+                    intplGetValue(float_0_80423338, float_neg640_804234ac, 0xB, timer, duration);
+                duration = (*(s32*)((s32)gp + 4) * 0x18) / 60;
+                if (*(s32*)((s32)entry + 0xD0) > duration) {
+                    *(s32*)((s32)entry + 0xCC) = -1;
+                }
+                break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x14);
+    } while (i < 5);
 }
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void winRootDisp(s32 cameraId, void* pWin) {
+    extern void winMarioDisp(s32 cameraId, void* win, s32 index);
+    extern void winPartyDisp(s32 cameraId, void* win, s32 index);
+    extern void winItemDisp(s32 cameraId, void* win, s32 index);
+    extern void winBadgeDisp(s32 cameraId, void* win, s32 index);
+    extern void winLogDisp(s32 cameraId, void* win, s32 index);
+    extern void winTexInit_x2(void* fileData);
+    extern void winTexSet_x2(s32 texId0, s32 texId1, void* pos, void* size, void* color);
+    extern void winMailDisp(void* win);
+    extern void winMsgDisp(f32 x, f32 y, void* win);
+    extern void winSortGX(void* win);
+    extern void winTexInit(void* fileData);
+    extern void winTexSet(s32 texId, void* pos, void* size, void* color);
+    extern char str_msg_menu_mario_802f47d8[];
+    extern u32 dat_804231a8;
+    extern u32 dat_804231ac;
+    extern u32 dat_804231b0;
+    extern u32 dat_804231b4;
+    extern f32 float_2_80423360;
 
-void winRootDisp(s32 cameraId, void* work) {
-    ;
+    char* base = str_msg_menu_mario_802f47d8;
+    u32 color;
+    u32 pos[3];
+    u32 size[3];
+    s32 i;
+    void* body;
+    void* header;
+    void* fileData;
+    s32 type;
+    s32 state;
+
+    color = dat_804231a8;
+    if (*(s32*)((s32)pWin + 0x24) == 0) {
+        return;
+    }
+
+    for (i = 4; i >= 0; i--) {
+        body = (void*)((s32)pWin + 0xC0 + i * 0x14);
+        state = *(s32*)((s32)body + 0xC);
+        if (state != -1 &&
+            (i <= 0 || *(s32*)((s32)body - 8) != 100) &&
+            (i <= 0 || (u32)(state - 10) > 1)) {
+            type = *(s32*)body;
+            switch (type) {
+                case 0:
+                    winMarioDisp(cameraId, pWin, i);
+                    break;
+                case 1:
+                    winPartyDisp(cameraId, pWin, i);
+                    break;
+                case 2:
+                    winItemDisp(cameraId, pWin, i);
+                    break;
+                case 3:
+                    winBadgeDisp(cameraId, pWin, i);
+                    break;
+                case 4:
+                    winLogDisp(cameraId, pWin, i);
+                    break;
+            }
+        }
+    }
+
+    header = (void*)((s32)pWin + 0x48);
+    for (i = 0; i < *(s32*)((s32)pWin + 0x44); i++) {
+        if (*(s32*)((s32)pWin + 0x40) == i) {
+            color = dat_804231b0;
+        } else {
+            color = dat_804231b4;
+        }
+
+        fileData = **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0);
+        winTexInit_x2(fileData);
+
+        size[0] = *(u32*)(base + 0x90);
+        size[1] = *(u32*)(base + 0x94);
+        size[2] = *(u32*)(base + 0x98);
+        pos[0] = *(u32*)(base + 0x84);
+        pos[1] = *(u32*)(base + 0x88);
+        pos[2] = *(u32*)(base + 0x8C);
+        *(f32*)&pos[0] = *(f32*)((s32)header + 4);
+        *(f32*)&pos[1] = *(f32*)((s32)header + 8);
+        winTexSet_x2(*(s32*)header + 1, 0xB2, pos, size, &color);
+        header = (void*)((s32)header + 0x18);
+    }
+
+    winMailDisp(pWin);
+    winMsgDisp(*(f32*)((s32)pWin + 0x128), *(f32*)((s32)pWin + 0x12C), pWin);
+    winSortGX(pWin);
+
+    if ((*(u16*)pWin & 0x8000) == 0) {
+        fileData = **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0);
+        winTexInit(fileData);
+
+        color = dat_804231ac;
+        size[0] = *(u32*)(base + 0x60);
+        size[1] = *(u32*)(base + 0x64);
+        size[2] = *(u32*)(base + 0x68);
+        pos[0] = *(u32*)(base + 0x54);
+        pos[1] = *(u32*)(base + 0x58);
+        pos[2] = *(u32*)(base + 0x5C);
+        *(f32*)&pos[0] = *(f32*)((s32)pWin + 0x150) + float_2_80423360;
+        *(f32*)&pos[1] = *(f32*)((s32)pWin + 0x154) - float_2_80423360;
+        winTexSet(0, pos, size, &color);
+
+        color = dat_804231a8;
+        size[0] = *(u32*)(base + 0x78);
+        size[1] = *(u32*)(base + 0x7C);
+        size[2] = *(u32*)(base + 0x80);
+        pos[0] = *(u32*)(base + 0x6C);
+        pos[1] = *(u32*)(base + 0x70);
+        pos[2] = *(u32*)(base + 0x74);
+        *(f32*)&pos[0] = *(f32*)((s32)pWin + 0x150);
+        *(f32*)&pos[1] = *(f32*)((s32)pWin + 0x154);
+        winTexSet(0, pos, size, &color);
+    }
 }
-
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
 u8 winSortMain(void* pWin) {
     extern void psndSFXOn(s32 soundId);
@@ -1216,8 +1883,34 @@ s32 N_compare_func4_2(void* param_1, void* param_2) {
     return 0;
 }
 
-u8 winHalfBookGX(double x, double y, void* file, int param_4) {
-    return 0;
+void winHalfBookGX(double x, double y, void* file, s32 side) {
+    extern void winTexInit(void* data);
+    extern void winTexSet(s32 id, void* pos, void* scale, void* color);
+    f32 pos[3];
+    f32 scale[3];
+    u32 white = 0xFFFFFFFF;
+    u32 shade = 0xB0B0B0FF;
+    s32 row;
+    s32 column;
+
+    winTexInit(*(void**)file);
+    pos[2] = 0.0f;
+    scale[0] = 1.0f;
+    scale[1] = 1.0f;
+    scale[2] = 1.0f;
+    for (row = 0; row < 4; row++) {
+        for (column = 0; column < 4; column++) {
+            pos[0] = (f32)x + column * 56.0f;
+            pos[1] = (f32)y - row * 56.0f;
+            winTexSet(0x80 + row * 4 + column, pos, scale,
+                      side == 0 ? &white : &shade);
+        }
+    }
+    pos[0] = (f32)x + (side == 0 ? 0.0f : 168.0f);
+    pos[1] = (f32)y + 12.0f;
+    scale[0] = 1.5f;
+    scale[1] = 1.5f;
+    winTexSet(0x90 + side, pos, scale, &white);
 }
 
 void unk_80152e80(s32 cameraId, void* win) {

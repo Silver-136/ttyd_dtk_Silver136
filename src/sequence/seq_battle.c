@@ -7,9 +7,182 @@ void seq_battleExit(void) {
 
 
 u8 seq_battleMain(int param_1) {
+    extern void fadeEntry(s32, s32, void*);
+    extern s32 getMarioStDvdRoot(void);
+    extern u32 fileAsyncf(s32, s32, char*, s32, char*, ...);
+    extern u32 fadeIsFinish(void);
+    extern void* pouchGetPtr(void);
+    extern void* fbatGetPointer(void);
+    extern void* marioGetPtr(void);
+    extern void marioCtrlOff(void);
+    extern void partyCtrlOff(void);
+    extern void padRumbleOff(s32);
+    extern void bmapLoad(char*, char*);
+    extern s32 battle_init(void);
+    extern u32 battleSeqEndCheck(void);
+    extern void* camGetPtr(s32);
+    extern void psndSetPosDirListener(void*, f32);
+    extern void seqSetSeq(s32, s32, s32);
+    extern void* gp;
+    extern void* _battleWorkPointer;
+    extern s32 debug_battle_flag;
+    extern u32 dat_804203b0;
+    extern u32 dat_804203b4;
+    extern char str_PCTs_PCTs_804203bc[];
+    extern char str_battle_audience_audi_802c2ae4[];
+    extern char str_battle_audience_audi_802c2b08[];
+    extern char str_bti_01_802c2ac4[];
+    extern char str_bti_02_802c2acc[];
+    extern char str_bti_03_802c2ad4[];
+    extern char str_bti_04_802c2adc[];
+    extern const f32 float_0_804203c4;
+    extern const f32 float_400_804203c8;
+    extern const f32 float_200_804203cc;
+    u32 color;
+    void* fbat;
+    void* pouch;
+    void* stageInfo;
+    void* cam;
+    f32 listener[3];
+    s32 keepWaiting;
+    s32 type;
+    s16 rank;
+
+    switch (*(s32*)(param_1 + 4)) {
+        case 0:
+            color = dat_804203b0;
+            fadeEntry(0x16, 1000, &color);
+            *(s32*)(param_1 + 4) += 1;
+            *(s32*)(param_1 + 0x10) = 0;
+            break;
+        case 1:
+            if (fileAsyncf(4, 0, str_PCTs_PCTs_804203bc, getMarioStDvdRoot(),
+                           str_battle_audience_audi_802c2ae4) != 0) {
+                if (fileAsyncf(4, 0, str_PCTs_PCTs_804203bc, getMarioStDvdRoot(),
+                               str_battle_audience_audi_802c2b08) != 0) {
+                    *(s32*)(param_1 + 0x10) += 1;
+                    if (fadeIsFinish() != 0) {
+                        *(s32*)(param_1 + 4) += 1;
+                    }
+                }
+            }
+            break;
+        case 2:
+            pouchGetPtr();
+            fbat = fbatGetPointer();
+            type = *(s32*)((s32)fbat + 0x10);
+            if (type == 0x01000000 || type == 0x00800000) {
+                if (debug_battle_flag == 0) {
+                    *(u32*)marioGetPtr() &= ~1;
+                }
+            } else if (debug_battle_flag == 0) {
+                marioCtrlOff();
+                partyCtrlOff();
+                *(u32*)marioGetPtr() &= ~1;
+                padRumbleOff(0);
+            }
+            fbat = fbatGetPointer();
+            *(s32*)((s32)fbat + 0x570) = 0;
+            *(s32*)(param_1 + 4) += 1;
+        case 3:
+            fbat = fbatGetPointer();
+            stageInfo = *(void**)(*(s32*)(*(s32*)((s32)fbat + 8) + 0x230) + 4);
+            pouch = pouchGetPtr();
+            keepWaiting = 0;
+            if (*(s32*)((s32)fbat + 0x550) != 0) {
+                keepWaiting = 1;
+                if (*(s32*)((s32)fbat + 0x558) >= 1 && *(s32*)((s32)fbat + 0x558) < 3 &&
+                    *(s32*)((s32)fbat + 0x554) != 0) {
+                    keepWaiting = 0;
+                }
+                if (keepWaiting == 0) {
+                    *(s32*)((s32)fbat + 0x570) += 1;
+                    if (*(s32*)((s32)fbat + 0x570) < 200) {
+                        keepWaiting = 1;
+                    }
+                }
+            }
+            if (keepWaiting == 0) {
+                rank = *(s16*)((s32)pouch + 0x88);
+                if (rank == 0) {
+                    bmapLoad(str_bti_01_802c2ac4, stageInfo);
+                } else if (rank == 1) {
+                    bmapLoad(str_bti_02_802c2acc, stageInfo);
+                } else if (rank == 2) {
+                    bmapLoad(str_bti_03_802c2ad4, stageInfo);
+                } else {
+                    bmapLoad(str_bti_04_802c2adc, stageInfo);
+                }
+                *(s32*)(param_1 + 4) += 1;
+                if (battle_init() == 0) {
+                    *(s32*)(param_1 + 4) += 1;
+                    if (battleSeqEndCheck() != 0) {
+                        *(s32*)(param_1 + 0x10) = 0;
+                        *(s32*)(param_1 + 4) += 1;
+                        if (*(s32*)((s32)gp + 0xC) != 0) {
+                            *(s32*)(param_1 + 4) = 0xB;
+                        }
+                    }
+                    marioGetPtr();
+                    camGetPtr(4);
+                    listener[0] = float_0_804203c4;
+                    listener[1] = float_0_804203c4;
+                    listener[2] = float_400_804203c8;
+                    if ((*(u32*)((s32)_battleWorkPointer + 0xEF4) & 0x100) != 0) {
+                        listener[2] = float_400_804203c8 + float_200_804203cc;
+                    }
+                    cam = camGetPtr(4);
+                    psndSetPosDirListener(listener, *(f32*)((s32)cam + 0x114));
+                }
+            }
+            break;
+        case 4:
+            if (battle_init() == 0) {
+                *(s32*)(param_1 + 4) += 1;
+            }
+        case 5:
+            if (battleSeqEndCheck() != 0) {
+                *(s32*)(param_1 + 0x10) = 0;
+                *(s32*)(param_1 + 4) += 1;
+                if (*(s32*)((s32)gp + 0xC) != 0) {
+                    *(s32*)(param_1 + 4) = 0xB;
+                }
+            }
+            marioGetPtr();
+            camGetPtr(4);
+            listener[0] = float_0_804203c4;
+            listener[1] = float_0_804203c4;
+            listener[2] = float_400_804203c8;
+            if ((*(u32*)((s32)_battleWorkPointer + 0xEF4) & 0x100) != 0) {
+                listener[2] = float_400_804203c8 + float_200_804203cc;
+            }
+            cam = camGetPtr(4);
+            psndSetPosDirListener(listener, *(f32*)((s32)cam + 0x114));
+            break;
+        case 6:
+            *(s32*)(param_1 + 0x10) += 1;
+            if (*(s32*)(param_1 + 0x10) > 30) {
+                if ((*(u32*)gp & 0x1000) != 0 && (*(u32*)gp & 0x2000) != 0) {
+                    seqSetSeq(5, 1, 0);
+                } else {
+                    seqSetSeq(2, 1, 0);
+                }
+            }
+            break;
+        case 10:
+            color = dat_804203b4;
+            fadeEntry(0x16, 200, &color);
+            *(s32*)(param_1 + 4) += 1;
+            break;
+        case 11:
+            if (fadeIsFinish() != 0) {
+                *(s32*)((s32)gp + 0xC) = 0;
+                seqSetSeq(5, 1, 0);
+            }
+            break;
+    }
     return 0;
 }
-
 
 s32 battle_init(void) {
     return 0;

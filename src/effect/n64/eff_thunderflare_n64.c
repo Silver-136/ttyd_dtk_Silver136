@@ -6,10 +6,22 @@ u8 effThunderflareMain(void) {
 }
 
 
-u8 effThunderflareDisp(void) {
-    return 0;
+void effThunderflareDisp(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXRotRad(void*, s32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void GXSetNumChans(s32); extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32);
+    extern void GXSetCullMode(s32); extern void effGetTexObjN64(s32,void*); extern void GXLoadTexObj(void*,s32);
+    extern void GXLoadPosMtxImm(void*,s32); extern void GXSetCurrentMtx(s32); extern void effSetVtxDescN64(void*);
+    extern void GXBegin(s32,s32,s32); extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);
+    u8* work=*(u8**)((s32)effect+0xC); f32 base[3][4],rot[3][4],mtx[3][4],scale[3][4]; u8 tex[0x20]; s32 i;
+    PSMTXTrans(base,*(f32*)(work+8),*(f32*)(work+0xC),*(f32*)(work+0x10));
+    PSMTXRotRad(rot,0x79,-0.017453292f**(f32*)((s32)camGetPtr(4)+0x114)); PSMTXConcat(base,rot,base); PSMTXConcat((u8*)camGetPtr(cameraId)+0x11C,base,base);
+    GXSetNumChans(0); GXSetNumTevStages(2); GXSetTevOrder(0,0,0,0xFF); GXSetTevOrder(1,0xFF,0xFF,0xFF); GXSetCullMode(0); effGetTexObjN64(0x89,tex); GXLoadTexObj(tex,0);
+    for(i=1;i<*(s32*)((s32)effect+8);i++){u8* part=work+0x48+(i-1)*0x90; PSMTXTrans(mtx,*(f32*)(part+0x40),*(f32*)(part+0x44),*(f32*)(part+0x48)); PSMTXScale(scale,*(f32*)(part+0x70),*(f32*)(part+0x70),*(f32*)(part+0x70)); PSMTXConcat(mtx,scale,mtx); PSMTXConcat(base,mtx,mtx); GXLoadPosMtxImm(mtx,0); GXSetCurrentMtx(0); effSetVtxDescN64((void*)0x803AB8E0); GXBegin(0x90,0,6); tri2(0,1,2,0,0,2,3,0);}
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

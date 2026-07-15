@@ -1,10 +1,105 @@
 #include "effect/n64/eff_timestamp_n64.h"
 
 
-u8 effTimestampDisp(void) {
-    return 0;
+void effTimestampDisp(s32 cameraId, void* effect)  {
+    extern void* camGetPtr(s32);
+    extern void PSMTXTrans(void*,f32,f32,f32);
+    extern void PSMTXRotRad(void*,s32,f32);
+    extern void PSMTXScale(void*,f32,f32,f32);
+    extern void PSMTXConcat(void*,void*,void*);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32,s32,s32,s32);
+    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevColorIn(s32,s32,s32,s32,s32);
+    extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
+    extern void GXSetTevColor(s32,void*);
+    extern void effGetTexObjN64(s32,void*);
+    extern void GXLoadTexObj(void*,s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+    extern void GXLoadTexMtxImm(void*,s32,s32);
+    extern void GXSetCullMode(s32);
+    extern void GXLoadPosMtxImm(void*,s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void effSetVtxDescN64(void*);
+    extern void GXBegin(s32,s32,s32);
+    extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);
+    extern void* smartAlloc(s32,s32);
+    extern void DCFlushRange(void*,s32);
+    extern void GXInvalidateVtxCache(void);
+    extern f64 sin(f64);
+    u8* work=*(u8**)((s32)effect+0xC);
+    void* cam=camGetPtr(cameraId);
+    f32 base[3][4],m[3][4],r[3][4],s[3][4];
+    u8 texObj[0x20];
+    s16* v;
+    u32 color;
+    s32 i,j;
+    f32 wave;
+    PSMTXTrans(base,*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC));
+    PSMTXScale(s,*(f32*)(work+0x28),*(f32*)(work+0x28),*(f32*)(work+0x28));
+    PSMTXConcat(base,s,base);
+    PSMTXRotRad(r,0x79,0.017453292f*-*(f32*)((u8*)camGetPtr(4)+0x114));
+    PSMTXConcat(base,r,base);
+    PSMTXConcat((u8*)cam+0x11C,base,base);
+    GXSetNumChans(0);
+    GXSetNumTevStages(2);
+    GXSetTevOrder(0,0,0,4);
+    GXSetTevColorOp(0,0,0,0,1,0);
+    GXSetTevAlphaOp(0,0,0,0,1,0);
+    GXSetTevColorIn(0,2,12,8,0);
+    GXSetTevAlphaIn(0,0,0,0,7);
+    GXSetTevOrder(1,1,1,4);
+    GXSetTevColorOp(1,0,0,0,1,0);
+    GXSetTevAlphaOp(1,0,0,0,1,0);
+    GXSetTevColorIn(1,0,12,7,0);
+    GXSetTevAlphaIn(1,0,4,7,7);
+    effGetTexObjN64(0x5A,texObj);
+    GXLoadTexObj(texObj,0);
+    effGetTexObjN64(0x5B,texObj);
+    GXLoadTexObj(texObj,1);
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+    GXSetTexCoordGen2(1,1,4,0x1E,0,0x7D);
+    PSMTXScale(s,0.015625f,0.015625f,0.0f);
+    GXLoadTexMtxImm(s,0x1E,1);
+    color=0xFFFFFF00|(*(s32*)(work+0x2C)&0xFF);
+    GXSetTevColor(2,&color);
+    v=smartAlloc(0x1C0,3);
+    for(i=0;i<16;i++) {
+        wave=*(f32*)(work+0x30);
+        v[i*14]=(s16)(wave*500.0f*(f32)sin((6.2832f*(f32)(*(s32*)(work+0x14)*10+i*60))/360.0f))-0xC80;
+        v[i*14+1]=(s16)(wave*200.0f*(f32)sin((6.2832f*(f32)(*(s32*)(work+0x14)*10+i*6))/360.0f)+i*400-3000);
+        v[i*14+2]=0;
+        v[i*14+3]=0;
+        v[i*14+4]=(s16)(i*0x80);
+        v[i*14+7]=v[i*14]+0x1900;
+        v[i*14+8]=v[i*14+1];
+        v[i*14+9]=0;
+        v[i*14+10]=0x800;
+        v[i*14+11]=(s16)(i*0x80);
+    }
+    DCFlushRange(v,0x1C0);
+    GXInvalidateVtxCache();
+    GXSetCullMode(0);
+    effSetVtxDescN64(v);
+    for(i=0;i<10;i++) {
+        PSMTXTrans(m,*(f32*)(work+0x34+i*4),*(f32*)(work+0x5C+i*4),*(f32*)(work+0x84+i*4));
+        PSMTXScale(s,0.01f,0.01f,0.01f);
+        PSMTXConcat(m,s,m);
+        PSMTXConcat(base,m,m);
+        GXLoadPosMtxImm(m,0);
+        GXSetCurrentMtx(0);
+        color=0xFFFFFF00|((*(s32*)(work+0x24) * *(s32*)(work+0x124+i*4))/0xFF&0xFF);
+        GXSetTevColor(1,&color);
+        for(j=0;j<15;j++) {
+            GXBegin(0x90,0,6);
+            tri2(j*2,j*2+2,j*2+1,j*2,j*2+1,j*2+2,j*2+3,0);
+        }
+    }
 }
-
 
 void effTimestampMain(void* effect) {
     typedef struct Vec3 {

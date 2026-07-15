@@ -37,20 +37,378 @@ extern f32 float_1p5_80424580;
 extern f32 float_12_80424584;
 
 
-u8 BattleAudienceCtrlProcessKinopioWait(void) {
-    return 0;
+void BattleAudienceCtrlProcessKinopioWait(s32 audienceId, u8 front) {
+    extern char* BattleAudienceBaseGetPtr(void);
+    extern char* BattleAudienceGetPtr(s32);
+    extern void* pouchGetPtr(void);
+    extern void BattleAudience_SetAnim(s32, s32, s32);
+    extern s32 irand(s32);
+    extern void BattleAudience_ChangeStatus(s32, s32);
+    char* base = BattleAudienceBaseGetPtr();
+    char* member = BattleAudienceGetPtr(audienceId);
+    f32 ratio;
+    f32 period;
+    f32 amount;
+    f32 split;
+    s32 timer;
+
+    pouchGetPtr();
+    BattleAudience_SetAnim(audienceId, front == 1 ? 0 : 1, 0);
+    ratio = (*(f32*)(base + 0x1377C) + *(f32*)(base + 0x13780)) / *(f32*)(base + 0x13778);
+    if (ratio >= 0.75f) { period = 1.0f; amount = 1.0f; }
+    else if (ratio >= 0.5f) { period = 2.0f; amount = 0.5f; }
+    else if (ratio >= 0.25f) { period = 4.0f; amount = 0.25f; }
+    else { period = 4.0f; amount = 0.0f; }
+    timer = *(s32*)(member + 0x30);
+    switch (*(u8*)(member + 0x1B)) {
+        default:
+            if ((f32)timer >= 32.0f * period) {
+                *(f32*)(member + 0x64) = 1.0f;
+                timer = 0;
+            }
+            split = 15.0f * period;
+            if ((f32)timer > split) *(f32*)(member + 0x64) -= 0.0025f * amount;
+            else *(f32*)(member + 0x64) += 0.0025f * amount;
+            break;
+        case 1:
+            break;
+        case 2:
+            if ((f32)timer >= 36.0f * period) {
+                *(f32*)(member + 0x64) = 1.0f;
+                timer = 0;
+            }
+            if ((f32)timer > 17.0f * period) *(f32*)(member + 0x64) -= 0.00175f * amount;
+            else *(f32*)(member + 0x64) += 0.00175f * amount;
+            break;
+        case 3:
+            if ((f32)timer >= 22.0f * period) {
+                *(f32*)(member + 0x64) = 1.0f;
+                timer = 0;
+            }
+            if ((f32)timer > 10.0f * period) *(f32*)(member + 0x64) -= 0.00375f * amount;
+            else *(f32*)(member + 0x64) += 0.00375f * amount;
+            break;
+        case 4:
+            if ((f32)timer >= 64.0f * period) {
+                *(f32*)(member + 0x64) = 1.0f;
+                timer = 0;
+            }
+            if ((f32)timer > 31.0f * period) *(f32*)(member + 0x64) -= 0.00125f * amount;
+            else *(f32*)(member + 0x64) += 0.00125f * amount;
+            break;
+    }
+    *(s32*)(member + 0x30) = timer + 1;
+    if ((*(u32*)member & 0x60) == 0 && *(s16*)(member + 0x1C) == -1) {
+        timer = irand(360000);
+        if (timer < 10) BattleAudience_ChangeStatus(audienceId, 1);
+        else if (timer < 20) BattleAudience_ChangeStatus(audienceId, 2);
+        else if (timer < (s32)(10.0f * ratio)) BattleAudience_ChangeStatus(audienceId, 4);
+    }
 }
 
+void BattleAudienceCtrlProcessKinopioIntrude(s32 audienceId) {
+    extern void* BattleAudienceBaseGetPtr(void);
+    extern char* BattleAudienceGetPtr(s32);
+    extern char* pouchGetPtr(void);
+    extern void BattleAudience_SetAnim(s32, s32, s32);
+    extern s32 irand(s32);
+    extern f64 sqrt(f64);
+    extern s32 psndSFXOn(char*);
+    extern void psndSFXOff(s32);
+    extern void btl_camera_set_mode(s32, s32);
+    extern void btl_camera_set_moveto(f32, f32, f32, f32, f32, f32, s32, s32, s32);
+    extern void btl_camera_set_moveSpeedLv(s32, s32);
+    extern void BattleAudience_ChangeStatus(s32, s32);
+    extern char str_SFX_AUDIENCE_HEIHO_M_802f9618[];
+    extern s32 intrudeSound;
+    char* member;
+    char* pouch;
+    f32 dx;
+    f32 dz;
+    f32 length;
 
-u8 BattleAudienceCtrlProcessKinopioIntrude(void) {
-    return 0;
+    BattleAudienceBaseGetPtr();
+    member = BattleAudienceGetPtr(audienceId);
+    pouch = pouchGetPtr();
+    BattleAudience_SetAnim(audienceId, 7, 0);
+    switch (*(s32*)(member + 4)) {
+        case 0:
+            *(f32*)(member + 0xC) = irand(2) == 0 ? 1.0f : -1.0f;
+            if (*(s16*)(pouch + 0x88) == 0 || irand(2) == 0) {
+                *(s32*)(member + 4) = 3;
+            } else {
+                *(s32*)(member + 4) = 0x32;
+            }
+            break;
+        case 3:
+        case 0x32:
+            *(s32*)(member + 4) = *(s32*)(member + 4) == 3 ? 5 : 0x37;
+            dz = 110.0f - *(f32*)(member + 0x50);
+            dx = 25.0f * *(f32*)(member + 0xC) - *(f32*)(member + 0x48);
+            length = (f32)sqrt(dx * dx + dz * dz);
+            *(f32*)(member + 0x78) = 5.0f * dx / length;
+            *(f32*)(member + 0x7C) = 0.0f;
+            *(f32*)(member + 0x88) = 0.0f;
+            *(f32*)(member + 0x80) = 5.0f * dz / length;
+            intrudeSound = psndSFXOn(str_SFX_AUDIENCE_HEIHO_M_802f9618);
+        case 5:
+        case 0x37:
+            if (*(f32*)(member + 0x50) <= 110.0f) {
+                *(s32*)(member + 4) = *(s32*)(member + 4) == 5 ? 10 : 0x3C;
+                *(f32*)(member + 0x50) = 110.0f;
+                *(f32*)(member + 0x78) = 0.0f;
+                *(f32*)(member + 0x7C) = 10.0f;
+                *(f32*)(member + 0x88) = -0.7f;
+                *(f32*)(member + 0x80) = -1.5f;
+                psndSFXOff(intrudeSound);
+            }
+            break;
+        case 10:
+            if (*(f32*)(member + 0x7C) <= 0.0f && *(f32*)(member + 0x4C) <= 0.0f) {
+                *(s32*)(member + 4) = 0xF;
+                *(f32*)(member + 0x4C) = 0.0f;
+                *(f32*)(member + 0x7C) = 0.0f;
+                *(f32*)(member + 0x88) = 0.0f;
+                dz = -*(f32*)(member + 0x50);
+                dx = 300.0f * *(f32*)(member + 0xC) - *(f32*)(member + 0x48);
+                length = (f32)sqrt(dx * dx + dz * dz);
+                *(f32*)(member + 0x78) = 5.0f * dx / length;
+                *(f32*)(member + 0x80) = 5.0f * dz / length;
+                btl_camera_set_mode(0, 3);
+                btl_camera_set_moveto(698.0f * *(f32*)(member + 0xC), 100.0f, 0.0f, 0.0f, 60.0f, 0.0f, 0, 0x1E, 4);
+                intrudeSound = psndSFXOn(str_SFX_AUDIENCE_HEIHO_M_802f9618);
+            }
+            break;
+        case 0x10:
+        case 0x12:
+        case 0x13:
+            if (--*(s32*)(member + 8) < 1) {
+                if (*(s32*)(member + 4) == 0x10) {
+                    *(s32*)(member + 4) = 0x12;
+                    *(s32*)(member + 8) = 0x19;
+                    btl_camera_set_mode(0, 0);
+                    btl_camera_set_moveSpeedLv(0, 2);
+                    psndSFXOff(intrudeSound);
+                } else if (*(s32*)(member + 4) == 0x12) {
+                    *(s32*)(member + 4) = 0x13;
+                    *(s32*)(member + 8) = 0x3C;
+                    btl_camera_set_moveSpeedLv(0, 1);
+                } else {
+                    *(s32*)(member + 4) = 0x14;
+                    btl_camera_set_moveSpeedLv(0, 1);
+                }
+            }
+            break;
+        case 0x1E:
+        case 0x55:
+            BattleAudience_ChangeStatus(audienceId, 0xB);
+            break;
+        case 0x3C:
+            if (*(f32*)(member + 0x7C) <= 0.0f && *(f32*)(member + 0x4C) <= 0.0f) {
+                *(s32*)(member + 4) = 0x41;
+                *(s32*)(member + 8) = 0;
+                *(f32*)(member + 0x4C) = 0.0f;
+                *(f32*)(member + 0x78) = 0.0f;
+                *(f32*)(member + 0x7C) = 0.0f;
+                *(f32*)(member + 0x88) = 0.0f;
+                *(f32*)(member + 0x80) = 0.0f;
+                intrudeSound = psndSFXOn(str_SFX_AUDIENCE_HEIHO_M_802f9618);
+            }
+            break;
+        case 0x41:
+        case 0x42:
+        case 0x43:
+            *(s32*)(member + 8) += 1;
+            if (*(f32*)(member + 0xC) == 1.0f) *(f32*)(member + 0xE8) = 270.0f;
+            if (*(f32*)(member + 0xC) == -1.0f) *(f32*)(member + 0xE8) = 90.0f;
+            if (*(s32*)(member + 8) < 6) *(f32*)(member + 0x48) = -(5.0f * *(f32*)(member + 0xC) - *(f32*)(member + 0x48));
+            else if (*(s32*)(member + 8) < 11) *(f32*)(member + 0x48) += 5.0f * *(f32*)(member + 0xC);
+            if (*(s32*)(member + 8) == 10) {
+                *(s32*)(member + 4) = *(s32*)(member + 4) == 0x43 ? 0x46 : *(s32*)(member + 4) + 1;
+                *(s32*)(member + 8) = 0;
+            }
+            break;
+    }
 }
 
+u8 BattleAudienceCtrlProcessKinopioEat(int audienceId) {
+    extern void* BattleAudienceBaseGetPtr(void);
+    extern char* BattleAudienceGetPtr(s32);
+    extern char* BattleStageGetPtr(void);
+    extern s32 BattleAudienceDetectPakkunEatTarget(s32);
+    extern void BattleAudience_SetAnim(s32, s32, s32);
+    extern void BattleAudience_ChangeStatus(s32, s32);
+    extern void BattleAudienceSoundPakkunEat(s32);
+    extern u32 BattleAudience_GetExist(s32);
+    extern s32 irand(s32);
+    extern s32 rand(void);
+    extern void* memcpy(void*, void*, u32);
+    extern void BattleAudience_Delete(s32);
+    extern f32 float_270_804244e0;
+    extern f32 float_90_804244e4;
+    extern f32 float_0_804244e8;
+    extern f32 float_6_804244ec;
+    extern f32 float_neg60_804244f0;
+    extern f32 float_60_804244f4;
+    extern f32 float_1_804244f8;
+    extern f32 float_neg1_804244fc;
+    extern f32 float_neg100_80424500;
+    extern f32 float_0p1_80424504;
 
-u8 BattleAudienceCtrlProcessKinopioEat(int param_1) {
-    return 0;
+    void* base;
+    char* audience;
+    char* stage;
+    char* target;
+    s32 state;
+    s32 found;
+    s32 count;
+    s32 offset;
+    s32 i;
+    s32 targets[69];
+    f32 value;
+
+    base = BattleAudienceBaseGetPtr();
+    audience = BattleAudienceGetPtr(audienceId);
+    stage = BattleStageGetPtr();
+    state = *(s32*)(audience + 4);
+
+    if (state == 7) {
+        found = BattleAudienceDetectPakkunEatTarget(audienceId);
+        if (found == -1) {
+            count = 0;
+            offset = 0;
+            i = 0;
+            do {
+                if (((BattleAudience_GetExist(i) & 0xFF) == 0) &&
+                    ((*(u32*)BattleAudienceGetPtr(i) & 0x100) == 0) &&
+                    (BattleAudienceDetectPakkunEatTarget(i) != -1)) {
+                    *(s32*)((s32)targets + offset) = i;
+                    count++;
+                    offset += 4;
+                }
+                i++;
+            } while (i < 0x3C);
+            if (count < 1) {
+                if (i == 0x3C) {
+                    *(s32*)(audience + 4) = 99;
+                    *(s32*)(audience + 8) = 10;
+                }
+            } else {
+                *(s32*)(audience + 4) = 8;
+                *(s32*)(audience + 0x12C) = targets[irand(count)];
+            }
+        } else {
+            *(s32*)(audience + 4) = 99;
+            *(s32*)(audience + 8) = 10;
+        }
+    } else if (state < 7) {
+        if (state == 3) {
+            target = BattleAudienceGetPtr(*(s16*)(audience + 0xF0));
+            if (*(f32*)(audience + 0x48) < *(f32*)(target + 0x48)) {
+                *(f32*)(audience + 0x6C) += float_6_804244ec;
+            } else {
+                *(f32*)(audience + 0x6C) -= float_6_804244ec;
+            }
+            value = *(f32*)(audience + 0x6C);
+            if (value <= float_neg60_804244f0 || float_60_804244f4 <= value) {
+                (*(s32*)(audience + 4))++;
+            }
+        } else if (state < 3) {
+            if (state != 1) {
+                if (state > 0) {
+                    return 0;
+                }
+                if (state < 0) {
+                    return 0;
+                }
+                found = BattleAudienceDetectPakkunEatTarget(audienceId);
+                if (found == -1) {
+                    BattleAudience_ChangeStatus(audienceId, 0);
+                    return 0;
+                }
+                *(s16*)(audience + 0xF0) = found;
+                target = BattleAudienceGetPtr(*(s16*)(audience + 0xF0));
+                if (*(f32*)(audience + 0x48) < *(f32*)(target + 0x48)) {
+                    *(f32*)(audience + 0xE8) = float_90_804244e4;
+                } else {
+                    *(f32*)(audience + 0xE8) = float_270_804244e0;
+                }
+                BattleAudience_SetAnim(audienceId, 0, 0);
+                *(s32*)(audience + 8) = 0x1E;
+                (*(s32*)(audience + 4))++;
+            }
+            target = BattleAudienceGetPtr(*(s16*)(audience + 0xF0));
+            if (*(s32*)(audience + 8) > 0) {
+                (*(s32*)(audience + 8))--;
+            }
+            if (*(s32*)(audience + 8) < 1 && *(f32*)(target + 0xD0) == float_0_804244e8) {
+                BattleAudience_SetAnim(audienceId, 0x12, 0);
+                *(u32*)target |= 2;
+                *(s32*)(audience + 4) = 3;
+            }
+        } else if (state == 5) {
+            value = *(f32*)(audience + 0x6C);
+            if (value <= float_0_804244e8) {
+                *(f32*)(audience + 0x6C) = value + float_6_804244ec;
+                if (float_0_804244e8 <= *(f32*)(audience + 0x6C)) {
+                    *(s32*)(audience + 4) = 7;
+                }
+            } else {
+                *(f32*)(audience + 0x6C) = value - float_6_804244ec;
+                if (*(f32*)(audience + 0x6C) <= float_0_804244e8) {
+                    *(s32*)(audience + 4) = 7;
+                }
+            }
+        } else if (state < 5) {
+            target = BattleAudienceGetPtr(*(s16*)(audience + 0xF0));
+            *(u32*)target = 0;
+            *(f32*)((s32)base + 0x1377C) -= float_1_804244f8;
+            BattleAudienceSoundPakkunEat(audienceId);
+            (*(s32*)(audience + 4))++;
+        }
+    } else if (state == 0xB) {
+        value = *(f32*)(stage + 0x200);
+        if (value <= *(f32*)(audience + 0x4C)) {
+            *(f32*)(audience + 0xB8) = value;
+            *(f32*)(audience + 0x4C) = value;
+            *(f32*)(audience + 0x7C) = float_0_804244e8;
+            *(s32*)(audience + 4) = 99;
+            *(s32*)(audience + 8) = 10;
+            target = BattleAudienceGetPtr(*(s32*)(audience + 0x12C));
+            memcpy(target, audience, 0x134);
+            BattleAudience_Delete(audienceId);
+        }
+    } else if (state < 0xB) {
+        if (state == 9) {
+            if (*(f32*)(audience + 0x4C) <= float_neg100_80424500) {
+                i = *(s32*)(audience + 0x12C);
+                found = rand();
+                *(f32*)(audience + 0x48) = (f32)((i % 0x14) * 0x19 + (found * 10) / 0x7FFF - 0xEB);
+                *(f32*)(audience + 0xB4) = *(f32*)(audience + 0x48);
+                value = float_0p1_80424504 * (f32)(i % 0x14) + (f32)((i / 0x14) * 0x1E + 0x73);
+                *(f32*)(audience + 0xB8) = *(f32*)(stage + 0x200);
+                *(f32*)(audience + 0x50) = value;
+                *(f32*)(audience + 0xBC) = value;
+                (*(s32*)(audience + 4))++;
+            }
+        } else if (state < 9) {
+            *(f32*)(audience + 0x78) = float_0_804244e8;
+            *(f32*)(audience + 0x7C) = float_neg1_804244fc;
+            *(f32*)(audience + 0x80) = float_0_804244e8;
+            (*(s32*)(audience + 4))++;
+        } else {
+            *(f32*)(audience + 0x78) = float_0_804244e8;
+            *(f32*)(audience + 0x7C) = float_1_804244f8;
+            *(f32*)(audience + 0x80) = float_0_804244e8;
+            (*(s32*)(audience + 4))++;
+        }
+    } else if (state == 99) {
+        (*(s32*)(audience + 8))--;
+        if (*(s32*)(audience + 8) < 1) {
+            BattleAudience_ChangeStatus(audienceId, 0);
+        }
+    }
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

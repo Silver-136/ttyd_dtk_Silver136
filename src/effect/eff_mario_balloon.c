@@ -1,10 +1,48 @@
 #include "effect/eff_mario_balloon.h"
 
 
-u8 effMarioBalloonDisp(int param_1, int param_2) {
+u8 effMarioBalloonDisp(s32 cameraId, void* effect) {
+    extern void effGetTexObj(s32 id, void* obj);
+    extern void GXLoadTexObj(void* obj, s32 map);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetBlendMode(s32, s32, s32, s32);
+    extern void GXSetZMode(s32, s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXBegin(s32, s32, s32);
+    u8 tex[0x20];
+    volatile f32* fifo;
+    s32* work;
+    f32 width;
+
+    work = *(s32**)((s32)effect + 0xC);
+    if (work == 0) return 0;
+    fifo = (volatile f32*)0xCC008000;
+    width = 20.0f * (0.7f * (f32)work[5]);
+    GXSetNumChans(0);
+    GXSetNumTevStages(1);
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZMode(0, 3, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(10, 1);
+    GXSetVtxDesc(13, 1);
+    effGetTexObj(work[0] == 1 ? 0x11 : 0x10, tex);
+    GXLoadTexObj(tex, 0);
+    GXSetCullMode(0);
+    GXBegin(0x80, 0, 4);
+    fifo[0] = -width; fifo[0] = 32.0f; fifo[0] = 0.0f;
+    fifo[0] = 0.0f; fifo[0] = 0.0f; fifo[0] = 1.0f;
+    fifo[0] = width; fifo[0] = 32.0f; fifo[0] = 0.0f;
+    fifo[0] = 1.0f; fifo[0] = 0.0f; fifo[0] = 1.0f;
+    fifo[0] = width; fifo[0] = 0.0f; fifo[0] = 0.0f;
+    fifo[0] = 1.0f; fifo[0] = 1.0f; fifo[0] = 1.0f;
+    fifo[0] = -width; fifo[0] = 0.0f; fifo[0] = 0.0f;
+    fifo[0] = 0.0f; fifo[0] = 1.0f; fifo[0] = 1.0f;
     return 0;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

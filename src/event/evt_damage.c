@@ -17,10 +17,69 @@ extern f32 float_90_80422730;
 extern f32 float_270_80422734;
 
 
-u8 evt_gazigazi_move_position(void) {
-    return 0;
-}
+u8 evt_gazigazi_move_position(void* event, s32 isFirstCall) {
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, char* name);
+    extern f32 intplGetValue(f32 start, f32 end, s32 mode, s32 curStep, s32 maxStep);
+    extern void* gp;
 
+    s32* args;
+    char* npcName;
+    s32 stepCount;
+    s32 mode;
+    s32 curStep;
+    void* npc;
+    f32 startX;
+    f32 startY;
+    f32 startZ;
+    f32 endX;
+    f32 endY;
+    f32 endZ;
+    f32 x;
+    f32 y;
+    f32 z;
+    u8 result;
+
+    args = *(s32**)((s32)event + 0x18);
+    npcName = (char*)evtGetValue(event, args[0]);
+    startX = (f32)evtGetValue(event, args[1]);
+    startY = (f32)evtGetValue(event, args[2]);
+    startZ = (f32)evtGetValue(event, args[3]);
+    endX = (f32)evtGetValue(event, args[4]);
+    endY = (f32)evtGetValue(event, args[5]);
+    endZ = (f32)evtGetValue(event, args[6]);
+    stepCount = evtGetValue(event, args[7]);
+    mode = evtGetValue(event, args[8]);
+    npc = evtNpcNameToPtr(event, npcName);
+
+    if (isFirstCall != 0) {
+        *(s32*)((s32)event + 0x78) = *(s32*)((s32)gp + 0x3C);
+    }
+
+    curStep = (*(s32*)((s32)gp + 0x3C) - *(s32*)((s32)event + 0x78)) /
+              ((*(u32*)0x800000F8 >> 2) / 4000);
+
+    if (curStep < stepCount) {
+        x = intplGetValue(startX, endX, mode, curStep, stepCount);
+        y = intplGetValue(startY, endY, mode, curStep, stepCount);
+        z = intplGetValue(startZ, endZ, mode, curStep, stepCount);
+        result = 0;
+    } else {
+        x = endX;
+        y = endY;
+        z = endZ;
+        result = 2;
+    }
+
+    *(f32*)((s32)npc + 0x98) = x;
+    *(f32*)((s32)npc + 0x9C) = y;
+    *(f32*)((s32)npc + 0xA0) = z;
+    *(f32*)((s32)npc + 0x8C) = *(f32*)((s32)npc + 0x98);
+    *(f32*)((s32)npc + 0x90) = *(f32*)((s32)npc + 0x9C);
+    *(f32*)((s32)npc + 0x94) = *(f32*)((s32)npc + 0xA0);
+
+    return result;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

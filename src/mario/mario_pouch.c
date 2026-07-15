@@ -1176,20 +1176,288 @@ char* pouchGetYoshiName(void) {
 }
 
 
-u8 pouchSortItem(u32 sortType) {
-    return 0;
-}
+void pouchSortItem(u32 sortType) {
+    extern void qqsort(void* base, u32 count, u32 width, void* compare);
+    extern void* memcpy(void* dst, const void* src, u32 size);
+    extern s32 strcmp(const char* a, const char* b);
+    extern char* msgSearch(const char* msg);
+    extern s32 comp_aiueo(short* a, short* b);
+    extern s32 comp_kind(short* a, short* b);
+    extern s32 comp_aiueo_r(short* a, short* b);
+    extern s32 comp_kind_r(short* a, short* b);
+    extern s32 mpp;
+    s16 items[20];
+    s16 keys[122];
+    s16 badges[208];
+    s16 equipped[200];
+    s16* src;
+    s32 count;
+    s32 i;
+    s32 j;
 
+    if (sortType < 2 || sortType == 7 || sortType == 8) {
+        src = (s16*)(mpp + 0x192);
+        count = 0;
+        for (i = 0; i < 20; i++) {
+            if (src[i] != 0) {
+                items[count++] = src[i];
+            }
+        }
+        for (i = count; i < 20; i++) {
+            items[i] = 0;
+        }
+        if (sortType == 0) {
+            qqsort(items, count, 2, comp_aiueo);
+        } else if (sortType == 1) {
+            qqsort(items, count, 2, comp_kind);
+        } else if (sortType == 7) {
+            qqsort(items, count, 2, comp_aiueo_r);
+        } else {
+            qqsort(items, count, 2, comp_kind_r);
+        }
+        memcpy(src, items, 0x28);
+    }
+
+    if ((sortType - 2) < 2 || sortType == 9 || sortType == 10) {
+        src = (s16*)(mpp + 0xA0);
+        count = 0;
+        for (i = 0; i < 0x79; i++) {
+            if (src[i] != 0) {
+                keys[count++] = src[i];
+            }
+        }
+        for (i = count; i < 0x79; i++) {
+            keys[i] = 0;
+        }
+        if (sortType == 2) {
+            qqsort(keys, count, 2, comp_aiueo);
+        } else if (sortType == 3) {
+            qqsort(keys, count, 2, comp_kind);
+        } else if (sortType == 9) {
+            qqsort(keys, count, 2, comp_aiueo_r);
+        } else {
+            qqsort(keys, count, 2, comp_kind_r);
+        }
+        memcpy(src, keys, 0xF2);
+    }
+
+    if ((sortType - 4) > 2 && (sortType - 11) > 1 && sortType != 13) {
+        return;
+    }
+    count = 0;
+    src = (s16*)(mpp + 0x1FA);
+    for (i = 0; i < 200; i++) {
+        if (src[i] != 0) {
+            badges[count] = src[i];
+            equipped[count] = *(s16*)(mpp + 0x38A + i * 2);
+            count++;
+        }
+    }
+    for (i = count; i < 200; i++) {
+        badges[i] = 0;
+        equipped[i] = 0;
+    }
+    for (i = 0; i < count - 1; i++) {
+        for (j = i + 1; j < count; j++) {
+            s16 a = badges[i];
+            s16 b = badges[j];
+            s8 bpA = *(s8*)(itemDataTable + a * 0x28 + 0x15);
+            s8 bpB = *(s8*)(itemDataTable + b * 0x28 + 0x15);
+            s32 orderA = *(s32*)(itemDataTable + a * 0x28 + 0x20);
+            s32 orderB = *(s32*)(itemDataTable + b * 0x28 + 0x20);
+            s32 swap = 0;
+            if (sortType == 4 || sortType == 11) {
+                s32 cmp = strcmp(msgSearch(*(char**)(itemDataTable + a * 0x28 + 4)),
+                                 msgSearch(*(char**)(itemDataTable + b * 0x28 + 4)));
+                swap = sortType == 4 ? cmp > 0 : cmp < 0;
+            } else if (sortType == 5) {
+                swap = orderB < orderA;
+            } else if (sortType == 12) {
+                swap = orderA < orderB;
+            } else if (sortType == 6) {
+                swap = bpB < bpA || (bpA == bpB && orderB < orderA);
+            } else {
+                swap = bpA < bpB || (bpA == bpB && orderA < orderB);
+            }
+            if (swap) {
+                s16 temp = badges[i];
+                badges[i] = badges[j];
+                badges[j] = temp;
+                temp = equipped[i];
+                equipped[i] = equipped[j];
+                equipped[j] = temp;
+            }
+        }
+    }
+    memcpy((void*)(mpp + 0x1FA), badges, 400);
+    memcpy((void*)(mpp + 0x38A), equipped, 400);
+}
 
 void pouchInit(void* pouch) {
-    ;
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void* memset(void* dest, int ch, u32 count);
+    extern char* msgSearch(const char* msg);
+    extern char* strcpy(char* dest, const char* src);
+    extern s32 mpp;
+    extern const char str_name_party3_802cc728[];
+    s32 i;
+    s32 offset;
+
+    mpp = (s32)__memAlloc(0, 0x5D4);
+    memset((void*)mpp, 0, 0x5D4);
+
+    for (i = 0; i < 0x79; i++) {
+        *(s16*)(mpp + 0xA0 + i * 2) = 0;
+    }
+    for (i = 0; i < 20; i++) {
+        *(s16*)(mpp + 0x192 + i * 2) = 0;
+    }
+    for (i = 0; i < 32; i++) {
+        *(s16*)(mpp + 0x1BA + i * 2) = 0;
+    }
+    for (i = 0; i < 200; i++) {
+        *(s16*)(mpp + 0x1FA + i * 2) = 0;
+    }
+    for (i = 0; i < 200; i++) {
+        *(s16*)(mpp + 0x38A + i * 2) = 0;
+    }
+
+    *(s16*)(mpp + 0x72) = 10;
+    *(s16*)(mpp + 0x8E) = 10;
+    *(s16*)(mpp + 0x76) = 5;
+    *(s16*)(mpp + 0x90) = 5;
+    *(s16*)(mpp + 0x92) = 3;
+    *(s16*)(mpp + 0x94) = 3;
+    *(s16*)(mpp + 0x70) = *(s16*)(mpp + 0x72);
+    *(s16*)(mpp + 0x74) = *(s16*)(mpp + 0x76);
+    *(s16*)(mpp + 0x7A) = 0;
+    *(s16*)(mpp + 0x7E) = 0;
+    *(s16*)(mpp + 0x7C) = 0;
+    *(s16*)(mpp + 0x80) = 0;
+    *(f32*)(mpp + 0x84) = 0.0f;
+    *(s16*)(mpp + 0x88) = 0;
+    *(s16*)(mpp + 0x8A) = 1;
+    *(s8*)(mpp + 0x98) = 0;
+    *(s8*)(mpp + 0x99) = 0;
+
+    offset = 0;
+    for (i = 0; i < 8; i++) {
+        if (i != 0) {
+            *(s16*)(mpp + offset + 0) = 0;
+            *(s16*)(mpp + offset + 4) = 10;
+            *(s16*)(mpp + offset + 2) = *(s16*)(mpp + offset + 4);
+            *(s16*)(mpp + offset + 6) = *(s16*)(mpp + offset + 4);
+            *(s16*)(mpp + offset + 0xA) = 0;
+            *(s16*)(mpp + offset + 0xC) = 0;
+        }
+        offset += 0xE;
+    }
+
+    strcpy((char*)(mpp + 0x5C0), msgSearch(str_name_party3_802cc728));
 }
 
+s32 pouchGetItem(s32 itemNo) {
+    extern s32 mpp;
+    extern void* yuwp;
+    extern s32 marioGetParty(void);
+    extern s32 pouchCheckItem(s32 item);
+    extern void swSet(s32 id);
+    s16* list;
+    s16* equipped;
+    s32 count;
+    s32 i;
+    s32 j;
+    s32 partyId;
+    s32 offset;
 
-void pouchGetItem(s32 itemNo) {
-    ;
+    if (itemNo == 0x79) {
+        if (*(s16*)(mpp + 0x78) < 999) {
+            *(s16*)(mpp + 0x78) += 1;
+        }
+        return 1;
+    }
+    if (itemNo == 0x7A) {
+        if (*(s32*)((s32)yuwp + 8) < 99999) {
+            *(s32*)((s32)yuwp + 8) += 1;
+        }
+        return 1;
+    }
+    if (itemNo == 0x7B) {
+        partyId = marioGetParty();
+        if (*(s16*)(mpp + 0x70) < *(s16*)(mpp + 0x72)) {
+            *(s16*)(mpp + 0x70) += 1;
+        }
+        if (partyId != 0) {
+            offset = partyId * 0xE;
+            if (*(s16*)(mpp + offset + 6) < *(s16*)(mpp + offset + 2)) {
+                *(s16*)(mpp + offset + 6) += 1;
+            }
+        }
+        return 1;
+    }
+    if (itemNo == 0x7C) {
+        if (*(s16*)(mpp + 0x74) < *(s16*)(mpp + 0x76)) {
+            *(s16*)(mpp + 0x74) += 1;
+        }
+        return 1;
+    }
+    if (itemNo == 0x7D) {
+        *(s16*)(mpp + 0x9A) += 1;
+        return 1;
+    }
+    if (itemNo == 0x57) {
+        *(s16*)(mpp + 0x9C) += 1;
+        return 1;
+    }
+
+    if (itemNo == 6 || itemNo == 7 || itemNo == 8) {
+        *(s8*)(mpp + 0x98) = itemNo - 5;
+    } else if (itemNo == 9 || itemNo == 10 || itemNo == 11) {
+        *(s8*)(mpp + 0x99) = itemNo - 8;
+    } else if (itemNo == 0x59) {
+        return 1;
+    } else if (itemNo >= 0xF0 && itemNo < 0x153) {
+        swSet(itemNo - 0x70);
+    }
+
+    list = 0;
+    equipped = 0;
+    count = 0;
+    if (itemNo >= 0x79 && itemNo < 0xEC) {
+        list = (s16*)(mpp + 0x192);
+        count = 10;
+        if (pouchCheckItem(1) != 0) {
+            count = 20;
+        }
+    } else if (itemNo >= 1 && itemNo < 0x79) {
+        list = (s16*)(mpp + 0xA0);
+        count = 0x79;
+    } else if (itemNo >= 0xF0 && itemNo < 0x153) {
+        list = (s16*)(mpp + 0x1FA);
+        equipped = (s16*)(mpp + 0x38A);
+        count = 200;
+    } else {
+        return 0;
+    }
+
+    for (i = count - 1; i >= 0; i--) {
+        if (list[i] == 0) {
+            for (j = i; j > 0; j--) {
+                list[j] = list[j - 1];
+                if (equipped != 0) {
+                    equipped[j] = equipped[j - 1];
+                }
+            }
+            list[0] = itemNo;
+            if (equipped != 0) {
+                equipped[0] = 0;
+            }
+            return 1;
+        }
+    }
+
+    return 0;
 }
-
 
 s32 pouchRemoveItemIndex(u32 itemType, int itemIndex) {
     s16* list;

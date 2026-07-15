@@ -436,5 +436,100 @@ void* effItemGetEntry(s32 type, double x, double y, double z) {
 
 /* stub-fill: effItemGetDisp | prototype_only | source_prototype */
 void effItemGetDisp(s32 cameraId, void* effect) {
-    return;
+    typedef f32 Mtx[3][4];
+    typedef struct VecLocal { f32 x, y, z; } VecLocal;
+    typedef struct ColorLocal { u8 r, g, b, a; } ColorLocal;
+    typedef u8 TexObj[0x20];
+    extern void* camGetPtr(s32 id);
+    extern void PSMTXTrans(Mtx m, f64 x, f64 y, f64 z);
+    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(Mtx m, f64 angle, char axis);
+    extern void PSMTXConcat(void* a, void* b, void* out);
+    extern void GXSetBlendMode(s32,s32,s32,s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);
+    extern void GXSetZMode(s32,s32,s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32,s32,s32,s32);
+    extern void GXSetTevOp(s32,s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);
+    extern void GXSetChanMatColor(s32, ColorLocal*);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32,s32);
+    extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
+    extern void effGetTexObj(s32, void*);
+    extern void GXLoadTexObj(void*,s32);
+    extern void GXLoadPosMtxImm(void*,s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXBegin(s32,s32,s32);
+    extern volatile f32 DAT_cc008000;
+    u8* work = *(u8**)((u8*)effect + 0xC);
+    void* camera = camGetPtr(cameraId);
+    Mtx trans, rot, scale, model;
+    TexObj tex;
+    ColorLocal color;
+    f32 size = *(f32*)(work + 0x14) * *(f32*)(work + 0x18);
+    f32 halfW;
+    f32 top = 32.0f;
+    s32 pass;
+    s32 i;
+
+    GXSetBlendMode(1,4,5,0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7,0,0,7,0);
+    GXSetZMode(1,3,0);
+    PSMTXTrans(trans, *(f32*)(work+4), *(f32*)(work+8), *(f32*)(work+0xC));
+    PSMTXRotRad(rot, -0.017453292f * *(f32*)((u8*)camGetPtr(cameraId)+0x114), 'y');
+    PSMTXScale(scale, size, size, size);
+    PSMTXConcat(trans, rot, trans);
+    PSMTXConcat(trans, scale, model);
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(0,1,0,0x1E,0,0x7D);
+    GXSetTexCoordGen2(1,1,4,0x3C,0,0x7D);
+    GXSetNumTevStages(2);
+    GXSetTevOrder(0,0,0,0xFF);
+    GXSetTevOrder(1,1,1,4);
+    effGetTexObj(0x2C, tex); GXLoadTexObj(tex,0);
+    effGetTexObj(0x2A, tex); GXLoadTexObj(tex,1);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4,0,0,0,0,0,2);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9,1); GXSetVtxDesc(13,1);
+    GXSetVtxAttrFmt(0,9,1,4,0); GXSetVtxAttrFmt(0,13,1,4,0);
+    halfW = -32.0f;
+    for (pass=0; pass<2; pass++) {
+        PSMTXConcat((u8*)camera+0x11C, model, trans);
+        color.r = color.g = color.b = 0xFF;
+        color.a = (u8)((*(u32*)(work+0x30) * (pass ? 255 : 128)) / 255);
+        GXSetChanMatColor(4,&color);
+        GXLoadPosMtxImm(trans,0); GXSetCurrentMtx(0); GXBegin(0x80,0,4);
+        DAT_cc008000=halfW; DAT_cc008000=top; DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=0.0f;
+        DAT_cc008000=top; DAT_cc008000=top; DAT_cc008000=0.0f; DAT_cc008000=2.0f; DAT_cc008000=0.0f;
+        DAT_cc008000=top; DAT_cc008000=halfW; DAT_cc008000=0.0f; DAT_cc008000=2.0f; DAT_cc008000=2.0f;
+        DAT_cc008000=halfW; DAT_cc008000=halfW; DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=2.0f;
+    }
+    effGetTexObj(0x2B, tex); GXLoadTexObj(tex,1);
+    for (i=1; i<*(s32*)((u8*)effect+8); i++) {
+        u8* child = work + i*0x38;
+        for (pass=0; pass<2; pass++) {
+            PSMTXTrans(trans, *(f32*)(child+4), *(f32*)(child+8), *(f32*)(child+0xC));
+            PSMTXConcat(model,trans,trans);
+            PSMTXRotRad(rot,*(f32*)(child+0x1C),'z');
+            PSMTXConcat(trans,rot,trans);
+            color.r=color.g=color.b=0xFF; color.a=(u8)*(s32*)(child+0x30);
+            GXSetChanMatColor(4,&color);
+            PSMTXConcat((u8*)camera+0x11C,trans,trans);
+            GXLoadPosMtxImm(trans,0); GXSetCurrentMtx(0); GXBegin(0x80,0,4);
+            DAT_cc008000=-5.3333f; DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=0.0f;
+            DAT_cc008000=5.3333f; DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=2.0f; DAT_cc008000=0.0f;
+            DAT_cc008000=5.3333f; DAT_cc008000=-42.667f; DAT_cc008000=0.0f; DAT_cc008000=2.0f; DAT_cc008000=1.0f;
+            DAT_cc008000=-5.3333f; DAT_cc008000=-42.667f; DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=1.0f;
+        }
+    }
 }
+

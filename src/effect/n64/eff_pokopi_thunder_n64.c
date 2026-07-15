@@ -1,10 +1,58 @@
 #include "effect/n64/eff_pokopi_thunder_n64.h"
 
 
-u8 effPokopiThunderDisp(void) {
+u8 effPokopiThunderDisp(s32 cameraId, s32 effectAddress) {
+    typedef f32 Mtx[3][4];
+    typedef struct GXTexObj { u32 data[8]; } GXTexObj;
+    extern void* camGetPtr(s32);
+    extern void* smartAlloc(u32, s32);
+    extern void effGetTexObj(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void PSMTXScale(Mtx, f32, f32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXLoadPosMtxImm(Mtx, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetCullMode(s32);
+    extern void GXBegin(s32, s32, s16);
+    u8* work = *(u8**)(effectAddress + 0xC);
+    char* camera = camGetPtr(cameraId);
+    GXTexObj tex;
+    Mtx scale, model;
+    f32* vertices = smartAlloc(0x480, 3);
+    s32 i;
+
+    PSMTXScale(scale, 0.1f, 0.1f, 0.1f);
+    PSMTXConcat(camera + 0x118, scale, model);
+    GXLoadPosMtxImm(model, 0);
+    GXSetCurrentMtx(0);
+    GXSetNumChans(0);
+    GXSetNumTevStages(4);
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
+    for (i = 0; i < 4; i++) {
+        GXSetTevOrder(i, i == 2 ? 1 : 0, i == 2 ? 1 : 0, -1);
+    }
+    effGetTexObj(0x6A, &tex);
+    GXLoadTexObj(&tex, 0);
+    GXLoadTexObj(&tex, 1);
+    GXSetCullMode(0);
+    for (i = 0; i < 12; i++) {
+        f32 t = (f32)i / 11.0f;
+        vertices[i * 3] = *(f32*)(work + 0x10) + t * (*(f32*)(work + 0x1C) - *(f32*)(work + 0x10));
+        vertices[i * 3 + 1] = *(f32*)(work + 0x14) + t * (*(f32*)(work + 0x20) - *(f32*)(work + 0x14));
+        vertices[i * 3 + 2] = *(f32*)(work + 0x18) + t * (*(f32*)(work + 0x24) - *(f32*)(work + 0x18));
+    }
+    for (i = 0; i < 11; i++) {
+        GXBegin(0x90, 0, 6);
+    }
     return 0;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

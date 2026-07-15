@@ -41,10 +41,113 @@ void effSnowmanDisp(void) {
 }
 
 
-u8 effSnowmanMain(void) {
-    return 0;
-}
+void effSnowmanMain(void* effect) {
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(Vec3*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void effSnowmanDisp(void);
+    extern s32 rand(void);
+    extern void* effVaporN64Entry(f32, f32, f32, f32, s32, s32);
+    extern void* effSnowDustN64Entry(f32, f32, f32, f32, f32, f32, s32, s32, s32);
+    extern u8 land_hscale_data[];
+    extern s8 jump_hscale_data[];
+    extern u8 jump2_hscale_data[];
+    extern s8 jump2_ry_data[];
+    u8* work = *(u8**)((s32)effect + 0xC);
+    Vec3 pos;
+    s32 timer;
+    s32 frame;
+    s32 state;
+    s32 anim;
+    f32 v;
 
+    pos.x = *(f32*)(work + 4);
+    pos.y = *(f32*)(work + 8);
+    pos.z = *(f32*)(work + 0xC);
+    if (*(s32*)effect & 4) {
+        *(s32*)effect &= ~4;
+        *(s32*)(work + 0x10) = 0x10;
+    }
+    if (*(s32*)(work + 0x10) < 1000) *(s32*)(work + 0x10) -= 1;
+    *(s32*)(work + 0x14) += 1;
+    timer = *(s32*)(work + 0x10);
+    frame = *(s32*)(work + 0x14);
+    if (timer < 0) {
+        effDelete(effect);
+        return;
+    }
+    if (timer < 0x10) *(s32*)(work + 0x24) = timer << 4;
+    if (frame < 0x10) *(s32*)(work + 0x24) = (frame << 4) + 0xF;
+
+    if (*(f32*)(work + 0x3C) != 0.0f) {
+        v = *(f32*)(work + 0x40);
+        if (v < 0.0f) v = -v;
+        if (*(f32*)(work + 0x3C) < 0.0f) *(f32*)(work + 0x2C) -= v;
+        else *(f32*)(work + 0x2C) += v;
+    }
+
+    state = *(s32*)(work + 0x58);
+    anim = *(s32*)(work + 0x54);
+    if (state == 0) {
+        *(f32*)(work + 0x4C) = 0.01f * (f32)land_hscale_data[anim];
+        *(f32*)(work + 0x48) = 2.0f - *(f32*)(work + 0x4C);
+        *(s32*)(work + 0x54) = anim + 1;
+        if (anim + 1 > 0x1A) *(s32*)(work + 0x58) = 2;
+    } else if (state == 1) {
+        *(f32*)(work + 0x4C) = 0.01f * (f32)jump_hscale_data[anim];
+        *(f32*)(work + 0x48) = 2.0f - *(f32*)(work + 0x4C);
+        *(s32*)(work + 0x54) = anim + 1;
+        if (anim + 1 > 0x11) *(s32*)(work + 0x58) = 2;
+        if (anim + 1 > 7) {
+            *(f32*)(work + 0x30) += *(f32*)(work + 0x3C);
+            *(f32*)(work + 0x34) += *(f32*)(work + 0x40);
+            *(f32*)(work + 0x38) += *(f32*)(work + 0x44);
+            *(f32*)(work + 0x40) -= 1.0f;
+        }
+    } else if (state == 3) {
+        *(f32*)(work + 0x4C) = 0.01f * (f32)jump2_hscale_data[anim];
+        *(f32*)(work + 0x48) = 2.0f - *(f32*)(work + 0x4C);
+        *(f32*)(work + 0x2C) = (f32)jump2_ry_data[anim + 1];
+        *(s32*)(work + 0x54) = anim + 2;
+        if (anim + 2 > 0x49) *(s32*)(work + 0x58) = 2;
+    } else if (state == 2) {
+        *(f32*)(work + 0x30) += *(f32*)(work + 0x3C);
+        *(f32*)(work + 0x34) += *(f32*)(work + 0x40);
+        *(f32*)(work + 0x38) += *(f32*)(work + 0x44);
+        *(f32*)(work + 0x40) += *(f32*)(work + 0x50);
+        if (*(f32*)(work + 0x34) < 0.0f) {
+            s32 sequence = *(s32*)(work + 0x5C);
+            *(s32*)(work + 0x5C) += 1;
+            *(f32*)(work + 0x34) = 0.0f;
+            *(s32*)(work + 0x54) = 0;
+            if (sequence == 0) *(s32*)(work + 0x58) = 0;
+            else if (sequence < 4) {
+                *(s32*)(work + 0x58) = 1;
+                *(f32*)(work + 0x3C) = sequence == 3 ? -2.0f : 2.0f;
+                *(f32*)(work + 0x40) = 10.0f;
+                *(f32*)(work + 0x44) = sequence == 2 ? -2.0f : 2.0f;
+            } else if (sequence == 4) {
+                *(s32*)(work + 0x58) = 1;
+                *(f32*)(work + 0x3C) = 10.0f;
+                *(f32*)(work + 0x40) = 14.0f;
+                *(f32*)(work + 0x44) = 0.0f;
+                *(f32*)(work + 0x50) = -1.0f;
+            }
+        }
+    }
+
+    if ((frame & 7) == 1) {
+        effVaporN64Entry(*(f32*)(work + 4) + *(f32*)(work + 0x30) + (f32)(rand() % 60) - 30.0f,
+                         *(f32*)(work + 8) + *(f32*)(work + 0x34) + (f32)(rand() % 100) + 50.0f,
+                         *(f32*)(work + 0xC) + *(f32*)(work + 0x38), 4.0f, 2, 40);
+        effSnowDustN64Entry(*(f32*)(work + 4) + *(f32*)(work + 0x30),
+                            *(f32*)(work + 8) + *(f32*)(work + 0x34) + 10.0f,
+                            *(f32*)(work + 0xC) + *(f32*)(work + 0x38) + 60.0f,
+                            60.0f, 100.0f, 2.0f, 1, 10, 30);
+    }
+    dispEntry(4, 2, effSnowmanDisp, effect, dispCalcZ(&pos));
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

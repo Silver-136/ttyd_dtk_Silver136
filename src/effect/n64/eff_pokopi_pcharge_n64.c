@@ -1,15 +1,82 @@
 #include "effect/n64/eff_pokopi_pcharge_n64.h"
 
 
-u8 effPokopiPchargeN64Entry(void) {
-    return 0;
+void* effPokopiPchargeN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 lifetime) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32, s32);
+    extern void effPokopiPchargeMain(void*);
+    extern s32 rand(void);
+    extern char str_PokopiPchargeN64_802fbcd8[];
+    extern u8 n_data[];
+    extern u8 vx_data[];
+    void* entry = effEntry();
+    u8* base;
+    u8* part;
+    s32 count = n_data[type];
+    s32 i;
+    s32 r;
+    f32 direction;
+
+    *(char**)((s32)entry + 0x14) = str_PokopiPchargeN64_802fbcd8;
+    *(s32*)((s32)entry + 8) = count;
+    base = __memAlloc(3, count * 0x48);
+    *(u8**)((s32)entry + 0xC) = base;
+    *(void**)((s32)entry + 0x10) = effPokopiPchargeMain;
+    *(s32*)entry |= 2;
+    *(s32*)base = type;
+    *(f32*)(base + 4) = x;
+    *(f32*)(base + 8) = y;
+    *(f32*)(base + 0xC) = z;
+    *(s32*)(base + 0x10) = lifetime < 1 ? 1000 : lifetime;
+    *(s32*)(base + 0x14) = 0;
+    *(s32*)(base + 0x18) = 0xFF;
+    *(s32*)(base + 0x1C) = 0xFF;
+    *(s32*)(base + 0x20) = 0xFF;
+    *(s32*)(base + 0x24) = 0;
+    *(s32*)(base + 0x28) = 0xFF;
+    *(s32*)(base + 0x2C) = 0xF5;
+    *(s32*)(base + 0x30) = 0;
+    *(f32*)(base + 0x34) = scale;
+    *(f32*)(base + 0x38) = (f32)vx_data[type];
+    *(f32*)(base + 0x44) = 1.0f;
+
+    part = base + 0x48;
+    for (i = 1; i < count; i++, part += 0x48) {
+        r = rand() % 10;
+        *(s32*)part = type % 3;
+        *(s32*)(part + 0x14) = 0;
+        *(f32*)(part + 0x3C) = (f32)(rand() % 360);
+        *(f32*)(part + 0x40) = 0.0f;
+        direction = 1.0f - 0.3f * (f32)(i % 3);
+        *(f32*)(part + 0x38) = direction;
+        if (type <= 2) {
+            *(s32*)(part + 0x10) = 20;
+            *(f32*)(part + 0x38) = 1.0f - 0.1f * (f32)(i % 3);
+            *(f32*)(part + 0x40) = -(0.2f * (f32)r + 0.2f);
+            *(f32*)(part + 0x44) = 0.0f;
+        } else if (type == 3 || type == 5) {
+            *(s32*)(part + 0x10) = 20;
+            *(f32*)(part + 0x38) = 1.0f - 0.1f * (f32)(i % 3);
+            *(f32*)(part + 0x40) = 0.2f * (f32)r + 0.2f;
+            *(f32*)(part + 0x44) = 0.0f;
+        } else if (type == 6 || type == 7) {
+            *(s32*)(part + 0x10) = 10;
+            *(f32*)(part + 0x40) = -(f32)(r + 4);
+            *(f32*)(part + 0x44) = 0.0f;
+        } else {
+            *(s32*)(part + 0x10) = 20;
+            *(f32*)(part + 0x40) = 0.2f * (f32)r + 0.6f;
+            *(f32*)(part + 0x44) = type == 8 ? -1.0f : -2.0f;
+        }
+    }
+    return entry;
 }
 
-
-u8 effPokopiPchargeDisp(void) {
-    return 0;
+void effPokopiPchargeDisp(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32);extern void PSMTXTrans(void*,f32,f32,f32);extern void PSMTXRotRad(void*,s32,f32);extern void PSMTXScale(void*,f32,f32,f32);extern void PSMTXConcat(void*,void*,void*);extern void GXSetTevColor(s32,void*);extern void GXSetNumChans(s32);extern void GXSetNumTevStages(s32);extern void GXSetTevOrder(s32,s32,s32,s32);extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevColorIn(s32,s32,s32,s32,s32);extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);extern void GXSetNumTexGens(s32);extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);extern void GXLoadTexMtxImm(void*,s32,s32);extern void effGetTexObjN64(s32,void*);extern void GXLoadTexObj(void*,s32);extern void GXSetCullMode(s32);extern void GXLoadPosMtxImm(void*,s32);extern void GXSetCurrentMtx(s32);extern void effSetVtxDescN64(void*);extern void GXBegin(s32,s32,s32);extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);extern f32 float_deg2rad_80425d20,float_0p03125_80425d24,float_0p0078125_80425d28,float_0_80425d2c,float_1_80425d30;f32 trans[3][4],rot[3][4],scale[3][4];u8 texObj[0x20];u8* work=*(u8**)((s32)effect+0xC);void* camera=camGetPtr(cameraId);u32 color=*(u32*)(work+0x18);s32 i;
+    PSMTXTrans(trans,*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC));PSMTXRotRad(rot,0x79,float_deg2rad_80425d20*-*(f32*)((s32)camGetPtr(4)+0x114));PSMTXScale(scale,*(f32*)(work+0x34)*(*(f32*)(work+0x44)),*(f32*)(work+0x34)*(*(f32*)(work+0x44)),*(f32*)(work+0x34)*(*(f32*)(work+0x44)));PSMTXConcat(trans,rot,trans);PSMTXConcat(trans,scale,trans);PSMTXConcat((void*)((s32)camera+0x11C),trans,trans);GXSetTevColor(1,&color);GXSetNumChans(0);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,3,2,8,0);GXSetTevAlphaIn(0,0,1,7,7);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);PSMTXScale(scale,float_0p03125_80425d24,float_0p0078125_80425d28,float_0_80425d2c);GXLoadTexMtxImm(scale,0x1E,1);effGetTexObjN64(0x86,texObj);GXLoadTexObj(texObj,0);GXSetCullMode(0);
+    for(i=1;i<*(s32*)((s32)effect+8);i++,work+=0x48){PSMTXRotRad(rot,0x7A,float_deg2rad_80425d20**(f32*)(work+0x84));PSMTXTrans(scale,*(f32*)(work+0x4C)+*(f32*)(work+0x38),float_0_80425d2c,float_0_80425d2c);PSMTXConcat(rot,scale,scale);PSMTXConcat(trans,scale,scale);GXLoadPosMtxImm(scale,0);GXSetCurrentMtx(0);effSetVtxDescN64((void*)0x803A7100);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3,0);}
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

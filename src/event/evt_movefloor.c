@@ -86,15 +86,19 @@ USER_FUNC(moving_floor_getf_xz_scale) {
 #pragma use_lmw_stmw on
 
 
-s32 evt_moving_floor_alloc(void* pEvt) {
-    return 0;
+s32 evt_moving_floor_alloc(void* event) {
+    extern void* _mapAlloc(void*,s32); extern void* mapalloc_base_ptr; extern void* memset(void*,s32,s32); extern s32 evtSetValue(void*,s32,s32); u8* e=event; s32* args=*(s32**)(e+0x18); s32* lw=(s32*)(e+0x9C); u8* floor=_mapAlloc(mapalloc_base_ptr,0x88); s32 type=lw[6];
+    memset(floor,0,0x88);*(s32*)(floor+0x20)=lw[12];*(s32*)(floor+4)=type;*(f32*)(floor+0x64)=1.0f;*(s32*)(floor+0x74)=lw[5];*(f32*)(floor+0x50)=0.0f;
+    if(type==1){*(s32*)(floor+0x28)=1;*(f32*)(floor+0x30)=(f32)lw[2];*(f32*)(floor+0x3C)=(f32)lw[3];*(s32*)(floor+0x6C)=lw[4];*(f32*)(floor+0x48)=*(f32*)(floor+0x30);}else if(type==3){*(f32*)(floor+0x2C)=(f32)lw[2];*(f32*)(floor+0x38)=(f32)lw[3];*(s32*)(floor+0x68)=lw[4];*(f32*)(floor+0x34)=0.5f*((f32)lw[2]+(f32)lw[3]);}
+    evtSetValue(event,args[0],(s32)floor);return 2;
 }
 
-
-u8 evt_moving_floor_init(s32 pEvt) {
-    return 0;
+u8 evt_moving_floor_init(s32 event) {
+    extern s32 evtGetValue(void*,s32); u8* e=(u8*)event; s32* args=*(s32**)(e+0x18); u8* floor=(u8*)evtGetValue(e,args[0]); s32 i;
+    *(s32*)(floor+0x1C)=*(s32*)(e+4); *(s32*)(floor+0x24)=0; *(s32*)(floor+0x28)=0; *(f32*)(floor+0xC)=*(f32*)(floor+0x44); *(f32*)(floor+0x10)=0.0f;
+    for(i=0;i<4;i++){*(f32*)(floor+0x44+i*4)=*(f32*)(floor+0x44+i*4);}
+    return 2;
 }
-
 
 s32 evt_moving_floor_main(void* event) {
     extern f32 float_0_80426584;

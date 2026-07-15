@@ -1,10 +1,63 @@
 #include "effect/n64/eff_kemuri5_n64.h"
 
 
-u8 effKemuri5N64Entry(void) {
-    return 0;
+#pragma optimize_for_size off
+
+void* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32, s32);
+    extern void effKemuri5Main(void*);
+    extern s32 rand(void);
+    extern f64 reviseAngle(f64);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern char str_Kemuri5N64_802fb24c[];
+    extern f32 float_0_804256d8;
+    extern f32 float_6p2832_804256e4;
+    extern f32 float_360_804256e8;
+    extern f32 float_1_80425704;
+    extern f32 float_0p03_80425708;
+    extern f32 float_1p7_8042570c;
+    extern f32 float_0p5_80425710;
+    extern f32 float_neg0p02_80425714;
+    extern f32 float_5Eneg05_80425718;
+    extern f32 float_neg3p9_8042571c;
+    void* entry;
+    u8* part;
+    s32 i;
+
+    entry = effEntry();
+    *(char**)((s32)entry + 0x14) = str_Kemuri5N64_802fb24c;
+    *(s32*)((s32)entry + 8) = 8;
+    part = __memAlloc(3, 0x260);
+    *(u8**)((s32)entry + 0xC) = part;
+    *(void**)((s32)entry + 0x10) = effKemuri5Main;
+    for (i = 0; i < 8; i++) {
+        *(s32*)part = 1;
+        *(u8*)(part + 8) = 0xFF;
+        *(s16*)(part + 6) = 0x1E;
+        *(f32*)(part + 0xC) = x;
+        *(f32*)(part + 0x10) = y;
+        *(f32*)(part + 0x14) = z;
+        *(f32*)(part + 0x18) = float_1_80425704;
+        *(f32*)(part + 0x1C) = float_1_80425704;
+        *(f32*)(part + 0x20) = float_1_80425704;
+        *(f32*)(part + 0x24) = float_0p03_80425708 * (f32)(rand() % 11) + float_1_80425704;
+        *(f32*)(part + 0x28) = float_0p03_80425708 * (f32)(rand() % 11) + float_1p7_8042570c;
+        *(f32*)(part + 0x2C) = (f32)(rand() % 61);
+        *(f32*)(part + 0x30) = float_neg3p9_8042571c;
+        *(f32*)(part + 0x34) = float_0p5_80425710;
+        *(f32*)(part + 0x38) = float_neg0p02_80425714;
+        *(f32*)(part + 0x3C) = float_5Eneg05_80425718;
+        *(f32*)(part + 0x40) = float_0_804256d8;
+        *(f32*)(part + 0x44) = (f32)sin(reviseAngle((f64)(angle + i * 45)) * float_6p2832_804256e4 / float_360_804256e8);
+        *(f32*)(part + 0x48) = (f32)cos(reviseAngle((f64)(angle + i * 45)) * float_6p2832_804256e4 / float_360_804256e8);
+        part += 0x4C;
+    }
+    return entry;
 }
 
+#pragma optimize_for_size on
 
 u8 effKemuri5Disp(int param_1, int param_2) {
     return 0;

@@ -93,10 +93,188 @@ s32 unk_800d12b0(EvtEntry* evt) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 _evt_msg_print(void* param_1, int param_2, u32 param_3, char* param_4, s32 param_5, char* param_6) {
+    extern char* msgSearch(char* msg);
+    extern s32 msgWindow_Entry(char* msg, s32 type, s16 flags);
+    extern void* windowGetPointer(s32 id);
+    extern void* evtNpcNameToPtr(void* evt, char* name);
+    extern s32 marioGetPartyId(void);
+    extern s32 marioGetExtraPartyId(void);
+    extern void* partyGetPtr(s32 id);
+    extern void* marioGetPtr(void);
+    extern char* strcpy(char* dst, const char* src);
+    extern s32 BattleTransID(void* evt, s32 id);
+    extern void BtlUnit_GetTalkTogePos(s32 unitIdx, f32* x, f32* y, f32* z);
+    extern f32 getScreenPoint(f32* src, f32* dst);
+    extern f32 __fabsf(f32 value);
+    extern char str_DIRECT_802cc71c[];
+    extern f32 float_300_80421874;
+
+    void* evt;
+    void* win;
+    void* workHead;
+    void* work;
+    void* npc;
+    void* party;
+    void* mario;
+    char* searchMsg;
+    char* displayMsg;
+    u32 mode;
+    s32 unitId;
+    f32 screenWin[5];
+    f32 screenMario[3];
+
+    evt = param_1;
+    npc = 0;
+
+    if (param_2 != 0) {
+        if ((param_3 & 1) == 0) {
+            searchMsg = msgSearch(param_4);
+            displayMsg = param_4;
+        } else {
+            searchMsg = param_4;
+            displayMsg = str_DIRECT_802cc71c;
+        }
+
+        *(s32*)((s32)evt + 0x178) = msgWindow_Entry(searchMsg, param_5, *(s16*)((s32)evt + 0x190));
+        *(s32*)((s32)evt + 0x190) = 0;
+        win = windowGetPointer(*(s32*)((s32)evt + 0x178));
+        workHead = *(void**)((s32)win + 0x28);
+        work = *(void**)workHead;
+        *(char**)work = displayMsg;
+        *(void**)((s32)work + 0xF200) = evt;
+
+        if ((param_3 & 2) == 0) {
+            if (*(u8*)((s32)evt + 0x10) == 6) {
+                npc = *(void**)((s32)evt + 0x170);
+            }
+            if (param_6 != 0) {
+                npc = evtNpcNameToPtr(evt, param_6);
+            }
+
+            if ((s32)npc == -1) {
+                if ((*(u32*)((s32)evt + 0x180) & 0x1EFFFFFF) == 0) {
+                    party = partyGetPtr(marioGetPartyId());
+                    if (party == 0) {
+                        mario = marioGetPtr();
+                        *(u32*)((s32)win + 0x30) = *(u32*)((s32)mario + 0x8C);
+                        *(u32*)((s32)win + 0x34) = *(u32*)((s32)mario + 0x90);
+                        *(u32*)((s32)win + 0x38) = *(u32*)((s32)mario + 0x94);
+                        mario = marioGetPtr();
+                        *(f32*)((s32)win + 0x34) += *(f32*)((s32)mario + 0x1BC);
+                    } else {
+                        *(u32*)((s32)win + 0x30) = *(u32*)((s32)party + 0x58);
+                        *(u32*)((s32)win + 0x34) = *(u32*)((s32)party + 0x5C);
+                        *(u32*)((s32)win + 0x38) = *(u32*)((s32)party + 0x60);
+                        *(f32*)((s32)win + 0x34) += *(f32*)((s32)party + 0xF0);
+                    }
+                }
+                strcpy((char*)((s32)work + 0xF204), param_6);
+            } else if ((s32)npc == -2) {
+                if ((*(u32*)((s32)evt + 0x180) & 0x1EFFFFFF) == 0) {
+                    party = partyGetPtr(marioGetExtraPartyId());
+                    if (party == 0) {
+                        mario = marioGetPtr();
+                        *(u32*)((s32)win + 0x30) = *(u32*)((s32)mario + 0x8C);
+                        *(u32*)((s32)win + 0x34) = *(u32*)((s32)mario + 0x90);
+                        *(u32*)((s32)win + 0x38) = *(u32*)((s32)mario + 0x94);
+                        mario = marioGetPtr();
+                        *(f32*)((s32)win + 0x34) += *(f32*)((s32)mario + 0x1BC);
+                    } else {
+                        *(u32*)((s32)win + 0x30) = *(u32*)((s32)party + 0x58);
+                        *(u32*)((s32)win + 0x34) = *(u32*)((s32)party + 0x5C);
+                        *(u32*)((s32)win + 0x38) = *(u32*)((s32)party + 0x60);
+                        *(f32*)((s32)win + 0x34) += *(f32*)((s32)party + 0xF0);
+                    }
+                }
+                strcpy((char*)((s32)work + 0xF204), param_6);
+            } else if ((s32)npc == -3) {
+                if ((*(u32*)((s32)evt + 0x180) & 0x1EFFFFFF) == 0) {
+                    mario = marioGetPtr();
+                    *(u32*)((s32)win + 0x30) = *(u32*)((s32)mario + 0x8C);
+                    *(u32*)((s32)win + 0x34) = *(u32*)((s32)mario + 0x90);
+                    *(u32*)((s32)win + 0x38) = *(u32*)((s32)mario + 0x94);
+                    mario = marioGetPtr();
+                    *(f32*)((s32)win + 0x34) += *(f32*)((s32)mario + 0x1BC);
+                }
+                strcpy((char*)((s32)work + 0xF204), param_6);
+            } else if (npc != 0) {
+                if ((*(u32*)((s32)evt + 0x180) & 0x1EFFFFFF) == 0) {
+                    *(u32*)((s32)win + 0x30) = *(u32*)((s32)npc + 0x8C);
+                    *(u32*)((s32)win + 0x34) = *(u32*)((s32)npc + 0x90);
+                    *(u32*)((s32)win + 0x38) = *(u32*)((s32)npc + 0x94);
+                    *(f32*)((s32)win + 0x34) += *(f32*)((s32)npc + 0x150);
+                }
+                strcpy((char*)((s32)work + 0xF204), (char*)((s32)npc + 8));
+            }
+        } else {
+            *(u32*)((s32)work + 4) |= 8;
+            unitId = BattleTransID(evt, (s32)param_6);
+            *(s32*)((s32)work + 0xF224) = unitId;
+            BtlUnit_GetTalkTogePos(*(s32*)((s32)work + 0xF224), (f32*)((s32)win + 0x30),
+                                   (f32*)((s32)win + 0x34), (f32*)((s32)win + 0x38));
+            *(u16*)((s32)win + 0x2C) = 3;
+        }
+
+        mode = *(u32*)((s32)evt + 0x180) & 0x1EFFFFFF;
+        if (mode == 2) {
+            *(u16*)((s32)win + 0x2C) = 7;
+            *(u32*)((s32)win + 0x30) = *(u32*)((s32)evt + 0x184);
+            *(u32*)((s32)win + 0x34) = *(u32*)((s32)evt + 0x188);
+            *(u32*)((s32)win + 0x38) = *(u32*)((s32)evt + 0x18C);
+        } else if (mode < 2) {
+            if (mode == 0) {
+                if (npc != 0) {
+                    marioGetPtr();
+                    getScreenPoint((f32*)((s32)win + 0x30), screenWin);
+                    if (*(s32*)((s32)win + 8) == 1) {
+                        *(u16*)((s32)win + 0x2C) = 7;
+                    } else if (__fabsf(screenWin[0]) >= float_300_80421874) {
+                        *(u16*)((s32)win + 0x2C) = 2;
+                    } else {
+                        mario = marioGetPtr();
+                        getScreenPoint((f32*)((s32)mario + 0x8C), screenMario);
+                        if (screenMario[0] <= screenWin[0]) {
+                            *(u16*)((s32)win + 0x2C) = 7;
+                        } else {
+                            *(u16*)((s32)win + 0x2C) = 3;
+                        }
+                    }
+                }
+            } else {
+                *(u16*)((s32)win + 0x2C) = 0;
+            }
+        } else if (mode < 4) {
+            *(u16*)((s32)win + 0x2C) = 2;
+            *(u32*)((s32)win + 0x30) = *(u32*)((s32)evt + 0x184);
+            *(u32*)((s32)win + 0x34) = *(u32*)((s32)evt + 0x188);
+            *(u32*)((s32)win + 0x38) = *(u32*)((s32)evt + 0x18C);
+        }
+
+        if ((*(u32*)((s32)evt + 0x180) & 0x80000000) != 0) {
+            *(u16*)((s32)win + 0x2C) = 3;
+            if ((*(u32*)((s32)evt + 0x180) & 0x40000000) != 0) {
+                *(u16*)((s32)win + 0x2C) |= 4;
+            }
+            if ((*(u32*)((s32)evt + 0x180) & 0x20000000) != 0) {
+                *(u16*)((s32)win + 0x2C) |= 8;
+            }
+        }
+        if ((*(u32*)((s32)evt + 0x180) & 0x01000000) != 0) {
+            *(u16*)((s32)win + 0x2C) |= 0x10;
+        }
+        *(u32*)((s32)evt + 0x180) = 0;
+    }
+
+    if (windowCheckID(*(s32*)((s32)evt + 0x178)) == 0) {
+        return 2;
+    }
     return 0;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_msg_print_insert(int param_1, int param_2) {
     extern int sprintf(char* str, const char* format, ...);
@@ -470,10 +648,180 @@ s32 evt_msg_repeat(void* pEvt, int param_2) {
 
 /* stub-fill: unk_800d0a4c | prototype_only | source_prototype */
 void unk_800d0a4c(char* dst, char* value) {
-    return;
+    extern char* strstr(const char* text, const char* find);
+    extern u32 strlen(const char* text);
+    extern char* strncpy(char* dst, const char* src, u32 count);
+    extern char* strcpy(char* dst, const char* src);
+    extern char* strcat(char* dst, const char* src);
+    extern s32 sprintf(char* dst, const char* format, ...);
+    extern char unk_803dd6c8[], unk_803de0c8[];
+    extern char str_COIN_802cc618[], str_POINT_802cc628[];
+    extern char str_Punkte_802cc630[], str_moneta_802cc638[], str_monete_802cc640[];
+    extern char str_point_802cc648[], str_OGGETTO_802cc650[];
+    extern char str_oggetto_802cc65c[], str_oggtti_802cc664[];
+    extern void* gp;
+    char number[16];
+    char* marker;
+    u32 prefix;
+    s32 count = (s32)value;
+    s32 language = *(s32*)((s32)gp + 0x14);
+
+    marker = strstr(dst, "<NUM>");
+    if (marker == 0) {
+        return;
+    }
+    prefix = strlen(dst) - strlen(marker);
+    strncpy(unk_803de0c8, dst, prefix);
+    unk_803de0c8[prefix] = 0;
+    sprintf(number, "%d", count);
+    strcat(unk_803de0c8, number);
+    strcat(unk_803de0c8, marker + 5);
+
+    if (language == 0) {
+        strcpy(unk_803dd6c8, dst);
+        goto finish;
+    }
+    if (language == 2) {
+        marker = strstr(unk_803de0c8, str_COIN_802cc618);
+        if (marker != 0) {
+            prefix = strlen(unk_803de0c8) - strlen(marker);
+            strncpy(unk_803dd6c8, unk_803de0c8, prefix);
+            unk_803dd6c8[prefix] = 0;
+            strcat(unk_803dd6c8, count == 1 ? "M\x81nze" : "M\x81nzen");
+            strcat(unk_803dd6c8, marker + 6);
+            goto finish;
+        }
+        marker = strstr(unk_803de0c8, str_POINT_802cc628);
+        if (marker != 0) {
+            prefix = strlen(unk_803de0c8) - strlen(marker);
+            strncpy(unk_803dd6c8, unk_803de0c8, prefix);
+            unk_803dd6c8[prefix] = 0;
+            strcat(unk_803dd6c8, count == 1 ? "Punkt" : str_Punkte_802cc630);
+            strcat(unk_803dd6c8, marker + 7);
+            goto finish;
+        }
+    }
+    if (language == 5) {
+        marker = strstr(unk_803de0c8, str_COIN_802cc618);
+        if (marker != 0) {
+            prefix = strlen(unk_803de0c8) - strlen(marker);
+            strncpy(unk_803dd6c8, unk_803de0c8, prefix);
+            unk_803dd6c8[prefix] = 0;
+            strcat(unk_803dd6c8, count == 1 ? str_moneta_802cc638 : str_monete_802cc640);
+            strcat(unk_803dd6c8, marker + 6);
+            goto finish;
+        }
+        marker = strstr(unk_803de0c8, str_point_802cc648);
+        if (marker != 0) {
+            prefix = strlen(unk_803de0c8) - strlen(marker);
+            strncpy(unk_803dd6c8, unk_803de0c8, prefix);
+            unk_803dd6c8[prefix] = 0;
+            strcat(unk_803dd6c8, count == 1 ? "punto" : "punti");
+            strcat(unk_803dd6c8, marker + 7);
+            goto finish;
+        }
+        marker = strstr(unk_803de0c8, str_OGGETTO_802cc650);
+        if (marker != 0) {
+            prefix = strlen(unk_803de0c8) - strlen(marker);
+            strncpy(unk_803dd6c8, unk_803de0c8, prefix);
+            unk_803dd6c8[prefix] = 0;
+            strcat(unk_803dd6c8, count == 1 ? str_oggetto_802cc65c : str_oggtti_802cc664);
+            strcat(unk_803dd6c8, marker + 7);
+            goto finish;
+        }
+    }
+    marker = strstr(unk_803de0c8, "<X>");
+    if (marker != 0 && language == 3) {
+        prefix = strlen(unk_803de0c8) - strlen(marker);
+        strncpy(unk_803dd6c8, unk_803de0c8, prefix);
+        unk_803dd6c8[prefix] = 0;
+        if (count > 1) strcat(unk_803dd6c8, "x");
+        strcat(unk_803dd6c8, marker + 3);
+        goto finish;
+    }
+    marker = strstr(unk_803de0c8, "<S>");
+    if (marker != 0) {
+        prefix = strlen(unk_803de0c8) - strlen(marker);
+        strncpy(unk_803dd6c8, unk_803de0c8, prefix);
+        unk_803dd6c8[prefix] = 0;
+        if ((language == 3 && count > 1) || (language != 3 && count != 1)) {
+            strcat(unk_803dd6c8, "s");
+        }
+        strcat(unk_803dd6c8, marker + 3);
+        goto finish;
+    }
+    marker = strstr(unk_803de0c8, "<N>");
+    if (marker != 0) {
+        prefix = strlen(unk_803de0c8) - strlen(marker);
+        strncpy(unk_803dd6c8, unk_803de0c8, prefix);
+        unk_803dd6c8[prefix] = 0;
+        strcat(unk_803dd6c8, marker + 3);
+    } else {
+        strcpy(unk_803dd6c8, unk_803de0c8);
+    }
+finish:
+    strcpy(dst, unk_803dd6c8);
 }
 
 /* stub-fill: unk_800d1364 | prototype_only | source_prototype */
 void unk_800d1364(char* dst, char* value) {
-    return;
+    extern void* gp;
+    extern char* strcpy(char*, const char*);
+    extern char* strncpy(char*, const char*, u32);
+    extern char* strcat(char*, const char*);
+    extern char* strstr(const char*, const char*);
+    extern u32 strlen(const char*);
+    extern char str_AN_80421844[];
+    extern char str_AN_ITEM_802cc674[];
+    extern char str_ITEM_802cc66c[];
+    extern char str_an_8042183c[];
+    extern char str_a_80421840[];
+    char buffer[2572];
+    char* marker;
+    char* article;
+    u32 prefix;
+
+    switch (*(s32*)((s32)gp + 0x11D8)) {
+    case 0:
+        strcpy(buffer, dst);
+        break;
+    case 1:
+    case 6:
+        switch (*value) {
+        case 'A': case 'E': case 'I': case 'O': case 'U':
+        case 'a': case 'e': case 'i': case 'o': case 'u': article = str_an_8042183c; break;
+        default: article = str_a_80421840; break;
+        }
+        marker = strstr(dst, str_AN_80421844);
+        if (marker != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix); buffer[prefix] = 0;
+            strcat(buffer, article); strcat(buffer, marker + 4);
+            strcpy(dst, buffer);
+        }
+        marker = strstr(dst, str_AN_ITEM_802cc674);
+        if (marker != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix); buffer[prefix] = 0;
+            strcat(buffer, article); strcat(buffer, value); strcat(buffer, marker + 9);
+        } else {
+            marker = strstr(dst, str_ITEM_802cc66c);
+            if (marker != 0) {
+                prefix = strlen(dst) - strlen(marker);
+                strncpy(buffer, dst, prefix); buffer[prefix] = 0;
+                strcat(buffer, value); strcat(buffer, marker + 6);
+            }
+        }
+        break;
+    default:
+        marker = strstr(dst, str_ITEM_802cc66c);
+        if (marker != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix); buffer[prefix] = 0;
+            strcat(buffer, value); strcat(buffer, marker + 6);
+        } else strcpy(buffer, dst);
+        break;
+    }
+    strcpy(dst, buffer);
 }
+

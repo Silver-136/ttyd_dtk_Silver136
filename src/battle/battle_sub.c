@@ -37,9 +37,89 @@ void btlsubResetMoveColorLvAll(void* battleWork) {
 
 
 double intpl_sub(double outStart, double outEnd, u32 intplType, u32 inStart, u32 inEnd) {
-    return 0.0;
-}
+    extern double cos(double);
+    extern double sin(double);
+    extern f32 float_4_80422674;
+    extern f32 float_3p1416_80422678;
+    extern f32 float_15_8042267c;
+    extern f32 float_40_80422670;
+    extern f32 float_0_80422680;
+    extern f32 float_1_80422684;
+    extern f32 float_0p5_80422688;
+    extern f32 float_1p5708_8042268c;
+    f32 start = (f32)outStart;
+    f32 delta = (f32)(outEnd - outStart);
+    f32 t = (f32)inStart;
+    f32 end = (f32)inEnd;
+    f32 remain;
+    f32 value;
+    f32 wave;
 
+    switch (intplType) {
+        case 0:
+            value = start + t * delta / end;
+            break;
+        case 1:
+            value = start + delta * (t * t) / (end * end);
+            break;
+        case 2:
+            value = start + delta * (t * t * t) / (end * end * end);
+            break;
+        case 3:
+            value = start + delta * (t * t * t * t) / (end * end * end * end);
+            break;
+        case 4:
+            remain = (f32)(inEnd - inStart);
+            value = start + delta - delta * (remain * remain) / (end * end);
+            break;
+        case 5:
+            remain = (f32)(inEnd - inStart);
+            value = start + delta - delta * (remain * remain * remain) / (end * end * end);
+            break;
+        case 6:
+            remain = (f32)(inEnd - inStart);
+            value = start + delta - delta * (remain * remain * remain * remain) /
+                    (end * end * end * end);
+            break;
+        case 7:
+            remain = (f32)(inEnd - inStart);
+            wave = (f32)cos((double)(float_4_80422674 * float_3p1416_80422678 * (t / end)));
+            value = (f32)outEnd - remain * remain * delta * wave / (end * end);
+            break;
+        case 8:
+            remain = (f32)(inEnd - inStart);
+            wave = (f32)cos((double)((float_4_80422674 * float_3p1416_80422678 *
+                                     ((t * t) / end)) / float_15_8042267c));
+            value = (f32)outEnd - remain * remain * delta * wave / (end * end);
+            break;
+        case 10:
+            remain = (f32)(inEnd - inStart);
+            wave = (f32)cos((double)((float_4_80422674 * float_3p1416_80422678 *
+                                     ((t * t) / end)) / float_40_80422670));
+            value = remain * remain * wave / (end * end);
+            if (value < float_0_80422680) {
+                value = -value;
+            }
+            value = -(value * delta - (f32)outEnd);
+            break;
+        case 11:
+            wave = (f32)cos((double)(float_3p1416_80422678 * t / end));
+            value = delta * (float_1_80422684 - wave) * float_0p5_80422688 + start;
+            break;
+        case 12:
+            wave = (f32)sin((double)(float_1p5708_8042268c * t / end));
+            value = delta * wave + start;
+            break;
+        case 13:
+            wave = (f32)cos((double)(float_1p5708_8042268c * t / end));
+            value = delta * (float_1_80422684 - wave) + start;
+            break;
+        default:
+            value = float_0_80422680;
+            break;
+    }
+    return (double)value;
+}
 
 s32 BattleTransID(EventEntry* event, s32 type) {
     void* battleWork;

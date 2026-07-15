@@ -85,15 +85,255 @@ USER_FUNC(evt_door_set_param) {
 #pragma use_lmw_stmw on
 
 
-u8 door_position_sub(void) {
-    return 0;
+void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void* out0, void* out1, s32 useMarioPos) {
+    typedef struct Vec { f32 x; f32 y; f32 z; } Vec;
+    extern void PSMTXInverse(void* in, void* out);
+    extern void PSMTXConcat(void* a, void* b, void* out);
+    extern void PSMTXMultVec(void* mtx, void* in, void* out);
+    extern void PSVECSubtract(void* a, void* b, void* out);
+    extern f64 atan(f64 x);
+    extern f64 cos(f64 x);
+    extern void hitObjGetPos(char* hit, void* out);
+    extern void hitObjGetNormal(char* hit, void* out);
+    extern void* marioGetPtr(void);
+    extern const f32 float_10_80421b58;
+    extern const f32 float_30_80421b60;
+    extern const f32 float_40_80421b5c;
+    extern const f32 float_50_80421b64;
+    extern const f32 float_0_80421b68;
+    extern const f32 float_0p5_80421b6c;
+
+    void* mapObj;
+    u8 inv[0x30];
+    u8 mtx[0x30];
+    Vec min;
+    Vec max;
+    Vec diff;
+    Vec pos;
+    Vec normal;
+    u8* mario;
+    f32 inset;
+    f32 side;
+    f32 front;
+
+    mapObj = ((void*(*)(char*))mapGetMapObj)(mapObjName);
+    inset = float_10_80421b58;
+    side = float_40_80421b5c;
+    front = float_30_80421b60;
+    if (useMarioPos != 0) {
+        side = float_50_80421b64;
+        front = float_50_80421b64;
+    }
+
+    if (mapObj != NULL) {
+        PSMTXInverse((void*)((s32)mapObj + 0xAC), inv);
+        PSMTXConcat((void*)((s32)mapObj + 0x1C), inv, mtx);
+        PSMTXMultVec(mtx, (void*)(*(s32*)((s32)mapObj + 8) + 0x3C), &min);
+        PSMTXMultVec(mtx, (void*)(*(s32*)((s32)mapObj + 8) + 0x48), &max);
+        PSVECSubtract(&max, &min, &diff);
+        if (diff.x == float_0_80421b68) {
+            inset = diff.z * float_0p5_80421b6c;
+        } else {
+            inset = (diff.x / (f32)cos((f32)atan(diff.z / diff.x))) * float_0p5_80421b6c;
+        }
+    }
+
+    if (kind == 2) {
+        if (hit1 == NULL) {
+            mario = marioGetPtr();
+            ((Vec*)out1)->x = *(f32*)(mario + 0x8C);
+            ((Vec*)out1)->y = *(f32*)(mario + 0x90);
+            ((Vec*)out1)->z = *(f32*)(mario + 0x94);
+        } else {
+            if (useMarioPos == 0) {
+                hitObjGetPos(hit1, &pos);
+            } else {
+                mario = marioGetPtr();
+                pos.x = *(f32*)(mario + 0x8C);
+                pos.y = *(f32*)(mario + 0x90);
+                pos.z = *(f32*)(mario + 0x94);
+            }
+            hitObjGetNormal(hit1, &normal);
+            ((Vec*)out1)->x = normal.z * inset + normal.x * side + pos.x;
+            ((Vec*)out1)->z = -(normal.x * inset - (normal.z * side + pos.z));
+        }
+
+        if (hit0 == NULL) {
+            mario = marioGetPtr();
+            ((Vec*)out0)->x = *(f32*)(mario + 0x8C);
+            ((Vec*)out0)->y = *(f32*)(mario + 0x90);
+            ((Vec*)out0)->z = *(f32*)(mario + 0x94);
+        } else {
+            if (useMarioPos == 0) {
+                hitObjGetPos(hit0, &pos);
+            } else {
+                mario = marioGetPtr();
+                pos.x = *(f32*)(mario + 0x8C);
+                pos.y = *(f32*)(mario + 0x90);
+                pos.z = *(f32*)(mario + 0x94);
+            }
+            hitObjGetNormal(hit0, &normal);
+            ((Vec*)out0)->x = normal.x * front + pos.x;
+            ((Vec*)out0)->z = normal.z * front + pos.z;
+        }
+    } else if (kind >= 0 && kind < 2) {
+        if (hit1 == NULL) {
+            mario = marioGetPtr();
+            ((Vec*)out1)->x = *(f32*)(mario + 0x8C);
+            ((Vec*)out1)->y = *(f32*)(mario + 0x90);
+            ((Vec*)out1)->z = *(f32*)(mario + 0x94);
+        } else {
+            if (useMarioPos == 0) {
+                hitObjGetPos(hit1, &pos);
+            } else {
+                mario = marioGetPtr();
+                pos.x = *(f32*)(mario + 0x8C);
+                pos.y = *(f32*)(mario + 0x90);
+                pos.z = *(f32*)(mario + 0x94);
+            }
+            hitObjGetNormal(hit1, &normal);
+            ((Vec*)out1)->x = -(normal.z * inset - (normal.x * side + pos.x));
+            ((Vec*)out1)->z = normal.x * inset + normal.z * side + pos.z;
+        }
+
+        if (hit0 == NULL) {
+            mario = marioGetPtr();
+            ((Vec*)out0)->x = *(f32*)(mario + 0x8C);
+            ((Vec*)out0)->y = *(f32*)(mario + 0x90);
+            ((Vec*)out0)->z = *(f32*)(mario + 0x94);
+        } else {
+            if (useMarioPos == 0) {
+                hitObjGetPos(hit0, &pos);
+            } else {
+                mario = marioGetPtr();
+                pos.x = *(f32*)(mario + 0x8C);
+                pos.y = *(f32*)(mario + 0x90);
+                pos.z = *(f32*)(mario + 0x94);
+            }
+            hitObjGetNormal(hit0, &normal);
+            ((Vec*)out0)->x = normal.x * front + pos.x;
+            ((Vec*)out0)->z = normal.z * front + pos.z;
+        }
+    } else if (kind < 4) {
+        if (hit1 == NULL) {
+            mario = marioGetPtr();
+            ((Vec*)out1)->x = *(f32*)(mario + 0x8C);
+            ((Vec*)out1)->y = *(f32*)(mario + 0x90);
+            ((Vec*)out1)->z = *(f32*)(mario + 0x94);
+        } else {
+            if (useMarioPos == 0) {
+                hitObjGetPos(hit1, &pos);
+            } else {
+                mario = marioGetPtr();
+                pos.x = *(f32*)(mario + 0x8C);
+                pos.y = *(f32*)(mario + 0x90);
+                pos.z = *(f32*)(mario + 0x94);
+            }
+            hitObjGetNormal(hit1, &normal);
+            ((Vec*)out1)->x = normal.x * side + pos.x;
+            ((Vec*)out1)->z = normal.z * side + pos.z;
+        }
+
+        if (hit0 == NULL) {
+            mario = marioGetPtr();
+            ((Vec*)out0)->x = *(f32*)(mario + 0x8C);
+            ((Vec*)out0)->y = *(f32*)(mario + 0x90);
+            ((Vec*)out0)->z = *(f32*)(mario + 0x94);
+        } else {
+            if (useMarioPos == 0) {
+                hitObjGetPos(hit0, &pos);
+            } else {
+                mario = marioGetPtr();
+                pos.x = *(f32*)(mario + 0x8C);
+                pos.y = *(f32*)(mario + 0x90);
+                pos.z = *(f32*)(mario + 0x94);
+            }
+            hitObjGetNormal(hit0, &normal);
+            ((Vec*)out0)->x = normal.x * side + pos.x;
+            ((Vec*)out0)->z = normal.z * side + pos.z;
+        }
+    }
 }
 
+s32 evt_door_param(EventEntry* event) {
+    typedef struct Vec { f32 x; f32 y; f32 z; } Vec;
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
+    extern void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, Vec* out0, Vec* out1, s32 useMarioPos);
+    extern Vec vec3_802e41b8;
+    extern Vec vec3_802e41c4;
 
-s32 evt_door_param(void* pEvt) {
-    return 0;
+    s32* args;
+    s32* info;
+    s32 kind;
+    Vec out0;
+    Vec out1;
+
+    args = event->args;
+    info = (s32*)evtGetValue(event, args[0]);
+    kind = evtGetValue(event, args[1]);
+    out0 = vec3_802e41b8;
+    out1 = vec3_802e41c4;
+
+    switch (kind) {
+        case 0:
+            evtSetValue(event, args[2], info[1]);
+            break;
+        case 1:
+            evtSetValue(event, args[2], info[3]);
+            evtSetValue(event, args[3], info[4]);
+            evtSetValue(event, args[4], info[5]);
+            break;
+        case 2:
+            evtSetValue(event, args[2], info[6]);
+            evtSetValue(event, args[3], info[7]);
+            break;
+        case 3:
+            evtSetValue(event, args[2], info[8]);
+            evtSetValue(event, args[3], info[9]);
+            break;
+        case 4:
+            door_position_sub(info[1], (char*)info[3], (char*)info[4], (char*)info[5], &out0, &out1, 0);
+            evtSetValue(event, args[2], (s32)out0.x);
+            evtSetValue(event, args[3], (s32)out0.y);
+            evtSetValue(event, args[4], (s32)out0.z);
+            break;
+        case 5:
+            door_position_sub(info[1], (char*)info[3], (char*)info[4], (char*)info[5], &out0, &out1, 0);
+            evtSetValue(event, args[2], (s32)out1.x);
+            evtSetValue(event, args[3], (s32)out1.y);
+            evtSetValue(event, args[4], (s32)out1.z);
+            break;
+        case 6:
+            evtSetValue(event, args[2], info[10]);
+            evtSetValue(event, args[3], info[11]);
+            evtSetValue(event, args[4], info[12]);
+            break;
+        case 7:
+            evtSetValue(event, args[2], info[16]);
+            evtSetValue(event, args[3], info[17]);
+            break;
+        case 8:
+            evtSetValue(event, args[2], info[2]);
+            break;
+        case 9:
+            evtSetValue(event, args[2], info[0]);
+            break;
+        case 10:
+            door_position_sub(info[1], (char*)info[3], (char*)info[4], (char*)info[5], &out0, &out1, 1);
+            evtSetValue(event, args[2], (s32)out0.x);
+            evtSetValue(event, args[3], (s32)out0.y);
+            evtSetValue(event, args[4], (s32)out0.z);
+            break;
+        case 11:
+            door_position_sub(info[1], (char*)info[3], (char*)info[4], (char*)info[5], &out0, &out1, 1);
+            evtSetValue(event, args[2], (s32)out1.x);
+            evtSetValue(event, args[3], (s32)out1.y);
+            evtSetValue(event, args[4], (s32)out1.z);
+            break;
+    }
+    return 2;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

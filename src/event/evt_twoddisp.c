@@ -17,10 +17,60 @@ s32 twoddisp_main(void) {
 }
 
 
-s32 evt_twoddisp_init(int param_1) {
-    return 0;
-}
+s32 evt_twoddisp_init(void* event) {
+    extern void* evtEntryType(void* script, s32 priority, s32 flags, s32 type);
+    extern void* _mapAlloc(void* heap, u32 size);
+    extern void* mapalloc_base_ptr;
+    extern void* twoddisp_main_event;
+    extern void* twodPtr;
+    extern s32 twodID;
+    extern f32 float_0_80422f80;
+    extern f32 float_1_80422f84;
+    void* child;
+    void* entry;
+    s32 i;
 
+    child = evtEntryType(&twoddisp_main_event, *(u8*)((s32)event + 0xB), 0, *(u8*)((s32)event + 0xC));
+    *(s32*)((s32)child + 0x160) = *(s32*)((s32)event + 0x160);
+    *(s32*)((s32)child + 0x170) = *(s32*)((s32)event + 0x170);
+    *(s32*)((s32)child + 0x9C) = *(s32*)((s32)event + 0x9C);
+    *(s32*)((s32)child + 0xA0) = *(s32*)((s32)event + 0xA0);
+    *(s32*)((s32)child + 0xA4) = *(s32*)((s32)event + 0xA4);
+    *(s32*)((s32)child + 0xA8) = *(s32*)((s32)event + 0xA8);
+    *(s32*)((s32)child + 0xAC) = *(s32*)((s32)event + 0xAC);
+    *(s32*)((s32)child + 0xB0) = *(s32*)((s32)event + 0xB0);
+    *(s32*)((s32)child + 0xB4) = *(s32*)((s32)event + 0xB4);
+    *(s32*)((s32)child + 0xB8) = *(s32*)((s32)event + 0xB8);
+    *(s32*)((s32)child + 0xBC) = *(s32*)((s32)event + 0xBC);
+    *(s32*)((s32)child + 0xC0) = *(s32*)((s32)event + 0xC0);
+    *(s32*)((s32)child + 0xC4) = *(s32*)((s32)event + 0xC4);
+    *(s32*)((s32)child + 0xC8) = *(s32*)((s32)event + 0xC8);
+    *(s32*)((s32)child + 0xCC) = *(s32*)((s32)event + 0xCC);
+    *(s32*)((s32)child + 0xD0) = *(s32*)((s32)event + 0xD0);
+    *(s32*)((s32)child + 0xD4) = *(s32*)((s32)event + 0xD4);
+    *(s32*)((s32)child + 0xD8) = *(s32*)((s32)event + 0xD8);
+    *(s32*)((s32)child + 0xDC) = *(s32*)((s32)event + 0xDC);
+    *(s32*)((s32)child + 0xE0) = *(s32*)((s32)event + 0xE0);
+    *(s32*)((s32)child + 0xE4) = *(s32*)((s32)event + 0xE4);
+    *(s32*)((s32)child + 0x154) = *(s32*)((s32)event + 0x154);
+    *(s32*)((s32)child + 0x158) = *(s32*)((s32)event + 0x158);
+    twodID = *(s32*)((s32)child + 0x15C);
+
+    twodPtr = _mapAlloc(mapalloc_base_ptr, 0x1450);
+    for (i = 0; i < 100; i++) {
+        entry = (void*)((s32)twodPtr + (i * 0x34));
+        *(u8*)((s32)entry + 0x0) = 0;
+        *(u16*)((s32)entry + 0x10) = 0;
+        *(u16*)((s32)entry + 0x12) = 0;
+        *(f32*)((s32)entry + 0x14) = float_0_80422f80;
+        *(f32*)((s32)entry + 0x1C) = float_0_80422f80;
+        *(f32*)((s32)entry + 0x18) = float_0_80422f80;
+        *(f32*)((s32)entry + 0x20) = float_0_80422f80;
+        *(s32*)((s32)entry + 0x24) = 0;
+        *(f32*)((s32)entry + 0x28) = float_1_80422f84;
+    }
+    return 2;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -44,10 +94,10 @@ void twoddisp_disp(void) {
     extern u32 dat_80422f78;
     extern u32 dat_80422f7c;
     extern void* twodPtr;
-    u32 color2;
-    u32 color1;
-    u32 fogColor2;
     u32 fogColor1;
+    u32 fogColor2;
+    u32 color1;
+    u32 color2;
     VecLocal pos;
     char buf[0x100];
     s32 offset;

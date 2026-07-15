@@ -396,8 +396,39 @@ void* kpaHitCheck(void) {
 }
 
 /* stub-fill: kpaSearchGround | missing_definition | ghidra_signature */
-u8 kpaSearchGround(void) {
-    return 0;
+s32 kpaSearchGround(f64 height, f32* outY, f32* outDelta, f32* outAngle) {
+    extern void* marioGetPtr(void);
+    extern void* kpaGetKpaWork(void);
+    extern void* hitCheckFilter(f32*, f32*, s32, void*);
+    extern f32 angleABf(f32, f32, f32, f32);
+    u8* mario = marioGetPtr();
+    u8* work = kpaGetKpaWork();
+    f32 start[3], end[3];
+    f32 best = -100000.0f;
+    s32 rays = *(s32*)(work + 0x14) < 2 ? 3 : 7;
+    s32 i, found = 0;
+
+    *(f32*)(mario + 0x218) = 0.0f;
+    *(f32*)(mario + 0x21C) = 0.0f;
+    *(f32*)(mario + 0x220) = 0.0f;
+    *(f32*)(mario + 0x224) = 0.0f;
+    *outY = *(f32*)(mario + 0x90);
+    *outDelta = -1.0f;
+    *outAngle = 0.0f;
+    for (i = 0; i < rays; i++) {
+        f32 x = *(f32*)(mario + 0x8C) + (f32)((i & 1) ? 20 : -20);
+        f32 z = *(f32*)(mario + 0x94) + (f32)((i & 2) ? 20 : -20);
+        start[0] = x; start[1] = *(f32*)(mario + 0x90) + (f32)height; start[2] = z;
+        end[0] = x; end[1] = *(f32*)(mario + 0x90) - (f32)height; end[2] = z;
+        if (hitCheckFilter(start, end, 0x1000, 0) != 0 && end[1] > best) {
+            best = end[1];
+            *outY = best;
+            *outDelta = *(f32*)(mario + 0x90) - best;
+            *outAngle = angleABf(start[0], start[2], end[0], end[2]);
+            found = 1;
+        }
+    }
+    return found;
 }
 
 /* stub-fill: kpaEnemyHitChk | missing_definition | ghidra_signature */

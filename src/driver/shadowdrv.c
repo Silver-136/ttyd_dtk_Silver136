@@ -9,8 +9,110 @@ u8 rampTex8[0x20];
 extern u8 shadowConfig[];
 extern void* smartTexObj(void*, s32);
 
-u8 depthShadowEnd(void) {
-    return 0;
+void depthShadowEnd(s32 param_1, u32* param_2) {
+    extern void* camGetCurPtr(void);
+    extern void PSMTXCopy(void* src, void* dst);
+    extern void GXSetColorUpdate(s32 enable);
+    extern void GXSetViewport(f32 left, f32 top, f32 width, f32 height, f32 nearz, f32 farz);
+    extern void GXSetScissor(s32 left, s32 top, s32 width, s32 height);
+    extern u32 GXGetTexBufferSize(u32 width, u32 height, s32 format, u8 mipmap, u32 max_lod);
+    extern void* smartAlloc(u32 size, s32 align);
+    extern void GXSetTexCopySrc(u32 left, u32 top, u32 width, u32 height);
+    extern void GXSetTexCopyDst(u16 width, u16 height, u32 format, u32 mipmap);
+    extern void GXSetZMode(u32 enable, u32 func, u32 update_enable);
+    extern void GXCopyTex(void* dest, u8 clear);
+    extern void GXPixModeSync(void);
+    extern void GXInitTexObj(void* obj, void* image_ptr, u16 width, u16 height, u32 format, u32 wrap_s, u32 wrap_t, u8 mipmap);
+    extern void GXInitTexObjLOD(void* obj, s32 min_filt, s32 mag_filt, f32 min_lod, f32 max_lod, f32 lod_bias, u8 bias_clamp, u8 edge_lod, u32 max_aniso);
+    extern void C_MTXLightFrustum(f32 t, f32 b, f32 l, f32 r, f32 n, f32 scale_s, f32 scale_t, f32 trans_s, void* mtx, f32 trans_t);
+    extern void C_MTXLightOrtho(f32 t, f32 b, f32 l, f32 r, f32 scale_s, f32 scale_t, f32 trans_s, f32 trans_t, void* mtx);
+    extern void PSMTXConcat(void* a, void* b, void* ab);
+    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
+    extern f32 tmp_view[3][4];
+    extern s32 tmp_sci[];
+    extern f32 tmp_vp[];
+    extern u8 shadowConfig[];
+    extern u16 ShadowSizeTbl[];
+    extern f32 float_0_8041f9d4;
+    extern f32 float_0p5_8041f9d8;
+    extern f32 float_1_8041f9e4;
+    extern f32 float_neg1_8041f9e8;
+    extern f32 float_16_8041f9e0;
+    extern f32 float_256_8041f9dc;
+    f32 projTexMtx[3][4];
+    f32 depthMtx[3][4];
+    void* cam;
+    u8* config;
+    u16 width;
+    u32 copyFmt;
+    u32 texFmt;
+    u32 shadowType;
+    f32 nearz;
+    f32 farz;
+
+    cam = camGetCurPtr();
+    PSMTXCopy(tmp_view, (void*)((s32)cam + 0x11C));
+    GXSetColorUpdate(1);
+    GXSetViewport(tmp_vp[0], tmp_vp[1], tmp_vp[2], tmp_vp[3], tmp_vp[4], tmp_vp[5]);
+    GXSetScissor(tmp_sci[0], tmp_sci[1], tmp_sci[2], tmp_sci[3]);
+
+    if (param_2[1] != 0) {
+        config = shadowConfig + param_2[2] * 0x48;
+        shadowType = *(u32*)(config + 0x3C);
+        if (shadowType < 3) {
+            copyFmt = 0x11;
+            texFmt = 1;
+        } else {
+            copyFmt = 0x13;
+            texFmt = 3;
+        }
+        width = ShadowSizeTbl[*(s32*)(config + 0x40)];
+        if ((param_2[0] & 2) != 0) {
+            param_2[0x3F] = (u32)smartAlloc(GXGetTexBufferSize(width, width, texFmt, 0, 0), 3);
+        }
+        GXSetTexCopySrc(0, 0, width, width);
+        GXSetTexCopyDst(width, width, copyFmt, 0);
+        GXSetZMode(1, 3, 1);
+        GXCopyTex(*(void**)param_2[0x3F], 1);
+        GXPixModeSync();
+        GXInitTexObj((void*)((s32)param_2 + 0xDC), *(void**)param_2[0x3F], width, width, texFmt, 0, 0, 0);
+        GXInitTexObjLOD((void*)((s32)param_2 + 0xDC), 0, 0, float_0_8041f9d4, float_0_8041f9d4, float_0_8041f9d4, 0, 0, 0);
+
+        if ((void*)((s32)param_2 + 0x7C) != 0) {
+            if (*(s32*)(config + 0x38) == 0) {
+                C_MTXLightFrustum(-*(f32*)(config + 0x2C), *(f32*)(config + 0x2C), *(f32*)(config + 0x28), -*(f32*)(config + 0x28), *(f32*)(config + 0x30), float_0p5_8041f9d8, float_0p5_8041f9d8, float_0p5_8041f9d8, projTexMtx, float_0p5_8041f9d8);
+            } else {
+                C_MTXLightOrtho(-*(f32*)(config + 0x2C), *(f32*)(config + 0x2C), *(f32*)(config + 0x28), -*(f32*)(config + 0x28), float_0p5_8041f9d8, float_0p5_8041f9d8, float_0p5_8041f9d8, float_0p5_8041f9d8, projTexMtx);
+            }
+            PSMTXConcat(projTexMtx, (void*)((s32)param_2 + 0xC), (void*)((s32)param_2 + 0x7C));
+        }
+
+        if ((void*)((s32)param_2 + 0xAC) != 0) {
+            nearz = *(f32*)(config + 0x30);
+            farz = *(f32*)(config + 0x34);
+            PSMTXScale(depthMtx, float_0_8041f9d4, float_0_8041f9d4, float_0_8041f9d4);
+            depthMtx[1][2] = float_16_8041f9e0;
+            if (shadowType == 2) {
+                depthMtx[1][2] = float_256_8041f9dc;
+            }
+            if (*(s32*)(config + 0x38) == 0) {
+                depthMtx[0][3] = farz * nearz;
+                depthMtx[2][3] = *(f32*)(config + 0x44);
+                depthMtx[2][2] = float_1_8041f9e4;
+                depthMtx[0][2] = farz;
+            } else {
+                depthMtx[0][3] = -nearz;
+                depthMtx[2][3] = float_1_8041f9e4 + *(f32*)(config + 0x44);
+                depthMtx[0][2] = float_neg1_8041f9e8;
+            }
+            depthMtx[0][3] = depthMtx[0][3] / (farz - nearz);
+            depthMtx[0][2] = depthMtx[0][2] / (farz - nearz);
+            depthMtx[1][3] = depthMtx[0][3] * depthMtx[1][2];
+            depthMtx[1][2] = depthMtx[0][2] * depthMtx[1][2];
+            PSMTXConcat(depthMtx, (void*)((s32)param_2 + 0xC), (void*)((s32)param_2 + 0xAC));
+        }
+        param_2[0] |= 1;
+    }
 }
 
 void projShadowEnd(s32 param_1, u32* param_2) {
@@ -223,8 +325,112 @@ u8 shadowEntry(double param_1, double param_2, double param_3, double param_4) {
     return 0;
 }
 
-u8 cylinderShadowDraw(void) {
-    return 0;
+void cylinderShadowDraw(s32 param_1) {
+    extern void* camGetCurPtr(void);
+    extern void sysWaitDrawSync(void);
+    extern void GXClearBoundingBox(void);
+    extern void PSMTXConcat(void* a, void* b, void* ab);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void GXSetTevColor(s32 reg, void* color);
+    extern void GXSetZMode(s32 enable, s32 func, s32 update);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXSetBlendMode(s32 type, s32 src, s32 dst, s32 op);
+    extern void GXSetAlphaUpdate(s32 enable);
+    extern void GXSetColorUpdate(s32 enable);
+    extern void GXSetChanCtrl(s32 chan, u8 enable, s32 amb_src, s32 mat_src, s32 light_mask, s32 diff_fn, s32 attn_fn);
+    extern void GXSetArray(s32 attr, void* base, s32 stride);
+    extern void GXCallDisplayList(void* list, u32 nbytes);
+    extern void GXSetChanMatColor(s32 chan, void* color);
+    extern void GXReadBoundingBox(u16* left, u16* top, u16* right, u16* bottom);
+    extern void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom);
+    extern void cylinder(void* entry);
+    extern void* cswp;
+    extern u32 unk_80429540;
+    extern u32 unk_80429544;
+    extern f32 float_0_8041f9d4;
+    extern u8 lbl_80304A20[];
+    f32 mtx[3][4];
+    void* cam;
+    void* entry;
+    u32 color;
+    u32 matColor;
+    s32 i;
+    u16 left;
+    u16 top;
+    u16 right;
+    u16 bottom;
+
+    entry = *(void**)((s32)cswp + 0x108);
+    cam = camGetCurPtr();
+    for (i = 0; i < *(s32*)((s32)cswp + 0x104); i++, entry = (void*)((s32)entry + 0x5C)) {
+        if (*(f32*)((s32)entry + 0x10) != float_0_8041f9d4
+            && *(u8*)((s32)entry + 2) == 2
+            && (*(u16*)entry & 2) != 0
+            && *(s16*)((s32)entry + 0x1A) == param_1) {
+            if (param_1 == 1) {
+                sysWaitDrawSync();
+                GXClearBoundingBox();
+            }
+            PSMTXConcat((void*)((s32)cam + 0x11C), (void*)((s32)entry + 0x2C), mtx);
+            GXLoadPosMtxImm(mtx, 0);
+            color = (unk_80429540 & 0xFFFFFF00) | *(u8*)((s32)entry + 0x28);
+            GXSetTevColor(1, &color);
+
+            GXSetZMode(1, 3, 0);
+            GXSetCullMode(2);
+            GXSetBlendMode(1, 1, 1, 0);
+            GXSetBlendMode(2, 1, 1, 7);
+            GXSetAlphaUpdate(1);
+            GXSetColorUpdate(0);
+            GXSetChanCtrl(4, 0, 0, 1, 0, 2, 2);
+            if (*(u8*)((s32)entry + 3) == 1) {
+                GXSetArray(0xB, lbl_80304A20 + 0x760, 4);
+                GXCallDisplayList(lbl_80304A20 + 0x540, 0x40);
+                GXCallDisplayList(lbl_80304A20 + 0x580, 0x20);
+                GXCallDisplayList(lbl_80304A20 + 0x5A0, 0x20);
+            } else {
+                cylinder(entry);
+            }
+
+            GXSetZMode(1, 3, 0);
+            GXSetCullMode(1);
+            GXSetBlendMode(0, 4, 5, 0);
+            GXSetAlphaUpdate(1);
+            GXSetColorUpdate(0);
+            matColor = unk_80429544;
+            GXSetChanMatColor(4, &matColor);
+            GXSetChanCtrl(4, 0, 0, 0, 0, 2, 2);
+            if (*(u8*)((s32)entry + 3) == 1) {
+                GXSetArray(0xB, lbl_80304A20 + 0x760, 4);
+                GXCallDisplayList(lbl_80304A20 + 0x540, 0x40);
+                GXCallDisplayList(lbl_80304A20 + 0x580, 0x20);
+                GXCallDisplayList(lbl_80304A20 + 0x5A0, 0x20);
+            } else {
+                cylinder(entry);
+            }
+
+            GXSetCullMode(2);
+            GXSetBlendMode(1, 6, 7, 0);
+            GXSetAlphaUpdate(0);
+            GXSetColorUpdate(1);
+            matColor = *(u32*)((s32)cswp + 0x100);
+            GXSetChanMatColor(4, &matColor);
+            if (*(u8*)((s32)entry + 3) == 1) {
+                GXSetArray(0xB, lbl_80304A20 + 0x760, 4);
+                GXCallDisplayList(lbl_80304A20 + 0x540, 0x40);
+                GXCallDisplayList(lbl_80304A20 + 0x580, 0x20);
+                GXCallDisplayList(lbl_80304A20 + 0x5A0, 0x20);
+            } else {
+                cylinder(entry);
+            }
+
+            if (param_1 == 1) {
+                sysWaitDrawSync();
+                GXReadBoundingBox(&left, &top, &right, &bottom);
+                offscreenAddBoundingBox(*(s16*)((s32)entry + 0x18), left, top, right, bottom);
+            }
+        }
+    }
 }
 
 void cylinder(void* param_1) {
@@ -279,8 +485,115 @@ void cylinder(void* param_1) {
     }
 }
 
-u8 shadowCharShadowDisp_Texture(void) {
-    return 0;
+void shadowCharShadowDisp_Texture(s32 param_1) {
+    extern void* camGetCurPtr(void);
+    extern void GXSetNumChans(u32 n);
+    extern void GXSetChanCtrl(s32 chan, u8 enable, s32 amb_src, s32 mat_src, s32 light_mask, s32 diff_fn, s32 attn_fn);
+    extern void GXSetChanMatColor(s32 chan, void* color);
+    extern void effGetTexObjN64(s32 id, void* obj);
+    extern void GXLoadTexObj(void* obj, s32 mapid);
+    extern void GXSetNumTexGens(u32 n);
+    extern void GXSetTexCoordGen2(s32 dst, s32 func, s32 src, u32 mtx, u32 normalize, s32 postmtx);
+    extern void GXSetNumTevStages(u32 n);
+    extern void GXSetTevOrder(s32 stage, s32 texcoord, s32 texmap, s32 color);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 regid);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 regid);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetFog(s32 type, f32 start, f32 end, f32 nearz, f32 farz, void* color);
+    extern void GXSetBlendMode(s32 type, s32 src, s32 dst, s32 op);
+    extern void GXSetZMode(s32 enable, s32 func, s32 update);
+    extern void GXSetZCompLoc(s32 before_tex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+    extern void GXSetCurrentMtx(s32 id);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 cnt, s32 type, s32 frac);
+    extern void sysWaitDrawSync(void);
+    extern void GXClearBoundingBox(void);
+    extern void PSMTXConcat(void* a, void* b, void* ab);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
+    extern void GXReadBoundingBox(u16* left, u16* top, u16* right, u16* bottom);
+    extern void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom);
+    extern void* cswp;
+    extern u32 unk_8042953c;
+    extern f32 float_0_8041f9d4;
+    extern f32 float_0p5_8041f9d8;
+    extern f32 float_1_8041f9e4;
+    extern f32 float_1p25_8041f9fc;
+    extern f32 float_2p5_8041f9f8;
+    volatile f32* fifo = (volatile f32*)0xCC008000;
+    f32 mtx[3][4];
+    u32 texObj[8];
+    u32 matColor;
+    u32 fogColor;
+    void* cam;
+    void* entry;
+    s32 i;
+    u16 left;
+    u16 top;
+    u16 right;
+    u16 bottom;
+    f32 negSize;
+    f32 halfNegSize;
+
+    entry = *(void**)((s32)cswp + 0x108);
+    cam = camGetCurPtr();
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 2, 2);
+    matColor = *(u32*)((s32)cswp + 0x100);
+    GXSetChanMatColor(4, &matColor);
+    effGetTexObjN64(0x2C, texObj);
+    GXLoadTexObj(texObj, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xA);
+    GXSetTevAlphaIn(0, 7, 6, 5, 7);
+    fogColor = unk_8042953c;
+    GXSetFog(0, float_0_8041f9d4, float_0_8041f9d4, float_0_8041f9d4, float_0_8041f9d4, &fogColor);
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZMode(1, 3, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetCurrentMtx(0);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+
+    negSize = -float_2p5_8041f9f8;
+    for (i = 0; i < *(s32*)((s32)cswp + 0x104); i++, entry = (void*)((s32)entry + 0x5C)) {
+        if (*(f32*)((s32)entry + 0x10) != float_0_8041f9d4
+            && *(u8*)((s32)entry + 2) == 1
+            && (*(u16*)entry & 2) != 0
+            && *(s16*)((s32)entry + 0x1A) == param_1) {
+            if (param_1 == 1) {
+                sysWaitDrawSync();
+                GXClearBoundingBox();
+            }
+            PSMTXConcat((void*)((s32)cam + 0x11C), (void*)((s32)entry + 0x2C), mtx);
+            GXLoadPosMtxImm(mtx, 0);
+            GXBegin(0x80, 0, 4);
+            halfNegSize = negSize * float_0p5_8041f9d8;
+            *fifo = halfNegSize;          *fifo = float_0_8041f9d4; *fifo = float_1p25_8041f9fc; *fifo = float_0_8041f9d4; *fifo = float_0_8041f9d4;
+            *fifo = float_1p25_8041f9fc; *fifo = float_0_8041f9d4; *fifo = float_1p25_8041f9fc; *fifo = float_1_8041f9e4; *fifo = float_0_8041f9d4;
+            *fifo = float_1p25_8041f9fc; *fifo = float_0_8041f9d4; *fifo = halfNegSize;          *fifo = float_1_8041f9e4; *fifo = float_1_8041f9e4;
+            *fifo = halfNegSize;          *fifo = float_0_8041f9d4; *fifo = halfNegSize;          *fifo = float_0_8041f9d4; *fifo = float_1_8041f9e4;
+            if (param_1 == 1) {
+                sysWaitDrawSync();
+                GXReadBoundingBox(&left, &top, &right, &bottom);
+                offscreenAddBoundingBox(*(s16*)((s32)entry + 0x18), left, top, right, bottom);
+            }
+        }
+    }
 }
 
 void shadowCharShadowDisp_Polygon(s32 param_1) {
@@ -892,6 +1205,102 @@ u8 shadowMain(void) {
     return 0;
 }
 
-u8 shadowInit(void) {
-    return 0;
+void shadowInit(void) {
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void* memset(void* dest, s32 value, u32 size);
+    extern u32 GXGetTexBufferSize(u32 width, u32 height, s32 format, u8 mipmap, u32 max_lod);
+    extern void* smartAlloc(u32 size, s32 align);
+    extern void GXInitTexObj(void* obj, void* image_ptr, u16 width, u16 height, u32 format, u32 wrap_s, u32 wrap_t, u8 mipmap);
+    extern void GXInitTexObjLOD(void* obj, s32 min_filt, s32 mag_filt, f32 min_lod, f32 max_lod, f32 lod_bias, u8 bias_clamp, u8 edge_lod, u32 max_aniso);
+    extern void DCFlushRange(void* ptr, s32 size);
+    extern void* cswp;
+    extern void* dswp;
+    extern void* pswp;
+    extern u16 ShadowSizeTbl[];
+    extern u32 dat_8041f9c0;
+    extern u32 dat_8041f9cc;
+    extern u32 dat_8041f9d0;
+    extern f32 float_0_8041f9d4;
+    extern f32 float_20_8041fa08;
+    u8* tex8;
+    u16* tex16;
+    u32 size;
+    u32 i;
+    u32 v;
+
+    *(u32*)((s32)cswp + 0x0) = 0;
+    *(u32*)((s32)cswp + 0x4) = 0;
+    *(u32*)((s32)cswp + 0x8) = 1;
+    *(u32*)((s32)cswp + 0x100) = dat_8041f9c0;
+    *(u32*)((s32)cswp + 0x10C) = 1;
+    *(u32*)((s32)cswp + 0x110) = 2;
+    *(f32*)((s32)cswp + 0x114) = float_20_8041fa08;
+    *(u32*)((s32)cswp + 0x118) = 1;
+    *(u32*)((s32)cswp + 0x104) = 0;
+    *(void**)((s32)cswp + 0x108) = __memAlloc(0, 0x1700);
+    memset(*(void**)((s32)cswp + 0x108), 0, 0x1700);
+    *(void**)((s32)cswp + 0xFC) = smartAlloc(GXGetTexBufferSize(ShadowSizeTbl[0], ShadowSizeTbl[0], 2, 0, 0), 0);
+
+    *(u32*)((s32)dswp + 0x0) = 2;
+    *(u32*)((s32)dswp + 0x4) = 0;
+    *(u32*)((s32)dswp + 0x8) = 0;
+    *(u32*)((s32)dswp + 0x100) = dat_8041f9cc;
+
+    size = GXGetTexBufferSize(0x10, 0x10, 1, 0, 0);
+    tex8 = __memAlloc(0, size);
+    i = 0;
+    while (i < 0x100) {
+        v = i;
+        tex8[(v & 0xC) * 0x10 + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
+        v = i + 1;
+        tex8[((v * 8) & 0x18) + ((v * 0x10) & 0xC0) + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
+        v = i + 2;
+        tex8[((v * 8) & 0x18) + ((v * 0x10) & 0xC0) + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
+        v = i + 3;
+        tex8[((v * 8) & 0x18) + ((v * 0x10) & 0xC0) + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
+        v = i + 4;
+        tex8[((v * 0x10) & 0xC0) + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
+        v = i + 5;
+        tex8[((v * 8) & 0x18) + ((v * 0x10) & 0xC0) + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
+        v = i + 6;
+        tex8[((v * 8) & 0x18) + ((v * 0x10) & 0xC0) + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
+        v = i + 7;
+        tex8[((v * 8) & 0x18) + ((v * 0x10) & 0xC0) + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
+        i += 8;
+    }
+    GXInitTexObj(rampTex8, tex8, 0x10, 0x10, 1, 0, 1, 0);
+    GXInitTexObjLOD(rampTex8, 0, 0, float_0_8041f9d4, float_0_8041f9d4, float_0_8041f9d4, 0, 0, 0);
+    DCFlushRange(tex8, size);
+
+    size = GXGetTexBufferSize(0x100, 0x100, 3, 0, 0);
+    tex16 = __memAlloc(0, size);
+    i = 0;
+    while (i < 0x10000) {
+        v = i;
+        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v & 0xFC) * 0x100)] = v;
+        v = i + 1;
+        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v * 0x100) & 0xFC00) + ((v * 4) & 0xC)] = v;
+        v = i + 2;
+        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v * 0x100) & 0xFC00) + ((v * 4) & 0xC)] = v;
+        v = i + 3;
+        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v * 0x100) & 0xFC00) + ((v * 4) & 0xC)] = v;
+        v = i + 4;
+        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v * 0x100) & 0xFC00)] = v;
+        v = i + 5;
+        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v * 0x100) & 0xFC00) + ((v * 4) & 0xC)] = v;
+        v = i + 6;
+        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v * 0x100) & 0xFC00) + ((v * 4) & 0xC)] = v;
+        v = i + 7;
+        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v * 0x100) & 0xFC00) + ((v * 4) & 0xC)] = v;
+        i += 8;
+    }
+    GXInitTexObj(rampTex16, tex16, 0x100, 0x100, 3, 0, 1, 0);
+    GXInitTexObjLOD(rampTex16, 0, 0, float_0_8041f9d4, float_0_8041f9d4, float_0_8041f9d4, 0, 0, 0);
+    DCFlushRange(tex16, size);
+
+    *(u32*)((s32)pswp + 0x0) = 2;
+    *(u32*)((s32)pswp + 0x4) = 0;
+    *(u32*)((s32)pswp + 0x8) = 0;
+    *(u32*)((s32)pswp + 0x100) = dat_8041f9d0;
 }
+

@@ -235,6 +235,48 @@ void monteCountDisp(void) {
 }
 
 /* stub-fill: yuugijou_init | missing_definition | ghidra_signature */
-u8 yuugijou_init(void) {
-    return 0;
+void yuugijou_init(void) {
+    static u8 yuugijouwork[600];
+    s32* work;
+    s32 i;
+    static const s32 flags[8] = { 0x14, 0x2C, 0x44, 0x5C, 0x74, 0x8C, 0xA4, 0xBC };
+    static const s32 values[8][5] = {
+        { 0x5B964, 0x5825A, 0x4F826, 0x4C3D8, 0x4237E },
+        { 2, 5, 0x12, 0x1B, 0x8A },
+        { 0x20850, 0x20436, 0x20184, 0x1F91E, 0x1E3AC },
+        { 0x16BDE, 0x16968, 0x16382, 0x1627E, 0x15950 },
+        { 0x5B964, 0x5825A, 0x4F826, 0x4C3D8, 0x4237E },
+        { 2, 5, 0x12, 0x1B, 0x8A },
+        { 0x1E3DE, 0x1E00A, 0x1DD8A, 0x1D5BA, 0x1C1CE },
+        { 0x1525C, 0x15018, 0x14A96, 0x149A6, 0x14122 }
+    };
+    static const s32 add[4][5] = {
+        { 14, 12, 15, 11, 10 }, { 1, 0, 0, 0, 0 },
+        { 7, 6, 4, 4, 1 }, { 7, 6, 4, 3, 4 }
+    };
+
+    yuwp = yuugijouwork;
+    memset(yuwp, 0, 600);
+    work = (s32*)yuwp;
+    for (i = 0; i < 40; i++) {
+        s32 group = i / 5;
+        s32 slot = i % 5;
+        s32 kind = group & 3;
+        s32 value = values[group][slot];
+        *(s32*)((u8*)work + flags[group] + slot * 4) = 1;
+        *(s32*)((u8*)work + 0xD4 + group * 0x18 + slot * 4) = value;
+        if (kind == 0) {
+            *(s32*)((u8*)work + 0x194 + group * 0x18 + slot * 4) = add[0][slot];
+        } else if (kind == 1) {
+            s32 rank = ((700 - value) * 15) / 700;
+            *(s32*)((u8*)work + 0x194 + group * 0x18 + slot * 4) = rank + add[1][slot];
+        } else if (kind == 2) {
+            s32 rank = (value - 0x1A9C8) / 2000;
+            *(s32*)((u8*)work + 0x194 + group * 0x18 + slot * 4) = rank + add[2][slot];
+        } else {
+            s32 rank = (value - 74000) / 2000;
+            *(s32*)((u8*)work + 0x194 + group * 0x18 + slot * 4) = rank + add[3][slot];
+        }
+    }
 }
+

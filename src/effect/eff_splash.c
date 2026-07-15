@@ -448,5 +448,45 @@ struct EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
 
 /* stub-fill: effSplashDisp | prototype_only | source_prototype */
 void effSplashDisp(void* unused, void* entry) {
-    return;
+    typedef struct { f32 x, y, z; } Vec;
+    typedef struct {
+        s32 type; Vec pos; f32 vx, vz; Vec scale; s32 frame, timer;
+        f32 vy, gravity; s32 unk, state; u8 r, g, b, a;
+    } Work;
+    extern void mapSetMaterialFog(void);
+    extern void effGetTexObj(void*, s32, s32);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXBegin(s32, s32, s32);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXLoadPosMtxImm(void*, s32);
+    u8 tex[64];
+    f32 trans[3][4], scale[3][4], model[3][4];
+    Work* work = *(Work**)((u8*)entry + 0xC);
+    s32 count = *(s32*)((u8*)entry + 8);
+    s32 first = work->type == 3 ? 6 : (work->type == 2 ? 1 : 2);
+    s32 i;
+
+    mapSetMaterialFog();
+    effGetTexObj(tex, work->type == 3 ? 0x43 : 0x41, 0);
+    GXLoadTexObj(tex, 0);
+    for (i = first; i < count; i++) {
+        Work* child = work + i;
+        if (child->timer != 0) continue;
+        PSMTXTrans(trans, child->pos.x, child->pos.y, child->pos.z);
+        PSMTXScale(scale, child->scale.x, child->scale.y, child->scale.z);
+        PSMTXConcat(trans, scale, model);
+        GXLoadPosMtxImm(model, 0);
+        GXBegin(0x80, 0, 4);
+        *(volatile f32*)0xCC008000 = -1.0f; *(volatile f32*)0xCC008000 = 1.0f; *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile u32*)0xCC008000 = *(u32*)&child->r; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 1.0f; *(volatile f32*)0xCC008000 = 1.0f; *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile u32*)0xCC008000 = *(u32*)&child->r; *(volatile f32*)0xCC008000 = 1.0f; *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 1.0f; *(volatile f32*)0xCC008000 = -1.0f; *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile u32*)0xCC008000 = *(u32*)&child->r; *(volatile f32*)0xCC008000 = 1.0f; *(volatile f32*)0xCC008000 = 1.0f;
+        *(volatile f32*)0xCC008000 = -1.0f; *(volatile f32*)0xCC008000 = -1.0f; *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile u32*)0xCC008000 = *(u32*)&child->r; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 1.0f;
+    }
 }
+

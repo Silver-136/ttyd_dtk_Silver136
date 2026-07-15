@@ -32,29 +32,31 @@ BOOL BtlUnit_Init(void) {
 }
 
 BattleWorkUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
+    extern void BtlUnit_SetOffsetPos(BattleWorkUnit*, f32, f32, f32);
+    extern void BtlUnit_SetHomePos(BattleWorkUnit*, f32, f32, f32);
+    extern void BtlUnit_SetBaseRotate(BattleWorkUnit*, f32, f32, f32);
+    extern void BtlUnit_SetRotate(BattleWorkUnit*, f32, f32, f32);
+    extern void BtlUnit_SetRotateOffset(BattleWorkUnit*, f32, f32, f32);
+    extern void BtlUnit_SetScale(BattleWorkUnit*, f32, f32, f32);
+    extern void BtlUnit_SetBaseScale(BattleWorkUnit*, f32, f32, f32);
+    extern void BtlUnit_HpGaugeInit(BattleWorkUnit*);
     BattleWork* wp = _battleWorkPointer;
     BattleWorkUnit* unit;
     BattleUnitType type;
     int i;
 
     for (i = 0; i < 64; i++) {
-        // Loop to find the end of the list
         if (BattleGetUnitPtr(wp, i) == NULL) {
             break;
         }
     }
-
-    // Make sure we even have a slot to add the unit
     if (i >= 64) {
         return NULL;
     }
-
-    // Allocate a new unit, and make sure it's valid
     unit = BattleAlloc(sizeof(BattleWorkUnit));
     if (unit == NULL) {
         return NULL;
     }
-
     memset(unit, 0, sizeof(BattleWorkUnit));
     BattleSetUnitPtr(wp, i, unit);
     unit->unitId = i;
@@ -69,10 +71,48 @@ BattleWorkUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     unit->alliance = setup->alliance;
     unit->level = unit->data->level;
     type = unit->currentType;
-    if (type == UNIT_MARIO || type >= UNIT_PARTNER_MIN && type < UNIT_PARTNER_MAX) {
+    if (type == UNIT_MARIO || (type >= UNIT_PARTNER_MIN && type < UNIT_PARTNER_MAX)) {
         unit->level = pouchGetPtr()->level;
     }
     unit->attackPhase = setup->attackPhase;
+
+    *(void**)((s32)unit + 0x280) = NULL;
+    *(void**)((s32)unit + 0x284) = NULL;
+    *(s32*)((s32)unit + 0x288) = 0;
+    *(void**)((s32)unit + 0x28C) = NULL;
+    *(s32*)((s32)unit + 0x290) = 0;
+    *(void**)((s32)unit + 0x294) = NULL;
+    *(s32*)((s32)unit + 0x298) = 0;
+
+    BtlUnit_SetPos(unit, setup->position.x, setup->position.y, setup->position.z);
+    BtlUnit_SetOffsetPos(unit, setup->position.x, setup->position.y, setup->position.z);
+    BtlUnit_SetHomePos(unit, setup->position.x, setup->position.y, setup->position.z);
+    BtlUnit_SetBaseRotate(unit, 0.0f, 0.0f, 0.0f);
+    BtlUnit_SetRotate(unit, 0.0f, 0.0f, 0.0f);
+    BtlUnit_SetRotateOffset(unit, 0.0f, 0.0f, 0.0f);
+    BtlUnit_SetScale(unit, 1.0f, 1.0f, 1.0f);
+    BtlUnit_SetBaseScale(unit, 1.0f, 1.0f, 1.0f);
+
+    unit->baseMaxHP = unit->data->maxHP;
+    unit->currentMaxHP = unit->baseMaxHP;
+    unit->currentHP = unit->data->maxHP;
+    unit->baseMaxFP = unit->data->maxFP;
+    unit->currentMaxFP = unit->baseMaxFP;
+    unit->currentFP = unit->data->maxFP;
+    unit->sizeMultiplier = 1.0f;
+    unit->tokenFlags = 0;
+    unit->statusFlags = 0;
+    *(u32*)((s32)unit + 0x140) = (u32)-1;
+    BtlUnit_HpGaugeInit(unit);
+    BtlUnit_ClearStatus(unit);
+    unit->maxMoveCount = 1;
+    unit->movesRemaining = 1;
+    unit->faceDirection = wp->allianceInfo[unit->alliance].attackDirection;
+    unit->work[0] = *(s32*)((s32)setup + 0x18);
+    unit->work[1] = *(s32*)((s32)setup + 0x1C);
+    unit->work[2] = *(s32*)((s32)setup + 0x20);
+    unit->work[3] = *(s32*)((s32)setup + 0x24);
+    return unit;
 }
 
 BattleWorkUnit* BtlUnit_Spawn(BattleUnitSetup* setup, s32 type) {

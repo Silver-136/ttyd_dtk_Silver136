@@ -78,8 +78,101 @@ void* effMahornEntry(s32 kind, s32 count, s32 timer, f32 x, f32 y, f32 z, f32 sc
 /* CHATGPT STUB FILL: main/effect/eff_mahorn 20260624_184929 */
 
 /* stub-fill: effMahornDisp | missing_definition | ghidra_signature */
-u8 effMahornDisp(void) {
-    return 0;
+void effMahornDisp(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32);
+    extern void effGetTexObj(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXSetChanMatColor(s32, void*);
+    extern void GXLoadPosMtxImm(f32[3][4], s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXBegin(s32, s32, s32);
+    extern void PSMTXTrans(f32[3][4], f32, f32, f32);
+    extern void PSMTXScale(f32[3][4], f32, f32, f32);
+    extern void PSMTXRotRad(f32[3][4], s32, f32);
+    extern void PSMTXConcat(f32[3][4], f32[3][4], f32[3][4]);
+    extern f32 float_deg2rad_804287e8;
+    extern u32 dat_804287e0;
+    extern u32 dat_804287e4;
+
+    u8 texObj[0x20];
+    f32 baseTrans[3][4];
+    f32 baseScale[3][4];
+    f32 rot[3][4];
+    f32 baseMtx[3][4];
+    u8* work = *(u8**)((u8*)effect + 0xC);
+    u8* child = work + 0x28;
+    void* camera;
+    volatile f32* fifo = (volatile f32*)0xCC008000;
+    f32 scale;
+    f32 halfWidth = -8.0f * 0.5f;
+    s32 baseAlpha = *(s32*)(work + 0x18);
+    s32 i;
+
+    PSMTXTrans(baseTrans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+    scale = *(f32*)(work + 0x10);
+    PSMTXScale(baseScale, scale, scale, scale);
+    camera = camGetPtr(cameraId);
+    PSMTXRotRad(rot, 'y', float_deg2rad_804287e8 * -*(f32*)((u8*)camera + 0x114));
+    PSMTXConcat(baseTrans, rot, baseMtx);
+    PSMTXConcat(baseMtx, baseScale, baseMtx);
+
+    effGetTexObj(0x66, texObj);
+    GXLoadTexObj(texObj, 0);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 15, 15, 15, 10);
+    GXSetTevAlphaIn(0, 7, 5, 4, 7);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+
+    for (i = 1; i < *(s32*)((u8*)effect + 8); i++, child += 0x28) {
+        if (*(s32*)(child + 0x24) == 0) {
+            f32 trans[3][4];
+            f32 childScale[3][4];
+            u32 color = (i & 1) ? dat_804287e0 : dat_804287e4;
+            s32 alpha = (*(s32*)(child + 0x18) * baseAlpha) / 0xFF;
+
+            ((u8*)&color)[3] = (u8)alpha;
+            GXSetChanMatColor(4, &color);
+            PSMTXTrans(trans, *(f32*)(child + 4), *(f32*)(child + 8), *(f32*)(child + 0xC));
+            scale = *(f32*)(child + 0x10) * *(f32*)(child + 0x14);
+            PSMTXScale(childScale, scale, (i & 1) ? scale : -scale, scale);
+            PSMTXConcat(trans, childScale, trans);
+            PSMTXConcat(baseMtx, trans, trans);
+            PSMTXConcat((f32(*)[4])((u8*)camera + 0x11C), trans, trans);
+            GXLoadPosMtxImm(trans, 0);
+            GXSetCurrentMtx(0);
+            GXBegin(0x80, 0, 4);
+            *fifo = halfWidth; *fifo = 4.0f; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
+            *fifo = 4.0f; *fifo = 4.0f; *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
+            *fifo = 4.0f; *fifo = halfWidth; *fifo = 0.0f; *fifo = 1.0f; *fifo = 1.0f;
+            *fifo = halfWidth; *fifo = halfWidth; *fifo = 0.0f; *fifo = 0.0f; *fifo = 1.0f;
+        }
+    }
 }
 
 /* stub-fill: effMahornMain | prototype_only | source_prototype */

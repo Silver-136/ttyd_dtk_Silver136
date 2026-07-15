@@ -71,6 +71,83 @@ void* effMachinegunEntry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 speed, f3
 /* CHATGPT STUB FILL: main/effect/eff_machinegun 20260624_184929 */
 
 /* stub-fill: effMachinegunDisp | prototype_only | source_prototype */
-void effMachinegunDisp(void* camera, void* entry) {
-    return;
+void effMachinegunDisp(void* cameraArg, void* effect) {
+    extern void* camGetPtr(s32);
+    extern void PSMTXTrans(f32[3][4], f32, f32, f32);
+    extern void PSMTXScale(f32[3][4], f32, f32, f32);
+    extern void PSMTXRotRad(f32[3][4], s32, f32);
+    extern void PSMTXConcat(f32[3][4], f32[3][4], f32[3][4]);
+    extern void effGetTexObj(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetChanMatColor(s32, void*);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXLoadPosMtxImm(f32[3][4], s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXBegin(s32, s32, s32);
+    extern f32 float_deg2rad_80428984;
+    extern u32 str_tl_80428980;
+
+    u8 texObj[0x20];
+    Mtx trans;
+    Mtx rot;
+    Mtx scaleMtx;
+    u8* work = *(u8**)((u8*)effect + 0xC);
+    s32 cameraId = (s32)cameraArg;
+    void* camera = camGetPtr(cameraId);
+    volatile f32* fifo = (volatile f32*)0xCC008000;
+    u32 color = str_tl_80428980;
+    f32 scale;
+    f32 halfWidth = -32.0f * 0.5f;
+
+    effGetTexObj(0x6D, texObj);
+    GXLoadTexObj(texObj, 0);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    ((u8*)&color)[3] = (u8)*(s32*)(work + 0x1C);
+    GXSetChanMatColor(4, &color);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 15, 15, 15, 10);
+    GXSetTevAlphaIn(0, 7, 5, 4, 7);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+
+    PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+    scale = *(f32*)(work + 0x10);
+    PSMTXScale(scaleMtx, scale, scale, scale);
+    PSMTXRotRad(rot, 'y', float_deg2rad_80428984 * -*(f32*)((u8*)camera + 0x114));
+    PSMTXConcat(trans, rot, trans);
+    PSMTXRotRad(rot, 'z', float_deg2rad_80428984 * (180.0f + *(f32*)(work + 0x14)));
+    PSMTXConcat(trans, rot, trans);
+    PSMTXConcat(trans, scaleMtx, trans);
+    PSMTXConcat((f32(*)[4])((u8*)camera + 0x11C), trans, trans);
+    GXLoadPosMtxImm(trans, 0);
+    GXSetCurrentMtx(0);
+    GXBegin(0x80, 0, 4);
+    *fifo = halfWidth; *fifo = 16.0f; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
+    *fifo = 16.0f; *fifo = 16.0f; *fifo = 0.0f; *fifo = 2.0f; *fifo = 0.0f;
+    *fifo = 16.0f; *fifo = halfWidth; *fifo = 0.0f; *fifo = 2.0f; *fifo = 2.0f;
+    *fifo = halfWidth; *fifo = halfWidth; *fifo = 0.0f; *fifo = 0.0f; *fifo = 2.0f;
 }
+

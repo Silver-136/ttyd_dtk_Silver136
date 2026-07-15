@@ -288,6 +288,136 @@ void actionCommandDisp(f32 x, f32 y) {
 }
 
 /* stub-fill: battleAcMain_StickRotate | missing_definition | ghidra_signature */
-s32 battleAcMain_StickRotate(int param_1) {
+s32 battleAcMain_StickRotate(s32 work)  {
+    extern void* memset(void*, s32, s32);
+    extern s32 BattlePadCheckNow(s32);
+    extern s32 _GetInputDir(void);
+    extern s32 _CalcRollDir(void);
+    extern s32 irand(s32);
+    s32 state;
+    s32 dir;
+    s32 roll;
+    s32 next;
+    s32 done = 0;
+    s8* current = (s8*)(work + 0x1F4C);
+    state=*(s32*)(work+0x1C9C);
+    if(state==0) {
+        *(s32*)(work+0x1CB8)=1;
+        memset((void*)(work+0x1F20),0,0x2C);
+        *(f32*)(work+0x1F34)=-300.0f;
+        *(f32*)(work+0x1F38)=0.0f;
+        *(s32*)(work+0x1F40)=20;
+        *(s8*)(work+0x1F4E)=0;
+        *(s8*)(work+0x1F4F)=0;
+        *(s8*)(work+0x1F52)=0;
+        *(s8*)(work+0x1F53)=0;
+        *(s16*)(work+0x1F5C)=0;
+        *(s8*)(work+0x1F51)=0;
+        *(s32*)(work+0x1C9C)=99;
+        return 1;
+    }
+    if(state==99||state==100) {
+        if(state==100) {
+            *(s32*)(work+0x1F58)=0x78;
+            *(s32*)(work+0x1C9C)=1000;
+            *(s8*)(work+0x1F50)=0;
+            *(s16*)(work+0x1F54)=0;
+            *(s32*)(work+0x1CE8)=0;
+            if(*(u32*)(work+0x1CC4)&2) {
+                *(s8*)(work+0x1F4E)=3;
+                *(s8*)(work+0x1F4F)=2;
+            }
+        }
+        dir=_GetInputDir();
+        *current=(s8)dir;
+        if((dir==-1||(*(s32*)(work+0x1CD0)==0&&dir<1))&&*(s16*)(work+0x1D18)<1) {
+            if(--*(s32*)(work+0x1F58)<1) {
+                *(s32*)(work+0x1CB8)=0;
+                *(s32*)(work+0x1C9C)=1002;
+            }
+        } else {
+            *(s32*)(work+0x1C9C)=1001;
+            *(s8*)(work+0x1F4D)=0;
+            (*(s32*)(work+0x1CE8))++;
+            *(s32*)(work+0x1F58)=*(s32*)(work+0x1CCC);
+            if(*(u32*)(work+0x1CC4)&2) {
+                *(s8*)(work+0x1F50)=-1;
+                *(s8*)(work+0x1F4D)=4;
+            }
+        }
+        return 1;
+    }
+    if(state==1001) {
+        if(*(s16*)(work+0x1D18)>0) {
+            (*(s16*)(work+0x1D18))--;
+            *(s32*)(work+0x1CB8)=2;
+            *(s32*)(work+0x1C9C)=1002;
+            *(s32*)(work+0x1CE8)=*(s32*)(work+0x1CC8);
+        }
+        (*(s32*)(work+0x1F58))--;
+        (*(s8*)(work+0x1F51))++;
+        if(*(s32*)(work+0x1CD0)!=0&&BattlePadCheckNow(*(s32*)(work+0x1CD0))==0)*(s32*)(work+0x1F58)=0;
+        if(*(s32*)(work+0x1F58)<0) {
+            if(*(s32*)(work+0x1CD4)<=*(s32*)(work+0x1CE8)&&BattlePadCheckNow(*(s32*)(work+0x1CD0))==0)*(u32*)(work+0x1CB8)|=2;
+            done=1;
+        } else {
+            dir=_GetInputDir();
+            *current=(s8)dir;
+            if(dir==-1)done=1;
+            else if(dir==0) {
+                *(s8*)(work+0x1F50)=0;
+                if((*(u32*)(work+0x1CC4)&1)&&*(s8*)(work+0x1F4D)!=0)done=1;
+            } else if(*(s8*)(work+0x1F4D)!=0) {
+                roll=(s8)_CalcRollDir();
+                if(roll==0) {
+                    *(s8*)(work+0x1F50)=0;
+                } else if(*(s8*)(work+0x1F50)==0) {
+                    *(s8*)(work+0x1F50)=(s8)roll;
+                    next=dir+roll;
+                    if(next>8)next=1;
+                    if(next<1)next=8;
+                    *(s8*)(work+0x1F4E)=(s8)dir;
+                    *(s8*)(work+0x1F4F)=(s8)next;
+                } else if(*(s8*)(work+0x1F50)!=(s8)roll)done=1;
+                if(*(s8*)(work+0x1F4D)!=*current) {
+                    (*(s16*)(work+0x1F54))++;
+                    *(s32*)(work+0x1CE8)=((u16)*(s16*)(work+0x1F54)+7)>>3;
+                    if(*(s32*)(work+0x1CE8)>*(s32*)(work+0x1CC8))*(s32*)(work+0x1CE8)=*(s32*)(work+0x1CC8);
+                }
+            }
+            *(s8*)(work+0x1F4D)=*current;
+        }
+        if(done) {
+            *(u32*)(work+0x1CB8)&=~1;
+            *(s32*)(work+0x1C9C)=1002;
+        }
+        return 1;
+    }
+    if(state==1002) {
+        *(s32*)(work+0x1C9C)=1003;
+        return 1;
+    }
+    if(state==1003) {
+        *(s32*)(work+0x1F60)=60;
+        *(s32*)(work+0x1F40)=60;
+        *(s32*)(work+0x1C9C)=1005;
+        return 1;
+    }
+    if(state==1005) {
+        if(--*(s32*)(work+0x1F60)<1)*(s32*)(work+0x1C9C)=1006;
+        return 1;
+    }
+    if(state==1006) {
+        *(s32*)(work+0x1CA0)=0;
+        *(s32*)(work+0x1CA4)=0;
+        *(s32*)(work+0x1CA8)=0;
+        *(s32*)(work+0x1CAC)=0;
+        return 1;
+    }
+    if(irand(100)<0) {
+        *(s32*)(work+0x1CB8)=2;
+        (*(s32*)(work+0x1CB4))++;
+    }
     return 0;
 }
+

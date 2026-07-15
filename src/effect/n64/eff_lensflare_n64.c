@@ -1,10 +1,13 @@
 #include "effect/n64/eff_lensflare_n64.h"
 
 
-u8 effLensflareDisp(void) {
-    return 0;
+void effLensflareDisp(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4]; extern void* camGetPtr(s32); extern void PSMTXTrans(void*,f32,f32,f32); extern void PSMTXRotRad(void*,s32,f32); extern void PSMTXScale(void*,f32,f32,f32); extern void PSMTXConcat(void*,void*,void*); extern void GXSetTevColor(s32,void*); extern void GXLoadPosMtxImm(void*,s32); extern void GXSetCurrentMtx(s32); extern void GXSetCullMode(s32); extern void GXSetNumChans(s32); extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevColorIn(s32,s32,s32,s32,s32); extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32); extern void GXLoadTexMtxImm(void*,s32,s32); extern void effGetTexObjN64(s32,void*); extern void GXLoadTexObj(void*,s32); extern void effSetVtxDescN64(void*); extern void GXBegin(s32,s32,s32); extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);
+    u8* w=*(u8**)((u8*)effect+0xC);u8* p=w+0x34;void* cam=camGetPtr(cameraId);Mtx base,m,r,s;u8 tex[0x20];u32 color;u32 flags=*(u32*)(w+0x1C);s32 alpha=*(s32*)(w+0x14),i,angle=10,yrot=35;if(flags&1)alpha=(s32)(0.95f*(f32)alpha);
+    PSMTXTrans(m,*(f32*)(w+8),*(f32*)(w+0xC),*(f32*)(w+0x10));PSMTXRotRad(r,0x79,-*(f32*)((u8*)camGetPtr(4)+0x114)*0.0174533f);PSMTXConcat(m,r,base);PSMTXConcat((u8*)cam+0x11C,base,base);color=0xFFFFFF00|(u8)alpha;GXSetTevColor(1,&color);PSMTXRotRad(r,0x7A,(f32)(flags+(flags&1)*2)*0.0174533f);PSMTXConcat(base,r,m);GXLoadPosMtxImm(m,0);GXSetCurrentMtx(0);GXSetCullMode(0);GXSetNumChans(0);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,2,4,8,15);GXSetTevAlphaIn(0,0,1,4,7);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);PSMTXScale(s,0.0625f,0.0625f,0.0f);GXLoadTexMtxImm(s,0x1E,1);effGetTexObjN64(0x6F,tex);GXLoadTexObj(tex,0);effSetVtxDescN64((void*)0x803A59A0);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3,0);
+    effGetTexObjN64(0x86,tex);GXLoadTexObj(tex,0);PSMTXScale(s,0.03125f,0.0078125f,0.0f);GXLoadTexMtxImm(s,0x1E,1);effSetVtxDescN64((void*)0x803A59D8);
+    for(i=1;i<*(s32*)((u8*)effect+8);i++,p+=0x34,angle+=10,yrot+=35){f32 sc=*(f32*)(p+0x28);if(sc==0.0f)continue;color=0xFFFFFF00|(u8)((*(s32*)(p+0x14)*alpha)>>8);GXSetTevColor(1,&color);PSMTXRotRad(r,0x7A,*(f32*)(p+0x20)*0.0174533f);PSMTXTrans(m,*(f32*)(p+0x2C),0.0f,0.0f);PSMTXConcat(r,m,m);PSMTXScale(s,sc,sc,sc);PSMTXConcat(m,s,m);PSMTXConcat(base,m,m);GXLoadPosMtxImm(m,0);GXBegin(0x90,0,6);tri2(12,13,14,0,12,14,15,0);PSMTXScale(s,2.3f-sc,2.3f-sc,2.3f-sc);PSMTXConcat(m,s,m);GXLoadPosMtxImm(m,0);GXBegin(0x90,0,6);tri2(8,9,10,0,8,10,11,0);PSMTXRotRad(r,0x7A,(14.0f+*(f32*)(p+0x20))*0.0174533f);PSMTXRotRad(s,0x79,(f32)(flags+angle)*0.0174533f);PSMTXConcat(r,s,r);PSMTXTrans(m,20.0f,0.0f,0.0f);PSMTXConcat(r,m,m);PSMTXConcat(base,m,m);GXLoadPosMtxImm(m,0);GXBegin(0x90,0,6);tri2(4,5,6,0,4,6,7,0);}
 }
-
 
 u8 effLensflareMain(void) {
     return 0;

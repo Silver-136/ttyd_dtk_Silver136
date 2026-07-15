@@ -145,7 +145,61 @@ USER_FUNC(main_muki) {
 
 /* stub-fill: disp_3D_alpha | prototype_only | source_prototype */
 void disp_3D_alpha(void) {
-    return;
+    extern void* get_ptr(void);
+    extern void PSMTXRotRad(f32 matrix[3][4], s32 axis, f32 radians);
+    extern void PSMTXScaleApply(f32 src[3][4], f32 dst[3][4], f32 x, f32 y, f32 z);
+    extern void PSMTXTransApply(f32 src[3][4], f32 dst[3][4], f32 x, f32 y, f32 z);
+    extern f64 cos(f64 angle);
+    extern f64 sin(f64 angle);
+    extern void btlDispTexPlane2(f32 matrix[3][4], s32 texture, u32* color);
+    extern void btlDispTexPlane3(f32 matrix[3][4], s32 texture,
+                                 u32* color0, u32* color1,
+                                 u32* color2, u32* color3);
+
+    u8* work = get_ptr();
+    s32 i;
+
+    for (i = 0; i < 9; i++) {
+        s32* icon = (s32*)(work + 0x1BC + i * 0x38);
+
+        if (icon[0] > 0 && icon[0] < 10 && icon[2] >= 0 && icon[2] < 3) {
+            f32 matrix[3][4];
+            f32 angle;
+            f32 xOffset;
+            f32 zOffset;
+            f32 scaleX = (f32)icon[6];
+            f32 scaleY = (f32)icon[7];
+            u8 alpha = *(u8*)((u8*)icon + 0x34);
+
+            PSMTXRotRad(matrix, 'y', 0.017453292f * (f32)icon[10]);
+            if (icon[2] < 2) {
+                scaleX *= 2.0f;
+                scaleY *= 2.0f;
+            }
+            PSMTXScaleApply(matrix, matrix, scaleX, scaleY, (f32)icon[8]);
+            PSMTXTransApply(matrix, matrix, (f32)icon[3], (f32)icon[4], (f32)icon[5]);
+
+            angle = (2.0f * (f32)icon[10] * 3.141592f) / 360.0f;
+            zOffset = 15.0f * (f32)cos((f64)angle);
+            xOffset = 15.0f * (f32)sin((f64)angle);
+            PSMTXTransApply(matrix, matrix, xOffset, 0.0f, zOffset);
+
+            if (icon[2] == 0) {
+                u32 bright = 0xE94A3F00 | alpha;
+                u32 dark = 0xFEE63E00 | alpha;
+                btlDispTexPlane3(matrix, 0x5B,
+                                 &bright, &bright, &dark, &dark);
+            } else if (icon[2] == 1) {
+                u32 bright = 0x3F3FE900 | alpha;
+                u32 dark = 0x74C9FF00 | alpha;
+                btlDispTexPlane3(matrix, 0x5B,
+                                 &bright, &bright, &dark, &dark);
+            } else {
+                u32 color = 0xFFFFFF00 | alpha;
+                btlDispTexPlane2(matrix, 0x47, &color);
+            }
+        }
+    }
 }
 
 /* stub-fill: disp_3D | prototype_only | source_prototype */
@@ -231,12 +285,166 @@ void disp_3D(void) {
 
 /* stub-fill: disp_2D | prototype_only | source_prototype */
 void disp_2D(void) {
-    return;
+    typedef f32 Mtx[3][4];
+    extern void* get_ptr(void);
+    extern void btlGetScreenPoint(f32* in, f32* out);
+    extern void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(Mtx a, Mtx b, Mtx out);
+    extern void btlDispTexPlane2(Mtx m, s32 tex, u32* color);
+    extern void btlDispGXInit2DRasta(void);
+    extern void btlDispGXQuads2DRasta(f64, f64, f64, f64, s32, s32, s32, s32);
+    extern void iconDispGxCol(Mtx m, u16 flags, u16 icon, u32* color);
+    extern void iconNumberDispGx(f32 x, f32 y, f32 z, s32 value, s32 flags, u32* color);
+    u8* work = get_ptr();
+    f32 world[3], screen[3];
+    Mtx trans, scale, model;
+    u32 white = 0xFFFFFFFF;
+    s32 state = *(s32*)(work + 4);
+    s32 pass;
+    if (state < 2 || state > 7) return;
+    world[0] = *(f32*)(work + 0x2C);
+    world[1] = *(f32*)(work + 0x30);
+    world[2] = *(f32*)(work + 0x34);
+    btlGetScreenPoint(world, screen);
+    for (pass = 0; pass < 2; pass++) {
+        f32 y = screen[1] - pass * 30.0f;
+        f32 amount = *(f32*)(work + (pass ? 0x20 : 0x18));
+        s32 flash = *(s32*)(work + (pass ? 0x28 : 0x24));
+        u32 fill = pass ? 0x40C0FFFF : 0xFF8040FF;
+        PSMTXTrans(trans, screen[0] - 56.0f, y, screen[2]);
+        btlDispTexPlane2(trans, 0x59, &white);
+        PSMTXScale(scale, 6.0f, 1.0f, 1.0f);
+        PSMTXTrans(trans, screen[0], y, screen[2]);
+        PSMTXConcat(trans, scale, model);
+        btlDispTexPlane2(model, 0x5A, &white);
+        PSMTXScale(scale, -1.0f, 1.0f, 1.0f);
+        PSMTXTrans(trans, screen[0] + 56.0f, y, screen[2]);
+        PSMTXConcat(trans, scale, model);
+        btlDispTexPlane2(model, 0x59, &white);
+        btlDispGXInit2DRasta();
+        btlDispGXQuads2DRasta(screen[0] - 48.0f, y + 5.0f,
+            screen[0] - 48.0f + amount * 9.6f, y - 5.0f,
+            (fill >> 24) & 0xFF, (fill >> 16) & 0xFF, (fill >> 8) & 0xFF, 0xFF);
+        if ((flash % 12) < 6) {
+            PSMTXTrans(trans, screen[0] - 70.0f, y, screen[2]);
+            btlDispTexPlane2(trans, 0x5B, &white);
+            iconDispGxCol(trans, 0x10, 0x1F5, &white);
+            iconNumberDispGx(screen[0] + 64.0f, y, screen[2], (s32)amount, 0, &white);
+        }
+    }
 }
 
 /* stub-fill: main_star | prototype_only | source_prototype */
 void main_star(void) {
-    return;
+    extern void* _battleWorkPointer;
+    extern void* get_ptr(void);
+    extern void* BattleGetMarioPtr(void* battleWork);
+    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+    extern void* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
+    extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
+    extern u32 vec3_803010fc[];
+    extern u32 vec3_80301108[];
+
+    u8* work = get_ptr();
+    void* mario = BattleGetMarioPtr(_battleWorkPointer);
+    s32 state = *(s32*)(work + 0x3B4);
+
+    if (state != 2) {
+        if (state > 1) {
+            if (state < 4) {
+                *(s32*)(work + 0x3B8) += 1;
+                *(f32*)(work + 0x3C0) =
+                    (f32)intplGetValue(*(f32*)(work + 0x3CC),
+                                       *(f32*)(work + 0x3D8), 1,
+                                       *(s32*)(work + 0x3B8), 0x3C);
+                if (*(s32*)(work + 0x3B8) > 0x3B) {
+                    *(s32*)(work + 0x3B4) = 5;
+                    *(s32*)(work + 0x3B8) = 0;
+                }
+            }
+            goto update_effect;
+        }
+        if (state <= 0) {
+            goto update_effect;
+        }
+
+        *(s32*)(work + 0x3B4) = 2;
+        *(s32*)(work + 0x3B8) = 0;
+        *(void**)(work + 0x404) = effStarStoneEntry(2, 0.0f, -1000.0f, 0.0f, 1.0f);
+        BtlUnit_GetPos(mario,
+                       (f32*)(work + 0x3BC),
+                       (f32*)(work + 0x3C0),
+                       (f32*)(work + 0x3C4));
+        *(f32*)(work + 0x3C0) +=
+            *(f32*)((s32)mario + 0x114) * (f32)*(s16*)((s32)mario + 0xCE) + 37.0f;
+        *(u32*)(work + 0x3C8) = *(u32*)(work + 0x3BC);
+        *(u32*)(work + 0x3CC) = *(u32*)(work + 0x3C0);
+        *(u32*)(work + 0x3D0) = *(u32*)(work + 0x3C4);
+        *(u32*)(work + 0x3D4) = *(u32*)(work + 0x3BC);
+        *(u32*)(work + 0x3D8) = *(u32*)(work + 0x3C0);
+        *(u32*)(work + 0x3DC) = *(u32*)(work + 0x3C4);
+        *(f32*)(work + 0x3D8) += 50.0f;
+        *(f32*)(work + 0x3DC) -= 1.0f;
+        *(u32*)(work + 0x3EC) = vec3_803010fc[0];
+        *(u32*)(work + 0x3F0) = vec3_803010fc[1];
+        *(u32*)(work + 0x3F4) = vec3_803010fc[2];
+        *(u32*)(work + 0x3F8) = vec3_80301108[0];
+        *(u32*)(work + 0x3FC) = vec3_80301108[1];
+        *(u32*)(work + 0x400) = vec3_80301108[2];
+    }
+
+    *(s32*)(work + 0x3B8) += 1;
+    if (*(s32*)(work + 0x3B8) < 0x65) {
+        f32 scale = (f32)intplGetValue(0.0, 2.0, 0,
+                                      *(s32*)(work + 0x3B8), 100);
+
+        *(f32*)(work + 0x3BC) =
+            (f32)intplGetValue(*(f32*)(work + 0x3C8),
+                               *(f32*)(work + 0x3D4), 0,
+                               *(s32*)(work + 0x3B8), 100);
+        *(f32*)(work + 0x3C0) =
+            (f32)intplGetValue(*(f32*)(work + 0x3CC),
+                               *(f32*)(work + 0x3D8), 0,
+                               *(s32*)(work + 0x3B8), 100);
+        *(f32*)(work + 0x3C4) =
+            (f32)intplGetValue(*(f32*)(work + 0x3D0),
+                               *(f32*)(work + 0x3DC), 0,
+                               *(s32*)(work + 0x3B8), 100);
+        *(f32*)(work + 0x3EC) = scale;
+        *(f32*)(work + 0x3F0) = scale;
+        *(f32*)(work + 0x3F4) = scale;
+    } else {
+        *(u32*)(work + 0x3BC) = *(u32*)(work + 0x3D4);
+        *(u32*)(work + 0x3C0) = *(u32*)(work + 0x3D8);
+        *(u32*)(work + 0x3C4) = *(u32*)(work + 0x3DC);
+        *(f32*)(work + 0x3EC) = 2.0f;
+        *(f32*)(work + 0x3F0) = 2.0f;
+        *(f32*)(work + 0x3F4) = 2.0f;
+    }
+    *(f32*)(work + 0x3FC) =
+        (f32)intplGetValue(0.0, 2160.0, 4,
+                           *(s32*)(work + 0x3B8), 0x78);
+    if (*(s32*)(work + 0x3B8) > 0x77) {
+        *(s32*)(work + 0x3B4) = 3;
+        *(s32*)(work + 0x3B8) = 0;
+        *(u32*)(work + 0x3C8) = *(u32*)(work + 0x3BC);
+        *(u32*)(work + 0x3CC) = *(u32*)(work + 0x3C0);
+        *(u32*)(work + 0x3D0) = *(u32*)(work + 0x3C4);
+        *(f32*)(work + 0x3D8) = 300.0f;
+    }
+
+update_effect:
+    if (*(void**)(work + 0x404) != NULL) {
+        u8* effectWork = *(u8**)((s32)*(void**)(work + 0x404) + 0xC);
+        *(u32*)(effectWork + 8) = *(u32*)(work + 0x3BC);
+        *(u32*)(effectWork + 0xC) = *(u32*)(work + 0x3C0);
+        *(u32*)(effectWork + 0x10) = *(u32*)(work + 0x3C4);
+        *(f32*)(effectWork + 0x14) = 1.5f * *(f32*)(work + 0x3EC);
+        *(u32*)(effectWork + 0x18) = *(u32*)(work + 0x3F8);
+        *(u32*)(effectWork + 0x1C) = *(u32*)(work + 0x3FC);
+        *(u32*)(effectWork + 0x20) = *(u32*)(work + 0x400);
+    }
 }
 
 /* stub-fill: main_icon | prototype_only | source_prototype */
@@ -435,10 +643,246 @@ void main_point(s32 index) {
 
 /* stub-fill: main_cursor | prototype_only | source_prototype */
 void main_cursor(void) {
-    return;
+    extern void* _battleWorkPointer;
+    extern void* get_ptr(void);
+    extern void* BattleGetMarioPtr(void* battleWork);
+    extern u16 keyGetButtonTrg(s32 pad);
+    extern u32 keyGetDirTrg(s32 pad);
+    extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
+    extern void* effHitEntry(f32 x, f32 y, f32 z, s32 type, s32 count, s32 arg);
+    u8* work = get_ptr();
+    void* mario = BattleGetMarioPtr(_battleWorkPointer);
+    s32 state = *(s32*)(work + 0x38);
+    s32 index = *(s32*)(work + 0x40);
+    u32 dir;
+    (void)mario;
+    if (state == 1 && *(s32*)(work + 0x108) >= 5) {
+        *(s32*)(work + 0x38) = 2;
+        *(s32*)(work + 0x3C) = 0;
+        *(f32*)(work + 0x44) = *(f32*)(work + 0x110);
+        *(f32*)(work + 0x48) = *(f32*)(work + 0x114);
+        *(f32*)(work + 0x4C) = *(f32*)(work + 0x118);
+        state = 2;
+    }
+    if (state == 2) {
+        if ((keyGetButtonTrg(0) & 0x100) != 0) {
+            u8* point = *(u8**)(work + 0x98) + index * 0x24;
+            *(s32*)(work + 0x38) = 5;
+            *(s32*)point = 5;
+            effHitEntry(*(f32*)(work + 0x44), *(f32*)(work + 0x48), *(f32*)(work + 0x4C), 0, 5, 0);
+            if (*(s32*)(point + 8) == 0) {
+                *(f32*)(work + 0x14) += 0.2f;
+                if (*(f32*)(work + 0x14) > 9.0f) *(f32*)(work + 0x14) = 9.0f;
+                *(s32*)(work + 0x24) = 30;
+            } else if (*(s32*)(point + 8) == 1) {
+                *(f32*)(work + 0x1C) += 0.2f;
+                if (*(f32*)(work + 0x1C) > 9.0f) *(f32*)(work + 0x1C) = 9.0f;
+                *(s32*)(work + 0x28) = 30;
+            }
+            return;
+        }
+        dir = keyGetDirTrg(0);
+        if ((dir & 0x8000) && index % 3 != 2) index++;
+        else if ((dir & 0x4000) && index % 3 != 0) index--;
+        else if ((dir & 0x1000) && index / 3 != 0) index -= 3;
+        else if ((dir & 0x2000) && index / 3 != 2) index += 3;
+        if (index != *(s32*)(work + 0x40)) {
+            *(f32*)(work + 0x50) = *(f32*)(work + 0x44);
+            *(f32*)(work + 0x54) = *(f32*)(work + 0x48);
+            *(s32*)(work + 0x40) = index;
+            *(s32*)(work + 0x38) = 3;
+            *(s32*)(work + 0x3C) = 0;
+        }
+    } else if (state == 3) {
+        *(s32*)(work + 0x38) = 4;
+        *(s32*)(work + 0x3C) = 0;
+    } else if (state == 4) {
+        u8* point = *(u8**)(work + 0x98) + index * 0x24;
+        s32 timer = ++*(s32*)(work + 0x3C);
+        *(f32*)(work + 0x44) = (f32)intplGetValue(*(f32*)(work + 0x50), *(f32*)(point + 0x18), 0, timer, 5);
+        *(f32*)(work + 0x48) = (f32)intplGetValue(*(f32*)(work + 0x54), *(f32*)(point + 0x1C), 0, timer, 5);
+        if (timer >= 5) *(s32*)(work + 0x38) = 2;
+    } else if (state == 5) {
+        *(s32*)(work + 0x38) = 6;
+    } else if (state == 6) {
+        *(s32*)(work + 0x38) = 2;
+    }
 }
 
 /* stub-fill: main_base | prototype_only | source_prototype */
 void main_base(void) {
-    return;
+    extern void* _battleWorkPointer;
+    extern void* get_ptr(void);
+    extern void* BattleGetMarioPtr(void* battleWork);
+    extern s32 BtlUnit_GetBodyPartsId(void* unit);
+    extern void* BtlUnit_GetPartsPtr(void* unit, s32 partId);
+    extern void BtlUnit_SetAnim(void* part, const char* name);
+    extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
+    extern void* evtEntry(const void* code, s32 priority, u32 flags);
+    extern const char str_M_X_1_804285d0[];
+    extern const char str_M_S_1_804285d8[];
+    extern const s32 nice_event_pow[];
+
+    u8* work = get_ptr();
+    void* mario = BattleGetMarioPtr(_battleWorkPointer);
+    void* part = BtlUnit_GetPartsPtr(mario, BtlUnit_GetBodyPartsId(mario));
+    s32 i;
+
+    if (*(s32*)(work + 0x24) > 0) {
+        *(s32*)(work + 0x24) -= 1;
+    }
+    if (*(s32*)(work + 0x28) > 0) {
+        *(s32*)(work + 0x28) -= 1;
+    }
+
+    switch (*(s32*)(work + 4)) {
+        case 1:
+            *(s32*)(work + 4) = 2;
+            *(f32*)(work + 0x14) = 0.0f;
+            *(f32*)(work + 0x18) = 0.0f;
+            *(f32*)(work + 0x1C) = 0.0f;
+            *(f32*)(work + 0x20) = 0.0f;
+            *(f32*)(work + 0x2C) = -400.0f;
+            *(f32*)(work + 0x30) = 90.0f;
+            *(s32*)(work + 0xC) = 899;
+            for (i = 0; i < 9; i++) {
+                *(s32*)(work + 0x78 + i * 0x24) = 1;
+            }
+            /* fallthrough */
+        case 2: {
+            s32 complete = 0;
+            for (i = 0; i < 9; i++) {
+                if (*(s32*)(work + 0x78 + i * 0x24) == 4) {
+                    complete++;
+                } else {
+                    break;
+                }
+            }
+            if (complete == 9) {
+                *(s32*)(work + 4) = 3;
+                *(s32*)(work + 8) = 0;
+            }
+            break;
+        }
+        case 3:
+            *(s32*)(work + 8) += 1;
+            *(f32*)(work + 0x2C) =
+                (f32)intplGetValue(-400.0, -120.0, 4,
+                                   *(s32*)(work + 8), 0x1E);
+            if (*(s32*)(work + 8) > 0x1D) {
+                *(s32*)(work + 4) = 4;
+                *(s32*)(work + 8) = 0;
+                *(s32*)(work + 0x38) = 1;
+                for (i = 0; i < 9; i++) {
+                    *(s32*)(work + 0x78 + i * 0x24) = 5;
+                }
+            }
+            break;
+        case 4:
+            if ((*(u32*)work & 1) != 0) {
+                *(s32*)(work + 0x34) += 1;
+                if (*(s32*)(work + 0x34) == 0x1E) {
+                    BtlUnit_SetAnim(part, str_M_X_1_804285d0);
+                }
+            }
+            *(s32*)(work + 0xC) -= 1;
+            if (*(s32*)(work + 0xC) < 1) {
+                s32 result;
+
+                *(s32*)(work + 4) = 5;
+                *(s32*)(work + 8) = 0;
+                *(s32*)(work + 0x38) = 7;
+                BtlUnit_SetAnim(part, str_M_S_1_804285d8);
+                for (i = 0; i < 9; i++) {
+                    *(s32*)(work + 0x78 + i * 0x24) = 6;
+                    *(s32*)(work + 0x1BC + i * 0x38) = 9;
+                }
+
+                result = (s32)(*(f32*)(work + 0x14) + *(f32*)(work + 0x1C));
+                if (result > 0) {
+                    void* event;
+
+                    if (result < 5) {
+                        result += 1;
+                    } else {
+                        result = 6;
+                    }
+                    event = evtEntry(nice_event_pow, 0, 0x20);
+                    *(s32*)((s32)event + 0x9C) = result;
+                }
+            }
+            break;
+        case 5: {
+            s32 complete = 0;
+            for (i = 0; i < 9; i++) {
+                if (*(s32*)(work + 0x78 + i * 0x24) == 8) {
+                    complete++;
+                } else {
+                    break;
+                }
+            }
+            if (complete == 9) {
+                *(s32*)(work + 4) = 6;
+                *(s32*)(work + 8) = 0;
+            }
+            break;
+        }
+        case 6:
+            *(s32*)(work + 8) += 1;
+            if (*(s32*)(work + 8) > 0x1D) {
+                *(s32*)(work + 4) = 7;
+                *(s32*)(work + 8) = 0;
+            }
+            break;
+    }
+
+    {
+        f32 delta = *(f32*)(work + 0x14) - *(f32*)(work + 0x18);
+        if (delta != 0.0f) {
+            if (delta <= 0.0f) {
+                f32 step = 0.1f;
+                if (0.1f * delta <= -0.1f) {
+                    step = -0.1f * delta;
+                }
+                *(f32*)(work + 0x18) -= step;
+                if (*(f32*)(work + 0x14) - *(f32*)(work + 0x18) > 0.0f) {
+                    *(f32*)(work + 0x18) = *(f32*)(work + 0x14);
+                }
+            } else {
+                f32 step = 0.1f * delta;
+                if (step < 0.1f) {
+                    step = 0.1f;
+                }
+                *(f32*)(work + 0x18) += step;
+                if (*(f32*)(work + 0x14) - *(f32*)(work + 0x18) < 0.0f) {
+                    *(f32*)(work + 0x18) = *(f32*)(work + 0x14);
+                }
+            }
+        }
+    }
+    {
+        f32 delta = *(f32*)(work + 0x1C) - *(f32*)(work + 0x20);
+        if (delta != 0.0f) {
+            if (delta <= 0.0f) {
+                f32 step = 0.1f;
+                if (0.1f * delta <= -0.1f) {
+                    step = -0.1f * delta;
+                }
+                *(f32*)(work + 0x20) -= step;
+                if (*(f32*)(work + 0x1C) - *(f32*)(work + 0x20) > 0.0f) {
+                    *(f32*)(work + 0x20) = *(f32*)(work + 0x1C);
+                }
+            } else {
+                f32 step = 0.1f * delta;
+                if (step < 0.1f) {
+                    step = 0.1f;
+                }
+                *(f32*)(work + 0x20) += step;
+                if (*(f32*)(work + 0x1C) - *(f32*)(work + 0x20) < 0.0f) {
+                    *(f32*)(work + 0x20) = *(f32*)(work + 0x1C);
+                }
+            }
+        }
+    }
 }
+

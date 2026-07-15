@@ -116,25 +116,366 @@ s32 winHelpMain(void* win) {
 }
 
 
-s32 itemEntry(s32 a, s32 item, s32 mode, s32 c, s32 d, f32 x, f32 y, f32 z) {
-    return 0;
-}
+s32 itemEntry(s32 nameArg, s32 itemId, s32 mode, s32 collectExpr, s32 script, f32 x, f32 y, f32 z) {
+    extern void* gp;
+    extern u8 work[];
+    extern u8 itemDataTable[];
+    extern u32 swGet(s32 id);
+    extern u32 _swGet(s32 id);
+    extern s32 sprintf(char* dst, char* fmt, ...);
+    extern s32 strcmp(char* a, char* b);
+    extern void* memset(void* dst, s32 value, u32 size);
+    extern char* strcpy(char* dst, char* src);
+    extern void* effStarStoneEntry(f64 x, f64 y, f64 z, f64 scale, s32 type);
+    extern void iconEntry(char* name, u16 icon);
+    extern void iconSetPos(f64 x, f64 y, f64 z, char* name);
+    extern void iconSetScale(f64 scale, char* name);
+    extern void iconSetAlpha(char* name, u8 alpha);
+    extern f32 float_1_804210bc;
+    extern f32 float_16_804210e0;
+    extern char str_iPCT05x_802c9258;
 
+    void* workSet = work;
+    void* entry;
+    char generated[12];
+    char* name = (char*)nameArg;
+    s32 count;
+    s32 i;
+    s32 collectedBySw = 0;
+    s32 collectedByLocal = 0;
+
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        workSet = (void*)((s32)workSet + 0x1C);
+    }
+    if (collectExpr != -1) {
+        if (collectExpr >= -130000000 && collectExpr <= -120000000) {
+            collectedBySw = 1;
+            collectExpr += 130000000;
+            if (swGet(collectExpr) != 0) return 0;
+        } else if (collectExpr > -110000001 && collectExpr < -99999999) {
+            collectedByLocal = 1;
+            collectExpr += 110000000;
+            if (_swGet(collectExpr) != 0) return 0;
+        }
+    }
+    if (name == 0) {
+        s32 serial = *(s32*)((s32)workSet + 8) + 1;
+        if (serial > 0xFFFFE) serial = 1;
+        *(s32*)((s32)workSet + 8) = serial;
+        sprintf(generated, &str_iPCT05x_802c9258, serial);
+        name = generated;
+    }
+
+    count = *(s32*)workSet;
+    entry = *(void**)((s32)workSet + 4);
+    for (i = 0; i < count; i++, entry = (void*)((s32)entry + 0x98)) {
+        if ((*(u16*)entry & 1) == 0) break;
+        if ((*(u16*)entry & 0x10000) != 0 && strcmp((char*)((s32)entry + 0xC), name) == 0) break;
+    }
+    if (i >= count) return 0;
+
+    memset(entry, 0, 0x98);
+    strcpy((char*)((s32)entry + 0xC), name);
+    *(f32*)((s32)entry + 0x3C) = x;
+    *(f32*)((s32)entry + 0x40) = y;
+    *(f32*)((s32)entry + 0x44) = z;
+    *(s32*)((s32)entry + 0x4) = itemId;
+    *(s16*)((s32)entry + 2) = mode;
+    *(void**)((s32)entry + 0x20) = (void*)script;
+    *(u16*)entry |= 1;
+    *(f32*)((s32)entry + 0x48) = float_1_804210bc;
+    *(u8*)((s32)entry + 0x54) = 0xFF;
+    if (collectExpr == -1) {
+        *(s32*)((s32)entry + 8) = -1;
+    } else if (collectedBySw) {
+        *(s32*)((s32)entry + 8) = collectExpr;
+        *(u16*)entry |= 0x20;
+    } else if (collectedByLocal) {
+        *(s32*)((s32)entry + 8) = collectExpr;
+        *(u16*)entry |= 0x40;
+    }
+
+    if (itemId > 0x71 && itemId < 0x79) {
+        *(void**)((s32)entry + 0x84) = effStarStoneEntry(x, y + float_16_804210e0, z, float_1_804210bc, itemId - 0x72);
+    } else {
+        *(void**)((s32)entry + 0x84) = 0;
+        iconEntry((char*)((s32)entry + 0xC), *(u16*)((s32)itemDataTable + itemId * 0x28 + 0x20));
+        iconSetPos(x, y, z, (char*)((s32)entry + 0xC));
+        iconSetScale(*(f32*)((s32)entry + 0x48), (char*)((s32)entry + 0xC));
+        iconSetAlpha((char*)((s32)entry + 0xC), *(u8*)((s32)entry + 0x54));
+    }
+    *(f32*)((s32)entry + 0x58) = float_1_804210bc;
+    *(f32*)((s32)entry + 0x5C) = float_1_804210bc;
+    if (itemId > 0x78 && itemId < 0x7D) *(u16*)entry |= 0x80;
+
+    *(u16*)((s32)entry + 0x24) = 1;
+    *(u16*)((s32)entry + 0x26) = 0;
+    switch ((u16)mode) {
+        case 1: *(u16*)entry |= 2; break;
+        case 2: *(u16*)((s32)entry + 0x24) = 5; break;
+        case 3: *(s32*)((s32)entry + 0x68) = 0; *(s32*)((s32)entry + 0x6C) = 5000; *(u16*)((s32)entry + 0x24) = 5; break;
+        case 4: *(u16*)((s32)entry + 0x24) = 6; break;
+        case 6: *(u32*)((s32)entry + 0x38) |= 0x40; goto timer5000;
+        case 7: *(u32*)((s32)entry + 0x38) |= 0x4000;
+        case 5:
+timer5000: *(s32*)((s32)entry + 0x68) = 0; *(s32*)((s32)entry + 0x6C) = 5000; *(u16*)((s32)entry + 0x24) = 6; break;
+        case 9: *(u16*)entry |= 0x100;
+        case 8: *(u32*)((s32)entry + 0x38) |= 0x4000; *(s32*)((s32)entry + 0x68) = 0; *(s32*)((s32)entry + 0x6C) = 8000; *(u16*)((s32)entry + 0x24) = 6; break;
+        case 10: *(u16*)entry |= 0x400; *(u32*)((s32)entry + 0x38) |= 0x4000; *(s32*)((s32)entry + 0x68) = 0; *(s32*)((s32)entry + 0x6C) = 8000; *(u16*)((s32)entry + 0x24) = 6; break;
+        case 11: case 12: *(u32*)((s32)entry + 0x38) |= 0x4000; *(s32*)((s32)entry + 0x68) = 0; *(s32*)((s32)entry + 0x6C) = 20000; *(u16*)((s32)entry + 0x24) = 6; if (mode == 12) *(u16*)entry |= 0x400; break;
+        case 13: *(u16*)((s32)entry + 0x24) = 3; break;
+        case 14: *(u16*)((s32)entry + 0x24) = 4; break;
+        case 15: *(u16*)((s32)entry + 0x24) = 10; break;
+        case 17: *(u16*)entry |= 2;
+        case 16: *(u16*)((s32)entry + 0x24) = 7; break;
+    }
+    return (s32)entry;
+}
 
 u8 itemMain(void) {
+    extern void* gp;
+    extern u8 work[];
+    extern void* marioGetPtr(void);
+    extern void* itemHitCheck(f64 x, f64 y, f64 z, f64 radius);
+    extern s32 itemGetCheck(void* item);
+    extern void itemseq_GetItem(void* item);
+    extern void itemseq_Bound(void* item);
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32 id);
+    extern void iconSetPos(f64 x, f64 y, f64 z, char* name);
+    extern void iconSetScale(f64 scale, char* name);
+    extern void iconSetAlpha(char* name, u8 alpha);
+    extern f32 float_0p5_804210d0;
+    extern f32 float_12_80421128;
+    extern f32 float_16_804210e0;
+    extern f32 float_neg1000_80421108;
+
+    void* workSet = work;
+    void* player = marioGetPtr();
+    void* item;
+    void* party;
+    s32 count;
+    s32 i;
+    u16 mode;
+
+    if (*(s32*)((s32)gp + 0x14) != 0) workSet = (void*)((s32)workSet + 0x1C);
+    item = itemHitCheck(*(f32*)((s32)player + 0x8C), *(f32*)((s32)player + 0x90), *(f32*)((s32)player + 0x94), float_0p5_804210d0 * *(f32*)((s32)player + 0xF8) + float_12_80421128);
+    if (itemGetCheck(item) != 0) {
+        *(u16*)((s32)item + 0x24) = 2;
+        *(u16*)((s32)item + 0x26) = 0;
+    }
+    count = *(s32*)workSet;
+    item = *(void**)((s32)workSet + 4);
+    for (i = 0; i < count; i++, item = (void*)((s32)item + 0x98)) {
+        if ((*(u16*)item & 1) == 0) continue;
+        mode = *(u16*)((s32)item + 0x24);
+        if (mode == 2) {
+            *(u32*)((s32)item + 0x38) &= ~0x100;
+        }
+        switch (mode) {
+            case 1:
+                *(f32*)((s32)item + 0x40) -= 1.0f;
+                if (*(f32*)((s32)item + 0x40) < -1000.0f) {
+                    *(u16*)((s32)item + 0x24) = 3;
+                    *(u16*)((s32)item + 0x26) = 0;
+                }
+                break;
+            case 2: itemseq_GetItem(item); break;
+            case 3: case 4: case 5: case 6: case 10: itemseq_Bound(item); break;
+            case 8:
+                party = partyGetPtr(marioGetPartyId());
+                if (party == 0) {
+                    *(u16*)((s32)item + 0x24) = 3;
+                    *(u16*)((s32)item + 0x26) = 0;
+                    *(u32*)((s32)item + 0x38) &= ~0x1000;
+                } else {
+                    *(f32*)((s32)item + 0x3C) = *(f32*)((s32)party + 0xC);
+                    *(f32*)((s32)item + 0x40) = *(f32*)((s32)party + 0x10) + 15.0f;
+                    *(f32*)((s32)item + 0x44) = *(f32*)((s32)party + 0x14);
+                }
+                break;
+        }
+        if ((*(u16*)item & 1) != 0) {
+            if (*(s32*)((s32)item + 4) > 0x71 && *(s32*)((s32)item + 4) < 0x79) {
+                void* eff = *(void**)((s32)item + 0x84);
+                void* alloc = *(void**)((s32)eff + 4);
+                *(f32*)((s32)alloc + 8) = *(f32*)((s32)item + 0x3C);
+                *(f32*)((s32)alloc + 0xC) = ((*(u32*)((s32)item + 0x38) & 0x100) != 0) ? float_neg1000_80421108 : *(f32*)((s32)item + 0x40) + float_16_804210e0;
+                *(f32*)((s32)alloc + 0x10) = *(f32*)((s32)item + 0x44);
+            } else if ((*(u32*)((s32)item + 0x38) & 0x100) == 0) {
+                iconSetPos(*(f32*)((s32)item + 0x3C), *(f32*)((s32)item + 0x40), *(f32*)((s32)item + 0x44), (char*)((s32)item + 0xC));
+                iconSetScale(*(f32*)((s32)item + 0x48), (char*)((s32)item + 0xC));
+                iconSetAlpha((char*)((s32)item + 0xC), *(u8*)((s32)item + 0x54));
+            } else {
+                iconSetPos(*(f32*)((s32)item + 0x3C), float_neg1000_80421108, *(f32*)((s32)item + 0x44), (char*)((s32)item + 0xC));
+            }
+        }
+    }
     return 0;
 }
 
+s32 itemHitCheckSide(f64 moveX, f64 moveZ, s32 item, f32* outX, f32* outZ, s32* outAngle) {
+    extern f64 angleABf(f64 x1, f64 z1, f64 x2, f64 z2);
+    extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
+    extern s32 hitCheckFilter(f64 x, f64 y, f64 z, f64 dirX, f64 dirY, f64 dirZ,
+                              s32 flags, void* hitOut, void* posX, void* posY,
+                              void* radius, void* normalX, void* posZ, void* normalZ);
+    extern f64 reviseAngle(f64 angle);
+    extern f64 sqrt(f64 value);
+    extern f32 float_0_804210b4;
+    extern f32 float_10_804210c8;
+    extern f32 float_15_804210cc;
+    extern f32 float_0p5_804210d0;
+    extern f32 float_180_804210d4;
+    extern f32 float_100_804210d8;
 
-u8 itemHitCheckSide(void) {
-    return 0;
+    f32 sinv;
+    f32 cosv;
+    f32 radius;
+    f32 normalX;
+    f32 normalZ;
+    f32 hitX;
+    f32 hitY;
+    f32 hitZ;
+    u32 hitWork[2];
+    f32 dist;
+    f64 dot;
+    s32 hit;
+
+    *outX = *(f32*)(item + 0x3C);
+    *outZ = *(f32*)(item + 0x44);
+
+    if ((moveX == (f64)float_0_804210b4) && (moveZ == (f64)float_0_804210b4)) {
+        return 0;
+    }
+
+    sincosf((f32)angleABf((f64)float_0_804210b4, (f64)float_0_804210b4, moveX, moveZ), &sinv, &cosv);
+    dist = (f32)sqrt((moveX * moveX) + (f64)((f32)(moveZ * moveZ)));
+    radius = float_10_804210c8 + dist;
+    hit = hitCheckFilter(
+        (f64)*(f32*)(item + 0x3C),
+        (f64)(*(f32*)(item + 0x40) + float_15_804210cc),
+        (f64)*(f32*)(item + 0x44),
+        (f64)sinv,
+        (f64)float_0_804210b4,
+        (f64)cosv,
+        0,
+        hitWork,
+        &hitX,
+        &hitY,
+        &radius,
+        &normalX,
+        &hitZ,
+        &normalZ);
+
+    if (hit == 0) {
+        *outX = *outX + (f32)moveX;
+        *outZ = *outZ + (f32)moveZ;
+        return 0;
+    }
+
+    dot = moveX * (f64)normalX + (f64)((f32)(moveZ * (f64)normalZ));
+    *outX = *outX + (float_0p5_804210d0 * -((f32)(dot * (f64)normalX - moveX)));
+    *outZ = *outZ + (float_0p5_804210d0 * -((f32)(dot * (f64)normalZ - moveZ)));
+    *outAngle = (s32)reviseAngle((f64)(f32)(reviseAngle(angleABf((f64)float_0_804210b4, (f64)float_0_804210b4,
+                                                                  (f64)(float_100_804210d8 * normalX),
+                                                                  (f64)(float_100_804210d8 * normalZ))) +
+                                             reviseAngle((f64)(f32)(reviseAngle((f64)(float_180_804210d4 + (f32)*outAngle)) -
+                                                                    reviseAngle(angleABf((f64)float_0_804210b4, (f64)float_0_804210b4,
+                                                                                        (f64)(float_100_804210d8 * normalX),
+                                                                                        (f64)(float_100_804210d8 * normalZ)))))));
+    return hit;
 }
 
+void* itemHitCheck(f64 posX, f64 posY, f64 posZ, f64 radius) {
+    extern void* marioGetPtr(void);
+    extern s32 marioItemGetOk(void);
+    extern s32 marioGetJabaraState(void);
+    extern s32 hitCheckAttr(f64 x, f64 y, f64 z, f64 dirX, f64 dirY, f64 dirZ,
+                            u32 attr, void* hitOut, void* hitX, void* hitY,
+                            void* radius, void* outX, void* outY, void* outZ);
+    extern f64 sqrt(f64 value);
+    extern f32 float_0_804210b4;
+    extern f32 float_0p5_804210d0;
+    extern f32 float_1_804210bc;
+    extern f32 float_10_804210c8;
 
-u8 itemHitCheck(s64 posX, s64 posY, s64 posZ, s64 param_4) {
-    return 0;
+    void* workSet = work;
+    void* item;
+    void* best = 0;
+    void* mario;
+    s32 count;
+    s32 i;
+    f32 dx;
+    f32 dy;
+    f32 dz;
+    f32 distXZ;
+    f32 dist;
+    f32 height;
+    f32 itemY;
+    f32 yDiff;
+    f32 hitRadius;
+    u32 hitWork[4];
+    f32 hitX;
+    f32 hitY;
+    f32 hitZ;
+    s32 blocked;
+
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        workSet = (void*)((s32)workSet + 0x1C);
+    }
+
+    mario = marioGetPtr();
+    count = *(s32*)workSet;
+    item = *(void**)((s32)workSet + 4);
+
+    for (i = 0; i < count; i++, item = (void*)((s32)item + 0x98)) {
+        if (((*(u16*)item & 1) != 0) &&
+            ((*(u16*)item & 2) == 0) &&
+            ((*(u32*)((s32)item + 0x38) & 0x1000) == 0) &&
+            (*(u16*)((s32)item + 0x24) != 2)) {
+            dx = (f32)(posX - (f64)*(f32*)((s32)item + 0x3C));
+            dz = (f32)(posZ - (f64)*(f32*)((s32)item + 0x44));
+            dy = (f32)(posY - (f64)*(f32*)((s32)item + 0x40));
+            distXZ = (f32)sqrt((f64)((dx * dx) + (dz * dz)));
+            dist = (f32)sqrt((f64)((dx * dx) + (dy * dy) + (dz * dz)));
+
+            if (((f64)distXZ < radius) &&
+                (marioItemGetOk() != 0) &&
+                (marioGetJabaraState() != 1) &&
+                (marioGetJabaraState() != 4) &&
+                (marioGetJabaraState() != 5)) {
+                height = *(f32*)((s32)mario + 0xFC);
+                itemY = *(f32*)((s32)item + 0x40);
+                yDiff = (f32)((float_0p5_804210d0 * height + (f32)posY) - itemY);
+                if (yDiff < float_0_804210b4) {
+                    yDiff = -yDiff;
+                }
+                if (yDiff < (float_0p5_804210d0 * height + float_10_804210c8)) {
+                    blocked = 0;
+                    if (posY < (f64)itemY) {
+                        hitRadius = float_10_804210c8 + (itemY - (f32)posY);
+                        if (float_0_804210b4 < hitRadius) {
+                            blocked = hitCheckAttr(posX, posY, posZ,
+                                                   (f64)float_0_804210b4,
+                                                   (f64)float_1_804210bc,
+                                                   (f64)float_0_804210b4,
+                                                   0x80000000,
+                                                   hitWork, &hitX, &hitY,
+                                                   &hitRadius, &hitX, &hitY, &hitZ);
+                        }
+                    }
+                    if (blocked == 0) {
+                        best = item;
+                        radius = (f64)dist;
+                    }
+                }
+            }
+        }
+    }
+
+    return best;
 }
-
 
 void winNameDisp(int param_1) {
     extern u32 FontGetMessageWidthLine(char* msg, s16* lineCount);
@@ -351,15 +692,160 @@ void itemCoinDrop(float* param_1) {
     }
 }
 
-u8 itemseq_GetItem(void* pItem, s32 param_2, s32 param_3, s32 param_4, u32* param_5, u32 param_6) {
+u8 itemseq_GetItem(void* item, s32 p2, s32 p3, s32 p4, u32* p5, u32 p6) {
+    extern void* marioGetPtr(void);
+    extern s32 pouchGetItem(s32);
+    extern void marioKeyOff(void);
+    extern void marioStSystemLevel(s32);
+    extern void psndSetFlag(u32);
+    extern u32 marioChkItemGetMotion(void);
+    extern void marioChgGetItemMotion(void);
+    extern void* effItemGetEntry(f64, f64, f64, s32);
+    extern void iconFlagOn(char*, u32);
+    extern void marioSetCamId(s32);
+    extern u32 psndBGMChkSilent(s32);
+    extern void psndBGMOff(s32);
+    extern void psndBGMOn(s32, char*);
+    extern char str_BGM_FF_GET_ITEM1_802c9234[];
+    void* player = marioGetPtr();
+    u16* mode = (u16*)((s32)item + 0x26);
+    u32* flags = (u32*)((s32)item + 0x34);
+    u32* status = (u32*)((s32)item + 0x38);
+    f32* pos = (f32*)((s32)item + 0x3C);
+    s32 itemId = *(s32*)((s32)item + 0x28);
+    s32 effectType = 7;
+    void* effect;
+
+    switch (*mode) {
+    case 0:
+        *status &= ~0x10000;
+        if ((*flags & 0x100) == 0) *status &= ~0x4000000;
+        else *status |= 0x4000000;
+        *flags &= ~0x100;
+        if ((*flags & 0x200) != 0) {
+            if (pouchGetItem(itemId) != 0) {
+                *status |= 1;
+                return 0;
+            }
+            *(u16*)((s32)item + 0x24) = 4;
+            *mode = 0;
+            return 0;
+        }
+        *mode = 1;
+        *(u32*)((s32)item + 0x68) = 0;
+        *(u32*)((s32)item + 0x6C) = 0;
+        marioKeyOff();
+        marioStSystemLevel(2);
+        psndSetFlag(0x80);
+        *(f32*)((s32)player + 0x180) = 0.0f;
+        *(f32*)((s32)player + 0x184) = 0.0f;
+    case 1:
+        if (((*flags & 0x1000) == 0 || (*flags & 0x4000) != 0) && marioChkItemGetMotion() == 0) {
+            *mode = 8;
+            return 0;
+        }
+        *mode = 2;
+        marioChgGetItemMotion();
+        pos[0] = *(f32*)((s32)player + 0x8C);
+        pos[1] = *(f32*)((s32)player + 0x90) + 50.0f;
+        pos[2] = *(f32*)((s32)player + 0x94);
+        if (itemId == 0x57) effectType = 4;
+        else if (itemId == 0x7D) effectType = 8;
+        else if (itemId < 0xC) effectType = 3;
+        else if (itemId < 0x72) effectType = 6;
+        else if (itemId < 0x79) effectType = 0;
+        else if (itemId >= 0xEC && itemId < 0x153) effectType = 5;
+        effect = effItemGetEntry(*(f32*)((s32)player + 0x8C),
+                                 *(f32*)((s32)player + 0x90) + 62.0f,
+                                 *(f32*)((s32)player + 0x94), effectType);
+        *(void**)((s32)item + 0x84) = effect;
+        iconFlagOn(*(char**)((s32)item + 0xC), (*status & 0x2000) ? 0x200 : 0x100);
+        marioSetCamId((*status & 0x2000) ? 7 : 5);
+        if ((*flags & 0x8000) == 0) {
+            if (psndBGMChkSilent(0) != 0) *flags |= 8;
+            if ((*flags & 8) == 0) psndBGMOff(0x3800);
+            psndBGMOn(0x211, str_BGM_FF_GET_ITEM1_802c9234);
+        }
+        break;
+    case 8:
+        if (marioChkItemGetMotion() != 0) *mode = 1;
+        break;
+    }
     return 0;
 }
 
+u8 itemseq_Bound(void* item) {
+    extern void* marioGetPtr(void);
+    extern s32 itemHitCheckSide(f64, f64, void*, f32*, f32*, u32*);
+    extern void* hitCheckFilter(f64, f64, f64, f64, f64, f64, s32, void*, f32*, void*, f32*, void*, void*, void*);
+    extern u32 hitGetAttr(void*);
+    extern u32 psndSFXOn_3D(s32, void*);
+    extern void effStardustEntry(f64, f64, f64, f64, f64, s32, s32, s32);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    f32* pos = (f32*)((s32)item + 0x3C);
+    u32* status = (u32*)((s32)item + 0x38);
+    u32* flags = (u32*)((s32)item + 0x34);
+    f32 speed = *(f32*)((s32)item + 0x50);
+    s32 angle = *(s32*)((s32)item + 0x54);
+    f32 gravity = *(f32*)((s32)item + 0x58);
+    f32 jump = *(f32*)((s32)item + 0x5C);
+    f32 nextX, nextZ, floorY, distance;
+    u32 nextAngle = angle;
+    void* hit;
+    f32 radians = 6.2832f * (f32)angle / 360.0f;
+    f32 dx = speed * (f32)sin(radians);
+    f32 dz = -speed * (f32)cos(radians);
+    f32 dy = jump - gravity * 0.98f;
 
-u8 itemseq_Bound(void* itemEntry) {
+    marioGetPtr();
+    if ((*status & 4) != 0 && (*(s32*)((s32)item + 0x8C) != 0 || dy < 0.0f)) *status &= ~4;
+    if ((*status & 8) != 0 && *(s32*)((s32)item + 0x8C) != 0) *status &= ~8;
+    if ((*status & 0x20) != 0 && dy < 0.0f) {
+        effStardustEntry(pos[0], pos[1], pos[2], 16.0, 16.0, 1, 3, 30);
+        return 0;
+    }
+    nextX = pos[0];
+    nextZ = pos[2];
+    if (itemHitCheckSide(dx, dz, item, &nextX, &nextZ, &nextAngle) != 0) {
+        *(f32*)((s32)item + 0x50) *= 0.25f;
+    }
+    pos[0] = nextX;
+    pos[2] = nextZ;
+    *(u32*)((s32)item + 0x54) = nextAngle;
+
+    hit = 0;
+    if (dy < 0.0f && (*status & 0x100000) == 0) {
+        distance = 20.0f + -dy;
+        hit = hitCheckFilter(pos[0], pos[1], pos[2], 0.0, -1.0, 0.0, 0,
+                             0, &floorY, 0, &distance, 0, 0, 0);
+        if (hit != 0) pos[1] = floorY;
+        else pos[1] += dy;
+    } else {
+        pos[1] += dy;
+    }
+    if ((*status & 0x100000) != 0 && pos[1] <= -1000.0f) {
+        *(u16*)((s32)item + 0x24) = 7;
+        *(u16*)((s32)item + 0x26) = 0;
+        *status &= ~(4 | 8 | 0x4000 | 0x1000);
+        *status |= 0x10000;
+        *flags |= 0x100;
+        return 0;
+    }
+    if (hit != 0 && (hitGetAttr(hit) & 0x600) == 0) {
+        s32 bounds = ++*(s32*)((s32)item + 0x8C);
+        if ((hitGetAttr(hit) & 0x80000000) == 0 && *(f32*)((s32)item + 0x90) != 0.0f &&
+            bounds >= (s32)*(f32*)((s32)item + 0x90)) {
+            *(u16*)((s32)item + 0x24) = 1;
+            *(u16*)((s32)item + 0x26) = 0;
+            *status &= ~(4 | 8 | 0x4000);
+        } else {
+            *(f32*)((s32)item + 0x5C) = -jump * 0.25f;
+            psndSFXOn_3D(0x1D0, pos);
+        }
+    }
     return 0;
 }
-
 
 s32 itemGetCheck(void* itemEntry) {
     extern void* marioGetPtr(void);

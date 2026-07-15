@@ -22,9 +22,139 @@ s32 partyGetHp(s32 partyId) {
 
 
 s32 marioUseParty(void) {
+    extern void* marioGetPtr(void);
+    extern s32 N_marioChkUseParty(void);
+    extern s32 marioKeyOffChk(void);
+    extern void* partyGetPtr(s32 partyId);
+    extern s32 N_fbatPreventMarioEventChk(void);
+    extern s32 yoshiGetStatus(void);
+    void* mario;
+    void* mario2;
+    void* party;
+    s32 partyId;
+    u16 motion;
+
+    mario = marioGetPtr();
+    if (N_marioChkUseParty() != 0) {
+        *(u8*)((s32)mario + 0x3B) = 0;
+        *(u32*)((s32)mario + 0xC) &= ~2;
+        return 0;
+    }
+
+    if ((*(u32*)((s32)mario + 0xC) & 2) != 0 && marioKeyOffChk() != 0) {
+        *(u8*)((s32)mario + 0x3B) = 0;
+        *(u32*)((s32)mario + 0xC) &= ~2;
+        return 0;
+    }
+
+    mario2 = marioGetPtr();
+    partyId = *(s8*)((s32)mario2 + 0x245);
+    if (partyId >= 0) {
+        party = partyGetPtr(partyId);
+        if (party != 0 && (*(u32*)party & 8) == 0) {
+            goto got_party;
+        }
+    }
+    partyId = *(s8*)((s32)mario2 + 0x246);
+    if (partyId >= 0) {
+        party = partyGetPtr(partyId);
+        if (party != 0 && (*(u32*)party & 8) == 0) {
+            goto got_party;
+        }
+    }
+    partyId = -1;
+got_party:
+    party = partyGetPtr(partyId);
+    if (party != 0 && *(u8*)((s32)party + 0x34) == 3) {
+        return 0;
+    }
+
+    if (*(s8*)((s32)mario + 0x245) < 0) {
+        *(u32*)((s32)mario + 0xC) &= ~2;
+        return 0;
+    }
+    if ((*(u32*)mario & 0x80000000) != 0) {
+        return 0;
+    }
+    if (N_fbatPreventMarioEventChk() != 0) {
+        *(u8*)((s32)mario + 0x3B) = 0;
+        *(u32*)((s32)mario + 0xC) &= ~2;
+        return 0;
+    }
+    if ((*(u32*)mario & 0x30000) != 0 || *(s16*)((s32)mario + 0x50) != 0) {
+        *(u8*)((s32)mario + 0x3B) = 0;
+        *(u32*)((s32)mario + 0xC) &= ~2;
+        return 0;
+    }
+
+    motion = *(u16*)((s32)mario + 0x2E);
+    if (motion != 0 && motion != 1 && motion != 2) {
+        *(u32*)((s32)mario + 0xC) &= ~2;
+        return 0;
+    }
+    if ((*(u32*)((s32)mario + 4) & 0x01000000) != 0) {
+        return 0;
+    }
+    if (party != 0 && *(u8*)((s32)party + 0x37) == 1) {
+        return 0;
+    }
+
+    mario2 = marioGetPtr();
+    partyId = *(s8*)((s32)mario2 + 0x245);
+    if (partyId >= 0) {
+        party = partyGetPtr(partyId);
+        if (party != 0 && (*(u32*)party & 8) == 0) {
+            goto got_party2;
+        }
+    }
+    partyId = *(s8*)((s32)mario2 + 0x246);
+    if (partyId >= 0) {
+        party = partyGetPtr(partyId);
+        if (party != 0 && (*(u32*)party & 8) == 0) {
+            goto got_party2;
+        }
+    }
+    partyId = -1;
+got_party2:
+    party = partyGetPtr(partyId);
+    if ((*(u32*)party & 0x100) != 0) {
+        return 0;
+    }
+
+    mario2 = marioGetPtr();
+    partyId = *(s8*)((s32)mario2 + 0x245);
+    if (partyId >= 0) {
+        party = partyGetPtr(partyId);
+        if (party != 0 && (*(u32*)party & 8) == 0) {
+            goto got_party3;
+        }
+    }
+    partyId = *(s8*)((s32)mario2 + 0x246);
+    if (partyId >= 0) {
+        party = partyGetPtr(partyId);
+        if (party != 0 && (*(u32*)party & 8) == 0) {
+            goto got_party3;
+        }
+    }
+    partyId = -1;
+got_party3:
+    party = partyGetPtr(partyId);
+    if (party == 0) {
+        return 0;
+    }
+    if (*(u8*)((s32)party + 0x31) == 1 && (*(u32*)party & 0x10) == 0) {
+        return 0;
+    }
+    if (*(u8*)((s32)party + 0x31) == 6 && yoshiGetStatus() != 0) {
+        return 0;
+    }
+    if ((*(u32*)((s32)mario + 0xC) & 2) == 0 && (*(u16*)((s32)mario + 0x24C) & 0x400) != 0) {
+        *(u32*)((s32)mario + 0xC) |= 2;
+        *(u8*)((s32)mario + 0x3B) = 5;
+    }
+
     return 0;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

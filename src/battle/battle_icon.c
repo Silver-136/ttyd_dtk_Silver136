@@ -73,10 +73,108 @@ USER_FUNC(btlevtcmd_BtlIconSetFallAccel) {
 }
 
 
-u8 btlevtcmd_BtlIconJumpPosition(void) {
+USER_FUNC(btlevtcmd_BtlIconJumpPosition) {
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern void btlMovePos(f32 speed, f32 angle, f32* x, f32* z);
+    extern f32 float_0_80424b18;
+    extern f32 float_0p5_80424b20;
+
+    s32* args;
+    s32 id;
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 frames;
+    void* icon;
+    f32 startX;
+    f32 startY;
+    f32 startZ;
+    f32 dist;
+    f32 zero;
+    f32 framef;
+
+    args = event->args;
+    id = evtGetValue(event, args[0]);
+    x = (f32)evtGetValue(event, args[1]);
+    y = (f32)evtGetValue(event, args[2]);
+    z = (f32)evtGetValue(event, args[3]);
+    frames = evtGetValue(event, args[4]);
+    icon = BtlIconGetPtr(id);
+
+    if (isFirstCall != 0) {
+        *(u8*)((s32)event + 0xD) = 1;
+        if (frames != 0) {
+            *(s32*)((s32)icon + 0x44) = frames;
+        }
+
+        *(f32*)((s32)icon + 0x38) = x;
+        *(f32*)((s32)icon + 0x3C) = y;
+        *(f32*)((s32)icon + 0x40) = z;
+
+        startX = *(f32*)((s32)icon + 8);
+        startY = *(f32*)((s32)icon + 0xC);
+        startZ = *(f32*)((s32)icon + 0x10);
+
+        *(f32*)((s32)icon + 0x2C) = startX;
+        *(f32*)((s32)icon + 0x20) = startX;
+        *(f32*)((s32)icon + 0x30) = startY;
+        *(f32*)((s32)icon + 0x24) = startY;
+        *(f32*)((s32)icon + 0x34) = startZ;
+        *(f32*)((s32)icon + 0x28) = startZ;
+
+        *(f32*)((s32)icon + 0x54) = angleABf(startX, startZ, x, z);
+        dist = distABf(startX, startZ, x, z);
+        zero = float_0_80424b18;
+        *(f32*)((s32)icon + 0x58) = dist;
+
+        if (x - startX > zero) {
+            *(s8*)((s32)icon + 0x60) = 1;
+        } else if (x - startX < zero) {
+            *(s8*)((s32)icon + 0x60) = -1;
+        }
+
+        if (*(s32*)((s32)icon + 0x44) == 0) {
+            *(s32*)((s32)icon + 0x44) = (s32)(*(f32*)((s32)icon + 0x58) / *(f32*)((s32)icon + 0x48));
+        } else {
+            *(f32*)((s32)icon + 0x48) = *(f32*)((s32)icon + 0x58) / (f32)*(s32*)((s32)icon + 0x44);
+        }
+
+        framef = (f32)*(s32*)((s32)icon + 0x44);
+        *(f32*)((s32)icon + 0x58) = -((framef * *(f32*)((s32)icon + 0x48)) - *(f32*)((s32)icon + 0x58));
+
+        if (*(s32*)((s32)icon + 0x44) == 0) {
+            return 2;
+        }
+
+        framef = (f32)*(s32*)((s32)icon + 0x44);
+        *(f32*)((s32)icon + 0x50) = (*(f32*)((s32)icon + 0x4C) * framef * float_0p5_80424b20) + ((y - startY) / framef);
+        *(f32*)((s32)icon + 0x48) += *(f32*)((s32)icon + 0x58) / framef;
+    }
+
+    zero = float_0_80424b18;
+    *(f32*)((s32)icon + 0x30) += *(f32*)((s32)icon + 0x50);
+    *(f32*)((s32)icon + 0x50) -= *(f32*)((s32)icon + 0x4C);
+    if (*(f32*)((s32)icon + 0x50) < zero && *(f32*)((s32)icon + 0x30) < *(f32*)((s32)icon + 0x3C)) {
+        *(f32*)((s32)icon + 0x30) = *(f32*)((s32)icon + 0x3C);
+    }
+
+    btlMovePos(*(f32*)((s32)icon + 0x48), *(f32*)((s32)icon + 0x54), (f32*)((s32)icon + 0x2C), (f32*)((s32)icon + 0x34));
+
+    *(f32*)((s32)icon + 8) = *(f32*)((s32)icon + 0x2C);
+    *(f32*)((s32)icon + 0xC) = *(f32*)((s32)icon + 0x30);
+    *(f32*)((s32)icon + 0x10) = *(f32*)((s32)icon + 0x34);
+
+    *(s32*)((s32)icon + 0x44) -= 1;
+    if (*(s32*)((s32)icon + 0x44) < 1) {
+        *(f32*)((s32)icon + 8) = *(f32*)((s32)icon + 0x38);
+        *(f32*)((s32)icon + 0xC) = *(f32*)((s32)icon + 0x3C);
+        *(f32*)((s32)icon + 0x10) = *(f32*)((s32)icon + 0x40);
+        return 1;
+    }
+
     return 0;
 }
-
 
 void* BtlIcon_Entry(u16 type, f32 x, f32 y, f32 z) {
     s32 i;

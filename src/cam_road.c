@@ -1408,9 +1408,71 @@ s32 camRoadSetup(const char* name) {
 
 
 s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
-    return 0;
-}
+    extern void* wp;
+    extern f64 sqrt(f64 x);
+    f32* point = pos;
+    f32* out = result;
+    f32* inner;
+    f32* outer;
+    s32 segments;
+    s32 startIndex;
+    s32 endIndex;
+    s32 i;
+    s32 hit = 0;
+    f32 best = *(f32*)result;
 
+    if (type != 0) {
+        segments = *(s32*)((u8*)road + 0x64) / 2;
+        startIndex = 0;
+        endIndex = 1;
+        inner = (f32*)((u8*)*(void**)((u8*)*(void**)wp + 0xF8) +
+                       *(s32*)((u8*)road + 0x60) * 12);
+    } else {
+        segments = *(s32*)((u8*)road + 0xA4) / 2;
+        startIndex = *(s32*)((u8*)road + 0x40);
+        endIndex = *(s32*)((u8*)road + 0x44);
+        inner = (f32*)((u8*)*(void**)((u8*)*(void**)wp + 0xF8) +
+                       *(s32*)((u8*)road + 0xA0) * 12);
+    }
+    outer = inner + segments * 3;
+    for (i = 0; i < segments - 1; i++) {
+        f32* a = inner + i * 3;
+        f32* b = inner + (i + 1) * 3;
+        f32* c = outer + i * 3;
+        f32* d = outer + (i + 1) * 3;
+        f32 edgeX = b[0] - a[0];
+        f32 edgeZ = b[2] - a[2];
+        f32 relX = point[0] - a[0];
+        f32 relZ = point[2] - a[2];
+        f32 side0 = c[0] * relX + c[2] * relZ;
+        f32 side1 = -(d[0] * (point[0] - b[0]) + d[2] * (point[2] - b[2]));
+        if (side0 >= 0.0f && side1 >= 0.0f) {
+            f32 denom = edgeX * edgeX + edgeZ * edgeZ;
+            f32 t = denom != 0.0f ? (relX * edgeX + relZ * edgeZ) / denom : 0.0f;
+            f32 x = a[0] + t * edgeX;
+            f32 z = a[2] + t * edgeZ;
+            f32 dx = point[0] - x;
+            f32 dz = point[2] - z;
+            f32 dist = (f32)sqrt(dx * dx + dz * dz);
+            f32 y = outer[i * 3 + 1] + t * (outer[(i + 1) * 3 + 1] - outer[i * 3 + 1]);
+            if (dist < best || !hit) {
+                best = dist;
+                hit = 1;
+                out[0] = y;
+                out[2] = 1.0f;
+                out[3] = x;
+                out[4] = 0.0f;
+                out[5] = z;
+                out[6] = a[0] + t * edgeX;
+                out[7] = 0.0f;
+                out[8] = a[2] + t * edgeZ;
+                out[9] = (f32)(startIndex + i);
+                out[10] = (f32)(endIndex != 0);
+            }
+        }
+    }
+    return hit;
+}
 
 s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
     f32* p;

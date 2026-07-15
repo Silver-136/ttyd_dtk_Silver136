@@ -246,10 +246,126 @@ USER_FUNC(evt_bero_get_info_nextarea) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-u8 bero_get_position_normal(void) {
-    return 0;
-}
+u8 bero_get_position_normal(void* pEvt) {
+    typedef struct Vec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
+    extern void* marioGetPtr(void);
+    extern s32 evtGetValue(void* event, s32 arg);
+    extern f32 evtGetFloat(void* event, s32 arg);
+    extern void hitObjGetPos(char* name, Vec* out);
+    extern double sin(double x);
+    extern double cos(double x);
+    extern s32 hitCheckFilter(f32 x, f32 y, f32 z, f32 vx, f32 vy, f32 vz, s32 flags,
+                              f32* outZ, f32* outY, f32* outX, f32* outDist,
+                              void* outA, void* outB, void* outC);
+    extern void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z);
+    extern void N_marioReloadMapOnBottomlessOn(void);
+    extern f32 BeroSX;
+    extern f32 BeroSY;
+    extern f32 BeroSZ;
+    extern f32 BeroEX;
+    extern f32 BeroEY;
+    extern f32 BeroEZ;
+    extern f32 float_0_804204e8;
+    extern f32 float_6p2832_804204e0;
+    extern f32 float_360_804204e4;
+    extern f32 float_1E06_8042050c;
+    extern f32 float_0p125_80420510;
+    extern f32 float_180_80420514;
+    extern f32 float_30_80420518;
+    extern f32 float_neg1_80420508;
+    void* mario = marioGetPtr();
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 type = evtGetValue(pEvt, args[0]);
+    f32 length = evtGetFloat(pEvt, args[1]);
+    s32* posData = *(s32**)((s32)pEvt + 0xB4);
+    s32 dirIndex = *(s32*)((s32)pEvt + 0xB0);
+    Vec start;
+    Vec end;
+    Vec base;
+    Vec hitPos;
+    Vec rayStart;
+    f32 hitDist;
+    f32 outA;
+    f32 outB;
+    f32 outC;
+    f32 angle;
+    f32 rad;
+    f32 s;
+    f32 c;
 
+    start.x = (f32)posData[0];
+    start.y = (f32)posData[1];
+    start.z = (f32)posData[2];
+    end.x = start.x;
+    end.y = start.y;
+    end.z = start.z;
+
+    if ((u32)(posData[0] - 0x10000) <= 0x86A0) {
+        hitObjGetPos(*(char**)((s32)pEvt + 0xA8), &start);
+    }
+
+    if (float_0_804204e8 != length) {
+        hitPos.x = float_0_804204e8;
+        hitPos.y = float_0_804204e8;
+        hitPos.z = float_0_804204e8;
+        hitDist = float_1E06_8042050c;
+        outA = float_0_804204e8;
+        outB = float_0_804204e8;
+        outC = float_0_804204e8;
+
+        angle = float_360_804204e4 * (f32)dirIndex * float_0p125_80420510;
+        if (type == 1) {
+            angle += float_180_80420514;
+        }
+        rad = (float_6p2832_804204e0 * angle) / float_360_804204e4;
+
+        s = (f32)sin(rad);
+        base.y = start.y;
+        base.x = start.x - (float_30_80420518 * s);
+
+        c = (f32)cos(rad);
+        base.z = start.z + (float_30_80420518 * c);
+
+        if (hitCheckFilter(base.x, base.y, base.z,
+                           float_0_804204e8, float_neg1_80420508, float_0_804204e8,
+                           0, &hitPos.z, &hitPos.y, &hitPos.x, &hitDist,
+                           &outA, &outB, &outC) != 0) {
+            base.y = hitPos.y;
+        }
+
+        rayStart.x = base.x;
+        rayStart.y = base.y;
+        rayStart.z = base.z;
+
+        s = (f32)sin(rad);
+        length += float_30_80420518;
+        end.x = (length * s) + rayStart.x;
+
+        c = (f32)cos(rad);
+        end.z = (length * -c) + rayStart.z;
+        end.y = rayStart.y;
+
+        start.x = base.x;
+        start.y = base.y;
+        start.z = base.z;
+    }
+
+    BeroSX = start.x;
+    BeroSY = start.y;
+    BeroSZ = start.z;
+    BeroEX = end.x;
+    BeroEY = end.y;
+    BeroEZ = end.z;
+    N_marioSetBottomlessRespawnPosOnBeroEntry(end.x, end.y, end.z);
+    if (*(u16*)((s32)mario + 0x2E) == 0x19) {
+        N_marioReloadMapOnBottomlessOn();
+    }
+    return 2;
+}
 
 s32 evt_bero_get_into_info(void* pEvt) {
     return 0;

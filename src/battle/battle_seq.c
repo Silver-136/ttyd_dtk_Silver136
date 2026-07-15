@@ -992,24 +992,407 @@ void btlseqTurn(void* battleWork) {
 
 
 void btlseqAct(void* battleWork) {
-    ;
-}
+    extern void effNiceAsync(s32);
+    extern void BattleAudience_ActInit(void);
+    extern void BattleStatusWindowSystemOn(void);
+    extern s32 BattleStatusChangeMsgMain(void*);
+    extern s32 BattleStatusChangeAnnouceMain(void*);
+    extern void BattleStatusChangeMsgAdjust(void*);
+    extern void BtlUnit_SetStatus(void*, s32, s32, s32);
+    extern void BtlUnit_OffStatusFlag(void*, u32);
+    void* unit;
+    s32 seq = BattleGetSeq(battleWork, 6);
+    s32 id = *(s32*)((s32)battleWork + 0x420);
+    s32 a;
+    s32 b;
 
+    switch (seq) {
+        case 0x6000000:
+            unit = BattleGetUnitPtr(battleWork, id);
+            effNiceAsync(1);
+            *(s32*)((s32)unit + 0x258) = 0;
+            *(void**)((s32)unit + 0x25C) = NULL;
+            BattleAudience_ActInit();
+            if (BtlUnit_CheckStatus(unit, 1) ||
+                BtlUnit_CheckStatus(unit, 2) ||
+                BtlUnit_CheckStatus(unit, 9) ||
+                BtlUnit_CheckStatus(unit, 0x1B)) {
+                BattleSetSeq(battleWork, 6, 0x6000003);
+            } else {
+                BattleIncSeq(battleWork, 6);
+            }
+            break;
+        case 0x6000007:
+            if (!BattleWaitAllActiveEvtEnd(battleWork)) {
+                return;
+            }
+            BattleIncSeq(battleWork, 6);
+            BattleStatusChangeMsgAdjust(battleWork);
+        case 0x6000008:
+            if (!BattleWaitAllActiveEvtEnd(battleWork)) {
+                return;
+            }
+            a = BattleStatusChangeMsgMain(battleWork);
+            b = BattleStatusChangeAnnouceMain(battleWork);
+            if (a != 0 || b != 0) {
+                return;
+            }
+            BattleIncSeq(battleWork, 6);
+        case 0x6000009:
+            if ((*(u32*)((s32)battleWork + 0x1720) & 0x30) == 0) {
+                BattleStatusWindowSystemOn();
+            }
+            unit = BattleGetUnitPtr(battleWork, id);
+            if (unit != NULL) {
+                *(u32*)((s32)unit + 0x1C) &= 0xFBFFFFFF;
+                if ((*(u32*)((s32)unit + 0x27C) & 8) != 0) {
+                    BtlUnit_SetStatus(unit, 0x10, 1, -99);
+                    *(u32*)((s32)unit + 0x27C) &= ~8;
+                }
+                if (*(u8*)((s32)unit + 0x20) == 0) {
+                    if ((*(u32*)((s32)battleWork + 0x1720) & 0x2000) != 0) {
+                        *(s8*)((s32)unit + 0x22) = 0;
+                    } else {
+                        *(s8*)((s32)unit + 0x22) -= 1;
+                    }
+                    if (*(s8*)((s32)unit + 0x22) < 1) {
+                        *(u8*)((s32)unit + 0x20) = 10;
+                    }
+                }
+            }
+            BattleIncSeq(battleWork, 6);
+            break;
+    }
+}
 
 void btlseqFirstAct(void* battleWork) {
-    ;
-}
+    extern s32 fadeIsFinish(void);
+    extern void BattleStatusWindowEventOn(void);
+    extern void BattleStatusWindowSystemOn(void);
+    extern void BattleConsumeReserveItem(void);
+    extern void BattleAudience_PerAct(void);
+    extern u32 BattleAudience_CheckReaction(void);
+    extern s32 BattleStatusChangeMsgMain(void*);
+    extern s32 BattleStatusChangeAnnouceMain(void*);
+    extern void BattleStatusChangeMsgAdjust(void*);
+    extern void BattleStage_WallCloseCheck(void);
+    s32 seq = BattleGetSeq(battleWork, 2);
+    void* unit;
+    s32 i;
+    s32 a;
+    s32 b;
 
+    switch (seq) {
+        case 0x2000000:
+            *(s32*)((s32)battleWork + 0xEFC) = 0;
+            for (i = 0; i < 64; i++) {
+                unit = BattleGetUnitPtr(battleWork, i);
+                if (unit != NULL) {
+                    *(u32*)((s32)unit + 0x27C) &= ~0x80000000;
+                }
+            }
+            BattleSetSeq(battleWork, 2, 0x2000001);
+            break;
+        case 0x2000001:
+            *(s32*)((s32)battleWork + 0xEFC) -= 1;
+            if (*(s32*)((s32)battleWork + 0xEFC) > 0) {
+                return;
+            }
+            BattleSetSeq(battleWork, 2, 0x2000002);
+        case 0x2000002:
+            if (BattleWaitAllActiveEvtEnd(battleWork) && fadeIsFinish()) {
+                BattleStatusWindowEventOn();
+                BattleSetSeq(battleWork, 2, 0x2000003);
+                unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
+                if (unit != NULL) {
+                    *(u32*)((s32)unit + 0x1C) &= 0xFBFFFFFF;
+                }
+            }
+            break;
+        case 0x2000003:
+            if (BattleCheckConcluded(battleWork)) {
+                BattleAudience_PerAct();
+                BattleSetSeq(battleWork, 0, 3);
+                BattleSetSeq(battleWork, 7, 0x7000000);
+                return;
+            }
+            BattleSetSeq(battleWork, 2, 0x2000004);
+            BattleStatusChangeMsgAdjust(battleWork);
+        case 0x2000004:
+            if (!BattleWaitAllActiveEvtEnd(battleWork)) {
+                return;
+            }
+            a = BattleStatusChangeMsgMain(battleWork);
+            b = BattleStatusChangeAnnouceMain(battleWork);
+            if (a != 0 || b != 0) {
+                return;
+            }
+            BattleIncSeq(battleWork, 2);
+        case 0x2000005:
+            if ((*(u32*)((s32)battleWork + 0x1720) & 0x30) == 0) {
+                BattleStatusWindowSystemOn();
+            }
+            BattleConsumeReserveItem();
+            *(u32*)((s32)battleWork + 0x1720) &= ~4;
+            BattleAudience_PerAct();
+            BattleIncSeq(battleWork, 2);
+        case 0x2000006:
+            if ((BattleAudience_CheckReaction() & 0xFF) == 0) {
+                BattleIncSeq(battleWork, 2);
+            }
+            break;
+        case 0x2000007:
+            a = BattleStatusChangeMsgMain(battleWork);
+            b = BattleStatusChangeAnnouceMain(battleWork);
+            if (a == 0 && b == 0) {
+                BattleIncSeq(battleWork, 2);
+            }
+            break;
+        case 0x2000008:
+            if (BattleWaitAllActiveEvtEnd(battleWork)) {
+                BattleSetSeq(battleWork, 2, 0x200000A);
+            }
+            break;
+        case 0x2000009:
+            BattleStage_WallCloseCheck();
+            break;
+        case 0x200000A:
+            *(s32*)((s32)battleWork + 0x1905C) = 0;
+            BattleSetSeq(battleWork, 2, 0x200000B);
+            break;
+    }
+}
 
 void btlseqMove(void* battleWork) {
-    ;
+    extern void btlseqPhaseFirstProcess(void*);
+    extern void BattleRunPhaseEvent(void*, s32);
+    extern void BattleSetTotalHitDamage(void*, s32);
+    extern u32 BattlePhaseEndCheck(void);
+    void* unit;
+    s32 seq;
+    s32 i;
+    s32 id;
+    s32 advance;
+
+    do {
+        advance = 0;
+        seq = BattleGetSeq(battleWork, 5);
+        switch (seq) {
+            case 0x5000000:
+                btlseqPhaseFirstProcess(battleWork);
+                BattleIncSeq(battleWork, 5);
+                advance = 1;
+                break;
+            case 0x5000001:
+                BattleIncSeq(battleWork, 5);
+                advance = 1;
+                break;
+            case 0x5000002:
+                BattleIncSeq(battleWork, 5);
+                BattleIncSeq(battleWork, 5);
+                advance = 1;
+                break;
+            case 0x5000003:
+            case 0x5000005:
+                if (BattleWaitAllActiveEvtEnd(battleWork)) {
+                    BattleIncSeq(battleWork, 5);
+                    advance = 1;
+                }
+                break;
+            case 0x5000004:
+                for (i = 0; i < 64; i++) {
+                    unit = BattleGetUnitPtr(battleWork, i);
+                    if (unit != NULL && *(void**)((s32)unit + 0x280) != NULL) {
+                        BattleRunPhaseEvent(unit, 1);
+                    }
+                }
+                BattleIncSeq(battleWork, 5);
+                advance = 1;
+                break;
+            case 0x5000008:
+                for (i = 0; i < 64; i++) {
+                    unit = BattleGetUnitPtr(battleWork, i);
+                    if (unit != NULL) {
+                        *(u32*)((s32)unit + 0x27C) &= 0x80002000;
+                        *(s32*)((s32)unit + 0x264) = 0;
+                        *(s8*)((s32)unit + 0x270) = 0;
+                        *(s32*)((s32)unit + 0x268) = 0;
+                        *(s8*)((s32)unit + 0x271) = 0;
+                    }
+                }
+                for (i = 0; i < 64; i++) {
+                    id = *(s32*)((s32)battleWork + 0x430 + i * 4);
+                    if (id != -1) {
+                        unit = BattleGetUnitPtr(battleWork, id);
+                        if (unit != NULL && *(s8*)((s32)unit + 0x22) > 0 &&
+                            *(u8*)((s32)unit + 0x20) != 10) {
+                            break;
+                        }
+                    }
+                }
+                *(s32*)((s32)battleWork + 0x420) = id;
+                unit = BattleGetUnitPtr(battleWork, id);
+                *(u32*)((s32)unit + 0x27C) |= 0x80000000;
+                BattleIncSeq(battleWork, 5);
+                BattleSetSeq(battleWork, 6, 0x6000000);
+                break;
+            case 0x5000009:
+                btlseqAct(battleWork);
+                break;
+            case 0x500000A:
+                if (!BattleCheckConcluded(battleWork)) {
+                    for (i = 0; i < 64; i++) {
+                        unit = BattleGetUnitPtr(battleWork, i);
+                        if (unit != NULL) {
+                            BattleSetTotalHitDamage(unit, 0);
+                            *(u32*)((s32)unit + 0x27C) &= ~0x80000000;
+                        }
+                    }
+                    if (!BattlePhaseEndCheck()) {
+                        BattleSetSeq(battleWork, 5, 0x5000008);
+                    }
+                }
+                break;
+        }
+    } while (advance != 0);
 }
 
+s32 _set_haikei_entry_scale(void* work, s32 reset) {
+    extern void* _battleWorkPointer;
+    extern f32 float_0_80422568;
+    extern f32 float_1_8042256c;
+    extern f32 float_90_80422578;
+    extern f32 float_100_8042257c;
+    extern f32 float_110_80422574;
+    extern char str_A1_80422564[];
+    extern char str_A2_80422570[];
+    extern void* mapGetMapObj(char* name);
+    extern void mapObjScale(char* name, f32 x, f32 y, f32 z);
+    extern f32 intpl_sub(s32 type, f32 start, f32 end, s32 current, s32 duration);
+    extern void _mapobj_data_touch_scale(s32 id);
 
-u8 _set_haikei_entry_scale(void) {
-    return 0;
+    void* battleWork = _battleWorkPointer;
+    s32 touched = 0;
+    s32 i;
+    s32 offset;
+    f32 sx;
+    f32 sy;
+    f32 hundred;
+
+    if (reset != 0) {
+        *(s32*)((s32)work + 0x78) = 0x3C;
+        *(s32*)((s32)work + 0x7C) = 0;
+        if (mapGetMapObj(str_A1_80422564) != 0) {
+            mapObjScale(str_A1_80422564, float_0_80422568, float_0_80422568, float_1_8042256c);
+        }
+        if (mapGetMapObj(str_A2_80422570) != 0) {
+            mapObjScale(str_A2_80422570, float_0_80422568, float_0_80422568, float_1_8042256c);
+        }
+    }
+
+    if (*(s32*)((s32)work + 0x78) > 0) {
+        *(s32*)((s32)work + 0x78) = *(s32*)((s32)work + 0x78) - 1;
+        if (*(s32*)((s32)work + 0x78) > 0) {
+            if (mapGetMapObj(str_A1_80422564) != 0) {
+                mapObjScale(str_A1_80422564, float_0_80422568, float_0_80422568, float_1_8042256c);
+                _mapobj_data_touch_scale(0);
+            }
+            if (mapGetMapObj(str_A2_80422570) != 0) {
+                mapObjScale(str_A2_80422570, float_0_80422568, float_0_80422568, float_1_8042256c);
+                _mapobj_data_touch_scale(1);
+            }
+            return 0;
+        }
+    }
+
+    *(s32*)((s32)work + 0x7C) = *(s32*)((s32)work + 0x7C) + 1;
+
+    if (mapGetMapObj(str_A1_80422564) != 0) {
+        if (*(s32*)((s32)work + 0x7C) >= 0x28) {
+            mapObjScale(str_A1_80422564, float_1_8042256c, float_1_8042256c, float_1_8042256c);
+            _mapobj_data_touch_scale(0);
+        } else if (*(s32*)((s32)work + 0x7C) < 0xF) {
+            touched = 1;
+            mapObjScale(str_A1_80422564, float_0_80422568, float_0_80422568, float_1_8042256c);
+            _mapobj_data_touch_scale(0);
+        } else {
+            touched = 1;
+            mapObjScale(str_A1_80422564, float_1_8042256c, float_1_8042256c, float_1_8042256c);
+            if (*(s32*)((s32)work + 0x7C) < 0x19) {
+                sx = intpl_sub(5, float_0_80422568, float_110_80422574, *(s32*)((s32)work + 0x7C) - 0xF, 0xA);
+            } else if (*(s32*)((s32)work + 0x7C) < 0x23) {
+                sx = intpl_sub(0xB, float_110_80422574, float_90_80422578, *(s32*)((s32)work + 0x7C) - 0x19, 0xA);
+            } else if (*(s32*)((s32)work + 0x7C) < 0x28) {
+                sx = intpl_sub(0xB, float_90_80422578, float_100_8042257c, *(s32*)((s32)work + 0x7C) - 0x23, 5);
+            }
+
+            if (*(s32*)((s32)work + 0x7C) < 0x19) {
+                sy = intpl_sub(5, float_100_8042257c, float_90_80422578, *(s32*)((s32)work + 0x7C) - 0xF, 0xA);
+            } else if (*(s32*)((s32)work + 0x7C) < 0x23) {
+                sy = intpl_sub(0xB, float_90_80422578, float_110_80422574, *(s32*)((s32)work + 0x7C) - 0x19, 0xA);
+            } else if (*(s32*)((s32)work + 0x7C) < 0x28) {
+                sy = intpl_sub(0xB, float_110_80422574, float_100_8042257c, *(s32*)((s32)work + 0x7C) - 0x23, 5);
+            }
+
+            hundred = float_100_8042257c;
+            offset = 0;
+            for (i = 0; i < 0x20; i++, offset += 0x7C) {
+                void* entry = (void*)((s32)battleWork + offset + 0x1715C);
+                if (*(s32*)entry > 0) {
+                    void* data = *(void**)((s32)entry + 0x64);
+                    if (*(u16*)((s32)data + 6) == 0) {
+                        mapObjScale(*(char**)data, sy / hundred, sx / hundred, float_1_8042256c);
+                        *(u32*)((s32)entry + 0x68) |= 2;
+                    }
+                }
+            }
+        }
+    }
+
+    if (mapGetMapObj(str_A2_80422570) != 0) {
+        if (*(s32*)((s32)work + 0x7C) >= 0x2D) {
+            mapObjScale(str_A2_80422570, float_1_8042256c, float_1_8042256c, float_1_8042256c);
+            _mapobj_data_touch_scale(1);
+        } else if (*(s32*)((s32)work + 0x7C) < 0x14) {
+            touched = 1;
+            mapObjScale(str_A2_80422570, float_0_80422568, float_0_80422568, float_1_8042256c);
+            _mapobj_data_touch_scale(1);
+        } else {
+            touched = 1;
+            mapObjScale(str_A2_80422570, float_1_8042256c, float_1_8042256c, float_1_8042256c);
+            if (*(s32*)((s32)work + 0x7C) < 0x1E) {
+                sx = intpl_sub(5, float_0_80422568, float_110_80422574, *(s32*)((s32)work + 0x7C) - 0x14, 0xA);
+            } else if (*(s32*)((s32)work + 0x7C) < 0x28) {
+                sx = intpl_sub(0xB, float_110_80422574, float_90_80422578, *(s32*)((s32)work + 0x7C) - 0x1E, 0xA);
+            } else if (*(s32*)((s32)work + 0x7C) < 0x2D) {
+                sx = intpl_sub(0xB, float_90_80422578, float_100_8042257c, *(s32*)((s32)work + 0x7C) - 0x28, 5);
+            }
+
+            if (*(s32*)((s32)work + 0x7C) < 0x1E) {
+                sy = intpl_sub(5, float_100_8042257c, float_90_80422578, *(s32*)((s32)work + 0x7C) - 0x14, 0xA);
+            } else if (*(s32*)((s32)work + 0x7C) < 0x28) {
+                sy = intpl_sub(0xB, float_90_80422578, float_110_80422574, *(s32*)((s32)work + 0x7C) - 0x1E, 0xA);
+            } else if (*(s32*)((s32)work + 0x7C) < 0x2D) {
+                sy = intpl_sub(0xB, float_110_80422574, float_100_8042257c, *(s32*)((s32)work + 0x7C) - 0x28, 5);
+            }
+
+            hundred = float_100_8042257c;
+            offset = 0;
+            for (i = 0; i < 0x20; i++, offset += 0x7C) {
+                void* entry = (void*)((s32)battleWork + offset + 0x1715C);
+                if (*(s32*)entry > 0) {
+                    void* data = *(void**)((s32)entry + 0x64);
+                    if (*(u16*)((s32)data + 6) == 1) {
+                        mapObjScale(*(char**)data, sy / hundred, sx / hundred, float_1_8042256c);
+                        *(u32*)((s32)entry + 0x68) |= 2;
+                    }
+                }
+            }
+        }
+    }
+
+    return touched != 0 ? 0 : 2;
 }
-
 
 void BattleCheckAllPinchStatus(void* battleWork, int param_2) {
     ;

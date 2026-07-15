@@ -1,9 +1,87 @@
 #include "motion/mot_dokan.h"
 
 
-u8 mot_dokan(void) {
-    return 0;
+void mot_dokan(void) {
+    extern void* marioGetPtr(void);
+    extern void _partyEntry(s32 mode);
+    extern void marioPaperOn(char* name);
+    extern void marioPaperOff(void);
+    extern void marioPaperLightOff(void);
+    extern void marioChgPaper(char* name);
+    extern void marioChgPose(char* name);
+    extern f32 revise360(f32 angle);
+    extern char str_p_dokan_y_802f45fc[];
+    extern char str_p_dokan_x_802f4610[];
+    extern char str_PM_D_1A_802f4608[];
+    extern char str_PM_D_1B_802f461c[];
+    extern char str_M_Z_1_80423044[];
+    u8* player = marioGetPtr();
+    u32 state;
+    u8 dokan;
+    f32 scale;
+
+    if ((*(u32*)(player + 8) & 2) != 0) {
+        *(u32*)(player + 8) &= ~2;
+        *(u32*)(player + 4) |= 0x1804;
+        *(f32*)(player + 0x214) = 0.0f;
+        *(f32*)(player + 0x218) = *(f32*)(player + 0x94);
+        *(s32*)(player + 0x20C) = 0;
+        *(s32*)(player + 0x1F8) = 0;
+        *(f32*)(player + 0x1B8) = 0.0f;
+        dokan = *(u8*)(player + 0x3A4);
+        if (dokan == 0) {
+            _partyEntry(0);
+            *(u32*)(player + 0x14) = 30;
+        } else if (dokan == 1) {
+            marioPaperOn(str_p_dokan_y_802f45fc);
+            marioChgPaper(str_PM_D_1A_802f4608);
+            marioChgPose(str_M_Z_1_80423044);
+            marioPaperLightOff();
+            *(u32*)(player + 0x14) = 20;
+            *(f32*)(player + 0x210) = 30.0f;
+            _partyEntry(1);
+        } else if (dokan == 2 || dokan == 3) {
+            *(u32*)(player + 0x14) = 10;
+        } else {
+            marioPaperOn(str_p_dokan_x_802f4610);
+            marioPaperLightOff();
+            marioChgPaper(str_PM_D_1A_802f4608);
+            marioChgPose(str_M_Z_1_80423044);
+            *(u32*)(player + 0x14) = 40;
+            *(f32*)(player + 0x210) = 30.0f;
+            _partyEntry(1);
+        }
+    }
+
+    state = *(u32*)(player + 0x14);
+    if (state == 10) {
+        *(f32*)(player + 0x188) = revise360(*(f32*)(player + 0x188) + *(f32*)(player + 0x210));
+        scale = *(f32*)(player + 0x144) - 0.005f;
+        if (scale < 0.0f) scale = 0.0f;
+        *(f32*)(player + 0x144) = scale;
+        *(f32*)(player + 0x148) = scale;
+        *(f32*)(player + 0x14C) = scale;
+    } else if (state == 20 || state == 30) {
+        *(f32*)(player + 0x188) = revise360(*(f32*)(player + 0x188) + *(f32*)(player + 0x210));
+        scale = *(f32*)(player + 0x144) + 0.05f;
+        if (scale > 1.0f) scale = 1.0f;
+        *(f32*)(player + 0x144) = scale;
+        *(f32*)(player + 0x148) = scale;
+        *(f32*)(player + 0x14C) = scale;
+    } else if (state == 40) {
+        *(f32*)(player + 0x17C) += *(f32*)(player + 0x210);
+        scale = *(f32*)(player + 0x144) + 0.03f;
+        if (scale > 1.0f) scale = 1.0f;
+        *(f32*)(player + 0x144) = scale;
+        *(f32*)(player + 0x148) = scale;
+        *(f32*)(player + 0x14C) = scale;
+    } else if (state == 0x67) {
+        marioPaperOff();
+        *(u32*)(player + 4) &= ~0x1804;
+        marioChgPaper(str_PM_D_1B_802f461c);
+    }
 }
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void _partyEntry(int param_1) {

@@ -38,10 +38,58 @@ extern f32 float_1p75_80425654;
 extern f32 float_neg0p16_80425658;
 
 
-u8 main_dl(int param_1) {
-    return 0;
-}
+void main_dl(s32 type) {
+    typedef struct GXTexObj { u32 words[8]; } GXTexObj;
+    extern void effGetTexObjN64(s32, GXTexObj*);
+    extern void GXLoadTexObj(GXTexObj*, s32);
+    extern void GXSetNumChans(u32);
+    extern void GXSetNumTexGens(u32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, u32, u32, s32);
+    extern void GXSetNumTevStages(u32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, u32, u32, u32, u32, u32);
+    extern void GXSetTevAlphaOp(s32, u32, u32, u32, u32, u32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, u32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXBegin(s32, s32, s32);
+    GXTexObj tex;
 
+    if (type == 1) effGetTexObjN64(0xD, &tex);
+    else if (type == 0) effGetTexObjN64(0xC, &tex);
+    else effGetTexObjN64(0xE, &tex);
+    GXLoadTexObj(&tex, 0);
+    GXSetNumChans(0);
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
+    GXSetNumTevStages(3);
+    GXSetTevOrder(0, 0, 0, -1);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0, 0, 0, 2);
+    GXSetTevAlphaIn(0, 0, 0, 0, 4);
+    GXSetTevOrder(1, 1, 0, -1);
+    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(1, 0, 0, 0, 0);
+    GXSetTevAlphaIn(1, 0, 1, 4, 7);
+    GXSetTevOrder(2, -1, -1, -1);
+    GXSetTevColorOp(2, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(2, 0, 0, 0, 0);
+    GXSetTevAlphaIn(2, 0, 1, 2, 7);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 3, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+    GXBegin(0x80, 0, 4);
+}
 
 u8 effKemuri2Disp(void) {
     return 0;

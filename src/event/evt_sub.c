@@ -200,15 +200,190 @@ USER_FUNC(evt_sub_countdown_flag_onoff) {
 #pragma use_lmw_stmw on
 
 
-s32 evt_sub_get_coin(void* evt, int param_2) {
-    return 0;
+s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern void* marioGetPtr(void);
+    extern void* camGetPtr(s32 id);
+    extern f32 reviseAngle(f32 angle);
+    extern void* effItemGetEntry(s32 item);
+    extern void* _mapAlloc(void* heap, u32 size);
+    extern void _mapFree(void* heap, void* ptr);
+    extern void iconEntry(char* name, s32 icon);
+    extern void iconSetPos(f32 x, f32 y, f32 z, char* name);
+    extern void iconFlagOn(char* name, u32 flags);
+    extern void iconFlagOff(char* name, u32 flags);
+    extern void iconDelete(char* name);
+    extern void marioChgGetItemMotion(void);
+    extern void marioChgStayMotion(void);
+    extern s32 winMgrEntry(void* desc);
+    extern void winMgrOpen(s32 id);
+    extern void winMgrSetParam(s32 id, void* param);
+    extern void winMgrCloseAutoDelete(s32 id);
+    extern s32 winMgrAction(s32 id);
+    extern void psndBGMOff(s32 id);
+    extern void psndBGMOn(s32 id, char* name);
+    extern s32 keyGetButtonTrg(s32 pad);
+    extern void pouchAddCoin(s16 coins);
+    extern void effSoftDelete(void* eff);
+    extern void* mapalloc_base_ptr;
+    extern void* gp;
+    extern u32 DAT_800000f8;
+    extern char str_iraiCoin_802c1868[];
+    extern char str_BGM_FF_GET_ITEM1_802c1874[];
+    extern char coinget_window_desc[];
+    extern f32 float_52_8041fe78;
+    extern f32 float_10_8041fe68;
+    extern f32 float_100_8041fe44;
+    extern f32 float_5_8041fe40;
+    extern f32 float_6p2832_8041fe48;
+    extern f32 float_360_8041fe4c;
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    s32 coins;
+    void* mario;
+    void* cam;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 angle;
+    f32 sx;
+    f32 cz;
+    void* eff;
+    s32* param;
+    s32 state;
+    s32 elapsed;
+    s32 win;
+
+    coins = evtGetValue(event, event->args[0]);
+    mario = marioGetPtr();
+    x = *(f32*)((s32)mario + 0x8C);
+    y = *(f32*)((s32)mario + 0x90) + float_52_8041fe78;
+    z = *(f32*)((s32)mario + 0x94);
+    cam = camGetPtr(0);
+    angle = reviseAngle((float_100_8041fe44 * *(f32*)((s32)cam + 0x114) + float_5_8041fe40) / float_100_8041fe44);
+    angle = float_6p2832_8041fe48 * angle / float_360_8041fe4c;
+    sx = float_10_8041fe68 * (f32)sin(angle);
+    cz = float_10_8041fe68 * (f32)cos(angle);
+    if (isFirstCall != 0) {
+        *(s32*)((s32)event + 0x78) = 0;
+        *(void**)((s32)event + 0x7C) = effItemGetEntry(7);
+        *(s32*)((s32)event + 0x80) = 0;
+        *(s32*)((s32)event + 0x84) = 0;
+        *(void**)((s32)event + 0x88) = _mapAlloc(mapalloc_base_ptr, 8);
+    }
+    state = *(s32*)((s32)event + 0x78);
+    eff = *(void**)((s32)event + 0x7C);
+    param = *(s32**)((s32)event + 0x88);
+    if (state == 0) {
+        iconEntry(str_iraiCoin_802c1868, 0x193);
+        iconSetPos(x + sx, y, z - cz, str_iraiCoin_802c1868);
+        iconFlagOn(str_iraiCoin_802c1868, 0x102);
+        *(s32*)((s32)*(void**)((s32)eff + 0xC) + 0x38) = 5;
+        marioChgGetItemMotion();
+        win = winMgrEntry(coinget_window_desc);
+        *(s32*)((s32)event + 0x84) = win;
+        winMgrOpen(win);
+        winMgrSetParam(win, param);
+        param[0] = coins;
+        param[1] = 0;
+        psndBGMOff(0x3800);
+        psndBGMOn(0x201, str_BGM_FF_GET_ITEM1_802c1874);
+        *(s32*)((s32)event + 0x80) = 200;
+        *(s32*)((s32)event + 0x198) = *(s32*)((s32)gp + 0x10);
+        *(s32*)((s32)event + 0x78) = 1;
+        return 0;
+    }
+    if (state == 1) {
+        elapsed = (*(s32*)((s32)gp + 0x10) - *(s32*)((s32)event + 0x198)) / (DAT_800000f8 / 4000);
+        if (*(s32*)((s32)event + 0x80) < elapsed) {
+            iconFlagOff(str_iraiCoin_802c1868, 2);
+            param[1] = 1;
+            *(s32*)((s32)event + 0x80) = 500;
+            *(s32*)((s32)event + 0x198) = *(s32*)((s32)gp + 0x10);
+            *(s32*)((s32)event + 0x78) = 2;
+        }
+        return 0;
+    }
+    if (state == 2) {
+        elapsed = (*(s32*)((s32)gp + 0x10) - *(s32*)((s32)event + 0x198)) / (DAT_800000f8 / 4000);
+        if (*(s32*)((s32)event + 0x80) < elapsed) {
+            *(s32*)((s32)event + 0x78) = 10;
+        }
+        return 0;
+    }
+    if (state == 10) {
+        if ((keyGetButtonTrg(0) & 0x100) != 0) {
+            *(s32*)((s32)event + 0x78) = 100;
+        }
+        return 0;
+    }
+    if (state == 100) {
+        pouchAddCoin((s16)coins);
+        effSoftDelete(eff);
+        iconDelete(str_iraiCoin_802c1868);
+        marioChgStayMotion();
+        psndBGMOn(0xA0, 0);
+        psndBGMOff(0x201);
+        winMgrCloseAutoDelete(*(s32*)((s32)event + 0x84));
+        param[1] = 0;
+        *(s32*)((s32)event + 0x78) = 101;
+        return 2;
+    }
+    if (state == 101) {
+        if (winMgrAction(*(s32*)((s32)event + 0x84)) == 0) {
+            _mapFree(mapalloc_base_ptr, param);
+            return 2;
+        }
+        return 0;
+    }
+    return 2;
 }
 
+s32 irai_mail_check(EventEntry* event) {
+    extern s32 evtGetValue(EventEntry* event, s32 value);
+    extern void evtSetValue(EventEntry* event, s32 dst, s32 value);
+    extern u32 swGet(u32 flag);
+    extern u32 swByteGet(s32 index);
+    extern void swSet(u32 flag);
+    extern void pouchReceiveMail(u32 mail);
+    extern void* gp;
+    extern u32 DAT_800000f8;
+    s32* args;
+    s32 enabled;
+    s32 value;
+    u8 bytes[8];
+    u64 saved;
+    u64 now;
+    s32 i;
 
-s32 irai_mail_check(void* pEvt) {
-    return 0;
+    args = event->args;
+    enabled = evtGetValue(event, args[0]);
+    value = 0;
+#define CHECK_MAIL(storyFlag, receivedFlag, byteBase, mailId) \
+    if (swGet(storyFlag) != 0 && swGet(receivedFlag) == 0) { \
+        for (i = 0; i < 8; i++) { \
+            bytes[i] = (u8)swByteGet((byteBase) + i); \
+        } \
+        saved = *(u64*)bytes; \
+        now = *(u64*)((s32)gp + 0x10); \
+        if ((s64)(now - saved) / (DAT_800000f8 >> 2) > 7200) { \
+            value = 1; \
+            if (enabled != 0) { \
+                swSet(receivedFlag); \
+                pouchReceiveMail(mailId); \
+            } \
+        } \
+    }
+    CHECK_MAIL(0x1505, 0x17, 0x58D, 0x25)
+    CHECK_MAIL(0x150A, 0x18, 0x595, 0x26)
+    CHECK_MAIL(0x150B, 0x19, 0x59D, 0x27)
+    CHECK_MAIL(0x150D, 0x1A, 0x5A5, 0x28)
+    CHECK_MAIL(0x1512, 0x1B, 0x5AD, 0x29)
+    CHECK_MAIL(0x1518, 0x1C, 0x5B5, 0x2A)
+#undef CHECK_MAIL
+    evtSetValue(event, args[1], value);
+    return 2;
 }
-
 
 s32 evt_sub_check_intersect(EventEntry* event) {
     extern f32 evtGetFloat(EventEntry* event, s32 index);

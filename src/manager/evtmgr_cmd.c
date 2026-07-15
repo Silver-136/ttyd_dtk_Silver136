@@ -960,24 +960,274 @@ int evt_debug_put_reg(void* param_1) {
 #pragma use_lmw_stmw on
 
 f32 evtGetFloat(struct EventEntry* entry, s32 index) {
-    return 0.0f;
-}
+    extern void* evtGetWork(void);
+    extern s32 swByteGet(s32);
+    extern s32 _swByteGet(s32);
 
+    void* work = evtGetWork();
+    s32 value = index;
+    u32 bitIndex;
+    u32 mask;
+
+    if (index < -270000000) {
+        return (f32)index;
+    }
+    if (index < -250000000) {
+        return (f32)index;
+    }
+    if (index < -220000000) {
+        return (f32)(index + 230000000) * 0.0009765625f;
+    }
+    if (index < -180000000) {
+        value = *(s32*)(*(s32*)((s32)entry + 0x154) + ((index + 190000000) * 4));
+    } else if (index < -160000000) {
+        value = swByteGet(index + 170000000);
+    } else if (index < -140000000) {
+        value = _swByteGet(index + 150000000);
+    } else if (index < -80000000) {
+        bitIndex = index + 90000000;
+        mask = 1 << (bitIndex & 0x1F);
+        return (*(u32*)((s32)work + 0x84 + ((bitIndex >> 5) * 4)) & mask) ? 1.0f : 0.0f;
+    } else if (index < -60000000) {
+        bitIndex = index + 70000000;
+        mask = 1 << (bitIndex & 0x1F);
+        return (*(u32*)((s32)entry + 0xE8 + (((bitIndex >> 5) - 3) * 4)) & mask) ? 1.0f : 0.0f;
+    } else if (index < -40000000) {
+        value = *(s32*)((s32)work + 4 + ((index + 50000000) * 4));
+    } else if (index < -20000000) {
+        value = *(s32*)((s32)entry + 0x9C + ((index + 30000000) * 4));
+    }
+
+    if (value < -220000000) {
+        return (f32)(value + 230000000) * 0.0009765625f;
+    }
+    return (f32)value;
+}
 
 s32 evtGetValue(struct EventEntry* entry, s32 index) {
-    return 0;
-}
+    extern void* evtGetWork(void);
+    extern s32 swByteGet(s32);
+    extern s32 _swByteGet(s32);
+    extern s32 swGet(s32);
+    extern s32 _swGet(s32);
 
+    void* work = evtGetWork();
+    s32 value = index;
+    u32 bitIndex;
+    u32 mask;
+
+    if (index <= -270000000) {
+        return index;
+    }
+    if (index <= -250000000) {
+        return index;
+    }
+    if (index < -220000000) {
+        return (s32)((f32)(index + 230000000) * 0.0009765625f);
+    }
+    if (index < -200000000) {
+        bitIndex = index + 210000000;
+        mask = 1 << (bitIndex & 0x1F);
+        return ((*(u32*)(*(s32*)((s32)entry + 0x158) + ((bitIndex >> 5) * 4)) & mask) != 0);
+    }
+    if (index < -180000000) {
+        value = *(s32*)(*(s32*)((s32)entry + 0x154) + ((index + 190000000) * 4));
+        if (value > -270000000 && value < -220000000) {
+            value = (s32)((f32)(value + 230000000) * 0.0009765625f);
+        }
+        return value;
+    }
+    if (index < -160000000) {
+        return swByteGet(index + 170000000);
+    }
+    if (index < -140000000) {
+        return _swByteGet(index + 150000000);
+    }
+    if (index < -120000000) {
+        return swGet(index + 130000000);
+    }
+    if (index < -100000000) {
+        return _swGet(index + 110000000);
+    }
+    if (index < -80000000) {
+        bitIndex = index + 90000000;
+        mask = 1 << (bitIndex & 0x1F);
+        return ((*(u32*)((s32)work + 0x84 + ((bitIndex >> 5) * 4)) & mask) != 0);
+    }
+    if (index < -60000000) {
+        bitIndex = index + 70000000;
+        mask = 1 << (bitIndex & 0x1F);
+        return ((*(u32*)((s32)entry + 0xE8 + (((bitIndex >> 5) - 3) * 4)) & mask) != 0);
+    }
+    if (index < -40000000) {
+        value = *(s32*)((s32)work + 4 + ((index + 50000000) * 4));
+        if (value > -270000000 && value < -220000000) {
+            value = (s32)((f32)(value + 230000000) * 0.0009765625f);
+        }
+        return value;
+    }
+    if (index < -20000000) {
+        value = *(s32*)((s32)entry + 0x9C + ((index + 30000000) * 4));
+        if (value > -270000000 && value < -220000000) {
+            value = (s32)((f32)(value + 230000000) * 0.0009765625f);
+        }
+    }
+    return value;
+}
 
 s32 evtSetValue(struct EventEntry* entry, s32 index, s32 value) {
-    return 0;
-}
+    extern void* evtGetWork(void);
+    extern s32 swByteGet(s32);
+    extern void swByteSet(s32, s32);
+    extern s32 _swByteGet(s32);
+    extern void _swByteSet(s32, s32);
+    extern s32 swGet(s32);
+    extern void swSet(s32);
+    extern void swClear(s32);
+    extern s32 _swGet(s32);
+    extern void _swSet(s32);
+    extern void _swClear(s32);
 
+    void* work = evtGetWork();
+    s32 old = value;
+    u32 bitIndex;
+    u32 mask;
+    s32* ptr;
+
+    if (index <= -270000000) {
+        return value;
+    }
+    if (index < -220000000) {
+        if (value < -220000000) {
+            value = (s32)((f32)(value + 230000000) * 0.0009765625f);
+        }
+    } else if (index < -200000000) {
+        bitIndex = index + 210000000;
+        mask = 1 << (bitIndex & 0x1F);
+        ptr = (s32*)(*(s32*)((s32)entry + 0x158) + ((bitIndex >> 5) * 4));
+        if (value == 0) {
+            *ptr = *ptr & ~mask;
+        } else {
+            *ptr = *ptr | mask;
+        }
+    } else if (index < -180000000) {
+        ptr = (s32*)(*(s32*)((s32)entry + 0x154) + ((index + 190000000) * 4));
+        old = *ptr;
+        *ptr = value;
+        value = old;
+    } else if (index < -160000000) {
+        old = swByteGet(index + 170000000);
+        swByteSet(index + 170000000, value);
+        value = old;
+    } else if (index < -140000000) {
+        old = _swByteGet(index + 150000000);
+        _swByteSet(index + 150000000, value & 0xFF);
+        value = old;
+    } else if (index < -120000000) {
+        old = swGet(index + 130000000);
+        if (value == 0) {
+            swClear(index + 130000000);
+        } else {
+            swSet(index + 130000000);
+        }
+        value = old;
+    } else if (index < -100000000) {
+        old = _swGet(index + 110000000);
+        if (value == 0) {
+            _swClear(index + 110000000);
+        } else {
+            _swSet(index + 110000000);
+        }
+        value = old;
+    } else if (index < -80000000) {
+        bitIndex = index + 90000000;
+        mask = 1 << (bitIndex & 0x1F);
+        ptr = (s32*)((s32)work + 0x84 + ((bitIndex >> 5) * 4));
+        if (value == 0) {
+            *ptr = *ptr & ~mask;
+        } else {
+            *ptr = *ptr | mask;
+        }
+    } else if (index < -60000000) {
+        bitIndex = index + 70000000;
+        mask = 1 << (bitIndex & 0x1F);
+        ptr = (s32*)((s32)entry + 0xE8 + (((bitIndex >> 5) - 3) * 4));
+        if (value == 0) {
+            *ptr = *ptr & ~mask;
+        } else {
+            *ptr = *ptr | mask;
+        }
+    } else if (index < -40000000) {
+        ptr = (s32*)((s32)work + 4 + ((index + 50000000) * 4));
+        old = *ptr;
+        *ptr = value;
+        value = old;
+    } else if (index < -20000000) {
+        ptr = (s32*)((s32)entry + 0x9C + ((index + 30000000) * 4));
+        old = *ptr;
+        *ptr = value;
+        value = old;
+    }
+    return value;
+}
 
 f32 evtSetFloat(struct EventEntry* entry, s32 index, f32 value) {
-    return 0.0f;
-}
+    extern void* evtGetWork(void);
 
+    void* work = evtGetWork();
+    s32 stored = (s32)(value * 1024.0f) - 230000000;
+    s32 old;
+    u32 bitIndex;
+    u32 mask;
+    s32* ptr;
+
+    if (index > -270000000 && index > -220000000) {
+        if (index < -180000000) {
+            ptr = (s32*)(*(s32*)((s32)entry + 0x154) + ((index + 190000000) * 4));
+            old = *ptr;
+            *ptr = stored;
+            if (old <= -220000000) {
+                return (f32)(old + 230000000) * 0.0009765625f;
+            }
+            return (f32)old;
+        } else if (index < -80000000) {
+            bitIndex = index + 90000000;
+            mask = 1 << (bitIndex & 0x1F);
+            ptr = (s32*)((s32)work + 0x84 + ((bitIndex >> 5) * 4));
+            if (value == 0.0f) {
+                *ptr = *ptr & ~mask;
+            } else {
+                *ptr = *ptr | mask;
+            }
+        } else if (index < -60000000) {
+            bitIndex = index + 70000000;
+            mask = 1 << (bitIndex & 0x1F);
+            ptr = (s32*)((s32)entry + 0xE8 + (((bitIndex >> 5) - 3) * 4));
+            if (value == 0.0f) {
+                *ptr = *ptr & ~mask;
+            } else {
+                *ptr = *ptr | mask;
+            }
+        } else if (index < -40000000) {
+            ptr = (s32*)((s32)work + 4 + ((index + 50000000) * 4));
+            old = *ptr;
+            *ptr = stored;
+            if (old <= -220000000) {
+                return (f32)(old + 230000000) * 0.0009765625f;
+            }
+            return (f32)old;
+        } else if (index < -20000000) {
+            ptr = (s32*)((s32)entry + 0x9C + ((index + 30000000) * 4));
+            old = *ptr;
+            *ptr = stored;
+            if (old <= -220000000) {
+                return (f32)(old + 230000000) * 0.0009765625f;
+            }
+            return (f32)old;
+        }
+    }
+    return value;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

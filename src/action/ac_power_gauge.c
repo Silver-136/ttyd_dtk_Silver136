@@ -373,5 +373,15 @@ state_3ee:
 
 /* stub-fill: actionCommandDisp | prototype_only | source_prototype */
 void actionCommandDisp(f32 x, f32 y) {
-    return;
+    typedef struct VecLocal{f32 x,y,z;}VecLocal;
+    extern void* _battleWorkPointer;extern void BattleAcDrawGauge(s32,s32,s32,s32,s32,s32,s32,s32);extern s32 BattleACGetButtonIcon(u32,s32);extern void iconDispGx(f64,VecLocal*,s32,s32);
+    u8* wp=(u8*)_battleWorkPointer;f32 value=*(f32*)(wp+0x1F24);f32 ratio=value/100.0f;u32 flags=*(u32*)(wp+0x1C94);s32 param=*(s32*)(wp+0x1CAC);s32 mode=*(s32*)(wp+0x1C9C);s32 input=*(s32*)(wp+0x1CA8);s32 left=0,right=0,left2=0,right2=0;VecLocal pos;
+    if(ratio>1.0f)ratio=1.0f;*(f32*)(wp+0x1F28)=ratio;
+    if((flags&2)==0)BattleAcDrawGauge((s32)x,(s32)y,0xB2,2,param,100,100,0);else BattleAcDrawGauge((s32)x,(s32)y,0xB2,1,100,100,100,0);
+    if((flags&4)==0){pos.x=x-288.0f+(176.0f*(f32)param)/100.0f;pos.y=y+45.0f;pos.z=0;iconDispGx(1.0,&pos,0x10,0x9E);}else{pos.x=x-80.0f-(flags&8?12.0f:0.0f);pos.y=y+18.0f;pos.z=0;iconDispGx(1.0,&pos,0x10,(value<(f32)param||value>100.0f)?0x99:0x9D);}
+    switch(input){case 0:left=0x87;right=0x86;left2=0x89;right2=0x88;break;case 1:case 2:left=BattleACGetButtonIcon(0x100,1);right=BattleACGetButtonIcon(0x100,0);break;case 3:left=BattleACGetButtonIcon(0x20,1);right=BattleACGetButtonIcon(0x20,0);break;}
+    if(mode==1002)return;if(mode<99||mode>1005)return;
+    pos.y=y+80.0f;pos.z=0;pos.x=x-225.0f;
+    if(left2!=0){iconDispGx(1.0,&pos,0x10,right);pos.x+=56.0f;iconDispGx(1.0,&pos,0x10,right2);}else{pos.x+=28.0f;iconDispGx(1.0,&pos,0x10,right);}
 }
+

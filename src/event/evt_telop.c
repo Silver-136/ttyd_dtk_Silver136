@@ -1,10 +1,14 @@
 #include "event/evt_telop.h"
 
 
-u8 telop(void) {
-    return 0;
+u8 telop(s32 cameraId) {
+    extern void GXSetZMode(s32,s32,s32);extern void GXSetBlendMode(s32,s32,s32,s32);extern void GXSetNumChans(s32);extern void GXSetNumTexGens(s32);extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);extern void GXSetNumTevStages(s32);extern void GXSetTevOrder(s32,s32,s32,s32);extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevColorIn(s32,s32,s32,s32,s32);extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);extern void effGetTexObj(s32,void*);extern void GXLoadTexObj(void*,s32);extern void GXClearVtxDesc(void);extern void GXSetVtxDesc(s32,s32);extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);extern void GXBegin(s32,s32,s32);extern void* wp;
+    u8 tex[0x20];s32 alpha=*(s32*)((u8*)wp+4);
+    GXSetZMode(0,7,0);GXSetBlendMode(1,4,5,0);GXSetNumChans(0);GXSetNumTexGens(2);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);GXSetTexCoordGen2(1,1,4,0x21,0,0x7D);
+    effGetTexObj(0x65,tex);GXLoadTexObj(tex,0);effGetTexObj(0x64,tex);GXLoadTexObj(tex,1);
+    GXSetNumTevStages(3);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,0,0,0,8);GXSetTevAlphaIn(0,0,0,0,4);GXSetTevOrder(1,1,1,0xFF);GXSetTevColorOp(1,0,0,0,1,0);GXSetTevAlphaOp(1,0,0,0,1,0);GXSetTevColorIn(1,0,8,6,15);GXSetTevAlphaIn(1,0,4,6,7);
+    GXClearVtxDesc();GXSetVtxDesc(9,1);GXSetVtxDesc(0xD,1);GXSetVtxAttrFmt(0,9,1,4,0);GXSetVtxAttrFmt(0,0xD,1,4,0);if(alpha>0)GXBegin(0x80,0,4);return 0;
 }
-
 
 s32 evt_telop_entry(void* param_1, int param_2) {
     extern void* memset(void* dest, s32 val, u32 size);

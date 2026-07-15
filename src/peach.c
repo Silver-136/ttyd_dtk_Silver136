@@ -77,9 +77,10 @@ void peachSetStsUneasy(void) {
 
 
 void peachChgPose(void* pose) {
-    ;
+    extern void* marioGetPtr(void); extern void marioChgPose(void*);
+    void* mario=marioGetPtr();
+    if ((*(u32*)((s32)mario+0xC)&1)==0) marioChgPose(pose);
 }
-
 
 u8 peach_dash(void) {
     extern f32 marioGetDashSpd(void);

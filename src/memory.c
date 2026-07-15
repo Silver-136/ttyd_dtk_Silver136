@@ -146,9 +146,125 @@ void* smartTexObj(void* texObj, void** data) {
 
 
 void* smartAlloc(u32 param_1, u8 param_2) {
+    typedef struct SmartAllocationData {
+        void* pMemory;
+        u32 usedSize;
+        void* pFileInfo;
+        u16 bUsed;
+        u8 group;
+        u8 pad_f;
+        u32 unusedSize;
+        struct SmartAllocationData* pNext;
+        struct SmartAllocationData* pPrev;
+    } SmartAllocationData;
+    extern void smartAutoFree(s32 kind);
+    extern void sysWaitDrawSync(void);
+    extern void _fileGarbage(s32 kind);
+    extern void smartGarbage(void);
+    extern u32* wp;
+    extern s32 g_bFirstSmartAlloc;
+    SmartAllocationData* entry;
+    SmartAllocationData* scan;
+    s32 i;
+
+    if (g_bFirstSmartAlloc == 0) {
+        g_bFirstSmartAlloc = 1;
+        smartAutoFree(3);
+    }
+    if (wp[0x3806] != 0) {
+        sysWaitDrawSync();
+        wp[0x3806] = 0;
+    }
+
+    entry = (SmartAllocationData*)wp[0x3804];
+    if (entry->pPrev == 0) {
+        wp[0x3804] = (u32)entry->pNext;
+        if (wp[0x3804] != 0) {
+            *(u32*)(wp[0x3804] + 0x18) = 0;
+        }
+    } else {
+        entry->pPrev->pNext = entry->pNext;
+    }
+    if (entry->pNext == 0) {
+        wp[0x3805] = (u32)entry->pPrev;
+        if (wp[0x3805] != 0) {
+            *(u32*)(wp[0x3805] + 0x14) = 0;
+        }
+    } else {
+        entry->pNext->pPrev = entry->pPrev;
+    }
+
+    if ((param_1 & 0x1F) != 0) {
+        param_1 += 0x20 - (param_1 & 0x1F);
+    }
+    entry->bUsed = 1;
+    entry->group = param_2;
+    entry->usedSize = param_1;
+    entry->pFileInfo = 0;
+
+    if (wp[0x3801] >= param_1) {
+        entry->pMemory = (void*)wp[0];
+        entry->unusedSize = wp[0x3801] - param_1;
+        entry->pNext = (SmartAllocationData*)wp[0x3802];
+        entry->pPrev = 0;
+        wp[0x3801] = 0;
+        if (wp[0x3802] != 0) {
+            *(u32*)(wp[0x3802] + 0x18) = (u32)entry;
+        }
+        wp[0x3802] = (u32)entry;
+        if (entry->pNext == 0) {
+            entry->unusedSize = (((u32)heapEnd[4] - (u32)heapStart[4]) + wp[0] - 0x20) - (u32)entry->pMemory - entry->usedSize;
+            wp[0x3803] = (u32)entry;
+        }
+        return entry;
+    }
+
+    scan = (SmartAllocationData*)wp[0x3802];
+    while (scan != 0) {
+        if (param_1 <= scan->unusedSize) {
+            entry->pMemory = (void*)((s32)scan->pMemory + scan->usedSize);
+            entry->unusedSize = scan->unusedSize - param_1;
+            entry->pNext = scan->pNext;
+            entry->pPrev = scan;
+            scan->unusedSize = 0;
+            if (scan->pNext == 0) {
+                wp[0x3803] = (u32)entry;
+            } else {
+                scan->pNext->pPrev = entry;
+            }
+            scan->pNext = entry;
+            return entry;
+        }
+        scan = scan->pNext;
+    }
+
+    i = 0;
+    while (i < 3) {
+        if (i == 1) {
+            _fileGarbage(1);
+        } else if (i > 0 && i < 3) {
+            _fileGarbage(0);
+        }
+        smartGarbage();
+        scan = (SmartAllocationData*)wp[0x3803];
+        if (param_1 <= scan->unusedSize) {
+            entry->pMemory = (void*)((s32)scan->pMemory + scan->usedSize);
+            entry->unusedSize = scan->unusedSize - param_1;
+            entry->pNext = scan->pNext;
+            entry->pPrev = scan;
+            scan->unusedSize = 0;
+            if (scan->pNext == 0) {
+                wp[0x3803] = (u32)entry;
+            } else {
+                scan->pNext->pPrev = entry;
+            }
+            scan->pNext = entry;
+            return entry;
+        }
+        i++;
+    }
     return 0;
 }
-
 
 void smartInit(void) {
     extern u32* wp;

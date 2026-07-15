@@ -94,14 +94,195 @@ void unk_800a6ac8(void) {
 }
 
 u8 mot_slit(void) {
+    extern void* marioGetPtr(void);
+    extern void marioPaperOn(char*);
+    extern void marioPaperOff(void);
+    extern void marioChgPose(char*);
+    extern void marioChgPaper(char*);
+    extern s32 marioRollChgChk(void);
+    extern u32 marioChkKey(void);
+    extern s32 marioKeyOffChk(void);
+    extern s32 marioSlitChkWallAround(void);
+    extern void allPartySlitOn(void);
+    extern void allPartySlitOff(void);
+    extern u32 psndSFXOn_3D(s32, void*);
+    extern char str_p_slit_802c433c[];
+    extern char str_PM_S_1A_802c4344[];
+    extern char str_PM_S_1B_802c434c[];
+    void* player = marioGetPtr();
+    s32 state;
+
+    if (*(f32*)((s32)player + 0x28) == 0.0f) *(u32*)((s32)player + 4) &= ~0x8000;
+    if ((*(u32*)((s32)player + 4) & 0x1000) != 0) {
+        *(u32*)((s32)player + 4) &= ~0x1000;
+        *(u32*)player &= ~0x78000;
+        *(u32*)((s32)player + 8) |= 0x1000400;
+        if (*(s32*)((s32)player + 0x210) == -1) marioPaperOn(str_p_slit_802c433c);
+        marioChgPose((char*)0x80420FA0);
+        marioChgPaper(str_PM_S_1A_802c4344);
+        *(s32*)((s32)player + 0x2EC) = 0;
+        *(s32*)((s32)player + 0x48) = 0;
+    }
+    if (marioRollChgChk() != 0) {
+        *(u32*)player &= ~0x8800000;
+        *(u32*)((s32)player + 8) &= 0xFEFFF3FF;
+        marioPaperOff();
+        return 0;
+    }
+    state = *(s32*)((s32)player + 0x2EC);
+    switch (state) {
+    case 0:
+        *(s32*)((s32)player + 0x2F0) = 30;
+        *(f32*)((s32)player + 0x178) = 0.0f;
+        *(s32*)((s32)player + 0x2EC) = 2;
+        *(f32*)((s32)player + 0x17C) = *(f32*)((s32)player + 0x90);
+        if (*(f32*)((s32)player + 0x180) >= *(f32*)((s32)player + 0x188) || *(f32*)((s32)player + 0x28) != 0.0f) {
+            *(f32*)((s32)player + 0x180) = *(f32*)((s32)player + 0x184);
+        }
+        psndSFXOn_3D(0x177, (void*)((s32)player + 0x8C));
+        break;
+    case 2:
+        if (*(f32*)((s32)player + 0x28) == 0.0f) {
+            *(f32*)((s32)player + 0x180) = 0.0f;
+            marioChgPose((char*)0x80420FA0);
+        } else {
+            *(f32*)((s32)player + 0x180) = *(f32*)((s32)player + 0x184);
+            *(f32*)((s32)player + 0x1A4) = *(f32*)((s32)player + 0x2C);
+        }
+        if (--*(s32*)((s32)player + 0x2F0) < 1) {
+            *(u32*)player |= 0x8000000;
+            *(s32*)((s32)player + 0x2EC) = 4;
+            *(f32*)((s32)player + 0xE0) = 6.0f;
+        }
+        if (*(s32*)((s32)player + 0x2F0) == 20) allPartySlitOn();
+        break;
+    case 4:
+        if (marioChkKey() != 0) *(f32*)((s32)player + 0x1A4) = *(f32*)((s32)player + 0x1AC);
+        *(f32*)((s32)player + 0x1AC) = 270.0f;
+        *(f32*)((s32)player + 0x1B0) = 270.0f;
+        marioChgPaper(str_PM_S_1B_802c434c);
+        *(s32*)((s32)player + 0x2EC) = 10;
+    case 10:
+        if (marioChkKey() != 0 && marioKeyOffChk() == 0 && marioSlitChkWallAround() == 0) {
+            *(f32*)((s32)player + 0x1A4) = *(f32*)((s32)player + 0x2C);
+            *(s32*)((s32)player + 0x2EC) = 100;
+        }
+        break;
+    case 120:
+        allPartySlitOff();
+        marioPaperOff();
+        break;
+    }
     return 0;
 }
 
+s32 marioCreviceWallChk(f32* pos) {
+    extern void* marioGetPtr(void);
+    extern f32 toMovedirSimple(f32);
+    extern void sincosf(f32, f32*, f32*);
+    extern s32 marioHitCheckVec(void*, void*, f32*, void*, f32*);
+    extern f64 angleABf(f64, f64, f64, f64);
+    extern f32 __fabsf(f32);
+    extern f32 float_0_80420f9c;
+    extern f32 float_0p5_80420fd8;
+    extern f32 float_10_80421000;
+    extern f32 float_20_80420ff4;
+    extern f32 float_180_80420fa8;
+    extern f32 float_270_80420fb8;
 
-u8 marioCreviceWallChk(void) {
-    return 0;
+    typedef struct Vec { f32 x, y, z; } Vec;
+
+    Vec checkPos;
+    Vec dir;
+    f32 outA[3];
+    f32 outB[3];
+    f32 radius;
+    f32 sx;
+    f32 sz;
+    f32 offX;
+    f32 offZ;
+    f32 angA;
+    f32 angB;
+    s32 hitA;
+    s32 hitB;
+
+    marioGetPtr();
+    sincosf(toMovedirSimple(float_270_80420fb8), &sx, &sz);
+    offX = float_0p5_80420fd8 * float_20_80420ff4 * sx;
+    offZ = float_0p5_80420fd8 * float_20_80420ff4 * sz;
+
+    sincosf(toMovedirSimple(float_180_80420fa8), &sx, &sz);
+    dir.x = sx;
+    dir.y = float_0_80420f9c;
+    dir.z = sz;
+    checkPos.x = pos[0];
+    checkPos.y = pos[1] + float_10_80421000;
+    checkPos.z = pos[2];
+    radius = float_20_80420ff4;
+    hitA = marioHitCheckVec(&checkPos, &dir, outA, outB, &radius);
+    angA = float_0_80420f9c;
+    if (hitA != 0) {
+        angA = (f32)angleABf(float_0_80420f9c, float_0_80420f9c, outB[0], outB[2]);
+    } else {
+        checkPos.x = pos[0] + offX;
+        checkPos.y = pos[1] + float_10_80421000;
+        checkPos.z = pos[2] + offZ;
+        radius = float_20_80420ff4;
+        hitA = marioHitCheckVec(&checkPos, &dir, outA, outB, &radius);
+        if (hitA != 0) {
+            angA = (f32)angleABf(float_0_80420f9c, float_0_80420f9c, outB[0], outB[2]);
+        }
+    }
+    if (hitA == 0) {
+        checkPos.x = pos[0] - offX;
+        checkPos.y = pos[1] + float_10_80421000;
+        checkPos.z = pos[2] - offZ;
+        radius = float_20_80420ff4;
+        hitA = marioHitCheckVec(&checkPos, &dir, outA, outB, &radius);
+        if (hitA != 0) {
+            angA = (f32)angleABf(float_0_80420f9c, float_0_80420f9c, outB[0], outB[2]);
+        }
+    }
+
+    sincosf(toMovedirSimple(float_0_80420f9c), &sx, &sz);
+    dir.x = sx;
+    dir.y = float_0_80420f9c;
+    dir.z = sz;
+    checkPos.x = pos[0];
+    checkPos.y = pos[1] + float_10_80421000;
+    checkPos.z = pos[2];
+    radius = float_20_80420ff4;
+    hitB = marioHitCheckVec(&checkPos, &dir, outA, outB, &radius);
+    angB = float_0_80420f9c;
+    if (hitB != 0) {
+        angB = (f32)angleABf(float_0_80420f9c, float_0_80420f9c, outB[0], outB[2]);
+    } else {
+        checkPos.x = pos[0] + offX;
+        checkPos.y = pos[1] + float_10_80421000;
+        checkPos.z = pos[2] + offZ;
+        radius = float_20_80420ff4;
+        hitB = marioHitCheckVec(&checkPos, &dir, outA, outB, &radius);
+        if (hitB != 0) {
+            angB = (f32)angleABf(float_0_80420f9c, float_0_80420f9c, outB[0], outB[2]);
+        }
+    }
+    if (hitB == 0) {
+        checkPos.x = pos[0] - offX;
+        checkPos.y = pos[1] + float_10_80421000;
+        checkPos.z = pos[2] - offZ;
+        radius = float_20_80420ff4;
+        hitB = marioHitCheckVec(&checkPos, &dir, outA, outB, &radius);
+        if (hitB != 0) {
+            angB = (f32)angleABf(float_0_80420f9c, float_0_80420f9c, outB[0], outB[2]);
+        }
+    }
+
+    if (hitA == 0 || hitB == 0 ||
+        float_10_80421000 < __fabsf(-(float_0p5_80420fd8 * (angA + angB) - float_180_80420fa8))) {
+        return 0;
+    }
+    return 1;
 }
-
 
 void mot_slit_post(void) {
     extern void* marioGetPtr(void);

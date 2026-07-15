@@ -1,10 +1,46 @@
 #include "effect/n64/eff_broken_barrier_n64.h"
 
 
-u8 effBrokenBarrierMain(void) {
-    return 0;
+void effBrokenBarrierMain(void* effect) {
+    extern void effDelete(void*);
+    extern s32 rand(void);
+    extern f32 dispCalcZ(void*);
+    extern void dispEntry(s32,s32,void*,void*,f32);
+    extern void effBrokenBarrierDisp(s32,void*);
+    u8* entry=effect; u8* work=*(u8**)(entry+0xC); u8* part;
+    f32 pos[3]; s32 type=*(s32*)work, timer, i;
+    pos[0]=*(f32*)(work+4); pos[1]=*(f32*)(work+8); pos[2]=*(f32*)(work+0xC);
+    if((*(u32*)entry&4)!=0){*(u32*)entry&=~4;*(s32*)(work+0x38)=16;}
+    if(*(s32*)(work+0x38)<1000)(*(s32*)(work+0x38))--;
+    (*(s32*)(work+0x3C))++; timer=*(s32*)(work+0x38);
+    if(timer<0){effDelete(effect);return;}
+    if(timer<8)*(s32*)(work+0x4C)=timer<<5;
+    part=work+0x6C;
+    for(i=1;i<*(s32*)(entry+8);i++,part+=0x6C){
+        s32 frame=++*(s32*)(part+0x30);
+        if(frame>19){frame=0;*(s32*)(part+0x30)=0;}
+        if(frame==0){
+            *(f32*)(part+4)=(f32)((rand()%360)-180);
+            *(f32*)(part+8)=(f32)((rand()%360)-180);
+            *(f32*)(part+0xC)=(f32)((rand()%360)-180);
+            *(f32*)(part+0x18)=0.3f**(f32*)(part+4);
+            *(f32*)(part+0x1C)=0.3f**(f32*)(part+8);
+            *(f32*)(part+0x20)=0.3f**(f32*)(part+0xC);
+            *(f32*)(part+0x34)=(f32)(rand()%15);
+            *(f32*)(part+0x38)=(f32)(rand()%15);
+            *(s32*)(part+0x40)=0xFF;
+        }
+        *(f32*)(part+4)+=*(f32*)(part+0x18);
+        *(f32*)(part+8)+=*(f32*)(part+0x1C);
+        *(f32*)(part+0xC)+=*(f32*)(part+0x20);
+        *(f32*)(part+0x34)+=0.2f; *(f32*)(part+0x38)+=0.6f;
+        *(f32*)(part+0x18)+=0.04f*(*(f32*)(part+0x24)-*(f32*)(part+0x18));
+        *(f32*)(part+0x1C)+=0.04f*(*(f32*)(part+0x28)-*(f32*)(part+0x1C));
+        *(f32*)(part+0x20)+=0.04f*(*(f32*)(part+0x2C)-*(f32*)(part+0x20));
+        if(type==2||type==3)*(f32*)(part+0x18)*=0.95f;
+    }
+    dispEntry(4,2,effBrokenBarrierDisp,effect,dispCalcZ(pos));
 }
-
 
 void* effBrokenBarrierN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(void);

@@ -1,10 +1,65 @@
 #include "effect/n64/eff_kameki_tornade_n64.h"
 
 
-u8 effKamekiTornadeDisp(void) {
+u8 effKamekiTornadeDisp(s32 cameraId, s32 effectAddress) {
+    typedef f32 Mtx[3][4];
+    typedef struct GXTexObj { u32 data[8]; } GXTexObj;
+    extern void* camGetPtr(s32);
+    extern void* smartAlloc(u32, s32);
+    extern void effGetTexObj(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void PSMTXTrans(Mtx, f32, f32, f32);
+    extern void PSMTXRotRad(Mtx, f32, char);
+    extern void PSMTXScale(Mtx, f32, f32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXLoadPosMtxImm(Mtx, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetCullMode(s32);
+    extern void GXBegin(s32, s32, s16);
+    u8* work = *(u8**)(effectAddress + 0xC);
+    char* camera = camGetPtr(cameraId);
+    GXTexObj tex;
+    Mtx trans, rot, scale, model;
+    f32* points = smartAlloc(0x300, 3);
+    s32 strand;
+    s32 segment;
+
+    effGetTexObj(0x68, &tex);
+    GXLoadTexObj(&tex, 0);
+    GXLoadTexObj(&tex, 1);
+    GXSetNumChans(0);
+    GXSetNumTevStages(3);
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
+    GXSetTevOrder(0, 0, 0, -1);
+    GXSetTevOrder(1, 1, 1, -1);
+    GXSetTevOrder(2, -1, -1, -1);
+    GXSetCullMode(0);
+    for (strand = 0; strand < 7; strand++) {
+        for (segment = 0; segment < 16; segment++) {
+            s32 index = strand * 48 + segment * 3;
+            points[index] = *(f32*)(work + 0x38 + strand * 4);
+            points[index + 1] = *(f32*)(work + 0x58 + strand * 4) + (f32)segment;
+            points[index + 2] = *(f32*)(work + 0x78 + strand * 4);
+        }
+        PSMTXTrans(trans, *(f32*)(work + 0x38 + strand * 4), *(f32*)(work + 0x58 + strand * 4), *(f32*)(work + 0x78 + strand * 4));
+        PSMTXRotRad(rot, *(f32*)(work + 0x118 + strand * 4) * 0.017453292f, 'z');
+        PSMTXScale(scale, *(f32*)(work + 0x98 + strand * 4), *(f32*)(work + 0x98 + strand * 4), 1.0f);
+        PSMTXConcat(trans, rot, model);
+        PSMTXConcat(model, scale, model);
+        PSMTXConcat(camera + 0x118, model, model);
+        GXLoadPosMtxImm(model, 0);
+        GXSetCurrentMtx(0);
+        GXBegin(0x90, 0, 6);
+    }
     return 0;
 }
-
 
 #pragma optimize_for_size off
 

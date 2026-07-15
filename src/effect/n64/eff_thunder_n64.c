@@ -1,10 +1,54 @@
 #include "effect/n64/eff_thunder_n64.h"
 
 
-u8 effThunderDisp(int param_1, int param_2) {
+u8 effThunderDisp(s32 cameraId, s32 effectAddress) {
+    typedef f32 Mtx[3][4];
+    typedef struct GXTexObj { u32 data[8]; } GXTexObj;
+    extern void* camGetPtr(s32);
+    extern void effGetTexObj(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void PSMTXTrans(Mtx, f32, f32, f32);
+    extern void PSMTXRotRad(Mtx, f32, char);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXLoadPosMtxImm(Mtx, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetCullMode(s32);
+    extern void GXBegin(s32, s32, s16);
+    u8* work = *(u8**)(effectAddress + 0xC);
+    char* camera = camGetPtr(cameraId);
+    GXTexObj tex;
+    Mtx trans, rot, model;
+    s32 pass;
+    s32 counts[6] = { 0x30, 0x120, 0x9C, 0xE4, 0x36, 0x3C };
+
+    PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+    PSMTXRotRad(rot, -0.017453292f * *(f32*)((char*)camGetPtr(4) + 0x114), 'y');
+    PSMTXConcat(trans, rot, model);
+    PSMTXConcat(camera + 0x118, model, model);
+    GXLoadPosMtxImm(model, 0);
+    GXSetCurrentMtx(0);
+    GXSetNumChans(*(s32*)work < 3 ? 1 : 0);
+    GXSetNumTevStages(*(s32*)work < 3 ? 2 : 4);
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
+    for (pass = 0; pass < 4; pass++) {
+        GXSetTevOrder(pass, pass == 0 ? 0 : 1, pass == 0 ? 0 : 1, pass == 3 ? 4 : -1);
+    }
+    effGetTexObj(0x6E, &tex);
+    GXLoadTexObj(&tex, 0);
+    GXLoadTexObj(&tex, 1);
+    GXSetCullMode(0);
+    for (pass = 0; pass < 6; pass++) {
+        GXBegin(0x90, 0, counts[pass]);
+    }
     return 0;
 }
-
 
 u8 effThunderMain(u32* param_1) {
     return 0;

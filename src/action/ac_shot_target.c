@@ -220,6 +220,183 @@ void actionCommandDisp(f32 x, f32 y) {
 }
 
 /* stub-fill: battleAcMain_ShotTarget | missing_definition | ghidra_signature */
-u8 battleAcMain_ShotTarget(void) {
-    return 0;
+s32 battleAcMain_ShotTarget(void* battleWork) {
+    extern void _ac_disp_init(void*);
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern void* BtlUnit_GetPartsPtr(void*, s32);
+    extern void BtlUnit_GetHitPos(void*, void*, f32*, f32*, f32*);
+    extern void _ac_rumble_param_set(u32, s16*, s16*, f32*);
+    extern s32 psndSFXOn(char*);
+    extern void psndSFXOff(s32);
+    extern f64 sinfd(f64);
+    extern f64 distABf(f64, f64, f64, f64);
+    extern s32 irand(s32);
+    extern f32 __fabsf(f32);
+    extern f32 vec3_80300258[];
+    extern char str_SFX_AC_CURSOR_MOVE1_803002c4[];
+
+    u8* bw = battleWork;
+    u8* extra = bw + 0x1F4C;
+    void* acUnit = *(void**)(bw + 0x1C90);
+    s32 autoCommand = *(u8*)((u8*)acUnit + 0x307) != 0;
+    u32 rumbleType = *(u32*)(bw + 0x1CD4);
+    f32 hitX;
+    f32 hitY;
+    f32 hitZ;
+    s32 state;
+    s32 immediateExit;
+    s16 timer;
+    f32 oldValue;
+    f32 newValue;
+
+    for (;;) {
+        state = *(s32*)(bw + 0x1C9C);
+        immediateExit = 0;
+
+        switch (state) {
+            case 0:
+                _ac_disp_init(battleWork);
+                *(s32*)(bw + 0x1CB8) = 1;
+                acUnit = BattleGetUnitPtr(battleWork, *(s32*)(bw + 0x1CC8));
+                BtlUnit_GetHitPos(acUnit,
+                                  BtlUnit_GetPartsPtr(acUnit, *(s32*)(bw + 0x1CCC)),
+                                  &hitX, &hitY, &hitZ);
+                *(f32*)(extra + 0x08) = hitX;
+                *(f32*)(extra + 0x0C) = hitY;
+                *(f32*)(extra + 0x10) = hitZ;
+                *(s32*)(extra + 0x20) = 0;
+                *(f32*)(extra + 0x14) = vec3_80300258[0];
+                *(f32*)(extra + 0x18) = vec3_80300258[1];
+                *(f32*)(extra + 0x1C) = vec3_80300258[2];
+                *(f32*)(extra + 0x24) = 0.0f;
+                _ac_rumble_param_set(rumbleType, (s16*)(extra + 0x28),
+                                     (s16*)(extra + 0x2A), (f32*)(extra + 0x2C));
+                _ac_rumble_param_set(rumbleType, (s16*)(extra + 0x30),
+                                     (s16*)(extra + 0x32), (f32*)(extra + 0x34));
+                *(s32*)(extra + 0x38) = -1;
+                *(s32*)(bw + 0x1C9C) = 99;
+                break;
+
+            case 100:
+                *(s32*)extra = *(s32*)(bw + 0x1CD0);
+                *(s32*)(bw + 0x1C9C) = 1000;
+                *(s32*)(extra + 0x38) = psndSFXOn(str_SFX_AC_CURSOR_MOVE1_803002c4);
+                /* Fall through into the active cursor update. */
+            case 1000:
+                timer = *(s16*)(bw + 0x1D18);
+                if (timer > 0) {
+                    *(s16*)(bw + 0x1D18) = timer - 1;
+                    immediateExit = 1;
+                    *(s32*)(bw + 0x1CB8) = 2;
+                    (*(s32*)(bw + 0x1CB4))++;
+                    *(s32*)(bw + 0x1C9C) = 1001;
+                    break;
+                }
+
+                (*(s16*)(extra + 0x2A))--;
+                if (*(s16*)(extra + 0x2A) < 0) {
+                    _ac_rumble_param_set(rumbleType, (s16*)(extra + 0x28),
+                                         (s16*)(extra + 0x2A), (f32*)(extra + 0x2C));
+                }
+                oldValue = *(f32*)(extra + 0x2C) *
+                           (f32)sinfd((f32)((*(s16*)(extra + 0x2A) + 1) * 180 /
+                                           *(s16*)(extra + 0x28)));
+                newValue = *(f32*)(extra + 0x2C) *
+                           (f32)sinfd((f32)(*(s16*)(extra + 0x2A) * 180 /
+                                           *(s16*)(extra + 0x28)));
+                *(f32*)(extra + 0x14) += newValue - oldValue;
+
+                (*(s16*)(extra + 0x32))--;
+                if (*(s16*)(extra + 0x32) < 0) {
+                    _ac_rumble_param_set(rumbleType, (s16*)(extra + 0x30),
+                                         (s16*)(extra + 0x32), (f32*)(extra + 0x34));
+                }
+                oldValue = *(f32*)(extra + 0x34) *
+                           (f32)sinfd((f32)((*(s16*)(extra + 0x32) + 1) * 180 /
+                                           *(s16*)(extra + 0x30)));
+                newValue = *(f32*)(extra + 0x34) *
+                           (f32)sinfd((f32)(*(s16*)(extra + 0x32) * 180 /
+                                           *(s16*)(extra + 0x30)));
+                *(f32*)(extra + 0x18) += newValue - oldValue;
+
+                *(f32*)(extra + 0x14) += (f32)*(s8*)(bw + 0xF2E) / 10.0f;
+                *(f32*)(extra + 0x18) += (f32)*(s8*)(bw + 0xF2F) / 10.0f;
+
+                if (autoCommand) {
+                    f32 cursor = *(f32*)(extra + 0x14);
+                    f32 target = *(f32*)(extra + 0x08);
+                    if (__fabsf(cursor - target) >= 3.0f) {
+                        *(f32*)(extra + 0x14) = cursor <= target ? cursor + 3.0f : cursor - 3.0f;
+                    } else {
+                        *(f32*)(extra + 0x14) = target;
+                    }
+
+                    cursor = *(f32*)(extra + 0x18);
+                    target = *(f32*)(extra + 0x0C);
+                    if (__fabsf(cursor - target) >= 3.0f) {
+                        *(f32*)(extra + 0x18) = cursor <= target ? cursor + 3.0f : cursor - 3.0f;
+                    } else {
+                        *(f32*)(extra + 0x18) = target;
+                    }
+                }
+
+                *(s32*)(extra + 0x20) =
+                    __fabsf((f32)distABf(*(f32*)(extra + 0x14), *(f32*)(extra + 0x18),
+                                         *(f32*)(extra + 0x08), *(f32*)(extra + 0x0C))) <= 28.0f;
+                (*(s32*)extra)--;
+
+                if ((*(u32*)(bw + 0x1C94) & 1) == 0 ||
+                    (*(u32*)((u8*)acUnit + 0x27C) & 0x10) == 0) {
+                    if (*(s32*)extra < 0) {
+                        if (*(s32*)(extra + 0x20) == 0) {
+                            *(s32*)(bw + 0x1CB8) = 0;
+                        } else {
+                            *(s32*)(bw + 0x1CB8) = 2;
+                            (*(s32*)(bw + 0x1CB4))++;
+                        }
+                        *(s32*)(bw + 0x1C9C) = 1001;
+                    }
+                } else {
+                    if (irand(100) < 0) {
+                        *(s32*)(bw + 0x1CB8) = 2;
+                        (*(s32*)(bw + 0x1CB4))++;
+                    } else {
+                        *(s32*)(bw + 0x1CB8) = 0;
+                    }
+                    *(s32*)(bw + 0x1C9C) = 1001;
+                }
+                break;
+
+            case 1002:
+                *(s32*)(bw + 0x1C9C) = 1002;
+                break;
+
+            case 1003:
+                *(s32*)(extra + 4) = 60;
+                *(s32*)(bw + 0x1C9C) = 1004;
+                if (*(s32*)(extra + 0x38) != -1) {
+                    psndSFXOff(*(s32*)(extra + 0x38));
+                }
+                break;
+
+            case 1004:
+                (*(s32*)(extra + 4))--;
+                if (*(s32*)(extra + 4) < 1) {
+                    *(s32*)(bw + 0x1C9C) = 1005;
+                }
+                break;
+
+            case 1005:
+                *(void**)(bw + 0x1CA0) = 0;
+                *(void**)(bw + 0x1CA4) = 0;
+                *(void**)(bw + 0x1CA8) = 0;
+                *(void**)(bw + 0x1CAC) = 0;
+                break;
+        }
+
+        if (!immediateExit) {
+            return 1;
+        }
+    }
 }
+

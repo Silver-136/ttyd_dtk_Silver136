@@ -155,10 +155,43 @@ void BattleActionCommandManager(struct BattleWork* work) {
     }
 }
 
-u8 BattleAcDrawGauge(s64 ratioFilled, s32 x, s32 y, s32 innerBarWidth, s32 param_5, s32 bar1EndPercent, s32 bar2EndPercent, s32 bar3EndPercent, s32 flags_) {
-    return 0;
-}
+u8 BattleAcDrawGauge(s64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
+                     s32 param_5, s32 bar1EndPercent, s32 bar2EndPercent,
+                     s32 bar3EndPercent, s32 flags) {
+    extern void btlDispGXInit2DRasta(void);
+    extern void btlDispGXQuads2DRasta(f32, f32, f32, f32, u8, u8, u8, u8);
+    f32 ratio;
+    f32 left;
+    f32 right;
+    f32 top;
+    f32 bottom;
 
+    ratio = *(f64*)&ratioFilled;
+    left = x - 289;
+    top = y + 32;
+    bottom = y + 50;
+
+    if (param_5 > 1) {
+        right = x + innerBarWidth * bar1EndPercent / 100 - 289;
+        if (left <= right) {
+            btlDispGXInit2DRasta();
+            btlDispGXQuads2DRasta(left, top, right, bottom, 0x21, 0x21, 0x75, 0xFF);
+        }
+        left = right;
+        right = x + innerBarWidth * bar2EndPercent / 100 - 289;
+        if (left <= right) {
+            btlDispGXInit2DRasta();
+            btlDispGXQuads2DRasta(left, top, right, bottom, 0x1D, 0x23, 0xA3, 0xFF);
+        }
+        left = right;
+        right = x + innerBarWidth * bar3EndPercent / 100 - 289;
+        if (left <= right) {
+            btlDispGXInit2DRasta();
+            btlDispGXQuads2DRasta(left, top, right, bottom, 0x46, 0x0C, 0xB4, 0xFF);
+        }
+    }
+    return ratio >= 1.0f;
+}
 
 void BattleActionCommandCheckDefence(void* unit, s32 value) {
     extern u8 N_normal_guard_frames[];

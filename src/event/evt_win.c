@@ -34,10 +34,34 @@ void unk_8017b330(void) {
 }
 
 
-void evt_unitwin_disp_func(s32 param_1, void* param_2) {
-    ;
-}
+void evt_unitwin_disp_func(s32 cameraId, void* work) {
+    typedef f32 Mtx[3][4];
+    extern s32 pouchGetCoin(void);
+    extern s32 pouchGetStarPiece(void);
+    extern s32 pouchGetSuperCoin(void);
+    extern void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(Mtx a, Mtx b, Mtx out);
+    extern void iconDispGx2(Mtx m, s32 alpha, s32 icon);
+    extern void iconNumberDispGx(Mtx m, s32 number, s32 flag, void* color);
+    Mtx trans, scale;
+    u32 white = 0xFFFFFFFF;
+    u16 flags = *(u16*)work;
+    s32 value;
 
+    if ((flags & 1) == 0) return;
+    if ((flags & 0x1000) != 0) { value = pouchGetStarPiece(); PSMTXTrans(trans,-220.0f,-113.0f,0.0f); iconDispGx2(trans,0x10,0x195); iconNumberDispGx(trans,value,0,&white); }
+    if ((flags & 0x4000) != 0) { value = pouchGetSuperCoin(); PSMTXTrans(trans,-220.0f,-113.0f,0.0f); iconDispGx2(trans,0x10,0x10A); iconNumberDispGx(trans,value,0,&white); }
+    if ((flags & 0x8000) != 0) { value = pouchGetCoin(); PSMTXTrans(trans,-220.0f,-113.0f,0.0f); iconDispGx2(trans,0x10,0x193); iconNumberDispGx(trans,value,0,&white); }
+    if ((flags & 0x2000) != 0) {
+        PSMTXTrans(trans, -210.0f, -166.0f, 0.0f);
+        PSMTXScale(scale, 1.1f, 1.1f, 1.1f);
+        PSMTXConcat(trans, scale, trans);
+        iconDispGx2(trans, 0x10, 0x226);
+        iconNumberDispGx(trans, *(s32*)((s32)work + 0x30), 0, &white);
+    }
+    (void)cameraId;
+}
 
 s32 evt_unitwin_selltable_setup(int pEvt) {
     extern void mapObjGetPos(void* obj, void* pos);
@@ -108,22 +132,25 @@ s32 evt_unitwin_selltable_setup(int pEvt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_unitwin_free(void* pEvt, s32 force) {
+    void* winPtr;
+    s32 offset;
     s32 i;
     void* work;
-    s32 offset;
-    void* winPtr;
     char name[0x20];
 
     work = _wp;
-    if (work == NULL) {
+    if (work == 0) {
         return 2;
     }
+
     if (force != 0) {
         *(u16*)((s32)work + 0x54) |= 1;
     }
+
     if ((*(u16*)((s32)work + 0x54) & 2) == 0) {
         return 0;
     }
+
     i = 0;
     offset = 0;
     while (i < *(s32*)((s32)work + 0x18)) {
@@ -133,6 +160,7 @@ s32 evt_unitwin_free(void* pEvt, s32 force) {
         offset += 0xC;
         i++;
     }
+
     if ((*(u16*)work & 0x80) != 0) {
         i = 0;
         winPtr = work;
@@ -142,11 +170,14 @@ s32 evt_unitwin_free(void* pEvt, s32 force) {
             winPtr = (void*)((s32)winPtr + 4);
         }
     }
+
     iconDelete(str_yubicursor_2_802f7124);
     _mapFree(mapalloc_base_ptr, _wp);
-    _wp = NULL;
+    _wp = 0;
+
     return 2;
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -422,9 +453,146 @@ void unk_8017b2b0(void* pWin) {
 /* CHATGPT FALLBACK MISSING STUBS: main/event/evt_win 20260624_191429 */
 
 /* fallback stub-fill: map=unk_8017a844 addr=0x8017a844 size=0x00000360 */
-int unk_8017a844() {
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+int unk_8017a844(void* pEvt) {
+    extern void* marioGetPtr(void);
+    extern void* partyGetPtr(s32 slot);
+    extern u16 keyGetButtonTrg(s32 port);
+    extern s32 marioChkCtrl(void);
+    extern s32 marioChkKey(void);
+    extern s32 winGhostDiaryChk(void);
+    extern s32 N_itemPickUpFromFieldCheck(void);
+    extern char* hitGetName(void* hit);
+    extern s32 strcmp(char* s1, char* s2);
+    extern void winMgrOpen(s32 winId);
+    extern void winMgrClose(s32 winId);
+    extern void* winMgrGetPtr(s32 winId);
+    extern void winMgrHelpInit(void* winMgr);
+    extern void marioKeyOff(void);
+    extern void marioKeyOn(void);
+    extern void* evtEntry(void* script, s32 priority, s32 flags);
+    extern s32 evtCheckID(s32 evtId);
+    extern void* mapGetMapObj(char* name);
+    extern void iconFlagOn(char* name, u16 flags);
+    extern void iconFlagOff(char* name, u16 flags);
+    extern const char str_uwnPCTd_80423e18;
+
+    void* work;
+    void* mario;
+    void* party;
+    void* hit;
+    u16 button;
+    s32 found;
+    s32 i;
+    s32 offset;
+    char name[0x20];
+
+    found = 0;
+    work = *(void**)((s32)pEvt + 0x9C);
+    mario = marioGetPtr();
+    party = partyGetPtr(0);
+    hit = *(void**)((s32)mario + 0x1E8);
+
+    if ((*(u16*)((s32)work + 0x54) & 1) != 0) {
+        *(u16*)((s32)work + 0x54) |= 2;
+        return 2;
+    }
+
+    *(u16*)work &= 0xFFFE;
+    button = keyGetButtonTrg(0);
+    if (marioChkCtrl() == 0 || marioChkKey() == 0) {
+        button = 0;
+    }
+
+    if (party != NULL && (*(u32*)party & 0x100) != 0) {
+        if (*(s32*)((s32)work + 0xE0) != -1) {
+            *(s32*)((s32)work + 0xE0) = -1;
+            winMgrClose(*(s32*)((s32)work + 0x60));
+            winMgrClose(*(s32*)((s32)work + 0x64));
+        }
+        return 0;
+    }
+
+    if (winGhostDiaryChk() != 0 || N_itemPickUpFromFieldCheck() != 0) {
+        if (*(s32*)((s32)work + 0xE0) != -1) {
+            *(s32*)((s32)work + 0xE0) = -1;
+            winMgrClose(*(s32*)((s32)work + 0x60));
+            winMgrClose(*(s32*)((s32)work + 0x64));
+        }
+        return 0;
+    }
+
+    if ((*(u16*)work & 2) == 0) {
+        if (hit != NULL) {
+            for (i = 0, offset = 0; i < *(s32*)((s32)work + 0x18); i++, offset += 0xC) {
+                if (strcmp(*(char**)(*(s32*)((s32)work + 4) + offset + 4), hitGetName(hit)) == 0) {
+                    break;
+                }
+            }
+            if (i < *(s32*)((s32)work + 0x18) &&
+                ((*(u16*)((s32)work + 0xC + i * 2) & 1) == 0)) {
+                if (*(s32*)((s32)work + 0xE0) != i) {
+                    if (*(s32*)((s32)work + 0xE0) == -1) {
+                        winMgrOpen(*(s32*)((s32)work + 0x60));
+                        winMgrOpen(*(s32*)((s32)work + 0x64));
+                    }
+                    *(s32*)((s32)work + 0xE0) = i;
+                    *(s32*)((s32)work + 0x24) = i;
+                    winMgrHelpInit(winMgrGetPtr(*(s32*)((s32)work + 0x64)));
+                }
+                found = 1;
+            }
+        }
+        if (found == 0 && *(s32*)((s32)work + 0xE0) != -1) {
+            *(s32*)((s32)work + 0xE0) = -1;
+            winMgrClose(*(s32*)((s32)work + 0x60));
+            winMgrClose(*(s32*)((s32)work + 0x64));
+        }
+        if (*(s32*)((s32)work + 0xE0) != -1) {
+            *(u16*)work |= 1;
+            if ((button & 0x100) != 0) {
+                marioKeyOff();
+                *(void**)((s32)work + 0x20) =
+                    evtEntry(*(void**)(*(s32*)((s32)work + 4) +
+                                       *(s32*)((s32)work + 0x24) * 0xC + 8), 0, 0);
+                *(void**)(*(s32*)((s32)work + 0x20) + 0x9C) = work;
+                *(u16*)work |= 2;
+                winMgrClose(*(s32*)((s32)work + 0x60));
+                winMgrClose(*(s32*)((s32)work + 0x64));
+                *(s32*)((s32)work + 0xE0) = -1;
+                *(s32*)((s32)work + 0xE4) = 0;
+            }
+        }
+    } else {
+        if (evtCheckID(*(s32*)(*(s32*)((s32)work + 0x20) + 0x15C)) == 0) {
+            *(u16*)work &= 0xFFFD;
+            marioKeyOn();
+            if (*(s32*)((s32)work + 0xE4) != 0) {
+                *(u16*)((s32)work + 0xC + *(s32*)((s32)work + 0x24) * 2) |= 1;
+            }
+        }
+    }
+
+    for (i = 0, offset = 0; i < *(s32*)((s32)work + 0x18); i++, offset += 0xC) {
+        void* obj = mapGetMapObj(*(char**)(*(s32*)((s32)work + 4) + offset));
+        if (obj != NULL) {
+            sprintf(name, &str_uwnPCTd_80423e18, i);
+            if ((*(u16*)((s32)work + 0xC + i * 2) & 1) == 0) {
+                if ((*(u32*)obj & 1) == 0) {
+                    iconFlagOff(name, 2);
+                } else {
+                    iconFlagOn(name, 2);
+                }
+            } else {
+                iconFlagOn(name, 2);
+            }
+        }
+    }
     return 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 /* fallback stub-fill: map=unk_8017b0c4 addr=0x8017b0c4 size=0x000001ec */
 int unk_8017b0c4(u32* pWin) {

@@ -235,9 +235,92 @@ void mapGrpSetFlushColor(s32 group, u8 r, u8 g, u8 b, u8 a) {
 
 
 void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
-    ;
+    extern void GXSetTevOrder(s32,s32,s32,s32);
+    extern void GXSetTevOp(s32,s32);
+    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevColorIn(s32,s32,s32,s32,s32);
+    extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
+    extern void GXSetTevSwapMode(s32,s32,s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetCullMode(s32);
+    extern void GXSetZMode(s32,s32,s32);
+    extern void GXSetBlendMode(s32,s32,s32,s32);
+    u32 stages = 1;
+    s32 i;
+    if (texCount == 0) {
+        GXSetTevOrder(0, 0xff, 0xff, 0);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 0, 0, 0, 10);
+        GXSetTevAlphaIn(0, 0, 0, 0, 5);
+        GXSetTevSwapMode(0, 0, 0);
+    } else switch (drawMode) {
+    case 0:
+        GXSetTevOrder(0, 0, 0, 0);
+        GXSetTevOp(0, 0);
+        break;
+    case 1: case 2: case 3: case 4: case 6: case 7:
+        GXSetTevOrder(0, 0, 0, 0xff);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 0, 0, 0, 8);
+        GXSetTevAlphaIn(0, 0, 0, 0, 4);
+        GXSetTevSwapMode(0, 0, 0);
+        GXSetTevOrder(1, 1, 1, 0xff);
+        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+        if (drawMode == 1) {
+            GXSetTevColorIn(1, 0, 8, 4, 0);
+            GXSetTevAlphaIn(1, 0, 0, 0, 0);
+        } else if (drawMode == 2) {
+            GXSetTevColorIn(1, 0, 8, 4, 0);
+            GXSetTevAlphaIn(1, 0, 6, 4, 7);
+        } else if (drawMode == 3) {
+            GXSetTevColorIn(1, 8, 0, 4, 0);
+            GXSetTevAlphaIn(1, 6, 0, 4, 7);
+        } else {
+            GXSetTevColorIn(1, 0, 8, 8, 0);
+            GXSetTevAlphaIn(1, 0, 6, 4, 7);
+        }
+        GXSetTevSwapMode(1, 0, 0);
+        GXSetTevOrder(2, drawMode == 4 ? 0 : 0xff, drawMode == 4 ? 0 : 0xff,
+                     drawMode == 4 ? 0xff : 0);
+        GXSetTevColorOp(2, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(2, 0, 8, 10, 0);
+        GXSetTevAlphaIn(2, 0, 6, 5, 7);
+        GXSetTevSwapMode(2, 0, 0);
+        stages = 3;
+        break;
+    case 5:
+        for (i = 0; i < 4; i++) {
+            GXSetTevOrder(i, i < 3 ? i : 0xff, i < 3 ? i : 0xff, i == 3 ? 0 : 0xff);
+            GXSetTevColorOp(i, 0, 0, 0, 1, i < 2 ? i + 1 : 0);
+            GXSetTevAlphaOp(i, 0, 0, 0, 1, i < 2 ? i + 1 : 0);
+            GXSetTevSwapMode(i, 0, 0);
+        }
+        stages = 4;
+        break;
+    default:
+        GXSetTevOrder(0, 0, 0, 0);
+        GXSetTevOp(0, 0);
+        break;
+    }
+    GXSetNumTevStages(stages);
+    GXSetNumTexGens(texCount);
+    for (i = 0; i < (s32)texCount && i < 8; i++) {
+        GXSetTexCoordGen2(i, 1, 4, 0x1e + i * 3, 0, 0x7d);
+    }
+    GXSetNumChans(1);
+    GXSetCullMode((materialFlag&0x400)?2:((materialFlag&0x800)?1:0));
+    GXSetBlendMode((materialFlag&0x20)?1:0,4,5,0);
+    GXSetZMode((materialFlag&0x10)==0,3,(materialFlag&0x20)==0);
+    (void)pMtx;
 }
-
 
 void mapMain(void) {
     extern s32 activeGroup;
@@ -760,10 +843,36 @@ void mapMain(void) {
 #undef P
 }
 
-void _mapDispMapObj(void) {
-    ;
+void _mapDispMapObj(s32 cam, void* mapObj) {
+    typedef f32 Mtx[3][4];
+    extern void* current_mp;
+    extern void* camGetPtr(s32 id);
+    extern void PSMTXConcat(Mtx,Mtx,Mtx);
+    extern void PSMTXInvXpose(Mtx,Mtx);
+    extern void GXLoadPosMtxImm(Mtx,s32);
+    extern void GXLoadNrmMtxImm(Mtx,s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetBlendMode(s32,s32,s32,s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);
+    extern void GXSetZMode(s32,s32,s32);
+    extern void GXSetCullMode(s32);
+    extern void mapSetTextureMatrix(void* material);
+    extern void mapSetMaterialTev(u32,s32,u32,s32);
+    extern void GXCallDisplayList(void*,u32);
+    u8* obj=mapObj;
+    u8* camera=camGetPtr(cam);
+    u8* joint=*(u8**)(obj+0x24);
+    Mtx model,normal;
+    s32 count=*(s32*)(joint+0x28);
+    s32 i;
+    current_mp=mapObj;
+    if(*(u32*)obj&0x20){s32 blend=*(u8*)(obj+0x5d);if(blend==3){GXSetBlendMode(0,1,0,0);GXSetZMode(0,3,0);}else if(blend==1){GXSetBlendMode(0,1,0,0);GXSetZCompLoc(0);GXSetAlphaCompare(6,0x80,1,0,0);GXSetZMode(1,3,1);}else{GXSetBlendMode(1,4,5,0);GXSetZCompLoc(1);GXSetZMode(1,3,0);}}
+    PSMTXConcat((f32(*)[4])(camera+0x64),(f32(*)[4])(obj+0x8),model);GXLoadPosMtxImm(model,0);
+    if((*(u32*)obj&0x100)==0){PSMTXInvXpose(model,normal);GXLoadNrmMtxImm(normal,0);}GXSetCurrentMtx(0);
+    GXSetCullMode(0);
+    if((*(u32*)obj&0x100)==0){for(i=0;i<count;i++){u8* part=*(u8**)(joint+0x2c)+i*8;void* material=*(void**)part;void* mesh=*(void**)(part+4);mapSetTextureMatrix(material);mapSetMaterialTev(*(u32*)((u8*)material+8),*(s32*)((u8*)material+0xc),*(u32*)obj,(s32)model);GXCallDisplayList(*(void**)((u8*)mesh+8),*(u32*)((u8*)mesh+0xc));}}
 }
-
 
 void mapDisp(void) {
     extern s32 activeGroup;
@@ -1628,7 +1737,7 @@ u8 mapSetMaterialLight(u32 materialLightFlag, void* pPos) {
 #undef BUILD_DIR
 }
 
-u8 mapObjGetPosSub(int param_1, s32 param_2, int* param_3, int param_4) {
+void mapObjGetPosSub(int param_1, s32 param_2, int* param_3, int param_4) {
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
     extern void PSVECAdd(void* a, void* b, void* out);
 
@@ -1908,7 +2017,7 @@ void _mapDispMapGrp_NoMaterial(s32 camId, void* grp) {
 #undef SETUP_NOMAT
 }
 
-u8 mapSetPolygon(int param_1, int param_2) {
+void mapSetPolygon(int param_1, int param_2) {
     extern s32 activeGroup;
     extern s32 mapWork;
     extern s32 culling[];
@@ -2460,7 +2569,7 @@ void _mapDispMapGrp(s32 cam, void* obj) {
     }
 }
 
-u8 mapSetTextureMatrix(void* param_1) {
+void mapSetTextureMatrix(void* param_1) {
     extern s32 texmtx_tbl[];
     extern f32 float_1_8041f940;
     extern f32 float_0_8041f930;
@@ -2574,7 +2683,7 @@ u8 mapSetTextureMatrix(void* param_1) {
     }
 }
 
-u8 mapFlgOff(u32* param_1, u32 param_2, int param_3) {
+void mapFlgOff(u32* param_1, u32 param_2, int param_3) {
     u32* root;
     u32 flags;
     u32 mask;
@@ -4633,16 +4742,115 @@ void mapSetMaterial(void* param_1, void* param_2) {
 
 
 void _mapLoad(void* pWork, int idx, char* pMapName) {
-    ;
-}
+    extern void* mapalloc_base_ptr;
+    extern void arcOpen(char*, void*, void*);
+    extern void* DVDMgrOpen(char*, s32, s32);
+    extern s32 DVDMgrGetLength(void*);
+    extern void DVDMgrRead(void*, void*, u32, s32);
+    extern void DVDMgrClose(void*);
+    extern void* _mapAllocTail(void*, u32);
+    extern void UnpackTexPalette(void*);
+    extern void GXInvalidateVtxCache(void);
+    extern s32 sprintf(char*, const char*, ...);
+    extern char* strncpy(char*, const char*, u32);
+    extern void* memcpy(void*, const void*, u32);
+    extern void* memset(void*, s32, u32);
+    extern s32 strcmp(const char*, const char*);
+    u8* entry = (u8*)pWork + idx * 0x188;
+    char name[132];
+    void* file;
+    u32 size;
+    u8* data;
+    u32 offset;
+    u32 i;
+    u8* chunkTable;
+    char* stringTable;
+    u8* mainData;
 
+    strncpy((char*)entry, pMapName, 16);
+    sprintf(name, "m/%s.d", pMapName);
+    arcOpen(name, entry + 0x18, entry + 0x1C);
+    if (*(void**)(entry + 0x18) == 0) {
+        file = DVDMgrOpen(name, 2, 0);
+        size = DVDMgrGetLength(file);
+        *(u32*)(entry + 0x1C) = size;
+        data = _mapAllocTail(mapalloc_base_ptr, (size + 31) & ~31);
+        *(void**)(entry + 0x18) = data;
+        DVDMgrRead(file, data, (size + 31) & ~31, 0);
+        DVDMgrClose(file);
+    }
+
+    sprintf(name, "m/%s.t", pMapName);
+    *(void**)(entry + 0x20) = 0;
+    arcOpen(name, entry + 0x20, entry + 0x24);
+    if (*(void**)(entry + 0x20) == 0) {
+        file = DVDMgrOpen(name, 2, 0);
+        if (file != 0) {
+            size = DVDMgrGetLength(file);
+            *(u32*)(entry + 0x24) = size;
+            data = _mapAllocTail(mapalloc_base_ptr, (size + 31) & ~31);
+            *(void**)(entry + 0x20) = data;
+            DVDMgrRead(file, data, (size + 31) & ~31, 0);
+            DVDMgrClose(file);
+            UnpackTexPalette(data);
+        }
+    } else {
+        UnpackTexPalette(*(void**)(entry + 0x20));
+    }
+
+    GXInvalidateVtxCache();
+    data = *(u8**)(entry + 0x18);
+    memset(entry + 0x28, 0, 0x44);
+    memcpy(entry + 0x28, data, 0x20);
+    if (*(u32*)(entry + 0x2C) == *(u32*)(entry + 0x1C)) {
+        offset = 0x20;
+        if (*(u32*)(entry + 0x30) != 0) {
+            *(void**)(entry + 0x48) = data + offset;
+            offset += *(u32*)(entry + 0x30);
+        }
+        if (*(u32*)(entry + 0x34) != 0) {
+            *(void**)(entry + 0x4C) = data + offset;
+            offset += *(u32*)(entry + 0x34) * 4;
+        }
+        if (*(u32*)(entry + 0x38) != 0) {
+            *(void**)(entry + 0x50) = data + offset;
+            offset += *(u32*)(entry + 0x38) * 8;
+        }
+        *(char**)(entry + 0x54) = (char*)data + offset;
+        for (i = 0; i < *(u32*)(entry + 0x34); i++) {
+            u32* rel = (u32*)(*(u8**)(entry + 0x48) +
+                              ((u32*)*(void**)(entry + 0x4C))[i]);
+            if (*rel <= 0x80000000) {
+                *rel += (u32)*(void**)(entry + 0x48);
+            }
+        }
+
+        mainData = *(u8**)(entry + 0x48);
+        chunkTable = *(u8**)(entry + 0x50);
+        stringTable = *(char**)(entry + 0x54);
+        for (i = 0; i < *(u32*)(entry + 0x38); i++) {
+            u32 chunkOffset = *(u32*)(chunkTable + i * 8);
+            u32 nameOffset = *(u32*)(chunkTable + i * 8 + 4);
+            char* chunkName = stringTable + nameOffset;
+            if (strcmp(chunkName, "texture_table") == 0) {
+                *(void**)(entry + 0x6C) = mainData + chunkOffset;
+            } else if (strcmp(chunkName, "light_table") == 0) {
+                *(void**)(entry + 0x70) = mainData + chunkOffset;
+            } else if (strcmp(chunkName, "fog_table") == 0) {
+                *(void**)(entry + 0x74) = mainData + chunkOffset;
+            } else if (strcmp(chunkName, "information") == 0) {
+                *(void**)(entry + 0x68) = mainData + chunkOffset;
+            }
+        }
+    }
+}
 
 void* _mapEnt(void* pJoint, void* pParent, void* pMtx, int entryIdx) {
     return 0;
 }
 
 
-u8 _setOffScrnId(void* param_1, int param_2, int param_3) {
+void _setOffScrnId(void* param_1, int param_2, int param_3) {
     int offId;
     int recurse;
     void* p1;
@@ -4988,7 +5196,7 @@ u8 setColor(void* param_1, u32* param_2, int param_3) {
     return 0;
 }
 
-u8 mapFlgOn(void* param_1, u32 param_2, int param_3) {
+void mapFlgOn(void* param_1, u32 param_2, int param_3) {
     u32 bit;
     void* p1;
     void* p2;
@@ -5136,20 +5344,187 @@ u8 mapFlgOn(void* param_1, u32 param_2, int param_3) {
 #undef FLG_ON
 }
 
-u8 mapReCalcMatrix(void* this, s32 param_2, int param_3) {
-    return 0;
-}
+void mapReCalcMatrix(void* obj, void* parentMtx, int recurse) {
+    extern void PSMTXConcat(void* a, void* b, void* out);
 
+    void* child;
+    u32 flags;
+    s32 doSelf;
+
+#define FLAGS(n_) (*(u32*)(n_))
+#define CHILD(n_) (*(void**)((s32)(n_) + 0xE4))
+#define SIB(n_) (*(void**)((s32)(n_) + 0xE8))
+#define WORLD(n_) ((void*)((s32)(n_) + 0x1C))
+#define LOCAL(n_) ((void*)((s32)(n_) + 0x4C))
+#define ALT(n_) ((void*)((s32)(n_) + 0x7C))
+#define RUNTIME(n_) ((void*)((s32)(n_) + 0xAC))
+#define APPLY_NODE(n_, p_)                                      \
+    do {                                                        \
+        if ((FLAGS(n_) & 0x2000) == 0) {                        \
+            PSMTXConcat((p_), LOCAL(n_), WORLD(n_));            \
+        } else {                                                \
+            PSMTXConcat((p_), ALT(n_), WORLD(n_));              \
+        }                                                       \
+        if ((FLAGS(n_) & 0x200000) != 0) {                      \
+            PSMTXConcat(WORLD(n_), RUNTIME(n_), WORLD(n_));     \
+        }                                                       \
+        FLAGS(n_) &= ~0x200;                                    \
+    } while (0)
+
+    flags = FLAGS(obj);
+    doSelf = 0;
+    if ((flags & 0x200) != 0) {
+        doSelf = 1;
+    }
+    if (recurse != 0) {
+        doSelf = 1;
+    }
+
+    if (doSelf != 0) {
+        APPLY_NODE(obj, parentMtx);
+
+        child = CHILD(obj);
+        if (child != 0) {
+            APPLY_NODE(child, WORLD(obj));
+            if (CHILD(child) != 0) {
+                mapReCalcMatrix(CHILD(child), WORLD(child), 1);
+            }
+            if (SIB(child) != 0) {
+                mapReCalcMatrix(SIB(child), WORLD(obj), 1);
+            }
+        }
+
+        child = SIB(obj);
+        if (child != 0) {
+            if ((recurse == 0) && ((FLAGS(child) & 0x200) == 0)) {
+                if (CHILD(child) != 0) {
+                    mapReCalcMatrix(CHILD(child), WORLD(child), recurse);
+                }
+                if (SIB(child) != 0) {
+                    mapReCalcMatrix(SIB(child), parentMtx, recurse);
+                }
+            } else {
+                APPLY_NODE(child, parentMtx);
+                if (CHILD(child) != 0) {
+                    mapReCalcMatrix(CHILD(child), WORLD(child), 1);
+                }
+                if (SIB(child) != 0) {
+                    mapReCalcMatrix(SIB(child), parentMtx, recurse);
+                }
+            }
+        }
+    } else {
+        child = CHILD(obj);
+        if (child != 0) {
+            if ((FLAGS(child) & 0x200) == 0) {
+                if (CHILD(child) != 0) {
+                    mapReCalcMatrix(CHILD(child), WORLD(child), recurse);
+                }
+                if (SIB(child) != 0) {
+                    mapReCalcMatrix(SIB(child), WORLD(obj), recurse);
+                }
+            } else {
+                APPLY_NODE(child, WORLD(obj));
+                if (CHILD(child) != 0) {
+                    mapReCalcMatrix(CHILD(child), WORLD(child), 1);
+                }
+                if (SIB(child) != 0) {
+                    mapReCalcMatrix(SIB(child), WORLD(obj), recurse);
+                }
+            }
+        }
+
+        child = SIB(obj);
+        if (child != 0) {
+            if ((FLAGS(child) & 0x200) == 0) {
+                if (CHILD(child) != 0) {
+                    mapReCalcMatrix(CHILD(child), WORLD(child), recurse);
+                }
+                if (SIB(child) != 0) {
+                    mapReCalcMatrix(SIB(child), parentMtx, recurse);
+                }
+            } else {
+                APPLY_NODE(child, parentMtx);
+                if (CHILD(child) != 0) {
+                    mapReCalcMatrix(CHILD(child), WORLD(child), 1);
+                }
+                if (SIB(child) != 0) {
+                    mapReCalcMatrix(SIB(child), parentMtx, recurse);
+                }
+            }
+        }
+    }
+
+#undef FLAGS
+#undef CHILD
+#undef SIB
+#undef WORLD
+#undef LOCAL
+#undef ALT
+#undef RUNTIME
+#undef APPLY_NODE
+}
 
 u8 mapCalcAnimMatrix(void* pDstMtx, void* pParentMtx, void* pEntry, void* pTrack) {
     return 0;
 }
 
 
-u8 mapSetMaterialLastStageBlend(u32 flags, void* pEvtColor, void* param_3) {
-    return 0;
-}
+void mapSetMaterialLastStageBlend(u32 flags, void* pEvtColor, void* param_3) {
+    extern u32 dat_8041f8fc;
+    extern s32 activeGroup;
+    extern s32 mapWork;
+    extern void GXSetTevKColor(s32 id, void* color);
 
+    u32 color;
+    u32 outColor;
+    u8* evt;
+    u8* mul;
+    s32 group;
+    u16 dataFlags;
+
+    color = dat_8041f8fc;
+    evt = (u8*)pEvtColor;
+
+    if ((flags & 0x40) != 0) {
+        color = (((((color >> 24) & 0xFF) * evt[0]) / 0xFF) << 24) |
+                (((((color >> 16) & 0xFF) * evt[1]) / 0xFF) << 16) |
+                (((((color >> 8) & 0xFF) * evt[2]) / 0xFF) << 8) |
+                ((((color & 0xFF) * evt[3]) / 0xFF) & 0xFF);
+    }
+
+    mul = (u8*)param_3;
+    if (mul[0] != 0xFF) {
+        color = (color & 0xFFFFFF00) | (((color & 0xFF) * mul[0]) / 0xFF);
+    }
+
+    group = mapWork + activeGroup * 0x2F4;
+    dataFlags = *(u16*)(group + 4);
+
+#define MUL_COLOR(ptr_)                                                                 \
+    do {                                                                                \
+        u8* c_ = (u8*)(ptr_);                                                           \
+        color = (((((color >> 24) & 0xFF) * c_[0]) / 0xFF) << 24) |                    \
+                (((((color >> 16) & 0xFF) * c_[1]) / 0xFF) << 16) |                    \
+                (((((color >> 8) & 0xFF) * c_[2]) / 0xFF) << 8) |                      \
+                ((((color & 0xFF) * c_[3]) / 0xFF) & 0xFF);                            \
+    } while (0)
+
+    if (((dataFlags & 2) != 0) && ((flags & 0x800) == 0)) {
+        MUL_COLOR(group + 0x16);
+    }
+    if (((dataFlags & 4) != 0) && ((flags & 0x1000) == 0)) {
+        MUL_COLOR(group + 0x1A);
+    }
+    if (((dataFlags & 8) != 0) && ((flags & 0x800) == 0)) {
+        MUL_COLOR(group + 0x1E);
+    }
+
+    outColor = color;
+    GXSetTevKColor(0, &outColor);
+
+#undef MUL_COLOR
+}
 
 void* mapEntrySub(void* pJoint, void* pParent, void* pMtx, int isRoot, int entryIdx) {
     return 0;
@@ -5313,11 +5688,12 @@ void* mapSearchAnmObj(char* name) {
     extern s32 activeGroup;
     extern s32 mapWork;
     extern s32 strcmp(const char*, const char*);
-    void* work;
+
     void* group;
-    void* anim;
-    s32 i;
+    void* work;
     s32 j;
+    s32 i;
+    void* anim;
 
     work = (void*)(mapWork + activeGroup * 0x2F4);
     group = work;
@@ -5340,7 +5716,6 @@ void* mapSearchAnmObj(char* name) {
 
     return 0;
 }
-
 
 void* mapEntry(void* pJoint, void* pMtx, int entryIdx) {
     return 0;

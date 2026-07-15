@@ -108,9 +108,107 @@ void _callback_tpl(void* unk, void* dvdEntry) {
 
 
 u8 effCalcMayaAnimMatrix(int param_1, int* param_2, s32 param_3, float* param_4) {
+    extern void PSMTXTrans(void*, double, double, double);
+    extern void PSMTXRotRad(void*, double, char);
+    extern void PSMTXScale(void*, float, float, float);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern f32 float_0_804201a0;
+    extern f32 dat_804201a4;
+    extern f32 float_neg2_804201ac;
+    extern f32 float_3_804201a8;
+    extern f32 float_1_804201b0;
+    extern f32 float_2_804201b4;
+    f32 m0[3][4];
+    f32 m1[3][4];
+    f32 m2[3][4];
+    f32 m3[3][4];
+    f32 m4[3][4];
+    f32 m5[3][4];
+    f32 m6[3][4];
+    f32 m7[3][4];
+    f32 m8[3][4];
+    f32 m9[3][4];
+    f32 m10[3][4];
+    f32 m11[3][4];
+    f32 m12[3][4];
+    f32 v[22];
+    s32 i;
+    s32 j;
+    s32 last;
+    s16* prev;
+    s16* next;
+    f32 time;
+    f32 frameTime;
+    f32 span;
+    f32 t;
+    f32 t2;
+    f32 t3;
+    f32 scale;
+
+    time = *(f32*)(param_1 + 4);
+    last = *param_2 - 1;
+    for (i = 1; i < *param_2; i++) {
+        next = (s16*)(param_2[1] + i * 0xB2);
+        prev = (s16*)(param_2[1] + (i - 1) * 0xB2);
+        frameTime = (f32)*next;
+        if (time > frameTime && i != last) {
+            continue;
+        }
+        if (time > frameTime) {
+            time = frameTime;
+        }
+        for (j = 0; j < 22; j++) {
+            s16* p = prev + j * 4;
+            s16* n = next + j * 4;
+            if (*(s8*)((s32)p + 9) != 0) {
+                v[j] = (f32)p[1] * (1.0f / 250.0f);
+            } else {
+                span = (f32)*next - (f32)*prev;
+                if (span == float_0_804201a0) {
+                    span = dat_804201a4;
+                }
+                t = (time - (f32)*prev) / span;
+                t2 = t * t;
+                t3 = t2 * t;
+                scale = 1.0f / 250.0f;
+                v[j] = ((f32)p[1] * scale) * (float_1_804201b0 + (float_2_804201b4 * t3 - float_3_804201a8 * t2)) +
+                       ((f32)n[1] * scale) * (float_neg2_804201ac * t3 + float_3_804201a8 * t2) +
+                       ((f32)p[3] * scale) * (span * (t + -(float_2_804201b4 * t2 - t3))) +
+                       ((f32)n[2] * scale) * (span * (t3 - t2));
+            }
+        }
+        PSMTXTrans(m12, (double)v[0], (double)v[1], (double)v[2]);
+        PSMTXRotRad(m0, (double)v[3], 'x');
+        PSMTXRotRad(m1, (double)v[4], 'y');
+        PSMTXRotRad(m2, (double)v[5], 'z');
+        PSMTXScale(m11, v[6], v[7], v[8]);
+        PSMTXTrans(m5, (double)v[9], (double)v[10], (double)v[11]);
+        PSMTXTrans(m6, -(double)v[9], -(double)v[10], -(double)v[11]);
+        PSMTXTrans(m7, (double)v[12], (double)v[13], (double)v[14]);
+        PSMTXTrans(m3, (double)v[15], (double)v[16], (double)v[17]);
+        PSMTXTrans(m4, -(double)v[15], -(double)v[16], -(double)v[17]);
+        PSMTXTrans(m8, (double)v[18], (double)v[19], (double)v[20]);
+        PSMTXConcat(m8, m3, m9);
+        PSMTXConcat(m9, m11, m9);
+        PSMTXConcat(m9, m4, m11);
+        PSMTXConcat(m7, m5, m9);
+        PSMTXConcat(m9, m2, m9);
+        PSMTXConcat(m9, m1, m9);
+        PSMTXConcat(m9, m0, m9);
+        PSMTXConcat(m9, m6, m10);
+        PSMTXConcat(m12, m10, m9);
+        PSMTXConcat(m9, m11, (void*)param_3);
+        if (v[21] > float_1_804201b0) {
+            *param_4 = float_1_804201b0;
+        } else if (v[21] < float_0_804201a0) {
+            *param_4 = float_0_804201a0;
+        } else {
+            *param_4 = v[21];
+        }
+        return 0;
+    }
     return 0;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

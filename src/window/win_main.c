@@ -173,19 +173,237 @@ s32 unk_8017b864(void* evt, s32 flag) {
 }
 
 
-u8 winMain(void) {
-    return 0;
-}
+void winMain(void) {
+    extern void* g_winPtr;
+    extern void* marioGetPtr(void);
+    extern s32 seqGetSeq(void);
+    extern s32 keyGetButtonTrg(s32 port);
+    extern s32 keyGetButtonRep(s32 port);
+    extern s32 keyGetDirTrg(s32 port);
+    extern s32 keyGetDirRep(s32 port);
+    extern s32 marioCheckMenuDisable(void);
+    extern s32 fadeIsFinish(void);
+    extern void marioCtrlOff(void);
+    extern void partyCtrlOff(void);
+    extern void statusWinForceUpdate(void);
+    void* win = g_winPtr;
+    void* player = marioGetPtr();
+    s32 state = *(s32*)((s32)win + 4);
 
+    if ((*(u32*)win & 1) == 0 || seqGetSeq() != 2) return;
+    *(u32*)((s32)win + 0x8C) = keyGetButtonTrg(0);
+    *(u32*)((s32)win + 0x90) = keyGetButtonRep(0);
+    *(u32*)((s32)win + 0x94) = keyGetDirTrg(0);
+    *(u32*)((s32)win + 0x98) = keyGetDirRep(0);
+    if (state == 0) {
+        if (marioCheckMenuDisable() == 0 && fadeIsFinish() != 0 &&
+            (*(u32*)((s32)win + 0x8C) & 0x1000) != 0) {
+            marioCtrlOff(); partyCtrlOff(); *(s32*)((s32)win + 4) = 1;
+        }
+    } else if (state == 1) {
+        if (*(void**)((s32)win + 0x28) != 0) *(s32*)((s32)win + 4) = 2;
+    } else if (state == 2) {
+        if ((*(u32*)((s32)win + 0x8C) & 0x1200) != 0) *(s32*)((s32)win + 4) = 3;
+    } else if (state == 3) {
+        statusWinForceUpdate(); *(s32*)((s32)win + 4) = 0;
+    }
+    (void)player;
+}
 
 u8 winIconGrayInit(void) {
-    return 0;
-}
+    extern void GXSetTevSwapModeTable(s32 table, s32 r, s32 g, s32 b, s32 a);
+    extern void GXSetTevColor(s32 reg, void* color);
+    extern u32 dat_80423ffc;
+    u32 color;
+    u32 fogColor;
 
+    winTexTpl = 0;
+    GXSetCullMode(0);
+    fogColor = dat_80423ff8;
+    GXSetFog(0, float_0_80424004, float_0_80424004, float_0_80424004, float_0_80424004, &fogColor);
+    GXSetNumChans(0);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 2, 8, 0xF);
+    GXSetTevAlphaIn(0, 7, 1, 4, 7);
+    GXSetTevSwapMode(0, 0, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+    GXSetTevSwapModeTable(1, 0, 0, 0, 3);
+    GXSetTevSwapModeTable(2, 1, 1, 1, 3);
+    GXSetTevSwapModeTable(3, 2, 2, 2, 3);
+    color = dat_80423ffc;
+    GXSetTevColor(2, &color);
+
+    GXSetNumTevStages(4);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 4, 8, 0xF);
+    GXSetTevAlphaIn(0, 7, 7, 7, 4);
+    GXSetTevSwapMode(0, 0, 1);
+
+    GXSetTevOrder(1, 0, 0, 0xFF);
+    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(1, 0xF, 4, 8, 0);
+    GXSetTevAlphaIn(1, 7, 7, 7, 4);
+    GXSetTevSwapMode(1, 0, 2);
+
+    GXSetTevOrder(2, 0, 0, 0xFF);
+    GXSetTevColorOp(2, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(2, 0xF, 4, 8, 0);
+    GXSetTevAlphaIn(2, 7, 7, 7, 4);
+    GXSetTevSwapMode(2, 0, 3);
+
+    GXSetTevOrder(3, 0xFF, 0xFF, 0xFF);
+    GXSetTevColorOp(3, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(3, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(3, 0xF, 2, 0, 0xF);
+    GXSetTevAlphaIn(3, 7, 1, 0, 7);
+    GXSetTevSwapMode(3, 0, 0);
+}
 
 s32 itemUseFunc(void* pEvt, int param_2) {
+    extern void* marioGetPtr(void);
+    extern void* partyGetPtr(s32 slot);
+    extern void statusWinForceOpen(void);
+    extern s32 pouchGetHP(void);
+    extern void pouchSetHP(s16 hp);
+    extern s32 pouchGetFP(void);
+    extern void pouchSetFP(s16 fp);
+    extern s32 pouchGetAP(void);
+    extern void pouchSetAP(s16 sp);
+    extern s32 pouchGetPartyHP(s32 partyId);
+    extern void pouchSetPartyHP(s32 partyId, s16 hp);
+    extern s32 effRecoveryEntry(f32 x, f32 y, f32 z, s32 type);
+    extern u8 itemDataTable[];
+    extern f32 float_0p5_80424000;
+    static s32 cnt;
+
+    s32 itemId;
+    s32 partyId;
+    void* itemData;
+    void* mario;
+    void* party;
+    s32 eff;
+
+    itemId = *(s32*)((s32)pEvt + 0xC4);
+    mario = marioGetPtr();
+    party = partyGetPtr(0);
+    itemData = itemDataTable + itemId * 0x28;
+    partyId = *(s32*)((s32)pEvt + 0xC8);
+
+    if (param_2 != 0) {
+        cnt = 0;
+    }
+
+    if (cnt == 0) {
+        statusWinForceOpen();
+        if (partyId == 0) {
+            pouchSetHP((s16)(pouchGetHP() + *(u8*)((s32)itemData + 0x1D)));
+            pouchSetFP((s16)(pouchGetFP() + *(u8*)((s32)itemData + 0x1E)));
+            pouchSetAP((s16)(pouchGetAP() + *(u8*)((s32)itemData + 0x1F)));
+        } else {
+            pouchSetPartyHP(partyId, (s16)(pouchGetPartyHP(partyId) + *(u8*)((s32)itemData + 0x1D)));
+            pouchSetFP((s16)(pouchGetFP() + *(u8*)((s32)itemData + 0x1E)));
+            pouchSetAP((s16)(pouchGetAP() + *(u8*)((s32)itemData + 0x1F)));
+        }
+        cnt++;
+        return 0;
+    }
+
+    if (cnt == 1) {
+        if (partyId != 0) {
+            cnt = 200;
+            return 0;
+        }
+        if (*(u8*)((s32)itemData + 0x1D) == 0) {
+            cnt = 100;
+            return 0;
+        }
+        effRecoveryEntry(*(f32*)((s32)mario + 0x8C),
+                         *(f32*)((s32)mario + 0x90) + *(f32*)((s32)mario + 0xFC),
+                         *(f32*)((s32)mario + 0x94), 0);
+        cnt++;
+        return 0;
+    }
+    if (cnt == 0x1F) {
+        cnt = 0x20;
+        return 0;
+    }
+    if (cnt == 0x3C) {
+        cnt = 100;
+        return 0;
+    }
+    if (cnt == 100) {
+        if (*(u8*)((s32)itemData + 0x1E) == 0) {
+            cnt = 999;
+            return 0;
+        }
+        effRecoveryEntry(*(f32*)((s32)mario + 0x8C),
+                         *(f32*)((s32)mario + 0x90) + *(f32*)((s32)mario + 0xFC),
+                         *(f32*)((s32)mario + 0x94), 1);
+        cnt = 999;
+        return 0;
+    }
+    if (cnt == 0x82) {
+        cnt = 999;
+        return 0;
+    }
+    if (cnt == 200) {
+        if (*(u8*)((s32)itemData + 0x1D) == 0) {
+            cnt = 300;
+            return 0;
+        }
+        eff = effRecoveryEntry(*(f32*)((s32)party + 0x58),
+                               *(f32*)((s32)party + 0x5C) + *(f32*)((s32)party + 0xF0),
+                               *(f32*)((s32)party + 0x60), 0);
+        *(f32*)(*(s32*)((s32)eff + 0xC) + 0x40) =
+            -*(f32*)((s32)party + 0xF0) * float_0p5_80424000;
+        cnt++;
+        return 0;
+    }
+    if (cnt == 0xE6) {
+        cnt = 0xE7;
+        return 0;
+    }
+    if (cnt == 0x104) {
+        cnt = 300;
+        return 0;
+    }
+    if (cnt == 300) {
+        if (*(u8*)((s32)itemData + 0x1E) == 0) {
+            cnt = 999;
+            return 0;
+        }
+        effRecoveryEntry(*(f32*)((s32)party + 0x58),
+                         *(f32*)((s32)party + 0x5C) + *(f32*)((s32)party + 0xF0),
+                         *(f32*)((s32)party + 0x60), 1);
+        cnt++;
+        return 0;
+    }
+    if (cnt == 0x14A) {
+        cnt = 999;
+        return 0;
+    }
+    if (cnt >= 999 && cnt < 0x3E9) {
+        return 2;
+    }
+
+    cnt++;
     return 0;
 }
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 winIconSet(s32 iconId, void* pos, void* size, void* color) {
