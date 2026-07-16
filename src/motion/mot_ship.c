@@ -66,6 +66,9 @@ u8 mot_ship(void) {
     extern void marioCamZoomUp(void);
     extern void camFollowYOff(void);
     extern void allPartyRideShip(void);
+    extern f64 revise360(f64);
+    extern void movePos(f64, f64, f32*, f32*);
+    extern void* camGetPtr(s32);
     extern char* paper_ship[];
     extern char str_M_J_1B_802c42c8[];
     extern char str_PM_H_1A_802c42d0[];
@@ -131,6 +134,35 @@ u8 mot_ship(void) {
     case 3:
         if (*(s32*)((s32)player + 0x170) == 30) allPartyRideShip();
         if (--*(s32*)((s32)player + 0x170) < 1) *(s32*)((s32)player + 0x44) = 10;
+        break;
+    case 10:
+        *(u32*)((s32)player + 4) &= ~0x100;
+        *(f32*)((s32)player + 0x1AC) = (f32)revise360(*(f32*)((s32)player + 0x1AC));
+        *(f32*)((s32)player + 0x1B8) = 40.0f;
+        *(f32*)((s32)player + 0x1BC) = 40.0f;
+        *(f32*)((s32)work + 0x40) = *(f32*)((s32)player + 0x90) - 15.0f;
+        *(s32*)((s32)player + 0x44) = 11;
+        break;
+    case 11:
+        movePos(*(f32*)((s32)player + 0x180), *(f32*)((s32)player + 0x1A4),
+                (f32*)((s32)player + 0x8C), (f32*)((s32)player + 0x94));
+        *(f32*)((s32)player + 0x90) += *(f32*)((s32)player + 0x7C);
+        marioMakeJumpPara();
+        break;
+    case 30:
+        if ((*(u32*)((s32)player + 0xC) & 0x800) == 0) {
+            *(u16*)camGetPtr(4) |= 0x200;
+        }
+        *(s32*)((s32)player + 0x44) = 31;
+    case 31:
+        *(f32*)((s32)player + 0x9C) -= 0.4f;
+        if (*(f32*)((s32)player + 0x9C) <= -18.0f) {
+            *(s32*)((s32)player + 0x48) = 4;
+            *(s32*)((s32)player + 0x44) = 32;
+        }
+        break;
+    case 32:
+        if (--*(s32*)((s32)player + 0x48) < 1) *(s32*)((s32)player + 0x44) = 40;
         break;
     }
     return 0;

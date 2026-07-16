@@ -5,43 +5,48 @@ void logoDisp(void) {
     extern void* wp;
     extern void* gp;
     extern u32 OSGetProgressiveMode(void);
-    extern void GXGetProjectionv(f32* projection);
-    extern void GXGetViewportv(f32* viewport);
-    extern void GXGetScissor(u32* x, u32* y, u32* width, u32* height);
-    extern void GXSetProjectionv(f32* projection);
+    extern void GXGetProjectionv(f32*);
+    extern void GXGetViewportv(f32*);
+    extern void GXGetScissor(u32*, u32*, u32*, u32*);
+    extern void GXSetProjectionv(f32*);
     extern void GXSetViewport(f32, f32, f32, f32, f32, f32);
     extern void GXSetScissor(u32, u32, u32, u32);
     extern void GXSetPixelFmt(s32, s32);
     extern void GXSetDispCopySrc(u16, u16, u16, u16);
     extern void GXSetDispCopyDst(u16, u16);
-    extern u32 GXSetDispCopyYScale(f32 scale);
-    extern void GXSetDispCopyGamma(s32 gamma);
-    extern void GXSetScissorBoxOffset(s32 x, s32 y);
-    extern void TEXGetGXTexObjFromPalette(void* palette, void* texObj, s32 id);
-    extern void GXLoadTexObj(void* texObj, s32 map);
-    extern void GXSetNumChans(s32 count);
-    extern void GXSetNumTexGens(s32 count);
+    extern u32 GXSetDispCopyYScale(f32);
+    extern void GXSetDispCopyGamma(s32);
+    extern void GXSetScissorBoxOffset(s32, s32);
+    extern void TEXGetGXTexObjFromPalette(void*, void*, s32);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTexGens(s32);
     extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
-    extern void GXSetNumTevStages(s32 count);
+    extern void GXSetNumTevStages(s32);
     extern void GXSetTevOrder(s32, s32, s32, s32);
-    extern void GXSetTevOp(s32 stage, s32 mode);
-    extern void GXSetTevColor(s32 reg, void* color);
+    extern void GXSetTevOp(s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevColor(s32, void*);
     extern void GXSetBlendMode(s32, s32, s32, s32);
-    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetZCompLoc(s32);
     extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
     extern void GXSetZMode(s32, s32, s32);
-    extern void C_MTXOrtho(f32* matrix, f32 top, f32 bottom, f32 left, f32 right, f32 nearZ, f32 farZ);
-    extern void GXSetProjection(f32* matrix, s32 type);
-    extern void PSMTXIdentity(f32* matrix);
-    extern void GXLoadPosMtxImm(f32* matrix, s32 id);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXSetCullMode(s32 mode);
+    extern void C_MTXOrtho(f32*, f32, f32, f32, f32, f32, f32);
+    extern void GXSetProjection(f32*, s32);
+    extern void PSMTXIdentity(f32*);
+    extern void GXLoadPosMtxImm(f32*, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetCullMode(s32);
     extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxDesc(s32, s32);
     extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
-    extern void GXBegin(s32 primitive, s32 format, s32 count);
-    extern u16 GXGetTexObjWidth(void* texObj);
-    extern u16 GXGetTexObjHeight(void* texObj);
+    extern void GXBegin(s32, s32, s32);
+    extern u16 GXGetTexObjWidth(void*);
+    extern u16 GXGetTexObjHeight(void*);
+    extern double cos(double);
     extern u8 sRMObjHReso[];
     extern u8 sRMObjHReso_prog[];
     extern u32 dat_804207e8;
@@ -50,36 +55,26 @@ void logoDisp(void) {
     extern u32 dat_804207f4;
     extern u32 dat_804207f8;
     extern u32 dat_804207fc;
-
+    extern u32 unk_80429588;
+    extern u32 unk_8041ea68;
+    extern f32 float_1p5708_80420840;
     f32 projection[7];
     f32 viewport[6];
     f32 ortho[16];
     f32 model[12];
     u8 texObj[32];
-    u32 scissorX;
-    u32 scissorY;
-    u32 scissorW;
-    u32 scissorH;
-    u32 color0;
-    u32 color1;
+    u32 scissorX, scissorY, scissorW, scissorH;
+    u32 color0, color1;
     u8* mode;
-    void* file;
     void* palette;
     s32 state;
     s32 texId;
-    f32 left;
-    f32 right;
-    f32 top;
-    f32 bottom;
-    f32 width;
-    f32 height;
+    f32 left, right, top, bottom, width, height;
 
 #define FIFO (*(volatile f32*)0xCC008000)
-#define VERTEX(px, py, s, t) do { FIFO=(px); FIFO=(py); FIFO=0.0f; FIFO=(s); FIFO=(t); } while (0)
+#define VERTEX(px,py,s,t) do { FIFO=(px); FIFO=(py); FIFO=0.0f; FIFO=(s); FIFO=(t); } while (0)
 
-    if (*(void**)wp == 0) {
-        return;
-    }
+    if (*(void**)wp == 0) return;
     GXGetProjectionv(projection);
     GXGetViewportv(viewport);
     GXGetScissor(&scissorX, &scissorY, &scissorW, &scissorH);
@@ -93,8 +88,7 @@ void logoDisp(void) {
     GXSetScissor(0, 0, 608, 448);
     GXSetViewport(0.0f, 0.0f, 608.0f, 448.0f, -1.0f, 1.0f);
 
-    file = *(void**)wp;
-    palette = (void*)**(u32**)((s32)file + 0xA0);
+    palette = (void*)**(u32**)((s32)*(void**)wp + 0xA0);
     state = *(s32*)((s32)wp + 4);
     if (state == 2) {
         texId = 0;
@@ -127,12 +121,24 @@ void logoDisp(void) {
     GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
     GXSetNumTevStages(1);
     GXSetTevOrder(0, 0, 0, 0xFF);
-    GXSetTevOp(0, 3);
+    if (state == 3) {
+        GXSetTevOp(0, 3);
+    } else {
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 2, 4, 8, 15);
+        if (state == 2) {
+            GXSetTevAlphaIn(0, 7, 4, 1, 7);
+        } else {
+            GXSetTevAlphaIn(0, 4, 7, 7, 7);
+        }
+    }
     GXSetBlendMode(1, 4, 5, 0);
     GXSetZCompLoc(1);
     GXSetAlphaCompare(7, 0, 0, 7, 0);
     GXSetZMode(0, 3, 0);
-    C_MTXOrtho(ortho, state == 2 ? -23.0f : 0.0f, 448.0f, 0.0f, 608.0f, -100.0f, 100.0f);
+    C_MTXOrtho(ortho, state == 2 ? -23.0f : 0.0f, 448.0f,
+               0.0f, 608.0f, -100.0f, 100.0f);
     GXSetProjection(ortho, 1);
     PSMTXIdentity(model);
     GXLoadPosMtxImm(model, 0);
@@ -161,7 +167,6 @@ void logoDisp(void) {
     GXSetProjectionv(projection);
     GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
     GXSetScissor(scissorX, scissorY, scissorW, scissorH);
-
 #undef VERTEX
 #undef FIFO
 }

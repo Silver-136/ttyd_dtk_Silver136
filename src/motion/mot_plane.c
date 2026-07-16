@@ -46,10 +46,17 @@ u8 mot_plane(void) {
     extern u32 psndSFXOn_3D(s32, void*);
     extern u32 hitGetAttr(void*);
     extern void flyMain(void);
+    extern void camFollowYOff(void);
+    extern void psndSFXOff(s32);
+    extern s32 sysMsec2Frame(s32);
+    extern void marioPaperOff(void);
+    extern void marioAdjustMoveDir(void);
+    extern void marioSetFallPara(void);
     extern char* paper_plane[];
     extern char str_M_J_1B_802c4170[];
     extern char str_PM_P_1A_802c4178[];
     extern char str_PM_P_1B_802c4180[];
+    extern char str_M_J_1C_802c41a8[];
     void* player = marioGetPtr();
     void* work;
     s32 state;
@@ -112,6 +119,46 @@ u8 mot_plane(void) {
             *(s32*)((s32)player + 0x44) = 12;
             *(f32*)((s32)player + 0x180) = 1.0f;
         }
+    } else if (state == 40) {
+        camFollowYOff();
+        if (*(s32*)((s32)work + 0x28) != -1) {
+            psndSFXOff(*(s32*)((s32)work + 0x28));
+            *(s32*)((s32)work + 0x28) = -1;
+        }
+        *(s32*)((s32)player + 0x48) = sysMsec2Frame(0x208);
+        *(s32*)((s32)player + 0x44) = 41;
+    } else if (state == 41) {
+        if (--*(s32*)((s32)player + 0x48) < 1) {
+            marioPaperOff();
+            marioChgPaper(0);
+            *(u32*)((s32)player + 4) &= ~8;
+            *(u32*)player |= 0x40000;
+            marioAdjustMoveDir();
+            *(u32*)((s32)player + 4) &= ~0x100;
+            marioChgPose(str_M_J_1C_802c41a8);
+            *(f32*)((s32)player + 0x180) = 0.0f;
+            marioSetFallPara();
+        }
+    } else if (state == 50 || state == 51) {
+        camFollowYOff();
+        *(s32*)((s32)player + 0x48) = sysMsec2Frame(state == 50 ? 0x208 : 100);
+        *(s32*)((s32)player + 0x44) = 52;
+    } else if (state == 52 && --*(s32*)((s32)player + 0x48) < 1) {
+        *(s32*)((s32)player + 0x44) = 53;
+    } else if (state == 53) {
+        if (*(s32*)((s32)work + 0x28) != -1) {
+            psndSFXOff(*(s32*)((s32)work + 0x28));
+            *(s32*)((s32)work + 0x28) = -1;
+        }
+        *(f32*)((s32)player + 0x1B8) = 20.0f;
+        *(f32*)((s32)player + 0x1BC) = 37.0f;
+        marioPaperOff();
+        marioChgPaper(0);
+        *(u32*)((s32)player + 4) &= ~8;
+        *(u32*)player |= 0x40000;
+        marioAdjustMoveDir();
+        *(f32*)((s32)player + 0x180) = 0.0f;
+        marioSetFallPara();
     }
     flyMain();
     return 0;

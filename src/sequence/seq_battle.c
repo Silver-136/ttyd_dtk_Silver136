@@ -185,9 +185,120 @@ u8 seq_battleMain(int param_1) {
 }
 
 s32 battle_init(void) {
+    extern void* fbatGetPointer(void);
+    extern void* pouchGetPtr(void);
+    extern void camSetMode(s32, s32);
+    extern char* DbgBtlSel_GetMsgDataPtr(void);
+    extern void msgLoad(char*, s32);
+    extern void N_battleMapAlloc(void);
+    extern void animPoseBattleInit(void);
+    extern void npcReleaseFiledNpc(void);
+    extern void evtmgrReInit(void);
+    extern void psndSetFlag(s32);
+    extern void BattleInformationInit(void*);
+    extern void BattleInformationSetMode(void*, s32);
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32);
+    extern s32 BattleTransPartyIdToUnitKind(s32);
+    extern void BattleInformationSetParty(void*, s32);
+    extern void BattleInformationSetFirstAttack(void*, s32);
+    extern void BattleInfomationSetBattleSetupInfo(void*, void*);
+    extern void BattleInit(void*);
+    extern void* gp;
+    extern void* _battleWorkPointer;
+    extern char str_gon_11_802c2abc[];
+    u8* fbat;
+    u8* pouch;
+    u8* npc;
+    u8* info;
+    u8* party;
+    char* room;
+    s32 partyMember;
+    s32 partyKind;
+    s32 firstAttack;
+    u32 hitFlags;
+
+    fbat = fbatGetPointer();
+    npc = *(u8**)(fbat + 8);
+    pouch = pouchGetPtr();
+    camSetMode(4, 2);
+
+    if (*(s32*)((u8*)gp + 0xC) != 0) {
+        room = DbgBtlSel_GetMsgDataPtr();
+        if (room != 0) {
+            msgLoad(room, 0);
+        } else {
+            msgLoad(str_gon_11_802c2abc, 0);
+        }
+    }
+
+    N_battleMapAlloc();
+    _battleWorkPointer = 0;
+    animPoseBattleInit();
+    npcReleaseFiledNpc();
+    *(s32*)((u8*)gp + 0x14) = 1;
+    evtmgrReInit();
+    psndSetFlag(0x10);
+
+    info = fbat + 0x20;
+    BattleInformationInit(info);
+    BattleInformationSetMode(info, 0);
+
+    party = partyGetPtr(marioGetPartyId());
+    if (party != 0) {
+        partyMember = *(s8*)(party + 0x31);
+        partyKind = BattleTransPartyIdToUnitKind(partyMember);
+        if ((*(u16*)(pouch + partyMember * 0xE) & 2) == 0) {
+            BattleInformationSetParty(info, partyKind);
+        }
+    }
+
+    if ((*(u32*)(fbat + 0x1C) & 1) != 0) {
+        firstAttack = 0;
+    } else {
+        hitFlags = *(u32*)(fbat + 0x10);
+        switch (hitFlags) {
+            case 0x00020000:
+                firstAttack = 1;
+                break;
+            case 0x00040000:
+                firstAttack = 2;
+                break;
+            case 0x00080000:
+                firstAttack = 3;
+                break;
+            case 0x00100000:
+                firstAttack = 4;
+                break;
+            case 0x00200000:
+                firstAttack = 5;
+                break;
+            case 0x00400000:
+                firstAttack = 6;
+                break;
+            case 0x00800000:
+                firstAttack = 7;
+                break;
+            case 0x01000000:
+                firstAttack = 8;
+                break;
+            case 0x10000000:
+                firstAttack = *(s32*)(fbat + 0x14);
+                break;
+            default:
+                firstAttack = 0;
+                break;
+        }
+    }
+    BattleInformationSetFirstAttack(info, firstAttack);
+
+    BattleInfomationSetBattleSetupInfo(info, npc + 0x230);
+    info[0x18] = npc[0x2F4];
+    info[0x1A] = npc[0x2F5];
+    info[0x1B] = npc[0x2F6];
+    BattleInit(info);
     return 0;
 }
-
 
 void battle_exit(void) {
     extern void BattleEnd(void);

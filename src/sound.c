@@ -280,6 +280,8 @@ void SoundSSPlayChEx_main(s32 result, s32 userData) {
     sndStreamMixParameter(entry, 0x7F, 0x40, 0, 0);
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 _sscallback(void* outA, u32 countA, void* outB, u32 countB, u32 streamId) {
     extern char sound[];
     extern u8* ssDecodeDPCM(void* entry, s32 work, void* out, u32 count, u8* input);
@@ -297,14 +299,26 @@ s32 _sscallback(void* outA, u32 countA, void* outB, u32 countB, u32 streamId) {
     if ((*(u16*)entry & 0x8006) != 0 || *(u16*)(sound + 0x214) != 0) {
         if ((*(u16*)entry & 0x100) != 0) {
             dst16 = outA;
-            for (i = 0; i < countA / 2; i++) dst16[i] = 0;
+            for (i = 0; i < countA; i++) {
+                dst16[i] = 0;
+                *(u32*)(entry + 0x24) += 1;
+            }
             dst16 = outB;
-            for (i = 0; i < countB / 2; i++) dst16[i] = 0;
+            for (i = 0; i < countB; i++) {
+                dst16[i] = 0;
+                *(u32*)(entry + 0x24) += 1;
+            }
         } else {
             src8 = outA;
-            for (i = 0; i < countA; i++) src8[i] = 0;
+            for (i = 0; i < countA; i++) {
+                src8[i] = 0;
+                *(u32*)(entry + 0x24) += 1;
+            }
             src8 = outB;
-            for (i = 0; i < countB; i++) src8[i] = 0;
+            for (i = 0; i < countB; i++) {
+                src8[i] = 0;
+                *(u32*)(entry + 0x24) += 1;
+            }
         }
         return 0;
     }
@@ -360,6 +374,8 @@ s32 _sscallback(void* outA, u32 countA, void* outB, u32 countB, u32 streamId) {
     }
     return *(s32*)(entry + 0x24);
 }
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
 void SoundSSMain(void) {
     extern char sound[];

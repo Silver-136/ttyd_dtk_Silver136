@@ -52,10 +52,91 @@ s32 N_evt_img_set_z(void* event, s32 isFirstCall) {
 #pragma use_lmw_stmw on
 
 
-s32 evt_img_alloc_capture(void* pEvt) {
-    return 0;
-}
+s32 evt_img_alloc_capture(void* evt) {
+    extern s32 evtGetValue(void* evt, s32 value);
+    extern void* imgNameToPtr(s32 name, s32 inBattle);
+    extern s32 offscreenNameToId(s32 name);
+    extern void* DEMOGetRenderModeObj(void);
+    extern void* gp;
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32 name = evtGetValue(evt, args[0]);
+    s32 slot = evtGetValue(evt, args[1]);
+    s32 offscreenName = evtGetValue(evt, args[2]);
+    s32 flags = evtGetValue(evt, args[3]);
+    s32 left = evtGetValue(evt, args[4]);
+    s32 top = evtGetValue(evt, args[5]);
+    s32 width = evtGetValue(evt, args[6]);
+    s32 height = evtGetValue(evt, args[7]);
+    s32 inBattle = *(s32*)((s32)gp + 0x14);
+    void* image;
+    u32* capture;
+    s32 offscreenId;
+    void* renderMode;
 
+    inBattle = ((u32)(-inBattle) | (u32)inBattle) >> 31;
+    image = imgNameToPtr(name, inBattle);
+    capture = (u32*)((s32)image + slot * 0x44);
+    offscreenId = offscreenName == 0 ? -1 : offscreenNameToId(offscreenName);
+    if ((*capture & 4) != 0) {
+        return 2;
+    }
+
+    width += width & 1;
+    height += height & 1;
+    left -= left & 1;
+    top -= top & 1;
+    if ((slot == 0 || (*(u32*)image & 4) == 0 ||
+         (*(u16*)((s32)image + 0xE4) == (u16)width && *(u16*)((s32)image + 0xE6) == (u16)height)) &&
+        (slot == 1 || (*(u32*)((s32)image + 0x44) & 4) == 0 ||
+         (*(u16*)((s32)image + 0xE4) == (u16)width && *(u16*)((s32)image + 0xE6) == (u16)height)) &&
+        (slot == 2 || (*(u32*)((s32)image + 0x88) & 4) == 0 ||
+         (*(u16*)((s32)image + 0xE4) == (u16)width && *(u16*)((s32)image + 0xE6) == (u16)height))) {
+        if (left == 0 && top == 0 && width == 0 && height == 0 && offscreenId != -1) {
+            *(u16*)((s32)image + 0xE4) = 0;
+            *(u16*)((s32)image + 0xE6) = 0;
+            *(u16*)(capture + 1) = 0;
+            *(u16*)((s32)capture + 6) = 0;
+            if (slot == 2) {
+                capture[5] = 0x27;
+                capture[6] = 1;
+            } else {
+                capture[5] = 6;
+                capture[6] = 6;
+            }
+            *(u32*)image |= 4;
+        } else {
+            if (left < 0 || top < 0 || width < 1 || height < 1) {
+                return 2;
+            }
+            renderMode = DEMOGetRenderModeObj();
+            if ((s32)*(u16*)((s32)renderMode + 4) < left + width) {
+                return 2;
+            }
+            renderMode = DEMOGetRenderModeObj();
+            if ((s32)*(u16*)((s32)renderMode + 6) < top + height) {
+                return 2;
+            }
+            *(u16*)((s32)image + 0xE4) = (u16)width;
+            *(u16*)((s32)image + 0xE6) = (u16)height;
+            *(u16*)(capture + 1) = (u16)left;
+            *(u16*)((s32)capture + 6) = (u16)top;
+            if (slot == 2) {
+                capture[5] = 0x27;
+                capture[6] = 1;
+            } else {
+                capture[5] = 6;
+                capture[6] = 6;
+            }
+        }
+        capture[4] = offscreenId;
+        *capture = 0x14;
+        capture[0x10] = flags;
+        if (flags != 0) {
+            *capture |= 0x100;
+        }
+    }
+    return 2;
+}
 
 s32 evt_img_set_virtual_point(void* event) {
     extern s32 evtGetValue(void* event, s32 value);

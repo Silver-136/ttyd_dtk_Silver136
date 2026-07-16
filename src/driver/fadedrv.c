@@ -655,16 +655,25 @@ void fadeMain(void) {
     extern void animPoseRelease(s32 poseId);
     extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
     extern void animPoseSetMaterialFlagOff(s32 poseId, u32 flags);
+    extern void animPoseSetMaterialEvtColor(s32 poseId, void* color);
     extern void animPoseSetAnim(s32 poseId, char* animName, s32 mode);
     extern void animPoseMain(s32 poseId);
     extern f64 animPoseGetLoopTimes(s32 poseId);
     extern void psndSFXOff(s32 sfxId);
+    extern s32 psndSFXOn(s32 sfxId);
+    extern f64 intplGetValue(f64 start, f64 end, s32 mode, s32 current, s32 total);
     extern const f32 float_0_8041f7a8;
     extern const f32 float_1_8041f7ac;
     extern const f32 float_10_8041f808;
     extern const f32 float_1000_8041f804;
     extern const f32 float_999_8041f81c;
     extern const f32 float_neg100_8041f820;
+    extern u32 dat_8041f790;
+    extern u32 dat_8041f794;
+    extern const f32 float_0p5_8041f7c0;
+    extern const f32 float_0p98_8041f810;
+    extern const f32 float_3_8041f814;
+    extern const f32 float_1p5_8041f818;
 
     u8* work;
     u8* entry;
@@ -749,7 +758,65 @@ void fadeMain(void) {
                     break;
 
                 case 0x16:
+                    if (state == 0) {
+                        if (animGroupBaseAsync(*(char**)(entry + 0x60), *(s32*)(entry + 0x68), 0) != 0) {
+                            if (*(s32*)(entry + 0x6C) > -1) animPoseRelease(*(s32*)(entry + 0x6C));
+                            poseId = animPoseEntry(*(char**)(entry + 0x60), *(u32*)(entry + 0x68));
+                            *(s32*)(entry + 0x6C) = poseId;
+                            animPoseSetMaterialFlagOn(poseId, 0x1800);
+                            animPoseSetAnim(poseId, *(char**)(entry + 0x64), 1);
+                            *(u32*)(entry + 0x74) = dat_8041f790;
+                            animPoseSetMaterialFlagOff(poseId, 0x40);
+                            *(s32*)(entry + 8) = 1;
+                            state = 1;
+                        }
+                    }
+                    if (state == 1) {
+                        animPoseMain(*(s32*)(entry + 0x6C));
+                        if (animPoseGetLoopTimes(*(s32*)(entry + 0x6C)) >= (f64)float_1_8041f7ac) {
+                            *(u16*)entry |= 2;
+                            *(s32*)(entry + 8) += 1;
+                        }
+                    } else if (state == 2) {
+                        animPoseMain(*(s32*)(entry + 0x6C));
+                    }
+                    break;
+
                 case 0x17:
+                    if (state == 0) {
+                        if (animGroupBaseAsync(*(char**)(entry + 0x60), *(s32*)(entry + 0x68), 0) == 0) break;
+                        if (*(s32*)(entry + 0x6C) > -1) animPoseRelease(*(s32*)(entry + 0x6C));
+                        poseId = animPoseEntry(*(char**)(entry + 0x60), *(u32*)(entry + 0x68));
+                        *(s32*)(entry + 0x6C) = poseId;
+                        animPoseSetMaterialFlagOn(poseId, 0x1800);
+                        animPoseSetAnim(poseId, *(char**)(entry + 0x64), 1);
+                        *(u32*)(entry + 0x74) = dat_8041f794;
+                        animPoseSetMaterialFlagOff(poseId, 0x40);
+                        *(s32*)(entry + 8) = 1;
+                    }
+                    loops = animPoseGetLoopTimes(*(s32*)(entry + 0x6C));
+                    if (loops >= (f64)float_0p5_8041f7c0) {
+                        u32 color = *(u32*)(entry + 0x74);
+                        u8* bytes = (u8*)&color;
+                        bytes[0] = (u8)((f32)bytes[0] * float_0p98_8041f810);
+                        bytes[1] = (u8)((f32)bytes[1] * float_0p98_8041f810);
+                        bytes[2] = (u8)((f32)bytes[2] * float_0p98_8041f810);
+                        *(u32*)(entry + 0x74) = color;
+                        animPoseSetMaterialEvtColor(*(s32*)(entry + 0x6C), &color);
+                        animPoseSetMaterialFlagOn(*(s32*)(entry + 0x6C), 0x40);
+                    }
+                    animPoseMain(*(s32*)(entry + 0x6C));
+                    if (animPoseGetLoopTimes(*(s32*)(entry + 0x6C)) >= (f64)float_1_8041f7ac) {
+                        *(u16*)entry |= 2;
+                        *(s32*)(entry + 8) += 1;
+                        animPoseRelease(*(s32*)(entry + 0x6C));
+                        *(s32*)(entry + 0x6C) = -1;
+                        entry[0x6D] = 0xFF;
+                        entry[0x6E] = 0xFF;
+                        entry[0x6F] = 0xFF;
+                    }
+                    break;
+
                 case 0x18:
                 case 0x19:
                 case 0x1A:
@@ -772,6 +839,26 @@ void fadeMain(void) {
                 case 0x40:
                     if (state == 0) {
                         if (animGroupBaseAsync(*(char**)(entry + 0x60), *(s32*)(entry + 0x68), 0) != 0) {
+                            switch (type) {
+                                case 0x18:
+                                case 0x1B:
+                                case 0x28:
+                                    *(s32*)(entry + 0x98) = psndSFXOn(0x40325);
+                                    break;
+                                case 0x19:
+                                case 0x1C:
+                                case 0x40:
+                                    *(s32*)(entry + 0x98) = psndSFXOn(0x40326);
+                                    break;
+                                case 0x1D:
+                                case 0x22:
+                                    *(s32*)(entry + 0x98) = psndSFXOn(0x40321);
+                                    break;
+                                case 0x1E:
+                                case 0x23:
+                                    *(s32*)(entry + 0x98) = psndSFXOn(0x40322);
+                                    break;
+                            }
                             if (*(s32*)(entry + 0x6C) > -1) {
                                 animPoseRelease(*(s32*)(entry + 0x6C));
                             }
@@ -782,19 +869,55 @@ void fadeMain(void) {
                             animPoseSetMaterialFlagOff(*(s32*)(entry + 0x6C), 0x40);
                             *(s32*)(entry + 8) = 1;
                             state = 1;
+                            if (type == 0x21 || type == 0x26) {
+                                *(f32*)(entry + 0x90) = float_3_8041f814;
+                                *(s32*)(entry + 0x94) = 0;
+                            }
                         }
                     }
                     if ((state == 1) || (state == 2)) {
                         if (*(s32*)(entry + 0x6C) > -1) {
                             animPoseMain(*(s32*)(entry + 0x6C));
+                            if (type == 0x21 || type == 0x26) {
+                                s32 frames;
+                                s32 counter;
+                                if ((*(u16*)entry & 8) == 0) {
+                                    frames = (*(s32*)((s32)gp + 4) * 180) / 60;
+                                    if (*(s32*)(entry + 0x94) < frames) {
+                                        counter = *(s32*)(entry + 0x94) + 1;
+                                        *(s32*)(entry + 0x94) = counter;
+                                        *(f32*)(entry + 0x90) = (f32)intplGetValue(
+                                            (f64)float_3_8041f814, (f64)float_1_8041f7ac,
+                                            12, counter, frames);
+                                    }
+                                } else {
+                                    frames = (*(s32*)((s32)gp + 4) * 90) / 60;
+                                    if (*(s32*)(entry + 0x94) < frames) {
+                                        counter = *(s32*)(entry + 0x94) + 1;
+                                        *(s32*)(entry + 0x94) = counter;
+                                        *(f32*)(entry + 0x90) = (f32)intplGetValue(
+                                            (f64)float_1p5_8041f818, (f64)float_1_8041f7ac,
+                                            12, counter, frames);
+                                    }
+                                }
+                            }
                             loops = animPoseGetLoopTimes(*(s32*)(entry + 0x6C));
                             if (loops >= (f64)float_1_8041f7ac) {
-                                *(u16*)entry |= 2;
-                                *(s32*)(entry + 8) = *(s32*)(entry + 8) + 1;
-                                if ((type == 0x17) || (type == 0x19) || (type == 0x40)) {
-                                    psndSFXOff(*(s32*)(entry + 0x98));
-                                    animPoseRelease(*(s32*)(entry + 0x6C));
-                                    *(s32*)(entry + 0x6C) = -1;
+                                s32 canFinish = 1;
+                                if (type == 0x21 || type == 0x26) {
+                                    s32 frames = ((*(u16*)entry & 8) == 0) ?
+                                        (*(s32*)((s32)gp + 4) * 180) / 60 :
+                                        (*(s32*)((s32)gp + 4) * 90) / 60;
+                                    canFinish = (*(s32*)(entry + 0x94) == frames);
+                                }
+                                if (canFinish) {
+                                    *(u16*)entry |= 2;
+                                    *(s32*)(entry + 8) = *(s32*)(entry + 8) + 1;
+                                    if ((type == 0x19) || (type == 0x1C) || (type == 0x40)) {
+                                        psndSFXOff(*(s32*)(entry + 0x98));
+                                        animPoseRelease(*(s32*)(entry + 0x6C));
+                                        *(s32*)(entry + 0x6C) = -1;
+                                    }
                                 }
                             }
                         }

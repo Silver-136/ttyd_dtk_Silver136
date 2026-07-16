@@ -275,9 +275,18 @@ s32 post_kurio_use(void) {
 
 
 u8 kuribo_bye(void* pParty) {
-    return 0;
-}
+    extern void partyGoodbyeInit(void* party);
+    extern s32 partyGoodbyeMain(void* party);
+    extern void partyChgRunMode(void* party, s32 mode);
 
+    if ((*(u32*)((s32)pParty + 8) & 4) != 0) {
+        *(u32*)((s32)pParty + 8) &= ~4;
+        partyGoodbyeInit(pParty);
+    }
+    if (partyGoodbyeMain(pParty) != 0) {
+        partyChgRunMode(pParty, 0xE);
+    }
+}
 
 s32 christineGetStatus(void) {
     void* party = partyGetPtr(marioGetPartyId());

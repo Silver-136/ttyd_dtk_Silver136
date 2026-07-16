@@ -222,7 +222,15 @@ void btlUnitPartsDisp(s32 cameraId, void* part) {
 }
 
 void btlDispMain(void) {
-    extern void* _battleWorkPointer;
+    extern s32 evtCheckID(s32);
+    extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
+    extern f32 BattleGetFloorHeight(void*, f32, f32, f32);
+    extern void BtlUnit_SetPos(void*, f32, f32, f32);
+    extern void BtlUnit_GetStatus(void*, s32, s8*, s8*);
+    extern void btlUnitPartsDisp(void*, void*);
+    extern void btlUnitPartsBlurDisp(void*);
+    extern void animPoseMain(s32);
+    extern s32 animPoseTestXLU(s32);
     extern void* BattleGetUnitPtr(void*, s32);
     extern void BtlUnit_OffUnitFlag(void*, u32);
     extern void BtlUnit_OnUnitFlag(void*, u32);
@@ -234,38 +242,87 @@ void btlDispMain(void) {
     extern void BattleCommandDisplay(void*);
     extern void BattleAudience_Disp(void);
     extern void BattleBreakSlot_Disp(void);
-    void* unit;
+    void* battleWork = _battleWorkPointer;
+    u8* unit;
+    u8* owner;
+    u8* part;
     s32 i;
-    u8 shown;
-    u8 target;
+    u8 shown, target;
+    s8 turns, strength;
+    f32 x, y, z, ox, oy, oz, floor;
 
     for (i = 0; i < 64; i++) {
-        unit = BattleGetUnitPtr(_battleWorkPointer, i);
-        if (unit == 0) {
-            continue;
+        unit = BattleGetUnitPtr(battleWork, i);
+        if (unit == NULL) continue;
+
+        if (*(s32*)(unit + 8) == 0xDF && *(s32*)(unit + 0x220) != 0) {
+            owner = BattleGetUnitPtr(battleWork, *(s32*)(unit + 0x218));
+            if (owner != NULL &&
+                (*(s32*)(owner + 0x2A8) == 0 || !evtCheckID(*(s32*)(owner + 0x2A8)) || (*(u32*)(owner + 0x2AC) & 4)) &&
+                (*(s32*)(owner + 0x2B4) == 0 || !evtCheckID(*(s32*)(owner + 0x2B4)))) {
+                BtlUnit_GetPos(unit, &x, &y, &z);
+                BtlUnit_GetPos(owner, &ox, &oy, &oz);
+                oz += 7.0f;
+                floor = BattleGetFloorHeight(battleWork, ox, oy, oz);
+                if (*(s32*)(unit + 0x220) == 3) {
+                    if (__fabs(x - ox) >= 1.0f) x += ox <= x ? -1.0f : 1.0f;
+                    else { x = ox; *(s32*)(unit + 0x220) = 1; }
+                    BtlUnit_SetPos(unit, x, floor, oz);
+                } else if (*(s32*)(unit + 0x220) == 2) {
+                    if (__fabs(x - ox) > 10.0f) x += ox <= x ? -((x - ox) - 10.0f) : ((ox - x) - 10.0f);
+                    BtlUnit_SetPos(unit, x, oy, oz);
+                } else {
+                    BtlUnit_SetPos(unit, ox, floor, oz);
+                }
+            }
         }
-        shown = *(u8*)((s32)unit + 0x304);
-        target = *(u8*)((s32)unit + 0x303);
+
+        shown = unit[0x304];
+        target = unit[0x303];
         BtlUnit_OffUnitFlag(unit, 2);
         if (shown != target) {
             BtlUnit_OnUnitFlag(unit, 2);
-            if (shown < target) {
-                shown += 12;
-                if (shown > target) shown = target;
-            } else {
-                shown -= 2;
-                if (shown < target) shown = target;
-            }
-            *(u8*)((s32)unit + 0x304) = shown;
+            if (shown < target) { shown += 12; if (shown > target) shown = target; }
+            else { shown -= 2; if (shown < target) shown = target; }
         }
+        unit[0x304] = shown;
         BtlUnit_HpGaugeMain(unit);
-        *(f32*)((s32)unit + 0x34) = 1.0f;
+        *(f32*)(unit + 0x114) = 1.0f;
+        BtlUnit_GetStatus(unit, 11, &turns, &strength);
+        if (turns > 0 && strength < 0) {
+            f32 scale = 1.0f + 0.5f * strength;
+            if (scale < 0.5f) scale = 0.5f;
+            *(f32*)(unit + 0x114) *= scale;
+        }
+        BtlUnit_GetStatus(unit, 10, &turns, &strength);
+        if (turns > 0 && strength > 0) {
+            f32 scale = 1.0f + strength;
+            if (scale > 2.0f) scale = 2.0f;
+            *(f32*)(unit + 0x114) *= scale;
+        }
         BattleStatusEffectMain(unit);
         BattleStatusIconMain(unit);
+        for (part = *(u8**)(unit + 0x14); part != NULL; part = *(u8**)part) {
+            if (*(s32*)(part + 0x1C0) != -1) {
+                animPoseMain(*(s32*)(part + 0x1C0));
+                if ((*(u32*)(unit + 0x104) & 0x1000000) == 0 &&
+                    (*(u32*)(part + 0x1AC) & 0x1000000) == 0 &&
+                    (*(u32*)(part + 0x204) & 0x100) == 0) {
+                    if (part[0x1F3] == 0xFF && animPoseTestXLU(*(s32*)(part + 0x1C0)) == 0) {
+                        dispEntry(1, 1, btlUnitPartsDisp, 0.0f, part);
+                    } else {
+                        dispEntry(1, 2, btlUnitPartsDisp, 0.0f, part);
+                    }
+                }
+                if ((*(u32*)(part + 0x1AC) & 0x4000000) != 0) {
+                    dispEntry(1, 2, btlUnitPartsBlurDisp, 0.0f, part);
+                }
+            }
+        }
     }
     BattleStockExpDisp();
     BattleStageDisp();
-    BattleCommandDisplay(_battleWorkPointer);
+    BattleCommandDisplay(battleWork);
     BattleAudience_Disp();
     BattleBreakSlot_Disp();
 }
@@ -387,10 +444,57 @@ void btlDispTex4(s32 texId, f32* trans, f32* scale, f32* rot, u32* color) {
     _btlDispTex4(texId, (f32*)base3, (f32*)size3, (f32*)rot3, (f32*)off3, (f32*)one3, &color3);
 }
 
-u8 btlDispTexPlainGX(void) {
-    return 0;
-}
+void btlDispTexPlainGX(s32 texId, u8* color0, u8* color1, u8* color2, u8* color3) {
+    extern void GXLoadTexObj(void*, s32);
+    extern s32 GXGetTexObjFmt(void*);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevOp(s32, s32);
+    extern void GXBegin(s32, s32, s32);
+    extern f32 float_0p5_80422234;
+    extern f32 float_1_8042224c;
+    u8 texObj[32];
+    volatile f32* fifoF = (volatile f32*)0xCC008000;
+    volatile u8* fifoB = (volatile u8*)0xCC008000;
+    void* work = _battleWorkPointer;
+    f32 halfWidth;
+    f32 halfHeight;
 
+    TEXGetGXTexObjFromPalette(**(void***)((s32)work + 0x163F8 + 0xA0), texObj, texId);
+    GXLoadTexObj(texObj, 0);
+    if (GXGetTexObjFmt(texObj) == 0) {
+        GXSetNumTevStages(1);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xA);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaIn(0, 7, 5, 4, 7);
+        GXSetTevOrder(0, 0, 0, 4);
+    } else {
+        GXSetNumTevStages(1);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevOrder(0, 0, 0, 4);
+        GXSetTevOp(0, 0);
+    }
+
+    halfWidth = (f32)GXGetTexObjWidth(texObj) * float_0p5_80422234;
+    halfHeight = (f32)GXGetTexObjHeight(texObj) * float_0p5_80422234;
+    GXBegin(0x80, 0, 4);
+
+#define EMIT_VERTEX(px, py, color, ts, tt) \
+    fifoF[0] = (px); fifoF[0] = (py); fifoF[0] = float_0_80422240; \
+    fifoB[0] = (color)[0]; fifoB[0] = (color)[1]; fifoB[0] = (color)[2]; fifoB[0] = (color)[3]; \
+    fifoF[0] = (ts); fifoF[0] = (tt)
+    EMIT_VERTEX(-halfWidth, halfHeight, color0, float_0_80422240, float_0_80422240);
+    EMIT_VERTEX(halfWidth, halfHeight, color1, float_1_8042224c, float_0_80422240);
+    EMIT_VERTEX(halfWidth, -halfHeight, color2, float_1_8042224c, float_1_8042224c);
+    EMIT_VERTEX(-halfWidth, -halfHeight, color3, float_0_80422240, float_1_8042224c);
+#undef EMIT_VERTEX
+}
 
 void _pose_two_pattern(void* part) {
     extern u8 vec3_802ee3a0[];
@@ -634,9 +738,36 @@ void btlDispTexPlane(s32 tpl, void* color, s32 flags, f32 x, f32 y, f32 z, f32 s
 }
 
 void btlUnitItemDisp(s32 param_1, void* unit) {
-    ;
-}
+    extern void* _battleWorkPointer;
+    extern u8 itemDataTable[];
+    extern f32 float_1_8042224c;
+    extern s32 BtlUnit_GetHeight(void* unit);
+    extern s32 BtlUnit_EnemyItemCanUseCheck(s32 item);
+    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+    extern void iconDispGx(f64 scale, f32* pos, u16 flags, u16 iconId);
+    s32 iconItem;
+    s32 height;
+    f32 pos[3];
 
+    height = BtlUnit_GetHeight(unit);
+    iconItem = BtlUnit_EnemyItemCanUseCheck(*(s32*)((s32)unit + 0x308));
+    if ((*(u32*)((s32)_battleWorkPointer + 0xEF4) & 0x20000) != 0 &&
+        iconItem == 0) {
+        iconItem = 0x94;
+    }
+
+    if (iconItem != 0) {
+        BtlUnit_GetPos(unit, &pos[0], &pos[1], &pos[2]);
+        pos[0] += *(f32*)((s32)unit + 0xB4);
+        pos[1] += *(f32*)((s32)unit + 0xB8);
+        pos[2] += *(f32*)((s32)unit + 0xBC);
+        pos[0] += *(f32*)((s32)unit + 0xC0);
+        pos[1] += *(f32*)((s32)unit + 0xC4);
+        pos[2] += *(f32*)((s32)unit + 0xC8);
+        iconDispGx(float_1_8042224c, pos, 0,
+                   *(u16*)(itemDataTable + iconItem * 0x28 + 0x20));
+    }
+}
 
 void btlDispGXInit2DRasta(void) {
     extern void btlDispGXInit2DSub(void);
@@ -765,9 +896,23 @@ void floatOffsetControl(void* part) {
 }
 
 void btlUnitStolenItemDisp(s32 param_1, void* unit) {
-    ;
-}
+    extern u8 itemDataTable[];
+    extern f32 float_1_8042224c;
+    extern f32 float_5_80422254;
+    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+    extern s32 BtlUnit_GetHeight(void* unit);
+    extern void iconDispGx(f64 scale, f32* pos, u16 flags, u16 iconId);
+    s32 item;
+    s32 height;
+    f32 pos[3];
 
+    item = *(s32*)((s32)unit + 0x308);
+    BtlUnit_GetPos(unit, &pos[0], &pos[1], &pos[2]);
+    height = BtlUnit_GetHeight(unit);
+    pos[1] += *(f32*)((s32)unit + 0x114) * (f32)height + float_5_80422254;
+    iconDispGx(float_1_8042224c, pos, 0,
+               *(u16*)(itemDataTable + item * 0x28 + 0x20));
+}
 
 void btlDispTexPlane3(void* mtx, s32 texId, void* color0, void* color1, void* color2, void* color3) {
     extern void btlDispTexPlaneInit(void);

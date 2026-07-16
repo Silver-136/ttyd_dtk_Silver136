@@ -1646,10 +1646,64 @@ void windowDispGX_Waku_col(double x, double y, double width, double height, doub
 #undef FIFO_F32
 }
 
-u8 windowDispGX_Message(void) {
-    return 0;
-}
+void windowDispGX_Message(f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 tailY,
+                          s32 kind, u32 flags, u8 alpha) {
+    typedef struct GXColorLocal { u8 r, g, b, a; } GXColorLocal;
+    extern void GXSetCullMode(s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
+    extern void GXSetBlendMode(s32, s32, s32, s32);
+    extern void GXSetZMode(s32, s32, s32);
+    extern void GXSetFog(s32, f32, f32, f32, f32, GXColorLocal);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevSwapMode(s32, s32, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void _windowDispGX_Message(f32, f32, f32, f32, f32, f32, s32, u32, u8, s32);
+    extern GXColorLocal dat_80420528;
+    extern f32 float_0_80420538;
+    GXColorLocal fog = dat_80420528;
 
+    GXSetCullMode(0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetBlendMode(1, 4, 5, 7);
+    GXSetZMode(1, 7, 0);
+    GXSetFog(0, float_0_80420538, float_0_80420538,
+             float_0_80420538, float_0_80420538, fog);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 15, 2, 8, 15);
+    GXSetTevAlphaIn(0, 7, 1, 4, 7);
+    GXSetTevSwapMode(0, 0, 0);
+    GXSetCurrentMtx(0);
+    if (kind == 8) {
+        _windowDispGX_Message(x, y, width, height, tailX, tailY, 8, 0, alpha, 1);
+    } else {
+        _windowDispGX_Message(x, y, width, height, tailX, tailY, kind, flags, alpha, 1);
+        _windowDispGX_Message(x, y, width, height, tailX, tailY, kind, flags, alpha, 0);
+    }
+}
 
 void windowTexSetup(void) {
     extern void* arcOpen(const char* filename, void** address, u32* length);
@@ -1703,8 +1757,21 @@ int windowEntry(s16 param_1) {
     return -1;
 }
 
-u8 windowMain(void) {
-    return 0;
+void windowMain(void) {
+    extern void* WinObjects;
+    u8* window = WinObjects;
+    s32 i;
+
+    for (i = 0; i < 7; i++, window += 0x48) {
+        void (*mainFunc)(void*);
+        if ((*(u16*)(window + 2) & 1) == 0) {
+            continue;
+        }
+        mainFunc = *(void (**)(void*))(window + 0x3C);
+        if (mainFunc != 0) {
+            mainFunc(window);
+        }
+    }
 }
 
 void unk_8007fcf0(void* param_1, void* param_2) {

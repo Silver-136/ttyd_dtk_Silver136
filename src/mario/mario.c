@@ -834,16 +834,29 @@ void marioSetCharMode(s32 mode) {
     if (mode == 1) {
         *(s8*)(player + 0x3C) = 1;
         peachPreInit();
-        for (i = 0; i < 3; i++) {
-            s32* poseId = (s32*)(player + 0x22C + i * 4);
-            if (*poseId >= 0) {
-                animPoseRelease(*poseId);
-                *poseId = -1;
-            }
+        if (*(s32*)(player + 0x22C) >= 0) {
+            animPoseRelease(*(s32*)(player + 0x22C));
+            *(s32*)(player + 0x22C) = -1;
         }
-        *(s32*)(player + 0x22C) = animPoseEntry(str_a_mario_802c18a0 + 0x398, 2);
-        *(s32*)(player + 0x230) = animPoseEntry(str_a_mario_802c18a0 + 0x3A0, 2);
-        npcSetMarioAutoTalkPose(str_P_S_1_8041ff18, str_P_T_1_8041ff30);
+        if (*(s32*)(player + 0x230) >= 0) {
+            animPoseRelease(*(s32*)(player + 0x230));
+            *(s32*)(player + 0x230) = -1;
+        }
+        if (*(s32*)(player + 0x234) >= 0) {
+            animPoseRelease(*(s32*)(player + 0x234));
+            *(s32*)(player + 0x234) = -1;
+        }
+        if ((*(u32*)(player + 0x10) & 0x2000) == 0) {
+            *(s32*)(player + 0x22C) = animPoseEntry(str_a_mario_802c18a0 + 0x398, 2);
+            *(s32*)(player + 0x230) = animPoseEntry(str_a_mario_802c18a0 + 0x3A0, 2);
+            npcSetMarioAutoTalkPose(str_P_S_1_8041ff18, str_P_T_1_8041ff30);
+        } else {
+            *(s32*)(player + 0x22C) = animPoseEntry(str_a_mario_802c18a0 + 0x3AC, 2);
+            *(s32*)(player + 0x230) = animPoseEntry(str_a_mario_802c18a0 + 0x3A0, 2);
+            npcSetMarioAutoTalkPose(str_S_1_8041fe8c, str_T_1_804200d0);
+            *(f32*)(player + 0xF8) = float_30_80420048;
+            *(f32*)(player + 0xFC) = float_30_80420048;
+        }
         *(f32*)(player + 0xF8) = float_20_80420088;
         *(f32*)(player + 0xFC) = float_47_804200bc;
         *(f32*)(player + 0x104) = float_1_80420008;
@@ -855,12 +868,17 @@ void marioSetCharMode(s32 mode) {
     if (mode == 2) {
         char* name;
         kpaPreInit();
-        for (i = 0; i < 3; i++) {
-            s32* poseId = (s32*)(player + 0x22C + i * 4);
-            if (*poseId >= 0) {
-                animPoseRelease(*poseId);
-                *poseId = -1;
-            }
+        if (*(s32*)(player + 0x22C) >= 0) {
+            animPoseRelease(*(s32*)(player + 0x22C));
+            *(s32*)(player + 0x22C) = -1;
+        }
+        if (*(s32*)(player + 0x230) >= 0) {
+            animPoseRelease(*(s32*)(player + 0x230));
+            *(s32*)(player + 0x230) = -1;
+        }
+        if (*(s32*)(player + 0x234) >= 0) {
+            animPoseRelease(*(s32*)(player + 0x234));
+            *(s32*)(player + 0x234) = -1;
         }
         name = str_a_mario_802c18a0 + 0x3C0;
         if (kpaGetStageViewType() == 1) {
@@ -1463,77 +1481,113 @@ u8 marioMoveMain(void) {
     return 0;
 }
 
-u8 marioMakeDispDir(void) {
+void marioMakeDispDir(void) {
     extern void* mp;
     extern f32 revise360(f64);
     extern f32 float_0_80420020;
+    extern f32 float_0p5_80420068;
     extern f32 float_10_80420078;
     extern f32 float_170_8042007c;
     extern f32 float_180_8042001c;
+    extern f32 float_190_80420070;
+    extern f32 float_250_8042006c;
+    extern f32 float_290_80420060;
+    extern f32 float_350_80420074;
     extern f32 float_0p125_80420084;
     extern f32 float_0p3_80420080;
     extern f32 float_30_80420048;
-    extern f32 float_neg20_80420088;
+    extern f32 float_20_80420088;
     extern f32 float_200_80420090;
     extern f32 float_210_8042008c;
     void* mario = mp;
     f32 diff;
     f32 target;
-    f32 cur;
+    f32 current;
     f32 step;
 
-    if ((*(u32*)((s32)mario + 4) & 0x1000000) != 0) {
-        return 0;
+    if ((*(u32*)((s32)mario + 4) & 0x01000000) != 0) {
+        return;
     }
-    diff = revise360((f64)(*(f32*)((s32)mario + 0x1A0) - *(f32*)((s32)mario + 0x19C)));
-    target = float_0_80420020;
-    if (*(f32*)((s32)mario + 0x180) != float_0_80420020 &&
-        diff >= float_10_80420078 && diff <= float_170_8042007c) {
-        target = float_180_8042001c;
+
+    if ((*(u32*)((s32)mario + 4) & 0x100) == 0) {
+        diff = revise360((f64)(*(f32*)((s32)mario + 0x1A0) -
+                               *(f32*)((s32)mario + 0x19C)));
+        target = (f32)(s32)(float_0p5_80420068 + *(f32*)((s32)mario + 0x1B0));
+        if ((target == float_290_80420060 || target == float_250_8042006c) &&
+            diff >= float_180_8042001c) {
+            target = float_0_80420020;
+        }
+        if (*(f32*)((s32)mario + 0x180) != float_0_80420020) {
+            if ((diff >= float_190_80420070 && diff <= float_350_80420074)) {
+                target = float_0_80420020;
+            } else if (diff >= float_10_80420078 && diff <= float_170_8042007c) {
+                target = float_180_8042001c;
+            }
+        }
+        *(f32*)((s32)mario + 0x1B0) = target;
+        if ((*(u32*)((s32)mario + 4) & 0x200) != 0) {
+            *(f32*)((s32)mario + 0x1AC) = target;
+        }
+        if (*(f32*)((s32)mario + 0x1AC) == target) {
+            return;
+        }
     }
-    *(f32*)((s32)mario + 0x1B0) = target;
-    if ((*(u32*)((s32)mario + 4) & 0x400000) != 0) {
-        *(f32*)((s32)mario + 0x1AC) = target;
+
+    target = *(f32*)((s32)mario + 0x1B0);
+    current = *(f32*)((s32)mario + 0x1AC);
+    if (*(u16*)((s32)mario + 0x2E) == 0x12) {
+        if (target == float_0_80420020) {
+            *(f32*)((s32)mario + 0x1AC) = float_0_80420020;
+            *(u32*)((s32)mario + 0xC) &= ~0x100;
+        } else if (target == float_180_8042001c) {
+            *(f32*)((s32)mario + 0x1AC) = float_180_8042001c;
+            *(u32*)((s32)mario + 0xC) &= ~0x100;
+        }
+        return;
     }
-    cur = *(f32*)((s32)mario + 0x1AC);
-    if (cur == target) {
-        return 0;
-    }
+
     if (target == float_0_80420020) {
-        *(u32*)((s32)mario + 0xC) |= 0x2000;
-        if ((*(u32*)((s32)mario + 0xC) & 0x8000) == 0) {
-            step = float_0p125_80420084 * (-float_30_80420048 - cur);
+        if ((*(u32*)((s32)mario + 0xC) & 0x400) != 0) {
+            *(u32*)((s32)mario + 0xC) &= ~0x400;
+            *(u32*)((s32)mario + 0xC) &= ~0x100;
+        }
+        *(u32*)((s32)mario + 0xC) |= 0x200;
+        if ((*(u32*)((s32)mario + 0xC) & 0x100) == 0) {
+            step = float_0p125_80420084 * (-float_30_80420048 - current);
         } else {
-            step = float_0p3_80420080 * (float_10_80420078 - cur);
+            step = float_0p3_80420080 * (float_10_80420078 - current);
         }
-        cur += step;
-        if ((*(u32*)((s32)mario + 0xC) & 0x8000) == 0) {
-            if (cur < float_neg20_80420088) {
-                *(u32*)((s32)mario + 0xC) |= 0x8000;
+        current += step;
+        if ((*(u32*)((s32)mario + 0xC) & 0x100) == 0) {
+            if (current < -float_20_80420088) {
+                *(u32*)((s32)mario + 0xC) |= 0x100;
             }
-        } else if (cur >= float_0_80420020) {
-            cur = float_0_80420020;
-            *(u32*)((s32)mario + 0xC) &= ~0x8000;
+        } else if (current >= float_0_80420020) {
+            current = float_0_80420020;
+            *(u32*)((s32)mario + 0xC) &= ~0x100;
         }
-    } else {
-        *(u32*)((s32)mario + 0xC) |= 0x4000;
-        if ((*(u32*)((s32)mario + 0xC) & 0x8000) == 0) {
-            step = float_0p125_80420084 * (float_210_8042008c - cur);
+    } else if (target == float_180_8042001c) {
+        if ((*(u32*)((s32)mario + 0xC) & 0x200) != 0) {
+            *(u32*)((s32)mario + 0xC) &= ~0x200;
+            *(u32*)((s32)mario + 0xC) &= ~0x100;
+        }
+        *(u32*)((s32)mario + 0xC) |= 0x400;
+        if ((*(u32*)((s32)mario + 0xC) & 0x100) == 0) {
+            step = float_0p125_80420084 * (float_210_8042008c - current);
         } else {
-            step = float_0p3_80420080 * (float_170_8042007c - cur);
+            step = float_0p3_80420080 * (float_170_8042007c - current);
         }
-        cur += step;
-        if ((*(u32*)((s32)mario + 0xC) & 0x8000) == 0) {
-            if (cur > float_200_80420090) {
-                *(u32*)((s32)mario + 0xC) |= 0x8000;
+        current += step;
+        if ((*(u32*)((s32)mario + 0xC) & 0x100) == 0) {
+            if (current > float_200_80420090) {
+                *(u32*)((s32)mario + 0xC) |= 0x100;
             }
-        } else if (cur <= float_180_8042001c) {
-            cur = float_180_8042001c;
-            *(u32*)((s32)mario + 0xC) &= ~0x8000;
+        } else if (current <= float_180_8042001c) {
+            current = float_180_8042001c;
+            *(u32*)((s32)mario + 0xC) &= ~0x100;
         }
     }
-    *(f32*)((s32)mario + 0x1AC) = cur;
-    return 0;
+    *(f32*)((s32)mario + 0x1AC) = current;
 }
 
 u8 marioDisp(void) {
@@ -1642,116 +1696,198 @@ u8 marioDisp(void) {
 char* toFrontPose(char* name) {
     extern void* mp;
     extern s32 strcmp(const char*, const char*);
-    extern char str_M_Z_1R_802c1afc[];
-    extern char str_M_Z_1_8041ff90[];
-    extern char str_M_S_1R_802c1b04[];
-    extern char str_M_S_1_8041ff98[];
-    extern char str_M_W_1R_802c1b0c[];
-    extern char str_M_W_1_8041ffa0[];
-    extern char str_M_R_1R_802c1b14[];
-    extern char str_M_R_1_8041ffa8[];
-    extern char str_M_J_1BR_802c1b1c[];
-    extern char str_M_J_1B_802c1b24[];
-    extern char str_M_J_1CR_802c1b2c[];
-    extern char str_M_J_1C_802c1b34[];
-    extern char str_M_H_1R_802c1b3c[];
-    extern char str_M_H_1_8041ffb0[];
-    extern char str_M_H_2R_802c1b44[];
-    extern char str_M_H_2_8041ffb8[];
-    extern char str_M_H_4R_802c1b4c[];
-    extern char str_M_H_4_8041ffc0[];
-    extern char str_M_H_5R_802c1b54[];
-    extern char str_M_H_5_8041ffc8[];
-    extern char str_M_H_7R_802c1b5c[];
-    extern char str_M_H_7_8041ffd0[];
-    extern char str_M_H_8R_802c1b64[];
-    extern char str_M_H_8_8041ffd8[];
-    extern char str_M_O_2R_802c1b6c[];
-    extern char str_M_O_1_8041ffe0[];
-    extern char str_M_I_2R_802c1b74[];
-    extern char str_M_I_2_8041ffe8[];
-    extern char str_M_U_2R_802c1b7c[];
-    extern char str_M_U_2_8041fff0[];
-    extern char str_M_C_1R_802c1b84[];
-    extern char str_M_C_1_8041fff8[];
+    extern char str_P_Z_1R_802c19a0[], str_P_Z_1_8041ff10[];
+    extern char str_P_S_1R_802c19a8[], str_P_S_1_8041ff18[];
+    extern char str_P_W_1R_802c19b0[], str_P_W_1_8041ff20[];
+    extern char str_P_R_1R_802c19b8[], str_P_R_1_8041ff28[];
+    extern char str_P_T_1R_802c19c0[], str_P_T_1_8041ff30[];
+    extern char str_P_Z_2R_802c19c8[], str_P_Z_2_8041ff38[];
+    extern char str_P_S_2R_802c19d0[], str_P_S_2_8041ff40[];
+    extern char str_P_W_2R_802c19d8[], str_P_W_2_8041ff48[];
+    extern char str_P_R_2R_802c19e0[], str_P_R_2_8041ff50[];
+    extern char str_P_T_2R_802c19e8[], str_P_T_2_8041ff58[];
+    extern char str_P_Z_3R_802c19f0[], str_P_Z_3_8041ff60[];
+    extern char str_P_S_3R_802c19f8[], str_P_S_3_8041ff68[];
+    extern char str_P_W_3R_802c1a00[], str_P_W_3_8041ff70[];
+    extern char str_P_R_3R_802c1a08[], str_P_R_3_8041ff78[];
+    extern char str_P_T_3R_802c1a10[], str_P_T_3_8041ff80[];
+    extern char str_P_O_Z_1R_802c1a18[], str_P_O_Z_1_802c1a24[];
+    extern char str_P_O_S_1R_802c1a2c[], str_P_O_S_1_802c1a38[];
+    extern char str_P_O_F_1R_802c1a40[], str_P_O_F_1_802c1a4c[];
+    extern char str_P_O_R_1R_802c1a54[], str_P_O_R_1_802c1a60[];
+    extern char str_P_O_N_1R_802c1a68[], str_P_O_N_1_802c1a74[];
+    extern char str_P_O_S_2R_802c1a7c[], str_P_O_S_2_802c1a88[];
+    extern char str_P_O_F_2R_802c1a90[], str_P_O_F_2_802c1a9c[];
+    extern char str_P_O_R_2R_802c1aa4[], str_P_O_R_2_802c1ab0[];
+    extern char str_P_O_N_2R_802c1ab8[], str_P_O_N_2_802c1ac4[];
+    extern char str_P_O_D_1R_802c1acc[], str_P_O_D_1_802c1ad8[];
+    extern char str_P_O_D_2R_802c1ae0[], str_P_O_D_2_802c1aec[];
+    extern char str_P_A_1R_802c1af4[], str_P_A_1_8041ff88[];
+    extern char str_M_Z_1R_802c1afc[], str_M_Z_1_8041ff90[];
+    extern char str_M_S_1R_802c1b04[], str_M_S_1_8041ff98[];
+    extern char str_M_W_1R_802c1b0c[], str_M_W_1_8041ffa0[];
+    extern char str_M_R_1R_802c1b14[], str_M_R_1_8041ffa8[];
+    extern char str_M_J_1BR_802c1b1c[], str_M_J_1B_802c1b24[];
+    extern char str_M_J_1CR_802c1b2c[], str_M_J_1C_802c1b34[];
+    extern char str_M_H_1R_802c1b3c[], str_M_H_1_8041ffb0[];
+    extern char str_M_H_2R_802c1b44[], str_M_H_2_8041ffb8[];
+    extern char str_M_H_4R_802c1b4c[], str_M_H_4_8041ffc0[];
+    extern char str_M_H_5R_802c1b54[], str_M_H_5_8041ffc8[];
+    extern char str_M_H_7R_802c1b5c[], str_M_H_7_8041ffd0[];
+    extern char str_M_H_8R_802c1b64[], str_M_H_8_8041ffd8[];
+    extern char str_M_O_2R_802c1b6c[], str_M_O_1_8041ffe0[];
+    extern char str_M_I_2R_802c1b74[], str_M_I_2_8041ffe8[];
+    extern char str_M_U_2R_802c1b7c[], str_M_U_2_8041fff0[];
+    extern char str_M_C_1R_802c1b84[], str_M_C_1_8041fff8[];
 
-    if (*(s8*)((s32)mp + 0x3C) == 1 && (*(u32*)((s32)mp + 0x10) & 0x10) == 0) {
-        return 0;
+#define POSE_MAP(_rear, _front) if (strcmp(name, (_rear)) == 0) return (_front)
+    if (*(s8*)((s32)mp + 0x3C) == 1 &&
+        (*(u32*)((s32)mp + 0x10) & 0x10) == 0) {
+        POSE_MAP(str_P_Z_1R_802c19a0, str_P_Z_1_8041ff10);
+        POSE_MAP(str_P_S_1R_802c19a8, str_P_S_1_8041ff18);
+        POSE_MAP(str_P_W_1R_802c19b0, str_P_W_1_8041ff20);
+        POSE_MAP(str_P_R_1R_802c19b8, str_P_R_1_8041ff28);
+        POSE_MAP(str_P_T_1R_802c19c0, str_P_T_1_8041ff30);
+        POSE_MAP(str_P_Z_2R_802c19c8, str_P_Z_2_8041ff38);
+        POSE_MAP(str_P_S_2R_802c19d0, str_P_S_2_8041ff40);
+        POSE_MAP(str_P_W_2R_802c19d8, str_P_W_2_8041ff48);
+        POSE_MAP(str_P_R_2R_802c19e0, str_P_R_2_8041ff50);
+        POSE_MAP(str_P_T_2R_802c19e8, str_P_T_2_8041ff58);
+        POSE_MAP(str_P_Z_3R_802c19f0, str_P_Z_3_8041ff60);
+        POSE_MAP(str_P_S_3R_802c19f8, str_P_S_3_8041ff68);
+        POSE_MAP(str_P_W_3R_802c1a00, str_P_W_3_8041ff70);
+        POSE_MAP(str_P_R_3R_802c1a08, str_P_R_3_8041ff78);
+        POSE_MAP(str_P_T_3R_802c1a10, str_P_T_3_8041ff80);
+        POSE_MAP(str_P_O_Z_1R_802c1a18, str_P_O_Z_1_802c1a24);
+        POSE_MAP(str_P_O_S_1R_802c1a2c, str_P_O_S_1_802c1a38);
+        POSE_MAP(str_P_O_F_1R_802c1a40, str_P_O_F_1_802c1a4c);
+        POSE_MAP(str_P_O_R_1R_802c1a54, str_P_O_R_1_802c1a60);
+        POSE_MAP(str_P_O_N_1R_802c1a68, str_P_O_N_1_802c1a74);
+        POSE_MAP(str_P_O_S_2R_802c1a7c, str_P_O_S_2_802c1a88);
+        POSE_MAP(str_P_O_F_2R_802c1a90, str_P_O_F_2_802c1a9c);
+        POSE_MAP(str_P_O_R_2R_802c1aa4, str_P_O_R_2_802c1ab0);
+        POSE_MAP(str_P_O_N_2R_802c1ab8, str_P_O_N_2_802c1ac4);
+        POSE_MAP(str_P_O_D_1R_802c1acc, str_P_O_D_1_802c1ad8);
+        POSE_MAP(str_P_O_D_2R_802c1ae0, str_P_O_D_2_802c1aec);
+        POSE_MAP(str_P_A_1R_802c1af4, str_P_A_1_8041ff88);
+    } else {
+        POSE_MAP(str_M_Z_1R_802c1afc, str_M_Z_1_8041ff90);
+        POSE_MAP(str_M_S_1R_802c1b04, str_M_S_1_8041ff98);
+        POSE_MAP(str_M_W_1R_802c1b0c, str_M_W_1_8041ffa0);
+        POSE_MAP(str_M_R_1R_802c1b14, str_M_R_1_8041ffa8);
+        POSE_MAP(str_M_J_1BR_802c1b1c, str_M_J_1B_802c1b24);
+        POSE_MAP(str_M_J_1CR_802c1b2c, str_M_J_1C_802c1b34);
+        POSE_MAP(str_M_H_1R_802c1b3c, str_M_H_1_8041ffb0);
+        POSE_MAP(str_M_H_2R_802c1b44, str_M_H_2_8041ffb8);
+        POSE_MAP(str_M_H_4R_802c1b4c, str_M_H_4_8041ffc0);
+        POSE_MAP(str_M_H_5R_802c1b54, str_M_H_5_8041ffc8);
+        POSE_MAP(str_M_H_7R_802c1b5c, str_M_H_7_8041ffd0);
+        POSE_MAP(str_M_H_8R_802c1b64, str_M_H_8_8041ffd8);
+        POSE_MAP(str_M_O_2R_802c1b6c, str_M_O_1_8041ffe0);
+        POSE_MAP(str_M_I_2R_802c1b74, str_M_I_2_8041ffe8);
+        POSE_MAP(str_M_U_2R_802c1b7c, str_M_U_2_8041fff0);
+        POSE_MAP(str_M_C_1R_802c1b84, str_M_C_1_8041fff8);
     }
-    if (strcmp(name, str_M_Z_1R_802c1afc) == 0) return str_M_Z_1_8041ff90;
-    if (strcmp(name, str_M_S_1R_802c1b04) == 0) return str_M_S_1_8041ff98;
-    if (strcmp(name, str_M_W_1R_802c1b0c) == 0) return str_M_W_1_8041ffa0;
-    if (strcmp(name, str_M_R_1R_802c1b14) == 0) return str_M_R_1_8041ffa8;
-    if (strcmp(name, str_M_J_1BR_802c1b1c) == 0) return str_M_J_1B_802c1b24;
-    if (strcmp(name, str_M_J_1CR_802c1b2c) == 0) return str_M_J_1C_802c1b34;
-    if (strcmp(name, str_M_H_1R_802c1b3c) == 0) return str_M_H_1_8041ffb0;
-    if (strcmp(name, str_M_H_2R_802c1b44) == 0) return str_M_H_2_8041ffb8;
-    if (strcmp(name, str_M_H_4R_802c1b4c) == 0) return str_M_H_4_8041ffc0;
-    if (strcmp(name, str_M_H_5R_802c1b54) == 0) return str_M_H_5_8041ffc8;
-    if (strcmp(name, str_M_H_7R_802c1b5c) == 0) return str_M_H_7_8041ffd0;
-    if (strcmp(name, str_M_H_8R_802c1b64) == 0) return str_M_H_8_8041ffd8;
-    if (strcmp(name, str_M_O_2R_802c1b6c) == 0) return str_M_O_1_8041ffe0;
-    if (strcmp(name, str_M_I_2R_802c1b74) == 0) return str_M_I_2_8041ffe8;
-    if (strcmp(name, str_M_U_2R_802c1b7c) == 0) return str_M_U_2_8041fff0;
-    if (strcmp(name, str_M_C_1R_802c1b84) == 0) return str_M_C_1_8041fff8;
+#undef POSE_MAP
     return 0;
 }
 
 char* toRearPose(char* name) {
     extern void* mp;
     extern s32 strcmp(const char*, const char*);
-    extern char str_M_Z_1R_802c1afc[];
-    extern char str_M_Z_1_8041ff90[];
-    extern char str_M_S_1R_802c1b04[];
-    extern char str_M_S_1_8041ff98[];
-    extern char str_M_W_1R_802c1b0c[];
-    extern char str_M_W_1_8041ffa0[];
-    extern char str_M_R_1R_802c1b14[];
-    extern char str_M_R_1_8041ffa8[];
-    extern char str_M_J_1BR_802c1b1c[];
-    extern char str_M_J_1B_802c1b24[];
-    extern char str_M_J_1CR_802c1b2c[];
-    extern char str_M_J_1C_802c1b34[];
-    extern char str_M_H_1R_802c1b3c[];
-    extern char str_M_H_1_8041ffb0[];
-    extern char str_M_H_2R_802c1b44[];
-    extern char str_M_H_2_8041ffb8[];
-    extern char str_M_H_4R_802c1b4c[];
-    extern char str_M_H_4_8041ffc0[];
-    extern char str_M_H_5R_802c1b54[];
-    extern char str_M_H_5_8041ffc8[];
-    extern char str_M_H_7R_802c1b5c[];
-    extern char str_M_H_7_8041ffd0[];
-    extern char str_M_H_8R_802c1b64[];
-    extern char str_M_H_8_8041ffd8[];
-    extern char str_M_O_2R_802c1b6c[];
-    extern char str_M_O_1_8041ffe0[];
-    extern char str_M_I_2R_802c1b74[];
-    extern char str_M_I_2_8041ffe8[];
-    extern char str_M_U_2R_802c1b7c[];
-    extern char str_M_U_2_8041fff0[];
-    extern char str_M_C_1R_802c1b84[];
-    extern char str_M_C_1_8041fff8[];
+    extern char str_P_Z_1R_802c19a0[], str_P_Z_1_8041ff10[];
+    extern char str_P_S_1R_802c19a8[], str_P_S_1_8041ff18[];
+    extern char str_P_W_1R_802c19b0[], str_P_W_1_8041ff20[];
+    extern char str_P_R_1R_802c19b8[], str_P_R_1_8041ff28[];
+    extern char str_P_T_1R_802c19c0[], str_P_T_1_8041ff30[];
+    extern char str_P_Z_2R_802c19c8[], str_P_Z_2_8041ff38[];
+    extern char str_P_S_2R_802c19d0[], str_P_S_2_8041ff40[];
+    extern char str_P_W_2R_802c19d8[], str_P_W_2_8041ff48[];
+    extern char str_P_R_2R_802c19e0[], str_P_R_2_8041ff50[];
+    extern char str_P_T_2R_802c19e8[], str_P_T_2_8041ff58[];
+    extern char str_P_Z_3R_802c19f0[], str_P_Z_3_8041ff60[];
+    extern char str_P_S_3R_802c19f8[], str_P_S_3_8041ff68[];
+    extern char str_P_W_3R_802c1a00[], str_P_W_3_8041ff70[];
+    extern char str_P_R_3R_802c1a08[], str_P_R_3_8041ff78[];
+    extern char str_P_T_3R_802c1a10[], str_P_T_3_8041ff80[];
+    extern char str_P_O_Z_1R_802c1a18[], str_P_O_Z_1_802c1a24[];
+    extern char str_P_O_S_1R_802c1a2c[], str_P_O_S_1_802c1a38[];
+    extern char str_P_O_F_1R_802c1a40[], str_P_O_F_1_802c1a4c[];
+    extern char str_P_O_R_1R_802c1a54[], str_P_O_R_1_802c1a60[];
+    extern char str_P_O_N_1R_802c1a68[], str_P_O_N_1_802c1a74[];
+    extern char str_P_O_S_2R_802c1a7c[], str_P_O_S_2_802c1a88[];
+    extern char str_P_O_F_2R_802c1a90[], str_P_O_F_2_802c1a9c[];
+    extern char str_P_O_R_2R_802c1aa4[], str_P_O_R_2_802c1ab0[];
+    extern char str_P_O_N_2R_802c1ab8[], str_P_O_N_2_802c1ac4[];
+    extern char str_P_O_D_1R_802c1acc[], str_P_O_D_1_802c1ad8[];
+    extern char str_P_O_D_2R_802c1ae0[], str_P_O_D_2_802c1aec[];
+    extern char str_P_A_1R_802c1af4[], str_P_A_1_8041ff88[];
+    extern char str_M_Z_1R_802c1afc[], str_M_Z_1_8041ff90[];
+    extern char str_M_S_1R_802c1b04[], str_M_S_1_8041ff98[];
+    extern char str_M_W_1R_802c1b0c[], str_M_W_1_8041ffa0[];
+    extern char str_M_R_1R_802c1b14[], str_M_R_1_8041ffa8[];
+    extern char str_M_J_1BR_802c1b1c[], str_M_J_1B_802c1b24[];
+    extern char str_M_J_1CR_802c1b2c[], str_M_J_1C_802c1b34[];
+    extern char str_M_H_1R_802c1b3c[], str_M_H_1_8041ffb0[];
+    extern char str_M_H_2R_802c1b44[], str_M_H_2_8041ffb8[];
+    extern char str_M_H_4R_802c1b4c[], str_M_H_4_8041ffc0[];
+    extern char str_M_H_5R_802c1b54[], str_M_H_5_8041ffc8[];
+    extern char str_M_H_7R_802c1b5c[], str_M_H_7_8041ffd0[];
+    extern char str_M_H_8R_802c1b64[], str_M_H_8_8041ffd8[];
+    extern char str_M_O_2R_802c1b6c[], str_M_O_1_8041ffe0[];
+    extern char str_M_I_2R_802c1b74[], str_M_I_2_8041ffe8[];
+    extern char str_M_U_2R_802c1b7c[], str_M_U_2_8041fff0[];
+    extern char str_M_C_1R_802c1b84[], str_M_C_1_8041fff8[];
 
-    if (*(s8*)((s32)mp + 0x3C) == 1 && (*(u32*)((s32)mp + 0x10) & 0x10) == 0) {
-        return 0;
+#define POSE_MAP(_front, _rear) if (strcmp(name, (_front)) == 0) return (_rear)
+    if (*(s8*)((s32)mp + 0x3C) == 1 &&
+        (*(u32*)((s32)mp + 0x10) & 0x10) == 0) {
+        POSE_MAP(str_P_Z_1_8041ff10, str_P_Z_1R_802c19a0);
+        POSE_MAP(str_P_S_1_8041ff18, str_P_S_1R_802c19a8);
+        POSE_MAP(str_P_W_1_8041ff20, str_P_W_1R_802c19b0);
+        POSE_MAP(str_P_R_1_8041ff28, str_P_R_1R_802c19b8);
+        POSE_MAP(str_P_T_1_8041ff30, str_P_T_1R_802c19c0);
+        POSE_MAP(str_P_Z_2_8041ff38, str_P_Z_2R_802c19c8);
+        POSE_MAP(str_P_S_2_8041ff40, str_P_S_2R_802c19d0);
+        POSE_MAP(str_P_W_2_8041ff48, str_P_W_2R_802c19d8);
+        POSE_MAP(str_P_R_2_8041ff50, str_P_R_2R_802c19e0);
+        POSE_MAP(str_P_T_2_8041ff58, str_P_T_2R_802c19e8);
+        POSE_MAP(str_P_Z_3_8041ff60, str_P_Z_3R_802c19f0);
+        POSE_MAP(str_P_S_3_8041ff68, str_P_S_3R_802c19f8);
+        POSE_MAP(str_P_W_3_8041ff70, str_P_W_3R_802c1a00);
+        POSE_MAP(str_P_R_3_8041ff78, str_P_R_3R_802c1a08);
+        POSE_MAP(str_P_T_3_8041ff80, str_P_T_3R_802c1a10);
+        POSE_MAP(str_P_O_Z_1_802c1a24, str_P_O_Z_1R_802c1a18);
+        POSE_MAP(str_P_O_S_1_802c1a38, str_P_O_S_1R_802c1a2c);
+        POSE_MAP(str_P_O_F_1_802c1a4c, str_P_O_F_1R_802c1a40);
+        POSE_MAP(str_P_O_R_1_802c1a60, str_P_O_R_1R_802c1a54);
+        POSE_MAP(str_P_O_N_1_802c1a74, str_P_O_N_1R_802c1a68);
+        POSE_MAP(str_P_O_S_2_802c1a88, str_P_O_S_2R_802c1a7c);
+        POSE_MAP(str_P_O_F_2_802c1a9c, str_P_O_F_2R_802c1a90);
+        POSE_MAP(str_P_O_R_2_802c1ab0, str_P_O_R_2R_802c1aa4);
+        POSE_MAP(str_P_O_N_2_802c1ac4, str_P_O_N_2R_802c1ab8);
+        POSE_MAP(str_P_O_D_1_802c1ad8, str_P_O_D_1R_802c1acc);
+        POSE_MAP(str_P_O_D_2_802c1aec, str_P_O_D_2R_802c1ae0);
+        POSE_MAP(str_P_A_1_8041ff88, str_P_A_1R_802c1af4);
+    } else {
+        POSE_MAP(str_M_Z_1_8041ff90, str_M_Z_1R_802c1afc);
+        POSE_MAP(str_M_S_1_8041ff98, str_M_S_1R_802c1b04);
+        POSE_MAP(str_M_W_1_8041ffa0, str_M_W_1R_802c1b0c);
+        POSE_MAP(str_M_R_1_8041ffa8, str_M_R_1R_802c1b14);
+        POSE_MAP(str_M_J_1B_802c1b24, str_M_J_1BR_802c1b1c);
+        POSE_MAP(str_M_J_1C_802c1b34, str_M_J_1CR_802c1b2c);
+        POSE_MAP(str_M_H_1_8041ffb0, str_M_H_1R_802c1b3c);
+        POSE_MAP(str_M_H_2_8041ffb8, str_M_H_2R_802c1b44);
+        POSE_MAP(str_M_H_4_8041ffc0, str_M_H_4R_802c1b4c);
+        POSE_MAP(str_M_H_5_8041ffc8, str_M_H_5R_802c1b54);
+        POSE_MAP(str_M_H_7_8041ffd0, str_M_H_7R_802c1b5c);
+        POSE_MAP(str_M_H_8_8041ffd8, str_M_H_8R_802c1b64);
+        POSE_MAP(str_M_O_1_8041ffe0, str_M_O_2R_802c1b6c);
+        POSE_MAP(str_M_I_2_8041ffe8, str_M_I_2R_802c1b74);
+        POSE_MAP(str_M_U_2_8041fff0, str_M_U_2R_802c1b7c);
+        POSE_MAP(str_M_C_1_8041fff8, str_M_C_1R_802c1b84);
     }
-    if (strcmp(name, str_M_Z_1_8041ff90) == 0) return str_M_Z_1R_802c1afc;
-    if (strcmp(name, str_M_S_1_8041ff98) == 0) return str_M_S_1R_802c1b04;
-    if (strcmp(name, str_M_W_1_8041ffa0) == 0) return str_M_W_1R_802c1b0c;
-    if (strcmp(name, str_M_R_1_8041ffa8) == 0) return str_M_R_1R_802c1b14;
-    if (strcmp(name, str_M_J_1B_802c1b24) == 0) return str_M_J_1BR_802c1b1c;
-    if (strcmp(name, str_M_J_1C_802c1b34) == 0) return str_M_J_1CR_802c1b2c;
-    if (strcmp(name, str_M_H_1_8041ffb0) == 0) return str_M_H_1R_802c1b3c;
-    if (strcmp(name, str_M_H_2_8041ffb8) == 0) return str_M_H_2R_802c1b44;
-    if (strcmp(name, str_M_H_4_8041ffc0) == 0) return str_M_H_4R_802c1b4c;
-    if (strcmp(name, str_M_H_5_8041ffc8) == 0) return str_M_H_5R_802c1b54;
-    if (strcmp(name, str_M_H_7_8041ffd0) == 0) return str_M_H_7R_802c1b5c;
-    if (strcmp(name, str_M_H_8_8041ffd8) == 0) return str_M_H_8R_802c1b64;
-    if (strcmp(name, str_M_O_1_8041ffe0) == 0) return str_M_O_2R_802c1b6c;
-    if (strcmp(name, str_M_I_2_8041ffe8) == 0) return str_M_I_2R_802c1b74;
-    if (strcmp(name, str_M_U_2_8041fff0) == 0) return str_M_U_2R_802c1b7c;
-    if (strcmp(name, str_M_C_1_8041fff8) == 0) return str_M_C_1R_802c1b84;
+#undef POSE_MAP
     return 0;
 }
 
@@ -3102,6 +3238,8 @@ void marioGetScreenPos(f32* pos, f32* x, f32* y, f32* z) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 marioChkPushAnime(void) {
     extern void* mp;
     extern s32 strcmp(const char* s1, const char* s2);
@@ -3120,6 +3258,8 @@ s32 marioChkPushAnime(void) {
     }
     return result;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 marioFBattlePrepare(void) {
     typedef struct Vec {

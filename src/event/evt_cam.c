@@ -604,9 +604,30 @@ s32 evt_cam_road_reset2(void* pEvt) {
 }
 
 u8 evt_cam3d_event_from_road(s32 pEvt) {
-    return 0;
-}
+    typedef struct RoadResult {
+        f32 unused[3];
+        f32 position[3];
+        f32 target[3];
+    } RoadResult;
+    extern f32 evtGetFloat(s32, s32);
+    extern void evtSetFloat(s32, s32, f32);
+    extern void camRoadMain(f64, f64, f64, f64, f64, f64, f64, void*);
+    s32* args = *(s32**)(pEvt + 0x18);
+    f32 x = evtGetFloat(pEvt, args[0]);
+    f32 y = evtGetFloat(pEvt, args[1]);
+    f32 z = evtGetFloat(pEvt, args[2]);
+    f32 distance = evtGetFloat(pEvt, args[3]);
+    RoadResult road;
 
+    camRoadMain(x, y, z, x, y, z, distance, &road);
+    evtSetFloat(pEvt, args[4], road.position[0]);
+    evtSetFloat(pEvt, args[5], road.position[1]);
+    evtSetFloat(pEvt, args[6], road.position[2]);
+    evtSetFloat(pEvt, args[7], road.target[0]);
+    evtSetFloat(pEvt, args[8], road.target[1]);
+    evtSetFloat(pEvt, args[9], road.target[2]);
+    return 2;
+}
 
 s32 evt_cam3d_get_shift(void* pEvt) {
     typedef struct Vec3 {

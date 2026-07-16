@@ -87,6 +87,13 @@ u8 mot_roll(void) {
     extern void allPartyRideShip(void);
     extern u32 psndSFXOn_3D(s32, void*);
     extern void marioChgMotSub(s32, s32);
+    extern void psndSFXOff(s32);
+    extern void marioPaperLightOff(void);
+    extern void marioSetSpec(void);
+    extern void marioOfsRotReset(void);
+    extern void marioPaperOff(void);
+    extern void __memFree(s32, void*);
+    extern void allPartyRideOff(void);
     extern char str_p_roll_802c4248[];
     extern char str_PM_R_1A_802c4250[];
     extern char str_PM_R_1B_802c4258[];
@@ -146,7 +153,30 @@ u8 mot_roll(void) {
         *(s32*)((s32)player + 0x170) = 65;
         *(s32*)((s32)player + 0x44) = 21;
         marioChgPaper(str_PM_R_1C_802c4260);
+        if (*(s32*)((s32)work + 0x14) != -1) {
+            psndSFXOff(*(s32*)((s32)work + 0x14));
+            *(s32*)((s32)work + 0x14) = -1;
+        }
+        *(f32*)((s32)player + 0x148) = 0.0f;
+        *(f32*)((s32)player + 0x158) = 0.004f;
+        marioPaperLightOff();
         psndSFXOn_3D(0x17A, (void*)((s32)player + 0x8C));
+    } else if (state == 21) {
+        if (--*(s32*)((s32)player + 0x170) < 1) {
+            marioSetSpec();
+            *(u32*)((s32)player + 8) = 0;
+            marioOfsRotReset();
+            *(u32*)((s32)player + 4) &= ~0x108;
+            *(u32*)player &= ~0x1000000;
+            marioPaperOff();
+            marioAdjustMoveDir();
+            if (*(void**)((s32)player + 0x234) != 0) {
+                __memFree(0, *(void**)((s32)player + 0x234));
+                *(void**)((s32)player + 0x234) = 0;
+            }
+            allPartyRideOff();
+            *(s32*)((s32)player + 0x44) = 22;
+        }
     } else if (state == 22) {
         marioChgMotSub(0, 0);
     }
@@ -494,9 +524,67 @@ void mot_roll_post(void) {
 }
 
 u8 marioReInit_roll(void) {
+    extern void* marioGetPtr(void);
+    extern void* __memAlloc(s32, u32);
+    extern void* memset(void*, s32, u32);
+    extern void marioPaperOn(char*);
+    extern void marioChgPose(char*);
+    extern void marioChgPaper(char*);
+    extern void allPartyForceRideOn(void);
+    extern char str_p_roll_802c4248[];
+    extern char str_M_I_U_80420e1c[];
+    extern char str_PM_R_1B_802c4258[];
+    extern f32 float_14p8_80420e24;
+    extern f32 float_0_80420dd4;
+    extern f32 float_neg6_80420e28;
+    extern f32 float_6_80420de4;
+    extern f32 float_1_80420e2c;
+    extern f32 rollData;
+    void* player = marioGetPtr();
+    void* work = __memAlloc(0, 0x18);
+    void* current;
+
+    current = marioGetPtr();
+    *(void**)((s32)current + 0x294) = work;
+    current = marioGetPtr();
+    memset(*(void**)((s32)current + 0x294), 0, 0x18);
+    marioGetPtr();
+    current = marioGetPtr();
+    if (*(void**)((s32)current + 0x294) != 0) {
+        current = marioGetPtr();
+        *(s32*)((s32)*(void**)((s32)current + 0x294) + 0x14) = -1;
+    }
+
+    *(u32*)((s32)player + 0xC) &= ~1;
+    *(u16*)((s32)player + 0x2E) = 0x16;
+    *(u32*)player |= 0x1000000;
+    *(u32*)((s32)player + 8) = 0x10;
+    marioPaperOn(str_p_roll_802c4248);
+    marioChgPose(str_M_I_U_80420e1c);
+    marioChgPaper(str_PM_R_1B_802c4258);
+    *(u32*)((s32)player + 4) |= 8;
+    *(u32*)((s32)player + 4) |= 0x100;
+    *(s32*)((s32)player + 0x44) = 0x1E;
+
+    player = marioGetPtr();
+    *(f32*)((s32)player + 0x1B8) = float_14p8_80420e24;
+    *(f32*)((s32)player + 0x1BC) = float_14p8_80420e24;
+    *(f32*)((s32)player + 0x188) = rollData;
+    current = marioGetPtr();
+    *(f32*)*(void**)((s32)current + 0x294) = float_0_80420dd4;
+    current = marioGetPtr();
+    *(f32*)((s32)*(void**)((s32)current + 0x294) + 4) = float_0_80420dd4;
+    *(f32*)((s32)player + 0xB0) = float_neg6_80420e28;
+    *(f32*)((s32)player + 0xB4) = float_6_80420de4;
+    *(f32*)((s32)player + 0x98) = float_6_80420de4;
+    *(f32*)((s32)player + 0x9C) = float_0_80420dd4;
+    *(f32*)((s32)player + 0xC8) = float_1_80420e2c;
+    *(f32*)((s32)player + 0xCC) = float_1_80420e2c;
+    *(f32*)((s32)player + 0xD0) = float_1_80420e2c;
+    *(f32*)((s32)player + 0x130) = float_1_80420e2c;
+    allPartyForceRideOn();
     return 0;
 }
-
 
 void roll_upstairs_on(void) {
     extern void* marioGetPtr(void);

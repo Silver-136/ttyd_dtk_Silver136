@@ -1461,9 +1461,71 @@ void btlseqInit(void* battleWork) {
 }
 
 s32 BattleCheckConcluded(void* battleWork) {
-    return 0;
-}
+    extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
+    extern s32 BtlUnit_CheckStatus(void* unit, s32 status);
+    s32 concluded;
+    s32 alliance;
+    s32 offset;
+    s32 unitId;
+    void* unit;
+    u16 flags;
 
+    concluded = 0;
+    alliance = 0;
+    offset = 0;
+    do {
+        *(s32*)((s32)battleWork + offset + 0xC) = 0;
+        flags = *(u16*)((s32)battleWork + offset + 8);
+        if (flags == 0) {
+            concluded++;
+            *(s32*)((s32)battleWork + offset + 0xC) = 1;
+        } else {
+            if (flags & 1) {
+                unitId = 0;
+                do {
+                    unit = BattleGetUnitPtr(battleWork, unitId);
+                    if (unit != 0 && *(s8*)((s32)unit + 0xC) == alliance &&
+                        BtlUnit_CheckStatus(unit, 0x1B) == 0 &&
+                        (*(u32*)((s32)unit + 0x104) & 0x20000) == 0 &&
+                        (*(u32*)((s32)unit + 0x104) & 0x10000000) == 0) {
+                        break;
+                    }
+                    unitId++;
+                } while (unitId < 0x40);
+                if (unitId >= 0x40) {
+                    concluded++;
+                    *(s32*)((s32)battleWork + offset + 0xC) = 1;
+                    goto next_alliance;
+                }
+            }
+            if (*(u16*)((s32)battleWork + offset + 8) & 2) {
+                unitId = 0;
+                do {
+                    unit = BattleGetUnitPtr(battleWork, unitId);
+                    if (unit != 0 && *(s8*)((s32)unit + 0xC) == alliance &&
+                        (*(u32*)((s32)unit + 0x104) & 0x40000) != 0 &&
+                        BtlUnit_CheckStatus(unit, 0x1B) == 0 &&
+                        (*(u32*)((s32)unit + 0x104) & 0x10000000) == 0) {
+                        break;
+                    }
+                    unitId++;
+                } while (unitId < 0x40);
+                if (unitId >= 0x40) {
+                    concluded++;
+                    *(s32*)((s32)battleWork + offset + 0xC) = 1;
+                }
+            }
+        }
+next_alliance:
+        alliance++;
+        offset += 8;
+    } while (alliance < 3);
+
+    if (concluded >= 2) {
+        return 1;
+    }
+    return (*(u32*)((s32)battleWork + 0xEF4) & 0x30) != 0;
+}
 
 void battleMakePhaseEvtTable(void* battleWork) {
     ;

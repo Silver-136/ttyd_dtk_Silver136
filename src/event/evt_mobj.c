@@ -1777,80 +1777,100 @@ s32 mobj_koopa_brickblk(u32* mobj) {
     extern f32 float_25_80420230;
     s32 level;
     s32 score;
-    s32 ok;
+    s32 valid;
     u32 hitKind;
-    u32 action = mobj[0x77];
 
-    if (action == 0) {
-        if ((*mobj & 8) != 0) {
-            ok = 0;
+    switch (mobj[0x77]) {
+        case 0:
+            if ((*mobj & 8) == 0) {
+                break;
+            }
+            valid = 0;
             level = kpaGetLevel();
             hitKind = mobj[0x78];
             if (level == 2) {
-                if (hitKind == 0x20000000 || hitKind == 0x10000000 || hitKind == 0x4000000) {
-                    ok = 1;
+                if (hitKind == 0x20000000 || hitKind == 0x10000000 ||
+                    hitKind == 0x04000000) {
+                    valid = 1;
                 }
             } else if (level < 2) {
                 if (level == 0) {
                     if (hitKind == 0x20000000) {
-                        ok = 1;
+                        valid = 1;
                     }
-                } else if (level > -1 && (hitKind == 0x20000000 || hitKind == 0x4000000)) {
-                    ok = 1;
+                } else if (level > -1 &&
+                           (hitKind == 0x20000000 || hitKind == 0x04000000)) {
+                    valid = 1;
                 }
             } else if (level < 4) {
-                ok = 1;
+                valid = 1;
             }
-            if (ok) {
+
+            if (valid != 0) {
                 mobjRunEvent(mobj, (void*)mobj[0x75]);
                 evtSetValue(0, mobj[0x79], 1);
-                if (mobj[0x78] == 0x4000000) {
+                if (mobj[0x78] == 0x04000000) {
                     npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
                 }
                 if ((void*)mobj[0x1D] != 0) {
                     *(u16*)mobj[0x1D] |= 1;
                 }
                 *mobj |= 2;
-                score = kpaMutekiCheck() != 0 ? 500 : 400;
+                score = 400;
+                if (kpaMutekiCheck() != 0) {
+                    score = 500;
+                }
                 kpaAddScore(score);
                 mobj[0x77] = 10;
-            } else if (mobj[0x78] == 0x4000000) {
+            } else if (mobj[0x78] == 0x04000000) {
                 npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
-                mobj[0x77] = 0x14;
+                mobj[0x77] = 20;
             } else {
                 *mobj &= ~8;
             }
-        }
-    } else if (action == 10) {
-        psndSFXOn_3D(0x1B8, mobj + 0xE);
-        if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_FlowBrickBlock_802c24e0) == 0) {
-            effMObjBrokenEntry((double)(f32)mobj[0xE], (double)(float_12p5_80420268 + (f32)mobj[0xF]),
-                               (double)(float_12p5_80420268 + (f32)mobj[0x10]), 0);
-        } else if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_block_ky_802c24f4) == 0) {
-            effMObjBrokenEntry((double)(f32)mobj[0xE], (double)(float_12p5_80420268 + (f32)mobj[0xF]),
-                               (double)(float_12p5_80420268 + (f32)mobj[0x10]), 1);
-        } else if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_bigblock_01_802c2504) == 0) {
-            effMObjBrokenEntry((double)(f32)mobj[0xE], (double)(float_25_80420230 + (f32)mobj[0xF]),
-                               (double)(float_25_80420230 + (f32)mobj[0x10]), 3);
-        } else if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_bigblock_02_802c2518) == 0) {
-            effMObjBrokenEntry((double)(f32)mobj[0xE], (double)(float_25_80420230 + (f32)mobj[0xF]),
-                               (double)(float_25_80420230 + (f32)mobj[0x10]), 4);
-        }
-        mobj[0x77] = 99;
-    } else if (action == 0x14) {
-        psndSFXOn_3D(0x1B7, mobj + 0xE);
-        animPoseSetAnim(mobj[0x1C], str_A_1_80420208, 1);
-        mobj[0x77] = 0x15;
-    } else if (action == 99) {
-        mobjDelete((char*)((s32)mobj + 5));
-    } else if ((s32)action < 0x16) {
-        if ((*mobj & 8) == 0) {
-            mobj[0x77] = 0;
-        } else if (animPoseGetLoopTimes(mobj[0x1C]) >= (double)float_1_80420250) {
-            animPoseSetAnim(mobj[0x1C], str_S_1_8042021c, 1);
-            mobj[0x77] = 0;
-            *mobj &= ~8;
-        }
+            break;
+
+        case 10:
+            psndSFXOn_3D(0x1B8, mobj + 0xE);
+            if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_FlowBrickBlock_802c24e0) == 0) {
+                effMObjBrokenEntry((double)(f32)mobj[0xE],
+                                   (double)(float_12p5_80420268 + (f32)mobj[0xF]),
+                                   (double)(float_12p5_80420268 + (f32)mobj[0x10]), 0);
+            } else if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_block_ky_802c24f4) == 0) {
+                effMObjBrokenEntry((double)(f32)mobj[0xE],
+                                   (double)(float_12p5_80420268 + (f32)mobj[0xF]),
+                                   (double)(float_12p5_80420268 + (f32)mobj[0x10]), 1);
+            } else if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_bigblock_01_802c2504) == 0) {
+                effMObjBrokenEntry((double)(f32)mobj[0xE],
+                                   (double)(float_25_80420230 + (f32)mobj[0xF]),
+                                   (double)(float_25_80420230 + (f32)mobj[0x10]), 3);
+            } else if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_bigblock_02_802c2518) == 0) {
+                effMObjBrokenEntry((double)(f32)mobj[0xE],
+                                   (double)(float_25_80420230 + (f32)mobj[0xF]),
+                                   (double)(float_25_80420230 + (f32)mobj[0x10]), 4);
+            }
+            mobj[0x77] = 99;
+            break;
+
+        case 20:
+            psndSFXOn_3D(0x1B7, mobj + 0xE);
+            animPoseSetAnim(mobj[0x1C], str_A_1_80420208, 1);
+            mobj[0x77] = 21;
+            break;
+
+        case 21:
+            if ((*mobj & 8) == 0) {
+                mobj[0x77] = 0;
+            } else if (animPoseGetLoopTimes(mobj[0x1C]) >= (double)float_1_80420250) {
+                animPoseSetAnim(mobj[0x1C], str_S_1_8042021c, 1);
+                mobj[0x77] = 0;
+                *mobj &= ~8;
+            }
+            break;
+
+        case 99:
+            mobjDelete((char*)((s32)mobj + 5));
+            break;
     }
     return 0;
 }
@@ -2433,9 +2453,118 @@ s32 mobj_badgeblk(void* pMobj) {
 }
 
 s32 mobj_brickblk(void* pMobj) {
+    extern char* strcat(char*, const char*);
+    extern u32 animGroupBaseAsync(const char*, s32, s32);
+    extern void* mobjRunEvent(void*, void*);
+    extern void evtSetValue(void*, s32, s32);
+    extern s32 animPaperPoseEntry(const char*, s32);
+    extern s32 offscreenEntry(char*);
+    extern s32 imgEntry(char*, s32);
+    extern s32 offscreenNameToId(char*);
+    extern s32 evt_img_alloc_capture(void*);
+    extern void* imgNameToPtr(char*, s32);
+    extern s32 animPaperPoseGetId(const char*, s32);
+    extern f64 animTimeGetTime(s32);
+    extern void imgSetShadow(void*, s32);
+    extern u32 psndSFXOn_3D(s32, void*);
+    extern void imgFreeCapture(void*, s32);
+    extern void imgRelease(void*);
+    extern void offscreenDelete(char*);
+    extern void mobjDelete(char*);
+    extern void* gp;
+    extern const char str_o_802c2290[];
+    extern const char str_i_802c22a0[];
+    extern const char str_P_box_y_802c2618[];
+    extern const char str_A_1_80420208[];
+    extern f32 vec3_802c22b0;
+    extern f32 DAT_802c22b4;
+    extern f32 DAT_802c22b8;
+    char offName[32];
+    char imgName[32];
+    char evtA[0x1B0];
+    char evtB[0x1B0];
+    void* argsA[8];
+    void* argsB[8];
+    void* img;
+    s32 heapType;
+    u32 action;
+
+    heapType = *(s32*)((s32)gp + 0x14) != 0;
+    offName[0] = 0;
+    imgName[0] = 0;
+    strcat(offName, str_o_802c2290);
+    strcat(imgName, str_i_802c22a0);
+    strcat(offName, (char*)((s32)pMobj + 5));
+    strcat(imgName, (char*)((s32)pMobj + 5));
+    action = *(u32*)((s32)pMobj + 0x1DC);
+
+    if (action == 0) {
+        animGroupBaseAsync(str_P_box_y_802c2618, heapType, 0);
+        if ((*(u32*)pMobj & 8) != 0) {
+            mobjRunEvent(pMobj, *(void**)((s32)pMobj + 0x1D4));
+            evtSetValue(0, *(s32*)((s32)pMobj + 0x1E4), 1);
+            *(s32*)((s32)pMobj + 0x1DC) = 10;
+        }
+    } else if ((s32)action > 9 && (s32)action < 11) {
+        animPaperPoseEntry(str_P_box_y_802c2618, heapType);
+        offscreenEntry(offName);
+        imgEntry(imgName, heapType);
+        *(s32*)((s32)pMobj + 0x19C) = offscreenNameToId(offName);
+
+        argsA[0] = imgName;
+        argsA[1] = offName;
+        argsA[2] = 0;
+        argsA[3] = (void*)1;
+        argsA[4] = 0;
+        argsA[5] = 0;
+        argsA[6] = 0;
+        argsA[7] = 0;
+        *(void**)(evtA + 0x18) = argsA;
+        evt_img_alloc_capture(evtA);
+
+        argsB[0] = imgName;
+        argsB[1] = offName;
+        argsB[2] = (void*)1;
+        argsB[3] = (void*)1;
+        argsB[4] = 0;
+        argsB[5] = 0;
+        argsB[6] = 0;
+        argsB[7] = 0;
+        *(void**)(evtB + 0x18) = argsB;
+        evt_img_alloc_capture(evtB);
+
+        img = imgNameToPtr(imgName, heapType);
+        *(s32*)((s32)img + 0x104) = animPaperPoseGetId(str_P_box_y_802c2618, heapType);
+        *(const char**)((s32)img + 0x108) = str_A_1_80420208;
+        *(f64*)((s32)img + 0x110) = animTimeGetTime(heapType);
+        imgSetShadow(img, 2);
+        psndSFXOn_3D(0x1B8, (void*)((s32)pMobj + 0x38));
+        *(s32*)((s32)pMobj + 0x1DC) = 11;
+    } else if (action == 11) {
+        img = imgNameToPtr(imgName, heapType);
+        if (*(f32*)((s32)img + 0x118) >= 1.0f ||
+            (*(u32*)img & 0x10000000) != 0) {
+            *(s32*)((s32)pMobj + 0x1DC) = 12;
+        }
+        *(f32*)((s32)pMobj + 0x38) = vec3_802c22b0;
+        *(f32*)((s32)pMobj + 0x3C) = DAT_802c22b4;
+        *(f32*)((s32)pMobj + 0x40) = DAT_802c22b8;
+        *(u32*)pMobj |= 4;
+        *(u32*)pMobj |= 8;
+    } else if ((s32)action < 99 && (s32)action < 13) {
+        img = imgNameToPtr(imgName, heapType);
+        imgFreeCapture(img, 0);
+        imgFreeCapture(img, 1);
+        imgSetShadow(img, 0);
+        imgRelease(img);
+        offscreenDelete(offName);
+        *(s32*)((s32)pMobj + 0x19C) = -1;
+        *(s32*)((s32)pMobj + 0x1DC) = 99;
+    } else if (action == 99) {
+        mobjDelete((char*)((s32)pMobj + 5));
+    }
     return 0;
 }
-
 
 s32 evt_mobj_float_blk(void* pEvt) {
     extern f32 evtGetFloat(void* evt, s32 value);
@@ -3373,60 +3502,62 @@ s32 mobj_koopa_dokan_evt(u32* mobj) {
     extern const char str_MOBJ_GreenPipe_kl_802c2480[];
     extern f32 float_25_80420230;
     extern f32 float_7p5_804202ac;
-    s32 action;
     s32 level;
-    s32 ok;
+    s32 valid = 0;
     u16* hit;
-    s32 score;
 
-    action = mobj[0x77];
-    if (action == 10) {
-        if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_GreenPipe_ks_802c246c) == 0) {
-            effMObjBrokenEntry(*(f32*)((s32)mobj + 0x38), float_25_80420230 + *(f32*)((s32)mobj + 0x3C),
-                               float_25_80420230 + *(f32*)((s32)mobj + 0x40), 6);
-        } else if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_GreenPipe_kl_802c2480) == 0) {
-            effMObjBrokenEntry(*(f32*)((s32)mobj + 0x38),
-                               float_7p5_804202ac + float_25_80420230 + *(f32*)((s32)mobj + 0x3C),
-                               float_25_80420230 + *(f32*)((s32)mobj + 0x40), 6);
-        } else {
-            effMObjBrokenEntry(*(f32*)((s32)mobj + 0x38) - float_25_80420230,
-                               float_25_80420230 + *(f32*)((s32)mobj + 0x3C),
-                               float_25_80420230 + *(f32*)((s32)mobj + 0x40), 6);
-        }
-        psndSFXOn_3D(0x834, (void*)((s32)mobj + 0x38));
-        mobj[0x77] = 99;
-    } else if (action < 10) {
-        if (action == 0 && ((*mobj & 8) != 0)) {
-            ok = 0;
+    switch (mobj[0x77]) {
+        case 0:
+            if ((*mobj & 8) == 0) {
+                break;
+            }
             level = kpaGetLevel();
             if (level == 3) {
-                ok = 1;
-            } else if (level < 3 && level != 0 && level > -1 && mobj[0x78] == 0x20000000) {
-                ok = 1;
+                valid = 1;
+            } else if (level < 3 && level != 0 && level > -1 &&
+                       mobj[0x78] == 0x20000000) {
+                valid = 1;
             }
-            if (ok != 0) {
-                mobjRunEvent(mobj, (void*)mobj[0x75]);
-                evtSetValue(0, mobj[0x79], 1);
-                if (mobj[0x78] == 0x4000000) {
-                    npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
-                }
-                hit = (u16*)mobj[0x1D];
-                if (hit != 0) {
-                    *hit |= 1;
-                }
-                *mobj |= 2;
-                score = 400;
-                if (kpaMutekiCheck() != 0) {
-                    score = 500;
-                }
-                kpaAddScore(score);
-                mobj[0x77] = 10;
-            } else {
+            if (valid == 0) {
                 *mobj &= ~8;
+                break;
             }
-        }
-    } else if (action == 99) {
-        mobjDelete((s32)mobj + 5);
+            mobjRunEvent(mobj, (void*)mobj[0x75]);
+            evtSetValue(0, mobj[0x79], 1);
+            if (mobj[0x78] == 0x4000000) {
+                npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
+            }
+            hit = (u16*)mobj[0x1D];
+            if (hit != 0) {
+                *hit |= 1;
+            }
+            *mobj |= 2;
+            kpaAddScore(kpaMutekiCheck() != 0 ? 500 : 400);
+            mobj[0x77] = 10;
+            break;
+
+        case 10:
+            if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_GreenPipe_ks_802c246c) == 0) {
+                effMObjBrokenEntry(*(f32*)((s32)mobj + 0x38),
+                                   float_25_80420230 + *(f32*)((s32)mobj + 0x3C),
+                                   float_25_80420230 + *(f32*)((s32)mobj + 0x40), 6);
+            } else if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_GreenPipe_kl_802c2480) == 0) {
+                effMObjBrokenEntry(*(f32*)((s32)mobj + 0x38),
+                                   float_7p5_804202ac + float_25_80420230 +
+                                       *(f32*)((s32)mobj + 0x3C),
+                                   float_25_80420230 + *(f32*)((s32)mobj + 0x40), 6);
+            } else {
+                effMObjBrokenEntry(*(f32*)((s32)mobj + 0x38) - float_25_80420230,
+                                   float_25_80420230 + *(f32*)((s32)mobj + 0x3C),
+                                   float_25_80420230 + *(f32*)((s32)mobj + 0x40), 6);
+            }
+            psndSFXOn_3D(0x834, (void*)((s32)mobj + 0x38));
+            mobj[0x77] = 99;
+            break;
+
+        case 99:
+            mobjDelete((s32)mobj + 5);
+            break;
     }
     return 0;
 }
@@ -5166,10 +5297,51 @@ s32 mobj_blk(void* mobj) {
     return 0;
 }
 
-s32 mobj_koopa_blk(u32* param_1) {
+s32 mobj_koopa_blk(u32* mobj) {
+    extern s32 kpaGetLevel(void);
+    extern void* mobjRunEvent(void*, void*);
+    extern void evtSetValue(void*, s32, s32);
+    extern s32 npcKoopaModeMobjBoundDeadCheck(void*);
+    extern void psndSFXOn_3D(s32, void*);
+    extern void effMObjBrokenEntry(double, double, double, s32);
+    extern void mobjDelete(char*);
+    extern f32 float_12p5_80420268;
+    u16* hit;
+
+    switch (mobj[0x77]) {
+        case 0:
+            if ((*mobj & 8) == 0) {
+                break;
+            }
+            if (kpaGetLevel() != 3) {
+                *mobj &= ~8;
+                break;
+            }
+            mobjRunEvent(mobj, (void*)mobj[0x75]);
+            evtSetValue(0, mobj[0x79], 1);
+            if (mobj[0x78] == 0x4000000) {
+                npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
+            }
+            hit = (u16*)mobj[0x1D];
+            if (hit != 0) {
+                *hit |= 1;
+            }
+            *mobj |= 2;
+            mobj[0x77] = 10;
+            break;
+        case 10:
+            psndSFXOn_3D(0x1B8, mobj + 0xE);
+            effMObjBrokenEntry((double)(f32)mobj[0xE],
+                               (double)(float_12p5_80420268 + (f32)mobj[0xF]),
+                               (double)(float_12p5_80420268 + (f32)mobj[0x10]), 2);
+            mobj[0x77] = 99;
+            break;
+        case 99:
+            mobjDelete((char*)((s32)mobj + 5));
+            break;
+    }
     return 0;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma no_register_save_helpers on
@@ -5313,10 +5485,36 @@ s32 mobj_switch_blue(void* mobj) {
     return 0;
 }
 
-u8 kpa_disp_pole_score_main(void) {
+s32 kpa_disp_pole_score_main(void* evt, s32 isFirstCall) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 order);
+    extern void kpa_disp_pole_score(void);
+    extern f32 float_0_80420240;
+    extern f32 float_230_80420244;
+    s32* args;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 speed;
+
+    args = *(s32**)((s32)evt + 0x18);
+    x = evtGetFloat(evt, args[0]);
+    y = evtGetFloat(evt, args[1]);
+    z = evtGetFloat(evt, args[2]);
+    speed = evtGetFloat(evt, args[3]);
+    if (isFirstCall != 0) {
+        *(f32*)((s32)psw + 8) = x;
+        *(f32*)((s32)psw + 0xC) = y;
+        *(f32*)((s32)psw + 0x10) = z;
+    }
+    if (*(f32*)((s32)psw + 0xC) >= float_230_80420244) {
+        *(f32*)((s32)psw + 0xC) = float_230_80420244;
+    } else {
+        *(f32*)((s32)psw + 0xC) += speed;
+    }
+    dispEntry(4, 2, kpa_disp_pole_score, 0, float_0_80420240);
     return 0;
 }
-
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
@@ -5708,10 +5906,30 @@ s32 evt_mobj_entry(void* evt) {
     return 2;
 }
 
-s32 kpa_powerup(void* pEvt) {
-    return 0;
-}
+s32 kpa_powerup(void* evt) {
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern void kpaAddScorePos(s32 score, VecLocal* pos);
+    extern s32 kpaGetLevel(void);
+    extern void kpaAddScore(s32 score);
+    extern void kpaPowUp(void);
+    s32* args = *(s32**)((s32)evt + 0x18);
+    VecLocal pos;
 
+    pos.x = evtGetFloat(evt, args[0]);
+    pos.y = evtGetFloat(evt, args[1]);
+    pos.z = evtGetFloat(evt, args[2]);
+    kpaAddScorePos(500, &pos);
+    if (kpaGetLevel() == 3) {
+        kpaAddScore(1000);
+    }
+    kpaPowUp();
+    return 2;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

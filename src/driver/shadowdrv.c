@@ -317,12 +317,67 @@ void shadowSetType(s32 id, u8 type) {
     *(u8*)((s32)*(void**)((s32)cswp + 0x108) + id * 0x5C + 3) = type;
 }
 
-int shadowEntryMode(double param_1, double param_2, double param_3, double param_4, u8 param_5) {
-    return 0;
+int shadowEntryMode(double x, double y, double z, double size, u8 mode) {
+    extern void* cswp;
+    extern f32 float_1_8041f9e4;
+    extern f32 float_0p2_8041f9ec;
+    extern f32 float_0p4_8041f9f0;
+    u8* work;
+    u8* entry;
+    s32 index;
+
+    work = cswp;
+    index = *(s32*)(work + 0x104);
+    entry = *(u8**)(work + 0x108) + index * 0x5C;
+    *(u16*)entry = 0;
+    if (*(s32*)(work + 0x118) != 0) {
+        *(u16*)entry |= 1;
+    }
+    *(f32*)(entry + 4) = (f32)x;
+    *(f32*)(entry + 8) = (f32)y;
+    *(f32*)(entry + 0xC) = (f32)z;
+    *(f32*)(entry + 0x10) = (f32)size;
+    *(u32*)(entry + 0x14) = *(u32*)(work + 0x114);
+    entry[2] = mode;
+    entry[3] = 0;
+    *(u16*)(entry + 0x18) = 0xFFFF;
+    *(u16*)(entry + 0x1A) = 4;
+    *(f32*)(entry + 0x1C) = float_1_8041f9e4;
+    *(f32*)(entry + 0x20) = float_0p2_8041f9ec;
+    *(f32*)(entry + 0x24) = float_0p4_8041f9f0;
+    entry[0x28] = 0xFF;
+    *(s32*)(work + 0x104) = index + 1;
+    return index;
 }
 
-u8 shadowEntry(double param_1, double param_2, double param_3, double param_4) {
-    return 0;
+void shadowEntry(double x, double y, double z, double size) {
+    extern void* cswp;
+    extern f32 float_1_8041f9e4;
+    extern f32 float_0p2_8041f9ec;
+    extern f32 float_0p4_8041f9f0;
+    u8* work;
+    u8* entry;
+
+    work = cswp;
+    entry = *(u8**)(work + 0x108) + *(s32*)(work + 0x104) * 0x5C;
+    *(u16*)entry = 0;
+    if (*(s32*)(work + 0x118) != 0) {
+        *(u16*)entry |= 1;
+    }
+    *(f32*)(entry + 4) = (f32)x;
+    *(f32*)(entry + 8) = (f32)y;
+    *(f32*)(entry + 0xC) = (f32)z;
+    *(f32*)(entry + 0x10) = (f32)size;
+    *(u32*)(entry + 0x14) = *(u32*)(work + 0x114);
+    entry[2] = *(u8*)(work + 0x110);
+    entry[3] = 0;
+    *(u16*)(entry + 0x18) = 0xFFFF;
+    *(u16*)(entry + 0x1A) = 4;
+    *(f32*)(entry + 0x1C) = float_1_8041f9e4;
+    *(f32*)(entry + 0x20) = float_0p2_8041f9ec;
+    *(f32*)(entry + 0x24) = float_0p4_8041f9f0;
+    entry[0x28] = 0xFF;
+    (*(s32*)(work + 0x104))++;
 }
 
 void cylinderShadowDraw(s32 param_1) {
@@ -1201,8 +1256,31 @@ void shadowDisp(s32 param_1, s32 param_2) {
     }
 }
 
-u8 shadowMain(void) {
-    return 0;
+void shadowMain(void) {
+    extern void* cswp;
+    extern void* pswp;
+    extern void* dswp;
+    extern void dispEntry(s32, s32, void*, s32, f32);
+    extern void shadowDisp(s32, s32);
+    extern f32 float_0_8041f9d4;
+
+    dispEntry(0, 9, shadowDisp, 0, float_0_8041f9d4);
+    dispEntry(7, 9, shadowDisp, 0, float_0_8041f9d4);
+    dispEntry(8, 9, shadowDisp, 0, float_0_8041f9d4);
+    dispEntry(9, 9, shadowDisp, 0, float_0_8041f9d4);
+    if (*(s32*)((u8*)cswp + 0x10C) != 0) {
+        dispEntry(6, 5, shadowDisp, 0, float_0_8041f9d4);
+    }
+    dispEntry(6, 0, shadowDisp, 0, float_0_8041f9d4);
+    dispEntry(6, 2, shadowDisp, 0, float_0_8041f9d4);
+    dispEntry(6, 7, shadowDisp, 0, float_0_8041f9d4);
+    *(s32*)((u8*)cswp + 0x104) = 0;
+    *(u32*)cswp &= ~1;
+    *(s32*)((u8*)cswp + 4) = 0;
+    *(u32*)pswp &= ~1;
+    *(s32*)((u8*)pswp + 4) = 0;
+    *(u32*)dswp &= ~1;
+    *(s32*)((u8*)dswp + 4) = 0;
 }
 
 void shadowInit(void) {

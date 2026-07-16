@@ -105,10 +105,13 @@ u8 mot_slit(void) {
     extern s32 marioSlitChkWallAround(void);
     extern void allPartySlitOn(void);
     extern void allPartySlitOff(void);
+    extern void marioAdjustMoveDir(void);
+    extern void marioChgMotSub(s32, s32);
     extern u32 psndSFXOn_3D(s32, void*);
     extern char str_p_slit_802c433c[];
     extern char str_PM_S_1A_802c4344[];
     extern char str_PM_S_1B_802c434c[];
+    extern char str_PM_S_1C_802c4384[];
     void* player = marioGetPtr();
     s32 state;
 
@@ -167,6 +170,46 @@ u8 mot_slit(void) {
             *(f32*)((s32)player + 0x1A4) = *(f32*)((s32)player + 0x2C);
             *(s32*)((s32)player + 0x2EC) = 100;
         }
+        break;
+    case 100:
+        *(u32*)player &= ~0x8000000;
+        *(u32*)player &= ~0x1000000;
+        *(f32*)((s32)player + 0x1B8) = 14.8f;
+        marioChgPaper(str_PM_S_1C_802c4384);
+        *(s32*)((s32)player + 0x2F0) = 30;
+        *(s32*)((s32)player + 0x2EC) = 101;
+        psndSFXOn_3D(0x178, (void*)((s32)player + 0x8C));
+        break;
+    case 101:
+        if (--*(s32*)((s32)player + 0x2F0) < 1) {
+            *(s32*)((s32)player + 0x2EC) = 102;
+        }
+        break;
+    case 102:
+        *(u32*)player &= ~0x4000000;
+        *(u32*)player &= ~0x8000000;
+        *(u32*)((s32)player + 8) &= 0xFEFFF3FF;
+        marioPaperOff();
+        marioAdjustMoveDir();
+        marioChgMotSub(0, 0);
+        break;
+    case 110:
+        *(u32*)player &= ~0x4000000;
+        *(s32*)((s32)player + 0x2F0) = 30;
+        *(s32*)((s32)player + 0x2EC) = 111;
+        break;
+    case 111:
+        if (--*(s32*)((s32)player + 0x2F0) < 1) {
+            *(s32*)((s32)player + 0x2EC) = 112;
+        }
+        break;
+    case 112:
+        *(u32*)player &= ~0x8000000;
+        *(u32*)((s32)player + 8) &= 0xFEFFF3FF;
+        allPartySlitOff();
+        marioPaperOff();
+        marioAdjustMoveDir();
+        marioChgMotSub(0, 0);
         break;
     case 120:
         allPartySlitOff();

@@ -73,24 +73,46 @@ void msgDispKeyWait_render(void* anim) {
 
 
 u8 msgDisp(f64 baseX, f64 baseY, s32* smart, u8 alpha) {
-    extern void FontDrawStart_alpha(u8 alpha);
+    extern void* gp;
+    extern void FontDrawStart_alpha(u8);
     extern u32 FontGetDrawColor(void);
-    extern void FontDrawColor(void* color);
+    extern void FontDrawColor(void*);
     extern void FontDrawColor_(void);
     extern void FontDrawNoise(void);
     extern void FontDrawNoiseOff(void);
-    extern void FontDrawScale(f32 scale);
-    extern void FontDrawScaleVec(void* scale);
-    extern void FontDrawCode(f64 x, f64 y, u16 code);
-    extern void FontDrawCodeMtx(void* mtx, u16 code);
+    extern void FontDrawScale(f32);
+    extern void FontDrawScaleVec(void*);
+    extern void FontDrawCode(f64, f64, u16);
+    extern void FontDrawCodeMtx(void*, u16);
     extern void FontDrawEdge(void);
     extern void FontDrawEdgeOff(void);
     extern void FontDrawRainbowColor(void);
     extern void FontDrawRainbowColorOff(void);
-    extern void FontDrawColorIDX(s32 id);
-    extern u16 kanjiGetWidth(u32 code);
-    extern s32 irand(s32 range);
-    extern void iconDispGxAlpha(f64 scale, void* pos, s32 flags, u16 icon, u8 alpha);
+    extern void FontDrawColorIDX(s32);
+    extern u16 kanjiGetWidth(u32);
+    extern s32 irand(s32);
+    extern void iconDispGxAlpha(f64, void*, s32, u16, u8);
+    extern void PSMTXIdentity(void*);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXTransApply(void*, void*, f32, f32, f32);
+    extern void PSMTXScaleApply(void*, void*, f32, f32, f32);
+    extern void animPoseMain(s32);
+    extern void animPoseDrawMtx(s32, void*, s32, f32, f32);
+    extern double sin(double);
+    extern double cos(double);
+    extern f32 float_0_80420600;
+    extern f32 float_1_80420618;
+    extern f32 float_0p5_80420620;
+    extern f32 float_20_8042077c;
+    extern f32 float_40_80420608;
+    extern f32 float_90_80420770;
+    extern f32 float_270_80420774;
+    extern f32 float_neg1_80420778;
+    extern f32 float_12_80420780;
+    extern f32 float_0p01_80420788;
+    extern f32 float_0p02_8042078c;
+    extern f32 float_3p2_80420790;
+    extern f32 float_4_8042076c;
     s32 work = *smart;
     u32* entry = (u32*)(work + 0x3C);
     s32 count = *(s32*)(work + 0x10);
@@ -99,45 +121,30 @@ u8 msgDisp(f64 baseX, f64 baseY, s32* smart, u8 alpha) {
 
     FontDrawStart_alpha(alpha);
     for (i = 0; i < count; i++, entry += 6) {
+        u32 flags = entry[0];
         u16 code = *(u16*)((u8*)entry + 4);
         f32 x = (f32)baseX + *(s16*)((u8*)entry + 6);
         f32 y = (f32)baseY + *(s16*)((u8*)entry + 8) + *(s32*)(work + 0x28);
         f32 scale = *(f32*)((u8*)entry + 0x10);
-        u32 flags = entry[0];
 
         switch (code) {
-            case 0xFFFF:
-                return 0;
-            case 0xFFFE:
-                if (*(u16*)(work + 8) == *(u16*)((u8*)entry + 6)) {
-                    result = 1;
-                }
-                break;
-            case 0xFFF7: {
-                u32 color = entry[0];
-                FontDrawColor(&color);
-                break;
-            }
-            case 0xFFF6:
-                if (entry[0] == 0) {
-                    FontDrawNoiseOff();
-                } else {
-                    FontDrawNoise();
-                }
-                break;
-            case 0xFFF8: {
-                f32 pos[3];
+            case 0xFFF4: {
+                f32 mtx[12];
                 u32 color = FontGetDrawColor();
-                pos[0] = x + 20.0f;
-                pos[1] = y - 40.0f;
-                pos[2] = 0.0f;
-                iconDispGxAlpha(scale, pos, 0x10, (u16)entry[0], alpha);
+                PSMTXIdentity(mtx);
+                if (*(f32*)((u8*)entry + 0x14) >= float_90_80420770 &&
+                    *(f32*)((u8*)entry + 0x14) <= float_270_80420774) {
+                    PSMTXScaleApply(mtx, mtx, float_1_80420618,
+                                    float_1_80420618, float_neg1_80420778);
+                }
+                PSMTXTransApply(mtx, mtx, x, y, (f32)*(s32*)(work + 0x28));
+                animPoseMain(entry[0]);
+                animPoseDrawMtx(entry[0], mtx, 2,
+                                *(f32*)((u8*)entry + 0x14), scale);
                 FontDrawStart_alpha(alpha);
                 FontDrawColor(&color);
                 break;
             }
-            case 0xFFF4:
-                break;
             case 0xFFF5:
             case 0xFFF9:
             case 0xFFFA:
@@ -145,33 +152,82 @@ u8 msgDisp(f64 baseX, f64 baseY, s32* smart, u8 alpha) {
             case 0xFFFC:
             case 0xFFFD:
                 break;
+            case 0xFFF6:
+                if (entry[0] == 0) FontDrawNoiseOff(); else FontDrawNoise();
+                break;
+            case 0xFFF7: {
+                u32 color = entry[0];
+                FontDrawColor(&color);
+                break;
+            }
+            case 0xFFF8: {
+                f32 pos[3];
+                u32 color = FontGetDrawColor();
+                if (*(s32*)(work + 0x28) + *(s16*)((u8*)entry + 8) - 40 +
+                    *(s16*)((u8*)entry + 10) < 1) {
+                    pos[0] = x + float_20_8042077c;
+                    pos[1] = y + *(s16*)((u8*)entry + 10) - float_40_80420608;
+                    pos[2] = float_0_80420600;
+                    iconDispGxAlpha(scale, pos, 0x10, (u16)entry[0], alpha);
+                    FontDrawStart_alpha(alpha);
+                    FontDrawColor(&color);
+                }
+                break;
+            }
+            case 0xFFFE:
+                if (*(u16*)(work + 8) == *(u16*)((u8*)entry + 6)) result = 1;
+                break;
+            case 0xFFFF:
+                return 0;
             default:
                 if ((flags & 1) != 0) {
+                    f32 mtx[12];
                     s32 halfWidth = kanjiGetWidth(code) >> 1;
-                    f32 vec[3];
-                    vec[0] = scale;
-                    vec[1] = *(f32*)((u8*)entry + 0x14);
-                    vec[2] = (f32)halfWidth;
-                    FontDrawScaleVec(vec);
-                    FontDrawCode(x, y, code);
+                    PSMTXTrans(mtx, (f32)-halfWidth, float_12_80420780,
+                               float_0_80420600);
+                    PSMTXScaleApply(mtx, mtx, *(f32*)((u8*)entry + 0x14),
+                                    *(f32*)((u8*)entry + 0x14),
+                                    *(f32*)((u8*)entry + 0x14));
+                    PSMTXTransApply(mtx, mtx, x + halfWidth, y, float_0_80420600);
+                    PSMTXScaleApply(mtx, mtx, scale, scale, scale);
+                    FontDrawCodeMtx(mtx, code);
+                    *(f32*)((u8*)entry + 0x14) =
+                        float_0p5_80420620 *
+                        (*(f32*)((u8*)entry + 0x14) - float_1_80420618) +
+                        float_1_80420618;
                 } else if ((flags & 2) != 0) {
                     FontDrawScale(scale);
                     FontDrawCode(x + (irand(10000) % 3),
                                  y + (irand(10000) % 3), code);
                 } else if ((flags & 4) != 0) {
+                    s64 elapsed = (s64)(*(u64*)((u8*)gp + 0x38) - *(u64*)(work + 0x18));
+                    f32 phase = float_0p01_80420788 *
+                                (f32)(elapsed / (*(u32*)0x800000F8 / 4000)) -
+                                float_0p02_8042078c * x;
+                    FontDrawScale(scale);
+                    FontDrawCode(x + float_3p2_80420790 * (f32)cos(phase),
+                                 y + float_3p2_80420790 * (f32)sin(phase), code);
+                } else if ((flags & (0x100 << (*(s8*)(work + 0xF243) & 31))) != 0) {
+                    s64 elapsed = (s64)(*(u64*)((u8*)gp + 0x38) - *(u64*)(work + 0x18));
+                    f32 phase = float_0p01_80420788 *
+                                (f32)(elapsed / (*(u32*)0x800000F8 / 4000)) -
+                                float_0p02_8042078c * x;
+                    f32 drawX = x + float_3p2_80420790 * (f32)cos(phase);
+                    f32 drawY = y + float_3p2_80420790 * (f32)sin(phase);
                     u32 color = FontGetDrawColor();
                     FontDrawScale(scale);
+                    FontDrawColor(&color);
+                    FontDrawCode(drawX, drawY, code);
                     FontDrawEdge();
                     FontDrawRainbowColor();
-                    FontDrawCode(x, y, code);
+                    FontDrawCode(drawX - float_4_8042076c,
+                                 drawY + float_4_8042076c, code);
                     FontDrawEdgeOff();
                     FontDrawRainbowColorOff();
                     FontDrawColorIDX(0);
-                    FontDrawColor(&color);
                 } else {
                     FontDrawScale(scale);
                     FontDrawCode(x, y, code);
-                    FontDrawColor_();
                 }
                 break;
         }
@@ -833,20 +889,190 @@ void selectWindow_Main(void* win) {
     dispEntry(8, 0, selectWindow_Disp, win, float_400_8042061c - (f32)*(s16*)((s32)win + 4));
 }
 
-void msgLoad(char* name, s32 unk) {
-    ;
+void msgLoad(char* roomName, s32 index) {
+    typedef struct MsgFileLocal {
+        char* data;
+        u32 length;
+        s32 count;
+        void* lookup;
+    } MsgFileLocal;
+    extern void* msgWork;
+    extern void* gp;
+    extern char* language_dir[];
+    extern char str_PCTs_PCTs_txt_802c342c[];
+    extern char str_PCTs_PCTs_80420798[];
+    extern s32 sprintf(char*, const char*, ...);
+    extern s32 getMarioStDvdRoot(void);
+    extern void* DVDMgrOpen(const char*, s32, s32);
+    extern u32 DVDMgrGetLength(void*);
+    extern void DVDMgrRead(void*, void*, u32, u32);
+    extern void DVDMgrClose(void*);
+    extern void* __memAlloc(s32, u32);
+    extern void* _mapAlloc(void*, u32);
+    extern void* mapalloc_base_ptr;
+    extern u32 strlen(const char*);
+    extern void smartFree(void*);
+    extern void* smartAlloc(void*, s32);
+    extern void qsort(void*, u32, u32, void*);
+    extern s32 msg_compare(s32*, s32*);
+    extern char* msgSortDvdData;
+    MsgFileLocal* file = ((MsgFileLocal*)&msgWork) + index;
+    char filepath[64];
+    char dvdPath[136];
+    void* entry;
+    char* cursor;
+    s32 maxLength;
+    s32 i;
+    s32 offset;
+    s32* lookup;
+
+    if (file->data == 0 && index == 1) {
+        maxLength = 0;
+        for (i = 0; i < 7; i++) {
+            sprintf(filepath, str_PCTs_PCTs_txt_802c342c, language_dir[i], roomName);
+            sprintf(dvdPath, str_PCTs_PCTs_80420798, getMarioStDvdRoot(), filepath);
+            entry = DVDMgrOpen(dvdPath, 2, 0);
+            if (entry != 0) {
+                s32 length = DVDMgrGetLength(entry);
+                DVDMgrClose(entry);
+                if (maxLength < length) {
+                    maxLength = length;
+                }
+            }
+        }
+        file->data = __memAlloc(0, (maxLength + 0x1F) & ~0x1F);
+    }
+
+    file->length = 0;
+    sprintf(filepath, str_PCTs_PCTs_txt_802c342c,
+            language_dir[*(s32*)((u8*)gp + 0x16C)], roomName);
+    sprintf(dvdPath, str_PCTs_PCTs_80420798, getMarioStDvdRoot(), filepath);
+    entry = DVDMgrOpen(dvdPath, 2, 0);
+    if (entry != 0) {
+        file->length = DVDMgrGetLength(entry);
+        if (index >= 0 && index < 1) {
+            file->data = _mapAlloc(mapalloc_base_ptr, (file->length + 0x1F) & ~0x1F);
+        }
+        DVDMgrRead(entry, file->data, (file->length + 0x1F) & ~0x1F, 0);
+        DVDMgrClose(entry);
+    }
+
+    cursor = file->data;
+    if (cursor == 0) {
+        file->length = 0;
+        file->count = 0;
+    } else {
+        i = 0;
+        while (*cursor != 0) {
+            cursor += strlen(cursor) + 1;
+            i++;
+        }
+        file->count = i / 2;
+    }
+    if (file->lookup != 0) {
+        smartFree(file->lookup);
+    }
+    if (file->count == 0) {
+        file->lookup = 0;
+        return;
+    }
+
+    file->lookup = smartAlloc(file->lookup, 0);
+    cursor = file->data;
+    lookup = *(s32**)file->lookup;
+    offset = 0;
+    for (i = 0; i < file->count; i++) {
+        lookup[0] = offset;
+        offset += strlen(cursor) + 1;
+        cursor += strlen(cursor) + 1;
+        lookup[1] = offset;
+        offset += strlen(cursor) + 1;
+        cursor += strlen(cursor) + 1;
+        lookup += 2;
+    }
+    msgSortDvdData = file->data;
+    qsort(*(void**)file->lookup, file->count, 8, msg_compare);
 }
 
+void selectWindow_Disp(s32 unused, void* win) {
+    typedef struct VecLocal { f32 x, y, z; } VecLocal;
+    extern void GXSetFog(s32, f32, f32, f32, f32, void*);
+    extern void windowDispGX_Waku_col(f32, f32, f32, f32, f32, s32, void*);
+    extern u8 msgDisp(f64, f64, s32*, u8);
+    extern void iconDispGxAlpha(f64, void*, s32, u16, u8);
+    extern u32 unk_80429584;
+    extern u32 dat_804205fc;
+    extern f32 float_0_80420600;
+    extern f32 float_30_80420604;
+    extern f32 float_40_80420608;
+    extern f32 float_25_8042060c;
+    extern f32 float_2_80420610;
+    extern f32 float_0p3_80420614;
+    extern f32 float_1_80420618;
+    u8* window = win;
+    u8* work = **(u8***)(window + 0x28);
+    u32 fogColor = unk_80429584;
+    u32 frameColor = (dat_804205fc & 0xFFFFFF00) | *(u16*)(window + 6);
+    VecLocal iconPos;
+    f32 targetY;
 
-u8 selectWindow_Disp(s32 param_1, int param_2) {
-    return 0;
+    (void)unused;
+    GXSetFog(0, float_0_80420600, float_0_80420600,
+             float_0_80420600, float_0_80420600, &fogColor);
+    windowDispGX_Waku_col(*(f32*)(window + 0x0C), *(f32*)(window + 0x10),
+                          *(f32*)(window + 0x14), *(f32*)(window + 0x18),
+                          float_30_80420604, 0, &frameColor);
+    msgDisp(float_40_80420608 + *(f32*)(window + 0x0C),
+            *(f32*)(window + 0x10) - float_25_8042060c,
+            *(s32**)(window + 0x28), (u8)*(u16*)(window + 6));
+
+    iconPos.x = float_2_80420610 + *(f32*)(window + 0x0C);
+    iconPos.z = float_0_80420600;
+    targetY = *(f32*)(window + 0x10) -
+              (f32)((u8)work[0xF243] * 0x1F + 0x3A);
+    *(f32*)(work + 0xF248) +=
+        float_0p3_80420614 * (targetY - *(f32*)(work + 0xF248));
+    iconPos.y = *(f32*)(work + 0xF248);
+    iconDispGxAlpha(float_1_80420618, &iconPos, 0x14, 0x1F8,
+                    (u8)*(u16*)(window + 6));
 }
-
 
 void* msgSearch(void* msgId) {
-    return 0;
-}
+    extern void* msgWork;
+    extern void* gp;
+    extern s32 strcmp(const char*, const char*);
+    extern char* ErrMessage[];
+    u8* files = (u8*)&msgWork;
+    char* key = msgId;
+    s32 fileIndex;
 
+    for (fileIndex = 0; fileIndex < 2; fileIndex++, files += 0x10) {
+        void* smart = *(void**)(files + 0x0C);
+        if (smart != 0) {
+            s32* lookup = *(s32**)smart;
+            s32 low = 0;
+            s32 high = *(s32*)(files + 8);
+            while (low <= high) {
+                s32 middle = (low + high) / 2;
+                s32 count = *(s32*)(files + 8);
+                s32 result;
+                if (middle >= count) {
+                    break;
+                }
+                result = strcmp(key, (char*)*(void**)files + lookup[middle * 2]);
+                if (result == 0) {
+                    return (char*)*(void**)files + lookup[middle * 2 + 1];
+                }
+                if (result < 0) {
+                    high = middle - 1;
+                } else {
+                    low = middle + 1;
+                }
+            }
+        }
+    }
+    return ErrMessage[*(s32*)((u8*)gp + 0x16C)];
+}
 
 void msgWindow_ForceClose(s32 id) {
     extern s32 strcmp(const char* a, const char* b);
@@ -953,26 +1179,60 @@ s32 msgIconStr2ID(char* param_1) {
     return -1;
 }
 
-u8 msgWindow_Repeat(int param_1) {
-    return 0;
+void msgWindow_Repeat(s32 id) {
+    extern void* windowGetPointer(s32);
+    extern void* gp;
+    u8* window = windowGetPointer(id);
+    u8* work = **(u8***)(window + 0x28);
+    u64 now = *(u64*)((u8*)gp + 0x38);
+
+    *(u16*)window = 1;
+    *(u16*)(window + 2) |= 2;
+    *(u64*)(work + 0x30) = now;
+    *(u64*)(work + 0x18) = now;
+    *(u32*)(work + 0x20) = 0;
+    *(u32*)(work + 0x24) = 0;
+    *(u32*)(work + 0x28) = 0;
+    *(u32*)(work + 0x10) = 0;
 }
 
+void msgWindow_Add(char* text, s32 id) {
+    extern void* windowGetPointer(s32);
+    extern void* gp;
+    extern void msgAnalize(void*, void*);
+    u8* window = windowGetPointer(id);
+    void* smart = *(void**)(window + 0x28);
+    u8* work = *(u8**)smart;
 
-u8 msgWindow_Add(s32 param_1, int param_2) {
-    return 0;
+    *(u64*)(work + 0x30) = *(u64*)((u8*)gp + 0x38);
+    msgAnalize(smart, text);
+    *(u16*)window = 1;
+    *(u16*)(window + 2) |= 2;
 }
 
+s32 msg_compare(s32* a, s32* b) {
+    extern char* msgSortDvdData;
+    extern s32 strcmp(const char*, const char*);
+    s32 result = strcmp(msgSortDvdData + *a, msgSortDvdData + *b);
 
-int msg_compare(int* param_1, int* param_2) {
-    return 0;
+    if (result > 0) {
+        return 1;
+    }
+    return result >> 31;
 }
-
 
 u8 msgAnalize(void* smart, s32 textAddress) {
-    extern u16 kanjiSearch(u32 code);
-    extern u16 hankakuSearch(u32 code);
-    extern u16 kanjiGetWidth(u32 code);
-    extern s32 strcmp(const char* a, const char* b);
+    extern u16 kanjiSearch(u32);
+    extern u16 hankakuSearch(u32);
+    extern u16 kanjiGetWidth(u32);
+    extern s32 strcmp(const char*, const char*);
+    extern s32 sscanf(const char*, const char*, ...);
+    extern u32 dat_804205ec;
+    extern u32 dat_804205f0;
+    extern u32 dat_804205f4;
+    extern u32 dat_804205f8;
+    extern f32 float_1_80420618;
+    extern f32 float_10_80420624;
     s32 work = *(s32*)smart;
     u8* text = (u8*)textAddress;
     s32 count = *(s32*)(work + 0x38);
@@ -983,10 +1243,23 @@ u8 msgAnalize(void* smart, s32 textAddress) {
     s32 speed = *(s32*)(work + 0xF23C);
     u32 time = *(u32*)(work + 0xF230);
     u32 flags = 0;
-    f32 scaleX = 1.0f;
-    f32 scaleY = 1.0f;
+    f32 scaleX = float_1_80420618;
+    f32 scaleY = float_1_80420618;
     f32 dynamic = 0.0f;
     s32 maxX = 70;
+    s32* style = *(s32**)(work + 0xF24C);
+
+    if (style[2] < 0) {
+        style[2] = 0;
+    }
+    if (style[2] == 8 || style[2] == 3) {
+        u32* entry = (u32*)(work + 0x3C + count * 0x18);
+        entry[0] = style[2] == 8 ? dat_804205f0 : dat_804205ec;
+        *(u16*)((u8*)entry + 4) = 0xFFF7;
+        entry[3] = time;
+        count++;
+        *(s32*)(work + 0x38) = count;
+    }
 
     for (;;) {
         u8 ch = *text;
@@ -997,9 +1270,7 @@ u8 msgAnalize(void* smart, s32 textAddress) {
             entry[3] = time;
             count++;
             if (*(s16*)(work + 0xF244) == 0) {
-                if (x > maxX) {
-                    maxX = x;
-                }
+                if (x > maxX) maxX = x;
                 *(s16*)(work + 0xF244) = maxX + 0x50;
             }
             *(s32*)(work + 0x38) = count;
@@ -1008,17 +1279,15 @@ u8 msgAnalize(void* smart, s32 textAddress) {
             *(s16*)(work + 0xF236) = y;
             *(s16*)(work + 0xF238) = line;
             *(s16*)(work + 0xF23A) = bottom;
+            *(s32*)(work + 0xF23C) = speed;
             return 0;
         }
-
         if (ch == '\n') {
             *(u16*)((u8*)entry + 4) = 0xFFFB;
             entry[3] = time;
             count++;
             time += speed;
-            if (x > maxX) {
-                maxX = x;
-            }
+            if (x > maxX) maxX = x;
             x = 0;
             y -= (s32)(32.0f * scaleY);
             bottom = y;
@@ -1026,9 +1295,8 @@ u8 msgAnalize(void* smart, s32 textAddress) {
             text++;
             continue;
         }
-
         if (ch == '<') {
-            char command[32];
+            char command[128];
             char argument[128];
             s32 ci = 0;
             s32 ai = 0;
@@ -1042,16 +1310,14 @@ u8 msgAnalize(void* smart, s32 textAddress) {
                     inArg = 1;
                 } else if (inArg) {
                     argument[ai++] = *text;
-                } else if (ci < 31) {
+                } else {
                     command[ci++] = *text;
                 }
                 text++;
             }
             command[ci] = 0;
             argument[ai] = 0;
-            if (*text == '>') {
-                text++;
-            }
+            if (*text == '>') text++;
             for (ci = 0; ci < ai; ci++) {
                 if (argument[ci] >= '0' && argument[ci] <= '9') {
                     value = value * 10 + argument[ci] - '0';
@@ -1064,6 +1330,8 @@ u8 msgAnalize(void* smart, s32 textAddress) {
                 entry[3] = time;
                 count++;
                 time += 100;
+            } else if (strcmp(command, "keyxon") == 0) {
+                *(u32*)(work + 4) |= 0x100;
             } else if (strcmp(command, "p") == 0 || strcmp(command, "scrl_auto") == 0) {
                 if (bottom != 0) {
                     *(u16*)((u8*)entry + 4) = 0xFFFD;
@@ -1078,19 +1346,95 @@ u8 msgAnalize(void* smart, s32 textAddress) {
                 entry[3] = time;
                 count++;
                 time += 50;
+            } else if (strcmp(command, "pos") == 0) {
+                sscanf(argument, "%d%d", &x, &y);
+            } else if (strcmp(command, "scale") == 0) {
+                sscanf(argument, "%f", &scaleX);
+                scaleY = scaleX;
+            } else if (strcmp(command, "scaleX") == 0) {
+                sscanf(argument, "%f", &scaleX);
+            } else if (strcmp(command, "/scale") == 0) {
+                scaleX = float_1_80420618;
+                scaleY = float_1_80420618;
             } else if (strcmp(command, "wait") == 0) {
                 time += value;
             } else if (strcmp(command, "speed") == 0) {
                 speed = value;
+            } else if (strcmp(command, "/speed") == 0) {
+                speed = *(s32*)(work + 0xF23C);
             } else if (strcmp(command, "dynamic") == 0) {
+                sscanf(argument, "%f", &dynamic);
                 flags |= 1;
-                dynamic = (f32)value;
+            } else if (strcmp(command, "/dynamic") == 0) {
+                flags &= ~1;
             } else if (strcmp(command, "shake") == 0) {
                 flags |= 2;
+            } else if (strcmp(command, "/shake") == 0) {
+                flags &= ~2;
             } else if (strcmp(command, "wave") == 0) {
                 flags |= 4;
-            } else if (strcmp(command, "keyxon") == 0) {
-                *(u32*)(work + 4) |= 0x100;
+            } else if (strcmp(command, "/wave") == 0) {
+                flags &= ~4;
+            } else if (strcmp(command, "col") == 0) {
+                sscanf(argument, "%x", &entry[0]);
+                *(u16*)((u8*)entry + 4) = 0xFFF7;
+                entry[3] = time;
+                count++;
+            } else if (strcmp(command, "/col") == 0) {
+                entry[0] = 0xFF;
+                *(u16*)((u8*)entry + 4) = 0xFFF7;
+                entry[3] = time;
+                count++;
+            } else if (strcmp(command, "noise") == 0 || strcmp(command, "/noise") == 0) {
+                entry[0] = command[0] == '/' ? 0 : 1;
+                *(u16*)((u8*)entry + 4) = 0xFFF6;
+                entry[3] = time;
+                count++;
+            } else if (strcmp(command, "dkey") == 0 || strcmp(command, "/dkey") == 0) {
+                entry[0] = command[0] == '/' ? 0 : 1;
+                *(u16*)((u8*)entry + 4) = 0xFFF5;
+                entry[3] = time;
+                count++;
+            } else if (strcmp(command, "plate") == 0) {
+                style[2] = 2;
+                speed = 0;
+                *(s32*)(work + 0xF23C) = 0;
+            } else if (strcmp(command, "system") == 0) {
+                style[2] = 3;
+                entry[0] = dat_804205f4;
+                *(u16*)((u8*)entry + 4) = 0xFFF7;
+                entry[3] = time;
+                count++;
+            } else if (strcmp(command, "tec") == 0) {
+                style[2] = 8;
+                entry[0] = dat_804205f8;
+                *(u16*)((u8*)entry + 4) = 0xFFF7;
+                entry[3] = time;
+                count++;
+            } else if (strcmp(command, "majo") == 0) {
+                style[2] = 9;
+            } else if (strcmp(command, "diary") == 0) {
+                style[2] = 7;
+            } else if (strcmp(command, "housou") == 0) {
+                style[2] = 10;
+            } else if (strcmp(command, "boss") == 0) {
+                style[2] = 6;
+            } else if (strcmp(command, "kanban") == 0) {
+                style[2] = 4;
+                speed = 0;
+                *(s32*)(work + 0xF23C) = 0;
+            } else if (strcmp(command, "small") == 0) {
+                style[2] = 1;
+                *(u32*)(work + 4) |= 0x10;
+            } else if (strcmp(command, "clear") == 0) {
+                style[2] = 11;
+            } else if (strcmp(command, "se") == 0 || strcmp(command, "vol") == 0) {
+                sscanf(argument, "%d", &entry[0]);
+                *(u16*)((u8*)entry + 4) = strcmp(command, "se") == 0 ? 0xFFFA : 0xFFF9;
+                entry[3] = time;
+                count++;
+            } else if (strcmp(command, "nowinse") == 0) {
+                *(u16*)((u8*)style + 2) |= 8;
             }
             continue;
         }
@@ -1112,7 +1456,7 @@ u8 msgAnalize(void* smart, s32 textAddress) {
             entry[0] = flags | (ch == ' ' ? 0 : 8);
             *(u16*)((u8*)entry + 4) = glyph;
             *(s16*)((u8*)entry + 6) = (s16)x;
-            *(s16*)((u8*)entry + 8) = (s16)(y - (s32)(10.0f * scaleY));
+            *(s16*)((u8*)entry + 8) = (s16)(y - (s32)(float_10_80420624 * scaleY));
             entry[3] = time;
             *(f32*)((u8*)entry + 0x10) = scaleX;
             *(f32*)((u8*)entry + 0x14) = dynamic;
@@ -1331,6 +1675,86 @@ u8 msgWindow_Main(void* pWindow) {
     return 0;
 }
 
-u8 msgWindow_Clear_Main(void* param_1) {
-    return 0;
+void msgWindow_Clear_Main(void* win) {
+    extern void* gp;
+    extern s32 msgMain(void*);
+    extern void windowDelete(void*);
+    extern void npcSetStayPose(void*);
+    extern void BtlUnit_ChangeStayAnim(void*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void msgWindow_Disp(s32, void*);
+    extern f32 float_400_8042061c;
+    u8* window = win;
+    u8* work;
+    s32 result;
+    s64 elapsed;
+
+    if (*(u16*)window == 5) {
+        *(u16*)window = 1;
+        *(u64*)(window + 0x20) = *(u64*)((u8*)gp + 0x38);
+        work = **(u8***)(window + 0x28);
+        *(u64*)(work + 0x18) = *(u64*)((u8*)gp + 0x38);
+        *(u64*)(work + 0x30) = *(u64*)((u8*)gp + 0x38);
+    } else if (*(u16*)window < 5) {
+        if (*(u16*)window != 1) {
+            goto display;
+        }
+    } else {
+        if (*(u16*)window == 7) {
+            if (*(u16*)(window + 6) == 0) {
+                windowDelete(window);
+                return;
+            }
+            elapsed = (s64)(*(u64*)((u8*)gp + 0x38) - *(u64*)(window + 0x20));
+            elapsed /= (*(u32*)0x800000F8 / 4000);
+            *(u16*)(window + 6) = 0xFF - (s16)((elapsed * 0xFF) / 200);
+            if ((s16)*(u16*)(window + 6) < 1) {
+                *(u16*)(window + 6) = 0;
+            }
+            goto display;
+        }
+        if (*(u16*)window > 6) {
+            goto display;
+        }
+    }
+
+    *(u16*)(window + 2) |= 2;
+    if ((s16)*(u16*)(window + 6) < 0xFF) {
+        elapsed = (s64)(*(u64*)((u8*)gp + 0x38) - *(u64*)(window + 0x20));
+        elapsed /= (*(u32*)0x800000F8 / 4000);
+        *(u16*)(window + 6) = (s16)((elapsed * 0xFF) / 200);
+        if ((s16)*(u16*)(window + 6) > 0xFF) {
+            *(u16*)(window + 6) = 0xFF;
+        }
+    }
+    if (*(u16*)window != 2) {
+        result = msgMain(*(void**)(window + 0x28));
+        if (result == 2) {
+            *(u16*)window = 3;
+        } else if (result < 2) {
+            if (result == 0) {
+                *(u16*)window = 7;
+                *(u64*)(window + 0x20) = *(u64*)((u8*)gp + 0x38);
+                work = **(u8***)(window + 0x28);
+                if ((*(u32*)(work + 4) & 8) == 0) {
+                    npcSetStayPose(work + 0xF204);
+                } else {
+                    BtlUnit_ChangeStayAnim(*(void**)(work + 0xF224));
+                }
+            } else if (result > -1) {
+                *(u16*)window = 2;
+                *(u16*)(window + 2) &= 0xFFFD;
+                work = **(u8***)(window + 0x28);
+                if ((*(u32*)(work + 4) & 8) == 0) {
+                    npcSetStayPose(work + 0xF204);
+                } else {
+                    BtlUnit_ChangeStayAnim(*(void**)(work + 0xF224));
+                }
+            }
+        }
+    }
+display:
+    dispEntry(8, 0, msgWindow_Disp, window,
+              float_400_8042061c - (f32)*(s16*)(window + 4));
 }
+

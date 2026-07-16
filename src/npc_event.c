@@ -286,10 +286,72 @@ s32 chain_main(EventEntry* event) {
     return 2;
 }
 
-u8 zakoEntryDokan(void) {
-    return 0;
-}
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 zakoEntryDokan(EventEntry* event) {
+    extern s32 strcmp(const char* a, const char* b);
+    extern char* strcpy(char* dst, const char* src);
+    extern void* npcNameToPtr(const char* name);
+    extern void evtDeleteID(s32 id);
+    extern void* evtEntry(void* script, s32 order, u32 flags);
+    extern char str_kemuri_test_802ed438[];
+    extern u32 vec3_802ed9a8[];
+    extern f32 float_neg75_80421fa0;
+    extern f32 float_35_80421fac;
+    void* owner;
+    void* npc;
+    void* child;
+    char mobjName[32];
+    char names[56];
+    char* name;
+    s32 i;
 
+    owner = evtNpcNameToPtr(event, str_me_80421f30);
+    if (strcmp((char*)owner + 8, str_kemuri_test_802ed438 + 0x690) == 0) {
+        strcpy(names, str_kemuri_test_802ed438 + 0x6C8);
+        strcpy(names + 0x10, str_kemuri_test_802ed438 + 0x6D8);
+        strcpy(names + 0x20, str_kemuri_test_802ed438 + 0x6E8);
+        strcpy(mobjName, str_kemuri_test_802ed438 + 0x6F8);
+    }
+    if (strcmp((char*)owner + 8, str_kemuri_test_802ed438 + 0x6A8) == 0) {
+        strcpy(names, str_kemuri_test_802ed438 + 0x704);
+        strcpy(names + 0x10, str_kemuri_test_802ed438 + 0x714);
+        strcpy(names + 0x20, str_kemuri_test_802ed438 + 0x724);
+        strcpy(mobjName, str_kemuri_test_802ed438 + 0x734);
+    }
+
+    name = names;
+    for (i = 0; i < 3; i++, name += 0x10) {
+        npc = npcNameToPtr(name);
+        if (*(f32*)((s32)npc + 0x90) <= float_neg75_80421fa0) {
+            *(u32*)npc |= 0x20410;
+            *(u32*)npc &= ~0x20;
+            *(u32*)((s32)npc + 0x1D4) |= 0x1002;
+            *(u32*)((s32)npc + 0x1D4) &= 0xEFAFFFFB;
+            *(u32*)((s32)npc + 0x8C) = *(u32*)((s32)owner + 0x8C);
+            *(f32*)((s32)npc + 0x90) = *(f32*)((s32)owner + 0x90) - float_35_80421fac;
+            *(u32*)((s32)npc + 0x94) = *(u32*)((s32)owner + 0x94);
+            *(u32*)((s32)npc + 0xEC) = vec3_802ed9a8[0];
+            *(u32*)((s32)npc + 0xF0) = vec3_802ed9a8[1];
+            *(u32*)((s32)npc + 0xF4) = vec3_802ed9a8[2];
+            *(s32*)((s32)npc + 0x304) = 1;
+            if (*(void**)((s32)npc + 0x124) == NULL) {
+                return 2;
+            }
+            if (*(s32*)((s32)npc + 0x11C) != 0) {
+                evtDeleteID(*(s32*)((s32)npc + 0x11C));
+            }
+            child = evtEntry(*(void**)((s32)npc + 0x124), 0, 0x20);
+            *(s8*)((s32)child + 0x10) = 1;
+            *(void**)((s32)child + 0x170) = npc;
+            *(s32*)((s32)npc + 0x11C) = *(s32*)((s32)child + 0x15C);
+            return 2;
+        }
+    }
+    return 2;
+}
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
 void piders_draw_yarn_sub(s32 unused, void* npc) {
     extern void GXSetCullMode(s32 mode);
@@ -372,10 +434,73 @@ void piders_draw_yarn_sub(s32 unused, void* npc) {
     *(volatile f32*)0xCC008000 = *(f32*)&a[2] - float_5_80421f84;
 }
 
-u8 zakoEntryFall(void) {
-    return 0;
-}
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 zakoEntryFall(EventEntry* event) {
+    extern s32 strcmp(const char* a, const char* b);
+    extern char* strcpy(char* dst, const char* src);
+    extern void* npcNameToPtr_NoAssert(const char* name);
+    extern void evtDeleteID(s32 id);
+    extern void* evtEntry(void* script, s32 order, u32 flags);
+    extern char str_kemuri_test_802ed438[];
+    extern u32 vec3_802ed9c0[];
+    extern f32 float_neg75_80421fa0;
+    void* owner;
+    void* npc;
+    void* child;
+    char names[56];
+    char* name;
+    s32 i;
 
+    owner = evtNpcNameToPtr(event, str_me_80421f30);
+    if (strcmp((char*)owner + 8, str_kemuri_test_802ed438 + 0x5EC) == 0) {
+        strcpy(names, str_kemuri_test_802ed438 + 0x600);
+        strcpy(names + 0x10, "");
+        strcpy(names + 0x20, "");
+    }
+    if (strcmp((char*)owner + 8, str_kemuri_test_802ed438 + 0x610) == 0) {
+        strcpy(names, str_kemuri_test_802ed438 + 0x600);
+        strcpy(names + 0x10, str_kemuri_test_802ed438 + 0x628);
+        strcpy(names + 0x20, str_kemuri_test_802ed438 + 0x638);
+    }
+    if (strcmp((char*)owner + 8, str_kemuri_test_802ed438 + 0x648) == 0) {
+        strcpy(names, str_kemuri_test_802ed438 + 0x660);
+        strcpy(names + 0x10, str_kemuri_test_802ed438 + 0x670);
+        strcpy(names + 0x20, str_kemuri_test_802ed438 + 0x680);
+    }
+
+    name = names;
+    for (i = 0; i < 3; i++, name += 0x10) {
+        npc = npcNameToPtr_NoAssert(name);
+        if (npc != NULL && *(f32*)((s32)npc + 0x90) <= float_neg75_80421fa0) {
+            *(u32*)npc |= 0x20410;
+            *(u32*)npc &= ~0x20;
+            *(u32*)((s32)npc + 0x1D4) |= 0x1002;
+            *(u32*)((s32)npc + 0x1D4) &= 0xEF8FFFFB;
+            *(u32*)((s32)npc + 0x8C) = *(u32*)((s32)owner + 0x8C);
+            *(u32*)((s32)npc + 0x90) = *(u32*)((s32)owner + 0x90);
+            *(u32*)((s32)npc + 0x94) = *(u32*)((s32)owner + 0x94);
+            *(u32*)((s32)npc + 0xEC) = vec3_802ed9c0[0];
+            *(u32*)((s32)npc + 0xF0) = vec3_802ed9c0[1];
+            *(u32*)((s32)npc + 0xF4) = vec3_802ed9c0[2];
+            *(s32*)((s32)npc + 0x304) = 2;
+            if (*(void**)((s32)npc + 0x124) == NULL) {
+                return 2;
+            }
+            if (*(s32*)((s32)npc + 0x11C) != 0) {
+                evtDeleteID(*(s32*)((s32)npc + 0x11C));
+            }
+            child = evtEntry(*(void**)((s32)npc + 0x124), 0, 0x20);
+            *(s8*)((s32)child + 0x10) = 1;
+            *(void**)((s32)child + 0x170) = npc;
+            *(s32*)((s32)npc + 0x11C) = *(s32*)((s32)child + 0x15C);
+            return 2;
+        }
+    }
+    return 2;
+}
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
 s32 cliffCheck(int param_1) {
     extern void* hitCheckFilter(s32 flags, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz,
@@ -480,6 +605,8 @@ s32 upperCheck(int param_1) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 pressCheck(int param_1) {
     extern void* hitCheckFilter(s32 flags, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz,
                                 f32* outX, f32* outY, f32* outZ, f32* radius,
@@ -509,9 +636,15 @@ s32 pressCheck(int param_1) {
                          *(f32*)((s32)npc + 0x94), float_0_80421f8c,
                          float_neg1_80421f90, float_0_80421f8c,
                          &a, &b, &c, &radius, &d, &e, &f);
-    evtSetValue((void*)param_1, args[0], hit != NULL);
+    if (hit != NULL) {
+        evtSetValue((void*)param_1, args[0], 1);
+    } else {
+        evtSetValue((void*)param_1, args[0], 0);
+    }
     return 2;
 }
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
 s32 dokanCheck(int param_1) {
     extern s32 strcmp(const char* a, const char* b);

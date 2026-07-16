@@ -826,15 +826,41 @@ void mobjDisp_OffscreenXLU(s32 param_1, void* entry) {
     extern void GXClearBoundingBox(void);
     extern void GXReadBoundingBox(u16* top, u16* bottom, u16* left, u16* right);
     extern void offscreenAddBoundingBox(s32 id, u16 top, u16 bottom, u16 left, u16 right);
-    extern void mobjDispXLU(s32 param_1, void* entry);
+    extern void animSetPaperTexMtx(void* mtx, s32 a, s32 b);
+    extern void animSetPaperTexObj(void* texObj, s32 a, s32 b, s32 texMap,
+                                   s32 d, s32 e, s32 f, s32 g);
+    extern void animPoseDraw(s32 poseId, s32 mode, f32 x, f32 y, f32 z,
+                             f32 rotY, f32 scale);
+    extern f32 float_10_804201bc;
     u16 top;
     u16 bottom;
     u16 left;
     u16 right;
+    f32 scale;
 
     sysWaitDrawSync();
     GXClearBoundingBox();
-    mobjDispXLU(param_1, entry);
+    if ((*(u32*)entry & 0x400) != 0) {
+        animSetPaperTexMtx((void*)((s32)entry + 0x20C), 0, 0);
+        animSetPaperTexObj((void*)((s32)entry + 0x1E8), 0, 0,
+                           *(s32*)((s32)entry + 0x208), 0, 0, 1, 1);
+    }
+
+    scale = float_10_804201bc * *(f32*)((s32)entry + 0x44);
+    animPoseDraw(*(s32*)((s32)entry + 0x70), 1,
+                 *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), scale);
+    animPoseDraw(*(s32*)((s32)entry + 0x70), 2,
+                 *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), scale);
+    animPoseDraw(*(s32*)((s32)entry + 0x70), 3,
+                 *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), scale);
+
+    if ((*(u32*)entry & 0x400) != 0) {
+        animSetPaperTexMtx(0, 0, 0);
+        animSetPaperTexObj(0, 0, 0, 0, 0, 0, 1, 1);
+    }
     sysWaitDrawSync();
     GXReadBoundingBox(&top, &bottom, &left, &right);
     offscreenAddBoundingBox(*(s32*)((s32)entry + 0x19C), top, bottom, left, right);

@@ -1003,6 +1003,125 @@ void L_titleInit(void) {
 /* CHATGPT STUB FILL: main/sequence/seq_title 20260624_183901 */
 
 /* stub-fill: pressStartGX | missing_definition | ghidra_signature */
-u8 pressStartGX(void) {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+void pressStartGX(u8 alpha, f32 x, f32 y) {
+    void* cam;
+    u8 tex0[0x20];
+    u8 tex1[0x20];
+    f32 workMtx[3][4];
+    f32 scaleMtx[3][4];
+    u32 color;
+    u32 colorTemp;
+    s32 work;
+    s32 texData;
+    s32 language;
+    u16 height;
+    u16 width;
+    f32 h;
+    f32 w;
+
+    cam = camGetCurPtr();
+
+    work = *(s32*)wp2;
+    language = *(s32*)(gp + 0x16C);
+    texData = *(s32*)(work + 0xA0);
+    TEXGetGXTexObjFromPalette(*(s32*)texData, &tex0, language + 0xF);
+    GXLoadTexObj(&tex0, 0);
+
+    work = *(s32*)wp2;
+    texData = *(s32*)(work + 0xA0);
+    TEXGetGXTexObjFromPalette(*(s32*)texData, &tex1, 6);
+    GXLoadTexObj(&tex1, 1);
+
+    GXSetNumTevStages(2);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 8);
+    GXSetTevAlphaIn(0, 7, 7, 7, 4);
+
+    GXSetTevOrder(1, 1, 1, 0xFF);
+    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(1, 0xF, 0, 8, 0xF);
+    GXSetTevAlphaIn(1, 7, 0, 1, 7);
+
+    colorTemp = unk_80429508;
+    *((u8*)&colorTemp + 3) = alpha;
+    color = colorTemp;
+    GXSetTevColor(1, &color);
+
+    GXSetNumChans(0);
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetTexCoordGen2(1, 1, 4, 0x1E, 0, 0x7D);
+
+    PSMTXScale(scaleMtx, float_1_8041f594, float_1_8041f594, float_1_8041f594);
+    PSMTXTrans(
+        workMtx,
+        (f32)*(s32*)(wp2 + 0x2C) / float_neg200_8041f598,
+        float_0_8041f59c,
+        float_0_8041f59c
+    );
+    PSMTXConcat(scaleMtx, workMtx, workMtx);
+    GXLoadTexMtxImm(workMtx, 0x1E, 1);
+
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(0, 3, 0);
+    GXSetCullMode(0);
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+
+    PSMTXTrans(workMtx, x, y, float_0_8041f59c);
+
+    height = GXGetTexObjHeight(&tex0);
+    h = (f32)height;
+    width = GXGetTexObjWidth(&tex0);
+    w = (f32)width;
+
+    PSMTXScale(scaleMtx, w, h, float_1_8041f594);
+    PSMTXConcat(workMtx, scaleMtx, workMtx);
+    PSMTXConcat((void*)((s32)cam + 0x11C), workMtx, workMtx);
+    GXLoadPosMtxImm(workMtx, 0);
+    GXSetCurrentMtx(0);
+
+    GXBegin(0x80, 0, 4);
+
+    FIFO_F32 = READ_F32(float_neg0p5_8041f5a0);
+    FIFO_F32 = READ_F32(float_neg0p5_8041f5a0);
+    FIFO_F32 = READ_F32(float_0_8041f59c);
+    FIFO_F32 = READ_F32(float_0_8041f59c);
+    FIFO_F32 = READ_F32(float_1_8041f594);
+
+    FIFO_F32 = READ_F32(float_0p5_8041f5a4);
+    FIFO_F32 = READ_F32(float_neg0p5_8041f5a0);
+    FIFO_F32 = READ_F32(float_0_8041f59c);
+    FIFO_F32 = READ_F32(float_1_8041f594);
+    FIFO_F32 = READ_F32(float_1_8041f594);
+
+    FIFO_F32 = READ_F32(float_0p5_8041f5a4);
+    FIFO_F32 = READ_F32(float_0p5_8041f5a4);
+    FIFO_F32 = READ_F32(float_0_8041f59c);
+    FIFO_F32 = READ_F32(float_1_8041f594);
+    FIFO_F32 = READ_F32(float_0_8041f59c);
+
+    FIFO_F32 = READ_F32(float_neg0p5_8041f5a0);
+    FIFO_F32 = READ_F32(float_0p5_8041f5a4);
+    FIFO_F32 = READ_F32(float_0_8041f59c);
+    FIFO_F32 = READ_F32(float_0_8041f59c);
+    FIFO_F32 = READ_F32(float_0_8041f59c);
+
+    GXSetTevSwapModeTable(1, 0, 1, 2, 3);
 }
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+

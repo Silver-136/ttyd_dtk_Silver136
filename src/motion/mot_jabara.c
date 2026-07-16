@@ -92,49 +92,60 @@ void mot_jabara(void) {
 #define RELEASED (*(u32*)((s32)player + 0x18))
 #define SUBMOTION (*(s32*)((s32)player + 0x44))
 #define TIMER (*(s32*)((s32)player + 0x48))
-#define MOTION_COUNT (*(s8*)((s32)player + 0x50))
-#define CHARGE (*(s8*)((s32)player + 0x51))
+#define MOTION_COUNT (*(s8*)((s32)player + 0x41))
+#define CHARGE (*(s8*)((s32)player + 0x42))
+#define AIR_TIMER (*(s16*)((s32)player + 0x50))
+#define AIR_TIMER2 (*(s16*)((s32)player + 0x52))
 #define POS ((f32*)((s32)player + 0x8C))
 #define JUMP_SPEED (*(f32*)((s32)player + 0x7C))
 #define JUMP_ACCEL (*(f32*)((s32)player + 0x80))
 #define JUMP_JERK (*(f32*)((s32)player + 0x84))
 #define JUMP_SNAP (*(f32*)((s32)player + 0x88))
-#define MOT_WORK (*(void**)((s32)player + 0x234))
+#define MOT_WORK (*(void**)((s32)player + 0x294))
 
     if ((TRIG_FLAGS & 1) != 0) {
         TRIG_FLAGS &= ~1;
-        *(u32*)((s32)player + 0x168) = 0;
-        *(u32*)((s32)player + 0x16C) = 0;
-        *(u32*)((s32)player + 0x170) = 0;
-        *(u32*)((s32)player + 0x174) = 0;
-        *(u32*)((s32)player + 0x178) = 0;
-        *(u32*)((s32)player + 0x17C) = 0;
-        *(u32*)((s32)player + 0x180) = 0;
+        *(u32*)((s32)player + 0x2B8) = 0;
+        *(u32*)((s32)player + 0x2BC) = 0;
+        *(u32*)((s32)player + 0x2C0) = 0;
+        *(u32*)((s32)player + 0x2C4) = 0;
+        *(u32*)((s32)player + 0x2C8) = 0;
+        *(u32*)((s32)player + 0x2CC) = 0;
+        *(u32*)((s32)player + 0x2D0) = 0;
         if ((DISP_FLAGS & 0x10000000) != 0) mot_slit_post();
         FLAGS &= ~0xF0000;
         SUBMOTION = 0;
         MOT_WORK = __memAlloc(0, 0x20);
         memset(MOT_WORK, 0, 0x20);
     }
-    *(void**)((s32)player + 0x1F0) = 0;
+    *(void**)((s32)player + 0x1F8) = 0;
     work = MOT_WORK;
 
     switch (SUBMOTION) {
         case 0:
-            DISP_FLAGS |= 0x20000000;
+            DISP_FLAGS |= 0x100;
             MOTION_COUNT = 1;
             CHARGE = 0;
+            AIR_TIMER = 0;
+            AIR_TIMER2 = 0;
             *(f32*)((s32)player + 0x180) = float_0_80420bd4;
             SUBMOTION = 10;
             marioChgPose(&str_M_J_1A_802c4000);
             marioPaperOn(&str_PM_J_1B_802c4014);
             marioChgPaper(&str_PM_J_1B_802c4014);
-            *(f32*)((s32)player + 0x164) = POS[0];
-            *(f32*)((s32)player + 0x168) = POS[1];
-            *(f32*)((s32)player + 0x16C) = POS[2];
+            *(f32*)((s32)player + 0x11C) = POS[0];
+            *(f32*)((s32)player + 0x120) = POS[1];
+            *(f32*)((s32)player + 0x124) = POS[2];
             marioChkGnd();
+            if (*(u16*)((s32)player + 0x2E) != 0x14) {
+                SUBMOTION = 100;
+            }
             break;
         case 10:
+            if (*(u16*)((s32)player + 0x2E) != 0x14) {
+                SUBMOTION = 100;
+                break;
+            }
             L_allPartyRideOn();
             psndSFXOn_3D(0x182, POS);
             TIMER = 8;
@@ -164,6 +175,10 @@ void mot_jabara(void) {
                 CHARGE = 3;
             }
             marioChkGnd();
+            if (*(u16*)((s32)player + 0x2E) != 0x14) {
+                SUBMOTION = 100;
+                break;
+            }
             if ((BUTTONS & 0x100) == 0 || (RELEASED & 0x100) != 0 ||
                 marioSearchHead(200.0, POS, &landY) == 0) {
                 camFollowYOff();
@@ -194,7 +209,7 @@ void mot_jabara(void) {
         case 20:
             marioMakeJumpPara();
             headY = (f32)marioChkOverheadJabara(&side, &landY);
-            if (*(void**)((s32)player + 0x1F0) == 0) {
+            if (*(void**)((s32)player + 0x1F8) == 0) {
                 POS[1] += JUMP_SPEED;
                 if (JUMP_SPEED <= float_0_80420bd4) {
                     SUBMOTION = 30;
@@ -241,6 +256,8 @@ void mot_jabara(void) {
     if (SUBMOTION > 69) swingMain();
 
 #undef MOT_WORK
+#undef AIR_TIMER2
+#undef AIR_TIMER
 #undef JUMP_SNAP
 #undef JUMP_JERK
 #undef JUMP_ACCEL

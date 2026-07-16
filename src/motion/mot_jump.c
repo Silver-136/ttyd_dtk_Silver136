@@ -238,17 +238,10 @@ void mot_jumpSw(void) {
         if ((*(u32*)((s32)mario + 0x0) & 0x10000000) == 0 && *(s8*)((s32)mario + 0x3C) == 0) {
             marioChgPose(&str_M_J_1B_802c40c8);
         }
-        if (*(void**)((s32)mario + 0x1EC) == 0) {
-            dir = revise360(float_180_80420cfc + *(f32*)((s32)mario + 0x1A4));
-            sincosf(dir, &sx, &sz);
-            *(f32*)((s32)mario + 0x1A4) = dir;
-            *(f32*)((s32)mario + 0x1A0) = dir;
-            *(s32*)((s32)mario + 0x48) = 0x14;
-            dist = (f32)distABf(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x94),
-                                sx * float_30_80420cf8 + *(f32*)((s32)mario + 0x8C),
-                                sz * float_30_80420cf8 + *(f32*)((s32)mario + 0x94));
-            *(f32*)((s32)mario + 0x180) = dist / (f32)*(s32*)((s32)mario + 0x48);
-        } else if ((hitGetAttr(*(void**)((s32)mario + 0x1EC)) & 1) != 0) {
+        if (*(void**)((s32)mario + 0x1EC) != 0) {
+            if ((hitGetAttr(*(void**)((s32)mario + 0x1EC)) & 1) == 0) {
+                goto jump_setup_done;
+            }
             work = mobjHitObjPtrToPtr((s32)*(void**)((s32)mario + 0x1EC));
             *(f32*)((s32)mario + 0x2CC) = *(f32*)((s32)work + 0x38);
             *(f32*)((s32)mario + 0x2D0) = *(f32*)((s32)work + 0x40);
@@ -272,7 +265,18 @@ void mot_jumpSw(void) {
                                 sx + *(f32*)((s32)work + 0x38),
                                 sz * float_30_80420cf8 + *(f32*)((s32)work + 0x40));
             *(f32*)((s32)mario + 0x180) = dist / (f32)*(s32*)((s32)mario + 0x48);
+        } else {
+            dir = revise360(float_180_80420cfc + *(f32*)((s32)mario + 0x1A4));
+            sincosf(dir, &sx, &sz);
+            *(f32*)((s32)mario + 0x1A4) = dir;
+            *(f32*)((s32)mario + 0x1A0) = dir;
+            *(s32*)((s32)mario + 0x48) = 0x14;
+            dist = (f32)distABf(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x94),
+                                sx * float_30_80420cf8 + *(f32*)((s32)mario + 0x8C),
+                                sz * float_30_80420cf8 + *(f32*)((s32)mario + 0x94));
+            *(f32*)((s32)mario + 0x180) = dist / (f32)*(s32*)((s32)mario + 0x48);
         }
+jump_setup_done:
         *(s32*)((s32)mario + 0x44) = 0;
     }
 

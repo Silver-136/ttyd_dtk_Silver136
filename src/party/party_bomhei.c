@@ -112,11 +112,11 @@ void partyGetReturnPos(f32* out) {
         f32 dist;
     } HitWork;
     extern void* marioGetPtr(void);
-    extern f64 toMovedirSimple(f64 angle);
-    extern f64 revise360(f64 angle);
+    extern f32 toMovedirSimple(f32 angle);
+    extern f32 revise360(f32 angle);
     extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
-    extern void movePos(f64 distance, f64 angle, f32* x, f32* z);
-    extern s32 hitCheckFilter(f64, f64, f64, f64, f64, f64, s32,
+    extern void movePos(f32 distance, f32 angle, f32* x, f32* z);
+    extern s32 hitCheckFilter(f32, f32, f32, f32, f32, f32, s32,
                               void*, void*, void*, void*, void*, void*, void*);
     extern void* hitCheckVecFilter(void* work, void* filter);
     extern u32 hitGetAttr(void* hit);
@@ -135,7 +135,7 @@ void partyGetReturnPos(f32* out) {
     f32 x = *(f32*)((s32)player + 0x8C);
     f32 y = *(f32*)((s32)player + 0x90);
     f32 z = *(f32*)((s32)player + 0x94);
-    f32 radius = *(f32*)((s32)player + 0x2B0);
+    f32 radius = *(f32*)((s32)player + 0x1B8);
     f32 facing = *(f32*)((s32)player + 0x19C);
     s32 i;
 
@@ -574,24 +574,158 @@ void mario_controll(void* pParty) {
 #pragma no_register_save_helpers reset
 
 u8 bomhei_use_post(void* party) {
+    extern void partyGetAppearPos(void*, void*);
+    extern void marioChgPose(char*);
+    extern void psndSFXOff(s32);
+    extern void __memFree(s32, void*);
+    extern char str_M_W_1_804213c0;
+    extern char str_M_R_1_804213c8;
+    extern char str_M_S_1_804213d0;
+    extern char str_M_J_1B_802cb468[];
+    void* player = *(void**)((s32)party + 0x160);
+    char* pose;
+
+    if (*(u8*)((s32)party + 0x39) > 0x45 && *(u8*)((s32)party + 0x39) < 100) {
+        partyGetAppearPos(party, (void*)((s32)party + 0x58));
+    }
+    if ((*(u32*)player & 0x2000) != 0) {
+        *(u32*)player &= ~0x2000;
+        if (*(u16*)((s32)player + 0x2E) == 1) pose = &str_M_W_1_804213c0;
+        else if (*(u16*)((s32)player + 0x2E) == 2) pose = &str_M_R_1_804213c8;
+        else if ((*(u32*)player & 0x10000) == 0) pose = &str_M_S_1_804213d0;
+        else pose = str_M_J_1B_802cb468;
+        marioChgPose(pose);
+    }
+    *(u32*)((s32)party + 4) &= ~0x10;
+    *(u32*)party &= ~0x02000000;
+    *(u32*)party &= ~0x80000000;
+    *(u32*)party &= ~0x100;
+    if (*(u8*)((s32)party + 0x34) != 9) {
+        *(u8*)((s32)party + 0x3B) = 0;
+        *(u32*)((s32)party + 8) |= 8;
+    }
+    *(u32*)*(void**)((s32)party + 0x160) &= ~0x2000;
+    if (*(s32*)((s32)party + 0x180) != -1) {
+        psndSFXOff(*(s32*)((s32)party + 0x180));
+        *(s32*)((s32)party + 0x180) = -1;
+    }
+    if (*(s32*)((s32)party + 0x184) != -1) {
+        psndSFXOff(*(s32*)((s32)party + 0x184));
+        *(s32*)((s32)party + 0x184) = -1;
+    }
+    if (*(void**)((s32)party + 0x170) != 0) {
+        __memFree(0, *(void**)((s32)party + 0x170));
+        *(void**)((s32)party + 0x170) = 0;
+    }
     return 0;
 }
-
 
 u8 bomhei_use_cancel2(void) {
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32);
+    extern void marioChgPose(char*);
+    extern void partyChgRunMode(void*, s32);
+    extern void psndSFXOff(s32);
+    extern void __memFree(s32, void*);
+    extern char str_M_S_1_804213d0;
+    void* party = partyGetPtr(marioGetPartyId());
+    void* player;
+
+    if (party == 0 || *(s8*)((s32)party + 0x31) != 3 || (*(u32*)party & 0x100) == 0) return 0;
+    player = *(void**)((s32)party + 0x160);
+    if ((*(u32*)player & 0x2000) == 0) return 0;
+    *(u32*)player &= ~0x2000;
+    marioChgPose(&str_M_S_1_804213d0);
+    if (*(u8*)((s32)party + 0x34) != 9) {
+        partyChgRunMode(party, 2);
+        *(u8*)((s32)party + 0x3B) = 0;
+    }
+    *(u32*)((s32)party + 4) &= ~0x10;
+    *(u32*)party &= ~0x02000000;
+    *(u32*)party &= ~0x80000000;
+    *(u32*)party &= ~0x100;
+    if (*(s32*)((s32)party + 0x180) != -1) {
+        psndSFXOff(*(s32*)((s32)party + 0x180));
+        *(s32*)((s32)party + 0x180) = -1;
+    }
+    if (*(s32*)((s32)party + 0x184) != -1) {
+        psndSFXOff(*(s32*)((s32)party + 0x184));
+        *(s32*)((s32)party + 0x184) = -1;
+    }
+    if (*(void**)((s32)party + 0x170) != 0) {
+        __memFree(0, *(void**)((s32)party + 0x170));
+        *(void**)((s32)party + 0x170) = 0;
+    }
     return 0;
 }
-
 
 u8 bomhei_exit(void* pParty) {
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32);
+    extern void partyChgRunMode(void*, s32);
+    extern void psndSFXOff(s32);
+    extern void __memFree(s32, void*);
+    void* party;
+
+    *(u32*)*(void**)((s32)pParty + 0x160) &= ~0x2000;
+    party = partyGetPtr(marioGetPartyId());
+    if (party == 0 || *(s8*)((s32)party + 0x31) != 3 || (*(u32*)party & 0x100) == 0) return 0;
+    *(u32*)*(void**)((s32)party + 0x160) &= ~0x2000;
+    if (*(u8*)((s32)party + 0x34) != 9) {
+        partyChgRunMode(party, 2);
+        *(u8*)((s32)party + 0x3B) = 0;
+    }
+    *(u32*)((s32)party + 4) &= ~0x10;
+    *(u32*)party &= ~0x02000000;
+    *(u32*)party &= ~0x80000000;
+    *(u32*)party &= ~0x100;
+    if (*(s32*)((s32)party + 0x180) != -1) {
+        psndSFXOff(*(s32*)((s32)party + 0x180));
+        *(s32*)((s32)party + 0x180) = -1;
+    }
+    if (*(s32*)((s32)party + 0x184) != -1) {
+        psndSFXOff(*(s32*)((s32)party + 0x184));
+        *(s32*)((s32)party + 0x184) = -1;
+    }
+    if (*(void**)((s32)party + 0x170) != 0) {
+        __memFree(0, *(void**)((s32)party + 0x170));
+        *(void**)((s32)party + 0x170) = 0;
+    }
     return 0;
 }
-
 
 u8 bomhei_use_cancel(void) {
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32);
+    extern void partyChgRunMode(void*, s32);
+    extern void psndSFXOff(s32);
+    extern void __memFree(s32, void*);
+    void* party = partyGetPtr(marioGetPartyId());
+
+    if (party == 0 || *(s8*)((s32)party + 0x31) != 3 || (*(u32*)party & 0x100) == 0) return 0;
+    *(u32*)*(void**)((s32)party + 0x160) &= ~0x2000;
+    if (*(u8*)((s32)party + 0x34) != 9) {
+        partyChgRunMode(party, 2);
+        *(u8*)((s32)party + 0x3B) = 0;
+    }
+    *(u32*)((s32)party + 4) &= ~0x10;
+    *(u32*)party &= ~0x02000000;
+    *(u32*)party &= ~0x80000000;
+    *(u32*)party &= ~0x100;
+    if (*(s32*)((s32)party + 0x180) != -1) {
+        psndSFXOff(*(s32*)((s32)party + 0x180));
+        *(s32*)((s32)party + 0x180) = -1;
+    }
+    if (*(s32*)((s32)party + 0x184) != -1) {
+        psndSFXOff(*(s32*)((s32)party + 0x184));
+        *(s32*)((s32)party + 0x184) = -1;
+    }
+    if (*(void**)((s32)party + 0x170) != 0) {
+        __memFree(0, *(void**)((s32)party + 0x170));
+        *(void**)((s32)party + 0x170) = 0;
+    }
     return 0;
 }
-
 
 s32 mario_bomhei_keychk(void) {
     extern void* marioGetPtr(void);
@@ -613,9 +747,29 @@ s32 mario_bomhei_keychk(void) {
 }
 
 u8 bomhei_bye(void* pParty) {
+    extern void partyGoodbyeInit(void*);
+    extern s32 partyGoodbyeMain(void*);
+    extern void partyChgRunMode(void*, s32);
+    extern void psndSFXOff(s32);
+
+    if ((*(u32*)((s32)pParty + 8) & 8) != 0) {
+        *(u32*)((s32)pParty + 8) &= ~8;
+        partyGoodbyeInit(pParty);
+        *(u32*)*(void**)((s32)pParty + 0x160) &= ~0x2000;
+        if (*(s32*)((s32)pParty + 0x180) != -1) {
+            psndSFXOff(*(s32*)((s32)pParty + 0x180));
+            *(s32*)((s32)pParty + 0x180) = -1;
+        }
+        if (*(s32*)((s32)pParty + 0x184) != -1) {
+            psndSFXOff(*(s32*)((s32)pParty + 0x184));
+            *(s32*)((s32)pParty + 0x184) = -1;
+        }
+    }
+    if (partyGoodbyeMain(pParty) != 0) {
+        partyChgRunMode(pParty, 0xE);
+    }
     return 0;
 }
-
 
 s32 mario_bomhei_keychk2(void) {
     extern void* marioGetPtr(void);

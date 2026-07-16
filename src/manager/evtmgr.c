@@ -123,40 +123,75 @@ void evtmgrReInit(void) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-u8 evtStart(void* pEvt, u32 flags) {
+void evtStart(void* pEvt, u32 flags) {
     extern void* gp;
     extern u8 work[];
-
-    void* set;
-    void* entry;
-    void* waiting;
+    u8* set = work;
+    u8* waiting;
+    u8* entry;
+    s32 count;
     s32 i;
 
-    set = work;
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        set = work + 0xA0;
-    }
-
-    waiting = *(void**)((s32)pEvt + 0x70);
+    if (*(s32*)((u8*)gp + 0x14) != 0) set += 0xA0;
+    waiting = *(u8**)((u8*)pEvt + 0x70);
     if (waiting != 0) {
-        evtStart(waiting, flags);
-    }
-
-    entry = *(void**)((s32)set + 0x90);
-    i = 0;
-    while (i < *(s32*)set) {
-        if ((*(u8*)((s32)entry + 8) & 1) != 0 && *(void**)((s32)entry + 0x74) == pEvt) {
-            evtStart(entry, flags);
+        u8* nestedSet = work;
+        u8* nested = *(u8**)(waiting + 0x70);
+        if (*(s32*)((u8*)gp + 0x14) != 0) nestedSet += 0xA0;
+        if (nested != 0) {
+            u8* child;
+            s32 childCount;
+            if (*(u8**)(nested + 0x70) != 0) evtStart(*(void**)(nested + 0x70), flags);
+            child = *(u8**)(nestedSet + 0x90);
+            childCount = *(s32*)nestedSet;
+            for (i = 0; i < childCount; i++, child += 0x1B0) {
+                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == nested) evtStart(child, flags);
+            }
+            if ((nested[0xC] & flags) != 0) nested[8] &= ~2;
         }
-        i++;
-        entry = (void*)((s32)entry + 0x1B0);
+
+        entry = *(u8**)(nestedSet + 0x90);
+        count = *(s32*)nestedSet;
+        for (i = 0; i < count; i++, entry += 0x1B0) {
+            if ((entry[8] & 1) != 0 && *(u8**)(entry + 0x74) == waiting) {
+                u8* childSet = work;
+                u8* child;
+                s32 childCount;
+                if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
+                if (*(u8**)(entry + 0x70) != 0) evtStart(*(void**)(entry + 0x70), flags);
+                child = *(u8**)(childSet + 0x90);
+                childCount = *(s32*)childSet;
+                while (childCount-- > 0) {
+                    if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) evtStart(child, flags);
+                    child += 0x1B0;
+                }
+                if ((entry[0xC] & flags) != 0) entry[8] &= ~2;
+            }
+        }
+        if ((waiting[0xC] & flags) != 0) waiting[8] &= ~2;
     }
 
-    if ((*(u8*)((s32)pEvt + 0xC) & flags) != 0) {
-        *(u8*)((s32)pEvt + 8) = *(u8*)((s32)pEvt + 8) & ~2;
+    entry = *(u8**)(set + 0x90);
+    count = *(s32*)set;
+    for (i = 0; i < count; i++, entry += 0x1B0) {
+        if ((entry[8] & 1) != 0 && *(void**)(entry + 0x74) == pEvt) {
+            u8* childSet = work;
+            u8* child;
+            s32 childCount;
+            if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
+            if (*(u8**)(entry + 0x70) != 0) evtStart(*(void**)(entry + 0x70), flags);
+            child = *(u8**)(childSet + 0x90);
+            childCount = *(s32*)childSet;
+            while (childCount-- > 0) {
+                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) evtStart(child, flags);
+                child += 0x1B0;
+            }
+            if ((entry[0xC] & flags) != 0) entry[8] &= ~2;
+        }
     }
-    return 0;
+    if ((((u8*)pEvt)[0xC] & flags) != 0) ((u8*)pEvt)[8] &= ~2;
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers off
@@ -164,40 +199,74 @@ u8 evtStart(void* pEvt, u32 flags) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-u8 evtStop(int pEvt, u32 flags) {
+void evtStop(int pEvt, u32 flags) {
     extern void* gp;
     extern u8 work[];
-
-    void* set;
-    void* entry;
-    void* waiting;
+    u8* set = work;
+    u8* waiting;
+    u8* entry;
+    s32 count;
     s32 i;
 
-    set = work;
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        set = work + 0xA0;
-    }
-
-    waiting = *(void**)(pEvt + 0x70);
+    if (*(s32*)((u8*)gp + 0x14) != 0) set += 0xA0;
+    waiting = *(u8**)(pEvt + 0x70);
     if (waiting != 0) {
-        evtStop((s32)waiting, flags);
-    }
-
-    entry = *(void**)((s32)set + 0x90);
-    i = 0;
-    while (i < *(s32*)set) {
-        if ((*(u8*)((s32)entry + 8) & 1) != 0 && *(s32*)((s32)entry + 0x74) == pEvt) {
-            evtStop((s32)entry, flags);
+        u8* nestedSet = work;
+        u8* nested = *(u8**)(waiting + 0x70);
+        if (*(s32*)((u8*)gp + 0x14) != 0) nestedSet += 0xA0;
+        if (nested != 0) {
+            u8* child;
+            s32 childCount;
+            if (*(u8**)(nested + 0x70) != 0) evtStop((s32)*(void**)(nested + 0x70), flags);
+            child = *(u8**)(nestedSet + 0x90);
+            childCount = *(s32*)nestedSet;
+            for (i = 0; i < childCount; i++, child += 0x1B0) {
+                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == nested) evtStop((s32)child, flags);
+            }
+            if ((nested[0xC] & flags) != 0) nested[8] |= 2;
         }
-        i++;
-        entry = (void*)((s32)entry + 0x1B0);
+        entry = *(u8**)(nestedSet + 0x90);
+        count = *(s32*)nestedSet;
+        for (i = 0; i < count; i++, entry += 0x1B0) {
+            if ((entry[8] & 1) != 0 && *(u8**)(entry + 0x74) == waiting) {
+                u8* childSet = work;
+                u8* child;
+                s32 childCount;
+                if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
+                if (*(u8**)(entry + 0x70) != 0) evtStop((s32)*(void**)(entry + 0x70), flags);
+                child = *(u8**)(childSet + 0x90);
+                childCount = *(s32*)childSet;
+                while (childCount-- > 0) {
+                    if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) evtStop((s32)child, flags);
+                    child += 0x1B0;
+                }
+                if ((entry[0xC] & flags) != 0) entry[8] |= 2;
+            }
+        }
+        if ((waiting[0xC] & flags) != 0) waiting[8] |= 2;
     }
 
-    if ((*(u8*)(pEvt + 0xC) & flags) != 0) {
-        *(u8*)(pEvt + 8) = *(u8*)(pEvt + 8) | 2;
+    entry = *(u8**)(set + 0x90);
+    count = *(s32*)set;
+    for (i = 0; i < count; i++, entry += 0x1B0) {
+        if ((entry[8] & 1) != 0 && *(u8**)(entry + 0x74) == (u8*)pEvt) {
+            u8* childSet = work;
+            u8* child;
+            s32 childCount;
+            if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
+            if (*(u8**)(entry + 0x70) != 0) evtStop((s32)*(void**)(entry + 0x70), flags);
+            child = *(u8**)(childSet + 0x90);
+            childCount = *(s32*)childSet;
+            while (childCount-- > 0) {
+                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) evtStop((s32)child, flags);
+                child += 0x1B0;
+            }
+            if ((entry[0xC] & flags) != 0) entry[8] |= 2;
+        }
     }
-    return 0;
+    if ((*(u8*)(pEvt + 0xC) & flags) != 0) *(u8*)(pEvt + 8) |= 2;
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw reset
 

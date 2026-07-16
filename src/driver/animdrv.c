@@ -2701,9 +2701,42 @@ void animPoseSetPaperAnim(s32 poseId, void* name, s32 enabled) {
 }
 
 void animPaperPoseEntry(s32 name, s32 flag) {
-    ;
-}
+    extern s32 strcmp(const char*, const char*);
+    extern s32 animPoseEntry(char*, u32);
+    extern s32 wp;
+    s32 index = 0;
+    s32 offset = 0;
+    s32 pose;
+    s32 file;
+    s32 data;
 
+    while (index < *(s32*)(wp + 0x14)) {
+        pose = *(s32*)(wp + 0x10) + offset;
+        if ((*(u32*)pose & 1) != 0 &&
+            (*(u32*)(pose + 4) & 1) != 0 &&
+            (*(u32*)(pose + 4) & 2) != 0 &&
+            *(s32*)(pose + 0xC) == flag) {
+            file = *(s32*)(*(s32*)wp + (*(s32*)(pose + 0x10) << 4) + 8);
+            data = **(s32**)(file + 0xA0);
+            if (strcmp((char*)(data + 4), (char*)name) == 0) break;
+        }
+        offset += 0x170;
+        index++;
+    }
+    if (index == *(s32*)(wp + 0x14)) index = -1;
+    if (index < 0) {
+        index = animPoseEntry((char*)name, flag);
+        if (index != -2) {
+            pose = *(s32*)(wp + 0x10) + index * 0x170;
+            *(u32*)(pose + 4) = 3;
+            *(s32*)(pose + 8) = 0;
+            *(u32*)pose |= 1;
+        }
+    } else {
+        pose = *(s32*)(wp + 0x10) + index * 0x170;
+        *(s32*)(pose + 8) += 1;
+    }
+}
 
 s32 animEffectAsync(void* name, s32 mode) {
     extern void fileSetCurrentArchiveType(s32 type);
@@ -3237,41 +3270,53 @@ void animPoseSetMaterialEvtColor(s32 poseId, void* color) {
 void animPose_AllocBuffer(void* pPose) {
     extern s32 wp;
     extern s32 testAlloc(u32 size);
+    extern void initTestHeap(void);
+    extern void animPoseRefresh(void);
     s32 pose = (s32)pPose;
-    s32 file;
-    s32 data;
+    s32 file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
+    s32 data = **(s32**)(*(s32*)(file + 8) + 0xA0);
+    s32 ret;
+    s32 otherPose;
+    s32 i;
+    u32 size;
 
-    file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
-    data = **(s32**)(*(s32*)(file + 8) + 0xA0);
-    *(s32*)(pose + 0x48) = testAlloc(*(s32*)(data + 0xF0) * 0xC);
+#define ALLOC_INLINE(destination, requestedSize) do { \
+    size = (requestedSize); \
+    ret = *(s32*)(wp + 0x108); \
+    if ((size & 0x1F) != 0) size += 0x20 - (size & 0x1F); \
+    *(s32*)(wp + 0x108) += size; \
+    if (*(s32*)(wp + 0x104) + 0x180000 <= *(s32*)(wp + 0x108)) { \
+        initTestHeap(); \
+        otherPose = *(s32*)(wp + 0x10); \
+        for (i = 0; i < *(s32*)(wp + 0x14); i++, otherPose += 0x170) { \
+            if (*(s32*)otherPose != 0 && \
+                (*(s32*)(wp + 0x10C) == 0 || *(s32*)(otherPose + 0xC) != 0) && \
+                (*(s32*)(wp + 0x10C) != 0 || *(s32*)(otherPose + 0xC) != 1)) { \
+                animPose_AllocBuffer((void*)otherPose); \
+                *(s32*)(otherPose + 0x3C) = -1; \
+            } \
+        } \
+        ret = *(s32*)(wp + 0x108); \
+        if ((size & 0x1F) != 0) size += 0x20 - (size & 0x1F); \
+        *(s32*)(wp + 0x108) += size; \
+        if (*(s32*)(wp + 0x104) + 0x180000 <= *(s32*)(wp + 0x108)) { \
+            animPoseRefresh(); \
+            ret = testAlloc(size); \
+        } \
+    } \
+    *(s32*)(pose + (destination)) = ret; \
+} while (0)
 
-    file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
-    data = **(s32**)(*(s32*)(file + 8) + 0xA0);
-    *(s32*)(pose + 0x4C) = testAlloc(*(s32*)(data + 0xF0) * 0xC);
+    ALLOC_INLINE(0x48, *(u32*)(data + 0xF0) * 0xC);
+    ALLOC_INLINE(0x4C, *(u32*)(data + 0xF0) * 0xC);
+    ALLOC_INLINE(0x50, *(u32*)(data + 0xF8) * 0xC);
+#undef ALLOC_INLINE
 
-    file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
-    data = **(s32**)(*(s32*)(file + 8) + 0xA0);
-    *(s32*)(pose + 0x50) = testAlloc(*(s32*)(data + 0xF8) * 0xC);
-
-    file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
-    data = **(s32**)(*(s32*)(file + 8) + 0xA0);
     *(s32*)(pose + 0x54) = testAlloc(*(s32*)(data + 0xF8) * 0xC);
-
-    file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
-    data = **(s32**)(*(s32*)(file + 8) + 0xA0);
     *(s32*)(pose + 0x58) = testAlloc(*(s32*)(data + 0x13C));
     *(s32*)(pose + 0x5C) = *(s32*)(pose + 0x58);
-
-    file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
-    data = **(s32**)(*(s32*)(file + 8) + 0xA0);
     *(s32*)(pose + 0x60) = testAlloc(*(s32*)(data + 0x140) << 2);
-
-    file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
-    data = **(s32**)(*(s32*)(file + 8) + 0xA0);
     *(s32*)(pose + 0x64) = testAlloc(*(s32*)(data + 0x140) << 2);
-
-    file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
-    data = **(s32**)(*(s32*)(file + 8) + 0xA0);
     *(s32*)(pose + 0x68) = testAlloc(*(s32*)(data + 0x12C) * 0x18);
     *(s32*)(pose + 0x6C) = *(s32*)(pose + 0x68);
     *(s32*)(pose + 0x3C) = -1;

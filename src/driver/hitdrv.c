@@ -1723,15 +1723,116 @@ void hitAtrOn(int param_1, u32 param_2, int param_3) {
     return;
 }
 
-void hitEntrySub(void* mapObj, s32 arg1, void* arg2, s32 arg3, s32 arg4) {
-    ;
+void hitEntrySub(void* joint, s32 parent, void* parentMtx, s32 rootOnly, s32 groupIndex) {
+    extern void* _hitEnt(void* joint, s32 parent, s32 parentMtx, s32 groupIndex);
+    void* root;
+    void* child;
+    void* grand;
+    void* hitChild;
+    void* hitGrand;
+
+    root = _hitEnt(joint, parent, (s32)parentMtx, groupIndex);
+    child = *(void**)((s32)joint + 0x0C);
+    if (child != NULL) {
+        hitChild = _hitEnt(child, (s32)root, (s32)root + 0x0C, groupIndex);
+        grand = *(void**)((s32)child + 0x0C);
+        if (grand != NULL) {
+            hitGrand = _hitEnt(grand, (s32)hitChild, (s32)hitChild + 0x0C, groupIndex);
+            if (*(void**)((s32)grand + 0x0C) != NULL) {
+                hitEntrySub(*(void**)((s32)grand + 0x0C), (s32)hitGrand, (void*)((s32)hitGrand + 0x0C), 0, groupIndex);
+            }
+            if (*(void**)((s32)grand + 0x10) != NULL) {
+                hitEntrySub(*(void**)((s32)grand + 0x10), (s32)hitChild, (void*)((s32)hitChild + 0x0C), 0, groupIndex);
+            }
+            *(void**)((s32)hitChild + 0xD8) = hitGrand;
+        }
+        child = *(void**)((s32)child + 0x10);
+        if (child != NULL) {
+            hitGrand = _hitEnt(child, (s32)root, (s32)root + 0x0C, groupIndex);
+            if (*(void**)((s32)child + 0x0C) != NULL)
+                hitEntrySub(*(void**)((s32)child + 0x0C), (s32)hitGrand, (void*)((s32)hitGrand + 0x0C), 0, groupIndex);
+            if (*(void**)((s32)child + 0x10) != NULL)
+                hitEntrySub(*(void**)((s32)child + 0x10), (s32)root, (void*)((s32)root + 0x0C), 0, groupIndex);
+            *(void**)((s32)hitChild + 0xDC) = hitGrand;
+        }
+        *(void**)((s32)root + 0xD8) = hitChild;
+    }
+    if (rootOnly == 0 && *(void**)((s32)joint + 0x10) != NULL) {
+        child = *(void**)((s32)joint + 0x10);
+        hitChild = _hitEnt(child, parent, (s32)parentMtx, groupIndex);
+        *(void**)((s32)root + 0xDC) = hitChild;
+    }
 }
 
+void hitMain(void) {
+    extern void* unk_8041e628;
+    extern void mapCalcAnimMatrix(void* dst, void* parent, void* entry, void* track);
+    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
+    extern f32 float_10_8041f840;
+    void* map = mapGetWork();
+    void* group;
+    void* hit;
+    void* last = NULL;
+    s32 groupIndex;
+    s32 hitIndex;
+    f32 scale[3][4];
 
-u8 hitMain(void) {
-    return 0;
+    unk_8041e628 = NULL;
+    group = map;
+    for (groupIndex = 0; groupIndex < *(s32*)map; groupIndex++, group = (void*)((s32)group + 0x178)) {
+        hit = *(void**)((s32)group + 0x15C);
+        for (hitIndex = 0; hitIndex < *(s32*)((s32)group + 0x158); hitIndex++, hit = (void*)((s32)hit + 0xE4)) {
+            if (*(s32*)(*(s32*)((s32)hit + 8) + 0x5C) != 0 && (*(u16*)hit & 0x81) == 0) {
+                if (last == NULL) unk_8041e628 = hit;
+                else *(void**)((s32)last + 0xE0) = hit;
+                last = hit;
+            }
+        }
+    }
+    if (last != NULL) *(void**)((s32)last + 0xE0) = NULL;
+
+    group = map;
+    for (groupIndex = 0; groupIndex < *(s32*)map; groupIndex++, group = (void*)((s32)group + 0x178)) {
+        void* entry = *(void**)((s32)group + 0x164);
+        s32 animIndex;
+        s32 changed = 0;
+        for (animIndex = 0; animIndex < *(s32*)((s32)group + 0x160); animIndex++, entry = (void*)((s32)entry + 0x20)) {
+            u16 flags = *(u16*)entry;
+            void* tracks = *(void**)(*(s32*)((s32)entry + 0x18) + 0x18);
+            if ((flags & 1) != 0 && ((flags & 2) == 0 || (flags & 0x1000) == 0) && tracks != NULL) {
+                s32 trackIndex;
+                void* trackNode = tracks;
+                for (trackIndex = 0; trackIndex < *(s32*)tracks; trackIndex++, trackNode = (void*)((s32)trackNode + 4)) {
+                    void* track = *(void**)((s32)trackNode + 4);
+                    char* name = *(char**)((s32)track + 4);
+                    void* searchGroup = map;
+                    s32 searchGroupIndex;
+                    hit = NULL;
+                    for (searchGroupIndex = 0; name != NULL && searchGroupIndex < *(s32*)map; searchGroupIndex++, searchGroup = (void*)((s32)searchGroup + 0x178)) {
+                        void* candidate = *(void**)((s32)searchGroup + 0x15C);
+                        for (hitIndex = 0; hitIndex < *(s32*)((s32)searchGroup + 0x158); hitIndex++, candidate = (void*)((s32)candidate + 0xE4)) {
+                            if ((*(u16*)candidate & 0x80) == 0 && strcmp(**(char***)((s32)candidate + 8), name) == 0) {
+                                hit = candidate;
+                                break;
+                            }
+                        }
+                        if (hit != NULL) break;
+                    }
+                    if (hit != NULL) {
+                        mapCalcAnimMatrix((void*)((s32)hit + 0x6C), (void*)((s32)hit + 0x3C), entry, track);
+                        *(u16*)hit |= 0x50;
+                        *(u16*)entry |= 0x1000;
+                        changed = 1;
+                    }
+                }
+            }
+        }
+        if (changed) {
+            PSMTXScale(scale, float_10_8041f840, float_10_8041f840, float_10_8041f840);
+            hitReCalcMatrix2(*(void**)((s32)group + 0xAC), scale, 0);
+        }
+    }
 }
-
 
 void hitObjGetPos(char* name, f32* out) {
     extern void* mapGetWork(void);
@@ -1848,15 +1949,63 @@ void hitDelete(char* name) {
     }
 }
 
-int hitCheckAttr(double param_1, double param_2, double param_3, double param_4, double param_5, double param_6, s32 param_7, void* param_8, void* param_9, void* param_10, void* param_11, void* param_12, void* param_13, void* param_14) {
-    return 0;
+s32 hitCheckAttr(f64 x, f64 y, f64 z, f64 vx, f64 vy, f64 vz, s32 flags,
+                 f32* outX, f32* outY, f32* outZ, f32* outDist,
+                 f32* outNX, f32* outNY, f32* outNZ) {
+    s32 work[16];
+    f32* values = (f32*)work;
+    s32 result;
+
+    values[3] = (f32)x;
+    values[4] = (f32)y;
+    values[5] = (f32)z;
+    values[6] = (f32)vx;
+    values[7] = (f32)vy;
+    values[8] = (f32)vz;
+    values[15] = *outDist;
+    work[1] = flags;
+
+    result = hitCheckVecFilter(work, chkFilterAttr);
+    if (result != 0) {
+        *outDist = values[15];
+        *outX = values[9];
+        *outY = values[10];
+        *outZ = values[11];
+        *outNX = values[12];
+        *outNY = values[13];
+        *outNZ = values[14];
+    }
+    return result;
 }
 
+s32 hitCheckFilter(f64 x, f64 y, f64 z, f64 vx, f64 vy, f64 vz, s32 filter,
+                   f32* outX, f32* outY, f32* outZ, f32* outDist,
+                   f32* outNX, f32* outNY, f32* outNZ) {
+    s32 work[16];
+    f32* values = (f32*)work;
+    s32 result;
 
-s32 hitCheckFilter(f32 x, f32 y, f32 z, f32 vx, f32 vy, f32 vz, s32 flags, f32* outZ, f32* outY, f32* outX, f32* outDist, void* outA, void* outB, void* outC) {
-    return 0;
+    values[3] = (f32)x;
+    values[4] = (f32)y;
+    values[5] = (f32)z;
+    values[6] = (f32)vx;
+    values[7] = (f32)vy;
+    values[8] = (f32)vz;
+    values[15] = *outDist;
+    work[1] = filter;
+
+    result = hitCheckVecFilter(work, (void*)filter);
+    if (result != 0) {
+        *outDist = values[15];
+        *outX = values[9];
+        *outY = values[10];
+        *outZ = values[11];
+        *outNX = values[12];
+        *outNY = values[13];
+        *outNZ = values[14];
+    }
+    return result;
 }
-
 
 void hitBindUpdate(char* name) {
     extern void* mapGetWork(void);
@@ -1971,10 +2120,23 @@ found:
     }
 }
 
-u8 hitCheckVecHitObjXZ(void) {
+u8 hitCheckVecHitObjXZ(s32* ray, void* hitObj) {
+    extern f32 PSVECDotProduct(void* a, void* b);
+    extern u8 checkTriVec_xz(void* ray, void* tri);
+    f32* fRay = (f32*)ray;
+    u8* tri;
+    s32 i;
+
+    ray[0] = (*(u8*)(*(s32*)(*(s32*)((s32)hitObj + 8) + 0x58) + 1) == 1);
+    tri = *(u8**)((s32)hitObj + 0xAC);
+    for (i = 0; i < *(s16*)((s32)hitObj + 0xA8); i++, tri += 0x54) {
+        if ((ray[0] == 0 || PSVECDotProduct(tri + 0x48, fRay + 6) < 0.0f) &&
+            checkTriVec_xz(ray, tri) != 0) {
+            return 1;
+        }
+    }
     return 0;
 }
-
 
 void hitObjGetNormal(char* name, void* out) {
     extern void* mapGetWork(void);

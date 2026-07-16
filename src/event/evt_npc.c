@@ -1930,10 +1930,21 @@ void* evtNpcNameToPtr(void* event, s32 name) {
     return npcNameToPtr((void*)name);
 }
 
-u8 evt_npc_set_rotate_offset(s32 pEvt) {
-    return 0;
-}
+s32 evt_npc_set_rotate_offset(void* pEvt) {
+    extern s32 evtGetValue(void* evt, s32 value);
+    extern void* evtNpcNameToPtr(void* evt, s32 name);
+    s32* args = *(s32**)((u8*)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    f32 x = evtGetValue(pEvt, args[1]);
+    f32 y = evtGetValue(pEvt, args[2]);
+    f32 z = evtGetValue(pEvt, args[3]);
+    u8* npc = evtNpcNameToPtr(pEvt, name);
 
+    *(f32*)(npc + 0xF8) = x;
+    *(f32*)(npc + 0xFC) = y;
+    *(f32*)(npc + 0x100) = z;
+    return 2;
+}
 
 s32 evt_npc_set_rotate(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
@@ -1965,10 +1976,42 @@ s32 evt_npc_set_rotate(void* pEvt) {
     return 2;
 }
 
-u8 evt_fbat_trans_floor_position(s32 pEvt) {
-    return 0;
-}
+s32 evt_fbat_trans_floor_position(void* pEvt) {
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern f32 evtSetFloat(void* evt, s32 value, f32 result);
+    extern s32 hitCheckFilter(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz,
+                              s32 flags, void* out0, f32* outY, void* out2,
+                              f32* outDist, void* out4, void* out5, void* out6);
+    extern f32 float_0_8041fd84;
+    extern f32 float_1_8041fd88;
+    extern f32 float_neg1_8041fd8c;
+    s32* args = *(s32**)((u8*)pEvt + 0x18);
+    s32 xArg = args[0];
+    s32 yArg = args[1];
+    s32 zArg = args[2];
+    f32 x = evtGetFloat(pEvt, xArg);
+    f32 y = evtGetFloat(pEvt, yArg);
+    f32 z = evtGetFloat(pEvt, zArg);
+    f32 addY = evtGetFloat(pEvt, args[3]);
+    f32 distance = evtGetFloat(pEvt, args[4]);
+    f32 floorY;
+    s32 out0;
+    s32 out2;
+    s32 out4;
+    s32 out5;
+    s32 out6;
 
+    if (hitCheckFilter(x, y + float_1_8041fd88, z,
+                       float_0_8041fd84, float_neg1_8041fd8c,
+                       float_0_8041fd84, 0, &out0, &floorY, &out2,
+                       &distance, &out4, &out5, &out6) != 0) {
+        y = floorY + addY;
+    }
+    evtSetFloat(pEvt, xArg, x);
+    evtSetFloat(pEvt, yArg, y);
+    evtSetFloat(pEvt, zArg, z);
+    return 2;
+}
 
 s32 evt_npc_add_rotate(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
@@ -2120,10 +2163,45 @@ s32 evt_npc_sound_data_set(void* pEvt) {
     return 2;
 }
 
-u8 _kamek_houki_kemuri(int param_1, int param_2) {
-    return 0;
-}
+void _kamek_houki_kemuri(s32 npc, s32 mode) {
+    extern void* gp;
+    extern void* effKemuri10N64Entry(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, s32 type);
+    extern s32 strcmp(const char* lhs, const char* rhs);
+    extern s32 cnt_1369;
+    extern f32 float_0_8041fd84;
+    extern f32 float_1_8041fd88;
+    extern f32 float_neg1_8041fd8c;
+    extern f32 float_180_8041fdb0;
+    extern f32 float_36_8041fdb4;
+    extern f32 float_18_8041fdb8;
+    extern char str_kpa_01_802c14d0[];
+    s32 mask;
+    f32 x;
+    f32 direction;
+    void* effect;
 
+    cnt_1369++;
+    if (mode == 3) mask = 7;
+    else if (mode == 2) mask = 0xF;
+    else return;
+    if ((cnt_1369 & mask) != 0) return;
+
+    if (*(f32*)(npc + 0x144) <= float_0_8041fd84 ||
+        *(f32*)(npc + 0x144) >= float_180_8041fdb0) {
+        x = *(f32*)(npc + 0x8C) + float_36_8041fdb4 * *(f32*)(npc + 0xE0);
+        direction = float_neg1_8041fd8c;
+    } else {
+        x = *(f32*)(npc + 0x8C) - float_36_8041fdb4 * *(f32*)(npc + 0xE0);
+        direction = float_1_8041fd88;
+    }
+    effect = effKemuri10N64Entry(x,
+                                 *(f32*)(npc + 0x90) + float_18_8041fdb8 * *(f32*)(npc + 0xE0),
+                                 *(f32*)(npc + 0x94), direction,
+                                 float_0_8041fd84, float_0_8041fd84, 0);
+    if (strcmp((char*)gp + 0x12C, str_kpa_01_802c14d0) == 0) {
+        *(s32*)(*(u8**)((u8*)effect + 0xC) + 0x6C) = 7;
+    }
+}
 
 s32 evt_npc_set_tribe(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
@@ -2166,10 +2244,33 @@ s32 evt_npc_set_tribe(void* pEvt) {
     return 1;
 }
 
-u8 evt_npc_kamek_kemuri2(void) {
-    return 0;
-}
+s32 evt_npc_kamek_kemuri2(void* pEvt, s32 isFirstCall) {
+    extern s32 evtGetValue(void* evt, s32 value);
+    extern void* npcNameToPtr(s32 name);
+    extern void _kamek_houki_kemuri(s32 npc, s32 mode);
+    extern f32 float_0_8041fd84;
+    extern f32 float_1000_8041fd94;
+    s32* args = *(s32**)((u8*)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    f32 duration = (f32)evtGetValue(pEvt, args[1]) / float_1000_8041fd94;
+    s32 type = evtGetValue(pEvt, args[2]);
+    u8* npc = npcNameToPtr(name);
 
+    if (isFirstCall == 0) {
+        if (*(f32*)(npc + 0x1A0) < *(f32*)(npc + 0x1C0)) {
+            _kamek_houki_kemuri((s32)npc, 3 - (type == 0));
+            return 0;
+        }
+        return 2;
+    }
+    if (duration > float_0_8041fd84) {
+        *(u32*)(npc + 0x188) = 0;
+        *(u32*)(npc + 0x18C) = 0;
+        *(f32*)(npc + 0x1C0) = duration;
+        return 0;
+    }
+    return 2;
+}
 
 s32 evt_npc_facedirection_add(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
@@ -2212,9 +2313,30 @@ s32 evt_npc_facedirection_add(void* pEvt) {
 }
 
 s32 evt_npc_set_ry_lr(void* pEvt) {
-    return 0;
-}
+    extern s32 evtGetValue(void* evt, s32 value);
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern void* evtNpcNameToPtr(void* evt, s32 name);
+    extern void* camGetPtr(s32 camera);
+    extern f32 reviseAngle(f32 angle);
+    extern f32 float_100_8041fde4;
+    extern f32 float_5_8041fde0;
+    s32* args = *(s32**)((u8*)pEvt + 0x18);
+    s32 name = evtGetValue(pEvt, args[0]);
+    s32 side = (s32)evtGetFloat(pEvt, args[1]);
+    u8* npc = evtNpcNameToPtr(pEvt, name);
+    u8* camera = camGetPtr(4);
+    s32 angle = (s32)reviseAngle((float_100_8041fde4 * *(f32*)(camera + 0x114) +
+                                   float_5_8041fde0) / float_100_8041fde4);
+    f32 left = (angle - 90) % 360;
+    f32 right = (angle + 90) % 360;
 
+    if (side == 0) {
+        *(f32*)(npc + 0x144) = left;
+    } else {
+        *(f32*)(npc + 0x144) = right;
+    }
+    return 2;
+}
 
 s32 evt_npc_get_loiter_dir(void* pEvt) {
     extern f32 evtGetFloat(void*, s32);
@@ -2300,10 +2422,27 @@ s32 evt_npc_set_position(void* pEvt) {
     return 2;
 }
 
-int evt_npc_wait_msec(void* pEvt, int param_2) {
-    return 0;
-}
+s32 evt_npc_wait_msec(void* pEvt, s32 isFirstCall) {
+    extern s32 evtGetValue(void* evt, s32 value);
+    extern void* evtNpcNameToPtr(void* evt, s32 name);
+    extern u32 __OSBusClock;
+    u8* evt = pEvt;
+    s32* args = *(s32**)(evt + 0x18);
+    u8* npc = evtNpcNameToPtr(pEvt, evtGetValue(pEvt, args[0]));
+    u64 now = *(u64*)evt;
+    u32 wait;
+    u32 elapsed;
 
+    *(u32*)(npc + 0x1D4) |= 0x10;
+    if (isFirstCall != 0) {
+        *(u32*)(evt + 0x78) = evtGetValue(pEvt, args[1]);
+        *(u64*)(evt + 0x7C) = now;
+    }
+    wait = *(u32*)(evt + 0x78);
+    if (wait == 0) return 2;
+    elapsed = (u32)(now - *(u64*)(evt + 0x7C));
+    return elapsed / (__OSBusClock / 4000) >= wait;
+}
 
 f32 _get_target_dir(void* pEvt, void* npc, s32 target) {
     extern s32 strcmp(const char*, const char*);
@@ -2589,10 +2728,28 @@ s32 evt_npc_flag_onoff(void* pEvt) {
 }
 
 
-s32 evt_npc_kamek_kemuri1(int param_1, int param_2) {
+s32 evt_npc_kamek_kemuri1(void* pEvt, s32 isFirstCall) {
+    extern s32 evtGetValue(void* evt, s32 value);
+    extern void* npcNameToPtr(s32 name);
+    extern void _kamek_houki_kemuri(s32 npc, s32 mode);
+    extern f32 float_0_8041fd84;
+    s32* args = *(s32**)((u8*)pEvt + 0x18);
+    u8* npc = npcNameToPtr(evtGetValue(pEvt, args[0]));
+
+    if (isFirstCall == 0) {
+        if (*(f32*)(npc + 0x1C0) == float_0_8041fd84) {
+            if (*(f32*)(npc + 0x1B0) > float_0_8041fd84) {
+                _kamek_houki_kemuri((s32)npc, *(s32*)(npc + 0x108));
+                return 0;
+            }
+        } else if (*(f32*)(npc + 0x1A0) < *(f32*)(npc + 0x1C0)) {
+            _kamek_houki_kemuri((s32)npc, *(s32*)(npc + 0x108));
+            return 0;
+        }
+        return 2;
+    }
     return 0;
 }
-
 
 s32 evt_npc_set_scale(void* pEvt) {
     extern s32 evtGetValue(void*, s32);

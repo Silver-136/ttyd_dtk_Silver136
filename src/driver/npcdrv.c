@@ -15,9 +15,29 @@ char MarioTalkPose[0x20] = "KPA_T_1";
 NPCWork* npcGetWorkPtr(void) {
     return gp->inBattle ? &work.battle : &work.field;
 }
-
 void npcInit(void) {
-    NPCWork* wp = &work.field;
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void* memset(void* dst, s32 value, u32 size);
+    extern void* release_wp;
+    extern s32 g_npcMainCount;
+    u8* field = (u8*)&work;
+    u8* battle = field + 0x14;
+    void* fbat;
+
+    *(u32*)(field + 4) = 0x24;
+    *(void**)(field + 0xC) = __memAlloc(0, 0x7500);
+    memset(*(void**)(field + 0xC), 0, *(u32*)(field + 4) * 0x340);
+    release_wp = __memAlloc(0, *(u32*)(field + 4) * 0x94);
+
+    *(u32*)(battle + 4) = 0x10;
+    *(void**)(battle + 0xC) = __memAlloc(0, 0x3400);
+    memset(*(void**)(battle + 0xC), 0, *(u32*)(battle + 4) * 0x340);
+
+    fbat = __memAlloc(0, 0x580);
+    *(void**)((u8*)gp + 0x168) = fbat;
+    memset(fbat, 0, 0x580);
+    *(s16*)fbat = 0;
+    g_npcMainCount = 0;
 }
 
 void* fbatGetPointer(void) {
@@ -256,8 +276,7 @@ void* fbatNpcTalkCheck(void) {
 }
 
 
-void fbatHitCheck(s32 flags, s32 hitInfo) {
-    extern NPCWork2 work;
+void* fbatHitCheck(u32 flags, void* hitInfo) {
     extern void* marioGetPtr(void);
     extern f64 sqrt(f64 value);
     extern s32 seqGetSeq(void);
@@ -280,7 +299,7 @@ void fbatHitCheck(s32 flags, s32 hitInfo) {
     f32 bestDistance = float_1000_8041fca8;
 
     npcWork = (s32)&work.field;
-    if (*(s32*)((s32)gp + 0x14) != 0) {
+    if (gp->inBattle != 0) {
         npcWork += 0x14;
     }
     player = (s32)marioGetPtr();
@@ -297,7 +316,6 @@ void fbatHitCheck(s32 flags, s32 hitInfo) {
             f32 dx;
             f32 dz;
             f32 distance;
-            f32 y;
 
             if (npc == 0) {
                 continue;
@@ -351,10 +369,10 @@ void fbatHitCheck(s32 flags, s32 hitInfo) {
             f32 distance;
             if (npc != 0 && (*(u32*)npc & 2) != 0 &&
                 (*(u32*)npc & 0x20000020) == 0 &&
-                _npcHitCheckSphere((f64)*(f32*)(player + 0x8C),
-                                   (f64)(*(f32*)(player + 0x90) +
-                                         float_0p5_8041fc80 * *(f32*)(player + 0xFC)),
-                                   (f64)*(f32*)(player + 0x94), 30.0, npc,
+                _npcHitCheckSphere(*(f32*)(player + 0x8C),
+                                   *(f32*)(player + 0x90) +
+                                       float_0p5_8041fc80 * *(f32*)(player + 0xFC),
+                                   *(f32*)(player + 0x94), 30.0, npc,
                                    &distance) != 0 &&
                 distance < bestDistance) {
                 bestDistance = distance;
@@ -366,11 +384,11 @@ void fbatHitCheck(s32 flags, s32 hitInfo) {
 
     if (hitInfo != 0) {
         *(u32*)hitInfo = hitFlags;
-        *(u32*)(hitInfo + 4) = attackMode;
-        *(f32*)(hitInfo + 8) = bestDistance;
-        *(u32*)(hitInfo + 0xC) = unknownFlags;
+        *(u32*)((u8*)hitInfo + 4) = attackMode;
+        *(f32*)((u8*)hitInfo + 8) = bestDistance;
+        *(u32*)((u8*)hitInfo + 0xC) = unknownFlags;
     }
-    (void)bestNpc;
+    return (void*)bestNpc;
 }
 
 void npcMain(void) {
@@ -1758,59 +1776,52 @@ u8 npcCheckHitMarioSide(s32 pNpc) {
     return 1;
 }
 
-u8 _npcHitCheckHammerAllMotion(double radius, double angle, s32 npc, f32* outDist) {
+s32 _npcHitCheckHammerAllMotion(f64 radius, f64 angle, s32 npc, f32* outDist) {
     extern void* marioGetPtr(void);
     extern void sincosf(f32 angle, f32* outSin, f32* outCos);
-    extern f64 sqrt(f64);
+    extern f64 sqrt(f64 value);
+    f32 steps[12] = {0.0f, 10.0f, 20.0f, 30.0f, 40.0f, 50.0f,
+                     60.0f, 70.0f, 80.0f, 90.0f, 100.0f, 110.0f};
     f32 sinA;
     f32 cosA;
     f32 sinB;
     f32 cosB;
-    f32 dx;
-    f32 dy;
-    f32 dz;
-    f32 dist;
-    f32 y;
-    f32 top;
+    f32 distance = 0.0f;
+    s32 result = 0;
     s32 i;
-    s32 ret;
-    void* mario;
-    f32 angleStep[12];
 
-    angleStep[0] = 0.0f;
-    angleStep[1] = 10.0f;
-    angleStep[2] = 20.0f;
-    angleStep[3] = 30.0f;
-    angleStep[4] = 40.0f;
-    angleStep[5] = 50.0f;
-    angleStep[6] = 60.0f;
-    angleStep[7] = 70.0f;
-    angleStep[8] = 80.0f;
-    angleStep[9] = 90.0f;
-    angleStep[10] = 100.0f;
-    angleStep[11] = 110.0f;
-    ret = 0;
-    dist = 0.0f;
-    for (i = 0; i <= 11; i++) {
-        mario = marioGetPtr();
+    for (i = 0; i < 12; i++) {
+        u8* player = marioGetPtr();
+        f32 sampleY;
+        f32 dx;
+        f32 dy;
+        f32 dz;
+        f32 baseY;
+        f32 topY;
+
         sincosf((f32)angle, &sinA, &cosA);
-        sincosf(angleStep[i], &sinB, &cosB);
-        y = (f32)((double)*(f32*)((s32)mario + 0x90) + radius * (double)cosB);
-        dx = (sinB * (f32)((double)sinA * radius) + *(f32*)((s32)mario + 0x8C)) - *(f32*)(npc + 0x8C);
-        dz = (sinB * (f32)((double)cosA * radius) + *(f32*)((s32)mario + 0x94)) - *(f32*)(npc + 0x94);
-        dy = y - *(f32*)(npc + 0x90);
-        top = *(f32*)(npc + 0x90) + *(f32*)(npc + 0x150);
-        if (y > *(f32*)(npc + 0x90) && y > top) {
-            dy = y - top;
+        sincosf(steps[i], &sinB, &cosB);
+        sampleY = (f32)(*(f32*)(player + 0x90) + radius * cosB);
+        dx = (f32)(sinB * (sinA * radius) + *(f32*)(player + 0x8C)) - *(f32*)(npc + 0x8C);
+        dz = (f32)(sinB * (cosA * radius) + *(f32*)(player + 0x94)) - *(f32*)(npc + 0x94);
+        baseY = *(f32*)(npc + 0x90);
+        topY = baseY + *(f32*)(npc + 0x150);
+        dy = sampleY - baseY;
+        if (sampleY > baseY) {
+            if (sampleY <= topY) {
+                dy = 0.0f;
+            } else {
+                dy = sampleY - topY;
+            }
         }
-        dist = (f32)sqrt((double)(dx * dx + dy * dy + dz * dz));
-        if (dist < (0.5f * *(f32*)(npc + 0x14C) + 12.0f)) {
-            ret = npc;
+        distance = (f32)sqrt((f64)(dx * dx + dz * dz + dy * dy));
+        if (distance < 0.5f * *(f32*)(npc + 0x14C) + 12.0f) {
+            result = npc;
             break;
         }
     }
-    *outDist = dist;
-    return ret != 0;
+    *outDist = distance;
+    return result;
 }
 
 u8 _npcGroupDead(u32* param_1, s16 param_2) {
@@ -2797,20 +2808,174 @@ void fbatTalkMode(void) {
     }
 }
 
-u8 npcKoopaModeEncountCheck(void) {
-    return 0;
+void npcKoopaModeEncountCheck(void) {
+    extern s32 kpaEnemyHitChk(f64 x, f64 y, f64 z, f64 height, f64 width);
+    extern void npcGroupDead(void* npc, s32 scoreType);
+    extern void kpaPowDown(void);
+    extern char* hitGetName(void* hit);
+    extern s32 strcmp(const char* lhs, const char* rhs);
+    extern char str_a_magu_802c138c[];
+    s32 wp = (s32)&work;
+    s32 count;
+    s32 i;
+    u8* npc;
+
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    if (*(s16*)*(u8**)((u8*)gp + 0x168) != 1) {
+        return;
+    }
+
+    npc = *(u8**)(wp + 0xC);
+    for (i = 0; i < count; i++, npc += 0x340) {
+        s32 hit;
+        u32 flags;
+
+        if (npc == 0) {
+            continue;
+        }
+        flags = *(u32*)npc;
+        if ((flags & 1) == 0 || (flags & 0x08000000) == 0 ||
+            (*(u32*)(npc + 0x1D4) & 4) != 0) {
+            continue;
+        }
+
+        hit = kpaEnemyHitChk(*(f32*)(npc + 0x8C), *(f32*)(npc + 0x90),
+                            *(f32*)(npc + 0x94), *(f32*)(npc + 0x150),
+                            *(f32*)(npc + 0x14C));
+        switch (hit) {
+            case 1:
+                if ((*(u32*)(npc + 0x318) & 1) == 0) npcGroupDead(npc, 1);
+                break;
+            case 2:
+                if ((*(u32*)(npc + 0x318) & 2) == 0) npcGroupDead(npc, 2);
+                break;
+            case 3:
+                if ((*(u32*)(npc + 0x318) & 4) == 0) npcGroupDead(npc, 4);
+                break;
+            case 4:
+                kpaPowDown();
+                break;
+            default:
+                if ((*(u32*)(npc + 0x318) & 0x10) == 0 &&
+                    *(void**)(npc + 0x300) != 0 &&
+                    strcmp(hitGetName(*(void**)(npc + 0x300)), str_a_magu_802c138c) == 0) {
+                    npcGroupDead(npc, 0x10);
+                }
+                break;
+        }
+    }
 }
 
+s32 _npcHitCheckSphere(f64 x, f64 y, f64 z, f64 radius, s32 npc, f32* outDist) {
+    f32 baseY;
+    f32 dx;
+    f32 dy;
+    f32 dz;
+    f32 topY;
+    f32 distSq;
+    f32 distance;
 
-int _npcHitCheckSphere(double param_1, double param_2, double param_3, double param_4, int param_5, float* param_6) {
-    return 0;
+    baseY = *(f32*)(npc + 0x90);
+    dx = (f32)(x - (f64)*(f32*)(npc + 0x8C));
+    dz = (f32)(z - (f64)*(f32*)(npc + 0x94));
+    dy = (f32)(y - (f64)baseY);
+
+    if (y != (f64)baseY) {
+        if (y >= (f64)baseY) {
+            topY = baseY + *(f32*)(npc + 0x150);
+            if (y <= (f64)topY) {
+                dy = 0.0f;
+            } else {
+                dy = (f32)(y - (f64)topY);
+            }
+        }
+    }
+
+    distSq = dz * dz + dx * dx + dy * dy;
+    if (distSq > 0.0f) {
+        f64 value;
+        f64 inv;
+        value = (f64)distSq;
+        inv = __frsqrte(value);
+        inv = 0.5 * inv * (3.0 - value * inv * inv);
+        inv = 0.5 * inv * (3.0 - value * inv * inv);
+        inv = 0.5 * inv * (3.0 - value * inv * inv);
+        distance = (f32)(value * inv);
+    } else {
+        distance = distSq;
+    }
+
+    *outDist = distance;
+    if (distance >= (f32)(0.5 * *(f32*)(npc + 0x14C) + radius)) {
+        return 0;
+    }
+
+    return npc;
 }
 
+void* npcNearDistCheck(f32 x, f32 y, f32 z, f32 radius) {
+    u8* workPtr;
+    s32 count;
+    u8* npc;
+    void* found;
 
-u32* npcNearDistCheck(double param_1, s64 param_2, double param_3, double param_4) {
-    return 0;
+    workPtr = (u8*)&work;
+    found = 0;
+
+    if (gp->inBattle != 0) {
+        workPtr += 0x14;
+    }
+
+    count = *(s32*)(workPtr + 4);
+    npc = *(u8**)(workPtr + 0xC);
+
+    if (count > 0) {
+        do {
+            if ((*(u32*)npc & 1) != 0) {
+                f32 dx;
+                f32 dy;
+                f32 dz;
+                f32 dxSq;
+                f32 dzSq;
+                f32 xzSq;
+                f32 xzDist;
+
+                dx = x - *(f32*)(npc + 0x8C);
+                dy = y - *(f32*)(npc + 0x90);
+                dz = z - *(f32*)(npc + 0x94);
+                dxSq = dx * dx;
+                dzSq = dz * dz;
+                xzSq = dxSq + dzSq;
+
+                if (xzSq > 0.0f) {
+                    f64 value;
+                    f64 inv;
+
+                    value = (f64)xzSq;
+                    inv = __frsqrte(value);
+                    inv = 0.5 * inv * (3.0 - value * inv * inv);
+                    inv = 0.5 * inv * (3.0 - value * inv * inv);
+                    inv = 0.5 * inv * (3.0 - value * inv * inv);
+                    xzDist = (f32)(value * inv);
+                } else {
+                    xzDist = xzSq;
+                }
+
+                if (xzDist < radius) {
+                    found = npc;
+                }
+            }
+
+            npc += 0x340;
+            count--;
+        } while (count != 0);
+    }
+
+    return found;
 }
-
 
 void npcSetStayPose(char* stayPose) {
     extern s32 strcmp(const char*, const char*);
@@ -3052,9 +3217,49 @@ u8 npcReleaseFiledNpc(void) {
 }
 
 void npcSetBattleInfo(void* npc, s32 info) {
-    ;
-}
+    extern void* areaDataPtr(char* area);
+    extern void npcSetupBattleInfo(void* npc, void* setup);
+    u8* base = npc;
+    u8* setup;
+    char area[4];
+    s32 index;
 
+    if (info == -1) {
+        setup = 0;
+    } else {
+        area[0] = *((char*)gp + 0x12C);
+        area[1] = *((char*)gp + 0x12D);
+        area[2] = *((char*)gp + 0x12E);
+        area[3] = 0;
+        setup = *(u8**)((u8*)areaDataPtr(area) + 8);
+        index = info;
+        while (index > 0) {
+            setup += 0x44;
+            index--;
+        }
+    }
+    npcSetupBattleInfo(base, setup);
+
+    index = 0;
+    do {
+        u8* child = *(u8**)(base + 0x330 + index * 4);
+        if (child != 0) {
+            u32* src = (u32*)(base + 0x22C);
+            u32* dst = (u32*)(child + 0x22C);
+            s32 count = 0x19;
+            do {
+                u32 first = src[1];
+                u32 second = src[2];
+                src += 2;
+                dst[1] = first;
+                dst += 2;
+                dst[0] = second;
+                count--;
+            } while (count != 0);
+        }
+        index++;
+    } while (index < 4);
+}
 
 u8 fbatSetAttackAnnounce(s32 flag) {
     extern char str_fb_sensei_shita_802c13e8[];
@@ -3193,10 +3398,32 @@ void npcExecAllReglEvt(void) {
     }
 }
 
-s32 _majinai_effect(void* pEvt, int param_2) {
+s32 _majinai_effect(void* pEvt, s32 firstCall) {
+    extern void* marioGetPtr(void);
+    extern void* effMajinaiEntry(f32 x, f32 y, f32 z, s32 type);
+    extern void effSetName(void* effect, char* name);
+    extern void* effNameToPtr(char* name);
+    extern f32 float_16_8041fc8c;
+    extern f32 float_0p8_8041fc90;
+    extern char str_mjef_coinup_802c13b8[];
+    u8* evt = pEvt;
+    u8* player = marioGetPtr();
+    void* effect;
+
+    if (firstCall != 0) {
+        effect = effMajinaiEntry(*(f32*)(player + 0x8C),
+                                 float_16_8041fc8c + *(f32*)(player + 0x90) +
+                                     *(f32*)(player + 0xFC),
+                                 *(f32*)(player + 0x94), 0);
+        *(void**)(evt + 0x78) = effect;
+        *(f32*)(*(u8**)((u8*)effect + 0xC) + 0x10) = float_0p8_8041fc90;
+        effSetName(effect, str_mjef_coinup_802c13b8);
+    }
+    if (*(void**)(evt + 0x78) == 0 || effNameToPtr(str_mjef_coinup_802c13b8) == 0) {
+        return 2;
+    }
     return 0;
 }
-
 
 void npcStartForEvent(void) {
     extern void evtStartID(s32 id);
@@ -3301,9 +3528,29 @@ void npcBlurOff(char* name) {
 }
 
 void npcGetBackItemEntry(void* npc) {
-    ;
-}
+    extern void* itemEntry(void* name, s32 id, u32 mode, s32 collected,
+                           void* script, f32 x, f32 y, f32 z);
+    extern void itemFlagOn(void* item, u16 flags);
+    u8* battle = (u8*)npc + 0x230;
+    s32 zero = 0;
+    s32 i = 0;
 
+    do {
+        s32 id = *(s32*)(battle + 0x7C);
+        if (id != 0) {
+            void* item = itemEntry(0, id, 0xB, -1, 0,
+                                   *(f32*)((u8*)npc + 0x8C),
+                                   *(f32*)((u8*)npc + 0x90),
+                                   *(f32*)((u8*)npc + 0x94));
+            if (item != 0) {
+                itemFlagOn(item, 0x100);
+            }
+            *(s32*)(battle + 0x7C) = zero;
+        }
+        i++;
+        battle += 4;
+    } while (i < 8);
+}
 
 void* npcNameToPtr(s32 name) {
     extern s32 strcmp(const char*, const char*);
@@ -3328,10 +3575,18 @@ void* npcNameToPtr(s32 name) {
     return npc;
 }
 
-u8 _npcDead(u32* param_1, s16 param_2) {
-    return 0;
-}
+void _npcDead(u32* npc, s16 scoreType) {
+    u8* fbat;
 
+    npc[0x50] |= 0x10;
+    npc[0x75] |= 4;
+    *(s16*)((u8*)npc + 0x31C) = scoreType;
+    if ((*npc & 4) == 0) {
+        return;
+    }
+    fbat = *(u8**)((u8*)gp + 0x168);
+    *(u32*)(fbat + 0x4C) |= 1 << (*(u8*)((u8*)npc + 0x314) & 0x3F);
+}
 
 u8 _fbatFirstAttackAnnouceDisp(s32 param_1, void* param_2) {
     extern char* msgSearch(char*);
@@ -3643,9 +3898,43 @@ void npcSetupBattleInfo(void* npc, void* battleInfo) {
 }
 
 void npcDelete(void* npc) {
-    ;
-}
+    extern void animPoseRelease(s32 poseId);
+    u8* entry = npc;
+    s32 i;
+    u8* prev;
+    u8* next;
+    s32 wp;
 
+    for (i = 0; i < 4; i++) {
+        u8* slave = *(u8**)(entry + 0x330 + i * 4);
+        if (slave != 0) {
+            *(void**)(slave + 0x32C) = 0;
+        }
+        *(void**)(entry + 0x330 + i * 4) = 0;
+    }
+
+    prev = *(u8**)(entry + 0x324);
+    next = *(u8**)(entry + 0x328);
+    if (prev == 0) {
+        if (next != 0) *(void**)(next + 0x324) = 0;
+    } else if (next == 0) {
+        *(void**)(prev + 0x328) = 0;
+    } else {
+        *(void**)(prev + 0x328) = next;
+        *(void**)(next + 0x324) = prev;
+    }
+
+    *(u32*)entry &= ~2;
+    if (*(s32*)(entry + 0x104) >= 0) {
+        animPoseRelease(*(s32*)(entry + 0x104));
+    }
+    *(s32*)(entry + 0x104) = -1;
+    *(u32*)entry &= ~1;
+
+    wp = (s32)&work;
+    if (gp->inBattle != 0) wp += 0x14;
+    *(s32*)wp -= 1;
+}
 
 void npcSetColor(char* name, void* color) {
     extern s32 strcmp(const char*, const char*);
@@ -3773,19 +4062,72 @@ s32 npcEntry(char* name, char* modelName) {
 }
 
 s32 npcCalcScore(void* npc) {
-    return 0;
-}
+    extern s32 kpaMutekiCheck(void);
+    extern void kpaAddScorePos(s32 score, void* position);
+    f32 position[3];
+    u8* fbat = *(u8**)((u8*)gp + 0x168);
+    u16 type = *(u16*)((u8*)npc + 0x31C);
+    s32 score = 300;
 
+    position[0] = *(f32*)((u8*)npc + 0x8C);
+    position[1] = *(f32*)((u8*)npc + 0x90) + *(f32*)(*(u8**)((u8*)npc + 0x28) + 0x2C);
+    position[2] = *(f32*)((u8*)npc + 0x94);
+    if (type == 0x10) {
+        score = 0;
+    } else {
+        if (type == 8) score = 400;
+        if (kpaMutekiCheck() != 0) score += 100;
+        if (type == 2) {
+            *(s32*)(fbat + 0x574) += 1;
+            score *= *(s32*)(fbat + 0x574);
+        }
+        if (type == 1) {
+            *(s32*)(fbat + 0x578) += 1;
+            *(s32*)(fbat + 0x57C) += score;
+        }
+        if (score > 9999) score = 10000;
+    }
+    if (score > 0) kpaAddScorePos(score, position);
+    return score;
+}
 
 s32 npcKoopaModeMobjBoundDeadCheck(void* hit) {
-    return 0;
+    extern void npcGroupDead(void* npc, s32 scoreType);
+    u8* npcWork = (u8*)&work;
+    u8* npc;
+    s32 count;
+    s32 i;
+    s32 result = 0;
+
+    if (*(s32*)((u8*)gp + 0x14) != 0) npcWork += 0x14;
+    if (hit == 0) return 0;
+    count = *(s32*)(npcWork + 4);
+    npc = *(u8**)(npcWork + 0xC);
+    for (i = 0; i < count; i++, npc += 0x340) {
+        if (npc != 0 && (*(u32*)npc & 1) != 0 &&
+            (*(u32*)npc & 0x08000000) != 0 &&
+            (*(u32*)(npc + 0x1D4) & 4) == 0 &&
+            (*(u16*)(npc + 0x31E) & 8) == 0 &&
+            *(void**)(npc + 0x300) == hit) {
+            npcGroupDead(npc, 8);
+            result++;
+        }
+    }
+    return result;
 }
 
+void npcGroupDead(void* npc, s32 scoreType) {
+    extern void _npcGroupDead(u32* npc, s32 scoreType);
+    u8* current = npc;
 
-void npcGroupDead(void* npc, s32 wKpaScoreType) {
-    ;
+    if (*(void**)(current + 0x32C) != 0) {
+        current = *(u8**)(current + 0x32C);
+    }
+    while (*(void**)(current + 0x324) != 0) {
+        current = *(u8**)(current + 0x324);
+    }
+    _npcGroupDead((u32*)current, scoreType);
 }
-
 
 s32 npcCheckInterrupt(void* pNpc) {
     extern void* evtGetPtrID(s32 id);
@@ -3849,5 +4191,26 @@ s32 npcCheckInterrupt(void* pNpc) {
 }
 
 s32 npcCheckBlow(void* npc) {
-    return 0;
+    extern f32 cloudGetBreathPower(f32 width, void* position);
+    extern f32 float_0_8041fc7c;
+    extern f32 float_0p5_8041fc80;
+    f32 top[3];
+    f32 middle[3];
+    f32 bottom[3];
+
+    if ((*(u32*)npc & 0x20000000) != 0 || (*(u32*)npc & 0x20) != 0) return 0;
+    top[0] = *(f32*)((u8*)npc + 0x8C);
+    top[1] = *(f32*)((u8*)npc + 0x90);
+    top[2] = *(f32*)((u8*)npc + 0x94);
+    if (cloudGetBreathPower(*(f32*)((u8*)npc + 0x14C), top) > float_0_8041fc7c) return 1;
+
+    middle[0] = *(f32*)((u8*)npc + 0x8C);
+    middle[1] = *(f32*)((u8*)npc + 0x90) - *(f32*)((u8*)npc + 0x150) * float_0p5_8041fc80;
+    middle[2] = *(f32*)((u8*)npc + 0x94);
+    if (cloudGetBreathPower(*(f32*)((u8*)npc + 0x14C), middle) > float_0_8041fc7c) return 1;
+
+    bottom[0] = *(f32*)((u8*)npc + 0x8C);
+    bottom[1] = *(f32*)((u8*)npc + 0x90) - *(f32*)((u8*)npc + 0x150);
+    bottom[2] = *(f32*)((u8*)npc + 0x94);
+    return cloudGetBreathPower(*(f32*)((u8*)npc + 0x14C), bottom) > float_0_8041fc7c;
 }

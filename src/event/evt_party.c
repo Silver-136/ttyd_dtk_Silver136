@@ -168,6 +168,8 @@ USER_FUNC(evt_party_cont_onoff) {
 #pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_party_jump_pos(EventEntry* event, s32 first) {
     extern s32 partyCtrlNo;
     extern void* partyGetPtr(s32 id);
@@ -325,6 +327,8 @@ s32 evt_party_jump_pos(EventEntry* event, s32 first) {
     }
     return 0;
 }
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

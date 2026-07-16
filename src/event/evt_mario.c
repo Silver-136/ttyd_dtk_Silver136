@@ -624,6 +624,8 @@ s32 evt_mario_paper_pose_dokan(EventEntry* event, s32 first) {
     return ret;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_mario_jump_pos(EventEntry* event, s32 first) {
     extern void* marioGetPtr(void);
     extern f32 evtGetFloat(EventEntry* event, s32 value);
@@ -798,6 +800,8 @@ s32 evt_mario_jump_pos(EventEntry* event, s32 first) {
     }
     return 0;
 }
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
 s32 evt_koopa_hip_attack(EventEntry* event, s32 first) {
     extern void* marioGetPtr(void);

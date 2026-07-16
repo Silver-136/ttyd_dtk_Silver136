@@ -1077,33 +1077,47 @@ void psndENV_stop(u32 envId) {
         }
 
         mode = env[8];
-        if (mode == 2 || mode < 4) {
-            sfxIndex = *(u32*)(env + 0x14);
-            if (sfxIndex != (u32)-1) {
-                sfx = &pssfx[sfxIndex & 0xFF];
-                if (sfx->listIndex != (u32)-1) {
-                    if ((sfx->unk6 & 1) == 0) {
-                        s32 effId = sfx->effectId;
-                        if (effId != -1) {
-                            u32 flags = pssfxlist[sfx->listIndex & 0x1FFF].unk4;
-                            if ((flags & 0x80000000) != 0) {
-                                SoundSSStopCh(effId);
-                            } else if ((flags & 0x40000000) != 0) {
-                                SoundSongStopCh(effId);
-                            } else {
-                                SoundEfxStop(effId);
-                            }
-                        }
-                        sfx->listIndex = (u32)-1;
-                        sfx->effectId = -1;
-                    } else {
-                        sfx->listIndex = (u32)-1;
-                        sfx->effectId = -1;
-                    }
-                }
+#define STOP_ENV_SFX() \
+        do { \
+            sfxIndex = *(u32*)(env + 0x14); \
+            if (sfxIndex != (u32)-1) { \
+                sfx = &pssfx[sfxIndex & 0xFF]; \
+                if (sfx->listIndex != (u32)-1) { \
+                    if ((sfx->unk6 & 1) == 0) { \
+                        s32 effId = sfx->effectId; \
+                        if (effId != -1) { \
+                            u32 flags = pssfxlist[sfx->listIndex & 0x1FFF].unk4; \
+                            if ((flags & 0x80000000) != 0) { \
+                                SoundSSStopCh(effId); \
+                            } else if ((flags & 0x40000000) != 0) { \
+                                SoundSongStopCh(effId); \
+                            } else { \
+                                SoundEfxStop(effId); \
+                            } \
+                        } \
+                        sfx->listIndex = (u32)-1; \
+                        sfx->effectId = -1; \
+                    } else { \
+                        sfx->listIndex = (u32)-1; \
+                        sfx->effectId = -1; \
+                    } \
+                } \
+            } \
+            *(u16*)(env + 4) = 0; \
+        } while (0)
+
+        if (mode == 2) {
+            STOP_ENV_SFX();
+        } else if (mode < 2) {
+            if (mode == 0) {
+                STOP_ENV_SFX();
+            } else {
+                STOP_ENV_SFX();
             }
-            *(u16*)(env + 4) = 0;
+        } else if (mode < 4) {
+            STOP_ENV_SFX();
         }
+#undef STOP_ENV_SFX
     }
 }
 

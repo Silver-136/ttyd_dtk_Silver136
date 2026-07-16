@@ -1293,7 +1293,7 @@ void pouchSortItem(u32 sortType) {
     memcpy((void*)(mpp + 0x38A), equipped, 400);
 }
 
-void pouchInit(void* pouch) {
+void pouchInit(void) {
     extern void* __memAlloc(s32 heap, u32 size);
     extern void* memset(void* dest, int ch, u32 count);
     extern char* msgSearch(const char* msg);
@@ -1309,9 +1309,26 @@ void pouchInit(void* pouch) {
     for (i = 0; i < 0x79; i++) {
         *(s16*)(mpp + 0xA0 + i * 2) = 0;
     }
-    for (i = 0; i < 20; i++) {
-        *(s16*)(mpp + 0x192 + i * 2) = 0;
-    }
+    *(s16*)(mpp + 0x192) = 0;
+    *(s16*)(mpp + 0x194) = 0;
+    *(s16*)(mpp + 0x196) = 0;
+    *(s16*)(mpp + 0x198) = 0;
+    *(s16*)(mpp + 0x19A) = 0;
+    *(s16*)(mpp + 0x19C) = 0;
+    *(s16*)(mpp + 0x19E) = 0;
+    *(s16*)(mpp + 0x1A0) = 0;
+    *(s16*)(mpp + 0x1A2) = 0;
+    *(s16*)(mpp + 0x1A4) = 0;
+    *(s16*)(mpp + 0x1A6) = 0;
+    *(s16*)(mpp + 0x1A8) = 0;
+    *(s16*)(mpp + 0x1AA) = 0;
+    *(s16*)(mpp + 0x1AC) = 0;
+    *(s16*)(mpp + 0x1AE) = 0;
+    *(s16*)(mpp + 0x1B0) = 0;
+    *(s16*)(mpp + 0x1B2) = 0;
+    *(s16*)(mpp + 0x1B4) = 0;
+    *(s16*)(mpp + 0x1B6) = 0;
+    *(s16*)(mpp + 0x1B8) = 0;
     for (i = 0; i < 32; i++) {
         *(s16*)(mpp + 0x1BA + i * 2) = 0;
     }
@@ -1913,8 +1930,10 @@ int comp_kind(short* param_1, short* param_2) {
     return 0;
 }
 
-u8 pouchSetPartyColor(int param_1, int param_2) {
-    return 0;
+void pouchSetPartyColor(int partyId, int color) {
+    u16* flags = (u16*)(mpp + partyId * sizeof(PouchPartyData));
+
+    *flags = (*flags & 0x1FFF) | (color << 13);
 }
 
 

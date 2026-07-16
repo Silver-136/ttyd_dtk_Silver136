@@ -652,10 +652,45 @@ s32 evt_sub_get_dist(void* event) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-u8 coingetDisp(int param_1) {
-    return 0;
-}
+void coingetDisp(void* work) {
+    extern void* gp;
+    extern char* msgSearch(char* name);
+    extern s32 sprintf(char* dst, const char* format, ...);
+    extern char* strcpy(char* dst, const char* src);
+    extern void unk_US_EU_06_800d0a4c(char* text, s32 value);
+    extern u32 FontGetMessageWidthLine(char* text, u16* lines);
+    extern void FontDrawStart(void);
+    extern void FontDrawColor(void* color);
+    extern u32 FontGetMessageWidth(char* text);
+    extern void FontDrawMessage(s32 x, s32 y, char* text);
+    extern char str_msg_window_coin_get_802c1888[];
+    extern u32 dat_8041fe10;
+    u8* data = work;
+    s32* params = *(s32**)(data + 0x2C);
+    u16 lines[2];
+    u32 color;
+    char text[0x408];
+    u32 width;
 
+    if (params[1] == 0) return;
+    if (*(s32*)((u8*)gp + 0x124) == 0) {
+        sprintf(text, msgSearch(str_msg_window_coin_get_802c1888), params[0]);
+    } else {
+        strcpy(text, msgSearch(str_msg_window_coin_get_802c1888));
+        unk_US_EU_06_800d0a4c(text, params[0]);
+    }
+    width = FontGetMessageWidthLine(text, lines) & 0xFFFF;
+    if (*(s32*)(data + 0x20) < (s32)width + 20) {
+        *(s32*)(data + 0x20) = width + 20;
+        *(s32*)(data + 0x18) = -*(s32*)(data + 0x20) / 2;
+    }
+    *(u32*)(data + 0x24) = *(s32*)(*(u8**)(data + 0x28) + 0x18) + lines[0] * 24;
+    FontDrawStart();
+    color = dat_8041fe10;
+    FontDrawColor(&color);
+    width = FontGetMessageWidth(text) & 0xFFFF;
+    FontDrawMessage(-(s32)width / 2, *(s32*)(data + 0x1C) - 8, text);
+}
 
 s32 evt_sub_intpl_msec_get_value_para(void* event) {
     extern f32 intplGetValue(s32, f32, f32, s32, s32);

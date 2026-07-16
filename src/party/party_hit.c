@@ -66,7 +66,7 @@ s32 partySearchGround(f64 rise, f64 fall, void* party) {
     height = *(u8*)((s32)mario + 0x2F) == 6 ? float_5_8042155c :
              float_0p75_80421528 * (f32)partyGetHeight(party);
     angle = *(f32*)((s32)party + 0x104) == float_0_80421508 ?
-            (f32)partyToMovedir(*(s8*)((s32)party + 0x2F), party) :
+            (f32)partyToMovedir(*(f32*)((s32)party + 0x108), party) :
             *(f32*)((s32)party + 0x100);
     angle = float_3p1416_80421550 * angle / float_180_8042150c;
     sideX = float_0p375_80421560 * *(f32*)((s32)party + 0xF4) * (f32)sin(angle);
@@ -112,6 +112,7 @@ s32 partySearchGround(f64 rise, f64 fall, void* party) {
     }
     return (s32)bestHit;
 }
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 partyChkFrontStep(f64 heightAdd, void* pParty, f32* outY, f32* outDiff, f32* outAngle) {
@@ -575,33 +576,209 @@ void partyHitCheck(void* pParty, unsigned int* param_2, unsigned int* param_3, f
 #pragma no_register_save_helpers reset
 
 u8 partyChkGnd(void* pParty) {
-    return 0;
+    extern s32 partySearchGround(f64 rise, f64 fall, void* party);
+    extern u32 hitGetAttr(s32 hit);
+    extern void partyChgMot(void* party, s32 motion);
+    extern s32 partyChkFrontStep(f64 height, void* party, f32* outY, f32* outDiff, f32* outAngle);
+    extern f32 float_11_80421534;
+    extern f32 float_neg1_8042153c;
+    extern f32 float_5_8042155c;
+    extern f32 float_30_8042156c;
+    extern f32 float_0_80421508;
+    s32 hit;
+    u32 attr;
+    f32 y;
+    f32 diff;
+    f32 angle;
+
+    if ((*(u32*)pParty & 0x2000000) == 0) {
+        attr = 0;
+        hit = partySearchGround(float_11_80421534, *(f32*)((s32)pParty + 0x114), pParty);
+        if (hit != 0) {
+            attr = hitGetAttr(hit);
+            if ((attr & 0x200) != 0) {
+                hit = 0;
+            }
+        }
+        *(s32*)((s32)pParty + 0x138) = hit;
+        *(u32*)pParty &= ~0x80;
+        if (hit == 0) {
+            *(u32*)pParty &= ~2;
+            partyChgMot(pParty, 3);
+            *(f32*)((s32)pParty + 0x11C) = float_neg1_8042153c;
+        } else {
+            *(u32*)pParty |= 2;
+            if ((attr & 0x100) == 0) {
+                *(u32*)pParty &= ~0x80;
+            } else {
+                *(u32*)pParty |= 0x80;
+            }
+        }
+        *(f32*)((s32)pParty + 0x5C) = *(f32*)((s32)pParty + 0xE4);
+        if ((*(u32*)pParty & 0x30) == 0) {
+            partyChkFrontStep(float_11_80421534, pParty, &y, &diff, &angle);
+            if (float_5_8042155c <= y - *(f32*)((s32)pParty + 0x5C) &&
+                *(f32*)((s32)pParty + 0xE0) <= float_30_8042156c) {
+                *(f32*)((s32)pParty + 0x120) = y;
+                if (*(f32*)((s32)pParty + 0x104) != float_0_80421508) {
+                    partyChgMot(pParty, 6);
+                }
+            }
+        }
+    }
 }
 
+u8 partyNrmToAngle(float* normal) {
+    extern f64 __frsqrte(f64 value);
+    extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
+    extern f32 float_0_80421508;
+    extern f32 __float_nan;
+    union FloatBits {
+        f32 value;
+        u32 bits;
+    } view;
+    f32 square;
+    f32 length;
+    f64 value;
+    f64 inv;
+    u32 exponent;
+    s32 kind;
 
-u8 partyNrmToAngle(float* param_1) {
-    return 0;
+    square = normal[0] * normal[0] + normal[2] * normal[2];
+    value = (f64)square;
+    if (value > (f64)float_0_80421508) {
+        inv = __frsqrte(value);
+        inv = 0.5 * inv * -((value * inv * inv) - 3.0);
+        inv = 0.5 * inv * -((value * inv * inv) - 3.0);
+        length = (f32)(value * 0.5 * inv * -((value * inv * inv) - 3.0));
+    } else if (value < 0.0) {
+        length = __float_nan;
+    } else {
+        view.value = square;
+        exponent = view.bits & 0x7F800000;
+        if (exponent == 0x7F800000) {
+            kind = (view.bits & 0x7FFFFF) == 0 ? 2 : 1;
+        } else if (exponent < 0x7F800000 && exponent == 0) {
+            kind = (view.bits & 0x7FFFFF) == 0 ? 3 : 5;
+        } else {
+            kind = 4;
+        }
+        length = kind == 1 ? __float_nan : square;
+    }
+    angleABf(float_0_80421508, float_0_80421508, length, -normal[1]);
 }
-
 
 s32 chkfilterYoshi(s32 param_1, int param_2) {
-    return 0;
-}
+    typedef struct MobjName {
+        u8 pad[0x15];
+        char name[16];
+    } MobjName;
+    extern void* marioGetPtr(void);
+    extern MobjName* mobjHitObjPtrToPtr(int hit);
+    extern s32 strcmp(char* a, char* b);
+    extern char str_MOBJ_HiddenHatenaBlo_802cb8a0[];
+    extern char str_MOBJ_HiddenBadgeBloc_802cb8b8[];
+    extern char str_MOBJ_Hidden10CountBl_802cb8d0[];
+    u32 attr;
+    MobjName* mobj;
 
+    marioGetPtr();
+    attr = *(u32*)(param_2 + 4);
+    if ((attr & 0x80080) != 0) {
+        return 1;
+    }
+    if ((attr & 0x800000) != 0) {
+        return 1;
+    }
+    if ((attr & 4) != 0) {
+        return 0;
+    }
+    if ((attr & 0x80000000) == 0) {
+        return 1;
+    }
+    mobj = mobjHitObjPtrToPtr(param_2);
+    if (strcmp(mobj->name, str_MOBJ_HiddenHatenaBlo_802cb8a0) == 0 ||
+        strcmp(mobj->name, str_MOBJ_HiddenBadgeBloc_802cb8b8) == 0 ||
+        strcmp(mobj->name, str_MOBJ_Hidden10CountBl_802cb8d0) == 0) {
+        mobjHitObjPtrToPtr(param_2);
+        return 0;
+    }
+    return 1;
+}
 
 s32 chkfilterNokotaro(s32 param_1, int param_2) {
-    return 0;
-}
+    typedef struct MobjName {
+        u8 pad[0x15];
+        char name[16];
+    } MobjName;
+    extern void* marioGetPtr(void);
+    extern MobjName* mobjHitObjPtrToPtr(int hit);
+    extern s32 strcmp(char* a, char* b);
+    extern char str_MOBJ_HiddenHatenaBlo_802cb8a0[];
+    extern char str_MOBJ_HiddenBadgeBloc_802cb8b8[];
+    extern char str_MOBJ_Hidden10CountBl_802cb8d0[];
+    u32 attr;
+    MobjName* mobj;
 
+    marioGetPtr();
+    attr = *(u32*)(param_2 + 4);
+    if ((attr & 0x800005) != 0) {
+        return 0;
+    }
+    if ((attr & 0x80080) != 0) {
+        return 1;
+    }
+    if ((attr & 0x80000000) == 0) {
+        return 1;
+    }
+    mobj = mobjHitObjPtrToPtr(param_2);
+    if (strcmp(mobj->name, str_MOBJ_HiddenHatenaBlo_802cb8a0) == 0 ||
+        strcmp(mobj->name, str_MOBJ_HiddenBadgeBloc_802cb8b8) == 0 ||
+        strcmp(mobj->name, str_MOBJ_Hidden10CountBl_802cb8d0) == 0) {
+        mobjHitObjPtrToPtr(param_2);
+        return 0;
+    }
+    return 1;
+}
 
 s32 chkfilter(s32 param_1, int param_2) {
-    return 0;
-}
+    typedef struct MobjName {
+        u8 pad[0x15];
+        char name[16];
+    } MobjName;
+    extern void* marioGetPtr(void);
+    extern MobjName* mobjHitObjPtrToPtr(int hit);
+    extern s32 strcmp(char* a, char* b);
+    extern char str_MOBJ_HiddenHatenaBlo_802cb8a0[];
+    extern char str_MOBJ_HiddenBadgeBloc_802cb8b8[];
+    extern char str_MOBJ_Hidden10CountBl_802cb8d0[];
+    u32 attr;
+    MobjName* mobj;
 
+    marioGetPtr();
+    attr = *(u32*)(param_2 + 4);
+    if ((attr & 0x80080) != 0) {
+        return 1;
+    }
+    if ((attr & 0x800004) != 0) {
+        return 0;
+    }
+    if ((attr & 0x80000000) == 0) {
+        return 1;
+    }
+    mobj = mobjHitObjPtrToPtr(param_2);
+    if (strcmp(mobj->name, str_MOBJ_HiddenHatenaBlo_802cb8a0) == 0 ||
+        strcmp(mobj->name, str_MOBJ_HiddenBadgeBloc_802cb8b8) == 0 ||
+        strcmp(mobj->name, str_MOBJ_Hidden10CountBl_802cb8d0) == 0) {
+        mobjHitObjPtrToPtr(param_2);
+        return 0;
+    }
+    return 1;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-void* partySearchWallFront(f64 unused, f64 distance, void* pParty, f32* pos) {
+void* partySearchWallFront(f64 distance, f64 direction, void* pParty, f32* pos) {
     typedef struct VecLocal {
         f32 x;
         f32 y;
@@ -643,7 +820,7 @@ void* partySearchWallFront(f64 unused, f64 distance, void* pParty, f32* pos) {
     push.x = 0.0f;
     push.y = 0.0f;
     push.z = 0.0f;
-    sincosf((f32)unused, &dir.x, &dir.z);
+    sincosf(direction, &dir.x, &dir.z);
     dir.y = 0.0f;
     count = 3;
     heights[0] = float_0p75_80421528 * partyGetHeight(pParty);
@@ -684,7 +861,7 @@ void* partySearchWallFront(f64 unused, f64 distance, void* pParty, f32* pos) {
     }
 
     blocked = 0;
-    sincosf((f32)unused + float_45_80421538, &sideDir.x, &sideDir.z);
+    sincosf(direction + float_45_80421538, &sideDir.x, &sideDir.z);
     sideDir.y = 0.0f;
     for (i = 0; i < count; i++) {
         posWork.x = pos[0];
@@ -697,7 +874,7 @@ void* partySearchWallFront(f64 unused, f64 distance, void* pParty, f32* pos) {
         }
     }
     if (blocked != 0) {
-        sincosf((f32)unused - float_45_80421538, &sideDir.x, &sideDir.z);
+        sincosf(direction - float_45_80421538, &sideDir.x, &sideDir.z);
         sideDir.y = 0.0f;
         blocked = 0;
         for (i = 0; i < count; i++) {
@@ -727,6 +904,9 @@ void* partySearchWallFront(f64 unused, f64 distance, void* pParty, f32* pos) {
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
 /* CHATGPT FALLBACK MISSING STUBS: main/party/party_hit 20260624_191429 */
 
 /* fallback stub-fill: map=unk_800c2010 addr=0x800c2010 size=0x000007b0 */
@@ -739,9 +919,9 @@ s32 unk_800c2010(void* party, f32* pos) {
         f32 normal[3];
         f32 dist;
     } HitWork;
-    extern f64 toMovedirSimple(f64 angle);
+    extern f32 toMovedirSimple(f32 angle);
     extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
-    extern f64 angleABf(f64, f64, f64, f64);
+    extern f32 angleABf(f32, f32, f32, f32);
     extern s32 yoshiGetStatus(void);
     extern void* hitCheckVecFilter(void* work, void* filter);
     extern s32 chkfilter(s32, s32);
@@ -815,3 +995,4 @@ s32 unk_800c2010(void* party, f32* pos) {
         return delta <= float_10_80421510;
     }
 }
+

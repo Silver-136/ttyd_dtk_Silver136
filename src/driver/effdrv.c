@@ -483,10 +483,43 @@ int* effMayaAnimAlloc(void* effData) {
     return anim;
 }
 
-u8 effCalcMayaAnim(void* param_1) {
+u8 effCalcMayaAnim(void* anim) {
+    extern s64 __div2i(s64 dividend, s64 divisor);
+    extern u8 effCalcMayaAnimMatrix(s32 anim, s32* data, s32 node, f32* matrix);
+    extern f32 float_1000_8042019c;
+    u64 now;
+    u32 ticks;
+    s32 data;
+    s32 i;
+    u8* node;
+
+    if ((*(u16*)anim & 1) != 0 && (*(u16*)anim & 2) == 0) {
+        ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+        if (*(s32*)((s32)gp + 0x14) == 0) {
+            now = (u64)__div2i(*(s64*)((s32)gp + 0x40), (s64)(s32)ticks);
+        } else {
+            now = (u64)__div2i(*(s64*)((s32)gp + 0x38), (s64)(s32)ticks);
+        }
+
+        *(f32*)((s32)anim + 4) =
+            ((f32)*(s32*)((s32)gp + 0x1C) * (f32)(now - *(u64*)((s32)anim + 8))) /
+            float_1000_8042019c;
+        data = *(s32*)((s32)anim + 0x10);
+        if (*(f32*)(data + 4) <= *(f32*)((s32)anim + 4)) {
+            *(f32*)((s32)anim + 4) = *(f32*)(data + 4);
+            *(u16*)anim |= 2;
+        }
+
+        node = (u8*)anim + 0x14;
+        for (i = 0; i < **(s32**)(data + 8); i++, node += 0x34) {
+            effCalcMayaAnimMatrix((s32)anim,
+                                  (s32*)(*(s32*)(*(s32*)(data + 8) + 4) + i * 0x10),
+                                  (s32)node,
+                                  (f32*)(node + 0x30));
+        }
+    }
     return 0;
 }
-
 
 void effPlayMayaAnim(void* anim) {
     extern EffGp* gp;

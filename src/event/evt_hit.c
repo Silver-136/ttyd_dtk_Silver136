@@ -53,10 +53,114 @@ s32 evt_hit_get_position(void* event, s32 isFirstCall) {
 #pragma no_register_save_helpers reset
 
 
-void name_callback_sub(s32 name, s32 callback, s32 value) {
-    ;
-}
+void name_callback_sub(char* name, void* callback, s32 followSibling) {
+    extern void* hitNameToPtr(char* name);
+    extern void* evtEntry(void* code, s32 priority, s32 flags);
+    void* hit0;
+    void* hit1;
+    void* hit2;
+    void* link;
+    void* evt;
+    char* name1;
+    char* name2;
 
+#define START_CALLBACK(_name) \
+    do { \
+        evt = evtEntry(callback, 0, 0x20); \
+        *(char**)((s32)evt + 0x84) = (_name); \
+    } while (0)
+
+    hit0 = hitNameToPtr(name);
+    if (hit0 == 0) {
+        return;
+    }
+    START_CALLBACK(name);
+
+    link = *(void**)((s32)hit0 + 0xD8);
+    if (link != 0) {
+        name1 = **(char***)((s32)link + 8);
+        hit1 = hitNameToPtr(name1);
+        if (hit1 != 0) {
+            START_CALLBACK(name1);
+            link = *(void**)((s32)hit1 + 0xD8);
+            if (link != 0) {
+                name2 = **(char***)((s32)link + 8);
+                hit2 = hitNameToPtr(name2);
+                if (hit2 != 0) {
+                    START_CALLBACK(name2);
+                    link = *(void**)((s32)hit2 + 0xD8);
+                    if (link != 0) {
+                        name_callback_sub(**(char***)((s32)link + 8), callback, 1);
+                    }
+                    link = *(void**)((s32)hit2 + 0xDC);
+                    if (link != 0) {
+                        name_callback_sub(**(char***)((s32)link + 8), callback, 1);
+                    }
+                }
+            }
+            link = *(void**)((s32)hit1 + 0xDC);
+            if (link != 0) {
+                name2 = **(char***)((s32)link + 8);
+                hit2 = hitNameToPtr(name2);
+                if (hit2 != 0) {
+                    START_CALLBACK(name2);
+                    link = *(void**)((s32)hit2 + 0xD8);
+                    if (link != 0) {
+                        name_callback_sub(**(char***)((s32)link + 8), callback, 1);
+                    }
+                    link = *(void**)((s32)hit2 + 0xDC);
+                    if (link != 0) {
+                        name_callback_sub(**(char***)((s32)link + 8), callback, 1);
+                    }
+                }
+            }
+        }
+    }
+
+    if (followSibling != 0) {
+        link = *(void**)((s32)hit0 + 0xDC);
+        if (link != 0) {
+            name1 = **(char***)((s32)link + 8);
+            hit1 = hitNameToPtr(name1);
+            if (hit1 != 0) {
+                START_CALLBACK(name1);
+                link = *(void**)((s32)hit1 + 0xD8);
+                if (link != 0) {
+                    name2 = **(char***)((s32)link + 8);
+                    hit2 = hitNameToPtr(name2);
+                    if (hit2 != 0) {
+                        START_CALLBACK(name2);
+                        link = *(void**)((s32)hit2 + 0xD8);
+                        if (link != 0) {
+                            name_callback_sub(**(char***)((s32)link + 8), callback, 1);
+                        }
+                        link = *(void**)((s32)hit2 + 0xDC);
+                        if (link != 0) {
+                            name_callback_sub(**(char***)((s32)link + 8), callback, 1);
+                        }
+                    }
+                }
+                link = *(void**)((s32)hit1 + 0xDC);
+                if (link != 0) {
+                    name2 = **(char***)((s32)link + 8);
+                    hit2 = hitNameToPtr(name2);
+                    if (hit2 != 0) {
+                        START_CALLBACK(name2);
+                        link = *(void**)((s32)hit2 + 0xD8);
+                        if (link != 0) {
+                            name_callback_sub(**(char***)((s32)link + 8), callback, 1);
+                        }
+                        link = *(void**)((s32)hit2 + 0xDC);
+                        if (link != 0) {
+                            name_callback_sub(**(char***)((s32)link + 8), callback, 1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+#undef START_CALLBACK
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

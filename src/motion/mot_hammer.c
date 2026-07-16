@@ -58,6 +58,9 @@ void mot_hammer2(void) {
     extern f32 float_72_80420b34;
     extern f32 float_180_80420ac8;
     extern f32 float_270_80420ac4;
+    extern f32 float_38_80420b0c;
+    extern f32 float_15_80420b10;
+    extern f32 float_10_80420b14;
 
     void* player = marioGetPtr();
     u8 dir[4];
@@ -80,33 +83,48 @@ void mot_hammer2(void) {
 #define DISP_DIR (*(f32*)((s32)player + 0x1AC))
 #define DISP_TARGET (*(f32*)((s32)player + 0x1B0))
 #define POSE_IDS ((s32*)((s32)player + 0x22C))
-#define MOTION_COUNT (*(s8*)((s32)player + 0x50))
-#define CHARGE (*(s8*)((s32)player + 0x51))
-#define CHARGE_ANGLE (*(f32*)((s32)player + 0x168))
-#define SOUND_ID (*(s32*)((s32)player + 0x170))
-#define CHARGE_FLAGS (*(u16*)((s32)player + 0x174))
+#define MOTION_COUNT (*(s8*)((s32)player + 0x41))
+#define CHARGE (*(s8*)((s32)player + 0x42))
+#define AIR_TIMER (*(s16*)((s32)player + 0x50))
+#define HAMMER_HIT (*(void**)((s32)player + 0x204))
+#define CHARGE_RATE (*(f32*)((s32)player + 0x2C0))
+#define CHARGE_ANGLE (*(f32*)((s32)player + 0x2C8))
+#define CHARGE_FLAGS (*(u16*)((s32)player + 0x2CC))
+#define SOUND_ID (*(s32*)((s32)player + 0x2D0))
 
     if ((TRIG_FLAGS & 1) != 0) {
         TRIG_FLAGS &= ~1;
         FLAGS &= ~0xF0000;
-        MOTION_COUNT = 0;
-        CHARGE = 0;
+        CHARGE_FLAGS = 0;
         SUBMOTION = 0;
         SOUND_ID = -1;
-        CHARGE_ANGLE = DISP_DIR;
+        *(f32*)((s32)player + 0x1B4) = DISP_DIR;
     }
 
     switch (SUBMOTION) {
         case 0:
             FLAGS |= 0x80;
-            DISP_FLAGS |= 0x80000000;
+            DISP_FLAGS |= 4;
+            MOTION_COUNT = 0;
+            CHARGE = 0;
             BASE_SPEED = float_0_80420ab8;
-            TIMER = 1;
+            AIR_TIMER = 0;
             SUBMOTION = 1;
+            TIMER = 30;
+            if (CHARGE == 3) {
+                CHARGE_RATE = float_38_80420b0c;
+            } else if (CHARGE <= 2) {
+                CHARGE_RATE = float_15_80420b10;
+            } else {
+                CHARGE_RATE = float_10_80420b14;
+            }
             level = pouchGetHammerLv();
             if (level == 1) marioChgPose(&str_M_H_3_80420b18);
             else if (level == 2) marioChgPose(&str_M_H_6_80420b20);
             else if (level == 3) marioChgPose(&str_M_H_9_80420b28);
+            HAMMER_HIT = 0;
+            SUBMOTION = 1;
+            TIMER = 1;
             break;
         case 1:
             TIMER--;
@@ -197,6 +215,9 @@ void mot_hammer2(void) {
 #undef CHARGE_FLAGS
 #undef SOUND_ID
 #undef CHARGE_ANGLE
+#undef CHARGE_RATE
+#undef HAMMER_HIT
+#undef AIR_TIMER
 #undef CHARGE
 #undef MOTION_COUNT
 #undef POSE_IDS

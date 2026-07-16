@@ -477,10 +477,50 @@ void lookupSafetyPos3(float height, float* inPos, float* outPos) {
     }
 }
 
-u8 lookupSafetyPosSub(void) {
-    return 0;
-}
+void lookupSafetyPosSub(double height, double angle, float* inPos, float* outPos) {
+    int outA;
+    int outB;
+    int outC;
+    int outD;
+    int outE;
+    int outF;
+    int hit;
+    void* player;
+    float radius;
+    float probeX;
+    float probeY;
+    float probeZ;
+    float limit;
 
+    extern void* marioGetPtr(void);
+    extern double sin(double x);
+    extern double cos(double x);
+    extern int hitCheckFilter(double x, double y, double z, double nx, double ny, double nz, int flags,
+                              void* out1, void* out2, void* out3, void* out4, void* out5, void* out6,
+                              void* out7);
+
+    player = marioGetPtr();
+    radius = *(float*)((s32)player + 0x1B8);
+    angle = angle * 3.14159265358979323846 / 180.0;
+
+    probeX = inPos[0] + radius * (float)sin(angle);
+    probeY = inPos[1] + (float)height;
+    probeZ = inPos[2] + radius * -(float)cos(angle);
+    limit = (float)height + 0.1f;
+
+    hit = hitCheckFilter((double)probeX, (double)probeY, (double)probeZ, 0.0, -1.0, 0.0, 0,
+                         &outF, &outE, &outD, &limit, &outC, &outB, &outA);
+
+    if (hit != 0) {
+        outPos[0] = probeX;
+        outPos[1] = probeY;
+        outPos[2] = probeZ;
+    } else {
+        outPos[0] = inPos[0];
+        outPos[1] = inPos[1];
+        outPos[2] = inPos[2];
+    }
+}
 
 void nokonoko_finish(void* party) {
     extern void itemNokoForceGet(s32 item);

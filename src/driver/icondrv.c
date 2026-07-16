@@ -558,10 +558,8 @@ void iconGX(void* mtx, void* icon) {
     extern s32 icon_tpl_ok, icon_bin_ok;
     extern void* camGetPtr(s32 id);
     extern void* camGetCurPtr(void);
-    extern void* mapGetWork(void);
     extern void mapSetMaterialLight(u32 flags, void* pos);
     extern void mapSetMaterialFog(void);
-    extern void mapGetBlend(void* color);
     extern void TEXGetGXTexObjFromPalette(void* tpl, void* obj, u32 id);
     extern void GXInitTexObj(void*, void*, u16, u16, s32, s32, s32, u8);
     extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, u8, u8, s32);
@@ -571,45 +569,191 @@ void iconGX(void* mtx, void* icon) {
     extern void GXLoadPosMtxImm(Mtx, s32);
     extern void GXSetCurrentMtx(s32);
     extern void GXSetNumChans(s32);
+    extern void GXSetChanMatColor(s32, void*);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
     extern void GXSetNumTevStages(s32);
-    extern void GXSetTevOrder(s32,s32,s32,s32);
-    extern void GXSetTevOp(s32,s32);
-    extern void GXSetTevColor(s32,void*);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevOp(s32, s32);
+    extern void GXSetTevSwapMode(s32, s32, s32);
+    extern void GXSetTevSwapModeTable(s32, s32, s32, s32, s32);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
     extern void GXSetNumTexGens(s32);
-    extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
-    extern void GXSetBlendMode(s32,s32,s32,s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetBlendMode(s32, s32, s32, s32);
     extern void GXSetZCompLoc(s32);
-    extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);
-    extern void GXSetZMode(s32,s32,s32);
+    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
+    extern void GXSetZMode(s32, s32, s32);
     extern void GXSetCullMode(s32);
     extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32,s32);
-    extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
-    extern void GXBegin(s32,s32,s32);
-    u16* data=icon;
-    Mtx scale, model;
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern u32 GXGetTexObjWidth(void*);
+    extern u32 GXGetTexObjHeight(void*);
+    extern void GXBegin(s32, s32, s32);
+    extern u32 dat_8041f868;
+    extern u32 dat_8041f86c;
+    extern u8 dummy_672;
+    u16* data;
+    Mtx scale;
+    Mtx model;
     TexObj tex;
     f32 pos[3];
-    f32 sx=(*data&4)?-1.0f:1.0f;
-    f32 sy=(*data&8)?-1.0f:1.0f;
-    u32 color=*(u32*)(data+10);
-    PSMTXScale(scale,sx,sy,1.0f);
-    PSMTXConcat(mtx,scale,model);
-    if(camGetCurPtr()!=camGetPtr(8)&&(*data&0x10)){PSMTXScale(scale,1.0f,-1.0f,1.0f);PSMTXConcat(model,scale,model);}
-    GXLoadPosMtxImm(model,0); GXSetCurrentMtx(0);
-    if(!icon_tpl_ok||!icon_bin_ok) GXInitTexObj(tex,0,1,1,0,0,0,0);
-    else {TEXGetGXTexObjFromPalette(icon_tpl,tex,data[0x19]);GXInitTexObjLOD(tex,1,1,0.0f,0.0f,0.0f,0,0,0);}
-    GXLoadTexObj(tex,0);
-    pos[0]=((f32(*)[4])mtx)[0][3]; pos[1]=((f32(*)[4])mtx)[1][3]; pos[2]=((f32(*)[4])mtx)[2][3];
-    if(!(*data&0x10)) mapSetMaterialLight(4,pos); else GXSetNumChans(1);
-    GXSetNumTevStages((*data&0x20)?3:2); GXSetTevOrder(0,0,0,0); GXSetTevOp(0,0); GXSetTevColor(1,&color);
-    GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x3c,0,0x7d);
-    if(!(*data&0x10)) mapSetMaterialFog();
-    if(*(s8*)((u8*)data+0x17)==-1){GXSetBlendMode(0,4,5,0);GXSetZCompLoc(0);GXSetAlphaCompare(6,0x80,1,0,0);GXSetZMode(1,3,1);}
-    else {GXSetBlendMode(1,4,5,0);GXSetZCompLoc(1);GXSetAlphaCompare(7,0,0,7,0);GXSetZMode(1,3,0);}
-    GXSetCullMode((*data&0x400)?2:((*data&0x800)?1:0));
-    GXClearVtxDesc();GXSetVtxDesc(9,1);GXSetVtxDesc(13,1);GXSetVtxAttrFmt(0,9,1,4,0);GXSetVtxAttrFmt(0,13,1,4,0);
-    GXBegin(0x80,0,4);
+    u32 color;
+    u32 white;
+    u32 width;
+    u32 height;
+    f32 left;
+    f32 top;
+    f32 right;
+    f32 bottom;
+    f32 sx;
+    f32 sy;
+    volatile f32* fifo;
+
+    data = icon;
+    pos[0] = ((f32(*)[4])mtx)[0][3];
+    pos[1] = ((f32(*)[4])mtx)[1][3];
+    pos[2] = ((f32(*)[4])mtx)[2][3];
+    sy = ((*data & 8) != 0) ? -1.0f : 1.0f;
+    sx = ((*data & 4) != 0) ? -1.0f : 1.0f;
+
+    PSMTXScale(scale, sx, sy, 1.0f);
+    PSMTXConcat(mtx, scale, model);
+    if (camGetCurPtr() != camGetPtr(8) && ((*data & 0x10) != 0)) {
+        PSMTXScale(scale, 1.0f, -1.0f, 1.0f);
+        PSMTXConcat(model, scale, model);
+    }
+    GXLoadPosMtxImm(model, 0);
+    GXSetCurrentMtx(0);
+
+    if (icon_tpl_ok == 0 || icon_bin_ok == 0) {
+        GXInitTexObj(tex, &dummy_672, 1, 1, 0, 0, 0, 0);
+    } else {
+        TEXGetGXTexObjFromPalette(icon_tpl, tex, data[0x19]);
+        GXInitTexObjLOD(tex, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+    }
+    GXLoadTexObj(tex, 0);
+
+    if ((*data & 0x10) == 0) {
+        mapSetMaterialLight(4, pos);
+    } else {
+        GXSetNumChans(1);
+        white = dat_8041f868;
+        GXSetChanMatColor(4, &white);
+        GXSetChanCtrl(0, 0, 0, 0, 0, 0, 2);
+    }
+
+    color = *(u32*)(data + 10);
+    if ((*data & 0x20) == 0) {
+        GXSetNumTevStages(2);
+        GXSetTevOrder(0, 0, 0, 0);
+        GXSetTevOp(0, 0);
+        GXSetTevSwapMode(0, 0, 0);
+        GXSetTevColor(1, &color);
+        GXSetTevOrder(1, 0xFF, 0xFF, 0xFF);
+        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(1, 0xF, 2, 0, 0xF);
+        GXSetTevAlphaIn(1, 7, 1, 0, 7);
+    } else {
+        GXSetNumTevStages(3);
+        GXSetTevSwapModeTable(1, 0, 0, 0, 3);
+        GXSetTevSwapModeTable(2, 1, 1, 1, 3);
+        GXSetTevSwapModeTable(3, 2, 2, 2, 3);
+        GXSetTevSwapMode(0, 0, 1);
+        GXSetTevSwapMode(1, 0, 2);
+        GXSetTevSwapMode(2, 0, 3);
+        white = dat_8041f86c;
+        GXSetTevColor(1, &white);
+        GXSetTevColor(2, &color);
+
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 0xF, 2, 8, 0xF);
+        GXSetTevAlphaIn(0, 7, 7, 7, 4);
+        GXSetTevOrder(1, 0, 0, 0xFF);
+        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(1, 0xF, 2, 8, 0);
+        GXSetTevAlphaIn(1, 7, 7, 7, 4);
+        GXSetTevOrder(2, 0, 0, 0xFF);
+        GXSetTevColorOp(2, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(2, 0xF, 2, 8, 0);
+        GXSetTevAlphaIn(2, 7, 1, 4, 7);
+    }
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+
+    if ((*data & 0x10) == 0) {
+        mapSetMaterialFog();
+    }
+
+    if (*(s8*)((u8*)data + 0x17) == -1) {
+        GXSetBlendMode(0, 4, 5, 0);
+        GXSetZCompLoc(0);
+        GXSetAlphaCompare(6, 0x80, 1, 0, 0);
+        GXSetZMode(1, 3, 1);
+    } else {
+        GXSetBlendMode(1, 4, 5, 0);
+        GXSetZCompLoc(1);
+        GXSetAlphaCompare(7, 0, 0, 7, 0);
+        GXSetZMode(1, 3, 0);
+    }
+    if ((*data & 0x10) != 0) {
+        GXSetZMode(0, 3, 0);
+    }
+    GXSetCullMode((*data & 0x400) ? 2 : ((*data & 0x800) ? 1 : 0));
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+
+    width = data[0x15];
+    height = data[0x16];
+    if (width == 0 && height == 0) {
+        width = GXGetTexObjWidth(tex);
+        height = GXGetTexObjHeight(tex);
+    }
+    left = -(f32)width * 0.5f;
+    top = (f32)height;
+    right = left + (f32)width;
+    bottom = 0.0f;
+    if ((*data & 0x10) == 0) {
+        left *= 0.6f;
+        top *= 0.6f;
+        right *= 0.6f;
+        bottom *= 0.6f;
+        if (data[0x14] == 0x193) {
+            left *= 0.8f;
+            top *= 0.8f;
+            right *= 0.8f;
+        } else if (data[0x14] == 0x195) {
+            left *= 0.9f;
+            top *= 0.9f;
+            right *= 0.9f;
+        }
+    }
+
+    fifo = (volatile f32*)0xCC008000;
+    GXBegin(0x80, 0, 4);
+    *fifo = left;  *fifo = top;    *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
+    *fifo = right; *fifo = top;    *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
+    *fifo = right; *fifo = bottom; *fifo = 0.0f; *fifo = 1.0f; *fifo = 1.0f;
+    *fifo = left;  *fifo = bottom; *fifo = 0.0f; *fifo = 0.0f; *fifo = 1.0f;
+
+    if ((*data & 0x20) != 0) {
+        GXSetTevSwapMode(0, 0, 0);
+        GXSetTevSwapMode(1, 0, 0);
+        GXSetTevSwapMode(2, 0, 0);
+    }
 }
 
 void iconMain(void) {

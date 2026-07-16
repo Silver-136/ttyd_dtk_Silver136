@@ -8,7 +8,13 @@ void psndSetFlag(s32 flag);
 void psndClearFlag(s32 flag);
 
 s32 N_cameraman_on(void) {
-    return 0;
+    extern void* npcNameToPtr(const char* name);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
+    void* npc;
+
+    npc = npcNameToPtr("å®¿å±‹ã®ã‚«ãƒ¡ãƒ©ãƒžãƒ³");
+    animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), 0x1800);
+    return 2;
 }
 
 USER_FUNC(snd_on) {

@@ -268,8 +268,8 @@ void partyPaperOff(void* party) {
 
 u8 partyRideMain(s32 pParty) {
     extern void getRidePos(void*, void*);
-    extern f64 distABf(f32, f32, f32, f32);
-    extern f64 angleABf(f32, f32, f32, f32);
+    extern f32 distABf(f32, f32, f32, f32);
+    extern f32 angleABf(f32, f32, f32, f32);
     extern void movePos(f32, f32, f32*, f32*);
     extern void partyMoveNoHosei(void*);
     extern void partyChgRunMode(void*, s32);
@@ -396,22 +396,140 @@ s32 partyDokanInit(void* party) {
 }
 
 u8 partyReInit(void) {
-    extern void* partyPtrTbl[2];extern s32 marioGetExtraPartyId(void);extern s32 marioGetPartyId(void);extern void* marioGetPtr(void);extern s32 marioGetCamId(void);
-    extern void animPoseSetMaterialFlagOff(s32,u32);extern void animPoseSetMaterialLightFlagOn(s32,u32);extern void animPoseSetPaperAnimGroup(s32,char*,s32);extern void animPaperPoseRelease(s32);
-    extern void partyChgRunMode(void*,s32);extern void partyChgMot(void*,s32);extern void partyClearFootmark(void);extern void chuchu_reinit(void);extern void unk_JP_US_EU_36_80151d20(void);
-    void* party;void* player;u32 oldDisp;s32 id;
-    id=marioGetExtraPartyId();party=id<0?0:partyPtrTbl[id];if(party!=0){*(u32*)party=0x181;*(u32*)((s32)party+4)=0;if(*(s32*)((s32)party+0xC)>=0){animPoseSetMaterialFlagOff(*(s32*)((s32)party+0xC),0xFFFFFFFF);animPoseSetMaterialLightFlagOn(*(s32*)((s32)party+0xC),2);}*(u8*)((s32)party+0x37)=0;if(*(char**)((s32)party+0x1C)!=0){animPoseSetPaperAnimGroup(*(s32*)((s32)party+0xC),0,0);*(char**)((s32)party+0x1C)=0;if(*(s32*)((s32)party+0x14)>=0)animPaperPoseRelease(*(s32*)((s32)party+0x14));*(s32*)((s32)party+0x14)=-1;}*(void**)((s32)party+0x134)=0;*(void**)((s32)party+0x12C)=0;*(void**)((s32)party+0x138)=0;*(void**)((s32)party+0x130)=0;*(void**)((s32)party+0x13C)=0;partyChgRunMode(party,2);partyChgMot(party,0);*(s32*)((s32)party+0x168)=-1;*(f32*)((s32)party+0x70)=1.0f;*(f32*)((s32)party+0x74)=1.0f;*(f32*)((s32)party+0x78)=1.0f;}
-    id=marioGetPartyId();party=id<0?0:partyPtrTbl[id];if(party!=0){oldDisp=*(u32*)((s32)party+4);*(u32*)party=1;*(u32*)((s32)party+4)=0;*(u8*)((s32)party+0x37)=0;*(s32*)((s32)party+0x164)=marioGetCamId();if(*(s32*)((s32)party+0xC)>=0){animPoseSetMaterialFlagOff(*(s32*)((s32)party+0xC),0xFFFFFFFF);animPoseSetMaterialLightFlagOn(*(s32*)((s32)party+0xC),2);}if(*(char**)((s32)party+0x1C)!=0){animPoseSetPaperAnimGroup(*(s32*)((s32)party+0xC),0,0);*(char**)((s32)party+0x1C)=0;if(*(s32*)((s32)party+0x14)>=0)animPaperPoseRelease(*(s32*)((s32)party+0x14));*(s32*)((s32)party+0x14)=-1;}*(void**)((s32)party+0x134)=0;*(void**)((s32)party+0x12C)=0;*(void**)((s32)party+0x138)=0;*(void**)((s32)party+0x130)=0;partyClearFootmark();*(f32*)((s32)party+0x70)=1.0f;*(f32*)((s32)party+0x74)=1.0f;*(f32*)((s32)party+0x78)=1.0f;player=marioGetPtr();partyChgRunMode(party,2);if((*(u32*)player&0x2000000)==0)partyChgMot(party,0);else{*(u8*)((s32)party+0x3B)=6;*(u8*)((s32)party+0x38)=0;*(u32*)party|=0x8000;}if(*(s8*)((s32)party+0x31)==6)chuchu_reinit();unk_JP_US_EU_36_80151d20();}
+    extern void* partyPtrTbl[2];
+    extern s32 marioGetExtraPartyId(void);
+    extern s32 marioGetPartyId(void);
+    extern void* marioGetPtr(void);
+    extern s32 marioGetCamId(void);
+    extern void animPoseSetMaterialFlagOff(s32, u32);
+    extern void animPoseSetMaterialLightFlagOn(s32, u32);
+    extern void animPoseSetPaperAnimGroup(s32, char*, s32);
+    extern void animPaperPoseRelease(s32);
+    extern void partyChgRunMode(void*, s32);
+    extern void partyChgMot(void*, s32);
+    extern void partyClearFootmark(void);
+    extern void chuchu_reinit(void);
+    extern void unk_JP_US_EU_36_80151d20(void);
+    extern s32 partyGetHp(s32);
+    extern s32 pouchGetPartyColor(s32);
+    extern s32 strcmp(const char*, const char*);
+    extern char* partyPoseTbl[][15];
+    extern char* partyDotPoseTbl[][15];
+    extern char* yoshiDotPoseTbl[][15];
+    void* party;
+    void* player;
+    char* pose;
+    s32 id;
+    s32 member;
+    s32 poseId;
+
+    id = marioGetExtraPartyId();
+    party = id < 0 ? 0 : partyPtrTbl[id];
+    if (party != 0) {
+        *(u32*)party = 0xD;
+        *(u32*)((s32)party + 4) = 0;
+        if (*(s32*)((s32)party + 0xC) >= 0) {
+            animPoseSetMaterialFlagOff(*(s32*)((s32)party + 0xC), 0xFFFFFFFF);
+            animPoseSetMaterialLightFlagOn(*(s32*)((s32)party + 0xC), 2);
+        }
+        *(u8*)((s32)party + 0x37) = 0;
+        if (*(char**)((s32)party + 0x1C) != 0) {
+            animPoseSetPaperAnimGroup(*(s32*)((s32)party + 0xC), 0, 0);
+            *(char**)((s32)party + 0x1C) = 0;
+            *(u32*)((s32)party + 4) &= ~0x4000000;
+            if (*(s32*)((s32)party + 0x14) >= 0) {
+                animPaperPoseRelease(*(s32*)((s32)party + 0x14));
+            }
+            *(s32*)((s32)party + 0x14) = -1;
+        }
+        *(void**)((s32)party + 0x130) = 0;
+        *(void**)((s32)party + 0x12C) = 0;
+        *(void**)((s32)party + 0x148) = 0;
+        *(void**)((s32)party + 0x138) = 0;
+        *(void**)((s32)party + 0x13C) = 0;
+        *(void**)((s32)party + 0x134) = 0;
+        *(void**)((s32)party + 0x140) = 0;
+        *(void**)((s32)party + 0x144) = 0;
+        member = *(s8*)((s32)party + 0x31);
+        poseId = (member < 8 && partyGetHp(member) < 6) ? 0xC : 1;
+        if ((*(u32*)((s32)party + 4) & 0x10000) == 0) {
+            pose = partyPoseTbl[member][poseId];
+        } else if (member == 4) {
+            pose = yoshiDotPoseTbl[pouchGetPartyColor(4)][poseId];
+        } else {
+            pose = partyDotPoseTbl[member][poseId];
+        }
+        if ((*(u32*)((s32)party + 4) & 2) == 0 &&
+            (*(char**)((s32)party + 0x18) == 0 ||
+             strcmp(*(char**)((s32)party + 0x18), pose) != 0)) {
+            *(char**)((s32)party + 0x18) = pose;
+            *(u16*)((s32)party + 0x20) = 0;
+            *(u32*)((s32)party + 8) |= 0x1000;
+        }
+        partyChgRunMode(party, 2);
+        partyChgMot(party, 0);
+        *(s32*)((s32)party + 0x168) = -1;
+        *(f32*)((s32)party + 0x70) = 1.0f;
+        *(f32*)((s32)party + 0x74) = 1.0f;
+        *(f32*)((s32)party + 0x78) = 1.0f;
+    }
+
+    id = marioGetPartyId();
+    party = id < 0 ? 0 : partyPtrTbl[id];
+    if (party != 0) {
+        *(u32*)party = 1;
+        *(u32*)((s32)party + 4) = 0;
+        *(u8*)((s32)party + 0x37) = 0;
+        *(s32*)((s32)party + 0x164) = marioGetCamId();
+        if (*(s32*)((s32)party + 0xC) >= 0) {
+            animPoseSetMaterialFlagOff(*(s32*)((s32)party + 0xC), 0xFFFFFFFF);
+            animPoseSetMaterialLightFlagOn(*(s32*)((s32)party + 0xC), 2);
+        }
+        if (*(char**)((s32)party + 0x1C) != 0) {
+            animPoseSetPaperAnimGroup(*(s32*)((s32)party + 0xC), 0, 0);
+            *(char**)((s32)party + 0x1C) = 0;
+            *(u32*)((s32)party + 4) &= ~0x4000000;
+            if (*(s32*)((s32)party + 0x14) >= 0) {
+                animPaperPoseRelease(*(s32*)((s32)party + 0x14));
+            }
+            *(s32*)((s32)party + 0x14) = -1;
+        }
+        *(void**)((s32)party + 0x130) = 0;
+        *(void**)((s32)party + 0x12C) = 0;
+        *(void**)((s32)party + 0x148) = 0;
+        *(void**)((s32)party + 0x138) = 0;
+        *(void**)((s32)party + 0x13C) = 0;
+        *(void**)((s32)party + 0x134) = 0;
+        *(void**)((s32)party + 0x140) = 0;
+        *(void**)((s32)party + 0x144) = 0;
+        partyClearFootmark();
+        *(f32*)((s32)party + 0x70) = 1.0f;
+        *(f32*)((s32)party + 0x74) = 1.0f;
+        *(f32*)((s32)party + 0x78) = 1.0f;
+        player = marioGetPtr();
+        partyChgRunMode(party, 2);
+        if ((*(u32*)player & 0x2000000) == 0) {
+            partyChgMot(party, 0);
+        } else {
+            *(u8*)((s32)party + 0x3B) = 6;
+            *(u8*)((s32)party + 0x38) = 0;
+            *(u32*)party |= 0x8000;
+        }
+        if (*(s8*)((s32)party + 0x31) == 6) {
+            chuchu_reinit();
+        }
+        unk_JP_US_EU_36_80151d20();
+    }
     return 0;
 }
 
 u8 partyHelloMain(void* pParty) {
     extern void partyGetAppearPos(void*, void*);
     extern void partyGetAppearPos2(void*, void*);
-    extern f64 distABf(f64,f64,f64,f64);
-    extern f64 angleABf(f64,f64,f64,f64);
+    extern f32 distABf(f32,f32,f32,f32);
+    extern f32 angleABf(f32,f32,f32,f32);
     extern void partyMoveNoHosei(void*);
-    extern f64 partyToMovedir(f64,void*);
+    extern f32 partyToMovedir(f32,void*);
     extern void partyClearJumpPara(void*);
     extern void allPartyForceRideOn(void);
     extern u32 psndSFXOn_3D(s32,void*);
@@ -425,27 +543,110 @@ u8 partyHelloMain(void* pParty) {
     extern f32 float_90_80421208;
     extern f32 float_270_8042120c;
     extern f32 float_180_80421214;
-    void* player=*(void**)((s32)pParty+0x160);s32 timer;f32 frames,delta,peak,scale;
-    switch(*(u8*)((s32)pParty+0x38)){
+    void* player = *(void**)((s32)pParty + 0x160);
+    s32 timer;
+    f32 frames;
+    f32 delta;
+    f32 peak;
+    f32 scale;
+
+    switch (*(u8*)((s32)pParty + 0x38)) {
         case 0:
-            *(f32*)((s32)pParty+0x58)=*(f32*)((s32)player+0x8C);
-            *(f32*)((s32)pParty+0x5C)=float_0p5_80421288* *(f32*)((s32)player+0xFC)+*(f32*)((s32)player+0x90);
-            *(f32*)((s32)pParty+0x60)=*(f32*)((s32)player+0x94);
-            partyGetAppearPos(pParty,(void*)((s32)pParty+0x94));*(s32*)((s32)pParty+0x24)=16;
-            *(f32*)((s32)pParty+0x10C)=(f32)distABf(*(f32*)((s32)pParty+0x58),*(f32*)((s32)pParty+0x60),*(f32*)((s32)pParty+0x94),*(f32*)((s32)pParty+0x9C));
-            *(f32*)((s32)pParty+0x100)=(f32)angleABf(*(f32*)((s32)pParty+0x58),*(f32*)((s32)pParty+0x60),*(f32*)((s32)pParty+0x94),*(f32*)((s32)pParty+0x9C));
-            frames=16.0f;*(f32*)((s32)pParty+0x104)=*(f32*)((s32)pParty+0x10C)/frames;delta=*(f32*)((s32)pParty+0x98)-*(f32*)((s32)pParty+0x5C);peak=float_10_8042123c;if(delta>=float_0_80421218&&delta>=float_1_80421200)peak=float_0p5_80421288* *(f32*)((s32)pParty+0xF0)+delta;delta=(peak+peak)/(8.0f*8.0f-8.0f);*(f32*)((s32)pParty+0x174)=delta*8.0f;*(f32*)((s32)pParty+0x118)=-delta;*(u32*)pParty|=8;*(u8*)((s32)pParty+0x38)=1;break;
+            *(f32*)((s32)pParty + 0x58) = *(f32*)((s32)player + 0x8C);
+            *(f32*)((s32)pParty + 0x5C) =
+                float_0p5_80421288 * *(f32*)((s32)player + 0x1BC) +
+                *(f32*)((s32)player + 0x90);
+            *(f32*)((s32)pParty + 0x60) = *(f32*)((s32)player + 0x94);
+            partyGetAppearPos(pParty, (void*)((s32)pParty + 0x94));
+            *(s32*)((s32)pParty + 0x24) = 16;
+            *(f32*)((s32)pParty + 0x128) =
+                distABf(*(f32*)((s32)pParty + 0x58), *(f32*)((s32)pParty + 0x60),
+                        *(f32*)((s32)pParty + 0x94), *(f32*)((s32)pParty + 0x9C));
+            *(f32*)((s32)pParty + 0x100) =
+                angleABf(*(f32*)((s32)pParty + 0x58), *(f32*)((s32)pParty + 0x60),
+                         *(f32*)((s32)pParty + 0x94), *(f32*)((s32)pParty + 0x9C));
+            frames = 16.0f;
+            *(f32*)((s32)pParty + 0x104) = *(f32*)((s32)pParty + 0x128) / frames;
+            delta = *(f32*)((s32)pParty + 0x98) - *(f32*)((s32)pParty + 0x5C);
+            peak = float_10_8042123c;
+            if (delta >= float_0_80421218 && delta >= float_1_80421200) {
+                peak = float_0p5_80421288 * *(f32*)((s32)pParty + 0xF0) + delta;
+            }
+            delta = (peak + peak) / (8.0f * 8.0f - 8.0f);
+            *(f32*)((s32)pParty + 0x114) = delta * 8.0f;
+            *(f32*)((s32)pParty + 0x118) = -delta;
+            *(u32*)pParty |= 0x10;
+            *(u8*)((s32)pParty + 0x38) = 1;
+            break;
         case 1:
-            partyMoveNoHosei(pParty);if(*(f32*)((s32)pParty+0x174)<=float_0_80421218){*(u32*)pParty&=~8;*(f32*)((s32)pParty+0x118)=float_neg1p6_80421298;}
-            if(*(f32*)((s32)pParty+0x5C)<float_neg2000_8042127c){*(s32*)((s32)pParty+0x24)=0;*(u8*)((s32)pParty+0x38)=2;return 0;}
-            if(*(void**)((s32)pParty+0x138)==0){timer=*(s32*)((s32)pParty+0x24);scale=(16.0f-(f32)timer)*float_0p0625_8042129c;*(f32*)((s32)pParty+0x70)=scale;*(f32*)((s32)pParty+0x74)=scale;*(f32*)((s32)pParty+0x78)=scale;if(--timer>0){*(s32*)((s32)pParty+0x24)=timer;return 0;}*(s32*)((s32)pParty+0x24)=0;return 0;}*(u8*)((s32)pParty+0x38)=2;
+            partyMoveNoHosei(pParty);
+            if (*(f32*)((s32)pParty + 0x114) <= float_0_80421218) {
+                *(u32*)pParty &= ~0x10;
+                *(f32*)((s32)pParty + 0x118) = float_neg1p6_80421298;
+            }
+            if (*(f32*)((s32)pParty + 0x5C) < float_neg2000_8042127c) {
+                *(s32*)((s32)pParty + 0x24) = 0;
+                *(u8*)((s32)pParty + 0x38) = 2;
+                return 0;
+            }
+            if (*(void**)((s32)pParty + 0x138) == 0) {
+                timer = *(s32*)((s32)pParty + 0x24);
+                scale = (16.0f - (f32)timer) * float_0p0625_8042129c;
+                *(f32*)((s32)pParty + 0x70) = scale;
+                *(f32*)((s32)pParty + 0x74) = scale;
+                *(f32*)((s32)pParty + 0x78) = scale;
+                if (--timer > 0) {
+                    *(s32*)((s32)pParty + 0x24) = timer;
+                    return 0;
+                }
+                *(s32*)((s32)pParty + 0x24) = 0;
+                return 0;
+            }
+            *(u8*)((s32)pParty + 0x38) = 2;
         case 2:
-            timer=*(s32*)((s32)pParty+0x24);scale=(16.0f-(f32)timer)*float_0p0625_8042129c;*(f32*)((s32)pParty+0x70)=scale;*(f32*)((s32)pParty+0x74)=scale;*(f32*)((s32)pParty+0x78)=scale;timer--;*(s32*)((s32)pParty+0x24)=timer;
-            if(timer<1){*(s32*)((s32)pParty+0x24)=0;if(*(f32*)((s32)pParty+0x108)<float_90_80421208||*(f32*)((s32)pParty+0x108)>float_270_8042120c){*(f32*)((s32)pParty+0xFC)=(f32)partyToMovedir(float_0_80421218,pParty);*(f32*)((s32)pParty+0x100)=*(f32*)((s32)pParty+0xFC);*(f32*)((s32)pParty+0x104)=float_0_80421218;*(f32*)((s32)pParty+0x108)=float_0_80421218;}else{*(f32*)((s32)pParty+0xFC)=(f32)partyToMovedir(float_180_80421214,pParty);*(f32*)((s32)pParty+0x100)=*(f32*)((s32)pParty+0xFC);*(f32*)((s32)pParty+0x104)=float_180_80421214;*(f32*)((s32)pParty+0x108)=float_180_80421214;}partyClearJumpPara(pParty);*(u32*)((s32)pParty+4)&=~0x8000;*(u8*)((s32)pParty+0x34)=1;psndSFXOn_3D(0x20920,(void*)((s32)player+0x8C));return 1;}break;
-        case 10: partyGetAppearPos2(pParty,(void*)((s32)pParty+0x58));*(f32*)((s32)pParty+0xB8)=*(f32*)((s32)pParty+0x58);*(f32*)((s32)pParty+0xBC)=*(f32*)((s32)pParty+0x5C);*(f32*)((s32)pParty+0xC0)=*(f32*)((s32)pParty+0x60);*(u8*)((s32)pParty+0x34)=1;return 1;
-        case 20: *(u8*)((s32)pParty+0x34)=0;return 1;
-        case 30: allPartyForceRideOn();return 1;
-    }return 0;
+            timer = *(s32*)((s32)pParty + 0x24);
+            scale = (16.0f - (f32)timer) * float_0p0625_8042129c;
+            *(f32*)((s32)pParty + 0x70) = scale;
+            *(f32*)((s32)pParty + 0x74) = scale;
+            *(f32*)((s32)pParty + 0x78) = scale;
+            timer--;
+            *(s32*)((s32)pParty + 0x24) = timer;
+            if (timer < 1) {
+                *(s32*)((s32)pParty + 0x24) = 0;
+                if (*(f32*)((s32)pParty + 0x108) < float_90_80421208 ||
+                    *(f32*)((s32)pParty + 0x108) > float_270_8042120c) {
+                    *(f32*)((s32)pParty + 0xFC) = partyToMovedir(float_0_80421218, pParty);
+                    *(f32*)((s32)pParty + 0x100) = *(f32*)((s32)pParty + 0xFC);
+                    *(f32*)((s32)pParty + 0x104) = float_0_80421218;
+                    *(f32*)((s32)pParty + 0x108) = float_0_80421218;
+                } else {
+                    *(f32*)((s32)pParty + 0xFC) = partyToMovedir(float_180_80421214, pParty);
+                    *(f32*)((s32)pParty + 0x100) = *(f32*)((s32)pParty + 0xFC);
+                    *(f32*)((s32)pParty + 0x104) = float_180_80421214;
+                    *(f32*)((s32)pParty + 0x108) = float_180_80421214;
+                }
+                partyClearJumpPara(pParty);
+                *(u32*)((s32)pParty + 4) &= ~0x8000;
+                *(u8*)((s32)pParty + 0x34) = 1;
+                psndSFXOn_3D(0x20920, (void*)((s32)player + 0x8C));
+                return 1;
+            }
+            break;
+        case 10:
+            partyGetAppearPos2(pParty, (void*)((s32)pParty + 0x58));
+            *(f32*)((s32)pParty + 0xB8) = *(f32*)((s32)pParty + 0x58);
+            *(f32*)((s32)pParty + 0xBC) = *(f32*)((s32)pParty + 0x5C);
+            *(f32*)((s32)pParty + 0xC0) = *(f32*)((s32)pParty + 0x60);
+            *(u8*)((s32)pParty + 0x34) = 1;
+            return 1;
+        case 20:
+            *(u8*)((s32)pParty + 0x34) = 0;
+            return 1;
+        case 30:
+            allPartyForceRideOn();
+            return 1;
+    }
+    return 0;
 }
 
 u8 driveParty(void* party) {
@@ -1661,9 +1862,66 @@ s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
 #pragma no_register_save_helpers reset
 
 u8 N__partyChgRunMode(void* pParty, int currRunModeId, int newRunModeId) {
+    extern void partyClearJumpPara(void*);
+    extern void L_partyForceSlitOff(void*);
+    extern s32 partyGetHp(s32);
+    extern s32 pouchGetPartyColor(s32);
+    extern s32 strcmp(const char*, const char*);
+    extern char* partyPoseTbl[][15];
+    extern char* partyDotPoseTbl[][15];
+    extern char* yoshiDotPoseTbl[][15];
+    extern u8 partyDataTbl[];
+    void* player;
+    char* pose;
+    s32 member;
+    s32 poseId;
+    void (*callback)(void);
+
+    member = *(s8*)((s32)pParty + 0x31);
+    if (currRunModeId == 4 || (currRunModeId == 0xB && newRunModeId != 8)) {
+        player = *(void**)((s32)pParty + 0x160);
+        *(f32*)((s32)pParty + 0x70) = 1.0f;
+        *(f32*)((s32)pParty + 0x74) = 1.0f;
+        *(f32*)((s32)pParty + 0x78) = 1.0f;
+        *(u32*)((s32)pParty + 4) &= ~0x100;
+        *(f32*)((s32)pParty + 0xFC) = *(f32*)((s32)player + 0x1A4);
+        *(f32*)((s32)pParty + 0x100) = *(f32*)((s32)player + 0x1A8);
+        *(f32*)((s32)pParty + 0x108) = *(f32*)((s32)player + 0x1B0);
+        partyClearJumpPara(pParty);
+        poseId = 1;
+        if ((*(u32*)((s32)pParty + 4) & 0x8000) == 0) {
+            if (member < 8 && partyGetHp(member) < 6) poseId = 0xC;
+            if ((*(u32*)((s32)pParty + 4) & 0x10000) == 0) {
+                pose = partyPoseTbl[member][poseId];
+            } else if (member == 4) {
+                pose = yoshiDotPoseTbl[pouchGetPartyColor(4)][poseId];
+            } else {
+                pose = partyDotPoseTbl[member][poseId];
+            }
+            if (*(char**)((s32)pParty + 0x18) == 0 ||
+                strcmp(*(char**)((s32)pParty + 0x18), pose) != 0) {
+                *(char**)((s32)pParty + 0x18) = pose;
+                *(u16*)((s32)pParty + 0x20) = 0;
+                *(u32*)((s32)pParty + 8) |= 0x1000;
+            }
+        }
+        *(u32*)((s32)pParty + 4) &= ~0x100;
+        if (currRunModeId == 4) {
+            *(u8*)((s32)pParty + 0x34) = 1;
+        } else {
+            *(u32*)((s32)pParty + 4) &= ~0x200;
+            *(u32*)pParty &= ~0x70000;
+        }
+    } else if (currRunModeId < 3 && currRunModeId > 0) {
+        L_partyForceSlitOff(pParty);
+    } else if (currRunModeId == 3) {
+        callback = *(void (**)(void))(partyDataTbl + member * 0x28 + 0x18);
+        if (callback != 0) callback();
+    } else if (currRunModeId == 0xC) {
+        if (pParty != 0) *(u32*)((s32)pParty + 4) &= ~0x40;
+    }
     return 0;
 }
-
 
 s32 partyEntryMain(void) {
     return 0;
@@ -2434,24 +2692,87 @@ void partyHello(void* pParty) {
     partyHelloMain(pParty);
 }
 
-void partyChgPoseId(void* party, s32 poseId) {
-    ;
+char* partyChgPoseId(void* party, s32 poseId) {
+    extern s32 partyGetHp(s32);
+    extern s32 pouchGetPartyColor(s32);
+    extern s32 strcmp(const char*, const char*);
+    extern char* partyPoseTbl[][15];
+    extern char* partyDotPoseTbl[][15];
+    extern char* yoshiDotPoseTbl[][15];
+    s32 member;
+    char* pose;
+
+    if ((*(u32*)((s32)party + 4) & 2) != 0) return *(char**)((s32)party + 0x18);
+    member = *(s8*)((s32)party + 0x31);
+    if (member < 8 && partyGetHp(member) < 6) {
+        if (poseId == 1) poseId = 0xC;
+        else if (poseId == 2) poseId = 0xD;
+        else if (poseId == 3) poseId = 0xE;
+    }
+    if ((*(u32*)((s32)party + 4) & 0x10000) == 0) {
+        pose = partyPoseTbl[member][poseId];
+    } else if (member == 4) {
+        pose = yoshiDotPoseTbl[pouchGetPartyColor(4)][poseId];
+    } else {
+        pose = partyDotPoseTbl[member][poseId];
+    }
+    if (*(char**)((s32)party + 0x18) == 0 ||
+        strcmp(*(char**)((s32)party + 0x18), pose) != 0) {
+        *(char**)((s32)party + 0x18) = pose;
+        *(u16*)((s32)party + 0x20) = 0;
+        *(u32*)((s32)party + 8) |= 0x1000;
+    }
+    return pose;
 }
 
+s32 partyPaperOn(void* pParty, char* paperGroup) {
+    extern void animPaperPoseRelease(s32);
+    extern s32 animPaperPoseEntry(char*, s32);
+    extern void animPoseSetPaperAnimGroup(s32, char*, s32);
+    extern s32 strcmp(const char*, const char*);
+    extern char str_p_roll_802cb36c[];
+    extern char str_p_plane_802cb374[];
+    extern char str_p_dokan_x_802cb37c[];
+    extern char str_p_dokan_y_802cb360[];
+    extern char str_p_slit_802cb388[];
+    s32 special;
 
-s32 partyPaperOn(void* pParty, char* param_2) {
-    return 0;
+    if (*(s32*)((s32)pParty + 0x14) >= 0) {
+        animPaperPoseRelease(*(s32*)((s32)pParty + 0x14));
+        *(s32*)((s32)pParty + 0x14) = -1;
+    }
+    *(u32*)((s32)pParty + 4) |= 0x4000000;
+    *(s32*)((s32)pParty + 0x14) = animPaperPoseEntry(paperGroup, 2);
+    special = strcmp(paperGroup, str_p_roll_802cb36c) == 0 ||
+              strcmp(paperGroup, str_p_plane_802cb374) == 0 ||
+              strcmp(paperGroup, str_p_dokan_x_802cb37c) == 0 ||
+              strcmp(paperGroup, str_p_dokan_y_802cb360) == 0;
+    special = !special;
+    if (strcmp(paperGroup, str_p_slit_802cb388) == 0) {
+        special = *(s8*)((s32)pParty + 0x31) == 6;
+    }
+    animPoseSetPaperAnimGroup(*(s32*)((s32)pParty + 0xC), paperGroup, special);
+    return 1;
 }
-
 
 void partyUpdateKeyData(void* party) {
     extern void* gp;
-    s32 port;
+    s32 port = *(s8*)((s32)party + 0x30);
     s32 offset;
 
-    port = (s8)*(u8*)((s32)party + 0x30);
     if ((*(u32*)party & 0x60000000) != 0) {
-        L_partyClearCont(party);
+        *(u8*)((s32)party + 0x158) = 0;
+        *(u8*)((s32)party + 0x159) = 0;
+        *(u8*)((s32)party + 0x15A) = 0;
+        *(u8*)((s32)party + 0x15B) = 0;
+        *(u8*)((s32)party + 0x15C) = 0;
+        *(u8*)((s32)party + 0x15D) = 0;
+        *(u8*)((s32)party + 0x15E) = 0;
+        *(u8*)((s32)party + 0x15F) = 0;
+        *(u16*)((s32)party + 0x150) = 0;
+        *(u16*)((s32)party + 0x152) = 0;
+        *(u16*)((s32)party + 0x154) = 0;
+        *(u16*)((s32)party + 0x156) = 0;
         return;
     }
     *(u8*)((s32)party + 0x158) = *(u8*)((s32)gp + port + 0x13B8);
@@ -2528,9 +2849,38 @@ void allPartyForceRideOn(void) {
 }
 
 void partyGoodbyeInit(void* party) {
-    ;
-}
+    extern u8 partyDataTbl[];
+    extern void* party_dp;
+    extern void vivianUnhold(void*);
+    extern u32 marioGetoffYoshi(void);
+    void (*callback)(void);
+    void* player;
+    s32 member;
+    s32 motion;
 
+    *(u8*)((s32)party + 0x38) = 10;
+    member = *(s8*)((s32)party + 0x31);
+    party_dp = partyDataTbl + member * 0x28;
+    callback = *(void (**)(void))(partyDataTbl + member * 0x28 + 0xC);
+    if (callback != 0) {
+        callback();
+    }
+    if ((*(u32*)party & 0x100) != 0) {
+        if (member == 3) {
+            vivianUnhold(party);
+            *(u8*)((s32)party + 0x38) = 0;
+        }
+        if (member == 4) {
+            marioGetoffYoshi();
+            *(u8*)((s32)party + 0x38) = 0;
+        }
+    }
+    player = *(void**)((s32)party + 0x160);
+    motion = *(s32*)((s32)player + 0x28);
+    if (motion == 0x12 || motion == 0x13 || motion == 0x14) {
+        *(u8*)((s32)party + 0x38) = 0x14;
+    }
+}
 
 void allPartyRideOff2(void) {
     s32 id;
@@ -2736,10 +3086,17 @@ void N_partyForceChgRunMode(void* pParty, int newRunMode, u8 subMotionId) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-u8 partyChgPaper(void* pParty, char* param_2) {
+u8 partyChgPaper(void* pParty, char* paperPose) {
+    extern s32 strcmp(const char*, const char*);
+    if ((*(u32*)((s32)pParty + 4) & 2) == 0 &&
+        (*(char**)((s32)pParty + 0x1C) == 0 ||
+         strcmp(*(char**)((s32)pParty + 0x1C), paperPose) != 0)) {
+        *(char**)((s32)pParty + 0x1C) = paperPose;
+        *(u16*)((s32)pParty + 0x20) = 0;
+        *(u32*)((s32)pParty + 8) |= 0x2000;
+    }
     return 0;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -2775,9 +3132,42 @@ s32 partyGoodbye(s32 id) {
 }
 
 s32 partyKill(s32 id) {
+    extern void* partyPtrTbl[2];
+    extern u8 partyDataTbl[];
+    extern void* party_dp;
+    extern void animPoseRelease(s32);
+    extern void __memFree(s32, void*);
+    void* party;
+    void* current;
+    void* player;
+    s32 slot;
+    s32 member;
+    void (*callback)(void*);
+
+    party = id < 0 ? 0 : partyPtrTbl[id];
+    if (party == 0) return 0;
+    player = *(void**)((s32)party + 0x160);
+    slot = *(s8*)((s32)player + 0x245 + id);
+    current = slot < 0 ? 0 : partyPtrTbl[slot];
+    member = *(s8*)((s32)current + 0x31);
+    party_dp = partyDataTbl + member * 0x28;
+    callback = *(void (**)(void*))(partyDataTbl + member * 0x28 + 0x24);
+    if (callback != 0 && *(u8*)((s32)party + 0x34) != 0xB) callback(party);
+    slot = *(s8*)((s32)player + 0x245 + id);
+    current = slot < 0 ? 0 : partyPtrTbl[slot];
+    if (current == 0) {
+        *(s8*)((s32)player + 0x247 + id) = 0;
+    } else {
+        slot = *(s8*)((s32)player + 0x245 + id);
+        current = slot < 0 ? 0 : partyPtrTbl[slot];
+        *(s8*)((s32)player + 0x247 + id) = *(s8*)((s32)current + 0x31);
+    }
+    *(s8*)((s32)player + 0x245 + id) = -1;
+    partyPtrTbl[id] = 0;
+    animPoseRelease(*(s32*)((s32)party + 0xC));
+    __memFree(0, party);
     return 0;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -2910,6 +3300,32 @@ s32 partyEntry2Hello(s32 memberId) {
 #pragma no_register_save_helpers reset
 
 s32 partyKill2(s32 id) {
+    extern void* partyPtrTbl[2];
+    extern u8 partyDataTbl[];
+    extern void* party_dp;
+    extern void animPoseRelease(s32);
+    extern void __memFree(s32, void*);
+    void* party;
+    void* current;
+    void* player;
+    s32 slot;
+    s32 member;
+    void (*callback)(void*);
+
+    party = id < 0 ? 0 : partyPtrTbl[id];
+    if (party == 0) return 0;
+    player = *(void**)((s32)party + 0x160);
+    slot = *(s8*)((s32)player + 0x245 + id);
+    current = slot < 0 ? 0 : partyPtrTbl[slot];
+    member = *(s8*)((s32)current + 0x31);
+    party_dp = partyDataTbl + member * 0x28;
+    callback = *(void (**)(void*))(partyDataTbl + member * 0x28 + 0x24);
+    if (callback != 0 && *(u8*)((s32)party + 0x34) != 0xB) callback(party);
+    *(s8*)((s32)player + 0x247 + id) = 0;
+    *(s8*)((s32)player + 0x245 + id) = -1;
+    partyPtrTbl[id] = 0;
+    animPoseRelease(*(s32*)((s32)party + 0xC));
+    __memFree(0, party);
     return 0;
 }
 

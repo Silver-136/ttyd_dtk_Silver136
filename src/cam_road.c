@@ -1408,216 +1408,495 @@ s32 camRoadSetup(const char* name) {
 
 
 s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
-    extern void* wp;
-    extern f64 sqrt(f64 x);
-    f32* point = pos;
-    f32* out = result;
-    f32* inner;
-    f32* outer;
-    s32 segments;
-    s32 startIndex;
-    s32 endIndex;
+    extern f64 __frsqrte(f64 value);
+    extern f64 __fabs(f64 value);
+    extern f32 __float_nan[];
+    f32* point = (f32*)pos;
+    f32* out = (f32*)result;
+    f32* vertices;
+    f32* normals;
+    s32 count;
+    s32 roadMode;
+    f32 start;
+    f32 end;
+    f32 limitA;
+    f32 limitB;
+    f32 best = dat_8041f688;
+    s32 found = 0;
     s32 i;
-    s32 hit = 0;
-    f32 best = *(f32*)result;
 
     if (type != 0) {
-        segments = *(s32*)((u8*)road + 0x64) / 2;
-        startIndex = 0;
-        endIndex = 1;
-        inner = (f32*)((u8*)*(void**)((u8*)*(void**)wp + 0xF8) +
-                       *(s32*)((u8*)road + 0x60) * 12);
+        count = *(s32*)((s32)road + 0x64) / 2;
+        start = 0.0f;
+        end = 1.40129846e-45f;
+        limitA = 0.0f;
+        limitB = 0.0f;
+        roadMode = 0;
+        vertices = (f32*)(*(s32*)(*(s32*)wp + 0xF8) + *(s32*)((s32)road + 0x60) * 12);
     } else {
-        segments = *(s32*)((u8*)road + 0xA4) / 2;
-        startIndex = *(s32*)((u8*)road + 0x40);
-        endIndex = *(s32*)((u8*)road + 0x44);
-        inner = (f32*)((u8*)*(void**)((u8*)*(void**)wp + 0xF8) +
-                       *(s32*)((u8*)road + 0xA0) * 12);
+        count = *(s32*)((s32)road + 0xA4) / 2;
+        start = *(f32*)((s32)road + 0x40);
+        end = *(f32*)((s32)road + 0x44);
+        limitA = *(f32*)((s32)road + 0x4C);
+        limitB = *(f32*)((s32)road + 0x48);
+        roadMode = *(s32*)((s32)road + 0x84);
+        vertices = (f32*)(*(s32*)(*(s32*)wp + 0xF8) + *(s32*)((s32)road + 0xA0) * 12);
     }
-    outer = inner + segments * 3;
-    for (i = 0; i < segments - 1; i++) {
-        f32* a = inner + i * 3;
-        f32* b = inner + (i + 1) * 3;
-        f32* c = outer + i * 3;
-        f32* d = outer + (i + 1) * 3;
-        f32 edgeX = b[0] - a[0];
-        f32 edgeZ = b[2] - a[2];
-        f32 relX = point[0] - a[0];
-        f32 relZ = point[2] - a[2];
-        f32 side0 = c[0] * relX + c[2] * relZ;
-        f32 side1 = -(d[0] * (point[0] - b[0]) + d[2] * (point[2] - b[2]));
-        if (side0 >= 0.0f && side1 >= 0.0f) {
-            f32 denom = edgeX * edgeX + edgeZ * edgeZ;
-            f32 t = denom != 0.0f ? (relX * edgeX + relZ * edgeZ) / denom : 0.0f;
-            f32 x = a[0] + t * edgeX;
-            f32 z = a[2] + t * edgeZ;
-            f32 dx = point[0] - x;
-            f32 dz = point[2] - z;
-            f32 dist = (f32)sqrt(dx * dx + dz * dz);
-            f32 y = outer[i * 3 + 1] + t * (outer[(i + 1) * 3 + 1] - outer[i * 3 + 1]);
-            if (dist < best || !hit) {
-                best = dist;
-                hit = 1;
-                out[0] = y;
-                out[2] = 1.0f;
-                out[3] = x;
-                out[4] = 0.0f;
-                out[5] = z;
-                out[6] = a[0] + t * edgeX;
-                out[7] = 0.0f;
-                out[8] = a[2] + t * edgeZ;
-                out[9] = (f32)(startIndex + i);
-                out[10] = (f32)(endIndex != 0);
+    normals = vertices + count * 3;
+
+    for (i = 0; i < count - 1; i++, vertices += 3, normals += 3) {
+        f32 dx0 = point[0] - vertices[0];
+        f32 dz0 = point[2] - vertices[2];
+        f32 dx1 = point[0] - vertices[3];
+        f32 dz1 = point[2] - vertices[5];
+        f32 side0 = normals[0] * dx0 + normals[2] * dz0;
+        f32 side1 = -(normals[3] * dx1 + normals[5] * dz1);
+
+        if (side0 >= float_0_8041f62c && side1 >= float_0_8041f62c) {
+            f32 edgeX = vertices[3] - vertices[0];
+            f32 edgeZ = vertices[5] - vertices[2];
+            f32 t;
+            f32 interp;
+            f32 hitX;
+            f32 hitZ;
+            f32 offX;
+            f32 offZ;
+            f32 distanceSq;
+            f32 distance;
+            f32 hitY;
+            f32 clampFlag = float_0_8041f62c;
+
+            if (__fabs((f64)-edgeZ) <= __fabs((f64)edgeX)) {
+                if ((f64)edgeX == 0.0) {
+                    t = float_0_8041f62c;
+                } else {
+                    t = (f32)((((f64)-edgeZ * (f64)((vertices[2] - point[2]) / edgeX) +
+                                  (f64)point[0]) - (f64)vertices[0]) /
+                                -(f64)((f32)((f64)-edgeZ * (f64)(edgeZ / edgeX)) - edgeX));
+                }
+            } else {
+                t = (f32)((((f64)edgeX * (f64)((vertices[0] - point[0]) / -edgeZ) +
+                              (f64)point[2]) - (f64)vertices[2]) /
+                            -(f64)((f32)((f64)edgeX * (f64)(edgeX / -edgeZ)) - edgeZ));
+            }
+            hitX = vertices[0] + t * edgeX;
+            hitZ = vertices[2] + t * edgeZ;
+            if (__fabs((f64)edgeX) <= __fabs((f64)edgeZ)) {
+                if ((f64)edgeZ != 0.0) interp = (hitZ - vertices[2]) / edgeZ;
+                else interp = float_0_8041f62c;
+            } else {
+                interp = (hitX - vertices[0]) / edgeX;
+            }
+            offX = point[0] - hitX;
+            offZ = point[2] - hitZ;
+            distanceSq = offX * offX + offZ * offZ;
+
+            if (distanceSq > float_0_8041f62c) {
+                f64 value = (f64)distanceSq;
+                f64 inv = __frsqrte(value);
+                f64 half = *(f64*)(vec3_802bf540 + 0x38);
+                f64 three = *(f64*)(vec3_802bf540 + 0x40);
+                f64 square = inv * inv;
+                inv = (half * inv) * (three - value * square);
+                square = inv * inv;
+                inv = (half * inv) * (three - value * square);
+                distance = (f32)(value * half * inv * (three - value * inv * inv));
+            } else if (distanceSq < float_0_8041f62c) {
+                distance = __float_nan[0];
+            } else {
+                distance = float_0_8041f62c;
+            }
+            hitY = normals[1] + interp * (normals[4] - normals[1]);
+
+            if (distance < best) {
+                if (roadMode != 0) {
+                    f32 lowY = normals[(s32)start * 3 + 1];
+                    f32 highY = normals[(s32)end * 3 + 1];
+                    if (hitY < lowY) {
+                        hitY = lowY;
+                        clampFlag = 1.40129846e-45f;
+                    } else if (hitY > highY) {
+                        hitY = highY;
+                        clampFlag = 1.40129846e-45f;
+                    }
+                    if (offX * edgeX + offZ * edgeZ >= float_0_8041f62c) {
+                        if (limitA < distance) distance = limitA;
+                    } else if (limitB < distance) distance = limitB;
+                }
+                best = distance;
+                found = 1;
+                out[0] = hitY;
+                out[2] = vertices[1];
+                out[3] = hitX;
+                out[4] = float_0_8041f62c;
+                out[5] = hitZ;
+                out[6] = normals[0] + interp * (normals[3] - normals[0]);
+                out[7] = float_0_8041f62c;
+                out[8] = normals[2] + interp * (normals[5] - normals[2]);
+                out[9] = (f32)i;
+                out[10] = clampFlag;
+            }
+        } else {
+            f32 ax = point[0] - vertices[0];
+            f32 az = point[2] - vertices[2];
+            f32 bx = point[0] - vertices[3];
+            f32 bz = point[2] - vertices[5];
+            f32 distA2 = ax * ax + az * az;
+            f32 distB2 = bx * bx + bz * bz;
+            f32 distance;
+            f32 endpoint;
+            f32 invLen;
+
+            if (distA2 <= distB2) {
+                f64 value = (f64)distA2;
+                endpoint = float_0_8041f62c;
+                if (value > 0.0) {
+                    f64 inv = __frsqrte(value);
+                    f64 half = *(f64*)(vec3_802bf540 + 0x38);
+                    f64 three = *(f64*)(vec3_802bf540 + 0x40);
+                    inv = half * inv * (three - value * inv * inv);
+                    inv = half * inv * (three - value * inv * inv);
+                    distance = (f32)(value * half * inv * (three - value * inv * inv));
+                } else distance = float_0_8041f62c;
+            } else {
+                f64 value = (f64)distB2;
+                endpoint = float_1_8041f638;
+                if (value > 0.0) {
+                    f64 inv = __frsqrte(value);
+                    f64 half = *(f64*)(vec3_802bf540 + 0x38);
+                    f64 three = *(f64*)(vec3_802bf540 + 0x40);
+                    inv = half * inv * (three - value * inv * inv);
+                    inv = half * inv * (three - value * inv * inv);
+                    distance = (f32)(value * half * inv * (three - value * inv * inv));
+                } else distance = float_0_8041f62c;
+            }
+
+            if (distance < best) {
+                invLen = distance != float_0_8041f62c ? float_1_8041f638 / distance : float_0_8041f62c;
+                best = distance;
+                found = 1;
+                out[0] = normals[1] + endpoint * (normals[4] - normals[1]);
+                out[2] = vertices[1];
+                out[3] = point[0] - (endpoint == float_0_8041f62c ? ax : bx);
+                out[4] = float_0_8041f62c;
+                out[5] = point[2] - (endpoint == float_0_8041f62c ? az : bz);
+                out[6] = (endpoint == float_0_8041f62c ? ax : bx) * invLen;
+                out[7] = float_0_8041f62c;
+                out[8] = (endpoint == float_0_8041f62c ? az : bz) * invLen;
+                out[9] = (f32)i;
+                out[10] = 4.20389539e-45f;
             }
         }
     }
-    return hit;
+    return found;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw on
+
+
 s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
-    f32* p;
-    f32* v0;
-    f32* v1;
-    f32* v2;
-    f32* outY;
-    f32 pX;
-    f32 pY;
-    f32 pZ;
-    f32 v0X;
-    f32 v0Y;
-    f32 v0Z;
-    f32 v1X;
-    f32 v1Y;
-    f32 v1Z;
-    f32 v2X;
-    f32 v2Y;
-    f32 v2Z;
-    f32 e0X;
-    f32 e0Y;
-    f32 e0Z;
-    f32 e1X;
-    f32 e1Y;
-    f32 e1Z;
-    f32 e2X;
-    f32 e2Y;
-    f32 e2Z;
-    f32 nX;
-    f32 nY;
-    f32 nZ;
+    extern const Vec3 vec3_802bf564;
+    extern const f32 float_0_8041f62c;
+    extern const f64 double_0_802bf588;
+
+    u32 p0;
+    u32 p1;
+    u32 p2;
+    u32 v00;
+    u32 v01;
+    u32 v02;
+    u32 v10;
+    u32 v11;
+    u32 v12;
+    u32 v20;
+    u32 v21;
+    u32 v22;
+    u32 dir0;
+    u32 dir1;
+    u32 dir2;
+    u32* dirPtr;
+
+    volatile u32 scratch[96];
+    volatile u32 e01[3];
+    volatile u32 e20[3];
+    volatile u32 e12[3];
+    volatile u32 normal[3];
+    volatile u32 diff[3];
+    volatile u32 tmpVec[3];
+    volatile u32 hit[3];
+    volatile u32 distBits;
+    volatile u32 denomBits;
+    volatile u32 sideBits;
+
+    f32 tmp;
     f32 dist;
     f32 denom;
-    f32 hitY;
+    f32 side;
     f32 oldY;
-    f32 vx;
-    f32 vy;
-    f32 vz;
-    f32 t0;
-    f32 t1;
-    f32 t2;
+    f32 scale;
+    f32 hitY;
 
-    p = (f32*)a;
-    v0 = (f32*)b;
-    v1 = (f32*)c;
-    v2 = (f32*)d;
-    outY = (f32*)e;
+    v10 = ((u32*)c)[0];
+    v00 = ((u32*)b)[0];
+    v01 = ((u32*)b)[1];
+    v11 = ((u32*)c)[1];
+    v02 = ((u32*)b)[2];
+    v12 = ((u32*)c)[2];
+    v20 = ((u32*)d)[0];
+    v21 = ((u32*)d)[1];
+    v22 = ((u32*)d)[2];
 
-    vx = 0.0f;
-    vy = -1.0f;
-    vz = 0.0f;
+    p0 = ((u32*)a)[0];
+    p1 = ((u32*)a)[1];
+    p2 = ((u32*)a)[2];
 
-    v0X = v0[0];
-    v0Y = v0[1];
-    v0Z = v0[2];
-    v1X = v1[0];
-    v1Y = v1[1];
-    v1Z = v1[2];
-    v2X = v2[0];
-    v2Y = v2[1];
-    v2Z = v2[2];
+    dirPtr = (u32*)&vec3_802bf564;
+    dir0 = dirPtr[0];
+    dir1 = dirPtr[1];
+    dir2 = dirPtr[2];
 
-    e0X = v0X - v1X;
-    e0Y = v0Y - v1Y;
-    e0Z = v0Z - v1Z;
-    e1X = v2X - v0X;
-    e1Y = v2Y - v0Y;
-    e1Z = v2Z - v0Z;
-    e2X = v1X - v2X;
-    e2Y = v1Y - v2Y;
-    e2Z = v1Z - v2Z;
+    tmp = ((scratch[13] = (v00)), (*(volatile f32*)&scratch[13])) - ((scratch[10] = (v10)), (*(volatile f32*)&scratch[10]));
+    (*(volatile f32*)&scratch[0]) = (tmp);
+    e01[0] = scratch[0];
 
-    nX = (e1Y * e0Z) - (e1Z * e0Y);
-    nY = (e1Z * e0X) - (e1X * e0Z);
-    nZ = (e1X * e0Y) - (e1Y * e0X);
+    tmp = ((scratch[14] = (v01)), (*(volatile f32*)&scratch[14])) - ((scratch[11] = (v11)), (*(volatile f32*)&scratch[11]));
+    (*(volatile f32*)&scratch[1]) = (tmp);
+    e01[1] = scratch[1];
 
-    if ((nX == 0.0f) && (nY == 0.0f) && (nZ == 0.0f)) {
+    tmp = ((scratch[15] = (v02)), (*(volatile f32*)&scratch[15])) - ((scratch[12] = (v12)), (*(volatile f32*)&scratch[12]));
+    (*(volatile f32*)&scratch[2]) = (tmp);
+    e01[2] = scratch[2];
+
+    tmp = ((scratch[16] = (v20)), (*(volatile f32*)&scratch[16])) - ((scratch[13] = (v00)), (*(volatile f32*)&scratch[13]));
+    (*(volatile f32*)&scratch[3]) = (tmp);
+    e20[0] = scratch[3];
+
+    tmp = ((scratch[17] = (v21)), (*(volatile f32*)&scratch[17])) - ((scratch[14] = (v01)), (*(volatile f32*)&scratch[14]));
+    (*(volatile f32*)&scratch[4]) = (tmp);
+    e20[1] = scratch[4];
+
+    tmp = ((scratch[18] = (v22)), (*(volatile f32*)&scratch[18])) - ((scratch[15] = (v02)), (*(volatile f32*)&scratch[15]));
+    (*(volatile f32*)&scratch[5]) = (tmp);
+    e20[2] = scratch[5];
+
+    tmp = ((scratch[10] = (v10)), (*(volatile f32*)&scratch[10])) - ((scratch[16] = (v20)), (*(volatile f32*)&scratch[16]));
+    (*(volatile f32*)&scratch[6]) = (tmp);
+    e12[0] = scratch[6];
+
+    tmp = ((scratch[11] = (v11)), (*(volatile f32*)&scratch[11])) - ((scratch[17] = (v21)), (*(volatile f32*)&scratch[17]));
+    (*(volatile f32*)&scratch[7]) = (tmp);
+    e12[1] = scratch[7];
+
+    tmp = ((scratch[12] = (v12)), (*(volatile f32*)&scratch[12])) - ((scratch[18] = (v22)), (*(volatile f32*)&scratch[18]));
+    (*(volatile f32*)&scratch[8]) = (tmp);
+    e12[2] = scratch[8];
+
+    tmp = ((*(volatile f32*)&e20[1]) * (*(volatile f32*)&e01[2])) -
+          ((*(volatile f32*)&e20[2]) * (*(volatile f32*)&e01[1]));
+    (*(volatile f32*)&scratch[20]) = (tmp);
+    normal[0] = scratch[20];
+
+    tmp = ((*(volatile f32*)&e20[2]) * (*(volatile f32*)&e01[0])) -
+          ((*(volatile f32*)&e20[0]) * (*(volatile f32*)&e01[2]));
+    (*(volatile f32*)&scratch[21]) = (tmp);
+    normal[1] = scratch[21];
+
+    tmp = ((*(volatile f32*)&e20[0]) * (*(volatile f32*)&e01[1])) -
+          ((*(volatile f32*)&e20[1]) * (*(volatile f32*)&e01[0]));
+    (*(volatile f32*)&scratch[22]) = (tmp);
+    normal[2] = scratch[22];
+
+    if ((float_0_8041f62c == (*(volatile f32*)&normal[0])) &&
+        (float_0_8041f62c == (*(volatile f32*)&normal[1])) &&
+        (float_0_8041f62c == (*(volatile f32*)&normal[2]))) {
         return 0;
     }
 
-    pX = p[0];
-    pY = p[1];
-    pZ = p[2];
+    tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[13] = (v00)), (*(volatile f32*)&scratch[13]));
+    (*(volatile f32*)&scratch[23]) = (tmp);
+    diff[0] = scratch[23];
 
-    dist = (nX * (pX - v0X)) + (nY * (pY - v0Y)) + (nZ * (pZ - v0Z));
-    denom = (nX * vx) + (nY * vy) + (nZ * vz);
+    tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[14] = (v01)), (*(volatile f32*)&scratch[14]));
+    (*(volatile f32*)&scratch[24]) = (tmp);
+    diff[1] = scratch[24];
 
-    if (dist <= 0.0f) {
-        if ((f64)denom <= 0.0) {
+    tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[15] = (v02)), (*(volatile f32*)&scratch[15]));
+    (*(volatile f32*)&scratch[25]) = (tmp);
+    diff[2] = scratch[25];
+
+    dist = ((*(volatile f32*)&normal[2]) * (*(volatile f32*)&diff[2])) +
+           ((*(volatile f32*)&normal[0]) * (*(volatile f32*)&diff[0])) +
+           ((*(volatile f32*)&normal[1]) * (*(volatile f32*)&diff[1]));
+    (*(volatile f32*)&scratch[26]) = (dist);
+    distBits = scratch[26];
+
+    denom = ((*(volatile f32*)&normal[2]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))) +
+            ((*(volatile f32*)&normal[0]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))) +
+            ((*(volatile f32*)&normal[1]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])));
+    (*(volatile f32*)&scratch[27]) = (denom);
+    denomBits = scratch[27];
+
+    if ((*(volatile f32*)&distBits) <= float_0_8041f62c) {
+        if ((f64)(*(volatile f32*)&denomBits) <= double_0_802bf588) {
             return 0;
         }
 
-        t0 = ((pZ - v0Z) * ((e1X * vz) - (e1Y * vx))) +
-             ((pX - v0X) * ((e1Y * vy) - (e1Z * vz))) +
-             ((pY - v0Y) * ((e1Z * vx) - (e1X * vy)));
-        if ((f64)t0 < 0.0) {
+        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[15] = (v02)), (*(volatile f32*)&scratch[15]));
+        (*(volatile f32*)&scratch[40]) = (tmp);
+        tmpVec[2] = scratch[40];
+        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[13] = (v00)), (*(volatile f32*)&scratch[13]));
+        (*(volatile f32*)&scratch[38]) = (tmp);
+        tmpVec[0] = scratch[38];
+        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[14] = (v01)), (*(volatile f32*)&scratch[14]));
+        (*(volatile f32*)&scratch[39]) = (tmp);
+        tmpVec[1] = scratch[39];
+
+        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e20[0]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))) - ((*(volatile f32*)&e20[1]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))))) +
+               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e20[1]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34]))) - ((*(volatile f32*)&e20[2]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))))) +
+               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e20[2]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))) - ((*(volatile f32*)&e20[0]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])))));
+        (*(volatile f32*)&scratch[28]) = (side);
+        sideBits = scratch[28];
+        if ((f64)(*(volatile f32*)&sideBits) < double_0_802bf588) {
             return 0;
         }
 
-        t1 = ((pZ - v1Z) * ((e0X * vz) - (e0Y * vx))) +
-             ((pX - v1X) * ((e0Y * vy) - (e0Z * vz))) +
-             ((pY - v1Y) * ((e0Z * vx) - (e0X * vy)));
-        if ((f64)t1 < 0.0) {
+        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[12] = (v12)), (*(volatile f32*)&scratch[12]));
+        (*(volatile f32*)&scratch[40]) = (tmp);
+        tmpVec[2] = scratch[40];
+        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[10] = (v10)), (*(volatile f32*)&scratch[10]));
+        (*(volatile f32*)&scratch[38]) = (tmp);
+        tmpVec[0] = scratch[38];
+        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[11] = (v11)), (*(volatile f32*)&scratch[11]));
+        (*(volatile f32*)&scratch[39]) = (tmp);
+        tmpVec[1] = scratch[39];
+
+        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e01[0]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))) - ((*(volatile f32*)&e01[1]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))))) +
+               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e01[1]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34]))) - ((*(volatile f32*)&e01[2]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))))) +
+               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e01[2]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))) - ((*(volatile f32*)&e01[0]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])))));
+        (*(volatile f32*)&scratch[28]) = (side);
+        sideBits = scratch[28];
+        if ((f64)(*(volatile f32*)&sideBits) < double_0_802bf588) {
             return 0;
         }
 
-        t2 = ((pZ - v2Z) * ((e2X * vz) - (e2Y * vx))) +
-             ((pX - v2X) * ((e2Y * vy) - (e2Z * vz))) +
-             ((pY - v2Y) * ((e2Z * vx) - (e2X * vy)));
-        if ((f64)t2 < 0.0) {
+        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[18] = (v22)), (*(volatile f32*)&scratch[18]));
+        (*(volatile f32*)&scratch[40]) = (tmp);
+        tmpVec[2] = scratch[40];
+        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[16] = (v20)), (*(volatile f32*)&scratch[16]));
+        (*(volatile f32*)&scratch[38]) = (tmp);
+        tmpVec[0] = scratch[38];
+        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[17] = (v21)), (*(volatile f32*)&scratch[17]));
+        (*(volatile f32*)&scratch[39]) = (tmp);
+        tmpVec[1] = scratch[39];
+
+        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e12[0]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))) - ((*(volatile f32*)&e12[1]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))))) +
+               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e12[1]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34]))) - ((*(volatile f32*)&e12[2]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))))) +
+               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e12[2]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))) - ((*(volatile f32*)&e12[0]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])))));
+        (*(volatile f32*)&scratch[28]) = (side);
+        sideBits = scratch[28];
+        if ((f64)(*(volatile f32*)&sideBits) < double_0_802bf588) {
             return 0;
         }
     } else {
-        if (0.0 <= (f64)denom) {
+        if (double_0_802bf588 <= (f64)(*(volatile f32*)&denomBits)) {
             return 0;
         }
 
-        t0 = ((pZ - v0Z) * ((e1X * vz) - (e1Y * vx))) +
-             ((pX - v0X) * ((e1Y * vy) - (e1Z * vz))) +
-             ((pY - v0Y) * ((e1Z * vx) - (e1X * vy)));
-        if (0.0 < (f64)t0) {
+        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[15] = (v02)), (*(volatile f32*)&scratch[15]));
+        (*(volatile f32*)&scratch[40]) = (tmp);
+        tmpVec[2] = scratch[40];
+        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[13] = (v00)), (*(volatile f32*)&scratch[13]));
+        (*(volatile f32*)&scratch[38]) = (tmp);
+        tmpVec[0] = scratch[38];
+        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[14] = (v01)), (*(volatile f32*)&scratch[14]));
+        (*(volatile f32*)&scratch[39]) = (tmp);
+        tmpVec[1] = scratch[39];
+
+        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e20[0]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))) - ((*(volatile f32*)&e20[1]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))))) +
+               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e20[1]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34]))) - ((*(volatile f32*)&e20[2]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))))) +
+               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e20[2]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))) - ((*(volatile f32*)&e20[0]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])))));
+        (*(volatile f32*)&scratch[28]) = (side);
+        sideBits = scratch[28];
+        if (double_0_802bf588 < (f64)(*(volatile f32*)&sideBits)) {
             return 0;
         }
 
-        t1 = ((pZ - v1Z) * ((e0X * vz) - (e0Y * vx))) +
-             ((pX - v1X) * ((e0Y * vy) - (e0Z * vz))) +
-             ((pY - v1Y) * ((e0Z * vx) - (e0X * vy)));
-        if (0.0 < (f64)t1) {
+        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[12] = (v12)), (*(volatile f32*)&scratch[12]));
+        (*(volatile f32*)&scratch[40]) = (tmp);
+        tmpVec[2] = scratch[40];
+        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[10] = (v10)), (*(volatile f32*)&scratch[10]));
+        (*(volatile f32*)&scratch[38]) = (tmp);
+        tmpVec[0] = scratch[38];
+        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[11] = (v11)), (*(volatile f32*)&scratch[11]));
+        (*(volatile f32*)&scratch[39]) = (tmp);
+        tmpVec[1] = scratch[39];
+
+        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e01[0]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))) - ((*(volatile f32*)&e01[1]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))))) +
+               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e01[1]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34]))) - ((*(volatile f32*)&e01[2]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))))) +
+               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e01[2]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))) - ((*(volatile f32*)&e01[0]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])))));
+        (*(volatile f32*)&scratch[28]) = (side);
+        sideBits = scratch[28];
+        if (double_0_802bf588 < (f64)(*(volatile f32*)&sideBits)) {
             return 0;
         }
 
-        t2 = ((pZ - v2Z) * ((e2X * vz) - (e2Y * vx))) +
-             ((pX - v2X) * ((e2Y * vy) - (e2Z * vz))) +
-             ((pY - v2Y) * ((e2Z * vx) - (e2X * vy)));
-        if (0.0 < (f64)t2) {
+        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[18] = (v22)), (*(volatile f32*)&scratch[18]));
+        (*(volatile f32*)&scratch[40]) = (tmp);
+        tmpVec[2] = scratch[40];
+        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[16] = (v20)), (*(volatile f32*)&scratch[16]));
+        (*(volatile f32*)&scratch[38]) = (tmp);
+        tmpVec[0] = scratch[38];
+        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[17] = (v21)), (*(volatile f32*)&scratch[17]));
+        (*(volatile f32*)&scratch[39]) = (tmp);
+        tmpVec[1] = scratch[39];
+
+        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e12[0]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))) - ((*(volatile f32*)&e12[1]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))))) +
+               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e12[1]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34]))) - ((*(volatile f32*)&e12[2]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))))) +
+               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e12[2]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))) - ((*(volatile f32*)&e12[0]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])))));
+        (*(volatile f32*)&scratch[28]) = (side);
+        sideBits = scratch[28];
+        if (double_0_802bf588 < (f64)(*(volatile f32*)&sideBits)) {
             return 0;
         }
     }
 
-    oldY = *outY;
-    hitY = pY + (vy * (-dist / denom));
+    scale = -(*(volatile f32*)&distBits) / (*(volatile f32*)&denomBits);
+
+    tmp = ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33])) * scale;
+    (*(volatile f32*)&scratch[50]) = (((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) + tmp);
+    hit[0] = scratch[50];
+
+    tmp = ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])) * scale;
+    (*(volatile f32*)&scratch[51]) = (((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) + tmp);
+    hit[1] = scratch[51];
+
+    tmp = ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35])) * scale;
+    (*(volatile f32*)&scratch[52]) = (((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) + tmp);
+    hit[2] = scratch[52];
+
+    oldY = *(f32*)e;
+    hitY = *(volatile f32*)&hit[1];
     if (oldY <= hitY) {
-        *outY = hitY;
+        *(f32*)e = hitY;
     }
 
     return oldY <= hitY;
 }
+
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 

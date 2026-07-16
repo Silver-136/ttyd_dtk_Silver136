@@ -383,41 +383,49 @@ void lightGetNearObj(void* pPos, LightEntry** pDst, int count, LightEntryFlags f
 }
 
 void lightMain(void) {
+    typedef f32 Mtx[3][4];
     extern void* camGetPtr(s32 cameraId);
     extern void PSVECNormalize(Vec* src, Vec* dst);
-    extern Vec vec3_802bf8d0;
-    extern Vec vec3_802bf8f4;
+    extern u32 vec3_802bf870[];
     extern f32 float_1p0486E06_8041f8c0;
     extern LightEntry booLight;
     void* cam;
+    u32* constants;
+    Vec direction;
+    Mtx view;
     Vec out;
-    f32 x;
-    f32 y;
-    f32 z;
+    Vec paperPos;
+    Vec booPos;
 
-    x = vec3_802bf8d0.x;
-    y = vec3_802bf8d0.y;
-    z = vec3_802bf8d0.z;
-
+    constants = vec3_802bf870;
+    direction = *(Vec*)((u8*)constants + 0x60);
     cam = camGetPtr(4);
 
-    out.x = (*(f32*)((s32)cam + 0x11C) * x)
-        + (*(f32*)((s32)cam + 0x12C) * y)
-        + (*(f32*)((s32)cam + 0x13C) * z);
-    out.y = (*(f32*)((s32)cam + 0x120) * x)
-        + (*(f32*)((s32)cam + 0x130) * y)
-        + (*(f32*)((s32)cam + 0x140) * z);
-    out.z = (*(f32*)((s32)cam + 0x124) * x)
-        + (*(f32*)((s32)cam + 0x134) * y)
-        + (*(f32*)((s32)cam + 0x144) * z);
+    *(Vec*)&view[1][0] = *(Vec*)((u8*)cam + 0x12C);
+    *(Vec*)&view[0][0] = *(Vec*)((u8*)cam + 0x11C);
+    *(Vec*)&view[2][0] = *(Vec*)((u8*)cam + 0x13C);
+
+    out = *(Vec*)((u8*)constants + 0x6C);
+    out.x = view[1][0] * direction.z
+        + view[0][0] * direction.x
+        + view[2][0] * direction.y;
+    out.y = view[1][1] * direction.z
+        + view[0][1] * direction.x
+        + view[2][1] * direction.y;
+    out.z = view[1][2] * direction.z
+        + view[0][2] * direction.x
+        + view[2][2] * direction.y;
 
     PSVECNormalize(&out, &out);
 
-    paperLight3D.position.x = float_1p0486E06_8041f8c0 * out.x;
-    paperLight3D.position.y = float_1p0486E06_8041f8c0 * out.y;
-    paperLight3D.position.z = float_1p0486E06_8041f8c0 * out.z;
+    paperPos = *(Vec*)((u8*)constants + 0x78);
+    paperPos.x = float_1p0486E06_8041f8c0 * out.x;
+    paperPos.y = float_1p0486E06_8041f8c0 * out.y;
+    paperPos.z = float_1p0486E06_8041f8c0 * out.z;
+    paperLight3D.position = paperPos;
 
-    booLight.position = vec3_802bf8f4;
+    booPos = *(Vec*)((u8*)constants + 0x84);
+    booLight.position = booPos;
 }
 
 void* lightNameToPtr(char* name) {

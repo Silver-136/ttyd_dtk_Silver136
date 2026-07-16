@@ -461,10 +461,107 @@ input_found:
     }
 }
 
-u8 gcDvdCheckThread(void) {
-    return 0;
-}
+void gcDvdCheckThread(void) {
+    extern s32 DVDGetDriveStatus(void);
+    extern u32 VIGetRetraceCount(void);
+    extern void SoundCloseCover(void);
+    extern void SoundOpenCover(void);
+    extern s32 cardIsExec(void);
+    extern void DEMOBeforeRender(void);
+    extern void DEMODoneRender(void);
+    extern char* romFontGetMessage(s32 id);
+    extern s32 romFontGetWidth(char* msg, ...);
+    extern void C_MTXPerspective(void* mtx, f32 fovY, f32 aspect, f32 nearZ, f32 farZ);
+    extern void GXSetProjection(void* mtx, s32 type);
+    extern void romFontPrintGX(f32 x, f32 y, f32 scale, void* color, char* msg);
+    extern void makeKey(void);
+    extern void L_gcResetCheck(void);
+    extern void OSYieldThread(void);
+    extern u32 dat_80420340;
+    extern f32 float_25_80420344;
+    extern f32 float_1p2667_80420348;
+    extern f32 float_1_8042034c;
+    extern f32 float_10000_80420350;
+    extern f32 float_0p5_80420354;
+    extern f32 float_60_80420358;
+    f32 projection[4][4];
+    u32 color;
+    char* message;
+    s32 width;
+    s32 status;
+    s32 messageId;
+    s32 lastStatus = 0;
+    u32 lastRetrace = 0;
+    s32 stableFrames = 0;
 
+    for (;;) {
+        messageId = 0;
+        status = DVDGetDriveStatus();
+        switch (status) {
+            case 4:
+            case 6:
+                messageId = 11;
+                *(s32*)((s32)gp + 0x1274) = 1;
+                break;
+            case 5:
+                messageId = 10;
+                *(s32*)((s32)gp + 0x1274) = 1;
+                break;
+            case 11:
+                messageId = 12;
+                *(s32*)((s32)gp + 0x1274) = 1;
+                break;
+            case -1:
+                messageId = 13;
+                *(s32*)((s32)gp + 0x1274) = 1;
+                break;
+            case 1:
+                break;
+            default:
+                *(s32*)((s32)gp + 0x1274) = 0;
+                break;
+        }
+
+        if (lastStatus == DVDGetDriveStatus()) {
+            if (lastRetrace != VIGetRetraceCount()) {
+                lastRetrace = VIGetRetraceCount();
+                if (++stableFrames > 100) {
+                    stableFrames = 100;
+                }
+            }
+        } else {
+            lastStatus = DVDGetDriveStatus();
+            stableFrames = 0;
+        }
+
+        if (*(s32*)((s32)gp + 0x1274) == 0) {
+            SoundCloseCover();
+        } else {
+            SoundOpenCover();
+        }
+        if (*(s32*)((s32)gp + 0x1274) != 0 && cardIsExec() != 0) {
+            *(s32*)((s32)gp + 0x1274) = 0;
+        }
+        if (*(s32*)((s32)gp + 0x1274) != 0 && stableFrames > 10) {
+            DEMOBeforeRender();
+            if (messageId != 0) {
+                message = romFontGetMessage(messageId);
+                width = romFontGetWidth(message);
+                C_MTXPerspective(projection, float_25_80420344, float_1p2667_80420348,
+                                 float_1_8042034c, float_10000_80420350);
+                GXSetProjection(projection, 0);
+                color = dat_80420340;
+                romFontPrintGX((f32)(-width) * float_0p5_80420354,
+                               float_60_80420358, float_1_8042034c,
+                               &color, message);
+            }
+            DEMODoneRender();
+            makeKey();
+            L_gcResetCheck();
+        }
+        OSYieldThread();
+    }
+}
 
 void L_gcResetCheck(void) {
     extern s32 R_bReset;
