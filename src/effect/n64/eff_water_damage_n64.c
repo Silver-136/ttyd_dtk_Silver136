@@ -118,14 +118,143 @@ void* effWaterDamageN64Entry(f64 x, f64 y, f64 z, f64 scale, s32 type, s32 timer
     return entry;
 }
 
-u8 effWaterDamageDisp(s32 cameraId, void* effect) {
-    extern void* camGetPtr(s32);extern void PSMTXTrans(void*,f32,f32,f32);extern void PSMTXRotRad(void*,s32,f32);extern void PSMTXScale(void*,f32,f32,f32);extern void PSMTXConcat(void*,void*,void*);extern void GXSetBlendMode(s32,s32,s32,s32);extern void GXSetNumChans(s32);extern void GXSetNumTevStages(s32);extern void GXSetNumTexGens(s32);extern void GXSetCullMode(s32);extern void GXLoadPosMtxImm(void*,s32);extern void GXSetCurrentMtx(s32);extern void GXBegin(s32,s32,s32);
-    u8* w=*(u8**)((s32)effect+0xC);f32 a[3][4],b[3][4],m[3][4];PSMTXTrans(a,(f32)*(s32*)(w+4),(f32)*(s32*)(w+8),*(f32*)(w+0xC));PSMTXRotRad(b,0x79,-0.017453292f**(f32*)((s32)camGetPtr(4)+0x114));PSMTXConcat(a,b,m);GXSetBlendMode(1,4,5,0);GXSetNumChans(0);GXSetNumTevStages(3);GXSetNumTexGens(2);GXSetCullMode(0);GXLoadPosMtxImm(m,0);GXSetCurrentMtx(0);GXBegin(0x90,0,6);return 0;
+void effWaterDamageDisp(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32); extern void GXSetBlendMode(s32,s32,s32,s32);
+    extern void GXSetZCompLoc(s32); extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);
+    extern void GXSetZMode(s32,s32,s32); extern void PSMTXTrans(void*,f32,f32,f32);
+    extern void PSMTXRotRad(void*,s32,f32); extern void PSMTXScale(void*,f32,f32,f32);
+    extern void PSMTXConcat(void*,void*,void*); extern void GXSetNumChans(s32);
+    extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32);
+    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevColorIn(s32,s32,s32,s32,s32);
+    extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32); extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+    extern void GXLoadTexMtxImm(void*,s32,s32); extern void effGetTexObjN64(s32,void*);
+    extern void GXLoadTexObj(void*,s32); extern void GXSetCullMode(s32);
+    extern void GXLoadPosMtxImm(void*,s32); extern void GXSetCurrentMtx(s32);
+    extern void GXSetTevColor(s32,void*); extern void effSetVtxDescN64(void*);
+    extern void GXBegin(s32,s32,s32); extern void tri2();
+    extern f32 float_deg2rad_804264dc; extern f32 float_0p0625_804264e0;
+    extern f32 float_0_804264e4; extern u32 dat_804264d0; extern u32 dat_804264d4;
+    u8* work=*(u8**)((s32)effect+0xC); void* camera=camGetPtr(cameraId);
+    f32 trans[3][4],rot[3][4],scaleMtx[3][4],base[3][4]; u8 texObj[0x20];
+    u8 color[4]; s32 i; s32 alpha=*(s32*)(work+0x30);
+    GXSetBlendMode(1,4,5,0);GXSetZCompLoc(1);GXSetAlphaCompare(7,0,0,7,0);GXSetZMode(1,3,0);
+    PSMTXTrans(trans,(f32)(s32)*(f32*)(work+4),(f32)(s32)*(f32*)(work+8),*(f32*)(work+0xC));
+    PSMTXRotRad(rot,0x79,float_deg2rad_804264dc*-*(f32*)((s32)camGetPtr(4)+0x114));
+    PSMTXScale(scaleMtx,*(f32*)(work+0x34),*(f32*)(work+0x34),*(f32*)(work+0x34));
+    PSMTXConcat(trans,scaleMtx,trans);PSMTXConcat(trans,rot,trans);
+    PSMTXConcat((void*)((s32)camera+0x11C),trans,base);
+    GXSetNumChans(0);GXSetNumTevStages(3);
+    GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);
+    GXSetTevColorIn(0,0,0,0,8);GXSetTevAlphaIn(0,0,0,0,4);
+    GXSetTevOrder(1,1,1,0xFF);GXSetTevColorOp(1,0,0,0,1,0);GXSetTevAlphaOp(1,0,0,0,1,0);
+    GXSetTevColorIn(1,0,2,8,1);GXSetTevAlphaIn(1,0,1,7,7);
+    GXSetTevOrder(2,0,0,0xFF);GXSetTevColorOp(2,0,0,0,1,0);GXSetTevAlphaOp(2,0,0,0,1,0);
+    GXSetTevColorIn(2,15,12,8,0);GXSetTevAlphaIn(2,0,0,0,0);
+    GXSetNumTexGens(2);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);GXSetTexCoordGen2(1,1,4,0x21,0,0x7D);
+    PSMTXScale(scaleMtx,float_0p0625_804264e0,float_0p0625_804264e0,float_0_804264e4);
+    GXLoadTexMtxImm(scaleMtx,0x1E,1);effGetTexObjN64(0x89,texObj);GXLoadTexObj(texObj,0);
+    GXSetCullMode(0);GXLoadTexObj(texObj,1);
+    for(i=1;i<*(s32*)((s32)effect+8);i++){
+        u8* part=work+i*0x3C; f32 scale=*(f32*)(part+0x34); s32 partAlpha;
+        PSMTXScale(scaleMtx,float_0p0625_804264e0,float_0p0625_804264e0,float_0_804264e4);
+        GXLoadTexMtxImm(scaleMtx,0x21,1);
+        PSMTXTrans(trans,*(f32*)(part+4),*(f32*)(part+8),*(f32*)(part+0xC));
+        PSMTXScale(scaleMtx,scale,scale,scale);PSMTXConcat(trans,scaleMtx,trans);PSMTXConcat(base,trans,trans);
+        GXLoadPosMtxImm(trans,0);GXSetCurrentMtx(0);
+        partAlpha=(alpha**(s32*)(part+0x30))/0xFF;
+        color[0]=(dat_804264d0>>24)&0xFF;color[1]=(dat_804264d0>>16)&0xFF;
+        color[2]=(dat_804264d0>>8)&0xFF;color[3]=partAlpha;GXSetTevColor(1,color);
+        GXSetTevColor(2,&dat_804264d4);
+        if((i&3)==0||(i&3)==2)effSetVtxDescN64((void*)0x803AB8E0);
+        else if((i&3)==1)effSetVtxDescN64((void*)0x803AB918);else effSetVtxDescN64((void*)0x803AB950);
+        GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3);
+    }
 }
 
-u8 effWaterDamageDisp2(s32 cameraId, void* effect) {
-    extern void* camGetPtr(s32);extern void PSMTXTrans(void*,f32,f32,f32);extern void PSMTXRotRad(void*,s32,f32);extern void PSMTXScale(void*,f32,f32,f32);extern void PSMTXConcat(void*,void*,void*);extern void GXSetBlendMode(s32,s32,s32,s32);extern void GXSetNumChans(s32);extern void GXSetNumTevStages(s32);extern void GXSetCullMode(s32);extern void GXLoadPosMtxImm(void*,s32);extern void GXSetCurrentMtx(s32);extern void GXBegin(s32,s32,s32);
-    u8* w=*(u8**)((s32)effect+0xC);f32 a[3][4],b[3][4],m[3][4];PSMTXTrans(a,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC));PSMTXRotRad(b,0x79,-0.017453292f**(f32*)((s32)camGetPtr(4)+0x114));PSMTXConcat(a,b,m);GXSetBlendMode(1,4,5,0);GXSetNumChans(0);GXSetNumTevStages(2);GXSetCullMode(0);GXLoadPosMtxImm(m,0);GXSetCurrentMtx(0);GXBegin(0x90,0,6);return 0;
+void effWaterDamageDisp2(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32);
+    extern void GXSetBlendMode(s32,s32,s32,s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);
+    extern void GXSetZMode(s32,s32,s32);
+    extern void PSMTXTrans(void*,f32,f32,f32);
+    extern void PSMTXRotRad(void*,s32,f32);
+    extern void PSMTXScale(void*,f32,f32,f32);
+    extern void PSMTXConcat(void*,void*,void*);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);
+    extern void GXSetChanMatColor(s32,void*);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32,s32,s32,s32);
+    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevColorIn(s32,s32,s32,s32,s32);
+    extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+    extern void GXLoadTexMtxImm(void*,s32,s32);
+    extern void effGetTexObjN64(s32,void*);
+    extern void GXLoadTexObj(void*,s32);
+    extern void GXSetCullMode(s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXLoadPosMtxImm(void*,s32);
+    extern void effSetVtxDescN64(void*);
+    extern void GXBegin(s32,s32,s32);
+    extern void tri2();
+    extern f32 float_deg2rad_804264dc;
+    extern f32 float_0p0625_804264e0;
+    extern f32 float_0_804264e4;
+    extern u32 dat_804264d8;
+    u8* work = *(u8**)((s32)effect + 0xC);
+    void* camera = camGetPtr(cameraId);
+    f32 trans[3][4], rot[3][4], scaleMtx[3][4], base[3][4];
+    u8 texObj[0x20];
+    u8 color[4];
+    s32 i;
+    s32 alpha = *(s32*)(work + 0x30);
+
+    GXSetBlendMode(1,4,5,0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7,0,0,7,0);
+    GXSetZMode(1,3,0);
+    PSMTXTrans(trans,(f32)(s32)*(f32*)(work+4),(f32)(s32)*(f32*)(work+8),*(f32*)(work+0xC));
+    PSMTXRotRad(rot,0x79,float_deg2rad_804264dc * -*(f32*)((s32)camGetPtr(4)+0x114));
+    PSMTXScale(scaleMtx,*(f32*)(work+0x34),*(f32*)(work+0x34),*(f32*)(work+0x34));
+    PSMTXConcat(trans,scaleMtx,trans);
+    PSMTXConcat(trans,rot,trans);
+    PSMTXConcat((void*)((s32)camera+0x11C),trans,base);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4,0,0,0,0,0,2);
+    color[0]=(dat_804264d8>>24)&0xFF;color[1]=(dat_804264d8>>16)&0xFF;
+    color[2]=(dat_804264d8>>8)&0xFF;color[3]=(alpha*alpha)/0xFF;
+    GXSetChanMatColor(4,color);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0,0,0,4);
+    GXSetTevColorOp(0,0,0,0,1,0);
+    GXSetTevAlphaOp(0,0,0,0,1,0);
+    GXSetTevColorIn(0,8,0,0,10);
+    GXSetTevAlphaIn(0,0,2,4,7);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+    PSMTXScale(scaleMtx,float_0p0625_804264e0,float_0p0625_804264e0,float_0_804264e4);
+    GXLoadTexMtxImm(scaleMtx,0x1E,1);
+    effGetTexObjN64(0x89,texObj);GXLoadTexObj(texObj,0);
+    GXSetCullMode(0);GXSetCurrentMtx(0);
+    for(i=1;i<*(s32*)((s32)effect+8);i++){
+        u8* part=work+i*0x3C;
+        f32 scale=*(f32*)(part+0x34);
+        PSMTXTrans(trans,*(f32*)(part+4),*(f32*)(part+8),*(f32*)(part+0xC));
+        PSMTXScale(scaleMtx,scale,scale,scale);
+        PSMTXConcat(trans,scaleMtx,trans);PSMTXConcat(base,trans,trans);
+        GXLoadPosMtxImm(trans,0);
+        if((i&3)==0||((i&3)==2))effSetVtxDescN64((void*)0x803AB8E0);
+        else if((i&3)==1)effSetVtxDescN64((void*)0x803AB918);
+        else effSetVtxDescN64((void*)0x803AB950);
+        GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3);
+    }
 }
 
 void effWaterDamageMain(void* effect) {

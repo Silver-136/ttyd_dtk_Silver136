@@ -99,10 +99,55 @@ void effFlowerDisp(s32 cameraId, void* effect) {
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
-u8 effFlowerN64Entry(void) {
-    return 0;
-}
+void* effFlowerN64Entry(float x, float y, float z, int type, int timer) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(int, int);
+    extern void effFlowerMain(void*);
+    extern int rand(void);
+    extern char str_FlowerN64_802fafbc[];
+    extern int kaiten_412;
+    extern float float_10_80425354;
+    extern float float_0_8042534c;
+    extern float float_0p12_80425368;
+    extern float float_neg0p0152_8042536c;
+    extern float float_3_80425370;
+    unsigned char* entry = (unsigned char*)effEntry();
+    unsigned char* work = (unsigned char*)__memAlloc(3, 0x48);
 
+    *(char**)(entry + 0x14) = str_FlowerN64_802fafbc;
+    *(int*)(entry + 8) = 1;
+    *(unsigned char**)(entry + 0xC) = work;
+    *(void**)(entry + 0x10) = effFlowerMain;
+    *(int*)work = type;
+    *(float*)(work + 4) = x;
+    *(float*)(work + 8) = y + float_10_80425354;
+    *(float*)(work + 0xC) = z;
+    *(float*)(work + 0x10) = float_0_8042534c;
+    *(float*)(work + 0x14) = float_0_8042534c;
+    *(float*)(work + 0x18) = float_0_8042534c;
+    *(float*)(work + 0x1C) = float_0p12_80425368;
+    *(float*)(work + 0x20) = float_neg0p0152_8042536c;
+    if (type == 0) {
+        *(float*)(work + 0x24) = float_0_8042534c;
+        *(float*)(work + 0x28) = float_0_8042534c;
+        *(float*)(work + 0x2C) = float_3_80425370;
+        *(float*)(work + 0x30) = kaiten_412 != 0 ? -10.0f : 10.0f;
+        *(int*)(work + 0x34) = timer;
+    } else {
+        *(float*)(work + 0x24) = (float)((rand() & 1) * 30 - 15);
+        *(float*)(work + 0x28) = (float)(rand() % 361);
+        *(float*)(work + 0x2C) = float_0_8042534c;
+        *(float*)(work + 0x30) = (float)((rand() & 1) * 8 - 4);
+        *(int*)(work + 0x34) = timer;
+        *(int*)(work + 0x38) = 0;
+        *(int*)(work + 0x44) = rand() % 11;
+        *(int*)(work + 0x40) = rand() % 21;
+        *(int*)(work + 0x3C) = (rand() & 1) * 2 - 1;
+    }
+    kaiten_412++;
+    if (kaiten_412 > 1) kaiten_412 = 0;
+    return entry;
+}
 
 void effFlowerMain(void* effect) {
     typedef struct Vec3 {

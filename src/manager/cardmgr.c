@@ -88,202 +88,710 @@ void unk_800b2c2c(void) {
 }
 
 
-u8 write_main(void) {
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+void write_main(void) {
     extern void* wp;
-    extern s32 CARDProbeEx(s32, u32*, s32*);
-    extern s32 CARDSetFastMode(s32);
-    extern s32 CARDMountAsync(s32, s32, void*, void*);
-    extern s32 CARDCheckAsync(s32, void*);
-    extern s32 CARDReadAsync(void*, u32, u32, u32, void*);
-    extern s32 CARDWriteAsync(void*, u32, u32, u32, void*);
-    extern s32 CARDGetResultCode(s32);
+    extern void* gp;
+    extern s32 CARDProbeEx(s32 chan, u32* memSize, s32* sectorSize);
+    extern s32 CARDSetFastMode(s32 enable);
+    extern s32 CARDMountAsync(s32 chan, s32 workArea, void* detachCb, void* attachCb);
+    extern s32 CARDCheckAsync(s32 chan, void* cb);
+    extern s32 CARDReadAsync(void* fileInfo, u32 addr, u32 length, u32 offset, void* cb);
+    extern s32 CARDWriteAsync(void* fileInfo, u32 addr, u32 length, u32 offset, void* cb);
+    extern s32 CARDGetSerialNo(s32 chan, u32* serial);
+    extern s32 CARDClose(void* fileInfo);
+    extern s32 CARDUnmount(s32 chan);
+    extern s32 CARDGetResultCode(s32 chan);
     extern void memcard_open(void);
     extern void mountDetachCallback(void);
-    extern void mountAttachCallback(s32, s32);
-    extern void checkCallback(s32, s32);
-    extern void readCallback(s32, s32);
-    extern void writeCallback(s32, s32);
-    u16* flags = (u16*)wp;
-    s32 state;
-    s32 result, retry, sector, i, valid;
-    u32 memSize, sum;
-    u8* buffer;
-    extern s32 strcmp(char*, char*);
+    extern void mountAttachCallback(s32 chan, s32 result);
+    extern void checkCallback(s32 chan, s32 result);
+    extern void readCallback(s32 chan, s32 result);
+    extern void writeCallback(s32 chan, s32 result);
+    extern void* memset(void* dst, s32 value, u32 size);
+    extern void* memcpy(void* dst, const void* src, u32 size);
+    extern char* strcpy(char* dst, const char* src);
+    extern s32 strcmp(const char* a, const char* b);
+    extern s32 sprintf(char* dst, const char* fmt, ...);
+    extern s64 OSGetTime(void);
+    extern void OSTicksToCalendarTime(u32 hi, u32 lo, void* calendar);
+    extern u8 _mariost_icon_tex[];
     extern char version[];
 
+    struct Calendar {
+        s32 sec;
+        s32 min;
+        s32 hour;
+        s32 mday;
+        s32 mon;
+        s32 year;
+        s32 wday;
+        s32 yday;
+        s32 msec;
+        s32 usec;
+    } calendar;
+
+    u8* icon;
+    u8* buffer;
+    u8* p;
+    s32 state;
+    s32 result;
+    s32 retry;
+    s32 sectorSize;
+    u32 memSize;
+    u32 sum;
+    s32 i;
+    s32 valid;
+    s64 time;
+
+    icon = _mariost_icon_tex;
+
     if (*(s32*)((s32)wp + 0x9C) != 0) {
-        *(u32*)((s32)wp + 0xE0) = 8;
-        *flags |= 0x200; *flags &= ~2;
-        return 0;
+        *(s32*)((s32)wp + 0xE0) = 8;
+        *(u16*)wp |= 0x200;
+        *(u16*)wp &= ~2;
+        return;
     }
-    if ((*flags & 1) != 0) goto pending;
+
+    if ((*(u16*)wp & 1) != 0) {
+        result = CARDGetResultCode(*(s32*)((s32)wp + 8));
+        if ((result != -1) && (result != *(s32*)((s32)wp + 0x9C))) {
+            *(s32*)((s32)wp + 0x9C) = CARDGetResultCode(*(s32*)((s32)wp + 8));
+            *(u16*)wp &= ~1;
+        }
+        return;
+    }
+
     state = *(s32*)((s32)wp + 0xD8);
     switch (state) {
-    case 0:
-        *flags |= 1;
-        for (retry = 0; retry <= 1000000; retry++) { result = CARDProbeEx(0, &memSize, &sector); if (result != -1) break; }
-        if (retry > 1000000) result = -0x80;
-        if (result == 0 && sector != 0x2000) result = -2;
-        *(s32*)((s32)wp + 0x9C) = result;
-        *(s32*)((s32)wp + 8) = (result == 0 || result == -2) ? 0 : -1;
-        *flags &= ~1;
-        break;
-    case 1:
-        CARDSetFastMode(1); *flags |= 1; CARDMountAsync(*(s32*)((s32)wp + 8), *(s32*)((s32)wp + 4), mountDetachCallback, mountAttachCallback); break;
-    case 2:
-        *flags |= 1; CARDCheckAsync(*(s32*)((s32)wp + 8), checkCallback); break;
-    case 3:
-        memcard_open(); break;
-    case 4:
-        *flags |= 1; CARDReadAsync((void*)((s32)wp + 0x38), *(u32*)((s32)wp + 0x158), 0x2000, 0, readCallback); break;
-    case 5:
-        *flags |= 1; CARDWriteAsync((void*)((s32)wp + 0x38), *(u32*)((s32)wp + 0x150), 0x2000, 0, writeCallback); break;
-    case 6:
-        *flags |= 1; CARDReadAsync((void*)((s32)wp + 0x38), *(u32*)((s32)wp + 0x158), 0x4000,
-                                   *(s32*)((s32)wp + 0x140) * 0x4000 + 0x2000, readCallback); break;
-    case 7:
-        buffer = *(u8**)((s32)wp + 0x158);
-        valid = 0;
-        if (*(u32*)(buffer + 0x3FF4) == 0x2260 && strcmp((char*)buffer + 0x3FF0, version) == 0) {
-            sum = 0;
-            for (i = 0; i < 0x2260; i++) sum += buffer[i];
-            if (*(u32*)(buffer + 0x3FF8) == sum && *(u32*)(buffer + 0x3FFC) == ~sum) valid = 1;
-        }
-        *(s32*)((s32)wp + 0x168) = valid;
-        break;
-    case 8:
-        *flags |= 1;
-        CARDReadAsync((void*)((s32)wp + 0x38), *(u32*)((s32)wp + 0x158), 0x4000,
-                      *(s32*)((s32)wp + 0x140) * 0x4000 + 0x12000, readCallback);
-        break;
-    case 9:
-        buffer = *(u8**)((s32)wp + 0x158);
-        valid = 0;
-        if (*(u32*)(buffer + 0x3FF4) == 0x2260 && strcmp((char*)buffer + 0x3FF0, version) == 0) {
-            sum = 0;
-            for (i = 0; i < 0x2260; i++) sum += buffer[i];
-            if (*(u32*)(buffer + 0x3FF8) == sum && *(u32*)(buffer + 0x3FFC) == ~sum) valid = 1;
-        }
-        *(s32*)((s32)wp + 0x170) = valid;
-        break;
-    case 11:
-        *flags |= 1; CARDWriteAsync((void*)((s32)wp + 0x38), *(u32*)((s32)wp + 0x160), 0x4000,
-                                    *(s32*)((s32)wp + 0x140) * 0x4000 + *(s32*)((s32)wp + 0x180) * 0x10000 + 0x2000, writeCallback); break;
-    case 15:
-        *(u32*)((s32)wp + 0x1C0) = 0; *(u32*)((s32)wp + 0x1C4) = 0;
-        *flags |= 0x2100; *flags &= ~2; break;
+        case 0:
+            *(u16*)wp |= 1;
+            for (retry = 0; retry <= 1000000; retry++) {
+                result = CARDProbeEx(0, &memSize, &sectorSize);
+                if (result != -1) {
+                    break;
+                }
+            }
+            if (retry > 1000000) {
+                result = -0x80;
+            }
+            if ((result == 0) && (sectorSize != 0x2000)) {
+                result = -2;
+            }
+            if (result == 0) {
+                *(s32*)((s32)wp + 0x9C) = 0;
+                *(s32*)((s32)wp + 8) = 0;
+            } else if (result == -2) {
+                *(s32*)((s32)wp + 0x9C) = -2;
+                *(s32*)((s32)wp + 8) = 0;
+            } else {
+                *(s32*)((s32)wp + 0x9C) = result;
+                *(s32*)((s32)wp + 8) = -1;
+            }
+            *(u16*)wp &= ~1;
+            break;
+
+        case 1:
+            CARDSetFastMode(1);
+            *(u16*)wp |= 1;
+            CARDMountAsync(*(s32*)((s32)wp + 8), *(s32*)((s32)wp + 4), mountDetachCallback, mountAttachCallback);
+            break;
+
+        case 2:
+            *(u16*)wp |= 1;
+            CARDCheckAsync(*(s32*)((s32)wp + 8), checkCallback);
+            break;
+
+        case 3:
+            memcard_open();
+            break;
+
+        case 4:
+            *(u16*)wp |= 1;
+            CARDReadAsync((void*)((s32)wp + 0x1C), *(u32*)((s32)wp + 0xAC), 0x2000, 0, readCallback);
+            break;
+
+        case 5:
+            buffer = *(u8**)((s32)wp + 0xAC);
+            valid = 0;
+            if (*(u32*)(buffer + 0x1FFC) == ~*(u32*)(buffer + 0x1FF8)) {
+                sum = 0;
+                for (i = 0; i < 0x1E40; i += 0x10) {
+                    sum += buffer[i + 0];
+                    sum += buffer[i + 1];
+                    sum += buffer[i + 2];
+                    sum += buffer[i + 3];
+                    sum += buffer[i + 4];
+                    sum += buffer[i + 5];
+                    sum += buffer[i + 6];
+                    sum += buffer[i + 7];
+                    sum += buffer[i + 8];
+                    sum += buffer[i + 9];
+                    sum += buffer[i + 10];
+                    sum += buffer[i + 11];
+                    sum += buffer[i + 12];
+                    sum += buffer[i + 13];
+                    sum += buffer[i + 14];
+                    sum += buffer[i + 15];
+                }
+                for (; i < 0x1E46; i++) {
+                    sum += buffer[i];
+                }
+                if (*(u32*)(buffer + 0x1FF8) == sum) {
+                    valid = 1;
+                }
+            }
+            if (valid == 0) {
+                buffer = *(u8**)((s32)wp + 0xA8);
+                memset(buffer, 0, 0x1E46);
+                strcpy((char*)buffer, (char*)(icon + 0x1E14));
+                time = OSGetTime();
+                OSTicksToCalendarTime((u32)(time >> 32), (u32)time, &calendar);
+                sprintf((char*)buffer + 0x20, (char*)(icon + 0x1E20), calendar.mon + 1, calendar.mday);
+                memcpy(buffer + 0x40, icon + 0x600, 0x1800);
+                memcpy(buffer + 0x1840, icon, 0x400);
+                memcpy(buffer + 0x1C40, icon + 0x400, 0x200);
+                *(u16*)(buffer + 0x1E40) = ((u32)(-*(s32*)((s32)gp + 0x1294)) | (u32)*(s32*)((s32)gp + 0x1294)) >> 31;
+                *(s16*)(buffer + 0x1E42) = *(s32*)((s32)gp + 0x1274);
+                *(s16*)(buffer + 0x1E44) = *(s32*)((s32)gp + 0x11B8);
+                *(s32*)(buffer + 0x1FF8) = 0;
+                *(s32*)(buffer + 0x1FFC) = -1;
+                sum = 0;
+                for (i = 0; i < 0x1E40; i += 0x10) {
+                    sum += buffer[i + 0];
+                    sum += buffer[i + 1];
+                    sum += buffer[i + 2];
+                    sum += buffer[i + 3];
+                    sum += buffer[i + 4];
+                    sum += buffer[i + 5];
+                    sum += buffer[i + 6];
+                    sum += buffer[i + 7];
+                    sum += buffer[i + 8];
+                    sum += buffer[i + 9];
+                    sum += buffer[i + 10];
+                    sum += buffer[i + 11];
+                    sum += buffer[i + 12];
+                    sum += buffer[i + 13];
+                    sum += buffer[i + 14];
+                    sum += buffer[i + 15];
+                }
+                for (; i < 0x1E46; i++) {
+                    sum += buffer[i];
+                }
+                *(u32*)(buffer + 0x1FF8) = sum;
+                *(u32*)(buffer + 0x1FFC) = ~sum;
+                *(u16*)wp |= 1;
+                CARDWriteAsync((void*)((s32)wp + 0x1C), *(u32*)((s32)wp + 0xA8), 0x2000, 0, writeCallback);
+            }
+            break;
+
+        case 6:
+            *(u16*)wp |= 1;
+            CARDReadAsync((void*)((s32)wp + 0x1C), *(u32*)((s32)wp + 0xAC), 0x4000,
+                          *(s32*)((s32)wp + 0xA0) * 0x4000 + 0x2000, readCallback);
+            break;
+
+        case 7:
+            buffer = *(u8**)((s32)wp + 0xAC);
+            valid = 0;
+            if (*(u32*)(buffer + 0x3FF4) == 0x2260) {
+                if (strcmp((char*)buffer + 0x3FF0, version) == 0) {
+                    if (*(u32*)(buffer + 0x3FFC) == ~*(u32*)(buffer + 0x3FF8)) {
+                        sum = 0;
+                        for (i = 0; i < 0x2260; i += 0x10) {
+                            sum += buffer[i + 0];
+                            sum += buffer[i + 1];
+                            sum += buffer[i + 2];
+                            sum += buffer[i + 3];
+                            sum += buffer[i + 4];
+                            sum += buffer[i + 5];
+                            sum += buffer[i + 6];
+                            sum += buffer[i + 7];
+                            sum += buffer[i + 8];
+                            sum += buffer[i + 9];
+                            sum += buffer[i + 10];
+                            sum += buffer[i + 11];
+                            sum += buffer[i + 12];
+                            sum += buffer[i + 13];
+                            sum += buffer[i + 14];
+                            sum += buffer[i + 15];
+                        }
+                        if (*(u32*)(buffer + 0x3FF8) == sum) {
+                            valid = 1;
+                        }
+                    }
+                }
+            }
+            *(s32*)((s32)wp + 0xB4) = valid;
+            break;
+
+        case 8:
+            *(u16*)wp |= 1;
+            CARDReadAsync((void*)((s32)wp + 0x1C), *(u32*)((s32)wp + 0xAC), 0x4000,
+                          *(s32*)((s32)wp + 0xA0) * 0x4000 + 0x12000, readCallback);
+            break;
+
+        case 9:
+            buffer = *(u8**)((s32)wp + 0xAC);
+            valid = 0;
+            if (*(u32*)(buffer + 0x3FF4) == 0x2260) {
+                if (strcmp((char*)buffer + 0x3FF0, version) == 0) {
+                    if (*(u32*)(buffer + 0x3FFC) == ~*(u32*)(buffer + 0x3FF8)) {
+                        sum = 0;
+                        for (i = 0; i < 0x2260; i += 0x10) {
+                            sum += buffer[i + 0];
+                            sum += buffer[i + 1];
+                            sum += buffer[i + 2];
+                            sum += buffer[i + 3];
+                            sum += buffer[i + 4];
+                            sum += buffer[i + 5];
+                            sum += buffer[i + 6];
+                            sum += buffer[i + 7];
+                            sum += buffer[i + 8];
+                            sum += buffer[i + 9];
+                            sum += buffer[i + 10];
+                            sum += buffer[i + 11];
+                            sum += buffer[i + 12];
+                            sum += buffer[i + 13];
+                            sum += buffer[i + 14];
+                            sum += buffer[i + 15];
+                        }
+                        if (*(u32*)(buffer + 0x3FF8) == sum) {
+                            valid = 1;
+                        }
+                    }
+                }
+            }
+            *(s32*)((s32)wp + 0xB8) = valid;
+            break;
+
+        case 10:
+            if ((*(s32*)((s32)wp + 0xB4) == 0) || (*(s32*)((s32)wp + 0xB8) != 0)) {
+                *(s32*)((s32)wp + 0xBC) = 0;
+                *(s32*)((s32)wp + 0xC0) = 1;
+            } else {
+                *(s32*)((s32)wp + 0xBC) = 1;
+                *(s32*)((s32)wp + 0xC0) = 0;
+            }
+            *(u16*)wp |= 1;
+            if ((*(u16*)wp & 0x800) != 0) {
+                CARDWriteAsync((void*)((s32)wp + 0x1C), *(u32*)((s32)wp + 0xB0), 0x4000,
+                               *(s32*)((s32)wp + 0xA0) * 0x4000 + *(s32*)((s32)wp + 0xBC) * 0x10000 + 0x2000,
+                               writeCallback);
+            } else {
+                CARDWriteAsync((void*)((s32)wp + 0x1C),
+                               *(u32*)((s32)wp + 0xA8) + *(s32*)((s32)wp + 0xA0) * 0x4000 + 0x2000,
+                               0x4000,
+                               *(s32*)((s32)wp + 0xA0) * 0x4000 + *(s32*)((s32)wp + 0xBC) * 0x10000 + 0x2000,
+                               writeCallback);
+            }
+            break;
+
+        case 11:
+            *(u16*)wp |= 1;
+            if ((*(u16*)wp & 0x800) != 0) {
+                CARDWriteAsync((void*)((s32)wp + 0x1C), *(u32*)((s32)wp + 0xB0), 0x4000,
+                               *(s32*)((s32)wp + 0xA0) * 0x4000 + *(s32*)((s32)wp + 0xC0) * 0x10000 + 0x2000,
+                               writeCallback);
+            } else {
+                CARDWriteAsync((void*)((s32)wp + 0x1C),
+                               *(u32*)((s32)wp + 0xA8) + *(s32*)((s32)wp + 0xA0) * 0x4000 + 0x2000,
+                               0x4000,
+                               *(s32*)((s32)wp + 0xA0) * 0x4000 + *(s32*)((s32)wp + 0xC0) * 0x10000 + 0x2000,
+                               writeCallback);
+            }
+            break;
+
+        case 12:
+            *(u16*)wp |= 1;
+            for (retry = 0; retry <= 1000000; retry++) {
+                result = CARDGetSerialNo(*(s32*)((s32)wp + 8), (u32*)((s32)wp + 0x10));
+                if (result != -1) {
+                    break;
+                }
+            }
+            if (retry > 1000000) {
+                result = -0x80;
+            }
+            *(s32*)((s32)wp + 0x9C) = result;
+            *(u16*)wp &= ~1;
+            break;
+
+        case 13:
+            *(u16*)wp |= 1;
+            for (retry = 0; retry <= 1000000; retry++) {
+                result = CARDClose((void*)((s32)wp + 0x1C));
+                if (result != -1) {
+                    break;
+                }
+            }
+            if (retry > 1000000) {
+                result = -0x80;
+            }
+            *(s32*)((s32)wp + 0x9C) = result;
+            *(u16*)wp &= ~1;
+            break;
+
+        case 14:
+            *(u16*)wp |= 1;
+            for (retry = 0; retry <= 1000000; retry++) {
+                result = CARDUnmount(*(s32*)((s32)wp + 8));
+                if (result != -1) {
+                    break;
+                }
+            }
+            if (retry > 1000000) {
+                result = -0x80;
+            }
+            *(s32*)((s32)wp + 0x9C) = result;
+            *(u16*)wp &= ~1;
+            break;
+
+        case 15:
+            *(s32*)((s32)wp + 0xE0) = 0;
+            *(u16*)wp |= 0x100;
+            *(u16*)wp |= 0x2000;
+            *(u16*)wp &= ~2;
+            if ((*(u16*)wp & 0x800) != 0) {
+                *(u16*)wp &= ~0x800;
+                memcpy((void*)(*(s32*)((s32)wp + 0xA8) + *(s32*)((s32)wp + 0xA0) * 0x4000 + 0x2000),
+                       *(void**)((s32)wp + 0xB0), 0x4000);
+            }
+            break;
     }
+
     *(s32*)((s32)wp + 0xD8) = state + 1;
-    return 0;
-pending:
-    result = CARDGetResultCode(*(s32*)((s32)wp + 8));
-    if (result != -1 && result != *(s32*)((s32)wp + 0x9C)) {
-        *(s32*)((s32)wp + 0x9C) = result;
-        *flags &= ~1;
-    }
-    return 0;
 }
 
-u8 read_all_main(void) {
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+void read_all_main(void) {
+    typedef struct CalendarTime {
+        s32 sec;
+        s32 min;
+        s32 hour;
+        s32 mday;
+        s32 mon;
+        s32 year;
+        s32 wday;
+        s32 yday;
+        s32 msec;
+        s32 usec;
+    } CalendarTime;
+
     extern void* wp;
-    extern s32 CARDProbeEx(s32, u32*, s32*);
-    extern s32 CARDSetFastMode(s32);
-    extern s32 CARDMountAsync(s32, s32, void*, void*);
-    extern s32 CARDCheckAsync(s32, void*);
-    extern s32 CARDReadAsync(void*, u32, u32, u32, void*);
-    extern s32 CARDGetResultCode(s32);
+    extern void* gp;
+    extern s32 CARDProbeEx(s32 chan, u32* memSize, s32* sectorSize);
+    extern s32 CARDSetFastMode(s32 mode);
+    extern s32 CARDMountAsync(s32 chan, s32 workArea, void* detachCb, void* attachCb);
+    extern s32 CARDCheckAsync(s32 chan, void* cb);
+    extern s32 CARDReadAsync(void* fileInfo, u32 addr, u32 length, u32 offset, void* cb);
+    extern s32 CARDGetResultCode(s32 chan);
+    extern s32 CARDGetSerialNo(s32 chan, u32* serial);
+    extern s32 CARDClose(void* fileInfo);
+    extern s32 CARDUnmount(s32 chan);
     extern void memcard_open(void);
     extern void mountDetachCallback(void);
-    extern void mountAttachCallback(s32, s32);
-    extern void checkCallback(s32, s32);
-    extern void readCallback(s32, s32);
-    u16* flags = (u16*)wp;
-    s32 state;
-    s32 result, retry, sector, i, valid;
-    u32 memSize, sum;
-    u8* buffer;
-    extern s32 strcmp(char*, char*);
+    extern void mountAttachCallback(s32 chan, s32 result);
+    extern void checkCallback(s32 chan, s32 result);
+    extern void readCallback(s32 chan, s32 result);
+    extern void* memset(void* dst, s32 value, u32 size);
+    extern void* memcpy(void* dst, const void* src, u32 size);
+    extern char* strcpy(char* dst, const char* src);
+    extern s32 sprintf(char* dst, const char* fmt, ...);
+    extern u64 OSGetTime(void);
+    extern void OSTicksToCalendarTime(u64 ticks, CalendarTime* calendar);
+    extern s32 strcmp(char* a, char* b);
+    extern char str_Paper_Mario_802cb0f4[];
+    extern char str_PCT2d_PCT2d_save_dat_802cb100[];
+    extern u8 _mariost_banner_tex[];
+    extern u8 _mariost_icon_tex[];
+    extern u8 _mariost_icon_tlut[];
     extern char version[];
 
+    u16* flags = (u16*)wp;
+    s32 state;
+    s32 result;
+    s32 retry;
+    s32 sector;
+    s32 i;
+    s32 count;
+    s32 valid;
+    s32 choice;
+    s32 slot;
+    u32 memSize;
+    u32 sum;
+    u32 hi0;
+    u32 hi1;
+    u32 lo0;
+    u32 lo1;
+    u8* buffer;
+    u8* p;
+    u64 ticks;
+    CalendarTime calendar;
+
     if (*(s32*)((s32)wp + 0x9C) != 0) {
-        *(u32*)((s32)wp + 0xE0) = 8;
+        *(s32*)((s32)wp + 0xE0) = 8;
         *flags |= 0x200;
         *flags &= ~2;
-        return 0;
+        return;
     }
-    if ((*flags & 1) != 0) goto pending;
+
+    if ((*flags & 1) != 0) {
+        result = CARDGetResultCode(*(s32*)((s32)wp + 8));
+        if (result != -1 && result != *(s32*)((s32)wp + 0x9C)) {
+            *(s32*)((s32)wp + 0x9C) = result;
+            *flags &= ~1;
+        }
+        return;
+    }
+
     state = *(s32*)((s32)wp + 0xD8);
     switch (state) {
     case 0:
         *flags |= 1;
-        for (retry = 0; retry <= 1000000; retry++) {
+        retry = 0;
+        while (retry <= 1000000) {
             result = CARDProbeEx(0, &memSize, &sector);
-            if (result != -1) break;
+            if (result != -1) {
+                break;
+            }
+            retry++;
         }
-        if (retry > 1000000) result = -0x80;
-        if (result == 0 && sector != 0x2000) result = -2;
+        if (retry > 1000000) {
+            result = -0x80;
+        }
+        if (result == 0 && sector != 0x2000) {
+            result = -2;
+        }
         *(s32*)((s32)wp + 0x9C) = result;
-        *(s32*)((s32)wp + 8) = (result == 0 || result == -2) ? 0 : -1;
+        if (result == 0 || result == -2) {
+            *(s32*)((s32)wp + 8) = 0;
+        } else {
+            *(s32*)((s32)wp + 8) = -1;
+        }
         *flags &= ~1;
         break;
+
     case 1:
-        CARDSetFastMode(1); *flags |= 1;
+        CARDSetFastMode(1);
+        *flags |= 1;
         CARDMountAsync(*(s32*)((s32)wp + 8), *(s32*)((s32)wp + 4), mountDetachCallback, mountAttachCallback);
         break;
+
     case 2:
-        *flags |= 1; CARDCheckAsync(*(s32*)((s32)wp + 8), checkCallback); break;
+        *flags |= 1;
+        CARDCheckAsync(*(s32*)((s32)wp + 8), checkCallback);
+        break;
+
     case 3:
-        memcard_open(); break;
+        memcard_open();
+        break;
+
     case 4:
-        *flags |= 1; CARDReadAsync((void*)((s32)wp + 0x38), *(u32*)((s32)wp + 0x150), 0x2000, 0, readCallback); break;
+        *flags |= 1;
+        CARDReadAsync((void*)((s32)wp + 0x1C), *(u32*)((s32)wp + 0xA8), 0x2000, 0, readCallback);
+        break;
+
     case 5:
-        buffer = *(u8**)((s32)wp + 0x150);
-        sum = 0;
-        for (i = 0; i < 0x1E46; i++) sum += buffer[i];
-        if (*(u32*)(buffer + 0x1FFC) != ~*(u32*)(buffer + 0x1FF8) ||
-            *(u32*)(buffer + 0x1FF8) != sum) *flags |= 0x400;
+        buffer = *(u8**)((s32)wp + 0xA8);
+        valid = 0;
+        if (*(u32*)(buffer + 0x1FFC) == ~*(u32*)(buffer + 0x1FF8)) {
+            sum = 0;
+            for (i = 0; i < 0x1E46; i++) {
+                sum += buffer[i];
+            }
+            if (*(u32*)(buffer + 0x1FF8) == sum) {
+                valid = 1;
+            }
+        }
+        if (valid == 0) {
+            memset(buffer, 0, 0x1E46);
+            strcpy((char*)buffer, str_Paper_Mario_802cb0f4);
+            ticks = OSGetTime();
+            OSTicksToCalendarTime(ticks, &calendar);
+            sprintf((char*)buffer + 0x20, str_PCT2d_PCT2d_save_dat_802cb100, calendar.mon + 1, calendar.mday);
+            memcpy(buffer + 0x40, _mariost_banner_tex, 0x1800);
+            memcpy(buffer + 0x1840, _mariost_icon_tex, 0x400);
+            memcpy(buffer + 0x1C40, _mariost_icon_tlut, 0x200);
+            *(u16*)(buffer + 0x1E40) = (*(s32*)((s32)gp + 0x1294) != 0);
+            *(u16*)(buffer + 0x1E42) = *(u16*)((s32)gp + 0x1274);
+            *(u16*)(buffer + 0x1E44) = *(u16*)((s32)gp + 0x11B8);
+            *(u32*)(buffer + 0x1FF8) = 0;
+            *(u32*)(buffer + 0x1FFC) = 0xFFFFFFFF;
+            sum = 0;
+            for (i = 0; i < 0x1E46; i++) {
+                sum += buffer[i];
+            }
+            *(u32*)(buffer + 0x1FF8) = sum;
+            *(u32*)(buffer + 0x1FFC) = ~sum;
+            *flags |= 0x400;
+        }
+        *(s32*)((s32)gp + 0x1274) = *(u16*)(buffer + 0x1E42);
+        *(s32*)((s32)gp + 0x1294) = *(u16*)(buffer + 0x1E40);
+        *(s32*)((s32)gp + 0x11B8) = *(u16*)(buffer + 0x1E44);
         break;
+
     case 6:
-        *flags |= 1; CARDReadAsync((void*)((s32)wp + 0x38), *(u32*)((s32)wp + 0x158), 0x4000,
-                                   *(s32*)((s32)wp + 0x148) * 0x4000 + 0x2000, readCallback); break;
+        *flags |= 1;
+        CARDReadAsync((void*)((s32)wp + 0x1C), *(u32*)((s32)wp + 0xAC), 0x4000,
+                      *(s32*)((s32)wp + 0xA4) * 0x4000 + 0x2000, readCallback);
+        break;
+
     case 7:
-        buffer = *(u8**)((s32)wp + 0x158);
+        buffer = *(u8**)((s32)wp + 0xAC);
         valid = 0;
         if (*(u32*)(buffer + 0x3FF4) == 0x2260 && strcmp((char*)buffer + 0x3FF0, version) == 0) {
-            sum = 0;
-            for (i = 0; i < 0x2260; i++) sum += buffer[i];
-            if (*(u32*)(buffer + 0x3FF8) == sum && *(u32*)(buffer + 0x3FFC) == ~sum) valid = 1;
+            if (*(u32*)(buffer + 0x3FFC) == ~*(u32*)(buffer + 0x3FF8)) {
+                sum = 0;
+                for (i = 0; i < 0x2260; i++) {
+                    sum += buffer[i];
+                }
+                if (*(u32*)(buffer + 0x3FF8) == sum) {
+                    valid = 1;
+                }
+            }
         }
-        *(s32*)((s32)wp + 0x168) = valid;
+        *(s32*)((s32)wp + 0xB4) = valid;
+        *(u32*)((s32)wp + 0xC8) = *(u32*)(buffer + 0x11F0);
+        *(u32*)((s32)wp + 0xCC) = *(u32*)(buffer + 0x11F4);
         break;
+
     case 8:
-        *flags |= 1; CARDReadAsync((void*)((s32)wp + 0x38), *(u32*)((s32)wp + 0x158), 0x4000,
-                                   *(s32*)((s32)wp + 0x148) * 0x4000 + 0x12000, readCallback); break;
+        *flags |= 1;
+        CARDReadAsync((void*)((s32)wp + 0x1C), *(u32*)((s32)wp + 0xAC), 0x4000,
+                      *(s32*)((s32)wp + 0xA4) * 0x4000 + 0x12000, readCallback);
+        break;
+
     case 9:
-        buffer = *(u8**)((s32)wp + 0x158);
+        buffer = *(u8**)((s32)wp + 0xAC);
         valid = 0;
         if (*(u32*)(buffer + 0x3FF4) == 0x2260 && strcmp((char*)buffer + 0x3FF0, version) == 0) {
-            sum = 0;
-            for (i = 0; i < 0x2260; i++) sum += buffer[i];
-            if (*(u32*)(buffer + 0x3FF8) == sum && *(u32*)(buffer + 0x3FFC) == ~sum) valid = 1;
+            if (*(u32*)(buffer + 0x3FFC) == ~*(u32*)(buffer + 0x3FF8)) {
+                sum = 0;
+                for (i = 0; i < 0x2260; i++) {
+                    sum += buffer[i];
+                }
+                if (*(u32*)(buffer + 0x3FF8) == sum) {
+                    valid = 1;
+                }
+            }
         }
-        *(s32*)((s32)wp + 0x16C) = valid;
+        *(s32*)((s32)wp + 0xB8) = valid;
+        *(u32*)((s32)wp + 0xD0) = *(u32*)(buffer + 0x11F0);
+        *(u32*)((s32)wp + 0xD4) = *(u32*)(buffer + 0x11F4);
         break;
-    case 14:
-        *(u32*)((s32)wp + 0x1C0) = 0;
-        *(u32*)((s32)wp + 0x1C4) = 0;
-        *flags |= 0x2100; *flags &= ~2; break;
-    }
-    *(s32*)((s32)wp + 0xD8) = state + 1;
-    return 0;
-pending:
-    result = CARDGetResultCode(*(s32*)((s32)wp + 8));
-    if (result != -1 && result != *(s32*)((s32)wp + 0x9C)) {
+
+    case 10:
+        choice = *(s32*)((s32)wp + 0xB4);
+        if (choice != 0 && *(s32*)((s32)wp + 0xB8) != 0) {
+            hi0 = *(u32*)((s32)wp + 0xC8);
+            lo0 = *(u32*)((s32)wp + 0xCC);
+            hi1 = *(u32*)((s32)wp + 0xD0);
+            lo1 = *(u32*)((s32)wp + 0xD4);
+            if ((hi1 ^ 0x80000000U) < (hi0 ^ 0x80000000U) ||
+                ((hi1 ^ 0x80000000U) == (hi0 ^ 0x80000000U) && lo1 < lo0)) {
+                choice = 0;
+            } else {
+                choice = 1;
+            }
+        } else if (choice == 0 && *(s32*)((s32)wp + 0xB8) != 0) {
+            choice = 1;
+        } else if (choice != 0 && *(s32*)((s32)wp + 0xB8) == 0) {
+            choice = 0;
+        } else {
+            choice = -1;
+        }
+
+        slot = *(s32*)((s32)wp + 0xA4);
+        if (choice == -1) {
+            p = *(u8**)((s32)wp + 0xA8) + slot * 0x4000;
+            *(u16*)(p + 0x2000) |= 2;
+        } else {
+            *flags |= 1;
+            CARDReadAsync((void*)((s32)wp + 0x1C),
+                          (u32)(*(u8**)((s32)wp + 0xA8) + slot * 0x4000 + 0x2000),
+                          0x4000,
+                          slot * 0x4000 + choice * 0x10000 + 0x2000,
+                          readCallback);
+        }
+        *(s32*)((s32)wp + 0xA4) = slot + 1;
+        if (*(s32*)((s32)wp + 0xA4) < 4) {
+            *(s32*)((s32)wp + 0xD8) = 3;
+        }
+        break;
+
+    case 11:
+        *flags |= 1;
+        retry = 0;
+        while (retry <= 1000000) {
+            result = CARDGetSerialNo(*(s32*)((s32)wp + 8), (u32*)((s32)wp + 0x10));
+            if (result != -1) {
+                break;
+            }
+            retry++;
+        }
+        if (retry > 1000000) {
+            result = -0x80;
+        }
         *(s32*)((s32)wp + 0x9C) = result;
         *flags &= ~1;
+        break;
+
+    case 12:
+        *flags |= 1;
+        retry = 0;
+        while (retry <= 1000000) {
+            result = CARDClose((void*)((s32)wp + 0x1C));
+            if (result != -1) {
+                break;
+            }
+            retry++;
+        }
+        if (retry > 1000000) {
+            result = -0x80;
+        }
+        *(s32*)((s32)wp + 0x9C) = result;
+        *flags &= ~1;
+        break;
+
+    case 13:
+        *flags |= 1;
+        retry = 0;
+        while (retry <= 1000000) {
+            result = CARDUnmount(*(s32*)((s32)wp + 8));
+            if (result != -1) {
+                break;
+            }
+            retry++;
+        }
+        if (retry > 1000000) {
+            result = -0x80;
+        }
+        *(s32*)((s32)wp + 0x9C) = result;
+        *flags &= ~1;
+        break;
+
+    case 14:
+        *(s32*)((s32)wp + 0xE0) = 0;
+        *flags |= 0x100;
+        *flags |= 0x2000;
+        *flags &= ~2;
+        break;
     }
-    return 0;
+
+    *(s32*)((s32)wp + 0xD8) = *(s32*)((s32)wp + 0xD8) + 1;
+    return;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 u8 read_main(void) {
     extern void* wp;

@@ -1,10 +1,81 @@
 #include "effect/n64/eff_guruguru_n64.h"
 
 
-u8 effGuruguruDisp(void) {
-    return 0;
-}
+void effGuruguruDisp(int cameraId, int effect) {
+    typedef float Mtx[3][4];
+    extern void* camGetPtr(int);
+    extern void GXSetNumChans(int);
+    extern void GXSetNumTexGens(int);
+    extern void GXSetTexCoordGen2(int, int, int, int, int, int);
+    extern void effGetTexObjN64(int, void*);
+    extern void GXLoadTexObj(void*, int);
+    extern void GXSetNumTevStages(int);
+    extern void GXSetTevOrder(int, int, int, int);
+    extern void GXSetTevColorOp(int, int, int, int, int, int);
+    extern void GXSetTevAlphaOp(int, int, int, int, int, int);
+    extern void GXSetTevColorIn(int, int, int, int, int);
+    extern void GXSetTevAlphaIn(int, int, int, int, int);
+    extern void GXSetCullMode(int);
+    extern void effSetVtxDescN64(void*);
+    extern void PSMTXTrans(Mtx, double, double, double);
+    extern void PSMTXRotRad(Mtx, double, char);
+    extern void PSMTXScale(Mtx, float, float, float);
+    extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void GXSetTevColor(int, void*);
+    extern void GXLoadPosMtxImm(Mtx, int);
+    extern void GXSetCurrentMtx(int);
+    extern void GXBegin(int, int, int);
+    extern void tri2(int, int, int, int, int, int, int);
+    extern float float_deg2rad_80425424;
+    extern unsigned int dat_80425420;
+    unsigned char texObj[0x20];
+    Mtx model;
+    Mtx scale;
+    Mtx rotation;
+    Mtx partMtx;
+    unsigned char* entry = (unsigned char*)effect;
+    unsigned char* work = *(unsigned char**)(entry + 0xC);
+    unsigned char* part;
+    unsigned char* camera;
+    unsigned char* camera3d;
+    unsigned int color = dat_80425420;
+    int i;
 
+    if (*(int*)(work + 0x28) == 0) return;
+    camera = (unsigned char*)camGetPtr(cameraId);
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    effGetTexObjN64(0x1D, texObj);
+    GXLoadTexObj(texObj, 0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 15, 15, 15, 2);
+    GXSetTevAlphaIn(0, 7, 4, 4, 7);
+    GXSetCullMode(0);
+    effSetVtxDescN64((void*)0x803A03E8);
+    PSMTXTrans(model, *(float*)(work + 4), *(float*)(work + 8), *(float*)(work + 0xC));
+    camera3d = (unsigned char*)camGetPtr(4);
+    PSMTXRotRad(rotation, float_deg2rad_80425424 * -*(float*)(camera3d + 0x114), 'y');
+    PSMTXScale(scale, *(float*)(work + 0x2C), *(float*)(work + 0x2C), *(float*)(work + 0x2C));
+    PSMTXConcat(model, rotation, model);
+    PSMTXConcat(model, scale, model);
+    PSMTXConcat((float (*)[4])(camera + 0x11C), model, model);
+    GXSetTevColor(1, &color);
+    part = work + 0x30;
+    for (i = 1; i < *(int*)(entry + 8); i++, part += 0x30) {
+        PSMTXTrans(partMtx, *(float*)(part + 4), *(float*)(part + 8), *(float*)(part + 0xC));
+        PSMTXRotRad(rotation, float_deg2rad_80425424 * *(float*)(part + 0x18), 'z');
+        PSMTXConcat(partMtx, rotation, partMtx);
+        PSMTXConcat(model, partMtx, partMtx);
+        GXLoadPosMtxImm(partMtx, 0);
+        GXSetCurrentMtx(0);
+        GXBegin(0x90, 0, 6);
+        tri2(0, 1, 2, 0, 0, 2, 3);
+    }
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

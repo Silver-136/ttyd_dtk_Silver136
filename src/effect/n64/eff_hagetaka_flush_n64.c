@@ -35,10 +35,77 @@ extern f32 float_0p3_80425450;
 extern f32 float_0p2_80425454;
 
 
-u8 effHagetakaFlushDisp(s32 param_1, void* effEntry) {
+u8 effHagetakaFlushDisp(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4];
+    extern void* camGetPtr(s32);
+    extern void PSMTXTrans(Mtx, f64, f64, f64);
+    extern void PSMTXRotRad(Mtx, f32, char);
+    extern void PSMTXScale(Mtx, f32, f32, f32);
+    extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void GXLoadPosMtxImm(Mtx, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXLoadTexMtxImm(Mtx, s32, s32);
+    extern void effGetTexObjN64(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetCullMode(s32);
+    extern void effSetVtxDescN64(void*);
+    extern void GXBegin(s32, s32, s32);
+    extern void tri2(s32, s32, s32, s32, s32, s32, s32);
+    extern f32 float_deg2rad_80425440;
+    extern f32 float_0p03125_80425444;
+    extern f32 float_0_80425448;
+    u8 texObj[0x20];
+    Mtx model;
+    Mtx rotation;
+    Mtx scale;
+    u8* work = *(u8**)((u8*)effect + 0xC);
+    u8* camera = (u8*)camGetPtr(cameraId);
+    u8* camera3d = (u8*)camGetPtr(4);
+    f32 size = *(f32*)(work + 0x28) * *(f32*)(work + 0x2C);
+    u32 color;
+
+    PSMTXTrans(model, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+    PSMTXRotRad(rotation, float_deg2rad_80425440 * -*(f32*)(camera3d + 0x114), 'y');
+    PSMTXScale(scale, size, size, size);
+    PSMTXConcat(model, rotation, model);
+    PSMTXConcat(model, scale, model);
+    PSMTXConcat((f32 (*)[4])(camera + 0x11C), model, model);
+    GXLoadPosMtxImm(model, 0);
+    GXSetCurrentMtx(0);
+    GXSetNumChans(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 15, 15, 15, 2);
+    GXSetTevAlphaIn(0, 7, 5, 4, 7);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    PSMTXScale(scale, float_0p03125_80425444, float_0p03125_80425444, float_0_80425448);
+    GXLoadTexMtxImm(scale, 0x1E, 1);
+    effGetTexObjN64(0x1C, texObj);
+    GXLoadTexObj(texObj, 0);
+    color = ((u32)*(u8*)(work + 0x18) << 24) |
+            ((u32)*(u8*)(work + 0x1C) << 16) |
+            ((u32)*(u8*)(work + 0x20) << 8) |
+            *(u8*)(work + 0x24);
+    GXSetTevColor(1, &color);
+    GXSetCullMode(0);
+    effSetVtxDescN64((void*)0x803A0420);
+    GXBegin(0x90, 0, 6);
+    tri2(0, 1, 2, 0, 0, 2, 3);
     return 0;
 }
-
 
 void effHagetakaFlushMain(void* effEntry) {
     Vec3 dispPos;

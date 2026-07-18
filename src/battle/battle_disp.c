@@ -192,33 +192,125 @@ void statusPoseControl(void* part) {
 
 
 void btlUnitPartsDisp(s32 cameraId, void* part) {
-    extern void animPoseSetLocalTimeRate(void*, f32);
-    extern void animPoseSetEffect(void*, s32, s32);
-    extern void animPoseSetEffectAnim(void*, s32, s32);
-    extern void _partsBlurControl(void*, s32, s32, void*);
-    s32 poseId;
-    u32 flags;
+    extern f32 float_deg2rad_8042223c;
+    extern void PSMTXIdentity(void*);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXRotRad(void*, s32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern f32 getFloatDispOffset(void*);
+    extern f32 getGravityDispOffset(void*);
+    extern void animPoseSetMaterialEvtColor(s32, void*);
+    extern void animPoseSetMaterialFlagOn(s32, u32);
+    extern void animPoseSetMaterialFlagOff(s32, u32);
+    extern void animPoseDrawMtx(s32, void*, s32, f32, f32);
+    extern s32 BtlUnit_CheckStatus(void*, s32);
+    f32 translateNeg[3][4];
+    f32 translatePos[3][4];
+    f32 translateDisp[3][4];
+    f32 translateWorld[3][4];
+    f32 rotateX[3][4];
+    f32 rotateY[3][4];
+    f32 rotateZ[3][4];
+    f32 scale[3][4];
+    f32 work[3][4];
+    f32 result[3][4];
+    f32 partTranslateNeg[3][4];
+    f32 partTranslatePos[3][4];
+    f32 partRotateX[3][4];
+    f32 partRotateY[3][4];
+    f32 partRotateZ[3][4];
+    f32 partTranslate[3][4];
+    f32 partDisp[3][4];
+    f32 partScale[3][4];
+    u8* p;
+    u8* unit;
+    u32 color;
+    void (*callback)(void*, s32);
 
-    if (part == 0) {
+    p = part;
+    if (*(s32*)(p + 0x1C0) < 0) {
         return;
     }
-    poseId = *(s32*)((s32)part + 0x1D4);
-    if (poseId < 0) {
-        return;
-    }
-    flags = *(u32*)((s32)part + 0x204);
-    if ((flags & 0x10) != 0) {
-        animPoseSetLocalTimeRate((void*)poseId, 0.5f);
+    unit = *(u8**)(p + 0x4EC);
+    PSMTXTrans(translateNeg, -*(f32*)(unit + 0x78), -*(f32*)(unit + 0x7C),
+               -*(f32*)(unit + 0x80));
+    PSMTXTrans(translatePos, *(f32*)(unit + 0x78), *(f32*)(unit + 0x7C),
+               *(f32*)(unit + 0x80));
+    PSMTXTrans(translateDisp, *(f32*)(unit + 0x54), *(f32*)(unit + 0x58),
+               *(f32*)(unit + 0x5C));
+    PSMTXTrans(translateWorld, *(f32*)(unit + 0x3C), *(f32*)(unit + 0x40),
+               *(f32*)(unit + 0x44));
+    PSMTXRotRad(rotateX, 0x78,
+                float_deg2rad_8042223c * (*(f32*)(unit + 0x6C) + *(f32*)(unit + 0x60)));
+    PSMTXRotRad(rotateY, 0x79,
+                float_deg2rad_8042223c * (*(f32*)(unit + 0x70) + *(f32*)(unit + 0x64)));
+    PSMTXRotRad(rotateZ, 0x7A,
+                float_deg2rad_8042223c * (*(f32*)(unit + 0x74) + *(f32*)(unit + 0x68)));
+    PSMTXScale(scale,
+               *(f32*)(unit + 0x114) * *(f32*)(unit + 0x9C) * *(f32*)(unit + 0x90),
+               *(f32*)(unit + 0x114) * *(f32*)(unit + 0xA0) * *(f32*)(unit + 0x94),
+               *(f32*)(unit + 0xA4) * *(f32*)(unit + 0x98));
+    PSMTXIdentity(work);
+    PSMTXConcat(scale, work, work);
+    PSMTXConcat(translateNeg, work, work);
+    PSMTXConcat(rotateY, work, work);
+    PSMTXConcat(rotateZ, work, work);
+    PSMTXConcat(rotateX, work, work);
+    PSMTXConcat(translatePos, work, result);
+    PSMTXConcat(translateDisp, result, result);
+    if ((*(u32*)(p + 0x1AC) & 0x10000000) == 0) {
+        PSMTXTrans(partTranslateNeg, -*(f32*)(p + 0x54), -*(f32*)(p + 0x58),
+                   -*(f32*)(p + 0x5C));
+        PSMTXTrans(partTranslatePos, *(f32*)(p + 0x54), *(f32*)(p + 0x58),
+                   *(f32*)(p + 0x5C));
+        PSMTXRotRad(partRotateX, 0x78,
+                    float_deg2rad_8042223c * (*(f32*)(p + 0x48) + *(f32*)(p + 0x3C)));
+        PSMTXRotRad(partRotateY, 0x79,
+                    float_deg2rad_8042223c * (*(f32*)(p + 0x4C) + *(f32*)(p + 0x40)));
+        PSMTXRotRad(partRotateZ, 0x7A,
+                    float_deg2rad_8042223c * (*(f32*)(p + 0x50) + *(f32*)(p + 0x44)));
+        PSMTXTrans(partTranslate,
+                   *(f32*)(unit + 0x3C) + *(f32*)(p + 0x24),
+                   *(f32*)(unit + 0x40) + *(f32*)(p + 0x28) + getGravityDispOffset(part) +
+                       getFloatDispOffset(part),
+                   *(f32*)(unit + 0x44) + *(f32*)(p + 0x2C));
+        PSMTXTrans(partDisp, *(f32*)(p + 0x30), *(f32*)(p + 0x34), *(f32*)(p + 0x38));
+        PSMTXScale(partScale,
+                   *(f32*)(p + 0x6C) * *(f32*)(p + 0x60),
+                   *(f32*)(p + 0x70) * *(f32*)(p + 0x64),
+                   *(f32*)(p + 0x74) * *(f32*)(p + 0x68));
+        PSMTXIdentity(work);
+        PSMTXConcat(result, work, work);
+        PSMTXConcat(partScale, work, work);
+        PSMTXConcat(partTranslateNeg, work, work);
+        PSMTXConcat(partRotateY, work, work);
+        PSMTXConcat(partRotateZ, work, work);
+        PSMTXConcat(partRotateX, work, work);
+        PSMTXConcat(partTranslatePos, work, work);
+        PSMTXConcat(partTranslate, work, result);
+        PSMTXConcat(partDisp, result, result);
     } else {
-        animPoseSetLocalTimeRate((void*)poseId, 1.0f);
+        PSMTXConcat(translateWorld, result, result);
     }
-    if ((flags & 0x40) != 0) {
-        animPoseSetEffect((void*)poseId, 1, 0);
+    color = *(u32*)(p + 0x218);
+    animPoseSetMaterialEvtColor(*(s32*)(p + 0x1C0), &color);
+    animPoseSetMaterialFlagOn(*(s32*)(p + 0x1C0), 0x40);
+    callback = *(void (**)(void*, s32))(p + 0x210);
+    if (callback != 0) {
+        callback(part, 0);
     }
-    if ((flags & 0x80) != 0) {
-        animPoseSetEffectAnim((void*)poseId, 1, 0);
+    if (BtlUnit_CheckStatus(unit, 0x13) == 0) {
+        animPoseSetMaterialFlagOff(*(s32*)(p + 0x1C0), 0x800000);
+    } else {
+        animPoseSetMaterialFlagOn(*(s32*)(p + 0x1C0), 0x800000);
     }
-    _partsBlurControl(part, (flags & 0x100) != 0, 0, (void*)((s32)part + 0x1F0));
+    animPoseDrawMtx(*(s32*)(p + 0x1C0), result, 1, 0.0f, 2.0f);
+    animPoseDrawMtx(*(s32*)(p + 0x1C0), result, 2, 0.0f, 2.0f);
+    animPoseDrawMtx(*(s32*)(p + 0x1C0), result, 3, 0.0f, 2.0f);
+    if (callback != 0) {
+        callback(part, 1);
+    }
 }
 
 void btlDispMain(void) {
@@ -230,7 +322,14 @@ void btlDispMain(void) {
     extern void btlUnitPartsDisp(void*, void*);
     extern void btlUnitPartsBlurDisp(void*);
     extern void animPoseMain(s32);
+    extern void gravityOffsetControl(void*);
+    extern void floatOffsetControl(void*);
+    extern void statusPoseControl(void*);
+    extern void BtlUnit_GetPartsWorldPos(void*, f32*, f32*, f32*);
     extern s32 animPoseTestXLU(s32);
+    extern s32 _GetStatusPoseType(void*);
+    extern s32 BtlUnit_CheckStatus(void*, s32);
+    extern void btlDispAnimeSpeed(f32, void*);
     extern void* BattleGetUnitPtr(void*, s32);
     extern void BtlUnit_OffUnitFlag(void*, u32);
     extern void BtlUnit_OnUnitFlag(void*, u32);
@@ -247,9 +346,11 @@ void btlDispMain(void) {
     u8* owner;
     u8* part;
     s32 i;
+    s32 poseType;
     u8 shown, target;
     s8 turns, strength;
     f32 x, y, z, ox, oy, oz, floor;
+    f32 worldX, worldY, worldZ;
 
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(battleWork, i);
@@ -304,6 +405,22 @@ void btlDispMain(void) {
         BattleStatusIconMain(unit);
         for (part = *(u8**)(unit + 0x14); part != NULL; part = *(u8**)part) {
             if (*(s32*)(part + 0x1C0) != -1) {
+                if ((*(u32*)(part + 0x204) & 2) == 0) {
+                    poseType = _GetStatusPoseType(unit);
+                    if (BtlUnit_CheckStatus(unit, 0x17) != 0) {
+                        btlDispAnimeSpeed(2.0f, part);
+                    } else if (BtlUnit_CheckStatus(unit, 0x18) != 0) {
+                        btlDispAnimeSpeed(0.5f, part);
+                    } else {
+                        btlDispAnimeSpeed(1.0f, part);
+                    }
+                } else {
+                    btlDispAnimeSpeed(1.0f, part);
+                }
+                gravityOffsetControl(part);
+                floatOffsetControl(part);
+                statusPoseControl(part);
+                BtlUnit_GetPartsWorldPos(part, &worldX, &worldY, &worldZ);
                 animPoseMain(*(s32*)(part + 0x1C0));
                 if ((*(u32*)(unit + 0x104) & 0x1000000) == 0 &&
                     (*(u32*)(part + 0x1AC) & 0x1000000) == 0 &&
@@ -325,6 +442,12 @@ void btlDispMain(void) {
     BattleCommandDisplay(battleWork);
     BattleAudience_Disp();
     BattleBreakSlot_Disp();
+    if ((*(u32*)battleWork & 0x10000) != 0) {
+        *(u32*)battleWork &= ~0x10000;
+    }
+    if ((*(u32*)battleWork & 0x20000) != 0) {
+        *(u32*)battleWork &= ~0x20000;
+    }
 }
 
 void btlDispTex4(s32 texId, f32* trans, f32* scale, f32* rot, u32* color) {
@@ -570,9 +693,50 @@ void _pose_two_pattern(void* part) {
 }
 
 void _btlStockExpDisp(void) {
-    ;
-}
+    extern void* _battleWorkPointer;
+    extern f32 float_13_80422218;
+    extern f32 float_308_80422210;
+    extern f32 float_3p5_80422214;
+    extern f32 float_220_8042221c;
+    extern f32 float_0p35_80422220;
+    extern f32 float_20_8042222c;
+    extern f32 float_10_80422228;
+    extern f32 float_16_80422230;
+    extern f32 float_0p5_80422234;
+    extern f32 float_4_80422224;
+    extern f32 vec3_802ee3dc[3];
+    extern f32 vec3_802ee3e8[3];
+    extern void iconDispGx(f64 scale, f32* pos, u16 flags, u16 iconId);
+    s32 value;
+    u32 i;
+    Vec pos;
+    static f32 x;
+    static f32 y;
 
+    value = *(s32*)((s32)_battleWorkPointer + 0xF04);
+    if (value > 0) {
+        if (value > 100) {
+            value = 100;
+        }
+
+        for (i = 0; i < value % 10; i++) {
+            pos.x = -(float_13_80422218 * (f32)i -
+                      ((float_308_80422210 + x) - float_3p5_80422214));
+            pos.y = y - float_220_8042221c;
+            pos.z = vec3_802ee3dc[2];
+            iconDispGx(float_0p35_80422220, (f32*)&pos, 0x10, 0x194);
+        }
+
+        for (i = 0; i < value / 10; i++) {
+            pos.x = float_4_80422224 +
+                    -(float_20_8042222c * (f32)i -
+                      ((float_308_80422210 + x) - float_10_80422228));
+            pos.y = float_16_80422230 + (y - float_220_8042221c);
+            pos.z = vec3_802ee3e8[2];
+            iconDispGx(float_0p5_80422234, (f32*)&pos, 0x10, 0x194);
+        }
+    }
+}
 
 void btlUnitPartsBlurDisp(s32 param_1, void* part) {
     extern void animPoseSetMaterialEvtColor(s32 poseId, void* color);

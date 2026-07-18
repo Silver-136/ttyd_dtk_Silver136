@@ -1,10 +1,130 @@
 #include "effect/eff_recovery.h"
 
 
-u8 effRecoveryMain(void) {
-    return 0;
-}
+void effRecoveryMain(void* effect) {
+    typedef struct Vec { f32 x, y, z; } Vec;
+    extern void effCalcMayaAnim(void* anim);
+    extern void effDeleteMayaAnim(void* anim);
+    extern void effDelete(void* effect);
+    extern f32 dispCalcZ(Vec* pos);
+    extern void dispEntry(s32 camera,s32 layer,void* callback,void* param,f32 z);
+    extern void effRecoveryDisp(void);
+    extern void effRecoveryDisp2(void);
+    extern void effRecoveryDisp3(void);
+    extern f32 intplGetValue(f32 start,f32 end,s32 mode,s32 current,s32 total);
+    extern f32 distABf(f32,f32,f32,f32);
+    extern double sin(double);
+    extern double cos(double);
+    extern s32 rand(void);
+    extern void* gpGlobals;
+    char* work;
+    char* part;
+    Vec pos;
+    s32 type;
+    s32 delta;
+    s32 i;
+    s32 finished;
+    s32 count;
+    f32 angle;
+    f32 radius;
 
+    work = *(char**)((char*)effect + 0x0C);
+    type = *(s8*)work;
+    effCalcMayaAnim(*(void**)(work + 0x38));
+    delta = 0;
+    if (*(u32*)(work + 0x34) < *(u32*)((char*)gpGlobals + 4)) {
+        delta = *(u32*)((char*)gpGlobals + 4) - *(u32*)(work + 0x34);
+    }
+    if (delta == 0) delta = 1;
+    finished = 0;
+
+    while (delta-- > 0) {
+        if (++*(s16*)(work + 0x2C) > 10) {
+            finished = 1;
+        }
+        count = (type == 4 || type == 5) ? 10 : *(u8*)(work + 1);
+        part = work;
+        for (i = 1; i < *(s32*)((char*)effect + 8); i++, part += 0x44) {
+            switch (*(s8*)(part + 0x46)) {
+                case 0:
+                    if (finished) {
+                        angle = 0.017453292f * (90.0f + 360.0f * (f32)(i - 1) / (f32)count);
+                        *(f32*)(part + 0x58) = 12.0f * (f32)sin(angle);
+                        *(f32*)(part + 0x5C) = 0.0f;
+                        *(f32*)(part + 0x60) = -12.0f * (f32)cos(angle);
+                        *(s16*)(part + 0x70) = 0;
+                        *(s8*)(part + 0x46) += 1;
+                    }
+                    break;
+                case 1:
+                    if (*(s16*)(part + 0x70) < 10) {
+                        *(f32*)(part + 0x58) *= 0.7f;
+                        *(f32*)(part + 0x5C) *= 0.7f;
+                        *(f32*)(part + 0x60) *= 0.7f;
+                        *(f32*)(part + 0x4C) += *(f32*)(part + 0x58);
+                        *(f32*)(part + 0x50) += *(f32*)(part + 0x5C);
+                        *(f32*)(part + 0x54) += *(f32*)(part + 0x60);
+                        *(f32*)(part + 0x64) = 1.0f;
+                        *(f32*)(part + 0x68) = 1.0f;
+                        *(f32*)(part + 0x6C) = 1.0f;
+                        *(s16*)(part + 0x70) += 1;
+                    } else {
+                        *(s16*)(part + 0x70) = 10;
+                        *(s8*)(part + 0x46) += 1;
+                    }
+                    break;
+                case 2:
+                    if (--*(s16*)(part + 0x70) < 1) {
+                        *(s16*)(part + 0x70) = 0;
+                        *(s8*)(part + 0x46) += 1;
+                    }
+                    break;
+                case 3:
+                    if (*(s16*)(part + 0x70) < 40) {
+                        *(s16*)(part + 0x70) += 1;
+                        angle = intplGetValue(0.0f,360.0f,11,*(s16*)(part+0x70),40);
+                        radius = distABf(0.0f,0.0f,*(f32*)(part+0x4C),*(f32*)(part+0x54)) * 0.99f;
+                        angle = 0.017453292f * (90.0f + angle + 360.0f * (f32)(i-2)/(f32)count);
+                        *(f32*)(part+0x4C)=radius*(f32)sin(angle);
+                        *(f32*)(part+0x54)=-radius*(f32)cos(angle);
+                    } else {
+                        *(s16*)(part+0x70)=rand()%20;
+                        *(s8*)(part+0x46)+=1;
+                    }
+                    break;
+                case 4:
+                    if (--*(s16*)(part+0x70)<1) {
+                        *(s16*)(part+0x70)=0;
+                        *(s8*)(part+0x46)+=1;
+                    }
+                    break;
+                case 5:
+                    if (*(s16*)(part+0x70)<16) {
+                        *(s16*)(part+0x70)+=1;
+                        *(f32*)(part+0x4C)=intplGetValue(*(f32*)(part+0x4C),0.0f,1,*(s16*)(part+0x70),16);
+                        *(f32*)(part+0x50)=intplGetValue(*(f32*)(part+0x50),*(f32*)(work+0x40),1,*(s16*)(part+0x70),16);
+                        *(f32*)(part+0x54)=intplGetValue(*(f32*)(part+0x54),0.0f,1,*(s16*)(part+0x70),20);
+                        *(f32*)(part+0x64)=intplGetValue(1.0f,0.0f,1,*(s16*)(part+0x70),16);
+                        *(f32*)(part+0x68)=*(f32*)(part+0x64);
+                        *(f32*)(part+0x6C)=*(f32*)(part+0x64);
+                    } else {
+                        *(s8*)(part+0x46)+=1;
+                    }
+                    break;
+            }
+        }
+    }
+
+    *(u32*)(work + 0x34) = *(u32*)((char*)gpGlobals + 4);
+    pos.x=*(f32*)(work+8); pos.y=*(f32*)(work+0xC); pos.z=*(f32*)(work+0x10);
+    dispEntry(4,1,effRecoveryDisp,effect,dispCalcZ(&pos));
+    if (type<2 || type==7 || type==8) {
+        dispEntry(4,2,effRecoveryDisp2,effect,dispCalcZ(&pos));
+    }
+    if (type==4 || type==5) {
+        dispEntry(4,2,effRecoveryDisp3,effect,dispCalcZ(&pos));
+    }
+}
 
 u8 effRecoveryDisp(int cameraId, int effect) {
     typedef f32 Mtx[3][4];
@@ -129,10 +249,102 @@ u8 effRecoveryDisp3(void) {
 }
 
 
-u8 effRecoveryDisp4(void) {
-    return 0;
-}
+void effRecoveryDisp4(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4];
+    typedef struct Tex { u32 data[8]; } Tex;
+    extern void* camGetPtr(s32);
+    extern void PSMTXTrans(Mtx, f32, f32, f32);
+    extern void PSMTXRotRad(Mtx, f32, char);
+    extern void PSMTXScale(Mtx, f32, f32, f32);
+    extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void effGetTexObj(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXLoadPosMtxImm(Mtx, s32);
+    extern void GXSetCurrentMtx(u32);
+    extern void GXSetNumTexGens(u32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, u32, u32, s32);
+    extern void GXSetNumChans(u32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTevStages(u32);
+    extern void GXSetTevOrder(u32, u32, u32, s32);
+    extern void GXSetTevOp(s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(u32, s32, u32, u32, u32);
+    extern void GXSetChanMatColor(s32, void*);
+    extern void GXBegin(s32, s32, s16);
+    extern void* gpGlobals;
+    extern u32 dat_80422dbc;
+    extern u8 color_rotation_data[];
+    Mtx trans;
+    Mtx rotate;
+    Mtx scale;
+    Mtx model;
+    Tex tex;
+    volatile f32* fifo = (volatile f32*)0xCC008000;
+    char* work = *(char**)((char*)effect + 0x0C);
+    char* part = work;
+    char* camera = (char*)camGetPtr(cameraId);
+    u32 color;
+    s32 alpha;
+    s32 i;
+    f32 u;
+    f32 yoff;
+    f32 left;
 
+    PSMTXTrans(trans, *(f32*)(work + 8), *(f32*)(work + 0xC), *(f32*)(work + 0x10));
+    PSMTXRotRad(rotate, -0.017453292f * *(f32*)(camera + 0x114), 'y');
+    PSMTXConcat(trans, rotate, model);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevOp(0, 0);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+    left = -32.0f;
+    for (i = 1; i < *(s32*)((char*)effect + 8); i++, part += 0x44) {
+        if (*(s32*)(part + 0x80) != 0) {
+            continue;
+        }
+        alpha = *(s32*)(work + 4) * *(s32*)(part + 0x48) / 255;
+        if (i == 1) {
+            effGetTexObj(0x12, &tex);
+            color = (dat_80422dbc & 0xFFFFFF00) | (alpha & 0xFF);
+        } else {
+            effGetTexObj(0x14, &tex);
+            color = ((u32)color_rotation_data[((i + *(u32*)((char*)gpGlobals + 4)) % 12) * 3] << 24) |
+                    ((u32)color_rotation_data[((i + *(u32*)((char*)gpGlobals + 4)) % 12) * 3 + 1] << 16) |
+                    ((u32)color_rotation_data[((i + *(u32*)((char*)gpGlobals + 4)) % 12) * 3 + 2] << 8) |
+                    (alpha & 0xFF);
+        }
+        GXLoadTexObj(&tex, 0);
+        GXSetChanMatColor(4, &color);
+        PSMTXTrans(trans, *(f32*)(part + 0x4C), *(f32*)(part + 0x50), *(f32*)(part + 0x54));
+        PSMTXScale(scale, *(f32*)(part + 0x64), *(f32*)(part + 0x68), *(f32*)(part + 0x6C));
+        PSMTXRotRad(rotate, i == 1 ? 0.0f : 0.017453292f * (*(f32*)(part + 0x74) - 90.0f), 'z');
+        PSMTXConcat(model, trans, trans);
+        PSMTXConcat(trans, scale, trans);
+        PSMTXConcat(trans, rotate, trans);
+        PSMTXConcat((f32 (*)[4])(camera + 0x48), trans, trans);
+        GXLoadPosMtxImm(trans, 0);
+        GXSetCurrentMtx(0);
+        GXBegin(0x80, 0, 4);
+        u = i == 1 ? 1.0f : 2.0f;
+        yoff = i == 1 ? 8.0f : 0.0f;
+        *fifo=left*0.5f; *fifo=16.0f+yoff; *fifo=0.0f; *fifo=0.0f; *fifo=0.0f;
+        *fifo=16.0f; *fifo=16.0f+yoff; *fifo=0.0f; *fifo=u; *fifo=0.0f;
+        *fifo=16.0f; *fifo=left*0.5f+yoff; *fifo=0.0f; *fifo=u; *fifo=1.0f;
+        *fifo=left*0.5f; *fifo=left*0.5f+yoff; *fifo=0.0f; *fifo=0.0f; *fifo=1.0f;
+    }
+}
 
 void* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     typedef struct LocalVec3 {

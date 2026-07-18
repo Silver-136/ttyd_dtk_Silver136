@@ -613,7 +613,7 @@ void N_cloud_use(void* pParty) {
     extern char str_PWD_A_6_802f89e8[];
     void* player = *(void**)((s32)pParty + 0x160);
     void* use;
-    s32 state = *(u8*)((s32)pParty + 0x38);
+    s32 state;
     f32 dir;
 
     if ((*(u32*)((s32)pParty + 8) & 2) != 0) {
@@ -622,32 +622,71 @@ void N_cloud_use(void* pParty) {
         use = __memAlloc(0, 0x48);
         *(void**)((s32)pParty + 0x164) = use;
         memset(use, 0, 0x48);
+        *(f32*)((s32)use + 0x00) = 100.0f;
+        *(f32*)((s32)use + 0x0C) = 120.0f;
+        *(f32*)((s32)use + 0x10) = 0.0f;
+        *(s32*)((s32)use + 0x14) = 0;
+        *(f32*)((s32)use + 0x18) = 0.0f;
+        *(s32*)((s32)use + 0x1C) = 1;
         *(s32*)((s32)use + 0x34) = -1;
         *(u8*)((s32)pParty + 0x38) = 0;
     }
     use = *(void**)((s32)pParty + 0x164);
+    state = *(u8*)((s32)pParty + 0x38);
     dir = toMovedir(*(f32*)((s32)player + 0x188));
-    if (state == 0 || state == 1) {
-        movePos(3.3f, dir, (f32*)((s32)pParty + 0x68), (f32*)((s32)pParty + 0x70));
-        if (*(s32*)((s32)pParty + 0x20C) == 0) {
-            marioChgMot(0x1C);
-            marioChgPose(str_M_A_2A_802f89d8);
-            partyChgPose(pParty, str_PWD_A_5_802f89e0);
-            *(u8*)((s32)pParty + 0x38) = 10;
-        }
-    } else if (state >= 10 && state <= 13) {
-        partyUpdateKeyData(pParty);
-        partyChgPose(pParty, str_PWD_A_6_802f89e8);
-        if ((*(u32*)((s32)pParty + 0x90) & 0x400) != 0)
-            *(u8*)((s32)pParty + 0x38) = 20;
-    } else if (state == 20) {
-        if (use != 0 && *(s32*)((s32)use + 0x34) != -1)
-            psndSFXOff(*(s32*)((s32)use + 0x34));
-        marioAdjustMoveDir();
-        partyChgRunMode(pParty, 2);
-        partyChgMoveMode(pParty, 2);
-        partyChgMot(pParty, 1);
-        if (use != 0) { __memFree(0, use); *(void**)((s32)pParty + 0x164) = 0; }
+    switch (state) {
+        case 0:
+            *(s32*)((s32)pParty + 0x24) = 4;
+            *(u8*)((s32)pParty + 0x38) = 1;
+        case 1:
+            *(f32*)((s32)pParty + 0x68) = *(f32*)((s32)player + 0x8C);
+            *(f32*)((s32)pParty + 0x6C) = *(f32*)((s32)player + 0x90);
+            *(f32*)((s32)pParty + 0x70) = *(f32*)((s32)player + 0x94);
+            movePos(3.3f, dir, (f32*)((s32)pParty + 0x68), (f32*)((s32)pParty + 0x70));
+            *(f32*)((s32)pParty + 0x6C) += 10.0f;
+            *(f32*)((s32)pParty + 0x58) +=
+                (*(f32*)((s32)pParty + 0x68) - *(f32*)((s32)pParty + 0x58)) /
+                (f32)*(s32*)((s32)pParty + 0x24);
+            *(f32*)((s32)pParty + 0x5C) +=
+                (*(f32*)((s32)pParty + 0x6C) - *(f32*)((s32)pParty + 0x5C)) /
+                (f32)*(s32*)((s32)pParty + 0x24);
+            *(f32*)((s32)pParty + 0x60) +=
+                (*(f32*)((s32)pParty + 0x70) - *(f32*)((s32)pParty + 0x60)) /
+                (f32)*(s32*)((s32)pParty + 0x24);
+            if (--*(s32*)((s32)pParty + 0x24) < 1) {
+                *(f32*)((s32)pParty + 0x58) = *(f32*)((s32)pParty + 0x68);
+                *(f32*)((s32)pParty + 0x5C) = *(f32*)((s32)pParty + 0x6C);
+                *(f32*)((s32)pParty + 0x60) = *(f32*)((s32)pParty + 0x70);
+                marioChgMot(0x1C);
+                marioChgPose(str_M_A_2A_802f89d8);
+                partyChgPose(pParty, str_PWD_A_5_802f89e0);
+                *(s32*)((s32)pParty + 0x24) = 0x10;
+                *(u8*)((s32)pParty + 0x38) = 0x0B;
+            }
+            break;
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+            partyUpdateKeyData(pParty);
+            partyChgPose(pParty, str_PWD_A_6_802f89e8);
+            if ((*(u32*)((s32)pParty + 0x90) & 0x400) != 0) {
+                *(u8*)((s32)pParty + 0x38) = 20;
+            }
+            break;
+        case 20:
+            if (use != 0 && *(s32*)((s32)use + 0x34) != -1) {
+                psndSFXOff(*(s32*)((s32)use + 0x34));
+            }
+            marioAdjustMoveDir();
+            partyChgRunMode(pParty, 2);
+            partyChgMoveMode(pParty, 2);
+            partyChgMot(pParty, 1);
+            if (use != 0) {
+                __memFree(0, use);
+                *(void**)((s32)pParty + 0x164) = 0;
+            }
+            break;
     }
 }
 

@@ -75,7 +75,6 @@ void effPacknBfireDisp(s32 cameraId, void* effect) {
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
     }
 }
-
 void* effPacknBfireN64Entry(f32 x, f32 y, f32 z, f32 dstX, f32 dstY, f32 dstZ, f32 scale, s32 type, s32 duration, s32 time) {
     extern void* effEntry(void); extern void* __memAlloc(s32,s32); extern void effPacknBfireMain(void*); extern char str_PacknBfireN64_802fbc4c[];
     extern f32 float_0_80425c6c,float_1_80425c80; void* entry; u8* work; s32 count,i;
@@ -84,6 +83,15 @@ void* effPacknBfireN64Entry(f32 x, f32 y, f32 z, f32 dstX, f32 dstY, f32 dstZ, f
     return entry;
 }
 
-u8 effPacknBfireMain(u32* param_1) {
-    return 0;
+void effPacknBfireMain(void* effect) {
+    extern void effDelete(void*); extern void* effPacknBfireN64Entry(f32,f32,f32,f32,f32,f32,f32,s32,s32,s32);
+    extern f32 dispCalcZ(void*); extern void dispEntry(s32,s32,void*,void*,f32); extern void effPacknBfireDisp(void);
+    extern f32 float_1_80425c80,float_0p97_80425c8c,float_0p02_80425c90,float_0p05_80425c94,float_0p1_80425c98,float_0p9_80425c9c,float_0p2_80425ca0,float_neg0p6_80425ca4,float_0_80425c6c;
+    u8* work=*(u8**)((s32)effect+0xC); s32 type=*(s32*)work,i;
+    if(*(s32*)effect&4){*(s32*)effect&=~4;*(s32*)(work+0x20)=0x10;} if(*(s32*)(work+0x20)<1000)*(s32*)(work+0x20)-=1;*(s32*)(work+0x24)+=1;
+    if(*(s32*)(work+0x20)<0){effDelete(effect);return;}
+    if(type==1){*(f32*)(work+0x60)*=float_0p97_80425c8c;*(f32*)(work+0x68)*=float_0p97_80425c8c;*(f32*)(work+0x64)+=float_0p02_80425c90*(float_1_80425c80-*(f32*)(work+0x64));}
+    else if(type<1 && (*(s32*)(work+0x24)&3)==0) effPacknBfireN64Entry(*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC),*(f32*)(work+0x10),*(f32*)(work+0x14),*(f32*)(work+0x18),float_1_80425c80,1,*(s32*)(work+0x1C),*(s32*)(work+0x1C));
+    else if(type<3) for(i=0;i<*(s32*)((s32)effect+8);i++,work+=0x7C){*(f32*)(work+0x60)*=float_0p9_80425c9c;*(f32*)(work+0x64)-=float_0p2_80425ca0;*(f32*)(work+4)+=*(f32*)(work+0x60);*(f32*)(work+8)+=*(f32*)(work+0x64);if(*(f32*)(work+8)<float_0_80425c6c){*(f32*)(work+8)=float_0_80425c6c;*(f32*)(work+0x64)*=float_neg0p6_80425ca4;}}
+    dispEntry(4,2,effPacknBfireDisp,effect,dispCalcZ((u8*)*(void**)((s32)effect+0xC)+4));
 }

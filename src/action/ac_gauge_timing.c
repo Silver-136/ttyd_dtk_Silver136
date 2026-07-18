@@ -71,7 +71,10 @@ void battleAcDisp_GaugeTiming(void* camera, void* wp) {
 
 /* stub-fill: actionCommandDisp | prototype_only | source_prototype */
 void actionCommandDisp(f32 x, f32 y) {
-    typedef struct Vec { f32 x, y, z; } Vec;
+    typedef struct Vec {
+        f32 x, y, z;
+        u8 targetFramePad[0xD0];
+    } Vec;
     extern void* _battleWorkPointer;
     extern void* camGetPtr(s32);
     extern void BattleAcDrawGauge(f32, s32, s32, s32, s32, s32, s32, s32, s32);
@@ -80,7 +83,7 @@ void actionCommandDisp(f32 x, f32 y) {
     extern void btlDispGXInit2DRasta(void);
     extern void btlDispGXQuads2DRasta(f64, f64, f64, f64, s32, s32, s32, s32);
     u8* wp = (u8*)_battleWorkPointer;
-    s32* params = (s32*)(wp + 0x1F40);
+    s32* params = (s32*)(wp + 0x1CC8);
     u8* extra = wp + 0x1F4C;
     f32 value = *(f32*)(extra + 4);
     f32 ratio = value / 100.0f;
@@ -90,16 +93,21 @@ void actionCommandDisp(f32 x, f32 y) {
     Vec pos;
     s32 i;
 
-    camGetPtr(1);
-    if (ratio > 1.0f) ratio = 1.0f;
+    camGetPtr(8);
+    if (ratio > 1.0f) {
+        ratio = 1.0f;
+    }
     *(f32*)(wp + 0x1F28) = ratio;
     if (params[2] == 1) {
         f32 gauge = 100.0f * ratio / (f32)params[3];
-        if (gauge > 100.0f) gauge = 100.0f;
-        if (*(s32*)(extra + 0x1C) < 1)
+        if (gauge > 100.0f) {
+            gauge = 100.0f;
+        }
+        if (*(s32*)(extra + 0x1C) < 1) {
             BattleAcDrawGauge(gauge, (s32)x, (s32)y, 0xB2, 100, 100, 100, 100, 0);
-        else
+        } else {
             BattleAcDrawGauge(-1.0f, (s32)x, (s32)y, 0xB2, 100, 100, 100, 100, 0);
+        }
         pos.x = x - 288.0f + 176.0f + 16.0f;
         pos.y = y + 18.0f;
         pos.z = 0.0f;
@@ -119,19 +127,34 @@ void actionCommandDisp(f32 x, f32 y) {
             iconDispGx(0.8, &pos, 0x10, *(s32*)(extra + 0x10) != 0 ? 0x9D : 0x99);
         }
     }
+
     button = params[0] == 0 ? 0x20 : (params[0] == 2 ? 0x40000 : 0x100);
     pressedIcon = BattleACGetButtonIcon(button, 1);
     normalIcon = BattleACGetButtonIcon(button, 0);
-    if (*(s32*)(wp + 0x1C9C) >= 99 && *(s32*)(wp + 0x1C9C) <= 1005 &&
-        *(s32*)(wp + 0x1C9C) != 1002) {
+    if (*(s32*)(wp + 0x1C9C) == 1002) {
+        return;
+    }
+    if (*(s32*)(wp + 0x1C9C) < 1002) {
+        if (*(s32*)(wp + 0x1C9C) > 100) {
+            if (*(s32*)(wp + 0x1C9C) < 1000) {
+                return;
+            }
+        } else if (*(s32*)(wp + 0x1C9C) < 99) {
+            return;
+        }
+    } else if (*(s32*)(wp + 0x1C9C) > 1005) {
+        return;
+    }
+    {
         pos.x = x - 228.0f + 28.0f;
         pos.y = y + 55.0f;
         pos.z = 0.0f;
-        if (*(s32*)(wp + 0x1C9C) == 1000) {
-            if (*(u8*)(extra + 0x16) != 0)
+        if (*(s32*)(wp + 0x1C9C) == 1000 || *(s32*)(wp + 0x1C9C) == 1001) {
+            if (*(u8*)(extra + 0x16) != 0) {
                 normalIcon = *(s32*)(extra + 0x10) != 0 ? pressedIcon : normalIcon;
-            else
+            } else {
                 normalIcon = *(s32*)(extra + 0x10) != 0 ? normalIcon : pressedIcon;
+            }
         }
         iconDispGx(1.0, &pos, 0x10, (u16)normalIcon);
     }

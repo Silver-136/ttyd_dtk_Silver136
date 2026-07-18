@@ -16,10 +16,44 @@ extern void fadeEntry(s32 type, s32 duration, void* color);
 extern void* gp;
 extern u32 dat_80422a88;
 
-s32 evt_fade_set_spot_pos(int param_1) {
-    return 0;
-}
+s32 evt_fade_set_spot_pos(int event) {
+    extern s32 evtGetValue(void*, s32);
+    extern void* camGetPtr(s32 cameraId);
+    extern void GXGetProjectionv(f32* projection);
+    extern void GXSetProjection(void* matrix, s32 type);
+    extern void GXGetViewportv(f32* viewport);
+    extern void GXProject(f32 x, f32 y, f32 z, void* model, f32* projection,
+                          f32* viewport, f32* screenX, f32* screenY, f32* screenZ);
+    extern void GXSetProjectionv(f32* projection);
+    extern void fadeSetSpotPos(f32 x, f32 y);
+    s32* args;
+    char* camera;
+    f32 oldProjection[7];
+    f32 viewport[6];
+    f32 projection[7];
+    f32 screenX;
+    f32 screenY;
+    f32 screenZ;
+    s32 x;
+    s32 y;
+    s32 z;
 
+    args = *(s32**)(event + 0x18);
+    x = evtGetValue((void*)event, args[0]);
+    y = evtGetValue((void*)event, args[1]);
+    z = evtGetValue((void*)event, args[2]);
+    camera = (char*)camGetPtr(4);
+    GXGetProjectionv(oldProjection);
+    GXSetProjection(camera + 0x15C, *(s32*)(camera + 0x19C));
+    GXGetProjectionv(projection);
+    GXGetViewportv(viewport);
+    GXProject((f32)x, (f32)y, (f32)z, camera + 0x11C, projection, viewport,
+              &screenX, &screenY, &screenZ);
+    fadeSetSpotPos(screenX + (f32)(-*(u16*)((char*)gp + 0x170) / 2),
+                   (f32)(*(u16*)((char*)gp + 0x172) / 2) - screenY);
+    GXSetProjectionv(oldProjection);
+    return 2;
+}
 
 s32 evt_fade_set_mapchange_type(int param_1) {
     s32* args;

@@ -16,7 +16,7 @@ void effStardustN64SetColor(void* effect, f32 r, f32 g, f32 b) {
 }
 
 
-void* effStardustN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type)  {
+void* effStardustN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32, s32);
     extern void effStardustMain(void*);
@@ -31,49 +31,69 @@ void* effStardustN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type)  {
     s32 i;
     s32 life = 0x20;
     f32 radiusScale = scale;
-    f32 angle;
-    f32 speed;
-    if (type == 0) count = 0x24;
-    else if (type == 1 || type == 3) count = 4;
-    else count = 8;
-    if (type >= 3) radiusScale = 8.0f;
+
+    if (type == 0) {
+        count = 0x24;
+    } else if (type == 1 || type == 3) {
+        count = 4;
+    } else {
+        count = 8;
+    }
+    if (type >= 3) {
+        radiusScale = 8.0f;
+    }
+
     *(char**)((s32)entry + 0x14) = str_StardustN64_802fc0b8;
     *(s32*)((s32)entry + 8) = count + 1;
     work = __memAlloc(3, (count + 1) * 0x40);
     *(u8**)((s32)entry + 0xC) = work;
     *(void**)((s32)entry + 0x10) = effStardustMain;
-    *(s32*)work = type;
     *(f32*)(work + 4) = x;
     *(f32*)(work + 8) = y;
     *(f32*)(work + 0xC) = z;
-    *(f32*)(work + 0x1C) = 1.0f;
     *(s32*)(work + 0x20) = 0;
+    *(s32*)work = type;
     *(s32*)(work + 0x24) = 0x1E;
     *(f32*)(work + 0x28) = 1.0f;
     *(f32*)(work + 0x2C) = 1.0f;
     *(f32*)(work + 0x30) = 1.0f;
     *(s32*)(work + 0x3C) = 4;
-    for (i = 1; i <= count; i++, life += 2)  {
+    *(f32*)(work + 0x1C) = 1.0f;
+
+    for (i = 1; i <= count; i++, life += 2) {
+        f32 speedX = (f32)(rand() % (s32)(1000.0f * scale)) / 1000.0f;
+        f32 speedY = (f32)(rand() % (s32)(1000.0f * radiusScale)) / 1000.0f;
+        f32 angle;
+        f32 angleRad;
         part = work + i * 0x40;
+
+        if (type == 0) {
+            f32 ringAngle = (6.2832f * ((1800.0f / (f32)count) * (f32)i - 90.0f)) / 360.0f;
+            f32 circleAngle = (6.2832f * (360.0f / (f32)count) * (f32)i) / 360.0f;
+            f32 ring = scale *
+                (85.0f - 15.0f * (f32)sin(ringAngle) - (f32)((i & 1) * 5)) / 100.0f;
+            *(f32*)(part + 0x18) = 0.0f;
+            *(f32*)(part + 4) = ring * (f32)sin(circleAngle);
+            *(f32*)(part + 8) = ring * (f32)cos(circleAngle);
+            *(f32*)(part + 0xC) = 0.0f;
+            *(s32*)(part + 0x38) = 0;
+            continue;
+        }
+
         angle = (360.0f / (f32)count) * (f32)i + (f32)(rand() % 360);
-        speed = (f32)(rand() % (s32)(1000.0f * radiusScale)) / 1000.0f;
+        angleRad = (6.2832f * angle) / 360.0f;
+        *(f32*)(part + 0x18) =
+            (type >= 3 || (i & 1)) ? -(0.05f + (f32)(rand() % 50) / 1000.0f) : 0.0f;
         *(f32*)(part + 4) = 0.0f;
         *(f32*)(part + 8) = 0.0f;
         *(f32*)(part + 0xC) = 0.0f;
-        *(f32*)(part + 0x10) = speed * (f32)sin((6.2832f * angle) / 360.0f);
-        *(f32*)(part + 0x14) = speed * (f32)cos((6.2832f * angle) / 360.0f);
-        *(f32*)(part + 0x18) = (type >= 3 || (i & 1)) ? -(0.05f + (f32)(rand() % 50) / 1000.0f) : 0.0f;
+        *(f32*)(part + 0x10) = speedX * (f32)sin(angleRad);
+        *(f32*)(part + 0x14) = speedY * (f32)cos(angleRad);
         *(f32*)(part + 0x1C) = 1.0f;
         *(s32*)(part + 0x20) = 0;
         *(s32*)(part + 0x24) = life;
         *(s32*)(part + 0x38) = -1;
         *(s32*)(part + 0x3C) = i % 3;
-        if (type == 0)  {
-            f32 ring = scale * (85.0f - 15.0f * (f32)sin((6.2832f * ((1800.0f / count) * i - 90.0f)) / 360.0f) - (f32)((i & 1) * 5)) / 100.0f;
-            *(f32*)(part + 4) = ring * (f32)sin((6.2832f * (360.0f / count) * i) / 360.0f);
-            *(f32*)(part + 8) = ring * (f32)cos((6.2832f * (360.0f / count) * i) / 360.0f);
-            *(f32*)(part + 0x18) = 0.0f;
-        }
     }
     return entry;
 }

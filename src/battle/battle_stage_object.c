@@ -99,63 +99,207 @@ s32 _object_fall_attack(void* evt, s32 firstCall) {
     extern s32 BattleCheckConcluded(void* battle);
     extern void evtSetValue(void* evt, s32 arg, s32 value);
     extern s32 irand(s32 limit);
+    extern void* pouchGetPtr(void);
+    extern void* BattleAudienceBaseGetPtr(void);
+    extern s32 BattleAudience_HaitiRandForFallObject(void);
+    char* battle;
+    char* fallData;
     u8* work;
+    u8* entry;
+    u8* source;
+    u32* copyDst;
+    u32* copySrc;
+    u8* pouch;
+    u8* audience;
     s32* args;
     s32 total;
     s32 random;
-    s32 type;
+    s32 slot;
     s32 i;
+    s32 j;
+    s32 active;
 
-    args = *(s32**)((s32)evt + 4);
+    battle = (char*)g_BattleWork;
+    fallData = *(char**)(battle + 0x18114);
+    args = *(s32**)((char*)evt + 0x18);
     if (firstCall != 0) {
-        work = BattleAlloc(0xEC);
-        *(u8**)((s32)evt + 0x70) = work;
-        *(s32*)((s32)evt + 0x74) = 0;
+        work = (u8*)BattleAlloc(0xEC);
+        *(u8**)((char*)evt + 0x70) = work;
+        *(s32*)((char*)evt + 0x74) = 0;
         memset(work, 0, 0xEC);
-        work[1] = 0xFF;
-        work[2] = 0xFF;
-        work[3] = 0xFF;
         work[4] = 0xFF;
+        for (i = 1; i < 4; i++) {
+            work[i] = 0xFF;
+        }
         if (BattleCheckConcluded(g_BattleWork) != 0) {
-            evtSetValue(evt, args[0], *(s32*)((s32)evt + 0x74));
+            evtSetValue(evt, args[0], *(s32*)((char*)evt + 0x74));
             return 2;
         }
         work[0] = 1;
-        total = 0;
-        for (i = 0; i < 9; i++) {
-            total += *(u8*)((s32)g_BattleWork + 0x23A4 + i);
-        }
-        random = irand(total);
-        type = 0;
-        while (type < 8) {
-            random -= *(u8*)((s32)g_BattleWork + 0x23A4 + type);
-            if (random < 0) {
-                break;
+        active = 0;
+        for (i = 0; i < work[0]; i++) {
+            entry = work + 4 + i * 0xE8;
+            entry[0] = i;
+            for (slot = 0; slot < 3 && work[slot + 1] != 0xFF; slot++) {}
+            if (slot < 3) {
+                total = 0;
+                for (j = 0; j < 9; j++) {
+                    total += (u8)fallData[j];
+                }
+                random = irand(total);
+                entry[1] = 0;
+                while (entry[1] < 8) {
+                    random -= (u8)fallData[entry[1]];
+                    if (random < 0) break;
+                    entry[1] += 1;
+                }
+                work[slot + 1] = entry[1];
+            } else {
+                entry[1] = work[irand(3) + 1];
             }
-            type++;
+            copyDst = (u32*)(entry + 0x24);
+            copySrc = (u32*)((u8*)fallData + entry[1] * 0xC0 + 8);
+            for (j = 0; j < 24; j++) {
+                copyDst[0] = copySrc[0];
+                copyDst[1] = copySrc[1];
+                copyDst += 2;
+                copySrc += 2;
+            }
+            if (entry[1] == 6) {
+                if (irand(100) < 50) {
+                    *(u32*)(entry + 0x8C) |= 0x100;
+                    *(u32*)(entry + 0x8C) &= ~0x200;
+                } else {
+                    *(u32*)(entry + 0x8C) &= ~0x100;
+                    *(u32*)(entry + 0x8C) |= 0x200;
+                }
+            }
+            *(s32*)(entry + 4) = 0;
+            pouch = (u8*)pouchGetPtr();
+            if (*(u16*)(pouch + 0x8C) != 0) {
+                audience = (u8*)BattleAudienceBaseGetPtr();
+                if ((*(u32*)audience & 0x4000) == 0 && entry[1] != 6 && entry[1] != 7 &&
+                    irand(100) < 10) {
+                    *(s32*)(entry + 4) = 1;
+                    *(s32*)(entry + 0x0C) = -1;
+                    *(s32*)(entry + 8) = BattleAudience_HaitiRandForFallObject();
+                    active = 1;
+                    *(s32*)((char*)evt + 0x74) = 1;
+                }
+            }
+            entry[0x14] = 1;
+            active = 1;
         }
-        work[5] = (u8)type;
-        work[8] = 0;
-        work[9] = 0;
-        work[10] = 0;
-        work[11] = 0;
+        if (!active) {
+            evtSetValue(evt, args[0], *(s32*)((char*)evt + 0x74));
+            return 2;
+        }
     }
-    work = *(u8**)((s32)evt + 0x70);
-    if (work == 0 || work[0] == 0) {
-        if (work != 0) {
-            BattleFree(work);
+
+    work = *(u8**)((char*)evt + 0x70);
+    active = 0;
+    for (i = 0; i < work[0]; i++) {
+        entry = work + 4 + i * 0xE8;
+        if (entry[0] != 0xFF) {
+            active = 1;
+            if (*(s16*)(entry + 0x10) > 0) {
+                *(s16*)(entry + 0x10) -= 1;
+            } else {
+                entry[0] = 0xFF;
+            }
         }
-        evtSetValue(evt, args[0], *(s32*)((s32)evt + 0x74));
+    }
+    if (!active) {
+        BattleFree(work);
+        evtSetValue(evt, args[0], *(s32*)((char*)evt + 0x74));
         return 2;
     }
-    work[0]--;
     return 0;
 }
 
-u8 BattleStageObjectInit(void) {
-    return 0;
-}
+void BattleStageObjectInit(void) {
+    extern void* pouchGetPtr(void);
+    extern void* mapGetWork(void);
+    extern void mapPlayAnimationLv(char*,s32,s32);
+    extern void* mapGetMapObj(char*);
+    extern void mapGrpFlagOn(char*,s32);
+    extern void mapGrpFlagOff(char*,s32);
+    extern s32 str_A1_80423028;
+    extern s32 str_A2_8042302c;
+    extern s32 str_B_80423030;
+    extern s32 str_C_80423034;
+    extern char str_den_80423038[];
+    extern char str_escape_wall_802f439c[];
+    extern u8 battle_stage_nozzle_data[];
+    extern u8 battle_stage_fall_object_data[];
+    char* battle;
+    char* info;
+    char* stageInfo;
+    char* objectData;
+    char* objectWork;
+    char* slot;
+    char* pouch;
+    char* mapWork;
+    char* rootName;
+    s32 objectCount;
+    s32 rank;
+    s32 id;
+    s32 i;
+    s32 j;
 
+    battle=(char*)_battleWorkPointer;
+    info=*(char**)(battle+0x2738);
+    info=*(char**)(info+0x0C);
+    stageInfo=*(char**)info;
+    objectCount=*(s32*)(stageInfo+8);
+    objectData=*(char**)(stageInfo+0x0C);
+    objectWork=battle+0x1715C;
+    memset(objectWork,0,0xF80);
+    pouch=(char*)pouchGetPtr();
+    rank=*(s16*)(pouch+0x88);
+    if (rank<4 && rank>0) mapPlayAnimationLv(str_den_80423038,1,0);
+    pouch=(char*)pouchGetPtr(); rank=*(s16*)(pouch+0x88);
+    if (rank<4 && rank>0) {
+        pouch=(char*)pouchGetPtr();
+        *(void**)(battle+0x18110)=battle_stage_nozzle_data+*(s16*)(pouch+0x88)*0x310;
+    } else {
+        *(void**)(battle+0x18110)=0;
+    }
+    pouch=(char*)pouchGetPtr();
+    *(void**)(battle+0x18114)=battle_stage_fall_object_data+*(s16*)(pouch+0x88)*0x78C;
+    *(s8*)(battle+0x182A6)=-1;
+    *(s32*)(battle+0x182B8)=0;
+    *(s32*)(battle+0x182BC)=0;
+    mapWork=(char*)mapGetWork();
+    rootName=*(char**)(mapWork+0xA8);
+    rootName=*(char**)(rootName+8);
+    rootName=*(char**)rootName;
+    mapGrpFlagOff(rootName,2);
+    if(mapGetMapObj((char*)&str_A1_80423028)){mapGrpFlagOn((char*)&str_A1_80423028,1);mapGrpFlagOff((char*)&str_A1_80423028,2);}
+    if(mapGetMapObj((char*)&str_A2_8042302c)){mapGrpFlagOn((char*)&str_A2_8042302c,1);mapGrpFlagOff((char*)&str_A2_8042302c,2);}
+    if(mapGetMapObj((char*)&str_B_80423030)){mapGrpFlagOn((char*)&str_B_80423030,1);mapGrpFlagOff((char*)&str_B_80423030,2);}
+    if(mapGetMapObj((char*)&str_C_80423034)){mapGrpFlagOn((char*)&str_C_80423034,1);mapGrpFlagOff((char*)&str_C_80423034,2);}
+    mapGrpFlagOn(str_escape_wall_802f439c,1);
+
+    id=1;
+    while(objectData!=0 && objectCount--!=0){
+        slot=objectWork;
+        for(j=0;j<32;j++,slot+=0x7C){
+            if(*(s32*)slot<1) break;
+        }
+        if(j>=32) break;
+        *(void**)(slot+0x64)=objectData;
+        *(s32*)(slot+0x00)=id++;
+        *(s32*)(slot+0x6C)=-1;
+        *(f32*)(slot+0x04)=*(f32*)(objectData+8);
+        *(f32*)(slot+0x08)=*(f32*)(objectData+0xC);
+        *(f32*)(slot+0x0C)=*(f32*)(objectData+0x10);
+        *(f32*)(slot+0x10)=0.0f;
+        *(f32*)(slot+0x14)=0.0f;
+        *(f32*)(slot+0x18)=0.0f;
+        objectData+=0x68;
+    }
+}
 
 s32 _nozzle_work_effect(void* event, s32 isFirstCall) {
     extern void* _battleWorkPointer;

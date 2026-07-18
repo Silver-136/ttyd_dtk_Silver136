@@ -34,6 +34,35 @@ void fileGarbageDataAdrClear(int fileEntry) {
 
     switch (kind) {
         case 1:
+            field = (char**)(data + 0x14C);
+            if (*field >= data) {
+                field[0] -= (int)data;
+                field[1] -= (int)data;
+                field[2] -= (int)data;
+                field[3] -= (int)data;
+                field[4] -= (int)data;
+                field[5] -= (int)data;
+                field[6] -= (int)data;
+                field[7] -= (int)data;
+                field[8] -= (int)data;
+                field[9] -= (int)data;
+                field[10] -= (int)data;
+                field[11] -= (int)data;
+                field[12] -= (int)data;
+                field[13] -= (int)data;
+                field[14] -= (int)data;
+                field[15] -= (int)data;
+                field[16] -= (int)data;
+                field[17] -= (int)data;
+                field[18] -= (int)data;
+                field[19] -= (int)data;
+                field[20] -= (int)data;
+                field[21] -= (int)data;
+                field[22] -= (int)data;
+                field[23] -= (int)data;
+                field[24] -= (int)data;
+            }
+            break;
         case 5:
             if (kind == 5) {
                 for (i = 0; i < *(int*)(data + 0x148); i++) {
@@ -127,6 +156,35 @@ void fileGarbageDataAdrSet(char* data, int kind) {
 
     switch (kind) {
         case 1:
+            field = (char**)(data + 0x14C);
+            if (*field < data) {
+                field[0] += (int)data;
+                field[1] += (int)data;
+                field[2] += (int)data;
+                field[3] += (int)data;
+                field[4] += (int)data;
+                field[5] += (int)data;
+                field[6] += (int)data;
+                field[7] += (int)data;
+                field[8] += (int)data;
+                field[9] += (int)data;
+                field[10] += (int)data;
+                field[11] += (int)data;
+                field[12] += (int)data;
+                field[13] += (int)data;
+                field[14] += (int)data;
+                field[15] += (int)data;
+                field[16] += (int)data;
+                field[17] += (int)data;
+                field[18] += (int)data;
+                field[19] += (int)data;
+                field[20] += (int)data;
+                field[21] += (int)data;
+                field[22] += (int)data;
+                field[23] += (int)data;
+                field[24] += (int)data;
+            }
+            break;
         case 5:
             field = (char**)(data + 0x14C);
             if (*field < data) {

@@ -121,11 +121,16 @@ void envBlurOff(void) {
 
 u8 envAddTev(s32 stage, s32 entryAddress) {
     typedef struct GXTexObj { u32 data[8]; } GXTexObj;
+    typedef f32 Mtx[3][4];
+    extern void* gp;
+    extern void* camGetCurPtr(void);
+    extern void PSMTXConcat(void*, void*, Mtx);
     extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
     extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
     extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
     extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
     extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevSwapMode(s32, s32, s32);
     extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
     extern void GXLoadTexObj(void*, s32);
     extern void GXLoadTlut(void*, s32);
@@ -133,40 +138,79 @@ u8 envAddTev(s32 stage, s32 entryAddress) {
     u8* entry = (u8*)entryAddress;
     GXTexObj tex;
     void* image;
-    s32 type = *(u8*)(entry + 1);
-    s32 texMap = stage & 7;
+    s32 type = stage;
+    s32 tevStage = *(u32*)(entry + 0xC);
+    s32 texMap = *(u32*)(entry + 0x10);
+    s32 texCoord = *(u32*)(entry + 0x14);
     s32 texId;
+    u8* envWork = (u8*)work;
+    char* cam;
+    Mtx viewMtx;
 
-    GXSetTevColorOp(stage, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(stage, 0, 0, 0, 1, 0);
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        envWork += 0xF0;
+    }
+    if (stage != 0) {
+        cam = camGetCurPtr();
+        PSMTXConcat(cam + 0x11C, *(void**)(entry + 4), viewMtx);
+        cam = camGetCurPtr();
+        *(void**)(envWork + 0x70) = cam + 0x11C;
+        *(void**)(envWork + 0x74) = *(void**)(entry + 4);
+        *(void**)(envWork + 0x78) = viewMtx;
+    }
+
+    GXSetTevOrder(tevStage, texCoord, texMap, -1);
+    GXSetTevColorOp(tevStage, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(tevStage, 0, 0, 0, 1, 0);
+    GXSetTevSwapMode(tevStage, 0, 0);
     switch (type) {
         case 1:
-            GXSetTevColorIn(stage, 15, 8, 10, 15);
-            GXSetTevAlphaIn(stage, 7, 4, 5, 7);
+            GXSetTevColorIn(tevStage, 15, 8, 10, 15);
+            GXSetTevAlphaIn(tevStage, 7, 7, 7, 0);
             texId = 6;
             break;
         case 2:
-            GXSetTevColorIn(stage, 15, 10, 8, 15);
-            GXSetTevAlphaIn(stage, 7, 5, 4, 7);
+            GXSetTevColorIn(tevStage, 15, 10, 8, 10);
+            GXSetTevAlphaIn(tevStage, 7, 7, 7, 0);
             texId = 8;
             break;
         case 3:
-            GXSetTevColorIn(stage, 10, 8, 15, 15);
-            GXSetTevAlphaIn(stage, 4, 7, 5, 7);
+            GXSetTevColorIn(tevStage, 8, 15, 10, 15);
+            GXSetTevAlphaIn(tevStage, 7, 7, 7, 0);
             texId = 0;
             break;
         case 4:
-            GXSetTevColorIn(stage, 8, 15, 10, 15);
-            GXSetTevAlphaIn(stage, 5, 4, 7, 7);
+            GXSetTevColorIn(tevStage, 8, 15, 15, 10);
+            GXSetTevAlphaIn(tevStage, 7, 7, 7, 0);
             texId = 1;
             break;
         case 5:
-            GXSetTevColorIn(stage, 15, 8, 10, 15);
-            GXSetTevAlphaIn(stage, 7, 4, 5, 7);
+            GXSetTevColorIn(tevStage, 8, 15, 15, 10);
+            GXSetTevAlphaIn(tevStage, 7, 7, 7, 0);
             texId = 2;
             break;
+        case 6:
+            GXSetTevColorIn(tevStage, 8, 15, 15, 10);
+            GXSetTevAlphaIn(tevStage, 7, 7, 7, 0);
+            texId = 3;
+            break;
+        case 7:
+            GXSetTevColorIn(tevStage, 8, 15, 15, 10);
+            GXSetTevAlphaIn(tevStage, 7, 7, 7, 0);
+            texId = 4;
+            break;
+        case 8:
+            GXSetTevColorIn(tevStage, 15, 8, 10, 15);
+            GXSetTevAlphaIn(tevStage, 7, 7, 7, 0);
+            texId = 5;
+            break;
+        case 10:
+            GXSetTevColorIn(tevStage, 0, 8, 14, 15);
+            GXSetTevAlphaIn(tevStage, 7, 7, 7, 0);
+            texId = 7;
+            break;
         default:
-            return stage;
+            return type;
     }
     image = TEXGet(texId);
     if (image != 0) {
@@ -176,9 +220,11 @@ u8 envAddTev(s32 stage, s32 entryAddress) {
             GXLoadTlut((u8*)image + 0x20, texMap);
         }
     }
-    GXSetTexCoordGen2(texMap, 1, 4, 0x1E + texMap * 3, 0, 0x7D);
-    GXSetTevOrder(stage, texMap, texMap, 4);
-    return stage + 1;
+    GXSetTexCoordGen2(texCoord, 1, 1, 0x1E + texMap * 3, 0, 0x7D);
+    *(u32*)(entry + 0x0C) = tevStage + 1;
+    *(u32*)(entry + 0x10) = texMap + 1;
+    *(u32*)(entry + 0x14) = texCoord + 1;
+    return type + 1;
 }
 
 void envDisp_DepthOfField(void) {
@@ -194,8 +240,24 @@ void envDisp_DepthOfField(void) {
     extern void GXSetNumChans(s32);
     extern void GXSetNumTexGens(s32);
     extern void GXSetNumTevStages(s32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetBlendMode(s32, s32, s32, s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
+    extern void GXSetZMode(s32, s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXSetCullMode(s32);
     extern void GXSetTevOrder(s32, s32, s32, s32);
     extern void GXSetTevOp(s32, s32);
+    extern void GXSetTevKColorSel(s32, s32);
+    extern void GXSetTevKAlphaSel(s32, s32);
+    extern void GXSetTevKColor(s32, void*);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevSwapMode(s32, s32, s32);
     extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
     extern void PSMTXTrans(Mtx, f32, f32, f32);
     extern void GXLoadTexMtxImm(Mtx, s32, s32);
@@ -209,6 +271,7 @@ void envDisp_DepthOfField(void) {
     s32 direction;
     s32 sample;
     s32 vertex;
+    u32 tevColor;
 
     if (*(s32*)((s32)gp + 0x14) != 0) {
         env += 0xF0;
@@ -216,17 +279,25 @@ void envDisp_DepthOfField(void) {
     if ((*(u32*)env & 0x80000000) == 0) {
         return;
     }
-    cam = camGetPtr(1);
-    GXSetProjection(cam + 0x1AC, *(s32*)(cam + 0x1E8));
-    cam = camGetPtr(1);
-    GXLoadPosMtxImm(cam + 0x118, 0);
+    cam = camGetPtr(8);
+    GXSetProjection(cam + 0x15C, *(s32*)(cam + 0x19C));
+    cam = camGetPtr(8);
+    GXLoadPosMtxImm(cam + 0x11C, 0);
     GXSetCurrentMtx(0);
     GXLoadTexObj(smartTexObj(env + 0x0C, *(void***)(env + 4)), 0);
     GXLoadTexObj(smartTexObj(env + 0x2C, *(void***)(env + 8)), 1);
     GXSetNumChans(0);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 2, 2);
+    GXSetBlendMode(0, 1, 0, 7);
+    GXSetZCompLoc(0);
+    GXSetAlphaCompare(6, 0x80, 1, 0, 0);
+    GXSetZMode(0, 3, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(9, 1);
     GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+    GXSetCullMode(0);
 
     dofFlags = *(u32*)(env + 0x88);
     for (direction = 0; direction < 2; direction++) {
@@ -240,12 +311,30 @@ void envDisp_DepthOfField(void) {
             PSMTXTrans(mtx, direction ? offset : 0.0f, direction ? 0.0f : offset, 0.0f);
             GXLoadTexMtxImm(mtx, 0x1E + sample * 3, 1);
             GXSetTexCoordGen2(sample, 1, 4, 0x1E + sample * 3, 0, 0x7D);
+            GXSetTevKColorSel(sample, 6);
+            GXSetTevKAlphaSel(sample, 6);
             GXSetTevOrder(sample, sample, 0, -1);
-            GXSetTevOp(sample, 3);
+            GXSetTevColorOp(sample, 0, 0, 0, 1, sample == 3);
+            GXSetTevAlphaOp(sample, 0, 0, 0, 1, sample == 3);
+            GXSetTevColorIn(sample, 15, 8, 14, sample == 0 ? 15 : 0);
+            GXSetTevAlphaIn(sample, 7, 4, 6, sample == 0 ? 7 : 0);
+            GXSetTevSwapMode(sample, 0, 0);
         }
+        tevColor = ((u32)env[0x8A + direction] << 24) | 0xFF;
+        GXSetTevKColor(0, &tevColor);
         GXSetTexCoordGen2(4, 1, 4, 0x3C, 0, 0x7D);
+        if (direction != 0) {
+            u32 white = 0xFFFFFFFF;
+            GXSetTevColor(2, &white);
+        }
+        GXSetTevKColorSel(4, 0xC);
+        GXSetTevKAlphaSel(4, 0x1C);
         GXSetTevOrder(4, 4, 1, -1);
-        GXSetTevOp(4, 0);
+        GXSetTevColorOp(4, 8, 0, 0, 1, 0);
+        GXSetTevAlphaOp(4, 8, 0, 0, 1, 0);
+        GXSetTevColorIn(4, 8, 14, 2, 15);
+        GXSetTevAlphaIn(4, 4, 6, 1, 7);
+        GXSetTevSwapMode(4, 0, 0);
         GXSetNumTexGens(5);
         GXSetNumTevStages(5);
         GXBegin(0x80, 0, 4);
@@ -259,10 +348,85 @@ void envDisp_DepthOfField(void) {
     }
 }
 
-u8 envTevLoadTexMtxImm(void) {
-    return 0;
-}
+void envTevLoadTexMtxImm(s32 type, s32 texMtx, s32 texMtx2, s32 mtxType) {
+    typedef f32 Mtx[3][4];
+    extern void PSMTXRotRad(void*, f32, char);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void PSMTXInvXpose(void*, void*);
+    extern void PSVECNormalize(void*, void*);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXIdentity(void*);
+    extern void GXLoadTexMtxImm(void*, s32, s32);
+    char* env = (char*)work;
+    Mtx matrix;
+    Mtx temp;
+    f32 scale;
 
+    if (*(s32*)((char*)gp + 0x14) != 0) env += 0xF0;
+    switch (type) {
+        case 0:
+            PSMTXRotRad(matrix, 0.017453292f * *(f32*)(env + 0x80), 'Y');
+            PSMTXRotRad(temp, 0.017453292f * -*(f32*)(env + 0x84), 'Z');
+            PSMTXConcat(matrix, temp, matrix);
+            PSMTXInvXpose(matrix, matrix);
+            PSVECNormalize(matrix, matrix);
+            PSVECNormalize((char*)matrix + 0x10, (char*)matrix + 0x10);
+            PSVECNormalize((char*)matrix + 0x20, (char*)matrix + 0x20);
+            PSMTXScale(temp, 0.5f, 0.5f, 0.0f);
+            PSMTXConcat(temp, matrix, matrix);
+            PSMTXTrans(temp, 0.5f, 0.5f, 0.0f);
+            PSMTXConcat(temp, matrix, matrix);
+            GXLoadTexMtxImm(matrix, texMtx, mtxType);
+            break;
+        case 1:
+            PSMTXRotRad(matrix, -1.5708f, 'Y');
+            PSMTXConcat(matrix, *(void**)(env + 0x78), matrix);
+            PSMTXInvXpose(matrix, matrix);
+            PSVECNormalize(matrix, matrix);
+            PSVECNormalize((char*)matrix + 0x10, (char*)matrix + 0x10);
+            PSVECNormalize((char*)matrix + 0x20, (char*)matrix + 0x20);
+            scale = -(0.25f * *(f32*)(env + 0x7C) - 0.5f);
+            PSMTXScale(temp, scale, 0.5f, 0.0f);
+            PSMTXConcat(temp, matrix, matrix);
+            PSMTXTrans(temp, 0.5f, 0.5f, 0.0f);
+            PSMTXConcat(temp, matrix, matrix);
+            GXLoadTexMtxImm(matrix, texMtx, mtxType);
+            break;
+        case 2:
+            PSMTXInvXpose(*(void**)(env + 0x78), matrix);
+            PSVECNormalize(matrix, matrix);
+            PSVECNormalize((char*)matrix + 0x10, (char*)matrix + 0x10);
+            PSVECNormalize((char*)matrix + 0x20, (char*)matrix + 0x20);
+            PSMTXIdentity(temp);
+            PSMTXConcat(temp, matrix, matrix);
+            GXLoadTexMtxImm(matrix, texMtx, mtxType);
+            break;
+        case 3:
+            PSMTXInvXpose(*(void**)(env + 0x78), matrix);
+            PSVECNormalize(matrix, matrix);
+            PSVECNormalize((char*)matrix + 0x10, (char*)matrix + 0x10);
+            PSVECNormalize((char*)matrix + 0x20, (char*)matrix + 0x20);
+            PSMTXScale(temp, 2.0f * *(f32*)(env + 0x7C),
+                       2.0f * *(f32*)(env + 0x7C), 0.0f);
+            PSMTXConcat(temp, matrix, matrix);
+            PSMTXTrans(temp, 0.5f, 0.5f, 0.0f);
+            PSMTXConcat(temp, matrix, matrix);
+            GXLoadTexMtxImm(matrix, texMtx, mtxType);
+            break;
+        case 4:
+            PSMTXInvXpose(*(void**)(env + 0x78), matrix);
+            PSVECNormalize(matrix, matrix);
+            PSVECNormalize((char*)matrix + 0x10, (char*)matrix + 0x10);
+            PSVECNormalize((char*)matrix + 0x20, (char*)matrix + 0x20);
+            GXLoadTexMtxImm(matrix, texMtx, 1);
+            PSMTXScale(temp, 0.5f, 0.5f, 0.0f);
+            PSMTXTrans(matrix, 0.5f, 0.5f, 0.0f);
+            PSMTXConcat(matrix, temp, matrix);
+            GXLoadTexMtxImm(matrix, texMtx2, mtxType);
+            break;
+    }
+}
 
 void envSetWater(s32* param) {
     typedef struct GXTexObj { u32 data[8]; } GXTexObj;
@@ -270,6 +434,17 @@ void envSetWater(s32* param) {
     extern void* smartAlloc(u32, s32);
     extern void GXTexModeSync(void);
     extern void GXLoadTexObj(void*, s32);
+    extern void GXSetTexCopySrc(u32, u32, u32, u32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetIndTexMtx(s32, f32*, s32);
+    extern void GXSetIndTexOrder(s32, s32, s32);
+    extern void GXSetIndTexCoordScale(s32, s32, s32);
+    extern void GXSetTevIndWarp(s32, s32, s32, s32, s32);
     u32* obj = (u32*)param[0];
     u32 flags = *obj;
     u32 left, top, right, bottom;
@@ -277,6 +452,7 @@ void envSetWater(s32* param) {
     u32 size;
     void* image;
     GXTexObj tex;
+    f32 indMtx[6] = {0.5f, 0.0f, 0.0f, 0.5f, 0.0f, 0.0f};
 
     if ((flags & 0x20) == 0) {
         if ((flags & 0x20000000) == 0) {
@@ -310,6 +486,7 @@ void envSetWater(s32* param) {
     height = (bottom - top) >> 1;
     size = GXGetTexBufferSize(width, height, 4, 0, 0);
     image = smartAlloc(size, 3);
+    GXSetTexCopySrc(left, top, right - left, bottom - top);
     GXSetTexCopyDst(width, height, 4, 1);
     GXCopyTex(image, 0);
     GXPixModeSync();
@@ -317,6 +494,16 @@ void envSetWater(s32* param) {
     GXInitTexObj(&tex, image, width, height, 4, 0, 0, 0);
     GXInitTexObjLOD(&tex, 0, 0, 0.0f, 0.0f, 0.0f, 0, 0, 0);
     GXLoadTexObj(&tex, param[4]);
+    GXSetTexCoordGen2(param[2], 0, 0, 0x1E + param[4] * 3, 0, 0x7D);
+    GXSetTevOrder(param[3], param[2], param[4], -1);
+    GXSetTevColorOp(param[3], 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(param[3], 0, 0, 0, 1, 0);
+    GXSetTevColorIn(param[3], 8, 0, 1, 15);
+    GXSetTevAlphaIn(param[3], 7, 7, 7, 4);
+    GXSetIndTexMtx(1, indMtx, 1);
+    GXSetIndTexOrder(param[5], param[2], param[4] + 1);
+    GXSetIndTexCoordScale(param[5], 0, 0);
+    GXSetTevIndWarp(param[3], param[5], 1, 0, 1);
 }
 
 void envGlare(void* data_) {

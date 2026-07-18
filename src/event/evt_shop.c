@@ -28,7 +28,11 @@ void list_disp(u32* win) {
     extern void FontDrawEdgeOff(void);
     extern void FontDrawColor(void* color);
     extern void FontDrawMessage(s32 x, s32 y, const char* msg);
+    extern void FontDrawMessageMtx(void* mtx, const char* msg);
     extern u32 FontGetMessageWidth(const char* msg);
+    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(void* a, void* b, void* out);
     extern char* winZenkakuStr(s32 value);
     extern s32 sprintf(char* dst, const char* format, ...);
     extern s32 shopPointList[];
@@ -41,6 +45,10 @@ void list_disp(u32* win) {
     char buffer[256];
     char* text;
     u32 color;
+    f32 trans[3][4];
+    f32 scale[3][4];
+    f32 width;
+    f32 x;
     s32 row;
     s32 index;
 
@@ -49,19 +57,41 @@ void list_disp(u32* win) {
     }
     pouch = pouchGetPtr();
     text = msgSearch(str_msg_shop_point_list5_802ed310);
+    width = (f32)(u16)FontGetMessageWidth(text);
     FontDrawStart();
     FontDrawEdge();
     color = dat_80421e88;
     FontDrawColor(&color);
-    FontDrawMessage(win[6] + 10, win[7] + 13, text);
+    x = (f32)(win[6] + 10);
+    if (width > 80.0f) {
+        PSMTXTrans(trans, x, (f32)(win[7] + 13), 0.0f);
+        PSMTXScale(scale, 80.0f / width, 1.0f, 1.0f);
+    } else {
+        PSMTXTrans(trans, x + (100.0f - width) * 0.5f,
+                   (f32)(win[7] + 13), 0.0f);
+        PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
+    }
+    PSMTXConcat(trans, scale, trans);
+    FontDrawMessageMtx(trans, text);
     FontDrawEdgeOff();
 
     text = msgSearch(str_msg_shop_point_list6_802ed328);
+    width = (f32)(u16)FontGetMessageWidth(text);
     FontDrawStart();
     FontDrawEdge();
     color = dat_80421e8c;
     FontDrawColor(&color);
-    FontDrawMessage(win[6] + (s32)win[8] / 2 - 10, win[7] + 13, text);
+    x = (f32)(win[6] + (s32)win[8] / 2 - 10);
+    if (width > 80.0f) {
+        PSMTXTrans(trans, x, (f32)(win[7] + 13), 0.0f);
+        PSMTXScale(scale, 80.0f / width, 1.0f, 1.0f);
+    } else {
+        PSMTXTrans(trans, x + (100.0f - width) * 0.5f,
+                   (f32)(win[7] + 13), 0.0f);
+        PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
+    }
+    PSMTXConcat(trans, scale, trans);
+    FontDrawMessageMtx(trans, text);
     FontDrawEdgeOff();
 
     row = 0;

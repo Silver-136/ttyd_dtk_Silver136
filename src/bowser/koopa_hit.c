@@ -399,33 +399,122 @@ void* kpaHitCheck(void) {
 s32 kpaSearchGround(f64 height, f32* outY, f32* outDelta, f32* outAngle) {
     extern void* marioGetPtr(void);
     extern void* kpaGetKpaWork(void);
-    extern void* hitCheckFilter(f32*, f32*, s32, void*);
+    extern s32 kpaGetLevel(void);
+    extern void toMovedir(f64);
+    extern s32 hitCheckFilter(f64, f64, f64, f64, f64, f64, s32,
+                              f32*, f32*, f32*, f32*, f32*, f32*, f32*);
     extern f32 angleABf(f32, f32, f32, f32);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern f64 sqrt(f64);
     u8* mario = marioGetPtr();
     u8* work = kpaGetKpaWork();
-    f32 start[3], end[3];
+    f32 start[3];
+    f32 end[3];
     f32 best = -100000.0f;
-    s32 rays = *(s32*)(work + 0x14) < 2 ? 3 : 7;
-    s32 i, found = 0;
+    s32 rays;
+    s32 i;
+    s32 found = 0;
+    f32 hitData[2];
+    f32 hitY;
+    f32 hitZ;
+    f32 hitDistance;
+    f32 normalX;
+    f32 normalY;
+    f32 normalZ;
 
     *(f32*)(mario + 0x218) = 0.0f;
     *(f32*)(mario + 0x21C) = 0.0f;
     *(f32*)(mario + 0x220) = 0.0f;
     *(f32*)(mario + 0x224) = 0.0f;
     *outY = *(f32*)(mario + 0x90);
+    if (*(u32*)mario & 0x200) {
+        return 0;
+    }
+
+    height += 0.01;
     *outDelta = -1.0f;
     *outAngle = 0.0f;
+    if (*(f32*)(mario + 0x180) == 0.0f) {
+        toMovedir(*(f32*)(mario + 0x1AC));
+    }
+    for (i = 0; i < 10; i++) {
+        *(s32*)(work + 0x4C + i * 4) = 0;
+        *(f32*)(work + 0xA4 + i * 4) = 1000.0f;
+    }
+    rays = kpaGetLevel() == 3 ? 7 : 3;
+
     for (i = 0; i < rays; i++) {
-        f32 x = *(f32*)(mario + 0x8C) + (f32)((i & 1) ? 20 : -20);
-        f32 z = *(f32*)(mario + 0x94) + (f32)((i & 2) ? 20 : -20);
-        start[0] = x; start[1] = *(f32*)(mario + 0x90) + (f32)height; start[2] = z;
-        end[0] = x; end[1] = *(f32*)(mario + 0x90) - (f32)height; end[2] = z;
-        if (hitCheckFilter(start, end, 0x1000, 0) != 0 && end[1] > best) {
-            best = end[1];
-            *outY = best;
-            *outDelta = *(f32*)(mario + 0x90) - best;
-            *outAngle = angleABf(start[0], start[2], end[0], end[2]);
-            found = 1;
+        f32 offsetX;
+        f32 offsetZ;
+        f32 radius;
+        f64 angle = (f64)*(f32*)(mario + 0x1AC) / 180.0;
+        switch (i) {
+        case 0:
+            offsetX = 0.0f;
+            offsetZ = 0.0f;
+            break;
+        case 1:
+            radius = 19.95f;
+            offsetX = radius * (f32)sin(angle);
+            offsetZ = -radius * (f32)cos(angle);
+            break;
+        case 2:
+            radius = 19.95f;
+            offsetX = -radius * (f32)sin(angle);
+            offsetZ = -radius * (f32)cos(angle);
+            break;
+        case 3:
+            radius = 39.95f;
+            offsetX = radius * (f32)sin(angle);
+            offsetZ = -radius * (f32)cos(angle);
+            break;
+        case 4:
+            radius = 39.95f;
+            offsetX = -radius * (f32)sin(angle);
+            offsetZ = -radius * (f32)cos(angle);
+            break;
+        case 5:
+            radius = 59.95f;
+            offsetX = radius * (f32)sin(angle);
+            offsetZ = -radius * (f32)cos(angle);
+            break;
+        default:
+            radius = 59.95f;
+            offsetX = -radius * (f32)sin(angle);
+            offsetZ = -radius * (f32)cos(angle);
+            break;
+        }
+        {
+        f32 x = *(f32*)(mario + 0x8C) + offsetX;
+        f32 z = *(f32*)(mario + 0x94) + offsetZ;
+        start[0] = x;
+        start[1] = *(f32*)(mario + 0x90) + (f32)height;
+        start[2] = z;
+        end[0] = x;
+        end[1] = *(f32*)(mario + 0x90) - (f32)height;
+        end[2] = z;
+        hitDistance = (f32)height + 0.01f;
+        {
+        s32 hit = hitCheckFilter((f64)x, (f64)start[1], (f64)z,
+                                 0.0, -1.0, 0.0, 0, hitData,
+                                 &hitY, &hitZ, &hitDistance,
+                                 &normalX, &normalY, &normalZ);
+        if (hit != 0) {
+            f32 horizontal = (f32)sqrt((f64)(normalX * normalX + normalZ * normalZ));
+            if (angleABf(0.0f, 0.0f, horizontal, -normalY) >= 50.0f) {
+                hit = 0;
+            }
+        }
+        hitY = (f32)(s32)(100.0f * hitY + 0.5f) / 100.0f;
+        if (hit != 0 && hitY > best) {
+                best = hitY;
+                *outY = best;
+                *outDelta = *(f32*)(mario + 0x90) - best;
+                *outAngle = angleABf(0.0f, 0.0f, normalX, normalZ);
+                found = 1;
+            }
+        }
         }
     }
     return found;

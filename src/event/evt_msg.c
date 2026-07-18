@@ -776,10 +776,26 @@ void unk_800d1364(char* dst, char* value) {
     extern char str_ITEM_802cc66c[];
     extern char str_an_8042183c[];
     extern char str_a_80421840[];
+    extern char str_M_8042184c[];
+    extern char str_F_80421850[];
+    extern char str_N_80421800[];
+    extern char str_MPLdie_802cc680[];
+    extern char str_FPLdie_802cc68c[];
+    extern char str_NPLdie_802cc698[];
+    extern char str_Einen_802cc6a4[];
+    extern char str_Ein_ITEM_802cc6ac[];
+    extern char str_ein_ITEM_802cc6b8[];
+    extern char str_Einen_ITEM_802cc6c4[];
+    extern char str_einen_ITEM_802cc6d4[];
+    extern char* PTR_str_Einen_802cc608_804163e8[];
+    extern char* dat_ptrarr_804163b8[];
+    extern char* PTR_str_ein_8042177c_804163d0[];
+    extern char* PTR_str_einen_802cc610_80416400[];
     char buffer[2572];
     char* marker;
     char* article;
     u32 prefix;
+    s32 form;
 
     switch (*(s32*)((s32)gp + 0x11D8)) {
     case 0:
@@ -811,6 +827,73 @@ void unk_800d1364(char* dst, char* value) {
                 strncpy(buffer, dst, prefix); buffer[prefix] = 0;
                 strcat(buffer, value); strcat(buffer, marker + 6);
             }
+        }
+        break;
+    case 2:
+        form = 0;
+        if (strstr(value, str_M_8042184c) != 0) {
+            form = 0;
+        } else if (strstr(value, str_F_80421850) != 0) {
+            form = 1;
+        } else if (strstr(value, str_N_80421800) != 0) {
+            form = 2;
+        } else if (strstr(value, str_MPLdie_802cc680) != 0) {
+            form = 3;
+        } else if (strstr(value, str_FPLdie_802cc68c) != 0) {
+            form = 4;
+        } else if (strstr(value, str_NPLdie_802cc698) != 0) {
+            form = 5;
+        }
+        marker = strstr(dst, str_Einen_802cc6a4);
+        if (marker != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix);
+            buffer[prefix] = 0;
+            strcat(buffer, PTR_str_Einen_802cc608_804163e8[form]);
+            strcat(buffer, marker + 7);
+            strcpy(dst, buffer);
+            marker = strstr(dst, str_ITEM_802cc66c);
+            if (marker != 0) {
+                prefix = strlen(dst) - strlen(marker);
+                strncpy(buffer, dst, prefix);
+                buffer[prefix] = 0;
+                strcat(buffer, value);
+                strcat(buffer, marker + 6);
+            }
+        } else if ((marker = strstr(dst, str_Ein_ITEM_802cc6ac)) != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix);
+            buffer[prefix] = 0;
+            strcat(buffer, dat_ptrarr_804163b8[form]);
+            strcat(buffer, value);
+            strcat(buffer, marker + 10);
+        } else if ((marker = strstr(dst, str_ein_ITEM_802cc6b8)) != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix);
+            buffer[prefix] = 0;
+            strcat(buffer, PTR_str_ein_8042177c_804163d0[form]);
+            strcat(buffer, value);
+            strcat(buffer, marker + 10);
+        } else if ((marker = strstr(dst, str_Einen_ITEM_802cc6c4)) != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix);
+            buffer[prefix] = 0;
+            strcat(buffer, PTR_str_Einen_802cc608_804163e8[form]);
+            strcat(buffer, value);
+            strcat(buffer, marker + 12);
+        } else if ((marker = strstr(dst, str_einen_ITEM_802cc6d4)) != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix);
+            buffer[prefix] = 0;
+            strcat(buffer, PTR_str_einen_802cc610_80416400[form]);
+            strcat(buffer, value);
+            strcat(buffer, marker + 12);
+        } else if ((marker = strstr(dst, str_ITEM_802cc66c)) != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix);
+            buffer[prefix] = 0;
+            strcat(buffer, value);
+            strcat(buffer, marker + 6);
         }
         break;
     default:

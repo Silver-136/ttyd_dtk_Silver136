@@ -1,49 +1,154 @@
 #include "effect/n64/eff_dogabon_attack_n64.h"
 
 
+#pragma optimize_for_size off
+#pragma optimize_for_size off
 void effDogabonAttackMain(void* effect) {
     extern void effDelete(void*);
-    extern f32 dispCalcZ(void*);
-    extern void dispEntry(s32,s32,void*,void*,f32);
-    extern void effDogabonAttackDisp(s32,void*);
-    u8* entry=effect; u8* work=*(u8**)(entry+0xC); u8* p=work;
-    f32 pos[3]; s32 i,frame,state,tick;
-    pos[0]=*(f32*)(work+4);pos[1]=*(f32*)(work+8);pos[2]=*(f32*)(work+0xC);
-    if((*(u32*)entry&4)!=0){*(u32*)entry&=~4;*(s32*)(work+0x10)=64;}
-    if(*(s32*)(work+0x10)<1000)(*(s32*)(work+0x10))--;
-    frame=++*(s32*)(work+0x14);
-    if(*(s32*)(work+0x10)<0){effDelete(effect);return;}
-    for(i=0;i<25;i++,p+=4){
-        state=*(s32*)(p+0x6D0); tick=*(s32*)(p+0x734);
-        *(f32*)(p+0x414)=0.01f*(f32)(100+(frame%7));
-        *(f32*)(p+0x3B0)=2.0f-*(f32*)(p+0x414);
-        switch(state){
-        case 0:
-            *(f32*)(p+0x2C)=*(f32*)(p+0x158);
-            *(f32*)(p+0x90)=*(f32*)(p+0x1BC);
-            *(f32*)(p+0xF4)=*(f32*)(p+0x220);
-            if(*(s32*)(p+0x66C)==0){*(s32*)(p+0x6D0)=1;*(s32*)(p+0x734)=0;}else (*(s32*)(p+0x66C))--;
-            break;
-        case 1:
-            if(++*(s32*)(p+0x734)>7){*(s32*)(p+0x734)=0;*(s32*)(p+0x6D0)=(*(s32*)work==0)?2:20;}
-            break;
-        case 2:
-        case 20:{
-            f32 t=(state==2?tick/14.0f:tick/19.0f);
-            *(f32*)(p+0x2C)+=t*(*(f32*)(p+0x284)-*(f32*)(p+0x2C));
-            *(f32*)(p+0x90)+=t*(*(f32*)(p+0x2E8)-*(f32*)(p+0x90));
-            *(f32*)(p+0xF4)+=t*(*(f32*)(p+0x34C)-*(f32*)(p+0xF4));
-            if(++*(s32*)(p+0x734)>(state==2?14:19)){*(s32*)(p+0x734)=0;*(s32*)(p+0x6D0)=state==2?3:5;}
-            break;}
-        case 5:
-            *(f32*)(p+0x2C)+=*(f32*)(p+0x540);*(f32*)(p+0x90)+=*(f32*)(p+0x5A4);*(f32*)(p+0xF4)+=*(f32*)(p+0x608);
-            *(f32*)(p+0x540)*=0.99f;*(f32*)(p+0x5A4)=*(f32*)(p+0x5A4)*0.99f-0.1f;*(f32*)(p+0x608)*=0.99f;
-            if(++*(s32*)(p+0x734)>16){*(s32*)(p+0x734)=0;*(s32*)(p+0x6D0)=6;}
-            break;
+    extern float dispCalcZ(void*);
+    extern void dispEntry(int, int, void*, void*, float);
+    extern void effDogabonAttackDisp(int, void*);
+    extern unsigned char scale_data[];
+    extern unsigned char scale_data_2[];
+    extern unsigned char move_data_1[];
+    extern unsigned char move_data_2[];
+    extern unsigned char move_data_hazure[];
+    extern signed char y_data[];
+    extern double sin(double);
+    extern double cos(double);
+    unsigned char* entry = (unsigned char*)effect;
+    unsigned char* work = *(unsigned char**)(entry + 0xC);
+    unsigned char* part = work;
+    float pos[3];
+    int type;
+    int frame;
+    int i;
+
+    pos[0] = *(float*)(work + 4);
+    pos[1] = *(float*)(work + 8);
+    pos[2] = *(float*)(work + 0xC);
+    type = *(int*)work;
+    if ((*(unsigned int*)entry & 4) != 0) {
+        *(unsigned int*)entry &= ~4;
+        *(int*)(work + 0x10) = 0x40;
+    }
+    if (*(int*)(work + 0x10) < 1000) {
+        (*(int*)(work + 0x10))--;
+    }
+    frame = ++*(int*)(work + 0x14);
+    if (*(int*)(work + 0x10) < 0) {
+        effDelete(effect);
+        return;
+    }
+
+    for (i = 0; i < 25; i++, part += 4) {
+        float startX = *(float*)(part + 0x158);
+        float startY = *(float*)(part + 0x1BC);
+        float startZ = *(float*)(part + 0x220);
+        int state = *(int*)(part + 0x6D0);
+        int tick = *(int*)(part + 0x734);
+        float pulse = 0.01f * (float)scale_data[frame % 7];
+
+        *(float*)(part + 0x414) = pulse;
+        *(float*)(part + 0x3B0) = 2.0f - pulse;
+        switch (state) {
+            case 0:
+                *(float*)(part + 0x2C) = startX;
+                *(float*)(part + 0x90) = startY;
+                *(float*)(part + 0xF4) = startZ;
+                if (*(int*)(part + 0x66C) == 0) {
+                    float intro = 0.01f * (float)scale_data_2[tick];
+                    *(int*)(part + 0x6D0) = 1;
+                    *(float*)(part + 0x414) = intro;
+                    *(float*)(part + 0x3B0) = intro;
+                    *(int*)(part + 0x734) = tick + 1;
+                } else {
+                    (*(int*)(part + 0x66C))--;
+                }
+                break;
+            case 1: {
+                float intro = 0.01f * (float)scale_data_2[tick];
+                *(float*)(part + 0x414) = intro;
+                *(float*)(part + 0x3B0) = intro;
+                tick++;
+                *(int*)(part + 0x734) = tick;
+                if (tick > 7) {
+                    *(int*)(part + 0x6D0) = type == 0 ? 2 : 20;
+                    *(int*)(part + 0x734) = 0;
+                }
+                break;
+            }
+            case 2: {
+                float t = 0.01f * (float)move_data_1[tick];
+                *(float*)(part + 0x2C) = startX + t * (*(float*)(part + 0x284) - startX);
+                *(float*)(part + 0x90) = startY + t * (*(float*)(part + 0x2E8) - startY);
+                *(float*)(part + 0xF4) = startZ + t * (*(float*)(part + 0x34C) - startZ);
+                *(float*)(part + 0x414) = 1.0f;
+                *(float*)(part + 0x3B0) = 1.0f;
+                if (++*(int*)(part + 0x734) > 14) {
+                    *(int*)(part + 0x6D0) = 3;
+                    *(int*)(part + 0x734) = 0;
+                }
+                break;
+            }
+            case 3:
+                if (i == 24) {
+                    int j;
+                    for (j = 0; j < 25; j++) {
+                        ((int*)(work + 0x6D0))[j] = 4;
+                    }
+                }
+                break;
+            case 4: {
+                float t = 0.01f * (float)move_data_2[tick];
+                float ring = (float)(i / 25);
+                float angle = (6.283185f * (540.0f * (1.0f - t) *
+                              (float)cos((6.283185f * ring) / 360.0f) + (float)i)) / 360.0f;
+                float radius = 15.0f / t / t;
+                *(float*)(part + 0x2C) = (float)sin(angle) * radius;
+                *(float*)(part + 0x90) = (float)y_data[i] + 10.0f;
+                *(float*)(part + 0xF4) = (float)cos(angle) * radius;
+                tick++;
+                *(int*)(part + 0x734) = tick;
+                if (tick > 0x45) {
+                    *(int*)(part + 0x6D0) = 5;
+                    *(int*)(part + 0x734) = 0;
+                    *(float*)(part + 0x540) = 0.5f * *(float*)(part + 0x284);
+                    *(float*)(part + 0x5A4) = 0.5f * *(float*)(part + 0x2E8);
+                    *(float*)(part + 0x608) = 0.5f * *(float*)(part + 0x34C);
+                }
+                break;
+            }
+            case 5:
+                *(float*)(part + 0x2C) += *(float*)(part + 0x540);
+                *(float*)(part + 0x90) += *(float*)(part + 0x5A4);
+                *(float*)(part + 0xF4) += *(float*)(part + 0x608);
+                *(float*)(part + 0x540) *= 0.99f;
+                *(float*)(part + 0x5A4) = *(float*)(part + 0x5A4) * 0.99f - 0.1f;
+                *(float*)(part + 0x608) *= 0.99f;
+                if (++*(int*)(part + 0x734) > 16) {
+                    *(int*)(part + 0x734) = 0;
+                    *(int*)(part + 0x6D0) = 6;
+                }
+                break;
+            case 20: {
+                float t = 0.01f * (float)move_data_hazure[tick];
+                *(float*)(part + 0x2C) = startX + t * (*(float*)(part + 0x284) - startX);
+                *(float*)(part + 0x90) = startY + t * (*(float*)(part + 0x2E8) - startY);
+                *(float*)(part + 0xF4) = startZ + t * (*(float*)(part + 0x34C) - startZ);
+                if (++*(int*)(part + 0x734) > 19) {
+                    *(int*)(part + 0x734) = 0;
+                    *(int*)(part + 0x6D0) = 5;
+                }
+                break;
+            }
         }
     }
-    dispEntry(4,1,effDogabonAttackDisp,effect,dispCalcZ(pos));
+    dispEntry(4, 1, effDogabonAttackDisp, effect, dispCalcZ(pos));
 }
+#pragma optimize_for_size on
+
+#pragma optimize_for_size on
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -144,6 +249,62 @@ void effDogabonAttackDisp(s32 cameraId, void* effect) {
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
-u8 effDogabonAttackN64Entry(void) {
-    return 0;
+void* effDogabonAttackN64Entry(float x, float y, float z, float scale, int type, int timer) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(int, int);
+    extern void effDogabonAttackMain(void*);
+    extern int rand(void);
+    extern double sin(double);
+    extern double cos(double);
+    extern char str_DogabonAttackN64_802fadf8[];
+    extern signed char y_data[];
+    extern float float_6p2832_80425084;
+    extern float float_360_80425088;
+    extern float float_15_80425090;
+    extern float float_120_804250a0;
+    extern float float_0_8042506c;
+    unsigned char* entry = (unsigned char*)effEntry();
+    int* work;
+    int* part;
+    int i;
+    int phase = 0;
+    int delay = 1;
+
+    *(char**)(entry + 0x14) = str_DogabonAttackN64_802fadf8;
+    *(int*)(entry + 8) = 1;
+    work = (int*)__memAlloc(3, 0x798);
+    *(int**)(entry + 0xC) = work;
+    *(void**)(entry + 0x10) = effDogabonAttackMain;
+    *(unsigned int*)entry |= 2;
+    work[0] = type;
+    work[5] = 0;
+    work[4] = timer < 1 ? 1000 : timer;
+    work[9] = 0xFF;
+    *(float*)&work[1] = x;
+    *(float*)&work[2] = y;
+    *(float*)&work[3] = z;
+    *(float*)&work[10] = scale;
+    work[6] = 0x46;
+    work[7] = 0xB4;
+    work[8] = 0x78;
+
+    part = work;
+    for (i = 0; i < 25; i++, part++, phase += 0x438, delay += 2) {
+        float angle = (float_6p2832_80425084 * (float)(phase / 25)) / float_360_80425088;
+        float sine = (float)sin(angle);
+        float cosine = (float)cos(angle);
+        part[0x11E] = (int)(float)((rand() % 360) - 180);
+        *(float*)&part[0xA1] = float_15_80425090 * sine;
+        *(float*)&part[0xBA] = (float)y_data[i] + 10.0f;
+        *(float*)&part[0xD3] = float_15_80425090 * cosine;
+        *(float*)&part[0x56] = float_120_804250a0 * sine;
+        *(float*)&part[0x6F] = (float)(y_data[i] * 8 + 0x28);
+        *(float*)&part[0x88] = float_120_804250a0 * cosine;
+        *(float*)&part[0x169] = float_0_8042506c;
+        part[0x19B] = delay;
+        part[0x1B4] = 0;
+        part[0x1CD] = 0;
+        *(float*)&part[0x137] = float_0_8042506c;
+    }
+    return entry;
 }

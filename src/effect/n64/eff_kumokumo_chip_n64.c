@@ -42,10 +42,20 @@ void* effKumokumoChipN64Entry(f32 x0, f32 y0, f32 z0, f32 x1, f32 y1, f32 z1, f3
     return entry;
 }
 
-u8 effKumokumoChipDisp(int param_1, int param_2) {
-    return 0;
+void effKumokumoChipDisp(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4];
+    extern void* camGetPtr(s32); extern void PSMTXTrans(Mtx,f64,f64,f64); extern void PSMTXScale(Mtx,f32,f32,f32); extern void PSMTXConcat(Mtx,Mtx,Mtx);
+    extern void GXLoadPosMtxImm(Mtx,s32); extern void GXSetCurrentMtx(s32); extern void GXSetTevColor(s32,void*); extern void effGetTexObjN64(s32,void*); extern void GXLoadTexObj(void*,s32);
+    extern void GXSetNumChans(s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32); extern void GXLoadTexMtxImm(Mtx,s32,s32);
+    extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevColorIn(s32,s32,s32,s32,s32); extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32); extern void GXSetCullMode(s32); extern void effSetVtxDescN64(void*); extern void GXBegin(s32,s32,s32); extern void tri2(s32,s32,s32,s32,s32,s32,s32);
+    extern f32 float_0p03125_804258e0; extern f32 float_0_804258e4;
+    u8* work=*(u8**)((u8*)effect+0xC);u8* camera=(u8*)camGetPtr(cameraId);u8 tex[0x20];Mtx model,scale;u32 c1,c2;
+    PSMTXTrans(model,*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC));PSMTXScale(scale,*(f32*)(work+0x44),*(f32*)(work+0x44),*(f32*)(work+0x44));PSMTXConcat(model,scale,model);PSMTXConcat((f32(*)[4])(camera+0x11C),model,model);GXLoadPosMtxImm(model,0);GXSetCurrentMtx(0);
+    c1=((u32)*(u8*)(work+0x24)<<24)|((u32)*(u8*)(work+0x28)<<16)|((u32)*(u8*)(work+0x2C)<<8)|*(u8*)(work+0x30);c2=((u32)*(u8*)(work+0x34)<<24)|((u32)*(u8*)(work+0x38)<<16)|((u32)*(u8*)(work+0x3C)<<8)|*(u8*)(work+0x40);GXSetTevColor(1,&c1);GXSetTevColor(2,&c2);
+    effGetTexObjN64(0x6B,tex);GXLoadTexObj(tex,0);GXSetNumChans(0);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);PSMTXScale(scale,float_0p03125_804258e0,float_0p03125_804258e0,float_0_804258e4);GXLoadTexMtxImm(scale,0x1E,1);
+    GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,4,2,8,15);GXSetTevAlphaIn(0,7,5,4,7);GXSetCullMode(0);effSetVtxDescN64((void*)0x803A51D8);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3);
 }
-
 
 void effKumokumoChipMain(void* effect) {
     typedef struct Vec3 {

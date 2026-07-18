@@ -101,7 +101,6 @@ void effFireDustMain(void* effect) {
 
     dispEntry(4, 2, effFireDustDisp, effect, dispCalcZ(&pos));
 }
-
 void* effFireDustN64Entry(f32 x, f32 y, f32 z, f32 scaleA, f32 scaleB, s32 type, s32 count, u32 timer) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -159,11 +158,136 @@ void* effFireDustN64Entry(f32 x, f32 y, f32 z, f32 scaleA, f32 scaleB, s32 type,
     return entry;
 }
 
-u8 main_dl(void) {
-    return 0;
+void main_dl(int effect, float view[3][4]) {
+    typedef float Mtx[3][4];
+    extern void PSMTXTrans(Mtx, double, double, double);
+    extern void PSMTXRotRad(Mtx, double, char);
+    extern void PSMTXScale(Mtx, float, float, float);
+    extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void GXLoadPosMtxImm(Mtx, int);
+    extern void GXSetCurrentMtx(int);
+    extern void GXSetTevColor(int, void*);
+    extern void effSetVtxDescN64(void*);
+    extern void GXBegin(int, int, int);
+    extern void tri2(int, int, int, int, int, int, int);
+    extern float float_255_80425188;
+    extern float float_deg2rad_8042518c;
+    extern unsigned char DAT_8039f480[], DAT_8039f4b8[], DAT_8039f4f0[], DAT_8039f528[];
+    extern unsigned char DAT_8039f560[], size8x8_tex22x22_vtx[], DAT_8039f410[], DAT_8039f448[];
+    unsigned char* entry = (unsigned char*)effect;
+    unsigned char* work = *(unsigned char**)(entry + 0xC);
+    unsigned char* part = work + 0x6C;
+    void* vertexData = 0;
+    Mtx rotation;
+    Mtx scale;
+    Mtx model;
+    float alphaScale = (float)*(int*)(work + 0x4C) / float_255_80425188;
+    int i;
+
+    for (i = 1; i < *(int*)(entry + 8); i++, part += 0x6C) {
+        unsigned int color;
+        float size;
+        if (*(int*)(part + 0x30) < 0) {
+            continue;
+        }
+        PSMTXTrans(model, *(float*)(part + 4), *(float*)(part + 8), *(float*)(part + 0xC));
+        PSMTXRotRad(rotation, float_deg2rad_8042518c * *(float*)(part + 0x34), 'z');
+        size = *(float*)(part + 0x60) * alphaScale;
+        PSMTXScale(scale, size, size, size);
+        PSMTXConcat(model, rotation, model);
+        PSMTXConcat(model, scale, model);
+        PSMTXConcat(view, model, model);
+        GXLoadPosMtxImm(model, 0);
+        GXSetCurrentMtx(0);
+        color = ((unsigned int)*(unsigned char*)(work + 0x50) << 24) |
+                ((unsigned int)*(unsigned char*)(work + 0x54) << 16) |
+                ((unsigned int)*(unsigned char*)(work + 0x58) << 8) |
+                (unsigned char)((float)*(int*)(part + 0x4C) * alphaScale);
+        GXSetTevColor(1, &color);
+        switch (i & 7) {
+            case 0: vertexData = DAT_8039f480; break;
+            case 1: vertexData = DAT_8039f4b8; break;
+            case 2: vertexData = DAT_8039f4f0; break;
+            case 3: vertexData = DAT_8039f528; break;
+            case 4: vertexData = DAT_8039f560; break;
+            case 5: vertexData = size8x8_tex22x22_vtx; break;
+            case 6: vertexData = DAT_8039f410; break;
+            case 7: vertexData = DAT_8039f448; break;
+        }
+        effSetVtxDescN64(vertexData);
+        GXBegin(0x90, 0, 6);
+        tri2(0, 1, 2, 0, 0, 2, 3);
+    }
 }
 
+void effFireDustDisp(int cameraId, int effect) {
+    typedef float Mtx[3][4];
+    extern void* camGetPtr(int);
+    extern void PSMTXTrans(Mtx, double, double, double);
+    extern void PSMTXScale(Mtx, float, float, float);
+    extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void PSMTXRotRad(Mtx, double, char);
+    extern void GXSetTevColor(int, void*);
+    extern void effGetTexObjN64(int, void*);
+    extern void GXLoadTexObj(void*, int);
+    extern void GXSetNumChans(int);
+    extern void GXSetNumTexGens(int);
+    extern void GXSetTexCoordGen2(int, int, int, int, int, int);
+    extern void GXLoadTexMtxImm(Mtx, int, int);
+    extern void GXSetNumTevStages(int);
+    extern void GXSetTevOrder(int, int, int, int);
+    extern void GXSetTevColorOp(int, int, int, int, int, int);
+    extern void GXSetTevAlphaOp(int, int, int, int, int, int);
+    extern void GXSetTevColorIn(int, int, int, int, int);
+    extern void GXSetTevAlphaIn(int, int, int, int, int);
+    extern void GXSetCullMode(int);
+    extern void main_dl(int, Mtx);
+    extern float float_0p0056818_80425190;
+    extern float float_0p045455_80425194;
+    extern float float_0_80425198;
+    extern float float_2p0944_8042519c;
+    extern float float_neg2p0944_804251a0;
+    unsigned char texObj[0x20];
+    Mtx view;
+    Mtx rotation;
+    Mtx scaled;
+    Mtx model;
+    unsigned char* entry = (unsigned char*)effect;
+    unsigned char* work = *(unsigned char**)(entry + 0xC);
+    unsigned char* camera = (unsigned char*)camGetPtr(cameraId);
+    unsigned int color;
+    float size = *(float*)(work + 0x60);
 
-u8 effFireDustDisp(int param_1, int param_2) {
-    return 0;
+    PSMTXTrans(model, *(float*)(work + 4), *(float*)(work + 8), *(float*)(work + 0xC));
+    PSMTXScale(scaled, size, size, size);
+    PSMTXConcat(model, scaled, model);
+    color = ((unsigned int)*(unsigned char*)(work + 0x40) << 24) |
+            ((unsigned int)*(unsigned char*)(work + 0x44) << 16) |
+            ((unsigned int)*(unsigned char*)(work + 0x48) << 8) |
+            *(unsigned char*)(work + 0x5C);
+    GXSetTevColor(2, &color);
+    effGetTexObjN64(0x20, texObj);
+    GXLoadTexObj(texObj, 0);
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    PSMTXScale(scaled, float_0p0056818_80425190, float_0p045455_80425194, float_0_80425198);
+    GXLoadTexMtxImm(scaled, 0x1E, 1);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 2, 12, 8, 15);
+    GXSetTevAlphaIn(0, 7, 4, 4, 7);
+    GXSetCullMode(0);
+    PSMTXConcat((float (*)[4])(camera + 0x11C), model, view);
+    main_dl(effect, view);
+    PSMTXRotRad(rotation, float_2p0944_8042519c, 'y');
+    PSMTXConcat(model, rotation, view);
+    PSMTXConcat((float (*)[4])(camera + 0x11C), view, view);
+    main_dl(effect, view);
+    PSMTXRotRad(rotation, float_neg2p0944_804251a0, 'y');
+    PSMTXConcat(model, rotation, view);
+    PSMTXConcat((float (*)[4])(camera + 0x11C), view, view);
+    main_dl(effect, view);
 }

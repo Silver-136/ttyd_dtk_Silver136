@@ -1037,29 +1037,46 @@ s32 _lvup_spot_on(void* event) {
     extern f32 float_25_804271e0;
     extern f32 float_neg50_80427208;
     extern void* BatSpotGetPtr(void);
-    void* spot;
+    u8* spot = BatSpotGetPtr();
+    s32* args = *(s32**)((u8*)event + 0x18);
+    u32 id;
     u8* entry;
-    s32 id;
-    char* base;
+    char* base = str_msg_menu_mario_name__802fe738;
 
-    base = str_msg_menu_mario_name__802fe738;
-    spot = BatSpotGetPtr();
-    *(s32*)((s32)spot + 8) = 1;
-    id = evtGetValue(event, **(s32**)((s32)event + 0x18));
-    entry = (u8*)((s32)*(void**)((s32)spot + 4) + id * 0x2C);
-
-    *(u32*)(entry + 4) = *(u32*)(base + 0x19C + id * 0xC);
-    *(f32*)(entry + 4) = float_neg50_80427208 + float_25_804271e0 * (f32)id;
-    *(u32*)(entry + 8) = *(u32*)(base + 0x1A0 + id * 0xC);
-    *(u32*)(entry + 0xC) = *(u32*)(base + 0x1A4 + id * 0xC);
-    *(u32*)(entry + 0x10) = *(u32*)(base + 0x1D8);
-    *(u32*)(entry + 0x14) = *(u32*)(base + 0x1DC);
-    *(u32*)(entry + 0x18) = *(u32*)(base + 0x1E0);
-    *(u32*)(entry + 0x1C) = *(u32*)(base + 0x1E4);
-    *(u32*)(entry + 0x20) = *(u32*)(base + 0x1E8);
-    *(u32*)(entry + 0x24) = *(u32*)(base + 0x1EC);
-    *(u32*)(entry + 0x28) = dat_8042716c;
-    *(u16*)entry |= 2;
+    *(s32*)(spot + 8) = 1;
+    id = evtGetValue(event, *args);
+    entry = *(u8**)(spot + 4) + id * 0x2C;
+    if (id == 2) {
+        *(f32*)(entry + 0) = float_neg50_80427208 + float_25_804271e0 * 2.0f;
+        *(u32*)(entry + 4) = *(u32*)(base + 0x1B8);
+        *(u32*)(entry + 8) = *(u32*)(base + 0x1BC);
+    } else if ((s32)id < 2) {
+        if (id == 0) {
+            *(f32*)(entry + 0) = float_neg50_80427208;
+            *(u32*)(entry + 4) = *(u32*)(base + 0x1A0);
+            *(u32*)(entry + 8) = *(u32*)(base + 0x1A4);
+        } else if ((s32)id > -1) {
+            *(f32*)(entry + 0) = float_neg50_80427208 + float_25_804271e0 * (f32)id;
+            *(u32*)(entry + 4) = *(u32*)(base + 0x1AC);
+            *(u32*)(entry + 8) = *(u32*)(base + 0x1B0);
+        }
+    } else if (id == 4) {
+        *(f32*)(entry + 0) = float_neg50_80427208 + float_25_804271e0 * 4.0f;
+        *(u32*)(entry + 4) = *(u32*)(base + 0x1D0);
+        *(u32*)(entry + 8) = *(u32*)(base + 0x1D4);
+    } else if ((s32)id < 4) {
+        *(f32*)(entry + 0) = float_neg50_80427208 + float_25_804271e0 * (f32)id;
+        *(u32*)(entry + 4) = *(u32*)(base + 0x1C4);
+        *(u32*)(entry + 8) = *(u32*)(base + 0x1C8);
+    }
+    *(u32*)(entry + 0xC) = *(u32*)(base + 0x1D8);
+    *(u32*)(entry + 0x10) = *(u32*)(base + 0x1DC);
+    *(u32*)(entry + 0x14) = *(u32*)(base + 0x1E0);
+    *(u32*)(entry + 0x18) = *(u32*)(base + 0x1E4);
+    *(u32*)(entry + 0x1C) = *(u32*)(base + 0x1E8);
+    *(u32*)(entry + 0x20) = *(u32*)(base + 0x1EC);
+    *(u32*)(entry + 0x24) = dat_8042716c;
+    *(u16*)(entry + 0x28) |= 2;
     return 2;
 }
 
@@ -1236,65 +1253,305 @@ void L__LvupParamHelpMsgDisp(void* disp, void* battleWork) {
 
 /* stub-fill: btlseqEnd | missing_definition | ghidra_signature */
 void btlseqEnd(void* battleWork) {
+    extern void _audience_Whistle_control(void);
     extern s32 BattleGetSeq(void*, s32);
     extern void BattleSetSeq(void*, s32, s32);
-    extern void* __memAlloc(s32, s32);
-    extern void memset(void*, s32, s32);
-    extern s32 evtEntry(void*, s32, s32);
+    extern void btlsubResetMoveColorLvAll(void*);
+    extern void* BattleAlloc(s32);
+    extern void btlseqEnd_DispInit(void*);
+    extern s32 irand(s32);
+    extern void _ExecAllUnitBattleEndEvent(void);
+    extern void btl_camera_set_moveSpeedLv(s32,s32);
+    extern void btl_camera_set_mode(s32,s32);
+    extern void btl_camera_set_posoffset(f64,f64,f64,s32);
+    extern void fadeEntry(s32,s32,void*);
+    extern void psndBGMOff(s32);
+    extern s32 fadeIsFinish(void);
+    extern void seqSetSeq(s32,void*,void*);
+    extern void* fbatGetPointer(void);
+    extern void* evtEntry(void*,s32,s32);
     extern s32 evtCheckID(s32);
-    extern void BattleCamSetMode(s32, s32);
-    extern void BattleCamSetMoveSpeedLv(s32, s32);
-    extern void BattleCamSetOffset(s32, f32, f32, f32);
-    extern void psndBGMOff(s32, s32);
-    extern void fadeEntry(s32, s32, u32);
-    s32 state = BattleGetSeq(battleWork, 7);
-    u8* work = *(u8**)((u8*)battleWork + 0x1C);
+    extern s32 BattleWaitAllActiveEvtEnd(void*);
+    extern void _BattleMarioKouraDelete(void);
+    extern void BattleFogForceStop(void);
+    extern s32 BattleGetStockExp(void*);
+    extern void _GetExpIcon_Init(void*);
+    extern void BattleAudienceSoundCheer(s32,s32);
+    extern void BattleAudienceSoundClap(s32,s32);
+    extern void BattleAudienceSoundWhistle(void);
+    extern u32 BattlePadCheckNow(u32);
+    extern void psndSFXOn(void*);
+    extern void _GetExpIcon_End(void*);
+    extern void effSoftDelete(void*);
+    extern void BattleAudience_WinSetActive(s32);
+    extern void BattleBreakSlot_HideReel(void);
+    extern void BattleStatusWindowSystemOff(void);
+    extern void BattleStatusWindowSystemOn(void);
+    extern void BattleStatusWindowEventOn(void);
+    extern void psndBGMOn(s32, void*);
+    extern s32 _curtain_close_event[];
+    extern char str_BGM_BATTLE_WIN3_802feabc[];
+    extern u32 BattlePadCheckTrigger(u32);
+    extern void evtDeleteID(s32);
+    extern s16* _get_rank_data(s32);
+    extern s32 _rank_up_event[];
+    u8* work = *(u8**)((u8*)battleWork + 0xF28);
+    s32 state;
+    void* fbat;
+    void* evt;
+    u32 fadeColor = 0;
+
+    _audience_Whistle_control();
+    state = BattleGetSeq(battleWork, 7);
     switch (state) {
-        case 0:
-            *(s32*)((u8*)battleWork + 0x10) = 0;
-            work = __memAlloc(0, 0x2AC);
-            memset(work, 0, 0x2AC);
-            *(void**)((u8*)battleWork + 0x1C) = work;
-            *(s32*)(work + 0x10) = 255;
-            BattleSetSeq(battleWork, 7, 1);
+        case 0x07000000:
+            btlsubResetMoveColorLvAll(battleWork);
+            BattleSetSeq(battleWork, 7, 0x07000005);
+            work = BattleAlloc(0x2AC);
+            *(u8**)((u8*)battleWork + 0xF28) = work;
+            btlseqEnd_DispInit(battleWork);
+            *(s32*)work = 0;
+            *(void**)(work + 0x29C) = 0;
+            *(s32*)(work + 0x2A0) = irand(120) + 60;
+            *(s32*)(work + 0x2A4) = 0;
             break;
-        case 1:
-            BattleCamSetMode(0, 0x11);
-            BattleCamSetMoveSpeedLv(0, 2);
-            BattleCamSetOffset(0, 0.0f, 0.0f, 0.0f);
-            fadeEntry(9, 30, 0x000000FF);
-            psndBGMOff(0x201, 1000);
-            BattleSetSeq(battleWork, 7, 2);
+
+        case 0x07000001:
+            _ExecAllUnitBattleEndEvent();
+            btl_camera_set_moveSpeedLv(0, 2);
+            btl_camera_set_mode(0, 0x13);
+            btl_camera_set_posoffset(0.0, 0.0, 0.0, 0);
+            fadeEntry(9, 200, &fadeColor);
+            psndBGMOff(0x201);
+            BattleSetSeq(battleWork, 7, 0x07000002);
             break;
-        case 2:
-            if (*(s32*)(work + 4) == 0) BattleSetSeq(battleWork, 7, 3);
+
+        case 0x07000002:
+            if (fadeIsFinish() != 0) {
+                BattleSetSeq(battleWork, 7, 0x0700001F);
+            }
             break;
-        case 3:
-            *(s32*)(work + 8) = (s32)evtEntry(*(void**)(work + 0x20), 0, 0);
-            BattleSetSeq(battleWork, 7, 4);
+
+        case 0x07000003:
+            fbat = fbatGetPointer();
+            evt = evtEntry(*(void**)((u8*)fbat + 0x3C), 10, 0);
+            *(s32*)((u8*)fbat + 0x40) = *(s32*)evt;
+            BattleSetSeq(battleWork, 7, 0x07000004);
+            return;
+
+        case 0x07000004:
+            fbat = fbatGetPointer();
+            if (!evtCheckID(*(s32*)((u8*)fbat + 0x40)) &&
+                BattleWaitAllActiveEvtEnd(battleWork) != 0) {
+                if (*(s32*)((u8*)fbat + 0x44) != 0) {
+                    BattleSetSeq(battleWork, 3, 0x03000001);
+                    BattleSetSeq(battleWork, 0, 2);
+                    return;
+                }
+                BattleSetSeq(battleWork, 7, 0x07000005);
+                _BattleMarioKouraDelete();
+                work = BattleAlloc(0x2AC);
+                *(u8**)((u8*)battleWork + 0xF28) = work;
+                btlseqEnd_DispInit(battleWork);
+                *(s32*)work = 0;
+                return;
+            }
             break;
-        case 4:
-            if (evtCheckID(*(s32*)(work + 8)) == 0) BattleSetSeq(battleWork, 7, 5);
+
+        case 0x07000006:
+            if (BattleWaitAllActiveEvtEnd(battleWork) != 0) {
+                BattleAudienceSoundClap(-1, 0);
+                _ExecAllUnitBattleEndEvent();
+                BattleSetSeq(battleWork, 7, 0x07000008);
+            }
             break;
-        case 5:
+
+        case 0x07000007:
+            if (BattleWaitAllActiveEvtEnd(battleWork) != 0) {
+                BattleSetSeq(battleWork, 7, 0x07000008);
+            }
+            break;
+
+        case 0x07000008:
+            BattleFogForceStop();
             *(s32*)(work + 0xC) = 0;
-            BattleSetSeq(battleWork, 7, 6);
+            *(s16*)(work + 8) = BattleGetStockExp(battleWork);
+            if (*(s16*)(work + 8) > 100) *(s16*)(work + 8) = 100;
+            *(s16*)(work + 0xA) = *(s16*)(work + 8);
+            if (*(s16*)(work + 8) > 0) _GetExpIcon_Init(work);
+            *(s32*)(work + 4) = 120;
+            btl_camera_set_moveSpeedLv(0, 2);
+            btl_camera_set_mode(0, 0x11);
+            btl_camera_set_posoffset(0.0, 0.0, 0.0, 0);
+            BattleSetSeq(battleWork, 7, 0x07000009);
+            BattleAudienceSoundCheer(60, 60);
+            BattleAudienceSoundClap(-1, 0);
+            BattleAudienceSoundWhistle();
+        case 0x07000009:
+            if (--*(s32*)(work + 4) < 1) {
+                BattleSetSeq(battleWork, 7, 0x0700000A);
+            }
             break;
-        case 6:
-            if (*(s32*)(work + 0xC) == 0) BattleSetSeq(battleWork, 7, 8);
+
+        case 0x0700000B:
+            if (*(s16*)(work + 0xA) < 1) {
+                if (*(s32*)(work + 4) < 1000) {
+                    if (*(s32*)(work + 4) < 120) {
+                        *(s32*)(work + 4) = 140 - *(s32*)(work + 4);
+                    } else {
+                        *(s32*)(work + 4) = 20;
+                    }
+                } else {
+                    *(s32*)(work + 4) = 10;
+                }
+                BattleSetSeq(battleWork, 7, 0x0700000C);
+            } else {
+                *(s32*)(work + 4) += 1;
+                if (BattlePadCheckNow(0x300) != 0 && *(s32*)(work + 4) < 1000) {
+                    *(s32*)(work + 4) += 1000;
+                }
+                if ((*(s32*)(work + 4) & 3) == 0 || *(s32*)(work + 4) > 999) {
+                    *(s16*)(work + 0xA) -= 1;
+                    if ((*(s32*)(work + 4) & 7) == 0) {
+                        psndSFXOn((void*)0x2000B);
+                    }
+                }
+            }
             break;
-        case 8:
-            *(s32*)(work + 0x30) = 0;
-            *(s32*)(work + 0x34) = 0;
-            *(s32*)(work + 0x38) = 0;
-            BattleCamSetMode(0, 0x11);
-            BattleSetSeq(battleWork, 7, 9);
+
+        case 0x0700000C:
+            if (--*(s32*)(work + 4) < 1) {
+                *(s32*)(work + 4) = 60;
+                _GetExpIcon_End(work);
+                BattleSetSeq(battleWork, 7, 0x0700000D);
+                effSoftDelete(*(void**)(work + 0x29C));
+                *(s32*)(work + 4) = (*(s32*)(work + 0xC) == 0) ? 5 : 60;
+            }
             break;
-        case 9:
-            if (++*(s32*)(work + 0x30) > 30) BattleSetSeq(battleWork, 7, 10);
+
+        case 0x0700000D:
+            if (--*(s32*)(work + 4) < 1) {
+                *(void**)(work + 0x29C) = 0;
+                BattleSetSeq(battleWork, 7, 0x0700000E);
+            }
             break;
-        case 10:
-            if (*(s32*)(work + 0x34) == 0) BattleSetSeq(battleWork, 7, 0x1F);
+
+        case 0x07000010:
+            *(u32*)(work + 0x30) &= ~1;
+            if (*(s32*)(work + 0xC) == 0) {
+                BattleSetSeq(battleWork, 7, 0x07000019);
+            } else {
+                *(s32*)(work + 0x10) = 1;
+                *(s32*)(work + 0x14) = 0;
+                *(s32*)(work + 0x18) = 3;
+                *(s32*)(work + 4) = 0;
+                BattleAudience_WinSetActive(0);
+                BattleBreakSlot_HideReel();
+                BattleSetSeq(battleWork, 7, 0x07000011);
+            }
+            break;
+
+        case 0x07000011:
+            if (*(s32*)(work + 4) == 0) {
+                evt = evtEntry(_curtain_close_event, 10, 0);
+                *(s32*)(work + 0x1FC) = *(s32*)evt;
+                BattleStatusWindowSystemOff();
+                psndBGMOff(0x400);
+                psndBGMOn(1, str_BGM_BATTLE_WIN3_802feabc);
+            }
+            *(s32*)(work + 4) += 1;
+            if (!evtCheckID(*(s32*)(work + 0x1FC))) {
+                *(s32*)(work + 0x1FC) = 0;
+                BattleStatusWindowSystemOn();
+                BattleStatusWindowEventOn();
+                BattleSetSeq(battleWork, 7, 0x07000012);
+            }
+            break;
+
+        case 0x07000013:
+            if (BattlePadCheckTrigger(0x20000) != 0) {
+                *(s32*)(work + 0x24) += 1;
+                if (*(s32*)(work + 0x24) >= *(s32*)(work + 0x2C)) {
+                    *(s32*)(work + 0x24) = 0;
+                }
+            }
+            if (BattlePadCheckTrigger(0x10000) != 0) {
+                *(s32*)(work + 0x24) -= 1;
+                if (*(s32*)(work + 0x24) < 0) {
+                    *(s32*)(work + 0x24) = *(s32*)(work + 0x2C) - 1;
+                }
+            }
+            if (BattlePadCheckTrigger(0x200) != 0) {
+                *(u32*)(work + 0x30) &= ~0x10;
+                BattleSetSeq(battleWork, 7, 0x07000012);
+            }
+            if (BattlePadCheckTrigger(0x100) != 0) {
+                if (*(s32*)(work + 0x24) == 0) {
+                    *(u32*)(work + 0x30) &= ~0x18;
+                    BattleSetSeq(battleWork, 7, 0x07000015);
+                } else {
+                    *(u32*)(work + 0x30) &= ~0x10;
+                    BattleSetSeq(battleWork, 7, 0x07000012);
+                }
+            }
+            break;
+
+        case 0x07000014:
+            if (!evtCheckID(*(s32*)(work + 0x1FC))) {
+                *(s32*)(work + 0x1FC) = 0;
+                BattleSetSeq(battleWork, 7, 0x07000015);
+            }
+            break;
+
+        case 0x07000016:
+            *(s32*)(work + 4) -= 1;
+            if (*(s32*)(work + 4) < 1) {
+                if (*(s32*)(work + 0x2A4) != 0) {
+                    evtDeleteID(*(s32*)(work + 0x2A4));
+                }
+                BattleSetSeq(battleWork, 7, 0x07000017);
+            }
+            break;
+
+        case 0x07000017:
+            {
+                s16* rank = _get_rank_data(0);
+                if (rank == 0) {
+                    BattleSetSeq(battleWork, 7, 0x0700001C);
+                    break;
+                }
+                evt = evtEntry(_rank_up_event, 10, 0);
+                *(s32*)(work + 0x2A8) = *(s32*)evt;
+                BattleSetSeq(battleWork, 7, 0x07000018);
+            }
+        case 0x07000018:
+            if (!evtCheckID(*(s32*)(work + 0x2A8))) {
+                BattleSetSeq(battleWork, 7, 0x0700001C);
+            }
+            break;
+
+        case 0x0700001A:
+            if (--*(s32*)(work + 4) < 1) {
+                BattleSetSeq(battleWork, 7, 0x0700001B);
+            }
+            break;
+
+        case 0x0700001B:
+            BattleSetSeq(battleWork, 7, 0x0700001C);
+            break;
+
+        case 0x0700001C:
+            BattleSetSeq(battleWork, 7, 0x0700001D);
+            break;
+
+        case 0x0700001D:
+            fadeEntry(9, 200, &fadeColor);
+            BattleSetSeq(battleWork, 7, 0x0700001E);
+            psndBGMOff(0x201);
+        case 0x0700001E:
+            if (fadeIsFinish() != 0) {
+                BattleSetSeq(battleWork, 7, 0x0700001F);
+            }
             break;
     }
 }
@@ -1309,11 +1566,11 @@ void _GetExpIcon_Init(void* seqEndWork) {
         f32 z;
     } VecLocal;
     extern int sprintf(char* s, const char* fmt, ...);
-    extern void iconEntry2D(char* name, s32 id);
+    extern void iconEntry2D(char* name, u16 id);
     extern void* iconNameToPtr(char* name);
-    extern void iconSetScale(f32 scale, char* name);
+    extern void iconSetScale(f64 scale, char* name);
     extern void iconFlagOn(char* name, u16 flags);
-    extern void iconSetPos(f32 x, f32 y, f32 z, char* name);
+    extern void iconSetPos(f64 x, f64 y, f64 z, char* name);
     extern const char str_BgspPCTd_802fe9c0[];
     extern f32 float_0_804271c0;
     extern f32 float_25_804271e0;
@@ -1330,9 +1587,14 @@ void _GetExpIcon_Init(void* seqEndWork) {
     s32 i;
     s32 iconOffset;
     s32 posOffset;
-    s32 remainTens;
+    f32 f36 = float_36_80427234;
+    f32 f18 = float_18_80427230;
+    f32 f24 = float_24_8042722c;
+    f32 f25 = float_25_804271e0;
+    f32 zero = float_0_804271c0;
+    f32 f162 = float_16p2_80427244;
+    f32 f869 = float_86p9_80427240;
 
-    remainTens = *(s16*)((s32)seqEndWork + 0xA) / 10;
     iconOffset = 0;
     posOffset = 0;
     for (i = 0; i < 10; i++) {
@@ -1344,9 +1606,9 @@ void _GetExpIcon_Init(void* seqEndWork) {
         iconFlagOn(iconEntryName, 2);
         *(s32*)((s32)seqEndWork + 0xCC + iconOffset) = 0;
         ((VecLocal*)((s32)seqEndWork + 0x118))[i].x =
-            float_36_80427234 * (f32)i - (float_18_80427230 * (f32)remainTens - float_24_8042722c);
-        ((VecLocal*)((s32)seqEndWork + 0x118))[i].y = float_25_804271e0;
-        ((VecLocal*)((s32)seqEndWork + 0x118))[i].z = float_0_804271c0;
+            f36 * (f32)i - (f18 * (f32)(*(s16*)((s32)seqEndWork + 0xA) / 10) - f24);
+        ((VecLocal*)((s32)seqEndWork + 0x118))[i].y = f25;
+        ((VecLocal*)((s32)seqEndWork + 0x118))[i].z = zero;
         iconSetPos(((VecLocal*)((s32)seqEndWork + 0x118))[i].x,
                    ((VecLocal*)((s32)seqEndWork + 0x118))[i].y,
                    ((VecLocal*)((s32)seqEndWork + 0x118))[i].z,
@@ -1366,9 +1628,9 @@ void _GetExpIcon_Init(void* seqEndWork) {
         iconFlagOn(iconEntryName, 2);
         *(s32*)((s32)seqEndWork + 0xCC + iconOffset) = 0;
         *(f32*)((s32)seqEndWork + 0x118 + posOffset) =
-            -(float_16p2_80427244 * (f32)(i - 9) - float_86p9_80427240);
-        *(f32*)((s32)seqEndWork + 0x11C + posOffset) = float_0_804271c0;
-        *(f32*)((s32)seqEndWork + 0x120 + posOffset) = float_0_804271c0;
+            -(f162 * (f32)(i - 9) - f869);
+        *(f32*)((s32)seqEndWork + 0x11C + posOffset) = zero;
+        *(f32*)((s32)seqEndWork + 0x120 + posOffset) = zero;
         iconSetPos(*(f32*)((s32)seqEndWork + 0x118 + posOffset),
                    *(f32*)((s32)seqEndWork + 0x11C + posOffset),
                    *(f32*)((s32)seqEndWork + 0x120 + posOffset),

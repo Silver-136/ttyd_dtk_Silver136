@@ -349,6 +349,9 @@ void effMiniGameMain(u32* effect) {
     extern f32 dispCalcZ(void* pos);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effMiniGameDisp(void);
+    extern void* gp;
+    extern u8 poyon_scale[];
+
     u8* work = (u8*)effect[3];
     f32 pos[3];
     s32 done = 0;
@@ -362,19 +365,19 @@ void effMiniGameMain(u32* effect) {
         s32* state = (s32*)(work + 0x68);
         s32* alpha = (s32*)(work + 0x6C);
         f32* y = (f32*)(work + 0x3C);
+        f32* z = (f32*)(work + 0x40);
         f32* sx = (f32*)(work + 0x48);
         f32* sy = (f32*)(work + 0x4C);
+        f32* rot = (f32*)(work + 0x50);
         f32* vy = (f32*)(work + 0x58);
         f32* gravity = (f32*)(work + 0x5C);
+
         switch (*state) {
             case 0:
-            case 3:
-            case 10:
-            case 0x17:
                 if (--*timer < 0) {
                     *timer = 0;
                     (*state)++;
-                    if (*state == 1) psndSFXOn(0x8D1);
+                    psndSFXOn(0x8D1);
                 }
                 break;
             case 1:
@@ -382,51 +385,127 @@ void effMiniGameMain(u32* effect) {
                 *sx += (1.0f - *sx) * 0.25f;
                 *sy += (1.0f - *sy) * 0.25f;
                 *alpha += (s32)((255 - *alpha) * 0.25f);
-                if (*alpha > 250) { *alpha = 255; (*state)++; }
+                if (*alpha > 250) {
+                    *alpha = 255;
+                    (*state)++;
+                }
                 break;
             case 2:
-                *timer = 42;
+                *timer = (s32)(0.7f * (f32)*(s32*)((u8*)gp + 4));
                 (*state)++;
+                break;
+            case 3:
+            case 10:
+            case 0xD:
+            case 0x17:
+            case 0x1E:
+            case 0x21:
+            case 0x32:
+            case 0x35:
+                if (--*timer < 0) {
+                    *timer = 0;
+                    (*state)++;
+                }
                 break;
             case 4:
                 *sx += (10.0f - *sx) * 0.25f;
                 *sy += (10.0f - *sy) * 0.25f;
                 *alpha += (s32)((0 - *alpha) * 0.25f);
-                if (*alpha < 5) { *alpha = 0; (*state)++; }
+                if (*alpha < 5) {
+                    *alpha = 0;
+                    (*state)++;
+                }
                 break;
             case 5:
             case 0xF:
             case 0x19:
+            case 0x23:
+            case 0x37:
                 done++;
                 break;
             case 0xB:
+                *y += *vy;
+                *vy -= *gravity;
+                {
+                    f32 floor = 26.0f * (f32)(i - 1) -
+                                26.0f * (f32)(effect[2] - 1) * 0.5f;
+                    if (*y < floor) {
+                        *y = floor;
+                        *timer = 0;
+                        (*state)++;
+                    }
+                }
+                break;
+            case 0xC:
+            case 0x20:
+            case 0x34:
+                if ((u32)*timer < 20) {
+                    *sx = (f32)poyon_scale[*timer * 2] / 100.0f;
+                    *sy = (f32)poyon_scale[*timer * 2 + 1] / 100.0f;
+                    (*timer)++;
+                } else {
+                    *gravity = *state == 0xC ? 2.0f : 1.0f;
+                    *vy = 0.0f;
+                    *timer = *state == 0xC
+                                 ? 120
+                                 : (s32)(0.7f * (f32)*(s32*)((u8*)gp + 4));
+                    (*state)++;
+                }
+                break;
             case 0xE:
             case 0x18:
                 *y += *vy;
                 *vy -= *gravity;
-                if (*y < -1000.0f) (*state)++;
-                break;
-            case 0xC:
-                if (*timer < 20) {
-                    (*timer)++;
-                } else {
-                    *gravity = 2.0f;
-                    *vy = 0.0f;
-                    *timer = 120;
+                if (*y < -1000.0f) {
                     (*state)++;
                 }
                 break;
             case 0x14:
-                if (*timer == 0) psndSFXOn(0x8D2);
-                if (--*timer < 0) { *timer = 0; (*state)++; }
+                if (*timer == 0) {
+                    psndSFXOn(0x8D2);
+                }
+                if (--*timer < 0) {
+                    *timer = 0;
+                    (*state)++;
+                }
                 break;
             case 0x16:
                 *timer = 60;
                 (*state)++;
                 break;
+            case 0x1F:
+            case 0x33:
+                *z += *vy;
+                *vy -= *gravity;
+                if (*z < 0.0f) {
+                    *z = 0.0f;
+                    *timer = 0;
+                    (*state)++;
+                }
+                break;
+            case 0x22:
+                *y -= 10.0f;
+                *z += 10.0f;
+                *rot += 30.0f;
+                if (*z > 300.0f) {
+                    (*state)++;
+                }
+                break;
+            case 0x36:
+                *z += *vy;
+                *vy -= *gravity;
+                *rot += 3.0f;
+                if (*z < -500.0f) {
+                    (*state)++;
+                }
+                break;
         }
     }
-    if (done == (s32)effect[2] - 1) {
+
+    if (done >= (s32)effect[2] - 1) {
+        effDelete(effect);
+    } else if (effect[0] & 4) {
+        effect[0] &= ~4;
         effDelete(effect);
     } else {
         dispEntry(2, 2, effMiniGameDisp, effect, dispCalcZ(pos));

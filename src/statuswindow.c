@@ -88,43 +88,81 @@ void statusWinForceOpen(void) {
 }
 
 
-u8 statusWinDisp(void) {
+void statusWinDisp(void) {
+    typedef struct StatusIcon {
+        s16 x;
+        s16 y;
+        u16 iconId;
+        u16 pad;
+        f32 scale;
+    } StatusIcon;
     extern void PSMTXTrans(f32 mtx[3][4], f32 x, f32 y, f32 z);
+    extern void PSMTXScale(f32 mtx[3][4], f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(f32 a[3][4], f32 b[3][4], f32 out[3][4]);
+    extern void iconDispGxCol(f32 mtx[3][4], s32 flags, s32 iconId, u32* color);
     extern void iconNumberDispGx(f32 mtx[3][4], s32 value, s32 type, u32* color);
     extern void gaugeDisp(f32 x, f32 y, s32 value);
-    f32 mtx[3][4];
+    extern u32 dat_80422bcc;
+    extern u32 dat_80422bc8;
+    StatusIcon* icon;
+    f32 trans[3][4];
+    f32 scale[3][4];
     f32 x;
     f32 y;
     u32 color;
     s32 blink;
+    s32 i;
 
-    if (wp == 0) return 0;
-    x = *(f32*)((s32)wp + 0x20);
-    y = *(f32*)((s32)wp + 0x24);
+    x = *(f32*)((char*)wp + 0x20);
+    y = *(f32*)((char*)wp + 0x24);
     blink = 1;
-    if (*(s32*)((s32)wp + 0x84) > 0) {
-        *(s32*)((s32)wp + 0x84) -= 1;
-        blink = ((*(s32*)((s32)wp + 0x84) >> 4) & 1) == 0;
+    if (*(s32*)((char*)wp + 0x84) > 0) {
+        *(s32*)((char*)wp + 0x84) -= 1;
+        blink = (((*(s32*)((char*)wp + 0x84) / 16) % 16) > 5);
     }
-    color = 0xFFFFFFFF;
-    if ((*(u32*)((s32)wp + 0x80) & 1) == 0 || blink) {
-        PSMTXTrans(mtx, x + 104.0f, y - 36.0f, 0.0f);
-        iconNumberDispGx(mtx, *(s16*)((s32)wp + 0x50), 0, &color);
+
+    icon = (StatusIcon*)alwaysDt;
+    for (i = 0; i < 13; i++, icon++) {
+        if (blink ||
+            (((*(u32*)((char*)wp + 0x80) & 1) == 0 || i != 1) &&
+             ((*(u32*)((char*)wp + 0x80) & 2) == 0 || i != 4) &&
+             ((*(u32*)((char*)wp + 0x80) & 0x10) == 0 || i != 8) &&
+             ((*(u32*)((char*)wp + 0x80) & 4) == 0 || i != 12))) {
+            PSMTXTrans(trans, x + (f32)icon->x, y - (f32)icon->y, 0.0f);
+            PSMTXScale(scale, icon->scale, icon->scale, icon->scale);
+            PSMTXConcat(trans, scale, trans);
+            color = dat_80422bcc;
+            iconDispGxCol(trans, 0x10, icon->iconId, &color);
+        }
     }
-    PSMTXTrans(mtx, x + 170.0f, y - 35.0f, 0.0f);
-    iconNumberDispGx(mtx, *(s16*)((s32)wp + 0x52), 1, &color);
-    if ((*(u32*)((s32)wp + 0x80) & 2) == 0 || blink) {
-        PSMTXTrans(mtx, x + 286.0f, y - 36.0f, 0.0f);
-        iconNumberDispGx(mtx, *(s16*)((s32)wp + 0x54), 0, &color);
+
+    if (((*(u32*)((char*)wp + 0x80) & 1) == 0) || blink) {
+        PSMTXTrans(trans, ((120.0f + x) - 6.0f) - 10.0f, 2.0f + (y - 38.0f), 0.0f);
+        color = dat_80422bc8;
+        iconNumberDispGx(trans, *(s16*)((char*)wp + 0x50), 0, &color);
     }
-    PSMTXTrans(mtx, x + 352.0f, y - 35.0f, 0.0f);
-    iconNumberDispGx(mtx, *(s16*)((s32)wp + 0x56), 1, &color);
-    PSMTXTrans(mtx, x + 462.0f, y - 36.0f, 0.0f);
-    iconNumberDispGx(mtx, *(s16*)((s32)wp + 0x5E), 0, &color);
-    if ((*(u32*)((s32)wp + 0x80) & 4) == 0 || blink) {
-        gaugeDisp(x + 260.0f, y - 83.0f, *(s16*)((s32)wp + 0x62));
+    PSMTXTrans(trans, ((186.0f + x) - 6.0f) - 10.0f, 3.0f + (y - 38.0f), 0.0f);
+    color = dat_80422bc8;
+    iconNumberDispGx(trans, *(s16*)((char*)wp + 0x52), 1, &color);
+    if (((*(u32*)((char*)wp + 0x80) & 2) == 0) || blink) {
+        PSMTXTrans(trans, (292.0f + x) - 6.0f, 2.0f + (y - 38.0f), 0.0f);
+        color = dat_80422bc8;
+        iconNumberDispGx(trans, *(s16*)((char*)wp + 0x54), 0, &color);
     }
-    return 0;
+    PSMTXTrans(trans, (358.0f + x) - 6.0f, 3.0f + (y - 38.0f), 0.0f);
+    color = dat_80422bc8;
+    iconNumberDispGx(trans, *(s16*)((char*)wp + 0x56), 1, &color);
+    PSMTXTrans(trans, 462.0f + x, 2.0f + (y - 38.0f), 0.0f);
+    color = dat_80422bc8;
+    iconNumberDispGx(trans, *(s16*)((char*)wp + 0x5E), 0, &color);
+    if (((*(u32*)((char*)wp + 0x80) & 0x10) == 0) || blink) {
+        PSMTXTrans(trans, 572.0f + x, 2.0f + (y - 38.0f), 0.0f);
+        color = dat_80422bc8;
+        iconNumberDispGx(trans, *(s16*)((char*)wp + 0x60), 0, &color);
+    }
+    if (((*(u32*)((char*)wp + 0x80) & 4) == 0) || blink) {
+        gaugeDisp(260.0f + x, 4.0f + (y - 87.0f), *(s16*)((char*)wp + 0x62));
+    }
 }
 
 void statusWinMain(void) {

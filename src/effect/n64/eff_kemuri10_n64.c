@@ -15,30 +15,98 @@ void* effKemuri10N64Entry(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, f32 speed
     extern void effKemuri10Main(void*);
     extern f32 sqrtf(f32);
     extern char str_Kemuri10N64_802fb318[];
+    void* entry = effEntry();
     u8* work;
-    void* entry;
     f32 len;
+    f32 horiz;
+    f32 crossLen;
+    f32 nx;
+    f32 ny;
+    f32 nz;
+    f32 rx;
+    f32 ry;
+    f32 rz;
+    f32 ux;
+    f32 uy;
+    f32 uz;
 
-    if (dx == 0.0f && dy == 0.0f && dz == 0.0f) return 0;
+    if (dx == 0.0f && dy == 0.0f && dz == 0.0f) {
+        return 0;
+    }
     len = sqrtf(dx * dx + dy * dy + dz * dz);
-    if (len == 0.0f) return 0;
-    entry = effEntry();
-    *(char**)((s32)entry + 0x14) = str_Kemuri10N64_802fb318;
-    *(s32*)((s32)entry + 8) = 1;
+    if (len == 0.0f) {
+        return 0;
+    }
+
+    nx = dx / len;
+    ny = dy / len;
+    nz = dz / len;
+    if (nx != 0.0f || nz != 0.0f) {
+        rx = -nx;
+        ry = 0.0f;
+        rz = nz;
+    } else {
+        rx = 1.0f;
+        ry = 0.0f;
+        rz = 0.0f;
+    }
+
+    horiz = sqrtf(rx * rx + ry * ry + rz * rz);
+    if (horiz == 0.0f) {
+        return 0;
+    }
+    rx = rz / horiz;
+    ry = 0.0f;
+    rz = -nx / horiz;
+
+    ux = rz * ny - ry * nz;
+    uy = rx * nz - rz * nx;
+    uz = ry * nx - rx * ny;
+    crossLen = sqrtf(ux * ux + uy * uy + uz * uz);
+    if (crossLen == 0.0f) {
+        return 0;
+    }
+    ux /= crossLen;
+    uy /= crossLen;
+    uz /= crossLen;
+
+    *(char**)((u8*)entry + 0x14) = str_Kemuri10N64_802fb318;
+    *(s32*)((u8*)entry + 8) = 1;
     work = __memAlloc(3, 0x70);
-    *(u8**)((s32)entry + 0xC) = work;
-    *(void**)((s32)entry + 0x10) = effKemuri10Main;
+    *(u8**)((u8*)entry + 0xC) = work;
+    *(void**)((u8*)entry + 0x10) = effKemuri10Main;
     *(s32*)work = camera;
     *(f32*)(work + 4) = x;
     *(f32*)(work + 8) = y;
     *(f32*)(work + 0xC) = z;
-    *(f32*)(work + 0x10) = dx / len;
-    *(f32*)(work + 0x14) = dy / len;
-    *(f32*)(work + 0x18) = dz / len;
+    *(f32*)(work + 0x10) = -4.0f * nx;
+    *(f32*)(work + 0x14) = -4.0f * ny;
+    *(f32*)(work + 0x18) = -4.0f * nz;
+    *(f32*)(work + 0x1C) = rx;
+    *(f32*)(work + 0x20) = ux;
+    *(f32*)(work + 0x24) = nx;
+    *(f32*)(work + 0x28) = 0.0f;
+    *(f32*)(work + 0x2C) = ry;
+    *(f32*)(work + 0x30) = uy;
+    *(f32*)(work + 0x34) = ny;
+    *(f32*)(work + 0x38) = 0.0f;
+    *(f32*)(work + 0x3C) = rz;
+    *(f32*)(work + 0x40) = uz;
+    *(f32*)(work + 0x44) = nz;
+    *(f32*)(work + 0x48) = 0.0f;
     *(f32*)(work + 0x4C) = speed;
-    *(s32*)(work + 0x5C) = 10;
+    *(f32*)(work + 0x50) = 278.0f;
+    *(f32*)(work + 0x54) = 32.0f;
+    *(s32*)(work + 0x58) = 0;
+    *(s32*)(work + 0x5C) = 0x10;
     *(s32*)(work + 0x60) = 0;
-    *(s32*)(work + 0x6C) = camera;
+    *(u8*)(work + 0x64) = 0xF8;
+    *(u8*)(work + 0x65) = 0x5C;
+    *(u8*)(work + 0x66) = 0xE5;
+    *(u8*)(work + 0x67) = 0xF8;
+    *(u8*)(work + 0x68) = 0x5C;
+    *(u8*)(work + 0x69) = 0xE5;
+    *(s32*)(work + 0x6C) = 4;
     return entry;
 }
 
@@ -105,4 +173,3 @@ void effKemuri10Main(void* effect) {
 
     dispEntry(camera, 2, effKemuri10Disp, effect, dispCalcZ(&dispPos));
 }
-

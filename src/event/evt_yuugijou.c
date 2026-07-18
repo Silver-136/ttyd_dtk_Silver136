@@ -237,46 +237,93 @@ void monteCountDisp(void) {
 /* stub-fill: yuugijou_init | missing_definition | ghidra_signature */
 void yuugijou_init(void) {
     static u8 yuugijouwork[600];
-    s32* work;
-    s32 i;
-    static const s32 flags[8] = { 0x14, 0x2C, 0x44, 0x5C, 0x74, 0x8C, 0xA4, 0xBC };
-    static const s32 values[8][5] = {
-        { 0x5B964, 0x5825A, 0x4F826, 0x4C3D8, 0x4237E },
-        { 2, 5, 0x12, 0x1B, 0x8A },
-        { 0x20850, 0x20436, 0x20184, 0x1F91E, 0x1E3AC },
-        { 0x16BDE, 0x16968, 0x16382, 0x1627E, 0x15950 },
-        { 0x5B964, 0x5825A, 0x4F826, 0x4C3D8, 0x4237E },
-        { 2, 5, 0x12, 0x1B, 0x8A },
-        { 0x1E3DE, 0x1E00A, 0x1DD8A, 0x1D5BA, 0x1C1CE },
-        { 0x1525C, 0x15018, 0x14A96, 0x149A6, 0x14122 }
-    };
-    static const s32 add[4][5] = {
-        { 14, 12, 15, 11, 10 }, { 1, 0, 0, 0, 0 },
-        { 7, 6, 4, 4, 1 }, { 7, 6, 4, 3, 4 }
-    };
+    u8* w;
+    s32 rank;
 
     yuwp = yuugijouwork;
     memset(yuwp, 0, 600);
-    work = (s32*)yuwp;
-    for (i = 0; i < 40; i++) {
-        s32 group = i / 5;
-        s32 slot = i % 5;
-        s32 kind = group & 3;
-        s32 value = values[group][slot];
-        *(s32*)((u8*)work + flags[group] + slot * 4) = 1;
-        *(s32*)((u8*)work + 0xD4 + group * 0x18 + slot * 4) = value;
-        if (kind == 0) {
-            *(s32*)((u8*)work + 0x194 + group * 0x18 + slot * 4) = add[0][slot];
-        } else if (kind == 1) {
-            s32 rank = ((700 - value) * 15) / 700;
-            *(s32*)((u8*)work + 0x194 + group * 0x18 + slot * 4) = rank + add[1][slot];
-        } else if (kind == 2) {
-            s32 rank = (value - 0x1A9C8) / 2000;
-            *(s32*)((u8*)work + 0x194 + group * 0x18 + slot * 4) = rank + add[2][slot];
-        } else {
-            s32 rank = (value - 74000) / 2000;
-            *(s32*)((u8*)work + 0x194 + group * 0x18 + slot * 4) = rank + add[3][slot];
-        }
-    }
+    w = yuwp;
+
+    *(s32*)(w + 0x14) = 1; *(s32*)(w + 0x18) = 1; *(s32*)(w + 0x1C) = 1;
+    *(s32*)(w + 0x20) = 1; *(s32*)(w + 0x24) = 1;
+    *(s32*)(w + 0xD4) = 0x5B964; *(s32*)(w + 0xD8) = 0x5825A;
+    *(s32*)(w + 0xDC) = 0x4F826; *(s32*)(w + 0xE0) = 0x4C3D8;
+    *(s32*)(w + 0xE4) = 0x4237E;
+    *(s32*)(w + 0x194) = 14; *(s32*)(w + 0x198) = 12;
+    *(s32*)(w + 0x19C) = 15; *(s32*)(w + 0x1A0) = 11;
+    *(s32*)(w + 0x1A4) = 10;
+
+    *(s32*)(w + 0x2C) = 1; *(s32*)(w + 0x30) = 1; *(s32*)(w + 0x34) = 1;
+    *(s32*)(w + 0x38) = 1; *(s32*)(w + 0x3C) = 1;
+    *(s32*)(w + 0xEC) = 2; *(s32*)(w + 0xF0) = 5; *(s32*)(w + 0xF4) = 0x12;
+    *(s32*)(w + 0xF8) = 0x1B; *(s32*)(w + 0xFC) = 0x8A;
+    rank = ((700 - *(s32*)(w + 0xEC)) * 15) / 700; if (rank < 0) rank = 0; *(s32*)(w + 0x1AC) = rank + 1;
+    rank = ((700 - *(s32*)(w + 0xF0)) * 15) / 700; if (rank < 0) rank = 0; *(s32*)(w + 0x1B0) = rank;
+    rank = ((700 - *(s32*)(w + 0xF4)) * 15) / 700; if (rank < 0) rank = 0; *(s32*)(w + 0x1B4) = rank;
+    rank = ((700 - *(s32*)(w + 0xF8)) * 15) / 700; if (rank < 0) rank = 0; *(s32*)(w + 0x1B8) = rank;
+    rank = ((700 - *(s32*)(w + 0xFC)) * 15) / 700; if (rank < 0) rank = 0; *(s32*)(w + 0x1BC) = rank;
+
+    *(s32*)(w + 0x44) = 1; *(s32*)(w + 0x48) = 1; *(s32*)(w + 0x4C) = 1;
+    *(s32*)(w + 0x50) = 1; *(s32*)(w + 0x54) = 1;
+    *(s32*)(w + 0x104) = 0x20850; *(s32*)(w + 0x108) = 0x20436;
+    *(s32*)(w + 0x10C) = 0x20184; *(s32*)(w + 0x110) = 0x1F91E;
+    *(s32*)(w + 0x114) = 0x1E3AC;
+    rank = (*(s32*)(w + 0x104) - 0x1A9C8) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x1C4) = rank + 7;
+    rank = (*(s32*)(w + 0x108) - 0x1A9C8) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x1C8) = rank + 6;
+    rank = (*(s32*)(w + 0x10C) - 0x1A9C8) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x1CC) = rank + 4;
+    rank = (*(s32*)(w + 0x110) - 0x1A9C8) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x1D0) = rank + 4;
+    rank = (*(s32*)(w + 0x114) - 0x1A9C8) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x1D4) = rank + 1;
+
+    *(s32*)(w + 0x5C) = 1; *(s32*)(w + 0x60) = 1; *(s32*)(w + 0x64) = 1;
+    *(s32*)(w + 0x68) = 1; *(s32*)(w + 0x6C) = 1;
+    *(s32*)(w + 0x11C) = 0x16BDE; *(s32*)(w + 0x120) = 0x16968;
+    *(s32*)(w + 0x124) = 0x16382; *(s32*)(w + 0x128) = 0x1627E;
+    *(s32*)(w + 0x12C) = 0x15950;
+    rank = (*(s32*)(w + 0x11C) - 74000) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x1DC) = rank + 7;
+    rank = (*(s32*)(w + 0x120) - 74000) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x1E0) = rank + 6;
+    rank = (*(s32*)(w + 0x124) - 74000) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x1E4) = rank + 4;
+    rank = (*(s32*)(w + 0x128) - 74000) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x1E8) = rank + 3;
+    rank = (*(s32*)(w + 0x12C) - 74000) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x1EC) = rank + 4;
+
+    *(s32*)(w + 0x74) = 1; *(s32*)(w + 0x78) = 1; *(s32*)(w + 0x7C) = 1;
+    *(s32*)(w + 0x80) = 1; *(s32*)(w + 0x84) = 1;
+    *(s32*)(w + 0x134) = 0x5B964; *(s32*)(w + 0x138) = 0x5825A;
+    *(s32*)(w + 0x13C) = 0x4F826; *(s32*)(w + 0x140) = 0x4C3D8;
+    *(s32*)(w + 0x144) = 0x4237E;
+    *(s32*)(w + 0x1F4) = 14; *(s32*)(w + 0x1F8) = 12;
+    *(s32*)(w + 0x1FC) = 15; *(s32*)(w + 0x200) = 11;
+    *(s32*)(w + 0x204) = 10;
+
+    *(s32*)(w + 0x8C) = 1; *(s32*)(w + 0x90) = 1; *(s32*)(w + 0x94) = 1;
+    *(s32*)(w + 0x98) = 1; *(s32*)(w + 0x9C) = 1;
+    *(s32*)(w + 0x14C) = 2; *(s32*)(w + 0x150) = 5; *(s32*)(w + 0x154) = 0x12;
+    *(s32*)(w + 0x158) = 0x1B; *(s32*)(w + 0x15C) = 0x8A;
+    rank = ((700 - *(s32*)(w + 0x14C)) * 15) / 700; if (rank < 0) rank = 0; *(s32*)(w + 0x20C) = rank + 1;
+    rank = ((700 - *(s32*)(w + 0x150)) * 15) / 700; if (rank < 0) rank = 0; *(s32*)(w + 0x210) = rank;
+    rank = ((700 - *(s32*)(w + 0x154)) * 15) / 700; if (rank < 0) rank = 0; *(s32*)(w + 0x214) = rank;
+    rank = ((700 - *(s32*)(w + 0x158)) * 15) / 700; if (rank < 0) rank = 0; *(s32*)(w + 0x218) = rank;
+    rank = ((700 - *(s32*)(w + 0x15C)) * 15) / 700; if (rank < 0) rank = 0; *(s32*)(w + 0x21C) = rank;
+
+    *(s32*)(w + 0xA4) = 1; *(s32*)(w + 0xA8) = 1; *(s32*)(w + 0xAC) = 1;
+    *(s32*)(w + 0xB0) = 1; *(s32*)(w + 0xB4) = 1;
+    *(s32*)(w + 0x164) = 0x1E3DE; *(s32*)(w + 0x168) = 0x1E00A;
+    *(s32*)(w + 0x16C) = 0x1DD8A; *(s32*)(w + 0x170) = 0x1D5BA;
+    *(s32*)(w + 0x174) = 0x1C1CE;
+    rank = (*(s32*)(w + 0x164) - 0x1A9C8) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x224) = rank + 7;
+    rank = (*(s32*)(w + 0x168) - 0x1A9C8) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x228) = rank + 6;
+    rank = (*(s32*)(w + 0x16C) - 0x1A9C8) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x22C) = rank + 4;
+    rank = (*(s32*)(w + 0x170) - 0x1A9C8) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x230) = rank + 4;
+    rank = (*(s32*)(w + 0x174) - 0x1A9C8) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x234) = rank + 1;
+
+    *(s32*)(w + 0xBC) = 1; *(s32*)(w + 0xC0) = 1; *(s32*)(w + 0xC4) = 1;
+    *(s32*)(w + 0xC8) = 1; *(s32*)(w + 0xCC) = 1;
+    *(s32*)(w + 0x17C) = 0x1525C; *(s32*)(w + 0x180) = 0x15018;
+    *(s32*)(w + 0x184) = 0x14A96; *(s32*)(w + 0x188) = 0x149A6;
+    *(s32*)(w + 0x18C) = 0x14122;
+    rank = (*(s32*)(w + 0x17C) - 74000) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x23C) = rank + 7;
+    rank = (*(s32*)(w + 0x180) - 74000) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x240) = rank + 6;
+    rank = (*(s32*)(w + 0x184) - 74000) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x244) = rank + 4;
+    rank = (*(s32*)(w + 0x188) - 74000) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x248) = rank + 3;
+    rank = (*(s32*)(w + 0x18C) - 74000) / 2000; if (rank < 0) rank = 0; *(s32*)(w + 0x24C) = rank + 4;
 }
 

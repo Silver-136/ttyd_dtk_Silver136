@@ -27,6 +27,7 @@ void marioChkGnd(void) {
         Vec hitPos;
         f32 radius;
     } HitCheckArg;
+    extern Vec vec3_802c3b78[];
     extern void* marioGetPtr(void);
     extern s32 vivianGetStatus(void);
     extern void kpaClearHitobjRide(void);
@@ -56,9 +57,9 @@ void marioChkGnd(void) {
     extern f32 float_5000_80420984;
     extern f32 float_neg3000_80420980;
 
+    Vec* downVec = &vec3_802c3b78[3];
     void* player = marioGetPtr();
     HitCheckArg under;
-    Vec down = { 0.0f, -1.0f, 0.0f };
     void* hit;
     void* underHit;
     f32 groundY;
@@ -73,7 +74,7 @@ void marioChkGnd(void) {
         under.start = *(Vec*)((s32)player + 0x8C); \
         under.start.y += *(f32*)((s32)player + 0x1BC) * \
             ((*(u32*)player & 0x01000000) ? float_0p5_804208cc : 1.0f); \
-        under.end = down; \
+        under.end = *downVec; \
         under.radius = float_1000_804208a8; \
         if (*(u16*)((s32)player + 0x2E) == 0x1C) { \
             underHit = (void*)hitCheckVecFilter(&under, chkfilterVecVivian); \
@@ -120,14 +121,6 @@ void marioChkGnd(void) {
         hit = 0;
     }
 
-    if (hit == 0) {
-        if ((*(u32*)player & 0x40000) == 0) {
-            marioChgMot(drop < float_0_804208ac ? 7 : 8);
-            marioSetFallPara();
-        }
-        return;
-    }
-
     if (*(u16*)((s32)player + 0x2E) == 0x13) {
         if (marioChkShipMoveMode() != 0) {
             if (*(void**)((s32)player + 0x1E8) == 0) {
@@ -139,8 +132,8 @@ void marioChkGnd(void) {
         return;
     }
 
-    if (*(u16*)((s32)player + 0x2E) != 0x1F &&
-        (hitGetAttr(hit) & 0x200) != 0) {
+    if (*(u16*)((s32)player + 0x2E) != 0x1F && hit != 0 &&
+        (hitGetAttr(*(void**)((s32)player + 0x1E8)) & 0x200) != 0) {
         if (*(f32*)((s32)player + 0x7C) >= float_0_804208ac) {
             marioSetFallPara();
         }
@@ -149,7 +142,8 @@ void marioChkGnd(void) {
         return;
     }
 
-    if ((hitGetAttr(hit) & 0x800) != 0) {
+    if (hit != 0 &&
+        (hitGetAttr(*(void**)((s32)player + 0x1E8)) & 0x800) != 0) {
         if (vivianGetStatus() != 2 && vivianGetStatus() != 1 &&
             vivianGetStatus() != 3) {
             set_damage_root_ypos(*(f32*)((s32)player + 0x90));
@@ -158,20 +152,36 @@ void marioChkGnd(void) {
         return;
     }
 
-    if (*(s16*)((s32)player + 0x50) == 0 &&
-        marioChkFrontStep(&stepY, stepA, stepB) != 0) {
-        f32 rise = stepY - *(f32*)((s32)player + 0x90);
-        if (rise >= float_5_804208c0 && rise <= float_11_804208b4 &&
-            *(f32*)((s32)player + 0x218) <= float_30_80420928 &&
-            *(f32*)((s32)player + 0x180) != float_0_804208ac) {
-            *(f32*)((s32)player + 0x1C8) = stepY;
-            if ((*(u32*)player & 0x01000000) != 0) roll_upstairs_on();
-            else marioChgMotSub(12, 0);
-            return;
+    if (hit == 0) {
+        if ((*(u32*)player & 0x01000000) == 0 &&
+            (*(u32*)player & 0x40000) == 0) {
+            if (drop < float_0_804208ac) {
+                marioChgMot(7);
+                marioSetFallPara();
+            }
+            if (drop > float_0_804208ac) {
+                marioChgMot(8);
+                marioSetFallPara();
+            }
         }
+    } else {
+        if (*(s16*)((s32)player + 0x50) == 0 &&
+            marioChkFrontStep(&stepY, stepA, stepB) != 0) {
+            f32 rise = stepY - *(f32*)((s32)player + 0x90);
+            if (rise <= float_11_804208b4 && rise >= float_5_804208c0 &&
+                *(f32*)((s32)player + 0x218) <= float_30_80420928 &&
+                (*(f32*)((s32)player + 0x1C8) = stepY,
+                 *(f32*)((s32)player + 0x180) != float_0_804208ac)) {
+                if ((*(u32*)player & 0x01000000) == 0) {
+                    marioChgMot(12);
+                } else {
+                    roll_upstairs_on();
+                }
+                return;
+            }
+        }
+        *(f32*)((s32)player + 0x90) = groundY;
     }
-
-    *(f32*)((s32)player + 0x90) = groundY;
 
 #undef CHECK_UNDER
 }
@@ -722,7 +732,9 @@ void* searchFrontWall(f64 speed, f64 angle, f64 radius, void* position, s32 outP
 }
 
 s32 marioHitCheck2(void* start, void* end, f32* outNormal, void* outHitPos, f32* radius) {
-    typedef struct Vec { f32 x, y, z; } Vec;
+    typedef struct Vec {
+        f32 x, y, z;
+    } Vec;
     typedef struct HitCheckArg {
         u32 flags;
         u32 attrMask;
@@ -733,6 +745,7 @@ s32 marioHitCheck2(void* start, void* end, f32* outNormal, void* outHitPos, f32*
         Vec hitPos;
         f32 radius;
     } HitCheckArg;
+
     extern void* marioGetPtr(void);
     extern s32 marioGetJabaraState(void);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
@@ -744,60 +757,118 @@ s32 marioHitCheck2(void* start, void* end, f32* outNormal, void* outHitPos, f32*
     extern f32 float_0p5_804208cc;
     extern f32 float_neg0p5_804208d0;
     extern f32 float_1000_804208a8;
-    u8* player = marioGetPtr();
-    HitCheckArg hit;
+
+    void* player = marioGetPtr();
     f32 value = *radius;
-    f32 bias;
-    s32 motion = *(u16*)(player + 0x2E);
-    s32 useAttrFilter;
     s32 result;
 
-    hit.start = *(Vec*)start;
-    hit.end = *(Vec*)end;
-    hit.radius = value;
-    useAttrFilter = 0;
-    if (motion == 0x14) {
-        if (marioGetJabaraState() == 1) {
-            useAttrFilter = 1;
-        }
-    } else if ((*(u32*)player & 0x00020000) == 0) {
-        useAttrFilter = 1;
+#define ROUND_1000(v) ((f32)(s32)((v) * float_1000_804208a8 + \
+        (((v) >= float_0_804208ac) ? float_0p5_804208cc : float_neg0p5_804208d0)) / \
+        float_1000_804208a8)
+
+#define FINISH_HIT(arg_) do { \
+        value = (arg_).radius; \
+        value = ROUND_1000(value); \
+        if (outNormal != 0) { \
+            *(Vec*)outNormal = (arg_).normal; \
+            outNormal[0] = ROUND_1000(outNormal[0]); \
+            outNormal[1] = ROUND_1000(outNormal[1]); \
+            outNormal[2] = ROUND_1000(outNormal[2]); \
+        } \
+        if (outHitPos != 0) { \
+            *(Vec*)outHitPos = (arg_).hitPos; \
+        } \
+    } while (0)
+
+    if (*(u16*)((s32)player + 0x2E) == 0x14) {
+        goto jabara_motion;
     }
 
-    if (useAttrFilter) {
+    if ((*(u32*)player & 0x00020000) == 0) {
+        HitCheckArg hit;
+
+        hit.start = *(Vec*)start;
+        hit.end = *(Vec*)end;
         hit.flags = 4;
         hit.attrMask = 0x800000;
+        hit.radius = value;
+
         result = hitCheckVecFilter(&hit, chkFilterAttr2);
-    } else if (motion == 0x1C) {
-        result = hitCheckVecFilter(&hit, chkfilterVecVivian);
-    } else if ((*(u32*)player & 0x01000000) != 0) {
-        result = hitCheckVecFilter(&hit, chkfilterVecRoll);
+        if (result != 0) {
+            FINISH_HIT(hit);
+        }
+        *radius = value;
+        return result;
     } else {
-        result = hitCheckVecFilter(&hit, chkfilterVec);
+        HitCheckArg hit;
+
+        hit.start = *(Vec*)start;
+        hit.end = *(Vec*)end;
+        hit.radius = value;
+
+        player = marioGetPtr();
+        if (*(u16*)((s32)player + 0x2E) == 0x1C) {
+            result = hitCheckVecFilter(&hit, chkfilterVecVivian);
+        } else {
+            player = marioGetPtr();
+            if ((*(u32*)player & 0x01000000) == 0) {
+                result = hitCheckVecFilter(&hit, chkfilterVec);
+            } else {
+                result = hitCheckVecFilter(&hit, chkfilterVecRoll);
+            }
+        }
+
+        if (result != 0) {
+            FINISH_HIT(hit);
+        }
+        *radius = value;
+        return result;
     }
 
-    if (result != 0) {
-        value = hit.radius;
-        bias = value >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0;
-        value = (f32)(s32)(value * float_1000_804208a8 + bias) / float_1000_804208a8;
-        if (outNormal != 0) {
-            *(Vec*)outNormal = hit.normal;
-            value = outNormal[0];
-            bias = value >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0;
-            outNormal[0] = (f32)(s32)(value * float_1000_804208a8 + bias) / float_1000_804208a8;
-            value = outNormal[1];
-            bias = value >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0;
-            outNormal[1] = (f32)(s32)(value * float_1000_804208a8 + bias) / float_1000_804208a8;
-            value = outNormal[2];
-            bias = value >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0;
-            outNormal[2] = (f32)(s32)(value * float_1000_804208a8 + bias) / float_1000_804208a8;
+jabara_motion:
+    if (marioGetJabaraState() == 1) {
+        HitCheckArg hit;
+
+        hit.start = *(Vec*)start;
+        hit.end = *(Vec*)end;
+        hit.flags = 4;
+        hit.attrMask = 0x800000;
+        hit.radius = value;
+
+        result = hitCheckVecFilter(&hit, chkFilterAttr2);
+        if (result != 0) {
+            FINISH_HIT(hit);
         }
-        if (outHitPos != 0) {
-            *(Vec*)outHitPos = hit.hitPos;
+        *radius = value;
+        return result;
+    } else {
+        HitCheckArg hit;
+
+        hit.start = *(Vec*)start;
+        hit.end = *(Vec*)end;
+        hit.radius = value;
+
+        player = marioGetPtr();
+        if (*(u16*)((s32)player + 0x2E) == 0x1C) {
+            result = hitCheckVecFilter(&hit, chkfilterVecVivian);
+        } else {
+            player = marioGetPtr();
+            if ((*(u32*)player & 0x01000000) == 0) {
+                result = hitCheckVecFilter(&hit, chkfilterVec);
+            } else {
+                result = hitCheckVecFilter(&hit, chkfilterVecRoll);
+            }
         }
+
+        if (result != 0) {
+            FINISH_HIT(hit);
+        }
+        *radius = value;
+        return result;
     }
-    *radius = value;
-    return result;
+
+#undef FINISH_HIT
+#undef ROUND_1000
 }
 
 s32 marioSearchGroundRoll(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f32* outAngle) {

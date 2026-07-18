@@ -373,15 +373,110 @@ state_3ee:
 
 /* stub-fill: actionCommandDisp | prototype_only | source_prototype */
 void actionCommandDisp(f32 x, f32 y) {
-    typedef struct VecLocal{f32 x,y,z;}VecLocal;
-    extern void* _battleWorkPointer;extern void BattleAcDrawGauge(s32,s32,s32,s32,s32,s32,s32,s32);extern s32 BattleACGetButtonIcon(u32,s32);extern void iconDispGx(f64,VecLocal*,s32,s32);
-    u8* wp=(u8*)_battleWorkPointer;f32 value=*(f32*)(wp+0x1F24);f32 ratio=value/100.0f;u32 flags=*(u32*)(wp+0x1C94);s32 param=*(s32*)(wp+0x1CAC);s32 mode=*(s32*)(wp+0x1C9C);s32 input=*(s32*)(wp+0x1CA8);s32 left=0,right=0,left2=0,right2=0;VecLocal pos;
-    if(ratio>1.0f)ratio=1.0f;*(f32*)(wp+0x1F28)=ratio;
-    if((flags&2)==0)BattleAcDrawGauge((s32)x,(s32)y,0xB2,2,param,100,100,0);else BattleAcDrawGauge((s32)x,(s32)y,0xB2,1,100,100,100,0);
-    if((flags&4)==0){pos.x=x-288.0f+(176.0f*(f32)param)/100.0f;pos.y=y+45.0f;pos.z=0;iconDispGx(1.0,&pos,0x10,0x9E);}else{pos.x=x-80.0f-(flags&8?12.0f:0.0f);pos.y=y+18.0f;pos.z=0;iconDispGx(1.0,&pos,0x10,(value<(f32)param||value>100.0f)?0x99:0x9D);}
-    switch(input){case 0:left=0x87;right=0x86;left2=0x89;right2=0x88;break;case 1:case 2:left=BattleACGetButtonIcon(0x100,1);right=BattleACGetButtonIcon(0x100,0);break;case 3:left=BattleACGetButtonIcon(0x20,1);right=BattleACGetButtonIcon(0x20,0);break;}
-    if(mode==1002)return;if(mode<99||mode>1005)return;
-    pos.y=y+80.0f;pos.z=0;pos.x=x-225.0f;
-    if(left2!=0){iconDispGx(1.0,&pos,0x10,right);pos.x+=56.0f;iconDispGx(1.0,&pos,0x10,right2);}else{pos.x+=28.0f;iconDispGx(1.0,&pos,0x10,right);}
+    typedef struct VecLocal {
+        f32 x, y, z;
+    } VecLocal;
+    extern void* _battleWorkPointer;
+    extern void* camGetPtr(s32);
+    extern void BattleAcDrawGauge(s32, s32, s32, s32, s32, s32, s32, s32);
+    extern s32 BattleACGetButtonIcon(u32, s32);
+    extern void iconDispGx(f64, VecLocal*, s32, s32);
+
+    u8* wp = (u8*)_battleWorkPointer;
+    u8* extra = wp + 0x1F4C;
+    s32* params = (s32*)(wp + 0x1CC8);
+    f32 value = *(f32*)(extra + 4);
+    f32 ratio = value / 100.0f;
+    u32 flags = *(u32*)(wp + 0x1C94);
+    s32 mode = *(s32*)(wp + 0x1C9C);
+    s32 left = 0;
+    s32 right = 0;
+    s32 left2 = 0;
+    s32 right2 = 0;
+    VecLocal pos;
+
+    camGetPtr(1);
+    if (ratio > 1.0f) {
+        ratio = 1.0f;
+    }
+    *(f32*)(wp + 0x1F28) = ratio;
+
+    if ((flags & 2) == 0) {
+        BattleAcDrawGauge((s32)x, (s32)y, 0xB2, 2, params[4], 100, 100, 0);
+    } else {
+        BattleAcDrawGauge((s32)x, (s32)y, 0xB2, 1, 100, 100, 100, 0);
+    }
+
+    if ((flags & 4) == 0) {
+        pos.x = x - 288.0f + (176.0f * (f32)params[4]) / 100.0f;
+        pos.y = y + 45.0f;
+        pos.z = 0.0f;
+        iconDispGx(1.0, &pos, 0x10, 0x9E);
+    } else {
+        pos.x = x - 80.0f - ((flags & 8) ? 12.0f : 0.0f);
+        pos.y = y + 18.0f;
+        pos.z = 0.0f;
+        iconDispGx(1.0, &pos, 0x10,
+                   (value < (f32)params[4] || value > 100.0f) ? 0x99 : 0x9D);
+    }
+
+    if (params[0] == 2) {
+        left = BattleACGetButtonIcon(0x100, 1);
+        right = BattleACGetButtonIcon(0x100, 0);
+    } else if (params[0] < 2) {
+        if (params[0] == 0) {
+            left = 0x87;
+            right = 0x86;
+            left2 = 0x89;
+            right2 = 0x88;
+        } else if (params[0] > -1) {
+            left = BattleACGetButtonIcon(0x100, 1);
+            right = BattleACGetButtonIcon(0x100, 0);
+        }
+    } else if (params[0] < 4) {
+        left = BattleACGetButtonIcon(0x20, 1);
+        right = BattleACGetButtonIcon(0x20, 0);
+    }
+
+    if (mode == 1002) {
+        return;
+    }
+    if (mode < 1002) {
+        if (mode > 100) {
+            if (mode < 1000) {
+                return;
+            }
+        } else if (mode < 99) {
+            return;
+        }
+    } else if (mode > 1005) {
+        return;
+    }
+    {
+        s32 primary;
+        s32 secondary;
+        s32 usePressed = 0;
+        if (*(u8*)(extra + 0x12) == 0) {
+            if ((value < (f32)params[4] || value > 100.0f) &&
+                *(s32*)(wp + 0x1CB8) != 0) {
+                usePressed = 1;
+            }
+        } else if ((f32)params[4] <= value && value <= 100.0f) {
+            usePressed = 1;
+        }
+        primary = usePressed ? left : right;
+        secondary = usePressed ? left2 : right2;
+        pos.y = y + 80.0f;
+        pos.z = 0.0f;
+        pos.x = x - 225.0f;
+        if (secondary != 0) {
+            iconDispGx(1.0, &pos, 0x10, primary);
+            pos.x += 56.0f;
+            iconDispGx(1.0, &pos, 0x10, secondary);
+        } else {
+            pos.x += 28.0f;
+            iconDispGx(1.0, &pos, 0x10, primary);
+        }
+    }
 }
 

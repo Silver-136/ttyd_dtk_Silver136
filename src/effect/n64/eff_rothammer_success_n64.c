@@ -1,10 +1,13 @@
 #include "effect/n64/eff_rothammer_success_n64.h"
 
 
-u8 effRotHammerSuccessDisp(void) {
-    return 0;
+void effRotHammerSuccessDisp(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32); extern void GXSetNumChans(s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32); extern void effGetTexObjN64(s32,void*); extern void GXLoadTexObj(void*,s32); extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevColorIn(s32,s32,s32,s32,s32); extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32); extern void GXSetCullMode(s32); extern void effSetVtxDescN64(void*); extern void PSMTXTrans(void*,f32,f32,f32); extern void PSMTXRotRad(void*,s32,f32); extern void PSMTXScale(void*,f32,f32,f32); extern void PSMTXConcat(void*,void*,void*); extern void GXSetTevColor(s32,void*); extern void GXLoadPosMtxImm(void*,s32); extern void GXSetCurrentMtx(s32); extern void GXBegin(s32,s32,s32); extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);
+    u8* w=*(u8**)((u8*)effect+0xC);u8* cam=camGetPtr(cameraId);f32 a[3][4],b[3][4],c[3][4],base[3][4];u8 tex[0x20];u32 col=0xFFFFFFFF;s32 i;
+    GXSetNumChans(0);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x3C,0,0x7D);effGetTexObjN64(0x1D,tex);GXLoadTexObj(tex,0);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,-1);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,15,15,15,2);GXSetTevAlphaIn(0,7,5,4,7);GXSetCullMode(0);effSetVtxDescN64((void*)0x803A80F8);
+    PSMTXTrans(a,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC));PSMTXRotRad(b,0x79,-0.017453292f**(f32*)((u8*)camGetPtr(4)+0x114));PSMTXConcat(a,b,a);PSMTXConcat(cam+0x11C,a,base);GXSetTevColor(1,&col);
+    for(i=1;i<*(s32*)((u8*)effect+8);i++,w+=0x34){PSMTXTrans(a,*(f32*)(w+0x38),*(f32*)(w+0x3C),*(f32*)(w+0x40));PSMTXRotRad(b,0x7A,0.017453292f**(f32*)(w+0x50));PSMTXScale(c,*(f32*)(w+0x64),*(f32*)(w+0x64),*(f32*)(w+0x64));PSMTXConcat(a,b,a);PSMTXConcat(a,c,a);PSMTXConcat(base,a,a);GXLoadPosMtxImm(a,0);GXSetCurrentMtx(0);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3,0);}
 }
-
 
 void* effRotHammerSuccessN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, s32 lifetime) {
     extern void* effEntry(void);

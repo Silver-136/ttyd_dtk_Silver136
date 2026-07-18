@@ -28,38 +28,102 @@ void itemUseDisp(void* pWinMgr) {
     extern s32 pouchGetMaxHP(void);
     extern s32 pouchGetFP(void);
     extern s32 pouchGetMaxFP(void);
+    extern void winTexInit(void* data);
+    extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
     extern void winIconInit(void);
     extern void winIconGrayInit(void);
     extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
     extern void winFontInit(void);
+    extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* format, ...);
     extern void winFontSetR(Vec3* pos, Vec3* scale, void* color, char* format, ...);
+    extern char* msgSearch(char* key);
+    extern s32 marioBgmodeChk(void);
+    extern s32 marioGetParty(void);
+    extern void* marioGetPtr(void);
+    extern u8 winPartyDt[];
     Vec3 pos;
     Vec3 scale;
     u32 white = 0xFFFFFFFF;
-    void* pWin = winGetPtr();
-    s32 count = *(s32*)((s32)pWin + 0x3D0);
-    s32 cursor = *(s32*)((s32)pWin + 0x3D4);
+    u32 gray = 0x7F7F7FFF;
+    u8* w = (u8*)winGetPtr();
+    s32 x = *(s32*)((u8*)pWinMgr + 0x18);
+    s32 y = *(s32*)((u8*)pWinMgr + 0x1C);
+    s32 count = *(s32*)(w + 0x1E0) + 1;
+    s32 cursor = *(s32*)(w + 0x2DC);
+    s32 timer = *(s32*)(w + 0x2E0);
+    void* partyOrder[11];
+    s32 currentParty;
+    s32 partyCount;
     s32 i;
 
-    if (winMgrAction(*(s32*)((s32)pWin + 0x1A0)) == 0) return;
-    scale.x = 1.0f;
-    scale.y = 1.0f;
-    scale.z = 1.0f;
-    pos.z = 0.0f;
-    for (i = 0; i <= count; i++) {
-        pos.x = *(f32*)((s32)pWinMgr + 0x10) + 20.0f;
-        pos.y = *(f32*)((s32)pWinMgr + 0x14) - i * 31.0f;
-        if (i == cursor) winIconInit();
-        else winIconGrayInit();
-        winIconSet(i == 0 ? 0x1A6 : 0x120 + i, &pos, &scale, &white);
-        winFontInit();
-        pos.x += 52.0f;
-        if (i == 0) {
-            winFontSetR(&pos, &scale, &white, "%d/%d", pouchGetHP(), pouchGetMaxHP());
-            pos.x += 90.0f;
-            winFontSetR(&pos, &scale, &white, "%d/%d", pouchGetFP(), pouchGetMaxFP());
+    if (winMgrAction(*(s32*)(w + 0x1210)) == 0) {
+        if (marioBgmodeChk() == 0) {
+            currentParty = marioGetParty();
+        } else {
+            currentParty = *(s8*)((u8*)marioGetPtr() + 0x247);
+        }
+        partyCount = 0;
+        for (i = 0; i < 7; i++) {
+            u8* party = winPartyDt + i * 0x24;
+            if (*(s32*)party == currentParty) {
+                partyOrder[partyCount++] = party;
+            }
+        }
+        for (i = 0; i < 7; i++) {
+            u8* party = winPartyDt + i * 0x24;
+            if (*(s32*)party != currentParty) {
+                partyOrder[partyCount++] = party;
+            }
+        }
+        scale.x = scale.y = scale.z = 1.0f;
+        pos.z = 0.0f;
+        for (i = 0; i < count; i++) {
+            if (timer != 0 && i != cursor) {
+                winIconGrayInit();
+            } else {
+                winIconInit();
+            }
+            pos.x = (f32)(x + 30);
+            pos.y = (f32)(y - 20 - i * 60);
+            winIconSet(i == 0 ? 0x1A6 : *(s16*)((u8*)partyOrder[i - 1] + 4), &pos, &scale,
+                       timer != 0 && i != cursor ? &gray : &white);
+
+            winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
+            GXSetTevColorIn(0, 0, 0, 0, 2);
+            GXSetTevAlphaIn(0, 0, 4, 5, 7);
+            pos.x = (f32)(x + 220);
+            pos.y = (f32)(y - 19 - i * 60);
+            winTexSet(0xAF, &pos, &scale, &white);
+            pos.y -= 22.0f;
+            winTexSet(0xAF, &pos, &scale, &white);
+
+            winFontInit();
+            pos.x = (f32)(x + 50);
+            pos.y = (f32)(y - 8 - i * 60);
+            if (i == 0) {
+                winFontSet(&pos, &scale, &white, msgSearch("name_mario"));
+                pos.x = (f32)(x + 110);
+                pos.y -= 22.0f;
+                winFontSetR(&pos, &scale, &white, "%d/%d", pouchGetHP(), pouchGetMaxHP());
+                pos.x += 95.0f;
+                winFontSetR(&pos, &scale, &white, "%d/%d", pouchGetFP(), pouchGetMaxFP());
+            } else {
+                winFontSet(&pos, &scale, &white, msgSearch("msg_menu_party_name"));
+            }
         }
     }
+
+    winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
+    pos.x = *(f32*)(w + 0x150) + 20.0f;
+    pos.y = *(f32*)(w + 0x154) - 20.0f;
+    pos.z = 0.0f;
+    scale.x = scale.y = scale.z = 1.0f;
+    winTexSet(0, &pos, &scale, &white);
+    pos.x = *(f32*)(w + 0x150);
+    pos.y = *(f32*)(w + 0x154);
+    winTexSet(0, &pos, &scale, &white);
 }
 
 u8 itemUseDisp2(void* pWinMgr) {
@@ -124,41 +188,174 @@ s32 winItemMain(void* pWin) {
     extern s32 pouchGetHaveItemCnt(void);
     extern s32 pouchHaveItem(s32 index);
     extern void winMsgEntry(void* win, s32 item, char* text, s32 type);
+    extern void winSortEntry(f32 x, f32 y, void* win, s32 type);
     extern char* msgSearch(char* key);
     extern u8 itemDataTable[];
     extern void psndSFXOn(s32 id);
-    s32 state = *(s32*)((s32)pWin + 0x10);
+    extern char str_msg_menu_mochi_item_802f5e44[];
+    extern char str_msg_menu_mochi_daiji_802f5e58[];
+    u8* w = (u8*)pWin;
+    s32 state = *(s32*)(w + 0x20C);
+    s32 sub = *(s32*)(w + 0x210);
     s32 count;
-    s32 cursor = *(s32*)((s32)pWin + 0x1C0);
+    s32 pages;
+    s32 cursor;
+    s32 page;
     s32 item;
-    u32 pressed = *(u32*)((s32)pWin + 0x8C);
-    u32 repeat = *(u32*)((s32)pWin + 0x90);
+    u32 pressed = *(u32*)(w + 4);
+    u32 repeat = *(u32*)(w + 8);
+    u32 dirs = *(u32*)(w + 0x10);
 
     if (state == 0) {
-        *(s32*)((s32)pWin + 0x1C0) = 0;
-        *(s32*)((s32)pWin + 0x1C4) = 0;
-        *(s32*)((s32)pWin + 0x10) = 10;
+        if ((pressed & 0x200) != 0) {
+            psndSFXOn(0x20013);
+            return -1;
+        }
+        if ((pressed & 0x1000) != 0) {
+            return -2;
+        }
+        if ((dirs & 0x3000) != 0) {
+            sub = 1 - sub;
+            *(s32*)(w + 0x210) = sub;
+            psndSFXOn(0x20005);
+        } else if ((pressed & 0x100) != 0) {
+            if (sub == 0) {
+                if (pouchGetHaveItemCnt() == 0) {
+                    return 0;
+                }
+            } else if (*(s16*)(w + 0x3DA) == 0) {
+                return 0;
+            }
+            *(s32*)(w + 0x20C) = 10;
+            psndSFXOn(0x20012);
+            return 0;
+        } else if ((pressed & 0x10) != 0) {
+            winSortEntry(-310.0f, 150.0f, pWin, sub != 0);
+            *(s32*)(w + 0x124) = state;
+            psndSFXOn(0x20012);
+            *(s32*)(w + 0x20C) = 1000;
+        }
+        *(f32*)(w + 0x158) = -275.0f;
+        *(f32*)(w + 0x15C) = (f32)(125 - sub * 50);
+        winMsgEntry(pWin, 0,
+                    sub == 0 ? str_msg_menu_mochi_item_802f5e44
+                             : str_msg_menu_mochi_daiji_802f5e58,
+                    0);
         return 0;
     }
+
     if (state == 10) {
-        count = pouchGetHaveItemCnt();
-        if ((pressed & 0x200) != 0) return -1;
-        if ((repeat & 0x1000) != 0 && cursor > 0) cursor--;
-        if ((repeat & 0x2000) != 0 && cursor + 1 < count) cursor++;
-        if ((repeat & 0x4000) != 0 && cursor > 1) cursor -= 2;
-        if ((repeat & 0x8000) != 0 && cursor + 2 < count) cursor += 2;
-        *(s32*)((s32)pWin + 0x1C0) = cursor;
-        if ((pressed & 0x100) != 0 && count != 0) {
-            item = pouchHaveItem(cursor);
-            winMsgEntry(pWin, item,
-                        msgSearch(*(char**)((s32)itemDataTable + item * 0x28 + 0xC)), 0);
-            psndSFXOn(0x20013);
-            *(s32*)((s32)pWin + 0x10) = 78;
+        if (sub == 0) {
+            count = pouchGetHaveItemCnt();
+        } else {
+            count = *(s16*)(w + 0x3DA);
         }
-    } else if (state == 78) {
-        if ((pressed & 0x300) != 0) *(s32*)((s32)pWin + 0x10) = 10;
-    } else if (state == 100) {
-        if ((pressed & 0x200) != 0) return -1;
+        pages = (count + 9) / 10;
+        cursor = *(s32*)(w + 0x214 + sub * 4);
+        page = *(s32*)(w + 0x21C + sub * 4);
+
+        if ((pressed & 0x200) != 0) {
+            psndSFXOn(0x20013);
+            *(s32*)(w + 0x20C) = 0;
+        } else if ((pressed & 0x100) == 0) {
+            if ((repeat & 0x40) != 0) {
+                page--;
+                if (page < 0) page = 0;
+                cursor = page * 10;
+                psndSFXOn(0x20035);
+            } else if ((repeat & 0x20) != 0) {
+                page++;
+                if (page >= pages) page = pages - 1;
+                cursor = page * 10;
+                psndSFXOn(0x20035);
+            } else if ((dirs & 0xC000) != 0) {
+                if ((cursor & 1) == 0) {
+                    if (cursor + 1 < count) cursor++;
+                } else if (cursor - 1 >= 0) {
+                    cursor--;
+                }
+                psndSFXOn(0x20035);
+            } else if ((dirs & 0x1000) != 0) {
+                if (cursor - 2 >= 0) cursor -= 2;
+                page = cursor / 10;
+                psndSFXOn(0x20035);
+            } else if ((dirs & 0x2000) != 0) {
+                if (cursor + 2 < count) {
+                    cursor += 2;
+                } else if (cursor + (cursor & 1) < count) {
+                    cursor = count - 1;
+                }
+                page = cursor / 10;
+                psndSFXOn(0x20035);
+            } else if ((pressed & 0x10) != 0) {
+                winSortEntry(-310.0f, 150.0f, pWin, sub != 0);
+                *(s32*)(w + 0x124) = state;
+                psndSFXOn(0x20012);
+                *(s32*)(w + 0x20C) = 1000;
+            } else if ((pressed & 0x1000) != 0) {
+                return -2;
+            }
+        } else if (sub == 0 && count != 0) {
+            item = pouchHaveItem(cursor);
+            *(s32*)(w + 0x2D4) = item;
+            *(s32*)(w + 0x2D8) = cursor;
+            *(s32*)(w + 0x20C) = 300;
+            *(s32*)(w + 0x2DC) = 0;
+            *(s32*)(w + 0x2E0) = 0;
+            psndSFXOn(0x20012);
+        }
+
+        *(s32*)(w + 0x214 + sub * 4) = cursor;
+        *(s32*)(w + 0x21C + sub * 4) = page;
+        *(f32*)(w + 0x158) = (f32)((cursor & 1) * 204 - 155);
+        *(f32*)(w + 0x15C) = (f32)(110 - ((cursor % 10) / 2) * 38);
+        if (sub == 0) {
+            item = pouchHaveItem(cursor);
+        } else {
+            item = *(s16*)(w + 0x2E8 + cursor * 2);
+        }
+        winMsgEntry(pWin, item,
+                    *(char**)(itemDataTable + item * 0x28 + 0xC), 0);
+        return 0;
+    }
+
+    if (state == 100) {
+        if ((pressed & 0x100) != 0) {
+            psndSFXOn(0x20012);
+            *(s32*)(w + 0x2D0) += 1;
+            if (*(s32*)(w + 0x2D0) >= *(s32*)(w + 0x2CC)) {
+                *(s32*)(w + 0x2D0) = *(s32*)(w + 0x2CC) - 1;
+                *(s32*)(w + 0x20C) = 10;
+                *(f32*)(w + 0x238) = 320.0f;
+                *(f32*)(w + 0x240) = -240.0f;
+                *(u16*)w &= 0x7FFF;
+                *(f32*)(w + 0x150) = *(f32*)(w + 0x158);
+                *(f32*)(w + 0x154) = *(f32*)(w + 0x15C);
+            }
+        } else if ((pressed & 0x200) != 0) {
+            psndSFXOn(0x20013);
+            *(s32*)(w + 0x2D0) -= 1;
+            if (*(s32*)(w + 0x2D0) < 0) {
+                *(s32*)(w + 0x2D0) = 0;
+                *(s32*)(w + 0x20C) = 10;
+                *(f32*)(w + 0x238) = 320.0f;
+                *(f32*)(w + 0x240) = -240.0f;
+                *(u16*)w &= 0x7FFF;
+                *(f32*)(w + 0x150) = *(f32*)(w + 0x158);
+                *(f32*)(w + 0x154) = *(f32*)(w + 0x15C);
+            }
+        } else if ((pressed & 0x1000) != 0) {
+            *(f32*)(w + 0x238) = 320.0f;
+            *(f32*)(w + 0x240) = -240.0f;
+            *(u16*)w &= 0x7FFF;
+            *(f32*)(w + 0x150) = *(f32*)(w + 0x158);
+            *(f32*)(w + 0x154) = *(f32*)(w + 0x15C);
+            return -2;
+        }
+        *(f32*)(w + 0x158) = -170.0f;
+        *(f32*)(w + 0x15C) = 150.0f;
+    } else if (state == 1000) {
+        *(s32*)(w + 0x20C) = *(s32*)(w + 0x124);
     }
     return 0;
 }
@@ -174,6 +371,11 @@ void item_disp(double x, double y, void* pWin) {
     extern void winFontInit(void);
     extern void winFontSet(Vec3*,Vec3*,void*,char*);
     extern char* msgSearch(char*);
+    extern u16 FontGetMessageWidth(char*);
+    extern void winTexInit(void*);
+    extern void winTexSet(s32, Vec3*, Vec3*, void*);
+    extern void winBookGX(double, double, void*, s32);
+    extern char str_msg_menu_sort_narabi_802f5e2c[];
     extern u8 itemDataTable[];
     extern u32 dat_80423758, dat_8042375c;
     s32 sub = *(s32*)((s32)pWin + 0x210);
@@ -200,6 +402,42 @@ void item_disp(double x, double y, void* pWin) {
         winFontSet(&pos, &scale, &color, msgSearch(*(char**)(itemDataTable + item*0x28 + 0x10)));
     }
     GXSetScissor(0,0,0x280,0x1E0);
+    {
+        s32 page = *(s32*)((s32)pWin + 0x21C + sub * 4);
+        s32 visibleStart = page * 10;
+        if (page > 0) {
+            winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
+            pos.x = (f32)x + 250.0f;
+            pos.y = (f32)y + 130.0f;
+            winTexSet(0x17, &pos, &scale, &color);
+            winIconInit();
+            winIconSet(0x86, &pos, &scale, &color);
+        }
+        if (visibleStart + 10 < count) {
+            winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
+            pos.x = (f32)x + 250.0f;
+            pos.y = (f32)y - 105.0f;
+            winTexSet(0x17, &pos, &scale, &color);
+            winIconInit();
+            winIconSet(0x88, &pos, &scale, &color);
+        }
+    }
+    {
+        char* sortText = msgSearch(str_msg_menu_sort_narabi_802f5e2c);
+        f32 width = 0.7f * (f32)FontGetMessageWidth(sortText);
+        winFontInit();
+        pos.x = (f32)x + 220.0f - width;
+        pos.y = (f32)y - 82.0f;
+        winFontSet(&pos, &scale, &color, sortText);
+        winIconInit();
+        pos.x -= 30.0f;
+        pos.y -= 8.0f;
+        winIconSet(0x219, &pos, &scale, &color);
+    }
+    if (*(f32*)((s32)pWin + 0x234) < 320.0f &&
+        *(f32*)((s32)pWin + 0x23C) > -240.0f) {
+        winBookGX(*(f32*)((s32)pWin + 0x234), *(f32*)((s32)pWin + 0x23C), pWin, 0);
+    }
 }
 
 #pragma no_register_save_helpers on

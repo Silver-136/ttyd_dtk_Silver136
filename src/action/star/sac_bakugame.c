@@ -725,8 +725,17 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
     extern s32 BattleAudience_GetWaiting(s32);
     extern s32 irand(s32);
     extern void memcpy(void*, void*, u32);
+    extern void animPoseRelease(s32);
+    extern void animPoseMain(void);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void bakuGameDisp2D(void);
+    extern void bakuGameDisp3D(void);
+    extern void evtSetValue(void*, s32, s32);
+    extern void evtSetFloat(void*, s32, f32);
     extern u8 weapon[];
+    extern f64 intplGetValue(f64, f64, s32, s32, s32);
     u32* work = GetBakuGamePtr();
+    s32* args = *(s32**)((u8*)event + 8);
     s32 i;
 
     BattleGetUnitPtr(g_BattleWork, BattleTransID(event, -3));
@@ -747,15 +756,22 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
                 canThrow = 1;
             }
         }
-        if (canThrow) *work &= ~2U;
-        else *work |= 2;
+        if (canThrow) {
+            *work &= ~2U;
+        } else {
+            *work |= 2;
+        }
     }
+
     switch (work[1]) {
         case 0:
             for (i = 0; i < 3; i++) {
-                if (*(s32*)((u8*)work + 0xC + i * 0x24) != 5) break;
+                if (*(s32*)((u8*)work + 0xC + i * 0x24) != 5) {
+                    break;
+                }
             }
-            if (i == 3 && work[0x1F] == 8 && (((*work & 1) == 0) || work[0x70] == 5)) {
+            if (i == 3 && work[0x1F] == 8 &&
+                (((*work & 1) == 0) || work[0x70] == 5)) {
                 work[1] = 5;
             }
             break;
@@ -772,17 +788,107 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
         case 10:
             work[2]++;
             if ((s32)work[2] > 60 && irand(0x96) == 0) {
-                for (i = 0; i < 3; i++) *(s32*)((u8*)work + 0xC + i * 0x24) = 10;
+                for (i = 0; i < 3; i++) {
+                    *(s32*)((u8*)work + 0xC + i * 0x24) = 10;
+                }
                 bakuGameDecideButton(0);
                 work[2] = 0;
             }
             if (work[2] == 180) {
-                for (i = 0; i < 3; i++) *(s32*)((u8*)work + 0xC + i * 0x24) = 10;
+                work[2] = 180;
+                for (i = 0; i < 3; i++) {
+                    *(s32*)((u8*)work + 0xC + i * 0x24) = 10;
+                }
                 bakuGameDecideButton(0);
                 work[2] = 0;
             }
+            {
+                s32 lane = -1;
+                if (*(u8*)((u8*)work + 0xCC) == 1) {
+                    lane = irand(2) == 0 ? 0 : 2;
+                } else if (*(u8*)((u8*)work + 0xCC) == 2) {
+                    lane = irand(2) == 0 ? 0 : 1;
+                }
+                if (lane != -1) {
+                    for (i = 0; i < 3; i++) {
+                        u8* slot = (u8*)work + 0xC + i * 0x24;
+                        if (*(s32*)(slot + 0xC) == lane) {
+                            *(f32*)(slot + 0x10) -= 2.5f;
+                        }
+                    }
+                }
+            }
             break;
+        case 20:
+            for (i = 0; i < 3; i++) {
+                *(s32*)((u8*)work + 0xC + i * 0x24) = 20;
+            }
+            work[0x1F] = 40;
+            work[0x20] = 60;
+            work[1] = 25;
+            break;
+        case 25:
+            if (work[0x1F] == 50) {
+                work[1] = 30;
+            }
+            break;
+        case 30:
+            animPoseRelease(work[0x3B]);
+            work[0x3B] = -1;
+            evtSetValue(event, args[0], *(u8*)((u8*)work + 0xCC));
+            evtSetFloat(event, args[1], *(f32*)((u8*)work + 0xD0));
+            {
+                f32 value = *(f32*)((u8*)work + 0xD0);
+                s32 result = -1;
+                if (value > 0.0f && value < 33.0f) result = 2;
+                if (value >= 33.0f && value < 66.0f) result = 3;
+                if (value >= 66.0f) result = 4;
+                if (result > 4) result = 4;
+                evtSetValue(event, args[2], result);
+            }
+            return 2;
     }
+    switch (work[0x70]) {
+    case 0:
+        if ((*work & 1) != 0) {
+            work[0x70] = 2;
+            *(u8*)((u8*)work + 0x1CC) = 0xFF;
+            work[0x80] = 0x5A;
+            *(f32*)(work + 0x74) = 300.0f;
+            *(f32*)(work + 0x77) = 300.0f;
+            work[0x71] = 0;
+            work[0x72] = 30;
+        } else {
+            break;
+        }
+    case 2:
+        *(f32*)(work + 0x74) = (f32)intplGetValue(
+            *(f32*)(work + 0x77), *(f32*)(work + 0x7A), 0,
+            work[0x71], work[0x72]);
+        i = work[0x71] % 12;
+        if (i < 4) work[0x80] = 0x5A;
+        else if (i < 8) work[0x80] = 0x5B;
+        else work[0x80] = 0x5C;
+        work[0x71]++;
+        if ((s32)work[0x71] > (s32)work[0x72]) {
+            work[0x70] = 5;
+            work[0x74] = work[0x7A];
+            work[0x75] = work[0x7B];
+            work[0x76] = work[0x7C];
+        }
+        break;
+    case 5:
+        work[0x80] = 0x52;
+        break;
+    case 10:
+        work[0x80] = 0x54;
+        break;
+    }
+    if ((s32)work[0x3B] != -1) {
+        animPoseMain();
+    }
+    dispEntry(1, 1, bakuGameDisp2D, 0, 900.0f);
+    dispEntry(4, 1, bakuGameDisp3D, 0, 0.0f);
     return 0;
 }
 

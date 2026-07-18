@@ -96,31 +96,58 @@ void battleAcDisp_SignalTiming(void* camera, void* wp) {
 
 /* stub-fill: actionCommandDisp | prototype_only | source_prototype */
 void actionCommandDisp(f32 x, f32 y) {
-    typedef struct { f32 x, y, z; } Vec;
+    typedef struct Vec {
+        f32 x, y, z;
+        u8 targetFramePad[0xD0];
+    } Vec;
     extern void* g_BattleWork;
+    extern void* camGetPtr(s32);
     extern void iconDispGx(f32, Vec*, s32, s32);
     extern void iconNumberDispGx(void*, s32, s32, void*);
     extern void PSMTXTrans(void*, f32, f32, f32);
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXConcat(void*, void*, void*);
-    u8* ac = (u8*)g_BattleWork + 0x1F20;
-    u32 flags = *(u32*)ac;
-    s32 kind = *(s32*)(ac + 0x10);
-    s32 count = *(s32*)(ac + 0x28);
-    s32 filled = *(s32*)(ac + 0x54);
+    extern s32 BattleACGetButtonIcon(u32, s32);
+
+    u8* battle = (u8*)g_BattleWork;
+    u8* extra = battle + 0x1F4C;
+    s32* params = (s32*)(battle + 0x1CC8);
+    u32 flags = *(u32*)(battle + 0x1C94);
+    s32 kind = params[0];
+    s32 count = params[6];
+    s32 filled = *(s32*)(extra + 0xC);
     s32 span;
     s32 i;
     Vec pos;
-    f32 trans[3][4], scale[3][4], model[3][4];
+    f32 trans[3][4];
+    f32 scale[3][4];
+    f32 model[3][4];
     u32 color = 0xFFFFFFFF;
 
+    camGetPtr(1);
     if ((flags & 1) == 0) {
         pos.x = x - 200.0f;
         pos.y = y + 70.0f;
         pos.z = 0.0f;
-        iconDispGx(1.0f, &pos, 0x10, *(s32*)(ac + 0x60) == 0 ? 0x6C : 0x6D);
+        iconDispGx(1.0f, &pos, 0x10,
+                   *(s32*)(extra + 0x30) == 0 ? 0x6C : 0x6D);
     }
-    span = count * 2 + (kind == 1 ? 5 : kind == 3 ? 0xB : kind == 5 ? 0xF : 0xD);
+
+    if (kind == 3) {
+        span = count * 2 + 0xB;
+    } else if (kind < 3) {
+        if (kind == 1) {
+            span = count * 2 + 5;
+        } else {
+            span = count * 2 + 0xB;
+        }
+    } else if (kind == 5) {
+        span = count * 2 + 0xF;
+    } else if (kind < 5) {
+        span = count * 2 + 0xD;
+    } else {
+        span = count * 2 + 0xB;
+    }
     pos.x = x - 288.0f;
     pos.y = y + 25.0f;
     pos.z = 0.0f;
@@ -131,16 +158,47 @@ void actionCommandDisp(f32 x, f32 y) {
     }
     pos.x = x + (f32)(span * 16 - 0x120);
     iconDispGx(1.0f, &pos, 0x10, 0x98);
+
     if ((flags & 4) == 0) {
-        PSMTXTrans(trans, x - 200.0f + (f32)(kind * 0x30 + count * 0x20 - 0x1A), y + 25.0f, 0.0f);
-        PSMTXScale(scale, (flags & 8) ? 1.5f : 1.0f, (flags & 8) ? 1.5f : 1.0f, (flags & 8) ? 1.5f : 1.0f);
+        PSMTXTrans(trans,
+                   x - 200.0f + (f32)(kind * 0x30 + count * 0x20 - 0x1A),
+                   y + 25.0f, 0.0f);
+        if (flags & 8) {
+            PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
+        } else {
+            PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
+        }
         PSMTXConcat(trans, scale, model);
-        iconNumberDispGx(model, *(s32*)(ac + 0x48) + *(s32*)(ac + 0x24), 0, &color);
+        iconNumberDispGx(model, *(s32*)extra + params[5], 0, &color);
     }
+
     for (i = 0; i < count; i++) {
         pos.x = x + (f32)(i * 0x21 - 0x102);
         pos.y = y + 25.0f;
-        iconDispGx(i < filled ? 1.0f : 0.5f, &pos, 0x10, i < filled ? 0x9A + i : 0x99);
+        pos.z = 0.0f;
+        iconDispGx(i < filled ? 1.0f : 0.5f, &pos, 0x10,
+                   i < filled ? 0x9A + i : 0x99);
+    }
+    if ((flags & 1) == 0) {
+        for (i = 0; i < kind; i++) {
+            pos.x = x + (f32)(count * 0x21 + i * 0x30 - 0xFA);
+            pos.y = y + 25.0f;
+            pos.z = 0.0f;
+            iconDispGx(1.0f, &pos, 0x10,
+                       i + count < filled ? 0x9D : 0x99);
+        }
+    } else {
+        s32* buttons = (s32*)(extra + 0x38);
+        for (i = 0; i < kind; i++) {
+            s32 index = i + count;
+            s32 pressed = index < filled ? 0 : 1;
+            f32 iconScale = index < filled ? 0.8f : 0.6f;
+            pos.x = x + (f32)(count * 0x21 + i * 0x30 - 0xFA);
+            pos.y = y + ((flags & 2) ? 20.8f : 15.0f);
+            pos.z = 0.0f;
+            iconDispGx(iconScale, &pos, 0x10,
+                       BattleACGetButtonIcon(buttons[i], pressed));
+        }
     }
 }
 

@@ -24,39 +24,93 @@ void winPartyMain2(void* work) {
 
 void winPartyDisp(s32 cameraId, void* pWin, s32 index) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
+    extern void* pouchGetPtr(void);
     extern void winBgGX(f32 x, f32 y, void* win, s32 type);
     extern void winKirinukiGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
+    extern void winNameGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
+    extern void winWazaGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
+    extern void winTexInit(void* data);
+    extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
     extern void winIconInit(void);
     extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
     extern void winFontInit(void);
-    extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* text);
+    extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* text, ...);
+    extern void winFontSetR(Vec3* pos, Vec3* scale, void* color, char* text, ...);
     extern char* msgSearch(char* key);
+    extern char* winZenkakuStr(s32 value);
     Vec3 pos;
     Vec3 scale;
     u32 white = 0xFFFFFFFF;
-    f32 x = *(f32*)((s32)pWin + 0x30 + index * 0x18);
-    f32 y = *(f32*)((s32)pWin + 0x34 + index * 0x18);
+    u32 gray = 0x7F7F7FFF;
+    u8* w = (u8*)pWin;
+    u8* pouch = (u8*)pouchGetPtr();
+    f32 x = *(f32*)(w + 0xC4 + index * 0x14);
+    f32 y = *(f32*)(w + 0xC8 + index * 0x14);
+    s32 partyCount = *(s32*)(w + 0x1E0);
+    s32 active = *(s32*)(w + 0x1D8);
     s32 member;
     s32 row;
 
-    winBgGX(x, y, pWin, 1);
-    winKirinukiGX(x - 150.0f, y + 140.0f, 415.0f, 210.0f, pWin, 0);
-    winIconInit();
-    scale.x = 1.0f;
-    scale.y = 1.0f;
-    scale.z = 1.0f;
+    scale.x = scale.y = scale.z = 1.0f;
     pos.z = 0.0f;
+    winBgGX(x, y, pWin, 1);
+
+    if (partyCount != 0) {
+        winKirinukiGX(x - 10.0f, y + 136.0f, 240.0f, 76.0f, pWin, 0);
+
+        for (row = 0; row < 2; row++) {
+            winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
+            GXSetTevColorIn(0, 0, 0, 0, 2);
+            GXSetTevAlphaIn(0, 0, 4, 5, 7);
+            pos.x = x + 33.0f;
+            pos.y = y + 110.0f - (f32)(row * 32);
+            winTexSet(0xAF, &pos, &scale, row == 0 ? &white : &gray);
+            winFontInit();
+            pos.x = x + 45.0f;
+            pos.y += 12.0f;
+            winFontSet(&pos, &scale, row == 0 ? &white : &gray,
+                       msgSearch(row == 0 ? "msg_menu_party_rank" : "msg_menu_party_name"));
+        }
+
+        winIconInit();
+        pos.x = x + 93.0f;
+        pos.y = y + 114.0f;
+        winIconSet(0x1A7, &pos, &scale, &white);
+
+        for (row = 0; row < partyCount - 2; row++) {
+            pos.x = x + 93.0f + (f32)(row * 34);
+            pos.y = y + 78.0f;
+            winIconSet(0x57, &pos, &scale, &white);
+        }
+
+        winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
+        pos.x = x + 178.0f;
+        pos.y = y + 114.0f;
+        winTexSet(0x10, &pos, &scale, &white);
+        winFontInit();
+        pos.x = x + 110.0f;
+        pos.y = y + 126.0f;
+        winFontSetR(&pos, &scale, &white, "%s", winZenkakuStr(*(s16*)(pouch + active * 0xE + 6)));
+
+        winNameGX(x - 230.0f, y - 40.0f, 200.0f, 32.0f, pWin, 0);
+    }
+
+    winIconInit();
     for (row = 0; row < 7; row++) {
-        member = *(s32*)((s32)pWin + 0x1D0 + row * 4);
-        if (member < 0) continue;
-        pos.x = x - 120.0f + (row & 1) * 180.0f;
-        pos.y = y + 90.0f - (row >> 1) * 50.0f;
+        member = *(s32*)(w + 0x1E4 + row * 4);
+        if (member < 0) {
+            continue;
+        }
+        pos.x = x - 120.0f + (f32)((row & 1) * 180);
+        pos.y = y + 70.0f - (f32)((row >> 1) * 50);
         winIconSet(0x120 + member, &pos, &scale, &white);
         winFontInit();
         pos.x += 42.0f;
-        winFontSet(&pos, &scale, &white,
-                   msgSearch(*(char**)((s32)&winPartyDt[0] + member * 0x20 + 8)));
+        winFontSet(&pos, &scale, &white, msgSearch("msg_menu_party_name"));
     }
+    winWazaGX(x - 5.0f, y + 50.0f, 260.0f, 144.0f, pWin, 0);
     (void)cameraId;
 }
 

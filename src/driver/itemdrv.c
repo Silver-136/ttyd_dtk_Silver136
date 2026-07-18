@@ -705,25 +705,50 @@ u8 itemseq_GetItem(void* item, s32 p2, s32 p3, s32 p4, u32* p5, u32 p6) {
     extern void swSet(u32);
     extern void _swSet(u32);
     extern void marioKeyOff(void);
+    extern void marioCtrlOff(void);
+    extern void marioCtrlOn(void);
+    extern void marioKeyOn(void);
     extern void marioStSystemLevel(s32);
     extern void psndSetFlag(u32);
+    extern void psndClearFlag(u32);
     extern u32 marioChkItemGetMotion(void);
     extern void marioChgGetItemMotion(void);
+    extern void marioChgStayMotion(void);
     extern void* effItemGetEntry(f64, f64, f64, s32);
     extern void iconFlagOn(char*, u32);
     extern void marioSetCamId(s32);
     extern u32 psndBGMChkSilent(s32);
+    extern s32 psndBGMChk(s32);
     extern void psndBGMOff(s32);
     extern void psndBGMOn(s32, char*);
+    extern u32 psndSFXOn_3D(char*, void*);
+    extern void effStardustEntry(f64, f64, f64, f64, f64, s32, s32, s32);
+    extern u32 winMgrAction(s32);
+    extern void winMgrCloseAutoDelete(s32);
+    extern u32 keyGetButtonTrg(s32);
+    extern char str_BGM_FF_GET_STARPIECE_802c91d8[];
+    extern char str_BGM_FF_GET_KEYITEM1_802c91f0[];
+    extern char str_BGM_FF_GET_BADGE1_802c9204[];
+    extern char str_BGM_FF_GET_IMPORTANT_802c9218[];
     extern char str_BGM_FF_GET_ITEM1_802c9234[];
+    extern char str_SFX_COIN_GET1_802c90c0[];
+    extern char str_SFX_EVT_GAME_MONTE_C_802c90d0[];
+    extern char str_SFX_HEART_GET1_802c90ec[];
+    extern char str_SFX_FLOWER_GET1_802c90fc[];
+    extern f32 float_0p7_8042110c;
+    extern f32 float_1_804210bc;
+    extern f32 float_85_80421120;
+    extern f32 float_120_80421124;
     void* player = marioGetPtr();
     u16* mode = (u16*)((s32)item + 0x26);
     u16* flags = (u16*)item;
     u32* status = (u32*)((s32)item + 0x38);
     f32* pos = (f32*)((s32)item + 0x3C);
-    s32 itemId = *(s32*)((s32)item + 0x28);
+    s32 itemId = *(s32*)((s32)item + 0x4);
     s32 effectType = 7;
+    s32 bgmType = -1;
     void* effect;
+    f32 soundPos[3];
 
     switch (*mode) {
     case 0:
@@ -761,6 +786,10 @@ u8 itemseq_GetItem(void* item, s32 p2, s32 p3, s32 p4, u32* p5, u32 p6) {
         }
     case 1:
         if (((*flags & 0x1000) == 0 || (*flags & 0x4000) != 0) && marioChkItemGetMotion() == 0) {
+            u16 motion = *(u16*)((s32)player + 0x2E);
+            if (motion != 5 && (u16)(motion - 6) > 2 && motion != 0xF && motion != 0xE) {
+                return 0;
+            }
             *mode = 8;
             return 0;
         }
@@ -769,26 +798,167 @@ u8 itemseq_GetItem(void* item, s32 p2, s32 p3, s32 p4, u32* p5, u32 p6) {
         pos[0] = *(f32*)((s32)player + 0x8C);
         pos[1] = *(f32*)((s32)player + 0x90) + 50.0f;
         pos[2] = *(f32*)((s32)player + 0x94);
-        if (itemId == 0x57) effectType = 4;
-        else if (itemId == 0x7D) effectType = 8;
-        else if (itemId < 0xC) effectType = 3;
-        else if (itemId < 0x72) effectType = 6;
-        else if (itemId < 0x79) effectType = 0;
-        else if (itemId >= 0xEC && itemId < 0x153) effectType = 5;
+        if (itemId == 0x57) {
+            effectType = 4;
+            bgmType = -1;
+        } else if (itemId == 0x7D) {
+            effectType = 8;
+            bgmType = 0;
+        } else if (itemId < 0xC) {
+            effectType = 3;
+            bgmType = 3;
+        } else if (itemId < 0x72) {
+            effectType = 6;
+            bgmType = 1;
+        } else if (itemId < 0x79) {
+            effectType = 0;
+            bgmType = -1;
+        } else if (itemId < 0xEC) {
+            effectType = 7;
+            bgmType = -1;
+        } else if (itemId < 0x153) {
+            effectType = 5;
+            bgmType = 2;
+        }
         effect = effItemGetEntry(*(f32*)((s32)player + 0x8C),
                                  *(f32*)((s32)player + 0x90) + 62.0f,
                                  *(f32*)((s32)player + 0x94), effectType);
         *(void**)((s32)item + 0x84) = effect;
-        iconFlagOn(*(char**)((s32)item + 0xC), (*status & 0x2000) ? 0x200 : 0x100);
-        marioSetCamId((*status & 0x2000) ? 7 : 5);
+        if ((*status & 0x2000) == 0) {
+            iconFlagOn(*(char**)((s32)item + 0xC), 0x100);
+            if (effectType == 0 || effectType == 3) {
+                marioSetCamId(5);
+            }
+        } else {
+            iconFlagOn(*(char**)((s32)item + 0xC), 0x200);
+            marioSetCamId(7);
+        }
         if ((*flags & 0x8000) == 0) {
             if (psndBGMChkSilent(0) != 0) *flags |= 8;
-            if ((*flags & 8) == 0) psndBGMOff(0x3800);
-            psndBGMOn(0x211, str_BGM_FF_GET_ITEM1_802c9234);
+            if (bgmType == 2) {
+                if ((*flags & 8) == 0) psndBGMOff(0x3800);
+                psndBGMOn(0x211, str_BGM_FF_GET_BADGE1_802c9204);
+            } else if (bgmType == 0) {
+                if ((*flags & 8) == 0) psndBGMOff(0x3800);
+                psndBGMOn(0x211, str_BGM_FF_GET_STARPIECE_802c91d8);
+            } else if (bgmType == 1) {
+                if ((*flags & 8) == 0) psndBGMOff(0x3800);
+                psndBGMOn(0x211, str_BGM_FF_GET_KEYITEM1_802c91f0);
+            } else if (bgmType == 3) {
+                if ((*flags & 8) == 0) psndBGMOff(0x3800);
+                psndBGMOn(0x211, str_BGM_FF_GET_IMPORTANT_802c9218);
+            } else {
+                if ((*flags & 8) == 0) psndBGMOff(0x3800);
+                psndBGMOn(0x211, str_BGM_FF_GET_ITEM1_802c9234);
+            }
+        }
+        *flags &= ~0x2000;
+        soundPos[0] = pos[0];
+        soundPos[1] = pos[1];
+        soundPos[2] = pos[2];
+        if (itemId == 0x7B) {
+            psndSFXOn_3D(str_SFX_HEART_GET1_802c90ec, soundPos);
+        } else if (itemId < 0x7B) {
+            if (itemId == 0x79) {
+                effStardustEntry(soundPos[0], soundPos[1] + 35.0f, soundPos[2],
+                                 16.0, 16.0, 1, 3, 30);
+                psndSFXOn_3D(str_SFX_COIN_GET1_802c90c0, soundPos);
+            } else if (itemId > 0x78) {
+                effStardustEntry(soundPos[0], soundPos[1] + 35.0f, soundPos[2],
+                                 16.0, 16.0, 1, 3, 30);
+                psndSFXOn_3D(str_SFX_EVT_GAME_MONTE_C_802c90d0, soundPos);
+            }
+        } else if (itemId != 0x7D && itemId < 0x7D) {
+            psndSFXOn_3D(str_SFX_FLOWER_GET1_802c90fc, soundPos);
+        }
+        break;
+    case 2:
+        if ((*status & 0x2000) == 0) {
+            marioCtrlOff();
+            *status |= 0x1000000;
+        }
+        *mode = 3;
+    case 3:
+        if ((*flags & 0x8000) == 0 && (*flags & 0x2000) == 0 &&
+            psndBGMChk(1) != 0) {
+            *flags |= 0x2000;
+            psndBGMOff(0x201);
+            if ((*flags & 8) == 0) {
+                psndBGMOn(0xA0, 0);
+            }
+        }
+        if (winMgrAction(*(s32*)((s32)item + 0x28)) == 0 &&
+            (keyGetButtonTrg(0) & 0x300) != 0) {
+            winMgrCloseAutoDelete(*(s32*)((s32)item + 0x28));
+            if ((*status & 0x2000) == 0) {
+                winMgrCloseAutoDelete(*(s32*)((s32)item + 0x2C));
+            }
+            *mode = 6;
         }
         break;
     case 8:
-        if (marioChkItemGetMotion() != 0) *mode = 1;
+        if ((*(u32*)player & 0x02000000) != 0) {
+            *status |= 0x8000;
+        }
+        *(u32*)((s32)item + 0x68) = 0;
+        *(u32*)((s32)item + 0x6C) = 0;
+        if ((*status & 0x1000) == 0) {
+            *(f32*)((s32)item + 0x50) = float_85_80421120;
+            *(f32*)((s32)item + 0x5C) = float_120_80421124;
+            *(f32*)((s32)item + 0x80) = float_0p7_8042110c;
+            *(f32*)((s32)item + 0x58) = float_1_804210bc;
+            *status |= 8;
+            *(u16*)((s32)item + 0x24) = 6;
+            *mode = 0;
+            *flags &= ~0x10;
+            *status &= ~0x1000;
+            *flags &= ~2;
+            *flags &= ~0x1000;
+        } else {
+            *(u16*)((s32)item + 0x24) = 1;
+            *mode = 0;
+            *status &= ~4;
+            *status &= ~8;
+            *status &= ~0x4000;
+            *status &= ~0x1000;
+            *flags &= ~0x1000;
+        }
+        marioStSystemLevel(0);
+        psndClearFlag(0x80);
+        if ((*status & 0x1000000) != 0) {
+            *status &= ~0x1000000;
+            marioCtrlOn();
+        }
+        marioKeyOn();
+        break;
+    case 9:
+        if ((keyGetButtonTrg(0) & 0x100) != 0) {
+            winMgrCloseAutoDelete(*(s32*)((s32)item + 0x28));
+            *status |= 8;
+            *(u16*)((s32)item + 0x24) = 6;
+            *mode = 0;
+            *flags &= ~0x10;
+            if ((itemId < 1 || itemId > 0x78) &&
+                (itemId < 0xF0 || itemId > 0x152)) {
+                *(u32*)((s32)item + 0x68) = 0;
+                *(u32*)((s32)item + 0x6C) = 20000;
+            } else {
+                *(u32*)((s32)item + 0x68) = 0;
+                *(u32*)((s32)item + 0x6C) = 0;
+            }
+            *status |= 0x10000;
+            *status &= ~0x1000;
+            *flags &= ~2;
+            marioStSystemLevel(0);
+            psndClearFlag(0x80);
+            if ((*status & 0x1000000) != 0) {
+                *status &= ~0x1000000;
+                marioCtrlOn();
+            }
+            marioKeyOn();
+            marioChgStayMotion();
+            *(u16*)camGetPtr(4) &= ~0x200;
+        }
         break;
     }
     return 0;
@@ -829,12 +999,39 @@ u8 itemseq_Bound(void* item) {
         *(u32*)((s32)item + 0x74) = *(u32*)((s32)gp + 0x3C);
         *(s32*)((s32)item + 0x8C) = 0;
         if ((*(u16*)item & 0x10) != 0) return 0;
-        if (*(u16*)((s32)item + 0x24) == 6) *status |= 4;
-        if ((*(u16*)item & 0x10) == 0) {
+        switch (*(u16*)((s32)item + 0x24)) {
+        case 3:
+        case 4:
+            if (*(u16*)((s32)item + 0x24) == 4) {
+                *status |= 8;
+            }
+            if ((*flags & 0x10) == 0) {
+                *(f32*)((s32)item + 0x80) = 1.0f;
+                *(f32*)((s32)item + 0x58) = 1.0f;
+                *(f32*)((s32)item + 0x84) = 0.0f;
+            }
+            *(f32*)((s32)item + 0x50) = 0.0f;
+            *(s32*)((s32)item + 0x54) = 0;
+            *(f32*)((s32)item + 0x5C) = 0.0f;
+            break;
+        case 6:
+            *status |= 4;
+            if ((*flags & 0x10) == 0) {
+                *(f32*)((s32)item + 0x80) = 1.0f;
+                *(f32*)((s32)item + 0x58) = 1.0f;
+                *(f32*)((s32)item + 0x84) = 0.0f;
+                *(f32*)((s32)item + 0x5C) = 500.0f;
+            }
+            break;
+        case 10:
             *(f32*)((s32)item + 0x80) = 1.0f;
-            *(f32*)((s32)item + 0x84) = 1.0f;
-            *(s32*)((s32)item + 0x88) = 0;
-            *(f32*)((s32)item + 0x58) = 500.0f;
+            *(f32*)((s32)item + 0x58) = 1.0f;
+            *(f32*)((s32)item + 0x84) = 0.0f;
+            *(f32*)((s32)item + 0x5C) = 500.0f;
+            *(f32*)((s32)item + 0x50) = 0.0f;
+            *(s32*)((s32)item + 0x54) = 0;
+            *status |= 0x24;
+            break;
         }
     }
     speed = *(f32*)((s32)item + 0x50);
@@ -862,13 +1059,33 @@ u8 itemseq_Bound(void* item) {
     *(u32*)((s32)item + 0x54) = nextAngle;
 
     hit = 0;
-    if (dy < 0.0f && (*status & 0x100000) == 0) {
-        distance = 20.0f + -dy;
-        hit = hitCheckFilter(pos[0], pos[1], pos[2], 0.0, -1.0, 0.0, 0,
-                             0, &floorY, 0, &distance, 0, 0, 0);
-        if (hit != 0) pos[1] = floorY;
-        else pos[1] += dy;
-    } else {
+    if ((*status & 0x20) == 0 && (*flags & 0x800) == 0) {
+        if (dy > 0.0f) {
+            distance = 20.0f + dy;
+            hit = hitCheckFilter(pos[0], pos[1] + 20.0f, pos[2],
+                                 0.0, 1.0, 0.0, 0,
+                                 0, &floorY, 0, &distance, 0, 0, 0);
+            if (hit == 0) {
+                distance = 20.0f + dy;
+                hit = hitCheckFilter(pos[0], pos[1], pos[2],
+                                     0.0, 1.0, 0.0, 0,
+                                     0, &floorY, 0, &distance, 0, 0, 0);
+                if (hit != 0) {
+                    pos[1] = floorY - 20.0f;
+                }
+            } else {
+                pos[1] = floorY - 24.0f;
+            }
+        }
+        if (hit != 0) {
+            *(f32*)((s32)item + 0x5C) = -jump * 0.25f;
+            *(u32*)((s32)item + 0x60) = 0;
+            *(u32*)((s32)item + 0x64) = 0;
+            *(u32*)((s32)item + 0x68) = *(u32*)((s32)item + 0x70);
+            *(u32*)((s32)item + 0x6C) = *(u32*)((s32)item + 0x74);
+        }
+    }
+    if (hit == 0) {
         pos[1] += dy;
     }
     if ((*status & 0x100000) != 0 && pos[1] <= -1000.0f) {

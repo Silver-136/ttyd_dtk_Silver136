@@ -287,51 +287,107 @@ void disp_3D(void) {
 void disp_2D(void) {
     typedef f32 Mtx[3][4];
     extern void* get_ptr(void);
+    extern void* camGetPtr(s32 camera);
     extern void btlGetScreenPoint(f32* in, f32* out);
     extern void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
     extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
-    extern void PSMTXConcat(Mtx a, Mtx b, Mtx out);
+    extern void PSMTXTransApply(Mtx src, Mtx dst, f32 x, f32 y, f32 z);
     extern void btlDispTexPlane2(Mtx m, s32 tex, u32* color);
+    extern void btlDispTexPlane3(Mtx m, s32 tex, u32*, u32*, u32*, u32*);
     extern void btlDispGXInit2DRasta(void);
+    extern void GXLoadPosMtxImm(void* matrix, s32 id);
     extern void btlDispGXQuads2DRasta(f64, f64, f64, f64, s32, s32, s32, s32);
-    extern void iconDispGxCol(Mtx m, u16 flags, u16 icon, u32* color);
-    extern void iconNumberDispGx(f32 x, f32 y, f32 z, s32 value, s32 flags, u32* color);
+    extern void iconDispGx2(Mtx m, u16 flags, u16 icon);
+    extern void iconNumberDispGx(Mtx m, s32 value, s32 flags, u32* color);
     u8* work = get_ptr();
-    f32 world[3], screen[3];
-    Mtx trans, scale, model;
-    u32 white = 0xFFFFFFFF;
-    s32 state = *(s32*)(work + 4);
-    s32 pass;
-    if (state < 2 || state > 7) return;
-    world[0] = *(f32*)(work + 0x2C);
-    world[1] = *(f32*)(work + 0x30);
-    world[2] = *(f32*)(work + 0x34);
-    btlGetScreenPoint(world, screen);
-    for (pass = 0; pass < 2; pass++) {
-        f32 y = screen[1] - pass * 30.0f;
-        f32 amount = *(f32*)(work + (pass ? 0x20 : 0x18));
-        s32 flash = *(s32*)(work + (pass ? 0x28 : 0x24));
-        u32 fill = pass ? 0x40C0FFFF : 0xFF8040FF;
-        PSMTXTrans(trans, screen[0] - 56.0f, y, screen[2]);
-        btlDispTexPlane2(trans, 0x59, &white);
-        PSMTXScale(scale, 6.0f, 1.0f, 1.0f);
-        PSMTXTrans(trans, screen[0], y, screen[2]);
-        PSMTXConcat(trans, scale, model);
-        btlDispTexPlane2(model, 0x5A, &white);
-        PSMTXScale(scale, -1.0f, 1.0f, 1.0f);
-        PSMTXTrans(trans, screen[0] + 56.0f, y, screen[2]);
-        PSMTXConcat(trans, scale, model);
-        btlDispTexPlane2(model, 0x59, &white);
-        btlDispGXInit2DRasta();
-        btlDispGXQuads2DRasta(screen[0] - 48.0f, y + 5.0f,
-            screen[0] - 48.0f + amount * 9.6f, y - 5.0f,
-            (fill >> 24) & 0xFF, (fill >> 16) & 0xFF, (fill >> 8) & 0xFF, 0xFF);
-        if ((flash % 12) < 6) {
-            PSMTXTrans(trans, screen[0] - 70.0f, y, screen[2]);
-            btlDispTexPlane2(trans, 0x5B, &white);
-            iconDispGxCol(trans, 0x10, 0x1F5, &white);
-            iconNumberDispGx(screen[0] + 64.0f, y, screen[2], (s32)amount, 0, &white);
-        }
+    f32 point[3];
+    Mtx matrix;
+    u32 white;
+    u32 color0;
+    u32 color1;
+    u32 numberColor;
+    f32 x;
+    f32 y;
+    s32 flash;
+
+    if (*(s32*)(work + 4) < 2 || *(s32*)(work + 4) >= 8) {
+        return;
+    }
+
+    point[0] = *(f32*)(work + 0x2C);
+    point[1] = *(f32*)(work + 0x30);
+    point[2] = 0.0f;
+    btlGetScreenPoint(point, point);
+    x = point[0];
+    y = point[1];
+    white = 0xFFFFFFFF;
+
+    PSMTXTrans(matrix, (x - 32.0f) - 8.0f, y, 0.0f);
+    btlDispTexPlane2(matrix, 0x59, &white);
+    PSMTXScale(matrix, 16.0f, 1.0f, 1.0f);
+    PSMTXTransApply(matrix, matrix, x, y, 0.0f);
+    btlDispTexPlane2(matrix, 0x5A, &white);
+    PSMTXScale(matrix, -1.0f, 1.0f, 1.0f);
+    PSMTXTransApply(matrix, matrix, x + 32.0f + 8.0f, y, 0.0f);
+    btlDispTexPlane2(matrix, 0x59, &white);
+    btlDispGXInit2DRasta();
+    GXLoadPosMtxImm((u8*)camGetPtr(5) + 0x40, 0);
+    if (*(f32*)(work + 0x14) - *(f32*)(work + 0x18) == 0.0f) {
+        btlDispGXQuads2DRasta(x - 40.0f, y, x, y + 8.0f, 0xF0, 0xA0, 0xA0, 0xFF);
+    } else {
+        btlDispGXQuads2DRasta(x - 40.0f, y, x, y + 8.0f, 0xFF, 0xB4, 0xB4, 0xFF);
+    }
+    flash = *(s32*)(work + 0x24) % 12;
+    if (flash >= 0 && flash < 6) {
+        PSMTXScale(matrix, 0.5f, 0.5f, 0.5f);
+        PSMTXTransApply(matrix, matrix, x - 48.0f, y, 0.0f);
+        color0 = 0xFFFFFFFF;
+        color1 = 0xE94A3FFF;
+        btlDispTexPlane3(matrix, 0x5B, &color0, &color0, &color1, &color1);
+        PSMTXScale(matrix, 0.7f, 0.7f, 0.7f);
+        PSMTXTransApply(matrix, matrix, x - 48.0f, y, 0.0f);
+        iconDispGx2(matrix, 0x10, 0x1F5);
+        PSMTXScale(matrix, 0.7f, 0.7f, 0.7f);
+        PSMTXTransApply(matrix, matrix, x + 48.0f, y, 0.0f);
+        numberColor = 0xFFFFFFFF;
+        iconNumberDispGx(matrix, (s32)*(f32*)(work + 0x18), 0, &numberColor);
+    }
+
+    point[0] = *(f32*)(work + 0x2C);
+    point[1] = *(f32*)(work + 0x30) - 30.0f;
+    point[2] = 0.0f;
+    btlGetScreenPoint(point, point);
+    x = point[0];
+    y = point[1];
+    PSMTXTrans(matrix, (x - 32.0f) - 8.0f, y, 0.0f);
+    btlDispTexPlane2(matrix, 0x59, &white);
+    PSMTXScale(matrix, 16.0f, 1.0f, 1.0f);
+    PSMTXTransApply(matrix, matrix, x, y, 0.0f);
+    btlDispTexPlane2(matrix, 0x5A, &white);
+    PSMTXScale(matrix, -1.0f, 1.0f, 1.0f);
+    PSMTXTransApply(matrix, matrix, x + 32.0f + 8.0f, y, 0.0f);
+    btlDispTexPlane2(matrix, 0x59, &white);
+    btlDispGXInit2DRasta();
+    GXLoadPosMtxImm((u8*)camGetPtr(5) + 0x40, 0);
+    if (*(f32*)(work + 0x14) - *(f32*)(work + 0x18) == 0.0f) {
+        btlDispGXQuads2DRasta(x - 40.0f, y, x, y + 8.0f, 0xA0, 0xA0, 0xF0, 0xFF);
+    } else {
+        btlDispGXQuads2DRasta(x - 40.0f, y, x, y + 8.0f, 0xB4, 0xB4, 0xFF, 0xFF);
+    }
+    flash = *(s32*)(work + 0x28) % 12;
+    if (flash >= 0 && flash < 6) {
+        PSMTXScale(matrix, 0.5f, 0.5f, 0.5f);
+        PSMTXTransApply(matrix, matrix, x - 48.0f, y, 0.0f);
+        color0 = 0xBFBFFFFF;
+        color1 = 0x3F3FE9FF;
+        btlDispTexPlane3(matrix, 0x5B, &color0, &color0, &color1, &color1);
+        PSMTXScale(matrix, 0.7f, 0.7f, 0.7f);
+        PSMTXTransApply(matrix, matrix, x - 48.0f, y, 0.0f);
+        iconDispGx2(matrix, 0x10, 0x1F5);
+        PSMTXScale(matrix, 0.7f, 0.7f, 0.7f);
+        PSMTXTransApply(matrix, matrix, x + 48.0f, y, 0.0f);
+        numberColor = 0xFFFFFFFF;
+        iconNumberDispGx(matrix, (s32)*(f32*)(work + 0x20), 0, &numberColor);
     }
 }
 
@@ -658,10 +714,11 @@ void main_cursor(void) {
     (void)mario;
     if (state == 1 && *(s32*)(work + 0x108) >= 5) {
         *(s32*)(work + 0x38) = 2;
-        *(s32*)(work + 0x3C) = 0;
         *(f32*)(work + 0x44) = *(f32*)(work + 0x110);
         *(f32*)(work + 0x48) = *(f32*)(work + 0x114);
-        *(f32*)(work + 0x4C) = *(f32*)(work + 0x118);
+        *(f32*)(work + 0x4C) = *(f32*)(work + 0x118) + 5.0f;
+        *(s32*)(work + 0x40) = 4;
+        index = 4;
         state = 2;
     }
     if (state == 2) {
@@ -697,10 +754,10 @@ void main_cursor(void) {
         *(s32*)(work + 0x38) = 4;
         *(s32*)(work + 0x3C) = 0;
     } else if (state == 4) {
-        u8* point = *(u8**)(work + 0x98) + index * 0x24;
+        u8* point = work + 0x80 + index * 0x24;
         s32 timer = ++*(s32*)(work + 0x3C);
-        *(f32*)(work + 0x44) = (f32)intplGetValue(*(f32*)(work + 0x50), *(f32*)(point + 0x18), 0, timer, 5);
-        *(f32*)(work + 0x48) = (f32)intplGetValue(*(f32*)(work + 0x54), *(f32*)(point + 0x1C), 0, timer, 5);
+        *(f32*)(work + 0x44) = (f32)intplGetValue(*(f32*)(work + 0x50), *(f32*)(point + 0x18), 4, timer, 5);
+        *(f32*)(work + 0x48) = (f32)intplGetValue(*(f32*)(work + 0x54), *(f32*)(point + 0x1C), 4, timer, 5);
         if (timer >= 5) *(s32*)(work + 0x38) = 2;
     } else if (state == 5) {
         *(s32*)(work + 0x38) = 6;

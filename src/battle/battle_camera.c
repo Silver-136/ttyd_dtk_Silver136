@@ -474,16 +474,132 @@ void btl_camera_set_zoom(s32 priority, f32 zoom) {
     *(f32*)((s32)work + 0x2778) = zoom;
 }
 
-s32 evt_btl_camera_set_homing_unit_audience(int param_1) {
-    return 0;
+s32 evt_btl_camera_set_homing_unit_audience(int event) {
+    extern s32 evtGetValue(void*, s32);
+    extern s32 BattleTransID(void*, s32);
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern void* BattleGetUnitPartsPtr(s32, s32);
+    extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
+    extern void BtlUnit_GetHitPos(void*, void*, f32*, f32*, f32*);
+    extern void* BattleAudienceBaseGetPtr(void);
+    s32* args = *(s32**)(event + 0x18);
+    u8* work = (u8*)_battleWorkPointer;
+    s32 priority = evtGetValue((void*)event, args[0]);
+    s32 unitId = evtGetValue((void*)event, args[1]);
+    s32 partId = evtGetValue((void*)event, args[2]);
+    s32 audienceId = evtGetValue((void*)event, args[3]);
+    f32 pos[3];
+    f32 hit[3];
+    void* unit;
+    void* part;
+    u8* audience;
+
+    audience = BattleAudienceBaseGetPtr();
+    if (priority >= *(s32*)(work + 0x275C)) {
+        unitId = BattleTransID((void*)event, unitId);
+        *(s32*)(work + 0x2764) = unitId;
+        *(s32*)(work + 0x276C) = partId;
+        unit = BattleGetUnitPtr(work, unitId);
+        part = BattleGetUnitPartsPtr(unitId, partId);
+        BtlUnit_GetPos(unit, &pos[0], &pos[1], &pos[2]);
+        BtlUnit_GetHitPos(unit, part, &hit[0], &hit[1], &hit[2]);
+        *(f32*)(work + 0x2810) = pos[0];
+        *(f32*)(work + 0x2814) = pos[1];
+        *(f32*)(work + 0x2818) = pos[2];
+        *(s32*)(work + 0x2774) = audienceId;
+        *(f32*)(work + 0x281C) = *(f32*)(audience + 0x140 + audienceId * 0x11C);
+        *(f32*)(work + 0x2820) = *(f32*)(audience + 0x144 + audienceId * 0x11C);
+        *(f32*)(work + 0x2824) = *(f32*)(audience + 0x148 + audienceId * 0x11C);
+    }
+    return 2;
 }
 
-s32 evt_btl_camera_set_homing_unitparts(int param_1) {
-    return 0;
+s32 evt_btl_camera_set_homing_unitparts(int event) {
+    extern s32 evtGetValue(void*, s32);
+    extern s32 BattleTransID(void*, s32);
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern void* BattleGetUnitPartsPtr(s32, s32);
+    extern void BtlUnit_GetHomePos(void*, f32*, f32*, f32*);
+    extern void BtlUnit_GetHitPos(void*, void*, f32*, f32*, f32*);
+    s32* args = *(s32**)(event + 0x18);
+    u8* work = (u8*)_battleWorkPointer;
+    s32 priority = evtGetValue((void*)event, args[0]);
+    s32 unit1 = evtGetValue((void*)event, args[1]);
+    s32 part1 = evtGetValue((void*)event, args[2]);
+    s32 unit2 = evtGetValue((void*)event, args[3]);
+    s32 part2 = evtGetValue((void*)event, args[4]);
+    f32 pos[3];
+    void* unit;
+    void* part;
+
+    if (priority >= *(s32*)(work + 0x275C)) {
+        unit1 = BattleTransID((void*)event, unit1);
+        *(s32*)(work + 0x2764) = unit1;
+        *(s32*)(work + 0x276C) = part1;
+        unit = BattleGetUnitPtr(work, unit1);
+        BattleGetUnitPartsPtr(unit1, part1);
+        BtlUnit_GetHomePos(unit, &pos[0], &pos[1], &pos[2]);
+        *(f32*)(work + 0x2810) = pos[0];
+        *(f32*)(work + 0x2814) = pos[1];
+        *(f32*)(work + 0x2818) = pos[2];
+        if (unit2 != -1) {
+            unit2 = BattleTransID((void*)event, unit2);
+            *(s32*)(work + 0x2768) = unit2;
+            *(s32*)(work + 0x2770) = part2;
+            unit = BattleGetUnitPtr(work, unit2);
+            part = BattleGetUnitPartsPtr(unit2, part2);
+            BtlUnit_GetHitPos(unit, part, &pos[0], &pos[1], &pos[2]);
+            *(f32*)(work + 0x281C) = pos[0];
+            *(f32*)(work + 0x2820) = pos[1];
+            *(f32*)(work + 0x2824) = pos[2];
+        }
+    }
+    return 2;
 }
 
-s32 evt_btl_camera_set_homing_unit(int param_1) {
-    return 0;
+s32 evt_btl_camera_set_homing_unit(int event) {
+    extern s32 evtGetValue(void*, s32);
+    extern s32 BattleTransID(void*, s32);
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern s32 BtlUnit_GetBodyPartsId(void*);
+    extern void* BattleGetUnitPartsPtr(s32, s32);
+    extern void BtlUnit_GetHomePos(void*, f32*, f32*, f32*);
+    extern void BtlUnit_GetHitPos(void*, void*, f32*, f32*, f32*);
+    s32* args = *(s32**)(event + 0x18);
+    u8* work = (u8*)_battleWorkPointer;
+    s32 unit1;
+    s32 unit2;
+    s32 partId;
+    f32 pos[3];
+    void* unit;
+    void* part;
+
+    evtGetValue((void*)event, args[0]);
+    unit1 = evtGetValue((void*)event, args[1]);
+    unit2 = evtGetValue((void*)event, args[2]);
+    unit1 = BattleTransID((void*)event, unit1);
+    *(s32*)(work + 0x2764) = unit1;
+    unit = BattleGetUnitPtr(work, unit1);
+    partId = BtlUnit_GetBodyPartsId(unit);
+    *(s32*)(work + 0x276C) = partId;
+    BattleGetUnitPartsPtr(unit1, partId);
+    BtlUnit_GetHomePos(unit, &pos[0], &pos[1], &pos[2]);
+    *(f32*)(work + 0x2810) = pos[0];
+    *(f32*)(work + 0x2814) = pos[1];
+    *(f32*)(work + 0x2818) = pos[2];
+    if (unit2 != -1) {
+        unit2 = BattleTransID((void*)event, unit2);
+        *(s32*)(work + 0x2768) = unit2;
+        unit = BattleGetUnitPtr(work, unit2);
+        partId = BtlUnit_GetBodyPartsId(unit);
+        *(s32*)(work + 0x2770) = partId;
+        part = BattleGetUnitPartsPtr(unit2, partId);
+        BtlUnit_GetHitPos(unit, part, &pos[0], &pos[1], &pos[2]);
+        *(f32*)(work + 0x281C) = pos[0];
+        *(f32*)(work + 0x2820) = pos[1];
+        *(f32*)(work + 0x2824) = pos[2];
+    }
+    return 2;
 }
 
 s32 evt_btl_camera_set_mode(void* evt) {
@@ -544,59 +660,190 @@ u8 battleCameraMoveTo(void) {
 }
 
 void battleCameraMain(void) {
-    extern f32 intplGetValue(f32 start, f32 end, s32 type, s32 current, s32 total);
-    BattleWork* battleWork;
-    BattleWorkCamera* camera;
-    void* view;
-    f32* currentPos;
-    f32* currentTarget;
-    f32 targetPos[3];
-    f32 targetLook[3];
-    s32 i;
+    typedef void (*MoveToFn)(f32, f32, f32, f32, f32, f32, s32, s32,
+                             f32*, f32*, f32*, f32*, f32*, f32*);
+    extern f32 intplGetValue(f32, f32, s32, s32, s32);
+    extern BattleWorkUnit* BattleGetUnitPtr(BattleWork*, s32);
+    extern BattleWorkUnitPart* BattleGetUnitPartsPtr(s32, s32);
+    extern void BtlUnit_GetPos(BattleWorkUnit*, f32*, f32*, f32*);
+    extern void BtlUnit_GetHitPos(BattleWorkUnit*, BattleWorkUnitPart*, f32*, f32*, f32*);
+    extern s32 BtlUnit_GetHeight(BattleWorkUnit*);
+    extern s32 BtlUnit_GetWidth(BattleWorkUnit*);
+    BattleWork* battleWork = _battleWorkPointer;
+    BattleWorkCamera* camera = &battleWork->camera;
+    u8* view = camGetPtr(4);
+    MoveToFn moveTo = (MoveToFn)battleCameraMoveTo;
+    f32 dx = 0.0f;
+    f32 dy = 0.0f;
+    f32 dz = 0.0f;
+    f32 dtx = 0.0f;
+    f32 dty = 0.0f;
+    f32 dtz = 0.0f;
+    f32 px;
+    f32 py;
+    f32 pz;
+    f32 tx;
+    f32 ty;
+    f32 tz;
+    s16 oldMove;
+    s16 oldZoom;
+    s32 current;
+    BattleWorkUnit* unit;
+    BattleWorkUnit* unit2;
+    BattleWorkUnitPart* part;
+    BattleWorkUnitPart* part2;
+    f32 unitPos[3];
+    f32 unitPos2[3];
+    f32 height;
+    f32 width;
+    f32 spread;
+    f32 focusY;
+    f32 width2;
+    f32 midpoint;
 
-    battleWork = _battleWorkPointer;
-    camera = &battleWork->camera;
-    view = camGetPtr(4);
-    currentPos = (f32*)((s32)camera + 0x2C);
-    currentTarget = (f32*)((s32)camera + 0x44);
-
-    targetPos[0] = 0.0f;
-    targetPos[1] = 110.0f;
-    targetPos[2] = 750.0f;
-    targetLook[0] = 0.0f;
-    targetLook[1] = 60.0f;
-    targetLook[2] = 0.0f;
+    *(f32*)(view + 0x34) = *(f32*)((u8*)camera + 0x2C);
+    *(f32*)(view + 0x38) = *(f32*)((u8*)camera + 0x30);
+    *(f32*)(view + 0x3C) = *(f32*)((u8*)camera + 0x34);
+    *(f32*)(view + 0x40) = *(f32*)((u8*)camera + 0x44);
+    *(f32*)(view + 0x44) = *(f32*)((u8*)camera + 0x48);
+    *(f32*)(view + 0x48) = *(f32*)((u8*)camera + 0x4C);
 
     switch (camera->mode) {
-    case 1:
-        targetPos[2] -= camera->zoom * 0.5f;
-        targetLook[2] -= camera->zoom * 0.5f;
-        break;
-    case 2:
-        targetPos[1] = 160.0f;
-        targetLook[1] = 110.0f;
-        break;
-    case 4:
-        targetPos[2] = -750.0f;
-        break;
-    case 5:
-        targetPos[1] = 400.0f;
-        targetPos[2] = -617.0f;
-        break;
-    default:
-        break;
+        case 0:
+            moveTo(0.0f, 110.0f, 750.0f, 0.0f, 60.0f, 0.0f, 1, 1,
+                   &dx, &dy, &dz, &dtx, &dty, &dtz);
+            break;
+        case 1:
+            pz = 750.0f - camera->zoom * 0.5f;
+            tz = -camera->zoom * 0.5f;
+            moveTo(0.0f, 110.0f, pz, 0.0f, 60.0f, tz, 1, 1,
+                   &dx, &dy, &dz, &dtx, &dty, &dtz);
+            break;
+        case 2:
+            moveTo(0.0f, 160.0f, 750.0f, 0.0f, 110.0f, 0.0f, 1, 1,
+                   &dx, &dy, &dz, &dtx, &dty, &dtz);
+            break;
+        case 3:
+            if (*(s32*)((u8*)camera + 0x84) > 0) {
+                (*(s32*)((u8*)camera + 0x84))--;
+                current = *(s32*)((u8*)camera + 0x88) - *(s32*)((u8*)camera + 0x84);
+                px = intplGetValue(*(f32*)((u8*)camera + 0x8C), *(f32*)((u8*)camera + 0x98),
+                                   *(s32*)((u8*)camera + 0x80), current,
+                                   *(s32*)((u8*)camera + 0x88));
+                py = intplGetValue(*(f32*)((u8*)camera + 0x90), *(f32*)((u8*)camera + 0x9C),
+                                   *(s32*)((u8*)camera + 0x80), current,
+                                   *(s32*)((u8*)camera + 0x88));
+                pz = intplGetValue(*(f32*)((u8*)camera + 0x94), *(f32*)((u8*)camera + 0xA0),
+                                   *(s32*)((u8*)camera + 0x80), current,
+                                   *(s32*)((u8*)camera + 0x88));
+                tx = intplGetValue(*(f32*)((u8*)camera + 0xA4), *(f32*)((u8*)camera + 0xB0),
+                                   *(s32*)((u8*)camera + 0x80), current,
+                                   *(s32*)((u8*)camera + 0x88));
+                ty = intplGetValue(*(f32*)((u8*)camera + 0xA8), *(f32*)((u8*)camera + 0xB4),
+                                   *(s32*)((u8*)camera + 0x80), current,
+                                   *(s32*)((u8*)camera + 0x88));
+                tz = intplGetValue(*(f32*)((u8*)camera + 0xAC), *(f32*)((u8*)camera + 0xB8),
+                                   *(s32*)((u8*)camera + 0x80), current,
+                                   *(s32*)((u8*)camera + 0x88));
+                oldMove = camera->moveSpeedLevel;
+                oldZoom = camera->zoomSpeedLevel;
+                camera->moveSpeedLevel = 3;
+                camera->zoomSpeedLevel = 3;
+                moveTo(px, py, pz, tx, ty, tz, 0, 0, &dx, &dy, &dz, &dtx, &dty, &dtz);
+                camera->moveSpeedLevel = oldMove;
+                camera->zoomSpeedLevel = oldZoom;
+            }
+            break;
+        case 4:
+            moveTo(0.0f, 110.0f, -750.0f, 0.0f, 60.0f, 0.0f, 1, 1,
+                   &dx, &dy, &dz, &dtx, &dty, &dtz);
+            break;
+        case 5:
+            moveTo(0.0f, 400.0f, -617.0f, 0.0f, 60.0f, 0.0f, 1, 1,
+                   &dx, &dy, &dz, &dtx, &dty, &dtz);
+            break;
+        case 7:
+            unit = BattleGetUnitPtr(battleWork, *(s32*)((u8*)camera + 0x10));
+            if (unit == 0) {
+                btl_camera_set_mode(0, 0);
+                break;
+            }
+            BattleGetUnitPartsPtr(*(s32*)((u8*)camera + 0x10),
+                                  *(s32*)((u8*)camera + 0x18));
+            BtlUnit_GetPos(unit, &unitPos[0], &unitPos[1], &unitPos[2]);
+            height = (f32)BtlUnit_GetHeight(unit);
+            width = (f32)BtlUnit_GetWidth(unit) - 24.0f;
+            if (width < 0.0f) width = 0.0f;
+            unitPos[1] += (height - 50.0f) * 0.5f;
+            spread = -(1.5f * width - camera->zoom);
+            focusY = -spread / 9.0f;
+            if (unitPos[1] > 100.0f) unitPos[1] = 100.0f;
+            if (unitPos[1] < 0.0f) unitPos[1] = 0.0f;
+            moveTo(unitPos[0], 110.0f + unitPos[1] + focusY, 750.0f - spread,
+                   unitPos[0], 60.0f + unitPos[1] + focusY, 0.0f, 1, 1,
+                   &dx, &dy, &dz, &dtx, &dty, &dtz);
+            break;
+        case 8:
+        case 9:
+            unit = BattleGetUnitPtr(battleWork, *(s32*)((u8*)camera + 0x10));
+            unit2 = BattleGetUnitPtr(battleWork, *(s32*)((u8*)camera + 0x14));
+            if (unit == 0 || unit2 == 0) {
+                btl_camera_set_mode(0, 0);
+                break;
+            }
+            BattleGetUnitPartsPtr(*(s32*)((u8*)camera + 0x10),
+                                  *(s32*)((u8*)camera + 0x18));
+            part2 = BattleGetUnitPartsPtr(*(s32*)((u8*)camera + 0x14),
+                                          *(s32*)((u8*)camera + 0x1C));
+            BtlUnit_GetPos(unit, &unitPos[0], &unitPos[1], &unitPos[2]);
+            BtlUnit_GetHitPos(unit2, part2, &unitPos2[0], &unitPos2[1], &unitPos2[2]);
+            width = (f32)BtlUnit_GetWidth(unit) - 24.0f;
+            width2 = (f32)BtlUnit_GetWidth(unit2) - 24.0f;
+            if (width < 0.0f) width = 0.0f;
+            if (width2 < 0.0f) width2 = 0.0f;
+            midpoint = (unitPos[0] + unitPos2[0]) * 0.5f;
+            spread = -(1.5f * (width + width2) - 2.0f * camera->zoom);
+            focusY = -spread / 10.0f;
+            height = (unitPos[1] + unitPos2[1]) * 0.5f;
+            if (height > 100.0f) height = 100.0f;
+            if (height < 0.0f) height = 0.0f;
+            moveTo(midpoint, 110.0f + height + focusY, 750.0f - spread,
+                   midpoint, 60.0f + height + focusY, 0.0f, 1, 1,
+                   &dx, &dy, &dz, &dtx, &dty, &dtz);
+            break;
+        case 10:
+            unit = BattleGetUnitPtr(battleWork, *(s32*)((u8*)camera + 0x10));
+            if (unit == 0) {
+                btl_camera_set_mode(0, 0);
+                break;
+            }
+            part = BattleGetUnitPartsPtr(*(s32*)((u8*)camera + 0x10),
+                                         *(s32*)((u8*)camera + 0x18));
+            if (part == 0) {
+                btl_camera_set_mode(0, 0);
+                break;
+            }
+            BtlUnit_GetHitPos(unit, part, &unitPos[0], &unitPos[1], &unitPos[2]);
+            height = (f32)BtlUnit_GetHeight(unit);
+            width = (f32)BtlUnit_GetWidth(unit) - 24.0f;
+            if (width < 0.0f) width = 0.0f;
+            unitPos[1] += (height - 50.0f) * 0.5f;
+            spread = -(1.5f * width - camera->zoom);
+            focusY = -spread / 9.0f;
+            if (unitPos[1] > 100.0f) unitPos[1] = 100.0f;
+            if (unitPos[1] < 0.0f) unitPos[1] = 0.0f;
+            moveTo(unitPos[0], 110.0f + unitPos[1] + focusY, 750.0f - spread,
+                   unitPos[0], 60.0f + unitPos[1] + focusY, 0.0f, 1, 1,
+                   &dx, &dy, &dz, &dtx, &dty, &dtz);
+            break;
+        default:
+            moveTo(0.0f, 110.0f, 750.0f, 0.0f, 60.0f, 0.0f, 1, 1,
+                   &dx, &dy, &dz, &dtx, &dty, &dtz);
+            break;
     }
-
-    for (i = 0; i < 3; i++) {
-        currentPos[i] += (targetPos[i] - currentPos[i]) * 0.1f;
-        currentTarget[i] += (targetLook[i] - currentTarget[i]) * 0.1f;
-    }
-    *(f32*)((s32)view + 0x34) = currentPos[0] + camera->offset.x;
-    *(f32*)((s32)view + 0x38) = currentPos[1] + camera->offset.y;
-    *(f32*)((s32)view + 0x3C) = currentPos[2] + camera->offset.z;
-    *(f32*)((s32)view + 0x40) = currentTarget[0];
-    *(f32*)((s32)view + 0x44) = currentTarget[1];
-    *(f32*)((s32)view + 0x48) = currentTarget[2];
+    *(f32*)((u8*)camera + 0x68) = dx;
+    *(f32*)((u8*)camera + 0x6C) = dy;
+    *(f32*)((u8*)camera + 0x70) = dz;
 }
 
 void battleCameraInit(void) {

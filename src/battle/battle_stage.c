@@ -1070,9 +1070,22 @@ double randf(double min, double max) {
 }
 
 void BattleStageEnd(void) {
-    ;
-}
+    extern void unk_US_EU_09_80137fe4(void);
+    char* stage;
+    void* allocation;
+    s32 i;
 
+    unk_US_EU_09_80137fe4();
+    stage = (char*)_battleWorkPointer + 0x163FC;
+    for (i = 0; i < 12; i++) {
+        allocation = *(void**)(stage + 0xE8);
+        if (allocation != 0) {
+            BattleFree(allocation);
+            *(void**)(stage + 0xE8) = 0;
+        }
+        stage += 0xE8;
+    }
+}
 
 void screen_capture(void) {
     extern void GXSetTexCopySrc(u32 left, u32 top, u32 width, u32 height);

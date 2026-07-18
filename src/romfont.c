@@ -30,105 +30,80 @@ char* romFontGetMessage(s32 messageId) {
 /* CHATGPT STUB FILL: main/romfont 20260624_184929 */
 
 /* stub-fill: romFontGetWidth | missing_definition | ghidra_signature */
-int romFontGetWidth(int param_1, int param_2) {
-    extern void* wp;
+int romFontGetWidth(s32 message, s32 entry) {
+    extern u8* wp;
+    s32 width = 0;
+    s32 index = 0;
+    s32 maximum = 0;
 
-    void* font;
-    void* entry;
-    s32 width;
-    s32 maxWidth;
-    s32 index;
-    s32 count;
-    u8 c;
-    u16 code;
-
-    width = 0;
-    maxWidth = 0;
-    index = 0;
-    font = wp;
-
-    while (1) {
-        if (*(s32*)((s32)font + 8) != 0) {
-            c = *(u8*)(param_1 + index);
-            code = *(u16*)(param_1 + index);
-            if (c == 0) {
-                if (maxWidth < width) {
-                    maxWidth = width;
-                }
-                break;
-            }
-            if (c == '\n') {
-                if (maxWidth < width) {
-                    maxWidth = width;
-                }
-                width = 0;
-                index++;
-                continue;
-            }
-            entry = *(void**)font;
-            count = *(s32*)((s32)font + 4);
-            while (count > 0) {
-                if (*(u16*)((s32)entry + 0x120) == (u16)c) {
-                    break;
-                }
-                entry = (void*)((s32)entry + 0x140);
-                count--;
-            }
-            if (count <= 0) {
-                entry = *(void**)font;
-            }
-            index++;
-        } else {
-            c = *(u8*)(param_1 + index);
-            code = *(u16*)(param_1 + index);
-            if (c >= 0x20 && c < 0x80) {
-                entry = *(void**)font;
-                count = *(s32*)((s32)font + 4);
-                while (count > 0) {
-                    if (*(u16*)((s32)entry + 0x120) == (u16)c) {
-                        break;
+    do {
+        u8 character = *(u8*)(message + index);
+        if (*(s32*)(wp + 8) == 0) {
+            if (character < 0x20 || character > 0x7F) {
+                if ((character < 0x80 || character > 0x9F) && character < 0xE0) {
+                    if (character == 0) {
+                        if (maximum < width) maximum = width;
+                        return maximum;
                     }
-                    entry = (void*)((s32)entry + 0x140);
-                    count--;
-                }
-                if (count <= 0) {
-                    entry = *(void**)font;
-                }
-                index++;
-            } else if ((c >= 0x80 && c < 0xA0) || c >= 0xE0) {
-                entry = *(void**)font;
-                count = *(s32*)((s32)font + 4);
-                while (count > 0) {
-                    if (*(u16*)((s32)entry + 0x120) == code) {
-                        break;
+                    if (character == '\n') {
+                        if (maximum < width) maximum = width;
+                        width = 0;
                     }
-                    entry = (void*)((s32)entry + 0x140);
-                    count--;
+                    index++;
+                    if (character == '\n') continue;
+                } else {
+                    s32 first = *(s32*)wp;
+                    s32 count = *(s32*)(wp + 4);
+                    s32 current = first;
+                    entry = first;
+                    while (count > 0) {
+                        entry = current;
+                        if (*(s16*)(current + 0x120) == *(s16*)(message + index)) break;
+                        current += 0x140;
+                        count--;
+                        entry = first;
+                    }
+                    index += 2;
                 }
-                if (count <= 0) {
-                    entry = *(void**)font;
-                }
-                index += 2;
-            } else if (c == 0) {
-                if (maxWidth < width) {
-                    maxWidth = width;
-                }
-                break;
-            } else if (c == '\n') {
-                if (maxWidth < width) {
-                    maxWidth = width;
-                }
-                width = 0;
-                index++;
-                continue;
             } else {
+                s32 first = *(s32*)wp;
+                s32 count = *(s32*)(wp + 4);
+                s32 current = first;
+                entry = first;
+                while (count > 0) {
+                    entry = current;
+                    if (*(u16*)(current + 0x120) == character) break;
+                    current += 0x140;
+                    count--;
+                    entry = first;
+                }
+                index++;
+            }
+        } else {
+            if (character == 0) return width <= maximum ? maximum : width;
+            if (character == '\n') {
+                if (maximum < width) maximum = width;
+                width = 0;
                 index++;
                 continue;
+            }
+            {
+                s32 first = *(s32*)wp;
+                s32 count = *(s32*)(wp + 4);
+                s32 current = first;
+                entry = first;
+                while (count > 0) {
+                    entry = current;
+                    if (*(u16*)(current + 0x120) == character) break;
+                    current += 0x140;
+                    count--;
+                    entry = first;
+                }
+                index++;
             }
         }
-        width += *(u16*)((s32)entry + 0x122);
-    }
-    return maxWidth;
+        width += *(u16*)(entry + 0x122);
+    } while (1);
 }
 
 /* stub-fill: romFontPrintGX | missing_definition | ghidra_signature */
@@ -325,7 +300,7 @@ void romFontMake(void) {
     extern char** msg_tbl[6];
     extern void* __memAlloc(s32 heap, u32 size);
     extern void __memFree(s32 heap, void* memory);
-    extern u16 OSGetFontEncode(void);
+    extern u32 OSGetFontEncode(void);
     extern s32 OSLoadFont(void* fontData, void* textureData);
     extern void* memset(void* dst, s32 value, u32 size);
     extern s32 OSGetFontTexel(const char* text, void* image,
@@ -406,7 +381,7 @@ void romFontMake(void) {
             remaining--;
         }
 
-        if (OSGetFontEncode() == 1) {
+        if ((OSGetFontEncode() & 0xFFFF) == 1) {
             fontData = __memAlloc(0, 0x90EE4);
             textureData = __memAlloc(0, 0x4D000);
         } else {
@@ -419,24 +394,27 @@ void romFontMake(void) {
         *(void**)wp = glyphData;
         memset(glyphData, 0, *(s32*)((s32)wp + 4) * 0x140);
 
+        {
+            u16* currentCharacter = uniqueCharacters;
+            u8* glyph = glyphData;
         for (i = 0; i < *(s32*)((s32)wp + 4); i++) {
-            struct {
-                u16 code;
-                u8 terminator;
-            } text;
+            u8 text[3];
             u32 width;
-            u16 character = uniqueCharacters[i];
-            u8* glyph = glyphData + i * 0x140;
+            u16 character = *currentCharacter;
 
-            text.code = character;
-            if (text.code < 0x100) {
-                text.code <<= 8;
+            if (character < 0x100) {
+                text[0] = (u8)character;
+                text[1] = 0;
             } else {
-                text.terminator = 0;
+                *(u16*)text = character;
+                text[2] = 0;
             }
-            OSGetFontTexel((const char*)&text.code, glyph, 0, 6, &width);
+            OSGetFontTexel((const char*)text, glyph, 0, 6, &width);
             *(u16*)(glyph + 0x120) = character;
             *(s16*)(glyph + 0x122) = (s16)width;
+            currentCharacter++;
+            glyph += 0x140;
+        }
         }
 
         DCFlushRange(glyphData, *(s32*)((s32)wp + 4) * 0x140);

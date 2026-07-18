@@ -134,10 +134,84 @@ void effButterflyMain(void* effect) {
     dispEntry(4, 1, effButterflyDisp, effect, dispCalcZ(&pos));
 }
 
-u8 effButterflyDisp(int param_1, int param_2) {
-    return 0;
-}
+void effButterflyDisp(int cameraId, int effect) {
+    typedef float Mtx[3][4];
+    extern void* camGetPtr(int);
+    extern void PSMTXTrans(Mtx, double, double, double);
+    extern void PSMTXRotRad(Mtx, double, char);
+    extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void PSMTXScale(Mtx, float, float, float);
+    extern void GXLoadPosMtxImm(Mtx, int);
+    extern void GXSetCurrentMtx(int);
+    extern void GXSetTevColor(int, void*);
+    extern void GXSetNumChans(int);
+    extern void GXSetNumTevStages(int);
+    extern void GXSetTevOrder(int, int, int, int);
+    extern void GXSetTevColorOp(int, int, int, int, int, int);
+    extern void GXSetTevAlphaOp(int, int, int, int, int, int);
+    extern void GXSetTevColorIn(int, int, int, int, int);
+    extern void GXSetTevAlphaIn(int, int, int, int, int);
+    extern void GXSetNumTexGens(int);
+    extern void GXSetTexCoordGen2(int, int, int, int, int, int);
+    extern void GXLoadTexMtxImm(Mtx, int, int);
+    extern void effGetTexObjN64(int, void*);
+    extern void GXLoadTexObj(void*, int);
+    extern void GXSetCullMode(int);
+    extern void effSetVtxDescN64(void*);
+    extern void GXBegin(int, int, int);
+    extern void tri2(int, int, int, int, int, int, int);
+    extern signed char y_data[];
+    extern unsigned char but_02_v[];
+    extern unsigned char dat_80424ee0;
+    extern float float_0p3_80424ee4;
+    extern float float_deg2rad_80424ee8;
+    extern float float_0p02_80424eec;
+    extern float float_0p03125_80424ef0;
+    extern float float_0p015625_80424ef4;
+    extern float float_0_80424ef8;
+    unsigned char texObj[0x20];
+    Mtx scale;
+    Mtx rotation;
+    Mtx model;
+    unsigned char* camera = (unsigned char*)camGetPtr(cameraId);
+    int* work = *(int**)(effect + 0xC);
+    int frame = work[0xB];
+    unsigned char alpha = (unsigned char)work[9];
+    unsigned int color;
 
+    PSMTXTrans(model, (float)work[3],
+        (float)work[4] + float_0p3_80424ee4 * (float)y_data[frame],
+        (float)work[5]);
+    PSMTXRotRad(rotation, float_deg2rad_80424ee8 * (float)work[10], 'y');
+    PSMTXConcat(model, rotation, model);
+    PSMTXScale(scale, float_0p02_80424eec, float_0p02_80424eec, float_0p02_80424eec);
+    PSMTXConcat(model, scale, model);
+    PSMTXConcat((float (*)[4])(camera + 0x11C), model, model);
+    GXLoadPosMtxImm(model, 0);
+    GXSetCurrentMtx(0);
+
+    color = ((unsigned int)alpha << 24) | ((unsigned int)alpha << 16) |
+            ((unsigned int)alpha << 8) | dat_80424ee0;
+    GXSetTevColor(1, &color);
+    GXSetNumChans(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 15, 2, 8, 15);
+    GXSetTevAlphaIn(0, 7, 7, 7, 4);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    PSMTXScale(scale, float_0p03125_80424ef0, float_0p015625_80424ef4, float_0_80424ef8);
+    GXLoadTexMtxImm(scale, 0x1E, 1);
+    effGetTexObjN64(work[0] + 0x78, texObj);
+    GXLoadTexObj(texObj, 0);
+    GXSetCullMode(0);
+    effSetVtxDescN64(but_02_v + frame * 0x54);
+    GXBegin(0x90, 0, 0xC);
+    tri2(0, 1, 2, 0, 0, 2, 3);
+    tri2(3, 4, 0, 0, 3, 5, 4);
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

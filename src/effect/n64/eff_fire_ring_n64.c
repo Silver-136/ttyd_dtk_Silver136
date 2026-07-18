@@ -149,10 +149,53 @@ void effFireRingDisp(s32 cameraId, void* effect) {
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
-u8 effFireRingMain(void) {
-    return 0;
-}
+void effFireRingMain(void* effect) {
+    extern void effDelete(void*);
+    extern int effTblRandN64(int, int);
+    extern void* effFireDustN64Entry(float, float, float, float, float, int, int, unsigned int);
+    extern float dispCalcZ(void*);
+    extern void dispEntry(int, int, void*, void*, float);
+    extern void effFireRingDisp(int, void*);
+    extern float float_128_804251f8;
+    extern float float_0_804251e4;
+    unsigned char* entry = (unsigned char*)effect;
+    unsigned char* work = *(unsigned char**)(entry + 0xC);
+    float pos[3];
+    int timer;
+    unsigned int frame;
 
+    pos[0] = *(float*)(work + 4);
+    pos[1] = *(float*)(work + 8);
+    pos[2] = *(float*)(work + 0xC);
+    timer = --*(int*)(work + 0x28);
+    frame = ++*(unsigned int*)(work + 0x2C);
+    if (timer < 0) {
+        effDelete(effect);
+        return;
+    }
+    if ((frame & 1) != 0) {
+        effTblRandN64(0x168, frame);
+        effFireDustN64Entry(*(float*)(work + 4), *(float*)(work + 8), *(float*)(work + 0xC),
+                            (float)(frame << 3), 10.0f, 0, 10, 0x14);
+    }
+    *(float*)(work + 0x1C) += *(float*)(work + 0x20);
+    if (timer < 10) {
+        *(int*)(work + 0x24) = timer * 0x19;
+    }
+    *(float*)(work + 0x30) += *(float*)(work + 0x40);
+    *(float*)(work + 0x34) += *(float*)(work + 0x44);
+    *(float*)(work + 0x38) += *(float*)(work + 0x48);
+    *(float*)(work + 0x3C) += *(float*)(work + 0x4C);
+    if (*(float*)(work + 0x30) > float_128_804251f8) *(float*)(work + 0x30) -= float_128_804251f8;
+    if (*(float*)(work + 0x34) > float_128_804251f8) *(float*)(work + 0x34) -= float_128_804251f8;
+    if (*(float*)(work + 0x38) > float_128_804251f8) *(float*)(work + 0x38) -= float_128_804251f8;
+    if (*(float*)(work + 0x3C) > float_128_804251f8) *(float*)(work + 0x3C) -= float_128_804251f8;
+    if (*(float*)(work + 0x30) < float_0_804251e4) *(float*)(work + 0x30) += float_128_804251f8;
+    if (*(float*)(work + 0x34) < float_0_804251e4) *(float*)(work + 0x34) += float_128_804251f8;
+    if (*(float*)(work + 0x38) < float_0_804251e4) *(float*)(work + 0x38) += float_128_804251f8;
+    if (*(float*)(work + 0x3C) < float_0_804251e4) *(float*)(work + 0x3C) += float_128_804251f8;
+    dispEntry(4, 2, effFireRingDisp, effect, dispCalcZ(pos));
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

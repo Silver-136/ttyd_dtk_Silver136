@@ -91,10 +91,65 @@ void main_dl(s32 type) {
     GXBegin(0x80, 0, 4);
 }
 
-u8 effKemuri2Disp(void) {
-    return 0;
-}
+void effKemuri2Disp(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4];
+    extern void* camGetPtr(s32);
+    extern void GXSetTevColor(s32, void*);
+    extern void PSMTXScale(Mtx, f32, f32, f32);
+    extern void PSMTXTrans(Mtx, f64, f64, f64);
+    extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void GXLoadTexMtxImm(Mtx, s32, s32);
+    extern void PSMTXRotRad(Mtx, f32, char);
+    extern void GXLoadPosMtxImm(Mtx, s32);
+    extern void main_dl(s32);
+    extern f32 float_176_80425630;
+    extern f32 float_24_80425634;
+    extern f32 float_224_80425638;
+    extern f32 float_32_8042563c;
+    extern f32 float_256_80425640;
+    extern f32 float_1_80425644;
+    extern f32 float_0_80425648;
+    extern f32 float_deg2rad_8042564c;
+    u8* entry = (u8*)effect;
+    u8* work = *(u8**)(entry + 0xC);
+    u8* camera = (u8*)camGetPtr(cameraId);
+    Mtx scale;
+    Mtx texMtx;
+    Mtx trans;
+    Mtx rotate;
+    Mtx draw;
+    u32 color0 = 0xFFFFFFFF;
+    u32 color1 = 0x808080FF;
+    s32 i;
+    s32 frame = *(s32*)(work + 0x60);
+    s32 type = *(u16*)(work + 4);
+    s32 tile = type == 0 ? 0x18 : 0x20;
+    f32 width = type == 0 ? float_176_80425630 : (type == 1 ? float_224_80425638 : float_256_80425640);
+    f32 height = type == 0 ? float_24_80425634 : float_32_8042563c;
+    f32 sx = (f32)tile / width;
+    f32 sy = (f32)tile / height;
 
+    GXSetTevColor(1, &color0);
+    GXSetTevColor(2, &color1);
+    PSMTXScale(scale, sx, sy, float_1_80425644);
+    PSMTXTrans(trans, (f32)(frame * tile) / width, float_0_80425648 / height, float_0_80425648);
+    PSMTXConcat(trans, scale, texMtx);
+    GXLoadTexMtxImm(texMtx, 0x1E, 1);
+    PSMTXScale(scale, sx, sy, float_1_80425644);
+    PSMTXTrans(trans, (f32)((frame + 1) * tile) / width, float_0_80425648 / height, float_0_80425648);
+    PSMTXConcat(trans, scale, texMtx);
+    GXLoadTexMtxImm(texMtx, 0x21, 1);
+    for (i = 0; i < *(s32*)(entry + 8); i++, work += 0x64) {
+        u8* camera3d;
+        PSMTXTrans(trans, *(f32*)(work + 8), *(f32*)(work + 0xC), *(f32*)(work + 0x10));
+        camera3d = (u8*)camGetPtr(cameraId);
+        PSMTXRotRad(rotate, float_deg2rad_8042564c * -*(f32*)(camera3d + 0x114), 'y');
+        PSMTXConcat(trans, rotate, draw);
+        PSMTXConcat((f32 (*)[4])(camera + 0x11C), draw, draw);
+        GXLoadPosMtxImm(draw, 0);
+        main_dl(type);
+    }
+}
 
 void effKemuri2Main(void* effEntry) {
     Vec3 dispPos;

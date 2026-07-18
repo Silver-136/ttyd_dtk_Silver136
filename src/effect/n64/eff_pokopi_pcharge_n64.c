@@ -15,6 +15,7 @@ void* effPokopiPchargeN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 lif
     s32 count = n_data[type];
     s32 i;
     s32 r;
+    s32 baseAngle;
     f32 direction;
 
     *(char**)((s32)entry + 0x14) = str_PokopiPchargeN64_802fbcd8;
@@ -40,6 +41,7 @@ void* effPokopiPchargeN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 lif
     *(f32*)(base + 0x38) = (f32)vx_data[type];
     *(f32*)(base + 0x44) = 1.0f;
 
+    baseAngle = rand() % 360;
     part = base + 0x48;
     for (i = 1; i < count; i++, part += 0x48) {
         r = rand() % 10;
@@ -48,26 +50,82 @@ void* effPokopiPchargeN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 lif
         *(f32*)(part + 0x3C) = (f32)(rand() % 360);
         *(f32*)(part + 0x40) = 0.0f;
         direction = 1.0f - 0.3f * (f32)(i % 3);
-        *(f32*)(part + 0x38) = direction;
-        if (type <= 2) {
+        *(f32*)(part + 0x34) = direction;
+        switch (type) {
+        case 0:
+        case 1:
+        case 2:
             *(s32*)(part + 0x10) = 20;
-            *(f32*)(part + 0x38) = 1.0f - 0.1f * (f32)(i % 3);
-            *(f32*)(part + 0x40) = -(0.2f * (f32)r + 0.2f);
-            *(f32*)(part + 0x44) = 0.0f;
-        } else if (type == 3 || type == 5) {
+            *(f32*)(part + 0x34) = 1.0f - 0.1f * (f32)(i % 3);
+            *(f32*)(part + 0x38) = -(0.2f * (f32)r + 0.2f);
+            *(f32*)(part + 0x40) = 0.0f;
+            break;
+        case 3:
+        case 5:
             *(s32*)(part + 0x10) = 20;
-            *(f32*)(part + 0x38) = 1.0f - 0.1f * (f32)(i % 3);
-            *(f32*)(part + 0x40) = 0.2f * (f32)r + 0.2f;
-            *(f32*)(part + 0x44) = 0.0f;
-        } else if (type == 6 || type == 7) {
+            *(f32*)(part + 0x34) = 1.0f - 0.1f * (f32)(i % 3);
+            *(f32*)(part + 0x38) = 0.2f * (f32)r + 0.2f;
+            *(f32*)(part + 0x40) = 0.0f;
+            break;
+        case 4:
+        case 12:
+            *(s32*)(part + 0x10) = 20;
+            *(f32*)(part + 0x34) = 1.0f - 0.3f * (f32)(i % 3);
+            *(f32*)(part + 0x38) = 0.2f * (f32)r + 0.6f;
+            *(f32*)(part + 0x40) = -2.0f;
+            break;
+        case 6:
+        case 7:
             *(s32*)(part + 0x10) = 10;
-            *(f32*)(part + 0x40) = -(f32)(r + 4);
-            *(f32*)(part + 0x44) = 0.0f;
-        } else {
+            *(f32*)(part + 0x34) = 1.0f - 0.3f * (f32)(i % 3);
+            *(f32*)(part + 0x38) = -(f32)(r + 4);
+            *(f32*)(part + 0x40) = 0.0f;
+            break;
+        case 8:
             *(s32*)(part + 0x10) = 20;
-            *(f32*)(part + 0x40) = 0.2f * (f32)r + 0.6f;
-            *(f32*)(part + 0x44) = type == 8 ? -1.0f : -2.0f;
+            *(f32*)(part + 0x34) = 1.0f - 0.3f * (f32)(i % 3);
+            *(f32*)(part + 0x38) = 0.2f * (f32)r + 0.6f;
+            *(f32*)(part + 0x40) = -1.0f;
+            break;
+        case 9:
+            *(s32*)(part + 0x10) = 20;
+            *(f32*)(part + 0x34) = 1.0f - 0.3f * (f32)(i % 3);
+            *(f32*)(part + 0x38) = -(0.2f * (f32)r + 0.6f);
+            *(f32*)(part + 0x40) = -2.0f;
+            *(s32*)(base + 0x18) = 0xFF;
+            *(s32*)(base + 0x1C) = 0xF5;
+            *(s32*)(base + 0x20) = 0xD7;
+            *(s32*)(base + 0x28) = 0xDC;
+            *(s32*)(base + 0x2C) = 0x3C;
+            *(s32*)(base + 0x30) = 10;
+            break;
+        case 10:
+            *(s32*)(part + 0x10) = 10;
+            *(f32*)(part + 0x34) = -0.5f * (0.3f * (f32)(i % 3) - 1.0f);
+            *(f32*)(part + 0x38) = 0.1f * (f32)r + 2.0f;
+            *(f32*)(part + 0x40) = 0.0f;
+            break;
+        case 11:
+            *(s32*)(part + 0x10) = 30;
+            *(f32*)(part + 0x34) = 1.0f - 0.3f * (f32)(i % 3);
+            *(f32*)(part + 0x38) = 0.05f * (f32)r + 0.2f;
+            *(f32*)(part + 0x40) = -1.0f;
+            break;
         }
+
+        r = rand();
+        r = r - (r / *(s32*)(part + 0x10)) * *(s32*)(part + 0x10);
+        *(s32*)(part + 0x14) = -r;
+        if (*(f32*)(part + 0x38) >= 1.0f) {
+            *(f32*)(part + 4) = (f32)-*(s32*)(part + 0x14) * *(f32*)(part + 0x38);
+        } else {
+            *(f32*)(part + 4) = -*(f32*)(part + 0x38) *
+                (f32)(*(s32*)(part + 0x10) - *(s32*)(part + 0x14));
+        }
+        *(f32*)(part + 8) = 1.0f;
+        *(f32*)(part + 0xC) = 1.0f;
+        *(f32*)(part + 0x3C) = (f32)baseAngle +
+            (360.0f * (f32)(i - 1)) / (f32)(count - 1);
     }
     return entry;
 }

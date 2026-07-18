@@ -51,121 +51,725 @@ void marioSetSwirlPower(s32 msec, f32 a, f32 b) {
 }
 
 
-u8 mot_ship(void) {
+void mot_ship(void) {
     extern void* marioGetPtr(void);
-    extern void* __memAlloc(s32, s32);
+    extern void* __memAlloc(s32, u32);
+    extern void __memFree(s32, void*);
     extern void* memset(void*, s32, u32);
+    extern void* camGetPtr(s32);
+    extern u32 hitGetAttr(void*);
+    extern void* hitGetName(void*);
+    extern void hitObjGetPos(void*, f32*);
+    extern u32 psndSFXOn_3D(s32, void*);
+    extern void psndSFXOff(s32);
+    extern void marioCamZoomUp(void);
+    extern void marioCamZoomOffReq2(s32);
+    extern void camFollowYOff(void);
+    extern void camFollowYOn(void);
     extern void marioPreJump(void);
     extern void marioMakeJumpPara(void);
+    extern void marioClearJumpPara(void);
+    extern void marioSetFallPara(void);
+    extern void marioAdjustMoveDir(void);
+    extern void marioChgMot(s32);
     extern void marioChgPose(char*);
     extern void marioPaperOn(char*);
+    extern void marioPaperOff(void);
     extern void marioChgPaper(char*);
+    extern void marioSetPaperAnimeLocalTime(s32);
     extern s32 marioGetColor(void);
-    extern u32 hitGetAttr(void*);
-    extern u32 psndSFXOn_3D(s32, void*);
-    extern void marioCamZoomUp(void);
-    extern void camFollowYOff(void);
-    extern void allPartyRideShip(void);
     extern f64 revise360(f64);
+    extern f64 toMovedir(f64);
+    extern f64 angleABf(f64, f64, f64, f64);
+    extern f64 distABf(f64, f64, f64, f64);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
     extern void movePos(f64, f64, f32*, f32*);
-    extern void* camGetPtr(s32);
+    extern void N_marioSetBottomlessRespawnPosOnBeroEntry(f64, f64, f64);
+    extern void N_marioReloadMapOnBottomlessOff(void);
+    extern void allPartyRideShip(void);
+    extern void allPartyRideOff(void);
+    extern void* evtEntry(void*, s32, u32);
+    extern void* marioChkLandon(f32, f32*);
+    extern void* effFunemizuEntry(s32, f64, f64, f64, f64, f64);
+    extern void effDelete(void*);
+    extern void shipMove(void);
+    extern void marioCheckWallShip(f64, f64);
+    extern s32 checkHarbor(f32*);
+    extern s32 strcmp(char*, char*);
     extern char* paper_ship[];
     extern char str_M_J_1B_802c42c8[];
     extern char str_PM_H_1A_802c42d0[];
-    void* player = marioGetPtr();
-    void* work;
-    s32 state;
-    f32 turn;
-    f32 target;
+    extern char str_M_Z_1_80420f14[];
+    extern char str_dou_03_802c42d8[];
+    extern s32 sound_evt[];
+    extern s32 sound_evt2[];
+    extern void* gp;
 
-    if ((*(u32*)((s32)player + 4) & 0x1000) != 0) {
-        *(u32*)((s32)player + 4) &= ~0x1000;
-        *(u32*)player &= ~0x78000;
+    void* player;
+    void* work;
+    void* hit;
+    void* evt;
+    void* eff;
+    void* cam;
+    f32 pos[3];
+    f32 groundY;
+    f32 dir;
+    f32 target;
+    f32 turn;
+    f32 speed;
+    f32 dx;
+    f32 dz;
+    f32 d;
+    f32 x;
+    f32 z;
+    f32 y;
+    f32 f;
+    s32 state;
+    s32 timer;
+    s32 side;
+    s32 n;
+    u32 attr;
+    u32 flags;
+
+#define P8(o) (*(u8*)((s32)player + (o)))
+#define PH16(o) (*(s16*)((s32)player + (o)))
+#define PU16(o) (*(u16*)((s32)player + (o)))
+#define P32(o) (*(s32*)((s32)player + (o)))
+#define PU32(o) (*(u32*)((s32)player + (o)))
+#define PF(o) (*(f32*)((s32)player + (o)))
+#define WP(o) (*(void**)((s32)work + (o)))
+#define W32(o) (*(s32*)((s32)work + (o)))
+#define WU32(o) (*(u32*)((s32)work + (o)))
+#define WF(o) (*(f32*)((s32)work + (o)))
+#define EFF(o) (*(f32*)((s32)*(void**)((s32)eff + 0x0C) + (o)))
+
+    player = marioGetPtr();
+
+    if ((PU32(0x0C) & 1U) != 0) {
+        PU32(0x0C) &= ~1U;
+        PU32(0x00) &= ~0x00078000U;
         work = __memAlloc(0, 0x48);
-        *(void**)((s32)player + 0x234) = work;
+        *(void**)((s32)player + 0x294) = work;
         memset(work, 0, 0x48);
-        *(s32*)((s32)work + 0x38) = -1;
-        *(f32*)((s32)work + 0xC) = 4.25f;
-        *(s32*)((s32)player + 0x44) = 0;
+        W32(0x38) = -1;
+        WF(0x20) = 0.0f;
+        WF(0x08) = 0.0f;
+        WF(0x0C) = 4.25f;
+        P32(0x44) = 0;
+        if ((PU32(0x0C) & 4U) == 0) {
+            cam = camGetPtr(8);
+            *(u16*)cam |= 0x200;
+        }
     }
-    work = *(void**)((s32)player + 0x234);
-    state = *(s32*)((s32)player + 0x44);
+
+    work = *(void**)((s32)player + 0x294);
+    if (work == 0) {
+        return;
+    }
+
+    state = P32(0x44);
     switch (state) {
     case 0:
         psndSFXOn_3D(0x18D, (void*)((s32)player + 0x8C));
-        psndSFXOn_3D(0xAF, (void*)((s32)player + 0x8C));
+        psndSFXOn_3D(0x0AF, (void*)((s32)player + 0x8C));
         marioCamZoomUp();
         marioPreJump();
         marioChgPose(str_M_J_1B_802c42c8);
         camFollowYOff();
-        *(u32*)((s32)player + 8) |= 0x400;
-        *(s32*)((s32)player + 0x170) = 0;
-        *(s32*)((s32)player + 0x44) = 1;
-        *(f32*)((s32)player + 0x180) = 0.0f;
-        *(f32*)((s32)work + 0x1C) = 0.0f;
-        *(u32*)work = (hitGetAttr(*(void**)((s32)player + 0x1E8)) & 0x20000) ? 1 : 2;
+        PU32(0x04) |= 0x100;
+        P32(0x48) = 0;
+        P32(0x44) = 1;
+        PH16(0x50) = 0;
+        PH16(0x52) = 0;
+        PF(0x180) = 0.0f;
+        WF(0x1C) = 0.0f;
+        N_marioSetBottomlessRespawnPosOnBeroEntry((f64)PF(0x8C), (f64)PF(0x90), (f64)PF(0x94));
+
+        hit = *(void**)((s32)player + 0x1EC);
+        attr = hitGetAttr(hit);
+        side = 0;
+        if ((attr & 0x4000) != 0) {
+            hitObjGetPos(hitGetName(hit), pos);
+            dir = (f32)revise360((f32)angleABf((f64)PF(0x8C), (f64)PF(0x94), (f64)pos[0], (f64)pos[2]) - PF(0x19C));
+            side = (dir < 180.0f) ? 1 : 2;
+        } else if ((attr & 0x8000) != 0) {
+            hitObjGetPos(hitGetName(hit), pos);
+            dir = (f32)revise360((f32)angleABf((f64)PF(0x8C), (f64)PF(0x94), (f64)pos[0], (f64)pos[2]) - PF(0x19C));
+            side = (dir < 180.0f) ? 1 : 2;
+        } else if ((attr & 0x10000) != 0) {
+            side = 2;
+        } else if ((attr & 0x20000) != 0) {
+            side = 1;
+        }
+        W32(0x00) = side;
+        /* fallthrough */
+
     case 1:
         marioMakeJumpPara();
-        target = (*(u32*)work & 1) ? 30.0f : -30.0f;
-        turn = *(f32*)((s32)work + 0x1C);
+        target = (WU32(0x00) & 1U) ? 30.0f : -30.0f;
+        turn = WF(0x1C);
         turn += 0.125f * (target - turn);
-        *(f32*)((s32)work + 0x1C) = turn;
-        *(f32*)((s32)player + 0x1AC) += turn;
-        if (((*(u32*)work & 1) == 0 && *(f32*)((s32)player + 0x1AC) <= -270.0f) ||
-            ((*(u32*)work & 1) != 0 && *(f32*)((s32)player + 0x1AC) >= 270.0f)) {
-            *(s32*)((s32)player + 0x44) = 2;
-            *(s32*)((s32)player + 0x170) = 20;
+        WF(0x1C) = turn;
+        if ((WU32(0x00) & 1U) != 0) {
+            if (WF(0x1C) >= 30.0f) {
+                WF(0x1C) = 30.0f;
+            }
+        } else if (WF(0x1C) <= -30.0f) {
+            WF(0x1C) = -30.0f;
+        }
+        PF(0x1AC) += WF(0x1C);
+        n = 0;
+        if ((WU32(0x00) & 1U) != 0) {
+            if (PF(0x1AC) >= 270.0f) {
+                n = 1;
+            }
+        } else if (PF(0x1AC) <= -270.0f) {
+            n = 1;
+        }
+        if (n != 0) {
+            P32(0x44) = 2;
+            P32(0x48) = 0x14;
             marioPaperOn(paper_ship[marioGetColor()]);
             marioChgPaper(str_PM_H_1A_802c42d0);
+            marioChgPose(str_M_Z_1_80420f14);
+            PU32(0x04) |= 8;
+            WF(0x20) = 15.0f;
+            evt = evtEntry(sound_evt, 0, 0);
+            *(s32*)((s32)evt + 0x9C) = (s32)(1024.0f * PF(0x8C)) - 230000000;
+            *(s32*)((s32)evt + 0xA0) = (s32)(1024.0f * PF(0x90)) - 230000000;
+            *(s32*)((s32)evt + 0xA4) = (s32)(1024.0f * PF(0x94)) - 230000000;
+        }
+        if (PF(0x7C) > 0.0f) {
+            PF(0x90) += PF(0x7C);
+            PU32(0x00) &= ~0x00078000U;
         }
         break;
+
     case 2:
-        target = (*(u32*)work & 1) ? 15.0f : -15.0f;
-        turn = *(f32*)((s32)work + 0x1C);
+        target = ((WU32(0x00) & 1U) ? 1.0f : -1.0f) * WF(0x20);
+        turn = WF(0x1C);
         turn += 0.125f * (target - turn);
-        *(f32*)((s32)work + 0x1C) = turn;
-        *(f32*)((s32)player + 0x1AC) += turn;
-        if (((*(u32*)work & 1) == 0 && *(f32*)((s32)player + 0x1AC) <= -1080.0f) ||
-            ((*(u32*)work & 1) != 0 && *(f32*)((s32)player + 0x1AC) >= 1260.0f)) {
-            *(s32*)((s32)player + 0x170) = 40;
-            *(s32*)((s32)player + 0x44) = 3;
+        WF(0x1C) = turn;
+        PF(0x1AC) += turn;
+        n = 0;
+        if ((WU32(0x00) & 1U) != 0) {
+            if (PF(0x1AC) >= 1260.0f) {
+                n = 1;
+            }
+        } else if (PF(0x1AC) <= -1080.0f) {
+            n = 1;
+        }
+        if (n != 0) {
+            P32(0x48) = 0x28;
+            P32(0x44) = 3;
         }
         break;
+
     case 3:
-        if (*(s32*)((s32)player + 0x170) == 30) allPartyRideShip();
-        if (--*(s32*)((s32)player + 0x170) < 1) *(s32*)((s32)player + 0x44) = 10;
+        if (P32(0x48) == 0x0E) {
+            allPartyRideShip();
+        }
+        if (P32(0x48) == 0x14) {
+            marioCamZoomOffReq2(900);
+            camFollowYOn();
+        }
+        timer = P32(0x48) - 1;
+        P32(0x48) = timer;
+        if (timer < 1) {
+            P32(0x44) = 4;
+        }
+        if (PF(0x9C) > -15.0f) {
+            PF(0x9C) -= 1.0f;
+            if (PF(0x9C) <= -15.0f) {
+                PF(0x9C) = -15.0f;
+            }
+        }
+        /* fallthrough */
+
+    case 4:
+        target = ((WU32(0x00) & 1U) ? 1.0f : -1.0f) * WF(0x20);
+        turn = WF(0x1C);
+        turn += 0.125f * (target - turn);
+        WF(0x1C) = turn;
+        PF(0x1AC) += turn;
+        WF(0x20) -= 0.1f;
+        if (WF(0x20) <= 1.0f) {
+            WF(0x20) = 1.0f;
+        }
+        n = 0;
+        if ((WU32(0x00) & 1U) != 0) {
+            if (PF(0x1AC) >= 1620.0f) {
+                PF(0x1AC) = 1620.0f;
+                n = 1;
+            }
+        } else if (PF(0x1AC) <= -1440.0f) {
+            PF(0x1AC) = -1440.0f;
+            n = 1;
+        }
+        if (n != 0 && P32(0x44) == 4) {
+            P32(0x44) = 10;
+        }
         break;
+
     case 10:
-        *(u32*)((s32)player + 4) &= ~0x100;
-        *(f32*)((s32)player + 0x1AC) = (f32)revise360(*(f32*)((s32)player + 0x1AC));
-        *(f32*)((s32)player + 0x1B8) = 40.0f;
-        *(f32*)((s32)player + 0x1BC) = 40.0f;
-        *(f32*)((s32)work + 0x40) = *(f32*)((s32)player + 0x90) - 15.0f;
-        *(s32*)((s32)player + 0x44) = 11;
+        PU32(0x04) &= ~0x100U;
+        PF(0x1AC) = (f32)revise360((f64)PF(0x1AC));
+        PF(0x1B8) = 40.0f;
+        PF(0x1BC) = 40.0f;
+        hit = *(void**)((s32)player + 0x1EC);
+        hitObjGetPos(hitGetName(hit), pos);
+        x = (f32)((s32)(100.0f * pos[0] + 0.5f)) / 100.0f;
+        z = (f32)((s32)(100.0f * pos[2] + 0.5f)) / 100.0f;
+        WF(0x40) = PF(0x90) - 15.0f;
+        attr = hitGetAttr(hit);
+        side = 0;
+        if ((attr & 0x4000) != 0) {
+            side = 1;
+        } else if ((attr & 0x8000) != 0) {
+            side = 2;
+        } else if ((attr & 0x10000) != 0) {
+            side = 3;
+        } else if ((attr & 0x20000) != 0) {
+            side = 4;
+        }
+        if (side == 1) {
+            WF(0x3C) = x;
+            WF(0x44) = (z - 50.0f) - 30.303f;
+        } else if (side == 2) {
+            WF(0x3C) = x;
+            WF(0x44) = 30.303f + 50.0f + z;
+        } else if (side == 3) {
+            WF(0x3C) = (x - 50.0f) - 30.303f;
+            WF(0x44) = z;
+        } else if (side == 4) {
+            WF(0x3C) = 30.303f + 50.0f + x;
+            WF(0x44) = z;
+        } else {
+            WF(0x3C) = x;
+            WF(0x44) = z;
+        }
+        d = (f32)distABf((f64)WF(0x3C), (f64)WF(0x44), (f64)PF(0x8C), (f64)PF(0x94));
+        f = 0.1f * d;
+        if (side == 1) {
+            WF(0x44) -= f;
+        } else if (side == 2) {
+            WF(0x44) += f;
+        } else if (side == 3) {
+            WF(0x3C) -= f;
+        } else if (side == 4) {
+            WF(0x3C) += f;
+        }
+        PF(0x180) = (f32)distABf((f64)PF(0x8C), (f64)PF(0x94), (f64)WF(0x3C), (f64)WF(0x44)) / 36.0f;
+        PF(0x1A4) = (f32)angleABf((f64)PF(0x8C), (f64)PF(0x94), (f64)WF(0x3C), (f64)WF(0x44));
+        PF(0x1A0) = PF(0x1A4);
+        WF(0x04) = WF(0x40);
+        PF(0x7C) = 0.0f;
+        PF(0x80) = ((WF(0x40) - PF(0x90)) * 2.0f) / 306.0f;
+        PF(0x84) = 0.0f;
+        PF(0x88) = 0.0f;
+        P32(0x48) = 0x24;
+        P32(0x44) = 0x0B;
         break;
-    case 11:
-        movePos(*(f32*)((s32)player + 0x180), *(f32*)((s32)player + 0x1A4),
-                (f32*)((s32)player + 0x8C), (f32*)((s32)player + 0x94));
-        *(f32*)((s32)player + 0x90) += *(f32*)((s32)player + 0x7C);
+
+    case 0x0B:
+        movePos((f64)PF(0x180), (f64)PF(0x1A4), (f32*)((s32)player + 0x8C), (f32*)((s32)player + 0x94));
+        PF(0x90) += PF(0x7C);
         marioMakeJumpPara();
-        break;
-    case 30:
-        if ((*(u32*)((s32)player + 0xC) & 0x800) == 0) {
-            *(u16*)camGetPtr(4) |= 0x200;
+        speed = PF(0x7C);
+        PF(0x1B8) = 20.0f;
+        hit = marioChkLandon(speed, &groundY);
+        PF(0x1B8) = 40.0f;
+        if (hit != 0) {
+            y = PF(0x90) - groundY;
+            if (y <= 0.0f || y + speed <= 0.0f) {
+                *(void**)((s32)player + 0x1E8) = hit;
+                PF(0x90) = groundY;
+                PU32(0x00) &= ~0x00078000U;
+                d = (f32)distABf((f64)PF(0x8C), (f64)PF(0x94), (f64)PF(0x11C), (f64)PF(0x124));
+                if (d < 0.0f) {
+                    d = -d;
+                }
+                PF(0x128) = d;
+                PU32(0x00) &= ~0x40U;
+                PH16(0x50) = 0;
+                PH16(0x52) = 0;
+                camFollowYOn();
+                PF(0x7C) = 0.0f;
+                PF(0x80) = 0.0f;
+                PF(0x84) = 0.0f;
+                PF(0x88) = 0.0f;
+                PF(0x180) = 0.0f;
+                WF(0x1C) = 0.0f;
+                PU32(0x00) &= ~0x00078000U;
+                PF(0x1AC) = (f32)revise360((f64)PF(0x1AC));
+                PF(0x1B0) = PF(0x1AC);
+                PF(0x1A4) = (f32)toMovedir((f64)PF(0x1AC));
+                PF(0x1A0) = PF(0x1A4);
+                PU32(0x04) &= ~0x100U;
+                PU32(0x04) |= 0x1000;
+                psndSFXOn_3D(0x18F, (void*)((s32)player + 0x8C));
+                eff = effFunemizuEntry(0, 0.0, 0.0, 0.0, 0.0, 0.0);
+                WP(0x24) = eff;
+                if (eff != 0) {
+                    *(s32*)((s32)*(void**)((s32)eff + 0x0C) + 0x48) = P32(0x134);
+                }
+                WF(0x08) = 0.0f;
+                WF(0x0C) = 4.25f;
+                P32(0x44) = 0x32;
+                if ((PU32(0x0C) & 4U) == 0) {
+                    cam = camGetPtr(8);
+                    *(u16*)cam &= ~0x200;
+                }
+            }
         }
-        *(s32*)((s32)player + 0x44) = 31;
-    case 31:
-        *(f32*)((s32)player + 0x9C) -= 0.4f;
-        if (*(f32*)((s32)player + 0x9C) <= -18.0f) {
-            *(s32*)((s32)player + 0x48) = 4;
-            *(s32*)((s32)player + 0x44) = 32;
+        break;
+
+    case 0x1E:
+        if ((PU32(0x0C) & 4U) == 0) {
+            cam = camGetPtr(8);
+            *(u16*)cam |= 0x200;
+        }
+        P32(0x44) = 0x1F;
+        /* fallthrough */
+
+    case 0x1F:
+        PF(0x9C) -= 0.4f;
+        if (PF(0x9C) <= -18.0f) {
+            P32(0x48) = 4;
+            P32(0x44) = 0x20;
+        }
+        eff = WP(0x24);
+        if (eff != 0) {
+            EFF(0x04) = PF(0x8C);
+            EFF(0x08) = PF(0x90);
+            EFF(0x0C) = PF(0x94);
+            EFF(0x10) = 1.6f;
+            EFF(0x14) = PF(0x1AC);
         }
         break;
-    case 32:
-        if (--*(s32*)((s32)player + 0x48) < 1) *(s32*)((s32)player + 0x44) = 40;
+
+    case 0x20:
+        timer = P32(0x48) - 1;
+        P32(0x48) = timer;
+        if (timer > 0) {
+            break;
+        }
+        P32(0x44) = 0x28;
+        /* fallthrough */
+
+    case 0x28:
+        if (work != 0 && ((u32)(W32(0x38) + 0x10000) != 0xFFFFU)) {
+            psndSFXOff(W32(0x38));
+            W32(0x38) = -1;
+        }
+        camFollowYOff();
+        PU32(0x04) &= ~0x1000U;
+        WF(0x04) = WF(0x40);
+        PF(0x180) = 2.8f;
+        d = (f32)distABf((f64)PF(0x8C), (f64)PF(0x94), (f64)WF(0x3C), (f64)WF(0x44));
+        n = (s32)((10.0f * ((2.0f * d) / PF(0x180)) + 0.5f) / 10.0f);
+        PF(0x1A4) = (f32)angleABf((f64)PF(0x8C), (f64)PF(0x94), (f64)WF(0x3C), (f64)WF(0x44));
+        PF(0x1A0) = PF(0x1A4);
+        W32(0x00) = ((PU32(0x0C) >> 9) & 1) + 1;
+        f = 0.5f * (f32)n;
+        y = 80.0f / ((f * f) - f);
+        PF(0x7C) = y * f;
+        PF(0x80) = -y;
+        PF(0x84) = 0.0f;
+        PF(0x88) = 0.0f;
+        P32(0x48) = (s16)n;
+        P32(0x44) = 0x29;
+        PF(0x2C8) = (PF(0x9C) < 0.0f ? -PF(0x9C) : PF(0x9C)) / (f32)(P32(0x48) + 0x58);
+        if (WP(0x24) != 0) {
+            effDelete(WP(0x24));
+            WP(0x24) = 0;
+        }
+        break;
+
+    case 0x29:
+        movePos((f64)PF(0x180), (f64)PF(0x1A4), (f32*)((s32)player + 0x8C), (f32*)((s32)player + 0x94));
+        PF(0x90) += PF(0x7C);
+        marioMakeJumpPara();
+        PF(0x9C) += PF(0x2C8);
+        if (PF(0x9C) > 0.0f) {
+            PF(0x9C) = 0.0f;
+        }
+        timer = P32(0x48) - 1;
+        P32(0x48) = timer;
+        if (timer < 1) {
+            marioChgPaper(str_PM_H_1A_802c42d0);
+            marioChgPose(str_M_Z_1_80420f14);
+            P32(0x2BC) = 0x58;
+            marioSetPaperAnimeLocalTime(P32(0x2BC));
+            WF(0x1C) = 0.0f;
+            PU32(0x04) |= 0x100;
+            marioAdjustMoveDir();
+            P32(0x44) = 0x2B;
+            psndSFXOn_3D(0x192, (void*)((s32)player + 0x8C));
+            evt = evtEntry(sound_evt2, 0, 0);
+            *(s32*)((s32)evt + 0x9C) = (s32)(1024.0f * PF(0x8C)) - 230000000;
+            *(s32*)((s32)evt + 0xA0) = (s32)(1024.0f * PF(0x90)) - 230000000;
+            *(s32*)((s32)evt + 0xA4) = (s32)(1024.0f * PF(0x94)) - 230000000;
+        }
+        break;
+
+    case 0x2B:
+        PF(0x9C) += PF(0x2C8);
+        if (PF(0x9C) > 0.0f) {
+            PF(0x9C) = 0.0f;
+        }
+        marioSetPaperAnimeLocalTime(P32(0x2BC));
+        P32(0x2BC)--;
+        if (P32(0x2BC) > 0x2B) {
+            target = (WU32(0x00) & 1U) ? 20.0f : -20.0f;
+            turn = WF(0x1C);
+            turn += 0.125f * (target - turn);
+            WF(0x1C) = turn;
+            if ((WU32(0x00) & 1U) != 0) {
+                if (WF(0x1C) >= 20.0f) {
+                    WF(0x1C) = 20.0f;
+                }
+            } else if (WF(0x1C) <= -20.0f) {
+                WF(0x1C) = -20.0f;
+            }
+            PF(0x1AC) += WF(0x1C);
+            if (P32(0x2BC) == 0x2C) {
+                P32(0x44) = 0x2C;
+            }
+        }
+        break;
+
+    case 0x2C:
+        PF(0x9C) += PF(0x2C8);
+        if (PF(0x9C) > 0.0f) {
+            PF(0x9C) = 0.0f;
+        }
+        marioSetPaperAnimeLocalTime(P32(0x2BC));
+        timer = P32(0x2BC) - 1;
+        P32(0x2BC) = timer;
+        if (timer < 1) {
+            P32(0x2BC) = 0;
+            P32(0x44) = 0x2D;
+            P32(0x48) = 6;
+            PF(0x1AC) = (f32)revise360((f64)PF(0x1AC));
+            if ((WU32(0x00) & 2U) != 0) {
+                PF(0x1AC) -= 360.0f;
+            }
+        }
+        PF(0x1AC) += WF(0x1C);
+        break;
+
+    case 0x2D:
+        marioSetPaperAnimeLocalTime(P32(0x2BC));
+        target = ((WU32(0x00) & 1U) ? 1.0f : -1.0f) * WF(0x20);
+        turn = WF(0x1C);
+        turn += 0.05f * (target - turn);
+        WF(0x1C) = turn;
+        PF(0x1AC) += turn;
+        WF(0x20) -= 0.005f;
+        if (WF(0x20) <= 10.0f) {
+            WF(0x20) = 10.0f;
+        }
+        timer = P32(0x48) - 1;
+        P32(0x48) = timer;
+        if (timer > 0) {
+            break;
+        }
+        /* fallthrough */
+
+    case 0x2E:
+        marioSetPaperAnimeLocalTime(P32(0x2BC));
+        target = ((WU32(0x00) & 1U) ? 1.0f : -1.0f) * WF(0x20);
+        turn = WF(0x1C);
+        turn += 0.05f * (target - turn);
+        WF(0x1C) = turn;
+        PF(0x1AC) += turn;
+        WF(0x20) -= 0.005f;
+        if (WF(0x20) <= 10.0f) {
+            WF(0x20) = 10.0f;
+        }
+        n = 0;
+        if ((WU32(0x00) & 1U) != 0) {
+            if (PF(0x1AC) >= 360.0f) {
+                PF(0x1AC) = (f32)revise360((f64)PF(0x1AC));
+                n = 1;
+            }
+        } else if (PF(0x1AC) <= -360.0f) {
+            PF(0x1AC) = (f32)revise360((f64)PF(0x1AC));
+            n = 1;
+        }
+        if (n != 0) {
+            PF(0x1AC) = (f32)revise360((f64)PF(0x1AC));
+            if ((WU32(0x00) & 2U) != 0) {
+                PF(0x1AC) -= 360.0f;
+            }
+            marioPaperOff();
+            PU32(0x04) &= ~8U;
+            marioChgPose(str_M_J_1B_802c42c8);
+            P32(0x44) = 0x2F;
+            WF(0x20) = 10.0f;
+        }
+        break;
+
+    case 0x2F:
+        target = (WU32(0x00) & 1U) ? 4.0f : -4.0f;
+        turn = WF(0x1C);
+        turn += 0.05f * (target - turn);
+        WF(0x1C) = turn;
+        PF(0x1AC) += turn;
+        n = 0;
+        if ((WU32(0x00) & 1U) != 0) {
+            if (PF(0x1AC) >= 540.0f) {
+                PF(0x1AC) = 540.0f;
+                n = 1;
+            }
+        } else if (PF(0x1AC) <= -360.0f) {
+            PF(0x1AC) = -360.0f;
+            n = 1;
+        }
+        if (P32(0x44) == 0x2F && n != 0) {
+            PF(0x1AC) = (f32)revise360((f64)PF(0x1AC));
+            PF(0x1B0) = PF(0x1AC);
+            PF(0x1A0) = (f32)toMovedir((f64)PF(0x1AC));
+            PF(0x1A4) = PF(0x1A0);
+            PU32(0x04) &= ~0x100U;
+            PF(0x1B8) = 20.0f;
+            PF(0x1BC) = 37.0f;
+            PF(0x7C) = 0.0f;
+            PF(0x80) = 0.0f;
+            PF(0x84) = 0.0f;
+            PF(0x88) = 0.0f;
+            PF(0x180) = 0.0f;
+            PU32(0x00) &= ~0x00078000U;
+            PF(0x9C) = 0.0f;
+            marioChgMot(10);
+            marioSetFallPara();
+            allPartyRideOff();
+            N_marioSetBottomlessRespawnPosOnBeroEntry((f64)PF(0x8C), (f64)PF(0x90), (f64)PF(0x94));
+            N_marioReloadMapOnBottomlessOff();
+            if (work != 0) {
+                __memFree(0, work);
+                *(void**)((s32)player + 0x294) = 0;
+            }
+            if ((PU32(0x0C) & 4U) == 0) {
+                cam = camGetPtr(8);
+                *(u16*)cam &= ~0x200;
+            }
+        }
+        break;
+
+    case 0x32:
+        P32(0x44) = 0x34;
+        /* fallthrough */
+
+    case 0x34:
+        if (*(void**)((s32)player + 0x1E8) != 0) {
+            WF(0x08) = (f32)revise360((f64)(WF(0x08) - WF(0x0C)));
+            PF(0x9C) = 3.0f * (f32)sin((3.1416f * WF(0x08)) / 180.0f) - 13.0f;
+        }
+        if ((PU32(0x00) & 0x20U) == 0) {
+            if (*(void**)((s32)player + 0x1E8) == 0) {
+                P8(0x252) = 0;
+                P8(0x253) = 0;
+            }
+            shipMove();
+            if ((PU32(0x00) & 0x20000U) == 0) {
+                marioClearJumpPara();
+            } else {
+                marioMakeJumpPara();
+                if (PF(0x7C) <= -7.0f) {
+                    PF(0x7C) = -7.0f;
+                }
+                speed = PF(0x7C);
+                PF(0x1B8) = 20.0f;
+                hit = marioChkLandon(speed, &groundY);
+                PF(0x1B8) = 40.0f;
+                if (hit != 0) {
+                    y = PF(0x90) - groundY;
+                    if (y <= 0.0f || y + speed <= 0.0f) {
+                        *(void**)((s32)player + 0x1E8) = hit;
+                        PF(0x90) = groundY;
+                        PU32(0x00) &= ~0x00078000U;
+                        d = (f32)distABf((f64)PF(0x8C), (f64)PF(0x94), (f64)PF(0x11C), (f64)PF(0x124));
+                        PF(0x128) = d < 0.0f ? -d : d;
+                        PU32(0x00) &= ~0x40U;
+                        PH16(0x50) = 0;
+                        PH16(0x52) = 0;
+                        camFollowYOn();
+                    } else {
+                        PF(0x90) += PF(0x7C);
+                    }
+                } else {
+                    PF(0x90) += PF(0x7C);
+                }
+            }
+            if (gp != 0 && strcmp((char*)((s32)gp + 0x12C), str_dou_03_802c42d8) == 0) {
+                if (PF(0x90) <= 260.0f && PF(0x90) >= 50.0f) {
+                    if ((f32)((s32)(10.0f * PF(0x218) + 0.5f)) / 10.0f != 0.0f) {
+                        PF(0x90) += 2.0f * (f32)sin((3.1416f * PF(0x218)) / 180.0f);
+                        PF(0x94) += 2.0f * -(f32)cos((3.1416f * PF(0x218)) / 180.0f);
+                    }
+                }
+            }
+            *(void**)((s32)player + 0x1E4) = 0;
+            *(void**)((s32)player + 0x1E0) = 0;
+            *(void**)((s32)player + 0x1F0) = 0;
+            *(void**)((s32)player + 0x1F4) = 0;
+            marioCheckWallShip((f64)PF(0x180), (f64)PF(0x1A4));
+            if (PF(0x180) < 0.5f) {
+                PF(0x180) = 0.0f;
+                P32(0x44) = 0x32;
+            }
+            f = PF(0x180);
+            if (f == 0.0f) {
+                target = (WF(0x08) > 180.0f) ? 0.6f : 0.3f;
+                WF(0x10) += 0.1f * (target - WF(0x10));
+                f = WF(0x10);
+            }
+            eff = WP(0x24);
+            if (eff != 0) {
+                EFF(0x04) = PF(0x8C);
+                EFF(0x08) = PF(0x90);
+                EFF(0x0C) = PF(0x94);
+                EFF(0x10) = f;
+                EFF(0x14) = PF(0x1AC);
+            }
+            if ((PU16(0x24C) & 0x0A00) != 0) {
+                if (checkHarbor((f32*)((s32)work + 0x3C)) != 0) {
+                    P32(0x44) = 0x1E;
+                }
+            }
+        } else {
+            f = PF(0x180);
+            if (f == 0.0f) {
+                target = (WF(0x08) > 180.0f) ? 0.6f : 0.3f;
+                WF(0x10) += 0.1f * (target - WF(0x10));
+                f = WF(0x10);
+            }
+            eff = WP(0x24);
+            if (eff != 0) {
+                EFF(0x04) = PF(0x8C);
+                EFF(0x08) = PF(0x90);
+                EFF(0x0C) = PF(0x94);
+                EFF(0x10) = f;
+                EFF(0x14) = PF(0x1AC);
+            }
+        }
         break;
     }
-    return 0;
+
+#undef P8
+#undef PH16
+#undef PU16
+#undef P32
+#undef PU32
+#undef PF
+#undef WP
+#undef W32
+#undef WU32
+#undef WF
+#undef EFF
 }
 
 void shipMove(void) {

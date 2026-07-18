@@ -254,81 +254,68 @@ void* effWhirlwindN64Entry(f32 scale, s32 type, void* follow, s32 lifetime) {
 }
 
 void effWhirlwindMain(int* entry) {
-    extern void effDelete(void* eff);
-    extern f32 dispCalcZ(void* pos);
-    extern void dispEntry(s32 camId, s32 renderMode, void* callback, void* param, f32 order);
+    typedef struct VecLocal { f32 x, y, z; } VecLocal;
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(void*);
+    extern void dispEntry(s32,s32,void*,void*,f32);
     extern void effWhirlwindDisp(void);
-    extern f32 float_0p05_80424be4;
-    extern f32 float_0p3_80424be8;
-    extern f32 float_0p8_80424bec;
-    extern f32 float_0p1_80424bf0;
-    extern f32 float_0p2_80424bf4;
-    extern f32 float_40_80424bf8;
-    extern f32 float_neg40_80424bfc;
-    extern f32 float_10_80424c00;
-    extern f32 float_2_80424be0;
-
-    s32 pos[3];
+    extern VecLocal vec3_802faa78;
+    extern f32 float_0p05_80424be4, float_0p3_80424be8, float_0p8_80424bec;
+    extern f32 float_0p1_80424bf0, float_0p2_80424bf4, float_40_80424bf8;
+    extern f32 float_neg40_80424bfc, float_10_80424c00, float_2_80424be0;
+    VecLocal pos;
+    VecLocal drawPos;
     s32* work;
+    u32 timer;
     s32 type;
-    s32 timer;
-    s32 i;
+    u32 i;
 
     work = (s32*)entry[3];
-    pos[0] = work[2];
-    pos[1] = work[3];
-    pos[2] = work[4];
-
+    pos = vec3_802faa78;
+    pos.x = *(f32*)&work[2]; pos.y = *(f32*)&work[3]; pos.z = *(f32*)&work[4];
+    drawPos = pos;
     work[9]--;
     work[10]++;
     timer = work[9];
-    if (timer < 0) {
+    if ((s32)timer < 0) {
         effDelete(entry);
-        return;
-    }
-
-    type = work[0];
-    if (type == 8) {
-        if (timer > 5) {
-            work[7] = (s32)(float_0p05_80424be4 * (f32)(0xFF - work[7]) + (f32)work[7]);
-        }
-        work[5] = (s32)(((f32)work[6] * (f32)timer) / (f32)work[8]);
-        if (timer < 10) {
-            work[7] = timer * 0x19;
-        }
     } else {
-        if (timer > 5) {
-            work[7] = (s32)(float_0p3_80424be8 * (f32)(100 - work[7]) + (f32)work[7]);
-        }
-        if (timer < 10) {
-            work[7] = (s32)(float_0p8_80424bec * (f32)work[7]);
-            work[5] = (s32)(float_0p1_80424bf0 * ((float_2_80424be0 * (f32)work[6]) - (f32)work[5]) + (f32)work[5]);
-        }
-    }
-
-    if (work[1] != 0) {
-        work[2] = *(s32*)(work[1] + 0x8C);
-        work[3] = *(s32*)(work[1] + 0x90);
-        work[4] = *(s32*)(work[1] + 0x94);
-    }
-
-    for (i = 1; i < entry[2]; i++, work += 0x12) {
+        type = work[0];
         if (type == 8) {
-            if ((i & 1) == 0) {
-                work[0x21] = (s32)(float_0p2_80424bf4 * (float_neg40_80424bfc - (f32)work[0x21]) + (f32)work[0x21]);
-            } else {
-                work[0x21] = (s32)(float_0p2_80424bf4 * (float_40_80424bf8 - (f32)work[0x21]) + (f32)work[0x21]);
+            if ((s32)timer > 5) {
+                work[7] = (s32)(float_0p05_80424be4 * (f32)(255 - work[7]) + (f32)work[7]);
             }
-            work[0x1D] = (s32)((f32)work[0x1D] + (f32)work[0x20]);
-            work[0x1E] = (s32)((f32)work[0x1E] + (f32)work[0x21]);
-            work[0x1F] = (s32)((f32)work[0x1F] + (f32)work[0x22]);
-        } else if (timer < 10) {
-            work[0x1E] = (s32)((f32)work[0x1E] + ((f32)work[0x21] * (f32)timer) / float_10_80424c00);
+            work[5] = (s32)(((f32)work[6] * (f32)timer) / (f32)work[8]);
+            if ((s32)timer < 10) work[7] = timer * 25;
         } else {
-            work[0x1E] = (s32)((f32)work[0x1E] + (f32)work[0x21]);
+            if ((s32)timer > 5) {
+                work[7] = (s32)(float_0p3_80424be8 * (f32)(100 - work[7]) + (f32)work[7]);
+            }
+            if ((s32)timer < 10) {
+                work[7] = (s32)((f32)work[7] * float_0p8_80424bec);
+                work[5] = (s32)(float_0p1_80424bf0 * (float_2_80424be0 * (f32)work[6] - (f32)work[5]) + (f32)work[5]);
+            }
         }
+        if (work[1] != 0) {
+            work[2] = *(s32*)(work[1] + 0x8C);
+            work[3] = *(s32*)(work[1] + 0x90);
+            work[4] = *(s32*)(work[1] + 0x94);
+        }
+        for (i = 1; (s32)i < entry[2]; i++) {
+            if (type == 8) {
+                if ((i & 1) == 0) work[0x21] = (s32)(float_0p2_80424bf4 * (float_neg40_80424bfc - (f32)work[0x21]) + (f32)work[0x21]);
+                else work[0x21] = (s32)(float_0p2_80424bf4 * (float_40_80424bf8 - (f32)work[0x21]) + (f32)work[0x21]);
+                work[0x1D] = (s32)((f32)work[0x1D] + (f32)work[0x20]);
+                work[0x1E] = (s32)((f32)work[0x1E] + (f32)work[0x21]);
+                work[0x1F] = (s32)((f32)work[0x1F] + (f32)work[0x22]);
+            } else if ((s32)timer < 10) {
+                work[0x1E] = (s32)((f32)work[0x1E] + ((f32)work[0x21] * (f32)timer) / float_10_80424c00);
+            } else {
+                work[0x1E] = (s32)((f32)work[0x1E] + (f32)work[0x21]);
+            }
+            work += 0x12;
+        }
+        dispEntry(3, 2, effWhirlwindDisp, entry, dispCalcZ(&drawPos));
     }
-
-    dispEntry(3, 2, effWhirlwindDisp, entry, dispCalcZ(pos));
 }
 

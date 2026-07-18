@@ -12,6 +12,15 @@ u8 effShockDisp(s32 cameraId, s32 effectAddress) {
     extern void GXSetNumTevStages(s32);
     extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
     extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXLoadTexMtxImm(Mtx, s32, s32);
+    extern void effSetVtxDescN64(void*);
+    extern void tri2(s32, s32, s32, s32, s32, s32, s32, s32);
     extern void PSMTXTrans(Mtx, f32, f32, f32);
     extern void PSMTXRotRad(Mtx, f32, char);
     extern void PSMTXScale(Mtx, f32, f32, f32);
@@ -24,28 +33,67 @@ u8 effShockDisp(s32 cameraId, s32 effectAddress) {
     char* camera = camGetPtr(cameraId);
     GXTexObj tex;
     Mtx trans, rot, scale, model;
-    s32 pass;
+    u32 color;
+    s32 type = *(s32*)work;
 
     PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
     PSMTXRotRad(rot, -0.017453292f * *(f32*)((char*)camGetPtr(4) + 0x114), 'y');
     PSMTXConcat(trans, rot, model);
     PSMTXConcat(camera + 0x118, model, model);
+    color = (*(u8*)(work + 0x30) << 24) | (*(u8*)(work + 0x34) << 16) |
+            (*(u8*)(work + 0x38) << 8) | *(u8*)(work + 0x18);
+    GXSetTevColor(1, &color);
+    color = (*(u8*)(work + 0x3C) << 24) | (*(u8*)(work + 0x40) << 16) |
+            (*(u8*)(work + 0x44) << 8) | 0xFF;
+    GXSetTevColor(2, &color);
     GXSetCullMode(0);
-    GXSetNumChans(1);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-    effGetTexObj(0x6B, &tex);
-    GXLoadTexObj(&tex, 0);
-    for (pass = 0; pass < 2; pass++) {
+    if ((u32)(type - 1) < 2 || type == 3) {
         PSMTXTrans(trans, 0.0f, *(f32*)(work + 0x2C), 0.0f);
-        PSMTXScale(scale, 0.25f * *(f32*)(work + 0x24), *(f32*)(work + 0x28), 1.0f);
+        PSMTXScale(scale, 0.25f * *(f32*)(work + 0x24),
+                   0.25f * *(f32*)(work + 0x24), 1.0f);
         PSMTXConcat(trans, scale, trans);
         PSMTXConcat(model, trans, trans);
         GXLoadPosMtxImm(trans, 0);
         GXSetCurrentMtx(0);
+        GXSetNumChans(1);
+        GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+        PSMTXScale(scale, 0.03125f, 0.03125f, 0.0f);
+        GXLoadTexMtxImm(scale, 0x1E, 1);
+        effGetTexObj(0x85, &tex);
+        GXLoadTexObj(&tex, 0);
         GXSetNumTevStages(1);
         GXSetTevOrder(0, 0, 0, 4);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 2, 8, 10, 15);
+        GXSetTevAlphaIn(0, 7, 5, 4, 7);
+        effSetVtxDescN64((void*)0x803A8460);
         GXBegin(0x90, 0, 0x90);
+        tri2(0x30,0x31,0x32,0,0x30,0x32,0x33,0);
+        tri2(0x31,0x34,0x35,0,0x31,0x35,0x32,0);
+        tri2(0x34,0x36,0x37,0,0x34,0x37,0x35,0);
+        tri2(0x38,0x30,0x33,0,0x38,0x33,0x39,0);
+        tri2(0x3A,0x38,0x39,0,0x3A,0x39,0x3B,0);
+        tri2(0x3C,0x3A,0x3B,0,0x3C,0x3B,0x3D,0);
+        tri2(0x3E,0x3C,0x3D,0,0x3E,0x3D,0x3F,0);
+        tri2(0x36,0x40,0x41,0,0x36,0x41,0x37,0);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(0, 0, 0, 4);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 2, 8, 10, 15);
+        GXSetTevAlphaIn(0, 7, 7, 7, 1);
+        GXBegin(0x90, 0, 0x90);
+        tri2(0,1,2,0,0,2,3,0);
+        tri2(1,4,5,0,1,5,2,0);
+        tri2(4,6,7,0,4,7,5,0);
+        tri2(8,0,3,0,8,3,9,0);
+        tri2(10,8,9,0,10,9,11,0);
+        tri2(12,10,11,0,12,11,13,0);
+        tri2(14,12,13,0,14,13,15,0);
+        tri2(6,16,17,0,6,17,7,0);
     }
     return 0;
 }

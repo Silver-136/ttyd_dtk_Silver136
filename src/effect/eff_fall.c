@@ -396,29 +396,110 @@ void effFallDisp(s32 cameraId, void* effect) {
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXConcat(void*, void*, void*);
     extern void GXLoadPosMtxImm(void*, s32);
+    extern void* camGetPtr(s32);
+    extern void PSMTXRotRad(void*, s32, f32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevOp(s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetChanMatColor(s32, void*);
+    extern void GXLoadTexMtxImm(void*, s32, s32);
     u8* base = *(u8**)((u8*)effect + 0xC);
     s32 count = *(s32*)((u8*)effect + 8);
     s32 type = *(s32*)base;
     u8 tex[64];
-    f32 trans[3][4], scale[3][4], model[3][4];
+    f32 trans[3][4];
+    f32 scale[3][4];
+    f32 model[3][4];
+    f32 baseMtx[3][4];
+    f32 rot[3][4];
+    f32 texMtx[3][4];
     s32 i;
+
     mapSetMaterialFog();
+    PSMTXTrans(trans, *(f32*)(base + 4), *(f32*)(base + 8), *(f32*)(base + 0xC));
+    PSMTXRotRad(rot, 0x79,
+                0.017453292f * -*(f32*)((u8*)camGetPtr(cameraId) + 0x114));
+    PSMTXConcat(trans, rot, baseMtx);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevOp(0, 0);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
     effGetTexObj(tex, type == 2 ? 0x33 : 0x32, 0);
     GXLoadTexObj(tex, 0);
     for (i = 1; i < count; i++) {
         u8* p = base + i * 0x68;
         u32 color;
-        if (*(s32*)(p + 0x38) < 0) continue;
-        PSMTXTrans(trans, *(f32*)(p + 8), *(f32*)(p + 0xC), *(f32*)(p + 0x10));
-        PSMTXScale(scale, *(f32*)(p + 0x28), *(f32*)(p + 0x28), *(f32*)(p + 0x28));
+        if (*(s32*)(p + 0x38) < 0) {
+            continue;
+        }
+        PSMTXTrans(trans, *(f32*)(p + 4), *(f32*)(p + 8), *(f32*)(p + 0xC));
+        if (type < 2) {
+            PSMTXRotRad(rot, 0x79, 0.017453292f * *(f32*)(p + 0x18));
+            PSMTXConcat(trans, rot, trans);
+            PSMTXTrans(rot, 0.0f, 10.66675f * *(f32*)(p + 0x2C), 0.0f);
+            PSMTXConcat(trans, rot, trans);
+            PSMTXRotRad(rot, 0x7A, 0.017453292f * *(f32*)(p + 0x48));
+            PSMTXConcat(trans, rot, trans);
+            PSMTXTrans(rot, 0.0f, -10.66675f * *(f32*)(p + 0x2C), 0.0f);
+            PSMTXConcat(trans, rot, trans);
+        }
+        PSMTXScale(scale, *(f32*)(p + 0x2C), *(f32*)(p + 0x2C), *(f32*)(p + 0x2C));
         PSMTXConcat(trans, scale, model);
+        PSMTXConcat(baseMtx, model, model);
+        PSMTXConcat((u8*)camGetPtr(cameraId) + 0x118, model, model);
         GXLoadPosMtxImm(model, 0);
-        color = *(u32*)(p + 0x34);
+        GXSetCurrentMtx(0);
+        color = *(u32*)(p + 0x3C);
+        GXSetChanMatColor(4, &color);
+        if (type < 2) {
+            PSMTXScale(texMtx, 1.0f, 0.33333f, 1.0f);
+            PSMTXTrans(rot, 0.0f, (f32)*(s32*)(p + 0x28), 0.0f);
+            PSMTXConcat(texMtx, rot, texMtx);
+            GXLoadTexMtxImm(texMtx, 0x1E, 1);
+        }
         GXBegin(0x80, 0, 4);
-        *(volatile f32*)0xCC008000=-1.0f; *(volatile f32*)0xCC008000=1.0f; *(volatile f32*)0xCC008000=0.0f; *(volatile u32*)0xCC008000=color;
-        *(volatile f32*)0xCC008000=1.0f; *(volatile f32*)0xCC008000=1.0f; *(volatile f32*)0xCC008000=0.0f; *(volatile u32*)0xCC008000=color;
-        *(volatile f32*)0xCC008000=1.0f; *(volatile f32*)0xCC008000=-1.0f; *(volatile f32*)0xCC008000=0.0f; *(volatile u32*)0xCC008000=color;
-        *(volatile f32*)0xCC008000=-1.0f; *(volatile f32*)0xCC008000=-1.0f; *(volatile f32*)0xCC008000=0.0f; *(volatile u32*)0xCC008000=color;
+        *(volatile f32*)0xCC008000 = -16.0f;
+        *(volatile f32*)0xCC008000 = 21.3335f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 16.0f;
+        *(volatile f32*)0xCC008000 = 21.3335f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 1.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 16.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 1.0f;
+        *(volatile f32*)0xCC008000 = 1.0f;
+        *(volatile f32*)0xCC008000 = -16.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 1.0f;
     }
 }
 
@@ -429,6 +510,11 @@ void effFallMain(void* effect) {
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effFallDisp(void);
     extern void psndSFXOn(s32);
+    extern f64 distABf(f64, f64, f64, f64);
+    extern f64 angleABf(f64, f64, f64, f64);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern void effWaterDamageN64Entry(f64, f64, f64, f64, s32, s32);
     u8* base = *(u8**)((u8*)effect + 0xC);
     s32 count = *(s32*)((u8*)effect + 8);
     s32 type = *(s32*)base;
@@ -439,46 +525,129 @@ void effFallMain(void* effect) {
     pos[0] = *(f32*)(base + 4);
     pos[1] = *(f32*)(base + 8);
     pos[2] = *(f32*)(base + 0xC);
-
     for (i = 1; i < count; i++) {
         u8* p = base + i * 0x68;
         s32* state = (s32*)(p + 0x38);
         s32* timer = (s32*)(p + 0x24);
-        f32* y = (f32*)(p + 0x0C);
-        f32* vy = (f32*)(p + 0x30);
-        f32* gravity = (f32*)(p + 0x2C);
-        s32* alpha = (s32*)(p + 0x34);
-        if (*state < 0) continue;
+        f32* y = (f32*)(p + 8);
+        f32* vy = (f32*)(p + 0x34);
+        f32* gravity = (f32*)(p + 0x30);
+        s32* alpha = (s32*)(p + 0x3C);
+        if (*state < 0) {
+            continue;
+        }
         alive++;
+        if (type == 3) {
+            switch (*state) {
+            case 0:
+                *y += *vy;
+                *vy -= *gravity;
+                if (*y < *(f32*)(base + 8)) {
+                    *y = *(f32*)(base + 8);
+                    *timer = 0;
+                    (*state)++;
+                }
+                break;
+            case 1:
+                if ((*timer % 10) == 0) {
+                    effWaterDamageN64Entry(pos[0], pos[1], pos[2], 1.0, 4, 20);
+                }
+                (*timer)++;
+                if (*(s32*)(base + 0x20) < *timer) {
+                    (*state)++;
+                }
+                break;
+            case 2:
+            case 3:
+                *alpha = (s32)((f32)*alpha * 0.9f);
+                *(f32*)(p + 0x2C) *= 0.9f;
+                if (*(f32*)(p + 0x2C) < 0.01f) {
+                    effDelete(effect);
+                    return;
+                }
+                break;
+            }
+            *(f32*)(p + 0x5C) -= 0.2f;
+        } else {
         switch (*state) {
             case 0:
-                if (--*timer <= 0) { *timer = 0; *state = 1; }
+                if (*timer != 0) {
+                    (*timer)--;
+                }
+                if (*timer == 0) {
+                    (*state)++;
+                    if (type == 1 || i == 1) {
+                        psndSFXOn(0x8CF);
+                    }
+                }
                 break;
             case 1:
                 *y += *vy;
                 *vy -= *gravity;
-                if (*y <= *(f32*)(base + 0x14)) {
-                    *y = *(f32*)(base + 0x14);
-                    *vy = -*vy * 0.4f;
-                    *state = 2;
-                    if (type < 2) psndSFXOn(0x8CF);
+                if (distABf(*(f32*)(p + 4), *(f32*)(p + 0xC), 0.0, 0.0) >=
+                    (f64)(0.5f * *(f32*)(base + 0x10))) {
+                    if (*y > *(f32*)(base + 8)) {
+                        break;
+                    }
+                    *y = *(f32*)(base + 8);
+                } else {
+                    if (*y > *(f32*)(base + 8) + *(f32*)(base + 0x14)) {
+                        break;
+                    }
+                    *y = *(f32*)(base + 8) + *(f32*)(base + 0x14);
                 }
+                    *vy *= -0.3f;
+                    (*state)++;
                 break;
             case 2:
                 *y += *vy;
                 *vy -= *gravity;
-                if (*vy < 0.0f && *y <= *(f32*)(base + 0x14)) {
-                    *y = *(f32*)(base + 0x14);
-                    *state = 3;
+                {
+                    f32 angle = (f32)angleABf(0.0, 0.0,
+                                              *(f32*)(p + 4), *(f32*)(p + 0xC));
+                    if (i == 1) {
+                        angle = 6.2832f * *(f32*)(base + 0x18);
+                    } else {
+                        angle = 6.2832f * angle / 360.0f;
+                    }
+                    *(f32*)(p + 4) += 0.5f * (f32)sin((f64)angle);
+                    *(f32*)(p + 0xC) -= 0.5f * (f32)cos((f64)angle);
+                }
+                if (*y <= *(f32*)(base + 8)) {
+                    *y = *(f32*)(base + 8);
+                    *timer = 0;
+                    (*state)++;
                 }
                 break;
             case 3:
-                *alpha -= 8;
-                if (*alpha <= 0) { *alpha = 0; *state = -1; alive--; }
+                (*timer)++;
+                if (*timer > 30) {
+                    (*state)++;
+                }
+                break;
+            case 4:
+                *alpha -= 10;
+                if (*alpha < 0) {
+                    *alpha = 0;
+                    (*state)++;
+                }
+                break;
+            case 5:
+                alive--;
                 break;
         }
+        }
+        if (type < 2) {
+            if (*(s32*)(p + 0x28) > 2) {
+                *(s32*)(p + 0x28) = 0;
+            }
+            *(f32*)(p + 0x48) = 35.0f *
+                (f32)sin((f64)(0.5f * (f32)(*timer + i)));
+        }
     }
-    if (alive == 0) {
+
+    if (alive == 0 || (*(u32*)effect & 4)) {
+        *(u32*)effect &= ~4;
         effDelete(effect);
     } else {
         dispEntry(4, 1, effFallDisp, effect, dispCalcZ(pos));

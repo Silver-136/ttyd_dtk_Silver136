@@ -263,41 +263,116 @@ void disp_3D(void) {
     extern void* g_BattleWork;
     extern void* BattleGetMarioPtr(void*);
     extern void* BattleGetPartyPtr(void*);
-    extern void BtlUnit_GetHomePos(void*,f32*,f32*,f32*);
-    extern void PSMTXTrans(void*,f32,f32,f32);
-    extern void iconNumberDispGx3D(void*,s32,s32,void*);
-    u8* work=get_ptr();
-    void* mario=BattleGetMarioPtr(g_BattleWork);
-    void* party=BattleGetPartyPtr(g_BattleWork);
-    f32 mx,my,mz,px,py,pz;
+    extern void BtlUnit_GetHomePos(void*, f32*, f32*, f32*);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXTransApply(void*, void*, f32, f32, f32);
+    extern void iconNumberDispGx3D(void*, s32, s32, void*);
+    extern void iconDispGxCol(void*, u16, u16, void*);
+    u8* work = get_ptr();
+    void* mario = BattleGetMarioPtr(g_BattleWork);
+    void* party = BattleGetPartyPtr(g_BattleWork);
+    f32 mx, my, mz, px, py, pz;
     f32 mtx[3][4];
-    u32 color=0xFFFFFFFF;
+    u32 color;
     s32 frame;
-    BtlUnit_GetHomePos(mario,&mx,&my,&mz);
-    BtlUnit_GetHomePos(party,&px,&py,&pz);
-    if(*(s32*)(work+4)!=0) {
-        u8* effect=*(u8**)(work+0x34);
-        my+=60.0f;
-        *(f32*)(effect+0x0C+8)=mx;
-        *(f32*)(effect+0x0C+0xC)=my-10.0f;
-        *(f32*)(effect+0x0C+0x10)=mz+5.0f;
-        PSMTXTrans(mtx,mx,my,mz+8.0f);
-        frame=*(s32*)(work+0x28)%12;
-        if(frame>=0&&frame<6) iconNumberDispGx3D(mtx,(s32)*(f32*)(work+0x1C),0,&color);
-        if(*(s32*)(work+0x50)==-1) {
-            effect=*(u8**)(work+0x3C);
-            my+=30.0f;
-            *(f32*)(effect+0x14)=mx; *(f32*)(effect+0x18)=my-10.0f; *(f32*)(effect+0x1C)=mz+5.0f;
-            PSMTXTrans(mtx,mx,my,mz+8.0f);
-            frame=*(s32*)(work+0x30)%12;
-            if(frame>=0&&frame<6) iconNumberDispGx3D(mtx,(s32)*(f32*)(work+0x24),0,&color);
-        } else {
-            effect=*(u8**)(work+0x38);
-            py+=60.0f;
-            *(f32*)(effect+0x14)=px; *(f32*)(effect+0x18)=py-10.0f; *(f32*)(effect+0x1C)=pz+5.0f;
-            PSMTXTrans(mtx,px,py,pz+8.0f);
-            frame=*(s32*)(work+0x2C)%12;
-            if(frame>=0&&frame<6) iconNumberDispGx3D(mtx,(s32)*(f32*)(work+0x20),0,&color);
+    f32 x;
+    s32 i;
+
+    (void)(3.141592f * *(f32*)(work + 0x6C) / 180.0f);
+    if (*(s32*)(work + 4) == 0) {
+        return;
+    }
+    BtlUnit_GetHomePos(mario, &mx, &my, &mz);
+    my += 60.0f;
+    {
+        u8* data = *(u8**)(*(u8**)(work + 0x34) + 0xC);
+        *(f32*)(data + 8) = mx;
+        *(f32*)(data + 0xC) = my - 10.0f;
+        *(f32*)(data + 0x10) = mz + 5.0f;
+    }
+    x = *(f32*)(work + 0x1C) < 10.0f ? mx : mx + 6.0f;
+    PSMTXTrans(mtx, x, my, mz + 8.0f);
+    frame = *(s32*)(work + 0x28) % 12;
+    if (frame >= 0 && frame < 6) {
+        color = 0xFFFFFFFF;
+        iconNumberDispGx3D(mtx, (s32)*(f32*)(work + 0x1C), 0, &color);
+    }
+    if (*(s32*)(work + 0x50) == -1) {
+        u8* data;
+        BtlUnit_GetHomePos(mario, &mx, &my, &mz);
+        my += 90.0f;
+        data = *(u8**)(*(u8**)(work + 0x3C) + 0xC);
+        *(f32*)(data + 8) = mx;
+        *(f32*)(data + 0xC) = my - 10.0f;
+        *(f32*)(data + 0x10) = mz + 5.0f;
+        x = *(f32*)(work + 0x24) < 10.0f ? mx : mx + 6.0f;
+        PSMTXTrans(mtx, x, my, mz + 8.0f);
+        frame = *(s32*)(work + 0x30) % 12;
+        if (frame >= 0 && frame < 6) {
+            color = 0xFFFFFFFF;
+            iconNumberDispGx3D(mtx, (s32)*(f32*)(work + 0x24), 0, &color);
+        }
+    } else {
+        u8* data;
+        BtlUnit_GetHomePos(party, &px, &py, &pz);
+        py += 60.0f;
+        data = *(u8**)(*(u8**)(work + 0x38) + 0xC);
+        *(f32*)(data + 8) = px;
+        *(f32*)(data + 0xC) = py - 10.0f;
+        *(f32*)(data + 0x10) = pz + 5.0f;
+        x = *(f32*)(work + 0x20) < 10.0f ? px : px + 6.0f;
+        PSMTXTrans(mtx, x, py, pz + 8.0f);
+        frame = *(s32*)(work + 0x2C) % 12;
+        if (frame >= 0 && frame < 6) {
+            color = 0xFFFFFFFF;
+            iconNumberDispGx3D(mtx, (s32)*(f32*)(work + 0x20), 0, &color);
+        }
+        BtlUnit_GetHomePos(mario, &mx, &my, &mz);
+        BtlUnit_GetHomePos(party, &px, &py, &pz);
+        mx = 0.5f * (mx + px);
+        my += 90.0f;
+        data = *(u8**)(*(u8**)(work + 0x3C) + 0xC);
+        *(f32*)(data + 8) = mx;
+        *(f32*)(data + 0xC) = my - 10.0f;
+        *(f32*)(data + 0x10) = mz + 5.0f;
+        x = *(f32*)(work + 0x24) < 10.0f ? mx : mx + 6.0f;
+        PSMTXTrans(mtx, x, my, mz + 8.0f);
+        frame = *(s32*)(work + 0x30) % 12;
+        if (frame >= 0 && frame < 6) {
+            color = 0xFFFFFFFF;
+            iconNumberDispGx3D(mtx, (s32)*(f32*)(work + 0x24), 0, &color);
+        }
+    }
+
+    for (i = 0; i < 10; i++) {
+        s32* entry = (s32*)(work + 0x358 + i * 0x2C);
+        if (entry[0] == 2) {
+            s32 kind = entry[2];
+            u16 icon = 0;
+            u16 flags = 0;
+            f32 scale = 1.25f;
+            if (kind == 0) {
+                icon = 0x1AB;
+            } else if (kind == 1) {
+                icon = 0x1AB;
+                if (entry[1] % 12 >= 0 && entry[1] % 12 < 6) {
+                    flags = 0x20;
+                    scale = 2.0f;
+                }
+            } else if (kind == 5) {
+                icon = 0x1B9;
+                if (entry[1] % 12 >= 0 && entry[1] % 12 < 6) {
+                    flags = 0x20;
+                    scale = 2.0f;
+                }
+            } else if (kind == 6) {
+                icon = 0x14B;
+            }
+            PSMTXScale(mtx, scale, scale, 1.0f);
+            PSMTXTransApply(mtx, mtx, (f32)entry[3], (f32)entry[4], (f32)entry[5]);
+            color = 0xFFFFFFFF;
+            iconDispGxCol(mtx, flags, icon, &color);
         }
     }
 }

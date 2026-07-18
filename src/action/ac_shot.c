@@ -73,58 +73,112 @@ s32 battleAcMain_Shot(void* battleWork) {
     extern s32 BattlePadCheckNow(u32);
     extern s32 BattlePadCheckTrigger(u32);
     extern s32 irand(s32);
+    extern s32 psndSFXOn(const char*);
+    extern void psndSFXOff(s32);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void _disp_target_mark(s32, void*);
     extern void _disp_target_mark_afterimage(s32, void*);
-    u8* ac = (u8*)battleWork + 0x1F20;
-    s32 state = *(s32*)(ac + 0x20);
-    s32 timer = *(s32*)(ac + 0x24);
-    s32 result = 0;
+    extern void* BattleGetUnitPtr(void* battle, s32 index);
+    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+    extern s32 BtlUnit_GetHeight(void* unit);
+    extern const char str_SFX_AC_CURSOR_MOVE1_802f9bb0[];
+    u8* bw = battleWork;
+    u8* disp = bw + 0x1F20;
+    s32 state = *(s32*)(bw + 0x1C9C);
+    s32 done = 0;
+    void* unit;
 
     switch (state) {
         case 0:
-            *(s32*)(ac + 0x00) = irand(3) - 1;
-            *(s32*)(ac + 0x04) = irand(7) + 3;
-            *(f32*)(ac + 0x14) = -200.0f;
-            *(f32*)(ac + 0x18) = 0.0f;
-            *(s32*)(ac + 0x24) = 0;
-            *(s32*)(ac + 0x20) = 1;
+            _ac_disp_init(battleWork);
+            *(s32*)(bw + 0x1CB8) = 1;
+            *(f32*)(disp + 0x0C) = (f32)*(s32*)(bw + 0x1CD8);
+            *(f32*)(disp + 0x10) = (f32)*(s32*)(bw + 0x1CDC);
+            *(f32*)(disp + 0x14) = (f32)*(s32*)(bw + 0x1CE0);
+            *(f32*)(disp + 0x18) = (f32)*(s32*)(bw + 0x1CE4);
+            *(f32*)(disp + 0x24) =
+                (f32)irand((s32)(*(f32*)(disp + 0x18) - *(f32*)(disp + 0x14))) +
+                *(f32*)(disp + 0x14);
+            *(f32*)(disp + 0x28) = (f32)*(s32*)(bw + 0x1CE8) * 0.1f;
+            *(s32*)(disp + 0x08) = 0;
+            unit = BattleGetUnitPtr(battleWork, *(s32*)(bw + 0x1CD0));
+            BtlUnit_GetPos(unit, (f32*)(disp + 0x30),
+                          (f32*)(disp + 0x34), (f32*)(disp + 0x38));
+            *(f32*)(disp + 0x34) +=
+                *(f32*)((s32)unit + 0x114) *
+                (f32)BtlUnit_GetHeight(unit) * 0.5f;
+            *(s32*)(disp + 0x64) = -1;
+            *(s32*)(bw + 0x1C9C) = 99;
             break;
-        case 1:
-            if (BattlePadCheckTrigger(0x100) != 0) {
-                *(s32*)(ac + 0x20) = 99;
-                *(s32*)(ac + 0x24) = 0;
-            } else {
-                *(s32*)(ac + 0x24) = timer + 1;
-                *(f32*)(ac + 0x14) += 4.0f;
-            }
-            break;
+
         case 99:
-            if (BattlePadCheckNow(0x100) != 0) {
-                *(s32*)(ac + 0x24) = timer + 1;
-                *(f32*)(ac + 0x18) += 1.0f;
-            } else {
-                result = timer;
-                *(s32*)(ac + 0x20) = 1000;
-                *(s32*)(ac + 0x24) = 0;
-            }
+            *(s32*)disp = 0x168;
+            *(s32*)(bw + 0x1C9C) = 1000;
+            *(s32*)(disp + 0x64) = psndSFXOn(str_SFX_AC_CURSOR_MOVE1_802f9bb0);
             break;
+
         case 1000:
-            *(s32*)(ac + 0x24) = timer + 1;
-            if (timer > 20) {
-                *(s32*)(ac + 0x20) = 1001;
+            if (BattlePadCheckTrigger(0x100) == 0) {
+                *(s32*)disp -= 1;
+                if (*(s32*)disp < 1) {
+                    *(s32*)(bw + 0x1CB8) = 0;
+                    *(s32*)(bw + 0x1C9C) = 1002;
+                    done = 1;
+                }
+            } else {
+                *(s32*)(bw + 0x1C9C) = 1001;
+            }
+            *(f32*)(disp + 0x24) += *(f32*)(disp + 0x28);
+            *(f32*)(disp + 0x2C) += 8.0f;
+            break;
+
+        case 1001:
+            if (BattlePadCheckNow(0x100) == 0) {
+                *(s32*)(bw + 0x1CB8) = 2;
+                *(s32*)(bw + 0x1C9C) = 1002;
+                done = 1;
             }
             break;
-        case 1001:
-            result = *(s32*)(ac + 0x04);
+
+        case 1002:
+            *(s32*)(bw + 0x1C9C) = 1003;
+            break;
+
+        case 1003:
+            break;
+
+        case 1004:
+            *(s32*)(disp + 0x3C) = 0x3C;
+            *(s32*)(bw + 0x1C9C) = 1005;
+            if (*(s32*)(disp + 0x64) != -1) {
+                psndSFXOff(*(s32*)(disp + 0x64));
+            }
+            break;
+
+        case 1005:
+            *(s32*)(disp + 0x3C) -= 1;
+            if (*(s32*)(disp + 0x3C) < 1) {
+                *(s32*)(bw + 0x1C9C) = 1006;
+            }
+            break;
+
+        case 1006:
+            *(void**)(bw + 0x1CA0) = 0;
+            *(void**)(bw + 0x1CA4) = 0;
+            *(void**)(bw + 0x1CA8) = 0;
+            *(void**)(bw + 0x1CAC) = 0;
             break;
     }
 
-    dispEntry(2, 1, _disp_target_mark, battleWork, 900.0f);
-    if (state == 99) {
+    if (!done) {
+        state = *(s32*)(bw + 0x1C9C);
+        if (state == 1000 || state == 1001) {
+            dispEntry(2, 1, _disp_target_mark, battleWork, 900.0f);
+        }
         dispEntry(2, 1, _disp_target_mark_afterimage, battleWork, 900.0f);
+        return 1;
     }
-    return result;
+    return 0;
 }
 
 void actionCommandDisp(f32 x, f32 y) {

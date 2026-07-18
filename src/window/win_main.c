@@ -177,37 +177,153 @@ void winMain(void) {
     extern void* g_winPtr;
     extern void* marioGetPtr(void);
     extern s32 seqGetSeq(void);
+    extern s32 seqCheckSeq(void);
     extern s32 keyGetButtonTrg(s32 port);
     extern s32 keyGetButtonRep(s32 port);
     extern s32 keyGetDirTrg(s32 port);
     extern s32 keyGetDirRep(s32 port);
     extern s32 marioCheckMenuDisable(void);
+    extern s32 marioStGetSystemLevel(void);
+    extern void marioStSystemLevel(s32 level);
+    extern s32 mobjCheckExec(void);
     extern s32 fadeIsFinish(void);
+    extern s32 keyGetButton(s32 port);
+    extern void* camGetPtr(s32 cameraId);
+    extern void fbatChangeMode(s32 mode);
     extern void marioCtrlOff(void);
+    extern void marioCtrlOff2(void);
+    extern void marioCtrlOn2(void);
     extern void partyCtrlOff(void);
+    extern void partyCtrlOn(void);
+    extern void psndSetFlag(s32 flag);
+    extern void psndClearFlag(s32 flag);
+    extern void padRumbleHardOff(s32 port);
+    extern s32 winLectureKeyMask(void);
+    extern s32 winRootMain(void* win);
+    extern void fileFree(void* file);
+    extern s32 marioBgmodeChk(void);
+    extern s32 marioGetParty(void);
+    extern s32 animGroupBaseAsync(char* name, s32 heap, s32 flags);
+    extern void marioPartyGoodbye(void);
+    extern void marioPartyHello(s32 partyId);
+    extern u8 partyDataTbl[];
     extern void statusWinForceUpdate(void);
+    extern s32 strcmp(const char* left, const char* right);
+    extern s32 swByteGet(s32 index);
+    extern s32 partyChkJoin(s32 partyId);
+    extern s32 pouchGetHaveBadgeCnt(void);
+    extern void* gp;
     void* win = g_winPtr;
     void* player = marioGetPtr();
-    s32 state = *(s32*)((s32)win + 4);
+    s32 state = *(s32*)((s32)win + 0x20);
 
-    if ((*(u32*)win & 1) == 0 || seqGetSeq() != 2) return;
-    *(u32*)((s32)win + 0x8C) = keyGetButtonTrg(0);
-    *(u32*)((s32)win + 0x90) = keyGetButtonRep(0);
-    *(u32*)((s32)win + 0x94) = keyGetDirTrg(0);
-    *(u32*)((s32)win + 0x98) = keyGetDirRep(0);
+    if ((*(u16*)win & 1) != 0 || seqGetSeq() != 2 || seqCheckSeq() != 0) return;
+    *(u32*)((s32)win + 4) = keyGetButtonTrg(0);
+    *(u32*)((s32)win + 8) = keyGetButtonRep(0);
+    *(u32*)((s32)win + 0xC) = keyGetDirTrg(0);
+    *(u32*)((s32)win + 0x10) = keyGetDirRep(0);
+    if ((keyGetButtonTrg(0) & 1) != 0) *(u32*)((s32)win + 0xC) |= 0x4000;
+    if ((keyGetButtonTrg(0) & 2) != 0) *(u32*)((s32)win + 0xC) |= 0x8000;
+    if ((keyGetButtonTrg(0) & 8) != 0) *(u32*)((s32)win + 0xC) |= 0x1000;
+    if ((keyGetButtonTrg(0) & 4) != 0) *(u32*)((s32)win + 0xC) |= 0x2000;
+    if ((keyGetButtonRep(0) & 1) != 0) *(u32*)((s32)win + 0x10) |= 0x4000;
+    if ((keyGetButtonRep(0) & 2) != 0) *(u32*)((s32)win + 0x10) |= 0x8000;
+    if ((keyGetButtonRep(0) & 8) != 0) *(u32*)((s32)win + 0x10) |= 0x1000;
+    if ((keyGetButtonRep(0) & 4) != 0) *(u32*)((s32)win + 0x10) |= 0x2000;
+    winLectureKeyMask();
     if (state == 0) {
-        if (marioCheckMenuDisable() == 0 && fadeIsFinish() != 0 &&
-            (*(u32*)((s32)win + 0x8C) & 0x1000) != 0) {
-            marioCtrlOff(); partyCtrlOff(); *(s32*)((s32)win + 4) = 1;
+        s32 openMenu = 0;
+        u32 buttons = *(u32*)((s32)win + 4);
+
+        if (*(u8*)((s32)player + 0x3C) == 2) {
+            if ((buttons & 0x1000) != 0) {
+                *(s32*)((s32)win + 0x1C) = 0;
+                openMenu = 1;
+            }
+        } else if ((buttons & 0x1000) != 0) {
+            *(s32*)((s32)win + 0x1C) = 0;
+            openMenu = 1;
+        } else if ((keyGetButton(0) & 0x40) == 0 &&
+                   strcmp((char*)gp + 0x13C, "yuu") != 0) {
+            if ((buttons & 1) != 0) {
+                if (swByteGet(0) >= 7 || partyChkJoin(1) == 0) {
+                    *(s32*)((s32)win + 0x1C) = 1;
+                    openMenu = 1;
+                }
+            } else if ((buttons & 8) != 0) {
+                *(s32*)((s32)win + 0x1C) = 2;
+                openMenu = 1;
+            } else if ((buttons & 2) != 0 &&
+                       (swByteGet(0) >= 0x14 || pouchGetHaveBadgeCnt() != 0)) {
+                *(s32*)((s32)win + 0x1C) = 3;
+                openMenu = 1;
+            }
+        }
+        if (marioStGetSystemLevel() == 0 &&
+            marioCheckMenuDisable() == 0 &&
+            mobjCheckExec() == 0 && fadeIsFinish() != 0 &&
+            openMenu != 0) {
+            void* camera = camGetPtr(1);
+            *(u16*)camera |= 0x200;
+            *(s32*)((s32)win + 0x1C) = 0;
+            marioStSystemLevel(4);
+            fbatChangeMode(7);
+            marioCtrlOff2();
+            partyCtrlOff();
+            psndSetFlag(0x80);
+            padRumbleHardOff(0);
+            padRumbleHardOff(1);
+            padRumbleHardOff(2);
+            padRumbleHardOff(3);
+            *(s32*)((s32)win + 0x20) = 1;
         }
     } else if (state == 1) {
-        if (*(void**)((s32)win + 0x28) != 0) *(s32*)((s32)win + 4) = 2;
+        if (*(void**)((s32)win + 0x28) != 0) *(s32*)((s32)win + 0x20) = 2;
     } else if (state == 2) {
-        if ((*(u32*)((s32)win + 0x8C) & 0x1200) != 0) *(s32*)((s32)win + 4) = 3;
+        s32 result = winRootMain(win);
+        if (result == -2) {
+            *(s32*)((s32)win + 0x20) = 100;
+        } else if (result == -3) {
+            *(s32*)((s32)win + 0x20) = 200;
+        } else if (result < 0) {
+            *(s32*)((s32)win + 0x20) = 3;
+        }
     } else if (state == 3) {
-        statusWinForceUpdate(); *(s32*)((s32)win + 4) = 0;
+        void* camera = camGetPtr(1);
+        *(u16*)camera &= ~0x200;
+        marioCtrlOn2();
+        partyCtrlOn();
+        fbatChangeMode(1);
+        psndClearFlag(0x80);
+        statusWinForceUpdate();
+        marioStSystemLevel(0);
+        if (*(void**)((s32)win + 0x28) != 0) {
+            fileFree(*(void**)((s32)win + 0x28));
+        }
+        *(void**)((s32)win + 0x28) = 0;
+        *(u16*)win = 0;
+        *(s32*)((s32)win + 0x20) = 0;
+    } else if (state == 100) {
+        s32 partyId = *(s32*)((s32)win + 0x1BC +
+                             *(s32*)((s32)win + 0x1DC) * 4);
+        if (marioBgmodeChk() == 0) {
+            if (animGroupBaseAsync(*(char**)(partyDataTbl + partyId * 0x28),
+                                   2, 0) != 0) {
+                *(s32*)((s32)win + 0x20) = 101;
+            }
+        } else {
+            *(s32*)((s32)win + 0x20) = 3;
+        }
+    } else if (state == 101) {
+        marioPartyGoodbye();
+        *(s32*)((s32)win + 0x20) = 102;
+    } else if (state == 102) {
+        if (marioGetParty() == 0) {
+            marioPartyHello(*(s32*)((s32)win + 0x1BC +
+                                    *(s32*)((s32)win + 0x1DC) * 4));
+            *(s32*)((s32)win + 0x20) = 3;
+        }
     }
-    (void)player;
 }
 
 u8 winIconGrayInit(void) {
@@ -871,20 +987,115 @@ void winTexInit(s32 texData) {
     GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
 }
 
-void winFontSetR(void* position, void* scale, void* color, char* format) {
-    ;
+void winFontSetR(void* position, void* scale, void* color, char* format, ...) {
+    typedef struct FontVaList {
+        u32 regInfo;
+        void* inputArgArea;
+        void* regSaveArea;
+    } FontVaList;
+    extern s32 vsprintf(char* buffer, const char* format, void* args);
+
+    FontVaList args;
+    char text[4096];
+    f32 translation[3][4];
+    f32 scaling[3][4];
+    u32 drawColor;
+
+    args.regInfo = 0x04000000;
+    args.inputArgArea = (u8*)&args + 0x30;
+    args.regSaveArea = (u8*)&args - 0x60;
+    if (strstr(format, &str_PCT_80424014) != 0) {
+        vsprintf(text, format, &args);
+        format = text;
+    }
+
+    PSMTXTrans(translation,
+               *(f32*)((s32)position + 0),
+               *(f32*)((s32)position + 4),
+               *(f32*)((s32)position + 8));
+    PSMTXScale(scaling,
+               *(f32*)((s32)scale + 0),
+               *(f32*)((s32)scale + 4),
+               *(f32*)((s32)scale + 8));
+    PSMTXConcat(translation, scaling, translation);
+    drawColor = *(u32*)color;
+    FontDrawColor(&drawColor);
+    FontDrawStringMtx(translation, format);
 }
 
+void winFontSetEdge(void* position, void* scale, void* color, char* format, ...) {
+    typedef struct FontVaList {
+        u32 regInfo;
+        void* inputArgArea;
+        void* regSaveArea;
+    } FontVaList;
+    extern s32 vsprintf(char* buffer, const char* format, void* args);
 
-void winFontSetEdge(void* position, void* scale, void* color, char* format) {
-    ;
+    FontVaList args;
+    char text[4104];
+    f32 translation[3][4];
+    f32 scaling[3][4];
+    u32 drawColor;
+
+    args.regInfo = 0x04000000;
+    args.inputArgArea = (u8*)&args + 0x30;
+    args.regSaveArea = (u8*)&args - 0x60;
+    if (strstr(format, &str_PCT_80424014) != 0) {
+        vsprintf(text, format, &args);
+        format = text;
+    }
+
+    PSMTXTrans(translation,
+               *(f32*)((s32)position + 0),
+               *(f32*)((s32)position + 4),
+               *(f32*)((s32)position + 8));
+    PSMTXScale(scaling,
+               *(f32*)((s32)scale + 0),
+               *(f32*)((s32)scale + 4),
+               *(f32*)((s32)scale + 8));
+    PSMTXConcat(translation, scaling, translation);
+    drawColor = *(u32*)color;
+    FontDrawColor(&drawColor);
+    FontDrawEdge();
+    FontDrawStringMtx(translation, format);
+    FontDrawEdgeOff();
 }
 
+void winFontSet(void* position, void* scale, void* color, char* format, ...) {
+    typedef struct FontVaList {
+        u32 regInfo;
+        void* inputArgArea;
+        void* regSaveArea;
+    } FontVaList;
+    extern s32 vsprintf(char* buffer, const char* format, void* args);
 
-void winFontSet(void* position, void* scale, void* color, char* format) {
-    ;
+    FontVaList args;
+    char text[4104];
+    f32 translation[3][4];
+    f32 scaling[3][4];
+    u32 drawColor;
+
+    args.regInfo = 0x04000000;
+    args.inputArgArea = (u8*)&args + 0x30;
+    args.regSaveArea = (u8*)&args - 0x60;
+    if (strstr(format, &str_PCT_80424014) != 0) {
+        vsprintf(text, format, &args);
+        format = text;
+    }
+
+    PSMTXTrans(translation,
+               *(f32*)((s32)position + 0),
+               *(f32*)((s32)position + 4),
+               *(f32*)((s32)position + 8));
+    PSMTXScale(scaling,
+               *(f32*)((s32)scale + 0),
+               *(f32*)((s32)scale + 4),
+               *(f32*)((s32)scale + 8));
+    PSMTXConcat(translation, scaling, translation);
+    drawColor = *(u32*)color;
+    FontDrawColor(&drawColor);
+    FontDrawMessageMtx(translation, format);
 }
-
 
 s32 cam_r(void) {
     void* cam;

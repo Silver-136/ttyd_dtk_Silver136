@@ -1,10 +1,90 @@
 #include "effect/n64/eff_thunderflare_n64.h"
 
 
-u8 effThunderflareMain(void) {
-    return 0;
-}
+void effThunderflareMain(void* effect) {
+    extern void effDelete(void*);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern f32 dispCalcZ(void*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void effThunderflareDisp(void);
+    extern f32 float_0_80426408;
+    extern f32 float_0p5_8042640c;
+    extern f32 float_6p2832_80426410;
+    extern f32 float_360_80426414;
+    extern f32 float_2_80426418;
+    extern f32 float_255_8042641c;
+    extern f32 float_100_80426420;
+    extern f32 float_0p2_80426424;
+    extern f32 float_80_80426428;
+    u8* work = *(u8**)((s32)effect + 0xC);
+    u8* particle = work;
+    f32 position[3];
+    s32 frame;
+    s32 odd;
+    s32 i;
 
+    position[0] = *(f32*)(work + 8);
+    position[1] = *(f32*)(work + 0xC);
+    position[2] = *(f32*)(work + 0x10);
+    if (*(s32*)(work + 0x18) < 100) {
+        *(s32*)(work + 0x18) -= 1;
+    }
+    *(s32*)(work + 0x1C) += 1;
+    if (*(s32*)(work + 0x18) < 0) {
+        effDelete(effect);
+        return;
+    }
+
+    frame = *(s32*)(work + 0x1C);
+    if (frame < 0x15) {
+        *(s32*)(work + 0x14) = frame * 12;
+    } else {
+        *(s32*)(work + 0x14) = 0xFF;
+    }
+    if (frame & 1) {
+        *(s32*)(work + 0x14) =
+            (s32)(float_0p5_8042640c * (f32)*(s32*)(work + 0x14));
+    }
+    odd = frame & 1;
+
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, particle += 0x48) {
+        f32 radius = *(f32*)(particle + 0x74);
+        f32 angleA = float_6p2832_80426410 * *(f32*)(particle + 0x68) /
+                     float_360_80426414;
+        f32 angleB = float_6p2832_80426410 * *(f32*)(particle + 0x6C) /
+                     float_360_80426414;
+        f32 sinA = (f32)sin(angleA);
+        f32 cosA = (f32)cos(angleA);
+        f32 sinB = (f32)sin(angleB);
+        f32 cosB = (f32)cos(angleB);
+        s32 stepA;
+        s32 stepB;
+
+        *(f32*)(particle + 0x50) = cosB * radius * sinA;
+        *(f32*)(particle + 0x54) = cosB * radius * cosA;
+        *(f32*)(particle + 0x58) = radius * sinB;
+        *(s32*)(particle + 0x5C) =
+            (s32)((float_2_80426418 * float_255_8042641c *
+                   (float_100_80426420 - radius)) / float_100_80426420);
+        if (*(s32*)(particle + 0x5C) > 0xFF) {
+            *(s32*)(particle + 0x5C) = 0xFF;
+        }
+        *(f32*)(particle + 0x70) =
+            float_0p2_80426424 + radius / float_80_80426428;
+        radius -= (f32)(((i & 3) * 2) + 2);
+        *(f32*)(particle + 0x74) = radius;
+        if (radius < float_0_80426408) {
+            *(f32*)(particle + 0x74) = float_0_80426408;
+            *(f32*)(particle + 0x70) = float_0_80426408;
+        }
+        stepA = odd ? 5 : 2;
+        stepB = odd ? 2 : 5;
+        *(f32*)(particle + 0x68) += (f32)stepA;
+        *(f32*)(particle + 0x6C) += (f32)stepB;
+    }
+    dispEntry(4, 2, effThunderflareDisp, effect, dispCalcZ(position));
+}
 
 void effThunderflareDisp(s32 cameraId, void* effect) {
     extern void* camGetPtr(s32);

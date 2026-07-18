@@ -2,40 +2,51 @@
 
 
 void* effMagic3N64Entry(f32 x, f32 y, f32 z, s32 type, s32 arg) {
+    typedef f32 Mtx[3][4];
+    typedef struct Vec { f32 x, y, z; } Vec;
     extern void* effEntry(void);
-    extern void* __memAlloc(s32 heap, s32 size);
+    extern void* __memAlloc(s32,s32);
     extern void effMagic3Main(void*);
+    extern void* camGetPtr(s32);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern void PSMTXRotAxisRad(Mtx,Vec*,f32);
     extern char str_Magic3N64_802fb4a8[];
-    extern f32 float_18_80425ab4;
-    extern f32 float_0p6_80425aa4;
-    extern f32 float_0p5_80425ac4;
-    void* entry;
+    void* entry = effEntry();
     u8* work;
+    u8* camera;
+    Mtx rot;
+    Vec axis;
+    f32 cameraAngle;
+    f32 spread;
     s32 i;
 
-    entry = effEntry();
-    if (entry == NULL) {
-        return NULL;
-    }
-    *(char**)((s32)entry + 0x14) = str_Magic3N64_802fb4a8;
-    *(s32*)((s32)entry + 8) = 5;
+    if (entry == 0) return 0;
+    camera = camGetPtr(4);
+    cameraAngle = 6.2832f * *(f32*)(camera + 0x114) / 360.0f;
+    axis.x = (f32)sin(cameraAngle);
+    axis.y = 0.0f;
+    axis.z = -(f32)cos(cameraAngle);
+    *(char**)((u8*)entry + 0x14) = str_Magic3N64_802fb4a8;
+    *(s32*)((u8*)entry + 8) = 5;
     work = __memAlloc(3, 0xF0);
-    *(u8**)((s32)entry + 0xC) = work;
-    *(void**)((s32)entry + 0x10) = effMagic3Main;
-
+    *(u8**)((u8*)entry + 0xC) = work;
+    *(void**)((u8*)entry + 0x10) = effMagic3Main;
     for (i = 0; i < 5; i++, work += 0x30) {
-        *(s32*)(work + 0) = type;
+        spread = 100.0f * (f32)i * 0.25f - 50.0f;
+        PSMTXRotAxisRad(rot, &axis, spread * 0.017453292f);
+        *(s32*)work = type;
         *(f32*)(work + 4) = x;
         *(f32*)(work + 8) = y;
         *(f32*)(work + 0xC) = z;
-        *(f32*)(work + 0x10) = 0.0f;
-        *(f32*)(work + 0x14) = 0.0f;
-        *(f32*)(work + 0x18) = 0.0f;
+        *(f32*)(work + 0x10) = 0.6f * rot[0][1] * 18.0f;
+        *(f32*)(work + 0x14) = rot[1][1] * 18.0f;
+        *(f32*)(work + 0x18) = 0.6f * rot[2][1] * 18.0f;
         *(f32*)(work + 0x1C) = (f32)(50 - i * 25);
-        *(f32*)(work + 0x20) = float_0p5_80425ac4;
-        *(s32*)(work + 0x24) = 0;
+        *(f32*)(work + 0x20) = 0.5f;
         *(s32*)(work + 0x28) = arg;
         *(s32*)(work + 0x2C) = 0;
+        *(s32*)(work + 0x24) = 0;
     }
     return entry;
 }

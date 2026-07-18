@@ -76,10 +76,76 @@ void peachSetStsUneasy(void) {
 }
 
 
-void peachChgPose(void* pose) {
-    extern void* marioGetPtr(void); extern void marioChgPose(void*);
-    void* mario=marioGetPtr();
-    if ((*(u32*)((s32)mario+0xC)&1)==0) marioChgPose(pose);
+void peachChgPose(void* posePtr) {
+    extern void* marioGetPtr(void);
+    extern s32 strcmp(const char*, const char*);
+    extern char str_P_Z_1_804265f8[];
+    extern char str_Z_1_80426600[];
+    extern char str_W_1_80426604[];
+    extern char str_R_1_80426608[];
+    extern char str_P_Z_2_8042660c[], str_P_S_2_80426614[], str_P_W_2_8042661c[];
+    extern char str_P_R_2_80426624[], str_P_T_2_8042662c[];
+    extern char str_P_Z_3_80426634[], str_P_S_3_8042663c[], str_P_W_3_80426644[];
+    extern char str_P_R_3_8042664c[], str_P_T_3_80426654[];
+    extern char str_P_Z_4_8042665c[], str_P_S_4_80426664[], str_P_W_4_8042666c[];
+    extern char str_P_R_4_80426674[], str_P_T_4_8042667c[];
+    extern char str_P_Z_5_80426684[], str_P_S_5_8042668c[], str_P_W_5_80426694[];
+    extern char str_P_R_5_8042669c[], str_P_T_5_804266a4[];
+    extern char str_P_Z_6_804266ac[], str_P_S_6_804266b4[], str_P_W_6_804266bc[];
+    extern char str_P_R_6_804266c4[], str_P_T_6_804266cc[];
+    extern char str_P_Z_7_804266d4[], str_P_S_7_804266dc[], str_P_W_7_804266e4[];
+    extern char str_P_R_7_804266ec[], str_P_T_13_802fd224[];
+    extern char str_P_Z_8_804266f4[], str_P_S_8_804266fc[], str_P_W_8_80426704[];
+    extern char str_P_R_8_8042670c[], str_P_T_14_802fd22c[];
+    u8* mario = marioGetPtr();
+    char* pose = posePtr;
+    u32 status;
+
+    if ((*(u32*)(mario + 4) & 2) != 0) {
+        return;
+    }
+    status = *(u32*)(mario + 0x10);
+
+#define MAP_POSE(z, s, w, r, t)                                      \
+    if (strcmp(pose, str_P_Z_1_804265f8) == 0) pose = (z);            \
+    else if (strcmp(pose, str_P_S_1_804265cc) == 0) pose = (s);       \
+    else if (strcmp(pose, str_P_W_1_804265c4) == 0) pose = (w);       \
+    else if (strcmp(pose, str_P_R_1_804265bc) == 0) pose = (r);       \
+    else if (strcmp(pose, str_P_T_1_804265b4) == 0) pose = (t)
+
+    if (status & 0x2000) {
+        MAP_POSE(str_Z_1_80426600, str_S_1_804265ec, str_W_1_80426604,
+                 str_R_1_80426608, str_T_1_804265f0);
+    } else if (status & 0x10) {
+        MAP_POSE(str_P_Z_2_8042660c, str_P_S_2_80426614, str_P_W_2_8042661c,
+                 str_P_R_2_80426624, str_P_T_2_8042662c);
+    } else if (status & 0x20) {
+        MAP_POSE(str_P_Z_3_80426634, str_P_S_3_8042663c, str_P_W_3_80426644,
+                 str_P_R_3_8042664c, str_P_T_3_80426654);
+    } else if (status & 0x80) {
+        MAP_POSE(str_P_Z_4_8042665c, str_P_S_4_80426664, str_P_W_4_8042666c,
+                 str_P_R_4_80426674, str_P_T_4_8042667c);
+    } else if (status & 0x40) {
+        MAP_POSE(str_P_Z_5_80426684, str_P_S_5_8042668c, str_P_W_5_80426694,
+                 str_P_R_5_8042669c, str_P_T_5_804266a4);
+    } else if (status & 0x100) {
+        MAP_POSE(str_P_Z_6_804266ac, str_P_S_6_804266b4, str_P_W_6_804266bc,
+                 str_P_R_6_804266c4, str_P_T_6_804266cc);
+    } else if (status & 0x200) {
+        MAP_POSE(str_P_Z_7_804266d4, str_P_S_7_804266dc, str_P_W_7_804266e4,
+                 str_P_R_7_804266ec, str_P_T_13_802fd224);
+    } else if (status & 0x400) {
+        MAP_POSE(str_P_Z_8_804266f4, str_P_S_8_804266fc, str_P_W_8_80426704,
+                 str_P_R_8_8042670c, str_P_T_14_802fd22c);
+    }
+#undef MAP_POSE
+
+    if (*(char**)(mario + 0x18) == NULL || strcmp(*(char**)(mario + 0x18), pose) != 0) {
+        *(char**)(mario + 0x18) = pose;
+        *(u16*)(mario + 0x28) = 0;
+        *(u32*)(mario + 4) &= 0xCFFFFFFF;
+        *(u32*)(mario + 0xC) |= 1;
+    }
 }
 
 u8 peach_dash(void) {

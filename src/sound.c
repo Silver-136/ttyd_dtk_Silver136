@@ -233,48 +233,157 @@ void SoundEfxSetPitch(s32 index, u32 value) {
 
 
 void SoundSSPlayChEx_main(s32 result, s32 userData) {
+    extern char sound[];
     extern void DVDMgrReadAsync(void*, void*, u32, u32, void*);
     extern void DCInvalidateRange(void*, u32);
     extern void ARQPostRequest(void*, void*, u32, u32, u32, void*, u32, void*);
+    extern void _ssDVDReadAsync_activeChk(s32, void*);
     extern u32 sndStreamAllocLength(u32, u32);
     extern void sndStreamAllocEx(void*, u32, u32, u32);
     extern void sndStreamMixParameter(void*, u32, u32, u32, u32);
-    u16* sound = *(u16**)0x803E0238;
-    u16* entry;
+    u8* base;
+    u8* entry;
     u8* header;
+    u8 type;
     u32 slot;
     u32 length;
+    u32 amount;
+    u32 pos;
+    u32 total;
     s32 i;
-    if (result < 0) return;
-    entry = sound;
-    for (slot = 0; slot < 3; slot++, entry += 0x4E) {
-        if (*entry != 0 && *(s32*)(entry + 0xA) + 0x40 == userData) break;
+
+    if (result < 0) {
+        return;
     }
-    if (slot == 3) return;
-    header = *(u8**)(entry + 0x28);
-    *(u16*)(entry + 0xC) = *(u16*)(header + 2);
-    *(u16*)(entry + 0xD) = *(u32*)(header + 4);
-    *(u32*)(entry + 0xE) = *(u32*)(header + 8);
-    *(u32*)(entry + 0x10) = *(u32*)(header + 0xC);
-    *(u32*)(entry + 0x44) = *(u32*)(header + 0x10);
-    *(u32*)(entry + 0x88) = *(u32*)(header + 0x14);
-    if (*header == 1) { *entry |= 0x80; entry[2] = 0x40; }
-    else if (*header == 0) { *(u32*)(entry + 0x44) = *(u32*)(entry + 0xE); entry[2] = 0x40; }
-    else { *entry |= 0x100; entry[2] = 0x100; }
-    for (i = 0x2E; i <= 0x42; i++) entry[i] = 0;
+
+    base = *(u8**)(sound + 0x100);
+    entry = base;
+    slot = 0;
+    if (*(u16*)entry == 0 || *(u32*)(entry + 0x28) + 0x40 != userData) {
+        entry = base + 0x138;
+        slot = 1;
+        if (*(u16*)entry == 0 || *(u32*)(entry + 0x28) + 0x40 != userData) {
+            entry = base + 0x270;
+            slot = 2;
+            if (*(u16*)entry == 0 || *(u32*)(entry + 0x28) + 0x40 != userData) {
+                slot = 3;
+            }
+        }
+    }
+    if (slot == 3) {
+        return;
+    }
+
+    header = *(u8**)(entry + 0x50);
+    type = header[0];
+    *(u16*)(entry + 0x18) = *(u16*)(header + 2);
+    *(u16*)(entry + 0x1A) = *(u32*)(header + 4);
+    *(u32*)(entry + 0x1C) = *(u32*)(header + 8);
+    *(u32*)(entry + 0x20) = *(u32*)(header + 0xC);
+    *(u32*)(entry + 0x88) = *(u32*)(header + 0x10);
+    *(u32*)(entry + 0x110) = *(u32*)(header + 0x14);
+    *(u32*)(entry + 0x8C) = *(u32*)(header + 0x18);
+    *(u32*)(entry + 0x114) = *(u32*)(header + 0x1C);
+    *(u16*)(entry + 0x76) = *(u16*)(header + 0x20);
+    *(u16*)(entry + 0xFE) = *(u16*)(header + 0x22);
+    *(u16*)(entry + 0x78) = *(u16*)(header + 0x24);
+    *(u16*)(entry + 0x100) = *(u16*)(header + 0x26);
+
+    if (*(s32*)(entry + 0x20) != -1) {
+        *(u16*)entry |= 0x200;
+    } else {
+        *(u32*)(entry + 0x20) = 0;
+    }
+
+    if (type == 0) {
+        *(u32*)(entry + 0x88) = *(u32*)(entry + 0x1C);
+        *(u32*)(entry + 0x110) = *(u32*)(entry + 0x1C);
+        *(u32*)(entry + 0x8C) = *(u32*)(entry + 0x20);
+        *(u32*)(entry + 0x114) = *(u32*)(entry + 0x20);
+        *(u16*)(entry + 4) = 0x40;
+    } else if (type == 1) {
+        *(u16*)entry |= 0x80;
+        *(s16*)(entry + 0x7A) = *(s16*)(entry + 0x76);
+        *(s16*)(entry + 0x102) = *(s16*)(entry + 0xFE);
+        *(u16*)(entry + 4) = 0x40;
+    } else if (type == 2) {
+        u8* src;
+        u8* dst;
+        *(u16*)entry |= 0x100;
+        src = header + 0x5C;
+        dst = entry + 0x90;
+        for (i = 0; i < 4; i++, src += 8, dst += 8) {
+            dst[0] = src[0];
+            dst[1] = src[1];
+            dst[2] = src[2];
+            dst[3] = src[3];
+            dst[4] = src[4];
+            dst[5] = src[5];
+            dst[6] = src[6];
+            dst[7] = src[7];
+        }
+        if (*(u16*)(entry + 0x1A) == 2) {
+            src = header + 0xBC;
+            dst = entry + 0x118;
+            for (i = 0; i < 4; i++, src += 8, dst += 8) {
+                dst[0] = src[0];
+                dst[1] = src[1];
+                dst[2] = src[2];
+                dst[3] = src[3];
+                dst[4] = src[4];
+                dst[5] = src[5];
+                dst[6] = src[6];
+                dst[7] = src[7];
+            }
+        }
+        *(u16*)(entry + 4) = 0x100;
+    }
+
+    *(u16*)(entry + 0x74) = 0;
+    *(u32*)(entry + 0x6C) = 0;
+    *(u32*)(entry + 0x5C) = 0;
+    *(u32*)(entry + 0x60) = 0;
+    *(u16*)(entry + 0x7C) = 0;
+    *(u16*)(entry + 0x7E) = 0;
+    *(u16*)(entry + 0x80) = 0;
+    *(u16*)(entry + 0x82) = 0;
+    *(u16*)(entry + 0x84) = 0;
+    *(u16*)(entry + 0xFC) = 0;
+    *(u32*)(entry + 0xF4) = 0;
+    *(u32*)(entry + 0xE4) = 0;
+    *(u32*)(entry + 0xE8) = 0;
+    *(u16*)(entry + 0x104) = 0;
+    *(u16*)(entry + 0x106) = 0;
+    *(u16*)(entry + 0x108) = 0;
+    *(u16*)(entry + 0x10A) = 0;
+    *(u16*)(entry + 0x10C) = 0;
+
+    if ((*(u16*)entry & 0x400) == 0) {
+        *(u16*)(entry + 0x74) = 1;
+        pos = *(u32*)(entry + 0x5C);
+        total = *(u32*)(entry + 0x88);
+        amount = 0x8000;
+        if (total < pos + 0x8000) {
+            amount = total - pos;
+        }
+        amount = (amount + 0x1F) & ~0x1F;
+        DVDMgrReadAsync(*(void**)(entry + 0x28), *(void**)(entry + 0x50), amount,
+                        *(u16*)(entry + 4) + pos, _ssDVDReadAsync_activeChk);
+        *(u32*)(entry + 0x70) = amount;
+        *(u16*)entry |= 0x1000;
+    } else {
+        DCInvalidateRange(*(void**)(entry + 0x50), 0x8000);
+        ARQPostRequest(entry + 0x2C, entry + 0x28, 1, 0,
+                       *(u16*)(entry + 4) + *(u32*)(entry + 0x5C),
+                       *(void**)(entry + 0x50), 0x8000, _ssDVDReadAsync_activeChk);
+    }
+
     length = sndStreamAllocLength(0xE00, 0);
     if (length != 0) {
-        u8* buffer = *(u8**)(entry + 0x28);
-        for (i = 0; i < (s32)length; i++) buffer[i] = 0;
-    }
-    if ((*entry & 0x400) == 0) {
-        u32 amount = (*(u32*)(entry + 0x44) - *(u32*)(entry + 0x2E) + 0x1F) & ~0x1F;
-        DVDMgrReadAsync(*(void**)(entry + 0x14), *(void**)(entry + 0x2C), amount,
-                        entry[2] + *(u32*)(entry + 0x2E), (void*)0x800DFC64);
-        *entry |= 0x1000;
-    } else {
-        DCInvalidateRange(*(void**)(entry + 0x2C), 0x8000);
-        ARQPostRequest(entry + 0x16, entry + 0x14, 1, 0, entry[2], *(void**)(entry + 0x2C), 0x8000, (void*)0x800DFC64);
+        u8* buffer = *(u8**)(entry + 0x50);
+        for (i = 0; i < (s32)length; i++) {
+            buffer[i] = 0;
+        }
     }
     sndStreamAllocEx(entry, 0xE00, 0, 0);
     sndStreamMixParameter(entry, 0x7F, 0x40, 0, 0);
@@ -388,18 +497,41 @@ void SoundSSMain(void) {
     extern const f32 float_63_8042190c;
     u8* entry;
     s32 i;
+    s32 offset;
 
-    for (i = 0; i < 3; i++) {
+    offset = 0;
+    for (i = 0; i < 3; i++, offset += 0x138) {
         f32 left;
         f32 right;
         u32 pan;
-        entry = (u8*)(*(s32*)(sound + 0x100) + i * 0x138);
+        entry = (u8*)(*(s32*)(sound + 0x100) + offset);
         if ((*(u16*)entry & 8) == 0 || (*(u16*)entry & 2) != 0) {
             continue;
         }
         if ((*(u16*)entry & 4) != 0) {
             *(u16*)entry &= ~4;
-            goto close_stream;
+            if (*(u16*)entry != 0) {
+                if (*(u16*)(sound + 0x20C) == 0) {
+                    *(s32*)(sound + 0x210) = OSDisableInterrupts();
+                }
+                *(u16*)(sound + 0x20C) += 1;
+                if ((*(u16*)entry & 0x400) != 0) {
+                    *(u8*)(sound + 0x226 + *(u16*)(entry + 2)) = 0;
+                }
+                *(u16*)entry = 0;
+                DVDMgrClose(*(void**)(entry + 0x28));
+                DVDMgrClose(*(void**)(entry + 0xB0));
+                sndStreamFree(*(void**)(entry + 0x4C));
+                if (*(u16*)(entry + 0x1A) == 2) {
+                    sndStreamFree(*(void**)(entry + 0xD4));
+                }
+                *(u16*)(sound + 0x20C) -= 1;
+                if (*(u16*)(sound + 0x20C) == 0) {
+                    OSRestoreInterrupts(*(s32*)(sound + 0x210));
+                }
+                *(s32*)(sound + 0x104) = -1;
+            }
+            continue;
         }
         if ((*(u16*)entry & 0x40) != 0) {
             if (*(f32*)(entry + 0x10) == float_0_80421908) {
@@ -415,7 +547,28 @@ void SoundSSMain(void) {
         if ((*(u16*)entry & 0x20) != 0) {
             if (*(f32*)(entry + 0x10) == float_0_80421908) {
                 *(u16*)entry &= ~0x20;
-                goto close_stream;
+                if (*(u16*)entry != 0) {
+                    if (*(u16*)(sound + 0x20C) == 0) {
+                        *(s32*)(sound + 0x210) = OSDisableInterrupts();
+                    }
+                    *(u16*)(sound + 0x20C) += 1;
+                    if ((*(u16*)entry & 0x400) != 0) {
+                        *(u8*)(sound + 0x226 + *(u16*)(entry + 2)) = 0;
+                    }
+                    *(u16*)entry = 0;
+                    DVDMgrClose(*(void**)(entry + 0x28));
+                    DVDMgrClose(*(void**)(entry + 0xB0));
+                    sndStreamFree(*(void**)(entry + 0x4C));
+                    if (*(u16*)(entry + 0x1A) == 2) {
+                        sndStreamFree(*(void**)(entry + 0xD4));
+                    }
+                    *(u16*)(sound + 0x20C) -= 1;
+                    if (*(u16*)(sound + 0x20C) == 0) {
+                        OSRestoreInterrupts(*(s32*)(sound + 0x210));
+                    }
+                    *(s32*)(sound + 0x104) = -1;
+                }
+                continue;
             }
             *(f32*)(entry + 0x10) -= *(f32*)(entry + 0x14);
             if (*(f32*)(entry + 0x10) <= float_0_80421908) {
@@ -445,30 +598,6 @@ void SoundSSMain(void) {
                                   *(u16*)(entry + 8) & 0xFF, 0);
             sndStreamMixParameter(*(void**)(entry + 0xD4), (s32)right, 0x7F,
                                   *(u16*)(entry + 8) & 0xFF, 0);
-        }
-        continue;
-
-close_stream:
-        if (*(u16*)entry != 0) {
-            if (*(u16*)(sound + 0x20C) == 0) {
-                *(s32*)(sound + 0x210) = OSDisableInterrupts();
-            }
-            *(u16*)(sound + 0x20C) += 1;
-            if ((*(u16*)entry & 0x400) != 0) {
-                *(u8*)(sound + 0x226 + *(u16*)(entry + 2)) = 0;
-            }
-            *(u16*)entry = 0;
-            DVDMgrClose(*(void**)(entry + 0x28));
-            DVDMgrClose(*(void**)(entry + 0xB0));
-            sndStreamFree(*(void**)(entry + 0x4C));
-            if (*(u16*)(entry + 0x1A) == 2) {
-                sndStreamFree(*(void**)(entry + 0xD4));
-            }
-            *(u16*)(sound + 0x20C) -= 1;
-            if (*(u16*)(sound + 0x20C) == 0) {
-                OSRestoreInterrupts(*(s32*)(sound + 0x210));
-            }
-            *(s32*)(sound + 0x104) = -1;
         }
     }
 }

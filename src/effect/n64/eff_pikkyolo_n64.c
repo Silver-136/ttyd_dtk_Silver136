@@ -9,10 +9,18 @@ void* effPikkyoloN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 time) {
     return entry;
 }
 
-u8 effPikkyoloDisp(void) {
-    return 0;
+void effPikkyoloDisp(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32); extern void GXSetNumChans(s32); extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32);
+    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevColorIn(s32,s32,s32,s32,s32); extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
+    extern void effGetTexObjN64(s32,void*); extern void GXLoadTexObj(void*,s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+    extern void PSMTXScale(void*,f32,f32,f32); extern void GXLoadTexMtxImm(void*,s32,s32); extern void GXSetCullMode(s32); extern void effSetVtxDescN64(void*); extern void PSMTXTrans(void*,f32,f32,f32);
+    extern void PSMTXRotRad(void*,s32,f32); extern void PSMTXConcat(void*,void*,void*); extern void GXLoadPosMtxImm(void*,s32); extern void GXSetCurrentMtx(s32); extern void GXSetTevColor(s32,void*);
+    extern void GXBegin(s32,s32,s32); extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);
+    u8* w=*(u8**)((u8*)effect+0xC); u8* cam=camGetPtr(cameraId); f32 a[3][4],b[3][4],c[3][4]; u8 tex[0x20]; u32 col; s32 i;
+    GXSetNumChans(0); GXSetNumTevStages(1); GXSetTevOrder(0,0,0,-1); GXSetTevColorOp(0,0,0,0,1,0); GXSetTevAlphaOp(0,0,0,0,1,0); GXSetTevColorIn(0,3,2,8,15); GXSetTevAlphaIn(0,7,5,4,7);
+    effGetTexObjN64(0x41,tex); GXLoadTexObj(tex,0); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D); PSMTXScale(b,0.0625f,0.015625f,0.0f); GXLoadTexMtxImm(b,0x1E,1); GXSetCullMode(0); effSetVtxDescN64((void*)0x803A6FE0);
+    for(i=0;i<*(s32*)((u8*)effect+8);i++,w+=0x3C){ f32 s=0.5f**(f32*)(w+0x24); PSMTXTrans(a,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC)); PSMTXScale(b,s,s,s); PSMTXRotRad(c,0x79,-0.017453292f**(f32*)((u8*)camGetPtr(4)+0x114)); PSMTXConcat(a,c,a); PSMTXConcat(a,b,a); PSMTXRotRad(c,0x7A,0.017453292f**(f32*)(w+0x28)); PSMTXConcat(a,c,a); PSMTXConcat(cam+0x11C,a,a); GXLoadPosMtxImm(a,0); GXSetCurrentMtx(0); col=(*(u8*)(w+0x2C)<<24)|(*(u8*)(w+0x2E)<<16)|(*(u8*)(w+0x30)<<8)|*(u8*)(w+0x32); GXSetTevColor(1,&col); col=(*(u8*)(w+0x34)<<24)|(*(u8*)(w+0x36)<<16)|(*(u8*)(w+0x38)<<8)|*(u8*)(w+0x3A); GXSetTevColor(2,&col); GXBegin(0x90,0,6); tri2((i&3)*4,(i&3)*4+1,(i&3)*4+2,(i&3)*4,(i&3)*4+2,(i&3)*4+3,0,0); }
 }
-
 
 void effPikkyoloMain(void* effect) {
     typedef struct Vec3 {

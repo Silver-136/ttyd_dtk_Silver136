@@ -10,71 +10,137 @@ void mot_dokan(void) {
     extern void marioChgPaper(char* name);
     extern void marioChgPose(char* name);
     extern f32 revise360(f32 angle);
-    extern char str_p_dokan_y_802f45fc[];
-    extern char str_p_dokan_x_802f4610[];
-    extern char str_PM_D_1A_802f4608[];
+    extern s32 marioGetPartyId(void);
+    extern s32 marioGetExtraPartyId(void);
+    extern void partyDokanEnd(s32 id, s32 dokan);
+    extern void marioUpdateCamPos(void);
+    extern void* partyGetPtr(s32 id);
+    extern f32 vec3_802f4548[];
     extern char str_PM_D_1B_802f461c[];
     extern char str_M_Z_1_80423044[];
     u8* player = marioGetPtr();
     u32 state;
     u8 dokan;
     f32 scale;
+    u8* party;
+    s32 partyId;
+    u8* data = (u8*)vec3_802f4548;
 
-    if ((*(u32*)(player + 8) & 2) != 0) {
-        *(u32*)(player + 8) &= ~2;
-        *(u32*)(player + 4) |= 0x1804;
-        *(f32*)(player + 0x214) = 0.0f;
-        *(f32*)(player + 0x218) = *(f32*)(player + 0x94);
-        *(s32*)(player + 0x20C) = 0;
-        *(s32*)(player + 0x1F8) = 0;
-        *(f32*)(player + 0x1B8) = 0.0f;
-        dokan = *(u8*)(player + 0x3A4);
+    if ((*(u32*)(player + 0xC) & 1) != 0) {
+        *(u32*)(player + 0xC) &= ~1;
+        *(u32*)(player + 4) |= 0x1000;
+        *(u32*)(player + 4) |= 0x8;
+        *(u32*)(player + 4) |= 0x100;
+        *(f32*)(player + 0x2BC) = 0.0f;
+        *(f32*)(player + 0x2C0) = *(f32*)(player + 0x94);
+        *(s32*)(player + 0x48) = 0;
+        *(s16*)(player + 0x50) = 0;
+        *(f32*)(player + 0x180) = 0.0f;
+        dokan = *(u8*)(player + 0x3E);
         if (dokan == 0) {
             _partyEntry(0);
-            *(u32*)(player + 0x14) = 30;
+            *(u32*)(player + 0x44) = 30;
         } else if (dokan == 1) {
-            marioPaperOn(str_p_dokan_y_802f45fc);
-            marioChgPaper(str_PM_D_1A_802f4608);
+            marioPaperOn((char*)(data + 0xB4));
+            marioChgPaper((char*)(data + 0xC0));
             marioChgPose(str_M_Z_1_80423044);
             marioPaperLightOff();
-            *(u32*)(player + 0x14) = 20;
-            *(f32*)(player + 0x210) = 30.0f;
+            *(u32*)(player + 0x44) = 20;
+            *(f32*)(player + 0x2B8) = 30.0f;
             _partyEntry(1);
         } else if (dokan == 2 || dokan == 3) {
-            *(u32*)(player + 0x14) = 10;
+            *(u32*)(player + 0x44) = 10;
         } else {
-            marioPaperOn(str_p_dokan_x_802f4610);
+            marioPaperOn((char*)(data + 0xC8));
             marioPaperLightOff();
-            marioChgPaper(str_PM_D_1A_802f4608);
+            marioChgPaper((char*)(data + 0xC0));
             marioChgPose(str_M_Z_1_80423044);
-            *(u32*)(player + 0x14) = 40;
-            *(f32*)(player + 0x210) = 30.0f;
+            *(u32*)(player + 0x44) = 40;
+            *(f32*)(player + 0x2B8) = 30.0f;
             _partyEntry(1);
         }
     }
 
-    state = *(u32*)(player + 0x14);
-    if (state == 10) {
-        *(f32*)(player + 0x188) = revise360(*(f32*)(player + 0x188) + *(f32*)(player + 0x210));
-        scale = *(f32*)(player + 0x144) - 0.005f;
+    state = *(u32*)(player + 0x44);
+    if (state == 0) {
+        *(s32*)(player + 0x48) -= 1;
+        if (*(s32*)(player + 0x48) < 1) {
+            *(f32*)(player + 0xBC) += *(f32*)(player + 0x2B8);
+            scale = *(f32*)(player + 0xC8) - 0.02f;
+            if (scale < 0.0f) scale = 0.0f;
+            *(f32*)(player + 0xC8) = scale;
+            *(f32*)(player + 0xCC) = scale;
+            *(f32*)(player + 0xD0) = scale;
+            *(f32*)(player + 0xB4) = 16.0f * scale;
+            *(f32*)(player + 0x9C) = 16.0f - *(f32*)(player + 0xB4);
+            *(f32*)(player + 0xA0) = -3.0f;
+        }
+    } else if (state == 10) {
+        *(f32*)(player + 0x1AC) = revise360(*(f32*)(player + 0x1AC) + *(f32*)(player + 0x2B8));
+        scale = *(f32*)(player + 0xC8) - 0.005f;
         if (scale < 0.0f) scale = 0.0f;
-        *(f32*)(player + 0x144) = scale;
-        *(f32*)(player + 0x148) = scale;
-        *(f32*)(player + 0x14C) = scale;
-    } else if (state == 20 || state == 30) {
-        *(f32*)(player + 0x188) = revise360(*(f32*)(player + 0x188) + *(f32*)(player + 0x210));
-        scale = *(f32*)(player + 0x144) + 0.05f;
+        *(f32*)(player + 0xC8) = scale;
+        *(f32*)(player + 0xCC) = scale;
+        *(f32*)(player + 0xD0) = scale;
+    } else if (state == 20 || state == 21 || state == 30) {
+        *(f32*)(player + 0x1AC) = revise360(*(f32*)(player + 0x1AC) + *(f32*)(player + 0x2B8));
+        scale = *(f32*)(player + 0xC8) + 0.05f;
         if (scale > 1.0f) scale = 1.0f;
-        *(f32*)(player + 0x144) = scale;
-        *(f32*)(player + 0x148) = scale;
-        *(f32*)(player + 0x14C) = scale;
+        *(f32*)(player + 0xC8) = scale;
+        *(f32*)(player + 0xCC) = scale;
+        *(f32*)(player + 0xD0) = scale;
     } else if (state == 40) {
-        *(f32*)(player + 0x17C) += *(f32*)(player + 0x210);
-        scale = *(f32*)(player + 0x144) + 0.03f;
+        *(f32*)(player + 0xBC) += *(f32*)(player + 0x2B8);
+        scale = *(f32*)(player + 0xC8) + 0.03f;
         if (scale > 1.0f) scale = 1.0f;
-        *(f32*)(player + 0x144) = scale;
-        *(f32*)(player + 0x148) = scale;
-        *(f32*)(player + 0x14C) = scale;
+        *(f32*)(player + 0xC8) = scale;
+        *(f32*)(player + 0xCC) = scale;
+        *(f32*)(player + 0xD0) = scale;
+        *(f32*)(player + 0xB4) = 16.0f * scale;
+        *(f32*)(player + 0x9C) = 16.0f - *(f32*)(player + 0xB4);
+        *(f32*)(player + 0xA0) = -3.0f;
+        partyId = marioGetPartyId();
+        party = partyGetPtr(partyId);
+        if (party != 0) {
+            *(f32*)(party + 0x58) = *(f32*)(player + 0x8C);
+            *(f32*)(party + 0x5C) = *(f32*)(player + 0x90);
+            *(f32*)(party + 0x60) = *(f32*)(player + 0x94);
+            *(f32*)(party + 0x74) = *(f32*)(player + 0xC8);
+            *(f32*)(party + 0x78) = *(f32*)(player + 0xCC);
+            *(f32*)(party + 0x7C) = *(f32*)(player + 0xD0);
+            *(f32*)(party + 0x8C) = *(f32*)(player + 0xB4);
+            *(f32*)(party + 0x80) = *(f32*)(player + 0x9C);
+            *(f32*)(party + 0x84) = *(f32*)(player + 0xA0);
+        }
+        partyId = marioGetExtraPartyId();
+        party = partyGetPtr(partyId);
+        if (party != 0) {
+            *(f32*)(party + 0x58) = *(f32*)(player + 0x8C);
+            *(f32*)(party + 0x5C) = *(f32*)(player + 0x90);
+            *(f32*)(party + 0x60) = *(f32*)(player + 0x94);
+            *(f32*)(party + 0x74) = *(f32*)(player + 0xC8);
+            *(f32*)(party + 0x78) = *(f32*)(player + 0xCC);
+            *(f32*)(party + 0x7C) = *(f32*)(player + 0xD0);
+            *(f32*)(party + 0x8C) = *(f32*)(player + 0xB4);
+            *(f32*)(party + 0x80) = *(f32*)(player + 0x9C);
+            *(f32*)(party + 0x84) = *(f32*)(player + 0xA0);
+        }
+    } else if (state == 0x65) {
+        *(f32*)(player + 0x1AC) += *(f32*)(player + 0x2B8);
+        if (*(f32*)(player + 0x1AC) >= 540.0f) {
+            marioChgPaper(str_PM_D_1B_802f461c);
+            *(s32*)(player + 0x48) = 20;
+            *(u32*)(player + 0x44) = 0x66;
+            *(f32*)(player + 0xBC) = 0.0f;
+            partyDokanEnd(marioGetPartyId(), (s8)*(u8*)(player + 0x3E));
+            partyDokanEnd(marioGetExtraPartyId(), (s8)*(u8*)(player + 0x3E));
+        }
+    } else if (state == 0x66) {
+        *(s32*)(player + 0x48) -= 1;
+        if (*(s32*)(player + 0x48) < 1) {
+            marioUpdateCamPos();
+            *(u32*)(player + 0x44) = 0x67;
+        }
     } else if (state == 0x67) {
         marioPaperOff();
         *(u32*)(player + 4) &= ~0x1804;

@@ -166,8 +166,6 @@ USER_FUNC(evt_party_cont_onoff) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_party_jump_pos(EventEntry* event, s32 first) {
@@ -192,22 +190,28 @@ s32 evt_party_jump_pos(EventEntry* event, s32 first) {
     extern f32 float_0_80421d4c;
     extern const f32 float_37_80421d50;
 
-    s32* args;
+    s32* args = event->args;
     void* party;
     s32 partyId;
+    s32 firstArg;
+    s32 msec;
+    s32 frames;
+    s32 keepDir;
+    s32 state;
+    s32 result;
     f32 x;
     f32 y;
     f32 z;
-    s32 frames;
-    s32 keepDir;
     f32 apex;
     f32 framef;
-    s32 state;
 
-    args = event->args;
+    result = 0;
+
     if (first != 0) {
+        firstArg = args[0];
         partyId = 1;
-        if (args[0] == 0) {
+        args = args + 1;
+        if (firstArg == 0) {
             partyId = partyCtrlNo;
         }
         *(s32*)((s32)event + 0x78) = partyId;
@@ -221,96 +225,74 @@ s32 evt_party_jump_pos(EventEntry* event, s32 first) {
         *(s32*)((s32)event + 0x84) = 0;
         partyChgMot(party, 8);
         partyChgRunMode(party, 9);
+    } else {
+        args = args + 1;
     }
 
-    args++;
     party = partyGetPtr(*(s32*)((s32)event + 0x78));
     x = evtGetFloat(event, args[0]);
     y = evtGetFloat(event, args[1]);
     z = evtGetFloat(event, args[2]);
-    frames = sysMsec2Frame(evtGetValue(event, args[3]));
+    msec = evtGetValue(event, args[3]);
     keepDir = evtGetValue(event, args[4]);
     apex = evtGetFloat(event, args[5]);
     if (apex <= float_neg1000_80421d54) {
         apex = float_20_80421d48;
     }
+
+    frames = sysMsec2Frame(msec);
     framef = (f32)frames;
     state = *(s32*)((s32)event + 0x84);
 
-    if (state != 1) {
-        if (state > 0) {
-            if (state > 2) {
-                return 0;
-            }
-            movePos((f32*)((s32)party + 0x58), (f32*)((s32)party + 0x60),
-                    *(f32*)((s32)party + 0x104), *(f32*)((s32)party + 0x100));
-            *(f32*)((s32)party + 0x114) += *(f32*)((s32)party + 0x174);
-            {
-                f32 vy = *(f32*)((s32)party + 0x114);
-                f32 avy = vy < float_0_80421d4c ? -vy : vy;
-                void* hit = partySearchGround(avy, avy, party);
-                s32 landed = 0;
-                if (hit != NULL && (*(f32*)((s32)party + 0x5C) + vy) <= *(f32*)((s32)party + 0xE4)) {
-                    *(void**)((s32)party + 0x138) = hit;
-                    landed = 1;
-                    *(f32*)((s32)party + 0x5C) = *(f32*)((s32)party + 0xE4);
-                    *(u32*)party &= ~(0x2 | 0x4 | 0x8);
-                }
-                if (landed != 0) {
-                    *(s32*)((s32)event + 0x80) = 0;
-                } else {
-                    *(f32*)((s32)party + 0x5C) += *(f32*)((s32)party + 0x114);
-                }
-            }
-            *(s32*)((s32)event + 0x80) -= 1;
-            if (*(s32*)((s32)event + 0x80) > 0) {
-                return 0;
-            }
-            partyChgPoseId(party, 1);
-            *(f32*)((s32)party + 0x11C) = float_0_80421d4c;
-            *(f32*)((s32)party + 0x174) = float_0_80421d4c;
-            *(f32*)((s32)party + 0x104) = float_0_80421d4c;
-            unk_800bc660(party);
-            return 1;
+    if (state == 1) {
+        goto state_1;
+    }
+    if (state >= 1) {
+        if (state >= 3) {
+            goto done_zero;
         }
-        if (state < 0) {
-            return 0;
-        }
+        goto state_2;
+    }
+    if (state >= 0) {
+        goto state_0;
+    }
+    goto done_zero;
 
-        *(void**)((s32)party + 0x13C) = *(void**)((s32)party + 0x138);
-        *(s32*)((s32)party + 0x138) = 0;
-        *(f32*)((s32)party + 0x104) =
-            distABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60), x, z) / framef;
-        *(f32*)((s32)party + 0x100) =
-            angleABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60), x, z);
-        if (keepDir == 0) {
-            *(f32*)((s32)party + 0xFC) = *(f32*)((s32)party + 0x100);
-        }
-        partyChgPoseId(party, 4);
-        {
-            f32 height = y - *(f32*)((s32)party + 0x5C);
-            f32 half = float_0p5_80421d44 * framef;
-            f32 accelBase = apex;
-            f32 accel;
-            f32 under[2];
-            if (height >= float_1_80421d40 || height <= -float_1_80421d40) {
-                if (height >= float_0_80421d4c) {
-                    accelBase = height + float_37_80421d50;
-                } else {
-                    accelBase = height;
-                    if (searchUnder2(x, y, z, under) != 0) {
-                        accelBase = apex;
-                    }
+state_0:
+    *(void**)((s32)party + 0x13C) = *(void**)((s32)party + 0x138);
+    *(s32*)((s32)party + 0x138) = 0;
+    *(f32*)((s32)party + 0x104) =
+        distABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60), x, z) / framef;
+    *(f32*)((s32)party + 0x100) =
+        angleABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60), x, z);
+    if (keepDir == 0) {
+        *(f32*)((s32)party + 0xFC) = *(f32*)((s32)party + 0x100);
+    }
+    partyChgPoseId(party, 4);
+    {
+        f32 height = y - *(f32*)((s32)party + 0x5C);
+        f32 half = float_0p5_80421d44 * framef;
+        f32 accelBase = apex;
+        f32 accel;
+        f32 under[2];
+        if (height >= float_1_80421d40 || height <= -float_1_80421d40) {
+            if (height < float_0_80421d4c) {
+                accelBase = height;
+                if (searchUnder2(x, y, z, under) != 0) {
+                    accelBase = apex;
                 }
+            } else {
+                accelBase = height + float_37_80421d50;
             }
-            accel = (accelBase + accelBase) / (half * half - half);
-            *(f32*)((s32)party + 0x114) = accel * half;
-            *(f32*)((s32)party + 0x174) = -accel;
-            *(s32*)((s32)event + 0x80) = (s32)(float_0p5_80421d44 + half);
-            *(s32*)((s32)event + 0x84) = 1;
         }
+        accel = (accelBase + accelBase) / (half * half - half);
+        *(f32*)((s32)party + 0x114) = accel * half;
+        *(f32*)((s32)party + 0x174) = -accel;
+        *(s32*)((s32)event + 0x80) = (s32)(float_0p5_80421d44 + half);
+        *(s32*)((s32)event + 0x84) = 1;
     }
 
+state_1:
     movePos((f32*)((s32)party + 0x58), (f32*)((s32)party + 0x60),
             *(f32*)((s32)party + 0x104), *(f32*)((s32)party + 0x100));
     *(f32*)((s32)party + 0x5C) += *(f32*)((s32)party + 0x114);
@@ -325,8 +307,49 @@ s32 evt_party_jump_pos(EventEntry* event, s32 first) {
         *(s32*)((s32)event + 0x80) = (s32)(float_0p5_80421d44 + half);
         *(s32*)((s32)event + 0x84) = 2;
     }
-    return 0;
+    goto done_zero;
+
+state_2:
+    movePos((f32*)((s32)party + 0x58), (f32*)((s32)party + 0x60),
+            *(f32*)((s32)party + 0x104), *(f32*)((s32)party + 0x100));
+    *(f32*)((s32)party + 0x114) += *(f32*)((s32)party + 0x174);
+    {
+        f32 vy = *(f32*)((s32)party + 0x114);
+        f32 avy = vy < float_0_80421d4c ? -vy : vy;
+        void* hit = partySearchGround(avy, avy, party);
+        s32 landed = 0;
+        if (hit != NULL && (*(f32*)((s32)party + 0x5C) + vy) <= *(f32*)((s32)party + 0xE4)) {
+            *(void**)((s32)party + 0x138) = hit;
+            landed = 1;
+            *(f32*)((s32)party + 0x5C) = *(f32*)((s32)party + 0xE4);
+            *(u32*)party &= ~(0x2 | 0x4 | 0x8);
+        }
+        if (landed != 0) {
+            *(s32*)((s32)event + 0x80) = 0;
+        } else {
+            *(f32*)((s32)party + 0x5C) += *(f32*)((s32)party + 0x114);
+        }
+    }
+    *(s32*)((s32)event + 0x80) -= 1;
+    if (*(s32*)((s32)event + 0x80) > 0) {
+        goto done_zero;
+    }
+    partyChgPoseId(party, 1);
+    *(f32*)((s32)party + 0x11C) = float_0_80421d4c;
+    *(f32*)((s32)party + 0x174) = float_0_80421d4c;
+    *(f32*)((s32)party + 0x104) = float_0_80421d4c;
+    unk_800bc660(party);
+    result = 1;
+    goto done;
+
+done_zero:
+    result = 0;
+done:
+    return result;
 }
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 

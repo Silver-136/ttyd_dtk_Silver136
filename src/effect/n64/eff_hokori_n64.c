@@ -1,10 +1,100 @@
 #include "effect/n64/eff_hokori_n64.h"
 
 
-u8 effHokoriDisp(int param_1, int param_2) {
-    return 0;
-}
+void effHokoriDisp(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4];
+    extern void* camGetPtr(s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void PSMTXScale(Mtx, f32, f32, f32);
+    extern void GXLoadTexMtxImm(Mtx, s32, s32);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void effGetTexObjN64(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void PSMTXTrans(Mtx, f64, f64, f64);
+    extern void PSMTXRotRad(Mtx, f32, char);
+    extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void GXSetCullMode(s32);
+    extern void GXLoadPosMtxImm(Mtx, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void effSetVtxDescN64(void*);
+    extern void GXBegin(s32, s32, s32);
+    extern void tri2(s32, s32, s32, s32, s32, s32, s32);
+    extern f32 float_0p03125_80425480;
+    extern f32 float_0p010417_80425484;
+    extern f32 float_0_80425488;
+    extern f32 float_deg2rad_8042548c;
+    extern u8 size16x16_tex32x32_vtx[];
+    extern u8 size16x32_tex32x64_vtx[];
+    extern u8 size8x8_tex32x32_vtx[];
+    u8 texObj[0x20];
+    Mtx base;
+    Mtx rotate;
+    Mtx texMtx;
+    Mtx draw;
+    u8* entry = (u8*)effect;
+    u8* work = *(u8**)(entry + 0xC);
+    u8* part;
+    u8* camera = (u8*)camGetPtr(cameraId);
+    u8* camera3d;
+    u32 color0;
+    u32 color1;
+    s32 type = *(s32*)work;
+    s32 i;
 
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    PSMTXScale(texMtx, float_0p03125_80425480, float_0p010417_80425484, float_0_80425488);
+    GXLoadTexMtxImm(texMtx, 0x1E, 1);
+    color0 = ((u32)*(u8*)(work + 0x30) << 24) | ((u32)*(u8*)(work + 0x34) << 16) |
+             ((u32)*(u8*)(work + 0x38) << 8) | *(u8*)(work + 0x18);
+    color1 = ((u32)*(u8*)(work + 0x3C) << 24) | ((u32)*(u8*)(work + 0x40) << 16) |
+             ((u32)*(u8*)(work + 0x44) << 8) | 0xFF;
+    GXSetTevColor(1, &color0);
+    GXSetTevColor(2, &color1);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    if (type == 0) {
+        GXSetTevColorIn(0, 15, 15, 15, 2);
+        GXSetTevAlphaIn(0, 7, 5, 4, 7);
+        effGetTexObjN64(0x15, texObj);
+    } else {
+        GXSetTevColorIn(0, 2, 12, 8, 15);
+        GXSetTevAlphaIn(0, 7, 5, 4, 7);
+        effGetTexObjN64(0x16, texObj);
+    }
+    GXLoadTexObj(texObj, 0);
+    PSMTXTrans(base, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+    camera3d = (u8*)camGetPtr(4);
+    PSMTXRotRad(rotate, float_deg2rad_8042548c * -*(f32*)(camera3d + 0x114), 'y');
+    PSMTXConcat(base, rotate, draw);
+    PSMTXConcat((f32 (*)[4])(camera + 0x11C), draw, draw);
+    GXSetCullMode(0);
+    part = work + 0x48;
+    for (i = 1; i < *(s32*)(entry + 8); i++, part += 0x48) {
+        void* vtx;
+        PSMTXTrans(base, *(f32*)(part + 4), *(f32*)(part + 8), *(f32*)(part + 0xC));
+        PSMTXScale(texMtx, *(f32*)(part + 0x28), *(f32*)(part + 0x24), *(f32*)(part + 0x28));
+        PSMTXConcat(base, texMtx, base);
+        PSMTXConcat(draw, base, base);
+        GXLoadPosMtxImm(base, 0);
+        GXSetCurrentMtx(0);
+        vtx = type < 2 ? ((i & 1) ? size16x32_tex32x64_vtx : size16x16_tex32x32_vtx) : size8x8_tex32x32_vtx;
+        effSetVtxDescN64(vtx);
+        GXBegin(0x90, 0, 6);
+        tri2(0, 1, 2, 0, 0, 2, 3);
+    }
+}
 
 #pragma optimize_for_size off
 

@@ -93,131 +93,742 @@ void unk_800a6ac8(void) {
     *(u32*)mario &= ~0xF0000;
 }
 
-u8 mot_slit(void) {
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+void mot_slit(void) {
     extern void* marioGetPtr(void);
-    extern void marioPaperOn(char*);
+    extern void mapSetPaperAmbColor(void* color);
+    extern void mapResetPaperAmbColor(void);
+    extern void marioPaperOn(char* name);
     extern void marioPaperOff(void);
-    extern void marioChgPose(char*);
-    extern void marioChgPaper(char*);
+    extern void marioChgPose(char* pose);
+    extern void marioChgPaper(char* paper);
     extern s32 marioRollChgChk(void);
+    extern f64 revise360(f64 angle);
+    extern f64 reviseAngle(f64 angle);
+    extern f64 toMovedirSimple(f64 angle);
     extern u32 marioChkKey(void);
     extern s32 marioKeyOffChk(void);
+    extern u32 marioBgmodeChk(void);
+    extern s32 marioChkJump(void);
     extern s32 marioSlitChkWallAround(void);
+    extern s32 marioCreviceWallChk(f32* pos);
+    extern void marioSetFallPara(void);
     extern void allPartySlitOn(void);
     extern void allPartySlitOff(void);
     extern void marioAdjustMoveDir(void);
-    extern void marioChgMotSub(s32, s32);
-    extern u32 psndSFXOn_3D(s32, void*);
-    extern char str_p_slit_802c433c[];
-    extern char str_PM_S_1A_802c4344[];
-    extern char str_PM_S_1B_802c434c[];
-    extern char str_PM_S_1C_802c4384[];
-    void* player = marioGetPtr();
-    s32 state;
+    extern void marioChgMotSub(s32 motion, s32 arg);
+    extern void marioChgMot(s32 motion);
+    extern u32 psndSFXOn_3D(s32 id, void* pos);
+    extern u32 hitGetAttr(void* hit);
+    extern s32 sysMsec2Frame(s32 msec);
+    extern void sincosf(f32 angle, f32* s, f32* c);
+    extern void movePos(f64 dist, f64 angle, f32* x, f32* z);
+    extern s32 hitCheckVecHitObjXZ(void* arg, void* hit);
+    extern void* camGetPtr(s32 id);
+    extern s32 strcmp(char* a, char* b);
 
-    if (*(f32*)((s32)player + 0x28) == 0.0f) *(u32*)((s32)player + 4) &= ~0x8000;
-    if ((*(u32*)((s32)player + 4) & 0x1000) != 0) {
-        *(u32*)((s32)player + 4) &= ~0x1000;
-        *(u32*)player &= ~0x78000;
-        *(u32*)((s32)player + 8) |= 0x1000400;
-        if (*(s32*)((s32)player + 0x210) == -1) marioPaperOn(str_p_slit_802c433c);
-        marioChgPose((char*)0x80420FA0);
-        marioChgPaper(str_PM_S_1A_802c4344);
-        *(s32*)((s32)player + 0x2EC) = 0;
-        *(s32*)((s32)player + 0x48) = 0;
+    extern u32 dat_80420f98;
+    extern char vec3_802c42e8[];
+    extern char str_M_S_1_80420fa0[];
+    extern char str_M_R_1_80420fac[];
+    extern char str_M_W_1_80420fc0[];
+    extern char str_M_I_Y_80420fd0[];
+
+    extern f32 float_0_80420f9c;
+    extern f32 float_1_80420ff8;
+    extern f32 float_2_80420ffc;
+    extern f32 float_6_80420fb4;
+    extern f32 float_10_80421000;
+    extern f32 float_11_80420ff0;
+    extern f32 float_20_80420ff4;
+    extern f32 float_45_80420fe0;
+    extern f32 float_90_80420fec;
+    extern f32 float_135_80420fe4;
+    extern f32 float_180_80420fa8;
+    extern f32 float_225_80420fe8;
+    extern f32 float_260_80420fc8;
+    extern f32 float_270_80420fb8;
+    extern f32 float_280_80420fcc;
+    extern f32 float_315_80420fdc;
+    extern f32 float_0p004_80420fbc;
+    extern f32 float_0p5_80420fd8;
+
+    void* player;
+    void* p2;
+    void* cam;
+    void* hit;
+    s32 state;
+    s32 blocked;
+    s32 t;
+    s32 key;
+    s32 side;
+    s32 color;
+    s16 s;
+    f32 angle;
+    f32 speed;
+    f32 ftmp;
+    f32 pos0[3];
+    f32 pos1[3];
+    f32 pos2[3];
+    f32 sx;
+    f32 cz;
+    f32 hitArg[12];
+
+#define P8(o) (*(s8*)((s32)player + (o)))
+#define PU8(o) (*(u8*)((s32)player + (o)))
+#define P16(o) (*(s16*)((s32)player + (o)))
+#define PU16(o) (*(u16*)((s32)player + (o)))
+#define P32(o) (*(s32*)((s32)player + (o)))
+#define PU32(o) (*(u32*)((s32)player + (o)))
+#define PF(o) (*(f32*)((s32)player + (o)))
+#define PP(o) (*(void**)((s32)player + (o)))
+#define CHG_IDLE() do { PF(0x180) = float_0_80420f9c; marioChgPose(str_M_S_1_80420fa0); } while (0)
+#define CHG_RUN() do { PF(0x180) = PF(0x184); if ((PU32(0x0C) & 0x8000U) == 0) { marioChgPose(str_M_R_1_80420fac); } PU16(0x2D0) = (u16)(PU16(0x2D0) | 1); } while (0)
+#define CAM_RESET() do { PF(0x148) = float_0_80420f9c; PF(0x158) = float_0p004_80420fbc; } while (0)
+#define RESET_TO_SLIT_WAIT() do { P16(0x2CC) = 0; PF(0x180) = float_0_80420f9c; P16(0x2F0) = 10; P16(0x2CE) = 0; marioChgPose(str_M_S_1_80420fa0); marioChgPaper(vec3_802c42e8 + 0x64); } while (0)
+
+    player = marioGetPtr();
+
+    if (PF(0x194) == float_0_80420f9c) {
+        PU32(0x0C) &= ~0x8000U;
     }
+
+    if ((PU32(0x0C) & 1U) != 0) {
+        p2 = marioGetPtr();
+        player = p2;
+        PF(0x2B8) = float_0_80420f9c;
+        P32(0x2BC) = 0;
+        P16(0x2CE) = 0;
+        P16(0x2CC) = 0;
+        P16(0x2D2) = 0;
+        PU32(0x0C) &= ~1U;
+        PU32(0x00) &= ~0x000F0000U;
+        PU32(0x04) |= 4U;
+        PU32(0x04) |= 0x01000000U;
+
+        if (P32(0x240) == -1) {
+            color = dat_80420f98;
+            color = (color & 0xFF000000) | 0x00A8A8A8;
+            mapSetPaperAmbColor(&color);
+            marioPaperOn(vec3_802c42e8 + 0x54);
+        }
+        if (PF(0x194) == float_0_80420f9c) {
+            marioChgPose(str_M_S_1_80420fa0);
+        }
+        marioChgPaper(vec3_802c42e8 + 0x5C);
+        P16(0x2F0) = 0;
+        P16(0x50) = 0;
+    }
+
     if (marioRollChgChk() != 0) {
-        *(u32*)player &= ~0x8800000;
-        *(u32*)((s32)player + 8) &= 0xFEFFF3FF;
+        angle = (f32)revise360((f64)(PF(0x1A4) - PF(0x19C)));
+        if (angle < float_180_80420fa8) {
+            PF(0x1AC) = float_180_80420fa8;
+        } else {
+            PF(0x1AC) = float_0_80420f9c;
+        }
+        PF(0x1B0) = PF(0x1AC);
+        PU32(0x00) &= ~0x00800000U;
+        PU32(0x00) &= ~0x01000000U;
+        PU32(0x04) &= 0xFEFFF3FFU;
         marioPaperOff();
-        return 0;
+        PU32(0x00) &= ~0x08000000U;
+        goto done;
     }
-    state = *(s32*)((s32)player + 0x2EC);
+
+    state = P16(0x2F0);
     switch (state) {
     case 0:
-        *(s32*)((s32)player + 0x2F0) = 30;
-        *(f32*)((s32)player + 0x178) = 0.0f;
-        *(s32*)((s32)player + 0x2EC) = 2;
-        *(f32*)((s32)player + 0x17C) = *(f32*)((s32)player + 0x90);
-        if (*(f32*)((s32)player + 0x180) >= *(f32*)((s32)player + 0x188) || *(f32*)((s32)player + 0x28) != 0.0f) {
-            *(f32*)((s32)player + 0x180) = *(f32*)((s32)player + 0x184);
+        P32(0x2F4) = 30;
+        P32(0x2BC) = 0;
+        P16(0x2F0) = 2;
+        PF(0x2C4) = PF(0x90);
+        if ((PF(0x180) >= PF(0x188)) || (PF(0x194) != float_0_80420f9c)) {
+            CHG_RUN();
         }
+        marioGetPtr();
         psndSFXOn_3D(0x177, (void*)((s32)player + 0x8C));
         break;
+
     case 2:
-        if (*(f32*)((s32)player + 0x28) == 0.0f) {
-            *(f32*)((s32)player + 0x180) = 0.0f;
-            marioChgPose((char*)0x80420FA0);
+        if (PF(0x194) == float_0_80420f9c) {
+            CHG_IDLE();
         } else {
-            *(f32*)((s32)player + 0x180) = *(f32*)((s32)player + 0x184);
-            *(f32*)((s32)player + 0x1A4) = *(f32*)((s32)player + 0x2C);
+            if ((PF(0x180) >= PF(0x188)) || (PF(0x194) != float_0_80420f9c)) {
+                CHG_RUN();
+            }
+            PF(0x1A4) = PF(0x198);
         }
-        if (--*(s32*)((s32)player + 0x2F0) < 1) {
-            *(u32*)player |= 0x8000000;
-            *(s32*)((s32)player + 0x2EC) = 4;
-            *(f32*)((s32)player + 0xE0) = 6.0f;
+        t = P32(0x2F4) - 1;
+        P32(0x2F4) = t;
+        if (t < 1) {
+            PU32(0x00) |= 0x08000000U;
+            P16(0x2F0) = 4;
+            PF(0x1B8) = float_6_80420fb4;
         }
-        if (*(s32*)((s32)player + 0x2F0) == 20) allPartySlitOn();
+        if (P32(0x2F4) == 20) {
+            allPartySlitOn();
+        }
         break;
+
     case 4:
-        if (marioChkKey() != 0) *(f32*)((s32)player + 0x1A4) = *(f32*)((s32)player + 0x1AC);
-        *(f32*)((s32)player + 0x1AC) = 270.0f;
-        *(f32*)((s32)player + 0x1B0) = 270.0f;
-        marioChgPaper(str_PM_S_1B_802c434c);
-        *(s32*)((s32)player + 0x2EC) = 10;
+        if (marioChkKey() != 0) {
+            PF(0x1A4) = (f32)toMovedirSimple((f64)PF(0x1AC));
+        }
+        if (PF(0x180) >= PF(0x188)) {
+            CHG_RUN();
+        }
+        PF(0x1AC) = float_270_80420fb8;
+        PF(0x1B0) = PF(0x1AC);
+        if (PF(0x194) == float_0_80420f9c) {
+            marioChgPose(str_M_S_1_80420fa0);
+        }
+        marioChgPaper(vec3_802c42e8 + 0x64);
+        P16(0x2F0) = 10;
+        P16(0x2CE) = 0;
+        /* fall through */
+
     case 10:
-        if (marioChkKey() != 0 && marioKeyOffChk() == 0 && marioSlitChkWallAround() == 0) {
-            *(f32*)((s32)player + 0x1A4) = *(f32*)((s32)player + 0x2C);
-            *(s32*)((s32)player + 0x2EC) = 100;
+        if (PF(0x90) != PF(0x2C4)) {
+            p2 = marioGetPtr();
+            *(f32*)((s32)p2 + 0x148) = float_0_80420f9c;
+            *(f32*)((s32)p2 + 0x158) = float_0p004_80420fbc;
         }
-        break;
-    case 100:
-        *(u32*)player &= ~0x8000000;
-        *(u32*)player &= ~0x1000000;
-        *(f32*)((s32)player + 0x1B8) = 14.8f;
-        marioChgPaper(str_PM_S_1C_802c4384);
-        *(s32*)((s32)player + 0x2F0) = 30;
-        *(s32*)((s32)player + 0x2EC) = 101;
-        psndSFXOn_3D(0x178, (void*)((s32)player + 0x8C));
-        break;
-    case 101:
-        if (--*(s32*)((s32)player + 0x2F0) < 1) {
-            *(s32*)((s32)player + 0x2EC) = 102;
+        PF(0x2C4) = PF(0x90);
+
+        if (P16(0x4E) == 0) {
+            if (PF(0x180) >= PF(0x188)) {
+                CHG_RUN();
+            }
+
+            if (marioChkKey() != 0) {
+                blocked = 0;
+                if ((PU32(0x0C) & 8U) != 0) {
+                    blocked = 1;
+                } else if (marioKeyOffChk() != 0) {
+                    blocked = 1;
+                } else if (marioBgmodeChk() == 1) {
+                    blocked = 1;
+                } else if (marioSlitChkWallAround() != 0) {
+                    blocked = 1;
+                } else {
+                    pos0[0] = PF(0x8C);
+                    pos0[1] = PF(0x90);
+                    pos0[2] = PF(0x94);
+                    if (marioCreviceWallChk(pos0) != 0) {
+                        blocked = 1;
+                    }
+                }
+                if (!blocked) {
+                    PF(0x1A4) = PF(0x198);
+                    P16(0x2F0) = 100;
+                    break;
+                }
+            }
+
+            if (marioChkJump() != 0) {
+                goto done;
+            }
+
+            if (PF(0x194) == float_0_80420f9c) {
+                PF(0x180) = float_0_80420f9c;
+                if (P32(0x2BC) == 0) {
+                    marioChgPose(str_M_S_1_80420fa0);
+                    marioChgPaper(vec3_802c42e8 + 0x64);
+                }
+            } else {
+                if (strcmp(*(char**)((s32)player + 0x18), str_M_I_Y_80420fd0) == 0) {
+                    marioChgPose(str_M_W_1_80420fc0);
+                }
+                CAM_RESET();
+
+                speed = PF(0x184);
+                if ((PU32(0x00) & 0x08000000U) == 0) {
+                    if ((PU32(0x00) & 0x80000000U) != 0) {
+                        speed *= float_0p5_80420fd8;
+                    }
+                } else if ((P16(0x2CC) == 0) &&
+                           ((P8(0x245) * P8(0x245) + P8(0x246) * P8(0x246)) < 0xBD2)) {
+                    speed *= float_0p5_80420fd8;
+                }
+                PF(0x180) = speed;
+                PF(0x1A4) = PF(0x198);
+                if ((PU32(0x0C) & 0x8000U) == 0) {
+                    marioChgPose(str_M_W_1_80420fc0);
+                }
+
+                angle = (f32)revise360((f64)(PF(0x198) - PF(0x19C)));
+                if ((float_315_80420fdc <= angle) || (angle <= float_45_80420fe0) ||
+                    ((float_135_80420fe4 <= angle) && (angle <= float_225_80420fe8))) {
+                    marioChgPaper(vec3_802c42e8 + 0x74);
+                } else {
+                    marioChgPaper(vec3_802c42e8 + 0x6C);
+                    angle = (f32)revise360((f64)(PF(0x1A4) - PF(0x19C)));
+                    if (float_180_80420fa8 < angle) {
+                        P16(0x2D2) = 2;
+                        PF(0x1AC) = float_280_80420fcc;
+                    } else {
+                        P16(0x2D2) = 1;
+                        PF(0x1AC) = float_260_80420fc8;
+                    }
+                }
+                P16(0x2F0) = 0x14;
+            }
+        } else {
+            if ((PU32(0x0C) & 0x8000U) == 0) {
+                marioChgPose(str_M_W_1_80420fc0);
+            }
+            marioChgPaper(vec3_802c42e8 + 0x6C);
+            angle = (f32)revise360((f64)(PF(0x1A4) - PF(0x19C)));
+            if (float_180_80420fa8 < angle) {
+                P16(0x2D2) = 2;
+                PF(0x1AC) = float_280_80420fcc;
+            } else {
+                P16(0x2D2) = 1;
+                PF(0x1AC) = float_260_80420fc8;
+            }
         }
-        break;
-    case 102:
-        *(u32*)player &= ~0x4000000;
-        *(u32*)player &= ~0x8000000;
-        *(u32*)((s32)player + 8) &= 0xFEFFF3FF;
-        marioPaperOff();
-        marioAdjustMoveDir();
-        marioChgMotSub(0, 0);
-        break;
-    case 110:
-        *(u32*)player &= ~0x4000000;
-        *(s32*)((s32)player + 0x2F0) = 30;
-        *(s32*)((s32)player + 0x2EC) = 111;
-        break;
-    case 111:
-        if (--*(s32*)((s32)player + 0x2F0) < 1) {
-            *(s32*)((s32)player + 0x2EC) = 112;
-        }
-        break;
-    case 112:
-        *(u32*)player &= ~0x8000000;
-        *(u32*)((s32)player + 8) &= 0xFEFFF3FF;
-        allPartySlitOff();
-        marioPaperOff();
-        marioAdjustMoveDir();
-        marioChgMotSub(0, 0);
-        break;
-    case 120:
-        allPartySlitOff();
-        marioPaperOff();
         break;
     }
-    return 0;
+
+    state = P16(0x2F0);
+    if (state == 0x15) {
+        s = P16(0x2CC) - 1;
+        P16(0x2CC) = s;
+        if (s < 1) {
+            marioChgPaper(vec3_802c42e8 + 0x6C);
+            P16(0x2F0) = 0x14;
+            if (P16(0x2D2) == 1) {
+                PF(0x1AC) = float_260_80420fc8;
+            } else {
+                PF(0x1AC) = float_280_80420fcc;
+            }
+        } else if (marioChkKey() == 0) {
+            RESET_TO_SLIT_WAIT();
+        }
+    } else if (state == 0x14) {
+        if (P16(0x2CC) > 0) {
+            P16(0x2CC) = 0;
+            marioChgPaper(vec3_802c42e8 + 0x6C);
+            angle = (f32)revise360((f64)(PF(0x1A4) - PF(0x19C)));
+            PF(0x1AC) = (angle <= float_180_80420fa8) ? float_260_80420fc8 : float_280_80420fcc;
+            if (marioChkKey() == 0) {
+                RESET_TO_SLIT_WAIT();
+                goto after_walk_state;
+            }
+        }
+
+        if (marioChkKey() != 0) {
+            blocked = 0;
+            if (marioKeyOffChk() != 0 || marioBgmodeChk() == 1 || marioSlitChkWallAround() != 0) {
+                blocked = 1;
+            } else {
+                pos1[0] = PF(0x8C);
+                pos1[1] = PF(0x90);
+                pos1[2] = PF(0x94);
+                if (marioCreviceWallChk(pos1) != 0) {
+                    blocked = 1;
+                }
+            }
+            if (!blocked) {
+                P16(0x2F0) = 100;
+            }
+        }
+
+        if ((PU32(0x00) & 0x00060000U) == 0) {
+            marioChkJump();
+        }
+
+        if (marioChkKey() != 0) {
+            if (PF(0x194) == float_0_80420f9c) {
+                PF(0x180) = float_0_80420f9c;
+                P16(0x2CE) = P16(0x2CE) + 1;
+                if (P16(0x2CE) >= 6) {
+                    P16(0x2F0) = 4;
+                }
+            } else {
+                P16(0x2CE) = 0;
+                if ((PU32(0x0C) & 0x8000U) == 0) {
+                    if (((P8(0x245) < 0 ? -P8(0x245) : P8(0x245)) +
+                         (P8(0x246) < 0 ? -P8(0x246) : P8(0x246))) < 0x44) {
+                        marioChgPose(str_M_W_1_80420fc0);
+                    } else {
+                        marioChgPose(str_M_R_1_80420fac);
+                    }
+                }
+            }
+        }
+
+        if (marioChkKey() != 0) {
+            PF(0x1A4) = PF(0x198);
+            speed = PF(0x184);
+            if ((PU32(0x00) & 0x08000000U) == 0) {
+                if ((PU32(0x00) & 0x80000000U) != 0) {
+                    speed *= float_0p5_80420fd8;
+                }
+            } else if ((P16(0x2CC) == 0) &&
+                       ((P8(0x245) * P8(0x245) + P8(0x246) * P8(0x246)) < 0xBD2)) {
+                speed *= float_0p5_80420fd8;
+            }
+            PF(0x180) = speed;
+        }
+
+        angle = (f32)revise360((f64)(PF(0x198) - PF(0x19C)));
+        if ((float_315_80420fdc <= angle) || (angle <= float_45_80420fe0) ||
+            ((float_135_80420fe4 <= angle) && (angle <= float_225_80420fe8))) {
+            marioChgPaper(vec3_802c42e8 + 0x74);
+            P16(0x2CE) = 6;
+            P16(0x2D2) = 0;
+            angle = (f32)revise360((f64)(PF(0x1A4) - PF(0x19C)));
+            PF(0x1AC) = (angle <= float_180_80420fa8) ? float_260_80420fc8 : float_280_80420fcc;
+        } else {
+            marioChgPaper(vec3_802c42e8 + 0x6C);
+            angle = (f32)revise360((f64)(PF(0x1A4) - PF(0x19C)));
+            if (P16(0x2D2) == 0) {
+                P16(0x2D2) = (angle < float_180_80420fa8) ? 1 : 2;
+            }
+            if (P16(0x2D2) == 1) {
+                if (float_180_80420fa8 <= angle) {
+                    marioChgPaper(vec3_802c42e8 + 0x7C);
+                    P16(0x2CC) = 6;
+                    P16(0x2F0) = 0x15;
+                    P16(0x2D2) = 2;
+                    PF(0x180) = PF(0x184);
+                    PF(0x1AC) = float_260_80420fc8;
+                    if (marioChkKey() == 0) {
+                        RESET_TO_SLIT_WAIT();
+                    }
+                }
+            } else if (P16(0x2D2) == 2 && angle <= float_180_80420fa8) {
+                marioChgPaper(vec3_802c42e8 + 0x7C);
+                P16(0x2CC) = 6;
+                P16(0x2F0) = 0x15;
+                P16(0x2D2) = 1;
+                PF(0x180) = PF(0x184);
+                PF(0x1AC) = float_280_80420fcc;
+                if (marioChkKey() == 0) {
+                    RESET_TO_SLIT_WAIT();
+                }
+            }
+        }
+    }
+
+after_walk_state:
+    if ((PU32(0x00) & 0x08000000U) != 0) {
+        hit = PP(0x1E8);
+        if (hit == 0) {
+            if ((P16(0x2F0) < 0x5A || P16(0x2F0) > 0x5E) && PP(0x1EC) != 0) {
+                if ((hitGetAttr(PP(0x1EC)) & 0x2000) != 0) {
+                    P32(0x2BC) += 3;
+                    marioChgPaper(vec3_802c42e8 + 0x84);
+                    if (P32(0x2BC) > 0xE && PU16(0x2E) == 0x15) {
+                        P16(0x2F0) = 0x5A;
+                    }
+                } else {
+                    P32(0x2BC) -= 1;
+                    if (P32(0x2BC) < 0) {
+                        P32(0x2BC) = 0;
+                    }
+                }
+            }
+        } else if (PP(0x1EC) != 0 && PU16(0x2E) == 0x15) {
+            if ((hitGetAttr(hit) & 0x2000) == 0) {
+                P32(0x2BC) = 0;
+            } else {
+                angle = (f32)revise360((f64)(PF(0x198) - PF(0x19C)));
+                PF(0x2C0) = ((angle <= float_90_80420fec) || (float_270_80420fb8 <= angle)) ? float_0_80420f9c : float_180_80420fa8;
+                P32(0x2BC) += 1;
+                if (P32(0x2BC) >= sysMsec2Frame(0x32)) {
+                    PF(0x1A4) = (f32)revise360((f64)(PF(0x2C0) + PF(0x19C)));
+                    P32(0x2BC) = 0;
+                    sincosf(PF(0x1A4), &sx, &cz);
+                    hitArg[0] = PF(0x8C);
+                    hitArg[1] = PF(0x90) + float_11_80420ff0;
+                    hitArg[2] = PF(0x94);
+                    hitArg[6] = sx;
+                    hitArg[8] = cz;
+                    hitArg[9] = float_20_80420ff4;
+                    if (hitCheckVecHitObjXZ(hitArg, hit) != 0) {
+                        hitArg[0] = PF(0x8C);
+                        hitArg[2] = PF(0x94);
+                        hitArg[9] = float_20_80420ff4;
+                        angle = (f32)reviseAngle((f64)(float_90_80420fec + PF(0x1A0)));
+                        movePos((f64)float_1_80420ff8, (f64)angle, &hitArg[0], &hitArg[2]);
+                        if (hitCheckVecHitObjXZ(hitArg, hit) != 0) {
+                            hitArg[0] = PF(0x8C);
+                            hitArg[2] = PF(0x94);
+                            hitArg[9] = float_20_80420ff4;
+                            angle = (f32)reviseAngle((f64)(PF(0x1A0) - float_90_80420fec));
+                            movePos((f64)float_1_80420ff8, (f64)angle, &hitArg[0], &hitArg[2]);
+                            if (hitCheckVecHitObjXZ(hitArg, hit) != 0) {
+                                P16(0x2F0) = 0x50;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    state = P16(0x2F0);
+    if (state == 0x50) {
+        cam = camGetPtr(2);
+        if (cam != 0) {
+            *(u32*)((s32)cam + 0x0C) |= 0x200;
+        }
+        CAM_RESET();
+        PU32(0x00) |= 0x00400000U;
+        if (PF(0x2C0) == float_0_80420f9c) {
+            marioChgPaper(vec3_802c42e8 + 0x8C);
+        } else {
+            marioChgPaper(vec3_802c42e8 + 0x94);
+        }
+        P32(0x2F4) = 20;
+        PF(0x180) = (float_2_80420ffc * PF(0x1B8)) / (f32)P32(0x2F4);
+        P16(0x2F0) = 0x51;
+        PU32(0x00) |= 0x01000000U;
+    } else if (state == 0x51) {
+        t = P32(0x2F4) - 1;
+        P32(0x2F4) = t;
+        if (t < 1) {
+            P16(0x2F0) = 0x52;
+        }
+    } else if (state == 0x52) {
+        cam = camGetPtr(2);
+        if (cam != 0) {
+            *(u32*)((s32)cam + 0x0C) &= ~0x200U;
+        }
+        PU32(0x00) &= ~0x02000000U;
+        P16(0x2F0) = 0x14;
+        PU32(0x00) &= ~0x00400000U;
+    }
+
+    state = P16(0x2F0);
+    if (state == 0x5A) {
+        cam = camGetPtr(2);
+        if (cam != 0) {
+            *(u32*)((s32)cam + 0x0C) |= 0x200;
+        }
+        CAM_RESET();
+        PU32(0x00) |= 0x00400000U;
+        marioChgPaper(vec3_802c42e8 + 0x84);
+        P32(0x2F4) = sysMsec2Frame(500);
+        PF(0x180) = float_0_80420f9c;
+        P16(0x2F0) = 0x5B;
+        p2 = marioGetPtr();
+        *(s32*)((s32)p2 + 0x26C) = 1;
+        *(u32*)((s32)p2 + 0x270) = *(u32*)((s32)p2 + 0x8C);
+        *(u32*)((s32)p2 + 0x274) = *(u32*)((s32)p2 + 0x90);
+        *(u32*)((s32)p2 + 0x278) = *(u32*)((s32)p2 + 0x94);
+        P32(0x2F4) = 15;
+        P16(0x2F0) = 0x5C;
+        PU32(0x00) |= 0x00200000U;
+        marioSetFallPara();
+        PU32(0x00) &= ~0x00040000U;
+        PU32(0x00) |= 0x00090000U;
+    } else if (state == 0x5B) {
+        P32(0x2F4) = 15;
+        P16(0x2F0) = 0x5C;
+        PU32(0x00) |= 0x00200000U;
+        marioSetFallPara();
+        PU32(0x00) &= ~0x00040000U;
+        PU32(0x00) |= 0x00090000U;
+    }
+
+    state = P16(0x2F0);
+    if (state == 0x5C) {
+        angle = (f32)revise360((f64)(PF(0x1A4) - PF(0x19C)));
+        PF(0x1AC) = (angle <= float_180_80420fa8) ? float_260_80420fc8 : float_280_80420fcc;
+        t = P32(0x2F4) - 1;
+        P32(0x2F4) = t;
+        if (t < 1) {
+            P16(0x2F0) = 0x5D;
+            PU32(0x00) &= ~0x00200000U;
+            PU32(0x00) &= ~0x00400000U;
+        }
+    }
+    state = P16(0x2F0);
+    if (state == 0x5D) {
+        if (PP(0x1EC) != 0) {
+            PU32(0x00) &= ~0x000F0000U;
+            P16(0x2F0) = 0x5E;
+        }
+    } else if (state == 0x5E) {
+        cam = camGetPtr(2);
+        if (cam != 0) {
+            *(u32*)((s32)cam + 0x0C) &= ~0x200U;
+        }
+        P16(0x2F0) = 0x14;
+    }
+
+    switch (P16(0x2F0)) {
+    case 100:
+        PU32(0x00) &= ~0x01000000U;
+        P16(0x2F2) = 0;
+        PU32(0x00) &= ~0x08000000U;
+        PF(0x1B8) = float_20_80420ff4;
+        if (PF(0x194) != float_0_80420f9c) {
+            CHG_RUN();
+        }
+        if (PF(0x180) == float_0_80420f9c) {
+            marioChgPose(str_M_S_1_80420fa0);
+        }
+        marioChgPaper(vec3_802c42e8 + 0x9C);
+        P16(0x2F2) = 30;
+        P16(0x2F0) = 0x65;
+        angle = (f32)revise360((f64)(PF(0x1A4) - PF(0x19C)));
+        if (angle < float_180_80420fa8) {
+            PF(0x1AC) = float_180_80420fa8;
+        } else {
+            PF(0x1AC) = float_0_80420f9c;
+        }
+        PF(0x1B0) = PF(0x1AC);
+        if (PF(0x194) == float_0_80420f9c) {
+            PF(0x1A4) = (f32)toMovedirSimple((f64)PF(0x1AC));
+        }
+        psndSFXOn_3D(0x178, (void*)((s32)player + 0x8C));
+        /* fall through */
+    case 0x65:
+        if (PF(0x194) == float_0_80420f9c) {
+            CHG_IDLE();
+        } else {
+            CHG_RUN();
+            PF(0x1A4) = PF(0x198);
+        }
+        s = P16(0x2F2) - 1;
+        P16(0x2F2) = s;
+        if (s < 1) {
+            P16(0x2F0) = 0x66;
+        }
+        break;
+
+    case 0x66:
+        if (PF(0x194) == float_0_80420f9c) {
+            CHG_IDLE();
+        } else {
+            CHG_RUN();
+        }
+        PU32(0x00) &= ~0x00800000U;
+        PU32(0x00) &= ~0x01000000U;
+        PU32(0x04) &= 0xFEFFF3FFU;
+        marioPaperOff();
+        mapResetPaperAmbColor();
+        PU32(0x04) &= ~4U;
+        marioAdjustMoveDir();
+        CAM_RESET();
+        marioChgMotSub(0, 0);
+        break;
+
+    case 0x6E:
+        PU32(0x00) &= ~0x00800000U;
+        PU32(0x00) &= ~0x01000000U;
+        PU32(0x00) &= ~0x00400000U;
+        PU32(0x00) &= ~0x02000000U;
+        P16(0x2F2) = 0;
+        PU32(0x00) &= ~0x08000000U;
+        PF(0x1B8) = float_20_80420ff4;
+        if (PF(0x194) == float_0_80420f9c) {
+            marioChgPose(str_M_S_1_80420fa0);
+        }
+        marioChgPaper(vec3_802c42e8 + 0x9C);
+        P16(0x2F2) = 30;
+        P16(0x2F0) = 0x6F;
+        PF(0x180) = float_0_80420f9c;
+        angle = (f32)revise360((f64)(PF(0x1A4) - PF(0x19C)));
+        if (angle < float_180_80420fa8) {
+            PF(0x1AC) = float_180_80420fa8;
+        } else {
+            PF(0x1AC) = float_0_80420f9c;
+        }
+        PF(0x1B0) = PF(0x1AC);
+        PF(0x1A4) = (f32)toMovedirSimple((f64)PF(0x1AC));
+        psndSFXOn_3D(0x178, (void*)((s32)player + 0x8C));
+        /* fall through */
+    case 0x6F:
+        s = P16(0x2F2) - 1;
+        P16(0x2F2) = s;
+        if (s < 1) {
+            P16(0x2F0) = 0x70;
+        }
+        break;
+
+    case 0x70:
+        PU32(0x00) &= ~0x00800000U;
+        PU32(0x00) &= ~0x01000000U;
+        PU32(0x04) &= 0xFEFFF3FFU;
+        marioPaperOff();
+        mapResetPaperAmbColor();
+        PU32(0x04) &= ~4U;
+        marioAdjustMoveDir();
+        allPartySlitOff();
+        CAM_RESET();
+        marioChgMot(0);
+        break;
+
+    case 0x78:
+        P16(0x2F2) = 0;
+        PU32(0x00) &= ~0x08000000U;
+        PF(0x1B8) = float_20_80420ff4;
+        if (PF(0x194) == float_0_80420f9c) {
+            marioChgPose(str_M_S_1_80420fa0);
+        }
+        marioChgPaper(vec3_802c42e8 + 0x9C);
+        P16(0x2F2) = 30;
+        P16(0x2F0) = 0x79;
+        PF(0x180) = float_0_80420f9c;
+        angle = (f32)revise360((f64)(PF(0x1A4) - PF(0x19C)));
+        if (angle < float_180_80420fa8) {
+            PF(0x1AC) = float_180_80420fa8;
+        } else {
+            PF(0x1AC) = float_0_80420f9c;
+        }
+        PF(0x1B0) = PF(0x1AC);
+        PF(0x1A4) = (f32)toMovedirSimple((f64)PF(0x1AC));
+        psndSFXOn_3D(0x178, (void*)((s32)player + 0x8C));
+        /* fall through */
+    case 0x79:
+        s = P16(0x2F2) - 1;
+        P16(0x2F2) = s;
+        if (s < 1) {
+            P16(0x2F0) = 0x7A;
+        }
+        break;
+
+    case 0x7A:
+        PU32(0x00) &= ~0x00800000U;
+        PU32(0x00) &= ~0x01000000U;
+        PU32(0x00) &= ~0x02000000U;
+        PU32(0x04) &= 0xFEFFF3FFU;
+        marioPaperOff();
+        mapResetPaperAmbColor();
+        PU32(0x04) &= ~4U;
+        marioAdjustMoveDir();
+        allPartySlitOff();
+        CAM_RESET();
+        marioChgMot(0);
+        break;
+    }
+
+done:
+#undef P8
+#undef PU8
+#undef P16
+#undef PU16
+#undef P32
+#undef PU32
+#undef PF
+#undef PP
+#undef CHG_IDLE
+#undef CHG_RUN
+#undef CAM_RESET
+#undef RESET_TO_SLIT_WAIT
+    return;
 }
+
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 s32 marioCreviceWallChk(f32* pos) {
     extern void* marioGetPtr(void);

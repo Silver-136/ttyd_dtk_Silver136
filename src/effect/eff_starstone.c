@@ -125,45 +125,146 @@ void effStarStoneDisp_2(s32 cameraId, s32 effectAddress) {
             }
         }
     }
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
     PSMTXTrans(trans, *(f32*)(work + 0x24), *(f32*)(work + 0x28), 0.0f);
     GXLoadTexMtxImm(trans, 0x1E, 1);
+    GXSetNumTevStages(2);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevOp(0, 0);
+    GXSetTevOrder(1, 0xFF, 0xFF, 0xFF);
+    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(1, 0, 2, 0, 0);
+    GXSetTevAlphaIn(1, 0, 5, 0, 7);
+    GXSetTevColor(1, &color);
     effGetTexObj(*(s32*)work == 2 ? 0x2E : 0x29, texObj);
     GXLoadTexObj(texObj, 0);
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(1, 3, 0);
 }
 
 /* stub-fill: effStarStoneDisp_1 | prototype_only | source_prototype */
-void effStarStoneDisp_1(void* camera, void* effect) {
+void effStarStoneDisp_1(s32 cameraId, s32 effectAddress) {
+    typedef f32 Mtx[3][4];
+    extern void* camGetPtr(s32);
     extern void mapSetMaterialFog(void);
-    extern void effGetTexObj(void*, s32, s32);
-    extern void GXLoadTexObj(void*, s32);
-    extern void GXBegin(s32, s32, s32);
-    extern void PSMTXTrans(void*, f32, f32, f32);
-    extern void PSMTXScale(void*, f32, f32, f32);
-    extern void PSMTXRotRad(void*, s32, f32);
-    extern void PSMTXConcat(void*, void*, void*);
-    extern void GXLoadPosMtxImm(void*, s32);
-    u8* work = *(u8**)((u8*)effect + 0xC);
-    u8 tex[64];
-    f32 trans[3][4], scale[3][4], rot[3][4], temp[3][4], model[3][4];
-    s32 pass;
+    extern void GXSetArray(s32, void*, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);
+    extern void GXSetChanMatColor(s32, void*);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32,s32,s32,s32);
+    extern void GXSetTevOp(s32,s32);
+    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevColorIn(s32,s32,s32,s32,s32);
+    extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
+    extern void GXSetTevColor(s32,void*);
+    extern void PSMTXTrans(Mtx,f32,f32,f32);
+    extern void PSMTXScale(Mtx,f32,f32,f32);
+    extern void PSMTXRotRad(Mtx,f32,char);
+    extern void PSMTXConcat(void*,void*,void*);
+    extern void GXLoadPosMtxImm(Mtx,s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetBlendMode(s32,s32,s32,s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);
+    extern void GXSetZMode(s32,s32,s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32,s32);
+    extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
+    extern void GXCallDisplayList(void*,u32);
+    extern void* diamond_1_dl_0_tbl[];
+    extern void* diamond_1_dl_1_tbl[];
+    extern u8 diamond_1_dl_0_size_tbl[];
+    extern u8 diamond_1_dl_1_size_tbl[];
+    extern void* diamond_7_dl_0_tbl[];
+    extern void* diamond_7_dl_1_tbl[];
+    extern u8 diamond_7_dl_0_size_tbl[];
+    extern u8 diamond_7_dl_1_size_tbl[];
+    u8* work = *(u8**)(effectAddress + 0xC);
+    u8* camera = camGetPtr(cameraId);
+    Mtx trans, scale, rot;
+    s32 type = *(s32*)work;
+    s32 color = *(s32*)(work + 0x5C);
+    s32 i;
+    f32 size;
+
     mapSetMaterialFog();
-    PSMTXTrans(trans, *(f32*)(work + 8), *(f32*)(work + 0xC), *(f32*)(work + 0x10));
-    PSMTXRotRad(rot, 0x79, *(f32*)(work + 0x1C));
-    PSMTXScale(scale, *(f32*)(work + 0x14) * 1.1f, *(f32*)(work + 0x14) * 1.1f, *(f32*)(work + 0x14) * 1.1f);
-    PSMTXConcat(trans, rot, temp);
-    PSMTXConcat(temp, scale, model);
-    GXLoadPosMtxImm(model, 0);
-    for (pass = 0; pass < 2; pass++) {
-        s32 texId = pass == 0 ? (*(s32*)work == 0 ? 0x2E : 0x2F) : 0x2D;
-        effGetTexObj(tex, texId, 0);
-        GXLoadTexObj(tex, 0);
-        GXBegin(0x80, 0, 4);
-        *(volatile f32*)0xCC008000=-1.0f; *(volatile f32*)0xCC008000=1.0f; *(volatile f32*)0xCC008000=0.0f;
-        *(volatile f32*)0xCC008000=1.0f; *(volatile f32*)0xCC008000=1.0f; *(volatile f32*)0xCC008000=0.0f;
-        *(volatile f32*)0xCC008000=1.0f; *(volatile f32*)0xCC008000=-1.0f; *(volatile f32*)0xCC008000=0.0f;
-        *(volatile f32*)0xCC008000=-1.0f; *(volatile f32*)0xCC008000=-1.0f; *(volatile f32*)0xCC008000=0.0f;
+    GXSetArray(11, (void*)(0x803AF400 + type * 4), 4);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4,0,0,0,0,0,2);
+    GXSetChanMatColor(4, work + 0x30);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(2);
+    GXSetTevOrder(0,0xFF,0xFF,4);
+    GXSetTevOp(0,4);
+    GXSetTevOrder(1,0xFF,0xFF,0xFF);
+    GXSetTevColorOp(1,0,0,0,1,0);
+    GXSetTevAlphaOp(1,0,0,0,1,0);
+    GXSetTevColorIn(1,0,2,0,0);
+    GXSetTevAlphaIn(1,0,5,0,7);
+    GXSetTevColor(1,&color);
+
+    PSMTXTrans(trans, *(f32*)(work+8), *(f32*)(work+0xC), *(f32*)(work+0x10));
+    size = 1.1f * *(f32*)(work+0x14);
+    PSMTXScale(scale,size,size,size);
+    PSMTXConcat(trans,scale,trans);
+    PSMTXRotRad(rot,0.017453292f * *(f32*)(work+0x1C),'y');
+    PSMTXConcat(trans,rot,trans);
+    PSMTXConcat(camera+0x118,trans,trans);
+    GXLoadPosMtxImm(trans,0);
+    GXSetCurrentMtx(0);
+    GXSetBlendMode(1,4,5,0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7,0,0,7,0);
+    GXSetZMode(1,3,0);
+    GXSetCullMode(2);
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(9,2);
+    GXSetVtxAttrFmt(0,9,1,3,11);
+    GXSetArray(9,(void*)(type == 0 ? 0x803AF180 : 0x803AF780),6);
+    GXSetVtxDesc(10,2);
+    GXSetVtxAttrFmt(0,10,0,1,6);
+    GXSetArray(10,(void*)(type == 0 ? 0x803AF280 : 0x803AF880),3);
+    GXSetVtxDesc(11,2);
+    GXSetVtxAttrFmt(0,11,1,5,0);
+    GXSetArray(11,(void*)(type == 0 ? 0x803AF3A0 : 0x803AFA20),4);
+    GXSetVtxDesc(13,2);
+    GXSetVtxAttrFmt(0,13,1,3,13);
+    GXSetArray(13,(void*)(type == 0 ? 0x803AF300 : 0x803AF900),4);
+    if (type == 0) {
+        for (i=0;i<34;i++) GXCallDisplayList(diamond_1_dl_0_tbl[i], diamond_1_dl_0_size_tbl[i] << 5);
+    } else {
+        for (i=0;i<34;i++) GXCallDisplayList(diamond_7_dl_0_tbl[i], diamond_7_dl_0_size_tbl[i] << 5);
+    }
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(9,2);
+    GXSetVtxAttrFmt(0,9,1,3,11);
+    GXSetArray(9,(void*)(type == 0 ? 0x803AF180 : 0x803AF780),6);
+    GXSetVtxDesc(10,2);
+    GXSetVtxAttrFmt(0,10,0,1,6);
+    GXSetArray(10,(void*)(type == 0 ? 0x803AF280 : 0x803AF880),3);
+    GXSetVtxDesc(11,2);
+    GXSetVtxAttrFmt(0,11,1,5,0);
+    GXSetVtxDesc(13,2);
+    GXSetVtxAttrFmt(0,13,1,3,13);
+    GXSetArray(13,(void*)(type == 0 ? 0x803AF300 : 0x803AF900),4);
+    if (type == 0) {
+        for (i=0;i<34;i++) GXCallDisplayList(diamond_1_dl_1_tbl[i], diamond_1_dl_1_size_tbl[i] << 5);
+    } else {
+        for (i=0;i<33;i++) GXCallDisplayList(diamond_7_dl_1_tbl[i], diamond_7_dl_1_size_tbl[i] << 5);
     }
 }
 

@@ -286,10 +286,16 @@ u8 nameWinGX(f64 x, f64 y, f64 width, f64 height, s32 palette, s32 texture) {
     extern void* camGetPtr(s32);
     extern void TEXGetGXTexObjFromPalette(s32, void*, s32);
     extern void GXLoadTexObj(void*, s32);
+    extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, s32, s32, s32);
+    extern u16 GXGetTexObjWidth(void*);
+    extern u16 GXGetTexObjHeight(void*);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevSwapMode(s32, s32, s32);
     extern void GXSetZCompLoc(s32);
     extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
     extern void GXSetBlendMode(s32, s32, s32, s32);
     extern void GXSetZMode(s32, s32, s32);
+    extern void GXSetFog(s32, f32, f32, f32, f32, void*);
     extern void GXSetNumChans(s32);
     extern void GXSetNumTevStages(s32);
     extern void GXSetTevOrder(s32, s32, s32, s32);
@@ -297,6 +303,8 @@ u8 nameWinGX(f64 x, f64 y, f64 width, f64 height, s32 palette, s32 texture) {
     extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
     extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
     extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetTevKAlphaSel(s32, s32);
     extern void GXSetCullMode(s32);
     extern void GXClearVtxDesc(void);
     extern void GXSetVtxDesc(s32, s32);
@@ -314,21 +322,38 @@ u8 nameWinGX(f64 x, f64 y, f64 width, f64 height, s32 palette, s32 texture) {
     f32 right = (f32)(x + width - 16.0);
     f32 bottom = (f32)(y - height + 16.0);
     s32 ids[4] = { 4, 7, 6, 3 };
+    u32 fogColor = 0xFFFFFFFF;
+    u32 tevColor = 0x00000080;
     s32 i;
 
     GXSetZCompLoc(1);
     GXSetAlphaCompare(7, 0, 0, 7, 0);
     GXSetBlendMode(1, 4, 5, 7);
     GXSetZMode(0, 7, 0);
+    GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &fogColor);
     GXSetNumChans(0);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
     GXSetNumTevStages(3);
-    for (i = 0; i < 3; i++) {
-        GXSetTevOrder(i, i == 0 ? 0 : 1, i, 0xFF);
-        GXSetTevColorOp(i, 0, 0, 0, 1, 0);
-        GXSetTevAlphaOp(i, 0, 0, 0, 1, 0);
-    }
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
     GXSetTevColorIn(0, 0, 0, 0, 8);
     GXSetTevAlphaIn(0, 0, 0, 0, 7);
+    GXSetTevSwapMode(0, 0, 0);
+    GXSetTevOrder(1, 1, 1, 0xFF);
+    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(1, 0, 0xF, 10, 0);
+    GXSetTevAlphaIn(1, 0, 4, 4, 7);
+    GXSetTevColor(1, &tevColor);
+    GXSetTevSwapMode(1, 0, 0);
+    GXSetTevOrder(2, 1, 2, 0xFF);
+    GXSetTevColorOp(2, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(2, 0xF, 8, 10, 0);
+    GXSetTevAlphaIn(2, 7, 6, 4, 7);
+    GXSetTevKAlphaSel(2, 0);
+    GXSetTevSwapMode(2, 0, 0);
     GXSetCullMode(0);
     GXClearVtxDesc();
     GXSetVtxDesc(9, 1);
@@ -338,16 +363,20 @@ u8 nameWinGX(f64 x, f64 y, f64 width, f64 height, s32 palette, s32 texture) {
     GXLoadPosMtxImm((u8*)camGetPtr(1) + 0x118, 0);
     GXSetCurrentMtx(0);
 
+#pragma unroll 4
     for (i = 0; i < 4; i++) {
         f32 left = i == 1 || i == 3 ? right : (f32)x;
         f32 top = i >= 2 ? bottom + 16.0f : (f32)y;
         f32 quadRight = left + (i == 1 || i == 3 ? 16.0f : (f32)width - 16.0f);
         f32 quadBottom = top - (i >= 2 ? 16.0f : (f32)height - 16.0f);
         TEXGetGXTexObjFromPalette(palette, texObj, texture + ids[i]);
+        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
         GXLoadTexObj(texObj, 0);
-        GXSetNumTexGens(1);
+        GXSetNumTexGens(2);
         GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx, 1.0f, 1.0f, 1.0f);
+        PSMTXScale(texMtx,
+                   __fabs(quadRight - left) / (f32)GXGetTexObjWidth(texObj),
+                   __fabs(top - quadBottom) / (f32)GXGetTexObjHeight(texObj), 1.0f);
         GXLoadTexMtxImm(texMtx, 0x1E, 1);
         GXBegin(0x80, 0, 4);
         *fifo = left; *fifo = top; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
@@ -365,6 +394,10 @@ u8 nameKirinukiGX(f64 x, f64 y, f64 width, f64 height) {
     extern void* camGetPtr(s32);
     extern void TEXGetGXTexObjFromPalette(s32, void*, s32);
     extern void GXLoadTexObj(void*, s32);
+    extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, s32, s32, s32);
+    extern u16 GXGetTexObjWidth(void*);
+    extern u16 GXGetTexObjHeight(void*);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
     extern void GXSetBlendMode(s32, s32, s32, s32);
     extern void GXSetZCompLoc(s32);
     extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
@@ -396,6 +429,7 @@ u8 nameKirinukiGX(f64 x, f64 y, f64 width, f64 height) {
     GXSetAlphaCompare(6, 0x80, 1, 0, 0);
     GXSetZMode(0, 7, 0);
     GXSetNumChans(0);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
     GXSetNumTevStages(1);
     GXSetTevOrder(0, 0, 0, 0xFF);
     GXSetTevOp(0, 3);
@@ -414,10 +448,13 @@ u8 nameKirinukiGX(f64 x, f64 y, f64 width, f64 height) {
         f32 right = left + ((i & 1) ? 8.0f : (f32)width - 8.0f);
         f32 bottom = top - ((i & 2) ? 8.0f : (f32)height - 8.0f);
         TEXGetGXTexObjFromPalette(palette, texObj, textureIds[i]);
+        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
         GXLoadTexObj(texObj, 0);
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx, 1.0f, 1.0f, 1.0f);
+        PSMTXScale(texMtx,
+                   __fabs(right - left) / (f32)GXGetTexObjWidth(texObj),
+                   __fabs(top - bottom) / (f32)GXGetTexObjHeight(texObj), 1.0f);
         GXLoadTexMtxImm(texMtx, 0x1E, 1);
         GXBegin(0x80, 0, 4);
         *fifo = left; *fifo = top; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
@@ -550,17 +587,33 @@ void nameEntDisp(void) {
     extern void GXSetViewport(f32, f32, f32, f32, f32, f32);
     extern void winTexInit(s32);
     extern void winTexSet(s32, Vec*, Vec*, void*);
+    extern void nameBG(void);
+    extern void nameKirinukiGX(f64, f64, f64, f64);
+    extern void nameWinGX(f64, f64, f64, f64, s32, s32);
     extern void FontDrawStart(void);
     extern void FontDrawString(f32, f32, const char*);
+    extern void FontDrawColor(void*);
+    extern void FontDrawEdge(void);
+    extern void FontDrawEdgeOff(void);
+    extern u16 FontGetMessageWidth(const char*);
     extern void* memset(void*, s32, u32);
     extern char* strncpy(char*, const char*, u32);
     extern u32 strlen(const char*);
+    extern char* msgSearch(const char*);
+    extern void windowDispGX_Waku_col(f64, f64, f64, f64, f64, s32, void*);
+    extern void nameMaskGX(f64);
+    extern char* msg_tbl[];
+    extern char str_msg_nameent_ok_802fe450[];
+    extern char str_msg_nameent_yes_802fe460[];
+    extern char str_msg_nameent_no_802fe470[];
+    extern char str_msg_nameent_ok_01_802fe480[];
     u8* work = wp;
     f32 projection[7];
     f32 viewport[6];
     Mtx saved;
     Vec pos, scale;
     u32 color = 0xFFFFFFFF;
+    u32 messageColor = 0xFFFFFFFF;
     char glyph[16];
     s32 file = ***(s32***)(work + 0x60);
     s32 i;
@@ -572,6 +625,7 @@ void nameEntDisp(void) {
     }
     GXSetProjection((u8*)camGetPtr(1) + 0x160, *(s32*)((u8*)camGetPtr(1) + 0x1A0));
 
+    nameBG();
     winTexInit(file);
     pos.x = -240.0f; pos.y = 120.0f; pos.z = 0.0f;
     scale.x = 480.0f; scale.y = 270.0f; scale.z = 1.0f;
@@ -585,6 +639,7 @@ void nameEntDisp(void) {
     pos.x = -160.0f; pos.y = -160.0f;
     scale.x = 500.0f; scale.y = 40.0f;
     winTexSet(0x2B, &pos, &scale, &color);
+    nameKirinukiGX(-240.0, 120.0, 480.0, 270.0);
 
     FontDrawStart();
     for (i = 0; i < 8; i++) {
@@ -599,6 +654,46 @@ void nameEntDisp(void) {
             FontDrawString(-220.0f + 40.0f * (f32)i, -100.0f, glyph);
         }
     }
+
+    {
+        const char* message = msgSearch(msg_tbl[*(s32*)(work + 0x58)]);
+        f32 messageWidth = (f32)FontGetMessageWidth(message);
+        windowDispGX_Waku_col(-250.0, -160.0, 500.0, 40.0, 20.0, 0, &messageColor);
+        FontDrawStart();
+        FontDrawString((240.0f - messageWidth) * 0.5f - 120.0f, -168.0f, message);
+        nameMaskGX((f64)*(f32*)(work + 0x54));
+    }
+    if (*(s32*)(work + 8) == 100) {
+        const char* ok = msgSearch(str_msg_nameent_ok_802fe450);
+        const char* yes = msgSearch(str_msg_nameent_yes_802fe460);
+        const char* no = msgSearch(str_msg_nameent_no_802fe470);
+        u32 textColor = 0xFFFFFFFF;
+        if (*(s32*)(work + 0x58) == 4) {
+            ok = msgSearch(str_msg_nameent_ok_01_802fe480);
+        }
+        nameWinGX(-180.0, 130.0, 360.0, 100.0, file, 1);
+        nameWinGX(-80.0, 10.0, 160.0, 120.0, file, 1);
+        FontDrawStart();
+        FontDrawColor(&textColor);
+        FontDrawEdge();
+        FontDrawString(-(f32)FontGetMessageWidth(ok) * 0.5f, 110.0f, ok);
+        FontDrawString(-(f32)FontGetMessageWidth((char*)work + 0x3C) * 0.5f,
+                       70.0f, (char*)work + 0x3C);
+        FontDrawString(-(f32)FontGetMessageWidth(no) * 0.5f, -20.0f, yes);
+        FontDrawString(-(f32)FontGetMessageWidth(no) * 0.5f, -60.0f, no);
+        FontDrawEdgeOff();
+    }
+    winTexInit(file);
+    pos.x = *(f32*)(work + 0x1C) + 2.0f;
+    pos.y = *(f32*)(work + 0x20) - 2.0f;
+    pos.z = 0.0f;
+    scale.x = 32.0f;
+    scale.y = 32.0f;
+    scale.z = 1.0f;
+    winTexSet(0, &pos, &scale, &color);
+    pos.x = *(f32*)(work + 0x1C);
+    pos.y = *(f32*)(work + 0x20);
+    winTexSet(0, &pos, &scale, &color);
     GXSetProjectionv(projection);
     GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
 }

@@ -1,57 +1,109 @@
 #include "effect/n64/eff_cloud_n64.h"
 
 
-u8 effCloudDisp(s32 camId, s32 effectAddress) {
-    typedef f32 Mtx[3][4];
-    typedef struct GXTexObj { u32 data[8]; } GXTexObj;
-    extern void* camGetPtr(s32);
-    extern void effGetTexObj(s32, void*);
-    extern void GXLoadTexObj(void*, s32);
-    extern void GXSetNumChans(s32);
-    extern void GXSetNumTexGens(s32);
-    extern void GXSetNumTevStages(s32);
-    extern void GXSetTevOrder(s32, s32, s32, s32);
-    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
-    extern void GXSetCullMode(s32);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32, s32);
-    extern void GXLoadPosMtxImm(Mtx, s32);
-    extern void GXSetCurrentMtx(s32);
-    extern void DCFlushRange(void*, u32);
-    extern void* smartAlloc(u32, s32);
-    extern void* memset(void*, s32, u32);
-    extern void GXBegin(s32, s32, s16);
-    u32* effect = (u32*)effectAddress;
-    u8* work = (u8*)effect[3];
-    char* cam = camGetPtr(camId);
-    GXTexObj tex;
-    f32* vertices;
-    s32 i;
-    s32 strip;
+void effCloudDisp(int cameraId, int effectAddress) {
+    typedef float Mtx[3][4];
+    typedef struct SmartAllocationData { void* pMemory; } SmartAllocationData;
+    extern void* camGetPtr(int);
+    extern void GXSetNumChans(int);
+    extern void GXSetChanCtrl(int, int, int, int, int, int, int);
+    extern void GXSetNumTevStages(int);
+    extern void GXSetTevOrder(int, int, int, int);
+    extern void GXSetTevColorOp(int, int, int, int, int, int);
+    extern void GXSetTevAlphaOp(int, int, int, int, int, int);
+    extern void GXSetTevColorIn(int, int, int, int, int);
+    extern void GXSetTevAlphaIn(int, int, int, int, int);
+    extern void GXSetNumTexGens(int);
+    extern void GXSetTexCoordGen2(int, int, int, int, int, int);
+    extern void PSMTXScale(Mtx, float, float, float);
+    extern void GXLoadTexMtxImm(Mtx, int, int);
+    extern void effGetTexObjN64(int, void*);
+    extern void GXLoadTexObj(void*, int);
+    extern void GXSetTevColor(int, void*);
+    extern void GXLoadPosMtxImm(Mtx, int);
+    extern void GXSetCurrentMtx(int);
+    extern void GXSetCullMode(int);
+    extern SmartAllocationData* smartAlloc(void*, int);
+    extern void* memset(void*, int, unsigned int);
+    extern void effSetVtxDescN64(void*);
+    extern void GXBegin(int, int, int);
+    extern float float_0p015625_80424f10;
+    extern float float_0p03125_80424f14;
+    extern float float_0_80424f18;
+    extern unsigned char unk_8042966c;
+    unsigned char texObj[0x20];
+    Mtx texMtx;
+    unsigned char* entry = (unsigned char*)effectAddress;
+    unsigned char* work = *(unsigned char**)(entry + 0xC);
+    unsigned char* camera = (unsigned char*)camGetPtr(cameraId);
+    SmartAllocationData* allocation;
+    float* vertices;
+    unsigned int color1;
+    unsigned int color2;
+    int type = *(int*)work;
+    int frame = *(int*)(work + 0x14);
+    int alpha = *(int*)(work + 0x24);
+    int i;
+    int strip;
 
-    effGetTexObj(0x83, &tex);
-    GXLoadTexObj(&tex, 0);
     GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
+    if (type >= 2) {
+        GXSetNumTevStages(2);
+        GXSetTevOrder(0, 0, 0, 4);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 2, 4, 8, 15);
+        GXSetTevAlphaIn(0, 7, 5, 4, 7);
+        GXSetTevOrder(1, 0xFF, 0xFF, 0xFF);
+        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(1, 15, 15, 15, 0);
+        GXSetTevAlphaIn(1, 7, 0, 1, 7);
+    } else {
+        GXSetNumTevStages(2);
+        GXSetTevOrder(0, 0, 0, 4);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 2, 10, 8, 15);
+        GXSetTevAlphaIn(0, 7, 5, 4, 7);
+        GXSetTevOrder(1, 0xFF, 0xFF, 0xFF);
+        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(1, 15, 15, 15, 0);
+        GXSetTevAlphaIn(1, 7, 0, 1, 7);
+    }
     GXSetNumTexGens(1);
-    GXSetNumTevStages(2);
-    GXSetTevOrder(0, 0, 0, 4);
-    GXSetTevOrder(1, 0, 0, 4);
-    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
-    GXSetCullMode(0);
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 2);
-    GXSetVtxDesc(11, 2);
-    GXSetVtxDesc(13, 2);
-    GXLoadPosMtxImm((f32(*)[4])(cam + 0x118), 0);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    PSMTXScale(texMtx, float_0p015625_80424f10, float_0p03125_80424f14, float_0_80424f18);
+    GXLoadTexMtxImm(texMtx, 0x1E, 1);
+    effGetTexObjN64(0x83, texObj);
+    GXLoadTexObj(texObj, 0);
+
+    color1 = ((unsigned int)*(unsigned char*)(work + 0x18) << 24) |
+             ((unsigned int)*(unsigned char*)(work + 0x1C) << 16) |
+             ((unsigned int)*(unsigned char*)(work + 0x20) << 8) |
+             (unsigned char)alpha;
+    color2 = ((unsigned int)*(unsigned char*)(work + 0x28) << 24) |
+             ((unsigned int)*(unsigned char*)(work + 0x2C) << 16) |
+             ((unsigned int)*(unsigned char*)(work + 0x30) << 8) |
+             unk_8042966c;
+    GXSetTevColor(1, &color1);
+    GXSetTevColor(2, &color2);
+    GXLoadPosMtxImm((float (*)[4])(camera + 0x11C), 0);
     GXSetCurrentMtx(0);
-    vertices = smartAlloc(0x690, 0);
+    GXSetCullMode(0);
+    allocation = smartAlloc(camera + 0x11C, 3);
+    vertices = (float*)allocation->pMemory;
     memset(vertices, 0, 0x690);
+    effSetVtxDescN64(vertices);
+
     for (i = 0; i < 30; i++) {
-        s32 next = (i + *(s32*)(work + 0x2A8)) % 30;
-        f32 x = ((f32*)(work + 0x50))[next];
-        f32 y = ((f32*)(work + 0xC8))[next];
-        f32 z = ((f32*)(work + 0x140))[next];
-        f32 width = *(f32*)(work + 0x18) * (1.0f - (f32)i / 30.0f);
+        int next = (i + *(int*)(work + 0x2A8)) % 30;
+        float x = ((float*)(work + 0x50))[next];
+        float y = ((float*)(work + 0xC8))[next];
+        float z = ((float*)(work + 0x140))[next];
+        float width = *(float*)(work + 0x34) * (1.0f - (float)i / 30.0f);
         vertices[i * 6 + 0] = x - width;
         vertices[i * 6 + 1] = y;
         vertices[i * 6 + 2] = z;
@@ -59,17 +111,15 @@ u8 effCloudDisp(s32 camId, s32 effectAddress) {
         vertices[i * 6 + 4] = y;
         vertices[i * 6 + 5] = z;
     }
-    DCFlushRange(vertices, 0x690);
     for (strip = 0; strip < 29; strip++) {
         GXBegin(0x90, 0, 6);
-        *(volatile u16*)0xCC008000 = strip * 2;
-        *(volatile u16*)0xCC008000 = strip * 2 + 1;
-        *(volatile u16*)0xCC008000 = strip * 2 + 2;
-        *(volatile u16*)0xCC008000 = strip * 2 + 1;
-        *(volatile u16*)0xCC008000 = strip * 2 + 3;
-        *(volatile u16*)0xCC008000 = strip * 2 + 2;
+        *(volatile unsigned short*)0xCC008000 = strip * 2;
+        *(volatile unsigned short*)0xCC008000 = strip * 2 + 1;
+        *(volatile unsigned short*)0xCC008000 = strip * 2 + 2;
+        *(volatile unsigned short*)0xCC008000 = strip * 2 + 1;
+        *(volatile unsigned short*)0xCC008000 = strip * 2 + 3;
+        *(volatile unsigned short*)0xCC008000 = strip * 2 + 2;
     }
-    return 0;
 }
 
 #pragma optimize_for_size off

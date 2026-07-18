@@ -36,29 +36,189 @@ void unk_8017b330(void) {
 
 void evt_unitwin_disp_func(s32 cameraId, void* work) {
     typedef f32 Mtx[3][4];
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
     extern s32 pouchGetCoin(void);
     extern s32 pouchGetStarPiece(void);
     extern s32 pouchGetSuperCoin(void);
+    extern void* pouchGetPtr(void);
     extern void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
     extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
     extern void PSMTXConcat(Mtx a, Mtx b, Mtx out);
+    extern void windowDispGX_Waku_col(f32 x, f32 y, f32 width, f32 height,
+                                      f32 radius, s32 style, void* color);
+    extern void FontDrawStart(void);
+    extern void FontDrawEdge(void);
+    extern void FontDrawEdgeOff(void);
+    extern void FontDrawColor(void* color);
+    extern void FontDrawString(f32 x, f32 y, char* text);
+    extern void FontDrawMessage(s32 x, s32 y, char* text);
+    extern char* msgSearch(char* key);
+    extern u32 strlen(const char* text);
+    extern u8 itemDataTable[];
+    extern void* gp;
+    extern void* lotteryGetPtr(void);
+    extern s32 sprintf(char* buffer, const char* format, ...);
     extern void iconDispGx2(Mtx m, s32 alpha, s32 icon);
     extern void iconNumberDispGx(Mtx m, s32 number, s32 flag, void* color);
+    extern void mapObjGetPos(void* object, Vec3* position);
+    extern void* camGetPtr(s32 cameraId);
+    extern void GXSetProjection(void* matrix, s32 type);
+    extern void GXGetProjectionv(f32* projection);
+    extern void GXGetViewportv(f32* viewport);
+    extern void GXProject(f32 x, f32 y, f32 z, void* matrix,
+                          f32* projection, f32* viewport,
+                          f32* screenX, f32* screenY, f32* screenZ);
     Mtx trans, scale;
     u32 white = 0xFFFFFFFF;
     u16 flags = *(u16*)work;
     s32 value;
+    s32 i;
 
     if ((flags & 1) == 0) return;
-    if ((flags & 0x1000) != 0) { value = pouchGetStarPiece(); PSMTXTrans(trans,-220.0f,-113.0f,0.0f); iconDispGx2(trans,0x10,0x195); iconNumberDispGx(trans,value,0,&white); }
-    if ((flags & 0x4000) != 0) { value = pouchGetSuperCoin(); PSMTXTrans(trans,-220.0f,-113.0f,0.0f); iconDispGx2(trans,0x10,0x10A); iconNumberDispGx(trans,value,0,&white); }
-    if ((flags & 0x8000) != 0) { value = pouchGetCoin(); PSMTXTrans(trans,-220.0f,-113.0f,0.0f); iconDispGx2(trans,0x10,0x193); iconNumberDispGx(trans,value,0,&white); }
+    {
+        s32 selected = *(s32*)((s32)work + 0x24);
+        s32 item = *(s32*)(*(s32*)((s32)work + 8) + selected * 4);
+        char* itemName = *(char**)(itemDataTable + item * 0x28 + 4);
+        char* itemDescription = *(char**)(itemDataTable + item * 0x28 + 8);
+
+        windowDispGX_Waku_col(-150.0f, 120.0f, 300.0f, 50.0f,
+                              20.0f, 0, &white);
+        FontDrawStart();
+        FontDrawEdge();
+        FontDrawColor(&white);
+        FontDrawString(-((f32)strlen(itemName) * 24.0f) * 0.25f,
+                       108.0f, itemName);
+        FontDrawEdgeOff();
+        windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f,
+                              20.0f, 0, &white);
+        FontDrawStart();
+        FontDrawMessage(-220, -138, msgSearch(itemDescription));
+
+        for (i = 0; i < *(s32*)((s32)work + 0x18); i++) {
+            s32 listedItem = *(s32*)(*(s32*)((s32)work + 8) + i * 4);
+            if (listedItem != 0) {
+                Vec3 world;
+                f32 projection[7];
+                f32 viewport[6];
+                f32 screenX, screenY, screenZ;
+                void* camera;
+                s32 number;
+
+                mapObjGetPos(*(void**)(*(s32*)((s32)work + 4) + i * 0xC),
+                             &world);
+                camera = camGetPtr(4);
+                GXSetProjection((u8*)camera + 0x15C,
+                                *(s32*)((s32)camera + 0x19C));
+                GXGetProjectionv(projection);
+                GXGetViewportv(viewport);
+                GXProject(world.x, world.y, world.z,
+                          (u8*)camera + 0x11C, projection, viewport,
+                          &screenX, &screenY, &screenZ);
+                camera = camGetPtr(cameraId);
+                GXSetProjection((u8*)camera + 0x15C,
+                                *(s32*)((s32)camera + 0x19C));
+                if (listedItem >= 0xF0 && listedItem < 0x153)
+                    number = *(u16*)(itemDataTable + listedItem * 0x28 + 0x16) & 0xFF;
+                else
+                    number = *(u16*)(itemDataTable + listedItem * 0x28 + 0x14) & 0xFF;
+                PSMTXTrans(trans, screenX - 296.0f,
+                           300.0f - screenY, 0.0f);
+                iconNumberDispGx(trans, number, 1, &white);
+            }
+        }
+    }
+    if ((flags & 0xD000) != 0) {
+        windowDispGX_Waku_col(-250.0f, -75.0f, 150.0f, 45.0f,
+                              20.0f, 0, &white);
+        PSMTXTrans(trans, -220.0f, -113.0f, 0.0f);
+        PSMTXScale(scale, 0.7f, 0.7f, 0.7f);
+        PSMTXConcat(trans, scale, trans);
+        if ((flags & 0x1000) != 0) {
+            iconDispGx2(trans, 0x10, 0x193);
+            value = pouchGetCoin();
+        } else if ((flags & 0x4000) != 0) {
+            iconDispGx2(trans, 0x10, 0x10A);
+            value = pouchGetSuperCoin();
+        } else {
+            iconDispGx2(trans, 0x10, 0x195);
+            value = pouchGetStarPiece();
+        }
+        PSMTXTrans(trans, -192.0f, -113.0f, 0.0f);
+        iconDispGx2(trans, 0x10, 0x1DE);
+        PSMTXTrans(trans, -126.0f, -113.0f, 0.0f);
+        iconNumberDispGx(trans, *(s32*)((s32)work + 0x2C), 0, &white);
+        if (*(s32*)((s32)work + 0x2C) != value) {
+            s32 delta = (value - *(s32*)((s32)work + 0x2C)) / 10;
+            if (delta == 0) delta = value > *(s32*)((s32)work + 0x2C) ? 1 : -1;
+            if ((*(u32*)((s32)work + 0x5C) & 1) != 0) {
+                *(s32*)((s32)work + 0x2C) += delta;
+            }
+            *(s32*)((s32)work + 0x5C) += 1;
+        }
+    }
     if ((flags & 0x2000) != 0) {
+        windowDispGX_Waku_col(-250.0f, -130.0f, 150.0f, 45.0f,
+                              20.0f, 0, &white);
         PSMTXTrans(trans, -210.0f, -166.0f, 0.0f);
         PSMTXScale(scale, 1.1f, 1.1f, 1.1f);
         PSMTXConcat(trans, scale, trans);
         iconDispGx2(trans, 0x10, 0x226);
+        PSMTXTrans(trans, -126.0f, -168.0f, 0.0f);
         iconNumberDispGx(trans, *(s32*)((s32)work + 0x30), 0, &white);
+        if ((*(u32*)((s32)gp + 0x1C) & 3) == 0) {
+            s32 target = *(s16*)((s32)pouchGetPtr() + 0x9C);
+            s32 shown = *(s32*)((s32)work + 0x30);
+            s32 delta = (target - shown) / 10;
+            if (delta == 0 && target != shown)
+                delta = target > shown ? 1 : -1;
+            *(s32*)((s32)work + 0x30) = shown + delta;
+        }
+    }
+    if ((flags & 0x100) != 0 && (*(u16*)lotteryGetPtr() & 2) != 0) {
+        char digits[8];
+        void* lottery = lotteryGetPtr();
+
+        windowDispGX_Waku_col(-250.0f, -130.0f, 150.0f, 45.0f,
+                              20.0f, 0, &white);
+        PSMTXTrans(trans, -220.0f, -172.0f, 0.0f);
+        iconDispGx2(trans, 0x10, 0x148);
+        sprintf(digits, "%04d", (s32)*(s16*)((s32)lottery + 0x20));
+        for (i = 0; i < 4; i++) {
+            PSMTXTrans(trans, -186.0f + 20.0f * (f32)i,
+                       -168.0f, 0.0f);
+            iconNumberDispGx(trans, digits[i] - '0', 0, &white);
+        }
+    }
+    {
+        s32 menuState = *(s32*)((s32)work + 0x50);
+        if (menuState == 2 || menuState == 3 ||
+            (menuState >= 0xB && menuState <= 0x10)) {
+            char* title;
+
+            if (menuState == 2 || menuState == 3)
+                title = msgSearch("msg_window_title_1");
+            else if (menuState == 0xC)
+                title = msgSearch("msg_window_title_2");
+            else if (menuState == 0x10)
+                title = msgSearch("msg_window_title_4");
+            else
+                title = msgSearch("msg_window_title_3");
+            windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f, 220.0f,
+                                  20.0f, 0, &white);
+            windowDispGX_Waku_col(51.0f, 114.0f, 150.0f, 28.0f,
+                                  8.0f, 0, &white);
+            FontDrawStart();
+            FontDrawEdge();
+            FontDrawColor(&white);
+            FontDrawString(71.0f, 111.0f, title);
+            FontDrawEdgeOff();
+            if (menuState != 3) {
+                PSMTXTrans(trans, 244.0f, 82.0f, 0.0f);
+                PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
+                PSMTXConcat(trans, scale, trans);
+                iconDispGx2(trans, 0x10, 0x213);
+            }
+        }
     }
     (void)cameraId;
 }

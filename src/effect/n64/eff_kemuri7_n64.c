@@ -35,10 +35,26 @@ extern const Vec3 vec3_802fb280;
 extern f32 float_deg2rad_80425774;
 
 
-u8 effKemuri7Disp(int param_1, void* effEntry) {
-    return 0;
+void effKemuri7Disp(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4];
+    extern void* camGetPtr(s32); extern void GXSetNumChans(s32); extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32); extern void PSMTXScale(Mtx,f32,f32,f32);
+    extern void GXLoadTexMtxImm(Mtx,s32,s32); extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32);
+    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevColorIn(s32,s32,s32,s32,s32); extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
+    extern void effGetTexObjN64(s32,void*); extern void GXLoadTexObj(void*,s32); extern void GXSetCullMode(s32);
+    extern void effSetVtxDescN64(void*); extern void GXSetTevColor(s32,void*); extern void PSMTXConcat(Mtx,Mtx,Mtx);
+    extern void GXLoadPosMtxImm(Mtx,s32); extern void GXBegin(s32,s32,s32); extern void tri2(s32,s32,s32,s32,s32,s32,s32);
+    extern f32 float_0p03125_80425764; extern f32 float_0_80425768; extern f32 float_neg1_8042576c; extern f32 float_1_80425770;
+    u8 tex[0x20]; Mtx texMtx,draw; u8* entry=(u8*)effect;u8* work=*(u8**)(entry+0xC);u8* camera=(u8*)camGetPtr(cameraId);s32 i;
+    GXSetNumChans(0);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+    PSMTXScale(texMtx,float_0p03125_80425764,float_0p03125_80425764,float_0_80425768);GXLoadTexMtxImm(texMtx,0x1E,1);
+    GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);
+    GXSetTevColorIn(0,15,15,15,15);GXSetTevAlphaIn(0,7,4,5,7);effGetTexObjN64(0x4F,tex);GXLoadTexObj(tex,0);GXSetCullMode(0);effSetVtxDescN64((void*)0x803A4D90);
+    for(i=0;i<*(s32*)(entry+8);i++,work+=0x88){if(*(s32*)work!=0){u32 color=0xFFFFFF00|*(u8*)(work+8);GXSetTevColor(1,&color);
+        PSMTXConcat((f32 (*)[4])(camera+0x11C),(f32 (*)[4])(work+0x30),draw);if(*(f32*)(work+0x60)==float_0_80425768){PSMTXScale(texMtx,float_neg1_8042576c,float_1_80425770,float_1_80425770);PSMTXConcat(draw,texMtx,draw);}
+        GXLoadPosMtxImm(draw,0);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3);}}
 }
-
 
 void* effKemuri7N64Entry(f32 x, f32 y, f32 z, f32 angle, f32 scale) {
     extern void* effEntry(void);

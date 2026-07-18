@@ -1684,75 +1684,107 @@ void msgWindow_Clear_Main(void* win) {
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void msgWindow_Disp(s32, void*);
     extern f32 float_400_8042061c;
+
     u8* window = win;
-    u8* work;
+    u8* work = **(u8***)(window + 0x28);
+    s32 state = *(u16*)window;
     s32 result;
     s64 elapsed;
 
-    if (*(u16*)window == 5) {
-        *(u16*)window = 1;
-        *(u64*)(window + 0x20) = *(u64*)((u8*)gp + 0x38);
-        work = **(u8***)(window + 0x28);
-        *(u64*)(work + 0x18) = *(u64*)((u8*)gp + 0x38);
-        *(u64*)(work + 0x30) = *(u64*)((u8*)gp + 0x38);
-    } else if (*(u16*)window < 5) {
-        if (*(u16*)window != 1) {
-            goto display;
-        }
-    } else {
-        if (*(u16*)window == 7) {
-            if (*(u16*)(window + 6) == 0) {
-                windowDelete(window);
-                return;
-            }
-            elapsed = (s64)(*(u64*)((u8*)gp + 0x38) - *(u64*)(window + 0x20));
-            elapsed /= (*(u32*)0x800000F8 / 4000);
-            *(u16*)(window + 6) = 0xFF - (s16)((elapsed * 0xFF) / 200);
-            if ((s16)*(u16*)(window + 6) < 1) {
-                *(u16*)(window + 6) = 0;
-            }
-            goto display;
-        }
-        if (*(u16*)window > 6) {
-            goto display;
-        }
+    if (state == 5) {
+        goto setup_open;
     }
+    if (state >= 5) {
+        goto state_ge_5;
+    }
+    if (state == 1) {
+        goto active_main;
+    }
+    goto display;
 
+state_ge_5:
+    if (state == 7) {
+        goto close_fade;
+    }
+    if (state >= 7) {
+        goto display;
+    }
+    goto active_main;
+
+setup_open:
+    *(u16*)window = 1;
+    *(u64*)(window + 0x20) = *(u64*)((u8*)gp + 0x38);
+    *(u64*)(work + 0x18) = *(u64*)((u8*)gp + 0x38);
+    *(u64*)(work + 0x30) = *(u64*)((u8*)gp + 0x38);
+
+active_main:
     *(u16*)(window + 2) |= 2;
     if ((s16)*(u16*)(window + 6) < 0xFF) {
         elapsed = (s64)(*(u64*)((u8*)gp + 0x38) - *(u64*)(window + 0x20));
-        elapsed /= (*(u32*)0x800000F8 / 4000);
+        elapsed /= ((*(u32*)0x800000F8 >> 2) / 1000);
         *(u16*)(window + 6) = (s16)((elapsed * 0xFF) / 200);
         if ((s16)*(u16*)(window + 6) > 0xFF) {
             *(u16*)(window + 6) = 0xFF;
         }
     }
-    if (*(u16*)window != 2) {
-        result = msgMain(*(void**)(window + 0x28));
-        if (result == 2) {
-            *(u16*)window = 3;
-        } else if (result < 2) {
-            if (result == 0) {
-                *(u16*)window = 7;
-                *(u64*)(window + 0x20) = *(u64*)((u8*)gp + 0x38);
-                work = **(u8***)(window + 0x28);
-                if ((*(u32*)(work + 4) & 8) == 0) {
-                    npcSetStayPose(work + 0xF204);
-                } else {
-                    BtlUnit_ChangeStayAnim(*(void**)(work + 0xF224));
-                }
-            } else if (result > -1) {
-                *(u16*)window = 2;
-                *(u16*)(window + 2) &= 0xFFFD;
-                work = **(u8***)(window + 0x28);
-                if ((*(u32*)(work + 4) & 8) == 0) {
-                    npcSetStayPose(work + 0xF204);
-                } else {
-                    BtlUnit_ChangeStayAnim(*(void**)(work + 0xF224));
-                }
-            }
-        }
+
+    if (*(u16*)window == 2) {
+        goto display;
     }
+
+    result = msgMain(*(void**)(window + 0x28));
+    if (result == 2) {
+        goto result_two;
+    }
+    if (result >= 2) {
+        goto display;
+    }
+    if (result == 0) {
+        goto result_zero;
+    }
+    if (result >= 0) {
+        goto result_positive;
+    }
+    goto display;
+
+result_zero:
+    *(u16*)window = 7;
+    *(u64*)(window + 0x20) = *(u64*)((u8*)gp + 0x38);
+    work = **(u8***)(window + 0x28);
+    if ((*(u32*)(work + 4) & 8) != 0) {
+        BtlUnit_ChangeStayAnim(*(void**)(work + 0xF224));
+    } else {
+        npcSetStayPose(work + 0xF204);
+    }
+    goto display;
+
+result_positive:
+    *(u16*)window = 2;
+    *(u16*)(window + 2) &= (u16)~2;
+    work = **(u8***)(window + 0x28);
+    if ((*(u32*)(work + 4) & 8) != 0) {
+        BtlUnit_ChangeStayAnim(*(void**)(work + 0xF224));
+    } else {
+        npcSetStayPose(work + 0xF204);
+    }
+    goto display;
+
+result_two:
+    *(u16*)window = 3;
+    goto display;
+
+close_fade:
+    if ((s16)*(u16*)(window + 6) == 0) {
+        windowDelete(window);
+        return;
+    }
+    elapsed = (s64)(*(u64*)((u8*)gp + 0x38) - *(u64*)(window + 0x20));
+    elapsed /= ((*(u32*)0x800000F8 >> 2) / 1000);
+    *(u16*)(window + 6) = 0xFF - (s16)((elapsed * 0xFF) / 200);
+    if ((s16)*(u16*)(window + 6) < 1) {
+        *(u16*)(window + 6) = 0;
+    }
+
 display:
     dispEntry(8, 0, msgWindow_Disp, window,
               float_400_8042061c - (f32)*(s16*)(window + 4));

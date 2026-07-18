@@ -29,8 +29,7 @@ void BattleBreakSlot_DecBreakTurn(void) {
 }
 
 void BattleBreakSlot_Disp(void) {
-    f32 priority = float_490_804268ac;
-
+    volatile f32 priority = float_490_804268ac;
     dispEntry(8, 0, BattleBreakSlotDispReel, 0, priority);
 }
 
@@ -353,6 +352,8 @@ void BattleBreakSlot_Main(void) {
     extern s32 rand(void);
     extern s32 psndSFXOn(void*);
     extern void psndSFXOff(s32);
+    extern f32 intplGetValue(f64, f64, s32, s32, s32);
+    extern f64 sin(f64);
     u8* work = BattleBreakSlotGetPtr();
     u8* reel;
     s32 state = *(s32*)(work + 4);
@@ -458,6 +459,189 @@ void BattleBreakSlot_Main(void) {
         case 8:
             *(s32*)(work + 4) = 0;
             break;
+    }
+
+    for (i = 0; i < 3; i++) {
+        reel = BattleBreakSlotReelGetPtr(i);
+        switch (*(s32*)(reel + 8)) {
+            case 0:
+                *(u32*)reel &= ~1;
+                *(s32*)(reel + 0x58) = 0xFF;
+                break;
+
+            case 1:
+                if (i != 2) *(u32*)reel |= 1;
+                *(s32*)(reel + 0xC) += 1;
+                if (*(s32*)(reel + 0xC) < 6) {
+                    *(f32*)(reel + 0x20) = 226.0f + 42.0f * (f32)i;
+                    *(f32*)(reel + 0x24) = intplGetValue(110.0, 142.0, 0,
+                                                         *(s32*)(reel + 0xC), 5);
+                    *(f32*)(reel + 0x28) = 0.0f;
+                    *(f32*)(reel + 0x2C) = 1.0f;
+                    *(f32*)(reel + 0x30) = 1.0f;
+                    *(f32*)(reel + 0x34) = 1.0f;
+                    *(f32*)(reel + 0x38) = 0.0f;
+                    *(f32*)(reel + 0x3C) = 0.0f;
+                    *(f32*)(reel + 0x40) = 0.0f;
+                    *(s32*)(reel + 0x58) = 0xFF;
+                } else {
+                    *(f32*)(reel + 0x20) = 226.0f + 42.0f * (f32)i;
+                    *(f32*)(reel + 0x24) = intplGetValue(142.0, 174.0, 4,
+                                                         *(s32*)(reel + 0xC) - 5, 20);
+                    *(f32*)(reel + 0x28) = 0.0f;
+                    *(s32*)(reel + 0x58) = 0xFF;
+                }
+                if (*(s32*)(reel + 0xC) > 24) {
+                    *(s32*)(reel + 8) = 2;
+                }
+                break;
+
+            case 2:
+                *(f32*)(reel + 0x20) = 226.0f + 42.0f * (f32)i;
+                *(f32*)(reel + 0x24) = 174.0f;
+                *(f32*)(reel + 0x28) = 0.0f;
+                *(f32*)(reel + 0x2C) = 1.0f;
+                *(f32*)(reel + 0x30) = 1.0f;
+                *(f32*)(reel + 0x34) = 1.0f;
+                if (*(u32*)reel & 2) {
+                    *(u32*)reel &= ~2;
+                    *(s32*)(reel + 8) = 3;
+                    *(s32*)(reel + 0xC) = 0;
+                }
+                break;
+
+            case 3:
+                *(f32*)(reel + 0x20) = 226.0f + 42.0f * (f32)i;
+                *(f32*)(reel + 0x24) = intplGetValue(142.0, 174.0, 0,
+                                                     *(s32*)(reel + 0xC), 20);
+                *(f32*)(reel + 0x28) = 0.0f;
+                *(s32*)(reel + 0xC) += 1;
+                if (*(s32*)(reel + 0xC) > 20) {
+                    *(s32*)(reel + 8) = 0;
+                    *(s32*)(reel + 0xC) = 0;
+                    *(u32*)reel &= ~1;
+                }
+                break;
+
+            case 4:
+                *(f32*)(reel + 0x20) = 226.0f + 42.0f * (f32)i;
+                *(f32*)(reel + 0x24) = intplGetValue(142.0, 174.0, 0,
+                                                     *(s32*)(reel + 0xC), 20);
+                *(f32*)(reel + 0x28) = 0.0f;
+                *(f32*)(reel + 0x2C) = 1.0f;
+                *(f32*)(reel + 0x30) = 1.0f;
+                *(f32*)(reel + 0x34) = 1.0f;
+                *(f32*)(reel + 0x38) = 0.0f;
+                *(f32*)(reel + 0x3C) = 0.0f;
+                *(f32*)(reel + 0x40) = 0.0f;
+                *(s32*)(reel + 0xC) += 1;
+                if (*(s32*)(reel + 0xC) > 20) {
+                    *(s32*)(reel + 8) = 5;
+                    *(f32*)(reel + 0x20) = -128.0f + 128.0f * (f32)i;
+                    *(f32*)(reel + 0x24) = 0.0f;
+                    *(f32*)(reel + 0x28) = 0.0f;
+                    *(s32*)(reel + 0xC) = 0;
+                }
+                break;
+
+            case 5:
+                *(u32*)reel |= 1;
+                *(f32*)(reel + 0x20) = -128.0f + 128.0f * (f32)i;
+                *(f32*)(reel + 0x24) = intplGetValue(-128.0, 0.0, 0,
+                                                     *(s32*)(reel + 0xC), 40);
+                *(f32*)(reel + 0x28) = 0.0f;
+                *(f32*)(reel + 0x2C) = 1.0f;
+                *(f32*)(reel + 0x30) = 1.0f;
+                *(f32*)(reel + 0x34) = 1.0f;
+                *(s32*)(reel + 0xC) += 1;
+                if (*(s32*)(reel + 0xC) > 40) {
+                    *(s32*)(reel + 8) = (i == 2) ? 6 : 10;
+                    *(s32*)(reel + 0xC) = 0;
+                }
+                break;
+
+            case 7:
+                *(f32*)(reel + 0x50) = intplGetValue(0.0, 22.5, 0,
+                                                     *(s32*)(reel + 0xC), 20);
+                *(f32*)(reel + 0x20) = -128.0f + 128.0f * (f32)i;
+                *(f32*)(reel + 0x24) += *(f32*)(reel + 0x50);
+                *(f32*)(reel + 0x28) = 0.0f;
+                if (*(f32*)(reel + 0x24) >= 128.0f) {
+                    *(f32*)(reel + 0x24) -= 128.0f;
+                }
+                *(s32*)(reel + 0xC) += 1;
+                if (*(s32*)(reel + 0xC) > 20) {
+                    *(s32*)(reel + 8) = 8;
+                    *(s32*)(reel + 0xC) = 0;
+                }
+                break;
+
+            case 8:
+                *(f32*)(reel + 0x50) = 22.5f;
+                *(f32*)(reel + 0x20) = -128.0f + 128.0f * (f32)i;
+                *(f32*)(reel + 0x24) += *(f32*)(reel + 0x50);
+                *(f32*)(reel + 0x28) = 0.0f;
+                if (*(f32*)(reel + 0x24) >= 128.0f) {
+                    *(f32*)(reel + 0x24) -= 128.0f;
+                }
+                break;
+
+            case 9:
+                *(f32*)(reel + 0x50) += *(f32*)(reel + 0x54);
+                if (*(f32*)(reel + 0x50) < 20.0f) *(f32*)(reel + 0x50) = 20.0f;
+                *(f32*)(reel + 0x20) = -128.0f + 128.0f * (f32)i;
+                *(f32*)(reel + 0x24) += *(f32*)(reel + 0x50);
+                *(f32*)(reel + 0x28) = 0.0f;
+                if (*(f32*)(reel + 0x50) >= 0.0f && *(f32*)(reel + 0x24) >= 128.0f) {
+                    *(f32*)(reel + 0x24) -= 128.0f;
+                    *(s32*)(reel + 8) = 10;
+                    *(s32*)(reel + 0xC) = 0;
+                    *(f32*)(reel + 0x54) = *(f32*)(reel + 0x50);
+                }
+                break;
+
+            case 10:
+                if (i == 2) {
+                    *(s32*)(reel + 0xC) += 1;
+                    *(f32*)(reel + 0x50) = intplGetValue(*(f32*)(reel + 0x50), 0.0, 0,
+                                                         *(s32*)(reel + 0xC), 20);
+                    *(f32*)(reel + 0x24) = *(f32*)(reel + 0x50) *
+                        (f32)sin(3.1416 * 2.0 * (f64)*(s32*)(reel + 0xC) * 0.125);
+                }
+                break;
+
+            case 11:
+                *(f32*)(reel + 0x50) = 0.0f;
+                *(f32*)(reel + 0x24) = 0.0f;
+                *(f32*)(reel + 0x2C) = intplGetValue(1.0, 2.0, 0,
+                                                     *(s32*)(reel + 0xC), 60);
+                *(f32*)(reel + 0x30) = *(f32*)(reel + 0x2C);
+                *(s32*)(reel + 0x58) = (s32)intplGetValue(255.0, 0.0, 0,
+                                                         *(s32*)(reel + 0xC), 60);
+                *(s32*)(reel + 0xC) += 1;
+                if (*(s32*)(reel + 0xC) > 60) {
+                    *(s32*)(reel + 8) = 13;
+                    *(u32*)reel &= ~1;
+                }
+                break;
+
+            case 12:
+                *(f32*)(reel + 0x50) = 0.0f;
+                *(f32*)(reel + 0x24) = intplGetValue(0.0, 128.0, 0,
+                                                     *(s32*)(reel + 0xC), 40);
+                *(f32*)(reel + 0x20) = -128.0f + 128.0f * (f32)i;
+                *(f32*)(reel + 0x28) = 0.0f;
+                *(s32*)(reel + 0xC) += 1;
+                if (*(s32*)(reel + 0xC) > 40) {
+                    *(s32*)(reel + 8) = 13;
+                    *(u32*)reel &= ~1;
+                }
+                break;
+
+            case 13:
+                *(s32*)(reel + 8) = 0;
+                break;
+        }
     }
 }
 

@@ -53,33 +53,33 @@ void effMagicHoraoDisp(s32 cameraId, void* effect) {
     PSMTXTrans(trans, *(f32*)(work + 4) * 100.0f,
                       *(f32*)(work + 8) * 100.0f,
                       *(f32*)(work + 0xC) * 100.0f);
-    PSMTXConcat(trans, scale, model);
+    PSMTXConcat(scale, trans, trans);
     PSMTXScale(scale, *(f32*)(work + 0x24), *(f32*)(work + 0x24), *(f32*)(work + 0x24));
-    PSMTXConcat(model, scale, model);
-    PSMTXConcat((u8*)camera + 0x11C, model, model);
-    GXLoadPosMtxImm(model, 0);
+    PSMTXConcat(trans, scale, trans);
+    PSMTXConcat((u8*)camera + 0x11C, trans, trans);
+    GXLoadPosMtxImm(trans, 0);
     GXSetCurrentMtx(0);
 
     pulse = (s32)(225.0f + 25.0f * (f32)sin((6.2832f * (f32)(*(s32*)(work + 0x44) * 30)) / 360.0f));
     color = (pulse << 24) | (pulse << 16) | (pulse << 8) | (*(s32*)(work + 0x3C) & 0xFF);
     GXSetTevColor(1, &color);
     GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    PSMTXScale(scale, float_0p015625_80425aec, float_0p015625_80425aec, float_0_80425ae8);
+    GXLoadTexMtxImm(scale, 0x1E, 1);
+    effSetVtxDescN64((void*)0x803A5DC8);
     GXSetNumTevStages(1);
     GXSetTevOrder(0, 0, 0, 0xFF);
     GXSetTevColorOp(0, 0, 0, 0, 1, 0);
     GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
     GXSetTevColorIn(0, 0, 2, 8, 0);
     GXSetTevAlphaIn(0, 0, 1, 7, 7);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
     GXSetCullMode(0);
-    PSMTXScale(scale, float_0p015625_80425aec, float_0p015625_80425aec, float_0_80425ae8);
-    GXLoadTexMtxImm(scale, 0x1E, 1);
 
     texture = state < 1 ? 0x56 : 0x57;
     effGetTexObjN64(texture, texObj);
     GXLoadTexObj(texObj, 0);
-    effSetVtxDescN64((void*)0x803A5DC8);
     GXBegin(0x90, 0, 6);
     tri2(0, 1, 2, 0, 0, 2, 3, 0);
 

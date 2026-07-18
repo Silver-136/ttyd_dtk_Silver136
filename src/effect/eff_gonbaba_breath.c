@@ -215,77 +215,48 @@ void init_breath(void* workPtr, s32 index, s32 type) {
     extern f64 cos(f64);
     extern u8 col_tbl[];
     extern u8* PTR_col_normal_8041e0a0;
-
-    u8* work = workPtr;
-    f32 angle;
-    f32 speed;
+    u8* work=workPtr;
+    f32 angle,speed;
     s32 colorType;
 
-    *(s32*)(work + 0) = type;
-    if (type == 7) {
-        *(s32*)(work + 0x44) = index << 3;
-        *(f32*)(work + 4) = 0.0f;
-        *(f32*)(work + 8) = 0.0f;
-        *(f32*)(work + 0xC) = 0.0f;
-        *(f32*)(work + 0x40) = 0.0f;
-        *(f32*)(work + 0x10) = -2.0f;
-        *(f32*)(work + 0x14) = 0.1f;
-        *(s32*)(work + 0x1C) = 0x40;
-        *(s32*)(work + 0x3C) = 0xFF;
+    *(s32*)work=type;
+    if(type<10) {
+        if(type==7) {
+            *(s32*)(work+0x44)=index<<3;
+            *(f32*)(work+4)=0.0f; *(f32*)(work+8)=0.0f; *(f32*)(work+0xC)=0.0f;
+            *(f32*)(work+0x40)=0.0f; *(f32*)(work+0x10)=-2.0f; *(f32*)(work+0x14)=0.1f;
+            *(s32*)(work+0x1C)=0x40; *(s32*)(work+0x3C)=0xFF;
+            return;
+        }
+        if(type>=0) {
+            *(s32*)(work+0x44)=index<<2;
+            *(f32*)(work+4)=0.0f; *(f32*)(work+8)=0.0f; *(f32*)(work+0xC)=0.0f;
+            *(f32*)(work+0x40)=0.0f; *(f32*)(work+0x10)=-2.4f; *(f32*)(work+0x14)=0.1f;
+            *(s32*)(work+0x1C)=0x40; *(s32*)(work+0x3C)=0xFF;
+            return;
+        }
         return;
     }
-    if (type >= 0 && type < 7) {
-        *(s32*)(work + 0x44) = index << 2;
-        *(f32*)(work + 4) = 0.0f;
-        *(f32*)(work + 8) = 0.0f;
-        *(f32*)(work + 0xC) = 0.0f;
-        *(f32*)(work + 0x40) = 0.0f;
-        *(f32*)(work + 0x10) = -2.4f;
-        *(f32*)(work + 0x14) = 0.1f;
-        *(s32*)(work + 0x1C) = 0x40;
-        *(s32*)(work + 0x3C) = 0xFF;
-        return;
-    }
-
-    if (type == 0x11) {
-        angle = (225.0f + (f32)irand(0x5A)) * 6.2832f / 360.0f;
-        speed = ((f32)(irand(0x32) + 10) / 10.0f) * 1.5f;
-        *(s32*)(work + 0x44) = irand(100);
-        *(s32*)(work + 0x1C) = 0x3C;
-        colorType = -1;
-    } else if (type < 0x11) {
-        angle = (240.0f + (f32)irand(0x3C)) * 6.2832f / 360.0f;
-        speed = ((f32)(irand(0x32) + 10) / 10.0f) * 1.5f;
-        *(s32*)(work + 0x44) = index;
-        *(s32*)(work + 0x1C) = 0x1E;
-        colorType = type % 10;
+    if(type==0x11) {
+        angle=(225.0f+(f32)irand(0x5A))*6.2832f/360.0f;
+        speed=((f32)(irand(0x32)+10)/10.0f)*1.5f;
+        *(s32*)(work+0x44)=irand(100); *(s32*)(work+0x1C)=0x3C; colorType=-1;
+    } else if(type<0x11) {
+        angle=(240.0f+(f32)irand(0x3C))*6.2832f/360.0f;
+        speed=((f32)(irand(0x32)+10)/10.0f)*1.5f;
+        *(s32*)(work+0x44)=index; *(s32*)(work+0x1C)=0x1E; colorType=type%10;
+    } else return;
+    *(f32*)(work+4)=0.0f; *(f32*)(work+8)=0.0f; *(f32*)(work+0xC)=0.0f;
+    *(f32*)(work+0x10)=speed*(f32)sin(angle); *(f32*)(work+0x14)=speed*(f32)cos(angle);
+    *(f32*)(work+0x40)=1.0f; *(s32*)(work+0x3C)=0xFF;
+    if(colorType<0) {
+        *(s32*)(work+0x24)=PTR_col_normal_8041e0a0[0xC]; *(s32*)(work+0x28)=PTR_col_normal_8041e0a0[0xD];
+        *(s32*)(work+0x2C)=PTR_col_normal_8041e0a0[0xE]; *(s32*)(work+0x30)=PTR_col_normal_8041e0a0[0];
+        *(s32*)(work+0x34)=PTR_col_normal_8041e0a0[1]; *(s32*)(work+0x38)=PTR_col_normal_8041e0a0[2];
     } else {
-        return;
-    }
-
-    *(f32*)(work + 4) = 0.0f;
-    *(f32*)(work + 8) = 0.0f;
-    *(f32*)(work + 0xC) = 0.0f;
-    *(f32*)(work + 0x10) = speed * (f32)sin(angle);
-    *(f32*)(work + 0x14) = speed * (f32)cos(angle);
-    *(f32*)(work + 0x40) = 1.0f;
-    *(s32*)(work + 0x3C) = 0xFF;
-
-    if (colorType < 0) {
-        *(s32*)(work + 0x24) = PTR_col_normal_8041e0a0[0xC];
-        *(s32*)(work + 0x28) = PTR_col_normal_8041e0a0[0xD];
-        *(s32*)(work + 0x2C) = PTR_col_normal_8041e0a0[0xE];
-        *(s32*)(work + 0x30) = PTR_col_normal_8041e0a0[0];
-        *(s32*)(work + 0x34) = PTR_col_normal_8041e0a0[1];
-        *(s32*)(work + 0x38) = PTR_col_normal_8041e0a0[2];
-    } else {
-        u8* colors = col_tbl + colorType * 16;
-        *(s32*)(work + 0x24) = colors[0xC];
-        *(s32*)(work + 0x28) = colors[0xD];
-        *(s32*)(work + 0x2C) = colors[0xE];
-        *(s32*)(work + 0x30) = colors[0];
-        *(s32*)(work + 0x34) = colors[1];
-        *(s32*)(work + 0x38) = colors[2];
+        u8* colors=col_tbl+colorType*16;
+        *(s32*)(work+0x24)=colors[0xC]; *(s32*)(work+0x28)=colors[0xD]; *(s32*)(work+0x2C)=colors[0xE];
+        *(s32*)(work+0x30)=colors[0]; *(s32*)(work+0x34)=colors[1]; *(s32*)(work+0x38)=colors[2];
     }
 }
 
@@ -293,59 +264,62 @@ void init_breath(void* workPtr, s32 index, s32 type) {
 
 /* fallback stub-fill: map=effGonbabaBreathMain addr=0x8025b270 size=0x00000694 */
 void effGonbabaBreathMain(void* effect) {
-    extern void effDelete(void* effect);
-    extern void effSoftDelete(void* effect);
-    extern void init_breath(void* work, s32 index, s32 type);
-    extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
-    extern f64 dispCalcZ(f32* position);
-    extern void dispEntry(s32 camera, s32 order, void* callback, void* param, f32 z);
+    extern void effDelete(void*);
+    extern void effSoftDelete(void*);
+    extern void init_breath(void*,s32,s32);
+    extern f64 intplGetValue(f64,f64,s32,s32,s32);
+    extern f64 dispCalcZ(f32*);
+    extern void dispEntry(s32,s32,void*,void*,f32);
     extern void effGonbabaBreathDisp(void);
-    u8* entry = effect;
-    u8* base = *(u8**)(entry + 0xC);
-    s32 count = *(s32*)(entry + 8);
-    f32 position[3];
+    u8* entry=effect;
+    u8* base=*(u8**)(entry+0xC);
+    s32 count=*(s32*)(entry+8);
+    f32 position[3]={0.0f,0.0f,0.0f};
     s32 i;
-    position[0] = *(f32*)(base + 4);
-    position[1] = *(f32*)(base + 8);
-    position[2] = *(f32*)(base + 0xC);
-    if ((*(u32*)entry & 4) != 0) {
-        *(u32*)entry &= ~4;
-        *(s32*)(base + 0x1C) = 32;
-        if (*(void**)(base + 0x4C) != 0) effSoftDelete(*(void**)(base + 0x4C));
+    position[0]=*(f32*)(base+4); position[1]=*(f32*)(base+8); position[2]=*(f32*)(base+0xC);
+    if((*(u32*)entry&4)!=0) {
+        *(u32*)entry&=~4; *(s32*)(base+0x1C)=0x20;
+        if(*(void**)(base+0x4C)!=0) effSoftDelete(*(void**)(base+0x4C));
     }
-    if (*(s32*)(base + 0x1C) < 1000) --*(s32*)(base + 0x1C);
-    ++*(s32*)(base + 0x20);
-    if (*(s32*)(base + 0x1C) < 32) *(s32*)(base + 0x3C) = *(s32*)(base + 0x1C) << 3;
-    if (*(s32*)(base + 0x1C) < 0) {
-        effDelete(effect);
-        return;
+    if(*(s32*)(base+0x1C)<1000) --*(s32*)(base+0x1C);
+    ++*(s32*)(base+0x20);
+    if(*(s32*)(base+0x1C)<0x20) *(s32*)(base+0x3C)=*(s32*)(base+0x1C)<<3;
+    if(*(s32*)(base+0x1C)<0) { effDelete(effect); return; }
+    for(i=1;i<count;i++) {
+        u8* work=base+i*0x50;
+        s32 type=*(s32*)work;
+        s32 duration;
+        if(*(s32*)(work+0x44)!=0) { --*(s32*)(work+0x44); continue; }
+        if(type<10) {
+            if(type==7) {
+                if(*(s32*)(work+0x1C)==0) { init_breath(work,0,type); continue; }
+            } else if(type>=0 && type<7) {
+                if(*(s32*)(work+0x1C)==0) { init_breath(work,i,type); continue; }
+            } else continue;
+            duration=0x40;
+        } else if(type==0x11) {
+            if(*(s32*)(work+0x1C)==0) { init_breath(work,0,type); continue; }
+            duration=0x3C;
+        } else if(type<0x11) {
+            if(*(s32*)(work+0x1C)==0) { init_breath(work,i,type); continue; }
+            duration=0x1E;
+        } else continue;
+        --*(s32*)(work+0x1C);
+        if(*(s32*)(work+0x1C)<(type<10?0x20:0x10))
+            *(s32*)(work+0x3C)=*(s32*)(work+0x1C)<<(type<10?3:4);
+        if(*(f32*)(work+0x40)>=1.4f) *(f32*)(work+0x40)*=(type<10?1.05f:1.03f);
+        else *(f32*)(work+0x40)+=(1.5f-*(f32*)(work+0x40))*(type<10?0.25f:0.125f);
+        *(f32*)(work+0x10)*=(type<10?0.995f:0.9f);
+        *(f32*)(work+0x14)*=(type<10?1.05f:0.9f);
+        *(f32*)(work+4)+=*(f32*)(work+0x10);
+        *(f32*)(work+8)+=*(f32*)(work+0x14);
+        if(type>=10) {
+            s32 elapsed=duration-*(s32*)(work+0x1C);
+            *(s32*)(work+0x24)=(s32)intplGetValue((f32)*(s32*)(work+0x24),(f32)*(s32*)(work+0x30),11,elapsed,duration);
+            *(s32*)(work+0x28)=(s32)intplGetValue((f32)*(s32*)(work+0x28),(f32)*(s32*)(work+0x34),11,elapsed,duration);
+            *(s32*)(work+0x2C)=(s32)intplGetValue((f32)*(s32*)(work+0x2C),(f32)*(s32*)(work+0x38),11,elapsed,duration);
+        }
     }
-    for (i = 1; i < count; i++) {
-        u8* work = base + i * 0x50;
-        s32 type = *(s32*)work;
-        if (*(s32*)(work + 0x44) != 0) {
-            --*(s32*)(work + 0x44);
-            continue;
-        }
-        if (*(s32*)(work + 0x1C) == 0) {
-            init_breath(work, (type == 7 || type == 17) ? 0 : i, type);
-            continue;
-        }
-        --*(s32*)(work + 0x1C);
-        if (*(s32*)(work + 0x1C) < (type < 10 ? 32 : 16))
-            *(s32*)(work + 0x3C) = *(s32*)(work + 0x1C) << (type < 10 ? 3 : 4);
-        if (*(f32*)(work + 0x40) >= 1.4f) *(f32*)(work + 0x40) *= type < 10 ? 1.05f : 1.03f;
-        else *(f32*)(work + 0x40) += (1.5f - *(f32*)(work + 0x40)) * (type < 10 ? 0.25f : 0.125f);
-        *(f32*)(work + 0x30) *= type < 10 ? 0.995f : 0.9f;
-        *(f32*)(work + 0x34) *= type < 10 ? 1.05f : 0.9f;
-        *(f32*)(work + 0x2A) += *(f32*)(work + 0x30);
-        *(f32*)(work + 0x2E) += *(f32*)(work + 0x34);
-        if (type >= 10) {
-            s32 duration = type == 17 ? 60 : 30;
-            s32 elapsed = duration - *(s32*)(work + 0x1C);
-            *(f32*)(work + 0x38) = (f32)intplGetValue(*(f32*)(work + 0x38), *(f32*)(work + 0x40), 11, elapsed, duration);
-        }
-    }
-    dispEntry(4, 2, effGonbabaBreathDisp, effect, (f32)dispCalcZ(position));
+    dispEntry(4,2,effGonbabaBreathDisp,effect,(f32)dispCalcZ(position));
 }
 

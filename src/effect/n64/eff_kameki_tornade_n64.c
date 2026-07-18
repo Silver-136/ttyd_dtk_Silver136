@@ -3,60 +3,112 @@
 
 u8 effKamekiTornadeDisp(s32 cameraId, s32 effectAddress) {
     typedef f32 Mtx[3][4];
-    typedef struct GXTexObj { u32 data[8]; } GXTexObj;
     extern void* camGetPtr(s32);
     extern void* smartAlloc(u32, s32);
-    extern void effGetTexObj(s32, void*);
+    extern void effGetTexObjN64(s32, void*);
     extern void GXLoadTexObj(void*, s32);
     extern void GXSetNumChans(s32);
     extern void GXSetNumTevStages(s32);
     extern void GXSetNumTexGens(s32);
     extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
     extern void GXSetTevOrder(s32, s32, s32, s32);
-    extern void PSMTXTrans(Mtx, f32, f32, f32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetCullMode(s32);
+    extern void PSMTXTrans(Mtx, f64, f64, f64);
     extern void PSMTXRotRad(Mtx, f32, char);
     extern void PSMTXScale(Mtx, f32, f32, f32);
-    extern void PSMTXConcat(void*, void*, void*);
+    extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void GXLoadTexMtxImm(Mtx, s32, s32);
     extern void GXLoadPosMtxImm(Mtx, s32);
     extern void GXSetCurrentMtx(s32);
-    extern void GXSetCullMode(s32);
+    extern void effSetVtxDescN64(void*);
     extern void GXBegin(s32, s32, s16);
+    extern void tri2(s32, s32, s32, s32, s32, s32, s32);
+    extern f32 float_deg2rad_80425560;
+    extern f32 float_0p1_80425564;
+    extern f32 float_0p02_80425568;
+    extern f32 float_10_8042556c;
+    extern f32 float_0_80425570;
+    extern f32 float_0p015625_80425574;
+    extern f32 float_0p03125_80425578;
     u8* work = *(u8**)(effectAddress + 0xC);
-    char* camera = camGetPtr(cameraId);
-    GXTexObj tex;
-    Mtx trans, rot, scale, model;
-    f32* points = smartAlloc(0x300, 3);
+    u8* camera = (u8*)camGetPtr(cameraId);
+    u8 tex[0x20];
+    Mtx base;
+    Mtx transform;
+    Mtx rotation;
+    Mtx scale;
+    u32 color0;
+    u32 color1;
+    s32 alpha = (s32)((f32)(*(s32*)(work + 0x24) >> 1) * *(f32*)(work + 0x148));
     s32 strand;
-    s32 segment;
 
-    effGetTexObj(0x68, &tex);
-    GXLoadTexObj(&tex, 0);
-    GXLoadTexObj(&tex, 1);
     GXSetNumChans(0);
     GXSetNumTevStages(3);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 15, 15, 15, 8);
+    GXSetTevAlphaIn(0, 7, 7, 7, 4);
+    GXSetTevOrder(1, 1, 1, 0xFF);
+    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(1, 8, 0, 0, 15);
+    GXSetTevAlphaIn(1, 7, 0, 4, 7);
+    GXSetTevOrder(2, 0xFF, 0xFF, 0xFF);
+    GXSetTevColorOp(2, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(2, 2, 4, 0, 15);
+    GXSetTevAlphaIn(2, 7, 0, 5, 7);
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
     GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
-    GXSetTevOrder(0, 0, 0, -1);
-    GXSetTevOrder(1, 1, 1, -1);
-    GXSetTevOrder(2, -1, -1, -1);
+    effGetTexObjN64(0x6C, tex);
+    GXLoadTexObj(tex, 0);
+    GXLoadTexObj(tex, 1);
+    color0 = ((u32)*(u8*)(work + 0x18) << 24) | ((u32)*(u8*)(work + 0x1C) << 16) |
+             ((u32)*(u8*)(work + 0x20) << 8) | (u8)alpha;
+    color1 = ((u32)*(u8*)(work + 0x28) << 24) | ((u32)*(u8*)(work + 0x2C) << 16) |
+             ((u32)*(u8*)(work + 0x30) << 8) | 0xFF;
+    GXSetTevColor(1, &color0);
+    GXSetTevColor(2, &color1);
     GXSetCullMode(0);
+    PSMTXRotRad(rotation, float_deg2rad_80425560 * *(f32*)(work + 0x144), 'z');
+    PSMTXScale(scale, float_0p1_80425564, float_0p1_80425564, float_0p1_80425564);
+    PSMTXConcat(rotation, scale, base);
     for (strand = 0; strand < 7; strand++) {
-        for (segment = 0; segment < 16; segment++) {
-            s32 index = strand * 48 + segment * 3;
-            points[index] = *(f32*)(work + 0x38 + strand * 4);
-            points[index + 1] = *(f32*)(work + 0x58 + strand * 4) + (f32)segment;
-            points[index + 2] = *(f32*)(work + 0x78 + strand * 4);
-        }
-        PSMTXTrans(trans, *(f32*)(work + 0x38 + strand * 4), *(f32*)(work + 0x58 + strand * 4), *(f32*)(work + 0x78 + strand * 4));
-        PSMTXRotRad(rot, *(f32*)(work + 0x118 + strand * 4) * 0.017453292f, 'z');
-        PSMTXScale(scale, *(f32*)(work + 0x98 + strand * 4), *(f32*)(work + 0x98 + strand * 4), 1.0f);
-        PSMTXConcat(trans, rot, model);
-        PSMTXConcat(model, scale, model);
-        PSMTXConcat(camera + 0x118, model, model);
-        GXLoadPosMtxImm(model, 0);
+        s32 segment;
+        void* vertices = smartAlloc(0x1C0, 3);
+        f32 strandScale = *(f32*)(work + 0x98 + strand * 4) * *(f32*)(work + 0x34);
+        effSetVtxDescN64(vertices);
+        PSMTXTrans(transform,
+                   float_10_8042556c * *(f32*)(work + 0x38 + strand * 4),
+                   float_10_8042556c * *(f32*)(work + 0x58 + strand * 4),
+                   float_10_8042556c * *(f32*)(work + 0x78 + strand * 4));
+        PSMTXRotRad(rotation, float_deg2rad_80425560 * *(f32*)(work + 0x118 + strand * 4), 'z');
+        PSMTXConcat(transform, rotation, transform);
+        PSMTXScale(scale, strandScale, *(f32*)(work + 0x34), strandScale);
+        PSMTXConcat(transform, scale, transform);
+        PSMTXConcat(base, transform, transform);
+        PSMTXScale(scale, float_0p015625_80425574, float_0p03125_80425578, float_0_80425570);
+        PSMTXTrans(rotation, *(f32*)(work + 0x13C) + (f32)(strand * 4), float_0_80425570, float_0_80425570);
+        PSMTXConcat(scale, rotation, scale);
+        GXLoadTexMtxImm(scale, 0x1E, 1);
+        PSMTXScale(scale, float_0p015625_80425574, float_0p03125_80425578, float_0_80425570);
+        PSMTXTrans(rotation, *(f32*)(work + 0x140) + (f32)(strand * 2), float_0_80425570, float_0_80425570);
+        PSMTXConcat(scale, rotation, scale);
+        GXLoadTexMtxImm(scale, 0x21, 1);
+        GXLoadPosMtxImm((f32 (*)[4])(camera + 0x11C), 0);
         GXSetCurrentMtx(0);
-        GXBegin(0x90, 0, 6);
+        for (segment = 0; segment < 15; segment++) {
+            GXBegin(0x90, 0, 6);
+            tri2(segment + 0x10, segment + 1, segment, 0,
+                 segment + 1, segment + 0x10, segment + 0x11);
+        }
     }
     return 0;
 }

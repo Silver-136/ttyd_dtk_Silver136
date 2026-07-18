@@ -1,10 +1,104 @@
 #include "effect/n64/eff_kemuri11_n64.h"
 
 
-u8 effKemuri11Disp(int param_1, int param_2) {
-    return 0;
-}
+void effKemuri11Disp(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4];
+    extern void* camGetPtr(s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void effGetTexObjN64(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void effSetVtxDescN64(void*);
+    extern void PSMTXTrans(Mtx, f64, f64, f64);
+    extern void PSMTXRotRad(Mtx, f32, char);
+    extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetCullMode(s32);
+    extern void main_dl(void*, Mtx);
+    extern f32 float_deg2rad_80425860;
+    u8 tex[0x20];
+    Mtx model;
+    Mtx rotation;
+    Mtx view;
+    u8* entry = (u8*)effect;
+    u8* work = *(u8**)(entry + 0xC);
+    u8* camera = (u8*)camGetPtr(cameraId);
+    u8* camera3d = (u8*)camGetPtr(4);
+    s32 type = *(u16*)work;
+    u32 front0;
+    u32 front1;
+    u32 back0;
+    u32 back1;
 
+    GXSetNumChans(0);
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
+    if (type < 2) {
+        GXSetNumTevStages(2);
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 15, 15, 15, 15);
+        GXSetTevAlphaIn(0, 7, 5, 4, 7);
+        GXSetTevOrder(1, 1, 1, 0xFF);
+        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(1, 4, 2, 8, 15);
+        GXSetTevAlphaIn(1, 7, 7, 7, 0);
+        effGetTexObjN64(0x23, tex);
+        GXLoadTexObj(tex, 0);
+        effGetTexObjN64(0x24, tex);
+        GXLoadTexObj(tex, 1);
+    } else {
+        GXSetNumTevStages(3);
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 15, 15, 15, 8);
+        GXSetTevAlphaIn(0, 7, 7, 7, 4);
+        GXSetTevOrder(1, 1, 1, 0xFF);
+        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(1, 0, 15, 8, 15);
+        GXSetTevAlphaIn(1, 7, 5, 0, 7);
+        GXSetTevOrder(2, 0xFF, 0xFF, 0xFF);
+        GXSetTevColorOp(2, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(2, 2, 4, 0, 15);
+        GXSetTevAlphaIn(2, 7, 7, 7, 0);
+        effGetTexObjN64(0x25, tex);
+        GXLoadTexObj(tex, 0);
+        effGetTexObjN64(0x24, tex);
+        GXLoadTexObj(tex, 1);
+    }
+    effSetVtxDescN64((void*)0x803A4FC0);
+    PSMTXTrans(model, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+    PSMTXRotRad(rotation, float_deg2rad_80425860 * -*(f32*)(camera3d + 0x114), 'y');
+    PSMTXConcat(model, rotation, view);
+    PSMTXConcat((f32 (*)[4])(camera + 0x11C), view, view);
+    front0 = ((u32)*(u8*)(work + 0x50) << 24) | ((u32)*(u8*)(work + 0x51) << 16) |
+             ((u32)*(u8*)(work + 0x52) << 8) | *(u8*)(work + 0x38);
+    front1 = ((u32)*(u8*)(work + 0x53) << 24) | ((u32)*(u8*)(work + 0x54) << 16) |
+             ((u32)*(u8*)(work + 0x55) << 8) | 0xFF;
+    back0 = (*(u32*)(work + 0x50) & 0xFFFFFF00) | *(u8*)(work + 0x38);
+    back1 = (*(u32*)(work + 0x53) << 8) | 0xFF;
+    GXSetTevColor(1, &front0);
+    GXSetTevColor(2, &front1);
+    GXSetCullMode(2);
+    main_dl(effect, view);
+    GXSetTevColor(1, &back0);
+    GXSetTevColor(2, &back1);
+    GXSetCullMode(1);
+    main_dl(effect, view);
+}
 
 void effKemuri11Main(void* effect) {
     typedef struct Vec3 { f32 x; f32 y; f32 z; } Vec3;

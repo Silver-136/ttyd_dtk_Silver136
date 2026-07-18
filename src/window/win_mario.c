@@ -36,47 +36,102 @@ void winMarioExit(void* wp) {
 void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
     extern void* pouchGetPtr(void);
-    extern s32 pouchGetHP(void);
-    extern s32 pouchGetMaxHP(void);
-    extern s32 pouchGetFP(void);
-    extern s32 pouchGetMaxFP(void);
     extern void winBgGX(f32 x, f32 y, void* win, s32 type);
     extern void winNameGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
+    extern void winKirinukiGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
+    extern void fukidashi(f32 x, f32 y, void* win, s32 type);
+    extern void winTexInit(void* data);
+    extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
     extern void winIconInit(void);
     extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
     extern void winFontInit(void);
+    extern void winFontSetEdge(Vec3* pos, Vec3* scale, void* color, char* text, ...);
+    extern void winFontSetEdgeWidth(Vec3* pos, Vec3* scale, void* color, f32 width,
+                                    char* text, ...);
     extern void winFontSetR(Vec3* pos, Vec3* scale, void* color, char* format, ...);
+    extern char* msgSearch(char* key);
+    extern char* BattleGetRankNameLabel(s32 level);
+    extern char* winZenkakuStr(s32 value);
     Vec3 pos;
     Vec3 scale;
     u32 white = 0xFFFFFFFF;
-    void* pouch = pouchGetPtr();
-    f32 x = *(f32*)((s32)pWin + 0x30 + index * 0x18);
-    f32 y = *(f32*)((s32)pWin + 0x34 + index * 0x18);
+    u8* w = (u8*)pWin;
+    u8* pouch = (u8*)pouchGetPtr();
+    f32 x = *(f32*)(w + 0xC4 + index * 0x14);
+    f32 y = *(f32*)(w + 0xC8 + index * 0x14);
+    s32 menuState = *(s32*)(w + 0x160);
+    s32 modes[6] = { 2, 3, 7, 8, 9, 10 };
     s32 i;
 
-    winBgGX(x, y, pWin, 0);
-    winNameGX(x - 265.0f, y + 165.0f, 240.0f, 32.0f, pWin, 0);
-    scale.x = 1.0f;
-    scale.y = 1.0f;
-    scale.z = 1.0f;
+    scale.x = scale.y = scale.z = 1.0f;
     pos.z = 0.0f;
-    winIconInit();
-    pos.x = x - 215.0f;
-    pos.y = y + 110.0f;
-    winIconSet(0x1A6, &pos, &scale, &white);
+    winBgGX(x, y, pWin, 0);
+    winNameGX(x - 265.0f, y + 154.0f, 190.0f, 24.0f, pWin, 2);
+
     winFontInit();
-    pos.x += 55.0f;
-    winFontSetR(&pos, &scale, &white, "HP %d/%d", pouchGetHP(), pouchGetMaxHP());
-    pos.y -= 34.0f;
-    winFontSetR(&pos, &scale, &white, "FP %d/%d", pouchGetFP(), pouchGetMaxFP());
-    for (i = 0; i < 8; i++) {
-        pos.x = x - 205.0f + (i & 3) * 58.0f;
-        pos.y = y - 10.0f - (i >> 2) * 52.0f;
-        winIconSet(0x27 + i, &pos, &scale, &white);
+    pos.x = x - 255.0f;
+    pos.y = y + 152.0f;
+    winFontSetEdge(&pos, &scale, &white, msgSearch("name_mario"));
+    pos.x += 20.0f;
+    winIconInit();
+    pos.y = y + 142.0f;
+    winIconSet(0x1A6, &pos, &scale, &white);
+
+    pos.x += 20.0f;
+    pos.y = y + 152.0f;
+    winFontInit();
+    winFontSetEdgeWidth(&pos, &scale, &white, 45.0f,
+                        msgSearch("msg_menu_mario_level"));
+    pos.x = x - 85.0f;
+    winFontSetEdgeWidth(&pos, &scale, &white, 20.0f,
+                        winZenkakuStr(*(s16*)(pouch + 0x8A)));
+
+    winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
+    pos.x = x - 255.0f;
+    pos.y = y + 112.0f;
+    winTexSet(0xB0, &pos, &scale, &white);
+    winFontInit();
+    pos.x = x - 240.0f;
+    pos.y = y + 124.0f;
+    winFontSetEdgeWidth(&pos, &scale, &white, 140.0f,
+                        msgSearch(BattleGetRankNameLabel(*(s16*)(pouch + 0x8A))));
+
+    for (i = 0; i < 6; i++) {
+        if (menuState != modes[i]) {
+            fukidashi(x, y, pWin, modes[i]);
+        }
     }
-    pos.x = x + 80.0f;
-    pos.y = y + 110.0f;
-    winFontSetR(&pos, &scale, &white, "%d", *(s32*)((s32)pouch + 0x98));
+    fukidashi(x, y, pWin, menuState);
+
+    winKirinukiGX(x - 270.0f, y - 10.0f, 264.0f, 110.0f, pWin, 0);
+    for (i = 0; i < 3; i++) {
+        winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
+        pos.x = x - 222.0f;
+        pos.y = y - 42.0f - (f32)(i * 34);
+        winTexSet(0xAF, &pos, &scale, &white);
+        winFontInit();
+        pos.x += 12.0f;
+        pos.y += 12.0f;
+        winFontSetEdge(&pos, &scale, &white, msgSearch("msg_menu_mario_status"));
+    }
+
+    winIconInit();
+    pos.x = x - 160.0f;
+    pos.y = y - 72.0f;
+    winIconSet(0x1A7, &pos, &scale, &white);
+    pos.y -= 34.0f;
+    winIconSet(0x1A8, &pos, &scale, &white);
+
+    winFontInit();
+    pos.x = x + 215.0f;
+    pos.y = y + 44.0f;
+    winFontSetR(&pos, &scale, &white, "%s", winZenkakuStr(*(s16*)(pouch + 0x96)));
+    pos.y -= 28.0f;
+    winFontSetR(&pos, &scale, &white, "%s", winZenkakuStr(*(s16*)(pouch + 0x78)));
+    pos.y -= 28.0f;
+    winFontSetR(&pos, &scale, &white, "%s", winZenkakuStr(*(s16*)(pouch + 0x9A)));
+    pos.y -= 28.0f;
+    winFontSetR(&pos, &scale, &white, "%s", winZenkakuStr(*(s16*)(pouch + 0x9C)));
     (void)cameraId;
 }
 
@@ -89,31 +144,273 @@ void fukidashi(double x, double y, void* menu, s32 type) {
     extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
     extern void winIconInit(void);
     extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
-    Vec3 pos;
-    Vec3 scale;
-    u32 white = 0xFFFFFFFF;
-    s32 icon = -1;
-    s32 available = 0;
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern u8 itemDataTable[];
+    Vec3 p0, p1, p2;
+    Vec3 s0, s1, s2;
+    u32 c0 = 0xFFFFFFFF;
+    u32 c1 = 0xFFFFFFFF;
+    u32 c2 = 0xFFFFFFFF;
+    s32 level;
+    s32 icon;
+    f32 bx;
+    f32 by;
 
-    if (type == 2) { available = pouchGetHammerLv(); icon = 0x1A0 + available; }
-    else if (type == 3) { available = pouchGetJumpLv(); icon = 0x1A4 + available; }
-    else if (type >= 7 && type <= 10) { available = pouchCheckItem(type + 0x70); icon = 0x1B0 + type; }
-    if (available == 0 || icon < 0) return;
-    winTexInit(**(void***)((s32)*(void**)((s32)menu + 0x28) + 0xA0));
-    pos.x = (f32)x - 32.0f; pos.y = (f32)y + 24.0f; pos.z = 0.0f;
-    scale.x = 1.0f; scale.y = 1.0f; scale.z = 1.0f;
-    winTexSet(0xB1, &pos, &scale, &white);
-    pos.x = (f32)x + 32.0f;
-    winTexSet(0xB1, &pos, &scale, &white);
-    winIconInit();
-    pos.x = (f32)x; pos.y = (f32)y;
-    winIconSet(icon, &pos, &scale, &white);
+    s0.x = s0.y = s0.z = 1.0f;
+    s1.x = s1.y = s1.z = 1.0f;
+    s2.x = s2.y = s2.z = 1.0f;
+    p0.z = p1.z = p2.z = 0.0f;
+
+    switch (type) {
+        case 2:
+            level = pouchGetHammerLv();
+            if (level > 0) {
+                level = pouchGetHammerLv();
+                icon = *(s16*)(itemDataTable + (level + 8) * 0x28 + 0x28);
+                winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
+                GXSetTevColorIn(0, 0, 0, 0, 2);
+                GXSetTevAlphaIn(0, 0, 4, 5, 7);
+                bx = (f32)x - 230.0f;
+                by = (f32)y + 72.0f;
+                p0.x = bx + 5.0f;
+                p0.y = by - 5.0f;
+                winTexSet(0xB1, &p0, &s0, &c0);
+                p1.x = bx;
+                p1.y = by;
+                winTexSet(0xB1, &p1, &s1, &c1);
+                winIconInit();
+                p2.x = bx - 6.0f;
+                p2.y = by;
+                winIconSet(icon, &p2, &s2, &c2);
+            }
+            break;
+
+        case 3:
+            level = pouchGetJumpLv();
+            if (level > 0) {
+                level = pouchGetJumpLv();
+                icon = *(s16*)(itemDataTable + (level + 5) * 0x28 + 0x28);
+                winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
+                GXSetTevColorIn(0, 0, 0, 0, 2);
+                GXSetTevAlphaIn(0, 0, 4, 5, 7);
+                bx = (f32)x - 210.0f;
+                by = (f32)y + 20.0f;
+                p0.x = bx + 5.0f;
+                p0.y = by - 5.0f;
+                winTexSet(0xB1, &p0, &s0, &c0);
+                p1.x = bx;
+                p1.y = by;
+                winTexSet(0xB1, &p1, &s1, &c1);
+                winIconInit();
+                p2.x = bx - 6.0f;
+                p2.y = by;
+                winIconSet(icon, &p2, &s2, &c2);
+            }
+            break;
+
+        case 7:
+            level = pouchCheckItem(2);
+            icon = *(s16*)(itemDataTable + 2 * 0x28 + 0x28);
+            if (level != 0) {
+                winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
+                GXSetTevColorIn(0, 0, 0, 0, 2);
+                GXSetTevAlphaIn(0, 0, 4, 5, 7);
+                bx = (f32)x - 80.0f;
+                by = (f32)y + 90.0f;
+                p0.x = bx + 5.0f;
+                p0.y = by - 5.0f;
+                winTexSet(0xB1, &p0, &s0, &c0);
+                p1.x = bx;
+                p1.y = by;
+                winTexSet(0xB1, &p1, &s1, &c1);
+                winIconInit();
+                p2.x = bx + 6.0f;
+                p2.y = by;
+                winIconSet(icon, &p2, &s2, &c2);
+            }
+            break;
+
+        case 8:
+            level = pouchCheckItem(4);
+            icon = *(s16*)(itemDataTable + 4 * 0x28 + 0x28);
+            if (level != 0) {
+                winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
+                GXSetTevColorIn(0, 0, 0, 0, 2);
+                GXSetTevAlphaIn(0, 0, 4, 5, 7);
+                bx = (f32)x - 80.0f;
+                by = (f32)y + 20.0f;
+                p0.x = bx + 5.0f;
+                p0.y = by - 5.0f;
+                winTexSet(0xB1, &p0, &s0, &c0);
+                p1.x = bx;
+                p1.y = by;
+                winTexSet(0xB1, &p1, &s1, &c1);
+                winIconInit();
+                p2.x = bx + 6.0f;
+                p2.y = by;
+                winIconSet(icon, &p2, &s2, &c2);
+            }
+            break;
+
+        case 9:
+            level = pouchCheckItem(5);
+            icon = *(s16*)(itemDataTable + 5 * 0x28 + 0x28);
+            if (level != 0) {
+                winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
+                GXSetTevColorIn(0, 0, 0, 0, 2);
+                GXSetTevAlphaIn(0, 0, 4, 5, 7);
+                bx = (f32)x - 30.0f;
+                by = (f32)y + 130.0f;
+                p0.x = bx + 5.0f;
+                p0.y = by - 5.0f;
+                winTexSet(0xB1, &p0, &s0, &c0);
+                p1.x = bx;
+                p1.y = by;
+                winTexSet(0xB1, &p1, &s1, &c1);
+                winIconInit();
+                p2.x = bx + 6.0f;
+                p2.y = by;
+                winIconSet(icon, &p2, &s2, &c2);
+            }
+            break;
+
+        case 10:
+            level = pouchCheckItem(3);
+            icon = *(s16*)(itemDataTable + 3 * 0x28 + 0x28);
+            if (level != 0) {
+                winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
+                GXSetTevColorIn(0, 0, 0, 0, 2);
+                GXSetTevAlphaIn(0, 0, 4, 5, 7);
+                bx = (f32)x - 30.0f;
+                by = (f32)y + 60.0f;
+                p0.x = bx + 5.0f;
+                p0.y = by - 5.0f;
+                winTexSet(0xB1, &p0, &s0, &c0);
+                p1.x = bx;
+                p1.y = by;
+                winTexSet(0xB1, &p1, &s1, &c1);
+                winIconInit();
+                p2.x = bx + 6.0f;
+                p2.y = by;
+                winIconSet(icon, &p2, &s2, &c2);
+            }
+            break;
+    }
 }
 
 s32 winMarioMain(void* pWin) {
+    extern void psndSFXOn(s32);
+    extern s32 pouchCheckItem(s32);
+    extern void* superActionTable[];
+    extern void winMsgEntry(void*, s32, char*, s32);
+    extern u8 DAT_80377708[];
+    s32 open = *(s32*)((s32)pWin + 0x190);
+    s32 state;
+    s32 cursor;
+    s32 count;
+    u32 pressed;
+    u32 dirs;
+
+    if (open == 1) {
+        goto star_list;
+    }
+    if (open > 0 || open < 0) {
+        return 0;
+    }
+
+    pressed = *(u32*)((s32)pWin + 4);
+    dirs = *(u32*)((s32)pWin + 0x10);
+    if ((pressed & 0x100) != 0) {
+        if (*(s32*)((s32)pWin + 0x160) == 12) {
+            *(s32*)((s32)pWin + 0x190) = 1;
+            *(s32*)((s32)pWin + 0x194) = 0;
+            psndSFXOn(0x20012);
+        }
+    } else {
+        if ((pressed & 0x200) != 0) {
+            psndSFXOn(0x20013);
+            return -1;
+        }
+        if ((pressed & 0x1000) != 0) {
+            return -2;
+        }
+        state = *(s32*)((s32)pWin + 0x160);
+        if ((dirs & 0x1000) != 0) {
+            do {
+                state = DAT_80377708[state * 0x1C];
+            } while (state != 11 && state != 12 &&
+                     *(u16*)(DAT_80377708 - 8 + state * 0x1C) != 0 &&
+                     pouchCheckItem(*(u16*)(DAT_80377708 - 8 + state * 0x1C)) == 0);
+        }
+        if ((dirs & 0x2000) != 0) {
+            do {
+                state = DAT_80377708[state * 0x1C + 1];
+            } while (state != 11 && state != 12 &&
+                     *(u16*)(DAT_80377708 - 8 + state * 0x1C) != 0 &&
+                     pouchCheckItem(*(u16*)(DAT_80377708 - 8 + state * 0x1C)) == 0);
+        }
+        if ((dirs & 0x4000) != 0) {
+            do {
+                state = DAT_80377708[state * 0x1C + 2];
+            } while (state != 11 && state != 12 &&
+                     *(u16*)(DAT_80377708 - 8 + state * 0x1C) != 0 &&
+                     pouchCheckItem(*(u16*)(DAT_80377708 - 8 + state * 0x1C)) == 0);
+        }
+        if ((dirs & 0x8000) != 0) {
+            do {
+                state = DAT_80377708[state * 0x1C + 3];
+            } while (state != 11 && state != 12 &&
+                     *(u16*)(DAT_80377708 - 8 + state * 0x1C) != 0 &&
+                     pouchCheckItem(*(u16*)(DAT_80377708 - 8 + state * 0x1C)) == 0);
+        }
+        *(s32*)((s32)pWin + 0x160) = state;
+        if ((dirs & 0xF000) != 0) {
+            psndSFXOn(0x20005);
+        }
+    }
+
+    state = *(s32*)((s32)pWin + 0x160);
+    *(f32*)((s32)pWin + 0x158) = (f32)linkDt[state].x;
+    *(f32*)((s32)pWin + 0x15C) = (f32)linkDt[state].y;
+    if (state == 2) {
+        winMsgEntry(pWin, 0, hammer_help[pouchGetHammerLv()], 0);
+    } else if (state == 3) {
+        winMsgEntry(pWin, 0, boots_help[pouchGetJumpLv()], 0);
+    } else {
+        winMsgEntry(pWin, 0, linkDt[state].msg, 0);
+    }
+    return 0;
+
+star_list:
+    cursor = *(s32*)((s32)pWin + 0x194);
+    count = *(s32*)((s32)pWin + 0x198);
+    dirs = *(u32*)((s32)pWin + 0x10);
+    pressed = *(u32*)((s32)pWin + 4);
+    if ((dirs & 0x1000) != 0) {
+        cursor--;
+        if (cursor < 0) {
+            cursor = count - 1;
+        }
+        psndSFXOn(0x20005);
+    } else if ((dirs & 0x2000) != 0) {
+        cursor++;
+        if (cursor >= count) {
+            cursor = 0;
+        }
+        psndSFXOn(0x20005);
+    } else if ((pressed & 0x200) != 0) {
+        *(s32*)((s32)pWin + 0x190) = 0;
+        psndSFXOn(0x20013);
+    } else if ((pressed & 0x1000) != 0) {
+        return -2;
+    }
+    *(s32*)((s32)pWin + 0x194) = cursor;
+    *(f32*)((s32)pWin + 0x158) = -280.0f;
+    *(f32*)((s32)pWin + 0x15C) = 118.0f - 26.0f * (f32)cursor;
+    winMsgEntry(pWin, 0, *(char**)((s32)superActionTable[cursor] + 0xC), 0);
     return 0;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

@@ -232,58 +232,63 @@ void actionCommandDisp2(f32 x, f32 y) {
 
 /* stub-fill: actionCommandDisp | prototype_only | source_prototype */
 void actionCommandDisp(f32 x, f32 y) {
-    extern void iconDispGx(f32* pos, s32 flags, s32 iconId, f32 scale);
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
+    extern void iconDispGx(f32, Vec3*, s32, u16);
+    extern s32 _get_icon_id(s8);
     extern f32 float_neg200_80426830;
     extern f32 float_70_80426834;
     extern f32 float_1_80426838;
-    void* battle = _battleWorkPointer;
-    s32 state = *(s32*)((s32)battle + 0x1C9C);
-    s8* extra = (s8*)((s32)battle + 0x1F4C);
-    f32 pos[3];
-    s32 icon;
+    u8* battle = _battleWorkPointer;
+    u32 state = *(u32*)(battle + 0x1C9C);
+    s8* extra = (s8*)(battle + 0x1F4C);
 
-    if (state == 0x3E8) {
-        icon = _get_icon_id(extra[2]);
-        pos[0] = float_neg200_80426830 + x;
-        pos[1] = float_70_80426834 + y;
-        pos[2] = 0.0f;
-        iconDispGx(pos, 0x10, icon, float_1_80426838);
-        return;
-    }
-
-    if (state < 0x3E8) {
-        if (state >= 0x63 && state < 0x65) {
-            pos[0] = float_neg200_80426830 + x;
-            pos[1] = float_70_80426834 + y;
-            pos[2] = 0.0f;
-            iconDispGx(pos, 0x10, 0x81, float_1_80426838);
+    if (state == 1000) {
+        Vec3 pos;
+        pos.x = float_neg200_80426830 + x;
+        pos.y = float_70_80426834 + y;
+        pos.z = 0.0f;
+        iconDispGx(float_1_80426838, &pos, 0x10, (u16)_get_icon_id(extra[2]));
+    } else if ((s32)state < 1000) {
+        if ((s32)state < 0x65 && (s32)state > 0x62) {
+            Vec3 pos;
+            pos.x = float_neg200_80426830 + x;
+            pos.y = float_70_80426834 + y;
+            pos.z = 0.0f;
+            iconDispGx(float_1_80426838, &pos, 0x10, 0x81);
         }
-        return;
-    }
-
-    if (state >= 0x3EF) {
-        return;
-    }
-
-    if (state < 0x3EA) {
-        if (extra[5] < *(s32*)((s32)battle + 0x1CD8)) {
-            if (*(u16*)(extra + 8) < 2) {
-                icon = _get_icon_id(extra[2]);
+    } else if ((s32)state < 0x3EF) {
+        if ((s32)state < 0x3EA) {
+            if ((s32)extra[5] < *(s32*)(battle + 0x1CD8)) {
+                if (*(u16*)(extra + 8) < 2) {
+                    Vec3 pos;
+                    pos.x = float_neg200_80426830 + x;
+                    pos.y = float_70_80426834 + y;
+                    pos.z = 0.0f;
+                    iconDispGx(float_1_80426838, &pos, 0x10,
+                               (u16)_get_icon_id(extra[2]));
+                } else {
+                    Vec3 pos;
+                    pos.x = float_neg200_80426830 + x;
+                    pos.y = float_70_80426834 + y;
+                    pos.z = 0.0f;
+                    iconDispGx(float_1_80426838, &pos, 0x10,
+                               (u16)_get_icon_id(extra[1]));
+                }
             } else {
-                icon = _get_icon_id(extra[1]);
+                Vec3 pos;
+                pos.x = float_neg200_80426830 + x;
+                pos.y = float_70_80426834 + y;
+                pos.z = 0.0f;
+                iconDispGx(float_1_80426838, &pos, 0x10,
+                           (u16)_get_icon_id(extra[2]));
             }
         } else {
-            icon = _get_icon_id(extra[2]);
+            Vec3 pos;
+            pos.x = float_neg200_80426830 + x;
+            pos.y = float_70_80426834 + y;
+            pos.z = 0.0f;
+            iconDispGx(float_1_80426838, &pos, 0x10, 0x81);
         }
-        pos[0] = float_neg200_80426830 + x;
-        pos[1] = float_70_80426834 + y;
-        pos[2] = 0.0f;
-        iconDispGx(pos, 0x10, icon, float_1_80426838);
-    } else {
-        pos[0] = float_neg200_80426830 + x;
-        pos[1] = float_70_80426834 + y;
-        pos[2] = 0.0f;
-        iconDispGx(pos, 0x10, 0x81, float_1_80426838);
     }
 }
 

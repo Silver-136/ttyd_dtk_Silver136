@@ -995,17 +995,30 @@ void btlseqAct(void* battleWork) {
     extern void effNiceAsync(s32);
     extern void BattleAudience_ActInit(void);
     extern void BattleStatusWindowSystemOn(void);
+    extern void BattleStatusWindowSystemOff(void);
+    extern void BattleCommandInit(void*);
+    extern f32 battleCameraGetPosMoveSpeed(void);
+    extern s32 BattleCommandInput(void*);
+    extern void* BtlUnit_GetData(void*, s32);
+    extern void* evtEntry(void*, s32, s32);
+    extern void evtDeleteID(s32);
     extern s32 BattleStatusChangeMsgMain(void*);
     extern s32 BattleStatusChangeAnnouceMain(void*);
     extern void BattleStatusChangeMsgAdjust(void*);
     extern void BtlUnit_SetStatus(void*, s32, s32, s32);
-    extern void BtlUnit_OffStatusFlag(void*, u32);
+    extern u8 btldefaultevt_BiribiriMove[];
+    extern u8 btldefaultevt_CantMoveZeroGravity[];
     void* unit;
-    s32 seq = BattleGetSeq(battleWork, 6);
-    s32 id = *(s32*)((s32)battleWork + 0x420);
-    s32 a;
-    s32 b;
+    void* event;
+    s32 seq;
+    s32 id;
+    s32 kind;
+    s32 messageBusy;
+    s32 announceBusy;
+    s32 unable;
 
+    seq = BattleGetSeq(battleWork, 6);
+    id = *(s32*)((s32)battleWork + 0x420);
     switch (seq) {
         case 0x6000000:
             unit = BattleGetUnitPtr(battleWork, id);
@@ -1013,30 +1026,93 @@ void btlseqAct(void* battleWork) {
             *(s32*)((s32)unit + 0x258) = 0;
             *(void**)((s32)unit + 0x25C) = NULL;
             BattleAudience_ActInit();
-            if (BtlUnit_CheckStatus(unit, 1) ||
-                BtlUnit_CheckStatus(unit, 2) ||
-                BtlUnit_CheckStatus(unit, 9) ||
-                BtlUnit_CheckStatus(unit, 0x1B)) {
+            kind = *(s32*)((s32)unit + 8);
+            unable = 1;
+            if (kind == 0xDE || (kind > 0xDF && kind < 0xE7)) {
+                if (!BtlUnit_CheckStatus(unit, 1) &&
+                    !BtlUnit_CheckStatus(unit, 2) &&
+                    !BtlUnit_CheckStatus(unit, 9) &&
+                    !BtlUnit_CheckStatus(unit, 0x1B)) {
+                    unable = 0;
+                }
+            }
+            if (unable) {
                 BattleSetSeq(battleWork, 6, 0x6000003);
+            } else if (*(s8*)((s32)unit + 0x12B) == 0) {
+                BattleCommandInit(battleWork);
+                BattleSetSeq(battleWork, 6, 0x6000001);
             } else {
-                BattleIncSeq(battleWork, 6);
+                BattleSetSeq(battleWork, 6, 0x6000005);
             }
             break;
-        case 0x6000007:
-            if (!BattleWaitAllActiveEvtEnd(battleWork)) {
-                return;
+        case 0x6000001:
+            if (battleCameraGetPosMoveSpeed() > 2.0f) return;
+            BattleSetSeq(battleWork, 6, 0x6000002);
+        case 0x6000002:
+            if (BattleCommandInput(battleWork) != 0) {
+                *(u32*)((s32)battleWork + 0xEF4) &= ~0x80;
+                BattleSetSeq(battleWork, 6, 0x6000006);
             }
+            break;
+        case 0x6000003:
+            unit = BattleGetUnitPtr(battleWork, id);
+            *(s32*)((s32)unit + 0x2AC) = 1;
+            *(u32*)((s32)unit + 0x1C) |= 0x04000000;
+            BattleSetSeq(battleWork, 6, 0x6000006);
+            break;
+        case 0x6000004:
+            unit = BattleGetUnitPtr(battleWork, id);
+            *(void**)((s32)unit + 0x2A0) = BtlUnit_GetData(unit, 3);
+            *(s32*)((s32)unit + 0x2AC) = 0x1B;
+            BattleSetSeq(battleWork, 6, 0x6000006);
+            break;
+        case 0x6000005:
+            unit = BattleGetUnitPtr(battleWork, id);
+            *(void**)((s32)unit + 0x2A0) = BtlUnit_GetData(unit, 2);
+            *(s32*)((s32)unit + 0x2AC) = 1;
+            BattleSetSeq(battleWork, 6, 0x6000006);
+            break;
+        case 0x6000006:
+            unit = BattleGetUnitPtr(battleWork, id);
+            if ((*(u32*)((s32)unit + 0x2AC) & 1) == 0) {
+                BattleStatusWindowSystemOff();
+            }
+            event = NULL;
+            if ((*(u32*)((s32)battleWork + 0xEF4) & 0x40000000) != 0 &&
+                (*(u32*)((s32)unit + 0x104) & 0x2000) == 0 &&
+                (*(u32*)((s32)unit + 0x2AC) & 0x18) == 0) {
+                event = evtEntry(btldefaultevt_CantMoveZeroGravity, 10, 0);
+            } else if ((*(u32*)((s32)unit + 0x2AC) & 0x10) != 0) {
+                if (*(void**)((s32)unit + 0x2A0) != NULL) {
+                    event = evtEntry(*(void**)((s32)unit + 0x2A0), 10, 0);
+                }
+            } else if ((*(u32*)((s32)unit + 0x2AC) & 2) != 0) {
+                event = evtEntry(*(void**)((s32)unit + 0x2A0), 10, 0);
+            } else if (!BtlUnit_CheckStatus(unit, 1) &&
+                       !BtlUnit_CheckStatus(unit, 2) &&
+                       !BtlUnit_CheckStatus(unit, 9) &&
+                       !BtlUnit_CheckStatus(unit, 0x1B)) {
+                event = evtEntry(*(void**)((s32)unit + 0x2A0), 10, 0);
+            }
+            if (event != NULL) {
+                *(s32*)((s32)unit + 0x2A8) = *(s32*)((s32)event + 0x15C);
+                *(s32*)((s32)event + 0x160) = *(s32*)unit;
+                if (*(s32*)((s32)unit + 0x290) != 0) {
+                    evtDeleteID(*(s32*)((s32)unit + 0x290));
+                    *(s32*)((s32)unit + 0x290) = 0;
+                }
+            }
+            BattleIncSeq(battleWork, 6);
+            break;
+        case 0x6000007:
+            if (!BattleWaitAllActiveEvtEnd(battleWork)) return;
             BattleIncSeq(battleWork, 6);
             BattleStatusChangeMsgAdjust(battleWork);
         case 0x6000008:
-            if (!BattleWaitAllActiveEvtEnd(battleWork)) {
-                return;
-            }
-            a = BattleStatusChangeMsgMain(battleWork);
-            b = BattleStatusChangeAnnouceMain(battleWork);
-            if (a != 0 || b != 0) {
-                return;
-            }
+            if (!BattleWaitAllActiveEvtEnd(battleWork)) return;
+            messageBusy = BattleStatusChangeMsgMain(battleWork);
+            announceBusy = BattleStatusChangeAnnouceMain(battleWork);
+            if (messageBusy != 0 || announceBusy != 0) return;
             BattleIncSeq(battleWork, 6);
         case 0x6000009:
             if ((*(u32*)((s32)battleWork + 0x1720) & 0x30) == 0) {
@@ -1053,7 +1129,7 @@ void btlseqAct(void* battleWork) {
                     if ((*(u32*)((s32)battleWork + 0x1720) & 0x2000) != 0) {
                         *(s8*)((s32)unit + 0x22) = 0;
                     } else {
-                        *(s8*)((s32)unit + 0x22) -= 1;
+                        (*(s8*)((s32)unit + 0x22))--;
                     }
                     if (*(s8*)((s32)unit + 0x22) < 1) {
                         *(u8*)((s32)unit + 0x20) = 10;
@@ -1072,16 +1148,18 @@ void btlseqFirstAct(void* battleWork) {
     extern void BattleConsumeReserveItem(void);
     extern void BattleAudience_PerAct(void);
     extern u32 BattleAudience_CheckReaction(void);
+    extern u32 BattleBreakSlot_CheckReaction(void);
     extern s32 BattleStatusChangeMsgMain(void*);
     extern s32 BattleStatusChangeAnnouceMain(void*);
     extern void BattleStatusChangeMsgAdjust(void*);
     extern void BattleStage_WallCloseCheck(void);
-    s32 seq = BattleGetSeq(battleWork, 2);
+    s32 seq;
     void* unit;
     s32 i;
-    s32 a;
-    s32 b;
+    s32 messageBusy;
+    s32 announceBusy;
 
+    seq = BattleGetSeq(battleWork, 2);
     switch (seq) {
         case 0x2000000:
             *(s32*)((s32)battleWork + 0xEFC) = 0;
@@ -1094,7 +1172,7 @@ void btlseqFirstAct(void* battleWork) {
             BattleSetSeq(battleWork, 2, 0x2000001);
             break;
         case 0x2000001:
-            *(s32*)((s32)battleWork + 0xEFC) -= 1;
+            (*(s32*)((s32)battleWork + 0xEFC))--;
             if (*(s32*)((s32)battleWork + 0xEFC) > 0) {
                 return;
             }
@@ -1119,14 +1197,10 @@ void btlseqFirstAct(void* battleWork) {
             BattleSetSeq(battleWork, 2, 0x2000004);
             BattleStatusChangeMsgAdjust(battleWork);
         case 0x2000004:
-            if (!BattleWaitAllActiveEvtEnd(battleWork)) {
-                return;
-            }
-            a = BattleStatusChangeMsgMain(battleWork);
-            b = BattleStatusChangeAnnouceMain(battleWork);
-            if (a != 0 || b != 0) {
-                return;
-            }
+            if (!BattleWaitAllActiveEvtEnd(battleWork)) return;
+            messageBusy = BattleStatusChangeMsgMain(battleWork);
+            announceBusy = BattleStatusChangeAnnouceMain(battleWork);
+            if (messageBusy != 0 || announceBusy != 0) return;
             BattleIncSeq(battleWork, 2);
         case 0x2000005:
             if ((*(u32*)((s32)battleWork + 0x1720) & 0x30) == 0) {
@@ -1137,14 +1211,16 @@ void btlseqFirstAct(void* battleWork) {
             BattleAudience_PerAct();
             BattleIncSeq(battleWork, 2);
         case 0x2000006:
-            if ((BattleAudience_CheckReaction() & 0xFF) == 0) {
+            if ((BattleAudience_CheckReaction() & 0xFF) == 0 &&
+                (BattleCheckConcluded(battleWork) ||
+                 (BattleBreakSlot_CheckReaction() & 0xFF) == 0)) {
                 BattleIncSeq(battleWork, 2);
             }
             break;
         case 0x2000007:
-            a = BattleStatusChangeMsgMain(battleWork);
-            b = BattleStatusChangeAnnouceMain(battleWork);
-            if (a == 0 && b == 0) {
+            messageBusy = BattleStatusChangeMsgMain(battleWork);
+            announceBusy = BattleStatusChangeAnnouceMain(battleWork);
+            if (messageBusy == 0 && announceBusy == 0) {
                 BattleIncSeq(battleWork, 2);
             }
             break;
@@ -1394,20 +1470,179 @@ s32 _set_haikei_entry_scale(void* work, s32 reset) {
     return touched != 0 ? 0 : 2;
 }
 
-void BattleCheckAllPinchStatus(void* battleWork, int param_2) {
-    ;
-}
+void BattleCheckAllPinchStatus(void* battleWork, s32 firstCheck) {
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern void BtlUnit_CheckPinchStatus(void*, s32);
+    extern s32 BtlUnit_CheckStatus(void*, s32);
+    extern s32 BtlUnit_GetBelong(void*);
+    extern void* BattleGetMarioPtr(void*);
+    extern void psndSFXOn(const char*);
+    extern char str_SFX_BTL_DANGER1_802efc04[];
+    extern char str_SFX_BTL_PINCH1_802efc14[];
+    void* unit;
+    void* mario;
+    s32 i;
+    s32 kind;
+    u32 statusFlag;
+    const char* sound;
 
+    for (i = 0; i < 0x40; i++) {
+        unit = BattleGetUnitPtr(battleWork, i);
+        if (unit != 0) {
+            BtlUnit_CheckPinchStatus(unit, firstCheck);
+        }
+    }
+
+    statusFlag = 0x20000000;
+    sound = str_SFX_BTL_DANGER1_802efc04;
+check_status:
+    for (i = 0; i < 0x40; i++) {
+        unit = BattleGetUnitPtr(battleWork, i);
+        if (unit == 0 || (*(u32*)((s32)unit + 0x138) & statusFlag) == 0) {
+            continue;
+        }
+        if (BtlUnit_CheckStatus(unit, 0x1B) != 0 || BtlUnit_GetBelong(unit) != 0) {
+            continue;
+        }
+        kind = *(s32*)((s32)unit + 8);
+        if ((kind == 0xDE || (kind > 0xDF && kind < 0xE7)) &&
+            *(s16*)((s32)unit + 0x10C) > 0) {
+            (*(s8*)((s32)battleWork + 0x18FF8))--;
+            if (*(s8*)((s32)battleWork + 0x18FF8) < 1) {
+                *(s8*)((s32)battleWork + 0x18FF8) = 60;
+                if ((*(u32*)((s32)battleWork + 0x1720) & 1) != 0) {
+                    psndSFXOn(sound);
+                }
+            }
+            return;
+        }
+    }
+    if (statusFlag == 0x20000000) {
+        statusFlag = 0x10000000;
+        sound = str_SFX_BTL_PINCH1_802efc14;
+        goto check_status;
+    }
+
+    mario = BattleGetMarioPtr(battleWork);
+    if (mario != 0) {
+        *(s32*)((s32)mario + 0x2D0) = 0;
+    }
+    *(s8*)((s32)battleWork + 0x18FF8) = 0;
+}
 
 s32 _set_effect_luck(void) {
-    return 0;
-}
+    extern void* _battleWorkPointer;
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern s32 BtlUnit_CheckStatus(void*, s32);
+    extern s32 irand(s32);
+    extern s32 BtlUnit_GetBodyPartsId(void*);
+    extern void* BtlUnit_GetPartsPtr(void*, s32);
+    extern void* BattleGetSystemPtr(void*);
+    extern s32 BattleSetStatusDamageFromWeapon(void*, void*, void*, void*, u32);
+    extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
+    extern void psndSFXOn(const char*);
+    extern void* effNiceEntry(f32, f32, f32, s32);
+    extern char str_SFX_SYSTEM_LUCKY1_802efbb0[];
+    u8 weapon[0xC0];
+    u32* source;
+    u32* destination;
+    void* unit;
+    void* part;
+    void* effect;
+    s32 random;
+    s32 partId;
+    s32 i;
+    f32 x;
+    f32 y;
+    f32 z;
 
+    source = (u32*)0x802EF834;
+    destination = (u32*)weapon;
+    for (i = 0; i < 0x30; i++) {
+        destination[i] = source[i];
+    }
+    for (i = 0; i < 0x40; i++) {
+        unit = BattleGetUnitPtr(_battleWorkPointer, i);
+        if (unit == 0 || *(u8*)((s32)unit + 0x304) == 0 ||
+            BtlUnit_CheckStatus(unit, 0x1B) != 0) {
+            continue;
+        }
+        random = irand(4);
+        if (random != 1) {
+            weapon[0x8B] = 0;
+            weapon[0x8C] = 0;
+        }
+        if (random != 0) {
+            weapon[0x8D] = 0;
+            weapon[0x8E] = 0;
+        }
+        if (random != 2) {
+            weapon[0xAA] = 0;
+            weapon[0xAB] = 0;
+        }
+        if (random == 0 || random == 1 || random > 2) {
+            weapon[0xAC] = 0;
+            weapon[0xAD] = 0;
+        }
+        partId = BtlUnit_GetBodyPartsId(unit);
+        part = BtlUnit_GetPartsPtr(unit, partId);
+        BattleSetStatusDamageFromWeapon(BattleGetSystemPtr(_battleWorkPointer),
+                                        unit, part, weapon, 0x100);
+        BtlUnit_GetPos(unit, &x, &y, &z);
+        psndSFXOn(str_SFX_SYSTEM_LUCKY1_802efbb0);
+        effect = effNiceEntry(x - 45.0f, y + 60.0f, z, 6);
+        *(f32*)(*(s32*)((s32)effect + 0xC) + 0x1C) = 0.75f;
+    }
+    return 2;
+}
 
 void _rule_disp(void) {
-    ;
-}
+    extern void* _battleWorkPointer;
+    extern s32 evtGetValue(void*, s32);
+    extern char* msgSearch(char*);
+    extern s32 sprintf(char*, const char*, ...);
+    extern u32 FontGetMessageWidthLine(char*, s16*);
+    extern void windowDispGX_Waku_col(f32, f32, f32, f32, f32, u16, u32*);
+    extern void FontDrawStart(void);
+    extern void FontDrawMessage(u32, u32, char*);
+    extern char* _rule_msg_table_1bu[];
+    extern char* _rule_msg_table_2bu[];
+    extern char* _rule_msg_table_after[];
+    extern u32 dat_80422554;
+    char buffer[256];
+    void* information;
+    char* message;
+    s16 lines[2];
+    u32 color;
+    u32 dimensions;
+    u32 width;
+    f32 x;
+    u8 condition;
+    u8 parameter;
 
+    information = *(void**)((s32)_battleWorkPointer + 0x2738);
+    condition = *(u8*)((s32)information + 0x18);
+    parameter = *(u8*)((s32)information + 0x1A);
+    if (evtGetValue(0, -170000000) < 172) {
+        if (evtGetValue(0, -170000444) < 11) {
+            message = msgSearch(_rule_msg_table_1bu[condition]);
+        } else {
+            message = msgSearch(_rule_msg_table_2bu[condition]);
+        }
+    } else {
+        message = msgSearch(_rule_msg_table_after[condition]);
+    }
+    sprintf(buffer, message, parameter);
+    dimensions = FontGetMessageWidthLine(buffer, lines);
+    lines[0]++;
+    width = dimensions & 0xFFFF;
+    x = 0.0f - (f32)((dimensions >> 1) & 0x7FFF);
+    color = dat_80422554;
+    windowDispGX_Waku_col(x - 10.0f, 94.0f, (f32)(width + 20),
+                          (f32)(lines[0] * 29 + 3), 10.0f, 0, &color);
+    FontDrawStart();
+    FontDrawMessage((u32)x, (u32)(120.0f - 29.0f), buffer);
+}
 
 void btlseqInit(void* battleWork) {
     extern u8 N_weapon_lucky_start[];
@@ -1528,34 +1763,207 @@ next_alliance:
 }
 
 void battleMakePhaseEvtTable(void* battleWork) {
-    ;
-}
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern void BtlUnit_GetHomePos(void*, f32*, f32*, f32*);
+    void* unit;
+    s32* table;
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 count;
+    s32 i;
+    s32 j;
+    s32 temp;
+    s32 tempPriority;
 
+    table = (s32*)((s32)battleWork + 0x220);
+    for (i = 0; i < 0x40; i++) {
+        table[i * 2] = -1;
+        table[i * 2 + 1] = 0;
+    }
+    count = 0;
+    for (i = 0; i < 0x40; i++) {
+        unit = BattleGetUnitPtr(battleWork, i);
+        if (unit != 0 && (*(u32*)((s32)unit + 0x104) & 0x80000) == 0) {
+            table[count * 2] = i;
+            BtlUnit_GetHomePos(unit, &x, &y, &z);
+            if (x < 0.0f) table[count * 2 + 1] = (s32)-x;
+            else table[count * 2 + 1] = (s32)(1000.0f + x);
+            count++;
+        }
+    }
+    for (i = 0; (u32)i < (u32)(count - 1); i++) {
+        for (j = 0; j < count - i - 1; j++) {
+            if (table[j * 2 + 1] > table[j * 2 + 3]) {
+                temp = table[j * 2];
+                tempPriority = table[j * 2 + 1];
+                table[j * 2] = table[j * 2 + 2];
+                table[j * 2 + 1] = table[j * 2 + 3];
+                table[j * 2 + 2] = temp;
+                table[j * 2 + 3] = tempPriority;
+            }
+        }
+    }
+}
 
 int BattleWaitAllActiveEvtEnd_NoBgSetEndWait(void* battleWork) {
-    return 0;
-}
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern s32 evtCheckID(s32);
+    extern s32 BattleAfterReactionMain(void);
+    void* unit;
+    s32 result;
+    s32 i;
+    s32 eventId;
 
+    result = 1;
+    for (i = 0; i < 0x40; i++) {
+        unit = BattleGetUnitPtr(battleWork, i);
+        if (unit != 0) {
+            eventId = *(s32*)((s32)unit + 0x29C);
+            if (eventId != 0) {
+                if (evtCheckID(eventId)) result = 0;
+                else *(s32*)((s32)unit + 0x29C) = 0;
+            }
+            eventId = *(s32*)((s32)unit + 0x2A8);
+            if (eventId != 0) {
+                if (evtCheckID(eventId)) result = 0;
+                else *(s32*)((s32)unit + 0x2A8) = 0;
+            }
+            eventId = *(s32*)((s32)unit + 0x2B4);
+            if (eventId != 0) {
+                if (evtCheckID(eventId)) result = 0;
+                else *(s32*)((s32)unit + 0x2B4) = 0;
+            }
+            eventId = *(s32*)((s32)unit + 0x2BC);
+            if (eventId != 0) {
+                if (evtCheckID(eventId)) result = 0;
+                else *(s32*)((s32)unit + 0x2BC) = 0;
+            }
+        }
+    }
+    if (result != 0 && BattleAfterReactionMain() != 0) result = 0;
+    return result;
+}
 
 void btlseqPhaseFirstProcess(void* battleWork) {
-    ;
-}
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern s32 BtlUnit_CheckStatus(void*, s32);
+    extern s32 BattleGetSeq(void*, s32);
+    extern void battleSortPhaseMoveTable(void*, s32);
+    extern void battleMakePhaseEvtTable(void*);
+    void* unit;
+    void* part;
+    s32 count;
+    s32 i;
 
+    *(s32*)((s32)battleWork + 0x1C70) = 0;
+    *(u8*)((s32)battleWork + 0x1C74) = 0;
+    for (i = 0; i < 0x40; i++) *(s32*)((s32)battleWork + 0x120 + i * 4) = -1;
+    count = 0;
+    for (i = 0; i < 0x40; i++) {
+        unit = BattleGetUnitPtr(battleWork, i);
+        if (unit != 0) {
+            *(u8*)((s32)unit + 0x311) = 0xFF;
+            if (*(u8*)((s32)unit + 0x20) != 10 || BtlUnit_CheckStatus(unit, 0x14) != 0) {
+                if (*(s32*)((s32)unit + 0x2C) == BattleGetSeq(battleWork, 4) &&
+                    (*(u32*)((s32)unit + 0x104) & 0x80000) == 0) {
+                    *(s32*)((s32)battleWork + 0x120 + count * 4) = *(s32*)unit;
+                    *(s32*)((s32)unit + 0x140) = -1;
+                    for (part = *(void**)((s32)unit + 0x14); part != 0; part = *(void**)part) {
+                        if (*(s32*)((s32)part + 0x1C0) != -1) *(u8*)((s32)part + 0x4E4) = 1;
+                    }
+                    count++;
+                }
+            }
+        }
+    }
+    battleSortPhaseMoveTable(battleWork, count);
+    battleMakePhaseEvtTable(battleWork);
+}
 
 s32 BattleWaitAllActiveEvtEnd(void* battleWork) {
-    return 0;
-}
+    extern s32 BattleWaitAllActiveEvtEnd_NoBgSetEndWait(void*);
+    extern s32 evtCheckID(s32);
+    s32* eventId;
 
+    if (!BattleWaitAllActiveEvtEnd_NoBgSetEndWait(battleWork)) return 0;
+    eventId = (s32*)((s32)battleWork + 0x182B4);
+    if (*eventId != 0) { if (evtCheckID(*eventId)) return 0; *eventId = 0; }
+    eventId = (s32*)((s32)battleWork + 0x182C4);
+    if (*eventId != 0) { if (evtCheckID(*eventId)) return 0; *eventId = 0; }
+    eventId = (s32*)((s32)battleWork + 0x180FC);
+    if (*eventId != 0) { if (evtCheckID(*eventId)) return 0; *eventId = 0; }
+    eventId = (s32*)((s32)battleWork + 0x182C8);
+    if (*eventId != 0) { if (evtCheckID(*eventId)) return 0; *eventId = 0; }
+    eventId = (s32*)((s32)battleWork + 0x182C0);
+    if (*eventId != 0) { if (evtCheckID(*eventId)) return 0; *eventId = 0; }
+    return 1;
+}
 
 void btlseqTurnFirstProcess(void* battleWork) {
-    ;
-}
+    extern void BtlActRec_JudgeTurnRuleKeep(void);
+    extern void BattleMajinaiCheck(void);
+    extern void BtlActRec_AddCount(void*);
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern void BtlUnit_ResetMoveStatus(void*);
+    extern s32 irand(s32);
+    extern s32 BtlUnit_CheckStatusFlag(void*, u32);
+    extern void BtlUnit_OffStatusFlag(void*, u32);
+    extern void BattleFogEndCheck(void);
+    void* unit;
+    void* kind;
+    s32 variance;
+    s32 i;
 
+    BtlActRec_JudgeTurnRuleKeep();
+    (*(s16*)battleWork)++;
+    if (*(s16*)battleWork > 1) BattleMajinaiCheck();
+    *(s32*)((s32)battleWork + 0x18FF4) = 0;
+    *(s32*)((s32)battleWork + 0x18FF0) = 0;
+    BtlActRec_AddCount((void*)((s32)battleWork + 0x16F57));
+    for (i = 0; i < 0x40; i++) {
+        unit = BattleGetUnitPtr(battleWork, i);
+        if (unit != 0) {
+            (*(u8*)((s32)unit + 0x24))++;
+            BtlUnit_ResetMoveStatus(unit);
+            kind = *(void**)((s32)unit + 0x10);
+            variance = *(s8*)((s32)kind + 0x89);
+            *(s32*)((s32)unit + 0x28) = *(s8*)((s32)kind + 0x88) + irand(variance) - variance / 2;
+            if (BtlUnit_CheckStatusFlag(unit, 0x1000000))
+                BtlUnit_OffStatusFlag(unit, 0x1000000);
+        }
+    }
+    BattleFogEndCheck();
+}
 
 void BattleSequenceManager(void) {
-    ;
-}
+    extern void* _battleWorkPointer;
+    extern s32 BattleGetSeq(void*, s32);
+    extern void BattleCheckAllPinchStatus(void*, s32);
+    extern void btlseqInit(void*);
+    extern void btlseqFirstAct(void*);
+    extern void btlseqTurn(void*);
+    extern void btlseqEnd(void*);
+    void* battleWork;
+    s32 sequence;
 
+    battleWork = _battleWorkPointer;
+    sequence = BattleGetSeq(battleWork, 0);
+    if (sequence == 2) {
+        BattleCheckAllPinchStatus(battleWork, 0);
+        btlseqTurn(battleWork);
+    } else if (sequence < 2) {
+        if (sequence == 0) {
+            btlseqInit(battleWork);
+            BattleCheckAllPinchStatus(battleWork, 1);
+        } else if (sequence > -1) {
+            BattleCheckAllPinchStatus(battleWork, 0);
+            btlseqFirstAct(battleWork);
+        }
+    } else if (sequence != 4 && sequence < 4) {
+        btlseqEnd(battleWork);
+    }
+}
 
 u32 BattlePhaseEndCheck(void) {
     s32 offset;
@@ -1589,9 +1997,25 @@ u32 BattlePhaseEndCheck(void) {
 }
 
 void btlseqPhase(void* battleWork) {
-    ;
-}
+    extern s32 BattleGetSeq(void*, s32);
+    extern void BattleIncSeq(void*, s32);
+    extern void BattleSetSeq(void*, s32, s32);
+    extern void btlseqMove(void*);
+    s32 seq;
 
+    seq = BattleGetSeq(battleWork, 4);
+    if (seq == 0x4000006) {
+        BattleIncSeq(battleWork, 3);
+        BattleSetSeq(battleWork, 4, 0x4000000);
+    } else if (seq < 0x4000006) {
+        if (seq == 0x4000000) {
+            BattleIncSeq(battleWork, 4);
+            BattleSetSeq(battleWork, 5, 0x5000000);
+        } else if (seq > 0x3FFFFFF) {
+            btlseqMove(battleWork);
+        }
+    }
+}
 
 void* _GetFirstAttackWeapon(u32 firstAttackType) {
     switch (firstAttackType) {

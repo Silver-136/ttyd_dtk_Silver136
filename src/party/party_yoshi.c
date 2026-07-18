@@ -41,71 +41,185 @@ u8 yoshi_use(s32 pParty) {
     extern void L_partyClearCont(void*);
     extern s32 marioKeyOffChk(void);
     extern void partyChgRunMode(void*, s32);
-    extern f64 angleABf(f32, f32, f32, f32);
-    extern f64 distABf(f32, f32, f32, f32);
+    extern f64 angleABf(f64, f64, f64, f64);
+    extern f64 distABf(f64, f64, f64, f64);
+    extern f32 evt_yoshi_spd;
+    extern s32 evt_yoshi_frm;
     extern void searchGround(void*);
     extern void marioChgSmallJumpMotion(void);
     extern void partyChkGnd(void*);
     extern void inertia(void*);
+    extern s32 marioGetExtraPartyId(void);
+    extern void* partyGetPtr(s32);
+    extern f64 toMovedir(f64);
+    extern void movePos(f64, f64, f32*, f32*);
     void* party = (void*)pParty;
     void* player = *(void**)(pParty + 0x160);
     void* work;
     u8 state;
 
-    if (*(u8*)((s32)player + 0x2A) == 0) partyUpdateKeyData(party);
+    if (*(s8*)((s32)player + 0x39) == 0) partyUpdateKeyData(party);
     else L_partyClearCont(party);
-    if ((*(u32*)(pParty + 8) & 0x1000) != 0) {
-        *(u32*)(pParty + 8) &= ~0x1000;
-        *(u32*)pParty &= ~0xC78000;
+    if ((*(u32*)(pParty + 8) & 8) != 0) {
+        *(u32*)(pParty + 8) &= ~8;
+        *(u32*)pParty &= ~0x00780000;
+        *(u32*)pParty &= ~0x03800000;
+        *(u32*)pParty &= ~0x08000000;
         work = __memAlloc(0, 0x18);
-        *(void**)(pParty + 0x164) = work;
+        *(void**)(pParty + 0x170) = work;
         memset(work, 0, 0x18);
         *(u32*)((s32)work + 0x14) = 0;
-        *(u8*)(pParty + 0x38) = (*(u32*)pParty & 0x10000000) ? 4 : 0;
-        *(s32*)(pParty + 0x9C) = 3;
+        if ((*(u32*)pParty & 1) == 0) {
+            evt_yoshi_frm = -1;
+            evt_yoshi_spd = 0.0f;
+            *(u8*)(pParty + 0x39) = 0;
+        } else {
+            evt_yoshi_spd = 1.0f;
+            *(u8*)(pParty + 0x39) = 4;
+        }
+        *(s32*)(pParty + 0x24) = 3;
         *(f32*)((s32)player + 0x180) = 0.0f;
-        *(f32*)((s32)player + 0x178) = 0.0f;
+        *(f32*)((s32)player + 0x2BC) = 0.0f;
+        *(f32*)((s32)player + 0x2B8) = 0.0f;
+        *(f32*)((s32)player + 0x2C8) = 0.0f;
+        *(f32*)((s32)player + 0x2CC) = 0.0f;
+        *(u32*)((s32)work + 4) = 0;
     }
-    work = *(void**)(pParty + 0x164);
-    state = *(u8*)(pParty + 0x38);
+    work = *(void**)(pParty + 0x170);
+    state = *(u8*)(pParty + 0x39);
     if (state == 0) {
-        if (--*(s32*)(pParty + 0x9C) > 0) {
+        if (--*(s32*)(pParty + 0x24) > 0) {
             if (marioKeyOffChk() == 0 && *(void**)((s32)player + 0x1F4) != 0) return 0;
             if ((*(u32*)pParty & 0x200000) != 0) {
                 *(u32*)pParty &= ~0x200000;
-                if (work != 0) { __memFree(0, work); *(void**)(pParty + 0x164) = 0; }
+                if (work != 0) { __memFree(0, work); *(void**)(pParty + 0x170) = 0; }
             }
-            if (*(u8*)(pParty + 0x34) != 8 && *(u8*)(pParty + 0x34) != 13) partyChgRunMode(party, 2);
+            if (*(u8*)(pParty + 0x34) != 8 && *(u8*)(pParty + 0x34) != 13) {
+                partyChgRunMode(party, 2);
+                *(u8*)(pParty + 0x3B) = 0;
+            }
             return 0;
         }
-        *(u8*)(pParty + 0x38) = 4;
+        *(u8*)(pParty + 0x39) = 4;
         state = 4;
     }
     if (state == 4) {
         *(f32*)((s32)player + 0x1A4) = (*(f32*)((s32)player + 0x1A4) <= 180.0f) ? 90.0f : 270.0f;
-        *(f32*)(pParty + 0xB8) = *(f32*)((s32)player + 0x8C);
-        *(f32*)(pParty + 0xBC) = *(f32*)((s32)player + 0x90);
-        *(f32*)(pParty + 0xC0) = *(f32*)((s32)player + 0x94);
-        *(s32*)(pParty + 0x9C) = 4;
+        *(f32*)((s32)player + 0x1A0) = *(f32*)((s32)player + 0x1A4);
+        *(f32*)(pParty + 0x94) = *(f32*)((s32)player + 0x8C);
+        *(f32*)(pParty + 0x98) = *(f32*)((s32)player + 0x90);
+        *(f32*)(pParty + 0x9C) = *(f32*)((s32)player + 0x94);
+        *(s32*)(pParty + 0x24) = 4;
+        *(f32*)(pParty + 0x114) = 0.0f;
+        *(f32*)(pParty + 0x11C) = 0.0f;
+        *(f32*)(pParty + 0x174) = 0.0f;
+        *(f32*)(pParty + 0x178) = 0.0f;
+        *(f32*)(pParty + 0x118) = 0.0f;
         *(f32*)(pParty + 0x104) = (f32)angleABf(*(f32*)(pParty + 0x58), *(f32*)(pParty + 0x60),
-                                                *(f32*)(pParty + 0xB8), *(f32*)(pParty + 0xC0));
+                                                *(f32*)(pParty + 0x94), *(f32*)(pParty + 0x9C));
         *(f32*)(pParty + 0x100) = (f32)distABf(*(f32*)(pParty + 0x58), *(f32*)(pParty + 0x60),
-                                               *(f32*)(pParty + 0xB8), *(f32*)(pParty + 0xC0)) / 4.0f;
-        *(u8*)(pParty + 0x38) = 5;
+                                               *(f32*)(pParty + 0x94), *(f32*)(pParty + 0x9C)) / 4.0f;
+        *(u8*)(pParty + 0x39) = 5;
         state = 5;
     }
     if (state == 5) {
-        f32 frames = (f32)*(s32*)(pParty + 0x9C);
-        *(f32*)(pParty + 0x58) += (*(f32*)(pParty + 0xB8) - *(f32*)(pParty + 0x58)) / frames;
-        *(f32*)(pParty + 0x5C) += (*(f32*)(pParty + 0xBC) - *(f32*)(pParty + 0x5C)) / frames;
-        *(f32*)(pParty + 0x60) += (*(f32*)(pParty + 0xC0) - *(f32*)(pParty + 0x60)) / frames;
-        if (--*(s32*)(pParty + 0x9C) == 0) {
+        f32 frames = (f32)*(s32*)(pParty + 0x24);
+        *(f32*)(pParty + 0x58) += (*(f32*)(pParty + 0x94) - *(f32*)(pParty + 0x58)) / frames;
+        *(f32*)(pParty + 0x5C) += (*(f32*)(pParty + 0x98) - *(f32*)(pParty + 0x5C)) / frames;
+        *(f32*)(pParty + 0x60) += (*(f32*)(pParty + 0x9C) - *(f32*)(pParty + 0x60)) / frames;
+        if (--*(s32*)(pParty + 0x24) == 0) {
             marioChgSmallJumpMotion();
             *(f32*)((s32)player + 0x180) = 0.0f;
             *(f32*)(pParty + 0x100) = 0.0f;
-            *(u8*)(pParty + 0x38) = 7;
+            *(u8*)(pParty + 0x39) = 7;
             partyChkGnd(party);
         } else searchGround(party);
+        return 0;
+    }
+    if (state == 7) {
+        if ((*(u32*)pParty & 1) == 0) {
+            if (marioKeyOffChk() == 0) {
+                if ((*(u32*)pParty & 2) == 0) {
+                    *(u8*)(pParty + 0x39) = 0x65;
+                    return 0;
+                }
+            } else {
+                *(u8*)(pParty + 0x39) = 0x65;
+                return 0;
+            }
+        }
+        if (*(void**)((s32)player + 0x1E8) == 0) {
+            if (*(void**)(pParty + 0x138) != 0) {
+                *(f32*)(pParty + 0x58) += *(f32*)(pParty + 0x70);
+                *(f32*)(pParty + 0x5C) += *(f32*)(pParty + 0x74);
+                *(f32*)(pParty + 0x60) += *(f32*)(pParty + 0x78);
+            }
+            partyChkGnd(party);
+            return 0;
+        }
+        *(u8*)(pParty + 0x39) = 10;
+        {
+            void* extra = partyGetPtr(marioGetExtraPartyId());
+            if (extra != 0) {
+                partyChgRunMode(extra, 0xC);
+            }
+        }
+        partyChkGnd(party);
+        return 0;
+    }
+    if (state == 0x28) {
+        *(u32*)pParty |= 0x40;
+        *(f32*)(pParty + 0x114) = 0.0f;
+        *(f32*)(pParty + 0x118) = 0.0f;
+        *(f32*)(pParty + 0x11C) = 0.0f;
+        *(s32*)(pParty + 0x24) = 3;
+        *(f32*)(pParty + 0x114) =
+            (*(f32*)(pParty + 0x120) - *(f32*)(pParty + 0x5C)) /
+            *(s32*)(pParty + 0x24);
+        *(u8*)(pParty + 0x39) = 0x29;
+        state = 0x29;
+    }
+    if (state == 0x29) {
+        *(f32*)(pParty + 0x5C) += *(f32*)(pParty + 0x114);
+        if (--*(s32*)(pParty + 0x24) < 1) {
+            *(u32*)pParty &= ~0x40;
+            *(u8*)(pParty + 0x39) = 0xD;
+        }
+    }
+    if (state == 0x65) {
+        if (*(void**)((s32)player + 0x1E8) == 0) {
+            if (*(void**)(pParty + 0x138) != 0) {
+                *(f32*)(pParty + 0x58) += *(f32*)(pParty + 0xAC);
+                *(f32*)(pParty + 0x5C) += *(f32*)(pParty + 0xB0);
+                *(f32*)(pParty + 0x60) += *(f32*)(pParty + 0xB4);
+            }
+            partyChkGnd(party);
+            return 0;
+        }
+        *(u32*)pParty &= ~0x100;
+        if (*(u8*)(pParty + 0x34) != 8) {
+            partyChgRunMode(party, 2);
+            *(u8*)(pParty + 0x3B) = 0;
+        }
+        if (*(void**)(pParty + 0x138) != 0) {
+            *(f32*)(pParty + 0x58) += *(f32*)(pParty + 0xAC);
+            *(f32*)(pParty + 0x5C) += *(f32*)(pParty + 0xB0);
+            *(f32*)(pParty + 0x60) += *(f32*)(pParty + 0xB4);
+        }
+        partyChkGnd(party);
+        {
+            f32 step = 0.1f;
+            if (*(void**)((s32)player + 0x1E4) != 0) {
+                step = -0.1f;
+            }
+            movePos(step, toMovedir(*(f32*)((s32)player + 0x1AC)),
+                    (f32*)(pParty + 0x58), (f32*)(pParty + 0x60));
+        }
+        work = *(void**)(pParty + 0x170);
+        if (work != 0) {
+            __memFree(0, work);
+            *(void**)(pParty + 0x170) = 0;
+        }
         return 0;
     }
     if (state >= 12) inertia(party);

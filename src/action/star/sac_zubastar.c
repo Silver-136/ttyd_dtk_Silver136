@@ -777,8 +777,10 @@ s32 main_star(void) {
 
 /* stub-fill: zubastar_main | missing_definition | ghidra_signature */
 s32 zubastar_main(void* event, s32 isFirstCall) {
+    typedef struct Vec { f32 x, y, z; } Vec;
     extern u8* GetZubaStarPtr(void);
     extern s32 BattleAudience_GetAudienceNum(void);
+    extern u32 GXGetTexBufferSize(s32, s32, s32, s32, s32);
     extern s32 keyGetButtonTrg(s32);
     extern void psndSFXOff(s32);
     extern void BattleAudienceSoundCallKind(s32);
@@ -786,14 +788,28 @@ s32 zubastar_main(void* event, s32 isFirstCall) {
     extern s32 irand(s32);
     extern void* smartAlloc(s32, s32);
     extern void zubastar_create_takaku(s32, void*);
+    extern void btl_camera_shake_h(f32, f32, s32, s32, s32);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void zubastar_disp2D(void);
+    extern f64 intplGetValue(f64, f64, s32, s32, s32);
     u8* work = GetZubaStarPtr();
     s32 audience = BattleAudience_GetAudienceNum();
     s32* state = (s32*)work;
 
     if (isFirstCall != 0) {
-        *(void**)(work + 0x5D8) = smartAlloc(audience, 1);
-        zubastar_create_takaku(4, work + 0x500);
+        Vec fragments[4];
+        u32 size = GXGetTexBufferSize(400, 0x1E0, 4, 0, 0);
+        *(void**)(work + 0x5D8) = smartAlloc(size, 1);
+        fragments[0].x = -200.0f; fragments[0].y = 240.0f; fragments[0].z = 0.0f;
+        fragments[1].x = 200.0f; fragments[1].y = 240.0f; fragments[1].z = 0.0f;
+        fragments[2].x = -200.0f; fragments[2].y = -240.0f; fragments[2].z = 0.0f;
+        fragments[3].x = 200.0f; fragments[3].y = -240.0f; fragments[3].z = 0.0f;
+        zubastar_create_takaku(4, fragments);
+        *(f32*)(work + 0xA0) = 0.0f;
+        *(f32*)(work + 0xA4) = 300.0f;
+        *(f32*)(work + 0xA8) = 0.0f;
     }
+
     switch (*state) {
         case 0:
             *state = 5;
@@ -802,52 +818,174 @@ s32 zubastar_main(void* event, s32 isFirstCall) {
         case 5:
             *state = 10;
             *(s32*)(work + 4) = 0;
-            if (*(s32*)(work + 0x518) == 0) *(s32*)(work + 0x518) = 1;
+            if (*(s32*)(work + 0x518) == 0) {
+                *(s32*)(work + 0x518) = 1;
+            }
+            if (*(s32*)(work + 0x518) == 5) {
+                *(s32*)(work + 0x518) = 6;
+            }
         case 10:
-            if (*(s32*)(work + 0x94) == 10 && *(s32*)(work + 0x518) == 2) *state = 15;
+            if (*(s32*)(work + 0x94) == 10 && *(s32*)(work + 0x518) == 2) {
+                *state = 11;
+            }
             break;
-        case 15:
-            *state = 20;
+        case 11:
+            *state = 12;
             *(s32*)(work + 0xC) = 300;
-        case 20:
+        case 12:
             if (*(f32*)(work + 0x520) < 100.0f) {
                 if (--*(s32*)(work + 0xC) < 1) {
-                    *state = 25;
+                    *state = 13;
                     psndSFXOff(*(s32*)(work + 0x530));
                 } else if (keyGetButtonTrg(0) & 0x100) {
                     *(f32*)(work + 0x524) = 2.8f;
                 }
             } else {
-                *state = 30;
+                *state = 14;
                 (*(s32*)(work + 8))++;
                 psndSFXOff(*(s32*)(work + 0x530));
             }
             break;
-        case 25:
+        case 13:
             *(s32*)(work + 0x518) = 5;
             psndSFXOff(*(s32*)(work + 0x530));
             *state = 0x1E;
             break;
-        case 30:
+        case 14:
             *(s32*)(work + 0x518) = 4;
             *(s32*)(work + 0x51C) = 0;
             psndSFXOff(*(s32*)(work + 0x530));
-            if (audience > 0 && audience < 50) BattleAudienceSoundCallKind(1);
-            else if (audience < 100) { BattleAudienceSoundCallKind(1); BattleAudienceSoundWhistleKind(1); }
-            else { BattleAudienceSoundCallKind(2); BattleAudienceSoundWhistleKind(audience > 150 ? 3 : 2); }
-            *state = 35;
+            if (audience > 0 && audience < 50) {
+                BattleAudienceSoundCallKind(1);
+            } else if (audience < 100) {
+                BattleAudienceSoundCallKind(1);
+                BattleAudienceSoundWhistleKind(1);
+            } else {
+                BattleAudienceSoundCallKind(2);
+                BattleAudienceSoundWhistleKind(audience > 150 ? 3 : 2);
+            }
+            *state = 15;
             *(s32*)(work + 0x94) = 15;
             break;
-        case 35:
-            if (*(s32*)(work + 0x94) == 20) { *state = 40; *(s32*)(work + 4) = 0; }
+        case 15:
+            if (*(s32*)(work + 0x94) == 20) {
+                *state = 16;
+                *(s32*)(work + 4) = 0;
+            }
             break;
-        case 40:
-            *state = 45;
+        case 16:
+            *state = 17;
             *(s32*)(work + 0x94) = 25;
-            if (irand(2) == 0) *(f32*)(work + 0xA0) = -96.0f;
-            else *(f32*)(work + 0xA0) = 96.0f;
+            if (irand(2) == 0) {
+                *(f32*)(work + 0xA0) = -96.0f;
+            } else {
+                *(f32*)(work + 0xA0) = 96.0f;
+            }
             break;
+        case 17:
+            if (*(s32*)(work + 0x94) == 30) {
+                (*(s32*)(work + 4))++;
+                *state = *(s32*)(work + 4) < 3 ? 16 : 32;
+            }
+            break;
+        case 32:
+            *state = *(s32*)(work + 8) < 5 ? 0 : 33;
+            break;
+        case 33:
+            *state = 0x24;
+            *(s32*)(work + 0x94) = 25;
+            break;
+        case 0x24:
+            if (*(s32*)(work + 0x94) == 30) {
+                *state = 0x26;
+                *(s32*)(work + 4) = 60;
+                btl_camera_shake_h(5.0f, 5.0f, 0, 60, 0);
+            }
+            break;
+        case 0x26:
+            if (--*(s32*)(work + 4) < 1) {
+                *state = 0x28;
+            }
+            break;
+        case 0x28:
+            {
+                s32 i;
+                for (i = 0; i < 16; i++) {
+                    *(s32*)(work + 0xC0 + i * 0x1C) = 0;
+                }
+            }
+            return 2;
     }
+    switch (*(s32*)(work + 0x94)) {
+    case 5:
+        *(s32*)(work + 0x94) = 6;
+        *(s32*)(work + 0x98) = 0;
+    case 6:
+        (*(s32*)(work + 0x98))++;
+        *(f32*)(work + 0xA0) = 0.0f;
+        *(f32*)(work + 0xA4) = (f32)intplGetValue(
+            300.0, 300.0, 4, *(s32*)(work + 0x98), 15);
+        *(f32*)(work + 0xA8) = 0.0f;
+        if (*(s32*)(work + 0x98) > 14) {
+            *(s32*)(work + 0x94) = 10;
+        }
+        break;
+    case 10:
+        *(f32*)(work + 0xA0) = 0.0f;
+        *(f32*)(work + 0xA4) = 300.0f;
+        *(f32*)(work + 0xA8) = 0.0f;
+        break;
+    }
+    switch (*(s32*)(work + 0x518)) {
+    case 1:
+        *(s32*)(work + 0x518) = 2;
+        *(s32*)(work + 0x51C) = 0;
+        *(f32*)(work + 0x520) = 0.0f;
+        *(f32*)(work + 0x524) = 0.0f;
+        *(f32*)(work + 0x528) = -1.0f;
+        *(s32*)(work + 0x52C) = 0xFF;
+        break;
+    case 2:
+        *(f32*)(work + 0x520) += *(f32*)(work + 0x524);
+        *(f32*)(work + 0x520) += *(f32*)(work + 0x528);
+        if (*(f32*)(work + 0x520) > 100.0f) {
+            *(f32*)(work + 0x520) = 100.0f;
+        }
+        if (*(f32*)(work + 0x520) < 0.0f) {
+            *(f32*)(work + 0x520) = 0.0f;
+        }
+        *(f32*)(work + 0x524) -= 0.25f;
+        if (*(f32*)(work + 0x524) < 0.0f) {
+            *(f32*)(work + 0x524) = 0.0f;
+        }
+        (*(s32*)(work + 0x52C))++;
+        if (*(s32*)(work + 0x52C) > 7) {
+            *(s32*)(work + 0x52C) = 0;
+        }
+        break;
+    }
+    {
+        Vec* ghosts = (Vec*)(work + 0xAC);
+        ghosts[3] = ghosts[2];
+        ghosts[2] = ghosts[1];
+        ghosts[1] = ghosts[0];
+        ghosts[0].x = *(f32*)(work + 0xA0);
+        ghosts[0].y = *(f32*)(work + 0xA4);
+        ghosts[0].z = *(f32*)(work + 0xA8);
+    }
+    {
+        s32 i;
+        for (i = 0; i < 16; i++) {
+            u8* line = work + 0xC0 + i * 0x1C;
+            if (*(s32*)line == 5) {
+                (*(s32*)(line + 4))++;
+                if (*(s32*)(line + 4) > 60) {
+                    *(s32*)(line + 4) = 0;
+                }
+            }
+        }
+    }
+    dispEntry(1, 1, zubastar_disp2D, 0, 900.0f);
     return 0;
 }
 

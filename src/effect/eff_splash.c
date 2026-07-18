@@ -447,46 +447,126 @@ struct EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
 /* CHATGPT STUB FILL: main/effect/eff_splash 20260624_184823 */
 
 /* stub-fill: effSplashDisp | prototype_only | source_prototype */
-void effSplashDisp(void* unused, void* entry) {
-    typedef struct { f32 x, y, z; } Vec;
+void effSplashDisp(s32 cameraId, void* entry) {
+    typedef struct Vec { f32 x, y, z; } Vec;
     typedef struct {
-        s32 type; Vec pos; f32 vx, vz; Vec scale; s32 frame, timer;
-        f32 vy, gravity; s32 unk, state; u8 r, g, b, a;
+        s32 type;
+        Vec pos;
+        f32 vx, vz;
+        Vec scale;
+        s32 frame, timer;
+        f32 vy, gravity;
+        s32 unk, state;
+        u8 r, g, b, a;
     } Work;
-    extern void mapSetMaterialFog(void);
-    extern void effGetTexObj(void*, s32, s32);
+    extern void* camGetPtr(s32);
+    extern void effGetTexObj(s32, void*);
     extern void GXLoadTexObj(void*, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevOp(s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXSetCurrentMtx(s32);
     extern void GXBegin(s32, s32, s32);
     extern void PSMTXTrans(void*, f32, f32, f32);
     extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXRotRad(void*, s32, f32);
     extern void PSMTXConcat(void*, void*, void*);
     extern void GXLoadPosMtxImm(void*, s32);
+    extern void PSMTXIdentity(void*);
+    extern void GXLoadTexMtxImm(void*, s32, s32);
+
     u8 tex[64];
-    f32 trans[3][4], scale[3][4], model[3][4];
+    f32 trans[3][4];
+    f32 rot[3][4];
+    f32 scale[3][4];
+    f32 baseMtx[3][4];
+    f32 model[3][4];
     Work* work = *(Work**)((u8*)entry + 0xC);
     s32 count = *(s32*)((u8*)entry + 8);
     s32 first = work->type == 3 ? 6 : (work->type == 2 ? 1 : 2);
+    u8* camera = camGetPtr(cameraId);
     s32 i;
 
-    mapSetMaterialFog();
-    effGetTexObj(tex, work->type == 3 ? 0x43 : 0x41, 0);
-    GXLoadTexObj(tex, 0);
+    PSMTXTrans(trans, work->pos.x, work->pos.y, work->pos.z);
+    camera = camGetPtr(4);
+    PSMTXRotRad(rot, 'y', 0.017453292f * -*(f32*)(camera + 0x114));
+    PSMTXScale(scale, work->scale.x, work->scale.y, work->scale.z);
+    PSMTXConcat(trans, rot, baseMtx);
+    PSMTXConcat(baseMtx, scale, baseMtx);
+    PSMTXConcat(((u8*)camGetPtr(cameraId)) + 0x118, baseMtx, baseMtx);
+
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevOp(0, 0);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(11, 1);
+    GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+
     for (i = first; i < count; i++) {
         Work* child = work + i;
-        if (child->timer != 0) continue;
+        u32 color;
+        if (child->timer != 0) {
+            continue;
+        }
         PSMTXTrans(trans, child->pos.x, child->pos.y, child->pos.z);
+        PSMTXRotRad(rot, 'y', 0.017453292f * -*(f32*)(camera + 0x114));
         PSMTXScale(scale, child->scale.x, child->scale.y, child->scale.z);
-        PSMTXConcat(trans, scale, model);
+        PSMTXConcat(trans, rot, trans);
+        PSMTXConcat(trans, scale, trans);
+        PSMTXConcat(baseMtx, trans, model);
         GXLoadPosMtxImm(model, 0);
+        GXSetCurrentMtx(0);
+        effGetTexObj(0x40, tex);
+        GXLoadTexObj(tex, 0);
+        PSMTXIdentity(trans);
+        GXLoadTexMtxImm(trans, 0x1E, 1);
+        color = *(u32*)&child->r;
         GXBegin(0x80, 0, 4);
-        *(volatile f32*)0xCC008000 = -1.0f; *(volatile f32*)0xCC008000 = 1.0f; *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile u32*)0xCC008000 = *(u32*)&child->r; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 1.0f; *(volatile f32*)0xCC008000 = 1.0f; *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile u32*)0xCC008000 = *(u32*)&child->r; *(volatile f32*)0xCC008000 = 1.0f; *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 1.0f; *(volatile f32*)0xCC008000 = -1.0f; *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile u32*)0xCC008000 = *(u32*)&child->r; *(volatile f32*)0xCC008000 = 1.0f; *(volatile f32*)0xCC008000 = 1.0f;
-        *(volatile f32*)0xCC008000 = -1.0f; *(volatile f32*)0xCC008000 = -1.0f; *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile u32*)0xCC008000 = *(u32*)&child->r; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 1.0f;
+        *(volatile f32*)0xCC008000 = -1.0f;
+        *(volatile f32*)0xCC008000 = 1.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile u32*)0xCC008000 = color;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 1.0f;
+        *(volatile f32*)0xCC008000 = 1.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile u32*)0xCC008000 = color;
+        *(volatile f32*)0xCC008000 = 1.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 1.0f;
+        *(volatile f32*)0xCC008000 = -1.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile u32*)0xCC008000 = color;
+        *(volatile f32*)0xCC008000 = 1.0f;
+        *(volatile f32*)0xCC008000 = 1.0f;
+        *(volatile f32*)0xCC008000 = -1.0f;
+        *(volatile f32*)0xCC008000 = -1.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile u32*)0xCC008000 = color;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 1.0f;
     }
 }
 

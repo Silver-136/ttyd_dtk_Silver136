@@ -23,24 +23,38 @@ s32 partySearchGround(f64 rise, f64 fall, void* party) {
         f32 normal[3];
         f32 dist;
     } HitWork;
+    typedef struct VecBits {
+        u32 x;
+        u32 y;
+        u32 z;
+    } VecBits;
     extern void* marioGetPtr(void);
     extern f64 partyGetHeight(void* party);
     extern f64 partyToMovedir(f64 direction, void* party);
     extern f64 sin(f64 x);
     extern f64 cos(f64 x);
+    extern f32 angleABf(f32 x0, f32 z0, f32 x1, f32 z1);
     extern s32 yoshiGetStatus(void);
     extern void* hitCheckVecFilter(void* work, void* filter);
     extern s32 chkfilter(s32, s32);
     extern s32 chkfilterNokotaro(s32, s32);
     extern s32 chkfilterYoshi(s32, s32);
+    extern const VecBits vec3_802cb770;
+    extern const VecBits vec3_802cb77c;
     extern const f32 float_0_80421508;
     extern const f32 float_0p1_80421558;
     extern const f32 float_0p375_80421560;
+    extern const f32 float_0p5_80421504;
     extern const f32 float_0p75_80421528;
+    extern const f32 float_2_80421554;
     extern const f32 float_3p1416_80421550;
     extern const f32 float_5_8042155c;
     extern const f32 float_11_80421534;
+    extern const f32 float_50_80421568;
+    extern const f32 float_100_80421520;
+    extern const f32 float_1000_80421530;
     extern const f32 float_180_8042150c;
+    extern const f32 float_neg0p5_8042152c;
     extern const f32 float_neg1_8042153c;
     extern const f32 float_neg10000_80421564;
     void* mario;
@@ -53,59 +67,139 @@ s32 partySearchGround(f64 rise, f64 fall, void* party) {
     void* bestHit = 0;
     s32 i;
 
-    if ((*(u32*)party & 0x20000000) != 0) {
+    if ((*(u32*)party & 0x02000000) != 0) {
         return 0;
     }
-    *(f32*)((s32)party + 0xC4) = float_0_80421508;
-    *(f32*)((s32)party + 0xC8) = float_0_80421508;
-    *(f32*)((s32)party + 0xCC) = float_0_80421508;
+
+    *(u32*)((s32)party + 0xC4) = vec3_802cb770.x;
+    *(u32*)((s32)party + 0xC8) = vec3_802cb770.y;
+    *(u32*)((s32)party + 0xCC) = vec3_802cb770.z;
     *(f32*)((s32)party + 0xE0) = float_0_80421508;
     *(f32*)((s32)party + 0xE4) = pos[1];
     *(f32*)((s32)party + 0xE8) = float_neg1_8042153c;
+
     mario = marioGetPtr();
-    height = *(u8*)((s32)mario + 0x2F) == 6 ? float_5_8042155c :
+    height = *(u16*)((s32)mario + 0x2E) == 0x1A ? float_5_8042155c :
              float_0p75_80421528 * (f32)partyGetHeight(party);
+
     angle = *(f32*)((s32)party + 0x104) == float_0_80421508 ?
-            (f32)partyToMovedir(*(f32*)((s32)party + 0x108), party) :
+            (f32)partyToMovedir(*(f32*)((s32)party + 0x10C), party) :
             *(f32*)((s32)party + 0x100);
     angle = float_3p1416_80421550 * angle / float_180_8042150c;
     sideX = float_0p375_80421560 * *(f32*)((s32)party + 0xF4) * (f32)sin(angle);
     sideZ = float_0p375_80421560 * *(f32*)((s32)party + 0xF4) * -(f32)cos(angle);
+
     for (i = 0; i < 5; i++) {
         HitWork work;
-        f32 offX = 0.0f;
-        f32 offZ = 0.0f;
-        void* filter = chkfilter;
+        f32 offX = float_0_80421508;
+        f32 offZ = float_0_80421508;
         void* hit;
+
         if (i == 1) { offX = sideX; offZ = sideZ; }
         if (i == 2) { offX = sideZ; offZ = -sideX; }
         if (i == 3) { offX = -sideZ; offZ = sideX; }
         if (i == 4) { offX = -sideX; offZ = -sideZ; }
+
         work.start[0] = pos[0] + offX;
         work.start[1] = pos[1] + height;
         work.start[2] = pos[2] + offZ;
-        work.dir[0] = float_0_80421508;
-        work.dir[1] = float_neg1_8042153c;
-        work.dir[2] = float_0_80421508;
+        *(u32*)&work.dir[0] = vec3_802cb77c.x;
+        *(u32*)&work.dir[1] = vec3_802cb77c.y;
+        *(u32*)&work.dir[2] = vec3_802cb77c.z;
         work.dist = height + (f32)(rise < 0.0 ? -rise : rise) + float_0p1_80421558;
+
         if (yoshiGetStatus() != 0) {
-            filter = chkfilterYoshi;
-        } else if (*(s8*)((s32)party + 0x31) == 2 && (*(u32*)party & 0x100)) {
-            filter = chkfilterNokotaro;
+            hit = hitCheckVecFilter(&work, chkfilterYoshi);
+        } else if (*(u8*)((s32)party + 0x31) == 2 && (*(u32*)party & 0x100)) {
+            hit = hitCheckVecFilter(&work, chkfilterNokotaro);
+        } else {
+            hit = hitCheckVecFilter(&work, chkfilter);
         }
-        hit = hitCheckVecFilter(&work, filter);
+
         if (hit != 0) {
-            f32 delta = work.hitPos[1] - pos[1];
-            f32 limit = fall < 0.0 ? (f32)-fall : (f32)fall;
-            if ((delta <= float_11_80421534 || delta < limit) && work.hitPos[1] > best) {
-                best = work.hitPos[1];
-                bestHit = hit;
-                *(f32*)((s32)party + 0xC4) = work.normal[0];
-                *(f32*)((s32)party + 0xC8) = work.normal[1];
-                *(f32*)((s32)party + 0xCC) = work.normal[2];
+            f32 hitY;
+            f32 normalX;
+            f32 normalY;
+            f32 normalZ;
+            f32 xzSq;
+            f32 xzLen;
+            f32 slopeAngle;
+            f32 diff;
+            f32 absDiff;
+            f32 limit;
+            f32 roundBias;
+            s32 rounded;
+
+            hitY = work.hitPos[1];
+            roundBias = float_neg0p5_8042152c;
+            if (hitY >= float_0_80421508) {
+                roundBias = float_0p5_80421504;
+            }
+            rounded = (s32)(hitY * float_1000_80421530 + roundBias);
+            hitY = (f32)rounded / float_1000_80421530;
+
+            normalX = work.normal[0];
+            normalY = work.normal[1];
+            normalZ = work.normal[2];
+
+            *(f32*)((s32)party + 0xC4) = (f32)(s32)(angleABf(float_0_80421508, float_0_80421508,
+                                                              float_100_80421520 * normalZ,
+                                                              float_100_80421520 * normalY) - float_180_8042150c);
+            *(f32*)((s32)party + 0xC8) = float_0_80421508;
+            *(f32*)((s32)party + 0xCC) = (f32)(s32)(angleABf(float_0_80421508, float_0_80421508,
+                                                              float_100_80421520 * normalX,
+                                                              float_100_80421520 * normalY) - float_180_8042150c);
+
+            xzSq = normalX * normalX + normalZ * normalZ;
+            if (xzSq > float_0_80421508) {
+                f64 inv;
+                f64 sq;
+                sq = (f64)xzSq;
+                inv = __frsqrte(sq);
+                inv = 0.5 * inv * (3.0 - sq * inv * inv);
+                inv = 0.5 * inv * (3.0 - sq * inv * inv);
+                inv = 0.5 * inv * (3.0 - sq * inv * inv);
+                xzLen = (f32)(sq * inv);
+            } else {
+                xzLen = float_0_80421508;
+            }
+
+            slopeAngle = angleABf(float_0_80421508, float_0_80421508, xzLen, -normalY);
+            if (slopeAngle >= float_50_80421568) {
+                hit = 0;
+            }
+
+            if (hit != 0) {
+                *(f32*)((s32)party + 0xC4) = (f32)(s32)(angleABf(float_0_80421508, float_0_80421508,
+                                                                  float_100_80421520 * normalZ,
+                                                                  float_100_80421520 * normalY) - float_180_8042150c);
+                *(f32*)((s32)party + 0xC8) = float_0_80421508;
+                *(f32*)((s32)party + 0xCC) = (f32)(s32)(angleABf(float_0_80421508, float_0_80421508,
+                                                                  float_100_80421520 * normalX,
+                                                                  float_100_80421520 * normalY) - float_180_8042150c);
+                *(f32*)((s32)party + 0xE0) = slopeAngle;
+
+                diff = hitY - pos[1];
+                absDiff = diff < float_0_80421508 ? -diff : diff;
+                limit = fall < 0.0 ? (f32)-fall : (f32)fall;
+
+                if (pos[1] <= hitY || absDiff < float_2_80421554) {
+                    if (absDiff <= float_11_80421534 && hitY > best) {
+                        best = hitY;
+                        bestHit = hit;
+                    }
+                } else if (absDiff <= limit) {
+                    if (hitY > best) {
+                        best = hitY;
+                        bestHit = hit;
+                    }
+                } else {
+                    *(f32*)((s32)party + 0xE8) = absDiff;
+                }
             }
         }
     }
+
     if (bestHit != 0) {
         *(f32*)((s32)party + 0xE4) = best;
         *(f32*)((s32)party + 0xE8) = float_0_80421508;
@@ -919,80 +1013,145 @@ s32 unk_800c2010(void* party, f32* pos) {
         f32 normal[3];
         f32 dist;
     } HitWork;
-    extern f32 toMovedirSimple(f32 angle);
+    extern f64 toMovedirSimple(f64 angle);
     extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
-    extern f32 angleABf(f32, f32, f32, f32);
+    extern f64 angleABf(f64, f64, f64, f64);
     extern s32 yoshiGetStatus(void);
     extern void* hitCheckVecFilter(void* work, void* filter);
     extern s32 chkfilter(s32, s32);
     extern s32 chkfilterNokotaro(s32, s32);
     extern s32 chkfilterYoshi(s32, s32);
+    extern f32 __fabsf(f32);
     extern const f32 float_0_80421508;
     extern const f32 float_0p5_80421504;
     extern const f32 float_10_80421510;
     extern const f32 float_20_80421514;
     extern const f32 float_180_8042150c;
     extern const f32 float_270_80421500;
-    f32 width = *(f32*)((s32)party + 0xF4);
+    HitWork left2;
+    HitWork right2;
+    HitWork center2;
+    HitWork left1;
+    HitWork right1;
+    HitWork center1;
     f32 sideSin;
     f32 sideCos;
-    f32 angles[2];
-    s32 found[2];
-    s32 pass;
+    f32 dirSin;
+    f32 dirCos;
+    f32 sideX;
+    f32 sideZ;
+    f32 angle1;
+    f32 angle2;
+    f32 delta;
+    s32 hit1;
+    s32 hit2;
 
-    sincosf((f32)toMovedirSimple(float_270_80421500), &sideSin, &sideCos);
-    for (pass = 0; pass < 2; pass++) {
-        f32 dirSin;
-        f32 dirCos;
-        s32 side;
-        found[pass] = 0;
-        angles[pass] = float_0_80421508;
-        sincosf((f32)toMovedirSimple(pass == 0 ? float_180_8042150c : float_0_80421508),
-                 &dirSin, &dirCos);
-        for (side = 0; side < 3; side++) {
-            HitWork work;
-            f32 offset;
-            void* filter;
-            void* hit;
-            if (side == 0) {
-                offset = float_0_80421508;
-            } else if (side == 1) {
-                offset = float_0p5_80421504;
-            } else {
-                offset = -float_0p5_80421504;
-            }
-            work.start[0] = pos[0] + offset * sideSin * width;
-            work.start[1] = pos[1] + float_10_80421510;
-            work.start[2] = pos[2] + offset * sideCos * width;
-            work.dir[0] = dirSin;
-            work.dir[1] = float_0_80421508;
-            work.dir[2] = dirCos;
-            work.dist = float_20_80421514;
-            if (yoshiGetStatus() != 0) {
-                filter = chkfilterYoshi;
-            } else if (*(s8*)((s32)party + 0x31) == 2 && (*(u32*)party & 0x100) != 0) {
-                filter = chkfilterNokotaro;
-            } else {
-                filter = chkfilter;
-            }
-            hit = hitCheckVecFilter(&work, filter);
-            if (hit != 0) {
-                found[pass] = 1;
-                angles[pass] = (f32)angleABf(float_0_80421508, float_0_80421508,
-                                              work.normal[0], work.normal[2]);
-                break;
-            }
+#define RUN_HIT(_result, _work) \
+    do { \
+        if (yoshiGetStatus() != 0) { \
+            (_result) = (s32)hitCheckVecFilter(&(_work), chkfilterYoshi); \
+        } else if (*(s8*)((s32)party + 0x31) == 2 && (*(u32*)party & 0x100) != 0) { \
+            (_result) = (s32)hitCheckVecFilter(&(_work), chkfilterNokotaro); \
+        } else { \
+            (_result) = (s32)hitCheckVecFilter(&(_work), chkfilter); \
+        } \
+    } while (0)
+
+    sideX = *(f32*)((s32)party + 0xF4);
+    sincosf((f32)toMovedirSimple(float_270_80421500), &sideCos, &sideSin);
+    sideZ = float_0p5_80421504 * sideCos * sideX;
+    sideX = float_0p5_80421504 * sideSin * sideX;
+
+    sincosf((f32)toMovedirSimple(float_180_8042150c), &dirCos, &dirSin);
+    center1.start[0] = pos[0];
+    center1.start[1] = pos[1] + float_10_80421510;
+    center1.start[2] = pos[2];
+    center1.dir[0] = dirCos;
+    center1.dir[1] = float_0_80421508;
+    center1.dir[2] = dirSin;
+    center1.dist = float_20_80421514;
+    RUN_HIT(hit1, center1);
+    angle1 = float_0_80421508;
+    if (hit1 != 0) {
+        angle1 = (f32)angleABf(float_0_80421508, float_0_80421508,
+                               center1.normal[0], center1.normal[2]);
+    } else {
+        right1.start[0] = pos[0] + sideZ;
+        right1.start[1] = pos[1] + float_10_80421510;
+        right1.start[2] = pos[2] + sideX;
+        right1.dir[0] = dirCos;
+        right1.dir[1] = float_0_80421508;
+        right1.dir[2] = dirSin;
+        right1.dist = float_20_80421514;
+        RUN_HIT(hit1, right1);
+        if (hit1 != 0) {
+            angle1 = (f32)angleABf(float_0_80421508, float_0_80421508,
+                                   right1.normal[0], right1.normal[2]);
         }
     }
-    if (found[0] == 0 || found[1] == 0) {
+    if (hit1 == 0) {
+        left1.start[0] = pos[0] - sideZ;
+        left1.start[1] = pos[1] + float_10_80421510;
+        left1.start[2] = pos[2] - sideX;
+        left1.dir[0] = dirCos;
+        left1.dir[1] = float_0_80421508;
+        left1.dir[2] = dirSin;
+        left1.dist = float_20_80421514;
+        RUN_HIT(hit1, left1);
+        if (hit1 != 0) {
+            angle1 = (f32)angleABf(float_0_80421508, float_0_80421508,
+                                   left1.normal[0], left1.normal[2]);
+        }
+    }
+
+    sincosf((f32)toMovedirSimple(float_0_80421508), &dirCos, &dirSin);
+    center2.start[0] = pos[0];
+    center2.start[1] = pos[1] + float_10_80421510;
+    center2.start[2] = pos[2];
+    center2.dir[0] = dirCos;
+    center2.dir[1] = float_0_80421508;
+    center2.dir[2] = dirSin;
+    center2.dist = float_20_80421514;
+    RUN_HIT(hit2, center2);
+    angle2 = float_0_80421508;
+    if (hit2 != 0) {
+        angle2 = (f32)angleABf(float_0_80421508, float_0_80421508,
+                               center2.normal[0], center2.normal[2]);
+    } else {
+        right2.start[0] = pos[0] + sideZ;
+        right2.start[1] = pos[1] + float_10_80421510;
+        right2.start[2] = pos[2] + sideX;
+        right2.dir[0] = dirCos;
+        right2.dir[1] = float_0_80421508;
+        right2.dir[2] = dirSin;
+        right2.dist = float_20_80421514;
+        RUN_HIT(hit2, right2);
+        if (hit2 != 0) {
+            angle2 = (f32)angleABf(float_0_80421508, float_0_80421508,
+                                   right2.normal[0], right2.normal[2]);
+        }
+    }
+    if (hit2 == 0) {
+        left2.start[0] = pos[0] - sideZ;
+        left2.start[1] = pos[1] + float_10_80421510;
+        left2.start[2] = pos[2] - sideX;
+        left2.dir[0] = dirCos;
+        left2.dir[1] = float_0_80421508;
+        left2.dir[2] = dirSin;
+        left2.dist = float_20_80421514;
+        RUN_HIT(hit2, left2);
+        if (hit2 != 0) {
+            angle2 = (f32)angleABf(float_0_80421508, float_0_80421508,
+                                   left2.normal[0], left2.normal[2]);
+        }
+    }
+
+#undef RUN_HIT
+    if (hit1 == 0 || hit2 == 0) {
         return 0;
     }
-    {
-        f32 delta = -(float_0p5_80421504 * (angles[0] + angles[1]) - float_180_8042150c);
-        if (delta < 0.0f) {
-            delta = -delta;
-        }
-        return delta <= float_10_80421510;
-    }
+    delta = -(float_0p5_80421504 * (angle1 + angle2) - float_180_8042150c);
+    delta = __fabsf(delta);
+    return delta <= float_10_80421510;
 }
 

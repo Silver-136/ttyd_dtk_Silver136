@@ -272,59 +272,261 @@ s32 unk_800f72e4(void* param_1) {
 
 
 u8 loadMain(void* param_1) {
+    typedef struct LoadEntry {
+        f32 x;
+        f32 y;
+        f32 cursorX;
+        f32 cursorY;
+        u32 texture0;
+        u32 texture1;
+        u8 up;
+        u8 down;
+        u8 left;
+        u8 right;
+    } LoadEntry;
     extern s32* wp;
-    extern u16 keyGetButtonTrg(s32 chan);
-    extern u32 keyGetDirRep(s32 chan);
+    extern LoadEntry win_dt[];
+    extern LoadEntry win_dt2[];
+    extern u16 keyGetButtonTrg(s32);
+    extern u16 keyGetButtonRep(s32);
+    extern u32 keyGetDirRep(s32);
     extern s32 cardGetCode(void);
     extern s32 cardIsExec(void);
     extern s32 fadeIsFinish(void);
     extern void* cardGetFilePtr(void);
+    extern char* msgSearch(char*);
+    extern void psndSFXOn(char*);
+    extern void psndBGMOff_f_d(s32, s32, s32);
+    extern void fadeEntry(s32, s32, void*);
+    extern void seqSetSeq(s32, void*, void*);
+    extern void* evtEntryType(void*, s32, s32, s32);
+    extern s32 evtCheckID(s32);
+    extern s32 evtGetValue(void*, s32);
+    extern void dispEntry(s32, s32, void*, s32, f32);
+    extern f64 sin(f64);
+    extern void* gp;
+    extern void* evt_memcard_start;
+    extern void* evt_continue;
+    extern u32 dat_8042202c;
+    extern u32 dat_80422030;
+    extern u32 dat_80422034;
+    extern u32 dat_80422038;
+    extern u32 dat_8042203c;
+    extern s32 nameEntPrepare(void);
+    extern void nameEntOn(s32);
+    extern s32 nameEntWait(void);
+    extern s32 nameEntIsCancel(void);
+    extern char str_msg_savefile_select_802edfa0[];
+    extern char str_msg_savefile_delete__802edfb4[];
     u16 buttons;
     u32 direction;
     s32 cardCode;
     s32 i;
     s32 fileBase;
-    u16 flags;
+    u16 fileFlags;
+    u32 oldSelection;
+    u32 selection;
 
     buttons = keyGetButtonTrg(0);
+    keyGetButtonRep(0);
     direction = keyGetDirRep(0);
     cardCode = cardGetCode();
-    if (cardIsExec() != 0 || fadeIsFinish() == 0 || wp[7] != cardCode) {
+    if (cardIsExec() != 0 || fadeIsFinish() == 0) {
+        buttons = 0;
+        direction = 0;
+    }
+    if (wp[7] != cardCode) {
         buttons = 0;
         direction = 0;
     }
     wp[7] = cardCode;
 
-    for (i = 0, fileBase = 0; i < 4; i++, fileBase += 0x4000) {
-        flags = *(u16*)((s32)cardGetFilePtr() + fileBase + 0x2000);
-        if ((flags & 1) == 0 || (flags & 2) != 0) {
+    i = 0;
+    fileBase = 0;
+    do {
+        fileFlags = *(u16*)((u8*)cardGetFilePtr() + fileBase + 0x2000);
+        if ((fileFlags & 1) == 0 || (fileFlags & 2) != 0) {
             break;
         }
-    }
+        i++;
+        fileBase += 0x4000;
+    } while (i < 4);
     if (i < 4) {
         *(u16*)wp &= ~0x10;
     } else {
         *(u16*)wp |= 0x10;
     }
 
+    i = 0;
+    fileBase = 0;
     *(u16*)wp &= ~0x20;
-    for (i = 0, fileBase = 0; i < 4; i++, fileBase += 0x4000) {
-        flags = *(u16*)((s32)cardGetFilePtr() + fileBase + 0x2000);
-        if ((flags & 3) == 0) {
+    do {
+        fileFlags = *(u16*)((u8*)cardGetFilePtr() + fileBase + 0x2000);
+        if ((fileFlags & 1) == 0 && (fileFlags & 2) == 0) {
             break;
         }
-    }
-    if (i >= 4) {
+        i++;
+        fileBase += 0x4000;
+    } while (i < 4);
+    if (i > 3) {
         *(u16*)wp |= 0x20;
     }
 
-    if (wp[1] == 0) {
-        wp[1] = 1;
-    } else if (wp[1] == 1 && (buttons & 0x100) != 0) {
-        wp[1] = 10;
-    } else if (wp[1] == 1 && direction != 0) {
-        wp[2] = (wp[2] + 1) % 7;
+    if (wp[6] == 0) {
+        wp[6] = 1;
     }
+    if (wp[6] == 1) {
+        *(char**)&wp[14] = msgSearch(str_msg_savefile_select_802edfa0);
+        oldSelection = wp[8];
+        if ((direction & 0x1000) != 0) {
+            wp[8] = win_dt[oldSelection].up;
+        } else if ((direction & 0x2000) != 0) {
+            wp[8] = win_dt[oldSelection].down;
+        } else if ((direction & 0x4000) != 0) {
+            wp[8] = win_dt[oldSelection].left;
+        } else if ((direction & 0x8000) != 0) {
+            wp[8] = win_dt[oldSelection].right;
+        } else if ((buttons & 0x100) != 0) {
+            selection = wp[8];
+            fileFlags = *(u16*)((u8*)cardGetFilePtr() +
+                                selection * 0x4000 + 0x2000);
+            if (selection < 4) {
+                if ((fileFlags & 2) != 0) {
+                    psndSFXOn((char*)0x13);
+                } else if ((fileFlags & 1) == 0) {
+                    wp[6] = 0x14;
+                    psndSFXOn((char*)0x12);
+                } else {
+                    wp[6] = 0x1E;
+                    psndSFXOn((char*)0x12);
+                }
+            } else if (selection == 4 && (*(u16*)wp & 0x10) == 0) {
+                wp[8] = 0;
+                wp[6] = 0x28;
+                psndSFXOn((char*)0x12);
+            } else if (selection == 5 && (*(u16*)wp & 0x20) == 0) {
+                wp[8] = 0;
+                wp[6] = 0x32;
+                psndSFXOn((char*)0x12);
+            } else if (selection == 6) {
+                wp[6] = 10;
+                psndSFXOn((char*)0x13);
+            }
+        } else if ((buttons & 0x200) != 0) {
+            psndSFXOn((char*)0x13);
+            wp[6] = 10;
+        }
+
+        if (oldSelection != (u32)wp[8]) {
+            if (wp[8] < 4) {
+                psndSFXOn((char*)9);
+            } else {
+                psndSFXOn((char*)5);
+            }
+        }
+        *(f32*)&wp[4] = win_dt[wp[8]].x + win_dt[wp[8]].cursorX;
+        *(f32*)&wp[5] = win_dt[wp[8]].y + win_dt[wp[8]].cursorY;
+    } else if (wp[6] == 10) {
+        u32 color = dat_8042202c;
+        fadeEntry(0x1C, 0, &color);
+        wp[6]++;
+    } else if (wp[6] == 11) {
+        if (fadeIsFinish() != 0) {
+            seqSetSeq(1, NULL, NULL);
+        }
+    } else if (wp[6] == 0x14) {
+        *(u16*)wp |= 0x40;
+        wp[15] = (s32)evtEntryType(&evt_memcard_start, 0, 0, 0);
+        *(s32*)(wp[15] + 0xC4) = wp[8];
+        wp[6]++;
+    } else if (wp[6] == 0x15) {
+        if (evtCheckID(*(s32*)(wp[15] + 0x15C)) == 0) {
+            *(u16*)wp &= ~0x40;
+            if (evtGetValue(NULL, -50000000) == 1) {
+                wp[6]++;
+            } else {
+                wp[6] = 1;
+            }
+        }
+    } else if (wp[6] == 0x16) {
+        u32 color = dat_80422030;
+        fadeEntry(0x1C, 0, &color);
+        psndBGMOff_f_d(0x200, 2000, 0);
+        wp[6]++;
+    } else if (wp[6] == 0x17) {
+        if (fadeIsFinish() != 0) {
+            *(u16*)wp |= 0x40;
+            wp[15] = (s32)evtEntryType(&evt_continue, 0, 0, 0);
+            wp[6]++;
+        }
+    } else if (wp[6] == 0x18) {
+        if (evtCheckID(*(s32*)(wp[15] + 0x15C)) == 0) {
+            *(u16*)wp &= ~0x40;
+            continueGame();
+        }
+    } else if (wp[6] == 0x1E) {
+        u32 color = dat_80422034;
+        fadeEntry(0x1C, 0, &color);
+        wp[6]++;
+    } else if (wp[6] == 0x1F) {
+        if (fadeIsFinish() != 0) {
+            wp[6]++;
+        }
+    } else if (wp[6] == 0x20) {
+        if (nameEntPrepare() != 0) {
+            u32 color = dat_80422038;
+            nameEntOn(0);
+            fadeEntry(0x1D, 0, &color);
+            wp[6]++;
+        }
+    } else if (wp[6] == 0x21) {
+        if (fadeIsFinish() != 0 && nameEntWait() == 0) {
+            u32 color = dat_8042203c;
+            fadeEntry(0x1B, 0, &color);
+            if (nameEntIsCancel() == 0) {
+                psndBGMOff_f_d(0x200, 3000, 0);
+            }
+            wp[6]++;
+        }
+    } else if (wp[6] == 0x28) {
+        *(char**)&wp[14] = msgSearch(str_msg_savefile_delete__802edfb4);
+        oldSelection = wp[8];
+        if ((direction & 0x1000) != 0) {
+            wp[8] = win_dt2[oldSelection].up;
+        } else if ((direction & 0x2000) != 0) {
+            wp[8] = win_dt2[oldSelection].down;
+        } else if ((direction & 0x4000) != 0) {
+            wp[8] = win_dt2[oldSelection].left;
+        } else if ((direction & 0x8000) != 0) {
+            wp[8] = win_dt2[oldSelection].right;
+        } else if ((buttons & 0x200) != 0) {
+            wp[8] = 4;
+            wp[6] = 1;
+            psndSFXOn((char*)0x13);
+        } else if ((buttons & 0x100) != 0) {
+            fileFlags = *(u16*)((u8*)cardGetFilePtr() +
+                                wp[8] * 0x4000 + 0x2000);
+            if (wp[8] < 4 && (fileFlags & 2) == 0 &&
+                (fileFlags & 1) != 0) {
+                wp[6]++;
+                psndSFXOn((char*)0x12);
+            } else {
+                wp[8] = 4;
+                wp[6] = 1;
+                psndSFXOn((char*)0x13);
+            }
+        }
+        if (oldSelection != (u32)wp[8] && wp[8] < 4) {
+            psndSFXOn((char*)9);
+        }
+        *(f32*)&wp[4] = win_dt2[wp[8]].x + win_dt2[wp[8]].cursorX;
+        *(f32*)&wp[5] = win_dt2[wp[8]].y + win_dt2[wp[8]].cursorY;
+    }
+
+    *(f32*)&wp[2] += (*(f32*)&wp[4] - *(f32*)&wp[2]) * 0.25f;
+    *(f32*)&wp[3] += (*(f32*)&wp[5] - *(f32*)&wp[3]) * 0.25f;
+    *(f32*)&wp[2] += 2.0f * (f32)sin((f64)(*(s32*)((u8*)gp + 0x1C) * 0.125f));
+    dispEntry(1, 0, loadDraw, 0, 1000.0f);
     return 0;
 }
 

@@ -9,10 +9,54 @@ void effLensflareDisp(s32 cameraId, void* effect) {
     for(i=1;i<*(s32*)((u8*)effect+8);i++,p+=0x34,angle+=10,yrot+=35){f32 sc=*(f32*)(p+0x28);if(sc==0.0f)continue;color=0xFFFFFF00|(u8)((*(s32*)(p+0x14)*alpha)>>8);GXSetTevColor(1,&color);PSMTXRotRad(r,0x7A,*(f32*)(p+0x20)*0.0174533f);PSMTXTrans(m,*(f32*)(p+0x2C),0.0f,0.0f);PSMTXConcat(r,m,m);PSMTXScale(s,sc,sc,sc);PSMTXConcat(m,s,m);PSMTXConcat(base,m,m);GXLoadPosMtxImm(m,0);GXBegin(0x90,0,6);tri2(12,13,14,0,12,14,15,0);PSMTXScale(s,2.3f-sc,2.3f-sc,2.3f-sc);PSMTXConcat(m,s,m);GXLoadPosMtxImm(m,0);GXBegin(0x90,0,6);tri2(8,9,10,0,8,10,11,0);PSMTXRotRad(r,0x7A,(14.0f+*(f32*)(p+0x20))*0.0174533f);PSMTXRotRad(s,0x79,(f32)(flags+angle)*0.0174533f);PSMTXConcat(r,s,r);PSMTXTrans(m,20.0f,0.0f,0.0f);PSMTXConcat(r,m,m);PSMTXConcat(base,m,m);GXLoadPosMtxImm(m,0);GXBegin(0x90,0,6);tri2(4,5,6,0,4,6,7,0);}
 }
 
-u8 effLensflareMain(void) {
-    return 0;
-}
+void effLensflareMain(void* effect) {
+    extern void effDelete(void*);
+    extern f64 cos(f64);
+    extern s32 rand(void);
+    extern f32 dispCalcZ(void*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void effLensflareDisp(s32, void*);
+    u8* entry = effect;
+    u8* work = *(u8**)(entry + 0xC);
+    u8* part = work;
+    f32 pos[3];
+    s32 timer;
+    s32 i;
 
+    pos[0] = *(f32*)(work + 8);
+    pos[1] = *(f32*)(work + 0xC);
+    pos[2] = *(f32*)(work + 0x10);
+    if ((*(u32*)entry & 4) != 0) {
+        *(u32*)entry &= ~4;
+        *(s32*)(work + 0x18) = 30;
+    }
+    if (*(s32*)(work + 0x18) < 100) {
+        (*(s32*)(work + 0x18))--;
+    }
+    (*(s32*)(work + 0x1C))++;
+    timer = *(s32*)(work + 0x18);
+    if (timer < 0) {
+        effDelete(effect);
+        return;
+    }
+    if (*(s32*)(work + 0x1C) < 21) {
+        *(s32*)(work + 0x14) = *(s32*)(work + 0x1C) * 12;
+    } else if (timer < 20) {
+        *(s32*)(work + 0x14) = timer * 12;
+    }
+    for (i = 1; i < *(s32*)(entry + 8); i++, part += 0x34) {
+        *(s32*)(part + 0x48) = (s32)(255.0f * (f32)cos(
+            6.2832f * (90.0f * (*(f32*)(part + 0x60) - 70.0f) / 10.0f) / 360.0f));
+        *(f32*)(part + 0x60) += *(f32*)(part + 0x64);
+        if (*(f32*)(part + 0x60) > 80.0f) {
+            *(f32*)(part + 0x60) = 60.0f;
+            *(f32*)(part + 0x5C) = 0.1f * (f32)(rand() % 16) + 0.4f;
+            *(f32*)(part + 0x64) = 0.1f * (f32)(rand() % 11) + 0.1f;
+            *(f32*)(part + 0x54) = (f32)(rand() % 360);
+        }
+    }
+    dispEntry(4, 2, effLensflareDisp, effect, dispCalcZ(pos));
+}
 
 void* effLensflareN64Entry(f32 x, f32 y, f32 z, s32 arg3, s32 life) {
     extern void* effEntry(void);

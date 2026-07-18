@@ -122,10 +122,34 @@ void effGarekiDisp(s32 cameraId, void* effect) {
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
-u8 gareki_dl(s32 param_1) {
-    return 0;
+void gareki_dl(int index) {
+    extern void GXSetCullMode(int);
+    extern void effSetVtxDescN64(void*);
+    extern void GXBegin(int, int, int);
+    extern void tri2(int, int, int, int, int, int, int);
+    GXSetCullMode(0);
+    effSetVtxDescN64((void*)0x8039FFF8);
+    switch (index) {
+        case 0:
+            GXBegin(0x90, 0, 12); tri2(0,1,2,0,0,2,3); tri2(4,5,6,0,4,6,7); break;
+        case 1:
+            GXBegin(0x90, 0, 6); tri2(8,9,10,8,11,12,13); break;
+        case 2:
+            GXBegin(0x90, 0, 6); tri2(14,15,16,14,17,18,19); break;
+        case 3:
+            GXBegin(0x90, 0, 12); tri2(20,21,22,20,20,22,23); tri2(24,25,26,20,24,26,27); break;
+        case 4:
+            GXBegin(0x90, 0, 6); tri2(28,29,30,28,31,32,33); break;
+        case 5:
+            GXBegin(0x90, 0, 6); tri2(34,35,36,34,37,38,39); break;
+        case 6:
+            GXBegin(0x90, 0, 12); tri2(40,41,42,40,40,42,43); tri2(44,45,46,40,44,46,47); break;
+        case 7:
+            GXBegin(0x90, 0, 6); tri2(48,49,50,48,51,52,53); break;
+        case 8:
+            GXBegin(0x90, 0, 6); tri2(54,55,56,54,57,58,59); break;
+    }
 }
-
 
 #pragma optimize_for_size off
 

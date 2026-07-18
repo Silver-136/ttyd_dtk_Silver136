@@ -1,10 +1,84 @@
 #include "effect/n64/eff_kemuri3_n64.h"
 
 
-u8 effKemuri3Disp(int param_1, int param_2) {
-    return 0;
-}
+void effKemuri3Disp(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4];
+    extern void* camGetPtr(s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void effGetTexObjN64(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXSetTevColor(s32, void*);
+    extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void GXLoadPosMtxImm(Mtx, s32);
+    extern void GXBegin(s32, s32, s32);
+    extern f32 float_8_80425664;
+    extern f32 float_0_80425668;
+    extern f32 float_1_8042566c;
+    extern f32 float_neg8_80425670;
+    volatile f32* fifoF = (volatile f32*)0xCC008000;
+    volatile u8* fifoB = (volatile u8*)0xCC008000;
+    u8 tex[0x20];
+    Mtx draw;
+    u8* entry = (u8*)effect;
+    u8* work = *(u8**)(entry + 0xC);
+    u8* camera = (u8*)camGetPtr(cameraId);
+    s32 i;
 
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 15, 10, 8, 15);
+    GXSetTevAlphaIn(0, 7, 5, 4, 7);
+    effGetTexObjN64(0xF, tex);
+    GXLoadTexObj(tex, 0);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xB, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xB, 1, 5, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+    for (i = 0; i < *(s32*)(entry + 8); i++, work += 0x88) {
+        if (*(s32*)work != 0) {
+            u32 color = 0xFFFFFF00 | *(u8*)(work + 8);
+            GXSetTevColor(1, &color);
+            PSMTXConcat((f32 (*)[4])(camera + 0x11C), (f32 (*)[4])(work + 0x30), draw);
+            GXLoadPosMtxImm(draw, 0);
+            GXBegin(0x80, 0, 4);
+            *fifoF = float_8_80425664; *fifoF = float_0_80425668; *fifoF = float_8_80425664;
+            *fifoB = 0xFF; *fifoB = 0xFF; *fifoB = 0xFF; *fifoB = 0xFF;
+            *fifoF = float_1_8042566c; *fifoF = float_0_80425668;
+            *fifoF = float_8_80425664; *fifoF = float_0_80425668; *fifoF = float_neg8_80425670;
+            *fifoB = 0xFF; *fifoB = 0xFF; *fifoB = 0xFF; *fifoB = 0xFF;
+            *fifoF = float_1_8042566c; *fifoF = float_1_8042566c;
+            *fifoF = float_neg8_80425670; *fifoF = float_0_80425668; *fifoF = float_neg8_80425670;
+            *fifoB = 0xFF; *fifoB = 0xFF; *fifoB = 0xFF; *fifoB = 0xFF;
+            *fifoF = float_0_80425668; *fifoF = float_1_8042566c;
+            *fifoF = float_neg8_80425670; *fifoF = float_0_80425668; *fifoF = float_8_80425664;
+            *fifoB = 0xFF; *fifoB = 0xFF; *fifoB = 0xFF; *fifoB = 0xFF;
+            *fifoF = float_0_80425668; *fifoF = float_0_80425668;
+        }
+    }
+}
 
 void effKemuri3Main(void* effect) {
     typedef struct Vec3 {

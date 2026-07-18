@@ -451,8 +451,68 @@ void yuka_disp(s32 cameraId) {
 }
 
 /* stub-fill: yuka_capture | missing_definition | ghidra_signature */
-u8 yuka_capture(int param_1) {
-    return 0;
+void yuka_capture(s32 cameraId) {
+    typedef f32 Mtx[3][4];
+    typedef f32 Mtx44[4][4];
+    typedef struct Vec { f32 x, y, z; } Vec;
+    extern void* get_ptr(void);
+    extern void* camGetPtr(s32 cameraId);
+    extern void* memcpy(void* dst, const void* src, u32 size);
+    extern f64 tan(f64 value);
+    extern void C_MTXLookAt(Mtx dst, Vec* pos, Vec* up, Vec* target);
+    extern void C_MTXPerspective(Mtx44 dst, f64 fov, f64 aspect,
+                                f64 nearZ, f64 farZ);
+    extern void GXSetProjection(Mtx44 projection, s32 type);
+    extern void GXSetViewport(f64 x, f64 y, f64 width, f64 height,
+                              f64 nearZ, f64 farZ);
+    extern void GXSetScissor(u32 x, u32 y, u32 width, u32 height);
+    extern void test_kururing_mapdisp(s32 cameraId);
+    extern void sysWaitDrawSync(void);
+    extern void GXSetTexCopySrc(u16 x, u16 y, u16 width, u16 height);
+    extern void GXSetTexCopyDst(u16 width, u16 height, u32 format, u8 mipmap);
+    extern void GXSetZMode(u8 enable, u32 func, u8 update);
+    extern void GXCopyTex(void* destination, u8 clear);
+    extern void GXPixModeSync(void);
+    extern f32 float_0p5_804283ec;
+    extern f32 float_25_8042841c;
+    extern f32 float_1_80428420;
+    extern f32 float_32767_80428404;
+
+    u8 cameraCopy[0x260];
+    u8* work = (u8*)get_ptr();
+    u8* camera = (u8*)camGetPtr(cameraId);
+    Vec* position = (Vec*)(camera + 0xC);
+    Vec* target = (Vec*)(camera + 0x18);
+    Vec* up = (Vec*)(camera + 0x24);
+    f32 half = float_0p5_804283ec;
+
+    memcpy(cameraCopy, camGetPtr(cameraId), 0x260);
+    up->x = 0.0f;
+    up->y = 1.0f;
+    up->z = 0.0f;
+    position->x = (*(f32*)(work + 4) + *(f32*)(work + 0x10)) * half;
+    position->y = (*(f32*)(work + 8) + *(f32*)(work + 0x14)) * half;
+    position->z = (*(f32*)(work + 0xC) + *(f32*)(work + 0x18)) * half;
+    *target = *position;
+    position->y += ((f32)*(s32*)(work + 0x20) * half) /
+                   (f32)tan(0.21817);
+    C_MTXLookAt((f32(*)[4])(camera + 0x11C), position, up, target);
+    C_MTXPerspective((f32(*)[4])(camera + 0x15C), float_25_8042841c,
+                     (f64)*(s32*)(work + 0x1C) / (f64)*(s32*)(work + 0x20),
+                     float_1_80428420, float_32767_80428404);
+    *(s32*)(camera + 0x19C) = 0;
+    GXSetProjection((f32(*)[4])(camera + 0x15C), *(s32*)(camera + 0x19C));
+    GXSetViewport(0.0, 0.0, (f64)*(s32*)(work + 0x24),
+                  (f64)*(s32*)(work + 0x28), 0.0, 1.0);
+    GXSetScissor(0, 0, *(u32*)(work + 0x24), *(u32*)(work + 0x28));
+    test_kururing_mapdisp(cameraId);
+    sysWaitDrawSync();
+    GXSetTexCopySrc(0, 0, *(u16*)(work + 0x26), *(u16*)(work + 0x2A));
+    GXSetTexCopyDst(*(u16*)(work + 0x26), *(u16*)(work + 0x2A), 4, 0);
+    GXSetZMode(1, 3, 1);
+    GXCopyTex(**(void***)work, 1);
+    GXPixModeSync();
+    memcpy(camGetPtr(cameraId), cameraCopy, 0x260);
 }
 
 /* stub-fill: disp_2D | prototype_only | source_prototype */
@@ -682,21 +742,26 @@ void main_enemy_sub(void* unit, s32* count) {
 void main_star(void) {
     extern void* _battleWorkPointer;
     extern void* get_ptr(void);
-    extern void* BattleGetMarioPtr(void* battleWork);
-    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
-    extern void* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
-    extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
+    extern void* BattleGetMarioPtr(void*);
+    extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
+    extern void* effStarStoneEntry(f32, f32, f32, f32, s32);
+    extern f64 intplGetValue(f64, f64, s32, s32, s32);
+    extern s32 BattleAudience_GetAudienceNum(void);
+    extern void BattleAudienceSoundCallKind(s32);
+    extern void BattleAudienceSoundWhistleKind(s32);
+    extern void psndSFXOn(const char*);
     u8* work = get_ptr();
-    void* mario = BattleGetMarioPtr(_battleWorkPointer);
-    s32 state = *(s32*)(work + 0x3F0);
+    u8* mario = BattleGetMarioPtr(_battleWorkPointer);
     s32 timer;
+    s32 audience;
 
-    if (state == 1) {
+    switch (*(s32*)(work + 0x3F0)) {
+    case 1:
         *(s32*)(work + 0x3F0) = 2;
         *(s32*)(work + 0x3F4) = 0;
-        *(void**)(work + 0x44C) = effStarStoneEntry(2, 0.0f, -1000.0f, 0.0f, 1.0f);
+        *(void**)(work + 0x44C) = effStarStoneEntry(0.0f, -1000.0f, 0.0f, 1.0f, 0);
         BtlUnit_GetPos(mario, (f32*)(work + 0x3FC), (f32*)(work + 0x400), (f32*)(work + 0x404));
-        *(f32*)(work + 0x400) += *(f32*)((u8*)mario + 0x114) * (f32)*(s16*)((u8*)mario + 0xCE) + 37.0f;
+        *(f32*)(work + 0x400) += *(f32*)(mario + 0x114) * (f32)*(s16*)(mario + 0xCE) + 37.0f;
         *(f32*)(work + 0x408) = *(f32*)(work + 0x3FC);
         *(f32*)(work + 0x40C) = *(f32*)(work + 0x400);
         *(f32*)(work + 0x410) = *(f32*)(work + 0x404);
@@ -706,15 +771,24 @@ void main_star(void) {
         *(f32*)(work + 0x42C) = 0.0f;
         *(f32*)(work + 0x430) = 0.0f;
         *(f32*)(work + 0x434) = 0.0f;
-    }
-    state = *(s32*)(work + 0x3F0);
-    timer = ++*(s32*)(work + 0x3F4);
-    if (state == 2) {
-        *(f32*)(work + 0x3FC) = (f32)intplGetValue(*(f32*)(work + 0x408), *(f32*)(work + 0x414), 0, timer, 100);
-        *(f32*)(work + 0x400) = (f32)intplGetValue(*(f32*)(work + 0x40C), *(f32*)(work + 0x418), 0, timer, 100);
-        *(f32*)(work + 0x404) = (f32)intplGetValue(*(f32*)(work + 0x410), *(f32*)(work + 0x41C), 0, timer, 100);
-        *(f32*)(work + 0x42C) = *(f32*)(work + 0x430) = *(f32*)(work + 0x434) =
-            (f32)intplGetValue(0.0, 2.0, 0, timer, 100);
+        *(f32*)(work + 0x438) = 0.0f;
+        *(f32*)(work + 0x43C) = 0.0f;
+        *(f32*)(work + 0x440) = 0.0f;
+        /* fallthrough */
+    case 2:
+        timer = ++*(s32*)(work + 0x3F4);
+        if (timer < 101) {
+            *(f32*)(work + 0x3FC) = (f32)intplGetValue(*(f32*)(work + 0x408), *(f32*)(work + 0x414), 0, timer, 100);
+            *(f32*)(work + 0x400) = (f32)intplGetValue(*(f32*)(work + 0x40C), *(f32*)(work + 0x418), 0, timer, 100);
+            *(f32*)(work + 0x404) = (f32)intplGetValue(*(f32*)(work + 0x410), *(f32*)(work + 0x41C), 0, timer, 100);
+            *(f32*)(work + 0x42C) = *(f32*)(work + 0x430) = *(f32*)(work + 0x434) =
+                (f32)intplGetValue(0.0, 2.0, 0, timer, 100);
+        } else {
+            *(f32*)(work + 0x3FC) = *(f32*)(work + 0x414);
+            *(f32*)(work + 0x400) = *(f32*)(work + 0x418);
+            *(f32*)(work + 0x404) = *(f32*)(work + 0x41C);
+            *(f32*)(work + 0x42C) = *(f32*)(work + 0x430) = *(f32*)(work + 0x434) = 2.0f;
+        }
         *(f32*)(work + 0x43C) = (f32)intplGetValue(0.0, 2160.0, 4, timer, 120);
         if (timer > 119) {
             *(s32*)(work + 0x3F0) = 3;
@@ -726,14 +800,57 @@ void main_star(void) {
             *(f32*)(work + 0x418) = 30.0f;
             *(f32*)(work + 0x41C) = 50.0f;
         }
-    } else if (state == 3) {
-        *(f32*)(work + 0x3FC) = (f32)intplGetValue(*(f32*)(work + 0x408), *(f32*)(work + 0x414), 0, timer, 60);
-        *(f32*)(work + 0x400) = (f32)intplGetValue(*(f32*)(work + 0x40C), *(f32*)(work + 0x418), 0, timer, 60);
-        *(f32*)(work + 0x404) = (f32)intplGetValue(*(f32*)(work + 0x410), *(f32*)(work + 0x41C), 0, timer, 60);
+        break;
+    case 3:
+        timer = ++*(s32*)(work + 0x3F4);
+        *(f32*)(work + 0x3FC) = (f32)intplGetValue(*(f32*)(work + 0x408), *(f32*)(work + 0x414), 4, timer, 60);
+        *(f32*)(work + 0x400) = (f32)intplGetValue(*(f32*)(work + 0x40C), *(f32*)(work + 0x418), 4, timer, 60);
+        *(f32*)(work + 0x404) = (f32)intplGetValue(*(f32*)(work + 0x410), *(f32*)(work + 0x41C), 4, timer, 60);
         if (timer > 59) {
             *(s32*)(work + 0x3F0) = 4;
             *(s32*)(work + 0x3F4) = 0;
         }
+        break;
+    case 6:
+        *(s32*)(work + 0x3F0) = 7;
+        *(s32*)(work + 0x3F4) = 0;
+        *(f32*)(work + 0x444) = *(f32*)(work + 0x42C);
+        *(f32*)(work + 0x448) = *(f32*)(work + 0x42C) + 1.0f;
+        psndSFXOn("SFX_BTL_SAC_DOKKAN4");
+        audience = BattleAudience_GetAudienceNum();
+        if (audience > 0 && audience < 50) {
+            BattleAudienceSoundCallKind(1);
+        }
+        if (audience > 49 && audience < 100) {
+            BattleAudienceSoundCallKind(1);
+            BattleAudienceSoundWhistleKind(1);
+        }
+        if (audience > 99 && audience < 150) {
+            BattleAudienceSoundCallKind(2);
+            BattleAudienceSoundWhistleKind(2);
+        }
+        if (audience > 149) {
+            BattleAudienceSoundCallKind(2);
+            BattleAudienceSoundWhistleKind(3);
+        }
+        /* fallthrough */
+    case 7:
+        timer = ++*(s32*)(work + 0x3F4);
+        *(f32*)(work + 0x42C) = (f32)intplGetValue(
+            *(f32*)(work + 0x444), *(f32*)(work + 0x448), 4,
+            timer >> 2, 5);
+        *(f32*)(work + 0x430) = *(f32*)(work + 0x42C);
+        *(f32*)(work + 0x434) = *(f32*)(work + 0x42C);
+        *(f32*)(work + 0x400) =
+            12.5f * (*(f32*)(work + 0x430) - 2.0f) + 30.0f;
+        if (timer > 42) {
+            *(s32*)(work + 0x3F0) = 5;
+            *(s32*)(work + 0x3F4) = 0;
+            *(f32*)(work + 0x42C) = *(f32*)(work + 0x448);
+            *(f32*)(work + 0x430) = *(f32*)(work + 0x448);
+            *(f32*)(work + 0x434) = *(f32*)(work + 0x448);
+        }
+        break;
     }
     if (*(void**)(work + 0x44C) != 0) {
         u8* ew = *(u8**)((u8*)*(void**)(work + 0x44C) + 0xC);
@@ -1088,5 +1205,53 @@ void yuka_main(void) {
 
 /* stub-fill: yuka_init | prototype_only | source_prototype */
 void yuka_init(void) {
-    return;
+    typedef struct Vec { f32 x, y, z; } Vec;
+    typedef f32 Mtx[3][4];
+    extern void* get_ptr(void);
+    extern void* mapGetMapObj(const char* name);
+    extern void mapGrpFlagOn(const char* name, u32 flags);
+    extern void PSMTXMultVec(Mtx matrix, Vec* source, Vec* destination);
+    extern u32 GXGetTexBufferSize(u16 width, u16 height, u32 format,
+                                  u8 mipmap, u8 maxLevel);
+    extern void* smartAlloc(u32 size, s32 type);
+    extern void dispEntry(s32 camera, s32 renderMode, void* callback,
+                          void* param, f32 order);
+    extern void yuka_capture(s32 cameraId);
+    extern const char str_stg_b_yuka_80301050[];
+    extern f32 float_0_80428424;
+
+    u8* work = (u8*)get_ptr();
+    u8* map = (u8*)mapGetMapObj(str_stg_b_yuka_80301050);
+    u8* joint = *(u8**)(map + 8);
+    s32 width;
+    s32 height;
+    u32 textureSize;
+
+    mapGrpFlagOn(str_stg_b_yuka_80301050, 0x400001);
+    PSMTXMultVec((f32(*)[4])(map + 0x1C), (Vec*)(joint + 0x3C),
+                 (Vec*)(work + 4));
+    PSMTXMultVec((f32(*)[4])(map + 0x1C), (Vec*)(joint + 0x48),
+                 (Vec*)(work + 0x10));
+
+    width = (s32)(*(f32*)(work + 0x10) - *(f32*)(work + 4));
+    *(s32*)(work + 0x1C) = width;
+    *(s32*)(work + 0x24) = width;
+    height = (s32)(*(f32*)(work + 0x18) - *(f32*)(work + 0xC));
+    *(s32*)(work + 0x20) = height;
+    *(s32*)(work + 0x28) = height;
+    *(u32*)(work + 0x24) += *(u32*)(work + 0x24) & 1;
+    *(u32*)(work + 0x28) += *(u32*)(work + 0x28) & 1;
+    if (*(s32*)(work + 0x24) > 0x260) {
+        *(s32*)(work + 0x24) = 0x260;
+    }
+    if (*(s32*)(work + 0x28) > 0x1E0) {
+        *(s32*)(work + 0x28) = 0x1E0;
+    }
+
+    textureSize = GXGetTexBufferSize((u16)*(u32*)(work + 0x24),
+                                     (u16)*(u32*)(work + 0x28), 4, 0, 0);
+    *(void**)work = smartAlloc(textureSize, 2);
+    *(void**)(work + 0x2C) = smartAlloc(0x3870, 2);
+    dispEntry(2, 0, yuka_capture, 0, float_0_80428424);
 }
+

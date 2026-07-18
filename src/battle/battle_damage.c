@@ -191,29 +191,159 @@ return 1;
 /* AUTOSTUB BattleCheckDamage size 0xA00 */
 s32 BattleCheckDamage(BattleWorkUnit* attacker, BattleWorkUnit* target,
                       BattleWorkUnitPart* part, void* weapon, s32 flags) {
-    extern void BattleInitCounterPreCheckWork(void* work);
-    extern s32 BattleCheckCounter(void* work, BattleWorkUnit*, BattleWorkUnit*, BattleWorkUnitPart*, void*, s32*);
-    extern s32 BattleCalculateDamage(BattleWorkUnit*, BattleWorkUnit*, BattleWorkUnitPart*, void*, s32, s32);
-    extern s32 BattleCalculateFpDamage(BattleWorkUnit*, BattleWorkUnit*, BattleWorkUnitPart*, void*, s32, s32);
+    extern void BattleInitCounterPreCheckWork(void*);
+    extern s32 BattleCheckCounter(void*, BattleWorkUnit*, BattleWorkUnit*, BattleWorkUnitPart*, void*, u32*);
+    extern s32 BtlUnit_GetACPossibility(BattleWorkUnit*);
+    extern s32 BattleActionCommandGetDefenceResult(void);
+    extern void BtlUnit_GetHitPos(BattleWorkUnit*, BattleWorkUnitPart*, f32*, f32*, f32*);
+    extern void* effNiceEntry(f32, f32, f32, s32);
+    extern void psndSFXOn(const char*);
+    extern void BattleAudience_Case_GuardGood(void);
+    extern void BattleAudience_Case_GuardBad(void);
+    extern void BattleRunHitEvent(BattleWorkUnit*, s32);
+    extern s32 BtlUnit_CheckStatus(BattleWorkUnit*, s32);
+    extern void BattleCheckPikkyoro(void*, u32*);
+    extern s32 BattleCalculateDamage(BattleWorkUnit*, BattleWorkUnit*, BattleWorkUnitPart*, void*, u32*, u32);
+    extern s32 BattleCalculateFpDamage(BattleWorkUnit*, BattleWorkUnit*, BattleWorkUnitPart*, void*, u32*, u32);
+    extern u32 BattleSetStatusDamageFromWeapon(BattleWorkUnit*, BattleWorkUnit*, BattleWorkUnitPart*, void*, u32);
+    extern void BattleDamageDirect(s32, BattleWorkUnit*, BattleWorkUnitPart*, s32, s32, s32, s32, s32);
+    extern char str_SFX_SYSTEM_GREAT1_802ee064[];
+    extern char str_SFX_SYSTEM_NICE1_802ee078[];
+    u32 result[8];
     s32 counterWork[12];
-    s32 result[12];
+    Vec hitPos;
+    void* effect;
+    u32 statusResult;
     s32 damage;
     s32 fpDamage;
+    s32 defence;
+    u8 counterType;
+    BOOL flip;
 
-    if (target == 0) {
-        return -1;
-    }
-    BattleInitCounterPreCheckWork(counterWork);
     result[0] = flags;
+    statusResult = 0;
+    flip = FALSE;
+    BattleInitCounterPreCheckWork(counterWork);
+    if (target == NULL) {
+        return 0x12;
+    }
+
+    if ((*(u32*)((u8*)weapon + 0x74) & 0x20) == 0 &&
+        BtlUnit_GetACPossibility(target) != 0 &&
+        BattleActionCommandGetDefenceResult() == 5) {
+        BtlUnit_GetHitPos(target, part, &hitPos.x, &hitPos.y, &hitPos.z);
+        effect = effNiceEntry(hitPos.x - 60.0f, hitPos.y + 45.0f,
+                              hitPos.z - 10.0f, 2);
+        *(f32*)((u8*)*(void**)((u8*)effect + 0xC) + 0x1C) = 0.75f;
+        result[0] |= 0x80000;
+        psndSFXOn(str_SFX_SYSTEM_GREAT1_802ee064);
+        BattleAudience_Case_GuardGood();
+        counterType = *(u8*)((u8*)weapon + 0x13);
+        if (counterType == 3 || counterType == 4 || counterType >= 5) {
+            result[7] = result[0] | 0x12A;
+            result[0] |= 0x100;
+            BattleDamageDirect(attacker->unitId, target, part, 0, 0,
+                               result[7], *(u8*)((u8*)weapon + 0x6D), 0);
+            return -1;
+        }
+        if (counterType == 0 || counterType == 1) {
+            result[7] = result[0] | 0x12A;
+        } else {
+            result[7] = result[0] | 0x2A;
+        }
+        BattleDamageDirect(attacker->unitId, target, part, 0, 0,
+                           result[7], *(u8*)((u8*)weapon + 0x6D), 0);
+        return 0x15;
+    }
+
     BattleCheckCounter(counterWork, attacker, target, part, weapon, result);
     if (counterWork[0] == 0) {
-        return result[0];
+        goto finish;
     }
-    damage = BattleCalculateDamage(attacker, target, part, weapon, result[7], result[0]);
-    fpDamage = BattleCalculateFpDamage(attacker, target, part, weapon, result[7], result[0]);
-    *(s8*)((s32)target + 0x119) = damage;
-    *(s8*)((s32)target + 0x11A) = fpDamage;
-    return result[0];
+    if ((result[0] & 0x100) != 0) {
+        if ((*(u32*)((u8*)part + 0x1B0) & 0x80000) != 0) {
+            BattleRunHitEvent(target, 0x719);
+            goto finish;
+        }
+        if ((*(u32*)((u8*)part + 0x1B0) & 0x100000) != 0 &&
+            (*(u8*)((u8*)weapon + 0x6C) == 1 ||
+             *(u8*)((u8*)weapon + 0x6C) == 2 ||
+             *(u8*)((u8*)weapon + 0x6C) == 3 ||
+             ((*(u32*)((u8*)weapon + 0x74) & 0x8000000) != 0 &&
+              BtlUnit_CheckStatus(attacker, 9) != 0))) {
+            BattleRunHitEvent(target, 0x719);
+            goto finish;
+        }
+    }
+
+    if ((*(u32*)((u8*)weapon + 0x74) & 0x20) == 0 &&
+        BtlUnit_GetACPossibility(target) != 0) {
+        defence = BattleActionCommandGetDefenceResult();
+        if (defence < 4) {
+            BattleAudience_Case_GuardBad();
+        } else {
+            BtlUnit_GetHitPos(target, part, &hitPos.x, &hitPos.y, &hitPos.z);
+            effect = effNiceEntry(hitPos.x - 60.0f, hitPos.y + 45.0f,
+                                  hitPos.z - 10.0f, 0);
+            *(f32*)((u8*)*(void**)((u8*)effect + 0xC) + 0x1C) = 0.75f;
+            result[0] |= 0x40000;
+            psndSFXOn(str_SFX_SYSTEM_NICE1_802ee078);
+            BattleAudience_Case_GuardGood();
+        }
+    }
+
+    if ((*(u32*)((u8*)weapon + 0x74) & 0x400000) != 0 &&
+        (*(u32*)((u8*)part + 0x1AC) & 0x4000000) != 0) {
+        flip = TRUE;
+        result[0] |= 0x200000;
+    }
+    if ((*(u32*)((u8*)weapon + 0x74) & 0x800000) != 0 &&
+        (*(u32*)((u8*)part + 0x1AC) & 0x8000000) != 0) {
+        flip = TRUE;
+        result[0] |= 0x200000;
+    }
+    BattleCheckPikkyoro(weapon, result);
+    damage = BattleCalculateDamage(attacker, target, part, weapon,
+                                   result + 7, result[0]);
+    fpDamage = BattleCalculateFpDamage(attacker, target, part, weapon,
+                                       result + 7, result[0]);
+    if ((result[0] & 0x40000) == 0) {
+        if ((result[0] & 0x40000000) != 0) {
+            statusResult = BattleSetStatusDamageFromWeapon(attacker, target,
+                                                           part, weapon,
+                                                           result[0]);
+        } else if ((result[0] & 0x100) != 0) {
+            statusResult = BattleSetStatusDamageFromWeapon(attacker, target,
+                                                           part, weapon,
+                                                           result[0]);
+        }
+    }
+    if ((result[7] & 0xFF) == 0x1E && flip) {
+        result[7] = result[0] | 0x17;
+    }
+    if ((result[7] & 0xFF) == 0x1E &&
+        (*(u8*)((u8*)weapon + 0x6D) == 0x13 ||
+         *(u8*)((u8*)weapon + 0x6D) == 0x1B)) {
+        result[7] = result[0] | 0x17;
+    }
+    if ((result[7] & 0xFF) == 0x1E && statusResult != 0) {
+        if ((statusResult & 1) == 0) {
+            result[7] = result[0] | 0x16;
+        } else {
+            result[7] = result[0] | 0x17;
+        }
+    }
+    if ((statusResult & 4) != 0) {
+        result[7] = result[0] | 0x1C;
+    }
+    if ((statusResult & 8) != 0) {
+        result[7] = result[0] | 0x1D;
+    }
+    *(s8*)((u8*)target + 0x119) = damage;
+    *(s8*)((u8*)target + 0x11A) = fpDamage;
+
+finish:
+    return 0x12;
 }
 
 /* MANUAL_AUTOMATION_STUBS_END main/battle/battle_damage */
@@ -229,26 +359,105 @@ void BattleDamageDirect(s32 unitIdx, BattleWorkUnit* unit, BattleWorkUnitPart* p
     extern BattleWork* _battleWorkPointer;
     extern BattleWorkUnit* BattleGetUnitPtr(BattleWork*, s32);
     extern BattleWorkUnitPart* BtlUnit_GetPartsPtr(BattleWorkUnit*, s32);
+    extern s32 BtlUnit_GetBodyPartsId(BattleWorkUnit*);
+    extern void BtlUnit_GetHitPos(BattleWorkUnit*, BattleWorkUnitPart*, f32*, f32*, f32*);
+    extern s32 BtlUnit_GetFp(BattleWorkUnit*);
+    extern void BtlUnit_SetFp(BattleWorkUnit*, s32);
+    extern u32 BtlUnit_GetBelong(BattleWorkUnit*);
+    extern void* effMissStarEntry(f64, f64, f64, s32, s32, s32);
+    extern void effHitEntry(void);
+    extern void effIceN64Entry(f32, f32, f32, s32);
+    extern void effDamageStarEntry(f32, f32, f32, f32, f32, s32, s32);
     extern void BattleRunHitEvent(BattleWorkUnit*, s32);
+    f32 hitX;
+    f32 hitY;
+    f32 hitZ;
+    s32 fp;
+    BattleWorkUnit* attacker;
 
-    if (unitIdx != -5) {
-        unit = BattleGetUnitPtr(_battleWorkPointer, unitIdx);
+    if (unitIdx == -5) {
+        attacker = 0;
+    } else {
+        attacker = BattleGetUnitPtr(_battleWorkPointer, unitIdx);
     }
-    if (unit == 0) {
-        return;
+    if (damage >= 100) {
+        damage = 99;
+    } else if (damage < -99) {
+        damage = -99;
+    }
+    if (attacker != 0) {
+        *(s32*)((s32)attacker + 0x284) += damage;
     }
     if (part == 0) {
-        part = BtlUnit_GetPartsPtr(unit, 1);
+        part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
     }
-    if (damage > 99) {
-        damage = 99;
+    *(BattleWorkUnitPart**)((s32)unit + 0x258) = part;
+    *(u32*)((s32)unit + 0x274) = hitEffect;
+    if ((*(u32*)((s32)unit + 0x104) & 0x200000) != 0 &&
+        (hitEffect == 0x15 || hitEffect - 0x16 < 2 || hitEffect == 0x18)) {
+        *(u32*)((s32)unit + 0x274) = 0;
     }
-    *(s8*)((s32)unit + 0x119) = damage;
-    *(s8*)((s32)unit + 0x11A) = fpDamage;
-    if (damage > 0) {
-        *(s16*)((s32)unit + 0x10C) -= damage;
-        if (*(s16*)((s32)unit + 0x10C) < 0) {
-            *(s16*)((s32)unit + 0x10C) = 0;
+    BtlUnit_GetHitPos(unit, part, &hitX, &hitY, &hitZ);
+
+    if ((flags & 0x2000) == 0 && damage == 0 && fpDamage == 0) {
+        BtlUnit_GetHitPos(unit, part, &hitX, &hitY, &hitZ);
+        if (hitEffect != 2 && hitEffect != 3 && hitEffect != 0x15 && hitEffect != 0x16 &&
+            hitEffect != 0x14 && hitEffect != 0x13 && hitEffect != 0x1B && hitEffect != 7 &&
+            (flags & 0xFF) != 0x16) {
+            effMissStarEntry(hitX, hitY, hitZ, (flags & 0x20000) != 0, 1,
+                             BtlUnit_GetBelong(unit) == 0 ? -1 : 1);
+        }
+    }
+
+    if ((flags & 0x2000) == 0 && (damage != 0 || fpDamage != 0)) {
+        BtlUnit_GetHitPos(unit, part, &hitX, &hitY, &hitZ);
+        if ((flags & 0xFF) == 0x1A) {
+            effIceN64Entry(hitX, hitY, hitZ, 0);
+        }
+        effHitEntry();
+        if (BtlUnit_GetBelong(unit) == 0) {
+            if (damage != 0 && (*(u32*)((s32)unit + 0x104) & 0x400000) == 0) {
+                effDamageStarEntry(hitX - 8.0f, hitY + 5.0f, hitZ, 10.0f, 30.0f, 0, damage);
+            }
+            if (fpDamage != 0) {
+                effDamageStarEntry(hitX - 8.0f, hitY + 5.0f, hitZ, 10.0f,
+                                   damage == 0 ? 30.0f : 60.0f, 1, fpDamage);
+            }
+        } else {
+            if (damage != 0 && (*(u32*)((s32)unit + 0x104) & 0x400000) == 0) {
+                effDamageStarEntry(hitX, hitY + 10.0f, hitZ, 10.0f, -30.0f, 0, damage);
+            }
+            if (fpDamage != 0) {
+                effDamageStarEntry(hitX, hitY + 10.0f, hitZ, 10.0f,
+                                   damage == 0 ? -30.0f : -60.0f, 1, fpDamage);
+            }
+        }
+    }
+
+    *(s8*)((s32)unit + 0x270) = damage;
+    *(s32*)((s32)unit + 0x264) += *(s8*)((s32)unit + 0x270);
+    *(s8*)((s32)unit + 0x271) = fpDamage;
+    *(s8*)((s32)unit + 0x272) = fpDamage;
+    *(s32*)((s32)unit + 0x268) += *(s8*)((s32)unit + 0x271);
+    if ((flags & 0x2000) == 0 && (damage != 0 || fpDamage != 0)) {
+        if ((*(u32*)((s32)unit + 0x104) & 0x40000000) == 0) {
+            *(s32*)((s32)unit + 0x208) = *(s16*)((s32)unit + 0x10C);
+            *(s16*)((s32)unit + 0x10C) -= *(s8*)((s32)unit + 0x270);
+            if (*(s16*)((s32)unit + 0x10C) > *(s16*)((s32)unit + 0x108)) {
+                *(s16*)((s32)unit + 0x10C) = *(s16*)((s32)unit + 0x108);
+            }
+            if (*(s16*)((s32)unit + 0x10C) < 0) {
+                *(s16*)((s32)unit + 0x10C) = 0;
+            }
+        }
+        if (fpDamage != 0) {
+            fp = BtlUnit_GetFp(unit) - (s8)fpDamage;
+            if (fp < 0) {
+                *(s8*)((s32)unit + 0x272) = BtlUnit_GetFp(unit);
+                fp = 0;
+            }
+            BtlUnit_SetFp(unit, fp);
+            *(s32*)((s32)unit + 0x26C) += *(s8*)((s32)unit + 0x272);
         }
     }
     if (runEvent != 0) {
@@ -1350,32 +1559,201 @@ s32 BattleSetStatusDamage(u32* result, BattleWorkUnit* unit, BattleWorkUnitPart*
                           int galeFactor, char turns, char strength) {
     extern s32 irand(s32 max);
     extern s32 BtlUnit_CheckStatus(BattleWorkUnit*, StatusEffectType);
-    s32 resistance;
+    extern void BtlUnit_GetStatus(BattleWorkUnit*, StatusEffectType, s8*, s8*);
+    extern BOOL BtlUnit_SetStatus(BattleWorkUnit*, StatusEffectType, s8, s8);
+    extern void BtlUnit_GetPos(BattleWorkUnit*, f32*, f32*, f32*);
+    extern s32 BtlUnit_GetHeight(BattleWorkUnit*);
+    extern void* effStampN64Entry(f32, f32, f32, s32);
+    extern u32 _getRegistStatus(BattleWorkUnit*, StatusEffectType);
+    s8 chargeStrength;
+    s32 invalid = 0;
+    s32 setResult = 0;
+    u32 resistance;
+    Vec position;
+    void* effect;
+    u8* effectWork;
 
-    if ((*(u32*)((s32)part + 0x1AC) & 0x80000000) != 0) {
-        return 0;
+    BtlUnit_GetStatus(unit, 0x10, NULL, &chargeStrength);
+    switch ((u32)status) {
+    case 0:
+    case 0x13:
+    case 0x14:
+    case 0x15:
+        if ((s8)turns < 1) invalid = 1;
+        break;
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+        if ((s8)turns == 0) invalid = 1;
+        break;
+    case 0xA:
+    case 0xB:
+    case 0xC:
+    case 0xD:
+    case 0xE:
+    case 0xF:
+        if ((s8)strength == 0) invalid = 1;
+        break;
     }
-    if ((*(u32*)((s32)part + 0x1AC) & 0x40000000) != 0) {
-        return 0;
+
+    if ((*(u32*)((u8*)part + 0x1AC) & 0x20000000) != 0) return 0;
+    if ((*(u32*)((u8*)part + 0x1AC) & 0x80000000) != 0) return 0;
+    if (BtlUnit_CheckStatus(unit, 0) != 0 && invalid == 0) return 0;
+
+    if ((*(u32*)((u8*)part + 0x1AC) & 0x40000000) != 0 && invalid == 0) {
+        switch ((u32)status) {
+        case 0: case 1: case 2: case 3: case 4: case 5:
+        case 8: case 9: case 0xB: case 0xD: case 0xF:
+        case 0x14: case 0x19: case 0x1A: case 0x1B:
+            return 0;
+        }
     }
-    if (BtlUnit_CheckStatus(unit, 8) != 0 && status != 8) {
-        return 0;
+
+    if (*(u8*)((s32)unit + 0x2F6) != 0) {
+        switch ((u32)status) {
+        case 1: case 2: case 3: case 4: case 5: case 6:
+        case 0xB: case 0xD: case 0xF: case 0x1B:
+            return 0;
+        }
     }
-    if (rate < 1) {
-        return 0;
-    }
-    resistance = *(u8*)((s32)unit + 0x30 + (s32)status);
-    if ((attackFlags & 0x40000000) == 0) {
+    if ((u32)status == 8 && *(u8*)((s32)unit + 0x301) != 0) return 0;
+    if (rate < 1) return 0;
+
+    resistance = _getRegistStatus(unit, status) & 0xFF;
+    if ((attackFlags & 0x100) == 0 || resistance == 0) {
         rate = rate * resistance / 100;
+        if ((attackFlags & 0x100) == 0 && resistance != 0) {
+            rate += galeFactor;
+        }
     }
-    rate += galeFactor;
-    if (rate <= irand(100)) {
-        return 0;
+    if (irand(100) >= rate) return 0;
+
+    if ((u32)status == 0x19) {
+        *result |= 4;
+    } else if ((u32)status == 0x1A) {
+        *result |= 8;
+    } else {
+        if ((u32)status == 1) *result |= 0x20;
+        if ((u32)status == 0x1B) *result |= 0x10;
+        setResult = BtlUnit_SetStatus(unit, status, (s8)turns, (s8)strength);
     }
-    *(s8*)((s32)unit + 0x120 + (s32)status * 2) = turns;
-    *(s8*)((s32)unit + 0x121 + (s32)status * 2) = strength;
-    *result |= 1 << ((u32)status & 31);
-    return 1;
+
+    switch ((u32)status) {
+    case 6: case 7: case 0xA: case 0xC: case 0xE:
+    case 0x10: case 0x12: case 0x13: case 0x15:
+    case 0x16: case 0x17: case 0x18:
+        *result |= 2;
+        break;
+    default:
+        *result |= (s8)turns < 1 ? 2 : 1;
+        break;
+    }
+
+    if (setResult != 0) {
+        BtlUnit_GetPos(unit, &position.x, &position.y, &position.z);
+        if ((*(u32*)((u8*)unit + 0x104) & 0x2000) == 0) {
+            position.y += BtlUnit_GetHeight(unit) / 2;
+        } else {
+            position.y -= BtlUnit_GetHeight(unit) / 2;
+        }
+        if (*(s32*)((u8*)unit + 8) == 0x83 ||
+            *(s32*)((u8*)unit + 8) == 0x94 ||
+            *(s32*)((u8*)unit + 8) == 0xAA) {
+            position.x -= 300.0f;
+            position.z += 30.0f;
+        } else if (*(s32*)((u8*)unit + 8) == 0x96) {
+            position.z += 40.0f;
+        }
+
+        effect = NULL;
+        switch ((u32)status) {
+        case 0:
+            effect = effStampN64Entry(position.x, position.y,
+                                      position.z + 10.0f, 2);
+            effectWork = *(u8**)((u8*)effect + 0xC);
+            effectWork[0x38] = 0xA0;
+            effectWork[0x39] = 0xDC;
+            effectWork[0x3A] = 0;
+            effectWork[0x3B] = 10;
+            effectWork[0x3C] = 10;
+            effectWork[0x3D] = 10;
+            break;
+        case 1:
+            effStampN64Entry(position.x, position.y, position.z + 10.0f, 0);
+            break;
+        case 2:
+            effect = effStampN64Entry(position.x, position.y,
+                                      position.z + 10.0f, 2);
+            effectWork = *(u8**)((u8*)effect + 0xC);
+            effectWork[0x38] = 0xDC;
+            effectWork[0x39] = 0x6E;
+            effectWork[0x3A] = 0x6E;
+            effectWork[0x3B] = 10;
+            effectWork[0x3C] = 10;
+            effectWork[0x3D] = 10;
+            break;
+        case 3:
+            effect = effStampN64Entry(position.x, position.y,
+                                      position.z + 10.0f, 2);
+            effectWork = *(u8**)((u8*)effect + 0xC);
+            effectWork[0x38] = 0;
+            effectWork[0x39] = 0x6E;
+            effectWork[0x3A] = 0xDC;
+            effectWork[0x3B] = 10;
+            effectWork[0x3C] = 10;
+            effectWork[0x3D] = 10;
+            break;
+        case 4:
+            effect = effStampN64Entry(position.x, position.y,
+                                      position.z + 10.0f, 2);
+            effectWork = *(u8**)((u8*)effect + 0xC);
+            effectWork[0x38] = 0;
+            effectWork[0x39] = 0xDC;
+            effectWork[0x3A] = 0;
+            effectWork[0x3B] = 10;
+            effectWork[0x3C] = 10;
+            effectWork[0x3D] = 10;
+            break;
+        case 5:
+            effStampN64Entry(position.x, position.y, position.z + 10.0f, 1);
+            break;
+        case 6:
+            effect = effStampN64Entry(position.x, position.y,
+                                      position.z + 10.0f, 2);
+            effectWork = *(u8**)((u8*)effect + 0xC);
+            effectWork[0x38] = 0xDC;
+            effectWork[0x39] = 0xDC;
+            effectWork[0x3A] = 0;
+            effectWork[0x3B] = 10;
+            effectWork[0x3C] = 10;
+            effectWork[0x3D] = 10;
+            break;
+        case 7:
+            effect = effStampN64Entry(position.x, position.y,
+                                      position.z + 10.0f, 2);
+            effectWork = *(u8**)((u8*)effect + 0xC);
+            effectWork[0x38] = 0xDC;
+            effectWork[0x39] = 0xDC;
+            effectWork[0x3A] = 0xDC;
+            effectWork[0x3B] = 0;
+            effectWork[0x3C] = 0xDC;
+            effectWork[0x3D] = 0;
+            break;
+        case 8:
+        case 9:
+            effect = effStampN64Entry(position.x, position.y,
+                                      position.z + 10.0f, 2);
+            break;
+        }
+    }
+
+    return setResult == 0 ? 1 : 1;
 }
 
 /* MANUAL_AUTOMATION_STUBS_END main/battle/battle_damage */

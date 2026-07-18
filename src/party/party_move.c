@@ -193,7 +193,7 @@ u8 partyWalkMain(void* pParty) {
     player = *(void**)((s32)pParty + 0x160);
     if (*(s8*)((s32)pParty + 0x2F) == 0) {
         source = marioGetPtr();
-        grounded = (*(u32*)source & 0x10) == 0;
+        grounded = (*(u32*)source & 0x10000) == 0;
         slit = marioChkSlitThrouh();
         x = *(u32*)((s32)player + 0x8C);
         y = *(u32*)((s32)player + 0x90);
@@ -207,7 +207,8 @@ u8 partyWalkMain(void* pParty) {
             nokonokoGetStatus(source) == 3 ||
             PSVECDistance((void*)((s32)player + 0x8C), (void*)((s32)source + 0x58)) >= float_150_80421594) {
             source = marioGetPtr();
-            grounded = (*(u32*)source & 0x10) == 0;
+            grounded = (*(u32*)source & 0x10000) == 0;
+            source = marioGetPtr();
             x = *(u32*)((s32)source + 0x8C);
             y = *(u32*)((s32)source + 0x90);
             z = *(u32*)((s32)source + 0x94);
@@ -544,24 +545,104 @@ void walkMain(void* pParty) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 void partyGetMoveDirSpd(void* pParty, f32* outDir, f32* outSpd) {
     extern s32 partyMarioHosei(void* party);
-    extern void partyChgPoseId(void* party, s32 pose);
+    extern void* marioGetPtr(void);
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32 id);
+    extern void* anotherPartyGetPtr(s32 id);
+    extern s32 nokonokoGetStatus(void* party);
+    extern f32 PSVECDistance(void* a, void* b);
     extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 sqrtf(f32 x);
+    extern u8 footmarkBuf[];
+    extern s32 readId[2];
+    extern s32 writeId[2];
     extern f32 float_0_804215b8;
     extern f32 float_1_804215f8;
     extern f32 float_0p75_80421608;
+    extern f32 float_150_80421594;
 
+    void* player;
+    void* source;
+    u8* mark;
+    f32 x;
+    f32 y;
+    f32 z;
     f32 s;
     f32 c;
     f32 dx;
     f32 dz;
     f32 mult;
     s32 hosei;
+    s32 ok;
+    s32 i;
 
+    player = *(void**)((s32)pParty + 0x160);
     hosei = partyMarioHosei(pParty);
+
+    if (hosei != 0 && *(u8*)((s32)pParty + 0x3B) != 2) {
+        if ((*(u32*)pParty & 0x8) == 0) {
+            player = marioGetPtr();
+            x = *(f32*)((s32)player + 0x8C);
+            y = *(f32*)((s32)player + 0x90);
+            z = *(f32*)((s32)player + 0x94);
+
+            mark = footmarkBuf;
+            for (i = 0; i < 80; i++) {
+                *(f32*)(mark + 0x4) = x;
+                *(f32*)(mark + 0x8) = y;
+                *(f32*)(mark + 0xC) = z;
+                *(u8*)(mark + 0x0) = 0;
+                mark += 0x10;
+            }
+            writeId[0] = 0;
+            readId[0] = 0;
+        } else {
+            ok = 0;
+            source = anotherPartyGetPtr(1);
+            if (source != 0) {
+                if (nokonokoGetStatus(source) == 3 ||
+                    PSVECDistance((void*)((s32)player + 0x8C), (void*)((s32)source + 0x58)) >= float_150_80421594) {
+                    ok = 1;
+                }
+            }
+
+            if (ok != 0) {
+                player = marioGetPtr();
+                source = partyGetPtr(marioGetPartyId());
+                if (source == 0) {
+                    x = *(f32*)((s32)player + 0x8C);
+                    y = *(f32*)((s32)player + 0x90);
+                    z = *(f32*)((s32)player + 0x94);
+                } else if (nokonokoGetStatus(source) == 3 ||
+                           PSVECDistance((void*)((s32)player + 0x8C), (void*)((s32)source + 0x58)) >= float_150_80421594) {
+                    x = *(f32*)((s32)player + 0x8C);
+                    y = *(f32*)((s32)player + 0x90);
+                    z = *(f32*)((s32)player + 0x94);
+                } else {
+                    x = *(f32*)((s32)source + 0x58);
+                    y = *(f32*)((s32)source + 0x5C);
+                    z = *(f32*)((s32)source + 0x60);
+                }
+
+                mark = footmarkBuf + 0x500;
+                for (i = 0; i < 80; i++) {
+                    *(f32*)(mark + 0x4) = x;
+                    *(f32*)(mark + 0x8) = y;
+                    *(f32*)(mark + 0xC) = z;
+                    *(u8*)(mark + 0x0) = 0;
+                    mark += 0x10;
+                }
+                writeId[1] = 0;
+                readId[1] = 0;
+            }
+        }
+    }
+
     if ((*(u32*)((s32)pParty + 8) & 0x2000) != 0) {
         hosei = 0;
     }
@@ -595,6 +676,9 @@ void partyGetMoveDirSpd(void* pParty, f32* outDir, f32* outSpd) {
     }
     *outSpd = mult * sqrtf(dx * dx + dz * dz);
 }
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 

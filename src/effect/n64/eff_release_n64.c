@@ -76,6 +76,16 @@ void effReleaseDisp(s32 cameraId, void* effect) {
         GXBegin(0x90, 0, i == 1 ? 12 : 6);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
         if (i == 1) tri2(4, 5, 6, 4, 4, 6, 7, 0);
+        if (i == 2) {
+            effGetTexObjN64(0x47, texObj);
+            GXLoadTexObj(texObj, 0);
+            PSMTXScale(scale, 0.015625f, 0.03125f, 0.0f);
+            GXLoadTexMtxImm(scale, 0x1E, 1);
+            effSetVtxDescN64((void*)0x803A7F60);
+            GXBegin(0x90, 0, 12);
+            tri2(0, 1, 2, 0, 0, 2, 3, 0);
+            tri2(4, 5, 6, 4, 4, 6, 7, 0);
+        }
     }
 }
 
@@ -86,6 +96,8 @@ void effReleaseMain(void* effect) {
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effReleaseDisp(void);
     extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern Vec3 vec3_802fbe18;
     u8* work = *(u8**)((s32)effect + 0xC);
     Vec3 pos;
     s32 timer;
@@ -94,6 +106,7 @@ void effReleaseMain(void* effect) {
     f32 phase;
     f32 pulse;
 
+    pos = vec3_802fbe18;
     pos.x = *(f32*)(work + 8);
     pos.y = *(f32*)(work + 0xC);
     pos.z = *(f32*)(work + 0x10);
@@ -117,8 +130,24 @@ void effReleaseMain(void* effect) {
 
     phase = (6.2832f * (f32)(frame * 12)) / 360.0f;
     pulse = 0.5f + 0.5f * (f32)sin(phase);
-    mode = *(s32*)work;
-    if (mode == 0x100 || mode == 0) {
+    mode = *(s32*)(work + 0x70);
+    if (mode == 0) {
+        s32 stateTimer = *(s32*)(work + 0x74) + 1;
+        *(s32*)(work + 0x74) = stateTimer;
+        *(s32*)(work + 0x50) = (frame & 3) * 0x1E + 200;
+        *(f32*)(work + 0x40) =
+            0.04f * (f32)sin((6.2832f * (f32)(frame * 20)) / 360.0f) + 0.5f;
+        if (*(s32*)work != 0) {
+            *(f32*)(work + 8) +=
+                (f32)sin((6.2832f * (f32)frame) / 360.0f);
+            *(f32*)(work + 0xC) +=
+                (f32)cos((6.2832f * 1.2356f * (f32)frame) / 360.0f);
+            if (stateTimer > 0x32) {
+                *(s32*)(work + 0x74) = 0;
+                *(s32*)(work + 0x70) = *(s32*)(work + 4) == 3 ? 100 : 1;
+            }
+        }
+    } else if (mode == 0x100) {
         *(f32*)(work + 0x40) = 0.5f + 0.04f * (f32)frame;
         *(f32*)(work + 0x44) = 1.2f * *(f32*)(work + 0x40) + 4.0f;
         *(f32*)(work + 0x48) = pulse;

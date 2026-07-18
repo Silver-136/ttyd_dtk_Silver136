@@ -170,7 +170,24 @@ s32 battleAcMain_PowerGaugeLv2(s32 battle) {
     s8 autoInput = *(s8*)(*(s32*)(battle + 0x1C90) + 0x307);
     s32 state = *(s32*)(battle + 0x1C9C);
 
-    if (state == 0) {
+    if (state == 1000) goto state_1000;
+    if (state >= 1000) {
+        if (state == 1004) goto state_1004;
+        if (state > 1003) {
+            if (state > 1005) return 1;
+            goto state_1005;
+        }
+        if (state == 1002) goto state_1002;
+        if (state < 1002) goto state_1001;
+        goto state_1003;
+    }
+    if (state == 99) return 1;
+    if (state < 99) { if (state != 0) return 1; goto state_0; }
+    if (state > 100) return 1;
+    goto state_100;
+
+state_0:
+    {
         s32 i;
         memset((void*)(battle + 0x1F20), 0, 0x2C);
         *(f32*)(battle + 0x1F34) = -300.0f;
@@ -200,10 +217,8 @@ s32 battleAcMain_PowerGaugeLv2(s32 battle) {
         }
         return 1;
     }
-    if (state == 99) {
-        return 1;
-    }
-    if (state == 100) {
+state_100:
+    {
         if ((*(u32*)(battle + 0x1C94) & 1) &&
             (*(u32*)(*(s32*)(battle + 0x1C90) + 0x27C) & 0x10)) {
             if (irand(100) < 0) {
@@ -217,9 +232,10 @@ s32 battleAcMain_PowerGaugeLv2(s32 battle) {
         }
         BattleAcGaugeSeInit();
         *(s32*)(battle + 0x1C9C) = 1000;
-        return 1;
     }
-    if (state == 1001) {
+    goto state_1000;
+state_1001:
+    {
         *(s32*)(battle + 0x1C98) -= 1;
         if (*(s32*)(battle + 0x1C98) > -1) {
             return 1;
@@ -232,17 +248,17 @@ s32 battleAcMain_PowerGaugeLv2(s32 battle) {
         }
         return 0;
     }
-    if (state == 1002) {
-        *(s32*)(battle + 0x1C9C) = 1003;
-        return 1;
-    }
-    if (state == 1003) {
+state_1002:
+    *(s32*)(battle + 0x1C9C) = 1003;
+state_1003:
+    {
         *(u32*)(battle + 0x1CC0) |= 1;
         BattleAcGaugeSeDelete();
         *(s32*)(battle + 0x1F74) = 0x3C;
         *(s32*)(battle + 0x1C9C) = 1004;
     }
-    if (*(s32*)(battle + 0x1C9C) == 1004) {
+state_1004:
+    {
         *(s32*)(battle + 0x1F74) -= 1;
         if (*(s32*)(battle + 0x1F74) > 0) {
             return 1;
@@ -250,17 +266,15 @@ s32 battleAcMain_PowerGaugeLv2(s32 battle) {
         *(s32*)(battle + 0x1C9C) = 1005;
         return 1;
     }
-    if (*(s32*)(battle + 0x1C9C) == 1005) {
+state_1005:
+    {
         *(s32*)(battle + 0x1CA0) = 0;
         *(s32*)(battle + 0x1CA8) = 0;
         *(s32*)(battle + 0x1CA4) = 0;
         *(s32*)(battle + 0x1CAC) = 0;
         return 0;
     }
-    if (state != 1000) {
-        return 1;
-    }
-
+state_1000:
     *timer += 1;
     if (*timer > *(s32*)(battle + 0x1F50)) {
         if (*(s32*)(battle + 0x1CE8) < *(s32*)(battle + 0x1CD8)) {

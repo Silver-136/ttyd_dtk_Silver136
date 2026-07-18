@@ -1,50 +1,165 @@
 #include "effect/eff_fukidashi.h"
 
 
-u8 effFukidashiDisp(s32 cameraId, void* effect) {
+void effFukidashiDisp(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4];
+    typedef struct Tex { u32 data[8]; } Tex;
+    extern void* camGetPtr(s32);
     extern void mapSetMaterialFog(void);
-    extern void GXSetNumTevStages(s32);
-    extern void GXSetTevOrder(s32, s32, s32, s32);
-    extern void GXSetTevOp(s32, s32);
-    extern void GXSetBlendMode(s32, s32, s32, s32);
-    extern void GXSetZMode(s32, s32, s32);
+    extern void PSMTXTrans(Mtx,f32,f32,f32);
+    extern void PSMTXRotRad(Mtx,f32,char);
+    extern void PSMTXScale(Mtx,f32,f32,f32);
+    extern void PSMTXConcat(Mtx,Mtx,Mtx);
+    extern void PSMTXIdentity(Mtx);
+    extern void effGetTexObj(s32,void*);
+    extern void GXLoadTexObj(void*,s32);
+    extern void GXSetCurrentMtx(s32);
     extern void GXSetCullMode(s32);
+    extern void GXLoadTexMtxImm(Mtx,s32,s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32,s32,s32,s32);
+    extern void GXSetTevOp(s32,s32);
+    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevColorIn(s32,s32,s32,s32,s32);
+    extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
+    extern void GXSetTevColor(s32,void*);
+    extern void GXSetBlendMode(s32,s32,s32,s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);
+    extern void GXSetZMode(s32,s32,s32);
     extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32, s32);
-    extern void GXBegin(s32, s32, s32);
-    volatile f32* fifo;
-    s32* work;
-    s32 sides;
+    extern void GXSetVtxDesc(s32,s32);
+    extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+    extern void GXSetChanMatColor(s32,void*);
+    extern void GXLoadPosMtxImm(Mtx,s32);
+    extern void GXBegin(s32,s32,s32);
+    extern u32 unk_804295a0;
+    extern u32 unk_804295a8;
+    extern u32 unk_804295a4;
+    extern u32 dat_80422898;
+    extern u32 dat_8042289c;
+    Mtx trans,rot,scale,model,temp,texMtx;
+    Tex tex;
+    volatile f32* fifo=(volatile f32*)0xCC008000;
+    s32* work=*(s32**)((char*)effect+0xC);
+    char* camera=(char*)camGetPtr(cameraId);
+    u32 color;
+    s32 alpha=work[0x12];
+    s32 sides=1;
     s32 side;
-    s32 alpha;
+    s32 layer;
+    s32 a;
+    s32 particle;
 
-    work = *(s32**)((s32)effect + 0xC);
-    if (work == 0) return 0;
-    alpha = work[0x12];
-    sides = ((f32)work[9] != 0.0f || work[0] == 2) ? 2 : 1;
-    fifo = (volatile f32*)0xCC008000;
     mapSetMaterialFog();
-    GXSetNumTevStages(1);
-    GXSetTevOrder(0, 0, 0, 4);
-    GXSetTevOp(0, 0);
-    GXSetBlendMode(1, 4, 5, 0);
-    GXSetZMode(1, 3, 0);
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 1);
-    GXSetVtxDesc(13, 1);
-    for (side = 0; side < sides; side++) {
-        GXSetCullMode(side == 0 ? 2 : 1);
-        GXBegin(0x80, 0, 4);
-        fifo[0] = -32.0f; fifo[0] = 24.0f; fifo[0] = 0.0f;
-        fifo[0] = 0.0f; fifo[0] = 0.0f;
-        fifo[0] = 32.0f; fifo[0] = 24.0f; fifo[0] = 0.0f;
-        fifo[0] = 1.0f; fifo[0] = 0.0f;
-        fifo[0] = 32.0f; fifo[0] = -24.0f; fifo[0] = 0.0f;
-        fifo[0] = 1.0f; fifo[0] = 1.0f;
-        fifo[0] = -32.0f; fifo[0] = -24.0f; fifo[0] = 0.0f;
-        fifo[0] = 0.0f; fifo[0] = 1.0f;
+    if ((f32)work[9] != 0.0f || work[0] == 2) sides=2;
+    for (side=0; side<sides; side++) {
+        PSMTXTrans(trans,(f32)work[1],(f32)work[2],(f32)work[3]);
+        camera=(char*)camGetPtr(cameraId);
+        PSMTXRotRad(rot,-0.017453292f**(f32*)(camera+0x114),'y');
+        PSMTXConcat(trans,rot,model);
+        PSMTXScale(scale,0.8f,0.8f,0.8f); PSMTXConcat(model,scale,model);
+        PSMTXScale(scale,1.0f,0.8f,1.0f);
+        PSMTXRotRad(rot,0.017453292f*(f32)work[10],'z');
+        PSMTXConcat(model,scale,temp); PSMTXConcat(temp,rot,model);
+        PSMTXConcat((f32(*)[4])(camera+0x48),model,model);
+        GXSetCurrentMtx(0); GXSetCullMode(side==0?2:1);
+        PSMTXIdentity(texMtx); GXLoadTexMtxImm(texMtx,0x1E,1);
+        GXSetNumTevStages(1); GXSetTevOrder(0,0,0,4); GXSetTevOp(0,0);
+        GXSetBlendMode(1,4,5,0); GXSetZCompLoc(1); GXSetAlphaCompare(7,0,0,7,0);
+        GXSetZMode(1,3,0); GXClearVtxDesc(); GXSetVtxDesc(9,1); GXSetVtxDesc(13,1);
+        GXSetVtxAttrFmt(0,9,1,4,0); GXSetVtxAttrFmt(0,13,1,4,0);
+        GXSetNumChans(1); GXSetChanCtrl(4,0,0,0,0,2,2);
+        GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        for (layer=0;layer<2;layer++) {
+            if (layer==0) {
+                effGetTexObj(5,&tex);
+                a=(alpha*0xB0)/0xFF;
+                color=(unk_804295a0&0xFFFFFF00)|(a&0xFF);
+                PSMTXTrans(temp,1.3f,-1.3f,0.0f);
+                PSMTXConcat(model,temp,temp);
+                PSMTXRotRad(rot,0.017453292f*(f32)work[9],'y');
+                PSMTXConcat(temp,rot,temp);
+            } else {
+                effGetTexObj(4,&tex);
+                a=(alpha*0xFF)/0xFF;
+                color=((side==0?dat_80422898:dat_8042289c)&0xFFFFFF00)|(a&0xFF);
+                PSMTXTrans(temp,0.0f,0.0f,0.0f);
+                PSMTXConcat(model,temp,temp);
+                PSMTXRotRad(rot,0.017453292f*(f32)work[9],'y');
+                PSMTXConcat(temp,rot,temp);
+            }
+            GXLoadTexObj(&tex,0); GXSetChanMatColor(4,&color);
+            GXLoadPosMtxImm(temp,0); GXSetCurrentMtx(0); GXBegin(0x80,0,4);
+            *fifo=-16.0f;*fifo=13.0f;*fifo=0.0f;*fifo=0.0f;*fifo=0.0f;
+            *fifo=16.0f;*fifo=13.0f;*fifo=0.0f;*fifo=2.0f;*fifo=0.0f;
+            *fifo=16.0f;*fifo=-19.0f;*fifo=0.0f;*fifo=2.0f;*fifo=1.0f;
+            *fifo=-16.0f;*fifo=-19.0f;*fifo=0.0f;*fifo=0.0f;*fifo=1.0f;
+        }
+        PSMTXScale(scale,1.3f,1.3f,1.3f);
+        PSMTXConcat(model,scale,model);
+        if (work[0] == 4) {
+            PSMTXIdentity(texMtx);
+            GXLoadTexMtxImm(texMtx,0x1E,1);
+            GXSetNumTevStages(1);
+            GXSetTevOrder(0,0,0,0xFF);
+            GXSetTevColorOp(0,0,0,0,1,0);
+            GXSetTevAlphaOp(0,0,0,0,1,0);
+            GXSetTevColorIn(0,15,15,15,15);
+            GXSetTevAlphaIn(0,7,1,4,7);
+            color=(unk_804295a8&0xFFFFFF00)|(alpha&0xFF);
+            GXSetTevColor(1,&color);
+            effGetTexObj(8,&tex);
+            GXLoadTexObj(&tex,0);
+            for (particle=0;particle<work[0xE];particle++) {
+                GXLoadPosMtxImm(model,0);
+                GXBegin(0x80,0,4);
+                *fifo=-3.0f;*fifo=3.0f;*fifo=0.0f;*fifo=0.0f;*fifo=0.0f;
+                *fifo=3.0f;*fifo=3.0f;*fifo=0.0f;*fifo=1.0f;*fifo=0.0f;
+                *fifo=3.0f;*fifo=-3.0f;*fifo=0.0f;*fifo=1.0f;*fifo=1.0f;
+                *fifo=-3.0f;*fifo=-3.0f;*fifo=0.0f;*fifo=0.0f;*fifo=1.0f;
+            }
+        } else if (work[0] >= 0 && work[0] < 2) {
+            GXSetNumTevStages(1);
+            GXSetTevOrder(0,0,0,0xFF);
+            GXSetTevColorOp(0,0,0,0,1,0);
+            GXSetTevAlphaOp(0,0,0,0,1,0);
+            GXSetTevColorIn(0,15,15,15,2);
+            GXSetTevAlphaIn(0,7,1,4,7);
+            if (work[0] == 1) {
+                effGetTexObj(7,&tex);
+                GXLoadTexObj(&tex,0);
+                PSMTXScale(scale,0.25f,1.0f,1.0f);
+            } else {
+                effGetTexObj(6,&tex);
+                GXLoadTexObj(&tex,0);
+                PSMTXScale(scale,0.16667f,1.0f,1.0f);
+            }
+            PSMTXTrans(texMtx,(f32)work[0xE],0.0f,0.0f);
+            PSMTXConcat(scale,texMtx,texMtx);
+            GXLoadTexMtxImm(texMtx,0x1E,1);
+            color=(unk_804295a4&0xFFFFFF00)|(alpha&0xFF);
+            GXSetTevColor(1,&color);
+            GXLoadPosMtxImm(model,0);
+            GXBegin(0x80,0,4);
+            if (work[0] == 0) {
+                *fifo=-4.0f;*fifo=8.0f;*fifo=0.0f;*fifo=0.0f;*fifo=0.0f;
+                *fifo=4.0f;*fifo=8.0f;*fifo=0.0f;*fifo=1.0f;*fifo=0.0f;
+                *fifo=4.0f;*fifo=-8.0f;*fifo=0.0f;*fifo=1.0f;*fifo=1.0f;
+                *fifo=-4.0f;*fifo=-8.0f;*fifo=0.0f;*fifo=0.0f;*fifo=1.0f;
+            } else {
+                *fifo=-8.0f;*fifo=16.0f;*fifo=0.0f;*fifo=0.0f;*fifo=0.0f;
+                *fifo=8.0f;*fifo=16.0f;*fifo=0.0f;*fifo=1.0f;*fifo=0.0f;
+                *fifo=8.0f;*fifo=-8.0f;*fifo=0.0f;*fifo=1.0f;*fifo=1.0f;
+                *fifo=-8.0f;*fifo=-8.0f;*fifo=0.0f;*fifo=0.0f;*fifo=1.0f;
+            }
+        }
     }
-    return alpha != 0;
 }
 
 u8 calc_pos(void* work, s32 flag) {

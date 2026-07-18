@@ -44,10 +44,75 @@ void effSweatDisp(s32 cameraId, void* effect) {
     }
 }
 
-u8 effSweatN64Entry(void) {
-    return 0;
-}
+void* effSweatN64Entry(
+    f32 x, f32 y, f32 z, f32 size, f32 angle, s32 type, s32 delay) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32, u32);
+    extern void effSweatMain(void*);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern s32 irand(s32);
+    extern char str_SweatN64_802fc150[];
+    void* effect = effEntry();
+    u8* work;
+    s32 count = 1;
+    s32 i;
+    f32 radius = size + 16.0f;
 
+    if (type == 1) {
+        count = 5;
+    } else if (type == 0) {
+        count = 7;
+    }
+
+    *(char**)((s32)effect + 0x14) = str_SweatN64_802fc150;
+    *(s32*)((s32)effect + 8) = count;
+    work = __memAlloc(3, count * 0x34);
+    *(u8**)((s32)effect + 0xC) = work;
+    *(void**)((s32)effect + 0x10) = effSweatMain;
+    *(s32*)work = type;
+    *(f32*)(work + 4) = x;
+    *(f32*)(work + 8) = y;
+    *(f32*)(work + 0xC) = z;
+
+    for (i = 1; i < count; i++) {
+        u8* part = work + i * 0x34;
+        f32 offset = 0.0f;
+        f32 particleAngle;
+        f32 radians;
+        f32 sine;
+        f32 cosine;
+
+        if (type == 1) {
+            offset = (f32)((i - 1) & 3) * 16.0f;
+        } else if (type == 0) {
+            offset = (f32)((i - 1) % 3) * 14.0f;
+        }
+        if (angle > 0.0f) {
+            offset = -offset;
+        }
+        particleAngle = angle + offset;
+        radians = -0.017453292f * particleAngle;
+        sine = (f32)sin(radians);
+        cosine = (f32)cos(radians);
+
+        *(f32*)(part + 4) = sine * radius;
+        *(f32*)(part + 8) = cosine * radius;
+        *(f32*)(part + 0xC) = 0.0f;
+        *(f32*)(part + 0x10) = particleAngle;
+        *(f32*)(part + 0x18) = sine;
+        *(f32*)(part + 0x1C) = cosine;
+        *(f32*)(part + 0x20) = 0.0f;
+        *(s32*)(part + 0x24) = delay;
+        *(s32*)(part + 0x28) = 0;
+        *(s32*)(part + 0x2C) = irand(10);
+        *(s32*)(part + 0x30) = 0;
+        if (type == 0 && i > 3) {
+            *(s32*)(part + 0x2C) += 0x10;
+        }
+    }
+    return effect;
+}
 
 void effSweatMain(void* effect) {
     typedef struct Vec3 {

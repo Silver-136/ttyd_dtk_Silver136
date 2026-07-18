@@ -13,6 +13,12 @@ u8 effPokopiThunderDisp(s32 cameraId, s32 effectAddress) {
     extern void GXSetNumTexGens(s32);
     extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
     extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXLoadTexMtxImm(Mtx, s32, s32);
     extern void PSMTXScale(Mtx, f32, f32, f32);
     extern void PSMTXConcat(void*, void*, void*);
     extern void GXLoadPosMtxImm(Mtx, s32);
@@ -24,21 +30,48 @@ u8 effPokopiThunderDisp(s32 cameraId, s32 effectAddress) {
     GXTexObj tex;
     Mtx scale, model;
     f32* vertices = smartAlloc(0x480, 3);
+    u32 color;
     s32 i;
 
     PSMTXScale(scale, 0.1f, 0.1f, 0.1f);
     PSMTXConcat(camera + 0x118, scale, model);
     GXLoadPosMtxImm(model, 0);
     GXSetCurrentMtx(0);
+    color = (*(u8*)(work + 0x30) << 24) | (*(u8*)(work + 0x34) << 16) |
+            (*(u8*)(work + 0x38) << 8) | *(u8*)(work + 0x3C);
+    GXSetTevColor(1, &color);
+    color = (*(u8*)(work + 0x40) << 24) | (*(u8*)(work + 0x44) << 16) |
+            (*(u8*)(work + 0x48) << 8) | 0xFF;
+    GXSetTevColor(2, &color);
     GXSetNumChans(0);
     GXSetNumTevStages(4);
+    GXSetTevOrder(0, 0, 0, -1);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 3);
+    GXSetTevColorIn(0, 15, 8, 8, 15);
+    GXSetTevAlphaIn(0, 7, 7, 7, 4);
+    GXSetTevOrder(1, 0xFF, 0xFF, -1);
+    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(1, 2, 4, 0, 15);
+    GXSetTevAlphaIn(1, 6, 7, 5, 7);
+    GXSetTevOrder(2, 1, 1, -1);
+    GXSetTevColorOp(2, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(2, 15, 15, 15, 0);
+    GXSetTevAlphaIn(2, 7, 6, 4, 0);
+    GXSetTevOrder(3, 0xFF, 0xFF, -1);
+    GXSetTevColorOp(3, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(3, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(3, 15, 15, 15, 0);
+    GXSetTevAlphaIn(3, 7, 5, 0, 7);
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
     GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
-    for (i = 0; i < 4; i++) {
-        GXSetTevOrder(i, i == 2 ? 1 : 0, i == 2 ? 1 : 0, -1);
-    }
-    effGetTexObj(0x6A, &tex);
+    PSMTXScale(scale, 0.0078125f, 0.03125f, 0.0f);
+    GXLoadTexMtxImm(scale, 0x1E, 1);
+    GXLoadTexMtxImm(scale, 0x21, 1);
+    effGetTexObj(0x54, &tex);
     GXLoadTexObj(&tex, 0);
     GXLoadTexObj(&tex, 1);
     GXSetCullMode(0);

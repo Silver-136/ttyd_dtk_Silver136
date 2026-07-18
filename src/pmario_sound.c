@@ -378,45 +378,153 @@ u8 psndENVMain(void) {
     extern s32 irand(u32);
     extern f64 sin(f64);
     extern f64 cos(f64);
-    extern u32 __psndSFXOn(s32, s32, s32, s32, void*, s32, s32, s32);
-    extern void psndENV_stop(u32);
-    u8* snd = (u8*)0x803DF6E8;
-    u8* env = (u8*)0x803DF748;
+    extern void SoundEfxSetLPF(s32, s16);
+    extern void* gp;
+    u8* snd = (u8*)&psnd;
+    u8* env = (u8*)psenv;
     s32 target = ((*(u16*)(snd + 0x56) & 0x20) != 0 && (*(u16*)(snd + 0x56) & 0x40) == 0) ? 80 : 100;
     s32 i;
 
-    if (seqGetSeq() != 2 && (*(u32*)0x8041CF08 & 1) != 0) {
+    if (seqGetSeq() != 3 && (*(u32*)((s32)gp + 0x1C) & 1) != 0) {
         if (*(s8*)(snd + 0x5A) < target) (*(s8*)(snd + 0x5A))++;
         if (*(s8*)(snd + 0x5A) > target) (*(s8*)(snd + 0x5A))--;
     }
     for (i = 0; i < 16; i++, env += 0x24) {
         s16 id = *(s16*)(env + 4);
         u8 mode = *(u8*)(env + 8);
-        u8 state = *(u8*)(env + 0xD);
         if (id == 0) continue;
-        if (state == 0) {
-            if (--*(s16*)(env + 0xE) <= 0) (*(u8*)(env + 0xD))++;
-        } else if (state == 1) {
-            s32 volume = (*(u8*)(env + 6) * *(s8*)(snd + 0x5A)) / 100;
-            if (mode == 0) {
+        switch (mode) {
+        case 0:
+            switch (*(u8*)(env + 0xD)) {
+            case 0:
+                (*(u16*)(env + 0xE))--;
+                if (*(u16*)(env + 0xE) == 0) {
+                    (*(u8*)(env + 0xD))++;
+                }
+                break;
+            case 1: {
+                s32 volume = (*(u8*)(env + 6) * *(s8*)(snd + 0x5A)) / 100;
                 f32 angle = (f32)irand(360) * 6.2832f / 360.0f;
                 f32 radius = (f32)(*(u8*)(env + 0xB) * 10 + irand(*(u8*)(env + 0xC) * 10));
-                *(f32*)(env + 0x18) = radius * (f32)sin(angle);
+                *(f32*)(env + 0x18) += radius * (f32)sin(angle);
                 *(f32*)(env + 0x1C) = 0.0f;
-                *(f32*)(env + 0x20) = -radius * (f32)cos(angle);
+                *(f32*)(env + 0x20) -= radius * (f32)cos(angle);
+                *(u32*)(env + 0x14) = __psndSFXOn(*(u32*)env | 0x5000000,
+                                                   volume, 0xFF, 0, (Vec*)(env + 0x18),
+                                                   0, *(u16*)(env + 0x10), 0);
+                (*(u8*)(env + 0xD))++;
+                break;
             }
-            *(u32*)(env + 0x14) = __psndSFXOn(*(u32*)env | (mode == 2 ? 0x4000000 : 0x5000000),
-                                               volume, -1, 0, env + 0x18, 0, *(s16*)(env + 0x10), 0);
-            (*(u8*)(env + 0xD))++;
-        } else if (state == 2) {
-            u32 handle = *(u32*)(env + 0x14);
-            if (handle == 0xFFFFFFFF) {
-                *(u8*)(env + 0xD) = 0;
-                *(s16*)(env + 0xE) = *(u8*)(env + 0xA) * 60 + irand(*(u8*)(env + 9)) * 60;
+            case 2:
+                if (*(u32*)(env + 0x14) == 0xFFFFFFFF) {
+                    *(u8*)(env + 0xD) = 0;
+                    *(u16*)(env + 0xE) = *(u8*)(env + 0xA) * 60 +
+                                         irand(*(u8*)(env + 9)) * 60;
+                }
+                break;
             }
-        } else {
-            psndENV_stop(*(u32*)(env + 0x14));
-            *(s16*)(env + 4) = 0;
+            break;
+        case 1:
+            if (*(u8*)(env + 0xD) == 0) {
+                s32 volume = (*(u8*)(env + 6) * *(s8*)(snd + 0x5A)) / 100;
+                *(u32*)(env + 0x14) = __psndSFXOn(*(u32*)env | 0x4000000,
+                                                   volume, 0xFF, 0, (Vec*)(env + 0x18),
+                                                   0, *(u16*)(env + 0x10), 0);
+                (*(u8*)(env + 0xD))++;
+            } else if (*(u8*)(env + 0xD) == 1) {
+                u32 handle = *(u32*)(env + 0x14);
+                if (handle == 0xFFFFFFFF ||
+                    (pssfx[handle & 0xFF].effectId == -1 &&
+                     (pssfx[handle & 0xFF].unk6 & 1) == 0)) {
+                    *(u32*)(env + 0x14) = 0xFFFFFFFF;
+                    *(u8*)(env + 0xD) = 0;
+                    *(u16*)(env + 0xE) = 0;
+                }
+            }
+            break;
+        case 2:
+            if (*(u8*)(env + 0xD) == 0) {
+                (*(u16*)(env + 0xE))--;
+                if (*(u16*)(env + 0xE) == 0) {
+                    (*(u8*)(env + 0xD))++;
+                }
+            } else if (*(u8*)(env + 0xD) == 1) {
+                s32 volume = (*(u8*)(env + 6) * *(s8*)(snd + 0x5A)) / 100;
+                *(u32*)(env + 0x14) = __psndSFXOn(*(u32*)env | 0x4000000,
+                                                   volume, 0xFF, 0, (Vec*)(env + 0x18),
+                                                   0, *(u16*)(env + 0x10), 0);
+                (*(u8*)(env + 0xD))++;
+            } else if (*(u8*)(env + 0xD) == 2) {
+                u32 handle = *(u32*)(env + 0x14);
+                if (handle == 0xFFFFFFFF ||
+                    (pssfx[handle & 0xFF].effectId == -1 &&
+                     (pssfx[handle & 0xFF].unk6 & 1) == 0)) {
+                    *(u32*)(env + 0x14) = 0xFFFFFFFF;
+                    *(u8*)(env + 0xD) = 0;
+                    *(u16*)(env + 0xE) = *(u8*)(env + 0xA) * *(s32*)((s32)gp + 4) +
+                                         (s16)*(s32*)((s32)gp + 4) *
+                                             (s16)irand(*(u8*)(env + 9));
+                }
+            }
+            break;
+        case 3:
+            if (*(u8*)(env + 0xD) == 0) {
+                s32 volume = (*(u8*)(env + 6) * *(s8*)(snd + 0x5A)) / 100;
+                *(u32*)(env + 0x14) = __psndSFXOn(*(u32*)env | 0x6000000,
+                                                   volume, 0xFF, 0, (Vec*)(env + 0x18),
+                                                   0, *(u16*)(env + 0x10), 0);
+                (*(u8*)(env + 0xD))++;
+            } else if (*(u8*)(env + 0xD) == 1) {
+                u32 handle = *(u32*)(env + 0x14);
+                if (handle == 0xFFFFFFFF ||
+                    (pssfx[handle & 0xFF].effectId == -1 &&
+                     (pssfx[handle & 0xFF].unk6 & 1) == 0)) {
+                    *(u32*)(env + 0x14) = 0xFFFFFFFF;
+                    *(u8*)(env + 0xD) = 0;
+                    *(u16*)(env + 0xE) = 0;
+                }
+            }
+            break;
+        }
+    }
+
+    env = (u8*)psenv;
+    for (i = 0; i < 16; i++, env += 0x24) {
+        u32 handle;
+        u32 sfxIndex;
+        s32 volume;
+        s16 lpf;
+
+        if (*(u16*)(env + 4) == 0 || *(s32*)(env + 0x14) == -1) {
+            continue;
+        }
+        if ((*(u8*)(env + 8) == 0 && *(u8*)(env + 0xD) != 2) ||
+            (*(u8*)(env + 8) == 1 && *(u8*)(env + 0xD) != 1) ||
+            (*(u8*)(env + 8) == 2 && *(u8*)(env + 0xD) != 2) ||
+            (*(u8*)(env + 8) == 3 && *(u8*)(env + 0xD) != 1)) {
+            continue;
+        }
+
+        volume = (*(u8*)(env + 6) * *(s8*)(snd + 0x5A)) / 100;
+        handle = *(u32*)(env + 0x14);
+        sfxIndex = handle & 0xFF;
+        if (pssfx[sfxIndex].listIndex != -1) {
+            pssfx[sfxIndex].volume = volume;
+        }
+
+        lpf = 0;
+        if (*(u16*)(snd + 0x18) == *(u16*)(env + 4)) {
+            lpf = *(s16*)(snd + 0x1C);
+        }
+        if (*(u16*)(snd + 0x1A) == *(u16*)(env + 4)) {
+            lpf = *(s16*)(snd + 0x1E);
+        }
+        if (pssfx[sfxIndex].listIndex != -1) {
+            *(s16*)((u8*)&pssfx[sfxIndex] + 0x16) = lpf;
+            if ((pssfx[sfxIndex].unk6 & 1) == 0 &&
+                (pssfxlist[pssfx[sfxIndex].listIndex & 0x1FFF].unk4 & 0x80000000) == 0) {
+                SoundEfxSetLPF(pssfx[sfxIndex].effectId, lpf);
+            }
         }
     }
     return 0;
@@ -433,18 +541,19 @@ u8 psndSFXMain(void) {
     extern void SoundEfxSetPan(s32, u8);
     extern void SoundEfxSetVolume(s32, u8);
     extern s32 seqGetSeq(void);
-    u8* snd = (u8*)0x803DF6E8;
-    u8* entry = (u8*)0x803DF988;
-    u8* list = (u8*)0x80316B2C;
+    extern void* gp;
+    u8* snd = (u8*)&psnd;
+    u8* entry = (u8*)pssfx;
+    u8* list = (u8*)pssfxlist;
     s32 i;
 
-    for (i = 0; i < 40; i++, entry += 0x30) {
+    for (i = 0; i < 40; i++, entry += 0x28) {
         s32 listId = *(s32*)entry;
         s32 handle = *(s32*)(entry + 0x18);
         u32 kind;
         s32 volume;
         if (listId == -1 || (*(u16*)(entry + 6) & 1) != 0) continue;
-        kind = *(u32*)(list + (listId & 0x1FFF) * 0x10);
+        kind = *(u32*)(list + (listId & 0x1FFF) * 0x14 + 4);
         if ((kind & 0x80000000) != 0) {
             if (SoundSSCheck(handle) == 0) { *(s32*)entry = -1; *(s32*)(entry + 0x18) = -1; continue; }
         } else if ((kind & 0x40000000) != 0) {
@@ -467,7 +576,7 @@ u8 psndSFXMain(void) {
         }
     }
     if (*(u8*)(snd + 0x24) == 2 && --*(s16*)(snd + 0x28) < 1) *(u8*)(snd + 0x24) = 0;
-    if (seqGetSeq() != 2 && (*(u32*)0x8041CF08 & 1) != 0) {
+    if (seqGetSeq() != 3 && (*(u32*)((s32)gp + 0x1C) & 1) != 0) {
         s8 target = ((*(u16*)(snd + 0x56) & 0x20) != 0 && (*(u16*)(snd + 0x56) & 0x40) == 0) ? 120 : 100;
         if (*(s8*)(snd + 0x59) < target) (*(s8*)(snd + 0x59))++;
         if (*(s8*)(snd + 0x59) > target) (*(s8*)(snd + 0x59))--;
@@ -495,6 +604,8 @@ void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
     extern void SoundSSSetPanCh(s32 ch, u8 pan);
     extern void SoundSSSetSrndPanCh(s32 ch, u8 pan);
     extern void psndBGMMain(void);
+    extern void psndBGMOff_f_d(s32 id, s32 fade, s32 unk);
+    extern char str_mri_00_802e3c70[];
     extern void* gp;
     u8* bgm;
     u8* list;
@@ -519,24 +630,75 @@ void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
             a2 = 0;
         }
     }
+
     channel = id & 0xF;
+    bgm = (u8*)&psbgm[channel];
+
     story = evtGetValue(0, -170000000);
-    if (story > 0x100 && story < 0x104 && (a2 == 0x5A || a2 == 0x5B)) {
+    if (story > 100) {
+        story = evtGetValue(0, -170000000);
+        if (story < 0x66 || evtGetValue(0, -170000000) >= 0x6A) {
+            if (strcmp((char*)((s32)gp + 0x12C), str_mri_00_802e3c70) != 0 && a2 == 0x4F) {
+                a2 = 0x50;
+            }
+        }
+    }
+
+    story = evtGetValue(0, -170000000);
+    if (story > 0x100 && evtGetValue(0, -170000000) < 0x104 && (a2 == 0x5A || a2 == 0x5B)) {
         a2 = 0xA4;
     }
-    if (story > 0x6C && story < 0x6F) {
-        if (a2 == 0x4F || a2 == 0x50) {
+
+    story = evtGetValue(0, -170000000);
+    if (story > 0x6C && evtGetValue(0, -170000000) < 0x6F) {
+        if (a2 == 0x4F) {
+            a2 = 0xA4;
+        }
+        if (a2 == 0x50) {
             a2 = 0xA4;
         }
         if (a2 == 0x7B || a2 == 0x7D || a2 == 0x7E) {
             return;
         }
+        if (channel == 0 && (id & 0x20) != 0 && *(u8*)((s32)&psbgm[0] + 0x20) != 4) {
+            return;
+        }
+        if ((a2 == 0x90 || a2 == 0x91) && *(s32*)&psbgm[0] == 0xA4) {
+            return;
+        }
+        if (a2 == 0x92 && *(s32*)&psbgm[0] == 0xA4) {
+            psndBGMOff_f_d(0x400, 0x2EE, 1);
+        }
     }
+
+    story = evtGetValue(0, -170000000);
+    if (story > 0x7E && evtGetValue(0, -170000000) < 0xB2) {
+        if (a2 == 0x8C) {
+            return;
+        }
+        if ((a2 == 0x90 || a2 == 0x91) && *(s32*)&psbgm[0] == 0xC3) {
+            return;
+        }
+        if (a2 == 0 && *(s32*)&psbgm[0] == 0xC3 && (id & 0x20) == 0) {
+            return;
+        }
+        if (a2 == 0x92 && *(s32*)&psbgm[0] == 0xC3) {
+            psndBGMOff_f_d(0x400, 0x2EE, 1);
+        }
+    }
+
+    story = evtGetValue(0, -170000000);
     if (story > 0xA3 && a2 == 0x53) {
         a2 = 0x54;
     }
 
-    bgm = (u8*)&psbgm[channel];
+    if (a2 == 0x90 || a2 == 0x91) {
+        s32 bgm1 = *(s32*)&psbgm[1];
+        if (bgm1 == 0x80 || (u32)(bgm1 - 0x81) < 0xC || bgm1 == 0x8E || bgm1 == 0x8D) {
+            return;
+        }
+    }
+
     list = psbgmlist + a2 * 0x10;
     flags = *(u32*)(list + 4);
     if (flags == 0 && (id & 0x20) == 0) {
@@ -555,10 +717,26 @@ void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
             *(u8*)(bgm + 0x20) = (id & 0x100) != 0;
             *(u16*)(bgm + 0x22) = (id & 0x100) != 0 ? fade / (1000 / *(s32*)((s32)gp + 4)) : 1;
             *(u16*)(bgm + 0x24) = (id & 0x100) == 0;
+            if ((id & 0x80) != 0 && *(u8*)(bgm + 0x26) == 8) {
+                s32 scale;
+                *(u8*)(bgm + 0x26) = 0x10;
+                *(u16*)(bgm + 0x28) = fade / (1000 / *(s32*)((s32)gp + 4));
+                scale = (s16)*(u16*)(bgm + 0x28) * *(u8*)(bgm + 0x27);
+                *(u16*)(bgm + 0x2A) = (s16)(scale / 100);
+                if ((id & 0x40) != 0) {
+                    *(u32*)(bgm + 8) |= 0x40;
+                } else {
+                    *(u32*)(bgm + 8) &= ~0x40;
+                }
+            }
             psndBGMMain();
             return;
         }
         if ((id & 0x10) == 0 && old == a2 && *(u8*)(bgm + 0x20) != 2) {
+            psndBGMMain();
+            return;
+        }
+        if ((id & 0x10) == 0 && *(u8*)(list + 0xE) != 0 && *(u8*)(list + 0xE) == *(u8*)(bgm + 0xD)) {
             psndBGMMain();
             return;
         }
@@ -580,6 +758,8 @@ void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
     *(u8*)(bgm + 0xE) = *(u8*)(list + 0xC);
     *(u8*)(bgm + 0xF) = *(u8*)(list + 0xD);
     *(u8*)(bgm + 0x10) = *(u8*)(list + 0xF) == 1 ? 0xFF : 0;
+    *(u32*)(bgm + 0x30) = *(u32*)((s32)gp + 0x38);
+    *(u32*)(bgm + 0x34) = *(u32*)((s32)gp + 0x3C);
     if ((flags & 0x80000000) == 0) {
         for (i = 0; i < 4 && SoundSongCheck(i) != 0; i++) {
         }

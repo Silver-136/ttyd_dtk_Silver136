@@ -177,20 +177,32 @@ void effNozleDisp(s32 cameraId, void* effect) {
     extern void GXSetZMode(s32, s32, s32);
     extern void GXSetCurrentMtx(s32);
     extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
     extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
     extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
     extern void GXSetCullMode(s32);
     extern void GXLoadTexObj(void*, s32);
     extern void effGetTexObj(s32, void*);
     extern void PSMTXTrans(void*, f32, f32, f32);
     extern void PSMTXScale(void*, f32, f32, f32);
-    extern void PSMTXRotRad(void*, f32, s32);
+    extern void PSMTXRotRad(void*, s32, f32);
     extern void PSMTXConcat(void*, void*, void*);
     extern void GXLoadPosMtxImm(void*, s32);
+    extern void GXLoadTexMtxImm(void*, s32, s32);
+
     s32* work = *(s32**)((u8*)effect + 0xC);
     u8* camera = camGetPtr(cameraId);
     u8 tex[32];
-    f32 m0[3][4], m1[3][4], m2[3][4], model[3][4];
+    f32 m0[3][4];
+    f32 m1[3][4];
+    f32 m2[3][4];
+    f32 model[3][4];
     f32 scale = *(f32*)(work + 10);
 
     GXSetBlendMode(1, 4, 5, 0);
@@ -198,9 +210,9 @@ void effNozleDisp(s32 cameraId, void* effect) {
     GXSetAlphaCompare(7, 0, 0, 7, 0);
     GXSetZMode(1, 3, 0);
     PSMTXTrans(m0, *(f32*)(work + 1), *(f32*)(work + 2), *(f32*)(work + 3));
-    PSMTXRotRad(m1, 0.017453292f * *(f32*)(work + 0x10), 'y');
+    PSMTXRotRad(m1, 'y', 0.017453292f * *(f32*)(work + 0x10));
     PSMTXConcat(m0, m1, m0);
-    PSMTXRotRad(m1, 0.017453292f * *(f32*)(work + 0xF), 'x');
+    PSMTXRotRad(m1, 'x', 0.017453292f * *(f32*)(work + 0xF));
     PSMTXConcat(m0, m1, m0);
     PSMTXScale(m2, scale * *(f32*)(work + 4), scale * *(f32*)(work + 5), scale);
     PSMTXConcat(m0, m2, m0);
@@ -208,9 +220,15 @@ void effNozleDisp(s32 cameraId, void* effect) {
     GXLoadPosMtxImm(model, 0);
     GXSetCurrentMtx(0);
     GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
     GXSetNumTexGens(2);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    GXSetTexCoordGen2(1, 1, 5, 0x21, 0, 0x7D);
     PSMTXTrans(m0, *(f32*)(work + 6), -*(f32*)(work + 7), 0.0f);
+    GXLoadTexMtxImm(m0, 0x1E, 1);
     PSMTXTrans(m0, *(f32*)(work + 8), -*(f32*)(work + 9), 0.0f);
+    GXLoadTexMtxImm(m0, 0x21, 1);
+
     effGetTexObj(0x3C, tex);
     GXLoadTexObj(tex, 0);
     if (*work == 2) {
@@ -220,7 +238,23 @@ void effNozleDisp(s32 cameraId, void* effect) {
         effGetTexObj(0x3D, tex);
         GXLoadTexObj(tex, 1);
     }
+
     GXSetNumTevStages(3);
+    GXSetTevOrder(0, 0, 1, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0, 0, 0, 8);
+    GXSetTevAlphaIn(0, 0, 0, 0, 4);
+    GXSetTevOrder(1, 1, 0, 0xFF);
+    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(1, 0, 15, 10, 0);
+    GXSetTevAlphaIn(1, 0, 7, 4, 7);
+    GXSetTevOrder(2, 0xFF, 0xFF, 4);
+    GXSetTevColorOp(2, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(2, 0, 15, 10, 0);
+    GXSetTevAlphaIn(2, 0, 7, 5, 7);
     GXSetCullMode(0);
 }
 

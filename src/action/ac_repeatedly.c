@@ -451,6 +451,78 @@ closing:
 /* CHATGPT STUB FILL: main/action/ac_repeatedly 20260624_184008 */
 
 /* stub-fill: _init_param | missing_definition | ghidra_signature */
-u8 _init_param(int param_1) {
-    return 0;
+void _init_param(void* battleWork) {
+    extern s32 irand(s32 max);
+    char* battle;
+    char* extra;
+    char* disp;
+    s32 type;
+    s32 value;
+
+    battle = (char*)battleWork;
+    extra = battle + 0x1F4C;
+    disp = battle + 0x1F20;
+    extra[0x2C] = 0;
+    *(s32*)(extra + 0x0C) = 0;
+    type = *(s32*)(battle + 0x1CC8);
+
+    switch (type) {
+        case 2: value = 0x200; goto set_same;
+        case 3: value = 0x400; goto set_same;
+        case 4: value = 0x800; goto set_same;
+        case 5: value = 0x20; goto set_same;
+        case 8:
+            *(s32*)(extra + 0x0C) = 0x100;
+        case 6:
+            value = 0x40000;
+            goto set_same;
+        case 10:
+            *(u32*)(battle + 0xEF4) |= 0x20000000;
+            break;
+        case 0x0B:
+            *(s32*)(extra + 0x00) = 0x100;
+            *(s32*)(extra + 0x04) = 0x100;
+            *(s32*)(extra + 0x08) = 0x200;
+            break;
+        case 0x0C:
+            *(s32*)(extra + 0x00) = 0x400;
+            *(s32*)(extra + 0x04) = 0x400;
+            *(s32*)(extra + 0x08) = 0x800;
+            break;
+        case 0x10:
+            *(s32*)(extra + 0x00) = 0x100;
+            *(s32*)(extra + 0x04) = 0x100;
+            *(s32*)(extra + 0x08) = 0x200;
+            *(s16*)(extra + 0x22) = irand(0x1E) + 0x3C;
+            break;
+        default:
+            value = 0x100;
+set_same:
+            *(s32*)(extra + 0x00) = value;
+            *(s32*)(extra + 0x04) = value;
+            *(s32*)(extra + 0x08) = value;
+            break;
+    }
+
+    *(s16*)(extra + 0x28) = *(s32*)(battle + 0x1CCC);
+    *(s16*)(extra + 0x26) = *(s32*)(battle + 0x1CCC);
+    *(f32*)(extra + 0x10) = (f32)*(s32*)(battle + 0x1CD0);
+    *(f32*)(extra + 0x14) = (f32)*(s32*)(battle + 0x1CD4) / 10.0f;
+    if (*(f32*)(extra + 0x14) != 0.0f) {
+        *(f32*)(extra + 0x10) = (f32)irand(100);
+    }
+    *(f32*)(extra + 0x18) = (f32)*(s32*)(battle + 0x1CE4);
+    *(f32*)(disp + 0x28) = 0.01f * *(f32*)(extra + 0x18);
+    *(s16*)(extra + 0x20) = 0;
+    *(s16*)(extra + 0x24) = *(s32*)(battle + 0x1CDC);
+    *(f32*)(extra + 0x1C) = 0.01f * (f32)*(s32*)(battle + 0x1CE0);
+    extra[0x2A] = 0xB2;
+    if (*(s16*)(battle + 0x1D18) > 0) {
+        *(s16*)(battle + 0x1D18) -= 1;
+        extra[0x2B] = 1;
+    } else {
+        extra[0x2B] = 0;
+    }
+    *(s32*)(battle + 0x1CE8) = 0;
 }
+

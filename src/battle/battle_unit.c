@@ -1993,9 +1993,72 @@ s32 BtlUnit_GetCoin(void* unit) {
 
 
 void BtlUnit_ControlPoseSoundMain(void* part) {
-    ;
-}
+    extern void* animPoseGetAnimPosePtr(s32);
+    extern char* animPoseGetCurrentAnim(s32);
+    extern s32 strcmp(const char*, const char*);
+    extern s32 BattleGetSeq(void*, s32);
+    extern s32 BtlUnit_snd_se(void*, const char*, s32, s16);
+    extern void psndSFX_vol(u32, u8);
+    extern f32 float_60_804226ac;
+    extern f32 float_neg1_804226b0;
+    u8* p;
+    u8* pose;
+    u8* entry;
+    char* animName;
+    f32 frame;
+    u32 loop;
+    s32 soundId;
 
+    if (part == 0) return;
+    p = part;
+    entry = *(u8**)(p + 0x4D0);
+    if (entry == 0 || *(s32*)(p + 0x1C0) == -1) return;
+    pose = animPoseGetAnimPosePtr(*(s32*)(p + 0x1C0));
+    if (pose == 0) return;
+    frame = *(f32*)(pose + 0x24) / float_60_804226ac;
+    loop = (u32)*(f32*)(pose + 0x84);
+    if (*(u32*)(p + 0x4D4) > loop) {
+        *(f32*)(p + 0x4D8) = frame;
+        *(f32*)(p + 0x4DC) = float_neg1_804226b0;
+        *(u32*)(p + 0x4D4) = loop;
+        *(s32*)(p + 0x4E0) = 0;
+        if (BattleGetSeq(_battleWorkPointer, 4) == 0x4000002 ||
+            BattleGetSeq(_battleWorkPointer, 4) == 0x4000004) {
+            p[0x4E4] = 1;
+        }
+    } else if (*(u32*)(p + 0x4D4) != loop || *(f32*)(p + 0x4D8) <= frame) {
+        if (*(u32*)(p + 0x4D4) < loop) {
+            *(f32*)(p + 0x4D8) = frame;
+            *(f32*)(p + 0x4DC) = float_neg1_804226b0;
+            *(u32*)(p + 0x4D4) = loop;
+        } else {
+            *(f32*)(p + 0x4DC) = *(f32*)(p + 0x4D8);
+            *(f32*)(p + 0x4D8) = frame;
+        }
+    } else {
+        *(f32*)(p + 0x4D8) = frame;
+        *(f32*)(p + 0x4DC) = float_neg1_804226b0;
+    }
+    if (*(f32*)(p + 0x4D8) == *(f32*)(p + 0x4DC)) return;
+    animName = animPoseGetCurrentAnim(*(s32*)(p + 0x1C0));
+    while (*(char**)entry != 0) {
+        if (strcmp(*(char**)entry, animName) == 0 && *(f32*)(entry + 4) <= *(f32*)(p + 0x4D8) &&
+            *(f32*)(p + 0x4DC) < *(f32*)(entry + 4)) {
+            if (*(void**)(entry + 8) != 0) {
+                soundId = ((s32 (*)(void*, void*, void*))*(void**)(entry + 8))
+                              (*(void**)(p + 0x4EC), entry, p + 0x4D0);
+            } else {
+                soundId = BtlUnit_snd_se(*(void**)(p + 0x4EC), *(char**)(entry + 0xC),
+                                         -250000000, *(s16*)(entry + 0x10));
+            }
+            if ((*(u16*)(entry + 0x12) & 1) != 0) {
+                psndSFX_vol(soundId, 0x7F);
+            }
+            (*(s32*)(p + 0x4E0))++;
+        }
+        entry += 0x14;
+    }
+}
 
 void BtlUnit_PayWeaponCost(void* unit, void* weapon) {
     extern void BtlActRec_AddPoint(void*, u32);
@@ -2046,10 +2109,29 @@ void BtlUnit_RecoverFp(void* unit, s32 fp) {
     }
 }
 
-u8 BtlUnit_SetCommandAnimPose(void* unit) {
-    return 0;
-}
+void BtlUnit_SetCommandAnimPose(void* unit) {
+    extern s32 BtlUnit_GetBodyPartsId(void*);
+    extern void* BtlUnit_GetPartsPtr(void*, s32);
+    extern s32 _GetStatusPoseType(void*);
+    extern void BtlUnit_SetAnimType(void*, s32);
+    extern void btlDispPoseAnime(void*);
+    void* part;
+    s32 bodyPart;
+    s32 useCommandPose;
 
+    bodyPart = BtlUnit_GetBodyPartsId(unit);
+    part = BtlUnit_GetPartsPtr(unit, bodyPart);
+    useCommandPose = 0;
+    if ((*(u32*)((u8*)unit + 0x138) & 0x30000000) == 0 && _GetStatusPoseType(unit) == 0x1C) {
+        useCommandPose = 1;
+    }
+    if (useCommandPose) {
+        BtlUnit_SetAnimType(part, 0x43);
+        *(u32*)((u8*)part + 0x204) |= 0x80;
+    } else {
+        btlDispPoseAnime(part);
+    }
+}
 
 BOOL BtlUnit_Delete(BattleWorkUnit* unit) {
     extern void evtDeleteID(s32);
@@ -2145,9 +2227,38 @@ BOOL BtlUnit_Delete(BattleWorkUnit* unit) {
 }
 
 s32 BtlUnit_GetWeaponCost(BattleWorkUnit* unit, void* weapon) {
-    return 0;
-}
+    extern s32 pouchEquipCheckBadge(s32);
+    extern double pow(double, double);
+    s32 item;
+    s32 equipped;
+    s32 cost;
+    s32 multiply;
 
+    item = *(s32*)((u8*)weapon + 8);
+    cost = *(u8*)((u8*)weapon + 0x11);
+    if (item != 0) {
+        equipped = pouchEquipCheckBadge(item);
+        multiply = 0;
+        if ((item >= 0xF0 && item < 0xF7 && item != 0xF3) ||
+            (item >= 0xFA && item < 0xFD) || item == 0xFD) {
+            cost *= equipped;
+        } else if ((item >= 0xF7 && item < 0xFA) ||
+                   (item >= 0x100 && item < 0x102) ||
+                   (item >= 0x14C && item < 0x14F) ||
+                   (item >= 0x151 && item < 0x153)) {
+            multiply = 1;
+        }
+        if (multiply) {
+            cost = (s32)((double)cost * pow(2.0, (double)(equipped - 1)));
+        }
+    }
+    if (cost != 0) {
+        cost -= *(u8*)((u8*)unit + 0x2F5);
+        if (cost < 1) cost = 1;
+    }
+    if (cost > 999) cost = 999;
+    return cost;
+}
 
 void BtlUnit_LoadSeMode(s32 mode, s32 selector, void* soundDataTable, void* moveSoundWork) {
     s32 zero;

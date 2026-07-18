@@ -15,41 +15,119 @@ void badge_disp(double x, double y, void* pWin) {
     extern s32 pouchHaveBadge(s32 index);
     extern s32 pouchEquipCheckBadgeIndex(s32 index);
     extern void GXSetScissor(s32 x, s32 y, s32 w, s32 h);
+    extern void winTexInit(void* texture);
+    extern void winTexSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
     extern void winIconInit(void);
     extern void winIconGrayInit(void);
     extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
     extern void winFontInit(void);
-    extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* text);
+    extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* text, ...);
+    extern void winFontSetWidth(Vec3* pos, Vec3* scale, void* color, f32 width,
+                                char* text, ...);
+    extern u32 FontGetMessageWidth(char* text);
     extern char* msgSearch(char* key);
+    extern char* winZenkakuStr(s32 value);
+    extern s32 sprintf(char* dst, char* format, ...);
     extern u8 itemDataTable[];
+    extern char str_msg_menu_sort_narabi_802f5464[];
+    extern char str_msg_menu_badge_hituy_802f547c[];
     Vec3 pos;
     Vec3 scale;
     u32 white = 0xFFFFFFFF;
-    s32 count = pouchGetHaveBadgeCnt();
-    s32 first = *(s32*)((s32)pWin + 0x3EC);
-    s32 i;
+    u32 gray = 0x7F7F7FFF;
+    s32 mode = *(s32*)((u8*)pWin + 0x3E0);
+    s32 count;
+    s32 index;
     s32 badge;
     s32 equipped;
+    f32 scroll;
+    f32 row_y;
+    char cost[64];
+
+    if (mode == 0) {
+        count = pouchGetHaveBadgeCnt();
+    } else {
+        count = *(s32*)((u8*)pWin + 0xD64);
+    }
 
     GXSetScissor(0, 0x77, 0x260, 0xB8);
-    scale.x = 1.0f;
-    scale.y = 1.0f;
-    scale.z = 1.0f;
+    scale.x = scale.y = scale.z = 1.0f;
     pos.z = 0.0f;
-    for (i = first; i < count && i < first + 8; i++) {
-        badge = pouchHaveBadge(i);
-        equipped = pouchEquipCheckBadgeIndex(i);
-        pos.x = (f32)x - 210.0f + ((i - first) & 1) * 220.0f;
-        pos.y = (f32)y + 75.0f - ((i - first) >> 1) * 42.0f;
-        if (equipped == 0) winIconGrayInit();
-        else winIconInit();
-        winIconSet(badge, &pos, &scale, &white);
+    for (index = 0; index < count; index++) {
+        if (mode == 0) {
+            badge = pouchHaveBadge(index);
+            equipped = pouchEquipCheckBadgeIndex(index);
+        } else {
+            badge = *(s32*)((u8*)pWin + 0x40C + index * 0xC);
+            equipped = *(s32*)((u8*)pWin + 0x404 + index * 0xC);
+        }
+        scroll = *(f32*)((u8*)pWin + 0x3F4 + mode * 4);
+        row_y = (f32)y + 110.0f - (f32)(index * 23) + scroll;
+        if (row_y > 240.0f) {
+            continue;
+        }
+        if (row_y < -240.0f) {
+            break;
+        }
+
+        if (equipped == 0) {
+            winIconInit();
+        } else {
+            winTexInit(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
+            pos.x = (f32)x + 82.0f;
+            pos.y = row_y;
+            winTexSet(0x1E, &pos, &scale, &white);
+            winIconInit();
+        }
+
+        pos.x = (f32)x - 75.0f;
+        pos.y = row_y;
+        winIconSet(*(s32*)(itemDataTable + badge * 0x28 + 0x28), &pos, &scale, &white);
+
         winFontInit();
-        pos.x += 36.0f;
-        winFontSet(&pos, &scale, &white,
-                   msgSearch(*(char**)((s32)itemDataTable + badge * 0x28 + 8)));
+        pos.x = (f32)x - 55.0f;
+        pos.y = row_y + 12.0f;
+        winFontSetWidth(&pos, &scale, equipped ? &white : &gray, 170.0f,
+                        msgSearch(*(char**)(itemDataTable + badge * 0x28 + 8)));
+
+        sprintf(cost, "%s", winZenkakuStr(*(s8*)(itemDataTable + badge * 0x28 + 0x24)));
+        pos.x = (f32)x + 142.0f - (f32)(FontGetMessageWidth(cost) >> 1);
+        pos.y = row_y + 12.0f;
+        winFontSet(&pos, &scale, equipped ? &white : &gray, cost);
     }
     GXSetScissor(0, 0, 0x260, 0x1E0);
+
+    if (*(s32*)((u8*)pWin + 0x3EC + mode * 4) > 0) {
+        winTexInit(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
+        pos.x = (f32)x + 250.0f;
+        pos.y = (f32)y + 151.0f;
+        winTexSet(0x17, &pos, &scale, &white);
+        winIconInit();
+        pos.y = (f32)y + 133.0f;
+        winIconSet(0x86, &pos, &scale, &white);
+    }
+    if (*(s32*)((u8*)pWin + 0x3EC + mode * 4) * 8 + 8 < count) {
+        winTexInit(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
+        pos.x = (f32)x + 250.0f;
+        pos.y = (f32)y - 85.0f;
+        winTexSet(0x17, &pos, &scale, &white);
+        winIconInit();
+        pos.y = (f32)y - 70.0f;
+        winIconSet(0x88, &pos, &scale, &white);
+    }
+
+    winFontInit();
+    pos.x = (f32)x + 220.0f;
+    pos.y = (f32)y - 82.0f;
+    winFontSet(&pos, &scale, &white, msgSearch(str_msg_menu_sort_narabi_802f5464));
+    winIconInit();
+    pos.x -= 30.0f;
+    pos.y -= 8.0f;
+    winIconSet(0x219, &pos, &scale, &white);
+    winFontInit();
+    pos.x = (f32)x + 120.0f;
+    pos.y = (f32)y + 135.0f;
+    winFontSet(&pos, &scale, &white, msgSearch(str_msg_menu_badge_hituy_802f547c));
 }
 
 void winBadgeDisp(s32 cameraId, void* pWin, s32 index) {
@@ -59,36 +137,78 @@ void winBadgeDisp(s32 cameraId, void* pWin, s32 index) {
     extern void winKirinukiGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
     extern void badge_disp(f32 x, f32 y, void* win);
     extern void winTexInit(void* data);
+    extern void winTexInit_x2(void* data);
     extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
+    extern void winTexSet_x2(s32 id, s32 frame, Vec3* pos, Vec3* scale, void* color);
     extern void winFontInit(void);
+    extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* format, ...);
     extern void winFontSetR(Vec3* pos, Vec3* scale, void* color, char* format, ...);
+    extern char* winZenkakuStr(s32 value);
+    extern char* msgSearch(char* key);
+    extern char str_msg_menu_badge_nokor_802f54a8[];
     Vec3 pos;
     Vec3 scale;
     u32 white = 0xFFFFFFFF;
     void* pouch = pouchGetPtr();
-    f32 x = *(f32*)((s32)pWin + 0x30 + index * 0x18);
-    f32 y = *(f32*)((s32)pWin + 0x34 + index * 0x18);
+    f32 x = *(f32*)((u8*)pWin + 0x30 + index * 0x18);
+    f32 y = *(f32*)((u8*)pWin + 0x34 + index * 0x18);
+    s32 active = *(s32*)((u8*)pWin + 0x3E0);
+    s32 total = *(s16*)((u8*)pouch + 0x94);
+    s32 available = *(s16*)((u8*)pouch + 0x92);
     s32 tab;
-    s32 bp;
+    s32 i;
 
     winBgGX(x, y, pWin, 3);
-    winKirinukiGX(x - 150.0f, y + 120.0f, 415.0f, 210.0f, pWin, 0);
-    winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
-    scale.x = 1.0f;
-    scale.y = 1.0f;
-    scale.z = 1.0f;
+    winKirinukiGX(x - 100.0f, y + 140.0f, 365.0f, 210.0f, pWin, 0);
+
+    scale.x = scale.y = scale.z = 1.0f;
     pos.z = 0.0f;
     for (tab = 0; tab < 2; tab++) {
-        pos.x = x - 125.0f + tab * 130.0f;
-        pos.y = y + 130.0f;
-        winTexSet(0x1A + tab, &pos, &scale, &white);
+        pos.x = x - 190.0f;
+        pos.y = y + 130.0f - (f32)(tab * 45);
+        if (tab == active) {
+            winTexInit(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
+            winTexSet(0xB4, &pos, &scale, &white);
+            winTexInit_x2(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
+            winTexSet_x2(tab + 0x1A, 0xB4, &pos, &scale, &white);
+        } else {
+            winTexInit_x2(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
+            winTexSet_x2(tab + 0x1A, 0xB4, &pos, &scale, &white);
+        }
     }
-    badge_disp(x, y, pWin);
-    bp = *(s32*)((s32)pouch + 0x130);
+
+    winKirinukiGX(x - 260.0f, y + 60.0f, 150.0f,
+                  (f32)((10 - ((total + 9) / 10)) * 13), pWin, 1);
+
     winFontInit();
-    pos.x = x + 140.0f;
-    pos.y = y - 112.0f;
-    winFontSetR(&pos, &scale, &white, "%d", bp);
+    pos.x = x - 220.0f;
+    pos.y = y + 56.0f;
+    winFontSet(&pos, &scale, &white, "BP");
+
+    pos.x = x - 193.0f;
+    winFontSetR(&pos, &scale, &white, "%s", winZenkakuStr(total));
+
+    pos.x = x - 180.0f;
+    pos.y = y - 106.0f + (f32)((10 - ((total + 9) / 10)) * 13);
+    winFontSet(&pos, &scale, &white, msgSearch(str_msg_menu_badge_nokor_802f54a8));
+
+    pos.x = x - 165.0f;
+    pos.y = y - 100.0f + (f32)((10 - ((total + 9) / 10)) * 13);
+    winFontSetR(&pos, &scale, &white, "%s", winZenkakuStr(available));
+
+    winTexInit(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
+    for (i = 0; i < available; i++) {
+        pos.x = x - 242.0f + (f32)((i % 10) * 13);
+        pos.y = y + 30.0f - (f32)((i / 10) * 13);
+        winTexSet(0x1C, &pos, &scale, &white);
+    }
+    for (; i < total; i++) {
+        pos.x = x - 242.0f + (f32)((i % 10) * 13);
+        pos.y = y + 30.0f - (f32)((i / 10) * 13);
+        winTexSet(0x1D, &pos, &scale, &white);
+    }
+
+    badge_disp(x, y, pWin);
     (void)cameraId;
 }
 

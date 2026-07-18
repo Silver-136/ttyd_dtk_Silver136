@@ -8,27 +8,99 @@ u8 effKumokumoDisp(s32 cameraId, s32 effectAddress) {
     extern void effGetTexObj(s32, void*);
     extern void GXLoadTexObj(void*, s32);
     extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
     extern void GXSetNumTevStages(s32);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
     extern void GXSetNumTexGens(s32);
     extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevOrder(s32, s32, s32, s32);
     extern void PSMTXTrans(Mtx, f32, f32, f32);
     extern void PSMTXRotRad(Mtx, f32, char);
     extern void PSMTXScale(Mtx, f32, f32, f32);
     extern void PSMTXConcat(void*, void*, void*);
     extern void GXLoadPosMtxImm(Mtx, s32);
+    extern void GXLoadTexMtxImm(Mtx, s32, s32);
     extern void GXSetCurrentMtx(s32);
     extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXSetArray(s32, void*, s32);
     extern void GXCallDisplayList(void*, u32);
+    extern u8 cloud_vertex_tbl[];
+    extern u8 cloud_normal_tbl[];
+    extern u8 cloud_texcoord0_tbl[];
+    extern u8 cloud_texcoord1_tbl[];
+    extern void* cloud_dl_0_tbl[];
+    extern u8 cloud_dl_0_size_tbl[];
+    extern u8 batten_vertex_tbl[];
+    extern u8 batten_normal_tbl[];
+    extern u8 batten_texcoord0_tbl[];
+    extern u8 batten_texcoord1_tbl[];
+    extern void* batten_dl_0_tbl[];
+    extern u8 batten_dl_0_size_tbl[];
     u8* effect = (u8*)effectAddress;
     u8* work = *(u8**)(effect + 0xC);
-    char* camera = camGetPtr(cameraId);
+    u8* camera = camGetPtr(cameraId);
     GXTexObj tex;
     Mtx trans, rot, scale, model;
+    f32 size;
+    u32 color1;
+    u32 color2;
+    s32 type = *(s32*)work;
     s32 i;
 
+    PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+    PSMTXRotRad(rot, -0.017453292f * *(f32*)(camera + 0x114), 'y');
+    PSMTXConcat(trans, rot, trans);
+    PSMTXRotRad(rot, 0.017453292f * *(f32*)(work + 0x58), 'z');
+    PSMTXConcat(trans, rot, trans);
+    size = *(f32*)(work + 0x5C);
+    if (type == 3) {
+        PSMTXScale(scale, size, size, size);
+        PSMTXConcat(trans, scale, trans);
+        PSMTXScale(scale, 0.1f, 0.1f, 0.1f);
+    } else {
+        if (*(f32*)(work + 0x58) >= 90.0f) {
+            PSMTXScale(scale, size, -size, size);
+        } else {
+            PSMTXScale(scale, size, size, size);
+        }
+        PSMTXConcat(trans, scale, trans);
+        PSMTXScale(scale, 0.4f, 0.4f, 0.4f);
+    }
+    PSMTXConcat(trans, scale, trans);
+    PSMTXConcat(camera + 0x118, trans, model);
+    GXLoadPosMtxImm(model, 0);
+    GXSetCurrentMtx(0);
+    color1 = (*(u8*)(work + 0x18) << 24) | (*(u8*)(work + 0x1C) << 16) |
+             (*(u8*)(work + 0x20) << 8) | *(u8*)(work + 0x24);
+    color2 = (*(u8*)(work + 0x28) << 24) | (*(u8*)(work + 0x2C) << 16) |
+             (*(u8*)(work + 0x30) << 8) | *(u8*)(work + 0x34);
+    GXSetTevColor(1, &color1);
+    GXSetTevColor(2, &color2);
     GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
     GXSetNumTevStages(3);
+    GXSetTevOrder(0, 0, 0, -1);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 3, 2, 8, 15);
+    GXSetTevAlphaIn(0, 7, 5, 4, 7);
+    GXSetTevOrder(1, 1, 1, -1);
+    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(1, 15, 0, 8, 15);
+    GXSetTevAlphaIn(1, 7, 0, 4, 7);
+    GXSetTevOrder(2, 0xFF, 0xFF, 4);
+    GXSetTevColorOp(2, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(2, 15, 0, 10, 15);
+    GXSetTevAlphaIn(2, 7, 0, 5, 7);
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
     GXSetTexCoordGen2(1, 1, 5, 0x21, 0, 0x7D);
@@ -36,24 +108,32 @@ u8 effKumokumoDisp(s32 cameraId, s32 effectAddress) {
     GXLoadTexObj(&tex, 0);
     effGetTexObj(0x69, &tex);
     GXLoadTexObj(&tex, 1);
-    GXSetTevOrder(0, 0, 0, -1);
-    GXSetTevOrder(1, 1, 1, -1);
-    GXSetTevOrder(2, -1, -1, 4);
+    PSMTXTrans(trans, *(f32*)(work + 0x38), *(f32*)(work + 0x40), 0.0f);
+    GXLoadTexMtxImm(trans, 0x1E, 1);
+    PSMTXTrans(trans, *(f32*)(work + 0x48), *(f32*)(work + 0x50), 0.0f);
+    GXLoadTexMtxImm(trans, 0x21, 1);
     GXSetCullMode(0);
-    for (i = 0; i < *(s32*)(effect + 8); i++) {
-        u8* part = work + i * 0x64;
-        f32 size = *(f32*)(part + 0x58);
-        PSMTXTrans(trans, *(f32*)(part + 4), *(f32*)(part + 8), *(f32*)(part + 0xC));
-        PSMTXRotRad(rot, -0.017453292f * *(f32*)(camera + 0x114), 'y');
-        PSMTXConcat(trans, rot, model);
-        PSMTXRotRad(rot, *(f32*)(part + 0x58) * 0.017453292f, 'z');
-        PSMTXConcat(model, rot, model);
-        PSMTXScale(scale, size, size, size);
-        PSMTXConcat(model, scale, model);
-        PSMTXConcat(camera + 0x118, model, model);
-        GXLoadPosMtxImm(model, 0);
-        GXSetCurrentMtx(0);
-        GXCallDisplayList(*(void**)(part + 0x5C), (u32)*(u8*)(part + 0x60) << 5);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 2);
+    GXSetVtxAttrFmt(0, 9, 1, 3, 6);
+    GXSetArray(9, type == 2 ? batten_vertex_tbl : cloud_vertex_tbl, 6);
+    GXSetVtxDesc(10, 2);
+    GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+    GXSetArray(10, type == 2 ? batten_normal_tbl : cloud_normal_tbl, 3);
+    GXSetVtxDesc(11, 2);
+    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+    GXSetVtxDesc(13, 2);
+    GXSetVtxAttrFmt(0, 13, 1, 3, 14);
+    GXSetArray(13, type == 2 ? batten_texcoord0_tbl : cloud_texcoord0_tbl, 4);
+    GXSetVtxDesc(14, 2);
+    GXSetVtxAttrFmt(0, 14, 1, 3, 14);
+    GXSetArray(14, type == 2 ? batten_texcoord1_tbl : cloud_texcoord1_tbl, 4);
+    for (i = 0; i < 4; i++) {
+        if (type == 2) {
+            GXCallDisplayList(batten_dl_0_tbl[i], (u32)batten_dl_0_size_tbl[i] << 5);
+        } else {
+            GXCallDisplayList(cloud_dl_0_tbl[i], (u32)cloud_dl_0_size_tbl[i] << 5);
+        }
     }
     return 0;
 }

@@ -146,6 +146,7 @@ void* effKemuTestEntry(f64 x, f64 y, f64 z, f64 scale, u32 type) {
     extern void effConfettiEntry(void);
     extern void effHitEntry(void);
     extern void* effStardust2N64Entry(f64, f64, f64, f64, f64, s32, s32, s32);
+    extern char str_KemuTest_802fe670[];
     void* effect = effEntry();
     u8* work;
     u8* part;
@@ -160,29 +161,37 @@ void* effKemuTestEntry(f64 x, f64 y, f64 z, f64 scale, u32 type) {
         case 2: case 16: count = 5; break;
         case 3: count = 33; break;
         case 4: count = 11; break;
-        case 5: count = 9; break;
-        case 6: count = 17; break;
-        case 7: count = 42; break;
-        case 8: count = 34; break;
+        case 5: count = 4; break;
+        case 6: count = 7; break;
+        case 7: count = 7; break;
+        case 8: count = 65; break;
         case 9: count = 21; break;
-        case 10: case 14: count = 10; break;
-        case 11: count = 18; break;
-        case 12: count = 66; break;
-        case 13: count = 12; break;
-        case 17: case 19: case 20: case 21: count = 8; break;
-        case 22: count = 13; break;
+        case 10: count = 7; break;
+        case 11: count = 9; break;
+        case 12: count = irand(3) + 4; break;
+        case 13: count = 11; break;
+        case 14: count = 5; break;
+        case 17: count = 11; scale *= 0.5; break;
+        case 19: count = 4; break;
+        case 20: count = 11; scale *= 0.5; break;
+        case 21: count = 3; break;
+        case 22: count = 4; break;
     }
+    *(char**)effect = str_KemuTest_802fe670;
     *(s32*)((u8*)effect + 8) = count;
     work = __memAlloc(3, count * 0x58);
     *(u8**)((u8*)effect + 0xC) = work;
     *(void**)((u8*)effect + 0x10) = effKemuTestMain;
-    *(u32*)effect |= 2;
     *(u32*)work = type;
     *(f32*)(work + 4) = (f32)x;
     *(f32*)(work + 8) = (f32)y;
     *(f32*)(work + 0xC) = (f32)z;
     *(f32*)(work + 0x48) = (f32)scale;
     *(s32*)(work + 0x1C) = 4;
+    *(s32*)(work + 0x28) = 0;
+    *(s32*)(work + 0x44) = 0;
+    *(f32*)(work + 0x50) = 0.0f;
+    *(f32*)(work + 0x54) = 0.0f;
 
     part = work + 0x58;
     for (i = 1; i < count; i++, part += 0x58) {
@@ -197,9 +206,47 @@ void* effKemuTestEntry(f64 x, f64 y, f64 z, f64 scale, u32 type) {
         *(u8*)(part + 0x4E) = 255;
         *(u8*)(part + 0x4F) = 255;
         *(f32*)(part + 0x50) = 1.0f;
-        angle = 6.2832f * (f32)irand(360) / 360.0f;
-        speed = 1.0f + (f32)irand(40) / 10.0f;
-        if (type == 3 || type == 6 || type == 7 || type == 8) {
+        if (type == 0 || type == 15 || type == 18) {
+            *(f32*)(part + 4) = 0.0f;
+            *(f32*)(part + 8) = 0.0f;
+            *(f32*)(part + 0xC) = 0.0f;
+            *(s32*)(part + 0x30) = 32;
+            *(f32*)(part + 0x50) = 1.0f;
+            if (type == 15) {
+                *(u8*)(part + 0x4C) = 0x50;
+                *(u8*)(part + 0x4D) = 0x4B;
+                *(u8*)(part + 0x4E) = 0x4B;
+            }
+        } else if (type == 1 || type == 19) {
+            *(f32*)(part + 4) = 0.0f;
+            *(f32*)(part + 8) = 0.0f;
+            *(f32*)(part + 0xC) = 0.0f;
+            *(s32*)(part + 0x30) = 128;
+            *(f32*)(part + 0x34) = 0.95f;
+            *(f32*)(part + 0x38) = -0.04f;
+            *(f32*)(part + 0x3C) = 0.94f;
+        } else if (type == 2 || type == 16) {
+            angle = 6.2832f * (f32)irand(360) / 360.0f;
+            *(f32*)(part + 4) = 20.0f * (f32)sin(angle);
+            *(f32*)(part + 8) = 20.0f * (f32)cos(angle);
+            *(f32*)(part + 0xC) = 0.0f;
+            *(s32*)(part + 0x30) = 32;
+            *(s32*)(part + 0x44) = (i - 1) * 6;
+            *(f32*)(part + 0x50) = 1.0f;
+        } else if (type == 3) {
+            angle = 6.2832f * (f32)irand(360) / 360.0f;
+            *(f32*)(part + 4) = 20.0f * (f32)sin(angle);
+            *(f32*)(part + 8) = 20.0f * (f32)cos(angle);
+            *(f32*)(part + 0xC) = 0.0f;
+            *(s32*)(part + 0x30) = 32;
+            *(s32*)(part + 0x44) = (i - 1) * 3;
+            *(f32*)(part + 0x34) = 0.95f;
+            *(f32*)(part + 0x38) = -0.04f;
+            *(f32*)(part + 0x3C) = 0.94f;
+            *(f32*)(part + 0x50) = 1.0f;
+        } else if (type == 6 || type == 7 || type == 8) {
+            angle = 6.2832f * (f32)irand(360) / 360.0f;
+            speed = 1.0f + (f32)irand(40) / 10.0f;
             *(f32*)(part + 0x10) = speed * (f32)cos(angle);
             *(f32*)(part + 0x14) = speed * (f32)sin(angle);
             *(f32*)(part + 0x34) = type == 3 ? 6.0f : 1.0f;
@@ -215,6 +262,7 @@ void* effKemuTestEntry(f64 x, f64 y, f64 z, f64 scale, u32 type) {
             *(f32*)(part + 0x14) = (f32)cos(angle);
             *(s32*)(part + 0x30) = 64;
         } else if (type == 11) {
+            angle = 6.2832f * (f32)irand(360) / 360.0f;
             *(f32*)(part + 0x10) = 5.0f * (f32)sin(angle);
             *(f32*)(part + 0x18) = 5.0f * (f32)cos(angle);
             *(s32*)(part + 0x30) = 64;

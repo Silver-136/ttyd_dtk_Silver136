@@ -23,11 +23,54 @@ extern char str_BoobooN64_802fac08[];
 extern f32 float_0_80424dec;
 
 
-s32 texture_dl(int effect,int index,s32 texture) {
-    extern void GXSetNumChans(s32);extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);extern void GXSetNumTexGens(s32);extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);extern void GXSetNumTevStages(s32);extern void GXSetTevOrder(s32,s32,s32,s32);extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevColorIn(s32,s32,s32,s32,s32);extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);extern void effGetTexObjN64(s32,void*);extern void GXLoadTexObj(void*,s32);u8 obj[0x20];s32 id;
-    GXSetNumChans(1);GXSetChanCtrl(4,0,0,1,0,0,2);
-    switch(texture){case 0:id=0x38;break;case 1:GXSetNumTexGens(0);GXSetNumTevStages(1);GXSetTevOrder(0,0xFF,0xFF,4);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,0,0,0,4);GXSetTevAlphaIn(0,0,0,0,2);return 0;case 2:id=0x39;break;case 3:id=0x3A;break;case 4:id=0x3B;break;case 5:id=0x3C;break;case 6:id=0x3D;break;case 7:id=0x3E;break;case 8:id=0x3F;break;case 9:id=0x40;break;default:return 1;}
-    effGetTexObjN64(id,obj);GXLoadTexObj(obj,0);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x3C,0,0x7D);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,4);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);if(texture>=8)GXSetTevColorIn(0,0,8,2,0);else GXSetTevColorIn(0,0,0,0,8);GXSetTevAlphaIn(0,0,0,0,1);return 0;
+s32 texture_dl(int effect, int index, s32 texture) {
+    extern void GXSetNumChans(s32); extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);
+    extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+    extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32);
+    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevColorIn(s32,s32,s32,s32,s32); extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
+    extern void effGetTexObjN64(s32,void*); extern void GXLoadTexObj(void*,s32);
+    u8 obj[0x20];
+
+#define LOAD_BOO_TEXTURE(tex_id, final_color) \
+    do { \
+        effGetTexObjN64((tex_id), obj); \
+        GXLoadTexObj(obj, 0); \
+        GXSetNumTexGens(1); \
+        GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D); \
+        GXSetNumTevStages(1); \
+        GXSetTevOrder(0, 0, 0, 4); \
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0); \
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0); \
+        GXSetTevColorIn(0, 15, 8, 10, (final_color)); \
+        GXSetTevAlphaIn(0, 7, 7, 7, 5); \
+    } while (0)
+
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
+    switch (texture) {
+        case 0: LOAD_BOO_TEXTURE(0x38, 15); break;
+        case 1:
+            GXSetNumTexGens(0);
+            GXSetNumTevStages(1);
+            GXSetTevOrder(0, 0, 0, 4);
+            GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+            GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+            GXSetTevColorIn(0, 15, 15, 15, 10);
+            GXSetTevAlphaIn(0, 7, 7, 7, 5);
+            break;
+        case 2: LOAD_BOO_TEXTURE(0x39, 15); break;
+        case 3: LOAD_BOO_TEXTURE(0x3A, 15); break;
+        case 4: LOAD_BOO_TEXTURE(0x3B, 15); break;
+        case 5: LOAD_BOO_TEXTURE(0x3C, 15); break;
+        case 6: LOAD_BOO_TEXTURE(0x3D, 15); break;
+        case 7: LOAD_BOO_TEXTURE(0x3E, 15); break;
+        case 8: LOAD_BOO_TEXTURE(0x3F, 2); break;
+        case 9: LOAD_BOO_TEXTURE(0x40, 2); break;
+        default: return 1;
+    }
+#undef LOAD_BOO_TEXTURE
+    return 0;
 }
 
 void effBoobooMain(void* effect) {
@@ -116,19 +159,70 @@ void effBoobooMain(void* effect) {
 }
 
 u8 boo_polygon_2(void) {
+    extern void GXClearVtxDesc(void); extern void GXSetVtxDesc(s32,s32);
+    extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32); extern void GXSetArray(s32,void*,s32);
+    extern void GXCallDisplayList(void*,s32);
+    extern u8 boo_dl_2_0[],boo_dl_2_1[],boo_dl_2_2[],boo_dl_2_3[],boo_dl_2_4[],boo_dl_2_5[],boo_dl_2_6[],boo_dl_2_7[];
+    extern u8 boo_dl_2_8[],boo_dl_2_9[],boo_dl_2_10[],boo_dl_2_11[],boo_dl_2_12[],boo_dl_2_13[],boo_dl_2_14[],boo_dl_2_15[];
+    GXClearVtxDesc();
+    GXSetVtxDesc(9,2); GXSetVtxAttrFmt(0,9,1,3,14); GXSetArray(9,(void*)0x8039D9C0,6);
+    GXSetVtxDesc(10,2); GXSetVtxAttrFmt(0,10,0,1,6); GXSetArray(10,(void*)0x8039DD60,3);
+    GXSetVtxDesc(11,2); GXSetVtxAttrFmt(0,11,1,5,0); GXSetArray(11,(void*)0x80418C40,4);
+    GXSetVtxDesc(13,2); GXSetVtxAttrFmt(0,13,1,3,14); GXSetArray(13,(void*)0x8039DE00,4);
+    GXCallDisplayList(boo_dl_2_0,0x40); GXCallDisplayList(boo_dl_2_1,0x40);
+    GXCallDisplayList(boo_dl_2_2,0x40); GXCallDisplayList(boo_dl_2_3,0x40);
+    GXCallDisplayList(boo_dl_2_4,0x20); GXCallDisplayList(boo_dl_2_5,0x20);
+    GXCallDisplayList(boo_dl_2_6,0x20); GXCallDisplayList(boo_dl_2_7,0x20);
+    GXCallDisplayList(boo_dl_2_8,0x20); GXCallDisplayList(boo_dl_2_9,0x20);
+    GXCallDisplayList(boo_dl_2_10,0x20); GXCallDisplayList(boo_dl_2_11,0x20);
+    GXCallDisplayList(boo_dl_2_12,0x20); GXCallDisplayList(boo_dl_2_13,0x20);
+    GXCallDisplayList(boo_dl_2_14,0x20); GXCallDisplayList(boo_dl_2_15,0x20);
     return 0;
 }
-
 
 u8 boo_polygon_1(void) {
+    extern void GXClearVtxDesc(void); extern void GXSetVtxDesc(s32,s32);
+    extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32); extern void GXSetArray(s32,void*,s32);
+    extern void GXCallDisplayList(void*,s32);
+    extern u8 boo_dl_1_0[],boo_dl_1_1[],boo_dl_1_2[],boo_dl_1_3[],boo_dl_1_4[],boo_dl_1_5[],boo_dl_1_6[],boo_dl_1_7[];
+    extern u8 boo_dl_1_8[],boo_dl_1_9[],boo_dl_1_10[],boo_dl_1_11[],boo_dl_1_12[],boo_dl_1_13[],boo_dl_1_14[],boo_dl_1_15[];
+    GXClearVtxDesc();
+    GXSetVtxDesc(9,2); GXSetVtxAttrFmt(0,9,1,3,14); GXSetArray(9,(void*)0x8039D9C0,6);
+    GXSetVtxDesc(10,2); GXSetVtxAttrFmt(0,10,0,1,6); GXSetArray(10,(void*)0x8039DD60,3);
+    GXSetVtxDesc(11,2); GXSetVtxAttrFmt(0,11,1,5,0); GXSetArray(11,(void*)0x80418C40,4);
+    GXSetVtxDesc(13,2); GXSetVtxAttrFmt(0,13,1,3,14); GXSetArray(13,(void*)0x8039DE00,4);
+    GXCallDisplayList(boo_dl_1_0,0x40); GXCallDisplayList(boo_dl_1_1,0x40);
+    GXCallDisplayList(boo_dl_1_2,0x40); GXCallDisplayList(boo_dl_1_3,0x40);
+    GXCallDisplayList(boo_dl_1_4,0x20); GXCallDisplayList(boo_dl_1_5,0x20);
+    GXCallDisplayList(boo_dl_1_6,0x20); GXCallDisplayList(boo_dl_1_7,0x20);
+    GXCallDisplayList(boo_dl_1_8,0x20); GXCallDisplayList(boo_dl_1_9,0x20);
+    GXCallDisplayList(boo_dl_1_10,0x20); GXCallDisplayList(boo_dl_1_11,0x20);
+    GXCallDisplayList(boo_dl_1_12,0x20); GXCallDisplayList(boo_dl_1_13,0x20);
+    GXCallDisplayList(boo_dl_1_14,0x20); GXCallDisplayList(boo_dl_1_15,0x20);
     return 0;
 }
-
 
 u8 boo_polygon_0(void) {
+    extern void GXClearVtxDesc(void); extern void GXSetVtxDesc(s32,s32);
+    extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32); extern void GXSetArray(s32,void*,s32);
+    extern void GXCallDisplayList(void*,s32);
+    extern u8 boo_dl_0_0[],boo_dl_0_1[],boo_dl_0_2[],boo_dl_0_3[],boo_dl_0_4[],boo_dl_0_5[],boo_dl_0_6[],boo_dl_0_7[];
+    extern u8 boo_dl_0_8[],boo_dl_0_9[],boo_dl_0_10[],boo_dl_0_11[],boo_dl_0_12[],boo_dl_0_13[],boo_dl_0_14[],boo_dl_0_15[];
+    GXClearVtxDesc();
+    GXSetVtxDesc(9,2); GXSetVtxAttrFmt(0,9,1,3,14); GXSetArray(9,(void*)0x8039D9C0,6);
+    GXSetVtxDesc(10,2); GXSetVtxAttrFmt(0,10,0,1,6); GXSetArray(10,(void*)0x8039DD60,3);
+    GXSetVtxDesc(11,2); GXSetVtxAttrFmt(0,11,1,5,0); GXSetArray(11,(void*)0x80418C40,4);
+    GXSetVtxDesc(13,2); GXSetVtxAttrFmt(0,13,1,3,14); GXSetArray(13,(void*)0x8039DE00,4);
+    GXCallDisplayList(boo_dl_0_0,0x40); GXCallDisplayList(boo_dl_0_1,0x40);
+    GXCallDisplayList(boo_dl_0_2,0x40); GXCallDisplayList(boo_dl_0_3,0x40);
+    GXCallDisplayList(boo_dl_0_4,0x20); GXCallDisplayList(boo_dl_0_5,0x20);
+    GXCallDisplayList(boo_dl_0_6,0x20); GXCallDisplayList(boo_dl_0_7,0x20);
+    GXCallDisplayList(boo_dl_0_8,0x20); GXCallDisplayList(boo_dl_0_9,0x20);
+    GXCallDisplayList(boo_dl_0_10,0x20); GXCallDisplayList(boo_dl_0_11,0x20);
+    GXCallDisplayList(boo_dl_0_12,0x20); GXCallDisplayList(boo_dl_0_13,0x20);
+    GXCallDisplayList(boo_dl_0_14,0x20); GXCallDisplayList(boo_dl_0_15,0x20);
     return 0;
 }
-
 
 void effBoobooDisp(int param_1, void* param_2) {
     extern void* camGetPtr(s32 id);
