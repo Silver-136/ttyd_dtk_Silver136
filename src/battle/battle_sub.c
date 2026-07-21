@@ -12,27 +12,52 @@ extern void* BattleGetPartyPtr(void* battleWork);
 extern void* BattleGetSystemPtr(void* battleWork);
 extern double atan2(double y, double x);
 
-f32 cosfd(f32 degree) {
-    return cos((float_6p2832_80422690 * degree) / float_360_80422694);
-}
-
 f32 sinfd(f32 degree) {
     return sin((float_6p2832_80422690 * degree) / float_360_80422694);
 }
 
-void btlsubResetMoveColorLvAll(void* battleWork) {
-    s32 i;
-    s32 color;
-    void* unit;
+f32 cosfd(f32 degree) {
+    return cos((float_6p2832_80422690 * degree) / float_360_80422694);
+}
 
-    color = 0xFF;
+f32 atan2f_safety(f32 y, f32 x) {
+    f32 abs;
 
-    for (i = 0; i < 0x40; i++) {
-        unit = BattleGetUnitPtr(battleWork, i);
-        if (unit != 0) {
-            *(u8*)((s32)unit + 0x311) = color;
-        }
+    if (x >= 0.0f) {
+        abs = x;
+    } else {
+        abs = -x;
     }
+    if (abs < 0.0001) {
+        x = 0.0001f;
+    }
+
+    if (y >= 0.0f) {
+        abs = y;
+    } else {
+        abs = -y;
+    }
+    if (abs < 0.0001) {
+        y = 0.0001f;
+    }
+
+    return atan2(y, x);
+}
+
+
+void btlMovePos(f32 distance, f32 angle, f32* moveXPos, f32* moveZPos) {
+    f32 s;
+    f32 radians;
+    f32 c;
+    f32 delta;
+
+    radians = (float_6p2832_80422690 * angle) / float_360_80422694;
+    s = sin(radians);
+    c = cos(radians);
+    delta = distance * s;
+    *moveXPos = *moveXPos + delta;
+    delta = -distance * c;
+    *moveZPos = *moveZPos + delta;
 }
 
 
@@ -121,6 +146,26 @@ f32 intpl_sub(f32 outStart, f32 outEnd, u32 intplType, u32 inStart, u32 inEnd) {
     return value;
 }
 
+
+s32 BtlCompForwardLv(f32 position, s32 direction) {
+    s32 level;
+    s32 result;
+
+    level = 0;
+    if (position > -800.0f) {
+        level = (s32)((position + 800.0f) / 40.0f);
+        if (level > 0x30) {
+            level = 0x30;
+        }
+    }
+
+    result = 0x30 - level;
+    if (direction >= 0) {
+        result = level;
+    }
+    return result;
+}
+
 s32 BattleTransID(EventEntry* event, s32 type) {
     void* battleWork;
     void* unit;
@@ -152,63 +197,18 @@ s32 BattleTransID(EventEntry* event, s32 type) {
     return type;
 }
 
+void btlsubResetMoveColorLvAll(void* battleWork) {
+    s32 i;
+    s32 color;
+    void* unit;
 
-void btlMovePos(f32 distance, f32 angle, f32* moveXPos, f32* moveZPos) {
-    f32 s;
-    f32 radians;
-    f32 c;
-    f32 delta;
+    color = 0xFF;
 
-    radians = (float_6p2832_80422690 * angle) / float_360_80422694;
-    s = sin(radians);
-    c = cos(radians);
-    delta = distance * s;
-    *moveXPos = *moveXPos + delta;
-    delta = -distance * c;
-    *moveZPos = *moveZPos + delta;
-}
-
-f32 atan2f_safety(f32 y, f32 x) {
-    f32 abs;
-
-    if (x >= 0.0f) {
-        abs = x;
-    } else {
-        abs = -x;
-    }
-    if (abs < 0.0001) {
-        x = 0.0001f;
-    }
-
-    if (y >= 0.0f) {
-        abs = y;
-    } else {
-        abs = -y;
-    }
-    if (abs < 0.0001) {
-        y = 0.0001f;
-    }
-
-    return atan2(y, x);
-}
-
-
-s32 BtlCompForwardLv(f32 position, s32 direction) {
-    s32 level;
-    s32 result;
-
-    level = 0;
-    if (position > -800.0f) {
-        level = (s32)((position + 800.0f) / 40.0f);
-        if (level > 0x30) {
-            level = 0x30;
+    for (i = 0; i < 0x40; i++) {
+        unit = BattleGetUnitPtr(battleWork, i);
+        if (unit != 0) {
+            *(u8*)((s32)unit + 0x311) = color;
         }
     }
-
-    result = 0x30 - level;
-    if (direction >= 0) {
-        result = level;
-    }
-    return result;
 }
 

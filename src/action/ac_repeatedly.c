@@ -1,23 +1,84 @@
 #include "action/ac_repeatedly.h"
 
 void BattleAcGaugeSeDelete(void* wp);
+void actionCommandDisp(f32 x, f32 y);
 
-s32 battleAcResult_Repeatedly(void* wp) {
-    return *(s32*)((s32)wp + 0x1CB8);
-}
+/* CHATGPT STUB FILL: main/action/ac_repeatedly 20260624_184008 */
 
-void battleAcDelete_Repeatedly(void* wp) {
-    void* callArg;
+/* stub-fill: _init_param | missing_definition | ghidra_signature */
+void _init_param(void* battleWork) {
+    extern s32 irand(s32 max);
+    char* battle;
+    char* extra;
+    char* disp;
+    s32 type;
+    s32 value;
 
-    switch (*(s32*)((s32)wp + 0x1CC8)) {
+    battle = (char*)battleWork;
+    extra = battle + 0x1F4C;
+    disp = battle + 0x1F20;
+    extra[0x2C] = 0;
+    *(s32*)(extra + 0x0C) = 0;
+    type = *(s32*)(battle + 0x1CC8);
+
+    switch (type) {
+        case 2: value = 0x200; goto set_same;
+        case 3: value = 0x400; goto set_same;
+        case 4: value = 0x800; goto set_same;
+        case 5: value = 0x20; goto set_same;
+        case 8:
+            *(s32*)(extra + 0x0C) = 0x100;
+        case 6:
+            value = 0x40000;
+            goto set_same;
         case 10:
-            *(u32*)((s32)wp + 0xEF4) &= ~0x20000000;
+            *(u32*)(battle + 0xEF4) |= 0x20000000;
+            break;
+        case 0x0B:
+            *(s32*)(extra + 0x00) = 0x100;
+            *(s32*)(extra + 0x04) = 0x100;
+            *(s32*)(extra + 0x08) = 0x200;
+            break;
+        case 0x0C:
+            *(s32*)(extra + 0x00) = 0x400;
+            *(s32*)(extra + 0x04) = 0x400;
+            *(s32*)(extra + 0x08) = 0x800;
+            break;
+        case 0x10:
+            *(s32*)(extra + 0x00) = 0x100;
+            *(s32*)(extra + 0x04) = 0x100;
+            *(s32*)(extra + 0x08) = 0x200;
+            *(s16*)(extra + 0x22) = irand(0x1E) + 0x3C;
             break;
         default:
+            value = 0x100;
+set_same:
+            *(s32*)(extra + 0x00) = value;
+            *(s32*)(extra + 0x04) = value;
+            *(s32*)(extra + 0x08) = value;
             break;
     }
-    BattleAcGaugeSeDelete(callArg);
-    *(s32*)((s32)wp + 0x1C9C) = 1002;
+
+    *(s16*)(extra + 0x28) = *(s32*)(battle + 0x1CCC);
+    *(s16*)(extra + 0x26) = *(s32*)(battle + 0x1CCC);
+    *(f32*)(extra + 0x10) = (f32)*(s32*)(battle + 0x1CD0);
+    *(f32*)(extra + 0x14) = (f32)*(s32*)(battle + 0x1CD4) / 10.0f;
+    if (*(f32*)(extra + 0x14) != 0.0f) {
+        *(f32*)(extra + 0x10) = (f32)irand(100);
+    }
+    *(f32*)(extra + 0x18) = (f32)*(s32*)(battle + 0x1CE4);
+    *(f32*)(disp + 0x28) = 0.01f * *(f32*)(extra + 0x18);
+    *(s16*)(extra + 0x20) = 0;
+    *(s16*)(extra + 0x24) = *(s32*)(battle + 0x1CDC);
+    *(f32*)(extra + 0x1C) = 0.01f * (f32)*(s32*)(battle + 0x1CE0);
+    extra[0x2A] = 0xB2;
+    if (*(s16*)(battle + 0x1D18) > 0) {
+        *(s16*)(battle + 0x1D18) -= 1;
+        extra[0x2B] = 1;
+    } else {
+        extra[0x2B] = 0;
+    }
+    *(s32*)(battle + 0x1CE8) = 0;
 }
 
 #pragma no_register_save_helpers on
@@ -222,6 +283,95 @@ s32 battleAcMain_Repeatedly(void* battleWork) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+
+s32 battleAcResult_Repeatedly(void* wp) {
+    return *(s32*)((s32)wp + 0x1CB8);
+}
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void battleAcDisp_Repeatedly(s32 param_1, void* battleWork) {
+    typedef struct AcRepeatedlyDispWork {
+        u8 pad_00[0x14];
+        f32 x;
+        f32 y;
+        u8 pad_1C[0x4];
+        s32 timer;
+    } AcRepeatedlyDispWork;
+    extern f32 intplGetValue(s32 type, f32 start, f32 end, s32 time, s32 duration);
+    extern f32 float_neg300_80422ab8;
+    extern f32 float_30_80422abc;
+    register AcRepeatedlyDispWork* work = (AcRepeatedlyDispWork*)((s32)battleWork + 0x1F20);
+    s32 status = *(s32*)((s32)battleWork + 0x1C9C);
+    s32 timer;
+
+    if (status < 1000) {
+        if (status >= 101) {
+            return;
+        }
+        if (status >= 99) {
+            goto opening;
+        }
+        return;
+    } else {
+        if (status >= 1004) {
+            return;
+        }
+        if (status >= 1002) {
+            goto closing;
+        }
+    }
+
+opening:
+    work->x = intplGetValue(
+        4,
+        float_neg300_80422ab8,
+        float_30_80422abc,
+        20 - work->timer,
+        20
+    );
+    actionCommandDisp(work->x, work->y);
+    timer = work->timer;
+    if (timer > 0) {
+        work->timer = timer - 1;
+    }
+    return;
+
+closing:
+    timer = work->timer;
+    if (timer >= 40) {
+        work->x = intplGetValue(
+            4,
+            float_30_80422abc,
+            float_neg300_80422ab8,
+            timer - 40,
+            20
+        );
+    } else {
+        work->x = float_30_80422abc;
+    }
+    actionCommandDisp(work->x, work->y);
+    timer = work->timer;
+    if (timer < 60) {
+        work->timer = timer + 1;
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+void battleAcDelete_Repeatedly(void* wp) {
+    void* callArg;
+
+    switch (*(s32*)((s32)wp + 0x1CC8)) {
+        case 10:
+            *(u32*)((s32)wp + 0xEF4) &= ~0x20000000;
+            break;
+        default:
+            break;
+    }
+    BattleAcGaugeSeDelete(callArg);
+    *(s32*)((s32)wp + 0x1C9C) = 1002;
+}
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void actionCommandDisp(f32 x, f32 y) {
@@ -374,155 +524,4 @@ void actionCommandDisp(f32 x, f32 y) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
-typedef struct AcRepeatedlyDispWork {
-    u8 pad_00[0x14];
-    f32 x;
-    f32 y;
-    u8 pad_1C[0x4];
-    s32 timer;
-} AcRepeatedlyDispWork;
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void battleAcDisp_Repeatedly(s32 param_1, void* battleWork) {
-    extern f32 intplGetValue(s32 type, f32 start, f32 end, s32 time, s32 duration);
-    extern f32 float_neg300_80422ab8;
-    extern f32 float_30_80422abc;
-    register AcRepeatedlyDispWork* work = (AcRepeatedlyDispWork*)((s32)battleWork + 0x1F20);
-    s32 status = *(s32*)((s32)battleWork + 0x1C9C);
-    s32 timer;
-
-    if (status < 1000) {
-        if (status >= 101) {
-            return;
-        }
-        if (status >= 99) {
-            goto opening;
-        }
-        return;
-    } else {
-        if (status >= 1004) {
-            return;
-        }
-        if (status >= 1002) {
-            goto closing;
-        }
-    }
-
-opening:
-    work->x = intplGetValue(
-        4,
-        float_neg300_80422ab8,
-        float_30_80422abc,
-        20 - work->timer,
-        20
-    );
-    actionCommandDisp(work->x, work->y);
-    timer = work->timer;
-    if (timer > 0) {
-        work->timer = timer - 1;
-    }
-    return;
-
-closing:
-    timer = work->timer;
-    if (timer >= 40) {
-        work->x = intplGetValue(
-            4,
-            float_30_80422abc,
-            float_neg300_80422ab8,
-            timer - 40,
-            20
-        );
-    } else {
-        work->x = float_30_80422abc;
-    }
-    actionCommandDisp(work->x, work->y);
-    timer = work->timer;
-    if (timer < 60) {
-        work->timer = timer + 1;
-    }
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-
-/* CHATGPT STUB FILL: main/action/ac_repeatedly 20260624_184008 */
-
-/* stub-fill: _init_param | missing_definition | ghidra_signature */
-void _init_param(void* battleWork) {
-    extern s32 irand(s32 max);
-    char* battle;
-    char* extra;
-    char* disp;
-    s32 type;
-    s32 value;
-
-    battle = (char*)battleWork;
-    extra = battle + 0x1F4C;
-    disp = battle + 0x1F20;
-    extra[0x2C] = 0;
-    *(s32*)(extra + 0x0C) = 0;
-    type = *(s32*)(battle + 0x1CC8);
-
-    switch (type) {
-        case 2: value = 0x200; goto set_same;
-        case 3: value = 0x400; goto set_same;
-        case 4: value = 0x800; goto set_same;
-        case 5: value = 0x20; goto set_same;
-        case 8:
-            *(s32*)(extra + 0x0C) = 0x100;
-        case 6:
-            value = 0x40000;
-            goto set_same;
-        case 10:
-            *(u32*)(battle + 0xEF4) |= 0x20000000;
-            break;
-        case 0x0B:
-            *(s32*)(extra + 0x00) = 0x100;
-            *(s32*)(extra + 0x04) = 0x100;
-            *(s32*)(extra + 0x08) = 0x200;
-            break;
-        case 0x0C:
-            *(s32*)(extra + 0x00) = 0x400;
-            *(s32*)(extra + 0x04) = 0x400;
-            *(s32*)(extra + 0x08) = 0x800;
-            break;
-        case 0x10:
-            *(s32*)(extra + 0x00) = 0x100;
-            *(s32*)(extra + 0x04) = 0x100;
-            *(s32*)(extra + 0x08) = 0x200;
-            *(s16*)(extra + 0x22) = irand(0x1E) + 0x3C;
-            break;
-        default:
-            value = 0x100;
-set_same:
-            *(s32*)(extra + 0x00) = value;
-            *(s32*)(extra + 0x04) = value;
-            *(s32*)(extra + 0x08) = value;
-            break;
-    }
-
-    *(s16*)(extra + 0x28) = *(s32*)(battle + 0x1CCC);
-    *(s16*)(extra + 0x26) = *(s32*)(battle + 0x1CCC);
-    *(f32*)(extra + 0x10) = (f32)*(s32*)(battle + 0x1CD0);
-    *(f32*)(extra + 0x14) = (f32)*(s32*)(battle + 0x1CD4) / 10.0f;
-    if (*(f32*)(extra + 0x14) != 0.0f) {
-        *(f32*)(extra + 0x10) = (f32)irand(100);
-    }
-    *(f32*)(extra + 0x18) = (f32)*(s32*)(battle + 0x1CE4);
-    *(f32*)(disp + 0x28) = 0.01f * *(f32*)(extra + 0x18);
-    *(s16*)(extra + 0x20) = 0;
-    *(s16*)(extra + 0x24) = *(s32*)(battle + 0x1CDC);
-    *(f32*)(extra + 0x1C) = 0.01f * (f32)*(s32*)(battle + 0x1CE0);
-    extra[0x2A] = 0xB2;
-    if (*(s16*)(battle + 0x1D18) > 0) {
-        *(s16*)(battle + 0x1D18) -= 1;
-        extra[0x2B] = 1;
-    } else {
-        extra[0x2B] = 0;
-    }
-    *(s32*)(battle + 0x1CE8) = 0;
-}
 

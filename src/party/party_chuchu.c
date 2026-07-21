@@ -8,37 +8,47 @@ extern char str_PCH_Y_1_802f8ca0[];
 
 s32 marioGetPartyId(void);
 void* partyGetPtr(s32 id);
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 search_result(void* pEvt, int param_2) {
+    extern s32 sysMsec2Frame(s32 msec);
+    extern void effFukidashiEntry(s32 type, s32 a, s32 b, s32 frames, f32 x, f32 y, f32 z, f32 w, f32 v);
+    extern void psndSFXOn_3D(s32 soundId, void* pos);
+    extern void partyChgPose(void* party, void* pose);
+    extern void partyChkGnd(void* party);
+    void* party;
+    s32 frames;
 
-void chuchu_exit(void) {
-    ;
-}
-
-void chuchu_reinit(void) {
-    ;
-}
-
-void chuchu_init(void* party) {
-    *(u8*)((s32)party + 0x33) = 7;
-    {
-        f32 f24;
-        f32 f20 = float_20_80424374;
-        *(u8*)((s32)party + 0x32) = 0;
-        f24 = float_24_80424378;
-        *(f32*)((s32)party + 0xF0) = f20;
-        *(f32*)((s32)party + 0xF4) = f24;
+    party = partyGetPtr(marioGetPartyId());
+    if (param_2 != 0) {
+        if (*(u32*)((s32)pEvt + 0x9C) == 0 || *(s32*)((s32)pEvt + 0xA0) == 0) {
+            return 2;
+        }
+        if (*(s32*)((s32)pEvt + 0xA0) == 1) {
+            if (party != 0) {
+                frames = sysMsec2Frame(0x5DC);
+                effFukidashiEntry(6, 0, -2, frames, float_0_80424370, float_18_80424388,
+                                  float_0_80424370, float_0_80424370, float_0_80424370);
+            }
+            return 2;
+        }
+        psndSFXOn_3D(0x945, (void*)((s32)party + 0x58));
+        *(s32*)((s32)pEvt + 0x84) = 0x2A;
+        partyChgPose(party, str_PCH_Y_1_802f8ca0);
     }
-}
-
-s32 post_msg(void* party) {
-    void* current;
-
-    current = partyGetPtr(marioGetPartyId());
-    *(s32*)((s32)party + 0x9C) = 0;
-    if (current != 0) {
-        (*(u8*)((s32)current + 0x39))++;
+    partyChkGnd(party);
+    if (--(*(s32*)((s32)pEvt + 0x84)) > 0) {
+        return 0;
+    }
+    if (party != 0) {
+        frames = sysMsec2Frame(0x5DC);
+        effFukidashiEntry(6, 0, -2, frames, float_0_80424370, float_18_80424388,
+                          float_0_80424370, float_0_80424370, float_0_80424370);
     }
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 #pragma no_register_save_helpers on
@@ -190,6 +200,17 @@ s32 set_msg(void* pEvt) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+
+s32 post_msg(void* party) {
+    void* current;
+
+    current = partyGetPtr(marioGetPartyId());
+    *(s32*)((s32)party + 0x9C) = 0;
+    if (current != 0) {
+        (*(u8*)((s32)current + 0x39))++;
+    }
+    return 2;
+}
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 chuchu_searchObject(void) {
@@ -249,48 +270,39 @@ u8 chuchu_searchObject(void) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-s32 search_result(void* pEvt, int param_2) {
-    extern s32 sysMsec2Frame(s32 msec);
-    extern void effFukidashiEntry(s32 type, s32 a, s32 b, s32 frames, f32 x, f32 y, f32 z, f32 w, f32 v);
-    extern void psndSFXOn_3D(s32 soundId, void* pos);
-    extern void partyChgPose(void* party, void* pose);
-    extern void partyChkGnd(void* party);
-    void* party;
-    s32 frames;
 
-    party = partyGetPtr(marioGetPartyId());
-    if (param_2 != 0) {
-        if (*(u32*)((s32)pEvt + 0x9C) == 0 || *(s32*)((s32)pEvt + 0xA0) == 0) {
-            return 2;
-        }
-        if (*(s32*)((s32)pEvt + 0xA0) == 1) {
-            if (party != 0) {
-                frames = sysMsec2Frame(0x5DC);
-                effFukidashiEntry(6, 0, -2, frames, float_0_80424370, float_18_80424388,
-                                  float_0_80424370, float_0_80424370, float_0_80424370);
-            }
-            return 2;
-        }
-        psndSFXOn_3D(0x945, (void*)((s32)party + 0x58));
-        *(s32*)((s32)pEvt + 0x84) = 0x2A;
-        partyChgPose(party, str_PCH_Y_1_802f8ca0);
+void chuchu_init(void* party) {
+    *(u8*)((s32)party + 0x33) = 7;
+    {
+        f32 f24;
+        f32 f20 = float_20_80424374;
+        *(u8*)((s32)party + 0x32) = 0;
+        f24 = float_24_80424378;
+        *(f32*)((s32)party + 0xF0) = f20;
+        *(f32*)((s32)party + 0xF4) = f24;
     }
-    partyChkGnd(party);
-    if (--(*(s32*)((s32)pEvt + 0x84)) > 0) {
-        return 0;
-    }
-    if (party != 0) {
-        frames = sysMsec2Frame(0x5DC);
-        effFukidashiEntry(6, 0, -2, frames, float_0_80424370, float_18_80424388,
-                          float_0_80424370, float_0_80424370, float_0_80424370);
-    }
-    return 2;
 }
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
 
+void chuchu_reinit(void) {
+    ;
+}
+
+void chuchu_exit(void) {
+    ;
+}
+u8 chuchu_move(void* pParty) {
+    extern void partyWalkInit(void* party, s32 param);
+    extern void unk_800cbeb0(void* party);
+    extern void partyWalkMain(void* party);
+
+    if (*(u32*)((s32)pParty + 8) & 8) {
+        *(u32*)((s32)pParty + 8) &= ~8;
+        *(u32*)pParty &= ~0x100;
+        partyWalkInit(pParty, 1);
+    }
+    unk_800cbeb0(pParty);
+    partyWalkMain(pParty);
+}
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void chuchu_use(void* pParty) {
@@ -409,18 +421,4 @@ void chuchu_use(void* pParty) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
-u8 chuchu_move(void* pParty) {
-    extern void partyWalkInit(void* party, s32 param);
-    extern void unk_800cbeb0(void* party);
-    extern void partyWalkMain(void* party);
-
-    if (*(u32*)((s32)pParty + 8) & 8) {
-        *(u32*)((s32)pParty + 8) &= ~8;
-        *(u32*)pParty &= ~0x100;
-        partyWalkInit(pParty, 1);
-    }
-    unk_800cbeb0(pParty);
-    partyWalkMain(pParty);
-}
 

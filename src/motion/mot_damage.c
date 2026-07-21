@@ -18,12 +18,6 @@ typedef struct DamageVec {
     f32 z;
 } DamageVec;
 
-void set_damage_root_ypos(f32 y) {
-    f32 temp = y;
-    void* mario = marioGetPtr();
-    *(f32*)((s32)mario + 0x2B8) = temp;
-}
-
 void marioDmgRetQuakeOn(void) {
     void* script;
 
@@ -54,6 +48,37 @@ void marioSetSplash(s32 type, f32* pos) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+
+
+s32 gazigazi(void* pEvt) {
+    void* mario = marioGetPtr();
+
+    *(s32*)((s32)pEvt + 0x9C) = (s32)*(f32*)((s32)mario + 0x8C);
+    *(s32*)((s32)pEvt + 0xA0) = (s32)*(f32*)((s32)mario + 0x2B8);
+    *(s32*)((s32)pEvt + 0xA4) = (s32)*(f32*)((s32)mario + 0x94);
+    return 2;
+}
+
+
+s32 marioChkDamageSink(void) {
+    extern void* marioGetPtr(void);
+    void* mario = marioGetPtr();
+    s32 state;
+
+    if (*(u16*)((s32)mario + 0x2E) == 0x1F) {
+        state = *(s32*)((s32)mario + 0x44);
+        if (state >= 0 && state < 10) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void set_damage_root_ypos(f32 y) {
+    f32 temp = y;
+    void* mario = marioGetPtr();
+    *(f32*)((s32)mario + 0x2B8) = temp;
+}
 
 u8 mot_damage(void) {
     typedef struct Vec { f32 x, y, z; } Vec;
@@ -275,6 +300,33 @@ u8 mot_damage(void) {
     return 0;
 }
 
+
+s32 marioWaitDamageReturnFall(void) {
+    s32 mario = (s32)marioGetPtr();
+    DamageVec pos;
+    f32 x;
+    f32 y;
+    f32 z;
+    u32 px;
+    u32 py;
+
+    if (*(u16*)(mario + 0x2E) != 0x1F) {
+        return -1;
+    }
+    if (*(s32*)(mario + 0x44) >= 20) {
+        px = *(u32*)(mario + 0x8C);
+        py = *(u32*)(mario + 0x90);
+        *(u32*)&pos.x = px;
+        *(u32*)&pos.y = py;
+        *(u32*)&pos.z = *(u32*)(mario + 0x94);
+        marioGetScreenPos(&pos, &x, &y, &z);
+        if (marioChkInScreen((s32)x, (s32)y) != 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 mot_damageToge(void) {
@@ -492,58 +544,6 @@ s32 marioWaitDamageTogeReturnFall(void) {
         *(u32*)&pos.z = *(u32*)(mario + 0x94);
         marioGetScreenPos(&pos, &x, &y, &z);
         if (marioChkInScreen((s32)x, (s32)y) != 0) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
-
-s32 marioWaitDamageReturnFall(void) {
-    s32 mario = (s32)marioGetPtr();
-    DamageVec pos;
-    f32 x;
-    f32 y;
-    f32 z;
-    u32 px;
-    u32 py;
-
-    if (*(u16*)(mario + 0x2E) != 0x1F) {
-        return -1;
-    }
-    if (*(s32*)(mario + 0x44) >= 20) {
-        px = *(u32*)(mario + 0x8C);
-        py = *(u32*)(mario + 0x90);
-        *(u32*)&pos.x = px;
-        *(u32*)&pos.y = py;
-        *(u32*)&pos.z = *(u32*)(mario + 0x94);
-        marioGetScreenPos(&pos, &x, &y, &z);
-        if (marioChkInScreen((s32)x, (s32)y) != 0) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
-
-s32 gazigazi(void* pEvt) {
-    void* mario = marioGetPtr();
-
-    *(s32*)((s32)pEvt + 0x9C) = (s32)*(f32*)((s32)mario + 0x8C);
-    *(s32*)((s32)pEvt + 0xA0) = (s32)*(f32*)((s32)mario + 0x2B8);
-    *(s32*)((s32)pEvt + 0xA4) = (s32)*(f32*)((s32)mario + 0x94);
-    return 2;
-}
-
-
-s32 marioChkDamageSink(void) {
-    extern void* marioGetPtr(void);
-    void* mario = marioGetPtr();
-    s32 state;
-
-    if (*(u16*)((s32)mario + 0x2E) == 0x1F) {
-        state = *(s32*)((s32)mario + 0x44);
-        if (state >= 0 && state < 10) {
             return 1;
         }
     }

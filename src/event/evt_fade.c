@@ -16,6 +16,74 @@ extern void fadeEntry(s32 type, s32 duration, void* color);
 extern void* gp;
 extern u32 dat_80422a88;
 
+s32 evt_fade_in(void* pEvt, int param_2) {
+    extern u32 dat_80422a80;
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 duration = evtGetValue(pEvt, args[0]);
+    u32 color;
+
+    if (param_2 != 0) {
+        color = dat_80422a80;
+        fadeEntry(9, duration, &color);
+    }
+
+    if (fadeIsFinish() != 1) {
+        return 0;
+    }
+    return 2;
+}
+
+s32 evt_fade_out(void* pEvt, int param_2) {
+    extern u32 dat_80422a84;
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 duration = evtGetValue(pEvt, args[0]);
+    u32 color;
+
+    if (param_2 != 0) {
+        color = dat_80422a84;
+        fadeEntry(10, duration, &color);
+    }
+
+    if (fadeIsFinish() != 1) {
+        return 0;
+    }
+    return 2;
+}
+
+
+s32 evt_fade_entry(void* pEvt) {
+    s32* args;
+    s32 type;
+    s32 duration;
+    u32 color;
+    u32 colorTemp;
+    u8 r;
+    u8 g;
+    u8 b;
+
+    args = *(s32**)((s32)pEvt + 0x18);
+    type = evtGetValue(pEvt, args[0]);
+    duration = evtGetValue(pEvt, args[1]);
+    r = evtGetValue(pEvt, args[2]);
+    g = evtGetValue(pEvt, args[3]);
+    b = evtGetValue(pEvt, args[4]);
+
+    colorTemp = dat_80422a88;
+    ((u8*)&colorTemp)[2] = b;
+    ((u8*)&colorTemp)[0] = r;
+    ((u8*)&colorTemp)[1] = g;
+    color = colorTemp;
+
+    fadeEntry(type, duration, &color);
+    return 2;
+}
+
+
+u32 evt_fade_end_wait(void) {
+    s32 done = fadeIsFinish();
+    return 2 & ~((done - 1 | 1 - done) >> 31);
+}
+
 s32 evt_fade_set_spot_pos(int event) {
     extern s32 evtGetValue(void*, s32);
     extern void* camGetPtr(s32 cameraId);
@@ -54,6 +122,40 @@ s32 evt_fade_set_spot_pos(int event) {
     GXSetProjectionv(oldProjection);
     return 2;
 }
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_fade_set_anim_ofs_pos(int param_1) {
+    void* args = *(void**)((s32)param_1 + 0x18);
+    f32 x = evtGetFloat(param_1, *(s32*)args);
+    f32 y = evtGetFloat(param_1, *(s32*)((s32)args + 4));
+
+    fadeSetAnimOfsPos(x, y);
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 evt_fade_set_anim_virtual_pos(int param_1) {
+    s32* args;
+    f32 x;
+    f32 y;
+    f32 z;
+
+    args = *(s32**)(param_1 + 0x18);
+    x = evtGetFloat(param_1, args[0]);
+    y = evtGetFloat(param_1, args[1]);
+    z = evtGetFloat(param_1, args[2]);
+    fadeSetAnimVirtualPos(x, y, z);
+
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
 
 s32 evt_fade_set_mapchange_type(int param_1) {
     s32* args;
@@ -102,34 +204,6 @@ s32 evt_fade_set_mapchange_type(int param_1) {
 }
 
 
-s32 evt_fade_entry(void* pEvt) {
-    s32* args;
-    s32 type;
-    s32 duration;
-    u32 color;
-    u32 colorTemp;
-    u8 r;
-    u8 g;
-    u8 b;
-
-    args = *(s32**)((s32)pEvt + 0x18);
-    type = evtGetValue(pEvt, args[0]);
-    duration = evtGetValue(pEvt, args[1]);
-    r = evtGetValue(pEvt, args[2]);
-    g = evtGetValue(pEvt, args[3]);
-    b = evtGetValue(pEvt, args[4]);
-
-    colorTemp = dat_80422a88;
-    ((u8*)&colorTemp)[2] = b;
-    ((u8*)&colorTemp)[0] = r;
-    ((u8*)&colorTemp)[1] = g;
-    color = colorTemp;
-
-    fadeEntry(type, duration, &color);
-    return 2;
-}
-
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_fade_tec_onoff(int param_1) {
@@ -161,74 +235,6 @@ s32 evt_fade_tec_onoff(int param_1) {
 #pragma use_lmw_stmw on
 
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-s32 evt_fade_set_anim_virtual_pos(int param_1) {
-    s32* args;
-    f32 x;
-    f32 y;
-    f32 z;
-
-    args = *(s32**)(param_1 + 0x18);
-    x = evtGetFloat(param_1, args[0]);
-    y = evtGetFloat(param_1, args[1]);
-    z = evtGetFloat(param_1, args[2]);
-    fadeSetAnimVirtualPos(x, y, z);
-
-    return 2;
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-
-s32 evt_fade_out(void* pEvt, int param_2) {
-    extern u32 dat_80422a84;
-    s32* args = *(s32**)((s32)pEvt + 0x18);
-    s32 duration = evtGetValue(pEvt, args[0]);
-    u32 color;
-
-    if (param_2 != 0) {
-        color = dat_80422a84;
-        fadeEntry(10, duration, &color);
-    }
-
-    if (fadeIsFinish() != 1) {
-        return 0;
-    }
-    return 2;
-}
-
-s32 evt_fade_in(void* pEvt, int param_2) {
-    extern u32 dat_80422a80;
-    s32* args = *(s32**)((s32)pEvt + 0x18);
-    s32 duration = evtGetValue(pEvt, args[0]);
-    u32 color;
-
-    if (param_2 != 0) {
-        color = dat_80422a80;
-        fadeEntry(9, duration, &color);
-    }
-
-    if (fadeIsFinish() != 1) {
-        return 0;
-    }
-    return 2;
-}
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-s32 evt_fade_set_anim_ofs_pos(int param_1) {
-    void* args = *(void**)((s32)param_1 + 0x18);
-    f32 x = evtGetFloat(param_1, *(s32*)args);
-    f32 y = evtGetFloat(param_1, *(s32*)((s32)args + 4));
-
-    fadeSetAnimOfsPos(x, y);
-    return 2;
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-
 s32 evt_fade_softfocus_onoff(int param_1) {
     if (evtGetValue(param_1, **(s32**)((s32)param_1 + 0x18)) != 0) {
         fadeSoftFocusOn();
@@ -236,12 +242,6 @@ s32 evt_fade_softfocus_onoff(int param_1) {
         fadeSoftFocusOff();
     }
     return 2;
-}
-
-
-u32 evt_fade_end_wait(void) {
-    s32 done = fadeIsFinish();
-    return 2 & ~((done - 1 | 1 - done) >> 31);
 }
 
 

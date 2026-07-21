@@ -27,144 +27,6 @@ s32 BattleAudience_GetPresentItemNo(void);
 void BattleAudience_SetPresentItemNo(s32 itemNo);
 void pouchGetItem(s32 itemNo);
 
-void* btlataudGetAttackEventPtr(s32 unitId) {
-    void* data = BtlUnit_GetData(BattleGetUnitPtr(_battleWorkPointer, unitId), 6);
-
-    if (data == 0) {
-        data = btlataudevtDummy + 4;
-    }
-    return data;
-}
-
-void* btlataudGetMoveEventPtr(void) {
-    switch (BattleAudience_GetPresentItemType()) {
-        case 1:
-            return btlataudevtPresentItem_Damage;
-        case 0:
-        default:
-            return btlataudevtPresentItem_Get;
-    }
-}
-
-USER_FUNC(_get_present_target_id) {
-    s32 dst;
-
-    dst = event->args[0];
-
-    evtSetValue(event, dst, BattleAudience_GetPresentTargetUnitId());
-    return 2;
-}
-
-USER_FUNC(_get_present_item) {
-    void* battleWork;
-    s32 itemNo;
-    s32 targetId;
-    void* unit;
-
-    battleWork = _battleWorkPointer;
-    itemNo = BattleAudience_GetPresentItemNo();
-
-    targetId = BattleAudience_GetPresentTargetUnitId();
-    unit = BattleGetUnitPtr(battleWork, targetId);
-
-    if (*(s8*)((s32)unit + 0xC) == 0) {
-        pouchGetItem(itemNo);
-    } else if (*(s32*)((s32)unit + 0x308) == 0) {
-        *(s32*)((s32)unit + 0x308) = itemNo;
-    }
-
-    return 2;
-}
-
-USER_FUNC(_delete_present_item) {
-    s32* args;
-    s32 dst;
-    s32 itemNo;
-
-    args = event->args;
-    dst = args[0];
-
-    itemNo = BattleAudience_GetPresentItemNo();
-
-    if (dst != -0x0EE6B280) {
-        evtSetValue(event, dst, itemNo);
-    }
-
-    BattleAudience_SetPresentItemNo(0);
-    return 2;
-}
-
-void _get_item_announce_disp(void) {
-    extern char* msgSearch(char* msgId);
-    extern int sprintf(char* str, const char* format, ...);
-    extern char* strcpy(char* dst, const char* src);
-    extern void unk_800d1364(char* dst, const char* src);
-    extern s32 FontGetMessageWidthLine(char* msg, void* lines);
-    extern void windowDispGX_Waku_col(s32 texture, void* color, f32 x, f32 y, f32 width, f32 height, f32 curve);
-    extern void FontDrawStart(void);
-    extern void FontDrawMessage(s32 x, s32 y, char* msg);
-    u32 color;
-    u16 lines[2];
-    char buf[0x80];
-    char* itemName;
-    s32 width;
-    s32 halfWidth;
-    f32 x;
-    u16 lineCount;
-
-    itemName = msgSearch(*(char**)(itemDataTable + BattleAudience_GetPresentItemNo() * 0x28 + 4));
-    if (*(void**)((s32)gp + 0x16C) == 0) {
-        sprintf(buf, msgSearch(str_btl_msg_get_item_802f4288), itemName);
-    } else {
-        strcpy(buf, msgSearch(str_btl_msg_get_item_802f4288));
-        unk_800d1364(buf, itemName);
-    }
-    width = (u16)FontGetMessageWidthLine(buf, lines);
-    halfWidth = width / 2;
-    lineCount = lines[0] + 1;
-    x = float_0_80422f9c - (f32)halfWidth;
-    lines[0] = lineCount;
-    color = dat_80422f90;
-    windowDispGX_Waku_col(0, &color, x - float_10_80422fa0, float_34_80422fa4, width + 0x14, lineCount * 0x1D + 3, float_10_80422fa0);
-    FontDrawStart();
-    FontDrawMessage((s32)x, (s32)float_60_80422fa8 - 0x1D, buf);
-}
-
-
-s32 _get_item_announce(void* event, s32 isFirstCall) {
-    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
-    extern s32 BtlUnit_GetHeight(void* unit);
-    extern s32 itemEntry(s32 id, s32 itemNo, s32 type, s32 a, s32 b, f32 x, f32 y, f32 z);
-    extern void itemDelete(void* name);
-    extern void dispEntry(s32 cameraId, s32 priority, void* callback, f32 z, void* param);
-    void* battleWork = _battleWorkPointer;
-    s32 itemNo = BattleAudience_GetPresentItemNo();
-    void* unit;
-    s32 targetId;
-    f32 x;
-    f32 y;
-    f32 z;
-
-    if (isFirstCall != 0) {
-        targetId = BattleAudience_GetPresentTargetUnitId();
-        unit = BattleGetUnitPtr(battleWork, targetId);
-        BtlUnit_GetPos(unit, &x, &y, &z);
-        y += *(f32*)((s32)unit + 0x114) * BtlUnit_GetHeight(unit) + float_8_80422f94;
-        *(s32*)((s32)event + 0x7C) = itemEntry(0, itemNo, 0x11, -1, 0, x, y, z);
-        *(s32*)((s32)event + 0x80) = 0x5A;
-    } else {
-        if (*(s32*)((s32)event + 0x80) > 0) {
-            *(s32*)((s32)event + 0x80) -= 1;
-        }
-        if (*(s32*)((s32)event + 0x80) <= 0) {
-            itemDelete((void*)(*(s32*)((s32)event + 0x7C) + 0xC));
-            return 2;
-        }
-    }
-    dispEntry(8, 1, _get_item_announce_disp, float_900_80422f98, 0);
-    return 0;
-}
-
 
 s32 _get_attack_aud_no(int param_1) {
     extern void BattleAudience_GetItemOn2(void* itemNo, f32* x, f32* y, f32* z, s32 flag);
@@ -254,6 +116,125 @@ s32 _check_aud_item_type(int param_1) {
     return 2;
 }
 
+USER_FUNC(_delete_present_item) {
+    s32* args;
+    s32 dst;
+    s32 itemNo;
+
+    args = event->args;
+    dst = args[0];
+
+    itemNo = BattleAudience_GetPresentItemNo();
+
+    if (dst != -0x0EE6B280) {
+        evtSetValue(event, dst, itemNo);
+    }
+
+    BattleAudience_SetPresentItemNo(0);
+    return 2;
+}
+
+USER_FUNC(_get_present_item) {
+    void* battleWork;
+    s32 itemNo;
+    s32 targetId;
+    void* unit;
+
+    battleWork = _battleWorkPointer;
+    itemNo = BattleAudience_GetPresentItemNo();
+
+    targetId = BattleAudience_GetPresentTargetUnitId();
+    unit = BattleGetUnitPtr(battleWork, targetId);
+
+    if (*(s8*)((s32)unit + 0xC) == 0) {
+        pouchGetItem(itemNo);
+    } else if (*(s32*)((s32)unit + 0x308) == 0) {
+        *(s32*)((s32)unit + 0x308) = itemNo;
+    }
+
+    return 2;
+}
+
+USER_FUNC(_get_present_target_id) {
+    s32 dst;
+
+    dst = event->args[0];
+
+    evtSetValue(event, dst, BattleAudience_GetPresentTargetUnitId());
+    return 2;
+}
+
+void _get_item_announce_disp(void) {
+    extern char* msgSearch(char* msgId);
+    extern int sprintf(char* str, const char* format, ...);
+    extern char* strcpy(char* dst, const char* src);
+    extern void unk_800d1364(char* dst, const char* src);
+    extern s32 FontGetMessageWidthLine(char* msg, void* lines);
+    extern void windowDispGX_Waku_col(s32 texture, void* color, f32 x, f32 y, f32 width, f32 height, f32 curve);
+    extern void FontDrawStart(void);
+    extern void FontDrawMessage(s32 x, s32 y, char* msg);
+    u32 color;
+    u16 lines[2];
+    char buf[0x80];
+    char* itemName;
+    s32 width;
+    s32 halfWidth;
+    f32 x;
+    u16 lineCount;
+
+    itemName = msgSearch(*(char**)(itemDataTable + BattleAudience_GetPresentItemNo() * 0x28 + 4));
+    if (*(void**)((s32)gp + 0x16C) == 0) {
+        sprintf(buf, msgSearch(str_btl_msg_get_item_802f4288), itemName);
+    } else {
+        strcpy(buf, msgSearch(str_btl_msg_get_item_802f4288));
+        unk_800d1364(buf, itemName);
+    }
+    width = (u16)FontGetMessageWidthLine(buf, lines);
+    halfWidth = width / 2;
+    lineCount = lines[0] + 1;
+    x = float_0_80422f9c - (f32)halfWidth;
+    lines[0] = lineCount;
+    color = dat_80422f90;
+    windowDispGX_Waku_col(0, &color, x - float_10_80422fa0, float_34_80422fa4, width + 0x14, lineCount * 0x1D + 3, float_10_80422fa0);
+    FontDrawStart();
+    FontDrawMessage((s32)x, (s32)float_60_80422fa8 - 0x1D, buf);
+}
+
+
+s32 _get_item_announce(void* event, s32 isFirstCall) {
+    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+    extern s32 BtlUnit_GetHeight(void* unit);
+    extern s32 itemEntry(s32 id, s32 itemNo, s32 type, s32 a, s32 b, f32 x, f32 y, f32 z);
+    extern void itemDelete(void* name);
+    extern void dispEntry(s32 cameraId, s32 priority, void* callback, f32 z, void* param);
+    void* battleWork = _battleWorkPointer;
+    s32 itemNo = BattleAudience_GetPresentItemNo();
+    void* unit;
+    s32 targetId;
+    f32 x;
+    f32 y;
+    f32 z;
+
+    if (isFirstCall != 0) {
+        targetId = BattleAudience_GetPresentTargetUnitId();
+        unit = BattleGetUnitPtr(battleWork, targetId);
+        BtlUnit_GetPos(unit, &x, &y, &z);
+        y += *(f32*)((s32)unit + 0x114) * BtlUnit_GetHeight(unit) + float_8_80422f94;
+        *(s32*)((s32)event + 0x7C) = itemEntry(0, itemNo, 0x11, -1, 0, x, y, z);
+        *(s32*)((s32)event + 0x80) = 0x5A;
+    } else {
+        if (*(s32*)((s32)event + 0x80) > 0) {
+            *(s32*)((s32)event + 0x80) -= 1;
+        }
+        if (*(s32*)((s32)event + 0x80) <= 0) {
+            itemDelete((void*)(*(s32*)((s32)event + 0x7C) + 0xC));
+            return 2;
+        }
+    }
+    dispEntry(8, 1, _get_item_announce_disp, float_900_80422f98, 0);
+    return 0;
+}
+
 
 s32 _damage(void* pEvt) {
     extern s32 BtlUnit_GetBodyPartsId(void* unit);
@@ -275,4 +256,23 @@ s32 _damage(void* pEvt) {
     BattleActionCommandResetDefenceResult();
     BattleCheckDamage(BattleGetSystemPtr(battleWork), unit, parts, (void*)((s32)audienceBase + 0x137FC), 0x100);
     return 2;
+}
+
+void* btlataudGetMoveEventPtr(void) {
+    switch (BattleAudience_GetPresentItemType()) {
+        case 1:
+            return btlataudevtPresentItem_Damage;
+        case 0:
+        default:
+            return btlataudevtPresentItem_Get;
+    }
+}
+
+void* btlataudGetAttackEventPtr(s32 unitId) {
+    void* data = BtlUnit_GetData(BattleGetUnitPtr(_battleWorkPointer, unitId), 6);
+
+    if (data == 0) {
+        data = btlataudevtDummy + 4;
+    }
+    return data;
 }

@@ -19,6 +19,35 @@ s32 _disable_restore_command_cursor(void) {
 }
 
 
+s32 _check_at_dm_event_wait(void* evt) {
+    s32* args;
+    void* battleWork;
+    s32 type;
+    void* unit;
+    s32 evtId;
+
+    args = *(s32**)((s32)evt + 0x18);
+    battleWork = _battleWorkPointer;
+    type = evtGetValue(evt, args[0]);
+    unit = BattleGetUnitPtr(battleWork, BattleTransID(evt, type));
+    if (unit == 0) {
+        return 2;
+    }
+
+    evtId = *(s32*)((s32)unit + 0x2A8);
+    if (evtId != 0 && evtCheckID(evtId) != 0) {
+        return 0;
+    }
+
+    evtId = *(s32*)((s32)unit + 0x2B4);
+    if (evtId != 0 && evtCheckID(evtId) != 0) {
+        return 0;
+    }
+
+    return 2;
+}
+
+
 s32 _add_star_point_disp_offset(void* evt) {
     s32* args;
     void* battleWork;
@@ -49,6 +78,23 @@ s32 _add_star_point_disp_offset(void* evt) {
     evtSetValue(evt, xVar, (s32)x);
     evtSetValue(evt, yVar, (s32)y);
     evtSetValue(evt, zVar, (s32)z);
+
+    return 2;
+}
+
+s32 unk_80113f1c(void* evt) {
+    s32* args;
+    void* battleWork;
+    s32 type;
+    void* unit;
+
+    args = *(s32**)((s32)evt + 0x18);
+    battleWork = _battleWorkPointer;
+    type = evtGetValue(evt, args[0]);
+    unit = BattleGetUnitPtr(battleWork, BattleTransID(evt, type));
+    if (unit != 0) {
+        *(u16*)((s32)unit + 0x1FE) |= 1;
+    }
 
     return 2;
 }
@@ -121,52 +167,6 @@ s32 _binta_effect(void* evt) {
     *(f32*)((s32)*(void**)((s32)eff + 0xC) + 8) = x;
     *(f32*)((s32)*(void**)((s32)eff + 0xC) + 0xC) = y;
     *(f32*)((s32)*(void**)((s32)eff + 0xC) + 0x10) = z;
-
-    return 2;
-}
-
-
-s32 _check_at_dm_event_wait(void* evt) {
-    s32* args;
-    void* battleWork;
-    s32 type;
-    void* unit;
-    s32 evtId;
-
-    args = *(s32**)((s32)evt + 0x18);
-    battleWork = _battleWorkPointer;
-    type = evtGetValue(evt, args[0]);
-    unit = BattleGetUnitPtr(battleWork, BattleTransID(evt, type));
-    if (unit == 0) {
-        return 2;
-    }
-
-    evtId = *(s32*)((s32)unit + 0x2A8);
-    if (evtId != 0 && evtCheckID(evtId) != 0) {
-        return 0;
-    }
-
-    evtId = *(s32*)((s32)unit + 0x2B4);
-    if (evtId != 0 && evtCheckID(evtId) != 0) {
-        return 0;
-    }
-
-    return 2;
-}
-
-s32 unk_80113f1c(void* evt) {
-    s32* args;
-    void* battleWork;
-    s32 type;
-    void* unit;
-
-    args = *(s32**)((s32)evt + 0x18);
-    battleWork = _battleWorkPointer;
-    type = evtGetValue(evt, args[0]);
-    unit = BattleGetUnitPtr(battleWork, BattleTransID(evt, type));
-    if (unit != 0) {
-        *(u16*)((s32)unit + 0x1FE) |= 1;
-    }
 
     return 2;
 }

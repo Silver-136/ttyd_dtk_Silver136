@@ -67,18 +67,6 @@ void* effPokopiPipoN64Entry(s32 type, s32 time, f32 x0, f32 y0, f32 z0, f32 x1, 
     return entry;
 }
 
-#pragma optimize_for_size on
-
-#pragma use_lmw_stmw on
-#pragma no_register_save_helpers off
-
-void effPokopiPipoDisp(s32 cameraId, void* effect) {
-    extern void* camGetPtr(s32); extern void PSMTXTrans(void*,f32,f32,f32); extern void PSMTXRotRad(void*,s32,f32); extern void PSMTXScale(void*,f32,f32,f32); extern void PSMTXConcat(void*,void*,void*); extern void GXLoadPosMtxImm(void*,s32); extern void GXSetCurrentMtx(s32); extern void GXSetTevColor(s32,void*); extern void GXSetNumChans(s32); extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevOp(s32,s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32); extern void GXLoadTexMtxImm(void*,s32,s32); extern void effGetTexObjN64(s32,void*); extern void GXLoadTexObj(void*,s32); extern void GXSetCullMode(s32); extern void effSetVtxDescN64(void*); extern void GXBegin(s32,s32,s32); extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);
-    u8* w=*(u8**)((u8*)effect+0xC); u8* cam=camGetPtr(cameraId); f32 a[3][4],b[3][4],c[3][4]; u8 tex[0x20]; u32 col; f32 s=0.71429f**(f32*)(w+0x40);
-    PSMTXTrans(a,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC)); PSMTXRotRad(c,0x79,-0.017453292f**(f32*)((u8*)camGetPtr(4)+0x114)); PSMTXScale(b,s**(f32*)(w+0x58),s**(f32*)(w+0x5C),s); PSMTXConcat(a,c,a); PSMTXConcat(a,b,a); PSMTXRotRad(c,0x7A,0.017453292f**(f32*)(w+0x50)); PSMTXConcat(a,c,a); PSMTXConcat(cam+0x11C,a,a); GXLoadPosMtxImm(a,0); GXSetCurrentMtx(0);
-    col=(*(u8*)(w+0x30)<<24)|(*(u8*)(w+0x34)<<16)|(*(u8*)(w+0x38)<<8)|*(u8*)(w+0x3C); GXSetTevColor(1,&col); GXSetNumChans(0); GXSetNumTevStages(1); GXSetTevOrder(0,0,0,-1); GXSetTevOp(0,3); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D); PSMTXScale(b,0.03125f,0.03125f,0.0f); GXLoadTexMtxImm(b,0x1E,1); effGetTexObjN64(*(s32*)w==0?0x95:0x96,tex); GXLoadTexObj(tex,0); GXSetCullMode(0); effSetVtxDescN64((void*)0x803A74E8); GXBegin(0x90,0,6); tri2(0,1,2,0,0,2,3,0);
-}
-
 void effPokopiPipoMain(void* effect) {
     typedef struct Vec3 {
         f32 x;
@@ -151,5 +139,17 @@ void effPokopiPipoMain(void* effect) {
         *(f32*)(work + 0x54) = float_neg20_80425d90;
     }
     dispEntry(4, 2, effPokopiPipoDisp, effect, dispCalcZ(&dispPos));
+}
+
+#pragma optimize_for_size on
+
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
+
+void effPokopiPipoDisp(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32); extern void PSMTXTrans(void*,f32,f32,f32); extern void PSMTXRotRad(void*,s32,f32); extern void PSMTXScale(void*,f32,f32,f32); extern void PSMTXConcat(void*,void*,void*); extern void GXLoadPosMtxImm(void*,s32); extern void GXSetCurrentMtx(s32); extern void GXSetTevColor(s32,void*); extern void GXSetNumChans(s32); extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevOp(s32,s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32); extern void GXLoadTexMtxImm(void*,s32,s32); extern void effGetTexObjN64(s32,void*); extern void GXLoadTexObj(void*,s32); extern void GXSetCullMode(s32); extern void effSetVtxDescN64(void*); extern void GXBegin(s32,s32,s32); extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);
+    u8* w=*(u8**)((u8*)effect+0xC); u8* cam=camGetPtr(cameraId); f32 a[3][4],b[3][4],c[3][4]; u8 tex[0x20]; u32 col; f32 s=0.71429f**(f32*)(w+0x40);
+    PSMTXTrans(a,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC)); PSMTXRotRad(c,0x79,-0.017453292f**(f32*)((u8*)camGetPtr(4)+0x114)); PSMTXScale(b,s**(f32*)(w+0x58),s**(f32*)(w+0x5C),s); PSMTXConcat(a,c,a); PSMTXConcat(a,b,a); PSMTXRotRad(c,0x7A,0.017453292f**(f32*)(w+0x50)); PSMTXConcat(a,c,a); PSMTXConcat(cam+0x11C,a,a); GXLoadPosMtxImm(a,0); GXSetCurrentMtx(0);
+    col=(*(u8*)(w+0x30)<<24)|(*(u8*)(w+0x34)<<16)|(*(u8*)(w+0x38)<<8)|*(u8*)(w+0x3C); GXSetTevColor(1,&col); GXSetNumChans(0); GXSetNumTevStages(1); GXSetTevOrder(0,0,0,-1); GXSetTevOp(0,3); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D); PSMTXScale(b,0.03125f,0.03125f,0.0f); GXLoadTexMtxImm(b,0x1E,1); effGetTexObjN64(*(s32*)w==0?0x95:0x96,tex); GXLoadTexObj(tex,0); GXSetCullMode(0); effSetVtxDescN64((void*)0x803A74E8); GXBegin(0x90,0,6); tri2(0,1,2,0,0,2,3,0);
 }
 

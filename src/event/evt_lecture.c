@@ -29,16 +29,6 @@ extern f32 stXdir2;
 extern f32 stXdir3;
 extern f32 stXdir4;
 
-s32 lect_juyoitem_rel_get(void* event) {
-    evtSetValue(event, **(s32**)((s32)event + 0x18), lect_work);
-    return 2;
-}
-
-s32 lect_juyoitem_rel_set(void* event) {
-    lect_work = (void*)evtGetValue(event, **(s32**)((s32)event + 0x18));
-    return 2;
-}
-
 s32 lect_set_systemlevel(void* event) {
     marioStSystemLevel(evtGetValue(event, **(s32**)((s32)event + 0x18)));
     return 2;
@@ -194,3 +184,13 @@ s32 lect_cam_load(int param_1) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+
+s32 lect_juyoitem_rel_set(void* event) {
+    lect_work = (void*)evtGetValue(event, **(s32**)((s32)event + 0x18));
+    return 2;
+}
+
+s32 lect_juyoitem_rel_get(void* event) {
+    evtSetValue(event, **(s32**)((s32)event + 0x18), lect_work);
+    return 2;
+}

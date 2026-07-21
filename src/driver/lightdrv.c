@@ -14,122 +14,69 @@ s32 mapGetActiveGroup(void);
 s32 camGetCurNo(void);
 s32 strcmp(const char* str1, const char* str2);
 
-static LightWorkSet* currentLightWork(void) {
-    if (mapGetActiveGroup() == 1) {
-        return &work[1];
-    }
-    return &work[0];
-}
+void lightInit(void) {
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void strcpy(char* dst, const char* src);
+    extern const char str_PAPER_8041f8c4[];
+    extern const char str_PAPERI_802bf938[];
+    extern const char str_PAPERCRAFT_802bf940[];
+    extern const char str_BooBoo_802bf94c[];
+    extern Vec vec3_802bf870;
+    extern Vec vec3_802bf87c;
+    extern Vec vec3_802bf888;
+    extern Vec vec3_802bf894;
+    extern Vec vec3_802bf8a0;
+    extern Vec vec3_802bf8ac;
+    extern Vec vec3_802bf8b8;
+    extern Vec vec3_802bf8c4;
+    extern GXColor dat_8041f8b0;
+    extern GXColor dat_8041f8b4;
+    extern GXColor dat_8041f8b8;
+    extern GXColor dat_8041f8bc;
+    extern f32 float_0_8041f8cc;
+    extern f32 float_1_8041f8d0;
+    extern f32 float_3_8041f8d4;
+    extern LightEntry booLight;
+    f32 scaleMtx[3][4];
 
-s32 _sort(void* a, void* b) {
-    if (*(f32*)((s32)a + 4) > *(f32*)((s32)b + 4)) {
-        return 1;
-    }
-    if (*(f32*)((s32)a + 4) < *(f32*)((s32)b + 4)) {
-        return -1;
-    }
-    return 0;
-}
+    work[0].count = 0x20;
+    work[0].entries = __memAlloc(0, work[0].count * sizeof(LightEntry));
+    work[1].count = 0x20;
+    work[1].entries = __memAlloc(0, work[1].count * sizeof(LightEntry));
 
-LightEntry* lightNumberToPtr(s32 index) {
-    s32 group = mapGetActiveGroup();
-    LightWorkSet* set = work;
-    LightEntry* entry;
-    if (group == 1) {
-        set++;
-    }
-    entry = &set->entries[index];
-    if (entry->flags & LIGHT_ENABLED) {
-        return entry;
-    }
-    return 0;
-}
+    paperLight3D.flags = LIGHT_POINT | LIGHT_NO_DIST_ATTEN;
+    strcpy(paperLight3D.name, str_PAPER_8041f8c4);
+    paperLight3D.position = vec3_802bf870;
+    paperLight3D.rotation = vec3_802bf87c;
+    paperLight3D.color = dat_8041f8b0;
+    paperLight3D.spotAngle = float_0_8041f8cc;
+    paperLight3D.attenAngle = float_1_8041f8d0;
 
-s32 lightGetEntryNum(void) {
-    s32 group = mapGetActiveGroup();
-    LightWorkSet* set = work;
-    LightEntry* entry;
-    s32 i;
-    s32 entryCount;
-    s32 count;
-    if (group == 1) {
-        set++;
-    }
-    entryCount = set->count;
-    count = 0;
-    entry = set->entries;
-    for (i = 0; i < entryCount; i++, entry++) {
-        if (entry->flags & LIGHT_ENABLED) {
-            count++;
-        }
-    }
-    return count;
-}
+    paperLight3DImg.flags = LIGHT_POINT | LIGHT_NO_DIST_ATTEN;
+    strcpy(paperLight3DImg.name, str_PAPERI_802bf938);
+    paperLight3DImg.position = vec3_802bf888;
+    paperLight3DImg.rotation = vec3_802bf894;
+    paperLight3DImg.color = dat_8041f8b4;
+    paperLight3DImg.spotAngle = float_0_8041f8cc;
+    paperLight3DImg.attenAngle = float_1_8041f8d0;
 
-LightEntry* lightGetPaperCraft(void) {
-    return &paperCraft;
-}
+    paperCraft.flags = LIGHT_POINT | LIGHT_NO_DIST_ATTEN;
+    strcpy(paperCraft.name, str_PAPERCRAFT_802bf940);
+    paperCraft.position = vec3_802bf8a0;
+    paperCraft.rotation = vec3_802bf8ac;
+    paperCraft.color = dat_8041f8b8;
+    paperCraft.spotAngle = float_0_8041f8cc;
+    paperCraft.attenAngle = float_1_8041f8d0;
+    PSMTXScale(scaleMtx, float_3_8041f8d4, float_3_8041f8d4, float_3_8041f8d4);
+    PSMTXMultVec(scaleMtx, &paperCraft.position, &paperCraft.position);
 
-LightEntry* lightGetPaper(void) {
-    s32 cam = camGetCurNo();
-    if (cam == 4) {
-        return &paperLight3D;
-    }
-    if (cam == 6) {
-        return &paperLight3DImg;
-    }
-    return &paperLight3DImg;
-}
-
-s32 lightCheckCharaLight(void) {
-    s32 group = mapGetActiveGroup();
-    LightWorkSet* set = work;
-    LightEntry* entry;
-    s32 i;
-    if (group == 1) {
-        set++;
-    }
-    entry = set->entries;
-    for (i = 0; i < set->count; i++, entry++) {
-        if ((entry->flags & LIGHT_ENABLED) && (entry->flags & LIGHT_CHARA)) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
-LightEntry* lightGetCharaAmbient(void) {
-    s32 group = mapGetActiveGroup();
-    LightWorkSet* set = work;
-    LightEntry* entry;
-    s32 i;
-    if (group == 1) {
-        set++;
-    }
-    entry = set->entries;
-    for (i = 0; i < set->count; i++, entry++) {
-        if ((entry->flags & LIGHT_ENABLED) && (entry->flags & LIGHT_CHARA) && (entry->flags & LIGHT_AMBIENT)) {
-            return entry;
-        }
-    }
-    return 0;
-}
-
-LightEntry* lightGetAmbient(void) {
-    s32 group = mapGetActiveGroup();
-    LightWorkSet* set = work;
-    LightEntry* entry;
-    s32 i;
-    if (group == 1) {
-        set++;
-    }
-    entry = set->entries;
-    for (i = 0; i < set->count; i++, entry++) {
-        if ((entry->flags & LIGHT_ENABLED) && !(entry->flags & LIGHT_CHARA) && (entry->flags & LIGHT_AMBIENT)) {
-            return entry;
-        }
-    }
-    return 0;
+    booLight.flags = LIGHT_POINT | LIGHT_NO_DIST_ATTEN;
+    strcpy(booLight.name, str_BooBoo_802bf94c);
+    booLight.position = vec3_802bf8b8;
+    booLight.rotation = vec3_802bf8c4;
+    booLight.color = dat_8041f8bc;
+    booLight.spotAngle = float_0_8041f8cc;
+    booLight.attenAngle = float_0_8041f8cc;
 }
 
 void lightReInit(void) {
@@ -139,6 +86,52 @@ void lightReInit(void) {
         set++;
     }
     memset(set->entries, 0, set->count * sizeof(LightEntry));
+}
+
+void lightMain(void) {
+    typedef f32 Mtx[3][4];
+    extern void* camGetPtr(s32 cameraId);
+    extern void PSVECNormalize(Vec* src, Vec* dst);
+    extern u32 vec3_802bf870[];
+    extern f32 float_1p0486E06_8041f8c0;
+    extern LightEntry booLight;
+    void* cam;
+    u32* constants;
+    Vec direction;
+    Mtx view;
+    Vec out;
+    Vec paperPos;
+    Vec booPos;
+
+    constants = vec3_802bf870;
+    direction = *(Vec*)((u8*)constants + 0x60);
+    cam = camGetPtr(4);
+
+    *(Vec*)&view[1][0] = *(Vec*)((u8*)cam + 0x12C);
+    *(Vec*)&view[0][0] = *(Vec*)((u8*)cam + 0x11C);
+    *(Vec*)&view[2][0] = *(Vec*)((u8*)cam + 0x13C);
+
+    out = *(Vec*)((u8*)constants + 0x6C);
+    out.x = view[1][0] * direction.z
+        + view[0][0] * direction.x
+        + view[2][0] * direction.y;
+    out.y = view[1][1] * direction.z
+        + view[0][1] * direction.x
+        + view[2][1] * direction.y;
+    out.z = view[1][2] * direction.z
+        + view[0][2] * direction.x
+        + view[2][2] * direction.y;
+
+    PSVECNormalize(&out, &out);
+
+    paperPos = *(Vec*)((u8*)constants + 0x78);
+    paperPos.x = float_1p0486E06_8041f8c0 * out.x;
+    paperPos.y = float_1p0486E06_8041f8c0 * out.y;
+    paperPos.z = float_1p0486E06_8041f8c0 * out.z;
+    paperLight3D.position = paperPos;
+
+    booPos = *(Vec*)((u8*)constants + 0x84);
+    booLight.position = booPos;
 }
 
 int lightEntry(char* pName, int lightType, void* pos, void* rot, GXColor* color, int distanceAttenType, u32 flags, double spotAngle, double angleAtten) {
@@ -235,69 +228,47 @@ int lightEntry(char* pName, int lightType, void* pos, void* rot, GXColor* color,
     return i;
 }
 
-void lightInit(void) {
-    extern void* __memAlloc(s32 heap, u32 size);
-    extern void strcpy(char* dst, const char* src);
-    extern const char str_PAPER_8041f8c4[];
-    extern const char str_PAPERI_802bf938[];
-    extern const char str_PAPERCRAFT_802bf940[];
-    extern const char str_BooBoo_802bf94c[];
-    extern Vec vec3_802bf870;
-    extern Vec vec3_802bf87c;
-    extern Vec vec3_802bf888;
-    extern Vec vec3_802bf894;
-    extern Vec vec3_802bf8a0;
-    extern Vec vec3_802bf8ac;
-    extern Vec vec3_802bf8b8;
-    extern Vec vec3_802bf8c4;
-    extern GXColor dat_8041f8b0;
-    extern GXColor dat_8041f8b4;
-    extern GXColor dat_8041f8b8;
-    extern GXColor dat_8041f8bc;
-    extern f32 float_0_8041f8cc;
-    extern f32 float_1_8041f8d0;
-    extern f32 float_3_8041f8d4;
-    extern LightEntry booLight;
-    f32 scaleMtx[3][4];
+void* lightNameToPtr(char* name) {
+    LightWorkSet* set;
+    void* entry;
+    s32 i;
+    s32 group;
 
-    work[0].count = 0x20;
-    work[0].entries = __memAlloc(0, work[0].count * sizeof(LightEntry));
-    work[1].count = 0x20;
-    work[1].entries = __memAlloc(0, work[1].count * sizeof(LightEntry));
+    group = mapGetActiveGroup();
+    set = work;
+    if (group == 1) {
+        set++;
+    }
 
-    paperLight3D.flags = LIGHT_POINT | LIGHT_NO_DIST_ATTEN;
-    strcpy(paperLight3D.name, str_PAPER_8041f8c4);
-    paperLight3D.position = vec3_802bf870;
-    paperLight3D.rotation = vec3_802bf87c;
-    paperLight3D.color = dat_8041f8b0;
-    paperLight3D.spotAngle = float_0_8041f8cc;
-    paperLight3D.attenAngle = float_1_8041f8d0;
+    entry = set->entries;
+    i = 0;
+    goto check;
 
-    paperLight3DImg.flags = LIGHT_POINT | LIGHT_NO_DIST_ATTEN;
-    strcpy(paperLight3DImg.name, str_PAPERI_802bf938);
-    paperLight3DImg.position = vec3_802bf888;
-    paperLight3DImg.rotation = vec3_802bf894;
-    paperLight3DImg.color = dat_8041f8b4;
-    paperLight3DImg.spotAngle = float_0_8041f8cc;
-    paperLight3DImg.attenAngle = float_1_8041f8d0;
+loop:
+    if ((*(u16*)entry & 1) != 0) {
+        if (strcmp(name, (const char*)((s32)entry + 2)) == 0) {
+            return entry;
+        }
+    }
+    i++;
+    entry = (void*)((s32)entry + 0x60);
 
-    paperCraft.flags = LIGHT_POINT | LIGHT_NO_DIST_ATTEN;
-    strcpy(paperCraft.name, str_PAPERCRAFT_802bf940);
-    paperCraft.position = vec3_802bf8a0;
-    paperCraft.rotation = vec3_802bf8ac;
-    paperCraft.color = dat_8041f8b8;
-    paperCraft.spotAngle = float_0_8041f8cc;
-    paperCraft.attenAngle = float_1_8041f8d0;
-    PSMTXScale(scaleMtx, float_3_8041f8d4, float_3_8041f8d4, float_3_8041f8d4);
-    PSMTXMultVec(scaleMtx, &paperCraft.position, &paperCraft.position);
+check:
+    if (i < set->count) {
+        goto loop;
+    }
 
-    booLight.flags = LIGHT_POINT | LIGHT_NO_DIST_ATTEN;
-    strcpy(booLight.name, str_BooBoo_802bf94c);
-    booLight.position = vec3_802bf8b8;
-    booLight.rotation = vec3_802bf8c4;
-    booLight.color = dat_8041f8bc;
-    booLight.spotAngle = float_0_8041f8cc;
-    booLight.attenAngle = float_0_8041f8cc;
+    return 0;
+}
+
+s32 _sort(void* a, void* b) {
+    if (*(f32*)((s32)a + 4) > *(f32*)((s32)b + 4)) {
+        return 1;
+    }
+    if (*(f32*)((s32)a + 4) < *(f32*)((s32)b + 4)) {
+        return -1;
+    }
+    return 0;
 }
 
 void lightGetNearObj(void* pPos, LightEntry** pDst, int count, LightEntryFlags flags) {
@@ -382,81 +353,103 @@ void lightGetNearObj(void* pPos, LightEntry** pDst, int count, LightEntryFlags f
     }
 }
 
-void lightMain(void) {
-    typedef f32 Mtx[3][4];
-    extern void* camGetPtr(s32 cameraId);
-    extern void PSVECNormalize(Vec* src, Vec* dst);
-    extern u32 vec3_802bf870[];
-    extern f32 float_1p0486E06_8041f8c0;
-    extern LightEntry booLight;
-    void* cam;
-    u32* constants;
-    Vec direction;
-    Mtx view;
-    Vec out;
-    Vec paperPos;
-    Vec booPos;
-
-    constants = vec3_802bf870;
-    direction = *(Vec*)((u8*)constants + 0x60);
-    cam = camGetPtr(4);
-
-    *(Vec*)&view[1][0] = *(Vec*)((u8*)cam + 0x12C);
-    *(Vec*)&view[0][0] = *(Vec*)((u8*)cam + 0x11C);
-    *(Vec*)&view[2][0] = *(Vec*)((u8*)cam + 0x13C);
-
-    out = *(Vec*)((u8*)constants + 0x6C);
-    out.x = view[1][0] * direction.z
-        + view[0][0] * direction.x
-        + view[2][0] * direction.y;
-    out.y = view[1][1] * direction.z
-        + view[0][1] * direction.x
-        + view[2][1] * direction.y;
-    out.z = view[1][2] * direction.z
-        + view[0][2] * direction.x
-        + view[2][2] * direction.y;
-
-    PSVECNormalize(&out, &out);
-
-    paperPos = *(Vec*)((u8*)constants + 0x78);
-    paperPos.x = float_1p0486E06_8041f8c0 * out.x;
-    paperPos.y = float_1p0486E06_8041f8c0 * out.y;
-    paperPos.z = float_1p0486E06_8041f8c0 * out.z;
-    paperLight3D.position = paperPos;
-
-    booPos = *(Vec*)((u8*)constants + 0x84);
-    booLight.position = booPos;
-}
-
-void* lightNameToPtr(char* name) {
-    LightWorkSet* set;
-    void* entry;
+LightEntry* lightGetAmbient(void) {
+    s32 group = mapGetActiveGroup();
+    LightWorkSet* set = work;
+    LightEntry* entry;
     s32 i;
-    s32 group;
-
-    group = mapGetActiveGroup();
-    set = work;
     if (group == 1) {
         set++;
     }
-
     entry = set->entries;
-    i = 0;
-    goto check;
-
-loop:
-    if ((*(u16*)entry & 1) != 0) {
-        if (strcmp(name, (const char*)((s32)entry + 2)) == 0) {
+    for (i = 0; i < set->count; i++, entry++) {
+        if ((entry->flags & LIGHT_ENABLED) && !(entry->flags & LIGHT_CHARA) && (entry->flags & LIGHT_AMBIENT)) {
             return entry;
         }
     }
-    i++;
-    entry = (void*)((s32)entry + 0x60);
+    return 0;
+}
 
-check:
-    if (i < set->count) {
-        goto loop;
+LightEntry* lightGetCharaAmbient(void) {
+    s32 group = mapGetActiveGroup();
+    LightWorkSet* set = work;
+    LightEntry* entry;
+    s32 i;
+    if (group == 1) {
+        set++;
     }
+    entry = set->entries;
+    for (i = 0; i < set->count; i++, entry++) {
+        if ((entry->flags & LIGHT_ENABLED) && (entry->flags & LIGHT_CHARA) && (entry->flags & LIGHT_AMBIENT)) {
+            return entry;
+        }
+    }
+    return 0;
+}
 
+s32 lightCheckCharaLight(void) {
+    s32 group = mapGetActiveGroup();
+    LightWorkSet* set = work;
+    LightEntry* entry;
+    s32 i;
+    if (group == 1) {
+        set++;
+    }
+    entry = set->entries;
+    for (i = 0; i < set->count; i++, entry++) {
+        if ((entry->flags & LIGHT_ENABLED) && (entry->flags & LIGHT_CHARA)) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+LightEntry* lightGetPaper(void) {
+    s32 cam = camGetCurNo();
+    if (cam == 4) {
+        return &paperLight3D;
+    }
+    if (cam == 6) {
+        return &paperLight3DImg;
+    }
+    return &paperLight3DImg;
+}
+
+LightEntry* lightGetPaperCraft(void) {
+    return &paperCraft;
+}
+
+s32 lightGetEntryNum(void) {
+    s32 group = mapGetActiveGroup();
+    LightWorkSet* set = work;
+    LightEntry* entry;
+    s32 i;
+    s32 entryCount;
+    s32 count;
+    if (group == 1) {
+        set++;
+    }
+    entryCount = set->count;
+    count = 0;
+    entry = set->entries;
+    for (i = 0; i < entryCount; i++, entry++) {
+        if (entry->flags & LIGHT_ENABLED) {
+            count++;
+        }
+    }
+    return count;
+}
+
+LightEntry* lightNumberToPtr(s32 index) {
+    s32 group = mapGetActiveGroup();
+    LightWorkSet* set = work;
+    LightEntry* entry;
+    if (group == 1) {
+        set++;
+    }
+    entry = &set->entries[index];
+    if (entry->flags & LIGHT_ENABLED) {
+        return entry;
+    }
     return 0;
 }

@@ -1,4 +1,87 @@
 #include "effect/n64/eff_cool_leaf_n64.h"
+void* effCoolLeafN64Entry(f32 x, f32 y, f32 z, u32 type) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, s32 size);
+    extern s32 rand(void);
+    extern void effCoolLeafMain(void* effect);
+    extern char str_CoolLeafN64_802fada0[];
+    extern f32 float_0_80424fd8;
+    extern f32 float_0p05_80425000;
+    extern f32 float_2_80424fe8;
+    extern f32 float_0p1_80425028;
+    extern f32 float_neg3_8042502c;
+    extern f32 float_3_80425030;
+    extern f32 float_neg6_80425034;
+    extern f32 float_6_80425038;
+    extern f32 float_0p008_8042503c;
+    void* entry;
+    u8* work;
+    u8* part;
+    s32 i;
+    s32 r;
+    s32 r2;
+    s32 r3;
+    s32 r4;
+    s32 mod;
+
+    entry = effEntry();
+    *(char**)((s32)entry + 0x14) = str_CoolLeafN64_802fada0;
+    *(s32*)((s32)entry + 8) = 5;
+    work = __memAlloc(3, 0x12C);
+    *(void**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effCoolLeafMain;
+
+    *(u32*)(work + 0) = type;
+    *(f32*)(work + 4) = x;
+    *(f32*)(work + 8) = y;
+    *(f32*)(work + 0xC) = z;
+    *(s32*)(work + 0x28) = 100;
+    *(s32*)(work + 0x2C) = 0;
+    *(s32*)(work + 0x24) = 0;
+
+    part = work + 0x3C;
+    for (i = 1; i < 5; i++, part += 0x3C) {
+        r = rand();
+        r2 = rand();
+        r3 = rand();
+        r4 = rand();
+
+        *(f32*)(part + 4) = (f32)((r % 0x33) + 0x4B);
+        *(f32*)(part + 8) = (f32)((r2 % 0x15) + 0x46);
+        *(f32*)(part + 0xC) = float_0_80424fd8;
+        *(f32*)(part + 0x18) = (f32)(r3 % 0x169);
+        *(f32*)(part + 0x20) = (f32)(0x168 - (r3 % 0x169));
+        mod = r4 % 0x65;
+
+        if (type == 1) {
+            *(f32*)(part + 0x1C) = float_2_80424fe8 * float_0p1_80425028 * (f32)mod;
+            *(f32*)(part + 0x10) = float_0_80424fd8;
+            *(f32*)(part + 0x14) = float_0_80424fd8;
+            *(f32*)(part + 0x30) = float_neg6_80425034;
+            *(f32*)(part + 0x34) = float_0_80424fd8;
+            *(f32*)(part + 0x38) = float_6_80425038;
+        } else if ((s32)type < 1) {
+            if ((s32)type > -1) {
+                *(f32*)(part + 0x1C) = float_0p1_80425028 * (f32)mod;
+                *(f32*)(part + 0x10) = float_0_80424fd8;
+                *(f32*)(part + 0x14) = float_0_80424fd8;
+                *(f32*)(part + 0x30) = float_neg3_8042502c;
+                *(f32*)(part + 0x34) = float_0_80424fd8;
+                *(f32*)(part + 0x38) = float_3_80425030;
+            }
+        } else if ((s32)type < 3) {
+            *(f32*)(part + 0x1C) = float_2_80424fe8 * float_0p1_80425028 * (f32)mod;
+            r = rand();
+            *(f32*)(part + 0x10) =
+                -*(f32*)(part + 4) * (float_0p008_8042503c * (f32)(r % 0xB) + float_0p05_80425000);
+            r = rand();
+            *(f32*)(part + 0x14) =
+                -*(f32*)(part + 8) * (float_0p008_8042503c * (f32)(r % 0xB) + float_0p05_80425000);
+        }
+    }
+
+    return entry;
+}
 
 
 void effCoolLeafMain(void* effect) {
@@ -160,88 +243,3 @@ void effCoolLeafDisp(s32 cameraId, void* effect) {
 }
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
-
-void* effCoolLeafN64Entry(f32 x, f32 y, f32 z, u32 type) {
-    extern void* effEntry(void);
-    extern void* __memAlloc(s32 heap, s32 size);
-    extern s32 rand(void);
-    extern void effCoolLeafMain(void* effect);
-    extern char str_CoolLeafN64_802fada0[];
-    extern f32 float_0_80424fd8;
-    extern f32 float_0p05_80425000;
-    extern f32 float_2_80424fe8;
-    extern f32 float_0p1_80425028;
-    extern f32 float_neg3_8042502c;
-    extern f32 float_3_80425030;
-    extern f32 float_neg6_80425034;
-    extern f32 float_6_80425038;
-    extern f32 float_0p008_8042503c;
-    void* entry;
-    u8* work;
-    u8* part;
-    s32 i;
-    s32 r;
-    s32 r2;
-    s32 r3;
-    s32 r4;
-    s32 mod;
-
-    entry = effEntry();
-    *(char**)((s32)entry + 0x14) = str_CoolLeafN64_802fada0;
-    *(s32*)((s32)entry + 8) = 5;
-    work = __memAlloc(3, 0x12C);
-    *(void**)((s32)entry + 0xC) = work;
-    *(void**)((s32)entry + 0x10) = effCoolLeafMain;
-
-    *(u32*)(work + 0) = type;
-    *(f32*)(work + 4) = x;
-    *(f32*)(work + 8) = y;
-    *(f32*)(work + 0xC) = z;
-    *(s32*)(work + 0x28) = 100;
-    *(s32*)(work + 0x2C) = 0;
-    *(s32*)(work + 0x24) = 0;
-
-    part = work + 0x3C;
-    for (i = 1; i < 5; i++, part += 0x3C) {
-        r = rand();
-        r2 = rand();
-        r3 = rand();
-        r4 = rand();
-
-        *(f32*)(part + 4) = (f32)((r % 0x33) + 0x4B);
-        *(f32*)(part + 8) = (f32)((r2 % 0x15) + 0x46);
-        *(f32*)(part + 0xC) = float_0_80424fd8;
-        *(f32*)(part + 0x18) = (f32)(r3 % 0x169);
-        *(f32*)(part + 0x20) = (f32)(0x168 - (r3 % 0x169));
-        mod = r4 % 0x65;
-
-        if (type == 1) {
-            *(f32*)(part + 0x1C) = float_2_80424fe8 * float_0p1_80425028 * (f32)mod;
-            *(f32*)(part + 0x10) = float_0_80424fd8;
-            *(f32*)(part + 0x14) = float_0_80424fd8;
-            *(f32*)(part + 0x30) = float_neg6_80425034;
-            *(f32*)(part + 0x34) = float_0_80424fd8;
-            *(f32*)(part + 0x38) = float_6_80425038;
-        } else if ((s32)type < 1) {
-            if ((s32)type > -1) {
-                *(f32*)(part + 0x1C) = float_0p1_80425028 * (f32)mod;
-                *(f32*)(part + 0x10) = float_0_80424fd8;
-                *(f32*)(part + 0x14) = float_0_80424fd8;
-                *(f32*)(part + 0x30) = float_neg3_8042502c;
-                *(f32*)(part + 0x34) = float_0_80424fd8;
-                *(f32*)(part + 0x38) = float_3_80425030;
-            }
-        } else if ((s32)type < 3) {
-            *(f32*)(part + 0x1C) = float_2_80424fe8 * float_0p1_80425028 * (f32)mod;
-            r = rand();
-            *(f32*)(part + 0x10) =
-                -*(f32*)(part + 4) * (float_0p008_8042503c * (f32)(r % 0xB) + float_0p05_80425000);
-            r = rand();
-            *(f32*)(part + 0x14) =
-                -*(f32*)(part + 8) * (float_0p008_8042503c * (f32)(r % 0xB) + float_0p05_80425000);
-        }
-    }
-
-    return entry;
-}
-

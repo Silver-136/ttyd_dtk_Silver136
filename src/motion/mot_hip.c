@@ -1,5 +1,22 @@
 #include "motion/mot_hip.h"
 
+void mot_hip_post(void);
+
+s32 marioChkHipAttack(void) {
+    extern void* marioGetPtr(void);
+    extern s32 pouchGetJumpLv(void);
+
+    void* mario;
+    s32 result;
+
+    result = 0;
+    mario = marioGetPtr();
+    if (*(s16*)((s32)mario + 0x52) >= 10 && (*(u16*)((s32)mario + 0x24C) & 0x100) && pouchGetJumpLv() >= 2) {
+        result = 1;
+    }
+    return result;
+}
+
 s32 marioChkHipBump(void) {
     extern void* marioGetPtr(void);
 
@@ -8,32 +25,6 @@ s32 marioChkHipBump(void) {
         result = 1;
     }
     return result;
-}
-
-void mot_hip_post(void) {
-    extern void* marioGetPtr(void);
-    extern void marioOfsRotReset(void);
-    extern void psndSFXOff(s32 soundId);
-
-    void* mario = marioGetPtr();
-    s32 soundId;
-
-    marioOfsRotReset();
-    *(s16*)((s32)mario + 0x50) = 0;
-    *(s16*)((s32)mario + 0x52) = 0;
-
-    mario = marioGetPtr();
-    soundId = *(s32*)((s32)mario + 0x288);
-    if ((u32)(soundId + 0x10000) != 0xFFFF) {
-        psndSFXOff(soundId);
-        *(s32*)((s32)mario + 0x288) = -1;
-    }
-
-    soundId = *(s32*)((s32)mario + 0x28C);
-    if ((u32)(soundId + 0x10000) != 0xFFFF) {
-        psndSFXOff(soundId);
-        *(s32*)((s32)mario + 0x28C) = -1;
-    }
 }
 
 
@@ -197,17 +188,28 @@ s32 U_chkground(void) {
 #pragma use_lmw_stmw on
 
 
-s32 marioChkHipAttack(void) {
+void mot_hip_post(void) {
     extern void* marioGetPtr(void);
-    extern s32 pouchGetJumpLv(void);
+    extern void marioOfsRotReset(void);
+    extern void psndSFXOff(s32 soundId);
 
-    void* mario;
-    s32 result;
+    void* mario = marioGetPtr();
+    s32 soundId;
 
-    result = 0;
+    marioOfsRotReset();
+    *(s16*)((s32)mario + 0x50) = 0;
+    *(s16*)((s32)mario + 0x52) = 0;
+
     mario = marioGetPtr();
-    if (*(s16*)((s32)mario + 0x52) >= 10 && (*(u16*)((s32)mario + 0x24C) & 0x100) && pouchGetJumpLv() >= 2) {
-        result = 1;
+    soundId = *(s32*)((s32)mario + 0x288);
+    if ((u32)(soundId + 0x10000) != 0xFFFF) {
+        psndSFXOff(soundId);
+        *(s32*)((s32)mario + 0x288) = -1;
     }
-    return result;
+
+    soundId = *(s32*)((s32)mario + 0x28C);
+    if ((u32)(soundId + 0x10000) != 0xFFFF) {
+        psndSFXOff(soundId);
+        *(s32*)((s32)mario + 0x28C) = -1;
+    }
 }

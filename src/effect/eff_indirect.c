@@ -25,6 +25,46 @@ extern f32 float_neg300_80428890;
 extern f32 float_60_80428894;
 extern f32 float_neg0p05_80428898;
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void* effIndirectEntry(s32 type, s32 timer, f32 x, f32 y, f32 z) {
+    void* entry = effEntry();
+    void* work;
+    void* buffer;
+    f32 zero;
+
+    *(char**)((s32)entry + 0x14) = str_Indirect_803029a8;
+    *(s32*)((s32)entry + 8) = 1;
+    work = __memAlloc(3, 0x38);
+    *(void**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effIndirectMain;
+    *(u32*)entry |= 2;
+
+    zero = float_0_8042888c;
+    *(s32*)((s32)work + 0) = type;
+    *(f32*)((s32)work + 4) = x;
+    *(f32*)((s32)work + 8) = y;
+    *(f32*)((s32)work + 0xC) = z;
+    *(f32*)((s32)work + 0x1C) = zero;
+    *(u8*)((s32)work + 0x20) = 0xFF;
+
+    buffer = smartAlloc(GXGetTexBufferSize(0x40, 0x40, 3, 0, 0), 0);
+    *(void**)((s32)work + 0x34) = buffer;
+
+    zero = float_0_8042888c;
+    *(f32*)((s32)work + 0x10) = zero;
+    *(f32*)((s32)work + 0x14) = zero;
+    *(f32*)((s32)work + 0x18) = zero;
+    *(s32*)((s32)work + 0x28) = timer;
+    *(s32*)((s32)work + 0x2C) = 0;
+    *(f32*)((s32)work + 0x30) = float_neg0p05_80428898;
+
+    return entry;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
 void effIndirectMain(void* entry) {
     EffIndirectVecRaw dispPos;
     EffIndirectVecRaw pos;
@@ -80,46 +120,6 @@ update:
 display:
     dispEntry(7, 2, effIndirectDisp, entry, dispCalcZ(&dispPos));
 }
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void* effIndirectEntry(s32 type, s32 timer, f32 x, f32 y, f32 z) {
-    void* entry = effEntry();
-    void* work;
-    void* buffer;
-    f32 zero;
-
-    *(char**)((s32)entry + 0x14) = str_Indirect_803029a8;
-    *(s32*)((s32)entry + 8) = 1;
-    work = __memAlloc(3, 0x38);
-    *(void**)((s32)entry + 0xC) = work;
-    *(void**)((s32)entry + 0x10) = effIndirectMain;
-    *(u32*)entry |= 2;
-
-    zero = float_0_8042888c;
-    *(s32*)((s32)work + 0) = type;
-    *(f32*)((s32)work + 4) = x;
-    *(f32*)((s32)work + 8) = y;
-    *(f32*)((s32)work + 0xC) = z;
-    *(f32*)((s32)work + 0x1C) = zero;
-    *(u8*)((s32)work + 0x20) = 0xFF;
-
-    buffer = smartAlloc(GXGetTexBufferSize(0x40, 0x40, 3, 0, 0), 0);
-    *(void**)((s32)work + 0x34) = buffer;
-
-    zero = float_0_8042888c;
-    *(f32*)((s32)work + 0x10) = zero;
-    *(f32*)((s32)work + 0x14) = zero;
-    *(f32*)((s32)work + 0x18) = zero;
-    *(s32*)((s32)work + 0x28) = timer;
-    *(s32*)((s32)work + 0x2C) = 0;
-    *(f32*)((s32)work + 0x30) = float_neg0p05_80428898;
-
-    return entry;
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 
 /* CHATGPT STUB FILL: main/effect/eff_indirect 20260624_184929 */
 

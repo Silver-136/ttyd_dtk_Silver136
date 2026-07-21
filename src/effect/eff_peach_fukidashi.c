@@ -6,12 +6,81 @@ void effPeachFukidashiDisp(s32 cameraId, void* effect);
 void effDelete(void* effect);
 void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 priority);
 
-void effSetPeachFukiBatu(char* name) {
-    extern void* effNameToPtr(char* name);
 
-    void* effect = effNameToPtr(name);
-    void* work = *(void**)((s32)effect + 0xC);
-    *(u32*)work |= 0x80;
+/* CHATGPT STUB FILL: main/effect/eff_peach_fukidashi 20260624_184128 */
+
+/* stub-fill: effPeachFukidashiEntry | missing_definition | ghidra_signature */
+void* effPeachFukidashiEntry(s32 flags, void* owner, s32 timer, double unused0, double unused1, double unused2, double radius, double angle) {
+    typedef f32 Mtx[3][4];
+    typedef struct Vec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void* camGetPtr(s32 cameraId);
+    extern void* marioGetPtr(void);
+    extern double sin(double x);
+    extern double cos(double x);
+    extern void PSMTXRotAxisRad(Mtx m, Vec* axis, f32 angle);
+    extern void effPeachFukidashiMain(void* effect);
+    extern const char str_PeachFukidashi_802fe59c[];
+    extern u32 vec3_802fe570[];
+    extern f32 float_deg2rad_80426f6c;
+    extern f32 float_0p5_80426f70;
+    extern f32 float_16_80426f74;
+    void* entry;
+    s32 work;
+    void* cam;
+    void* baseObj;
+    Vec axis;
+    Vec base;
+    Mtx axisMtx;
+    f32 dist;
+    f32 ownerY;
+
+    entry = effEntry();
+    *(const char**)((s32)entry + 0x14) = str_PeachFukidashi_802fe59c;
+    *(s32*)((s32)entry + 8) = 1;
+    work = (s32)__memAlloc(3, *(s32*)((s32)entry + 8) * 0x24);
+    *(s32*)((s32)entry + 0xC) = work;
+    *(void (**)(void*))((s32)entry + 0x10) = effPeachFukidashiMain;
+
+    *(s32*)work = flags;
+    *(f32*)(work + 0x14) = (f32)radius;
+    *(f32*)(work + 0x10) = (f32)angle;
+    *(s32*)(work + 0x1C) = timer;
+    *(void**)(work + 0x20) = owner;
+
+    cam = camGetPtr(4);
+    axis.x = ((f32*)vec3_802fe570)[0];
+    axis.y = ((f32*)vec3_802fe570)[1];
+    axis.z = ((f32*)vec3_802fe570)[2];
+    axis.x = (f32)sin((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
+    axis.z = -(f32)cos((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
+
+    dist = float_0p5_80426f70 * (float_16_80426f74 + *(f32*)(work + 0x14));
+    baseObj = *(void**)(work + 0x20);
+    if (baseObj != 0) {
+        base.x = *(f32*)((s32)baseObj + 0x8C);
+        base.y = *(f32*)((s32)baseObj + 0x90);
+        base.z = *(f32*)((s32)baseObj + 0x94);
+        ownerY = *(f32*)((s32)baseObj + 0x150);
+    } else {
+        baseObj = marioGetPtr();
+        base.x = *(f32*)((s32)baseObj + 0x8C);
+        base.y = *(f32*)((s32)baseObj + 0x90);
+        base.z = *(f32*)((s32)baseObj + 0x94);
+        ownerY = *(f32*)((s32)baseObj + 0x1BC);
+    }
+
+    PSMTXRotAxisRad(axisMtx, &axis, float_deg2rad_80426f6c * -*(f32*)(work + 0x10));
+    *(f32*)(work + 4) = axisMtx[0][1] * dist + base.x;
+    *(f32*)(work + 8) = axisMtx[1][1] * dist + base.y + ownerY;
+    *(f32*)(work + 0xC) = axisMtx[2][1] * dist + base.z;
+    *(f32*)(work + 0x18) = *(f32*)(work + 0x10);
+    return entry;
 }
 
 void effPeachFukidashiMain(void* effect) {
@@ -242,80 +311,11 @@ void effPeachFukidashiDisp(s32 cameraId, void* effect) {
     }
 }
 
+void effSetPeachFukiBatu(char* name) {
+    extern void* effNameToPtr(char* name);
 
-/* CHATGPT STUB FILL: main/effect/eff_peach_fukidashi 20260624_184128 */
-
-/* stub-fill: effPeachFukidashiEntry | missing_definition | ghidra_signature */
-void* effPeachFukidashiEntry(s32 flags, void* owner, s32 timer, double unused0, double unused1, double unused2, double radius, double angle) {
-    typedef f32 Mtx[3][4];
-    typedef struct Vec {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec;
-    extern void* effEntry(void);
-    extern void* __memAlloc(s32 heap, u32 size);
-    extern void* camGetPtr(s32 cameraId);
-    extern void* marioGetPtr(void);
-    extern double sin(double x);
-    extern double cos(double x);
-    extern void PSMTXRotAxisRad(Mtx m, Vec* axis, f32 angle);
-    extern void effPeachFukidashiMain(void* effect);
-    extern const char str_PeachFukidashi_802fe59c[];
-    extern u32 vec3_802fe570[];
-    extern f32 float_deg2rad_80426f6c;
-    extern f32 float_0p5_80426f70;
-    extern f32 float_16_80426f74;
-    void* entry;
-    s32 work;
-    void* cam;
-    void* baseObj;
-    Vec axis;
-    Vec base;
-    Mtx axisMtx;
-    f32 dist;
-    f32 ownerY;
-
-    entry = effEntry();
-    *(const char**)((s32)entry + 0x14) = str_PeachFukidashi_802fe59c;
-    *(s32*)((s32)entry + 8) = 1;
-    work = (s32)__memAlloc(3, *(s32*)((s32)entry + 8) * 0x24);
-    *(s32*)((s32)entry + 0xC) = work;
-    *(void (**)(void*))((s32)entry + 0x10) = effPeachFukidashiMain;
-
-    *(s32*)work = flags;
-    *(f32*)(work + 0x14) = (f32)radius;
-    *(f32*)(work + 0x10) = (f32)angle;
-    *(s32*)(work + 0x1C) = timer;
-    *(void**)(work + 0x20) = owner;
-
-    cam = camGetPtr(4);
-    axis.x = ((f32*)vec3_802fe570)[0];
-    axis.y = ((f32*)vec3_802fe570)[1];
-    axis.z = ((f32*)vec3_802fe570)[2];
-    axis.x = (f32)sin((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
-    axis.z = -(f32)cos((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
-
-    dist = float_0p5_80426f70 * (float_16_80426f74 + *(f32*)(work + 0x14));
-    baseObj = *(void**)(work + 0x20);
-    if (baseObj != 0) {
-        base.x = *(f32*)((s32)baseObj + 0x8C);
-        base.y = *(f32*)((s32)baseObj + 0x90);
-        base.z = *(f32*)((s32)baseObj + 0x94);
-        ownerY = *(f32*)((s32)baseObj + 0x150);
-    } else {
-        baseObj = marioGetPtr();
-        base.x = *(f32*)((s32)baseObj + 0x8C);
-        base.y = *(f32*)((s32)baseObj + 0x90);
-        base.z = *(f32*)((s32)baseObj + 0x94);
-        ownerY = *(f32*)((s32)baseObj + 0x1BC);
-    }
-
-    PSMTXRotAxisRad(axisMtx, &axis, float_deg2rad_80426f6c * -*(f32*)(work + 0x10));
-    *(f32*)(work + 4) = axisMtx[0][1] * dist + base.x;
-    *(f32*)(work + 8) = axisMtx[1][1] * dist + base.y + ownerY;
-    *(f32*)(work + 0xC) = axisMtx[2][1] * dist + base.z;
-    *(f32*)(work + 0x18) = *(f32*)(work + 0x10);
-    return entry;
+    void* effect = effNameToPtr(name);
+    void* work = *(void**)((s32)effect + 0xC);
+    *(u32*)work |= 0x80;
 }
 

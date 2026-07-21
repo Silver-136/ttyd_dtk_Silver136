@@ -15,28 +15,6 @@ typedef struct YoshiVec {
 extern YoshiVec vec3_802f38e0[];
 extern YoshiVec vec3_802f38ec[];
 extern f32 float_0_80422bc0;
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void mot_yoshi_post(void) {
-    void* party = partyGetPtr(marioGetPartyId());
-    void* mario = marioGetPtr();
-    s32 sfxId = *(s32*)((s32)party + 0x168);
-
-    if ((u32)(sfxId + 0x10000) != 0xFFFF) {
-        psndSFXOff(sfxId);
-        *(s32*)((s32)party + 0x168) = -1;
-    }
-    bero_clear_Offset();
-    *(u32*)((s32)mario + 0x4) &= ~4;
-    *(u32*)((s32)mario + 0x4) &= ~0x1000;
-    *(YoshiVec*)((s32)mario + 0x98) = vec3_802f38e0[0];
-    *(YoshiVec*)((s32)mario + 0xA4) = vec3_802f38ec[0];
-}
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 void mot_yoshi(void) {
     void* mario = marioGetPtr();
 
@@ -61,3 +39,24 @@ void mot_yoshi(void) {
         *(s32*)((s32)mario + 0x1FC) = 0;
     }
 }
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void mot_yoshi_post(void) {
+    void* party = partyGetPtr(marioGetPartyId());
+    void* mario = marioGetPtr();
+    s32 sfxId = *(s32*)((s32)party + 0x168);
+
+    if ((u32)(sfxId + 0x10000) != 0xFFFF) {
+        psndSFXOff(sfxId);
+        *(s32*)((s32)party + 0x168) = -1;
+    }
+    bero_clear_Offset();
+    *(u32*)((s32)mario + 0x4) &= ~4;
+    *(u32*)((s32)mario + 0x4) &= ~0x1000;
+    *(YoshiVec*)((s32)mario + 0x98) = vec3_802f38e0[0];
+    *(YoshiVec*)((s32)mario + 0xA4) = vec3_802f38ec[0];
+}
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on

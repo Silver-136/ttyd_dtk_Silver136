@@ -10,18 +10,6 @@ void* memset(void* dest, int ch, size_t count);
 void evtStopAll(s32 type);
 void evt_msg_init(void);
 
-void evtSetType(void* entry, s32 type) {
-    *(u8*)((s32)entry + 0xC) = type;
-}
-
-void evtSetSpeed(void* entry, f32 speed) {
-    *(f32*)((s32)entry + 0x164) = speed * evtSpd;
-}
-
-void evtSetPri(void* entry, s32 pri) {
-    *(u8*)((s32)entry + 0xB) = pri;
-}
-
 void* evtGetWork(void) {
     if (*(s32*)((s32)gp + 0x14) != 0) {
         return work + 0xA0;
@@ -29,74 +17,88 @@ void* evtGetWork(void) {
     return work;
 }
 
-void* evtGetPtr(s32 index) {
-    void* set = work;
+void make_pri_table(void) {
+    extern unsigned char work[];
+    extern void* gp;
+    extern s32 priTblNum;
+    extern s32 priTbl[];
+    extern s32 priTblIndex[];
+    void* set;
     void* entry;
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        set = work + 0xA0;
-    }
-    entry = (void*)((s32)*(void**)((s32)set + 0x90) + index * 0x1B0);
-    if ((*(u8*)((s32)entry + 8) & 1) != 0) {
-        return entry;
-    }
-    return 0;
-}
-
-BOOL evtCheckID(s32 eventId) {
-    void* set = work;
+    s32 count;
     s32 i;
-    EventEntry* entry;
+    s32 j;
 
+    set = work;
     if (*(s32*)((s32)gp + 0x14) != 0) {
         set = work + 0xA0;
     }
-    i = *(s32*)set;
-    entry = *(EventEntry**)((s32)set + 0x90);
-    for (; i > 0; i--) {
-        if ((*(u8*)((s32)entry + 8) & 1) != 0 && *(s32*)((s32)entry + 0x15C) == eventId) {
-            return TRUE;
+
+    entry = *(void**)((s32)set + 0x90);
+    count = 0;
+    for (i = 0; i < *(s32*)set; i++) {
+        if ((*(u8*)((s32)entry + 8) & 1) != 0) {
+            priTblIndex[count] = i;
+            priTbl[count] = *(s32*)((s32)entry + 0x15C);
+            count++;
         }
-        entry = (EventEntry*)((s32)entry + 0x1B0);
+        entry = (void*)((s32)entry + 0x1B0);
     }
-    return FALSE;
+    priTblNum = count;
+
+    for (i = 0; i < count - 1; i++) {
+        for (j = i + 1; j < count; j++) {
+            s32 idxA = priTblIndex[i];
+            s32 idxB = priTblIndex[j];
+            void* base = *(void**)((s32)set + 0x90);
+            if (*(u8*)((s32)base + idxA * 0x1B0 + 0xB) < *(u8*)((s32)base + idxB * 0x1B0 + 0xB)) {
+                s32 idA = priTbl[i];
+                s32 idB = priTbl[j];
+                priTblIndex[i] = idxB;
+                priTbl[j] = idA;
+                priTblIndex[j] = idxA;
+                priTbl[i] = idB;
+            }
+        }
+    }
 }
 
-void* evtGetPtrID(s32 eventId) {
-    void* set = work;
-    s32 i;
-    EventEntry* entry;
+void evtmgrInit(void) {
+    extern unsigned char work[];
+    extern void* gp;
+    extern s32 evtMax;
+    extern s32 priTblNum;
+    extern s32 runMainF;
+    extern void* __memAlloc(s32, u32);
+    extern void* memset(void*, int, u32);
+    extern void evt_msg_init(void);
+    void* ptr;
+    void* gpPtr;
 
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        set = work + 0xA0;
-    }
-    i = *(s32*)set;
-    entry = *(EventEntry**)((s32)set + 0x90);
-    for (; i > 0; i--) {
-        if ((*(u8*)((s32)entry + 8) & 1) != 0 && *(s32*)((s32)entry + 0x15C) == eventId) {
-            return entry;
-        }
-        entry = (EventEntry*)((s32)entry + 0x1B0);
-    }
-    return 0;
-}
+    *(s32*)work = 0x100;
+    ptr = __memAlloc(0, 0x100 * 0x1B0);
+    *(void**)(work + 0x90) = ptr;
+    gpPtr = gp;
+    *(s32*)(work + 0x9C) = *(s32*)((s32)gpPtr + 0x3C);
+    *(s32*)(work + 0x98) = *(s32*)((s32)gpPtr + 0x38);
+    memset(ptr, 0, *(s32*)work * 0x1B0);
+    memset(work + 4, 0, 0x80);
+    memset(work + 0x84, 0, 0xC);
 
-void evtEntryRunCheck(void) {
-    switch (_mariostSystemLevel) {
-        case 0:
-            break;
-        case 1:
-            evtStopAll(1);
-            break;
-        case 2:
-            evtStopAll(2);
-            break;
-        case 3:
-            evtStopAll(0x10);
-            break;
-        case 4:
-            evtStopAll(0xEF);
-            break;
-    }
+    *(s32*)(work + 0xA0) = 0x100;
+    ptr = __memAlloc(0, 0x100 * 0x1B0);
+    *(void**)(work + 0x130) = ptr;
+    gpPtr = gp;
+    *(s32*)(work + 0x13C) = *(s32*)((s32)gpPtr + 0x3C);
+    *(s32*)(work + 0x138) = *(s32*)((s32)gpPtr + 0x38);
+    memset(ptr, 0, *(s32*)(work + 0xA0) * 0x1B0);
+    memset(work + 0xA4, 0, 0x80);
+    memset(work + 0x124, 0, 0xC);
+
+    evtMax = 0;
+    priTblNum = 0;
+    runMainF = 0;
+    evt_msg_init();
 }
 
 void evtmgrReInit(void) {
@@ -120,156 +122,212 @@ void evtmgrReInit(void) {
     evt_msg_init();
 }
 
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void evtStart(void* pEvt, u32 flags) {
-    extern void* gp;
-    extern u8 work[];
-    u8* set = work;
-    u8* waiting;
-    u8* entry;
-    s32 count;
-    s32 i;
-
-    if (*(s32*)((u8*)gp + 0x14) != 0) set += 0xA0;
-    waiting = *(u8**)((u8*)pEvt + 0x70);
-    if (waiting != 0) {
-        u8* nestedSet = work;
-        u8* nested = *(u8**)(waiting + 0x70);
-        if (*(s32*)((u8*)gp + 0x14) != 0) nestedSet += 0xA0;
-        if (nested != 0) {
-            u8* child;
-            s32 childCount;
-            if (*(u8**)(nested + 0x70) != 0) evtStart(*(void**)(nested + 0x70), flags);
-            child = *(u8**)(nestedSet + 0x90);
-            childCount = *(s32*)nestedSet;
-            for (i = 0; i < childCount; i++, child += 0x1B0) {
-                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == nested) evtStart(child, flags);
-            }
-            if ((nested[0xC] & flags) != 0) nested[8] &= ~2;
-        }
-
-        entry = *(u8**)(nestedSet + 0x90);
-        count = *(s32*)nestedSet;
-        for (i = 0; i < count; i++, entry += 0x1B0) {
-            if ((entry[8] & 1) != 0 && *(u8**)(entry + 0x74) == waiting) {
-                u8* childSet = work;
-                u8* child;
-                s32 childCount;
-                if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
-                if (*(u8**)(entry + 0x70) != 0) evtStart(*(void**)(entry + 0x70), flags);
-                child = *(u8**)(childSet + 0x90);
-                childCount = *(s32*)childSet;
-                while (childCount-- > 0) {
-                    if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) evtStart(child, flags);
-                    child += 0x1B0;
-                }
-                if ((entry[0xC] & flags) != 0) entry[8] &= ~2;
-            }
-        }
-        if ((waiting[0xC] & flags) != 0) waiting[8] &= ~2;
+void evtEntryRunCheck(void) {
+    switch (_mariostSystemLevel) {
+        case 0:
+            break;
+        case 1:
+            evtStopAll(1);
+            break;
+        case 2:
+            evtStopAll(2);
+            break;
+        case 3:
+            evtStopAll(0x10);
+            break;
+        case 4:
+            evtStopAll(0xEF);
+            break;
     }
-
-    entry = *(u8**)(set + 0x90);
-    count = *(s32*)set;
-    for (i = 0; i < count; i++, entry += 0x1B0) {
-        if ((entry[8] & 1) != 0 && *(void**)(entry + 0x74) == pEvt) {
-            u8* childSet = work;
-            u8* child;
-            s32 childCount;
-            if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
-            if (*(u8**)(entry + 0x70) != 0) evtStart(*(void**)(entry + 0x70), flags);
-            child = *(u8**)(childSet + 0x90);
-            childCount = *(s32*)childSet;
-            while (childCount-- > 0) {
-                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) evtStart(child, flags);
-                child += 0x1B0;
-            }
-            if ((entry[0xC] & flags) != 0) entry[8] &= ~2;
-        }
-    }
-    if ((((u8*)pEvt)[0xC] & flags) != 0) ((u8*)pEvt)[8] &= ~2;
 }
 
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw reset
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw reset
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void evtStop(int pEvt, u32 flags) {
-    extern void* gp;
-    extern u8 work[];
-    u8* set = work;
-    u8* waiting;
-    u8* entry;
+void* evtEntry(void* script, s32 pri, s32 flags) {
+    extern s32 evtID;
+    extern s32 priTblNum;
+    extern s32 priTbl[];
+    extern s32 priTblIndex[];
+    void* set;
+    void* evt;
+    void* labelBase;
+    u32* cmd;
+    u32* next;
+    u32 op;
     s32 count;
+    s32 index;
     s32 i;
 
-    if (*(s32*)((u8*)gp + 0x14) != 0) set += 0xA0;
-    waiting = *(u8**)(pEvt + 0x70);
-    if (waiting != 0) {
-        u8* nestedSet = work;
-        u8* nested = *(u8**)(waiting + 0x70);
-        if (*(s32*)((u8*)gp + 0x14) != 0) nestedSet += 0xA0;
-        if (nested != 0) {
-            u8* child;
-            s32 childCount;
-            if (*(u8**)(nested + 0x70) != 0) evtStop((s32)*(void**)(nested + 0x70), flags);
-            child = *(u8**)(nestedSet + 0x90);
-            childCount = *(s32*)nestedSet;
-            for (i = 0; i < childCount; i++, child += 0x1B0) {
-                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == nested) evtStop((s32)child, flags);
-            }
-            if ((nested[0xC] & flags) != 0) nested[8] |= 2;
+    set = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = work + 0xA0;
+    }
+    count = *(s32*)set;
+    index = 0;
+    evt = *(void**)((s32)set + 0x90);
+    while (count > 0) {
+        if ((*(u8*)((s32)evt + 8) & 1) == 0) {
+            break;
         }
-        entry = *(u8**)(nestedSet + 0x90);
-        count = *(s32*)nestedSet;
-        for (i = 0; i < count; i++, entry += 0x1B0) {
-            if ((entry[8] & 1) != 0 && *(u8**)(entry + 0x74) == waiting) {
-                u8* childSet = work;
-                u8* child;
-                s32 childCount;
-                if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
-                if (*(u8**)(entry + 0x70) != 0) evtStop((s32)*(void**)(entry + 0x70), flags);
-                child = *(u8**)(childSet + 0x90);
-                childCount = *(s32*)childSet;
-                while (childCount-- > 0) {
-                    if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) evtStop((s32)child, flags);
-                    child += 0x1B0;
-                }
-                if ((entry[0xC] & flags) != 0) entry[8] |= 2;
-            }
-        }
-        if ((waiting[0xC] & flags) != 0) waiting[8] |= 2;
+        index++;
+        evt = (void*)((s32)evt + 0x1B0);
+        count--;
     }
 
-    entry = *(u8**)(set + 0x90);
-    count = *(s32*)set;
-    for (i = 0; i < count; i++, entry += 0x1B0) {
-        if ((entry[8] & 1) != 0 && *(u8**)(entry + 0x74) == (u8*)pEvt) {
-            u8* childSet = work;
-            u8* child;
-            s32 childCount;
-            if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
-            if (*(u8**)(entry + 0x70) != 0) evtStop((s32)*(void**)(entry + 0x70), flags);
-            child = *(u8**)(childSet + 0x90);
-            childCount = *(s32*)childSet;
-            while (childCount-- > 0) {
-                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) evtStop((s32)child, flags);
-                child += 0x1B0;
-            }
-            if ((entry[0xC] & flags) != 0) entry[8] |= 2;
-        }
+    evtMax++;
+    memset(evt, 0, 0x1B0);
+    *(u8*)((s32)evt + 8) = flags | 1;
+    *(void**)((s32)evt + 0x14) = script;
+    *(void**)((s32)evt + 0x1A0) = script;
+    *(void**)((s32)evt + 0x1A8) = script;
+    *(u8*)((s32)evt + 0xA) = 0;
+    *(void**)((s32)evt + 0x6C) = 0;
+    *(void**)((s32)evt + 0x70) = 0;
+    *(void**)((s32)evt + 0x74) = 0;
+    *(u8*)((s32)evt + 0xB) = pri;
+    *(s32*)((s32)evt + 0x15C) = evtID;
+    evtID++;
+    *(void**)((s32)evt + 0x160) = (void*)-1;
+    *(u8*)((s32)evt + 0xE) = 0xFF;
+    *(u8*)((s32)evt + 0xF) = 0xFF;
+    *(u8*)((s32)evt + 0xC) = 0xEF;
+    *(void**)((s32)evt + 0x1A4) = 0;
+    *(f32*)((s32)evt + 0x164) = evtSpd;
+    *(f32*)((s32)evt + 0x168) = 0.0f;
+    *(s32*)((s32)evt + 0x16C) = -1;
+    *(void**)((s32)evt + 0x170) = 0;
+    *(s32*)evt = 0;
+    *(s32*)((s32)evt + 4) = 0;
+
+    for (i = 0; i < 0x10; i++) {
+        *(s8*)((s32)evt + 0x1C + i) = -1;
+        *(void**)((s32)evt + 0x2C + i * 4) = 0;
+        *(s32*)((s32)evt + 0x9C + i * 4) = 0;
     }
-    if ((*(u8*)(pEvt + 0xC) & flags) != 0) *(u8*)(pEvt + 8) |= 2;
+    *(s32*)((s32)evt + 0xDC) = 0;
+    *(s32*)((s32)evt + 0xE0) = 0;
+    *(s32*)((s32)evt + 0xE4) = 0;
+
+    cmd = (u32*)script;
+    labelBase = evt;
+    i = 0;
+    do {
+        do {
+            next = cmd + 1;
+            op = *cmd & 0xFFFF;
+            cmd = next + ((s32)*cmd >> 0x10);
+        } while (op == 2);
+        if (op >= 2 && op < 4) {
+            *(s8*)((s32)evt + 0x1C + i) = *(s8*)next;
+            *(u32**)((s32)labelBase + 0x2C) = cmd;
+            labelBase = (void*)((s32)labelBase + 4);
+            i++;
+        }
+    } while (op == 0 || op >= 2);
+
+    if (runMainF != 0 && (*(u8*)((s32)evt + 8) & 0x20) != 0) {
+        priTblIndex[priTblNum] = index;
+        priTbl[priTblNum] = *(s32*)((s32)evt + 0x15C);
+        priTblNum++;
+    }
+    evtEntryRunCheck();
+    if (evtID == 0) {
+        evtID = 1;
+    }
+    return evt;
 }
 
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw reset
+void* evtEntryType(void* script, s32 pri, s32 flags, s32 type) {
+    extern s32 evtID;
+    extern s32 priTblNum;
+    extern s32 priTbl[];
+    extern s32 priTblIndex[];
+    void* set;
+    void* evt;
+    void* labelBase;
+    u32* cmd;
+    u32* next;
+    u32 op;
+    s32 count;
+    s32 index;
+    s32 i;
 
+    set = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = work + 0xA0;
+    }
+    count = *(s32*)set;
+    index = 0;
+    evt = *(void**)((s32)set + 0x90);
+    while (count > 0) {
+        if ((*(u8*)((s32)evt + 8) & 1) == 0) {
+            break;
+        }
+        index++;
+        evt = (void*)((s32)evt + 0x1B0);
+        count--;
+    }
+
+    evtMax++;
+    memset(evt, 0, 0x1B0);
+    *(u8*)((s32)evt + 8) = flags | 1;
+    *(void**)((s32)evt + 0x14) = script;
+    *(void**)((s32)evt + 0x1A0) = script;
+    *(void**)((s32)evt + 0x1A8) = script;
+    *(u8*)((s32)evt + 0xA) = 0;
+    *(void**)((s32)evt + 0x6C) = 0;
+    *(void**)((s32)evt + 0x70) = 0;
+    *(void**)((s32)evt + 0x74) = 0;
+    *(u8*)((s32)evt + 0xB) = pri;
+    *(s32*)((s32)evt + 0x15C) = evtID;
+    evtID++;
+    *(void**)((s32)evt + 0x160) = (void*)-1;
+    *(u8*)((s32)evt + 0xE) = 0xFF;
+    *(u8*)((s32)evt + 0xF) = 0xFF;
+    *(u8*)((s32)evt + 0xC) = type;
+    *(void**)((s32)evt + 0x1A4) = 0;
+    *(f32*)((s32)evt + 0x164) = evtSpd;
+    *(f32*)((s32)evt + 0x168) = 0.0f;
+    *(s32*)((s32)evt + 0x16C) = -1;
+    *(void**)((s32)evt + 0x170) = 0;
+    *(s32*)evt = 0;
+    *(s32*)((s32)evt + 4) = 0;
+
+    for (i = 0; i < 0x10; i++) {
+        *(s8*)((s32)evt + 0x1C + i) = -1;
+        *(void**)((s32)evt + 0x2C + i * 4) = 0;
+        *(s32*)((s32)evt + 0x9C + i * 4) = 0;
+    }
+    *(s32*)((s32)evt + 0xDC) = 0;
+    *(s32*)((s32)evt + 0xE0) = 0;
+    *(s32*)((s32)evt + 0xE4) = 0;
+
+    cmd = (u32*)script;
+    labelBase = evt;
+    i = 0;
+    do {
+        do {
+            next = cmd + 1;
+            op = *cmd & 0xFFFF;
+            cmd = next + ((s32)*cmd >> 0x10);
+        } while (op == 2);
+        if (op >= 2 && op < 4) {
+            *(s8*)((s32)evt + 0x1C + i) = *(s8*)next;
+            *(u32**)((s32)labelBase + 0x2C) = cmd;
+            labelBase = (void*)((s32)labelBase + 4);
+            i++;
+        }
+    } while (op == 0 || op >= 2);
+
+    if (runMainF != 0 && (*(u8*)((s32)evt + 8) & 0x20) != 0) {
+        priTblIndex[priTblNum] = index;
+        priTbl[priTblNum] = *(s32*)((s32)evt + 0x15C);
+        priTblNum++;
+    }
+    evtEntryRunCheck();
+    if (evtID == 0) {
+        evtID = 1;
+    }
+    return evt;
+}
 void* evtChildEntry(void* parentEvt, void* evtCode, s32 flags) {
     extern void* gp;
     extern f32 evtSpd;
@@ -480,192 +538,60 @@ void* evtBrotherEntry(void* parentEvt, void* evtCode, u32 flags) {
     return evt;
 }
 
-void* evtEntryType(void* script, s32 pri, s32 flags, s32 type) {
-    extern s32 evtID;
-    extern s32 priTblNum;
-    extern s32 priTbl[];
-    extern s32 priTblIndex[];
-    void* set;
-    void* evt;
-    void* labelBase;
-    u32* cmd;
-    u32* next;
-    u32 op;
+void* evtRestart(void* entry) {
+    extern f32 evtSpd;
+    extern void* evtEntryRunCheck(void);
+    unsigned int* ip;
+    unsigned int cmd;
+    s32 opcode;
     s32 count;
-    s32 index;
     s32 i;
+    void* slotBase;
+    float zero;
 
-    set = work;
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        set = work + 0xA0;
+    zero = 0.0f;
+    ip = *(unsigned int**)((s32)entry + 0x1A0);
+    *(unsigned int**)((s32)entry + 0x14) = ip;
+    *(unsigned int**)((s32)entry + 0x1A8) = ip;
+    *(u8*)((s32)entry + 0xA) = 0;
+    *(f32*)((s32)entry + 0x164) = 1.0f;
+    *(f32*)((s32)entry + 0x168) = zero;
+    *(s8*)((s32)entry + 0xE) = -1;
+    *(s8*)((s32)entry + 0xF) = -1;
+    *(f32*)((s32)entry + 0x164) = evtSpd;
+    *(f32*)((s32)entry + 0x168) = zero;
+    *(s32*)((s32)entry + 4) = 0;
+    *(s32*)entry = 0;
+
+    slotBase = entry;
+    for (i = 0; i < 0x10; i++) {
+        *(s8*)((s32)entry + 0x1C + i) = -1;
+        *(void**)((s32)slotBase + 0x2C) = 0;
+        slotBase = (void*)((s32)slotBase + 4);
     }
-    count = *(s32*)set;
-    index = 0;
-    evt = *(void**)((s32)set + 0x90);
-    while (count > 0) {
-        if ((*(u8*)((s32)evt + 8) & 1) == 0) {
+
+    ip = *(unsigned int**)((s32)entry + 0x14);
+    slotBase = entry;
+    count = 0;
+    while (1) {
+        cmd = *ip++;
+        opcode = cmd & 0xFFFF;
+        ip += (s32)cmd >> 0x10;
+        if (opcode == 1) {
             break;
         }
-        index++;
-        evt = (void*)((s32)evt + 0x1B0);
-        count--;
-    }
-
-    evtMax++;
-    memset(evt, 0, 0x1B0);
-    *(u8*)((s32)evt + 8) = flags | 1;
-    *(void**)((s32)evt + 0x14) = script;
-    *(void**)((s32)evt + 0x1A0) = script;
-    *(void**)((s32)evt + 0x1A8) = script;
-    *(u8*)((s32)evt + 0xA) = 0;
-    *(void**)((s32)evt + 0x6C) = 0;
-    *(void**)((s32)evt + 0x70) = 0;
-    *(void**)((s32)evt + 0x74) = 0;
-    *(u8*)((s32)evt + 0xB) = pri;
-    *(s32*)((s32)evt + 0x15C) = evtID;
-    evtID++;
-    *(void**)((s32)evt + 0x160) = (void*)-1;
-    *(u8*)((s32)evt + 0xE) = 0xFF;
-    *(u8*)((s32)evt + 0xF) = 0xFF;
-    *(u8*)((s32)evt + 0xC) = type;
-    *(void**)((s32)evt + 0x1A4) = 0;
-    *(f32*)((s32)evt + 0x164) = evtSpd;
-    *(f32*)((s32)evt + 0x168) = 0.0f;
-    *(s32*)((s32)evt + 0x16C) = -1;
-    *(void**)((s32)evt + 0x170) = 0;
-    *(s32*)evt = 0;
-    *(s32*)((s32)evt + 4) = 0;
-
-    for (i = 0; i < 0x10; i++) {
-        *(s8*)((s32)evt + 0x1C + i) = -1;
-        *(void**)((s32)evt + 0x2C + i * 4) = 0;
-        *(s32*)((s32)evt + 0x9C + i * 4) = 0;
-    }
-    *(s32*)((s32)evt + 0xDC) = 0;
-    *(s32*)((s32)evt + 0xE0) = 0;
-    *(s32*)((s32)evt + 0xE4) = 0;
-
-    cmd = (u32*)script;
-    labelBase = evt;
-    i = 0;
-    do {
-        do {
-            next = cmd + 1;
-            op = *cmd & 0xFFFF;
-            cmd = next + ((s32)*cmd >> 0x10);
-        } while (op == 2);
-        if (op >= 2 && op < 4) {
-            *(s8*)((s32)evt + 0x1C + i) = *(s8*)next;
-            *(u32**)((s32)labelBase + 0x2C) = cmd;
-            labelBase = (void*)((s32)labelBase + 4);
-            i++;
+        if (opcode >= 2 && opcode < 4) {
+            *(s8*)((s32)entry + 0x1C + count) = *(s8*)ip;
+            *(unsigned int**)((s32)slotBase + 0x2C) = ip;
+            slotBase = (void*)((s32)slotBase + 4);
+            count++;
         }
-    } while (op == 0 || op >= 2);
-
-    if (runMainF != 0 && (*(u8*)((s32)evt + 8) & 0x20) != 0) {
-        priTblIndex[priTblNum] = index;
-        priTbl[priTblNum] = *(s32*)((s32)evt + 0x15C);
-        priTblNum++;
+        if (count >= 0x10) {
+            continue;
+        }
     }
     evtEntryRunCheck();
-    if (evtID == 0) {
-        evtID = 1;
-    }
-    return evt;
-}
-
-void* evtEntry(void* script, s32 pri, s32 flags) {
-    extern s32 evtID;
-    extern s32 priTblNum;
-    extern s32 priTbl[];
-    extern s32 priTblIndex[];
-    void* set;
-    void* evt;
-    void* labelBase;
-    u32* cmd;
-    u32* next;
-    u32 op;
-    s32 count;
-    s32 index;
-    s32 i;
-
-    set = work;
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        set = work + 0xA0;
-    }
-    count = *(s32*)set;
-    index = 0;
-    evt = *(void**)((s32)set + 0x90);
-    while (count > 0) {
-        if ((*(u8*)((s32)evt + 8) & 1) == 0) {
-            break;
-        }
-        index++;
-        evt = (void*)((s32)evt + 0x1B0);
-        count--;
-    }
-
-    evtMax++;
-    memset(evt, 0, 0x1B0);
-    *(u8*)((s32)evt + 8) = flags | 1;
-    *(void**)((s32)evt + 0x14) = script;
-    *(void**)((s32)evt + 0x1A0) = script;
-    *(void**)((s32)evt + 0x1A8) = script;
-    *(u8*)((s32)evt + 0xA) = 0;
-    *(void**)((s32)evt + 0x6C) = 0;
-    *(void**)((s32)evt + 0x70) = 0;
-    *(void**)((s32)evt + 0x74) = 0;
-    *(u8*)((s32)evt + 0xB) = pri;
-    *(s32*)((s32)evt + 0x15C) = evtID;
-    evtID++;
-    *(void**)((s32)evt + 0x160) = (void*)-1;
-    *(u8*)((s32)evt + 0xE) = 0xFF;
-    *(u8*)((s32)evt + 0xF) = 0xFF;
-    *(u8*)((s32)evt + 0xC) = 0xEF;
-    *(void**)((s32)evt + 0x1A4) = 0;
-    *(f32*)((s32)evt + 0x164) = evtSpd;
-    *(f32*)((s32)evt + 0x168) = 0.0f;
-    *(s32*)((s32)evt + 0x16C) = -1;
-    *(void**)((s32)evt + 0x170) = 0;
-    *(s32*)evt = 0;
-    *(s32*)((s32)evt + 4) = 0;
-
-    for (i = 0; i < 0x10; i++) {
-        *(s8*)((s32)evt + 0x1C + i) = -1;
-        *(void**)((s32)evt + 0x2C + i * 4) = 0;
-        *(s32*)((s32)evt + 0x9C + i * 4) = 0;
-    }
-    *(s32*)((s32)evt + 0xDC) = 0;
-    *(s32*)((s32)evt + 0xE0) = 0;
-    *(s32*)((s32)evt + 0xE4) = 0;
-
-    cmd = (u32*)script;
-    labelBase = evt;
-    i = 0;
-    do {
-        do {
-            next = cmd + 1;
-            op = *cmd & 0xFFFF;
-            cmd = next + ((s32)*cmd >> 0x10);
-        } while (op == 2);
-        if (op >= 2 && op < 4) {
-            *(s8*)((s32)evt + 0x1C + i) = *(s8*)next;
-            *(u32**)((s32)labelBase + 0x2C) = cmd;
-            labelBase = (void*)((s32)labelBase + 4);
-            i++;
-        }
-    } while (op == 0 || op >= 2);
-
-    if (runMainF != 0 && (*(u8*)((s32)evt + 8) & 0x20) != 0) {
-        priTblIndex[priTblNum] = index;
-        priTbl[priTblNum] = *(s32*)((s32)evt + 0x15C);
-        priTblNum++;
-    }
-    evtEntryRunCheck();
-    if (evtID == 0) {
-        evtID = 1;
-    }
-    return evt;
+    return entry;
 }
 
 void evtmgrMain(void) {
@@ -796,146 +722,236 @@ void evtDelete(void* evt) {
         evtMax--;
     }
 }
-
-void* evtRestart(void* entry) {
-    extern f32 evtSpd;
-    extern void* evtEntryRunCheck(void);
-    unsigned int* ip;
-    unsigned int cmd;
-    s32 opcode;
-    s32 count;
-    s32 i;
-    void* slotBase;
-    float zero;
-
-    zero = 0.0f;
-    ip = *(unsigned int**)((s32)entry + 0x1A0);
-    *(unsigned int**)((s32)entry + 0x14) = ip;
-    *(unsigned int**)((s32)entry + 0x1A8) = ip;
-    *(u8*)((s32)entry + 0xA) = 0;
-    *(f32*)((s32)entry + 0x164) = 1.0f;
-    *(f32*)((s32)entry + 0x168) = zero;
-    *(s8*)((s32)entry + 0xE) = -1;
-    *(s8*)((s32)entry + 0xF) = -1;
-    *(f32*)((s32)entry + 0x164) = evtSpd;
-    *(f32*)((s32)entry + 0x168) = zero;
-    *(s32*)((s32)entry + 4) = 0;
-    *(s32*)entry = 0;
-
-    slotBase = entry;
-    for (i = 0; i < 0x10; i++) {
-        *(s8*)((s32)entry + 0x1C + i) = -1;
-        *(void**)((s32)slotBase + 0x2C) = 0;
-        slotBase = (void*)((s32)slotBase + 4);
-    }
-
-    ip = *(unsigned int**)((s32)entry + 0x14);
-    slotBase = entry;
-    count = 0;
-    while (1) {
-        cmd = *ip++;
-        opcode = cmd & 0xFFFF;
-        ip += (s32)cmd >> 0x10;
-        if (opcode == 1) {
-            break;
-        }
-        if (opcode >= 2 && opcode < 4) {
-            *(s8*)((s32)entry + 0x1C + count) = *(s8*)ip;
-            *(unsigned int**)((s32)slotBase + 0x2C) = ip;
-            slotBase = (void*)((s32)slotBase + 4);
-            count++;
-        }
-        if (count >= 0x10) {
-            continue;
-        }
-    }
-    evtEntryRunCheck();
-    return entry;
-}
-
-void make_pri_table(void) {
-    extern unsigned char work[];
-    extern void* gp;
-    extern s32 priTblNum;
-    extern s32 priTbl[];
-    extern s32 priTblIndex[];
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void evtDeleteID(int id) {
     void* set;
-    void* entry;
-    s32 count;
-    s32 i;
-    s32 j;
+    register void* entry;
+    int i;
 
     set = work;
+    if (*(int*)((int)gp + 0x14) != 0) {
+        set = (void*)((int)set + 0xA0);
+    }
+    entry = *(void**)((int)set + 0x90);
+    i = 0;
+    while (i < *(int*)set) {
+        if ((*(unsigned char*)((int)entry + 8) & 1) != 0 && *(int*)((int)entry + 0x15C) == id) {
+            evtDelete(entry);
+        }
+        i++;
+        entry = (void*)((int)entry + 0x1B0);
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw reset
+
+
+BOOL evtCheckID(s32 eventId) {
+    void* set = work;
+    s32 i;
+    EventEntry* entry;
+
     if (*(s32*)((s32)gp + 0x14) != 0) {
         set = work + 0xA0;
     }
-
-    entry = *(void**)((s32)set + 0x90);
-    count = 0;
-    for (i = 0; i < *(s32*)set; i++) {
-        if ((*(u8*)((s32)entry + 8) & 1) != 0) {
-            priTblIndex[count] = i;
-            priTbl[count] = *(s32*)((s32)entry + 0x15C);
-            count++;
+    i = *(s32*)set;
+    entry = *(EventEntry**)((s32)set + 0x90);
+    for (; i > 0; i--) {
+        if ((*(u8*)((s32)entry + 8) & 1) != 0 && *(s32*)((s32)entry + 0x15C) == eventId) {
+            return TRUE;
         }
-        entry = (void*)((s32)entry + 0x1B0);
+        entry = (EventEntry*)((s32)entry + 0x1B0);
     }
-    priTblNum = count;
+    return FALSE;
+}
 
-    for (i = 0; i < count - 1; i++) {
-        for (j = i + 1; j < count; j++) {
-            s32 idxA = priTblIndex[i];
-            s32 idxB = priTblIndex[j];
-            void* base = *(void**)((s32)set + 0x90);
-            if (*(u8*)((s32)base + idxA * 0x1B0 + 0xB) < *(u8*)((s32)base + idxB * 0x1B0 + 0xB)) {
-                s32 idA = priTbl[i];
-                s32 idB = priTbl[j];
-                priTblIndex[i] = idxB;
-                priTbl[j] = idA;
-                priTblIndex[j] = idxA;
-                priTbl[i] = idB;
+void evtSetPri(void* entry, s32 pri) {
+    *(u8*)((s32)entry + 0xB) = pri;
+}
+
+void evtSetSpeed(void* entry, f32 speed) {
+    *(f32*)((s32)entry + 0x164) = speed * evtSpd;
+}
+
+void evtSetType(void* entry, s32 type) {
+    *(u8*)((s32)entry + 0xC) = type;
+}
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void evtStop(int pEvt, u32 flags) {
+    extern void* gp;
+    extern u8 work[];
+    u8* set = work;
+    u8* waiting;
+    u8* entry;
+    s32 count;
+    s32 i;
+
+    if (*(s32*)((u8*)gp + 0x14) != 0) set += 0xA0;
+    waiting = *(u8**)(pEvt + 0x70);
+    if (waiting != 0) {
+        u8* nestedSet = work;
+        u8* nested = *(u8**)(waiting + 0x70);
+        if (*(s32*)((u8*)gp + 0x14) != 0) nestedSet += 0xA0;
+        if (nested != 0) {
+            u8* child;
+            s32 childCount;
+            if (*(u8**)(nested + 0x70) != 0) evtStop((s32)*(void**)(nested + 0x70), flags);
+            child = *(u8**)(nestedSet + 0x90);
+            childCount = *(s32*)nestedSet;
+            for (i = 0; i < childCount; i++, child += 0x1B0) {
+                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == nested) evtStop((s32)child, flags);
+            }
+            if ((nested[0xC] & flags) != 0) nested[8] |= 2;
+        }
+        entry = *(u8**)(nestedSet + 0x90);
+        count = *(s32*)nestedSet;
+        for (i = 0; i < count; i++, entry += 0x1B0) {
+            if ((entry[8] & 1) != 0 && *(u8**)(entry + 0x74) == waiting) {
+                u8* childSet = work;
+                u8* child;
+                s32 childCount;
+                if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
+                if (*(u8**)(entry + 0x70) != 0) evtStop((s32)*(void**)(entry + 0x70), flags);
+                child = *(u8**)(childSet + 0x90);
+                childCount = *(s32*)childSet;
+                while (childCount-- > 0) {
+                    if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) evtStop((s32)child, flags);
+                    child += 0x1B0;
+                }
+                if ((entry[0xC] & flags) != 0) entry[8] |= 2;
             }
         }
+        if ((waiting[0xC] & flags) != 0) waiting[8] |= 2;
+    }
+
+    entry = *(u8**)(set + 0x90);
+    count = *(s32*)set;
+    for (i = 0; i < count; i++, entry += 0x1B0) {
+        if ((entry[8] & 1) != 0 && *(u8**)(entry + 0x74) == (u8*)pEvt) {
+            u8* childSet = work;
+            u8* child;
+            s32 childCount;
+            if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
+            if (*(u8**)(entry + 0x70) != 0) evtStop((s32)*(void**)(entry + 0x70), flags);
+            child = *(u8**)(childSet + 0x90);
+            childCount = *(s32*)childSet;
+            while (childCount-- > 0) {
+                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) evtStop((s32)child, flags);
+                child += 0x1B0;
+            }
+            if ((entry[0xC] & flags) != 0) entry[8] |= 2;
+        }
+    }
+    if ((*(u8*)(pEvt + 0xC) & flags) != 0) *(u8*)(pEvt + 8) |= 2;
+}
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw reset
+
+
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void evtStart(void* pEvt, u32 flags) {
+    extern void* gp;
+    extern u8 work[];
+    u8* set = work;
+    u8* waiting;
+    u8* entry;
+    s32 count;
+    s32 i;
+
+    if (*(s32*)((u8*)gp + 0x14) != 0) set += 0xA0;
+    waiting = *(u8**)((u8*)pEvt + 0x70);
+    if (waiting != 0) {
+        u8* nestedSet = work;
+        u8* nested = *(u8**)(waiting + 0x70);
+        if (*(s32*)((u8*)gp + 0x14) != 0) nestedSet += 0xA0;
+        if (nested != 0) {
+            u8* child;
+            s32 childCount;
+            if (*(u8**)(nested + 0x70) != 0) evtStart(*(void**)(nested + 0x70), flags);
+            child = *(u8**)(nestedSet + 0x90);
+            childCount = *(s32*)nestedSet;
+            for (i = 0; i < childCount; i++, child += 0x1B0) {
+                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == nested) evtStart(child, flags);
+            }
+            if ((nested[0xC] & flags) != 0) nested[8] &= ~2;
+        }
+
+        entry = *(u8**)(nestedSet + 0x90);
+        count = *(s32*)nestedSet;
+        for (i = 0; i < count; i++, entry += 0x1B0) {
+            if ((entry[8] & 1) != 0 && *(u8**)(entry + 0x74) == waiting) {
+                u8* childSet = work;
+                u8* child;
+                s32 childCount;
+                if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
+                if (*(u8**)(entry + 0x70) != 0) evtStart(*(void**)(entry + 0x70), flags);
+                child = *(u8**)(childSet + 0x90);
+                childCount = *(s32*)childSet;
+                while (childCount-- > 0) {
+                    if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) evtStart(child, flags);
+                    child += 0x1B0;
+                }
+                if ((entry[0xC] & flags) != 0) entry[8] &= ~2;
+            }
+        }
+        if ((waiting[0xC] & flags) != 0) waiting[8] &= ~2;
+    }
+
+    entry = *(u8**)(set + 0x90);
+    count = *(s32*)set;
+    for (i = 0; i < count; i++, entry += 0x1B0) {
+        if ((entry[8] & 1) != 0 && *(void**)(entry + 0x74) == pEvt) {
+            u8* childSet = work;
+            u8* child;
+            s32 childCount;
+            if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
+            if (*(u8**)(entry + 0x70) != 0) evtStart(*(void**)(entry + 0x70), flags);
+            child = *(u8**)(childSet + 0x90);
+            childCount = *(s32*)childSet;
+            while (childCount-- > 0) {
+                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) evtStart(child, flags);
+                child += 0x1B0;
+            }
+            if ((entry[0xC] & flags) != 0) entry[8] &= ~2;
+        }
+    }
+    if ((((u8*)pEvt)[0xC] & flags) != 0) ((u8*)pEvt)[8] &= ~2;
+}
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw reset
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void evtStopID(int id) {
+    void* set;
+    register void* entry;
+    int i;
+
+    set = work;
+    if (*(int*)((int)gp + 0x14) != 0) {
+        set = (void*)((int)set + 0xA0);
+    }
+    entry = *(void**)((int)set + 0x90);
+    i = 0;
+    while (i < *(int*)set) {
+        if ((*(unsigned char*)((int)entry + 8) & 1) != 0 && *(int*)((int)entry + 0x15C) == id) {
+            evtStop((int)entry, 0xEF);
+        }
+        i++;
+        entry = (void*)((int)entry + 0x1B0);
     }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw reset
 
-void evtmgrInit(void) {
-    extern unsigned char work[];
-    extern void* gp;
-    extern s32 evtMax;
-    extern s32 priTblNum;
-    extern s32 runMainF;
-    extern void* __memAlloc(s32, u32);
-    extern void* memset(void*, int, u32);
-    extern void evt_msg_init(void);
-    void* ptr;
-    void* gpPtr;
-
-    *(s32*)work = 0x100;
-    ptr = __memAlloc(0, 0x100 * 0x1B0);
-    *(void**)(work + 0x90) = ptr;
-    gpPtr = gp;
-    *(s32*)(work + 0x9C) = *(s32*)((s32)gpPtr + 0x3C);
-    *(s32*)(work + 0x98) = *(s32*)((s32)gpPtr + 0x38);
-    memset(ptr, 0, *(s32*)work * 0x1B0);
-    memset(work + 4, 0, 0x80);
-    memset(work + 0x84, 0, 0xC);
-
-    *(s32*)(work + 0xA0) = 0x100;
-    ptr = __memAlloc(0, 0x100 * 0x1B0);
-    *(void**)(work + 0x130) = ptr;
-    gpPtr = gp;
-    *(s32*)(work + 0x13C) = *(s32*)((s32)gpPtr + 0x3C);
-    *(s32*)(work + 0x138) = *(s32*)((s32)gpPtr + 0x38);
-    memset(ptr, 0, *(s32*)(work + 0xA0) * 0x1B0);
-    memset(work + 0xA4, 0, 0x80);
-    memset(work + 0x124, 0, 0xC);
-
-    evtMax = 0;
-    priTblNum = 0;
-    runMainF = 0;
-    evt_msg_init();
-}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -968,7 +984,7 @@ void evtStartID(int id) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-void evtStopID(int id) {
+void evtStopAll(s32 type) {
     void* set;
     register void* entry;
     int i;
@@ -980,32 +996,8 @@ void evtStopID(int id) {
     entry = *(void**)((int)set + 0x90);
     i = 0;
     while (i < *(int*)set) {
-        if ((*(unsigned char*)((int)entry + 8) & 1) != 0 && *(int*)((int)entry + 0x15C) == id) {
-            evtStop((int)entry, 0xEF);
-        }
-        i++;
-        entry = (void*)((int)entry + 0x1B0);
-    }
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw reset
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void evtDeleteID(int id) {
-    void* set;
-    register void* entry;
-    int i;
-
-    set = work;
-    if (*(int*)((int)gp + 0x14) != 0) {
-        set = (void*)((int)set + 0xA0);
-    }
-    entry = *(void**)((int)set + 0x90);
-    i = 0;
-    while (i < *(int*)set) {
-        if ((*(unsigned char*)((int)entry + 8) & 1) != 0 && *(int*)((int)entry + 0x15C) == id) {
-            evtDelete(entry);
+        if ((*(unsigned char*)((int)entry + 8) & 1) != 0) {
+            evtStop((int)entry, type);
         }
         i++;
         entry = (void*)((int)entry + 0x1B0);
@@ -1039,50 +1031,7 @@ void evtStartAll(unsigned long flags) {
 #pragma use_lmw_stmw reset
 
 #pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void evtStopAll(s32 type) {
-    void* set;
-    register void* entry;
-    int i;
-
-    set = work;
-    if (*(int*)((int)gp + 0x14) != 0) {
-        set = (void*)((int)set + 0xA0);
-    }
-    entry = *(void**)((int)set + 0x90);
-    i = 0;
-    while (i < *(int*)set) {
-        if ((*(unsigned char*)((int)entry + 8) & 1) != 0) {
-            evtStop((int)entry, type);
-        }
-        i++;
-        entry = (void*)((int)entry + 0x1B0);
-    }
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw reset
-
-
-void evtStartOther(void* except, unsigned long flags) {
-    void* set;
-    register void* entry;
-    int i;
-
-    set = work;
-    if (*(int*)((int)gp + 0x14) != 0) {
-        set = (void*)((int)set + 0xA0);
-    }
-    entry = *(void**)((int)set + 0x90);
-    i = 0;
-    while (i < *(int*)set) {
-        if ((*(unsigned char*)((int)entry + 8) & 1) != 0 && entry != except) {
-            evtStart(entry, flags);
-        }
-        i++;
-        entry = (void*)((int)entry + 0x1B0);
-    }
-}
-
+#pragma use_lmw_stmw on
 void evtStopOther(void* except, unsigned long flags) {
     void* set;
     register void* entry;
@@ -1102,4 +1051,62 @@ void evtStopOther(void* except, unsigned long flags) {
         entry = (void*)((int)entry + 0x1B0);
     }
 }
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw on
+void evtStartOther(void* except, unsigned long flags) {
+    void* set;
+    register void* entry;
+    int i;
+
+    set = work;
+    if (*(int*)((int)gp + 0x14) != 0) {
+        set = (void*)((int)set + 0xA0);
+    }
+    entry = *(void**)((int)set + 0x90);
+    i = 0;
+    while (i < *(int*)set) {
+        if ((*(unsigned char*)((int)entry + 8) & 1) != 0 && entry != except) {
+            evtStart(entry, flags);
+        }
+        i++;
+        entry = (void*)((int)entry + 0x1B0);
+    }
+}
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
+
+void* evtGetPtr(s32 index) {
+    void* set = work;
+    void* entry;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = work + 0xA0;
+    }
+    entry = (void*)((s32)*(void**)((s32)set + 0x90) + index * 0x1B0);
+    if ((*(u8*)((s32)entry + 8) & 1) != 0) {
+        return entry;
+    }
+    return 0;
+}
+
+void* evtGetPtrID(s32 eventId) {
+    void* set = work;
+    s32 i;
+    EventEntry* entry;
+
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        set = work + 0xA0;
+    }
+    i = *(s32*)set;
+    entry = *(EventEntry**)((s32)set + 0x90);
+    for (; i > 0; i--) {
+        if ((*(u8*)((s32)entry + 8) & 1) != 0 && *(s32*)((s32)entry + 0x15C) == eventId) {
+            return entry;
+        }
+        entry = (EventEntry*)((s32)entry + 0x1B0);
+    }
+    return 0;
+}

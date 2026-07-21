@@ -22,26 +22,26 @@ void OSYieldThread(void);
 void OSCancelThread(void* thread);
 void OSResumeThread(void* thread);
 
-s32 DVDMgrGetLength(DVDEntry* entry) {
-    return entry->length;
+void proc_main(void) {
+    while (1) {
+        DVDMgrMain();
+        OSYieldThread();
+    }
 }
 
-void DVDMgrSetupCallback(void* callback) {
-    _callback = callback;
-}
+u8 DVDMgrInit(void) {
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern u8 stack[];
+    extern s32 OSCreateThread(void* thread, void* func, void* param, void* stack, u32 stackSize, s32 priority, s16 attr);
 
-void DVDMgrClose(DVDEntry* entry) {
-    entry->flags |= 8;
-}
-
-void DVDMgrReadAsync(DVDEntry* entry, void* dst, u32 size, u32 offset, void* callback) {
-    entry->dst = dst;
-    entry->size = size;
-    entry->offset = offset;
-    entry->flags |= 1;
-    entry->flags &= ~2;
-    entry->callback = callback;
-    entry->done = 0;
+    dvdq = __memAlloc(0, 0x9800);
+    memset(dvdq, 0, 0x9800);
+    if (OSCreateThread(dvdmgr_thread, proc_main, 0, stack + 0x4000, 0x4000, 0x10, 1) == 0) {
+        while (1) {
+        }
+    }
+    dvdmgr_thread_on = 1;
+    OSResumeThread(dvdmgr_thread);
 }
 
 void DVDMgrDelete(void) {
@@ -51,11 +51,20 @@ void DVDMgrDelete(void) {
     }
 }
 
-void proc_main(void) {
-    while (1) {
-        DVDMgrMain();
-        OSYieldThread();
+s32 compare(u8* lhs, u8* rhs) {
+    extern void* dvdq;
+    u32 left;
+    u32 right;
+
+    left = *(u16*)((s32)dvdq + 0x92 + *lhs * 0x98) & 0xFF;
+    right = *(u16*)((s32)dvdq + 0x92 + *rhs * 0x98) & 0xFF;
+    if (left > right) {
+        return 1;
     }
+    if (left < right) {
+        return -1;
+    }
+    return 0;
 }
 
 
@@ -210,21 +219,6 @@ void* DVDMgrOpen(const char* path, s32 mode, s32 unk) {
     return entry;
 }
 
-u8 DVDMgrInit(void) {
-    extern void* __memAlloc(s32 heap, u32 size);
-    extern u8 stack[];
-    extern s32 OSCreateThread(void* thread, void* func, void* param, void* stack, u32 stackSize, s32 priority, s16 attr);
-
-    dvdq = __memAlloc(0, 0x9800);
-    memset(dvdq, 0, 0x9800);
-    if (OSCreateThread(dvdmgr_thread, proc_main, 0, stack + 0x4000, 0x4000, 0x10, 1) == 0) {
-        while (1) {
-        }
-    }
-    dvdmgr_thread_on = 1;
-    OSResumeThread(dvdmgr_thread);
-}
-
 
 s32 DVDMgrRead(void* handle, void* dst, u32 size, s32 offset) {
     extern void OSYieldThread(void);
@@ -247,19 +241,25 @@ s32 DVDMgrRead(void* handle, void* dst, u32 size, s32 offset) {
     return *(s32*)((s32)handle + 0x74);
 }
 
-s32 compare(u8* lhs, u8* rhs) {
-    extern void* dvdq;
-    u32 left;
-    u32 right;
+void DVDMgrReadAsync(DVDEntry* entry, void* dst, u32 size, u32 offset, void* callback) {
+    entry->dst = dst;
+    entry->size = size;
+    entry->offset = offset;
+    entry->flags |= 1;
+    entry->flags &= ~2;
+    entry->callback = callback;
+    entry->done = 0;
+}
 
-    left = *(u16*)((s32)dvdq + 0x92 + *lhs * 0x98) & 0xFF;
-    right = *(u16*)((s32)dvdq + 0x92 + *rhs * 0x98) & 0xFF;
-    if (left > right) {
-        return 1;
-    }
-    if (left < right) {
-        return -1;
-    }
-    return 0;
+void DVDMgrClose(DVDEntry* entry) {
+    entry->flags |= 8;
+}
+
+s32 DVDMgrGetLength(DVDEntry* entry) {
+    return entry->length;
+}
+
+void DVDMgrSetupCallback(void* callback) {
+    _callback = callback;
 }
 

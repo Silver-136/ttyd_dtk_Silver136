@@ -1,4 +1,6 @@
 #include "effect/n64/eff_star_power_n64.h"
+u8 effStarPowerMain(u32* effect);
+u8 effStarPowerDisp(s32 cameraId, s32 effectAddress);
 
 typedef struct EffStarPowerWork {
     s16 field_00;
@@ -31,6 +33,187 @@ void* __memAlloc(s32 heap, u32 size);
 
 extern const char str_StarPowerN64_802fc058[];
 extern f32 float_0_804261ac;
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void* effStarPowerN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
+    void* entry;
+    EffStarPowerWork* work;
+    f32 zero;
+    s32 one;
+    s32 zeroInt;
+    s32 full;
+    s32 half;
+
+    entry = effEntry();
+    *(const char**)((s32)entry + 0x14) = str_StarPowerN64_802fc058;
+    *(s32*)((s32)entry + 0x8) = 1;
+    work = __memAlloc(3, 0x58);
+    *(EffStarPowerWork**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effStarPowerMain;
+    *(u32*)entry |= 2;
+
+    one = 1;
+    zeroInt = 0;
+    work->field_00 = one;
+    work->type = (s16)type;
+    work->frame = zeroInt;
+    if (lifetime <= 0) {
+        work->lifetime = 1000;
+    } else {
+        work->lifetime = lifetime;
+    }
+    work->x = x;
+    full = 0xFF;
+    half = 0x78;
+    zeroInt = 0;
+    work->y = y;
+    zero = float_0_804261ac;
+    work->z = z;
+    work->scale = scale;
+    work->r0 = full;
+    work->g0 = full;
+    work->b0 = half;
+    work->r1 = full;
+    work->g1 = half;
+    work->b1 = zeroInt;
+    work->a1 = full;
+    work->a0 = full;
+    work->field_3C = zero;
+    work->field_40 = zero;
+    work->field_44 = zero;
+    return entry;
+}
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
+
+u8 effStarPowerMain(u32* effect) {
+    typedef struct Vec { f32 x, y, z; } Vec;
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(void*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void effStarPowerDisp(void);
+    extern f64 sin(f64);
+    extern f32 float_0p4953_804261b8;
+    extern f32 float_4_804261bc;
+    extern f32 float_0p2234_804261c0;
+    extern f32 float_6p2832_804261c4;
+    extern f32 float_7p1234_804261c8;
+    extern f32 float_360_804261cc;
+    extern f32 float_128_804261d0;
+    extern f32 float_127_804261d4;
+    extern f32 float_1p231_804261d8;
+    extern f32 float_215_804261dc;
+    extern f32 float_0p531_804261e0;
+    extern f32 float_3p231_804261e4;
+    extern f32 float_0p298_804261e8;
+    extern f32 float_188_804261ec;
+    extern f32 float_0p831_804261f0;
+    extern f32 float_2p231_804261f4;
+    extern f32 float_2p044_804261f8;
+    extern f32 float_0p7_804261fc;
+    extern f32 float_0p3_80426200;
+    extern Vec vec3_802fc040;
+    u8* work = *(u8**)((u8*)effect + 0xC);
+    Vec oldPos = vec3_802fc040;
+    Vec oldPosCopy;
+    s16 type;
+    s32 timer;
+    s32 frame;
+    s32 value;
+    u32 colorValue;
+    f32 radians;
+    f32 frame4;
+
+    oldPos.x = *(f32*)(work + 4);
+    oldPos.y = *(f32*)(work + 8);
+    oldPos.z = *(f32*)(work + 0xC);
+    oldPosCopy = oldPos;
+    type = *(s16*)(work + 2);
+    if ((*effect & 4) != 0) {
+        *effect &= ~4;
+        *(s32*)(work + 0x10) = 0x10;
+    }
+    if (*(s32*)(work + 0x10) < 1000) {
+        *(s32*)(work + 0x10) -= 1;
+    }
+    *(s32*)(work + 0x14) += 1;
+    timer = *(s32*)(work + 0x10);
+    if (timer < 0) {
+        effDelete(effect);
+        return 0;
+    }
+    frame = *(s32*)(work + 0x14);
+    if (timer < 0x10) {
+        value = timer << 4;
+        if (value < *(s32*)(work + 0x24)) {
+            *(s32*)(work + 0x24) = value;
+        }
+        if (value < *(s32*)(work + 0x34)) {
+            *(s32*)(work + 0x34) = value;
+        }
+    }
+    if (frame < 0x10) {
+        value = frame * 0x10 + 0xF;
+        if (*(s32*)(work + 0x24) < value) {
+            *(s32*)(work + 0x24) = value;
+        }
+        if (*(s32*)(work + 0x34) < value) {
+            *(s32*)(work + 0x34) = value;
+        }
+    }
+    *(f32*)(work + 0x48) = *(f32*)(work + 0x3C);
+    *(f32*)(work + 0x4C) = *(f32*)(work + 0x40);
+    *(f32*)(work + 0x50) = *(f32*)(work + 0x44);
+    *(f32*)(work + 0x54) = *(f32*)(work + 0x38);
+    if (type == 1) {
+        frame4 = float_4_804261bc * (f32)frame;
+        radians = (float_6p2832_804261c4 * float_7p1234_804261c8 * (f32)frame) /
+                  float_360_804261cc;
+        *(f32*)(work + 0x3C) = frame4;
+        *(f32*)(work + 0x40) = float_0p4953_804261b8 * frame4;
+        *(f32*)(work + 0x44) = float_0p2234_804261c0 * frame4;
+        *(s32*)(work + 0x24) = 0xFF;
+        colorValue = (u32)(float_127_804261d4 * (f32)sin((f64)radians) + float_128_804261d0);
+        *(u32*)(work + 0x34) = colorValue & 0xFF;
+        radians = (float_6p2832_804261c4 * float_1p231_804261d8 * (f32)frame) /
+                  float_360_804261cc;
+        colorValue = (u32)(float_127_804261d4 * (f32)sin((f64)radians) + float_215_804261dc);
+        *(u32*)(work + 0x18) = colorValue & 0xFF;
+        radians = (float_6p2832_804261c4 * float_0p531_804261e0 * (f32)frame) /
+                  float_360_804261cc;
+        colorValue = (u32)(float_127_804261d4 * (f32)sin((f64)radians) + float_215_804261dc);
+        *(u32*)(work + 0x1C) = colorValue & 0xFF;
+        radians = (float_6p2832_804261c4 * float_3p231_804261e4 * (f32)frame) /
+                  float_360_804261cc;
+        colorValue = (u32)(float_127_804261d4 * (f32)sin((f64)radians) + float_215_804261dc);
+        *(u32*)(work + 0x20) = colorValue & 0xFF;
+        radians = (float_6p2832_804261c4 * float_0p298_804261e8 * (f32)frame) /
+                  float_360_804261cc;
+        colorValue = (u32)(float_127_804261d4 * (f32)sin((f64)radians) + float_188_804261ec);
+        *(u32*)(work + 0x28) = colorValue & 0xFF;
+        radians = (float_6p2832_804261c4 * float_0p831_804261f0 * (f32)frame) /
+                  float_360_804261cc;
+        colorValue = (u32)(float_127_804261d4 * (f32)sin((f64)radians) + float_188_804261ec);
+        *(u32*)(work + 0x2C) = colorValue & 0xFF;
+        radians = (float_6p2832_804261c4 * float_2p231_804261f4 * (f32)frame) /
+                  float_360_804261cc;
+        colorValue = (u32)(float_127_804261d4 * (f32)sin((f64)radians) + float_188_804261ec);
+        *(u32*)(work + 0x30) = colorValue & 0xFF;
+        radians = (float_6p2832_804261c4 * float_2p044_804261f8 * (f32)frame) /
+                  float_360_804261cc;
+        *(f32*)(work + 0x38) = float_0p3_80426200 * (f32)sin((f64)radians) +
+                               float_0p7_804261fc;
+    }
+    if (frame == 1) {
+        *(f32*)(work + 0x48) = *(f32*)(work + 0x3C);
+        *(f32*)(work + 0x4C) = *(f32*)(work + 0x40);
+        *(f32*)(work + 0x50) = *(f32*)(work + 0x44);
+        *(f32*)(work + 0x54) = *(f32*)(work + 0x38);
+    }
+    dispEntry(4, 2, effStarPowerDisp, effect, dispCalcZ(&oldPosCopy));
+    return 0;
+}
 
 u8 effStarPowerDisp(s32 cameraId, s32 effectAddress) {
     typedef f32 Mtx[3][4];
@@ -185,184 +368,3 @@ u8 effStarPowerDisp(s32 cameraId, s32 effectAddress) {
     tri2(16,18,19,0,16,19,17,0); tri2(18,14,15,0,18,15,19,0);
     return 0;
 }
-
-u8 effStarPowerMain(u32* effect) {
-    typedef struct Vec { f32 x, y, z; } Vec;
-    extern void effDelete(void*);
-    extern f32 dispCalcZ(void*);
-    extern void dispEntry(s32, s32, void*, void*, f32);
-    extern void effStarPowerDisp(void);
-    extern f64 sin(f64);
-    extern f32 float_0p4953_804261b8;
-    extern f32 float_4_804261bc;
-    extern f32 float_0p2234_804261c0;
-    extern f32 float_6p2832_804261c4;
-    extern f32 float_7p1234_804261c8;
-    extern f32 float_360_804261cc;
-    extern f32 float_128_804261d0;
-    extern f32 float_127_804261d4;
-    extern f32 float_1p231_804261d8;
-    extern f32 float_215_804261dc;
-    extern f32 float_0p531_804261e0;
-    extern f32 float_3p231_804261e4;
-    extern f32 float_0p298_804261e8;
-    extern f32 float_188_804261ec;
-    extern f32 float_0p831_804261f0;
-    extern f32 float_2p231_804261f4;
-    extern f32 float_2p044_804261f8;
-    extern f32 float_0p7_804261fc;
-    extern f32 float_0p3_80426200;
-    extern Vec vec3_802fc040;
-    u8* work = *(u8**)((u8*)effect + 0xC);
-    Vec oldPos = vec3_802fc040;
-    Vec oldPosCopy;
-    s16 type;
-    s32 timer;
-    s32 frame;
-    s32 value;
-    u32 colorValue;
-    f32 radians;
-    f32 frame4;
-
-    oldPos.x = *(f32*)(work + 4);
-    oldPos.y = *(f32*)(work + 8);
-    oldPos.z = *(f32*)(work + 0xC);
-    oldPosCopy = oldPos;
-    type = *(s16*)(work + 2);
-    if ((*effect & 4) != 0) {
-        *effect &= ~4;
-        *(s32*)(work + 0x10) = 0x10;
-    }
-    if (*(s32*)(work + 0x10) < 1000) {
-        *(s32*)(work + 0x10) -= 1;
-    }
-    *(s32*)(work + 0x14) += 1;
-    timer = *(s32*)(work + 0x10);
-    if (timer < 0) {
-        effDelete(effect);
-        return 0;
-    }
-    frame = *(s32*)(work + 0x14);
-    if (timer < 0x10) {
-        value = timer << 4;
-        if (value < *(s32*)(work + 0x24)) {
-            *(s32*)(work + 0x24) = value;
-        }
-        if (value < *(s32*)(work + 0x34)) {
-            *(s32*)(work + 0x34) = value;
-        }
-    }
-    if (frame < 0x10) {
-        value = frame * 0x10 + 0xF;
-        if (*(s32*)(work + 0x24) < value) {
-            *(s32*)(work + 0x24) = value;
-        }
-        if (*(s32*)(work + 0x34) < value) {
-            *(s32*)(work + 0x34) = value;
-        }
-    }
-    *(f32*)(work + 0x48) = *(f32*)(work + 0x3C);
-    *(f32*)(work + 0x4C) = *(f32*)(work + 0x40);
-    *(f32*)(work + 0x50) = *(f32*)(work + 0x44);
-    *(f32*)(work + 0x54) = *(f32*)(work + 0x38);
-    if (type == 1) {
-        frame4 = float_4_804261bc * (f32)frame;
-        radians = (float_6p2832_804261c4 * float_7p1234_804261c8 * (f32)frame) /
-                  float_360_804261cc;
-        *(f32*)(work + 0x3C) = frame4;
-        *(f32*)(work + 0x40) = float_0p4953_804261b8 * frame4;
-        *(f32*)(work + 0x44) = float_0p2234_804261c0 * frame4;
-        *(s32*)(work + 0x24) = 0xFF;
-        colorValue = (u32)(float_127_804261d4 * (f32)sin((f64)radians) + float_128_804261d0);
-        *(u32*)(work + 0x34) = colorValue & 0xFF;
-        radians = (float_6p2832_804261c4 * float_1p231_804261d8 * (f32)frame) /
-                  float_360_804261cc;
-        colorValue = (u32)(float_127_804261d4 * (f32)sin((f64)radians) + float_215_804261dc);
-        *(u32*)(work + 0x18) = colorValue & 0xFF;
-        radians = (float_6p2832_804261c4 * float_0p531_804261e0 * (f32)frame) /
-                  float_360_804261cc;
-        colorValue = (u32)(float_127_804261d4 * (f32)sin((f64)radians) + float_215_804261dc);
-        *(u32*)(work + 0x1C) = colorValue & 0xFF;
-        radians = (float_6p2832_804261c4 * float_3p231_804261e4 * (f32)frame) /
-                  float_360_804261cc;
-        colorValue = (u32)(float_127_804261d4 * (f32)sin((f64)radians) + float_215_804261dc);
-        *(u32*)(work + 0x20) = colorValue & 0xFF;
-        radians = (float_6p2832_804261c4 * float_0p298_804261e8 * (f32)frame) /
-                  float_360_804261cc;
-        colorValue = (u32)(float_127_804261d4 * (f32)sin((f64)radians) + float_188_804261ec);
-        *(u32*)(work + 0x28) = colorValue & 0xFF;
-        radians = (float_6p2832_804261c4 * float_0p831_804261f0 * (f32)frame) /
-                  float_360_804261cc;
-        colorValue = (u32)(float_127_804261d4 * (f32)sin((f64)radians) + float_188_804261ec);
-        *(u32*)(work + 0x2C) = colorValue & 0xFF;
-        radians = (float_6p2832_804261c4 * float_2p231_804261f4 * (f32)frame) /
-                  float_360_804261cc;
-        colorValue = (u32)(float_127_804261d4 * (f32)sin((f64)radians) + float_188_804261ec);
-        *(u32*)(work + 0x30) = colorValue & 0xFF;
-        radians = (float_6p2832_804261c4 * float_2p044_804261f8 * (f32)frame) /
-                  float_360_804261cc;
-        *(f32*)(work + 0x38) = float_0p3_80426200 * (f32)sin((f64)radians) +
-                               float_0p7_804261fc;
-    }
-    if (frame == 1) {
-        *(f32*)(work + 0x48) = *(f32*)(work + 0x3C);
-        *(f32*)(work + 0x4C) = *(f32*)(work + 0x40);
-        *(f32*)(work + 0x50) = *(f32*)(work + 0x44);
-        *(f32*)(work + 0x54) = *(f32*)(work + 0x38);
-    }
-    dispEntry(4, 2, effStarPowerDisp, effect, dispCalcZ(&oldPosCopy));
-    return 0;
-}
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void* effStarPowerN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
-    void* entry;
-    EffStarPowerWork* work;
-    f32 zero;
-    s32 one;
-    s32 zeroInt;
-    s32 full;
-    s32 half;
-
-    entry = effEntry();
-    *(const char**)((s32)entry + 0x14) = str_StarPowerN64_802fc058;
-    *(s32*)((s32)entry + 0x8) = 1;
-    work = __memAlloc(3, 0x58);
-    *(EffStarPowerWork**)((s32)entry + 0xC) = work;
-    *(void**)((s32)entry + 0x10) = effStarPowerMain;
-    *(u32*)entry |= 2;
-
-    one = 1;
-    zeroInt = 0;
-    work->field_00 = one;
-    work->type = (s16)type;
-    work->frame = zeroInt;
-    if (lifetime <= 0) {
-        work->lifetime = 1000;
-    } else {
-        work->lifetime = lifetime;
-    }
-    work->x = x;
-    full = 0xFF;
-    half = 0x78;
-    zeroInt = 0;
-    work->y = y;
-    zero = float_0_804261ac;
-    work->z = z;
-    work->scale = scale;
-    work->r0 = full;
-    work->g0 = full;
-    work->b0 = half;
-    work->r1 = full;
-    work->g1 = half;
-    work->b1 = zeroInt;
-    work->a1 = full;
-    work->a0 = full;
-    work->field_3C = zero;
-    work->field_40 = zero;
-    work->field_44 = zero;
-    return entry;
-}
-#pragma use_lmw_stmw on
-#pragma no_register_save_helpers off

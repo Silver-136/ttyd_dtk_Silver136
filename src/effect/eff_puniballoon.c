@@ -1,4 +1,219 @@
 #include "effect/eff_puniballoon.h"
+#pragma optimize_for_size off
+void* effPuniBalloonEntry(s32 type, double x, double y, double z, double scale) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern s32 rand(void);
+    extern const char str_PuniBalloon_802fe560[];
+    extern void effPuniBalloonMain(void);
+    extern f32 float_0_80426f60;
+    extern f64 double_to_int_802fe558;
+
+    void* entry;
+    s32 work;
+    s32 child;
+    s32 count;
+    s32 i;
+    s32 r;
+    s32 q;
+    s32 rem;
+    f32 zero;
+    f64 conv;
+
+    entry = effEntry();
+
+    count = 1;
+    if (type == 1) {
+        count = 0xB;
+    } else if (type < 1) {
+        if (type >= 0) {
+            count = 1;
+        }
+    }
+
+    *(const char**)((s32)entry + 0x14) = str_PuniBalloon_802fe560;
+    *(s32*)((s32)entry + 8) = count;
+
+    work = (s32)__memAlloc(3, *(s32*)((s32)entry + 8) * 0x30);
+    *(s32*)((s32)entry + 0xC) = work;
+    *(void (**)(void))((s32)entry + 0x10) = effPuniBalloonMain;
+
+    zero = float_0_80426f60;
+    *(u32*)entry = *(u32*)entry | 2;
+
+    *(s32*)work = type;
+    *(f32*)(work + 4) = (f32)x;
+    *(f32*)(work + 8) = (f32)y;
+    *(f32*)(work + 0xC) = (f32)z;
+    *(f32*)(work + 0x24) = zero;
+
+    if (type == 0) {
+        *(s32*)(work + 0x28) = 1000;
+    } else {
+        *(s32*)(work + 0x28) = 0x1E;
+    }
+
+    *(s32*)(work + 0x2C) = 0;
+    *(f32*)(work + 0x20) = zero;
+    *(f32*)(work + 0x1C) = (f32)scale;
+
+    conv = double_to_int_802fe558;
+    child = work + 0x30;
+    i = 1;
+
+    while (i < *(s32*)((s32)entry + 8)) {
+        *(f32*)(child + 4) = zero;
+        *(f32*)(child + 8) = zero;
+        *(f32*)(child + 0xC) = zero;
+        *(f32*)(child + 0x20) = (f32)scale;
+
+        r = rand();
+        q = r / 11;
+        if (r < 0 && (r - q * 11) != 0) {
+            q--;
+        }
+        rem = r - q * 11;
+        *(f32*)(child + 0x10) = (f32)(rem - 5);
+
+        r = rand();
+        q = r / 11;
+        if (r < 0 && (r - q * 11) != 0) {
+            q--;
+        }
+        rem = r - q * 11;
+        *(f32*)(child + 0x14) = (f32)(rem - 5);
+
+        r = rand();
+        q = r / 11;
+        if (r < 0 && (r - q * 11) != 0) {
+            q--;
+        }
+        rem = r - q * 11;
+        *(f32*)(child + 0x18) = (f32)(rem - 5);
+
+        i++;
+        child += 0x30;
+    }
+
+    return entry;
+}
+#pragma optimize_for_size on
+
+void effPuniBalloonMain(void* effect) {
+    typedef struct Vec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
+
+    extern u32 vec3_802fe548[];
+    extern f32 float_1_80426f4c;
+    extern f32 float_10_80426f44;
+    extern f32 float_20_80426f50;
+    extern f32 float_neg0p1_80426f54;
+    extern f32 float_0p98_80426f58;
+    extern f32 float_0p9_80426f5c;
+    extern f64 double_to_int_802fe558;
+    extern double sin(double x);
+    extern void* effPuniBalloonEntry(s32 type, double x, double y, double z, double scale);
+    extern void effDelete(void* effect);
+    extern f32 dispCalcZ(Vec* pos);
+    extern void dispEntry(s32 cameraId, s32 order, void* dispFunc, void* effect, f32 z);
+    extern void effPuniBalloonDisp(void* camera, void* effect);
+
+    s32 work;
+    s32 child;
+    s32 i;
+    Vec base;
+    Vec pos;
+    f32 scale;
+    f32 target;
+    f32 frame;
+    f32 wave;
+    f32 one;
+    f32 twenty;
+    f32 neg;
+    f32 damp;
+    f32 shrink;
+    f32 zOrder;
+
+    work = *(s32*)((s32)effect + 0xC);
+
+    base.x = ((f32*)vec3_802fe548)[0];
+    base.y = ((f32*)vec3_802fe548)[1];
+    base.z = ((f32*)vec3_802fe548)[2];
+
+    base.x = *(f32*)(work + 4);
+    base.y = *(f32*)(work + 8);
+    base.z = *(f32*)(work + 0xC);
+
+    pos.x = base.x;
+    pos.y = base.y;
+    pos.z = base.z;
+
+    if ((*(u32*)effect & 4) != 0) {
+        *(u32*)effect = *(u32*)effect & ~4;
+        *(s32*)(work + 0x28) = 0x10;
+    }
+
+    if (*(s32*)(work + 0x28) < 0x3E8) {
+        *(s32*)(work + 0x28) = *(s32*)(work + 0x28) - 1;
+    }
+
+    *(s32*)(work + 0x2C) = *(s32*)(work + 0x2C) + 1;
+
+    if (*(s32*)(work + 0x28) < 0) {
+        if (*(s32*)work == 0) {
+            one = float_1_80426f4c;
+            effPuniBalloonEntry(
+                1,
+                (double)*(f32*)(work + 4),
+                (double)*(f32*)(work + 8),
+                (double)*(f32*)(work + 0xC),
+                (double)one);
+        }
+
+        effDelete(effect);
+        return;
+    }
+
+    one = float_1_80426f4c;
+    scale = *(f32*)(work + 0x20);
+    target = one - scale;
+    scale = scale + target / float_10_80426f44;
+    *(f32*)(work + 0x20) = scale;
+
+    twenty = float_20_80426f50;
+    frame = (f32)*(s32*)(work + 0x2C);
+    wave = twenty * (f32)sin((double)(frame / twenty));
+    *(f32*)(work + 0x24) = wave;
+
+    neg = float_neg0p1_80426f54;
+    damp = float_0p98_80426f58;
+    shrink = float_0p9_80426f5c;
+
+    i = 1;
+    child = work + 0x30;
+
+    while (i < *(s32*)((s32)effect + 8)) {
+        *(f32*)(child + 4) = *(f32*)(child + 4) + *(f32*)(child + 0x10);
+        *(f32*)(child + 8) = *(f32*)(child + 8) + *(f32*)(child + 0x14);
+        *(f32*)(child + 0xC) = *(f32*)(child + 0xC) + *(f32*)(child + 0x18);
+
+        *(f32*)(child + 0x14) = *(f32*)(child + 0x14) + neg;
+
+        *(f32*)(child + 0x10) = *(f32*)(child + 0x10) * damp;
+        *(f32*)(child + 0x14) = *(f32*)(child + 0x14) * damp;
+        *(f32*)(child + 0x18) = *(f32*)(child + 0x18) * damp;
+        *(f32*)(child + 0x20) = *(f32*)(child + 0x20) * shrink;
+
+        i++;
+        child += 0x30;
+    }
+
+    zOrder = dispCalcZ(&pos);
+    dispEntry(4, 2, effPuniBalloonDisp, effect, zOrder);
+}
 
 void effPuniBalloonDisp(void* camera, void* effect) {
     extern void balloon_0(void* camera, void* effect);
@@ -278,219 +493,3 @@ void balloon_1(void* camera, void* effect) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
-#pragma optimize_for_size off
-void* effPuniBalloonEntry(s32 type, double x, double y, double z, double scale) {
-    extern void* effEntry(void);
-    extern void* __memAlloc(s32 heap, u32 size);
-    extern s32 rand(void);
-    extern const char str_PuniBalloon_802fe560[];
-    extern void effPuniBalloonMain(void);
-    extern f32 float_0_80426f60;
-    extern f64 double_to_int_802fe558;
-
-    void* entry;
-    s32 work;
-    s32 child;
-    s32 count;
-    s32 i;
-    s32 r;
-    s32 q;
-    s32 rem;
-    f32 zero;
-    f64 conv;
-
-    entry = effEntry();
-
-    count = 1;
-    if (type == 1) {
-        count = 0xB;
-    } else if (type < 1) {
-        if (type >= 0) {
-            count = 1;
-        }
-    }
-
-    *(const char**)((s32)entry + 0x14) = str_PuniBalloon_802fe560;
-    *(s32*)((s32)entry + 8) = count;
-
-    work = (s32)__memAlloc(3, *(s32*)((s32)entry + 8) * 0x30);
-    *(s32*)((s32)entry + 0xC) = work;
-    *(void (**)(void))((s32)entry + 0x10) = effPuniBalloonMain;
-
-    zero = float_0_80426f60;
-    *(u32*)entry = *(u32*)entry | 2;
-
-    *(s32*)work = type;
-    *(f32*)(work + 4) = (f32)x;
-    *(f32*)(work + 8) = (f32)y;
-    *(f32*)(work + 0xC) = (f32)z;
-    *(f32*)(work + 0x24) = zero;
-
-    if (type == 0) {
-        *(s32*)(work + 0x28) = 1000;
-    } else {
-        *(s32*)(work + 0x28) = 0x1E;
-    }
-
-    *(s32*)(work + 0x2C) = 0;
-    *(f32*)(work + 0x20) = zero;
-    *(f32*)(work + 0x1C) = (f32)scale;
-
-    conv = double_to_int_802fe558;
-    child = work + 0x30;
-    i = 1;
-
-    while (i < *(s32*)((s32)entry + 8)) {
-        *(f32*)(child + 4) = zero;
-        *(f32*)(child + 8) = zero;
-        *(f32*)(child + 0xC) = zero;
-        *(f32*)(child + 0x20) = (f32)scale;
-
-        r = rand();
-        q = r / 11;
-        if (r < 0 && (r - q * 11) != 0) {
-            q--;
-        }
-        rem = r - q * 11;
-        *(f32*)(child + 0x10) = (f32)(rem - 5);
-
-        r = rand();
-        q = r / 11;
-        if (r < 0 && (r - q * 11) != 0) {
-            q--;
-        }
-        rem = r - q * 11;
-        *(f32*)(child + 0x14) = (f32)(rem - 5);
-
-        r = rand();
-        q = r / 11;
-        if (r < 0 && (r - q * 11) != 0) {
-            q--;
-        }
-        rem = r - q * 11;
-        *(f32*)(child + 0x18) = (f32)(rem - 5);
-
-        i++;
-        child += 0x30;
-    }
-
-    return entry;
-}
-#pragma optimize_for_size on
-
-void effPuniBalloonMain(void* effect) {
-    typedef struct Vec {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec;
-
-    extern u32 vec3_802fe548[];
-    extern f32 float_1_80426f4c;
-    extern f32 float_10_80426f44;
-    extern f32 float_20_80426f50;
-    extern f32 float_neg0p1_80426f54;
-    extern f32 float_0p98_80426f58;
-    extern f32 float_0p9_80426f5c;
-    extern f64 double_to_int_802fe558;
-    extern double sin(double x);
-    extern void* effPuniBalloonEntry(s32 type, double x, double y, double z, double scale);
-    extern void effDelete(void* effect);
-    extern f32 dispCalcZ(Vec* pos);
-    extern void dispEntry(s32 cameraId, s32 order, void* dispFunc, void* effect, f32 z);
-    extern void effPuniBalloonDisp(void* camera, void* effect);
-
-    s32 work;
-    s32 child;
-    s32 i;
-    Vec base;
-    Vec pos;
-    f32 scale;
-    f32 target;
-    f32 frame;
-    f32 wave;
-    f32 one;
-    f32 twenty;
-    f32 neg;
-    f32 damp;
-    f32 shrink;
-    f32 zOrder;
-
-    work = *(s32*)((s32)effect + 0xC);
-
-    base.x = ((f32*)vec3_802fe548)[0];
-    base.y = ((f32*)vec3_802fe548)[1];
-    base.z = ((f32*)vec3_802fe548)[2];
-
-    base.x = *(f32*)(work + 4);
-    base.y = *(f32*)(work + 8);
-    base.z = *(f32*)(work + 0xC);
-
-    pos.x = base.x;
-    pos.y = base.y;
-    pos.z = base.z;
-
-    if ((*(u32*)effect & 4) != 0) {
-        *(u32*)effect = *(u32*)effect & ~4;
-        *(s32*)(work + 0x28) = 0x10;
-    }
-
-    if (*(s32*)(work + 0x28) < 0x3E8) {
-        *(s32*)(work + 0x28) = *(s32*)(work + 0x28) - 1;
-    }
-
-    *(s32*)(work + 0x2C) = *(s32*)(work + 0x2C) + 1;
-
-    if (*(s32*)(work + 0x28) < 0) {
-        if (*(s32*)work == 0) {
-            one = float_1_80426f4c;
-            effPuniBalloonEntry(
-                1,
-                (double)*(f32*)(work + 4),
-                (double)*(f32*)(work + 8),
-                (double)*(f32*)(work + 0xC),
-                (double)one);
-        }
-
-        effDelete(effect);
-        return;
-    }
-
-    one = float_1_80426f4c;
-    scale = *(f32*)(work + 0x20);
-    target = one - scale;
-    scale = scale + target / float_10_80426f44;
-    *(f32*)(work + 0x20) = scale;
-
-    twenty = float_20_80426f50;
-    frame = (f32)*(s32*)(work + 0x2C);
-    wave = twenty * (f32)sin((double)(frame / twenty));
-    *(f32*)(work + 0x24) = wave;
-
-    neg = float_neg0p1_80426f54;
-    damp = float_0p98_80426f58;
-    shrink = float_0p9_80426f5c;
-
-    i = 1;
-    child = work + 0x30;
-
-    while (i < *(s32*)((s32)effect + 8)) {
-        *(f32*)(child + 4) = *(f32*)(child + 4) + *(f32*)(child + 0x10);
-        *(f32*)(child + 8) = *(f32*)(child + 8) + *(f32*)(child + 0x14);
-        *(f32*)(child + 0xC) = *(f32*)(child + 0xC) + *(f32*)(child + 0x18);
-
-        *(f32*)(child + 0x14) = *(f32*)(child + 0x14) + neg;
-
-        *(f32*)(child + 0x10) = *(f32*)(child + 0x10) * damp;
-        *(f32*)(child + 0x14) = *(f32*)(child + 0x14) * damp;
-        *(f32*)(child + 0x18) = *(f32*)(child + 0x18) * damp;
-        *(f32*)(child + 0x20) = *(f32*)(child + 0x20) * shrink;
-
-        i++;
-        child += 0x30;
-    }
-
-    zOrder = dispCalcZ(&pos);
-    dispEntry(4, 2, effPuniBalloonDisp, effect, zOrder);
-}

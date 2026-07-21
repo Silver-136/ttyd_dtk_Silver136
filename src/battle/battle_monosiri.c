@@ -12,6 +12,43 @@ void* battleGetUnitMonosiriPtr(s32 id) {
 }
 
 
+s32 battleCheckUnitMonosiriFlag(void* unit) {
+    void* battleWork;
+    s32 id;
+    s32 flags;
+    s32 result;
+    s32 word;
+    s32 bit;
+    s32 sameId;
+
+    battleWork = _battleWorkPointer;
+    id = *(s32*)((s32)unit + 8);
+
+    if ((*(u32*)((s32)battleWork + 0x163F4) & 2) != 0) {
+        return 1;
+    }
+
+    result = swGet(id + 0x117A);
+    word = id / 32;
+    bit = id % 32;
+    result |= *(u32*)((s32)battleWork + 0x163D4 + word * 4) & (1 << bit);
+
+    flags = *(s32*)((s32)unit + 0x1C);
+    if ((flags & 4) != 0) {
+        sameId = *(s32*)((s32)unit + 4);
+        word = sameId / 32;
+        bit = sameId % 32;
+        result |= *(u32*)((s32)battleWork + 0x163D4 + word * 4) & (1 << bit);
+    }
+
+    if (result != 0) {
+        return 1;
+    }
+
+    return 0;
+}
+
+
 void battleSetUnitMonosiriFlag(void* unit) {
     void* battleWork;
     s32 id;
@@ -48,41 +85,4 @@ void battleSetUnitMonosiriFlag(void* unit) {
     word = id / 32;
     bit = id % 32;
     *(u32*)((s32)battleWork + 0x163D4 + word * 4) |= 1 << bit;
-}
-
-
-s32 battleCheckUnitMonosiriFlag(void* unit) {
-    void* battleWork;
-    s32 id;
-    s32 flags;
-    s32 result;
-    s32 word;
-    s32 bit;
-    s32 sameId;
-
-    battleWork = _battleWorkPointer;
-    id = *(s32*)((s32)unit + 8);
-
-    if ((*(u32*)((s32)battleWork + 0x163F4) & 2) != 0) {
-        return 1;
-    }
-
-    result = swGet(id + 0x117A);
-    word = id / 32;
-    bit = id % 32;
-    result |= *(u32*)((s32)battleWork + 0x163D4 + word * 4) & (1 << bit);
-
-    flags = *(s32*)((s32)unit + 0x1C);
-    if ((flags & 4) != 0) {
-        sameId = *(s32*)((s32)unit + 4);
-        word = sameId / 32;
-        bit = sameId % 32;
-        result |= *(u32*)((s32)battleWork + 0x163D4 + word * 4) & (1 << bit);
-    }
-
-    if (result != 0) {
-        return 1;
-    }
-
-    return 0;
 }

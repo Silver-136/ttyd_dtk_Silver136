@@ -1,5 +1,146 @@
 #include "effect/eff_mist2.h"
 
+/* stub-fill: effMist2Entry | missing_definition | ghidra_signature */
+void* effMist2Entry(f32 x, f32 y, f32 z, f32 radius, f32 height, s32 type, s32 lifetime) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32, u32);
+    extern s32 irand(s32);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern void effMist2Main(void*);
+    extern char str_Mist2_80428270[];
+
+    s32 count = type == 0 ? 30 : 10;
+    void* effect = effEntry();
+    s32* work = __memAlloc(3, (count + 1) * 0x48);
+    s32* particle = work;
+    s32 i;
+
+    *(char**)((s32)effect + 0x14) = str_Mist2_80428270;
+    *(s32*)((s32)effect + 8) = count + 1;
+    *(void**)((s32)effect + 0xC) = work;
+    *(void**)((s32)effect + 0x10) = effMist2Main;
+    *(u32*)effect |= 2;
+    work[0] = type;
+    *(f32*)&work[1] = x;
+    *(f32*)&work[2] = y;
+    *(f32*)&work[3] = z;
+    work[0xD] = lifetime < 1 ? 1000 : lifetime;
+    work[0xC] = 0;
+    *(f32*)&work[0xB] = 255.0f;
+    *(f32*)&work[6] = 1.0f;
+    *(u8*)((s32)work + 0x38) = 0;
+    *(u8*)((s32)work + 0x39) = 0;
+    *(u8*)((s32)work + 0x3A) = 0;
+
+    for (i = 1; i < count + 1; i++) {
+        f32 distance;
+        f32 radians;
+        particle[0x19] = (s32)radius;
+        particle[0x1A] = (s32)height;
+        distance = (f32)irand((s32)*(f32*)&particle[0x19]);
+        radians = 6.2832f * (f32)irand(360) / 360.0f;
+        *(f32*)&particle[0x13] = distance * (f32)sin(radians);
+        *(f32*)&particle[0x14] = 0.0f;
+        *(f32*)&particle[0x15] = distance * (f32)cos(radians);
+        *(f32*)&particle[0x18] = 0.0f;
+        *(f32*)&particle[0x17] = 0.5f + (f32)irand(100) / 100.0f;
+        *(f32*)&particle[0x1D] = 255.0f;
+        particle[0x1F] = irand(60) + 60;
+        particle[0x1E] = 0;
+        *(f32*)&particle[0x1C] = (f32)(5 - irand(10));
+        *(f32*)&particle[0x1B] = 0.0f;
+        particle[0x21] = irand(30);
+        *(f32*)&particle[0x22] = 0.2f;
+        *(f32*)&particle[0x23] = 0.0f;
+        if (type == 1) {
+            radians = 6.2832f * (f32)irand(360) / 360.0f;
+            *(f32*)&particle[0x13] = *(f32*)&particle[0x19] * (f32)sin(radians);
+            particle[0x14] = particle[0x1A];
+            *(f32*)&particle[0x15] = *(f32*)&particle[0x19] * (f32)cos(radians);
+        }
+        particle += 0x12;
+    }
+    return effect;
+}
+
+/* stub-fill: effMist2Main | missing_definition | ghidra_signature */
+void effMist2Main(void* effect) {
+    extern void effDelete(void*);
+    extern s32 irand(s32);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern f32 dispCalcZ(f32*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void effMist2Disp(s32, void*);
+
+    s32* work = *(s32**)((s32)effect + 0xC);
+    s32* particle = work;
+    f32 pos[3];
+    s32 type = work[0];
+    s32 i;
+
+    pos[0] = *(f32*)&work[1];
+    pos[1] = *(f32*)&work[2];
+    pos[2] = *(f32*)&work[3];
+    if ((*(u32*)effect & 4) != 0) {
+        *(u32*)effect &= ~4;
+        work[0xD] = 0x20;
+    }
+    if (work[0xD] < 1000) {
+        work[0xD]--;
+    }
+    if (work[0xD] < 0) {
+        effDelete(effect);
+        return;
+    }
+    if (work[0xD] < 0x20) {
+        *(f32*)&work[0xB] = (f32)(work[0xD] << 3);
+    }
+    work[0xC]++;
+
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
+        if (particle[0x21] == 0) {
+            particle[0x1F]--;
+            if (particle[0x1F] < 0x20) {
+                *(f32*)&particle[0x1D] = (f32)(particle[0x1F] << 3);
+            }
+            if (*(f32*)&particle[0x1D] > 0.0f) {
+                *(f32*)&particle[0x1B] += *(f32*)&particle[0x1C];
+                *(f32*)&particle[0x18] +=
+                    (*(f32*)&particle[0x17] - *(f32*)&particle[0x18]) / 10.0f;
+                if (type == 1) {
+                    *(f32*)&particle[0x14] += *(f32*)&particle[0x23];
+                    *(f32*)&particle[0x23] -= *(f32*)&particle[0x22];
+                    if (*(f32*)&particle[0x14] < 0.0f) {
+                        *(f32*)&particle[0x14] = 0.0f;
+                    }
+                }
+            } else {
+                f32 radius = (f32)irand((s32)*(f32*)&particle[0x19]);
+                f32 radians = 6.2832f * (f32)irand(360) / 360.0f;
+                *(f32*)&particle[0x13] = radius * (f32)sin(radians);
+                *(f32*)&particle[0x14] = 0.0f;
+                *(f32*)&particle[0x15] = radius * (f32)cos(radians);
+                *(f32*)&particle[0x18] = 0.0f;
+                *(f32*)&particle[0x17] = 0.5f + (f32)irand(100) / 100.0f;
+                *(f32*)&particle[0x1D] = 255.0f;
+                particle[0x1F] = irand(60) + 60;
+                particle[0x1E] = 0;
+                *(f32*)&particle[0x1C] = (f32)(5 - irand(10));
+                *(f32*)&particle[0x1B] = 0.0f;
+                particle[0x21] = irand(30);
+                *(f32*)&particle[0x22] = 0.2f;
+                *(f32*)&particle[0x23] = 0.0f;
+            }
+        } else {
+            particle[0x21]--;
+        }
+        particle += 0x12;
+    }
+    dispEntry(4, 2, effMist2Disp, effect, dispCalcZ(pos));
+}
+
 
 /* CHATGPT STUB FILL: main/effect/eff_mist2 20260624_184929 */
 
@@ -92,146 +233,5 @@ void effMist2Disp(s32 cameraId, void* effect) {
         fifo[0] = 8.0f; fifo[0] = half; fifo[0] = 0.0f; fifo[0] = 1.0f; fifo[0] = 1.0f;
         fifo[0] = half; fifo[0] = half; fifo[0] = 0.0f; fifo[0] = 0.0f; fifo[0] = 1.0f;
     }
-}
-
-/* stub-fill: effMist2Main | missing_definition | ghidra_signature */
-void effMist2Main(void* effect) {
-    extern void effDelete(void*);
-    extern s32 irand(s32);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
-    extern f32 dispCalcZ(f32*);
-    extern void dispEntry(s32, s32, void*, void*, f32);
-    extern void effMist2Disp(s32, void*);
-
-    s32* work = *(s32**)((s32)effect + 0xC);
-    s32* particle = work;
-    f32 pos[3];
-    s32 type = work[0];
-    s32 i;
-
-    pos[0] = *(f32*)&work[1];
-    pos[1] = *(f32*)&work[2];
-    pos[2] = *(f32*)&work[3];
-    if ((*(u32*)effect & 4) != 0) {
-        *(u32*)effect &= ~4;
-        work[0xD] = 0x20;
-    }
-    if (work[0xD] < 1000) {
-        work[0xD]--;
-    }
-    if (work[0xD] < 0) {
-        effDelete(effect);
-        return;
-    }
-    if (work[0xD] < 0x20) {
-        *(f32*)&work[0xB] = (f32)(work[0xD] << 3);
-    }
-    work[0xC]++;
-
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
-        if (particle[0x21] == 0) {
-            particle[0x1F]--;
-            if (particle[0x1F] < 0x20) {
-                *(f32*)&particle[0x1D] = (f32)(particle[0x1F] << 3);
-            }
-            if (*(f32*)&particle[0x1D] > 0.0f) {
-                *(f32*)&particle[0x1B] += *(f32*)&particle[0x1C];
-                *(f32*)&particle[0x18] +=
-                    (*(f32*)&particle[0x17] - *(f32*)&particle[0x18]) / 10.0f;
-                if (type == 1) {
-                    *(f32*)&particle[0x14] += *(f32*)&particle[0x23];
-                    *(f32*)&particle[0x23] -= *(f32*)&particle[0x22];
-                    if (*(f32*)&particle[0x14] < 0.0f) {
-                        *(f32*)&particle[0x14] = 0.0f;
-                    }
-                }
-            } else {
-                f32 radius = (f32)irand((s32)*(f32*)&particle[0x19]);
-                f32 radians = 6.2832f * (f32)irand(360) / 360.0f;
-                *(f32*)&particle[0x13] = radius * (f32)sin(radians);
-                *(f32*)&particle[0x14] = 0.0f;
-                *(f32*)&particle[0x15] = radius * (f32)cos(radians);
-                *(f32*)&particle[0x18] = 0.0f;
-                *(f32*)&particle[0x17] = 0.5f + (f32)irand(100) / 100.0f;
-                *(f32*)&particle[0x1D] = 255.0f;
-                particle[0x1F] = irand(60) + 60;
-                particle[0x1E] = 0;
-                *(f32*)&particle[0x1C] = (f32)(5 - irand(10));
-                *(f32*)&particle[0x1B] = 0.0f;
-                particle[0x21] = irand(30);
-                *(f32*)&particle[0x22] = 0.2f;
-                *(f32*)&particle[0x23] = 0.0f;
-            }
-        } else {
-            particle[0x21]--;
-        }
-        particle += 0x12;
-    }
-    dispEntry(4, 2, effMist2Disp, effect, dispCalcZ(pos));
-}
-
-/* stub-fill: effMist2Entry | missing_definition | ghidra_signature */
-void* effMist2Entry(f32 x, f32 y, f32 z, f32 radius, f32 height, s32 type, s32 lifetime) {
-    extern void* effEntry(void);
-    extern void* __memAlloc(s32, u32);
-    extern s32 irand(s32);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
-    extern void effMist2Main(void*);
-    extern char str_Mist2_80428270[];
-
-    s32 count = type == 0 ? 30 : 10;
-    void* effect = effEntry();
-    s32* work = __memAlloc(3, (count + 1) * 0x48);
-    s32* particle = work;
-    s32 i;
-
-    *(char**)((s32)effect + 0x14) = str_Mist2_80428270;
-    *(s32*)((s32)effect + 8) = count + 1;
-    *(void**)((s32)effect + 0xC) = work;
-    *(void**)((s32)effect + 0x10) = effMist2Main;
-    *(u32*)effect |= 2;
-    work[0] = type;
-    *(f32*)&work[1] = x;
-    *(f32*)&work[2] = y;
-    *(f32*)&work[3] = z;
-    work[0xD] = lifetime < 1 ? 1000 : lifetime;
-    work[0xC] = 0;
-    *(f32*)&work[0xB] = 255.0f;
-    *(f32*)&work[6] = 1.0f;
-    *(u8*)((s32)work + 0x38) = 0;
-    *(u8*)((s32)work + 0x39) = 0;
-    *(u8*)((s32)work + 0x3A) = 0;
-
-    for (i = 1; i < count + 1; i++) {
-        f32 distance;
-        f32 radians;
-        particle[0x19] = (s32)radius;
-        particle[0x1A] = (s32)height;
-        distance = (f32)irand((s32)*(f32*)&particle[0x19]);
-        radians = 6.2832f * (f32)irand(360) / 360.0f;
-        *(f32*)&particle[0x13] = distance * (f32)sin(radians);
-        *(f32*)&particle[0x14] = 0.0f;
-        *(f32*)&particle[0x15] = distance * (f32)cos(radians);
-        *(f32*)&particle[0x18] = 0.0f;
-        *(f32*)&particle[0x17] = 0.5f + (f32)irand(100) / 100.0f;
-        *(f32*)&particle[0x1D] = 255.0f;
-        particle[0x1F] = irand(60) + 60;
-        particle[0x1E] = 0;
-        *(f32*)&particle[0x1C] = (f32)(5 - irand(10));
-        *(f32*)&particle[0x1B] = 0.0f;
-        particle[0x21] = irand(30);
-        *(f32*)&particle[0x22] = 0.2f;
-        *(f32*)&particle[0x23] = 0.0f;
-        if (type == 1) {
-            radians = 6.2832f * (f32)irand(360) / 360.0f;
-            *(f32*)&particle[0x13] = *(f32*)&particle[0x19] * (f32)sin(radians);
-            particle[0x14] = particle[0x1A];
-            *(f32*)&particle[0x15] = *(f32*)&particle[0x19] * (f32)cos(radians);
-        }
-        particle += 0x12;
-    }
-    return effect;
 }
 

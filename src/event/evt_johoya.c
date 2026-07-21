@@ -24,31 +24,179 @@ JohoyaData _jdt;
 void* memset(void* dst, int value, u32 size);
 s32 johoya_set(void* flags, s32 value, s32 set);
 void* _mapAlloc(void* heap, u32 size);
+int johoya_data_make(s32 param_1, u32 param_2);
 
-char* search_evt_moji(s32 index) {
-    return evtNoLabel[index];
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(johoya_data_alloc) {
+    JohoyaData* data = &_jdt;
+    s32* args = event->args;
+    s32 value = evtGetValue(event, args[0]);
+    s32 count;
+    s32 size;
+
+    data->unk8 = value;
+    count = johoya_data_make(value, 0);
+    data->count = count;
+    size = (count << 4) + 0x40;
+    data->entries = _mapAlloc(mapalloc_base_ptr, size);
+    memset(data->entries, 0, (data->count << 4) + 0x40);
+    data->end = (JohoyaEntry*)((s32)data->entries + (data->count << 4));
+    johoya_data_make(data->unk8, 1);
+    return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
-void johoya_init(void) {
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 johoya_data_free(void) {
+    extern void _mapFree(void* heap, void* ptr);
+    JohoyaData* data = &_jdt;
+
+    if (data->entries == NULL) {
+        return 2;
+    }
+    _mapFree(mapalloc_base_ptr, data->entries);
+    data->entries = NULL;
+    data->count = 0;
+    data->unk8 = 0;
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(johoya_keti_newjoho_check) {
+    JohoyaData* data = &_jdt;
+    s32 count = 0;
+    s32 offset = 0;
+    u8* flags = data->flags;
+    s32 i = 0;
+    s32* args = event->args;
+    s32 total = data->count;
+    JohoyaEntry* entries = data->entries;
+
+    while (i < total) {
+        s32 entryOffset = offset + 0xC;
+        s32 index = *(s16*)((s32)entries + entryOffset);
+        s32 mask;
+        s32 shift;
+
+        switch (index & 7) {
+            case 0:
+                mask = 1;
+                shift = 0;
+                break;
+            case 1:
+                mask = 2;
+                shift = 1;
+                break;
+            case 2:
+                mask = 4;
+                shift = 2;
+                break;
+            case 3:
+                mask = 8;
+                shift = 3;
+                break;
+            case 4:
+                mask = 0x10;
+                shift = 4;
+                break;
+            case 5:
+                mask = 0x20;
+                shift = 5;
+                break;
+            case 6:
+                mask = 0x40;
+                shift = 6;
+                break;
+            case 7:
+                mask = 0x80;
+                shift = 7;
+                break;
+        }
+
+        if ((s16)((flags[index / 8] & (u8)mask) >> shift) == 0) {
+            count++;
+        }
+        offset += 0x10;
+        i++;
+    }
+
+    evtSetValue(event, args[0], count);
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+s32 johoya_keti_newjoho_makelabel(int param_1) {
+    extern int sprintf(char* str, const char* format, ...);
+    extern char* msgSearch(char* key);
+    extern u32 strlen(const char* str);
+    EventEntry* event = (EventEntry*)param_1;
+    s32* args = event->args;
+    s32 target = evtGetValue(event, args[0]);
+    s32 seen = 0;
+    s32 i;
+    s32 offset = 0;
+    char titleKey[64];
+    JohoyaEntry* entries = _jdt.entries;
     u8* flags = _jdt.flags;
 
-    memset(flags, 0, 0xD);
-    memset(flags + 0xD, 0, 0xD);
-    memset(flags + 0x1A, 0, 0xD);
-}
+    for (i = 0; i < _jdt.count; i++, offset += 0x10) {
+        JohoyaEntry* entry = (JohoyaEntry*)((s32)entries + offset);
+        s32 index = entry->unkC;
+        s32 mask;
+        s32 shift;
 
-s32 johoya_luigi_newjoho_setreadflag(void) {
-    johoya_set(_jdt.flags + 0x1A, _jdt.entries[_jdt.index].unkC, 1);
-    return 2;
-}
+        switch (index & 7) {
+            case 0: mask = 1; shift = 0; break;
+            case 1: mask = 2; shift = 1; break;
+            case 2: mask = 4; shift = 2; break;
+            case 3: mask = 8; shift = 3; break;
+            case 4: mask = 0x10; shift = 4; break;
+            case 5: mask = 0x20; shift = 5; break;
+            case 6: mask = 0x40; shift = 6; break;
+            case 7: mask = 0x80; shift = 7; break;
+        }
 
-s32 johoya_perfect_newjoho_setreadflag(void) {
-    johoya_set(_jdt.flags + 0xD, _jdt.entries[_jdt.index].unkC, 1);
-    return 2;
-}
+        if ((s16)((flags[index / 8] & (u8)mask) >> shift) == 0) {
+            if (target == seen) {
+                char* title;
+                sprintf((char*)_jdt.end, "%s%04d", _jdt.unk8, entry->unkC);
+                sprintf(titleKey, "jketi_title_%04d", entry->unkC);
+                title = msgSearch(titleKey);
+                evtSetValue(event, args[1], (s32)_jdt.end);
+                evtSetValue(event, args[2], (s32)title);
+                evtSetValue(event, args[3], strlen(title));
+                evtSetValue(event, args[4], *(s16*)((s32)entry + 0xA));
+                _jdt.index = i;
+                return 2;
+            }
+            seen++;
+        }
+    }
 
-s32 johoya_keti_oldspeak_setreadflag(void) {
-    _jdt.entries[_jdt.index].flags |= 1;
+    *(char*)_jdt.end = 0;
+    evtSetValue(event, args[1], (s32)_jdt.end);
+    evtSetValue(event, args[2], (s32)_jdt.end);
+    evtSetValue(event, args[3], 0);
+    evtSetValue(event, args[4], 0);
     return 2;
 }
 
@@ -59,6 +207,138 @@ s32 johoya_keti_newjoho_setreadflag(void) {
     entry = (void*)((s32)entry + offset);
     johoya_set(_jdt.flags, *(s16*)((s32)entry + 0xC), 1);
     *(u16*)((s32)_jdt.entries + offset) |= 1;
+    return 2;
+}
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(johoya_keti_oldspeak_check) {
+    JohoyaData* data = &_jdt;
+    s32 count = 0;
+    s32 offset = 0;
+    u8* flags = data->flags;
+    s32 i = 0;
+    s32* args = event->args;
+    s32 total = data->count;
+    JohoyaEntry* entries = data->entries;
+
+    while (i < total) {
+        JohoyaEntry* entry = (JohoyaEntry*)((s32)entries + offset);
+        s32 index = entry->unkC;
+        s32 mask;
+        s32 shift;
+
+        switch (index & 7) {
+            case 0:
+                mask = 1;
+                shift = 0;
+                break;
+            case 1:
+                mask = 2;
+                shift = 1;
+                break;
+            case 2:
+                mask = 4;
+                shift = 2;
+                break;
+            case 3:
+                mask = 8;
+                shift = 3;
+                break;
+            case 4:
+                mask = 0x10;
+                shift = 4;
+                break;
+            case 5:
+                mask = 0x20;
+                shift = 5;
+                break;
+            case 6:
+                mask = 0x40;
+                shift = 6;
+                break;
+            case 7:
+                mask = 0x80;
+                shift = 7;
+                break;
+        }
+
+        if ((s16)((flags[index / 8] & (u8)mask) >> shift) != 0 && (entry->flags & 1) == 0) {
+            count++;
+        }
+        offset += 0x10;
+        i++;
+    }
+
+    evtSetValue(event, args[0], count);
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+s32 johoya_keti_oldspeak_makelabel(int param_1) {
+    extern int sprintf(char* str, const char* format, ...);
+    EventEntry* event = (EventEntry*)param_1;
+    s32* args = event->args;
+    s32 target = evtGetValue(event, args[0]);
+    s32 seen = 0;
+    s32 i;
+    s32 offset = 0;
+    JohoyaEntry* entries = _jdt.entries;
+    u8* flags = _jdt.flags;
+
+    for (i = 0; i < _jdt.count; i++, offset += 0x10) {
+        JohoyaEntry* entry = (JohoyaEntry*)((s32)entries + offset);
+        s32 index = entry->unkC;
+        s32 mask;
+        s32 shift;
+
+        switch (index & 7) {
+            case 0: mask = 1; shift = 0; break;
+            case 1: mask = 2; shift = 1; break;
+            case 2: mask = 4; shift = 2; break;
+            case 3: mask = 8; shift = 3; break;
+            case 4: mask = 0x10; shift = 4; break;
+            case 5: mask = 0x20; shift = 5; break;
+            case 6: mask = 0x40; shift = 6; break;
+            case 7: mask = 0x80; shift = 7; break;
+        }
+
+        if ((s16)((flags[index / 8] & (u8)mask) >> shift) != 0 && (entry->flags & 1) == 0) {
+            if (target == seen) {
+                sprintf((char*)_jdt.end, "%s%04d", _jdt.unk8, entry->unkC);
+                evtSetValue(event, args[1], (s32)_jdt.end);
+                evtSetValue(event, args[2], *(s32*)((s32)entry + 4));
+                evtSetValue(event, args[3], *(s16*)((s32)entry + 8));
+                evtSetValue(event, args[4], 0);
+                _jdt.index = i;
+                return 2;
+            }
+            seen++;
+        }
+    }
+
+    *(char*)_jdt.end = 0;
+    evtSetValue(event, args[1], (s32)_jdt.end);
+    evtSetValue(event, args[2], (s32)_jdt.end);
+    evtSetValue(event, args[3], 0);
+    evtSetValue(event, args[4], 0);
+    return 2;
+}
+
+s32 johoya_keti_oldspeak_setreadflag(void) {
+    _jdt.entries[_jdt.index].flags |= 1;
+    return 2;
+}
+
+s32 johoya_perfect_newjoho_setreadflag(void) {
+    johoya_set(_jdt.flags + 0xD, _jdt.entries[_jdt.index].unkC, 1);
+    return 2;
+}
+
+s32 johoya_luigi_newjoho_setreadflag(void) {
+    johoya_set(_jdt.flags + 0x1A, _jdt.entries[_jdt.index].unkC, 1);
     return 2;
 }
 
@@ -163,250 +443,13 @@ int johoya_data_make(s32 param_1, u32 param_2) {
     }
 }
 
-s32 johoya_keti_newjoho_makelabel(int param_1) {
-    extern int sprintf(char* str, const char* format, ...);
-    extern char* msgSearch(char* key);
-    extern u32 strlen(const char* str);
-    EventEntry* event = (EventEntry*)param_1;
-    s32* args = event->args;
-    s32 target = evtGetValue(event, args[0]);
-    s32 seen = 0;
-    s32 i;
-    s32 offset = 0;
-    char titleKey[64];
-    JohoyaEntry* entries = _jdt.entries;
+void johoya_init(void) {
     u8* flags = _jdt.flags;
 
-    for (i = 0; i < _jdt.count; i++, offset += 0x10) {
-        JohoyaEntry* entry = (JohoyaEntry*)((s32)entries + offset);
-        s32 index = entry->unkC;
-        s32 mask;
-        s32 shift;
-
-        switch (index & 7) {
-            case 0: mask = 1; shift = 0; break;
-            case 1: mask = 2; shift = 1; break;
-            case 2: mask = 4; shift = 2; break;
-            case 3: mask = 8; shift = 3; break;
-            case 4: mask = 0x10; shift = 4; break;
-            case 5: mask = 0x20; shift = 5; break;
-            case 6: mask = 0x40; shift = 6; break;
-            case 7: mask = 0x80; shift = 7; break;
-        }
-
-        if ((s16)((flags[index / 8] & (u8)mask) >> shift) == 0) {
-            if (target == seen) {
-                char* title;
-                sprintf((char*)_jdt.end, "%s%04d", _jdt.unk8, entry->unkC);
-                sprintf(titleKey, "jketi_title_%04d", entry->unkC);
-                title = msgSearch(titleKey);
-                evtSetValue(event, args[1], (s32)_jdt.end);
-                evtSetValue(event, args[2], (s32)title);
-                evtSetValue(event, args[3], strlen(title));
-                evtSetValue(event, args[4], *(s16*)((s32)entry + 0xA));
-                _jdt.index = i;
-                return 2;
-            }
-            seen++;
-        }
-    }
-
-    *(char*)_jdt.end = 0;
-    evtSetValue(event, args[1], (s32)_jdt.end);
-    evtSetValue(event, args[2], (s32)_jdt.end);
-    evtSetValue(event, args[3], 0);
-    evtSetValue(event, args[4], 0);
-    return 2;
+    memset(flags, 0, 0xD);
+    memset(flags + 0xD, 0, 0xD);
+    memset(flags + 0x1A, 0, 0xD);
 }
-
-s32 johoya_keti_oldspeak_makelabel(int param_1) {
-    extern int sprintf(char* str, const char* format, ...);
-    EventEntry* event = (EventEntry*)param_1;
-    s32* args = event->args;
-    s32 target = evtGetValue(event, args[0]);
-    s32 seen = 0;
-    s32 i;
-    s32 offset = 0;
-    JohoyaEntry* entries = _jdt.entries;
-    u8* flags = _jdt.flags;
-
-    for (i = 0; i < _jdt.count; i++, offset += 0x10) {
-        JohoyaEntry* entry = (JohoyaEntry*)((s32)entries + offset);
-        s32 index = entry->unkC;
-        s32 mask;
-        s32 shift;
-
-        switch (index & 7) {
-            case 0: mask = 1; shift = 0; break;
-            case 1: mask = 2; shift = 1; break;
-            case 2: mask = 4; shift = 2; break;
-            case 3: mask = 8; shift = 3; break;
-            case 4: mask = 0x10; shift = 4; break;
-            case 5: mask = 0x20; shift = 5; break;
-            case 6: mask = 0x40; shift = 6; break;
-            case 7: mask = 0x80; shift = 7; break;
-        }
-
-        if ((s16)((flags[index / 8] & (u8)mask) >> shift) != 0 && (entry->flags & 1) == 0) {
-            if (target == seen) {
-                sprintf((char*)_jdt.end, "%s%04d", _jdt.unk8, entry->unkC);
-                evtSetValue(event, args[1], (s32)_jdt.end);
-                evtSetValue(event, args[2], *(s32*)((s32)entry + 4));
-                evtSetValue(event, args[3], *(s16*)((s32)entry + 8));
-                evtSetValue(event, args[4], 0);
-                _jdt.index = i;
-                return 2;
-            }
-            seen++;
-        }
-    }
-
-    *(char*)_jdt.end = 0;
-    evtSetValue(event, args[1], (s32)_jdt.end);
-    evtSetValue(event, args[2], (s32)_jdt.end);
-    evtSetValue(event, args[3], 0);
-    evtSetValue(event, args[4], 0);
-    return 2;
-}
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-USER_FUNC(johoya_keti_oldspeak_check) {
-    JohoyaData* data = &_jdt;
-    s32 count = 0;
-    s32 offset = 0;
-    u8* flags = data->flags;
-    s32 i = 0;
-    s32* args = event->args;
-    s32 total = data->count;
-    JohoyaEntry* entries = data->entries;
-
-    while (i < total) {
-        JohoyaEntry* entry = (JohoyaEntry*)((s32)entries + offset);
-        s32 index = entry->unkC;
-        s32 mask;
-        s32 shift;
-
-        switch (index & 7) {
-            case 0:
-                mask = 1;
-                shift = 0;
-                break;
-            case 1:
-                mask = 2;
-                shift = 1;
-                break;
-            case 2:
-                mask = 4;
-                shift = 2;
-                break;
-            case 3:
-                mask = 8;
-                shift = 3;
-                break;
-            case 4:
-                mask = 0x10;
-                shift = 4;
-                break;
-            case 5:
-                mask = 0x20;
-                shift = 5;
-                break;
-            case 6:
-                mask = 0x40;
-                shift = 6;
-                break;
-            case 7:
-                mask = 0x80;
-                shift = 7;
-                break;
-        }
-
-        if ((s16)((flags[index / 8] & (u8)mask) >> shift) != 0 && (entry->flags & 1) == 0) {
-            count++;
-        }
-        offset += 0x10;
-        i++;
-    }
-
-    evtSetValue(event, args[0], count);
-    return 2;
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-USER_FUNC(johoya_keti_newjoho_check) {
-    JohoyaData* data = &_jdt;
-    s32 count = 0;
-    s32 offset = 0;
-    u8* flags = data->flags;
-    s32 i = 0;
-    s32* args = event->args;
-    s32 total = data->count;
-    JohoyaEntry* entries = data->entries;
-
-    while (i < total) {
-        s32 entryOffset = offset + 0xC;
-        s32 index = *(s16*)((s32)entries + entryOffset);
-        s32 mask;
-        s32 shift;
-
-        switch (index & 7) {
-            case 0:
-                mask = 1;
-                shift = 0;
-                break;
-            case 1:
-                mask = 2;
-                shift = 1;
-                break;
-            case 2:
-                mask = 4;
-                shift = 2;
-                break;
-            case 3:
-                mask = 8;
-                shift = 3;
-                break;
-            case 4:
-                mask = 0x10;
-                shift = 4;
-                break;
-            case 5:
-                mask = 0x20;
-                shift = 5;
-                break;
-            case 6:
-                mask = 0x40;
-                shift = 6;
-                break;
-            case 7:
-                mask = 0x80;
-                shift = 7;
-                break;
-        }
-
-        if ((s16)((flags[index / 8] & (u8)mask) >> shift) == 0) {
-            count++;
-        }
-        offset += 0x10;
-        i++;
-    }
-
-    evtSetValue(event, args[0], count);
-    return 2;
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
@@ -465,35 +508,6 @@ s32 johoya_set(void* flags, s32 value, s32 set) {
     ((u8*)flags)[byteIndex] = cleared + shifted;
     return set;
 }
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-USER_FUNC(johoya_data_alloc) {
-    JohoyaData* data = &_jdt;
-    s32* args = event->args;
-    s32 value = evtGetValue(event, args[0]);
-    s32 count;
-    s32 size;
-
-    data->unk8 = value;
-    count = johoya_data_make(value, 0);
-    data->count = count;
-    size = (count << 4) + 0x40;
-    data->entries = _mapAlloc(mapalloc_base_ptr, size);
-    memset(data->entries, 0, (data->count << 4) + 0x40);
-    data->end = (JohoyaEntry*)((s32)data->entries + (data->count << 4));
-    johoya_data_make(data->unk8, 1);
-    return 2;
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 s32 johoya_get(void* flags, s16 value) {
     s32 index = value;
     s32 mask;
@@ -554,21 +568,7 @@ int search_evt_no(char* label) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-s32 johoya_data_free(void) {
-    extern void _mapFree(void* heap, void* ptr);
-    JohoyaData* data = &_jdt;
 
-    if (data->entries == NULL) {
-        return 2;
-    }
-    _mapFree(mapalloc_base_ptr, data->entries);
-    data->entries = NULL;
-    data->count = 0;
-    data->unk8 = 0;
-    return 2;
+char* search_evt_moji(s32 index) {
+    return evtNoLabel[index];
 }
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-

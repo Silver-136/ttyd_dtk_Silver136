@@ -1,5 +1,49 @@
 #include "effect/n64/eff_akari_pose_n64.h"
 
+void* effAkariPoseN64Entry(s32 type, s32 count, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, s32 size);
+    extern void effAkariPoseMain(void);
+    extern char str_AkariPoseN64_802faaf8[];
+    extern s32 max_seq_num[];
+    extern f32 float_0p5_80424c70;
+    extern f32 float_neg1_80424c74;
+    void* entry;
+    void* work;
+    u8* item;
+    s32 i;
+    f32 halfSeq;
+
+    entry = effEntry();
+    *(char**)((s32)entry + 0x14) = str_AkariPoseN64_802faaf8;
+    *(s32*)((s32)entry + 8) = count + 1;
+    work = __memAlloc(3, (count + 1) * 0x38);
+    *(void**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effAkariPoseMain;
+    *(u32*)entry |= 2;
+
+    *(s32*)work = type;
+    *(s32*)((s32)work + 0x2C) = 0;
+    if (timer <= 0) {
+        *(s32*)((s32)work + 0x28) = 1000;
+    } else {
+        *(s32*)((s32)work + 0x28) = timer;
+    }
+    *(s32*)((s32)work + 0x30) = 0xFF;
+    *(f32*)((s32)work + 4) = x;
+    *(f32*)((s32)work + 8) = y;
+    *(f32*)((s32)work + 0xC) = z;
+    *(f32*)((s32)work + 0x34) = scale;
+
+    halfSeq = (f32)max_seq_num[type] * float_0p5_80424c70;
+    item = (u8*)work + 0x38;
+    for (i = 1; i < count + 1; i++, item += 0x38) {
+        *(s32*)(item + 0x20) = (s32)(float_neg1_80424c74 - (halfSeq * (f32)(i & 1)));
+    }
+
+    return entry;
+}
+
 
 void effAkariPoseMain(void* entry) {
     extern void effDelete(void* entry);
@@ -118,50 +162,6 @@ void effAkariPoseMain(void* entry) {
     }
 
     dispEntry(4, 2, effAkariPoseDisp, entry, dispCalcZ(pos));
-}
-
-void* effAkariPoseN64Entry(s32 type, s32 count, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
-    extern void* effEntry(void);
-    extern void* __memAlloc(s32 heap, s32 size);
-    extern void effAkariPoseMain(void);
-    extern char str_AkariPoseN64_802faaf8[];
-    extern s32 max_seq_num[];
-    extern f32 float_0p5_80424c70;
-    extern f32 float_neg1_80424c74;
-    void* entry;
-    void* work;
-    u8* item;
-    s32 i;
-    f32 halfSeq;
-
-    entry = effEntry();
-    *(char**)((s32)entry + 0x14) = str_AkariPoseN64_802faaf8;
-    *(s32*)((s32)entry + 8) = count + 1;
-    work = __memAlloc(3, (count + 1) * 0x38);
-    *(void**)((s32)entry + 0xC) = work;
-    *(void**)((s32)entry + 0x10) = effAkariPoseMain;
-    *(u32*)entry |= 2;
-
-    *(s32*)work = type;
-    *(s32*)((s32)work + 0x2C) = 0;
-    if (timer <= 0) {
-        *(s32*)((s32)work + 0x28) = 1000;
-    } else {
-        *(s32*)((s32)work + 0x28) = timer;
-    }
-    *(s32*)((s32)work + 0x30) = 0xFF;
-    *(f32*)((s32)work + 4) = x;
-    *(f32*)((s32)work + 8) = y;
-    *(f32*)((s32)work + 0xC) = z;
-    *(f32*)((s32)work + 0x34) = scale;
-
-    halfSeq = (f32)max_seq_num[type] * float_0p5_80424c70;
-    item = (u8*)work + 0x38;
-    for (i = 1; i < count + 1; i++, item += 0x38) {
-        *(s32*)(item + 0x20) = (s32)(float_neg1_80424c74 - (halfSeq * (f32)(i & 1)));
-    }
-
-    return entry;
 }
 
 void effAkariPoseDisp(int param_1, void* param_2) {

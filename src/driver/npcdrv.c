@@ -15,6 +15,767 @@ char MarioTalkPose[0x20] = "KPA_T_1";
 NPCWork* npcGetWorkPtr(void) {
     return gp->inBattle ? &work.battle : &work.field;
 }
+
+
+u8 npcReleaseFiledNpc(void) {
+    extern void* release_wp;
+    extern void* animPoseGetAnimPosePtr(s32);
+    extern void* animPoseGetAnimBaseDataPtr(s32);
+    extern char* animPoseGetCurrentAnim(s32);
+    extern void animPoseRelease(s32);
+    extern char* strcpy(char*, const char*);
+    s32 wp = (s32)&work;
+    char* release = release_wp;
+    void* npc;
+    void* pose;
+    s32 i;
+
+    if ((*(u32*)(wp + 8) & 2) != 0) {
+        npc = *(void**)(wp + 0xC);
+        i = 0;
+        while (i < *(s32*)(wp + 4)) {
+            if ((*(u32*)npc & 1) && (*(u32*)npc & 2)) {
+                pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
+                if (*(s32*)((s32)pose + 0x90) == -1 && *(s32*)((s32)npc + 0x104) >= 0) {
+                    pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
+                    *(s32*)(release + 0x80) = *(s32*)pose;
+                    *(f32*)(release + 0x84) = *(f32*)((s32)pose + 0x70);
+                    *(f32*)(release + 0x88) = *(f32*)((s32)pose + 0x74);
+                    *(f32*)(release + 0x8C) = *(f32*)((s32)pose + 0x78);
+                    *(f32*)(release + 0x90) = *(f32*)((s32)pose + 0x7C);
+                    strcpy(release, (char*)animPoseGetAnimBaseDataPtr(*(s32*)((s32)npc + 0x104)) + 4);
+                    strcpy(release + 0x40, animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104)));
+                    animPoseRelease(*(s32*)((s32)npc + 0x104));
+                    release += 0x94;
+                    *(s32*)((s32)npc + 0x104) = -1;
+                }
+            }
+            i++;
+            npc = (void*)((s32)npc + 0x340);
+        }
+    }
+}
+
+u8 npcRecoveryFiledNpc(void) {
+    extern void* release_wp;
+    extern s32 animPoseEntry(char*, s32);
+    extern void animPoseSetAnim(s32, char*, s32);
+    extern void* animPoseGetAnimPosePtr(s32);
+    extern void animPoseWorldPositionEvalOn(s32);
+    extern void animPoseWorldMatrixEvalOn(s32);
+    extern void animPoseMain(s32);
+    s32 wp = (s32)&work;
+    char* release = release_wp;
+    void* npc;
+    void* pose;
+    s32 i;
+
+    if ((*(u32*)(wp + 8) & 2) != 0) {
+        npc = *(void**)(wp + 0xC);
+        i = 0;
+        while (i < *(s32*)(wp + 4)) {
+            if ((*(u32*)npc & 1) && (*(u32*)npc & 2) && *(s32*)((s32)npc + 0x104) == -1) {
+                *(s32*)((s32)npc + 0x104) = animPoseEntry(release, 0);
+                animPoseSetAnim(*(s32*)((s32)npc + 0x104), release + 0x40, 1);
+                pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
+                *(s32*)pose = *(s32*)(release + 0x80);
+                *(f32*)((s32)pose + 0x70) = *(f32*)(release + 0x84);
+                *(f32*)((s32)pose + 0x74) = *(f32*)(release + 0x88);
+                *(f32*)((s32)pose + 0x78) = *(f32*)(release + 0x8C);
+                *(f32*)((s32)pose + 0x7C) = *(f32*)(release + 0x90);
+                if ((*(u32*)pose & 0x40) != 0) {
+                    *(u32*)pose &= ~0x40;
+                    animPoseWorldPositionEvalOn(*(s32*)((s32)npc + 0x104));
+                }
+                if ((*(u32*)pose & 0x80) != 0) {
+                    *(u32*)pose &= ~0x80;
+                    animPoseWorldMatrixEvalOn(*(s32*)((s32)npc + 0x104));
+                }
+                animPoseMain(*(s32*)((s32)npc + 0x104));
+                release += 0x94;
+            }
+            i++;
+            npc = (void*)((s32)npc + 0x340);
+        }
+        *(u32*)(wp + 8) &= ~2;
+    }
+}
+
+void mtx_setup(void* npc, f32 mtx[3][4], s32 historyIndex) {
+    extern void* camGetCurPtr(void);
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern f32 reviseAngle(f32 angle);
+    extern void PSMTXIdentity(f32 mtx[3][4]);
+    extern void PSMTXScaleApply(f32 src[3][4], f32 dst[3][4], f32 x, f32 y, f32 z);
+    extern void PSMTXTransApply(f32 src[3][4], f32 dst[3][4], f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(f32 mtx[3][4], s32 axis, f32 radians);
+    extern void PSMTXConcat(f32 a[3][4], f32 b[3][4], f32 c[3][4]);
+    extern f32 float_0_8041fc7c;
+    extern f32 float_1_8041fc94;
+    extern f32 float_90_8041fcb0;
+    extern f32 float_270_8041fcc4;
+    extern f32 float_neg1_8041fcd8;
+    extern f32 float_deg2rad_8041fd7c;
+    f32 xRot[3][4];
+    f32 yRot[3][4];
+    f32 zRot[3][4];
+    f32 camAngle;
+    f32 scaleSign;
+    f32 angle;
+    f32 one;
+    void* cam;
+    u32 flags;
+
+    camAngle = float_0_8041fc7c;
+    scaleSign = float_1_8041fc94;
+    flags = *(u32*)npc;
+    if (!(flags & 0x2000000) && !(flags & 0x8000000)) {
+        cam = camGetCurPtr();
+        camAngle = angleABf(
+            *(f32*)((s32)cam + 0xC),
+            *(f32*)((s32)cam + 0x14),
+            *(f32*)((s32)cam + 0x18),
+            *(f32*)((s32)cam + 0x20));
+        angle = angleABf(
+            *(f32*)((s32)cam + 0xC),
+            *(f32*)((s32)cam + 0x14),
+            *(f32*)((s32)npc + 0x8C),
+            *(f32*)((s32)npc + 0x94));
+        camAngle = reviseAngle(camAngle - angle);
+    }
+
+    angle = reviseAngle(*(f32*)((s32)npc + 0xF0));
+    angle = reviseAngle(angle);
+    if (angle >= float_90_8041fcb0 && angle <= float_270_8041fcc4) {
+        scaleSign *= float_neg1_8041fcd8;
+    }
+
+    PSMTXIdentity(mtx);
+    one = float_1_8041fc94;
+    if (one != *(f32*)((s32)npc + 0xE0) || one != *(f32*)((s32)npc + 0xE4) ||
+        one != *(f32*)((s32)npc + 0xE8) || one != scaleSign) {
+        PSMTXScaleApply(
+            mtx,
+            mtx,
+            *(f32*)((s32)npc + 0xE0),
+            *(f32*)((s32)npc + 0xE4),
+            *(f32*)((s32)npc + 0xE8) * scaleSign);
+    }
+
+    if (*(f32*)((s32)npc + 0xF8) != float_0_8041fc7c ||
+        *(f32*)((s32)npc + 0xFC) != float_0_8041fc7c ||
+        *(f32*)((s32)npc + 0x100) != float_0_8041fc7c) {
+        PSMTXTransApply(
+            mtx,
+            mtx,
+            -*(f32*)((s32)npc + 0xF8),
+            -*(f32*)((s32)npc + 0xFC),
+            -*(f32*)((s32)npc + 0x100));
+    }
+
+    if (*(f32*)((s32)npc + 0xF4) != float_0_8041fc7c) {
+        PSMTXRotRad(zRot, 0x7A, float_deg2rad_8041fd7c * *(f32*)((s32)npc + 0xF4));
+        PSMTXConcat(zRot, mtx, mtx);
+    }
+    if (*(f32*)((s32)npc + 0xEC) != float_0_8041fc7c) {
+        PSMTXRotRad(xRot, 0x78, float_deg2rad_8041fd7c * *(f32*)((s32)npc + 0xEC));
+        PSMTXConcat(xRot, mtx, mtx);
+    }
+    if (*(f32*)((s32)npc + 0xF0) != float_0_8041fc7c || camAngle != float_0_8041fc7c) {
+        PSMTXRotRad(yRot, 0x79, float_deg2rad_8041fd7c * (*(f32*)((s32)npc + 0xF0) + camAngle));
+        PSMTXConcat(yRot, mtx, mtx);
+    }
+
+    if (*(f32*)((s32)npc + 0xF8) != float_0_8041fc7c ||
+        *(f32*)((s32)npc + 0xFC) != float_0_8041fc7c ||
+        *(f32*)((s32)npc + 0x100) != float_0_8041fc7c) {
+        PSMTXTransApply(
+            mtx,
+            mtx,
+            *(f32*)((s32)npc + 0xF8),
+            *(f32*)((s32)npc + 0xFC),
+            *(f32*)((s32)npc + 0x100));
+    }
+
+    if (historyIndex == -1) {
+        PSMTXTransApply(
+            mtx,
+            mtx,
+            *(f32*)((s32)npc + 0x8C),
+            *(f32*)((s32)npc + 0x90),
+            *(f32*)((s32)npc + 0x94));
+    } else {
+        void* history = (void*)((s32)npc + historyIndex * 0xC);
+        PSMTXTransApply(
+            mtx,
+            mtx,
+            *(f32*)((s32)history + 0xA4),
+            *(f32*)((s32)history + 0xA8),
+            *(f32*)((s32)history + 0xAC));
+    }
+}
+
+void npcDisp_xlu(s32 cameraId, void* npc) {
+    extern f32 reviseAngle(f32);
+    extern void mtx_setup(void*, f32 (*)[4], s32);
+    extern void animPoseSetMaterialEvtColor(s32, void*);
+    extern void animPoseSetMaterialFlagOn(s32, u32);
+    extern char* animPoseGetCurrentAnim(s32);
+    extern void* animPoseGetAnimPosePtr(s32);
+    extern void* camGetPtr(s32);
+    extern f64 atan2(f64, f64);
+    extern s32 strcmp(const char*, const char*);
+    extern void animPoseSetAnim(s32, char*, s32);
+    extern void animPoseMain(s32);
+    extern void animPoseDrawMtx(s32, f32 (*)[4], s32, f32, f32);
+    extern const f32 float_0_8041fc7c;
+    extern const f32 float_360_8041fcc0;
+    extern const f32 float_rad2deg_8041fcbc;
+    extern const f32 float_90_8041fcb0;
+    extern const f32 float_270_8041fcc4;
+    extern const f32 float_neg90_8041fcb8;
+    extern const f32 float_neg270_8041fcc8;
+    extern const f32 float_2_8041fd34;
+    extern char* luigi_pose[];
+    f32 mtx[3][4];
+    s32 color;
+    s32 color2;
+    f32 rot;
+    f32 angle;
+    void* pose;
+    u32 i;
+    char* anim;
+    char** poses;
+    void* cam;
+    s32 r;
+    s32 g;
+    s32 b;
+
+    rot = reviseAngle(-*(f32*)((s32)npc + 0x144));
+    mtx_setup(npc, mtx, -1);
+    color = *(s32*)((s32)npc + 0x114);
+    if ((*(u32*)((s32)npc + 0x1D4) & 0x400000) != 0) {
+        r = *(u8*)((s32)&color + 0);
+        g = *(u8*)((s32)&color + 1);
+        b = *(u8*)((s32)&color + 2);
+        *(u8*)((s32)&color + 0) = (s32)(r + ((u32)r >> 31)) >> 1;
+        *(u8*)((s32)&color + 1) = (s32)(g + ((u32)g >> 31)) >> 1;
+        *(u8*)((s32)&color + 2) = (s32)(b + ((u32)b >> 31)) >> 1;
+        color2 = color;
+        animPoseSetMaterialEvtColor(*(s32*)((s32)npc + 0x104), &color2);
+        animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), 0x40);
+    }
+    if ((*(u32*)npc & 0x800000) != 0) {
+        animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
+        pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
+        anim = animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
+        cam = camGetPtr(4);
+        angle = atan2(-(*(f32*)((s32)cam + 0x18) - *(f32*)((s32)cam + 0xC)),
+                      -(*(f32*)((s32)cam + 0x20) - *(f32*)((s32)cam + 0x14)));
+        angle = reviseAngle(float_rad2deg_8041fcbc * angle);
+        if (angle < float_0_8041fc7c) {
+            angle += float_360_8041fcc0;
+        }
+        angle = reviseAngle(angle - *(f32*)((s32)pose + 0x74));
+        if ((angle > float_90_8041fcb0 && angle <= float_270_8041fcc4) ||
+            (angle < float_neg90_8041fcb8 && angle >= float_neg270_8041fcc8)) {
+            i = 0;
+            poses = luigi_pose;
+            do {
+                if (strcmp(poses[0], anim) == 0) {
+                    break;
+                }
+                i++;
+                poses += 2;
+            } while (i < 0xE);
+            if (i < 0xE) {
+                animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2 + 1], 0);
+            }
+        } else {
+            i = 0;
+            poses = luigi_pose;
+            do {
+                if (strcmp(poses[1], anim) == 0) {
+                    break;
+                }
+                i++;
+                poses += 2;
+            } while (i < 0xE);
+            if (i < 0xE) {
+                animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2], 0);
+            }
+        }
+    }
+    animPoseMain(*(s32*)((s32)npc + 0x104));
+    animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 1, rot, float_2_8041fd34);
+    animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 2, rot, float_2_8041fd34);
+    animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 3, rot, float_2_8041fd34);
+}
+
+void npcDisp(s32 cameraId, void* npc) {
+    extern f32 reviseAngle(f32);
+    extern void mtx_setup(void*, f32 (*)[4], s32);
+    extern void animPoseSetMaterialEvtColor(s32, void*);
+    extern void animPoseSetMaterialFlagOn(s32, u32);
+    extern void* dispGetCurWork(void);
+    extern char* animPoseGetCurrentAnim(s32);
+    extern void* animPoseGetAnimPosePtr(s32);
+    extern void* camGetPtr(s32);
+    extern f64 atan2(f64, f64);
+    extern s32 strcmp(const char*, const char*);
+    extern void animPoseSetAnim(s32, char*, s32);
+    extern void animPoseMain(s32);
+    extern void animPoseDrawMtx(s32, f32 (*)[4], s32, f32, f32);
+    extern const f32 float_0_8041fc7c;
+    extern const f32 float_360_8041fcc0;
+    extern const f32 float_rad2deg_8041fcbc;
+    extern const f32 float_90_8041fcb0;
+    extern const f32 float_270_8041fcc4;
+    extern const f32 float_neg90_8041fcb8;
+    extern const f32 float_neg270_8041fcc8;
+    extern const f32 float_2_8041fd34;
+    extern char* luigi_pose[];
+    f32 mtx[3][4];
+    s32 color;
+    s32 color2;
+    f32 rot;
+    f32 angle;
+    void* pose;
+    u32 i;
+    char* anim;
+    char** poses;
+    void* cam;
+    void* disp;
+    s32 r;
+    s32 g;
+    s32 b;
+    s32 mode;
+
+    rot = reviseAngle(-*(f32*)((s32)npc + 0x144));
+    mtx_setup(npc, mtx, -1);
+    color = *(s32*)((s32)npc + 0x114);
+    if ((*(u32*)((s32)npc + 0x1D4) & 0x400000) != 0) {
+        r = *(u8*)((s32)&color + 0);
+        g = *(u8*)((s32)&color + 1);
+        b = *(u8*)((s32)&color + 2);
+        *(u8*)((s32)&color + 0) = (s32)(r + ((u32)r >> 31)) >> 1;
+        *(u8*)((s32)&color + 1) = (s32)(g + ((u32)g >> 31)) >> 1;
+        *(u8*)((s32)&color + 2) = (s32)(b + ((u32)b >> 31)) >> 1;
+        color2 = color;
+        animPoseSetMaterialEvtColor(*(s32*)((s32)npc + 0x104), &color2);
+        animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), 0x40);
+    }
+
+    disp = dispGetCurWork();
+    mode = *(u8*)((s32)disp + 1);
+    switch (mode) {
+        case 0:
+            if ((*(u32*)npc & 0x800000) != 0) {
+            animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
+            pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
+            anim = animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
+            cam = camGetPtr(4);
+            angle = atan2(-(*(f32*)((s32)cam + 0x18) - *(f32*)((s32)cam + 0xC)),
+                          -(*(f32*)((s32)cam + 0x20) - *(f32*)((s32)cam + 0x14)));
+            angle = reviseAngle(float_rad2deg_8041fcbc * angle);
+            if (angle < float_0_8041fc7c) {
+                angle += float_360_8041fcc0;
+            }
+            angle = reviseAngle(angle - *(f32*)((s32)pose + 0x74));
+            if ((angle > float_90_8041fcb0 && angle <= float_270_8041fcc4) ||
+                (angle < float_neg90_8041fcb8 && angle >= float_neg270_8041fcc8)) {
+                i = 0;
+                poses = luigi_pose;
+                do {
+                    if (strcmp(poses[0], anim) == 0) {
+                        break;
+                    }
+                    i++;
+                    poses += 2;
+                } while (i < 0xE);
+                if (i < 0xE) {
+                    animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2 + 1], 0);
+                }
+            } else {
+                i = 0;
+                poses = luigi_pose;
+                do {
+                    if (strcmp(poses[1], anim) == 0) {
+                        break;
+                    }
+                    i++;
+                    poses += 2;
+                } while (i < 0xE);
+                if (i < 0xE) {
+                    animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2], 0);
+                }
+            }
+            }
+            animPoseMain(*(s32*)((s32)npc + 0x104));
+            animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 1, rot, float_2_8041fd34);
+            break;
+        case 1:
+            animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 2, rot, float_2_8041fd34);
+            break;
+        case 2:
+            animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 3, rot, float_2_8041fd34);
+            break;
+    }
+}
+
+void npcDisp_offscreen_xlu(s32 cameraId, void* npc) {
+    extern void sysWaitDrawSync(void);
+    extern void GXClearBoundingBox(void);
+    extern f32 reviseAngle(f32);
+    extern void mtx_setup(void*, f32 (*)[4], s32);
+    extern void animPoseSetMaterialEvtColor(s32, void*);
+    extern void animPoseSetMaterialFlagOn(s32, u32);
+    extern char* animPoseGetCurrentAnim(s32);
+    extern void* animPoseGetAnimPosePtr(s32);
+    extern void* camGetPtr(s32);
+    extern f64 atan2(f64, f64);
+    extern s32 strcmp(const char*, const char*);
+    extern void animPoseSetAnim(s32, char*, s32);
+    extern void animPoseMain(s32);
+    extern void animPoseDrawMtx(s32, f32 (*)[4], s32, f32, f32);
+    extern void GXReadBoundingBox(u16*, u16*, u16*, u16*);
+    extern void offscreenAddBoundingBox(s32, u16, u16, u16, u16);
+    extern const f32 float_0_8041fc7c;
+    extern const f32 float_360_8041fcc0;
+    extern const f32 float_rad2deg_8041fcbc;
+    extern const f32 float_90_8041fcb0;
+    extern const f32 float_270_8041fcc4;
+    extern const f32 float_neg90_8041fcb8;
+    extern const f32 float_neg270_8041fcc8;
+    extern const f32 float_2_8041fd34;
+    extern char* luigi_pose[];
+    f32 mtx[3][4];
+    s32 color2;
+    s32 color;
+    u16 x0;
+    u16 y0;
+    u16 x1;
+    u16 y1;
+    f32 rot;
+    f32 angle;
+    void* pose;
+    u32 i;
+    char* anim;
+    char** poses;
+    void* cam;
+    s32 r;
+    s32 g;
+    s32 b;
+
+    sysWaitDrawSync();
+    GXClearBoundingBox();
+    rot = reviseAngle(-*(f32*)((s32)npc + 0x144));
+    mtx_setup(npc, mtx, -1);
+    color = *(s32*)((s32)npc + 0x114);
+    if ((*(u32*)((s32)npc + 0x1D4) & 0x400000) != 0) {
+        r = *(u8*)((s32)&color + 0);
+        g = *(u8*)((s32)&color + 1);
+        b = *(u8*)((s32)&color + 2);
+        *(u8*)((s32)&color + 0) = (s32)(r + ((u32)r >> 31)) >> 1;
+        *(u8*)((s32)&color + 1) = (s32)(g + ((u32)g >> 31)) >> 1;
+        *(u8*)((s32)&color + 2) = (s32)(b + ((u32)b >> 31)) >> 1;
+        color2 = color;
+        animPoseSetMaterialEvtColor(*(s32*)((s32)npc + 0x104), &color2);
+        animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), 0x40);
+    }
+
+    if ((*(u32*)npc & 0x800000) != 0) {
+        animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
+        pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
+        anim = animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
+        cam = camGetPtr(4);
+        angle = atan2(-(*(f32*)((s32)cam + 0x18) - *(f32*)((s32)cam + 0xC)),
+                      -(*(f32*)((s32)cam + 0x20) - *(f32*)((s32)cam + 0x14)));
+        angle = reviseAngle(float_rad2deg_8041fcbc * angle);
+        if (angle < float_0_8041fc7c) {
+            angle += float_360_8041fcc0;
+        }
+        angle = reviseAngle(angle - *(f32*)((s32)pose + 0x74));
+        if ((angle > float_90_8041fcb0 && angle <= float_270_8041fcc4) ||
+            (angle < float_neg90_8041fcb8 && angle >= float_neg270_8041fcc8)) {
+            i = 0;
+            poses = luigi_pose;
+            do {
+                if (strcmp(poses[0], anim) == 0) {
+                    break;
+                }
+                i++;
+                poses += 2;
+            } while (i < 0xE);
+            if (i < 0xE) {
+                animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2 + 1], 0);
+            }
+        } else {
+            i = 0;
+            poses = luigi_pose;
+            do {
+                if (strcmp(poses[1], anim) == 0) {
+                    break;
+                }
+                i++;
+                poses += 2;
+            } while (i < 0xE);
+            if (i < 0xE) {
+                animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2], 0);
+            }
+        }
+    }
+
+    animPoseMain(*(s32*)((s32)npc + 0x104));
+    animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 1, rot, float_2_8041fd34);
+    animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 2, rot, float_2_8041fd34);
+    animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 3, rot, float_2_8041fd34);
+    sysWaitDrawSync();
+    GXReadBoundingBox(&x0, &y0, &x1, &y1);
+    offscreenAddBoundingBox(*(s32*)((s32)npc + 0x110), x0, y0, x1, y1);
+}
+
+u8 npcDisp_offscreen(s32 cameraId, void* npc) {
+    extern void sysWaitDrawSync(void);
+    extern void GXClearBoundingBox(void);
+    extern f32 reviseAngle(f32);
+    extern void mtx_setup(void*, f32 (*)[4], s32);
+    extern void animPoseSetMaterialEvtColor(s32, void*);
+    extern void animPoseSetMaterialFlagOn(s32, u32);
+    extern void* dispGetCurWork(void);
+    extern char* animPoseGetCurrentAnim(s32);
+    extern void* animPoseGetAnimPosePtr(s32);
+    extern void* camGetPtr(s32);
+    extern f64 atan2(f64, f64);
+    extern s32 strcmp(const char*, const char*);
+    extern void animPoseSetAnim(s32, char*, s32);
+    extern void animPoseMain(s32);
+    extern void animPoseDrawMtx(s32, f32 (*)[4], s32, f32, f32);
+    extern void GXReadBoundingBox(u16*, u16*, u16*, u16*);
+    extern void offscreenAddBoundingBox(s32, u16, u16, u16, u16);
+    extern const f32 float_0_8041fc7c;
+    extern const f32 float_360_8041fcc0;
+    extern const f32 float_rad2deg_8041fcbc;
+    extern const f32 float_90_8041fcb0;
+    extern const f32 float_270_8041fcc4;
+    extern const f32 float_neg90_8041fcb8;
+    extern const f32 float_neg270_8041fcc8;
+    extern const f32 float_2_8041fd34;
+    extern char* luigi_pose[];
+    f32 mtx[3][4];
+    s32 color;
+    s32 color2;
+    u16 x0;
+    u16 y0;
+    u16 x1;
+    u16 y1;
+    f32 rot;
+    f32 angle;
+    void* pose;
+    u32 i;
+    char* anim;
+    char** poses;
+    void* cam;
+    void* disp;
+    s32 r;
+    s32 g;
+    s32 b;
+
+    sysWaitDrawSync();
+    GXClearBoundingBox();
+    rot = reviseAngle(-*(f32*)((s32)npc + 0x144));
+    mtx_setup(npc, mtx, -1);
+    color = *(s32*)((s32)npc + 0x114);
+    if ((*(u32*)((s32)npc + 0x1D4) & 0x400000) != 0) {
+        r = *(u8*)((s32)&color + 0);
+        g = *(u8*)((s32)&color + 1);
+        b = *(u8*)((s32)&color + 2);
+        *(u8*)((s32)&color + 0) = r >> 1;
+        *(u8*)((s32)&color + 1) = g >> 1;
+        *(u8*)((s32)&color + 2) = b >> 1;
+        color2 = color;
+        animPoseSetMaterialEvtColor(*(s32*)((s32)npc + 0x104), &color2);
+        animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), 0x40);
+    }
+
+    disp = dispGetCurWork();
+    if (*(u8*)((s32)disp + 1) == 1) {
+        animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 2, rot, float_2_8041fd34);
+    } else if (*(u8*)((s32)disp + 1) == 0) {
+        if ((*(u32*)npc & 0x800000) != 0) {
+            animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
+            pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
+            anim = animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
+            cam = camGetPtr(4);
+            angle = atan2(-(*(f32*)((s32)cam + 0x18) - *(f32*)((s32)cam + 0xC)),
+                          -(*(f32*)((s32)cam + 0x20) - *(f32*)((s32)cam + 0x14)));
+            angle = reviseAngle(float_rad2deg_8041fcbc * angle);
+            if (angle < float_0_8041fc7c) {
+                angle += float_360_8041fcc0;
+            }
+            angle = reviseAngle(angle - *(f32*)((s32)pose + 0x74));
+            if ((angle > float_90_8041fcb0 && angle <= float_270_8041fcc4) ||
+                (angle < float_neg90_8041fcb8 && angle >= float_neg270_8041fcc8)) {
+                i = 0;
+                poses = luigi_pose;
+                do {
+                    if (strcmp(poses[0], anim) == 0) {
+                        break;
+                    }
+                    i++;
+                    poses += 2;
+                } while (i < 0xE);
+                if (i < 0xE) {
+                    animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2 + 1], 0);
+                }
+            } else {
+                i = 0;
+                poses = luigi_pose;
+                do {
+                    if (strcmp(poses[1], anim) == 0) {
+                        break;
+                    }
+                    i++;
+                    poses += 2;
+                } while (i < 0xE);
+                if (i < 0xE) {
+                    animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2], 0);
+                }
+            }
+        }
+        animPoseMain(*(s32*)((s32)npc + 0x104));
+        animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 1, rot, float_2_8041fd34);
+    } else if (*(u8*)((s32)disp + 1) < 3) {
+        animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 3, rot, float_2_8041fd34);
+    }
+    sysWaitDrawSync();
+    GXReadBoundingBox(&x0, &y0, &x1, &y1);
+    offscreenAddBoundingBox(*(s32*)((s32)npc + 0x110), x0, y0, x1, y1);
+    return 0;
+}
+
+void npcDisp_blur(s32 cameraId, void* npc) {
+    extern f32 reviseAngle(f32);
+    extern u32 animPoseGetMaterialFlag(s32);
+    extern void* camGetPtr(s32);
+    extern void animPoseMain(s32);
+    extern void mtx_setup(void*, f32 (*)[4], s32);
+    extern void PSMTXTransApply(f32 (*)[4], f32 (*)[4], f32, f32, f32);
+    extern void animPoseSetMaterialFlagOn(s32, u32);
+    extern void animPoseSetMaterialEvtColor(s32, void*);
+    extern void animPoseDrawMtx(s32, f32 (*)[4], s32, f32, f32);
+    extern void animPoseSetMaterialFlagOff(s32, u32);
+    extern const f32 float_6p2832_8041fd10;
+    extern const f32 float_360_8041fcc0;
+    extern const f32 float_3p1416_8041fd1c;
+    extern const f32 float_1p5708_8041fd20;
+    extern const f32 float_4p7124_8041fd24;
+    extern const f32 float_0p00761_8041fd14;
+    extern const f32 float_0p16605_8041fd18;
+    extern const f32 float_0p03705_8041fd28;
+    extern const f32 float_0p4967_8041fd2c;
+    extern const f32 float_2_8041fd34;
+    extern const f32 float_1_8041fc94;
+    extern const f32 float_0_8041fc7c;
+    extern s32 dat_8041fc68;
+    f32 mtx[3][4];
+    f32 rot;
+    f32 t;
+    f32 x;
+    f32 z;
+    f32 sq;
+    f32 c0;
+    f32 c1;
+    f32 one;
+    s32 poseId;
+    u32 flags;
+    s32 i;
+    s32 alpha;
+    s32 color;
+    s32 color2;
+    void* cam;
+
+    rot = reviseAngle(-*(f32*)((s32)npc + 0x144));
+    poseId = *(s32*)((s32)npc + 0x104);
+    flags = animPoseGetMaterialFlag(poseId);
+    cam = camGetPtr(cameraId);
+    t = (float_6p2832_8041fd10 * *(f32*)((s32)cam + 0x114)) / float_360_8041fcc0;
+    c0 = float_0p00761_8041fd14;
+    c1 = float_0p16605_8041fd18;
+    one = float_1_8041fc94;
+    if (t <= float_3p1416_8041fd1c) {
+        if (t <= float_1p5708_8041fd20) {
+            sq = t * t;
+            x = ((c0 * sq) - c1) * sq + one;
+            x *= t;
+        } else {
+            t = float_1p5708_8041fd20 - (t - float_1p5708_8041fd20);
+            sq = t * t;
+            x = ((c0 * sq) - c1) * sq + one;
+            x *= t;
+        }
+    } else if (t < float_4p7124_8041fd24) {
+        t -= float_3p1416_8041fd1c;
+        sq = t * t;
+        x = ((c0 * sq) - c1) * sq + one;
+        x *= t;
+        x = -x;
+    } else {
+        t = float_1p5708_8041fd20 - (t - float_4p7124_8041fd24);
+        sq = t * t;
+        x = ((c0 * sq) - c1) * sq + one;
+        x *= t;
+        x = -x;
+    }
+    x *= float_2_8041fd34;
+
+    cam = camGetPtr(cameraId);
+    t = (float_6p2832_8041fd10 * *(f32*)((s32)cam + 0x114)) / float_360_8041fcc0;
+    c0 = float_0p03705_8041fd28;
+    c1 = float_0p4967_8041fd2c;
+    one = float_1_8041fc94;
+    if (t <= float_3p1416_8041fd1c) {
+        if (t <= float_1p5708_8041fd20) {
+            sq = t * t;
+            z = ((c0 * sq) - c1) * sq + one;
+        } else {
+            t = float_1p5708_8041fd20 - (t - float_1p5708_8041fd20);
+            sq = t * t;
+            z = ((c0 * sq) - c1) * sq + one;
+            z = -z;
+        }
+    } else if (t < float_4p7124_8041fd24) {
+        t -= float_3p1416_8041fd1c;
+        sq = t * t;
+        z = ((c0 * sq) - c1) * sq + one;
+        z = -z;
+    } else {
+        t = float_1p5708_8041fd20 - (t - float_4p7124_8041fd24);
+        sq = t * t;
+        z = ((c0 * sq) - c1) * sq + one;
+    }
+    z = -z * float_2_8041fd34;
+
+    animPoseMain(*(s32*)((s32)npc + 0x104));
+    i = 4;
+    alpha = 0x64;
+    do {
+        mtx_setup(npc, mtx, i);
+        PSMTXTransApply(mtx, mtx, x, float_0_8041fc7c, z);
+        animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), 0x40);
+        color = dat_8041fc68;
+        *(u8*)((s32)&color + 3) = 0x80 - alpha;
+        color2 = color;
+        animPoseSetMaterialEvtColor(*(s32*)((s32)npc + 0x104), &color2);
+        animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 1, rot, float_2_8041fd34);
+        animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 2, rot, float_2_8041fd34);
+        animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 3, rot, float_2_8041fd34);
+        i--;
+        alpha -= 0x19;
+    } while (i > 0);
+    animPoseSetMaterialFlagOff(*(s32*)((s32)npc + 0x104), 0x40);
+    animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), flags);
+}
 void npcInit(void) {
     extern void* __memAlloc(s32 heap, u32 size);
     extern void* memset(void* dst, s32 value, u32 size);
@@ -40,210 +801,6 @@ void npcInit(void) {
     g_npcMainCount = 0;
 }
 
-void* fbatGetPointer(void) {
-    return *(void**)((s32)gp + 0x168);
-}
-
-void npcSetLink(void* a, void* b) {
-    *(void**)((s32)a + 0x328) = b;
-    *(void**)((s32)b + 0x324) = a;
-}
-
-void fbatSandersBombTriggerOn(void) {
-    *(u8*)((s32)*(void**)((s32)gp + 0x168) + 0x54D) = 1;
-}
-
-void fbatSetAttackAnnounceEnable(void) {
-    *(s32*)((s32)*(void**)((s32)gp + 0x168) + 0x550) = 1;
-}
-
-void fbatChangeMode(s16 mode) {
-    *(s16*)*(void**)((s32)gp + 0x168) = mode;
-}
-
-void fbatHitCheckAll(void) {
-    extern void fbatHitCheck(s32, s32);
-    fbatHitCheck(0x13F1, 0);
-}
-
-void npcClearDeadInfo(void) {
-    extern void* memset(void*, int, unsigned long);
-    memset((void*)((s32)*(void**)((s32)gp + 0x168) + 0x4C), 0, 0x500);
-}
-
-s32 npcGetReactionOfLivingBody(s32 battle) {
-    void* ptr = &work.field;
-    if (battle) {
-        ptr = (void*)((s32)ptr + 0x14);
-    }
-    return *(s32*)ptr;
-}
-
-s32 N_fbatPreventMarioEventChk(void) {
-    s32 mode = *(s16*)*(void**)((s32)gp + 0x168);
-    if (mode == 0) {
-        goto ok;
-    }
-    if (mode == 1) {
-        goto ok;
-    }
-    if (mode == 8) {
-        goto ok;
-    }
-    return 1;
-ok:
-    return 0;
-}
-
-void* npcGetBtlSetupWork(void* npc, s32 index) {
-    s32 offset = index << 2;
-    npc = (void*)((s32)npc + offset);
-    return *(void**)((s32)npc + 0x2CC);
-}
-
-void npcSetBtlSetupWork(void* npc, s32 index, void* value) {
-    s32 offset = index << 2;
-    npc = (void*)((s32)npc + offset);
-    *(void**)((s32)npc + 0x2CC) = value;
-}
-
-void npcSetSlave(void* master, void* slave, s32 index) {
-    s32 offset;
-    *(void**)((s32)slave + 0x32C) = master;
-    offset = index << 2;
-    master = (void*)((s32)master + offset);
-    *(void**)((s32)master + 0x330) = slave;
-}
-
-f32 npcTransRytoFaceDir(void* npc) {
-    extern f32 reviseAngle(f32 angle);
-    extern f32 float_180_8041fccc;
-    extern f32 float_90_8041fcb0;
-    extern f32 float_270_8041fcc4;
-    f32 angle = reviseAngle(*(f32*)((s32)npc + 0x144));
-    if (angle < float_180_8041fccc) {
-        return float_90_8041fcb0;
-    }
-    return float_270_8041fcc4;
-}
-
-void npcStartForOneEvent(void* npc) {
-    extern void evtStartID(s32 id);
-    extern void animPoseSetLocalTimeRate(void* pose, f32 rate);
-    extern f32 float_1_8041fc94;
-    u32 flags;
-
-    if (npc == 0) {
-        return;
-    }
-    flags = *(u32*)npc;
-    if (!(flags & 2)) {
-        return;
-    }
-    if (!(flags & 0x10000000)) {
-        return;
-    }
-    flags = *(u32*)((s32)npc + 0x1D4);
-    if (!(flags & 0x10000)) {
-        return;
-    }
-    *(u32*)((s32)npc + 0x1D4) = flags & ~0x10000;
-    evtStartID(*(s32*)((s32)npc + 0x11C));
-    animPoseSetLocalTimeRate(*(void**)((s32)npc + 0x104), float_1_8041fc94);
-}
-
-void npcStopForOneEvent(void* npc) {
-    extern void evtStopID(s32 id);
-    extern void animPoseSetLocalTimeRate(void* pose, f32 rate);
-    extern f32 float_0_8041fc7c;
-    u32 flags;
-
-    if (npc == 0) {
-        return;
-    }
-    flags = *(u32*)npc;
-    if (!(flags & 2)) {
-        return;
-    }
-    if (!(flags & 0x10000000)) {
-        return;
-    }
-    *(u32*)((s32)npc + 0x1D4) |= 0x10000;
-    evtStopID(*(s32*)((s32)npc + 0x11C));
-    animPoseSetLocalTimeRate(*(void**)((s32)npc + 0x104), float_0_8041fc7c);
-}
-
-void npcTuningRy(void* npc, f32 angle) {
-    extern f32 reviseAngle(f32 angle);
-    *(f32*)((s32)npc + 0x144) = reviseAngle(angle);
-}
-
-void npcSetMarioAutoTalkPose(const char* stay, const char* talk) {
-    extern char* strcpy(char* dest, const char* src);
-    strcpy(MarioStayPose, stay);
-    strcpy(MarioTalkPose, talk);
-}
-
-void npcDeleteGroup(void* npc) {
-    extern void _npcDeleteGroup(void* npc);
-    void* parent;
-
-    parent = *(void**)((s32)npc + 0x32C);
-    if (parent != 0) {
-        npc = parent;
-    }
-    while (*(void**)((s32)npc + 0x324) != 0) {
-        npc = *(void**)((s32)npc + 0x324);
-    }
-    _npcDeleteGroup(npc);
-}
-
-s32 _check(void* event, BOOL isFirstCall) {
-    extern void* pouchGetPtr(void);
-    extern void evtSetValue(void* event, s32 dst, s32 value);
-    s32* args = *(s32**)((s32)event + 0x18);
-    s32 dst = args[0];
-
-    if (*(u8*)((s32)pouchGetPtr() + 0x5B8) != 0) {
-        evtSetValue(event, dst, 0);
-    } else {
-        evtSetValue(event, dst, 1);
-    }
-    return 2;
-}
-
-void* npcGetTribe(const char* name) {
-    extern char npcTribe[];
-    extern s32 strcmp(const char* s1, const char* s2);
-    void* tribe = npcTribe;
-
-    while (*(char**)tribe != 0) {
-        if (strcmp(*(char**)tribe, name) == 0) {
-            return tribe;
-        }
-        tribe = (void*)((s32)tribe + 0x54);
-    }
-    return 0;
-}
-
-void* dbGetDefData(void* entry, const char* name) {
-    extern s32 strcmp(const char* s1, const char* s2);
-    void* ret = 0;
-
-    for (;;) {
-        char* current = *(char**)entry;
-        if (current == 0) {
-            break;
-        }
-        if (strcmp(current, name) == 0) {
-            ret = *(void**)((s32)entry + 4);
-            break;
-        }
-        entry = (void*)((s32)entry + 8);
-    }
-    return ret;
-}
-
 void npcReset(s32 battle) {
     extern void* memset(void* dest, int value, unsigned long size);
     extern s32 npcMainCount;
@@ -260,135 +817,307 @@ void npcReset(s32 battle) {
     npcMainCount = 0;
 }
 
-void* fbatNpcTalkCheck(void) {
-    extern s32 marioChkTalkable(void);
-    void* wp = &work.field;
-    void* ret;
-
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        wp = (void*)((s32)wp + 0x14);
+s32 npcGetReactionOfLivingBody(s32 battle) {
+    void* ptr = &work.field;
+    if (battle) {
+        ptr = (void*)((s32)ptr + 0x14);
     }
-    ret = *(void**)((s32)wp + 0x10);
-    if (ret != 0 && marioChkTalkable() != 0) {
-        return ret;
+    return *(s32*)ptr;
+}
+
+s32 npcEntry(char* name, char* modelName) {
+    extern s32 strcmp(const char*, const char*);
+    extern void* memset(void*, int, unsigned long);
+    extern char* strcpy(char*, const char*);
+    extern s32 animPoseEntry(char*, u32);
+    extern void animPosePeraOn(s32);
+    extern f32 animPoseGetHeight(s32);
+    extern f32 animPoseGetRadius(s32);
+    extern s32 animPoseGetVivianType(s32);
+    extern void animPoseSetMaterialLightFlagOn(s32, u32);
+    extern s32 vec3_802c11f8[];
+    extern s32 vec3_802c1204[];
+    extern char str_hoshi_8041fd6c;
+    extern char str_M_I_2_8041fd74;
+    extern char str_c_luigi_802c1468[];
+    extern const f32 float_1_8041fc94;
+    extern const f32 float_0_8041fc7c;
+    extern s32 dat_8041fc6c;
+    s32 wp;
+    s32 max;
+    s32 npc;
+    s32 index;
+    s32 i;
+    s32 data;
+
+    data = (s32)&work;
+    wp = (s32)vec3_802c11f8;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        data += 0x14;
+    }
+
+    max = *(s32*)(data + 4);
+    index = 0;
+    npc = *(s32*)(data + 0xC);
+    while (index < max) {
+        if ((*(u32*)npc & 1) != 0 && strcmp((char*)(npc + 8), name) == 0) {
+            break;
+        }
+        index++;
+        npc += 0x340;
+    }
+
+    npc = *(s32*)(data + 0xC);
+    i = 0;
+    if (max > 0) {
+        for (;;) {
+            if ((*(u32*)npc & 1) == 0) {
+                break;
+            }
+            i++;
+            npc += 0x340;
+            if (i >= max) {
+                break;
+            }
+        }
+    }
+
+    memset((void*)npc, 0, 0x340);
+    *(u32*)npc = 3;
+    strcpy((char*)(npc + 8), name);
+    *(s32*)(npc + 0x104) = animPoseEntry(modelName, (*(s32*)((s32)gp + 0x14) != 0));
+    if (*(s32*)(npc + 0x104) == -2) {
+        *(s32*)(npc + 0x104) = animPoseEntry(&str_hoshi_8041fd6c, (*(s32*)((s32)gp + 0x14) != 0));
+    }
+    animPosePeraOn(*(s32*)(npc + 0x104));
+    *(s32*)(npc + 0x8C) = *(s32*)wp;
+    *(s32*)(npc + 0x90) = *(s32*)(wp + 4);
+    *(s32*)(npc + 0x94) = *(s32*)(wp + 8);
+    *(s32*)(npc + 0x98) = *(s32*)(npc + 0x8C);
+    *(s32*)(npc + 0x9C) = *(s32*)(npc + 0x90);
+    *(s32*)(npc + 0xA0) = *(s32*)(npc + 0x94);
+    *(f32*)(npc + 0x14C) = animPoseGetHeight(*(s32*)(npc + 0x104));
+    *(f32*)(npc + 0x150) = animPoseGetRadius(*(s32*)(npc + 0x104));
+    *(s32*)(npc + 0xE0) = *(s32*)(wp + 0xC);
+    *(s32*)(npc + 0xE4) = *(s32*)(wp + 0x10);
+    *(s32*)(npc + 0xE8) = *(s32*)(wp + 0x14);
+    *(f32*)(npc + 0x154) = float_1_8041fc94;
+    *(s32*)(npc + 0x108) = 0;
+    *(char**)(npc + 0x10C) = &str_M_I_2_8041fd74;
+    *(s32*)(npc + 0x19C) = *(s32*)((s32)gp + 0x3C);
+    *(s32*)(npc + 0x198) = *(s32*)((s32)gp + 0x38);
+    *(s32*)(npc + 0x18C) = 0;
+    *(s32*)(npc + 0x188) = 0;
+    *(f32*)(npc + 0x1CC) = float_1_8041fc94;
+    *(f32*)(npc + 0x1D0) = float_0_8041fc7c;
+    *(f32*)(npc + 0x1C8) = float_1_8041fc94;
+    *(s32*)(npc + 0x110) = -1;
+    *(s32*)(npc + 0x114) = dat_8041fc6c;
+    *(s32*)(npc + 0x1F4) = 4;
+    *(s32*)(npc + 0x2F8) = 0;
+    *(u8*)(npc + 0x317) = 1;
+    if (animPoseGetVivianType(*(s32*)(npc + 0x104)) != 0) {
+        *(u32*)npc |= 0x4000000;
+    }
+    if (strcmp(modelName, (char*)(wp + 0x270)) == 0) {
+        *(u32*)npc |= 0x800000;
+    }
+    animPoseSetMaterialLightFlagOn(*(s32*)(npc + 0x104), 2);
+    *(s32*)data = *(s32*)data + 1;
+    return i;
+}
+
+void* npcGetTribe(const char* name) {
+    extern char npcTribe[];
+    extern s32 strcmp(const char* s1, const char* s2);
+    void* tribe = npcTribe;
+
+    while (*(char**)tribe != 0) {
+        if (strcmp(*(char**)tribe, name) == 0) {
+            return tribe;
+        }
+        tribe = (void*)((s32)tribe + 0x54);
     }
     return 0;
 }
 
-
-void* fbatHitCheck(u32 flags, void* hitInfo) {
-    extern void* marioGetPtr(void);
-    extern f64 sqrt(f64 value);
-    extern s32 seqGetSeq(void);
-    extern s32 vivianGetStatus(void);
-    extern s32 pouchEquipCheckBadge(s32 badge);
-    extern s32 marioGetJabaraState(void);
-    extern s32 _npcHitCheckSphere(f64 x, f64 y, f64 z, f64 radius,
-                                  s32 npc, f32* distance);
-    extern f32 float_1000_8041fca8;
-    extern f32 float_0p5_8041fc80;
-    s32 npcWork;
-    s32 player;
-    s32 npc;
-    s32 count;
+void npcDelete(void* npc) {
+    extern void animPoseRelease(s32 poseId);
+    u8* entry = npc;
     s32 i;
-    s32 bestNpc = 0;
-    u32 hitFlags = 0;
-    u32 attackMode = 0;
-    u32 unknownFlags = 0;
-    f32 bestDistance = float_1000_8041fca8;
+    u8* prev;
+    u8* next;
+    s32 wp;
 
-    npcWork = (s32)&work.field;
-    if (gp->inBattle != 0) {
-        npcWork += 0x14;
-    }
-    player = (s32)marioGetPtr();
-    count = *(s32*)(npcWork + 4);
-    npc = *(s32*)(npcWork + 0xC);
-
-    if ((flags & 0x2000) != 0) {
-        unknownFlags |= 1;
+    for (i = 0; i < 4; i++) {
+        u8* slave = *(u8**)(entry + 0x330 + i * 4);
+        if (slave != 0) {
+            *(void**)(slave + 0x32C) = 0;
+        }
+        *(void**)(entry + 0x330 + i * 4) = 0;
     }
 
-    if ((flags & 0x30) != 0 && seqGetSeq() == 2 && vivianGetStatus() == 0) {
-        for (i = 0; i < count; i++, npc += 0x340) {
-            u32 npcFlags;
-            f32 dx;
-            f32 dz;
-            f32 distance;
+    prev = *(u8**)(entry + 0x324);
+    next = *(u8**)(entry + 0x328);
+    if (prev == 0) {
+        if (next != 0) *(void**)(next + 0x324) = 0;
+    } else if (next == 0) {
+        *(void**)(prev + 0x328) = 0;
+    } else {
+        *(void**)(prev + 0x328) = next;
+        *(void**)(next + 0x324) = prev;
+    }
 
-            if (npc == 0) {
-                continue;
-            }
-            npcFlags = *(u32*)npc;
-            if ((npcFlags & 2) == 0 || (npcFlags & 0x20) != 0 ||
-                (npcFlags & 0x08000000) != 0 ||
-                (*(u32*)(npc + 0x1D4) & 4) != 0) {
-                continue;
-            }
-            if ((flags & 0x1000) == 0) {
-                if ((npcFlags & 8) == 0) {
-                    continue;
-                }
-            } else if ((npcFlags & 8) != 0) {
-                continue;
-            }
+    *(u32*)entry &= ~2;
+    if (*(s32*)(entry + 0x104) >= 0) {
+        animPoseRelease(*(s32*)(entry + 0x104));
+    }
+    *(s32*)(entry + 0x104) = -1;
+    *(u32*)entry &= ~1;
 
-            if (*(f32*)(player + 0x90) >=
-                    *(f32*)(npc + 0x90) + *(f32*)(npc + 0x150) ||
-                *(f32*)(npc + 0x90) >=
-                    *(f32*)(player + 0x90) + *(f32*)(player + 0xFC)) {
-                continue;
-            }
+    wp = (s32)&work;
+    if (gp->inBattle != 0) wp += 0x14;
+    *(s32*)wp -= 1;
+}
 
-            dx = *(f32*)(player + 0x8C) - *(f32*)(npc + 0x8C);
-            dz = *(f32*)(player + 0x94) - *(f32*)(npc + 0x94);
-            distance = (f32)sqrt((f64)(dx * dx + dz * dz));
-            if (distance < float_0p5_8041fc80 *
-                               (*(f32*)(player + 0xF8) + *(f32*)(npc + 0x14C)) &&
-                distance < bestDistance) {
-                bestDistance = distance;
-                bestNpc = npc;
-                if ((flags & 0x10) != 0) {
-                    hitFlags = pouchEquipCheckBadge(0x1D) == 0 ?
-                                   0x10000000 : 0x10000;
+void _npcDeleteGroup(void* npc) {
+    extern void npcDelete(void* npc);
+    extern void animPoseRelease(s32 poseId);
+    s32 current;
+    s32 child;
+    s32 slave;
+    s32 slave2;
+    s32 workPtr;
+    s32 i;
+
+    child = *(s32*)((s32)npc + 0x328);
+    if ((void*)child != 0) {
+        if (*(void**)(child + 0x328) != 0) {
+            _npcDeleteGroup(*(void**)(child + 0x328));
+        }
+        i = 0;
+        current = child;
+        do {
+            slave = *(s32*)(current + 0x330);
+            if ((void*)slave != 0) {
+                npcDelete((void*)slave);
+                *(s32*)(current + 0x330) = 0;
+            }
+            i++;
+            current += 4;
+        } while (i < 4);
+        npcDelete((void*)child);
+    }
+
+    workPtr = (s32)&work + 0x14;
+    current = (s32)npc;
+    i = 0;
+    do {
+        slave = *(s32*)(current + 0x330);
+        if ((void*)slave != 0) {
+            if (*(void**)(slave + 0x330) != 0) {
+                *(s32*)(*(s32*)(slave + 0x330) + 0x32C) = 0;
+            }
+            *(s32*)(slave + 0x330) = 0;
+            if (*(void**)(slave + 0x334) != 0) {
+                *(s32*)(*(s32*)(slave + 0x334) + 0x32C) = 0;
+            }
+            *(s32*)(slave + 0x334) = 0;
+            slave2 = slave + 8;
+            if (*(void**)(slave2 + 0x330) != 0) {
+                *(s32*)(*(s32*)(slave2 + 0x330) + 0x32C) = 0;
+            }
+            *(s32*)(slave2 + 0x330) = 0;
+            if (*(void**)(slave2 + 0x334) != 0) {
+                *(s32*)(*(s32*)(slave2 + 0x334) + 0x32C) = 0;
+            }
+            *(s32*)(slave2 + 0x334) = 0;
+
+            if (*(void**)(slave + 0x324) != 0) {
+                if (*(void**)(slave + 0x328) != 0) {
+                    *(s32*)(*(s32*)(slave + 0x324) + 0x328) = *(s32*)(slave + 0x328);
+                    *(s32*)(*(s32*)(slave + 0x328) + 0x324) = *(s32*)(slave + 0x324);
+                } else {
+                    *(s32*)(*(s32*)(slave + 0x324) + 0x328) = 0;
                 }
-                if ((flags & 0x20) != 0 && marioGetJabaraState() == 6) {
-                    hitFlags = 0x20000;
-                }
-                if ((flags & 0x2000) != 0) {
-                    break;
+            } else {
+                if (*(void**)(slave + 0x328) != 0) {
+                    *(s32*)(*(s32*)(slave + 0x328) + 0x324) = 0;
                 }
             }
+            *(u32*)slave &= ~2;
+            if (*(s32*)(slave + 0x104) >= 0) {
+                animPoseRelease(*(s32*)(slave + 0x104));
+            }
+            *(s32*)(slave + 0x104) = -1;
+            *(u32*)slave &= ~1;
+            if (*(s32*)((s32)gp + 0x14) != 0) {
+                slave2 = workPtr;
+            } else {
+                slave2 = (s32)&work;
+            }
+            *(s32*)slave2 = *(s32*)slave2 - 1;
+            *(s32*)(current + 0x330) = 0;
+        }
+        i++;
+        current += 4;
+    } while (i < 4);
+
+    if (*(void**)((s32)npc + 0x330) != 0) {
+        *(s32*)(*(s32*)((s32)npc + 0x330) + 0x32C) = 0;
+    }
+    *(s32*)((s32)npc + 0x330) = 0;
+    if (*(void**)((s32)npc + 0x334) != 0) {
+        *(s32*)(*(s32*)((s32)npc + 0x334) + 0x32C) = 0;
+    }
+    *(s32*)((s32)npc + 0x334) = 0;
+    slave2 = (s32)npc + 8;
+    if (*(void**)(slave2 + 0x330) != 0) {
+        *(s32*)(*(s32*)(slave2 + 0x330) + 0x32C) = 0;
+    }
+    *(s32*)(slave2 + 0x330) = 0;
+    if (*(void**)(slave2 + 0x334) != 0) {
+        *(s32*)(*(s32*)(slave2 + 0x334) + 0x32C) = 0;
+    }
+    *(s32*)(slave2 + 0x334) = 0;
+
+    if (*(void**)((s32)npc + 0x324) != 0) {
+        if (*(void**)((s32)npc + 0x328) != 0) {
+            *(s32*)(*(s32*)((s32)npc + 0x324) + 0x328) = *(s32*)((s32)npc + 0x328);
+            *(s32*)(*(s32*)((s32)npc + 0x328) + 0x324) = *(s32*)((s32)npc + 0x324);
+        } else {
+            *(s32*)(*(s32*)((s32)npc + 0x324) + 0x328) = 0;
+        }
+    } else {
+        if (*(void**)((s32)npc + 0x328) != 0) {
+            *(s32*)(*(s32*)((s32)npc + 0x328) + 0x324) = 0;
         }
     }
-
-    if ((flags & 1) != 0) {
-        npc = *(s32*)(npcWork + 0xC);
-        for (i = 0; i < count; i++, npc += 0x340) {
-            f32 distance;
-            if (npc != 0 && (*(u32*)npc & 2) != 0 &&
-                (*(u32*)npc & 0x20000020) == 0 &&
-                _npcHitCheckSphere(*(f32*)(player + 0x8C),
-                                   *(f32*)(player + 0x90) +
-                                       float_0p5_8041fc80 * *(f32*)(player + 0xFC),
-                                   *(f32*)(player + 0x94), 30.0, npc,
-                                   &distance) != 0 &&
-                distance < bestDistance) {
-                bestDistance = distance;
-                bestNpc = npc;
-                hitFlags = 0x1000000;
-            }
-        }
+    *(u32*)npc &= ~2;
+    if (*(s32*)((s32)npc + 0x104) >= 0) {
+        animPoseRelease(*(s32*)((s32)npc + 0x104));
     }
-
-    if (hitInfo != 0) {
-        *(u32*)hitInfo = hitFlags;
-        *(u32*)((u8*)hitInfo + 4) = attackMode;
-        *(f32*)((u8*)hitInfo + 8) = bestDistance;
-        *(u32*)((u8*)hitInfo + 0xC) = unknownFlags;
+    *(s32*)((s32)npc + 0x104) = -1;
+    *(u32*)npc &= ~1;
+    slave2 = (s32)&work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        slave2 = workPtr;
     }
-    return (void*)bestNpc;
+    *(s32*)slave2 = *(s32*)slave2 - 1;
+}
+
+void npcDeleteGroup(void* npc) {
+    extern void _npcDeleteGroup(void* npc);
+    void* parent;
+
+    parent = *(void**)((s32)npc + 0x32C);
+    if (parent != 0) {
+        npc = parent;
+    }
+    while (*(void**)((s32)npc + 0x324) != 0) {
+        npc = *(void**)((s32)npc + 0x324);
+    }
+    _npcDeleteGroup(npc);
 }
 
 void npcMain(void) {
@@ -853,6 +1582,743 @@ void npcMain(void) {
     *(u8*)((s32)fbatData + 0x54D) = 0;
 }
 
+void* npcNameToPtr(s32 name) {
+    extern s32 strcmp(const char*, const char*);
+    s32 wp = (s32)&work;
+    s32 i;
+    s32 count;
+    void* npc;
+
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), (char*)name) == 0) {
+            break;
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+    return npc;
+}
+
+void* npcNameToPtr_NoAssert(s32 name) {
+    extern s32 strcmp(const char*, const char*);
+    s32 wp = (s32)&work;
+    s32 i;
+    s32 count;
+    void* npc;
+
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), (char*)name) == 0) {
+            break;
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+    if (i >= count) {
+        return 0;
+    }
+    return npc;
+}
+
+void npcSetMarioAutoTalkPose(const char* stay, const char* talk) {
+    extern char* strcpy(char* dest, const char* src);
+    strcpy(MarioStayPose, stay);
+    strcpy(MarioTalkPose, talk);
+}
+
+void npcSetTalkPose(char* talkPose) {
+    extern s32 strcmp(const char*, const char*);
+    extern s32 marioGetPartyId(void);
+    extern s32 marioGetExtraPartyId(void);
+    extern void* partyGetPtr(s32);
+    extern void partyChgPoseId(void*, s32);
+    extern void marioChgPose(char*);
+    extern void animPoseSetAnim(s32, char*, s32);
+    extern char str_x_party_802c1444[];
+    extern char str_party_8041fd40[];
+    extern char str_extparty_802c1450[];
+    extern char str_mario_8041fd48[];
+    s32 wp;
+    s32 count;
+    s32 i;
+    void* npc;
+    void* party;
+
+    if (*talkPose == 0 || strcmp(talkPose, str_x_party_802c1444) == 0) {
+        return;
+    }
+    if (strcmp(talkPose, str_party_8041fd40) == 0) {
+        party = partyGetPtr(marioGetPartyId());
+        if (party != 0) {
+            partyChgPoseId(party, 7);
+        }
+        return;
+    }
+    if (strcmp(talkPose, str_extparty_802c1450) == 0) {
+        party = partyGetPtr(marioGetExtraPartyId());
+        if (party != 0) {
+            partyChgPoseId(party, 7);
+        }
+        return;
+    }
+    if (strcmp(talkPose, str_mario_8041fd48) == 0) {
+        marioChgPose(MarioTalkPose);
+        return;
+    }
+    wp = (s32)&work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), talkPose) == 0) {
+            break;
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+    if ((*(u32*)npc & 0x200) != 0) {
+        animPoseSetAnim(*(s32*)((s32)npc + 0x104), (char*)((s32)npc + 0x6C), 1);
+    }
+}
+
+void npcSetStayPose(char* stayPose) {
+    extern s32 strcmp(const char*, const char*);
+    extern s32 marioGetPartyId(void);
+    extern s32 marioGetExtraPartyId(void);
+    extern void* partyGetPtr(s32);
+    extern void partyChgPoseId(void*, s32);
+    extern void marioChgPose(char*);
+    extern void animPoseSetAnim(s32, char*, s32);
+    extern char str_x_party_802c1444[];
+    extern char str_party_8041fd40[];
+    extern char str_extparty_802c1450[];
+    extern char str_mario_8041fd48[];
+    s32 wp;
+    s32 count;
+    s32 i;
+    void* npc;
+    void* party;
+
+    if (*stayPose == 0 || strcmp(stayPose, str_x_party_802c1444) == 0) {
+        return;
+    }
+    if (strcmp(stayPose, str_party_8041fd40) == 0) {
+        party = partyGetPtr(marioGetPartyId());
+        if (party != 0) {
+            partyChgPoseId(party, 1);
+        }
+        return;
+    }
+    if (strcmp(stayPose, str_extparty_802c1450) == 0) {
+        party = partyGetPtr(marioGetExtraPartyId());
+        if (party != 0) {
+            partyChgPoseId(party, 1);
+        }
+        return;
+    }
+    if (strcmp(stayPose, str_mario_8041fd48) == 0) {
+        marioChgPose(MarioStayPose);
+        return;
+    }
+    wp = (s32)&work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), stayPose) == 0) {
+            break;
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+    if ((*(u32*)npc & 0x200) != 0) {
+        animPoseSetAnim(*(s32*)((s32)npc + 0x104), (char*)((s32)npc + 0x4C), 1);
+    }
+}
+
+u8 npcCheckHitMarioSide(s32 pNpc) {
+    extern void* marioGetPtr(void);
+    extern f32 PSVECDistance(void*, void*);
+    extern f32 angleABf(f32, f32, f32, f32);
+    extern f32 compAngle(f32, f32);
+    extern s32 marioChkWallAround(void*, s32, f32, f32, f32, f32);
+    extern f64 sqrt(f64);
+    extern const f32 float_40_8041fd0c;
+    extern const f32 float_6p2832_8041fd10;
+    extern const f32 float_360_8041fcc0;
+    extern const f32 float_2_8041fd34;
+    void* mario;
+    f32 pos[3];
+    f32 dist;
+    f32 radius;
+    f32 angle;
+    f32 diff;
+    f32 pushX;
+    f32 pushZ;
+    f32 len;
+    f32 f;
+
+    mario = marioGetPtr();
+    if (*(f32*)((s32)mario + 0x90) + *(f32*)((s32)mario + 0xFC) < *(f32*)(pNpc + 0x90)) {
+        return 0;
+    }
+    if (*(f32*)(pNpc + 0x90) + *(f32*)(pNpc + 0x150) < *(f32*)((s32)mario + 0x90)) {
+        return 0;
+    }
+    pos[0] = *(f32*)((s32)mario + 0x8C);
+    pos[1] = *(f32*)(pNpc + 0x90);
+    pos[2] = *(f32*)((s32)mario + 0x94);
+    dist = PSVECDistance(pos, (void*)(pNpc + 0x8C));
+    radius = (5.0f + *(f32*)((s32)mario + 0xF8) + *(f32*)(pNpc + 0x14C)) * 0.5f;
+    if (dist > radius) {
+        return 0;
+    }
+    *(f32*)(pNpc + 0x8C) = *(f32*)(pNpc + 0x98);
+    *(f32*)(pNpc + 0x94) = *(f32*)(pNpc + 0xA0);
+    dist = PSVECDistance(pos, (void*)(pNpc + 0x8C));
+    if (dist > radius) {
+        return 0;
+    }
+    *(void**)((s32)mario + 0x2A0) = (void*)pNpc;
+    angle = angleABf(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x94), *(f32*)(pNpc + 0x8C), *(f32*)(pNpc + 0x94));
+    diff = compAngle(angle, *(f32*)((s32)mario + 0x1A4));
+    if (diff < 0.0f) {
+        diff = -diff;
+    }
+    if (diff >= float_40_8041fd0c) {
+        f = (float_6p2832_8041fd10 * angle) / float_360_8041fcc0;
+    } else {
+        f = (float_6p2832_8041fd10 * *(f32*)((s32)mario + 0x1A4)) / float_360_8041fcc0;
+    }
+    pushX = *(f32*)(pNpc + 0x8C) - *(f32*)((s32)mario + 0x8C);
+    pushZ = *(f32*)(pNpc + 0x94) - *(f32*)((s32)mario + 0x94);
+    len = (f32)sqrt((double)(pushX * pushX + pushZ * pushZ));
+    if (len > 0.0f) {
+        pushX = pushX * (float_2_8041fd34 / len);
+        pushZ = pushZ * (float_2_8041fd34 / len);
+    }
+    *(f32*)((s32)mario + 0x8C) += pushX;
+    *(f32*)((s32)mario + 0x94) += pushZ;
+    marioChkWallAround((void*)((s32)mario + 0x8C), 0, 0.0f, 160.0f + f, *(f32*)((s32)mario + 0xF8), 0.0f);
+    return 1;
+}
+
+u8 npcMoveG(void* pNpc) {
+    extern void* hitCheckFilter(double, double, double, double, double, double, s32, void*, void*, void*, void*, void*, void*, void*);
+    f32 oldYVel;
+    f32 addY;
+    f32 walking;
+    f32 remain;
+    f32 minAdd;
+    f32 heightPart;
+    f32 hitY;
+    f32 hitDist;
+    s32 hitTmp[3];
+    s32 hitA;
+    s32 hitB;
+    s32 hitC;
+    s32 hitD;
+    void* hit;
+    u32 jumpFlags;
+    u32 dampedJump;
+
+    oldYVel = *(f32*)((s32)pNpc + 0x1B8);
+    *(f32*)((s32)pNpc + 0x1B8) = 0.0f;
+    jumpFlags = *(u32*)((s32)pNpc + 0x1D4);
+    dampedJump = jumpFlags & 0x100000;
+    if (dampedJump != 0 && (jumpFlags & 0x10000000) == 0) {
+        oldYVel *= 0.5f;
+    }
+
+    addY = 0.0f;
+    if ((*(u32*)pNpc & 0x20000) != 0) {
+        remain = *(f32*)((s32)pNpc + 0x180);
+        walking = *(f32*)((s32)pNpc + 0x1A4);
+        if (dampedJump == 0 || (jumpFlags & 0x10000000) != 0) {
+            addY = *(f32*)((s32)pNpc + 0x1C4) * walking +
+                   -980.0f * *(f32*)((s32)pNpc + 0x1CC) * (remain * remain - (remain - walking) * (remain - walking));
+        } else {
+            addY = 0.4f * *(f32*)((s32)pNpc + 0x1C4) * walking +
+                   0.15f * -980.0f * *(f32*)((s32)pNpc + 0x1CC) * (remain * remain - (remain - walking) * (remain - walking));
+        }
+        addY *= *(f32*)((s32)pNpc + 0x1C8);
+        if (*(f32*)((s32)pNpc + 0x1D0) > 0.0f) {
+            if (dampedJump == 0) {
+                minAdd = -*(f32*)((s32)pNpc + 0x1D0) * walking;
+            } else {
+                minAdd = 0.5f * -*(f32*)((s32)pNpc + 0x1D0) * walking;
+            }
+            if (addY < minAdd) {
+                addY = minAdd;
+            }
+        }
+    }
+
+    addY += oldYVel;
+    if ((*(u32*)pNpc & 0x10) == 0) {
+        *(f32*)((s32)pNpc + 0x90) += addY;
+        if (*(f32*)((s32)pNpc + 0x90) < -1000.0f) {
+            *(f32*)((s32)pNpc + 0x90) = -1000.0f;
+        }
+    } else if (addY != 0.0f) {
+        if (addY > 0.0f) {
+            *(u32*)((s32)pNpc + 0x1D4) |= 1;
+            *(f32*)((s32)pNpc + 0x90) += addY;
+        } else {
+            heightPart = 0.8f * *(f32*)((s32)pNpc + 0x150);
+            hitDist = heightPart;
+            if (addY < 0.0f) {
+                hitDist += -addY;
+            } else {
+                hitDist += addY;
+            }
+            hit = hitCheckFilter((double)*(f32*)((s32)pNpc + 0x8C),
+                                 (double)(*(f32*)((s32)pNpc + 0x90) + heightPart),
+                                 (double)*(f32*)((s32)pNpc + 0x94),
+                                 0.0, -1.0, 0.0, 0,
+                                 hitTmp, &hitY, &hitA, &hitDist, &hitB, &hitC, &hitD);
+            *(void**)((s32)pNpc + 0x300) = hit;
+            if (hit == 0) {
+                hit = hitCheckFilter((double)(0.5f * *(f32*)((s32)pNpc + 0x14C) + *(f32*)((s32)pNpc + 0x8C)),
+                                     (double)(*(f32*)((s32)pNpc + 0x90) + heightPart),
+                                     (double)*(f32*)((s32)pNpc + 0x94),
+                                     0.0, -1.0, 0.0, 0,
+                                     hitTmp, &hitY, &hitA, &hitDist, &hitB, &hitC, &hitD);
+                *(void**)((s32)pNpc + 0x300) = hit;
+                if (hit == 0) {
+                    hit = hitCheckFilter((double)(*(f32*)((s32)pNpc + 0x8C) - 0.5f * *(f32*)((s32)pNpc + 0x14C)),
+                                         (double)(*(f32*)((s32)pNpc + 0x90) + heightPart),
+                                         (double)*(f32*)((s32)pNpc + 0x94),
+                                         0.0, -1.0, 0.0, 0,
+                                         hitTmp, &hitY, &hitA, &hitDist, &hitB, &hitC, &hitD);
+                    *(void**)((s32)pNpc + 0x300) = hit;
+                }
+            }
+            if (hit == 0) {
+                *(u32*)((s32)pNpc + 0x1D4) |= 1;
+                *(f32*)((s32)pNpc + 0x90) += addY;
+            } else {
+                *(u32*)((s32)pNpc + 0x1D4) &= ~1;
+                *(f32*)((s32)pNpc + 0x90) = hitY;
+                *(s32*)((s32)pNpc + 0x17C) = 0;
+                *(s32*)((s32)pNpc + 0x178) = 0;
+            }
+        }
+    }
+    return 0;
+}
+
+void npcTuningRy(void* npc, f32 angle) {
+    extern f32 reviseAngle(f32 angle);
+    *(f32*)((s32)npc + 0x144) = reviseAngle(angle);
+}
+
+f32 npcTransRytoFaceDir(void* npc) {
+    extern f32 reviseAngle(f32 angle);
+    extern f32 float_180_8041fccc;
+    extern f32 float_90_8041fcb0;
+    extern f32 float_270_8041fcc4;
+    f32 angle = reviseAngle(*(f32*)((s32)npc + 0x144));
+    if (angle < float_180_8041fccc) {
+        return float_90_8041fcb0;
+    }
+    return float_270_8041fcc4;
+}
+
+s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* outAngle) {
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
+    extern f32 reviseAngle(f32 angle);
+    extern s32 hitCheckFilter(f64 x, f64 y, f64 z, f64 dx, f64 dy, f64 dz, s32 flags,
+                              void* outA, void* outB, void* outC, void* dist,
+                              void* outNX, void* outNY, void* outNZ);
+    extern s32 hitCheckAttr(f64 x, f64 y, f64 z, f64 dx, f64 dy, f64 dz, s32 attr,
+                            void* outA, void* outB, void* outC, void* dist,
+                            void* outNX, void* outNY, void* outNZ);
+    extern f64 __frsqrte(f64 x);
+
+    extern f32 float_0_8041fc7c;
+    extern f32 float_0p75_8041fcd4;
+    extern f32 float_0p2_8041fcec;
+    extern f32 float_10_8041fc98;
+    extern f32 float_0p5_8041fc80;
+    extern f32 float_180_8041fccc;
+    extern f32 float_100_8041fcf0;
+    extern f32 float_0p4_8041fcf4;
+    extern f32 float_45_8041fcf8;
+
+    u32 flags;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 sinDir;
+    f32 cosDir;
+    f32 lenSq;
+    f32 moveLen;
+    f32 dist;
+    f32 nyAdd;
+    f32 nx;
+    f32 ny;
+    f32 nz;
+    s32 outA;
+    s32 outB;
+    s32 outC;
+    s32 hit;
+    f32 dot;
+    f32 normalLenSq;
+    f32 normalLen;
+    f32 slopeAngle;
+    f64 d;
+    f64 inv;
+
+    flags = *(u32*)npc;
+    x = *(f32*)((s32)npc + 0x8C);
+    y = *(f32*)((s32)npc + 0x90);
+    z = *(f32*)((s32)npc + 0x94);
+
+    *outX = x;
+    *outZ = z;
+
+    if (moveX == float_0_8041fc7c && moveZ == float_0_8041fc7c) {
+        return 0;
+    }
+
+    sincosf(angleABf(float_0_8041fc7c, float_0_8041fc7c, moveX, moveZ), &sinDir, &cosDir);
+
+    lenSq = moveX * moveX + moveZ * moveZ;
+    if (lenSq > float_0_8041fc7c) {
+        d = (f64)lenSq;
+        inv = __frsqrte(d);
+        inv = 0.5 * inv * (3.0 - d * inv * inv);
+        inv = 0.5 * inv * (3.0 - d * inv * inv);
+        inv = 0.5 * inv * (3.0 - d * inv * inv);
+        moveLen = (f32)(d * inv);
+    } else {
+        moveLen = float_0_8041fc7c;
+    }
+
+    dist = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x14C) + moveLen;
+    nyAdd = float_0p2_8041fcec * *(f32*)((s32)npc + 0x150);
+    if (nyAdd > float_10_8041fc98) {
+        nyAdd = float_10_8041fc98;
+    }
+
+    if (flags & 0x2000) {
+        hit = hitCheckAttr(x, y + nyAdd, z, sinDir, float_0_8041fc7c, cosDir, 4,
+                           &outA, &outB, &outC, &dist, &nx, &ny, &nz);
+    } else {
+        hit = hitCheckFilter(x, y + nyAdd, z, sinDir, float_0_8041fc7c, cosDir, 0,
+                             &outA, &outB, &outC, &dist, &nx, &ny, &nz);
+    }
+
+    if (hit != 0) {
+        dot = moveX * nx + moveZ * nz;
+        *outX += float_0p5_8041fc80 * -(dot * nx - moveX);
+        *outZ += float_0p5_8041fc80 * -(dot * nz - moveZ);
+
+        if (flags & 0x10000) {
+            f32 baseAngle;
+            f32 normalAngle;
+            f32 delta;
+            baseAngle = reviseAngle(float_180_8041fccc + *outAngle);
+            normalAngle = reviseAngle(angleABf(float_0_8041fc7c, float_0_8041fc7c,
+                                               float_100_8041fcf0 * nx,
+                                               float_100_8041fcf0 * nz));
+            delta = reviseAngle(normalAngle - baseAngle);
+            *outAngle = (f32)(s32)reviseAngle(normalAngle + delta);
+        }
+
+        return hit;
+    }
+
+    dist = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x14C) + moveLen;
+    nyAdd = float_0p4_8041fcf4 * *(f32*)((s32)npc + 0x150);
+
+    if (flags & 0x2000) {
+        hit = hitCheckAttr(x, y + nyAdd, z, sinDir, float_0_8041fc7c, cosDir, 4,
+                           &outA, &outB, &outC, &dist, &nx, &ny, &nz);
+    } else {
+        hit = hitCheckFilter(x, y + nyAdd, z, sinDir, float_0_8041fc7c, cosDir, 0,
+                             &outA, &outB, &outC, &dist, &nx, &ny, &nz);
+    }
+
+    if (hit != 0) {
+        normalLenSq = nx * nx + nz * nz;
+        if (normalLenSq > float_0_8041fc7c) {
+            d = (f64)normalLenSq;
+            inv = __frsqrte(d);
+            inv = 0.5 * inv * (3.0 - d * inv * inv);
+            inv = 0.5 * inv * (3.0 - d * inv * inv);
+            inv = 0.5 * inv * (3.0 - d * inv * inv);
+            normalLen = (f32)(d * inv);
+        } else {
+            normalLen = float_0_8041fc7c;
+        }
+
+        slopeAngle = angleABf(float_0_8041fc7c, float_0_8041fc7c, normalLen, -ny);
+        if (slopeAngle >= float_45_8041fcf8) {
+            dot = moveX * nx + moveZ * nz;
+            *outX += float_0p5_8041fc80 * -(dot * nx - moveX);
+            *outZ += float_0p5_8041fc80 * -(dot * nz - moveZ);
+
+            if (flags & 0x10000) {
+                f32 baseAngle;
+                f32 normalAngle;
+                f32 delta;
+                baseAngle = reviseAngle(float_180_8041fccc + *outAngle);
+                normalAngle = reviseAngle(angleABf(float_0_8041fc7c, float_0_8041fc7c,
+                                                   float_100_8041fcf0 * nx,
+                                                   float_100_8041fcf0 * nz));
+                delta = reviseAngle(normalAngle - baseAngle);
+                *outAngle = (f32)(s32)reviseAngle(normalAngle + delta);
+            }
+
+            return hit;
+        }
+    }
+
+    dist = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x14C) + moveLen;
+    nyAdd = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x150);
+
+    if (flags & 0x2000) {
+        hit = hitCheckAttr(x, y + nyAdd, z, sinDir, float_0_8041fc7c, cosDir, 4,
+                           &outA, &outB, &outC, &dist, &nx, &ny, &nz);
+    } else {
+        hit = hitCheckFilter(x, y + nyAdd, z, sinDir, float_0_8041fc7c, cosDir, 0,
+                             &outA, &outB, &outC, &dist, &nx, &ny, &nz);
+    }
+
+    if (hit == 0) {
+        *outX += moveX;
+        *outZ += moveZ;
+        return 0;
+    }
+
+    dot = moveX * nx + moveZ * nz;
+    *outX += float_0p5_8041fc80 * -(dot * nx - moveX);
+    *outZ += float_0p5_8041fc80 * -(dot * nz - moveZ);
+
+    if (flags & 0x10000) {
+        f32 baseAngle;
+        f32 normalAngle;
+        f32 delta;
+        baseAngle = reviseAngle(float_180_8041fccc + *outAngle);
+        normalAngle = reviseAngle(angleABf(float_0_8041fc7c, float_0_8041fc7c,
+                                           float_100_8041fcf0 * nx,
+                                           float_100_8041fcf0 * nz));
+        delta = reviseAngle(normalAngle - baseAngle);
+        *outAngle = (f32)(s32)reviseAngle(normalAngle + delta);
+    }
+
+    return hit;
+}
+
+void* npcNearDistCheck(f32 x, f32 y, f32 z, f32 radius) {
+    u8* workPtr;
+    s32 count;
+    u8* npc;
+    void* found;
+
+    workPtr = (u8*)&work;
+    found = 0;
+
+    if (gp->inBattle != 0) {
+        workPtr += 0x14;
+    }
+
+    count = *(s32*)(workPtr + 4);
+    npc = *(u8**)(workPtr + 0xC);
+
+    if (count > 0) {
+        do {
+            if ((*(u32*)npc & 1) != 0) {
+                f32 dx;
+                f32 dy;
+                f32 dz;
+                f32 dxSq;
+                f32 dzSq;
+                f32 xzSq;
+                f32 xzDist;
+
+                dx = x - *(f32*)(npc + 0x8C);
+                dy = y - *(f32*)(npc + 0x90);
+                dz = z - *(f32*)(npc + 0x94);
+                dxSq = dx * dx;
+                dzSq = dz * dz;
+                xzSq = dxSq + dzSq;
+
+                if (xzSq > 0.0f) {
+                    f64 value;
+                    f64 inv;
+
+                    value = (f64)xzSq;
+                    inv = __frsqrte(value);
+                    inv = 0.5 * inv * (3.0 - value * inv * inv);
+                    inv = 0.5 * inv * (3.0 - value * inv * inv);
+                    inv = 0.5 * inv * (3.0 - value * inv * inv);
+                    xzDist = (f32)(value * inv);
+                } else {
+                    xzDist = xzSq;
+                }
+
+                if (xzDist < radius) {
+                    found = npc;
+                }
+            }
+
+            npc += 0x340;
+            count--;
+        } while (count != 0);
+    }
+
+    return found;
+}
+
+void* fbatGetPointer(void) {
+    return *(void**)((s32)gp + 0x168);
+}
+
+void fbatChangeMode(s16 mode) {
+    *(s16*)*(void**)((s32)gp + 0x168) = mode;
+}
+
+u8 fbatSetAttackAnnounce(s32 flag) {
+    extern char str_fb_sensei_shita_802c13e8[];
+    extern char str_fb_sensei_sareta_802c13f8[];
+    extern s32 dat_8041fc70;
+    extern s32 dat_8041fc74;
+    s32 data;
+
+    data = *(s32*)((s32)gp + 0x168);
+    *(s32*)(data + 0x550) = 0;
+    *(s32*)(data + 0x554) = flag;
+    *(s32*)(data + 0x55C) = 0;
+    switch (*(s32*)(data + 0x554)) {
+        case 0x20000:
+        case 0x40000:
+        case 0x80000:
+        case 0x100000:
+        case 0x200000:
+        case 0x400000:
+        case 0x800000:
+        case 0x1000000:
+        case 0x2000000:
+            *(char**)(data + 0x568) = str_fb_sensei_shita_802c13e8;
+            *(s32*)(data + 0x558) = 2;
+            *(s32*)(data + 0x56C) = dat_8041fc70;
+            break;
+        case 0x10000000:
+            *(char**)(data + 0x568) = str_fb_sensei_sareta_802c13f8;
+            *(s32*)(data + 0x558) = 1;
+            *(s32*)(data + 0x56C) = dat_8041fc74;
+            break;
+        default:
+            *(s32*)(data + 0x558) = 0;
+            break;
+    }
+}
+
+void fbatSetAttackAnnounceEnable(void) {
+    *(s32*)((s32)*(void**)((s32)gp + 0x168) + 0x550) = 1;
+}
+
+u8 _fbatFirstAttackAnnouceDisp(s32 param_1, void* param_2) {
+    extern char* msgSearch(char*);
+    extern u32 FontGetMessageWidthLine(char*, s16*);
+    extern s32 irand(s32);
+    extern void windowDispGX_Waku_col(double, double, double, double, double, u16, u32*);
+    extern void FontDrawStart(void);
+    extern void FontDrawEdge(void);
+    extern void FontDrawColor(u32*);
+    extern void FontDrawScale(f32);
+    extern void FontDrawStringShake(double, double, char*);
+    extern const f32 float_0p1_8041fcdc;
+    extern const f32 float_1_8041fc94;
+    extern const f32 float_3_8041fce0;
+    extern u32 dat_8041fc78;
+    char lines[516];
+    s16 lineCount[2];
+    u32 color;
+    u32 fontColor;
+    char* msg;
+    char* out;
+    char* dst;
+    s32 i;
+    s32 j;
+    s32 r0;
+    s32 r1;
+    u32 width;
+    u32 halfWidth;
+    u32 originalLines;
+    f32 x;
+    f32 y;
+    char c;
+
+    msg = msgSearch(*(char**)((s32)param_2 + 0x18));
+    x = *(f32*)((s32)param_2 + 0x10);
+    y = *(f32*)((s32)param_2 + 0x14);
+    width = FontGetMessageWidthLine(msg, lineCount);
+    lineCount[0]++;
+    originalLines = (u32)lineCount[0];
+    r0 = irand(10000);
+    r1 = irand(10000);
+    if (lineCount[0] > 4) {
+        lineCount[0] = 4;
+    }
+    out = lines;
+    dst = out;
+    for (i = 0; i < lineCount[0]; i++, dst += 0x80) {
+        for (j = 0; j < 0x80; j++) {
+            c = *msg++;
+            if (c == 0 || c == '\n') {
+                dst[j] = 0;
+                break;
+            }
+            dst[j] = c;
+        }
+    }
+
+    halfWidth = (width >> 1) & 0x7FFF;
+    color = *(u32*)((s32)param_2 + 0x1C);
+    windowDispGX_Waku_col(
+        (double)(float_0p1_8041fcdc * (((x + (f32)(r0 % 5)) - 10.0f) - (f32)halfWidth)),
+        (double)((y + (f32)(r1 % 5)) * float_0p1_8041fcdc),
+        (double)((f32)((width & 0xFFFF) + 0x14) * float_0p1_8041fcdc),
+        (double)((f32)(originalLines * 0x1D + 3) * float_0p1_8041fcdc),
+        (double)float_1_8041fc94,
+        0,
+        &color);
+    FontDrawStart();
+    FontDrawEdge();
+    fontColor = dat_8041fc78;
+    FontDrawColor(&fontColor);
+    FontDrawScale(float_0p1_8041fcdc);
+    x = float_0p1_8041fcdc * (x - (f32)halfWidth);
+    out = lines;
+    for (i = 0; i < lineCount[0]; i++) {
+        FontDrawStringShake((double)x, (double)(float_0p1_8041fcdc * ((y + (f32)(-i * 0x1D)) - float_3_8041fce0)), out);
+        out += 0x80;
+    }
+    return 0;
+}
+
 void fbatEncountCheck(void) {
     extern void* marioGetPtr(void);
     extern s32 marioStGetSystemLevel(void);
@@ -1237,192 +2703,76 @@ void fbatEncountCheck(void) {
     effSmallStarEntry();
 }
 
-s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* outAngle) {
+void fbatTalkMode(void) {
+    extern void* marioGetPtr(void);
+    extern void evtStopID(s32 id);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
     extern f32 reviseAngle(f32 angle);
-    extern s32 hitCheckFilter(f64 x, f64 y, f64 z, f64 dx, f64 dy, f64 dz, s32 flags,
-                              void* outA, void* outB, void* outC, void* dist,
-                              void* outNX, void* outNY, void* outNZ);
-    extern s32 hitCheckAttr(f64 x, f64 y, f64 z, f64 dx, f64 dy, f64 dz, s32 attr,
-                            void* outA, void* outB, void* outC, void* dist,
-                            void* outNX, void* outNY, void* outNZ);
-    extern f64 __frsqrte(f64 x);
+    extern void marioKeyOff(void);
+    extern void partyKeyOff(void);
+    extern void* evtEntry(void* code, s32 order, u32 flags);
+    extern void marioChgTalkMotion(void);
+    extern s32 evtCheckID(s32 id);
+    extern void evtStartID(s32 id);
+    extern void animPoseSetAnim(s32 poseId, void* name, s32 force);
+    extern void marioKeyOn(void);
+    extern void partyKeyOn(void);
+    extern void marioChgStayMotion(void);
+    s32 fbatData;
+    s32 npc;
+    s32 player;
+    void* entry;
+    s32 wp;
 
-    extern f32 float_0_8041fc7c;
-    extern f32 float_0p75_8041fcd4;
-    extern f32 float_0p2_8041fcec;
-    extern f32 float_10_8041fc98;
-    extern f32 float_0p5_8041fc80;
-    extern f32 float_180_8041fccc;
-    extern f32 float_100_8041fcf0;
-    extern f32 float_0p4_8041fcf4;
-    extern f32 float_45_8041fcf8;
-
-    u32 flags;
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 sinDir;
-    f32 cosDir;
-    f32 lenSq;
-    f32 moveLen;
-    f32 dist;
-    f32 nyAdd;
-    f32 nx;
-    f32 ny;
-    f32 nz;
-    s32 outA;
-    s32 outB;
-    s32 outC;
-    s32 hit;
-    f32 dot;
-    f32 normalLenSq;
-    f32 normalLen;
-    f32 slopeAngle;
-    f64 d;
-    f64 inv;
-
-    flags = *(u32*)npc;
-    x = *(f32*)((s32)npc + 0x8C);
-    y = *(f32*)((s32)npc + 0x90);
-    z = *(f32*)((s32)npc + 0x94);
-
-    *outX = x;
-    *outZ = z;
-
-    if (moveX == float_0_8041fc7c && moveZ == float_0_8041fc7c) {
-        return 0;
-    }
-
-    sincosf(angleABf(float_0_8041fc7c, float_0_8041fc7c, moveX, moveZ), &sinDir, &cosDir);
-
-    lenSq = moveX * moveX + moveZ * moveZ;
-    if (lenSq > float_0_8041fc7c) {
-        d = (f64)lenSq;
-        inv = __frsqrte(d);
-        inv = 0.5 * inv * (3.0 - d * inv * inv);
-        inv = 0.5 * inv * (3.0 - d * inv * inv);
-        inv = 0.5 * inv * (3.0 - d * inv * inv);
-        moveLen = (f32)(d * inv);
-    } else {
-        moveLen = float_0_8041fc7c;
-    }
-
-    dist = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x14C) + moveLen;
-    nyAdd = float_0p2_8041fcec * *(f32*)((s32)npc + 0x150);
-    if (nyAdd > float_10_8041fc98) {
-        nyAdd = float_10_8041fc98;
-    }
-
-    if (flags & 0x2000) {
-        hit = hitCheckAttr(x, y + nyAdd, z, sinDir, float_0_8041fc7c, cosDir, 4,
-                           &outA, &outB, &outC, &dist, &nx, &ny, &nz);
-    } else {
-        hit = hitCheckFilter(x, y + nyAdd, z, sinDir, float_0_8041fc7c, cosDir, 0,
-                             &outA, &outB, &outC, &dist, &nx, &ny, &nz);
-    }
-
-    if (hit != 0) {
-        dot = moveX * nx + moveZ * nz;
-        *outX += float_0p5_8041fc80 * -(dot * nx - moveX);
-        *outZ += float_0p5_8041fc80 * -(dot * nz - moveZ);
-
-        if (flags & 0x10000) {
-            f32 baseAngle;
-            f32 normalAngle;
-            f32 delta;
-            baseAngle = reviseAngle(float_180_8041fccc + *outAngle);
-            normalAngle = reviseAngle(angleABf(float_0_8041fc7c, float_0_8041fc7c,
-                                               float_100_8041fcf0 * nx,
-                                               float_100_8041fcf0 * nz));
-            delta = reviseAngle(normalAngle - baseAngle);
-            *outAngle = (f32)(s32)reviseAngle(normalAngle + delta);
-        }
-
-        return hit;
-    }
-
-    dist = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x14C) + moveLen;
-    nyAdd = float_0p4_8041fcf4 * *(f32*)((s32)npc + 0x150);
-
-    if (flags & 0x2000) {
-        hit = hitCheckAttr(x, y + nyAdd, z, sinDir, float_0_8041fc7c, cosDir, 4,
-                           &outA, &outB, &outC, &dist, &nx, &ny, &nz);
-    } else {
-        hit = hitCheckFilter(x, y + nyAdd, z, sinDir, float_0_8041fc7c, cosDir, 0,
-                             &outA, &outB, &outC, &dist, &nx, &ny, &nz);
-    }
-
-    if (hit != 0) {
-        normalLenSq = nx * nx + nz * nz;
-        if (normalLenSq > float_0_8041fc7c) {
-            d = (f64)normalLenSq;
-            inv = __frsqrte(d);
-            inv = 0.5 * inv * (3.0 - d * inv * inv);
-            inv = 0.5 * inv * (3.0 - d * inv * inv);
-            inv = 0.5 * inv * (3.0 - d * inv * inv);
-            normalLen = (f32)(d * inv);
-        } else {
-            normalLen = float_0_8041fc7c;
-        }
-
-        slopeAngle = angleABf(float_0_8041fc7c, float_0_8041fc7c, normalLen, -ny);
-        if (slopeAngle >= float_45_8041fcf8) {
-            dot = moveX * nx + moveZ * nz;
-            *outX += float_0p5_8041fc80 * -(dot * nx - moveX);
-            *outZ += float_0p5_8041fc80 * -(dot * nz - moveZ);
-
-            if (flags & 0x10000) {
-                f32 baseAngle;
-                f32 normalAngle;
-                f32 delta;
-                baseAngle = reviseAngle(float_180_8041fccc + *outAngle);
-                normalAngle = reviseAngle(angleABf(float_0_8041fc7c, float_0_8041fc7c,
-                                                   float_100_8041fcf0 * nx,
-                                                   float_100_8041fcf0 * nz));
-                delta = reviseAngle(normalAngle - baseAngle);
-                *outAngle = (f32)(s32)reviseAngle(normalAngle + delta);
+    fbatData = *(s32*)((s32)gp + 0x168);
+    npc = *(s32*)(fbatData + 4);
+    player = (s32)marioGetPtr();
+    switch (*(u8*)(fbatData + 2)) {
+        case 0:
+            evtStopID(*(s32*)(*(s32*)(fbatData + 4) + 0x11C));
+            if ((*(u32*)npc & 0x1000000) == 0) {
+                *(f32*)(npc + 0x144) = reviseAngle(angleABf(
+                    *(f32*)(npc + 0x8C), *(f32*)(npc + 0x94),
+                    *(f32*)(player + 0x8C), *(f32*)(player + 0x94)));
             }
-
-            return hit;
-        }
+            marioKeyOff();
+            partyKeyOff();
+            if (*(s16*)fbatData == 3) {
+                entry = evtEntry(*(void**)(npc + 0x12C), 0, 0);
+                *(u8*)((s32)entry + 0x10) = 6;
+            } else {
+                entry = evtEntry(*(void**)(npc + 0x128), 0, 0);
+                *(u8*)((s32)entry + 0x10) = 6;
+                marioChgTalkMotion();
+            }
+            *(s32*)((s32)entry + 0x170) = npc;
+            *(s32*)(fbatData + 0xC) = *(s32*)((s32)entry + 0x15C);
+            *(u8*)(fbatData + 2) = *(u8*)(fbatData + 2) + 1;
+            break;
+        case 1:
+            if (evtCheckID(*(s32*)(fbatData + 0xC)) == 0) {
+                if ((*(u32*)(npc + 0x1D4) & 0x20000000) == 0) {
+                    evtStartID(*(s32*)(*(s32*)(fbatData + 4) + 0x11C));
+                    *(f32*)(npc + 0x144) = *(f32*)(npc + 0x148);
+                }
+                if ((*(u32*)npc & 0x400) != 0) {
+                    *(s32*)(npc + 0x108) = 0;
+                }
+                if ((*(u32*)npc & 0x200) != 0) {
+                    animPoseSetAnim(*(s32*)(npc + 0x104), (void*)(npc + 0x2C), 1);
+                }
+                marioKeyOn();
+                partyKeyOn();
+                marioChgStayMotion();
+                *(s16*)fbatData = 1;
+                wp = (s32)&work;
+                if (*(s32*)((s32)gp + 0x14) != 0) {
+                    wp += 0x14;
+                }
+                *(s32*)(wp + 0x10) = 0;
+            }
+            break;
     }
-
-    dist = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x14C) + moveLen;
-    nyAdd = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x150);
-
-    if (flags & 0x2000) {
-        hit = hitCheckAttr(x, y + nyAdd, z, sinDir, float_0_8041fc7c, cosDir, 4,
-                           &outA, &outB, &outC, &dist, &nx, &ny, &nz);
-    } else {
-        hit = hitCheckFilter(x, y + nyAdd, z, sinDir, float_0_8041fc7c, cosDir, 0,
-                             &outA, &outB, &outC, &dist, &nx, &ny, &nz);
-    }
-
-    if (hit == 0) {
-        *outX += moveX;
-        *outZ += moveZ;
-        return 0;
-    }
-
-    dot = moveX * nx + moveZ * nz;
-    *outX += float_0p5_8041fc80 * -(dot * nx - moveX);
-    *outZ += float_0p5_8041fc80 * -(dot * nz - moveZ);
-
-    if (flags & 0x10000) {
-        f32 baseAngle;
-        f32 normalAngle;
-        f32 delta;
-        baseAngle = reviseAngle(float_180_8041fccc + *outAngle);
-        normalAngle = reviseAngle(angleABf(float_0_8041fc7c, float_0_8041fc7c,
-                                           float_100_8041fcf0 * nx,
-                                           float_100_8041fcf0 * nz));
-        delta = reviseAngle(normalAngle - baseAngle);
-        *outAngle = (f32)(s32)reviseAngle(normalAngle + delta);
-    }
-
-    return hit;
 }
 
 void fbatBattleMode(void) {
@@ -1709,119 +3059,17 @@ case0_flags_done:
     }
 }
 
-u8 npcCheckHitMarioSide(s32 pNpc) {
-    extern void* marioGetPtr(void);
-    extern f32 PSVECDistance(void*, void*);
-    extern f32 angleABf(f32, f32, f32, f32);
-    extern f32 compAngle(f32, f32);
-    extern s32 marioChkWallAround(void*, s32, f32, f32, f32, f32);
-    extern f64 sqrt(f64);
-    extern const f32 float_40_8041fd0c;
-    extern const f32 float_6p2832_8041fd10;
-    extern const f32 float_360_8041fcc0;
-    extern const f32 float_2_8041fd34;
-    void* mario;
-    f32 pos[3];
-    f32 dist;
-    f32 radius;
-    f32 angle;
-    f32 diff;
-    f32 pushX;
-    f32 pushZ;
-    f32 len;
-    f32 f;
+void _npcDead(u32* npc, s16 scoreType) {
+    u8* fbat;
 
-    mario = marioGetPtr();
-    if (*(f32*)((s32)mario + 0x90) + *(f32*)((s32)mario + 0xFC) < *(f32*)(pNpc + 0x90)) {
-        return 0;
+    npc[0x50] |= 0x10;
+    npc[0x75] |= 4;
+    *(s16*)((u8*)npc + 0x31C) = scoreType;
+    if ((*npc & 4) == 0) {
+        return;
     }
-    if (*(f32*)(pNpc + 0x90) + *(f32*)(pNpc + 0x150) < *(f32*)((s32)mario + 0x90)) {
-        return 0;
-    }
-    pos[0] = *(f32*)((s32)mario + 0x8C);
-    pos[1] = *(f32*)(pNpc + 0x90);
-    pos[2] = *(f32*)((s32)mario + 0x94);
-    dist = PSVECDistance(pos, (void*)(pNpc + 0x8C));
-    radius = (5.0f + *(f32*)((s32)mario + 0xF8) + *(f32*)(pNpc + 0x14C)) * 0.5f;
-    if (dist > radius) {
-        return 0;
-    }
-    *(f32*)(pNpc + 0x8C) = *(f32*)(pNpc + 0x98);
-    *(f32*)(pNpc + 0x94) = *(f32*)(pNpc + 0xA0);
-    dist = PSVECDistance(pos, (void*)(pNpc + 0x8C));
-    if (dist > radius) {
-        return 0;
-    }
-    *(void**)((s32)mario + 0x2A0) = (void*)pNpc;
-    angle = angleABf(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x94), *(f32*)(pNpc + 0x8C), *(f32*)(pNpc + 0x94));
-    diff = compAngle(angle, *(f32*)((s32)mario + 0x1A4));
-    if (diff < 0.0f) {
-        diff = -diff;
-    }
-    if (diff >= float_40_8041fd0c) {
-        f = (float_6p2832_8041fd10 * angle) / float_360_8041fcc0;
-    } else {
-        f = (float_6p2832_8041fd10 * *(f32*)((s32)mario + 0x1A4)) / float_360_8041fcc0;
-    }
-    pushX = *(f32*)(pNpc + 0x8C) - *(f32*)((s32)mario + 0x8C);
-    pushZ = *(f32*)(pNpc + 0x94) - *(f32*)((s32)mario + 0x94);
-    len = (f32)sqrt((double)(pushX * pushX + pushZ * pushZ));
-    if (len > 0.0f) {
-        pushX = pushX * (float_2_8041fd34 / len);
-        pushZ = pushZ * (float_2_8041fd34 / len);
-    }
-    *(f32*)((s32)mario + 0x8C) += pushX;
-    *(f32*)((s32)mario + 0x94) += pushZ;
-    marioChkWallAround((void*)((s32)mario + 0x8C), 0, 0.0f, 160.0f + f, *(f32*)((s32)mario + 0xF8), 0.0f);
-    return 1;
-}
-
-s32 _npcHitCheckHammerAllMotion(f64 radius, f64 angle, s32 npc, f32* outDist) {
-    extern void* marioGetPtr(void);
-    extern void sincosf(f32 angle, f32* outSin, f32* outCos);
-    extern f64 sqrt(f64 value);
-    f32 steps[12] = {0.0f, 10.0f, 20.0f, 30.0f, 40.0f, 50.0f,
-                     60.0f, 70.0f, 80.0f, 90.0f, 100.0f, 110.0f};
-    f32 sinA;
-    f32 cosA;
-    f32 sinB;
-    f32 cosB;
-    f32 distance = 0.0f;
-    s32 result = 0;
-    s32 i;
-
-    for (i = 0; i < 12; i++) {
-        u8* player = marioGetPtr();
-        f32 sampleY;
-        f32 dx;
-        f32 dy;
-        f32 dz;
-        f32 baseY;
-        f32 topY;
-
-        sincosf((f32)angle, &sinA, &cosA);
-        sincosf(steps[i], &sinB, &cosB);
-        sampleY = (f32)(*(f32*)(player + 0x90) + radius * cosB);
-        dx = (f32)(sinB * (sinA * radius) + *(f32*)(player + 0x8C)) - *(f32*)(npc + 0x8C);
-        dz = (f32)(sinB * (cosA * radius) + *(f32*)(player + 0x94)) - *(f32*)(npc + 0x94);
-        baseY = *(f32*)(npc + 0x90);
-        topY = baseY + *(f32*)(npc + 0x150);
-        dy = sampleY - baseY;
-        if (sampleY > baseY) {
-            if (sampleY <= topY) {
-                dy = 0.0f;
-            } else {
-                dy = sampleY - topY;
-            }
-        }
-        distance = (f32)sqrt((f64)(dx * dx + dz * dz + dy * dy));
-        if (distance < 0.5f * *(f32*)(npc + 0x14C) + 12.0f) {
-            result = npc;
-            break;
-        }
-    }
-    *outDist = distance;
-    return result;
+    fbat = *(u8**)((u8*)gp + 0x168);
+    *(u32*)(fbat + 0x4C) |= 1 << (*(u8*)((u8*)npc + 0x314) & 0x3F);
 }
 
 u8 _npcGroupDead(u32* param_1, s16 param_2) {
@@ -1934,939 +3182,153 @@ u8 _npcGroupDead(u32* param_1, s16 param_2) {
     return 0;
 }
 
-u8 npcDisp_offscreen(s32 cameraId, void* npc) {
-    extern void sysWaitDrawSync(void);
-    extern void GXClearBoundingBox(void);
-    extern f32 reviseAngle(f32);
-    extern void mtx_setup(void*, f32 (*)[4], s32);
-    extern void animPoseSetMaterialEvtColor(s32, void*);
-    extern void animPoseSetMaterialFlagOn(s32, u32);
-    extern void* dispGetCurWork(void);
-    extern char* animPoseGetCurrentAnim(s32);
-    extern void* animPoseGetAnimPosePtr(s32);
-    extern void* camGetPtr(s32);
-    extern f64 atan2(f64, f64);
-    extern s32 strcmp(const char*, const char*);
-    extern void animPoseSetAnim(s32, char*, s32);
-    extern void animPoseMain(s32);
-    extern void animPoseDrawMtx(s32, f32 (*)[4], s32, f32, f32);
-    extern void GXReadBoundingBox(u16*, u16*, u16*, u16*);
-    extern void offscreenAddBoundingBox(s32, u16, u16, u16, u16);
-    extern const f32 float_0_8041fc7c;
-    extern const f32 float_360_8041fcc0;
-    extern const f32 float_rad2deg_8041fcbc;
-    extern const f32 float_90_8041fcb0;
-    extern const f32 float_270_8041fcc4;
-    extern const f32 float_neg90_8041fcb8;
-    extern const f32 float_neg270_8041fcc8;
-    extern const f32 float_2_8041fd34;
-    extern char* luigi_pose[];
-    f32 mtx[3][4];
-    s32 color;
-    s32 color2;
-    u16 x0;
-    u16 y0;
-    u16 x1;
-    u16 y1;
-    f32 rot;
-    f32 angle;
-    void* pose;
-    u32 i;
-    char* anim;
-    char** poses;
-    void* cam;
-    void* disp;
-    s32 r;
-    s32 g;
-    s32 b;
+void npcGroupDead(void* npc, s32 scoreType) {
+    extern void _npcGroupDead(u32* npc, s32 scoreType);
+    u8* current = npc;
 
-    sysWaitDrawSync();
-    GXClearBoundingBox();
-    rot = reviseAngle(-*(f32*)((s32)npc + 0x144));
-    mtx_setup(npc, mtx, -1);
-    color = *(s32*)((s32)npc + 0x114);
-    if ((*(u32*)((s32)npc + 0x1D4) & 0x400000) != 0) {
-        r = *(u8*)((s32)&color + 0);
-        g = *(u8*)((s32)&color + 1);
-        b = *(u8*)((s32)&color + 2);
-        *(u8*)((s32)&color + 0) = r >> 1;
-        *(u8*)((s32)&color + 1) = g >> 1;
-        *(u8*)((s32)&color + 2) = b >> 1;
-        color2 = color;
-        animPoseSetMaterialEvtColor(*(s32*)((s32)npc + 0x104), &color2);
-        animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), 0x40);
+    if (*(void**)(current + 0x32C) != 0) {
+        current = *(u8**)(current + 0x32C);
     }
+    while (*(void**)(current + 0x324) != 0) {
+        current = *(u8**)(current + 0x324);
+    }
+    _npcGroupDead((u32*)current, scoreType);
+}
 
-    disp = dispGetCurWork();
-    if (*(u8*)((s32)disp + 1) == 1) {
-        animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 2, rot, float_2_8041fd34);
-    } else if (*(u8*)((s32)disp + 1) == 0) {
-        if ((*(u32*)npc & 0x800000) != 0) {
-            animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
-            pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
-            anim = animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
-            cam = camGetPtr(4);
-            angle = atan2(-(*(f32*)((s32)cam + 0x18) - *(f32*)((s32)cam + 0xC)),
-                          -(*(f32*)((s32)cam + 0x20) - *(f32*)((s32)cam + 0x14)));
-            angle = reviseAngle(float_rad2deg_8041fcbc * angle);
-            if (angle < float_0_8041fc7c) {
-                angle += float_360_8041fcc0;
-            }
-            angle = reviseAngle(angle - *(f32*)((s32)pose + 0x74));
-            if ((angle > float_90_8041fcb0 && angle <= float_270_8041fcc4) ||
-                (angle < float_neg90_8041fcb8 && angle >= float_neg270_8041fcc8)) {
-                i = 0;
-                poses = luigi_pose;
-                do {
-                    if (strcmp(poses[0], anim) == 0) {
-                        break;
-                    }
-                    i++;
-                    poses += 2;
-                } while (i < 0xE);
-                if (i < 0xE) {
-                    animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2 + 1], 0);
-                }
-            } else {
-                i = 0;
-                poses = luigi_pose;
-                do {
-                    if (strcmp(poses[1], anim) == 0) {
-                        break;
-                    }
-                    i++;
-                    poses += 2;
-                } while (i < 0xE);
-                if (i < 0xE) {
-                    animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2], 0);
-                }
-            }
-        }
-        animPoseMain(*(s32*)((s32)npc + 0x104));
-        animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 1, rot, float_2_8041fd34);
-    } else if (*(u8*)((s32)disp + 1) < 3) {
-        animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 3, rot, float_2_8041fd34);
+void* fbatNpcTalkCheck(void) {
+    extern s32 marioChkTalkable(void);
+    void* wp = &work.field;
+    void* ret;
+
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        wp = (void*)((s32)wp + 0x14);
     }
-    sysWaitDrawSync();
-    GXReadBoundingBox(&x0, &y0, &x1, &y1);
-    offscreenAddBoundingBox(*(s32*)((s32)npc + 0x110), x0, y0, x1, y1);
+    ret = *(void**)((s32)wp + 0x10);
+    if (ret != 0 && marioChkTalkable() != 0) {
+        return ret;
+    }
     return 0;
 }
 
-void npcDisp_blur(s32 cameraId, void* npc) {
-    extern f32 reviseAngle(f32);
-    extern u32 animPoseGetMaterialFlag(s32);
-    extern void* camGetPtr(s32);
-    extern void animPoseMain(s32);
-    extern void mtx_setup(void*, f32 (*)[4], s32);
-    extern void PSMTXTransApply(f32 (*)[4], f32 (*)[4], f32, f32, f32);
-    extern void animPoseSetMaterialFlagOn(s32, u32);
-    extern void animPoseSetMaterialEvtColor(s32, void*);
-    extern void animPoseDrawMtx(s32, f32 (*)[4], s32, f32, f32);
-    extern void animPoseSetMaterialFlagOff(s32, u32);
-    extern const f32 float_6p2832_8041fd10;
-    extern const f32 float_360_8041fcc0;
-    extern const f32 float_3p1416_8041fd1c;
-    extern const f32 float_1p5708_8041fd20;
-    extern const f32 float_4p7124_8041fd24;
-    extern const f32 float_0p00761_8041fd14;
-    extern const f32 float_0p16605_8041fd18;
-    extern const f32 float_0p03705_8041fd28;
-    extern const f32 float_0p4967_8041fd2c;
-    extern const f32 float_2_8041fd34;
-    extern const f32 float_1_8041fc94;
-    extern const f32 float_0_8041fc7c;
-    extern s32 dat_8041fc68;
-    f32 mtx[3][4];
-    f32 rot;
-    f32 t;
-    f32 x;
-    f32 z;
-    f32 sq;
-    f32 c0;
-    f32 c1;
-    f32 one;
-    s32 poseId;
-    u32 flags;
-    s32 i;
-    s32 alpha;
-    s32 color;
-    s32 color2;
-    void* cam;
-
-    rot = reviseAngle(-*(f32*)((s32)npc + 0x144));
-    poseId = *(s32*)((s32)npc + 0x104);
-    flags = animPoseGetMaterialFlag(poseId);
-    cam = camGetPtr(cameraId);
-    t = (float_6p2832_8041fd10 * *(f32*)((s32)cam + 0x114)) / float_360_8041fcc0;
-    c0 = float_0p00761_8041fd14;
-    c1 = float_0p16605_8041fd18;
-    one = float_1_8041fc94;
-    if (t <= float_3p1416_8041fd1c) {
-        if (t <= float_1p5708_8041fd20) {
-            sq = t * t;
-            x = ((c0 * sq) - c1) * sq + one;
-            x *= t;
-        } else {
-            t = float_1p5708_8041fd20 - (t - float_1p5708_8041fd20);
-            sq = t * t;
-            x = ((c0 * sq) - c1) * sq + one;
-            x *= t;
-        }
-    } else if (t < float_4p7124_8041fd24) {
-        t -= float_3p1416_8041fd1c;
-        sq = t * t;
-        x = ((c0 * sq) - c1) * sq + one;
-        x *= t;
-        x = -x;
-    } else {
-        t = float_1p5708_8041fd20 - (t - float_4p7124_8041fd24);
-        sq = t * t;
-        x = ((c0 * sq) - c1) * sq + one;
-        x *= t;
-        x = -x;
-    }
-    x *= float_2_8041fd34;
-
-    cam = camGetPtr(cameraId);
-    t = (float_6p2832_8041fd10 * *(f32*)((s32)cam + 0x114)) / float_360_8041fcc0;
-    c0 = float_0p03705_8041fd28;
-    c1 = float_0p4967_8041fd2c;
-    one = float_1_8041fc94;
-    if (t <= float_3p1416_8041fd1c) {
-        if (t <= float_1p5708_8041fd20) {
-            sq = t * t;
-            z = ((c0 * sq) - c1) * sq + one;
-        } else {
-            t = float_1p5708_8041fd20 - (t - float_1p5708_8041fd20);
-            sq = t * t;
-            z = ((c0 * sq) - c1) * sq + one;
-            z = -z;
-        }
-    } else if (t < float_4p7124_8041fd24) {
-        t -= float_3p1416_8041fd1c;
-        sq = t * t;
-        z = ((c0 * sq) - c1) * sq + one;
-        z = -z;
-    } else {
-        t = float_1p5708_8041fd20 - (t - float_4p7124_8041fd24);
-        sq = t * t;
-        z = ((c0 * sq) - c1) * sq + one;
-    }
-    z = -z * float_2_8041fd34;
-
-    animPoseMain(*(s32*)((s32)npc + 0x104));
-    i = 4;
-    alpha = 0x64;
-    do {
-        mtx_setup(npc, mtx, i);
-        PSMTXTransApply(mtx, mtx, x, float_0_8041fc7c, z);
-        animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), 0x40);
-        color = dat_8041fc68;
-        *(u8*)((s32)&color + 3) = 0x80 - alpha;
-        color2 = color;
-        animPoseSetMaterialEvtColor(*(s32*)((s32)npc + 0x104), &color2);
-        animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 1, rot, float_2_8041fd34);
-        animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 2, rot, float_2_8041fd34);
-        animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 3, rot, float_2_8041fd34);
-        i--;
-        alpha -= 0x19;
-    } while (i > 0);
-    animPoseSetMaterialFlagOff(*(s32*)((s32)npc + 0x104), 0x40);
-    animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), flags);
+void fbatHitCheckAll(void) {
+    extern void fbatHitCheck(s32, s32);
+    fbatHitCheck(0x13F1, 0);
 }
 
-void npcDisp_offscreen_xlu(s32 cameraId, void* npc) {
-    extern void sysWaitDrawSync(void);
-    extern void GXClearBoundingBox(void);
-    extern f32 reviseAngle(f32);
-    extern void mtx_setup(void*, f32 (*)[4], s32);
-    extern void animPoseSetMaterialEvtColor(s32, void*);
-    extern void animPoseSetMaterialFlagOn(s32, u32);
-    extern char* animPoseGetCurrentAnim(s32);
-    extern void* animPoseGetAnimPosePtr(s32);
-    extern void* camGetPtr(s32);
-    extern f64 atan2(f64, f64);
-    extern s32 strcmp(const char*, const char*);
-    extern void animPoseSetAnim(s32, char*, s32);
-    extern void animPoseMain(s32);
-    extern void animPoseDrawMtx(s32, f32 (*)[4], s32, f32, f32);
-    extern void GXReadBoundingBox(u16*, u16*, u16*, u16*);
-    extern void offscreenAddBoundingBox(s32, u16, u16, u16, u16);
-    extern const f32 float_0_8041fc7c;
-    extern const f32 float_360_8041fcc0;
-    extern const f32 float_rad2deg_8041fcbc;
-    extern const f32 float_90_8041fcb0;
-    extern const f32 float_270_8041fcc4;
-    extern const f32 float_neg90_8041fcb8;
-    extern const f32 float_neg270_8041fcc8;
-    extern const f32 float_2_8041fd34;
-    extern char* luigi_pose[];
-    f32 mtx[3][4];
-    s32 color2;
-    s32 color;
-    u16 x0;
-    u16 y0;
-    u16 x1;
-    u16 y1;
-    f32 rot;
-    f32 angle;
-    void* pose;
-    u32 i;
-    char* anim;
-    char** poses;
-    void* cam;
-    s32 r;
-    s32 g;
-    s32 b;
 
-    sysWaitDrawSync();
-    GXClearBoundingBox();
-    rot = reviseAngle(-*(f32*)((s32)npc + 0x144));
-    mtx_setup(npc, mtx, -1);
-    color = *(s32*)((s32)npc + 0x114);
-    if ((*(u32*)((s32)npc + 0x1D4) & 0x400000) != 0) {
-        r = *(u8*)((s32)&color + 0);
-        g = *(u8*)((s32)&color + 1);
-        b = *(u8*)((s32)&color + 2);
-        *(u8*)((s32)&color + 0) = (s32)(r + ((u32)r >> 31)) >> 1;
-        *(u8*)((s32)&color + 1) = (s32)(g + ((u32)g >> 31)) >> 1;
-        *(u8*)((s32)&color + 2) = (s32)(b + ((u32)b >> 31)) >> 1;
-        color2 = color;
-        animPoseSetMaterialEvtColor(*(s32*)((s32)npc + 0x104), &color2);
-        animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), 0x40);
-    }
-
-    if ((*(u32*)npc & 0x800000) != 0) {
-        animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
-        pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
-        anim = animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
-        cam = camGetPtr(4);
-        angle = atan2(-(*(f32*)((s32)cam + 0x18) - *(f32*)((s32)cam + 0xC)),
-                      -(*(f32*)((s32)cam + 0x20) - *(f32*)((s32)cam + 0x14)));
-        angle = reviseAngle(float_rad2deg_8041fcbc * angle);
-        if (angle < float_0_8041fc7c) {
-            angle += float_360_8041fcc0;
-        }
-        angle = reviseAngle(angle - *(f32*)((s32)pose + 0x74));
-        if ((angle > float_90_8041fcb0 && angle <= float_270_8041fcc4) ||
-            (angle < float_neg90_8041fcb8 && angle >= float_neg270_8041fcc8)) {
-            i = 0;
-            poses = luigi_pose;
-            do {
-                if (strcmp(poses[0], anim) == 0) {
-                    break;
-                }
-                i++;
-                poses += 2;
-            } while (i < 0xE);
-            if (i < 0xE) {
-                animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2 + 1], 0);
-            }
-        } else {
-            i = 0;
-            poses = luigi_pose;
-            do {
-                if (strcmp(poses[1], anim) == 0) {
-                    break;
-                }
-                i++;
-                poses += 2;
-            } while (i < 0xE);
-            if (i < 0xE) {
-                animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2], 0);
-            }
-        }
-    }
-
-    animPoseMain(*(s32*)((s32)npc + 0x104));
-    animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 1, rot, float_2_8041fd34);
-    animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 2, rot, float_2_8041fd34);
-    animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 3, rot, float_2_8041fd34);
-    sysWaitDrawSync();
-    GXReadBoundingBox(&x0, &y0, &x1, &y1);
-    offscreenAddBoundingBox(*(s32*)((s32)npc + 0x110), x0, y0, x1, y1);
-}
-
-void npcDisp(s32 cameraId, void* npc) {
-    extern f32 reviseAngle(f32);
-    extern void mtx_setup(void*, f32 (*)[4], s32);
-    extern void animPoseSetMaterialEvtColor(s32, void*);
-    extern void animPoseSetMaterialFlagOn(s32, u32);
-    extern void* dispGetCurWork(void);
-    extern char* animPoseGetCurrentAnim(s32);
-    extern void* animPoseGetAnimPosePtr(s32);
-    extern void* camGetPtr(s32);
-    extern f64 atan2(f64, f64);
-    extern s32 strcmp(const char*, const char*);
-    extern void animPoseSetAnim(s32, char*, s32);
-    extern void animPoseMain(s32);
-    extern void animPoseDrawMtx(s32, f32 (*)[4], s32, f32, f32);
-    extern const f32 float_0_8041fc7c;
-    extern const f32 float_360_8041fcc0;
-    extern const f32 float_rad2deg_8041fcbc;
-    extern const f32 float_90_8041fcb0;
-    extern const f32 float_270_8041fcc4;
-    extern const f32 float_neg90_8041fcb8;
-    extern const f32 float_neg270_8041fcc8;
-    extern const f32 float_2_8041fd34;
-    extern char* luigi_pose[];
-    f32 mtx[3][4];
-    s32 color;
-    s32 color2;
-    f32 rot;
-    f32 angle;
-    void* pose;
-    u32 i;
-    char* anim;
-    char** poses;
-    void* cam;
-    void* disp;
-    s32 r;
-    s32 g;
-    s32 b;
-    s32 mode;
-
-    rot = reviseAngle(-*(f32*)((s32)npc + 0x144));
-    mtx_setup(npc, mtx, -1);
-    color = *(s32*)((s32)npc + 0x114);
-    if ((*(u32*)((s32)npc + 0x1D4) & 0x400000) != 0) {
-        r = *(u8*)((s32)&color + 0);
-        g = *(u8*)((s32)&color + 1);
-        b = *(u8*)((s32)&color + 2);
-        *(u8*)((s32)&color + 0) = (s32)(r + ((u32)r >> 31)) >> 1;
-        *(u8*)((s32)&color + 1) = (s32)(g + ((u32)g >> 31)) >> 1;
-        *(u8*)((s32)&color + 2) = (s32)(b + ((u32)b >> 31)) >> 1;
-        color2 = color;
-        animPoseSetMaterialEvtColor(*(s32*)((s32)npc + 0x104), &color2);
-        animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), 0x40);
-    }
-
-    disp = dispGetCurWork();
-    mode = *(u8*)((s32)disp + 1);
-    switch (mode) {
-        case 0:
-            if ((*(u32*)npc & 0x800000) != 0) {
-            animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
-            pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
-            anim = animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
-            cam = camGetPtr(4);
-            angle = atan2(-(*(f32*)((s32)cam + 0x18) - *(f32*)((s32)cam + 0xC)),
-                          -(*(f32*)((s32)cam + 0x20) - *(f32*)((s32)cam + 0x14)));
-            angle = reviseAngle(float_rad2deg_8041fcbc * angle);
-            if (angle < float_0_8041fc7c) {
-                angle += float_360_8041fcc0;
-            }
-            angle = reviseAngle(angle - *(f32*)((s32)pose + 0x74));
-            if ((angle > float_90_8041fcb0 && angle <= float_270_8041fcc4) ||
-                (angle < float_neg90_8041fcb8 && angle >= float_neg270_8041fcc8)) {
-                i = 0;
-                poses = luigi_pose;
-                do {
-                    if (strcmp(poses[0], anim) == 0) {
-                        break;
-                    }
-                    i++;
-                    poses += 2;
-                } while (i < 0xE);
-                if (i < 0xE) {
-                    animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2 + 1], 0);
-                }
-            } else {
-                i = 0;
-                poses = luigi_pose;
-                do {
-                    if (strcmp(poses[1], anim) == 0) {
-                        break;
-                    }
-                    i++;
-                    poses += 2;
-                } while (i < 0xE);
-                if (i < 0xE) {
-                    animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2], 0);
-                }
-            }
-            }
-            animPoseMain(*(s32*)((s32)npc + 0x104));
-            animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 1, rot, float_2_8041fd34);
-            break;
-        case 1:
-            animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 2, rot, float_2_8041fd34);
-            break;
-        case 2:
-            animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 3, rot, float_2_8041fd34);
-            break;
-    }
-}
-
-void mtx_setup(void* npc, f32 mtx[3][4], s32 historyIndex) {
-    extern void* camGetCurPtr(void);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern f32 reviseAngle(f32 angle);
-    extern void PSMTXIdentity(f32 mtx[3][4]);
-    extern void PSMTXScaleApply(f32 src[3][4], f32 dst[3][4], f32 x, f32 y, f32 z);
-    extern void PSMTXTransApply(f32 src[3][4], f32 dst[3][4], f32 x, f32 y, f32 z);
-    extern void PSMTXRotRad(f32 mtx[3][4], s32 axis, f32 radians);
-    extern void PSMTXConcat(f32 a[3][4], f32 b[3][4], f32 c[3][4]);
-    extern f32 float_0_8041fc7c;
-    extern f32 float_1_8041fc94;
-    extern f32 float_90_8041fcb0;
-    extern f32 float_270_8041fcc4;
-    extern f32 float_neg1_8041fcd8;
-    extern f32 float_deg2rad_8041fd7c;
-    f32 xRot[3][4];
-    f32 yRot[3][4];
-    f32 zRot[3][4];
-    f32 camAngle;
-    f32 scaleSign;
-    f32 angle;
-    f32 one;
-    void* cam;
-    u32 flags;
-
-    camAngle = float_0_8041fc7c;
-    scaleSign = float_1_8041fc94;
-    flags = *(u32*)npc;
-    if (!(flags & 0x2000000) && !(flags & 0x8000000)) {
-        cam = camGetCurPtr();
-        camAngle = angleABf(
-            *(f32*)((s32)cam + 0xC),
-            *(f32*)((s32)cam + 0x14),
-            *(f32*)((s32)cam + 0x18),
-            *(f32*)((s32)cam + 0x20));
-        angle = angleABf(
-            *(f32*)((s32)cam + 0xC),
-            *(f32*)((s32)cam + 0x14),
-            *(f32*)((s32)npc + 0x8C),
-            *(f32*)((s32)npc + 0x94));
-        camAngle = reviseAngle(camAngle - angle);
-    }
-
-    angle = reviseAngle(*(f32*)((s32)npc + 0xF0));
-    angle = reviseAngle(angle);
-    if (angle >= float_90_8041fcb0 && angle <= float_270_8041fcc4) {
-        scaleSign *= float_neg1_8041fcd8;
-    }
-
-    PSMTXIdentity(mtx);
-    one = float_1_8041fc94;
-    if (one != *(f32*)((s32)npc + 0xE0) || one != *(f32*)((s32)npc + 0xE4) ||
-        one != *(f32*)((s32)npc + 0xE8) || one != scaleSign) {
-        PSMTXScaleApply(
-            mtx,
-            mtx,
-            *(f32*)((s32)npc + 0xE0),
-            *(f32*)((s32)npc + 0xE4),
-            *(f32*)((s32)npc + 0xE8) * scaleSign);
-    }
-
-    if (*(f32*)((s32)npc + 0xF8) != float_0_8041fc7c ||
-        *(f32*)((s32)npc + 0xFC) != float_0_8041fc7c ||
-        *(f32*)((s32)npc + 0x100) != float_0_8041fc7c) {
-        PSMTXTransApply(
-            mtx,
-            mtx,
-            -*(f32*)((s32)npc + 0xF8),
-            -*(f32*)((s32)npc + 0xFC),
-            -*(f32*)((s32)npc + 0x100));
-    }
-
-    if (*(f32*)((s32)npc + 0xF4) != float_0_8041fc7c) {
-        PSMTXRotRad(zRot, 0x7A, float_deg2rad_8041fd7c * *(f32*)((s32)npc + 0xF4));
-        PSMTXConcat(zRot, mtx, mtx);
-    }
-    if (*(f32*)((s32)npc + 0xEC) != float_0_8041fc7c) {
-        PSMTXRotRad(xRot, 0x78, float_deg2rad_8041fd7c * *(f32*)((s32)npc + 0xEC));
-        PSMTXConcat(xRot, mtx, mtx);
-    }
-    if (*(f32*)((s32)npc + 0xF0) != float_0_8041fc7c || camAngle != float_0_8041fc7c) {
-        PSMTXRotRad(yRot, 0x79, float_deg2rad_8041fd7c * (*(f32*)((s32)npc + 0xF0) + camAngle));
-        PSMTXConcat(yRot, mtx, mtx);
-    }
-
-    if (*(f32*)((s32)npc + 0xF8) != float_0_8041fc7c ||
-        *(f32*)((s32)npc + 0xFC) != float_0_8041fc7c ||
-        *(f32*)((s32)npc + 0x100) != float_0_8041fc7c) {
-        PSMTXTransApply(
-            mtx,
-            mtx,
-            *(f32*)((s32)npc + 0xF8),
-            *(f32*)((s32)npc + 0xFC),
-            *(f32*)((s32)npc + 0x100));
-    }
-
-    if (historyIndex == -1) {
-        PSMTXTransApply(
-            mtx,
-            mtx,
-            *(f32*)((s32)npc + 0x8C),
-            *(f32*)((s32)npc + 0x90),
-            *(f32*)((s32)npc + 0x94));
-    } else {
-        void* history = (void*)((s32)npc + historyIndex * 0xC);
-        PSMTXTransApply(
-            mtx,
-            mtx,
-            *(f32*)((s32)history + 0xA4),
-            *(f32*)((s32)history + 0xA8),
-            *(f32*)((s32)history + 0xAC));
-    }
-}
-
-void _npcDeleteGroup(void* npc) {
-    extern void npcDelete(void* npc);
-    extern void animPoseRelease(s32 poseId);
-    s32 current;
-    s32 child;
-    s32 slave;
-    s32 slave2;
-    s32 workPtr;
-    s32 i;
-
-    child = *(s32*)((s32)npc + 0x328);
-    if ((void*)child != 0) {
-        if (*(void**)(child + 0x328) != 0) {
-            _npcDeleteGroup(*(void**)(child + 0x328));
-        }
-        i = 0;
-        current = child;
-        do {
-            slave = *(s32*)(current + 0x330);
-            if ((void*)slave != 0) {
-                npcDelete((void*)slave);
-                *(s32*)(current + 0x330) = 0;
-            }
-            i++;
-            current += 4;
-        } while (i < 4);
-        npcDelete((void*)child);
-    }
-
-    workPtr = (s32)&work + 0x14;
-    current = (s32)npc;
-    i = 0;
-    do {
-        slave = *(s32*)(current + 0x330);
-        if ((void*)slave != 0) {
-            if (*(void**)(slave + 0x330) != 0) {
-                *(s32*)(*(s32*)(slave + 0x330) + 0x32C) = 0;
-            }
-            *(s32*)(slave + 0x330) = 0;
-            if (*(void**)(slave + 0x334) != 0) {
-                *(s32*)(*(s32*)(slave + 0x334) + 0x32C) = 0;
-            }
-            *(s32*)(slave + 0x334) = 0;
-            slave2 = slave + 8;
-            if (*(void**)(slave2 + 0x330) != 0) {
-                *(s32*)(*(s32*)(slave2 + 0x330) + 0x32C) = 0;
-            }
-            *(s32*)(slave2 + 0x330) = 0;
-            if (*(void**)(slave2 + 0x334) != 0) {
-                *(s32*)(*(s32*)(slave2 + 0x334) + 0x32C) = 0;
-            }
-            *(s32*)(slave2 + 0x334) = 0;
-
-            if (*(void**)(slave + 0x324) != 0) {
-                if (*(void**)(slave + 0x328) != 0) {
-                    *(s32*)(*(s32*)(slave + 0x324) + 0x328) = *(s32*)(slave + 0x328);
-                    *(s32*)(*(s32*)(slave + 0x328) + 0x324) = *(s32*)(slave + 0x324);
-                } else {
-                    *(s32*)(*(s32*)(slave + 0x324) + 0x328) = 0;
-                }
-            } else {
-                if (*(void**)(slave + 0x328) != 0) {
-                    *(s32*)(*(s32*)(slave + 0x328) + 0x324) = 0;
-                }
-            }
-            *(u32*)slave &= ~2;
-            if (*(s32*)(slave + 0x104) >= 0) {
-                animPoseRelease(*(s32*)(slave + 0x104));
-            }
-            *(s32*)(slave + 0x104) = -1;
-            *(u32*)slave &= ~1;
-            if (*(s32*)((s32)gp + 0x14) != 0) {
-                slave2 = workPtr;
-            } else {
-                slave2 = (s32)&work;
-            }
-            *(s32*)slave2 = *(s32*)slave2 - 1;
-            *(s32*)(current + 0x330) = 0;
-        }
-        i++;
-        current += 4;
-    } while (i < 4);
-
-    if (*(void**)((s32)npc + 0x330) != 0) {
-        *(s32*)(*(s32*)((s32)npc + 0x330) + 0x32C) = 0;
-    }
-    *(s32*)((s32)npc + 0x330) = 0;
-    if (*(void**)((s32)npc + 0x334) != 0) {
-        *(s32*)(*(s32*)((s32)npc + 0x334) + 0x32C) = 0;
-    }
-    *(s32*)((s32)npc + 0x334) = 0;
-    slave2 = (s32)npc + 8;
-    if (*(void**)(slave2 + 0x330) != 0) {
-        *(s32*)(*(s32*)(slave2 + 0x330) + 0x32C) = 0;
-    }
-    *(s32*)(slave2 + 0x330) = 0;
-    if (*(void**)(slave2 + 0x334) != 0) {
-        *(s32*)(*(s32*)(slave2 + 0x334) + 0x32C) = 0;
-    }
-    *(s32*)(slave2 + 0x334) = 0;
-
-    if (*(void**)((s32)npc + 0x324) != 0) {
-        if (*(void**)((s32)npc + 0x328) != 0) {
-            *(s32*)(*(s32*)((s32)npc + 0x324) + 0x328) = *(s32*)((s32)npc + 0x328);
-            *(s32*)(*(s32*)((s32)npc + 0x328) + 0x324) = *(s32*)((s32)npc + 0x324);
-        } else {
-            *(s32*)(*(s32*)((s32)npc + 0x324) + 0x328) = 0;
-        }
-    } else {
-        if (*(void**)((s32)npc + 0x328) != 0) {
-            *(s32*)(*(s32*)((s32)npc + 0x328) + 0x324) = 0;
-        }
-    }
-    *(u32*)npc &= ~2;
-    if (*(s32*)((s32)npc + 0x104) >= 0) {
-        animPoseRelease(*(s32*)((s32)npc + 0x104));
-    }
-    *(s32*)((s32)npc + 0x104) = -1;
-    *(u32*)npc &= ~1;
-    slave2 = (s32)&work;
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        slave2 = workPtr;
-    }
-    *(s32*)slave2 = *(s32*)slave2 - 1;
-}
-
-void npcDisp_xlu(s32 cameraId, void* npc) {
-    extern f32 reviseAngle(f32);
-    extern void mtx_setup(void*, f32 (*)[4], s32);
-    extern void animPoseSetMaterialEvtColor(s32, void*);
-    extern void animPoseSetMaterialFlagOn(s32, u32);
-    extern char* animPoseGetCurrentAnim(s32);
-    extern void* animPoseGetAnimPosePtr(s32);
-    extern void* camGetPtr(s32);
-    extern f64 atan2(f64, f64);
-    extern s32 strcmp(const char*, const char*);
-    extern void animPoseSetAnim(s32, char*, s32);
-    extern void animPoseMain(s32);
-    extern void animPoseDrawMtx(s32, f32 (*)[4], s32, f32, f32);
-    extern const f32 float_0_8041fc7c;
-    extern const f32 float_360_8041fcc0;
-    extern const f32 float_rad2deg_8041fcbc;
-    extern const f32 float_90_8041fcb0;
-    extern const f32 float_270_8041fcc4;
-    extern const f32 float_neg90_8041fcb8;
-    extern const f32 float_neg270_8041fcc8;
-    extern const f32 float_2_8041fd34;
-    extern char* luigi_pose[];
-    f32 mtx[3][4];
-    s32 color;
-    s32 color2;
-    f32 rot;
-    f32 angle;
-    void* pose;
-    u32 i;
-    char* anim;
-    char** poses;
-    void* cam;
-    s32 r;
-    s32 g;
-    s32 b;
-
-    rot = reviseAngle(-*(f32*)((s32)npc + 0x144));
-    mtx_setup(npc, mtx, -1);
-    color = *(s32*)((s32)npc + 0x114);
-    if ((*(u32*)((s32)npc + 0x1D4) & 0x400000) != 0) {
-        r = *(u8*)((s32)&color + 0);
-        g = *(u8*)((s32)&color + 1);
-        b = *(u8*)((s32)&color + 2);
-        *(u8*)((s32)&color + 0) = (s32)(r + ((u32)r >> 31)) >> 1;
-        *(u8*)((s32)&color + 1) = (s32)(g + ((u32)g >> 31)) >> 1;
-        *(u8*)((s32)&color + 2) = (s32)(b + ((u32)b >> 31)) >> 1;
-        color2 = color;
-        animPoseSetMaterialEvtColor(*(s32*)((s32)npc + 0x104), &color2);
-        animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), 0x40);
-    }
-    if ((*(u32*)npc & 0x800000) != 0) {
-        animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
-        pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
-        anim = animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
-        cam = camGetPtr(4);
-        angle = atan2(-(*(f32*)((s32)cam + 0x18) - *(f32*)((s32)cam + 0xC)),
-                      -(*(f32*)((s32)cam + 0x20) - *(f32*)((s32)cam + 0x14)));
-        angle = reviseAngle(float_rad2deg_8041fcbc * angle);
-        if (angle < float_0_8041fc7c) {
-            angle += float_360_8041fcc0;
-        }
-        angle = reviseAngle(angle - *(f32*)((s32)pose + 0x74));
-        if ((angle > float_90_8041fcb0 && angle <= float_270_8041fcc4) ||
-            (angle < float_neg90_8041fcb8 && angle >= float_neg270_8041fcc8)) {
-            i = 0;
-            poses = luigi_pose;
-            do {
-                if (strcmp(poses[0], anim) == 0) {
-                    break;
-                }
-                i++;
-                poses += 2;
-            } while (i < 0xE);
-            if (i < 0xE) {
-                animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2 + 1], 0);
-            }
-        } else {
-            i = 0;
-            poses = luigi_pose;
-            do {
-                if (strcmp(poses[1], anim) == 0) {
-                    break;
-                }
-                i++;
-                poses += 2;
-            } while (i < 0xE);
-            if (i < 0xE) {
-                animPoseSetAnim(*(s32*)((s32)npc + 0x104), luigi_pose[i * 2], 0);
-            }
-        }
-    }
-    animPoseMain(*(s32*)((s32)npc + 0x104));
-    animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 1, rot, float_2_8041fd34);
-    animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 2, rot, float_2_8041fd34);
-    animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 3, rot, float_2_8041fd34);
-}
-
-void fbatTalkMode(void) {
+void* fbatHitCheck(u32 flags, void* hitInfo) {
     extern void* marioGetPtr(void);
-    extern void evtStopID(s32 id);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern f32 reviseAngle(f32 angle);
-    extern void marioKeyOff(void);
-    extern void partyKeyOff(void);
-    extern void* evtEntry(void* code, s32 order, u32 flags);
-    extern void marioChgTalkMotion(void);
-    extern s32 evtCheckID(s32 id);
-    extern void evtStartID(s32 id);
-    extern void animPoseSetAnim(s32 poseId, void* name, s32 force);
-    extern void marioKeyOn(void);
-    extern void partyKeyOn(void);
-    extern void marioChgStayMotion(void);
-    s32 fbatData;
-    s32 npc;
+    extern f64 sqrt(f64 value);
+    extern s32 seqGetSeq(void);
+    extern s32 vivianGetStatus(void);
+    extern s32 pouchEquipCheckBadge(s32 badge);
+    extern s32 marioGetJabaraState(void);
+    extern s32 _npcHitCheckSphere(f64 x, f64 y, f64 z, f64 radius,
+                                  s32 npc, f32* distance);
+    extern f32 float_1000_8041fca8;
+    extern f32 float_0p5_8041fc80;
+    s32 npcWork;
     s32 player;
-    void* entry;
-    s32 wp;
-
-    fbatData = *(s32*)((s32)gp + 0x168);
-    npc = *(s32*)(fbatData + 4);
-    player = (s32)marioGetPtr();
-    switch (*(u8*)(fbatData + 2)) {
-        case 0:
-            evtStopID(*(s32*)(*(s32*)(fbatData + 4) + 0x11C));
-            if ((*(u32*)npc & 0x1000000) == 0) {
-                *(f32*)(npc + 0x144) = reviseAngle(angleABf(
-                    *(f32*)(npc + 0x8C), *(f32*)(npc + 0x94),
-                    *(f32*)(player + 0x8C), *(f32*)(player + 0x94)));
-            }
-            marioKeyOff();
-            partyKeyOff();
-            if (*(s16*)fbatData == 3) {
-                entry = evtEntry(*(void**)(npc + 0x12C), 0, 0);
-                *(u8*)((s32)entry + 0x10) = 6;
-            } else {
-                entry = evtEntry(*(void**)(npc + 0x128), 0, 0);
-                *(u8*)((s32)entry + 0x10) = 6;
-                marioChgTalkMotion();
-            }
-            *(s32*)((s32)entry + 0x170) = npc;
-            *(s32*)(fbatData + 0xC) = *(s32*)((s32)entry + 0x15C);
-            *(u8*)(fbatData + 2) = *(u8*)(fbatData + 2) + 1;
-            break;
-        case 1:
-            if (evtCheckID(*(s32*)(fbatData + 0xC)) == 0) {
-                if ((*(u32*)(npc + 0x1D4) & 0x20000000) == 0) {
-                    evtStartID(*(s32*)(*(s32*)(fbatData + 4) + 0x11C));
-                    *(f32*)(npc + 0x144) = *(f32*)(npc + 0x148);
-                }
-                if ((*(u32*)npc & 0x400) != 0) {
-                    *(s32*)(npc + 0x108) = 0;
-                }
-                if ((*(u32*)npc & 0x200) != 0) {
-                    animPoseSetAnim(*(s32*)(npc + 0x104), (void*)(npc + 0x2C), 1);
-                }
-                marioKeyOn();
-                partyKeyOn();
-                marioChgStayMotion();
-                *(s16*)fbatData = 1;
-                wp = (s32)&work;
-                if (*(s32*)((s32)gp + 0x14) != 0) {
-                    wp += 0x14;
-                }
-                *(s32*)(wp + 0x10) = 0;
-            }
-            break;
-    }
-}
-
-void npcKoopaModeEncountCheck(void) {
-    extern s32 kpaEnemyHitChk(f64 x, f64 y, f64 z, f64 height, f64 width);
-    extern void npcGroupDead(void* npc, s32 scoreType);
-    extern void kpaPowDown(void);
-    extern char* hitGetName(void* hit);
-    extern s32 strcmp(const char* lhs, const char* rhs);
-    extern char str_a_magu_802c138c[];
-    s32 wp = (s32)&work;
+    s32 npc;
     s32 count;
     s32 i;
-    u8* npc;
+    s32 bestNpc = 0;
+    u32 hitFlags = 0;
+    u32 attackMode = 0;
+    u32 unknownFlags = 0;
+    f32 bestDistance = float_1000_8041fca8;
 
+    npcWork = (s32)&work.field;
     if (gp->inBattle != 0) {
-        wp += 0x14;
+        npcWork += 0x14;
     }
-    count = *(s32*)(wp + 4);
-    if (*(s16*)*(u8**)((u8*)gp + 0x168) != 1) {
-        return;
+    player = (s32)marioGetPtr();
+    count = *(s32*)(npcWork + 4);
+    npc = *(s32*)(npcWork + 0xC);
+
+    if ((flags & 0x2000) != 0) {
+        unknownFlags |= 1;
     }
 
-    npc = *(u8**)(wp + 0xC);
-    for (i = 0; i < count; i++, npc += 0x340) {
-        s32 hit;
-        u32 flags;
+    if ((flags & 0x30) != 0 && seqGetSeq() == 2 && vivianGetStatus() == 0) {
+        for (i = 0; i < count; i++, npc += 0x340) {
+            u32 npcFlags;
+            f32 dx;
+            f32 dz;
+            f32 distance;
 
-        if (npc == 0) {
-            continue;
-        }
-        flags = *(u32*)npc;
-        if ((flags & 1) == 0 || (flags & 0x08000000) == 0 ||
-            (*(u32*)(npc + 0x1D4) & 4) != 0) {
-            continue;
-        }
-
-        hit = kpaEnemyHitChk(*(f32*)(npc + 0x8C), *(f32*)(npc + 0x90),
-                            *(f32*)(npc + 0x94), *(f32*)(npc + 0x150),
-                            *(f32*)(npc + 0x14C));
-        switch (hit) {
-            case 1:
-                if ((*(u32*)(npc + 0x318) & 1) == 0) npcGroupDead(npc, 1);
-                break;
-            case 2:
-                if ((*(u32*)(npc + 0x318) & 2) == 0) npcGroupDead(npc, 2);
-                break;
-            case 3:
-                if ((*(u32*)(npc + 0x318) & 4) == 0) npcGroupDead(npc, 4);
-                break;
-            case 4:
-                kpaPowDown();
-                break;
-            default:
-                if ((*(u32*)(npc + 0x318) & 0x10) == 0 &&
-                    *(void**)(npc + 0x300) != 0 &&
-                    strcmp(hitGetName(*(void**)(npc + 0x300)), str_a_magu_802c138c) == 0) {
-                    npcGroupDead(npc, 0x10);
+            if (npc == 0) {
+                continue;
+            }
+            npcFlags = *(u32*)npc;
+            if ((npcFlags & 2) == 0 || (npcFlags & 0x20) != 0 ||
+                (npcFlags & 0x08000000) != 0 ||
+                (*(u32*)(npc + 0x1D4) & 4) != 0) {
+                continue;
+            }
+            if ((flags & 0x1000) == 0) {
+                if ((npcFlags & 8) == 0) {
+                    continue;
                 }
-                break;
+            } else if ((npcFlags & 8) != 0) {
+                continue;
+            }
+
+            if (*(f32*)(player + 0x90) >=
+                    *(f32*)(npc + 0x90) + *(f32*)(npc + 0x150) ||
+                *(f32*)(npc + 0x90) >=
+                    *(f32*)(player + 0x90) + *(f32*)(player + 0xFC)) {
+                continue;
+            }
+
+            dx = *(f32*)(player + 0x8C) - *(f32*)(npc + 0x8C);
+            dz = *(f32*)(player + 0x94) - *(f32*)(npc + 0x94);
+            distance = (f32)sqrt((f64)(dx * dx + dz * dz));
+            if (distance < float_0p5_8041fc80 *
+                               (*(f32*)(player + 0xF8) + *(f32*)(npc + 0x14C)) &&
+                distance < bestDistance) {
+                bestDistance = distance;
+                bestNpc = npc;
+                if ((flags & 0x10) != 0) {
+                    hitFlags = pouchEquipCheckBadge(0x1D) == 0 ?
+                                   0x10000000 : 0x10000;
+                }
+                if ((flags & 0x20) != 0 && marioGetJabaraState() == 6) {
+                    hitFlags = 0x20000;
+                }
+                if ((flags & 0x2000) != 0) {
+                    break;
+                }
+            }
         }
     }
+
+    if ((flags & 1) != 0) {
+        npc = *(s32*)(npcWork + 0xC);
+        for (i = 0; i < count; i++, npc += 0x340) {
+            f32 distance;
+            if (npc != 0 && (*(u32*)npc & 2) != 0 &&
+                (*(u32*)npc & 0x20000020) == 0 &&
+                _npcHitCheckSphere(*(f32*)(player + 0x8C),
+                                   *(f32*)(player + 0x90) +
+                                       float_0p5_8041fc80 * *(f32*)(player + 0xFC),
+                                   *(f32*)(player + 0x94), 30.0, npc,
+                                   &distance) != 0 &&
+                distance < bestDistance) {
+                bestDistance = distance;
+                bestNpc = npc;
+                hitFlags = 0x1000000;
+            }
+        }
+    }
+
+    if (hitInfo != 0) {
+        *(u32*)hitInfo = hitFlags;
+        *(u32*)((u8*)hitInfo + 4) = attackMode;
+        *(f32*)((u8*)hitInfo + 8) = bestDistance;
+        *(u32*)((u8*)hitInfo + 0xC) = unknownFlags;
+    }
+    return (void*)bestNpc;
 }
 
 s32 _npcHitCheckSphere(f64 x, f64 y, f64 z, f64 radius, s32 npc, f32* outDist) {
@@ -2916,860 +3378,112 @@ s32 _npcHitCheckSphere(f64 x, f64 y, f64 z, f64 radius, s32 npc, f32* outDist) {
     return npc;
 }
 
-void* npcNearDistCheck(f32 x, f32 y, f32 z, f32 radius) {
-    u8* workPtr;
-    s32 count;
-    u8* npc;
-    void* found;
-
-    workPtr = (u8*)&work;
-    found = 0;
-
-    if (gp->inBattle != 0) {
-        workPtr += 0x14;
-    }
-
-    count = *(s32*)(workPtr + 4);
-    npc = *(u8**)(workPtr + 0xC);
-
-    if (count > 0) {
-        do {
-            if ((*(u32*)npc & 1) != 0) {
-                f32 dx;
-                f32 dy;
-                f32 dz;
-                f32 dxSq;
-                f32 dzSq;
-                f32 xzSq;
-                f32 xzDist;
-
-                dx = x - *(f32*)(npc + 0x8C);
-                dy = y - *(f32*)(npc + 0x90);
-                dz = z - *(f32*)(npc + 0x94);
-                dxSq = dx * dx;
-                dzSq = dz * dz;
-                xzSq = dxSq + dzSq;
-
-                if (xzSq > 0.0f) {
-                    f64 value;
-                    f64 inv;
-
-                    value = (f64)xzSq;
-                    inv = __frsqrte(value);
-                    inv = 0.5 * inv * (3.0 - value * inv * inv);
-                    inv = 0.5 * inv * (3.0 - value * inv * inv);
-                    inv = 0.5 * inv * (3.0 - value * inv * inv);
-                    xzDist = (f32)(value * inv);
-                } else {
-                    xzDist = xzSq;
-                }
-
-                if (xzDist < radius) {
-                    found = npc;
-                }
-            }
-
-            npc += 0x340;
-            count--;
-        } while (count != 0);
-    }
-
-    return found;
-}
-
-void npcSetStayPose(char* stayPose) {
-    extern s32 strcmp(const char*, const char*);
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32);
-    extern void partyChgPoseId(void*, s32);
-    extern void marioChgPose(char*);
-    extern void animPoseSetAnim(s32, char*, s32);
-    extern char str_x_party_802c1444[];
-    extern char str_party_8041fd40[];
-    extern char str_extparty_802c1450[];
-    extern char str_mario_8041fd48[];
-    s32 wp;
-    s32 count;
-    s32 i;
-    void* npc;
-    void* party;
-
-    if (*stayPose == 0 || strcmp(stayPose, str_x_party_802c1444) == 0) {
-        return;
-    }
-    if (strcmp(stayPose, str_party_8041fd40) == 0) {
-        party = partyGetPtr(marioGetPartyId());
-        if (party != 0) {
-            partyChgPoseId(party, 1);
-        }
-        return;
-    }
-    if (strcmp(stayPose, str_extparty_802c1450) == 0) {
-        party = partyGetPtr(marioGetExtraPartyId());
-        if (party != 0) {
-            partyChgPoseId(party, 1);
-        }
-        return;
-    }
-    if (strcmp(stayPose, str_mario_8041fd48) == 0) {
-        marioChgPose(MarioStayPose);
-        return;
-    }
-    wp = (s32)&work;
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        wp += 0x14;
-    }
-    count = *(s32*)(wp + 4);
-    i = 0;
-    npc = *(void**)(wp + 0xC);
-    while (i < count) {
-        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), stayPose) == 0) {
-            break;
-        }
-        i++;
-        npc = (void*)((s32)npc + 0x340);
-    }
-    if ((*(u32*)npc & 0x200) != 0) {
-        animPoseSetAnim(*(s32*)((s32)npc + 0x104), (char*)((s32)npc + 0x4C), 1);
-    }
-}
-
-void npcSetTalkPose(char* talkPose) {
-    extern s32 strcmp(const char*, const char*);
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32);
-    extern void partyChgPoseId(void*, s32);
-    extern void marioChgPose(char*);
-    extern void animPoseSetAnim(s32, char*, s32);
-    extern char str_x_party_802c1444[];
-    extern char str_party_8041fd40[];
-    extern char str_extparty_802c1450[];
-    extern char str_mario_8041fd48[];
-    s32 wp;
-    s32 count;
-    s32 i;
-    void* npc;
-    void* party;
-
-    if (*talkPose == 0 || strcmp(talkPose, str_x_party_802c1444) == 0) {
-        return;
-    }
-    if (strcmp(talkPose, str_party_8041fd40) == 0) {
-        party = partyGetPtr(marioGetPartyId());
-        if (party != 0) {
-            partyChgPoseId(party, 7);
-        }
-        return;
-    }
-    if (strcmp(talkPose, str_extparty_802c1450) == 0) {
-        party = partyGetPtr(marioGetExtraPartyId());
-        if (party != 0) {
-            partyChgPoseId(party, 7);
-        }
-        return;
-    }
-    if (strcmp(talkPose, str_mario_8041fd48) == 0) {
-        marioChgPose(MarioTalkPose);
-        return;
-    }
-    wp = (s32)&work;
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        wp += 0x14;
-    }
-    count = *(s32*)(wp + 4);
-    i = 0;
-    npc = *(void**)(wp + 0xC);
-    while (i < count) {
-        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), talkPose) == 0) {
-            break;
-        }
-        i++;
-        npc = (void*)((s32)npc + 0x340);
-    }
-    if ((*(u32*)npc & 0x200) != 0) {
-        animPoseSetAnim(*(s32*)((s32)npc + 0x104), (char*)((s32)npc + 0x6C), 1);
-    }
-}
-
-u8 npcRecoveryFiledNpc(void) {
-    extern void* release_wp;
-    extern s32 animPoseEntry(char*, s32);
-    extern void animPoseSetAnim(s32, char*, s32);
-    extern void* animPoseGetAnimPosePtr(s32);
-    extern void animPoseWorldPositionEvalOn(s32);
-    extern void animPoseWorldMatrixEvalOn(s32);
-    extern void animPoseMain(s32);
-    s32 wp = (s32)&work;
-    char* release = release_wp;
-    void* npc;
-    void* pose;
-    s32 i;
-
-    if ((*(u32*)(wp + 8) & 2) != 0) {
-        npc = *(void**)(wp + 0xC);
-        i = 0;
-        while (i < *(s32*)(wp + 4)) {
-            if ((*(u32*)npc & 1) && (*(u32*)npc & 2) && *(s32*)((s32)npc + 0x104) == -1) {
-                *(s32*)((s32)npc + 0x104) = animPoseEntry(release, 0);
-                animPoseSetAnim(*(s32*)((s32)npc + 0x104), release + 0x40, 1);
-                pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
-                *(s32*)pose = *(s32*)(release + 0x80);
-                *(f32*)((s32)pose + 0x70) = *(f32*)(release + 0x84);
-                *(f32*)((s32)pose + 0x74) = *(f32*)(release + 0x88);
-                *(f32*)((s32)pose + 0x78) = *(f32*)(release + 0x8C);
-                *(f32*)((s32)pose + 0x7C) = *(f32*)(release + 0x90);
-                if ((*(u32*)pose & 0x40) != 0) {
-                    *(u32*)pose &= ~0x40;
-                    animPoseWorldPositionEvalOn(*(s32*)((s32)npc + 0x104));
-                }
-                if ((*(u32*)pose & 0x80) != 0) {
-                    *(u32*)pose &= ~0x80;
-                    animPoseWorldMatrixEvalOn(*(s32*)((s32)npc + 0x104));
-                }
-                animPoseMain(*(s32*)((s32)npc + 0x104));
-                release += 0x94;
-            }
-            i++;
-            npc = (void*)((s32)npc + 0x340);
-        }
-        *(u32*)(wp + 8) &= ~2;
-    }
-}
-
-void npcBlurOn(char* name) {
-    extern s32 strcmp(const char*, const char*);
-    s32 wp = (s32)&work;
-    void* npc;
-    s32 count;
-    s32 i;
-
-    if (gp->inBattle != 0) {
-        wp += 0x14;
-    }
-    count = *(s32*)(wp + 4);
-    i = 0;
-    npc = *(void**)(wp + 0xC);
-    while (i < count) {
-        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), name) == 0) {
-            break;
-        }
-        i++;
-        npc = (void*)((s32)npc + 0x340);
-    }
-    *(u32*)npc |= 0x100;
-    *(s32*)((s32)npc + 0xA4) = *(s32*)((s32)npc + 0x8C);
-    *(s32*)((s32)npc + 0xA8) = *(s32*)((s32)npc + 0x90);
-    *(s32*)((s32)npc + 0xAC) = *(s32*)((s32)npc + 0x94);
-    *(s32*)((s32)npc + 0xB0) = *(s32*)((s32)npc + 0x8C);
-    *(s32*)((s32)npc + 0xB4) = *(s32*)((s32)npc + 0x90);
-    *(s32*)((s32)npc + 0xB8) = *(s32*)((s32)npc + 0x94);
-    *(s32*)((s32)npc + 0xBC) = *(s32*)((s32)npc + 0x8C);
-    *(s32*)((s32)npc + 0xC0) = *(s32*)((s32)npc + 0x90);
-    *(s32*)((s32)npc + 0xC4) = *(s32*)((s32)npc + 0x94);
-    *(s32*)((s32)npc + 0xC8) = *(s32*)((s32)npc + 0x8C);
-    *(s32*)((s32)npc + 0xCC) = *(s32*)((s32)npc + 0x90);
-    *(s32*)((s32)npc + 0xD0) = *(s32*)((s32)npc + 0x94);
-    *(s32*)((s32)npc + 0xD4) = *(s32*)((s32)npc + 0x8C);
-    *(s32*)((s32)npc + 0xD8) = *(s32*)((s32)npc + 0x90);
-    *(s32*)((s32)npc + 0xDC) = *(s32*)((s32)npc + 0x94);
-}
-
-
-u8 npcReleaseFiledNpc(void) {
-    extern void* release_wp;
-    extern void* animPoseGetAnimPosePtr(s32);
-    extern void* animPoseGetAnimBaseDataPtr(s32);
-    extern char* animPoseGetCurrentAnim(s32);
-    extern void animPoseRelease(s32);
-    extern char* strcpy(char*, const char*);
-    s32 wp = (s32)&work;
-    char* release = release_wp;
-    void* npc;
-    void* pose;
-    s32 i;
-
-    if ((*(u32*)(wp + 8) & 2) != 0) {
-        npc = *(void**)(wp + 0xC);
-        i = 0;
-        while (i < *(s32*)(wp + 4)) {
-            if ((*(u32*)npc & 1) && (*(u32*)npc & 2)) {
-                pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
-                if (*(s32*)((s32)pose + 0x90) == -1 && *(s32*)((s32)npc + 0x104) >= 0) {
-                    pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
-                    *(s32*)(release + 0x80) = *(s32*)pose;
-                    *(f32*)(release + 0x84) = *(f32*)((s32)pose + 0x70);
-                    *(f32*)(release + 0x88) = *(f32*)((s32)pose + 0x74);
-                    *(f32*)(release + 0x8C) = *(f32*)((s32)pose + 0x78);
-                    *(f32*)(release + 0x90) = *(f32*)((s32)pose + 0x7C);
-                    strcpy(release, (char*)animPoseGetAnimBaseDataPtr(*(s32*)((s32)npc + 0x104)) + 4);
-                    strcpy(release + 0x40, animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104)));
-                    animPoseRelease(*(s32*)((s32)npc + 0x104));
-                    release += 0x94;
-                    *(s32*)((s32)npc + 0x104) = -1;
-                }
-            }
-            i++;
-            npc = (void*)((s32)npc + 0x340);
-        }
-    }
-}
-
-void npcSetBattleInfo(void* npc, s32 info) {
-    extern void* areaDataPtr(char* area);
-    extern void npcSetupBattleInfo(void* npc, void* setup);
-    u8* base = npc;
-    u8* setup;
-    char area[4];
-    s32 index;
-
-    if (info == -1) {
-        setup = 0;
-    } else {
-        area[0] = *((char*)gp + 0x12C);
-        area[1] = *((char*)gp + 0x12D);
-        area[2] = *((char*)gp + 0x12E);
-        area[3] = 0;
-        setup = *(u8**)((u8*)areaDataPtr(area) + 8);
-        index = info;
-        while (index > 0) {
-            setup += 0x44;
-            index--;
-        }
-    }
-    npcSetupBattleInfo(base, setup);
-
-    index = 0;
-    do {
-        u8* child = *(u8**)(base + 0x330 + index * 4);
-        if (child != 0) {
-            u32* src = (u32*)(base + 0x22C);
-            u32* dst = (u32*)(child + 0x22C);
-            s32 count = 0x19;
-            do {
-                u32 first = src[1];
-                u32 second = src[2];
-                src += 2;
-                dst[1] = first;
-                dst += 2;
-                dst[0] = second;
-                count--;
-            } while (count != 0);
-        }
-        index++;
-    } while (index < 4);
-}
-
-u8 fbatSetAttackAnnounce(s32 flag) {
-    extern char str_fb_sensei_shita_802c13e8[];
-    extern char str_fb_sensei_sareta_802c13f8[];
-    extern s32 dat_8041fc70;
-    extern s32 dat_8041fc74;
-    s32 data;
-
-    data = *(s32*)((s32)gp + 0x168);
-    *(s32*)(data + 0x550) = 0;
-    *(s32*)(data + 0x554) = flag;
-    *(s32*)(data + 0x55C) = 0;
-    switch (*(s32*)(data + 0x554)) {
-        case 0x20000:
-        case 0x40000:
-        case 0x80000:
-        case 0x100000:
-        case 0x200000:
-        case 0x400000:
-        case 0x800000:
-        case 0x1000000:
-        case 0x2000000:
-            *(char**)(data + 0x568) = str_fb_sensei_shita_802c13e8;
-            *(s32*)(data + 0x558) = 2;
-            *(s32*)(data + 0x56C) = dat_8041fc70;
-            break;
-        case 0x10000000:
-            *(char**)(data + 0x568) = str_fb_sensei_sareta_802c13f8;
-            *(s32*)(data + 0x558) = 1;
-            *(s32*)(data + 0x56C) = dat_8041fc74;
-            break;
-        default:
-            *(s32*)(data + 0x558) = 0;
-            break;
-    }
-}
-
-s32 npcWaitAllInitEvtEnd(void) {
-    extern s32 evtCheckID(s32 id);
-    s32 wp = (s32)&work;
-    s32 ret;
-    s32 i;
-    s32 count;
-    void* npc;
-
-    if (gp->inBattle != 0) {
-        wp += 0x14;
-    }
-    count = *(s32*)(wp + 4);
-    ret = 1;
-    npc = *(void**)(wp + 0xC);
-    i = 0;
-    while (i < count) {
-        if (npc != 0 && (*(u32*)npc & 1) && !(*(u32*)npc & 2)) {
-            u32 flags = *(u32*)npc;
-            s32 id = *(s32*)((s32)npc + 0x118);
-            if (id != 0) {
-                ret = 0;
-                if (evtCheckID(id) == 0) {
-                    *(s32*)((s32)npc + 0x118) = 0;
-                    *(u32*)npc |= 2;
-                }
-            } else {
-                *(u32*)npc = flags | 2;
-            }
-        }
-        i++;
-        npc = (void*)((s32)npc + 0x340);
-    }
-    return ret;
-}
-
-void npcExecAllInitEvt(void) {
-    extern s32 evtEntry(void* script, s32 type, s32 flags);
-    extern void evtDeleteID(s32 id);
-    s32 wp = (s32)&work;
-    s32 i;
-    s32 count;
-    void* npc;
-
-    if (gp->inBattle != 0) {
-        wp += 0x14;
-    }
-    count = *(s32*)(wp + 4);
-    i = 0;
-    npc = *(void**)(wp + 0xC);
-    while (i < count) {
-        if (npc != 0 && (*(u32*)npc & 1)) {
-            if (*(void**)((s32)npc + 0x120) != 0) {
-                if (*(s32*)((s32)npc + 0x118) != 0) {
-                    evtDeleteID(*(s32*)((s32)npc + 0x118));
-                }
-                {
-                    s32 evt = evtEntry(*(void**)((s32)npc + 0x120), 0, 0);
-                    *(u8*)(evt + 0x10) = 0;
-                    *(void**)(evt + 0x170) = npc;
-                    *(s32*)((s32)npc + 0x118) = *(s32*)(evt + 0x15C);
-                }
-            } else {
-                *(s32*)((s32)npc + 0x118) = 0;
-            }
-        }
-        i++;
-        npc = (void*)((s32)npc + 0x340);
-    }
-}
-
-void npcExecAllReglEvt(void) {
-    extern s32 evtEntry(void* script, s32 type, s32 flags);
-    extern void evtDeleteID(s32 id);
-    s32 wp = (s32)&work;
-    s32 i;
-    s32 count;
-    void* npc;
-
-    if (gp->inBattle != 0) {
-        wp += 0x14;
-    }
-    count = *(s32*)(wp + 4);
-    i = 0;
-    npc = *(void**)(wp + 0xC);
-    while (i < count) {
-        if (npc != 0 && (*(u32*)npc & 1) && *(void**)((s32)npc + 0x124) != 0) {
-            if (*(s32*)((s32)npc + 0x11C) != 0) {
-                evtDeleteID(*(s32*)((s32)npc + 0x11C));
-            }
-            {
-                s32 evt = evtEntry(*(void**)((s32)npc + 0x124), 0, 0x20);
-                *(u8*)(evt + 0x10) = 1;
-                *(void**)(evt + 0x170) = npc;
-                *(s32*)((s32)npc + 0x11C) = *(s32*)(evt + 0x15C);
-            }
-        }
-        i++;
-        npc = (void*)((s32)npc + 0x340);
-    }
-}
-
-s32 _majinai_effect(void* pEvt, s32 firstCall) {
+s32 _npcHitCheckHammerAllMotion(f64 radius, f64 angle, s32 npc, f32* outDist) {
     extern void* marioGetPtr(void);
-    extern void* effMajinaiEntry(f32 x, f32 y, f32 z, s32 type);
-    extern void effSetName(void* effect, char* name);
-    extern void* effNameToPtr(char* name);
-    extern f32 float_16_8041fc8c;
-    extern f32 float_0p8_8041fc90;
-    extern char str_mjef_coinup_802c13b8[];
-    u8* evt = pEvt;
-    u8* player = marioGetPtr();
-    void* effect;
-
-    if (firstCall != 0) {
-        effect = effMajinaiEntry(*(f32*)(player + 0x8C),
-                                 float_16_8041fc8c + *(f32*)(player + 0x90) +
-                                     *(f32*)(player + 0xFC),
-                                 *(f32*)(player + 0x94), 0);
-        *(void**)(evt + 0x78) = effect;
-        *(f32*)(*(u8**)((u8*)effect + 0xC) + 0x10) = float_0p8_8041fc90;
-        effSetName(effect, str_mjef_coinup_802c13b8);
-    }
-    if (*(void**)(evt + 0x78) == 0 || effNameToPtr(str_mjef_coinup_802c13b8) == 0) {
-        return 2;
-    }
-    return 0;
-}
-
-void npcStartForEvent(void) {
-    extern void evtStartID(s32 id);
-    extern void animPoseSetLocalTimeRate(void* pose, f32 rate);
-    extern f32 float_1_8041fc94;
-    s32 wp = (s32)&work;
+    extern void sincosf(f32 angle, f32* outSin, f32* outCos);
+    extern f64 sqrt(f64 value);
+    f32 steps[12] = {0.0f, 10.0f, 20.0f, 30.0f, 40.0f, 50.0f,
+                     60.0f, 70.0f, 80.0f, 90.0f, 100.0f, 110.0f};
+    f32 sinA;
+    f32 cosA;
+    f32 sinB;
+    f32 cosB;
+    f32 distance = 0.0f;
+    s32 result = 0;
     s32 i;
-    s32 count;
-    void* npc;
 
-    if (gp->inBattle != 0) {
-        wp += 0x14;
-    }
-    count = *(s32*)(wp + 4);
-    i = 0;
-    npc = *(void**)(wp + 0xC);
-    while (i < count) {
-        if (npc != 0 && (*(u32*)npc & 2) && (*(u32*)npc & 0x10000000) &&
-            (*(u32*)((s32)npc + 0x1D4) & 0x10000)) {
-            *(u32*)((s32)npc + 0x1D4) &= ~0x10000;
-            evtStartID(*(s32*)((s32)npc + 0x11C));
-            animPoseSetLocalTimeRate(*(void**)((s32)npc + 0x104), float_1_8041fc94);
+    for (i = 0; i < 12; i++) {
+        u8* player = marioGetPtr();
+        f32 sampleY;
+        f32 dx;
+        f32 dy;
+        f32 dz;
+        f32 baseY;
+        f32 topY;
+
+        sincosf((f32)angle, &sinA, &cosA);
+        sincosf(steps[i], &sinB, &cosB);
+        sampleY = (f32)(*(f32*)(player + 0x90) + radius * cosB);
+        dx = (f32)(sinB * (sinA * radius) + *(f32*)(player + 0x8C)) - *(f32*)(npc + 0x8C);
+        dz = (f32)(sinB * (cosA * radius) + *(f32*)(player + 0x94)) - *(f32*)(npc + 0x94);
+        baseY = *(f32*)(npc + 0x90);
+        topY = baseY + *(f32*)(npc + 0x150);
+        dy = sampleY - baseY;
+        if (sampleY > baseY) {
+            if (sampleY <= topY) {
+                dy = 0.0f;
+            } else {
+                dy = sampleY - topY;
+            }
         }
-        i++;
-        npc = (void*)((s32)npc + 0x340);
-    }
-}
-
-void* npcNameToPtr_NoAssert(s32 name) {
-    extern s32 strcmp(const char*, const char*);
-    s32 wp = (s32)&work;
-    s32 i;
-    s32 count;
-    void* npc;
-
-    if (gp->inBattle != 0) {
-        wp += 0x14;
-    }
-    count = *(s32*)(wp + 4);
-    i = 0;
-    npc = *(void**)(wp + 0xC);
-    while (i < count) {
-        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), (char*)name) == 0) {
+        distance = (f32)sqrt((f64)(dx * dx + dz * dz + dy * dy));
+        if (distance < 0.5f * *(f32*)(npc + 0x14C) + 12.0f) {
+            result = npc;
             break;
         }
-        i++;
-        npc = (void*)((s32)npc + 0x340);
     }
-    if (i >= count) {
-        return 0;
-    }
-    return npc;
+    *outDist = distance;
+    return result;
 }
 
-void npcStopForEvent(void) {
-    extern void evtStopID(s32 id);
-    extern void animPoseSetLocalTimeRate(void* pose, f32 rate);
-    extern f32 float_0_8041fc7c;
-    s32 wp = (s32)&work;
-    s32 i;
-    s32 count;
-    void* npc;
+s32 npcCheckInterrupt(void* pNpc) {
+    extern void* evtGetPtrID(s32 id);
+    extern void* evtEntry(void* code, s32 order, u32 flags);
+    extern void evtDeleteID(s32 id);
+    extern const f32 float_0_8041fc7c;
+    void* entry;
+    u32 interruptFlags;
 
-    if (gp->inBattle != 0) {
-        wp += 0x14;
-    }
-    count = *(s32*)(wp + 4);
-    i = 0;
-    npc = *(void**)(wp + 0xC);
-    while (i < count) {
-        if (npc != 0 && (*(u32*)npc & 2) && (*(u32*)npc & 0x10000000)) {
-            *(u32*)((s32)npc + 0x1D4) |= 0x10000;
-            evtStopID(*(s32*)((s32)npc + 0x11C));
-            animPoseSetLocalTimeRate(*(void**)((s32)npc + 0x104), float_0_8041fc7c);
+    evtGetPtrID(*(s32*)((s32)pNpc + 0x11C));
+    interruptFlags = *(u32*)((s32)pNpc + 0x140);
+    if ((interruptFlags & ~0xF00) != 0) {
+        entry = 0;
+        if ((interruptFlags & 0x10) != 0 && *(void**)((s32)pNpc + 0x12C) != 0) {
+            entry = evtEntry(*(void**)((s32)pNpc + 0x12C), 0, 0x20);
+            *(u8*)((s32)entry + 0x10) = 8;
+            *(void**)((s32)entry + 0x170) = pNpc;
+        } else if ((interruptFlags & 0x10000000) != 0 && *(void**)((s32)pNpc + 0x124) != 0) {
+            entry = evtEntry(*(void**)((s32)pNpc + 0x124), 0, 0x20);
+            *(u8*)((s32)entry + 0x10) = 1;
+            *(void**)((s32)entry + 0x170) = pNpc;
+        } else if ((interruptFlags & 8) != 0 && *(void**)((s32)pNpc + 0x13C) != 0) {
+            entry = evtEntry(*(void**)((s32)pNpc + 0x13C), 0, 0x20);
+            *(u8*)((s32)entry + 0x10) = 5;
+            *(void**)((s32)entry + 0x170) = pNpc;
+        } else if ((interruptFlags & 1) != 0 && *(void**)((s32)pNpc + 0x130) != 0 &&
+                   (*(u32*)((s32)pNpc + 0x1D4) & 0x1000) == 0 &&
+                   (*(u32*)pNpc & 0x200000) == 0 && (interruptFlags & 0x100) == 0) {
+            entry = evtEntry(*(void**)((s32)pNpc + 0x130), 0, 0x20);
+            *(u8*)((s32)entry + 0x10) = 2;
+            *(void**)((s32)entry + 0x170) = pNpc;
+        } else if ((interruptFlags & 2) != 0 && *(void**)((s32)pNpc + 0x134) != 0 &&
+                   (*(u32*)((s32)pNpc + 0x1D4) & 0x1000) == 0 &&
+                   (*(u32*)pNpc & 0x200000) == 0) {
+            entry = evtEntry(*(void**)((s32)pNpc + 0x134), 0, 0x20);
+            *(u8*)((s32)entry + 0x10) = 3;
+            *(void**)((s32)entry + 0x170) = pNpc;
+        } else if ((interruptFlags & 4) != 0 && *(void**)((s32)pNpc + 0x138) != 0 &&
+                   (*(u32*)((s32)pNpc + 0x1D4) & 0x1000) == 0 &&
+                   (*(u32*)pNpc & 0x200000) == 0) {
+            entry = evtEntry(*(void**)((s32)pNpc + 0x138), 0, 0x20);
+            *(u8*)((s32)entry + 0x10) = 4;
+            *(void**)((s32)entry + 0x170) = pNpc;
         }
-        i++;
-        npc = (void*)((s32)npc + 0x340);
-    }
-}
 
-void npcBlurOff(char* name) {
-    extern s32 strcmp(const char*, const char*);
-    s32 wp = (s32)&work;
-    void* npc;
-    s32 count;
-    s32 i;
-
-    if (gp->inBattle != 0) {
-        wp += 0x14;
-    }
-    count = *(s32*)(wp + 4);
-    i = 0;
-    npc = *(void**)(wp + 0xC);
-    while (i < count) {
-        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), name) == 0) {
-            break;
-        }
-        i++;
-        npc = (void*)((s32)npc + 0x340);
-    }
-    *(u32*)npc &= ~0x100;
-}
-
-void npcGetBackItemEntry(void* npc) {
-    extern void* itemEntry(void* name, s32 id, u32 mode, s32 collected,
-                           void* script, f32 x, f32 y, f32 z);
-    extern void itemFlagOn(void* item, u16 flags);
-    u8* battle = (u8*)npc + 0x230;
-    s32 zero = 0;
-    s32 i = 0;
-
-    do {
-        s32 id = *(s32*)(battle + 0x7C);
-        if (id != 0) {
-            void* item = itemEntry(0, id, 0xB, -1, 0,
-                                   *(f32*)((u8*)npc + 0x8C),
-                                   *(f32*)((u8*)npc + 0x90),
-                                   *(f32*)((u8*)npc + 0x94));
-            if (item != 0) {
-                itemFlagOn(item, 0x100);
-            }
-            *(s32*)(battle + 0x7C) = zero;
-        }
-        i++;
-        battle += 4;
-    } while (i < 8);
-}
-
-void* npcNameToPtr(s32 name) {
-    extern s32 strcmp(const char*, const char*);
-    s32 wp = (s32)&work;
-    s32 i;
-    s32 count;
-    void* npc;
-
-    if (gp->inBattle != 0) {
-        wp += 0x14;
-    }
-    count = *(s32*)(wp + 4);
-    i = 0;
-    npc = *(void**)(wp + 0xC);
-    while (i < count) {
-        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), (char*)name) == 0) {
-            break;
-        }
-        i++;
-        npc = (void*)((s32)npc + 0x340);
-    }
-    return npc;
-}
-
-void _npcDead(u32* npc, s16 scoreType) {
-    u8* fbat;
-
-    npc[0x50] |= 0x10;
-    npc[0x75] |= 4;
-    *(s16*)((u8*)npc + 0x31C) = scoreType;
-    if ((*npc & 4) == 0) {
-        return;
-    }
-    fbat = *(u8**)((u8*)gp + 0x168);
-    *(u32*)(fbat + 0x4C) |= 1 << (*(u8*)((u8*)npc + 0x314) & 0x3F);
-}
-
-u8 _fbatFirstAttackAnnouceDisp(s32 param_1, void* param_2) {
-    extern char* msgSearch(char*);
-    extern u32 FontGetMessageWidthLine(char*, s16*);
-    extern s32 irand(s32);
-    extern void windowDispGX_Waku_col(double, double, double, double, double, u16, u32*);
-    extern void FontDrawStart(void);
-    extern void FontDrawEdge(void);
-    extern void FontDrawColor(u32*);
-    extern void FontDrawScale(f32);
-    extern void FontDrawStringShake(double, double, char*);
-    extern const f32 float_0p1_8041fcdc;
-    extern const f32 float_1_8041fc94;
-    extern const f32 float_3_8041fce0;
-    extern u32 dat_8041fc78;
-    char lines[516];
-    s16 lineCount[2];
-    u32 color;
-    u32 fontColor;
-    char* msg;
-    char* out;
-    char* dst;
-    s32 i;
-    s32 j;
-    s32 r0;
-    s32 r1;
-    u32 width;
-    u32 halfWidth;
-    u32 originalLines;
-    f32 x;
-    f32 y;
-    char c;
-
-    msg = msgSearch(*(char**)((s32)param_2 + 0x18));
-    x = *(f32*)((s32)param_2 + 0x10);
-    y = *(f32*)((s32)param_2 + 0x14);
-    width = FontGetMessageWidthLine(msg, lineCount);
-    lineCount[0]++;
-    originalLines = (u32)lineCount[0];
-    r0 = irand(10000);
-    r1 = irand(10000);
-    if (lineCount[0] > 4) {
-        lineCount[0] = 4;
-    }
-    out = lines;
-    dst = out;
-    for (i = 0; i < lineCount[0]; i++, dst += 0x80) {
-        for (j = 0; j < 0x80; j++) {
-            c = *msg++;
-            if (c == 0 || c == '\n') {
-                dst[j] = 0;
-                break;
-            }
-            dst[j] = c;
+        if (entry != 0) {
+            evtDeleteID(*(s32*)((s32)pNpc + 0x11C));
+            *(s32*)((s32)pNpc + 0x11C) = *(s32*)((s32)entry + 0x15C);
+            *(u32*)((s32)pNpc + 0x140) &= 0xF00;
+            *(u32*)((s32)pNpc + 0x1D4) &= ~0x1000;
+            *(s32*)((s32)pNpc + 0x18C) = 0;
+            *(s32*)((s32)pNpc + 0x188) = 0;
+            *(f32*)((s32)pNpc + 0x1B0) = float_0_8041fc7c;
+            return 1;
         }
     }
 
-    halfWidth = (width >> 1) & 0x7FFF;
-    color = *(u32*)((s32)param_2 + 0x1C);
-    windowDispGX_Waku_col(
-        (double)(float_0p1_8041fcdc * (((x + (f32)(r0 % 5)) - 10.0f) - (f32)halfWidth)),
-        (double)((y + (f32)(r1 % 5)) * float_0p1_8041fcdc),
-        (double)((f32)((width & 0xFFFF) + 0x14) * float_0p1_8041fcdc),
-        (double)((f32)(originalLines * 0x1D + 3) * float_0p1_8041fcdc),
-        (double)float_1_8041fc94,
-        0,
-        &color);
-    FontDrawStart();
-    FontDrawEdge();
-    fontColor = dat_8041fc78;
-    FontDrawColor(&fontColor);
-    FontDrawScale(float_0p1_8041fcdc);
-    x = float_0p1_8041fcdc * (x - (f32)halfWidth);
-    out = lines;
-    for (i = 0; i < lineCount[0]; i++) {
-        FontDrawStringShake((double)x, (double)(float_0p1_8041fcdc * ((y + (f32)(-i * 0x1D)) - float_3_8041fce0)), out);
-        out += 0x80;
-    }
-    return 0;
-}
-
-u8 npcMoveG(void* pNpc) {
-    extern void* hitCheckFilter(double, double, double, double, double, double, s32, void*, void*, void*, void*, void*, void*, void*);
-    f32 oldYVel;
-    f32 addY;
-    f32 walking;
-    f32 remain;
-    f32 minAdd;
-    f32 heightPart;
-    f32 hitY;
-    f32 hitDist;
-    s32 hitTmp[3];
-    s32 hitA;
-    s32 hitB;
-    s32 hitC;
-    s32 hitD;
-    void* hit;
-    u32 jumpFlags;
-    u32 dampedJump;
-
-    oldYVel = *(f32*)((s32)pNpc + 0x1B8);
-    *(f32*)((s32)pNpc + 0x1B8) = 0.0f;
-    jumpFlags = *(u32*)((s32)pNpc + 0x1D4);
-    dampedJump = jumpFlags & 0x100000;
-    if (dampedJump != 0 && (jumpFlags & 0x10000000) == 0) {
-        oldYVel *= 0.5f;
-    }
-
-    addY = 0.0f;
-    if ((*(u32*)pNpc & 0x20000) != 0) {
-        remain = *(f32*)((s32)pNpc + 0x180);
-        walking = *(f32*)((s32)pNpc + 0x1A4);
-        if (dampedJump == 0 || (jumpFlags & 0x10000000) != 0) {
-            addY = *(f32*)((s32)pNpc + 0x1C4) * walking +
-                   -980.0f * *(f32*)((s32)pNpc + 0x1CC) * (remain * remain - (remain - walking) * (remain - walking));
-        } else {
-            addY = 0.4f * *(f32*)((s32)pNpc + 0x1C4) * walking +
-                   0.15f * -980.0f * *(f32*)((s32)pNpc + 0x1CC) * (remain * remain - (remain - walking) * (remain - walking));
-        }
-        addY *= *(f32*)((s32)pNpc + 0x1C8);
-        if (*(f32*)((s32)pNpc + 0x1D0) > 0.0f) {
-            if (dampedJump == 0) {
-                minAdd = -*(f32*)((s32)pNpc + 0x1D0) * walking;
-            } else {
-                minAdd = 0.5f * -*(f32*)((s32)pNpc + 0x1D0) * walking;
-            }
-            if (addY < minAdd) {
-                addY = minAdd;
-            }
-        }
-    }
-
-    addY += oldYVel;
-    if ((*(u32*)pNpc & 0x10) == 0) {
-        *(f32*)((s32)pNpc + 0x90) += addY;
-        if (*(f32*)((s32)pNpc + 0x90) < -1000.0f) {
-            *(f32*)((s32)pNpc + 0x90) = -1000.0f;
-        }
-    } else if (addY != 0.0f) {
-        if (addY > 0.0f) {
-            *(u32*)((s32)pNpc + 0x1D4) |= 1;
-            *(f32*)((s32)pNpc + 0x90) += addY;
-        } else {
-            heightPart = 0.8f * *(f32*)((s32)pNpc + 0x150);
-            hitDist = heightPart;
-            if (addY < 0.0f) {
-                hitDist += -addY;
-            } else {
-                hitDist += addY;
-            }
-            hit = hitCheckFilter((double)*(f32*)((s32)pNpc + 0x8C),
-                                 (double)(*(f32*)((s32)pNpc + 0x90) + heightPart),
-                                 (double)*(f32*)((s32)pNpc + 0x94),
-                                 0.0, -1.0, 0.0, 0,
-                                 hitTmp, &hitY, &hitA, &hitDist, &hitB, &hitC, &hitD);
-            *(void**)((s32)pNpc + 0x300) = hit;
-            if (hit == 0) {
-                hit = hitCheckFilter((double)(0.5f * *(f32*)((s32)pNpc + 0x14C) + *(f32*)((s32)pNpc + 0x8C)),
-                                     (double)(*(f32*)((s32)pNpc + 0x90) + heightPart),
-                                     (double)*(f32*)((s32)pNpc + 0x94),
-                                     0.0, -1.0, 0.0, 0,
-                                     hitTmp, &hitY, &hitA, &hitDist, &hitB, &hitC, &hitD);
-                *(void**)((s32)pNpc + 0x300) = hit;
-                if (hit == 0) {
-                    hit = hitCheckFilter((double)(*(f32*)((s32)pNpc + 0x8C) - 0.5f * *(f32*)((s32)pNpc + 0x14C)),
-                                         (double)(*(f32*)((s32)pNpc + 0x90) + heightPart),
-                                         (double)*(f32*)((s32)pNpc + 0x94),
-                                         0.0, -1.0, 0.0, 0,
-                                         hitTmp, &hitY, &hitA, &hitDist, &hitB, &hitC, &hitD);
-                    *(void**)((s32)pNpc + 0x300) = hit;
-                }
-            }
-            if (hit == 0) {
-                *(u32*)((s32)pNpc + 0x1D4) |= 1;
-                *(f32*)((s32)pNpc + 0x90) += addY;
-            } else {
-                *(u32*)((s32)pNpc + 0x1D4) &= ~1;
-                *(f32*)((s32)pNpc + 0x90) = hitY;
-                *(s32*)((s32)pNpc + 0x17C) = 0;
-                *(s32*)((s32)pNpc + 0x178) = 0;
-            }
-        }
-    }
+    *(u32*)((s32)pNpc + 0x140) &= 0xF00;
+    *(u32*)((s32)pNpc + 0x1D4) &= ~0x1000;
     return 0;
 }
 
@@ -3897,43 +3611,148 @@ void npcSetupBattleInfo(void* npc, void* battleInfo) {
     *(u32*)npc |= 0x10000000;
 }
 
-void npcDelete(void* npc) {
-    extern void animPoseRelease(s32 poseId);
-    u8* entry = npc;
-    s32 i;
-    u8* prev;
-    u8* next;
-    s32 wp;
+void npcSetBattleInfo(void* npc, s32 info) {
+    extern void* areaDataPtr(char* area);
+    extern void npcSetupBattleInfo(void* npc, void* setup);
+    u8* base = npc;
+    u8* setup;
+    char area[4];
+    s32 index;
 
-    for (i = 0; i < 4; i++) {
-        u8* slave = *(u8**)(entry + 0x330 + i * 4);
-        if (slave != 0) {
-            *(void**)(slave + 0x32C) = 0;
-        }
-        *(void**)(entry + 0x330 + i * 4) = 0;
-    }
-
-    prev = *(u8**)(entry + 0x324);
-    next = *(u8**)(entry + 0x328);
-    if (prev == 0) {
-        if (next != 0) *(void**)(next + 0x324) = 0;
-    } else if (next == 0) {
-        *(void**)(prev + 0x328) = 0;
+    if (info == -1) {
+        setup = 0;
     } else {
-        *(void**)(prev + 0x328) = next;
-        *(void**)(next + 0x324) = prev;
+        area[0] = *((char*)gp + 0x12C);
+        area[1] = *((char*)gp + 0x12D);
+        area[2] = *((char*)gp + 0x12E);
+        area[3] = 0;
+        setup = *(u8**)((u8*)areaDataPtr(area) + 8);
+        index = info;
+        while (index > 0) {
+            setup += 0x44;
+            index--;
+        }
     }
+    npcSetupBattleInfo(base, setup);
 
-    *(u32*)entry &= ~2;
-    if (*(s32*)(entry + 0x104) >= 0) {
-        animPoseRelease(*(s32*)(entry + 0x104));
+    index = 0;
+    do {
+        u8* child = *(u8**)(base + 0x330 + index * 4);
+        if (child != 0) {
+            u32* src = (u32*)(base + 0x22C);
+            u32* dst = (u32*)(child + 0x22C);
+            s32 count = 0x19;
+            do {
+                u32 first = src[1];
+                u32 second = src[2];
+                src += 2;
+                dst[1] = first;
+                dst += 2;
+                dst[0] = second;
+                count--;
+            } while (count != 0);
+        }
+        index++;
+    } while (index < 4);
+}
+
+void npcStopForEvent(void) {
+    extern void evtStopID(s32 id);
+    extern void animPoseSetLocalTimeRate(void* pose, f32 rate);
+    extern f32 float_0_8041fc7c;
+    s32 wp = (s32)&work;
+    s32 i;
+    s32 count;
+    void* npc;
+
+    if (gp->inBattle != 0) {
+        wp += 0x14;
     }
-    *(s32*)(entry + 0x104) = -1;
-    *(u32*)entry &= ~1;
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if (npc != 0 && (*(u32*)npc & 2) && (*(u32*)npc & 0x10000000)) {
+            *(u32*)((s32)npc + 0x1D4) |= 0x10000;
+            evtStopID(*(s32*)((s32)npc + 0x11C));
+            animPoseSetLocalTimeRate(*(void**)((s32)npc + 0x104), float_0_8041fc7c);
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+}
 
-    wp = (s32)&work;
-    if (gp->inBattle != 0) wp += 0x14;
-    *(s32*)wp -= 1;
+void npcStopForOneEvent(void* npc) {
+    extern void evtStopID(s32 id);
+    extern void animPoseSetLocalTimeRate(void* pose, f32 rate);
+    extern f32 float_0_8041fc7c;
+    u32 flags;
+
+    if (npc == 0) {
+        return;
+    }
+    flags = *(u32*)npc;
+    if (!(flags & 2)) {
+        return;
+    }
+    if (!(flags & 0x10000000)) {
+        return;
+    }
+    *(u32*)((s32)npc + 0x1D4) |= 0x10000;
+    evtStopID(*(s32*)((s32)npc + 0x11C));
+    animPoseSetLocalTimeRate(*(void**)((s32)npc + 0x104), float_0_8041fc7c);
+}
+
+void npcStartForEvent(void) {
+    extern void evtStartID(s32 id);
+    extern void animPoseSetLocalTimeRate(void* pose, f32 rate);
+    extern f32 float_1_8041fc94;
+    s32 wp = (s32)&work;
+    s32 i;
+    s32 count;
+    void* npc;
+
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if (npc != 0 && (*(u32*)npc & 2) && (*(u32*)npc & 0x10000000) &&
+            (*(u32*)((s32)npc + 0x1D4) & 0x10000)) {
+            *(u32*)((s32)npc + 0x1D4) &= ~0x10000;
+            evtStartID(*(s32*)((s32)npc + 0x11C));
+            animPoseSetLocalTimeRate(*(void**)((s32)npc + 0x104), float_1_8041fc94);
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+}
+
+void npcStartForOneEvent(void* npc) {
+    extern void evtStartID(s32 id);
+    extern void animPoseSetLocalTimeRate(void* pose, f32 rate);
+    extern f32 float_1_8041fc94;
+    u32 flags;
+
+    if (npc == 0) {
+        return;
+    }
+    flags = *(u32*)npc;
+    if (!(flags & 2)) {
+        return;
+    }
+    if (!(flags & 0x10000000)) {
+        return;
+    }
+    flags = *(u32*)((s32)npc + 0x1D4);
+    if (!(flags & 0x10000)) {
+        return;
+    }
+    *(u32*)((s32)npc + 0x1D4) = flags & ~0x10000;
+    evtStartID(*(s32*)((s32)npc + 0x11C));
+    animPoseSetLocalTimeRate(*(void**)((s32)npc + 0x104), float_1_8041fc94);
 }
 
 void npcSetColor(char* name, void* color) {
@@ -3959,106 +3778,370 @@ void npcSetColor(char* name, void* color) {
     *(s32*)((s32)npc + 0x114) = *(s32*)color;
 }
 
-s32 npcEntry(char* name, char* modelName) {
+void npcBlurOn(char* name) {
     extern s32 strcmp(const char*, const char*);
-    extern void* memset(void*, int, unsigned long);
-    extern char* strcpy(char*, const char*);
-    extern s32 animPoseEntry(char*, u32);
-    extern void animPosePeraOn(s32);
-    extern f32 animPoseGetHeight(s32);
-    extern f32 animPoseGetRadius(s32);
-    extern s32 animPoseGetVivianType(s32);
-    extern void animPoseSetMaterialLightFlagOn(s32, u32);
-    extern s32 vec3_802c11f8[];
-    extern s32 vec3_802c1204[];
-    extern char str_hoshi_8041fd6c;
-    extern char str_M_I_2_8041fd74;
-    extern char str_c_luigi_802c1468[];
-    extern const f32 float_1_8041fc94;
-    extern const f32 float_0_8041fc7c;
-    extern s32 dat_8041fc6c;
-    s32 wp;
-    s32 max;
-    s32 npc;
-    s32 index;
+    s32 wp = (s32)&work;
+    void* npc;
+    s32 count;
     s32 i;
-    s32 data;
 
-    data = (s32)&work;
-    wp = (s32)vec3_802c11f8;
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        data += 0x14;
+    if (gp->inBattle != 0) {
+        wp += 0x14;
     }
-
-    max = *(s32*)(data + 4);
-    index = 0;
-    npc = *(s32*)(data + 0xC);
-    while (index < max) {
-        if ((*(u32*)npc & 1) != 0 && strcmp((char*)(npc + 8), name) == 0) {
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), name) == 0) {
             break;
         }
-        index++;
-        npc += 0x340;
+        i++;
+        npc = (void*)((s32)npc + 0x340);
     }
+    *(u32*)npc |= 0x100;
+    *(s32*)((s32)npc + 0xA4) = *(s32*)((s32)npc + 0x8C);
+    *(s32*)((s32)npc + 0xA8) = *(s32*)((s32)npc + 0x90);
+    *(s32*)((s32)npc + 0xAC) = *(s32*)((s32)npc + 0x94);
+    *(s32*)((s32)npc + 0xB0) = *(s32*)((s32)npc + 0x8C);
+    *(s32*)((s32)npc + 0xB4) = *(s32*)((s32)npc + 0x90);
+    *(s32*)((s32)npc + 0xB8) = *(s32*)((s32)npc + 0x94);
+    *(s32*)((s32)npc + 0xBC) = *(s32*)((s32)npc + 0x8C);
+    *(s32*)((s32)npc + 0xC0) = *(s32*)((s32)npc + 0x90);
+    *(s32*)((s32)npc + 0xC4) = *(s32*)((s32)npc + 0x94);
+    *(s32*)((s32)npc + 0xC8) = *(s32*)((s32)npc + 0x8C);
+    *(s32*)((s32)npc + 0xCC) = *(s32*)((s32)npc + 0x90);
+    *(s32*)((s32)npc + 0xD0) = *(s32*)((s32)npc + 0x94);
+    *(s32*)((s32)npc + 0xD4) = *(s32*)((s32)npc + 0x8C);
+    *(s32*)((s32)npc + 0xD8) = *(s32*)((s32)npc + 0x90);
+    *(s32*)((s32)npc + 0xDC) = *(s32*)((s32)npc + 0x94);
+}
 
-    npc = *(s32*)(data + 0xC);
+void npcBlurOff(char* name) {
+    extern s32 strcmp(const char*, const char*);
+    s32 wp = (s32)&work;
+    void* npc;
+    s32 count;
+    s32 i;
+
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
     i = 0;
-    if (max > 0) {
-        for (;;) {
-            if ((*(u32*)npc & 1) == 0) {
-                break;
-            }
-            i++;
-            npc += 0x340;
-            if (i >= max) {
-                break;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if ((*(u32*)npc & 1) && strcmp((char*)((s32)npc + 8), name) == 0) {
+            break;
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+    *(u32*)npc &= ~0x100;
+}
+
+void* npcGetBtlSetupWork(void* npc, s32 index) {
+    s32 offset = index << 2;
+    npc = (void*)((s32)npc + offset);
+    return *(void**)((s32)npc + 0x2CC);
+}
+
+void npcSetBtlSetupWork(void* npc, s32 index, void* value) {
+    s32 offset = index << 2;
+    npc = (void*)((s32)npc + offset);
+    *(void**)((s32)npc + 0x2CC) = value;
+}
+
+void npcSetSlave(void* master, void* slave, s32 index) {
+    s32 offset;
+    *(void**)((s32)slave + 0x32C) = master;
+    offset = index << 2;
+    master = (void*)((s32)master + offset);
+    *(void**)((s32)master + 0x330) = slave;
+}
+
+void npcSetLink(void* a, void* b) {
+    *(void**)((s32)a + 0x328) = b;
+    *(void**)((s32)b + 0x324) = a;
+}
+
+void* dbGetDefData(void* entry, const char* name) {
+    extern s32 strcmp(const char* s1, const char* s2);
+    void* ret = 0;
+
+    for (;;) {
+        char* current = *(char**)entry;
+        if (current == 0) {
+            break;
+        }
+        if (strcmp(current, name) == 0) {
+            ret = *(void**)((s32)entry + 4);
+            break;
+        }
+        entry = (void*)((s32)entry + 8);
+    }
+    return ret;
+}
+
+void npcExecAllInitEvt(void) {
+    extern s32 evtEntry(void* script, s32 type, s32 flags);
+    extern void evtDeleteID(s32 id);
+    s32 wp = (s32)&work;
+    s32 i;
+    s32 count;
+    void* npc;
+
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if (npc != 0 && (*(u32*)npc & 1)) {
+            if (*(void**)((s32)npc + 0x120) != 0) {
+                if (*(s32*)((s32)npc + 0x118) != 0) {
+                    evtDeleteID(*(s32*)((s32)npc + 0x118));
+                }
+                {
+                    s32 evt = evtEntry(*(void**)((s32)npc + 0x120), 0, 0);
+                    *(u8*)(evt + 0x10) = 0;
+                    *(void**)(evt + 0x170) = npc;
+                    *(s32*)((s32)npc + 0x118) = *(s32*)(evt + 0x15C);
+                }
+            } else {
+                *(s32*)((s32)npc + 0x118) = 0;
             }
         }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+}
+
+s32 npcWaitAllInitEvtEnd(void) {
+    extern s32 evtCheckID(s32 id);
+    s32 wp = (s32)&work;
+    s32 ret;
+    s32 i;
+    s32 count;
+    void* npc;
+
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    ret = 1;
+    npc = *(void**)(wp + 0xC);
+    i = 0;
+    while (i < count) {
+        if (npc != 0 && (*(u32*)npc & 1) && !(*(u32*)npc & 2)) {
+            u32 flags = *(u32*)npc;
+            s32 id = *(s32*)((s32)npc + 0x118);
+            if (id != 0) {
+                ret = 0;
+                if (evtCheckID(id) == 0) {
+                    *(s32*)((s32)npc + 0x118) = 0;
+                    *(u32*)npc |= 2;
+                }
+            } else {
+                *(u32*)npc = flags | 2;
+            }
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+    return ret;
+}
+
+void npcExecAllReglEvt(void) {
+    extern s32 evtEntry(void* script, s32 type, s32 flags);
+    extern void evtDeleteID(s32 id);
+    s32 wp = (s32)&work;
+    s32 i;
+    s32 count;
+    void* npc;
+
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    i = 0;
+    npc = *(void**)(wp + 0xC);
+    while (i < count) {
+        if (npc != 0 && (*(u32*)npc & 1) && *(void**)((s32)npc + 0x124) != 0) {
+            if (*(s32*)((s32)npc + 0x11C) != 0) {
+                evtDeleteID(*(s32*)((s32)npc + 0x11C));
+            }
+            {
+                s32 evt = evtEntry(*(void**)((s32)npc + 0x124), 0, 0x20);
+                *(u8*)(evt + 0x10) = 1;
+                *(void**)(evt + 0x170) = npc;
+                *(s32*)((s32)npc + 0x11C) = *(s32*)(evt + 0x15C);
+            }
+        }
+        i++;
+        npc = (void*)((s32)npc + 0x340);
+    }
+}
+
+s32 _check(void* event, BOOL isFirstCall) {
+    extern void* pouchGetPtr(void);
+    extern void evtSetValue(void* event, s32 dst, s32 value);
+    s32* args = *(s32**)((s32)event + 0x18);
+    s32 dst = args[0];
+
+    if (*(u8*)((s32)pouchGetPtr() + 0x5B8) != 0) {
+        evtSetValue(event, dst, 0);
+    } else {
+        evtSetValue(event, dst, 1);
+    }
+    return 2;
+}
+
+s32 _majinai_effect(void* pEvt, s32 firstCall) {
+    extern void* marioGetPtr(void);
+    extern void* effMajinaiEntry(f32 x, f32 y, f32 z, s32 type);
+    extern void effSetName(void* effect, char* name);
+    extern void* effNameToPtr(char* name);
+    extern f32 float_16_8041fc8c;
+    extern f32 float_0p8_8041fc90;
+    extern char str_mjef_coinup_802c13b8[];
+    u8* evt = pEvt;
+    u8* player = marioGetPtr();
+    void* effect;
+
+    if (firstCall != 0) {
+        effect = effMajinaiEntry(*(f32*)(player + 0x8C),
+                                 float_16_8041fc8c + *(f32*)(player + 0x90) +
+                                     *(f32*)(player + 0xFC),
+                                 *(f32*)(player + 0x94), 0);
+        *(void**)(evt + 0x78) = effect;
+        *(f32*)(*(u8**)((u8*)effect + 0xC) + 0x10) = float_0p8_8041fc90;
+        effSetName(effect, str_mjef_coinup_802c13b8);
+    }
+    if (*(void**)(evt + 0x78) == 0 || effNameToPtr(str_mjef_coinup_802c13b8) == 0) {
+        return 2;
+    }
+    return 0;
+}
+
+void npcGetBackItemEntry(void* npc) {
+    extern void* itemEntry(void* name, s32 id, u32 mode, s32 collected,
+                           void* script, f32 x, f32 y, f32 z);
+    extern void itemFlagOn(void* item, u16 flags);
+    u8* battle = (u8*)npc + 0x230;
+    s32 zero = 0;
+    s32 i = 0;
+
+    do {
+        s32 id = *(s32*)(battle + 0x7C);
+        if (id != 0) {
+            void* item = itemEntry(0, id, 0xB, -1, 0,
+                                   *(f32*)((u8*)npc + 0x8C),
+                                   *(f32*)((u8*)npc + 0x90),
+                                   *(f32*)((u8*)npc + 0x94));
+            if (item != 0) {
+                itemFlagOn(item, 0x100);
+            }
+            *(s32*)(battle + 0x7C) = zero;
+        }
+        i++;
+        battle += 4;
+    } while (i < 8);
+}
+
+void npcClearDeadInfo(void) {
+    extern void* memset(void*, int, unsigned long);
+    memset((void*)((s32)*(void**)((s32)gp + 0x168) + 0x4C), 0, 0x500);
+}
+
+void npcKoopaModeEncountCheck(void) {
+    extern s32 kpaEnemyHitChk(f64 x, f64 y, f64 z, f64 height, f64 width);
+    extern void npcGroupDead(void* npc, s32 scoreType);
+    extern void kpaPowDown(void);
+    extern char* hitGetName(void* hit);
+    extern s32 strcmp(const char* lhs, const char* rhs);
+    extern char str_a_magu_802c138c[];
+    s32 wp = (s32)&work;
+    s32 count;
+    s32 i;
+    u8* npc;
+
+    if (gp->inBattle != 0) {
+        wp += 0x14;
+    }
+    count = *(s32*)(wp + 4);
+    if (*(s16*)*(u8**)((u8*)gp + 0x168) != 1) {
+        return;
     }
 
-    memset((void*)npc, 0, 0x340);
-    *(u32*)npc = 3;
-    strcpy((char*)(npc + 8), name);
-    *(s32*)(npc + 0x104) = animPoseEntry(modelName, (*(s32*)((s32)gp + 0x14) != 0));
-    if (*(s32*)(npc + 0x104) == -2) {
-        *(s32*)(npc + 0x104) = animPoseEntry(&str_hoshi_8041fd6c, (*(s32*)((s32)gp + 0x14) != 0));
+    npc = *(u8**)(wp + 0xC);
+    for (i = 0; i < count; i++, npc += 0x340) {
+        s32 hit;
+        u32 flags;
+
+        if (npc == 0) {
+            continue;
+        }
+        flags = *(u32*)npc;
+        if ((flags & 1) == 0 || (flags & 0x08000000) == 0 ||
+            (*(u32*)(npc + 0x1D4) & 4) != 0) {
+            continue;
+        }
+
+        hit = kpaEnemyHitChk(*(f32*)(npc + 0x8C), *(f32*)(npc + 0x90),
+                            *(f32*)(npc + 0x94), *(f32*)(npc + 0x150),
+                            *(f32*)(npc + 0x14C));
+        switch (hit) {
+            case 1:
+                if ((*(u32*)(npc + 0x318) & 1) == 0) npcGroupDead(npc, 1);
+                break;
+            case 2:
+                if ((*(u32*)(npc + 0x318) & 2) == 0) npcGroupDead(npc, 2);
+                break;
+            case 3:
+                if ((*(u32*)(npc + 0x318) & 4) == 0) npcGroupDead(npc, 4);
+                break;
+            case 4:
+                kpaPowDown();
+                break;
+            default:
+                if ((*(u32*)(npc + 0x318) & 0x10) == 0 &&
+                    *(void**)(npc + 0x300) != 0 &&
+                    strcmp(hitGetName(*(void**)(npc + 0x300)), str_a_magu_802c138c) == 0) {
+                    npcGroupDead(npc, 0x10);
+                }
+                break;
+        }
     }
-    animPosePeraOn(*(s32*)(npc + 0x104));
-    *(s32*)(npc + 0x8C) = *(s32*)wp;
-    *(s32*)(npc + 0x90) = *(s32*)(wp + 4);
-    *(s32*)(npc + 0x94) = *(s32*)(wp + 8);
-    *(s32*)(npc + 0x98) = *(s32*)(npc + 0x8C);
-    *(s32*)(npc + 0x9C) = *(s32*)(npc + 0x90);
-    *(s32*)(npc + 0xA0) = *(s32*)(npc + 0x94);
-    *(f32*)(npc + 0x14C) = animPoseGetHeight(*(s32*)(npc + 0x104));
-    *(f32*)(npc + 0x150) = animPoseGetRadius(*(s32*)(npc + 0x104));
-    *(s32*)(npc + 0xE0) = *(s32*)(wp + 0xC);
-    *(s32*)(npc + 0xE4) = *(s32*)(wp + 0x10);
-    *(s32*)(npc + 0xE8) = *(s32*)(wp + 0x14);
-    *(f32*)(npc + 0x154) = float_1_8041fc94;
-    *(s32*)(npc + 0x108) = 0;
-    *(char**)(npc + 0x10C) = &str_M_I_2_8041fd74;
-    *(s32*)(npc + 0x19C) = *(s32*)((s32)gp + 0x3C);
-    *(s32*)(npc + 0x198) = *(s32*)((s32)gp + 0x38);
-    *(s32*)(npc + 0x18C) = 0;
-    *(s32*)(npc + 0x188) = 0;
-    *(f32*)(npc + 0x1CC) = float_1_8041fc94;
-    *(f32*)(npc + 0x1D0) = float_0_8041fc7c;
-    *(f32*)(npc + 0x1C8) = float_1_8041fc94;
-    *(s32*)(npc + 0x110) = -1;
-    *(s32*)(npc + 0x114) = dat_8041fc6c;
-    *(s32*)(npc + 0x1F4) = 4;
-    *(s32*)(npc + 0x2F8) = 0;
-    *(u8*)(npc + 0x317) = 1;
-    if (animPoseGetVivianType(*(s32*)(npc + 0x104)) != 0) {
-        *(u32*)npc |= 0x4000000;
+}
+
+s32 npcKoopaModeMobjBoundDeadCheck(void* hit) {
+    extern void npcGroupDead(void* npc, s32 scoreType);
+    u8* npcWork = (u8*)&work;
+    u8* npc;
+    s32 count;
+    s32 i;
+    s32 result = 0;
+
+    if (*(s32*)((u8*)gp + 0x14) != 0) npcWork += 0x14;
+    if (hit == 0) return 0;
+    count = *(s32*)(npcWork + 4);
+    npc = *(u8**)(npcWork + 0xC);
+    for (i = 0; i < count; i++, npc += 0x340) {
+        if (npc != 0 && (*(u32*)npc & 1) != 0 &&
+            (*(u32*)npc & 0x08000000) != 0 &&
+            (*(u32*)(npc + 0x1D4) & 4) == 0 &&
+            (*(u16*)(npc + 0x31E) & 8) == 0 &&
+            *(void**)(npc + 0x300) == hit) {
+            npcGroupDead(npc, 8);
+            result++;
+        }
     }
-    if (strcmp(modelName, (char*)(wp + 0x270)) == 0) {
-        *(u32*)npc |= 0x800000;
-    }
-    animPoseSetMaterialLightFlagOn(*(s32*)(npc + 0x104), 2);
-    *(s32*)data = *(s32*)data + 1;
-    return i;
+    return result;
+}
+
+void fbatSandersBombTriggerOn(void) {
+    *(u8*)((s32)*(void**)((s32)gp + 0x168) + 0x54D) = 1;
 }
 
 s32 npcCalcScore(void* npc) {
@@ -4091,105 +4174,6 @@ s32 npcCalcScore(void* npc) {
     return score;
 }
 
-s32 npcKoopaModeMobjBoundDeadCheck(void* hit) {
-    extern void npcGroupDead(void* npc, s32 scoreType);
-    u8* npcWork = (u8*)&work;
-    u8* npc;
-    s32 count;
-    s32 i;
-    s32 result = 0;
-
-    if (*(s32*)((u8*)gp + 0x14) != 0) npcWork += 0x14;
-    if (hit == 0) return 0;
-    count = *(s32*)(npcWork + 4);
-    npc = *(u8**)(npcWork + 0xC);
-    for (i = 0; i < count; i++, npc += 0x340) {
-        if (npc != 0 && (*(u32*)npc & 1) != 0 &&
-            (*(u32*)npc & 0x08000000) != 0 &&
-            (*(u32*)(npc + 0x1D4) & 4) == 0 &&
-            (*(u16*)(npc + 0x31E) & 8) == 0 &&
-            *(void**)(npc + 0x300) == hit) {
-            npcGroupDead(npc, 8);
-            result++;
-        }
-    }
-    return result;
-}
-
-void npcGroupDead(void* npc, s32 scoreType) {
-    extern void _npcGroupDead(u32* npc, s32 scoreType);
-    u8* current = npc;
-
-    if (*(void**)(current + 0x32C) != 0) {
-        current = *(u8**)(current + 0x32C);
-    }
-    while (*(void**)(current + 0x324) != 0) {
-        current = *(u8**)(current + 0x324);
-    }
-    _npcGroupDead((u32*)current, scoreType);
-}
-
-s32 npcCheckInterrupt(void* pNpc) {
-    extern void* evtGetPtrID(s32 id);
-    extern void* evtEntry(void* code, s32 order, u32 flags);
-    extern void evtDeleteID(s32 id);
-    extern const f32 float_0_8041fc7c;
-    void* entry;
-    u32 interruptFlags;
-
-    evtGetPtrID(*(s32*)((s32)pNpc + 0x11C));
-    interruptFlags = *(u32*)((s32)pNpc + 0x140);
-    if ((interruptFlags & ~0xF00) != 0) {
-        entry = 0;
-        if ((interruptFlags & 0x10) != 0 && *(void**)((s32)pNpc + 0x12C) != 0) {
-            entry = evtEntry(*(void**)((s32)pNpc + 0x12C), 0, 0x20);
-            *(u8*)((s32)entry + 0x10) = 8;
-            *(void**)((s32)entry + 0x170) = pNpc;
-        } else if ((interruptFlags & 0x10000000) != 0 && *(void**)((s32)pNpc + 0x124) != 0) {
-            entry = evtEntry(*(void**)((s32)pNpc + 0x124), 0, 0x20);
-            *(u8*)((s32)entry + 0x10) = 1;
-            *(void**)((s32)entry + 0x170) = pNpc;
-        } else if ((interruptFlags & 8) != 0 && *(void**)((s32)pNpc + 0x13C) != 0) {
-            entry = evtEntry(*(void**)((s32)pNpc + 0x13C), 0, 0x20);
-            *(u8*)((s32)entry + 0x10) = 5;
-            *(void**)((s32)entry + 0x170) = pNpc;
-        } else if ((interruptFlags & 1) != 0 && *(void**)((s32)pNpc + 0x130) != 0 &&
-                   (*(u32*)((s32)pNpc + 0x1D4) & 0x1000) == 0 &&
-                   (*(u32*)pNpc & 0x200000) == 0 && (interruptFlags & 0x100) == 0) {
-            entry = evtEntry(*(void**)((s32)pNpc + 0x130), 0, 0x20);
-            *(u8*)((s32)entry + 0x10) = 2;
-            *(void**)((s32)entry + 0x170) = pNpc;
-        } else if ((interruptFlags & 2) != 0 && *(void**)((s32)pNpc + 0x134) != 0 &&
-                   (*(u32*)((s32)pNpc + 0x1D4) & 0x1000) == 0 &&
-                   (*(u32*)pNpc & 0x200000) == 0) {
-            entry = evtEntry(*(void**)((s32)pNpc + 0x134), 0, 0x20);
-            *(u8*)((s32)entry + 0x10) = 3;
-            *(void**)((s32)entry + 0x170) = pNpc;
-        } else if ((interruptFlags & 4) != 0 && *(void**)((s32)pNpc + 0x138) != 0 &&
-                   (*(u32*)((s32)pNpc + 0x1D4) & 0x1000) == 0 &&
-                   (*(u32*)pNpc & 0x200000) == 0) {
-            entry = evtEntry(*(void**)((s32)pNpc + 0x138), 0, 0x20);
-            *(u8*)((s32)entry + 0x10) = 4;
-            *(void**)((s32)entry + 0x170) = pNpc;
-        }
-
-        if (entry != 0) {
-            evtDeleteID(*(s32*)((s32)pNpc + 0x11C));
-            *(s32*)((s32)pNpc + 0x11C) = *(s32*)((s32)entry + 0x15C);
-            *(u32*)((s32)pNpc + 0x140) &= 0xF00;
-            *(u32*)((s32)pNpc + 0x1D4) &= ~0x1000;
-            *(s32*)((s32)pNpc + 0x18C) = 0;
-            *(s32*)((s32)pNpc + 0x188) = 0;
-            *(f32*)((s32)pNpc + 0x1B0) = float_0_8041fc7c;
-            return 1;
-        }
-    }
-
-    *(u32*)((s32)pNpc + 0x140) &= 0xF00;
-    *(u32*)((s32)pNpc + 0x1D4) &= ~0x1000;
-    return 0;
-}
-
 s32 npcCheckBlow(void* npc) {
     extern f32 cloudGetBreathPower(f32 width, void* position);
     extern f32 float_0_8041fc7c;
@@ -4213,4 +4197,20 @@ s32 npcCheckBlow(void* npc) {
     bottom[1] = *(f32*)((u8*)npc + 0x90) - *(f32*)((u8*)npc + 0x150);
     bottom[2] = *(f32*)((u8*)npc + 0x94);
     return cloudGetBreathPower(*(f32*)((u8*)npc + 0x14C), bottom) > float_0_8041fc7c;
+}
+
+s32 N_fbatPreventMarioEventChk(void) {
+    s32 mode = *(s16*)*(void**)((s32)gp + 0x168);
+    if (mode == 0) {
+        goto ok;
+    }
+    if (mode == 1) {
+        goto ok;
+    }
+    if (mode == 8) {
+        goto ok;
+    }
+    return 1;
+ok:
+    return 0;
 }

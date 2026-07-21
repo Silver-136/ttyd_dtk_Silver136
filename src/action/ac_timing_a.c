@@ -22,6 +22,7 @@ void* camGetPtr(s32 cameraId);
 void iconDispGx(Vec3* pos, s32 flags, s32 iconId, f32 scale);
 f32 intplGetValue(s32 mode, s32 current, s32 total, f32 start, f32 end);
 void* memset(void* ptr, int value, u32 size);
+void actionCommandDisp(f32 x, f32 y);
 extern Vec3 vec3_802f01c8[];
 extern Vec3 vec3_802f01d4[];
 extern f32 float_neg200_80422710;
@@ -32,8 +33,49 @@ extern f32 float_30_80422720;
 extern f32 float_0_80422724;
 s32* _ac_timing_a_timing_tbl[4];
 
-void battleAcDelete_TimingA(void* obj) {
-    *(s32*)((s32)obj + 0x1C9C) = 0x3E8;
+
+s32 battleAcMain_TimingA(int param_1) {
+    void* work;
+    TimingADispWork* dispWork;
+    volatile s32* wait;
+
+    work = (void*)param_1;
+    wait = (volatile s32*)(param_1 + 0x1F4C);
+    dispWork = (TimingADispWork*)(param_1 + 0x1F20);
+
+    switch (*(s32*)((s32)work + 0x1C9C)) {
+        case 0:
+            memset(dispWork, 0, 0x2C);
+            dispWork->x = float_neg300_8042271c;
+            dispWork->y = float_0_80422724;
+            dispWork->timer = 0x14;
+            *(s32*)((s32)work + 0x1C9C) = 0x63;
+            *(u32*)((s32)work + 0x1F50) &= ~1;
+            *(s32*)((s32)work + 0x1CE8) = 0;
+            break;
+        case 0x64:
+            break;
+        case 0x3E8:
+            wait[2] = 0x3C;
+            *(s32*)((s32)work + 0x1C9C) = 0x3E9;
+            /* fallthrough */
+        case 0x3E9:
+            wait[2] -= 1;
+            if (wait[2] <= 0) {
+                *(s32*)((s32)work + 0x1C9C) = 0x3EA;
+            }
+            break;
+        case 0x3EA:
+            *(s32*)((s32)work + 0x1CA0) = 0;
+            *(s32*)((s32)work + 0x1CA8) = 0;
+            *(s32*)((s32)work + 0x1CA4) = 0;
+            *(s32*)((s32)work + 0x1CAC) = 0;
+            return 0;
+        default:
+            break;
+    }
+
+    return 1;
 }
 
 s32 battleAcTimingA_GetSuccessFrame(void* obj) {
@@ -136,76 +178,6 @@ s32 battleAcResult_TimingA(void* battleWork) {
     return *(s32*)((s32)battleWork + 0x1CB8);
 }
 
-void actionCommandDisp(f32 x, f32 y) {
-    void* battleWork;
-    volatile s32* dispCount;
-    Vec3 posA;
-    Vec3 posB;
-
-    battleWork = _battleWorkPointer;
-    dispCount = (volatile s32*)((s32)battleWork + 0x1F20);
-    camGetPtr(8);
-
-    if ((*(u32*)((s32)battleWork + 0x1F50) & 1) != 0) {
-        posA = vec3_802f01c8[0];
-        posA.x = float_neg200_80422710 + x;
-        posA.y = float_50_80422714 + y;
-        iconDispGx(&posA, 0x10, 0x6D, float_1_80422718);
-    } else {
-        posB = vec3_802f01d4[0];
-        posB.x = float_neg200_80422710 + x;
-        posB.y = float_50_80422714 + y;
-        iconDispGx(&posB, 0x10, 0x6C, float_1_80422718);
-    }
-
-    *dispCount += 1;
-}
-
-
-s32 battleAcMain_TimingA(int param_1) {
-    void* work;
-    TimingADispWork* dispWork;
-    volatile s32* wait;
-
-    work = (void*)param_1;
-    wait = (volatile s32*)(param_1 + 0x1F4C);
-    dispWork = (TimingADispWork*)(param_1 + 0x1F20);
-
-    switch (*(s32*)((s32)work + 0x1C9C)) {
-        case 0:
-            memset(dispWork, 0, 0x2C);
-            dispWork->x = float_neg300_8042271c;
-            dispWork->y = float_0_80422724;
-            dispWork->timer = 0x14;
-            *(s32*)((s32)work + 0x1C9C) = 0x63;
-            *(u32*)((s32)work + 0x1F50) &= ~1;
-            *(s32*)((s32)work + 0x1CE8) = 0;
-            break;
-        case 0x64:
-            break;
-        case 0x3E8:
-            wait[2] = 0x3C;
-            *(s32*)((s32)work + 0x1C9C) = 0x3E9;
-            /* fallthrough */
-        case 0x3E9:
-            wait[2] -= 1;
-            if (wait[2] <= 0) {
-                *(s32*)((s32)work + 0x1C9C) = 0x3EA;
-            }
-            break;
-        case 0x3EA:
-            *(s32*)((s32)work + 0x1CA0) = 0;
-            *(s32*)((s32)work + 0x1CA8) = 0;
-            *(s32*)((s32)work + 0x1CA4) = 0;
-            *(s32*)((s32)work + 0x1CAC) = 0;
-            return 0;
-        default:
-            break;
-    }
-
-    return 1;
-}
-
 
 void battleAcDisp_TimingA(s32 param_1, void* battleWork) {
     volatile TimingADispWork* dispWork;
@@ -245,4 +217,33 @@ void battleAcDisp_TimingA(s32 param_1, void* battleWork) {
         default:
             break;
     }
+}
+
+void battleAcDelete_TimingA(void* obj) {
+    *(s32*)((s32)obj + 0x1C9C) = 0x3E8;
+}
+
+void actionCommandDisp(f32 x, f32 y) {
+    void* battleWork;
+    volatile s32* dispCount;
+    Vec3 posA;
+    Vec3 posB;
+
+    battleWork = _battleWorkPointer;
+    dispCount = (volatile s32*)((s32)battleWork + 0x1F20);
+    camGetPtr(8);
+
+    if ((*(u32*)((s32)battleWork + 0x1F50) & 1) != 0) {
+        posA = vec3_802f01c8[0];
+        posA.x = float_neg200_80422710 + x;
+        posA.y = float_50_80422714 + y;
+        iconDispGx(&posA, 0x10, 0x6D, float_1_80422718);
+    } else {
+        posB = vec3_802f01d4[0];
+        posB.x = float_neg200_80422710 + x;
+        posB.y = float_50_80422714 + y;
+        iconDispGx(&posB, 0x10, 0x6C, float_1_80422718);
+    }
+
+    *dispCount += 1;
 }

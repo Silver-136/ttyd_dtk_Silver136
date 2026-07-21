@@ -28,47 +28,6 @@ extern u32 unk_80429908;
 extern f32 float_10_80428a78;
 extern const Vec vec3_80302b58;
 extern char str_Queen2_80302b70[];
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void effQueen2Disp(s32 cameraId, void* entry) {
-    u32 color;
-    u32 tempColor;
-    Mtx trans;
-    Mtx scaleMtx;
-    void* work = *(void**)((s32)entry + 0xC);
-    void* camera = camGetPtr(cameraId);
-    f32 scale;
-
-    GXSetNumChans(1);
-    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
-    tempColor = unk_80429908;
-    ((u8*)&tempColor)[3] = (u8)*(s32*)((s32)work + 0x18);
-    color = tempColor;
-    GXSetChanMatColor(4, &color);
-    GXSetNumTexGens(0);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(0, 0xFF, 0xFF, 4);
-    GXSetTevOp(0, 4);
-    GXSetCullMode(2);
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 1);
-    GXSetVtxDesc(0xD, 1);
-    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
-    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
-    PSMTXTrans(trans, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
-    scale = float_10_80428a78 * *(f32*)((s32)work + 0x10);
-    PSMTXScale(scaleMtx, scale, scale, scale);
-    PSMTXConcat(trans, scaleMtx, scaleMtx);
-    PSMTXConcat((void*)((s32)camera + 0x11C), scaleMtx, scaleMtx);
-    GXLoadPosMtxImm(scaleMtx, 0);
-    GXSetCurrentMtx(0);
-    GXSetCullMode(2);
-    GXDrawSphere(0x10, 0x10);
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effQueen2Entry(s32 type, f32 x, f32 y, f32 z) {
@@ -216,6 +175,47 @@ void effQueen2Main(void* entry) {
     }
     dispCalcZ(&pos);
     dispEntry(4, 2, effQueen2Disp, 0.0f, entry);
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void effQueen2Disp(s32 cameraId, void* entry) {
+    u32 color;
+    u32 tempColor;
+    Mtx trans;
+    Mtx scaleMtx;
+    void* work = *(void**)((s32)entry + 0xC);
+    void* camera = camGetPtr(cameraId);
+    f32 scale;
+
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    tempColor = unk_80429908;
+    ((u8*)&tempColor)[3] = (u8)*(s32*)((s32)work + 0x18);
+    color = tempColor;
+    GXSetChanMatColor(4, &color);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0xFF, 0xFF, 4);
+    GXSetTevOp(0, 4);
+    GXSetCullMode(2);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+    PSMTXTrans(trans, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
+    scale = float_10_80428a78 * *(f32*)((s32)work + 0x10);
+    PSMTXScale(scaleMtx, scale, scale, scale);
+    PSMTXConcat(trans, scaleMtx, scaleMtx);
+    PSMTXConcat((void*)((s32)camera + 0x11C), scaleMtx, scaleMtx);
+    GXLoadPosMtxImm(scaleMtx, 0);
+    GXSetCurrentMtx(0);
+    GXSetCullMode(2);
+    GXDrawSphere(0x10, 0x10);
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on

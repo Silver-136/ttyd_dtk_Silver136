@@ -10,229 +10,138 @@ void GXSetZMode(s32 enable, s32 func, s32 update);
 void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
 void GXSetZCompLoc(s32 beforeTex);
 void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+void msgDispKeyWait_render(void* anim);
+void msgLoad(char* roomName, s32 index);
 
-void* L_msgGetWork(void) {
-    return &msgWork;
-}
-
-s32 _ismbblead(s32 c) {
-    u32 value;
-
-    if (*(void**)((s32)gp + 0x16C) != 0) {
-        return 0;
-    }
-
-    value = (u8)c;
-    if ((value >= 0x81 && value <= 0x9F) || (value >= 0xE0 && value <= 0xFC)) {
-        return 1;
-    }
-    return 0;
-}
-
-void msgWindow_Continue(s32 id) {
-    void* win = windowGetPointer(id);
-    void* obj;
+u8 msgInit(void) {
+    extern void* msgw;
+    extern s32 animPoseEntry(const char* name, s32 type);
+    extern void animPoseSetAnim(s32 pose, const char* name, s32 loop);
+    extern void animPoseSetMaterialFlagOn(s32 pose, s32 flags);
+    extern void animPoseSetMaterialFlagOff(s32 pose, s32 flags);
+    extern void animPoseSetGXFunc(s32 pose, void* func, s32 param);
+    extern const char R_no_messages_JP[];
+    char* base = (char*)R_no_messages_JP;
     void* work;
-    s32 x;
-    s32 y;
+    s32 pose;
 
-    *(u16*)win = 1;
-    *(u16*)((s32)win + 2) |= 2;
-    work = gp;
-    obj = *(void**)((s32)win + 0x28);
-    x = *(s32*)((s32)work + 0x38);
-    y = *(s32*)((s32)work + 0x3C);
-    obj = *(void**)obj;
-    *(s32*)((s32)obj + 0x34) = y;
-    *(s32*)((s32)obj + 0x30) = x;
+    pose = animPoseEntry(base + 0x390, 2);
+    *(s32*)((s32)msgw + 0x20) = pose;
+    animPoseSetAnim(*(s32*)((s32)msgw + 0x20), base + 0x398, 1);
+    animPoseSetMaterialFlagOn(*(s32*)((s32)msgw + 0x20), 0x1800);
+    animPoseSetMaterialFlagOff(*(s32*)((s32)msgw + 0x20), 0x40);
+    animPoseSetGXFunc(*(s32*)((s32)msgw + 0x20), msgDispKeyWait_render, 0);
+    work = msgw;
+    *(s32*)((s32)work + 4) = 0;
+    *(s32*)((s32)msgw + 0xC) = 0;
+    *(s32*)((s32)msgw + 0x14) = 0;
+    *(s32*)((s32)msgw + 0x1C) = 0;
+    msgLoad(base + 0x3A0, 1);
 }
 
-void msgWindow_Delete(void* win) {
-    void* ptr = *(void**)((s32)win + 0x28);
-
-    if (ptr != 0) {
-        s32 count = *(s32*)(*(s32*)ptr + 0x38);
-
-        while (count > 0) {
-            count--;
-        }
-        smartFree(ptr);
-        *(void**)((s32)win + 0x28) = 0;
-    }
-}
-
-void msgDispKeyWait_render(void* anim) {
-    void* ptr = animGetPtr(anim);
-
-    GXSetZMode(1, 7, 0);
-    GXSetBlendMode(0, 4, 5, 0);
-    GXSetZCompLoc(0);
-    GXSetAlphaCompare(6, 0x80, 1, 0, 0);
-    *(void**)((s32)ptr + 0xE0) = anim;
-}
-
-
-u8 msgDisp(f64 baseX, f64 baseY, s32* smart, u8 alpha) {
+void msgLoad(char* roomName, s32 index) {
+    typedef struct MsgFileLocal {
+        char* data;
+        u32 length;
+        s32 count;
+        void* lookup;
+    } MsgFileLocal;
+    extern void* msgWork;
     extern void* gp;
-    extern void FontDrawStart_alpha(u8);
-    extern u32 FontGetDrawColor(void);
-    extern void FontDrawColor(void*);
-    extern void FontDrawColor_(void);
-    extern void FontDrawNoise(void);
-    extern void FontDrawNoiseOff(void);
-    extern void FontDrawScale(f32);
-    extern void FontDrawScaleVec(void*);
-    extern void FontDrawCode(f64, f64, u16);
-    extern void FontDrawCodeMtx(void*, u16);
-    extern void FontDrawEdge(void);
-    extern void FontDrawEdgeOff(void);
-    extern void FontDrawRainbowColor(void);
-    extern void FontDrawRainbowColorOff(void);
-    extern void FontDrawColorIDX(s32);
-    extern u16 kanjiGetWidth(u32);
-    extern s32 irand(s32);
-    extern void iconDispGxAlpha(f64, void*, s32, u16, u8);
-    extern void PSMTXIdentity(void*);
-    extern void PSMTXTrans(void*, f32, f32, f32);
-    extern void PSMTXTransApply(void*, void*, f32, f32, f32);
-    extern void PSMTXScaleApply(void*, void*, f32, f32, f32);
-    extern void animPoseMain(s32);
-    extern void animPoseDrawMtx(s32, void*, s32, f32, f32);
-    extern double sin(double);
-    extern double cos(double);
-    extern f32 float_0_80420600;
-    extern f32 float_1_80420618;
-    extern f32 float_0p5_80420620;
-    extern f32 float_20_8042077c;
-    extern f32 float_40_80420608;
-    extern f32 float_90_80420770;
-    extern f32 float_270_80420774;
-    extern f32 float_neg1_80420778;
-    extern f32 float_12_80420780;
-    extern f32 float_0p01_80420788;
-    extern f32 float_0p02_8042078c;
-    extern f32 float_3p2_80420790;
-    extern f32 float_4_8042076c;
-    s32 work = *smart;
-    u32* entry = (u32*)(work + 0x3C);
-    s32 count = *(s32*)(work + 0x10);
+    extern char* language_dir[];
+    extern char str_PCTs_PCTs_txt_802c342c[];
+    extern char str_PCTs_PCTs_80420798[];
+    extern s32 sprintf(char*, const char*, ...);
+    extern s32 getMarioStDvdRoot(void);
+    extern void* DVDMgrOpen(const char*, s32, s32);
+    extern u32 DVDMgrGetLength(void*);
+    extern void DVDMgrRead(void*, void*, u32, u32);
+    extern void DVDMgrClose(void*);
+    extern void* __memAlloc(s32, u32);
+    extern void* _mapAlloc(void*, u32);
+    extern void* mapalloc_base_ptr;
+    extern u32 strlen(const char*);
+    extern void smartFree(void*);
+    extern void* smartAlloc(void*, s32);
+    extern void qsort(void*, u32, u32, void*);
+    extern s32 msg_compare(s32*, s32*);
+    extern char* msgSortDvdData;
+    MsgFileLocal* file = ((MsgFileLocal*)&msgWork) + index;
+    char filepath[64];
+    char dvdPath[136];
+    void* entry;
+    char* cursor;
+    s32 maxLength;
     s32 i;
-    u8 result = 0;
+    s32 offset;
+    s32* lookup;
 
-    FontDrawStart_alpha(alpha);
-    for (i = 0; i < count; i++, entry += 6) {
-        u32 flags = entry[0];
-        u16 code = *(u16*)((u8*)entry + 4);
-        f32 x = (f32)baseX + *(s16*)((u8*)entry + 6);
-        f32 y = (f32)baseY + *(s16*)((u8*)entry + 8) + *(s32*)(work + 0x28);
-        f32 scale = *(f32*)((u8*)entry + 0x10);
-
-        switch (code) {
-            case 0xFFF4: {
-                f32 mtx[12];
-                u32 color = FontGetDrawColor();
-                PSMTXIdentity(mtx);
-                if (*(f32*)((u8*)entry + 0x14) >= float_90_80420770 &&
-                    *(f32*)((u8*)entry + 0x14) <= float_270_80420774) {
-                    PSMTXScaleApply(mtx, mtx, float_1_80420618,
-                                    float_1_80420618, float_neg1_80420778);
+    if (file->data == 0 && index == 1) {
+        maxLength = 0;
+        for (i = 0; i < 7; i++) {
+            sprintf(filepath, str_PCTs_PCTs_txt_802c342c, language_dir[i], roomName);
+            sprintf(dvdPath, str_PCTs_PCTs_80420798, getMarioStDvdRoot(), filepath);
+            entry = DVDMgrOpen(dvdPath, 2, 0);
+            if (entry != 0) {
+                s32 length = DVDMgrGetLength(entry);
+                DVDMgrClose(entry);
+                if (maxLength < length) {
+                    maxLength = length;
                 }
-                PSMTXTransApply(mtx, mtx, x, y, (f32)*(s32*)(work + 0x28));
-                animPoseMain(entry[0]);
-                animPoseDrawMtx(entry[0], mtx, 2,
-                                *(f32*)((u8*)entry + 0x14), scale);
-                FontDrawStart_alpha(alpha);
-                FontDrawColor(&color);
-                break;
             }
-            case 0xFFF5:
-            case 0xFFF9:
-            case 0xFFFA:
-            case 0xFFFB:
-            case 0xFFFC:
-            case 0xFFFD:
-                break;
-            case 0xFFF6:
-                if (entry[0] == 0) FontDrawNoiseOff(); else FontDrawNoise();
-                break;
-            case 0xFFF7: {
-                u32 color = entry[0];
-                FontDrawColor(&color);
-                break;
-            }
-            case 0xFFF8: {
-                f32 pos[3];
-                u32 color = FontGetDrawColor();
-                if (*(s32*)(work + 0x28) + *(s16*)((u8*)entry + 8) - 40 +
-                    *(s16*)((u8*)entry + 10) < 1) {
-                    pos[0] = x + float_20_8042077c;
-                    pos[1] = y + *(s16*)((u8*)entry + 10) - float_40_80420608;
-                    pos[2] = float_0_80420600;
-                    iconDispGxAlpha(scale, pos, 0x10, (u16)entry[0], alpha);
-                    FontDrawStart_alpha(alpha);
-                    FontDrawColor(&color);
-                }
-                break;
-            }
-            case 0xFFFE:
-                if (*(u16*)(work + 8) == *(u16*)((u8*)entry + 6)) result = 1;
-                break;
-            case 0xFFFF:
-                return 0;
-            default:
-                if ((flags & 1) != 0) {
-                    f32 mtx[12];
-                    s32 halfWidth = kanjiGetWidth(code) >> 1;
-                    PSMTXTrans(mtx, (f32)-halfWidth, float_12_80420780,
-                               float_0_80420600);
-                    PSMTXScaleApply(mtx, mtx, *(f32*)((u8*)entry + 0x14),
-                                    *(f32*)((u8*)entry + 0x14),
-                                    *(f32*)((u8*)entry + 0x14));
-                    PSMTXTransApply(mtx, mtx, x + halfWidth, y, float_0_80420600);
-                    PSMTXScaleApply(mtx, mtx, scale, scale, scale);
-                    FontDrawCodeMtx(mtx, code);
-                    *(f32*)((u8*)entry + 0x14) =
-                        float_0p5_80420620 *
-                        (*(f32*)((u8*)entry + 0x14) - float_1_80420618) +
-                        float_1_80420618;
-                } else if ((flags & 2) != 0) {
-                    FontDrawScale(scale);
-                    FontDrawCode(x + (irand(10000) % 3),
-                                 y + (irand(10000) % 3), code);
-                } else if ((flags & 4) != 0) {
-                    s64 elapsed = (s64)(*(u64*)((u8*)gp + 0x38) - *(u64*)(work + 0x18));
-                    f32 phase = float_0p01_80420788 *
-                                (f32)(elapsed / (*(u32*)0x800000F8 / 4000)) -
-                                float_0p02_8042078c * x;
-                    FontDrawScale(scale);
-                    FontDrawCode(x + float_3p2_80420790 * (f32)cos(phase),
-                                 y + float_3p2_80420790 * (f32)sin(phase), code);
-                } else if ((flags & (0x100 << (*(s8*)(work + 0xF243) & 31))) != 0) {
-                    s64 elapsed = (s64)(*(u64*)((u8*)gp + 0x38) - *(u64*)(work + 0x18));
-                    f32 phase = float_0p01_80420788 *
-                                (f32)(elapsed / (*(u32*)0x800000F8 / 4000)) -
-                                float_0p02_8042078c * x;
-                    f32 drawX = x + float_3p2_80420790 * (f32)cos(phase);
-                    f32 drawY = y + float_3p2_80420790 * (f32)sin(phase);
-                    u32 color = FontGetDrawColor();
-                    FontDrawScale(scale);
-                    FontDrawColor(&color);
-                    FontDrawCode(drawX, drawY, code);
-                    FontDrawEdge();
-                    FontDrawRainbowColor();
-                    FontDrawCode(drawX - float_4_8042076c,
-                                 drawY + float_4_8042076c, code);
-                    FontDrawEdgeOff();
-                    FontDrawRainbowColorOff();
-                    FontDrawColorIDX(0);
-                } else {
-                    FontDrawScale(scale);
-                    FontDrawCode(x, y, code);
-                }
-                break;
         }
+        file->data = __memAlloc(0, (maxLength + 0x1F) & ~0x1F);
     }
-    return result;
+
+    file->length = 0;
+    sprintf(filepath, str_PCTs_PCTs_txt_802c342c,
+            language_dir[*(s32*)((u8*)gp + 0x16C)], roomName);
+    sprintf(dvdPath, str_PCTs_PCTs_80420798, getMarioStDvdRoot(), filepath);
+    entry = DVDMgrOpen(dvdPath, 2, 0);
+    if (entry != 0) {
+        file->length = DVDMgrGetLength(entry);
+        if (index >= 0 && index < 1) {
+            file->data = _mapAlloc(mapalloc_base_ptr, (file->length + 0x1F) & ~0x1F);
+        }
+        DVDMgrRead(entry, file->data, (file->length + 0x1F) & ~0x1F, 0);
+        DVDMgrClose(entry);
+    }
+
+    cursor = file->data;
+    if (cursor == 0) {
+        file->length = 0;
+        file->count = 0;
+    } else {
+        i = 0;
+        while (*cursor != 0) {
+            cursor += strlen(cursor) + 1;
+            i++;
+        }
+        file->count = i / 2;
+    }
+    if (file->lookup != 0) {
+        smartFree(file->lookup);
+    }
+    if (file->count == 0) {
+        file->lookup = 0;
+        return;
+    }
+
+    file->lookup = smartAlloc(file->lookup, 0);
+    cursor = file->data;
+    lookup = *(s32**)file->lookup;
+    offset = 0;
+    for (i = 0; i < file->count; i++) {
+        lookup[0] = offset;
+        offset += strlen(cursor) + 1;
+        cursor += strlen(cursor) + 1;
+        lookup[1] = offset;
+        offset += strlen(cursor) + 1;
+        cursor += strlen(cursor) + 1;
+        lookup += 2;
+    }
+    msgSortDvdData = file->data;
+    qsort(*(void**)file->lookup, file->count, 8, msg_compare);
 }
 
 s32 msgMain(int* param_1) {
@@ -442,783 +351,178 @@ s32 msgMain(int* param_1) {
 #undef I32
 }
 
-void msgWindow_Disp(s32 unused, void* win) {
-    extern void* camGetCurPtr(void);
-    extern void GXSetFog(s32 type, f32 startz, f32 endz, f32 nearz, f32 farz, void* color);
-    extern void getScreenPoint(void* src, f32* dst);
-    extern f32 intplGetValue(s32 type, s32 currStep, s32 steps, f32 start, f32 end);
-    extern void windowDispGX_Message(f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, s32 type, s32 flagsArg, u8 alphaArg);
-    extern void windowDispGX_Kanban(f32 x, f32 y, f32 w, f32 h, s32 type, u8 alphaArg);
-    extern void windowDispGX_System(f32 x, f32 y, f32 w, f32 h, s32 type, u8 alphaArg);
-    extern void GXSetScissor(u32 x, u32 y, u32 w, u32 h);
-    extern u8 msgDisp();
-    extern void animPoseMain(s32 poseId);
-    extern void animPoseDraw(s32 poseId, double x, double y, double z, double rot, double scale, s32 modeArg);
-    extern u32 unk_80429580;
-    extern void* msgw;
-    extern u16 active_772;
-    extern f32 float_0_80420600;
-    extern f32 float_0p5_80420620;
-    extern f32 float_10_80420624;
-    extern f32 float_240_80420628;
-    extern f32 float_36_8042062c;
-    extern f32 float_62_80420630;
-    extern f32 float_80_80420634;
-    extern f32 float_60_80420638;
-    extern f32 float_28_8042063c;
-    extern f32 float_6_80420640;
-    extern f32 float_8_80420644;
-    extern f32 float_2_80420610;
-    extern f32 float_50_80420648;
-    extern f32 float_52_8042064c;
-    extern f32 float_31_80420650;
-    extern f32 float_180_80420654;
-    extern f32 float_5_80420658;
 
-#define W_MODE (*(volatile s32*)((s32)win + 0x08))
-#define W_STEP (*(volatile s16*)((s32)win + 0x06))
-#define W_ALPHA ((u8)W_STEP)
-#define W_FLAGS (*(volatile s16*)((s32)win + 0x2C))
-
-    void* cam;
-    u32 fogColor;
-    f32 screen[3];
-    f32 ix;
-    f32 iy;
-    f32 iw;
-    f32 ih;
-    s32 drew;
-    u32 scissorY;
-    u32 scissorH;
-    s32 signedY;
-
-    (void)unused;
-
-    cam = camGetCurPtr();
-    drew = 0;
-    fogColor = unk_80429580;
-    GXSetFog(0, float_0_80420600, float_0_80420600, float_0_80420600, float_0_80420600, &fogColor);
-
-
-    switch (W_MODE) {
-        case 0:
-        case 1:
-        case 6:
-        case 8:
-        case 9:
-            if (W_FLAGS == 0) {
-                windowDispGX_Message(
-                    *(f32*)((s32)win + 0x0C),
-                    *(f32*)((s32)win + 0x10),
-                    *(f32*)((s32)win + 0x14),
-                    *(f32*)((s32)win + 0x18),
-                    float_0_80420600,
-                    float_0_80420600,
-                    W_MODE,
-                    0,
-                    W_ALPHA);
-                scissorY = (u32)(float_240_80420628 - (*(f32*)((s32)win + 0x10) - float_36_8042062c) - float_8_80420644);
-                GXSetScissor(*(u16*)((s32)cam + 0xF4), scissorY, *(u16*)((s32)cam + 0xF8), 0x7E);
-                drew = msgDisp(
-                    float_62_80420630 + *(f32*)((s32)win + 0x0C),
-                    *(f32*)((s32)win + 0x10) - float_36_8042062c,
-                    *(void**)((s32)win + 0x28),
-                    W_ALPHA);
-            } else {
-                if ((W_FLAGS & 0x10) != 0) {
-                    screen[0] = *(f32*)((s32)win + 0x30);
-                    screen[1] = *(f32*)((s32)win + 0x34);
-                    screen[2] = *(f32*)((s32)win + 0x38);
-                } else {
-                    getScreenPoint((void*)((s32)win + 0x30), screen);
-                }
-
-                if (W_MODE == 1) {
-                    *(f32*)((s32)win + 0x0C) = screen[0] - (*(f32*)((s32)win + 0x14) * float_0p5_80420620);
-                    if ((W_FLAGS & 8) != 0) {
-                        *(f32*)((s32)win + 0x10) = screen[1] - float_80_80420634;
-                    } else {
-                        *(f32*)((s32)win + 0x10) = float_60_80420638 + screen[1];
-                    }
-
-                    ix = intplGetValue(0, W_STEP, 0xFF, screen[0], *(f32*)((s32)win + 0x0C) + (*(f32*)((s32)win + 0x14) * float_0p5_80420620));
-                    iy = intplGetValue(0, W_STEP, 0xFF, screen[1], *(f32*)((s32)win + 0x10) - (*(f32*)((s32)win + 0x18) * float_0p5_80420620));
-                    iw = intplGetValue(0, W_STEP, 0xFF, float_10_80420624, *(f32*)((s32)win + 0x14));
-                    ih = intplGetValue(0, W_STEP, 0xFF, float_10_80420624, *(f32*)((s32)win + 0x18));
-                    windowDispGX_Message(
-                        ix - (iw * float_0p5_80420620),
-                        iy + (ih * float_0p5_80420620),
-                        iw,
-                        ih,
-                        screen[0],
-                        screen[1],
-                        W_MODE,
-                        W_FLAGS,
-                        W_ALPHA);
-                    if (W_STEP == 0xFF) {
-                        signedY = 0xF0 - ((s32)*(f32*)((s32)win + 0x10) - 10);
-                        if (signedY < 0) {
-                            signedY = 0;
-                        }
-                        if (signedY > 0x1E0) {
-                            signedY = 0x1E0;
-                        }
-                        GXSetScissor(*(u16*)((s32)cam + 0xF4), signedY, *(u16*)((s32)cam + 0xF8), 0x7E);
-                        msgDisp(
-                            float_28_8042063c + *(f32*)((s32)win + 0x0C),
-                            *(f32*)((s32)win + 0x10) - float_6_80420640,
-                            *(void**)((s32)win + 0x28),
-                            W_ALPHA);
-                    }
-                } else if (W_MODE == 0 || W_MODE == 6 || W_MODE == 8 || W_MODE == 9) {
-                    ix = intplGetValue(0, W_STEP, 0xFF, screen[0], *(f32*)((s32)win + 0x0C) + (*(f32*)((s32)win + 0x14) * float_0p5_80420620));
-                    iy = intplGetValue(0, W_STEP, 0xFF, screen[1], *(f32*)((s32)win + 0x10) - (*(f32*)((s32)win + 0x18) * float_0p5_80420620));
-                    iw = intplGetValue(0, W_STEP, 0xFF, float_10_80420624, *(f32*)((s32)win + 0x14));
-                    ih = intplGetValue(0, W_STEP, 0xFF, float_10_80420624, *(f32*)((s32)win + 0x18));
-                    windowDispGX_Message(
-                        ix - (iw * float_0p5_80420620),
-                        iy + (ih * float_0p5_80420620),
-                        iw,
-                        ih,
-                        screen[0],
-                        screen[1],
-                        W_MODE,
-                        W_FLAGS,
-                        W_ALPHA);
-                    if (W_STEP == 0xFF) {
-                        scissorY = (u32)(float_240_80420628 - (*(f32*)((s32)win + 0x10) - float_36_8042062c));
-                        GXSetScissor(*(u16*)((s32)cam + 0xF4), scissorY, *(u16*)((s32)cam + 0xF8), 100);
-                        drew = msgDisp(
-                            float_62_80420630 + *(f32*)((s32)win + 0x0C),
-                            *(f32*)((s32)win + 0x10) - float_36_8042062c,
-                            *(void**)((s32)win + 0x28),
-                            W_ALPHA);
-                    }
-                }
-            }
-            break;
-
-        case 2:
-        case 4:
-        case 10:
-            windowDispGX_Kanban(
-                *(f32*)((s32)win + 0x0C),
-                *(f32*)((s32)win + 0x10),
-                *(f32*)((s32)win + 0x14),
-                *(f32*)((s32)win + 0x18),
-                W_MODE,
-                W_ALPHA);
-            scissorY = (u32)(float_240_80420628 - (*(f32*)((s32)win + 0x10) - float_36_8042062c) - float_2_80420610);
-            GXSetScissor(*(u16*)((s32)cam + 0xF4), scissorY, *(u16*)((s32)cam + 0xF8), 0x68);
-            drew = msgDisp(
-                float_62_80420630 + *(f32*)((s32)win + 0x0C),
-                *(f32*)((s32)win + 0x10) - float_36_8042062c,
-                *(void**)((s32)win + 0x28),
-                W_ALPHA);
-            break;
-
-        case 3:
-            windowDispGX_System(
-                *(f32*)((s32)win + 0x0C),
-                *(f32*)((s32)win + 0x10),
-                *(f32*)((s32)win + 0x14),
-                *(f32*)((s32)win + 0x18),
-                W_MODE,
-                W_ALPHA);
-            scissorH = (u32)(*(f32*)((s32)win + 0x18) - float_50_80420648);
-            scissorY = (u32)(float_240_80420628 - (*(f32*)((s32)win + 0x10) - float_36_8042062c) - float_8_80420644);
-            GXSetScissor(*(u16*)((s32)cam + 0xF4), scissorY, *(u16*)((s32)cam + 0xF8), scissorH);
-            drew = msgDisp(
-                float_62_80420630 + *(f32*)((s32)win + 0x0C),
-                *(f32*)((s32)win + 0x10) - float_36_8042062c,
-                *(void**)((s32)win + 0x28),
-                W_ALPHA);
-            break;
-
-        case 7:
-            windowDispGX_Kanban(
-                *(f32*)((s32)win + 0x0C),
-                *(f32*)((s32)win + 0x10),
-                *(f32*)((s32)win + 0x14),
-                *(f32*)((s32)win + 0x18),
-                W_MODE,
-                W_ALPHA);
-            scissorY = (u32)(float_240_80420628 - (*(f32*)((s32)win + 0x10) - float_36_8042062c) - float_8_80420644);
-            GXSetScissor(*(u16*)((s32)cam + 0xF4), scissorY, *(u16*)((s32)cam + 0xF8), 0x7E);
-            drew = msgDisp(
-                float_62_80420630 + *(f32*)((s32)win + 0x0C),
-                *(f32*)((s32)win + 0x10) - float_36_8042062c,
-                *(void**)((s32)win + 0x28),
-                W_ALPHA);
-            break;
-
-        case 11:
-            scissorH = (u32)(*(f32*)((s32)win + 0x18) - float_50_80420648);
-            scissorY = (u32)(float_240_80420628 - (*(f32*)((s32)win + 0x10) - float_36_8042062c) - float_8_80420644);
-            GXSetScissor(*(u16*)((s32)cam + 0xF4), scissorY, *(u16*)((s32)cam + 0xF8), scissorH);
-            drew = msgDisp(
-                float_62_80420630 + *(f32*)((s32)win + 0x0C),
-                *(f32*)((s32)win + 0x10) - float_36_8042062c,
-                *(void**)((s32)win + 0x28),
-                W_ALPHA);
-            break;
-    }
-
-    GXSetScissor(
-        *(u16*)((s32)cam + 0xF4),
-        *(u16*)((s32)cam + 0xF6),
-        *(u16*)((s32)cam + 0xF8),
-        *(u16*)((s32)cam + 0xFA));
-
-    if (drew != 0) {
-        if (active_772 == 0) {
-            active_772 = 1;
-        }
-        animPoseMain(*(s32*)((s32)msgw + 0x20));
-        animPoseDraw(
-            *(s32*)((s32)msgw + 0x20),
-            (*(f32*)((s32)win + 0x0C) + *(f32*)((s32)win + 0x14)) - float_52_8042064c,
-            float_31_80420650 + (*(f32*)((s32)win + 0x10) - *(f32*)((s32)win + 0x18)),
-            float_0_80420600,
-            float_180_80420654,
-            float_5_80420658,
-            2);
-    }
-#undef W_MODE
-#undef W_STEP
-#undef W_ALPHA
-#undef W_FLAGS
-}
-
-int msgWindow_Entry(char* text, s32 param_2, short kind) {
-    extern s32 windowEntry(short kind);
-    extern void* windowGetPointer(s32 id);
-    extern u32 strlen(char* str);
-    extern void* __memAlloc(s32 heap, u32 size);
-    extern char* strcpy(char* dst, char* src);
-    extern void* smartAlloc(void* ptr, s32 flag);
-    extern void* memset(void* dst, s32 value, u32 size);
-    extern void msgAnalize(void* smart, void* text);
-    extern void __memFree(s32 heap, void* ptr);
-    extern void* getWakuTexObj(s32 id);
-    extern u32 GXGetTexObjWidth(void* obj);
-    extern u32 GXGetTexObjHeight(void* obj);
-    extern u8 msgWindow_Main(void* win);
-    extern void msgWindow_Delete(void* win);
-    extern u8 selectWindow_Main(s32 win);
-    extern u8 msgWindow_Clear_Main(void* win);
-    extern f32 float_neg280_80420660;
-    extern f32 float_225_80420664;
-    extern f32 float_560_80420668;
-    extern f32 float_176_8042066c;
-    extern f32 float_0p9_80420670;
-    s32 id = windowEntry(kind);
-    void* win = windowGetPointer(id);
-    char* copy;
-    void* smart;
-    char* work;
-    s32 mode;
-    void* texObj;
-
-    *(void**)((s32)win + 0x3C) = msgWindow_Main;
-    *(void**)((s32)win + 0x40) = msgWindow_Delete;
-    *(u16*)win = 5;
-    *(s32*)((s32)win + 8) = -1;
-    *(u16*)((s32)win + 2) |= 2;
-
-    copy = __memAlloc(0, strlen(text));
-    strcpy(copy, text);
-    smart = smartAlloc(copy, 1);
-    work = *(char**)smart;
-    memset(work, 0, 0xF258);
-
-    *(void**)(work + 0xF24C) = win;
-    *(s32*)(work + 4) = 3;
-    *(s32*)(work + 0xF1FC) = param_2;
-    *(s32*)(work + 0x34) = *(s32*)((s32)gp + 0x3C);
-    *(s32*)(work + 0x30) = *(s32*)((s32)gp + 0x38);
-    *(s32*)(work + 0x1C) = *(s32*)((s32)gp + 0x3C);
-    *(s32*)(work + 0x18) = *(s32*)((s32)gp + 0x38);
-    *(s32*)(work + 0xF228) = 0;
-    *(u8*)(work + 0xF22C) = 0x7F;
-    *(s32*)(work + 0xF230) = 0;
-    *(u16*)(work + 0xF234) = 0;
-    *(u16*)(work + 0xF236) = 0;
-    *(u16*)(work + 0xF238) = 0;
-    *(u16*)(work + 0xF23A) = 0;
-    *(s32*)(work + 0xF23C) = 0x19;
-    *(s32*)(work + 0xF040) = 0;
-
-    msgAnalize(smart, copy);
-    if (*(s32*)((s32)win + 8) == 1) {
-        *(u32*)(work + 4) |= 0x200;
-    }
-    __memFree(0, copy);
-
-    *(void**)((s32)win + 0x28) = smart;
-    work = **(char***)((s32)win + 0x28);
-    *(s32*)(work + 0xF250) = 0;
-    *(s32*)(work + 0xF254) = 0;
-
-    mode = *(s32*)((s32)win + 8);
-    if (mode == 5) {
-        *(void**)((s32)win + 0x3C) = selectWindow_Main;
-        *(f32*)((s32)win + 0x0C) = (f32)(s16)(-(*(s16*)(work + 0xF244) / 2));
-        *(f32*)((s32)win + 0x10) = (f32)*(s16*)(work + 0xF246);
-        *(f32*)((s32)win + 0x14) = (f32)*(s16*)(work + 0xF244);
-        *(f32*)((s32)win + 0x18) = (f32)(s16)((*(s8*)(work + 0xF240) * 0x24) + 0x28);
-        *(u8*)(work + 0xF243) = *(u8*)(work + 0xF241);
-        *(f32*)(work + 0xF248) = *(f32*)((s32)win + 0x10) - (f32)((*(s8*)(work + 0xF243) * 0x1F) + 0x3A);
-        return id;
-    }
-
-    if (mode < 5) {
-        if (mode == 1) {
-            *(s32*)((s32)win + 4) = kind + 10;
-            texObj = getWakuTexObj(3);
-            *(f32*)((s32)win + 0x14) = float_0p9_80420670 * (f32)(u16)GXGetTexObjWidth(texObj);
-            texObj = getWakuTexObj(3);
-            *(f32*)((s32)win + 0x18) = float_0p9_80420670 * (f32)(u16)GXGetTexObjHeight(texObj);
-            return id;
-        }
-        if (mode < 0) {
-            return id;
-        }
-    } else if (mode == 0xB) {
-        *(void**)((s32)win + 0x3C) = msgWindow_Clear_Main;
-    } else if (mode > 10) {
-        return id;
-    }
-
-    if ((*(u16*)((s32)win + 2) & 4) == 0) {
-        *(f32*)((s32)win + 0x0C) = float_neg280_80420660;
-        *(f32*)((s32)win + 0x10) = float_225_80420664;
-        *(f32*)((s32)win + 0x14) = float_560_80420668;
-        *(f32*)((s32)win + 0x18) = float_176_8042066c;
-    }
-    return id;
-}
-
-void selectWindow_Main(void* win) {
-    extern s32 msgMain(void* work);
-    extern u32 keyGetButtonTrg(s32 pad);
-    extern u32 keyGetDirTrg(s32 pad);
-    extern u32 keyGetButtonRep(s32 pad);
-    extern u32 keyGetDirRep(s32 pad);
-    extern void psndSFXOn(u32 id);
-    extern void dispEntry(s32 camId, s32 order, void* callback, void* param, f32 prio);
-    extern u8 selectWindow_Disp(s32 param_1, int param_2);
-    extern f32 float_400_8042061c;
-    void* smart = *(void**)((s32)win + 0x28);
-    char* work = *(char**)smart;
-    s8 oldSelect;
-    s8 value;
-
-    msgMain(smart);
-
-    switch (*(u16*)win) {
-        case 5:
-            *(s16*)((s32)win + 6) += 0x19;
-            if (*(s16*)((s32)win + 6) > 0xFF) {
-                *(s16*)((s32)win + 6) = 0xFF;
-                *(u16*)win = 1;
-            }
-            break;
-        case 1:
-            oldSelect = *(s8*)(work + 0xF243);
-            if (((keyGetButtonTrg(0) & 8) != 0) || ((keyGetDirTrg(0) & 0x1000) != 0)) {
-                *(u8*)(work + 0xF243) = *(u8*)(work + 0xF243) - 1;
-            } else if (((keyGetButtonRep(0) & 8) != 0) || ((keyGetDirRep(0) & 0x1000) != 0)) {
-                if (*(s8*)(work + 0xF243) != 0) {
-                    *(u8*)(work + 0xF243) = *(u8*)(work + 0xF243) - 1;
-                }
-            }
-
-            if (((keyGetButtonTrg(0) & 4) != 0) || ((keyGetDirTrg(0) & 0x2000) != 0)) {
-                *(u8*)(work + 0xF243) = *(u8*)(work + 0xF243) + 1;
-            } else if (((keyGetButtonRep(0) & 4) != 0) || ((keyGetDirRep(0) & 0x2000) != 0)) {
-                if (*(s8*)(work + 0xF243) < (*(s8*)(work + 0xF240) - 1)) {
-                    *(u8*)(work + 0xF243) = *(u8*)(work + 0xF243) + 1;
-                }
-            }
-
-            if (*(s8*)(work + 0xF243) < 0) {
-                *(u8*)(work + 0xF243) = *(u8*)(work + 0xF240) - 1;
-            }
-            if (*(s8*)(work + 0xF243) >= *(s8*)(work + 0xF240)) {
-                *(u8*)(work + 0xF243) = 0;
-            }
-            if (oldSelect != *(s8*)(work + 0xF243)) {
-                psndSFXOn(0x20005);
-            }
-
-            if ((keyGetButtonTrg(0) & 0x200) != 0) {
-                value = *(s8*)(work + 0xF242);
-                if (value != -1) {
-                    if (value < -1 && value > -3) {
-                        *(u8*)(work + 0xF243) = 0xFF;
-                    } else {
-                        *(s8*)(work + 0xF243) = value;
-                    }
-                    *(u16*)win = 7;
-                    psndSFXOn(0x20013);
-                }
-            } else if ((keyGetButtonTrg(0) & 0x100) != 0) {
-                *(u16*)win = 7;
-                psndSFXOn(0x20012);
-            }
-            break;
-        case 7:
-            if (*(s16*)((s32)win + 6) == 0) {
-                *(u16*)win = 4;
-                *(u16*)((s32)win + 2) &= ~2;
-                return;
-            }
-            *(s16*)((s32)win + 6) -= 0x19;
-            if (*(s16*)((s32)win + 6) < 1) {
-                *(s16*)((s32)win + 6) = 0;
-            }
-            break;
-        default:
-            if (*(u16*)win >= 4) {
-                return;
-            }
-            break;
-    }
-
-    dispEntry(8, 0, selectWindow_Disp, win, float_400_8042061c - (f32)*(s16*)((s32)win + 4));
-}
-
-void msgLoad(char* roomName, s32 index) {
-    typedef struct MsgFileLocal {
-        char* data;
-        u32 length;
-        s32 count;
-        void* lookup;
-    } MsgFileLocal;
-    extern void* msgWork;
+u8 msgDisp(f64 baseX, f64 baseY, s32* smart, u8 alpha) {
     extern void* gp;
-    extern char* language_dir[];
-    extern char str_PCTs_PCTs_txt_802c342c[];
-    extern char str_PCTs_PCTs_80420798[];
-    extern s32 sprintf(char*, const char*, ...);
-    extern s32 getMarioStDvdRoot(void);
-    extern void* DVDMgrOpen(const char*, s32, s32);
-    extern u32 DVDMgrGetLength(void*);
-    extern void DVDMgrRead(void*, void*, u32, u32);
-    extern void DVDMgrClose(void*);
-    extern void* __memAlloc(s32, u32);
-    extern void* _mapAlloc(void*, u32);
-    extern void* mapalloc_base_ptr;
-    extern u32 strlen(const char*);
-    extern void smartFree(void*);
-    extern void* smartAlloc(void*, s32);
-    extern void qsort(void*, u32, u32, void*);
-    extern s32 msg_compare(s32*, s32*);
-    extern char* msgSortDvdData;
-    MsgFileLocal* file = ((MsgFileLocal*)&msgWork) + index;
-    char filepath[64];
-    char dvdPath[136];
-    void* entry;
-    char* cursor;
-    s32 maxLength;
-    s32 i;
-    s32 offset;
-    s32* lookup;
-
-    if (file->data == 0 && index == 1) {
-        maxLength = 0;
-        for (i = 0; i < 7; i++) {
-            sprintf(filepath, str_PCTs_PCTs_txt_802c342c, language_dir[i], roomName);
-            sprintf(dvdPath, str_PCTs_PCTs_80420798, getMarioStDvdRoot(), filepath);
-            entry = DVDMgrOpen(dvdPath, 2, 0);
-            if (entry != 0) {
-                s32 length = DVDMgrGetLength(entry);
-                DVDMgrClose(entry);
-                if (maxLength < length) {
-                    maxLength = length;
-                }
-            }
-        }
-        file->data = __memAlloc(0, (maxLength + 0x1F) & ~0x1F);
-    }
-
-    file->length = 0;
-    sprintf(filepath, str_PCTs_PCTs_txt_802c342c,
-            language_dir[*(s32*)((u8*)gp + 0x16C)], roomName);
-    sprintf(dvdPath, str_PCTs_PCTs_80420798, getMarioStDvdRoot(), filepath);
-    entry = DVDMgrOpen(dvdPath, 2, 0);
-    if (entry != 0) {
-        file->length = DVDMgrGetLength(entry);
-        if (index >= 0 && index < 1) {
-            file->data = _mapAlloc(mapalloc_base_ptr, (file->length + 0x1F) & ~0x1F);
-        }
-        DVDMgrRead(entry, file->data, (file->length + 0x1F) & ~0x1F, 0);
-        DVDMgrClose(entry);
-    }
-
-    cursor = file->data;
-    if (cursor == 0) {
-        file->length = 0;
-        file->count = 0;
-    } else {
-        i = 0;
-        while (*cursor != 0) {
-            cursor += strlen(cursor) + 1;
-            i++;
-        }
-        file->count = i / 2;
-    }
-    if (file->lookup != 0) {
-        smartFree(file->lookup);
-    }
-    if (file->count == 0) {
-        file->lookup = 0;
-        return;
-    }
-
-    file->lookup = smartAlloc(file->lookup, 0);
-    cursor = file->data;
-    lookup = *(s32**)file->lookup;
-    offset = 0;
-    for (i = 0; i < file->count; i++) {
-        lookup[0] = offset;
-        offset += strlen(cursor) + 1;
-        cursor += strlen(cursor) + 1;
-        lookup[1] = offset;
-        offset += strlen(cursor) + 1;
-        cursor += strlen(cursor) + 1;
-        lookup += 2;
-    }
-    msgSortDvdData = file->data;
-    qsort(*(void**)file->lookup, file->count, 8, msg_compare);
-}
-
-void selectWindow_Disp(s32 unused, void* win) {
-    typedef struct VecLocal { f32 x, y, z; } VecLocal;
-    extern void GXSetFog(s32, f32, f32, f32, f32, void*);
-    extern void windowDispGX_Waku_col(f32, f32, f32, f32, f32, s32, void*);
-    extern u8 msgDisp(f64, f64, s32*, u8);
+    extern void FontDrawStart_alpha(u8);
+    extern u32 FontGetDrawColor(void);
+    extern void FontDrawColor(void*);
+    extern void FontDrawColor_(void);
+    extern void FontDrawNoise(void);
+    extern void FontDrawNoiseOff(void);
+    extern void FontDrawScale(f32);
+    extern void FontDrawScaleVec(void*);
+    extern void FontDrawCode(f64, f64, u16);
+    extern void FontDrawCodeMtx(void*, u16);
+    extern void FontDrawEdge(void);
+    extern void FontDrawEdgeOff(void);
+    extern void FontDrawRainbowColor(void);
+    extern void FontDrawRainbowColorOff(void);
+    extern void FontDrawColorIDX(s32);
+    extern u16 kanjiGetWidth(u32);
+    extern s32 irand(s32);
     extern void iconDispGxAlpha(f64, void*, s32, u16, u8);
-    extern u32 unk_80429584;
-    extern u32 dat_804205fc;
+    extern void PSMTXIdentity(void*);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXTransApply(void*, void*, f32, f32, f32);
+    extern void PSMTXScaleApply(void*, void*, f32, f32, f32);
+    extern void animPoseMain(s32);
+    extern void animPoseDrawMtx(s32, void*, s32, f32, f32);
+    extern double sin(double);
+    extern double cos(double);
     extern f32 float_0_80420600;
-    extern f32 float_30_80420604;
-    extern f32 float_40_80420608;
-    extern f32 float_25_8042060c;
-    extern f32 float_2_80420610;
-    extern f32 float_0p3_80420614;
     extern f32 float_1_80420618;
-    u8* window = win;
-    u8* work = **(u8***)(window + 0x28);
-    u32 fogColor = unk_80429584;
-    u32 frameColor = (dat_804205fc & 0xFFFFFF00) | *(u16*)(window + 6);
-    VecLocal iconPos;
-    f32 targetY;
-
-    (void)unused;
-    GXSetFog(0, float_0_80420600, float_0_80420600,
-             float_0_80420600, float_0_80420600, &fogColor);
-    windowDispGX_Waku_col(*(f32*)(window + 0x0C), *(f32*)(window + 0x10),
-                          *(f32*)(window + 0x14), *(f32*)(window + 0x18),
-                          float_30_80420604, 0, &frameColor);
-    msgDisp(float_40_80420608 + *(f32*)(window + 0x0C),
-            *(f32*)(window + 0x10) - float_25_8042060c,
-            *(s32**)(window + 0x28), (u8)*(u16*)(window + 6));
-
-    iconPos.x = float_2_80420610 + *(f32*)(window + 0x0C);
-    iconPos.z = float_0_80420600;
-    targetY = *(f32*)(window + 0x10) -
-              (f32)((u8)work[0xF243] * 0x1F + 0x3A);
-    *(f32*)(work + 0xF248) +=
-        float_0p3_80420614 * (targetY - *(f32*)(work + 0xF248));
-    iconPos.y = *(f32*)(work + 0xF248);
-    iconDispGxAlpha(float_1_80420618, &iconPos, 0x14, 0x1F8,
-                    (u8)*(u16*)(window + 6));
-}
-
-void* msgSearch(void* msgId) {
-    extern void* msgWork;
-    extern void* gp;
-    extern s32 strcmp(const char*, const char*);
-    extern char* ErrMessage[];
-    u8* files = (u8*)&msgWork;
-    char* key = msgId;
-    s32 fileIndex;
-
-    for (fileIndex = 0; fileIndex < 2; fileIndex++, files += 0x10) {
-        void* smart = *(void**)(files + 0x0C);
-        if (smart != 0) {
-            s32* lookup = *(s32**)smart;
-            s32 low = 0;
-            s32 high = *(s32*)(files + 8);
-            while (low <= high) {
-                s32 middle = (low + high) / 2;
-                s32 count = *(s32*)(files + 8);
-                s32 result;
-                if (middle >= count) {
-                    break;
-                }
-                result = strcmp(key, (char*)*(void**)files + lookup[middle * 2]);
-                if (result == 0) {
-                    return (char*)*(void**)files + lookup[middle * 2 + 1];
-                }
-                if (result < 0) {
-                    high = middle - 1;
-                } else {
-                    low = middle + 1;
-                }
-            }
-        }
-    }
-    return ErrMessage[*(s32*)((u8*)gp + 0x16C)];
-}
-
-void msgWindow_ForceClose(s32 id) {
-    extern s32 strcmp(const char* a, const char* b);
-    extern void BtlUnit_ChangeStayAnim(void* unit);
-    extern void npcSetStayPose(void* npc);
+    extern f32 float_0p5_80420620;
+    extern f32 float_20_8042077c;
+    extern f32 float_40_80420608;
+    extern f32 float_90_80420770;
+    extern f32 float_270_80420774;
+    extern f32 float_neg1_80420778;
+    extern f32 float_12_80420780;
+    extern f32 float_0p01_80420788;
+    extern f32 float_0p02_8042078c;
+    extern f32 float_3p2_80420790;
+    extern f32 float_4_8042076c;
+    s32 work = *smart;
+    u32* entry = (u32*)(work + 0x3C);
+    s32 count = *(s32*)(work + 0x10);
     s32 i;
-    void* win;
-    void* obj;
+    u8 result = 0;
 
-    for (i = 0; i < 7; i++) {
-        win = windowGetPointer(i);
-        if (*(u16*)((s32)win + 2) != 0 && *(u16*)win != 0 && *(void**)((s32)win + 0x28) != NULL) {
-            obj = *(void**)(*(void**)((s32)win + 0x28));
-            if (*(void**)obj != NULL && strcmp(*(char**)obj, (char*)id) == 0) {
-                *(u16*)win = 7;
-                obj = *(void**)(*(void**)((s32)win + 0x28));
-                if (*(u32*)((s32)obj + 4) & 8) {
-                    BtlUnit_ChangeStayAnim(*(void**)((s32)obj + 0xF224));
-                } else {
-                    npcSetStayPose((void*)((s32)obj + 0xF204));
+    FontDrawStart_alpha(alpha);
+    for (i = 0; i < count; i++, entry += 6) {
+        u32 flags = entry[0];
+        u16 code = *(u16*)((u8*)entry + 4);
+        f32 x = (f32)baseX + *(s16*)((u8*)entry + 6);
+        f32 y = (f32)baseY + *(s16*)((u8*)entry + 8) + *(s32*)(work + 0x28);
+        f32 scale = *(f32*)((u8*)entry + 0x10);
+
+        switch (code) {
+            case 0xFFF4: {
+                f32 mtx[12];
+                u32 color = FontGetDrawColor();
+                PSMTXIdentity(mtx);
+                if (*(f32*)((u8*)entry + 0x14) >= float_90_80420770 &&
+                    *(f32*)((u8*)entry + 0x14) <= float_270_80420774) {
+                    PSMTXScaleApply(mtx, mtx, float_1_80420618,
+                                    float_1_80420618, float_neg1_80420778);
                 }
+                PSMTXTransApply(mtx, mtx, x, y, (f32)*(s32*)(work + 0x28));
+                animPoseMain(entry[0]);
+                animPoseDrawMtx(entry[0], mtx, 2,
+                                *(f32*)((u8*)entry + 0x14), scale);
+                FontDrawStart_alpha(alpha);
+                FontDrawColor(&color);
+                break;
             }
-        }
-    }
-}
-
-u8 msgInit(void) {
-    extern void* msgw;
-    extern s32 animPoseEntry(const char* name, s32 type);
-    extern void animPoseSetAnim(s32 pose, const char* name, s32 loop);
-    extern void animPoseSetMaterialFlagOn(s32 pose, s32 flags);
-    extern void animPoseSetMaterialFlagOff(s32 pose, s32 flags);
-    extern void animPoseSetGXFunc(s32 pose, void* func, s32 param);
-    extern const char R_no_messages_JP[];
-    char* base = (char*)R_no_messages_JP;
-    void* work;
-    s32 pose;
-
-    pose = animPoseEntry(base + 0x390, 2);
-    *(s32*)((s32)msgw + 0x20) = pose;
-    animPoseSetAnim(*(s32*)((s32)msgw + 0x20), base + 0x398, 1);
-    animPoseSetMaterialFlagOn(*(s32*)((s32)msgw + 0x20), 0x1800);
-    animPoseSetMaterialFlagOff(*(s32*)((s32)msgw + 0x20), 0x40);
-    animPoseSetGXFunc(*(s32*)((s32)msgw + 0x20), msgDispKeyWait_render, 0);
-    work = msgw;
-    *(s32*)((s32)work + 4) = 0;
-    *(s32*)((s32)msgw + 0xC) = 0;
-    *(s32*)((s32)msgw + 0x14) = 0;
-    *(s32*)((s32)msgw + 0x1C) = 0;
-    msgLoad(base + 0x3A0, 1);
-}
-
-char* msgGetCommand(char* param_1, char* param_2, char* param_3) {
-    s8 c;
-    s32 mode = 0;
-    s32 i;
-
-    for (i = 0; i < 0x80; i++) {
-        c = *(s8*)param_1;
-        switch (c) {
-            case '>':
-                if (mode == 0) {
-                    *param_2 = 0;
-                } else {
-                    *param_3 = 0;
-                }
-                return param_1 + 1;
-            case ' ':
-                if (mode == 0) {
-                    *param_2 = 0;
-                    mode = 1;
-                } else {
-                    *param_3++ = c;
+            case 0xFFF5:
+            case 0xFFF9:
+            case 0xFFFA:
+            case 0xFFFB:
+            case 0xFFFC:
+            case 0xFFFD:
+                break;
+            case 0xFFF6:
+                if (entry[0] == 0) FontDrawNoiseOff(); else FontDrawNoise();
+                break;
+            case 0xFFF7: {
+                u32 color = entry[0];
+                FontDrawColor(&color);
+                break;
+            }
+            case 0xFFF8: {
+                f32 pos[3];
+                u32 color = FontGetDrawColor();
+                if (*(s32*)(work + 0x28) + *(s16*)((u8*)entry + 8) - 40 +
+                    *(s16*)((u8*)entry + 10) < 1) {
+                    pos[0] = x + float_20_8042077c;
+                    pos[1] = y + *(s16*)((u8*)entry + 10) - float_40_80420608;
+                    pos[2] = float_0_80420600;
+                    iconDispGxAlpha(scale, pos, 0x10, (u16)entry[0], alpha);
+                    FontDrawStart_alpha(alpha);
+                    FontDrawColor(&color);
                 }
                 break;
+            }
+            case 0xFFFE:
+                if (*(u16*)(work + 8) == *(u16*)((u8*)entry + 6)) result = 1;
+                break;
+            case 0xFFFF:
+                return 0;
             default:
-                if (mode == 0) {
-                    *param_2++ = c;
+                if ((flags & 1) != 0) {
+                    f32 mtx[12];
+                    s32 halfWidth = kanjiGetWidth(code) >> 1;
+                    PSMTXTrans(mtx, (f32)-halfWidth, float_12_80420780,
+                               float_0_80420600);
+                    PSMTXScaleApply(mtx, mtx, *(f32*)((u8*)entry + 0x14),
+                                    *(f32*)((u8*)entry + 0x14),
+                                    *(f32*)((u8*)entry + 0x14));
+                    PSMTXTransApply(mtx, mtx, x + halfWidth, y, float_0_80420600);
+                    PSMTXScaleApply(mtx, mtx, scale, scale, scale);
+                    FontDrawCodeMtx(mtx, code);
+                    *(f32*)((u8*)entry + 0x14) =
+                        float_0p5_80420620 *
+                        (*(f32*)((u8*)entry + 0x14) - float_1_80420618) +
+                        float_1_80420618;
+                } else if ((flags & 2) != 0) {
+                    FontDrawScale(scale);
+                    FontDrawCode(x + (irand(10000) % 3),
+                                 y + (irand(10000) % 3), code);
+                } else if ((flags & 4) != 0) {
+                    s64 elapsed = (s64)(*(u64*)((u8*)gp + 0x38) - *(u64*)(work + 0x18));
+                    f32 phase = float_0p01_80420788 *
+                                (f32)(elapsed / (*(u32*)0x800000F8 / 4000)) -
+                                float_0p02_8042078c * x;
+                    FontDrawScale(scale);
+                    FontDrawCode(x + float_3p2_80420790 * (f32)cos(phase),
+                                 y + float_3p2_80420790 * (f32)sin(phase), code);
+                } else if ((flags & (0x100 << (*(s8*)(work + 0xF243) & 31))) != 0) {
+                    s64 elapsed = (s64)(*(u64*)((u8*)gp + 0x38) - *(u64*)(work + 0x18));
+                    f32 phase = float_0p01_80420788 *
+                                (f32)(elapsed / (*(u32*)0x800000F8 / 4000)) -
+                                float_0p02_8042078c * x;
+                    f32 drawX = x + float_3p2_80420790 * (f32)cos(phase);
+                    f32 drawY = y + float_3p2_80420790 * (f32)sin(phase);
+                    u32 color = FontGetDrawColor();
+                    FontDrawScale(scale);
+                    FontDrawColor(&color);
+                    FontDrawCode(drawX, drawY, code);
+                    FontDrawEdge();
+                    FontDrawRainbowColor();
+                    FontDrawCode(drawX - float_4_8042076c,
+                                 drawY + float_4_8042076c, code);
+                    FontDrawEdgeOff();
+                    FontDrawRainbowColorOff();
+                    FontDrawColorIDX(0);
                 } else {
-                    *param_3++ = c;
+                    FontDrawScale(scale);
+                    FontDrawCode(x, y, code);
                 }
                 break;
         }
-        param_1++;
     }
-    return NULL;
+    return result;
 }
 
-s32 msgIconStr2ID(char* param_1) {
-    typedef struct MsgIcon {
-        const char* name;
-        s32 id;
-    } MsgIcon;
-    extern MsgIcon msgIcon[];
-    extern s32 strcmp(const char* a, const char* b);
-    register MsgIcon* icon = msgIcon;
-    u32 i;
+void msgDispKeyWait_render(void* anim) {
+    void* ptr = animGetPtr(anim);
 
-    for (i = 0; i < 0x12; i++, icon++) {
-        if (strcmp(icon->name, param_1) == 0) {
-            return msgIcon[i].id;
-        }
-    }
-    return -1;
-}
-
-void msgWindow_Repeat(s32 id) {
-    extern void* windowGetPointer(s32);
-    extern void* gp;
-    u8* window = windowGetPointer(id);
-    u8* work = **(u8***)(window + 0x28);
-    u64 now = *(u64*)((u8*)gp + 0x38);
-
-    *(u16*)window = 1;
-    *(u16*)(window + 2) |= 2;
-    *(u64*)(work + 0x30) = now;
-    *(u64*)(work + 0x18) = now;
-    *(u32*)(work + 0x20) = 0;
-    *(u32*)(work + 0x24) = 0;
-    *(u32*)(work + 0x28) = 0;
-    *(u32*)(work + 0x10) = 0;
-}
-
-void msgWindow_Add(char* text, s32 id) {
-    extern void* windowGetPointer(s32);
-    extern void* gp;
-    extern void msgAnalize(void*, void*);
-    u8* window = windowGetPointer(id);
-    void* smart = *(void**)(window + 0x28);
-    u8* work = *(u8**)smart;
-
-    *(u64*)(work + 0x30) = *(u64*)((u8*)gp + 0x38);
-    msgAnalize(smart, text);
-    *(u16*)window = 1;
-    *(u16*)(window + 2) |= 2;
-}
-
-s32 msg_compare(s32* a, s32* b) {
-    extern char* msgSortDvdData;
-    extern s32 strcmp(const char*, const char*);
-    s32 result = strcmp(msgSortDvdData + *a, msgSortDvdData + *b);
-
-    if (result > 0) {
-        return 1;
-    }
-    return result >> 31;
+    GXSetZMode(1, 7, 0);
+    GXSetBlendMode(0, 4, 5, 0);
+    GXSetZCompLoc(0);
+    GXSetAlphaCompare(6, 0x80, 1, 0, 0);
+    *(void**)((s32)ptr + 0xE0) = anim;
 }
 
 u8 msgAnalize(void* smart, s32 textAddress) {
@@ -1463,6 +767,323 @@ u8 msgAnalize(void* smart, s32 textAddress) {
             x += advance;
             count++;
             time += speed;
+        }
+    }
+}
+
+void* L_msgGetWork(void) {
+    return &msgWork;
+}
+
+s32 msg_compare(s32* a, s32* b) {
+    extern char* msgSortDvdData;
+    extern s32 strcmp(const char*, const char*);
+    s32 result = strcmp(msgSortDvdData + *a, msgSortDvdData + *b);
+
+    if (result > 0) {
+        return 1;
+    }
+    return result >> 31;
+}
+
+void* msgSearch(void* msgId) {
+    extern void* msgWork;
+    extern void* gp;
+    extern s32 strcmp(const char*, const char*);
+    extern char* ErrMessage[];
+    u8* files = (u8*)&msgWork;
+    char* key = msgId;
+    s32 fileIndex;
+
+    for (fileIndex = 0; fileIndex < 2; fileIndex++, files += 0x10) {
+        void* smart = *(void**)(files + 0x0C);
+        if (smart != 0) {
+            s32* lookup = *(s32**)smart;
+            s32 low = 0;
+            s32 high = *(s32*)(files + 8);
+            while (low <= high) {
+                s32 middle = (low + high) / 2;
+                s32 count = *(s32*)(files + 8);
+                s32 result;
+                if (middle >= count) {
+                    break;
+                }
+                result = strcmp(key, (char*)*(void**)files + lookup[middle * 2]);
+                if (result == 0) {
+                    return (char*)*(void**)files + lookup[middle * 2 + 1];
+                }
+                if (result < 0) {
+                    high = middle - 1;
+                } else {
+                    low = middle + 1;
+                }
+            }
+        }
+    }
+    return ErrMessage[*(s32*)((u8*)gp + 0x16C)];
+}
+
+s32 _ismbblead(s32 c) {
+    u32 value;
+
+    if (*(void**)((s32)gp + 0x16C) != 0) {
+        return 0;
+    }
+
+    value = (u8)c;
+    if ((value >= 0x81 && value <= 0x9F) || (value >= 0xE0 && value <= 0xFC)) {
+        return 1;
+    }
+    return 0;
+}
+
+char* msgGetCommand(char* param_1, char* param_2, char* param_3) {
+    s8 c;
+    s32 mode = 0;
+    s32 i;
+
+    for (i = 0; i < 0x80; i++) {
+        c = *(s8*)param_1;
+        switch (c) {
+            case '>':
+                if (mode == 0) {
+                    *param_2 = 0;
+                } else {
+                    *param_3 = 0;
+                }
+                return param_1 + 1;
+            case ' ':
+                if (mode == 0) {
+                    *param_2 = 0;
+                    mode = 1;
+                } else {
+                    *param_3++ = c;
+                }
+                break;
+            default:
+                if (mode == 0) {
+                    *param_2++ = c;
+                } else {
+                    *param_3++ = c;
+                }
+                break;
+        }
+        param_1++;
+    }
+    return NULL;
+}
+
+s32 msgIconStr2ID(char* param_1) {
+    typedef struct MsgIcon {
+        const char* name;
+        s32 id;
+    } MsgIcon;
+    extern MsgIcon msgIcon[];
+    extern s32 strcmp(const char* a, const char* b);
+    register MsgIcon* icon = msgIcon;
+    u32 i;
+
+    for (i = 0; i < 0x12; i++, icon++) {
+        if (strcmp(icon->name, param_1) == 0) {
+            return msgIcon[i].id;
+        }
+    }
+    return -1;
+}
+
+int msgWindow_Entry(char* text, s32 param_2, short kind) {
+    extern s32 windowEntry(short kind);
+    extern void* windowGetPointer(s32 id);
+    extern u32 strlen(char* str);
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern char* strcpy(char* dst, char* src);
+    extern void* smartAlloc(void* ptr, s32 flag);
+    extern void* memset(void* dst, s32 value, u32 size);
+    extern void msgAnalize(void* smart, void* text);
+    extern void __memFree(s32 heap, void* ptr);
+    extern void* getWakuTexObj(s32 id);
+    extern u32 GXGetTexObjWidth(void* obj);
+    extern u32 GXGetTexObjHeight(void* obj);
+    extern u8 msgWindow_Main(void* win);
+    extern void msgWindow_Delete(void* win);
+    extern u8 selectWindow_Main(s32 win);
+    extern u8 msgWindow_Clear_Main(void* win);
+    extern f32 float_neg280_80420660;
+    extern f32 float_225_80420664;
+    extern f32 float_560_80420668;
+    extern f32 float_176_8042066c;
+    extern f32 float_0p9_80420670;
+    s32 id = windowEntry(kind);
+    void* win = windowGetPointer(id);
+    char* copy;
+    void* smart;
+    char* work;
+    s32 mode;
+    void* texObj;
+
+    *(void**)((s32)win + 0x3C) = msgWindow_Main;
+    *(void**)((s32)win + 0x40) = msgWindow_Delete;
+    *(u16*)win = 5;
+    *(s32*)((s32)win + 8) = -1;
+    *(u16*)((s32)win + 2) |= 2;
+
+    copy = __memAlloc(0, strlen(text));
+    strcpy(copy, text);
+    smart = smartAlloc(copy, 1);
+    work = *(char**)smart;
+    memset(work, 0, 0xF258);
+
+    *(void**)(work + 0xF24C) = win;
+    *(s32*)(work + 4) = 3;
+    *(s32*)(work + 0xF1FC) = param_2;
+    *(s32*)(work + 0x34) = *(s32*)((s32)gp + 0x3C);
+    *(s32*)(work + 0x30) = *(s32*)((s32)gp + 0x38);
+    *(s32*)(work + 0x1C) = *(s32*)((s32)gp + 0x3C);
+    *(s32*)(work + 0x18) = *(s32*)((s32)gp + 0x38);
+    *(s32*)(work + 0xF228) = 0;
+    *(u8*)(work + 0xF22C) = 0x7F;
+    *(s32*)(work + 0xF230) = 0;
+    *(u16*)(work + 0xF234) = 0;
+    *(u16*)(work + 0xF236) = 0;
+    *(u16*)(work + 0xF238) = 0;
+    *(u16*)(work + 0xF23A) = 0;
+    *(s32*)(work + 0xF23C) = 0x19;
+    *(s32*)(work + 0xF040) = 0;
+
+    msgAnalize(smart, copy);
+    if (*(s32*)((s32)win + 8) == 1) {
+        *(u32*)(work + 4) |= 0x200;
+    }
+    __memFree(0, copy);
+
+    *(void**)((s32)win + 0x28) = smart;
+    work = **(char***)((s32)win + 0x28);
+    *(s32*)(work + 0xF250) = 0;
+    *(s32*)(work + 0xF254) = 0;
+
+    mode = *(s32*)((s32)win + 8);
+    if (mode == 5) {
+        *(void**)((s32)win + 0x3C) = selectWindow_Main;
+        *(f32*)((s32)win + 0x0C) = (f32)(s16)(-(*(s16*)(work + 0xF244) / 2));
+        *(f32*)((s32)win + 0x10) = (f32)*(s16*)(work + 0xF246);
+        *(f32*)((s32)win + 0x14) = (f32)*(s16*)(work + 0xF244);
+        *(f32*)((s32)win + 0x18) = (f32)(s16)((*(s8*)(work + 0xF240) * 0x24) + 0x28);
+        *(u8*)(work + 0xF243) = *(u8*)(work + 0xF241);
+        *(f32*)(work + 0xF248) = *(f32*)((s32)win + 0x10) - (f32)((*(s8*)(work + 0xF243) * 0x1F) + 0x3A);
+        return id;
+    }
+
+    if (mode < 5) {
+        if (mode == 1) {
+            *(s32*)((s32)win + 4) = kind + 10;
+            texObj = getWakuTexObj(3);
+            *(f32*)((s32)win + 0x14) = float_0p9_80420670 * (f32)(u16)GXGetTexObjWidth(texObj);
+            texObj = getWakuTexObj(3);
+            *(f32*)((s32)win + 0x18) = float_0p9_80420670 * (f32)(u16)GXGetTexObjHeight(texObj);
+            return id;
+        }
+        if (mode < 0) {
+            return id;
+        }
+    } else if (mode == 0xB) {
+        *(void**)((s32)win + 0x3C) = msgWindow_Clear_Main;
+    } else if (mode > 10) {
+        return id;
+    }
+
+    if ((*(u16*)((s32)win + 2) & 4) == 0) {
+        *(f32*)((s32)win + 0x0C) = float_neg280_80420660;
+        *(f32*)((s32)win + 0x10) = float_225_80420664;
+        *(f32*)((s32)win + 0x14) = float_560_80420668;
+        *(f32*)((s32)win + 0x18) = float_176_8042066c;
+    }
+    return id;
+}
+
+void msgWindow_Delete(void* win) {
+    void* ptr = *(void**)((s32)win + 0x28);
+
+    if (ptr != 0) {
+        s32 count = *(s32*)(*(s32*)ptr + 0x38);
+
+        while (count > 0) {
+            count--;
+        }
+        smartFree(ptr);
+        *(void**)((s32)win + 0x28) = 0;
+    }
+}
+
+void msgWindow_Add(char* text, s32 id) {
+    extern void* windowGetPointer(s32);
+    extern void* gp;
+    extern void msgAnalize(void*, void*);
+    u8* window = windowGetPointer(id);
+    void* smart = *(void**)(window + 0x28);
+    u8* work = *(u8**)smart;
+
+    *(u64*)(work + 0x30) = *(u64*)((u8*)gp + 0x38);
+    msgAnalize(smart, text);
+    *(u16*)window = 1;
+    *(u16*)(window + 2) |= 2;
+}
+
+void msgWindow_Continue(s32 id) {
+    void* win = windowGetPointer(id);
+    void* obj;
+    void* work;
+    s32 x;
+    s32 y;
+
+    *(u16*)win = 1;
+    *(u16*)((s32)win + 2) |= 2;
+    work = gp;
+    obj = *(void**)((s32)win + 0x28);
+    x = *(s32*)((s32)work + 0x38);
+    y = *(s32*)((s32)work + 0x3C);
+    obj = *(void**)obj;
+    *(s32*)((s32)obj + 0x34) = y;
+    *(s32*)((s32)obj + 0x30) = x;
+}
+
+void msgWindow_Repeat(s32 id) {
+    extern void* windowGetPointer(s32);
+    extern void* gp;
+    u8* window = windowGetPointer(id);
+    u8* work = **(u8***)(window + 0x28);
+    u64 now = *(u64*)((u8*)gp + 0x38);
+
+    *(u16*)window = 1;
+    *(u16*)(window + 2) |= 2;
+    *(u64*)(work + 0x30) = now;
+    *(u64*)(work + 0x18) = now;
+    *(u32*)(work + 0x20) = 0;
+    *(u32*)(work + 0x24) = 0;
+    *(u32*)(work + 0x28) = 0;
+    *(u32*)(work + 0x10) = 0;
+}
+
+void msgWindow_ForceClose(s32 id) {
+    extern s32 strcmp(const char* a, const char* b);
+    extern void BtlUnit_ChangeStayAnim(void* unit);
+    extern void npcSetStayPose(void* npc);
+    s32 i;
+    void* win;
+    void* obj;
+
+    for (i = 0; i < 7; i++) {
+        win = windowGetPointer(i);
+        if (*(u16*)((s32)win + 2) != 0 && *(u16*)win != 0 && *(void**)((s32)win + 0x28) != NULL) {
+            obj = *(void**)(*(void**)((s32)win + 0x28));
+            if (*(void**)obj != NULL && strcmp(*(char**)obj, (char*)id) == 0) {
+                *(u16*)win = 7;
+                obj = *(void**)(*(void**)((s32)win + 0x28));
+                if (*(u32*)((s32)obj + 4) & 8) {
+                    BtlUnit_ChangeStayAnim(*(void**)((s32)obj + 0xF224));
+                } else {
+                    npcSetStayPose((void*)((s32)obj + 0xF204));
+                }
+            }
         }
     }
 }
@@ -1790,3 +1411,383 @@ display:
               float_400_8042061c - (f32)*(s16*)(window + 4));
 }
 
+void msgWindow_Disp(s32 unused, void* win) {
+    extern void* camGetCurPtr(void);
+    extern void GXSetFog(s32 type, f32 startz, f32 endz, f32 nearz, f32 farz, void* color);
+    extern void getScreenPoint(void* src, f32* dst);
+    extern f32 intplGetValue(s32 type, s32 currStep, s32 steps, f32 start, f32 end);
+    extern void windowDispGX_Message(f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, s32 type, s32 flagsArg, u8 alphaArg);
+    extern void windowDispGX_Kanban(f32 x, f32 y, f32 w, f32 h, s32 type, u8 alphaArg);
+    extern void windowDispGX_System(f32 x, f32 y, f32 w, f32 h, s32 type, u8 alphaArg);
+    extern void GXSetScissor(u32 x, u32 y, u32 w, u32 h);
+    extern u8 msgDisp();
+    extern void animPoseMain(s32 poseId);
+    extern void animPoseDraw(s32 poseId, double x, double y, double z, double rot, double scale, s32 modeArg);
+    extern u32 unk_80429580;
+    extern void* msgw;
+    extern u16 active_772;
+    extern f32 float_0_80420600;
+    extern f32 float_0p5_80420620;
+    extern f32 float_10_80420624;
+    extern f32 float_240_80420628;
+    extern f32 float_36_8042062c;
+    extern f32 float_62_80420630;
+    extern f32 float_80_80420634;
+    extern f32 float_60_80420638;
+    extern f32 float_28_8042063c;
+    extern f32 float_6_80420640;
+    extern f32 float_8_80420644;
+    extern f32 float_2_80420610;
+    extern f32 float_50_80420648;
+    extern f32 float_52_8042064c;
+    extern f32 float_31_80420650;
+    extern f32 float_180_80420654;
+    extern f32 float_5_80420658;
+
+#define W_MODE (*(volatile s32*)((s32)win + 0x08))
+#define W_STEP (*(volatile s16*)((s32)win + 0x06))
+#define W_ALPHA ((u8)W_STEP)
+#define W_FLAGS (*(volatile s16*)((s32)win + 0x2C))
+
+    void* cam;
+    u32 fogColor;
+    f32 screen[3];
+    f32 ix;
+    f32 iy;
+    f32 iw;
+    f32 ih;
+    s32 drew;
+    u32 scissorY;
+    u32 scissorH;
+    s32 signedY;
+
+    (void)unused;
+
+    cam = camGetCurPtr();
+    drew = 0;
+    fogColor = unk_80429580;
+    GXSetFog(0, float_0_80420600, float_0_80420600, float_0_80420600, float_0_80420600, &fogColor);
+
+
+    switch (W_MODE) {
+        case 0:
+        case 1:
+        case 6:
+        case 8:
+        case 9:
+            if (W_FLAGS == 0) {
+                windowDispGX_Message(
+                    *(f32*)((s32)win + 0x0C),
+                    *(f32*)((s32)win + 0x10),
+                    *(f32*)((s32)win + 0x14),
+                    *(f32*)((s32)win + 0x18),
+                    float_0_80420600,
+                    float_0_80420600,
+                    W_MODE,
+                    0,
+                    W_ALPHA);
+                scissorY = (u32)(float_240_80420628 - (*(f32*)((s32)win + 0x10) - float_36_8042062c) - float_8_80420644);
+                GXSetScissor(*(u16*)((s32)cam + 0xF4), scissorY, *(u16*)((s32)cam + 0xF8), 0x7E);
+                drew = msgDisp(
+                    float_62_80420630 + *(f32*)((s32)win + 0x0C),
+                    *(f32*)((s32)win + 0x10) - float_36_8042062c,
+                    *(void**)((s32)win + 0x28),
+                    W_ALPHA);
+            } else {
+                if ((W_FLAGS & 0x10) != 0) {
+                    screen[0] = *(f32*)((s32)win + 0x30);
+                    screen[1] = *(f32*)((s32)win + 0x34);
+                    screen[2] = *(f32*)((s32)win + 0x38);
+                } else {
+                    getScreenPoint((void*)((s32)win + 0x30), screen);
+                }
+
+                if (W_MODE == 1) {
+                    *(f32*)((s32)win + 0x0C) = screen[0] - (*(f32*)((s32)win + 0x14) * float_0p5_80420620);
+                    if ((W_FLAGS & 8) != 0) {
+                        *(f32*)((s32)win + 0x10) = screen[1] - float_80_80420634;
+                    } else {
+                        *(f32*)((s32)win + 0x10) = float_60_80420638 + screen[1];
+                    }
+
+                    ix = intplGetValue(0, W_STEP, 0xFF, screen[0], *(f32*)((s32)win + 0x0C) + (*(f32*)((s32)win + 0x14) * float_0p5_80420620));
+                    iy = intplGetValue(0, W_STEP, 0xFF, screen[1], *(f32*)((s32)win + 0x10) - (*(f32*)((s32)win + 0x18) * float_0p5_80420620));
+                    iw = intplGetValue(0, W_STEP, 0xFF, float_10_80420624, *(f32*)((s32)win + 0x14));
+                    ih = intplGetValue(0, W_STEP, 0xFF, float_10_80420624, *(f32*)((s32)win + 0x18));
+                    windowDispGX_Message(
+                        ix - (iw * float_0p5_80420620),
+                        iy + (ih * float_0p5_80420620),
+                        iw,
+                        ih,
+                        screen[0],
+                        screen[1],
+                        W_MODE,
+                        W_FLAGS,
+                        W_ALPHA);
+                    if (W_STEP == 0xFF) {
+                        signedY = 0xF0 - ((s32)*(f32*)((s32)win + 0x10) - 10);
+                        if (signedY < 0) {
+                            signedY = 0;
+                        }
+                        if (signedY > 0x1E0) {
+                            signedY = 0x1E0;
+                        }
+                        GXSetScissor(*(u16*)((s32)cam + 0xF4), signedY, *(u16*)((s32)cam + 0xF8), 0x7E);
+                        msgDisp(
+                            float_28_8042063c + *(f32*)((s32)win + 0x0C),
+                            *(f32*)((s32)win + 0x10) - float_6_80420640,
+                            *(void**)((s32)win + 0x28),
+                            W_ALPHA);
+                    }
+                } else if (W_MODE == 0 || W_MODE == 6 || W_MODE == 8 || W_MODE == 9) {
+                    ix = intplGetValue(0, W_STEP, 0xFF, screen[0], *(f32*)((s32)win + 0x0C) + (*(f32*)((s32)win + 0x14) * float_0p5_80420620));
+                    iy = intplGetValue(0, W_STEP, 0xFF, screen[1], *(f32*)((s32)win + 0x10) - (*(f32*)((s32)win + 0x18) * float_0p5_80420620));
+                    iw = intplGetValue(0, W_STEP, 0xFF, float_10_80420624, *(f32*)((s32)win + 0x14));
+                    ih = intplGetValue(0, W_STEP, 0xFF, float_10_80420624, *(f32*)((s32)win + 0x18));
+                    windowDispGX_Message(
+                        ix - (iw * float_0p5_80420620),
+                        iy + (ih * float_0p5_80420620),
+                        iw,
+                        ih,
+                        screen[0],
+                        screen[1],
+                        W_MODE,
+                        W_FLAGS,
+                        W_ALPHA);
+                    if (W_STEP == 0xFF) {
+                        scissorY = (u32)(float_240_80420628 - (*(f32*)((s32)win + 0x10) - float_36_8042062c));
+                        GXSetScissor(*(u16*)((s32)cam + 0xF4), scissorY, *(u16*)((s32)cam + 0xF8), 100);
+                        drew = msgDisp(
+                            float_62_80420630 + *(f32*)((s32)win + 0x0C),
+                            *(f32*)((s32)win + 0x10) - float_36_8042062c,
+                            *(void**)((s32)win + 0x28),
+                            W_ALPHA);
+                    }
+                }
+            }
+            break;
+
+        case 2:
+        case 4:
+        case 10:
+            windowDispGX_Kanban(
+                *(f32*)((s32)win + 0x0C),
+                *(f32*)((s32)win + 0x10),
+                *(f32*)((s32)win + 0x14),
+                *(f32*)((s32)win + 0x18),
+                W_MODE,
+                W_ALPHA);
+            scissorY = (u32)(float_240_80420628 - (*(f32*)((s32)win + 0x10) - float_36_8042062c) - float_2_80420610);
+            GXSetScissor(*(u16*)((s32)cam + 0xF4), scissorY, *(u16*)((s32)cam + 0xF8), 0x68);
+            drew = msgDisp(
+                float_62_80420630 + *(f32*)((s32)win + 0x0C),
+                *(f32*)((s32)win + 0x10) - float_36_8042062c,
+                *(void**)((s32)win + 0x28),
+                W_ALPHA);
+            break;
+
+        case 3:
+            windowDispGX_System(
+                *(f32*)((s32)win + 0x0C),
+                *(f32*)((s32)win + 0x10),
+                *(f32*)((s32)win + 0x14),
+                *(f32*)((s32)win + 0x18),
+                W_MODE,
+                W_ALPHA);
+            scissorH = (u32)(*(f32*)((s32)win + 0x18) - float_50_80420648);
+            scissorY = (u32)(float_240_80420628 - (*(f32*)((s32)win + 0x10) - float_36_8042062c) - float_8_80420644);
+            GXSetScissor(*(u16*)((s32)cam + 0xF4), scissorY, *(u16*)((s32)cam + 0xF8), scissorH);
+            drew = msgDisp(
+                float_62_80420630 + *(f32*)((s32)win + 0x0C),
+                *(f32*)((s32)win + 0x10) - float_36_8042062c,
+                *(void**)((s32)win + 0x28),
+                W_ALPHA);
+            break;
+
+        case 7:
+            windowDispGX_Kanban(
+                *(f32*)((s32)win + 0x0C),
+                *(f32*)((s32)win + 0x10),
+                *(f32*)((s32)win + 0x14),
+                *(f32*)((s32)win + 0x18),
+                W_MODE,
+                W_ALPHA);
+            scissorY = (u32)(float_240_80420628 - (*(f32*)((s32)win + 0x10) - float_36_8042062c) - float_8_80420644);
+            GXSetScissor(*(u16*)((s32)cam + 0xF4), scissorY, *(u16*)((s32)cam + 0xF8), 0x7E);
+            drew = msgDisp(
+                float_62_80420630 + *(f32*)((s32)win + 0x0C),
+                *(f32*)((s32)win + 0x10) - float_36_8042062c,
+                *(void**)((s32)win + 0x28),
+                W_ALPHA);
+            break;
+
+        case 11:
+            scissorH = (u32)(*(f32*)((s32)win + 0x18) - float_50_80420648);
+            scissorY = (u32)(float_240_80420628 - (*(f32*)((s32)win + 0x10) - float_36_8042062c) - float_8_80420644);
+            GXSetScissor(*(u16*)((s32)cam + 0xF4), scissorY, *(u16*)((s32)cam + 0xF8), scissorH);
+            drew = msgDisp(
+                float_62_80420630 + *(f32*)((s32)win + 0x0C),
+                *(f32*)((s32)win + 0x10) - float_36_8042062c,
+                *(void**)((s32)win + 0x28),
+                W_ALPHA);
+            break;
+    }
+
+    GXSetScissor(
+        *(u16*)((s32)cam + 0xF4),
+        *(u16*)((s32)cam + 0xF6),
+        *(u16*)((s32)cam + 0xF8),
+        *(u16*)((s32)cam + 0xFA));
+
+    if (drew != 0) {
+        if (active_772 == 0) {
+            active_772 = 1;
+        }
+        animPoseMain(*(s32*)((s32)msgw + 0x20));
+        animPoseDraw(
+            *(s32*)((s32)msgw + 0x20),
+            (*(f32*)((s32)win + 0x0C) + *(f32*)((s32)win + 0x14)) - float_52_8042064c,
+            float_31_80420650 + (*(f32*)((s32)win + 0x10) - *(f32*)((s32)win + 0x18)),
+            float_0_80420600,
+            float_180_80420654,
+            float_5_80420658,
+            2);
+    }
+#undef W_MODE
+#undef W_STEP
+#undef W_ALPHA
+#undef W_FLAGS
+}
+
+void selectWindow_Main(void* win) {
+    extern s32 msgMain(void* work);
+    extern u32 keyGetButtonTrg(s32 pad);
+    extern u32 keyGetDirTrg(s32 pad);
+    extern u32 keyGetButtonRep(s32 pad);
+    extern u32 keyGetDirRep(s32 pad);
+    extern void psndSFXOn(u32 id);
+    extern void dispEntry(s32 camId, s32 order, void* callback, void* param, f32 prio);
+    extern u8 selectWindow_Disp(s32 param_1, int param_2);
+    extern f32 float_400_8042061c;
+    void* smart = *(void**)((s32)win + 0x28);
+    char* work = *(char**)smart;
+    s8 oldSelect;
+    s8 value;
+
+    msgMain(smart);
+
+    switch (*(u16*)win) {
+        case 5:
+            *(s16*)((s32)win + 6) += 0x19;
+            if (*(s16*)((s32)win + 6) > 0xFF) {
+                *(s16*)((s32)win + 6) = 0xFF;
+                *(u16*)win = 1;
+            }
+            break;
+        case 1:
+            oldSelect = *(s8*)(work + 0xF243);
+            if (((keyGetButtonTrg(0) & 8) != 0) || ((keyGetDirTrg(0) & 0x1000) != 0)) {
+                *(u8*)(work + 0xF243) = *(u8*)(work + 0xF243) - 1;
+            } else if (((keyGetButtonRep(0) & 8) != 0) || ((keyGetDirRep(0) & 0x1000) != 0)) {
+                if (*(s8*)(work + 0xF243) != 0) {
+                    *(u8*)(work + 0xF243) = *(u8*)(work + 0xF243) - 1;
+                }
+            }
+
+            if (((keyGetButtonTrg(0) & 4) != 0) || ((keyGetDirTrg(0) & 0x2000) != 0)) {
+                *(u8*)(work + 0xF243) = *(u8*)(work + 0xF243) + 1;
+            } else if (((keyGetButtonRep(0) & 4) != 0) || ((keyGetDirRep(0) & 0x2000) != 0)) {
+                if (*(s8*)(work + 0xF243) < (*(s8*)(work + 0xF240) - 1)) {
+                    *(u8*)(work + 0xF243) = *(u8*)(work + 0xF243) + 1;
+                }
+            }
+
+            if (*(s8*)(work + 0xF243) < 0) {
+                *(u8*)(work + 0xF243) = *(u8*)(work + 0xF240) - 1;
+            }
+            if (*(s8*)(work + 0xF243) >= *(s8*)(work + 0xF240)) {
+                *(u8*)(work + 0xF243) = 0;
+            }
+            if (oldSelect != *(s8*)(work + 0xF243)) {
+                psndSFXOn(0x20005);
+            }
+
+            if ((keyGetButtonTrg(0) & 0x200) != 0) {
+                value = *(s8*)(work + 0xF242);
+                if (value != -1) {
+                    if (value < -1 && value > -3) {
+                        *(u8*)(work + 0xF243) = 0xFF;
+                    } else {
+                        *(s8*)(work + 0xF243) = value;
+                    }
+                    *(u16*)win = 7;
+                    psndSFXOn(0x20013);
+                }
+            } else if ((keyGetButtonTrg(0) & 0x100) != 0) {
+                *(u16*)win = 7;
+                psndSFXOn(0x20012);
+            }
+            break;
+        case 7:
+            if (*(s16*)((s32)win + 6) == 0) {
+                *(u16*)win = 4;
+                *(u16*)((s32)win + 2) &= ~2;
+                return;
+            }
+            *(s16*)((s32)win + 6) -= 0x19;
+            if (*(s16*)((s32)win + 6) < 1) {
+                *(s16*)((s32)win + 6) = 0;
+            }
+            break;
+        default:
+            if (*(u16*)win >= 4) {
+                return;
+            }
+            break;
+    }
+
+    dispEntry(8, 0, selectWindow_Disp, win, float_400_8042061c - (f32)*(s16*)((s32)win + 4));
+}
+
+void selectWindow_Disp(s32 unused, void* win) {
+    typedef struct VecLocal { f32 x, y, z; } VecLocal;
+    extern void GXSetFog(s32, f32, f32, f32, f32, void*);
+    extern void windowDispGX_Waku_col(f32, f32, f32, f32, f32, s32, void*);
+    extern u8 msgDisp(f64, f64, s32*, u8);
+    extern void iconDispGxAlpha(f64, void*, s32, u16, u8);
+    extern u32 unk_80429584;
+    extern u32 dat_804205fc;
+    extern f32 float_0_80420600;
+    extern f32 float_30_80420604;
+    extern f32 float_40_80420608;
+    extern f32 float_25_8042060c;
+    extern f32 float_2_80420610;
+    extern f32 float_0p3_80420614;
+    extern f32 float_1_80420618;
+    u8* window = win;
+    u8* work = **(u8***)(window + 0x28);
+    u32 fogColor = unk_80429584;
+    u32 frameColor = (dat_804205fc & 0xFFFFFF00) | *(u16*)(window + 6);
+    VecLocal iconPos;
+    f32 targetY;
+
+    (void)unused;
+    GXSetFog(0, float_0_80420600, float_0_80420600,
+             float_0_80420600, float_0_80420600, &fogColor);
+    windowDispGX_Waku_col(*(f32*)(window + 0x0C), *(f32*)(window + 0x10),
+                          *(f32*)(window + 0x14), *(f32*)(window + 0x18),
+                          float_30_80420604, 0, &frameColor);
+    msgDisp(float_40_80420608 + *(f32*)(window + 0x0C),
+            *(f32*)(window + 0x10) - float_25_8042060c,
+            *(s32**)(window + 0x28), (u8)*(u16*)(window + 6));
+
+    iconPos.x = float_2_80420610 + *(f32*)(window + 0x0C);
+    iconPos.z = float_0_80420600;
+    targetY = *(f32*)(window + 0x10) -
+              (f32)((u8)work[0xF243] * 0x1F + 0x3A);
+    *(f32*)(work + 0xF248) +=
+        float_0p3_80420614 * (targetY - *(f32*)(work + 0xF248));
+    iconPos.y = *(f32*)(work + 0xF248);
+    iconDispGxAlpha(float_1_80420618, &iconPos, 0x14, 0x1F8,
+                    (u8)*(u16*)(window + 6));
+}

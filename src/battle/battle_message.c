@@ -11,19 +11,6 @@ void windowDispGX_Waku_col(s32 texture, void* color, f32 x, f32 y, f32 width, f3
 void FontDrawStart(void);
 void FontDrawMessage(s32 x, s32 y, char* msg);
 
-s32 btlevtcmd_AnnounceSetParam(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-
-    void* battleWork = _battleWorkPointer;
-    s32* args = *(s32**)((s32)evt + 0x18);
-    s32* params = (s32*)((s32)battleWork + 0x18C8C);
-    s32 index = evtGetValue(evt, args[0]);
-
-    params[index + 1] = evtGetValue(evt, args[1]);
-    return 2;
-}
-
 
 u32 btlevtcmd_AnnounceMessage(int param_1, int param_2) {
     extern s32 evtGetValue(void* evt, s32 arg);
@@ -117,4 +104,17 @@ void _disp(void) {
                           width + 0x14, lineCount * 0x1D + 3, float_10_80424bbc);
     FontDrawStart();
     FontDrawMessage((s32)x, (s32)y - 0x1D, msg);
+}
+
+s32 btlevtcmd_AnnounceSetParam(void* evt) {
+    extern void* _battleWorkPointer;
+    extern s32 evtGetValue(void* evt, s32 arg);
+
+    void* battleWork = _battleWorkPointer;
+    s32* args = *(s32**)((s32)evt + 0x18);
+    s32* params = (s32*)((s32)battleWork + 0x18C8C);
+    s32 index = evtGetValue(evt, args[0]);
+
+    params[index + 1] = evtGetValue(evt, args[1]);
+    return 2;
 }

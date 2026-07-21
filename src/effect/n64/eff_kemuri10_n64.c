@@ -1,14 +1,5 @@
 #include "effect/n64/eff_kemuri10_n64.h"
 
-
-void effKemuri10Disp(s32 cameraId, void* effect) {
-    typedef f32 Mtx[3][4]; extern void* camGetPtr(s32); extern void PSMTXTrans(void*,f32,f32,f32); extern void PSMTXScale(void*,f32,f32,f32); extern void PSMTXConcat(void*,void*,void*); extern void GXSetNumChans(s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32); extern void GXLoadTexMtxImm(void*,s32,s32); extern void effGetTexObjN64(s32,void*); extern void GXLoadTexObj(void*,s32); extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevColorIn(s32,s32,s32,s32,s32); extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32); extern void GXSetTevColor(s32,void*); extern void GXLoadPosMtxImm(void*,s32); extern void GXSetCurrentMtx(s32); extern void effSetVtxDescN64(void*); extern void GXBegin(s32,s32,s32); extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);
-    u8* w=*(u8**)((u8*)effect+0xC); void* cam=camGetPtr(cameraId); Mtx m,t,s; u8 tex[0x20]; u32 color; s32 frame=(s32)*(f32*)(w+0x4C);
-    GXSetNumChans(0); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D); PSMTXScale(s,0.015625f,0.03125f,0.0f); PSMTXTrans(t,(f32)frame,0.0f,0.0f); PSMTXConcat(s,t,t); GXLoadTexMtxImm(t,0x1E,1); effGetTexObjN64(0x1F,tex); GXLoadTexObj(tex,0); GXSetNumTevStages(1); GXSetTevOrder(0,0,0,0xFF); GXSetTevColorOp(0,0,0,0,1,0); GXSetTevAlphaOp(0,0,0,0,1,0); GXSetTevColorIn(0,0,0,0,2); GXSetTevAlphaIn(0,0,4,1,7); color=(*(u32*)(w+0x64)&0xFFFFFF00)|(u8)*(s32*)(w+0x58); GXSetTevColor(1,&color);
-    PSMTXTrans(m,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC)); PSMTXConcat(m,w+0x1C,m); PSMTXScale(s,*(f32*)(w+0x54),*(f32*)(w+0x54),*(f32*)(w+0x54)); PSMTXConcat(m,s,m); PSMTXConcat((u8*)cam+0x11C,m,m); GXLoadPosMtxImm(m,0); GXSetCurrentMtx(0); effSetVtxDescN64((void*)0x803A4DC8); GXBegin(0x90,0,0xC0);
-    tri2(0,1,2,0,0,2,3,0);tri2(3,2,4,0,3,4,5,0);tri2(2,6,7,0,2,7,4,0);tri2(1,8,6,0,1,6,2,0);tri2(4,7,9,0,4,9,10,0);tri2(5,4,10,0,5,10,11,0);tri2(10,9,8,0,10,8,1,0);tri2(11,10,1,0,11,1,0,0);tri2(6,12,13,0,6,13,7,0);tri2(8,14,12,0,8,12,6,0);tri2(7,13,15,0,7,15,9,0);tri2(9,15,14,0,9,14,8,0);tri2(16,17,18,0,16,18,19,0);tri2(20,21,17,0,20,17,16,0);tri2(22,20,16,0,22,16,23,0);tri2(23,16,19,0,23,19,24,0);
-}
-
 void* effKemuri10N64Entry(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, f32 speed, s32 camera) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32, s32);
@@ -172,4 +163,13 @@ void effKemuri10Main(void* effect) {
     }
 
     dispEntry(camera, 2, effKemuri10Disp, effect, dispCalcZ(&dispPos));
+}
+
+
+void effKemuri10Disp(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4]; extern void* camGetPtr(s32); extern void PSMTXTrans(void*,f32,f32,f32); extern void PSMTXScale(void*,f32,f32,f32); extern void PSMTXConcat(void*,void*,void*); extern void GXSetNumChans(s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32); extern void GXLoadTexMtxImm(void*,s32,s32); extern void effGetTexObjN64(s32,void*); extern void GXLoadTexObj(void*,s32); extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevColorIn(s32,s32,s32,s32,s32); extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32); extern void GXSetTevColor(s32,void*); extern void GXLoadPosMtxImm(void*,s32); extern void GXSetCurrentMtx(s32); extern void effSetVtxDescN64(void*); extern void GXBegin(s32,s32,s32); extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);
+    u8* w=*(u8**)((u8*)effect+0xC); void* cam=camGetPtr(cameraId); Mtx m,t,s; u8 tex[0x20]; u32 color; s32 frame=(s32)*(f32*)(w+0x4C);
+    GXSetNumChans(0); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D); PSMTXScale(s,0.015625f,0.03125f,0.0f); PSMTXTrans(t,(f32)frame,0.0f,0.0f); PSMTXConcat(s,t,t); GXLoadTexMtxImm(t,0x1E,1); effGetTexObjN64(0x1F,tex); GXLoadTexObj(tex,0); GXSetNumTevStages(1); GXSetTevOrder(0,0,0,0xFF); GXSetTevColorOp(0,0,0,0,1,0); GXSetTevAlphaOp(0,0,0,0,1,0); GXSetTevColorIn(0,0,0,0,2); GXSetTevAlphaIn(0,0,4,1,7); color=(*(u32*)(w+0x64)&0xFFFFFF00)|(u8)*(s32*)(w+0x58); GXSetTevColor(1,&color);
+    PSMTXTrans(m,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC)); PSMTXConcat(m,w+0x1C,m); PSMTXScale(s,*(f32*)(w+0x54),*(f32*)(w+0x54),*(f32*)(w+0x54)); PSMTXConcat(m,s,m); PSMTXConcat((u8*)cam+0x11C,m,m); GXLoadPosMtxImm(m,0); GXSetCurrentMtx(0); effSetVtxDescN64((void*)0x803A4DC8); GXBegin(0x90,0,0xC0);
+    tri2(0,1,2,0,0,2,3,0);tri2(3,2,4,0,3,4,5,0);tri2(2,6,7,0,2,7,4,0);tri2(1,8,6,0,1,6,2,0);tri2(4,7,9,0,4,9,10,0);tri2(5,4,10,0,5,10,11,0);tri2(10,9,8,0,10,8,1,0);tri2(11,10,1,0,11,1,0,0);tri2(6,12,13,0,6,13,7,0);tri2(8,14,12,0,8,12,6,0);tri2(7,13,15,0,7,15,9,0);tri2(9,15,14,0,9,14,8,0);tri2(16,17,18,0,16,18,19,0);tri2(20,21,17,0,20,17,16,0);tri2(22,20,16,0,22,16,23,0);tri2(23,16,19,0,23,19,24,0);
 }

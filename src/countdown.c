@@ -13,43 +13,47 @@ extern f32 float_0_80426800;
 extern f32 float_180_80426824;
 extern f32 float_neg180_80426828;
 
-void countDownSetRestartTime(s32 time) {
-    *(s32*)((s32)wp + 0x1C) = time;
-}
-
-void countDownFlagOff(u16 flag) {
-    *(u16*)wp &= ~flag;
-}
-
-void countDownFlagOn(u16 flag) {
-    *(u16*)wp |= flag;
-}
-
-void countDownStop(void) {
-    *(u16*)wp |= 8;
-    psndSFXOff(*(s32*)((s32)wp + 0x38));
-}
-
-void countDownEnd(void) {
-    if (*(u16*)wp & 1) {
-        *(s32*)((s32)wp + 0x30) = 2;
-    }
-}
-
-s32 countDownGetStatus(void) {
-    u32 flags = *(u16*)wp;
-    if (flags & 1) {
-        goto active;
-    }
-    return -1;
-active:
-    return (flags >> 1) & 1;
-}
-
 void countDownInit(void) {
     wp = (void*)((s32)gp + 0x68);
     memset(wp, 0, 0x40);
 }
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void countDownSaveReStart(void) {
+    void* work = wp;
+    s64 elapsed;
+    u32 ticksPerMs;
+    s32 remaining;
+    s32 restartTime;
+    s32 startTime;
+
+    if ((*(u16*)work & 1) != 0) {
+        ticksPerMs = (((*(u32*)0x800000F8 >> 2) * 0x10624DD3U) >> 6);
+        elapsed = *(s64*)((s32)work + 8) / (s32)ticksPerMs;
+        startTime = *(s32*)((s32)work + 0x18);
+        remaining = startTime - (s32)elapsed;
+        if (remaining < 0) {
+            remaining = 0;
+        }
+        restartTime = *(s32*)((s32)work + 0x1C);
+        if ((u32)remaining <= (u32)restartTime) {
+            *(u64*)((s32)work + 8) = (u64)ticksPerMs * (u32)(startTime - restartTime);
+        }
+
+        *(s32*)((s32)wp + 0x10) = *(s32*)((s32)gp + 0x38);
+        *(s32*)((s32)wp + 0x14) = *(s32*)((s32)gp + 0x3C);
+        if ((s32)evtGetValue(0, (s32)0xF5DE0180) < 0x160) {
+            *(s32*)((s32)wp + 0x38) = psndSFXOn(str_SFX_STG2_BOMB_TIMER1_802fde48);
+        } else {
+            *(s32*)((s32)wp + 0x38) = psndSFXOn(str_SFX_STG7_ALART_WARNI_802fde60);
+        }
+        *(u16*)wp &= ~2;
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
 
 void countDownStart(s32 time, s32 restartTime) {
     s32 sfxTime;
@@ -92,49 +96,8 @@ void countDownStart(s32 time, s32 restartTime) {
     }
 }
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void countDownSaveReStart(void) {
-    void* work = wp;
-    s64 elapsed;
-    u32 ticksPerMs;
-    s32 remaining;
-    s32 restartTime;
-    s32 startTime;
-
-    if ((*(u16*)work & 1) != 0) {
-        ticksPerMs = (((*(u32*)0x800000F8 >> 2) * 0x10624DD3U) >> 6);
-        elapsed = *(s64*)((s32)work + 8) / (s32)ticksPerMs;
-        startTime = *(s32*)((s32)work + 0x18);
-        remaining = startTime - (s32)elapsed;
-        if (remaining < 0) {
-            remaining = 0;
-        }
-        restartTime = *(s32*)((s32)work + 0x1C);
-        if ((u32)remaining <= (u32)restartTime) {
-            *(u64*)((s32)work + 8) = (u64)ticksPerMs * (u32)(startTime - restartTime);
-        }
-
-        *(s32*)((s32)wp + 0x10) = *(s32*)((s32)gp + 0x38);
-        *(s32*)((s32)wp + 0x14) = *(s32*)((s32)gp + 0x3C);
-        if ((s32)evtGetValue(0, (s32)0xF5DE0180) < 0x160) {
-            *(s32*)((s32)wp + 0x38) = psndSFXOn(str_SFX_STG2_BOMB_TIMER1_802fde48);
-        } else {
-            *(s32*)((s32)wp + 0x38) = psndSFXOn(str_SFX_STG7_ALART_WARNI_802fde60);
-        }
-        *(u16*)wp &= ~2;
-    }
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-
-/* CHATGPT STUB FILL: main/countdown 20260624_184008 */
-
-/* stub-fill: countDownDisp | missing_definition | ghidra_signature */
-u8 countDownDisp(void) {
-    extern void PSMTXTrans(void*,f32,f32,f32);extern void PSMTXScale(void*,f32,f32,f32);extern void PSMTXConcat(void*,void*,void*);extern void iconDispGxCol(void*,s32,s32,void*);extern void* wp;u8* work=wp;f32 base[3][4],scale[3][4],mtx[3][4];s32 t=*(s32*)(work+0x18);s32 sec=t/1000; s32 digits[3];s32 i;u32 color=0xFFFFFFFF;
-    PSMTXTrans(base,*(f32*)(work+0x20)+*(f32*)(work+0x28),*(f32*)(work+0x24)+*(f32*)(work+0x2C),0.0f);PSMTXScale(scale,2.5f,1.0f,1.0f);PSMTXConcat(base,scale,mtx);iconDispGxCol(mtx,0x10,0x1FD,&color);digits[0]=sec/100;digits[1]=(sec/10)%10;digits[2]=sec%10;for(i=0;i<3;i++){PSMTXTrans(scale,-50.0f+i*30.0f,8.0f,0.0f);PSMTXConcat(base,scale,mtx);iconDispGxCol(mtx,0x10,0x1FE+digits[i],&color);}return 0;
+void countDownSetRestartTime(s32 time) {
+    *(s32*)((s32)wp + 0x1C) = time;
 }
 
 /* stub-fill: countDownMain | missing_definition | ghidra_signature */
@@ -205,5 +168,42 @@ void countDownMain(void) {
         *(u16*)work |= 2;
     }
     dispEntry(8, 0, countDownDisp, 0, float_1000_80426820);
+}
+
+/* CHATGPT STUB FILL: main/countdown 20260624_184008 */
+
+/* stub-fill: countDownDisp | missing_definition | ghidra_signature */
+u8 countDownDisp(void) {
+    extern void PSMTXTrans(void*,f32,f32,f32);extern void PSMTXScale(void*,f32,f32,f32);extern void PSMTXConcat(void*,void*,void*);extern void iconDispGxCol(void*,s32,s32,void*);extern void* wp;u8* work=wp;f32 base[3][4],scale[3][4],mtx[3][4];s32 t=*(s32*)(work+0x18);s32 sec=t/1000; s32 digits[3];s32 i;u32 color=0xFFFFFFFF;
+    PSMTXTrans(base,*(f32*)(work+0x20)+*(f32*)(work+0x28),*(f32*)(work+0x24)+*(f32*)(work+0x2C),0.0f);PSMTXScale(scale,2.5f,1.0f,1.0f);PSMTXConcat(base,scale,mtx);iconDispGxCol(mtx,0x10,0x1FD,&color);digits[0]=sec/100;digits[1]=(sec/10)%10;digits[2]=sec%10;for(i=0;i<3;i++){PSMTXTrans(scale,-50.0f+i*30.0f,8.0f,0.0f);PSMTXConcat(base,scale,mtx);iconDispGxCol(mtx,0x10,0x1FE+digits[i],&color);}return 0;
+}
+
+s32 countDownGetStatus(void) {
+    u32 flags = *(u16*)wp;
+    if (flags & 1) {
+        goto active;
+    }
+    return -1;
+active:
+    return (flags >> 1) & 1;
+}
+
+void countDownEnd(void) {
+    if (*(u16*)wp & 1) {
+        *(s32*)((s32)wp + 0x30) = 2;
+    }
+}
+
+void countDownStop(void) {
+    *(u16*)wp |= 8;
+    psndSFXOff(*(s32*)((s32)wp + 0x38));
+}
+
+void countDownFlagOn(u16 flag) {
+    *(u16*)wp |= flag;
+}
+
+void countDownFlagOff(u16 flag) {
+    *(u16*)wp &= ~flag;
 }
 

@@ -1,136 +1,5 @@
 #include "effect/eff_kemutest.h"
 
-void effKemuTestSetRxRz(void* effect, f32 rx, f32 rz) {
-    void* work = *(void**)((s32)effect + 0xC);
-    *(f32*)((s32)work + 0x50) = rx;
-    *(f32*)((s32)work + 0x54) = rz;
-}
-
-void effKemuTestDrawCam(void* effect, s32 camId) {
-    *(s32*)((s32)*(void**)((s32)effect + 0xC) + 0x1C) = camId;
-}
-
-
-
-/* CHATGPT STUB FILL: main/effect/eff_kemutest 20260624_184128 */
-
-/* stub-fill: effKemuTestMain | missing_definition | ghidra_signature */
-void effKemuTestMain(void* effect)  {
-    typedef struct Vec3 {
-        f32 x,y,z;
-    }
-    Vec3;
-    extern void effDelete(void*);
-    extern f32 dispCalcZ(Vec3*);
-    extern void dispEntry(s32,s32,void*,void*,f32);
-    extern void effKemuTestDisp(void);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
-    extern void psndSFXOn_3D(char*,Vec3*);
-    extern void effConfettiEntry(void);
-    extern char str_SFX_BTL_STAGE_BURST1_802fe658[];
-    u8* base=*(u8**)((s32)effect+0xC);
-    u8* p=base+0x58;
-    Vec3 pos;
-    u32 type=*(u32*)base;
-    s32 camera=*(s32*)(base+0x1C);
-    s32 done=0;
-    s32 burst=0;
-    s32 i;
-    f32 angle;
-    f32 decay;
-    pos.x=*(f32*)(base+4);
-    pos.y=*(f32*)(base+8);
-    pos.z=*(f32*)(base+0xC);
-    for(i=1;i<*(s32*)((s32)effect+8);i++,p+=0x58) {
-        if(*(s32*)(p+0x44)>0) {
-            (*(s32*)(p+0x44))--;
-            continue;
-        }
-        *(s32*)(p+0x20)=(16 * *(s32*)(p+0x28))/ *(s32*)(p+0x30);
-        *(s32*)(p+0x24)=(16*(*(s32*)(p+0x28)+1))/ *(s32*)(p+0x30);
-        if(*(s32*)(p+0x24)>15)*(s32*)(p+0x24)=15;
-        (*(s32*)(p+0x28))++;
-        decay=0.9f;
-        switch(type) {
-            case 1:case 3:case 19:*(f32*)(p+8)+=*(f32*)(p+0x34);
-            *(f32*)(p+0x34)+=*(f32*)(p+0x38);
-            *(f32*)(p+0x38)*=*(f32*)(p+0x3C);
-            break;
-            case 4:case 5:case 7:case 8:case 9:case 16:case 17:case 20:case 21:*(f32*)(p+4)+=*(f32*)(p+0x10);
-            *(f32*)(p+8)+=*(f32*)(p+0x14);
-            *(f32*)(p+0x10)*=decay;
-            *(f32*)(p+0x14)*=decay;
-            break;
-            case 6:*(f32*)(p+4)+=*(f32*)(p+0x10);
-            *(f32*)(p+0x10)*=0.95f;
-            *(f32*)(p+8)+=*(f32*)(p+0x34);
-            *(f32*)(p+0x34)+=*(f32*)(p+0x38);
-            *(f32*)(p+0x38)*=*(f32*)(p+0x3C);
-            break;
-            case 10:case 14:angle=(6.2832f*(90.0f+180.0f*(f32)(i-1)/(f32)(*(s32*)((s32)effect+8)-2)))/360.0f;
-            *(f32*)(p+4)+=*(f32*)(p+0x34)*(f32)sin(angle);
-            *(f32*)(p+8)-=*(f32*)(p+0x34)*(f32)cos(angle);
-            *(f32*)(p+0x34)+=*(f32*)(p+0x38);
-            *(f32*)(p+0x38)*=*(f32*)(p+0x3C);
-            break;
-            case 11:*(f32*)(p+4)+=*(f32*)(p+0x10);
-            *(f32*)(p+8)+=*(f32*)(p+0x14);
-            *(f32*)(p+0xC)+=*(f32*)(p+0x18);
-            *(f32*)(p+0x10)*=decay;
-            *(f32*)(p+0x14)*=decay;
-            *(f32*)(p+0x18)*=decay;
-            break;
-            case 12:angle=(6.2832f*(90.0f+360.0f*(f32)(i-1)/(f32)(*(s32*)((s32)effect+8)-2)))/360.0f;
-            *(f32*)(p+4)+=*(f32*)(p+0x34)*(f32)sin(angle);
-            *(f32*)(p+8)-=*(f32*)(p+0x34)*(f32)cos(angle);
-            *(f32*)(p+0x34)+=*(f32*)(p+0x38);
-            *(f32*)(p+0x38)*=*(f32*)(p+0x3C);
-            *(f32*)(p+0x40)+=0.05f;
-            break;
-            case 13:*(f32*)(p+4)+=*(f32*)(p+0x10);
-            *(f32*)(p+8)+=*(f32*)(p+0x14)+*(f32*)(p+0x34);
-            *(f32*)(p+0x10)*=decay;
-            *(f32*)(p+0x14)*=decay;
-            *(f32*)(p+0x34)+=*(f32*)(p+0x38);
-            *(f32*)(p+0x38)*=*(f32*)(p+0x3C);
-            break;
-        }
-        if(type==3||type==6||type==11||type==16||type==18) {
-            s32 b=*(s32*)(p+0x28)*-60+255;
-            s32 g=255,sr=255;
-            if(b<0) {
-                g=(s32)(0.8f*(f32)b)+255;
-                b=0;
-                if(g<0) {
-                    sr=(s32)(0.4f*(f32)g)+255;
-                    g=0;
-                    if(sr<0)sr=0;
-                }
-            }
-            *(u8*)(p+0x4C)=(u8)sr;
-            *(u8*)(p+0x4D)=(u8)g;
-            *(u8*)(p+0x4E)=(u8)b;
-            if(type==3&&i==1&&*(s32*)(p+0x28)==30)burst=1;
-        } else if(type==7) {
-            *(u8*)(p+0x4C)+=(s8)((189-*(u8*)(p+0x4C))/10);
-            *(u8*)(p+0x4D)+=(s8)((16-*(u8*)(p+0x4D))/10);
-            *(u8*)(p+0x4E)+=(s8)((170-*(u8*)(p+0x4E))/10);
-        } else if(type==12) {
-            *(u8*)(p+0x4C)+=(s8)((130-*(u8*)(p+0x4C))/64);
-            *(u8*)(p+0x4D)+=(s8)((130-*(u8*)(p+0x4D))/64);
-            *(u8*)(p+0x4E)+=(s8)((130-*(u8*)(p+0x4E))/64);
-        }
-        if(*(s32*)(p+0x28)>=*(s32*)(p+0x30))done++;
-    }
-    if(burst) {
-        psndSFXOn_3D(str_SFX_BTL_STAGE_BURST1_802fe658,&pos);
-        effConfettiEntry();
-    }
-    if(done<*(s32*)((s32)effect+8)-1)dispEntry(camera,2,effKemuTestDisp,effect,dispCalcZ(&pos));
-    else effDelete(effect);
-}
-
 /* CHATGPT STUB FILL: main/effect/eff_kemutest 20260624_184128 */
 
 /* stub-fill: effKemuTestEntry | missing_definition | ghidra_signature */
@@ -280,6 +149,127 @@ void* effKemuTestEntry(f64 x, f64 y, f64 z, f64 scale, u32 type) {
     return effect;
 }
 
+
+
+/* CHATGPT STUB FILL: main/effect/eff_kemutest 20260624_184128 */
+
+/* stub-fill: effKemuTestMain | missing_definition | ghidra_signature */
+void effKemuTestMain(void* effect)  {
+    typedef struct Vec3 {
+        f32 x,y,z;
+    }
+    Vec3;
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(Vec3*);
+    extern void dispEntry(s32,s32,void*,void*,f32);
+    extern void effKemuTestDisp(void);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern void psndSFXOn_3D(char*,Vec3*);
+    extern void effConfettiEntry(void);
+    extern char str_SFX_BTL_STAGE_BURST1_802fe658[];
+    u8* base=*(u8**)((s32)effect+0xC);
+    u8* p=base+0x58;
+    Vec3 pos;
+    u32 type=*(u32*)base;
+    s32 camera=*(s32*)(base+0x1C);
+    s32 done=0;
+    s32 burst=0;
+    s32 i;
+    f32 angle;
+    f32 decay;
+    pos.x=*(f32*)(base+4);
+    pos.y=*(f32*)(base+8);
+    pos.z=*(f32*)(base+0xC);
+    for(i=1;i<*(s32*)((s32)effect+8);i++,p+=0x58) {
+        if(*(s32*)(p+0x44)>0) {
+            (*(s32*)(p+0x44))--;
+            continue;
+        }
+        *(s32*)(p+0x20)=(16 * *(s32*)(p+0x28))/ *(s32*)(p+0x30);
+        *(s32*)(p+0x24)=(16*(*(s32*)(p+0x28)+1))/ *(s32*)(p+0x30);
+        if(*(s32*)(p+0x24)>15)*(s32*)(p+0x24)=15;
+        (*(s32*)(p+0x28))++;
+        decay=0.9f;
+        switch(type) {
+            case 1:case 3:case 19:*(f32*)(p+8)+=*(f32*)(p+0x34);
+            *(f32*)(p+0x34)+=*(f32*)(p+0x38);
+            *(f32*)(p+0x38)*=*(f32*)(p+0x3C);
+            break;
+            case 4:case 5:case 7:case 8:case 9:case 16:case 17:case 20:case 21:*(f32*)(p+4)+=*(f32*)(p+0x10);
+            *(f32*)(p+8)+=*(f32*)(p+0x14);
+            *(f32*)(p+0x10)*=decay;
+            *(f32*)(p+0x14)*=decay;
+            break;
+            case 6:*(f32*)(p+4)+=*(f32*)(p+0x10);
+            *(f32*)(p+0x10)*=0.95f;
+            *(f32*)(p+8)+=*(f32*)(p+0x34);
+            *(f32*)(p+0x34)+=*(f32*)(p+0x38);
+            *(f32*)(p+0x38)*=*(f32*)(p+0x3C);
+            break;
+            case 10:case 14:angle=(6.2832f*(90.0f+180.0f*(f32)(i-1)/(f32)(*(s32*)((s32)effect+8)-2)))/360.0f;
+            *(f32*)(p+4)+=*(f32*)(p+0x34)*(f32)sin(angle);
+            *(f32*)(p+8)-=*(f32*)(p+0x34)*(f32)cos(angle);
+            *(f32*)(p+0x34)+=*(f32*)(p+0x38);
+            *(f32*)(p+0x38)*=*(f32*)(p+0x3C);
+            break;
+            case 11:*(f32*)(p+4)+=*(f32*)(p+0x10);
+            *(f32*)(p+8)+=*(f32*)(p+0x14);
+            *(f32*)(p+0xC)+=*(f32*)(p+0x18);
+            *(f32*)(p+0x10)*=decay;
+            *(f32*)(p+0x14)*=decay;
+            *(f32*)(p+0x18)*=decay;
+            break;
+            case 12:angle=(6.2832f*(90.0f+360.0f*(f32)(i-1)/(f32)(*(s32*)((s32)effect+8)-2)))/360.0f;
+            *(f32*)(p+4)+=*(f32*)(p+0x34)*(f32)sin(angle);
+            *(f32*)(p+8)-=*(f32*)(p+0x34)*(f32)cos(angle);
+            *(f32*)(p+0x34)+=*(f32*)(p+0x38);
+            *(f32*)(p+0x38)*=*(f32*)(p+0x3C);
+            *(f32*)(p+0x40)+=0.05f;
+            break;
+            case 13:*(f32*)(p+4)+=*(f32*)(p+0x10);
+            *(f32*)(p+8)+=*(f32*)(p+0x14)+*(f32*)(p+0x34);
+            *(f32*)(p+0x10)*=decay;
+            *(f32*)(p+0x14)*=decay;
+            *(f32*)(p+0x34)+=*(f32*)(p+0x38);
+            *(f32*)(p+0x38)*=*(f32*)(p+0x3C);
+            break;
+        }
+        if(type==3||type==6||type==11||type==16||type==18) {
+            s32 b=*(s32*)(p+0x28)*-60+255;
+            s32 g=255,sr=255;
+            if(b<0) {
+                g=(s32)(0.8f*(f32)b)+255;
+                b=0;
+                if(g<0) {
+                    sr=(s32)(0.4f*(f32)g)+255;
+                    g=0;
+                    if(sr<0)sr=0;
+                }
+            }
+            *(u8*)(p+0x4C)=(u8)sr;
+            *(u8*)(p+0x4D)=(u8)g;
+            *(u8*)(p+0x4E)=(u8)b;
+            if(type==3&&i==1&&*(s32*)(p+0x28)==30)burst=1;
+        } else if(type==7) {
+            *(u8*)(p+0x4C)+=(s8)((189-*(u8*)(p+0x4C))/10);
+            *(u8*)(p+0x4D)+=(s8)((16-*(u8*)(p+0x4D))/10);
+            *(u8*)(p+0x4E)+=(s8)((170-*(u8*)(p+0x4E))/10);
+        } else if(type==12) {
+            *(u8*)(p+0x4C)+=(s8)((130-*(u8*)(p+0x4C))/64);
+            *(u8*)(p+0x4D)+=(s8)((130-*(u8*)(p+0x4D))/64);
+            *(u8*)(p+0x4E)+=(s8)((130-*(u8*)(p+0x4E))/64);
+        }
+        if(*(s32*)(p+0x28)>=*(s32*)(p+0x30))done++;
+    }
+    if(burst) {
+        psndSFXOn_3D(str_SFX_BTL_STAGE_BURST1_802fe658,&pos);
+        effConfettiEntry();
+    }
+    if(done<*(s32*)((s32)effect+8)-1)dispEntry(camera,2,effKemuTestDisp,effect,dispCalcZ(&pos));
+    else effDelete(effect);
+}
+
 /* CHATGPT FALLBACK MISSING STUBS: main/effect/eff_kemutest 20260624_191429 */
 
 /* fallback stub-fill: map=effKemuTestDisp addr=0x8020cf24 size=0x00000730 */
@@ -403,5 +393,15 @@ void effKemuTestDisp(s32 cameraId, void* effect)  {
             *fifo=1.0f;
         }
     }
+}
+
+void effKemuTestDrawCam(void* effect, s32 camId) {
+    *(s32*)((s32)*(void**)((s32)effect + 0xC) + 0x1C) = camId;
+}
+
+void effKemuTestSetRxRz(void* effect, f32 rx, f32 rz) {
+    void* work = *(void**)((s32)effect + 0xC);
+    *(f32*)((s32)work + 0x50) = rx;
+    *(f32*)((s32)work + 0x54) = rz;
 }
 

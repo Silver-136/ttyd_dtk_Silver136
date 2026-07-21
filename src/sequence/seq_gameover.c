@@ -12,11 +12,6 @@ void L_psndBGM_stop(void);
 void psndClearFlag(s32 flag);
 void N_pouchUnEquipBadgeID(s32 badgeId);
 
-void seq_gameOverExit(void) {
-    psndStopAllFadeOut();
-    marioStSystemLevel(0);
-}
-
 void seq_gameOverInit(void) {
     winReInit();
     L_camDispOn(4);
@@ -28,6 +23,11 @@ void seq_gameOverInit(void) {
     psndClearFlag(0x40);
     N_pouchUnEquipBadgeID(0x143);
     marioStSystemLevel(4);
+}
+
+void seq_gameOverExit(void) {
+    psndStopAllFadeOut();
+    marioStSystemLevel(0);
 }
 
 s32 N_evt_snd_bgm_unpause(void) {

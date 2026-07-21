@@ -1,213 +1,6 @@
 #include "effect/eff_splash.h"
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void effSplashGetCol(void* unused, void* entry) {
-    extern void* camGetPtr(void);
-    extern void GXSetProjection(void* mtx, s32 type);
-    extern void GXGetProjectionv(void* proj);
-    extern void GXGetViewportv(void* viewport);
-    extern void GXProject(f32 x, f32 y, f32 z, void* model, void* proj, void* viewport, f32* sx, f32* sy, f32* sz);
-    extern void sysWaitDrawSync(void);
-    extern void GXPeekARGB(s32 x, s32 y, void* color);
-    extern u32 unk_802294a4(void);
-    extern f32 float_0_80427868;
-    extern f32 float_608_804278cc;
-    extern f32 float_480_804278d0;
-
-    void* work = *(void**)((s32)entry + 0xC);
-    void* cam = camGetPtr();
-    f32 proj[7];
-    f32 viewport[6];
-    f32 sx;
-    f32 sy;
-    f32 sz;
-    u32 color;
-    u32 fallback;
-
-    GXSetProjection((void*)((s32)cam + 0x15C), *(s32*)((s32)cam + 0x19C));
-    GXGetProjectionv(proj);
-    GXGetViewportv(viewport);
-    GXProject(*(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC),
-              (void*)((s32)cam + 0x11C), proj, viewport, &sx, &sy, &sz);
-    if (sx > float_0_80427868 && sx < float_608_804278cc &&
-        sy > float_0_80427868 && sy < float_480_804278d0) {
-        sysWaitDrawSync();
-        GXPeekARGB((s32)sx, (s32)sy, &color);
-        *(u8*)((s32)work + 0x3C) = ((u8*)&color)[1];
-        *(u8*)((s32)work + 0x3D) = ((u8*)&color)[2];
-        *(u8*)((s32)work + 0x3E) = ((u8*)&color)[3];
-        *(u8*)((s32)work + 0x3F) = 0xFF;
-    }
-    *(s32*)((s32)work + 0x38) = 1;
-    fallback = unk_802294a4();
-    *(u8*)((s32)work + 0x3C) = ((u8*)&fallback)[0];
-    *(u8*)((s32)work + 0x3D) = ((u8*)&fallback)[1];
-    *(u8*)((s32)work + 0x3E) = ((u8*)&fallback)[2];
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-void effSplashMain(struct EffectEntry* effect) {
-    typedef struct VecSplash {
-        f32 x;
-        f32 y;
-        f32 z;
-    } VecSplash;
-    typedef struct EffSplashWork {
-        s32 type;
-        VecSplash pos;
-        f32 velX;
-        f32 velZ;
-        VecSplash scale;
-        s32 frame;
-        s32 timer;
-        f32 velY;
-        f32 gravity;
-        s32 unused34;
-        s32 state;
-        u8 r;
-        u8 g;
-        u8 b;
-        u8 a;
-    } EffSplashWork;
-
-    extern VecSplash vec3_802ff030;
-    extern f32 dispCalcZ(VecSplash* pos);
-    extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, struct EffectEntry* param, f32 priority);
-    extern void effDelete(struct EffectEntry* effect);
-    extern void effSplashGetCol(void* unused, void* entry);
-    extern void effSplashDisp(void* unused, void* entry);
-    extern s8 geso_trans_dt[];
-    extern u8 geso_scale_dt[];
-    extern f32 float_0_80427868;
-    extern f32 float_0p95_804278d4;
-    extern f32 float_96_804278d8;
-    extern f32 float_0p125_804278b4;
-    extern f32 float_10_80427870;
-    extern f32 float_0p3_804278dc;
-    extern f32 float_0p5_804278c4;
-    extern f32 float_0p6_804278e0;
-    extern f32 float_0p9_804278e4;
-    extern f32 float_1p3_804278e8;
-    extern f32 float_neg1_804278ec;
-
-    EffSplashWork* work;
-    EffSplashWork* child;
-    VecSplash pos;
-    VecSplash zpos;
-    s32 type;
-    s32 lifetime;
-    s32 oldFrame;
-    s32 i;
-    s32 idx;
-    f32 z;
-
-    work = *(EffSplashWork**)((s32)effect + 0xC);
-    pos = vec3_802ff030;
-    pos.x = work->pos.x;
-    pos.y = work->pos.y;
-    pos.z = work->pos.z;
-    zpos = pos;
-    type = work->type;
-
-    if (work->state == 0) {
-        z = dispCalcZ(&zpos);
-        dispEntry(4, 8, effSplashGetCol, effect, z);
-        return;
-    }
-
-    switch (type) {
-        case 0:
-        case 1:
-            lifetime = 30;
-            break;
-        case 2:
-        case 4:
-            lifetime = 60;
-            break;
-        case 3:
-            lifetime = 71;
-            break;
-        default:
-            lifetime = 0;
-            break;
-    }
-
-    oldFrame = work->frame;
-    work->frame = oldFrame + 1;
-    if (work->frame > lifetime) {
-        effDelete(effect);
-        return;
-    }
-
-    child = work + 1;
-    for (i = 1; i < *(s32*)((s32)effect + 0x8); i++, child++) {
-        if (child->timer != 0) {
-            child->timer--;
-            continue;
-        }
-
-        child->pos.x += child->velX;
-        child->pos.z += child->velZ;
-        child->pos.y += child->velY;
-        child->velY -= child->gravity;
-
-        if (type == 1) {
-            if (i == 1 && child->velY < float_0_80427868) {
-                child->scale.x *= float_0p95_804278d4;
-                child->scale.y *= float_0p95_804278d4;
-                child->scale.z *= float_0p95_804278d4;
-            }
-        }
-        else if (type == 3 && i < 7) {
-            if ((u32)oldFrame < 0x3D) {
-                child->scale.y = (f32)geso_scale_dt[oldFrame] / float_96_804278d8;
-            }
-            if ((u32)oldFrame < 0x47) {
-                child->pos.x = float_10_80427870 * (f32)((s32)geso_trans_dt[oldFrame * 2] + 0x28) * float_0p125_804278b4;
-                child->pos.y = float_10_80427870 * (f32)((s32)geso_trans_dt[oldFrame * 2 + 1] - 0xC) * float_0p125_804278b4;
-            }
-
-            idx = i - 1;
-            switch (idx) {
-                case 0:
-                case 1:
-                    child->pos.x *= float_0p3_804278dc;
-                    child->pos.y *= float_0p5_804278c4;
-                    child->scale.y *= float_0p6_804278e0;
-                    break;
-                case 2:
-                case 3:
-                    child->pos.x *= float_0p9_804278e4;
-                    break;
-                case 4:
-                case 5:
-                    child->pos.x *= float_1p3_804278e8;
-                    child->pos.y *= float_0p3_804278dc;
-                    child->scale.y *= float_0p6_804278e0;
-                    break;
-            }
-
-            switch (idx) {
-                case 1:
-                case 3:
-                case 5:
-                    child->scale.x = float_neg1_804278ec;
-                    child->pos.x *= float_neg1_804278ec;
-                    break;
-            }
-        }
-    }
-
-    z = dispCalcZ(&zpos);
-    dispEntry(4, 1, effSplashDisp, effect, z);
-}
+void effSplashMain(struct EffectEntry* effect);
 
 struct EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     typedef struct VecSplash {
@@ -441,6 +234,215 @@ struct EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
 
     return effect;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+void effSplashMain(struct EffectEntry* effect) {
+    typedef struct VecSplash {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecSplash;
+    typedef struct EffSplashWork {
+        s32 type;
+        VecSplash pos;
+        f32 velX;
+        f32 velZ;
+        VecSplash scale;
+        s32 frame;
+        s32 timer;
+        f32 velY;
+        f32 gravity;
+        s32 unused34;
+        s32 state;
+        u8 r;
+        u8 g;
+        u8 b;
+        u8 a;
+    } EffSplashWork;
+
+    extern VecSplash vec3_802ff030;
+    extern f32 dispCalcZ(VecSplash* pos);
+    extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, struct EffectEntry* param, f32 priority);
+    extern void effDelete(struct EffectEntry* effect);
+    extern void effSplashGetCol(void* unused, void* entry);
+    extern void effSplashDisp(void* unused, void* entry);
+    extern s8 geso_trans_dt[];
+    extern u8 geso_scale_dt[];
+    extern f32 float_0_80427868;
+    extern f32 float_0p95_804278d4;
+    extern f32 float_96_804278d8;
+    extern f32 float_0p125_804278b4;
+    extern f32 float_10_80427870;
+    extern f32 float_0p3_804278dc;
+    extern f32 float_0p5_804278c4;
+    extern f32 float_0p6_804278e0;
+    extern f32 float_0p9_804278e4;
+    extern f32 float_1p3_804278e8;
+    extern f32 float_neg1_804278ec;
+
+    EffSplashWork* work;
+    EffSplashWork* child;
+    VecSplash pos;
+    VecSplash zpos;
+    s32 type;
+    s32 lifetime;
+    s32 oldFrame;
+    s32 i;
+    s32 idx;
+    f32 z;
+
+    work = *(EffSplashWork**)((s32)effect + 0xC);
+    pos = vec3_802ff030;
+    pos.x = work->pos.x;
+    pos.y = work->pos.y;
+    pos.z = work->pos.z;
+    zpos = pos;
+    type = work->type;
+
+    if (work->state == 0) {
+        z = dispCalcZ(&zpos);
+        dispEntry(4, 8, effSplashGetCol, effect, z);
+        return;
+    }
+
+    switch (type) {
+        case 0:
+        case 1:
+            lifetime = 30;
+            break;
+        case 2:
+        case 4:
+            lifetime = 60;
+            break;
+        case 3:
+            lifetime = 71;
+            break;
+        default:
+            lifetime = 0;
+            break;
+    }
+
+    oldFrame = work->frame;
+    work->frame = oldFrame + 1;
+    if (work->frame > lifetime) {
+        effDelete(effect);
+        return;
+    }
+
+    child = work + 1;
+    for (i = 1; i < *(s32*)((s32)effect + 0x8); i++, child++) {
+        if (child->timer != 0) {
+            child->timer--;
+            continue;
+        }
+
+        child->pos.x += child->velX;
+        child->pos.z += child->velZ;
+        child->pos.y += child->velY;
+        child->velY -= child->gravity;
+
+        if (type == 1) {
+            if (i == 1 && child->velY < float_0_80427868) {
+                child->scale.x *= float_0p95_804278d4;
+                child->scale.y *= float_0p95_804278d4;
+                child->scale.z *= float_0p95_804278d4;
+            }
+        }
+        else if (type == 3 && i < 7) {
+            if ((u32)oldFrame < 0x3D) {
+                child->scale.y = (f32)geso_scale_dt[oldFrame] / float_96_804278d8;
+            }
+            if ((u32)oldFrame < 0x47) {
+                child->pos.x = float_10_80427870 * (f32)((s32)geso_trans_dt[oldFrame * 2] + 0x28) * float_0p125_804278b4;
+                child->pos.y = float_10_80427870 * (f32)((s32)geso_trans_dt[oldFrame * 2 + 1] - 0xC) * float_0p125_804278b4;
+            }
+
+            idx = i - 1;
+            switch (idx) {
+                case 0:
+                case 1:
+                    child->pos.x *= float_0p3_804278dc;
+                    child->pos.y *= float_0p5_804278c4;
+                    child->scale.y *= float_0p6_804278e0;
+                    break;
+                case 2:
+                case 3:
+                    child->pos.x *= float_0p9_804278e4;
+                    break;
+                case 4:
+                case 5:
+                    child->pos.x *= float_1p3_804278e8;
+                    child->pos.y *= float_0p3_804278dc;
+                    child->scale.y *= float_0p6_804278e0;
+                    break;
+            }
+
+            switch (idx) {
+                case 1:
+                case 3:
+                case 5:
+                    child->scale.x = float_neg1_804278ec;
+                    child->pos.x *= float_neg1_804278ec;
+                    break;
+            }
+        }
+    }
+
+    z = dispCalcZ(&zpos);
+    dispEntry(4, 1, effSplashDisp, effect, z);
+}
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void effSplashGetCol(void* unused, void* entry) {
+    extern void* camGetPtr(void);
+    extern void GXSetProjection(void* mtx, s32 type);
+    extern void GXGetProjectionv(void* proj);
+    extern void GXGetViewportv(void* viewport);
+    extern void GXProject(f32 x, f32 y, f32 z, void* model, void* proj, void* viewport, f32* sx, f32* sy, f32* sz);
+    extern void sysWaitDrawSync(void);
+    extern void GXPeekARGB(s32 x, s32 y, void* color);
+    extern u32 unk_802294a4(void);
+    extern f32 float_0_80427868;
+    extern f32 float_608_804278cc;
+    extern f32 float_480_804278d0;
+
+    void* work = *(void**)((s32)entry + 0xC);
+    void* cam = camGetPtr();
+    f32 proj[7];
+    f32 viewport[6];
+    f32 sx;
+    f32 sy;
+    f32 sz;
+    u32 color;
+    u32 fallback;
+
+    GXSetProjection((void*)((s32)cam + 0x15C), *(s32*)((s32)cam + 0x19C));
+    GXGetProjectionv(proj);
+    GXGetViewportv(viewport);
+    GXProject(*(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC),
+              (void*)((s32)cam + 0x11C), proj, viewport, &sx, &sy, &sz);
+    if (sx > float_0_80427868 && sx < float_608_804278cc &&
+        sy > float_0_80427868 && sy < float_480_804278d0) {
+        sysWaitDrawSync();
+        GXPeekARGB((s32)sx, (s32)sy, &color);
+        *(u8*)((s32)work + 0x3C) = ((u8*)&color)[1];
+        *(u8*)((s32)work + 0x3D) = ((u8*)&color)[2];
+        *(u8*)((s32)work + 0x3E) = ((u8*)&color)[3];
+        *(u8*)((s32)work + 0x3F) = 0xFF;
+    }
+    *(s32*)((s32)work + 0x38) = 1;
+    fallback = unk_802294a4();
+    *(u8*)((s32)work + 0x3C) = ((u8*)&fallback)[0];
+    *(u8*)((s32)work + 0x3D) = ((u8*)&fallback)[1];
+    *(u8*)((s32)work + 0x3E) = ((u8*)&fallback)[2];
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
 
 
 
@@ -569,4 +571,3 @@ void effSplashDisp(s32 cameraId, void* entry) {
         *(volatile f32*)0xCC008000 = 1.0f;
     }
 }
-

@@ -1,4 +1,63 @@
 #include "effect/n64/eff_dogabon_attack_n64.h"
+void* effDogabonAttackN64Entry(float x, float y, float z, float scale, int type, int timer) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(int, int);
+    extern void effDogabonAttackMain(void*);
+    extern int rand(void);
+    extern double sin(double);
+    extern double cos(double);
+    extern char str_DogabonAttackN64_802fadf8[];
+    extern signed char y_data[];
+    extern float float_6p2832_80425084;
+    extern float float_360_80425088;
+    extern float float_15_80425090;
+    extern float float_120_804250a0;
+    extern float float_0_8042506c;
+    unsigned char* entry = (unsigned char*)effEntry();
+    int* work;
+    int* part;
+    int i;
+    int phase = 0;
+    int delay = 1;
+
+    *(char**)(entry + 0x14) = str_DogabonAttackN64_802fadf8;
+    *(int*)(entry + 8) = 1;
+    work = (int*)__memAlloc(3, 0x798);
+    *(int**)(entry + 0xC) = work;
+    *(void**)(entry + 0x10) = effDogabonAttackMain;
+    *(unsigned int*)entry |= 2;
+    work[0] = type;
+    work[5] = 0;
+    work[4] = timer < 1 ? 1000 : timer;
+    work[9] = 0xFF;
+    *(float*)&work[1] = x;
+    *(float*)&work[2] = y;
+    *(float*)&work[3] = z;
+    *(float*)&work[10] = scale;
+    work[6] = 0x46;
+    work[7] = 0xB4;
+    work[8] = 0x78;
+
+    part = work;
+    for (i = 0; i < 25; i++, part++, phase += 0x438, delay += 2) {
+        float angle = (float_6p2832_80425084 * (float)(phase / 25)) / float_360_80425088;
+        float sine = (float)sin(angle);
+        float cosine = (float)cos(angle);
+        part[0x11E] = (int)(float)((rand() % 360) - 180);
+        *(float*)&part[0xA1] = float_15_80425090 * sine;
+        *(float*)&part[0xBA] = (float)y_data[i] + 10.0f;
+        *(float*)&part[0xD3] = float_15_80425090 * cosine;
+        *(float*)&part[0x56] = float_120_804250a0 * sine;
+        *(float*)&part[0x6F] = (float)(y_data[i] * 8 + 0x28);
+        *(float*)&part[0x88] = float_120_804250a0 * cosine;
+        *(float*)&part[0x169] = float_0_8042506c;
+        part[0x19B] = delay;
+        part[0x1B4] = 0;
+        part[0x1CD] = 0;
+        *(float*)&part[0x137] = float_0_8042506c;
+    }
+    return entry;
+}
 
 
 #pragma optimize_for_size off
@@ -248,63 +307,3 @@ void effDogabonAttackDisp(s32 cameraId, void* effect) {
 }
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
-
-void* effDogabonAttackN64Entry(float x, float y, float z, float scale, int type, int timer) {
-    extern void* effEntry(void);
-    extern void* __memAlloc(int, int);
-    extern void effDogabonAttackMain(void*);
-    extern int rand(void);
-    extern double sin(double);
-    extern double cos(double);
-    extern char str_DogabonAttackN64_802fadf8[];
-    extern signed char y_data[];
-    extern float float_6p2832_80425084;
-    extern float float_360_80425088;
-    extern float float_15_80425090;
-    extern float float_120_804250a0;
-    extern float float_0_8042506c;
-    unsigned char* entry = (unsigned char*)effEntry();
-    int* work;
-    int* part;
-    int i;
-    int phase = 0;
-    int delay = 1;
-
-    *(char**)(entry + 0x14) = str_DogabonAttackN64_802fadf8;
-    *(int*)(entry + 8) = 1;
-    work = (int*)__memAlloc(3, 0x798);
-    *(int**)(entry + 0xC) = work;
-    *(void**)(entry + 0x10) = effDogabonAttackMain;
-    *(unsigned int*)entry |= 2;
-    work[0] = type;
-    work[5] = 0;
-    work[4] = timer < 1 ? 1000 : timer;
-    work[9] = 0xFF;
-    *(float*)&work[1] = x;
-    *(float*)&work[2] = y;
-    *(float*)&work[3] = z;
-    *(float*)&work[10] = scale;
-    work[6] = 0x46;
-    work[7] = 0xB4;
-    work[8] = 0x78;
-
-    part = work;
-    for (i = 0; i < 25; i++, part++, phase += 0x438, delay += 2) {
-        float angle = (float_6p2832_80425084 * (float)(phase / 25)) / float_360_80425088;
-        float sine = (float)sin(angle);
-        float cosine = (float)cos(angle);
-        part[0x11E] = (int)(float)((rand() % 360) - 180);
-        *(float*)&part[0xA1] = float_15_80425090 * sine;
-        *(float*)&part[0xBA] = (float)y_data[i] + 10.0f;
-        *(float*)&part[0xD3] = float_15_80425090 * cosine;
-        *(float*)&part[0x56] = float_120_804250a0 * sine;
-        *(float*)&part[0x6F] = (float)(y_data[i] * 8 + 0x28);
-        *(float*)&part[0x88] = float_120_804250a0 * cosine;
-        *(float*)&part[0x169] = float_0_8042506c;
-        part[0x19B] = delay;
-        part[0x1B4] = 0;
-        part[0x1CD] = 0;
-        *(float*)&part[0x137] = float_0_8042506c;
-    }
-    return entry;
-}

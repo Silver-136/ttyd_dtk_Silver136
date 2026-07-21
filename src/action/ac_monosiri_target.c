@@ -7,147 +7,8 @@ extern f32 float_0_80428604;
 s32 BattleActionCommandGetDifficulty(void* battleWork);
 void actionCommandDisp(f32 x, f32 y);
 
-s32 battleAcResult_MonosiriTarget(void* wp) {
-    return *(s32*)((s32)wp + 0x1CB8);
-}
-
-void battleAcDelete_MonosiriTarget(void* wp) {
-    *(s32*)((s32)wp + 0x1C9C) = 1002;
-}
-
-void battleAcDisp_MonosiriTarget(void) {
-    switch (*(s32*)((s32)_battleWorkPointer + 0x1C9C)) {
-        case 1000:
-            actionCommandDisp(float_0_80428604, float_0_80428604);
-            break;
-    }
-}
-
 s32 _getmaxcount(void) {
     return _frame_table[BattleActionCommandGetDifficulty(_battleWorkPointer)];
-}
-
-
-/* CHATGPT STUB FILL: main/action/ac_monosiri_target 20260624_184929 */
-
-/* stub-fill: actionCommandDisp | prototype_only | source_prototype */
-void actionCommandDisp(f32 x, f32 y) {
-    extern void* _battleWorkPointer;
-    extern void btlGetScreenPoint(const f32* world, f32* screen);
-    extern void btlDispTex4(s32 texture, const f32* position,
-                            const void* params0, const void* params1,
-                            const u32* color);
-    extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
-    extern u32 BattleACGetButtonIcon(s32 buttons, s32 pressed);
-    extern void iconDispGx(f32 scale, const f32* position, s32 flags, u16 iconId);
-    extern u32 vec3_80301220[];
-    extern u32 vec3_8030122c[];
-    extern u32 vec3_80301238[];
-    extern u32 vec3_80301244[];
-    extern u32 vec3_80301250[];
-    extern u32 vec3_8030125c[];
-    extern u32 vec3_80301268[];
-    extern u32 vec3_80301274[];
-    extern u32 vec3_80301280[];
-    extern u32 vec3_8030128c[];
-    extern u32 dat_804285f0;
-    extern u32 dat_804285f4;
-    extern u32 dat_804285f8;
-    extern u32 dat_804285fc;
-    extern u32 dat_80428600;
-    extern f32 DAT_803012a0;
-
-    u8* battle = _battleWorkPointer;
-    u8* work = battle + 0x1F4C;
-    f32 screen[3];
-    u32 params0[3];
-    u32 params1[3];
-    u32 color;
-    f32 glow = 0.0f;
-
-    btlGetScreenPoint((f32*)(work + 0x14), screen);
-    params0[0] = vec3_80301220[0];
-    params0[1] = vec3_80301220[1];
-    params0[2] = vec3_80301220[2];
-    params1[0] = vec3_8030122c[0];
-    params1[1] = vec3_8030122c[1];
-    params1[2] = vec3_8030122c[2];
-    color = dat_804285f0;
-    btlDispTex4(0x58, screen, params0, params1, &color);
-
-    screen[0] += 4.0f;
-    screen[1] -= 4.0f;
-    screen[2] -= 2.0f;
-    params0[0] = vec3_80301238[0];
-    params0[1] = vec3_80301238[1];
-    params0[2] = vec3_80301238[2];
-    params1[0] = vec3_80301244[0];
-    params1[1] = vec3_80301244[1];
-    params1[2] = vec3_80301244[2];
-    color = dat_804285f4;
-    btlDispTex4(0x58, screen, params0, params1, &color);
-
-    if (*(s32*)(work + 0x30) != 0) {
-        s32 step = *(s32*)(work + 0x34) % 0x1E;
-        if (step < 0x14) {
-            glow = 0.01f * (f32)intplGetValue(100.0, 0.0, 5, step, 0x14);
-        }
-    }
-
-    btlGetScreenPoint((f32*)(work + 0x20), screen);
-    params0[0] = vec3_80301250[0];
-    params0[1] = vec3_80301250[1];
-    params0[2] = vec3_80301250[2];
-    params1[0] = vec3_8030125c[0];
-    params1[1] = vec3_8030125c[1];
-    params1[2] = *(u32*)(work + 0x2C);
-    color = dat_804285f8;
-    btlDispTex4(0x57, screen, params0, params1, &color);
-
-    if (glow > 0.0f) {
-        f32 glowParams[3];
-        u32 glowUv[3];
-
-        glowParams[0] = glow;
-        glowParams[1] = glow;
-        glowParams[2] = *(f32*)&vec3_80301268[2];
-        glowUv[0] = vec3_80301274[0];
-        glowUv[1] = vec3_80301274[1];
-        glowUv[2] = *(u32*)(work + 0x2C);
-        color = dat_804285fc;
-        btlDispTex4(0x57, screen, glowParams, glowUv, &color);
-    }
-
-    screen[0] += 4.0f;
-    screen[1] -= 4.0f;
-    screen[2] -= 2.0f;
-    params0[0] = vec3_80301280[0];
-    params0[1] = vec3_80301280[1];
-    params0[2] = vec3_80301280[2];
-    params1[0] = vec3_8030128c[0];
-    params1[1] = vec3_8030128c[1];
-    params1[2] = *(u32*)(work + 0x2C);
-    color = dat_80428600;
-    btlDispTex4(0x57, screen, params0, params1, &color);
-
-    *(f32*)(work + 0x2C) += 2.0f;
-    {
-        u16 normalIcon = (u16)BattleACGetButtonIcon(0x100, 0);
-        u16 pressedIcon = (u16)BattleACGetButtonIcon(0x100, 1);
-        f64 distance = (f64)*(f32*)(work + 0x14) - (f64)*(f32*)(work + 0x20);
-        f32 iconPosition[3];
-
-        if (distance < 0.0) {
-            distance = -distance;
-        }
-        if (distance < 15.0) {
-            normalIcon = pressedIcon;
-        }
-        iconPosition[0] = x - 200.0f;
-        iconPosition[1] = y + 50.0f;
-        iconPosition[2] = DAT_803012a0;
-        iconDispGx(1.0f, iconPosition, 0x10, normalIcon);
-    }
 }
 
 /* stub-fill: battleAcMain_MonosiriTarget | missing_definition | ghidra_signature */
@@ -271,4 +132,143 @@ s32 battleAcMain_MonosiriTarget(s32 battleWork) {
     }
 
     return 1;
+}
+
+s32 battleAcResult_MonosiriTarget(void* wp) {
+    return *(s32*)((s32)wp + 0x1CB8);
+}
+
+void battleAcDisp_MonosiriTarget(void) {
+    switch (*(s32*)((s32)_battleWorkPointer + 0x1C9C)) {
+        case 1000:
+            actionCommandDisp(float_0_80428604, float_0_80428604);
+            break;
+    }
+}
+
+void battleAcDelete_MonosiriTarget(void* wp) {
+    *(s32*)((s32)wp + 0x1C9C) = 1002;
+}
+
+
+/* CHATGPT STUB FILL: main/action/ac_monosiri_target 20260624_184929 */
+
+/* stub-fill: actionCommandDisp | prototype_only | source_prototype */
+void actionCommandDisp(f32 x, f32 y) {
+    extern void* _battleWorkPointer;
+    extern void btlGetScreenPoint(const f32* world, f32* screen);
+    extern void btlDispTex4(s32 texture, const f32* position,
+                            const void* params0, const void* params1,
+                            const u32* color);
+    extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
+    extern u32 BattleACGetButtonIcon(s32 buttons, s32 pressed);
+    extern void iconDispGx(f32 scale, const f32* position, s32 flags, u16 iconId);
+    extern u32 vec3_80301220[];
+    extern u32 vec3_8030122c[];
+    extern u32 vec3_80301238[];
+    extern u32 vec3_80301244[];
+    extern u32 vec3_80301250[];
+    extern u32 vec3_8030125c[];
+    extern u32 vec3_80301268[];
+    extern u32 vec3_80301274[];
+    extern u32 vec3_80301280[];
+    extern u32 vec3_8030128c[];
+    extern u32 dat_804285f0;
+    extern u32 dat_804285f4;
+    extern u32 dat_804285f8;
+    extern u32 dat_804285fc;
+    extern u32 dat_80428600;
+    extern f32 DAT_803012a0;
+
+    u8* battle = _battleWorkPointer;
+    u8* work = battle + 0x1F4C;
+    f32 screen[3];
+    u32 params0[3];
+    u32 params1[3];
+    u32 color;
+    f32 glow = 0.0f;
+
+    btlGetScreenPoint((f32*)(work + 0x14), screen);
+    params0[0] = vec3_80301220[0];
+    params0[1] = vec3_80301220[1];
+    params0[2] = vec3_80301220[2];
+    params1[0] = vec3_8030122c[0];
+    params1[1] = vec3_8030122c[1];
+    params1[2] = vec3_8030122c[2];
+    color = dat_804285f0;
+    btlDispTex4(0x58, screen, params0, params1, &color);
+
+    screen[0] += 4.0f;
+    screen[1] -= 4.0f;
+    screen[2] -= 2.0f;
+    params0[0] = vec3_80301238[0];
+    params0[1] = vec3_80301238[1];
+    params0[2] = vec3_80301238[2];
+    params1[0] = vec3_80301244[0];
+    params1[1] = vec3_80301244[1];
+    params1[2] = vec3_80301244[2];
+    color = dat_804285f4;
+    btlDispTex4(0x58, screen, params0, params1, &color);
+
+    if (*(s32*)(work + 0x30) != 0) {
+        s32 step = *(s32*)(work + 0x34) % 0x1E;
+        if (step < 0x14) {
+            glow = 0.01f * (f32)intplGetValue(100.0, 0.0, 5, step, 0x14);
+        }
+    }
+
+    btlGetScreenPoint((f32*)(work + 0x20), screen);
+    params0[0] = vec3_80301250[0];
+    params0[1] = vec3_80301250[1];
+    params0[2] = vec3_80301250[2];
+    params1[0] = vec3_8030125c[0];
+    params1[1] = vec3_8030125c[1];
+    params1[2] = *(u32*)(work + 0x2C);
+    color = dat_804285f8;
+    btlDispTex4(0x57, screen, params0, params1, &color);
+
+    if (glow > 0.0f) {
+        f32 glowParams[3];
+        u32 glowUv[3];
+
+        glowParams[0] = glow;
+        glowParams[1] = glow;
+        glowParams[2] = *(f32*)&vec3_80301268[2];
+        glowUv[0] = vec3_80301274[0];
+        glowUv[1] = vec3_80301274[1];
+        glowUv[2] = *(u32*)(work + 0x2C);
+        color = dat_804285fc;
+        btlDispTex4(0x57, screen, glowParams, glowUv, &color);
+    }
+
+    screen[0] += 4.0f;
+    screen[1] -= 4.0f;
+    screen[2] -= 2.0f;
+    params0[0] = vec3_80301280[0];
+    params0[1] = vec3_80301280[1];
+    params0[2] = vec3_80301280[2];
+    params1[0] = vec3_8030128c[0];
+    params1[1] = vec3_8030128c[1];
+    params1[2] = *(u32*)(work + 0x2C);
+    color = dat_80428600;
+    btlDispTex4(0x57, screen, params0, params1, &color);
+
+    *(f32*)(work + 0x2C) += 2.0f;
+    {
+        u16 normalIcon = (u16)BattleACGetButtonIcon(0x100, 0);
+        u16 pressedIcon = (u16)BattleACGetButtonIcon(0x100, 1);
+        f64 distance = (f64)*(f32*)(work + 0x14) - (f64)*(f32*)(work + 0x20);
+        f32 iconPosition[3];
+
+        if (distance < 0.0) {
+            distance = -distance;
+        }
+        if (distance < 15.0) {
+            normalIcon = pressedIcon;
+        }
+        iconPosition[0] = x - 200.0f;
+        iconPosition[1] = y + 50.0f;
+        iconPosition[2] = DAT_803012a0;
+        iconDispGx(1.0f, iconPosition, 0x10, normalIcon);
+    }
 }

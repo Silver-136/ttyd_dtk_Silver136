@@ -1,150 +1,6 @@
 #include "action/ac_stick_keep_left.h"
 
-void battleAcDelete_StickKeepLeft(void* obj) {
-    *(s32*)((s32)obj + 0x1C9C) = 0x3ED;
-}
-
-s32 battleAcResult_StickKeepLeft(void* obj) {
-    return *(s32*)((s32)obj + 0x1CB8);
-}
-
-
-void actionCommandDisp(s32 unused, f32 x, f32 y) {
-    typedef struct Vec {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec;
-
-    extern void* _battleWorkPointer;
-    extern void* gp;
-    extern void camGetPtr(s32 id);
-    extern void iconDispGx(f32 scale, Vec* pos, s32 flags, s32 iconId);
-    extern char str_AcSkl1_802f00d8[];
-
-    Vec pos;
-    void* battleWork;
-    s32 state;
-    s32 count;
-    s32 current;
-    s32 limit;
-    s32 i;
-    f32 yPos;
-    f32 step;
-
-    (void)unused;
-
-    battleWork = _battleWorkPointer;
-    camGetPtr(8);
-    state = *(s32*)((s32)battleWork + 0x1C9C);
-    count = *(s32*)((s32)battleWork + 0x1CC8);
-    current = *(s32*)((s32)battleWork + 0x1F50) - 1;
-
-    if (state < 0x65) {
-        if (state == 0 || (state >= 0 && state >= 0x63)) {
-            pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x28);
-            pos.x = -200.0f + x;
-            pos.y = 70.0f + y;
-            iconDispGx(1.0f, &pos, 0x10, 0x81);
-            goto draw_meter;
-        }
-    } else if (state == 1000) {
-        if ((*(u32*)((s32)gp + 0x1C) & 8) == 0) {
-            pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x40);
-            pos.x = -200.0f + x;
-            pos.y = 70.0f + y;
-            iconDispGx(1.0f, &pos, 0x10, 0x81);
-        } else {
-            pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x34);
-            pos.x = -200.0f + x;
-            pos.y = 70.0f + y;
-            iconDispGx(1.0f, &pos, 0x10, 0x80);
-        }
-        goto draw_meter;
-    }
-
-    if (current < count) {
-        pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x4C);
-        pos.x = -200.0f + x;
-        pos.y = 70.0f + y;
-        iconDispGx(1.0f, &pos, 0x10, 0x80);
-    } else {
-        pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x58);
-        pos.x = -200.0f + x;
-        pos.y = 70.0f + y;
-        iconDispGx(1.0f, &pos, 0x10, 0x81);
-    }
-
-draw_meter:
-    limit = 10;
-    if (count > 3) {
-        limit = count * 2 + 3;
-        if ((*(u32*)((s32)battleWork + 0x1CC4) & 1) != 0) {
-            limit += 2;
-        }
-    }
-
-    step = 16.0f;
-    if ((*(u32*)((s32)battleWork + 0x1CC4) & 1) != 0) {
-        step = 12.0f;
-    }
-    yPos = 25.0f + y;
-
-    pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x64);
-    pos.x = -288.0f + x;
-    pos.y = yPos;
-    iconDispGx(1.0f, &pos, 0x10, 0x97);
-
-    for (i = 1; i < limit; i++) {
-        pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x70);
-        pos.x = x + (step * (f32)i + -288.0f);
-        pos.y = yPos;
-        iconDispGx(1.0f, &pos, 0x10, 0x96);
-    }
-
-    pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x7C);
-    pos.x = x + (step * (f32)i + -288.0f);
-    pos.y = yPos;
-    iconDispGx(1.0f, &pos, 0x10, 0x98);
-
-    step = 33.0f;
-    if ((*(u32*)((s32)battleWork + 0x1CC4) & 1) != 0) {
-        step = 24.75f;
-    }
-
-    for (i = 0; i < count - 1; i++) {
-        if (i < current) {
-            if (i < 3) {
-                pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x88);
-                pos.x = x + (step * (f32)i + -258.0f);
-                pos.y = yPos;
-                iconDispGx(1.0f, &pos, 0x10, i + 0x9A);
-            } else {
-                pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x94);
-                pos.x = x + (step * (f32)i + -258.0f);
-                pos.y = yPos;
-                iconDispGx(1.0f, &pos, 0x10, 0x9C);
-            }
-        } else {
-            pos = *(Vec*)(str_AcSkl1_802f00d8 + 0xA0);
-            pos.x = x + (step * (f32)i + -258.0f);
-            pos.y = yPos;
-            iconDispGx(0.5f, &pos, 0x10, 0x99);
-        }
-    }
-
-    if (current < count) {
-        pos = *(Vec*)(str_AcSkl1_802f00d8 + 0xAC);
-        pos.x = x + (step * (f32)i + -250.0f);
-        pos.y = yPos;
-        iconDispGx(1.0f, &pos, 0x10, 0x99);
-    } else {
-        pos = *(Vec*)(str_AcSkl1_802f00d8 + 0xB8);
-        pos.x = x + (step * (f32)i + -250.0f);
-        pos.y = yPos;
-        iconDispGx(1.0f, &pos, 0x10, 0x9D);
-    }
-}
+void actionCommandDisp(s32 unused, f32 x, f32 y);
 
 s32 battleAcMain_StickKeepLeft(void* battleWork) {
     extern void* memset(void* dest, s32 value, u32 size);
@@ -327,6 +183,10 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
     }
 }
 
+s32 battleAcResult_StickKeepLeft(void* obj) {
+    return *(s32*)((s32)obj + 0x1CB8);
+}
+
 void battleAcDisp_StickKeepLeft(s32 param_1, void* battleWork) {
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
 
@@ -378,3 +238,144 @@ void battleAcDisp_StickKeepLeft(s32 param_1, void* battleWork) {
     }
 }
 
+void battleAcDelete_StickKeepLeft(void* obj) {
+    *(s32*)((s32)obj + 0x1C9C) = 0x3ED;
+}
+
+
+void actionCommandDisp(s32 unused, f32 x, f32 y) {
+    typedef struct Vec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
+
+    extern void* _battleWorkPointer;
+    extern void* gp;
+    extern void camGetPtr(s32 id);
+    extern void iconDispGx(f32 scale, Vec* pos, s32 flags, s32 iconId);
+    extern char str_AcSkl1_802f00d8[];
+
+    Vec pos;
+    void* battleWork;
+    s32 state;
+    s32 count;
+    s32 current;
+    s32 limit;
+    s32 i;
+    f32 yPos;
+    f32 step;
+
+    (void)unused;
+
+    battleWork = _battleWorkPointer;
+    camGetPtr(8);
+    state = *(s32*)((s32)battleWork + 0x1C9C);
+    count = *(s32*)((s32)battleWork + 0x1CC8);
+    current = *(s32*)((s32)battleWork + 0x1F50) - 1;
+
+    if (state < 0x65) {
+        if (state == 0 || (state >= 0 && state >= 0x63)) {
+            pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x28);
+            pos.x = -200.0f + x;
+            pos.y = 70.0f + y;
+            iconDispGx(1.0f, &pos, 0x10, 0x81);
+            goto draw_meter;
+        }
+    } else if (state == 1000) {
+        if ((*(u32*)((s32)gp + 0x1C) & 8) == 0) {
+            pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x40);
+            pos.x = -200.0f + x;
+            pos.y = 70.0f + y;
+            iconDispGx(1.0f, &pos, 0x10, 0x81);
+        } else {
+            pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x34);
+            pos.x = -200.0f + x;
+            pos.y = 70.0f + y;
+            iconDispGx(1.0f, &pos, 0x10, 0x80);
+        }
+        goto draw_meter;
+    }
+
+    if (current < count) {
+        pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x4C);
+        pos.x = -200.0f + x;
+        pos.y = 70.0f + y;
+        iconDispGx(1.0f, &pos, 0x10, 0x80);
+    } else {
+        pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x58);
+        pos.x = -200.0f + x;
+        pos.y = 70.0f + y;
+        iconDispGx(1.0f, &pos, 0x10, 0x81);
+    }
+
+draw_meter:
+    limit = 10;
+    if (count > 3) {
+        limit = count * 2 + 3;
+        if ((*(u32*)((s32)battleWork + 0x1CC4) & 1) != 0) {
+            limit += 2;
+        }
+    }
+
+    step = 16.0f;
+    if ((*(u32*)((s32)battleWork + 0x1CC4) & 1) != 0) {
+        step = 12.0f;
+    }
+    yPos = 25.0f + y;
+
+    pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x64);
+    pos.x = -288.0f + x;
+    pos.y = yPos;
+    iconDispGx(1.0f, &pos, 0x10, 0x97);
+
+    for (i = 1; i < limit; i++) {
+        pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x70);
+        pos.x = x + (step * (f32)i + -288.0f);
+        pos.y = yPos;
+        iconDispGx(1.0f, &pos, 0x10, 0x96);
+    }
+
+    pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x7C);
+    pos.x = x + (step * (f32)i + -288.0f);
+    pos.y = yPos;
+    iconDispGx(1.0f, &pos, 0x10, 0x98);
+
+    step = 33.0f;
+    if ((*(u32*)((s32)battleWork + 0x1CC4) & 1) != 0) {
+        step = 24.75f;
+    }
+
+    for (i = 0; i < count - 1; i++) {
+        if (i < current) {
+            if (i < 3) {
+                pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x88);
+                pos.x = x + (step * (f32)i + -258.0f);
+                pos.y = yPos;
+                iconDispGx(1.0f, &pos, 0x10, i + 0x9A);
+            } else {
+                pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x94);
+                pos.x = x + (step * (f32)i + -258.0f);
+                pos.y = yPos;
+                iconDispGx(1.0f, &pos, 0x10, 0x9C);
+            }
+        } else {
+            pos = *(Vec*)(str_AcSkl1_802f00d8 + 0xA0);
+            pos.x = x + (step * (f32)i + -258.0f);
+            pos.y = yPos;
+            iconDispGx(0.5f, &pos, 0x10, 0x99);
+        }
+    }
+
+    if (current < count) {
+        pos = *(Vec*)(str_AcSkl1_802f00d8 + 0xAC);
+        pos.x = x + (step * (f32)i + -250.0f);
+        pos.y = yPos;
+        iconDispGx(1.0f, &pos, 0x10, 0x99);
+    } else {
+        pos = *(Vec*)(str_AcSkl1_802f00d8 + 0xB8);
+        pos.x = x + (step * (f32)i + -250.0f);
+        pos.y = yPos;
+        iconDispGx(1.0f, &pos, 0x10, 0x9D);
+    }
+}

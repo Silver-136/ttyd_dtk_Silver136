@@ -13,6 +13,7 @@ BackgroundWork work[2];
 #define READ_F32_BG(addr) (*(volatile const f32*)&(addr))
 
 void bgMain(void);
+void bgDisp(s32 cameraId);
 
 extern void* camGetPtr(s32 cameraId);
 extern void GXSetAlphaUpdate(s32 enable);
@@ -86,6 +87,223 @@ void bgReInit(void) {
     BackgroundWork* wp = bgGetWork();
 
     memset(wp, 0, sizeof(BackgroundWork));
+}
+
+void bgEntry(char* name) {
+    typedef struct BgEntryWork {
+        u16 flags;          // 0x00
+        u8 pad_02[0x12];    // 0x02
+        u32 color;          // 0x14
+        u32 failColor;      // 0x18
+        void* texData;      // 0x1C
+    } BgEntryWork;
+
+    BgEntryWork* wp;
+    unsigned long length;
+    s32 root;
+    char path[0x100];
+
+    wp = (BgEntryWork*)bgGetWork();
+    length = 0;
+
+    if (name == NULL) {
+        wp->flags &= ~1;
+        return;
+    }
+
+    wp->texData = NULL;
+
+    arcOpen(name, &wp->texData, &length);
+
+    if (wp->texData == NULL) {
+        root = getMarioStDvdRoot();
+        sprintf(path, str_PCTs_PCTs_8041f61c, root, name);
+
+        name = DVDMgrOpen(path, 2, 0);
+        if (name != NULL) {
+            length = DVDMgrGetLength(name);
+
+            wp->texData = _mapAlloc(mapalloc_base_ptr, (length + 0x1F) & ~0x1F);
+
+            DVDMgrRead(
+                name,
+                wp->texData,
+                (length + 0x1F) & ~0x1F,
+                0
+            );
+
+            DVDMgrClose(name);
+        }
+    }
+
+    if (wp->texData != NULL) {
+        UnpackTexPalette(wp->texData);
+
+        wp->flags |= 1;
+        wp->flags &= ~2;
+        wp->flags &= ~4;
+        wp->color = dat_8041f5f0;
+    } else {
+        wp->flags |= 2;
+        wp->failColor = dat_8041f5f4;
+        wp->flags |= 1;
+        wp->color = dat_8041f5f8;
+    }
+}
+
+void bgReEntry(char* name) {
+    typedef struct BgEntryWork {
+        u16 flags;          // 0x00
+        u8 pad_02[0x12];    // 0x02
+        u32 color;          // 0x14
+        u32 failColor;      // 0x18
+        void* texData;      // 0x1C
+    } BgEntryWork;
+
+    BgEntryWork* wp;
+    unsigned long length;
+    s32 root;
+    char path[0x100];
+
+    wp = (BgEntryWork*)bgGetWork();
+    _mapFree(mapalloc_base_ptr, wp->texData);
+
+    wp = (BgEntryWork*)bgGetWork();
+    length = 0;
+
+    if (name == NULL) {
+        wp->flags &= ~1;
+        return;
+    }
+
+    wp->texData = NULL;
+
+    arcOpen(name, &wp->texData, &length);
+
+    if (wp->texData == NULL) {
+        root = getMarioStDvdRoot();
+        sprintf(path, str_PCTs_PCTs_8041f61c, root, name);
+
+        name = DVDMgrOpen(path, 2, 0);
+        if (name != NULL) {
+            length = DVDMgrGetLength(name);
+
+            wp->texData = _mapAlloc(mapalloc_base_ptr, (length + 0x1F) & ~0x1F);
+
+            DVDMgrRead(
+                name,
+                wp->texData,
+                (length + 0x1F) & ~0x1F,
+                0
+            );
+
+            DVDMgrClose(name);
+        }
+    }
+
+    if (wp->texData != NULL) {
+        UnpackTexPalette(wp->texData);
+
+        wp->flags |= 1;
+        wp->flags &= ~2;
+        wp->flags &= ~4;
+        wp->color = dat_8041f5f0;
+    } else {
+        wp->flags |= 2;
+        wp->failColor = dat_8041f5f4;
+        wp->flags |= 1;
+        wp->color = dat_8041f5f8;
+    }
+}
+
+void bgSetColor(void* color) {
+    void* wp;
+
+    wp = bgGetWork();
+    *(u32*)((s32)wp + 0x14) = *(volatile u32*)color;
+}
+
+void bgDispOn(void) {
+    *(u16*)bgGetWork() |= 1;
+}
+
+void bgDispOff(void) {
+    *(u16*)bgGetWork() &= ~1;
+}
+
+void bgSetScrlOffset(f32 x, f32 y) {
+    void* wp = bgGetWork();
+
+    *(f32*)((s32)wp + 0xC) = x;
+    *(f32*)((s32)wp + 0x10) = y;
+}
+
+void bgAutoScrollOff(void) {
+    *(u16*)bgGetWork() |= 4;
+}
+
+void bgAutoScrollOn(void) {
+    *(u16*)bgGetWork() &= ~4;
+}
+
+void bgTransOffsetOff(void) {
+    *(u16*)bgGetWork() |= 8;
+}
+
+void bgTransOffsetOn(void) {
+    *(u16*)bgGetWork() &= ~8;
+}
+
+void bgMain(void) {
+    u8* bg;
+    void* cam;
+    f32 sinValue;
+    f32 cosValue;
+    f32 offset;
+    s32 tileCount;
+    u8 texObj[0x20];
+    s32 width;
+    f32 angle;
+
+    bg = (u8*)bgGetWork();
+
+    if ((*(u16*)bg & 1) == 0) {
+        return;
+    }
+
+    cam = camGetPtr(4);
+
+    cosValue = reviseAngle(-*(f32*)((s32)cam + 0x114));
+    cosValue = (float_6p2832_8041f60c * cosValue) / float_360_8041f610;
+
+    sinValue = (f32)sin(cosValue);
+    cosValue = (f32)cos(cosValue);
+
+    offset = float_0_8041f608;
+
+    if ((*(u16*)bg & 2) == 0) {
+        TEXGetGXTexObjFromPalette(*(s32*)(bg + 0x1C), texObj, 0);
+        tileCount = (s32)*(u16*)((s32)gp + 0x170) / (s32)(u16)GXGetTexObjWidth(texObj);
+    } else {
+        tileCount = 0;
+    }
+
+    if ((*(u16*)bg & 8) == 0) {
+        offset += float_0p001_8041f614 *
+            ((sinValue * *(f32*)((s32)cam + 0x18)) -
+             (cosValue * *(f32*)((s32)cam + 0x20)));
+    }
+
+    cam = camGetPtr(4);
+
+    angle = *(f32*)((s32)cam + 0x114) / float_360_8041f610;
+    angle = float_4_8041f618 * angle;
+
+    offset += (f32)tileCount * angle;
+
+    *(f32*)(bg + 0x04) = offset;
+
+    dispEntry(3, 3, bgDisp, 0, float_0_8041f608);
 }
 
 void bgDisp(s32 cameraId) {
@@ -221,221 +439,4 @@ void bgDisp(s32 cameraId) {
     FIFO_U16 = 0;
     FIFO_F32_BG = READ_F32_BG(float_0_8041f608);
     FIFO_F32_BG = READ_F32_BG(float_1_8041f604);
-}
-
-void bgMain(void) {
-    u8* bg;
-    void* cam;
-    f32 sinValue;
-    f32 cosValue;
-    f32 offset;
-    s32 tileCount;
-    u8 texObj[0x20];
-    s32 width;
-    f32 angle;
-
-    bg = (u8*)bgGetWork();
-
-    if ((*(u16*)bg & 1) == 0) {
-        return;
-    }
-
-    cam = camGetPtr(4);
-
-    cosValue = reviseAngle(-*(f32*)((s32)cam + 0x114));
-    cosValue = (float_6p2832_8041f60c * cosValue) / float_360_8041f610;
-
-    sinValue = (f32)sin(cosValue);
-    cosValue = (f32)cos(cosValue);
-
-    offset = float_0_8041f608;
-
-    if ((*(u16*)bg & 2) == 0) {
-        TEXGetGXTexObjFromPalette(*(s32*)(bg + 0x1C), texObj, 0);
-        tileCount = (s32)*(u16*)((s32)gp + 0x170) / (s32)(u16)GXGetTexObjWidth(texObj);
-    } else {
-        tileCount = 0;
-    }
-
-    if ((*(u16*)bg & 8) == 0) {
-        offset += float_0p001_8041f614 *
-            ((sinValue * *(f32*)((s32)cam + 0x18)) -
-             (cosValue * *(f32*)((s32)cam + 0x20)));
-    }
-
-    cam = camGetPtr(4);
-
-    angle = *(f32*)((s32)cam + 0x114) / float_360_8041f610;
-    angle = float_4_8041f618 * angle;
-
-    offset += (f32)tileCount * angle;
-
-    *(f32*)(bg + 0x04) = offset;
-
-    dispEntry(3, 3, bgDisp, 0, float_0_8041f608);
-}
-
-void bgTransOffsetOn(void) {
-    *(u16*)bgGetWork() &= ~8;
-}
-
-void bgTransOffsetOff(void) {
-    *(u16*)bgGetWork() |= 8;
-}
-
-void bgAutoScrollOn(void) {
-    *(u16*)bgGetWork() &= ~4;
-}
-
-void bgAutoScrollOff(void) {
-    *(u16*)bgGetWork() |= 4;
-}
-
-void bgSetScrlOffset(f32 x, f32 y) {
-    void* wp = bgGetWork();
-
-    *(f32*)((s32)wp + 0xC) = x;
-    *(f32*)((s32)wp + 0x10) = y;
-}
-
-void bgDispOff(void) {
-    *(u16*)bgGetWork() &= ~1;
-}
-
-void bgDispOn(void) {
-    *(u16*)bgGetWork() |= 1;
-}
-
-void bgSetColor(void* color) {
-    void* wp;
-
-    wp = bgGetWork();
-    *(u32*)((s32)wp + 0x14) = *(volatile u32*)color;
-}
-
-void bgReEntry(char* name) {
-    typedef struct BgEntryWork {
-        u16 flags;          // 0x00
-        u8 pad_02[0x12];    // 0x02
-        u32 color;          // 0x14
-        u32 failColor;      // 0x18
-        void* texData;      // 0x1C
-    } BgEntryWork;
-
-    BgEntryWork* wp;
-    unsigned long length;
-    s32 root;
-    char path[0x100];
-
-    wp = (BgEntryWork*)bgGetWork();
-    _mapFree(mapalloc_base_ptr, wp->texData);
-
-    wp = (BgEntryWork*)bgGetWork();
-    length = 0;
-
-    if (name == NULL) {
-        wp->flags &= ~1;
-        return;
-    }
-
-    wp->texData = NULL;
-
-    arcOpen(name, &wp->texData, &length);
-
-    if (wp->texData == NULL) {
-        root = getMarioStDvdRoot();
-        sprintf(path, str_PCTs_PCTs_8041f61c, root, name);
-
-        name = DVDMgrOpen(path, 2, 0);
-        if (name != NULL) {
-            length = DVDMgrGetLength(name);
-
-            wp->texData = _mapAlloc(mapalloc_base_ptr, (length + 0x1F) & ~0x1F);
-
-            DVDMgrRead(
-                name,
-                wp->texData,
-                (length + 0x1F) & ~0x1F,
-                0
-            );
-
-            DVDMgrClose(name);
-        }
-    }
-
-    if (wp->texData != NULL) {
-        UnpackTexPalette(wp->texData);
-
-        wp->flags |= 1;
-        wp->flags &= ~2;
-        wp->flags &= ~4;
-        wp->color = dat_8041f5f0;
-    } else {
-        wp->flags |= 2;
-        wp->failColor = dat_8041f5f4;
-        wp->flags |= 1;
-        wp->color = dat_8041f5f8;
-    }
-}
-
-void bgEntry(char* name) {
-    typedef struct BgEntryWork {
-        u16 flags;          // 0x00
-        u8 pad_02[0x12];    // 0x02
-        u32 color;          // 0x14
-        u32 failColor;      // 0x18
-        void* texData;      // 0x1C
-    } BgEntryWork;
-
-    BgEntryWork* wp;
-    unsigned long length;
-    s32 root;
-    char path[0x100];
-
-    wp = (BgEntryWork*)bgGetWork();
-    length = 0;
-
-    if (name == NULL) {
-        wp->flags &= ~1;
-        return;
-    }
-
-    wp->texData = NULL;
-
-    arcOpen(name, &wp->texData, &length);
-
-    if (wp->texData == NULL) {
-        root = getMarioStDvdRoot();
-        sprintf(path, str_PCTs_PCTs_8041f61c, root, name);
-
-        name = DVDMgrOpen(path, 2, 0);
-        if (name != NULL) {
-            length = DVDMgrGetLength(name);
-
-            wp->texData = _mapAlloc(mapalloc_base_ptr, (length + 0x1F) & ~0x1F);
-
-            DVDMgrRead(
-                name,
-                wp->texData,
-                (length + 0x1F) & ~0x1F,
-                0
-            );
-
-            DVDMgrClose(name);
-        }
-    }
-
-    if (wp->texData != NULL) {
-        UnpackTexPalette(wp->texData);
-
-        wp->flags |= 1;
-        wp->flags &= ~2;
-        wp->flags &= ~4;
-        wp->color = dat_8041f5f0;
-    } else {
-        wp->flags |= 2;
-        wp->failColor = dat_8041f5f4;
-        wp->flags |= 1;
-        wp->color = dat_8041f5f8;
-    }
 }

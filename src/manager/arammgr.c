@@ -14,6 +14,28 @@ void* __memAlloc(s32 heap, u32 size);
 u8 aramMgrGarbage(void);
 void arqCallbackToAram(void* arq);
 void arqCallbackToMram(void* arq);
+void aramMgrInit(void) {
+    memset(wp, 0, 0x68);
+    if (ARCheckInit() == 0) {
+        ARInit(wp, 8);
+    }
+    ARQInit();
+    *(u32*)((s32)wp + 0x28) = 0x3FC000;
+    *(s32*)((s32)wp + 0x30) = 0x40;
+    *(u32*)((s32)wp + 0x24) = ARAlloc(*(u32*)((s32)wp + 0x28));
+    *(u32*)((s32)wp + 0x20) = *(u32*)((s32)wp + 0x24);
+    *(void**)((s32)wp + 0x2C) = __memAlloc(0, *(s32*)((s32)wp + 0x30) * 0x38);
+    memset(*(void**)((s32)wp + 0x2C), 0, *(s32*)((s32)wp + 0x30) * 0x38);
+    *(s32*)((s32)wp + 0x34) = 0;
+    *(s32*)((s32)wp + 0x38) = 0;
+}
+
+
+void aramCallbackGarbage(void) {
+    *(s32*)((s32)wp + 0x5C) = 0;
+    DCInvalidateRange(*(void**)((s32)wp + 0x60), *(s32*)((s32)wp + 0x64));
+    ICInvalidateRange(*(void**)((s32)wp + 0x60), *(s32*)((s32)wp + 0x64));
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -99,6 +121,23 @@ u8 aramMgrGarbage(void) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+
+void arqCallbackToAram(void* arq) {
+    void* entry = *(void**)((s32)wp + 0x34);
+
+    goto check;
+loop:
+    if (arq == (void*)((s32)entry + 4)) {
+        goto found;
+    }
+    entry = *(void**)((s32)entry + 0x34);
+check:
+    if (entry != NULL) {
+        goto loop;
+    }
+found:
+    *(u16*)entry |= 4;
+}
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* aramMgrToAramAsync(u32 mramAddr, int size) {
@@ -153,20 +192,37 @@ void* aramMgrToAramAsync(u32 mramAddr, int size) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-void aramMgrInit(void) {
-    memset(wp, 0, 0x68);
-    if (ARCheckInit() == 0) {
-        ARInit(wp, 8);
+
+
+void* aramMgrToAram(u32 param_1, int param_2) {
+    void* entry = aramMgrToAramAsync(param_1, param_2);
+
+    while (1) {
+        if (*(volatile u16*)entry & 4) {
+            break;
+        }
     }
-    ARQInit();
-    *(u32*)((s32)wp + 0x28) = 0x3FC000;
-    *(s32*)((s32)wp + 0x30) = 0x40;
-    *(u32*)((s32)wp + 0x24) = ARAlloc(*(u32*)((s32)wp + 0x28));
-    *(u32*)((s32)wp + 0x20) = *(u32*)((s32)wp + 0x24);
-    *(void**)((s32)wp + 0x2C) = __memAlloc(0, *(s32*)((s32)wp + 0x30) * 0x38);
-    memset(*(void**)((s32)wp + 0x2C), 0, *(s32*)((s32)wp + 0x30) * 0x38);
-    *(s32*)((s32)wp + 0x34) = 0;
-    *(s32*)((s32)wp + 0x38) = 0;
+    return entry;
+}
+
+void arqCallbackToMram(void* arq) {
+    void* entry = *(void**)((s32)wp + 0x34);
+
+    goto check;
+loop:
+    if (arq == (void*)((s32)entry + 4)) {
+        goto found;
+    }
+    entry = *(void**)((s32)entry + 0x34);
+check:
+    if (entry != NULL) {
+        goto loop;
+    }
+found:
+    *(u16*)entry |= 0x10;
+    *(u16*)entry |= 0x20;
+    DCInvalidateRange(*(void**)((s32)entry + 0x30), *(s32*)((s32)entry + 0x24));
+    ICInvalidateRange(*(void**)((s32)entry + 0x30), *(s32*)((s32)entry + 0x24));
 }
 
 
@@ -193,61 +249,3 @@ void aramMgrToMram(void* entry, s32 dest) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
-
-void arqCallbackToMram(void* arq) {
-    void* entry = *(void**)((s32)wp + 0x34);
-
-    goto check;
-loop:
-    if (arq == (void*)((s32)entry + 4)) {
-        goto found;
-    }
-    entry = *(void**)((s32)entry + 0x34);
-check:
-    if (entry != NULL) {
-        goto loop;
-    }
-found:
-    *(u16*)entry |= 0x10;
-    *(u16*)entry |= 0x20;
-    DCInvalidateRange(*(void**)((s32)entry + 0x30), *(s32*)((s32)entry + 0x24));
-    ICInvalidateRange(*(void**)((s32)entry + 0x30), *(s32*)((s32)entry + 0x24));
-}
-
-
-void aramCallbackGarbage(void) {
-    *(s32*)((s32)wp + 0x5C) = 0;
-    DCInvalidateRange(*(void**)((s32)wp + 0x60), *(s32*)((s32)wp + 0x64));
-    ICInvalidateRange(*(void**)((s32)wp + 0x60), *(s32*)((s32)wp + 0x64));
-}
-
-
-void arqCallbackToAram(void* arq) {
-    void* entry = *(void**)((s32)wp + 0x34);
-
-    goto check;
-loop:
-    if (arq == (void*)((s32)entry + 4)) {
-        goto found;
-    }
-    entry = *(void**)((s32)entry + 0x34);
-check:
-    if (entry != NULL) {
-        goto loop;
-    }
-found:
-    *(u16*)entry |= 4;
-}
-
-
-void* aramMgrToAram(u32 param_1, int param_2) {
-    void* entry = aramMgrToAramAsync(param_1, param_2);
-
-    while (1) {
-        if (*(volatile u16*)entry & 4) {
-            break;
-        }
-    }
-    return entry;
-}

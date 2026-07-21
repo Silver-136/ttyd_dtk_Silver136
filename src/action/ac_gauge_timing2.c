@@ -1,149 +1,5 @@
 #include "action/ac_gauge_timing2.h"
 
-s32 battleAcResult_GaugeTiming2(void* wp) {
-    return *(s32*)((s32)wp + 0x1CB8);
-}
-
-void battleAcDelete_GaugeTiming2(void* wp) {
-    if ((*(u32*)((s32)wp + 0x1CC0) & 1) != 0) {
-        return;
-    }
-    *(s32*)((s32)wp + 0x1C9C) = 1003;
-}
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void battleAcDisp_GaugeTiming2(void* camera, void* wp) {
-    typedef struct GaugeTimingDispWork {
-        u8 pad_00[0x14];
-        f32 x;
-        f32 y;
-        u8 pad_1C[4];
-        s32 timer;
-    } GaugeTimingDispWork;
-    GaugeTimingDispWork* disp;
-    s32 state;
-    s32 timer;
-
-    extern f32 float_neg300_804280d0;
-    extern f32 float_30_804280d4;
-    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
-    extern void actionCommandDisp(f32 x, f32 y);
-
-    disp = (GaugeTimingDispWork*)((s32)wp + 0x1F20);
-    state = *(s32*)((s32)wp + 0x1C9C);
-    switch (state) {
-        case 99:
-            disp->x = intplGetValue(4, 0x14 - disp->timer, 0x14, float_neg300_804280d0, float_30_804280d4);
-        case 100:
-        case 1000:
-        case 1002:
-            actionCommandDisp(disp->x, disp->y);
-            timer = disp->timer;
-            if (timer > 0) {
-                disp->timer = timer - 1;
-            }
-            break;
-        case 1003:
-        case 1004:
-            timer = disp->timer;
-            if (timer >= 0x28) {
-                disp->x = intplGetValue(4, timer - 0x28, 0x14, float_30_804280d4, float_neg300_804280d0);
-            } else {
-                disp->x = float_30_804280d4;
-            }
-            actionCommandDisp(disp->x, disp->y);
-            timer = disp->timer;
-            if (timer < 0x3C) {
-                disp->timer = timer + 1;
-            }
-            break;
-    }
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-
-/* CHATGPT STUB FILL: main/action/ac_gauge_timing2 20260624_184929 */
-
-/* stub-fill: actionCommandDisp | prototype_only | source_prototype */
-void actionCommandDisp(f32 x, f32 y) {
-    typedef struct Vec { f32 x, y, z; } Vec;
-    extern void* _battleWorkPointer;
-    extern void* camGetPtr(s32);
-    extern void btlDispGXInit2DRasta(void);
-    extern void btlDispTexPlane(f64, f64, f64, f64, f64, s32, u32*, s32);
-    extern void btlDispGXQuads2DRasta(f64, f64, f64, f64, s32, s32, s32, s32);
-    extern s32 BattleACGetButtonIcon(s32, s32);
-    extern void iconDispGx(f64, Vec*, u16, u16);
-    u8* bw = (u8*)_battleWorkPointer;
-    u8* extra = bw + 0x1F4C;
-    s32* params = (s32*)(bw + 0x1CC8);
-    f32 value = *(f32*)(extra + 4);
-    f32 left = x - 288.0f;
-    f32 barY = y + 49.0f;
-    u32 color = 0xFFFFFFFF;
-    u16 width = *(u16*)(extra + 0x68);
-    s32 segments = 0;
-    s32 remainder = 0;
-    s32 pressed = BattleACGetButtonIcon(0x100, 1);
-    s32 normal = BattleACGetButtonIcon(0x100, 0);
-    Vec pos;
-    s32 i;
-
-    camGetPtr(1);
-    if ((s32)width - 0x10 > 0) {
-        segments = ((s32)width - 0x0D) / 4;
-        remainder = (s32)width - 0x10 - segments * 4;
-    }
-    btlDispGXInit2DRasta();
-    btlDispTexPlane(left, y + 41.0f, 0.0, 1.0, 1.0, 0x59, &color, 0);
-    for (i = 0; i < segments; i++) {
-        f32 partX = left + 10.0f + (f32)(i * 4);
-        if (i == segments - 1) partX += (f32)remainder;
-        btlDispTexPlane(partX, y + 41.0f, 0.0, 1.0, 1.0, 0x5A, &color, 0);
-    }
-    btlDispTexPlane(left + 16.0f + (f32)(width - 0x10), y + 41.0f,
-                    0.0, -1.0, 1.0, 0x59, &color, 0);
-    if (value > 100.0f) value = 100.0f;
-    *(f32*)(bw + 0x1F48) = value / 100.0f;
-    if (value >= 0.0f) {
-        btlDispGXInit2DRasta();
-        btlDispGXQuads2DRasta(left, barY, left + (f32)width * value / 100.0f,
-                              barY, 0xFF, 0, 0, 0xFF);
-    }
-    for (i = 0; i < params[2]; i++) {
-        f32 threshold = *(f32*)(extra + 0x4C + i * 4);
-        f32 distance = value - threshold;
-        if (distance < 0.0f) distance = -distance;
-        pos.x = left + (f32)width * threshold / 100.0f;
-        pos.y = y + 23.0f;
-        pos.z = 0.0f;
-        iconDispGx(0.75, &pos, 0x10, value >= threshold || distance <= 6.0f ? 0x9D : 0x99);
-    }
-    if (*(s32*)(bw + 0x1C9C) == 1000) {
-        pos.x = x - 225.0f + 28.0f;
-        pos.y = y + 55.0f;
-        pos.z = 0.0f;
-        iconDispGx(1.0, &pos, 0x10, *(s32*)(extra + 0x10) == 0 ? (u16)normal : (u16)pressed);
-    } else if ((*(s32*)(bw + 0x1C9C) >= 99 && *(s32*)(bw + 0x1C9C) <= 100) ||
-               (*(s32*)(bw + 0x1C9C) >= 1002 && *(s32*)(bw + 0x1C9C) <= 1004)) {
-        pos.x = x - 225.0f + 28.0f;
-        pos.y = y + 55.0f;
-        pos.z = 0.0f;
-        iconDispGx(1.0, &pos, 0x10, (u16)normal);
-    }
-    for (i = 0; i < params[2]; i++) {
-        s8 result = *(s8*)(extra + 0x6C + i);
-        s32 texture = result == 1 ? 0x54 : (result == -1 ? 0x55 : 0x5B);
-        if (texture != 0x5B) {
-            f32 threshold = *(f32*)(extra + 0x4C + i * 4);
-            btlDispTexPlane(left + (f32)width * threshold / 100.0f, y,
-                            0.0, 1.0, 1.0, texture, &color, 0);
-        }
-    }
-}
-
 /* stub-fill: battleAcMain_GaugeTiming2 | missing_definition | ghidra_signature */
 s32 battleAcMain_GaugeTiming2(void* battleWork) {
     extern void* memset(void*, s32, u32);
@@ -311,5 +167,149 @@ state_1000:
         }
     }
     return 1;
+}
+
+s32 battleAcResult_GaugeTiming2(void* wp) {
+    return *(s32*)((s32)wp + 0x1CB8);
+}
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void battleAcDisp_GaugeTiming2(void* camera, void* wp) {
+    typedef struct GaugeTimingDispWork {
+        u8 pad_00[0x14];
+        f32 x;
+        f32 y;
+        u8 pad_1C[4];
+        s32 timer;
+    } GaugeTimingDispWork;
+    GaugeTimingDispWork* disp;
+    s32 state;
+    s32 timer;
+
+    extern f32 float_neg300_804280d0;
+    extern f32 float_30_804280d4;
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+    extern void actionCommandDisp(f32 x, f32 y);
+
+    disp = (GaugeTimingDispWork*)((s32)wp + 0x1F20);
+    state = *(s32*)((s32)wp + 0x1C9C);
+    switch (state) {
+        case 99:
+            disp->x = intplGetValue(4, 0x14 - disp->timer, 0x14, float_neg300_804280d0, float_30_804280d4);
+        case 100:
+        case 1000:
+        case 1002:
+            actionCommandDisp(disp->x, disp->y);
+            timer = disp->timer;
+            if (timer > 0) {
+                disp->timer = timer - 1;
+            }
+            break;
+        case 1003:
+        case 1004:
+            timer = disp->timer;
+            if (timer >= 0x28) {
+                disp->x = intplGetValue(4, timer - 0x28, 0x14, float_30_804280d4, float_neg300_804280d0);
+            } else {
+                disp->x = float_30_804280d4;
+            }
+            actionCommandDisp(disp->x, disp->y);
+            timer = disp->timer;
+            if (timer < 0x3C) {
+                disp->timer = timer + 1;
+            }
+            break;
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+void battleAcDelete_GaugeTiming2(void* wp) {
+    if ((*(u32*)((s32)wp + 0x1CC0) & 1) != 0) {
+        return;
+    }
+    *(s32*)((s32)wp + 0x1C9C) = 1003;
+}
+
+/* CHATGPT STUB FILL: main/action/ac_gauge_timing2 20260624_184929 */
+
+/* stub-fill: actionCommandDisp | prototype_only | source_prototype */
+void actionCommandDisp(f32 x, f32 y) {
+    typedef struct Vec { f32 x, y, z; } Vec;
+    extern void* _battleWorkPointer;
+    extern void* camGetPtr(s32);
+    extern void btlDispGXInit2DRasta(void);
+    extern void btlDispTexPlane(f64, f64, f64, f64, f64, s32, u32*, s32);
+    extern void btlDispGXQuads2DRasta(f64, f64, f64, f64, s32, s32, s32, s32);
+    extern s32 BattleACGetButtonIcon(s32, s32);
+    extern void iconDispGx(f64, Vec*, u16, u16);
+    u8* bw = (u8*)_battleWorkPointer;
+    u8* extra = bw + 0x1F4C;
+    s32* params = (s32*)(bw + 0x1CC8);
+    f32 value = *(f32*)(extra + 4);
+    f32 left = x - 288.0f;
+    f32 barY = y + 49.0f;
+    u32 color = 0xFFFFFFFF;
+    u16 width = *(u16*)(extra + 0x68);
+    s32 segments = 0;
+    s32 remainder = 0;
+    s32 pressed = BattleACGetButtonIcon(0x100, 1);
+    s32 normal = BattleACGetButtonIcon(0x100, 0);
+    Vec pos;
+    s32 i;
+
+    camGetPtr(1);
+    if ((s32)width - 0x10 > 0) {
+        segments = ((s32)width - 0x0D) / 4;
+        remainder = (s32)width - 0x10 - segments * 4;
+    }
+    btlDispGXInit2DRasta();
+    btlDispTexPlane(left, y + 41.0f, 0.0, 1.0, 1.0, 0x59, &color, 0);
+    for (i = 0; i < segments; i++) {
+        f32 partX = left + 10.0f + (f32)(i * 4);
+        if (i == segments - 1) partX += (f32)remainder;
+        btlDispTexPlane(partX, y + 41.0f, 0.0, 1.0, 1.0, 0x5A, &color, 0);
+    }
+    btlDispTexPlane(left + 16.0f + (f32)(width - 0x10), y + 41.0f,
+                    0.0, -1.0, 1.0, 0x59, &color, 0);
+    if (value > 100.0f) value = 100.0f;
+    *(f32*)(bw + 0x1F48) = value / 100.0f;
+    if (value >= 0.0f) {
+        btlDispGXInit2DRasta();
+        btlDispGXQuads2DRasta(left, barY, left + (f32)width * value / 100.0f,
+                              barY, 0xFF, 0, 0, 0xFF);
+    }
+    for (i = 0; i < params[2]; i++) {
+        f32 threshold = *(f32*)(extra + 0x4C + i * 4);
+        f32 distance = value - threshold;
+        if (distance < 0.0f) distance = -distance;
+        pos.x = left + (f32)width * threshold / 100.0f;
+        pos.y = y + 23.0f;
+        pos.z = 0.0f;
+        iconDispGx(0.75, &pos, 0x10, value >= threshold || distance <= 6.0f ? 0x9D : 0x99);
+    }
+    if (*(s32*)(bw + 0x1C9C) == 1000) {
+        pos.x = x - 225.0f + 28.0f;
+        pos.y = y + 55.0f;
+        pos.z = 0.0f;
+        iconDispGx(1.0, &pos, 0x10, *(s32*)(extra + 0x10) == 0 ? (u16)normal : (u16)pressed);
+    } else if ((*(s32*)(bw + 0x1C9C) >= 99 && *(s32*)(bw + 0x1C9C) <= 100) ||
+               (*(s32*)(bw + 0x1C9C) >= 1002 && *(s32*)(bw + 0x1C9C) <= 1004)) {
+        pos.x = x - 225.0f + 28.0f;
+        pos.y = y + 55.0f;
+        pos.z = 0.0f;
+        iconDispGx(1.0, &pos, 0x10, (u16)normal);
+    }
+    for (i = 0; i < params[2]; i++) {
+        s8 result = *(s8*)(extra + 0x6C + i);
+        s32 texture = result == 1 ? 0x54 : (result == -1 ? 0x55 : 0x5B);
+        if (texture != 0x5B) {
+            f32 threshold = *(f32*)(extra + 0x4C + i * 4);
+            btlDispTexPlane(left + (f32)width * threshold / 100.0f, y,
+                            0.0, 1.0, 1.0, texture, &color, 0);
+        }
+    }
 }
 

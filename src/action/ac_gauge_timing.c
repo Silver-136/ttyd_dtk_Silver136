@@ -1,165 +1,5 @@
 #include "action/ac_gauge_timing.h"
 
-s32 battleAcResult_GaugeTiming(void* wp) {
-    return *(s32*)((s32)wp + 0x1CB8);
-}
-
-void battleAcDelete_GaugeTiming(void* wp) {
-    if ((*(u32*)((s32)wp + 0x1CC0) & 1) != 0) {
-        return;
-    }
-    *(s32*)((s32)wp + 0x1C9C) = 1004;
-}
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void battleAcDisp_GaugeTiming(void* camera, void* wp) {
-    typedef struct GaugeTimingDispWork {
-        u8 pad_00[0x14];
-        f32 x;
-        f32 y;
-        u8 pad_1C[4];
-        s32 timer;
-    } GaugeTimingDispWork;
-    GaugeTimingDispWork* disp;
-    s32 state;
-    s32 timer;
-
-    extern f32 float_neg300_80427e20;
-    extern f32 float_30_80427e24;
-    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
-    extern void actionCommandDisp(f32 x, f32 y);
-
-    disp = (GaugeTimingDispWork*)((s32)wp + 0x1F20);
-    state = *(s32*)((s32)wp + 0x1C9C);
-
-    switch (state) {
-        case 99:
-            disp->x = intplGetValue(4, 0x14 - disp->timer, 0x14, float_neg300_80427e20, float_30_80427e24);
-            /* fallthrough */
-        case 100:
-        case 1000:
-        case 1001:
-        case 1003:
-            actionCommandDisp(disp->x, disp->y);
-            timer = disp->timer;
-            if (timer > 0) {
-                disp->timer = timer - 1;
-            }
-            break;
-        case 1004:
-        case 1005:
-            timer = disp->timer;
-            if (timer >= 0x28) {
-                disp->x = intplGetValue(4, timer - 0x28, 0x14, float_30_80427e24, float_neg300_80427e20);
-            } else {
-                disp->x = float_30_80427e24;
-            }
-            actionCommandDisp(disp->x, disp->y);
-            timer = disp->timer;
-            if (timer < 0x3C) {
-                disp->timer = timer + 1;
-            }
-            break;
-    }
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-
-/* CHATGPT STUB FILL: main/action/ac_gauge_timing 20260624_184929 */
-
-/* stub-fill: actionCommandDisp | prototype_only | source_prototype */
-void actionCommandDisp(f32 x, f32 y) {
-    typedef struct Vec {
-        f32 x, y, z;
-        u8 targetFramePad[0xD0];
-    } Vec;
-    extern void* _battleWorkPointer;
-    extern void* camGetPtr(s32);
-    extern void BattleAcDrawGauge(f32, s32, s32, s32, s32, s32, s32, s32, s32);
-    extern s32 BattleACGetButtonIcon(s32, s32);
-    extern void iconDispGx(f64, Vec*, u16, u16);
-    extern void btlDispGXInit2DRasta(void);
-    extern void btlDispGXQuads2DRasta(f64, f64, f64, f64, s32, s32, s32, s32);
-    u8* wp = (u8*)_battleWorkPointer;
-    s32* params = (s32*)(wp + 0x1CC8);
-    u8* extra = wp + 0x1F4C;
-    f32 value = *(f32*)(extra + 4);
-    f32 ratio = value / 100.0f;
-    s32 pressedIcon;
-    s32 normalIcon;
-    s32 button;
-    Vec pos;
-    s32 i;
-
-    camGetPtr(8);
-    if (ratio > 1.0f) {
-        ratio = 1.0f;
-    }
-    *(f32*)(wp + 0x1F28) = ratio;
-    if (params[2] == 1) {
-        f32 gauge = 100.0f * ratio / (f32)params[3];
-        if (gauge > 100.0f) {
-            gauge = 100.0f;
-        }
-        if (*(s32*)(extra + 0x1C) < 1) {
-            BattleAcDrawGauge(gauge, (s32)x, (s32)y, 0xB2, 100, 100, 100, 100, 0);
-        } else {
-            BattleAcDrawGauge(-1.0f, (s32)x, (s32)y, 0xB2, 100, 100, 100, 100, 0);
-        }
-        pos.x = x - 288.0f + 176.0f + 16.0f;
-        pos.y = y + 18.0f;
-        pos.z = 0.0f;
-        iconDispGx(1.0, &pos, 0x10, value < (f32)params[3] ? 0x99 : 0x9D);
-    } else {
-        BattleAcDrawGauge(0.0f, (s32)x, (s32)y, 0xB2, 100, 100, 100, 100, 0);
-        if (*(s32*)(extra + 0x1C) < 1) {
-            f32 left = x - 288.0f - 88.0f;
-            f32 right = left + 173.0f * value / 100.0f;
-            btlDispGXInit2DRasta();
-            btlDispGXQuads2DRasta(left, y + 49.0f, right, y + 49.0f, 0, 0xFF, 0, 0xFF);
-        }
-        for (i = 0; i < params[3]; i++) {
-            pos.x = x - 288.0f + 176.0f * ((f32)(i + 1) / (f32)(params[3] + 1));
-            pos.y = y + 20.0f;
-            pos.z = 0.0f;
-            iconDispGx(0.8, &pos, 0x10, *(s32*)(extra + 0x10) != 0 ? 0x9D : 0x99);
-        }
-    }
-
-    button = params[0] == 0 ? 0x20 : (params[0] == 2 ? 0x40000 : 0x100);
-    pressedIcon = BattleACGetButtonIcon(button, 1);
-    normalIcon = BattleACGetButtonIcon(button, 0);
-    if (*(s32*)(wp + 0x1C9C) == 1002) {
-        return;
-    }
-    if (*(s32*)(wp + 0x1C9C) < 1002) {
-        if (*(s32*)(wp + 0x1C9C) > 100) {
-            if (*(s32*)(wp + 0x1C9C) < 1000) {
-                return;
-            }
-        } else if (*(s32*)(wp + 0x1C9C) < 99) {
-            return;
-        }
-    } else if (*(s32*)(wp + 0x1C9C) > 1005) {
-        return;
-    }
-    {
-        pos.x = x - 228.0f + 28.0f;
-        pos.y = y + 55.0f;
-        pos.z = 0.0f;
-        if (*(s32*)(wp + 0x1C9C) == 1000 || *(s32*)(wp + 0x1C9C) == 1001) {
-            if (*(u8*)(extra + 0x16) != 0) {
-                normalIcon = *(s32*)(extra + 0x10) != 0 ? pressedIcon : normalIcon;
-            } else {
-                normalIcon = *(s32*)(extra + 0x10) != 0 ? normalIcon : pressedIcon;
-            }
-        }
-        iconDispGx(1.0, &pos, 0x10, (u16)normalIcon);
-    }
-}
-
 /* stub-fill: battleAcMain_GaugeTiming | missing_definition | ghidra_signature */
 s32 battleAcMain_GaugeTiming(void* battleWork) {
     extern void* memset(void*, s32, u32);
@@ -309,5 +149,165 @@ s32 battleAcMain_GaugeTiming(void* battleWork) {
         *(s32*)(bw + 0x1C9C) = 1003;
     }
     return 1;
+}
+
+s32 battleAcResult_GaugeTiming(void* wp) {
+    return *(s32*)((s32)wp + 0x1CB8);
+}
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void battleAcDisp_GaugeTiming(void* camera, void* wp) {
+    typedef struct GaugeTimingDispWork {
+        u8 pad_00[0x14];
+        f32 x;
+        f32 y;
+        u8 pad_1C[4];
+        s32 timer;
+    } GaugeTimingDispWork;
+    GaugeTimingDispWork* disp;
+    s32 state;
+    s32 timer;
+
+    extern f32 float_neg300_80427e20;
+    extern f32 float_30_80427e24;
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
+    extern void actionCommandDisp(f32 x, f32 y);
+
+    disp = (GaugeTimingDispWork*)((s32)wp + 0x1F20);
+    state = *(s32*)((s32)wp + 0x1C9C);
+
+    switch (state) {
+        case 99:
+            disp->x = intplGetValue(4, 0x14 - disp->timer, 0x14, float_neg300_80427e20, float_30_80427e24);
+            /* fallthrough */
+        case 100:
+        case 1000:
+        case 1001:
+        case 1003:
+            actionCommandDisp(disp->x, disp->y);
+            timer = disp->timer;
+            if (timer > 0) {
+                disp->timer = timer - 1;
+            }
+            break;
+        case 1004:
+        case 1005:
+            timer = disp->timer;
+            if (timer >= 0x28) {
+                disp->x = intplGetValue(4, timer - 0x28, 0x14, float_30_80427e24, float_neg300_80427e20);
+            } else {
+                disp->x = float_30_80427e24;
+            }
+            actionCommandDisp(disp->x, disp->y);
+            timer = disp->timer;
+            if (timer < 0x3C) {
+                disp->timer = timer + 1;
+            }
+            break;
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+void battleAcDelete_GaugeTiming(void* wp) {
+    if ((*(u32*)((s32)wp + 0x1CC0) & 1) != 0) {
+        return;
+    }
+    *(s32*)((s32)wp + 0x1C9C) = 1004;
+}
+
+/* CHATGPT STUB FILL: main/action/ac_gauge_timing 20260624_184929 */
+
+/* stub-fill: actionCommandDisp | prototype_only | source_prototype */
+void actionCommandDisp(f32 x, f32 y) {
+    typedef struct Vec {
+        f32 x, y, z;
+        u8 targetFramePad[0xD0];
+    } Vec;
+    extern void* _battleWorkPointer;
+    extern void* camGetPtr(s32);
+    extern void BattleAcDrawGauge(f32, s32, s32, s32, s32, s32, s32, s32, s32);
+    extern s32 BattleACGetButtonIcon(s32, s32);
+    extern void iconDispGx(f64, Vec*, u16, u16);
+    extern void btlDispGXInit2DRasta(void);
+    extern void btlDispGXQuads2DRasta(f64, f64, f64, f64, s32, s32, s32, s32);
+    u8* wp = (u8*)_battleWorkPointer;
+    s32* params = (s32*)(wp + 0x1CC8);
+    u8* extra = wp + 0x1F4C;
+    f32 value = *(f32*)(extra + 4);
+    f32 ratio = value / 100.0f;
+    s32 pressedIcon;
+    s32 normalIcon;
+    s32 button;
+    Vec pos;
+    s32 i;
+
+    camGetPtr(8);
+    if (ratio > 1.0f) {
+        ratio = 1.0f;
+    }
+    *(f32*)(wp + 0x1F28) = ratio;
+    if (params[2] == 1) {
+        f32 gauge = 100.0f * ratio / (f32)params[3];
+        if (gauge > 100.0f) {
+            gauge = 100.0f;
+        }
+        if (*(s32*)(extra + 0x1C) < 1) {
+            BattleAcDrawGauge(gauge, (s32)x, (s32)y, 0xB2, 100, 100, 100, 100, 0);
+        } else {
+            BattleAcDrawGauge(-1.0f, (s32)x, (s32)y, 0xB2, 100, 100, 100, 100, 0);
+        }
+        pos.x = x - 288.0f + 176.0f + 16.0f;
+        pos.y = y + 18.0f;
+        pos.z = 0.0f;
+        iconDispGx(1.0, &pos, 0x10, value < (f32)params[3] ? 0x99 : 0x9D);
+    } else {
+        BattleAcDrawGauge(0.0f, (s32)x, (s32)y, 0xB2, 100, 100, 100, 100, 0);
+        if (*(s32*)(extra + 0x1C) < 1) {
+            f32 left = x - 288.0f - 88.0f;
+            f32 right = left + 173.0f * value / 100.0f;
+            btlDispGXInit2DRasta();
+            btlDispGXQuads2DRasta(left, y + 49.0f, right, y + 49.0f, 0, 0xFF, 0, 0xFF);
+        }
+        for (i = 0; i < params[3]; i++) {
+            pos.x = x - 288.0f + 176.0f * ((f32)(i + 1) / (f32)(params[3] + 1));
+            pos.y = y + 20.0f;
+            pos.z = 0.0f;
+            iconDispGx(0.8, &pos, 0x10, *(s32*)(extra + 0x10) != 0 ? 0x9D : 0x99);
+        }
+    }
+
+    button = params[0] == 0 ? 0x20 : (params[0] == 2 ? 0x40000 : 0x100);
+    pressedIcon = BattleACGetButtonIcon(button, 1);
+    normalIcon = BattleACGetButtonIcon(button, 0);
+    if (*(s32*)(wp + 0x1C9C) == 1002) {
+        return;
+    }
+    if (*(s32*)(wp + 0x1C9C) < 1002) {
+        if (*(s32*)(wp + 0x1C9C) > 100) {
+            if (*(s32*)(wp + 0x1C9C) < 1000) {
+                return;
+            }
+        } else if (*(s32*)(wp + 0x1C9C) < 99) {
+            return;
+        }
+    } else if (*(s32*)(wp + 0x1C9C) > 1005) {
+        return;
+    }
+    {
+        pos.x = x - 228.0f + 28.0f;
+        pos.y = y + 55.0f;
+        pos.z = 0.0f;
+        if (*(s32*)(wp + 0x1C9C) == 1000 || *(s32*)(wp + 0x1C9C) == 1001) {
+            if (*(u8*)(extra + 0x16) != 0) {
+                normalIcon = *(s32*)(extra + 0x10) != 0 ? pressedIcon : normalIcon;
+            } else {
+                normalIcon = *(s32*)(extra + 0x10) != 0 ? normalIcon : pressedIcon;
+            }
+        }
+        iconDispGx(1.0, &pos, 0x10, (u16)normalIcon);
+    }
 }
 

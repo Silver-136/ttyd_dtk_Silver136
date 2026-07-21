@@ -1,5 +1,75 @@
 #include "effect/eff_nozle.h"
 
+/* stub-fill: effNozleEntry | missing_definition | ghidra_signature */
+void* effNozleEntry(s32 mode, f32 x, f32 y, f32 z, s32 timer, f32 arg5, f32 arg6) {
+    extern void effKemuTestEntry(s32 kind, f32 x, f32 y, f32 z, f32 scale);
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void effNozleMain(void* effect);
+    extern const char str_Nozle_804277bc[];
+    extern f32 float_1_80427790;
+    extern f32 float_0_8042778c;
+    extern f32 float_20_804277c4;
+
+    void* effect;
+    void* work;
+    void* child;
+    s32 count;
+    s32 i;
+
+    if (mode == 1) {
+        effKemuTestEntry(3, x, y, z, float_1_80427790);
+        return 0;
+    }
+
+    effect = effEntry();
+    count = 1;
+    if (mode == 3) {
+        count = 4;
+    }
+    *(const char**)((s32)effect + 0x14) = str_Nozle_804277bc;
+    *(s32*)((s32)effect + 8) = count;
+    work = __memAlloc(3, count * 0x44);
+    *(void**)((s32)effect + 0xC) = work;
+    *(void**)((s32)effect + 0x10) = effNozleMain;
+    *(u32*)effect |= 2;
+
+    *(s32*)work = mode;
+    *(f32*)((s32)work + 4) = x;
+    *(f32*)((s32)work + 8) = y;
+    *(f32*)((s32)work + 0xC) = z;
+    *(f32*)((s32)work + 0x10) = (mode == 3) ? float_1_80427790 : float_0_8042778c;
+    *(f32*)((s32)work + 0x14) = (mode == 3) ? float_1_80427790 : float_0_8042778c;
+    *(f32*)((s32)work + 0x28) = float_1_80427790;
+    *(f32*)((s32)work + 0x1C) = float_0_8042778c;
+    *(f32*)((s32)work + 0x18) = float_0_8042778c;
+    *(f32*)((s32)work + 0x24) = float_0_8042778c;
+    *(f32*)((s32)work + 0x20) = float_0_8042778c;
+    *(s32*)((s32)work + 0x2C) = (timer <= 0) ? 1000 : timer;
+    *(s32*)((s32)work + 0x30) = 0;
+    *(s32*)((s32)work + 0x34) = 0xFF;
+    *(f32*)((s32)work + 0x3C) = arg5;
+    *(f32*)((s32)work + 0x40) = arg6;
+
+    child = (void*)((s32)work + 0x44);
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, child = (void*)((s32)child + 0x44)) {
+        s32 sign = (i & 1) ? -1 : 1;
+        *(f32*)((s32)child + 4) = (f32)(sign * 0x190);
+        *(f32*)((s32)child + 8) = float_0_8042778c;
+        *(f32*)((s32)child + 0xC) = float_20_804277c4 * (f32)i;
+        *(f32*)((s32)child + 0x10) = (f32)-sign;
+        *(f32*)((s32)child + 0x14) = float_1_80427790;
+        *(f32*)((s32)child + 0x1C) = float_0_8042778c;
+        *(f32*)((s32)child + 0x18) = float_0_8042778c;
+        *(f32*)((s32)child + 0x24) = float_0_8042778c;
+        *(f32*)((s32)child + 0x20) = float_0_8042778c;
+        *(s32*)((s32)child + 0x34) = 0xFF;
+        *(s32*)((s32)child + 0x38) = 0;
+    }
+
+    return effect;
+}
+
 void effNozleMain(void* effEntry) {
     typedef struct VecNozle_s {
         f32 x;
@@ -256,75 +326,5 @@ void effNozleDisp(s32 cameraId, void* effect) {
     GXSetTevColorIn(2, 0, 15, 10, 0);
     GXSetTevAlphaIn(2, 0, 7, 5, 7);
     GXSetCullMode(0);
-}
-
-/* stub-fill: effNozleEntry | missing_definition | ghidra_signature */
-void* effNozleEntry(s32 mode, f32 x, f32 y, f32 z, s32 timer, f32 arg5, f32 arg6) {
-    extern void effKemuTestEntry(s32 kind, f32 x, f32 y, f32 z, f32 scale);
-    extern void* effEntry(void);
-    extern void* __memAlloc(s32 heap, u32 size);
-    extern void effNozleMain(void* effect);
-    extern const char str_Nozle_804277bc[];
-    extern f32 float_1_80427790;
-    extern f32 float_0_8042778c;
-    extern f32 float_20_804277c4;
-
-    void* effect;
-    void* work;
-    void* child;
-    s32 count;
-    s32 i;
-
-    if (mode == 1) {
-        effKemuTestEntry(3, x, y, z, float_1_80427790);
-        return 0;
-    }
-
-    effect = effEntry();
-    count = 1;
-    if (mode == 3) {
-        count = 4;
-    }
-    *(const char**)((s32)effect + 0x14) = str_Nozle_804277bc;
-    *(s32*)((s32)effect + 8) = count;
-    work = __memAlloc(3, count * 0x44);
-    *(void**)((s32)effect + 0xC) = work;
-    *(void**)((s32)effect + 0x10) = effNozleMain;
-    *(u32*)effect |= 2;
-
-    *(s32*)work = mode;
-    *(f32*)((s32)work + 4) = x;
-    *(f32*)((s32)work + 8) = y;
-    *(f32*)((s32)work + 0xC) = z;
-    *(f32*)((s32)work + 0x10) = (mode == 3) ? float_1_80427790 : float_0_8042778c;
-    *(f32*)((s32)work + 0x14) = (mode == 3) ? float_1_80427790 : float_0_8042778c;
-    *(f32*)((s32)work + 0x28) = float_1_80427790;
-    *(f32*)((s32)work + 0x1C) = float_0_8042778c;
-    *(f32*)((s32)work + 0x18) = float_0_8042778c;
-    *(f32*)((s32)work + 0x24) = float_0_8042778c;
-    *(f32*)((s32)work + 0x20) = float_0_8042778c;
-    *(s32*)((s32)work + 0x2C) = (timer <= 0) ? 1000 : timer;
-    *(s32*)((s32)work + 0x30) = 0;
-    *(s32*)((s32)work + 0x34) = 0xFF;
-    *(f32*)((s32)work + 0x3C) = arg5;
-    *(f32*)((s32)work + 0x40) = arg6;
-
-    child = (void*)((s32)work + 0x44);
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++, child = (void*)((s32)child + 0x44)) {
-        s32 sign = (i & 1) ? -1 : 1;
-        *(f32*)((s32)child + 4) = (f32)(sign * 0x190);
-        *(f32*)((s32)child + 8) = float_0_8042778c;
-        *(f32*)((s32)child + 0xC) = float_20_804277c4 * (f32)i;
-        *(f32*)((s32)child + 0x10) = (f32)-sign;
-        *(f32*)((s32)child + 0x14) = float_1_80427790;
-        *(f32*)((s32)child + 0x1C) = float_0_8042778c;
-        *(f32*)((s32)child + 0x18) = float_0_8042778c;
-        *(f32*)((s32)child + 0x24) = float_0_8042778c;
-        *(f32*)((s32)child + 0x20) = float_0_8042778c;
-        *(s32*)((s32)child + 0x34) = 0xFF;
-        *(s32*)((s32)child + 0x38) = 0;
-    }
-
-    return effect;
 }
 

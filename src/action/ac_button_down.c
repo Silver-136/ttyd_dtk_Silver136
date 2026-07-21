@@ -6,191 +6,6 @@ extern f32 float_0_80426860;
 f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
 void actionCommandDisp(s32 type, f32 x, f32 y);
 
-s32 battleAcResult_ButtonDown(void* obj) {
-    return *(s32*)((s32)obj + 0x1CB8);
-}
-
-void battleAcDelete_ButtonDown(void* obj) {
-    *(s32*)((s32)obj + 0x1C9C) = 0x3EB;
-}
-
-void battleAcDisp_ButtonDown(void* camera, void* obj) {
-    s32 state;
-    s32 timer;
-    f32 x;
-    f32 y;
-
-    state = *(s32*)((s32)obj + 0x1C9C);
-    obj = (void*)((s32)obj + 0x1F20);
-    if (state == 0x63) {
-        goto active;
-    }
-    if (state >= 0x63) {
-        goto inactive;
-    }
-    if (state == 0) {
-        goto active;
-    }
-    goto inactive;
-
-active:
-    timer = *(s32*)((s32)obj + 0x20);
-    if (timer > 0) {
-        *(s32*)((s32)obj + 0x20) = timer - 1;
-    }
-    x = intplGetValue(4, 0x14 - *(s32*)((s32)obj + 0x20), 0x14, float_neg300_8042685c, float_0_80426860);
-    y = float_0_80426860;
-    goto disp;
-
-inactive:
-    y = float_0_80426860;
-    x = y;
-
-disp:
-    actionCommandDisp(0, x, y);
-}
-
-void actionCommandDisp(s32 type, f32 x, f32 y) {
-    typedef struct Vec {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec;
-
-    extern void* _battleWorkPointer;
-    extern Vec vec3_802fdee8[];
-    extern f32 float_neg200_80426848;
-    extern f32 float_40_8042684c;
-    extern f32 float_70_80426850;
-    extern f32 float_1_80426854;
-    extern f32 float_16_80426858;
-    extern void iconDispGx(f32 scale, Vec* pos, s32 flags, s32 iconId);
-
-    void* battleWork;
-    void* extraWork;
-    Vec* vecs;
-    Vec pos;
-    f32 baseX;
-    f32 drawX;
-    f32 drawY;
-    f32 step;
-    s32 count;
-    s32 limit;
-    s32 shown;
-    s32 i;
-    s32 offset;
-    s32 xOffset;
-    s32 button;
-    s32 icon;
-    s32 iconOff;
-    s32 remaining;
-
-    (void)type;
-
-    vecs = vec3_802fdee8;
-    battleWork = _battleWorkPointer;
-    baseX = float_neg200_80426848 + x;
-    drawX = baseX - float_40_8042684c;
-    drawY = float_70_80426850 + y;
-    extraWork = (void*)((s32)battleWork + 0x1F4C);
-    count = *(s32*)((s32)battleWork + 0x1CD0);
-    limit = count * 3 + 2;
-
-    pos = vecs[0];
-    pos.x = drawX;
-    pos.y = drawY;
-    iconDispGx(float_1_80426854, &pos, 0x10, 0x97);
-
-    step = float_16_80426858;
-    for (i = 1, drawX += step; i < limit; i++, drawX += step) {
-        pos = vecs[1];
-        pos.x = drawX;
-        pos.y = drawY;
-        iconDispGx(float_1_80426854, &pos, 0x10, 0x96);
-    }
-
-    pos = vecs[2];
-    pos.x = drawX;
-    pos.y = drawY;
-    iconDispGx(float_1_80426854, &pos, 0x10, 0x98);
-
-    if ((*(u32*)((s32)battleWork + 0x1CC4) & 1) != 0) {
-        shown = 0;
-        offset = 0;
-        remaining = count;
-        if (count > 0) {
-            do {
-                if (*(s32*)((s32)extraWork + offset + 0x3C) == 0) {
-                    break;
-                }
-                shown++;
-                offset += 4;
-                remaining--;
-            } while (remaining != 0);
-        }
-        if (shown < count) {
-            shown++;
-        }
-    } else {
-        shown = count;
-    }
-
-    for (i = 0, xOffset = 0, offset = 0; i < shown; i++, xOffset += 0x30, offset += 4) {
-        button = *(s32*)((s32)extraWork + offset + 8);
-        if (button == 0) {
-            continue;
-        }
-
-        if (button == 0x200) {
-            icon = 0x6F;
-            iconOff = 0x6E;
-        } else if (button < 0x200) {
-            if (button == 0x40) {
-                icon = 0x87;
-                iconOff = 0x86;
-            } else if (button < 0x40) {
-                if (button == 0x20) {
-                    icon = 0x89;
-                    iconOff = 0x88;
-                } else if (button < 0x20 && button == 0x10) {
-                    icon = 0x8B;
-                    iconOff = 0x8A;
-                } else {
-                    icon = 0x80;
-                    iconOff = 0x81;
-                }
-            } else if (button == 0x100) {
-                icon = 0x6D;
-                iconOff = 0x6C;
-            } else {
-                icon = 0x80;
-                iconOff = 0x81;
-            }
-        } else if (button == 0x800) {
-            icon = 0x73;
-            iconOff = 0x72;
-        } else if (button < 0x800 && button == 0x400) {
-            icon = 0x71;
-            iconOff = 0x70;
-        } else {
-            icon = 0x80;
-            iconOff = 0x81;
-        }
-
-        if (*(s32*)((s32)extraWork + offset + 0x3C) != 0) {
-            pos = vecs[3];
-            pos.x = baseX + (f32)xOffset;
-            pos.y = drawY;
-            iconDispGx(float_1_80426854, &pos, 0x10, icon);
-        } else {
-            pos = vecs[4];
-            pos.x = baseX + (f32)xOffset;
-            pos.y = drawY;
-            iconDispGx(float_1_80426854, &pos, 0x10, iconOff);
-        }
-    }
-}
-
 s32 battleAcMain_ButtonDown(void* battleWork) {
     extern void* memset(void* dest, int ch, u32 count);
     extern s32 irand(s32 range);
@@ -440,4 +255,189 @@ s32 battleAcMain_ButtonDown(void* battleWork) {
     } while (loop != 0);
 
     return 1;
+}
+
+s32 battleAcResult_ButtonDown(void* obj) {
+    return *(s32*)((s32)obj + 0x1CB8);
+}
+
+void battleAcDisp_ButtonDown(void* camera, void* obj) {
+    s32 state;
+    s32 timer;
+    f32 x;
+    f32 y;
+
+    state = *(s32*)((s32)obj + 0x1C9C);
+    obj = (void*)((s32)obj + 0x1F20);
+    if (state == 0x63) {
+        goto active;
+    }
+    if (state >= 0x63) {
+        goto inactive;
+    }
+    if (state == 0) {
+        goto active;
+    }
+    goto inactive;
+
+active:
+    timer = *(s32*)((s32)obj + 0x20);
+    if (timer > 0) {
+        *(s32*)((s32)obj + 0x20) = timer - 1;
+    }
+    x = intplGetValue(4, 0x14 - *(s32*)((s32)obj + 0x20), 0x14, float_neg300_8042685c, float_0_80426860);
+    y = float_0_80426860;
+    goto disp;
+
+inactive:
+    y = float_0_80426860;
+    x = y;
+
+disp:
+    actionCommandDisp(0, x, y);
+}
+
+void battleAcDelete_ButtonDown(void* obj) {
+    *(s32*)((s32)obj + 0x1C9C) = 0x3EB;
+}
+
+void actionCommandDisp(s32 type, f32 x, f32 y) {
+    typedef struct Vec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
+
+    extern void* _battleWorkPointer;
+    extern Vec vec3_802fdee8[];
+    extern f32 float_neg200_80426848;
+    extern f32 float_40_8042684c;
+    extern f32 float_70_80426850;
+    extern f32 float_1_80426854;
+    extern f32 float_16_80426858;
+    extern void iconDispGx(f32 scale, Vec* pos, s32 flags, s32 iconId);
+
+    void* battleWork;
+    void* extraWork;
+    Vec* vecs;
+    Vec pos;
+    f32 baseX;
+    f32 drawX;
+    f32 drawY;
+    f32 step;
+    s32 count;
+    s32 limit;
+    s32 shown;
+    s32 i;
+    s32 offset;
+    s32 xOffset;
+    s32 button;
+    s32 icon;
+    s32 iconOff;
+    s32 remaining;
+
+    (void)type;
+
+    vecs = vec3_802fdee8;
+    battleWork = _battleWorkPointer;
+    baseX = float_neg200_80426848 + x;
+    drawX = baseX - float_40_8042684c;
+    drawY = float_70_80426850 + y;
+    extraWork = (void*)((s32)battleWork + 0x1F4C);
+    count = *(s32*)((s32)battleWork + 0x1CD0);
+    limit = count * 3 + 2;
+
+    pos = vecs[0];
+    pos.x = drawX;
+    pos.y = drawY;
+    iconDispGx(float_1_80426854, &pos, 0x10, 0x97);
+
+    step = float_16_80426858;
+    for (i = 1, drawX += step; i < limit; i++, drawX += step) {
+        pos = vecs[1];
+        pos.x = drawX;
+        pos.y = drawY;
+        iconDispGx(float_1_80426854, &pos, 0x10, 0x96);
+    }
+
+    pos = vecs[2];
+    pos.x = drawX;
+    pos.y = drawY;
+    iconDispGx(float_1_80426854, &pos, 0x10, 0x98);
+
+    if ((*(u32*)((s32)battleWork + 0x1CC4) & 1) != 0) {
+        shown = 0;
+        offset = 0;
+        remaining = count;
+        if (count > 0) {
+            do {
+                if (*(s32*)((s32)extraWork + offset + 0x3C) == 0) {
+                    break;
+                }
+                shown++;
+                offset += 4;
+                remaining--;
+            } while (remaining != 0);
+        }
+        if (shown < count) {
+            shown++;
+        }
+    } else {
+        shown = count;
+    }
+
+    for (i = 0, xOffset = 0, offset = 0; i < shown; i++, xOffset += 0x30, offset += 4) {
+        button = *(s32*)((s32)extraWork + offset + 8);
+        if (button == 0) {
+            continue;
+        }
+
+        if (button == 0x200) {
+            icon = 0x6F;
+            iconOff = 0x6E;
+        } else if (button < 0x200) {
+            if (button == 0x40) {
+                icon = 0x87;
+                iconOff = 0x86;
+            } else if (button < 0x40) {
+                if (button == 0x20) {
+                    icon = 0x89;
+                    iconOff = 0x88;
+                } else if (button < 0x20 && button == 0x10) {
+                    icon = 0x8B;
+                    iconOff = 0x8A;
+                } else {
+                    icon = 0x80;
+                    iconOff = 0x81;
+                }
+            } else if (button == 0x100) {
+                icon = 0x6D;
+                iconOff = 0x6C;
+            } else {
+                icon = 0x80;
+                iconOff = 0x81;
+            }
+        } else if (button == 0x800) {
+            icon = 0x73;
+            iconOff = 0x72;
+        } else if (button < 0x800 && button == 0x400) {
+            icon = 0x71;
+            iconOff = 0x70;
+        } else {
+            icon = 0x80;
+            iconOff = 0x81;
+        }
+
+        if (*(s32*)((s32)extraWork + offset + 0x3C) != 0) {
+            pos = vecs[3];
+            pos.x = baseX + (f32)xOffset;
+            pos.y = drawY;
+            iconDispGx(float_1_80426854, &pos, 0x10, icon);
+        } else {
+            pos = vecs[4];
+            pos.x = baseX + (f32)xOffset;
+            pos.y = drawY;
+            iconDispGx(float_1_80426854, &pos, 0x10, iconOff);
+        }
+    }
 }

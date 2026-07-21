@@ -12,246 +12,6 @@ extern f32 float_20_804234fc;
 extern WinPartyDtEntry winPartyDt[];
 void winMsgEntry(void* pWin, s32 param_2, char* msg, s32 param_4);
 
-void winPartyMain2(void* work) {
-    extern f32 float_0p25_804235f8;
-    f32 target = *(f32*)((s32)work + 0x1E8);
-    f32 current = *(f32*)((s32)work + 0x1E4);
-    f32 rate = float_0p25_804235f8;
-
-    *(f32*)((s32)work + 0x1E4) = (target - current) * rate + current;
-}
-
-
-void winPartyDisp(s32 cameraId, void* pWin, s32 index) {
-    typedef struct Vec3 { f32 x, y, z; } Vec3;
-    extern void* pouchGetPtr(void);
-    extern void winBgGX(f32 x, f32 y, void* win, s32 type);
-    extern void winKirinukiGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
-    extern void winNameGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
-    extern void winWazaGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
-    extern void winTexInit(void* data);
-    extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
-    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void winIconInit(void);
-    extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
-    extern void winFontInit(void);
-    extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* text, ...);
-    extern void winFontSetR(Vec3* pos, Vec3* scale, void* color, char* text, ...);
-    extern char* msgSearch(char* key);
-    extern char* winZenkakuStr(s32 value);
-    Vec3 pos;
-    Vec3 scale;
-    u32 white = 0xFFFFFFFF;
-    u32 gray = 0x7F7F7FFF;
-    u8* w = (u8*)pWin;
-    u8* pouch = (u8*)pouchGetPtr();
-    f32 x = *(f32*)(w + 0xC4 + index * 0x14);
-    f32 y = *(f32*)(w + 0xC8 + index * 0x14);
-    s32 partyCount = *(s32*)(w + 0x1E0);
-    s32 active = *(s32*)(w + 0x1D8);
-    s32 member;
-    s32 row;
-
-    scale.x = scale.y = scale.z = 1.0f;
-    pos.z = 0.0f;
-    winBgGX(x, y, pWin, 1);
-
-    if (partyCount != 0) {
-        winKirinukiGX(x - 10.0f, y + 136.0f, 240.0f, 76.0f, pWin, 0);
-
-        for (row = 0; row < 2; row++) {
-            winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
-            GXSetTevColorIn(0, 0, 0, 0, 2);
-            GXSetTevAlphaIn(0, 0, 4, 5, 7);
-            pos.x = x + 33.0f;
-            pos.y = y + 110.0f - (f32)(row * 32);
-            winTexSet(0xAF, &pos, &scale, row == 0 ? &white : &gray);
-            winFontInit();
-            pos.x = x + 45.0f;
-            pos.y += 12.0f;
-            winFontSet(&pos, &scale, row == 0 ? &white : &gray,
-                       msgSearch(row == 0 ? "msg_menu_party_rank" : "msg_menu_party_name"));
-        }
-
-        winIconInit();
-        pos.x = x + 93.0f;
-        pos.y = y + 114.0f;
-        winIconSet(0x1A7, &pos, &scale, &white);
-
-        for (row = 0; row < partyCount - 2; row++) {
-            pos.x = x + 93.0f + (f32)(row * 34);
-            pos.y = y + 78.0f;
-            winIconSet(0x57, &pos, &scale, &white);
-        }
-
-        winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
-        pos.x = x + 178.0f;
-        pos.y = y + 114.0f;
-        winTexSet(0x10, &pos, &scale, &white);
-        winFontInit();
-        pos.x = x + 110.0f;
-        pos.y = y + 126.0f;
-        winFontSetR(&pos, &scale, &white, "%s", winZenkakuStr(*(s16*)(pouch + active * 0xE + 6)));
-
-        winNameGX(x - 230.0f, y - 40.0f, 200.0f, 32.0f, pWin, 0);
-    }
-
-    winIconInit();
-    for (row = 0; row < 7; row++) {
-        member = *(s32*)(w + 0x1E4 + row * 4);
-        if (member < 0) {
-            continue;
-        }
-        pos.x = x - 120.0f + (f32)((row & 1) * 180);
-        pos.y = y + 70.0f - (f32)((row >> 1) * 50);
-        winIconSet(0x120 + member, &pos, &scale, &white);
-        winFontInit();
-        pos.x += 42.0f;
-        winFontSet(&pos, &scale, &white, msgSearch("msg_menu_party_name"));
-    }
-    winWazaGX(x - 5.0f, y + 50.0f, 260.0f, 144.0f, pWin, 0);
-    (void)cameraId;
-}
-
-s32 winPartyMain(void* pWin) {
-    extern void psndSFXOn(s32 soundId);
-    extern s32 pouchGetPartyAttackLv(s32 partyId);
-    extern void winMsgEntry(void* pWin, s32 arg1, char* msg, s32 arg3);
-    extern f32 float_360_80423550;
-    extern f32 float_neg200_804235fc;
-    extern f32 float_20_804234fc;
-    extern f32 float_neg10_80423600;
-    extern f32 float_neg26_80423604;
-    extern f32 float_5_804235b4;
-    extern WinPartyDtEntry winPartyDt[];
-
-    s32 prev;
-    s32 count;
-    s32 cursor;
-    s32 active;
-    s32 i;
-    s32 partyId;
-    u32 buttons;
-    u32 dirs;
-    char* msg;
-    void* entry;
-
-    if (*(s32*)((s32)pWin + 0x1E0) == 0) {
-        return -1;
-    }
-
-    switch (*(s32*)((s32)pWin + 0x200)) {
-        case 0:
-            buttons = *(u32*)((s32)pWin + 4);
-            if ((buttons & 0x100) != 0) {
-                *(s32*)((s32)pWin + 0x19C) = 1;
-                return -2;
-            }
-            if ((buttons & 0x400) != 0) {
-                *(s32*)((s32)pWin + 0x200) = 1;
-                *(s32*)((s32)pWin + 0x208) = 0;
-                psndSFXOn(0x20012);
-            } else {
-                if ((buttons & 0x200) != 0) {
-                    psndSFXOn(0x20013);
-                    *(s32*)((s32)pWin + 0x19C) = 0;
-                    return -1;
-                }
-                if ((buttons & 0x1000) != 0) {
-                    *(s32*)((s32)pWin + 0x19C) = 0;
-                    return -2;
-                }
-                dirs = *(u32*)((s32)pWin + 0x10);
-                if ((dirs & 0x4000) != 0) {
-                    prev = *(s32*)((s32)pWin + 0x1DC);
-                    *(s32*)((s32)pWin + 0x1DC) = prev - 1;
-                    while (*(s32*)((s32)pWin + 0x1DC) < 0) {
-                        *(s32*)((s32)pWin + 0x1DC) += *(s32*)((s32)pWin + 0x1E0);
-                    }
-                    count = *(s32*)((s32)pWin + 0x1E0);
-                    cursor = *(s32*)((s32)pWin + 0x1DC);
-                    *(f32*)((s32)pWin + 0x1E8) =
-                        (float_360_80423550 / (f32)count) * (f32)cursor;
-                    while (*(f32*)((s32)pWin + 0x1E4) < *(f32*)((s32)pWin + 0x1E8)) {
-                        *(f32*)((s32)pWin + 0x1E4) += float_360_80423550;
-                    }
-                    if (prev != *(s32*)((s32)pWin + 0x1DC)) {
-                        psndSFXOn(0x209D6);
-                    }
-                } else if ((dirs & 0x8000) != 0) {
-                    prev = *(s32*)((s32)pWin + 0x1DC);
-                    *(s32*)((s32)pWin + 0x1DC) = prev + 1;
-                    count = *(s32*)((s32)pWin + 0x1E0);
-                    while (*(s32*)((s32)pWin + 0x1DC) > count - 1) {
-                        *(s32*)((s32)pWin + 0x1DC) -= count;
-                    }
-                    cursor = *(s32*)((s32)pWin + 0x1DC);
-                    *(f32*)((s32)pWin + 0x1E8) =
-                        (float_360_80423550 / (f32)count) * (f32)cursor;
-                    while (*(f32*)((s32)pWin + 0x1E8) < *(f32*)((s32)pWin + 0x1E4)) {
-                        *(f32*)((s32)pWin + 0x1E4) -= float_360_80423550;
-                    }
-                    if (prev != *(s32*)((s32)pWin + 0x1DC)) {
-                        psndSFXOn(0x209D6);
-                    }
-                }
-            }
-
-            partyId = *(s32*)((s32)pWin + 0x1BC + (*(s32*)((s32)pWin + 0x1DC) * 4));
-            entry = winPartyDt;
-            active = 0;
-            for (i = 0; i < 8; i++, active++, entry = (void*)((s32)entry + 0x24)) {
-                if (partyId == *(s32*)entry) {
-                    *(s32*)((s32)pWin + 0x1D8) = active;
-                    break;
-                }
-            }
-
-            *(f32*)((s32)pWin + 0x158) = float_neg200_804235fc;
-            *(f32*)((s32)pWin + 0x15C) = float_20_804234fc;
-            active = *(s32*)((s32)pWin + 0x1D8);
-            partyId = *(s32*)((s32)winPartyDt + active * 0x24);
-            *(s32*)((s32)pWin + 0x204) = pouchGetPartyAttackLv(partyId) + 2;
-            msg = *(char**)((s32)winPartyDt + active * 0x24 + 0xC);
-            winMsgEntry(pWin, 0, msg, 0);
-            break;
-
-        case 1:
-            dirs = *(u32*)((s32)pWin + 0x10);
-            if ((dirs & 0x1000) != 0) {
-                (*(s32*)((s32)pWin + 0x208))--;
-                if (*(s32*)((s32)pWin + 0x208) < 0) {
-                    *(s32*)((s32)pWin + 0x208) = *(s32*)((s32)pWin + 0x204) - 1;
-                }
-                psndSFXOn(0x20005);
-            } else if ((dirs & 0x2000) != 0) {
-                (*(s32*)((s32)pWin + 0x208))++;
-                if (*(s32*)((s32)pWin + 0x208) >= *(s32*)((s32)pWin + 0x204)) {
-                    *(s32*)((s32)pWin + 0x208) = 0;
-                }
-                psndSFXOn(0x20005);
-            } else {
-                buttons = *(u32*)((s32)pWin + 4);
-                if ((buttons & 0x200) != 0) {
-                    *(s32*)((s32)pWin + 0x200) = 0;
-                    psndSFXOn(0x20013);
-                } else if ((buttons & 0x1000) != 0) {
-                    *(s32*)((s32)pWin + 0x19C) = 0;
-                    return -2;
-                }
-            }
-            active = *(s32*)((s32)pWin + 0x1D8);
-            cursor = *(s32*)((s32)pWin + 0x208);
-            *(f32*)((s32)pWin + 0x158) = float_neg10_80423600;
-            *(f32*)((s32)pWin + 0x15C) = float_neg26_80423604 * (f32)cursor + float_5_804235b4;
-            msg = *(char**)(*(s32*)((s32)winPartyDt + active * 0x24 + 0x10) + cursor * 4 + 4);
-            winMsgEntry(pWin, 0, msg, 0);
-            break;
-    }
-    return 0;
-}
-
 void winPartyInit(void* pWin) {
     extern void* pouchGetPtr(void);
     extern s32 pouchGetPartyColor(s32 id);
@@ -448,5 +208,245 @@ u8 winPartyExit(void* pWin) {
         scan = (void*)((s32)scan + 4);
         i++;
     }
+}
+
+s32 winPartyMain(void* pWin) {
+    extern void psndSFXOn(s32 soundId);
+    extern s32 pouchGetPartyAttackLv(s32 partyId);
+    extern void winMsgEntry(void* pWin, s32 arg1, char* msg, s32 arg3);
+    extern f32 float_360_80423550;
+    extern f32 float_neg200_804235fc;
+    extern f32 float_20_804234fc;
+    extern f32 float_neg10_80423600;
+    extern f32 float_neg26_80423604;
+    extern f32 float_5_804235b4;
+    extern WinPartyDtEntry winPartyDt[];
+
+    s32 prev;
+    s32 count;
+    s32 cursor;
+    s32 active;
+    s32 i;
+    s32 partyId;
+    u32 buttons;
+    u32 dirs;
+    char* msg;
+    void* entry;
+
+    if (*(s32*)((s32)pWin + 0x1E0) == 0) {
+        return -1;
+    }
+
+    switch (*(s32*)((s32)pWin + 0x200)) {
+        case 0:
+            buttons = *(u32*)((s32)pWin + 4);
+            if ((buttons & 0x100) != 0) {
+                *(s32*)((s32)pWin + 0x19C) = 1;
+                return -2;
+            }
+            if ((buttons & 0x400) != 0) {
+                *(s32*)((s32)pWin + 0x200) = 1;
+                *(s32*)((s32)pWin + 0x208) = 0;
+                psndSFXOn(0x20012);
+            } else {
+                if ((buttons & 0x200) != 0) {
+                    psndSFXOn(0x20013);
+                    *(s32*)((s32)pWin + 0x19C) = 0;
+                    return -1;
+                }
+                if ((buttons & 0x1000) != 0) {
+                    *(s32*)((s32)pWin + 0x19C) = 0;
+                    return -2;
+                }
+                dirs = *(u32*)((s32)pWin + 0x10);
+                if ((dirs & 0x4000) != 0) {
+                    prev = *(s32*)((s32)pWin + 0x1DC);
+                    *(s32*)((s32)pWin + 0x1DC) = prev - 1;
+                    while (*(s32*)((s32)pWin + 0x1DC) < 0) {
+                        *(s32*)((s32)pWin + 0x1DC) += *(s32*)((s32)pWin + 0x1E0);
+                    }
+                    count = *(s32*)((s32)pWin + 0x1E0);
+                    cursor = *(s32*)((s32)pWin + 0x1DC);
+                    *(f32*)((s32)pWin + 0x1E8) =
+                        (float_360_80423550 / (f32)count) * (f32)cursor;
+                    while (*(f32*)((s32)pWin + 0x1E4) < *(f32*)((s32)pWin + 0x1E8)) {
+                        *(f32*)((s32)pWin + 0x1E4) += float_360_80423550;
+                    }
+                    if (prev != *(s32*)((s32)pWin + 0x1DC)) {
+                        psndSFXOn(0x209D6);
+                    }
+                } else if ((dirs & 0x8000) != 0) {
+                    prev = *(s32*)((s32)pWin + 0x1DC);
+                    *(s32*)((s32)pWin + 0x1DC) = prev + 1;
+                    count = *(s32*)((s32)pWin + 0x1E0);
+                    while (*(s32*)((s32)pWin + 0x1DC) > count - 1) {
+                        *(s32*)((s32)pWin + 0x1DC) -= count;
+                    }
+                    cursor = *(s32*)((s32)pWin + 0x1DC);
+                    *(f32*)((s32)pWin + 0x1E8) =
+                        (float_360_80423550 / (f32)count) * (f32)cursor;
+                    while (*(f32*)((s32)pWin + 0x1E8) < *(f32*)((s32)pWin + 0x1E4)) {
+                        *(f32*)((s32)pWin + 0x1E4) -= float_360_80423550;
+                    }
+                    if (prev != *(s32*)((s32)pWin + 0x1DC)) {
+                        psndSFXOn(0x209D6);
+                    }
+                }
+            }
+
+            partyId = *(s32*)((s32)pWin + 0x1BC + (*(s32*)((s32)pWin + 0x1DC) * 4));
+            entry = winPartyDt;
+            active = 0;
+            for (i = 0; i < 8; i++, active++, entry = (void*)((s32)entry + 0x24)) {
+                if (partyId == *(s32*)entry) {
+                    *(s32*)((s32)pWin + 0x1D8) = active;
+                    break;
+                }
+            }
+
+            *(f32*)((s32)pWin + 0x158) = float_neg200_804235fc;
+            *(f32*)((s32)pWin + 0x15C) = float_20_804234fc;
+            active = *(s32*)((s32)pWin + 0x1D8);
+            partyId = *(s32*)((s32)winPartyDt + active * 0x24);
+            *(s32*)((s32)pWin + 0x204) = pouchGetPartyAttackLv(partyId) + 2;
+            msg = *(char**)((s32)winPartyDt + active * 0x24 + 0xC);
+            winMsgEntry(pWin, 0, msg, 0);
+            break;
+
+        case 1:
+            dirs = *(u32*)((s32)pWin + 0x10);
+            if ((dirs & 0x1000) != 0) {
+                (*(s32*)((s32)pWin + 0x208))--;
+                if (*(s32*)((s32)pWin + 0x208) < 0) {
+                    *(s32*)((s32)pWin + 0x208) = *(s32*)((s32)pWin + 0x204) - 1;
+                }
+                psndSFXOn(0x20005);
+            } else if ((dirs & 0x2000) != 0) {
+                (*(s32*)((s32)pWin + 0x208))++;
+                if (*(s32*)((s32)pWin + 0x208) >= *(s32*)((s32)pWin + 0x204)) {
+                    *(s32*)((s32)pWin + 0x208) = 0;
+                }
+                psndSFXOn(0x20005);
+            } else {
+                buttons = *(u32*)((s32)pWin + 4);
+                if ((buttons & 0x200) != 0) {
+                    *(s32*)((s32)pWin + 0x200) = 0;
+                    psndSFXOn(0x20013);
+                } else if ((buttons & 0x1000) != 0) {
+                    *(s32*)((s32)pWin + 0x19C) = 0;
+                    return -2;
+                }
+            }
+            active = *(s32*)((s32)pWin + 0x1D8);
+            cursor = *(s32*)((s32)pWin + 0x208);
+            *(f32*)((s32)pWin + 0x158) = float_neg10_80423600;
+            *(f32*)((s32)pWin + 0x15C) = float_neg26_80423604 * (f32)cursor + float_5_804235b4;
+            msg = *(char**)(*(s32*)((s32)winPartyDt + active * 0x24 + 0x10) + cursor * 4 + 4);
+            winMsgEntry(pWin, 0, msg, 0);
+            break;
+    }
+    return 0;
+}
+
+void winPartyMain2(void* work) {
+    extern f32 float_0p25_804235f8;
+    f32 target = *(f32*)((s32)work + 0x1E8);
+    f32 current = *(f32*)((s32)work + 0x1E4);
+    f32 rate = float_0p25_804235f8;
+
+    *(f32*)((s32)work + 0x1E4) = (target - current) * rate + current;
+}
+
+
+void winPartyDisp(s32 cameraId, void* pWin, s32 index) {
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
+    extern void* pouchGetPtr(void);
+    extern void winBgGX(f32 x, f32 y, void* win, s32 type);
+    extern void winKirinukiGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
+    extern void winNameGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
+    extern void winWazaGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
+    extern void winTexInit(void* data);
+    extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void winIconInit(void);
+    extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
+    extern void winFontInit(void);
+    extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* text, ...);
+    extern void winFontSetR(Vec3* pos, Vec3* scale, void* color, char* text, ...);
+    extern char* msgSearch(char* key);
+    extern char* winZenkakuStr(s32 value);
+    Vec3 pos;
+    Vec3 scale;
+    u32 white = 0xFFFFFFFF;
+    u32 gray = 0x7F7F7FFF;
+    u8* w = (u8*)pWin;
+    u8* pouch = (u8*)pouchGetPtr();
+    f32 x = *(f32*)(w + 0xC4 + index * 0x14);
+    f32 y = *(f32*)(w + 0xC8 + index * 0x14);
+    s32 partyCount = *(s32*)(w + 0x1E0);
+    s32 active = *(s32*)(w + 0x1D8);
+    s32 member;
+    s32 row;
+
+    scale.x = scale.y = scale.z = 1.0f;
+    pos.z = 0.0f;
+    winBgGX(x, y, pWin, 1);
+
+    if (partyCount != 0) {
+        winKirinukiGX(x - 10.0f, y + 136.0f, 240.0f, 76.0f, pWin, 0);
+
+        for (row = 0; row < 2; row++) {
+            winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
+            GXSetTevColorIn(0, 0, 0, 0, 2);
+            GXSetTevAlphaIn(0, 0, 4, 5, 7);
+            pos.x = x + 33.0f;
+            pos.y = y + 110.0f - (f32)(row * 32);
+            winTexSet(0xAF, &pos, &scale, row == 0 ? &white : &gray);
+            winFontInit();
+            pos.x = x + 45.0f;
+            pos.y += 12.0f;
+            winFontSet(&pos, &scale, row == 0 ? &white : &gray,
+                       msgSearch(row == 0 ? "msg_menu_party_rank" : "msg_menu_party_name"));
+        }
+
+        winIconInit();
+        pos.x = x + 93.0f;
+        pos.y = y + 114.0f;
+        winIconSet(0x1A7, &pos, &scale, &white);
+
+        for (row = 0; row < partyCount - 2; row++) {
+            pos.x = x + 93.0f + (f32)(row * 34);
+            pos.y = y + 78.0f;
+            winIconSet(0x57, &pos, &scale, &white);
+        }
+
+        winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
+        pos.x = x + 178.0f;
+        pos.y = y + 114.0f;
+        winTexSet(0x10, &pos, &scale, &white);
+        winFontInit();
+        pos.x = x + 110.0f;
+        pos.y = y + 126.0f;
+        winFontSetR(&pos, &scale, &white, "%s", winZenkakuStr(*(s16*)(pouch + active * 0xE + 6)));
+
+        winNameGX(x - 230.0f, y - 40.0f, 200.0f, 32.0f, pWin, 0);
+    }
+
+    winIconInit();
+    for (row = 0; row < 7; row++) {
+        member = *(s32*)(w + 0x1E4 + row * 4);
+        if (member < 0) {
+            continue;
+        }
+        pos.x = x - 120.0f + (f32)((row & 1) * 180);
+        pos.y = y + 70.0f - (f32)((row >> 1) * 50);
+        winIconSet(0x120 + member, &pos, &scale, &white);
+        winFontInit();
+        pos.x += 42.0f;
+        winFontSet(&pos, &scale, &white, msgSearch("msg_menu_party_name"));
+    }
+    winWazaGX(x - 5.0f, y + 50.0f, 260.0f, 144.0f, pWin, 0);
+    (void)cameraId;
 }
 

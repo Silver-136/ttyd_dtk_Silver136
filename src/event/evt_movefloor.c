@@ -21,71 +21,6 @@ void mapErrorEntry(s32 type, s32 id);
 s32 psndGetFlag(void);
 s32 psndSFXOn_3D(s32 sfxId, f32* pos);
 
-USER_FUNC(moving_floor_halt_se) {
-    void* floor = (void*)evtGetValue(event, event->args[0]);
-    *(s32*)((s32)floor + 0x78) = 1;
-    return 2;
-}
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-USER_FUNC(moving_floor_get_mode) {
-    s32* args = event->args;
-    void* floor = (void*)evtGetValue(event, args[0]);
-
-    evtSetValue(event, args[1], *(s32*)((s32)floor + 0x20));
-    return 2;
-}
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-USER_FUNC(moving_floor_get_kind) {
-    s32* args = event->args;
-    void* floor = (void*)evtGetValue(event, args[0]);
-
-    evtSetValue(event, args[1], *(s32*)((s32)floor + 4));
-    return 2;
-}
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-USER_FUNC(moving_floor_get_pause) {
-    s32* args = event->args;
-    void* floor = (void*)evtGetValue(event, args[0]);
-
-    if (*(s32*)floor & 2) {
-        evtSetValue(event, args[1], 1);
-    } else {
-        evtSetValue(event, args[1], 0);
-    }
-    return 2;
-}
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-USER_FUNC(moving_floor_getf_xz_scale) {
-    s32* args = event->args;
-    void* floor = (void*)evtGetValue(event, args[0]);
-    s32 value = *(f32*)((s32)floor + 0x48) + *(f32*)((s32)floor + 0x5C);
-    f32 scale = evtGetFloat(event, value);
-
-    evtSetFloat(event, args[1], (float_500_8042658c - scale) / float_500_8042658c);
-    return 2;
-}
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-
 s32 evt_moving_floor_alloc(void* event) {
     extern void* _mapAlloc(void*, s32);
     extern void* mapalloc_base_ptr;
@@ -155,6 +90,23 @@ s32 evt_moving_floor_alloc(void* event) {
     evtSetValue(event, args[0], (s32)floor);
     return 2;
 }
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(evt_moving_floor_free) {
+    s32* args = event->args;
+    void* floor = (void*)evtGetValue(event, args[0]);
+
+    if (floor == NULL) {
+        return 2;
+    }
+    _mapFree(mapalloc_base_ptr, floor);
+    evtSetValue(event, args[0], 0);
+    return 2;
+}
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
+
 
 u8 evt_moving_floor_init(s32 event) {
     extern s32 evtGetValue(void*, s32);
@@ -278,6 +230,108 @@ s32 evt_moving_floor_main(void* event) {
     return 2;
 }
 
+USER_FUNC(evt_moving_floor_main2) {
+    volatile s32* floor = (volatile s32*)evtGetValue(event, event->args[0]);
+    s32 value0 = *(volatile s32*)event;
+    s32 value4 = *(volatile s32*)((s32)event + 4);
+
+    floor[7] = value4;
+    floor[6] = value0;
+    return 2;
+}
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(moving_floor_get_end) {
+    s32* args = event->args;
+    void* floor = (void*)evtGetValue(event, args[0]);
+    s32 index = *(s32*)((s32)floor + 0x28);
+    s32 now = (s32)*(f32*)((s32)floor + 0x10);
+    s32 end = (s32)(*(s32*)((s32)floor + 0x68 + index * 4) * *(f32*)((s32)floor + 0x64));
+
+    if (now >= end) {
+        evtSetValue(event, args[1], 1);
+    } else {
+        evtSetValue(event, args[1], 0);
+    }
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(moving_floor_get_pause) {
+    s32* args = event->args;
+    void* floor = (void*)evtGetValue(event, args[0]);
+
+    if (*(s32*)floor & 2) {
+        evtSetValue(event, args[1], 1);
+    } else {
+        evtSetValue(event, args[1], 0);
+    }
+    return 2;
+}
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(moving_floor_get_kind) {
+    s32* args = event->args;
+    void* floor = (void*)evtGetValue(event, args[0]);
+
+    evtSetValue(event, args[1], *(s32*)((s32)floor + 4));
+    return 2;
+}
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(moving_floor_get_mode) {
+    s32* args = event->args;
+    void* floor = (void*)evtGetValue(event, args[0]);
+
+    evtSetValue(event, args[1], *(s32*)((s32)floor + 0x20));
+    return 2;
+}
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(moving_floor_update_turn) {
+    s32* args = event->args;
+    void* floor = (void*)evtGetValue(event, args[0]);
+    f32 zero;
+    f32 delta;
+    f32 angle;
+
+    zero = float_0_80426584;
+    angle = *(f32*)((s32)floor + 0x84);
+    delta = *(f32*)((s32)floor + 0x80);
+    angle += delta;
+    *(f32*)((s32)floor + 0x84) = angle;
+    angle = *(f32*)((s32)floor + 0x84);
+    if (angle < zero) {
+        *(f32*)((s32)floor + 0x84) = angle + float_360_80426598;
+    }
+    angle = *(f32*)((s32)floor + 0x84);
+    if (angle >= float_360_80426598) {
+        *(f32*)((s32)floor + 0x84) = angle - float_360_80426598;
+    }
+    evtSetFloat(event, args[1], *(f32*)((s32)floor + 0x84));
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(moving_floor_getf_pos) {
@@ -305,7 +359,83 @@ USER_FUNC(moving_floor_getf_pos) {
     return 2;
 }
 
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(moving_floor_getf_now_bpoint) {
+    s32* args = event->args;
+    void* floor = (void*)evtGetValue(event, args[0]);
+
+    evtSetFloat(event, args[1], *(f32*)((s32)floor + 0x44) - *(f32*)((s32)floor + 0x50));
+    evtSetFloat(event, args[2],
+                (*(f32*)((s32)floor + 0x48) + *(f32*)((s32)floor + 0x5C)) -
+                    (*(f32*)((s32)floor + 0x54) + *(f32*)((s32)floor + 0x60)));
+    evtSetFloat(event, args[3], *(f32*)((s32)floor + 0x4C) - *(f32*)((s32)floor + 0x58));
+    return 2;
+}
+
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(moving_floor_get_stmsec) {
+    s32* args = event->args;
+    void* floor = (void*)evtGetValue(event, args[0]);
+
+    if (*(s32*)floor & 1) {
+        evtSetValue(event, args[1], 0);
+    } else {
+        evtSetValue(event, args[1], (*(s32*)((s32)floor + 0x74) * 60) / 1000);
+    }
+    return 2;
+}
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(moving_floor_getf_xz_scale) {
+    s32* args = event->args;
+    void* floor = (void*)evtGetValue(event, args[0]);
+    s32 value = *(f32*)((s32)floor + 0x48) + *(f32*)((s32)floor + 0x5C);
+    f32 scale = evtGetFloat(event, value);
+
+    evtSetFloat(event, args[1], (float_500_8042658c - scale) / float_500_8042658c);
+    return 2;
+}
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+USER_FUNC(moving_floor_reverse) {
+    void* floor = (void*)evtGetValue(event, event->args[0]);
+    f32 speed = *(f32*)((s32)floor + 8);
+    f32 distance;
+    s32 index;
+
+    if (speed >= float_0_80426584) {
+        return 2;
+    }
+    *(f32*)((s32)floor + 8) = speed * float_neg1_80426588;
+    index = *(s32*)((s32)floor + 0x28);
+    distance = *(s32*)((s32)floor + 0x68 + index * 4);
+    distance *= *(f32*)((s32)floor + 0x64);
+    *(f32*)((s32)floor + 0x10) = distance - *(f32*)((s32)floor + 0x10);
+    *(s32*)((s32)floor + 0x24) ^= 1;
+    return 2;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(moving_floor_set_se) {
     s32* args = event->args;
     void* floor = (void*)evtGetValue(event, args[0]);
@@ -332,23 +462,30 @@ USER_FUNC(moving_floor_set_se) {
     }
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+USER_FUNC(moving_floor_stop_se) {
+    void* floor = (void*)evtGetValue(event, event->args[0]);
 
-USER_FUNC(moving_floor_get_end) {
-    s32* args = event->args;
-    void* floor = (void*)evtGetValue(event, args[0]);
-    s32 index = *(s32*)((s32)floor + 0x28);
-    s32 now = (s32)*(f32*)((s32)floor + 0x10);
-    s32 end = (s32)(*(s32*)((s32)floor + 0x68 + index * 4) * *(f32*)((s32)floor + 0x64));
-
-    if (now >= end) {
-        evtSetValue(event, args[1], 1);
-    } else {
-        evtSetValue(event, args[1], 0);
+    if (*(u32*)((s32)floor + 0x78) == 0) {
+        u32 handle = *(u32*)((s32)floor + 0x7C);
+        if (handle != 0) {
+            psndSFXOff(handle);
+            *(s32*)((s32)floor + 0x7C) = 0;
+        }
     }
     return 2;
 }
 
+USER_FUNC(moving_floor_halt_se) {
+    void* floor = (void*)evtGetValue(event, event->args[0]);
+    *(s32*)((s32)floor + 0x78) = 1;
+    return 2;
+}
 
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 USER_FUNC(evt_moving_floor_delete) {
     s32 id = evtGetValue(event, event->args[0]);
     void* evt = evtGetPtrID(id);
@@ -370,118 +507,5 @@ USER_FUNC(evt_moving_floor_delete) {
     }
     return 2;
 }
-
-USER_FUNC(moving_floor_reverse) {
-    void* floor = (void*)evtGetValue(event, event->args[0]);
-    f32 speed = *(f32*)((s32)floor + 8);
-    f32 distance;
-    s32 index;
-
-    if (speed >= float_0_80426584) {
-        return 2;
-    }
-    *(f32*)((s32)floor + 8) = speed * float_neg1_80426588;
-    index = *(s32*)((s32)floor + 0x28);
-    distance = *(s32*)((s32)floor + 0x68 + index * 4);
-    distance *= *(f32*)((s32)floor + 0x64);
-    *(f32*)((s32)floor + 0x10) = distance - *(f32*)((s32)floor + 0x10);
-    *(s32*)((s32)floor + 0x24) ^= 1;
-    return 2;
-}
-
-
-USER_FUNC(moving_floor_getf_now_bpoint) {
-    s32* args = event->args;
-    void* floor = (void*)evtGetValue(event, args[0]);
-
-    evtSetFloat(event, args[1], *(f32*)((s32)floor + 0x44) - *(f32*)((s32)floor + 0x50));
-    evtSetFloat(event, args[2],
-                (*(f32*)((s32)floor + 0x48) + *(f32*)((s32)floor + 0x5C)) -
-                    (*(f32*)((s32)floor + 0x54) + *(f32*)((s32)floor + 0x60)));
-    evtSetFloat(event, args[3], *(f32*)((s32)floor + 0x4C) - *(f32*)((s32)floor + 0x58));
-    return 2;
-}
-
-
-USER_FUNC(moving_floor_update_turn) {
-    s32* args = event->args;
-    void* floor = (void*)evtGetValue(event, args[0]);
-    f32 zero;
-    f32 delta;
-    f32 angle;
-
-    zero = float_0_80426584;
-    angle = *(f32*)((s32)floor + 0x84);
-    delta = *(f32*)((s32)floor + 0x80);
-    angle += delta;
-    *(f32*)((s32)floor + 0x84) = angle;
-    angle = *(f32*)((s32)floor + 0x84);
-    if (angle < zero) {
-        *(f32*)((s32)floor + 0x84) = angle + float_360_80426598;
-    }
-    angle = *(f32*)((s32)floor + 0x84);
-    if (angle >= float_360_80426598) {
-        *(f32*)((s32)floor + 0x84) = angle - float_360_80426598;
-    }
-    evtSetFloat(event, args[1], *(f32*)((s32)floor + 0x84));
-    return 2;
-}
-
-
-USER_FUNC(moving_floor_get_stmsec) {
-    s32* args = event->args;
-    void* floor = (void*)evtGetValue(event, args[0]);
-
-    if (*(s32*)floor & 1) {
-        evtSetValue(event, args[1], 0);
-    } else {
-        evtSetValue(event, args[1], (*(s32*)((s32)floor + 0x74) * 60) / 1000);
-    }
-    return 2;
-}
-#pragma use_lmw_stmw on
 #pragma no_register_save_helpers off
-
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-USER_FUNC(evt_moving_floor_free) {
-    s32* args = event->args;
-    void* floor = (void*)evtGetValue(event, args[0]);
-
-    if (floor == NULL) {
-        return 2;
-    }
-    _mapFree(mapalloc_base_ptr, floor);
-    evtSetValue(event, args[0], 0);
-    return 2;
-}
 #pragma use_lmw_stmw on
-#pragma no_register_save_helpers off
-
-USER_FUNC(moving_floor_stop_se) {
-    void* floor = (void*)evtGetValue(event, event->args[0]);
-
-    if (*(u32*)((s32)floor + 0x78) == 0) {
-        u32 handle = *(u32*)((s32)floor + 0x7C);
-        if (handle != 0) {
-            psndSFXOff(handle);
-            *(s32*)((s32)floor + 0x7C) = 0;
-        }
-    }
-    return 2;
-}
-
-USER_FUNC(evt_moving_floor_main2) {
-    volatile s32* floor = (volatile s32*)evtGetValue(event, event->args[0]);
-    s32 value0 = *(volatile s32*)event;
-    s32 value4 = *(volatile s32*)((s32)event + 4);
-
-    floor[7] = value4;
-    floor[6] = value0;
-    return 2;
-}
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-

@@ -1,4 +1,6 @@
 #include "effect/n64/eff_sunlight_n64.h"
+u8 effSunlightMain(void* effect);
+void effSunlightDisp(s32 cameraId, void* effect);
 
 typedef struct EffSunlightWork {
     s32 type;
@@ -24,6 +26,109 @@ void* __memAlloc(s32 heap, u32 size);
 
 extern const char str_SunlightN64_802fc128[];
 extern f32 float_0_80426300;
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void* effSunlightN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
+    void* entry;
+    EffSunlightWork* work;
+    f32 zero;
+    s32 zeroInt;
+    s32 full;
+
+    entry = effEntry();
+    *(const char**)((s32)entry + 0x14) = str_SunlightN64_802fc128;
+    *(s32*)((s32)entry + 0x8) = 1;
+    work = __memAlloc(3, 0x40);
+    *(EffSunlightWork**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effSunlightMain;
+    *(u32*)entry |= 2;
+
+    zeroInt = 0;
+    work->type = type;
+    work->frame = zeroInt;
+    if (lifetime <= 0) {
+        work->lifetime = 1000;
+    } else {
+        work->lifetime = lifetime;
+    }
+
+    work->x = x;
+    full = 0xFF;
+    zero = float_0_80426300;
+    zeroInt = 0;
+    work->y = y;
+    work->z = z;
+    work->scale = scale;
+    work->color0[0] = full;
+    work->color0[1] = full;
+    work->color0[2] = full;
+    work->color0[3] = full;
+    work->color0[4] = full;
+    work->color0[5] = full;
+    work->color0[6] = full;
+    work->field_20 = zero;
+    work->field_24 = zero;
+    work->field_28 = zero;
+    work->field_2C = zero;
+    work->field_30 = zero;
+    work->field_3C = full;
+    work->field_38 = zeroInt;
+    return entry;
+}
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
+
+u8 effSunlightMain(void* effect) {
+    extern void effDelete(void*);
+    extern f64 sin(f64);
+    extern f64 dispCalcZ(void*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    u8* work = *(u8**)((s32)effect + 0xC);
+    f32 pos[3];
+    s32 i;
+    s32 timer;
+    pos[0] = *(f32*)(work + 4);
+    pos[1] = *(f32*)(work + 8);
+    pos[2] = *(f32*)(work + 0xC);
+    if (*(u32*)effect & 4) {
+        *(u32*)effect &= ~4;
+        *(s32*)(work + 0x10) = 0x10;
+    }
+    if (*(s32*)(work + 0x10) < 1000) *(s32*)(work + 0x10) -= 1;
+    *(s32*)(work + 0x14) += 1;
+    if (*(s32*)(work + 0x14) > 0x4F1A0) *(s32*)(work + 0x14) = 0x100;
+    if (*(s32*)(work + 0x10) < 0) {
+        effDelete(effect);
+        return 0;
+    }
+    if (*(s32*)(work + 0x10) < 0x10) {
+        *(s32*)(work + 0x38) -= 0x10;
+        if (*(s32*)(work + 0x38) < 0) *(s32*)(work + 0x38) = 0;
+    }
+    if (*(s32*)(work + 0x3C) < 0) *(s32*)(work + 0x3C) = 0;
+    if (*(s32*)(work + 0x3C) > 0xFF) *(s32*)(work + 0x3C) = 0xFF;
+    timer = *(s32*)(work + 0x38);
+    if (*(s32*)(work + 0x3C) < timer) {
+        timer -= 8;
+        if (timer < *(s32*)(work + 0x3C)) timer = *(s32*)(work + 0x3C);
+        *(s32*)(work + 0x38) = timer;
+    } else if (timer < *(s32*)(work + 0x3C)) {
+        timer += 8;
+        if (*(s32*)(work + 0x3C) < timer) timer = *(s32*)(work + 0x3C);
+        *(s32*)(work + 0x38) = timer;
+    }
+    for (i = 0; i < 5; i++) {
+        f32 a = 6.2832f * (0.25f * (f32)*(s32*)(work + 0x14) + (f32)(i * i * 20)) / 360.0f;
+        f32 b = 6.2832f * (f32)(*(s32*)(work + 0x14) * 2) / 360.0f;
+        f32* value = (f32*)(work + 0x20 + i * 4);
+        *value = -(4.0f * (0.01f * (f32)sin(b) + 0.05f) * (f32)sin(a) - *value);
+        if (*value < 0.0f) *value += 256.0f;
+        if (*value > 256.0f) *value -= 256.0f;
+    }
+    dispEntry(4, 10, effSunlightDisp, effect, (f32)dispCalcZ(pos));
+    return 0;
+}
 
 
 void effSunlightDisp(s32 cameraId, void* effect)  {
@@ -130,106 +235,3 @@ void effSunlightDisp(s32 cameraId, void* effect)  {
     }
     GXSetProjectionv(projection);
 }
-
-u8 effSunlightMain(void* effect) {
-    extern void effDelete(void*);
-    extern f64 sin(f64);
-    extern f64 dispCalcZ(void*);
-    extern void dispEntry(s32, s32, void*, void*, f32);
-    u8* work = *(u8**)((s32)effect + 0xC);
-    f32 pos[3];
-    s32 i;
-    s32 timer;
-    pos[0] = *(f32*)(work + 4);
-    pos[1] = *(f32*)(work + 8);
-    pos[2] = *(f32*)(work + 0xC);
-    if (*(u32*)effect & 4) {
-        *(u32*)effect &= ~4;
-        *(s32*)(work + 0x10) = 0x10;
-    }
-    if (*(s32*)(work + 0x10) < 1000) *(s32*)(work + 0x10) -= 1;
-    *(s32*)(work + 0x14) += 1;
-    if (*(s32*)(work + 0x14) > 0x4F1A0) *(s32*)(work + 0x14) = 0x100;
-    if (*(s32*)(work + 0x10) < 0) {
-        effDelete(effect);
-        return 0;
-    }
-    if (*(s32*)(work + 0x10) < 0x10) {
-        *(s32*)(work + 0x38) -= 0x10;
-        if (*(s32*)(work + 0x38) < 0) *(s32*)(work + 0x38) = 0;
-    }
-    if (*(s32*)(work + 0x3C) < 0) *(s32*)(work + 0x3C) = 0;
-    if (*(s32*)(work + 0x3C) > 0xFF) *(s32*)(work + 0x3C) = 0xFF;
-    timer = *(s32*)(work + 0x38);
-    if (*(s32*)(work + 0x3C) < timer) {
-        timer -= 8;
-        if (timer < *(s32*)(work + 0x3C)) timer = *(s32*)(work + 0x3C);
-        *(s32*)(work + 0x38) = timer;
-    } else if (timer < *(s32*)(work + 0x3C)) {
-        timer += 8;
-        if (*(s32*)(work + 0x3C) < timer) timer = *(s32*)(work + 0x3C);
-        *(s32*)(work + 0x38) = timer;
-    }
-    for (i = 0; i < 5; i++) {
-        f32 a = 6.2832f * (0.25f * (f32)*(s32*)(work + 0x14) + (f32)(i * i * 20)) / 360.0f;
-        f32 b = 6.2832f * (f32)(*(s32*)(work + 0x14) * 2) / 360.0f;
-        f32* value = (f32*)(work + 0x20 + i * 4);
-        *value = -(4.0f * (0.01f * (f32)sin(b) + 0.05f) * (f32)sin(a) - *value);
-        if (*value < 0.0f) *value += 256.0f;
-        if (*value > 256.0f) *value -= 256.0f;
-    }
-    dispEntry(4, 10, effSunlightDisp, effect, (f32)dispCalcZ(pos));
-    return 0;
-}
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void* effSunlightN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
-    void* entry;
-    EffSunlightWork* work;
-    f32 zero;
-    s32 zeroInt;
-    s32 full;
-
-    entry = effEntry();
-    *(const char**)((s32)entry + 0x14) = str_SunlightN64_802fc128;
-    *(s32*)((s32)entry + 0x8) = 1;
-    work = __memAlloc(3, 0x40);
-    *(EffSunlightWork**)((s32)entry + 0xC) = work;
-    *(void**)((s32)entry + 0x10) = effSunlightMain;
-    *(u32*)entry |= 2;
-
-    zeroInt = 0;
-    work->type = type;
-    work->frame = zeroInt;
-    if (lifetime <= 0) {
-        work->lifetime = 1000;
-    } else {
-        work->lifetime = lifetime;
-    }
-
-    work->x = x;
-    full = 0xFF;
-    zero = float_0_80426300;
-    zeroInt = 0;
-    work->y = y;
-    work->z = z;
-    work->scale = scale;
-    work->color0[0] = full;
-    work->color0[1] = full;
-    work->color0[2] = full;
-    work->color0[3] = full;
-    work->color0[4] = full;
-    work->color0[5] = full;
-    work->color0[6] = full;
-    work->field_20 = zero;
-    work->field_24 = zero;
-    work->field_28 = zero;
-    work->field_2C = zero;
-    work->field_30 = zero;
-    work->field_3C = full;
-    work->field_38 = zeroInt;
-    return entry;
-}
-#pragma use_lmw_stmw on
-#pragma no_register_save_helpers off

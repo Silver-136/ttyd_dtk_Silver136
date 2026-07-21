@@ -1,20 +1,6 @@
 #include "effect/n64/eff_stardust_n64.h"
 
-void effStardustN64SetScale(void* effect, f32 scale) {
-    *(f32*)((s32)*(void**)((s32)effect + 0xC) + 0x1C) = scale;
-}
-
-void effStardustN64SetDrawCam(void* effect, s32 camId) {
-    *(s32*)((s32)*(void**)((s32)effect + 0xC) + 0x3C) = camId;
-}
-
-void effStardustN64SetColor(void* effect, f32 r, f32 g, f32 b) {
-    void* work = *(void**)((s32)effect + 0xC);
-    *(f32*)((s32)work + 0x28) = r;
-    *(f32*)((s32)work + 0x2C) = g;
-    *(f32*)((s32)work + 0x30) = b;
-}
-
+void effStardustDisp(s32 cameraId, void* effect);
 
 void* effStardustN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type) {
     extern void* effEntry(void);
@@ -98,13 +84,6 @@ void* effStardustN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type) {
     return entry;
 }
 
-void effStardustDisp(s32 cameraId, void* effect) {
-    extern void* camGetPtr(s32);extern void PSMTXTrans(void*,f32,f32,f32);extern void PSMTXRotRad(void*,s32,f32);extern void PSMTXScale(void*,f32,f32,f32);extern void PSMTXConcat(void*,void*,void*);extern void GXSetNumChans(s32);extern void GXSetNumTexGens(s32);extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);extern void GXLoadTexMtxImm(void*,s32,s32);extern void effGetTexObjN64(s32,void*);extern void GXLoadTexObj(void*,s32);extern void GXSetNumTevStages(s32);extern void GXSetTevOrder(s32,s32,s32,s32);extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevColorIn(s32,s32,s32,s32,s32);extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);extern void GXSetCullMode(s32);extern void GXSetTevColor(s32,void*);extern void GXLoadPosMtxImm(void*,s32);extern void GXSetCurrentMtx(s32);extern void effSetVtxDescN64(void*);extern void GXBegin(s32,s32,s32);extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);extern f32 float_deg2rad_80426274,float_0p0056818_80426278,float_0p045455_8042627c,float_0_80426280;
-    f32 base[3][4],rot[3][4],scale[3][4],mtx[3][4];u8 texObj[0x20];u8* work=*(u8**)((s32)effect+0xC);u8* p=work+0x40;s32 i;u32 color;
-    PSMTXTrans(base,*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC));PSMTXRotRad(rot,0x79,float_deg2rad_80426274*-*(f32*)((s32)camGetPtr(cameraId)+0x114));PSMTXScale(scale,*(f32*)(work+0x1C),*(f32*)(work+0x1C),*(f32*)(work+0x1C));PSMTXConcat(base,rot,base);PSMTXConcat(base,scale,base);PSMTXConcat((void*)((s32)camGetPtr(cameraId)+0x11C),base,base);GXSetNumChans(0);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);PSMTXScale(scale,float_0p0056818_80426278,float_0p045455_8042627c,float_0_80426280);GXLoadTexMtxImm(scale,0x1E,1);effGetTexObjN64(0x20,texObj);GXLoadTexObj(texObj,0);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,2,1,8,0);GXSetTevAlphaIn(0,0,1,7,7);GXSetCullMode(0);
-    for(i=0;i<*(s32*)((s32)effect+8)-1;i++,p+=0x40){if(*(s32*)(p+0x38)<0)continue;PSMTXTrans(mtx,*(f32*)(p+4),*(f32*)(p+8),*(f32*)(p+0xC));PSMTXScale(scale,*(f32*)(p+0x1C),*(f32*)(p+0x1C),*(f32*)(p+0x1C));PSMTXConcat(mtx,scale,mtx);PSMTXConcat(base,mtx,mtx);GXLoadPosMtxImm(mtx,0);GXSetCurrentMtx(0);color=*(u32*)(p+0x28);GXSetTevColor(1,&color);effSetVtxDescN64((void*)0x803A9000);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3,0);}
-}
-
 u8 effStardustMain(void* effect) {
     extern void effDelete(void*);
     extern s32 effTblRandN64(s32, s32);
@@ -166,3 +145,24 @@ u8 effStardustMain(void* effect) {
     return 0;
 }
 
+void effStardustDisp(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32);extern void PSMTXTrans(void*,f32,f32,f32);extern void PSMTXRotRad(void*,s32,f32);extern void PSMTXScale(void*,f32,f32,f32);extern void PSMTXConcat(void*,void*,void*);extern void GXSetNumChans(s32);extern void GXSetNumTexGens(s32);extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);extern void GXLoadTexMtxImm(void*,s32,s32);extern void effGetTexObjN64(s32,void*);extern void GXLoadTexObj(void*,s32);extern void GXSetNumTevStages(s32);extern void GXSetTevOrder(s32,s32,s32,s32);extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevColorIn(s32,s32,s32,s32,s32);extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);extern void GXSetCullMode(s32);extern void GXSetTevColor(s32,void*);extern void GXLoadPosMtxImm(void*,s32);extern void GXSetCurrentMtx(s32);extern void effSetVtxDescN64(void*);extern void GXBegin(s32,s32,s32);extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);extern f32 float_deg2rad_80426274,float_0p0056818_80426278,float_0p045455_8042627c,float_0_80426280;
+    f32 base[3][4],rot[3][4],scale[3][4],mtx[3][4];u8 texObj[0x20];u8* work=*(u8**)((s32)effect+0xC);u8* p=work+0x40;s32 i;u32 color;
+    PSMTXTrans(base,*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC));PSMTXRotRad(rot,0x79,float_deg2rad_80426274*-*(f32*)((s32)camGetPtr(cameraId)+0x114));PSMTXScale(scale,*(f32*)(work+0x1C),*(f32*)(work+0x1C),*(f32*)(work+0x1C));PSMTXConcat(base,rot,base);PSMTXConcat(base,scale,base);PSMTXConcat((void*)((s32)camGetPtr(cameraId)+0x11C),base,base);GXSetNumChans(0);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);PSMTXScale(scale,float_0p0056818_80426278,float_0p045455_8042627c,float_0_80426280);GXLoadTexMtxImm(scale,0x1E,1);effGetTexObjN64(0x20,texObj);GXLoadTexObj(texObj,0);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,2,1,8,0);GXSetTevAlphaIn(0,0,1,7,7);GXSetCullMode(0);
+    for(i=0;i<*(s32*)((s32)effect+8)-1;i++,p+=0x40){if(*(s32*)(p+0x38)<0)continue;PSMTXTrans(mtx,*(f32*)(p+4),*(f32*)(p+8),*(f32*)(p+0xC));PSMTXScale(scale,*(f32*)(p+0x1C),*(f32*)(p+0x1C),*(f32*)(p+0x1C));PSMTXConcat(mtx,scale,mtx);PSMTXConcat(base,mtx,mtx);GXLoadPosMtxImm(mtx,0);GXSetCurrentMtx(0);color=*(u32*)(p+0x28);GXSetTevColor(1,&color);effSetVtxDescN64((void*)0x803A9000);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3,0);}
+}
+
+void effStardustN64SetColor(void* effect, f32 r, f32 g, f32 b) {
+    void* work = *(void**)((s32)effect + 0xC);
+    *(f32*)((s32)work + 0x28) = r;
+    *(f32*)((s32)work + 0x2C) = g;
+    *(f32*)((s32)work + 0x30) = b;
+}
+
+void effStardustN64SetDrawCam(void* effect, s32 camId) {
+    *(s32*)((s32)*(void**)((s32)effect + 0xC) + 0x3C) = camId;
+}
+
+void effStardustN64SetScale(void* effect, f32 scale) {
+    *(f32*)((s32)*(void**)((s32)effect + 0xC) + 0x1C) = scale;
+}

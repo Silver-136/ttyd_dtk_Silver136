@@ -16,6 +16,29 @@ extern Vec vec3_80302a80;
 extern f32 float_6p2832_804289a0;
 extern f32 float_360_804289a4;
 extern f32 float_0p9_804289a8;
+#pragma use_lmw_stmw off
+void* effMachinegunEntry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 speed, f32 field10) {
+    void* entry = effEntry();
+    void* work;
+
+    *(char**)((s32)entry + 0x14) = str_Machinegun_80302a8c;
+    *(s32*)((s32)entry + 8) = 1;
+    work = __memAlloc(3, 0x28);
+    *(void**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effMachinegunMain;
+    *(s32*)((s32)work + 0) = type;
+    *(f32*)((s32)work + 4) = x;
+    *(f32*)((s32)work + 8) = y;
+    *(f32*)((s32)work + 0xC) = z;
+    *(f32*)((s32)work + 0x14) = angle;
+    *(f32*)((s32)work + 0x10) = field10;
+    *(s32*)((s32)work + 0x1C) = 0xFF;
+    *(f32*)((s32)work + 0x18) = speed;
+
+    return entry;
+}
+#pragma use_lmw_stmw on
+
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -42,29 +65,6 @@ void effMachinegunMain(void* entry) {
     }
 }
 #pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma use_lmw_stmw off
-void* effMachinegunEntry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 speed, f32 field10) {
-    void* entry = effEntry();
-    void* work;
-
-    *(char**)((s32)entry + 0x14) = str_Machinegun_80302a8c;
-    *(s32*)((s32)entry + 8) = 1;
-    work = __memAlloc(3, 0x28);
-    *(void**)((s32)entry + 0xC) = work;
-    *(void**)((s32)entry + 0x10) = effMachinegunMain;
-    *(s32*)((s32)work + 0) = type;
-    *(f32*)((s32)work + 4) = x;
-    *(f32*)((s32)work + 8) = y;
-    *(f32*)((s32)work + 0xC) = z;
-    *(f32*)((s32)work + 0x14) = angle;
-    *(f32*)((s32)work + 0x10) = field10;
-    *(s32*)((s32)work + 0x1C) = 0xFF;
-    *(f32*)((s32)work + 0x18) = speed;
-
-    return entry;
-}
 #pragma use_lmw_stmw on
 
 

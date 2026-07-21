@@ -37,173 +37,71 @@ u32 unk_802294a4(void) {
     return dat_804279c0;
 }
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void effFunemizuShibukiDisp(s32 cameraId, void* effect) {
-    typedef struct FunemizuChild {
-        s32 mode;
-        f32 x;
-        f32 y;
-        f32 z;
-        f32 speed;
-        f32 angle;
-        f32 a;
-        f32 b;
-        f32 c;
-        f32 d;
-        f32 e;
-        f32 f;
-        s32 counter;
-        f32 vy;
-        f32 gravity;
-        s32 delay;
-        s32 alpha;
-        s32 unk44;
-        s32 cameraId;
-    } FunemizuChild;
-    typedef struct EffectEntryLocal {
-        char pad0[8];
-        s32 effCount;
-        void* work;
-    } EffectEntryLocal;
-
-    extern void* camGetPtr(s32 cameraId);
-    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
-    extern void GXSetZCompLoc(s32 beforeTex);
-    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
-    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
-    extern void PSMTXTrans(f32 mtx[3][4], double x, double y, double z);
-    extern void PSMTXRotRad(f32 mtx[3][4], double angle, char axis);
-    extern void PSMTXConcat(void* a, void* b, void* out);
-    extern void GXSetNumChans(s32 count);
-    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
-    extern void GXSetNumTexGens(s32 count);
-    extern void GXSetTexCoordGen2(s32 texCoord, s32 genType, s32 texGenSrc, s32 mtx, s32 normalize, s32 postMtx);
-    extern void GXSetNumTevStages(s32 count);
-    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 colorChan);
-    extern void GXSetTevOp(s32 stage, s32 mode);
-    extern void effGetTexObj(s32 id, void* texObj);
-    extern void GXLoadTexObj(void* texObj, s32 mapId);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
-    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 cnt, s32 type, s32 frac);
-    extern void GXSetChanMatColor(s32 chan, void* color);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
-    extern f32 float_deg2rad_804279c8;
-    extern f32 float_3_804279cc;
-    extern f32 float_0_804279d0;
+/* stub-fill: effFunemizuEntry | prototype_only | source_prototype */
+void* effFunemizuEntry(double x, double y, double z, double scale, double angle, s32 type) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern s32 irand(s32 range);
+    extern void effFunemizuMain(void* effect);
+    extern const char str_funemizu_802ff1c0[];
     extern f32 float_0p5_804279d4;
-    extern f32 float_1p5_804279d8;
+    extern f32 float_0_804279d0;
     extern f32 float_1_804279dc;
-    extern u32 dat_804279c4;
+    extern f32 float_0p1_804279f0;
+    extern f32 float_100_80427a00;
 
-    EffectEntryLocal* eff;
-    FunemizuChild* work;
-    FunemizuChild* child;
-    void* cam;
-    void* cam2;
-    f32 trans[3][4];
-    f32 rot[3][4];
-    f32 viewTrans[3][4];
-    u32 texObj[8];
-    u32 color;
-    volatile f32* fifo;
-    f32 negThree;
-    f32 halfNeg;
-    f32 oneHalf;
-    f32 zero;
-    f32 one;
+    void* effect = effEntry();
+    s32 count = 1;
+    void* work;
+    void* child;
     s32 i;
+    f32 halfScale;
+    f32 zero;
 
-    eff = (EffectEntryLocal*)effect;
-    work = (FunemizuChild*)eff->work;
-    cam = camGetPtr(cameraId);
-
-    GXSetBlendMode(1, 4, 5, 0);
-    GXSetZCompLoc(1);
-    GXSetAlphaCompare(7, 0, 0, 7, 0);
-    GXSetZMode(1, 3, 0);
-
-    PSMTXTrans(trans, (double)work->x, (double)work->y, (double)work->z);
-    cam2 = camGetPtr(cameraId);
-    PSMTXRotRad(rot, (double)(float_deg2rad_804279c8 * (work->angle - *(f32*)((s32)cam2 + 0x114))), 'y');
-    PSMTXConcat(trans, rot, trans);
-    PSMTXConcat((void*)((s32)cam + 0x11C), trans, viewTrans);
-
-    GXSetNumChans(1);
-    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(0, 0, 0, 4);
-    GXSetTevOp(0, 0);
-    effGetTexObj(0x40, texObj);
-    GXLoadTexObj(texObj, 0);
-    GXSetCullMode(0);
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 1);
-    GXSetVtxDesc(0xD, 1);
-    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
-    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
-
-    negThree = -float_3_804279cc;
-    i = 1;
-    child = (FunemizuChild*)((s32)work + 0x4C);
-    while (i < eff->effCount) {
-        if (child->delay != 0) {
-            goto next_child;
-        }
-        if (child->y < float_0_804279d0) {
-            goto next_child;
-        }
-
-        color = dat_804279c4;
-            ((u8*)&color)[3] = (u8)child->alpha;
-            GXSetChanMatColor(4, &color);
-
-            PSMTXTrans(trans, (double)child->x, (double)child->y, (double)child->z);
-            PSMTXConcat(viewTrans, trans, trans);
-            GXLoadPosMtxImm(trans, 0);
-            GXSetCurrentMtx(0);
-            GXBegin(0x80, 0, 4);
-
-            zero = float_0_804279d0;
-            one = float_1_804279dc;
-            oneHalf = float_1p5_804279d8;
-            halfNeg = negThree * float_0p5_804279d4;
-            fifo = (volatile f32*)0xCC008000;
-            *fifo = halfNeg;
-            *fifo = oneHalf;
-            *fifo = zero;
-            *fifo = zero;
-            *fifo = zero;
-            *fifo = oneHalf;
-            *fifo = oneHalf;
-            *fifo = zero;
-            *fifo = one;
-            *fifo = zero;
-            *fifo = oneHalf;
-            *fifo = halfNeg;
-            *fifo = zero;
-            *fifo = one;
-            *fifo = one;
-            *fifo = halfNeg;
-            *fifo = halfNeg;
-            *fifo = zero;
-            *fifo = zero;
-            *fifo = one;
-
-next_child:
-        child++;
-        i++;
+    if (type == 1) {
+        count = ((s32)scale * 3) + 1;
     }
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
+    if (count > 10) {
+        count = 10;
+    }
 
+    *(const char**)((s32)effect + 0x14) = str_funemizu_802ff1c0;
+    *(s32*)((s32)effect + 8) = count;
+    work = __memAlloc(3, count * 0x4C);
+    *(void**)((s32)effect + 0xC) = work;
+    *(void**)((s32)effect + 0x10) = effFunemizuMain;
+
+    zero = float_0_804279d0;
+    halfScale = (f32)scale * float_0p5_804279d4;
+    *(s32*)work = type;
+    *(f32*)((s32)work + 4) = (f32)x;
+    *(f32*)((s32)work + 8) = (f32)y;
+    *(f32*)((s32)work + 0xC) = (f32)z;
+    *(f32*)((s32)work + 0x18) = zero;
+    *(f32*)((s32)work + 0x1C) = zero;
+    *(f32*)((s32)work + 0x20) = zero;
+    *(f32*)((s32)work + 0x24) = zero;
+    *(f32*)((s32)work + 0x2C) = zero;
+    *(f32*)((s32)work + 0x28) = zero;
+    *(s32*)((s32)work + 0x30) = 0;
+    *(f32*)((s32)work + 0x44) = float_1_804279dc;
+    *(s32*)((s32)work + 0x48) = 4;
+
+    child = (void*)((s32)work + 0x4C);
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, child = (void*)((s32)child + 0x4C)) {
+        *(f32*)((s32)child + 4) = zero;
+        *(f32*)((s32)child + 8) = zero;
+        *(f32*)((s32)child + 0xC) = zero;
+        *(f32*)((s32)child + 0x10) = halfScale;
+        *(f32*)((s32)child + 0x14) = (f32)angle;
+        *(f32*)((s32)child + 0x34) = halfScale + (f32)irand(2);
+        *(f32*)((s32)child + 0x38) = float_0p1_804279f0 + ((f32)irand(10) / float_100_80427a00);
+        *(s32*)((s32)child + 0x3C) = irand(5);
+        *(s32*)((s32)child + 0x40) = 0xFF;
+    }
+
+    return effect;
+}
 void effFunemizuMain(void* effect) {
     typedef struct VecLocal {
         f32 x;
@@ -409,69 +307,169 @@ void effFunemizuDisp(s32 cameraId, void* effect) {
     }
 }
 
-/* stub-fill: effFunemizuEntry | prototype_only | source_prototype */
-void* effFunemizuEntry(double x, double y, double z, double scale, double angle, s32 type) {
-    extern void* effEntry(void);
-    extern void* __memAlloc(s32 heap, u32 size);
-    extern s32 irand(s32 range);
-    extern void effFunemizuMain(void* effect);
-    extern const char str_funemizu_802ff1c0[];
-    extern f32 float_0p5_804279d4;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void effFunemizuShibukiDisp(s32 cameraId, void* effect) {
+    typedef struct FunemizuChild {
+        s32 mode;
+        f32 x;
+        f32 y;
+        f32 z;
+        f32 speed;
+        f32 angle;
+        f32 a;
+        f32 b;
+        f32 c;
+        f32 d;
+        f32 e;
+        f32 f;
+        s32 counter;
+        f32 vy;
+        f32 gravity;
+        s32 delay;
+        s32 alpha;
+        s32 unk44;
+        s32 cameraId;
+    } FunemizuChild;
+    typedef struct EffectEntryLocal {
+        char pad0[8];
+        s32 effCount;
+        void* work;
+    } EffectEntryLocal;
+
+    extern void* camGetPtr(s32 cameraId);
+    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
+    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
+    extern void PSMTXTrans(f32 mtx[3][4], double x, double y, double z);
+    extern void PSMTXRotRad(f32 mtx[3][4], double angle, char axis);
+    extern void PSMTXConcat(void* a, void* b, void* out);
+    extern void GXSetNumChans(s32 count);
+    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
+    extern void GXSetNumTexGens(s32 count);
+    extern void GXSetTexCoordGen2(s32 texCoord, s32 genType, s32 texGenSrc, s32 mtx, s32 normalize, s32 postMtx);
+    extern void GXSetNumTevStages(s32 count);
+    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 colorChan);
+    extern void GXSetTevOp(s32 stage, s32 mode);
+    extern void effGetTexObj(s32 id, void* texObj);
+    extern void GXLoadTexObj(void* texObj, s32 mapId);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 cnt, s32 type, s32 frac);
+    extern void GXSetChanMatColor(s32 chan, void* color);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void GXSetCurrentMtx(s32 id);
+    extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
+    extern f32 float_deg2rad_804279c8;
+    extern f32 float_3_804279cc;
     extern f32 float_0_804279d0;
+    extern f32 float_0p5_804279d4;
+    extern f32 float_1p5_804279d8;
     extern f32 float_1_804279dc;
-    extern f32 float_0p1_804279f0;
-    extern f32 float_100_80427a00;
+    extern u32 dat_804279c4;
 
-    void* effect = effEntry();
-    s32 count = 1;
-    void* work;
-    void* child;
-    s32 i;
-    f32 halfScale;
+    EffectEntryLocal* eff;
+    FunemizuChild* work;
+    FunemizuChild* child;
+    void* cam;
+    void* cam2;
+    f32 trans[3][4];
+    f32 rot[3][4];
+    f32 viewTrans[3][4];
+    u32 texObj[8];
+    u32 color;
+    volatile f32* fifo;
+    f32 negThree;
+    f32 halfNeg;
+    f32 oneHalf;
     f32 zero;
+    f32 one;
+    s32 i;
 
-    if (type == 1) {
-        count = ((s32)scale * 3) + 1;
+    eff = (EffectEntryLocal*)effect;
+    work = (FunemizuChild*)eff->work;
+    cam = camGetPtr(cameraId);
+
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(1, 3, 0);
+
+    PSMTXTrans(trans, (double)work->x, (double)work->y, (double)work->z);
+    cam2 = camGetPtr(cameraId);
+    PSMTXRotRad(rot, (double)(float_deg2rad_804279c8 * (work->angle - *(f32*)((s32)cam2 + 0x114))), 'y');
+    PSMTXConcat(trans, rot, trans);
+    PSMTXConcat((void*)((s32)cam + 0x11C), trans, viewTrans);
+
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevOp(0, 0);
+    effGetTexObj(0x40, texObj);
+    GXLoadTexObj(texObj, 0);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+
+    negThree = -float_3_804279cc;
+    i = 1;
+    child = (FunemizuChild*)((s32)work + 0x4C);
+    while (i < eff->effCount) {
+        if (child->delay != 0) {
+            goto next_child;
+        }
+        if (child->y < float_0_804279d0) {
+            goto next_child;
+        }
+
+        color = dat_804279c4;
+            ((u8*)&color)[3] = (u8)child->alpha;
+            GXSetChanMatColor(4, &color);
+
+            PSMTXTrans(trans, (double)child->x, (double)child->y, (double)child->z);
+            PSMTXConcat(viewTrans, trans, trans);
+            GXLoadPosMtxImm(trans, 0);
+            GXSetCurrentMtx(0);
+            GXBegin(0x80, 0, 4);
+
+            zero = float_0_804279d0;
+            one = float_1_804279dc;
+            oneHalf = float_1p5_804279d8;
+            halfNeg = negThree * float_0p5_804279d4;
+            fifo = (volatile f32*)0xCC008000;
+            *fifo = halfNeg;
+            *fifo = oneHalf;
+            *fifo = zero;
+            *fifo = zero;
+            *fifo = zero;
+            *fifo = oneHalf;
+            *fifo = oneHalf;
+            *fifo = zero;
+            *fifo = one;
+            *fifo = zero;
+            *fifo = oneHalf;
+            *fifo = halfNeg;
+            *fifo = zero;
+            *fifo = one;
+            *fifo = one;
+            *fifo = halfNeg;
+            *fifo = halfNeg;
+            *fifo = zero;
+            *fifo = zero;
+            *fifo = one;
+
+next_child:
+        child++;
+        i++;
     }
-    if (count > 10) {
-        count = 10;
-    }
-
-    *(const char**)((s32)effect + 0x14) = str_funemizu_802ff1c0;
-    *(s32*)((s32)effect + 8) = count;
-    work = __memAlloc(3, count * 0x4C);
-    *(void**)((s32)effect + 0xC) = work;
-    *(void**)((s32)effect + 0x10) = effFunemizuMain;
-
-    zero = float_0_804279d0;
-    halfScale = (f32)scale * float_0p5_804279d4;
-    *(s32*)work = type;
-    *(f32*)((s32)work + 4) = (f32)x;
-    *(f32*)((s32)work + 8) = (f32)y;
-    *(f32*)((s32)work + 0xC) = (f32)z;
-    *(f32*)((s32)work + 0x18) = zero;
-    *(f32*)((s32)work + 0x1C) = zero;
-    *(f32*)((s32)work + 0x20) = zero;
-    *(f32*)((s32)work + 0x24) = zero;
-    *(f32*)((s32)work + 0x2C) = zero;
-    *(f32*)((s32)work + 0x28) = zero;
-    *(s32*)((s32)work + 0x30) = 0;
-    *(f32*)((s32)work + 0x44) = float_1_804279dc;
-    *(s32*)((s32)work + 0x48) = 4;
-
-    child = (void*)((s32)work + 0x4C);
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++, child = (void*)((s32)child + 0x4C)) {
-        *(f32*)((s32)child + 4) = zero;
-        *(f32*)((s32)child + 8) = zero;
-        *(f32*)((s32)child + 0xC) = zero;
-        *(f32*)((s32)child + 0x10) = halfScale;
-        *(f32*)((s32)child + 0x14) = (f32)angle;
-        *(f32*)((s32)child + 0x34) = halfScale + (f32)irand(2);
-        *(f32*)((s32)child + 0x38) = float_0p1_804279f0 + ((f32)irand(10) / float_100_80427a00);
-        *(s32*)((s32)child + 0x3C) = irand(5);
-        *(s32*)((s32)child + 0x40) = 0xFF;
-    }
-
-    return effect;
 }
-
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on

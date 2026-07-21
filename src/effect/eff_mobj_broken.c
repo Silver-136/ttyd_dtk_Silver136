@@ -1,22 +1,14 @@
 #include "effect/eff_mobj_broken.h"
 
+void effMObjBrokenMain(void* effect);
+
 void* animGetPtr(void);
 void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
 void GXSetZCompLoc(s32 beforeTex);
 void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
 void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
 
-void rendermodeFunc(s32 mode) {
-    void* anim = animGetPtr();
-
-    *(s32*)((s32)anim + 0xE0) = mode;
-    GXSetBlendMode(1, 4, 5, 0);
-    GXSetZCompLoc(1);
-    GXSetAlphaCompare(7, 0, 0, 7, 0);
-    GXSetZMode(0, 3, 0);
-}
-
-void effMObjBrokenDisp(s32 cameraId, void* effect) {
+void* effMObjBrokenEntry(double x, double y, double z, u32 typeId) {
     typedef struct { f32 x; f32 y; f32 z; } Vec;
     typedef struct {
         u32 typeId;
@@ -28,132 +20,100 @@ void effMObjBrokenDisp(s32 cameraId, void* effect) {
         Vec vel;
         s32 poseId;
     } BrokenWork;
-    typedef f32 Mtx[3][4];
 
-    extern void* camGetPtr(s32 cameraId);
-    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
-    extern void GXSetZCompLoc(s32 beforeTex);
-    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
-    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
-    extern void PSMTXTrans(Mtx m, double x, double y, double z);
-    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
-    extern void PSMTXConcat(Mtx a, Mtx b, Mtx out);
-    extern void GXSetNumChans(s32 num);
-    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
-    extern void GXSetNumTexGens(s32 num);
-    extern void GXSetTexCoordGen2(s32 dst, s32 func, s32 src, s32 mtx, s32 normalize, s32 postMtx);
-    extern void GXSetNumTevStages(s32 num);
-    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 colorChan);
-    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevOp(s32 stage, s32 mode);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
-    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
-    extern void effGetTexObj(s32 id, void* texObj);
-    extern void GXLoadTexObj(void* texObj, s32 mapId);
-    extern void GXSetChanMatColor(s32 chan, void* color);
-    extern double cos(double x);
-    extern double sin(double x);
-    extern void PSMTXRotAxisRad(Mtx m, Vec* axis, double rad);
-    extern void GXLoadPosMtxImm(Mtx m, s32 id);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXDrawCube(void);
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern s32 irand(s32 range);
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern void effKemuTestEntry(s32 type, double x, double y, double z, double scale);
 
-    BrokenWork* work = *(BrokenWork**)((s32)effect + 0xC);
-    void* cam = camGetPtr(cameraId);
-    u8 texObj[0x20];
-    Mtx model;
-    Mtx scaleMtx;
-    Mtx rotMtx;
-    Mtx viewModel;
-    s32 i;
-    u32 color;
-    Vec axis;
+    void* effect = effEntry();
+    s32 count = 1;
+    BrokenWork* work;
     BrokenWork* child;
-    f32 angle;
-    f32 c;
-    f32 s;
+    s32 i;
+    f32 zero = 0.0f;
+    f32 half = 0.5f;
+    f32 randScale = 0.0625f;
+    f32 divFive = 5.0f;
 
-    GXSetBlendMode(1, 4, 5, 0);
-    GXSetZCompLoc(1);
-    GXSetAlphaCompare(7, 0, 0, 7, 0);
-    GXSetZMode(0, 3, 0);
+    if ((s32)typeId >= 0 && (s32)typeId < 7) {
+        count = 17;
+    } else if ((s32)typeId < 8) {
+        count = 9;
+    }
 
-    PSMTXTrans(model, work->pos.x, work->pos.y, work->pos.z);
-    PSMTXScale(scaleMtx, work->scale, work->scale, work->scale);
-    PSMTXConcat(model, scaleMtx, model);
-    PSMTXConcat((void*)((s32)cam + 0x11C), model, viewModel);
+    *(char**)((s32)effect + 0x14) = "MObjBroken";
+    *(s32*)((s32)effect + 8) = count;
+    work = (BrokenWork*)__memAlloc(3, count * 0x30);
+    *(BrokenWork**)((s32)effect + 0xC) = work;
+    *(void**)((s32)effect + 0x10) = effMObjBrokenMain;
+    *(u32*)effect |= 2;
 
-    GXSetNumChans(1);
-    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(0, 0, 0, 4);
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevOp(0, 0);
-    GXSetCullMode(2);
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 1);
-    GXSetVtxDesc(0xD, 1);
-    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
-    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+    work->typeId = typeId;
+    work->pos.x = (f32)x;
+    work->pos.y = (f32)y;
+    work->pos.z = (f32)z;
+    work->scale = 1.0f;
+    work->poseId = -1;
 
-    if ((s32)work->typeId < 6) {
-        effGetTexObj((work->typeId % 3) + 0x38, texObj);
+    child = work + 1;
+    for (i = 1; i < count; i++, child++) {
+        s32 index = i;
+        s32 n;
+        s32 a = 0;
+        s32 b = 0;
+        s32 c = 0;
+        f32 size = 12.5f;
+        f32 halfSize;
+
+        if (index > 9) {
+            index -= 8;
+        }
+        n = index - 1;
+
+        if ((s32)typeId >= 0 && (s32)typeId < 3) {
+            size = 6.25f;
+            a = ((n % 4) / 2);
+            b = n / 4;
+            c = (n % 4) & 1;
+        } else if (((s32)typeId >= 3 && (s32)typeId < 6)) {
+            size = 12.5f;
+            a = ((n % 4) / 2);
+            b = n / 4;
+            c = (n % 4) & 1;
+        } else if (typeId == 6 || ((s32)typeId >= 6 && (s32)typeId < 8)) {
+            size = 12.5f;
+            a = n & 1;
+            b = n / 2;
+            c = 0;
+        }
+
+        halfSize = size * half;
+        child->pos.x = ((f32)a * size) - halfSize;
+        child->pos.y = ((f32)b * size) + halfSize;
+        child->pos.z = ((f32)c * size) - halfSize;
+        child->scale = size;
+        child->alpha = 0xFF;
+        child->rot = zero;
+        child->poseId = -1;
+        child->vel.x = (f32)(irand(10) + 10) * randScale;
+        child->angle = angleABf(zero, zero, child->pos.x, child->pos.z);
+        child->vel.y = (f32)(irand(3) + 3);
+        child->vel.z = (f32)(irand(5) + 2) / divFive;
+    }
+
+    if (typeId == 7) {
+        effKemuTestEntry(0x10, x, (f32)(y + child[1].pos.y), z, 1.0f);
     } else {
-        effGetTexObj(0x3B, texObj);
-    }
-    GXLoadTexObj(texObj, 0);
-
-    color = 0x00000080;
-    GXSetChanMatColor(4, &color);
-    child = work + 1;
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++, child++) {
-        angle = (6.283185f * child->angle) / 360.0f;
-        c = (f32)cos(angle);
-        s = (f32)sin(angle);
-        axis.x = c;
-        axis.y = 0.0f;
-        axis.z = s;
-        PSMTXTrans(model, child->pos.x + 5.0f, child->pos.y - 5.0f, child->pos.z);
-        PSMTXScale(scaleMtx, child->scale, child->scale, child->scale);
-        PSMTXConcat(model, scaleMtx, model);
-        PSMTXRotAxisRad(rotMtx, &axis, 0.017453292f * -child->rot);
-        PSMTXConcat(model, rotMtx, model);
-        PSMTXScale(scaleMtx, 1.0f, 1.0f, 0.0f);
-        PSMTXConcat(model, scaleMtx, model);
-        PSMTXConcat(viewModel, model, model);
-        GXLoadPosMtxImm(model, 0);
-        GXSetCurrentMtx(0);
-        GXDrawCube();
+        f32 scale = 1.0f;
+        if ((s32)typeId < 3) {
+            scale = 0.5f;
+        }
+        effKemuTestEntry(2, x, (f32)(y + child->pos.y), z, scale);
     }
 
-    color = 0xFFFFFFFF;
-    GXSetChanMatColor(4, &color);
-    child = work + 1;
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++, child++) {
-        angle = (6.283185f * child->angle) / 360.0f;
-        c = (f32)cos(angle);
-        s = (f32)sin(angle);
-        axis.x = c;
-        axis.y = 0.0f;
-        axis.z = s;
-        PSMTXTrans(model, child->pos.x, child->pos.y, child->pos.z);
-        PSMTXScale(scaleMtx, child->scale, child->scale, child->scale);
-        PSMTXConcat(model, scaleMtx, model);
-        PSMTXRotAxisRad(rotMtx, &axis, 0.017453292f * -child->rot);
-        PSMTXConcat(model, rotMtx, model);
-        PSMTXScale(scaleMtx, 1.0f, 1.0f, 0.0f);
-        PSMTXConcat(model, scaleMtx, model);
-        PSMTXConcat(viewModel, model, model);
-        GXLoadPosMtxImm(model, 0);
-        GXSetCurrentMtx(0);
-        GXDrawCube();
-    }
+    return effect;
 }
 
 void effMObjBrokenMain(void* effect) {
@@ -330,7 +290,7 @@ void effMObjBrokenMain(void* effect) {
     }
 }
 
-void* effMObjBrokenEntry(double x, double y, double z, u32 typeId) {
+void effMObjBrokenDisp(s32 cameraId, void* effect) {
     typedef struct { f32 x; f32 y; f32 z; } Vec;
     typedef struct {
         u32 typeId;
@@ -342,100 +302,142 @@ void* effMObjBrokenEntry(double x, double y, double z, u32 typeId) {
         Vec vel;
         s32 poseId;
     } BrokenWork;
+    typedef f32 Mtx[3][4];
 
-    extern void* effEntry(void);
-    extern void* __memAlloc(s32 heap, u32 size);
-    extern s32 irand(s32 range);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern void effKemuTestEntry(s32 type, double x, double y, double z, double scale);
+    extern void* camGetPtr(s32 cameraId);
+    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
+    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
+    extern void PSMTXTrans(Mtx m, double x, double y, double z);
+    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(Mtx a, Mtx b, Mtx out);
+    extern void GXSetNumChans(s32 num);
+    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
+    extern void GXSetNumTexGens(s32 num);
+    extern void GXSetTexCoordGen2(s32 dst, s32 func, s32 src, s32 mtx, s32 normalize, s32 postMtx);
+    extern void GXSetNumTevStages(s32 num);
+    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 colorChan);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevOp(s32 stage, s32 mode);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+    extern void effGetTexObj(s32 id, void* texObj);
+    extern void GXLoadTexObj(void* texObj, s32 mapId);
+    extern void GXSetChanMatColor(s32 chan, void* color);
+    extern double cos(double x);
+    extern double sin(double x);
+    extern void PSMTXRotAxisRad(Mtx m, Vec* axis, double rad);
+    extern void GXLoadPosMtxImm(Mtx m, s32 id);
+    extern void GXSetCurrentMtx(s32 id);
+    extern void GXDrawCube(void);
 
-    void* effect = effEntry();
-    s32 count = 1;
-    BrokenWork* work;
-    BrokenWork* child;
+    BrokenWork* work = *(BrokenWork**)((s32)effect + 0xC);
+    void* cam = camGetPtr(cameraId);
+    u8 texObj[0x20];
+    Mtx model;
+    Mtx scaleMtx;
+    Mtx rotMtx;
+    Mtx viewModel;
     s32 i;
-    f32 zero = 0.0f;
-    f32 half = 0.5f;
-    f32 randScale = 0.0625f;
-    f32 divFive = 5.0f;
+    u32 color;
+    Vec axis;
+    BrokenWork* child;
+    f32 angle;
+    f32 c;
+    f32 s;
 
-    if ((s32)typeId >= 0 && (s32)typeId < 7) {
-        count = 17;
-    } else if ((s32)typeId < 8) {
-        count = 9;
-    }
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(0, 3, 0);
 
-    *(char**)((s32)effect + 0x14) = "MObjBroken";
-    *(s32*)((s32)effect + 8) = count;
-    work = (BrokenWork*)__memAlloc(3, count * 0x30);
-    *(BrokenWork**)((s32)effect + 0xC) = work;
-    *(void**)((s32)effect + 0x10) = effMObjBrokenMain;
-    *(u32*)effect |= 2;
+    PSMTXTrans(model, work->pos.x, work->pos.y, work->pos.z);
+    PSMTXScale(scaleMtx, work->scale, work->scale, work->scale);
+    PSMTXConcat(model, scaleMtx, model);
+    PSMTXConcat((void*)((s32)cam + 0x11C), model, viewModel);
 
-    work->typeId = typeId;
-    work->pos.x = (f32)x;
-    work->pos.y = (f32)y;
-    work->pos.z = (f32)z;
-    work->scale = 1.0f;
-    work->poseId = -1;
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevOp(0, 0);
+    GXSetCullMode(2);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
 
-    child = work + 1;
-    for (i = 1; i < count; i++, child++) {
-        s32 index = i;
-        s32 n;
-        s32 a = 0;
-        s32 b = 0;
-        s32 c = 0;
-        f32 size = 12.5f;
-        f32 halfSize;
-
-        if (index > 9) {
-            index -= 8;
-        }
-        n = index - 1;
-
-        if ((s32)typeId >= 0 && (s32)typeId < 3) {
-            size = 6.25f;
-            a = ((n % 4) / 2);
-            b = n / 4;
-            c = (n % 4) & 1;
-        } else if (((s32)typeId >= 3 && (s32)typeId < 6)) {
-            size = 12.5f;
-            a = ((n % 4) / 2);
-            b = n / 4;
-            c = (n % 4) & 1;
-        } else if (typeId == 6 || ((s32)typeId >= 6 && (s32)typeId < 8)) {
-            size = 12.5f;
-            a = n & 1;
-            b = n / 2;
-            c = 0;
-        }
-
-        halfSize = size * half;
-        child->pos.x = ((f32)a * size) - halfSize;
-        child->pos.y = ((f32)b * size) + halfSize;
-        child->pos.z = ((f32)c * size) - halfSize;
-        child->scale = size;
-        child->alpha = 0xFF;
-        child->rot = zero;
-        child->poseId = -1;
-        child->vel.x = (f32)(irand(10) + 10) * randScale;
-        child->angle = angleABf(zero, zero, child->pos.x, child->pos.z);
-        child->vel.y = (f32)(irand(3) + 3);
-        child->vel.z = (f32)(irand(5) + 2) / divFive;
-    }
-
-    if (typeId == 7) {
-        effKemuTestEntry(0x10, x, (f32)(y + child[1].pos.y), z, 1.0f);
+    if ((s32)work->typeId < 6) {
+        effGetTexObj((work->typeId % 3) + 0x38, texObj);
     } else {
-        f32 scale = 1.0f;
-        if ((s32)typeId < 3) {
-            scale = 0.5f;
-        }
-        effKemuTestEntry(2, x, (f32)(y + child->pos.y), z, scale);
+        effGetTexObj(0x3B, texObj);
+    }
+    GXLoadTexObj(texObj, 0);
+
+    color = 0x00000080;
+    GXSetChanMatColor(4, &color);
+    child = work + 1;
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, child++) {
+        angle = (6.283185f * child->angle) / 360.0f;
+        c = (f32)cos(angle);
+        s = (f32)sin(angle);
+        axis.x = c;
+        axis.y = 0.0f;
+        axis.z = s;
+        PSMTXTrans(model, child->pos.x + 5.0f, child->pos.y - 5.0f, child->pos.z);
+        PSMTXScale(scaleMtx, child->scale, child->scale, child->scale);
+        PSMTXConcat(model, scaleMtx, model);
+        PSMTXRotAxisRad(rotMtx, &axis, 0.017453292f * -child->rot);
+        PSMTXConcat(model, rotMtx, model);
+        PSMTXScale(scaleMtx, 1.0f, 1.0f, 0.0f);
+        PSMTXConcat(model, scaleMtx, model);
+        PSMTXConcat(viewModel, model, model);
+        GXLoadPosMtxImm(model, 0);
+        GXSetCurrentMtx(0);
+        GXDrawCube();
     }
 
-    return effect;
+    color = 0xFFFFFFFF;
+    GXSetChanMatColor(4, &color);
+    child = work + 1;
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, child++) {
+        angle = (6.283185f * child->angle) / 360.0f;
+        c = (f32)cos(angle);
+        s = (f32)sin(angle);
+        axis.x = c;
+        axis.y = 0.0f;
+        axis.z = s;
+        PSMTXTrans(model, child->pos.x, child->pos.y, child->pos.z);
+        PSMTXScale(scaleMtx, child->scale, child->scale, child->scale);
+        PSMTXConcat(model, scaleMtx, model);
+        PSMTXRotAxisRad(rotMtx, &axis, 0.017453292f * -child->rot);
+        PSMTXConcat(model, rotMtx, model);
+        PSMTXScale(scaleMtx, 1.0f, 1.0f, 0.0f);
+        PSMTXConcat(model, scaleMtx, model);
+        PSMTXConcat(viewModel, model, model);
+        GXLoadPosMtxImm(model, 0);
+        GXSetCurrentMtx(0);
+        GXDrawCube();
+    }
+}
+
+void rendermodeFunc(s32 mode) {
+    void* anim = animGetPtr();
+
+    *(s32*)((s32)anim + 0xE0) = mode;
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(0, 3, 0);
 }
 
 
@@ -507,4 +509,3 @@ void effMObjBrokenDisp2(s32 cameraId, void* effect) {
         }
     }
 }
-

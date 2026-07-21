@@ -1,26 +1,17 @@
 #include "battle/battle_information.h"
-s32 BattleInformationGetResult(void* info) {
-    return *(s32*)((s32)info + 0x10);
-}
 
-void BattleInformationSetResult(void* info, s32 result) {
-    *(s32*)((s32)info + 0x10) = result;
-}
+void BattleInformationSetResult(void* info, s32 result);
 
-void BattleInfomationSetBattleSetupInfo(void* info, s32 battleSetupInfo) {
-    *(s32*)((s32)info + 0xC) = battleSetupInfo;
-}
-
-void BattleInformationSetFirstAttack(void* info, s32 firstAttack) {
-    *(s32*)((s32)info + 0x8) = firstAttack;
+void BattleInformationSetMode(void* info, s32 mode) {
+    *(s32*)((s32)info + 0x0) = mode;
 }
 
 void BattleInformationSetParty(void* info, s32 party) {
     *(s32*)((s32)info + 0x4) = party;
 }
 
-void BattleInformationSetMode(void* info, s32 mode) {
-    *(s32*)((s32)info + 0x0) = mode;
+void BattleInformationSetFirstAttack(void* info, s32 firstAttack) {
+    *(s32*)((s32)info + 0x8) = firstAttack;
 }
 
 void BattleInformationInit(void* info) {
@@ -35,6 +26,17 @@ void BattleInformationInit(void* info) {
     *(u8*)((s32)info + 0x19) = 0;
     *(u8*)((s32)info + 0x1A) = 0;
     *(u8*)((s32)info + 0x1B) = 0;
+}
+
+void BattleInfomationSetBattleSetupInfo(void* info, s32 battleSetupInfo) {
+    *(s32*)((s32)info + 0xC) = battleSetupInfo;
+}
+
+void BattleInformationSetResult(void* info, s32 result) {
+    *(s32*)((s32)info + 0x10) = result;
+}
+s32 BattleInformationGetResult(void* info) {
+    return *(s32*)((s32)info + 0x10);
 }
 
 
@@ -178,4 +180,3 @@ void BattleInformationSetDropMaterial(void* fbatBattleInfo) {
         *(s32*)((s32)info + 0xC) = hogItems[irand(25)];
     }
 }
-

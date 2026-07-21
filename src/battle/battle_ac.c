@@ -1,5 +1,7 @@
 #include "battle/battle_ac.h"
 
+s32 BattleACPadCheckRecordTrigger(s32 id, u32 mask);
+
 typedef struct BattleACPadRecordWork {
     u8 pad[0x1D34];
     s32 mButtonsPressedHistory[4];
@@ -13,118 +15,6 @@ void dispEntry(s32 cameraId, s32 priority, void* callback, f32 z, void* param);
 extern const char str_SFX_AC_POWER_GAUGE1_802ee034[20];
 extern f32 float_0_80422188;
 extern f32 float_900_804221a8;
-
-s32 BattleActionCommandGetDifficulty(void* work) {
-    return *(u8*)((s32)work + 0x1CBD);
-}
-
-s32 BattleActionCommandGetDefenceResult(void) {
-    return *(s32*)((s32)_battleWorkPointer + 0x1CB0);
-}
-
-void BattleActionCommandStart(void* work) {
-    *(s32*)((s32)work + 0x1C9C) = 100;
-}
-
-s32 BattleACPadCheckRecordTrigger(s32 id, u32 mask) {
-    BattleACPadRecordWork* work;
-
-    work = (BattleACPadRecordWork*)_battleWorkPointer;
-    return work->mButtonsPressedHistory[id] & mask;
-}
-
-void BattleActionCommandResetDefenceResult(void) {
-    void* work;
-
-    work = _battleWorkPointer;
-    *(s32*)((s32)work + 0x1CB0) = 0;
-    BtlPad_WorkInit((void*)((s32)work + 0x1D1C));
-}
-
-void BattleActionCommandSetDifficulty(void* work, void* unit, s32 difficulty) {
-    s32 value;
-
-    *(u8*)((s32)work + 0x1CBC) = difficulty;
-
-    value = difficulty - *(u8*)((s32)unit + 0x305);
-    value += *(u8*)((s32)unit + 0x306);
-
-    if (value < 0) {
-        value = 0;
-    }
-
-    if (value > 6) {
-        value = 6;
-    }
-
-    *(u8*)((s32)work + 0x1CBD) = value;
-}
-
-void BattleActionCommandStop(void* work) {
-    void (*callback)(void*);
-
-    callback = *(void (**)(void*))((s32)work + 0x1CAC);
-    if (callback != 0) {
-        callback(work);
-    }
-}
-
-s32 BattleActionCommandResult(void* work) {
-    s32 (*callback)(void*);
-
-    callback = *(s32 (**)(void*))((s32)work + 0x1CA4);
-    if (callback != 0) {
-        return callback(work);
-    }
-
-    return *(u32*)((s32)work + 0x1CB8) & 2;
-}
-
-void BattleAcGaugeSeInit(void) {
-    void* work;
-
-    work = _battleWorkPointer;
-    *(s32*)((s32)work + 0x1F18) = psndSFXOn(str_SFX_AC_POWER_GAUGE1_802ee034);
-    *(f32*)((s32)work + 0x1F1C) = float_0_80422188;
-}
-
-void BattleAcGaugeSeDelete(void) {
-    void* work;
-    s32 id;
-
-    work = _battleWorkPointer;
-    id = *(s32*)((s32)work + 0x1F18);
-
-    if ((u32)(id + 0x10000) != 0xFFFF) {
-        psndSFXOff(id);
-        *(s32*)((s32)work + 0x1F18) = -1;
-    }
-}
-
-s32 BattleActionCommandGetPrizeLv(void* work, void* unit, s32 base) {
-    s32 difficulty;
-    s32 result;
-
-    if (unit != 0) {
-        if ((*(u32*)((s32)unit + 0x278) & 0xFF) == 0x1E) {
-            return -1;
-        }
-    }
-
-    difficulty = *(u8*)((s32)work + 0x1CBD);
-    result = base + difficulty;
-    result -= 1;
-
-    if (result < 0) {
-        result = 0;
-    }
-
-    if (result < 7) {
-        return result;
-    }
-
-    return 6;
-}
 
 void BattleActionCommandManagerInit(struct BattleWork* work) {
     BtlPad_WorkInit((void*)((s32)work + 0x1D1C));
@@ -155,112 +45,96 @@ void BattleActionCommandManager(struct BattleWork* work) {
     }
 }
 
-u8 BattleAcDrawGauge(s64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
-                     s32 param_5, s32 bar1EndPercent, s32 bar2EndPercent,
-                     s32 bar3EndPercent, s32 flags) {
-    extern void* camGetPtr(s32);
-    extern void iconDispGx(f32, Vec*, s32, s32);
-    extern void GXLoadPosMtxImm(void*, s32);
-    extern void btlDispGXInit2DRasta(void);
-    extern void btlDispGXQuads2DRasta(f32, f32, f32, f32, u8, u8, u8, u8);
-    void* camera;
-    Vec position;
-    f32 ratio;
-    f32 left;
-    f32 right;
-    f32 top;
-    f32 bottom;
+s32 BattleActionCommandResult(void* work) {
+    s32 (*callback)(void*);
 
-    ratio = *(f64*)&ratioFilled;
-    camera = camGetPtr(8);
-    position.x = x - 200;
-    position.y = y + 25;
-    position.z = 0.0f;
-    iconDispGx(1.0f, &position, 0x10, 0x94);
-
-    top = y + 32;
-    bottom = y + 50;
-    if (param_5 > 1) {
-        left = x - 289;
-        right = x + innerBarWidth * bar1EndPercent / 100 - 289;
-        if (left <= right) {
-            btlDispGXInit2DRasta();
-            GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
-            btlDispGXQuads2DRasta(left, top, right, bottom,
-                                  0x21, 0x21, 0x75, 0xFF);
-        }
-        if (bar2EndPercent - bar1EndPercent > 0) {
-            left = right;
-            right = x + innerBarWidth * bar2EndPercent / 100 - 289;
-            if (left <= right) {
-                btlDispGXInit2DRasta();
-                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
-                btlDispGXQuads2DRasta(left, top, right, bottom,
-                                      0x1D, 0x23, 0xA3, 0xFF);
-            }
-        }
-        if (bar3EndPercent - bar2EndPercent > 0) {
-            left = x + innerBarWidth * bar2EndPercent / 100 - 289;
-            right = x + innerBarWidth * bar3EndPercent / 100 - 289;
-            if (left <= right) {
-                btlDispGXInit2DRasta();
-                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
-                btlDispGXQuads2DRasta(left, top, right, bottom,
-                                      0x46, 0x0C, 0xB4, 0xFF);
-            }
-        }
-        if (100 - bar3EndPercent > 0) {
-            left = x + innerBarWidth * bar3EndPercent / 100 - 289;
-            right = x + innerBarWidth - 289;
-            if (left <= right) {
-                btlDispGXInit2DRasta();
-                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
-                btlDispGXQuads2DRasta(left, top, right, bottom,
-                                      0x73, 0x0D, 0x13, 0xFF);
-            }
-        }
+    callback = *(s32 (**)(void*))((s32)work + 0x1CA4);
+    if (callback != 0) {
+        return callback(work);
     }
 
-    if (param_5 > 1) {
-        left = x - 289;
-        right = x + innerBarWidth - 289;
-        btlDispGXInit2DRasta();
-        GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
-        btlDispGXQuads2DRasta(left, top, right, bottom,
-                              0x2D, 0x38, 0xD2, 0xFF);
+    return *(u32*)((s32)work + 0x1CB8) & 2;
+}
 
-        if (bar1EndPercent > 0) {
-            right = x + innerBarWidth * bar1EndPercent / 100 - 289;
-            left = right - 2.0f;
-            if (left <= right) {
-                btlDispGXInit2DRasta();
-                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
-                btlDispGXQuads2DRasta(left, top, right, bottom,
-                                      0x54, 0x28, 0xD1, 0xFF);
-            }
-        }
-        if (bar2EndPercent - bar1EndPercent > 0) {
-            right = x + innerBarWidth * bar2EndPercent / 100 - 289;
-            left = right - 2.0f;
-            if (left <= right) {
-                btlDispGXInit2DRasta();
-                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
-                btlDispGXQuads2DRasta(left, top, right, bottom,
-                                      0x7D, 0x2C, 0xB5, 0xFF);
-            }
-        }
-        if (bar3EndPercent - bar2EndPercent > 0) {
-            right = x + innerBarWidth * bar3EndPercent / 100 - 289;
-            left = right - 2.0f;
-            if (left <= right) {
-                btlDispGXInit2DRasta();
-                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
-                btlDispGXQuads2DRasta(left, top, right, bottom,
-                                      0xA1, 0x1B, 0x55, 0xFF);
-            }
-        }
+void BattleActionCommandDeclareACResult(void* battleWork, void* unit, s32 result) {
+    extern void BattleAudience_Case_ActionCommandBad(void*);
+    extern void BattleAudience_Case_ActionCommandGood(void*);
+    extern f64 double_to_int_802ee048;
+    extern f32 float_0p25_804221a4;
+    extern f32 float_0p5_804221a0;
+    void* base;
+
+    base = (void*)((s32)battleWork + 0x20000);
+    if (result == -1) {
+        goto bad;
     }
-    return ratio >= 1.0f;
+    goto good;
+
+bad:
+    BattleAudience_Case_ActionCommandBad(unit);
+    return;
+
+good:
+    *(void**)((s32)base - 0x7004) = unit;
+    *(f32*)((s32)base - 0x7000) = (f32)result * float_0p25_804221a4 + float_0p5_804221a0;
+    *(u8*)((s32)base - 0x6FFB) = *(u8*)((s32)unit + 0x19);
+    *(u8*)((s32)base - 0x6FFA) = *(u8*)((s32)unit + 0x1A);
+    BattleAudience_Case_ActionCommandGood(unit);
+}
+
+void BattleActionCommandSetup(void* battleWork, s32 param, void* unit, s32 rawArg, s32 value) {
+    typedef struct ActionCommandEntry {
+        s32 id;
+        void* mainCallback;
+        void* resultCallback;
+        void* dispCallback;
+        void* stopCallback;
+    } ActionCommandEntry;
+    extern ActionCommandEntry ActionCommandList[];
+    ActionCommandEntry* entry;
+    s32 zero;
+    s32 id;
+
+    *(void**)((s32)battleWork + 0x1C90) = unit;
+    entry = ActionCommandList;
+    zero = 0;
+    *(s32*)((s32)battleWork + 0x1C94) = rawArg;
+    *(s32*)((s32)battleWork + 0x1C9C) = zero;
+    *(s32*)((s32)battleWork + 0x1CB4) = zero;
+    *(s32*)((s32)battleWork + 0x1CB8) = 1;
+    *(s32*)((s32)battleWork + 0x1CA0) = zero;
+    *(s32*)((s32)battleWork + 0x1CA8) = zero;
+    *(s32*)((s32)battleWork + 0x1CA4) = zero;
+    *(s32*)((s32)battleWork + 0x1CAC) = zero;
+    *(s32*)((s32)battleWork + 0x1C98) = value;
+    *(s32*)((s32)battleWork + 0x1CC0) = zero;
+
+    while ((id = entry->id) != 0) {
+        if (id == param) {
+            *(void**)((s32)battleWork + 0x1CA0) = entry->mainCallback;
+            unit = *(void**)((s32)battleWork + 0x1C90);
+            if ((*(u32*)((s32)unit + 0x27C) & 0x10) == 0) {
+                *(void**)((s32)battleWork + 0x1CA8) = entry->dispCallback;
+            }
+            *(void**)((s32)battleWork + 0x1CA4) = entry->resultCallback;
+            *(void**)((s32)battleWork + 0x1CAC) = entry->stopCallback;
+            return;
+        }
+        entry++;
+    }
+}
+
+void BattleActionCommandStart(void* work) {
+    *(s32*)((s32)work + 0x1C9C) = 100;
+}
+
+void BattleActionCommandStop(void* work) {
+    void (*callback)(void*);
+
+    callback = *(void (**)(void*))((s32)work + 0x1CAC);
+    if (callback != 0) {
+        callback(work);
+    }
 }
 
 void BattleActionCommandCheckDefence(void* unit, s32 value) {
@@ -374,6 +248,73 @@ void BattleActionCommandCheckDefence(void* unit, s32 value) {
     }
 
     BtlPad_WorkInit(padWork);
+}
+
+s32 BattleACPadCheckRecordTrigger(s32 id, u32 mask) {
+    BattleACPadRecordWork* work;
+
+    work = (BattleACPadRecordWork*)_battleWorkPointer;
+    return work->mButtonsPressedHistory[id] & mask;
+}
+
+s32 BattleActionCommandGetDefenceResult(void) {
+    return *(s32*)((s32)_battleWorkPointer + 0x1CB0);
+}
+
+void BattleActionCommandResetDefenceResult(void) {
+    void* work;
+
+    work = _battleWorkPointer;
+    *(s32*)((s32)work + 0x1CB0) = 0;
+    BtlPad_WorkInit((void*)((s32)work + 0x1D1C));
+}
+
+s32 BattleActionCommandGetDifficulty(void* work) {
+    return *(u8*)((s32)work + 0x1CBD);
+}
+
+void BattleActionCommandSetDifficulty(void* work, void* unit, s32 difficulty) {
+    s32 value;
+
+    *(u8*)((s32)work + 0x1CBC) = difficulty;
+
+    value = difficulty - *(u8*)((s32)unit + 0x305);
+    value += *(u8*)((s32)unit + 0x306);
+
+    if (value < 0) {
+        value = 0;
+    }
+
+    if (value > 6) {
+        value = 6;
+    }
+
+    *(u8*)((s32)work + 0x1CBD) = value;
+}
+
+s32 BattleActionCommandGetPrizeLv(void* work, void* unit, s32 base) {
+    s32 difficulty;
+    s32 result;
+
+    if (unit != 0) {
+        if ((*(u32*)((s32)unit + 0x278) & 0xFF) == 0x1E) {
+            return -1;
+        }
+    }
+
+    difficulty = *(u8*)((s32)work + 0x1CBD);
+    result = base + difficulty;
+    result -= 1;
+
+    if (result < 0) {
+        result = 0;
+    }
+
+    if (result < 7) {
+        return result;
+    }
+
+    return 6;
 }
 
 s32 BattleACGetButtonIcon(int button, int pressed) {
@@ -490,72 +431,120 @@ s32 BattleACGetButtonIcon(int button, int pressed) {
     return icon;
 }
 
-void BattleActionCommandSetup(void* battleWork, s32 param, void* unit, s32 rawArg, s32 value) {
-    typedef struct ActionCommandEntry {
-        s32 id;
-        void* mainCallback;
-        void* resultCallback;
-        void* dispCallback;
-        void* stopCallback;
-    } ActionCommandEntry;
-    extern ActionCommandEntry ActionCommandList[];
-    ActionCommandEntry* entry;
-    s32 zero;
-    s32 id;
+u8 BattleAcDrawGauge(s64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
+                     s32 param_5, s32 bar1EndPercent, s32 bar2EndPercent,
+                     s32 bar3EndPercent, s32 flags) {
+    extern void* camGetPtr(s32);
+    extern void iconDispGx(f32, Vec*, s32, s32);
+    extern void GXLoadPosMtxImm(void*, s32);
+    extern void btlDispGXInit2DRasta(void);
+    extern void btlDispGXQuads2DRasta(f32, f32, f32, f32, u8, u8, u8, u8);
+    void* camera;
+    Vec position;
+    f32 ratio;
+    f32 left;
+    f32 right;
+    f32 top;
+    f32 bottom;
 
-    *(void**)((s32)battleWork + 0x1C90) = unit;
-    entry = ActionCommandList;
-    zero = 0;
-    *(s32*)((s32)battleWork + 0x1C94) = rawArg;
-    *(s32*)((s32)battleWork + 0x1C9C) = zero;
-    *(s32*)((s32)battleWork + 0x1CB4) = zero;
-    *(s32*)((s32)battleWork + 0x1CB8) = 1;
-    *(s32*)((s32)battleWork + 0x1CA0) = zero;
-    *(s32*)((s32)battleWork + 0x1CA8) = zero;
-    *(s32*)((s32)battleWork + 0x1CA4) = zero;
-    *(s32*)((s32)battleWork + 0x1CAC) = zero;
-    *(s32*)((s32)battleWork + 0x1C98) = value;
-    *(s32*)((s32)battleWork + 0x1CC0) = zero;
+    ratio = *(f64*)&ratioFilled;
+    camera = camGetPtr(8);
+    position.x = x - 200;
+    position.y = y + 25;
+    position.z = 0.0f;
+    iconDispGx(1.0f, &position, 0x10, 0x94);
 
-    while ((id = entry->id) != 0) {
-        if (id == param) {
-            *(void**)((s32)battleWork + 0x1CA0) = entry->mainCallback;
-            unit = *(void**)((s32)battleWork + 0x1C90);
-            if ((*(u32*)((s32)unit + 0x27C) & 0x10) == 0) {
-                *(void**)((s32)battleWork + 0x1CA8) = entry->dispCallback;
-            }
-            *(void**)((s32)battleWork + 0x1CA4) = entry->resultCallback;
-            *(void**)((s32)battleWork + 0x1CAC) = entry->stopCallback;
-            return;
+    top = y + 32;
+    bottom = y + 50;
+    if (param_5 > 1) {
+        left = x - 289;
+        right = x + innerBarWidth * bar1EndPercent / 100 - 289;
+        if (left <= right) {
+            btlDispGXInit2DRasta();
+            GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
+            btlDispGXQuads2DRasta(left, top, right, bottom,
+                                  0x21, 0x21, 0x75, 0xFF);
         }
-        entry++;
+        if (bar2EndPercent - bar1EndPercent > 0) {
+            left = right;
+            right = x + innerBarWidth * bar2EndPercent / 100 - 289;
+            if (left <= right) {
+                btlDispGXInit2DRasta();
+                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
+                btlDispGXQuads2DRasta(left, top, right, bottom,
+                                      0x1D, 0x23, 0xA3, 0xFF);
+            }
+        }
+        if (bar3EndPercent - bar2EndPercent > 0) {
+            left = x + innerBarWidth * bar2EndPercent / 100 - 289;
+            right = x + innerBarWidth * bar3EndPercent / 100 - 289;
+            if (left <= right) {
+                btlDispGXInit2DRasta();
+                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
+                btlDispGXQuads2DRasta(left, top, right, bottom,
+                                      0x46, 0x0C, 0xB4, 0xFF);
+            }
+        }
+        if (100 - bar3EndPercent > 0) {
+            left = x + innerBarWidth * bar3EndPercent / 100 - 289;
+            right = x + innerBarWidth - 289;
+            if (left <= right) {
+                btlDispGXInit2DRasta();
+                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
+                btlDispGXQuads2DRasta(left, top, right, bottom,
+                                      0x73, 0x0D, 0x13, 0xFF);
+            }
+        }
     }
+
+    if (param_5 > 1) {
+        left = x - 289;
+        right = x + innerBarWidth - 289;
+        btlDispGXInit2DRasta();
+        GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
+        btlDispGXQuads2DRasta(left, top, right, bottom,
+                              0x2D, 0x38, 0xD2, 0xFF);
+
+        if (bar1EndPercent > 0) {
+            right = x + innerBarWidth * bar1EndPercent / 100 - 289;
+            left = right - 2.0f;
+            if (left <= right) {
+                btlDispGXInit2DRasta();
+                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
+                btlDispGXQuads2DRasta(left, top, right, bottom,
+                                      0x54, 0x28, 0xD1, 0xFF);
+            }
+        }
+        if (bar2EndPercent - bar1EndPercent > 0) {
+            right = x + innerBarWidth * bar2EndPercent / 100 - 289;
+            left = right - 2.0f;
+            if (left <= right) {
+                btlDispGXInit2DRasta();
+                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
+                btlDispGXQuads2DRasta(left, top, right, bottom,
+                                      0x7D, 0x2C, 0xB5, 0xFF);
+            }
+        }
+        if (bar3EndPercent - bar2EndPercent > 0) {
+            right = x + innerBarWidth * bar3EndPercent / 100 - 289;
+            left = right - 2.0f;
+            if (left <= right) {
+                btlDispGXInit2DRasta();
+                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
+                btlDispGXQuads2DRasta(left, top, right, bottom,
+                                      0xA1, 0x1B, 0x55, 0xFF);
+            }
+        }
+    }
+    return ratio >= 1.0f;
 }
 
-void BattleActionCommandDeclareACResult(void* battleWork, void* unit, s32 result) {
-    extern void BattleAudience_Case_ActionCommandBad(void*);
-    extern void BattleAudience_Case_ActionCommandGood(void*);
-    extern f64 double_to_int_802ee048;
-    extern f32 float_0p25_804221a4;
-    extern f32 float_0p5_804221a0;
-    void* base;
+void BattleAcGaugeSeInit(void) {
+    void* work;
 
-    base = (void*)((s32)battleWork + 0x20000);
-    if (result == -1) {
-        goto bad;
-    }
-    goto good;
-
-bad:
-    BattleAudience_Case_ActionCommandBad(unit);
-    return;
-
-good:
-    *(void**)((s32)base - 0x7004) = unit;
-    *(f32*)((s32)base - 0x7000) = (f32)result * float_0p25_804221a4 + float_0p5_804221a0;
-    *(u8*)((s32)base - 0x6FFB) = *(u8*)((s32)unit + 0x19);
-    *(u8*)((s32)base - 0x6FFA) = *(u8*)((s32)unit + 0x1A);
-    BattleAudience_Case_ActionCommandGood(unit);
+    work = _battleWorkPointer;
+    *(s32*)((s32)work + 0x1F18) = psndSFXOn(str_SFX_AC_POWER_GAUGE1_802ee034);
+    *(f32*)((s32)work + 0x1F1C) = float_0_80422188;
 }
 
 void BattleAcGaugeSeUpdate(f32 value) {
@@ -580,3 +569,15 @@ void BattleAcGaugeSeUpdate(f32 value) {
     }
 }
 
+void BattleAcGaugeSeDelete(void) {
+    void* work;
+    s32 id;
+
+    work = _battleWorkPointer;
+    id = *(s32*)((s32)work + 0x1F18);
+
+    if ((u32)(id + 0x10000) != 0xFFFF) {
+        psndSFXOff(id);
+        *(s32*)((s32)work + 0x1F18) = -1;
+    }
+}

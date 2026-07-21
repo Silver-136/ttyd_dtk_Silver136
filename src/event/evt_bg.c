@@ -9,6 +9,16 @@ extern void bgDispOff();
 extern void bgSetScrlOffset(f32, f32);
 
 
+s32 evt_bg_disp_onoff(int param_1) {
+    if (evtGetValue(param_1, **(s32**)((s32)param_1 + 0x18)) != 0) {
+        bgDispOn();
+    } else {
+        bgDispOff();
+    }
+    return 2;
+}
+
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 #pragma no_register_save_helpers on
@@ -37,6 +47,14 @@ s32 evt_bg_set_color(int param_1) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+s32 evt_bg_auto_scroll_onoff(int param_1) {
+    if (evtGetValue(param_1, **(s32**)((s32)param_1 + 0x18)) != 0) {
+        bgAutoScrollOff();
+    } else {
+        bgAutoScrollOn();
+    }
+    return 2;
+}
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -66,23 +84,3 @@ s32 evt_bg_set_scrl_offset(int param_1) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
-
-s32 evt_bg_auto_scroll_onoff(int param_1) {
-    if (evtGetValue(param_1, **(s32**)((s32)param_1 + 0x18)) != 0) {
-        bgAutoScrollOff();
-    } else {
-        bgAutoScrollOn();
-    }
-    return 2;
-}
-
-
-s32 evt_bg_disp_onoff(int param_1) {
-    if (evtGetValue(param_1, **(s32**)((s32)param_1 + 0x18)) != 0) {
-        bgDispOn();
-    } else {
-        bgDispOff();
-    }
-    return 2;
-}

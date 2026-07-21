@@ -1,74 +1,5 @@
 #include "bowser/kpa_act.h"
 
-s32 kpa_chg_pose(void* evt) {
-    extern s32 evtGetValue(void* evt, s32 value);
-    extern void marioChgPose(s32 pose);
-
-    s32* args = *(s32**)((s32)evt + 0x18);
-    marioChgPose(evtGetValue(evt, args[0]));
-    return 2;
-}
-
-void kpaAddScore(s32 score) {
-    extern void pouchAddKpaScore(s32 score);
-
-    if (score > 10000) {
-        score = 10000;
-    }
-    pouchAddKpaScore(score);
-}
-
-void kpaAddCoin(s32 coin) {
-    extern s32 pouchAddKpaCoin(s32 coin);
-    extern void pouchAddKpaScore(s32 score);
-
-    if (pouchAddKpaCoin(coin) != 0) {
-        pouchAddKpaScore(1000);
-    }
-    {
-        s32 score = coin * 500;
-
-        if (score > 10000) {
-            score = 10000;
-        }
-        pouchAddKpaScore(score);
-    }
-}
-
-s32 kpa_score_disp_main(void) {
-    s32 i;
-    s32 offset;
-
-    extern void* ksdp;
-    extern f32 float_1_804272d4;
-    extern f32 float_0_804272d0;
-    extern void kpaScoreDisp(void);
-    extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, s32 param, f32 priority);
-
-    {
-        f32 one = float_1_804272d4;
-
-    offset = 0;
-    for (i = 0; i < 25; i++) {
-        void* entry = (void*)((s32)ksdp + offset);
-        if (*(u8*)((s32)entry + 8) != 0) {
-            *(f32*)((s32)entry + 0x10) += one;
-            *(u8*)((s32)ksdp + offset + 8) -= 1;
-        }
-        offset += 0x18;
-        entry = (void*)((s32)ksdp + offset);
-        if (*(u8*)((s32)entry + 8) != 0) {
-            *(f32*)((s32)entry + 0x10) += one;
-            *(u8*)((s32)ksdp + offset + 8) -= 1;
-        }
-        offset += 0x18;
-    }
-    }
-
-    dispEntry(4, 2, kpaScoreDisp, 0, float_0_804272d0);
-    return 2;
-}
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void kpaScoreDisp(void) {
@@ -107,6 +38,40 @@ void kpaScoreDisp(void) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+
+s32 kpa_score_disp_main(void) {
+    s32 i;
+    s32 offset;
+
+    extern void* ksdp;
+    extern f32 float_1_804272d4;
+    extern f32 float_0_804272d0;
+    extern void kpaScoreDisp(void);
+    extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, s32 param, f32 priority);
+
+    {
+        f32 one = float_1_804272d4;
+
+    offset = 0;
+    for (i = 0; i < 25; i++) {
+        void* entry = (void*)((s32)ksdp + offset);
+        if (*(u8*)((s32)entry + 8) != 0) {
+            *(f32*)((s32)entry + 0x10) += one;
+            *(u8*)((s32)ksdp + offset + 8) -= 1;
+        }
+        offset += 0x18;
+        entry = (void*)((s32)ksdp + offset);
+        if (*(u8*)((s32)entry + 8) != 0) {
+            *(f32*)((s32)entry + 0x10) += one;
+            *(u8*)((s32)ksdp + offset + 8) -= 1;
+        }
+        offset += 0x18;
+    }
+    }
+
+    dispEntry(4, 2, kpaScoreDisp, 0, float_0_804272d0);
+    return 2;
+}
 s32 kpa_score_disp_init(s32 evt) {
     extern void* evtEntryType(void* script, s32 priority, s32 flags, s32 typeMask);
     extern void* _mapAlloc(void* heap, u32 size);
@@ -245,73 +210,20 @@ s32 kpa_score_disp_init(s32 evt) {
     return 2;
 }
 
-
-
-/* CHATGPT STUB FILL: main/bowser/kpa_act 20260624_184128 */
-
-/* stub-fill: kpaAddScorePos | missing_definition | ghidra_signature */
-void kpaAddScorePos(s32 score, f32* pos) {
-    extern void* ksdp;
+void kpaAddCoin(s32 coin) {
+    extern s32 pouchAddKpaCoin(s32 coin);
     extern void pouchAddKpaScore(s32 score);
-    extern s32 strlen(const char* str);
-    extern f32 float_10_804272c8;
-    extern f32 float_0p5_804272c4;
-    extern f32 float_20_804272cc;
-    extern f32 float_0_804272d0;
-    s32 i;
-    s32 digit;
-    s32 started;
-    s32 value;
-    s32 offset;
-    char* out;
 
-    if (score > 10000) {
-        score = 10000;
+    if (pouchAddKpaCoin(coin) != 0) {
+        pouchAddKpaScore(1000);
     }
-    pouchAddKpaScore(score);
+    {
+        s32 score = coin * 500;
 
-    for (i = 0; i < 50; i++) {
-        offset = i * 0x18;
-        if (*(u8*)((s32)ksdp + offset + 8) == 0) {
-            out = (char*)((s32)ksdp + offset);
-            value = score;
-            started = 0;
-
-            digit = value / 10000;
-            value -= digit * 10000;
-            if (digit != 0) {
-                *out++ = digit + '0';
-                started = 1;
-            }
-            digit = value / 1000;
-            value -= digit * 1000;
-            if (started != 0 || digit != 0) {
-                *out++ = digit + '0';
-                started++;
-            }
-            digit = value / 100;
-            value -= digit * 100;
-            if (started != 0 || digit != 0) {
-                *out++ = digit + '0';
-                started++;
-            }
-            digit = value / 10;
-            value -= digit * 10;
-            if (started != 0 || digit != 0) {
-                *out++ = digit + '0';
-                started++;
-            }
-            if (started != 0 || value != 0) {
-                *out++ = value + '0';
-            }
-            *out = 0;
-
-            *(u8*)((s32)ksdp + offset + 8) = 0x1E;
-            *(f32*)((s32)ksdp + offset + 0xC) = pos[0] - float_0p5_804272c4 * (float_10_804272c8 * (f32)strlen((char*)((s32)ksdp + offset)));
-            *(f32*)((s32)ksdp + offset + 0x10) = pos[1] + float_20_804272cc;
-            *(f32*)((s32)ksdp + offset + 0x14) = float_0_804272d0;
-            break;
+        if (score > 10000) {
+            score = 10000;
         }
+        pouchAddKpaScore(score);
     }
 }
 
@@ -385,5 +297,93 @@ void kpaAddCoinPos(s32 coin, f32* pos) {
             break;
         }
     }
+}
+
+void kpaAddScore(s32 score) {
+    extern void pouchAddKpaScore(s32 score);
+
+    if (score > 10000) {
+        score = 10000;
+    }
+    pouchAddKpaScore(score);
+}
+
+
+
+/* CHATGPT STUB FILL: main/bowser/kpa_act 20260624_184128 */
+
+/* stub-fill: kpaAddScorePos | missing_definition | ghidra_signature */
+void kpaAddScorePos(s32 score, f32* pos) {
+    extern void* ksdp;
+    extern void pouchAddKpaScore(s32 score);
+    extern s32 strlen(const char* str);
+    extern f32 float_10_804272c8;
+    extern f32 float_0p5_804272c4;
+    extern f32 float_20_804272cc;
+    extern f32 float_0_804272d0;
+    s32 i;
+    s32 digit;
+    s32 started;
+    s32 value;
+    s32 offset;
+    char* out;
+
+    if (score > 10000) {
+        score = 10000;
+    }
+    pouchAddKpaScore(score);
+
+    for (i = 0; i < 50; i++) {
+        offset = i * 0x18;
+        if (*(u8*)((s32)ksdp + offset + 8) == 0) {
+            out = (char*)((s32)ksdp + offset);
+            value = score;
+            started = 0;
+
+            digit = value / 10000;
+            value -= digit * 10000;
+            if (digit != 0) {
+                *out++ = digit + '0';
+                started = 1;
+            }
+            digit = value / 1000;
+            value -= digit * 1000;
+            if (started != 0 || digit != 0) {
+                *out++ = digit + '0';
+                started++;
+            }
+            digit = value / 100;
+            value -= digit * 100;
+            if (started != 0 || digit != 0) {
+                *out++ = digit + '0';
+                started++;
+            }
+            digit = value / 10;
+            value -= digit * 10;
+            if (started != 0 || digit != 0) {
+                *out++ = digit + '0';
+                started++;
+            }
+            if (started != 0 || value != 0) {
+                *out++ = value + '0';
+            }
+            *out = 0;
+
+            *(u8*)((s32)ksdp + offset + 8) = 0x1E;
+            *(f32*)((s32)ksdp + offset + 0xC) = pos[0] - float_0p5_804272c4 * (float_10_804272c8 * (f32)strlen((char*)((s32)ksdp + offset)));
+            *(f32*)((s32)ksdp + offset + 0x10) = pos[1] + float_20_804272cc;
+            *(f32*)((s32)ksdp + offset + 0x14) = float_0_804272d0;
+            break;
+        }
+    }
+}
+
+s32 kpa_chg_pose(void* evt) {
+    extern s32 evtGetValue(void* evt, s32 value);
+    extern void marioChgPose(s32 pose);
+
+    s32* args = *(s32**)((s32)evt + 0x18);
+    marioChgPose(evtGetValue(evt, args[0]));
+    return 2;
 }
 

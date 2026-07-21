@@ -3,8 +3,203 @@
 void* marioGetPtr(void);
 u32 hitGetAttr(void* hitObj);
 void* effKemuriEntry(s32 kind, f32 x, f32 y, f32 z, f32 zero);
+u8 kemuri_mugi(void);
+u8 mario_kemuri_landon(void);
 extern f32 float_0_80422a38;
 extern f32 float_0p6_80422a3c;
+
+u8 mario_kemuri(void) {
+    extern void* marioGetPtr(void);
+    extern s32 marioStGetSystemLevel(void);
+    extern u32 hitGetAttr(void* hitObj);
+    extern u8 kemuri_mugi(void);
+    extern u8 mario_kemuri_landon(void);
+    extern u8 kemuri(void);
+    extern f32 reviseAngle(f32 angle);
+    extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
+    extern void effKemuri7N64Entry(s32 kind, f32 x, f32 y, f32 z, f32 dir, f32 side);
+    extern s32 kpaGetBodyStatus(void);
+    extern f32 float_6p2832_80422a24;
+    extern f32 float_360_80422a28;
+    extern f32 float_0p2_80422a2c;
+    extern f32 float_0p5_80422a44;
+    static s32 ct_481;
+    static s32 left_or_right_482;
+    void* mario;
+    u32 attr;
+    f32 s;
+    f32 c;
+    f32 speed;
+
+    mario = marioGetPtr();
+    attr = 0;
+    if (marioStGetSystemLevel() != 0) {
+        return 0;
+    }
+    if ((*(u32*)mario & 0x01000000) != 0) {
+        return 0;
+    }
+    if (*(u16*)((s32)mario + 0x2E) == 0x1D) {
+        return 0;
+    }
+
+    if (*(u16*)((s32)mario + 0x2E) == 3) {
+        if (*(void**)((s32)mario + 0x1EC) != 0) {
+            attr = hitGetAttr(*(void**)((s32)mario + 0x1EC));
+        }
+    } else if (*(void**)((s32)mario + 0x1E8) != 0) {
+        attr = hitGetAttr(*(void**)((s32)mario + 0x1E8));
+    }
+
+    if ((attr & 0x1000) != 0) {
+        kemuri_mugi();
+        return 0;
+    }
+    if ((attr & 0x100) != 0) {
+        mario_kemuri_landon();
+        return 0;
+    }
+    if ((attr & 0x100000) != 0) {
+        mario = marioGetPtr();
+        if (*(u16*)((s32)mario + 0x2E) != 2 && *(u16*)((s32)mario + 0x2E) != 1) {
+            ct_481 = 8;
+            return 0;
+        }
+        if (ct_481++ > 8) {
+            ct_481 = 0;
+            sincosf((float_6p2832_80422a24 * reviseAngle(-*(f32*)((s32)mario + 0x1A4))) / float_360_80422a28, &s, &c);
+            speed = *(f32*)((s32)mario + 0x1B8);
+            effKemuri7N64Entry(0,
+                               *(f32*)((s32)mario + 0x8C) + float_0p2_80422a2c * (speed * s),
+                               *(f32*)((s32)mario + 0x90) + float_0p5_80422a44,
+                               *(f32*)((s32)mario + 0x94) + float_0p2_80422a2c * (speed * c),
+                               -*(f32*)((s32)mario + 0x1A4),
+                               (f32)left_or_right_482);
+            left_or_right_482 = left_or_right_482 == 0;
+        }
+        return 0;
+    }
+
+    if ((*(u32*)mario & 0x01000000) == 0 && kpaGetBodyStatus() <= 0 && *(u8*)((s32)mario + 0x3C) != 1) {
+        kemuri();
+    }
+    return 0;
+}
+
+void mario_simple_kemuri(void) {
+    void* mario;
+    void* effect;
+
+    mario = marioGetPtr();
+    effect = effKemuriEntry(0,
+                            *(f32*)((s32)mario + 0x8C),
+                            *(f32*)((s32)mario + 0x90),
+                            *(f32*)((s32)mario + 0x94),
+                            float_0_80422a38);
+    if ((*(u32*)mario & 0x02000000) != 0) {
+        *(f32*)((s32)*(void**)((s32)effect + 0xC) + 0x74) = float_0p6_80422a3c;
+    }
+}
+
+void unk_8013587c(void) {
+    void* mario;
+    void* hitObj;
+    void* effect;
+    void* effectWork;
+    u32 flags;
+    u32 attr;
+
+    mario = marioGetPtr();
+    hitObj = *(void**)((s32)mario + 0x1E8);
+    if (hitObj != 0) {
+        flags = *(u32*)((s32)mario + 0xC);
+        if ((flags & 0x20000) != 0) {
+            *(u32*)((s32)mario + 0xC) = flags & ~0x20000;
+        } else {
+            attr = hitGetAttr(hitObj);
+            if ((attr & 0x1000) != 0) {
+                kemuri_mugi();
+            } else if ((attr & 0x100) != 0) {
+                mario_kemuri_landon();
+            } else {
+                effect = effKemuriEntry(0,
+                                        *(f32*)((s32)mario + 0x8C),
+                                        *(f32*)((s32)mario + 0x90),
+                                        *(f32*)((s32)mario + 0x94),
+                                        float_0_80422a38);
+                if ((*(u32*)mario & 0x02000000) != 0) {
+                    effectWork = *(void**)((s32)effect + 0xC);
+                    *(f32*)((s32)effectWork + 0x74) = float_0p6_80422a3c;
+                }
+            }
+        }
+    }
+}
+
+u8 mario_kemuri_landon(void) {
+    extern void* marioGetPtr(void);
+    extern s32 strcmp(const char* a, const char* b);
+    extern void* gp;
+    extern char str_mri_05_802f3738[];
+    extern void effWaterDamageN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
+    extern void effRippleEntry(s32 type, f32 x, f32 y, f32 z);
+    extern s32 rand(void);
+    extern f32 float_1_80422a4c;
+    extern f32 float_11_80422a60;
+    static s32 cnt_491;
+    static s32 cnt2_492;
+    void* mario;
+    s32 add;
+    u16 state;
+    s32 r;
+
+    mario = marioGetPtr();
+    add = 0;
+    if (strcmp((const char*)((s32)gp + 0x12C), str_mri_05_802f3738) == 0) {
+        add = 10;
+    }
+
+    if (*(u16*)((s32)mario + 0x2E) == 3 && *(s16*)((s32)mario + 0x50) == 1 && cnt2_492 == 10) {
+        effWaterDamageN64Entry(add + 5, 30,
+                               *(f32*)((s32)mario + 0x8C),
+                               *(f32*)((s32)mario + 0x90),
+                               *(f32*)((s32)mario + 0x94),
+                               float_1_80422a4c);
+        cnt2_492 = 0;
+        effRippleEntry(0,
+                       *(f32*)((s32)mario + 0x8C),
+                       *(f32*)((s32)mario + 0x90) + float_11_80422a60,
+                       *(f32*)((s32)mario + 0x94));
+    }
+    if (++cnt2_492 > 10) {
+        cnt2_492 = 10;
+    }
+
+    state = *(u16*)((s32)mario + 0x2E);
+    if (state == 0 || state == 1 || state == 2 || state == 13) {
+        if (state == 13) {
+            cnt_491 = 0;
+        }
+        if (--cnt_491 < 0) {
+            r = rand();
+            cnt_491 = (r % 20) + 30;
+            effRippleEntry(0,
+                           *(f32*)((s32)mario + 0x8C),
+                           *(f32*)((s32)mario + 0x90) + float_11_80422a60,
+                           *(f32*)((s32)mario + 0x94));
+        }
+        if (state == 1 || state == 2 || state == 13) {
+            if ((*(s32*)((s32)gp + 0x1C) % 20) == 0 || state == 13) {
+                effWaterDamageN64Entry(add + 7, 30,
+                                       *(f32*)((s32)mario + 0x8C),
+                                       *(f32*)((s32)mario + 0x90) + float_11_80422a60,
+                                       *(f32*)((s32)mario + 0x94),
+                                       float_1_80422a4c);
+            }
+        }
+    }
+    return 0;
+}
 
 
 u8 kemuri_mugi(void) {
@@ -288,197 +483,4 @@ u8 party_kemuri(void* party) {
                     *(f32*)((s32)party + 0x60) + float_0p2_80422a2c * (speed * c),
                     0.0f);
     return 0;
-}
-
-u8 mario_kemuri_landon(void) {
-    extern void* marioGetPtr(void);
-    extern s32 strcmp(const char* a, const char* b);
-    extern void* gp;
-    extern char str_mri_05_802f3738[];
-    extern void effWaterDamageN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
-    extern void effRippleEntry(s32 type, f32 x, f32 y, f32 z);
-    extern s32 rand(void);
-    extern f32 float_1_80422a4c;
-    extern f32 float_11_80422a60;
-    static s32 cnt_491;
-    static s32 cnt2_492;
-    void* mario;
-    s32 add;
-    u16 state;
-    s32 r;
-
-    mario = marioGetPtr();
-    add = 0;
-    if (strcmp((const char*)((s32)gp + 0x12C), str_mri_05_802f3738) == 0) {
-        add = 10;
-    }
-
-    if (*(u16*)((s32)mario + 0x2E) == 3 && *(s16*)((s32)mario + 0x50) == 1 && cnt2_492 == 10) {
-        effWaterDamageN64Entry(add + 5, 30,
-                               *(f32*)((s32)mario + 0x8C),
-                               *(f32*)((s32)mario + 0x90),
-                               *(f32*)((s32)mario + 0x94),
-                               float_1_80422a4c);
-        cnt2_492 = 0;
-        effRippleEntry(0,
-                       *(f32*)((s32)mario + 0x8C),
-                       *(f32*)((s32)mario + 0x90) + float_11_80422a60,
-                       *(f32*)((s32)mario + 0x94));
-    }
-    if (++cnt2_492 > 10) {
-        cnt2_492 = 10;
-    }
-
-    state = *(u16*)((s32)mario + 0x2E);
-    if (state == 0 || state == 1 || state == 2 || state == 13) {
-        if (state == 13) {
-            cnt_491 = 0;
-        }
-        if (--cnt_491 < 0) {
-            r = rand();
-            cnt_491 = (r % 20) + 30;
-            effRippleEntry(0,
-                           *(f32*)((s32)mario + 0x8C),
-                           *(f32*)((s32)mario + 0x90) + float_11_80422a60,
-                           *(f32*)((s32)mario + 0x94));
-        }
-        if (state == 1 || state == 2 || state == 13) {
-            if ((*(s32*)((s32)gp + 0x1C) % 20) == 0 || state == 13) {
-                effWaterDamageN64Entry(add + 7, 30,
-                                       *(f32*)((s32)mario + 0x8C),
-                                       *(f32*)((s32)mario + 0x90) + float_11_80422a60,
-                                       *(f32*)((s32)mario + 0x94),
-                                       float_1_80422a4c);
-            }
-        }
-    }
-    return 0;
-}
-
-u8 mario_kemuri(void) {
-    extern void* marioGetPtr(void);
-    extern s32 marioStGetSystemLevel(void);
-    extern u32 hitGetAttr(void* hitObj);
-    extern u8 kemuri_mugi(void);
-    extern u8 mario_kemuri_landon(void);
-    extern u8 kemuri(void);
-    extern f32 reviseAngle(f32 angle);
-    extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
-    extern void effKemuri7N64Entry(s32 kind, f32 x, f32 y, f32 z, f32 dir, f32 side);
-    extern s32 kpaGetBodyStatus(void);
-    extern f32 float_6p2832_80422a24;
-    extern f32 float_360_80422a28;
-    extern f32 float_0p2_80422a2c;
-    extern f32 float_0p5_80422a44;
-    static s32 ct_481;
-    static s32 left_or_right_482;
-    void* mario;
-    u32 attr;
-    f32 s;
-    f32 c;
-    f32 speed;
-
-    mario = marioGetPtr();
-    attr = 0;
-    if (marioStGetSystemLevel() != 0) {
-        return 0;
-    }
-    if ((*(u32*)mario & 0x01000000) != 0) {
-        return 0;
-    }
-    if (*(u16*)((s32)mario + 0x2E) == 0x1D) {
-        return 0;
-    }
-
-    if (*(u16*)((s32)mario + 0x2E) == 3) {
-        if (*(void**)((s32)mario + 0x1EC) != 0) {
-            attr = hitGetAttr(*(void**)((s32)mario + 0x1EC));
-        }
-    } else if (*(void**)((s32)mario + 0x1E8) != 0) {
-        attr = hitGetAttr(*(void**)((s32)mario + 0x1E8));
-    }
-
-    if ((attr & 0x1000) != 0) {
-        kemuri_mugi();
-        return 0;
-    }
-    if ((attr & 0x100) != 0) {
-        mario_kemuri_landon();
-        return 0;
-    }
-    if ((attr & 0x100000) != 0) {
-        mario = marioGetPtr();
-        if (*(u16*)((s32)mario + 0x2E) != 2 && *(u16*)((s32)mario + 0x2E) != 1) {
-            ct_481 = 8;
-            return 0;
-        }
-        if (ct_481++ > 8) {
-            ct_481 = 0;
-            sincosf((float_6p2832_80422a24 * reviseAngle(-*(f32*)((s32)mario + 0x1A4))) / float_360_80422a28, &s, &c);
-            speed = *(f32*)((s32)mario + 0x1B8);
-            effKemuri7N64Entry(0,
-                               *(f32*)((s32)mario + 0x8C) + float_0p2_80422a2c * (speed * s),
-                               *(f32*)((s32)mario + 0x90) + float_0p5_80422a44,
-                               *(f32*)((s32)mario + 0x94) + float_0p2_80422a2c * (speed * c),
-                               -*(f32*)((s32)mario + 0x1A4),
-                               (f32)left_or_right_482);
-            left_or_right_482 = left_or_right_482 == 0;
-        }
-        return 0;
-    }
-
-    if ((*(u32*)mario & 0x01000000) == 0 && kpaGetBodyStatus() <= 0 && *(u8*)((s32)mario + 0x3C) != 1) {
-        kemuri();
-    }
-    return 0;
-}
-
-void mario_simple_kemuri(void) {
-    void* mario;
-    void* effect;
-
-    mario = marioGetPtr();
-    effect = effKemuriEntry(0,
-                            *(f32*)((s32)mario + 0x8C),
-                            *(f32*)((s32)mario + 0x90),
-                            *(f32*)((s32)mario + 0x94),
-                            float_0_80422a38);
-    if ((*(u32*)mario & 0x02000000) != 0) {
-        *(f32*)((s32)*(void**)((s32)effect + 0xC) + 0x74) = float_0p6_80422a3c;
-    }
-}
-
-void unk_8013587c(void) {
-    void* mario;
-    void* hitObj;
-    void* effect;
-    void* effectWork;
-    u32 flags;
-    u32 attr;
-
-    mario = marioGetPtr();
-    hitObj = *(void**)((s32)mario + 0x1E8);
-    if (hitObj != 0) {
-        flags = *(u32*)((s32)mario + 0xC);
-        if ((flags & 0x20000) != 0) {
-            *(u32*)((s32)mario + 0xC) = flags & ~0x20000;
-        } else {
-            attr = hitGetAttr(hitObj);
-            if ((attr & 0x1000) != 0) {
-                kemuri_mugi();
-            } else if ((attr & 0x100) != 0) {
-                mario_kemuri_landon();
-            } else {
-                effect = effKemuriEntry(0,
-                                        *(f32*)((s32)mario + 0x8C),
-                                        *(f32*)((s32)mario + 0x90),
-                                        *(f32*)((s32)mario + 0x94),
-                                        float_0_80422a38);
-                if ((*(u32*)mario & 0x02000000) != 0) {
-                    effectWork = *(void**)((s32)effect + 0xC);
-                    *(f32*)((s32)effectWork + 0x74) = float_0p6_80422a3c;
-                }
-            }
-        }
-    }
 }

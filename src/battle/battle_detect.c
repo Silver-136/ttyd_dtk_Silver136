@@ -1,11 +1,5 @@
 #include "battle/battle_detect.h"
 
-void BattleSamplingEnemyUpdate(void) {
-    extern void _btlSamplingEnemy(void);
-
-    _btlSamplingEnemy();
-}
-
 
 void _btlSamplingEnemy(void* targetWork) {
     extern void* _battleWorkPointer;
@@ -76,6 +70,43 @@ void _btlSamplingEnemy(void* targetWork) {
     for (unitIdx = 0; unitIdx < count; unitIdx++) {
         *((s8*)((s32)targetWork + 0xA6D) + unitIdx) = unitIdx;
     }
+}
+
+s32 BattleSamplingEnemy(void* targetWork, void* weapon, int attackerIdx, int enemyBelong, u32 targetClassFlags, u32 targetPropertyFlags, u8 param_7) {
+    extern void* _battleWorkPointer;
+    extern void* BattleGetUnitPtr(void*, s32);
+    s32 changed;
+    u32 flags;
+
+    changed = 0;
+    *(void**)targetWork = weapon;
+    *(s32*)((s32)targetWork + 0xAB8) = attackerIdx;
+    *(u8*)((s32)targetWork + 0xABC) = enemyBelong;
+    *(u32*)((s32)targetWork + 0xAC0) = targetClassFlags;
+    *(u32*)((s32)targetWork + 0xAC4) = targetPropertyFlags;
+    *(u8*)((s32)targetWork + 0xAC8) = param_7;
+
+    if ((*(u32*)((s32)BattleGetUnitPtr(_battleWorkPointer, attackerIdx) + 0x27C) & 0x10) != 0) {
+        flags = *(u32*)((s32)targetWork + 0xAC0);
+        if (((flags & 0x100) != 0) && ((flags & 0x200) == 0)) {
+            *(u32*)((s32)targetWork + 0xAC0) = (flags & ~0x100);
+            *(u32*)((s32)targetWork + 0xAC0) |= 0x200;
+            changed = 1;
+        } else if (((flags & 0x100) == 0) && ((flags & 0x200) != 0)) {
+            *(u32*)((s32)targetWork + 0xAC0) |= 0x100;
+            *(u32*)((s32)targetWork + 0xAC0) &= ~0x200;
+            changed = 1;
+        }
+    }
+
+    ((void (*)(void*))_btlSamplingEnemy)(targetWork);
+    return changed;
+}
+
+void BattleSamplingEnemyUpdate(void) {
+    extern void _btlSamplingEnemy(void);
+
+    _btlSamplingEnemy();
 }
 
 void BattleChoiceSamplingEnemy(void* targetWork, u32 weighting, int* unitIdx, int* partIdx) {
@@ -169,37 +200,6 @@ void BattleChoiceSamplingEnemy(void* targetWork, u32 weighting, int* unitIdx, in
             *partIdx = *(s16*)((s32)targetWork + 6 + index * 0x24);
         }
     }
-}
-
-s32 BattleSamplingEnemy(void* targetWork, void* weapon, int attackerIdx, int enemyBelong, u32 targetClassFlags, u32 targetPropertyFlags, u8 param_7) {
-    extern void* _battleWorkPointer;
-    extern void* BattleGetUnitPtr(void*, s32);
-    s32 changed;
-    u32 flags;
-
-    changed = 0;
-    *(void**)targetWork = weapon;
-    *(s32*)((s32)targetWork + 0xAB8) = attackerIdx;
-    *(u8*)((s32)targetWork + 0xABC) = enemyBelong;
-    *(u32*)((s32)targetWork + 0xAC0) = targetClassFlags;
-    *(u32*)((s32)targetWork + 0xAC4) = targetPropertyFlags;
-    *(u8*)((s32)targetWork + 0xAC8) = param_7;
-
-    if ((*(u32*)((s32)BattleGetUnitPtr(_battleWorkPointer, attackerIdx) + 0x27C) & 0x10) != 0) {
-        flags = *(u32*)((s32)targetWork + 0xAC0);
-        if (((flags & 0x100) != 0) && ((flags & 0x200) == 0)) {
-            *(u32*)((s32)targetWork + 0xAC0) = (flags & ~0x100);
-            *(u32*)((s32)targetWork + 0xAC0) |= 0x200;
-            changed = 1;
-        } else if (((flags & 0x100) == 0) && ((flags & 0x200) != 0)) {
-            *(u32*)((s32)targetWork + 0xAC0) |= 0x100;
-            *(u32*)((s32)targetWork + 0xAC0) &= ~0x200;
-            changed = 1;
-        }
-    }
-
-    ((void (*)(void*))_btlSamplingEnemy)(targetWork);
-    return changed;
 }
 
 void BattleGetFirstAttackUnit(void* battleWork, void** part, void** unit) {

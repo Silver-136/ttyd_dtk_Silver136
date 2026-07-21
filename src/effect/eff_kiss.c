@@ -1,155 +1,99 @@
 #include "effect/eff_kiss.h"
 
-void effKissDisp2(s32 cameraId, void* effect) {
-    typedef f32 Mtx[3][4];
-    typedef struct KissWork {
-        s32 type;
-        f32 x;
-        f32 y;
-        f32 z;
-        f32 vx;
-        f32 vy;
-        f32 angleRate;
-        f32 rot;
-        f32 scaleX;
-        f32 scaleY;
-        s32 timer;
-        s32 frame;
-        s32 alpha;
-        s32 unk34;
-    } KissWork;
-
-    extern void* camGetPtr(s32 camId);
-    extern void PSMTXTrans(Mtx m, f64 x, f64 y, f64 z);
-    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
-    extern void PSMTXRotRad(Mtx m, char axis, f32 rad);
-    extern void PSMTXConcat(void* a, void* b, void* out);
-    extern void GXSetNumChans(s32 n);
-    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
-    extern void GXSetNumTexGens(s32 n);
-    extern void GXSetTexCoordGen2(s32 coord, s32 func, s32 src, s32 mtx, s32 normalize, s32 postMtx);
-    extern void GXSetNumTevStages(s32 n);
-    extern void GXSetTevOrder(s32 stage, s32 coord, s32 map, s32 color);
-    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
-    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
-    extern void effGetTexObj(s32 texId, void* texObj);
-    extern void GXLoadTexObj(void* texObj, s32 mapId);
-    extern void GXSetChanMatColor(s32 chan, void* color);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXBegin(s32 prim, s32 vtxfmt, s32 count);
-
-    extern u32 dat_80427950;
-    extern f32 float_deg2rad_80427954;
-    extern f32 float_8_80427958;
-    extern f32 float_0p5_80427960;
+/* stub-fill: effKissEntry | missing_definition | ghidra_signature */
+void* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angleRate) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void* effStampN64Entry(s32 type, f32 x, f32 y, f32 z);
+    extern void effKissMain(void* effect);
+    extern const char str_kiss_804279b0[];
+    extern f64 sin(f64 x);
+    extern f64 cos(f64 x);
     extern f32 float_1_8042795c;
     extern f32 float_0_80427964;
-    extern f32 float_4_80427968;
-    extern f32 float_2_8042796c;
+    extern f32 float_6p2832_80427990;
+    extern f32 float_360_8042799c;
+    extern f32 float_3_804279b8;
+    extern f32 float_1p5_80427970;
+    extern f32 float_neg1_804279bc;
 
-    u8 texObj[0x20];
-    Mtx baseMtx;
-    Mtx childMtx;
-    Mtx rotMtx;
-    Mtx scaleMtx;
-    KissWork* work;
-    KissWork* child;
-    void* cam;
-    u32 color;
+    void* effect = effEntry();
+    void* work;
+    void* child;
+    s32 count = 2;
     s32 i;
-    f32 height;
-    f32 halfWidth;
-    f32 width;
-    f32 deg;
-    volatile f32* fifo;
+    f32 phase = float_6p2832_80427990 * angleRate;
 
-    work = *(KissWork**)((s32)effect + 0xC);
-    cam = camGetPtr(cameraId);
-
-    PSMTXTrans(baseMtx, work->x, work->y, work->z);
-    PSMTXScale(scaleMtx, work->scaleX, work->scaleY, work->scaleY);
-    PSMTXRotRad(rotMtx, 'y', float_deg2rad_80427954 * -*(f32*)((s32)camGetPtr(4) + 0x114));
-    PSMTXConcat(baseMtx, rotMtx, baseMtx);
-    PSMTXConcat(baseMtx, scaleMtx, childMtx);
-
-    GXSetNumChans(1);
-    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(0, 0, 0, 4);
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xA);
-    GXSetTevAlphaIn(0, 7, 4, 5, 7);
-    GXSetCullMode(0);
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 1);
-    GXSetVtxDesc(0xD, 1);
-    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
-    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
-
-    effGetTexObj(0x14, texObj);
-    GXLoadTexObj(texObj, 0);
-
-    color = dat_80427950;
-    *(u8*)((s32)&color + 3) = (u8)work->alpha;
-    GXSetChanMatColor(4, &color);
-
-    height = float_8_80427958;
-    halfWidth = -height * float_0p5_80427960;
-    width = float_4_80427968;
-    deg = float_deg2rad_80427954;
-    fifo = (volatile f32*)0xCC008000;
-
-    i = 1;
-    child = work + 1;
-    while (i < *(s32*)((s32)effect + 0x8)) {
-        PSMTXTrans(baseMtx, child->x, child->y, child->z);
-        PSMTXScale(scaleMtx, child->scaleX, child->scaleY, float_1_8042795c);
-        PSMTXRotRad(rotMtx, 'z', deg * child->rot);
-        PSMTXConcat(baseMtx, scaleMtx, baseMtx);
-        PSMTXConcat(baseMtx, rotMtx, baseMtx);
-        PSMTXConcat(childMtx, baseMtx, baseMtx);
-        PSMTXConcat((void*)((s32)cam + 0x11C), baseMtx, baseMtx);
-        GXLoadPosMtxImm(baseMtx, 0);
-        GXSetCurrentMtx(0);
-        GXBegin(0x80, 0, 4);
-
-        i++;
-        child++;
-
-        fifo[0] = halfWidth;
-        fifo[0] = height;
-        fifo[0] = float_0_80427964;
-        fifo[0] = float_0_80427964;
-        fifo[0] = float_0_80427964;
-
-        fifo[0] = width;
-        fifo[0] = height;
-        fifo[0] = float_0_80427964;
-        fifo[0] = float_2_8042796c;
-        fifo[0] = float_0_80427964;
-
-        fifo[0] = width;
-        fifo[0] = float_0_80427964;
-        fifo[0] = float_0_80427964;
-        fifo[0] = float_2_8042796c;
-        fifo[0] = float_1_8042795c;
-
-        fifo[0] = halfWidth;
-        fifo[0] = float_0_80427964;
-        fifo[0] = float_0_80427964;
-        fifo[0] = float_0_80427964;
-        fifo[0] = float_1_8042795c;
+    if (type == 5) {
+        effStampN64Entry(2, x, y, z);
+        count = 7;
     }
+
+    *(const char**)((s32)effect + 0x14) = str_kiss_804279b0;
+    *(s32*)((s32)effect + 8) = count;
+    work = __memAlloc(3, count * 0x38);
+    *(void**)((s32)effect + 0xC) = work;
+    *(void**)((s32)effect + 0x10) = effKissMain;
+
+    *(s32*)work = type;
+    *(f32*)((s32)work + 4) = x;
+    *(f32*)((s32)work + 8) = y;
+    *(f32*)((s32)work + 0xC) = z;
+    *(f32*)((s32)work + 0x20) = float_1_8042795c;
+    *(f32*)((s32)work + 0x24) = float_1_8042795c;
+    *(s32*)((s32)work + 0x28) = (type == 4) ? 0x3C : 0x28;
+    *(s32*)((s32)work + 0x2C) = 0;
+    *(s32*)((s32)work + 0x30) = 0xFF;
+    *(f32*)((s32)work + 0x18) = angleRate;
+    *(f32*)((s32)work + 0x1C) = float_0_80427964;
+
+    child = (void*)((s32)work + 0x38);
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, child = (void*)((s32)child + 0x38)) {
+        *(f32*)((s32)child + 4) = float_0_80427964;
+        *(f32*)((s32)child + 8) = float_0_80427964;
+        *(f32*)((s32)child + 0xC) = float_0_80427964;
+        *(f32*)((s32)child + 0x1C) = float_0_80427964;
+        *(s32*)((s32)child + 0x28) = 0;
+        *(s32*)((s32)child + 0x2C) = 0;
+
+        switch (type) {
+            case 0:
+            case 3: {
+                f32 angle = phase / float_360_8042799c;
+                *(f32*)((s32)child + 0x20) = float_1_8042795c;
+                *(f32*)((s32)child + 0x24) = float_1_8042795c;
+                *(f32*)((s32)child + 0x10) = float_3_804279b8 * (f32)sin(angle);
+                *(f32*)((s32)child + 0x14) = float_3_804279b8 * (f32)cos(angle);
+                break;
+            }
+            case 1:
+            case 2: {
+                f32 angle = phase / float_360_8042799c;
+                *(f32*)((s32)child + 0x20) = float_0_80427964;
+                *(f32*)((s32)child + 0x24) = float_0_80427964;
+                *(f32*)((s32)child + 0x10) = float_3_804279b8 * (f32)sin(angle);
+                *(f32*)((s32)child + 0x14) = float_3_804279b8 * (f32)cos(angle);
+                break;
+            }
+            case 4:
+                *(f32*)((s32)child + 0x20) = float_1_8042795c;
+                *(f32*)((s32)child + 0x24) = float_1_8042795c;
+                break;
+            case 5: {
+                f32 span = float_360_8042799c * (f32)i / (f32)(*(s32*)((s32)effect + 8) - 1);
+                f32 angle = (float_6p2832_80427990 * span) / float_360_8042799c;
+                *(f32*)((s32)child + 0x20) = float_1p5_80427970;
+                *(f32*)((s32)child + 0x24) = float_1p5_80427970;
+                *(f32*)((s32)child + 0x1C) = span;
+                *(f32*)((s32)child + 0x10) = float_3_804279b8 * (f32)sin(angle);
+                *(f32*)((s32)child + 0x14) = float_3_804279b8 * (f32)cos(angle);
+                *(f32*)((s32)child + 0x1C) *= float_neg1_804279bc;
+                break;
+            }
+        }
+    }
+
+    return effect;
 }
 
 #pragma no_register_save_helpers on
@@ -357,99 +301,155 @@ void effKissDisp(s32 cameraId, void* effect) {
     }
 }
 
-/* stub-fill: effKissEntry | missing_definition | ghidra_signature */
-void* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angleRate) {
-    extern void* effEntry(void);
-    extern void* __memAlloc(s32 heap, u32 size);
-    extern void* effStampN64Entry(s32 type, f32 x, f32 y, f32 z);
-    extern void effKissMain(void* effect);
-    extern const char str_kiss_804279b0[];
-    extern f64 sin(f64 x);
-    extern f64 cos(f64 x);
+void effKissDisp2(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4];
+    typedef struct KissWork {
+        s32 type;
+        f32 x;
+        f32 y;
+        f32 z;
+        f32 vx;
+        f32 vy;
+        f32 angleRate;
+        f32 rot;
+        f32 scaleX;
+        f32 scaleY;
+        s32 timer;
+        s32 frame;
+        s32 alpha;
+        s32 unk34;
+    } KissWork;
+
+    extern void* camGetPtr(s32 camId);
+    extern void PSMTXTrans(Mtx m, f64 x, f64 y, f64 z);
+    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(Mtx m, char axis, f32 rad);
+    extern void PSMTXConcat(void* a, void* b, void* out);
+    extern void GXSetNumChans(s32 n);
+    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
+    extern void GXSetNumTexGens(s32 n);
+    extern void GXSetTexCoordGen2(s32 coord, s32 func, s32 src, s32 mtx, s32 normalize, s32 postMtx);
+    extern void GXSetNumTevStages(s32 n);
+    extern void GXSetTevOrder(s32 stage, s32 coord, s32 map, s32 color);
+    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetCullMode(s32 mode);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32 attr, s32 type);
+    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+    extern void effGetTexObj(s32 texId, void* texObj);
+    extern void GXLoadTexObj(void* texObj, s32 mapId);
+    extern void GXSetChanMatColor(s32 chan, void* color);
+    extern void GXLoadPosMtxImm(void* mtx, s32 id);
+    extern void GXSetCurrentMtx(s32 id);
+    extern void GXBegin(s32 prim, s32 vtxfmt, s32 count);
+
+    extern u32 dat_80427950;
+    extern f32 float_deg2rad_80427954;
+    extern f32 float_8_80427958;
+    extern f32 float_0p5_80427960;
     extern f32 float_1_8042795c;
     extern f32 float_0_80427964;
-    extern f32 float_6p2832_80427990;
-    extern f32 float_360_8042799c;
-    extern f32 float_3_804279b8;
-    extern f32 float_1p5_80427970;
-    extern f32 float_neg1_804279bc;
+    extern f32 float_4_80427968;
+    extern f32 float_2_8042796c;
 
-    void* effect = effEntry();
-    void* work;
-    void* child;
-    s32 count = 2;
+    u8 texObj[0x20];
+    Mtx baseMtx;
+    Mtx childMtx;
+    Mtx rotMtx;
+    Mtx scaleMtx;
+    KissWork* work;
+    KissWork* child;
+    void* cam;
+    u32 color;
     s32 i;
-    f32 phase = float_6p2832_80427990 * angleRate;
+    f32 height;
+    f32 halfWidth;
+    f32 width;
+    f32 deg;
+    volatile f32* fifo;
 
-    if (type == 5) {
-        effStampN64Entry(2, x, y, z);
-        count = 7;
+    work = *(KissWork**)((s32)effect + 0xC);
+    cam = camGetPtr(cameraId);
+
+    PSMTXTrans(baseMtx, work->x, work->y, work->z);
+    PSMTXScale(scaleMtx, work->scaleX, work->scaleY, work->scaleY);
+    PSMTXRotRad(rotMtx, 'y', float_deg2rad_80427954 * -*(f32*)((s32)camGetPtr(4) + 0x114));
+    PSMTXConcat(baseMtx, rotMtx, baseMtx);
+    PSMTXConcat(baseMtx, scaleMtx, childMtx);
+
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xA);
+    GXSetTevAlphaIn(0, 7, 4, 5, 7);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+
+    effGetTexObj(0x14, texObj);
+    GXLoadTexObj(texObj, 0);
+
+    color = dat_80427950;
+    *(u8*)((s32)&color + 3) = (u8)work->alpha;
+    GXSetChanMatColor(4, &color);
+
+    height = float_8_80427958;
+    halfWidth = -height * float_0p5_80427960;
+    width = float_4_80427968;
+    deg = float_deg2rad_80427954;
+    fifo = (volatile f32*)0xCC008000;
+
+    i = 1;
+    child = work + 1;
+    while (i < *(s32*)((s32)effect + 0x8)) {
+        PSMTXTrans(baseMtx, child->x, child->y, child->z);
+        PSMTXScale(scaleMtx, child->scaleX, child->scaleY, float_1_8042795c);
+        PSMTXRotRad(rotMtx, 'z', deg * child->rot);
+        PSMTXConcat(baseMtx, scaleMtx, baseMtx);
+        PSMTXConcat(baseMtx, rotMtx, baseMtx);
+        PSMTXConcat(childMtx, baseMtx, baseMtx);
+        PSMTXConcat((void*)((s32)cam + 0x11C), baseMtx, baseMtx);
+        GXLoadPosMtxImm(baseMtx, 0);
+        GXSetCurrentMtx(0);
+        GXBegin(0x80, 0, 4);
+
+        i++;
+        child++;
+
+        fifo[0] = halfWidth;
+        fifo[0] = height;
+        fifo[0] = float_0_80427964;
+        fifo[0] = float_0_80427964;
+        fifo[0] = float_0_80427964;
+
+        fifo[0] = width;
+        fifo[0] = height;
+        fifo[0] = float_0_80427964;
+        fifo[0] = float_2_8042796c;
+        fifo[0] = float_0_80427964;
+
+        fifo[0] = width;
+        fifo[0] = float_0_80427964;
+        fifo[0] = float_0_80427964;
+        fifo[0] = float_2_8042796c;
+        fifo[0] = float_1_8042795c;
+
+        fifo[0] = halfWidth;
+        fifo[0] = float_0_80427964;
+        fifo[0] = float_0_80427964;
+        fifo[0] = float_0_80427964;
+        fifo[0] = float_1_8042795c;
     }
-
-    *(const char**)((s32)effect + 0x14) = str_kiss_804279b0;
-    *(s32*)((s32)effect + 8) = count;
-    work = __memAlloc(3, count * 0x38);
-    *(void**)((s32)effect + 0xC) = work;
-    *(void**)((s32)effect + 0x10) = effKissMain;
-
-    *(s32*)work = type;
-    *(f32*)((s32)work + 4) = x;
-    *(f32*)((s32)work + 8) = y;
-    *(f32*)((s32)work + 0xC) = z;
-    *(f32*)((s32)work + 0x20) = float_1_8042795c;
-    *(f32*)((s32)work + 0x24) = float_1_8042795c;
-    *(s32*)((s32)work + 0x28) = (type == 4) ? 0x3C : 0x28;
-    *(s32*)((s32)work + 0x2C) = 0;
-    *(s32*)((s32)work + 0x30) = 0xFF;
-    *(f32*)((s32)work + 0x18) = angleRate;
-    *(f32*)((s32)work + 0x1C) = float_0_80427964;
-
-    child = (void*)((s32)work + 0x38);
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++, child = (void*)((s32)child + 0x38)) {
-        *(f32*)((s32)child + 4) = float_0_80427964;
-        *(f32*)((s32)child + 8) = float_0_80427964;
-        *(f32*)((s32)child + 0xC) = float_0_80427964;
-        *(f32*)((s32)child + 0x1C) = float_0_80427964;
-        *(s32*)((s32)child + 0x28) = 0;
-        *(s32*)((s32)child + 0x2C) = 0;
-
-        switch (type) {
-            case 0:
-            case 3: {
-                f32 angle = phase / float_360_8042799c;
-                *(f32*)((s32)child + 0x20) = float_1_8042795c;
-                *(f32*)((s32)child + 0x24) = float_1_8042795c;
-                *(f32*)((s32)child + 0x10) = float_3_804279b8 * (f32)sin(angle);
-                *(f32*)((s32)child + 0x14) = float_3_804279b8 * (f32)cos(angle);
-                break;
-            }
-            case 1:
-            case 2: {
-                f32 angle = phase / float_360_8042799c;
-                *(f32*)((s32)child + 0x20) = float_0_80427964;
-                *(f32*)((s32)child + 0x24) = float_0_80427964;
-                *(f32*)((s32)child + 0x10) = float_3_804279b8 * (f32)sin(angle);
-                *(f32*)((s32)child + 0x14) = float_3_804279b8 * (f32)cos(angle);
-                break;
-            }
-            case 4:
-                *(f32*)((s32)child + 0x20) = float_1_8042795c;
-                *(f32*)((s32)child + 0x24) = float_1_8042795c;
-                break;
-            case 5: {
-                f32 span = float_360_8042799c * (f32)i / (f32)(*(s32*)((s32)effect + 8) - 1);
-                f32 angle = (float_6p2832_80427990 * span) / float_360_8042799c;
-                *(f32*)((s32)child + 0x20) = float_1p5_80427970;
-                *(f32*)((s32)child + 0x24) = float_1p5_80427970;
-                *(f32*)((s32)child + 0x1C) = span;
-                *(f32*)((s32)child + 0x10) = float_3_804279b8 * (f32)sin(angle);
-                *(f32*)((s32)child + 0x14) = float_3_804279b8 * (f32)cos(angle);
-                *(f32*)((s32)child + 0x1C) *= float_neg1_804279bc;
-                break;
-            }
-        }
-    }
-
-    return effect;
 }
 

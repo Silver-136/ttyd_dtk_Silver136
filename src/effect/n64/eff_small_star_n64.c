@@ -1,14 +1,5 @@
 #include "effect/n64/eff_small_star_n64.h"
 
-void effSmallStarN64CamChg(void* effect, s8 camId) {
-    void* work = *(void**)((s32)effect + 0xC);
-    s32 i;
-
-    for (i = 0; i < *(s32*)((s32)effect + 8); i++, work = (void*)((s32)work + 0x34)) {
-        *(s8*)((s32)work + 0x30) = camId;
-    }
-}
-
 
 void* effSmallStarN64Entry(f32 x, f32 y, f32 z, f32 dirX, f32 dirY, f32 dirZ,
                            s32 type, s32 count) {
@@ -137,4 +128,13 @@ void effSmallStarDisp(s32 cameraId, void* effect) {
     u8* w=*(u8**)((u8*)effect+0xC);u8* cam=camGetPtr(cameraId);f32 a[3][4],b[3][4],c[3][4];u8 tex[0x20];u32 col;s32 i,idx=(*(s32*)(w+0x2C)-1)*3;
     GXSetZMode(0,7,0);GXSetNumChans(0);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x3C,0,0x7D);effGetTexObjN64(0x1D,tex);GXLoadTexObj(tex,0);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,-1);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,15,15,15,2);GXSetTevAlphaIn(0,7,5,4,7);GXSetCullMode(0);effSetVtxDescN64((void*)0x803A89A0);
     for(i=0;i<*(s32*)((u8*)effect+8);i++,w+=0x34,idx+=3){col=(color_rotation_data[idx%36]<<24)|(color_rotation_data[(idx+1)%36]<<16)|(color_rotation_data[(idx+2)%36]<<8)|*(u8*)(w+0x24);GXSetTevColor(1,&col);PSMTXTrans(a,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC));PSMTXRotRad(b,0x79,-0.017453292f**(f32*)((u8*)camGetPtr(4)+0x114));PSMTXRotRad(c,0x7A,0.017453292f**(f32*)(w+0x1C));PSMTXConcat(a,b,a);PSMTXConcat(a,c,a);PSMTXConcat(cam+0x11C,a,a);GXLoadPosMtxImm(a,0);GXSetCurrentMtx(0);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3,0);}
+}
+
+void effSmallStarN64CamChg(void* effect, s8 camId) {
+    void* work = *(void**)((s32)effect + 0xC);
+    s32 i;
+
+    for (i = 0; i < *(s32*)((s32)effect + 8); i++, work = (void*)((s32)work + 0x34)) {
+        *(s8*)((s32)work + 0x30) = camId;
+    }
 }

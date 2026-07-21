@@ -10,31 +10,36 @@ void partyChgRunMode(void* party, s32 mode);
 s32 marioGetPartyId(void);
 void* partyGetPtr(s32 id);
 
-void nokotaro_hold_cancel(void* party) {
-    *(u8*)((s32)party + 0x39) = 0x14;
-}
+s32 nokonokoGetStatus(void* party) {
+    u8 state;
+    s32 ret;
 
-void nokonoko_init(void* party) {
-    f32 offset;
-    f32 height;
-
-    *(u8*)((s32)party + 0x33) = 2;
-    height = float_37_80421678;
-    *(u8*)((s32)party + 0x32) = 0;
-    offset = float_24_80421708;
-    *(f32*)((s32)party + 0xF0) = height;
-    *(f32*)((s32)party + 0xF4) = offset;
-    nokoSe = -1;
-}
-
-void nokonoko_bye(void* party) {
-    if (*(u32*)((s32)party + 8) & 8) {
-        *(u32*)((s32)party + 8) &= ~8;
-        partyGoodbyeInit(party);
+    if (party == 0) {
+        return 0;
     }
-    if (partyGoodbyeMain(party) != 0) {
-        partyChgRunMode(party, 0xE);
+    if (*(s8*)((s32)party + 0x31) != 2) {
+        return 0;
     }
+    if ((*(u32*)party & 0x100) == 0) {
+        return 0;
+    }
+
+    state = *(u8*)((s32)party + 0x39);
+    ret = 7;
+    if (state <= 2) {
+        ret = 1;
+    } else if (state >= 0xA && state <= 0xD) {
+        ret = 2;
+    } else if (state >= 0x14 && state <= 0x15) {
+        ret = 3;
+    } else if (state >= 0x32 && state <= 0x47) {
+        ret = 4;
+    } else if (state >= 0x50 && state <= 0x64) {
+        ret = 5;
+    } else if (state >= 0x6E && state <= 0x72) {
+        ret = 6;
+    }
+    return ret;
 }
 
 s32 nokonoko_holdItem(void) {
@@ -50,6 +55,157 @@ s32 nokonoko_holdItem(void) {
 
     item = *(s32*)((s32)party + 0x174);
     return ((u32)(-item) | (u32)item) >> 31;
+}
+
+void nokonoko_bye(void* party) {
+    if (*(u32*)((s32)party + 8) & 8) {
+        *(u32*)((s32)party + 8) &= ~8;
+        partyGoodbyeInit(party);
+    }
+    if (partyGoodbyeMain(party) != 0) {
+        partyChgRunMode(party, 0xE);
+    }
+}
+
+void nokonoko_init(void* party) {
+    f32 offset;
+    f32 height;
+
+    *(u8*)((s32)party + 0x33) = 2;
+    height = float_37_80421678;
+    *(u8*)((s32)party + 0x32) = 0;
+    offset = float_24_80421708;
+    *(f32*)((s32)party + 0xF0) = height;
+    *(f32*)((s32)party + 0xF4) = offset;
+    nokoSe = -1;
+}
+
+void nokonoko_move(void* party) {
+    extern void* marioGetPtr(void);
+    extern void partyWalkInit(void* party, s32 param);
+    extern void unk_800cbeb0(void* party);
+    extern void partyRecordFootmark(void* party);
+    extern void party_move_mode_stay(void* party);
+    extern void party_move_mode_walk(void* party);
+    extern void party_move_mode_behind_mario(void* party);
+    extern void party_move_mode_beside_mario(void* party);
+
+    marioGetPtr();
+    if (*(u32*)((s32)party + 8) & 8) {
+        *(u32*)((s32)party + 8) &= ~8;
+        partyWalkInit(party, 1);
+    }
+    unk_800cbeb0(party);
+    partyRecordFootmark(party);
+    switch (*(u8*)((s32)party + 0x3B)) {
+        case 0:
+            party_move_mode_stay(party);
+            break;
+        case 1:
+            party_move_mode_walk(party);
+            break;
+        case 2:
+            party_move_mode_behind_mario(party);
+            break;
+        case 3:
+            party_move_mode_beside_mario(party);
+            break;
+        case 4:
+        default:
+            break;
+    }
+}
+
+
+/* CHATGPT FALLBACK MISSING STUBS: main/party/party_nokonoko 20260624_191429 */
+
+/* fallback stub-fill: map=unk_800d058c addr=0x800d058c size=0x000001a8 */
+void unk_800d058c(void) {
+    extern void* marioGetPtr(void);
+    extern void psndSFXOff(s32 soundId);
+
+    void* party;
+    unsigned char state;
+    int status;
+    float height;
+
+    marioGetPtr();
+    party = partyGetPtr(marioGetPartyId());
+    status = 0;
+    if (party != 0) {
+        if (*(signed char*)((int)party + 0x31) == 2 && (*(unsigned int*)party & 0x100) != 0) {
+            state = *(unsigned char*)((int)party + 0x39);
+            status = 7;
+            if (state < 3) {
+                status = 1;
+            } else if (state >= 0xA && state <= 0xD) {
+                status = 2;
+            } else if (state >= 0x14 && state <= 0x15) {
+                status = 3;
+            } else if (state >= 0x32 && state <= 0x47) {
+                status = 4;
+            } else if (state >= 0x50 && state <= 0x64) {
+                status = 5;
+            } else if (state >= 0x6E && state <= 0x72) {
+                status = 6;
+            }
+        }
+    }
+    if (status != 0) {
+        if ((*(unsigned int*)party & 0x100) != 0) {
+            marioGetPtr();
+            if ((unsigned int)(nokoSe + 0x10000) != 0xFFFF) {
+                psndSFXOff(nokoSe);
+                nokoSe = -1;
+            }
+            height = float_37_80421678;
+            *(unsigned int*)party &= ~0x100;
+            *(unsigned int*)party &= ~0x04000000;
+            *(unsigned int*)party &= ~0x01000000;
+            *(unsigned int*)party &= ~0x02000000;
+            *(unsigned int*)((int)party + 4) &= ~0x20;
+            *(unsigned int*)((int)party + 4) &= ~0x10;
+            *(float*)((int)party + 0xF0) = height;
+            *(int*)((int)party + 0x178) = 0;
+            *(int*)((int)party + 0x17C) = 0;
+            *(int*)((int)party + 0x180) = 0;
+        }
+        if (*(unsigned char*)((int)party + 0x34) != 8 && *(unsigned char*)((int)party + 0x34) != 0xD) {
+            partyChgRunMode(party, 2);
+            *(unsigned char*)((int)party + 0x3B) = 0;
+        }
+    }
+}
+
+
+void nokonoko_use_post(void* party) {
+    extern void itemNokoForceGet(s32 item);
+    extern void* marioGetPtr(void);
+    extern void psndSFXOff(s32 soundId);
+    u32 item;
+    f32 height;
+
+    item = *(u32*)((s32)party + 0x174);
+    if (item != 0) {
+        itemNokoForceGet(item);
+        *(s32*)((s32)party + 0x174) = 0;
+    }
+    marioGetPtr();
+    if ((u32)(nokoSe + 0x10000) != 0xFFFF) {
+        psndSFXOff(nokoSe);
+        nokoSe = -1;
+    }
+    height = float_37_80421678;
+    *(u32*)party &= ~0x100;
+    *(u32*)party &= ~0x04000000;
+    *(u32*)party &= ~0x01000000;
+    *(u32*)party &= ~0x02000000;
+    *(u32*)((s32)party + 4) &= ~0x20;
+    *(u32*)((s32)party + 4) &= ~0x10;
+    *(f32*)((s32)party + 0xF0) = height;
+    *(s32*)((s32)party + 0x178) = 0;
+    *(s32*)((s32)party + 0x17C) = 0;
+    *(s32*)((s32)party + 0x180) = 0;
 }
 
 
@@ -251,6 +407,62 @@ u8 nokonoko_use(void* party) {
         break;
     }
     return 0;
+}
+
+void nokonoko_finish(void* party) {
+    extern void itemNokoForceGet(s32 item);
+    extern void* marioGetPtr(void);
+    extern void psndSFXOff(s32 soundId);
+    u32 item;
+    f32 height;
+    u32 flags;
+
+    if (party == 0) {
+        return;
+    }
+    if (*(s8*)((s32)party + 0x31) != 2) {
+        return;
+    }
+    if (!(*(u32*)party & 0x100)) {
+        return;
+    }
+
+    item = *(u32*)((s32)party + 0x174);
+    if (item != 0) {
+        itemNokoForceGet(item);
+        *(s32*)((s32)party + 0x174) = 0;
+    }
+    marioGetPtr();
+    if ((u32)(nokoSe + 0x10000) != 0xFFFF) {
+        psndSFXOff(nokoSe);
+        nokoSe = -1;
+    }
+    height = float_37_80421678;
+    *(u32*)party &= ~0x100;
+    *(u32*)party &= ~0x04000000;
+    *(u32*)party &= ~0x01000000;
+    *(u32*)party &= ~0x02000000;
+    *(u32*)((s32)party + 4) &= ~0x20;
+    *(u32*)((s32)party + 4) &= ~0x10;
+    *(f32*)((s32)party + 0xF0) = height;
+    *(s32*)((s32)party + 0x178) = 0;
+    *(s32*)((s32)party + 0x17C) = 0;
+    *(s32*)((s32)party + 0x180) = 0;
+
+    if (*(u8*)((s32)party + 0x34) != 9) {
+        flags = *(u32*)party;
+        if (!(flags & 0x80000000)) {
+            partyChgRunMode(party, 2);
+            *(u8*)((s32)party + 0x3B) = 0;
+        } else {
+            *(u32*)party = flags & 0x7FFFFFFF;
+            partyChgRunMode(party, 0);
+        }
+    }
+}
+
+void nokotaro_hold_cancel(void* party) {
+    *(u8*)((s32)party + 0x39) = 0x14;
 }
 
 #pragma no_register_save_helpers on
@@ -745,217 +957,5 @@ void lookupSafetyPosSub(double height, double angle, float* inPos, float* outPos
         outPos[0] = inPos[0];
         outPos[1] = inPos[1];
         outPos[2] = inPos[2];
-    }
-}
-
-void nokonoko_finish(void* party) {
-    extern void itemNokoForceGet(s32 item);
-    extern void* marioGetPtr(void);
-    extern void psndSFXOff(s32 soundId);
-    u32 item;
-    f32 height;
-    u32 flags;
-
-    if (party == 0) {
-        return;
-    }
-    if (*(s8*)((s32)party + 0x31) != 2) {
-        return;
-    }
-    if (!(*(u32*)party & 0x100)) {
-        return;
-    }
-
-    item = *(u32*)((s32)party + 0x174);
-    if (item != 0) {
-        itemNokoForceGet(item);
-        *(s32*)((s32)party + 0x174) = 0;
-    }
-    marioGetPtr();
-    if ((u32)(nokoSe + 0x10000) != 0xFFFF) {
-        psndSFXOff(nokoSe);
-        nokoSe = -1;
-    }
-    height = float_37_80421678;
-    *(u32*)party &= ~0x100;
-    *(u32*)party &= ~0x04000000;
-    *(u32*)party &= ~0x01000000;
-    *(u32*)party &= ~0x02000000;
-    *(u32*)((s32)party + 4) &= ~0x20;
-    *(u32*)((s32)party + 4) &= ~0x10;
-    *(f32*)((s32)party + 0xF0) = height;
-    *(s32*)((s32)party + 0x178) = 0;
-    *(s32*)((s32)party + 0x17C) = 0;
-    *(s32*)((s32)party + 0x180) = 0;
-
-    if (*(u8*)((s32)party + 0x34) != 9) {
-        flags = *(u32*)party;
-        if (!(flags & 0x80000000)) {
-            partyChgRunMode(party, 2);
-            *(u8*)((s32)party + 0x3B) = 0;
-        } else {
-            *(u32*)party = flags & 0x7FFFFFFF;
-            partyChgRunMode(party, 0);
-        }
-    }
-}
-
-
-void nokonoko_use_post(void* party) {
-    extern void itemNokoForceGet(s32 item);
-    extern void* marioGetPtr(void);
-    extern void psndSFXOff(s32 soundId);
-    u32 item;
-    f32 height;
-
-    item = *(u32*)((s32)party + 0x174);
-    if (item != 0) {
-        itemNokoForceGet(item);
-        *(s32*)((s32)party + 0x174) = 0;
-    }
-    marioGetPtr();
-    if ((u32)(nokoSe + 0x10000) != 0xFFFF) {
-        psndSFXOff(nokoSe);
-        nokoSe = -1;
-    }
-    height = float_37_80421678;
-    *(u32*)party &= ~0x100;
-    *(u32*)party &= ~0x04000000;
-    *(u32*)party &= ~0x01000000;
-    *(u32*)party &= ~0x02000000;
-    *(u32*)((s32)party + 4) &= ~0x20;
-    *(u32*)((s32)party + 4) &= ~0x10;
-    *(f32*)((s32)party + 0xF0) = height;
-    *(s32*)((s32)party + 0x178) = 0;
-    *(s32*)((s32)party + 0x17C) = 0;
-    *(s32*)((s32)party + 0x180) = 0;
-}
-
-s32 nokonokoGetStatus(void* party) {
-    u8 state;
-    s32 ret;
-
-    if (party == 0) {
-        return 0;
-    }
-    if (*(s8*)((s32)party + 0x31) != 2) {
-        return 0;
-    }
-    if ((*(u32*)party & 0x100) == 0) {
-        return 0;
-    }
-
-    state = *(u8*)((s32)party + 0x39);
-    ret = 7;
-    if (state <= 2) {
-        ret = 1;
-    } else if (state >= 0xA && state <= 0xD) {
-        ret = 2;
-    } else if (state >= 0x14 && state <= 0x15) {
-        ret = 3;
-    } else if (state >= 0x32 && state <= 0x47) {
-        ret = 4;
-    } else if (state >= 0x50 && state <= 0x64) {
-        ret = 5;
-    } else if (state >= 0x6E && state <= 0x72) {
-        ret = 6;
-    }
-    return ret;
-}
-
-void nokonoko_move(void* party) {
-    extern void* marioGetPtr(void);
-    extern void partyWalkInit(void* party, s32 param);
-    extern void unk_800cbeb0(void* party);
-    extern void partyRecordFootmark(void* party);
-    extern void party_move_mode_stay(void* party);
-    extern void party_move_mode_walk(void* party);
-    extern void party_move_mode_behind_mario(void* party);
-    extern void party_move_mode_beside_mario(void* party);
-
-    marioGetPtr();
-    if (*(u32*)((s32)party + 8) & 8) {
-        *(u32*)((s32)party + 8) &= ~8;
-        partyWalkInit(party, 1);
-    }
-    unk_800cbeb0(party);
-    partyRecordFootmark(party);
-    switch (*(u8*)((s32)party + 0x3B)) {
-        case 0:
-            party_move_mode_stay(party);
-            break;
-        case 1:
-            party_move_mode_walk(party);
-            break;
-        case 2:
-            party_move_mode_behind_mario(party);
-            break;
-        case 3:
-            party_move_mode_beside_mario(party);
-            break;
-        case 4:
-        default:
-            break;
-    }
-}
-
-
-/* CHATGPT FALLBACK MISSING STUBS: main/party/party_nokonoko 20260624_191429 */
-
-/* fallback stub-fill: map=unk_800d058c addr=0x800d058c size=0x000001a8 */
-void unk_800d058c(void) {
-    extern void* marioGetPtr(void);
-    extern void psndSFXOff(s32 soundId);
-
-    void* party;
-    unsigned char state;
-    int status;
-    float height;
-
-    marioGetPtr();
-    party = partyGetPtr(marioGetPartyId());
-    status = 0;
-    if (party != 0) {
-        if (*(signed char*)((int)party + 0x31) == 2 && (*(unsigned int*)party & 0x100) != 0) {
-            state = *(unsigned char*)((int)party + 0x39);
-            status = 7;
-            if (state < 3) {
-                status = 1;
-            } else if (state >= 0xA && state <= 0xD) {
-                status = 2;
-            } else if (state >= 0x14 && state <= 0x15) {
-                status = 3;
-            } else if (state >= 0x32 && state <= 0x47) {
-                status = 4;
-            } else if (state >= 0x50 && state <= 0x64) {
-                status = 5;
-            } else if (state >= 0x6E && state <= 0x72) {
-                status = 6;
-            }
-        }
-    }
-    if (status != 0) {
-        if ((*(unsigned int*)party & 0x100) != 0) {
-            marioGetPtr();
-            if ((unsigned int)(nokoSe + 0x10000) != 0xFFFF) {
-                psndSFXOff(nokoSe);
-                nokoSe = -1;
-            }
-            height = float_37_80421678;
-            *(unsigned int*)party &= ~0x100;
-            *(unsigned int*)party &= ~0x04000000;
-            *(unsigned int*)party &= ~0x01000000;
-            *(unsigned int*)party &= ~0x02000000;
-            *(unsigned int*)((int)party + 4) &= ~0x20;
-            *(unsigned int*)((int)party + 4) &= ~0x10;
-            *(float*)((int)party + 0xF0) = height;
-            *(int*)((int)party + 0x178) = 0;
-            *(int*)((int)party + 0x17C) = 0;
-            *(int*)((int)party + 0x180) = 0;
-        }
-        if (*(unsigned char*)((int)party + 0x34) != 8 && *(unsigned char*)((int)party + 0x34) != 0xD) {
-            partyChgRunMode(party, 2);
-            *(unsigned char*)((int)party + 0x3B) = 0;
-        }
     }
 }

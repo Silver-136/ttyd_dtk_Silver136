@@ -20,18 +20,132 @@ extern void* mapalloc_base_ptr;
 void* memset(void* dst, int value, u32 size);
 void* _mapAlloc(void* heap, u32 size);
 
-s32 mobjGetHint(void* mobj) {
-    if (mobj == 0) {
-        return 0;
+void mobjKoopaOn(void) {
+    if (koopaRunFlag == 0) {
+        MobjSet* set = &work.koopa;
+
+        koopaRunFlag = 1;
+        set->count = 0x80;
+        set->entries = _mapAlloc(mapalloc_base_ptr, set->count * 0x23C);
+        memset(set->entries, 0, set->count * 0x23C);
     }
-    return (*(u32*)mobj >> 5) & 1;
 }
 
-void* mobjHitObjPtrToPtr(void* hitObj) {
-    if (*(u32*)((s32)hitObj + 4) & 0x80000000) {
-        return *(void**)((s32)hitObj + 0xD0);
+void mobjDispXLU(s32 param_1, void* entry) {
+    extern void animSetPaperTexMtx(void* mtx, s32 a, s32 b);
+    extern void animSetPaperTexObj(void* texObj, s32 a, s32 b, s32 texMap, s32 d, s32 e, s32 f, s32 g);
+    extern void animPoseDraw(s32 poseId, s32 mode, f32 x, f32 y, f32 z, f32 rotY, f32 scale);
+    extern f32 float_10_804201bc;
+
+    if (*(u32*)entry & 0x400) {
+        animSetPaperTexMtx((void*)((s32)entry + 0x20C), 0, 0);
+        animSetPaperTexObj((void*)((s32)entry + 0x1E8), 0, 0, *(s32*)((s32)entry + 0x208), 0, 0, 1, 1);
     }
-    return 0;
+
+    animPoseDraw(*(s32*)((s32)entry + 0x70), 1, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
+    animPoseDraw(*(s32*)((s32)entry + 0x70), 2, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
+    animPoseDraw(*(s32*)((s32)entry + 0x70), 3, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
+
+    if (*(u32*)entry & 0x400) {
+        animSetPaperTexMtx(0, 0, 0);
+        animSetPaperTexObj(0, 0, 0, 0, 0, 0, 1, 1);
+    }
+}
+
+void mobjDisp(s32 param_1, void* entry) {
+    extern void animSetPaperTexMtx(void* mtx, s32 a, s32 b);
+    extern void animSetPaperTexObj(void* texObj, s32 a, s32 b, s32 texMap, s32 d, s32 e, s32 f, s32 g);
+    extern void* dispGetCurWork(void);
+    extern void animPoseDraw(s32 poseId, s32 mode, f32 x, f32 y, f32 z, f32 rotY, f32 scale);
+    extern f32 float_10_804201bc;
+    s32 mode;
+
+    if (*(u32*)entry & 0x400) {
+        animSetPaperTexMtx((void*)((s32)entry + 0x20C), 0, 0);
+        animSetPaperTexObj((void*)((s32)entry + 0x1E8), 0, 0, *(s32*)((s32)entry + 0x208), 0, 0, 1, 1);
+    }
+
+    mode = *(u8*)((s32)dispGetCurWork() + 1);
+    if (mode == 0) {
+        animPoseDraw(*(s32*)((s32)entry + 0x70), 1, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                     *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
+    } else if (mode == 1) {
+        animPoseDraw(*(s32*)((s32)entry + 0x70), 2, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                     *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
+    } else {
+        animPoseDraw(*(s32*)((s32)entry + 0x70), 3, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                     *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
+    }
+
+    if (*(u32*)entry & 0x400) {
+        animSetPaperTexMtx(0, 0, 0);
+        animSetPaperTexObj(0, 0, 0, 0, 0, 0, 1, 1);
+    }
+}
+
+void mobjDisp_OffscreenXLU(s32 param_1, void* entry) {
+    extern void sysWaitDrawSync(void);
+    extern void GXClearBoundingBox(void);
+    extern void GXReadBoundingBox(u16* top, u16* bottom, u16* left, u16* right);
+    extern void offscreenAddBoundingBox(s32 id, u16 top, u16 bottom, u16 left, u16 right);
+    extern void animSetPaperTexMtx(void* mtx, s32 a, s32 b);
+    extern void animSetPaperTexObj(void* texObj, s32 a, s32 b, s32 texMap,
+                                   s32 d, s32 e, s32 f, s32 g);
+    extern void animPoseDraw(s32 poseId, s32 mode, f32 x, f32 y, f32 z,
+                             f32 rotY, f32 scale);
+    extern f32 float_10_804201bc;
+    u16 top;
+    u16 bottom;
+    u16 left;
+    u16 right;
+    f32 scale;
+
+    sysWaitDrawSync();
+    GXClearBoundingBox();
+    if ((*(u32*)entry & 0x400) != 0) {
+        animSetPaperTexMtx((void*)((s32)entry + 0x20C), 0, 0);
+        animSetPaperTexObj((void*)((s32)entry + 0x1E8), 0, 0,
+                           *(s32*)((s32)entry + 0x208), 0, 0, 1, 1);
+    }
+
+    scale = float_10_804201bc * *(f32*)((s32)entry + 0x44);
+    animPoseDraw(*(s32*)((s32)entry + 0x70), 1,
+                 *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), scale);
+    animPoseDraw(*(s32*)((s32)entry + 0x70), 2,
+                 *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), scale);
+    animPoseDraw(*(s32*)((s32)entry + 0x70), 3,
+                 *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
+                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), scale);
+
+    if ((*(u32*)entry & 0x400) != 0) {
+        animSetPaperTexMtx(0, 0, 0);
+        animSetPaperTexObj(0, 0, 0, 0, 0, 0, 1, 1);
+    }
+    sysWaitDrawSync();
+    GXReadBoundingBox(&top, &bottom, &left, &right);
+    offscreenAddBoundingBox(*(s32*)((s32)entry + 0x19C), top, bottom, left, right);
+}
+
+void mobjInit(void) {
+    extern void* __memAlloc(s32 heap, u32 size);
+    s32 count;
+
+    count = 0x10;
+    work.normal.count = count;
+    work.normal.entries = __memAlloc(0, count * 0x23C);
+    memset(work.normal.entries, 0, work.normal.count * 0x23C);
+
+    count = 8;
+    work.alt.count = count;
+    work.alt.entries = __memAlloc(0, count * 0x23C);
+    memset(work.alt.entries, 0, work.alt.count * 0x23C);
+
+    koopaRunFlag = 0;
 }
 
 void mobjReset(s32 alt) {
@@ -44,18 +158,269 @@ void mobjReset(s32 alt) {
     koopaRunFlag = 0;
 }
 
-void mobjKoopaOn(void) {
-    if (koopaRunFlag == 0) {
-        MobjSet* set = &work.koopa;
+u8 mobjHitEntry(void* pMobj, int param_2) {
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+    extern void* animPoseGetAnimBaseDataPtr(s32);
+    extern void hitDelete(void*);
+    extern void PSVECAdd(VecLocal*, VecLocal*, VecLocal*);
+    extern void PSVECScale(VecLocal*, VecLocal*, double);
+    extern u32 strlen(const char*);
+    extern s32 strncmp(const char*, const char*, u32);
+    extern void PSMTXTrans(void*, double, double, double);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXRotRad(void*, double, char);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void* memcpy(void*, const void*, u32);
+    extern char* strcpy(char*, const char*);
+    extern char* strcat(char*, const char*);
+    extern void* hitEntryMOBJ(void*, void*);
+    extern f32 float_0_804201b8;
+    extern f32 float_10_804201bc;
+    extern f32 float_deg2rad_804201cc;
+    extern f32 float_2p5_804201d8;
+    extern f32 float_0p5_804201f0;
+    extern const char str_HOBJ_804201d0[];
+    extern const char str_MOBJ_804201f4[];
+    extern const char str_MOBJ_804201fc[];
+    extern char headDJ[];
+    extern char cubeDJ[];
+    extern char frontDJ[];
+    extern char front2DJ[];
+    VecLocal min;
+    VecLocal max;
+    VecLocal pos;
+    f32 m0[3][4];
+    f32 m1[3][4];
+    f32 m2[3][4];
+    f32 m3[3][4];
+    f32 m4[3][4];
+    f32 result[3][4];
+    void* poseData;
+    void* hit;
+    void* scan;
+    s32 i;
+    f32 diff;
 
-        koopaRunFlag = 1;
-        set->count = 0x80;
-        set->entries = _mapAlloc(mapalloc_base_ptr, set->count * 0x23C);
-        memset(set->entries, 0, set->count * 0x23C);
+    poseData = animPoseGetAnimBaseDataPtr(*(s32*)((s32)pMobj + 0x70));
+    min.x = *(f32*)((s32)poseData + 0xD0);
+    min.y = *(f32*)((s32)poseData + 0xD4);
+    min.z = *(f32*)((s32)poseData + 0xD8);
+    max.x = *(f32*)((s32)poseData + 0xDC);
+    max.y = *(f32*)((s32)poseData + 0xE0);
+    max.z = *(f32*)((s32)poseData + 0xE4);
+
+    scan = pMobj;
+    for (i = 0; i < 2; i++, scan = (void*)((s32)scan + 0x88)) {
+        if (*(void**)((s32)scan + 0x74) != 0) {
+            hitDelete((void*)((s32)scan + 0x78));
+        }
+    }
+
+    PSVECAdd(&max, &min, (VecLocal*)((s32)pMobj + 0x190));
+    PSVECScale((VecLocal*)((s32)pMobj + 0x190), (VecLocal*)((s32)pMobj + 0x190), (double)float_0p5_804201f0);
+    PSVECScale((VecLocal*)((s32)pMobj + 0x190), (VecLocal*)((s32)pMobj + 0x190), (double)float_10_804201bc);
+    *(f32*)((s32)pMobj + 0x194) = float_0_804201b8;
+    diff = max.x - min.x;
+    if (diff < 0.0f) {
+        diff = -diff;
+    }
+    *(f32*)((s32)pMobj + 0x184) = float_10_804201bc * *(f32*)((s32)pMobj + 0x44) * diff;
+    diff = max.y;
+    if (diff < 0.0f) {
+        diff = -diff;
+    }
+    *(f32*)((s32)pMobj + 0x188) = float_10_804201bc * *(f32*)((s32)pMobj + 0x48) * diff;
+    diff = max.z - min.z;
+    if (diff < 0.0f) {
+        diff = -diff;
+    }
+    *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * *(f32*)((s32)pMobj + 0x4C) * diff;
+    if (strncmp((const char*)((s32)poseData + 0), str_HOBJ_804201d0, strlen(str_HOBJ_804201d0)) == 0) {
+        *(f32*)((s32)pMobj + 0x198) = float_0_804201b8;
+        *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * float_2p5_804201d8 * *(f32*)((s32)pMobj + 0x4C);
+    }
+
+    if (param_2 >= 0 && param_2 < 3) {
+        PSVECAdd((VecLocal*)((s32)pMobj + 0x38), (VecLocal*)((s32)pMobj + 0x190), &pos);
+        PSMTXTrans(m0, (double)pos.x, (double)pos.y, (double)pos.z);
+        PSMTXScale(m1, *(f32*)((s32)pMobj + 0x184), *(f32*)((s32)pMobj + 0x188), *(f32*)((s32)pMobj + 0x18C));
+        PSMTXRotRad(m2, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x50)), 'x');
+        PSMTXRotRad(m3, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x54)), 'y');
+        PSMTXRotRad(m4, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x58)), 'z');
+        PSMTXConcat(m0, m4, m0);
+        PSMTXConcat(m0, m3, m0);
+        PSMTXConcat(m0, m2, m0);
+        PSMTXConcat(m0, m1, result);
+        if (param_2 == 1) {
+            memcpy((void*)((s32)pMobj + 0x90), headDJ, 0x68);
+            strcpy((char*)((s32)pMobj + 0x78), str_MOBJ_804201f4);
+            strcat((char*)((s32)pMobj + 0x78), (char*)((s32)pMobj + 5));
+            *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
+            hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
+            *(void**)((s32)pMobj + 0x74) = hit;
+            *(void**)((s32)hit + 0xD0) = pMobj;
+        } else if (param_2 == 0) {
+            memcpy((void*)((s32)pMobj + 0x90), cubeDJ, 0x68);
+            strcpy((char*)((s32)pMobj + 0x78), str_MOBJ_804201f4);
+            strcat((char*)((s32)pMobj + 0x78), (char*)((s32)pMobj + 5));
+            *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
+            hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
+            *(void**)((s32)pMobj + 0x74) = hit;
+            *(void**)((s32)hit + 0xD0) = pMobj;
+        } else {
+            memcpy((void*)((s32)pMobj + 0x90), frontDJ, 0x68);
+            strcpy((char*)((s32)pMobj + 0x78), str_MOBJ_804201f4);
+            strcat((char*)((s32)pMobj + 0x78), (char*)((s32)pMobj + 5));
+            *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
+            hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
+            *(void**)((s32)pMobj + 0x74) = hit;
+            *(void**)((s32)hit + 0xD0) = pMobj;
+            memcpy((void*)((s32)pMobj + 0x118), front2DJ, 0x68);
+            strcpy((char*)((s32)pMobj + 0x100), str_MOBJ_804201fc);
+            strcat((char*)((s32)pMobj + 0x100), (char*)((s32)pMobj + 5));
+            *(char**)((s32)pMobj + 0x118) = (char*)((s32)pMobj + 0x100);
+            hit = hitEntryMOBJ((void*)((s32)pMobj + 0x118), result);
+            *(void**)((s32)pMobj + 0xFC) = hit;
+            *(void**)((s32)hit + 0xD0) = pMobj;
+        }
+    }
+    return 0;
+}
+
+int mobjEntry(char* name, char* pAnimPoseName) {
+    typedef struct MobjEntryLocal {
+        u32 flags;
+        u8 camId;
+        char name[16];
+        char animPoseName[16];
+    } MobjEntryLocal;
+    extern MobjWork work;
+    extern void* gp;
+    extern s32 koopaRunFlag;
+    extern s32 strcmp(const char* a, const char* b);
+    extern char* strcpy(char* dst, const char* src);
+    extern int animPoseEntry(char* name, u32 inBattle);
+    extern void animPosePeraOff(s32 poseId);
+    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
+    extern void animPoseSetMaterialLightFlagOn(s32 poseId, u32 flags);
+    extern void mobjHitEntry(void* pMobj, s32 param_2);
+    extern char vec3_802c1f58[];
+    extern f32 float_1_804201c0;
+    extern const char str_S_1_804201ec;
+    MobjSet* set;
+    MobjEntryLocal* entry;
+    s32 count;
+    s32 index;
+    s32 poseId;
+    s32 battle;
+
+    if (koopaRunFlag != 0) {
+        set = &work.koopa;
+    } else {
+        set = &work.normal;
+        if (*(s32*)((s32)gp + 0x14) != 0) {
+            set = &work.alt;
+        }
+    }
+
+    count = set->count;
+    index = 0;
+    entry = (MobjEntryLocal*)set->entries;
+    while (index < count) {
+        if ((entry->flags & 1) && strcmp(entry->name, name) == 0) {
+            break;
+        }
+        index++;
+        entry = (MobjEntryLocal*)((s32)entry + 0x23C);
+    }
+
+    entry = (MobjEntryLocal*)set->entries;
+    index = 0;
+    if (count > 0) {
+        do {
+            if ((entry->flags & 1) == 0) {
+                break;
+            }
+            index++;
+            entry = (MobjEntryLocal*)((s32)entry + 0x23C);
+            count--;
+        } while (count != 0);
+    }
+
+    memset(entry, 0, 0x23C);
+    entry->flags |= 1;
+    strcpy(entry->name, name);
+    *(u32*)((s32)entry + 0x38) = *(u32*)((s32)vec3_802c1f58 + 0x18);
+    *(u32*)((s32)entry + 0x3C) = *(u32*)((s32)vec3_802c1f58 + 0x1C);
+    *(u32*)((s32)entry + 0x40) = *(u32*)((s32)vec3_802c1f58 + 0x20);
+    *(u32*)((s32)entry + 0x44) = *(u32*)((s32)vec3_802c1f58 + 0x24);
+    *(u32*)((s32)entry + 0x48) = *(u32*)((s32)vec3_802c1f58 + 0x28);
+    *(u32*)((s32)entry + 0x4C) = *(u32*)((s32)vec3_802c1f58 + 0x2C);
+    *(u32*)((s32)entry + 0x50) = *(u32*)((s32)vec3_802c1f58 + 0x30);
+    *(u32*)((s32)entry + 0x54) = *(u32*)((s32)vec3_802c1f58 + 0x34);
+    *(u32*)((s32)entry + 0x58) = *(u32*)((s32)vec3_802c1f58 + 0x38);
+    *(u32*)((s32)entry + 0x5C) = *(u32*)((s32)vec3_802c1f58 + 0x3C);
+    *(u32*)((s32)entry + 0x60) = *(u32*)((s32)vec3_802c1f58 + 0x40);
+    *(u32*)((s32)entry + 0x64) = *(u32*)((s32)vec3_802c1f58 + 0x44);
+    *(f32*)((s32)entry + 0x68) = float_1_804201c0;
+    *(f32*)((s32)entry + 0x6C) = float_1_804201c0;
+    *(u8*)((s32)entry + 4) = 4;
+    battle = *(s32*)((s32)gp + 0x14);
+    poseId = animPoseEntry(pAnimPoseName, ((u32)(-battle) | (u32)battle) >> 31);
+    *(s32*)((s32)entry + 0x70) = poseId;
+    animPosePeraOff(*(s32*)((s32)entry + 0x70));
+    strcpy(entry->animPoseName, pAnimPoseName);
+    animPoseSetAnim(*(s32*)((s32)entry + 0x70), &str_S_1_804201ec, 1);
+    animPoseSetMaterialLightFlagOn(*(s32*)((s32)entry + 0x70), 2);
+    mobjHitEntry(entry, 0);
+    *(s32*)((s32)entry + 0x19C) = -1;
+    return index;
+}
+
+void mobjDelete(char* name) {
+    extern s32 strcmp(const char* a, const char* b);
+    extern void marioResetHitObj(void* hitObj);
+    extern void hitDelete(void* hitObj);
+    MobjSet* set;
+    s32 i;
+    s32 j;
+    void* entry;
+    void* hitObj;
+
+    if (koopaRunFlag != 0) {
+        set = &work.koopa;
+    } else {
+        set = &work.normal;
+        if (*(s32*)((s32)gp + 0x14) != 0) {
+            set = &work.alt;
+        }
+    }
+
+    entry = set->entries;
+    for (i = 0; i < set->count; i++, entry = (void*)((s32)entry + 0x23C)) {
+        if ((*(u32*)entry & 1) && strcmp((char*)((s32)entry + 5), name) == 0) {
+            hitObj = (void*)((s32)entry + 0x78);
+            for (j = 0; j < 2; j++, hitObj = (void*)((s32)hitObj + 0x88)) {
+                if (hitObj != 0) {
+                    if (*(s32*)((s32)gp + 0x14) == 0) {
+                        marioResetHitObj(hitObj);
+                    }
+                    hitDelete(hitObj);
+                }
+            }
+            *(u32*)entry &= ~1U;
+            break;
+        }
     }
 }
 
-s32 mobjCheckExec(void) {
+void mobjSetPosition(f32 posX, f32 posY, f32 posZ, char* mobjName) {
+    extern f32 float_0p1_804201e8;
+    extern s32 strcmp(const char* a, const char* b);
     MobjSet* set;
     s32 i;
     void* entry;
@@ -71,11 +436,14 @@ s32 mobjCheckExec(void) {
 
     entry = set->entries;
     for (i = 0; i < set->count; i++, entry = (void*)((s32)entry + 0x23C)) {
-        if (*(u32*)entry & 0x200) {
-            return 1;
+        if ((*(u32*)entry & 1) && strcmp((char*)((s32)entry + 5), mobjName) == 0) {
+            break;
         }
     }
-    return 0;
+
+    *(f32*)((s32)entry + 0x38) = posX;
+    *(f32*)((s32)entry + 0x3C) = posY + float_0p1_804201e8;
+    *(f32*)((s32)entry + 0x40) = posZ;
 }
 
 
@@ -625,6 +993,265 @@ void mobjMain(void) {
         }
     }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void* mobjNameToPtr(char* name) {
+    extern MobjWork work;
+    extern void* gp;
+    extern s32 koopaRunFlag;
+    extern s32 strcmp(const char* a, const char* b);
+    MobjSet* set;
+    s32 count;
+    s32 i;
+    void* entry;
+    if (koopaRunFlag != 0) {
+        set = &work.koopa;
+    } else {
+        set = &work.normal;
+        if (*(s32*)((s32)gp + 0x14) != 0) {
+            set = &work.alt;
+        }
+    }
+    count = set->count;
+    i = 0;
+    entry = set->entries;
+    while (i < count) {
+        if ((*(u32*)entry & 1) && strcmp((char*)((s32)entry + 5), name) == 0) {
+            break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x23C);
+    }
+    return entry;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void* mobjNameToPtrNoAssert(char* name) {
+    extern MobjWork work;
+    extern void* gp;
+    extern s32 koopaRunFlag;
+    extern s32 strcmp(const char* a, const char* b);
+    MobjSet* set;
+    s32 i;
+    s32 count;
+    void* entry;
+    if (koopaRunFlag != 0) {
+        set = &work.koopa;
+    } else {
+        set = &work.normal;
+        if (*(s32*)((s32)gp + 0x14) != 0) {
+            set = &work.alt;
+        }
+    }
+    count = set->count;
+    i = 0;
+    entry = set->entries;
+    while (i < count) {
+        if ((*(u32*)entry & 1) && strcmp((char*)((s32)entry + 5), name) == 0) {
+            break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x23C);
+    }
+    if (i >= count) {
+        return 0;
+    }
+    return entry;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+void* mobjHitObjPtrToPtr(void* hitObj) {
+    if (*(u32*)((s32)hitObj + 4) & 0x80000000) {
+        return *(void**)((s32)hitObj + 0xD0);
+    }
+    return 0;
+}
+
+void* mobjRunEvent(void* pMobj, void* evtCode) {
+    extern s32 evtCheckID(s32 id);
+    extern void* evtEntryType(void* evtCode, s32 priority, s32 flags, s32 type);
+    void* event;
+
+    if (evtCode == 0) {
+        return 0;
+    }
+    if (evtCheckID(*(s32*)((s32)pMobj + 0x1CC)) != 0) {
+        return 0;
+    }
+    *(s32*)((s32)pMobj + 0x1CC) = 0;
+    event = evtEntryType(evtCode, 0x1E, 0, 0x1A);
+    *(void**)((s32)event + 0x174) = pMobj;
+    *(s32*)((s32)pMobj + 0x1CC) = *(s32*)((s32)event + 0x15C);
+    return event;
+}
+
+void mobjCalcMtx(void* pMobj) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+    typedef f32 Mtx34[3][4];
+    typedef struct AnimBaseLocal {
+        s32 size;
+        char fileName[64];
+        char texFileName[64];
+        char buildTime[64];
+        s32 dispModeMask;
+        s32 radius;
+        s32 height;
+        Vec3 bboxMin;
+        Vec3 bboxMax;
+    } AnimBaseLocal;
+    extern void PSVECAdd(Vec3* a, Vec3* b, Vec3* out);
+    extern void* animPoseGetAnimBaseDataPtr(s32 poseId);
+    extern u32 strlen(const char* s);
+    extern s32 strncmp(const char* a, const char* b, u32 n);
+    extern void PSMTXTrans(Mtx34 m, f32 x, f32 y, f32 z);
+    extern void PSMTXScale(Mtx34 m, f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(Mtx34 m, char axis, f32 rad);
+    extern void PSMTXConcat(Mtx34 a, Mtx34 b, Mtx34 out);
+    extern void hitReCalcMatrix(void* hitEntry, Mtx34 mtx);
+    extern f32 __fabsf(f32 value);
+    extern f32 float_10_804201bc;
+    extern f32 float_0_804201b8;
+    extern f32 float_2p5_804201d8;
+    extern f32 float_deg2rad_804201cc;
+    extern const char str_HOBJ_804201d0[];
+    Vec3 trans;
+    Mtx34 transMtx;
+    Mtx34 scaleMtx;
+    Mtx34 rotXMtx;
+    Mtx34 rotYMtx;
+    Mtx34 rotZMtx;
+    Mtx34 outMtx;
+    AnimBaseLocal* base;
+    s32 i;
+
+    PSVECAdd((Vec3*)((s32)pMobj + 0x38), (Vec3*)((s32)pMobj + 0x190), &trans);
+    base = animPoseGetAnimBaseDataPtr(*(s32*)((s32)pMobj + 0x70));
+    *(f32*)((s32)pMobj + 0x184) = float_10_804201bc * *(f32*)((s32)pMobj + 0x44) * __fabsf(base->bboxMax.x - base->bboxMin.x);
+    *(f32*)((s32)pMobj + 0x188) = float_10_804201bc * *(f32*)((s32)pMobj + 0x48) * __fabsf(base->bboxMax.y);
+    *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * *(f32*)((s32)pMobj + 0x4C) * __fabsf(base->bboxMax.z - base->bboxMin.z);
+
+    if (strncmp(base->fileName, str_HOBJ_804201d0, strlen(str_HOBJ_804201d0)) == 0) {
+        *(f32*)((s32)pMobj + 0x198) = float_0_804201b8;
+        *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * float_2p5_804201d8 * *(f32*)((s32)pMobj + 0x4C);
+    }
+
+    PSMTXTrans(transMtx, trans.x, trans.y, trans.z);
+    PSMTXScale(scaleMtx, *(f32*)((s32)pMobj + 0x184), *(f32*)((s32)pMobj + 0x188), *(f32*)((s32)pMobj + 0x18C));
+    PSMTXRotRad(rotXMtx, 'x', float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x50));
+    PSMTXRotRad(rotYMtx, 'y', float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x54));
+    PSMTXRotRad(rotZMtx, 'z', float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x58));
+    PSMTXConcat(transMtx, rotZMtx, transMtx);
+    PSMTXConcat(transMtx, rotYMtx, transMtx);
+    PSMTXConcat(transMtx, rotXMtx, transMtx);
+    PSMTXConcat(transMtx, scaleMtx, outMtx);
+
+    for (i = 0; i < 2; i++) {
+        if (*(void**)((s32)pMobj + 0x74) != 0) {
+            hitReCalcMatrix(*(void**)((s32)pMobj + 0x74), outMtx);
+        }
+        pMobj = (void*)((s32)pMobj + 0x88);
+    }
+}
+
+void mobjCalcMtx2(void* pMobj) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+    typedef f32 Mtx34[3][4];
+    extern void PSVECAdd(Vec3* a, Vec3* b, Vec3* out);
+    extern void PSMTXTrans(Mtx34 m, f32 x, f32 y, f32 z);
+    extern void PSMTXScale(Mtx34 m, f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(Mtx34 m, char axis, f32 rad);
+    extern void PSMTXConcat(Mtx34 a, Mtx34 b, Mtx34 out);
+    extern void hitReCalcMatrix(void* hitEntry, Mtx34 mtx);
+    extern f32 float_deg2rad_804201cc;
+    Vec3 trans;
+    Mtx34 transMtx;
+    Mtx34 scaleMtx;
+    Mtx34 rotXMtx;
+    Mtx34 rotYMtx;
+    Mtx34 rotZMtx;
+    Mtx34 outMtx;
+    s32 i;
+
+    PSVECAdd((Vec3*)((s32)pMobj + 0x38), (Vec3*)((s32)pMobj + 0x190), &trans);
+    PSMTXTrans(transMtx, trans.x, trans.y, trans.z);
+    PSMTXScale(scaleMtx, *(f32*)((s32)pMobj + 0x184), *(f32*)((s32)pMobj + 0x188), *(f32*)((s32)pMobj + 0x18C));
+    PSMTXRotRad(rotXMtx, 'x', float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x50));
+    PSMTXRotRad(rotYMtx, 'y', float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x54));
+    PSMTXRotRad(rotZMtx, 'z', float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x58));
+    PSMTXConcat(transMtx, rotZMtx, transMtx);
+    PSMTXConcat(transMtx, rotYMtx, transMtx);
+    PSMTXConcat(transMtx, rotXMtx, transMtx);
+    PSMTXConcat(transMtx, scaleMtx, outMtx);
+
+    for (i = 0; i < 2; i++) {
+        if (*(void**)((s32)pMobj + 0x74) != 0) {
+            hitReCalcMatrix(*(void**)((s32)pMobj + 0x74), outMtx);
+        }
+        pMobj = (void*)((s32)pMobj + 0x88);
+    }
+}
+
+s32 mobjGetHint(void* mobj) {
+    if (mobj == 0) {
+        return 0;
+    }
+    return (*(u32*)mobj >> 5) & 1;
+}
+
+s32 mobjCheckExec(void) {
+    MobjSet* set;
+    s32 i;
+    void* entry;
+
+    if (koopaRunFlag != 0) {
+        set = &work.koopa;
+    } else {
+        set = &work.normal;
+        if (*(s32*)((s32)gp + 0x14) != 0) {
+            set = &work.alt;
+        }
+    }
+
+    entry = set->entries;
+    for (i = 0; i < set->count; i++, entry = (void*)((s32)entry + 0x23C)) {
+        if (*(u32*)entry & 0x200) {
+            return 1;
+        }
+    }
+    return 0;
+}
+s32 mobjCheckItemboxOpen(void* entry) {
+    extern s32 strcmp(const char* a, const char* b);
+    extern const char str_MOBJ_TreasureBox_802c1fe4[];
+    extern const char str_MOBJ_BigTreasureBox_802c1ff8[];
+    extern const char str_MOBJ_GrayTreasureBox_802c200c[];
+    extern const char str_MOBJ_BlackTreasureBo_802c2024[];
+
+    if (strcmp((char*)((s32)entry + 0x15), str_MOBJ_TreasureBox_802c1fe4) == 0 ||
+        strcmp((char*)((s32)entry + 0x15), str_MOBJ_BigTreasureBox_802c1ff8) == 0 ||
+        strcmp((char*)((s32)entry + 0x15), str_MOBJ_GrayTreasureBox_802c200c) == 0 ||
+        strcmp((char*)((s32)entry + 0x15), str_MOBJ_BlackTreasureBo_802c2024) == 0) {
+        return (*(s32*)((s32)entry + 0x1DC) == 99) + 1;
+    }
+    return 0;
+}
 
 u32* mobjNearDistCheck2(double param_1, double param_2, double param_3, double param_4, char** param_5) {
     typedef struct Vec3 {
@@ -729,632 +1356,5 @@ u32* mobjNearDistCheck2(double param_1, double param_2, double param_3, double p
         entry = (u32*)((s32)entry + 0x23C);
     }
     return best;
-}
-
-int mobjEntry(char* name, char* pAnimPoseName) {
-    typedef struct MobjEntryLocal {
-        u32 flags;
-        u8 camId;
-        char name[16];
-        char animPoseName[16];
-    } MobjEntryLocal;
-    extern MobjWork work;
-    extern void* gp;
-    extern s32 koopaRunFlag;
-    extern s32 strcmp(const char* a, const char* b);
-    extern char* strcpy(char* dst, const char* src);
-    extern int animPoseEntry(char* name, u32 inBattle);
-    extern void animPosePeraOff(s32 poseId);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
-    extern void animPoseSetMaterialLightFlagOn(s32 poseId, u32 flags);
-    extern void mobjHitEntry(void* pMobj, s32 param_2);
-    extern char vec3_802c1f58[];
-    extern f32 float_1_804201c0;
-    extern const char str_S_1_804201ec;
-    MobjSet* set;
-    MobjEntryLocal* entry;
-    s32 count;
-    s32 index;
-    s32 poseId;
-    s32 battle;
-
-    if (koopaRunFlag != 0) {
-        set = &work.koopa;
-    } else {
-        set = &work.normal;
-        if (*(s32*)((s32)gp + 0x14) != 0) {
-            set = &work.alt;
-        }
-    }
-
-    count = set->count;
-    index = 0;
-    entry = (MobjEntryLocal*)set->entries;
-    while (index < count) {
-        if ((entry->flags & 1) && strcmp(entry->name, name) == 0) {
-            break;
-        }
-        index++;
-        entry = (MobjEntryLocal*)((s32)entry + 0x23C);
-    }
-
-    entry = (MobjEntryLocal*)set->entries;
-    index = 0;
-    if (count > 0) {
-        do {
-            if ((entry->flags & 1) == 0) {
-                break;
-            }
-            index++;
-            entry = (MobjEntryLocal*)((s32)entry + 0x23C);
-            count--;
-        } while (count != 0);
-    }
-
-    memset(entry, 0, 0x23C);
-    entry->flags |= 1;
-    strcpy(entry->name, name);
-    *(u32*)((s32)entry + 0x38) = *(u32*)((s32)vec3_802c1f58 + 0x18);
-    *(u32*)((s32)entry + 0x3C) = *(u32*)((s32)vec3_802c1f58 + 0x1C);
-    *(u32*)((s32)entry + 0x40) = *(u32*)((s32)vec3_802c1f58 + 0x20);
-    *(u32*)((s32)entry + 0x44) = *(u32*)((s32)vec3_802c1f58 + 0x24);
-    *(u32*)((s32)entry + 0x48) = *(u32*)((s32)vec3_802c1f58 + 0x28);
-    *(u32*)((s32)entry + 0x4C) = *(u32*)((s32)vec3_802c1f58 + 0x2C);
-    *(u32*)((s32)entry + 0x50) = *(u32*)((s32)vec3_802c1f58 + 0x30);
-    *(u32*)((s32)entry + 0x54) = *(u32*)((s32)vec3_802c1f58 + 0x34);
-    *(u32*)((s32)entry + 0x58) = *(u32*)((s32)vec3_802c1f58 + 0x38);
-    *(u32*)((s32)entry + 0x5C) = *(u32*)((s32)vec3_802c1f58 + 0x3C);
-    *(u32*)((s32)entry + 0x60) = *(u32*)((s32)vec3_802c1f58 + 0x40);
-    *(u32*)((s32)entry + 0x64) = *(u32*)((s32)vec3_802c1f58 + 0x44);
-    *(f32*)((s32)entry + 0x68) = float_1_804201c0;
-    *(f32*)((s32)entry + 0x6C) = float_1_804201c0;
-    *(u8*)((s32)entry + 4) = 4;
-    battle = *(s32*)((s32)gp + 0x14);
-    poseId = animPoseEntry(pAnimPoseName, ((u32)(-battle) | (u32)battle) >> 31);
-    *(s32*)((s32)entry + 0x70) = poseId;
-    animPosePeraOff(*(s32*)((s32)entry + 0x70));
-    strcpy(entry->animPoseName, pAnimPoseName);
-    animPoseSetAnim(*(s32*)((s32)entry + 0x70), &str_S_1_804201ec, 1);
-    animPoseSetMaterialLightFlagOn(*(s32*)((s32)entry + 0x70), 2);
-    mobjHitEntry(entry, 0);
-    *(s32*)((s32)entry + 0x19C) = -1;
-    return index;
-}
-
-void mobjDisp_OffscreenXLU(s32 param_1, void* entry) {
-    extern void sysWaitDrawSync(void);
-    extern void GXClearBoundingBox(void);
-    extern void GXReadBoundingBox(u16* top, u16* bottom, u16* left, u16* right);
-    extern void offscreenAddBoundingBox(s32 id, u16 top, u16 bottom, u16 left, u16 right);
-    extern void animSetPaperTexMtx(void* mtx, s32 a, s32 b);
-    extern void animSetPaperTexObj(void* texObj, s32 a, s32 b, s32 texMap,
-                                   s32 d, s32 e, s32 f, s32 g);
-    extern void animPoseDraw(s32 poseId, s32 mode, f32 x, f32 y, f32 z,
-                             f32 rotY, f32 scale);
-    extern f32 float_10_804201bc;
-    u16 top;
-    u16 bottom;
-    u16 left;
-    u16 right;
-    f32 scale;
-
-    sysWaitDrawSync();
-    GXClearBoundingBox();
-    if ((*(u32*)entry & 0x400) != 0) {
-        animSetPaperTexMtx((void*)((s32)entry + 0x20C), 0, 0);
-        animSetPaperTexObj((void*)((s32)entry + 0x1E8), 0, 0,
-                           *(s32*)((s32)entry + 0x208), 0, 0, 1, 1);
-    }
-
-    scale = float_10_804201bc * *(f32*)((s32)entry + 0x44);
-    animPoseDraw(*(s32*)((s32)entry + 0x70), 1,
-                 *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
-                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), scale);
-    animPoseDraw(*(s32*)((s32)entry + 0x70), 2,
-                 *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
-                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), scale);
-    animPoseDraw(*(s32*)((s32)entry + 0x70), 3,
-                 *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
-                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), scale);
-
-    if ((*(u32*)entry & 0x400) != 0) {
-        animSetPaperTexMtx(0, 0, 0);
-        animSetPaperTexObj(0, 0, 0, 0, 0, 0, 1, 1);
-    }
-    sysWaitDrawSync();
-    GXReadBoundingBox(&top, &bottom, &left, &right);
-    offscreenAddBoundingBox(*(s32*)((s32)entry + 0x19C), top, bottom, left, right);
-}
-
-void mobjDisp(s32 param_1, void* entry) {
-    extern void animSetPaperTexMtx(void* mtx, s32 a, s32 b);
-    extern void animSetPaperTexObj(void* texObj, s32 a, s32 b, s32 texMap, s32 d, s32 e, s32 f, s32 g);
-    extern void* dispGetCurWork(void);
-    extern void animPoseDraw(s32 poseId, s32 mode, f32 x, f32 y, f32 z, f32 rotY, f32 scale);
-    extern f32 float_10_804201bc;
-    s32 mode;
-
-    if (*(u32*)entry & 0x400) {
-        animSetPaperTexMtx((void*)((s32)entry + 0x20C), 0, 0);
-        animSetPaperTexObj((void*)((s32)entry + 0x1E8), 0, 0, *(s32*)((s32)entry + 0x208), 0, 0, 1, 1);
-    }
-
-    mode = *(u8*)((s32)dispGetCurWork() + 1);
-    if (mode == 0) {
-        animPoseDraw(*(s32*)((s32)entry + 0x70), 1, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
-                     *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
-    } else if (mode == 1) {
-        animPoseDraw(*(s32*)((s32)entry + 0x70), 2, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
-                     *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
-    } else {
-        animPoseDraw(*(s32*)((s32)entry + 0x70), 3, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
-                     *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
-    }
-
-    if (*(u32*)entry & 0x400) {
-        animSetPaperTexMtx(0, 0, 0);
-        animSetPaperTexObj(0, 0, 0, 0, 0, 0, 1, 1);
-    }
-}
-
-void mobjDispXLU(s32 param_1, void* entry) {
-    extern void animSetPaperTexMtx(void* mtx, s32 a, s32 b);
-    extern void animSetPaperTexObj(void* texObj, s32 a, s32 b, s32 texMap, s32 d, s32 e, s32 f, s32 g);
-    extern void animPoseDraw(s32 poseId, s32 mode, f32 x, f32 y, f32 z, f32 rotY, f32 scale);
-    extern f32 float_10_804201bc;
-
-    if (*(u32*)entry & 0x400) {
-        animSetPaperTexMtx((void*)((s32)entry + 0x20C), 0, 0);
-        animSetPaperTexObj((void*)((s32)entry + 0x1E8), 0, 0, *(s32*)((s32)entry + 0x208), 0, 0, 1, 1);
-    }
-
-    animPoseDraw(*(s32*)((s32)entry + 0x70), 1, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
-                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
-    animPoseDraw(*(s32*)((s32)entry + 0x70), 2, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
-                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
-    animPoseDraw(*(s32*)((s32)entry + 0x70), 3, *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
-                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), float_10_804201bc * *(f32*)((s32)entry + 0x44));
-
-    if (*(u32*)entry & 0x400) {
-        animSetPaperTexMtx(0, 0, 0);
-        animSetPaperTexObj(0, 0, 0, 0, 0, 0, 1, 1);
-    }
-}
-
-void mobjCalcMtx2(void* pMobj) {
-    typedef struct Vec3 {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec3;
-    typedef f32 Mtx34[3][4];
-    extern void PSVECAdd(Vec3* a, Vec3* b, Vec3* out);
-    extern void PSMTXTrans(Mtx34 m, f32 x, f32 y, f32 z);
-    extern void PSMTXScale(Mtx34 m, f32 x, f32 y, f32 z);
-    extern void PSMTXRotRad(Mtx34 m, char axis, f32 rad);
-    extern void PSMTXConcat(Mtx34 a, Mtx34 b, Mtx34 out);
-    extern void hitReCalcMatrix(void* hitEntry, Mtx34 mtx);
-    extern f32 float_deg2rad_804201cc;
-    Vec3 trans;
-    Mtx34 transMtx;
-    Mtx34 scaleMtx;
-    Mtx34 rotXMtx;
-    Mtx34 rotYMtx;
-    Mtx34 rotZMtx;
-    Mtx34 outMtx;
-    s32 i;
-
-    PSVECAdd((Vec3*)((s32)pMobj + 0x38), (Vec3*)((s32)pMobj + 0x190), &trans);
-    PSMTXTrans(transMtx, trans.x, trans.y, trans.z);
-    PSMTXScale(scaleMtx, *(f32*)((s32)pMobj + 0x184), *(f32*)((s32)pMobj + 0x188), *(f32*)((s32)pMobj + 0x18C));
-    PSMTXRotRad(rotXMtx, 'x', float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x50));
-    PSMTXRotRad(rotYMtx, 'y', float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x54));
-    PSMTXRotRad(rotZMtx, 'z', float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x58));
-    PSMTXConcat(transMtx, rotZMtx, transMtx);
-    PSMTXConcat(transMtx, rotYMtx, transMtx);
-    PSMTXConcat(transMtx, rotXMtx, transMtx);
-    PSMTXConcat(transMtx, scaleMtx, outMtx);
-
-    for (i = 0; i < 2; i++) {
-        if (*(void**)((s32)pMobj + 0x74) != 0) {
-            hitReCalcMatrix(*(void**)((s32)pMobj + 0x74), outMtx);
-        }
-        pMobj = (void*)((s32)pMobj + 0x88);
-    }
-}
-
-void mobjSetPosition(f32 posX, f32 posY, f32 posZ, char* mobjName) {
-    extern f32 float_0p1_804201e8;
-    extern s32 strcmp(const char* a, const char* b);
-    MobjSet* set;
-    s32 i;
-    void* entry;
-
-    if (koopaRunFlag != 0) {
-        set = &work.koopa;
-    } else {
-        set = &work.normal;
-        if (*(s32*)((s32)gp + 0x14) != 0) {
-            set = &work.alt;
-        }
-    }
-
-    entry = set->entries;
-    for (i = 0; i < set->count; i++, entry = (void*)((s32)entry + 0x23C)) {
-        if ((*(u32*)entry & 1) && strcmp((char*)((s32)entry + 5), mobjName) == 0) {
-            break;
-        }
-    }
-
-    *(f32*)((s32)entry + 0x38) = posX;
-    *(f32*)((s32)entry + 0x3C) = posY + float_0p1_804201e8;
-    *(f32*)((s32)entry + 0x40) = posZ;
-}
-
-void mobjDelete(char* name) {
-    extern s32 strcmp(const char* a, const char* b);
-    extern void marioResetHitObj(void* hitObj);
-    extern void hitDelete(void* hitObj);
-    MobjSet* set;
-    s32 i;
-    s32 j;
-    void* entry;
-    void* hitObj;
-
-    if (koopaRunFlag != 0) {
-        set = &work.koopa;
-    } else {
-        set = &work.normal;
-        if (*(s32*)((s32)gp + 0x14) != 0) {
-            set = &work.alt;
-        }
-    }
-
-    entry = set->entries;
-    for (i = 0; i < set->count; i++, entry = (void*)((s32)entry + 0x23C)) {
-        if ((*(u32*)entry & 1) && strcmp((char*)((s32)entry + 5), name) == 0) {
-            hitObj = (void*)((s32)entry + 0x78);
-            for (j = 0; j < 2; j++, hitObj = (void*)((s32)hitObj + 0x88)) {
-                if (hitObj != 0) {
-                    if (*(s32*)((s32)gp + 0x14) == 0) {
-                        marioResetHitObj(hitObj);
-                    }
-                    hitDelete(hitObj);
-                }
-            }
-            *(u32*)entry &= ~1U;
-            break;
-        }
-    }
-}
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void* mobjNameToPtrNoAssert(char* name) {
-    extern MobjWork work;
-    extern void* gp;
-    extern s32 koopaRunFlag;
-    extern s32 strcmp(const char* a, const char* b);
-    MobjSet* set;
-    s32 i;
-    s32 count;
-    void* entry;
-    if (koopaRunFlag != 0) {
-        set = &work.koopa;
-    } else {
-        set = &work.normal;
-        if (*(s32*)((s32)gp + 0x14) != 0) {
-            set = &work.alt;
-        }
-    }
-    count = set->count;
-    i = 0;
-    entry = set->entries;
-    while (i < count) {
-        if ((*(u32*)entry & 1) && strcmp((char*)((s32)entry + 5), name) == 0) {
-            break;
-        }
-        i++;
-        entry = (void*)((s32)entry + 0x23C);
-    }
-    if (i >= count) {
-        return 0;
-    }
-    return entry;
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void* mobjNameToPtr(char* name) {
-    extern MobjWork work;
-    extern void* gp;
-    extern s32 koopaRunFlag;
-    extern s32 strcmp(const char* a, const char* b);
-    MobjSet* set;
-    s32 count;
-    s32 i;
-    void* entry;
-    if (koopaRunFlag != 0) {
-        set = &work.koopa;
-    } else {
-        set = &work.normal;
-        if (*(s32*)((s32)gp + 0x14) != 0) {
-            set = &work.alt;
-        }
-    }
-    count = set->count;
-    i = 0;
-    entry = set->entries;
-    while (i < count) {
-        if ((*(u32*)entry & 1) && strcmp((char*)((s32)entry + 5), name) == 0) {
-            break;
-        }
-        i++;
-        entry = (void*)((s32)entry + 0x23C);
-    }
-    return entry;
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-s32 mobjCheckItemboxOpen(void* entry) {
-    extern s32 strcmp(const char* a, const char* b);
-    extern const char str_MOBJ_TreasureBox_802c1fe4[];
-    extern const char str_MOBJ_BigTreasureBox_802c1ff8[];
-    extern const char str_MOBJ_GrayTreasureBox_802c200c[];
-    extern const char str_MOBJ_BlackTreasureBo_802c2024[];
-
-    if (strcmp((char*)((s32)entry + 0x15), str_MOBJ_TreasureBox_802c1fe4) == 0 ||
-        strcmp((char*)((s32)entry + 0x15), str_MOBJ_BigTreasureBox_802c1ff8) == 0 ||
-        strcmp((char*)((s32)entry + 0x15), str_MOBJ_GrayTreasureBox_802c200c) == 0 ||
-        strcmp((char*)((s32)entry + 0x15), str_MOBJ_BlackTreasureBo_802c2024) == 0) {
-        return (*(s32*)((s32)entry + 0x1DC) == 99) + 1;
-    }
-    return 0;
-}
-
-void mobjInit(void) {
-    extern void* __memAlloc(s32 heap, u32 size);
-    s32 count;
-
-    count = 0x10;
-    work.normal.count = count;
-    work.normal.entries = __memAlloc(0, count * 0x23C);
-    memset(work.normal.entries, 0, work.normal.count * 0x23C);
-
-    count = 8;
-    work.alt.count = count;
-    work.alt.entries = __memAlloc(0, count * 0x23C);
-    memset(work.alt.entries, 0, work.alt.count * 0x23C);
-
-    koopaRunFlag = 0;
-}
-
-void mobjCalcMtx(void* pMobj) {
-    typedef struct Vec3 {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec3;
-    typedef f32 Mtx34[3][4];
-    typedef struct AnimBaseLocal {
-        s32 size;
-        char fileName[64];
-        char texFileName[64];
-        char buildTime[64];
-        s32 dispModeMask;
-        s32 radius;
-        s32 height;
-        Vec3 bboxMin;
-        Vec3 bboxMax;
-    } AnimBaseLocal;
-    extern void PSVECAdd(Vec3* a, Vec3* b, Vec3* out);
-    extern void* animPoseGetAnimBaseDataPtr(s32 poseId);
-    extern u32 strlen(const char* s);
-    extern s32 strncmp(const char* a, const char* b, u32 n);
-    extern void PSMTXTrans(Mtx34 m, f32 x, f32 y, f32 z);
-    extern void PSMTXScale(Mtx34 m, f32 x, f32 y, f32 z);
-    extern void PSMTXRotRad(Mtx34 m, char axis, f32 rad);
-    extern void PSMTXConcat(Mtx34 a, Mtx34 b, Mtx34 out);
-    extern void hitReCalcMatrix(void* hitEntry, Mtx34 mtx);
-    extern f32 __fabsf(f32 value);
-    extern f32 float_10_804201bc;
-    extern f32 float_0_804201b8;
-    extern f32 float_2p5_804201d8;
-    extern f32 float_deg2rad_804201cc;
-    extern const char str_HOBJ_804201d0[];
-    Vec3 trans;
-    Mtx34 transMtx;
-    Mtx34 scaleMtx;
-    Mtx34 rotXMtx;
-    Mtx34 rotYMtx;
-    Mtx34 rotZMtx;
-    Mtx34 outMtx;
-    AnimBaseLocal* base;
-    s32 i;
-
-    PSVECAdd((Vec3*)((s32)pMobj + 0x38), (Vec3*)((s32)pMobj + 0x190), &trans);
-    base = animPoseGetAnimBaseDataPtr(*(s32*)((s32)pMobj + 0x70));
-    *(f32*)((s32)pMobj + 0x184) = float_10_804201bc * *(f32*)((s32)pMobj + 0x44) * __fabsf(base->bboxMax.x - base->bboxMin.x);
-    *(f32*)((s32)pMobj + 0x188) = float_10_804201bc * *(f32*)((s32)pMobj + 0x48) * __fabsf(base->bboxMax.y);
-    *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * *(f32*)((s32)pMobj + 0x4C) * __fabsf(base->bboxMax.z - base->bboxMin.z);
-
-    if (strncmp(base->fileName, str_HOBJ_804201d0, strlen(str_HOBJ_804201d0)) == 0) {
-        *(f32*)((s32)pMobj + 0x198) = float_0_804201b8;
-        *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * float_2p5_804201d8 * *(f32*)((s32)pMobj + 0x4C);
-    }
-
-    PSMTXTrans(transMtx, trans.x, trans.y, trans.z);
-    PSMTXScale(scaleMtx, *(f32*)((s32)pMobj + 0x184), *(f32*)((s32)pMobj + 0x188), *(f32*)((s32)pMobj + 0x18C));
-    PSMTXRotRad(rotXMtx, 'x', float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x50));
-    PSMTXRotRad(rotYMtx, 'y', float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x54));
-    PSMTXRotRad(rotZMtx, 'z', float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x58));
-    PSMTXConcat(transMtx, rotZMtx, transMtx);
-    PSMTXConcat(transMtx, rotYMtx, transMtx);
-    PSMTXConcat(transMtx, rotXMtx, transMtx);
-    PSMTXConcat(transMtx, scaleMtx, outMtx);
-
-    for (i = 0; i < 2; i++) {
-        if (*(void**)((s32)pMobj + 0x74) != 0) {
-            hitReCalcMatrix(*(void**)((s32)pMobj + 0x74), outMtx);
-        }
-        pMobj = (void*)((s32)pMobj + 0x88);
-    }
-}
-
-u8 mobjHitEntry(void* pMobj, int param_2) {
-    typedef struct VecLocal {
-        f32 x;
-        f32 y;
-        f32 z;
-    } VecLocal;
-    extern void* animPoseGetAnimBaseDataPtr(s32);
-    extern void hitDelete(void*);
-    extern void PSVECAdd(VecLocal*, VecLocal*, VecLocal*);
-    extern void PSVECScale(VecLocal*, VecLocal*, double);
-    extern u32 strlen(const char*);
-    extern s32 strncmp(const char*, const char*, u32);
-    extern void PSMTXTrans(void*, double, double, double);
-    extern void PSMTXScale(void*, f32, f32, f32);
-    extern void PSMTXRotRad(void*, double, char);
-    extern void PSMTXConcat(void*, void*, void*);
-    extern void* memcpy(void*, const void*, u32);
-    extern char* strcpy(char*, const char*);
-    extern char* strcat(char*, const char*);
-    extern void* hitEntryMOBJ(void*, void*);
-    extern f32 float_0_804201b8;
-    extern f32 float_10_804201bc;
-    extern f32 float_deg2rad_804201cc;
-    extern f32 float_2p5_804201d8;
-    extern f32 float_0p5_804201f0;
-    extern const char str_HOBJ_804201d0[];
-    extern const char str_MOBJ_804201f4[];
-    extern const char str_MOBJ_804201fc[];
-    extern char headDJ[];
-    extern char cubeDJ[];
-    extern char frontDJ[];
-    extern char front2DJ[];
-    VecLocal min;
-    VecLocal max;
-    VecLocal pos;
-    f32 m0[3][4];
-    f32 m1[3][4];
-    f32 m2[3][4];
-    f32 m3[3][4];
-    f32 m4[3][4];
-    f32 result[3][4];
-    void* poseData;
-    void* hit;
-    void* scan;
-    s32 i;
-    f32 diff;
-
-    poseData = animPoseGetAnimBaseDataPtr(*(s32*)((s32)pMobj + 0x70));
-    min.x = *(f32*)((s32)poseData + 0xD0);
-    min.y = *(f32*)((s32)poseData + 0xD4);
-    min.z = *(f32*)((s32)poseData + 0xD8);
-    max.x = *(f32*)((s32)poseData + 0xDC);
-    max.y = *(f32*)((s32)poseData + 0xE0);
-    max.z = *(f32*)((s32)poseData + 0xE4);
-
-    scan = pMobj;
-    for (i = 0; i < 2; i++, scan = (void*)((s32)scan + 0x88)) {
-        if (*(void**)((s32)scan + 0x74) != 0) {
-            hitDelete((void*)((s32)scan + 0x78));
-        }
-    }
-
-    PSVECAdd(&max, &min, (VecLocal*)((s32)pMobj + 0x190));
-    PSVECScale((VecLocal*)((s32)pMobj + 0x190), (VecLocal*)((s32)pMobj + 0x190), (double)float_0p5_804201f0);
-    PSVECScale((VecLocal*)((s32)pMobj + 0x190), (VecLocal*)((s32)pMobj + 0x190), (double)float_10_804201bc);
-    *(f32*)((s32)pMobj + 0x194) = float_0_804201b8;
-    diff = max.x - min.x;
-    if (diff < 0.0f) {
-        diff = -diff;
-    }
-    *(f32*)((s32)pMobj + 0x184) = float_10_804201bc * *(f32*)((s32)pMobj + 0x44) * diff;
-    diff = max.y;
-    if (diff < 0.0f) {
-        diff = -diff;
-    }
-    *(f32*)((s32)pMobj + 0x188) = float_10_804201bc * *(f32*)((s32)pMobj + 0x48) * diff;
-    diff = max.z - min.z;
-    if (diff < 0.0f) {
-        diff = -diff;
-    }
-    *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * *(f32*)((s32)pMobj + 0x4C) * diff;
-    if (strncmp((const char*)((s32)poseData + 0), str_HOBJ_804201d0, strlen(str_HOBJ_804201d0)) == 0) {
-        *(f32*)((s32)pMobj + 0x198) = float_0_804201b8;
-        *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * float_2p5_804201d8 * *(f32*)((s32)pMobj + 0x4C);
-    }
-
-    if (param_2 >= 0 && param_2 < 3) {
-        PSVECAdd((VecLocal*)((s32)pMobj + 0x38), (VecLocal*)((s32)pMobj + 0x190), &pos);
-        PSMTXTrans(m0, (double)pos.x, (double)pos.y, (double)pos.z);
-        PSMTXScale(m1, *(f32*)((s32)pMobj + 0x184), *(f32*)((s32)pMobj + 0x188), *(f32*)((s32)pMobj + 0x18C));
-        PSMTXRotRad(m2, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x50)), 'x');
-        PSMTXRotRad(m3, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x54)), 'y');
-        PSMTXRotRad(m4, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x58)), 'z');
-        PSMTXConcat(m0, m4, m0);
-        PSMTXConcat(m0, m3, m0);
-        PSMTXConcat(m0, m2, m0);
-        PSMTXConcat(m0, m1, result);
-        if (param_2 == 1) {
-            memcpy((void*)((s32)pMobj + 0x90), headDJ, 0x68);
-            strcpy((char*)((s32)pMobj + 0x78), str_MOBJ_804201f4);
-            strcat((char*)((s32)pMobj + 0x78), (char*)((s32)pMobj + 5));
-            *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
-            hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
-            *(void**)((s32)pMobj + 0x74) = hit;
-            *(void**)((s32)hit + 0xD0) = pMobj;
-        } else if (param_2 == 0) {
-            memcpy((void*)((s32)pMobj + 0x90), cubeDJ, 0x68);
-            strcpy((char*)((s32)pMobj + 0x78), str_MOBJ_804201f4);
-            strcat((char*)((s32)pMobj + 0x78), (char*)((s32)pMobj + 5));
-            *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
-            hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
-            *(void**)((s32)pMobj + 0x74) = hit;
-            *(void**)((s32)hit + 0xD0) = pMobj;
-        } else {
-            memcpy((void*)((s32)pMobj + 0x90), frontDJ, 0x68);
-            strcpy((char*)((s32)pMobj + 0x78), str_MOBJ_804201f4);
-            strcat((char*)((s32)pMobj + 0x78), (char*)((s32)pMobj + 5));
-            *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
-            hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
-            *(void**)((s32)pMobj + 0x74) = hit;
-            *(void**)((s32)hit + 0xD0) = pMobj;
-            memcpy((void*)((s32)pMobj + 0x118), front2DJ, 0x68);
-            strcpy((char*)((s32)pMobj + 0x100), str_MOBJ_804201fc);
-            strcat((char*)((s32)pMobj + 0x100), (char*)((s32)pMobj + 5));
-            *(char**)((s32)pMobj + 0x118) = (char*)((s32)pMobj + 0x100);
-            hit = hitEntryMOBJ((void*)((s32)pMobj + 0x118), result);
-            *(void**)((s32)pMobj + 0xFC) = hit;
-            *(void**)((s32)hit + 0xD0) = pMobj;
-        }
-    }
-    return 0;
-}
-
-void* mobjRunEvent(void* pMobj, void* evtCode) {
-    extern s32 evtCheckID(s32 id);
-    extern void* evtEntryType(void* evtCode, s32 priority, s32 flags, s32 type);
-    void* event;
-
-    if (evtCode == 0) {
-        return 0;
-    }
-    if (evtCheckID(*(s32*)((s32)pMobj + 0x1CC)) != 0) {
-        return 0;
-    }
-    *(s32*)((s32)pMobj + 0x1CC) = 0;
-    event = evtEntryType(evtCode, 0x1E, 0, 0x1A);
-    *(void**)((s32)event + 0x174) = pMobj;
-    *(s32*)((s32)pMobj + 0x1CC) = *(s32*)((s32)event + 0x15C);
-    return event;
 }
 

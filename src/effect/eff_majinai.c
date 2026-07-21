@@ -22,46 +22,6 @@ extern f32 float_0_80428b24;
 extern f32 float_10_80428b28;
 extern f32 float_1_80428b3c;
 extern char str_Majinai_80302fa0[];
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void effMajinaiDisp(s32 cameraId, void* entry) {
-    u32 color;
-    u32 tempColor;
-    Mtx trans;
-    Mtx scaleMtx;
-    Mtx rot;
-    void* work = *(void**)((s32)entry + 0xC);
-    s32 poseId = *(s32*)((s32)work + 0x1C);
-    void* cam;
-    f32 scale;
-    f32 angle;
-
-    if (poseId != -1) {
-        PSMTXTrans(trans, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
-        scale = *(f32*)((s32)work + 0x10);
-        PSMTXScale(scaleMtx, scale, scale, scale);
-        cam = camGetPtr(cameraId);
-        angle = *(f32*)((s32)cam + 0x114);
-        angle = -angle;
-        PSMTXRotRad(rot, 0x79, float_deg2rad_80428b20 * angle);
-        PSMTXConcat(trans, rot, trans);
-        PSMTXConcat(trans, scaleMtx, trans);
-
-        animPoseSetMaterialFlagOn(*(s32*)((s32)work + 0x1C), 0x840);
-        tempColor = dat_80428b1c;
-        ((u8*)&tempColor)[3] = (u8)*(s32*)((s32)work + 0x14);
-        color = tempColor;
-        animPoseSetMaterialEvtColor(*(s32*)((s32)work + 0x1C), &color);
-        animPoseMain(*(s32*)((s32)work + 0x1C));
-        animPoseDrawMtx(*(s32*)((s32)work + 0x1C), trans, float_0_80428b24, 1, float_10_80428b28);
-        animPoseDrawMtx(*(s32*)((s32)work + 0x1C), trans, float_0_80428b24, 2, float_10_80428b28);
-        animPoseDrawMtx(*(s32*)((s32)work + 0x1C), trans, float_0_80428b24, 3, float_10_80428b28);
-    }
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effMajinaiEntry(f32 x, f32 y, f32 z, s32 type) {
@@ -104,7 +64,6 @@ void* effMajinaiEntry(f32 x, f32 y, f32 z, s32 type) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
 
 /* CHATGPT STUB FILL: main/effect/eff_majinai 20260624_185035 */
 
@@ -234,4 +193,43 @@ void effMajinaiMain(void* effect) {
     }
     dispEntry(4, 2, effMajinaiDisp, effect, dispCalcZ(pos));
 }
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void effMajinaiDisp(s32 cameraId, void* entry) {
+    u32 color;
+    u32 tempColor;
+    Mtx trans;
+    Mtx scaleMtx;
+    Mtx rot;
+    void* work = *(void**)((s32)entry + 0xC);
+    s32 poseId = *(s32*)((s32)work + 0x1C);
+    void* cam;
+    f32 scale;
+    f32 angle;
+
+    if (poseId != -1) {
+        PSMTXTrans(trans, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
+        scale = *(f32*)((s32)work + 0x10);
+        PSMTXScale(scaleMtx, scale, scale, scale);
+        cam = camGetPtr(cameraId);
+        angle = *(f32*)((s32)cam + 0x114);
+        angle = -angle;
+        PSMTXRotRad(rot, 0x79, float_deg2rad_80428b20 * angle);
+        PSMTXConcat(trans, rot, trans);
+        PSMTXConcat(trans, scaleMtx, trans);
+
+        animPoseSetMaterialFlagOn(*(s32*)((s32)work + 0x1C), 0x840);
+        tempColor = dat_80428b1c;
+        ((u8*)&tempColor)[3] = (u8)*(s32*)((s32)work + 0x14);
+        color = tempColor;
+        animPoseSetMaterialEvtColor(*(s32*)((s32)work + 0x1C), &color);
+        animPoseMain(*(s32*)((s32)work + 0x1C));
+        animPoseDrawMtx(*(s32*)((s32)work + 0x1C), trans, float_0_80428b24, 1, float_10_80428b28);
+        animPoseDrawMtx(*(s32*)((s32)work + 0x1C), trans, float_0_80428b24, 2, float_10_80428b28);
+        animPoseDrawMtx(*(s32*)((s32)work + 0x1C), trans, float_0_80428b24, 3, float_10_80428b28);
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 

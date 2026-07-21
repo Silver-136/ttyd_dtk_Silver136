@@ -31,6 +31,47 @@ s32 marioGetPlaneStatus(void) {
     return 1;
 }
 
+s32 mario_plane_cancel(void) {
+    extern void* marioGetPtr(void);
+    void* mario = marioGetPtr();
+    s32 state;
+    s32 result;
+
+    if (*(u16*)((s32)mario + 0x2E) != 0x18) {
+        result = 0;
+    } else {
+        state = *(s32*)((s32)mario + 0x44);
+        if (state >= 0xC && state < 0x14) {
+            *(s32*)((s32)mario + 0x44) = 0x32;
+            *(f32*)((s32)mario + 0x2C4) = *(f32*)((s32)mario + 0x90);
+            result = 1;
+        } else {
+            result = 0;
+        }
+    }
+    return result;
+}
+
+u8 marioForcePlaneAnime(void) {
+    extern void* marioGetPtr(void);
+    extern void marioPaperOff(void);
+    extern void marioChgPaper(void* paper);
+    extern s32 marioGetColor(void);
+    extern void marioPaperOn(void* paper);
+    extern void marioChgPose(void* pose);
+    extern void* paper_plane[4];
+    extern char str_PM_P_1B_802c4180[];
+    extern char str_M_Z_1_80420d88[6];
+    void* mario = marioGetPtr();
+
+    marioPaperOff();
+    marioChgPaper(0);
+    marioPaperOn(paper_plane[marioGetColor()]);
+    marioChgPaper(str_PM_P_1B_802c4180);
+    marioChgPose(str_M_Z_1_80420d88);
+    *(u32*)((s32)mario + 4) |= 8;
+}
+
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -800,6 +841,57 @@ check_flying:
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+
+void mot_plane_post(void) {
+    extern void* marioGetPtr(void);
+    extern void camFollowYOn(void);
+    extern void psndSFXOff(s32 id);
+    extern void marioPaperOff(void);
+    extern void marioChgPaper(s32 mode);
+    extern void marioAdjustMoveDir(void);
+    extern void __memFree(s32 heap, void* ptr);
+    extern void allPartyRideOff2(void);
+    extern u8 str_SFX_MARIO_AIRPLANE1_802c40d8[];
+    extern f32 float_20_80420d34;
+    extern f32 float_37_80420d38;
+    extern f32 float_0_80420d1c;
+    typedef struct Vec { u32 x, y, z; } Vec;
+    u8* data = str_SFX_MARIO_AIRPLANE1_802c40d8;
+    void* mario = marioGetPtr();
+    void* mario2;
+    void* plane;
+
+    camFollowYOn();
+    mario2 = marioGetPtr();
+    plane = *(void**)((s32)mario2 + 0x294);
+    if (plane != 0) {
+        s32 sound = *(s32*)((s32)plane + 0x28);
+        if ((u32)(sound + 0x10000) != 0xFFFF) {
+            psndSFXOff(sound);
+            *(s32*)((s32)*(void**)((s32)mario2 + 0x294) + 0x28) = -1;
+        }
+    }
+    mario2 = marioGetPtr();
+    *(f32*)((s32)mario2 + 0x1B8) = float_20_80420d34;
+    *(f32*)((s32)mario2 + 0x1BC) = float_37_80420d38;
+    *(Vec*)((s32)mario2 + 0xBC) = *(Vec*)(data + 0x50);
+    *(Vec*)((s32)mario2 + 0xB0) = *(Vec*)(data + 0x5C);
+    *(Vec*)((s32)mario2 + 0x98) = *(Vec*)(data + 0x68);
+    marioPaperOff();
+    marioChgPaper(0);
+    *(u32*)((s32)mario2 + 0x4) &= ~0x8;
+    *(u32*)((s32)mario2 + 0x0) |= 0x80;
+    marioAdjustMoveDir();
+    *(u32*)((s32)mario2 + 0x4) &= ~0x100;
+    *(f32*)((s32)mario + 0x138) = float_0_80420d1c;
+    *(f32*)((s32)mario + 0x140) = float_0_80420d1c;
+    plane = *(void**)((s32)mario + 0x294);
+    if (plane != 0) {
+        __memFree(0, plane);
+        *(void**)((s32)mario + 0x294) = 0;
+    }
+    allPartyRideOff2();
+}
 s32 chkCollision(s32* outAttr) {
     extern void* marioGetPtr(void);
     extern void sincosf(f32, f32*, f32*);
@@ -938,96 +1030,4 @@ s32 chkCollision(s32* outAttr) {
     }
 
     return hitAny;
-}
-
-void mot_plane_post(void) {
-    extern void* marioGetPtr(void);
-    extern void camFollowYOn(void);
-    extern void psndSFXOff(s32 id);
-    extern void marioPaperOff(void);
-    extern void marioChgPaper(s32 mode);
-    extern void marioAdjustMoveDir(void);
-    extern void __memFree(s32 heap, void* ptr);
-    extern void allPartyRideOff2(void);
-    extern u8 str_SFX_MARIO_AIRPLANE1_802c40d8[];
-    extern f32 float_20_80420d34;
-    extern f32 float_37_80420d38;
-    extern f32 float_0_80420d1c;
-    typedef struct Vec { u32 x, y, z; } Vec;
-    u8* data = str_SFX_MARIO_AIRPLANE1_802c40d8;
-    void* mario = marioGetPtr();
-    void* mario2;
-    void* plane;
-
-    camFollowYOn();
-    mario2 = marioGetPtr();
-    plane = *(void**)((s32)mario2 + 0x294);
-    if (plane != 0) {
-        s32 sound = *(s32*)((s32)plane + 0x28);
-        if ((u32)(sound + 0x10000) != 0xFFFF) {
-            psndSFXOff(sound);
-            *(s32*)((s32)*(void**)((s32)mario2 + 0x294) + 0x28) = -1;
-        }
-    }
-    mario2 = marioGetPtr();
-    *(f32*)((s32)mario2 + 0x1B8) = float_20_80420d34;
-    *(f32*)((s32)mario2 + 0x1BC) = float_37_80420d38;
-    *(Vec*)((s32)mario2 + 0xBC) = *(Vec*)(data + 0x50);
-    *(Vec*)((s32)mario2 + 0xB0) = *(Vec*)(data + 0x5C);
-    *(Vec*)((s32)mario2 + 0x98) = *(Vec*)(data + 0x68);
-    marioPaperOff();
-    marioChgPaper(0);
-    *(u32*)((s32)mario2 + 0x4) &= ~0x8;
-    *(u32*)((s32)mario2 + 0x0) |= 0x80;
-    marioAdjustMoveDir();
-    *(u32*)((s32)mario2 + 0x4) &= ~0x100;
-    *(f32*)((s32)mario + 0x138) = float_0_80420d1c;
-    *(f32*)((s32)mario + 0x140) = float_0_80420d1c;
-    plane = *(void**)((s32)mario + 0x294);
-    if (plane != 0) {
-        __memFree(0, plane);
-        *(void**)((s32)mario + 0x294) = 0;
-    }
-    allPartyRideOff2();
-}
-
-u8 marioForcePlaneAnime(void) {
-    extern void* marioGetPtr(void);
-    extern void marioPaperOff(void);
-    extern void marioChgPaper(void* paper);
-    extern s32 marioGetColor(void);
-    extern void marioPaperOn(void* paper);
-    extern void marioChgPose(void* pose);
-    extern void* paper_plane[4];
-    extern char str_PM_P_1B_802c4180[];
-    extern char str_M_Z_1_80420d88[6];
-    void* mario = marioGetPtr();
-
-    marioPaperOff();
-    marioChgPaper(0);
-    marioPaperOn(paper_plane[marioGetColor()]);
-    marioChgPaper(str_PM_P_1B_802c4180);
-    marioChgPose(str_M_Z_1_80420d88);
-    *(u32*)((s32)mario + 4) |= 8;
-}
-
-s32 mario_plane_cancel(void) {
-    extern void* marioGetPtr(void);
-    void* mario = marioGetPtr();
-    s32 state;
-    s32 result;
-
-    if (*(u16*)((s32)mario + 0x2E) != 0x18) {
-        result = 0;
-    } else {
-        state = *(s32*)((s32)mario + 0x44);
-        if (state >= 0xC && state < 0x14) {
-            *(s32*)((s32)mario + 0x44) = 0x32;
-            *(f32*)((s32)mario + 0x2C4) = *(f32*)((s32)mario + 0x90);
-            result = 1;
-        } else {
-            result = 0;
-        }
-    }
-    return result;
 }

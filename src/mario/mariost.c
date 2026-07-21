@@ -1,105 +1,5 @@
 #include "mario/mariost.h"
 
-s32 marioStGetSystemLevel(void) {
-    return *(s32*)((s32)gp + 0x18);
-}
-
-void marioStDisp(void) {
-    extern void camDraw(void);
-    extern s32 g_bFirstSmartAlloc;
-
-    camDraw();
-    g_bFirstSmartAlloc = 0;
-}
-
-
-u8 viPostCallback(s32 param_1) {
-    extern s64 OSGetTime(void);
-    extern s32 winCheck(void);
-    extern u32 battleDisableHResetCheck(void);
-    extern u32 OSGetResetButtonState(void);
-    extern u32 OSGetResetCode(void);
-    extern u32 keyGetButton(s32);
-    extern s32 DVDGetDriveStatus(void);
-    extern u8 gcRumbleCheck(void);
-    extern void psndMainInt(void);
-    s64 now;
-    s64 delta;
-    u32 buttons;
-
-    now = OSGetTime();
-    delta = now - *(s64*)((s32)gp + 0x30);
-    *(s64*)((s32)gp + 0x28) = delta;
-    *(s64*)((s32)gp + 0x20) += delta;
-    if (*(s64*)((s32)gp + 0x20) > ((s64)(*(u32*)0x800000F8 >> 2) * 359999999)) {
-        *(s64*)((s32)gp + 0x20) = (s64)(*(u32*)0x800000F8 >> 2) * 359999999;
-    }
-    if (*(s32*)((s32)gp + 0x10) == 0 && winCheck() == 0) {
-        if ((*(u32*)((s32)gp + 0x18) & 8) == 0) {
-            *(s64*)((s32)gp + 0x60) += *(s64*)((s32)gp + 0x28);
-        }
-        if ((*(u32*)((s32)gp + 0x18) & 4) == 0) {
-            *(s64*)((s32)gp + 0x58) += *(s64*)((s32)gp + 0x28);
-        }
-        if ((*(u32*)((s32)gp + 0x18) & 2) == 0) {
-            *(s64*)((s32)gp + 0x50) += *(s64*)((s32)gp + 0x28);
-        }
-        if ((*(u32*)((s32)gp + 0x18) & 1) == 0) {
-            *(s64*)((s32)gp + 0x48) += *(s64*)((s32)gp + 0x28);
-        }
-        *(s64*)((s32)gp + 0x38) += *(s64*)((s32)gp + 0x28);
-        if (*(s32*)((s32)gp + 0x14) == 0) {
-            *(s64*)((s32)gp + 0x40) += *(s64*)((s32)gp + 0x28);
-        }
-    }
-    *(s64*)((s32)gp + 0x30) = now;
-    *(s32*)((s32)gp + 0x1C) = param_1;
-    if (battleDisableHResetCheck() == 0) {
-        if (*(s32*)((s32)gp + 0x127C) == 0) {
-            if (OSGetResetButtonState() != 0) {
-                *(s32*)((s32)gp + 0x127C) = 1;
-            }
-        } else if (OSGetResetButtonState() == 0) {
-            *(s32*)((s32)gp + 0x1278) = 1;
-        }
-        if (*(s32*)((s32)gp + 0x1324) != 0) {
-            if ((s32)OSGetResetCode() < 0 && *(s32*)((s32)gp + 0x1290) == 0) {
-                buttons = keyGetButton(0);
-                if ((buttons & 0x1600) == 0x1600) {
-                    *(s32*)((s32)gp + 0x1278) = 0;
-                    gcRumbleCheck();
-                    psndMainInt();
-                    return 0;
-                }
-                *(s32*)((s32)gp + 0x1290) = 1;
-            }
-            buttons = keyGetButton(0);
-            if ((buttons & 0x1600) == 0x1600) {
-                if (*(s32*)((s32)gp + 0x1280) == 0) {
-                    *(s32*)((s32)gp + 0x1280) = 1;
-                    now = OSGetTime();
-                    *(s32*)((s32)gp + 0x1288) = (s32)(now >> 32);
-                    *(s32*)((s32)gp + 0x128C) = (s32)now;
-                }
-                now = OSGetTime();
-                if ((now - *(s64*)((s32)gp + 0x1288)) / (*(u32*)0x800000F8 / 4000) > 500) {
-                    *(s32*)((s32)gp + 0x1278) = 1;
-                }
-            } else {
-                *(s32*)((s32)gp + 0x1280) = 0;
-            }
-            if (DVDGetDriveStatus() == -1) {
-                *(s32*)((s32)gp + 0x1278) = 0;
-            }
-        }
-    } else {
-        *(s32*)((s32)gp + 0x127C) = 0;
-    }
-    gcRumbleCheck();
-    psndMainInt();
-    return 0;
-}
-
 void marioStInit(void) {
     extern u32 OSGetResetCode(void);
     extern void DEMOInit(void*);
@@ -276,70 +176,6 @@ void marioStInit(void) {
     }
 }
 
-u8 gcRumbleCheck(void) {
-    extern s64 OSGetTime(void);
-    extern u32 padGetRumbleStatus(s32);
-    s32 local_flags[4];
-    static s32 off_trg[4];
-    static s64 off_time[4];
-    s64 now;
-    s32 i;
-
-    local_flags[0] = 0;
-    local_flags[1] = 0;
-    local_flags[2] = 0;
-    local_flags[3] = 0;
-    now = OSGetTime();
-    for (i = 0; i < 4; i++) {
-        if (*(u8*)((s32)gp + 0x12E8 + i) == 0) {
-            if ((padGetRumbleStatus(i) & 0xFF) == 1) {
-                if (*(u8*)((s32)gp + 0x12C0 + i) == 0) {
-                    *(u8*)((s32)gp + 0x12C0 + i) = 1;
-                    *(s64*)((s32)gp + 0x12C8 + i * 8) = now;
-                }
-                if (((now - *(s64*)((s32)gp + 0x12C8 + i * 8)) /
-                     (*(u32*)0x800000F8 / 4000) > 30000) &&
-                    *(u8*)((s32)gp + 0x12EC + i) == 0) {
-                    *(u8*)((s32)gp + 0x12EC + i) = 1;
-                    *(u8*)((s32)gp + 0x12E8 + i) = 1;
-                    *(s64*)((s32)gp + 0x12F0 + i * 8) = now;
-                }
-                off_trg[i] = 0;
-            } else if (*(u8*)((s32)gp + 0x12C0 + i) != 0) {
-                if (off_trg[i] == 0) {
-                    off_time[i] = now;
-                    off_trg[i] = 1;
-                }
-                if (off_trg[i] != 0 &&
-                    (now - off_time[i]) / (*(u32*)0x800000F8 / 4000) > 100) {
-                    off_trg[i] = 0;
-                    *(u8*)((s32)gp + 0x12C0 + i) = 0;
-                }
-            }
-        } else {
-            if ((now - *(s64*)((s32)gp + 0x12F0 + i * 8)) /
-                (*(u32*)0x800000F8 / 4000) > 30000) {
-                *(u8*)((s32)gp + 0x12EC + i) = 0;
-                *(u8*)((s32)gp + 0x12E8 + i) = 0;
-                *(u8*)((s32)gp + 0x12C0 + i) = 0;
-            }
-            local_flags[i] = 1;
-        }
-        if (*(s32*)((s32)gp + 0x10) != 0) {
-            local_flags[i] = 1;
-        }
-        if (*(s32*)((s32)gp + 0x18) != 0) {
-            local_flags[i] = 1;
-        }
-        if (local_flags[i] == 0) {
-            *(u8*)((s32)gp + 0x1310 + i) = 0;
-        } else {
-            *(u8*)((s32)gp + 0x1310 + i) = 1;
-        }
-    }
-    return 0;
-}
-
 void marioStMain(void) {
     extern void OSYieldThread(void);
     extern void makeKey(void);
@@ -461,6 +297,143 @@ input_found:
     }
 }
 
+void marioStDisp(void) {
+    extern void camDraw(void);
+    extern s32 g_bFirstSmartAlloc;
+
+    camDraw();
+    g_bFirstSmartAlloc = 0;
+}
+
+void marioStSystemLevel(s32 level) {
+    extern s32 _mariostSystemLevel;
+    extern void evtStartAll(s32 mask);
+    extern void evtStopAll(s32 mask);
+
+    switch (level) {
+        case 0:
+            _mariostSystemLevel = level;
+            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) & ~0xF;
+            evtStartAll(0xEF);
+            break;
+        case 1:
+            _mariostSystemLevel = level;
+            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) & ~0xE;
+            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) | 1;
+            evtStopAll(1);
+            break;
+        case 2:
+            _mariostSystemLevel = level;
+            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) & ~0xC;
+            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) | 3;
+            evtStopAll(2);
+            break;
+        case 3:
+            _mariostSystemLevel = level;
+            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) & ~8;
+            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) | 7;
+            evtStopAll(0x10);
+            break;
+        case 4:
+            _mariostSystemLevel = level;
+            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) | 0xF;
+            evtStopAll(0xEF);
+            break;
+    }
+}
+
+s32 marioStGetSystemLevel(void) {
+    return *(s32*)((s32)gp + 0x18);
+}
+
+
+u8 viPostCallback(s32 param_1) {
+    extern s64 OSGetTime(void);
+    extern s32 winCheck(void);
+    extern u32 battleDisableHResetCheck(void);
+    extern u32 OSGetResetButtonState(void);
+    extern u32 OSGetResetCode(void);
+    extern u32 keyGetButton(s32);
+    extern s32 DVDGetDriveStatus(void);
+    extern u8 gcRumbleCheck(void);
+    extern void psndMainInt(void);
+    s64 now;
+    s64 delta;
+    u32 buttons;
+
+    now = OSGetTime();
+    delta = now - *(s64*)((s32)gp + 0x30);
+    *(s64*)((s32)gp + 0x28) = delta;
+    *(s64*)((s32)gp + 0x20) += delta;
+    if (*(s64*)((s32)gp + 0x20) > ((s64)(*(u32*)0x800000F8 >> 2) * 359999999)) {
+        *(s64*)((s32)gp + 0x20) = (s64)(*(u32*)0x800000F8 >> 2) * 359999999;
+    }
+    if (*(s32*)((s32)gp + 0x10) == 0 && winCheck() == 0) {
+        if ((*(u32*)((s32)gp + 0x18) & 8) == 0) {
+            *(s64*)((s32)gp + 0x60) += *(s64*)((s32)gp + 0x28);
+        }
+        if ((*(u32*)((s32)gp + 0x18) & 4) == 0) {
+            *(s64*)((s32)gp + 0x58) += *(s64*)((s32)gp + 0x28);
+        }
+        if ((*(u32*)((s32)gp + 0x18) & 2) == 0) {
+            *(s64*)((s32)gp + 0x50) += *(s64*)((s32)gp + 0x28);
+        }
+        if ((*(u32*)((s32)gp + 0x18) & 1) == 0) {
+            *(s64*)((s32)gp + 0x48) += *(s64*)((s32)gp + 0x28);
+        }
+        *(s64*)((s32)gp + 0x38) += *(s64*)((s32)gp + 0x28);
+        if (*(s32*)((s32)gp + 0x14) == 0) {
+            *(s64*)((s32)gp + 0x40) += *(s64*)((s32)gp + 0x28);
+        }
+    }
+    *(s64*)((s32)gp + 0x30) = now;
+    *(s32*)((s32)gp + 0x1C) = param_1;
+    if (battleDisableHResetCheck() == 0) {
+        if (*(s32*)((s32)gp + 0x127C) == 0) {
+            if (OSGetResetButtonState() != 0) {
+                *(s32*)((s32)gp + 0x127C) = 1;
+            }
+        } else if (OSGetResetButtonState() == 0) {
+            *(s32*)((s32)gp + 0x1278) = 1;
+        }
+        if (*(s32*)((s32)gp + 0x1324) != 0) {
+            if ((s32)OSGetResetCode() < 0 && *(s32*)((s32)gp + 0x1290) == 0) {
+                buttons = keyGetButton(0);
+                if ((buttons & 0x1600) == 0x1600) {
+                    *(s32*)((s32)gp + 0x1278) = 0;
+                    gcRumbleCheck();
+                    psndMainInt();
+                    return 0;
+                }
+                *(s32*)((s32)gp + 0x1290) = 1;
+            }
+            buttons = keyGetButton(0);
+            if ((buttons & 0x1600) == 0x1600) {
+                if (*(s32*)((s32)gp + 0x1280) == 0) {
+                    *(s32*)((s32)gp + 0x1280) = 1;
+                    now = OSGetTime();
+                    *(s32*)((s32)gp + 0x1288) = (s32)(now >> 32);
+                    *(s32*)((s32)gp + 0x128C) = (s32)now;
+                }
+                now = OSGetTime();
+                if ((now - *(s64*)((s32)gp + 0x1288)) / (*(u32*)0x800000F8 / 4000) > 500) {
+                    *(s32*)((s32)gp + 0x1278) = 1;
+                }
+            } else {
+                *(s32*)((s32)gp + 0x1280) = 0;
+            }
+            if (DVDGetDriveStatus() == -1) {
+                *(s32*)((s32)gp + 0x1278) = 0;
+            }
+        }
+    } else {
+        *(s32*)((s32)gp + 0x127C) = 0;
+    }
+    gcRumbleCheck();
+    psndMainInt();
+    return 0;
+}
+
 void gcDvdCheckThread(void) {
     extern s32 DVDGetDriveStatus(void);
     extern u32 VIGetRetraceCount(void);
@@ -563,6 +536,70 @@ void gcDvdCheckThread(void) {
     }
 }
 
+u8 gcRumbleCheck(void) {
+    extern s64 OSGetTime(void);
+    extern u32 padGetRumbleStatus(s32);
+    s32 local_flags[4];
+    static s32 off_trg[4];
+    static s64 off_time[4];
+    s64 now;
+    s32 i;
+
+    local_flags[0] = 0;
+    local_flags[1] = 0;
+    local_flags[2] = 0;
+    local_flags[3] = 0;
+    now = OSGetTime();
+    for (i = 0; i < 4; i++) {
+        if (*(u8*)((s32)gp + 0x12E8 + i) == 0) {
+            if ((padGetRumbleStatus(i) & 0xFF) == 1) {
+                if (*(u8*)((s32)gp + 0x12C0 + i) == 0) {
+                    *(u8*)((s32)gp + 0x12C0 + i) = 1;
+                    *(s64*)((s32)gp + 0x12C8 + i * 8) = now;
+                }
+                if (((now - *(s64*)((s32)gp + 0x12C8 + i * 8)) /
+                     (*(u32*)0x800000F8 / 4000) > 30000) &&
+                    *(u8*)((s32)gp + 0x12EC + i) == 0) {
+                    *(u8*)((s32)gp + 0x12EC + i) = 1;
+                    *(u8*)((s32)gp + 0x12E8 + i) = 1;
+                    *(s64*)((s32)gp + 0x12F0 + i * 8) = now;
+                }
+                off_trg[i] = 0;
+            } else if (*(u8*)((s32)gp + 0x12C0 + i) != 0) {
+                if (off_trg[i] == 0) {
+                    off_time[i] = now;
+                    off_trg[i] = 1;
+                }
+                if (off_trg[i] != 0 &&
+                    (now - off_time[i]) / (*(u32*)0x800000F8 / 4000) > 100) {
+                    off_trg[i] = 0;
+                    *(u8*)((s32)gp + 0x12C0 + i) = 0;
+                }
+            }
+        } else {
+            if ((now - *(s64*)((s32)gp + 0x12F0 + i * 8)) /
+                (*(u32*)0x800000F8 / 4000) > 30000) {
+                *(u8*)((s32)gp + 0x12EC + i) = 0;
+                *(u8*)((s32)gp + 0x12E8 + i) = 0;
+                *(u8*)((s32)gp + 0x12C0 + i) = 0;
+            }
+            local_flags[i] = 1;
+        }
+        if (*(s32*)((s32)gp + 0x10) != 0) {
+            local_flags[i] = 1;
+        }
+        if (*(s32*)((s32)gp + 0x18) != 0) {
+            local_flags[i] = 1;
+        }
+        if (local_flags[i] == 0) {
+            *(u8*)((s32)gp + 0x1310 + i) = 0;
+        } else {
+            *(u8*)((s32)gp + 0x1310 + i) = 1;
+        }
+    }
+    return 0;
+}
+
 void L_gcResetCheck(void) {
     extern s32 R_bReset;
     extern s32 DvdCheckTreadOn;
@@ -617,42 +654,5 @@ void L_gcResetCheck(void) {
             for (;;) {
             }
         }
-    }
-}
-
-void marioStSystemLevel(s32 level) {
-    extern s32 _mariostSystemLevel;
-    extern void evtStartAll(s32 mask);
-    extern void evtStopAll(s32 mask);
-
-    switch (level) {
-        case 0:
-            _mariostSystemLevel = level;
-            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) & ~0xF;
-            evtStartAll(0xEF);
-            break;
-        case 1:
-            _mariostSystemLevel = level;
-            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) & ~0xE;
-            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) | 1;
-            evtStopAll(1);
-            break;
-        case 2:
-            _mariostSystemLevel = level;
-            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) & ~0xC;
-            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) | 3;
-            evtStopAll(2);
-            break;
-        case 3:
-            _mariostSystemLevel = level;
-            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) & ~8;
-            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) | 7;
-            evtStopAll(0x10);
-            break;
-        case 4:
-            _mariostSystemLevel = level;
-            *(u32*)((s32)gp + 0x18) = *(u32*)((s32)gp + 0x18) | 0xF;
-            evtStopAll(0xEF);
-            break;
     }
 }

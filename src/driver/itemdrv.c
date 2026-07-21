@@ -9,60 +9,239 @@ extern void winMgrHelpDraw(void* win);
 extern s32 winMgrHelpMain(void* win);
 extern void* msgSearch(void* msgId);
 
-u32 itemStatus(void* item, u32 flags) {
-    return *(u32*)((s32)item + 0x38) & flags;
+void itemInit(void) {
+    extern void* __memAlloc(s32 heap, u32 size);
+    extern void* memset(void* ptr, s32 value, u32 size);
+    void* item;
+
+    *(s32*)work = 0x20;
+    item = __memAlloc(0, *(s32*)work * 0x98);
+    *(void**)(work + 4) = item;
+    memset(item, 0, *(s32*)work * 0x98);
+    *(s32*)(work + 8) = 0;
+    *(s32*)(work + 0x1C) = 0x20;
+    item = __memAlloc(0, *(s32*)(work + 0x1C) * 0x98);
+    *(void**)(work + 0x20) = item;
+    memset(item, 0, *(s32*)(work + 0x1C) * 0x98);
+    *(s32*)(work + 0x24) = 0;
+}
+void itemReInit(void) {
+    extern void pouchArriveBadge(s32 itemId);
+    extern void iconDelete(void* iconName);
+    extern void* memset(void* ptr, s32 value, u32 size);
+    void* workSet;
+    void* item;
+    s32 i;
+
+    workSet = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        workSet = (void*)((s32)workSet + 0x1C);
+    }
+    if (*(s32*)((s32)gp + 0x14) == 0) {
+        item = *(void**)((s32)workSet + 4);
+        for (i = 0; i < *(s32*)workSet; i++, item = (void*)((s32)item + 0x98)) {
+            u16 flags = *(u16*)item;
+            if ((flags & 1) != 0) {
+                s32 itemId = *(s32*)((s32)item + 4);
+                if (itemId >= 0xF0 && itemId < 0x153 && (flags & 0x100) != 0) {
+                    pouchArriveBadge(itemId);
+                }
+            }
+        }
+    }
+    item = *(void**)((s32)workSet + 4);
+    for (i = 0; i < *(s32*)workSet; i++, item = (void*)((s32)item + 0x98)) {
+        iconDelete((void*)((s32)item + 0xC));
+        *(u16*)item &= ~1;
+        memset((void*)((s32)item + 0xC), 0, 0x10);
+    }
 }
 
-u16 itemFlag(void* item, u32 flags) {
-    return *(u16*)item & flags;
+void itemCoinDrop(float* param_1) {
+    extern s32 pouchGetCoin(void);
+    extern void pouchAddCoin(s32 coin);
+    extern void* itemEntry(s32 name, s32 item, s32 mode, s32 script, s32 arg, f32 x, f32 y, f32 z);
+
+    void* item;
+
+    if (pouchGetCoin() > 0) {
+        pouchAddCoin(-1);
+        item = itemEntry(0, 0x79, 8, -1, 0, param_1[0], param_1[1], param_1[2]);
+        if (item != 0) {
+            *(u32*)((s32)item + 0x38) |= 0x40;
+        }
+    }
 }
 
-void itemStatusOn(void* item, u32 flags) {
-    *(u32*)((s32)item + 0x38) |= flags;
+s32 itemGetCheck(void* itemEntry) {
+    extern void* marioGetPtr(void);
+    extern s32 marioStGetSystemLevel(void);
+    extern s32 seqGetSeq(void);
+    extern s32 vivianGetStatus(void);
+    extern s32 nokonoko_holdItem(void);
+    extern s32 N_fbatPreventMarioEventChk(void);
+
+    void* player = marioGetPtr();
+    void* workSet;
+    void* item;
+    s32 count;
+    s32 mode;
+
+    if (itemEntry == 0) {
+        return 0;
+    }
+    if ((*(u32*)((s32)itemEntry + 0x38) & 0x100000) != 0) {
+        return 0;
+    }
+
+    if ((s32)*(u8*)((s32)player + 0x3C) == 2) {
+        if ((*(u32*)((s32)player + 0x14) & 1) == 0) {
+            if ((u32)marioStGetSystemLevel() != 0) {
+                return 0;
+            }
+            if ((*(u32*)player & 0xA) != 0) {
+                return 0;
+            }
+        }
+    } else {
+        if ((u32)marioStGetSystemLevel() != 0) {
+            return 0;
+        }
+        if ((*(u32*)player & 0xA) != 0) {
+            return 0;
+        }
+    }
+
+    if (*(s32*)((s32)gp + 0x164) != 0) {
+        return 0;
+    }
+    if (seqGetSeq() != 2) {
+        return 0;
+    }
+    if (*(u16*)((s32)player + 0x2E) == 0x19) {
+        return 0;
+    }
+    if (*(u16*)((s32)player + 0x2E) == 0x18) {
+        return 0;
+    }
+    if (vivianGetStatus() != 0) {
+        return 0;
+    }
+    if (*(u16*)((s32)player + 0x2E) == 0x1F || *(u16*)((s32)player + 0x2E) == 0x20) {
+        return 0;
+    }
+    if (nokonoko_holdItem() != 0) {
+        return 0;
+    }
+
+    workSet = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        workSet = (void*)((s32)work + 0x1C);
+    }
+
+    count = *(s32*)workSet;
+    item = *(void**)((s32)workSet + 4);
+    while (count > 0) {
+        if ((*(u16*)item & 1) != 0 && *(u16*)((s32)item + 0x24) == 2) {
+            return 0;
+        }
+        item = (void*)((s32)item + 0x98);
+        count--;
+    }
+
+    if (N_fbatPreventMarioEventChk() != 0) {
+        return 0;
+    }
+
+    mode = *(u16*)((s32)itemEntry + 0x24);
+    if (mode < 5) {
+        if (mode != 2) {
+            if (mode < 2) {
+                if (mode != 0) {
+                    return 1;
+                }
+            } else if ((*(u32*)((s32)itemEntry + 0x38) & 8) == 0) {
+                return 1;
+            }
+        }
+    } else {
+        if (mode == 7) {
+            return 1;
+        }
+        if (mode < 7 && *(u16*)((s32)itemEntry + 0x26) != 0 &&
+            (*(u32*)((s32)itemEntry + 0x38) & 4) == 0 &&
+            (*(u32*)((s32)itemEntry + 0x38) & 8) == 0) {
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
-void itemFlagOff(void* item, u32 flags) {
-    *(u16*)item &= ~flags;
-}
+u32 itemGetNokoCheck(void* itemEntry) {
+    extern void* marioGetPtr(void);
+    extern s32 marioStGetSystemLevel(void);
+    extern s32 seqGetSeq(void);
+    extern s32 vivianGetStatus(void);
+    extern s32 N_fbatPreventMarioEventChk(void);
 
-void itemFlagOn(void* item, u32 flags) {
-    *(u16*)item |= flags;
-}
+    void* player = marioGetPtr();
+    void* workSet;
+    void* item;
+    s32 count;
 
-void itemSetPosition(void* item, f32 x, f32 y, f32 z) {
-    *(f32*)((s32)item + 0x3C) = x;
-    *(f32*)((s32)item + 0x40) = y;
-    *(f32*)((s32)item + 0x44) = z;
-}
+    if (itemEntry == 0) {
+        return 0;
+    }
+    if ((*(u32*)((s32)itemEntry + 0x38) & 0x100000) != 0) {
+        return 0;
+    }
+    if ((u32)marioStGetSystemLevel() != 0) {
+        return 0;
+    }
+    if ((*(u32*)player & 0xA) != 0) {
+        return 0;
+    }
+    if ((*(u32*)((s32)itemEntry + 0x38) & 0x2000000) != 0) {
+        return 0;
+    }
+    if (*(s32*)((s32)gp + 0x164) != 0) {
+        return 0;
+    }
+    if (seqGetSeq() != 2) {
+        return 0;
+    }
+    if (*(u16*)((s32)player + 0x2E) == 0x19) {
+        return 0;
+    }
+    if (vivianGetStatus() != 0) {
+        return 0;
+    }
+    if (*(u16*)((s32)player + 0x2E) == 0x1F || *(u16*)((s32)player + 0x2E) == 0x20) {
+        return 0;
+    }
+    if ((u16)(*(u16*)((s32)player + 0x2E) - 5) <= 3 ||
+        *(u16*)((s32)player + 0x2E) == 0xF ||
+        *(u16*)((s32)player + 0x2E) == 0xE) {
+        return 0;
+    }
 
-void itemModeChange(void* item, u16 mode) {
-    *(u16*)((s32)item + 0x24) = mode;
-    *(u16*)((s32)item + 0x26) = 0;
-}
+    workSet = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        workSet = (void*)((s32)work + 0x1C);
+    }
 
-void itemPickUp(void* item) {
-    u32 status;
+    count = *(s32*)workSet;
+    item = *(void**)((s32)workSet + 4);
+    while (count > 0) {
+        if ((*(u16*)item & 1) != 0 && *(u16*)((s32)item + 0x24) == 2) {
+            return 0;
+        }
+        item = (void*)((s32)item + 0x98);
+        count--;
+    }
 
-    status = *(u32*)((s32)item + 0x38);
-    status |= 0x1000;
-    *(u32*)((s32)item + 0x38) = status;
-
-    *(u16*)((s32)item + 0x24) = 8;
-    *(u16*)((s32)item + 0x26) = 0;
-    *(s32*)((s32)item + 0x7C) = 0;
-    *(s32*)((s32)item + 0x78) = 0;
-
-    *(u32*)((s32)item + 0x38) &= ~0x100;
-}
-
-void itemForceGet(void* item) {
-    *(s32*)((s32)item + 0x7C) = 0;
-    *(s32*)((s32)item + 0x78) = 0;
-    *(u16*)((s32)item + 0x24) = 2;
-    *(u16*)((s32)item + 0x26) = 0;
-
-    *(u16*)item |= 0x1000;
-    *(u32*)((s32)item + 0x38) &= ~0x10000;
+    return N_fbatPreventMarioEventChk() == 0;
 }
 
 s32 N_itemPickUpFromFieldCheck(void) {
@@ -91,145 +270,6 @@ s32 N_itemPickUpFromFieldCheck(void) {
     }
 
     return 0;
-}
-
-void winHelpDisp(void* win) {
-    void* data;
-    s32 offset;
-
-    data = *(void**)((s32)win + 0x2C);
-
-    if (winMgrAction(*(void**)((s32)data + 0x2C)) == 0) {
-        offset = *(s32*)((s32)data + 0x4);
-        offset *= 0x28;
-
-        *(void**)((s32)win + 0x34) = msgSearch(
-            *(void**)((s32)itemDataTable + offset + 0x8)
-        );
-
-        winMgrHelpDraw(win);
-    }
-}
-
-s32 winHelpMain(void* win) {
-    return winMgrHelpMain(win);
-}
-
-
-s32 itemEntry(s32 nameArg, s32 itemId, s32 mode, s32 collectExpr, s32 script, f32 x, f32 y, f32 z) {
-    extern void* gp;
-    extern u8 work[];
-    extern u8 itemDataTable[];
-    extern u32 swGet(s32 id);
-    extern u32 _swGet(s32 id);
-    extern s32 sprintf(char* dst, char* fmt, ...);
-    extern s32 strcmp(char* a, char* b);
-    extern void* memset(void* dst, s32 value, u32 size);
-    extern char* strcpy(char* dst, char* src);
-    extern void* effStarStoneEntry(f64 x, f64 y, f64 z, f64 scale, s32 type);
-    extern void iconEntry(char* name, u16 icon);
-    extern void iconSetPos(f64 x, f64 y, f64 z, char* name);
-    extern void iconSetScale(f64 scale, char* name);
-    extern void iconSetAlpha(char* name, u8 alpha);
-    extern f32 float_1_804210bc;
-    extern f32 float_16_804210e0;
-    extern char str_iPCT05x_802c9258;
-
-    void* workSet = work;
-    void* entry;
-    char generated[12];
-    char* name = (char*)nameArg;
-    s32 count;
-    s32 i;
-    s32 collectedBySw = 0;
-    s32 collectedByLocal = 0;
-
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        workSet = (void*)((s32)workSet + 0x1C);
-    }
-    if (collectExpr != -1) {
-        if (collectExpr >= -130000000 && collectExpr <= -120000000) {
-            collectedBySw = 1;
-            collectExpr += 130000000;
-            if (swGet(collectExpr) != 0) return 0;
-        } else if (collectExpr > -110000001 && collectExpr < -99999999) {
-            collectedByLocal = 1;
-            collectExpr += 110000000;
-            if (_swGet(collectExpr) != 0) return 0;
-        }
-    }
-    if (name == 0) {
-        s32 serial = *(s32*)((s32)workSet + 8) + 1;
-        if (serial > 0xFFFFE) serial = 1;
-        *(s32*)((s32)workSet + 8) = serial;
-        sprintf(generated, &str_iPCT05x_802c9258, serial);
-        name = generated;
-    }
-
-    count = *(s32*)workSet;
-    entry = *(void**)((s32)workSet + 4);
-    for (i = 0; i < count; i++, entry = (void*)((s32)entry + 0x98)) {
-        if ((*(u16*)entry & 1) == 0) break;
-        if ((*(u16*)entry & 0x10000) != 0 && strcmp((char*)((s32)entry + 0xC), name) == 0) break;
-    }
-    if (i >= count) return 0;
-
-    memset(entry, 0, 0x98);
-    strcpy((char*)((s32)entry + 0xC), name);
-    *(f32*)((s32)entry + 0x3C) = x;
-    *(f32*)((s32)entry + 0x40) = y;
-    *(f32*)((s32)entry + 0x44) = z;
-    *(s32*)((s32)entry + 0x4) = itemId;
-    *(s16*)((s32)entry + 2) = mode;
-    *(void**)((s32)entry + 0x20) = (void*)script;
-    *(u16*)entry |= 1;
-    *(f32*)((s32)entry + 0x48) = float_1_804210bc;
-    *(u8*)((s32)entry + 0x54) = 0xFF;
-    if (collectExpr == -1) {
-        *(s32*)((s32)entry + 8) = -1;
-    } else if (collectedBySw) {
-        *(s32*)((s32)entry + 8) = collectExpr;
-        *(u16*)entry |= 0x20;
-    } else if (collectedByLocal) {
-        *(s32*)((s32)entry + 8) = collectExpr;
-        *(u16*)entry |= 0x40;
-    }
-
-    if (itemId > 0x71 && itemId < 0x79) {
-        *(void**)((s32)entry + 0x84) = effStarStoneEntry(x, y + float_16_804210e0, z, float_1_804210bc, itemId - 0x72);
-    } else {
-        *(void**)((s32)entry + 0x84) = 0;
-        iconEntry((char*)((s32)entry + 0xC), *(u16*)((s32)itemDataTable + itemId * 0x28 + 0x20));
-        iconSetPos(x, y, z, (char*)((s32)entry + 0xC));
-        iconSetScale(*(f32*)((s32)entry + 0x48), (char*)((s32)entry + 0xC));
-        iconSetAlpha((char*)((s32)entry + 0xC), *(u8*)((s32)entry + 0x54));
-    }
-    *(f32*)((s32)entry + 0x58) = float_1_804210bc;
-    *(f32*)((s32)entry + 0x5C) = float_1_804210bc;
-    if (itemId > 0x78 && itemId < 0x7D) *(u16*)entry |= 0x80;
-
-    *(u16*)((s32)entry + 0x24) = 1;
-    *(u16*)((s32)entry + 0x26) = 0;
-    switch ((u16)mode) {
-        case 1: *(u16*)entry |= 2; break;
-        case 2: *(u16*)((s32)entry + 0x24) = 5; break;
-        case 3: *(s32*)((s32)entry + 0x68) = 0; *(s32*)((s32)entry + 0x6C) = 5000; *(u16*)((s32)entry + 0x24) = 5; break;
-        case 4: *(u16*)((s32)entry + 0x24) = 6; break;
-        case 6: *(u32*)((s32)entry + 0x38) |= 0x40; goto timer5000;
-        case 7: *(u32*)((s32)entry + 0x38) |= 0x4000;
-        case 5:
-timer5000: *(s32*)((s32)entry + 0x68) = 0; *(s32*)((s32)entry + 0x6C) = 5000; *(u16*)((s32)entry + 0x24) = 6; break;
-        case 9: *(u16*)entry |= 0x100;
-        case 8: *(u32*)((s32)entry + 0x38) |= 0x4000; *(s32*)((s32)entry + 0x68) = 0; *(s32*)((s32)entry + 0x6C) = 8000; *(u16*)((s32)entry + 0x24) = 6; break;
-        case 10: *(u16*)entry |= 0x400; *(u32*)((s32)entry + 0x38) |= 0x4000; *(s32*)((s32)entry + 0x68) = 0; *(s32*)((s32)entry + 0x6C) = 8000; *(u16*)((s32)entry + 0x24) = 6; break;
-        case 11: case 12: *(u32*)((s32)entry + 0x38) |= 0x4000; *(s32*)((s32)entry + 0x68) = 0; *(s32*)((s32)entry + 0x6C) = 20000; *(u16*)((s32)entry + 0x24) = 6; if (mode == 12) *(u16*)entry |= 0x400; break;
-        case 13: *(u16*)((s32)entry + 0x24) = 3; break;
-        case 14: *(u16*)((s32)entry + 0x24) = 4; break;
-        case 15: *(u16*)((s32)entry + 0x24) = 10; break;
-        case 17: *(u16*)entry |= 2;
-        case 16: *(u16*)((s32)entry + 0x24) = 7; break;
-    }
-    return (s32)entry;
 }
 
 u8 itemMain(void) {
@@ -349,48 +389,184 @@ u8 itemMain(void) {
     return 0;
 }
 
-s32 itemHitCheckSide(f64 moveX, f64 moveZ, s32 item, f32* outX, f32* outZ, s32* outAngle) {
-    extern f64 angleABf(f64, f64, f64, f64);
-    extern void sincosf(f32, f32*, f32*);
-    extern s32 hitCheckFilter(f64, f64, f64, f64, f64, f64, s32, void*, void*, void*, void*, void*, void*, void*);
-    extern f64 reviseAngle(f64);
-    extern f64 sqrt(f64);
-    extern f32 float_0_804210b4, float_10_804210c8, float_15_804210cc;
-    extern f32 float_0p5_804210d0, float_180_804210d4, float_100_804210d8;
-    f32 sinv, cosv, radius, normalX, normalZ, hitX, hitY, hitZ, length;
-    u32 hitWork[2];
-    f64 dot, incoming, normalAngle;
-    s32 hit;
+void itemModeChange(void* item, u16 mode) {
+    *(u16*)((s32)item + 0x24) = mode;
+    *(u16*)((s32)item + 0x26) = 0;
+}
 
-    *outX = *(f32*)(item + 0x3C);
-    *outZ = *(f32*)(item + 0x44);
-    if (moveX == float_0_804210b4 && moveZ == float_0_804210b4) return 0;
-    sincosf((f32)angleABf(float_0_804210b4, float_0_804210b4, moveX, moveZ), &sinv, &cosv);
-    length = (f32)sqrt(moveX * moveX + (f64)(f32)(moveZ * moveZ));
-    radius = float_10_804210c8 + length;
-    hit = hitCheckFilter(*(f32*)(item + 0x3C), *(f32*)(item + 0x40) + float_15_804210cc,
-                         *(f32*)(item + 0x44), sinv, float_0_804210b4, cosv, 0,
-                         hitWork, &hitX, &hitY, &radius, &normalX, &hitZ, &normalZ);
-    if (hit == 0) {
-        radius = float_10_804210c8 + length;
-        hit = hitCheckFilter(*(f32*)(item + 0x3C), *(f32*)(item + 0x40) + float_15_804210cc,
-                             *(f32*)(item + 0x44), sinv, float_0_804210b4, cosv, 0,
-                             hitWork, &hitX, &hitY, &radius, &normalX, &hitZ, &normalZ);
-        if (hit == 0) {
-            *outX += (f32)moveX;
-            *outZ += (f32)moveZ;
-            return 0;
+
+s32 itemEntry(s32 nameArg, s32 itemId, s32 mode, s32 collectExpr, s32 script, f32 x, f32 y, f32 z) {
+    extern void* gp;
+    extern u8 work[];
+    extern u8 itemDataTable[];
+    extern u32 swGet(s32 id);
+    extern u32 _swGet(s32 id);
+    extern s32 sprintf(char* dst, char* fmt, ...);
+    extern s32 strcmp(char* a, char* b);
+    extern void* memset(void* dst, s32 value, u32 size);
+    extern char* strcpy(char* dst, char* src);
+    extern void* effStarStoneEntry(f64 x, f64 y, f64 z, f64 scale, s32 type);
+    extern void iconEntry(char* name, u16 icon);
+    extern void iconSetPos(f64 x, f64 y, f64 z, char* name);
+    extern void iconSetScale(f64 scale, char* name);
+    extern void iconSetAlpha(char* name, u8 alpha);
+    extern f32 float_1_804210bc;
+    extern f32 float_16_804210e0;
+    extern char str_iPCT05x_802c9258;
+
+    void* workSet = work;
+    void* entry;
+    char generated[12];
+    char* name = (char*)nameArg;
+    s32 count;
+    s32 i;
+    s32 collectedBySw = 0;
+    s32 collectedByLocal = 0;
+
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        workSet = (void*)((s32)workSet + 0x1C);
+    }
+    if (collectExpr != -1) {
+        if (collectExpr >= -130000000 && collectExpr <= -120000000) {
+            collectedBySw = 1;
+            collectExpr += 130000000;
+            if (swGet(collectExpr) != 0) return 0;
+        } else if (collectExpr > -110000001 && collectExpr < -99999999) {
+            collectedByLocal = 1;
+            collectExpr += 110000000;
+            if (_swGet(collectExpr) != 0) return 0;
         }
     }
-    dot = moveX * normalX + (f64)(f32)(moveZ * normalZ);
-    *outX += float_0p5_804210d0 * -(f32)(dot * normalX - moveX);
-    *outZ += float_0p5_804210d0 * -(f32)(dot * normalZ - moveZ);
-    incoming = reviseAngle(float_180_804210d4 + (f32)*outAngle);
-    normalAngle = reviseAngle(angleABf(float_0_804210b4, float_0_804210b4,
-                                      float_100_804210d8 * normalX, float_100_804210d8 * normalZ));
-    incoming = reviseAngle((f32)(normalAngle - incoming));
-    *outAngle = (s32)reviseAngle((f32)(normalAngle + incoming));
-    return hit;
+    if (name == 0) {
+        s32 serial = *(s32*)((s32)workSet + 8) + 1;
+        if (serial > 0xFFFFE) serial = 1;
+        *(s32*)((s32)workSet + 8) = serial;
+        sprintf(generated, &str_iPCT05x_802c9258, serial);
+        name = generated;
+    }
+
+    count = *(s32*)workSet;
+    entry = *(void**)((s32)workSet + 4);
+    for (i = 0; i < count; i++, entry = (void*)((s32)entry + 0x98)) {
+        if ((*(u16*)entry & 1) == 0) break;
+        if ((*(u16*)entry & 0x10000) != 0 && strcmp((char*)((s32)entry + 0xC), name) == 0) break;
+    }
+    if (i >= count) return 0;
+
+    memset(entry, 0, 0x98);
+    strcpy((char*)((s32)entry + 0xC), name);
+    *(f32*)((s32)entry + 0x3C) = x;
+    *(f32*)((s32)entry + 0x40) = y;
+    *(f32*)((s32)entry + 0x44) = z;
+    *(s32*)((s32)entry + 0x4) = itemId;
+    *(s16*)((s32)entry + 2) = mode;
+    *(void**)((s32)entry + 0x20) = (void*)script;
+    *(u16*)entry |= 1;
+    *(f32*)((s32)entry + 0x48) = float_1_804210bc;
+    *(u8*)((s32)entry + 0x54) = 0xFF;
+    if (collectExpr == -1) {
+        *(s32*)((s32)entry + 8) = -1;
+    } else if (collectedBySw) {
+        *(s32*)((s32)entry + 8) = collectExpr;
+        *(u16*)entry |= 0x20;
+    } else if (collectedByLocal) {
+        *(s32*)((s32)entry + 8) = collectExpr;
+        *(u16*)entry |= 0x40;
+    }
+
+    if (itemId > 0x71 && itemId < 0x79) {
+        *(void**)((s32)entry + 0x84) = effStarStoneEntry(x, y + float_16_804210e0, z, float_1_804210bc, itemId - 0x72);
+    } else {
+        *(void**)((s32)entry + 0x84) = 0;
+        iconEntry((char*)((s32)entry + 0xC), *(u16*)((s32)itemDataTable + itemId * 0x28 + 0x20));
+        iconSetPos(x, y, z, (char*)((s32)entry + 0xC));
+        iconSetScale(*(f32*)((s32)entry + 0x48), (char*)((s32)entry + 0xC));
+        iconSetAlpha((char*)((s32)entry + 0xC), *(u8*)((s32)entry + 0x54));
+    }
+    *(f32*)((s32)entry + 0x58) = float_1_804210bc;
+    *(f32*)((s32)entry + 0x5C) = float_1_804210bc;
+    if (itemId > 0x78 && itemId < 0x7D) *(u16*)entry |= 0x80;
+
+    *(u16*)((s32)entry + 0x24) = 1;
+    *(u16*)((s32)entry + 0x26) = 0;
+    switch ((u16)mode) {
+        case 1: *(u16*)entry |= 2; break;
+        case 2: *(u16*)((s32)entry + 0x24) = 5; break;
+        case 3: *(s32*)((s32)entry + 0x68) = 0; *(s32*)((s32)entry + 0x6C) = 5000; *(u16*)((s32)entry + 0x24) = 5; break;
+        case 4: *(u16*)((s32)entry + 0x24) = 6; break;
+        case 6: *(u32*)((s32)entry + 0x38) |= 0x40; goto timer5000;
+        case 7: *(u32*)((s32)entry + 0x38) |= 0x4000;
+        case 5:
+timer5000: *(s32*)((s32)entry + 0x68) = 0; *(s32*)((s32)entry + 0x6C) = 5000; *(u16*)((s32)entry + 0x24) = 6; break;
+        case 9: *(u16*)entry |= 0x100;
+        case 8: *(u32*)((s32)entry + 0x38) |= 0x4000; *(s32*)((s32)entry + 0x68) = 0; *(s32*)((s32)entry + 0x6C) = 8000; *(u16*)((s32)entry + 0x24) = 6; break;
+        case 10: *(u16*)entry |= 0x400; *(u32*)((s32)entry + 0x38) |= 0x4000; *(s32*)((s32)entry + 0x68) = 0; *(s32*)((s32)entry + 0x6C) = 8000; *(u16*)((s32)entry + 0x24) = 6; break;
+        case 11: case 12: *(u32*)((s32)entry + 0x38) |= 0x4000; *(s32*)((s32)entry + 0x68) = 0; *(s32*)((s32)entry + 0x6C) = 20000; *(u16*)((s32)entry + 0x24) = 6; if (mode == 12) *(u16*)entry |= 0x400; break;
+        case 13: *(u16*)((s32)entry + 0x24) = 3; break;
+        case 14: *(u16*)((s32)entry + 0x24) = 4; break;
+        case 15: *(u16*)((s32)entry + 0x24) = 10; break;
+        case 17: *(u16*)entry |= 2;
+        case 16: *(u16*)((s32)entry + 0x24) = 7; break;
+    }
+    return (s32)entry;
+}
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void itemDelete(void* name) {
+    extern s32 strcmp(const char* a, const char* b);
+    extern void pouchArriveBadge(s32 itemId);
+    extern void effSoftDelete(void* eff);
+    extern void iconDelete(void* iconName);
+    void* workSet;
+    void* item;
+    s32 i;
+
+    workSet = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        workSet = (void*)((s32)workSet + 0x1C);
+    }
+    item = *(void**)((s32)workSet + 4);
+    for (i = 0; i < *(s32*)workSet; i++, item = (void*)((s32)item + 0x98)) {
+        if (strcmp((char*)((s32)item + 0xC), name) == 0) {
+            if (*(s32*)((s32)gp + 0x14) == 0) {
+                s32 itemId = *(s32*)((s32)item + 4);
+                if (itemId >= 0xF0 && itemId < 0x153 && (*(u16*)item & 0x100) != 0) {
+                    pouchArriveBadge(itemId);
+                }
+            }
+            if (*(s32*)((s32)item + 4) >= 0x72 && *(s32*)((s32)item + 4) < 0x79) {
+                effSoftDelete(*(void**)((s32)item + 0x1C));
+            } else {
+                iconDelete((void*)((s32)item + 0xC));
+            }
+            *(u16*)item &= ~1;
+        }
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+void* itemNameToPtr(s32 name) {
+    extern s32 strcmp(const char* a, const char* b);
+    void* workSet;
+    void* gpWork;
+    void* item;
+    s32 i;
+
+    workSet = work;
+    gpWork = gp;
+    if (*(s32*)((s32)gpWork + 0x14) != 0) {
+        workSet = (void*)((s32)workSet + 0x1C);
+    }
+    item = *(void**)((s32)workSet + 4);
+    for (i = 0; i < *(s32*)workSet; i++, item = (void*)((s32)item + 0x98)) {
+        if (strcmp((char*)((s32)item + 0xC), (char*)name) == 0) {
+            return item;
+        }
+    }
+    return 0;
 }
 
 void* itemHitCheck(f64 posX, f64 posY, f64 posZ, f64 radius) {
@@ -481,6 +657,61 @@ void* itemHitCheck(f64 posX, f64 posY, f64 posZ, f64 radius) {
     }
 
     return best;
+}
+
+void* itemNearDistCheck(float posX, float posY, float posZ, float maxDist) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+
+    extern void* marioGetPtr(void);
+    extern void PSVECSubtract(void* a, void* b, void* out);
+    extern f32 PSVECMag(void* v);
+
+    void* workSet;
+    void* item;
+    void* nearest;
+    Vec3 pos;
+    Vec3 itemPos;
+    Vec3 delta;
+    f32 dist;
+    s32 i;
+
+    marioGetPtr();
+
+    workSet = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        workSet = (void*)((s32)workSet + 0x1C);
+    }
+
+    item = *(void**)((s32)workSet + 4);
+    nearest = 0;
+
+    pos.x = posX;
+    pos.y = posY;
+    pos.z = posZ;
+
+    for (i = 0; i < *(s32*)workSet; i++, item = (void*)((s32)item + 0x98)) {
+        if ((*(u16*)item & 1) != 0) {
+            u32 status = *(u32*)((s32)item + 0x38);
+            if ((status & 0x1000) == 0 && (status & 0x100000) == 0 &&
+                *(u16*)((s32)item + 0x24) != 2 && (status & 0x2000000) == 0) {
+                itemPos.x = *(f32*)((s32)item + 0x3C);
+                itemPos.y = *(f32*)((s32)item + 0x40);
+                itemPos.z = *(f32*)((s32)item + 0x44);
+                PSVECSubtract(&itemPos, &pos, &delta);
+                dist = PSVECMag(&delta);
+                if (dist < maxDist) {
+                    nearest = item;
+                    maxDist = dist;
+                }
+            }
+        }
+    }
+
+    return nearest;
 }
 
 void winNameDisp(int param_1) {
@@ -576,125 +807,67 @@ u8 winNameDisp2(int param_1) {
     return 0;
 }
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void itemDelete(void* name) {
-    extern s32 strcmp(const char* a, const char* b);
-    extern void pouchArriveBadge(s32 itemId);
-    extern void effSoftDelete(void* eff);
-    extern void iconDelete(void* iconName);
-    void* workSet;
-    void* item;
-    s32 i;
-
-    workSet = work;
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        workSet = (void*)((s32)workSet + 0x1C);
-    }
-    item = *(void**)((s32)workSet + 4);
-    for (i = 0; i < *(s32*)workSet; i++, item = (void*)((s32)item + 0x98)) {
-        if (strcmp((char*)((s32)item + 0xC), name) == 0) {
-            if (*(s32*)((s32)gp + 0x14) == 0) {
-                s32 itemId = *(s32*)((s32)item + 4);
-                if (itemId >= 0xF0 && itemId < 0x153 && (*(u16*)item & 0x100) != 0) {
-                    pouchArriveBadge(itemId);
-                }
-            }
-            if (*(s32*)((s32)item + 4) >= 0x72 && *(s32*)((s32)item + 4) < 0x79) {
-                effSoftDelete(*(void**)((s32)item + 0x1C));
-            } else {
-                iconDelete((void*)((s32)item + 0xC));
-            }
-            *(u16*)item &= ~1;
-        }
-    }
+s32 winHelpMain(void* win) {
+    return winMgrHelpMain(win);
 }
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
 
-void itemReInit(void) {
-    extern void pouchArriveBadge(s32 itemId);
-    extern void iconDelete(void* iconName);
-    extern void* memset(void* ptr, s32 value, u32 size);
-    void* workSet;
-    void* item;
-    s32 i;
+void winHelpDisp(void* win) {
+    void* data;
+    s32 offset;
 
-    workSet = work;
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        workSet = (void*)((s32)workSet + 0x1C);
-    }
-    if (*(s32*)((s32)gp + 0x14) == 0) {
-        item = *(void**)((s32)workSet + 4);
-        for (i = 0; i < *(s32*)workSet; i++, item = (void*)((s32)item + 0x98)) {
-            u16 flags = *(u16*)item;
-            if ((flags & 1) != 0) {
-                s32 itemId = *(s32*)((s32)item + 4);
-                if (itemId >= 0xF0 && itemId < 0x153 && (flags & 0x100) != 0) {
-                    pouchArriveBadge(itemId);
-                }
-            }
-        }
-    }
-    item = *(void**)((s32)workSet + 4);
-    for (i = 0; i < *(s32*)workSet; i++, item = (void*)((s32)item + 0x98)) {
-        iconDelete((void*)((s32)item + 0xC));
-        *(u16*)item &= ~1;
-        memset((void*)((s32)item + 0xC), 0, 0x10);
+    data = *(void**)((s32)win + 0x2C);
+
+    if (winMgrAction(*(void**)((s32)data + 0x2C)) == 0) {
+        offset = *(s32*)((s32)data + 0x4);
+        offset *= 0x28;
+
+        *(void**)((s32)win + 0x34) = msgSearch(
+            *(void**)((s32)itemDataTable + offset + 0x8)
+        );
+
+        winMgrHelpDraw(win);
     }
 }
 
-void* itemNameToPtr(s32 name) {
-    extern s32 strcmp(const char* a, const char* b);
-    void* workSet;
-    void* gpWork;
-    void* item;
-    s32 i;
+void winFullDisp(void* winMgrEntry) {
+    extern s32 FontGetMessageWidth(const char* msg);
+    extern void FontDrawStart(void);
+    extern void FontDrawEdge(void);
+    extern void FontDrawEdgeOff(void);
+    extern void FontDrawColor(void* color);
+    extern u8 FontDrawMessage(u32 x, u32 y, char* msg);
+    extern u32 dat_804210b0;
+    extern char str_msg_window_badge_ful_802c9260[];
+    extern char str_msg_window_item_full_802c9278[];
 
-    workSet = work;
-    gpWork = gp;
-    if (*(s32*)((s32)gpWork + 0x14) != 0) {
-        workSet = (void*)((s32)workSet + 0x1C);
+    s32 badge;
+    void* data;
+    char* msg;
+    u16 width;
+    u32 color;
+
+    badge = 0;
+    data = *(void**)((s32)winMgrEntry + 0x2C);
+    if (*(s32*)((s32)data + 4) >= 0xF0 && *(s32*)((s32)data + 4) < 0x153) {
+        badge = 1;
     }
-    item = *(void**)((s32)workSet + 4);
-    for (i = 0; i < *(s32*)workSet; i++, item = (void*)((s32)item + 0x98)) {
-        if (strcmp((char*)((s32)item + 0xC), (char*)name) == 0) {
-            return item;
-        }
+    if (badge != 0) {
+        msg = msgSearch(str_msg_window_badge_ful_802c9260);
+    } else {
+        msg = msgSearch(str_msg_window_item_full_802c9278);
     }
-    return 0;
-}
-
-void itemInit(void) {
-    extern void* __memAlloc(s32 heap, u32 size);
-    extern void* memset(void* ptr, s32 value, u32 size);
-    void* item;
-
-    *(s32*)work = 0x20;
-    item = __memAlloc(0, *(s32*)work * 0x98);
-    *(void**)(work + 4) = item;
-    memset(item, 0, *(s32*)work * 0x98);
-    *(s32*)(work + 8) = 0;
-    *(s32*)(work + 0x1C) = 0x20;
-    item = __memAlloc(0, *(s32*)(work + 0x1C) * 0x98);
-    *(void**)(work + 0x20) = item;
-    memset(item, 0, *(s32*)(work + 0x1C) * 0x98);
-    *(s32*)(work + 0x24) = 0;
-}
-
-void itemCoinDrop(float* param_1) {
-    extern s32 pouchGetCoin(void);
-    extern void pouchAddCoin(s32 coin);
-    extern void* itemEntry(s32 name, s32 item, s32 mode, s32 script, s32 arg, f32 x, f32 y, f32 z);
-
-    void* item;
-
-    if (pouchGetCoin() > 0) {
-        pouchAddCoin(-1);
-        item = itemEntry(0, 0x79, 8, -1, 0, param_1[0], param_1[1], param_1[2]);
-        if (item != 0) {
-            *(u32*)((s32)item + 0x38) |= 0x40;
-        }
+    width = (u16)FontGetMessageWidth(msg);
+    if ((s32)(width + 0x14) > *(s32*)((s32)winMgrEntry + 0x20)) {
+        *(s32*)((s32)winMgrEntry + 0x20) = width + 0x14;
+        *(s32*)((s32)winMgrEntry + 0x18) = -*(s32*)((s32)winMgrEntry + 0x20) / 2;
+    }
+    if (winMgrAction(*(void**)((s32)data + 0x30)) == 0) {
+        FontDrawStart();
+        FontDrawEdge();
+        color = dat_804210b0;
+        FontDrawColor(&color);
+        FontDrawMessage((u32)(-width / 2), *(s32*)((s32)winMgrEntry + 0x1C) - 10, msg);
+        FontDrawEdgeOff();
     }
 }
 
@@ -1111,272 +1284,64 @@ u8 itemseq_Bound(void* item) {
     return 0;
 }
 
-s32 itemGetCheck(void* itemEntry) {
-    extern void* marioGetPtr(void);
-    extern s32 marioStGetSystemLevel(void);
-    extern s32 seqGetSeq(void);
-    extern s32 vivianGetStatus(void);
-    extern s32 nokonoko_holdItem(void);
-    extern s32 N_fbatPreventMarioEventChk(void);
-
-    void* player = marioGetPtr();
-    void* workSet;
-    void* item;
-    s32 count;
-    s32 mode;
-
-    if (itemEntry == 0) {
-        return 0;
-    }
-    if ((*(u32*)((s32)itemEntry + 0x38) & 0x100000) != 0) {
-        return 0;
-    }
-
-    if ((s32)*(u8*)((s32)player + 0x3C) == 2) {
-        if ((*(u32*)((s32)player + 0x14) & 1) == 0) {
-            if ((u32)marioStGetSystemLevel() != 0) {
-                return 0;
-            }
-            if ((*(u32*)player & 0xA) != 0) {
-                return 0;
-            }
-        }
-    } else {
-        if ((u32)marioStGetSystemLevel() != 0) {
-            return 0;
-        }
-        if ((*(u32*)player & 0xA) != 0) {
-            return 0;
-        }
-    }
-
-    if (*(s32*)((s32)gp + 0x164) != 0) {
-        return 0;
-    }
-    if (seqGetSeq() != 2) {
-        return 0;
-    }
-    if (*(u16*)((s32)player + 0x2E) == 0x19) {
-        return 0;
-    }
-    if (*(u16*)((s32)player + 0x2E) == 0x18) {
-        return 0;
-    }
-    if (vivianGetStatus() != 0) {
-        return 0;
-    }
-    if (*(u16*)((s32)player + 0x2E) == 0x1F || *(u16*)((s32)player + 0x2E) == 0x20) {
-        return 0;
-    }
-    if (nokonoko_holdItem() != 0) {
-        return 0;
-    }
-
-    workSet = work;
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        workSet = (void*)((s32)work + 0x1C);
-    }
-
-    count = *(s32*)workSet;
-    item = *(void**)((s32)workSet + 4);
-    while (count > 0) {
-        if ((*(u16*)item & 1) != 0 && *(u16*)((s32)item + 0x24) == 2) {
-            return 0;
-        }
-        item = (void*)((s32)item + 0x98);
-        count--;
-    }
-
-    if (N_fbatPreventMarioEventChk() != 0) {
-        return 0;
-    }
-
-    mode = *(u16*)((s32)itemEntry + 0x24);
-    if (mode < 5) {
-        if (mode != 2) {
-            if (mode < 2) {
-                if (mode != 0) {
-                    return 1;
-                }
-            } else if ((*(u32*)((s32)itemEntry + 0x38) & 8) == 0) {
-                return 1;
-            }
-        }
-    } else {
-        if (mode == 7) {
-            return 1;
-        }
-        if (mode < 7 && *(u16*)((s32)itemEntry + 0x26) != 0 &&
-            (*(u32*)((s32)itemEntry + 0x38) & 4) == 0 &&
-            (*(u32*)((s32)itemEntry + 0x38) & 8) == 0) {
-            return 1;
-        }
-    }
-
-    return 0;
+void itemSetPosition(void* item, f32 x, f32 y, f32 z) {
+    *(f32*)((s32)item + 0x3C) = x;
+    *(f32*)((s32)item + 0x40) = y;
+    *(f32*)((s32)item + 0x44) = z;
 }
 
-void* itemNearDistCheck(float posX, float posY, float posZ, float maxDist) {
-    typedef struct Vec3 {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec3;
+s32 itemHitCheckSide(f64 moveX, f64 moveZ, s32 item, f32* outX, f32* outZ, s32* outAngle) {
+    extern f64 angleABf(f64, f64, f64, f64);
+    extern void sincosf(f32, f32*, f32*);
+    extern s32 hitCheckFilter(f64, f64, f64, f64, f64, f64, s32, void*, void*, void*, void*, void*, void*, void*);
+    extern f64 reviseAngle(f64);
+    extern f64 sqrt(f64);
+    extern f32 float_0_804210b4, float_10_804210c8, float_15_804210cc;
+    extern f32 float_0p5_804210d0, float_180_804210d4, float_100_804210d8;
+    f32 sinv, cosv, radius, normalX, normalZ, hitX, hitY, hitZ, length;
+    u32 hitWork[2];
+    f64 dot, incoming, normalAngle;
+    s32 hit;
 
-    extern void* marioGetPtr(void);
-    extern void PSVECSubtract(void* a, void* b, void* out);
-    extern f32 PSVECMag(void* v);
-
-    void* workSet;
-    void* item;
-    void* nearest;
-    Vec3 pos;
-    Vec3 itemPos;
-    Vec3 delta;
-    f32 dist;
-    s32 i;
-
-    marioGetPtr();
-
-    workSet = work;
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        workSet = (void*)((s32)workSet + 0x1C);
-    }
-
-    item = *(void**)((s32)workSet + 4);
-    nearest = 0;
-
-    pos.x = posX;
-    pos.y = posY;
-    pos.z = posZ;
-
-    for (i = 0; i < *(s32*)workSet; i++, item = (void*)((s32)item + 0x98)) {
-        if ((*(u16*)item & 1) != 0) {
-            u32 status = *(u32*)((s32)item + 0x38);
-            if ((status & 0x1000) == 0 && (status & 0x100000) == 0 &&
-                *(u16*)((s32)item + 0x24) != 2 && (status & 0x2000000) == 0) {
-                itemPos.x = *(f32*)((s32)item + 0x3C);
-                itemPos.y = *(f32*)((s32)item + 0x40);
-                itemPos.z = *(f32*)((s32)item + 0x44);
-                PSVECSubtract(&itemPos, &pos, &delta);
-                dist = PSVECMag(&delta);
-                if (dist < maxDist) {
-                    nearest = item;
-                    maxDist = dist;
-                }
-            }
-        }
-    }
-
-    return nearest;
-}
-
-u32 itemGetNokoCheck(void* itemEntry) {
-    extern void* marioGetPtr(void);
-    extern s32 marioStGetSystemLevel(void);
-    extern s32 seqGetSeq(void);
-    extern s32 vivianGetStatus(void);
-    extern s32 N_fbatPreventMarioEventChk(void);
-
-    void* player = marioGetPtr();
-    void* workSet;
-    void* item;
-    s32 count;
-
-    if (itemEntry == 0) {
-        return 0;
-    }
-    if ((*(u32*)((s32)itemEntry + 0x38) & 0x100000) != 0) {
-        return 0;
-    }
-    if ((u32)marioStGetSystemLevel() != 0) {
-        return 0;
-    }
-    if ((*(u32*)player & 0xA) != 0) {
-        return 0;
-    }
-    if ((*(u32*)((s32)itemEntry + 0x38) & 0x2000000) != 0) {
-        return 0;
-    }
-    if (*(s32*)((s32)gp + 0x164) != 0) {
-        return 0;
-    }
-    if (seqGetSeq() != 2) {
-        return 0;
-    }
-    if (*(u16*)((s32)player + 0x2E) == 0x19) {
-        return 0;
-    }
-    if (vivianGetStatus() != 0) {
-        return 0;
-    }
-    if (*(u16*)((s32)player + 0x2E) == 0x1F || *(u16*)((s32)player + 0x2E) == 0x20) {
-        return 0;
-    }
-    if ((u16)(*(u16*)((s32)player + 0x2E) - 5) <= 3 ||
-        *(u16*)((s32)player + 0x2E) == 0xF ||
-        *(u16*)((s32)player + 0x2E) == 0xE) {
-        return 0;
-    }
-
-    workSet = work;
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        workSet = (void*)((s32)work + 0x1C);
-    }
-
-    count = *(s32*)workSet;
-    item = *(void**)((s32)workSet + 4);
-    while (count > 0) {
-        if ((*(u16*)item & 1) != 0 && *(u16*)((s32)item + 0x24) == 2) {
+    *outX = *(f32*)(item + 0x3C);
+    *outZ = *(f32*)(item + 0x44);
+    if (moveX == float_0_804210b4 && moveZ == float_0_804210b4) return 0;
+    sincosf((f32)angleABf(float_0_804210b4, float_0_804210b4, moveX, moveZ), &sinv, &cosv);
+    length = (f32)sqrt(moveX * moveX + (f64)(f32)(moveZ * moveZ));
+    radius = float_10_804210c8 + length;
+    hit = hitCheckFilter(*(f32*)(item + 0x3C), *(f32*)(item + 0x40) + float_15_804210cc,
+                         *(f32*)(item + 0x44), sinv, float_0_804210b4, cosv, 0,
+                         hitWork, &hitX, &hitY, &radius, &normalX, &hitZ, &normalZ);
+    if (hit == 0) {
+        radius = float_10_804210c8 + length;
+        hit = hitCheckFilter(*(f32*)(item + 0x3C), *(f32*)(item + 0x40) + float_15_804210cc,
+                             *(f32*)(item + 0x44), sinv, float_0_804210b4, cosv, 0,
+                             hitWork, &hitX, &hitY, &radius, &normalX, &hitZ, &normalZ);
+        if (hit == 0) {
+            *outX += (f32)moveX;
+            *outZ += (f32)moveZ;
             return 0;
         }
-        item = (void*)((s32)item + 0x98);
-        count--;
     }
-
-    return N_fbatPreventMarioEventChk() == 0;
+    dot = moveX * normalX + (f64)(f32)(moveZ * normalZ);
+    *outX += float_0p5_804210d0 * -(f32)(dot * normalX - moveX);
+    *outZ += float_0p5_804210d0 * -(f32)(dot * normalZ - moveZ);
+    incoming = reviseAngle(float_180_804210d4 + (f32)*outAngle);
+    normalAngle = reviseAngle(angleABf(float_0_804210b4, float_0_804210b4,
+                                      float_100_804210d8 * normalX, float_100_804210d8 * normalZ));
+    incoming = reviseAngle((f32)(normalAngle - incoming));
+    *outAngle = (s32)reviseAngle((f32)(normalAngle + incoming));
+    return hit;
 }
 
-void winFullDisp(void* winMgrEntry) {
-    extern s32 FontGetMessageWidth(const char* msg);
-    extern void FontDrawStart(void);
-    extern void FontDrawEdge(void);
-    extern void FontDrawEdgeOff(void);
-    extern void FontDrawColor(void* color);
-    extern u8 FontDrawMessage(u32 x, u32 y, char* msg);
-    extern u32 dat_804210b0;
-    extern char str_msg_window_badge_ful_802c9260[];
-    extern char str_msg_window_item_full_802c9278[];
+void itemForceGet(void* item) {
+    *(s32*)((s32)item + 0x7C) = 0;
+    *(s32*)((s32)item + 0x78) = 0;
+    *(u16*)((s32)item + 0x24) = 2;
+    *(u16*)((s32)item + 0x26) = 0;
 
-    s32 badge;
-    void* data;
-    char* msg;
-    u16 width;
-    u32 color;
-
-    badge = 0;
-    data = *(void**)((s32)winMgrEntry + 0x2C);
-    if (*(s32*)((s32)data + 4) >= 0xF0 && *(s32*)((s32)data + 4) < 0x153) {
-        badge = 1;
-    }
-    if (badge != 0) {
-        msg = msgSearch(str_msg_window_badge_ful_802c9260);
-    } else {
-        msg = msgSearch(str_msg_window_item_full_802c9278);
-    }
-    width = (u16)FontGetMessageWidth(msg);
-    if ((s32)(width + 0x14) > *(s32*)((s32)winMgrEntry + 0x20)) {
-        *(s32*)((s32)winMgrEntry + 0x20) = width + 0x14;
-        *(s32*)((s32)winMgrEntry + 0x18) = -*(s32*)((s32)winMgrEntry + 0x20) / 2;
-    }
-    if (winMgrAction(*(void**)((s32)data + 0x30)) == 0) {
-        FontDrawStart();
-        FontDrawEdge();
-        color = dat_804210b0;
-        FontDrawColor(&color);
-        FontDrawMessage((u32)(-width / 2), *(s32*)((s32)winMgrEntry + 0x1C) - 10, msg);
-        FontDrawEdgeOff();
-    }
+    *(u16*)item |= 0x1000;
+    *(u32*)((s32)item + 0x38) &= ~0x10000;
 }
 
 void itemNokoForceGet(void* item) {
@@ -1397,5 +1362,40 @@ void itemNokoForceGet(void* item) {
         *(u32*)((s32)item + 0x38) &= ~0x4000;
         *(u32*)((s32)item + 0x38) &= ~0x1000;
     }
+}
+
+void itemFlagOn(void* item, u32 flags) {
+    *(u16*)item |= flags;
+}
+
+void itemFlagOff(void* item, u32 flags) {
+    *(u16*)item &= ~flags;
+}
+
+u16 itemFlag(void* item, u32 flags) {
+    return *(u16*)item & flags;
+}
+
+void itemStatusOn(void* item, u32 flags) {
+    *(u32*)((s32)item + 0x38) |= flags;
+}
+
+u32 itemStatus(void* item, u32 flags) {
+    return *(u32*)((s32)item + 0x38) & flags;
+}
+
+void itemPickUp(void* item) {
+    u32 status;
+
+    status = *(u32*)((s32)item + 0x38);
+    status |= 0x1000;
+    *(u32*)((s32)item + 0x38) = status;
+
+    *(u16*)((s32)item + 0x24) = 8;
+    *(u16*)((s32)item + 0x26) = 0;
+    *(s32*)((s32)item + 0x7C) = 0;
+    *(s32*)((s32)item + 0x78) = 0;
+
+    *(u32*)((s32)item + 0x38) &= ~0x100;
 }
 

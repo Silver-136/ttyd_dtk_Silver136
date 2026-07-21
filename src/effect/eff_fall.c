@@ -1,171 +1,4 @@
 #include "effect/eff_fall.h"
-
-s32 effFallCheckHit(void* eff) {
-    void* work = *(void**)((s32)eff + 0xC);
-
-    switch (*(s32*)work) {
-        case 0:
-        case 1:
-        case 4:
-        case 5:
-            if (*(s32*)((s32)work + 0xA0) >= 2) {
-                return 1;
-            }
-            break;
-        case 2:
-        case 3:
-            if (*(s32*)((s32)work + 0xA0) >= 1) {
-                return 1;
-            }
-            break;
-        case 6:
-            if (*(s32*)((s32)work + 0xA0) < 2) {
-                if (*(s32*)((s32)work + 0xA0) != 1) {
-                    break;
-                }
-                if (*(s32*)((s32)work + 0x8C) <= 90) {
-                    break;
-                }
-            }
-            return 1;
-        case 7:
-            if (*(s32*)((s32)work + 0xA0) >= 4) {
-                return 1;
-            }
-            break;
-        case 8:
-            if (*(s32*)((s32)work + 0xA0) >= 3) {
-                return 1;
-            }
-            break;
-    }
-    return 0;
-}
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void effFallDispInseki(s32 cameraId, void* eff) {
-    typedef f32 MtxRaw[3][4];
-    typedef struct VecRaw { f32 x; f32 y; f32 z; } VecRaw;
-
-    extern void* camGetPtr(s32 cameraId);
-    extern void PSMTXTrans(MtxRaw m, double x, double y, double z);
-    extern void PSMTXRotRad(MtxRaw m, s32 axis, double angle);
-    extern void PSMTXRotAxisRad(MtxRaw m, VecRaw* axis, double angle);
-    extern void PSMTXScale(MtxRaw m, f32 x, f32 y, f32 z);
-    extern void PSMTXConcat(MtxRaw a, MtxRaw b, MtxRaw out);
-    extern f64 cos(f64 x);
-    extern f64 sin(f64 x);
-    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
-    extern void animPoseSetMaterialEvtColor(s32 poseId, void* color);
-    extern void animPoseDrawMtx(s32 poseId, MtxRaw mtx, s32 mode, double rot, double scale);
-
-    extern f32 float_deg2rad_804274c0;
-    extern f32 float_6p2832_804274f4;
-    extern f32 float_360_804274f8;
-    extern f32 float_2p05_804274fc;
-    extern f32 float_2_804274d8;
-    extern f32 float_0_804274d4;
-    extern f32 float_10_80427500;
-    extern f32 float_2p1_80427504;
-    extern VecRaw vec3_802fedc4[];
-    extern u32 dat_804274ac;
-    extern u32 dat_804274b0;
-
-    MtxRaw mtxA;
-    MtxRaw mtxD;
-    MtxRaw mtxB;
-    MtxRaw mtxC;
-    VecRaw axis;
-    VecRaw axis0;
-    u32 color0;
-    u32 color1;
-    void* cam;
-    void* work;
-    f32 camAngle;
-    f32 deg;
-    f32 scale;
-    s32 i;
-
-    work = *(void**)((s32)eff + 0xC);
-
-    camGetPtr(cameraId);
-    PSMTXTrans(mtxA,
-        (double)*(f32*)((s32)work + 0x4),
-        (double)*(f32*)((s32)work + 0x8),
-        (double)*(f32*)((s32)work + 0xC));
-
-    cam = camGetPtr(cameraId);
-    camAngle = *(f32*)((s32)cam + 0x114);
-    deg = float_deg2rad_804274c0;
-    camAngle = -camAngle;
-    PSMTXRotRad(mtxB, 'y', (double)(deg * camAngle));
-    PSMTXConcat(mtxA, mtxB, mtxC);
-
-    if (*(s32*)((s32)work + 0xC4) != -1 && *(s32*)((s32)work + 0xC8) != -1) {
-        axis0 = vec3_802fedc4[0];
-        axis0.x = (f32)cos((double)((float_6p2832_804274f4 * *(f32*)((s32)work + 0x80)) / float_360_804274f8));
-        axis0.z = (f32)sin((double)((float_6p2832_804274f4 * *(f32*)((s32)work + 0x80)) / float_360_804274f8));
-        axis = axis0;
-
-        for (i = 0; i < 2; i++) {
-            if (i == 0) {
-                PSMTXTrans(mtxA,
-                    (double)*(f32*)((s32)work + 0x6C),
-                    (double)*(f32*)((s32)work + 0x70),
-                    (double)*(f32*)((s32)work + 0x74));
-                camAngle = *(f32*)((s32)work + 0xB0);
-                deg = float_deg2rad_804274c0;
-                camAngle = -camAngle;
-                PSMTXRotAxisRad(mtxB, &axis, (double)(deg * camAngle));
-                scale = float_2p05_804274fc * *(f32*)((s32)work + 0x94);
-                PSMTXScale(mtxD, scale, scale, scale);
-                PSMTXConcat(mtxC, mtxA, mtxA);
-                PSMTXConcat(mtxA, mtxB, mtxA);
-                PSMTXConcat(mtxA, mtxD, mtxA);
-                animPoseSetMaterialFlagOn(*(s32*)((s32)work + 0xC4), 0x40);
-                color0 = dat_804274ac;
-                animPoseSetMaterialEvtColor(*(s32*)((s32)work + 0xC4), &color0);
-            } else {
-                PSMTXTrans(mtxA,
-                    (double)*(f32*)((s32)work + 0x6C),
-                    (double)*(f32*)((s32)work + 0x70),
-                    (double)*(f32*)((s32)work + 0x74));
-                camAngle = *(f32*)((s32)work + 0xB0);
-                deg = float_deg2rad_804274c0;
-                camAngle = -camAngle;
-                PSMTXRotAxisRad(mtxB, &axis, (double)(deg * camAngle));
-                scale = float_2_804274d8 * *(f32*)((s32)work + 0x94);
-                PSMTXScale(mtxD, scale, scale, scale);
-                PSMTXConcat(mtxC, mtxA, mtxA);
-                PSMTXConcat(mtxA, mtxB, mtxA);
-                PSMTXConcat(mtxA, mtxD, mtxA);
-                animPoseSetMaterialFlagOn(*(s32*)((s32)work + 0xC4), 0x40);
-                color1 = dat_804274b0;
-                animPoseSetMaterialEvtColor(*(s32*)((s32)work + 0xC4), &color1);
-            }
-
-            animPoseDrawMtx(*(s32*)((s32)work + 0xC4), mtxA, 1, (double)float_0_804274d4, (double)float_10_80427500);
-            animPoseDrawMtx(*(s32*)((s32)work + 0xC4), mtxA, 2, (double)float_0_804274d4, (double)float_10_80427500);
-            animPoseDrawMtx(*(s32*)((s32)work + 0xC4), mtxA, 3, (double)float_0_804274d4, (double)float_10_80427500);
-        }
-
-        PSMTXTrans(mtxA,
-            (double)*(f32*)((s32)work + 0x6C),
-            (double)*(f32*)((s32)work + 0x70),
-            (double)*(f32*)((s32)work + 0x74));
-        scale = float_2p1_80427504 * *(f32*)((s32)work + 0x94);
-        PSMTXScale(mtxD, scale, scale, scale);
-        PSMTXConcat(mtxC, mtxA, mtxA);
-        PSMTXConcat(mtxA, mtxD, mtxA);
-        animPoseDrawMtx(*(s32*)((s32)work + 0xC8), mtxA, 1, (double)float_0_804274d4, (double)float_10_80427500);
-        animPoseDrawMtx(*(s32*)((s32)work + 0xC8), mtxA, 2, (double)float_0_804274d4, (double)float_10_80427500);
-        animPoseDrawMtx(*(s32*)((s32)work + 0xC8), mtxA, 3, (double)float_0_804274d4, (double)float_10_80427500);
-    }
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 void* effFallEntry(f32 x, s32 type, f32 y, s32 count, f32 z, s32 param, f32 rot, f32 arg5, f32 arg6) {
     typedef struct EffEntryRaw {
         u32 flags;
@@ -362,147 +195,6 @@ void* effFallEntry(f32 x, s32 type, f32 y, s32 count, f32 z, s32 param, f32 rot,
     return eff;
 }
 
-
-/* CHATGPT STUB FILL: main/effect/eff_fall 20260624_184823 */
-
-/* stub-fill: effFallDispWater | missing_definition | ghidra_signature */
-void effFallDispWater(s32 cameraId, void* effect) {
-    typedef f32 Mtx[3][4]; typedef u8 TexObj[0x20];
-    extern void* camGetPtr(s32); extern void PSMTXTrans(Mtx,f64,f64,f64); extern void PSMTXScale(Mtx,f32,f32,f32); extern void PSMTXRotRad(Mtx,f64,char); extern void PSMTXConcat(void*,void*,void*);
-    extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevOp(s32,s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
-    extern void GXSetNumChans(s32); extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32); extern void GXSetCullMode(s32); extern void GXClearVtxDesc(void); extern void GXSetVtxDesc(s32,s32); extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
-    extern void effGetTexObj(s32,void*); extern void GXLoadTexObj(void*,s32); extern void GXLoadTexMtxImm(void*,s32,s32); extern void GXLoadPosMtxImm(void*,s32); extern void GXBegin(s32,s32,s32); extern void GXCallDisplayList(void*,u32); extern volatile f32 DAT_cc008000;
-    u8* w=*(u8**)((u8*)effect+0xC); void* cam=camGetPtr(cameraId); Mtx trans,scale,rot,base; TexObj tex; f32 halfW=32.0f; f32 height=352.0f;
-    PSMTXTrans(trans,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC));PSMTXRotRad(rot,-0.017453292f**(f32*)((u8*)camGetPtr(cameraId)+0x114),'y');
-    PSMTXConcat(trans,rot,base);PSMTXConcat((u8*)cam+0x11C,base,base);GXSetNumTevStages(2);GXSetTevOrder(0,0,0,4);GXSetTevOp(0,0);
-    GXSetTevOrder(1,0xFF,0xFF,0xFF);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);GXSetNumChans(1);GXSetChanCtrl(4,0,0,1,0,0,2);GXSetCullMode(2);
-    GXClearVtxDesc();GXSetVtxDesc(9,1);GXSetVtxDesc(11,1);GXSetVtxDesc(13,1);GXSetVtxAttrFmt(0,9,1,4,0);GXSetVtxAttrFmt(0,11,1,5,0);GXSetVtxAttrFmt(0,13,1,4,0);
-    effGetTexObj(0x35,tex);GXLoadTexObj(tex,0);PSMTXTrans(trans,*(f32*)(w+0xB8),*(f32*)(w+0xBC),*(f32*)(w+0xC0));PSMTXScale(scale,1.0f,height/704.0f,1.0f);PSMTXConcat(trans,scale,trans);GXLoadTexMtxImm(trans,0x1E,1);
-    PSMTXTrans(trans,*(f32*)(w+0x6C),*(f32*)(w+0x70),*(f32*)(w+0x74));PSMTXScale(scale,*(f32*)(w+0x94),1.0f,1.0f);PSMTXConcat(trans,scale,trans);PSMTXConcat(base,trans,trans);GXLoadPosMtxImm(trans,0);
-    GXBegin(0x80,0,4);DAT_cc008000=-halfW;DAT_cc008000=height;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;
-    DAT_cc008000=halfW;DAT_cc008000=height;DAT_cc008000=0;DAT_cc008000=2;DAT_cc008000=0;
-    DAT_cc008000=halfW;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=2;DAT_cc008000=1;
-    DAT_cc008000=-halfW;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=1;
-    if(*(s32*)(w+0xA0)>0){effGetTexObj(0x37,tex);GXLoadTexObj(tex,0);PSMTXTrans(trans,*(f32*)(w+0x6C),*(f32*)(w+0x70),*(f32*)(w+0x74));PSMTXScale(scale,0.56f,0.4f,0.8f);PSMTXConcat(base,trans,trans);PSMTXConcat(trans,scale,trans);GXLoadPosMtxImm(trans,0);}
-}
-
-/* stub-fill: effFallDisp | missing_definition | ghidra_signature */
-void effFallDisp(s32 cameraId, void* effect) {
-    extern void mapSetMaterialFog(void);
-    extern void effGetTexObj(void*, s32, s32);
-    extern void GXLoadTexObj(void*, s32);
-    extern void GXBegin(s32, s32, s32);
-    extern void PSMTXTrans(void*, f32, f32, f32);
-    extern void PSMTXScale(void*, f32, f32, f32);
-    extern void PSMTXConcat(void*, void*, void*);
-    extern void GXLoadPosMtxImm(void*, s32);
-    extern void* camGetPtr(s32);
-    extern void PSMTXRotRad(void*, s32, f32);
-    extern void GXSetNumChans(s32);
-    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
-    extern void GXSetNumTevStages(s32);
-    extern void GXSetTevOrder(s32, s32, s32, s32);
-    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevOp(s32, s32);
-    extern void GXSetCullMode(s32);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32, s32);
-    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
-    extern void GXSetNumTexGens(s32);
-    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
-    extern void GXSetCurrentMtx(s32);
-    extern void GXSetChanMatColor(s32, void*);
-    extern void GXLoadTexMtxImm(void*, s32, s32);
-    u8* base = *(u8**)((u8*)effect + 0xC);
-    s32 count = *(s32*)((u8*)effect + 8);
-    s32 type = *(s32*)base;
-    u8 tex[64];
-    f32 trans[3][4];
-    f32 scale[3][4];
-    f32 model[3][4];
-    f32 baseMtx[3][4];
-    f32 rot[3][4];
-    f32 texMtx[3][4];
-    s32 i;
-
-    mapSetMaterialFog();
-    PSMTXTrans(trans, *(f32*)(base + 4), *(f32*)(base + 8), *(f32*)(base + 0xC));
-    PSMTXRotRad(rot, 0x79,
-                0.017453292f * -*(f32*)((u8*)camGetPtr(cameraId) + 0x114));
-    PSMTXConcat(trans, rot, baseMtx);
-    GXSetNumChans(1);
-    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(0, 0, 0, 4);
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevOp(0, 0);
-    GXSetCullMode(0);
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 1);
-    GXSetVtxDesc(13, 1);
-    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
-    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-    effGetTexObj(tex, type == 2 ? 0x33 : 0x32, 0);
-    GXLoadTexObj(tex, 0);
-    for (i = 1; i < count; i++) {
-        u8* p = base + i * 0x68;
-        u32 color;
-        if (*(s32*)(p + 0x38) < 0) {
-            continue;
-        }
-        PSMTXTrans(trans, *(f32*)(p + 4), *(f32*)(p + 8), *(f32*)(p + 0xC));
-        if (type < 2) {
-            PSMTXRotRad(rot, 0x79, 0.017453292f * *(f32*)(p + 0x18));
-            PSMTXConcat(trans, rot, trans);
-            PSMTXTrans(rot, 0.0f, 10.66675f * *(f32*)(p + 0x2C), 0.0f);
-            PSMTXConcat(trans, rot, trans);
-            PSMTXRotRad(rot, 0x7A, 0.017453292f * *(f32*)(p + 0x48));
-            PSMTXConcat(trans, rot, trans);
-            PSMTXTrans(rot, 0.0f, -10.66675f * *(f32*)(p + 0x2C), 0.0f);
-            PSMTXConcat(trans, rot, trans);
-        }
-        PSMTXScale(scale, *(f32*)(p + 0x2C), *(f32*)(p + 0x2C), *(f32*)(p + 0x2C));
-        PSMTXConcat(trans, scale, model);
-        PSMTXConcat(baseMtx, model, model);
-        PSMTXConcat((u8*)camGetPtr(cameraId) + 0x118, model, model);
-        GXLoadPosMtxImm(model, 0);
-        GXSetCurrentMtx(0);
-        color = *(u32*)(p + 0x3C);
-        GXSetChanMatColor(4, &color);
-        if (type < 2) {
-            PSMTXScale(texMtx, 1.0f, 0.33333f, 1.0f);
-            PSMTXTrans(rot, 0.0f, (f32)*(s32*)(p + 0x28), 0.0f);
-            PSMTXConcat(texMtx, rot, texMtx);
-            GXLoadTexMtxImm(texMtx, 0x1E, 1);
-        }
-        GXBegin(0x80, 0, 4);
-        *(volatile f32*)0xCC008000 = -16.0f;
-        *(volatile f32*)0xCC008000 = 21.3335f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 16.0f;
-        *(volatile f32*)0xCC008000 = 21.3335f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 1.0f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 16.0f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 1.0f;
-        *(volatile f32*)0xCC008000 = 1.0f;
-        *(volatile f32*)0xCC008000 = -16.0f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 1.0f;
-    }
-}
-
 /* stub-fill: effFallMain | prototype_only | source_prototype */
 void effFallMain(void* effect) {
     extern void effDelete(void*);
@@ -652,5 +344,313 @@ void effFallMain(void* effect) {
     } else {
         dispEntry(4, 1, effFallDisp, effect, dispCalcZ(pos));
     }
+}
+
+/* stub-fill: effFallDisp | missing_definition | ghidra_signature */
+void effFallDisp(s32 cameraId, void* effect) {
+    extern void mapSetMaterialFog(void);
+    extern void effGetTexObj(void*, s32, s32);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXBegin(s32, s32, s32);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXLoadPosMtxImm(void*, s32);
+    extern void* camGetPtr(s32);
+    extern void PSMTXRotRad(void*, s32, f32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevOp(s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetChanMatColor(s32, void*);
+    extern void GXLoadTexMtxImm(void*, s32, s32);
+    u8* base = *(u8**)((u8*)effect + 0xC);
+    s32 count = *(s32*)((u8*)effect + 8);
+    s32 type = *(s32*)base;
+    u8 tex[64];
+    f32 trans[3][4];
+    f32 scale[3][4];
+    f32 model[3][4];
+    f32 baseMtx[3][4];
+    f32 rot[3][4];
+    f32 texMtx[3][4];
+    s32 i;
+
+    mapSetMaterialFog();
+    PSMTXTrans(trans, *(f32*)(base + 4), *(f32*)(base + 8), *(f32*)(base + 0xC));
+    PSMTXRotRad(rot, 0x79,
+                0.017453292f * -*(f32*)((u8*)camGetPtr(cameraId) + 0x114));
+    PSMTXConcat(trans, rot, baseMtx);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevOp(0, 0);
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    effGetTexObj(tex, type == 2 ? 0x33 : 0x32, 0);
+    GXLoadTexObj(tex, 0);
+    for (i = 1; i < count; i++) {
+        u8* p = base + i * 0x68;
+        u32 color;
+        if (*(s32*)(p + 0x38) < 0) {
+            continue;
+        }
+        PSMTXTrans(trans, *(f32*)(p + 4), *(f32*)(p + 8), *(f32*)(p + 0xC));
+        if (type < 2) {
+            PSMTXRotRad(rot, 0x79, 0.017453292f * *(f32*)(p + 0x18));
+            PSMTXConcat(trans, rot, trans);
+            PSMTXTrans(rot, 0.0f, 10.66675f * *(f32*)(p + 0x2C), 0.0f);
+            PSMTXConcat(trans, rot, trans);
+            PSMTXRotRad(rot, 0x7A, 0.017453292f * *(f32*)(p + 0x48));
+            PSMTXConcat(trans, rot, trans);
+            PSMTXTrans(rot, 0.0f, -10.66675f * *(f32*)(p + 0x2C), 0.0f);
+            PSMTXConcat(trans, rot, trans);
+        }
+        PSMTXScale(scale, *(f32*)(p + 0x2C), *(f32*)(p + 0x2C), *(f32*)(p + 0x2C));
+        PSMTXConcat(trans, scale, model);
+        PSMTXConcat(baseMtx, model, model);
+        PSMTXConcat((u8*)camGetPtr(cameraId) + 0x118, model, model);
+        GXLoadPosMtxImm(model, 0);
+        GXSetCurrentMtx(0);
+        color = *(u32*)(p + 0x3C);
+        GXSetChanMatColor(4, &color);
+        if (type < 2) {
+            PSMTXScale(texMtx, 1.0f, 0.33333f, 1.0f);
+            PSMTXTrans(rot, 0.0f, (f32)*(s32*)(p + 0x28), 0.0f);
+            PSMTXConcat(texMtx, rot, texMtx);
+            GXLoadTexMtxImm(texMtx, 0x1E, 1);
+        }
+        GXBegin(0x80, 0, 4);
+        *(volatile f32*)0xCC008000 = -16.0f;
+        *(volatile f32*)0xCC008000 = 21.3335f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 16.0f;
+        *(volatile f32*)0xCC008000 = 21.3335f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 1.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 16.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 1.0f;
+        *(volatile f32*)0xCC008000 = 1.0f;
+        *(volatile f32*)0xCC008000 = -16.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 0.0f;
+        *(volatile f32*)0xCC008000 = 1.0f;
+    }
+}
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void effFallDispInseki(s32 cameraId, void* eff) {
+    typedef f32 MtxRaw[3][4];
+    typedef struct VecRaw { f32 x; f32 y; f32 z; } VecRaw;
+
+    extern void* camGetPtr(s32 cameraId);
+    extern void PSMTXTrans(MtxRaw m, double x, double y, double z);
+    extern void PSMTXRotRad(MtxRaw m, s32 axis, double angle);
+    extern void PSMTXRotAxisRad(MtxRaw m, VecRaw* axis, double angle);
+    extern void PSMTXScale(MtxRaw m, f32 x, f32 y, f32 z);
+    extern void PSMTXConcat(MtxRaw a, MtxRaw b, MtxRaw out);
+    extern f64 cos(f64 x);
+    extern f64 sin(f64 x);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
+    extern void animPoseSetMaterialEvtColor(s32 poseId, void* color);
+    extern void animPoseDrawMtx(s32 poseId, MtxRaw mtx, s32 mode, double rot, double scale);
+
+    extern f32 float_deg2rad_804274c0;
+    extern f32 float_6p2832_804274f4;
+    extern f32 float_360_804274f8;
+    extern f32 float_2p05_804274fc;
+    extern f32 float_2_804274d8;
+    extern f32 float_0_804274d4;
+    extern f32 float_10_80427500;
+    extern f32 float_2p1_80427504;
+    extern VecRaw vec3_802fedc4[];
+    extern u32 dat_804274ac;
+    extern u32 dat_804274b0;
+
+    MtxRaw mtxA;
+    MtxRaw mtxD;
+    MtxRaw mtxB;
+    MtxRaw mtxC;
+    VecRaw axis;
+    VecRaw axis0;
+    u32 color0;
+    u32 color1;
+    void* cam;
+    void* work;
+    f32 camAngle;
+    f32 deg;
+    f32 scale;
+    s32 i;
+
+    work = *(void**)((s32)eff + 0xC);
+
+    camGetPtr(cameraId);
+    PSMTXTrans(mtxA,
+        (double)*(f32*)((s32)work + 0x4),
+        (double)*(f32*)((s32)work + 0x8),
+        (double)*(f32*)((s32)work + 0xC));
+
+    cam = camGetPtr(cameraId);
+    camAngle = *(f32*)((s32)cam + 0x114);
+    deg = float_deg2rad_804274c0;
+    camAngle = -camAngle;
+    PSMTXRotRad(mtxB, 'y', (double)(deg * camAngle));
+    PSMTXConcat(mtxA, mtxB, mtxC);
+
+    if (*(s32*)((s32)work + 0xC4) != -1 && *(s32*)((s32)work + 0xC8) != -1) {
+        axis0 = vec3_802fedc4[0];
+        axis0.x = (f32)cos((double)((float_6p2832_804274f4 * *(f32*)((s32)work + 0x80)) / float_360_804274f8));
+        axis0.z = (f32)sin((double)((float_6p2832_804274f4 * *(f32*)((s32)work + 0x80)) / float_360_804274f8));
+        axis = axis0;
+
+        for (i = 0; i < 2; i++) {
+            if (i == 0) {
+                PSMTXTrans(mtxA,
+                    (double)*(f32*)((s32)work + 0x6C),
+                    (double)*(f32*)((s32)work + 0x70),
+                    (double)*(f32*)((s32)work + 0x74));
+                camAngle = *(f32*)((s32)work + 0xB0);
+                deg = float_deg2rad_804274c0;
+                camAngle = -camAngle;
+                PSMTXRotAxisRad(mtxB, &axis, (double)(deg * camAngle));
+                scale = float_2p05_804274fc * *(f32*)((s32)work + 0x94);
+                PSMTXScale(mtxD, scale, scale, scale);
+                PSMTXConcat(mtxC, mtxA, mtxA);
+                PSMTXConcat(mtxA, mtxB, mtxA);
+                PSMTXConcat(mtxA, mtxD, mtxA);
+                animPoseSetMaterialFlagOn(*(s32*)((s32)work + 0xC4), 0x40);
+                color0 = dat_804274ac;
+                animPoseSetMaterialEvtColor(*(s32*)((s32)work + 0xC4), &color0);
+            } else {
+                PSMTXTrans(mtxA,
+                    (double)*(f32*)((s32)work + 0x6C),
+                    (double)*(f32*)((s32)work + 0x70),
+                    (double)*(f32*)((s32)work + 0x74));
+                camAngle = *(f32*)((s32)work + 0xB0);
+                deg = float_deg2rad_804274c0;
+                camAngle = -camAngle;
+                PSMTXRotAxisRad(mtxB, &axis, (double)(deg * camAngle));
+                scale = float_2_804274d8 * *(f32*)((s32)work + 0x94);
+                PSMTXScale(mtxD, scale, scale, scale);
+                PSMTXConcat(mtxC, mtxA, mtxA);
+                PSMTXConcat(mtxA, mtxB, mtxA);
+                PSMTXConcat(mtxA, mtxD, mtxA);
+                animPoseSetMaterialFlagOn(*(s32*)((s32)work + 0xC4), 0x40);
+                color1 = dat_804274b0;
+                animPoseSetMaterialEvtColor(*(s32*)((s32)work + 0xC4), &color1);
+            }
+
+            animPoseDrawMtx(*(s32*)((s32)work + 0xC4), mtxA, 1, (double)float_0_804274d4, (double)float_10_80427500);
+            animPoseDrawMtx(*(s32*)((s32)work + 0xC4), mtxA, 2, (double)float_0_804274d4, (double)float_10_80427500);
+            animPoseDrawMtx(*(s32*)((s32)work + 0xC4), mtxA, 3, (double)float_0_804274d4, (double)float_10_80427500);
+        }
+
+        PSMTXTrans(mtxA,
+            (double)*(f32*)((s32)work + 0x6C),
+            (double)*(f32*)((s32)work + 0x70),
+            (double)*(f32*)((s32)work + 0x74));
+        scale = float_2p1_80427504 * *(f32*)((s32)work + 0x94);
+        PSMTXScale(mtxD, scale, scale, scale);
+        PSMTXConcat(mtxC, mtxA, mtxA);
+        PSMTXConcat(mtxA, mtxD, mtxA);
+        animPoseDrawMtx(*(s32*)((s32)work + 0xC8), mtxA, 1, (double)float_0_804274d4, (double)float_10_80427500);
+        animPoseDrawMtx(*(s32*)((s32)work + 0xC8), mtxA, 2, (double)float_0_804274d4, (double)float_10_80427500);
+        animPoseDrawMtx(*(s32*)((s32)work + 0xC8), mtxA, 3, (double)float_0_804274d4, (double)float_10_80427500);
+    }
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+
+/* CHATGPT STUB FILL: main/effect/eff_fall 20260624_184823 */
+
+/* stub-fill: effFallDispWater | missing_definition | ghidra_signature */
+void effFallDispWater(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4]; typedef u8 TexObj[0x20];
+    extern void* camGetPtr(s32); extern void PSMTXTrans(Mtx,f64,f64,f64); extern void PSMTXScale(Mtx,f32,f32,f32); extern void PSMTXRotRad(Mtx,f64,char); extern void PSMTXConcat(void*,void*,void*);
+    extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevOp(s32,s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+    extern void GXSetNumChans(s32); extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32); extern void GXSetCullMode(s32); extern void GXClearVtxDesc(void); extern void GXSetVtxDesc(s32,s32); extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
+    extern void effGetTexObj(s32,void*); extern void GXLoadTexObj(void*,s32); extern void GXLoadTexMtxImm(void*,s32,s32); extern void GXLoadPosMtxImm(void*,s32); extern void GXBegin(s32,s32,s32); extern void GXCallDisplayList(void*,u32); extern volatile f32 DAT_cc008000;
+    u8* w=*(u8**)((u8*)effect+0xC); void* cam=camGetPtr(cameraId); Mtx trans,scale,rot,base; TexObj tex; f32 halfW=32.0f; f32 height=352.0f;
+    PSMTXTrans(trans,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC));PSMTXRotRad(rot,-0.017453292f**(f32*)((u8*)camGetPtr(cameraId)+0x114),'y');
+    PSMTXConcat(trans,rot,base);PSMTXConcat((u8*)cam+0x11C,base,base);GXSetNumTevStages(2);GXSetTevOrder(0,0,0,4);GXSetTevOp(0,0);
+    GXSetTevOrder(1,0xFF,0xFF,0xFF);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);GXSetNumChans(1);GXSetChanCtrl(4,0,0,1,0,0,2);GXSetCullMode(2);
+    GXClearVtxDesc();GXSetVtxDesc(9,1);GXSetVtxDesc(11,1);GXSetVtxDesc(13,1);GXSetVtxAttrFmt(0,9,1,4,0);GXSetVtxAttrFmt(0,11,1,5,0);GXSetVtxAttrFmt(0,13,1,4,0);
+    effGetTexObj(0x35,tex);GXLoadTexObj(tex,0);PSMTXTrans(trans,*(f32*)(w+0xB8),*(f32*)(w+0xBC),*(f32*)(w+0xC0));PSMTXScale(scale,1.0f,height/704.0f,1.0f);PSMTXConcat(trans,scale,trans);GXLoadTexMtxImm(trans,0x1E,1);
+    PSMTXTrans(trans,*(f32*)(w+0x6C),*(f32*)(w+0x70),*(f32*)(w+0x74));PSMTXScale(scale,*(f32*)(w+0x94),1.0f,1.0f);PSMTXConcat(trans,scale,trans);PSMTXConcat(base,trans,trans);GXLoadPosMtxImm(trans,0);
+    GXBegin(0x80,0,4);DAT_cc008000=-halfW;DAT_cc008000=height;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;
+    DAT_cc008000=halfW;DAT_cc008000=height;DAT_cc008000=0;DAT_cc008000=2;DAT_cc008000=0;
+    DAT_cc008000=halfW;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=2;DAT_cc008000=1;
+    DAT_cc008000=-halfW;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=1;
+    if(*(s32*)(w+0xA0)>0){effGetTexObj(0x37,tex);GXLoadTexObj(tex,0);PSMTXTrans(trans,*(f32*)(w+0x6C),*(f32*)(w+0x70),*(f32*)(w+0x74));PSMTXScale(scale,0.56f,0.4f,0.8f);PSMTXConcat(base,trans,trans);PSMTXConcat(trans,scale,trans);GXLoadPosMtxImm(trans,0);}
+}
+
+s32 effFallCheckHit(void* eff) {
+    void* work = *(void**)((s32)eff + 0xC);
+
+    switch (*(s32*)work) {
+        case 0:
+        case 1:
+        case 4:
+        case 5:
+            if (*(s32*)((s32)work + 0xA0) >= 2) {
+                return 1;
+            }
+            break;
+        case 2:
+        case 3:
+            if (*(s32*)((s32)work + 0xA0) >= 1) {
+                return 1;
+            }
+            break;
+        case 6:
+            if (*(s32*)((s32)work + 0xA0) < 2) {
+                if (*(s32*)((s32)work + 0xA0) != 1) {
+                    break;
+                }
+                if (*(s32*)((s32)work + 0x8C) <= 90) {
+                    break;
+                }
+            }
+            return 1;
+        case 7:
+            if (*(s32*)((s32)work + 0xA0) >= 4) {
+                return 1;
+            }
+            break;
+        case 8:
+            if (*(s32*)((s32)work + 0xA0) >= 3) {
+                return 1;
+            }
+            break;
+    }
+    return 0;
 }
 

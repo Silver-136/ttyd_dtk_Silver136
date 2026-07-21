@@ -7,8 +7,8 @@ void BattleAudience_WinSetActive(s32 active);
 void _ac_help_disp(void);
 void dispEntry(s32 cameraId, s32 renderMode, void* callback, s32 param, f32 priority);
 
-void BattleAcHelpInit(void) {
-    ;
+void BattleAcHelpSetHelp(s32 help) {
+    *(s32*)((s32)_battleWorkPointer + 0x19008) = help;
 }
 
 void BattleAcHelpSetDispType(s32 type) {
@@ -23,8 +23,8 @@ void BattleAcHelpSetDispType(s32 type) {
     }
 }
 
-void BattleAcHelpSetHelp(s32 help) {
-    *(s32*)((s32)_battleWorkPointer + 0x19008) = help;
+void BattleAcHelpInit(void) {
+    ;
 }
 
 void BattleAcHelpMain(void) {

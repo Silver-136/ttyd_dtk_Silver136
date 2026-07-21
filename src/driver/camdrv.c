@@ -69,6 +69,16 @@ extern void PSVECSubtract(void* a, void* b, void* out);
 extern f32 PSVECDotProduct(void* a, void* b);
 extern void PSMTXMultVec(void* mtx, void* src, void* dst);
 typedef void (*CamCallback)(void*);
+void* camEntryPersp(
+    CamCallback callback,
+    const char* name,
+    f32 fovy,
+    f32 aspect,
+    f32 near,
+    f32 far,
+    f32 viewportNear,
+    f32 viewportFar
+);
 extern void* __memAlloc(s32 heap, u32 size);
 extern char* strcpy(char* dst, const char* src);
 
@@ -134,6 +144,26 @@ extern const f32 dat_8041f6e8;
 extern const f32 float_neg1_8041f6ec;
 extern VecRaw vec3_802bf608[];
 
+extern f32 marioGetCamFollowRate(void);
+extern f32 intplGetValue(f32 start, f32 end, u32 type, s32 time, s32 maxTime);
+extern void camShiftMain(void* cam, void* mario, f32* out);
+extern void camShiftPostMain(void);
+extern void camRoadMain(f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z2, void* out);
+extern void battleCameraMain(void);
+extern void PSMTXCopy(void* src, void* dst);
+extern void PSMTX44Copy(void* src, void* dst);
+
+extern const f32 float_1_8041f6c0;
+extern const f32 float_0p01_8041f6c4;
+extern const f32 float_1E05_8041f6c8;
+extern const f32 float_25_8041f6cc;
+extern const f32 float_32768_8041f6d0;
+extern const f32 float_100_8041f6d4;
+extern const f32 float_1p2667_8041f6d8;
+extern const f32 float_608_8041f6dc;
+extern const f32 float_480_8041f6e0;
+extern const double double_0p21817_802bf638;
+
 typedef struct CamVecRaw {
     u32 x;
     u32 y;
@@ -161,326 +191,822 @@ typedef struct Vec3 {
     f32 z;
 } Vec3;
 
-void camLetterBox(void) {
+void camEffMain(CamWorkRaw* cam);
+void cam3dImgMain(CamWorkRaw* cam);
+void cam3dMain(void* cam);
+
+#define INIT_ORTHO_CAM(slot, top, bottom, left, right, camName, wConv, hConv) \
+    do {                                                                        \
+        renderMode = NULL;                                                      \
+        cam = __memAlloc(0, 0x260);                                             \
+        memset(cam, 0, 0x260);                                                  \
+                                                                                \
+        C_MTXOrtho(                                                             \
+            (void*)((s32)cam + 0x15C),                                          \
+            (top),                                                              \
+            (bottom),                                                           \
+            (left),                                                             \
+            (right),                                                            \
+            float_1_8041f6c0,                                                   \
+            float_32768_8041f6d0                                                \
+        );                                                                      \
+                                                                                \
+        *(s32*)((s32)cam + 0x19C) = 1;                                          \
+                                                                                \
+        *(VecRaw*)((s32)cam + 0x0C) = camPtDefault;                             \
+        *(VecRaw*)((s32)cam + 0x18) = camAtDefault;                             \
+        *(VecRaw*)((s32)cam + 0x24) = camUpDefault;                             \
+                                                                                \
+        *(f32*)((s32)cam + 0x30) = float_1_8041f6c0;                            \
+        *(f32*)((s32)cam + 0x34) = float_32768_8041f6d0;                        \
+        *(f32*)((s32)cam + 0x114) = float_0_8041f6b4;                           \
+        *(f32*)((s32)cam + 0x118) = PSVECDistance(                              \
+            (void*)((s32)cam + 0x0C),                                           \
+            (void*)((s32)cam + 0x18)                                            \
+        );                                                                      \
+                                                                                \
+        *(void**)((s32)cam + 0x1EC) = NULL;                                     \
+        *(s16*)((s32)cam + 0x2) = 0;                                            \
+                                                                                \
+        *(f32*)((s32)cam + 0x14C) = float_0_8041f6b4;                           \
+        *(f32*)((s32)cam + 0x158) = float_0_8041f6b4;                           \
+        *(f32*)((s32)cam + 0x154) = float_0_8041f6b4;                           \
+        *(f32*)((s32)cam + 0x150) = float_0_8041f6b4;                           \
+        *(f32*)((s32)cam + 0x3C) = float_1p2667_8041f6d8;                       \
+        *(f32*)((s32)cam + 0x38) = float_25_8041f6cc;                           \
+        *(s32*)((s32)cam + 0x1E8) = 8;                                          \
+                                                                                \
+        strcpy((char*)((s32)cam + 0x254), (camName));                           \
+                                                                                \
+        *(s16*)((s32)cam + 0xF4) = 0;                                           \
+        *(s16*)((s32)cam + 0xF6) = 0;                                           \
+                                                                                \
+        renderMode = DEMOGetRenderModeObj();                                   \
+        *(u16*)((s32)cam + 0xF8) = *(u16*)((s32)renderMode + 0x4);              \
+                                                                                \
+        renderMode = DEMOGetRenderModeObj();                                   \
+        *(u16*)((s32)cam + 0xFA) = *(u16*)((s32)renderMode + 0x6);              \
+                                                                                \
+        *(f32*)((s32)cam + 0xFC) = float_0_8041f6b4;                            \
+        *(f32*)((s32)cam + 0x100) = float_0_8041f6b4;                           \
+                                                                                \
+        renderMode = DEMOGetRenderModeObj();                                   \
+        (wConv).words.hi = 0x43300000;                                         \
+        (wConv).words.lo = *(u16*)((s32)renderMode + 0x4);                     \
+        *(f32*)((s32)cam + 0x104) =                                            \
+            (f32)((wConv).value - *(f64*)((s32)defaults + 0x68));              \
+                                                                                \
+        renderMode = DEMOGetRenderModeObj();                                   \
+        (hConv).words.hi = 0x43300000;                                         \
+        (hConv).words.lo = *(u16*)((s32)renderMode + 0x6);                     \
+        *(f32*)((s32)cam + 0x108) =                                            \
+            (f32)((hConv).value - *(f64*)((s32)defaults + 0x68));              \
+                                                                                \
+        *(f32*)((s32)cam + 0x10C) = float_0_8041f6b4;                          \
+        *(f32*)((s32)cam + 0x110) = float_1_8041f6c0;                          \
+                                                                                \
+        camPtrTbl[(slot)] = cam;                                               \
+    } while (0)
+
+void camInit(void) {
+    VecRaw* defaults;
+    CamDoubleConv w0;
+    CamDoubleConv h0;
+    CamDoubleConv w1;
+    CamDoubleConv h1;
+    CamDoubleConv w2;
+    CamDoubleConv h2;
+    CamDoubleConv w3;
+    CamDoubleConv h3;
+    CamDoubleConv w11;
+    CamDoubleConv h11;
     void* cam;
-    void* party;
-    s32 value;
-    s16 alpha;
-    u16 flags;
+    void* renderMode;
+    f32 z;
+    VecRaw pos6;
+    VecRaw pos8;
+    VecRaw pos9;
+    VecRaw pos10;
+    defaults = vec3_802bf5d8;
 
-    cam = camPtrTbl[8];
-    party = partyGetPtr(0);
+    INIT_ORTHO_CAM(
+        0,
+        float_240_8041f6bc,
+        float_neg240_8041f704,
+        float_neg304_8041f708,
+        float_304_8041f6b8,
+        str_off_8041f70c,
+        w0,
+        h0
+    );
 
-    if ((*(u16*)cam & 0x200) != 0) {
-        goto after_initial_check;
-    }
+    INIT_ORTHO_CAM(
+        1,
+        float_0_8041f6b4,
+        float_480_8041f6e0,
+        float_0_8041f6b4,
+        float_608_8041f6dc,
+        str_off2_8041f710,
+        w1,
+        h1
+    );
 
-    if ((bero_get_BeroEXEC() & 1) != 0) {
-        goto after_initial_check;
-    }
+    INIT_ORTHO_CAM(
+        2,
+        float_0_8041f6b4,
+        float_480_8041f6e0,
+        float_0_8041f6b4,
+        float_608_8041f6dc,
+        str_shadow_802bf648,
+        w2,
+        h2
+    );
 
-    if (seqGetSeq() == 2) {
-        if (marioChkKey() != 0) {
-            if (marioChkCtrl() != 0) {
-                goto clear_letterbox;
-            }
-        }
+    INIT_ORTHO_CAM(
+        3,
+        float_0_8041f6b4,
+        float_480_8041f6e0,
+        float_0_8041f6b4,
+        float_608_8041f6dc,
+        str_bg_8041f718,
+        w3,
+        h3
+    );
 
-        if (party != NULL) {
-            if (party == NULL) {
-                goto clear_letterbox;
-            }
+    camPtrTbl[4] = camEntryPersp(
+        (CamCallback)cam3dMain,
+        str_3d_8041f71c,
+        float_25_8041f6cc,
+        float_1p2667_8041f6d8,
+        float_1_8041f6c0,
+        float_32768_8041f6d0,
+        float_0_8041f6b4,
+        float_1_8041f6c0
+    );
 
-            if ((*(u32*)party & 0x100) != 0) {
-                goto clear_letterbox;
-            }
-        }
+    camPtrTbl[5] = camEntryPersp(
+        (CamCallback)camEffMain,
+        str_3deff_A_802bf650,
+        float_25_8041f6cc,
+        float_1p2667_8041f6d8,
+        float_100_8041f6d4,
+        float_10000_8041f720,
+        float_0p2_8041f6f8,
+        float_0p3_8041f724
+    );
 
-        flags = *(u16*)cam;
-        if ((flags & 0x100) == 0) {
-            *(u16*)cam = flags | 0x100;
-            psndSetFlag(0x20);
+    camPtrTbl[6] = camEntryPersp(
+        (CamCallback)cam3dImgMain,
+        str_3dimg_8041f72c,
+        float_25_8041f6cc,
+        float_1p3333_8041f728,
+        float_1_8041f6c0,
+        float_32768_8041f6d0,
+        float_0_8041f6b4,
+        float_1_8041f6c0
+    );
 
-            *(s16*)((s32)cam + 0x1E0) = 0xFF;
-            *(s16*)((s32)cam + 0x1E2) = 0;
-            *(s16*)((s32)cam + 0x1E4) = 0;
-            *(s32*)((s32)cam + 0x1E8) = 8;
-        }
+    z = float_24_8041f734 / (f32)tan(double_0p21817_802bf658);
+    *(f32*)((s32)camPtrTbl[6] + 0x0C) = float_0_8041f6b4;
+    *(f32*)((s32)camPtrTbl[6] + 0x10) = float_0_8041f6b4;
+    *(f32*)((s32)camPtrTbl[6] + 0x14) = z;
 
-        goto after_initial_check;
-    }
+    camPtrTbl[7] = camEntryPersp(
+        (CamCallback)camEffMain,
+        str_3deff_B_802bf660,
+        float_0_8041f6b4,
+        float_1p2667_8041f6d8,
+        float_100_8041f6d4,
+        float_10000_8041f720,
+        float_0p2_8041f6f8,
+        float_0p3_8041f724
+    );
 
-clear_letterbox:
-    if (seqGetSeq() != 3) {
-        *(u16*)cam &= ~0x100;
-        psndClearFlag(0x20);
-    }
+    camPtrTbl[8] = camEntryPersp(
+        (CamCallback)0,
+        str_2d_8041f73c,
+        float_25_8041f6cc,
+        float_1p2667_8041f6d8,
+        float_100_8041f6d4,
+        float_10000_8041f720,
+        float_0p1_8041f738,
+        float_0p2_8041f6f8
+    );
 
-after_initial_check:
+    z = float_240_8041f6bc / (f32)tan(double_0p21817_802bf658);
+    pos8 = *(VecRaw*)((s32)defaults + 0x48);
+    *(f32*)&pos8.x = float_0_8041f6b4;
+    *(f32*)&pos8.y = float_0_8041f6b4;
+    *(f32*)&pos8.z = z;
+    *(VecRaw*)((s32)camPtrTbl[8] + 0x0C) = pos8;
 
-    if ((*(u16*)cam & 0x100) != 0) {
-        *(s16*)((s32)cam + 0x1E0) = 0xFF;
+    camPtrTbl[9] = camEntryPersp(
+        (CamCallback)0,
+        str_fade_8041f740,
+        float_25_8041f6cc,
+        float_1p3333_8041f728,
+        float_1_8041f6c0,
+        float_32768_8041f6d0,
+        float_0_8041f6b4,
+        float_0p1_8041f738
+    );
 
-        value = *(s16*)((s32)cam + 0x1E2) + 3;
-        *(s16*)((s32)cam + 0x1E2) = value;
-        if (*(s16*)((s32)cam + 0x1E2) > 0x31) {
-            *(s16*)((s32)cam + 0x1E2) = 0x31;
-        }
+    z = float_24_8041f734 / (f32)tan(double_0p21817_802bf658);
+    pos9 = *(VecRaw*)((s32)defaults + 0x48);
+    *(f32*)&pos9.x = float_0_8041f6b4;
+    *(f32*)&pos9.y = float_0_8041f6b4;
+    *(f32*)&pos9.z = z;
+    *(VecRaw*)((s32)camPtrTbl[9] + 0x0C) = pos9;
 
-        value = *(s16*)((s32)cam + 0x1E4) + 3;
-        *(s16*)((s32)cam + 0x1E4) = value;
-        if (*(s16*)((s32)cam + 0x1E4) > 0x2C) {
-            *(s16*)((s32)cam + 0x1E4) = 0x2C;
-        }
+    camPtrTbl[10] = camEntryPersp(
+        (CamCallback)0,
+        str_fade2_8041f748,
+        float_25_8041f6cc,
+        float_1p3333_8041f728,
+        float_1_8041f6c0,
+        float_32768_8041f6d0,
+        float_0_8041f6b4,
+        float_0p1_8041f738
+    );
 
-        flags = *(u16*)cam;
-        if ((flags & 0x400) != 0) {
-            *(u16*)cam = flags & ~0x400;
-            *(s16*)((s32)cam + 0x1E2) = 0x31;
-            *(s16*)((s32)cam + 0x1E4) = 0x2C;
-        }
-    } else {
-        *(s16*)((s32)cam + 0x1E0) =
-            *(s16*)((s32)cam + 0x1E0) -
-            ((0xFF / *(s32*)((s32)gp + 0x4)) * 2);
+    z = float_24_8041f734 / (f32)tan(double_0p21817_802bf658);
+    pos10 = *(VecRaw*)((s32)defaults + 0x48);
+    *(f32*)&pos10.x = float_0_8041f6b4;
+    *(f32*)&pos10.y = float_0_8041f6b4;
+    *(f32*)&pos10.z = z;
+    *(VecRaw*)((s32)camPtrTbl[10] + 0x0C) = pos10;
+    INIT_ORTHO_CAM(
+        11,
+        float_0_8041f6b4,
+        float_480_8041f6e0,
+        float_0_8041f6b4,
+        float_608_8041f6dc,
+        str_dbg_8041f750,
+        w11,
+        h11
+    );
 
-        if (*(s16*)((s32)cam + 0x1E0) < 0) {
-            *(s16*)((s32)cam + 0x1E0) = 0;
-        }
-
-        flags = *(u16*)cam;
-        if ((flags & 0x400) != 0) {
-            *(u16*)cam = flags & ~0x400;
-            *(s16*)((s32)cam + 0x1E0) = 0;
-        }
-    }
-
-    dispEntry(*(s32*)((s32)cam + 0x1E8), 3, camLetterBoxDraw, NULL, float_0_8041f6b4);
+    camPtrTbl[12] = camEntryPersp(
+        (CamCallback)0,
+        str_dbg3d_8041f754,
+        float_25_8041f6cc,
+        float_1p2667_8041f6d8,
+        float_1_8041f6c0,
+        float_32768_8041f6d0,
+        float_0_8041f6b4,
+        float_1_8041f6c0
+    );
 }
 
-void camLetterBoxDraw(void) {
+void* camEntryPersp(
+    CamCallback callback,
+    const char* name,
+    f32 fovy,
+    f32 aspect,
+    f32 near,
+    f32 far,
+    f32 viewportNear,
+    f32 viewportFar
+) {
+    VecRaw* defaults;
+    CamDoubleConv widthConv;
+    CamDoubleConv heightConv;
     void* cam;
-    volatile s16* fifo;
+    void* renderMode;
 
-    f32 viewport[6];
-    f32 projection[7];
-    s16 topY;
-    s16 bottomY;
-    u32 scissorX;
-    u32 scissorY;
-    u32 scissorW;
-    u32 scissorH;
+    defaults = vec3_802bf5d8;
 
-    u32 matColor;
-    u32 colorTemp;
-    u32 fogColor;
+    cam = __memAlloc(0, 0x260);
+    memset(cam, 0, 0x260);
 
-    cam = camPtrTbl[8];
+    C_MTXPerspective(
+        (void*)((s32)cam + 0x15C),
+        fovy,
+        aspect,
+        near,
+        far
+    );
 
-    if ((*(u32*)gp & 0x8000) != 0) {
-        return;
-    }
+    *(s32*)((s32)cam + 0x19C) = 0;
 
-    if (*(s16*)((s32)cam + 0x1E0) == 0) {
-        return;
-    }
+    *(VecRaw*)((s32)cam + 0x0C) = camPtDefault;
+    *(VecRaw*)((s32)cam + 0x18) = camAtDefault;
+    *(VecRaw*)((s32)cam + 0x24) = camUpDefault;
 
-    GXGetViewportv(viewport);
-    GXGetProjectionv(projection);
-    GXGetScissor(&scissorX, &scissorY, &scissorW, &scissorH);
+    *(f32*)((s32)cam + 0x30) = near;
+    *(f32*)((s32)cam + 0x34) = far;
+    *(f32*)((s32)cam + 0x114) = float_0_8041f6b4;
 
-    GXSetProjection((void*)((s32)cam + 0x15C), *(u32*)((s32)cam + 0x19C));
-    GXSetBlendMode(1, 4, 5, 0);
-    GXSetZCompLoc(1);
-    GXSetAlphaCompare(7, 0, 0, 7, 0);
-    GXSetZMode(0, 3, 0);
-    GXSetNumChans(1);
+    *(f32*)((s32)cam + 0x118) = PSVECDistance(
+        (void*)((s32)cam + 0x0C),
+        (void*)((s32)cam + 0x18)
+    );
 
-    colorTemp = unk_80429510;
-    *(u8*)((s32)&colorTemp + 3) = *(s16*)((s32)cam + 0x1E0);
-    matColor = colorTemp;
-    GXSetChanMatColor(4, &matColor);
+    *(void**)((s32)cam + 0x1EC) = callback;
 
-    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    *(s16*)((s32)cam + 0x2) = 0;
+    *(s16*)((s32)cam + 0x4) = 0;
+    *(f32*)((s32)cam + 0x8) = float_0_8041f6b4;
 
-    fogColor = dat_8041f6b0;
-    GXSetFog(0, float_0_8041f6b4, float_0_8041f6b4, float_0_8041f6b4, float_0_8041f6b4, &fogColor);
+    *(f32*)((s32)cam + 0x38) = fovy;
+    *(f32*)((s32)cam + 0x3C) = aspect;
 
-    GXSetNumTexGens(0);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(0, 0xFF, 0xFF, 4);
-    GXSetTevOp(0, 4);
-    GXSetCullMode(0);
+    *(f32*)((s32)cam + 0x14C) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x158) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x154) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x150) = float_0_8041f6b4;
 
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 1);
-    GXSetVtxAttrFmt(0, 9, 1, 3, 0);
+    *(s32*)((s32)cam + 0x1E8) = 8;
 
-    GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
-    GXSetCurrentMtx(0);
+    strcpy((char*)((s32)cam + 0x254), name);
 
-    GXBegin(0x80, 0, 8);
+    *(s16*)((s32)cam + 0xF4) = 0;
+    *(s16*)((s32)cam + 0xF6) = 0;
 
-    fifo = (volatile s16*)0xCC008000;
+    renderMode = DEMOGetRenderModeObj();
+    *(u16*)((s32)cam + 0xF8) = *(u16*)((s32)renderMode + 0x4);
 
-    *fifo = -0x130;
-    *fifo = 0xF0;
-    *fifo = 0;
+    renderMode = DEMOGetRenderModeObj();
+    *(u16*)((s32)cam + 0xFA) = *(u16*)((s32)renderMode + 0x6);
 
-    *fifo = 0x130;
-    *fifo = 0xF0;
-    *fifo = 0;
+    *(f32*)((s32)cam + 0xFC) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x100) = float_0_8041f6b4;
 
-    topY = 0xF0 - *(s16*)((s32)cam + 0x1E2);
-    *fifo = 0x130;
-    *fifo = topY;
-    *fifo = 0;
+    renderMode = DEMOGetRenderModeObj();
+    widthConv.words.hi = 0x43300000;
+    widthConv.words.lo = *(u16*)((s32)renderMode + 0x4);
+    *(f32*)((s32)cam + 0x104) = (f32)(widthConv.value - *(f64*)((s32)defaults + 0x68));
 
-    topY = 0xF0 - *(s16*)((s32)cam + 0x1E2);
-    *fifo = -0x130;
-    *fifo = topY;
-    *fifo = 0;
+    renderMode = DEMOGetRenderModeObj();
+    heightConv.words.hi = 0x43300000;
+    heightConv.words.lo = *(u16*)((s32)renderMode + 0x6);
+    *(f32*)((s32)cam + 0x108) = (f32)(heightConv.value - *(f64*)((s32)defaults + 0x68));
 
-    bottomY = *(s16*)((s32)cam + 0x1E4) - 0xF0;
-    *fifo = -0x130;
-    *fifo = bottomY;
-    *fifo = 0;
+    *(f32*)((s32)cam + 0x10C) = viewportNear;
+    *(f32*)((s32)cam + 0x110) = viewportFar;
 
-    bottomY = *(s16*)((s32)cam + 0x1E4) - 0xF0;
-    *fifo = 0x130;
-    *fifo = bottomY;
-    *fifo = 0;
+    *(f32*)((s32)cam + 0x1F0) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x1F4) = float_8_8041f6fc;
+    *(f32*)((s32)cam + 0x1F8) = float_400_8041f700;
 
-    *fifo = 0x130;
-    *fifo = -0xF0;
-    *fifo = 0;
+    *(f32*)((s32)cam + 0x20C) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x210) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x214) = float_0_8041f6b4;
 
-    *fifo = -0x130;
-    *fifo = -0xF0;
-    *fifo = 0;
+    *(f32*)((s32)cam + 0x200) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x204) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x208) = float_0_8041f6b4;
 
-    GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
-    GXSetProjectionv(projection);
-    GXSetScissor(scissorX, scissorY, scissorW, scissorH);
+    *(s16*)((s32)cam + 0x218) = 0;
+    *(s16*)((s32)cam + 0x21A) = 0;
+    *(s16*)((s32)cam + 0x21C) = 0;
+    *(s16*)((s32)cam + 0x21E) = 0;
+
+    *(VecRaw*)((s32)cam + 0x224) = defaults[0];
+    *(VecRaw*)((s32)cam + 0x230) = defaults[1];
+    *(VecRaw*)((s32)cam + 0x23C) = defaults[2];
+    *(VecRaw*)((s32)cam + 0x248) = defaults[3];
+
+    return cam;
 }
 
-void getScreenPoint(Vec3* pos, Vec3* out) {
+void camMain(void) {
+    void** camPtr;
     void* cam;
-    f32 projection[7];
-    f32 viewport[6];
+    void* cam4;
+    void* player;
+    void* renderMode;
+    CamCallback callback;
+    s32 i;
+
+    VecRaw pointB;
+
+    f32 projectedZ;
+    f32 projectedY;
+    f32 projectedX;
+
+    VecRaw pointA;
+
+    f32* projectedZPtr;
+    f32* projectedYPtr;
+
+    f32 deg2rad;
+    f32 strength;
+    f32 zoom;
+    f32 baseScale;
+    f32 extentX;
+    f32 extentY;
+    f32 offsetX;
+    f32 offsetY;
+    f32 limit;
+    f32 zoomScale;
+
     f32 oldProjection[7];
+    f32 viewport[6];
+    f32 projection[7];
 
-    GXGetProjectionv(oldProjection);
+    f32 rotMtx[3][4];
+    f32 postTransMtx[3][4];
+    f32 screenTransMtx[3][4];
+    f32 scaleMtx[3][4];
+    f32 concatMtx[3][4];
 
-    cam = camPtrTbl[4];
+    deg2rad = float_deg2rad_8041f6f0;
 
-    GXSetProjection((void*)((s32)cam + 0x15C), *(u32*)((s32)cam + 0x19C));
+    projectedZPtr = &projectedZ;
+    projectedYPtr = &projectedY;
 
-    GXGetProjectionv(projection);
-    GXGetViewportv(viewport);
+    camPtr = camPtrTbl;
+    for (i = 0; i < 13; i++, camPtr++) {
+        cam = *camPtr;
 
-    GXProject(
-        pos->x,
-        pos->y,
-        pos->z,
-        (void*)((s32)cam + 0x11C),
-        projection,
-        viewport,
-        &out->x,
-        &out->y,
-        &out->z
-    );
+        callback = *(CamCallback*)((s32)cam + 0x1EC);
+        if (callback != NULL) {
+            callback(cam);
+        }
 
-    GXSetProjectionv(oldProjection);
+        C_MTXLookAt(
+            (void*)((s32)cam + 0x11C),
+            (void*)((s32)cam + 0x0C),
+            (void*)((s32)cam + 0x24),
+            (void*)((s32)cam + 0x18)
+        );
 
-    out->x = out->x - float_304_8041f6b8;
-    out->y = float_240_8041f6bc - out->y;
+        PSMTXRotRad(
+            rotMtx,
+            'z',
+            deg2rad * *(f32*)((s32)cam + 0x14C)
+        );
+
+        PSMTXTrans(
+            postTransMtx,
+            *(f32*)((s32)cam + 0x150),
+            *(f32*)((s32)cam + 0x154),
+            *(f32*)((s32)cam + 0x158)
+        );
+
+        PSMTXConcat(
+            rotMtx,
+            (void*)((s32)cam + 0x11C),
+            (void*)((s32)cam + 0x11C)
+        );
+
+        PSMTXConcat(
+            postTransMtx,
+            (void*)((s32)cam + 0x11C),
+            (void*)((s32)cam + 0x11C)
+        );
+
+        if ((i == 4) && (*(s32*)((s32)gp + 0x14) == 0)) {
+            player = marioGetPtr();
+            strength = *(f32*)((s32)player + 0x64);
+
+            pointA = vec3_802bf608[0];
+
+            player = marioGetPtr();
+            *(f32*)&pointA.x = *(f32*)((s32)player + 0x8C) + *(f32*)((s32)player + 0x6C);
+
+            player = marioGetPtr();
+            *(f32*)&pointA.y = *(f32*)((s32)player + 0x90) + *(f32*)((s32)player + 0x70);
+
+            player = marioGetPtr();
+            *(f32*)&pointA.z = *(f32*)((s32)player + 0x94) + *(f32*)((s32)player + 0x74);
+
+            pointB = pointA;
+
+            player = marioGetPtr();
+            zoom = *(f32*)((s32)player + 0x68);
+
+            renderMode = DEMOGetRenderModeObj();
+            baseScale = strength * (float_1_8041f6c0 - (float_1_8041f6c0 / zoom));
+            extentX = baseScale * (f32)*(u16*)((s32)renderMode + 0x4);
+
+            renderMode = DEMOGetRenderModeObj();
+            extentY = baseScale * (f32)*(u16*)((s32)renderMode + 0x6);
+
+            GXGetProjectionv(oldProjection);
+
+            cam4 = camPtrTbl[4];
+            GXSetProjection(
+                (void*)((s32)cam4 + 0x15C),
+                *(u32*)((s32)cam4 + 0x19C)
+            );
+
+            GXGetProjectionv(projection);
+            GXGetViewportv(viewport);
+
+            GXProject(
+                *(f32*)&pointB.x,
+                *(f32*)&pointB.y,
+                *(f32*)&pointB.z,
+                (void*)((s32)cam4 + 0x11C),
+                projection,
+                viewport,
+                &projectedX,
+                projectedYPtr,
+                projectedZPtr
+            );
+
+            GXSetProjectionv(oldProjection);
+
+            projectedX = projectedX - float_304_8041f6b8;
+            projectedY = float_240_8041f6bc - projectedY;
+
+            if (strength > float_1_8041f6c0) {
+                strength = float_1_8041f6c0;
+            } else if (strength < float_0_8041f6b4) {
+                strength = float_0_8041f6b4;
+            }
+
+            offsetX = float_0p5_8041f6f4 * projectedX * strength;
+            offsetY = float_0p5_8041f6f4 * projectedY * strength;
+
+            limit = -extentX * float_0p2_8041f6f8;
+            if (offsetX < limit) {
+                offsetX = limit;
+            } else {
+                limit = extentX * float_0p2_8041f6f8;
+                if (offsetX > limit) {
+                    offsetX = limit;
+                }
+            }
+
+            limit = -extentY * float_0p2_8041f6f8;
+            if (offsetY < limit) {
+                offsetY = limit;
+            } else {
+                limit = extentY * float_0p2_8041f6f8;
+                if (offsetY > limit) {
+                    offsetY = limit;
+                }
+            }
+
+            zoomScale = (strength * zoom) + (float_1_8041f6c0 - strength);
+
+            PSMTXTrans(
+                screenTransMtx,
+                -offsetX,
+                -offsetY,
+                float_0_8041f6b4
+            );
+
+            PSMTXScale(
+                scaleMtx,
+                zoomScale,
+                zoomScale,
+                float_1_8041f6c0
+            );
+
+            PSMTXConcat(scaleMtx, screenTransMtx, concatMtx);
+
+            PSMTXConcat(
+                concatMtx,
+                (void*)((s32)cam + 0x11C),
+                (void*)((s32)cam + 0x11C)
+            );
+        }
+
+        if ((*(u16*)cam & 8) != 0) {
+            PSMTX44Concat(
+                (void*)((s32)cam + 0x1A0),
+                (void*)((s32)cam + 0x15C),
+                (void*)((s32)cam + 0x15C)
+            );
+
+            *(u16*)cam &= ~8;
+        }
+    }
 }
 
-void camSetTypeOrtho(s32 camId) {
-    *(s32*)((s32)camPtrTbl[camId] + 0x19C) = 1;
+void camEvalNearFar(void* cam) {
+    typedef struct CamEvalWork {
+        u8 pad_00[0x0C];
+        Vec3 pos;               // 0x0C
+        u8 pad_18[0x30 - 0x18];
+        f32 nearClip;           // 0x30
+        f32 farClip;            // 0x34
+        u8 pad_38[0x10C - 0x38];
+        f32 screenNear;         // 0x10C
+        f32 screenFar;          // 0x110
+        u8 pad_114[0x11C - 0x114];
+        f32 viewMtx[3][4];      // 0x11C
+        u8 pad_14C[0x184 - 0x14C];
+        f32 scale;              // 0x184
+        f32 bias;               // 0x188
+    } CamEvalWork;
+
+    typedef struct CamEvalMap {
+        u8 pad_00[0xB0];
+        Vec3 point;             // 0xB0
+    } CamEvalMap;
+
+    CamEvalWork* camWork;
+    void* map;
+    s32 i;
+
+    f32 zero;
+    f32 scale;
+    f32 bias;
+    f32 screenFar;
+    f32 nearDepth;
+    f32 farDepth;
+    f32 screenRange;
+    f32 minValue;
+    f32 maxValue;
+
+    f32 screenNear;
+    f32 z;
+    f32 value;
+    Vec3 diff;
+    Vec3 transformed;
+
+    camWork = (CamEvalWork*)cam;
+
+    nearDepth = float_1_8041f6c0;
+    farDepth = float_32768_8041f6d0;
+    minValue = dat_8041f6e4;
+    maxValue = dat_8041f6e8;
+
+    map = mapGetWork();
+
+    screenFar = camWork->screenFar;
+    screenNear = camWork->screenNear;
+    scale = camWork->scale;
+    screenRange = screenFar - screenNear;
+    bias = camWork->bias;
+    zero = float_0_8041f6b4;
+
+    for (i = 0; i < 8; i++, map = (void*)((s32)map + 0xC)) {
+        PSVECSubtract(
+            (void*)((s32)map + 0xB0),
+            &camWork->pos,
+            &diff
+        );
+
+        if (PSVECDotProduct(&diff, (void*)&camWork->viewMtx[2][0]) >= zero) {
+            if (zero != minValue) {
+                minValue = zero;
+                nearDepth = float_neg1_8041f6ec;
+            }
+        } else {
+            PSMTXMultVec(
+                camWork->viewMtx,
+                &((CamEvalMap*)map)->point,
+                &transformed
+            );
+
+            z = transformed.z;
+            value = (float_1_8041f6c0 / -z) * ((scale * z) + bias);
+            value = (screenRange * value) + screenFar;
+
+            if (value < minValue) {
+                minValue = value;
+                nearDepth = z;
+            }
+
+            if (value > maxValue) {
+                maxValue = value;
+                farDepth = z;
+            }
+        }
+    }
+
+    farDepth = -farDepth;
+    nearDepth = -nearDepth;
+
+    if (farDepth < float_1_8041f6c0) {
+        farDepth = float_1_8041f6c0;
+    }
+
+    camWork->nearClip = *(volatile f32*)&float_1_8041f6c0;
+    camWork->nearClip = nearDepth;
+    camWork->farClip = farDepth;
 }
 
-void camSetTypePersp(s32 camId) {
-    *(s32*)((s32)camPtrTbl[camId] + 0x19C) = 0;
+void camDraw(void) {
+    void** camPtr;
+    s32 i;
+    void* cam;
+
+    camLetterBox();
+    dispSort();
+
+    camPtr = camPtrTbl;
+    for (i = 0; i < 13; i++, camPtr++) {
+        cam = *camPtr;
+
+        if ((*(u16*)cam & 1) == 0) {
+            currentCamNo = i;
+
+            GXSetViewport(
+                *(f32*)((s32)cam + 0xFC),
+                *(f32*)((s32)cam + 0x100),
+                *(f32*)((s32)cam + 0x104),
+                *(f32*)((s32)cam + 0x108),
+                *(f32*)((s32)cam + 0x10C),
+                *(f32*)((s32)cam + 0x110)
+            );
+
+            GXSetScissor(
+                *(u16*)((s32)cam + 0xF4),
+                *(u16*)((s32)cam + 0xF6),
+                *(u16*)((s32)cam + 0xF8),
+                *(u16*)((s32)cam + 0xFA)
+            );
+
+            if (((*(u16*)cam & 0x40) != 0) && (*(s32*)((s32)cam + 0x19C) == 0)) {
+                camEvalNearFar(cam);
+
+                C_MTXPerspective(
+                    (void*)((s32)cam + 0x15C),
+                    *(f32*)((s32)cam + 0x38),
+                    *(f32*)((s32)cam + 0x3C),
+                    *(f32*)((s32)cam + 0x30),
+                    *(f32*)((s32)cam + 0x34)
+                );
+            }
+
+            GXSetProjection((void*)((s32)cam + 0x15C), *(u32*)((s32)cam + 0x19C));
+            dispDraw(i);
+            sysDummyDraw((void*)((s32)cam + 0x11C));
+        }
+    }
+
+    dispReInit();
 }
 
-void camCtrlOff(s32 camId) {
-    *(u16*)camPtrTbl[camId] |= 2;
+void camLoadRoad(s32 camId, const char* name) {
+    void* cam;
+
+    cam = camPtrTbl[camId];
+
+    *(u16*)cam &= ~0x10;
+
+    *(f32*)((s32)cam + 0x90) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x8C) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x88) = float_0_8041f6b4;
+
+    if (camRoadSetup(name) != 0) {
+        *(u16*)cam |= 0x4;
+        *(u16*)((s32)camPtrTbl[camId] + 0x2) = 1;
+    } else {
+        *(u16*)cam &= ~0x4;
+        *(u16*)((s32)camPtrTbl[camId] + 0x2) = 3;
+    }
+
+    *(f32*)((s32)cam + 0x38) = float_25_8041f6cc;
+
+    *(f32*)((s32)cam + 0x14C) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x158) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x154) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x150) = float_0_8041f6b4;
+
+    *(u16*)((s32)cam + 0x4) = 0;
+    *(u8*)((s32)cam + 0x80) = 0xB;
+    *(f32*)((s32)cam + 0x8) = float_0_8041f6b4;
+    *(u8*)((s32)cam + 0xE0) = 0xB;
+    *(f32*)((s32)cam + 0x84) = float_0_8041f6b4;
+
+    *(f32*)((s32)cam + 0x9C) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x98) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x94) = float_0_8041f6b4;
 }
 
-void camCtrlOn(s32 camId) {
-    *(u16*)camPtrTbl[camId] &= ~2;
+void camUnLoadRoad(s32 camId) {
+    void* cam;
+
+    cam = camPtrTbl[camId];
+
+    *(u16*)cam &= ~4;
+    *(u16*)((s32)camPtrTbl[camId] + 0x2) = 0;
+    *(u16*)((s32)cam + 0x4) = 0;
+
+    *(f32*)((s32)cam + 0x8) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x38) = float_25_8041f6cc;
+
+    *(f32*)((s32)cam + 0x14C) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x158) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x154) = float_0_8041f6b4;
+    *(f32*)((s32)cam + 0x150) = float_0_8041f6b4;
+
+    *(u16*)cam &= ~8;
 }
 
-void L_camDispOff(s32 camId) {
-    *(u16*)camPtrTbl[camId] |= 1;
+void* camGetPtr(s32 camId) {
+    return camPtrTbl[camId];
 }
 
-void L_camDispOn(s32 camId) {
-    *(u16*)camPtrTbl[camId] &= ~1;
+void* camGetCurPtr(void) {
+    return camPtrTbl[currentCamNo];
 }
 
-void camSetMode(s32 camId, s16 mode) {
-    *(s16*)((s32)camPtrTbl[camId] + 0x2) = mode;
+s32 camGetCurNo(void) {
+    return currentCamNo;
 }
 
-void camEffMain(CamWorkRaw* cam) {
-    CamWorkRaw* src;
-
-    src = camPtrTbl[4];
-
-    cam->pos = src->pos;
-    cam->up = src->up;
-    cam->target = src->target;
-
-    cam->distance = PSVECDistance(&cam->pos, &cam->target);
-
-    cam->angle = angleABf(
-        *(f32*)&cam->pos.x,
-        *(f32*)&cam->pos.z,
-        *(f32*)&cam->target.x,
-        *(f32*)&cam->target.z
-    );
-
-    C_MTXPerspective(
-        (void*)((s32)cam + 0x15C),
-        cam->fovy,
-        cam->aspect,
-        cam->near,
-        cam->far
-    );
+void camSetCurNo(s32 camNo) {
+    currentCamNo = camNo;
 }
-
-void cam3dImgMain(CamWorkRaw* cam) {
-    C_MTXPerspective(
-        (void*)((s32)cam + 0x15C),
-        cam->fovy,
-        cam->aspect,
-        cam->near,
-        cam->far
-    );
-}
-
-extern f32 marioGetCamFollowRate(void);
-extern f32 intplGetValue(f32 start, f32 end, u32 type, s32 time, s32 maxTime);
-extern void camShiftMain(void* cam, void* mario, f32* out);
-extern void camShiftPostMain(void);
-extern void camRoadMain(f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z2, void* out);
-extern void battleCameraMain(void);
-extern void PSMTXCopy(void* src, void* dst);
-extern void PSMTX44Copy(void* src, void* dst);
-
-extern const f32 float_1_8041f6c0;
-extern const f32 float_0p01_8041f6c4;
-extern const f32 float_1E05_8041f6c8;
-extern const f32 float_25_8041f6cc;
-extern const f32 float_32768_8041f6d0;
-extern const f32 float_100_8041f6d4;
-extern const f32 float_1p2667_8041f6d8;
-extern const f32 float_608_8041f6dc;
-extern const f32 float_480_8041f6e0;
-extern const double double_0p21817_802bf638;
 
 void cam3dMain(void* cam) {
     void* mario;
@@ -797,815 +1323,303 @@ copy_to_cam1:
     *(s32*)((s32)cam1 + 0x19C) = *(s32*)((s32)cam4 + 0x19C);
 }
 
-void camSetCurNo(s32 camNo) {
-    currentCamNo = camNo;
+void cam3dImgMain(CamWorkRaw* cam) {
+    C_MTXPerspective(
+        (void*)((s32)cam + 0x15C),
+        cam->fovy,
+        cam->aspect,
+        cam->near,
+        cam->far
+    );
 }
 
-s32 camGetCurNo(void) {
-    return currentCamNo;
-}
-
-void* camGetCurPtr(void) {
-    return camPtrTbl[currentCamNo];
-}
-
-void* camGetPtr(s32 camId) {
-    return camPtrTbl[camId];
-}
-
-void camUnLoadRoad(s32 camId) {
-    void* cam;
-
-    cam = camPtrTbl[camId];
-
-    *(u16*)cam &= ~4;
-    *(u16*)((s32)camPtrTbl[camId] + 0x2) = 0;
-    *(u16*)((s32)cam + 0x4) = 0;
-
-    *(f32*)((s32)cam + 0x8) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x38) = float_25_8041f6cc;
-
-    *(f32*)((s32)cam + 0x14C) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x158) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x154) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x150) = float_0_8041f6b4;
-
-    *(u16*)cam &= ~8;
-}
-
-void camLoadRoad(s32 camId, const char* name) {
-    void* cam;
-
-    cam = camPtrTbl[camId];
-
-    *(u16*)cam &= ~0x10;
-
-    *(f32*)((s32)cam + 0x90) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x8C) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x88) = float_0_8041f6b4;
-
-    if (camRoadSetup(name) != 0) {
-        *(u16*)cam |= 0x4;
-        *(u16*)((s32)camPtrTbl[camId] + 0x2) = 1;
-    } else {
-        *(u16*)cam &= ~0x4;
-        *(u16*)((s32)camPtrTbl[camId] + 0x2) = 3;
-    }
-
-    *(f32*)((s32)cam + 0x38) = float_25_8041f6cc;
-
-    *(f32*)((s32)cam + 0x14C) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x158) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x154) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x150) = float_0_8041f6b4;
-
-    *(u16*)((s32)cam + 0x4) = 0;
-    *(u8*)((s32)cam + 0x80) = 0xB;
-    *(f32*)((s32)cam + 0x8) = float_0_8041f6b4;
-    *(u8*)((s32)cam + 0xE0) = 0xB;
-    *(f32*)((s32)cam + 0x84) = float_0_8041f6b4;
-
-    *(f32*)((s32)cam + 0x9C) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x98) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x94) = float_0_8041f6b4;
-}
-
-void camDraw(void) {
-    void** camPtr;
-    s32 i;
-    void* cam;
-
-    camLetterBox();
-    dispSort();
-
-    camPtr = camPtrTbl;
-    for (i = 0; i < 13; i++, camPtr++) {
-        cam = *camPtr;
-
-        if ((*(u16*)cam & 1) == 0) {
-            currentCamNo = i;
-
-            GXSetViewport(
-                *(f32*)((s32)cam + 0xFC),
-                *(f32*)((s32)cam + 0x100),
-                *(f32*)((s32)cam + 0x104),
-                *(f32*)((s32)cam + 0x108),
-                *(f32*)((s32)cam + 0x10C),
-                *(f32*)((s32)cam + 0x110)
-            );
-
-            GXSetScissor(
-                *(u16*)((s32)cam + 0xF4),
-                *(u16*)((s32)cam + 0xF6),
-                *(u16*)((s32)cam + 0xF8),
-                *(u16*)((s32)cam + 0xFA)
-            );
-
-            if (((*(u16*)cam & 0x40) != 0) && (*(s32*)((s32)cam + 0x19C) == 0)) {
-                camEvalNearFar(cam);
-
-                C_MTXPerspective(
-                    (void*)((s32)cam + 0x15C),
-                    *(f32*)((s32)cam + 0x38),
-                    *(f32*)((s32)cam + 0x3C),
-                    *(f32*)((s32)cam + 0x30),
-                    *(f32*)((s32)cam + 0x34)
-                );
-            }
-
-            GXSetProjection((void*)((s32)cam + 0x15C), *(u32*)((s32)cam + 0x19C));
-            dispDraw(i);
-            sysDummyDraw((void*)((s32)cam + 0x11C));
-        }
-    }
-
-    dispReInit();
-}
-
-void camEvalNearFar(void* cam) {
-    typedef struct CamEvalWork {
-        u8 pad_00[0x0C];
-        Vec3 pos;               // 0x0C
-        u8 pad_18[0x30 - 0x18];
-        f32 nearClip;           // 0x30
-        f32 farClip;            // 0x34
-        u8 pad_38[0x10C - 0x38];
-        f32 screenNear;         // 0x10C
-        f32 screenFar;          // 0x110
-        u8 pad_114[0x11C - 0x114];
-        f32 viewMtx[3][4];      // 0x11C
-        u8 pad_14C[0x184 - 0x14C];
-        f32 scale;              // 0x184
-        f32 bias;               // 0x188
-    } CamEvalWork;
-
-    typedef struct CamEvalMap {
-        u8 pad_00[0xB0];
-        Vec3 point;             // 0xB0
-    } CamEvalMap;
-
-    CamEvalWork* camWork;
-    void* map;
-    s32 i;
-
-    f32 zero;
-    f32 scale;
-    f32 bias;
-    f32 screenFar;
-    f32 nearDepth;
-    f32 farDepth;
-    f32 screenRange;
-    f32 minValue;
-    f32 maxValue;
-
-    f32 screenNear;
-    f32 z;
-    f32 value;
-    Vec3 diff;
-    Vec3 transformed;
-
-    camWork = (CamEvalWork*)cam;
-
-    nearDepth = float_1_8041f6c0;
-    farDepth = float_32768_8041f6d0;
-    minValue = dat_8041f6e4;
-    maxValue = dat_8041f6e8;
-
-    map = mapGetWork();
-
-    screenFar = camWork->screenFar;
-    screenNear = camWork->screenNear;
-    scale = camWork->scale;
-    screenRange = screenFar - screenNear;
-    bias = camWork->bias;
-    zero = float_0_8041f6b4;
-
-    for (i = 0; i < 8; i++, map = (void*)((s32)map + 0xC)) {
-        PSVECSubtract(
-            (void*)((s32)map + 0xB0),
-            &camWork->pos,
-            &diff
-        );
-
-        if (PSVECDotProduct(&diff, (void*)&camWork->viewMtx[2][0]) >= zero) {
-            if (zero != minValue) {
-                minValue = zero;
-                nearDepth = float_neg1_8041f6ec;
-            }
-        } else {
-            PSMTXMultVec(
-                camWork->viewMtx,
-                &((CamEvalMap*)map)->point,
-                &transformed
-            );
-
-            z = transformed.z;
-            value = (float_1_8041f6c0 / -z) * ((scale * z) + bias);
-            value = (screenRange * value) + screenFar;
-
-            if (value < minValue) {
-                minValue = value;
-                nearDepth = z;
-            }
-
-            if (value > maxValue) {
-                maxValue = value;
-                farDepth = z;
-            }
-        }
-    }
-
-    farDepth = -farDepth;
-    nearDepth = -nearDepth;
-
-    if (farDepth < float_1_8041f6c0) {
-        farDepth = float_1_8041f6c0;
-    }
-
-    camWork->nearClip = *(volatile f32*)&float_1_8041f6c0;
-    camWork->nearClip = nearDepth;
-    camWork->farClip = farDepth;
-}
-
-void camMain(void) {
-    void** camPtr;
-    void* cam;
-    void* cam4;
-    void* player;
-    void* renderMode;
-    CamCallback callback;
-    s32 i;
-
-    VecRaw pointB;
-
-    f32 projectedZ;
-    f32 projectedY;
-    f32 projectedX;
-
-    VecRaw pointA;
-
-    f32* projectedZPtr;
-    f32* projectedYPtr;
-
-    f32 deg2rad;
-    f32 strength;
-    f32 zoom;
-    f32 baseScale;
-    f32 extentX;
-    f32 extentY;
-    f32 offsetX;
-    f32 offsetY;
-    f32 limit;
-    f32 zoomScale;
-
-    f32 oldProjection[7];
-    f32 viewport[6];
-    f32 projection[7];
-
-    f32 rotMtx[3][4];
-    f32 postTransMtx[3][4];
-    f32 screenTransMtx[3][4];
-    f32 scaleMtx[3][4];
-    f32 concatMtx[3][4];
-
-    deg2rad = float_deg2rad_8041f6f0;
-
-    projectedZPtr = &projectedZ;
-    projectedYPtr = &projectedY;
-
-    camPtr = camPtrTbl;
-    for (i = 0; i < 13; i++, camPtr++) {
-        cam = *camPtr;
-
-        callback = *(CamCallback*)((s32)cam + 0x1EC);
-        if (callback != NULL) {
-            callback(cam);
-        }
-
-        C_MTXLookAt(
-            (void*)((s32)cam + 0x11C),
-            (void*)((s32)cam + 0x0C),
-            (void*)((s32)cam + 0x24),
-            (void*)((s32)cam + 0x18)
-        );
-
-        PSMTXRotRad(
-            rotMtx,
-            'z',
-            deg2rad * *(f32*)((s32)cam + 0x14C)
-        );
-
-        PSMTXTrans(
-            postTransMtx,
-            *(f32*)((s32)cam + 0x150),
-            *(f32*)((s32)cam + 0x154),
-            *(f32*)((s32)cam + 0x158)
-        );
-
-        PSMTXConcat(
-            rotMtx,
-            (void*)((s32)cam + 0x11C),
-            (void*)((s32)cam + 0x11C)
-        );
-
-        PSMTXConcat(
-            postTransMtx,
-            (void*)((s32)cam + 0x11C),
-            (void*)((s32)cam + 0x11C)
-        );
-
-        if ((i == 4) && (*(s32*)((s32)gp + 0x14) == 0)) {
-            player = marioGetPtr();
-            strength = *(f32*)((s32)player + 0x64);
-
-            pointA = vec3_802bf608[0];
-
-            player = marioGetPtr();
-            *(f32*)&pointA.x = *(f32*)((s32)player + 0x8C) + *(f32*)((s32)player + 0x6C);
-
-            player = marioGetPtr();
-            *(f32*)&pointA.y = *(f32*)((s32)player + 0x90) + *(f32*)((s32)player + 0x70);
-
-            player = marioGetPtr();
-            *(f32*)&pointA.z = *(f32*)((s32)player + 0x94) + *(f32*)((s32)player + 0x74);
-
-            pointB = pointA;
-
-            player = marioGetPtr();
-            zoom = *(f32*)((s32)player + 0x68);
-
-            renderMode = DEMOGetRenderModeObj();
-            baseScale = strength * (float_1_8041f6c0 - (float_1_8041f6c0 / zoom));
-            extentX = baseScale * (f32)*(u16*)((s32)renderMode + 0x4);
-
-            renderMode = DEMOGetRenderModeObj();
-            extentY = baseScale * (f32)*(u16*)((s32)renderMode + 0x6);
-
-            GXGetProjectionv(oldProjection);
-
-            cam4 = camPtrTbl[4];
-            GXSetProjection(
-                (void*)((s32)cam4 + 0x15C),
-                *(u32*)((s32)cam4 + 0x19C)
-            );
-
-            GXGetProjectionv(projection);
-            GXGetViewportv(viewport);
-
-            GXProject(
-                *(f32*)&pointB.x,
-                *(f32*)&pointB.y,
-                *(f32*)&pointB.z,
-                (void*)((s32)cam4 + 0x11C),
-                projection,
-                viewport,
-                &projectedX,
-                projectedYPtr,
-                projectedZPtr
-            );
-
-            GXSetProjectionv(oldProjection);
-
-            projectedX = projectedX - float_304_8041f6b8;
-            projectedY = float_240_8041f6bc - projectedY;
-
-            if (strength > float_1_8041f6c0) {
-                strength = float_1_8041f6c0;
-            } else if (strength < float_0_8041f6b4) {
-                strength = float_0_8041f6b4;
-            }
-
-            offsetX = float_0p5_8041f6f4 * projectedX * strength;
-            offsetY = float_0p5_8041f6f4 * projectedY * strength;
-
-            limit = -extentX * float_0p2_8041f6f8;
-            if (offsetX < limit) {
-                offsetX = limit;
-            } else {
-                limit = extentX * float_0p2_8041f6f8;
-                if (offsetX > limit) {
-                    offsetX = limit;
-                }
-            }
-
-            limit = -extentY * float_0p2_8041f6f8;
-            if (offsetY < limit) {
-                offsetY = limit;
-            } else {
-                limit = extentY * float_0p2_8041f6f8;
-                if (offsetY > limit) {
-                    offsetY = limit;
-                }
-            }
-
-            zoomScale = (strength * zoom) + (float_1_8041f6c0 - strength);
-
-            PSMTXTrans(
-                screenTransMtx,
-                -offsetX,
-                -offsetY,
-                float_0_8041f6b4
-            );
-
-            PSMTXScale(
-                scaleMtx,
-                zoomScale,
-                zoomScale,
-                float_1_8041f6c0
-            );
-
-            PSMTXConcat(scaleMtx, screenTransMtx, concatMtx);
-
-            PSMTXConcat(
-                concatMtx,
-                (void*)((s32)cam + 0x11C),
-                (void*)((s32)cam + 0x11C)
-            );
-        }
-
-        if ((*(u16*)cam & 8) != 0) {
-            PSMTX44Concat(
-                (void*)((s32)cam + 0x1A0),
-                (void*)((s32)cam + 0x15C),
-                (void*)((s32)cam + 0x15C)
-            );
-
-            *(u16*)cam &= ~8;
-        }
-    }
-}
-
-void* camEntryPersp(
-    CamCallback callback,
-    const char* name,
-    f32 fovy,
-    f32 aspect,
-    f32 near,
-    f32 far,
-    f32 viewportNear,
-    f32 viewportFar
-) {
-    VecRaw* defaults;
-    CamDoubleConv widthConv;
-    CamDoubleConv heightConv;
-    void* cam;
-    void* renderMode;
-
-    defaults = vec3_802bf5d8;
-
-    cam = __memAlloc(0, 0x260);
-    memset(cam, 0, 0x260);
+void camEffMain(CamWorkRaw* cam) {
+    CamWorkRaw* src;
+
+    src = camPtrTbl[4];
+
+    cam->pos = src->pos;
+    cam->up = src->up;
+    cam->target = src->target;
+
+    cam->distance = PSVECDistance(&cam->pos, &cam->target);
+
+    cam->angle = angleABf(
+        *(f32*)&cam->pos.x,
+        *(f32*)&cam->pos.z,
+        *(f32*)&cam->target.x,
+        *(f32*)&cam->target.z
+    );
 
     C_MTXPerspective(
         (void*)((s32)cam + 0x15C),
-        fovy,
-        aspect,
-        near,
-        far
+        cam->fovy,
+        cam->aspect,
+        cam->near,
+        cam->far
     );
-
-    *(s32*)((s32)cam + 0x19C) = 0;
-
-    *(VecRaw*)((s32)cam + 0x0C) = camPtDefault;
-    *(VecRaw*)((s32)cam + 0x18) = camAtDefault;
-    *(VecRaw*)((s32)cam + 0x24) = camUpDefault;
-
-    *(f32*)((s32)cam + 0x30) = near;
-    *(f32*)((s32)cam + 0x34) = far;
-    *(f32*)((s32)cam + 0x114) = float_0_8041f6b4;
-
-    *(f32*)((s32)cam + 0x118) = PSVECDistance(
-        (void*)((s32)cam + 0x0C),
-        (void*)((s32)cam + 0x18)
-    );
-
-    *(void**)((s32)cam + 0x1EC) = callback;
-
-    *(s16*)((s32)cam + 0x2) = 0;
-    *(s16*)((s32)cam + 0x4) = 0;
-    *(f32*)((s32)cam + 0x8) = float_0_8041f6b4;
-
-    *(f32*)((s32)cam + 0x38) = fovy;
-    *(f32*)((s32)cam + 0x3C) = aspect;
-
-    *(f32*)((s32)cam + 0x14C) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x158) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x154) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x150) = float_0_8041f6b4;
-
-    *(s32*)((s32)cam + 0x1E8) = 8;
-
-    strcpy((char*)((s32)cam + 0x254), name);
-
-    *(s16*)((s32)cam + 0xF4) = 0;
-    *(s16*)((s32)cam + 0xF6) = 0;
-
-    renderMode = DEMOGetRenderModeObj();
-    *(u16*)((s32)cam + 0xF8) = *(u16*)((s32)renderMode + 0x4);
-
-    renderMode = DEMOGetRenderModeObj();
-    *(u16*)((s32)cam + 0xFA) = *(u16*)((s32)renderMode + 0x6);
-
-    *(f32*)((s32)cam + 0xFC) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x100) = float_0_8041f6b4;
-
-    renderMode = DEMOGetRenderModeObj();
-    widthConv.words.hi = 0x43300000;
-    widthConv.words.lo = *(u16*)((s32)renderMode + 0x4);
-    *(f32*)((s32)cam + 0x104) = (f32)(widthConv.value - *(f64*)((s32)defaults + 0x68));
-
-    renderMode = DEMOGetRenderModeObj();
-    heightConv.words.hi = 0x43300000;
-    heightConv.words.lo = *(u16*)((s32)renderMode + 0x6);
-    *(f32*)((s32)cam + 0x108) = (f32)(heightConv.value - *(f64*)((s32)defaults + 0x68));
-
-    *(f32*)((s32)cam + 0x10C) = viewportNear;
-    *(f32*)((s32)cam + 0x110) = viewportFar;
-
-    *(f32*)((s32)cam + 0x1F0) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x1F4) = float_8_8041f6fc;
-    *(f32*)((s32)cam + 0x1F8) = float_400_8041f700;
-
-    *(f32*)((s32)cam + 0x20C) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x210) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x214) = float_0_8041f6b4;
-
-    *(f32*)((s32)cam + 0x200) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x204) = float_0_8041f6b4;
-    *(f32*)((s32)cam + 0x208) = float_0_8041f6b4;
-
-    *(s16*)((s32)cam + 0x218) = 0;
-    *(s16*)((s32)cam + 0x21A) = 0;
-    *(s16*)((s32)cam + 0x21C) = 0;
-    *(s16*)((s32)cam + 0x21E) = 0;
-
-    *(VecRaw*)((s32)cam + 0x224) = defaults[0];
-    *(VecRaw*)((s32)cam + 0x230) = defaults[1];
-    *(VecRaw*)((s32)cam + 0x23C) = defaults[2];
-    *(VecRaw*)((s32)cam + 0x248) = defaults[3];
-
-    return cam;
 }
 
-#define INIT_ORTHO_CAM(slot, top, bottom, left, right, camName, wConv, hConv) \
-    do {                                                                        \
-        renderMode = NULL;                                                      \
-        cam = __memAlloc(0, 0x260);                                             \
-        memset(cam, 0, 0x260);                                                  \
-                                                                                \
-        C_MTXOrtho(                                                             \
-            (void*)((s32)cam + 0x15C),                                          \
-            (top),                                                              \
-            (bottom),                                                           \
-            (left),                                                             \
-            (right),                                                            \
-            float_1_8041f6c0,                                                   \
-            float_32768_8041f6d0                                                \
-        );                                                                      \
-                                                                                \
-        *(s32*)((s32)cam + 0x19C) = 1;                                          \
-                                                                                \
-        *(VecRaw*)((s32)cam + 0x0C) = camPtDefault;                             \
-        *(VecRaw*)((s32)cam + 0x18) = camAtDefault;                             \
-        *(VecRaw*)((s32)cam + 0x24) = camUpDefault;                             \
-                                                                                \
-        *(f32*)((s32)cam + 0x30) = float_1_8041f6c0;                            \
-        *(f32*)((s32)cam + 0x34) = float_32768_8041f6d0;                        \
-        *(f32*)((s32)cam + 0x114) = float_0_8041f6b4;                           \
-        *(f32*)((s32)cam + 0x118) = PSVECDistance(                              \
-            (void*)((s32)cam + 0x0C),                                           \
-            (void*)((s32)cam + 0x18)                                            \
-        );                                                                      \
-                                                                                \
-        *(void**)((s32)cam + 0x1EC) = NULL;                                     \
-        *(s16*)((s32)cam + 0x2) = 0;                                            \
-                                                                                \
-        *(f32*)((s32)cam + 0x14C) = float_0_8041f6b4;                           \
-        *(f32*)((s32)cam + 0x158) = float_0_8041f6b4;                           \
-        *(f32*)((s32)cam + 0x154) = float_0_8041f6b4;                           \
-        *(f32*)((s32)cam + 0x150) = float_0_8041f6b4;                           \
-        *(f32*)((s32)cam + 0x3C) = float_1p2667_8041f6d8;                       \
-        *(f32*)((s32)cam + 0x38) = float_25_8041f6cc;                           \
-        *(s32*)((s32)cam + 0x1E8) = 8;                                          \
-                                                                                \
-        strcpy((char*)((s32)cam + 0x254), (camName));                           \
-                                                                                \
-        *(s16*)((s32)cam + 0xF4) = 0;                                           \
-        *(s16*)((s32)cam + 0xF6) = 0;                                           \
-                                                                                \
-        renderMode = DEMOGetRenderModeObj();                                   \
-        *(u16*)((s32)cam + 0xF8) = *(u16*)((s32)renderMode + 0x4);              \
-                                                                                \
-        renderMode = DEMOGetRenderModeObj();                                   \
-        *(u16*)((s32)cam + 0xFA) = *(u16*)((s32)renderMode + 0x6);              \
-                                                                                \
-        *(f32*)((s32)cam + 0xFC) = float_0_8041f6b4;                            \
-        *(f32*)((s32)cam + 0x100) = float_0_8041f6b4;                           \
-                                                                                \
-        renderMode = DEMOGetRenderModeObj();                                   \
-        (wConv).words.hi = 0x43300000;                                         \
-        (wConv).words.lo = *(u16*)((s32)renderMode + 0x4);                     \
-        *(f32*)((s32)cam + 0x104) =                                            \
-            (f32)((wConv).value - *(f64*)((s32)defaults + 0x68));              \
-                                                                                \
-        renderMode = DEMOGetRenderModeObj();                                   \
-        (hConv).words.hi = 0x43300000;                                         \
-        (hConv).words.lo = *(u16*)((s32)renderMode + 0x6);                     \
-        *(f32*)((s32)cam + 0x108) =                                            \
-            (f32)((hConv).value - *(f64*)((s32)defaults + 0x68));              \
-                                                                                \
-        *(f32*)((s32)cam + 0x10C) = float_0_8041f6b4;                          \
-        *(f32*)((s32)cam + 0x110) = float_1_8041f6c0;                          \
-                                                                                \
-        camPtrTbl[(slot)] = cam;                                               \
-    } while (0)
+void camSetMode(s32 camId, s16 mode) {
+    *(s16*)((s32)camPtrTbl[camId] + 0x2) = mode;
+}
 
-void camInit(void) {
-    VecRaw* defaults;
-    CamDoubleConv w0;
-    CamDoubleConv h0;
-    CamDoubleConv w1;
-    CamDoubleConv h1;
-    CamDoubleConv w2;
-    CamDoubleConv h2;
-    CamDoubleConv w3;
-    CamDoubleConv h3;
-    CamDoubleConv w11;
-    CamDoubleConv h11;
+void L_camDispOn(s32 camId) {
+    *(u16*)camPtrTbl[camId] &= ~1;
+}
+
+void L_camDispOff(s32 camId) {
+    *(u16*)camPtrTbl[camId] |= 1;
+}
+
+void camCtrlOn(s32 camId) {
+    *(u16*)camPtrTbl[camId] &= ~2;
+}
+
+void camCtrlOff(s32 camId) {
+    *(u16*)camPtrTbl[camId] |= 2;
+}
+
+void camSetTypePersp(s32 camId) {
+    *(s32*)((s32)camPtrTbl[camId] + 0x19C) = 0;
+}
+
+void camSetTypeOrtho(s32 camId) {
+    *(s32*)((s32)camPtrTbl[camId] + 0x19C) = 1;
+}
+
+void getScreenPoint(Vec3* pos, Vec3* out) {
     void* cam;
-    void* renderMode;
-    f32 z;
-    VecRaw pos6;
-    VecRaw pos8;
-    VecRaw pos9;
-    VecRaw pos10;
-    defaults = vec3_802bf5d8;
+    f32 projection[7];
+    f32 viewport[6];
+    f32 oldProjection[7];
 
-    INIT_ORTHO_CAM(
-        0,
-        float_240_8041f6bc,
-        float_neg240_8041f704,
-        float_neg304_8041f708,
-        float_304_8041f6b8,
-        str_off_8041f70c,
-        w0,
-        h0
+    GXGetProjectionv(oldProjection);
+
+    cam = camPtrTbl[4];
+
+    GXSetProjection((void*)((s32)cam + 0x15C), *(u32*)((s32)cam + 0x19C));
+
+    GXGetProjectionv(projection);
+    GXGetViewportv(viewport);
+
+    GXProject(
+        pos->x,
+        pos->y,
+        pos->z,
+        (void*)((s32)cam + 0x11C),
+        projection,
+        viewport,
+        &out->x,
+        &out->y,
+        &out->z
     );
 
-    INIT_ORTHO_CAM(
-        1,
-        float_0_8041f6b4,
-        float_480_8041f6e0,
-        float_0_8041f6b4,
-        float_608_8041f6dc,
-        str_off2_8041f710,
-        w1,
-        h1
-    );
+    GXSetProjectionv(oldProjection);
 
-    INIT_ORTHO_CAM(
-        2,
-        float_0_8041f6b4,
-        float_480_8041f6e0,
-        float_0_8041f6b4,
-        float_608_8041f6dc,
-        str_shadow_802bf648,
-        w2,
-        h2
-    );
+    out->x = out->x - float_304_8041f6b8;
+    out->y = float_240_8041f6bc - out->y;
+}
 
-    INIT_ORTHO_CAM(
-        3,
-        float_0_8041f6b4,
-        float_480_8041f6e0,
-        float_0_8041f6b4,
-        float_608_8041f6dc,
-        str_bg_8041f718,
-        w3,
-        h3
-    );
+void camLetterBoxDraw(void) {
+    void* cam;
+    volatile s16* fifo;
 
-    camPtrTbl[4] = camEntryPersp(
-        (CamCallback)cam3dMain,
-        str_3d_8041f71c,
-        float_25_8041f6cc,
-        float_1p2667_8041f6d8,
-        float_1_8041f6c0,
-        float_32768_8041f6d0,
-        float_0_8041f6b4,
-        float_1_8041f6c0
-    );
+    f32 viewport[6];
+    f32 projection[7];
+    s16 topY;
+    s16 bottomY;
+    u32 scissorX;
+    u32 scissorY;
+    u32 scissorW;
+    u32 scissorH;
 
-    camPtrTbl[5] = camEntryPersp(
-        (CamCallback)camEffMain,
-        str_3deff_A_802bf650,
-        float_25_8041f6cc,
-        float_1p2667_8041f6d8,
-        float_100_8041f6d4,
-        float_10000_8041f720,
-        float_0p2_8041f6f8,
-        float_0p3_8041f724
-    );
+    u32 matColor;
+    u32 colorTemp;
+    u32 fogColor;
 
-    camPtrTbl[6] = camEntryPersp(
-        (CamCallback)cam3dImgMain,
-        str_3dimg_8041f72c,
-        float_25_8041f6cc,
-        float_1p3333_8041f728,
-        float_1_8041f6c0,
-        float_32768_8041f6d0,
-        float_0_8041f6b4,
-        float_1_8041f6c0
-    );
+    cam = camPtrTbl[8];
 
-    z = float_24_8041f734 / (f32)tan(double_0p21817_802bf658);
-    *(f32*)((s32)camPtrTbl[6] + 0x0C) = float_0_8041f6b4;
-    *(f32*)((s32)camPtrTbl[6] + 0x10) = float_0_8041f6b4;
-    *(f32*)((s32)camPtrTbl[6] + 0x14) = z;
+    if ((*(u32*)gp & 0x8000) != 0) {
+        return;
+    }
 
-    camPtrTbl[7] = camEntryPersp(
-        (CamCallback)camEffMain,
-        str_3deff_B_802bf660,
-        float_0_8041f6b4,
-        float_1p2667_8041f6d8,
-        float_100_8041f6d4,
-        float_10000_8041f720,
-        float_0p2_8041f6f8,
-        float_0p3_8041f724
-    );
+    if (*(s16*)((s32)cam + 0x1E0) == 0) {
+        return;
+    }
 
-    camPtrTbl[8] = camEntryPersp(
-        (CamCallback)0,
-        str_2d_8041f73c,
-        float_25_8041f6cc,
-        float_1p2667_8041f6d8,
-        float_100_8041f6d4,
-        float_10000_8041f720,
-        float_0p1_8041f738,
-        float_0p2_8041f6f8
-    );
+    GXGetViewportv(viewport);
+    GXGetProjectionv(projection);
+    GXGetScissor(&scissorX, &scissorY, &scissorW, &scissorH);
 
-    z = float_240_8041f6bc / (f32)tan(double_0p21817_802bf658);
-    pos8 = *(VecRaw*)((s32)defaults + 0x48);
-    *(f32*)&pos8.x = float_0_8041f6b4;
-    *(f32*)&pos8.y = float_0_8041f6b4;
-    *(f32*)&pos8.z = z;
-    *(VecRaw*)((s32)camPtrTbl[8] + 0x0C) = pos8;
+    GXSetProjection((void*)((s32)cam + 0x15C), *(u32*)((s32)cam + 0x19C));
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(0, 3, 0);
+    GXSetNumChans(1);
 
-    camPtrTbl[9] = camEntryPersp(
-        (CamCallback)0,
-        str_fade_8041f740,
-        float_25_8041f6cc,
-        float_1p3333_8041f728,
-        float_1_8041f6c0,
-        float_32768_8041f6d0,
-        float_0_8041f6b4,
-        float_0p1_8041f738
-    );
+    colorTemp = unk_80429510;
+    *(u8*)((s32)&colorTemp + 3) = *(s16*)((s32)cam + 0x1E0);
+    matColor = colorTemp;
+    GXSetChanMatColor(4, &matColor);
 
-    z = float_24_8041f734 / (f32)tan(double_0p21817_802bf658);
-    pos9 = *(VecRaw*)((s32)defaults + 0x48);
-    *(f32*)&pos9.x = float_0_8041f6b4;
-    *(f32*)&pos9.y = float_0_8041f6b4;
-    *(f32*)&pos9.z = z;
-    *(VecRaw*)((s32)camPtrTbl[9] + 0x0C) = pos9;
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
 
-    camPtrTbl[10] = camEntryPersp(
-        (CamCallback)0,
-        str_fade2_8041f748,
-        float_25_8041f6cc,
-        float_1p3333_8041f728,
-        float_1_8041f6c0,
-        float_32768_8041f6d0,
-        float_0_8041f6b4,
-        float_0p1_8041f738
-    );
+    fogColor = dat_8041f6b0;
+    GXSetFog(0, float_0_8041f6b4, float_0_8041f6b4, float_0_8041f6b4, float_0_8041f6b4, &fogColor);
 
-    z = float_24_8041f734 / (f32)tan(double_0p21817_802bf658);
-    pos10 = *(VecRaw*)((s32)defaults + 0x48);
-    *(f32*)&pos10.x = float_0_8041f6b4;
-    *(f32*)&pos10.y = float_0_8041f6b4;
-    *(f32*)&pos10.z = z;
-    *(VecRaw*)((s32)camPtrTbl[10] + 0x0C) = pos10;
-    INIT_ORTHO_CAM(
-        11,
-        float_0_8041f6b4,
-        float_480_8041f6e0,
-        float_0_8041f6b4,
-        float_608_8041f6dc,
-        str_dbg_8041f750,
-        w11,
-        h11
-    );
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0xFF, 0xFF, 4);
+    GXSetTevOp(0, 4);
+    GXSetCullMode(0);
 
-    camPtrTbl[12] = camEntryPersp(
-        (CamCallback)0,
-        str_dbg3d_8041f754,
-        float_25_8041f6cc,
-        float_1p2667_8041f6d8,
-        float_1_8041f6c0,
-        float_32768_8041f6d0,
-        float_0_8041f6b4,
-        float_1_8041f6c0
-    );
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 3, 0);
+
+    GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
+    GXSetCurrentMtx(0);
+
+    GXBegin(0x80, 0, 8);
+
+    fifo = (volatile s16*)0xCC008000;
+
+    *fifo = -0x130;
+    *fifo = 0xF0;
+    *fifo = 0;
+
+    *fifo = 0x130;
+    *fifo = 0xF0;
+    *fifo = 0;
+
+    topY = 0xF0 - *(s16*)((s32)cam + 0x1E2);
+    *fifo = 0x130;
+    *fifo = topY;
+    *fifo = 0;
+
+    topY = 0xF0 - *(s16*)((s32)cam + 0x1E2);
+    *fifo = -0x130;
+    *fifo = topY;
+    *fifo = 0;
+
+    bottomY = *(s16*)((s32)cam + 0x1E4) - 0xF0;
+    *fifo = -0x130;
+    *fifo = bottomY;
+    *fifo = 0;
+
+    bottomY = *(s16*)((s32)cam + 0x1E4) - 0xF0;
+    *fifo = 0x130;
+    *fifo = bottomY;
+    *fifo = 0;
+
+    *fifo = 0x130;
+    *fifo = -0xF0;
+    *fifo = 0;
+
+    *fifo = -0x130;
+    *fifo = -0xF0;
+    *fifo = 0;
+
+    GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
+    GXSetProjectionv(projection);
+    GXSetScissor(scissorX, scissorY, scissorW, scissorH);
+}
+
+void camLetterBox(void) {
+    void* cam;
+    void* party;
+    s32 value;
+    s16 alpha;
+    u16 flags;
+
+    cam = camPtrTbl[8];
+    party = partyGetPtr(0);
+
+    if ((*(u16*)cam & 0x200) != 0) {
+        goto after_initial_check;
+    }
+
+    if ((bero_get_BeroEXEC() & 1) != 0) {
+        goto after_initial_check;
+    }
+
+    if (seqGetSeq() == 2) {
+        if (marioChkKey() != 0) {
+            if (marioChkCtrl() != 0) {
+                goto clear_letterbox;
+            }
+        }
+
+        if (party != NULL) {
+            if (party == NULL) {
+                goto clear_letterbox;
+            }
+
+            if ((*(u32*)party & 0x100) != 0) {
+                goto clear_letterbox;
+            }
+        }
+
+        flags = *(u16*)cam;
+        if ((flags & 0x100) == 0) {
+            *(u16*)cam = flags | 0x100;
+            psndSetFlag(0x20);
+
+            *(s16*)((s32)cam + 0x1E0) = 0xFF;
+            *(s16*)((s32)cam + 0x1E2) = 0;
+            *(s16*)((s32)cam + 0x1E4) = 0;
+            *(s32*)((s32)cam + 0x1E8) = 8;
+        }
+
+        goto after_initial_check;
+    }
+
+clear_letterbox:
+    if (seqGetSeq() != 3) {
+        *(u16*)cam &= ~0x100;
+        psndClearFlag(0x20);
+    }
+
+after_initial_check:
+
+    if ((*(u16*)cam & 0x100) != 0) {
+        *(s16*)((s32)cam + 0x1E0) = 0xFF;
+
+        value = *(s16*)((s32)cam + 0x1E2) + 3;
+        *(s16*)((s32)cam + 0x1E2) = value;
+        if (*(s16*)((s32)cam + 0x1E2) > 0x31) {
+            *(s16*)((s32)cam + 0x1E2) = 0x31;
+        }
+
+        value = *(s16*)((s32)cam + 0x1E4) + 3;
+        *(s16*)((s32)cam + 0x1E4) = value;
+        if (*(s16*)((s32)cam + 0x1E4) > 0x2C) {
+            *(s16*)((s32)cam + 0x1E4) = 0x2C;
+        }
+
+        flags = *(u16*)cam;
+        if ((flags & 0x400) != 0) {
+            *(u16*)cam = flags & ~0x400;
+            *(s16*)((s32)cam + 0x1E2) = 0x31;
+            *(s16*)((s32)cam + 0x1E4) = 0x2C;
+        }
+    } else {
+        *(s16*)((s32)cam + 0x1E0) =
+            *(s16*)((s32)cam + 0x1E0) -
+            ((0xFF / *(s32*)((s32)gp + 0x4)) * 2);
+
+        if (*(s16*)((s32)cam + 0x1E0) < 0) {
+            *(s16*)((s32)cam + 0x1E0) = 0;
+        }
+
+        flags = *(u16*)cam;
+        if ((flags & 0x400) != 0) {
+            *(u16*)cam = flags & ~0x400;
+            *(s16*)((s32)cam + 0x1E0) = 0;
+        }
+    }
+
+    dispEntry(*(s32*)((s32)cam + 0x1E8), 3, camLetterBoxDraw, NULL, float_0_8041f6b4);
 }

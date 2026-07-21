@@ -1,4 +1,195 @@
 #include "effect/eff_charge.h"
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void* effChargeEntry(s32 type, s32 arg, f32 x, f32 y, f32 z, f32 scale) {
+    typedef struct EffectEntry {
+        s32 flags;
+        s32 unk4;
+        s32 live;
+        void* work;
+        void* main;
+        char* name;
+    } EffectEntry;
+    extern EffectEntry* effEntry(void);
+    extern void* __memAlloc(s32, u32);
+    extern void effChargeMain(void);
+    extern char str_Charge_802f9728[];
+
+    EffectEntry* effect;
+    u8* work;
+    u8* particle;
+    s32 i;
+    s32 prev;
+    s32 cur;
+    f32 angle;
+
+    effect = effEntry();
+    effect->name = str_Charge_802f9728;
+    effect->live = 31;
+    work = __memAlloc(3, 0x8B8);
+    effect->work = work;
+    effect->main = effChargeMain;
+
+    *(s32*)(work + 4) = type;
+    *(s32*)(work + 0x1C) = 0;
+    *(s32*)(work + 0x18) = arg;
+    *(s32*)(work + 0x14) = 0;
+    *(f32*)(work + 8) = x;
+    *(f32*)(work + 0xC) = y;
+    *(f32*)(work + 0x10) = z;
+    *(f32*)(work + 0x28) = scale;
+
+    switch (type) {
+        case 0:
+            *(s32*)(work + 0x30) = 255;
+            *(s32*)(work + 0x34) = 0;
+            *(s32*)(work + 0x38) = 255;
+            *(s32*)(work + 0x3C) = 255;
+            *(s32*)(work + 0x40) = 255;
+            *(s32*)(work + 0x44) = 255;
+            break;
+        case 1:
+            *(s32*)(work + 0x30) = 255;
+            *(s32*)(work + 0x34) = 20;
+            *(s32*)(work + 0x38) = 33;
+            *(s32*)(work + 0x3C) = 50;
+            *(s32*)(work + 0x40) = 20;
+            *(s32*)(work + 0x44) = 10;
+            break;
+        default:
+            *(s32*)(work + 0x30) = 0;
+            *(s32*)(work + 0x34) = 0;
+            *(s32*)(work + 0x38) = 0;
+            *(s32*)(work + 0x3C) = 255;
+            *(s32*)(work + 0x40) = 255;
+            *(s32*)(work + 0x44) = 255;
+            break;
+    }
+
+    particle = work + 0x48;
+    for (i = 1; i < 31; i += 2) {
+        prev = i - 1;
+        cur = i;
+        angle = 360.0f * (f32)prev;
+        *(f32*)(particle + 0x20) = (angle * 9.0f) / 30.0f;
+        *(f32*)(particle + 0x24) = 0.0f;
+        *(f32*)(particle + 0x2C) = (f32)((prev * 100) / 30);
+        angle = 360.0f * (f32)cur;
+        *(s32*)particle = 0;
+        *(f32*)(particle + 0x68) = (angle * 9.0f) / 30.0f;
+        *(f32*)(particle + 0x6C) = 0.0f;
+        *(f32*)(particle + 0x74) = (f32)((cur * 100) / 30);
+        *(s32*)(particle + 0x48) = 0;
+        particle += 0x90;
+    }
+
+    return effect;
+}
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void effChargeMain(void* effect) {
+    typedef struct VecLocal { f32 x; f32 y; f32 z; } VecLocal;
+
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(void*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void effChargeDisp(s32, void*);
+    extern double sin(double);
+    extern double cos(double);
+    extern VecLocal vec3_802f9710;
+    extern f32 float_0_80424660;
+    extern f32 float_6p2832_8042467c;
+    extern f32 float_360_80424680;
+    extern f32 float_100_80424684;
+    extern f32 float_0p2_80424688;
+    extern f32 float_80_8042468c;
+
+    u8* work;
+    u8* part;
+    VecLocal pos;
+    s32 frame;
+    s32 alpha;
+    s32 i;
+    s32 temp;
+    f32 angle0;
+    f32 angle1;
+    f32 sin0;
+    f32 cos0;
+    f32 sin1;
+    f32 cos1;
+    f32 radius;
+    s32 parity;
+
+    work = *(u8**)((s32)effect + 0xC);
+    pos = vec3_802f9710;
+    pos.x = *(f32*)(work + 8);
+    pos.y = *(f32*)(work + 0xC);
+    pos.z = *(f32*)(work + 0x10);
+    if (*(s32*)(work + 0x18) < 1000) {
+        *(s32*)(work + 0x18) -= 1;
+    }
+    *(s32*)(work + 0x1C) += 1;
+    if (*(s32*)(work + 0x18) < 0) {
+        effDelete(effect);
+        return;
+    }
+
+    frame = *(s32*)(work + 0x1C);
+    if (frame < 0x15) {
+        alpha = frame * 0xC;
+    } else {
+        alpha = 0xFF;
+    }
+    if (frame & 1) {
+        alpha /= 2;
+    }
+    *(s32*)(work + 0x14) = alpha;
+    parity = frame & 1;
+
+    part = work + 0x48;
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, part += 0x48) {
+        radius = *(f32*)(part + 0x2C);
+        angle1 = (float_6p2832_8042467c * *(f32*)(part + 0x20)) / float_360_80424680;
+        sin1 = (f32)sin(angle1);
+        cos1 = (f32)cos(angle1);
+        angle0 = (float_6p2832_8042467c * *(f32*)(part + 0x24)) / float_360_80424680;
+        sin0 = (f32)sin(angle0);
+        cos0 = (f32)cos(angle0);
+        *(f32*)(part + 8) = cos0 * radius * sin1;
+        *(f32*)(part + 0xC) = cos0 * radius * cos1;
+        *(f32*)(part + 0x10) = radius * sin0;
+        temp = (s32)((float_100_80424684 - radius) * 0x1FE);
+        temp = temp / 100;
+        if (temp < 0) {
+            temp = -temp;
+        }
+        *(s32*)(part + 0x14) = temp;
+        if (*(s32*)(part + 0x14) > 0xFF) {
+            *(s32*)(part + 0x14) = 0xFF;
+        }
+        *(f32*)(part + 0x28) = float_0p2_80424688 + (radius / float_80_8042468c);
+        *(f32*)(part + 0x2C) = radius - (f32)(((i & 3) * 2) + 2);
+        if (*(f32*)(part + 0x2C) < float_0_80424660) {
+            *(f32*)(part + 0x2C) = float_0_80424660;
+            *(f32*)(part + 0x28) = float_0_80424660;
+        }
+        if (parity) {
+            *(f32*)(part + 0x20) += 5.0f;
+            *(f32*)(part + 0x24) += 2.0f;
+        } else {
+            *(f32*)(part + 0x20) += 2.0f;
+            *(f32*)(part + 0x24) += 5.0f;
+        }
+    }
+    dispEntry(4, 2, effChargeDisp, effect, dispCalcZ(&pos));
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
 
 
 #pragma no_register_save_helpers on
@@ -122,197 +313,6 @@ void effChargeDisp(s32 cameraId, void* effect) {
         }
     }
 }
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void effChargeMain(void* effect) {
-    typedef struct VecLocal { f32 x; f32 y; f32 z; } VecLocal;
-
-    extern void effDelete(void*);
-    extern f32 dispCalcZ(void*);
-    extern void dispEntry(s32, s32, void*, void*, f32);
-    extern void effChargeDisp(s32, void*);
-    extern double sin(double);
-    extern double cos(double);
-    extern VecLocal vec3_802f9710;
-    extern f32 float_0_80424660;
-    extern f32 float_6p2832_8042467c;
-    extern f32 float_360_80424680;
-    extern f32 float_100_80424684;
-    extern f32 float_0p2_80424688;
-    extern f32 float_80_8042468c;
-
-    u8* work;
-    u8* part;
-    VecLocal pos;
-    s32 frame;
-    s32 alpha;
-    s32 i;
-    s32 temp;
-    f32 angle0;
-    f32 angle1;
-    f32 sin0;
-    f32 cos0;
-    f32 sin1;
-    f32 cos1;
-    f32 radius;
-    s32 parity;
-
-    work = *(u8**)((s32)effect + 0xC);
-    pos = vec3_802f9710;
-    pos.x = *(f32*)(work + 8);
-    pos.y = *(f32*)(work + 0xC);
-    pos.z = *(f32*)(work + 0x10);
-    if (*(s32*)(work + 0x18) < 1000) {
-        *(s32*)(work + 0x18) -= 1;
-    }
-    *(s32*)(work + 0x1C) += 1;
-    if (*(s32*)(work + 0x18) < 0) {
-        effDelete(effect);
-        return;
-    }
-
-    frame = *(s32*)(work + 0x1C);
-    if (frame < 0x15) {
-        alpha = frame * 0xC;
-    } else {
-        alpha = 0xFF;
-    }
-    if (frame & 1) {
-        alpha /= 2;
-    }
-    *(s32*)(work + 0x14) = alpha;
-    parity = frame & 1;
-
-    part = work + 0x48;
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++, part += 0x48) {
-        radius = *(f32*)(part + 0x2C);
-        angle1 = (float_6p2832_8042467c * *(f32*)(part + 0x20)) / float_360_80424680;
-        sin1 = (f32)sin(angle1);
-        cos1 = (f32)cos(angle1);
-        angle0 = (float_6p2832_8042467c * *(f32*)(part + 0x24)) / float_360_80424680;
-        sin0 = (f32)sin(angle0);
-        cos0 = (f32)cos(angle0);
-        *(f32*)(part + 8) = cos0 * radius * sin1;
-        *(f32*)(part + 0xC) = cos0 * radius * cos1;
-        *(f32*)(part + 0x10) = radius * sin0;
-        temp = (s32)((float_100_80424684 - radius) * 0x1FE);
-        temp = temp / 100;
-        if (temp < 0) {
-            temp = -temp;
-        }
-        *(s32*)(part + 0x14) = temp;
-        if (*(s32*)(part + 0x14) > 0xFF) {
-            *(s32*)(part + 0x14) = 0xFF;
-        }
-        *(f32*)(part + 0x28) = float_0p2_80424688 + (radius / float_80_8042468c);
-        *(f32*)(part + 0x2C) = radius - (f32)(((i & 3) * 2) + 2);
-        if (*(f32*)(part + 0x2C) < float_0_80424660) {
-            *(f32*)(part + 0x2C) = float_0_80424660;
-            *(f32*)(part + 0x28) = float_0_80424660;
-        }
-        if (parity) {
-            *(f32*)(part + 0x20) += 5.0f;
-            *(f32*)(part + 0x24) += 2.0f;
-        } else {
-            *(f32*)(part + 0x20) += 2.0f;
-            *(f32*)(part + 0x24) += 5.0f;
-        }
-    }
-    dispEntry(4, 2, effChargeDisp, effect, dispCalcZ(&pos));
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void* effChargeEntry(s32 type, s32 arg, f32 x, f32 y, f32 z, f32 scale) {
-    typedef struct EffectEntry {
-        s32 flags;
-        s32 unk4;
-        s32 live;
-        void* work;
-        void* main;
-        char* name;
-    } EffectEntry;
-    extern EffectEntry* effEntry(void);
-    extern void* __memAlloc(s32, u32);
-    extern void effChargeMain(void);
-    extern char str_Charge_802f9728[];
-
-    EffectEntry* effect;
-    u8* work;
-    u8* particle;
-    s32 i;
-    s32 prev;
-    s32 cur;
-    f32 angle;
-
-    effect = effEntry();
-    effect->name = str_Charge_802f9728;
-    effect->live = 31;
-    work = __memAlloc(3, 0x8B8);
-    effect->work = work;
-    effect->main = effChargeMain;
-
-    *(s32*)(work + 4) = type;
-    *(s32*)(work + 0x1C) = 0;
-    *(s32*)(work + 0x18) = arg;
-    *(s32*)(work + 0x14) = 0;
-    *(f32*)(work + 8) = x;
-    *(f32*)(work + 0xC) = y;
-    *(f32*)(work + 0x10) = z;
-    *(f32*)(work + 0x28) = scale;
-
-    switch (type) {
-        case 0:
-            *(s32*)(work + 0x30) = 255;
-            *(s32*)(work + 0x34) = 0;
-            *(s32*)(work + 0x38) = 255;
-            *(s32*)(work + 0x3C) = 255;
-            *(s32*)(work + 0x40) = 255;
-            *(s32*)(work + 0x44) = 255;
-            break;
-        case 1:
-            *(s32*)(work + 0x30) = 255;
-            *(s32*)(work + 0x34) = 20;
-            *(s32*)(work + 0x38) = 33;
-            *(s32*)(work + 0x3C) = 50;
-            *(s32*)(work + 0x40) = 20;
-            *(s32*)(work + 0x44) = 10;
-            break;
-        default:
-            *(s32*)(work + 0x30) = 0;
-            *(s32*)(work + 0x34) = 0;
-            *(s32*)(work + 0x38) = 0;
-            *(s32*)(work + 0x3C) = 255;
-            *(s32*)(work + 0x40) = 255;
-            *(s32*)(work + 0x44) = 255;
-            break;
-    }
-
-    particle = work + 0x48;
-    for (i = 1; i < 31; i += 2) {
-        prev = i - 1;
-        cur = i;
-        angle = 360.0f * (f32)prev;
-        *(f32*)(particle + 0x20) = (angle * 9.0f) / 30.0f;
-        *(f32*)(particle + 0x24) = 0.0f;
-        *(f32*)(particle + 0x2C) = (f32)((prev * 100) / 30);
-        angle = 360.0f * (f32)cur;
-        *(s32*)particle = 0;
-        *(f32*)(particle + 0x68) = (angle * 9.0f) / 30.0f;
-        *(f32*)(particle + 0x6C) = 0.0f;
-        *(f32*)(particle + 0x74) = (f32)((cur * 100) / 30);
-        *(s32*)(particle + 0x48) = 0;
-        particle += 0x90;
-    }
-
-    return effect;
-}
-
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

@@ -27,11 +27,49 @@ extern f32 float_1_804267dc;
 extern f32 float_100_804267f4;
 
 void effCoinFukidashiDisp(s32 cameraId, void* effect);
+void effCoinFukidashiMain(void* effect);
 void* effEntry(s32 type, s32 item, f32 x, f32 y, f32 z, s32 timer);
 void effDelete(void* effect);
 void* __memAlloc(s32 heap, u32 size);
 f32 dispCalcZ(Vec* pos);
 void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 priority);
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void* effCoinFukidashiEntry(s32 type, s32 item, f32 x, f32 y, f32 z, s32 timer) {
+    void* effect = effEntry(type, item, x, y, z, timer);
+    EffCoinFukidashiWork* work;
+    f32 zero;
+    f32 one;
+
+    *(const char**)((s32)effect + 0x14) = str_CoinFukidashi_802fddc8;
+    *(s32*)((s32)effect + 0x8) = 1;
+    work = __memAlloc(3, *(s32*)((s32)effect + 0x8) * 0x28);
+    *(void**)((s32)effect + 0xC) = work;
+    zero = float_0_804267d8;
+    *(void**)((s32)effect + 0x10) = effCoinFukidashiMain;
+    one = float_1_804267dc;
+    *(u32*)effect |= 2;
+
+    work->type = type;
+    work->x = x;
+    work->y = y;
+    work->z = z;
+    work->scale = zero;
+    work->unk18 = one;
+    work->item = item;
+    if (timer <= 0) {
+        work->timer = 1000;
+    } else {
+        work->timer = timer;
+    }
+    work->counter = 0;
+    work->alpha = 0;
+    return effect;
+}
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
 
 void effCoinFukidashiMain(void* effect) {
     Vec dispPos;
@@ -79,43 +117,6 @@ void effCoinFukidashiMain(void* effect) {
     }
     dispEntry(4, 2, effCoinFukidashiDisp, effect, dispCalcZ(&dispPos));
 }
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void* effCoinFukidashiEntry(s32 type, s32 item, f32 x, f32 y, f32 z, s32 timer) {
-    void* effect = effEntry(type, item, x, y, z, timer);
-    EffCoinFukidashiWork* work;
-    f32 zero;
-    f32 one;
-
-    *(const char**)((s32)effect + 0x14) = str_CoinFukidashi_802fddc8;
-    *(s32*)((s32)effect + 0x8) = 1;
-    work = __memAlloc(3, *(s32*)((s32)effect + 0x8) * 0x28);
-    *(void**)((s32)effect + 0xC) = work;
-    zero = float_0_804267d8;
-    *(void**)((s32)effect + 0x10) = effCoinFukidashiMain;
-    one = float_1_804267dc;
-    *(u32*)effect |= 2;
-
-    work->type = type;
-    work->x = x;
-    work->y = y;
-    work->z = z;
-    work->scale = zero;
-    work->unk18 = one;
-    work->item = item;
-    if (timer <= 0) {
-        work->timer = 1000;
-    } else {
-        work->timer = timer;
-    }
-    work->counter = 0;
-    work->alpha = 0;
-    return effect;
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 void effCoinFukidashiDisp(s32 cameraId, void* effect) {
     typedef f32 Mtx[3][4];
 

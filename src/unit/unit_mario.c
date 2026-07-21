@@ -11,19 +11,6 @@ void BtlUnit_snd_se(void* unit, const char* name, u32 flags, s32 zero);
 
 extern char str_SFX_VOICE_MARIO_RELI_802f4250[];
 extern char str_SFX_VOICE_MARIO_RELI_802f4268[];
-
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-s32 _get_mario_hammer_lv(void* event) {
-    s32 arg0 = **(s32**)((s32)event + 0x18);
-    evtSetValue(event, arg0, *(s8*)((s32)pouchGetPtr() + 0x99));
-    return 2;
-}
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _get_local_frame(void* event) {
@@ -36,7 +23,6 @@ s32 _get_local_frame(void* event) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
 void mario_pinch_pose_sound_callback(void* unit) {
     if (*(s32*)((s32)unit + 0x238) & 1) {
         BtlUnit_snd_se(unit, str_SFX_VOICE_MARIO_RELI_802f4250, 0xF1194D80, 0);
@@ -81,6 +67,21 @@ void callback(void* tev) {
 
 void faker_mario_makkuro_set(void) {
     mapSetTevCallback(0xB, callback);
+}
+s32 _mario_makkuro_set(void) {
+    extern void* _battleWorkPointer;
+    extern void* BattleGetMarioPtr(void* battleWork);
+    extern void* BtlUnit_GetPartsPtr(void* unit, s32 partId);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
+    void* mario = BattleGetMarioPtr(_battleWorkPointer);
+
+    if (mario != 0) {
+        mapSetTevCallback(0xB, callback);
+        animPoseSetMaterialFlagOn(*(s32*)((s32)BtlUnit_GetPartsPtr(mario, 1) + 0x1C0), 0x0B000000);
+        animPoseSetMaterialFlagOn(*(s32*)((s32)BtlUnit_GetPartsPtr(mario, 2) + 0x1C0), 0x0B000000);
+        animPoseSetMaterialFlagOn(*(s32*)((s32)BtlUnit_GetPartsPtr(mario, 3) + 0x1C0), 0x0B000000);
+    }
+    return 2;
 }
 
 
@@ -174,18 +175,15 @@ s32 _mario_super_emblem_anim_set(void* event, s32 releaseOld) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-s32 _mario_makkuro_set(void) {
-    extern void* _battleWorkPointer;
-    extern void* BattleGetMarioPtr(void* battleWork);
-    extern void* BtlUnit_GetPartsPtr(void* unit, s32 partId);
-    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
-    void* mario = BattleGetMarioPtr(_battleWorkPointer);
 
-    if (mario != 0) {
-        mapSetTevCallback(0xB, callback);
-        animPoseSetMaterialFlagOn(*(s32*)((s32)BtlUnit_GetPartsPtr(mario, 1) + 0x1C0), 0x0B000000);
-        animPoseSetMaterialFlagOn(*(s32*)((s32)BtlUnit_GetPartsPtr(mario, 2) + 0x1C0), 0x0B000000);
-        animPoseSetMaterialFlagOn(*(s32*)((s32)BtlUnit_GetPartsPtr(mario, 3) + 0x1C0), 0x0B000000);
-    }
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 _get_mario_hammer_lv(void* event) {
+    s32 arg0 = **(s32**)((s32)event + 0x18);
+    evtSetValue(event, arg0, *(s8*)((s32)pouchGetPtr() + 0x99));
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on

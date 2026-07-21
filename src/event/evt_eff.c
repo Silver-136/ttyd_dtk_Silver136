@@ -5,6 +5,299 @@ extern void* effNameToPtr();
 extern void effDelete();
 extern void effSoftDelete();
 
+u8 evt_eff(s32 pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern f32 evtGetFloat(void*, s32);
+    extern s16* effGetSet(char*);
+    extern s32 strcmp(const char*, const char*);
+    extern void effSetName(s32, char*);
+    extern char zero_8042033c;
+
+    extern void* effKemuriEntry();
+    extern void* effKemuTestEntry();
+    extern void* effStarStoneEntry();
+    extern void* effConfettiEntry();
+    extern void* effButterflyEntry();
+    extern void* effRecoveryEntry();
+    extern void* effBreathFireEntry();
+    extern void* effHitEntry();
+    extern void* effBombEntry();
+    extern void* effChargeEntry();
+    extern void* effTogeFlushEntry();
+    extern void* effIceEntry();
+    extern void* effDamageStarEntry();
+    extern void* effStarPointEntry();
+    extern void* effItemGetEntry();
+    extern void* effStageClearEntry();
+    extern void* effLevelupEntry();
+    extern void* effFallEntry();
+    extern void* effMahojinEntry();
+    extern void* effNozleEntry();
+    extern void* effPuniBalloonEntry();
+    extern void* effKissEntry();
+    extern void* effSplashEntry();
+    extern void* effNiceEntry();
+    extern void* effMistEntry();
+    extern void* effMist2Entry();
+    extern void* effScanningEntry();
+    extern void* effParticleEntry();
+    extern void* effStardustEntry();
+    extern void* effTreasureMapEntry();
+    extern void* effSandarsEntry();
+    extern void* effSheepEntry();
+    extern void* effRankupEntry();
+    extern void* effIrekaeruEntry();
+    extern void* effSmallStarEntry();
+    extern void* effIbukiEntry();
+    extern void* effMahornEntry();
+    extern void* effToikiEntry();
+    extern void* effUranokoEntry();
+    extern void* effSyuryouEntry();
+    extern void* effHibashiraEntry();
+    extern void* effFireEntry();
+    extern void* effMachinegunEntry();
+    extern void* effRippleEntry();
+    extern void* effLasMonEntry();
+    extern void* effLaserEntry();
+    extern void* effIndirectEntry();
+    extern void* effQueenEntry();
+    extern void* effQueen2Entry();
+    extern void* effGonbabaBreathEntry();
+    extern void* effMajinaiEntry();
+
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32* argBase;
+    s32* floatArgs;
+    char* outName;
+    char* setName;
+    s32 i0;
+    s32 i4;
+    s32 i5;
+    s32 i6;
+    s32 i7;
+    s32 i8;
+    s32 i9;
+    f32 f1;
+    f32 f2;
+    f32 f3;
+    f32 f4;
+    f32 f5;
+    f32 f6;
+    f32 f8;
+    f32 f10;
+    f32 f11;
+    void* eff;
+    s16* set;
+    s32 id;
+
+    outName = (char*)evtGetValue((void*)pEvt, args[0]);
+    evtGetValue((void*)pEvt, args[0]);
+    evtGetValue((void*)pEvt, args[0]);
+
+    argBase = args + 2;
+    setName = (char*)evtGetValue((void*)pEvt, args[1]);
+    floatArgs = argBase;
+    evtGetValue((void*)pEvt, args[1]);
+    evtGetValue((void*)pEvt, args[1]);
+
+    i0 = evtGetValue((void*)pEvt, argBase[0]);
+    evtGetValue((void*)pEvt, argBase[1]);
+    evtGetValue((void*)pEvt, argBase[2]);
+    evtGetValue((void*)pEvt, argBase[3]);
+    i4 = evtGetValue((void*)pEvt, argBase[4]);
+    i5 = evtGetValue((void*)pEvt, argBase[5]);
+    i6 = evtGetValue((void*)pEvt, argBase[6]);
+    i7 = evtGetValue((void*)pEvt, argBase[7]);
+    i8 = evtGetValue((void*)pEvt, argBase[8]);
+    i9 = evtGetValue((void*)pEvt, argBase[9]);
+    evtGetValue((void*)pEvt, argBase[10]);
+    evtGetValue((void*)pEvt, argBase[11]);
+    evtGetValue((void*)pEvt, argBase[12]);
+
+    evtGetFloat((void*)pEvt, floatArgs[0]);
+    f1 = evtGetFloat((void*)pEvt, floatArgs[1]);
+    f2 = evtGetFloat((void*)pEvt, floatArgs[2]);
+    f3 = evtGetFloat((void*)pEvt, floatArgs[3]);
+    f4 = evtGetFloat((void*)pEvt, floatArgs[4]);
+    f5 = evtGetFloat((void*)pEvt, floatArgs[5]);
+    f6 = evtGetFloat((void*)pEvt, floatArgs[6]);
+    evtGetFloat((void*)pEvt, floatArgs[7]);
+    f8 = evtGetFloat((void*)pEvt, floatArgs[8]);
+    evtGetFloat((void*)pEvt, floatArgs[9]);
+    f10 = evtGetFloat((void*)pEvt, floatArgs[10]);
+    f11 = evtGetFloat((void*)pEvt, floatArgs[11]);
+    evtGetFloat((void*)pEvt, floatArgs[12]);
+
+    eff = 0;
+    set = effGetSet(setName);
+    id = *set;
+
+    switch (id) {
+        case 0:
+            eff = effKemuriEntry(f1, f2, f3, f4, i0);
+            break;
+        case 0x1c:
+            eff = effKemuTestEntry(f1, f2, f3, f4, i0);
+            break;
+        case 0x1d:
+            eff = effStarStoneEntry(f1, f2, f3, f4, i0);
+            break;
+        case 1:
+            eff = effConfettiEntry(f1, f2, f3, i0, i4);
+            break;
+        case 3:
+            eff = effButterflyEntry(f1, f2, f3);
+            break;
+        case 10:
+            eff = effRecoveryEntry(f1, f2, f3, i0, i4);
+            break;
+        case 0xd:
+            eff = effBreathFireEntry(f1, f2, f3, f4, f5, f6, i0, i7, i8, i9);
+            *(f32*)(*(s32*)((s32)eff + 0xc) + 0x38) = f10;
+            *(f32*)(*(s32*)((s32)eff + 0xc) + 0x30) = f10;
+            *(f32*)(*(s32*)((s32)eff + 0xc) + 0x34) = f11;
+            break;
+        case 4:
+            eff = effHitEntry(f1, f2, f3, f4, i0, i5);
+            break;
+        case 0x16:
+            eff = effBombEntry(f1, f2, f3, f4, i0);
+            break;
+        case 0x12:
+            eff = effChargeEntry(f1, f2, f3, f4, i0, i5);
+            break;
+        case 0x13:
+            eff = effTogeFlushEntry(f1, f2, f3, i0, i4);
+            break;
+        case 0x14:
+            eff = effIceEntry(f1, f2, f3, f4, i0, i5);
+            break;
+        case 5:
+            eff = effDamageStarEntry(f1, f2, f3, (f32)i4, (f32)i5, i0, i6);
+            break;
+        case 0x19:
+            eff = effStarPointEntry(f1, f2, f3, i0, i4);
+            break;
+        case 0x1e:
+            eff = effItemGetEntry(f1, f2, f3, i0);
+            break;
+        case 0x22:
+            eff = effStageClearEntry(f1, f2, f3, i0);
+            break;
+        case 0x21:
+            eff = effLevelupEntry(f1, f2, f3, i0, i4);
+            break;
+        case 0x23:
+            eff = effFallEntry(f1, f2, f3, f4, f5, f6, i0, i7, i8);
+            break;
+        case 0x27:
+            eff = effMahojinEntry(f1, f2, f3, i0);
+            break;
+        case 0x28:
+            eff = effNozleEntry(f1, f2, f3, f4, f5, i0, i6);
+            break;
+        case 0x1a:
+            eff = effPuniBalloonEntry(f1, f2, f3, f4, i0);
+            break;
+        case 0x2d:
+            eff = effKissEntry(f1, f2, f3, f4, i0);
+            break;
+        case 0x2b:
+            eff = effSplashEntry(f1, f2, f3, f4, i0);
+            break;
+        case 0xc:
+            eff = effNiceEntry(f1, f2, f3, i0);
+            break;
+        case 0x2f:
+            eff = effMistEntry(f1, f2, f3, f4, i0, i5);
+            break;
+        case 0x3a:
+            eff = effMist2Entry(f1, f2, f3, f4, f5, i0, i6);
+            break;
+        case 0x38:
+            eff = effScanningEntry(f1, f2, f3, i0);
+            break;
+        case 0x3b:
+            eff = effParticleEntry(f1, f2, f3, f4, f5, f6, i0, i7, i8);
+            break;
+        case 9:
+            effStardustEntry(f1, f2, f3, f4, f5, i0, i6, i7);
+            break;
+        case 0x2c:
+            eff = effTreasureMapEntry(f1, f2, f3, i0);
+            break;
+        case 0x34:
+            eff = effSandarsEntry(f1, f2, f3, (f32)i4, i0);
+            break;
+        case 0x32:
+            eff = effSheepEntry(f1, f2, f3, i0);
+            break;
+        case 0x37:
+            eff = effRankupEntry(f1, f2, f3, i0);
+            break;
+        case 0x36:
+            eff = effIrekaeruEntry(f1, f2, f3, i0);
+            break;
+        case 6:
+            eff = effSmallStarEntry(f1, f2, f3, f4, f5, f6, i0, i7);
+            break;
+        case 0x3c:
+            eff = effIbukiEntry(f1, f2, f3, i0, i4);
+            break;
+        case 0x3d:
+            eff = effMahornEntry(f1, f2, f3, f4, i0, i5, i6);
+            break;
+        case 0x39:
+            eff = effToikiEntry(f1, f2, f3, i0, i4);
+            break;
+        case 0x41:
+            eff = effUranokoEntry(f1, f2, f3, i0, i4);
+            break;
+        case 0x40:
+            eff = effSyuryouEntry(f1, f2, f3, i0, i4);
+            break;
+        case 0x42:
+            eff = effHibashiraEntry(f1, f2, f3, f4, f5, f6, f8, i0, i7, i9);
+            break;
+        case 0x15:
+            eff = effFireEntry(f1, f2, f3, f4, i0, i5);
+            break;
+        case 0x45:
+            eff = effMachinegunEntry(f1, f2, f3, f4, f5, f6);
+            break;
+        case 0x17:
+            eff = effRippleEntry(f1, f2, f3, i0);
+            break;
+        case 0x46:
+            eff = effLasMonEntry(f1, f2, f3, i0);
+            break;
+        case 0x44:
+            eff = effLaserEntry(f1, f2, f3, i0);
+            break;
+        case 0x3f:
+            eff = effIndirectEntry(f1, f2, f3, i0, i4);
+            break;
+        case 0x4b:
+            eff = effQueenEntry(f1, f2, f3, f4, i0, i5);
+            break;
+        case 0x4c:
+            eff = effQueen2Entry(f1, f2, f3, i0);
+            break;
+        case 0x4d:
+            eff = effGonbabaBreathEntry(f1, f2, f3, f4, i0, i5);
+            break;
+        case 0x4e:
+            eff = effMajinaiEntry(f1, f2, f3, i0);
+            break;
+    }
+
+    if ((eff != 0) && (outName != 0) && (strcmp(outName, &zero_8042033c) != 0)) {
+        effSetName((s32)eff, outName);
+    }
+
+    return 2;
+}
+
 s32 evt_eff64(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
     extern f32 evtGetFloat(void*, s32);
@@ -489,296 +782,26 @@ s32 evt_eff64(void* pEvt) {
     return 2;
 }
 
-u8 evt_eff(s32 pEvt) {
-    extern s32 evtGetValue(void*, s32);
-    extern f32 evtGetFloat(void*, s32);
-    extern s16* effGetSet(char*);
-    extern s32 strcmp(const char*, const char*);
-    extern void effSetName(s32, char*);
-    extern char zero_8042033c;
 
-    extern void* effKemuriEntry();
-    extern void* effKemuTestEntry();
-    extern void* effStarStoneEntry();
-    extern void* effConfettiEntry();
-    extern void* effButterflyEntry();
-    extern void* effRecoveryEntry();
-    extern void* effBreathFireEntry();
-    extern void* effHitEntry();
-    extern void* effBombEntry();
-    extern void* effChargeEntry();
-    extern void* effTogeFlushEntry();
-    extern void* effIceEntry();
-    extern void* effDamageStarEntry();
-    extern void* effStarPointEntry();
-    extern void* effItemGetEntry();
-    extern void* effStageClearEntry();
-    extern void* effLevelupEntry();
-    extern void* effFallEntry();
-    extern void* effMahojinEntry();
-    extern void* effNozleEntry();
-    extern void* effPuniBalloonEntry();
-    extern void* effKissEntry();
-    extern void* effSplashEntry();
-    extern void* effNiceEntry();
-    extern void* effMistEntry();
-    extern void* effMist2Entry();
-    extern void* effScanningEntry();
-    extern void* effParticleEntry();
-    extern void* effStardustEntry();
-    extern void* effTreasureMapEntry();
-    extern void* effSandarsEntry();
-    extern void* effSheepEntry();
-    extern void* effRankupEntry();
-    extern void* effIrekaeruEntry();
-    extern void* effSmallStarEntry();
-    extern void* effIbukiEntry();
-    extern void* effMahornEntry();
-    extern void* effToikiEntry();
-    extern void* effUranokoEntry();
-    extern void* effSyuryouEntry();
-    extern void* effHibashiraEntry();
-    extern void* effFireEntry();
-    extern void* effMachinegunEntry();
-    extern void* effRippleEntry();
-    extern void* effLasMonEntry();
-    extern void* effLaserEntry();
-    extern void* effIndirectEntry();
-    extern void* effQueenEntry();
-    extern void* effQueen2Entry();
-    extern void* effGonbabaBreathEntry();
-    extern void* effMajinaiEntry();
+s32 evt_eff_softdelete(void* pEvt) {
+    effSoftDelete(effNameToPtr(evtGetValue(pEvt, **(s32***)((s32)pEvt + 0x18))));
+    return 2;
+}
 
-    s32* args = *(s32**)((s32)pEvt + 0x18);
-    s32* argBase;
-    s32* floatArgs;
-    char* outName;
-    char* setName;
-    s32 i0;
-    s32 i4;
-    s32 i5;
-    s32 i6;
-    s32 i7;
-    s32 i8;
-    s32 i9;
-    f32 f1;
-    f32 f2;
-    f32 f3;
-    f32 f4;
-    f32 f5;
-    f32 f6;
-    f32 f8;
-    f32 f10;
-    f32 f11;
-    void* eff;
-    s16* set;
-    s32 id;
+s32 evt_eff_delete(void* pEvt) {
+    effDelete(effNameToPtr(evtGetValue(pEvt, **(s32***)((s32)pEvt + 0x18))));
+    return 2;
+}
 
-    outName = (char*)evtGetValue((void*)pEvt, args[0]);
-    evtGetValue((void*)pEvt, args[0]);
-    evtGetValue((void*)pEvt, args[0]);
 
-    argBase = args + 2;
-    setName = (char*)evtGetValue((void*)pEvt, args[1]);
-    floatArgs = argBase;
-    evtGetValue((void*)pEvt, args[1]);
-    evtGetValue((void*)pEvt, args[1]);
+s32 evt_eff_softdelete_ptr(void* pEvt) {
+    effSoftDelete(evtGetValue(pEvt, **(s32***)((s32)pEvt + 0x18)));
+    return 2;
+}
 
-    i0 = evtGetValue((void*)pEvt, argBase[0]);
-    evtGetValue((void*)pEvt, argBase[1]);
-    evtGetValue((void*)pEvt, argBase[2]);
-    evtGetValue((void*)pEvt, argBase[3]);
-    i4 = evtGetValue((void*)pEvt, argBase[4]);
-    i5 = evtGetValue((void*)pEvt, argBase[5]);
-    i6 = evtGetValue((void*)pEvt, argBase[6]);
-    i7 = evtGetValue((void*)pEvt, argBase[7]);
-    i8 = evtGetValue((void*)pEvt, argBase[8]);
-    i9 = evtGetValue((void*)pEvt, argBase[9]);
-    evtGetValue((void*)pEvt, argBase[10]);
-    evtGetValue((void*)pEvt, argBase[11]);
-    evtGetValue((void*)pEvt, argBase[12]);
 
-    evtGetFloat((void*)pEvt, floatArgs[0]);
-    f1 = evtGetFloat((void*)pEvt, floatArgs[1]);
-    f2 = evtGetFloat((void*)pEvt, floatArgs[2]);
-    f3 = evtGetFloat((void*)pEvt, floatArgs[3]);
-    f4 = evtGetFloat((void*)pEvt, floatArgs[4]);
-    f5 = evtGetFloat((void*)pEvt, floatArgs[5]);
-    f6 = evtGetFloat((void*)pEvt, floatArgs[6]);
-    evtGetFloat((void*)pEvt, floatArgs[7]);
-    f8 = evtGetFloat((void*)pEvt, floatArgs[8]);
-    evtGetFloat((void*)pEvt, floatArgs[9]);
-    f10 = evtGetFloat((void*)pEvt, floatArgs[10]);
-    f11 = evtGetFloat((void*)pEvt, floatArgs[11]);
-    evtGetFloat((void*)pEvt, floatArgs[12]);
-
-    eff = 0;
-    set = effGetSet(setName);
-    id = *set;
-
-    switch (id) {
-        case 0:
-            eff = effKemuriEntry(f1, f2, f3, f4, i0);
-            break;
-        case 0x1c:
-            eff = effKemuTestEntry(f1, f2, f3, f4, i0);
-            break;
-        case 0x1d:
-            eff = effStarStoneEntry(f1, f2, f3, f4, i0);
-            break;
-        case 1:
-            eff = effConfettiEntry(f1, f2, f3, i0, i4);
-            break;
-        case 3:
-            eff = effButterflyEntry(f1, f2, f3);
-            break;
-        case 10:
-            eff = effRecoveryEntry(f1, f2, f3, i0, i4);
-            break;
-        case 0xd:
-            eff = effBreathFireEntry(f1, f2, f3, f4, f5, f6, i0, i7, i8, i9);
-            *(f32*)(*(s32*)((s32)eff + 0xc) + 0x38) = f10;
-            *(f32*)(*(s32*)((s32)eff + 0xc) + 0x30) = f10;
-            *(f32*)(*(s32*)((s32)eff + 0xc) + 0x34) = f11;
-            break;
-        case 4:
-            eff = effHitEntry(f1, f2, f3, f4, i0, i5);
-            break;
-        case 0x16:
-            eff = effBombEntry(f1, f2, f3, f4, i0);
-            break;
-        case 0x12:
-            eff = effChargeEntry(f1, f2, f3, f4, i0, i5);
-            break;
-        case 0x13:
-            eff = effTogeFlushEntry(f1, f2, f3, i0, i4);
-            break;
-        case 0x14:
-            eff = effIceEntry(f1, f2, f3, f4, i0, i5);
-            break;
-        case 5:
-            eff = effDamageStarEntry(f1, f2, f3, (f32)i4, (f32)i5, i0, i6);
-            break;
-        case 0x19:
-            eff = effStarPointEntry(f1, f2, f3, i0, i4);
-            break;
-        case 0x1e:
-            eff = effItemGetEntry(f1, f2, f3, i0);
-            break;
-        case 0x22:
-            eff = effStageClearEntry(f1, f2, f3, i0);
-            break;
-        case 0x21:
-            eff = effLevelupEntry(f1, f2, f3, i0, i4);
-            break;
-        case 0x23:
-            eff = effFallEntry(f1, f2, f3, f4, f5, f6, i0, i7, i8);
-            break;
-        case 0x27:
-            eff = effMahojinEntry(f1, f2, f3, i0);
-            break;
-        case 0x28:
-            eff = effNozleEntry(f1, f2, f3, f4, f5, i0, i6);
-            break;
-        case 0x1a:
-            eff = effPuniBalloonEntry(f1, f2, f3, f4, i0);
-            break;
-        case 0x2d:
-            eff = effKissEntry(f1, f2, f3, f4, i0);
-            break;
-        case 0x2b:
-            eff = effSplashEntry(f1, f2, f3, f4, i0);
-            break;
-        case 0xc:
-            eff = effNiceEntry(f1, f2, f3, i0);
-            break;
-        case 0x2f:
-            eff = effMistEntry(f1, f2, f3, f4, i0, i5);
-            break;
-        case 0x3a:
-            eff = effMist2Entry(f1, f2, f3, f4, f5, i0, i6);
-            break;
-        case 0x38:
-            eff = effScanningEntry(f1, f2, f3, i0);
-            break;
-        case 0x3b:
-            eff = effParticleEntry(f1, f2, f3, f4, f5, f6, i0, i7, i8);
-            break;
-        case 9:
-            effStardustEntry(f1, f2, f3, f4, f5, i0, i6, i7);
-            break;
-        case 0x2c:
-            eff = effTreasureMapEntry(f1, f2, f3, i0);
-            break;
-        case 0x34:
-            eff = effSandarsEntry(f1, f2, f3, (f32)i4, i0);
-            break;
-        case 0x32:
-            eff = effSheepEntry(f1, f2, f3, i0);
-            break;
-        case 0x37:
-            eff = effRankupEntry(f1, f2, f3, i0);
-            break;
-        case 0x36:
-            eff = effIrekaeruEntry(f1, f2, f3, i0);
-            break;
-        case 6:
-            eff = effSmallStarEntry(f1, f2, f3, f4, f5, f6, i0, i7);
-            break;
-        case 0x3c:
-            eff = effIbukiEntry(f1, f2, f3, i0, i4);
-            break;
-        case 0x3d:
-            eff = effMahornEntry(f1, f2, f3, f4, i0, i5, i6);
-            break;
-        case 0x39:
-            eff = effToikiEntry(f1, f2, f3, i0, i4);
-            break;
-        case 0x41:
-            eff = effUranokoEntry(f1, f2, f3, i0, i4);
-            break;
-        case 0x40:
-            eff = effSyuryouEntry(f1, f2, f3, i0, i4);
-            break;
-        case 0x42:
-            eff = effHibashiraEntry(f1, f2, f3, f4, f5, f6, f8, i0, i7, i9);
-            break;
-        case 0x15:
-            eff = effFireEntry(f1, f2, f3, f4, i0, i5);
-            break;
-        case 0x45:
-            eff = effMachinegunEntry(f1, f2, f3, f4, f5, f6);
-            break;
-        case 0x17:
-            eff = effRippleEntry(f1, f2, f3, i0);
-            break;
-        case 0x46:
-            eff = effLasMonEntry(f1, f2, f3, i0);
-            break;
-        case 0x44:
-            eff = effLaserEntry(f1, f2, f3, i0);
-            break;
-        case 0x3f:
-            eff = effIndirectEntry(f1, f2, f3, i0, i4);
-            break;
-        case 0x4b:
-            eff = effQueenEntry(f1, f2, f3, f4, i0, i5);
-            break;
-        case 0x4c:
-            eff = effQueen2Entry(f1, f2, f3, i0);
-            break;
-        case 0x4d:
-            eff = effGonbabaBreathEntry(f1, f2, f3, f4, i0, i5);
-            break;
-        case 0x4e:
-            eff = effMajinaiEntry(f1, f2, f3, i0);
-            break;
-    }
-
-    if ((eff != 0) && (outName != 0) && (strcmp(outName, &zero_8042033c) != 0)) {
-        effSetName((s32)eff, outName);
-    }
-
+s32 evt_eff_delete_ptr(void* pEvt) {
+    effDelete(evtGetValue(pEvt, **(s32***)((s32)pEvt + 0x18)));
     return 2;
 }
 
@@ -856,28 +879,5 @@ u8 evt_eff_fukidashi(s32 pEvt) {
     if ((name != 0) && (strcmp(name, zero_8042033c) != 0) && (eff != 0)) {
         effSetName(eff, name);
     }
-    return 2;
-}
-
-s32 evt_eff_delete(void* pEvt) {
-    effDelete(effNameToPtr(evtGetValue(pEvt, **(s32***)((s32)pEvt + 0x18))));
-    return 2;
-}
-
-
-s32 evt_eff_softdelete(void* pEvt) {
-    effSoftDelete(effNameToPtr(evtGetValue(pEvt, **(s32***)((s32)pEvt + 0x18))));
-    return 2;
-}
-
-
-s32 evt_eff_delete_ptr(void* pEvt) {
-    effDelete(evtGetValue(pEvt, **(s32***)((s32)pEvt + 0x18)));
-    return 2;
-}
-
-
-s32 evt_eff_softdelete_ptr(void* pEvt) {
-    effSoftDelete(evtGetValue(pEvt, **(s32***)((s32)pEvt + 0x18)));
     return 2;
 }

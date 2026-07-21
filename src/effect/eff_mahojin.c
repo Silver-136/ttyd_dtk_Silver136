@@ -1,4 +1,36 @@
 #include "effect/eff_mahojin.h"
+void callback(void* data) {
+    extern void GXSetTevColor(s32 id, void* color);
+    extern void GXSetTevOrder(s32 tev, s32 coord, s32 map, s32 color);
+    extern void GXSetTevColorOp(s32 tev, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevAlphaOp(s32 tev, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+    extern void GXSetTevColorIn(s32 tev, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevAlphaIn(s32 tev, s32 a, s32 b, s32 c, s32 d);
+    extern void GXSetTevSwapMode(s32 tev, s32 rasSel, s32 texSel);
+    extern u32 dat_80427750;
+    extern s32 mahojin_rate;
+
+    u32 colorCopy;
+    u32 color = dat_80427750;
+    s32 tev = *(s32*)((s32)data + 0xC);
+    s32 v10 = *(s32*)((s32)data + 0x10);
+    s32 v14 = *(s32*)((s32)data + 0x14);
+    s32 v18 = *(s32*)((s32)data + 0x18);
+
+    ((u8*)&color)[3] = mahojin_rate;
+    colorCopy = color;
+    GXSetTevColor(1, &colorCopy);
+    GXSetTevOrder(tev, 0xFF, 0xFF, 0xFF);
+    GXSetTevColorOp(tev, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(tev, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(tev, 0, 2, 3, 0xF);
+    GXSetTevAlphaIn(tev, 7, 7, 7, 0);
+    GXSetTevSwapMode(tev, 0, 0);
+    *(s32*)((s32)data + 0xC) = tev + 1;
+    *(s32*)((s32)data + 0x14) = v14;
+    *(s32*)((s32)data + 0x18) = v18;
+    *(s32*)((s32)data + 0x10) = v10;
+}
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -70,38 +102,6 @@ void* effMahojinEntry(s32 kind, f32 x, f32 y, f32 z) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-void callback(void* data) {
-    extern void GXSetTevColor(s32 id, void* color);
-    extern void GXSetTevOrder(s32 tev, s32 coord, s32 map, s32 color);
-    extern void GXSetTevColorOp(s32 tev, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevAlphaOp(s32 tev, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevColorIn(s32 tev, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevAlphaIn(s32 tev, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevSwapMode(s32 tev, s32 rasSel, s32 texSel);
-    extern u32 dat_80427750;
-    extern s32 mahojin_rate;
-
-    u32 colorCopy;
-    u32 color = dat_80427750;
-    s32 tev = *(s32*)((s32)data + 0xC);
-    s32 v10 = *(s32*)((s32)data + 0x10);
-    s32 v14 = *(s32*)((s32)data + 0x14);
-    s32 v18 = *(s32*)((s32)data + 0x18);
-
-    ((u8*)&color)[3] = mahojin_rate;
-    colorCopy = color;
-    GXSetTevColor(1, &colorCopy);
-    GXSetTevOrder(tev, 0xFF, 0xFF, 0xFF);
-    GXSetTevColorOp(tev, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(tev, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(tev, 0, 2, 3, 0xF);
-    GXSetTevAlphaIn(tev, 7, 7, 7, 0);
-    GXSetTevSwapMode(tev, 0, 0);
-    *(s32*)((s32)data + 0xC) = tev + 1;
-    *(s32*)((s32)data + 0x14) = v14;
-    *(s32*)((s32)data + 0x18) = v18;
-    *(s32*)((s32)data + 0x10) = v10;
-}
 
 void effMahojinMain(void* entry) {
     typedef struct Vec_s {

@@ -1,57 +1,5 @@
 #include "sdk/DEMOPad.h"
 
-
-void DEMOPadRead(void) {
-    extern u8 Pad[];
-    extern u8 DemoPad[];
-    extern u32 PadChanMask[];
-    extern s32 DemoNumValidPads;
-    extern void PADRead(void*);
-    extern void PADClamp(void*);
-    extern void PADReset(u32);
-    extern void DEMOPadCopy(void*, void*);
-    u32 resetMask;
-    u8* raw;
-    u8* state;
-    s32 i;
-    s8 error;
-
-    resetMask = 0;
-    PADRead(Pad);
-    PADClamp(Pad);
-    DemoNumValidPads = 0;
-    raw = Pad;
-    state = DemoPad;
-    for (i = 0; i < 4; i++, raw += 0xC, state += 0x1E) {
-        error = *(s8*)(raw + 0xA);
-        if (error == 0 || error == -3) {
-            DemoNumValidPads++;
-        } else if (error == -1) {
-            resetMask |= PadChanMask[i];
-        }
-        DEMOPadCopy(raw, state);
-    }
-    if (resetMask != 0) {
-        PADReset(resetMask);
-    }
-}
-
-void DEMOPadInit(void) {
-    extern void PADInit(void);
-    extern u8 DemoPad[];
-    u8* pad;
-    s32 i;
-    s32 j;
-
-    PADInit();
-    pad = DemoPad;
-    for (i = 0; i < 4; i++, pad += 0x1E) {
-        for (j = 0; j < 0x1E; j++) {
-            pad[j] = 0;
-        }
-    }
-}
-
 void DEMOPadCopy(void* newPadState, void* padState) {
     u16 dirs;
     u16 buttons;
@@ -130,6 +78,58 @@ void DEMOPadCopy(void* newPadState, void* padState) {
         *(s16*)((s32)padState + 0x16) = 0;
         *(s16*)((s32)padState + 0x1C) = 0;
         *(s16*)((s32)padState + 0x1A) = 0;
+    }
+}
+
+
+void DEMOPadRead(void) {
+    extern u8 Pad[];
+    extern u8 DemoPad[];
+    extern u32 PadChanMask[];
+    extern s32 DemoNumValidPads;
+    extern void PADRead(void*);
+    extern void PADClamp(void*);
+    extern void PADReset(u32);
+    extern void DEMOPadCopy(void*, void*);
+    u32 resetMask;
+    u8* raw;
+    u8* state;
+    s32 i;
+    s8 error;
+
+    resetMask = 0;
+    PADRead(Pad);
+    PADClamp(Pad);
+    DemoNumValidPads = 0;
+    raw = Pad;
+    state = DemoPad;
+    for (i = 0; i < 4; i++, raw += 0xC, state += 0x1E) {
+        error = *(s8*)(raw + 0xA);
+        if (error == 0 || error == -3) {
+            DemoNumValidPads++;
+        } else if (error == -1) {
+            resetMask |= PadChanMask[i];
+        }
+        DEMOPadCopy(raw, state);
+    }
+    if (resetMask != 0) {
+        PADReset(resetMask);
+    }
+}
+
+void DEMOPadInit(void) {
+    extern void PADInit(void);
+    extern u8 DemoPad[];
+    u8* pad;
+    s32 i;
+    s32 j;
+
+    PADInit();
+    pad = DemoPad;
+    for (i = 0; i < 4; i++, pad += 0x1E) {
+        for (j = 0; j < 0x1E; j++) {
+            pad[j] = 0;
+        }
     }
 }
 

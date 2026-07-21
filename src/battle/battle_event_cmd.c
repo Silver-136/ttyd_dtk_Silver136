@@ -35,6 +35,7 @@ void* BtlUnit_GetData(BattleWorkUnit* unit, s32 id);
 void* evtChildEntry(void* event, void* script, s32 flags);
 void evtDeleteID(s32 id);
 void BattleRunWaitEvent(BattleWorkUnit* unit);
+void _MoveSoundControlEndCore(void* unit, void* work);
 
 void BattleAttackDeclareAll(BattleWork* battleWork);
 void BattleDamageDirect(s32 unk, BattleWorkUnit* unit, BattleWorkUnitPart* part, s32 damage, s32 zero, s32 flags, s32 arg5, s32 arg6);
@@ -8379,6 +8380,82 @@ USER_FUNC(btlevtcmd_SetPartsJumpSound) {
     return EVT_RETURN_DONE;
 }
 
+void _UnitMoveSoundControl(void* unit) {
+    extern void _MoveSoundControlCore();
+    f32 x;
+    f32 y;
+    f32 z;
+
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    _MoveSoundControlCore(x, y, z, unit, (void*)((s32)unit + 0x18C), NULL);
+}
+
+
+void _PartsMoveSoundControl(void* part) {
+    extern void _MoveSoundControlCore(void* unit, void* moveSoundWork, void* part, f32 z, f32 y, f32 x);
+    f32 x;
+    f32 y;
+    f32 z;
+
+    BtlUnit_GetPartsPos(part, &x, &y, &z);
+    _MoveSoundControlCore(*(void**)((s32)part + 0x4EC), (void*)((s32)part + 0xC0), part, z, y, x);
+}
+
+void _MoveSoundControlCore(double x, double y, double z, void* unit, void* moveSoundWork, void* part) {
+    extern void BtlUnit_GetPartsWorldPos(void*, f32*, f32*, f32*);
+    extern void psndSFX_pos(s32, Vec*);
+    extern Vec vec3_802ee494;
+    Vec soundPos;
+    Vec worldPos;
+    char* sound;
+
+    soundPos = vec3_802ee494;
+    soundPos.x = (f32)x;
+    soundPos.y = (f32)y;
+    soundPos.z = (f32)z;
+    sound = *(char**)((s32)moveSoundWork + 0x0);
+
+    if (sound != NULL || *(char**)((s32)moveSoundWork + 0x4) != NULL) {
+        if (sound != NULL && *(char**)((s32)moveSoundWork + 0x4) == NULL) {
+            if (*(s32*)((s32)moveSoundWork + 0x18) == -1) {
+                *(s32*)((s32)moveSoundWork + 0x18) =
+                    BtlUnit_snd_se_pos(unit, (s32)sound, -250000000, 0, &soundPos);
+            }
+            if (part != NULL) {
+                BtlUnit_GetPartsWorldPos(part, &worldPos.x, &worldPos.y, &worldPos.z);
+            } else {
+                BtlUnit_GetPos(unit, &worldPos.x, &worldPos.y, &worldPos.z);
+            }
+            psndSFX_pos(*(s32*)((s32)moveSoundWork + 0x18), &worldPos);
+        } else {
+            if (*(s16*)((s32)moveSoundWork + 0x12) > -1) {
+                *(s16*)((s32)moveSoundWork + 0x12) -= 1;
+                if (*(s16*)((s32)moveSoundWork + 0x12) < 0) {
+                    *(s16*)((s32)moveSoundWork + 0x14) += 1;
+                    if ((*(s16*)((s32)moveSoundWork + 0x14) & 1) == 0) {
+                        sound = *(char**)((s32)moveSoundWork + 0x4);
+                        *(s16*)((s32)moveSoundWork + 0x12) = *(s16*)((s32)moveSoundWork + 0x10);
+                    } else {
+                        sound = *(char**)((s32)moveSoundWork + 0x0);
+                        *(s16*)((s32)moveSoundWork + 0x12) = *(s16*)((s32)moveSoundWork + 0xE);
+                    }
+                    if (sound != NULL) {
+                        BtlUnit_snd_se_pos(unit, (s32)sound, -250000000, 0, &soundPos);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void _UnitMoveSoundControlEnd(void* unit) {
+    _MoveSoundControlEndCore(unit, (void*)((s32)unit + 0x18C));
+}
+
+void _PartsMoveSoundControlEnd(void* parts) {
+    _MoveSoundControlEndCore(*(void**)((s32)parts + 0x4EC), (void*)((s32)parts + 0xC0));
+}
+
 
 // _UnitMoveSoundControl
 
@@ -8395,14 +8472,6 @@ void _MoveSoundControlEndCore(void* unit, void* work) {
         psndSFXOff(sfxId);
         *(s32*)((s32)work + 0x18) = -1;
     }
-}
-
-void _PartsMoveSoundControlEnd(void* parts) {
-    _MoveSoundControlEndCore(*(void**)((s32)parts + 0x4EC), (void*)((s32)parts + 0xC0));
-}
-
-void _UnitMoveSoundControlEnd(void* unit) {
-    _MoveSoundControlEndCore(unit, (void*)((s32)unit + 0x18C));
 }
 
 USER_FUNC(btlevtcmd_snd_se) {
@@ -8812,72 +8881,3 @@ USER_FUNC(btlevtcmd_ftof) {
 
     return EVT_RETURN_DONE;
 }
-
-
-void _PartsMoveSoundControl(void* part) {
-    extern void _MoveSoundControlCore(void* unit, void* moveSoundWork, void* part, f32 z, f32 y, f32 x);
-    f32 x;
-    f32 y;
-    f32 z;
-
-    BtlUnit_GetPartsPos(part, &x, &y, &z);
-    _MoveSoundControlCore(*(void**)((s32)part + 0x4EC), (void*)((s32)part + 0xC0), part, z, y, x);
-}
-
-void _UnitMoveSoundControl(void* unit) {
-    extern void _MoveSoundControlCore();
-    f32 x;
-    f32 y;
-    f32 z;
-
-    BtlUnit_GetPos(unit, &x, &y, &z);
-    _MoveSoundControlCore(x, y, z, unit, (void*)((s32)unit + 0x18C), NULL);
-}
-
-void _MoveSoundControlCore(double x, double y, double z, void* unit, void* moveSoundWork, void* part) {
-    extern void BtlUnit_GetPartsWorldPos(void*, f32*, f32*, f32*);
-    extern void psndSFX_pos(s32, Vec*);
-    extern Vec vec3_802ee494;
-    Vec soundPos;
-    Vec worldPos;
-    char* sound;
-
-    soundPos = vec3_802ee494;
-    soundPos.x = (f32)x;
-    soundPos.y = (f32)y;
-    soundPos.z = (f32)z;
-    sound = *(char**)((s32)moveSoundWork + 0x0);
-
-    if (sound != NULL || *(char**)((s32)moveSoundWork + 0x4) != NULL) {
-        if (sound != NULL && *(char**)((s32)moveSoundWork + 0x4) == NULL) {
-            if (*(s32*)((s32)moveSoundWork + 0x18) == -1) {
-                *(s32*)((s32)moveSoundWork + 0x18) =
-                    BtlUnit_snd_se_pos(unit, (s32)sound, -250000000, 0, &soundPos);
-            }
-            if (part != NULL) {
-                BtlUnit_GetPartsWorldPos(part, &worldPos.x, &worldPos.y, &worldPos.z);
-            } else {
-                BtlUnit_GetPos(unit, &worldPos.x, &worldPos.y, &worldPos.z);
-            }
-            psndSFX_pos(*(s32*)((s32)moveSoundWork + 0x18), &worldPos);
-        } else {
-            if (*(s16*)((s32)moveSoundWork + 0x12) > -1) {
-                *(s16*)((s32)moveSoundWork + 0x12) -= 1;
-                if (*(s16*)((s32)moveSoundWork + 0x12) < 0) {
-                    *(s16*)((s32)moveSoundWork + 0x14) += 1;
-                    if ((*(s16*)((s32)moveSoundWork + 0x14) & 1) == 0) {
-                        sound = *(char**)((s32)moveSoundWork + 0x4);
-                        *(s16*)((s32)moveSoundWork + 0x12) = *(s16*)((s32)moveSoundWork + 0x10);
-                    } else {
-                        sound = *(char**)((s32)moveSoundWork + 0x0);
-                        *(s16*)((s32)moveSoundWork + 0x12) = *(s16*)((s32)moveSoundWork + 0xE);
-                    }
-                    if (sound != NULL) {
-                        BtlUnit_snd_se_pos(unit, (s32)sound, -250000000, 0, &soundPos);
-                    }
-                }
-            }
-        }
-    }
-}
-

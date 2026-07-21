@@ -2,76 +2,6 @@
 
 void* twodPtr;
 
-s32 twoddisp_main(void) {
-    extern void twoddisp_disp(void);
-    extern f32 float_1000_80422f88;
-    extern void dispEntry(s32, s32, void*, s32, f32);
-    s32 i = 0;
-
-    for (; i < 96; i += 8) {
-    }
-    for (; i < 100; i++) {
-    }
-    dispEntry(8, 0, twoddisp_disp, 0, float_1000_80422f88);
-    return 2;
-}
-
-
-s32 evt_twoddisp_init(void* event) {
-    extern void* evtEntryType(void* script, s32 priority, s32 flags, s32 type);
-    extern void* _mapAlloc(void* heap, u32 size);
-    extern void* mapalloc_base_ptr;
-    extern void* twoddisp_main_event;
-    extern void* twodPtr;
-    extern s32 twodID;
-    extern f32 float_0_80422f80;
-    extern f32 float_1_80422f84;
-    void* child;
-    void* entry;
-    s32 i;
-
-    child = evtEntryType(&twoddisp_main_event, *(u8*)((s32)event + 0xB), 0, *(u8*)((s32)event + 0xC));
-    *(s32*)((s32)child + 0x160) = *(s32*)((s32)event + 0x160);
-    *(s32*)((s32)child + 0x170) = *(s32*)((s32)event + 0x170);
-    *(s32*)((s32)child + 0x9C) = *(s32*)((s32)event + 0x9C);
-    *(s32*)((s32)child + 0xA0) = *(s32*)((s32)event + 0xA0);
-    *(s32*)((s32)child + 0xA4) = *(s32*)((s32)event + 0xA4);
-    *(s32*)((s32)child + 0xA8) = *(s32*)((s32)event + 0xA8);
-    *(s32*)((s32)child + 0xAC) = *(s32*)((s32)event + 0xAC);
-    *(s32*)((s32)child + 0xB0) = *(s32*)((s32)event + 0xB0);
-    *(s32*)((s32)child + 0xB4) = *(s32*)((s32)event + 0xB4);
-    *(s32*)((s32)child + 0xB8) = *(s32*)((s32)event + 0xB8);
-    *(s32*)((s32)child + 0xBC) = *(s32*)((s32)event + 0xBC);
-    *(s32*)((s32)child + 0xC0) = *(s32*)((s32)event + 0xC0);
-    *(s32*)((s32)child + 0xC4) = *(s32*)((s32)event + 0xC4);
-    *(s32*)((s32)child + 0xC8) = *(s32*)((s32)event + 0xC8);
-    *(s32*)((s32)child + 0xCC) = *(s32*)((s32)event + 0xCC);
-    *(s32*)((s32)child + 0xD0) = *(s32*)((s32)event + 0xD0);
-    *(s32*)((s32)child + 0xD4) = *(s32*)((s32)event + 0xD4);
-    *(s32*)((s32)child + 0xD8) = *(s32*)((s32)event + 0xD8);
-    *(s32*)((s32)child + 0xDC) = *(s32*)((s32)event + 0xDC);
-    *(s32*)((s32)child + 0xE0) = *(s32*)((s32)event + 0xE0);
-    *(s32*)((s32)child + 0xE4) = *(s32*)((s32)event + 0xE4);
-    *(s32*)((s32)child + 0x154) = *(s32*)((s32)event + 0x154);
-    *(s32*)((s32)child + 0x158) = *(s32*)((s32)event + 0x158);
-    twodID = *(s32*)((s32)child + 0x15C);
-
-    twodPtr = _mapAlloc(mapalloc_base_ptr, 0x1450);
-    for (i = 0; i < 100; i++) {
-        entry = (void*)((s32)twodPtr + (i * 0x34));
-        *(u8*)((s32)entry + 0x0) = 0;
-        *(u16*)((s32)entry + 0x10) = 0;
-        *(u16*)((s32)entry + 0x12) = 0;
-        *(f32*)((s32)entry + 0x14) = float_0_80422f80;
-        *(f32*)((s32)entry + 0x1C) = float_0_80422f80;
-        *(f32*)((s32)entry + 0x18) = float_0_80422f80;
-        *(f32*)((s32)entry + 0x20) = float_0_80422f80;
-        *(s32*)((s32)entry + 0x24) = 0;
-        *(f32*)((s32)entry + 0x28) = float_1_80422f84;
-    }
-    return 2;
-}
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void twoddisp_disp(void) {
@@ -142,33 +72,73 @@ void twoddisp_disp(void) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-s32 evt_twoddisp_flag_onoff(int param_1) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern s32 strcmp(const char* s1, const char* s2);
-    void* event = (void*)param_1;
-    s32* args = *(s32**)((s32)event + 0x18);
-    s32 onoff = evtGetValue(event, args[0]);
-    char* name = (char*)evtGetValue(event, args[1]);
+
+s32 twoddisp_main(void) {
+    extern void twoddisp_disp(void);
+    extern f32 float_1000_80422f88;
+    extern void dispEntry(s32, s32, void*, s32, f32);
     s32 i = 0;
-    s32 offset = 0;
+
+    for (; i < 96; i += 8) {
+    }
+    for (; i < 100; i++) {
+    }
+    dispEntry(8, 0, twoddisp_disp, 0, float_1000_80422f88);
+    return 2;
+}
+
+
+s32 evt_twoddisp_init(void* event) {
+    extern void* evtEntryType(void* script, s32 priority, s32 flags, s32 type);
+    extern void* _mapAlloc(void* heap, u32 size);
+    extern void* mapalloc_base_ptr;
+    extern void* twoddisp_main_event;
+    extern void* twodPtr;
+    extern s32 twodID;
+    extern f32 float_0_80422f80;
+    extern f32 float_1_80422f84;
+    void* child;
     void* entry;
+    s32 i;
 
-    while (i < 100) {
-        entry = (void*)((s32)twodPtr + offset);
-        if (strcmp((char*)entry, name) == 0) {
-            break;
-        }
-        i++;
-        offset += 0x34;
-    }
-    if (i >= 100) {
-        entry = 0;
-    }
+    child = evtEntryType(&twoddisp_main_event, *(u8*)((s32)event + 0xB), 0, *(u8*)((s32)event + 0xC));
+    *(s32*)((s32)child + 0x160) = *(s32*)((s32)event + 0x160);
+    *(s32*)((s32)child + 0x170) = *(s32*)((s32)event + 0x170);
+    *(s32*)((s32)child + 0x9C) = *(s32*)((s32)event + 0x9C);
+    *(s32*)((s32)child + 0xA0) = *(s32*)((s32)event + 0xA0);
+    *(s32*)((s32)child + 0xA4) = *(s32*)((s32)event + 0xA4);
+    *(s32*)((s32)child + 0xA8) = *(s32*)((s32)event + 0xA8);
+    *(s32*)((s32)child + 0xAC) = *(s32*)((s32)event + 0xAC);
+    *(s32*)((s32)child + 0xB0) = *(s32*)((s32)event + 0xB0);
+    *(s32*)((s32)child + 0xB4) = *(s32*)((s32)event + 0xB4);
+    *(s32*)((s32)child + 0xB8) = *(s32*)((s32)event + 0xB8);
+    *(s32*)((s32)child + 0xBC) = *(s32*)((s32)event + 0xBC);
+    *(s32*)((s32)child + 0xC0) = *(s32*)((s32)event + 0xC0);
+    *(s32*)((s32)child + 0xC4) = *(s32*)((s32)event + 0xC4);
+    *(s32*)((s32)child + 0xC8) = *(s32*)((s32)event + 0xC8);
+    *(s32*)((s32)child + 0xCC) = *(s32*)((s32)event + 0xCC);
+    *(s32*)((s32)child + 0xD0) = *(s32*)((s32)event + 0xD0);
+    *(s32*)((s32)child + 0xD4) = *(s32*)((s32)event + 0xD4);
+    *(s32*)((s32)child + 0xD8) = *(s32*)((s32)event + 0xD8);
+    *(s32*)((s32)child + 0xDC) = *(s32*)((s32)event + 0xDC);
+    *(s32*)((s32)child + 0xE0) = *(s32*)((s32)event + 0xE0);
+    *(s32*)((s32)child + 0xE4) = *(s32*)((s32)event + 0xE4);
+    *(s32*)((s32)child + 0x154) = *(s32*)((s32)event + 0x154);
+    *(s32*)((s32)child + 0x158) = *(s32*)((s32)event + 0x158);
+    twodID = *(s32*)((s32)child + 0x15C);
 
-    if (onoff != 0) {
-        *(u16*)((s32)entry + 0x10) |= evtGetValue(event, args[2]);
-    } else {
-        *(u16*)((s32)entry + 0x10) &= ~evtGetValue(event, args[2]);
+    twodPtr = _mapAlloc(mapalloc_base_ptr, 0x1450);
+    for (i = 0; i < 100; i++) {
+        entry = (void*)((s32)twodPtr + (i * 0x34));
+        *(u8*)((s32)entry + 0x0) = 0;
+        *(u16*)((s32)entry + 0x10) = 0;
+        *(u16*)((s32)entry + 0x12) = 0;
+        *(f32*)((s32)entry + 0x14) = float_0_80422f80;
+        *(f32*)((s32)entry + 0x1C) = float_0_80422f80;
+        *(f32*)((s32)entry + 0x18) = float_0_80422f80;
+        *(f32*)((s32)entry + 0x20) = float_0_80422f80;
+        *(s32*)((s32)entry + 0x24) = 0;
+        *(f32*)((s32)entry + 0x28) = float_1_80422f84;
     }
     return 2;
 }
@@ -209,6 +179,34 @@ s32 evt_twoddisp_entry(void* pEvt) {
 }
 
 
+s32 evt_twoddisp_set_position(int param_1) {
+    extern s32 evtGetValue(void* event, s32 value);
+    extern f32 evtGetFloat(void* event, s32 value);
+    extern s32 strcmp(const char* s1, const char* s2);
+    void* event = (void*)param_1;
+    s32* args = *(s32**)((s32)event + 0x18);
+    char* name = (char*)evtGetValue(event, args[0]);
+    s32 i = 0;
+    s32 offset = 0;
+    void* entry;
+
+    while (i < 100) {
+        entry = (void*)((s32)twodPtr + offset);
+        if (strcmp((char*)entry, name) == 0) {
+            break;
+        }
+        i++;
+        offset += 0x34;
+    }
+    if (i >= 100) {
+        entry = 0;
+    }
+    *(f32*)((s32)entry + 0x14) = evtGetFloat(event, args[1]);
+    *(f32*)((s32)entry + 0x18) = evtGetFloat(event, args[2]);
+    return 2;
+}
+
+
 s32 evt_twoddisp_set_base_position(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
     extern f32 evtGetFloat(void* event, s32 value);
@@ -234,15 +232,13 @@ s32 evt_twoddisp_set_base_position(void* pEvt) {
     *(f32*)((s32)entry + 0x20) = evtGetFloat(pEvt, args[2]);
     return 2;
 }
-
-
-s32 evt_twoddisp_set_position(int param_1) {
+s32 evt_twoddisp_flag_onoff(int param_1) {
     extern s32 evtGetValue(void* event, s32 value);
-    extern f32 evtGetFloat(void* event, s32 value);
     extern s32 strcmp(const char* s1, const char* s2);
     void* event = (void*)param_1;
     s32* args = *(s32**)((s32)event + 0x18);
-    char* name = (char*)evtGetValue(event, args[0]);
+    s32 onoff = evtGetValue(event, args[0]);
+    char* name = (char*)evtGetValue(event, args[1]);
     s32 i = 0;
     s32 offset = 0;
     void* entry;
@@ -258,7 +254,11 @@ s32 evt_twoddisp_set_position(int param_1) {
     if (i >= 100) {
         entry = 0;
     }
-    *(f32*)((s32)entry + 0x14) = evtGetFloat(event, args[1]);
-    *(f32*)((s32)entry + 0x18) = evtGetFloat(event, args[2]);
+
+    if (onoff != 0) {
+        *(u16*)((s32)entry + 0x10) |= evtGetValue(event, args[2]);
+    } else {
+        *(u16*)((s32)entry + 0x10) &= ~evtGetValue(event, args[2]);
+    }
     return 2;
 }

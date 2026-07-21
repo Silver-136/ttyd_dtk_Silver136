@@ -135,441 +135,381 @@ extern const f32 float_480_8041f7dc;
 extern const f32 float_32_8041f7e0;
 extern const f32 float_neg24_8041f7e4;
 
-void fadeSetNarrowFast(void) {
-    *(u16*)((s32)wp + 0xB0) |= 8;
+void _callback(void* unused, void* fileInfo) {
+    s32 entry;
+
+    entry = *(s32*)((s32)fileInfo + 0x2C);
+
+    UnpackTexPalette(*(void**)((s32)wp + 0x358));
+    DVDMgrClose(entry);
+
+    *(s32*)((s32)wp + 0x35C) = 1;
 }
 
-void* fadeGetTpl(void) {
-    return *(void**)((s32)wp + 0x358);
+void fadeInit(void) {
+    void* work;
+    s32 minusOne;
+    s32 zero;
+    f32 oneFloat;
+    f32 zeroFloat;
+
+    work = __memAlloc(0, 0x360);
+    wp = work;
+    memset(work, 0, 0x360);
+
+    work = wp;
+    minusOne = -1;
+    zero = 0;
+    oneFloat = float_1_8041f7ac;
+    zeroFloat = float_0_8041f7a8;
+
+    *(s32*)((s32)work + 0x74) = minusOne;
+    *(s32*)((s32)work + 0x78) = minusOne;
+    *(f32*)((s32)work + 0x24) = zeroFloat;
+    *(f32*)((s32)work + 0x28) = zeroFloat;
+    *(f32*)((s32)work + 0x80) = zeroFloat;
+    *(f32*)((s32)work + 0x84) = zeroFloat;
+    *(f32*)((s32)work + 0x98) = oneFloat;
+    *(s32*)((s32)work + 0xAC) = zero;
+
+    work = wp;
+    *(s32*)((s32)work + 0x11C) = minusOne;
+    *(s32*)((s32)work + 0x120) = minusOne;
+    *(f32*)((s32)work + 0xCC) = zeroFloat;
+    *(f32*)((s32)work + 0xD0) = zeroFloat;
+    *(f32*)((s32)work + 0x128) = zeroFloat;
+    *(f32*)((s32)work + 0x12C) = zeroFloat;
+    *(f32*)((s32)work + 0x140) = oneFloat;
+    *(s32*)((s32)work + 0x154) = zero;
+
+    work = wp;
+    *(s32*)((s32)work + 0x1C4) = minusOne;
+    *(s32*)((s32)work + 0x1C8) = minusOne;
+    *(f32*)((s32)work + 0x174) = zeroFloat;
+    *(f32*)((s32)work + 0x178) = zeroFloat;
+    *(f32*)((s32)work + 0x1D0) = zeroFloat;
+    *(f32*)((s32)work + 0x1D4) = zeroFloat;
+    *(f32*)((s32)work + 0x1E8) = oneFloat;
+    *(s32*)((s32)work + 0x1FC) = zero;
+
+    work = wp;
+    *(s32*)((s32)work + 0x26C) = minusOne;
+    *(s32*)((s32)work + 0x270) = minusOne;
+    *(f32*)((s32)work + 0x21C) = zeroFloat;
+    *(f32*)((s32)work + 0x220) = zeroFloat;
+    *(f32*)((s32)work + 0x278) = zeroFloat;
+    *(f32*)((s32)work + 0x27C) = zeroFloat;
+    *(f32*)((s32)work + 0x290) = oneFloat;
+    *(s32*)((s32)work + 0x2A4) = zero;
+
+    work = wp;
+    *(s32*)((s32)work + 0x314) = minusOne;
+    *(s32*)((s32)work + 0x318) = minusOne;
+    *(f32*)((s32)work + 0x2C4) = zeroFloat;
+    *(f32*)((s32)work + 0x2C8) = zeroFloat;
+    *(f32*)((s32)work + 0x320) = zeroFloat;
+    *(f32*)((s32)work + 0x324) = zeroFloat;
+    *(f32*)((s32)work + 0x338) = oneFloat;
+    *(s32*)((s32)work + 0x34C) = zero;
+
+    work = wp;
+    *(s32*)((s32)work + 0x350) = minusOne;
+    work = wp;
+    *(s32*)((s32)work + 0x358) = zero;
+    work = wp;
+    *(s32*)((s32)work + 0x35C) = zero;
 }
 
-void fadeReset(s32 type) {
-    void* entry;
 
-    type *= 0xA8;
-    entry = (void*)((s32)wp + type + 0x8);
+void fadeTexSetup(void) {
+    s32 length;
+    s32 entry;
+    char path[0x80];
 
-    if (*(s32*)((s32)entry + 0x6C) >= 0) {
-        animPoseRelease(*(s32*)((s32)entry + 0x6C));
-    }
-
-    if (*(s32*)((s32)entry + 0x70) >= 0) {
-        animPaperPoseRelease(*(s32*)((s32)entry + 0x70));
-    }
-
-    if (*(void**)((s32)entry + 0x8C) != NULL) {
-        imgRelease(
-            *(s32*)((s32)entry + 0x8C),
-            *(void**)((s32)entry + 0x68)
-        );
-    }
-
-    memset(entry, 0, 0xA8);
-
-    *(s32*)((s32)entry + 0x6C) = -1;
-    *(s32*)((s32)entry + 0x70) = -1;
-
-    *(f32*)((s32)entry + 0x1C) = float_0_8041f7a8;
-    *(f32*)((s32)entry + 0x20) = float_0_8041f7a8;
-    *(f32*)((s32)entry + 0x78) = float_0_8041f7a8;
-    *(f32*)((s32)entry + 0x7C) = float_0_8041f7a8;
-    *(f32*)((s32)entry + 0x90) = float_1_8041f7ac;
-}
-
-s32 fadeIsFinish(void) {
-    s32 type;
-
-    type = *(s32*)((s32)wp + 0x350);
-
-    if (type == -1) {
-        return 1;
-    }
-
-    type *= 0xA8;
-
-    return (*(u16*)((s32)wp + type + 0x8) >> 1) & 1;
-}
-
-void disp_dummy_black(void) {
-    void* cam;
-    u32 colorA;
-    u32 colorB;
-    f32 proj[8];
-
-    cam = camGetPtr(9);
-
-    GXGetProjectionv(proj);
-    GXSetProjection((void*)((s32)cam + 0x15C), *(s32*)((s32)cam + 0x19C));
-
-    GXSetZCompLoc(0);
-    GXSetAlphaCompare(7, 0, 0, 7, 0);
-    GXSetBlendMode(0, 1, 0, 7);
-    GXSetZMode(0, 7, 0);
-
-    GXSetNumChans(1);
-    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
-
-    if ((*(u16*)wp & 0x8000) != 0) {
-        colorA = dat_8041f7a0;
-        GXSetChanMatColor(4, &colorA);
+    *(void**)((s32)wp + 0x358) = NULL;
+    *(void**)((s32)wp + 0x358) = arcOpen(str_fade_tpl_802bf79c, 0, 0);
+    if (*(void**)((s32)wp + 0x358) == NULL) {
+        sprintf(path, str_PCTs_fade_tpl_802bf7a8, getMarioStDvdRoot());
+        entry = DVDMgrOpen(path, 2, 0);
+        length = DVDMgrGetLength(entry);
+        length = (length + 0x1F) & ~0x1F;
+        *(void**)((s32)wp + 0x358) = __memAlloc(0, length);
+        *(s32*)((s32)entry + 0x6C) = entry;
+        DVDMgrReadAsync(entry, *(void**)((s32)wp + 0x358), length, 0, _callback);
     } else {
-        colorB = dat_8041f7a4;
-        GXSetChanMatColor(4, &colorB);
+        UnpackTexPalette(*(void**)((s32)wp + 0x358));
+        *(s32*)((s32)wp + 0x35C) = 1;
     }
-
-    GXSetNumTevStages(1);
-    GXSetNumTexGens(1);
-    GXSetTevOrder(0, 0xFF, 0xFF, 4);
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevOp(0, 4);
-
-    GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
-    GXSetCurrentMtx(0);
-
-    GXSetCullMode(2);
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 1);
-    GXSetVtxAttrFmt(0, 9, 1, 3, 0);
-
-    GXBegin(0x80, 0, 4);
-
-    FIFO_S16_FADE = -0x20;
-    FIFO_S16_FADE = 0x18;
-    FIFO_S16_FADE = 0;
-
-    FIFO_S16_FADE = 0x20;
-    FIFO_S16_FADE = 0x18;
-    FIFO_S16_FADE = 0;
-
-    FIFO_S16_FADE = 0x20;
-    FIFO_S16_FADE = -0x18;
-    FIFO_S16_FADE = 0;
-
-    FIFO_S16_FADE = -0x20;
-    FIFO_S16_FADE = -0x18;
-    FIFO_S16_FADE = 0;
-
-    GXSetProjectionv(proj);
 }
 
-void disp_tec(s32 cameraId) {
-    void* cam;
-    u8 texObj[0x20];
-    u32 colorA;
-    u32 colorB;
-    u32 color;
-    u32 colorTemp;
-    s32 alpha;
-    f32 tecValue;
-f32 tecStep;
-f32 tecClamp;
+void fadeEntry(s32 type, s32 time, void* data) {
+    extern u32 dat_8041f778;
+    extern u32 dat_8041f77c;
+    extern u32 dat_8041f780;
+    extern u32 dat_8041f784;
+    extern u32 dat_8041f788;
+    extern u32 dat_8041f78c;
+    extern const f32 float_3_8041f814;
+    extern const char str_OFF_d_maku_up_down_802bf6fc[];
+    extern const char str_OFF_d_maku_left_righ_802bf710[];
+    extern const char str_OFF_d_maku_center_802bf728[];
+    extern const char str_OFF_d_dokan_up_802bf6c4[];
+    extern const char str_OFF_d_dokan_down_802bf6b0[];
+    extern const char str_OFF_d_dokan_left_802bf6d4[];
+    extern const char str_OFF_d_dokan_right_802bf6e8[];
+    extern const char str_OFF_d_meku_802bf73c[];
+    extern const char str_OFF_d_four_meku_5sec_802bf748[];
+    extern const char str_A_1_8041f824[];
+    extern const char str_A_2_8041f80c[];
+    extern const char str_Z_1_8041f828[];
+    extern const char str_Z_2_8041f82c[];
+    s32 work;
+    s32 entry;
+    s32 reset;
+    s32 slot;
+    s32 pose;
+    void* image;
 
-    cam = camGetPtr(cameraId);
+    if (type == 0) {
+        return;
+    }
 
-    GXSetZCompLoc(1);
-    GXSetAlphaCompare(7, 0, 0, 7, 0);
-    GXSetBlendMode(1, 4, 5, 7);
-    GXSetZMode(0, 7, 0);
+    if (type == 0x10) {
+        type = 9;
+        *(u32*)data = dat_8041f778;
+    }
+    if (type == 0x11) {
+        type = 10;
+        *(u32*)data = dat_8041f77c;
+    }
+    if (type == 0x12) {
+        type = 11;
+        *(u32*)data = dat_8041f780;
+    }
+    if (type == 0x13) {
+        type = 12;
+        *(u32*)data = dat_8041f784;
+    }
+    if (type == 0x14) {
+        type = 14;
+        *(u32*)data = dat_8041f788;
+    }
+    if (type == 0x15) {
+        type = 15;
+        *(u32*)data = dat_8041f78c;
+    }
 
-    GXSetNumChans(0);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    if (((type == 1) || (type == 2)) && (time < 1000)) {
+        time = 1000;
+    }
+    if (type == 7) {
+        type = 3;
+    } else if (type == 8) {
+        type = 4;
+    } else if ((((u32)(type - 3) <= 2) || (type == 6)) && (time < 1000)) {
+        time = 1000;
+    }
 
-    if ((*(u16*)wp & 0x1000) != 0) {
-        TEXGetGXTexObjFromPalette(*(void**)((s32)wp + 0x358), texObj, 2);
-        GXLoadTexObj(texObj, 0);
+    work = (s32)wp;
+    reset = 0;
+    if (type < 0x16) {
+        slot = 0;
+        reset = work + 0x158;
+    } else if ((type < 0x29) || (type == 0x33)) {
+        slot = 1;
+    } else if (type < 0x31) {
+        slot = 2;
+        reset = work + 8;
+    } else if (type < 0x3F) {
+        slot = 3;
+        if ((u32)(type - 0x32) <= 8) {
+            reset = work + 8;
+        }
+    } else if (type < 0x41) {
+        slot = 4;
     } else {
-        TEXGetGXTexObjFromPalette(*(void**)((s32)wp + 0x358), texObj, 3);
-        GXLoadTexObj(texObj, 0);
+        return;
     }
 
-    GXSetNumTevStages(1);
-    GXSetTevOrder(0, 0, 0, 0xFF);
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 2);
-    GXSetTevAlphaIn(0, 1, 7, 4, 7);
-
-    if ((*(u16*)wp & 0x1000) != 0) {
-        colorA = dat_8041f798;
-        GXSetTevColor(1, &colorA);
-    } else {
-        colorB = dat_8041f79c;
-        GXSetTevColor(1, &colorB);
-    }
-
-    if ((*(u16*)wp & 0x30) != 0) {
-        if ((*(u16*)wp & 0x10) != 0) {
-            tecValue = *(f32*)((s32)wp + 0x354);
-            tecStep = float_0p04_8041f7b0;
-            tecClamp = float_1_8041f7ac;
-
-            tecValue = tecValue + tecStep;
-        *(f32*)((s32)wp + 0x354) = tecValue;
-
-            if (*(f32*)((s32)wp + 0x354) > tecClamp) {
-           *(f32*)((s32)wp + 0x354) = tecClamp;
-         *(u16*)wp &= ~0x10;
+    entry = work + 8 + slot * 0xA8;
+    if (reset != 0) {
+        pose = *(s32*)(reset + 0x6C);
+        if (pose >= 0) {
+            animPoseRelease(pose);
         }
-        } else {
-            tecValue = *(f32*)((s32)wp + 0x354);
-            tecStep = float_0p04_8041f7b0;
-            tecClamp = float_0_8041f7a8;
-
-            tecValue = tecValue - tecStep;
-        *(f32*)((s32)wp + 0x354) = tecValue;
-
-    if (*(f32*)((s32)wp + 0x354) < tecClamp) {
-        *(f32*)((s32)wp + 0x354) = tecClamp;
-        *(u16*)wp &= ~0x20;
-     *(u16*)wp &= ~0x3000;
-    }
+        pose = *(s32*)(reset + 0x70);
+        if (pose >= 0) {
+            animPaperPoseRelease(pose);
         }
-
-        colorTemp = unk_80429518;
-        alpha = (s32)(float_255_8041f7b4 * *(f32*)((s32)wp + 0x354));
-        *((u8*)&colorTemp + 3) = alpha;
-        color = colorTemp;
-
-        GXSetTevColor(2, &color);
-
-        GXSetNumTevStages(2);
-        GXSetTevOrder(1, 0xFF, 0xFF, 0xFF);
-        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
-        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
-        GXSetTevColorIn(1, 0xF, 0xF, 0xF, 0);
-        GXSetTevAlphaIn(1, 7, 0, 2, 7);
+        image = *(void**)(reset + 0x8C);
+        if (image != 0) {
+            imgRelease((s32)image, (void*)(reset + 0x68));
+        }
+        memset((void*)reset, 0, 0xA8);
+        *(s32*)(reset + 0x6C) = -1;
+        *(s32*)(reset + 0x70) = -1;
+        *(f32*)(reset + 0x1C) = float_0_8041f7a8;
+        *(f32*)(reset + 0x20) = float_0_8041f7a8;
+        *(f32*)(reset + 0x78) = float_0_8041f7a8;
+        *(f32*)(reset + 0x7C) = float_0_8041f7a8;
+        *(f32*)(reset + 0x90) = float_1_8041f7ac;
+        if ((slot == 0) && (type <= 14) && (time != 0)) {
+            *(s32*)(work + 0xAC) = 2;
+        }
     }
 
-    GXSetCullMode(2);
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 1);
-    GXSetVtxDesc(0xD, 1);
-    GXSetVtxAttrFmt(0, 9, 1, 3, 0);
-    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
-
-    GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
-    GXSetCurrentMtx(0);
-
-    GXBegin(0x80, 0, 4);
-
-    FIFO_S16_FADE = -0x134;
-    FIFO_S16_FADE = 0xF4;
-    FIFO_S16_FADE = 0;
-    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
-    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
-
-    FIFO_S16_FADE = 0x134;
-    FIFO_S16_FADE = 0xF4;
-    FIFO_S16_FADE = 0;
-    FIFO_F32_FADE = READ_F32_FADE(float_2_8041f7b8);
-    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
-
-    FIFO_S16_FADE = 0x134;
-    FIFO_S16_FADE = -0xF4;
-    FIFO_S16_FADE = 0;
-    FIFO_F32_FADE = READ_F32_FADE(float_2_8041f7b8);
-    FIFO_F32_FADE = READ_F32_FADE(float_2_8041f7b8);
-
-    FIFO_S16_FADE = -0x134;
-    FIFO_S16_FADE = -0xF4;
-    FIFO_S16_FADE = 0;
-    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
-    FIFO_F32_FADE = READ_F32_FADE(float_2_8041f7b8);
-}
-
-void disp_maku(s32 cameraId, void* fade) {
-    s32 type;
-    void* cam;
-    FadeVec diff;
-    FadeVec forward;
-    f32 fovy;
-    f32 distBase;
-    f32 dist;
-    f32 scale;
-    f32 zOfs;
-    f32 xRate;
-    f32 yRate;
-    f32 width;
-    f32 height;
-    f32 mtxA[3][4];
-    f32 mtxB[3][4];
-    FadeDoubleConv widthConv0;
-    FadeDoubleConv heightConv0;
-    FadeDoubleConv widthConv1;
-    FadeDoubleConv heightConv1;
-
-    camGetPtr(cameraId);
-
-    type = *(s32*)((s32)fade + 0x4);
-
-   if (type != 0x1C) {
-    if (type < 0x1C) {
-        if (type == 0x18) {
-            goto after_bit2_check;
-        }
-
-        if (type < 0x18) {
-            if (type >= 0x17) {
-                goto check_bit2;
-            }
-
-            goto after_bit2_check;
-        } else if (type >= 0x1A) {
-            goto after_bit2_check;
-        }
-    } else if (type != 0x40) {
-        goto after_bit2_check;
+    *(u16*)entry = 0;
+    *(u16*)entry |= 1;
+    *(s32*)(entry + 4) = type;
+    *(s64*)(entry + 0x10) = time;
+    *(u32*)(entry + 0x18) = *(u32*)data;
+    *(f32*)(entry + 0x24) = float_0_8041f7a8;
+    *(f32*)(entry + 0x28) = float_0_8041f7a8;
+    *(f32*)(entry + 0x5C) = float_0_8041f7a8;
+    *(s32*)(entry + 8) = 0;
+    *(f32*)(entry + 0x78) = float_0_8041f7a8;
+    *(f32*)(entry + 0x7C) = float_0_8041f7a8;
+    *(f32*)(entry + 0x90) = float_1_8041f7ac;
+    if ((type != 0x32) && (type != 0x35)) {
+        *(s32*)(entry + 0x9C) = 0;
     }
-}
+    *(s32*)(work + 0x350) = slot;
 
-check_bit2:
-if ((*(u16*)fade & 2) != 0) {
-    return;
-}
+    if ((type == 0x22) || (type == 0x28)) {
+        *(f32*)(entry + 0x90) = float_3_8041f814;
+    }
 
-after_bit2_check:
-if (type != 0x33) {
-    if (type < 0x33) {
-        if (type >= 0x29) {
+    switch (type) {
+        case 0x16:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_up_down_802bf6fc;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x17:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_up_down_802bf6fc;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            break;
+        case 0x18:
+        case 0x1A:
+        case 0x40:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x19:
+        case 0x1B:
+        case 0x3F:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            break;
+        case 0x1C:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
+            *(const char**)(entry + 0x64) = str_Z_1_8041f828;
+            break;
+        case 0x1D:
+        case 0x25:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x1E:
+        case 0x26:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            break;
+        case 0x1F:
+        case 0x21:
+        case 0x27:
+        case 0x28:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
+            *(const char**)(entry + 0x64) = str_Z_2_8041f82c;
+            break;
+        case 0x20:
+        case 0x24:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
+            *(const char**)(entry + 0x64) = str_Z_1_8041f828;
+            break;
+        case 0x29:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_up_802bf6c4;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x2A:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_up_802bf6c4;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            break;
+        case 0x2B:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_down_802bf6b0;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x2C:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_down_802bf6b0;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            break;
+        case 0x2D:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_left_802bf6d4;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x2E:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_left_802bf6d4;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            break;
+        case 0x2F:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_right_802bf6e8;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x30:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_right_802bf6e8;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            break;
+        case 0x31:
+        case 0x34:
+            *(const char**)(entry + 0x60) = str_OFF_d_meku_802bf73c;
+            *(const char**)(entry + 0x64) = str_Z_1_8041f828;
+            break;
+        case 0x32:
+        case 0x35:
+            *(const char**)(entry + 0x60) = str_OFF_d_meku_802bf73c;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        case 0x33:
+            *(const char**)(entry + 0x60) = str_OFF_d_four_meku_5sec_802bf748;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            break;
+        default:
             return;
-        }
-
-        if (type < 0x16) {
-            return;
-        }
-    } else {
-        if (type >= 0x41) {
-            return;
-        }
-
-        if (type < 0x3F) {
-            return;
-        }
     }
+    *(s32*)(entry + 0x68) = 2;
 }
 
-    if (*(s32*)((s32)fade + 0x6C) < 0) {
-     return;
-    }
-
-    if ((*(u16*)fade & 4) != 0) {
-        cam = camGetPtr(4);
-
-        fovy = *(f32*)((s32)cam + 0x38);
-        distBase = float_24_8041f7c8 /
-            (f32)tan(
-                float_3p1416_8041f7bc *
-                ((fovy * float_0p5_8041f7c0) / float_180_8041f7c4)
-            );
-
-        cam = camGetPtr(4);
-        PSVECSubtract(
-            (void*)((s32)cam + 0x0C),
-            (void*)((s32)fade + 0x80),
-            &diff
-        );
-
-        cam = camGetPtr(4);
-
-        forward.x = *(f32*)((s32)cam + 0x13C);
-        forward.y = *(f32*)((s32)cam + 0x140);
-        forward.z = *(f32*)((s32)cam + 0x144);
-
-        PSVECNormalize(&forward, &forward);
-
-        diff.x *= forward.x;
-        diff.y *= forward.y;
-        diff.z *= forward.z;
-
-        dist = PSVECMag(&diff);
-
-        scale = dist / distBase;
-        zOfs = distBase - dist;
-
-        animPoseSetGXFunc(*(s32*)((s32)fade + 0x6C), NULL, NULL);
-        GXSetZScaleOffset(z(), float_0_8041f7a8);
-    } else {
-        scale = *(f32*)((s32)fade + 0x90);
-        zOfs = float_0_8041f7a8;
-        zFill();
-    }
-
-    widthConv0.words.hi = 0x43300000;
-    widthConv0.words.lo = *(u16*)((s32)gp + 0x170);
-    width = (f32)(widthConv0.value - double_to_int_mask_802bf678);
-
-    heightConv0.words.hi = 0x43300000;
-    heightConv0.words.lo = *(u16*)((s32)gp + 0x172);
-    height = (f32)(heightConv0.value - double_to_int_mask_802bf678);
-
-    xRate = ((*(f32*)((s32)fade + 0x78) * scale) + float_0_8041f7a8) / width;
-    yRate = ((*(f32*)((s32)fade + 0x7C) * scale) + float_0_8041f7a8) / height;
-
-    PSMTXTrans(
-        mtxA,
-        float_64_8041f7cc * xRate,
-        float_48_8041f7d0 * yRate,
-        zOfs
-    );
-
-    PSMTXTrans(
-        mtxB,
-        float_neg32_8041f7d4,
-        float_24_8041f7c8,
-        float_0_8041f7a8
-    );
-
-    PSMTXConcat(mtxA, mtxB, mtxA);
-
-    widthConv1.words.hi = 0x43300000;
-    widthConv1.words.lo = *(u16*)((s32)gp + 0x170);
-    width = (f32)(widthConv1.value - double_to_int_mask_802bf678);
-
-    heightConv1.words.hi = 0x43300000;
-    heightConv1.words.lo = *(u16*)((s32)gp + 0x172);
-    height = (f32)(heightConv1.value - double_to_int_mask_802bf678);
-
-    xRate = float_608_8041f7d8 / width;
-
-    PSMTXScale(
-        mtxB,
-        xRate,
-        float_480_8041f7dc / height,
-        xRate
-    );
-
-    PSMTXConcat(mtxA, mtxB, mtxA);
-
-    PSMTXTrans(
-        mtxB,
-        float_32_8041f7e0,
-        float_neg24_8041f7e4,
-        float_0_8041f7a8
-    );
-
-    PSMTXConcat(mtxA, mtxB, mtxA);
-
-    animPoseDrawMtx(*(s32*)((s32)fade + 0x6C), mtxA, 1, float_0_8041f7a8, scale);
-    animPoseDrawMtx(*(s32*)((s32)fade + 0x6C), mtxA, 2, float_0_8041f7a8, scale);
-    animPoseDrawMtx(*(s32*)((s32)fade + 0x6C), mtxA, 3, float_0_8041f7a8, scale);
-
-    sysWaitDrawSync();
+void fadeTecOn(void) {
+    *(u16*)wp |= 0x1000;
 }
 
-void fadeSetOffscreenCallback(void* callback, void* param) {
-    void* work = wp;
-
-    *(void**)((s32)work + 0x29C) = callback;
-    *(void**)((s32)work + 0x2A0) = param;
+void fadeTecOff(void) {
+    *(u16*)wp &= ~0x1000;
 }
 
-void fadeSetAnimOfsPos(f32 x, f32 y) {
-    void* work = wp;
+void fadeTecSoftOn(void) {
+    *(u16*)wp |= 0x1010;
+    *(f32*)((s32)wp + 0x354) = float_0_8041f7a8;
+}
 
-    *(f32*)((s32)work + 0x128) = x;
-    *(f32*)((s32)work + 0x12C) = y;
+void fadeTecSoftOff(void) {
+    *(u16*)wp |= 0x1020;
+    *(f32*)((s32)wp + 0x354) = float_1_8041f7ac;
+}
+
+void fadeSoftFocusOn(void) {
+    *(u16*)wp |= 0x2000;
+}
+
+void fadeSoftFocusOff(void) {
+    *(u16*)wp &= ~0x2000;
+}
+
+void fadeWhiteOutOn(void) {
+    *(u16*)wp |= 0x4000;
+}
+
+void fadeWhiteOutOff(void) {
+    *(u16*)wp &= ~0x4000;
 }
 
 void fadeSetSpotPos(f32 x, f32 y) {
@@ -579,38 +519,11 @@ void fadeSetSpotPos(f32 x, f32 y) {
     *(f32*)((s32)work + 0x28) = y;
 }
 
-void fadeWhiteOutOff(void) {
-    *(u16*)wp &= ~0x4000;
-}
+void fadeSetAnimOfsPos(f32 x, f32 y) {
+    void* work = wp;
 
-void fadeWhiteOutOn(void) {
-    *(u16*)wp |= 0x4000;
-}
-
-void fadeSoftFocusOff(void) {
-    *(u16*)wp &= ~0x2000;
-}
-
-void fadeSoftFocusOn(void) {
-    *(u16*)wp |= 0x2000;
-}
-
-void fadeTecSoftOff(void) {
-    *(u16*)wp |= 0x1020;
-    *(f32*)((s32)wp + 0x354) = float_1_8041f7ac;
-}
-
-void fadeTecSoftOn(void) {
-    *(u16*)wp |= 0x1010;
-    *(f32*)((s32)wp + 0x354) = float_0_8041f7a8;
-}
-
-void fadeTecOff(void) {
-    *(u16*)wp &= ~0x1000;
-}
-
-void fadeTecOn(void) {
-    *(u16*)wp |= 0x1000;
+    *(f32*)((s32)work + 0x128) = x;
+    *(f32*)((s32)work + 0x12C) = y;
 }
 
 void fadeSetAnimVirtualPos(f32 x, f32 y, f32 z) {
@@ -631,15 +544,11 @@ void fadeSetAnimVirtualPos(f32 x, f32 y, f32 z) {
     *(u16*)((s32)work + 0xB0) |= 4;
 }
 
-void _callback(void* unused, void* fileInfo) {
-    s32 entry;
+void fadeSetOffscreenCallback(void* callback, void* param) {
+    void* work = wp;
 
-    entry = *(s32*)((s32)fileInfo + 0x2C);
-
-    UnpackTexPalette(*(void**)((s32)wp + 0x358));
-    DVDMgrClose(entry);
-
-    *(s32*)((s32)wp + 0x35C) = 1;
+    *(void**)((s32)work + 0x29C) = callback;
+    *(void**)((s32)work + 0x2A0) = param;
 }
 
 
@@ -1000,242 +909,6 @@ void fadeMain(void) {
     }
 }
 
-void fadeEntry(s32 type, s32 time, void* data) {
-    extern u32 dat_8041f778;
-    extern u32 dat_8041f77c;
-    extern u32 dat_8041f780;
-    extern u32 dat_8041f784;
-    extern u32 dat_8041f788;
-    extern u32 dat_8041f78c;
-    extern const f32 float_3_8041f814;
-    extern const char str_OFF_d_maku_up_down_802bf6fc[];
-    extern const char str_OFF_d_maku_left_righ_802bf710[];
-    extern const char str_OFF_d_maku_center_802bf728[];
-    extern const char str_OFF_d_dokan_up_802bf6c4[];
-    extern const char str_OFF_d_dokan_down_802bf6b0[];
-    extern const char str_OFF_d_dokan_left_802bf6d4[];
-    extern const char str_OFF_d_dokan_right_802bf6e8[];
-    extern const char str_OFF_d_meku_802bf73c[];
-    extern const char str_OFF_d_four_meku_5sec_802bf748[];
-    extern const char str_A_1_8041f824[];
-    extern const char str_A_2_8041f80c[];
-    extern const char str_Z_1_8041f828[];
-    extern const char str_Z_2_8041f82c[];
-    s32 work;
-    s32 entry;
-    s32 reset;
-    s32 slot;
-    s32 pose;
-    void* image;
-
-    if (type == 0) {
-        return;
-    }
-
-    if (type == 0x10) {
-        type = 9;
-        *(u32*)data = dat_8041f778;
-    }
-    if (type == 0x11) {
-        type = 10;
-        *(u32*)data = dat_8041f77c;
-    }
-    if (type == 0x12) {
-        type = 11;
-        *(u32*)data = dat_8041f780;
-    }
-    if (type == 0x13) {
-        type = 12;
-        *(u32*)data = dat_8041f784;
-    }
-    if (type == 0x14) {
-        type = 14;
-        *(u32*)data = dat_8041f788;
-    }
-    if (type == 0x15) {
-        type = 15;
-        *(u32*)data = dat_8041f78c;
-    }
-
-    if (((type == 1) || (type == 2)) && (time < 1000)) {
-        time = 1000;
-    }
-    if (type == 7) {
-        type = 3;
-    } else if (type == 8) {
-        type = 4;
-    } else if ((((u32)(type - 3) <= 2) || (type == 6)) && (time < 1000)) {
-        time = 1000;
-    }
-
-    work = (s32)wp;
-    reset = 0;
-    if (type < 0x16) {
-        slot = 0;
-        reset = work + 0x158;
-    } else if ((type < 0x29) || (type == 0x33)) {
-        slot = 1;
-    } else if (type < 0x31) {
-        slot = 2;
-        reset = work + 8;
-    } else if (type < 0x3F) {
-        slot = 3;
-        if ((u32)(type - 0x32) <= 8) {
-            reset = work + 8;
-        }
-    } else if (type < 0x41) {
-        slot = 4;
-    } else {
-        return;
-    }
-
-    entry = work + 8 + slot * 0xA8;
-    if (reset != 0) {
-        pose = *(s32*)(reset + 0x6C);
-        if (pose >= 0) {
-            animPoseRelease(pose);
-        }
-        pose = *(s32*)(reset + 0x70);
-        if (pose >= 0) {
-            animPaperPoseRelease(pose);
-        }
-        image = *(void**)(reset + 0x8C);
-        if (image != 0) {
-            imgRelease((s32)image, (void*)(reset + 0x68));
-        }
-        memset((void*)reset, 0, 0xA8);
-        *(s32*)(reset + 0x6C) = -1;
-        *(s32*)(reset + 0x70) = -1;
-        *(f32*)(reset + 0x1C) = float_0_8041f7a8;
-        *(f32*)(reset + 0x20) = float_0_8041f7a8;
-        *(f32*)(reset + 0x78) = float_0_8041f7a8;
-        *(f32*)(reset + 0x7C) = float_0_8041f7a8;
-        *(f32*)(reset + 0x90) = float_1_8041f7ac;
-        if ((slot == 0) && (type <= 14) && (time != 0)) {
-            *(s32*)(work + 0xAC) = 2;
-        }
-    }
-
-    *(u16*)entry = 0;
-    *(u16*)entry |= 1;
-    *(s32*)(entry + 4) = type;
-    *(s64*)(entry + 0x10) = time;
-    *(u32*)(entry + 0x18) = *(u32*)data;
-    *(f32*)(entry + 0x24) = float_0_8041f7a8;
-    *(f32*)(entry + 0x28) = float_0_8041f7a8;
-    *(f32*)(entry + 0x5C) = float_0_8041f7a8;
-    *(s32*)(entry + 8) = 0;
-    *(f32*)(entry + 0x78) = float_0_8041f7a8;
-    *(f32*)(entry + 0x7C) = float_0_8041f7a8;
-    *(f32*)(entry + 0x90) = float_1_8041f7ac;
-    if ((type != 0x32) && (type != 0x35)) {
-        *(s32*)(entry + 0x9C) = 0;
-    }
-    *(s32*)(work + 0x350) = slot;
-
-    if ((type == 0x22) || (type == 0x28)) {
-        *(f32*)(entry + 0x90) = float_3_8041f814;
-    }
-
-    switch (type) {
-        case 0x16:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_up_down_802bf6fc;
-            *(const char**)(entry + 0x64) = str_A_1_8041f824;
-            break;
-        case 0x17:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_up_down_802bf6fc;
-            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
-            break;
-        case 0x18:
-        case 0x1A:
-        case 0x40:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
-            *(const char**)(entry + 0x64) = str_A_1_8041f824;
-            break;
-        case 0x19:
-        case 0x1B:
-        case 0x3F:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
-            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
-            break;
-        case 0x1C:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
-            *(const char**)(entry + 0x64) = str_Z_1_8041f828;
-            break;
-        case 0x1D:
-        case 0x25:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
-            *(const char**)(entry + 0x64) = str_A_1_8041f824;
-            break;
-        case 0x1E:
-        case 0x26:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
-            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
-            break;
-        case 0x1F:
-        case 0x21:
-        case 0x27:
-        case 0x28:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
-            *(const char**)(entry + 0x64) = str_Z_2_8041f82c;
-            break;
-        case 0x20:
-        case 0x24:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
-            *(const char**)(entry + 0x64) = str_Z_1_8041f828;
-            break;
-        case 0x29:
-            *(const char**)(entry + 0x60) = str_OFF_d_dokan_up_802bf6c4;
-            *(const char**)(entry + 0x64) = str_A_1_8041f824;
-            break;
-        case 0x2A:
-            *(const char**)(entry + 0x60) = str_OFF_d_dokan_up_802bf6c4;
-            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
-            break;
-        case 0x2B:
-            *(const char**)(entry + 0x60) = str_OFF_d_dokan_down_802bf6b0;
-            *(const char**)(entry + 0x64) = str_A_1_8041f824;
-            break;
-        case 0x2C:
-            *(const char**)(entry + 0x60) = str_OFF_d_dokan_down_802bf6b0;
-            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
-            break;
-        case 0x2D:
-            *(const char**)(entry + 0x60) = str_OFF_d_dokan_left_802bf6d4;
-            *(const char**)(entry + 0x64) = str_A_1_8041f824;
-            break;
-        case 0x2E:
-            *(const char**)(entry + 0x60) = str_OFF_d_dokan_left_802bf6d4;
-            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
-            break;
-        case 0x2F:
-            *(const char**)(entry + 0x60) = str_OFF_d_dokan_right_802bf6e8;
-            *(const char**)(entry + 0x64) = str_A_1_8041f824;
-            break;
-        case 0x30:
-            *(const char**)(entry + 0x60) = str_OFF_d_dokan_right_802bf6e8;
-            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
-            break;
-        case 0x31:
-        case 0x34:
-            *(const char**)(entry + 0x60) = str_OFF_d_meku_802bf73c;
-            *(const char**)(entry + 0x64) = str_Z_1_8041f828;
-            break;
-        case 0x32:
-        case 0x35:
-            *(const char**)(entry + 0x60) = str_OFF_d_meku_802bf73c;
-            *(const char**)(entry + 0x64) = str_A_1_8041f824;
-            break;
-        case 0x33:
-            *(const char**)(entry + 0x60) = str_OFF_d_four_meku_5sec_802bf748;
-            *(const char**)(entry + 0x64) = str_A_1_8041f824;
-            break;
-        default:
-            return;
-    }
-    *(s32*)(entry + 0x68) = 2;
-}
-
 void disp_texture(void) {
     extern void PSMTXRotRad(void* mtx, s32 axis, f32 rad);
     extern void PSMTXIdentity(void* mtx);
@@ -1428,6 +1101,36 @@ void disp_texture(void) {
     GXSetProjectionv(proj);
 }
 
+
+f32 z(void) {
+    void* work;
+    void* cam;
+    FadeVec pos;
+    f32 divisor;
+    f32 value;
+
+    work = wp;
+    cam = camGetPtr(4);
+    if (*(s32*)((s32)cam + 0x19C) == 0) {
+        return float_1_8041f7ac;
+    }
+
+    cam = camGetPtr(9);
+    PSMTXMultVec((void*)((s32)cam + 0x11C), (void*)((s32)work + 0x130), &pos);
+    value = ((*(f32*)((s32)cam + 0x110) - *(f32*)((s32)cam + 0x10C)) *
+        ((float_1_8041f7ac / -pos.z) *
+        (*(f32*)((s32)cam + 0x184) * pos.z + *(f32*)((s32)cam + 0x188)))) +
+        *(f32*)((s32)cam + 0x110);
+    divisor = value;
+
+    cam = camGetPtr(4);
+    PSMTXMultVec((void*)((s32)cam + 0x11C), (void*)((s32)work + 0x130), &pos);
+    value = ((*(f32*)((s32)cam + 0x110) - *(f32*)((s32)cam + 0x10C)) *
+        (float_1_8041f7ac * (*(f32*)((s32)cam + 0x184) * pos.z + *(f32*)((s32)cam + 0x188)))) +
+        *(f32*)((s32)cam + 0x110);
+    return value / divisor;
+}
+
 void zFill(void) {
     extern void* camGetCurPtr(void);
     extern void GXInitTexObj(void* obj, void* image, u16 width, u16 height, s32 format, s32 wrapS, s32 wrapT, s32 mipmap);
@@ -1513,128 +1216,425 @@ void zFill(void) {
     GXSetColorUpdate(1);
 }
 
-void fadeInit(void) {
-    void* work;
-    s32 minusOne;
-    s32 zero;
-    f32 oneFloat;
-    f32 zeroFloat;
+void disp_maku(s32 cameraId, void* fade) {
+    s32 type;
+    void* cam;
+    FadeVec diff;
+    FadeVec forward;
+    f32 fovy;
+    f32 distBase;
+    f32 dist;
+    f32 scale;
+    f32 zOfs;
+    f32 xRate;
+    f32 yRate;
+    f32 width;
+    f32 height;
+    f32 mtxA[3][4];
+    f32 mtxB[3][4];
+    FadeDoubleConv widthConv0;
+    FadeDoubleConv heightConv0;
+    FadeDoubleConv widthConv1;
+    FadeDoubleConv heightConv1;
 
-    work = __memAlloc(0, 0x360);
-    wp = work;
-    memset(work, 0, 0x360);
+    camGetPtr(cameraId);
 
-    work = wp;
-    minusOne = -1;
-    zero = 0;
-    oneFloat = float_1_8041f7ac;
-    zeroFloat = float_0_8041f7a8;
+    type = *(s32*)((s32)fade + 0x4);
 
-    *(s32*)((s32)work + 0x74) = minusOne;
-    *(s32*)((s32)work + 0x78) = minusOne;
-    *(f32*)((s32)work + 0x24) = zeroFloat;
-    *(f32*)((s32)work + 0x28) = zeroFloat;
-    *(f32*)((s32)work + 0x80) = zeroFloat;
-    *(f32*)((s32)work + 0x84) = zeroFloat;
-    *(f32*)((s32)work + 0x98) = oneFloat;
-    *(s32*)((s32)work + 0xAC) = zero;
+   if (type != 0x1C) {
+    if (type < 0x1C) {
+        if (type == 0x18) {
+            goto after_bit2_check;
+        }
 
-    work = wp;
-    *(s32*)((s32)work + 0x11C) = minusOne;
-    *(s32*)((s32)work + 0x120) = minusOne;
-    *(f32*)((s32)work + 0xCC) = zeroFloat;
-    *(f32*)((s32)work + 0xD0) = zeroFloat;
-    *(f32*)((s32)work + 0x128) = zeroFloat;
-    *(f32*)((s32)work + 0x12C) = zeroFloat;
-    *(f32*)((s32)work + 0x140) = oneFloat;
-    *(s32*)((s32)work + 0x154) = zero;
+        if (type < 0x18) {
+            if (type >= 0x17) {
+                goto check_bit2;
+            }
 
-    work = wp;
-    *(s32*)((s32)work + 0x1C4) = minusOne;
-    *(s32*)((s32)work + 0x1C8) = minusOne;
-    *(f32*)((s32)work + 0x174) = zeroFloat;
-    *(f32*)((s32)work + 0x178) = zeroFloat;
-    *(f32*)((s32)work + 0x1D0) = zeroFloat;
-    *(f32*)((s32)work + 0x1D4) = zeroFloat;
-    *(f32*)((s32)work + 0x1E8) = oneFloat;
-    *(s32*)((s32)work + 0x1FC) = zero;
-
-    work = wp;
-    *(s32*)((s32)work + 0x26C) = minusOne;
-    *(s32*)((s32)work + 0x270) = minusOne;
-    *(f32*)((s32)work + 0x21C) = zeroFloat;
-    *(f32*)((s32)work + 0x220) = zeroFloat;
-    *(f32*)((s32)work + 0x278) = zeroFloat;
-    *(f32*)((s32)work + 0x27C) = zeroFloat;
-    *(f32*)((s32)work + 0x290) = oneFloat;
-    *(s32*)((s32)work + 0x2A4) = zero;
-
-    work = wp;
-    *(s32*)((s32)work + 0x314) = minusOne;
-    *(s32*)((s32)work + 0x318) = minusOne;
-    *(f32*)((s32)work + 0x2C4) = zeroFloat;
-    *(f32*)((s32)work + 0x2C8) = zeroFloat;
-    *(f32*)((s32)work + 0x320) = zeroFloat;
-    *(f32*)((s32)work + 0x324) = zeroFloat;
-    *(f32*)((s32)work + 0x338) = oneFloat;
-    *(s32*)((s32)work + 0x34C) = zero;
-
-    work = wp;
-    *(s32*)((s32)work + 0x350) = minusOne;
-    work = wp;
-    *(s32*)((s32)work + 0x358) = zero;
-    work = wp;
-    *(s32*)((s32)work + 0x35C) = zero;
+            goto after_bit2_check;
+        } else if (type >= 0x1A) {
+            goto after_bit2_check;
+        }
+    } else if (type != 0x40) {
+        goto after_bit2_check;
+    }
 }
 
+check_bit2:
+if ((*(u16*)fade & 2) != 0) {
+    return;
+}
 
-f32 z(void) {
-    void* work;
-    void* cam;
-    FadeVec pos;
-    f32 divisor;
-    f32 value;
+after_bit2_check:
+if (type != 0x33) {
+    if (type < 0x33) {
+        if (type >= 0x29) {
+            return;
+        }
 
-    work = wp;
-    cam = camGetPtr(4);
-    if (*(s32*)((s32)cam + 0x19C) == 0) {
-        return float_1_8041f7ac;
+        if (type < 0x16) {
+            return;
+        }
+    } else {
+        if (type >= 0x41) {
+            return;
+        }
+
+        if (type < 0x3F) {
+            return;
+        }
     }
+}
+
+    if (*(s32*)((s32)fade + 0x6C) < 0) {
+     return;
+    }
+
+    if ((*(u16*)fade & 4) != 0) {
+        cam = camGetPtr(4);
+
+        fovy = *(f32*)((s32)cam + 0x38);
+        distBase = float_24_8041f7c8 /
+            (f32)tan(
+                float_3p1416_8041f7bc *
+                ((fovy * float_0p5_8041f7c0) / float_180_8041f7c4)
+            );
+
+        cam = camGetPtr(4);
+        PSVECSubtract(
+            (void*)((s32)cam + 0x0C),
+            (void*)((s32)fade + 0x80),
+            &diff
+        );
+
+        cam = camGetPtr(4);
+
+        forward.x = *(f32*)((s32)cam + 0x13C);
+        forward.y = *(f32*)((s32)cam + 0x140);
+        forward.z = *(f32*)((s32)cam + 0x144);
+
+        PSVECNormalize(&forward, &forward);
+
+        diff.x *= forward.x;
+        diff.y *= forward.y;
+        diff.z *= forward.z;
+
+        dist = PSVECMag(&diff);
+
+        scale = dist / distBase;
+        zOfs = distBase - dist;
+
+        animPoseSetGXFunc(*(s32*)((s32)fade + 0x6C), NULL, NULL);
+        GXSetZScaleOffset(z(), float_0_8041f7a8);
+    } else {
+        scale = *(f32*)((s32)fade + 0x90);
+        zOfs = float_0_8041f7a8;
+        zFill();
+    }
+
+    widthConv0.words.hi = 0x43300000;
+    widthConv0.words.lo = *(u16*)((s32)gp + 0x170);
+    width = (f32)(widthConv0.value - double_to_int_mask_802bf678);
+
+    heightConv0.words.hi = 0x43300000;
+    heightConv0.words.lo = *(u16*)((s32)gp + 0x172);
+    height = (f32)(heightConv0.value - double_to_int_mask_802bf678);
+
+    xRate = ((*(f32*)((s32)fade + 0x78) * scale) + float_0_8041f7a8) / width;
+    yRate = ((*(f32*)((s32)fade + 0x7C) * scale) + float_0_8041f7a8) / height;
+
+    PSMTXTrans(
+        mtxA,
+        float_64_8041f7cc * xRate,
+        float_48_8041f7d0 * yRate,
+        zOfs
+    );
+
+    PSMTXTrans(
+        mtxB,
+        float_neg32_8041f7d4,
+        float_24_8041f7c8,
+        float_0_8041f7a8
+    );
+
+    PSMTXConcat(mtxA, mtxB, mtxA);
+
+    widthConv1.words.hi = 0x43300000;
+    widthConv1.words.lo = *(u16*)((s32)gp + 0x170);
+    width = (f32)(widthConv1.value - double_to_int_mask_802bf678);
+
+    heightConv1.words.hi = 0x43300000;
+    heightConv1.words.lo = *(u16*)((s32)gp + 0x172);
+    height = (f32)(heightConv1.value - double_to_int_mask_802bf678);
+
+    xRate = float_608_8041f7d8 / width;
+
+    PSMTXScale(
+        mtxB,
+        xRate,
+        float_480_8041f7dc / height,
+        xRate
+    );
+
+    PSMTXConcat(mtxA, mtxB, mtxA);
+
+    PSMTXTrans(
+        mtxB,
+        float_32_8041f7e0,
+        float_neg24_8041f7e4,
+        float_0_8041f7a8
+    );
+
+    PSMTXConcat(mtxA, mtxB, mtxA);
+
+    animPoseDrawMtx(*(s32*)((s32)fade + 0x6C), mtxA, 1, float_0_8041f7a8, scale);
+    animPoseDrawMtx(*(s32*)((s32)fade + 0x6C), mtxA, 2, float_0_8041f7a8, scale);
+    animPoseDrawMtx(*(s32*)((s32)fade + 0x6C), mtxA, 3, float_0_8041f7a8, scale);
+
+    sysWaitDrawSync();
+}
+
+void disp_tec(s32 cameraId) {
+    void* cam;
+    u8 texObj[0x20];
+    u32 colorA;
+    u32 colorB;
+    u32 color;
+    u32 colorTemp;
+    s32 alpha;
+    f32 tecValue;
+f32 tecStep;
+f32 tecClamp;
+
+    cam = camGetPtr(cameraId);
+
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetBlendMode(1, 4, 5, 7);
+    GXSetZMode(0, 7, 0);
+
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+
+    if ((*(u16*)wp & 0x1000) != 0) {
+        TEXGetGXTexObjFromPalette(*(void**)((s32)wp + 0x358), texObj, 2);
+        GXLoadTexObj(texObj, 0);
+    } else {
+        TEXGetGXTexObjFromPalette(*(void**)((s32)wp + 0x358), texObj, 3);
+        GXLoadTexObj(texObj, 0);
+    }
+
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 2);
+    GXSetTevAlphaIn(0, 1, 7, 4, 7);
+
+    if ((*(u16*)wp & 0x1000) != 0) {
+        colorA = dat_8041f798;
+        GXSetTevColor(1, &colorA);
+    } else {
+        colorB = dat_8041f79c;
+        GXSetTevColor(1, &colorB);
+    }
+
+    if ((*(u16*)wp & 0x30) != 0) {
+        if ((*(u16*)wp & 0x10) != 0) {
+            tecValue = *(f32*)((s32)wp + 0x354);
+            tecStep = float_0p04_8041f7b0;
+            tecClamp = float_1_8041f7ac;
+
+            tecValue = tecValue + tecStep;
+        *(f32*)((s32)wp + 0x354) = tecValue;
+
+            if (*(f32*)((s32)wp + 0x354) > tecClamp) {
+           *(f32*)((s32)wp + 0x354) = tecClamp;
+         *(u16*)wp &= ~0x10;
+        }
+        } else {
+            tecValue = *(f32*)((s32)wp + 0x354);
+            tecStep = float_0p04_8041f7b0;
+            tecClamp = float_0_8041f7a8;
+
+            tecValue = tecValue - tecStep;
+        *(f32*)((s32)wp + 0x354) = tecValue;
+
+    if (*(f32*)((s32)wp + 0x354) < tecClamp) {
+        *(f32*)((s32)wp + 0x354) = tecClamp;
+        *(u16*)wp &= ~0x20;
+     *(u16*)wp &= ~0x3000;
+    }
+        }
+
+        colorTemp = unk_80429518;
+        alpha = (s32)(float_255_8041f7b4 * *(f32*)((s32)wp + 0x354));
+        *((u8*)&colorTemp + 3) = alpha;
+        color = colorTemp;
+
+        GXSetTevColor(2, &color);
+
+        GXSetNumTevStages(2);
+        GXSetTevOrder(1, 0xFF, 0xFF, 0xFF);
+        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(1, 0xF, 0xF, 0xF, 0);
+        GXSetTevAlphaIn(1, 7, 0, 2, 7);
+    }
+
+    GXSetCullMode(2);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(0xD, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 3, 0);
+    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+
+    GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
+    GXSetCurrentMtx(0);
+
+    GXBegin(0x80, 0, 4);
+
+    FIFO_S16_FADE = -0x134;
+    FIFO_S16_FADE = 0xF4;
+    FIFO_S16_FADE = 0;
+    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
+    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
+
+    FIFO_S16_FADE = 0x134;
+    FIFO_S16_FADE = 0xF4;
+    FIFO_S16_FADE = 0;
+    FIFO_F32_FADE = READ_F32_FADE(float_2_8041f7b8);
+    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
+
+    FIFO_S16_FADE = 0x134;
+    FIFO_S16_FADE = -0xF4;
+    FIFO_S16_FADE = 0;
+    FIFO_F32_FADE = READ_F32_FADE(float_2_8041f7b8);
+    FIFO_F32_FADE = READ_F32_FADE(float_2_8041f7b8);
+
+    FIFO_S16_FADE = -0x134;
+    FIFO_S16_FADE = -0xF4;
+    FIFO_S16_FADE = 0;
+    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
+    FIFO_F32_FADE = READ_F32_FADE(float_2_8041f7b8);
+}
+
+void disp_dummy_black(void) {
+    void* cam;
+    u32 colorA;
+    u32 colorB;
+    f32 proj[8];
 
     cam = camGetPtr(9);
-    PSMTXMultVec((void*)((s32)cam + 0x11C), (void*)((s32)work + 0x130), &pos);
-    value = ((*(f32*)((s32)cam + 0x110) - *(f32*)((s32)cam + 0x10C)) *
-        ((float_1_8041f7ac / -pos.z) *
-        (*(f32*)((s32)cam + 0x184) * pos.z + *(f32*)((s32)cam + 0x188)))) +
-        *(f32*)((s32)cam + 0x110);
-    divisor = value;
 
-    cam = camGetPtr(4);
-    PSMTXMultVec((void*)((s32)cam + 0x11C), (void*)((s32)work + 0x130), &pos);
-    value = ((*(f32*)((s32)cam + 0x110) - *(f32*)((s32)cam + 0x10C)) *
-        (float_1_8041f7ac * (*(f32*)((s32)cam + 0x184) * pos.z + *(f32*)((s32)cam + 0x188)))) +
-        *(f32*)((s32)cam + 0x110);
-    return value / divisor;
+    GXGetProjectionv(proj);
+    GXSetProjection((void*)((s32)cam + 0x15C), *(s32*)((s32)cam + 0x19C));
+
+    GXSetZCompLoc(0);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetBlendMode(0, 1, 0, 7);
+    GXSetZMode(0, 7, 0);
+
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+
+    if ((*(u16*)wp & 0x8000) != 0) {
+        colorA = dat_8041f7a0;
+        GXSetChanMatColor(4, &colorA);
+    } else {
+        colorB = dat_8041f7a4;
+        GXSetChanMatColor(4, &colorB);
+    }
+
+    GXSetNumTevStages(1);
+    GXSetNumTexGens(1);
+    GXSetTevOrder(0, 0xFF, 0xFF, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevOp(0, 4);
+
+    GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
+    GXSetCurrentMtx(0);
+
+    GXSetCullMode(2);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 3, 0);
+
+    GXBegin(0x80, 0, 4);
+
+    FIFO_S16_FADE = -0x20;
+    FIFO_S16_FADE = 0x18;
+    FIFO_S16_FADE = 0;
+
+    FIFO_S16_FADE = 0x20;
+    FIFO_S16_FADE = 0x18;
+    FIFO_S16_FADE = 0;
+
+    FIFO_S16_FADE = 0x20;
+    FIFO_S16_FADE = -0x18;
+    FIFO_S16_FADE = 0;
+
+    FIFO_S16_FADE = -0x20;
+    FIFO_S16_FADE = -0x18;
+    FIFO_S16_FADE = 0;
+
+    GXSetProjectionv(proj);
 }
 
+s32 fadeIsFinish(void) {
+    s32 type;
 
-void fadeTexSetup(void) {
-    s32 length;
-    s32 entry;
-    char path[0x80];
+    type = *(s32*)((s32)wp + 0x350);
 
-    *(void**)((s32)wp + 0x358) = NULL;
-    *(void**)((s32)wp + 0x358) = arcOpen(str_fade_tpl_802bf79c, 0, 0);
-    if (*(void**)((s32)wp + 0x358) == NULL) {
-        sprintf(path, str_PCTs_fade_tpl_802bf7a8, getMarioStDvdRoot());
-        entry = DVDMgrOpen(path, 2, 0);
-        length = DVDMgrGetLength(entry);
-        length = (length + 0x1F) & ~0x1F;
-        *(void**)((s32)wp + 0x358) = __memAlloc(0, length);
-        *(s32*)((s32)entry + 0x6C) = entry;
-        DVDMgrReadAsync(entry, *(void**)((s32)wp + 0x358), length, 0, _callback);
-    } else {
-        UnpackTexPalette(*(void**)((s32)wp + 0x358));
-        *(s32*)((s32)wp + 0x35C) = 1;
+    if (type == -1) {
+        return 1;
     }
+
+    type *= 0xA8;
+
+    return (*(u16*)((s32)wp + type + 0x8) >> 1) & 1;
+}
+
+void fadeReset(s32 type) {
+    void* entry;
+
+    type *= 0xA8;
+    entry = (void*)((s32)wp + type + 0x8);
+
+    if (*(s32*)((s32)entry + 0x6C) >= 0) {
+        animPoseRelease(*(s32*)((s32)entry + 0x6C));
+    }
+
+    if (*(s32*)((s32)entry + 0x70) >= 0) {
+        animPaperPoseRelease(*(s32*)((s32)entry + 0x70));
+    }
+
+    if (*(void**)((s32)entry + 0x8C) != NULL) {
+        imgRelease(
+            *(s32*)((s32)entry + 0x8C),
+            *(void**)((s32)entry + 0x68)
+        );
+    }
+
+    memset(entry, 0, 0xA8);
+
+    *(s32*)((s32)entry + 0x6C) = -1;
+    *(s32*)((s32)entry + 0x70) = -1;
+
+    *(f32*)((s32)entry + 0x1C) = float_0_8041f7a8;
+    *(f32*)((s32)entry + 0x20) = float_0_8041f7a8;
+    *(f32*)((s32)entry + 0x78) = float_0_8041f7a8;
+    *(f32*)((s32)entry + 0x7C) = float_0_8041f7a8;
+    *(f32*)((s32)entry + 0x90) = float_1_8041f7ac;
+}
+
+void* fadeGetTpl(void) {
+    return *(void**)((s32)wp + 0x358);
+}
+
+void fadeSetNarrowFast(void) {
+    *(u16*)((s32)wp + 0xB0) |= 8;
 }

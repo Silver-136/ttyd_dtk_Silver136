@@ -40,38 +40,64 @@ extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
 extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
 extern const f32 float_1_8041f770;
 
-void* dispGetCurWork(void) {
-    return currentWorkPtr;
+void dispInit(void) {
+    pDispWork = __memAlloc(0, 0x4000);
+    pSortWork = __memAlloc(0, 0x1000);
+
+    memset(pDispWork, 0, 0x4000);
+    memset(pSortWork, 0, 0x1000);
+
+    entry_n = 0;
 }
 
-f32 dispCalcZ(void* pos) {
-    void* cam;
-    DispVec work;
-    f32 z;
+void dispReInit(void) {
+    entry_n = 0;
+}
 
-    cam = camGetPtr(4);
+void dispEntry(s32 cameraId, s32 mode, void* callback, void* param, f32 z) {
+    DispWork* work;
 
-    PSMTXMultVec(
-        (void*)((s32)cam + 0x11C),
-        pos,
-        &work
-    );
+    work = (DispWork*)((s32)pDispWork + (entry_n << 4));
 
-    PSMTX44MultVec(
-        (void*)((s32)cam + 0x15C),
-        &work,
-        &work
-    );
-
-    z = (work.z * float_5000_8041f760) + float_5000_8041f760;
-
-    if (z < float_0_8041f764) {
-        z = float_0_8041f764;
-    } else if (z > float_10000_8041f768) {
-        z = float_10000_8041f768;
+    if (z != z) {
+        return;
     }
 
-    return z * float_neg1_8041f76c;
+    work->cameraId = cameraId;
+    work->drawMode = mode;
+    work->callback = callback;
+    work->param = param;
+
+    if ((mode == 5) || (mode == 2) || ((mode >= 9) && (mode < 11))) {
+        work->z = z + offset_tbl[mode];
+    } else {
+        work->z = offset_tbl[mode] - z;
+    }
+
+    pSortWork[entry_n] = work;
+    entry_n++;
+}
+
+s32 _sort(const void* a, const void* b) {
+    DispWork* workA;
+    DispWork* workB;
+
+    workA = *(DispWork**)a;
+    workB = *(DispWork**)b;
+
+    if (workA->z > workB->z) {
+        return 1;
+    }
+
+    if (workA->z < workB->z) {
+        return -1;
+    }
+
+    return 0;
+}
+
+void dispSort(void) {
+    qqsort(pSortWork, entry_n, 4, _sort);
 }
 
 void dispDraw(s32 cameraId) {
@@ -145,62 +171,36 @@ void dispDraw(s32 cameraId) {
     }
 }
 
-void dispSort(void) {
-    qqsort(pSortWork, entry_n, 4, _sort);
-}
+f32 dispCalcZ(void* pos) {
+    void* cam;
+    DispVec work;
+    f32 z;
 
-s32 _sort(const void* a, const void* b) {
-    DispWork* workA;
-    DispWork* workB;
+    cam = camGetPtr(4);
 
-    workA = *(DispWork**)a;
-    workB = *(DispWork**)b;
+    PSMTXMultVec(
+        (void*)((s32)cam + 0x11C),
+        pos,
+        &work
+    );
 
-    if (workA->z > workB->z) {
-        return 1;
+    PSMTX44MultVec(
+        (void*)((s32)cam + 0x15C),
+        &work,
+        &work
+    );
+
+    z = (work.z * float_5000_8041f760) + float_5000_8041f760;
+
+    if (z < float_0_8041f764) {
+        z = float_0_8041f764;
+    } else if (z > float_10000_8041f768) {
+        z = float_10000_8041f768;
     }
 
-    if (workA->z < workB->z) {
-        return -1;
-    }
-
-    return 0;
+    return z * float_neg1_8041f76c;
 }
 
-void dispEntry(s32 cameraId, s32 mode, void* callback, void* param, f32 z) {
-    DispWork* work;
-
-    work = (DispWork*)((s32)pDispWork + (entry_n << 4));
-
-    if (z != z) {
-        return;
-    }
-
-    work->cameraId = cameraId;
-    work->drawMode = mode;
-    work->callback = callback;
-    work->param = param;
-
-    if ((mode == 5) || (mode == 2) || ((mode >= 9) && (mode < 11))) {
-        work->z = z + offset_tbl[mode];
-    } else {
-        work->z = offset_tbl[mode] - z;
-    }
-
-    pSortWork[entry_n] = work;
-    entry_n++;
-}
-
-void dispReInit(void) {
-    entry_n = 0;
-}
-
-void dispInit(void) {
-    pDispWork = __memAlloc(0, 0x4000);
-    pSortWork = __memAlloc(0, 0x1000);
-
-    memset(pDispWork, 0, 0x4000);
-    memset(pSortWork, 0, 0x1000);
-
-    entry_n = 0;
+void* dispGetCurWork(void) {
+    return currentWorkPtr;
 }

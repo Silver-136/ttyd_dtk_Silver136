@@ -1,119 +1,5 @@
 #include "effect/n64/eff_thruhammer_n64.h"
 
-
-void main_dl(void* effect, void* view) {
-    extern void PSMTXTrans(void*, f32, f32, f32);
-    extern void PSMTXRotRad(void*, s32, f32);
-    extern void PSMTXScale(void*, f32, f32, f32);
-    extern void PSMTXConcat(void*, void*, void*);
-    extern void GXLoadPosMtxImm(void*, s32);
-    extern void GXSetCurrentMtx(s32);
-    extern void GXLoadTexMtxImm(void*, s32, s32);
-    extern void GXBegin(s32, s32, s32);
-    extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);
-    u8* work = *(u8**)((s32)effect + 0xC);
-    f32 trans[3][4], rot[3][4], scale[3][4];
-    s32 i;
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
-        u8* part = work + i * 0x58;
-        if (*(s32*)(part + 0x4C) >= 0) {
-            PSMTXTrans(trans, *(f32*)(part + 4), *(f32*)(part + 8), *(f32*)(part + 0xC));
-            PSMTXRotRad(rot, 0x7A, 0.017453292f * *(f32*)(part + 0x34));
-            PSMTXConcat(trans, rot, trans);
-            PSMTXScale(scale, 0.3f * *(f32*)(part + 0x1C), 0.3f * *(f32*)(part + 0x20), 0.3f * *(f32*)(part + 0x24));
-            PSMTXConcat(trans, scale, trans); PSMTXConcat(view, trans, trans);
-            GXLoadPosMtxImm(trans, 0); GXSetCurrentMtx(0);
-            PSMTXScale(scale, 0.015873f, 0.032258f, 0.0f); GXLoadTexMtxImm(scale, 0x1E, 1);
-            GXBegin(0x90, 0, 0x36); tri2(0,1,2,0,2,3,4,0); tri2(2,4,5,0,1,3,2,0);
-        }
-    }
-}
-
-void effThruHammerDisp(s32 cameraId, void* effect) {
-    extern void* camGetPtr(s32);
-    extern void GXSetNumChans(s32);
-    extern void GXSetNumTexGens(s32);
-    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevOrder(s32, s32, s32, s32);
-    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
-    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
-    extern void effGetTexObjN64(s32, void*);
-    extern void GXLoadTexObj(void*, s32);
-    extern void effSetVtxDescN64(void*);
-    extern void PSMTXTrans(void*, f32, f32, f32);
-    extern void PSMTXRotRad(void*, s32, f32);
-    extern void PSMTXConcat(void*, void*, void*);
-    extern void GXSetTevColor(s32, void*);
-    extern void GXSetCullMode(s32);
-    extern void main_dl(void*, void*);
-    extern f32 float_deg2rad_80426360;
-    extern u8 unk_80429844;
-    extern u8 unk_8042984c;
-
-    f32 trans[3][4];
-    f32 rot[3][4];
-    f32 view[3][4];
-    u8 texObj[0x20];
-    u8 color0[4];
-    u8 color1[4];
-    u8* work = *(u8**)((s32)effect + 0xC);
-    void* camera = camGetPtr(cameraId);
-
-    GXSetNumChans(0);
-    GXSetNumTexGens(2);
-    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-    GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
-    GXSetTevOrder(0, 0, 0, 0xFF);
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(0, 0, 0, 0, 0);
-    GXSetTevAlphaIn(0, 0, 1, 4, 7);
-    GXSetTevOrder(1, 1, 1, 0xFF);
-    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(1, 2, 1, 8, 0);
-    GXSetTevAlphaIn(1, 0, 0, 0, 0);
-    effGetTexObjN64(0x23, texObj);
-    GXLoadTexObj(texObj, 0);
-    effGetTexObjN64(0x24, texObj);
-    GXLoadTexObj(texObj, 1);
-    effSetVtxDescN64((void*)0x803A9568);
-
-    PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
-    PSMTXRotRad(rot, 0x79,
-                float_deg2rad_80426360 * -*(f32*)((s32)camGetPtr(4) + 0x114));
-    PSMTXConcat(trans, rot, trans);
-    PSMTXConcat((void*)((s32)camera + 0x11C), trans, view);
-
-    color0[0] = *(u8*)(work + 0x50);
-    color0[1] = *(u8*)(work + 0x51);
-    color0[2] = *(u8*)(work + 0x52);
-    color0[3] = *(s32*)(work + 0x38);
-    GXSetTevColor(1, color0);
-    color1[0] = *(u8*)(work + 0x53);
-    color1[1] = *(u8*)(work + 0x54);
-    color1[2] = *(u8*)(work + 0x55);
-    color1[3] = unk_80429844;
-    GXSetTevColor(2, color1);
-    GXSetCullMode(2);
-    main_dl(effect, view);
-
-    color0[0] = *(u8*)(work + 0x50);
-    color0[1] = *(u8*)(work + 0x51);
-    color0[2] = *(u8*)(work + 0x52);
-    color0[3] = *(s32*)(work + 0x38);
-    GXSetTevColor(1, color0);
-    color1[0] = *(u8*)(work + 0x53);
-    color1[1] = *(u8*)(work + 0x54);
-    color1[2] = *(u8*)(work + 0x55);
-    color1[3] = unk_8042984c;
-    GXSetTevColor(2, color1);
-    GXSetCullMode(1);
-    main_dl(effect, view);
-}
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effThruHammerN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
@@ -254,5 +140,119 @@ void effThruHammerMain(void* effect) {
         }
     }
     dispEntry(4, 2, effThruHammerDisp, effect, dispCalcZ(&dispPos));
+}
+
+void effThruHammerDisp(s32 cameraId, void* effect) {
+    extern void* camGetPtr(s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void effGetTexObjN64(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void effSetVtxDescN64(void*);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXRotRad(void*, s32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetCullMode(s32);
+    extern void main_dl(void*, void*);
+    extern f32 float_deg2rad_80426360;
+    extern u8 unk_80429844;
+    extern u8 unk_8042984c;
+
+    f32 trans[3][4];
+    f32 rot[3][4];
+    f32 view[3][4];
+    u8 texObj[0x20];
+    u8 color0[4];
+    u8 color1[4];
+    u8* work = *(u8**)((s32)effect + 0xC);
+    void* camera = camGetPtr(cameraId);
+
+    GXSetNumChans(0);
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0, 0, 0, 0);
+    GXSetTevAlphaIn(0, 0, 1, 4, 7);
+    GXSetTevOrder(1, 1, 1, 0xFF);
+    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(1, 2, 1, 8, 0);
+    GXSetTevAlphaIn(1, 0, 0, 0, 0);
+    effGetTexObjN64(0x23, texObj);
+    GXLoadTexObj(texObj, 0);
+    effGetTexObjN64(0x24, texObj);
+    GXLoadTexObj(texObj, 1);
+    effSetVtxDescN64((void*)0x803A9568);
+
+    PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+    PSMTXRotRad(rot, 0x79,
+                float_deg2rad_80426360 * -*(f32*)((s32)camGetPtr(4) + 0x114));
+    PSMTXConcat(trans, rot, trans);
+    PSMTXConcat((void*)((s32)camera + 0x11C), trans, view);
+
+    color0[0] = *(u8*)(work + 0x50);
+    color0[1] = *(u8*)(work + 0x51);
+    color0[2] = *(u8*)(work + 0x52);
+    color0[3] = *(s32*)(work + 0x38);
+    GXSetTevColor(1, color0);
+    color1[0] = *(u8*)(work + 0x53);
+    color1[1] = *(u8*)(work + 0x54);
+    color1[2] = *(u8*)(work + 0x55);
+    color1[3] = unk_80429844;
+    GXSetTevColor(2, color1);
+    GXSetCullMode(2);
+    main_dl(effect, view);
+
+    color0[0] = *(u8*)(work + 0x50);
+    color0[1] = *(u8*)(work + 0x51);
+    color0[2] = *(u8*)(work + 0x52);
+    color0[3] = *(s32*)(work + 0x38);
+    GXSetTevColor(1, color0);
+    color1[0] = *(u8*)(work + 0x53);
+    color1[1] = *(u8*)(work + 0x54);
+    color1[2] = *(u8*)(work + 0x55);
+    color1[3] = unk_8042984c;
+    GXSetTevColor(2, color1);
+    GXSetCullMode(1);
+    main_dl(effect, view);
+}
+
+
+void main_dl(void* effect, void* view) {
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXRotRad(void*, s32, f32);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXLoadPosMtxImm(void*, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXLoadTexMtxImm(void*, s32, s32);
+    extern void GXBegin(s32, s32, s32);
+    extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);
+    u8* work = *(u8**)((s32)effect + 0xC);
+    f32 trans[3][4], rot[3][4], scale[3][4];
+    s32 i;
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
+        u8* part = work + i * 0x58;
+        if (*(s32*)(part + 0x4C) >= 0) {
+            PSMTXTrans(trans, *(f32*)(part + 4), *(f32*)(part + 8), *(f32*)(part + 0xC));
+            PSMTXRotRad(rot, 0x7A, 0.017453292f * *(f32*)(part + 0x34));
+            PSMTXConcat(trans, rot, trans);
+            PSMTXScale(scale, 0.3f * *(f32*)(part + 0x1C), 0.3f * *(f32*)(part + 0x20), 0.3f * *(f32*)(part + 0x24));
+            PSMTXConcat(trans, scale, trans); PSMTXConcat(view, trans, trans);
+            GXLoadPosMtxImm(trans, 0); GXSetCurrentMtx(0);
+            PSMTXScale(scale, 0.015873f, 0.032258f, 0.0f); GXLoadTexMtxImm(scale, 0x1E, 1);
+            GXBegin(0x90, 0, 0x36); tri2(0,1,2,0,2,3,4,0); tri2(2,4,5,0,1,3,2,0);
+        }
+    }
 }
 

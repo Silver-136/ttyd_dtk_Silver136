@@ -1,4 +1,60 @@
 #include "effect/n64/eff_fire_dust_n64.h"
+void* effFireDustN64Entry(f32 x, f32 y, f32 z, f32 scaleA, f32 scaleB, s32 type, s32 count, u32 timer) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, s32 size);
+    extern void effFireDustMain(void* effect);
+    extern char str_FireDustN64_802faea0[];
+    extern f32 float_1_804251cc;
+    extern f32 float_20_804251d0;
+    void* entry;
+    u8* work;
+    u8* part;
+    f32 step;
+    u32 i;
+
+    entry = effEntry();
+    *(char**)((s32)entry + 0x14) = str_FireDustN64_802faea0;
+    *(s32*)((s32)entry + 8) = count + 2;
+    work = __memAlloc(3, (count + 2) * 0x6C);
+    *(void**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effFireDustMain;
+    *(u32*)entry |= 2;
+
+    *(s32*)work = type;
+    *(s32*)(work + 0x3C) = 0;
+    if ((s32)timer < 1) {
+        *(s32*)(work + 0x38) = 1000;
+    } else {
+        *(s32*)(work + 0x38) = timer;
+    }
+    *(f32*)(work + 4) = x;
+    *(f32*)(work + 8) = y;
+    *(f32*)(work + 0xC) = z;
+    *(f32*)(work + 0x10) = scaleA;
+    *(f32*)(work + 0x14) = scaleB;
+    *(f32*)(work + 0x60) = float_1_804251cc;
+    *(s32*)(work + 0x4C) = 0xFF;
+    *(s32*)(work + 0x40) = 0xFF;
+    *(s32*)(work + 0x44) = 0xFF;
+    *(s32*)(work + 0x48) = 0xFF;
+    *(s32*)(work + 0x50) = 0xFF;
+    *(s32*)(work + 0x54) = 0xFF;
+    *(s32*)(work + 0x58) = 0x7F;
+    *(s32*)(work + 0x5C) = 0xFF;
+
+    if ((s32)timer < 0x14) {
+        step = float_20_804251d0 / (f32)(count + 1);
+    } else {
+        step = (f32)timer / (f32)(count + 1);
+    }
+
+    part = work + 0x6C;
+    for (i = 1; i < (u32)(count + 2); i++, part += 0x6C) {
+        *(s32*)(part + 0x30) = (s32)(-(f32)i * step) - 1;
+    }
+
+    return entry;
+}
 
 
 void effFireDustMain(void* effect) {
@@ -101,124 +157,6 @@ void effFireDustMain(void* effect) {
 
     dispEntry(4, 2, effFireDustDisp, effect, dispCalcZ(&pos));
 }
-void* effFireDustN64Entry(f32 x, f32 y, f32 z, f32 scaleA, f32 scaleB, s32 type, s32 count, u32 timer) {
-    extern void* effEntry(void);
-    extern void* __memAlloc(s32 heap, s32 size);
-    extern void effFireDustMain(void* effect);
-    extern char str_FireDustN64_802faea0[];
-    extern f32 float_1_804251cc;
-    extern f32 float_20_804251d0;
-    void* entry;
-    u8* work;
-    u8* part;
-    f32 step;
-    u32 i;
-
-    entry = effEntry();
-    *(char**)((s32)entry + 0x14) = str_FireDustN64_802faea0;
-    *(s32*)((s32)entry + 8) = count + 2;
-    work = __memAlloc(3, (count + 2) * 0x6C);
-    *(void**)((s32)entry + 0xC) = work;
-    *(void**)((s32)entry + 0x10) = effFireDustMain;
-    *(u32*)entry |= 2;
-
-    *(s32*)work = type;
-    *(s32*)(work + 0x3C) = 0;
-    if ((s32)timer < 1) {
-        *(s32*)(work + 0x38) = 1000;
-    } else {
-        *(s32*)(work + 0x38) = timer;
-    }
-    *(f32*)(work + 4) = x;
-    *(f32*)(work + 8) = y;
-    *(f32*)(work + 0xC) = z;
-    *(f32*)(work + 0x10) = scaleA;
-    *(f32*)(work + 0x14) = scaleB;
-    *(f32*)(work + 0x60) = float_1_804251cc;
-    *(s32*)(work + 0x4C) = 0xFF;
-    *(s32*)(work + 0x40) = 0xFF;
-    *(s32*)(work + 0x44) = 0xFF;
-    *(s32*)(work + 0x48) = 0xFF;
-    *(s32*)(work + 0x50) = 0xFF;
-    *(s32*)(work + 0x54) = 0xFF;
-    *(s32*)(work + 0x58) = 0x7F;
-    *(s32*)(work + 0x5C) = 0xFF;
-
-    if ((s32)timer < 0x14) {
-        step = float_20_804251d0 / (f32)(count + 1);
-    } else {
-        step = (f32)timer / (f32)(count + 1);
-    }
-
-    part = work + 0x6C;
-    for (i = 1; i < (u32)(count + 2); i++, part += 0x6C) {
-        *(s32*)(part + 0x30) = (s32)(-(f32)i * step) - 1;
-    }
-
-    return entry;
-}
-
-void main_dl(int effect, float view[3][4]) {
-    typedef float Mtx[3][4];
-    extern void PSMTXTrans(Mtx, double, double, double);
-    extern void PSMTXRotRad(Mtx, double, char);
-    extern void PSMTXScale(Mtx, float, float, float);
-    extern void PSMTXConcat(Mtx, Mtx, Mtx);
-    extern void GXLoadPosMtxImm(Mtx, int);
-    extern void GXSetCurrentMtx(int);
-    extern void GXSetTevColor(int, void*);
-    extern void effSetVtxDescN64(void*);
-    extern void GXBegin(int, int, int);
-    extern void tri2(int, int, int, int, int, int, int);
-    extern float float_255_80425188;
-    extern float float_deg2rad_8042518c;
-    extern unsigned char DAT_8039f480[], DAT_8039f4b8[], DAT_8039f4f0[], DAT_8039f528[];
-    extern unsigned char DAT_8039f560[], size8x8_tex22x22_vtx[], DAT_8039f410[], DAT_8039f448[];
-    unsigned char* entry = (unsigned char*)effect;
-    unsigned char* work = *(unsigned char**)(entry + 0xC);
-    unsigned char* part = work + 0x6C;
-    void* vertexData = 0;
-    Mtx rotation;
-    Mtx scale;
-    Mtx model;
-    float alphaScale = (float)*(int*)(work + 0x4C) / float_255_80425188;
-    int i;
-
-    for (i = 1; i < *(int*)(entry + 8); i++, part += 0x6C) {
-        unsigned int color;
-        float size;
-        if (*(int*)(part + 0x30) < 0) {
-            continue;
-        }
-        PSMTXTrans(model, *(float*)(part + 4), *(float*)(part + 8), *(float*)(part + 0xC));
-        PSMTXRotRad(rotation, float_deg2rad_8042518c * *(float*)(part + 0x34), 'z');
-        size = *(float*)(part + 0x60) * alphaScale;
-        PSMTXScale(scale, size, size, size);
-        PSMTXConcat(model, rotation, model);
-        PSMTXConcat(model, scale, model);
-        PSMTXConcat(view, model, model);
-        GXLoadPosMtxImm(model, 0);
-        GXSetCurrentMtx(0);
-        color = ((unsigned int)*(unsigned char*)(work + 0x50) << 24) |
-                ((unsigned int)*(unsigned char*)(work + 0x54) << 16) |
-                ((unsigned int)*(unsigned char*)(work + 0x58) << 8) |
-                (unsigned char)((float)*(int*)(part + 0x4C) * alphaScale);
-        GXSetTevColor(1, &color);
-        switch (i & 7) {
-            case 0: vertexData = DAT_8039f480; break;
-            case 1: vertexData = DAT_8039f4b8; break;
-            case 2: vertexData = DAT_8039f4f0; break;
-            case 3: vertexData = DAT_8039f528; break;
-            case 4: vertexData = DAT_8039f560; break;
-            case 5: vertexData = size8x8_tex22x22_vtx; break;
-            case 6: vertexData = DAT_8039f410; break;
-            case 7: vertexData = DAT_8039f448; break;
-        }
-        effSetVtxDescN64(vertexData);
-        GXBegin(0x90, 0, 6);
-        tri2(0, 1, 2, 0, 0, 2, 3);
-    }
-}
 
 void effFireDustDisp(int cameraId, int effect) {
     typedef float Mtx[3][4];
@@ -290,4 +228,66 @@ void effFireDustDisp(int cameraId, int effect) {
     PSMTXConcat(model, rotation, view);
     PSMTXConcat((float (*)[4])(camera + 0x11C), view, view);
     main_dl(effect, view);
+}
+
+void main_dl(int effect, float view[3][4]) {
+    typedef float Mtx[3][4];
+    extern void PSMTXTrans(Mtx, double, double, double);
+    extern void PSMTXRotRad(Mtx, double, char);
+    extern void PSMTXScale(Mtx, float, float, float);
+    extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void GXLoadPosMtxImm(Mtx, int);
+    extern void GXSetCurrentMtx(int);
+    extern void GXSetTevColor(int, void*);
+    extern void effSetVtxDescN64(void*);
+    extern void GXBegin(int, int, int);
+    extern void tri2(int, int, int, int, int, int, int);
+    extern float float_255_80425188;
+    extern float float_deg2rad_8042518c;
+    extern unsigned char DAT_8039f480[], DAT_8039f4b8[], DAT_8039f4f0[], DAT_8039f528[];
+    extern unsigned char DAT_8039f560[], size8x8_tex22x22_vtx[], DAT_8039f410[], DAT_8039f448[];
+    unsigned char* entry = (unsigned char*)effect;
+    unsigned char* work = *(unsigned char**)(entry + 0xC);
+    unsigned char* part = work + 0x6C;
+    void* vertexData = 0;
+    Mtx rotation;
+    Mtx scale;
+    Mtx model;
+    float alphaScale = (float)*(int*)(work + 0x4C) / float_255_80425188;
+    int i;
+
+    for (i = 1; i < *(int*)(entry + 8); i++, part += 0x6C) {
+        unsigned int color;
+        float size;
+        if (*(int*)(part + 0x30) < 0) {
+            continue;
+        }
+        PSMTXTrans(model, *(float*)(part + 4), *(float*)(part + 8), *(float*)(part + 0xC));
+        PSMTXRotRad(rotation, float_deg2rad_8042518c * *(float*)(part + 0x34), 'z');
+        size = *(float*)(part + 0x60) * alphaScale;
+        PSMTXScale(scale, size, size, size);
+        PSMTXConcat(model, rotation, model);
+        PSMTXConcat(model, scale, model);
+        PSMTXConcat(view, model, model);
+        GXLoadPosMtxImm(model, 0);
+        GXSetCurrentMtx(0);
+        color = ((unsigned int)*(unsigned char*)(work + 0x50) << 24) |
+                ((unsigned int)*(unsigned char*)(work + 0x54) << 16) |
+                ((unsigned int)*(unsigned char*)(work + 0x58) << 8) |
+                (unsigned char)((float)*(int*)(part + 0x4C) * alphaScale);
+        GXSetTevColor(1, &color);
+        switch (i & 7) {
+            case 0: vertexData = DAT_8039f480; break;
+            case 1: vertexData = DAT_8039f4b8; break;
+            case 2: vertexData = DAT_8039f4f0; break;
+            case 3: vertexData = DAT_8039f528; break;
+            case 4: vertexData = DAT_8039f560; break;
+            case 5: vertexData = size8x8_tex22x22_vtx; break;
+            case 6: vertexData = DAT_8039f410; break;
+            case 7: vertexData = DAT_8039f448; break;
+        }
+        effSetVtxDescN64(vertexData);
+        GXBegin(0x90, 0, 6);
+        tri2(0, 1, 2, 0, 0, 2, 3);
+    }
 }

@@ -1,36 +1,5 @@
 #include "effect/n64/eff_kemuri6_n64.h"
 
-
-void effKemuri6Disp(s32 cameraId, void* effect) {
-    typedef f32 Mtx[3][4];
-    extern void* camGetPtr(s32);
-    extern void GXSetNumChans(s32); extern void GXSetNumTexGens(s32);
-    extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32); extern void PSMTXScale(Mtx,f32,f32,f32);
-    extern void GXLoadTexMtxImm(Mtx,s32,s32); extern void GXSetNumTevStages(s32);
-    extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);
-    extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevColorIn(s32,s32,s32,s32,s32);
-    extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32); extern void effGetTexObjN64(s32,void*);
-    extern void GXLoadTexObj(void*,s32); extern void GXSetCullMode(s32); extern void effSetVtxDescN64(void*);
-    extern void GXSetTevColor(s32,void*); extern void PSMTXTrans(Mtx,f64,f64,f64);
-    extern void PSMTXRotRad(Mtx,f32,char); extern void PSMTXConcat(Mtx,Mtx,Mtx);
-    extern void GXLoadPosMtxImm(Mtx,s32); extern void GXBegin(s32,s32,s32);
-    extern void tri2(s32,s32,s32,s32,s32,s32,s32);
-    extern f32 float_0p0625_80425724; extern f32 float_0_80425728; extern f32 float_deg2rad_8042572c;
-    u8 tex[0x20]; Mtx texMtx,trans,rotate; u8* entry=(u8*)effect; u8* work=*(u8**)(entry+0xC);
-    u8* camera=(u8*)camGetPtr(cameraId); s32 i;
-    GXSetNumChans(0); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
-    PSMTXScale(texMtx,float_0p0625_80425724,float_0p0625_80425724,float_0_80425728); GXLoadTexMtxImm(texMtx,0x1E,1);
-    GXSetNumTevStages(1); GXSetTevOrder(0,0,0,0xFF); GXSetTevColorOp(0,0,0,0,1,0); GXSetTevAlphaOp(0,0,0,0,1,0);
-    GXSetTevColorIn(0,8,15,15,2); GXSetTevAlphaIn(0,7,4,5,7); effGetTexObjN64(0x4E,tex); GXLoadTexObj(tex,0);
-    GXSetCullMode(0); effSetVtxDescN64((void*)0x803A4D58);
-    for(i=0;i<*(s32*)(entry+8);i++,work+=0x50){if(*(s32*)work!=0){u8* camera3d;u32 color=0xFFFFFF00|*(u8*)(work+8);GXSetTevColor(1,&color);
-        PSMTXTrans(trans,*(f32*)(work+0xC),*(f32*)(work+0x10),*(f32*)(work+0x14));camera3d=(u8*)camGetPtr(4);
-        PSMTXRotRad(rotate,float_deg2rad_8042572c*-*(f32*)(camera3d+0x114),'y');PSMTXConcat(trans,rotate,trans);
-        PSMTXScale(texMtx,*(f32*)(work+0x1C),*(f32*)(work+0x20),*(f32*)(work+0x24));PSMTXConcat(trans,texMtx,trans);
-        PSMTXRotRad(rotate,float_deg2rad_8042572c**(f32*)(work+0x18),'z');PSMTXConcat(trans,rotate,trans);
-        PSMTXConcat((f32 (*)[4])(camera+0x11C),trans,trans);GXLoadPosMtxImm(trans,0);GXBegin(0x90,0,6);tri2(0,3,1,0,0,2,3);}}
-}
-
 void* effKemuri6N64Entry(s32 type, f32 x, f32 y, f32 z) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -154,5 +123,36 @@ void effKemuri6Main(void* effect) {
     } else {
         dispEntry(4, 2, effKemuri6Disp, effect, dispCalcZ(&dispPos));
     }
+}
+
+
+void effKemuri6Disp(s32 cameraId, void* effect) {
+    typedef f32 Mtx[3][4];
+    extern void* camGetPtr(s32);
+    extern void GXSetNumChans(s32); extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32); extern void PSMTXScale(Mtx,f32,f32,f32);
+    extern void GXLoadTexMtxImm(Mtx,s32,s32); extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevColorIn(s32,s32,s32,s32,s32);
+    extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32); extern void effGetTexObjN64(s32,void*);
+    extern void GXLoadTexObj(void*,s32); extern void GXSetCullMode(s32); extern void effSetVtxDescN64(void*);
+    extern void GXSetTevColor(s32,void*); extern void PSMTXTrans(Mtx,f64,f64,f64);
+    extern void PSMTXRotRad(Mtx,f32,char); extern void PSMTXConcat(Mtx,Mtx,Mtx);
+    extern void GXLoadPosMtxImm(Mtx,s32); extern void GXBegin(s32,s32,s32);
+    extern void tri2(s32,s32,s32,s32,s32,s32,s32);
+    extern f32 float_0p0625_80425724; extern f32 float_0_80425728; extern f32 float_deg2rad_8042572c;
+    u8 tex[0x20]; Mtx texMtx,trans,rotate; u8* entry=(u8*)effect; u8* work=*(u8**)(entry+0xC);
+    u8* camera=(u8*)camGetPtr(cameraId); s32 i;
+    GXSetNumChans(0); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+    PSMTXScale(texMtx,float_0p0625_80425724,float_0p0625_80425724,float_0_80425728); GXLoadTexMtxImm(texMtx,0x1E,1);
+    GXSetNumTevStages(1); GXSetTevOrder(0,0,0,0xFF); GXSetTevColorOp(0,0,0,0,1,0); GXSetTevAlphaOp(0,0,0,0,1,0);
+    GXSetTevColorIn(0,8,15,15,2); GXSetTevAlphaIn(0,7,4,5,7); effGetTexObjN64(0x4E,tex); GXLoadTexObj(tex,0);
+    GXSetCullMode(0); effSetVtxDescN64((void*)0x803A4D58);
+    for(i=0;i<*(s32*)(entry+8);i++,work+=0x50){if(*(s32*)work!=0){u8* camera3d;u32 color=0xFFFFFF00|*(u8*)(work+8);GXSetTevColor(1,&color);
+        PSMTXTrans(trans,*(f32*)(work+0xC),*(f32*)(work+0x10),*(f32*)(work+0x14));camera3d=(u8*)camGetPtr(4);
+        PSMTXRotRad(rotate,float_deg2rad_8042572c*-*(f32*)(camera3d+0x114),'y');PSMTXConcat(trans,rotate,trans);
+        PSMTXScale(texMtx,*(f32*)(work+0x1C),*(f32*)(work+0x20),*(f32*)(work+0x24));PSMTXConcat(trans,texMtx,trans);
+        PSMTXRotRad(rotate,float_deg2rad_8042572c**(f32*)(work+0x18),'z');PSMTXConcat(trans,rotate,trans);
+        PSMTXConcat((f32 (*)[4])(camera+0x11C),trans,trans);GXLoadPosMtxImm(trans,0);GXBegin(0x90,0,6);tri2(0,3,1,0,0,2,3);}}
 }
 

@@ -22,37 +22,18 @@ typedef struct BatstageVec3 {
             copyDst += 2;                           \
         }                                           \
     } while (0)
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
-s32 evt_batstage_set_aud_dark_base(void* event, s32 isFirstCall) {
+s32 evt_batstage_set_stg_dark(void* event, s32 isFirstCall) {
     extern s32 evtGetValue(void* event, s32 value);
-    extern void BattleStageSetAudDarkBase(u8 id, s32 value1, s32 value2);
+    extern void BattleStageSetStgDark(u8 id, s32 value1, s32 value2);
     s32* args = *(s32**)((s32)event + 0x18);
     u8 id = evtGetValue(event, args[0]);
     s32 value1 = evtGetValue(event, args[1]);
     s32 value2 = evtGetValue(event, args[2]);
 
-    BattleStageSetAudDarkBase(id, value1, value2);
-    return 2;
-}
-
-#pragma use_lmw_stmw reset
-#pragma no_register_save_helpers reset
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
-s32 evt_batstage_set_aud_dark(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern void BattleStageSetAudDark(u8 id, s32 value1, s32 value2);
-    s32* args = *(s32**)((s32)event + 0x18);
-    u8 id = evtGetValue(event, args[0]);
-    s32 value1 = evtGetValue(event, args[1]);
-    s32 value2 = evtGetValue(event, args[2]);
-
-    BattleStageSetAudDark(id, value1, value2);
+    BattleStageSetStgDark(id, value1, value2);
     return 2;
 }
 
@@ -80,15 +61,52 @@ s32 evt_batstage_set_stg_dark_base(void* event, s32 isFirstCall) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
-s32 evt_batstage_set_stg_dark(void* event, s32 isFirstCall) {
+s32 evt_batstage_return_stg_dark_base(void* event, s32 isFirstCall) {
     extern s32 evtGetValue(void* event, s32 value);
-    extern void BattleStageSetStgDark(u8 id, s32 value1, s32 value2);
+    extern void BattleStageReturnStgDarkBase(s32 value1, s32 value2);
+
+    s32* args = *(s32**)((s32)event + 0x18);
+    s32 value1 = evtGetValue(event, args[0]);
+    s32 value2 = evtGetValue(event, args[1]);
+
+    BattleStageReturnStgDarkBase(value1, value2);
+    return 2;
+}
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+s32 evt_batstage_set_aud_dark(void* event, s32 isFirstCall) {
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void BattleStageSetAudDark(u8 id, s32 value1, s32 value2);
     s32* args = *(s32**)((s32)event + 0x18);
     u8 id = evtGetValue(event, args[0]);
     s32 value1 = evtGetValue(event, args[1]);
     s32 value2 = evtGetValue(event, args[2]);
 
-    BattleStageSetStgDark(id, value1, value2);
+    BattleStageSetAudDark(id, value1, value2);
+    return 2;
+}
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+s32 evt_batstage_set_aud_dark_base(void* event, s32 isFirstCall) {
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void BattleStageSetAudDarkBase(u8 id, s32 value1, s32 value2);
+    s32* args = *(s32**)((s32)event + 0x18);
+    u8 id = evtGetValue(event, args[0]);
+    s32 value1 = evtGetValue(event, args[1]);
+    s32 value2 = evtGetValue(event, args[2]);
+
+    BattleStageSetAudDarkBase(id, value1, value2);
     return 2;
 }
 
@@ -113,54 +131,6 @@ s32 evt_batstage_return_aud_dark_base(void* event, s32 isFirstCall) {
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
-s32 evt_batstage_return_stg_dark_base(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern void BattleStageReturnStgDarkBase(s32 value1, s32 value2);
-
-    s32* args = *(s32**)((s32)event + 0x18);
-    s32 value1 = evtGetValue(event, args[0]);
-    s32 value2 = evtGetValue(event, args[1]);
-
-    BattleStageReturnStgDarkBase(value1, value2);
-    return 2;
-}
-
-#pragma use_lmw_stmw reset
-#pragma no_register_save_helpers reset
-
-s32 evt_batstage_light_set_player_off(void* event, s32 isFirstCall) {
-    extern void BattleStageReturnAudDarkBase(s32 value1, s32 value2);
-    extern void BattleStageReturnStgDarkBase(s32 value1, s32 value2);
-    extern s32 BattleStageGetLightNumberByName(const char* name);
-    extern void BattleStageLightRelease(s32 lightId, s32 fadeFrames, s32 unk);
-    extern char dat_802f38f8[];
-
-    char* base = dat_802f38f8;
-    s32 lightId;
-
-    BattleStageReturnAudDarkBase(0, 0);
-    BattleStageReturnStgDarkBase(0x1E, 0);
-
-    lightId = BattleStageGetLightNumberByName(base + 0xFC);
-    if (lightId != -1) {
-        BattleStageLightRelease(lightId, 0x1E, 0);
-    }
-
-    lightId = BattleStageGetLightNumberByName(base + 0x110);
-    if (lightId != -1) {
-        BattleStageLightRelease(lightId, 0x1E, 0);
-    }
-
-    lightId = BattleStageGetLightNumberByName(base + 0x124);
-    if (lightId != -1) {
-        BattleStageLightRelease(lightId, 0x1E, 0);
-    }
-
-    return 2;
-}
 
 s32 evt_batstage_light_set_player_on(void* event, s32 isFirstCall) {
     extern s32 evtGetValue(void* event, s32 value);
@@ -321,6 +291,36 @@ s32 evt_batstage_light_set_player_on(void* event, s32 isFirstCall) {
 
     BattleStageSetStgDark(0x8C, 0x1E, 0);
     BattleStageSetAudDark(0x8C, 0, 0);
+
+    return 2;
+}
+s32 evt_batstage_light_set_player_off(void* event, s32 isFirstCall) {
+    extern void BattleStageReturnAudDarkBase(s32 value1, s32 value2);
+    extern void BattleStageReturnStgDarkBase(s32 value1, s32 value2);
+    extern s32 BattleStageGetLightNumberByName(const char* name);
+    extern void BattleStageLightRelease(s32 lightId, s32 fadeFrames, s32 unk);
+    extern char dat_802f38f8[];
+
+    char* base = dat_802f38f8;
+    s32 lightId;
+
+    BattleStageReturnAudDarkBase(0, 0);
+    BattleStageReturnStgDarkBase(0x1E, 0);
+
+    lightId = BattleStageGetLightNumberByName(base + 0xFC);
+    if (lightId != -1) {
+        BattleStageLightRelease(lightId, 0x1E, 0);
+    }
+
+    lightId = BattleStageGetLightNumberByName(base + 0x110);
+    if (lightId != -1) {
+        BattleStageLightRelease(lightId, 0x1E, 0);
+    }
+
+    lightId = BattleStageGetLightNumberByName(base + 0x124);
+    if (lightId != -1) {
+        BattleStageLightRelease(lightId, 0x1E, 0);
+    }
 
     return 2;
 }

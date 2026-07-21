@@ -1,4 +1,61 @@
 #include "effect/n64/eff_fire_spark_n64.h"
+void* effFireSparkN64Entry(f32 x, f32 y, f32 z, f32 width, f32 height, f32 unkScale,
+                           f32 velScaleA, f32 velScaleB, s32 type, s32 count, s32 duration) {
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32 heap, s32 size);
+    extern void effFireSparkMain(void* effect);
+    extern char str_FireSparkN64_802faef0[];
+    extern f32 float_30_80425238;
+    extern f32 float_0p5_80425224;
+
+    void* entry;
+    u8* work;
+    u8* part;
+    f32 step;
+    u32 i;
+
+    entry = effEntry();
+    *(char**)((s32)entry + 0x14) = str_FireSparkN64_802faef0;
+    *(s32*)((s32)entry + 8) = count;
+    work = __memAlloc(3, count * 0x70);
+    *(u8**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effFireSparkMain;
+    *(u32*)entry |= 2;
+
+    *(s32*)work = type;
+    *(s32*)(work + 0x1C) = 0;
+    if (duration < 1) {
+        *(s32*)(work + 0x18) = 1000;
+    } else {
+        *(s32*)(work + 0x18) = duration;
+    }
+
+    *(f32*)(work + 4) = x;
+    *(f32*)(work + 8) = y;
+    *(f32*)(work + 0xC) = z;
+    *(f32*)(work + 0x10) = width;
+    *(f32*)(work + 0x14) = height;
+    *(f32*)(work + 0x40) = unkScale;
+    *(f32*)(work + 0x68) = velScaleA;
+    *(f32*)(work + 0x6C) = velScaleB;
+
+    *(s32*)(work + 0x20) = 0x7F;
+    *(s32*)(work + 0x24) = 0;
+    *(s32*)(work + 0x28) = 0;
+    *(s32*)(work + 0x2C) = 0;
+    *(s32*)(work + 0x30) = 0x7F;
+    *(s32*)(work + 0x34) = 0x7F;
+    *(s32*)(work + 0x38) = 0;
+    *(s32*)(work + 0x3C) = 0xFF;
+
+    step = (float_30_80425238 / (f32)(count - 1)) * float_0p5_80425224;
+    part = work + 0x70;
+    for (i = 1; i < (u32)count; i++, part += 0x70) {
+        *(s32*)(part + 0xD4) = (s32)(-(f32)i * step) - 1;
+    }
+
+    return entry;
+}
 
 
 void effFireSparkMain(void* effect) {
@@ -226,62 +283,3 @@ void effFireSparkDisp(s32 cameraId, void* effect) {
 }
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
-
-void* effFireSparkN64Entry(f32 x, f32 y, f32 z, f32 width, f32 height, f32 unkScale,
-                           f32 velScaleA, f32 velScaleB, s32 type, s32 count, s32 duration) {
-    extern void* effEntry(void);
-    extern void* __memAlloc(s32 heap, s32 size);
-    extern void effFireSparkMain(void* effect);
-    extern char str_FireSparkN64_802faef0[];
-    extern f32 float_30_80425238;
-    extern f32 float_0p5_80425224;
-
-    void* entry;
-    u8* work;
-    u8* part;
-    f32 step;
-    u32 i;
-
-    entry = effEntry();
-    *(char**)((s32)entry + 0x14) = str_FireSparkN64_802faef0;
-    *(s32*)((s32)entry + 8) = count;
-    work = __memAlloc(3, count * 0x70);
-    *(u8**)((s32)entry + 0xC) = work;
-    *(void**)((s32)entry + 0x10) = effFireSparkMain;
-    *(u32*)entry |= 2;
-
-    *(s32*)work = type;
-    *(s32*)(work + 0x1C) = 0;
-    if (duration < 1) {
-        *(s32*)(work + 0x18) = 1000;
-    } else {
-        *(s32*)(work + 0x18) = duration;
-    }
-
-    *(f32*)(work + 4) = x;
-    *(f32*)(work + 8) = y;
-    *(f32*)(work + 0xC) = z;
-    *(f32*)(work + 0x10) = width;
-    *(f32*)(work + 0x14) = height;
-    *(f32*)(work + 0x40) = unkScale;
-    *(f32*)(work + 0x68) = velScaleA;
-    *(f32*)(work + 0x6C) = velScaleB;
-
-    *(s32*)(work + 0x20) = 0x7F;
-    *(s32*)(work + 0x24) = 0;
-    *(s32*)(work + 0x28) = 0;
-    *(s32*)(work + 0x2C) = 0;
-    *(s32*)(work + 0x30) = 0x7F;
-    *(s32*)(work + 0x34) = 0x7F;
-    *(s32*)(work + 0x38) = 0;
-    *(s32*)(work + 0x3C) = 0xFF;
-
-    step = (float_30_80425238 / (f32)(count - 1)) * float_0p5_80425224;
-    part = work + 0x70;
-    for (i = 1; i < (u32)count; i++, part += 0x70) {
-        *(s32*)(part + 0xD4) = (s32)(-(f32)i * step) - 1;
-    }
-
-    return entry;
-}
-

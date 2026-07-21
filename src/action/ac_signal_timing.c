@@ -4,14 +4,6 @@ extern void* _battleWorkPointer;
 s32 ac_signaltiming_ok_frame_range[4];
 s32 ac_signaltiming_ok_frame_range_2[4];
 
-s32 battleAcResult_SignalTiming(void* wp) {
-    return *(s32*)((s32)wp + 0x1CB8);
-}
-
-void battleAcDelete_SignalTiming(void* wp) {
-    *(s32*)((s32)wp + 0x1C9C) = 1004;
-}
-
 s32 _get_ok_frame_range(s32 idx) {
     void* wp = _battleWorkPointer;
 
@@ -21,6 +13,42 @@ s32 _get_ok_frame_range(s32 idx) {
         default:
             return *(s32*)((s32)wp + 0x1CE4) + ac_signaltiming_ok_frame_range[idx];
     }
+}
+
+/* stub-fill: battleAcMain_SignalTiming | missing_definition | ghidra_signature */
+s32 battleAcMain_SignalTiming(int work) {
+    extern void* memset(void*,s32,u32);extern s32 BattleActionCommandGetDifficulty(void*);extern s32 BattlePadCheckTrigger(u32);extern s32 BattlePadGetTrigger(void);extern s32 irand(s32);extern s32 _get_ok_frame_range(s32);extern void psndSFXOn(char*);
+    extern char str_SFX_AC_COMMAND_NG1_802ff7b0[];extern char str_SFX_AC_COMMAND_OK1_802ff79c[];extern char str_SFX_AC_PI1_802ff780[];extern char str_SFX_AC_PONE1_802ff78c[];
+    u8* wp=(u8*)work;u8* extra=wp+0x1F4C;s32 state;u32 trig;s32 valid;s32 frame;s32 start;s32 end;s32 i;s32 button;s32 done=0;
+    do{
+        state=*(s32*)(wp+0x1C9C);
+        switch(state){
+        case 0:
+            *(s32*)(wp+0x1CB8)=1;memset(wp+0x1F20,0,0x2C);*(f32*)(wp+0x1F34)=-300.0f;*(f32*)(wp+0x1F38)=0.0f;*(s32*)(wp+0x1F40)=0x14;
+            *(s32*)(extra+0)=0;*(s32*)(wp+0x1F50)=0;*(s32*)(wp+0x1F5C)=0;*(s32*)(wp+0x1F54)=0;*(s32*)(wp+0x1F58)=0;*(s32*)(wp+0x1F78)=BattleActionCommandGetDifficulty(wp);*(s32*)(wp+0x1F7C)=0;*(s32*)(wp+0x1CEC)=0;
+            for(i=0;i<5;i++)extra[0x4C+i]=0;
+            if(*(s32*)(wp+0x1CD8)>0&&*(s32*)(wp+0x1CD8)<3){for(i=0;i<*(s32*)(wp+0x1CC8);i++){button=irand(4);*(s32*)(extra+0x38+i*4)=button;}}else{for(i=0;i<*(s32*)(wp+0x1CC8);i++)*(s32*)(extra+0x38+i*4)=0x100;}
+            *(s32*)(wp+0x1F80)=*(s32*)(wp+0x1F84);*(s32*)(wp+0x1C9C)=99;break;
+        case 99:
+            if(*(s16*)(wp+0x1D18)<1){frame=*(s32*)(wp+0x1F54);*(s32*)(wp+0x1F60)=frame**(s32*)(wp+0x1CD0);*(s32*)(wp+0x1F64)=(frame+1)**(s32*)(wp+0x1CD0)-1;*(s32*)(wp+0x1F68)=*(s32*)(wp+0x1F60);*(s32*)(wp+0x1F6C)=*(s32*)(wp+0x1F68)+_get_ok_frame_range(*(s32*)(wp+0x1F78))-1;*(s32*)(wp+0x1C9C)=1000;}else{(*(s16*)(wp+0x1D18))--;*(s32*)(wp+0x1CB8)=2;*(s32*)(wp+0x1C9C)=1002;done=1;}break;
+        case 1000:
+            *(s32*)(wp+0x1F74)=(*(s32*)(wp+0x1F58)+1)**(s32*)(wp+0x1CD0)-1;(*(s32*)(wp+0x1F58))++;psndSFXOn(*(s32*)(wp+0x1F58)<*(s32*)(wp+0x1CE0)+1?str_SFX_AC_PI1_802ff780:str_SFX_AC_PONE1_802ff78c);*(s32*)(wp+0x1F70)=0;*(s32*)(wp+0x1C9C)=1001;break;
+        case 1001:
+            (*(s32*)(wp+0x1F5C))++;frame=*(s32*)(wp+0x1F5C);start=*(s32*)(wp+0x1F68);end=*(s32*)(wp+0x1F6C);valid=(frame>=start&&frame<=end&&*(s32*)(wp+0x1F70)==0);*(s32*)(wp+0x1F7C)=valid;
+            trig=BattlePadCheckTrigger(*(u32*)(wp+0x1F80));if(trig&&valid){*(s32*)(wp+0x1F70)=1;(*(s32*)extra)++;*(s32*)(wp+0x1CEC)=1;psndSFXOn(str_SFX_AC_COMMAND_OK1_802ff79c);}else if(frame>end&&*(s32*)(wp+0x1F70)==0){*(s32*)(wp+0x1F70)=1;*(s32*)(wp+0x1CEC)=-1;psndSFXOn(str_SFX_AC_COMMAND_NG1_802ff7b0);}
+            if(*(s32*)(wp+0x1F70)&&*(s32*)(wp+0x1F54)<*(s32*)(wp+0x1CC8)+*(s32*)(wp+0x1CE0)){(*(s32*)(wp+0x1F54))++;frame=*(s32*)(wp+0x1F54);*(s32*)(wp+0x1F68)=frame**(s32*)(wp+0x1CD0);*(s32*)(wp+0x1F6C)=*(s32*)(wp+0x1F68)+_get_ok_frame_range(*(s32*)(wp+0x1F78))-1;*(s32*)(wp+0x1F70)=0;}
+            if(*(s32*)(wp+0x1F58)**(s32*)(wp+0x1CD0)<=frame){*(s32*)(wp+0x1C9C)=1000;}break;
+        case 1002:*(s32*)(wp+0x1C9C)=1003;break;
+        case 1003:*(u32*)(wp+0x1CC0)|=1;*(s32*)(wp+0x1F7C)=0;*(s32*)(wp+0x1FA0)=60;*(s32*)(wp+0x1C9C)=1005;break;
+        case 1005:if(--*(s32*)(wp+0x1FA0)<1)*(s32*)(wp+0x1C9C)=1006;break;
+        case 1006:*(s32*)(wp+0x1CA0)=0;*(s32*)(wp+0x1CA8)=0;*(s32*)(wp+0x1CA4)=0;*(s32*)(wp+0x1CAC)=0;break;
+        }
+        if(!done)return 1;
+    }while(1);
+}
+
+s32 battleAcResult_SignalTiming(void* wp) {
+    return *(s32*)((s32)wp + 0x1CB8);
 }
 
 #pragma no_register_save_helpers on
@@ -91,6 +119,10 @@ void battleAcDisp_SignalTiming(void* camera, void* wp) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+
+void battleAcDelete_SignalTiming(void* wp) {
+    *(s32*)((s32)wp + 0x1C9C) = 1004;
+}
 
 /* CHATGPT STUB FILL: main/action/ac_signal_timing 20260624_184823 */
 
@@ -200,37 +232,5 @@ void actionCommandDisp(f32 x, f32 y) {
                        BattleACGetButtonIcon(buttons[i], pressed));
         }
     }
-}
-
-/* stub-fill: battleAcMain_SignalTiming | missing_definition | ghidra_signature */
-s32 battleAcMain_SignalTiming(int work) {
-    extern void* memset(void*,s32,u32);extern s32 BattleActionCommandGetDifficulty(void*);extern s32 BattlePadCheckTrigger(u32);extern s32 BattlePadGetTrigger(void);extern s32 irand(s32);extern s32 _get_ok_frame_range(s32);extern void psndSFXOn(char*);
-    extern char str_SFX_AC_COMMAND_NG1_802ff7b0[];extern char str_SFX_AC_COMMAND_OK1_802ff79c[];extern char str_SFX_AC_PI1_802ff780[];extern char str_SFX_AC_PONE1_802ff78c[];
-    u8* wp=(u8*)work;u8* extra=wp+0x1F4C;s32 state;u32 trig;s32 valid;s32 frame;s32 start;s32 end;s32 i;s32 button;s32 done=0;
-    do{
-        state=*(s32*)(wp+0x1C9C);
-        switch(state){
-        case 0:
-            *(s32*)(wp+0x1CB8)=1;memset(wp+0x1F20,0,0x2C);*(f32*)(wp+0x1F34)=-300.0f;*(f32*)(wp+0x1F38)=0.0f;*(s32*)(wp+0x1F40)=0x14;
-            *(s32*)(extra+0)=0;*(s32*)(wp+0x1F50)=0;*(s32*)(wp+0x1F5C)=0;*(s32*)(wp+0x1F54)=0;*(s32*)(wp+0x1F58)=0;*(s32*)(wp+0x1F78)=BattleActionCommandGetDifficulty(wp);*(s32*)(wp+0x1F7C)=0;*(s32*)(wp+0x1CEC)=0;
-            for(i=0;i<5;i++)extra[0x4C+i]=0;
-            if(*(s32*)(wp+0x1CD8)>0&&*(s32*)(wp+0x1CD8)<3){for(i=0;i<*(s32*)(wp+0x1CC8);i++){button=irand(4);*(s32*)(extra+0x38+i*4)=button;}}else{for(i=0;i<*(s32*)(wp+0x1CC8);i++)*(s32*)(extra+0x38+i*4)=0x100;}
-            *(s32*)(wp+0x1F80)=*(s32*)(wp+0x1F84);*(s32*)(wp+0x1C9C)=99;break;
-        case 99:
-            if(*(s16*)(wp+0x1D18)<1){frame=*(s32*)(wp+0x1F54);*(s32*)(wp+0x1F60)=frame**(s32*)(wp+0x1CD0);*(s32*)(wp+0x1F64)=(frame+1)**(s32*)(wp+0x1CD0)-1;*(s32*)(wp+0x1F68)=*(s32*)(wp+0x1F60);*(s32*)(wp+0x1F6C)=*(s32*)(wp+0x1F68)+_get_ok_frame_range(*(s32*)(wp+0x1F78))-1;*(s32*)(wp+0x1C9C)=1000;}else{(*(s16*)(wp+0x1D18))--;*(s32*)(wp+0x1CB8)=2;*(s32*)(wp+0x1C9C)=1002;done=1;}break;
-        case 1000:
-            *(s32*)(wp+0x1F74)=(*(s32*)(wp+0x1F58)+1)**(s32*)(wp+0x1CD0)-1;(*(s32*)(wp+0x1F58))++;psndSFXOn(*(s32*)(wp+0x1F58)<*(s32*)(wp+0x1CE0)+1?str_SFX_AC_PI1_802ff780:str_SFX_AC_PONE1_802ff78c);*(s32*)(wp+0x1F70)=0;*(s32*)(wp+0x1C9C)=1001;break;
-        case 1001:
-            (*(s32*)(wp+0x1F5C))++;frame=*(s32*)(wp+0x1F5C);start=*(s32*)(wp+0x1F68);end=*(s32*)(wp+0x1F6C);valid=(frame>=start&&frame<=end&&*(s32*)(wp+0x1F70)==0);*(s32*)(wp+0x1F7C)=valid;
-            trig=BattlePadCheckTrigger(*(u32*)(wp+0x1F80));if(trig&&valid){*(s32*)(wp+0x1F70)=1;(*(s32*)extra)++;*(s32*)(wp+0x1CEC)=1;psndSFXOn(str_SFX_AC_COMMAND_OK1_802ff79c);}else if(frame>end&&*(s32*)(wp+0x1F70)==0){*(s32*)(wp+0x1F70)=1;*(s32*)(wp+0x1CEC)=-1;psndSFXOn(str_SFX_AC_COMMAND_NG1_802ff7b0);}
-            if(*(s32*)(wp+0x1F70)&&*(s32*)(wp+0x1F54)<*(s32*)(wp+0x1CC8)+*(s32*)(wp+0x1CE0)){(*(s32*)(wp+0x1F54))++;frame=*(s32*)(wp+0x1F54);*(s32*)(wp+0x1F68)=frame**(s32*)(wp+0x1CD0);*(s32*)(wp+0x1F6C)=*(s32*)(wp+0x1F68)+_get_ok_frame_range(*(s32*)(wp+0x1F78))-1;*(s32*)(wp+0x1F70)=0;}
-            if(*(s32*)(wp+0x1F58)**(s32*)(wp+0x1CD0)<=frame){*(s32*)(wp+0x1C9C)=1000;}break;
-        case 1002:*(s32*)(wp+0x1C9C)=1003;break;
-        case 1003:*(u32*)(wp+0x1CC0)|=1;*(s32*)(wp+0x1F7C)=0;*(s32*)(wp+0x1FA0)=60;*(s32*)(wp+0x1C9C)=1005;break;
-        case 1005:if(--*(s32*)(wp+0x1FA0)<1)*(s32*)(wp+0x1C9C)=1006;break;
-        case 1006:*(s32*)(wp+0x1CA0)=0;*(s32*)(wp+0x1CA8)=0;*(s32*)(wp+0x1CA4)=0;*(s32*)(wp+0x1CAC)=0;break;
-        }
-        if(!done)return 1;
-    }while(1);
 }
 

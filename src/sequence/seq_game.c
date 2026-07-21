@@ -23,8 +23,10 @@ typedef struct SeqGameVecRaw {
 
 static u64 none_key;
 
-void seq_gameExit(void) {
-    *(u32*)gp &= ~2;
+void seq_gameInit(void) {
+    none_key = OSGetTime();
+
+    *(u32*)(gp + 0x18) &= ~0x10;
 }
 
 void seq_gameMain(void* seq) {
@@ -80,8 +82,6 @@ void seq_gameMain(void* seq) {
     }
 }
 
-void seq_gameInit(void) {
-    none_key = OSGetTime();
-
-    *(u32*)(gp + 0x18) &= ~0x10;
+void seq_gameExit(void) {
+    *(u32*)gp &= ~2;
 }

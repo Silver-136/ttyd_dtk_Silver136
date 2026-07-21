@@ -1,81 +1,5 @@
 #include "effect/eff_hibashira.h"
 
-
-/* CHATGPT STUB FILL: main/effect/eff_hibashira 20260624_184929 */
-
-/* stub-fill: effHibashiraDisp | missing_definition | ghidra_signature */
-void effHibashiraDisp(s32 cameraId, void* entry) {
-    typedef f32 Mtx[3][4];
-    extern void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
-    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
-    extern void PSMTXRotRad(Mtx m, s8 axis, f32 rad);
-    extern void PSMTXConcat(Mtx a, Mtx b, Mtx out);
-    extern void* camGetPtr(s32 cameraId);
-    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
-    extern void animPoseSetMaterialEvtColor(s32 poseId, void* color);
-    extern void animPoseMain(s32 poseId);
-    extern void animPoseDrawMtx(s32 poseId, Mtx matrix, f32 arg2, s32 pass, f32 arg4);
-    extern u32 dat_804288e0;
-    extern f32 float_deg2rad_804288e4;
-    extern f32 float_0_804288e8;
-    extern f32 float_10_804288ec;
-
-    u32 tempColor;
-    u32 color;
-    Mtx baseTrans;
-    Mtx baseScale;
-    Mtx rot;
-    Mtx baseMtx;
-    void* work;
-    void* child;
-    void* cam;
-    f32 scale;
-    f32 angle;
-    f32 deg;
-    s32 i;
-    s32 pose;
-    s32 baseAlpha;
-    s32 alpha;
-
-    work = *(void**)((s32)entry + 0xC);
-    baseAlpha = *(s32*)((s32)work + 0x18);
-    PSMTXTrans(baseTrans, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
-    scale = *(f32*)((s32)work + 0x10);
-    PSMTXScale(baseScale, scale, scale, scale);
-    cam = camGetPtr(cameraId);
-    angle = *(f32*)((s32)cam + 0x114);
-    angle = -angle;
-    deg = float_deg2rad_804288e4;
-    PSMTXRotRad(rot, 0x79, deg * angle);
-    PSMTXConcat(baseTrans, rot, baseTrans);
-    PSMTXConcat(baseTrans, baseScale, baseMtx);
-
-    i = 1;
-    child = (void*)((s32)work + 0x28);
-    while (i < *(s32*)((s32)entry + 8)) {
-        pose = *(s32*)((s32)child + 0x14);
-        if (pose != -1) {
-            PSMTXTrans(baseTrans, *(f32*)((s32)child + 4), *(f32*)((s32)child + 8), *(f32*)((s32)child + 0xC));
-            scale = *(f32*)((s32)child + 0x10);
-            PSMTXScale(baseScale, scale, scale, scale);
-            PSMTXConcat(baseTrans, baseScale, baseTrans);
-            PSMTXConcat(baseMtx, baseTrans, baseTrans);
-            animPoseSetMaterialFlagOn(pose, 0x40);
-            alpha = (*(s32*)((s32)child + 0x18) * baseAlpha) / 0xFF;
-            tempColor = dat_804288e0;
-            ((u8*)&tempColor)[3] = (u8)alpha;
-            color = tempColor;
-            animPoseSetMaterialEvtColor(pose, &color);
-            animPoseMain(pose);
-            animPoseDrawMtx(pose, baseTrans, float_0_804288e8, 1, float_10_804288ec);
-            animPoseDrawMtx(pose, baseTrans, float_0_804288e8, 2, float_10_804288ec);
-            animPoseDrawMtx(pose, baseTrans, float_0_804288e8, 3, float_10_804288ec);
-        }
-        i++;
-        child = (void*)((s32)child + 0x28);
-    }
-}
-
 /* CHATGPT STUB FILL: main/effect/eff_hibashira 20260624_184929 */
 
 /* stub-fill: effHibashiraEntry | missing_definition | ghidra_signature */
@@ -283,5 +207,81 @@ void effHibashiraMain(void* entry) {
     }
 
     dispEntry(4, 2, effHibashiraDisp, entry, dispCalcZ(dispPos));
+}
+
+
+/* CHATGPT STUB FILL: main/effect/eff_hibashira 20260624_184929 */
+
+/* stub-fill: effHibashiraDisp | missing_definition | ghidra_signature */
+void effHibashiraDisp(s32 cameraId, void* entry) {
+    typedef f32 Mtx[3][4];
+    extern void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(Mtx m, s8 axis, f32 rad);
+    extern void PSMTXConcat(Mtx a, Mtx b, Mtx out);
+    extern void* camGetPtr(s32 cameraId);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
+    extern void animPoseSetMaterialEvtColor(s32 poseId, void* color);
+    extern void animPoseMain(s32 poseId);
+    extern void animPoseDrawMtx(s32 poseId, Mtx matrix, f32 arg2, s32 pass, f32 arg4);
+    extern u32 dat_804288e0;
+    extern f32 float_deg2rad_804288e4;
+    extern f32 float_0_804288e8;
+    extern f32 float_10_804288ec;
+
+    u32 tempColor;
+    u32 color;
+    Mtx baseTrans;
+    Mtx baseScale;
+    Mtx rot;
+    Mtx baseMtx;
+    void* work;
+    void* child;
+    void* cam;
+    f32 scale;
+    f32 angle;
+    f32 deg;
+    s32 i;
+    s32 pose;
+    s32 baseAlpha;
+    s32 alpha;
+
+    work = *(void**)((s32)entry + 0xC);
+    baseAlpha = *(s32*)((s32)work + 0x18);
+    PSMTXTrans(baseTrans, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
+    scale = *(f32*)((s32)work + 0x10);
+    PSMTXScale(baseScale, scale, scale, scale);
+    cam = camGetPtr(cameraId);
+    angle = *(f32*)((s32)cam + 0x114);
+    angle = -angle;
+    deg = float_deg2rad_804288e4;
+    PSMTXRotRad(rot, 0x79, deg * angle);
+    PSMTXConcat(baseTrans, rot, baseTrans);
+    PSMTXConcat(baseTrans, baseScale, baseMtx);
+
+    i = 1;
+    child = (void*)((s32)work + 0x28);
+    while (i < *(s32*)((s32)entry + 8)) {
+        pose = *(s32*)((s32)child + 0x14);
+        if (pose != -1) {
+            PSMTXTrans(baseTrans, *(f32*)((s32)child + 4), *(f32*)((s32)child + 8), *(f32*)((s32)child + 0xC));
+            scale = *(f32*)((s32)child + 0x10);
+            PSMTXScale(baseScale, scale, scale, scale);
+            PSMTXConcat(baseTrans, baseScale, baseTrans);
+            PSMTXConcat(baseMtx, baseTrans, baseTrans);
+            animPoseSetMaterialFlagOn(pose, 0x40);
+            alpha = (*(s32*)((s32)child + 0x18) * baseAlpha) / 0xFF;
+            tempColor = dat_804288e0;
+            ((u8*)&tempColor)[3] = (u8)alpha;
+            color = tempColor;
+            animPoseSetMaterialEvtColor(pose, &color);
+            animPoseMain(pose);
+            animPoseDrawMtx(pose, baseTrans, float_0_804288e8, 1, float_10_804288ec);
+            animPoseDrawMtx(pose, baseTrans, float_0_804288e8, 2, float_10_804288ec);
+            animPoseDrawMtx(pose, baseTrans, float_0_804288e8, 3, float_10_804288ec);
+        }
+        i++;
+        child = (void*)((s32)child + 0x28);
+    }
 }
 

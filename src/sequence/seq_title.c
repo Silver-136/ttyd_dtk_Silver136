@@ -129,408 +129,117 @@ extern void FontDrawEdge(void);
 extern void FontDrawColor(void* color);
 extern void FontDrawScale(f32 scale);
 extern void FontDrawString(f32 x, f32 y, s32 str);
+void disp1(s32 cameraId);
+void disp2(s32 cameraId);
+void titleMain(void* seq);
+void pressStartGX(u8 alpha, f32 x, f32 y);
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
-void pressStartGX_80008888(u8 alpha, f32 x, f32 y) {
-    void* cam;
-    u8 tex0[0x20];
-    u8 tex1[0x20];
-    f32 workMtx[3][4];
-    f32 scaleMtx[3][4];
-    u32 color;
-    u32 colorTemp;
-    s32 work;
-    s32 texData;
-    s32 language;
-    u16 height;
-    u16 width;
-    f32 h;
-    f32 w;
-
-    cam = camGetCurPtr();
-
-    work = *(s32*)wp2;
-    language = *(s32*)(gp + 0x16C);
-    texData = *(s32*)(work + 0xA0);
-    TEXGetGXTexObjFromPalette(*(s32*)texData, &tex0, language + 0xF);
-    GXLoadTexObj(&tex0, 0);
-
-    work = *(s32*)wp2;
-    texData = *(s32*)(work + 0xA0);
-    TEXGetGXTexObjFromPalette(*(s32*)texData, &tex1, 6);
-    GXLoadTexObj(&tex1, 1);
-
-    GXSetNumTevStages(2);
-
-    GXSetTevOrder(0, 0, 0, 0xFF);
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 8);
-    GXSetTevAlphaIn(0, 7, 7, 7, 4);
-
-    GXSetTevOrder(1, 1, 1, 0xFF);
-    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(1, 0xF, 0, 8, 0xF);
-    GXSetTevAlphaIn(1, 7, 0, 1, 7);
-
-    colorTemp = unk_80429508;
-    *((u8*)&colorTemp + 3) = alpha;
-    color = colorTemp;
-    GXSetTevColor(1, &color);
-
-    GXSetNumChans(0);
-    GXSetNumTexGens(2);
-
-    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
-    GXSetTexCoordGen2(1, 1, 4, 0x1E, 0, 0x7D);
-
-    PSMTXScale(scaleMtx, float_1_8041f594, float_1_8041f594, float_1_8041f594);
-
-    PSMTXTrans(
-        workMtx,
-        (f32)*(s32*)(wp2 + 0x2C) / float_neg200_8041f598,
-        float_0_8041f59c,
-        float_0_8041f59c
-    );
-
-    PSMTXConcat(scaleMtx, workMtx, workMtx);
-    GXLoadTexMtxImm(workMtx, 0x1E, 1);
-
-    GXSetBlendMode(1, 4, 5, 0);
-    GXSetZCompLoc(1);
-    GXSetAlphaCompare(7, 0, 0, 7, 0);
-    GXSetZMode(0, 3, 0);
-    GXSetCullMode(0);
-
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 1);
-    GXSetVtxDesc(0xD, 1);
-    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
-    GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
-
-    PSMTXTrans(workMtx, x, y, float_0_8041f59c);
-
-    height = GXGetTexObjHeight(&tex0);
-    h = (f32)height;
-
-    width = GXGetTexObjWidth(&tex0);
-    w = (f32)width;
-
-    PSMTXScale(scaleMtx, w, h, float_1_8041f594);
-    PSMTXConcat(workMtx, scaleMtx, workMtx);
-    PSMTXConcat((void*)((s32)cam + 0x11C), workMtx, workMtx);
-
-    GXLoadPosMtxImm(workMtx, 0);
-    GXSetCurrentMtx(0);
-
-    GXBegin(0x80, 0, 4);
-
-    FIFO_F32 = READ_F32(float_neg0p5_8041f5a0);
-    FIFO_F32 = READ_F32(float_neg0p5_8041f5a0);
-    FIFO_F32 = READ_F32(float_0_8041f59c);
-    FIFO_F32 = READ_F32(float_0_8041f59c);
-    FIFO_F32 = READ_F32(float_1_8041f594);
-
-    FIFO_F32 = READ_F32(float_0p5_8041f5a4);
-    FIFO_F32 = READ_F32(float_neg0p5_8041f5a0);
-    FIFO_F32 = READ_F32(float_0_8041f59c);
-    FIFO_F32 = READ_F32(float_1_8041f594);
-    FIFO_F32 = READ_F32(float_1_8041f594);
-
-    FIFO_F32 = READ_F32(float_0p5_8041f5a4);
-    FIFO_F32 = READ_F32(float_0p5_8041f5a4);
-    FIFO_F32 = READ_F32(float_0_8041f59c);
-    FIFO_F32 = READ_F32(float_1_8041f594);
-    FIFO_F32 = READ_F32(float_0_8041f59c);
-
-    FIFO_F32 = READ_F32(float_neg0p5_8041f5a0);
-    FIFO_F32 = READ_F32(float_0p5_8041f5a4);
-    FIFO_F32 = READ_F32(float_0_8041f59c);
-    FIFO_F32 = READ_F32(float_0_8041f59c);
-    FIFO_F32 = READ_F32(float_0_8041f59c);
-
-    GXSetTevSwapModeTable(1, 0, 1, 2, 3);
+void* DbgBtlSel_GetMsgDataPtr(void) {
+    return 0;
 }
 
-#pragma use_lmw_stmw reset
-#pragma no_register_save_helpers reset
+void seq_titleInit(void) {
+    L_titleInit();
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+    *(u32*)gp &= ~0x2;
+    *(u32*)gp &= ~0x40;
+    *(u32*)gp &= ~0x20;
+    *(u32*)gp &= ~0x1000;
+}
+void seq_titleExit(void) {
+    fileFree(*(void**)wp2);
 
-void disp2(s32 cameraId) {
-    void* cam8;
-    void* cam;
-    void* camAgain;
-    s32 i;
-    u32 camBackup[0x9C];
-    f32 projBackup[6];
-    f32 viewportBackup[6];
+    if (seqGetNextSeq() != 6) {
+        psndStopAllFadeOut();
+    }
+}
+
+void seq_titleMain(void* seq) {
+    titleMain(seq);
+}
+
+s32 N_getDebugMode(void) {
+    return *(s32*)(wp2 + 0x30);
+}
+
+void L_titleInit(void) {
     u32* vec;
-    u32 msgTbl[6];
-    u32 color1;
-    u32 color2;
-    u32 fontColor;
-    u32 size1[3];
-    u32 basePos1[3];
-    u32 pos1[3];
-    u32 size2[3];
-    u32 basePos2[3];
-    u32 pos2[3];
-    s32 lang;
-    s32 counter;
-    s32 alpha;
-    f64 angle;
-    f64 sineValue;
-    f32 sineF;
-    u32* copySrc;
-    u32* copyDst;
-    u32 copyA;
-    u32 copyB;
-    s32 copyCount;
-    u32* vecMsg;
+    s32 root;
+    s32 prev;
+    s32 bgmSlot;
+    u16* soundTable;
+    void* cam;
+
     vec = vec3_802bf3f8;
-    cam8 = camGetPtr(8);
-    vecMsg = vec;
 
-    msgTbl[0] = vecMsg[6];
-    msgTbl[1] = vecMsg[7];
-    msgTbl[2] = vecMsg[8];
-    msgTbl[3] = vecMsg[9];
-    msgTbl[4] = vecMsg[10];
-    msgTbl[5] = vecMsg[11];
+    memset((void*)wp2, 0, 0x34);
 
-    cam = camGetPtr(cameraId);
-    copySrc = (u32*)((s32)cam - 4);
-    copyDst = (u32*)((s32)&camBackup[4] - 4);
-    for (i = 0; i < 0x4C; i++) {
-        copyA = copySrc[1];
-        copySrc += 2;
-        copyB = copySrc[0];
-        copyDst[1] = copyA;
-        copyDst += 2;
-        copyDst[0] = copyB;
-    };
+    root = getMarioStDvdRoot();
+    *(void**)wp2 = fileAllocf(4, (void*)((s32)vec + 0x10C), root);
 
-    camAgain = camGetPtr(cameraId);
-    copySrc = (u32*)((s32)cam8 - 4);
-    copyDst = (u32*)((s32)camAgain - 4);
-    for (i = 0; i < 0x4C; i++) {
-        copyA = copySrc[1];
-        copySrc += 2;
-        copyB = copySrc[0];
-        copyDst[1] = copyA;
-        copyDst += 2;
-        copyDst[0] = copyB;
-    }
+    *(f32*)(wp2 + 0x0C) = float_0_8041f59c;
+    *(f32*)(wp2 + 0x10) = float_1000_8041f5e4;
+    *(f32*)(wp2 + 0x14) = float_0_8041f59c;
+    *(f32*)(wp2 + 0x18) = float_neg1000_8041f5e8;
+    *(f32*)(wp2 + 0x1C) = float_0_8041f59c;
+    *(s32*)(wp2 + 0x30) = 0;
 
-    GXGetProjectionv(projBackup);
-    GXGetViewportv(viewportBackup);
-
-    GXSetProjection((void*)((s32)cam8 + 0x15C), *(s32*)((s32)cam8 + 0x19C));
-    GXSetViewport(
-        *(f32*)((s32)cam8 + 0xFC),
-        *(f32*)((s32)cam8 + 0x100),
-        *(f32*)((s32)cam8 + 0x104),
-        *(f32*)((s32)cam8 + 0x108),
-        *(f32*)((s32)cam8 + 0x10C),
-        *(f32*)((s32)cam8 + 0x110)
-    );
-
-    winTexInit(**(s32**)(*(s32*)wp2 + 0xA0));
-
-    color1 = dat_8041f588;
-
-    size1[0] = vec[15];
-    size1[1] = vec[16];
-    size1[2] = vec[17];
-
-    basePos1[0] = vec[12];
-    basePos1[1] = vec[13];
-    basePos1[2] = vec[14];
-
-    basePos1[0] = *(u32*)(wp2 + 0xC);
-    basePos1[1] = *(u32*)(wp2 + 0x10);
-    *(f32*)&basePos1[1] = *(f32*)&basePos1[1] - float_20_8041f5a8;
-
-    pos1[0] = basePos1[0];
-    pos1[1] = basePos1[1];
-    pos1[2] = basePos1[2];
-
-    lang = *(s32*)(gp + 0x16C);
-    unk_8017c9bc(msgTbl[lang], pos1, size1, &color1);
-
-    color2 = dat_8041f58c;
-
-    size2[0] = vec[21];
-    size2[1] = vec[22];
-    size2[2] = vec[23];
-
-    basePos2[0] = vec[18];
-    basePos2[1] = vec[19];
-    basePos2[2] = vec[20];
-
-    basePos2[0] = *(u32*)(wp2 + 0x14);
-    basePos2[1] = *(u32*)(wp2 + 0x18);
-
-    pos2[0] = basePos2[0];
-    pos2[1] = basePos2[1];
-    pos2[2] = basePos2[2];
-
-    winTexSet(*(s32*)(gp + 0x16C) + 9, pos2, size2, &color2);
-
-    *(s32*)(wp2 + 0x2C) = *(s32*)(wp2 + 0x2C) + 1;
-    counter = *(s32*)(wp2 + 0x2C);
-
-    angle = (f64)((float_6p2832_8041f5ac * (f32)counter) / float_120_8041f5b0);
-    sineValue = sin(angle);
-    sineF = (f32)sineValue;
-
-    alpha = (s32)(*(f32*)(wp2 + 0x1C) * float_459_8041f5b4 * sineF);
-
-    if (alpha < 0) {
-        alpha = 0;
-    }
-
-    if (alpha > 0xFF) {
-        alpha = 0xFF;
-    }
-
-    pressStartGX_80008888(alpha, float_0_8041f59c, float_neg122_8041f5b8);
-
-    if (*(s32*)(wp2 + 0x30) < 0) {
-        if ((keyGetButton(0) & 0x10) != 0) {
-            FontDrawStart();
-            FontDrawEdge();
-
-            fontColor = dat_8041f590;
-            FontDrawColor(&fontColor);
-
-            FontDrawScale(float_0p8_8041f5bc);
-            FontDrawString(float_60_8041f5c0, float_220_8041f5c4, dat_ptr_80414f20);
-            FontDrawString(float_200_8041f5c8, float_220_8041f5c4, dat_ptr_80414f24);
+    prev = seqGetPrevSeq();
+    if (prev == 6) {
+        psndSFXAllOff();
+    } else {
+        prev = seqGetPrevSeq();
+        if (prev != 0) {
+            prev = seqGetPrevSeq();
+            if (prev == 3) {
+                psndBGMOff_f_d(0x200, 0xBB8, 0);
+                psndBGMOff_f_d(0x201, 0xBB8, 0);
+                psndSFXAllOff();
+            } else {
+                prev = seqGetPrevSeq();
+                if (prev == 5) {
+                    psndStopAllFadeOut();
+                }
+            }
         }
     }
 
-    cam = camGetPtr(cameraId);
-    for (i = 0; i < 0x98; i++) {
-        ((u32*)cam)[i] = camBackup[i];
+    prev = seqGetPrevSeq();
+    if (prev != 6) {
+        prev = seqGetPrevSeq();
+        if (prev == 5) {
+            if (OSGetSoundMode() == 0) {
+                SoundSetOutputMode(0);
+            } else {
+                SoundSetOutputMode(1);
+            }
+
+            psndBGMOn(0x200, (void*)((s32)vec + 0x11C));
+
+            bgmSlot = *(s32*)((s32)psbgm + 0x4);
+            if ((u32)(bgmSlot + 0x10000) != 0xFFFF) {
+                soundTable = *(u16**)((s32)sound + 0x100);
+                *(u16*)((s32)soundTable + bgmSlot * 0x138) =
+                    *(u16*)((s32)soundTable + bgmSlot * 0x138) | 0x8000;
+            }
+        } else {
+            psndBGMOn(0x200, (void*)((s32)vec + 0x128));
+
+            bgmSlot = *(s32*)((s32)psbgm + 0x4);
+            if ((u32)(bgmSlot + 0x10000) != 0xFFFF) {
+                soundTable = *(u16**)((s32)sound + 0x100);
+                *(u16*)((s32)soundTable + bgmSlot * 0x138) =
+                    *(u16*)((s32)soundTable + bgmSlot * 0x138) | 0x8000;
+            }
+        }
     }
 
-    GXSetProjectionv(projBackup);
-    GXSetViewport(
-        viewportBackup[0],
-        viewportBackup[1],
-        viewportBackup[2],
-        viewportBackup[3],
-        viewportBackup[4],
-        viewportBackup[5]
-    );
+    cam = camGetPtr(8);
+    *(u16*)cam &= ~0x100;
+
+    cam = camGetPtr(8);
+    *(u16*)cam |= 0x400;
 }
-
-#pragma use_lmw_stmw reset
-#pragma no_register_save_helpers reset
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void disp1(s32 cameraId) {
-    void* cam8;
-    void* cam;
-    u32 camBackup[0x98];
-    f32 projBackup[6];
-    f32 viewportBackup[6];
-
-    u32 color;
-    u32 pos[3];
-    u32 size[3];
-
-    u32* copySrc;
-    u32* copyDst;
-    u32 copyA;
-    u32 copyB;
-    s32 i;
-
-    cam8 = camGetPtr(8);
-
-    cam = camGetPtr(cameraId);
-    copySrc = (u32*)((s32)cam - 4);
-    copyDst = (u32*)((s32)camBackup - 4);
-    for (i = 0; i < 0x4C; i++) {
-        copyA = copySrc[1];
-        copySrc += 2;
-        copyB = copySrc[0];
-        copyDst[1] = copyA;
-        copyDst += 2;
-        copyDst[0] = copyB;
-    }
-
-    cam = camGetPtr(cameraId);
-    copySrc = (u32*)((s32)cam8 - 4);
-    copyDst = (u32*)((s32)cam - 4);
-    for (i = 0; i < 0x4C; i++) {
-        copyA = copySrc[1];
-        copySrc += 2;
-        copyB = copySrc[0];
-        copyDst[1] = copyA;
-        copyDst += 2;
-        copyDst[0] = copyB;
-    }
-
-    GXGetProjectionv(projBackup);
-    GXGetViewportv(viewportBackup);
-
-    GXSetProjection((void*)((s32)cam8 + 0x15C), *(s32*)((s32)cam8 + 0x19C));
-    GXSetViewport(
-        *(f32*)((s32)cam8 + 0xFC),
-        *(f32*)((s32)cam8 + 0x100),
-        *(f32*)((s32)cam8 + 0x104),
-        *(f32*)((s32)cam8 + 0x108),
-        *(f32*)((s32)cam8 + 0x10C),
-        *(f32*)((s32)cam8 + 0x110)
-    );
-
-    winTexInit(**(s32**)(*(s32*)wp2 + 0xA0));
-
-    color = dat_8041f584;
-
-    size[0] = vec3_802bf404[0];
-    size[1] = vec3_802bf404[1];
-    size[2] = vec3_802bf404[2];
-
-    pos[0] = vec3_802bf3f8[0];
-    pos[1] = vec3_802bf3f8[1];
-    pos[2] = vec3_802bf3f8[2];
-
-    winTexSet(5, pos, size, &color);
-
-    cam = camGetPtr(cameraId);
-    copySrc = (u32*)((s32)camBackup - 4);
-    copyDst = (u32*)((s32)cam - 4);
-    for (i = 0; i < 0x4C; i++) {
-        copyA = copySrc[1];
-        copySrc += 2;
-        copyB = copySrc[0];
-        copyDst[1] = copyA;
-        copyDst += 2;
-        copyDst[0] = copyB;
-    }
-
-    GXSetProjectionv(projBackup);
-    GXSetViewport(
-        viewportBackup[0],
-        viewportBackup[1],
-        viewportBackup[2],
-        viewportBackup[3],
-        viewportBackup[4],
-        viewportBackup[5]
-    );
-}
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
@@ -891,113 +600,280 @@ void titleMain(void* seq) {
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
-void seq_titleExit(void) {
-    fileFree(*(void**)wp2);
-
-    if (seqGetNextSeq() != 6) {
-        psndStopAllFadeOut();
-    }
-}
-
-void seq_titleInit(void) {
-    L_titleInit();
-
-    *(u32*)gp &= ~0x2;
-    *(u32*)gp &= ~0x40;
-    *(u32*)gp &= ~0x20;
-    *(u32*)gp &= ~0x1000;
-}
-
-void seq_titleMain(void* seq) {
-    titleMain(seq);
-}
-
-s32 N_getDebugMode(void) {
-    return *(s32*)(wp2 + 0x30);
-}
-
-void* DbgBtlSel_GetMsgDataPtr(void) {
-    return 0;
-}
-
-void L_titleInit(void) {
-    u32* vec;
-    s32 root;
-    s32 prev;
-    s32 bgmSlot;
-    u16* soundTable;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void disp1(s32 cameraId) {
+    void* cam8;
     void* cam;
+    u32 camBackup[0x98];
+    f32 projBackup[6];
+    f32 viewportBackup[6];
 
-    vec = vec3_802bf3f8;
+    u32 color;
+    u32 pos[3];
+    u32 size[3];
 
-    memset((void*)wp2, 0, 0x34);
+    u32* copySrc;
+    u32* copyDst;
+    u32 copyA;
+    u32 copyB;
+    s32 i;
 
-    root = getMarioStDvdRoot();
-    *(void**)wp2 = fileAllocf(4, (void*)((s32)vec + 0x10C), root);
+    cam8 = camGetPtr(8);
 
-    *(f32*)(wp2 + 0x0C) = float_0_8041f59c;
-    *(f32*)(wp2 + 0x10) = float_1000_8041f5e4;
-    *(f32*)(wp2 + 0x14) = float_0_8041f59c;
-    *(f32*)(wp2 + 0x18) = float_neg1000_8041f5e8;
-    *(f32*)(wp2 + 0x1C) = float_0_8041f59c;
-    *(s32*)(wp2 + 0x30) = 0;
-
-    prev = seqGetPrevSeq();
-    if (prev == 6) {
-        psndSFXAllOff();
-    } else {
-        prev = seqGetPrevSeq();
-        if (prev != 0) {
-            prev = seqGetPrevSeq();
-            if (prev == 3) {
-                psndBGMOff_f_d(0x200, 0xBB8, 0);
-                psndBGMOff_f_d(0x201, 0xBB8, 0);
-                psndSFXAllOff();
-            } else {
-                prev = seqGetPrevSeq();
-                if (prev == 5) {
-                    psndStopAllFadeOut();
-                }
-            }
-        }
+    cam = camGetPtr(cameraId);
+    copySrc = (u32*)((s32)cam - 4);
+    copyDst = (u32*)((s32)camBackup - 4);
+    for (i = 0; i < 0x4C; i++) {
+        copyA = copySrc[1];
+        copySrc += 2;
+        copyB = copySrc[0];
+        copyDst[1] = copyA;
+        copyDst += 2;
+        copyDst[0] = copyB;
     }
 
-    prev = seqGetPrevSeq();
-    if (prev != 6) {
-        prev = seqGetPrevSeq();
-        if (prev == 5) {
-            if (OSGetSoundMode() == 0) {
-                SoundSetOutputMode(0);
-            } else {
-                SoundSetOutputMode(1);
-            }
-
-            psndBGMOn(0x200, (void*)((s32)vec + 0x11C));
-
-            bgmSlot = *(s32*)((s32)psbgm + 0x4);
-            if ((u32)(bgmSlot + 0x10000) != 0xFFFF) {
-                soundTable = *(u16**)((s32)sound + 0x100);
-                *(u16*)((s32)soundTable + bgmSlot * 0x138) =
-                    *(u16*)((s32)soundTable + bgmSlot * 0x138) | 0x8000;
-            }
-        } else {
-            psndBGMOn(0x200, (void*)((s32)vec + 0x128));
-
-            bgmSlot = *(s32*)((s32)psbgm + 0x4);
-            if ((u32)(bgmSlot + 0x10000) != 0xFFFF) {
-                soundTable = *(u16**)((s32)sound + 0x100);
-                *(u16*)((s32)soundTable + bgmSlot * 0x138) =
-                    *(u16*)((s32)soundTable + bgmSlot * 0x138) | 0x8000;
-            }
-        }
+    cam = camGetPtr(cameraId);
+    copySrc = (u32*)((s32)cam8 - 4);
+    copyDst = (u32*)((s32)cam - 4);
+    for (i = 0; i < 0x4C; i++) {
+        copyA = copySrc[1];
+        copySrc += 2;
+        copyB = copySrc[0];
+        copyDst[1] = copyA;
+        copyDst += 2;
+        copyDst[0] = copyB;
     }
 
-    cam = camGetPtr(8);
-    *(u16*)cam &= ~0x100;
+    GXGetProjectionv(projBackup);
+    GXGetViewportv(viewportBackup);
 
-    cam = camGetPtr(8);
-    *(u16*)cam |= 0x400;
+    GXSetProjection((void*)((s32)cam8 + 0x15C), *(s32*)((s32)cam8 + 0x19C));
+    GXSetViewport(
+        *(f32*)((s32)cam8 + 0xFC),
+        *(f32*)((s32)cam8 + 0x100),
+        *(f32*)((s32)cam8 + 0x104),
+        *(f32*)((s32)cam8 + 0x108),
+        *(f32*)((s32)cam8 + 0x10C),
+        *(f32*)((s32)cam8 + 0x110)
+    );
+
+    winTexInit(**(s32**)(*(s32*)wp2 + 0xA0));
+
+    color = dat_8041f584;
+
+    size[0] = vec3_802bf404[0];
+    size[1] = vec3_802bf404[1];
+    size[2] = vec3_802bf404[2];
+
+    pos[0] = vec3_802bf3f8[0];
+    pos[1] = vec3_802bf3f8[1];
+    pos[2] = vec3_802bf3f8[2];
+
+    winTexSet(5, pos, size, &color);
+
+    cam = camGetPtr(cameraId);
+    copySrc = (u32*)((s32)camBackup - 4);
+    copyDst = (u32*)((s32)cam - 4);
+    for (i = 0; i < 0x4C; i++) {
+        copyA = copySrc[1];
+        copySrc += 2;
+        copyB = copySrc[0];
+        copyDst[1] = copyA;
+        copyDst += 2;
+        copyDst[0] = copyB;
+    }
+
+    GXSetProjectionv(projBackup);
+    GXSetViewport(
+        viewportBackup[0],
+        viewportBackup[1],
+        viewportBackup[2],
+        viewportBackup[3],
+        viewportBackup[4],
+        viewportBackup[5]
+    );
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+void disp2(s32 cameraId) {
+    void* cam8;
+    void* cam;
+    void* camAgain;
+    s32 i;
+    u32 camBackup[0x9C];
+    f32 projBackup[6];
+    f32 viewportBackup[6];
+    u32* vec;
+    u32 msgTbl[6];
+    u32 color1;
+    u32 color2;
+    u32 fontColor;
+    u32 size1[3];
+    u32 basePos1[3];
+    u32 pos1[3];
+    u32 size2[3];
+    u32 basePos2[3];
+    u32 pos2[3];
+    s32 lang;
+    s32 counter;
+    s32 alpha;
+    f64 angle;
+    f64 sineValue;
+    f32 sineF;
+    u32* copySrc;
+    u32* copyDst;
+    u32 copyA;
+    u32 copyB;
+    s32 copyCount;
+    u32* vecMsg;
+    vec = vec3_802bf3f8;
+    cam8 = camGetPtr(8);
+    vecMsg = vec;
+
+    msgTbl[0] = vecMsg[6];
+    msgTbl[1] = vecMsg[7];
+    msgTbl[2] = vecMsg[8];
+    msgTbl[3] = vecMsg[9];
+    msgTbl[4] = vecMsg[10];
+    msgTbl[5] = vecMsg[11];
+
+    cam = camGetPtr(cameraId);
+    copySrc = (u32*)((s32)cam - 4);
+    copyDst = (u32*)((s32)&camBackup[4] - 4);
+    for (i = 0; i < 0x4C; i++) {
+        copyA = copySrc[1];
+        copySrc += 2;
+        copyB = copySrc[0];
+        copyDst[1] = copyA;
+        copyDst += 2;
+        copyDst[0] = copyB;
+    };
+
+    camAgain = camGetPtr(cameraId);
+    copySrc = (u32*)((s32)cam8 - 4);
+    copyDst = (u32*)((s32)camAgain - 4);
+    for (i = 0; i < 0x4C; i++) {
+        copyA = copySrc[1];
+        copySrc += 2;
+        copyB = copySrc[0];
+        copyDst[1] = copyA;
+        copyDst += 2;
+        copyDst[0] = copyB;
+    }
+
+    GXGetProjectionv(projBackup);
+    GXGetViewportv(viewportBackup);
+
+    GXSetProjection((void*)((s32)cam8 + 0x15C), *(s32*)((s32)cam8 + 0x19C));
+    GXSetViewport(
+        *(f32*)((s32)cam8 + 0xFC),
+        *(f32*)((s32)cam8 + 0x100),
+        *(f32*)((s32)cam8 + 0x104),
+        *(f32*)((s32)cam8 + 0x108),
+        *(f32*)((s32)cam8 + 0x10C),
+        *(f32*)((s32)cam8 + 0x110)
+    );
+
+    winTexInit(**(s32**)(*(s32*)wp2 + 0xA0));
+
+    color1 = dat_8041f588;
+
+    size1[0] = vec[15];
+    size1[1] = vec[16];
+    size1[2] = vec[17];
+
+    basePos1[0] = vec[12];
+    basePos1[1] = vec[13];
+    basePos1[2] = vec[14];
+
+    basePos1[0] = *(u32*)(wp2 + 0xC);
+    basePos1[1] = *(u32*)(wp2 + 0x10);
+    *(f32*)&basePos1[1] = *(f32*)&basePos1[1] - float_20_8041f5a8;
+
+    pos1[0] = basePos1[0];
+    pos1[1] = basePos1[1];
+    pos1[2] = basePos1[2];
+
+    lang = *(s32*)(gp + 0x16C);
+    unk_8017c9bc(msgTbl[lang], pos1, size1, &color1);
+
+    color2 = dat_8041f58c;
+
+    size2[0] = vec[21];
+    size2[1] = vec[22];
+    size2[2] = vec[23];
+
+    basePos2[0] = vec[18];
+    basePos2[1] = vec[19];
+    basePos2[2] = vec[20];
+
+    basePos2[0] = *(u32*)(wp2 + 0x14);
+    basePos2[1] = *(u32*)(wp2 + 0x18);
+
+    pos2[0] = basePos2[0];
+    pos2[1] = basePos2[1];
+    pos2[2] = basePos2[2];
+
+    winTexSet(*(s32*)(gp + 0x16C) + 9, pos2, size2, &color2);
+
+    *(s32*)(wp2 + 0x2C) = *(s32*)(wp2 + 0x2C) + 1;
+    counter = *(s32*)(wp2 + 0x2C);
+
+    angle = (f64)((float_6p2832_8041f5ac * (f32)counter) / float_120_8041f5b0);
+    sineValue = sin(angle);
+    sineF = (f32)sineValue;
+
+    alpha = (s32)(*(f32*)(wp2 + 0x1C) * float_459_8041f5b4 * sineF);
+
+    if (alpha < 0) {
+        alpha = 0;
+    }
+
+    if (alpha > 0xFF) {
+        alpha = 0xFF;
+    }
+
+    pressStartGX(alpha, float_0_8041f59c, float_neg122_8041f5b8);
+
+    if (*(s32*)(wp2 + 0x30) < 0) {
+        if ((keyGetButton(0) & 0x10) != 0) {
+            FontDrawStart();
+            FontDrawEdge();
+
+            fontColor = dat_8041f590;
+            FontDrawColor(&fontColor);
+
+            FontDrawScale(float_0p8_8041f5bc);
+            FontDrawString(float_60_8041f5c0, float_220_8041f5c4, dat_ptr_80414f20);
+            FontDrawString(float_200_8041f5c8, float_220_8041f5c4, dat_ptr_80414f24);
+        }
+    }
+
+    cam = camGetPtr(cameraId);
+    for (i = 0; i < 0x98; i++) {
+        ((u32*)cam)[i] = camBackup[i];
+    }
+
+    GXSetProjectionv(projBackup);
+    GXSetViewport(
+        viewportBackup[0],
+        viewportBackup[1],
+        viewportBackup[2],
+        viewportBackup[3],
+        viewportBackup[4],
+        viewportBackup[5]
+    );
+}
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
 
 
 /* CHATGPT STUB FILL: main/sequence/seq_title 20260624_183901 */
@@ -1124,4 +1000,3 @@ void pressStartGX(u8 alpha, f32 x, f32 y) {
 
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
-

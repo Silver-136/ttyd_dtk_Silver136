@@ -25,11 +25,59 @@ typedef struct EffFreezeWork {
 void* effEntry(void);
 void* __memAlloc(s32 heap, s32 size);
 void* effSnowDustN64Entry(s32, s32, s32, f32, f32, f32, f32, f32, f32);
+void effFreezeMain(void* effect);
 
 extern char str_FreezeN64_802fafe8[];
 extern f32 float_10_80425388;
 extern f32 float_32_804253a8;
 extern f32 float_30_804253ac;
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void* effFreezeN64Entry(s32 type, s32 param2, f32 x, f32 y, f32 z, f32 scale) {
+    void* entry = effEntry();
+    EffFreezeWork* work;
+    s32 flags;
+    f32 ten;
+    f32 dustY;
+
+    *(char**)((s32)entry + 0x14) = str_FreezeN64_802fafe8;
+    *(s32*)((s32)entry + 0x8) = 1;
+    work = __memAlloc(3, 0x2C);
+    *(EffFreezeWork**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effFreezeMain;
+    flags = *(s32*)entry;
+    *(s32*)entry = flags | 2;
+    work->type = type;
+    work->frame = 0;
+    if (param2 <= 0) {
+        work->timer = 1000;
+    } else {
+        work->timer = param2;
+    }
+    ten = float_10_80425388;
+    work->alpha = 0xFF;
+    work->x = x;
+    work->y = y;
+    dustY = ten + y;
+    work->z = z;
+    work->scale = scale;
+    work->colorR = 0xFF;
+    work->colorG = 0xFF;
+    work->colorB = 0xFF;
+    work->color2R = 0xF0;
+    work->color2G = 0xFF;
+    work->color2B = 0xFF;
+    work->color2A = 0xFF;
+    work->unk_25 = 0;
+    work->unk_24 = 0;
+    work->snowDust = effSnowDustN64Entry(1, 4, 0, x, dustY, z,
+                                         float_32_804253a8, float_30_804253ac, scale);
+
+    return entry;
+}
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 
 
 void effFreezeMain(void* effect) {
@@ -206,50 +254,3 @@ void effFreezeDisp(int cameraId, int effect) {
     GXBegin(0x90, 0, 6);
     tri2(0, 1, 2, 0, 0, 2, 3);
 }
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-void* effFreezeN64Entry(s32 type, s32 param2, f32 x, f32 y, f32 z, f32 scale) {
-    void* entry = effEntry();
-    EffFreezeWork* work;
-    s32 flags;
-    f32 ten;
-    f32 dustY;
-
-    *(char**)((s32)entry + 0x14) = str_FreezeN64_802fafe8;
-    *(s32*)((s32)entry + 0x8) = 1;
-    work = __memAlloc(3, 0x2C);
-    *(EffFreezeWork**)((s32)entry + 0xC) = work;
-    *(void**)((s32)entry + 0x10) = effFreezeMain;
-    flags = *(s32*)entry;
-    *(s32*)entry = flags | 2;
-    work->type = type;
-    work->frame = 0;
-    if (param2 <= 0) {
-        work->timer = 1000;
-    } else {
-        work->timer = param2;
-    }
-    ten = float_10_80425388;
-    work->alpha = 0xFF;
-    work->x = x;
-    work->y = y;
-    dustY = ten + y;
-    work->z = z;
-    work->scale = scale;
-    work->colorR = 0xFF;
-    work->colorG = 0xFF;
-    work->colorB = 0xFF;
-    work->color2R = 0xF0;
-    work->color2G = 0xFF;
-    work->color2B = 0xFF;
-    work->color2A = 0xFF;
-    work->unk_25 = 0;
-    work->unk_24 = 0;
-    work->snowDust = effSnowDustN64Entry(1, 4, 0, x, dustY, z,
-                                         float_32_804253a8, float_30_804253ac, scale);
-
-    return entry;
-}
-#pragma use_lmw_stmw on
-#pragma no_register_save_helpers off

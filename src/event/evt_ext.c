@@ -1,12 +1,5 @@
 #include "event/evt_ext.h"
 
-s32 evt_ext_reset(void) {
-    extern void extReset(void);
-
-    extReset();
-    return 2;
-}
-
 
 s32 evt_ext_entry(void* pEvt) {
     extern s32 evtGetValue(void* evt, s32 value);
@@ -25,6 +18,13 @@ s32 evt_ext_entry(void* pEvt) {
     d = evtGetValue(pEvt, args[3]);
     e = evtGetValue(pEvt, args[4]);
     extEntry(a, b, c, d, e);
+    return 2;
+}
+
+s32 evt_ext_reset(void) {
+    extern void extReset(void);
+
+    extReset();
     return 2;
 }
 

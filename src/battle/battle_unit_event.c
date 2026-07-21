@@ -80,6 +80,32 @@ s32 BattleRunHitEventDirect(void* unit, s32 flags, void* script) {
 }
 
 
+s32 BattleRunHitEvent(void* unit, u32 param_2) {
+    s32 result;
+    s32 allow;
+    void* script;
+
+    result = 0;
+    allow = 1;
+    if ((u8)param_2 == 0x28) {
+        if (BtlUnit_CheckData(unit, 0x2E) == 0) {
+            allow = 0;
+        }
+    }
+
+    if (allow == 0) {
+        return 0;
+    }
+
+    script = *(void**)((s32)unit + 0x2B0);
+    if (script != 0) {
+        result = BattleRunHitEventDirect(unit, param_2, script);
+    }
+
+    return result;
+}
+
+
 s32 BattleRunPhaseEvent(void* unit, int bUnisonPhase) {
     void* script;
     void* event;
@@ -104,32 +130,6 @@ s32 BattleRunPhaseEvent(void* unit, int bUnisonPhase) {
         *(s32*)((s32)event + 0x160) = *(s32*)unit;
         result = *(s32*)((s32)event + 0x15C);
         *(s32*)((s32)unit + 0x29C) = result;
-    }
-
-    return result;
-}
-
-
-s32 BattleRunHitEvent(void* unit, u32 param_2) {
-    s32 result;
-    s32 allow;
-    void* script;
-
-    result = 0;
-    allow = 1;
-    if ((u8)param_2 == 0x28) {
-        if (BtlUnit_CheckData(unit, 0x2E) == 0) {
-            allow = 0;
-        }
-    }
-
-    if (allow == 0) {
-        return 0;
-    }
-
-    script = *(void**)((s32)unit + 0x2B0);
-    if (script != 0) {
-        result = BattleRunHitEventDirect(unit, param_2, script);
     }
 
     return result;
