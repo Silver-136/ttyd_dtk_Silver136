@@ -9,6 +9,8 @@ void effUltraHammerDisp(void* camera, void* entry);
 extern const Vec vec3_8030301c;
 extern f32 scroll_tbl[];
 extern f32 float_3p5_80428ba0;
+extern f32 float_1_80428b98;
+extern f32 float_0_80428b9c;
 
 /* stub-fill: effUltraHammerEntry | missing_definition | ghidra_signature */
 #pragma no_register_save_helpers on
@@ -19,9 +21,7 @@ void* effUltraHammerEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
     extern void effUltraHammerMain(void* entry);
     extern char str_UltraHammer_80303028[];
     extern u32 dat_80303010[];
-    extern f32 float_0_80428b9c;
     extern f32 float_neg4_80428ba4;
-    extern f32 float_1_80428b98;
 
     void* entry;
     void* work;
@@ -153,8 +153,6 @@ void effUltraHammerDisp(void* cameraArg, void* effect) {
     extern u32 dat_80428b88;
     extern f32 float_0p6_80428b90;
     extern f32 float_neg1_80428b94;
-    extern f32 float_1_80428b98;
-    extern f32 float_0_80428b9c;
     extern u8 wakka_vertex_tbl[];
     extern u8 wakka_texcoord0_tbl[];
     extern void* wakka_dl_0_tbl[];

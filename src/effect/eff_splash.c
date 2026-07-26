@@ -2,6 +2,10 @@
 
 void effSplashMain(struct EffectEntry* effect);
 
+extern f32 float_0_80427868;
+extern f32 float_10_80427870;
+extern f32 float_0p5_804278c4;
+
 struct EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     typedef struct VecSplash {
         f32 x;
@@ -35,9 +39,7 @@ struct EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     extern void effWaterDamageN64Entry(double x, double y, double z, double scale, s32 type, s32 time);
     extern void effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
     extern char str_splash_802ff050[];
-    extern f32 float_0_80427868;
     extern f32 float_1_804278a0;
-    extern f32 float_0p5_804278c4;
     extern f32 float_5_804278f0;
     extern f32 float_0p4_804278f4;
     extern f32 float_0p7_804278f8;
@@ -45,7 +47,6 @@ struct EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     extern f32 float_7_804278fc;
     extern f32 float_2_80427900;
     extern f32 float_0p1_804278b8;
-    extern f32 float_10_80427870;
     extern f32 float_20_80427864;
     extern f32 float_0p48_80427904;
     extern f32 float_3p6_80427908;
@@ -269,13 +270,10 @@ void effSplashMain(struct EffectEntry* effect) {
     extern void effSplashDisp(void* unused, void* entry);
     extern s8 geso_trans_dt[];
     extern u8 geso_scale_dt[];
-    extern f32 float_0_80427868;
     extern f32 float_0p95_804278d4;
     extern f32 float_96_804278d8;
     extern f32 float_0p125_804278b4;
-    extern f32 float_10_80427870;
     extern f32 float_0p3_804278dc;
-    extern f32 float_0p5_804278c4;
     extern f32 float_0p6_804278e0;
     extern f32 float_0p9_804278e4;
     extern f32 float_1p3_804278e8;
@@ -395,8 +393,6 @@ void effSplashMain(struct EffectEntry* effect) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 void effSplashGetCol(void* unused, void* entry) {
     extern void* camGetPtr(void);
     extern void GXSetProjection(void* mtx, s32 type);
@@ -406,7 +402,6 @@ void effSplashGetCol(void* unused, void* entry) {
     extern void sysWaitDrawSync(void);
     extern void GXPeekARGB(s32 x, s32 y, void* color);
     extern u32 unk_802294a4(void);
-    extern f32 float_0_80427868;
     extern f32 float_608_804278cc;
     extern f32 float_480_804278d0;
 

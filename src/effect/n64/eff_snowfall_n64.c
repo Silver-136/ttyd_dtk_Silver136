@@ -1,9 +1,10 @@
 #include "effect/n64/eff_snowfall_n64.h"
 
+extern void* camGetPtr(s32 camera);
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void cam_clip_chk(u8* work, s32 xRange, s32 yRange, s32 timer) {
-    extern void* camGetPtr(s32 camera);
     extern f32 float_0p5_804260bc;
     extern f32 float_0_80426098;
     u8* cam;
@@ -75,7 +76,6 @@ void effSnowfallMain(void* effect) {
         f32 y;
         f32 z;
     } Vec3;
-    extern void* camGetPtr(s32 camera);
     extern void effDelete(void*);
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);

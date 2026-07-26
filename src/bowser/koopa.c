@@ -1,4 +1,7 @@
 #include "bowser/koopa.h"
+#include "bowser/koopa_hit.h"
+
+#include "system.h"
 
 void* fireefp;
 f32 baseScaleTbl[4];
@@ -11,9 +14,7 @@ void kpa3DMain(void* mario);
 void kpaFireAttack(void);
 u8 kpaFireMain(void);
 u8 kpaFall(void);
-s32 irand(s32 range);
 void psndSFXOn(u32 id);
-s32 sysMsec2Frame(s32 msec);
 void animPoseSetMaterialFlagOff(void* pose, u32 flag);
 void animPoseSetMaterialFlagOn(void* pose, u32 flag);
 void marioChgPose(void* pose);
@@ -24,7 +25,6 @@ void marioPreJump(void);
 double marioMakeJumpPara(void);
 void marioSetPeakYpos(void);
 void* __memAlloc(s32 heap, u32 size);
-void* memset(void* dst, int value, u32 size);
 s32 strcmp(const char* a, const char* b);
 extern void* gp;
 extern f32 marioJumpData[];
@@ -261,7 +261,6 @@ void kpaMain(void) {
 }
 
 void kpa2DMain(void* unused) {
-    extern void* kpaHitCheck(void);
     extern void marioItemGetChk(void);
     extern void marioBottomless(void);
     extern void marioPreDisp(void);
@@ -273,7 +272,6 @@ void kpa2DMain(void* unused) {
     extern void marioChkGnd2(void);
     extern void marioBoots(void);
     extern void marioForceMoveMain(void);
-    extern u8 kpaFall(void);
     extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
     extern f32 angleABf(f32 x0, f32 z0, f32 x1, f32 z1);
     extern void marioCheckWall(f32 speed, f32 angle);
@@ -396,7 +394,6 @@ void kpa2DMain(void* unused) {
 }
 
 void kpa3DMain(void* unused) {
-    extern void* kpaHitCheck(void);
     extern void marioPreDisp(void);
     extern void marioBottomless(void);
     extern void partyMain(void);
@@ -656,7 +653,6 @@ void kpa_jumpNpc(void) {
 
 
 u8 kpaFall(void) {
-    extern void kpaClearHitobjRide(void);
     extern f32 marioGetFallSpd(void);
     extern void* marioChkLandon(f32 speed, f32* out);
     extern void marioLandOn(void);

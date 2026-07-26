@@ -1,5 +1,11 @@
 #include "manager/evtmgr_cmd.h"
 
+#include "manager/evtmgr.h"
+extern int strcmp(const char*, const char*);
+extern void* evtGetWork(void);
+extern void* evtEntryType(void*, s32, s32, s32);
+extern void* evtBrotherEntry(void*, void*, unsigned int);
+
 s32 evt_while(void* event) {
     extern s32 evtGetValue(void*, s32);
     extern s32 evtSetValue(void*, s32, s32);
@@ -67,7 +73,6 @@ s32 evt_wait_msec(void* event) {
 }
 
 int evt_if_str_equal(void* param_1) {
-    extern int strcmp(const char*, const char*);
     u8* event = param_1;
     s32* args = *(s32**)(event + 0x18);
     char* left = (char*)evtGetValue(param_1, args[0]);
@@ -95,7 +100,6 @@ int evt_if_str_equal(void* param_1) {
 }
 
 int evt_if_str_not_equal(void* param_1) {
-    extern int strcmp(const char*, const char*);
     u8* event = param_1;
     s32* args = *(s32**)(event + 0x18);
     char* left = (char*)evtGetValue(param_1, args[0]);
@@ -123,7 +127,6 @@ int evt_if_str_not_equal(void* param_1) {
 }
 
 int evt_if_str_small(void* param_1) {
-    extern int strcmp(const char*, const char*);
     u8* event = param_1;
     s32* args = *(s32**)(event + 0x18);
     char* left = (char*)evtGetValue(param_1, args[0]);
@@ -151,7 +154,6 @@ int evt_if_str_small(void* param_1) {
 }
 
 int evt_if_str_large(void* param_1) {
-    extern int strcmp(const char*, const char*);
     u8* event = param_1;
     s32* args = *(s32**)(event + 0x18);
     char* left = (char*)evtGetValue(param_1, args[0]);
@@ -179,7 +181,6 @@ int evt_if_str_large(void* param_1) {
 }
 
 int evt_if_str_small_equal(void* param_1) {
-    extern int strcmp(const char*, const char*);
     u8* event = param_1;
     s32* args = *(s32**)(event + 0x18);
     char* left = (char*)evtGetValue(param_1, args[0]);
@@ -207,7 +208,6 @@ int evt_if_str_small_equal(void* param_1) {
 }
 
 int evt_if_str_large_equal(void* pEvt) {
-    extern int strcmp(const char*, const char*);
     u8* event = pEvt;
     s32* args = *(s32**)(event + 0x18);
     char* left = (char*)evtGetValue(pEvt, args[0]);
@@ -1361,7 +1361,6 @@ s32 evt_case_end(int event) {
 
 s32 evt_run_evt(void* event) {
     extern s32 evtGetValue(void*, s32);
-    extern void* evtEntryType(void*, s32, s32, s32);
     s32 code;
     void* child;
 
@@ -1396,7 +1395,6 @@ s32 evt_run_evt(void* event) {
 s32 evt_run_evt_id(void* event) {
     extern s32 evtGetValue(void*, s32);
     extern s32 evtSetValue(void*, s32, s32);
-    extern void* evtEntryType(void*, s32, s32, s32);
     s32* args;
     s32 dst;
     s32 code;
@@ -1434,7 +1432,6 @@ s32 evt_run_evt_id(void* event) {
 }
 
 s32 evt_inline_evt(void* event) {
-    extern void* evtEntryType(void*, s32, s32, s32);
     unsigned int* start;
     unsigned int* ip;
     unsigned int cmd;
@@ -1483,7 +1480,6 @@ s32 evt_inline_evt(void* event) {
 }
 
 s32 evt_inline_evt_id(void* event) {
-    extern void* evtEntryType(void*, s32, s32, s32);
     extern s32 evtSetValue(void*, s32, s32);
     unsigned int* start;
     unsigned int* ip;
@@ -1536,7 +1532,6 @@ s32 evt_inline_evt_id(void* event) {
 }
 
 s32 evt_brother_evt(void* event) {
-    extern void* evtBrotherEntry(void*, void*, unsigned int);
     unsigned int* old_ip;
     unsigned int* ip;
     unsigned int cmd;
@@ -1561,7 +1556,6 @@ s32 evt_brother_evt(void* event) {
 }
 
 s32 evt_brother_evt_id(void* event) {
-    extern void* evtBrotherEntry(void*, void*, unsigned int);
     extern s32 evtSetValue(void*, s32, s32);
     unsigned int* old_ip;
     unsigned int* ip;
@@ -1593,7 +1587,6 @@ s32 evt_brother_evt_id(void* event) {
 
 int evt_debug_put_reg(void* param_1) {
     extern int sprintf(char* str, const char* format, ...);
-    extern void* evtGetWork(void);
     extern s32 swByteGet(s32 index);
     extern s32 _swByteGet(s32 index);
     extern s32 swGet(s32 index);
@@ -1773,7 +1766,6 @@ int evt_debug_put_reg(void* param_1) {
 
 s32 evtmgrCmd(struct EventEntry* entry) {
     extern void evtDelete(void*);
-    extern void evtDeleteID(s32);
     extern void* evtChildEntry(void*, void*, u32);
     extern void evtSetPri(void*, s32);
     extern void evtSetSpeed(void*, s32);
@@ -2549,7 +2541,6 @@ finish:
 }
 
 s32 evtGetValue(struct EventEntry* entry, s32 index) {
-    extern void* evtGetWork(void);
     extern s32 swByteGet(s32);
     extern s32 _swByteGet(s32);
     extern s32 swGet(s32);
@@ -2665,7 +2656,6 @@ s32 evtGetNumber(struct EventEntry* entry, s32 value) {
 }
 
 s32 evtSetValue(struct EventEntry* entry, s32 index, s32 value) {
-    extern void* evtGetWork(void);
     extern s32 swByteGet(s32);
     extern void swByteSet(s32, s32);
     extern s32 _swByteGet(s32);
@@ -2760,7 +2750,6 @@ s32 evtSetValue(struct EventEntry* entry, s32 index, s32 value) {
     return value;
 }
 f32 evtGetFloat(struct EventEntry* entry, s32 index) {
-    extern void* evtGetWork(void);
     extern s32 swByteGet(s32);
     extern s32 _swByteGet(s32);
 
@@ -2805,7 +2794,6 @@ f32 evtGetFloat(struct EventEntry* entry, s32 index) {
 }
 
 f32 evtSetFloat(struct EventEntry* entry, s32 index, f32 value) {
-    extern void* evtGetWork(void);
 
     void* work = evtGetWork();
     s32 stored = (s32)(value * 1024.0f) - 230000000;

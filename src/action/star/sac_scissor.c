@@ -1,18 +1,22 @@
 #include "action/star/sac_scissor.h"
+#include "battle/battle.h"
 #include "event/evt_cmd.h"
 
 s32 star_disp2D(EventEntry* event, BOOL isFirstCall);
 s32 scissor_capture(EventEntry* event, BOOL isFirstCall);
 
-extern void* _battleWorkPointer;
-void* BattleAlloc(u32 size);
-void BattleFree(void* ptr);
-void* memset(void* dst, int value, u32 size);
-s32 evtSetValue(EventEntry* event, s32 target, s32 value);
 void dispEntry(s32 cameraId, s32 layer, void* callback, f32 z, void* param);
 extern f32 float_0_80427c94;
+extern f32 float_0p5_80427ca8;
+extern f32 float_1_80427cb4;
+extern f32 float_neg1000_80427cfc;
+extern void* gp;
 extern void scissor_disp_region(void);
 extern void star_disp2D_sub(s32 id, s32 alpha);
+void smartFree(void* ptr);
+void tess(void* entries, s32 count);
+void scissor_damage_sub(void* unit, s32* out);
+s32 scissor_damage_sub2(f32* pos);
 
 void* GetScissorPtr(void) {
     return (void*)((s32)_battleWorkPointer + 0x1F4C);
@@ -98,9 +102,7 @@ s32 scissor_intersection2(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4
 }
 
 s32 scissor_intersection3(f32* outX, f32* outY, f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4) {
-    extern f32 float_0_80427c94;
     extern f32 float_1000_80427d10;
-    extern f32 float_neg1000_80427cfc;
     extern s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4);
 
     f32 dx;
@@ -138,7 +140,6 @@ s32 scissor_intersection3(f32* outX, f32* outY, f32 x1, f32 y1, f32 x2, f32 y2, 
 }
 
 s32 scissor_intersection4(f32* outX, f32* outY, f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4) {
-    extern s32 scissor_intersection3(f32* outX, f32* outY, f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4);
 
     if (x1 == x3 && y1 == y3) {
         *outX = x1;
@@ -164,10 +165,7 @@ s32 scissor_intersection4(f32* outX, f32* outY, f32 x1, f32 y1, f32 x2, f32 y2, 
 }
 
 s32 scissor_cross(f32* pos1, f32* pos2, f32* poly, s32 count) {
-    extern f32 float_neg1000_80427cfc;
-    extern f32 float_1_80427cb4;
     extern f32 float_1000_80427d10;
-    extern f32 float_0p5_80427ca8;
 
     f32 outX;
     f32 outY;
@@ -278,7 +276,6 @@ s32 scissor_cross(f32* pos1, f32* pos2, f32* poly, s32 count) {
 
 USER_FUNC(scissor_tess) {
     extern void* memcpy(void* dest, const void* src, u32 size);
-    extern void tess(void* entries, s32 count);
     extern void DCFlushRange(void* addr, u32 nBytes);
     void* work;
     void* copy;
@@ -296,10 +293,6 @@ USER_FUNC(scissor_tess) {
 
 /* stub-fill: tess | prototype_only | source_prototype */
 void tess(void* entries, s32 count) {
-    extern void* GetScissorPtr(void);
-    extern void* BattleAlloc(u32 size);
-    extern void BattleFree(void* ptr);
-    extern s32 scissor_cross(f32* pos1, f32* pos2, f32* poly, s32 count);
 
     void* work;
     f32* src;
@@ -364,7 +357,6 @@ void tess(void* entries, s32 count) {
 }
 
 s32 weaponGetPower_Scissor(void* weapon, void* attacker, void* target) {
-    extern void* GetScissorPtr(void);
     extern s32 BtlUnit_GetUnitId(void* unit);
 
     void* work;
@@ -393,11 +385,6 @@ s32 star_control(void) {
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern void* effStarStoneEntry(f32 x, f32 y, f32 z, f32 scale, s32 type);
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
-    extern void* gp;
-    extern void* _battleWorkPointer;
-    extern f32 float_0_80427c94;
-    extern f32 float_neg1000_80427cfc;
-    extern f32 float_1_80427cb4;
     extern f32 float_37_80427d00;
     extern f32 float_50_80427cd0;
     extern f32 float_neg1_80427cb0;
@@ -571,7 +558,6 @@ USER_FUNC(star_disp2D) {
 
 /* stub-fill: star_disp2D_sub | prototype_only | source_prototype */
 void star_disp2D_sub(s32 id, s32 alpha) {
-    extern void* GetScissorPtr(void);
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
     extern void PSMTXTrans(f32 mtx[3][4], f32 x, f32 y, f32 z);
     extern void PSMTXScale(f32 mtx[3][4], f32 x, f32 y, f32 z);
@@ -579,7 +565,6 @@ void star_disp2D_sub(s32 id, s32 alpha) {
     extern void PSMTXConcat(f32 a[3][4], f32 b[3][4], f32 out[3][4]);
     extern void iconDispGxCol(f32 mtx[3][4], s32 size, s32 iconId, void* color);
     extern u32 dat_80427c78;
-    extern f32 float_0_80427c94;
     extern f32 float_20_80427cf4;
     extern f32 float_deg2rad_80427cf8;
 
@@ -648,7 +633,6 @@ USER_FUNC(scissor_timer_get) {
 }
 
 s32 scissor_timer_main(void) {
-    extern void* GetScissorPtr(void);
     extern f32 float_320_80427ce8;
     extern f32 float_185_80427cec;
     extern f32 float_120_80427cf0;
@@ -722,11 +706,9 @@ s32 scissor_control(s32 param_1, s32 reset) {
     extern s32 keyGetStickX(s32 pad);
     extern s32 keyGetStickY(s32 pad);
     extern void psndSFXOn(const char* name);
-    extern void smartFree(void* ptr);
     extern s32 GXGetTexBufferSize(s32 width, s32 height, s32 format, s32 mipmap, s32 roundUp);
     extern void* smartAlloc(s32 size, s32 group);
     extern void scissor_disp_control(void);
-    extern f32 float_0_80427c94;
     extern f32 float_42_80427ccc;
     extern f32 float_50_80427cd0;
     extern f32 float_0p86_80427cd4;
@@ -736,7 +718,6 @@ s32 scissor_control(s32 param_1, s32 reset) {
     extern f32 float_200_80427ce4;
     extern f64 double_5_802fff48;
     extern const char str_SFX_BTL_SAC_KAKONDEP_802fff50[];
-    extern void* gp;
     void* work;
     f32* points;
     s32 count;
@@ -837,15 +818,12 @@ s32 scissor_control(s32 param_1, s32 reset) {
 
 /* stub-fill: scissor_damage | missing_definition | ghidra_signature */
 s32 scissor_damage(EventEntry* event) {
-    extern void* _battleWorkPointer;
-    extern void* GetScissorPtr(void);
     extern void* BattleGetMarioPtr(void* battleWork);
     extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern s8 BtlUnit_GetBelong(void* unit);
     extern s32 BtlUnit_GetBodyPartsId(void* unit);
     extern void* BtlUnit_GetPartsPtr(void* unit, s32 partsId);
     extern s32 BtlUnit_CheckStatus(void* unit, s32 status);
-    extern void scissor_damage_sub(void* unit, s32* out);
     extern void BattleCheckDamage(void* attacker, void* target, void* parts, void* weapon, s32 flags);
     extern s32 BattleAudience_GetAudienceNum(void);
     extern void BattleAudienceSoundCallKind(s32 kind);
@@ -957,10 +935,7 @@ s32 scissor_damage(EventEntry* event) {
 void scissor_damage_sub(void* unit, s32* out) {
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern void btlGetScreenPoint(f32* in, f32* out);
-    extern s32 scissor_damage_sub2(f32* pos);
     extern f32 float_neg1_80427cb0;
-    extern f32 float_1_80427cb4;
-    extern f32 float_0p5_80427ca8;
     extern f32 float_9_80427cb8;
     extern f32 float_100_80427cbc;
     extern f32 float_0p3_80427cc0;
@@ -1026,8 +1001,6 @@ void scissor_damage_sub(void* unit, s32* out) {
 }
 
 s32 scissor_damage_sub2(f32* pos) {
-    extern void* GetScissorPtr(void);
-    extern f32 float_0_80427c94;
 
     void* work;
     f32 x;
@@ -1092,7 +1065,6 @@ USER_FUNC(scissor_capture) {
 
 /* stub-fill: scissor_disp_control | prototype_only | source_prototype */
 void scissor_disp_control(s32 cameraId) {
-    extern void* GetScissorPtr(void);
     extern f32 intplGetValue(f32 start, f32 end, s32 type, s32 current, s32 total);
     extern void GXSetCullMode(s32 mode);
     extern void GXClearVtxDesc(void);
@@ -1114,7 +1086,6 @@ void scissor_disp_control(s32 cameraId) {
     extern void GXSetChanMatColor(s32 chan, void* color);
     extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
     extern void* gpGlobals;
-    extern f32 float_0_80427c94;
     extern f32 float_255_80427cac;
 
     void* work;
@@ -1186,7 +1157,6 @@ USER_FUNC(scissor_offscreen) {
 
 /* stub-fill: scissor_disp_region | prototype_only | source_prototype */
 void scissor_disp_region(void) {
-    extern void* GetScissorPtr(void);
     extern void sysWaitDrawSync(void);
     extern void GXClearBoundingBox(void);
     extern void GXSetCullMode(s32 mode);
@@ -1212,12 +1182,9 @@ void scissor_disp_region(void) {
     extern void GXSetTevKAlphaSel(s32 stage, s32 sel);
     extern void GXLoadPosMtxImm(void* mtx, s32 id);
     extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
-    extern void smartFree(void* ptr);
     extern void GXReadBoundingBox(u16* left, u16* top, u16* right, u16* bottom);
     extern s32 offscreenNameToId(char* name);
     extern void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom);
-    extern f32 float_0_80427c94;
-    extern f32 float_0p5_80427ca8;
     extern f32 float_neg240_80427c98;
     extern f32 float_240_80427c9c;
     extern f32 float_neg304_80427ca0;
@@ -1312,7 +1279,6 @@ USER_FUNC(scissor_init) {
 
 USER_FUNC(scissor_end) {
     extern void effDelete(void* eff);
-    extern void smartFree(void* ptr);
     void* work;
     void* texture;
 

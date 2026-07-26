@@ -1,5 +1,8 @@
 #include "action/ac_timing_a.h"
 
+#include "driver/camdrv.h"
+#include "system.h"
+
 typedef struct Vec3 {
     f32 x;
     f32 y;
@@ -18,10 +21,7 @@ typedef struct TimingADispWork {
 
 s32 BattleActionCommandGetDifficulty(void);
 extern void* _battleWorkPointer;
-void* camGetPtr(s32 cameraId);
 void iconDispGx(Vec3* pos, s32 flags, s32 iconId, f32 scale);
-f32 intplGetValue(s32 mode, s32 current, s32 total, f32 start, f32 end);
-void* memset(void* ptr, int value, u32 size);
 void actionCommandDisp(f32 x, f32 y);
 extern Vec3 vec3_802f01c8[];
 extern Vec3 vec3_802f01d4[];
@@ -113,7 +113,6 @@ done:
 
 s32 battleAcResult_TimingA(void* battleWork) {
     extern s32 BattlePadCheckRecordTrigger(s32, s32);
-    extern s32 irand(s32);
     s32 successFrame;
     s32 count;
     s32 i;

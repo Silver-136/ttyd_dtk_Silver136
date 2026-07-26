@@ -2,10 +2,9 @@
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+extern f32 float_0_80427ab4;
+extern f32 float_30_80427ad4;
+
 void* effTeresaEntry(s32 type, f32 x, f32 y, f32 z) {
     typedef struct Vec {
         f32 x;
@@ -16,8 +15,6 @@ void* effTeresaEntry(s32 type, f32 x, f32 y, f32 z) {
     extern void* __memAlloc(s32 heap, u32 size);
     extern const char str_Teresa_802ff24c[];
     extern void effTeresaMain(void);
-    extern f32 float_30_80427ad4;
-    extern f32 float_0_80427ab4;
     extern const Vec vec3_802ff228;
     extern u32 psndSFXOn_3D(s32 lookup, Vec* position);
 
@@ -62,12 +59,6 @@ void* effTeresaEntry(s32 type, f32 x, f32 y, f32 z) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
 /* CHATGPT STUB FILL: main/effect/eff_teresa 20260624_184823 */
 
 /* stub-fill: effTeresaMain | prototype_only | source_prototype */
@@ -91,9 +82,7 @@ void effTeresaMain(void* effect) {
     extern f32 float_1_80427ac4;
     extern f32 float_10_80427ac8;
     extern f32 float_178p5_80427acc;
-    extern f32 float_0_80427ab4;
     extern f32 float_20_80427ad0;
-    extern f32 float_30_80427ad4;
     extern f32 float_3_80427ad8;
     extern f32 float_0p98_80427adc;
 
@@ -142,14 +131,6 @@ void effTeresaMain(void* effect) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void effTeresaDisp(s32 cameraId, void* effect) {
@@ -209,7 +190,6 @@ void effTeresaDisp(s32 cameraId, void* effect) {
     extern f32 float_32_80427aa8;
     extern f32 float_0p5_80427aac;
     extern f32 float_16_80427ab0;
-    extern f32 float_0_80427ab4;
     extern f32 float_2_80427ab8;
 
     u8 texObj[0x20];

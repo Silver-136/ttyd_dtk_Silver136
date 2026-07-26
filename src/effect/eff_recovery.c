@@ -1,5 +1,36 @@
 #include "effect/eff_recovery.h"
 
+typedef f32 Mtx[3][4];
+
+extern void PSMTXTrans(Mtx, f32, f32, f32);
+extern void PSMTXScale(Mtx, f32, f32, f32);
+extern void PSMTXConcat(Mtx, Mtx, Mtx);
+extern void PSMTXRotRad(Mtx, f32, char);
+extern void GXLoadPosMtxImm(Mtx, s32);
+extern void* gpGlobals;
+extern void effDeleteMayaAnim(void* anim);
+extern void effDelete(void* effect);
+extern double cos(double);
+extern double sin(double);
+extern f32 float_0_80422dcc;
+extern f32 float_2_80422dd8;
+extern f32 float_6p2832_80422e20;
+extern f32 float_360_80422e24;
+extern void* camGetPtr(s32);
+extern void effGetTexObj(s32, void*);
+extern void GXLoadTexObj(void*, s32);
+extern void GXSetCurrentMtx(u32);
+extern void GXSetNumTexGens(u32);
+extern void GXSetTexCoordGen2(s32, s32, s32, u32, u32, s32);
+extern void GXSetNumChans(u32);
+extern void GXSetNumTevStages(u32);
+extern void GXSetTevOrder(u32, u32, u32, s32);
+extern void GXSetCullMode(s32);
+extern void GXClearVtxDesc(void);
+extern void GXSetVtxDesc(s32, s32);
+extern void GXSetVtxAttrFmt(u32, s32, u32, u32, u32);
+extern void GXBegin(s32, s32, s16);
+
 void* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     typedef struct LocalVec3 {
         f32 x;
@@ -10,12 +41,8 @@ void* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     extern void* __memAlloc(s32 heap, u32 size);
     extern void* effMayaAnimAlloc(void* data);
     extern void effPlayMayaAnim(void* anim);
-    extern void effDeleteMayaAnim(void* anim);
     extern void psndSFXOn_3D(char* sound, LocalVec3* pos);
     extern s32 irand(s32 max);
-    extern double cos(double);
-    extern double sin(double);
-    extern void* gpGlobals;
     extern u8 effRecoveryMain(void);
     extern u8 effRecoveryMain2(void*);
     extern char str_Recovery_802f3c00[];
@@ -26,9 +53,6 @@ void* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     extern char str_SFX_FP_RECOVER_MID1_802f3c64[];
     extern char str_SFX_FP_RECOVER_BIG1_802f3c78[];
     extern void* recovery_effAnimDt;
-    extern f32 float_0_80422dcc;
-    extern f32 float_6p2832_80422e20;
-    extern f32 float_360_80422e24;
     extern f32 float_neg30_80422e38;
     extern f32 float_neg15_80422e3c;
     extern f32 float_1p5_80422e40;
@@ -174,8 +198,6 @@ void* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
 void effRecoveryMain(void* effect) {
     typedef struct Vec { f32 x, y, z; } Vec;
     extern void effCalcMayaAnim(void* anim);
-    extern void effDeleteMayaAnim(void* anim);
-    extern void effDelete(void* effect);
     extern f32 dispCalcZ(Vec* pos);
     extern void dispEntry(s32 camera,s32 layer,void* callback,void* param,f32 z);
     extern void effRecoveryDisp(void);
@@ -183,10 +205,7 @@ void effRecoveryMain(void* effect) {
     extern void effRecoveryDisp3(void);
     extern f32 intplGetValue(f32 start,f32 end,s32 mode,s32 current,s32 total);
     extern f32 distABf(f32,f32,f32,f32);
-    extern double sin(double);
-    extern double cos(double);
     extern s32 rand(void);
-    extern void* gpGlobals;
     char* work;
     char* part;
     Vec pos;
@@ -303,19 +322,12 @@ u8 effRecoveryMain2(void* effEntry) {
         f32 z;
     } LocalVec3;
     extern void* effStardustEntry(f64 x, f64 y, f64 z, f64 a, f64 b, s32 c, s32 d, s32 e);
-    extern void effDelete(void* effect);
     extern f32 dispCalcZ(LocalVec3* pos);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern u8 effRecoveryDisp4(void);
-    extern f32 float_0_80422dcc;
-    extern f32 float_2_80422dd8;
     extern f32 float_40_80422e14;
     extern f32 float_45_80422e18;
     extern f32 float_0p95_80422e1c;
-    extern f32 float_6p2832_80422e20;
-    extern f32 float_360_80422e24;
-    extern double sin(double x);
-    extern double cos(double x);
     LocalVec3 pos;
     void* work;
     void* part;
@@ -376,22 +388,7 @@ u8 effRecoveryMain2(void* effEntry) {
 }
 
 u8 effRecoveryDisp(int cameraId, int effect) {
-    typedef f32 Mtx[3][4];
     typedef struct Tex { u32 data[8]; } Tex;
-    extern void* camGetPtr(s32);
-    extern void PSMTXTrans(Mtx, f32, f32, f32);
-    extern void PSMTXRotRad(Mtx, f32, char);
-    extern void PSMTXScale(Mtx, f32, f32, f32);
-    extern void PSMTXConcat(Mtx, Mtx, Mtx);
-    extern void effGetTexObj(s32, void*);
-    extern void GXLoadTexObj(void*, s32);
-    extern void GXLoadPosMtxImm(Mtx, s32);
-    extern void GXSetCurrentMtx(u32);
-    extern void GXSetNumTexGens(u32);
-    extern void GXSetTexCoordGen2(s32, s32, s32, u32, u32, s32);
-    extern void GXSetNumChans(u32);
-    extern void GXSetNumTevStages(u32);
-    extern void GXSetTevOrder(u32, u32, u32, s32);
     extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
     extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
     extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
@@ -400,11 +397,6 @@ u8 effRecoveryDisp(int cameraId, int effect) {
     extern void GXSetZCompLoc(s32);
     extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
     extern void GXSetZMode(s32, s32, s32);
-    extern void GXSetCullMode(s32);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32, s32);
-    extern void GXSetVtxAttrFmt(u32, s32, u32, u32, u32);
-    extern void GXBegin(s32, s32, s16);
     u8* work;
     u8* part;
     void* cam;
@@ -495,19 +487,13 @@ u8 effRecoveryDisp(int cameraId, int effect) {
 
 void effRecoveryDisp2(s32 cameraId, void* effEntry) {
     typedef f32 LocalMtx[3][4];
-    extern void* camGetPtr(s32 cameraId);
     extern s32 sprintf(char* str, char* fmt, ...);
     extern u32 strlen(char* str);
-    extern void PSMTXTrans(LocalMtx mtx, f32 x, f32 y, f32 z);
     extern void PSMTXRotRad(LocalMtx mtx, f32 rad, s32 axis);
-    extern void PSMTXConcat(LocalMtx a, LocalMtx b, LocalMtx ab);
-    extern void PSMTXScale(LocalMtx mtx, f32 x, f32 y, f32 z);
     extern void effNumberGX(LocalMtx mtx, s32 colorType, s32 value, s32 alpha, s32 flag);
     extern char str_PCTd_80422df8[];
     extern f32 float_deg2rad_80422dc0;
-    extern f32 float_0_80422dcc;
     extern f32 float_1_80422dd0;
-    extern f32 float_2_80422dd8;
     extern f32 float_0p5_80422ddc;
     extern f32 float_10_80422de4;
     extern f32 float_0p035_80422dfc;
@@ -564,31 +550,10 @@ u8 effRecoveryDisp3(void) {
 
 
 void effRecoveryDisp4(s32 cameraId, void* effect) {
-    typedef f32 Mtx[3][4];
     typedef struct Tex { u32 data[8]; } Tex;
-    extern void* camGetPtr(s32);
-    extern void PSMTXTrans(Mtx, f32, f32, f32);
-    extern void PSMTXRotRad(Mtx, f32, char);
-    extern void PSMTXScale(Mtx, f32, f32, f32);
-    extern void PSMTXConcat(Mtx, Mtx, Mtx);
-    extern void effGetTexObj(s32, void*);
-    extern void GXLoadTexObj(void*, s32);
-    extern void GXLoadPosMtxImm(Mtx, s32);
-    extern void GXSetCurrentMtx(u32);
-    extern void GXSetNumTexGens(u32);
-    extern void GXSetTexCoordGen2(s32, s32, s32, u32, u32, s32);
-    extern void GXSetNumChans(u32);
     extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
-    extern void GXSetNumTevStages(u32);
-    extern void GXSetTevOrder(u32, u32, u32, s32);
     extern void GXSetTevOp(s32, s32);
-    extern void GXSetCullMode(s32);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32, s32);
-    extern void GXSetVtxAttrFmt(u32, s32, u32, u32, u32);
     extern void GXSetChanMatColor(s32, void*);
-    extern void GXBegin(s32, s32, s16);
-    extern void* gpGlobals;
     extern u32 dat_80422dbc;
     extern u8 color_rotation_data[];
     Mtx trans;

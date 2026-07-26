@@ -1,5 +1,7 @@
 #include "sdk/DEMOPad.h"
 
+extern u8 DemoPad[];
+
 void DEMOPadCopy(void* newPadState, void* padState) {
     u16 dirs;
     u16 buttons;
@@ -84,7 +86,6 @@ void DEMOPadCopy(void* newPadState, void* padState) {
 
 void DEMOPadRead(void) {
     extern u8 Pad[];
-    extern u8 DemoPad[];
     extern u32 PadChanMask[];
     extern s32 DemoNumValidPads;
     extern void PADRead(void*);
@@ -119,7 +120,6 @@ void DEMOPadRead(void) {
 
 void DEMOPadInit(void) {
     extern void PADInit(void);
-    extern u8 DemoPad[];
     u8* pad;
     s32 i;
     s32 j;

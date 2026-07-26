@@ -1,5 +1,6 @@
 #include "event/evt_cam.h"
 #include "event/evt_cmd.h"
+#include "cam_road.h"
 
 void* marioGetPtr(void);
 void* camGetPtr(s32 id);
@@ -8,6 +9,10 @@ void camCtrlOn(s32 id);
 void camCtrlOff(s32 id);
 void psndSetFlag(s32 flag);
 void psndClearFlag(s32 flag);
+extern void* gp;
+extern f32 float_0p01_80421040;
+extern f32 float_0_80421044;
+extern f32 float_100_80421048;
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_cam_ctrl_onoff) {
@@ -58,12 +63,10 @@ USER_FUNC(evt_cam_get_at) {
 
 
 u8 evt_cam_shake(s32 pEvt, s32 param_2) {
-    extern f32 evtGetFloat(void* event, s32 arg);
     extern void PSMTX44Trans(void* mtx, f32 x, f32 y, f32 z);
     extern void padRumbleOn(s32 controller);
     extern void padRumbleOff(s32 controller);
     extern double sqrt(double value);
-    extern f32 float_0_80421044;
     extern f32 float_13000_80421050;
     extern f32 float_50_80421054;
     extern f32 float_1_80421058;
@@ -140,8 +143,6 @@ s32 evt_cam3d_evt_zoom_in(void* pEvt) {
         f32 z;
     } Vec3;
 
-    extern void* gp;
-    extern f32 float_100_80421048;
     extern void PSVECSubtract(void* a, void* b, void* out);
     extern void PSVECScale(void* src, void* dst, f32 scale);
     extern void PSVECAdd(void* a, void* b, void* out);
@@ -199,8 +200,6 @@ s32 evt_cam3d_evt_set_at(void* pEvt) {
         f32 z;
     } Vec3;
 
-    extern void* gp;
-    extern f32 float_100_80421048;
     extern void PSVECSubtract(void* a, void* b, void* out);
     extern void PSVECScale(void* src, void* dst, f32 scale);
     extern void PSVECAdd(void* a, void* b, void* out);
@@ -252,7 +251,6 @@ s32 evt_cam3d_evt_set_at(void* pEvt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 evt_cam3d_evt_set(s32 pEvt) {
-    extern void* gp;
 
     s32* args = *(s32**)(pEvt + 0x18);
     f32 x = (f32)evtGetValue((void*)pEvt, args[0]);
@@ -294,7 +292,6 @@ u8 evt_cam3d_evt_set(s32 pEvt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 evt_cam3d_evt_set_rel(s32 pEvt) {
-    extern void* gp;
 
     s32* args = *(s32**)(pEvt + 0x18);
     f32 xOff = (f32)evtGetValue((void*)pEvt, args[0]);
@@ -346,7 +343,6 @@ u8 evt_cam3d_evt_set_npc_rel(s32 pEvt) {
         f32 z;
     } Vec3;
 
-    extern void* gp;
     extern void* evtNpcNameToPtr(void* evt, char* name);
     extern void PSVECAdd(Vec3* a, Vec3* b, Vec3* out);
 
@@ -413,7 +409,6 @@ u8 evt_cam3d_evt_set_rel_dir(s32 pEvt) {
     } Vec3;
     typedef f32 Mtx[3][4];
 
-    extern void* gp;
     extern f32 float_deg2rad_8042104c;
     extern void PSMTXRotRad(Mtx m, double angle, char axis);
     extern void PSMTXMultVec(Mtx m, Vec3* src, Vec3* dst);
@@ -475,9 +470,6 @@ u8 evt_cam3d_evt_set_rel_dir(s32 pEvt) {
 }
 
 s32 evt_cam3d_evt_off(void* pEvt) {
-    extern void* gp;
-    extern void* camGetPtr(s32 camId);
-    extern s32 evtGetValue(void* event, s32 arg);
 
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 time = evtGetValue(pEvt, args[0]);
@@ -518,7 +510,6 @@ s32 evt_cam3d_evt_set_xyz(void* pEvt) {
         f32 z;
     } Vec3;
 
-    extern void* gp;
 
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 x = evtGetValue(pEvt, args[0]);
@@ -564,10 +555,6 @@ s32 evt_cam3d_evt_xyz_off(void* pEvt) {
         f32 z;
     } Vec3;
 
-    extern void* gp;
-    extern void* camGetPtr(s32 camId);
-    extern s32 evtGetValue(void* event, s32 arg);
-    extern f32 float_0_80421044;
 
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 time = evtGetValue(pEvt, args[0]);
@@ -598,9 +585,6 @@ s32 evt_cam3d_get_shift(void* pEvt) {
         f32 z;
     } Vec3;
 
-    extern void* marioGetPtr(void);
-    extern void* camGetPtr(s32 camId);
-    extern f32 evtGetFloat(void* event, s32 arg);
     extern void evtSetFloat(void* event, s32 arg, f32 value);
     extern void camShiftMain(void* cam, void* mario, void* out);
 
@@ -626,7 +610,6 @@ s32 evt_cam3d_get_shift(void* pEvt) {
     return 2;
 }
 USER_FUNC(evt_cam3d_evt_set_now) {
-    extern void* gp;
     void* cam = camGetPtr(4);
     *(u32*)((s32)cam + 0x40) = *(u32*)((s32)cam + 0xC);
     *(u32*)((s32)cam + 0x44) = *(u32*)((s32)cam + 0x10);
@@ -676,8 +659,6 @@ u8 evt_cam3d_event_from_road(s32 pEvt) {
 }
 
 USER_FUNC(evt_cam_road_reset) {
-    extern f32 float_0p01_80421040;
-    extern void camRoadReset(void);
     void* mario = marioGetPtr();
     void* cam = camGetPtr(4);
     *(f32*)((s32)cam + 0x94) = *(f32*)((s32)mario + 0x8C);
@@ -704,13 +685,7 @@ s32 evt_cam_road_reset2(void* pEvt) {
         f32 z;
     } Vec3;
 
-    extern void* marioGetPtr(void);
-    extern void* camGetPtr(s32 camId);
-    extern f32 evtGetFloat(void* event, s32 arg);
-    extern void camRoadReset(void);
     extern void camShiftReset(void* cam);
-    extern f32 float_0p01_80421040;
-    extern f32 float_0_80421044;
 
     s32* args = *(s32**)((s32)pEvt + 0x18);
     f32 x = evtGetFloat(pEvt, args[0]);
@@ -757,7 +732,6 @@ USER_FUNC(evt_cam_shift_reset) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_cam_type_change(void* pEvt) {
-    extern s32 evtGetValue(void* event, s32 value);
     extern void camSetTypePersp(s32 camId);
     extern void camSetTypeOrtho(s32 camId);
     void* event = pEvt;
@@ -820,8 +794,6 @@ USER_FUNC(evt_cam_letter_box_disable) {
     return 2;
 }
 s32 evt_cam_letter_box_camid(void* pEvt) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern void* camGetPtr(s32 camId);
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 id = evtGetValue(pEvt, args[0]);
 

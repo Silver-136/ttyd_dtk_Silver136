@@ -1,10 +1,11 @@
 #include "effect/n64/eff_lensflare_n64.h"
 
+extern s32 rand(void);
+
 void* effLensflareN64Entry(f32 x, f32 y, f32 z, s32 arg3, s32 life) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effLensflareMain(void);
-    extern s32 rand(void);
     extern char str_LensflareN64_802fb408[];
     extern f32 float_0p1_804259a0;
     extern f32 float_0p4_804259c0;
@@ -49,7 +50,6 @@ void* effLensflareN64Entry(f32 x, f32 y, f32 z, s32 arg3, s32 life) {
 void effLensflareMain(void* effect) {
     extern void effDelete(void*);
     extern f64 cos(f64);
-    extern s32 rand(void);
     extern f32 dispCalcZ(void*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effLensflareDisp(s32, void*);

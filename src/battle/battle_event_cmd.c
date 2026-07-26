@@ -1,19 +1,15 @@
 #include "battle/battle_event_cmd.h"
 
 #include "battle/battle.h"
+#include "battle/battle_ac.h"
+#include "battle/battle_ac_help.h"
 #include "battle/battle_sub.h"
+#include "manager/evtmgr.h"
 
 void btlsubResetMoveColorLvAll(BattleWork* battleWork);
-void BattleStoreExp(BattleWork* battleWork, s32 exp);
-void BattleStoreCoin(BattleWork* battleWork, s32 coin);
-
 void BattleFogForceStop(void);
 void battleSortPhaseMoveTable(BattleWork* battleWork, s32 arg);
 
-void BattleAcHelpSetHelp(s32 help);
-void BattleAcHelpSetDispType(s32 type);
-void BattleActionCommandStop(BattleWork* battleWork);
-s32 BattleActionCommandGetDefenceResult(void);
 void psndSFXOff(s32 sfxId);
 
 BattleWorkUnitPart* BtlUnit_GetPartsPtr(BattleWorkUnit* unit, s32 partsId);
@@ -28,14 +24,15 @@ s32 BtlUnit_GetEnemyBelong(BattleWorkUnit* unit);
 s32 BtlUnit_GetBodyPartsId(BattleWorkUnit* unit);
 BattleWorkUnit* BattleGetPartnerPtr(BattleWork* battleWork, BattleWorkUnit* unit);
 BattleWorkUnitPart* BattleGetUnitPartsPtr(s32 unitId, s32 partsId);
-void BtlUnit_GetPos(BattleWorkUnit* unit, f32* x, f32* y, f32* z);
 void BtlUnit_GetPartsPos(BattleWorkUnitPart* part, f32* x, f32* y, f32* z);
-void BtlUnit_GetPartsOffsetPos(BattleWorkUnitPart* part, f32* x, f32* y, f32* z);
 void* BtlUnit_GetData(BattleWorkUnit* unit, s32 id);
 void* evtChildEntry(void* event, void* script, s32 flags);
-void evtDeleteID(s32 id);
 void BattleRunWaitEvent(BattleWorkUnit* unit);
 void _MoveSoundControlEndCore(void* unit, void* work);
+void _UnitMoveSoundControl(void* unit);
+void _PartsMoveSoundControl(void* part);
+void _UnitMoveSoundControlEnd(void* unit);
+void _PartsMoveSoundControlEnd(void* parts);
 
 void BattleAttackDeclareAll(BattleWork* battleWork);
 void BattleDamageDirect(s32 unk, BattleWorkUnit* unit, BattleWorkUnitPart* part, s32 damage, s32 zero, s32 flags, s32 arg5, s32 arg6);
@@ -58,7 +55,6 @@ void BtlUnit_GetScale(BattleWorkUnit* unit, f32* x, f32* y, f32* z);
 s32 BtlUnit_GetWidth(BattleWorkUnit* unit);
 s32 BtlUnit_GetHeight(BattleWorkUnit* unit);
 
-void BtlUnit_SetPos(BattleWorkUnit* unit, f32 x, f32 y, f32 z);
 void BtlUnit_AddPos(BattleWorkUnit* unit, f32 x, f32 y, f32 z);
 void BtlUnit_SetPartsPos(BattleWorkUnitPart* part, f32 x, f32 y, f32 z);
 void BtlUnit_AddPartsPos(BattleWorkUnitPart* part, f32 x, f32 y, f32 z);
@@ -106,10 +102,7 @@ s32 BtlUnit_GetTotalHitDamage(BattleWorkUnit* unit);
 void BtlUnit_SetStatus(BattleWorkUnit* unit, s32 status, s32 turns, s32 strength);
 void BattleRunHitEventDirect(BattleWorkUnit* unit, s32 flags, s32 arg);
 f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
-s32 BattleActionCommandGetDifficulty(BattleWork* battleWork);
-void BattleActionCommandSetDifficulty(BattleWork* battleWork, BattleWorkUnit* unit, s32 difficulty);
 void BattleActionCommandDeclareACResult(BattleWork* battleWork, s32 result);
-s32 BattleActionCommandGetPrizeLv(BattleWork* battleWork, BattleWorkUnit* unit, s32 value);
 void BattleAcrobatStart(BattleWork* battleWork, s32 unitId, s32 a, s32 b, s32 c, s32 d);
 s32 BattleAcrobatMain(BattleWork* battleWork);
 void BattleAcrobatGetResult(BattleWork* battleWork, s32* result1, s32* result2);
@@ -125,7 +118,6 @@ void BtlUnit_PayWeaponCost(BattleWorkUnit* unit, void* weapon);
 BattleWorkUnit* BtlUnit_GetGuardKouraPtr(BattleWorkUnit* unit);
 s32 BattlePadMultiCheckNow(s32 player, u32 mask);
 s32 BattlePadMultiCheckTrigger(s32 player, u32 mask);
-void BattleAudience_ApRecoveryBuild(void* apInfo);
 void BattleStatusWindowCheck(void);
 s32 BattleEnemyUseItemCheck(BattleWorkUnit* unit);
 void* BattleStageGetPtr(void);
@@ -160,12 +152,8 @@ extern s32 _mario_acrobat_voice_table[];
 extern s32 _mario_attack_voice_table[];
 extern s32 subsetevt_confuse_flustered[];
 void BattleGetFirstAttackUnit(BattleWork* battleWork, BattleWorkUnitPart** part, BattleWorkUnit** unit);
-void BattleActionCommandSetup(BattleWork* battleWork, s32 param, BattleWorkUnit* unit, s32 rawArg, s32 value);
-void BattleActionCommandStart(BattleWork* battleWork);
 void BattleActionCommandResult(BattleWork* battleWork);
-void BattleActionCommandCheckDefence(BattleWorkUnit* unit, s32 value);
 void BattleAudience_Case_Appeal(BattleWorkUnit* unit);
-void BattleAfterReactionEntry(s32 unitId, s32 arg);
 USER_FUNC(btlevtcmd_WaitEventEnd) {
     s32 id;
 
@@ -4180,8 +4168,6 @@ USER_FUNC(btlevtcmd_MovePosition) {
     extern void BtlUnit_SetMoveTargetPos(BattleWorkUnit* unit, f32 x, f32 y, f32 z);
     extern void BtlUnit_SetPos(BattleWorkUnit* unit, f32 x, f32 y, f32 z);
     extern void BtlUnit_LoadSeMode(s32 mode, s32 sound, void* soundData, void* soundWork);
-    extern void _UnitMoveSoundControl(void* unit);
-    extern void _UnitMoveSoundControlEnd(void* unit);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern void btlMovePos(f32* x, f32* z, f32 speed, f32 angle);
@@ -4304,8 +4290,6 @@ s32 btlevtcmd_DivePosition(EventEntry* event, BOOL isFirstCall) {
     extern void BtlUnit_SetMoveTargetPos(BattleWorkUnit*, f32, f32, f32);
     extern void BtlUnit_SetPos(BattleWorkUnit*, f32, f32, f32);
     extern void BtlUnit_LoadSeMode(s32, s32, void*, void*);
-    extern void _UnitMoveSoundControl(void*);
-    extern void _UnitMoveSoundControlEnd(void*);
     extern f32 intpl_sub(f32, f32, s32, s32, s32);
     extern f32 sinfd(f32);
     extern f32 sqrtf(f32);
@@ -6147,8 +6131,6 @@ s32 btlevtcmd_DivePartsPosition(EventEntry* event, BOOL isFirstCall) {
     extern void BtlUnit_SetPartsMoveTargetPos(void*, f32, f32, f32);
     extern void BtlUnit_SetPartsPos(void*, f32, f32, f32);
     extern void BtlUnit_LoadSeMode(s32, s32, void*, void*);
-    extern void _PartsMoveSoundControl(void*);
-    extern void _PartsMoveSoundControlEnd(void*);
     extern f32 intpl_sub(f32, f32, s32, s32, s32);
     extern f32 sinfd(f32);
     extern f32 sqrtf(f32);

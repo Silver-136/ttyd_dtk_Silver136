@@ -1,13 +1,15 @@
 #include "effect/n64/eff_cloud_n64.h"
+
+extern s32 rand(void);
+extern f32 float_0_80424f18;
+
 #pragma optimize_for_size off
 
 void* effCloudN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effCloudMain(void*);
-    extern s32 rand(void);
     extern char str_CloudN64_802fad30[];
-    extern f32 float_0_80424f18;
     void* entry;
     u8* work;
     s32 i;
@@ -99,12 +101,10 @@ void* effCloudN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
 
 u8 effCloudMain(u32* effect) {
     extern void effDelete(void* effect);
-    extern s32 rand(void);
     extern f32 dispCalcZ(void* pos);
     extern void dispEntry(s32 prio, s32 layer, void* callback, void* arg, f32 z);
     extern u8 effCloudDisp(void);
     extern f32 sqrtf(f32 x);
-    extern f32 float_0_80424f18;
     extern u32 vec3_802fad00[];
 
     u8* work = (u8*)effect[3];
@@ -256,7 +256,6 @@ void effCloudDisp(int cameraId, int effectAddress) {
     extern void GXBegin(int, int, int);
     extern float float_0p015625_80424f10;
     extern float float_0p03125_80424f14;
-    extern float float_0_80424f18;
     extern unsigned char unk_8042966c;
     unsigned char texObj[0x20];
     Mtx texMtx;

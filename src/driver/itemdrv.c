@@ -1,4 +1,5 @@
 #include "driver/itemdrv.h"
+#include "driver/seqdrv.h"
 extern void* gp;
 extern u8 work[];
 
@@ -76,7 +77,6 @@ void itemCoinDrop(float* param_1) {
 s32 itemGetCheck(void* itemEntry) {
     extern void* marioGetPtr(void);
     extern s32 marioStGetSystemLevel(void);
-    extern s32 seqGetSeq(void);
     extern s32 vivianGetStatus(void);
     extern s32 nokonoko_holdItem(void);
     extern s32 N_fbatPreventMarioEventChk(void);
@@ -181,7 +181,6 @@ s32 itemGetCheck(void* itemEntry) {
 u32 itemGetNokoCheck(void* itemEntry) {
     extern void* marioGetPtr(void);
     extern s32 marioStGetSystemLevel(void);
-    extern s32 seqGetSeq(void);
     extern s32 vivianGetStatus(void);
     extern s32 N_fbatPreventMarioEventChk(void);
 

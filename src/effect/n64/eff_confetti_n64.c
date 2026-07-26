@@ -1,5 +1,17 @@
 #include "effect/n64/eff_confetti_n64.h"
 
+extern s32 rand(void);
+extern f32 float_0_80424f78;
+extern f32 float_0p1_80424f7c;
+extern f32 float_35_80424f80;
+extern f32 float_15_80424f84;
+extern f32 float_0p03_80424f88;
+extern f32 float_5_80424f8c;
+extern f32 float_neg1p7_80424f90;
+extern f32 float_0p01_80424f94;
+extern f32 float_0p05_80424f98;
+extern f32 float_10_80424f9c;
+
 void effConfettiN64SetCamId(void* effect, s32 camId) {
     *(s32*)((s32)*(void**)((s32)effect + 0xC) + 0x34) = camId;
 }
@@ -8,21 +20,10 @@ void effConfettiN64SetCamId(void* effect, s32 camId) {
 void* effConfettiN64Entry(f32 x, f32 y, f32 z, s32 type, s32 timer) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
-    extern s32 rand(void);
     extern double sin(f64 x);
     extern double cos(f64 x);
     extern void effConfettiMain(void* effect);
     extern char str_ConfettiN64_802fad78[];
-    extern f32 float_0_80424f78;
-    extern f32 float_0p1_80424f7c;
-    extern f32 float_35_80424f80;
-    extern f32 float_15_80424f84;
-    extern f32 float_0p03_80424f88;
-    extern f32 float_5_80424f8c;
-    extern f32 float_neg1p7_80424f90;
-    extern f32 float_0p01_80424f94;
-    extern f32 float_0p05_80424f98;
-    extern f32 float_10_80424f9c;
     extern f32 float_3_80424fa8;
     extern f32 float_4_80424fac;
     extern f32 float_0p5_80424fb0;
@@ -143,20 +144,9 @@ void effConfettiMain(void* effect) {
         f32 z;
     } LocalVec3;
     extern void effDelete(void* effect);
-    extern s32 rand(void);
     extern f32 dispCalcZ(LocalVec3* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
     extern void effConfettiDisp(s32 cameraId, void* effect);
-    extern f32 float_0_80424f78;
-    extern f32 float_0p1_80424f7c;
-    extern f32 float_35_80424f80;
-    extern f32 float_15_80424f84;
-    extern f32 float_0p03_80424f88;
-    extern f32 float_5_80424f8c;
-    extern f32 float_neg1p7_80424f90;
-    extern f32 float_0p01_80424f94;
-    extern f32 float_0p05_80424f98;
-    extern f32 float_10_80424f9c;
     extern f32 float_0p98_80424fa0;
     extern f32 float_neg0p5_80424fa4;
     u8* work;
@@ -279,7 +269,6 @@ void effConfettiDisp(s32 cameraId, void* effect) {
     extern f32 float_0p011489_80424f68;
     extern f32 float_0p0625_80424f70;
     extern f32 float_0p0039062_80424f74;
-    extern f32 float_0_80424f78;
     extern u8 color_table[];
     extern u8 anm_seq[];
     extern u8 size6x6_tex16x16_2_vtx[];

@@ -3,12 +3,24 @@
 extern s32 nokoSe;
 extern f32 float_37_80421678;
 extern f32 float_24_80421708;
+extern f32 float_0_80421644;
+extern f32 float_neg1_80421648;
+extern f32 float_10_8042165c;
+extern f32 float_180_8042163c;
+extern f32 float_3p1416_80421638;
+extern f32 float_90_80421654;
+extern f32 float_0p5_80421658;
+extern double sin(double x);
+extern double cos(double x);
 
 void partyGoodbyeInit(void* party);
 s32 partyGoodbyeMain(void* party);
 void partyChgRunMode(void* party, s32 mode);
 s32 marioGetPartyId(void);
 void* partyGetPtr(s32 id);
+extern void* marioGetPtr(void);
+extern void psndSFXOff(s32 soundId);
+extern void itemNokoForceGet(s32 item);
 
 s32 nokonokoGetStatus(void* party) {
     u8 state;
@@ -81,7 +93,6 @@ void nokonoko_init(void* party) {
 }
 
 void nokonoko_move(void* party) {
-    extern void* marioGetPtr(void);
     extern void partyWalkInit(void* party, s32 param);
     extern void unk_800cbeb0(void* party);
     extern void partyRecordFootmark(void* party);
@@ -121,8 +132,6 @@ void nokonoko_move(void* party) {
 
 /* fallback stub-fill: map=unk_800d058c addr=0x800d058c size=0x000001a8 */
 void unk_800d058c(void) {
-    extern void* marioGetPtr(void);
-    extern void psndSFXOff(s32 soundId);
 
     void* party;
     unsigned char state;
@@ -179,9 +188,6 @@ void unk_800d058c(void) {
 
 
 void nokonoko_use_post(void* party) {
-    extern void itemNokoForceGet(s32 item);
-    extern void* marioGetPtr(void);
-    extern void psndSFXOff(s32 soundId);
     u32 item;
     f32 height;
 
@@ -233,15 +239,9 @@ u8 nokonoko_use(void* party) {
     extern f32 float_18p5_80421680;
     extern f32 float_2_80421684;
     extern f32 float_45_80421688;
-    extern f32 float_0_80421644;
     extern f32 float_6p2832_8042168c;
     extern f32 float_360_80421690;
-    extern f32 float_neg1_80421648;
-    extern f32 float_10_8042165c;
     extern f32 float_50_80421694;
-    extern f32 float_180_8042163c;
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern void effSmallStarN64Entry(f64, f64, f64, f64, f64, f64, s32, s32);
     void* player = *(void**)((s32)party + 0x160);
     u8 state;
@@ -410,9 +410,6 @@ u8 nokonoko_use(void* party) {
 }
 
 void nokonoko_finish(void* party) {
-    extern void itemNokoForceGet(s32 item);
-    extern void* marioGetPtr(void);
-    extern void psndSFXOff(s32 soundId);
     u32 item;
     f32 height;
     u32 flags;
@@ -469,21 +466,12 @@ void nokotaro_hold_cancel(void* party) {
 #pragma use_lmw_stmw off
 void* ccwall(void* party, s32 mode) {
     extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
-    extern f64 sin(f64 x);
-    extern f64 cos(f64 x);
     extern void* hitCheckFilter(f64, f64, f64, f64, f64, f64, s32,
                                 void*, void*, void*, void*, void*, void*, void*);
     extern u32 hitGetAttr(void* hit);
-    extern f32 float_3p1416_80421638;
-    extern f32 float_180_8042163c;
-    extern f32 float_0_80421644;
-    extern f32 float_neg1_80421648;
-    extern f32 float_90_80421654;
-    extern f32 float_0p5_80421658;
     extern f32 float_0p4_80421674;
     extern f32 float_1_80421670;
     extern f32 float_6_8042166c;
-    extern f32 float_10_8042165c;
     extern f32 float_11_80421668;
     extern f32 float_30_80421660;
     extern f32 float_100_80421664;
@@ -641,22 +629,13 @@ void* ccwall(void* party, s32 mode) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u32 lookupSafetyPos(f32 height, f32* inPos, f32* outPos) {
-    extern void* marioGetPtr(void);
     extern f32 toMovedir(f32 dir);
     extern f32 revise360(f32 dir);
-    extern double sin(double x);
-    extern double cos(double x);
     extern s32 hitCheckFilter(double x, double y, double z,
                               double nx, double ny, double nz, s32 flags,
                               void* out1, void* out2, void* out3, void* out4,
                               void* out5, void* out6, void* out7);
-    extern f32 float_180_8042163c;
-    extern f32 float_3p1416_80421638;
     extern f32 float_0p1_80421640;
-    extern f32 float_0_80421644;
-    extern f32 float_neg1_80421648;
-    extern f32 float_90_80421654;
-    extern f32 float_0p5_80421658;
 
     void* player;
     f32 radius;
@@ -797,9 +776,6 @@ u32 lookupSafetyPos(f32 height, f32* inPos, f32* outPos) {
 #pragma no_register_save_helpers reset
 
 void lookupSafetyPos2(float height, float* inPos, float* outPos) {
-    extern void* marioGetPtr(void);
-    extern double sin(double x);
-    extern double cos(double x);
     extern int hitCheckFilter(double x, double y, double z, double nx, double ny, double nz, int flags,
                               void* out1, void* out2, void* out3, void* out4, void* out5, void* out6, void* out7);
 
@@ -864,9 +840,6 @@ void lookupSafetyPos2(float height, float* inPos, float* outPos) {
 }
 
 void lookupSafetyPos3(float height, float* inPos, float* outPos) {
-    extern void* marioGetPtr(void);
-    extern double sin(double x);
-    extern double cos(double x);
     extern int hitCheckFilter(double x, double y, double z, double nx, double ny, double nz, int flags,
                               void* out1, void* out2, void* out3, void* out4, void* out5, void* out6, void* out7);
 
@@ -930,9 +903,6 @@ void lookupSafetyPosSub(double height, double angle, float* inPos, float* outPos
     float probeZ;
     float limit;
 
-    extern void* marioGetPtr(void);
-    extern double sin(double x);
-    extern double cos(double x);
     extern int hitCheckFilter(double x, double y, double z, double nx, double ny, double nz, int flags,
                               void* out1, void* out2, void* out3, void* out4, void* out5, void* out6,
                               void* out7);

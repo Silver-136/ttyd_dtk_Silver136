@@ -1,5 +1,7 @@
 #include "effect/n64/eff_timestamp_n64.h"
 
+extern f32 float_0_80426438;
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effTimestampN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
@@ -9,7 +11,6 @@ void* effTimestampN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scal
     extern char str_TimestampN64_802fc200[];
     extern s32 pos_data[];
     extern f32 float_1_80426454;
-    extern f32 float_0_80426438;
     void* entry;
     u8* work;
     s32 i;
@@ -75,7 +76,6 @@ void effTimestampMain(void* effect) {
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effTimestampDisp(void);
     extern Vec3 vec3_802fc1e0[];
-    extern f32 float_0_80426438;
     extern f32 float_0p05_80426450;
     u8* work;
     u8* part;

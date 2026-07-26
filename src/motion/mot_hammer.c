@@ -1,31 +1,32 @@
 #include "motion/mot_hammer.h"
+extern void* pouchGetPtr(void);
+extern void* marioGetPtr(void);
+extern f32 revise360(f32 angle);
+extern s32 pouchGetHammerLv(void);
+extern void marioChgPose(char* pose);
+extern u32 psndSFXOn_3D(s32 id, void* position);
+extern s32 marioAnimeId(void);
+extern void animPoseSetLocalTime(f32 time, s32 poseId);
+extern f32 float_0_80420ab8;
+extern f32 float_90_80420ac0;
+extern f32 float_270_80420ac4;
+extern f32 float_180_80420ac8;
+extern f32 float_30_80420ae4;
+extern void marioPaperOff(void);
+extern void marioAdjustMoveDir(void);
 
 s32 marioGetHammerLevel(void) {
-    extern void* pouchGetPtr(void);
 
     return *(s8*)((s32)pouchGetPtr() + 0x99);
 }
 
 u8 mot_hammer(void) {
-    extern void* marioGetPtr(void);
-    extern void* pouchGetPtr(void);
     extern void* hitEstimate(s32* kind);
     extern u32 hitGetAttr(void* hit);
-    extern f32 revise360(f32 angle);
     extern f32 toMovedir(f32 angle);
     extern f32 toMovedir2(f32 angle, f32 offset);
-    extern s32 pouchGetHammerLv(void);
-    extern void marioChgPose(char* pose);
-    extern u32 psndSFXOn_3D(s32 id, void* position);
-    extern s32 marioAnimeId(void);
-    extern void animPoseSetLocalTime(f32 time, s32 poseId);
     extern void* evtEntry(void* code, s32 priority, s32 flags);
     extern void marioChgMot(s32 motion);
-    extern f32 float_0_80420ab8;
-    extern f32 float_90_80420ac0;
-    extern f32 float_270_80420ac4;
-    extern f32 float_180_80420ac8;
-    extern f32 float_30_80420ae4;
     extern f32 float_neg30_80420b7c;
     extern char str_M_H_1_80420b88;
     extern char str_M_H_2_80420b80;
@@ -188,14 +189,11 @@ u8 mot_hammer(void) {
 }
 
 s32 marioChkHammer2(void) {
-    extern void* marioGetPtr(void);
-    extern void* pouchGetPtr(void);
     extern s32 strcmp(char*, char*);
     extern void marioChgPose(char*);
     extern void marioVoiceGlareOff(void);
     extern void marioVoiceGlareOn(void);
     extern s32 marioGetRub(s32, void*, void*, void*);
-    extern f32 float_0_80420ab8;
     extern char str_M_I_Y_80420b74;
     extern char str_M_S_1_80420b6c;
 
@@ -251,20 +249,12 @@ s32 marioChkHammer2(void) {
 
 
 void mot_hammer2(void) {
-    extern void* marioGetPtr(void);
-    extern s32 pouchGetHammerLv(void);
-    extern void marioChgPose(char* pose);
     extern void marioPaperOn(char* pose);
-    extern void marioPaperOff(void);
     extern void marioChgPaper(char* pose);
     extern void marioPaperLightOff(void);
-    extern u32 psndSFXOn_3D(s32 id, void* position);
     extern void psndSFXOff(u32 id);
-    extern s32 marioAnimeId(void);
-    extern void animPoseSetLocalTime(f32 time, s32 poseId);
     extern s32 marioGetRub(s32 type, void* dir, void* count, void* scratch);
     extern f64 revise360(f64 angle);
-    extern void marioAdjustMoveDir(void);
     extern void marioChgMotSub(s32 motion, s32 param);
     extern char str_M_H_3_80420b18;
     extern char str_M_H_6_80420b20;
@@ -272,18 +262,14 @@ void mot_hammer2(void) {
     extern char str_P_H_1A_802c3f8c;
     extern char str_P_H_1B_802c3f84;
     extern char str_P_H_1C_802c3f7c;
-    extern f32 float_0_80420ab8;
     extern f32 float_1_80420b48;
     extern f32 float_6_80420b30;
     extern f32 float_18_80420b58;
     extern f32 float_24_80420b64;
-    extern f32 float_30_80420ae4;
     extern f32 float_36_80420aec;
     extern f32 float_42_80420b4c;
     extern f32 float_54_80420b44;
     extern f32 float_72_80420b34;
-    extern f32 float_180_80420ac8;
-    extern f32 float_270_80420ac4;
     extern f32 float_38_80420b0c;
     extern f32 float_15_80420b10;
     extern f32 float_10_80420b14;
@@ -460,11 +446,8 @@ void mot_hammer2(void) {
 }
 
 f32 marioGetAngleKaitenHammer(void) {
-    extern void* marioGetPtr(void);
-    extern f32 revise360(f32 angle);
     extern f32 float_neg1_80420b04;
     extern f32 float_neg2_80420b08;
-    extern f32 float_270_80420ac4;
 
     void* mario = marioGetPtr();
     if (*(u16*)((s32)mario + 0x2E) != 0x13) {
@@ -477,10 +460,6 @@ f32 marioGetAngleKaitenHammer(void) {
 }
 
 void mot_ham2_post(void) {
-    extern void* marioGetPtr(void);
-    extern void marioPaperOff(void);
-    extern void marioAdjustMoveDir(void);
-    extern f32 float_0_80420ab8;
     extern f32 float_0p01_80420b00;
     void* mario = marioGetPtr();
     u32 flags = *(u32*)((s32)mario + 0x4);
@@ -504,24 +483,18 @@ void mot_ham2_post(void) {
 }
 
 void* hitEstimate(s32* outKind) {
-    extern void* marioGetPtr(void);
     extern f32 toMovedir2(f32, f32);
     extern void sincosf(f32, f32*, f32*);
     extern f64 cos(f64);
     extern void* hitCheckVecFilter(void*, s32);
     extern u32 hitGetAttr(void*);
-    extern f32 float_0_80420ab8;
     extern f32 float_neg20_80420abc;
-    extern f32 float_90_80420ac0;
-    extern f32 float_270_80420ac4;
-    extern f32 float_180_80420ac8;
     extern f32 float_3p1416_80420acc;
     extern f32 float_4_80420ad0;
     extern f32 float_14_80420ad4;
     extern f32 float_1p2217_80420ad8;
     extern f32 float_5_80420adc;
     extern f32 float_26_80420ae0;
-    extern f32 float_30_80420ae4;
     extern f32 float_0p7854_80420ae8;
     extern f32 float_20_80420af0;
     extern f32 float_34_80420af4;

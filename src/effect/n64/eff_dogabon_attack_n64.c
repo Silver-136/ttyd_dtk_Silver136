@@ -1,13 +1,14 @@
 #include "effect/n64/eff_dogabon_attack_n64.h"
+extern double sin(double);
+extern double cos(double);
+extern signed char y_data[];
+
 void* effDogabonAttackN64Entry(float x, float y, float z, float scale, int type, int timer) {
     extern void* effEntry(void);
     extern void* __memAlloc(int, int);
     extern void effDogabonAttackMain(void*);
     extern int rand(void);
-    extern double sin(double);
-    extern double cos(double);
     extern char str_DogabonAttackN64_802fadf8[];
-    extern signed char y_data[];
     extern float float_6p2832_80425084;
     extern float float_360_80425088;
     extern float float_15_80425090;
@@ -61,7 +62,6 @@ void* effDogabonAttackN64Entry(float x, float y, float z, float scale, int type,
 
 
 #pragma optimize_for_size off
-#pragma optimize_for_size off
 void effDogabonAttackMain(void* effect) {
     extern void effDelete(void*);
     extern float dispCalcZ(void*);
@@ -72,9 +72,6 @@ void effDogabonAttackMain(void* effect) {
     extern unsigned char move_data_1[];
     extern unsigned char move_data_2[];
     extern unsigned char move_data_hazure[];
-    extern signed char y_data[];
-    extern double sin(double);
-    extern double cos(double);
     unsigned char* entry = (unsigned char*)effect;
     unsigned char* work = *(unsigned char**)(entry + 0xC);
     unsigned char* part = work;

@@ -1,6 +1,16 @@
 #include "sound.h"
 
 void SoundSSPlayChEx_main(s32 result, s32 userData);
+extern char sound[];
+extern void __memFree(s32 heap, void* ptr);
+extern void sndSeqVolume(s32 volume, s32 frames, void* seq, s32 flag);
+extern void sndStreamFree(void* stream);
+extern void sndRemoveEmitter(void* emitter);
+extern char str_PCTs_PCTsPCTs_802e3cd0[];
+extern char* getMarioStDvdRoot(void);
+extern char str_436[];
+extern void sndSeqContinue(void* seq);
+extern void cache_flush(void*);
 
 void* sndMalloc(s32 size) {
     extern void* __memAlloc(s32 heap, s32 size);
@@ -9,13 +19,11 @@ void* sndMalloc(s32 size) {
 }
 
 void sndFree(void* ptr) {
-    extern void __memFree(s32 heap, void* ptr);
 
     __memFree(0, ptr);
 }
 
 void SoundInit(void) {
-    extern char sound[];
     extern char aramMemArray[];
     extern char revH[];
     extern char revS[];
@@ -220,7 +228,6 @@ void SoundInit(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundMain(void) {
-    extern char sound[];
     extern u32 sndSeqGetValid(void* seq);
     extern void sndSeqStop(void* seq);
     extern void SoundEfxMain(void);
@@ -259,7 +266,6 @@ void SoundMainInt(void) {
 }
 
 void SoundSetFadeTime(s16 a, s16 b) {
-    extern char sound[];
 
     *(s16*)(sound + 0x208) = a;
     *(s16*)(sound + 0x20A) = b;
@@ -270,7 +276,6 @@ void SoundSetFadeTime(s16 a, s16 b) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 loadDVD_callback(u32 offset, s32 length) {
-    extern char sound[];
     extern s32 DVDOpen(char* path, void* fileInfo);
     extern s32 DVDReadPrio(void* fileInfo, void* dst, s32 length, u32 offset, s32 prio);
     extern void DVDClose(void* fileInfo);
@@ -290,14 +295,10 @@ s32 loadDVD_callback(u32 offset, s32 length) {
 
 
 s32 SoundLoadDVD2(s32 name) {
-    extern char sound[];
-    extern char str_436[];
-    extern char str_PCTs_PCTsPCTs_802e3cd0[];
     extern char str_pool_80421944[];
     extern char str_proj_8042194c[];
     extern char str_sdir_80421954[];
     extern char str_samp_8042195c[];
-    extern char* getMarioStDvdRoot(void);
     extern int sprintf(char* s, char* format, ...);
     extern char* strcpy(char* dst, char* src);
     extern void* DVDMgrOpen(char* path, s32 mode, s32 unk);
@@ -305,7 +306,6 @@ s32 SoundLoadDVD2(s32 name) {
     extern s32 DVDMgrRead(void* handle, void* dst, u32 size, u32 offset);
     extern void DVDMgrClose(void* handle);
     extern void* __memAlloc(s32 heap, u32 size);
-    extern void __memFree(s32 heap, void* ptr);
     extern void sndSetSampleDataUploadCallback(void* callback, s32 size);
     extern void loadDVD_callback(void);
 
@@ -407,7 +407,6 @@ s32 SoundLoadDVD2(s32 name) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 SoundLoadDVD2PushGroup(u8* data) {
-    extern char sound[];
     extern s32 sndPushGroup(void* group, u16 id, s32 zero, void* aux, void* base);
     u32 group;
     u32 count;
@@ -451,8 +450,6 @@ s32 SoundLoadDVD2PushGroup(u8* data) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundLoadDVD2Free(void) {
-    extern char sound[];
-    extern void __memFree(s32 heap, void* ptr);
     void* ptr;
 
     ptr = *(void**)(sound + 0x32C);
@@ -465,20 +462,15 @@ void SoundLoadDVD2Free(void) {
 #pragma use_lmw_stmw on
 
 s32 SoundSLibLoadDVD(s32 name) {
-    extern char sound[];
-    extern char str_436[];
-    extern char str_PCTs_PCTsPCTs_802e3cd0[];
     extern char str_slib_8042192c[];
     extern char str_stbl_80421934[];
     extern char str_etbl_8042193c[];
-    extern char* getMarioStDvdRoot(void);
     extern int sprintf(char* s, char* format, ...);
     extern void* DVDMgrOpen(char* path, s32 mode, s32 unk);
     extern u32 DVDMgrGetLength(void* handle);
     extern s32 DVDMgrRead(void* handle, void* dst, u32 size, u32 offset);
     extern void DVDMgrClose(void* handle);
     extern void* __memAlloc(s32 heap, u32 size);
-    extern void __memFree(s32 heap, void* ptr);
 
     void* handle;
     u32 length;
@@ -604,21 +596,17 @@ s32 SoundSLibLoadDVD(s32 name) {
 }
 
 s32 SoundDropData(void) {
-    extern char sound[];
     extern u32 sndSeqGetValid(u32 id);
     extern void sndSeqStop(void);
     extern void sndFXKeyOff(u32 id);
-    extern void sndRemoveEmitter(void* emitter);
     extern void AISetStreamPlayState(u32 state);
     extern void DVDCancelStream(void* fileInfo);
     extern void DVDClose(void* fileInfo);
     extern s32 OSDisableInterrupts(void);
     extern void OSRestoreInterrupts(s32 level);
     extern void DVDMgrClose(void* handle);
-    extern void sndStreamFree(void* stream);
     extern void sndSilence(void);
     extern void sndPopGroup(void);
-    extern void __memFree(s32 heap, void* ptr);
 
     u8* node;
     u8* entry;
@@ -778,7 +766,6 @@ s32 SoundDropData(void) {
 }
 
 void SoundSetOutputMode(s32 mode) {
-    extern char sound[];
     extern void sndOutputMode(s32 mode);
 
     if (*(s32*)(sound + 0x218) != mode) {
@@ -788,7 +775,6 @@ void SoundSetOutputMode(s32 mode) {
 }
 
 void SoundOpenCover(void) {
-    extern char sound[];
 
     if (*(u16*)(sound + 0x214) != 0) {
         return;
@@ -802,7 +788,6 @@ void SoundOpenCover(void) {
 
 
 void SoundCloseCover(void) {
-    extern char sound[];
     extern s32 sndIsInstalled(void);
     void* table;
     u16 flags;
@@ -860,12 +845,9 @@ void SoundCloseCover(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundSongPlayCh(s32 index, u32 value) {
-    extern char sound[];
     extern u32 sndSeqGetValid(void* seq);
     extern void sndSeqStop(void* seq);
     extern s32 sndSeqPlayEx(s32 a, s32 b, void* seq, s32 c, s32 d);
-    extern void sndSeqVolume(s32 volume, s32 frames, void* seq, s32 flag);
-    extern void sndSeqContinue(void* seq);
     extern void sndSeqMute(void* seq, s32 mute, s32 flag);
     void* entry;
     void* node;
@@ -906,10 +888,7 @@ void SoundSongPlayCh(s32 index, u32 value) {
 
 
 void SoundSongContinueCh(s32 index) {
-    extern char sound[];
     extern u32 sndSeqGetValid(void* seq);
-    extern void sndSeqContinue(void* seq);
-    extern void sndSeqVolume(s32 volume, s32 frames, void* seq, s32 flag);
     void* entry = (void*)((s32)*(void**)(sound + 0xF0) + index * 0x10);
 
     if (sndSeqGetValid(*(void**)entry) != 0) {
@@ -921,7 +900,6 @@ void SoundSongContinueCh(s32 index) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundSongStopCh(s32 index) {
-    extern char sound[];
     extern u32 sndSeqGetValid(void* seq);
     extern void sndSeqStop(void* seq);
     void** table = *(void***)(sound + 0xF0);
@@ -939,9 +917,7 @@ void SoundSongStopCh(s32 index) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundSongFadeoutCh(s32 index) {
-    extern char sound[];
     extern u32 sndSeqGetValid(void* seq);
-    extern void sndSeqVolume(s32 volume, s32 frames, void* seq, s32 flag);
     void** table = *(void***)(sound + 0xF0);
     s32 offset = index * 0x10;
 
@@ -955,9 +931,7 @@ void SoundSongFadeoutCh(s32 index) {
 
 
 void SoundSongFadeinCh(s32 index) {
-    extern char sound[];
     extern u32 sndSeqGetValid(void* seq);
-    extern void sndSeqVolume(s32 volume, s32 frames, void* seq, s32 flag);
     void* entry = (void*)((s32)*(void**)(sound + 0xF0) + index * 0x10);
 
     if (sndSeqGetValid(*(void**)entry) != 0) {
@@ -969,9 +943,7 @@ void SoundSongFadeinCh(s32 index) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundSongSetVolCh(s32 index, u8 volume) {
-    extern char sound[];
     extern u32 sndSeqGetValid(void* seq);
-    extern void sndSeqVolume(s32 volume, s32 frames, void* seq, s32 flag);
     void* entry;
 
     entry = (void*)((s32)*(void**)(sound + 0xF0) + (index << 4));
@@ -988,7 +960,6 @@ void SoundSongSetVolCh(s32 index, u8 volume) {
 
 
 s32 SoundSongGetVolCh(s32 index) {
-    extern char sound[];
     extern u32 sndSeqGetValid(void* seq);
     void* entry = (void*)((s32)*(void**)(sound + 0xF0) + index * 0x10);
 
@@ -999,7 +970,6 @@ s32 SoundSongGetVolCh(s32 index) {
 }
 
 s32 SoundSongCheck(s32 index) {
-    extern char sound[];
     extern s32 sndSeqGetValid(void* seq);
     void* seq = *(void**)((s32)*(void**)(sound + 0xF0) + index * 0x10);
     s32 valid = sndSeqGetValid(seq);
@@ -1008,9 +978,7 @@ s32 SoundSongCheck(s32 index) {
 }
 
 u32 SoundEfxPlayEx(s32 id, u16 priority, u32 volume, u32 pan) {
-    extern char sound[];
     extern void sndFXKeyOff(u32 id);
-    extern void sndRemoveEmitter(void* emitter);
     extern s32 OSDisableInterrupts(void);
     extern void OSRestoreInterrupts(s32 level);
     extern u32 sndFXStartEx(s32 id, u32 volume, u32 pan, u8 zero);
@@ -1106,9 +1074,7 @@ u32 SoundEfxPlayEx(s32 id, u16 priority, u32 volume, u32 pan) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundEfxStop(s32 index) {
-    extern char sound[];
     extern void sndFXKeyOff(s32 id);
-    extern void sndRemoveEmitter(void* emitter);
     void* entry;
 
     entry = (void*)((s32)*(void**)(sound + 0xF4) + index * 0x88);
@@ -1125,7 +1091,6 @@ void SoundEfxStop(s32 index) {
 
 
 void SoundEfxSetPitch(s32 index, u32 value) {
-    extern char sound[];
     extern s32 sndEmitterVoiceID(void* emitter);
     extern s32 sndFXCheck(s32 id);
     extern void sndFXCtrl14(s32 id, s32 ctrl, s32 value);
@@ -1145,7 +1110,6 @@ void SoundEfxSetPitch(s32 index, u32 value) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundEfxSetVolume(s32 index, u32 value) {
-    extern char sound[];
     extern s32 sndEmitterVoiceID(void* emitter);
     extern s32 sndFXCheck(s32 id);
     extern void sndFXCtrl(s32 id, s32 ctrl, s32 value);
@@ -1171,14 +1135,12 @@ void SoundEfxSetVolume(s32 index, u32 value) {
 
 
 s32 SoundEfxGetVolume(s32 index) {
-    extern char sound[];
     void* table = *(void**)(sound + 0xF4);
 
     return *(u16*)((s32)table + index * 0x88 + 4) & 0xFF;
 }
 
 void SoundEfxSetAux1(s32 index, s32 value) {
-    extern char sound[];
     extern s32 sndEmitterVoiceID(void* emitter);
     extern s32 sndFXCheck(s32 id);
     extern void sndFXCtrl(s32 id, s32 ctrl, s32 value);
@@ -1198,7 +1160,6 @@ void SoundEfxSetAux1(s32 index, s32 value) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundEfxSetPan(s32 index, u32 value) {
-    extern char sound[];
     extern s32 sndEmitterVoiceID(void* emitter);
     extern s32 sndFXCheck(s32 id);
     extern void sndFXCtrl(s32 id, s32 ctrl, s32 value);
@@ -1228,7 +1189,6 @@ void SoundEfxSetPan(s32 index, u32 value) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundEfxSetSrndPan(s32 index, u32 value) {
-    extern char sound[];
     extern s32 sndEmitterVoiceID(void* emitter);
     extern s32 sndFXCheck(s32 id);
     extern void sndFXCtrl(s32 id, s32 ctrl, s32 value);
@@ -1267,7 +1227,6 @@ void SoundEfxSetSrndPan(s32 index, u32 value) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundEfxSetLPF(s32 index, s16 value) {
-    extern char sound[];
     extern s32 sndEmitterVoiceID(void* emitter);
     extern s32 sndFXCheck(s32 id);
     extern void sndFXSetFilter(s32 id, s32 on, s32 value);
@@ -1302,7 +1261,6 @@ void SoundEfxSetLPF(s32 index, s16 value) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 SoundEfxCheck(s32 index) {
-    extern char sound[];
     extern s32 sndEmitterVoiceID(void* emitter);
     extern s32 sndFXCheck(s32 id);
     extern s32 sndCheckEmitter(void* emitter);
@@ -1344,7 +1302,6 @@ ok:
 
 
 void SoundEfxMain(void) {
-    extern char sound[];
     extern double sin(double);
     extern double cos(double);
     extern void sndUpdateListener(void* listener, void* pos, void* delta, void* dir, void* up, u32 flags);
@@ -1352,7 +1309,6 @@ void SoundEfxMain(void) {
     extern u32 sndEmitterVoiceID(void* emitter);
     extern u32 sndFXCheck(u32 id);
     extern void sndFXKeyOff(u32 id);
-    extern void sndRemoveEmitter(void* emitter);
     extern u32 sndCheckEmitter(void* emitter);
     extern const f32 float_0_80421908;
     extern const f32 float_1_80421914;
@@ -1451,7 +1407,6 @@ void SoundEfxMain(void) {
 }
 
 void SoundDVDMain(void) {
-    extern char sound[];
     extern u32 AIGetStreamSampleCount(void);
     extern void AISetStreamPlayState(u32 state);
     extern void DVDCancelStream(void* fileInfo);
@@ -1582,7 +1537,6 @@ void SoundDVDMain(void) {
 }
 
 void _ssDVDReadAsync_activeChk(s32 result, void* ptr) {
-    extern char sound[];
     extern s32 OSDisableInterrupts(void);
     extern void OSRestoreInterrupts(s32);
     extern void sndStreamActivate(s32);
@@ -1728,14 +1682,12 @@ void cache_flush(void* ptr) {
 }
 
 void _ssDVDReadAsync_cache_aram(int param_1) {
-    extern char sound[];
     extern u32 DVDMgrGetLength(void*);
     extern void DVDMgrReadAsync(void*, void*, u32, u32, void*);
     extern void DCInvalidateRange(void*, u32);
     extern void ARQPostRequest(void*, void*, s32, s32, u32, void*, u32, void*);
     extern void _ssDVDReadAsync_activeChk(s32, void*);
     extern void _ssDVDReadAsync_cache_next(void);
-    extern void cache_flush(void*);
 
     u8* entry;
     u32 length;
@@ -1849,7 +1801,6 @@ void _ssDVDReadAsync_cache_aram(int param_1) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void _ssDVDReadAsync_cache_next(s32 result, void* fileInfo) {
-    extern char sound[];
     extern void DCFlushRange(void* addr, u32 len);
     extern void ARQPostRequest(void* request, u32 owner, u32 type, u32 priority, u32 source, u32 dest, u32 length, void* callback);
     extern void _ssDVDReadAsync_cache_aram(s32 value);
@@ -1976,7 +1927,6 @@ check_count:
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _sscallback(void* outA, u32 countA, void* outB, u32 countB, u32 streamId) {
-    extern char sound[];
     extern u8* ssDecodeDPCM(void* entry, s32 work, void* out, u32 count, u8* input);
     u8* entry = (u8*)(*(s32*)(sound + 0x100) + (streamId & 0xFF) * 0x138);
     u8* work;
@@ -2078,17 +2028,12 @@ void SoundSSPlayCh(s32 a, s32 b) {
 }
 
 void SoundSSPlayChEx(s32 index, char* name, s32 useSlot) {
-    extern char sound[];
     extern f32 float_0_80421908;
     extern f32 float_127_80421918;
-    extern char str_436[];
-    extern char str_PCTs_PCTsPCTs_802e3cd0[];
     extern char str_stm_8042191c[];
     extern s32 OSDisableInterrupts(void);
     extern void OSRestoreInterrupts(s32 level);
     extern void DVDMgrClose(void* handle);
-    extern void sndStreamFree(void* stream);
-    extern char* getMarioStDvdRoot(void);
     extern int sprintf(char* s, char* format, ...);
     extern void* DVDMgrOpen(char* path, s32 zero, s32 zero2);
     extern void DVDMgrReadAsync(void* handle, void* dst, s32 size, s32 offset, void* callback);
@@ -2186,7 +2131,6 @@ void SoundSSPlayChEx(s32 index, char* name, s32 useSlot) {
 
 
 void SoundSSPlayChEx_main(s32 result, s32 userData) {
-    extern char sound[];
     extern void DVDMgrReadAsync(void*, void*, u32, u32, void*);
     extern void DCInvalidateRange(void*, u32);
     extern void ARQPostRequest(void*, void*, u32, u32, u32, void*, u32, void*);
@@ -2350,11 +2294,9 @@ void SoundSSPlayChEx_main(s32 result, s32 userData) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundSSStopCh(s32 index) {
-    extern char sound[];
     extern s32 OSDisableInterrupts(void);
     extern void OSRestoreInterrupts(s32 level);
     extern void DVDMgrClose(void* handle);
-    extern void sndStreamFree(void* stream);
     void* entry;
     u32 streamIndex;
     char* base;
@@ -2396,7 +2338,6 @@ void SoundSSStopCh(s32 index) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundSSFadeoutCh(s32 index) {
-    extern char sound[];
     extern void* gp;
     void* entry;
     f32 rate;
@@ -2416,7 +2357,6 @@ void SoundSSFadeoutCh(s32 index) {
 
 
 void SoundSSContinueCh(s32 index) {
-    extern char sound[];
     void* entry = (void*)((s32)*(void**)(sound + 0x100) + index * 0x138);
     u16 flags = *(u16*)entry;
 
@@ -2435,7 +2375,6 @@ void SoundSSContinueCh(s32 index) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundSSSetPanCh(s32 index, u8 pan) {
-    extern char sound[];
     extern f32 float_63_8042190c;
     extern void sndStreamMixParameter(void* stream, s32 volume, s32 pan, s32 aux, s32 zero);
     void* entry;
@@ -2474,7 +2413,6 @@ void SoundSSSetPanCh(s32 index, u8 pan) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundSSSetVolCh(s32 index, u8 volume) {
-    extern char sound[];
     extern f32 float_63_8042190c;
     extern void sndStreamMixParameter(void* stream, s32 volume, s32 pan, s32 aux, s32 zero);
     void* entry;
@@ -2523,7 +2461,6 @@ void SoundSSSetVolCh(s32 index, u8 volume) {
 
 
 s32 SoundSSGetVolCh(s32 index) {
-    extern char sound[];
     void* entry = (void*)((s32)*(void**)(sound + 0x100) + index * 0x138);
 
     if (*(u16*)entry != 0) {
@@ -2538,7 +2475,6 @@ s32 SoundSSGetVolCh(s32 index) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundSSSetSrndPanCh(s32 index, u8 pan) {
-    extern char sound[];
     extern f32 float_63_8042190c;
     extern void sndStreamMixParameter(void* stream, s32 volume, s32 pan, s32 aux, s32 zero);
     s32 offset;
@@ -2587,7 +2523,6 @@ void SoundSSSetSrndPanCh(s32 index, u8 pan) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundSSSetPlayFreqCh(s32 index, u16 value) {
-    extern char sound[];
     extern s32 OSDisableInterrupts(void);
     extern void OSRestoreInterrupts(s32 level);
     extern void sndStreamFrq(void* stream, u16 freq);
@@ -2619,14 +2554,12 @@ void SoundSSSetPlayFreqCh(s32 index, u16 value) {
 
 
 u16 SoundSSCheck(s32 index) {
-    extern char sound[];
     void* table = *(void**)(sound + 0x100);
 
     return *(u16*)((s32)table + index * 0x138);
 }
 
 void SoundSSMuteOn(s32 index) {
-    extern char sound[];
     void* table = *(void**)(sound + 0x100);
     u16* flags = (u16*)((s32)table + index * 0x138);
 
@@ -2637,7 +2570,6 @@ void SoundSSMuteOn(s32 index) {
 }
 
 void SoundSSMuteOff(s32 index) {
-    extern char sound[];
     void* table = *(void**)(sound + 0x100);
     u16* flags = (u16*)((s32)table + index * 0x138);
 
@@ -2647,10 +2579,8 @@ void SoundSSMuteOff(s32 index) {
     *flags &= ~2;
 }
 void SoundSSMain(void) {
-    extern char sound[];
     extern void sndStreamMixParameter(void* stream, s32 volume, s32 pan, s32 span, s32 flags);
     extern void DVDMgrClose(void* entry);
-    extern void sndStreamFree(void* stream);
     extern s32 OSDisableInterrupts(void);
     extern void OSRestoreInterrupts(s32 state);
     extern const f32 float_0_80421908;
@@ -2763,12 +2693,10 @@ void SoundSSMain(void) {
 }
 
 void SoundSSMainInt(void) {
-    extern char sound[];
     extern void DVDMgrReadAsync(void*, void*, u32, u32, void*);
     extern void DCInvalidateRange(void*, u32);
     extern void ARQPostRequest(void*, void*, s32, s32, u32, void*, u32, void*);
     extern void _ssDVDReadAsync_activeChk(s32, void*);
-    extern void cache_flush(void*);
 
     s32 i;
     s32 offset;
@@ -2904,7 +2832,6 @@ void SoundSSMainInt(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundAIDMACallback(void) {
-    extern char sound[];
     extern void DCFlushRange(void* addr, u32 len);
     void (*callback)(void);
     u8* src;

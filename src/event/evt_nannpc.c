@@ -7,6 +7,11 @@ extern u8 extLoadShadowTev(void);
 extern u8 extDrawShadow(void);
 extern void* nanNPCWork;
 s32 evtGetValue(void* event, s32 arg);
+extern s32 extGetPoseNum(void);
+extern u8* gpGlobals;
+extern char makestring[];
+extern char str_PCT06x_8042285c[];
+extern f32 evtGetFloat(void*, s32);
 
 typedef struct NanNpcSortEntry {
     f32 unk0;
@@ -21,7 +26,6 @@ u8 nanNPCOption(void) {
         f32 z;
     } Vec;
 
-    extern void* nanNPCWork;
     extern f32 PSVECDistance(Vec* a, Vec* b);
     extern void PSVECSubtract(Vec* a, Vec* b, Vec* out);
     extern f32 PSVECMag(Vec* v);
@@ -176,7 +180,6 @@ void nannpc_ext_disp(void) {
     extern void extLoadTev(void);
     extern void extDraw(void);
     extern void extLoadTextureExit(void);
-    extern s32 extGetPoseNum(void);
     extern void extPoseDraw(s32 pose);
     extern void qqsort(void* base, s32 count, s32 size, void* compare);
     extern s32 nannpc_zcompare(void*, void*);
@@ -255,7 +258,6 @@ u8 nannpc_ext_shadow_disp(void) {
 
 void nannpc_ext_init(void) {
     extern void* extGetPosePtr(void);
-    extern s32 extGetPoseNum(void);
     extern void PSMTXIdentity(void* matrix);
     extern f32 float_0_80422870;
     extern f32 float_neg1000_80422874;
@@ -277,7 +279,6 @@ void nannpc_ext_init(void) {
     }
 }
 void nannpc_ext_main_sub(void) {
-    extern s32 extGetPoseNum(void);
     s32* work;
     char* entry;
     void (*callback)(void);
@@ -296,8 +297,6 @@ void nannpc_ext_main_sub(void) {
 }
 
 void nannpc_ext_main_sub_fast(void) {
-    extern s32 extGetPoseNum(void);
-    extern u8* gpGlobals;
     s32* work = (s32*)nanNPCWork;
     char* entry;
     s32 pose;
@@ -352,7 +351,6 @@ void nannpc_ext_dispent(void) {
 }
 
 s32 evt_nannpc_init(void* event, s32 firstCall) {
-    extern s32 evtGetValue(void*, s32);
     extern void* mapalloc_base_ptr;
     extern void* _mapAlloc(void*, u32);
     extern void* memset(void*, s32, u32);
@@ -440,13 +438,10 @@ s32 evt_nannpc_set_subfunc(void* pEvt) {
 }
 
 s32 evt_nannpc_entry(void* event) {
-    extern s32 evtGetValue(void*, s32);
     extern s32 extGetPosePtr(void);
     extern s32 sprintf(char*, const char*, ...);
     extern s32 strcmp(const char*, const char*);
     extern char* strcpy(char*, const char*);
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
     s32* args = *(s32**)((u8*)event + 0x18);
     s32* work = (s32*)nanNPCWork;
     char* name = (char*)evtGetValue(event, args[0]);
@@ -494,9 +489,6 @@ s32 evt_nannpc_entry(void* event) {
 s32 evt_nannpc_set_position(void* pEvt) {
     extern s32 sprintf(char*, char*, ...);
     extern s32 strcmp(char*, char*);
-    extern f32 evtGetFloat(void*, s32);
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
     s32* args;
     s32* work;
     char* name;
@@ -540,8 +532,6 @@ s32 evt_nannpc_get_position(void* pEvt) {
     extern s32 sprintf(char*, char*, ...);
     extern s32 strcmp(char*, char*);
     extern void evtSetFloat(void*, s32, f32);
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
     s32* args;
     s32* work;
     char* name;
@@ -575,9 +565,6 @@ s32 evt_nannpc_get_position(void* pEvt) {
 s32 evt_nannpc_set_hosei_position(void* pEvt) {
     extern s32 sprintf(char*, char*, ...);
     extern s32 strcmp(char*, char*);
-    extern f32 evtGetFloat(void*, s32);
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
     s32* args;
     s32* work;
     char* name;
@@ -611,9 +598,6 @@ s32 evt_nannpc_set_hosei_position(void* pEvt) {
 s32 evt_nannpc_set_size(void* pEvt) {
     extern s32 sprintf(char*, char*, ...);
     extern s32 strcmp(char*, char*);
-    extern f32 evtGetFloat(void*, s32);
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
     s32* args;
     s32* work;
     char* name;
@@ -664,8 +648,6 @@ done:
 s32 evt_nannpc_set_animtbl(void* pEvt) {
     extern s32 sprintf(char*, char*, ...);
     extern s32 strcmp(char*, char*);
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
     s32* args;
     s32* work;
     char* name;
@@ -709,8 +691,6 @@ s32 evt_nannpc_set_animtbl(void* pEvt) {
 s32 evt_nannpc_set_dir(void* pEvt) {
     extern s32 sprintf(char*, char*, ...);
     extern s32 strcmp(char*, char*);
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
     s32* args;
     s32* work;
     char* name;
@@ -742,8 +722,6 @@ s32 evt_nannpc_set_dir(void* pEvt) {
 s32 evt_nannpc_set_work(void* pEvt) {
     extern s32 sprintf(char*, char*, ...);
     extern s32 strcmp(char*, char*);
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
     s32* args;
     s32* work;
     char* name;
@@ -778,8 +756,6 @@ s32 evt_nannpc_get_work(void* pEvt) {
     extern s32 sprintf(char*, char*, ...);
     extern s32 strcmp(char*, char*);
     extern void evtSetValue(void*, s32, s32);
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
     s32* args;
     s32* work;
     char* name;
@@ -812,13 +788,8 @@ s32 evt_nannpc_get_work(void* pEvt) {
 
 s32 evt_nannpc_move_position2(void* event, s32 firstCall) {
     typedef struct Vec3f { f32 x, y, z; } Vec3f;
-    extern s32 evtGetValue(void*, s32);
-    extern f32 evtGetFloat(void*, s32);
     extern s32 sprintf(char*, const char*, ...);
     extern s32 strcmp(const char*, const char*);
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
-    extern u8* gpGlobals;
     extern void PSVECSubtract(Vec3f*, Vec3f*, Vec3f*);
     extern f32 PSVECMag(Vec3f*);
     extern void PSVECScale(Vec3f*, f32, Vec3f*);
@@ -876,10 +847,7 @@ u8 evt_nannpc_jump_position(void* event, s32 isFirstCall) {
     extern s32 strcmp(char* a, char* b);
     extern s32 evtGetValue(void* event, s32 arg);
     extern f32 intplGetValue(f32 start, f32 end, s32 mode, s32 curStep, s32 maxStep);
-    extern void* nanNPCWork;
     extern void* gp;
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
 
     s32* args;
     s32* work;
@@ -947,8 +915,6 @@ u8 evt_nannpc_jump_position(void* event, s32 isFirstCall) {
 s32 evt_nannpc_flag_onoff(void* pEvt) {
     extern s32 sprintf(char*, char*, ...);
     extern s32 strcmp(char*, char*);
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
     s32* args;
     s32* work;
     char* name;
@@ -988,8 +954,6 @@ s32 evt_nannpc_flag_onoff(void* pEvt) {
 s32 evt_nannpc_ppflag_onoff(void* pEvt) {
     extern s32 sprintf(char*, char*, ...);
     extern s32 strcmp(char*, char*);
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
     s32* args;
     s32* work;
     char* name;
@@ -1029,8 +993,6 @@ s32 evt_nannpc_ppflag_onoff(void* pEvt) {
 s32 evt_nannpc_set_func(void* pEvt) {
     extern s32 sprintf(char*, char*, ...);
     extern s32 strcmp(char*, char*);
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
     s32* args;
     s32* work;
     char* name;
@@ -1062,9 +1024,6 @@ s32 evt_nannpc_set_func(void* pEvt) {
 s32 evt_nannpc_set_shadow_position(void* pEvt) {
     extern s32 sprintf(char*, char*, ...);
     extern s32 strcmp(char*, char*);
-    extern f32 evtGetFloat(void*, s32);
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
     s32* args;
     s32* work;
     char* name;
@@ -1099,8 +1058,6 @@ s32 evt_nannpc_set_shadow_position(void* pEvt) {
 s32 evt_nannpc_set_color(void* pEvt) {
     extern s32 sprintf(char*, char*, ...);
     extern s32 strcmp(char*, char*);
-    extern char makestring[];
-    extern char str_PCT06x_8042285c[];
     s32* args;
     s32* work;
     char* name;

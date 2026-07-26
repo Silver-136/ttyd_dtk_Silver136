@@ -1,5 +1,9 @@
 #include "effect/eff_kemutest.h"
 
+extern f64 sin(f64);
+extern f64 cos(f64);
+extern void effConfettiEntry(void);
+
 /* CHATGPT STUB FILL: main/effect/eff_kemutest 20260624_184128 */
 
 /* stub-fill: effKemuTestEntry | missing_definition | ghidra_signature */
@@ -9,10 +13,7 @@ void* effKemuTestEntry(f64 x, f64 y, f64 z, f64 scale, u32 type) {
     extern void* __memAlloc(s32, u32);
     extern void effKemuTestMain(void*);
     extern s32 irand(s32);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern void psndSFXOn_3D(void*, Vec*);
-    extern void effConfettiEntry(void);
     extern void effHitEntry(void);
     extern void* effStardust2N64Entry(f64, f64, f64, f64, f64, s32, s32, s32);
     extern char str_KemuTest_802fe670[];
@@ -163,10 +164,7 @@ void effKemuTestMain(void* effect)  {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32,s32,void*,void*,f32);
     extern void effKemuTestDisp(void);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern void psndSFXOn_3D(char*,Vec3*);
-    extern void effConfettiEntry(void);
     extern char str_SFX_BTL_STAGE_BURST1_802fe658[];
     u8* base=*(u8**)((s32)effect+0xC);
     u8* p=base+0x58;

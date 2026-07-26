@@ -15,7 +15,6 @@ u32 GXGetTexBufferSize(u16 width, u16 height, u32 format, u32 mipmap, u32 maxLod
 f32 dispCalcZ(void* pos);
 void dispEntry(s32 prio, s32 type, void* callback, void* entry, f32 z);
 void effIndirectDisp(s32 cameraId, void* effect);
-void effIndirectMain(void* entry);
 
 extern void* gp;
 extern u32 vec3_80302990[];

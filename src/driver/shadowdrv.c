@@ -1,4 +1,5 @@
 #include "driver/shadowdrv.h"
+#include "driver/dispdrv.h"
 
 void shadowCharShadowDisp_Polygon(s32 param_1);
 void cylinderShadowDraw(s32 param_1);
@@ -16,14 +17,55 @@ u8 rampTex8[0x20];
 
 extern u8 shadowConfig[];
 extern void* smartTexObj(void*, s32);
+extern void* camGetCurPtr(void);
+extern void PSMTXConcat(void* a, void* b, void* ab);
+extern void PSMTXCopy(void* src, void* dst);
+extern void GXSetFog(s32 type, f32 start, f32 end, f32 nearz, f32 farz, void* color);
+extern void GXSetBlendMode(s32 type, s32 src, s32 dst, s32 op);
+extern void GXSetCullMode(s32 mode);
+extern void GXSetNumChans(u32 n);
+extern void GXSetNumTexGens(u32 n);
+extern void GXSetNumTevStages(u32 n);
+extern void GXSetTevOrder(s32 stage, s32 texcoord, s32 texmap, s32 color);
+extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 regid);
+extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 regid);
+extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+extern void GXSetZCompLoc(s32 before_tex);
+extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+extern void GXSetCurrentMtx(s32 id);
+extern void GXClearVtxDesc(void);
+extern void GXSetVtxDesc(s32 attr, s32 type);
+extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 cnt, s32 type, s32 frac);
+extern void GXSetChanMatColor(s32 chan, void* color);
+extern void GXSetArray(s32 attr, void* base, s32 stride);
+extern void GXLoadPosMtxImm(void* mtx, s32 id);
+extern void sysWaitDrawSync(void);
+extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
+extern u32 GXGetTexBufferSize(u32 width, u32 height, s32 format, u8 mipmap, u32 max_lod);
+extern void GXClearBoundingBox(void);
+extern void GXReadBoundingBox(u16* left, u16* top, u16* right, u16* bottom);
+extern void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom);
+extern void GXSetColorUpdate(s32 enable);
+extern void GXSetViewport(f32 left, f32 top, f32 width, f32 height, f32 nearz, f32 farz);
+extern void GXInitTexObjLOD(void* obj, s32 min_filt, s32 mag_filt, f32 min_lod, f32 max_lod, f32 lod_bias, u8 bias_clamp, u8 edge_lod, u32 max_aniso);
+extern void GXInitTexObj(void* obj, void* image_ptr, u16 width, u16 height, u32 format, u32 wrap_s, u32 wrap_t, u8 mipmap);
+extern void GXSetScissor(s32 left, s32 top, s32 width, s32 height);
+extern void* smartAlloc(u32 size, s32 align);
+extern void GXCopyTex(void* dest, u8 clear);
+extern void GXSetTexCopyDst(u16 width, u16 height, u32 format, u32 mipmap);
+extern void GXPixModeSync(void);
+extern void C_MTXLightOrtho(f32 t, f32 b, f32 l, f32 r, f32 scale_s, f32 scale_t, f32 trans_s, f32 trans_t, void* mtx);
+extern void C_MTXLightFrustum(f32 t, f32 b, f32 l, f32 r, f32 n, f32 scale_s, f32 scale_t, f32 trans_s, void* mtx, f32 trans_t);
+extern void GXSetProjection(void* mtx, s32 type);
+extern void C_MTXOrtho(double t, double b, double l, double r, double n, double f, void* mtx);
+extern void C_MTXLookAt(void* dst, void* camPos, void* camUp, void* target);
+extern void GXSetTexCopySrc(u32 left, u32 top, u32 width, u32 height);
+extern void GXCallDisplayList(void* list, u32 nbytes);
 
 void shadowInit(void) {
     extern void* __memAlloc(s32 heap, u32 size);
     extern void* memset(void* dest, s32 value, u32 size);
-    extern u32 GXGetTexBufferSize(u32 width, u32 height, s32 format, u8 mipmap, u32 max_lod);
-    extern void* smartAlloc(u32 size, s32 align);
-    extern void GXInitTexObj(void* obj, void* image_ptr, u16 width, u16 height, u32 format, u32 wrap_s, u32 wrap_t, u8 mipmap);
-    extern void GXInitTexObjLOD(void* obj, s32 min_filt, s32 mag_filt, f32 min_lod, f32 max_lod, f32 lod_bias, u8 bias_clamp, u8 edge_lod, u32 max_aniso);
     extern void DCFlushRange(void* ptr, s32 size);
     extern void* cswp;
     extern void* dswp;
@@ -144,42 +186,13 @@ void shadowMain(void) {
 }
 
 void shadowDisp(s32 param_1, s32 param_2) {
-    extern void* dispGetCurWork(void);
-    extern void* camGetCurPtr(void);
     extern void* camGetPtr(s32 id);
-    extern void GXSetNumChans(u32 n);
     extern void GXSetChanCtrl(s32 chan, s32 enable, s32 amb_src, s32 mat_src, s32 light_mask, s32 diff_fn, s32 attn_fn);
-    extern void GXSetChanMatColor(s32 chan, void* color);
-    extern void GXSetNumTexGens(u32 n);
-    extern void GXSetNumTevStages(u32 n);
-    extern void GXSetTevOrder(s32 stage, s32 texcoord, s32 texmap, s32 color);
-    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 regid);
-    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 regid);
-    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetFog(s32 type, f32 start, f32 end, f32 nearz, f32 farz, void* color);
-    extern void GXSetBlendMode(s32 type, s32 src, s32 dst, s32 op);
     extern void GXSetZMode(s32 enable, s32 func, s32 update);
-    extern void GXSetZCompLoc(s32 before_tex);
-    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXSetArray(s32 attr, void* base, s32 stride);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
-    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 cnt, s32 type, s32 frac);
     extern void GXInvalidateTexAll(void);
     extern void GXGetViewportv(void* vp);
     extern void GXGetScissor(s32* left, s32* top, s32* width, s32* height);
-    extern void GXSetViewport(f32 left, f32 top, f32 width, f32 height, f32 nearz, f32 farz);
-    extern void GXSetScissor(s32 left, s32 top, s32 width, s32 height);
-    extern void GXSetProjection(void* mtx, s32 type);
-    extern void GXSetColorUpdate(s32 enable);
-    extern void C_MTXLookAt(void* dst, void* camPos, void* camUp, void* target);
     extern void C_MTXFrustum(double t, double b, double l, double r, double n, double f, void* mtx);
-    extern void C_MTXOrtho(double t, double b, double l, double r, double n, double f, void* mtx);
-    extern void PSMTXCopy(void* src, void* dst);
-    extern void projShadowEnd(s32 param_1, u32* param_2);
     extern void* cswp;
     extern void* pswp;
     extern void* dswp;
@@ -384,7 +397,6 @@ s32 _filter(s32 param_1, int param_2) {
 }
 
 void shadowCharShadowDisp_Collision(void) {
-    extern void* camGetCurPtr(void);
     extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
     extern s32 hitCheckVecFilter(void* data, void* filter);
     extern s32 _filter(s32, int);
@@ -461,34 +473,8 @@ void shadowCharShadowDisp_Collision(void) {
 }
 
 u8 shadowCharShadowDisp_Projection(void) {
-    extern void* camGetCurPtr(void);
-    extern void GXSetNumChans(u32 n);
     extern void GXSetChanCtrl(s32 chan, u8 enable, s32 amb_src, s32 mat_src, s32 light_mask, s32 diff_fn, s32 attn_fn);
-    extern void GXSetChanMatColor(s32 chan, void* color);
-    extern void GXSetNumTexGens(u32 n);
-    extern void GXSetNumTevStages(u32 n);
-    extern void GXSetTevOrder(s32 stage, s32 texcoord, s32 texmap, s32 color);
-    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 regid);
-    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 regid);
-    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetFog(s32 type, f32 start, f32 end, f32 nearz, f32 farz, void* color);
-    extern void GXSetBlendMode(s32 type, s32 src, s32 dst, s32 op);
     extern void GXSetZMode(s32 enable, s32 func, s32 update);
-    extern void GXSetZCompLoc(s32 before_tex);
-    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXSetArray(s32 attr, void* base, s32 stride);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
-    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 cnt, s32 type, s32 frac);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
-    extern void C_MTXOrtho(double t, double b, double l, double r, double n, double f, void* mtx);
-    extern void GXSetProjection(void* mtx, s32 type);
-    extern void C_MTXLookAt(void* dst, void* camPos, void* camUp, void* target);
     extern void* cswp;
     extern void* gp;
     extern u8 shadowConfig[];
@@ -647,35 +633,8 @@ u8 shadowCharShadowDisp_Projection(void) {
 }
 
 void shadowCharShadowDisp_Polygon(s32 param_1) {
-    extern void* camGetCurPtr(void);
-    extern void GXSetNumChans(u32 n);
     extern void GXSetChanCtrl(s32 chan, u8 enable, s32 amb_src, s32 mat_src, s32 light_mask, s32 diff_fn, s32 attn_fn);
-    extern void GXSetChanMatColor(s32 chan, void* color);
-    extern void GXSetNumTexGens(u32 n);
-    extern void GXSetNumTevStages(u32 n);
-    extern void GXSetTevOrder(s32 stage, s32 texcoord, s32 texmap, s32 color);
-    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 regid);
-    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 regid);
-    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetFog(s32 type, f32 start, f32 end, f32 nearz, f32 farz, void* color);
-    extern void GXSetBlendMode(s32 type, s32 src, s32 dst, s32 op);
     extern void GXSetZMode(s32 enable, s32 func, s32 update);
-    extern void GXSetZCompLoc(s32 before_tex);
-    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXSetArray(s32 attr, void* base, s32 stride);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
-    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 cnt, s32 type, s32 frac);
-    extern void sysWaitDrawSync(void);
-    extern void GXClearBoundingBox(void);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
-    extern void GXReadBoundingBox(u16* left, u16* top, u16* right, u16* bottom);
-    extern void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom);
     extern void* cswp;
     extern u8 testKagePosArray[];
     extern u32 unk_80429538;
@@ -749,37 +708,11 @@ void shadowCharShadowDisp_Polygon(s32 param_1) {
 }
 
 void shadowCharShadowDisp_Texture(s32 param_1) {
-    extern void* camGetCurPtr(void);
-    extern void GXSetNumChans(u32 n);
     extern void GXSetChanCtrl(s32 chan, u8 enable, s32 amb_src, s32 mat_src, s32 light_mask, s32 diff_fn, s32 attn_fn);
-    extern void GXSetChanMatColor(s32 chan, void* color);
     extern void effGetTexObjN64(s32 id, void* obj);
     extern void GXLoadTexObj(void* obj, s32 mapid);
-    extern void GXSetNumTexGens(u32 n);
     extern void GXSetTexCoordGen2(s32 dst, s32 func, s32 src, u32 mtx, u32 normalize, s32 postmtx);
-    extern void GXSetNumTevStages(u32 n);
-    extern void GXSetTevOrder(s32 stage, s32 texcoord, s32 texmap, s32 color);
-    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 regid);
-    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 regid);
-    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetFog(s32 type, f32 start, f32 end, f32 nearz, f32 farz, void* color);
-    extern void GXSetBlendMode(s32 type, s32 src, s32 dst, s32 op);
     extern void GXSetZMode(s32 enable, s32 func, s32 update);
-    extern void GXSetZCompLoc(s32 before_tex);
-    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
-    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 cnt, s32 type, s32 frac);
-    extern void sysWaitDrawSync(void);
-    extern void GXClearBoundingBox(void);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
-    extern void GXReadBoundingBox(u16* left, u16* top, u16* right, u16* bottom);
-    extern void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom);
     extern void* cswp;
     extern u32 unk_8042953c;
     extern f32 float_0_8041f9d4;
@@ -860,8 +793,6 @@ void shadowCharShadowDisp_Texture(s32 param_1) {
 }
 
 void cylinder(void* param_1) {
-    extern void GXSetArray(s32 attr, void* base, s32 stride);
-    extern void GXCallDisplayList(void* list, u32 nbytes);
     extern void* cswp;
     extern u8 color_tbl;
     extern u8 color_tbl_nodecay;
@@ -912,23 +843,10 @@ void cylinder(void* param_1) {
 }
 
 void cylinderShadowDraw(s32 param_1) {
-    extern void* camGetCurPtr(void);
-    extern void sysWaitDrawSync(void);
-    extern void GXClearBoundingBox(void);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
     extern void GXSetTevColor(s32 reg, void* color);
     extern void GXSetZMode(s32 enable, s32 func, s32 update);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXSetBlendMode(s32 type, s32 src, s32 dst, s32 op);
     extern void GXSetAlphaUpdate(s32 enable);
-    extern void GXSetColorUpdate(s32 enable);
     extern void GXSetChanCtrl(s32 chan, u8 enable, s32 amb_src, s32 mat_src, s32 light_mask, s32 diff_fn, s32 attn_fn);
-    extern void GXSetArray(s32 attr, void* base, s32 stride);
-    extern void GXCallDisplayList(void* list, u32 nbytes);
-    extern void GXSetChanMatColor(s32 chan, void* color);
-    extern void GXReadBoundingBox(u16* left, u16* top, u16* right, u16* bottom);
-    extern void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom);
     extern void cylinder(void* entry);
     extern void* cswp;
     extern u32 unk_80429540;
@@ -1049,7 +967,7 @@ void shadowEntry(double x, double y, double z, double size) {
     (*(s32*)(work + 0x104))++;
 }
 
-int shadowEntryMode(double x, double y, double z, double size, u8 mode) {
+s32 shadowEntryMode(double x, double y, double z, double size, u8 mode) {
     extern void* cswp;
     extern f32 float_1_8041f9e4;
     extern f32 float_0p2_8041f9ec;
@@ -1210,22 +1128,7 @@ void* shadowGetProjShadowConfig(void) {
 }
 
 void projShadowEnd(s32 param_1, u32* param_2) {
-    extern void* camGetCurPtr(void);
-    extern void PSMTXCopy(void* src, void* dst);
-    extern void GXSetViewport(f32 left, f32 top, f32 width, f32 height, f32 nearz, f32 farz);
-    extern void GXSetScissor(s32 left, s32 top, s32 width, s32 height);
-    extern u32 GXGetTexBufferSize(u32 width, u32 height, s32 format, u8 mipmap, u32 max_lod);
-    extern void* smartAlloc(u32 size, s32 align);
-    extern void GXSetTexCopySrc(u32 left, u32 top, u32 width, u32 height);
-    extern void GXSetTexCopyDst(u16 width, u16 height, u32 format, u32 mipmap);
     extern void GXSetZMode(u32 enable, u32 func, u32 update_enable);
-    extern void GXCopyTex(void* dest, u8 clear);
-    extern void GXPixModeSync(void);
-    extern void GXInitTexObj(void* obj, void* image_ptr, u16 width, u16 height, u32 format, u32 wrap_s, u32 wrap_t, u8 mipmap);
-    extern void GXInitTexObjLOD(void* obj, s32 min_filt, s32 mag_filt, f32 min_lod, f32 max_lod, f32 lod_bias, u8 bias_clamp, u8 edge_lod, u32 max_aniso);
-    extern void C_MTXLightFrustum(f32 t, f32 b, f32 l, f32 r, f32 n, f32 scale_s, f32 scale_t, f32 trans_s, void* mtx, f32 trans_t);
-    extern void C_MTXLightOrtho(f32 t, f32 b, f32 l, f32 r, f32 scale_s, f32 scale_t, f32 trans_s, f32 trans_t, void* mtx);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
     extern f32 tmp_view[3][4];
     extern s32 tmp_sci[];
     extern f32 tmp_vp[];
@@ -1285,23 +1188,7 @@ void projShadowEnd(s32 param_1, u32* param_2) {
 }
 
 void depthShadowEnd(s32 param_1, u32* param_2) {
-    extern void* camGetCurPtr(void);
-    extern void PSMTXCopy(void* src, void* dst);
-    extern void GXSetColorUpdate(s32 enable);
-    extern void GXSetViewport(f32 left, f32 top, f32 width, f32 height, f32 nearz, f32 farz);
-    extern void GXSetScissor(s32 left, s32 top, s32 width, s32 height);
-    extern u32 GXGetTexBufferSize(u32 width, u32 height, s32 format, u8 mipmap, u32 max_lod);
-    extern void* smartAlloc(u32 size, s32 align);
-    extern void GXSetTexCopySrc(u32 left, u32 top, u32 width, u32 height);
-    extern void GXSetTexCopyDst(u16 width, u16 height, u32 format, u32 mipmap);
     extern void GXSetZMode(u32 enable, u32 func, u32 update_enable);
-    extern void GXCopyTex(void* dest, u8 clear);
-    extern void GXPixModeSync(void);
-    extern void GXInitTexObj(void* obj, void* image_ptr, u16 width, u16 height, u32 format, u32 wrap_s, u32 wrap_t, u8 mipmap);
-    extern void GXInitTexObjLOD(void* obj, s32 min_filt, s32 mag_filt, f32 min_lod, f32 max_lod, f32 lod_bias, u8 bias_clamp, u8 edge_lod, u32 max_aniso);
-    extern void C_MTXLightFrustum(f32 t, f32 b, f32 l, f32 r, f32 n, f32 scale_s, f32 scale_t, f32 trans_s, void* mtx, f32 trans_t);
-    extern void C_MTXLightOrtho(f32 t, f32 b, f32 l, f32 r, f32 scale_s, f32 scale_t, f32 trans_s, f32 trans_t, void* mtx);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
     extern f32 tmp_view[3][4];
     extern s32 tmp_sci[];

@@ -1,5 +1,8 @@
 #include "effect/n64/eff_stardust_n64.h"
 
+extern f64 sin(f64);
+extern f64 cos(f64);
+
 void effStardustDisp(s32 cameraId, void* effect);
 
 void* effStardustN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type) {
@@ -7,8 +10,6 @@ void* effStardustN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type) {
     extern void* __memAlloc(s32, s32);
     extern void effStardustMain(void*);
     extern s32 rand(void);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern char str_StardustN64_802fc0b8[];
     void* entry = effEntry();
     u8* work;
@@ -87,8 +88,6 @@ void* effStardustN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type) {
 u8 effStardustMain(void* effect) {
     extern void effDelete(void*);
     extern s32 effTblRandN64(s32, s32);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern f64 dispCalcZ(void*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     u8* work = *(u8**)((s32)effect + 0xC);

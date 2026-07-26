@@ -18,3 +18,4 @@ extern GlobalWork* gp;
 void marioStInit(void);
 void marioStMain(void);
 void marioStDisp(void);
+void marioStSystemLevel(s32 level);

@@ -138,7 +138,6 @@ u8 effHagetakaFlushDisp(s32 cameraId, void* effect) {
     extern void tri2(s32, s32, s32, s32, s32, s32, s32);
     extern f32 float_deg2rad_80425440;
     extern f32 float_0p03125_80425444;
-    extern f32 float_0_80425448;
     u8 texObj[0x20];
     Mtx model;
     Mtx rotation;

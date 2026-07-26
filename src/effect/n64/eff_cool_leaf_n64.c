@@ -1,11 +1,12 @@
 #include "effect/n64/eff_cool_leaf_n64.h"
+
+extern f32 float_0_80424fd8;
 void* effCoolLeafN64Entry(f32 x, f32 y, f32 z, u32 type) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
     extern s32 rand(void);
     extern void effCoolLeafMain(void* effect);
     extern char str_CoolLeafN64_802fada0[];
-    extern f32 float_0_80424fd8;
     extern f32 float_0p05_80425000;
     extern f32 float_2_80424fe8;
     extern f32 float_0p1_80425028;
@@ -165,7 +166,6 @@ void effCoolLeafDisp(s32 cameraId, void* effect) {
     extern u32 dat_80424fc8;
     extern f32 float_4_80424fd0;
     extern f32 float_1_80424fd4;
-    extern f32 float_0_80424fd8;
     extern char size12x12_tex64x64_brown_vtx[];
     extern char size12x12_tex64x64_red_vtx[];
     u8 texObj[0x20];

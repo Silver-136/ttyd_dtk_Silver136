@@ -1,7 +1,11 @@
 #include "action/star/sac_suki.h"
-#include "event/evt_cmd.h"
+#include "battle/battle_audience.h"
 #include "dolphin/gx.h"
 #include "dolphin/mtx.h"
+#include "driver/camdrv.h"
+#include "event/evt_cmd.h"
+#include "system.h"
+#include "effect/n64/eff_crystal_n64.h"
 
 void* get_ptr(void);
 void main_button(s32 index);
@@ -10,14 +14,8 @@ void disp_3D(void);
 void disp_3D_alpha(void);
 
 extern void* _battleWorkPointer;
-s32 evtGetValue(EventEntry* event, s32 value);
-s32 evtSetValue(EventEntry* event, s32 target, s32 value);
-f32 evtGetFloat(EventEntry* event, s32 value);
-f32 evtSetFloat(EventEntry* event, s32 target, f32 value);
 void* mapGetMapObj(s32 name);
-void* BattleAudienceBaseGetPtr(void);
 void effDelete(void* effect);
-void* memset(void* dest, int value, u32 size);
 void* memcpy(void* dest, const void* src, u32 size);
 char* strcpy(char* dest, const char* src);
 void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 colorChan);
@@ -31,8 +29,6 @@ void PSMTXTransApply(Mtx src, Mtx dst, f32 x, f32 y, f32 z);
 void iconDispGx2(Mtx mtx, s32 flags, s32 iconId);
 void iconDispGx(Vec* pos, s32 flags, s32 iconId, f32 scale);
 void btlGetScreenPoint(Vec* pos, Vec* out);
-void* camGetPtr(s32 cameraId);
-s32 irand(s32 max);
 void N__disp_2D(s32 type, s32 index);
 void main_base(void);
 void main_star(void);
@@ -96,7 +92,6 @@ USER_FUNC(main_suki) {
 
 /* stub-fill: main_base | prototype_only | source_prototype */
 void main_base(void) {
-    extern void* get_ptr(void);
     extern s32 BattleAudience_GetAudienceNum(void);
     extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
     extern void* memcpy(void* dst, const void* src, u32 size);
@@ -283,8 +278,6 @@ void main_button(s32 index) {
 
 /* stub-fill: main_star | prototype_only | source_prototype */
 void main_star(void) {
-    extern void* _battleWorkPointer;
-    extern void* get_ptr(void);
     extern void* BattleGetMarioPtr(void* battleWork);
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern void* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
@@ -531,12 +524,8 @@ void disp_2D(void) {
 
 /* stub-fill: N__disp_2D | prototype_only | source_prototype */
 void N__disp_2D(s32 type, s32 index) {
-    extern void* get_ptr(void);
     extern void iconDispGx(f32 scale, Vec* pos, s32 flags, s32 iconId);
     extern Vec vec3_80301430;
-    extern f32 float_0_80428680;
-    extern f32 float_1_80428670;
-    extern f32 float_60_80428684;
     extern f32 float_80_8042867c;
 
     void* work;
@@ -780,7 +769,6 @@ USER_FUNC(get_screen_point) {
 }
 
 USER_FUNC(eff_crystal) {
-    extern void* effCrystalN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
 
     s32* args;
     f32 x;

@@ -1,5 +1,7 @@
 #include "effect/eff_itemget.h"
 
+extern f32 float_0_804270fc;
+
 void* effItemGetEntry(s32 type, double x, double y, double z) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
@@ -10,7 +12,6 @@ void* effItemGetEntry(s32 type, double x, double y, double z) {
     extern u8 size_tbl[];
     extern f64 double_to_int_mask_802fe720;
     extern f64 double_to_int_802fe730;
-    extern f32 float_0_804270fc;
     extern f32 float_10_80427134;
     extern f32 float_0p75_80427130;
     extern f32 float_6p2832_80427108;
@@ -383,7 +384,6 @@ void effItemUseDisp(s32 cameraId, void* effect) {
     extern f32 float_42p667_804270f0;
     extern f32 float_2_804270f4;
     extern f32 float_0p5_804270f8;
-    extern f32 float_0_804270fc;
     extern f32 float_10p667_80427100;
     extern f32 float_1_80427104;
     extern u32 unk_804298a0;

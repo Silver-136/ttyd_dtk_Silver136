@@ -5,6 +5,7 @@ extern const char str_PCTd_80423948[3];
 
 void animPoseRelease(s32 poseId);
 s32 sprintf(char* str, const char* fmt, ...);
+typedef struct Vec3 { f32 x, y, z; } Vec3;
 typedef struct WinMarioLinkEntry {
     s16 x;
     s16 y;
@@ -18,11 +19,15 @@ extern char* boots_help[4];
 s32 pouchGetHammerLv(void);
 s32 pouchGetJumpLv(void);
 void winMsgEntry(void* pWin, s32 param_2, char* msg, s32 param_4);
+void* pouchGetPtr(void);
+void winTexInit(void* data);
+void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
+void winIconInit(void);
+void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 winMarioInit(void* pWin) {
-    extern void* pouchGetPtr(void);
     extern void* marioGetPtr(void);
     extern s32 marioGetColor(void);
     extern s32 animPoseEntry(char* name, s32 mode);
@@ -289,14 +294,7 @@ char* unk_801703e8(s32 value, s32 width) {
 }
 
 void fukidashi(double x, double y, void* menu, s32 type) {
-    typedef struct Vec3 { f32 x, y, z; } Vec3;
-    extern s32 pouchGetHammerLv(void);
-    extern s32 pouchGetJumpLv(void);
     extern s32 pouchCheckItem(s32 item);
-    extern void winTexInit(void* data);
-    extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
-    extern void winIconInit(void);
-    extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
     extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
     extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
     extern u8 itemDataTable[];
@@ -454,16 +452,9 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
 
 void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
-    typedef struct Vec3 { f32 x, y, z; } Vec3;
-    extern void* pouchGetPtr(void);
     extern void winBgGX(f32 x, f32 y, void* win, s32 type);
     extern void winNameGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
     extern void winKirinukiGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
-    extern void fukidashi(f32 x, f32 y, void* win, s32 type);
-    extern void winTexInit(void* data);
-    extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
-    extern void winIconInit(void);
-    extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
     extern void winFontInit(void);
     extern void winFontSetEdge(Vec3* pos, Vec3* scale, void* color, char* text, ...);
     extern void winFontSetEdgeWidth(Vec3* pos, Vec3* scale, void* color, f32 width,

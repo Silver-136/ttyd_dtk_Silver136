@@ -1,4 +1,6 @@
 #include "driver/mobjdrv.h"
+#include "bowser/koopa_hit.h"
+#include "driver/dispdrv.h"
 
 typedef struct MobjSet {
     s32 count;
@@ -17,7 +19,6 @@ extern void* gp;
 extern s32 koopaRunFlag;
 extern void* mapalloc_base_ptr;
 
-void* memset(void* dst, int value, u32 size);
 void* _mapAlloc(void* heap, u32 size);
 
 void mobjKoopaOn(void) {
@@ -58,7 +59,6 @@ void mobjDispXLU(s32 param_1, void* entry) {
 void mobjDisp(s32 param_1, void* entry) {
     extern void animSetPaperTexMtx(void* mtx, s32 a, s32 b);
     extern void animSetPaperTexObj(void* texObj, s32 a, s32 b, s32 texMap, s32 d, s32 e, s32 f, s32 g);
-    extern void* dispGetCurWork(void);
     extern void animPoseDraw(s32 poseId, s32 mode, f32 x, f32 y, f32 z, f32 rotY, f32 scale);
     extern f32 float_10_804201bc;
     s32 mode;
@@ -494,12 +494,8 @@ void mobjMain(void) {
     extern void PSMTXConcat(Mtx34Local a, Mtx34Local b, Mtx34Local out);
     extern void hitReCalcMatrix(void* hitEntry, Mtx34Local mtx);
 
-    extern void* kpaGetHitobjHead(s32 index);
-    extern void* kpaGetHitobjRide(s32 index);
     extern s32 kpaHipAttackCheck(void);
-    extern void* kpaGetHitobj(void);
     extern s32 kpaGetLevel(void);
-    extern void* kpaGetHitFlame(void);
     extern s32 marioChkHipBump(void);
     extern s32 unk_8005ca2c(void);
     extern f32 PSVECDistance(void* a, void* b);

@@ -1,5 +1,7 @@
 #include "effect/n64/eff_snow_dust_n64.h"
 
+extern void* camGetPtr(s32);
+
 void* effSnowDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 arg4, f32 arg5, f32 scale, s32 count, s32 lifetime) {
     extern void* effEntry(void); extern void* __memAlloc(s32,u32); extern s32 rand(void); extern void effSnowDustMain(void);
     void* effect=effEntry(); u8* work; s32 i; f32 step;
@@ -16,7 +18,6 @@ u8 effSnowDustMain(s32 effectAddress) {
         f32 z;
     } LocalVec3;
     extern void effDelete(void*);
-    extern void* camGetPtr(s32);
     extern s32 rand(void);
     extern s32 irand(s32);
     extern f64 sin(f64);
@@ -163,7 +164,6 @@ u8 effSnowDustMain(s32 effectAddress) {
 
 u8 effSnowDustDisp(s32 cameraId, s32 effectAddress) {
     typedef f32 Mtx[3][4];
-    extern void* camGetPtr(s32);
     extern void effGetTexObjN64(s32, void*);
     extern void GXLoadTexObj(void*, s32);
     extern void GXSetNumChans(s32);

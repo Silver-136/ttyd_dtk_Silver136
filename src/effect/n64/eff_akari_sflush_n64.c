@@ -145,7 +145,6 @@ void effAkariSflushDisp(s32 cameraId, void* entry) {
     extern f32 float_6p2832_80424c80;
     extern f32 float_360_80424c84;
     extern f32 float_0p1_80424c88;
-    extern f32 float_1_80424c8c;
     extern f32 float_30_80424c90;
     extern f32 float_0_80424c94;
     extern u32 dat_80424c78;

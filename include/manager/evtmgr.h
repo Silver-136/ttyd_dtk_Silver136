@@ -9,4 +9,7 @@ typedef struct EventEntry {
 } EventEntry;
 STATIC_ASSERT_SIZEOF(EventEntry, 0x1B0);
 
+void evtmgrReInit(void);
+void evtDeleteID(s32 eventId);
 BOOL evtCheckID(s32 eventId);
+void* evtEntry(void* script, s32 priority, s32 flags);

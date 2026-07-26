@@ -6,6 +6,9 @@ extern void* partyGetPtr();
 extern void marioStSystemLevel();
 extern void psndClearFlag();
 
+extern void partyChgPoseId(void* party, s32 pose);
+extern void partyChgRunMode(void* party, s32 mode);
+
 s32 christineGetStatus(void) {
     void* party = partyGetPtr(marioGetPartyId());
 
@@ -25,7 +28,6 @@ s32 pre_kurio_use(void* pEvt) {
     extern s32 pouchGetHammerLv(void);
     extern s32 pouchGetJumpLv(void);
     extern s32 mobjCheckItemboxOpen(void* mobj);
-    extern void partyChgPoseId(void* party, s32 pose);
     extern char str_msg_kuri_map_802cb8f0[];
     extern char str_MOBJ_Lv1Block_802cb900[], str_MOBJ_Lv1BigBlock_802cb938[];
     extern char str_MOBJ_Lv1BigBigBlock_802cb94c[], str_MOBJ_Lv2Block_802cb988[];
@@ -176,12 +178,10 @@ void kuribo_use(void* pParty) {
     extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
     extern f32 distABf(f32 ax, f32 az, f32 bx, f32 bz);
     extern s32 partySearchFrontWall(f64 distance, f64 angle, void* pParty, f32* pos);
-    extern void partyChgPoseId(void* party, s32 pose);
     extern s32 partyGetAppearPos3(void* party, void* pos);
     extern void* evtEntryType(void* evt, s32 priority, u32 flags, u32 type);
     extern void marioStSystemLevel(s32 level);
     extern void* fbatNpcTalkCheck(void);
-    extern void partyChgRunMode(void* party, s32 mode);
     extern void partyChgMoveMode(void* party, s32 mode);
     extern void partyChgMot(void* party, s32 motion);
     extern void partyChkGnd(void* party);
@@ -301,7 +301,6 @@ void kuribo_use(void* pParty) {
 u8 kuribo_bye(void* pParty) {
     extern void partyGoodbyeInit(void* party);
     extern s32 partyGoodbyeMain(void* party);
-    extern void partyChgRunMode(void* party, s32 mode);
 
     if ((*(u32*)((s32)pParty + 8) & 4) != 0) {
         *(u32*)((s32)pParty + 8) &= ~4;

@@ -1,18 +1,29 @@
 #include "sequence/seq_battle.h"
 
+#include "battle/battle_information.h"
+#include "driver/seqdrv.h"
+#include "sequence/seq_title.h"
+
+extern void* gp;
+extern s32 debug_battle_flag;
+extern void* fbatGetPointer(void);
+extern s32 evtGetValue(void* evt, s32 value);
+extern void psndBGMOn(s32 a, s32 bgm);
+extern void marioCtrlOff(void);
+extern void partyCtrlOff(void);
+extern void* pouchGetPtr(void);
+extern void* marioGetPtr(void);
+extern void* _battleWorkPointer;
+extern void evtmgrReInit(void);
+extern void padRumbleOff(s32 pad);
+extern void psndSetFlag(s32 flag);
+extern void* camGetPtr(s32 cameraId);
+extern void camSetMode(s32 cameraId, s32 mode);
+
 void seq_battleInit(void) {
-    extern void* gp;
-    extern s32 debug_battle_flag;
-    extern void* fbatGetPointer(void);
-    extern s32 evtGetValue(void* evt, s32 value);
     extern void psndBGMOff(s32 flags);
-    extern void psndBGMOn(s32 a, s32 bgm);
     extern void psndENVOff(s32 flags);
-    extern void padRumbleOff(s32 pad);
     extern void evtStopAll(s32 mask);
-    extern void psndSetFlag(s32 flag);
-    extern void marioCtrlOff(void);
-    extern void partyCtrlOff(void);
     void* battle;
     s32 type;
 
@@ -53,21 +64,11 @@ u8 seq_battleMain(int param_1) {
     extern s32 getMarioStDvdRoot(void);
     extern u32 fileAsyncf(s32, s32, char*, s32, char*, ...);
     extern u32 fadeIsFinish(void);
-    extern void* pouchGetPtr(void);
-    extern void* fbatGetPointer(void);
-    extern void* marioGetPtr(void);
-    extern void marioCtrlOff(void);
-    extern void partyCtrlOff(void);
-    extern void padRumbleOff(s32);
     extern void bmapLoad(char*, char*);
     extern s32 battle_init(void);
     extern u32 battleSeqEndCheck(void);
-    extern void* camGetPtr(s32);
     extern void psndSetPosDirListener(void*, f32);
     extern void seqSetSeq(s32, s32, s32);
-    extern void* gp;
-    extern void* _battleWorkPointer;
-    extern s32 debug_battle_flag;
     extern u32 dat_804203b0;
     extern u32 dat_804203b4;
     extern char str_PCTs_PCTs_804203bc[];
@@ -227,27 +228,15 @@ u8 seq_battleMain(int param_1) {
 }
 
 s32 battle_init(void) {
-    extern void* fbatGetPointer(void);
-    extern void* pouchGetPtr(void);
-    extern void camSetMode(s32, s32);
-    extern char* DbgBtlSel_GetMsgDataPtr(void);
     extern void msgLoad(char*, s32);
     extern void N_battleMapAlloc(void);
     extern void animPoseBattleInit(void);
     extern void npcReleaseFiledNpc(void);
-    extern void evtmgrReInit(void);
-    extern void psndSetFlag(s32);
-    extern void BattleInformationInit(void*);
-    extern void BattleInformationSetMode(void*, s32);
     extern s32 marioGetPartyId(void);
     extern void* partyGetPtr(s32);
     extern s32 BattleTransPartyIdToUnitKind(s32);
-    extern void BattleInformationSetParty(void*, s32);
-    extern void BattleInformationSetFirstAttack(void*, s32);
     extern void BattleInfomationSetBattleSetupInfo(void*, void*);
     extern void BattleInit(void*);
-    extern void* gp;
-    extern void* _battleWorkPointer;
     extern char str_gon_11_802c2abc[];
     u8* fbat;
     u8* pouch;
@@ -350,32 +339,23 @@ void battle_exit(void) {
     extern void iconReInit(void);
     extern void extReset(void);
     extern void bmapUnLoad(void);
-    extern void* camGetPtr(s32 cameraId);
-    extern void camSetMode(s32 cameraId, s32 mode);
     extern void npcReset(s32 flag);
     extern void mobjReset(s32 flag);
     extern void offscreenReset(s32 flag);
     extern void imgAutoRelease(s32 value);
     extern void effAutoRelease(s32 value);
     extern void animPoseAutoRelease(s32 value);
-    extern void evtmgrReInit(void);
     extern void npcRecoveryFiledNpc(void);
     extern void evtStartAll(s32 mask);
     extern void marioCtrlOn(void);
     extern void partyCtrlOn(void);
-    extern void* marioGetPtr(void);
     extern void L_psndBGM_stop(void);
     extern void psndClearFlag(s32 flag);
     extern void* lightGetPaperCraft(void);
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
-    extern s32 evtGetValue(void* evt, s32 value);
     extern void unk_800db778(s32 a, s32 b, s32 c, s32 d);
-    extern s32 seqGetNextSeq(void);
-    extern void psndBGMOn(s32 a, s32 bgm);
     extern void psndENVOn(s32 a, s32 env);
-    extern void* gp;
-    extern s32 debug_battle_flag;
     extern const u32 vec3_802c2ab0[];
     extern const f32 float_3_804203b8;
     void* craft;

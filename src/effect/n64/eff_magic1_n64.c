@@ -16,7 +16,6 @@ void* effMagic1N64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 targetX, f3
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effMagic1Main(void*);
     extern char str_Magic1N64_802fb430[];
-    extern f32 float_0_804259cc;
     extern f32 float_1_80425a04;
     extern f32 float_29_80425a1c;
     extern f32 float_6p2_80425a20;
@@ -82,9 +81,7 @@ void effMagic1Main(void* effect) {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effMagic1Disp(s32, void*);
-    extern void* effMagic1N64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 targetX, f32 targetY, f32 targetZ);
     extern const Vec3 vec3_802fb418;
-    extern f32 float_0_804259cc;
     extern f32 float_0p83_80425a14;
     extern f32 float_0p9_80425a18;
     u8* work;

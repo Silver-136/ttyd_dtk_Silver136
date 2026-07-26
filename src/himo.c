@@ -1,4 +1,12 @@
 #include "himo.h"
+
+extern f32 float_0_8042423c;
+extern f32 float_0p5_80424230;
+extern f32 float_1_80424244;
+extern f32 float_3p1416_80424248;
+extern f32 float_10_80424240;
+extern double double_to_int_802f8920;
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void vivihimo(f32 param_1, f32 param_2, f32 param_3, f32 param_4, f32* mtxA, f32* mtxB) {
@@ -16,18 +24,12 @@ void vivihimo(f32 param_1, f32 param_2, f32 param_3, f32 param_4, f32* mtxA, f32
     extern void spline_maketable(s32 count, f32* points, f32* out1, f32* out2);
     extern s32 camGetCurNo(void);
     extern void vivihimoDisp(s32 camera, void* work);
-    extern f32 float_0_8042423c;
     extern f32 float_0p1_80424258;
     extern f32 float_0p2_80424264;
     extern f32 float_0p25_80424260;
     extern f32 float_0p33333_8042426c;
-    extern f32 float_0p5_80424230;
-    extern f32 float_1_80424244;
     extern f32 float_2p5_8042425c;
-    extern f32 float_3p1416_80424248;
-    extern f32 float_10_80424240;
     extern f32 float_neg1_80424268;
-    extern double double_to_int_802f8920;
     extern double double_to_int_mask_802f8940;
     extern void* gp;
 
@@ -122,18 +124,12 @@ void vivihimoDisp(s32 cameraId, void* work) {
     extern void PSMTXConcat(void* a, void* b, void* out);
     extern void GXLoadPosMtxImm(void* mtx, s32 id);
     extern void GXBegin(u32 prim, u32 fmt, u16 count);
-    extern f32 float_0_8042423c;
     extern f32 float_0p066667_80424234;
-    extern f32 float_0p5_80424230;
     extern f32 float_0p82_8042424c;
     extern f32 float_neg1p2881_80424238;
-    extern f32 float_1_80424244;
     extern f32 float_1p2881_80424250;
-    extern f32 float_3p1416_80424248;
-    extern f32 float_10_80424240;
     extern f32 float_15_80424254;
     extern double double_1p2881_802f8918;
-    extern double double_to_int_802f8920;
     extern u8 lbl_80418360[];
     extern u8 lbl_80418380[];
     extern u8 lbl_804183a0[];

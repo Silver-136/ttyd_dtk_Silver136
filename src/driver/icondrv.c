@@ -4,7 +4,6 @@ extern s32 work;
 extern void* gp;
 
 extern s32 strcmp(const char* a, const char* b);
-extern void* memset(void* dst, int value, unsigned long size);
 
 extern void* camGetPtr(s32 cameraId);
 extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);

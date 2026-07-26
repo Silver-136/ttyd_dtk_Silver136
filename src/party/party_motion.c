@@ -17,6 +17,41 @@ void* partyGetPtr(s32 id);
 void partyPaperOff(void* party);
 void partyChgPoseId(void* party, s32 poseId);
 void partyChgMot(void* party, s32 mot);
+extern void partyClearFootmark(void);
+extern void partyClearFootmark2(void);
+extern s32 marioKeyOffChk(void);
+extern s32 marioChkDeepSleep(void);
+extern void partyChgRunMode(void* party, s32 mode);
+extern f32 float_15_80423130;
+extern void* gp;
+extern f32 float_10_804230a4;
+extern f32 float_0p1_80423114;
+extern f32 float_0p05_80423174;
+extern f32 float_5_804230e8;
+extern f32 float_1_804230ec;
+extern void* partyGetFootmarkPtr(s32 id);
+extern void unk_800cbfbc(f32 speed, void* party);
+extern f32 partyGetTargetDistY(s32 id);
+extern f32 partyGetTargetMovespd2(void* party);
+extern f32 vec3_802f4628[];
+extern f32 float_1p5_8042316c;
+extern f32 float_1000_804230c4;
+extern f32 float_100_804230b0;
+extern f32 float_0p5_804230d0;
+extern f32 float_2_804230d8;
+extern f32 float_50_804230b8;
+extern f32 float_neg1_804230c8;
+extern f32 float_neg2000_804230cc;
+extern f32 float_6_80423100;
+extern f32 float_90_80423118;
+extern f32 float_20_80423090;
+extern f32 float_neg6_804230fc;
+extern f32 float_200_804230a8;
+extern void partyPaperOn(void* party, char* name);
+extern void partyChgPaper(void* party, char* name);
+extern f32 float_45_804230e0;
+extern f32 float_neg3_80423110;
+extern f32 float_300_804230ac;
 
 #define PARTY_CAN_FORCE_SLIT_OFF(party) \
     (((*(u32*)(party) & 0x1000) != 0) || ((*(u32*)((s32)(party) + 4) & 0x100) != 0))
@@ -54,14 +89,10 @@ void N_partyFollowCloseOff(void* party) {
 
 u8 party_motion_stay(s32 pParty) {
     extern s32 partyGetFootmarkId(void*);
-    extern void partyClearFootmark(void);
-    extern void partyClearFootmark2(void);
     extern void partyChgPoseId(void*, s32);
     extern void partyChgMot(void*, s32);
     extern void unk_800cbf84(f32, void*);
-    extern s32 marioKeyOffChk(void);
     extern s32 marioChkSlitThrouh(void);
-    extern s32 marioChkDeepSleep(void);
     extern f32 distABf(f32, f32, f32, f32);
     extern void partyGetMoveDirSpd(void*, f32*, f32*);
     extern void* partySearchFrontWall(f32, f32, void*, void*);
@@ -136,20 +167,15 @@ u8 party_motion_stay(s32 pParty) {
 /* fallback stub-fill: map=unk_8015146c addr=0x8015146c size=0x000001e0 */
 void unk_8015146c(void* party) {
     extern void partyChgPoseId(void* party, s32 pose);
-    extern void partyClearFootmark(void);
-    extern void partyClearFootmark2(void);
     extern void party_slit(void* party);
     extern void party_roll(void* party);
     extern void unk_800cbc30(void* party);
     extern void partyChkWall(void* party);
     extern void partyChkGnd(void* party);
     extern f32 distABf(f32 ax, f32 az, f32 bx, f32 bz);
-    extern void partyChgRunMode(void* party, s32 mode);
     extern void partyMoveBehindMario(void* party, s32 arg);
     extern void unk_80150fac(void* party);
     extern void unk_801512e0(void* party);
-    extern s32 marioKeyOffChk(void);
-    extern s32 marioChkDeepSleep(void);
     extern s32 chuchu_searchObject(void);
     extern void partyChgPose(void* party, char* name);
     extern char str_PCH_A2_1_802f46f4[];
@@ -217,7 +243,6 @@ void unk_801512e0(void* pParty) {
     extern void partyChgMot(void* party, s32 mot);
     extern s32 unk_800cb9bc(void* hit);
     extern void partyGetAppearPos5(void* party, void* hit, void* pos);
-    extern f32 float_15_80423130;
     extern f32 float_neg15_8042319c;
     extern f32 float_neg1p5_804231a0;
     f32 pos[3];
@@ -288,16 +313,8 @@ void unk_80150fac(void* pParty) {
     extern void* partySearchHead(f32 dir, void* party, VecLocal* pos, f32* height);
     extern void* partySearchGround(f32 height, f32 vel, void* party);
     extern u32 hitGetAttr(void* hit);
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern void* gp;
     extern char str_las_10_802f47c8[];
-    extern f32 float_10_804230a4;
-    extern f32 float_0_804230bc;
-    extern f32 float_0p1_80423114;
     extern f32 float_0p2_80423194;
-    extern f32 float_0p05_80423174;
-    extern f32 float_5_804230e8;
-    extern f32 float_1_804230ec;
     extern f32 float_neg5_80423180;
     extern f32 float_18p5_80423198;
 
@@ -419,21 +436,14 @@ void unk_80150fac(void* pParty) {
 
 u8 party_motion_homing_walk(s32 pParty) {
     extern s32 partyGetFootmarkId(void* party);
-    extern void* partyGetFootmarkPtr(s32 id);
     extern s32 party_slit(void* party);
     extern s32 party_roll(void* party);
     extern f32 distABf(f32 ax, f32 az, f32 bx, f32 bz);
     extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
     extern void movePos(f32 speed, f32 angle, f32* x, f32* z);
     extern void partyChgPoseId(void* party, s32 pose);
-    extern void unk_800cbfbc(f32 speed, void* party);
     extern void partyMoveBehindMario(void* party, s32 mode);
-    extern f32 partyGetTargetDistY(s32 id);
-    extern f32 partyGetTargetMovespd2(void* party);
-    extern void* gp;
-    extern f32 vec3_802f4628[];
     extern s32 strcmp(const char*, const char*);
-    extern s32 marioKeyOffChk(void);
     void* party = (void*)pParty;
     void* player = *(void**)(pParty + 0x160);
     void* mark;
@@ -497,21 +507,14 @@ u8 party_motion_homing_walk(s32 pParty) {
 
 u8 party_motion_homing_fly(s32 pParty) {
     extern s32 partyGetFootmarkId(void* party);
-    extern void* partyGetFootmarkPtr(s32 id);
     extern s32 party_slit(void* party);
     extern s32 party_roll(void* party);
     extern f32 distABf(f32 ax, f32 az, f32 bx, f32 bz);
     extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
     extern void movePos(f32 speed, f32 angle, f32* x, f32* z);
     extern void partyChgPoseId(void* party, s32 pose);
-    extern void unk_800cbfbc(f32 speed, void* party);
     extern void partyMoveBehindMario(void* party, s32 mode);
-    extern f32 partyGetTargetDistY(s32 id);
-    extern f32 partyGetTargetMovespd2(void* party);
-    extern void* gp;
-    extern f32 vec3_802f4628[];
     extern s32 strcmp(const char*, const char*);
-    extern s32 marioKeyOffChk(void);
     void* party = (void*)pParty;
     void* player = *(void**)(pParty + 0x160);
     void* mark;
@@ -584,11 +587,9 @@ u8 party_motion_behind_mario(s32 pParty) {
     typedef struct Vec { f32 x,y,z; } Vec;
     extern f32 toMovedir(f32);
     extern f32 revise360(f32);
-    extern s32 marioGetPartyId(void);
     extern void* partyGetPtr(s32);
     extern f32 partyToMovedir(f32,void*);
     extern void partyGetAppearPos4(void*,Vec*);
-    extern s32 marioKeyOffChk(void);
     extern f32 distABf(f32,f32,f32,f32);
     extern f32 angleABf(f32,f32,f32,f32);
     extern void partyChgMoveMode(void*,s32);
@@ -697,7 +698,6 @@ void party_motion_behind_mario_continue(void* pParty) {
         f32 z;
     } VecLocal;
     extern f32 toMovedir(f32 dir);
-    extern s32 marioGetPartyId(void);
     extern void* partyGetPtr(s32 id);
     extern void* anotherPartyGetPtr(s32 slot);
     extern f32 partyToMovedir(f32 dir, void* party);
@@ -705,7 +705,6 @@ void party_motion_behind_mario_continue(void* pParty) {
     extern void movePos(f32 speed, f32 angle, f32* x, f32* z);
     extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
     extern f32 distABf(f32 ax, f32 az, f32 bx, f32 bz);
-    extern s32 marioKeyOffChk(void);
     extern void* hitCheckFilter(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, s32 flags,
                                 void* out0, f32* outY, void* out2, f32* dist,
                                 void* out4, void* out5, void* out6);
@@ -717,16 +716,6 @@ void party_motion_behind_mario_continue(void* pParty) {
     extern void partyMoveCheckWall(void* party);
     extern void unk_800cbb10(f32 speed, void* party);
     extern void* partySearchGround(f32 height, f32 vel, void* party);
-    extern f32 float_1p5_8042316c;
-    extern f32 float_1000_804230c4;
-    extern f32 float_100_804230b0;
-    extern f32 float_0p5_804230d0;
-    extern f32 float_2_804230d8;
-    extern f32 float_1_804230ec;
-    extern f32 float_10_804230a4;
-    extern f32 float_50_804230b8;
-    extern f32 float_neg1_804230c8;
-    extern f32 float_neg2000_804230cc;
 
     void* player;
     void* party;
@@ -881,32 +870,23 @@ void party_motion_behind_mario_fly(void* pParty) {
         f32 z;
     } VecLocal;
     extern f32 toMovedir(f32 dir);
-    extern s32 marioGetPartyId(void);
     extern void* partyGetPtr(s32 id);
     extern f32 partyToMovedir(f32 dir, void* party);
     extern f32 revise360(f32 dir);
     extern void partyGetAppearPos4(void* party, VecLocal* pos);
     extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
     extern f32 distABf(f32 ax, f32 az, f32 bx, f32 bz);
-    extern s32 marioKeyOffChk(void);
     extern void partyChgMoveMode(void* party, s32 mode);
     extern void partyChgMot(void* party, s32 mot);
     extern void partySetDir(f32 x, f32 z, void* party);
     extern void unk_800cbf84(f32 speed, void* party);
     extern void unk_800cba60(void* party);
-    extern void unk_800cbfbc(f32 speed, void* party);
     extern void partyGetMoveDirSpd(void* party, f32* dir, f32* speed);
     extern void* partySearchFrontWall(f32 speed, f32 dir, void* party, VecLocal* pos);
     extern void unk_800cbb10(f32 speed, void* party);
     extern void* partySearchGround(f32 height, f32 vel, void* party);
     extern u32 hitGetAttr(void* hit);
     extern f32 float_3p6_80423170;
-    extern f32 float_0p05_80423174;
-    extern f32 float_2_804230d8;
-    extern f32 float_1_804230ec;
-    extern f32 float_6_80423100;
-    extern f32 float_50_804230b8;
-    extern f32 float_100_804230b0;
 
     void* player;
     void* party;
@@ -1058,13 +1038,11 @@ void party_motion_beside_mario(void* pParty) {
         f32 z;
     } VecLocal;
     extern f32 toMovedir(f32 dir);
-    extern s32 marioGetPartyId(void);
     extern void* partyGetPtr(s32 id);
     extern f32 partyToMovedir(f32 dir, void* party);
     extern f32 revise360(f32 dir);
     extern void movePos(f32 speed, f32 angle, f32* x, f32* z);
     extern f32 distABf(f32 ax, f32 az, f32 bx, f32 bz);
-    extern s32 marioKeyOffChk(void);
     extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
     extern void* hitCheckFilter(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, s32 flags,
                                 void* out0, f32* outY, void* out2, f32* dist,
@@ -1077,17 +1055,6 @@ void party_motion_beside_mario(void* pParty) {
     extern void partyChgMot(void* party, s32 mot);
     extern void partyChgMoveMode(void* party, s32 mode);
     extern void partySetDir(f32 x, f32 z, void* party);
-    extern f32 float_1p5_8042316c;
-    extern f32 float_90_80423118;
-    extern f32 float_neg1_804230c8;
-    extern f32 float_neg2000_804230cc;
-    extern f32 float_1000_804230c4;
-    extern f32 float_100_804230b0;
-    extern f32 float_0p5_804230d0;
-    extern f32 float_2_804230d8;
-    extern f32 float_1_804230ec;
-    extern f32 float_10_804230a4;
-    extern f32 float_50_804230b8;
 
     void* player;
     void* party;
@@ -1369,14 +1336,7 @@ void party_motion_jump2(void* pParty) {
     extern u32 hitGetAttr(void* hit);
     extern void partyChgMot(void* party, s32 mot);
     extern void N_partyPlaySfxPartyLanding1(void* party);
-    extern f32 float_neg1_804230c8;
     extern f32 float_2p25_80423154;
-    extern f32 float_50_804230b8;
-    extern f32 float_10_804230a4;
-    extern f32 float_0p5_804230d0;
-    extern f32 float_20_80423090;
-    extern f32 float_neg2000_804230cc;
-    extern f32 float_5_804230e8;
 
     void* player;
     void* hit;
@@ -1498,7 +1458,6 @@ s32 party_motion_fall(void* pParty) {
     extern void partyChgPoseId(void* party, s32 poseId);
     extern void* partySearchGround(f32 height, f32 vel, void* party);
     extern u32 hitGetAttr(void* hit);
-    extern s32 marioKeyOffChk(void);
     extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
     extern f32 toMovedir(f32 dir);
     extern f32 revise360(f32 dir);
@@ -1506,11 +1465,7 @@ s32 party_motion_fall(void* pParty) {
     extern void partyChgMot(void* party, s32 mot);
     extern void partySearchFrontWall(f32 distance, f32 angle, void* party, VecLocal* pos);
     extern void N_partyPlaySfxPartyLanding1(void* party);
-    extern void partyClearFootmark(void);
-    extern void partyClearFootmark2(void);
     extern f32 float_neg1p4_8042313c;
-    extern f32 float_10_804230a4;
-    extern f32 float_neg2000_804230cc;
     extern f32 float_neg16_80423140;
     extern f32 float_neg0p2_80423144;
     extern f32 float_neg2001_80423148;
@@ -1662,15 +1617,8 @@ void party_motion_damage(void* pParty) {
     extern void unk_800cbf84(void* party);
     extern void partyMove(void* party);
     extern u32 hitGetAttr(void* hit);
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern f32 float_0_804230bc;
-    extern f32 float_neg1_804230c8;
-    extern f32 float_neg6_804230fc;
-    extern f32 float_15_80423130;
     extern f32 float_neg300_80423134;
     extern f32 float_240_80423138;
-    extern f32 float_200_804230a8;
-    extern f32 float_neg2000_804230cc;
     void* player;
     f32 posA[3];
     f32 posB[3];
@@ -1868,14 +1816,11 @@ s32 party_slit(void* pParty) {
         f32 y;
         f32 z;
     } VecLocal;
-    extern void partyPaperOn(void* party, char* name);
-    extern void partyChgPaper(void* party, char* name);
     extern void unk_800cbf84(f32 value, void* party);
     extern f32 revise360(f32 angle);
     extern s32 unk_800c2010(void* party, VecLocal* pos);
     extern u32 hitGetAttr(void* hit);
     extern void marioClearSlitFloor(void);
-    extern void partyPaperOff(void* party);
     extern char str_p_slit_802f4770[];
     extern char str_PM_S_1A_802f4778[];
     extern char str_PM_S_1B_802f4780[];
@@ -1886,10 +1831,8 @@ s32 party_slit(void* pParty) {
     extern f32 float_260_80423120;
     extern f32 float_280_8042311c;
     extern f32 float_315_80423124;
-    extern f32 float_45_804230e0;
     extern f32 float_135_80423128;
     extern f32 float_225_8042312c;
-    extern f32 float_neg3_80423110;
 
     void* player;
     VecLocal pos;
@@ -2040,25 +1983,15 @@ s32 party_slit(void* pParty) {
 }
 
 s32 party_roll(void* pParty) {
-    extern void partyPaperOn(void* party, char* name);
-    extern void partyChgPaper(void* party, char* name);
     extern void partyChgPoseId(void* party, s32 poseId);
     extern void unk_800cbf84(f32 value, void* party);
     extern f32 revise360(f32 angle);
     extern void partyPaperLightOff(void* party);
-    extern void partyPaperOff(void* party);
     extern char str_p_roll_802f4750[];
     extern char str_PM_R_1A_802f4758[];
     extern char str_PM_R_1B_802f4760[];
     extern char str_PM_R_1C_802f4768[];
-    extern f32 float_neg6_804230fc;
-    extern f32 float_6_80423100;
-    extern f32 float_2_804230d8;
     extern f32 float_7_8042310c;
-    extern f32 float_neg3_80423110;
-    extern f32 float_0p1_80423114;
-    extern f32 float_90_80423118;
-    extern f32 float_1_804230ec;
     extern f32 vec3_802f4670;
     extern f32 DAT_802f4674;
     extern f32 DAT_802f4678;
@@ -2196,15 +2129,8 @@ u32 getFrontFloor(f32 angle, void* pParty, f32* outPos) {
     extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
     extern s32 hitCheckVecFilter(void* work, void* filter);
     extern u32 hitGetAttr(void* hit);
-    extern f32 float_2_804230d8;
-    extern f32 float_45_804230e0;
-    extern f32 float_100_804230b0;
-    extern f32 float_300_804230ac;
-    extern f32 float_neg2000_804230cc;
     extern f32 float_0p75_804230e4;
-    extern f32 float_0p5_804230d0;
     extern f32 float_neg0p5_804230d4;
-    extern f32 float_1000_804230c4;
 
     HitWork probe;
     HitWork floor;
@@ -2303,26 +2229,18 @@ void party_force_reset_outofscreen(void* pParty) {
         f32 dist;
     } HitWork;
     extern s32 marioCtrlOffChk(void);
-    extern s32 marioKeyOffChk(void);
     extern void marioGetScreenPos(VecLocal* pos, f32* x, f32* y, f32* z);
     extern f32 distABf(f32 ax, f32 az, f32 bx, f32 bz);
     extern s32 partyGetAppearPos3(void* party, VecLocal* pos);
-    extern void partyClearFootmark(void);
     extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
     extern void movePos(f32 speed, f32 angle, f32* x, f32* z);
     extern void* partyHitCheck(void* party, VecLocal* pos, VecLocal* dir, VecLocal* outPos, HitWork* work, f32* dist);
     extern u32 hitGetAttr(void* hit);
-    extern f32 float_20_80423090;
     extern f32 float_800_80423094;
     extern f32 float_neg100_80423098;
     extern f32 float_700_8042309c;
     extern f32 float_650_804230a0;
-    extern f32 float_10_804230a4;
-    extern f32 float_200_804230a8;
-    extern f32 float_300_804230ac;
-    extern f32 float_100_804230b0;
     extern f32 float_74_804230b4;
-    extern f32 float_50_804230b8;
 
     void* player;
     VecLocal screenPos;

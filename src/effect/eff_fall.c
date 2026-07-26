@@ -1,4 +1,7 @@
 #include "effect/eff_fall.h"
+
+extern f64 sin(f64 x);
+extern f64 cos(f64 x);
 void* effFallEntry(f32 x, s32 type, f32 y, s32 count, f32 z, s32 param, f32 rot, f32 arg5, f32 arg6) {
     typedef struct EffEntryRaw {
         u32 flags;
@@ -15,8 +18,6 @@ void* effFallEntry(f32 x, s32 type, f32 y, s32 count, f32 z, s32 param, f32 rot,
     extern void* __memAlloc(s32 heap, u32 size);
     extern void effFallMain(void);
     extern s32 irand(s32 max);
-    extern f64 sin(f64 x);
-    extern f64 cos(f64 x);
     extern u32 psndSFXOn_3D(char* name, VecRaw* pos);
 
     extern char str_Fall_804275a8;
@@ -204,8 +205,6 @@ void effFallMain(void* effect) {
     extern void psndSFXOn(s32);
     extern f64 distABf(f64, f64, f64, f64);
     extern f64 angleABf(f64, f64, f64, f64);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern void effWaterDamageN64Entry(f64, f64, f64, f64, s32, s32);
     u8* base = *(u8**)((u8*)effect + 0xC);
     s32 count = *(s32*)((u8*)effect + 8);
@@ -475,8 +474,6 @@ void effFallDispInseki(s32 cameraId, void* eff) {
     extern void PSMTXRotAxisRad(MtxRaw m, VecRaw* axis, double angle);
     extern void PSMTXScale(MtxRaw m, f32 x, f32 y, f32 z);
     extern void PSMTXConcat(MtxRaw a, MtxRaw b, MtxRaw out);
-    extern f64 cos(f64 x);
-    extern f64 sin(f64 x);
     extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
     extern void animPoseSetMaterialEvtColor(s32 poseId, void* color);
     extern void animPoseDrawMtx(s32 poseId, MtxRaw mtx, s32 mode, double rot, double scale);

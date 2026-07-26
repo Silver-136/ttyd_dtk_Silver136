@@ -21,4 +21,13 @@ typedef struct BattleWorkCamera {
 } BattleWorkCamera;
 STATIC_ASSERT_SIZEOF(BattleWorkCamera, 0x104);
 
+void battleCameraInit(void);
+void battleCameraMain(void);
+f32 battleCameraGetPosMoveSpeed(void);
+void btl_camera_set_mode(s32 priority, s32 mode);
+void btl_camera_set_posoffset(s32 priority, f32 x, f32 y, f32 z);
+void btl_camera_set_moveSpeedLv(s32 priority, s32 level);
+void btl_camera_set_moveto(s32 priority, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz, s32 frames, s32 type);
+void btl_camera_shake_h(s32 priority, f32 a, f32 b, s32 frames, s32 type);
+
 USER_FUNC(evt_btl_camera_set_prilimit);

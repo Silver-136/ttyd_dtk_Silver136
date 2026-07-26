@@ -1,4 +1,36 @@
 #include "sequence/seq_mapchange.h"
+#include "cam_road.h"
+#include "cam_shift.h"
+
+#include "database.h"
+#include "driver/animdrv.h"
+#include "driver/bgdrv.h"
+#include "driver/casedrv.h"
+#include "driver/effdrv.h"
+#include "driver/extdrv.h"
+#include "driver/seqdrv.h"
+#include "driver/icondrv.h"
+#include "driver/imgdrv.h"
+#include "driver/itemdrv.h"
+#include "driver/mapdrv.h"
+#include "driver/msgdrv.h"
+#include "driver/mobjdrv.h"
+#include "driver/npcdrv.h"
+#include "driver/offscreendrv.h"
+#include "driver/swdrv.h"
+#include "driver/windowdrv.h"
+#include "event/evt_badgeshop.h"
+#include "manager/evtmgr.h"
+#include "manager/winmgr.h"
+#include "mapdata.h"
+#include "mario/mario.h"
+#include "mario/mario_cam.h"
+#include "mario/mario_party.h"
+#include "mario/mario_sbr.h"
+#include "mario/mariost.h"
+#include "party/party.h"
+#include "statuswindow.h"
+#include "window/win_main.h"
 
 // Types
 
@@ -16,7 +48,6 @@ typedef struct SeqMapVecRaw {
 
 // Data
 
-extern s32 gp;
 extern void* mapalloc_base_ptr;
 extern char rel_bss[];
 extern void* nanNPCWork;
@@ -26,7 +57,6 @@ extern s32 dbg_lotteryinfo;
 
 extern s32 zero_8041f508;
 extern char lbl_802BF268[];
-extern char* dir_str[];
 
 extern s32 _next_area;
 extern s32 _next_map;
@@ -75,7 +105,6 @@ extern s32 strcmp(const char* a, const char* b);
 extern s32 strncmp(const char* a, const char* b, size_t count);
 extern size_t strlen(const char* str);
 extern s32 sprintf(char* dst, const char* fmt, ...);
-extern void* memset(void* dst, int value, size_t size);
 extern void* memcpy(void* dst, const void* src, size_t size);
 
 extern f64 sin(f64 x);
@@ -95,62 +124,15 @@ extern s32 psndBGMPlayTime(s32 id);
 extern void psndClearFlag(u32 flags);
 extern void psndMapChange(void);
 
-extern void badgeShop_bargainGeneration(void);
-extern void badgeShop_bottakuruGeneration(void);
-
-extern void marioReInit(void);
-extern void marioInitCamId(void);
-extern void* marioGetPtr(void);
-extern s32 marioGetPartyId(void);
-extern s32 marioGetExtraPartyId(void);
-extern s32 marioChkKey(void);
-extern s32 marioChkCtrl(void);
 extern void marioKeyOff(void);
-extern void marioStSystemLevel(s32 level);
-extern void marioEntry(void);
-extern void N_marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z);
-extern void* partyGetPtr(s32 id);
 
-extern void mapLoad(char* name);
-extern void msgLoad(char* name, s32 unk);
-extern void mapUnLoad(void);
 extern s32 mapPreLoad(char* map);
-extern char** mapDataPtr(char* map);
-extern void setupDataLoad(char* name);
-extern void setupDataBase(char* area, char* map);
-extern s32 setupDataCheck(void);
-extern void bgEntry(char* name);
-extern void bgReInit(void);
 
-extern void npcReset(s32 value);
-extern void npcExecAllInitEvt(void);
-extern s32 npcWaitAllInitEvtEnd(void);
-extern void npcExecAllReglEvt(void);
-extern void extReset(void);
-extern void mobjReset(s32 value);
-extern void offscreenReset(s32 value);
-extern void imgAutoRelease(s32 value);
-extern void effAutoRelease(s32 value);
-extern void animPoseAutoRelease(s32 value);
-extern void evtmgrReInit(void);
-extern void caseReInit(void);
-extern void itemReInit(void);
-extern void iconReInit(void);
-extern void windowReInit(void);
-extern void winReInit(void);
-extern void statusWinReInit(void);
-extern void statusWinForceUpdate(void);
-extern void winMgrReInit(void);
-
-extern s32 seqGetPrevSeq(void);
-extern s32 seqGetSeq(void);
-extern void seqSetSeq(s32 seq, void* arg1, void* arg2);
 extern void fadeEntry(s32 type, s32 time, void* data);
 extern s32 fadeIsFinish(void);
 extern void fadeReset(s32 type);
 
 extern void padRumbleHardOff(s32 controller);
-extern void swReInit(void);
 extern s32 swByteGet(s32 id);
 extern void memClear(s32 heap);
 extern void smartAutoFree(s32 heap);
@@ -164,16 +146,12 @@ extern void fileFree(void* file);
 extern u32 OSGetSoundMode(void);
 extern void SoundSetOutputMode(s32 mode);
 
-extern void* evtEntry(void* script, s32 type, s32 flags);
-extern s32 evtCheckID(s32 id);
 extern void evtEntryType(void* script, s32 type, s32 a, s32 b);
 extern void evt_cam_road_reset(s32 a, s32 b);
 
 extern void camCtrlOff(s32 id);
 extern void camCtrlOn(s32 id);
 extern void* camGetPtr(s32 id);
-extern void camRoadReset(void);
-extern void camShiftReset(void);
 extern void camRoadMain(
     f32 x1,
     f32 y1,
@@ -204,7 +182,6 @@ extern s32 hitCheckFilter(
 );
 
 extern s32 bero_get_BeroEXEC(void);
-extern void animGroupBaseAsync(char* name, s32 a, s32 b);
 extern void effNiceAsync(s32 a);
 
 #define NEXT_AREA ((char*)&_next_area)
@@ -241,8 +218,8 @@ void seq_mapChangeInit(void* seq) {
     psndENVOff(0x200);
     psndENVOff(0x201);
 
-    oldMapEmptyCmp = strcmp((char*)(gp + 0x12C), (char*)&zero_8041f508);
-    oldMapGorCmp = strcmp((char*)(gp + 0x12C), str_gor_01_802bf2d4);
+    oldMapEmptyCmp = strcmp((char*)((s32)gp + 0x12C), (char*)&zero_8041f508);
+    oldMapGorCmp = strcmp((char*)((s32)gp + 0x12C), str_gor_01_802bf2d4);
     nextMapGorCmp = strcmp((char*)&_next_map, str_gor_01_802bf2d4);
 
     if ((oldMapEmptyCmp != 0) && (oldMapGorCmp != 0) && (nextMapGorCmp != 0)) {
@@ -292,7 +269,7 @@ void seq_mapChangeMain(void* seq) {
 
     rodata = lbl_802BF268;
 
-    areaCompare = strcmp(NEXT_AREA, (char*)(gp + 0x13C));
+    areaCompare = strcmp(NEXT_AREA, (char*)((s32)gp + 0x13C));
     areaChanged = ((u32)-areaCompare | (u32)areaCompare) >> 31;
 
     state = STATE(seq);
@@ -300,32 +277,32 @@ void seq_mapChangeMain(void* seq) {
     switch (state) {
         case 0:
             if (strcmp(NEXT_MAP, rodata + 0x98) == 0) {
-                if (*(s32*)(gp + 0x110) != 10) {
+                if (*(s32*)((s32)gp + 0x110) != 10) {
                     fadeDataC4 = dat_8041f4c4;
-                    fadeEntry(*(s32*)(gp + 0x110), *(s32*)(gp + 0x114), &fadeDataC4);
+                    fadeEntry(*(s32*)((s32)gp + 0x110), *(s32*)((s32)gp + 0x114), &fadeDataC4);
                 }
 
                 fadeDataC8 = dat_8041f4c8;
                 fadeEntry(0x11, 0x7D0, &fadeDataC8);
             } else if (areaChanged == 0) {
                 fadeDataCC = dat_8041f4cc;
-                fadeEntry(*(s32*)(gp + 0x100), *(s32*)(gp + 0x104), &fadeDataCC);
+                fadeEntry(*(s32*)((s32)gp + 0x100), *(s32*)((s32)gp + 0x104), &fadeDataCC);
             } else {
                 fadeDataD0 = dat_8041f4d0;
-                fadeEntry(*(s32*)(gp + 0x110), *(s32*)(gp + 0x114), &fadeDataD0);
+                fadeEntry(*(s32*)((s32)gp + 0x110), *(s32*)((s32)gp + 0x114), &fadeDataD0);
             }
 
-            *(s32*)(gp + 0x100) = 10;
-            *(s32*)(gp + 0x104) = 300;
-            *(s32*)(gp + 0x110) = 10;
-            *(s32*)(gp + 0x114) = 300;
+            *(s32*)((s32)gp + 0x100) = 10;
+            *(s32*)((s32)gp + 0x104) = 300;
+            *(s32*)((s32)gp + 0x110) = 10;
+            *(s32*)((s32)gp + 0x114) = 300;
 
             psndSFXAllOff();
 
             if (areaChanged == 0) {
-                *(s32*)(gp + 0x118) = 0;
+                *(s32*)((s32)gp + 0x118) = 0;
             } else {
-                *(s32*)(gp + 0x118) = 1;
+                *(s32*)((s32)gp + 0x118) = 1;
             }
 
             if (strcmp(NEXT_MAP, rodata + 0x4C) != 0) {
@@ -349,27 +326,27 @@ void seq_mapChangeMain(void* seq) {
             psndSFXAllOff();
 
             if (fadeIsFinish() != 0) {
-                rel = *(void**)(gp + 0x15C);
+                rel = *(void**)((s32)gp + 0x15C);
 
                 if (rel != NULL) {
                     ((void (*)(void))(*(void**)((s32)rel + 0x38)))();
 
-                    OSUnlink(*(void**)(gp + 0x15C));
+                    OSUnlink(*(void**)((s32)gp + 0x15C));
 
-                    if (*(void**)(gp + 0x15C) != *(void**)(gp + 0x160)) {
-                        _mapFree(mapalloc_base_ptr, *(void**)(gp + 0x15C));
+                    if (*(void**)((s32)gp + 0x15C) != *(void**)((s32)gp + 0x160)) {
+                        _mapFree(mapalloc_base_ptr, *(void**)((s32)gp + 0x15C));
                     }
 
-                    *(void**)(gp + 0x15C) = NULL;
+                    *(void**)((s32)gp + 0x15C) = NULL;
                 }
 
-                ((void (*)(char*, char*, char*))_unload)((char*)(gp + 0x12C), NEXT_MAP, NEXT_BERO);
+                ((void (*)(char*, char*, char*))_unload)((char*)((s32)gp + 0x12C), NEXT_MAP, NEXT_BERO);
 
                 if (strcmp(NEXT_MAP, rodata + 0x64) != 0) {
                     if (strcmp(NEXT_MAP, (char*)&str_title_8041f538) != 0) {
                         if (OSGetSoundMode() == 0) {
                             SoundSetOutputMode(0);
-                        } else if (*(s32*)(gp + 0x1274) == 0) {
+                        } else if (*(s32*)((s32)gp + 0x1274) == 0) {
                             SoundSetOutputMode(1);
                         } else {
                             SoundSetOutputMode(2);
@@ -383,10 +360,10 @@ void seq_mapChangeMain(void* seq) {
 
         case 2:
             if (strcmp(NEXT_MAP, (char*)&str_title_8041f538) == 0) {
-                strcpy((char*)(gp + 0x14C), (char*)(gp + 0x12C));
-                strcpy((char*)(gp + 0x13C), ZERO_STR);
-                strcpy((char*)(gp + 0x12C), ZERO_STR);
-                seqSetSeq(1, NULL, NULL);
+                strcpy((char*)((s32)gp + 0x14C), (char*)((s32)gp + 0x12C));
+                strcpy((char*)((s32)gp + 0x13C), ZERO_STR);
+                strcpy((char*)((s32)gp + 0x12C), ZERO_STR);
+                seqSetSeq(1, 0, 0);
             } else {
                 areaName = NEXT_AREA;
 
@@ -424,23 +401,23 @@ void seq_mapChangeMain(void* seq) {
 
                         if (file != NULL) {
                             if (strncmp(areaName, (char*)&str_tst_8041f500, 3) == 0) {
-                                *(void**)(gp + 0x15C) =
+                                *(void**)((s32)gp + 0x15C) =
                                     _mapAlloc(
                                         mapalloc_base_ptr,
                                         *(u32*)((s32)*(void**)((s32)file + 0xA0) + 4)
                                     );
                             } else if (strncmp(areaName, (char*)&str_jon_8041f504, 3) == 0) {
-                                *(void**)(gp + 0x15C) =
+                                *(void**)((s32)gp + 0x15C) =
                                     _mapAlloc(
                                         mapalloc_base_ptr,
                                         *(u32*)((s32)*(void**)((s32)file + 0xA0) + 4)
                                     );
                             } else {
-                                *(void**)(gp + 0x15C) = *(void**)(gp + 0x160);
+                                *(void**)((s32)gp + 0x15C) = *(void**)((s32)gp + 0x160);
                             }
 
                             memcpy(
-                                *(void**)(gp + 0x15C),
+                                *(void**)((s32)gp + 0x15C),
                                 *(void**)((s32)*(void**)((s32)file + 0xA0) + 0),
                                 *(u32*)((s32)*(void**)((s32)file + 0xA0) + 4)
                             );
@@ -448,15 +425,15 @@ void seq_mapChangeMain(void* seq) {
                             fileFree(file);
                         }
 
-                        if (*(void**)(gp + 0x15C) != NULL) {
+                        if (*(void**)((s32)gp + 0x15C) != NULL) {
                             memset(rel_bss, 0, 0x3C4);
-                            OSLink(*(void**)(gp + 0x15C), rel_bss);
+                            OSLink(*(void**)((s32)gp + 0x15C), rel_bss);
 
-                            rel = *(void**)(gp + 0x15C);
+                            rel = *(void**)((s32)gp + 0x15C);
                             ((void (*)(void))(*(void**)((s32)rel + 0x34)))();
                         }
 
-                        _load((char*)(gp + 0x12C), NEXT_MAP, NEXT_BERO);
+                        _load((char*)((s32)gp + 0x12C), NEXT_MAP, NEXT_BERO);
 
                         STATE(seq)++;
                     }
@@ -489,9 +466,9 @@ void seq_mapChangeMain(void* seq) {
 
                 if (mapData[1] != NULL) {
                     evt = evtEntry(mapData[1], 0, 0);
-                    *(s32*)(gp + 0x164) = *(s32*)((s32)evt + 0x15C);
+                    *(s32*)((s32)gp + 0x164) = *(s32*)((s32)evt + 0x15C);
                 } else {
-                    *(s32*)(gp + 0x164) = 0;
+                    *(s32*)((s32)gp + 0x164) = 0;
                 }
 
                 STATE(seq)++;
@@ -499,12 +476,12 @@ void seq_mapChangeMain(void* seq) {
             break;
 
         case 4:
-            if (*(s32*)(gp + 0x164) == 0) {
+            if (*(s32*)((s32)gp + 0x164) == 0) {
                 camCtrlOn(4);
                 STATE(seq)++;
-            } else if (evtCheckID(*(s32*)(gp + 0x164)) == 0) {
+            } else if (evtCheckID(*(s32*)((s32)gp + 0x164)) == 0) {
                 camCtrlOn(4);
-                *(s32*)(gp + 0x164) = 0;
+                *(s32*)((s32)gp + 0x164) = 0;
                 STATE(seq)++;
             }
             break;
@@ -551,7 +528,7 @@ void seq_mapChangeMain(void* seq) {
                                     0,
                                     rodata + 0xB0,
                                     getMarioStDvdRoot(),
-                                    langList[*(s32*)(gp + 0x16C)]
+                                    langList[*(s32*)((s32)gp + 0x16C)]
                                 );
 
                                 animGroupBaseAsync(rodata + 0xC0, 0, 0);
@@ -585,12 +562,12 @@ void seq_mapChangeMain(void* seq) {
                 }
 
 restoreSavedPosition:
-                *(SeqMapVecRaw*)((s32)mario + 0x8C) = *(SeqMapVecRaw*)(gp + 0x11D4);
+                *(SeqMapVecRaw*)((s32)mario + 0x8C) = *(SeqMapVecRaw*)((s32)gp + 0x11D4);
 
                 evt_cam_road_reset(0, 0);
 
                 if (party != NULL) {
-                    *(SeqMapVecRaw*)((s32)party + 0x58) = *(SeqMapVecRaw*)(gp + 0x11D4);
+                    *(SeqMapVecRaw*)((s32)party + 0x58) = *(SeqMapVecRaw*)((s32)gp + 0x11D4);
 
                     cam = camGetPtr(4);
                     *(f32*)((s32)party + 0x58) =
@@ -604,7 +581,7 @@ restoreSavedPosition:
                 }
 
                 if (extraParty != NULL) {
-                    *(SeqMapVecRaw*)((s32)extraParty + 0x58) = *(SeqMapVecRaw*)(gp + 0x11D4);
+                    *(SeqMapVecRaw*)((s32)extraParty + 0x58) = *(SeqMapVecRaw*)((s32)gp + 0x11D4);
 
                     cam = camGetPtr(4);
                     *(f32*)((s32)extraParty + 0x58) =
@@ -617,10 +594,10 @@ restoreSavedPosition:
                         *(f32*)((s32)extraParty + 0x60);
                 }
 
-                if ((strcmp((char*)(gp + 0x12C), rodata + 0x178) == 0) ||
-                    (strcmp((char*)(gp + 0x12C), rodata + 0x6C) == 0) ||
-                    (strcmp((char*)(gp + 0x12C), rodata + 0x180) == 0) ||
-                    (strcmp((char*)(gp + 0x12C), rodata + 0x188) == 0)) {
+                if ((strcmp((char*)((s32)gp + 0x12C), rodata + 0x178) == 0) ||
+                    (strcmp((char*)((s32)gp + 0x12C), rodata + 0x6C) == 0) ||
+                    (strcmp((char*)((s32)gp + 0x12C), rodata + 0x180) == 0) ||
+                    (strcmp((char*)((s32)gp + 0x12C), rodata + 0x188) == 0)) {
                     *(f32*)((s32)mario + 0x8C) -= float_5_8041f550;
 
                     if (party != NULL) {
@@ -656,7 +633,7 @@ savedPositionDone:
             }
 
             marioEntry();
-            seqSetSeq(2, NULL, NULL);
+            seqSetSeq(2, 0, 0);
             break;
     }
 }
@@ -790,9 +767,9 @@ void _load(char* oldMap, char* mapName, char* beroName) {
         srcBero = (char*)&zero_8041f508;
     }
 
-    strcpy((char*)(gp + 0x11C), srcBero);
-    strcpy((char*)(gp + 0x12C), mapData[0]);
-    strncpy((char*)(gp + 0x13C), mapData[0], 3);
+    strcpy((char*)((s32)gp + 0x11C), srcBero);
+    strcpy((char*)((s32)gp + 0x12C), mapData[0]);
+    strncpy((char*)((s32)gp + 0x13C), mapData[0], 3);
 
     if (strcmp(map, rodata + 0x64) == 0) {
         mapLoad(rodata + 0x6C);
@@ -802,7 +779,7 @@ void _load(char* oldMap, char* mapName, char* beroName) {
 
     camCtrlOff(4);
 
-    if (*(s32*)(gp + 0xC) != 0) {
+    if (*(s32*)((s32)gp + 0xC) != 0) {
         msgLoad(rodata + 0x74, 0);
     } else {
         memset(msgName, 0, 0x40);
@@ -821,18 +798,18 @@ void _load(char* oldMap, char* mapName, char* beroName) {
         party = partyGetPtr(marioGetPartyId());
         extraParty = partyGetPtr(marioGetExtraPartyId());
 
-        *(SeqMapVec*)((s32)mario + 0x8C) = *(SeqMapVec*)(gp + 0x11D4);
+        *(SeqMapVec*)((s32)mario + 0x8C) = *(SeqMapVec*)((s32)gp + 0x11D4);
         *(SeqMapVec*)((s32)mario + 0xEC) = *(SeqMapVec*)((s32)mario + 0x8C);
 
         camRoadReset();
         camShiftReset();
 
         if (party != NULL) {
-            *(SeqMapVec*)((s32)party + 0x58) = *(SeqMapVec*)(gp + 0x11D4);
+            *(SeqMapVec*)((s32)party + 0x58) = *(SeqMapVec*)((s32)gp + 0x11D4);
         }
 
         if (extraParty != NULL) {
-            *(SeqMapVec*)((s32)extraParty + 0x58) = *(SeqMapVec*)(gp + 0x11D4);
+            *(SeqMapVec*)((s32)extraParty + 0x58) = *(SeqMapVec*)((s32)gp + 0x11D4);
         }
     } else {
         if (bero != NULL) {
@@ -948,17 +925,17 @@ void _load(char* oldMap, char* mapName, char* beroName) {
 void _relUnLoad(void) {
     void* module;
 
-    module = *(void**)(gp + 0x15C);
+    module = *(void**)((s32)gp + 0x15C);
 
     if (module != NULL) {
         ((void (*)(void*))(*(void**)((s32)module + 0x38)))(module);
 
-        OSUnlink(*(void**)(gp + 0x15C));
+        OSUnlink(*(void**)((s32)gp + 0x15C));
 
-        if (*(void**)(gp + 0x15C) != *(void**)(gp + 0x160)) {
-            _mapFree(mapalloc_base_ptr, *(void**)(gp + 0x15C));
+        if (*(void**)((s32)gp + 0x15C) != *(void**)((s32)gp + 0x160)) {
+            _mapFree(mapalloc_base_ptr, *(void**)((s32)gp + 0x15C));
         }
 
-        *(void**)(gp + 0x15C) = NULL;
+        *(void**)((s32)gp + 0x15C) = NULL;
     }
 }

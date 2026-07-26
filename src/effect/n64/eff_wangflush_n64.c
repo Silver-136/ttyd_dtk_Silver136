@@ -159,7 +159,6 @@ void effWangFlushDisp(s32 cameraId, void* effect) {
     extern void tri2();
     extern f32 float_deg2rad_80426494;
     extern f32 float_0p03125_80426498;
-    extern f32 float_0_8042649c;
     extern u32 dat_80426490;
     extern u8 color_rotation_data[];
     extern u8 unk_80429868;

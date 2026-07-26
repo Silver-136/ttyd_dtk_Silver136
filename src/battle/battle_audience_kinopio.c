@@ -1,22 +1,15 @@
 #include "battle/battle_audience_kinopio.h"
+#include "battle/battle_audience.h"
 
 extern void* _battleWorkPointer;
-extern void* BattleAudienceBaseGetPtr(void);
-extern void* BattleAudienceGetPtr(s32 audienceId);
 extern u8 BattleAudience_GetSysCtrl(s32 audienceId);
-extern void BattleAudience_ChangeStatus(s32 audienceId, s32 status);
-extern void BattleAudience_Delete(s32 audienceId);
-extern void BattleAudience_SetAnim(s32 audienceId, s32 animId, s32 flags);
-extern void BattleAudienceSoundBombIgnite(s32 audienceId, s32 param_2, s32 param_3);
-extern s32 BattleAudience_GetAnimEnd(s32 audienceId);
 extern u8 BattleAudience_GetEscapeChangeOK(s32 audienceId);
 extern void* BattleAudienceItemGetPtr(s32 itemId);
-extern void BattleAudienceSoundItemThrow(s32 itemId, s32 audienceId);
-extern void BattleAudienceAddTargetNum(f32 value, f32 unused);
 extern f32 intplGetValue(s32 type, s32 time, f32 start, f32 end, s32 maxTime);
 extern s32 irand(s32 max);
 extern s32 rand(void);
 extern void psndSFXOn_3D(const char* name, void* pos);
+extern f64 sqrt(f64 value);
 extern const char str_SFX_AUDIENCE_PANIC_S_802f9698[];
 extern f32 float_270_804244e0;
 extern f32 float_90_804244e4;
@@ -35,11 +28,14 @@ extern f32 float_neg0p2_80424578;
 extern f32 float_3p4_8042457c;
 extern f32 float_1p5_80424580;
 extern f32 float_12_80424584;
+void BattleAudienceCtrlProcessKinopioDamage(s32 audienceId);
+void BattleAudienceCtrlProcessKinopioIntrude(s32 audienceId);
+void BattleAudienceCtrlProcessKinopioSingSub(s32 audienceId);
+void BattleAudienceCtrlProcessKinopioFireSub(s32 audienceId);
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 BattleAudienceCtrlProcessKinopio(int audienceId) {
-    extern void* BattleAudienceGetPtr(s32 audienceId);
     extern s32 BattleAudience_GetFront(s32 audienceId);
     extern void BattleAudienceCtrlProcessKinopioWait(s32 audienceId);
     extern void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 audienceId);
@@ -51,12 +47,10 @@ u8 BattleAudienceCtrlProcessKinopio(int audienceId) {
     extern void BattleAudienceCtrlProcessKinopioItemOn(s32 audienceId, s32 front);
     extern void BattleAudienceCtrlProcessKinopioItemThrow(s32 audienceId, s32 front);
     extern void BattleAudienceCtrlProcessKinopioBooing(s32 audienceId);
-    extern void BattleAudienceCtrlProcessKinopioDamage(s32 audienceId);
     extern void BattleAudienceCtrlProcessKinopioEnter(s32 audienceId);
     extern void BattleAudienceCtrlProcessKinopioEscape(s32 audienceId);
     extern void BattleAudienceCtrlProcessKinopioSleep(s32 audienceId, s32 front);
     extern void BattleAudienceCtrlProcessKinopioTransEvt(s32 audienceId);
-    extern void BattleAudienceCtrlProcessKinopioIntrude(s32 audienceId);
     extern void BattleAudienceCtrlProcessKinopioSing(s32 audienceId);
     extern void BattleAudienceCtrlProcessKinopioShell(s32 audienceId);
     extern void BattleAudienceCtrlProcessKinopioIgnite(s32 audienceId);
@@ -186,9 +180,6 @@ void BattleAudienceCtrlProcessKinopioWait(s32 audienceId, u8 front) {
     extern char* BattleAudienceBaseGetPtr(void);
     extern char* BattleAudienceGetPtr(s32);
     extern void* pouchGetPtr(void);
-    extern void BattleAudience_SetAnim(s32, s32, s32);
-    extern s32 irand(s32);
-    extern void BattleAudience_ChangeStatus(s32, s32);
     char* base = BattleAudienceBaseGetPtr();
     char* member = BattleAudienceGetPtr(audienceId);
     f32 ratio;
@@ -613,11 +604,7 @@ void BattleAudienceCtrlProcessKinopioDamage(s32 param_1) {
 #pragma use_lmw_stmw off
 u8 BattleAudienceCtrlProcessKinopioEnter(int audienceId) {
     extern void BattleAudienceBaseGetPtr(void);
-    extern void* BattleAudienceGetPtr(s32 audienceId);
     extern void* camGetPtr(s32 cameraId);
-    extern void BattleAudience_SetAnim(s32 audienceId, s32 animId, s32 flags);
-    extern void BattleAudience_ChangeStatus(s32 audienceId, s32 status);
-    extern s32 irand(s32 max);
     extern f64 sqrt(f64);
 
     u8* audience;
@@ -706,11 +693,6 @@ u8 BattleAudienceCtrlProcessKinopioEnter(int audienceId) {
 #pragma use_lmw_stmw off
 u8 BattleAudienceCtrlProcessKinopioEscape(int audienceId) {
     extern void BattleAudienceBaseGetPtr(void);
-    extern void* BattleAudienceGetPtr(s32 audienceId);
-    extern void BattleAudience_SetAnim(s32 audienceId, s32 animId, s32 flags);
-    extern void BattleAudience_Delete(s32 audienceId);
-    extern s32 rand(void);
-    extern void psndSFXOn_3D(const char* name, void* pos);
     extern const char str_SFX_AUDIENCE_RUN3_802f9684[];
 
     u8* audience;
@@ -770,14 +752,8 @@ u8 BattleAudienceCtrlProcessKinopioEscape(int audienceId) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 BattleAudienceCtrlProcessKinopioSleep(int audienceId, char altAnim) {
-    extern void* BattleAudienceBaseGetPtr(void);
-    extern void* BattleAudienceGetPtr(s32 audienceId);
-    extern void BattleAudience_SetAnim(s32 audienceId, s32 animId, s32 flags);
-    extern void BattleAudience_ChangeStatus(s32 audienceId, s32 status);
     extern void BattleAudienceSoundSleep(s32 audienceId);
     extern void BattleAudienceSoundZZZ(s32 audienceId);
-    extern s32 irand(s32 max);
-    extern s32 rand(void);
     extern void* effSleepEntry(s32, s32, f32, f32, f32, f32, f32);
 
     u8* audience;
@@ -850,10 +826,6 @@ u8 BattleAudienceCtrlProcessKinopioSleep(int audienceId, char altAnim) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 BattleAudienceCtrlProcessKinopioTransEvt(int audienceId) {
-    extern void* _battleWorkPointer;
-    extern void* BattleAudienceGetPtr(s32 audienceId);
-    extern void BattleAudience_SetAnim(s32 audienceId, s32 animId, s32 flags);
-    extern void BattleAudience_ChangeStatus(s32 audienceId, s32 status);
     extern void* BattleAudienceDetectTargetAll(void);
     extern s32 BtlUnit_GetBodyPartsId(void*);
     extern s32 BtlUnit_GetUnitId(void*);
@@ -864,8 +836,6 @@ u8 BattleAudienceCtrlProcessKinopioTransEvt(int audienceId) {
     extern void* BattleGetSystemPtr(void*);
     extern void BattleCheckDamage(void*, void*, void*, void*, s32);
     extern void BtlUnit_snd_se(void*, const char*, s32, s32);
-    extern void psndSFXOn_3D(const char* name, void* pos);
-    extern f32 intplGetValue(s32 type, s32 time, f32 start, f32 end, s32 maxTime);
     extern char str_SFX_AUDIENCE_TELESA__802f9648[];
     extern char str_SFX_AUDIENCE_TELESA__802f9664[];
     extern void* weapon_teresa_trans;
@@ -943,18 +913,13 @@ u8 BattleAudienceCtrlProcessKinopioTransEvt(int audienceId) {
 
 
 void BattleAudienceCtrlProcessKinopioIntrude(s32 audienceId) {
-    extern void* BattleAudienceBaseGetPtr(void);
     extern char* BattleAudienceGetPtr(s32);
     extern char* pouchGetPtr(void);
-    extern void BattleAudience_SetAnim(s32, s32, s32);
-    extern s32 irand(s32);
-    extern f64 sqrt(f64);
     extern s32 psndSFXOn(char*);
     extern void psndSFXOff(s32);
     extern void btl_camera_set_mode(s32, s32);
     extern void btl_camera_set_moveto(f32, f32, f32, f32, f32, f32, s32, s32, s32);
     extern void btl_camera_set_moveSpeedLv(s32, s32);
-    extern void BattleAudience_ChangeStatus(s32, s32);
     extern char str_SFX_AUDIENCE_HEIHO_M_802f9618[];
     extern s32 intrudeSound;
     char* member;
@@ -1069,13 +1034,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 audienceId) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 BattleAudienceCtrlProcessKinopioSing(int audienceId) {
-    extern void* BattleAudienceBaseGetPtr(void);
-    extern void* BattleAudienceGetPtr(s32 audienceId);
-    extern void BattleAudience_SetAnim(s32 audienceId, s32 animId, s32 flags);
-    extern void BattleAudience_ChangeStatus(s32 audienceId, s32 status);
     extern void BattleAudienceSoundSing(s32 audienceId);
-    extern void BattleAudienceCtrlProcessKinopioSingSub(s32 audienceId);
-    extern s32 irand(s32 max);
     extern void* gp;
     extern void effOnpuN64Entry(s32, f32, f32, f32);
 
@@ -1152,10 +1111,6 @@ void BattleAudienceCtrlProcessKinopioSingSub(s32 param_1) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 BattleAudienceCtrlProcessKinopioShell(int audienceId) {
-    extern void* BattleAudienceGetPtr(s32 audienceId);
-    extern void BattleAudience_SetAnim(s32 audienceId, s32 animId, s32 flags);
-    extern void BattleAudience_ChangeStatus(s32 audienceId, s32 status);
-    extern s32 irand(s32 max);
     extern void BattleAudienceSoundShell(s32 audienceId);
 
     u8* audience;
@@ -1253,15 +1208,10 @@ void BattleAudienceCtrlProcessKinopioIgnite(s32 param_1, u8 param_2) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 BattleAudienceCtrlProcessKinopioFire(int audienceId, char altAnim) {
-    extern void* BattleAudienceBaseGetPtr(void);
-    extern void* BattleAudienceGetPtr(s32 audienceId);
-    extern void BattleAudience_SetAnim(s32 audienceId, s32 animId, s32 flags);
-    extern void BattleAudience_Delete(s32 audienceId);
     extern void BattleAudienceSoundBombFire(s32 audienceId);
     extern void* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
     extern void btl_camera_shake_h(s32, s32, s32, f32, f32);
     extern s32 BattleAudience_GetAudienceNoFromOffset(s32 audienceId, s32 x, s32 y);
-    extern void BattleAudienceCtrlProcessKinopioFireSub(s32 audienceId);
     extern void BattleAudiencePuniAllEscape(void);
     extern s32 dat_802f954c[];
 
@@ -1354,28 +1304,16 @@ void BattleAudienceCtrlProcessKinopioFireSub(s32 param_1) {
 }
 
 u8 BattleAudienceCtrlProcessKinopioEat(int audienceId) {
-    extern void* BattleAudienceBaseGetPtr(void);
     extern char* BattleAudienceGetPtr(s32);
     extern char* BattleStageGetPtr(void);
     extern s32 BattleAudienceDetectPakkunEatTarget(s32);
-    extern void BattleAudience_SetAnim(s32, s32, s32);
-    extern void BattleAudience_ChangeStatus(s32, s32);
     extern void BattleAudienceSoundPakkunEat(s32);
     extern u32 BattleAudience_GetExist(s32);
-    extern s32 irand(s32);
-    extern s32 rand(void);
     extern void* memcpy(void*, void*, u32);
-    extern void BattleAudience_Delete(s32);
-    extern f32 float_270_804244e0;
-    extern f32 float_90_804244e4;
-    extern f32 float_0_804244e8;
     extern f32 float_6_804244ec;
     extern f32 float_neg60_804244f0;
     extern f32 float_60_804244f4;
-    extern f32 float_1_804244f8;
-    extern f32 float_neg1_804244fc;
     extern f32 float_neg100_80424500;
-    extern f32 float_0p1_80424504;
 
     void* base;
     char* audience;

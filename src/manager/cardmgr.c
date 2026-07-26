@@ -1,6 +1,13 @@
 #include "manager/cardmgr.h"
 
 extern void* wp;
+extern void* gp;
+extern u8 _mariost_icon_tex[];
+extern u8 _mariost_banner_tex[];
+extern char str_PCT2d_PCT2d_save_dat_802cb100[];
+extern u8 _mariost_icon_tlut[];
+extern void* yuwp;
+extern void* bdsw;
 
 void* cardGetFilePtr(void) {
     return *(void**)((s32)wp + 0xA8);
@@ -14,8 +21,8 @@ void cardBufReset(void) {
     extern void OSTicksToCalendarTime(u32 hi, u32 lo, void* calendar);
     extern s32 sprintf(char* buf, const char* fmt, ...);
     extern void* memcpy(void* dst, const void* src, u32 size);
-    extern u8 _mariost_icon_tex[];
-    extern void* gp;
+
+
     extern void* version;
 
     struct Calendar {
@@ -144,12 +151,12 @@ u8 cardInit(void) {
     extern u64 OSGetTime(void);
     extern void OSTicksToCalendarTime(u64, CalendarTime*);
     extern void CARDInit(void);
-    extern void* gp;
+
     extern char str_Paper_Mario_802cb0f4[];
-    extern char str_PCT2d_PCT2d_save_dat_802cb100[];
-    extern u8 _mariost_banner_tex[];
-    extern u8 _mariost_icon_tex[];
-    extern u8 _mariost_icon_tlut[];
+
+
+
+
     extern char version[];
     CalendarTime calendar;
     u8* header;
@@ -273,7 +280,7 @@ void* cardGetCode(void) {
 }
 
 u8 cardMain(void) {
-    extern void* wp;
+
     extern s32 CARDProbe(s32);
     extern s32 CARDProbeEx(s32,u32*,s32*);
     extern s32 CARDSetFastMode(s32);
@@ -305,9 +312,9 @@ fail:*(s32*)((s32)wp+0xE0)=8;*(u16*)wp|=0x200;*(u16*)wp&=~2;return 0;
 }
 
 void cardCopy2Main(s32 fileNo) {
-    extern void* gp;
-    extern void* bdsw;
-    extern void* yuwp;
+
+
+
     extern void _jdt;
     extern char str_123_80421134[];
     extern void* memcpy(void* dst, const void* src, u32 size);
@@ -441,9 +448,9 @@ void cardWrite(s32 fileNo) {
     extern s64 OSGetTime(void);
     extern void* pouchGetPtr(void);
     extern void* fbatGetPointer(void);
-    extern void* gp;
-    extern void* bdsw;
-    extern void* yuwp;
+
+
+
     extern void _jdt;
     extern void* version;
 
@@ -542,8 +549,8 @@ void cardWrite(s32 fileNo) {
 #pragma use_lmw_stmw off
 
 void write_main(void) {
-    extern void* wp;
-    extern void* gp;
+
+
     extern s32 CARDProbeEx(s32 chan, u32* memSize, s32* sectorSize);
     extern s32 CARDSetFastMode(s32 enable);
     extern s32 CARDMountAsync(s32 chan, s32 workArea, void* detachCb, void* attachCb);
@@ -567,7 +574,7 @@ void write_main(void) {
     extern s32 sprintf(char* dst, const char* fmt, ...);
     extern s64 OSGetTime(void);
     extern void OSTicksToCalendarTime(u32 hi, u32 lo, void* calendar);
-    extern u8 _mariost_icon_tex[];
+
     extern char version[];
 
     struct Calendar {
@@ -928,8 +935,8 @@ void cardWriteHeader(void) {
     extern void* memcpy(void* dst, const void* src, u32 size);
     extern s64 OSGetTime(void);
     extern void OSTicksToCalendarTime(u32 hi, u32 lo, void* calendar);
-    extern void* gp;
-    extern u8 _mariost_icon_tex[];
+
+
 
     struct Calendar {
         s32 sec;
@@ -1136,7 +1143,7 @@ u8 write_header_main(void) {
     return 0;
 }
 u8 read_main(void) {
-    extern void* wp;
+
     extern s32 CARDProbeEx(s32, u32*, s32*);
     extern s32 CARDSetFastMode(s32);
     extern s32 CARDMountAsync(s32, s32, void*, void*);
@@ -1283,8 +1290,8 @@ void read_all_main(void) {
         s32 usec;
     } CalendarTime;
 
-    extern void* wp;
-    extern void* gp;
+
+
     extern s32 CARDProbeEx(s32 chan, u32* memSize, s32* sectorSize);
     extern s32 CARDSetFastMode(s32 mode);
     extern s32 CARDMountAsync(s32 chan, s32 workArea, void* detachCb, void* attachCb);
@@ -1307,10 +1314,10 @@ void read_all_main(void) {
     extern void OSTicksToCalendarTime(u64 ticks, CalendarTime* calendar);
     extern s32 strcmp(char* a, char* b);
     extern char str_Paper_Mario_802cb0f4[];
-    extern char str_PCT2d_PCT2d_save_dat_802cb100[];
-    extern u8 _mariost_banner_tex[];
-    extern u8 _mariost_icon_tex[];
-    extern u8 _mariost_icon_tlut[];
+
+
+
+
     extern char version[];
 
     u16* flags = (u16*)wp;
@@ -1605,7 +1612,7 @@ void cardCreate(void) {
 }
 
 u8 create_main(void) {
-    extern void* wp;
+
     extern s32 CARDProbeEx(s32, u32*, s32*);
     extern s32 CARDSetFastMode(s32);
     extern s32 CARDMountAsync(s32, s32, void*, void*);

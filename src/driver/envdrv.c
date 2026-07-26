@@ -12,7 +12,6 @@ extern f32 float_20_804248f8;
 extern f32 float_5000_8042493c;
 extern u8 lbl_8039B860[];
 
-void* memset(void* dst, int value, u32 size);
 void* __memAlloc(s32 heap, u32 size);
 void* _mapAlloc(void* heap, u32 size);
 void PSMTXCopy(void* src, void* dst);

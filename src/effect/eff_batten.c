@@ -1,13 +1,14 @@
 #include "effect/eff_batten.h"
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+extern f32 float_deg2rad_80427ee8;
+extern f32 float_0_80427eec;
 void* effBattenEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
     extern void effBattenMain(void);
     extern void PSMTXIdentity(f32 mtx[3][4]);
     extern const char str_Batten_80300398[];
-    extern f32 float_0_80427eec;
     extern f32 float_3_80427f14;
 
     void* effect;
@@ -230,7 +231,6 @@ void effBattenDisp(s32 cameraId, void* effect) {
     extern void GXSetCurrentMtx(s32);
     extern void GXSetChanMatColor(s32, u32*);
     extern void GXBegin(s32, s32, s32);
-    extern f32 float_deg2rad_80427ee8;
     extern u32 dat_80427ee0;
 
     u8 texObj[0x20];
@@ -321,8 +321,6 @@ void effBattenDisp2(s32 cameraId, void* effect) {
     extern void animPoseSetMaterialEvtColor(s32 poseId, u32* color);
     extern void animPoseMain(s32 poseId);
     extern void animPoseDrawMtx(s32 poseId, f32 mtx[3][4], s32 mode, f32 a, f32 b);
-    extern f32 float_deg2rad_80427ee8;
-    extern f32 float_0_80427eec;
     extern f32 float_2_80427ef0;
     extern u32 dat_80427ee4;
 

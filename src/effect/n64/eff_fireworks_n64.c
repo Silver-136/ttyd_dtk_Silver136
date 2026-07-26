@@ -1,5 +1,11 @@
 #include "effect/n64/eff_fireworks_n64.h"
 
+extern s32 rand(void);
+extern double sin(f64 x);
+extern f32 float_6p2832_804252a0;
+extern f32 float_360_804252a4;
+extern f32 float_0_804252b0;
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effFireworksN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 vx, f32 vy, f32 vz, f32 scale) {
@@ -7,7 +13,6 @@ void* effFireworksN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 vx, f32
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effFireworksMain(void*);
     extern char str_FireworksN64_802faf78[];
-    extern f32 float_0_804252b0;
     extern f32 float_1000_804252dc;
     void* entry;
     u8* work;
@@ -80,13 +85,9 @@ void* effFireworksN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 vx, f32
 
 void effFireworksMain(void* effect) {
     extern void effDelete(void* effect);
-    extern s32 rand(void);
-    extern double sin(f64 x);
     extern f32 dispCalcZ(void* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
     extern void effFireworksDisp(s32 cameraId, void* effect);
-    extern f32 float_6p2832_804252a0;
-    extern f32 float_360_804252a4;
     extern f32 float_0p95_804252c4;
     extern f32 float_0p15_804252c8;
     extern f32 float_0p11_804252cc;
@@ -195,7 +196,6 @@ void effFireworksMain(void* effect) {
 #pragma use_lmw_stmw off
 void effFireworksDisp(s32 cameraId, void* effect) {
     extern void* camGetPtr(s32 id);
-    extern double sin(f64 x);
     extern double cos(f64 x);
     extern void GXSetNumChans(s32 count);
     extern void GXSetNumTevStages(s32 count);
@@ -213,7 +213,6 @@ void effFireworksDisp(s32 cameraId, void* effect) {
     extern void GXSetVtxDesc(s32 attr, s32 type);
     extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 type, s32 compCnt, s32 frac);
     extern void GXSetTevColor(s32 id, void* color);
-    extern s32 rand(void);
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
     extern void PSMTX44MultVec(void* mtx, void* src, void* dst);
     extern void GXGetProjectionv(void* dst);
@@ -225,11 +224,8 @@ void effFireworksDisp(s32 cameraId, void* effect) {
     extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
     extern void GXSetProjectionv(void* src);
     extern void* gp;
-    extern f32 float_6p2832_804252a0;
-    extern f32 float_360_804252a4;
     extern f32 float_0p5_804252a8;
     extern f32 float_480_804252ac;
-    extern f32 float_0_804252b0;
     extern f32 float_608_804252b4;
     extern f32 float_1_804252b8;
     extern f32 float_32768_804252bc;

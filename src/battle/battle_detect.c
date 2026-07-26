@@ -1,9 +1,9 @@
 #include "battle/battle_detect.h"
 
+extern void* _battleWorkPointer;
+extern void* BattleGetUnitPtr(void*, s32);
 
 void _btlSamplingEnemy(void* targetWork) {
-    extern void* _battleWorkPointer;
-    extern void* BattleGetUnitPtr(void*, s32);
     extern void* BtlUnit_GetPartsPtr(void*, s32);
     extern s32 BtlUnit_CheckStatus(void*, s32);
     extern void BtlUnit_GetPartsWorldPos(void*, f32*, f32*, f32*);
@@ -73,8 +73,6 @@ void _btlSamplingEnemy(void* targetWork) {
 }
 
 s32 BattleSamplingEnemy(void* targetWork, void* weapon, int attackerIdx, int enemyBelong, u32 targetClassFlags, u32 targetPropertyFlags, u8 param_7) {
-    extern void* _battleWorkPointer;
-    extern void* BattleGetUnitPtr(void*, s32);
     s32 changed;
     u32 flags;
 
@@ -110,8 +108,6 @@ void BattleSamplingEnemyUpdate(void) {
 }
 
 void BattleChoiceSamplingEnemy(void* targetWork, u32 weighting, int* unitIdx, int* partIdx) {
-    extern void* _battleWorkPointer;
-    extern void* BattleGetUnitPtr(void*, s32);
     u32 weights[74];
     s8* order;
     u8 count;
@@ -203,7 +199,6 @@ void BattleChoiceSamplingEnemy(void* targetWork, u32 weighting, int* unitIdx, in
 }
 
 void BattleGetFirstAttackUnit(void* battleWork, void** part, void** unit) {
-    extern void* BattleGetUnitPtr(void*, s32);
     extern void* BattleGetMarioPtr(void*);
     extern void* BattleGetPartnerPtr(void*, void*);
     void* foundUnit;

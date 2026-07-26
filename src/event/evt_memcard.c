@@ -3,7 +3,6 @@
 
 extern void* gp;
 
-s32 evtGetValue(EventEntry* event, s32 value);
 void unk_800b2c08(void);
 void unk_800b2c2c(void);
 void cardBufReset(void);

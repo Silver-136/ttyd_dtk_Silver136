@@ -1,9 +1,18 @@
 #include "unit/party/unit_party_clauda.h"
 
+extern void* _battleWorkPointer;
+extern s32 BattleTransID(void* evt, s32 id);
+extern void* BattleGetUnitPtr(void* battleWork, s32 id);
+extern s32 evtGetValue(void* evt, s32 arg);
+extern void evtSetValue(void* evt, s32 arg, s32 value);
+extern void* memcpy(void* dest, const void* src, u32 size);
+extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+extern void* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 angle, f32 speed, f32 scale);
+extern f32 float_0_80424074;
+extern f32 float_1_8042407c;
+extern f32 float_180_80424080;
+
 s32 _clauda_make_extra_work_area(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern void* BattleAlloc(u32 size);
     void* battleWork;
     s32 id;
@@ -19,7 +28,6 @@ s32 _clauda_make_extra_work_area(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void __makeTechMenuFunc(void* commandWork, s32* count) {
-    extern void* _battleWorkPointer;
     extern void* BattleGetPartyPtr(void* battleWork);
     extern s32 BattleTransPartyId(s32 id);
     extern s32 partyGetTechLv(s32 partyId);
@@ -84,11 +92,6 @@ void __makeTechMenuFunc(void* commandWork, s32* count) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _check_blow_rate(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
 
     s32* args = *(s32**)((s32)evt + 0x18);
     void* battleWork = _battleWorkPointer;
@@ -106,16 +109,8 @@ s32 _check_blow_rate(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _clauda_breath_effect_ready(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
-    extern void* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 angle, f32 speed, f32 scale);
     extern f32 float_25_80424088;
-    extern f32 float_0_80424074;
     extern f32 float_2_8042408c;
-    extern f32 float_1_8042407c;
-    extern f32 float_180_80424080;
 
     void* battleWork = _battleWorkPointer;
     s32 id = BattleTransID(evt, -2);
@@ -154,17 +149,8 @@ s32 _clauda_breath_effect_ready(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _clauda_breath_effect_fire(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
-    extern void* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 angle, f32 speed, f32 scale);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
     extern f32 float_15_80424070;
-    extern f32 float_0_80424074;
     extern f32 float_neg2_80424078;
-    extern f32 float_1_8042407c;
-    extern f32 float_180_80424080;
 
     void* battleWork = _battleWorkPointer;
     s32* args = *(s32**)((s32)evt + 0x18);
@@ -205,12 +191,6 @@ s32 _clauda_breath_effect_fire(void* evt) {
 
 
 s32 _make_breath_weapon(void* pEvt) {
-    extern void* _battleWorkPointer;
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
-    extern void* memcpy(void* dest, const void* src, u32 size);
 
     void* battleWork = _battleWorkPointer;
     s32* args = *(s32**)((s32)pEvt + 0x18);
@@ -229,12 +209,6 @@ s32 _make_breath_weapon(void* pEvt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _make_kiss_weapon(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
-    extern void* memcpy(void* dest, const void* src, u32 size);
 
     void* battleWork = _battleWorkPointer;
     s32* args = *(s32**)((s32)evt + 0x18);
@@ -252,11 +226,6 @@ s32 _make_kiss_weapon(void* evt) {
 #pragma use_lmw_stmw on
 
 s32 _get_clauda_kiss_hit_position(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern f32 BattleGetFloorHeight(void* battleWork, f32 x, f32 y, f32 z);
     extern void evtSetFloat(void* evt, s32 arg, f32 value);
     extern f32 float_30_8042406c;
@@ -303,12 +272,6 @@ s32 _get_clauda_kiss_hit_position(void* evt) {
     return 2;
 }
 s32 _make_kumoguard_weapon(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
-    extern void* memcpy(void* dest, const void* src, u32 size);
 
     void* battleWork = _battleWorkPointer;
     s32* args = *(s32**)((s32)evt + 0x18);

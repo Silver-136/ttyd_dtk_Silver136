@@ -1,11 +1,11 @@
 #include "effect/n64/eff_pokopi_pcharge_n64.h"
 
+extern s32 rand(void);
 
 void* effPokopiPchargeN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 lifetime) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32, s32);
     extern void effPokopiPchargeMain(void*);
-    extern s32 rand(void);
     extern char str_PokopiPchargeN64_802fbcd8[];
     extern u8 n_data[];
     extern u8 vx_data[];
@@ -142,7 +142,6 @@ void effPokopiPchargeMain(void* effect) {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effPokopiPchargeDisp(void);
-    extern s32 rand(void);
     extern f64 sin(f64);
     extern const Vec3 vec3_802fbcc0;
     extern f64 double_to_int_802fbcd0;

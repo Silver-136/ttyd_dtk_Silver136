@@ -16,7 +16,6 @@ typedef struct DispVec {
     f32 z;
 } DispVec;
 extern void* __memAlloc(s32 heap, u32 size);
-extern void* memset(void* dst, int value, unsigned long size);
 extern DispWork** pSortWork;
 extern s32 entry_n;
 extern void* currentWorkPtr;

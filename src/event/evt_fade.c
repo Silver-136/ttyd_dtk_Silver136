@@ -1,18 +1,9 @@
 #include "event/evt_fade.h"
 
+#include "driver/fadedrv.h"
+
 extern s32 evtGetValue();
 extern f32 evtGetFloat();
-extern void fadeReset();
-extern void fadeSoftFocusOn();
-extern void fadeSoftFocusOff();
-extern s32 fadeIsFinish();
-extern void fadeSetAnimOfsPos(f32, f32);
-extern void fadeTecSoftOn(void);
-extern void fadeTecOn(void);
-extern void fadeTecSoftOff(void);
-extern void fadeTecOff(void);
-extern void fadeSetAnimVirtualPos(f32, f32, f32);
-extern void fadeEntry(s32 type, s32 duration, void* color);
 extern void* gp;
 extern u32 dat_80422a88;
 
@@ -93,7 +84,6 @@ s32 evt_fade_set_spot_pos(int event) {
     extern void GXProject(f32 x, f32 y, f32 z, void* model, f32* projection,
                           f32* viewport, f32* screenX, f32* screenY, f32* screenZ);
     extern void GXSetProjectionv(f32* projection);
-    extern void fadeSetSpotPos(f32 x, f32 y);
     s32* args;
     char* camera;
     f32 oldProjection[7];

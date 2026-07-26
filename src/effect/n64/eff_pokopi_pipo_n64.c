@@ -1,5 +1,6 @@
 #include "effect/n64/eff_pokopi_pipo_n64.h"
 
+extern f32 float_0_80425d74;
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -12,7 +13,6 @@ void* effPokopiPipoN64Entry(s32 type, s32 time, f32 x0, f32 y0, f32 z0, f32 x1, 
     extern s32 rand(void);
     extern const char str_PokopiPipoN64_802fbd10[];
     extern f32 float_neg0p1_80425d94;
-    extern f32 float_0_80425d74;
     extern f32 float_1_80425d98;
     void* entry;
     u8* work;
@@ -85,7 +85,6 @@ void effPokopiPipoMain(void* effect) {
     extern f32 float_neg0p2_80425d80;
     extern f32 float_neg1_80425d84;
     extern f32 float_neg4_80425d88;
-    extern f32 float_0_80425d74;
     extern f32 float_14p286_80425d8c;
     extern f32 float_neg20_80425d90;
     u8* work;

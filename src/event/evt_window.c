@@ -170,9 +170,6 @@ USER_FUNC(evt_win_nameent_off) {
 }
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 void oneMessageDisp(void* entry) {
     void* data = *(void**)((s32)entry + 0x2C);
     char* msg;

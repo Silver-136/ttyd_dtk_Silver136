@@ -1,5 +1,10 @@
 #include "effect/n64/eff_water_damage_n64.h"
 
+extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);
+extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
+extern void GXSetTevColorIn(s32,s32,s32,s32,s32);
+extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+
 
 void* effWaterDamageN64Entry(f64 x, f64 y, f64 z, f64 scale, s32 type, s32 timer) {
     typedef struct WaterPart {
@@ -201,11 +206,7 @@ void effWaterDamageDisp(s32 cameraId, void* effect) {
     extern void PSMTXRotRad(void*,s32,f32); extern void PSMTXScale(void*,f32,f32,f32);
     extern void PSMTXConcat(void*,void*,void*); extern void GXSetNumChans(s32);
     extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32);
-    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);
-    extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
-    extern void GXSetTevColorIn(s32,s32,s32,s32,s32);
     extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32); extern void GXSetNumTexGens(s32);
-    extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
     extern void GXLoadTexMtxImm(void*,s32,s32); extern void effGetTexObjN64(s32,void*);
     extern void GXLoadTexObj(void*,s32); extern void GXSetCullMode(s32);
     extern void GXLoadPosMtxImm(void*,s32); extern void GXSetCurrentMtx(s32);
@@ -265,12 +266,8 @@ void effWaterDamageDisp2(s32 cameraId, void* effect) {
     extern void GXSetChanMatColor(s32,void*);
     extern void GXSetNumTevStages(s32);
     extern void GXSetTevOrder(s32,s32,s32,s32);
-    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);
-    extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
-    extern void GXSetTevColorIn(s32,s32,s32,s32,s32);
     extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
     extern void GXSetNumTexGens(s32);
-    extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
     extern void GXLoadTexMtxImm(void*,s32,s32);
     extern void effGetTexObjN64(s32,void*);
     extern void GXLoadTexObj(void*,s32);

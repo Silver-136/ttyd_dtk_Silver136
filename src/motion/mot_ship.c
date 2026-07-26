@@ -1,10 +1,20 @@
 #include "motion/mot_ship.h"
 
+#include "system.h"
+
 extern f32 float_0_80420eb8;
 
 u32 hitGetAttr(void* hit);
 void* marioGetPtr(void);
-s32 sysMsec2Frame(s32 msec);
+extern s32 marioGetColor(void);
+extern void marioPaperOff(void);
+extern f64 cos(f64);
+extern f64 sin(f64);
+extern f32 float_20_80420eb4;
+extern char str_PM_H_1A_802c42d0[];
+extern void* __memAlloc(s32, u32);
+extern void allPartyRideOff(void);
+extern f32 float_40_80420eb0;
 
 s32 N_marioShipGetDir(void) {
     marioGetPtr();
@@ -17,7 +27,6 @@ s32 N_marioShipGetDir(void) {
 #pragma use_lmw_stmw on
 
 s32 marioShipChanging(void) {
-    extern void* marioGetPtr(void);
     void* mario = marioGetPtr();
     s32 state;
     if (*(u16*)((s32)mario + 0x2E) != 0x19) {
@@ -54,8 +63,6 @@ s32 marioChkSwirlPower(void) {
 }
 
 u8 marioShipForceStop(void) {
-    extern void* marioGetPtr(void);
-    extern f32 float_0_80420eb8;
     f32 zeroB;
     f32 zeroA;
     void* ship;
@@ -88,10 +95,7 @@ s32 marioChkShipPlace(void* hit) {
 }
 
 u8 marioForceShipAnime(void) {
-    extern void* marioGetPtr(void);
-    extern void marioPaperOff(void);
     extern void marioChgPaper(void* paper);
-    extern s32 marioGetColor(void);
     extern void marioPaperOn(void* paper);
     extern void marioChgPose(void* pose);
     extern void* paper_ship[4];
@@ -108,10 +112,7 @@ u8 marioForceShipAnime(void) {
 }
 
 void marioReInit_ship(void) {
-    extern void* marioGetPtr(void);
-    extern void* __memAlloc(s32, u32);
     extern void* memset(void*, s32, u32);
-    extern s32 marioGetColor(void);
     extern void marioPaperOn(void*);
     extern void marioChgPaper(void*);
     extern void marioChgPose(void*);
@@ -119,10 +120,7 @@ void marioReInit_ship(void) {
     extern void* effFunemizuEntry(double, double, double, double, double, s32);
     extern void allPartyForceRideOn(void);
     extern void* paper_ship[];
-    extern char str_PM_H_1A_802c42d0[];
     extern char str_M_Z_1_80420f14[];
-    extern f32 float_40_80420eb0;
-    extern f32 float_0_80420eb8;
     extern f32 float_4p25_80420efc;
     extern f32 float_neg15_80420f28;
 
@@ -165,16 +163,10 @@ void marioReInit_ship(void) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 void mot_ship_post(void) {
-    extern void* marioGetPtr(void);
-    extern void allPartyRideOff(void);
-    extern void marioPaperOff(void);
     extern void psndSFXOff(s32 id);
     extern void marioOfsRotReset(void);
     extern void __memFree(s32 heap, void* ptr);
-    extern f32 float_20_80420eb4;
     extern f32 float_37_80420f7c;
     void* mario = marioGetPtr();
     allPartyRideOff();
@@ -210,12 +202,9 @@ void mot_ship_post(void) {
 
 
 void mot_ship(void) {
-    extern void* marioGetPtr(void);
-    extern void* __memAlloc(s32, u32);
     extern void __memFree(s32, void*);
     extern void* memset(void*, s32, u32);
     extern void* camGetPtr(s32);
-    extern u32 hitGetAttr(void*);
     extern void* hitGetName(void*);
     extern void hitObjGetPos(void*, f32*);
     extern u32 psndSFXOn_3D(s32, void*);
@@ -232,21 +221,16 @@ void mot_ship(void) {
     extern void marioChgMot(s32);
     extern void marioChgPose(char*);
     extern void marioPaperOn(char*);
-    extern void marioPaperOff(void);
     extern void marioChgPaper(char*);
     extern void marioSetPaperAnimeLocalTime(s32);
-    extern s32 marioGetColor(void);
     extern f64 revise360(f64);
     extern f64 toMovedir(f64);
     extern f64 angleABf(f64, f64, f64, f64);
     extern f64 distABf(f64, f64, f64, f64);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern void movePos(f64, f64, f32*, f32*);
     extern void N_marioSetBottomlessRespawnPosOnBeroEntry(f64, f64, f64);
     extern void N_marioReloadMapOnBottomlessOff(void);
     extern void allPartyRideShip(void);
-    extern void allPartyRideOff(void);
     extern void* evtEntry(void*, s32, u32);
     extern void* marioChkLandon(f32, f32*);
     extern void* effFunemizuEntry(s32, f64, f64, f64, f64, f64);
@@ -257,7 +241,6 @@ void mot_ship(void) {
     extern s32 strcmp(char*, char*);
     extern char* paper_ship[];
     extern char str_M_J_1B_802c42c8[];
-    extern char str_PM_H_1A_802c42d0[];
     extern char str_M_Z_1_80420f14[];
     extern char str_dou_03_802c42d8[];
     extern s32 sound_evt[];
@@ -931,7 +914,6 @@ void mot_ship(void) {
 }
 
 u8 marioShipChgFall(void) {
-    extern void* marioGetPtr(void);
     extern f32 float_neg0p1_80420eec;
     extern f32 float_neg0p2_80420ef0;
     extern f32 float_0p024_80420ef4;
@@ -950,7 +932,6 @@ u8 marioShipChgFall(void) {
 
 
 s32 marioChkShipMoveMode(void) {
-    extern void* marioGetPtr(void);
     void* mario = marioGetPtr();
     s32 mode;
 
@@ -965,10 +946,7 @@ s32 marioChkShipMoveMode(void) {
 }
 
 void shipMove(void) {
-    extern void* marioGetPtr(void);
     extern void movePos(f32, f32, f32*, f32*);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern f64 distABf(f64, f64, f64, f64);
     extern f64 angleABf(f64, f64, f64, f64);
     extern u32 psndSFXOn_3D(void*, void*);
@@ -976,7 +954,6 @@ void shipMove(void) {
     extern void psndSFX_pos(s32, void*);
     extern f32 __fabsf(f32);
     extern f32 shipData[];
-    extern f32 float_0_80420eb8;
     extern f32 float_180_80420ed8;
     extern f32 float_3p1416_80420edc;
     extern f32 float_1_80420ee0;
@@ -1124,18 +1101,13 @@ void shipMove(void) {
 }
 
 s32 checkHarbor(f32* outPos) {
-    extern void* marioGetPtr(void);
     extern f32 toMovedir(f32);
     extern void sincosf(f32, f32*, f32*);
     extern void* hitCheckFilter(f64, f64, f64, f64, f64, f64, s32, void*, void*, void*, f32*, void*, void*, void*);
-    extern u32 hitGetAttr(void*);
     extern char* hitGetName(void*);
     extern void hitObjGetPos(char*, void*);
-    extern f32 float_0_80420eb8;
     extern f32 float_neg1_80420ebc;
     extern f32 float_0p5_80420ec0;
-    extern f32 float_20_80420eb4;
-    extern f32 float_40_80420eb0;
     extern f32 float_90_80420ec8;
     extern f32 float_100_80420ec4;
 

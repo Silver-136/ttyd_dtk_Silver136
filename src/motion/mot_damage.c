@@ -3,6 +3,18 @@
 extern s32 quake_bgmode_evt[8];
 extern s32 quake_evt[8];
 extern f32 float_1_80422b78;
+extern void marioClearSlitFloor(void);
+extern void marioAdjustMoveDir(void);
+extern void marioSlitForceCancel(void);
+extern void bomhei_use_cancel2(void);
+extern void marioNoUpdateCamPos(void);
+extern void marioSetFallPara(void);
+extern f32 marioGetFallSpd(void);
+extern void mario_simple_kemuri(void);
+extern s32 pouchGetHP(void);
+extern void marioUpdateCamPos(void);
+extern char str_M_D_2_80422b90[];
+extern char str_M_U_3_80422b98[];
 
 void* marioGetPtr(void);
 s32 marioBgmodeChk(void);
@@ -61,7 +73,6 @@ s32 gazigazi(void* pEvt) {
 
 
 s32 marioChkDamageSink(void) {
-    extern void* marioGetPtr(void);
     void* mario = marioGetPtr();
     s32 state;
 
@@ -82,20 +93,11 @@ void set_damage_root_ypos(f32 y) {
 
 u8 mot_damage(void) {
     typedef struct Vec { f32 x, y, z; } Vec;
-    extern void* marioGetPtr(void);
-    extern void marioClearSlitFloor(void);
     extern void marioOfsRotReset(void);
-    extern void marioAdjustMoveDir(void);
-    extern void marioSlitForceCancel(void);
-    extern void bomhei_use_cancel2(void);
-    extern void marioNoUpdateCamPos(void);
     extern void marioChgPose(char*);
     extern void marioChgEvtPose(char*);
     extern void marioMakeJumpPara(void);
-    extern void marioSetFallPara(void);
-    extern f32 marioGetFallSpd(void);
     extern void* marioChkLandon(f32, f32*);
-    extern void mario_simple_kemuri(void);
     extern void npcStopForEvent(void);
     extern void npcStartForEvent(void);
     extern void* evtEntry(void*, s32, s32);
@@ -104,19 +106,12 @@ u8 mot_damage(void) {
     extern f32 distABf(f32, f32, f32, f32);
     extern f32 angleABf(f32, f32, f32, f32);
     extern void movePos(f32, f32, f32*, f32*);
-    extern s32 marioBgmodeChk(void);
     extern s32 pouchAddHP(s16);
-    extern s32 pouchGetHP(void);
-    extern void marioUpdateCamPos(void);
     extern void marioChgMot(s32);
-    extern s32 quake_evt[8];
-    extern s32 quake_bgmode_evt[8];
     extern s32 evt_gazigazi[8];
     extern char str_KPA_D_1_802f38b8[];
     extern char str_M_F_1_80422ba4[];
     extern char str_KPA_D_2_802f38d8[];
-    extern char str_M_D_2_80422b90[];
-    extern char str_M_U_3_80422b98[];
     extern Vec vec3_802f385c;
     void* mario;
     void* hit;
@@ -336,33 +331,19 @@ u8 mot_damageToge(void) {
         f32 z;
     } Vec;
 
-    extern void* marioGetPtr(void);
-    extern void marioClearSlitFloor(void);
-    extern void marioAdjustMoveDir(void);
-    extern void marioSlitForceCancel(void);
     extern void marioYoshiForceCancel(void);
     extern void unk_800d058c(void);
-    extern void marioNoUpdateCamPos(void);
-    extern void bomhei_use_cancel2(void);
     extern void marioChgEvtPose(char* pose);
     extern void marioChgPose(char* pose);
     extern void psndSFXOn_3D(s32 id, void* pos);
-    extern void mario_simple_kemuri(void);
     extern Vec* hitGetDamageReturnPos(void* hit);
     extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern void movePos(f32 speed, f32 angle, void* pos, f32* z);
-    extern void marioSetFallPara(void);
-    extern f32 marioGetFallSpd(void);
     extern void* marioChkLandon(f32 velocityY, f32* y);
-    extern s32 marioBgmodeChk(void);
     extern void* evtEntry(void* script, s32 priority, s32 flags);
     extern s32 pouchAddHP(s16 amount);
-    extern s32 pouchGetHP(void);
-    extern void marioUpdateCamPos(void);
     extern void marioChgMot(s32 mot);
-    extern s32 quake_evt[8];
-    extern s32 quake_bgmode_evt[8];
     extern Vec vec3_802f3898;
     extern f32 float_0_80422b60;
     extern f32 float_4_80422b64;
@@ -374,8 +355,6 @@ u8 mot_damageToge(void) {
     extern f32 float_8_80422b84;
     extern f32 float_0p125_80422b88;
     extern f32 float_neg10_80422b8c;
-    extern char str_M_D_2_80422b90[];
-    extern char str_M_U_3_80422b98[];
 
     void* mario;
     void* hit;

@@ -1,6 +1,7 @@
 #include "effect/eff_charge.h"
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+extern f32 float_0_80424660;
 void* effChargeEntry(s32 type, s32 arg, f32 x, f32 y, f32 z, f32 scale) {
     typedef struct EffectEntry {
         s32 flags;
@@ -101,7 +102,6 @@ void effChargeMain(void* effect) {
     extern double sin(double);
     extern double cos(double);
     extern VecLocal vec3_802f9710;
-    extern f32 float_0_80424660;
     extern f32 float_6p2832_8042467c;
     extern f32 float_360_80424680;
     extern f32 float_100_80424684;
@@ -227,7 +227,6 @@ void effChargeDisp(s32 cameraId, void* effect) {
     extern u32 unk_80429610;
     extern f32 float_1_80424658;
     extern f32 float_deg2rad_8042465c;
-    extern f32 float_0_80424660;
     extern f32 float_neg8_80424664;
     extern f32 float_8_80424668;
     extern f32 float_neg24_8042466c;

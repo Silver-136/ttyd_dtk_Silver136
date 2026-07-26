@@ -23,10 +23,23 @@ void* partyGetPtr(s32 id);
 s32 marioGetPartyId(void);
 void partyChgPose(void* party, void* pose);
 f32 toMovedir(f32 angle);
+extern void* marioGetPtr(void);
+extern void* camGetPtr(s32 cameraId);
+extern void marioAdjustMoveDir(void);
+extern f32 revise360(f32 angle);
+extern f64 sin(f64 x);
+extern void psndSFXOff(s32 soundId);
+extern void effSoftDelete(void* effect);
+extern void __memFree(s32 heap, void* ptr);
+extern void movePos(f32* x, f32* z, f32 speed, f32 dir);
+extern void partyChgRunMode(void* party, s32 mode);
+extern void partyChgMot(void* party, s32 mot);
+extern f32 float_90_80424304;
+extern f32 float_270_80424308;
+extern void marioChgMot(s32 mot);
 
 
 u8 mot_cloud(void) {
-    extern void* marioGetPtr(void);
 
     void* mario = marioGetPtr();
     u32 flags = *(u32*)((s32)mario + 0xC);
@@ -39,10 +52,7 @@ u8 mot_cloud(void) {
     }
 }
 u8 cloudResetAt(void) {
-    extern void* marioGetPtr(void);
-    extern void* camGetPtr(s32 cameraId);
     extern void marioCamZoomOffReq2(s32 frames);
-    extern void marioAdjustMoveDir(void);
     void* mario;
     void* party;
     void* cam;
@@ -114,7 +124,6 @@ f32 cloudGetBreathDir(void) {
 f32 cloudGetBreathPower(void* pos, f32 radius) {
     extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern f32 revise360(f32 angle);
     extern f64 cos(f64 x);
     extern f32 __fabsf(f32 value);
     void* party;
@@ -211,8 +220,6 @@ void unk_80187d74(void* party) {
 }
 
 void unk_80187d10(void* party) {
-    extern f32 revise360(f32 angle);
-    extern f64 sin(f64 x);
     f32 angle;
     f32 s;
     f32 three;
@@ -227,8 +234,6 @@ void unk_80187d10(void* party) {
 u8 cloud_move(void* pParty) {
     extern void partyMoveFlyInit(void* party, s32 param);
     extern void partyFlyMain(void* party);
-    extern f32 revise360(f32 angle);
-    extern f64 sin(f64 x);
     f32 angle;
     f32 value;
     f32 zero;
@@ -276,16 +281,8 @@ void cloud_init(void* party) {
 }
 u8 cloud_use(void* pParty) {
     extern void N_cloud_use(void* party);
-    extern void psndSFXOff(s32 soundId);
-    extern void effSoftDelete(void* effect);
-    extern void __memFree(s32 heap, void* ptr);
-    extern void movePos(f32* x, f32* z, f32 speed, f32 dir);
-    extern void partyChgRunMode(void* party, s32 mode);
     extern s32 partyChgPoseId(void* party, s32 poseId);
     extern void partyChgPose(void* party, s32 pose);
-    extern void partyChgMot(void* party, s32 mot);
-    extern f32 float_90_80424304;
-    extern f32 float_270_80424308;
     extern f32 float_neg90_8042432c;
     extern f32 float_3p3_80424330;
     void* mario;
@@ -352,16 +349,11 @@ u8 cloud_use(void* pParty) {
 /* fallback stub-fill: map=N_cloud_use addr=0x80186ee0 size=0x00000b64 */
 void N_cloud_use(void* pParty) {
     extern void* __memAlloc(s32 heap, s32 size);
-    extern void __memFree(s32 heap, void* ptr);
     extern void* memset(void* ptr, s32 value, u32 size);
-    extern void marioAdjustMoveDir(void);
-    extern void marioChgMot(s32 mot);
     extern void marioChgPose(char* pose);
     extern void partyChgPose(void* party, char* pose);
     extern void partyUpdateKeyData(void* party);
-    extern void partyChgRunMode(void* party, s32 mode);
     extern void partyChgMoveMode(void* party, s32 mode);
-    extern void partyChgMot(void* party, s32 mot);
     extern void movePos(f32 speed, f32 dir, f32* x, f32* z);
     extern f32 toMovedir(f32 dir);
     extern void psndSFXOff(s32 id);
@@ -449,11 +441,6 @@ void N_cloud_use(void* pParty) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 cloud_exit(void* pParty) {
-    extern void psndSFXOff(s32 soundId);
-    extern void effSoftDelete(void* effect);
-    extern void __memFree(s32 heap, void* ptr);
-    extern void marioAdjustMoveDir(void);
-    extern void marioChgMot(s32 mot);
     void* work;
     void* mario;
     s32 soundId;
@@ -498,7 +485,6 @@ void getHitBreatheout2(void* pParty, f32 angle) {
     extern void* hitCheckFilter(f32 x, f32 y, f32 z, f32 dirX, f32 dirY, f32 dirZ, s32 flags,
                                 void* outA, void* outB, void* outC, void* outD, void* outE, void* outF, void* outG);
     extern u32 hitGetAttr(void* hit);
-    extern void movePos(f32* x, f32* z, f32 speed, f32 dir);
     extern f32 float_0_804242e0;
     extern f32 float_1_80424314;
     extern f32 float_8_804242ec;
@@ -506,8 +492,6 @@ void getHitBreatheout2(void* pParty, f32 angle) {
     extern f32 float_20_804242f0;
     extern f32 float_24_804242f8;
     extern f32 float_40_804242f4;
-    extern f32 float_90_80424304;
-    extern f32 float_270_80424308;
     extern f32 float_neg25_8042430c;
     extern f32 float_neg1_80424318;
     extern f32 float_neg20_8042431c;
@@ -651,8 +635,6 @@ void getHitBreatheout2(void* pParty, f32 angle) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 cloudGetAt(void* param_1) {
-    extern void* marioGetPtr(void);
-    extern void* camGetPtr(s32 cameraId);
     void* mario;
     void* party;
     void* cam;

@@ -1,4 +1,6 @@
 #include "battle/battle_break_slot.h"
+#include "battle/battle_audience.h"
+#include "battle/battle_camera.h"
 
 void item_appear_force(void* reel, s32 item);
 
@@ -8,10 +10,6 @@ extern f32 float_490_804268ac;
 void BattleBreakSlotDispReel(void);
 void dispEntry(s32 cameraId, s32 renderMode, void* callback, s32 param, f32 priority);
 void BattleFree(void* ptr);
-s32 evtCheckID(s32 id);
-void btl_camera_set_mode(s32 cameraId, s32 mode);
-void btl_camera_set_moveSpeedLv(s32 cameraId, s32 level);
-void BattleAudienceNumToTarget(void);
 
 void* BattleBreakSlotGetPtr(void) {
     return (void*)((s32)_battleWorkPointer + 0x1616C);
@@ -27,7 +25,6 @@ void* BattleBreakSlotReelGetPtr(s32 index) {
 /* stub-fill: BattleBreakSlot_Init | missing_definition | header_prototype */
 void BattleBreakSlot_Init(void) {
     extern void* BattleAlloc(u32 size);
-    extern void* memset(void* dst, int value, u32 size);
     extern void* memcpy(void* dst, const void* src, u32 size);
     extern const s32 R_slot_1_cards[];
     extern const s32 R_slot_2_cards[];
@@ -66,8 +63,6 @@ void BattleBreakSlot_Init(void) {
 
 /* stub-fill: BattleBreakSlot_Main | missing_definition | header_prototype */
 void BattleBreakSlot_Main(void) {
-    extern void* BattleBreakSlotGetPtr(void);
-    extern void* BattleBreakSlotReelGetPtr(s32);
     extern s32 keyGetButtonTrg(s32);
     extern s32 rand(void);
     extern s32 psndSFXOn(void*);
@@ -388,7 +383,6 @@ void BattleBreakSlotDispReel(void) {
     extern u16 tex_id_list_big[];
     extern void* gp;
 
-    extern void* BattleBreakSlotReelGetPtr(s32 index);
     extern void PSMTXTrans(Mtx m, double x, double y, double z);
     extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
     extern void PSMTXRotRad(Mtx m, double angle, char axis);

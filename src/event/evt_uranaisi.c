@@ -17,10 +17,11 @@ UranaisiData _udt;
 s32 uranaisi_ryokin_tbl[3];
 extern void* mapalloc_base_ptr;
 extern const char str_PCTs_PCT04d_802fdda0[];
+extern int strcmp(const char* s1, const char* s2);
+extern char* msgSearch(char* key);
+extern s32 _ismbblead(s32 c);
+extern int search_evt_no(void* pEvt);
 
-s32 evtGetValue(EventEntry* event, s32 value);
-s32 evtSetValue(EventEntry* event, s32 target, s32 value);
-void* memset(void* dst, int value, u32 size);
 void* _mapAlloc(void* heap, u32 size);
 void _mapFree(void* heap, void* ptr);
 s32 johoya_get(void* flags, s32 id);
@@ -226,10 +227,6 @@ USER_FUNC(uranaisi_supercoin_setreadflag) {
 }
 
 int uranaisi_data_make_next(s32 param_1, u32 param_2) {
-    extern int strcmp(const char* s1, const char* s2);
-    extern char* msgSearch(char* key);
-    extern s32 _ismbblead(s32 c);
-    extern int search_evt_no(void* pEvt);
     char label[64];
     char key[72];
     char* scan;
@@ -320,10 +317,6 @@ int uranaisi_data_make_next(s32 param_1, u32 param_2) {
 }
 
 int uranaisi_data_make_starpiece(s32 param_1, u32 param_2) {
-    extern int strcmp(const char* s1, const char* s2);
-    extern char* msgSearch(char* key);
-    extern s32 _ismbblead(s32 c);
-    extern int search_evt_no(void* pEvt);
     extern void* uranai_table_starpiece[];
     char label[64];
     char key[76];
@@ -426,10 +419,6 @@ int uranaisi_data_make_starpiece(s32 param_1, u32 param_2) {
 }
 
 int uranaisi_data_make_supercoin(s32 param_1, u32 param_2) {
-    extern int strcmp(const char* s1, const char* s2);
-    extern char* msgSearch(char* key);
-    extern s32 _ismbblead(s32 c);
-    extern int search_evt_no(void* pEvt);
     extern void* uranai_table_supercoin[];
     char label[64];
     char key[76];

@@ -13,6 +13,18 @@ s32 evtGetValue(EvtEntry* evt, s32 value);
 void msgWindow_ForceClose(s32 id);
 void msgWindow_Continue(s32 id);
 s32 windowCheckID(s32 id);
+extern char* msgSearch(char* msg);
+extern void* windowGetPointer(s32 id);
+extern s32 marioGetPartyId(void);
+extern void* partyGetPtr(s32 id);
+extern char* strcpy(char* dst, const char* src);
+extern char str_DIRECT_802cc71c[];
+extern char* strcat(char* dst, const char* src);
+extern char* partyMsgStr[11];
+extern u8 msgWindow_Add(char* msg, s32 windowId);
+extern int sprintf(char* str, const char* format, ...);
+extern void* gp;
+extern void evtSetValue(EvtEntry* evt, s32 index, s32 value);
 
 void evt_msg_init(void) {
     ;
@@ -22,20 +34,14 @@ void evt_msg_init(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _evt_msg_print(void* param_1, int param_2, u32 param_3, char* param_4, s32 param_5, char* param_6) {
-    extern char* msgSearch(char* msg);
     extern s32 msgWindow_Entry(char* msg, s32 type, s16 flags);
-    extern void* windowGetPointer(s32 id);
     extern void* evtNpcNameToPtr(void* evt, char* name);
-    extern s32 marioGetPartyId(void);
     extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32 id);
     extern void* marioGetPtr(void);
-    extern char* strcpy(char* dst, const char* src);
     extern s32 BattleTransID(void* evt, s32 id);
     extern void BtlUnit_GetTalkTogePos(s32 unitIdx, f32* x, f32* y, f32* z);
     extern f32 getScreenPoint(f32* src, f32* dst);
     extern f32 __fabsf(f32 value);
-    extern char str_DIRECT_802cc71c[];
     extern f32 float_300_80421874;
 
     void* evt;
@@ -223,11 +229,6 @@ s32 evt_msg_print(void* evtEntry, int param_2) {
 
 
 s32 evt_msg_print_party(void* pEvt, int param_2) {
-    extern char* strcpy(char* dst, const char* src);
-    extern char* strcat(char* dst, const char* src);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
-    extern char* partyMsgStr[11];
     extern char str_party_8042186c[];
     static char partyLabel[0x40];
     EvtEntry* evt = pEvt;
@@ -249,13 +250,6 @@ s32 evt_msg_print_party(void* pEvt, int param_2) {
 }
 
 s32 evt_msg_print_party_add(int param_1, int param_2) {
-    extern char* strcpy(char* dst, const char* src);
-    extern char* strcat(char* dst, const char* src);
-    extern char* msgSearch(char* msg);
-    extern u8 msgWindow_Add(char* msg, s32 windowId);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
-    extern char* partyMsgStr[11];
     static char partyLabel[0x40];
     EvtEntry* evt = (EvtEntry*)param_1;
     s32 first = param_2;
@@ -283,8 +277,6 @@ s32 evt_msg_print_party_add(int param_1, int param_2) {
 
 
 s32 evt_msg_print_battle_party(int param_1, int param_2) {
-    extern char* strcpy(char* dst, const char* src);
-    extern char* strcat(char* dst, const char* src);
     extern s32 BattleTransID(s32 id);
     extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
     extern void* _battleWorkPointer;
@@ -307,8 +299,6 @@ s32 evt_msg_print_battle_party(int param_1, int param_2) {
     return _evt_msg_print(evt, first, 2, partyLabel, 0, (char*)-4);
 }
 s32 evt_msg_print_insert(int param_1, int param_2) {
-    extern int sprintf(char* str, const char* format, ...);
-    extern char* msgSearch(char* msg);
 
     s32 values[4];
     char buffer[0xA00];
@@ -372,8 +362,6 @@ s32 evt_msg_print_insert(int param_1, int param_2) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_msg_print_add(void* pEvt, int param_2) {
-    extern char* msgSearch(char* msg);
-    extern u8 msgWindow_Add(char* msg, s32 windowId);
     s32 first;
     EvtEntry* evt;
     s32 flags;
@@ -403,9 +391,6 @@ s32 evt_msg_print_add(void* pEvt, int param_2) {
 
 
 s32 evt_msg_print_add_insert(int param_1, int param_2) {
-    extern int sprintf(char* str, const char* format, ...);
-    extern char* msgSearch(char* msg);
-    extern u8 msgWindow_Add(char* msg, s32 windowId);
     s32 values[4];
     char buffer[0xA00];
     EvtEntry* evt = (EvtEntry*)param_1;
@@ -484,11 +469,8 @@ s32 evt_msg_close(EvtEntry* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_msg_select(void* pEvt, int param_2) {
-    extern char* msgSearch(char* msg);
     extern s32 msgWindow_Entry(char* msg, s32 type, s32 flags);
-    extern void* windowGetPointer(s32 id);
     extern void windowDeleteID(s32 id);
-    extern char str_DIRECT_802cc71c[];
     EvtEntry* evt = pEvt;
     s32 first = param_2;
     s32* args = evt->args;
@@ -576,8 +558,6 @@ s32 evt_msg_pri(EvtEntry* evt) {
 
 
 s32 evt_msg_npc(int param_1) {
-    extern void* windowGetPointer(s32 id);
-    extern char* strcpy(char* dst, const char* src);
     EvtEntry* evt = (EvtEntry*)param_1;
     char* msg;
     void* window;
@@ -592,7 +572,6 @@ s32 evt_msg_npc(int param_1) {
 
 /* stub-fill: unk_800d1364 | prototype_only | source_prototype */
 void unk_800d1364(char* dst, char* value) {
-    extern void* gp;
     extern char* strcpy(char*, const char*);
     extern char* strncpy(char*, const char*, u32);
     extern char* strcat(char*, const char*);
@@ -736,10 +715,7 @@ void unk_800d1364(char* dst, char* value) {
 }
 
 s32 unk_800d12b0(EvtEntry* evt) {
-    extern char* msgSearch(char* msg);
-    extern char* strcpy(char* dst, const char* src);
     extern void unk_800d1364(char* dst, char* value);
-    extern void evtSetValue(EvtEntry* evt, s32 index, s32 value);
     extern char unk_803deac8[];
     s32* args = evt->args;
     s32 mode = args[0];
@@ -769,15 +745,12 @@ void unk_800d0a4c(char* dst, char* value) {
     extern char* strstr(const char* text, const char* find);
     extern u32 strlen(const char* text);
     extern char* strncpy(char* dst, const char* src, u32 count);
-    extern char* strcpy(char* dst, const char* src);
-    extern char* strcat(char* dst, const char* src);
     extern s32 sprintf(char* dst, const char* format, ...);
     extern char unk_803dd6c8[], unk_803de0c8[];
     extern char str_COIN_802cc618[], str_POINT_802cc628[];
     extern char str_Punkte_802cc630[], str_moneta_802cc638[], str_monete_802cc640[];
     extern char str_point_802cc648[], str_OGGETTO_802cc650[];
     extern char str_oggetto_802cc65c[], str_oggtti_802cc664[];
-    extern void* gp;
     char number[16];
     char* marker;
     u32 prefix;
@@ -882,10 +855,7 @@ finish:
 }
 
 s32 unk_800d0998(EvtEntry* evt) {
-    extern char* msgSearch(char* msg);
-    extern char* strcpy(char* dst, const char* src);
     extern void unk_800d0a4c(char* dst, char* value);
-    extern void evtSetValue(EvtEntry* evt, s32 index, s32 value);
     extern char unk_803dccc8[];
     s32* args = evt->args;
     s32 mode = args[0];

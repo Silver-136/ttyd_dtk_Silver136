@@ -2,6 +2,7 @@
 
 extern void* _battleWorkPointer;
 
+u32 _check_turn_count_0_turn(int value);
 
 void BtlActRec_AddCount(u8* value) {
     if (*value < 100) {
@@ -18,9 +19,6 @@ void BtlActRec_AddPoint(u8* value, u8 point) {
 }
 
 u8 BtlActRec_JudgeTurnRuleKeep(void) {
-    extern void* _battleWorkPointer;
-    extern u32 _check_turn_count_0_turn(int);
-
     u8* battleWork = _battleWorkPointer;
     u8* work = *(u8**)(battleWork + 0x2738);
     u8* record = battleWork + 0x16F38;
@@ -68,7 +66,6 @@ high_dispatch:
 }
 
 void BtlActRec_JudgeRuleKeep(void) {
-    extern void* _battleWorkPointer;
     extern s32 _check_no_use(s32);
     extern s32 _check_use(u32);
     extern void* BattleGetMarioPtr(void*);

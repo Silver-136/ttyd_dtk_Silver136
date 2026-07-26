@@ -1,6 +1,5 @@
 #include "driver/swdrv.h"
 extern void* gp;
-extern void* memset(void* dst, int value, unsigned long size);
 
 void swInit(void) {
     memset((void*)((s32)gp + 0x178), 0, 0x400);

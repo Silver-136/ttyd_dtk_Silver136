@@ -1,5 +1,9 @@
 #include "effect/n64/eff_thruhammer_n64.h"
 
+extern void PSMTXTrans(void*, f32, f32, f32);
+extern void PSMTXRotRad(void*, s32, f32);
+extern void PSMTXConcat(void*, void*, void*);
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effThruHammerN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
@@ -155,9 +159,6 @@ void effThruHammerDisp(s32 cameraId, void* effect) {
     extern void effGetTexObjN64(s32, void*);
     extern void GXLoadTexObj(void*, s32);
     extern void effSetVtxDescN64(void*);
-    extern void PSMTXTrans(void*, f32, f32, f32);
-    extern void PSMTXRotRad(void*, s32, f32);
-    extern void PSMTXConcat(void*, void*, void*);
     extern void GXSetTevColor(s32, void*);
     extern void GXSetCullMode(s32);
     extern void main_dl(void*, void*);
@@ -229,10 +230,7 @@ void effThruHammerDisp(s32 cameraId, void* effect) {
 
 
 void main_dl(void* effect, void* view) {
-    extern void PSMTXTrans(void*, f32, f32, f32);
-    extern void PSMTXRotRad(void*, s32, f32);
     extern void PSMTXScale(void*, f32, f32, f32);
-    extern void PSMTXConcat(void*, void*, void*);
     extern void GXLoadPosMtxImm(void*, s32);
     extern void GXSetCurrentMtx(s32);
     extern void GXLoadTexMtxImm(void*, s32, s32);

@@ -1,13 +1,14 @@
 #include "effect/eff_ibuki.h"
 
+extern s32 irand(s32 max);
+extern f64 cos(f64 x);
+extern f64 sin(f64 x);
+
 /* stub-fill: effIbukiEntry | missing_definition | ghidra_signature */
 void* effIbukiEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     extern void* effEntry(s32 type);
     extern void* __memAlloc(s32 heap, u32 size);
     extern void effIbukiMain(void);
-    extern s32 irand(s32 max);
-    extern f64 cos(f64 x);
-    extern f64 sin(f64 x);
     extern char str_Ibuki_804284e0[];
     extern f32 float_1_804284c8;
     extern f32 float_0_804284a0;
@@ -72,13 +73,10 @@ void* effIbukiEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
 /* stub-fill: effIbukiMain | missing_definition | ghidra_signature */
 void effIbukiMain(void* effect) {
     extern void effDelete(void* effect);
-    extern s32 irand(s32 max);
     extern void* camGetPtr(s32 cameraId);
     extern void PSMTXRotRad(f32 matrix[3][4], s32 axis, f32 radians);
     extern void PSMTXMultVec(f32 matrix[3][4], const f32* src, f32* dst);
     extern void effVaporN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale);
-    extern f64 cos(f64 angle);
-    extern f64 sin(f64 angle);
     extern f64 dispCalcZ(const f32* position);
     extern void dispEntry(s32 camera, s32 order, void* callback, void* param, f32 z);
     extern void effIbukiDisp(s32 camera, void* effect);

@@ -1,4 +1,8 @@
 #include "sequence/seq_game.h"
+#include "driver/camdrv.h"
+#include "driver/fadedrv.h"
+#include "driver/seqdrv.h"
+#include "mario/mario.h"
 
 extern s32 gp;
 extern u64 OSGetTime(void);
@@ -6,13 +10,8 @@ extern s32 dat_8041f498;
 extern s32 dat_8041f49c;
 extern s32 dat_8041f4a0;
 extern s32 maku_spread;
-extern void fadeEntry(s32 type, s32 time, void* data);
 extern void evtEntryType(void* script, s32 type, s32 a, s32 b);
-extern s32 fadeIsFinish(void);
-extern s32 seqCheckSeq(void);
 extern void seqSetSeq(s32 seq, s32 arg1, s32 arg2);
-extern void* marioGetPtr(void);
-extern void* camGetPtr(s32 id);
 extern void psndSetPosDirListener(void* pos, void* cam, f32 dir);
 
 typedef struct SeqGameVecRaw {

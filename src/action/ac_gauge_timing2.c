@@ -1,8 +1,9 @@
 #include "action/ac_gauge_timing2.h"
 
+void actionCommandDisp(f32 x, f32 y);
+
 /* stub-fill: battleAcMain_GaugeTiming2 | missing_definition | ghidra_signature */
 s32 battleAcMain_GaugeTiming2(void* battleWork) {
-    extern void* memset(void*, s32, u32);
     extern s32 irand(s32);
     extern u32 BattlePadCheckTrigger(u32);
     extern s32 psndSFXOn(char*);
@@ -190,7 +191,6 @@ void battleAcDisp_GaugeTiming2(void* camera, void* wp) {
     extern f32 float_neg300_804280d0;
     extern f32 float_30_804280d4;
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
-    extern void actionCommandDisp(f32 x, f32 y);
 
     disp = (GaugeTimingDispWork*)((s32)wp + 0x1F20);
     state = *(s32*)((s32)wp + 0x1C9C);

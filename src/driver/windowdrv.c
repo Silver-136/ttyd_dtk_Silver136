@@ -1,4 +1,6 @@
 #include "driver/windowdrv.h"
+#include "driver/arcdrv.h"
+#include "driver/camdrv.h"
 
 void* winTpl;
 void* wakuTexObj;
@@ -6,6 +8,52 @@ void* WinObjects;
 s32 unk_8041ea1c;
 
 void* __memAlloc(s32 heap, u32 size);
+
+extern void GXBegin(s32 primitive, s32 vtxfmt, u16 nverts);
+extern void GXClearVtxDesc(void);
+extern u16 GXGetTexObjHeight(void* obj);
+extern u16 GXGetTexObjWidth(void* obj);
+extern void GXLoadPosMtxImm(void* mtx, s32 id);
+extern void GXLoadTexMtxImm(void* mtx, s32 id, s32 type);
+extern void GXLoadTexObj(void* obj, s32 id);
+extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
+extern void GXSetCullMode(s32 mode);
+extern void GXSetCurrentMtx(s32 mtx);
+extern void GXSetNumChans(s32 nChans);
+extern void GXSetNumTevStages(s32 nStages);
+extern void GXSetNumTexGens(s32 nTexGens);
+extern void GXSetTevAlphaIn(s32 tevStage, s32 a, s32 b, s32 c, s32 d);
+extern void GXSetTevAlphaOp(s32 tevStage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+extern void GXSetTevColor(s32 reg, void* color);
+extern void GXSetTevColorIn(s32 tevStage, s32 a, s32 b, s32 c, s32 d);
+extern void GXSetTevColorOp(s32 tevStage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+extern void GXSetTevOrder(s32 tevStage, s32 texCoord, s32 texMap, s32 colorChan);
+extern void GXSetTevSwapMode(s32 tevStage, s32 rasSel, s32 texSel);
+extern void GXSetTexCoordGen2(s32 texcoord, s32 tgenType, s32 tgenSrc, s32 mtxsrc, s32 normalize, s32 postmtx);
+extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+extern void GXSetVtxDesc(s32 attr, s32 type);
+extern void GXSetZCompLoc(s32 beforeTex);
+extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
+extern void PSMTXConcat(void* a, void* b, void* ab);
+extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
+extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+extern void TEXGetGXTexObjFromPalette(void* palette, void* texObj, s32 id);
+extern void* UnpackTexPalette(void* data);
+extern f32 __fabsf(f32);
+extern f32 float_0_80420538;
+extern f32 float_0p33333_80420540;
+extern f32 float_0p66667_80420544;
+extern f32 float_136_80420560;
+extern f32 float_176_80420550;
+extern f32 float_1_80420548;
+extern f32 float_40_8042056c;
+extern f32 float_416_8042055c;
+extern f32 float_488_80420564;
+extern f32 float_560_8042054c;
+extern f32 float_72_80420554;
+extern f32 float_neg136_80420568;
+extern f32 float_neg176_80420558;
 
 void windowInit(void) {
     void* win = __memAlloc(0, 0x1F8);
@@ -29,9 +77,7 @@ void windowInit(void) {
 }
 
 void unk_8007fcf0(void* param_1, void* param_2) {
-    extern void* UnpackTexPalette(void* data);
     extern void DVDMgrClose(void* entry);
-    extern void TEXGetGXTexObjFromPalette(void* palette, void* texObj, s32 id);
     void* entry = *(void**)((s32)param_2 + 0x2C);
     u32 offset;
     u32 i;
@@ -50,15 +96,11 @@ void unk_8007fcf0(void* param_1, void* param_2) {
 }
 
 void windowTexSetup(void) {
-    extern void* arcOpen(const char* filename, void** address, u32* length);
     extern char* getMarioStDvdRoot(void);
     extern s32 sprintf(char* str, const char* format, ...);
     extern void* DVDMgrOpen(const char* path, s32 mode, s32 unk);
     extern u32 DVDMgrGetLength(void* entry);
     extern void DVDMgrReadAsync(void* entry, void* dst, u32 size, u32 offset, void* callback);
-    extern void* UnpackTexPalette(void* data);
-    extern void TEXGetGXTexObjFromPalette(void* palette, void* texObj, s32 id);
-    extern void unk_8007fcf0(void* param_1, void* param_2);
     extern const char str_font_msgWindow_tpl_802c3080[];
     extern const char str_PCTs_f_msgWindow_tpl_802c3094[];
     char path[128];
@@ -104,7 +146,7 @@ void windowReInit(void) {
     *(s32*)((s32)win + 0x1D8) = 0;
 }
 
-int windowEntry(s16 param_1) {
+s32 windowEntry(s16 param_1) {
     void* win = WinObjects;
     s32 i;
 
@@ -145,7 +187,6 @@ s32 windowDeleteID(s32 id) {
 }
 
 void windowMain(void) {
-    extern void* WinObjects;
     u8* window = WinObjects;
     s32 i;
 
@@ -162,52 +203,10 @@ void windowMain(void) {
 }
 
 void windowDispGX_Kanban(f32 x, f32 y, f32 width, f32 height, s32 type, u8 alpha) {
-    extern void* camGetCurPtr(void);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXSetZCompLoc(s32 beforeTex);
-    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
-    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
-    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
     extern void GXSetFog(s32 type, f32 startz, f32 endz, f32 nearz, f32 farz, void* color);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
-    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
-    extern void GXSetTexCoordGen2(s32 texcoord, s32 tgenType, s32 tgenSrc, s32 mtxsrc, s32 normalize, s32 postmtx);
-    extern void GXSetNumChans(s32 nChans);
-    extern void GXSetNumTexGens(s32 nTexGens);
-    extern void GXSetNumTevStages(s32 nStages);
-    extern void GXSetTevOrder(s32 tevStage, s32 texCoord, s32 texMap, s32 colorChan);
-    extern void GXSetTevColorOp(s32 tevStage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevAlphaOp(s32 tevStage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevColorIn(s32 tevStage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevAlphaIn(s32 tevStage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevSwapMode(s32 tevStage, s32 rasSel, s32 texSel);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXSetTevColor(s32 reg, void* color);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXLoadTexMtxImm(void* mtx, s32 id, s32 type);
-    extern void GXLoadTexObj(void* obj, s32 id);
-    extern u16 GXGetTexObjHeight(void* obj);
-    extern u16 GXGetTexObjWidth(void* obj);
-    extern void GXBegin(s32 primitive, s32 vtxfmt, u16 nverts);
-    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
-    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
 
-    extern void* wakuTexObj;
     extern u32 dat_80420528;
     extern u32 dat_8042052c;
-    extern f32 float_0_80420538;
-    extern f32 float_1_80420548;
-    extern f32 float_560_8042054c;
-    extern f32 float_176_80420550;
-    extern f32 float_72_80420554;
-    extern f32 float_neg176_80420558;
-    extern f32 float_416_8042055c;
-    extern f32 float_136_80420560;
-    extern f32 float_488_80420564;
-    extern f32 float_neg136_80420568;
-    extern f32 float_40_8042056c;
 
     void* cam;
     u32 fogColor;
@@ -323,44 +322,10 @@ void windowDispGX_Kanban(f32 x, f32 y, f32 width, f32 height, s32 type, u8 alpha
 }
 
 void windowDispGX_System(f32 x, f32 y, f32 width, f32 height, s32 unused, u8 alpha) {
-    extern void* camGetCurPtr(void);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXSetZCompLoc(s32 beforeTex);
-    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
-    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
-    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
     extern void GXSetFog(s32 type, f32 startz, f32 endz, f32 nearz, f32 farz, void* color);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
-    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
-    extern void GXSetTexCoordGen2(s32 texcoord, s32 tgenType, s32 tgenSrc, s32 mtxsrc, s32 normalize, s32 postmtx);
-    extern void GXSetNumChans(s32 nChans);
-    extern void GXSetNumTexGens(s32 nTexGens);
-    extern void GXSetNumTevStages(s32 nStages);
-    extern void GXSetTevOrder(s32 tevStage, s32 texCoord, s32 texMap, s32 colorChan);
-    extern void GXSetTevColorOp(s32 tevStage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevAlphaOp(s32 tevStage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevColorIn(s32 tevStage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevAlphaIn(s32 tevStage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevSwapMode(s32 tevStage, s32 rasSel, s32 texSel);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXSetTevColor(s32 reg, void* color);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXLoadTexObj(void* obj, s32 id);
-    extern u16 GXGetTexObjHeight(void* obj);
-    extern u16 GXGetTexObjWidth(void* obj);
-    extern void GXLoadTexMtxImm(void* mtx, s32 id, s32 type);
-    extern void GXBegin(s32 primitive, s32 vtxfmt, u16 nverts);
-    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
-    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
-    extern f32 __fabsf(f32);
 
-    extern void* wakuTexObj;
     extern u32 dat_80420528;
     extern u32 dat_80420530;
-    extern f32 float_0_80420538;
-    extern f32 float_1_80420548;
     extern f32 float_0p005_80420598;
     extern f32 float_10_8042059c;
     extern f32 dat_ptr_804205a0;
@@ -653,35 +618,8 @@ void windowDispGX_System(f32 x, f32 y, f32 width, f32 height, s32 unused, u8 alp
 
 
 u8 _windowDispGX_Message(f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 tailY, s32 kind, u32 flags, u8 alpha, s32 dark) {
-    extern void* camGetCurPtr(void);
-    extern void GXSetTevColor(s32 reg, void* color);
-    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
-    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
     extern void PSMTXTransApply(void* src, void* dst, f32 x, f32 y, f32 z);
-    extern f32 __fabsf(f32);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXSetCurrentMtx(s32 mtx);
-    extern void GXSetNumTexGens(s32 nTexGens);
-    extern void GXSetTexCoordGen2(s32 texcoord, s32 tgenType, s32 tgenSrc, s32 mtxsrc, s32 normalize, s32 postmtx);
-    extern u16 GXGetTexObjHeight(void* obj);
-    extern u16 GXGetTexObjWidth(void* obj);
-    extern void GXLoadTexMtxImm(void* mtx, s32 id, s32 type);
-    extern void GXLoadTexObj(void* obj, s32 id);
-    extern void GXBegin(s32 primitive, s32 vtxfmt, u16 nverts);
-    extern void* wakuTexObj;
     extern u32 dat_80420534;
-    extern f32 float_0_80420538;
-    extern f32 float_1_80420548;
-    extern f32 float_560_8042054c;
-    extern f32 float_176_80420550;
-    extern f32 float_72_80420554;
-    extern f32 float_416_8042055c;
-    extern f32 float_136_80420560;
-    extern f32 float_488_80420564;
-    extern f32 float_neg136_80420568;
-    extern f32 float_40_8042056c;
-    extern f32 float_neg176_80420558;
     extern f32 float_neg1_80420570;
     extern f32 float_536_80420574;
     extern f32 float_neg24_80420578;
@@ -1271,29 +1209,9 @@ u8 _windowDispGX_Message(f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 tai
 void windowDispGX_Message(f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 tailY,
                           s32 kind, u32 flags, u8 alpha) {
     typedef struct GXColorLocal { u8 r, g, b, a; } GXColorLocal;
-    extern void GXSetCullMode(s32);
-    extern void GXSetZCompLoc(s32);
-    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
-    extern void GXSetBlendMode(s32, s32, s32, s32);
-    extern void GXSetZMode(s32, s32, s32);
     extern void GXSetFog(s32, f32, f32, f32, f32, GXColorLocal);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32, s32);
-    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
-    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
-    extern void GXSetNumChans(s32);
-    extern void GXSetNumTexGens(s32);
-    extern void GXSetNumTevStages(s32);
-    extern void GXSetTevOrder(s32, s32, s32, s32);
-    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
-    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
-    extern void GXSetTevSwapMode(s32, s32, s32);
-    extern void GXSetCurrentMtx(s32);
     extern void _windowDispGX_Message(f32, f32, f32, f32, f32, f32, s32, u32, u8, s32);
     extern GXColorLocal dat_80420528;
-    extern f32 float_0_80420538;
     GXColorLocal fog = dat_80420528;
 
     GXSetCullMode(0);
@@ -1328,37 +1246,8 @@ void windowDispGX_Message(f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 ta
 }
 
 void windowDispGX_Waku_col(double x, double y, double width, double height, double curve, u16 gxTexMapID, u32* color) {
-    extern void* camGetCurPtr(void);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXSetZCompLoc(s32 enable);
-    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
-    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
-    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
     extern void GXSetFog(s32 type, f32 startz, f32 endz, f32 nearz, f32 farz, void* color);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
-    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 comptype, s32 compsize, s32 frac);
-    extern void GXSetTexCoordGen2(s32 texcoord, s32 tgenType, s32 tgenSrc, s32 mtxsrc, s32 normalize, s32 postmtx);
-    extern void GXSetNumChans(s32 nChans);
-    extern void GXSetNumTexGens(s32 nTexGens);
-    extern void GXSetNumTevStages(s32 nStages);
-    extern void GXSetTevOrder(s32 stage, s32 texcoord, s32 texmap, s32 color);
-    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevSwapMode(s32 stage, s32 rasSel, s32 texSel);
-    extern void GXSetCurrentMtx(s32 mtx);
-    extern void GXSetTevColor(s32 reg, void* color);
     extern void PSMTXIdentity(void* mtx);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXLoadTexObj(void* obj, s32 id);
-    extern void GXBegin(s32 primitive, s32 vtxfmt, u16 nverts);
-    extern f32 float_0_80420538;
-    extern f32 float_0p33333_80420540;
-    extern f32 float_0p66667_80420544;
-    extern f32 float_1_80420548;
     extern u32 dat_80420528;
 
     void* cam;
@@ -1488,38 +1377,8 @@ void windowDispGX_Waku_col(double x, double y, double width, double height, doub
 }
 
 void windowDispGX2_Waku_col(f32 x, f32 y, f32 width, f32 height, f32 curve, void* mtx, u16 gxTexMapID, u32* color) {
-    extern void* camGetCurPtr(void);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXSetZCompLoc(s32 enable);
-    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
-    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
-    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
     extern void GXSetFog(s32 type, f32 startz, f32 endz, f32 nearz, f32 farz, void* color);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
-    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 comptype, s32 compsize, s32 frac);
-    extern void GXSetTexCoordGen2(s32 texcoord, s32 tgenType, s32 tgenSrc, s32 mtxsrc, s32 normalize, s32 postmtx);
-    extern void GXSetNumChans(s32 nChans);
-    extern void GXSetNumTexGens(s32 nTexGens);
-    extern void GXSetNumTevStages(s32 nStages);
-    extern void GXSetTevOrder(s32 stage, s32 texcoord, s32 texmap, s32 color);
-    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevSwapMode(s32 stage, s32 rasSel, s32 texSel);
-    extern void GXSetCurrentMtx(s32 mtx);
-    extern void GXSetTevColor(s32 reg, void* color);
-    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXLoadTexObj(void* obj, s32 id);
-    extern void GXBegin(s32 primitive, s32 vtxfmt, u16 nverts);
-    extern f32 float_0_80420538;
     extern f32 float_0p5_8042053c;
-    extern f32 float_0p33333_80420540;
-    extern f32 float_0p66667_80420544;
-    extern f32 float_1_80420548;
     extern u32 dat_80420528;
 
     void* cam;

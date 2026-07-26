@@ -1,10 +1,20 @@
 #include "party/party_bomhei.h"
 
+extern void partyChgRunMode(void*, s32);
+extern void psndSFXOff(s32);
+extern s32 marioGetPartyId(void);
+extern void* partyGetPtr(s32 partyId);
+extern char str_M_S_1_804213d0;
+extern void partyGetAppearPos(void*, void*);
+extern u32 hitGetAttr(void* hit);
+extern void* mobjHitObjPtrToPtr(void* hit);
+extern void* marioGetPtr(void);
+extern f32 revise360(f32 angle);
+extern void* hitCheckVecFilter(void* work, s32 filter);
+
 u8 bomhei_bye(void* pParty) {
     extern void partyGoodbyeInit(void*);
     extern s32 partyGoodbyeMain(void*);
-    extern void partyChgRunMode(void*, s32);
-    extern void psndSFXOff(s32);
 
     if ((*(u32*)((s32)pParty + 8) & 8) != 0) {
         *(u32*)((s32)pParty + 8) &= ~8;
@@ -43,8 +53,6 @@ void bomhei_init(void* party) {
 }
 
 s32 bomheiGetStatus(void) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 partyId);
 
     void* party = partyGetPtr(marioGetPartyId());
     s32 status = 2;
@@ -60,10 +68,6 @@ s32 bomheiGetStatus(void) {
 }
 
 u8 bomhei_exit(void* pParty) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32);
-    extern void partyChgRunMode(void*, s32);
-    extern void psndSFXOff(s32);
     extern void __memFree(s32, void*);
     void* party;
 
@@ -95,10 +99,6 @@ u8 bomhei_exit(void* pParty) {
 }
 
 u8 bomhei_use_cancel(void) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32);
-    extern void partyChgRunMode(void*, s32);
-    extern void psndSFXOff(s32);
     extern void __memFree(s32, void*);
     void* party = partyGetPtr(marioGetPartyId());
 
@@ -128,13 +128,8 @@ u8 bomhei_use_cancel(void) {
 }
 
 u8 bomhei_use_cancel2(void) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32);
     extern void marioChgPose(char*);
-    extern void partyChgRunMode(void*, s32);
-    extern void psndSFXOff(s32);
     extern void __memFree(s32, void*);
-    extern char str_M_S_1_804213d0;
     void* party = partyGetPtr(marioGetPartyId());
     void* player;
 
@@ -166,13 +161,10 @@ u8 bomhei_use_cancel2(void) {
     return 0;
 }
 u8 bomhei_use_post(void* party) {
-    extern void partyGetAppearPos(void*, void*);
     extern void marioChgPose(char*);
-    extern void psndSFXOff(s32);
     extern void __memFree(s32, void*);
     extern char str_M_W_1_804213c0;
     extern char str_M_R_1_804213c8;
-    extern char str_M_S_1_804213d0;
     extern char str_M_J_1B_802cb468[];
     void* player = *(void**)((s32)party + 0x160);
     char* pose;
@@ -221,9 +213,6 @@ void bomhei_use(void* pParty) {
     extern char* hitGetName(void* hit);
     extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
     extern void mario_controll(void* party);
-    extern u32 hitGetAttr(void* hit);
-    extern void* mobjHitObjPtrToPtr(void* hit);
-    extern s32 marioGetPartyId(void);
     extern void* partyGetPtr(s32 id);
     extern void partyChgRunMode(void* party, s32 mode);
     extern void psndSFXOff(s32 sfx);
@@ -358,9 +347,6 @@ u8 bomhei_use_main(void* party) {
     extern void partyMoveNoHosei(void*);
     extern void partyMove(void*);
     extern u32 psndSFXOn_3D(s32, void*);
-    extern void psndSFXOff(s32);
-    extern void partyGetAppearPos(void*, void*);
-    extern void partyChgRunMode(void*, s32);
     extern char str_R_1_80421330[];
     extern char str_J_1A_80421344[];
     extern char str_L_1_8042134c[];
@@ -524,9 +510,6 @@ u8 bomhei_use_main(void* party) {
 }
 
 s32 mario_bomhei_keychk(void) {
-    extern void* marioGetPtr(void);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 partyId);
     void* party;
     u8 state;
 
@@ -543,9 +526,6 @@ s32 mario_bomhei_keychk(void) {
 }
 
 s32 mario_bomhei_keychk2(void) {
-    extern void* marioGetPtr(void);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 partyId);
     void* party;
     u8 state;
 
@@ -675,15 +655,11 @@ void partyGetReturnPos(f32* out) {
         f32 dist;
     } HitWork;
 
-    extern void* marioGetPtr(void);
     extern f32 toMovedirSimple(f32 angle);
-    extern f32 revise360(f32 angle);
     extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
     extern void movePos(f32 distance, f32 angle, f32* x, f32* z);
     extern s32 hitCheckFilter(f32, f32, f32, f32, f32, f32, s32,
                               u32*, u32*, u32*, f32*, u32*, u32*, u32*);
-    extern void* hitCheckVecFilter(void* work, s32 filter);
-    extern u32 hitGetAttr(void* hit);
     extern Vec3Local vec3_802cb398[];
     extern Vec3Local vec3_802cb3a4[];
     extern const f32 float_0_804212dc;
@@ -892,12 +868,8 @@ void* check_front(void* pParty) {
     } Probe;
     extern f32 partyToMovedir(f32 dir, void* party);
     extern void sincosf(f32 angle, f32* cosOut, f32* sinOut);
-    extern void* hitCheckVecFilter(void* work, s32 filter);
     extern void* camGetPtr(s32 camId);
-    extern f32 revise360(f32 angle);
-    extern u32 hitGetAttr(void* hit);
     extern void* caseCheckHitObj2(u32 hit);
-    extern void* mobjHitObjPtrToPtr(void* hit);
     extern s32 strcmp(const char* a, const char* b);
     extern u32 vec3_802cb398[];
     extern char str_MOBJ_BombRock_802cb3dc[];

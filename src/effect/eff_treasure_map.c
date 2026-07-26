@@ -1,15 +1,7 @@
 #include "effect/eff_treasure_map.h"
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+extern f32 float_0_80427934;
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effTreasureMapEntry(s32 kind, f32 x, f32 y, f32 z) {
@@ -18,7 +10,6 @@ void* effTreasureMapEntry(s32 kind, f32 x, f32 y, f32 z) {
     extern void effTreasureMapMain(void);
     extern const char str_Treasure_Map_802ff078[];
     extern f32 float_1_80427940;
-    extern f32 float_0_80427934;
 
     void* entry = effEntry();
     void* work;
@@ -107,17 +98,9 @@ void effTreasureMapMain(void* effect) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
 
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
 
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
 
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
 
 
 /* CHATGPT STUB FILL: main/effect/eff_treasure_map 20260624_184823 */
@@ -140,7 +123,6 @@ void effTreasureMapDisp(s32 cameraId, void* effect) {
     extern f32 float_1p1_80427928;
     extern f32 float_1p06_8042792c;
     extern f32 float_deg2rad_80427930;
-    extern f32 float_0_80427934;
     extern f32 float_10_80427938;
 
     void* work = *(void**)((s32)effect + 0xC);

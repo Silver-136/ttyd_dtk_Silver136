@@ -1,12 +1,15 @@
 #include "unit/party/unit_party_christine.h"
 
+extern void* _battleWorkPointer;
+extern s32 evtGetValue(void* evt, s32 arg);
+extern void evtSetValue(void* evt, s32 arg, s32 value);
+extern s32 BattleTransID(void* evt, s32 id);
+extern void* BattleGetUnitPtr(void* battleWork, s32 id);
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 krb_get_dir(void* evt) {
     extern f32 evtGetFloat(void* evt, s32 arg);
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 float_0_804243cc;
 
@@ -36,7 +39,6 @@ s32 krb_get_dir(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void __makeTechMenuFunc(void* commandWork, s32* count) {
-    extern void* _battleWorkPointer;
     extern void* BattleGetPartyPtr(void* battleWork);
     extern s32 BattleTransPartyId(s32 id);
     extern s32 partyGetTechLv(s32 partyId);
@@ -101,11 +103,7 @@ void __makeTechMenuFunc(void* commandWork, s32* count) {
 #pragma use_lmw_stmw off
 
 s32 btlevtcmd_get_monosiri_msg_no(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern void* battleGetUnitMonosiriPtr(void* unit);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
 
     s32* args = *(s32**)((s32)evt + 0x18);
     void* mono;
@@ -120,9 +118,6 @@ s32 btlevtcmd_get_monosiri_msg_no(void* evt) {
 #pragma use_lmw_stmw on
 
 s32 _monosiri_flag_on(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern void battleSetUnitMonosiriFlag(void* unit);
 
     s32 id = evtGetValue(evt, **(s32**)((s32)evt + 0x18));
@@ -131,10 +126,6 @@ s32 _monosiri_flag_on(void* evt) {
     return 2;
 }
 s32 _dictionary(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern void* monosiriInit(void* unit, f32 x, f32 y);
     extern void monosiriMain(void* work);
     extern void monosiriClose(void* work);
@@ -190,10 +181,6 @@ s32 _dictionary(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _set_hustle(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern s32 BtlUnit_CheckStatus(void* unit, s32 status);
     extern void BtlUnit_OnStatusFlag(void* unit, u32 flag);
 

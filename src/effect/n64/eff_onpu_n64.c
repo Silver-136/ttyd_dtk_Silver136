@@ -1,5 +1,7 @@
 #include "effect/n64/eff_onpu_n64.h"
 
+extern f32 float_1_80425b24;
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effOnpuN64Entry(s32 type, f32 x, f32 y, f32 z) {
@@ -9,7 +11,6 @@ void* effOnpuN64Entry(s32 type, f32 x, f32 y, f32 z) {
     extern s32 rand(void);
     extern char str_OnpuN64_802fbb40[];
     extern f32 float_0_80425b18;
-    extern f32 float_1_80425b24;
     extern f32 float_neg5_80425b2c;
     extern f32 float_0p1_80425b30;
     extern f32 float_0p5_80425b34;
@@ -76,7 +77,6 @@ void effOnpuMain(void* effect) {
     extern void effOnpuDisp(s32, s32);
     extern const Vec3 vec3_802fbb28;
     extern f32 float_0p3_80425b20;
-    extern f32 float_1_80425b24;
     extern f32 float_0p04_80425b28;
     u8* work;
     Vec3 dispPos;

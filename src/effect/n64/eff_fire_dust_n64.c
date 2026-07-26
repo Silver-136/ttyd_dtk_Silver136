@@ -1,4 +1,11 @@
 #include "effect/n64/eff_fire_dust_n64.h"
+typedef float Mtx[3][4];
+extern void PSMTXTrans(Mtx, double, double, double);
+extern void PSMTXScale(Mtx, float, float, float);
+extern void PSMTXConcat(Mtx, Mtx, Mtx);
+extern void PSMTXRotRad(Mtx, double, char);
+extern void GXSetTevColor(int, void*);
+
 void* effFireDustN64Entry(f32 x, f32 y, f32 z, f32 scaleA, f32 scaleB, s32 type, s32 count, u32 timer) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -159,13 +166,7 @@ void effFireDustMain(void* effect) {
 }
 
 void effFireDustDisp(int cameraId, int effect) {
-    typedef float Mtx[3][4];
     extern void* camGetPtr(int);
-    extern void PSMTXTrans(Mtx, double, double, double);
-    extern void PSMTXScale(Mtx, float, float, float);
-    extern void PSMTXConcat(Mtx, Mtx, Mtx);
-    extern void PSMTXRotRad(Mtx, double, char);
-    extern void GXSetTevColor(int, void*);
     extern void effGetTexObjN64(int, void*);
     extern void GXLoadTexObj(void*, int);
     extern void GXSetNumChans(int);
@@ -231,14 +232,8 @@ void effFireDustDisp(int cameraId, int effect) {
 }
 
 void main_dl(int effect, float view[3][4]) {
-    typedef float Mtx[3][4];
-    extern void PSMTXTrans(Mtx, double, double, double);
-    extern void PSMTXRotRad(Mtx, double, char);
-    extern void PSMTXScale(Mtx, float, float, float);
-    extern void PSMTXConcat(Mtx, Mtx, Mtx);
     extern void GXLoadPosMtxImm(Mtx, int);
     extern void GXSetCurrentMtx(int);
-    extern void GXSetTevColor(int, void*);
     extern void effSetVtxDescN64(void*);
     extern void GXBegin(int, int, int);
     extern void tri2(int, int, int, int, int, int, int);

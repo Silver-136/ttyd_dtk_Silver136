@@ -1,4 +1,36 @@
 #include "effect/eff_puniballoon.h"
+
+typedef f32 Mtx[3][4];
+
+extern f64 double_to_int_802fe558;
+extern double sin(double x);
+extern f32 float_deg2rad_80426f40;
+extern f32 float_10_80426f44;
+extern void* camGetPtr(s32 cameraId);
+extern void PSMTXTrans(Mtx m, double x, double y, double z);
+extern void PSMTXRotRad(Mtx m, double angle, char axis);
+extern void PSMTXConcat(void* a, void* b, void* out);
+extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
+extern void GXLoadPosMtxImm(void* mtx, s32 id);
+extern void GXSetCurrentMtx(s32 id);
+extern void GXSetCullMode(s32 mode);
+extern void GXClearVtxDesc(void);
+extern void GXSetVtxDesc(s32 attr, s32 type);
+extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+extern void GXSetNumChans(s32 num);
+extern void GXSetNumTexGens(s32 num);
+extern void GXSetTexCoordGen2(s32 dstCoord, s32 func, s32 srcParam, s32 mtx, s32 normalize, s32 postMtx);
+extern void GXSetNumTevStages(s32 num);
+extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 colorChan);
+extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
+extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
+extern void GXSetTevKAlphaSel(s32 stage, s32 sel);
+extern void effGetTexObj(s32 id, void* texObj);
+extern void GXLoadTexObj(void* texObj, s32 mapId);
+extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
+
 #pragma optimize_for_size off
 void* effPuniBalloonEntry(s32 type, double x, double y, double z, double scale) {
     extern void* effEntry(void);
@@ -7,7 +39,6 @@ void* effPuniBalloonEntry(s32 type, double x, double y, double z, double scale) 
     extern const char str_PuniBalloon_802fe560[];
     extern void effPuniBalloonMain(void);
     extern f32 float_0_80426f60;
-    extern f64 double_to_int_802fe558;
 
     void* entry;
     s32 work;
@@ -108,13 +139,10 @@ void effPuniBalloonMain(void* effect) {
 
     extern u32 vec3_802fe548[];
     extern f32 float_1_80426f4c;
-    extern f32 float_10_80426f44;
     extern f32 float_20_80426f50;
     extern f32 float_neg0p1_80426f54;
     extern f32 float_0p98_80426f58;
     extern f32 float_0p9_80426f5c;
-    extern f64 double_to_int_802fe558;
-    extern double sin(double x);
     extern void* effPuniBalloonEntry(s32 type, double x, double y, double z, double scale);
     extern void effDelete(void* effect);
     extern f32 dispCalcZ(Vec* pos);
@@ -229,39 +257,9 @@ void effPuniBalloonDisp(void* camera, void* effect) {
 }
 
 void balloon_0(void* camera, void* effect) {
-    typedef f32 Mtx[3][4];
-
-    extern void* camGetPtr(s32 cameraId);
-    extern double sin(double x);
-    extern void PSMTXTrans(Mtx m, double x, double y, double z);
-    extern void PSMTXRotRad(Mtx m, double angle, char axis);
-    extern void PSMTXConcat(void* a, void* b, void* out);
-    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
-    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
-    extern void GXSetNumChans(s32 num);
-    extern void GXSetNumTexGens(s32 num);
-    extern void GXSetTexCoordGen2(s32 dstCoord, s32 func, s32 srcParam, s32 mtx, s32 normalize, s32 postMtx);
-    extern void GXSetNumTevStages(s32 num);
-    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 colorChan);
-    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevKAlphaSel(s32 stage, s32 sel);
-    extern void effGetTexObj(s32 id, void* texObj);
-    extern void GXLoadTexObj(void* texObj, s32 mapId);
-    extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
     extern void GXSetNumIndStages(s32 num);
     extern void GXSetTevDirect(s32 stage);
 
-    extern f64 double_to_int_802fe558;
-    extern f32 float_deg2rad_80426f40;
-    extern f32 float_10_80426f44;
     extern f32 float_0p1_80426f48;
 
     void* cam;
@@ -363,35 +361,6 @@ void balloon_0(void* camera, void* effect) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void balloon_1(void* camera, void* effect) {
-    typedef f32 Mtx[3][4];
-
-    extern void* camGetPtr(s32 cameraId);
-    extern void PSMTXTrans(Mtx m, double x, double y, double z);
-    extern void PSMTXRotRad(Mtx m, double angle, char axis);
-    extern void PSMTXConcat(void* a, void* b, void* out);
-    extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
-    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
-    extern void GXSetNumChans(s32 num);
-    extern void GXSetNumTexGens(s32 num);
-    extern void GXSetTexCoordGen2(s32 dstCoord, s32 func, s32 srcParam, s32 mtx, s32 normalize, s32 postMtx);
-    extern void GXSetNumTevStages(s32 num);
-    extern void GXSetTevOrder(s32 stage, s32 texCoord, s32 texMap, s32 colorChan);
-    extern void GXSetTevColorOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevAlphaOp(s32 stage, s32 op, s32 bias, s32 scale, s32 clamp, s32 outReg);
-    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevKAlphaSel(s32 stage, s32 sel);
-    extern void effGetTexObj(s32 id, void* texObj);
-    extern void GXLoadTexObj(void* texObj, s32 mapId);
-    extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
-
-    extern f32 float_deg2rad_80426f40;
-
     s32 work;
     s32 child;
     s32 i;

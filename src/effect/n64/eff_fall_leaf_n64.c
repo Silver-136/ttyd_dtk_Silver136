@@ -1,4 +1,7 @@
 #include "effect/n64/eff_fall_leaf_n64.h"
+extern f32 float_2_80425158;
+extern f32 float_10_80425178;
+
 void* effFallLeafN64Entry(f32 x, f32 y, f32 z, u32 type, s32 timer) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -6,8 +9,6 @@ void* effFallLeafN64Entry(f32 x, f32 y, f32 z, u32 type, s32 timer) {
     extern void effFallLeafMain(void* effect);
     extern char str_FallLeafN64_802fae78[];
     extern f32 float_0_80425180;
-    extern f32 float_2_80425158;
-    extern f32 float_10_80425178;
     void* entry;
     u8* work;
     u8* part;
@@ -81,7 +82,6 @@ void effFallLeafMain(void* effect) {
     extern f32 float_0p3_8042514c;
     extern f32 float_0p8_80425150;
     extern f32 float_6p2832_80425154;
-    extern f32 float_2_80425158;
     extern f32 float_360_8042515c;
     extern f32 float_neg0p05_80425160;
     extern f32 float_0p2_80425164;
@@ -89,7 +89,6 @@ void effFallLeafMain(void* effect) {
     extern f32 float_0p95_8042516c;
     extern f32 float_0p05_80425170;
     extern f32 float_0p92_80425174;
-    extern f32 float_10_80425178;
     extern f32 float_0p5_8042517c;
     u8* work;
     u8* part;

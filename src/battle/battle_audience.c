@@ -1,21 +1,30 @@
 #include "battle/battle_audience.h"
+#include "battle/battle_weapon_power.h"
+#include "statuswindow.h"
 extern void* _battleWorkPointer;
 
 extern void psndSFXOn(const char* name);
 extern s32 irand(s32 max);
+extern s32 rand(void);
+extern s32 evtCheckID(s32 eventId);
+extern void* evtEntry(void* evt, s32 order, u32 flags);
+extern s32 BtlUnit_GetBodyPartsId(void* unit);
+extern void* BattleGetUnitPtr(void* battle, s32 unitIdx);
+extern void* BattleGetMarioPtr(void* battleWork);
+extern void* BattleStageGetPtr(void);
 extern s32 psndSFXOn_3D(const char* name, void* pos);
 extern void psndSFXOff(s32 id);
 extern void psndSFX_vol(s32 id, s32 vol);
 extern s32 psndSFX_get_vol(s32 sfxId);
 extern char* strcpy(char* dst, const char* src);
 extern void psndSFX_pit(s32 sfxId, s32 pitch);
+extern void* BattleGetUnitPartsPtr(s32 unitIdx, s32 partIdx);
+extern void* camGetPtr(s32 cameraId);
+extern void* memcpy(void* dst, const void* src, u32 size);
 
 extern const char str_btl_msg_audience_pun_802f9e28[];
 extern s32 haiti_data[];
 
-extern void* pouchGetPtr(void);
-extern s32 irand(s32 max);
-extern s32 psndSFX_get_vol(s32 sfxId);
 extern void* pouchGetPtr(void);
 extern s32 unk_801a21e0(void);
 extern s32 unk_801a23e0(void);
@@ -49,6 +58,15 @@ u8 BattleAudienceAddTargetNumSub(void);
 void BattleAudienceSoundCheer(s32 vol, s32 frames);
 s32 BattleAudienceSound1(const char* name, s32 kind, s32 arg);
 s32 BattleAudienceSound2(const char* name, s32 kind);
+void BattleAudienceSetThrowItemMax(void);
+void BattleAudienceNumToTarget(void);
+void BattleAudienceSoundSetVol(s32 id, s32 vol, s32 frames);
+void BattleAudienceCheer(s32 kind);
+void BattleAudienceAddPuni(s32 count);
+s32 BattleAudienceDetectTargetPlayer(void);
+s32 BattleAudienceApSrcEntry(void);
+u8 BattleAudience_Entry_Sub(u32 memberIdx, u32 audienceKind, u8 status);
+void BattleAudienceJoy_Sub(s32 joy, s32 cheer, s32 boo, s32 kind);
 
 #define BA_SOUND_INIT(sound, duration, delay)                         \
     do {                                                              \
@@ -70,6 +88,9 @@ extern const f32 float_26_804249c0;
 extern const f32 float_100_804249bc;
 extern const f32 float_200_804249b8;
 extern const f32 float_250_804249c4;
+extern const f32 float_20_80424a18;
+extern const f32 float_25_80424a4c;
+extern const f32 float_40_80424a00;
 extern const f32 float_75_804249c8;
 extern void BattleAudienceSoundClap(s32 vol, s32 frames);
 extern void BattleAudienceSoundCheerKind(s32 kind, s32 vol, s32 frames);
@@ -86,7 +107,6 @@ extern const char str_SFX_AUDIENCE_HANDBEA_802fa474[];
 extern const char str_SFX_AUDIENCE_CALL_AL_802fa48c[];
 extern const char str_SFX_AUDIENCE_CALL_AL_802fa4a4[];
 
-extern void weaponGetPowerFromMarioHammerLv(void);
 extern void BattleAudienceJoy(s32 kind);
 extern s32 BattleAudience_GetAudienceNoFromOffset(s32 id, s32 offset, s32 arg);
 extern void BattleAudienceSoundGetInfo1(s32 kind, s32 arg, u8* vol, void* pos);
@@ -105,7 +125,6 @@ extern void BattleAudienceAddPhaseEvtList(s32 id);
 extern s32 BattleAudience_GetPPAudienceNum_RL_Sub(s32 side);
 extern void BattleAudienceSoundWhistleKind(s32 kind);
 
-extern const f32 float_0_80424988;
 extern const f32 float_0p05_80424994;
 extern const f32 float_neg0p1_804249a4;
 
@@ -167,9 +186,6 @@ void BattleAudience_Init(void) {
     extern void BattleAudienceSettingAudience(void);
     extern void* tplRead(const char* path);
     extern void BattleAudienceGuestTPLRead(s32 guestId, s32 kind, const char* path);
-    extern void BattleAudienceSetThrowItemMax(void);
-    extern void BattleAudienceNumToTarget(void);
-    extern void BattleAudienceSoundSetVol(s32 id, s32 vol, s32 frames);
     extern u8 BattleAudienceSoundNoiseAlways(void);
     extern const char str_battle_audience_audi_802fa710[];
     extern const char str_audience_luigi_tpl_802fa734[];
@@ -268,15 +284,8 @@ void BattleAudience_ActInit(void) {
 }
 
 u8 BattleAudience_PerAct(void) {
-    extern void BattleAudienceCheer(s32 kind);
-    extern void BattleAudienceAddPuni(s32 num);
-    extern void* evtEntry(void* evt, s32 order, u32 flags);
-    extern void BattleAudience_ActInit(void);
     extern void* msg_puni_all_escape;
     extern const f32 float_neg5_80424a80;
-    extern const f32 float_25_80424a4c;
-    extern const f32 float_40_80424a00;
-    extern const f32 float_20_80424a18;
     extern const f32 float_15_80424a64;
     extern const f32 float_neg15_80424a84;
     extern const f32 float_neg20_80424a10;
@@ -432,7 +441,6 @@ u8 BattleAudience_PerAct(void) {
 }
 
 s32 BattleAudience_CheckReaction(void) {
-    extern s32 evtCheckID(s32 eventId);
     void* base = BattleAudienceBaseGetPtr();
     void* event;
 
@@ -464,12 +472,7 @@ u32 check_exe_phase_evt_status(int param_1, u32 param_2) {
 }
 
 void BattleAudience_PerPhase(int phaseId) {
-    extern void* BattleAudienceBaseGetPtr(void);
-    extern void* BattleAudienceGetPtr(s32);
     extern u8 BattleAudience_GetExist(s32);
-    extern void* BattleAudienceItemGetPtr(s32);
-    extern void BattleAudience_ChangeStatus(s32, s32);
-    extern void BattleAudienceSetThrowItemMax(void);
     u8* base;
     u8* member;
     u8* item;
@@ -505,9 +508,6 @@ void BattleAudience_PerPhase(int phaseId) {
 
 
 s32 BattleAudience_CheckReactionPerPhase(void) {
-    extern void* pouchGetPtr(void);
-    extern void* evtEntry(void*, s32, u32);
-    extern s32 evtCheckID(s32);
     extern void* msg_heavy_bomb_fire;
     extern void* msg_puni_all_escape;
     u8* base;
@@ -598,7 +598,6 @@ s32 BattleAudience_CheckReactionPerPhase(void) {
 
 u8 BattleAudience_Disp(void) {
     extern void dispEntry(s32, s32, void*, void*, f32);
-    extern void* pouchGetPtr(void);
     u8* base;
     u8* pouch;
 
@@ -656,7 +655,6 @@ void BattleAudience_End(void) {
 u8 BattleAudienceSettingAudience(void) {
     extern f32 pouchGetAudienceNum(void);
     extern void* memset(void*, s32, u32);
-    extern void* memcpy(void*, const void*, u32);
     extern const u8 audience_kind[];
     u8* base;
     u8* pouch;
@@ -773,7 +771,6 @@ u8 BattleAudienceSettingAudience(void) {
 
 void BattleAudienceGuestTPLRead(s32 index, u32 memberKind, char* tplName) {
     extern s32 sprintf(char* dst, const char* format, ...);
-    extern void tplRead(char* tplName);
     extern const char str_battle_audience_PCTs_802fa6fc[];
     u8* base;
     char path[264];
@@ -788,8 +785,6 @@ void BattleAudienceGuestTPLRead(s32 index, u32 memberKind, char* tplName) {
 }
 
 u8 BattleAudienceCtrlProcess(void) {
-    extern s32 BattleAudience_GetExist(s32 id);
-    extern void* BattleAudienceGetPtr(s32 id);
     extern void BattleAudienceCtrlProcessKinopio(s32 id);
     extern s32 BattleAudienceItemOn(s32 memberIdx, s32 itemType, s32 num);
 
@@ -992,9 +987,6 @@ void BattleAudienceSetThrowItemMax(void) {
 
 
 s32 BattleAudienceDetectTargetAll(void) {
-    extern s32 BtlUnit_GetBodyPartsId(void* unit);
-    extern void* BattleGetUnitPartsPtr(s32 unitIdx, s32 partIdx);
-    extern void* BattleGetUnitPtr(void* battle, s32 unitIdx);
     s32 candidates[64];
     u8* battle;
     u8* unit;
@@ -1027,9 +1019,6 @@ s32 BattleAudienceDetectTargetAll(void) {
 }
 
 s32 BattleAudienceDetectTargetPlayer(void) {
-    extern s32 BtlUnit_GetBodyPartsId(void* unit);
-    extern void* BattleGetUnitPartsPtr(s32 unitIdx, s32 partIdx);
-    extern void* BattleGetUnitPtr(void* battle, s32 unitIdx);
     s32 candidates[64];
     u8* battle;
     u8* unit;
@@ -1060,8 +1049,6 @@ s32 BattleAudienceDetectTargetPlayer(void) {
 }
 
 u8 BattleAudienceItemCtrlProcess(void) {
-    extern s32 BattleAudienceDetectTargetPlayer(void);
-    extern s32 BtlUnit_GetBodyPartsId(void* unit);
     extern void* BtlUnit_GetPartsPtr(void* unit, s32 partIdx);
     extern void BtlUnit_GetHitPos(void* unit, void* part, f32*, f32*, f32*);
     u8* base;
@@ -1243,23 +1230,16 @@ clear_item:
 
 u8 BattleAudienceApSrcCtrlProcess(void) {
     extern s32 psndSFXChk(s32 id);
-    extern void psndSFX_vol(s32 id, s32 vol);
     extern void BattleStatusWindowAPRecoveryOff(void);
-    extern s32 BattleAudienceApSrcEntry(void);
     extern const char str_SFX_BTL_SYS_AP_STAR1_802fa6e4[];
-    extern s32 rand(void);
     extern f32 intplGetValue(f32 start, f32 end, s32 type, s32 current, s32 max);
-    extern s32 statusGetApPos(void* pos);
-    extern f64 sqrt(f64 value);
     extern f64 asin(f64 value);
     extern f64 cos(f64 value);
     extern f64 sin(f64 value);
-    extern s32 irand(s32 max);
     extern const f32 float_64_80424a44;
     extern const f32 float_63_804249b4;
     extern const f32 float_50_80424a48;
     extern const f32 float_32767_804249e4;
-    extern const f32 float_25_80424a4c;
     extern const f32 float_0p9_80424a50;
     extern const f32 float_0p8_80424a0c;
     extern const f32 float_0p05_80424a54;
@@ -1415,15 +1395,11 @@ u8 BattleAudienceApSrcCtrlProcess(void) {
 }
 
 s32 BattleAudienceApSrcEntry(void) {
-    extern s32 rand(void);
-    extern void* camGetPtr(s32 id);
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
     extern void PSMTX44MultVec(void* mtx, void* src, void* dst);
     extern const f32 vec3_802fa000[];
     extern const f32 vec3_802fa00c[];
     extern const f32 float_10_80424a04;
-    extern const f32 float_20_80424a18;
-    extern const f32 float_40_80424a00;
     extern const f32 float_240_80424a40;
     extern const f32 float_304_80424a3c;
     extern const f32 float_32767_804249e4;
@@ -1498,8 +1474,6 @@ s32 BattleAudienceApSrcEntry(void) {
 }
 
 u8 BattleAudienceWinCtrlProcess(void) {
-    extern void* BattleAudienceBaseGetPtr(void);
-    extern void* BattleAudienceWinGetPtr(void);
     extern f32 intplGetValue(s32 type, s32 current, f32 start, f32 end, s32 max);
     extern f32 float_0p1_804249e8;
     extern f32 float_neg0p1_80424a2c;
@@ -1674,9 +1648,6 @@ u8 BattleAudienceAnimProcess(void) {
 
 u8 BattleAudienceDispAudience(void) {
     typedef f32 Mtx[3][4];
-    extern void* BattleAudienceBaseGetPtr(void);
-    extern void* BattleAudienceGetPtr(s32);
-    extern void* camGetPtr(s32);
     extern s32 dispGetCurWork(void);
     extern void TEXGetGXTexObjFromPalette(void*, void*, s32);
     extern void GXLoadTexObj(void*, s32);
@@ -1853,7 +1824,6 @@ u8 BattleAudienceDispItem(void) {
 
 u8 BattleAudienceDispApSrc(void) {
     typedef f32 Mtx[3][4];
-    extern void* camGetPtr(s32);
     extern void GXSetBlendMode(s32, s32, s32, s32);
     extern void GXSetZCompLoc(s32);
     extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
@@ -1929,9 +1899,6 @@ u8 BattleAudienceDispWin(void) {
 }
 
 s32 BattleAudience_Entry(s32 memberIdx, s32 audienceKind, s32 status) {
-    extern s32 rand(void);
-    extern void* BattleStageGetPtr(void);
-    extern u8 BattleAudience_Entry_Sub(u32, u32, u8);
     extern const u8 audience_kind[];
     u8* member;
     f32 x;
@@ -1966,7 +1933,6 @@ s32 BattleAudience_Entry(s32 memberIdx, s32 audienceKind, s32 status) {
 
 
 u8 BattleAudience_Entry_Sub(u32 memberIdx, u32 audienceKind, u8 status) {
-    extern void* BattleStageGetPtr(void);
     extern void* PTR_audience_anim_kinopio_803b4de8[];
     u8* member;
     u8* stage;
@@ -2255,7 +2221,6 @@ void BattleAudience_Attack(s32 id) {
 }
 
 u32 BattleAudience_GetFront(s32 memberIdx) {
-    extern void* camGetPtr(s32 cameraId);
     u8* member;
     u8* camera;
     f32 dot;
@@ -2485,7 +2450,6 @@ s32 BattleAudience_NoUsedHaitiRand(void) {
 }
 
 s32 unk_801a23e0(void) {
-    extern s32 rand(void);
     extern s32 dat_802fa134[10];
     extern s32 dat_802fa15c[20];
     extern f32 float_32767_804249e4;
@@ -2545,7 +2509,6 @@ s32 unk_801a23e0(void) {
 }
 
 s32 unk_801a21e0(void) {
-    extern s32 rand(void);
     extern s32 dat_802fa1ac[10];
     extern s32 dat_802fa1d4[20];
     extern s32 unk_8039cc20[];
@@ -2722,11 +2685,7 @@ s32 BattleAudience_GetPPAudienceNum_Sub(s32 id) {
 
 void BattleAudience_ApRecoveryBuild(void* apInfo) {
     extern void* BattleAlloc(u32 size);
-    extern void* memcpy(void* dst, const void* src, u32 size);
-    extern f64 sqrt(f64 value);
-    extern void* BattleGetMarioPtr(void* battle);
     extern void* BattleGetPartyPtr(void* battle);
-    extern s32 BattleAudience_GetPPAudienceNumKind(s32 kind);
     extern s32 BattleBreakSlot_GetBreakTurn(void);
     extern void* BattleBreakSlotGetPtr(void);
     extern void BattleBreakSlot_PointInc(void);
@@ -3061,8 +3020,6 @@ void BattleAudienceCheer(s32 kind) {
 
 
 void BattleAudienceJoy(s32 kind) {
-    extern void* BattleAudienceBaseGetPtr(void);
-    extern void BattleAudienceJoy_Sub(s32 arg0, s32 arg1, s32 arg2, s32 kind);
     u8* base;
     s32 level;
 
@@ -3921,8 +3878,6 @@ void BattleAudienceSoundGetInfo2(s32 id, void* pos) {
 }
 
 u8 BattleAudienceSoundMain(void) {
-    extern void* BattleAudienceBaseGetPtr(void);
-    extern void* BattleAudienceSoundGetPtr(s32 id);
     extern void BattleAudienceNoiseMain(void);
     extern s32 psndSFXChk(s32 sfxId);
     extern f32 intplGetValue(s32 type, s32 current, f32 start, f32 end, s32 max);
@@ -3968,11 +3923,6 @@ u8 BattleAudienceSoundMain(void) {
 }
 
 u8 BattleAudienceNoiseMain(void) {
-    extern void* BattleAudienceBaseGetPtr(void);
-    extern void* BattleAudienceSoundGetPtr(s32 id);
-    extern s32 BattleAudience_GetPPAudienceNum(void);
-    extern void BattleAudienceSoundSetVol(s32 id, s32 vol, s32 frames);
-    extern void BattleAudienceSoundNoiseAlways(void);
     extern f32 float_63_804249b4;
     void* battleWork;
     u8* base;
@@ -4214,8 +4164,6 @@ void BattleAudience_Case_FinalAttack(void) {
 }
 
 void BattleAudience_Case_TurnEnd(void) {
-    extern void BattleAudienceNumToTarget(void);
-    extern void* BattleGetMarioPtr(void* battleWork);
     void* battle;
     void* mario;
     void* base;

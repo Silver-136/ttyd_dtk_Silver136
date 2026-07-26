@@ -1,9 +1,11 @@
 #include "romfont.h"
 
+extern char** msg_tbl[6];
+void romFontMake(void);
+
 char* romFontGetMessage(s32 messageId) {
     extern void* wp;
     extern void* gp;
-    extern char** msg_tbl[6];
 
     if (*(s32*)((s32)wp + 8) != 0 && *(u32*)((s32)gp + 0x16C) == 0) {
         return msg_tbl[1][messageId];
@@ -14,7 +16,6 @@ char* romFontGetMessage(s32 messageId) {
 void romFontInit(void) {
     extern void* wp;
     extern u16 OSGetFontEncode(void);
-    extern void romFontMake(void);
 
     *(s32*)((s32)wp + 0) = 0;
     *(s32*)((s32)wp + 4) = 0;
@@ -29,7 +30,6 @@ void romFontInit(void) {
 /* stub-fill: romFontMake | prototype_only | source_prototype */
 void romFontMake(void) {
     extern void* wp;
-    extern char** msg_tbl[6];
     extern void* __memAlloc(s32 heap, u32 size);
     extern void __memFree(s32 heap, void* memory);
     extern u32 OSGetFontEncode(void);

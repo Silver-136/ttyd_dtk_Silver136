@@ -6,6 +6,11 @@ typedef struct BatstageVec3 {
     f32 z;
 } BatstageVec3;
 
+extern s32 evtGetValue(void* event, s32 value);
+extern void BattleStageReturnStgDarkBase(s32 value1, s32 value2);
+extern void BattleStageReturnAudDarkBase(s32 value1, s32 value2);
+extern char dat_802f38f8[];
+
 #define COPY_BATSTAGE_NAMES(dstBase, srcBase)       \
     do {                                            \
         u32* copySrc = (u32*)((s32)(srcBase));      \
@@ -26,7 +31,6 @@ typedef struct BatstageVec3 {
 #pragma use_lmw_stmw off
 
 s32 evt_batstage_set_stg_dark(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
     extern void BattleStageSetStgDark(u8 id, s32 value1, s32 value2);
     s32* args = *(s32**)((s32)event + 0x18);
     u8 id = evtGetValue(event, args[0]);
@@ -44,7 +48,6 @@ s32 evt_batstage_set_stg_dark(void* event, s32 isFirstCall) {
 #pragma use_lmw_stmw off
 
 s32 evt_batstage_set_stg_dark_base(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
     extern void BattleStageSetStgDarkBase(u8 id, s32 value1, s32 value2);
     s32* args = *(s32**)((s32)event + 0x18);
     u8 id = evtGetValue(event, args[0]);
@@ -62,8 +65,6 @@ s32 evt_batstage_set_stg_dark_base(void* event, s32 isFirstCall) {
 #pragma use_lmw_stmw off
 
 s32 evt_batstage_return_stg_dark_base(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern void BattleStageReturnStgDarkBase(s32 value1, s32 value2);
 
     s32* args = *(s32**)((s32)event + 0x18);
     s32 value1 = evtGetValue(event, args[0]);
@@ -80,7 +81,6 @@ s32 evt_batstage_return_stg_dark_base(void* event, s32 isFirstCall) {
 #pragma use_lmw_stmw off
 
 s32 evt_batstage_set_aud_dark(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
     extern void BattleStageSetAudDark(u8 id, s32 value1, s32 value2);
     s32* args = *(s32**)((s32)event + 0x18);
     u8 id = evtGetValue(event, args[0]);
@@ -99,7 +99,6 @@ s32 evt_batstage_set_aud_dark(void* event, s32 isFirstCall) {
 #pragma use_lmw_stmw off
 
 s32 evt_batstage_set_aud_dark_base(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
     extern void BattleStageSetAudDarkBase(u8 id, s32 value1, s32 value2);
     s32* args = *(s32**)((s32)event + 0x18);
     u8 id = evtGetValue(event, args[0]);
@@ -117,8 +116,6 @@ s32 evt_batstage_set_aud_dark_base(void* event, s32 isFirstCall) {
 #pragma use_lmw_stmw off
 
 s32 evt_batstage_return_aud_dark_base(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern void BattleStageReturnAudDarkBase(s32 value1, s32 value2);
 
     s32* args = *(s32**)((s32)event + 0x18);
     s32 value1 = evtGetValue(event, args[0]);
@@ -133,7 +130,6 @@ s32 evt_batstage_return_aud_dark_base(void* event, s32 isFirstCall) {
 
 
 s32 evt_batstage_light_set_player_on(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
     extern s32 BattleStageGetLightNumberByName(char* name);
     extern s32 BattleStageSysLightEntry(char* name);
     extern void BattleStageLightSetLightColor(s32 lightId, u8 r, u8 g, u8 b, s32 fadeFrames, s32 unk);
@@ -144,7 +140,6 @@ s32 evt_batstage_light_set_player_on(void* event, s32 isFirstCall) {
     extern void BattleStageLightSetTargetByUnit(s32 lightId, f32 x, f32 y, f32 z, s32 unitId, s32 fadeFrames, s32 unk);
     extern void BattleStageSetStgDark(s32 value1, s32 value2, s32 value3);
     extern void BattleStageSetAudDark(s32 value1, s32 value2, s32 value3);
-    extern char dat_802f38f8[];
     extern u8 unk_804295d8[];
     extern void* _battleWorkPointer;
 
@@ -295,11 +290,8 @@ s32 evt_batstage_light_set_player_on(void* event, s32 isFirstCall) {
     return 2;
 }
 s32 evt_batstage_light_set_player_off(void* event, s32 isFirstCall) {
-    extern void BattleStageReturnAudDarkBase(s32 value1, s32 value2);
-    extern void BattleStageReturnStgDarkBase(s32 value1, s32 value2);
     extern s32 BattleStageGetLightNumberByName(const char* name);
     extern void BattleStageLightRelease(s32 lightId, s32 fadeFrames, s32 unk);
-    extern char dat_802f38f8[];
 
     char* base = dat_802f38f8;
     s32 lightId;

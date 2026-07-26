@@ -1,15 +1,45 @@
 #include "event/evt_mario.h"
+#include "bowser/koopa_motion.h"
+#include "driver/camdrv.h"
+#include "driver/hitdrv.h"
+#include "mario/mario_balloon.h"
+#include "party/party_motion.h"
+#include "manager/evtmgr_cmd.h"
+#include "mario/mario.h"
+#include "mario/mario_party.h"
+#include "system.h"
+
+extern void camFollowYOn(void);
+extern void camFollowYOff(void);
+extern void marioAdjustMoveDir(void);
+extern s32 partyEntry2(s32 party);
+extern s32 partyEntry(s32 party);
+extern void marioMakeJumpPara(void);
+extern void marioClearJumpPara(void);
+extern f32 revise360(f32 angle);
+extern void partyKill(s32 id);
+extern void partyShadowOff(void* party);
+extern void marioChgEvtPose(const char* pose);
+extern s32 partyEntryPos(s32 party, f32 x, f32 y, f32 z);
+extern s32 partyEntry2Hello(s32 party);
+extern s32 partyEntry2Pos(s32 party, f32 x, f32 y, f32 z);
+extern f32 toMovedirSimple(f32 angle);
+extern void marioNoUpdateCamPos(void);
+extern void marioPaperOff(void);
+extern void marioUpdateCamPos(void);
+extern void marioGetScreenPos(f32* pos, f32* x, f32* y, f32* z);
+extern void* toDotMarioPose(void* pose);
+extern s32 strcmp(const char* a, const char* b);
+extern void* partyGetPtr(s32 id);
+extern void marioChgMot(s32 motion);
+extern void* marioSearchGround(f64 a, f64 b, f32* y, void* out1, void* out2);
+extern void* marioSearchGroundRoll(f64 a, f64 b, f32* y, void* out1, void* out2);
+
 
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_dokan_prepare(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32 party);
-    extern void partyShadowOff(void* party);
     extern s32 vec3_802e3cd8[9];
     EventEntry* evt = event;
     s32* args = event->args;
@@ -55,20 +85,9 @@ s32 evt_mario_dokan_prepare(EventEntry* event) {
 #pragma use_lmw_stmw on
 
 s32 evt_mario_paper_pose_dokan(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern void marioPaperOff(void);
-    extern void marioUpdateCamPos(void);
-    extern void camFollowYOn(void);
-    extern void camFollowYOff(void);
-    extern void marioNoUpdateCamPos(void);
     extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
     extern void marioSlitForceCancel(void);
     extern void marioRollForceCancel(void);
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32 id);
-    extern void partyShadowOff(void* party);
     extern void partyGoodbye(s32 id);
     extern s32 marioPaperOn(char* name);
     extern void marioPaperLightOff(void);
@@ -255,7 +274,6 @@ s32 evt_mario_paper_pose_dokan(EventEntry* event, s32 first) {
 }
 
 s32 evt_mario_dokan_end(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
     void* mario;
 
     mario = marioGetPtr();
@@ -272,14 +290,11 @@ s32 evt_mario_dokan_end(EventEntry* event, s32 first) {
 }
 
 USER_FUNC(evt_mario_paper_pose_off) {
-    extern void marioPaperOff(void);
     marioPaperOff();
     return 2;
 }
 
 USER_FUNC(evt_mario_balloon_bikkuri) {
-    extern void* marioGetPtr(void);
-    extern void marioBalloonOn(s32 type);
     void* mario = marioGetPtr();
     if (!(*(u32*)((s32)mario + 4) & 0x04000000)) {
         marioBalloonOn(0);
@@ -289,8 +304,6 @@ USER_FUNC(evt_mario_balloon_bikkuri) {
 }
 
 USER_FUNC(evt_mario_balloon_tenten) {
-    extern void* marioGetPtr(void);
-    extern void marioBalloonOn(s32 type);
     void* mario = marioGetPtr();
     if (!(*(u32*)((s32)mario + 4) & 0x04000000)) {
         marioBalloonOn(1);
@@ -300,7 +313,6 @@ USER_FUNC(evt_mario_balloon_tenten) {
 }
 
 USER_FUNC(evt_mario_balloon_off) {
-    extern void* marioGetPtr(void);
     extern void marioBalloonOff(void);
     void* mario = marioGetPtr();
     if (*(u32*)((s32)mario + 4) & 0x04000000) {
@@ -314,8 +326,6 @@ USER_FUNC(evt_mario_balloon_off) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_flag_onoff(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     void* mario = marioGetPtr();
@@ -335,8 +345,6 @@ s32 evt_mario_flag_onoff(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_dispflag_onoff(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     void* mario = marioGetPtr();
@@ -355,8 +363,6 @@ s32 evt_mario_dispflag_onoff(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_trigflag_onoff(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     void* mario = marioGetPtr();
@@ -373,7 +379,6 @@ s32 evt_mario_trigflag_onoff(EventEntry* event) {
 
 
 USER_FUNC(evt_mario_cont_onoff) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void marioCtrlOn(void);
     extern void marioCtrlOff(void);
     if (!evtGetValue(event, event->args[0])) {
@@ -388,8 +393,6 @@ USER_FUNC(evt_mario_cont_onoff) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_key_onoff(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void marioKeyOff(void);
     extern void marioKeyOn(void);
     extern void partyKeyOff(void);
@@ -413,8 +416,6 @@ s32 evt_mario_key_onoff(EventEntry* event) {
 
 
 USER_FUNC(evt_mario_set_enable_key) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern void* marioGetPtr(void);
     s32 value = evtGetValue(event, event->args[0]);
     *(s32*)((s32)marioGetPtr() + 0x290) = value;
     return 2;
@@ -433,37 +434,31 @@ USER_FUNC(evt_mario_bgmode_off) {
 }
 
 USER_FUNC(evt_mario_cam_on) {
-    extern void marioUpdateCamPos(void);
     marioUpdateCamPos();
     return 2;
 }
 
 USER_FUNC(evt_mario_cam_off) {
-    extern void marioNoUpdateCamPos(void);
     marioNoUpdateCamPos();
     return 2;
 }
 
 USER_FUNC(evt_mario_cam_keep_on) {
-    extern void camFollowYOff(void);
     camFollowYOff();
     return 2;
 }
 
 USER_FUNC(evt_mario_cam_keep_off) {
-    extern void camFollowYOn(void);
     camFollowYOn();
     return 2;
 }
 
 USER_FUNC(evt_mario_cam_y_on) {
-    extern void camFollowYOn(void);
     camFollowYOn();
     return 2;
 }
 
 USER_FUNC(evt_mario_cam_y_off) {
-    extern void camFollowYOff(void);
     camFollowYOff();
     return 2;
 }
@@ -475,7 +470,6 @@ USER_FUNC(evt_mario_init_camid) {
 }
 
 USER_FUNC(evt_mario_set_camid) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void marioSetCamId(s32 id);
     marioSetCamId(evtGetValue(event, event->args[0]));
     return 2;
@@ -484,8 +478,6 @@ USER_FUNC(evt_mario_set_camid) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_get_pos(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern s32 evtSetFloat(EventEntry* event, s32 target, f32 value);
     extern const f32 float_1_80421ad8;
     EventEntry* evt = event;
@@ -511,8 +503,6 @@ s32 evt_mario_get_pos(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_set_pos(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
     s32* args = event->args;
     void* mario = marioGetPtr();
 
@@ -529,8 +519,6 @@ s32 evt_mario_set_pos(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_set_hosei_xyz(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
     void* mario = marioGetPtr();
     s32* args = event->args;
 
@@ -545,8 +533,6 @@ s32 evt_mario_set_hosei_xyz(EventEntry* event) {
 
 s32 evt_mario_set_mov_spd(EventEntry* event) {
     extern void* gp;
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
-    extern void* marioGetPtr(void);
     f32 speed;
 
     speed = evtGetFloat(event, event->args[0]) / (f32)*(s32*)((s32)gp + 4);
@@ -558,7 +544,6 @@ s32 evt_mario_set_mov_spd(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_get_mov_spd(EventEntry* event) {
-    extern void* marioGetPtr(void);
     extern void* gp;
     extern s32 evtSetFloat(EventEntry* event, s32 target, f32 value);
     s32* args = event->args;
@@ -575,7 +560,6 @@ s32 evt_mario_get_mov_spd(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_get_dir(EventEntry* event) {
-    extern void* marioGetPtr(void);
     extern s32 evtSetFloat(EventEntry* event, s32 target, f32 value);
     EventEntry* evt = event;
     s32* args = event->args;
@@ -592,12 +576,6 @@ s32 evt_mario_get_dir(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_set_dir(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern s32 sysMsec2Frame(s32 msec);
-    extern f32 revise360(f32 angle);
-    extern f32 toMovedirSimple(f32 angle);
     extern const f32 float_270_80421b1c;
     extern const f32 float_360_80421b44;
     extern const f32 float_0_80421adc;
@@ -664,8 +642,6 @@ s32 evt_mario_set_dir(EventEntry* event, s32 first) {
 
 
 USER_FUNC(evt_mario_set_reardir) {
-    extern void* marioGetPtr(void);
-    extern void marioAdjustMoveDir(void);
     extern f32 float_0_80421adc;
     void* mario = marioGetPtr();
     f32 zero;
@@ -678,7 +654,6 @@ USER_FUNC(evt_mario_set_reardir) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_get_dispdir(EventEntry* event) {
-    extern void* marioGetPtr(void);
     extern s32 evtSetFloat(EventEntry* event, s32 target, f32 value);
     EventEntry* evt = event;
     s32* args = event->args;
@@ -696,8 +671,6 @@ s32 evt_mario_get_dispdir(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_set_dispdir(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
     extern f32 reviseAngle(f32 angle);
     EventEntry* evt = event;
     s32* args = event->args;
@@ -718,13 +691,8 @@ s32 evt_mario_set_dispdir(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_set_dir_npc(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern void* camGetPtr(s32 id);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern f32 revise360(f32 angle);
-    extern f32 toMovedirSimple(f32 angle);
     extern const f32 float_180_80421b34;
     extern const f32 float_0_80421adc;
     EventEntry* evt = event;
@@ -756,11 +724,7 @@ s32 evt_mario_set_dir_npc(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 unk_800e6b1c(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern void* camGetPtr(s32 id);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern f32 revise360(f32 angle);
     extern const f32 float_180_80421b34;
     extern const f32 float_0_80421adc;
     EventEntry* evt = event;
@@ -789,7 +753,6 @@ s32 unk_800e6b1c(EventEntry* event) {
 
 
 USER_FUNC(evt_mario_adjust_dir) {
-    extern void marioAdjustMoveDir(void);
     marioAdjustMoveDir();
     return 2;
 }
@@ -797,9 +760,6 @@ USER_FUNC(evt_mario_adjust_dir) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_set_normal_pose(void) {
-    extern void* marioGetPtr(void);
-    extern void* toDotMarioPose(void* pose);
-    extern s32 strcmp(const char* a, const char* b);
     extern char* a_mario_group[];
     extern const char str_M_W_1_804219a0[];
     extern const char str_M_R_1_804219a8[];
@@ -860,10 +820,6 @@ s32 evt_mario_set_normal_pose(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_set_pose(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern void* toDotMarioPose(void* pose);
-    extern s32 strcmp(const char* a, const char* b);
     extern char* a_mario_group[];
     EventEntry* evt = event;
     s32* args = event->args;
@@ -916,17 +872,12 @@ s32 evt_mario_set_pose(EventEntry* event) {
 
 
 s32 evt_mario_normalize(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32 id);
     extern void unk_8014c330(void* party);
     extern s32 marioChkCtrl(void);
     extern s32 marioCtrlOn(void);
     extern s32 marioCtrlOff(void);
     extern void partyCtrlOn(void);
     extern void partyCtrlOff(void);
-    extern void marioChgMot(s32 motion);
     extern s32 partyRideChk(void* party);
     extern s32 marioRollCancel(void);
     extern void motSlitCancel2(void);
@@ -1088,8 +1039,6 @@ s32 evt_mario_normalize(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_get_motion(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     s32* args = event->args;
     void* mario;
     s32 flags;
@@ -1110,15 +1059,11 @@ s32 evt_mario_get_motion(EventEntry* event) {
 
 
 USER_FUNC(evt_mario_set_motion) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern void marioChgMot(s32 motion);
     marioChgMot(evtGetValue(event, event->args[0]));
     return 2;
 }
 
 s32 evt_mario_chk_hipbump(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     void* mario;
     s32 dst;
     s32 result;
@@ -1145,7 +1090,6 @@ USER_FUNC(evt_mario_set_talk_motion) {
 #pragma use_lmw_stmw off
 s32 evt_mario_cancel_roll_motion(s32 param_1, int param_2) {
     extern void unk_800a1454(s32);
-    extern void* marioGetPtr(void);
 
     if (param_2 != 0) {
         unk_800a1454(param_1);
@@ -1162,8 +1106,6 @@ s32 evt_mario_cancel_roll_motion(s32 param_1, int param_2) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_get_pose(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     void* mario = marioGetPtr();
@@ -1180,8 +1122,6 @@ s32 evt_mario_get_pose(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_set_force_dir(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     void* mario = marioGetPtr();
@@ -1199,10 +1139,6 @@ s32 evt_mario_set_force_dir(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_mov_pos(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern s32 sysMsec2Frame(s32 msec);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern void marioSetForceMove(s32 frames, f32 dir, f32 speed);
@@ -1238,8 +1174,6 @@ s32 evt_mario_mov_pos(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_mov_pos2(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern void* gp;
@@ -1277,9 +1211,6 @@ s32 evt_mario_mov_pos2(EventEntry* event, s32 first) {
 
 
 s32 N_evt_mario_party_door_halve_hitbox(void) {
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32 partyId);
     void* party;
 
     party = partyGetPtr(marioGetPartyId());
@@ -1294,17 +1225,10 @@ s32 N_evt_mario_party_door_halve_hitbox(void) {
 }
 
 s32 evt_mario_party_door_move(void* pEvt, s32 first) {
-    extern void* marioGetPtr(void);
     extern f32 evtGetFloat(void* evt, s32 value);
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32 id);
-    extern void marioGetScreenPos(f32* pos, f32* x, f32* y, f32* z);
-    extern void N_partyFollowCloseOn(void* party);
     extern f64 distABf(f64, f64, f64, f64);
     extern f64 angleABf(f64, f64, f64, f64);
     extern void marioSetForceMove(f64 angle, f64 speed, s32 frames);
-    extern s32 sysMsec2Frame(s32 msec);
     extern void partyMoveBehindMario3(f64 angle, void* party, s32 mode);
     extern void* gp;
     extern const f32 float_0_80421adc;
@@ -1383,17 +1307,10 @@ s32 evt_mario_party_door_move(void* pEvt, s32 first) {
 }
 
 s32 evt_mario_party_bero_move(void* pEvt, s32 first) {
-    extern void* marioGetPtr(void);
     extern f32 evtGetFloat(void* evt, s32 value);
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32 id);
-    extern void marioGetScreenPos(f32* pos, f32* x, f32* y, f32* z);
-    extern void N_partyFollowCloseOn(void* party);
     extern f64 distABf(f64, f64, f64, f64);
     extern f64 angleABf(f64, f64, f64, f64);
     extern void marioSetForceMove(f64 angle, f64 speed, s32 frames);
-    extern s32 sysMsec2Frame(s32 msec);
     extern void partyMoveBehindMario3(void* party, s32 mode);
     extern void* gp;
     extern const f32 float_0_80421adc;
@@ -1470,19 +1387,9 @@ s32 evt_mario_party_bero_move(void* pEvt, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_jump_pos(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern s32 sysMsec2Frame(s32 msec);
     extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern void movePos(f64 dist, f64 dir, void* x, void* z);
-    extern void marioChgMot(s32 motion);
-    extern void marioMakeJumpPara(void);
-    extern void marioClearJumpPara(void);
-    extern void camFollowYOn(void);
-    extern void* marioSearchGround(f64 a, f64 b, f32* y, void* out1, void* out2);
-    extern void* marioSearchGroundRoll(f64 a, f64 b, f32* y, void* out1, void* out2);
     extern void searchUnder2(f32 x, f32 y, f32 z, f32* outY);
     extern void rollEvtJumpSetup(void);
     extern void setRollEvtFlag(void);
@@ -1657,22 +1564,12 @@ state2:
 
 
 s32 evt_mario_jump_jumpstand(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern s32 marioChkSts(u32 flags);
     extern void effKemuriEntry(f64 x, f64 y, f64 z, f64 scale, s32 type);
-    extern void marioChgMot(s32 motion);
-    extern s32 sysMsec2Frame(s32 msec);
     extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern void movePos(f64 dist, f64 dir, void* x, void* z);
-    extern void marioMakeJumpPara(void);
     extern void marioChgPose(char* pose);
-    extern void marioClearJumpPara(void);
-    extern void camFollowYOn(void);
-    extern void camFollowYOff(void);
-    extern void marioAdjustMoveDir(void);
     extern void* marioSearchGround(f64 velocityY, f64 maxDrop, f32* outY, void* out1, void* out2);
     extern void* marioSearchGroundRoll(f64 a, f64 velocityY, f32* outY, void* out1, void* out2);
     extern void* gp;
@@ -1954,7 +1851,6 @@ finish:
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_wait_landon(void) {
-    extern void* marioGetPtr(void);
     void* mario;
     s32 motion;
     s32 ok;
@@ -1993,7 +1889,6 @@ s32 evt_mario_wait_landon(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_wait_rideon(void) {
-    extern void* marioGetPtr(void);
     void* mario;
     s32 motion;
     s32 ok;
@@ -2032,8 +1927,6 @@ s32 evt_mario_wait_rideon(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_check_landon(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     void* mario;
@@ -2073,22 +1966,10 @@ s32 evt_mario_check_landon(EventEntry* event) {
 
 
 s32 evt_koopa_hip_attack(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern s32 sysMsec2Frame(s32 msec);
     extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern void movePos(f64 dist, f64 dir, void* x, void* z);
-    extern void marioChgMot(s32 motion);
-    extern void marioMakeJumpPara(void);
-    extern void marioClearJumpPara(void);
-    extern void camFollowYOff(void);
-    extern void camFollowYOn(void);
     extern void kpaChgPose(char* pose, char* anim);
-    extern void quake_kpaHipAttack(void);
-    extern void* marioSearchGround(f64 a, f64 b, f32* y, void* out1, void* out2);
-    extern void* marioSearchGroundRoll(f64 a, f64 b, f32* y, void* out1, void* out2);
     extern char str_KPA_A_2D_802e3ec0[];
     extern char str_KPA2_J_1C_802e3ecc[];
     extern const f32 float_0_80421adc;
@@ -2217,11 +2098,7 @@ s32 evt_koopa_hip_attack(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_koopa_fire(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern s32 sysMsec2Frame(s32 msec);
     extern void kpaAttackStart(void);
-    extern void marioChgMot(s32 mot);
     EventEntry* evt = event;
     s32* args = event->args;
     void* mario = marioGetPtr();
@@ -2252,8 +2129,6 @@ s32 evt_koopa_fire(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_koopa_chk_dead(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     s32* args;
     void* mario;
     u32 flags;
@@ -2271,7 +2146,6 @@ s32 evt_koopa_chk_dead(EventEntry* event) {
 
 
 s32 evt_koopa_weary(EventEntry* event) {
-    extern void* marioGetPtr(void);
     s32* args;
     void* mario;
     u32* flags;
@@ -2290,7 +2164,6 @@ s32 evt_koopa_weary(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u32 evt_mario_wait_move_end(void) {
-    extern void* marioGetPtr(void);
     s32 value = *(s16*)((s32)marioGetPtr() + 0x4E);
 
     return 2 & ~((s32)((u32)(-value) | (u32)value) >> 31);
@@ -2300,7 +2173,6 @@ u32 evt_mario_wait_move_end(void) {
 
 
 USER_FUNC(evt_mario_wait_movable) {
-    extern void* marioGetPtr(void);
     return (*(u32*)marioGetPtr() & 8) ? 0 : 2;
 }
 
@@ -2308,9 +2180,7 @@ USER_FUNC(evt_mario_wait_movable) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_get_state(EventEntry* event) {
-    extern void* marioGetPtr(void);
     extern s32 marioChkSlitThrouhEnd(void);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     EventEntry* evt = event;
     s32 dst;
     s32* args;
@@ -2343,8 +2213,6 @@ s32 evt_mario_get_state(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_get_mode(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     s32 dst = args[0];
@@ -2358,7 +2226,6 @@ s32 evt_mario_get_mode(EventEntry* event) {
 
 
 USER_FUNC(evt_mario_set_mode) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void marioSetCharMode(s32 mode);
     marioSetCharMode(evtGetValue(event, event->args[0]));
     return 2;
@@ -2368,7 +2235,6 @@ USER_FUNC(evt_mario_set_mode) {
 #pragma use_lmw_stmw off
 s32 evt_koopa_get_level(EventEntry* event) {
     extern s32 kpaGetLevel(void);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     s32 level = kpaGetLevel();
@@ -2383,7 +2249,6 @@ s32 evt_koopa_get_level(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_koopa_set_level(EventEntry* event) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void kpaSetLevel(s32 level);
 
     kpaSetLevel(evtGetValue(event, event->args[0]));
@@ -2420,7 +2285,6 @@ s32 evt_peach_transform_gundan_off(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_peach_set_condition(EventEntry* event) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void peachSetStsNormal(void);
     extern void peachSetStsAftershower(void);
     extern void peachSetStsInvisible(void);
@@ -2466,9 +2330,6 @@ s32 evt_peach_set_condition(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_get_party(EventEntry* event) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 partyId);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     s32 dst = args[0];
@@ -2492,9 +2353,6 @@ s32 evt_mario_get_party(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_get_exparty(EventEntry* event) {
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32 partyId);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     s32 dst = args[0];
@@ -2515,8 +2373,6 @@ s32 evt_mario_get_exparty(EventEntry* event) {
 
 
 s32 evt_mario_chk_join_party(EventEntry* event) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     extern s32 partyChkJoin(s32 partyId);
     s32* args;
     s32 dst;
@@ -2535,9 +2391,6 @@ s32 evt_mario_chk_join_party(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_party_use_check(EventEntry* event) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     s32* args;
     s32 dst;
     s32 value;
@@ -2563,10 +2416,6 @@ s32 evt_mario_party_use_check(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_set_prev_party_dokan(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern s32 partyEntry(s32 party);
-    extern s32 partyEntry2(s32 party);
-    extern void* partyGetPtr(s32 party);
     extern void partyChgRunMode(void* party, s32 mode);
     extern s32 vec3_802e3e9c[3];
     s32* args = event->args;
@@ -2610,11 +2459,7 @@ s32 evt_mario_set_prev_party_dokan(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_hello_party(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern s32 partyEntryHello(s32 party);
-    extern s32 partyEntry2Hello(s32 party);
-    extern void* partyGetPtr(s32 party);
     EventEntry* evt = event;
     s32* args = event->args;
     void* mario = marioGetPtr();
@@ -2657,10 +2502,6 @@ s32 evt_mario_hello_party(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_hello_exparty_pos(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern s32 partyEntry2Hello(s32 party);
-    extern void* partyGetPtr(s32 party);
     EventEntry* evt = event;
     s32* args = event->args;
     void* mario = marioGetPtr();
@@ -2699,11 +2540,6 @@ s32 evt_mario_hello_exparty_pos(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_set_party(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern s32 partyEntry(s32 party);
-    extern s32 partyEntry2(s32 party);
-    extern void* partyGetPtr(s32 party);
     EventEntry* evt = event;
     s32* args = event->args;
     void* mario = marioGetPtr();
@@ -2737,10 +2573,6 @@ s32 evt_mario_set_party(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_set_party_pos(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern s32 partyEntryPos(s32 party, f32 x, f32 y, f32 z);
-    extern s32 partyEntry2Pos(s32 party, f32 x, f32 y, f32 z);
     EventEntry* evt = event;
     s32* args = event->args;
     void* mario = marioGetPtr();
@@ -2780,10 +2612,6 @@ s32 evt_mario_set_party_pos(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_set_prev_party(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern s32 partyEntry(s32 party);
-    extern s32 partyEntry2(s32 party);
-    extern void* partyGetPtr(s32 party);
     s32* args = event->args;
     void* mario = marioGetPtr();
     s32 offset = args[0];
@@ -2819,10 +2647,6 @@ s32 evt_mario_set_prev_party(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_set_prev_party_pos(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern s32 partyEntryPos(s32 party, f32 x, f32 y, f32 z);
-    extern s32 partyEntry2Pos(s32 party, f32 x, f32 y, f32 z);
     EventEntry* evt = event;
     s32* args = event->args;
     void* mario = marioGetPtr();
@@ -2865,7 +2689,6 @@ s32 evt_mario_set_prev_party_pos(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_goodbye_party(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
     extern void partyGoodbye(s32 party);
     EventEntry* evt = event;
     s32* args;
@@ -2893,8 +2716,6 @@ s32 evt_mario_goodbye_party(EventEntry* event, s32 first) {
 
 
 s32 evt_mario_kill_party(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern void partyKill(s32 id);
     s32 offset;
     s8 partyId;
 
@@ -2913,8 +2734,6 @@ s32 evt_mario_kill_party(EventEntry* event) {
 
 
 s32 evt_mario_clear_party(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern void partyKill(s32 id);
     extern void partyKill2(s32 id);
     s32 offset;
     s8 partyId;
@@ -2933,21 +2752,18 @@ s32 evt_mario_clear_party(EventEntry* event) {
 }
 
 USER_FUNC(evt_mario_push) {
-    extern void* marioGetPtr(void);
     void* mario = marioGetPtr();
     *(u32*)mario |= 0x8000;
     return 2;
 }
 
 USER_FUNC(evt_mario_sleep_on) {
-    extern void marioChgEvtPose(const char* pose);
     extern const char str_M_N_5A_802e3eb0[];
     marioChgEvtPose(str_M_N_5A_802e3eb0);
     return 2;
 }
 
 s32 evt_mario_sleep_off(EventEntry* event, s32 first) {
-    extern void marioChgEvtPose(const char* pose);
     extern const char str_M_N_5B_802e3ea8[];
 
     if (first != 0) {
@@ -2965,9 +2781,7 @@ s32 evt_mario_sleep_off(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_check_key_item(EventEntry* event) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern s32 pouchCheckItem(s32 item);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     s32* args;
     s32 item;
     s32 dst;
@@ -2987,7 +2801,6 @@ s32 evt_mario_check_key_item(EventEntry* event) {
 
 
 USER_FUNC(evt_mario_dump_item) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void pouchRemoveItem(s32 item);
     pouchRemoveItem(evtGetValue(event, event->args[0]));
     return 2;
@@ -2997,9 +2810,6 @@ USER_FUNC(evt_mario_dump_item) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_get_name_hitobj_head(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 hitGetName(void* hit);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     s32 dst = args[0];
@@ -3022,9 +2832,6 @@ s32 evt_mario_get_name_hitobj_head(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_get_name_hitobj_ride(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 hitGetName(void* hit);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     s32 dst = args[0];
@@ -3047,9 +2854,6 @@ s32 evt_mario_get_name_hitobj_ride(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_get_name_hitobj_under(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 hitGetName(void* hit);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     s32 dst = args[0];
@@ -3072,9 +2876,6 @@ s32 evt_mario_get_name_hitobj_under(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_get_name_hitobj_front(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 hitGetName(void* hit);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     s32 dst = args[0];
@@ -3097,9 +2898,6 @@ s32 evt_mario_get_name_hitobj_front(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_get_name_hitobj_push(EventEntry* event) {
-    extern void* marioGetPtr(void);
-    extern s32 hitGetName(void* hit);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     s32 dst = args[0];
@@ -3120,7 +2918,6 @@ s32 evt_mario_get_name_hitobj_push(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u32 L_evt_mario_keyon_wait(void) {
-    extern void* marioGetPtr(void);
     extern s32 marioKeyOffChk(void*);
     void* mario = marioGetPtr();
     return marioKeyOffChk(mario) != 0 ? 0 : 2;
@@ -3132,9 +2929,7 @@ u32 L_evt_mario_keyon_wait(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mario_paper_plane(EventEntry* event, s32 first) {
-    extern void* marioGetPtr(void);
     extern void mario_plane_cancel(void);
-    extern void marioChgMot(s32 mot);
     extern s32 marioGetPlaneStatus(void);
     s32* args = event->args;
     void* mario = marioGetPtr();

@@ -1,21 +1,22 @@
 #include "effect/n64/eff_flame_n64.h"
 
+extern f32 float_0_804252ec;
+extern f32 float_0p04_80425304;
+extern f32 float_0p1_80425310;
+
 void* effFlameN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effFlameMain(void* effect);
     extern char str_FlameN64_802fafa0[];
-    extern f32 float_0_804252ec;
     extern f32 float_2_80425314;
     extern f32 float_0p6_80425318;
     extern f32 float_neg0p9_8042531c;
     extern f32 float_0p9_80425320;
-    extern f32 float_0p04_80425304;
     extern f32 float_0p2_80425324;
     extern f32 float_1p3_80425328;
     extern f32 float_0p16_8042532c;
     extern f32 float_1p04_80425330;
-    extern f32 float_0p1_80425310;
     extern f32 float_1p7_80425334;
     extern f32 float_0p08_80425338;
     extern f32 float_1p36_8042533c;
@@ -137,13 +138,10 @@ void effFlameMain(void* effect) {
     extern f32 dispCalcZ(void* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
     extern void effFlameDisp(void);
-    extern f32 float_0_804252ec;
     extern f32 float_0p5_804252fc;
     extern f32 float_0p02_80425300;
-    extern f32 float_0p04_80425304;
     extern f32 float_64_80425308;
     extern f32 float_128_8042530c;
-    extern f32 float_0p1_80425310;
 
     u8* work;
     f32 pos[3];
@@ -284,7 +282,6 @@ void effFlameDisp(int cameraId, int effectAddress) {
     extern float float_deg2rad_804252e0;
     extern float float_1_804252e4;
     extern float float_10_804252e8;
-    extern float float_0_804252ec;
     extern float float_0p03125_804252f0;
     extern float float_0p0078125_804252f4;
     extern float float_30_804252f8;

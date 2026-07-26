@@ -22,11 +22,16 @@ void effBoobooMain(void* effect);
 
 extern char str_BoobooN64_802fac08[];
 extern f32 float_0_80424dec;
+extern f32 float_6p2832_80424ddc;
+extern f32 float_360_80424de0;
+extern double sin(f64 x);
+extern void GXClearVtxDesc(void);
+extern void GXSetVtxDesc(s32, s32);
+extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+extern void GXSetArray(s32, void*, s32);
+extern void GXCallDisplayList(void*, s32);
 
 u8 boo_polygon_0(void) {
-    extern void GXClearVtxDesc(void); extern void GXSetVtxDesc(s32,s32);
-    extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32); extern void GXSetArray(s32,void*,s32);
-    extern void GXCallDisplayList(void*,s32);
     extern u8 boo_dl_0_0[],boo_dl_0_1[],boo_dl_0_2[],boo_dl_0_3[],boo_dl_0_4[],boo_dl_0_5[],boo_dl_0_6[],boo_dl_0_7[];
     extern u8 boo_dl_0_8[],boo_dl_0_9[],boo_dl_0_10[],boo_dl_0_11[],boo_dl_0_12[],boo_dl_0_13[],boo_dl_0_14[],boo_dl_0_15[];
     GXClearVtxDesc();
@@ -46,9 +51,6 @@ u8 boo_polygon_0(void) {
 }
 
 u8 boo_polygon_1(void) {
-    extern void GXClearVtxDesc(void); extern void GXSetVtxDesc(s32,s32);
-    extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32); extern void GXSetArray(s32,void*,s32);
-    extern void GXCallDisplayList(void*,s32);
     extern u8 boo_dl_1_0[],boo_dl_1_1[],boo_dl_1_2[],boo_dl_1_3[],boo_dl_1_4[],boo_dl_1_5[],boo_dl_1_6[],boo_dl_1_7[];
     extern u8 boo_dl_1_8[],boo_dl_1_9[],boo_dl_1_10[],boo_dl_1_11[],boo_dl_1_12[],boo_dl_1_13[],boo_dl_1_14[],boo_dl_1_15[];
     GXClearVtxDesc();
@@ -68,9 +70,6 @@ u8 boo_polygon_1(void) {
 }
 
 u8 boo_polygon_2(void) {
-    extern void GXClearVtxDesc(void); extern void GXSetVtxDesc(s32,s32);
-    extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32); extern void GXSetArray(s32,void*,s32);
-    extern void GXCallDisplayList(void*,s32);
     extern u8 boo_dl_2_0[],boo_dl_2_1[],boo_dl_2_2[],boo_dl_2_3[],boo_dl_2_4[],boo_dl_2_5[],boo_dl_2_6[],boo_dl_2_7[];
     extern u8 boo_dl_2_8[],boo_dl_2_9[],boo_dl_2_10[],boo_dl_2_11[],boo_dl_2_12[],boo_dl_2_13[],boo_dl_2_14[],boo_dl_2_15[];
     GXClearVtxDesc();
@@ -124,11 +123,8 @@ void* effBoobooN64Entry(void) {
 }
 
 void effBoobooMain(void* effect) {
-    extern double sin(f64 x);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
     extern void effBoobooDisp(s32 cameraId, void* effect);
-    extern f32 float_6p2832_80424ddc;
-    extern f32 float_360_80424de0;
     extern f32 float_2_80424de8;
     extern f32 float_0_80424dec;
     extern f32 float_4_80424df0;
@@ -269,12 +265,9 @@ void effBoobooDisp(int param_1, void* param_2) {
     extern void GXSetCurrentMtx(s32 id);
     extern void GXSetTevColor(s32 id, void* color);
     extern void GXSetCullMode(s32 mode);
-    extern double sin(f64 x);
     extern f32 float_deg2rad_80424dd0;
     extern f32 float_180_80424dd4;
     extern f32 float_10_80424dd8;
-    extern f32 float_6p2832_80424ddc;
-    extern f32 float_360_80424de0;
     extern f32 float_63_80424de4;
     extern u32 unk_80429650;
     f32 mtxA[3][4];

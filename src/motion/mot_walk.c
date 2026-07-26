@@ -1,9 +1,31 @@
 #include "motion/mot_walk.h"
+#include "bowser/koopa_motion.h"
+
+extern void* marioGetPtr(void);
+extern s32 marioBgmodeChk(void);
+extern f32 float_0p5_8042088c;
+extern void* caseCheckHitObj(void*);
+extern s32 marioChkPushAnime(void);
+extern void marioChgPose(char*);
+extern void marioResetCamFollowRate(void);
+extern void motSlitContinue(void);
+extern s32 strcmp(char*, char*);
+extern void marioChgMot(s32);
+extern s32 marioSlitAbilityChk(void);
+extern s32 marioSlitButton(void);
+extern s32 marioChkItemMotion(void);
+extern void marioChkJump(void);
+extern void marioChkTransform(void);
+extern s32 pouchEquipCheckBadge(s32);
+extern char str_M_W_1_80420884[];
+extern char str_M_O_1_8042087c[];
+extern char str_M_I_Y_80420890[];
+extern f32 float_1_80420878;
+extern f32 float_0_80420898;
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 marioWalkDashSe(void* pHit, u32 interval) {
-    extern void* marioGetPtr(void);
     extern u32 hitGetAttr(void* hit);
     extern void psndSFXOn_3D(s32 sfx, void* pos);
     extern s32 strncmp(const char* a, const char* b, u32 n);
@@ -60,9 +82,6 @@ u8 marioWalkDashSe(void* pHit, u32 interval) {
 
 
 float marioGetWalkSpd(void) {
-    extern void* marioGetPtr(void);
-    extern s32 marioBgmodeChk(void);
-    extern f32 float_0p5_8042088c;
     void* mario = marioGetPtr();
     f32 speed = *(f32*)((s32)mario + 0x184);
 
@@ -79,9 +98,6 @@ float marioGetWalkSpd(void) {
     return speed;
 }
 f32 marioGetDashSpd(void) {
-    extern void* marioGetPtr(void);
-    extern s32 marioBgmodeChk(void);
-    extern f32 float_0p5_8042088c;
     void* mario = marioGetPtr();
     f32 speed = *(f32*)((s32)mario + 0x188);
 
@@ -100,31 +116,8 @@ f32 marioGetDashSpd(void) {
 }
 
 void mot_walk(void) {
-    extern void* marioGetPtr(void);
-    extern void kpa_walk(void);
     extern void peach_walk(void);
-    extern void* caseCheckHitObj(void*);
-    extern s32 marioChkPushAnime(void);
-    extern s32 marioBgmodeChk(void);
-    extern void marioChgPose(char*);
-    extern void marioResetCamFollowRate(void);
-    extern void motSlitContinue(void);
-    extern s32 strcmp(char*, char*);
-    extern void marioChgMot(s32);
-    extern s32 marioSlitAbilityChk(void);
-    extern s32 marioSlitButton(void);
-    extern s32 marioChkItemMotion(void);
-    extern void marioChkJump(void);
-    extern void marioChkTransform(void);
-    extern void marioWalkDashSe(void*, u32);
-    extern s32 pouchEquipCheckBadge(s32);
-    extern char str_M_W_1_80420884[];
-    extern char str_M_O_1_8042087c[];
     extern char str_M_W_7_8042089c[];
-    extern char str_M_I_Y_80420890[];
-    extern f32 float_1_80420878;
-    extern f32 float_0p5_8042088c;
-    extern f32 float_0_80420898;
 
     void* player;
     void* caseEntry;
@@ -241,31 +234,8 @@ void mot_walk(void) {
 
 
 void mot_dash(void) {
-    extern void* marioGetPtr(void);
-    extern void kpa_dash(void);
     extern void peach_dash(void);
-    extern void* caseCheckHitObj(void*);
-    extern s32 marioChkPushAnime(void);
-    extern s32 marioBgmodeChk(void);
-    extern void marioChgPose(char*);
-    extern void marioResetCamFollowRate(void);
-    extern void motSlitContinue(void);
-    extern s32 strcmp(char*, char*);
-    extern void marioChgMot(s32);
-    extern s32 marioSlitAbilityChk(void);
-    extern s32 marioSlitButton(void);
-    extern s32 marioChkItemMotion(void);
-    extern void marioChkJump(void);
-    extern void marioChkTransform(void);
-    extern void marioWalkDashSe(void*, u32);
-    extern s32 pouchEquipCheckBadge(s32);
     extern char str_M_R_1_80420870[];
-    extern char str_M_O_1_8042087c[];
-    extern char str_M_W_1_80420884[];
-    extern char str_M_I_Y_80420890[];
-    extern f32 float_1_80420878;
-    extern f32 float_0p5_8042088c;
-    extern f32 float_0_80420898;
 
     void* player;
     void* caseEntry;

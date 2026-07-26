@@ -1,13 +1,14 @@
 #include "action/ac_power_gauge.h"
+
+#include "system.h"
+
+void actionCommandDisp(f32 x, f32 y);
 s32 battleAcMain_PowerGauge(void* battleWork) {
-    extern void* memset(void* dest, int ch, u32 count);
-    extern s32 irand(s32 range);
     extern void BattleAcGaugeSeInit(void);
     extern s32 BattlePadGetNow(void);
     extern s32 BattlePadCheckTrigger(u32 buttons);
     extern s32 BattlePadCheckNow(u32 buttons);
     extern s32 BattlePadCheckUp(u32 buttons);
-    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
     extern void BattleAcGaugeSeUpdate(double value);
     extern void BattleAcGaugeSeDelete(void);
 
@@ -311,8 +312,6 @@ void battleAcDisp_PowerGauge(void* camera, void* wp) {
 
     extern f32 float_neg300_80427b14;
     extern f32 float_30_80427b18;
-    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
-    extern void actionCommandDisp(f32 x, f32 y);
 
     disp = (PowerGaugeDispWork*)((s32)wp + 0x1F20);
     state = *(s32*)((s32)wp + 0x1C9C);

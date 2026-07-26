@@ -9,7 +9,6 @@ extern LightWorkSet work[2];
 extern LightEntry paperCraft;
 extern LightEntry paperLight3D;
 extern LightEntry paperLight3DImg;
-void* memset(void* dst, int value, u32 size);
 s32 mapGetActiveGroup(void);
 s32 camGetCurNo(void);
 s32 strcmp(const char* str1, const char* str2);

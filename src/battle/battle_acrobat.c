@@ -1,5 +1,6 @@
 #include "battle/battle_acrobat.h"
 
+void _accrobat_timing_icon_disp(s32 cameraId, void* battleWork);
 
 s32 BattleAcrobatStart(void* battleWork, s32 unitId, s32 a, s32 b, s32 c, s32 d) {
     *(s32*)((s32)battleWork + 0x271C) = 0;
@@ -11,14 +12,11 @@ s32 BattleAcrobatStart(void* battleWork, s32 unitId, s32 a, s32 b, s32 c, s32 d)
     *(s32*)((s32)battleWork + 0x2734) = d;
     return 0;
 }
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
 s32 BattleAcrobatMain(void* battleWork) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
     extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
     extern f32 dispCalcZ(Vec3* pos);
     extern void dispEntry(s32, s32, void*, void*, f32);
-    extern void _accrobat_timing_icon_disp(s32, void*);
     extern s32 BattlePadCheckRecordTrigger(s32, s32);
     extern s32 BattlePadCheckTrigger(s32);
 
@@ -77,8 +75,6 @@ s32 BattleAcrobatMain(void* battleWork) {
     }
     return 0;
 }
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
 
 void _accrobat_timing_icon_disp(s32 param_1, void* unit) {
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);

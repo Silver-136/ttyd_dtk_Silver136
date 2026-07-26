@@ -8,3 +8,10 @@ typedef struct FieldBattleInfo {
     u8 unkC[0x1C - 0xC]; //0xC
 } FieldBattleInfo;
 STATIC_ASSERT_SIZEOF(FieldBattleInfo, 0x1C);
+
+void BattleInformationInit(void* info);
+void BattleInformationSetMode(void* info, s32 mode);
+void BattleInformationSetParty(void* info, s32 party);
+void BattleInformationSetFirstAttack(void* info, s32 firstAttack);
+void BattleInformationSetResult(void* info, s32 result);
+s32 BattleInformationGetResult(void* info);

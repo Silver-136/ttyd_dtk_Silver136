@@ -1,13 +1,11 @@
 #include "event/evt_item.h"
 
-s32 evtGetValue(EventEntry* event, s32 value);
-f32 evtGetFloat(EventEntry* event, s32 value);
-s32 evtSetValue(EventEntry* event, s32 target, s32 value);
 void* itemNameToPtr(s32 name);
 void itemDelete(s32 name);
 void itemFlagOff(void* item, u16 flag);
 void itemFlagOn(void* item, u16 flag);
 void itemStatusOn(void* item, s32 status);
+void* itemStatus(void* item, s32 status);
 
 s32 evt_item_entry(void* pEvt) {
     extern s32 itemEntry(s32 name, s32 item, u16 mode, s32 script, s32 arg, f32 x, f32 y, f32 z);
@@ -165,7 +163,6 @@ USER_FUNC(evt_item_set_bound_limit) {
 
 u32 evt_item_get_item(void* pEvt, int param_2) {
     extern void itemForceGet(void* item);
-    extern void* itemStatus(void* item, s32 status);
 
     EventEntry* event = pEvt;
     void* item = itemNameToPtr(evtGetValue(event, event->args[0]));
@@ -189,7 +186,6 @@ u32 evt_item_get_item(void* pEvt, int param_2) {
 }
 
 USER_FUNC(evt_item_get_item_end_wait) {
-    extern void* itemStatus(void* item, s32 status);
     void* item = itemNameToPtr(evtGetValue(event, event->args[0]));
     s32 value;
     if (item == 0) {

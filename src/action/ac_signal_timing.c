@@ -3,6 +3,7 @@
 extern void* _battleWorkPointer;
 s32 ac_signaltiming_ok_frame_range[4];
 s32 ac_signaltiming_ok_frame_range_2[4];
+void actionCommandDisp(f32 x, f32 y);
 
 s32 _get_ok_frame_range(s32 idx) {
     void* wp = _battleWorkPointer;
@@ -17,8 +18,15 @@ s32 _get_ok_frame_range(s32 idx) {
 
 /* stub-fill: battleAcMain_SignalTiming | missing_definition | ghidra_signature */
 s32 battleAcMain_SignalTiming(int work) {
-    extern void* memset(void*,s32,u32);extern s32 BattleActionCommandGetDifficulty(void*);extern s32 BattlePadCheckTrigger(u32);extern s32 BattlePadGetTrigger(void);extern s32 irand(s32);extern s32 _get_ok_frame_range(s32);extern void psndSFXOn(char*);
-    extern char str_SFX_AC_COMMAND_NG1_802ff7b0[];extern char str_SFX_AC_COMMAND_OK1_802ff79c[];extern char str_SFX_AC_PI1_802ff780[];extern char str_SFX_AC_PONE1_802ff78c[];
+    extern s32 BattleActionCommandGetDifficulty(void*);
+    extern s32 BattlePadCheckTrigger(u32);
+    extern s32 BattlePadGetTrigger(void);
+    extern s32 irand(s32);
+    extern void psndSFXOn(char*);
+    extern char str_SFX_AC_COMMAND_NG1_802ff7b0[];
+    extern char str_SFX_AC_COMMAND_OK1_802ff79c[];
+    extern char str_SFX_AC_PI1_802ff780[];
+    extern char str_SFX_AC_PONE1_802ff78c[];
     u8* wp=(u8*)work;u8* extra=wp+0x1F4C;s32 state;u32 trig;s32 valid;s32 frame;s32 start;s32 end;s32 i;s32 button;s32 done=0;
     do{
         state=*(s32*)(wp+0x1C9C);
@@ -69,7 +77,6 @@ void battleAcDisp_SignalTiming(void* camera, void* wp) {
     extern f32 float_30_80427c74;
     extern f32 float_0_80427c54;
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
-    extern void actionCommandDisp(f32 x, f32 y);
 
     disp = (SignalTimingDispWork*)((s32)wp + 0x1F20);
     state = *(s32*)((s32)wp + 0x1C9C);

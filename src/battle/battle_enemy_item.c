@@ -1,5 +1,7 @@
 #include "battle/battle_enemy_item.h"
 
+#include "system.h"
+
 s32 _check_attack_item(void* unit);
 s32 _check_status_attack_item(void* unit);
 s32 _check_status_support_item(void* unit);
@@ -16,7 +18,7 @@ void* BattleGetUnitPtr(void* battleWork, s32 unitId);
 s32 BtlUnit_CanActStatus(void* unit);
 s32 BtlUnit_GetMaxFp(void* unit);
 s32 BtlUnit_GetFp(void* unit);
-s32 irand(s32 range);
+s32 BtlUnit_CheckStatus(void* unit, s32 type);
 
 
 s32 BattleEnemyUseItemCheck(void* unit) {
@@ -190,13 +192,6 @@ s32 _check_attack_item(void* unit) {
 }
 
 s32 _check_status_attack_item(void* unit) {
-    extern u8 itemDataTable[];
-    extern void* _battleWorkPointer;
-    extern s32 BtlUnit_GetEnemyBelong(void*);
-    extern void BattleSamplingEnemy(void*, void*, s32, s32, s32, s32, s32);
-    extern void* BattleGetUnitPtr(void*, s32);
-    extern s32 BtlUnit_CheckStatus(void*, s32);
-    extern s32 BtlUnit_CanActStatus(void*);
     s32 itemId;
     u8* item;
     void* battleWork;
@@ -253,13 +248,6 @@ s32 _check_status_attack_item(void* unit) {
 }
 
 s32 _check_status_support_item(void* unit) {
-    extern u8 itemDataTable[];
-    extern void* _battleWorkPointer;
-    extern s32 BtlUnit_GetEnemyBelong(void*);
-    extern void BattleSamplingEnemy(void*, void*, s32, s32, s32, s32, s32);
-    extern void* BattleGetUnitPtr(void*, s32);
-    extern s32 BtlUnit_CheckStatus(void*, s32);
-    extern s32 BtlUnit_CanActStatus(void*);
     s32 itemId;
     u8* item;
     void* battleWork;
@@ -316,12 +304,6 @@ s32 _check_status_support_item(void* unit) {
 }
 
 s32 _check_status_recover_item(void* unit) {
-    extern u8 itemDataTable[];
-    extern void* _battleWorkPointer;
-    extern s32 BtlUnit_GetEnemyBelong(void*);
-    extern void BattleSamplingEnemy(void*, void*, s32, s32, s32, s32, s32);
-    extern void* BattleGetUnitPtr(void*, s32);
-    extern s32 BtlUnit_CheckStatus(void*, s32);
     s32 itemId;
     u8* item;
     void* battleWork;

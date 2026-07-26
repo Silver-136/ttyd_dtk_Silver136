@@ -5,7 +5,6 @@ void* effEntry(void);
 void* __memAlloc(s32 heap, u32 size);
 void effLasMonMain(void* entry);
 void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
-void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
 void PSMTXConcat(Mtx a, Mtx b, Mtx out);
 void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
 void animPoseSetMaterialEvtColor(s32 poseId, void* color);
@@ -21,9 +20,6 @@ extern f32 float_1_804289c0;
 void* effLasMonEntry(s32 type, f32 x, f32 y, f32 z) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
-    extern void effLasMonMain(void* entry);
-    extern char str_LasMon_80302ab8[];
-    extern f32 float_1_804289c0;
 
     void* entry = effEntry();
     void* work;
@@ -79,8 +75,6 @@ void effLasMonMain(void* entry) {
     extern char str_MOBJ_EFF_las_mon_80302aa4[];
     extern char str_A_1_804289bc;
     extern char str_S_1_804289c4;
-    extern f32 float_1_804289c0;
-
     void* work;
     u32 dispPos[3];
     u32 pos[3];

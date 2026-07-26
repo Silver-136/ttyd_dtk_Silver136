@@ -1,9 +1,14 @@
 #include "battle/battle_damage.h"
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
-extern s32 irand(s32 max);
+#include "effect/eff_miss_star.h"
+
+#include "system.h"
+
 extern f64 double_to_int_802ee0a8;
 extern f32 float_0p5_804221c4;
+void BtlUnit_GetHitPos(BattleWorkUnit* unit, BattleWorkUnitPart* part, f32* x, f32* y, f32* z);
+s32 BtlUnit_CanGuardStatus(BattleWorkUnit* unit);
 #define WEAPON_ACCURACY(weapon) (*(u8*)((s32)(weapon) + 0x10))
 #define WEAPON_SPECIAL_PROPERTY_FLAGS(weapon) (*(u32*)((s32)(weapon) + 0x74))
 #define WEAPON_COUNTER_RESISTANCE_FLAGS(weapon) (*(u32*)((s32)(weapon) + 0x78))
@@ -68,11 +73,9 @@ void BattleDamageDirect(s32 unitIdx, BattleWorkUnit* unit, BattleWorkUnitPart* p
     extern BattleWorkUnit* BattleGetUnitPtr(BattleWork*, s32);
     extern BattleWorkUnitPart* BtlUnit_GetPartsPtr(BattleWorkUnit*, s32);
     extern s32 BtlUnit_GetBodyPartsId(BattleWorkUnit*);
-    extern void BtlUnit_GetHitPos(BattleWorkUnit*, BattleWorkUnitPart*, f32*, f32*, f32*);
     extern s32 BtlUnit_GetFp(BattleWorkUnit*);
     extern void BtlUnit_SetFp(BattleWorkUnit*, s32);
     extern u32 BtlUnit_GetBelong(BattleWorkUnit*);
-    extern void* effMissStarEntry(f64, f64, f64, s32, s32, s32);
     extern void effHitEntry(void);
     extern void effIceN64Entry(f32, f32, f32, s32);
     extern void effDamageStarEntry(f32, f32, f32, f32, f32, s32, s32);
@@ -282,7 +285,6 @@ int BattleCalculateDamage(BattleWorkUnit* attacker, BattleWorkUnit* target,
                           BattleWorkUnitPart* part, void* weapon, u32* flagsOut, u32 flags) {
     typedef s32 (*DamageFunc)(BattleWorkUnit*, void*, BattleWorkUnit*, BattleWorkUnitPart*);
     extern s32 BtlUnit_CheckStatus(BattleWorkUnit*, StatusEffectType);
-    extern void BtlUnit_GetStatus(BattleWorkUnit*, StatusEffectType, s8*, s8*);
     extern s32 BtlUnit_CheckStatusFlag(BattleWorkUnit*, u32);
     u8* atk = (u8*)attacker;
     u8* def = (u8*)target;
@@ -865,12 +867,10 @@ s32 BattleSetStatusDamage(u32* result, BattleWorkUnit* unit, BattleWorkUnitPart*
                           int galeFactor, char turns, char strength) {
     extern s32 irand(s32 max);
     extern s32 BtlUnit_CheckStatus(BattleWorkUnit*, StatusEffectType);
-    extern void BtlUnit_GetStatus(BattleWorkUnit*, StatusEffectType, s8*, s8*);
     extern BOOL BtlUnit_SetStatus(BattleWorkUnit*, StatusEffectType, s8, s8);
     extern void BtlUnit_GetPos(BattleWorkUnit*, f32*, f32*, f32*);
     extern s32 BtlUnit_GetHeight(BattleWorkUnit*);
     extern void* effStampN64Entry(f32, f32, f32, s32);
-    extern u32 _getRegistStatus(BattleWorkUnit*, StatusEffectType);
     s8 chargeStrength;
     s32 invalid = 0;
     s32 setResult = 0;
@@ -1073,8 +1073,6 @@ s32 BattleSetStatusDamage(u32* result, BattleWorkUnit* unit, BattleWorkUnitPart*
 /* signature source: manual_signatures */
 u32 BattleSetStatusDamageFromWeapon(BattleWorkUnit* unit1, BattleWorkUnit* unit2, BattleWorkUnitPart* part, void* weapon, u32 param_5) {
     extern void _getSickStatusParam(BattleWorkUnit* unit, void* weapon, StatusEffectType statusType, s8* turns, s8* strength);
-    extern u32 _getSickStatusRate(void* weapon, StatusEffectType statusType);
-    extern s32 BattleSetStatusDamage(u32* param_1, BattleWorkUnit* unit, BattleWorkUnitPart* part, u32 attackPropertyFlags, StatusEffectType statusType, int rate, int galeFactor, char turns, char strength);
     extern void btlDispPoseAnime(void* part);
     u32 result = 0;
     s32 status;
@@ -1278,11 +1276,9 @@ s32 _checkDamageCode_EmergencyRevival(int param_1, u32* param_2) {
 /* AUTOSTUB BattleCheckDamage size 0xA00 */
 s32 BattleCheckDamage(BattleWorkUnit* attacker, BattleWorkUnit* target,
                       BattleWorkUnitPart* part, void* weapon, s32 flags) {
-    extern void BattleInitCounterPreCheckWork(void*);
     extern s32 BattleCheckCounter(void*, BattleWorkUnit*, BattleWorkUnit*, BattleWorkUnitPart*, void*, u32*);
     extern s32 BtlUnit_GetACPossibility(BattleWorkUnit*);
     extern s32 BattleActionCommandGetDefenceResult(void);
-    extern void BtlUnit_GetHitPos(BattleWorkUnit*, BattleWorkUnitPart*, f32*, f32*, f32*);
     extern void* effNiceEntry(f32, f32, f32, s32);
     extern void psndSFXOn(const char*);
     extern void BattleAudience_Case_GuardGood(void);
@@ -1292,8 +1288,6 @@ s32 BattleCheckDamage(BattleWorkUnit* attacker, BattleWorkUnit* target,
     extern void BattleCheckPikkyoro(void*, u32*);
     extern s32 BattleCalculateDamage(BattleWorkUnit*, BattleWorkUnit*, BattleWorkUnitPart*, void*, u32*, u32);
     extern s32 BattleCalculateFpDamage(BattleWorkUnit*, BattleWorkUnit*, BattleWorkUnitPart*, void*, u32*, u32);
-    extern u32 BattleSetStatusDamageFromWeapon(BattleWorkUnit*, BattleWorkUnit*, BattleWorkUnitPart*, void*, u32);
-    extern void BattleDamageDirect(s32, BattleWorkUnit*, BattleWorkUnitPart*, s32, s32, s32, s32, s32);
     extern char str_SFX_SYSTEM_GREAT1_802ee064[];
     extern char str_SFX_SYSTEM_NICE1_802ee078[];
     u32 result[8];
@@ -1443,7 +1437,6 @@ finish:
 /* AUTOSTUB BattleAttackDeclare size 0x150 */
 /* signature source: manual_signatures */
 void BattleAttackDeclare(int* unitIdx, int* partIdx) {
-    extern s32 BtlUnit_CanGuardStatus(BattleWorkUnit*);
     extern void BattleRunHitEvent(void*, s32);
     BattleWork* battleWork;
     BattleWorkUnit* unit;
@@ -1504,7 +1497,6 @@ void BattleAttackDeclare(int* unitIdx, int* partIdx) {
 /* AUTOSTUB __declare size 0x15C */
 /* signature source: manual_signatures */
 void __declare(int param_1, s32 param_2, int* param_3, int* param_4) {
-    extern s32 BtlUnit_CanGuardStatus(BattleWorkUnit*);
     extern void BattleRunHitEvent(void*, s32);
     BattleWork* battleWork;
     BattleWorkUnit* unit;

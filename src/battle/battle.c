@@ -11,15 +11,22 @@
 #include "battle/battle_stage_object.h"
 #include "battle/battle_status_effect.h"
 #include "mario/mariost.h"
+#include "statuswindow.h"
 
 //.sbss
 BattleWork* _battleWorkPointer;
 
+typedef struct PartyEntry {
+    void* data;
+    u8 pad[0x30 - 0x4];
+} PartyEntry;
+
+extern PartyEntry entryunit_party[];
+extern void* R_battlemapalloc_base_ptr;
+
 // Local Prototypes
 BOOL battleSeqEndCheck(void);
-BOOL BattleMain(void);
-
-BattleWorkUnit* BattleGetUnitPtr(BattleWork* wp, s32 index);
+s32 BattleStatusWindowCheck(void);
 
 void BattlePartyInfoWorkInit(BattleWork* wp);
 
@@ -27,6 +34,13 @@ void BattleCheckUnitBroken(BattleWork* wp);
 
 void BattleAfterReactionQueueInit(void);
 void _EquipItem(void* unit, u32 flags, u32 item);
+void BtlUnit_EquipItem(void* unit, u32 flags, u32 item);
+void* BattleGetMarioPtr(BattleWork* wp);
+void* BattleGetPartyPtr(BattleWork* wp);
+BattleWorkUnit* BattleGetUnitPtr(BattleWork* wp, s32 index);
+void BattleConsumeReserveItem(void);
+void BattleAfterReactionRelease(int unitId, int arg);
+void BtlUnit_SetParamToPouch(void* unit);
 
 void battleMain(void) {
     BattleWork* wp = _battleWorkPointer;
@@ -155,15 +169,9 @@ void BattleEnd(void) {
 }
 
 BOOL Btl_UnitSetup(BattleWork* wp) {
-    typedef struct PartyEntry {
-        void* data;
-        u8 pad[0x30 - 0x4];
-    } PartyEntry;
     extern BattleUnitSetup entryunit_system;
     extern BattleUnitSetup entryunit_mario;
-    extern PartyEntry entryunit_party[];
     extern BattleWorkUnit* BtlUnit_Entry(BattleUnitSetup* setup);
-    extern void BtlUnit_EquipItem(void* unit, u32 flags, u32 item);
     extern void BtlUnit_SetParamFromPouch(BattleWorkUnit* unit);
     extern void BtlUnit_GetHomePos(BattleWorkUnit* unit, f32* x, f32* y, f32* z);
     extern void BtlUnit_SetHomePos(BattleWorkUnit* unit, f32 x, f32 y, f32 z);
@@ -276,9 +284,6 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
 }
 
 void BattleSetMarioParamToFieldBattle(BattleWork* wp) {
-    extern void* BattleGetMarioPtr(BattleWork*);
-    extern void* BattleGetPartyPtr(BattleWork*);
-    extern void BtlUnit_SetParamToPouch(void*);
     void* unit;
 
     unit = BattleGetMarioPtr(wp);
@@ -347,13 +352,11 @@ void BattleIncSeq(void* battleWork, s32 seqType) {
 }
 
 void* BattleAlloc(u32 size) {
-    extern void* R_battlemapalloc_base_ptr;
     extern void* _mapAlloc(void*, u32);
     return _mapAlloc(R_battlemapalloc_base_ptr, size);
 }
 
 void BattleFree(void* ptr) {
-    extern void* R_battlemapalloc_base_ptr;
     extern void _mapFree(void*, void*);
 
     if (ptr != NULL) {
@@ -440,11 +443,6 @@ void* BattleGetPartnerPtr(BattleWork* wp, void* unit) {
 }
 
 s32 BattlePartyAnimeLoad(s32 partyId) {
-    typedef struct PartyEntry {
-        void* data;
-        u8 pad[0x30 - 0x4];
-    } PartyEntry;
-    extern PartyEntry entryunit_party[];
     extern s32 animEffectAsync(void*, s32);
     s32 async = 1;
 
@@ -453,18 +451,11 @@ s32 BattlePartyAnimeLoad(s32 partyId) {
 }
 
 void* BattleChangeParty(void* battleWork) {
-    typedef struct PartyEntry {
-        void* data;
-        u8 pad[0x30 - 0x4];
-    } PartyEntry;
-    extern PartyEntry entryunit_party[];
     extern void* BattleGetPartyPtr(void);
     extern void* BtlUnit_Spawn(void* setup, s32 flag);
     extern void BtlUnit_GetHomePos(void* unit, f32* x, f32* y, f32* z);
-    extern void BtlUnit_EquipItem(void* unit, u32 flags, u32 item);
     extern f32 BattleGetFloorHeight(void* wp, f32 x, f32 y, f32 z);
     extern void BtlUnit_SetHomePos(void* unit, f32 x, f32 y, f32 z);
-    extern void BtlUnit_SetParamToPouch(void* unit);
     s32 kind = *(s32*)((s32)battleWork + 0x1C68);
     void* oldUnit = BattleGetPartyPtr();
     s32 oldId = *(s32*)oldUnit;
@@ -542,7 +533,7 @@ s32 BattleTransPartyId(BattleUnitType type) {
 }
 
 
-s32 BattleTransPartyIdToUnitKind(int partyId) {
+s32 BattleTransPartyIdToUnitKind(s32 partyId) {
     switch (partyId) {
         case 1:
             return 0xE0;
@@ -564,7 +555,6 @@ s32 BattleTransPartyIdToUnitKind(int partyId) {
 }
 
 void BtlUnit_EquipItem(void* unit, u32 param_2, u32 item) {
-    extern void* pouchGetPtr(void);
     extern void BtlUnit_ReviseHpFp(void*);
     void* pouch;
     void* unitLocal;
@@ -821,10 +811,7 @@ void BattleAfterReactionRelease(int param_1, int param_2) {
 }
 
 s32 BattleAfterReactionMain(void) {
-    extern BattleWorkUnit* BattleGetUnitPtr(BattleWork* wp, s32 index);
-    extern void BattleConsumeReserveItem(void);
     extern s32 BattleCheckConcluded(BattleWork* wp);
-    extern void BattleAfterReactionRelease(int unitId, int arg);
     extern void* BtlUnit_GetData(void* unit, s32 arg);
     extern void* evtEntry(void* script, s32 type, s32 flags);
     BattleWork* wp = _battleWorkPointer;
@@ -874,7 +861,6 @@ s32 battleDisableHResetCheck(void) {
 }
 
 u32 BattleMajinaiCheck(void) {
-    extern void* pouchGetPtr(void);
     extern s32 irand(s32);
     void* pouch = pouchGetPtr();
     BattleWork* wp = _battleWorkPointer;
@@ -929,7 +915,6 @@ u32 BattleMajinaiCheck(void) {
 }
 
 void BattleMajinaiDone(void) {
-    extern void* pouchGetPtr(void);
     void* pouch = pouchGetPtr();
     u8 count = *(u8*)((s32)pouch + 0x5B8);
 
@@ -944,7 +929,6 @@ void BattleMajinaiDone(void) {
 }
 
 void BattleMajinaiEndCheck(void) {
-    extern void* pouchGetPtr(void);
     BattleWork* wp = _battleWorkPointer;
     void* pouch = pouchGetPtr();
 
@@ -954,45 +938,36 @@ void BattleMajinaiEndCheck(void) {
 }
 
 void BattleStatusWindowAPRecoveryOn(void) {
-    extern void BattleStatusWindowCheck(void);
     *(s32*)((s32)_battleWorkPointer + 0x274C) = 1;
     BattleStatusWindowCheck();
 }
 
 void BattleStatusWindowAPRecoveryOff(void) {
-    extern void BattleStatusWindowCheck(void);
     *(s32*)((s32)_battleWorkPointer + 0x274C) = 0;
     BattleStatusWindowCheck();
 }
 
 void BattleStatusWindowEventOn(void) {
-    extern void BattleStatusWindowCheck(void);
     *(s32*)((s32)_battleWorkPointer + 0x2748) = 1;
     BattleStatusWindowCheck();
 }
 
 void BattleStatusWindowSystemOn(void) {
-    extern void BattleStatusWindowCheck(void);
     *(s32*)((s32)_battleWorkPointer + 0x2744) = 1;
     BattleStatusWindowCheck();
 }
 
 void BattleStatusWindowEventOff(void) {
-    extern void BattleStatusWindowCheck(void);
     *(s32*)((s32)_battleWorkPointer + 0x2748) = 0;
     BattleStatusWindowCheck();
 }
 
 void BattleStatusWindowSystemOff(void) {
-    extern void BattleStatusWindowCheck(void);
     *(s32*)((s32)_battleWorkPointer + 0x2744) = 0;
     BattleStatusWindowCheck();
 }
 
 s32 BattleStatusWindowCheck(void) {
-    extern s32 statusWinCheck(void);
-    extern void statusWinOpen(void);
-    extern void statusWinClose(void);
     BattleWork* wp = _battleWorkPointer;
     s32 flag;
 

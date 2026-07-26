@@ -5,7 +5,6 @@ void* effEntry(void);
 void* __memAlloc(s32 heap, u32 size);
 void effUranokoMain(void* entry);
 void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
-void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
 void PSMTXRotRad(Mtx m, s8 axis, f32 rad);
 void PSMTXConcat(Mtx a, Mtx b, Mtx out);
 void* camGetPtr(s32 cameraId);
@@ -79,7 +78,6 @@ void effUranokoMain(void* entry) {
     extern void effUranokoDisp(s32 cameraId, void* entry);
     extern u32 vec3_803029f0[];
     extern const char str_A_1_804288d0[];
-    extern f32 float_1_804288d4;
     extern f32 float_0p125_804288d8;
 
     void* work;

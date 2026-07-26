@@ -3,7 +3,6 @@
 extern void* wp;
 extern void DCInvalidateRange();
 extern void ICInvalidateRange();
-void* memset(void* ptr, int value, u32 size);
 void DCStoreRange(void* ptr, u32 size);
 void ARQPostRequest(void* request, u32 owner, s32 type, s32 priority, u32 source, u32 dest, u32 length, void* callback);
 s32 ARCheckInit(void);
@@ -40,11 +39,7 @@ void aramCallbackGarbage(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 aramMgrGarbage(void) {
-    extern void* wp;
-    extern void* __memAlloc(s32 heap, u32 size);
     extern void __memFree(s32 heap, void* ptr);
-    extern void ARQPostRequest(void* request, u32 owner, s32 type, s32 priority, u32 source, u32 dest, u32 length, void* callback);
-    extern void aramCallbackGarbage(void);
     void* head;
     void* entry;
     void* prev;

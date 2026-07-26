@@ -1,4 +1,7 @@
 #include "effect/eff_irekaeru.h"
+
+extern f32 float_1_804281ac;
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effIrekaeruEntry(s32 type, f32 x, f32 y, f32 z) {
@@ -6,7 +9,6 @@ void* effIrekaeruEntry(s32 type, f32 x, f32 y, f32 z) {
     extern void* __memAlloc(s32 heap, u32 size);
     extern void effIrekaeruMain(void);
     extern char str_Irekaeru_80300b50[];
-    extern f32 float_1_804281ac;
 
     void* effect;
     void* work;
@@ -50,7 +52,6 @@ void effIrekaeruMain(void* effect) {
     extern void effIrekaeruDisp(s32 cameraId, void* effect);
     extern char* eff_irekae_str_tbl[];
     extern char str_Z_1_804281a8[];
-    extern f32 float_1_804281ac;
     extern f32 float_0p75_804281b0;
 
     void* work;

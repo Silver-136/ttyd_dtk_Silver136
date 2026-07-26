@@ -1,9 +1,43 @@
 #include "event/evt_bero.h"
+#include "cam_road.h"
+#include "cam_shift.h"
+extern void* marioGetPtr(void);
+extern void* gp;
+extern f32 BeroSZ;
+extern f32 BeroEY;
+extern f32 BeroEZ;
+extern f32 BeroEX;
+extern s32 BeroEXEC;
+extern f32 BeroSY;
+extern f32 BeroSX;
+extern f32 float_0_804204e8;
+extern s32 BeroSW[];
+extern char* bero_id_filter(char* id);
+extern s32 BeroMarioGO;
+extern f32 BeroOX;
+extern s32 BeroNUM;
+extern f32 BeroOZ;
+extern f32 BeroOY;
+extern f32 float_20_804204f8;
+extern s32 BeroID[];
+extern f32 float_30_80420518;
+extern f32 BeroAT[];
+extern void camRoadMain(f64, f64, f64, f64, f64, f64, void*);
+extern f32 BeroPT[];
+extern s32 BeroNOWNUM;
+extern f32 float_360_804204e4;
+extern f32 float_neg1_80420508;
+extern u8 default_entevt;
+extern f32 float_6p2832_804204e0;
+
+
+extern s32 strncmp(const char*, const char*, u32);
+extern u32 strlen(const char*);
+extern void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z);
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry(EventEntry* event) {
-    extern void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z);
     s32* args = event->args;
     s32 x = evtGetValue(event, args[0]);
     s32 y = evtGetValue(event, args[1]);
@@ -17,8 +51,6 @@ s32 N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry(EventEntry* event)
 
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos) {
-    extern void* marioGetPtr(void);
-    extern void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z);
     void* mario = marioGetPtr();
 
     N_marioSetBottomlessRespawnPosOnBeroEntry(
@@ -29,42 +61,34 @@ USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos) {
 }
 
 s32 bero_get_BeroEXEC(void) {
-    extern s32 BeroEXEC;
     return BeroEXEC;
 }
 
 s32 bero_get_BeroNUM(void) {
-    extern s32 BeroNUM;
     return BeroNUM;
 }
 
 f32 bero_get_BeroSX(void) {
-    extern f32 BeroSX;
     return BeroSX;
 }
 
 f32 bero_get_BeroSY(void) {
-    extern f32 BeroSY;
     return BeroSY;
 }
 
 f32 bero_get_BeroSZ(void) {
-    extern f32 BeroSZ;
     return BeroSZ;
 }
 
 f32 bero_get_BeroEX(void) {
-    extern f32 BeroEX;
     return BeroEX;
 }
 
 f32 bero_get_BeroEY(void) {
-    extern f32 BeroEY;
     return BeroEY;
 }
 
 f32 bero_get_BeroEZ(void) {
-    extern f32 BeroEZ;
     return BeroEZ;
 }
 
@@ -74,10 +98,6 @@ void* bero_get_ptr(void) {
 }
 
 void bero_clear_Offset(void) {
-    extern f32 BeroOX;
-    extern f32 BeroOY;
-    extern f32 BeroOZ;
-    extern f32 float_0_804204e8;
     f32 zero = float_0_804204e8;
 
     BeroOX = zero;
@@ -122,7 +142,6 @@ s32 evt_bero_mapchange(void* pEvt, int param_2) {
 
 
 USER_FUNC(evt_bero_get_entername) {
-    extern void* gp;
 
     evtSetValue(event, event->args[0], (s32)gp + 0x11C);
     return EVT_RETURN_DONE;
@@ -130,7 +149,6 @@ USER_FUNC(evt_bero_get_entername) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_bero_exec_onoff) {
-    extern s32 BeroEXEC;
     s32* args = event->args;
     s32 clear = evtGetValue(event, args[0]);
     s32 flags = evtGetValue(event, args[1]);
@@ -148,14 +166,12 @@ USER_FUNC(evt_bero_exec_onoff) {
 
 
 USER_FUNC(evt_bero_exec_get) {
-    extern s32 BeroEXEC;
 
     evtSetValue(event, event->args[0], BeroEXEC);
     return EVT_RETURN_DONE;
 }
 
 u32 evt_bero_exec_wait(int param_1) {
-    extern s32 BeroEXEC;
     EventEntry* event = (EventEntry*)param_1;
     s32 ret = EVT_RETURN_DONE;
     s32 mask = evtGetValue(event, event->args[0]);
@@ -167,9 +183,6 @@ u32 evt_bero_exec_wait(int param_1) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_bero_get_start_position) {
-    extern f32 BeroSX;
-    extern f32 BeroSY;
-    extern f32 BeroSZ;
     s32* args = event->args;
 
     evtSetFloat(event, args[0], BeroSX);
@@ -185,9 +198,6 @@ USER_FUNC(evt_bero_get_start_position) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_bero_get_end_position) {
-    extern f32 BeroEX;
-    extern f32 BeroEY;
-    extern f32 BeroEZ;
     s32* args = event->args;
 
     evtSetFloat(event, args[0], BeroEX);
@@ -236,7 +246,6 @@ s32 evt_bero_get_info_length(void* pEvt) {
         s32 length;
     } BeroInfo;
     extern BeroInfo* BeroINFOARR[];
-    extern f32 float_30_80420518;
     extern f32 float_60_80420520;
     EventEntry* event = pEvt;
     s32* args = event->args;
@@ -310,14 +319,12 @@ USER_FUNC(evt_bero_get_info_nextarea) {
 
 
 USER_FUNC(evt_bero_set_now_number) {
-    extern s32 BeroNOWNUM;
 
     BeroNOWNUM = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_get_now_number) {
-    extern s32 BeroNOWNUM;
 
     evtSetValue(event, event->args[0], BeroNOWNUM);
     return EVT_RETURN_DONE;
@@ -330,9 +337,6 @@ s32 evt_bero_get_info(void* evt, s32 isFirstCall) {
         u8 data[0x38];
     } BeroInfo;
     extern BeroInfo* BeroINFOARR[];
-    extern s32 BeroSW[];
-    extern s32 BeroNUM;
-    extern s32 BeroEXEC;
     extern void* hitNameToPtr(const char* name);
     extern void mapErrorEntry(s32);
     EventEntry* event = evt;
@@ -376,13 +380,8 @@ s32 evt_bero_get_into_info(void* pEvt) {
         void* enterEvt;
     } BeroInfoLocal;
     extern s32 strcmp(const char*, const char*);
-    extern u32 strlen(const char*);
-    extern s32 strncmp(const char*, const char*, u32);
     extern BeroInfoLocal* BeroINFOARR[];
     extern BeroInfoLocal bero_null;
-    extern s32 BeroNUM;
-    extern void* gp;
-    extern u8 default_entevt;
     extern char float_0_8042051c;
     static const char* directions[8] = { "n", "ne", "e", "se", "s", "sw", "w", "nw" };
     u8* event = pEvt;
@@ -488,7 +487,6 @@ u32 evt_bero_read_mario_pera(int param_1, int param_2) {
 }
 
 s32 evt_bero_id_filter(int param_1) {
-    extern char* bero_id_filter(char* id);
     EventEntry* event = (EventEntry*)param_1;
     s32* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -511,11 +509,7 @@ s32 evt_bero_get_info_num(void* pEvt, s32 isFirstCall) {
         s32 length;
     } BeroInfoLocal;
     extern s32 evtGetValue(void*, s32);
-    extern u32 strlen(const char*);
-    extern s32 strncmp(const char*, const char*, u32);
     extern BeroInfoLocal* BeroINFOARR[];
-    extern s32 BeroSW[];
-    extern u8 default_entevt;
     extern u8 default_outevt;
     static const char* directions[8] = { "n", "ne", "e", "se", "s", "sw", "w", "nw" };
     u8* event = pEvt;
@@ -575,7 +569,6 @@ u8 bero_get_position_normal(void* pEvt) {
         f32 y;
         f32 z;
     } Vec;
-    extern void* marioGetPtr(void);
     extern s32 evtGetValue(void* event, s32 arg);
     extern f32 evtGetFloat(void* event, s32 arg);
     extern void hitObjGetPos(char* name, Vec* out);
@@ -584,22 +577,10 @@ u8 bero_get_position_normal(void* pEvt) {
     extern s32 hitCheckFilter(f32 x, f32 y, f32 z, f32 vx, f32 vy, f32 vz, s32 flags,
                               f32* outZ, f32* outY, f32* outX, f32* outDist,
                               void* outA, void* outB, void* outC);
-    extern void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z);
     extern void N_marioReloadMapOnBottomlessOn(void);
-    extern f32 BeroSX;
-    extern f32 BeroSY;
-    extern f32 BeroSZ;
-    extern f32 BeroEX;
-    extern f32 BeroEY;
-    extern f32 BeroEZ;
-    extern f32 float_0_804204e8;
-    extern f32 float_6p2832_804204e0;
-    extern f32 float_360_804204e4;
     extern f32 float_1E06_8042050c;
     extern f32 float_0p125_80420510;
     extern f32 float_180_80420514;
-    extern f32 float_30_80420518;
-    extern f32 float_neg1_80420508;
     void* mario = marioGetPtr();
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 type = evtGetValue(pEvt, args[0]);
@@ -695,9 +676,6 @@ void bero_get_position_pipe_sub(s32 side, u32 distance, char* hitName, s32 kind,
     extern void hitObjGetPos(char*, f32*);
     extern s32 hitCheckFilter(f32, f32, f32, f32, f32, f32, s32,
                               f32*, f32*, f32*, f32*, void*, void*, void*);
-    extern f32 float_0_804204e8;
-    extern f32 float_20_804204f8;
-    extern f32 float_neg1_80420508;
     extern f32 float_10000_80420504;
     f32 hitX = float_0_804204e8;
     f32 hitY = float_0_804204e8;
@@ -764,13 +742,6 @@ s32 bero_get_position_pipe_pure(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
     extern f32 evtGetFloat(void*, s32);
     extern void bero_get_position_pipe_sub(s32, s32, void*, s32, void*, void*);
-    extern void N_marioSetBottomlessRespawnPosOnBeroEntry(f32, f32, f32);
-    extern f32 BeroSX;
-    extern f32 BeroSY;
-    extern f32 BeroSZ;
-    extern f32 BeroEX;
-    extern f32 BeroEY;
-    extern f32 BeroEZ;
     extern f32 float_37p5_80420500;
     EventEntry* event;
     s32* args;
@@ -806,11 +777,6 @@ s32 bero_get_position_pipe2(s32 param) {
     extern s32 evtGetValue(void*, s32);
     extern f32 evtGetFloat(void*, s32);
     extern void bero_get_position_pipe_sub(s32, s32, void*, s32, void*, void*);
-    extern void camRoadReset(void);
-    extern void camShiftReset(void);
-    extern void camRoadMain(f64, f64, f64, f64, f64, f64, void*);
-    extern f32 BeroPT[];
-    extern f32 BeroAT[];
     extern f32 float_1_804204fc;
     s32* args;
     f32 start[3];
@@ -838,11 +804,9 @@ s32 bero_get_position_pipe2(s32 param) {
 }
 
 s32 bero_set_disp_position_pipe(s32 param) {
-    extern void* marioGetPtr(void);
     extern f32 float_3_804204ec;
     extern f32 float_15_804204f0;
     extern f32 float_13_804204f4;
-    extern f32 float_20_804204f8;
     u8* mario;
     s32 kind;
     u32 flags;
@@ -868,8 +832,6 @@ s32 bero_set_disp_position_pipe(s32 param) {
 }
 
 s32 evt_bero_switch_on(void* pEvt) {
-    extern char* bero_id_filter(char* id);
-    extern s32 BeroSW[];
     EventEntry* event = pEvt;
     s32* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -885,8 +847,6 @@ s32 evt_bero_switch_on(void* pEvt) {
     return EVT_RETURN_DONE;
 }
 s32 evt_bero_switch_off(void* pEvt) {
-    extern char* bero_id_filter(char* id);
-    extern s32 BeroSW[];
     EventEntry* event = pEvt;
     s32* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -903,7 +863,6 @@ s32 evt_bero_switch_off(void* pEvt) {
 }
 
 s32 evt_bero_get_number(void* pEvt) {
-    extern char* bero_id_filter(char* id);
     EventEntry* event = pEvt;
     s32* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -914,7 +873,6 @@ s32 evt_bero_get_number(void* pEvt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_bero_case_id_save(void* pEvt) {
-    extern s32 BeroID[];
     EventEntry* event = (EventEntry*)pEvt;
     s32* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -930,7 +888,6 @@ s32 evt_bero_case_id_save(void* pEvt) {
 #pragma use_lmw_stmw off
 
 s32 evt_bero_case_id_load(void* pEvt) {
-    extern s32 BeroID[];
     EventEntry* event = (EventEntry*)pEvt;
     s32* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -943,10 +900,6 @@ s32 evt_bero_case_id_load(void* pEvt) {
 
 
 USER_FUNC(evt_bero_disppos_save) {
-    extern void* marioGetPtr(void);
-    extern f32 BeroOX;
-    extern f32 BeroOY;
-    extern f32 BeroOZ;
 
     BeroOX = *(f32*)((s32)marioGetPtr() + 0x98);
     BeroOY = *(f32*)((s32)marioGetPtr() + 0x9C);
@@ -955,10 +908,6 @@ USER_FUNC(evt_bero_disppos_save) {
 }
 
 USER_FUNC(evt_bero_disppos_load) {
-    extern void* marioGetPtr(void);
-    extern f32 BeroOX;
-    extern f32 BeroOY;
-    extern f32 BeroOZ;
     f32 value;
 
     value = BeroOX;
@@ -978,17 +927,6 @@ s32 evt_bero_move_mario_speed(void* pEvt, s32 isFirstCall) {
     extern f32 reviseAngle(f32);
     extern double sin(double);
     extern double cos(double);
-    extern void* marioGetPtr(void);
-    extern void* gp;
-    extern f32 BeroSX;
-    extern f32 BeroSY;
-    extern f32 BeroSZ;
-    extern f32 BeroEX;
-    extern f32 BeroEY;
-    extern f32 BeroEZ;
-    extern f32 float_6p2832_804204e0;
-    extern f32 float_360_804204e4;
-    extern f32 float_0_804204e8;
     u8* event = pEvt;
     s32* args = *(s32**)(event + 0x18);
     u8* player;
@@ -1087,9 +1025,6 @@ s32 evt_bero_overwrite(void* pEvt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_bero_cam3d_change(int param_1) {
-    extern void* gp;
-    extern f32 BeroPT[];
-    extern f32 BeroAT[];
     extern void* camGetPtr(s32 camId);
     EventEntry* event = (EventEntry*)param_1;
     s32* args = event->args;
@@ -1124,8 +1059,6 @@ s32 evt_bero_cam3d_change(int param_1) {
 
 
 USER_FUNC(evt_bero_cam_shift_init) {
-    extern void camRoadReset(void);
-    extern void camShiftReset(void);
 
     camRoadReset();
     camShiftReset();
@@ -1133,21 +1066,18 @@ USER_FUNC(evt_bero_cam_shift_init) {
 }
 
 USER_FUNC(evt_bero_mario_go_init) {
-    extern s32 BeroMarioGO;
 
     BeroMarioGO = 0;
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_mario_go) {
-    extern s32 BeroMarioGO;
 
     BeroMarioGO = 1;
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_mario_go_wait) {
-    extern s32 BeroMarioGO;
 
     return BeroMarioGO ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
@@ -1171,11 +1101,8 @@ USER_FUNC(evt_bero_1stcheck) {
 
 
 s32 evt_camera_change_event_from_road(void) {
-    extern void* marioGetPtr(void);
     extern void* camGetPtr(s32);
     extern void camShiftMain(void*, void*, void*);
-    extern void camRoadMain(f64, f64, f64, f64, f64, f64, void*);
-    extern void* gp;
     u8 shiftWork[28];
     f32 road[9];
     u8* player;

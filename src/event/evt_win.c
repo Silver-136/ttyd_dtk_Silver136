@@ -26,29 +26,30 @@ void* _mapAlloc(void* heap, u32 size);
 void _mapFree(void* heap, void* ptr);
 void* memset(void* ptr, int value, u32 size);
 void* evtEntry(s32* script, s32 priority, s32 flags);
+extern char* msgSearch(s32 msgId);
+extern s32 winMgrAction(s32 winId);
+extern void FontDrawStart(void);
+extern void FontDrawEdge(void);
+extern void FontDrawColor(void* color);
+extern void FontDrawEdgeOff(void);
+extern void mapObjGetPos(void* obj, void* pos);
+extern void PSMTXTrans(void* mtx, f64 x, f64 y, f64 z);
+extern void iconNumberDispGx(void* mtx, s32 value, s32 unk, void* color);
+extern void* gp;
+extern f32 float_30_80423f48;
+extern s32 pouchGetCoin(void);
 
 /* fallback stub-fill: map=unk_8017b350 addr=0x8017b350 size=0x00000260 */
 int unk_8017b350(void) {
-    extern char* msgSearch(s32 msgId);
-    extern s32 winMgrAction(s32 winId);
-    extern void FontDrawStart(void);
-    extern void FontDrawEdge(void);
-    extern void FontDrawColor(void* color);
     extern s32 FontGetMessageWidth(char* msg);
     extern void FontDrawString(f64 x, f64 y, char* msg);
-    extern void FontDrawEdgeOff(void);
-    extern void mapObjGetPos(void* obj, void* pos);
     extern void* camGetPtr(s32 camId);
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
     extern void PSMTX44MultVec(void* mtx, void* src, void* dst);
-    extern void PSMTXTrans(void* mtx, f64 x, f64 y, f64 z);
     extern s32 strlen(char* str);
-    extern void iconNumberDispGx(void* mtx, s32 value, s32 unk, void* color);
-    extern void* gp;
     extern u32 dat_80423d0c;
     extern u32 dat_80423d10;
     extern f32 float_108_80423e34;
-    extern f32 float_30_80423f48;
     extern f32 float_0p5_80423eb8;
     extern f32 float_12_80423f54;
     extern char str_PCTd_80423f04[];
@@ -112,8 +113,6 @@ void unk_8017b330(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void unk_8017b2b0(void* pWin) {
-    extern s32 winMgrAction(s32 winId);
-    extern char* msgSearch(s32 msgId);
     extern void winMgrHelpDraw(void* pWin);
     s32 index;
     s32* itemTable;
@@ -137,14 +136,10 @@ void unk_8017b2b0(void* pWin) {
 
 /* fallback stub-fill: map=unk_8017b0c4 addr=0x8017b0c4 size=0x000001ec */
 int unk_8017b0c4(u32* pWin) {
-    extern void PSMTXTrans(void* mtx, f64 x, f64 y, f64 z);
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
     extern void PSMTXConcat(void* a, void* b, void* out);
     extern void iconDispGx2(void* mtx, s32 mode, u16 iconId);
-    extern void iconNumberDispGx(void* mtx, s32 value, s32 unk, void* color);
-    extern void* gp;
     extern f32 float_10_80423f44;
-    extern f32 float_30_80423f48;
     extern f32 float_36_80423ebc;
     extern f32 float_0_80423e58;
     extern f32 float_1p1_80423e88;
@@ -287,7 +282,6 @@ s32 evt_unitwin_free(void* pEvt, s32 force) {
 
 
 s32 evt_unitwin_selltable_setup(int pEvt) {
-    extern void mapObjGetPos(void* obj, void* pos);
     extern void mapObjFlagOn(void* obj, u32 flags);
     extern void iconEntry(char* name, u16 iconId);
     extern void iconSetPos(f32 x, f32 y, f32 z, char* name);
@@ -355,10 +349,6 @@ s32 evt_unitwin_selltable_setup(int pEvt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 unitwincoin_disp_onoff(void* pEvt) {
-    extern s32 evtGetValue(void* entry, s32 index);
-    extern void* pouchGetPtr(void);
-    extern s32 pouchGetCoin(void);
-    extern void* _wp;
     s32 onoff;
     void* work;
 
@@ -379,7 +369,6 @@ s32 unitwincoin_disp_onoff(void* pEvt) {
 
 
 u32 unitwincoin_wait(void) {
-    extern s32 pouchGetCoin(void);
     void* work;
     s32 coin;
     s32 stored;
@@ -589,25 +578,18 @@ s32 evt_unitwin_main_func(void* pEvt) {
 void evt_unitwin_disp_func(s32 cameraId, void* work) {
     typedef f32 Mtx[3][4];
     typedef struct Vec3 { f32 x, y, z; } Vec3;
-    extern s32 pouchGetCoin(void);
     extern s32 pouchGetStarPiece(void);
     extern s32 pouchGetSuperCoin(void);
-    extern void* pouchGetPtr(void);
     extern void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
     extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
     extern void PSMTXConcat(Mtx a, Mtx b, Mtx out);
     extern void windowDispGX_Waku_col(f32 x, f32 y, f32 width, f32 height,
                                       f32 radius, s32 style, void* color);
-    extern void FontDrawStart(void);
-    extern void FontDrawEdge(void);
-    extern void FontDrawEdgeOff(void);
-    extern void FontDrawColor(void* color);
     extern void FontDrawString(f32 x, f32 y, char* text);
     extern void FontDrawMessage(s32 x, s32 y, char* text);
     extern char* msgSearch(char* key);
     extern u32 strlen(const char* text);
     extern u8 itemDataTable[];
-    extern void* gp;
     extern void* lotteryGetPtr(void);
     extern s32 sprintf(char* buffer, const char* format, ...);
     extern void iconDispGx2(Mtx m, s32 alpha, s32 icon);
@@ -807,8 +789,6 @@ s32 set_new_goods_list(void* pEvt) {
 #pragma use_lmw_stmw off
 
 s32 unitwin_get_work_ptr(void* pEvt) {
-    extern s32 evtSetValue(void* entry, s32 index, s32 value);
-    extern void* _wp;
 
     evtSetValue(pEvt, **(s32**)((s32)pEvt + 0x18), (s32)_wp);
     return 2;
@@ -817,9 +797,6 @@ s32 unitwin_get_work_ptr(void* pEvt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 unitwin_getpartylank(void* pEvt) {
-    extern void* pouchGetPtr(void);
-    extern s32 evtGetValue(void* entry, s32 index);
-    extern s32 evtSetValue(void* entry, s32 index, s32 value);
     s32* args;
     void* pouch;
     void* partyData;

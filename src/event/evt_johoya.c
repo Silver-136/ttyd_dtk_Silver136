@@ -1,6 +1,10 @@
 #include "event/evt_johoya.h"
 #include "event/evt_cmd.h"
 
+extern int sprintf(char* str, const char* format, ...);
+extern char* msgSearch(char* key);
+extern int strcmp(const char* s1, const char* s2);
+
 typedef struct JohoyaEntry {
     u16 flags;
     u8 pad2[0xA];
@@ -21,7 +25,6 @@ extern char* evtNoLabel[];
 extern void* mapalloc_base_ptr;
 JohoyaData _jdt;
 
-void* memset(void* dst, int value, u32 size);
 s32 johoya_set(void* flags, s32 value, s32 set);
 void* _mapAlloc(void* heap, u32 size);
 int johoya_data_make(s32 param_1, u32 param_2);
@@ -145,8 +148,6 @@ USER_FUNC(johoya_keti_newjoho_check) {
 
 
 s32 johoya_keti_newjoho_makelabel(int param_1) {
-    extern int sprintf(char* str, const char* format, ...);
-    extern char* msgSearch(char* key);
     extern u32 strlen(const char* str);
     EventEntry* event = (EventEntry*)param_1;
     s32* args = event->args;
@@ -278,7 +279,6 @@ USER_FUNC(johoya_keti_oldspeak_check) {
 
 
 s32 johoya_keti_oldspeak_makelabel(int param_1) {
-    extern int sprintf(char* str, const char* format, ...);
     EventEntry* event = (EventEntry*)param_1;
     s32* args = event->args;
     s32 target = evtGetValue(event, args[0]);
@@ -344,9 +344,6 @@ s32 johoya_luigi_newjoho_setreadflag(void) {
 
 
 int johoya_data_make(s32 param_1, u32 param_2) {
-    extern int sprintf(char* str, const char* format, ...);
-    extern int strcmp(const char* s1, const char* s2);
-    extern char* msgSearch(char* key);
     extern s32 _ismbblead(s32 c);
     char label[64];
     char key[76];
@@ -554,7 +551,6 @@ s32 johoya_get(void* flags, s16 value) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 int search_evt_no(char* label) {
-    extern int strcmp(const char* s1, const char* s2);
     char** table = evtNoLabel;
     s32 i;
 

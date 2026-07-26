@@ -1,5 +1,33 @@
 #include "effect/eff_starstone.h"
 
+extern void* camGetPtr(s32);
+extern void mapSetMaterialFog(void);
+extern void GXSetArray(s32, void*, s32);
+extern void GXSetNumChans(s32);
+extern void GXSetChanMatColor(s32, void*);
+extern void GXSetNumTexGens(s32);
+extern void GXSetNumTevStages(s32);
+extern void GXSetCurrentMtx(s32);
+extern void GXSetZCompLoc(s32);
+extern void GXSetCullMode(s32);
+extern void GXClearVtxDesc(void);
+
+extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+extern void GXSetTevOrder(s32, s32, s32, s32);
+extern void GXSetTevOp(s32, s32);
+extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+extern void GXSetTevColor(s32, void*);
+extern void PSMTXConcat(void*, void*, void*);
+extern void GXSetBlendMode(s32, s32, s32, s32);
+extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
+extern void GXSetZMode(s32, s32, s32);
+extern void GXSetVtxDesc(s32, s32);
+extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+extern void GXCallDisplayList(void*, u32);
+
 /* stub-fill: effStarStoneEntry | missing_definition | ghidra_signature */
 u8 effStarStoneEntry(s64 xPos, s64 yPos, s64 zPos, s64 param_4, s32 param_5) {
     typedef struct GXColorLocal {
@@ -202,36 +230,10 @@ u8 effStarStoneMain(s32 effEntry) {
 /* stub-fill: effStarStoneDisp_1 | prototype_only | source_prototype */
 void effStarStoneDisp_1(s32 cameraId, s32 effectAddress) {
     typedef f32 Mtx[3][4];
-    extern void* camGetPtr(s32);
-    extern void mapSetMaterialFog(void);
-    extern void GXSetArray(s32, void*, s32);
-    extern void GXSetNumChans(s32);
-    extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);
-    extern void GXSetChanMatColor(s32, void*);
-    extern void GXSetNumTexGens(s32);
-    extern void GXSetNumTevStages(s32);
-    extern void GXSetTevOrder(s32,s32,s32,s32);
-    extern void GXSetTevOp(s32,s32);
-    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);
-    extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
-    extern void GXSetTevColorIn(s32,s32,s32,s32,s32);
-    extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
-    extern void GXSetTevColor(s32,void*);
     extern void PSMTXTrans(Mtx,f32,f32,f32);
     extern void PSMTXScale(Mtx,f32,f32,f32);
     extern void PSMTXRotRad(Mtx,f32,char);
-    extern void PSMTXConcat(void*,void*,void*);
     extern void GXLoadPosMtxImm(Mtx,s32);
-    extern void GXSetCurrentMtx(s32);
-    extern void GXSetBlendMode(s32,s32,s32,s32);
-    extern void GXSetZCompLoc(s32);
-    extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);
-    extern void GXSetZMode(s32,s32,s32);
-    extern void GXSetCullMode(s32);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32,s32);
-    extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
-    extern void GXCallDisplayList(void*,u32);
     extern void* diamond_1_dl_0_tbl[];
     extern void* diamond_1_dl_1_tbl[];
     extern u8 diamond_1_dl_0_size_tbl[];
@@ -323,36 +325,10 @@ void effStarStoneDisp_1(s32 cameraId, s32 effectAddress) {
 /* stub-fill: effStarStoneDisp_2 | prototype_only | source_prototype */
 void effStarStoneDisp_2(s32 cameraId, s32 effectAddress) {
     typedef f32 Mtx[3][4];
-    extern void* camGetPtr(s32);
-    extern void mapSetMaterialFog(void);
-    extern void GXSetArray(s32, void*, s32);
-    extern void GXSetNumChans(s32);
-    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
-    extern void GXSetChanMatColor(s32, void*);
-    extern void GXSetNumTexGens(s32);
-    extern void GXSetNumTevStages(s32);
-    extern void GXSetTevOrder(s32, s32, s32, s32);
-    extern void GXSetTevOp(s32, s32);
-    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
-    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
-    extern void GXSetTevColor(s32, void*);
-    extern void GXSetBlendMode(s32, s32, s32, s32);
-    extern void GXSetZCompLoc(s32);
-    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
-    extern void GXSetZMode(s32, s32, s32);
-    extern void GXSetCullMode(s32);
     extern void PSMTXTrans(Mtx, f32, f32, f32);
     extern void PSMTXScale(Mtx, f32, f32, f32);
     extern void PSMTXRotRad(Mtx, f32, char);
-    extern void PSMTXConcat(void*, void*, void*);
     extern void GXLoadPosMtxImm(Mtx, s32);
-    extern void GXSetCurrentMtx(s32);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32, s32);
-    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
-    extern void GXCallDisplayList(void*, u32);
     extern void effGetTexObj(s32, void*);
     extern void GXLoadTexObj(void*, s32);
     extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);

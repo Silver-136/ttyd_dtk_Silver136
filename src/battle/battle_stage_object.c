@@ -1,9 +1,9 @@
 #include "battle/battle_stage_object.h"
+#include "battle/battle_audience.h"
+#include "manager/evtmgr.h"
 
 extern void* _battleWorkPointer;
-void BattleAudience_Case_HaikeiSet(void);
 s32 strcmp(const char*, const char*);
-void evtDeleteID(s32 id);
 s32 evtCheckID(s32 id);
 void* evtEntry(void* script, s32 priority, s32 flags);
 s32 evtGetValue(void* event, s32 value);
@@ -349,7 +349,6 @@ void BattleStage_DestroyB(void) {
 u32 _set_mobj_rotate_x(void* event, s32 isFirstCall) {
     extern void* _battleWorkPointer;
     extern s32 evtGetValue(void* event, s32 value);
-    extern void _mobj_shake_main(void* stageObject);
     extern void psndSFXOn_3D(char* name, void* pos);
     extern f32 intpl_sub(s32 type, f32 start, f32 end, s32 current, s32 duration);
     extern char vec3_802f42b8[];

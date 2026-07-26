@@ -1,5 +1,7 @@
 #include "driver/msgdrv.h"
 
+#include "driver/camdrv.h"
+
 void* msgWork;
 extern void* gp;
 
@@ -10,6 +12,24 @@ void GXSetZMode(s32 enable, s32 func, s32 update);
 void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
 void GXSetZCompLoc(s32 beforeTex);
 void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+extern s32 strcmp(const char* a, const char* b);
+extern u32 keyGetButtonTrg(s32 pad);
+extern void msgWindow_Disp(s32 camera, void* win);
+extern void GXSetFog(s32 type, f32 startz, f32 endz, f32 nearz, f32 farz, void* color);
+extern u16 kanjiGetWidth(u32 code);
+extern void* smartAlloc(void* ptr, s32 flag);
+extern void iconDispGxAlpha(f64 x, void* icon, s32 id, u16 flags, u8 alpha);
+extern void* __memAlloc(s32 heap, u32 size);
+extern void animPoseMain(s32 poseId);
+extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 order);
+s32 msgMain(int* work);
+u8 msgAnalize(void* smart, s32 textAddress);
+extern u32 strlen(const char* text);
+extern s32 windowDelete(void* window);
+extern void npcSetStayPose(char* name);
+extern void BtlUnit_ChangeStayAnim(s32 unit);
+extern u32 psndSFXOn(s32 id);
+u8 msgDisp(f64 baseX, f64 baseY, s32* smart, u8 alpha);
 void msgDispKeyWait_render(void* anim);
 void msgLoad(char* roomName, s32 index);
 
@@ -57,12 +77,9 @@ void msgLoad(char* roomName, s32 index) {
     extern u32 DVDMgrGetLength(void*);
     extern void DVDMgrRead(void*, void*, u32, u32);
     extern void DVDMgrClose(void*);
-    extern void* __memAlloc(s32, u32);
     extern void* _mapAlloc(void*, u32);
     extern void* mapalloc_base_ptr;
-    extern u32 strlen(const char*);
     extern void smartFree(void*);
-    extern void* smartAlloc(void*, s32);
     extern void qsort(void*, u32, u32, void*);
     extern s32 msg_compare(s32*, s32*);
     extern char* msgSortDvdData;
@@ -145,8 +162,6 @@ void msgLoad(char* roomName, s32 index) {
 }
 
 s32 msgMain(int* param_1) {
-    extern u32 keyGetButtonTrg(s32 pad);
-    extern u32 psndSFXOn(s32 id);
     extern u32 psndSFXOnVol(s32 id, s8 volume);
     extern void* npcNameToPtr(char* name);
     extern void animPoseSetPaperAnimGroup(s32 poseId, char* name, s32 flags);
@@ -369,14 +384,11 @@ u8 msgDisp(f64 baseX, f64 baseY, s32* smart, u8 alpha) {
     extern void FontDrawRainbowColor(void);
     extern void FontDrawRainbowColorOff(void);
     extern void FontDrawColorIDX(s32);
-    extern u16 kanjiGetWidth(u32);
     extern s32 irand(s32);
-    extern void iconDispGxAlpha(f64, void*, s32, u16, u8);
     extern void PSMTXIdentity(void*);
     extern void PSMTXTrans(void*, f32, f32, f32);
     extern void PSMTXTransApply(void*, void*, f32, f32, f32);
     extern void PSMTXScaleApply(void*, void*, f32, f32, f32);
-    extern void animPoseMain(s32);
     extern void animPoseDrawMtx(s32, void*, s32, f32, f32);
     extern double sin(double);
     extern double cos(double);
@@ -528,8 +540,6 @@ void msgDispKeyWait_render(void* anim) {
 u8 msgAnalize(void* smart, s32 textAddress) {
     extern u16 kanjiSearch(u32);
     extern u16 hankakuSearch(u32);
-    extern u16 kanjiGetWidth(u32);
-    extern s32 strcmp(const char*, const char*);
     extern s32 sscanf(const char*, const char*, ...);
     extern u32 dat_804205ec;
     extern u32 dat_804205f0;
@@ -777,7 +787,6 @@ void* L_msgGetWork(void) {
 
 s32 msg_compare(s32* a, s32* b) {
     extern char* msgSortDvdData;
-    extern s32 strcmp(const char*, const char*);
     s32 result = strcmp(msgSortDvdData + *a, msgSortDvdData + *b);
 
     if (result > 0) {
@@ -789,7 +798,6 @@ s32 msg_compare(s32* a, s32* b) {
 void* msgSearch(void* msgId) {
     extern void* msgWork;
     extern void* gp;
-    extern s32 strcmp(const char*, const char*);
     extern char* ErrMessage[];
     u8* files = (u8*)&msgWork;
     char* key = msgId;
@@ -879,7 +887,6 @@ s32 msgIconStr2ID(char* param_1) {
         s32 id;
     } MsgIcon;
     extern MsgIcon msgIcon[];
-    extern s32 strcmp(const char* a, const char* b);
     register MsgIcon* icon = msgIcon;
     u32 i;
 
@@ -891,15 +898,10 @@ s32 msgIconStr2ID(char* param_1) {
     return -1;
 }
 
-int msgWindow_Entry(char* text, s32 param_2, short kind) {
+s32 msgWindow_Entry(char* text, s32 param_2, short kind) {
     extern s32 windowEntry(short kind);
-    extern void* windowGetPointer(s32 id);
-    extern u32 strlen(char* str);
-    extern void* __memAlloc(s32 heap, u32 size);
     extern char* strcpy(char* dst, char* src);
-    extern void* smartAlloc(void* ptr, s32 flag);
     extern void* memset(void* dst, s32 value, u32 size);
-    extern void msgAnalize(void* smart, void* text);
     extern void __memFree(s32 heap, void* ptr);
     extern void* getWakuTexObj(s32 id);
     extern u32 GXGetTexObjWidth(void* obj);
@@ -950,7 +952,7 @@ int msgWindow_Entry(char* text, s32 param_2, short kind) {
     *(s32*)(work + 0xF23C) = 0x19;
     *(s32*)(work + 0xF040) = 0;
 
-    msgAnalize(smart, copy);
+    msgAnalize(smart, (s32)copy);
     if (*(s32*)((s32)win + 8) == 1) {
         *(u32*)(work + 4) |= 0x200;
     }
@@ -1015,15 +1017,13 @@ void msgWindow_Delete(void* win) {
 }
 
 void msgWindow_Add(char* text, s32 id) {
-    extern void* windowGetPointer(s32);
     extern void* gp;
-    extern void msgAnalize(void*, void*);
     u8* window = windowGetPointer(id);
     void* smart = *(void**)(window + 0x28);
     u8* work = *(u8**)smart;
 
     *(u64*)(work + 0x30) = *(u64*)((u8*)gp + 0x38);
-    msgAnalize(smart, text);
+    msgAnalize(smart, (s32)text);
     *(u16*)window = 1;
     *(u16*)(window + 2) |= 2;
 }
@@ -1047,7 +1047,6 @@ void msgWindow_Continue(s32 id) {
 }
 
 void msgWindow_Repeat(s32 id) {
-    extern void* windowGetPointer(s32);
     extern void* gp;
     u8* window = windowGetPointer(id);
     u8* work = **(u8***)(window + 0x28);
@@ -1064,9 +1063,6 @@ void msgWindow_Repeat(s32 id) {
 }
 
 void msgWindow_ForceClose(s32 id) {
-    extern s32 strcmp(const char* a, const char* b);
-    extern void BtlUnit_ChangeStayAnim(void* unit);
-    extern void npcSetStayPose(void* npc);
     s32 i;
     void* win;
     void* obj;
@@ -1079,9 +1075,9 @@ void msgWindow_ForceClose(s32 id) {
                 *(u16*)win = 7;
                 obj = *(void**)(*(void**)((s32)win + 0x28));
                 if (*(u32*)((s32)obj + 4) & 8) {
-                    BtlUnit_ChangeStayAnim(*(void**)((s32)obj + 0xF224));
+                    BtlUnit_ChangeStayAnim((s32)*(void**)((s32)obj + 0xF224));
                 } else {
-                    npcSetStayPose((void*)((s32)obj + 0xF204));
+                    npcSetStayPose((char*)((s32)obj + 0xF204));
                 }
             }
         }
@@ -1090,15 +1086,7 @@ void msgWindow_ForceClose(s32 id) {
 
 u8 msgWindow_Main(void* pWindow) {
     extern void npcSetTalkPose(char* name);
-    extern void npcSetStayPose(char* name);
     extern void BtlUnit_ChangeTalkAnim(s32 unit);
-    extern void BtlUnit_ChangeStayAnim(s32 unit);
-    extern u32 keyGetButtonTrg(s32 pad);
-    extern u32 psndSFXOn(s32 id);
-    extern void windowDelete(s32 id);
-    extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 order);
-    extern s32 msgMain(int* work);
-    extern void msgWindow_Disp(s32 camera, void* win);
     extern void* gp;
     extern f32 float_0p6_8042065c;
     extern f32 float_400_8042061c;
@@ -1211,7 +1199,7 @@ u8 msgWindow_Main(void* pWindow) {
             W_ACTION = 8;
         case 8:
             if (W_ALPHA == 0) {
-                windowDelete((s32)pWindow);
+                windowDelete(pWindow);
                 return 0;
             }
             W_ALPHA = 255 - (s16)((ELAPSED_MS() * 255) / 200);
@@ -1298,12 +1286,6 @@ u8 msgWindow_Main(void* pWindow) {
 
 void msgWindow_Clear_Main(void* win) {
     extern void* gp;
-    extern s32 msgMain(void*);
-    extern void windowDelete(void*);
-    extern void npcSetStayPose(void*);
-    extern void BtlUnit_ChangeStayAnim(void*);
-    extern void dispEntry(s32, s32, void*, void*, f32);
-    extern void msgWindow_Disp(s32, void*);
     extern f32 float_400_8042061c;
 
     u8* window = win;
@@ -1353,7 +1335,7 @@ active_main:
         goto display;
     }
 
-    result = msgMain(*(void**)(window + 0x28));
+    result = msgMain((int*)*(void**)(window + 0x28));
     if (result == 2) {
         goto result_two;
     }
@@ -1373,9 +1355,9 @@ result_zero:
     *(u64*)(window + 0x20) = *(u64*)((u8*)gp + 0x38);
     work = **(u8***)(window + 0x28);
     if ((*(u32*)(work + 4) & 8) != 0) {
-        BtlUnit_ChangeStayAnim(*(void**)(work + 0xF224));
+        BtlUnit_ChangeStayAnim((s32)*(void**)(work + 0xF224));
     } else {
-        npcSetStayPose(work + 0xF204);
+        npcSetStayPose((char*)(work + 0xF204));
     }
     goto display;
 
@@ -1384,9 +1366,9 @@ result_positive:
     *(u16*)(window + 2) &= (u16)~2;
     work = **(u8***)(window + 0x28);
     if ((*(u32*)(work + 4) & 8) != 0) {
-        BtlUnit_ChangeStayAnim(*(void**)(work + 0xF224));
+        BtlUnit_ChangeStayAnim((s32)*(void**)(work + 0xF224));
     } else {
-        npcSetStayPose(work + 0xF204);
+        npcSetStayPose((char*)(work + 0xF204));
     }
     goto display;
 
@@ -1413,15 +1395,11 @@ display:
 
 void msgWindow_Disp(s32 unused, void* win) {
     extern void* camGetCurPtr(void);
-    extern void GXSetFog(s32 type, f32 startz, f32 endz, f32 nearz, f32 farz, void* color);
-    extern void getScreenPoint(void* src, f32* dst);
     extern f32 intplGetValue(s32 type, s32 currStep, s32 steps, f32 start, f32 end);
     extern void windowDispGX_Message(f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, s32 type, s32 flagsArg, u8 alphaArg);
     extern void windowDispGX_Kanban(f32 x, f32 y, f32 w, f32 h, s32 type, u8 alphaArg);
     extern void windowDispGX_System(f32 x, f32 y, f32 w, f32 h, s32 type, u8 alphaArg);
     extern void GXSetScissor(u32 x, u32 y, u32 w, u32 h);
-    extern u8 msgDisp();
-    extern void animPoseMain(s32 poseId);
     extern void animPoseDraw(s32 poseId, double x, double y, double z, double rot, double scale, s32 modeArg);
     extern u32 unk_80429580;
     extern void* msgw;
@@ -1660,13 +1638,9 @@ void msgWindow_Disp(s32 unused, void* win) {
 }
 
 void selectWindow_Main(void* win) {
-    extern s32 msgMain(void* work);
-    extern u32 keyGetButtonTrg(s32 pad);
     extern u32 keyGetDirTrg(s32 pad);
     extern u32 keyGetButtonRep(s32 pad);
     extern u32 keyGetDirRep(s32 pad);
-    extern void psndSFXOn(u32 id);
-    extern void dispEntry(s32 camId, s32 order, void* callback, void* param, f32 prio);
     extern u8 selectWindow_Disp(s32 param_1, int param_2);
     extern f32 float_400_8042061c;
     void* smart = *(void**)((s32)win + 0x28);
@@ -1674,7 +1648,7 @@ void selectWindow_Main(void* win) {
     s8 oldSelect;
     s8 value;
 
-    msgMain(smart);
+    msgMain((int*)smart);
 
     switch (*(u16*)win) {
         case 5:
@@ -1751,10 +1725,7 @@ void selectWindow_Main(void* win) {
 
 void selectWindow_Disp(s32 unused, void* win) {
     typedef struct VecLocal { f32 x, y, z; } VecLocal;
-    extern void GXSetFog(s32, f32, f32, f32, f32, void*);
     extern void windowDispGX_Waku_col(f32, f32, f32, f32, f32, s32, void*);
-    extern u8 msgDisp(f64, f64, s32*, u8);
-    extern void iconDispGxAlpha(f64, void*, s32, u16, u8);
     extern u32 unk_80429584;
     extern u32 dat_804205fc;
     extern f32 float_0_80420600;

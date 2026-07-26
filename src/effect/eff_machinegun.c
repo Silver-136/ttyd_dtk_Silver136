@@ -3,7 +3,6 @@
 
 void* effEntry(void);
 void* __memAlloc(s32 heap, u32 size);
-void effMachinegunMain(void* entry);
 void effMachinegunDisp(void* camera, void* entry);
 void effDelete(void* entry);
 f32 dispCalcZ(Vec* pos);

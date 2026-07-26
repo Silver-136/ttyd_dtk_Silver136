@@ -1,4 +1,9 @@
 #include "battle/battle_mario.h"
+#include "battle/battle_audience.h"
+#include "effect/eff_energy.h"
+#include "effect/eff_fire.h"
+#include "effect/eff_majinai.h"
+#include "effect/n64/eff_kameki_tornade_n64.h"
 extern void* _battleWorkPointer;
 
 extern s32 evtGetValue(void* evt, s32 value);
@@ -15,11 +20,9 @@ extern void* BtlUnit_GetPartsPtr(void* unit, s32 partsId);
 extern void BtlUnit_GetPartsPos(void* part, f32* x, f32* y, f32* z);
 extern s32 BtlUnit_GetHeight(void* unit);
 extern void BtlUnit_SetPos(void* unit, f32 x, f32 y, f32 z);
-extern void* effFireEntry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 duration);
 extern void effDelete(void* eff);
 extern void* effWhirlwindN64Entry(f32 height, s32 flip, s32 unk, s32 duration);
 extern void* effHibashiraEntry(f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z2, f32 scale, s32 unk0, s32 unk1, s32 duration);
-extern void* effMajinaiEntry(f32 x, f32 y, f32 z, s32 type);
 extern void effSetName(void* eff, const char* name);
 extern void* effNameToPtr(const char* name);
 
@@ -27,7 +30,6 @@ extern void* pouchGetPtr(void);
 
 extern void BattleMajinaiDone(void);
 extern void BattleMajinaiEndCheck(void);
-extern void BattleAudience_Case_JumpNewRecord(void);
 extern const f32 vec3_802ef5d8[3];
 extern const char str_mjef_coinup_802ef624[];
 
@@ -75,7 +77,6 @@ s32 _whirlwind_effect(void* evt) {
 }
 
 s32 _jump_star_effect(void* evt, s32 first) {
-    extern void* effEnergyEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 field10, f32 field20, f32 field18);
     extern f32 float_neg10_804223c4;
     extern f32 float_10_804223d0;
     extern f32 float_0p1_804223dc;
@@ -183,7 +184,6 @@ s32 _wait_jyabara_hit_iron_frame(void* evt) {
 
 
 s32 _tatsumaki_effect(void* evt, s32 first) {
-    extern void* effKamekiTornadeN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale);
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
     extern f32 sinfd(f32 angle);
     extern f32 cosfd(f32 angle);
@@ -339,7 +339,6 @@ s32 _hammer_star_effect(void* evt, s32 first) {
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
     extern f32 sinfd(f32 angle);
     extern f32 cosfd(f32 angle);
-    extern void* effEnergyEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 field10, f32 field20, f32 field18);
     extern f32 float_210_804223bc;
     extern f32 float_420_804223c0;
     extern f32 float_neg10_804223c4;

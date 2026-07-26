@@ -1,4 +1,7 @@
 #include "effect/n64/eff_fire_spark_n64.h"
+extern f32 float_0_80425220;
+extern f32 float_0p5_80425224;
+
 void* effFireSparkN64Entry(f32 x, f32 y, f32 z, f32 width, f32 height, f32 unkScale,
                            f32 velScaleA, f32 velScaleB, s32 type, s32 count, s32 duration) {
     extern void* effEntry(void);
@@ -6,7 +9,6 @@ void* effFireSparkN64Entry(f32 x, f32 y, f32 z, f32 width, f32 height, f32 unkSc
     extern void effFireSparkMain(void* effect);
     extern char str_FireSparkN64_802faef0[];
     extern f32 float_30_80425238;
-    extern f32 float_0p5_80425224;
 
     void* entry;
     u8* work;
@@ -65,8 +67,6 @@ void effFireSparkMain(void* effect) {
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
     extern void effFireSparkDisp(s32 cameraId, void* effect);
     extern f32 scale_data[];
-    extern f32 float_0_80425220;
-    extern f32 float_0p5_80425224;
     extern f32 float_0p05_80425228;
     extern f32 float_0p1_8042522c;
     extern f32 float_0p3_80425230;
@@ -195,7 +195,6 @@ void effFireSparkDisp(s32 cameraId, void* effect) {
     extern f32 float_deg2rad_80425214;
     extern f32 float_0p03125_80425218;
     extern f32 float_0p0078125_8042521c;
-    extern f32 float_0_80425220;
     extern char stg__s_v[];
 
     u8 texObj[0x20];

@@ -1,12 +1,13 @@
 #include "effect/eff_mist2.h"
 
+extern s32 irand(s32);
+extern f64 sin(f64);
+extern f64 cos(f64);
+
 /* stub-fill: effMist2Entry | missing_definition | ghidra_signature */
 void* effMist2Entry(f32 x, f32 y, f32 z, f32 radius, f32 height, s32 type, s32 lifetime) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32, u32);
-    extern s32 irand(s32);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern void effMist2Main(void*);
     extern char str_Mist2_80428270[];
 
@@ -67,9 +68,6 @@ void* effMist2Entry(f32 x, f32 y, f32 z, f32 radius, f32 height, s32 type, s32 l
 /* stub-fill: effMist2Main | missing_definition | ghidra_signature */
 void effMist2Main(void* effect) {
     extern void effDelete(void*);
-    extern s32 irand(s32);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern f32 dispCalcZ(f32*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effMist2Disp(s32, void*);

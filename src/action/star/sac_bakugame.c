@@ -1,16 +1,22 @@
 #include "action/star/sac_bakugame.h"
+#include "battle/battle.h"
 #include "event/evt_cmd.h"
 
 void bakuGameDispStar(void);
+void bakuGameDecideButton(s32 flag);
+s32 bakuGameAudienceCanThrowPos(s32 pos);
+s32 bakuGamePartyExist(void* unit);
+void bakuGameDisp2D(void);
+void bakuGameDisp3D(void);
 
-extern void* _battleWorkPointer;
 extern char str_c_star_bom_802ff6c0[];
+extern f32 float_0_80427b70;
+extern f32 float_1_80427b60;
+extern f32 float_neg1_80427b5c;
+extern f32 float_100_80427b78;
+extern f32 float_90_80427b7c;
 const char str_Z_1_80427c20[] = "Z_1";
 
-void* memset(void* dst, int value, u32 size);
-void* BattleGetUnitPtr(void* battleWork, s32 unitId);
-s32 BtlUnit_CheckStatus(void* unit, s32 status);
-s32 BtlUnit_CanActStatus(void* unit);
 s32 BtlUnit_GetBodyPartsId(void* unit);
 void* BtlUnit_GetPartsPtr(void* unit, s32 partsId);
 void btlDispPoseAnime(void* part);
@@ -45,13 +51,9 @@ s32 main_star(void) {
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, s32 param, f32 order);
-    extern void* _battleWorkPointer;
-    extern f32 float_0_80427b70;
     extern f32 float_neg1000_80427bd8;
-    extern f32 float_1_80427b60;
     extern f32 float_37_80427c24;
     extern f32 float_50_80427bd4;
-    extern f32 float_neg1_80427b5c;
     extern f32 float_2_80427bb4;
     extern f32 float_2160_80427c28;
     extern f32 float_300_80427b9c;
@@ -207,7 +209,6 @@ USER_FUNC(bakuGameDecideWeapon) {
     extern void* GetBakuGamePtr(void);
     extern void* memcpy(void* dst, const void* src, u32 size);
     extern u8 weapon[0xC0];
-    extern f32 float_100_80427b78;
 
     s32* args;
     u8* weaponWork;
@@ -252,16 +253,12 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
     extern void* g_BattleWork;
     extern s32 BattleTransID(void*, s32);
     extern void* BattleGetUnitPtr(void*, s32);
-    extern void bakuGameDecideButton(s32);
-    extern s32 bakuGameAudienceCanThrowPos(s32);
     extern s32 BattleAudience_GetWaiting(s32);
     extern s32 irand(s32);
     extern void memcpy(void*, void*, u32);
     extern void animPoseRelease(s32);
     extern void animPoseMain(void);
     extern void dispEntry(s32, s32, void*, void*, f32);
-    extern void bakuGameDisp2D(void);
-    extern void bakuGameDisp3D(void);
     extern void evtSetValue(void*, s32, s32);
     extern void evtSetFloat(void*, s32, f32);
     extern u8 weapon[];
@@ -429,9 +426,7 @@ s32 bakuGameHeihoReturn(s32 unused, s32 reset) {
     extern void* GetBakuGamePtr(void);
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
     extern void dispEntry(s32 cameraId, s32 layer, void* func, s32 param, f32 z);
-    extern void bakuGameDisp3D(void);
     extern u32 vec3_802ff4f8[3];
-    extern f32 float_0_80427b70;
     extern f32 float_neg2_80427b8c;
 
     void* work = GetBakuGamePtr();
@@ -578,7 +573,6 @@ void bakuGameMarioSurpriseReset(void* mario, void* party) {
 }
 
 void bakuGameEnemySurpriseReset(void) {
-    extern void* _battleWorkPointer;
     extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
     extern s32 BtlUnit_CheckStatus(void* unit, s32 status);
     extern s32 BtlUnit_GetBodyPartsId(void* unit);
@@ -602,8 +596,6 @@ void bakuGameEnemySurpriseReset(void) {
 void bakuGameAudienceSurpriseReset(void) {
     extern void* BattleAudienceGetPtr(s32 id);
     extern s32 BattleAudience_GetExist(s32 id);
-    extern s32 bakuGameAudienceCanThrowPos(s32 pos);
-    extern f32 float_90_80427b7c;
 
     s32 i;
     void* audience;
@@ -625,7 +617,6 @@ void bakuGameAudienceSurpriseReset(void) {
 
 void bakuGameMarioSurprise(void* mario, void* party) {
     extern void BtlUnit_SetBodyAnim(void* unit, const char* name);
-    extern s32 bakuGamePartyExist(void* unit);
     extern const char str_btl_wn_sac_bakugame_802ff3a0[];
     extern const char str_M_N_7_80427b84[6];
 
@@ -676,10 +667,8 @@ void bakuGameAudienceSurprise(void) {
     extern void* BattleAudienceGetPtr(s32 id);
     extern s32 BattleAudience_GetWaiting(s32 id);
     extern void BattleAudience_SetAnim(s32 id, s32 anim, s32 pose);
-    extern s32 bakuGameAudienceCanThrowPos(s32 pos);
     extern s32 irand(s32 max);
     extern void* memset(void* dst, int value, u32 size);
-    extern f32 float_90_80427b7c;
     extern f32 float_270_80427b80;
 
     s32 i;
@@ -709,11 +698,9 @@ void bakuGameAudienceSurprise(void) {
 /* stub-fill: bakuGameDisp2D | missing_definition | ghidra_signature */
 void bakuGameDisp2D(void) {
     extern void* GetBakuGamePtr(void);
-    extern void* _battleWorkPointer;
     extern void btlGetScreenPoint(void* pos, void* out);
     extern void iconDispGx(void* pos, s32 size, s32 iconId, f32 scale);
     extern void BattleAcDrawGauge(s32 x, s32 y, s32 icon, s32 unk1, s32 unk2, s32 unk3, s32 unk4, f32 value);
-    extern f32 float_100_80427b78;
 
     void* work = GetBakuGamePtr();
     void* battle = _battleWorkPointer;
@@ -792,12 +779,9 @@ void bakuGameDisp3D(void) {
     extern void GXBegin(s32 primitive, s32 vtxfmt, s32 nverts);
     extern u32 dat_80427b58;
     extern u32 dat_802ff570[16];
-    extern f32 float_neg1_80427b5c;
-    extern f32 float_1_80427b60;
     extern f32 float_180_80427b64;
     extern f32 float_neg20_80427b68;
     extern f32 float_40_80427b6c;
-    extern f32 float_0_80427b70;
     extern f32 float_20_80427b74;
 
     u8* work;

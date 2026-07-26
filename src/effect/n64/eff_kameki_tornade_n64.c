@@ -1,5 +1,9 @@
 #include "effect/n64/eff_kameki_tornade_n64.h"
 
+extern f32 float_0p1_80425564;
+extern f32 float_10_8042556c;
+extern f32 float_0_80425570;
+
 #pragma optimize_for_size off
 
 void* effKamekiTornadeN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
@@ -10,9 +14,7 @@ void* effKamekiTornadeN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 sca
     extern char str_KamekiTornadeN64_802fb198[];
     extern f32 float_0p2_8042559c;
     extern f32 float_1_80425598;
-    extern f32 float_0p1_80425564;
     extern f32 float_2_804255a0;
-    extern f32 float_0_80425570;
     void* entry;
     u8* work;
     s32 i;
@@ -78,7 +80,6 @@ void effKamekiTornadeMain(void* effect) {
     extern Vec3 vec3_802fb168[];
     extern f32 float_4_80425580;
     extern f32 float_5_8042557c;
-    extern f32 float_10_8042556c;
     extern f32 float_12p96_8042558c;
     extern f32 float_17p28_80425590;
     extern f32 float_64_80425594;
@@ -196,10 +197,7 @@ u8 effKamekiTornadeDisp(s32 cameraId, s32 effectAddress) {
     extern void GXBegin(s32, s32, s16);
     extern void tri2(s32, s32, s32, s32, s32, s32, s32);
     extern f32 float_deg2rad_80425560;
-    extern f32 float_0p1_80425564;
     extern f32 float_0p02_80425568;
-    extern f32 float_10_8042556c;
-    extern f32 float_0_80425570;
     extern f32 float_0p015625_80425574;
     extern f32 float_0p03125_80425578;
     u8* work = *(u8**)(effectAddress + 0xC);

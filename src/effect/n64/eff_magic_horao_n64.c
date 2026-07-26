@@ -67,8 +67,6 @@ void effMagicHoraoMain(void* effect) {
     extern void* effHokoriN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z);
     extern const Vec3 vec3_802fb4b8;
     extern f32 float_0p02_80425af4;
-    extern f32 float_0_80425ae8;
-    extern f32 float_1_80425af8;
     extern f32 float_5_80425afc;
     extern f32 float_0p05_80425b00;
     u8* work;
@@ -176,10 +174,8 @@ void effMagicHoraoDisp(s32 cameraId, void* effect) {
     extern void tri2(s32, s32, s32, s32, s32, s32, s32, s32);
     extern f64 sin(f64);
     extern f32 float_deg2rad_80425ae4;
-    extern f32 float_0_80425ae8;
     extern f32 float_0p015625_80425aec;
     extern f32 float_0p01_80425af0;
-    extern f32 float_1_80425af8;
     u8* work = *(u8**)((s32)effect + 0xC);
     void* camera = camGetPtr(cameraId);
     f32 trans[3][4], rot[3][4], scale[3][4], model[3][4];

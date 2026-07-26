@@ -111,7 +111,6 @@ void effSnowmanMain(void* effect) {
     extern void effDelete(void*);
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32, s32, void*, void*, f32);
-    extern void effSnowmanDisp(void);
     extern s32 rand(void);
     extern void* effVaporN64Entry(f32, f32, f32, f32, s32, s32);
     extern void* effSnowDustN64Entry(f32, f32, f32, f32, f32, f32, s32, s32, s32);

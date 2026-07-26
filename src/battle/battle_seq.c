@@ -1,4 +1,6 @@
 #include "battle/battle_seq.h"
+#include "battle/battle_audience.h"
+#include "manager/evtmgr.h"
 
 extern void* _battleWorkPointer;
 s32 BtlUnit_CheckStatus(void* unit, s32 status);
@@ -17,7 +19,6 @@ void* evtEntry(void* script, s32 priority, s32 flags);
 void psndSFXOn(const char* name);
 void BtlUnit_ResetMoveStatus(void* unit);
 void btlseqPhase(void* battleWork);
-void BattleAudience_Case_TurnEnd(void);
 s32 BtlUnit_CheckShadowGuard(void* unit);
 void BattleDamageDirect(s32 attackerId, void* target, s32 param3, s32 param4, s32 param5, s32 param6, s32 param7, s32 param8);
 void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
@@ -1506,7 +1507,6 @@ void btlseqAct(void* battleWork) {
     extern s32 BattleCommandInput(void*);
     extern void* BtlUnit_GetData(void*, s32);
     extern void* evtEntry(void*, s32, s32);
-    extern void evtDeleteID(s32);
     extern s32 BattleStatusChangeMsgMain(void*);
     extern s32 BattleStatusChangeAnnouceMain(void*);
     extern void BattleStatusChangeMsgAdjust(void*);

@@ -1,4 +1,9 @@
 #include "party/party.h"
+#include "mario/mario.h"
+#include "mario/mario_party.h"
+#include "mario/mario_pouch.h"
+#include "party/party_vivian.h"
+
 
 void* partyPtrTbl[2];
 void animPoseSetMaterialLightFlagOff(void* pose, s32 flag);
@@ -13,6 +18,29 @@ void animPoseSetPaperAnimGroup(void* pose, s32 a, s32 b);
 void animPaperPoseRelease(s32 id);
 s32 strcmp(const char* a, const char* b);
 extern u8 partyDataTbl[];
+extern char* partyPoseTbl[][15];
+extern char* partyDotPoseTbl[][15];
+extern char* yoshiDotPoseTbl[][15];
+void animPoseRelease(s32 poseId);
+void animPosePeraOff(s32 poseId);
+s32 yoshiGetStatus(void);
+extern char* yoshigroup[];
+s32 marioAnimeId(void);
+f32 revise360(f32 angle);
+void* __memAlloc(s32 heap, u32 size);
+void __memFree(s32 heap, void* ptr);
+void getRidePos(void* party, void* pos);
+f32 toMovedir(f32 angle);
+s32 animPoseEntry(char* group, s32 flags);
+u32 animPoseGetMaterialFlag(s32 poseId);
+void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
+u32 animPoseGetMaterialLightFlag(s32 poseId);
+void animPoseSetMaterialLightFlagOn(s32 poseId, u32 flags);
+s32 animPaperPoseEntry(char* group, s32 flags);
+void partyClearJumpPara(void* party);
+f32 distABf(f32 ax, f32 az, f32 bx, f32 bz);
+f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
+void movePos(f32 dist, f32 dir, f32* x, f32* z);
 
 void* partyGetPtr(s32 id) {
     if (id >= 0) {
@@ -31,10 +59,7 @@ void* anotherPartyGetPtr(s32 id) {
 }
 
 s32 partyPaperOn(void* pParty, char* paperGroup) {
-    extern void animPaperPoseRelease(s32);
-    extern s32 animPaperPoseEntry(char*, s32);
     extern void animPoseSetPaperAnimGroup(s32, char*, s32);
-    extern s32 strcmp(const char*, const char*);
     extern char str_p_roll_802cb36c[];
     extern char str_p_plane_802cb374[];
     extern char str_p_dokan_x_802cb37c[];
@@ -86,12 +111,6 @@ void partyPaperLightOff(void* party) {
 }
 
 char* partyChgPoseId(void* party, s32 poseId) {
-    extern s32 partyGetHp(s32);
-    extern s32 pouchGetPartyColor(s32);
-    extern s32 strcmp(const char*, const char*);
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
     s32 member;
     char* pose;
 
@@ -146,7 +165,6 @@ void partyChgPose(void* party, const char* pose) {
 #pragma use_lmw_stmw on
 
 u8 partyChgPaper(void* pParty, char* paperPose) {
-    extern s32 strcmp(const char*, const char*);
     if ((*(u32*)((s32)pParty + 4) & 2) == 0 &&
         (*(char**)((s32)pParty + 0x1C) == 0 ||
          strcmp(*(char**)((s32)pParty + 0x1C), paperPose) != 0)) {
@@ -222,15 +240,7 @@ s32 partyEntryHello(s32 partyMemberId) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 partyEntry(s32 partyMemberId) {
-    extern s32 partyEntryMain(s32 partyMemberId);
     extern void partyGetAppearPos2(void* party, void* pos);
-    extern void* partyPtrTbl[2];
-    extern s32 partyGetHp(s32 partyId);
-    extern s32 pouchGetPartyColor(s32 partyId);
-    extern s32 strcmp(const char* a, const char* b);
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
     extern u32 vec3_802cb178[];
 
     u32* base;
@@ -288,17 +298,7 @@ s32 partyEntry(s32 partyMemberId) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 s32 partyEntryPos(double xIn, double yIn, double zIn, s32 partyMemberId) {
-    extern s32 partyEntryMain(s32 partyMemberId);
-    extern void* partyPtrTbl[2];
-    extern s32 partyGetHp(s32 partyId);
-    extern s32 pouchGetPartyColor(s32 partyId);
-    extern s32 strcmp(const char* a, const char* b);
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
     extern u32 vec3_802cb178[];
 
     u32 pos[3];
@@ -364,9 +364,6 @@ s32 partyEntryPos(double xIn, double yIn, double zIn, s32 partyMemberId) {
 #pragma no_register_save_helpers reset
 #pragma use_lmw_stmw reset
 
-#pragma no_register_save_helpers reset
-#pragma use_lmw_stmw reset
-
 s32 partyGoodbye(s32 id) {
     void* party;
     s32 ret = 0;
@@ -384,11 +381,7 @@ s32 partyGoodbye(s32 id) {
 }
 
 s32 partyKill(s32 id) {
-    extern void* partyPtrTbl[2];
-    extern u8 partyDataTbl[];
     extern void* party_dp;
-    extern void animPoseRelease(s32);
-    extern void __memFree(s32, void*);
     void* party;
     void* current;
     void* player;
@@ -421,11 +414,7 @@ s32 partyKill(s32 id) {
     return 0;
 }
 s32 partyKill2(s32 id) {
-    extern void* partyPtrTbl[2];
-    extern u8 partyDataTbl[];
     extern void* party_dp;
-    extern void animPoseRelease(s32);
-    extern void __memFree(s32, void*);
     void* party;
     void* current;
     void* player;
@@ -489,28 +478,7 @@ f32 partyGetHeight(void* party) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 partyEntryMain(s32 memberId) {
-    extern void* marioGetPtr(void);
-    extern void* __memAlloc(s32 heap, u32 size);
-    extern void* memset(void* dst, s32 value, u32 size);
-    extern s32 marioGetCamId(void);
-    extern s32 pouchGetPartyColor(s32 partyId);
-    extern void animPoseRelease(s32 poseId);
-    extern s32 animPoseEntry(char* group, s32 flags);
-    extern void animPosePeraOff(s32 poseId);
-    extern s32 marioAnimeId(void);
-    extern u32 animPoseGetMaterialFlag(s32 poseId);
-    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
-    extern u32 animPoseGetMaterialLightFlag(s32 poseId);
-    extern void animPoseSetMaterialLightFlagOn(s32 poseId, u32 flags);
-    extern s32 partyGetHp(s32 partyId);
-    extern s32 strcmp(const char* a, const char* b);
-    extern void* partyPtrTbl[2];
-    extern u8 partyDataTbl[];
     extern void* party_dp;
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
-    extern char* yoshigroup[];
     extern char str_d_mario_802cb340[];
 
     void* player;
@@ -626,29 +594,7 @@ s32 partyEntryMain(s32 memberId) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 partyEntry2(s32 memberId) {
-    extern void* marioGetPtr(void);
-    extern void* __memAlloc(s32 heap, u32 size);
-    extern void* memset(void* dst, s32 value, u32 size);
-    extern s32 marioGetCamId(void);
-    extern s32 pouchGetPartyColor(s32 partyId);
-    extern void animPoseRelease(s32 poseId);
-    extern s32 animPoseEntry(char* group, s32 flags);
-    extern void animPosePeraOff(s32 poseId);
-    extern s32 marioAnimeId(void);
-    extern u32 animPoseGetMaterialFlag(s32 poseId);
-    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
-    extern u32 animPoseGetMaterialLightFlag(s32 poseId);
-    extern void animPoseSetMaterialLightFlagOn(s32 poseId, u32 flags);
-    extern s32 partyGetHp(s32 partyId);
-    extern s32 strcmp(const char* a, const char* b);
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern void* partyPtrTbl[2];
-    extern u8 partyDataTbl[];
     extern void* party_dp;
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
-    extern char* yoshigroup[];
     extern char str_d_mario_802cb340[];
 
     void* player;
@@ -757,29 +703,7 @@ s32 partyEntry2(s32 memberId) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 partyEntry2Hello(s32 memberId) {
-    extern void* marioGetPtr(void);
-    extern void* __memAlloc(s32 heap, u32 size);
-    extern void* memset(void* dst, s32 value, u32 size);
-    extern s32 marioGetCamId(void);
-    extern s32 pouchGetPartyColor(s32 partyId);
-    extern void animPoseRelease(s32 poseId);
-    extern s32 animPoseEntry(char* group, s32 flags);
-    extern void animPosePeraOff(s32 poseId);
-    extern s32 marioAnimeId(void);
-    extern u32 animPoseGetMaterialFlag(s32 poseId);
-    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
-    extern u32 animPoseGetMaterialLightFlag(s32 poseId);
-    extern void animPoseSetMaterialLightFlagOn(s32 poseId, u32 flags);
-    extern s32 partyGetHp(s32 partyId);
-    extern s32 strcmp(const char* a, const char* b);
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern void* partyPtrTbl[2];
-    extern u8 partyDataTbl[];
     extern void* party_dp;
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
-    extern char* yoshigroup[];
     extern char str_d_mario_802cb340[];
 
     void* player;
@@ -892,30 +816,7 @@ s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
         f32 y;
         f32 z;
     } VecLocal;
-    extern void* marioGetPtr(void);
-    extern void* __memAlloc(s32 heap, u32 size);
-    extern void* memset(void* dst, s32 value, u32 size);
-    extern s32 marioGetCamId(void);
-    extern s32 pouchGetPartyColor(s32 partyId);
-    extern void animPoseRelease(s32 poseId);
-    extern s32 animPoseEntry(char* group, s32 flags);
-    extern void animPosePeraOff(s32 poseId);
-    extern s32 marioAnimeId(void);
-    extern u32 animPoseGetMaterialFlag(s32 poseId);
-    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
-    extern u32 animPoseGetMaterialLightFlag(s32 poseId);
-    extern void animPoseSetMaterialLightFlagOn(s32 poseId, u32 flags);
-    extern s32 partyGetHp(s32 partyId);
-    extern s32 pouchGetPartyColor(s32 partyId);
-    extern s32 strcmp(const char* a, const char* b);
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern void* partyPtrTbl[2];
-    extern u8 partyDataTbl[];
     extern void* party_dp;
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
-    extern char* yoshigroup[];
     extern char str_d_mario_802cb340[];
     extern f32 float_1_80421200;
 
@@ -1042,26 +943,14 @@ void partyInit(void) {
     memset(partyPtrTbl, 0, 8);
 }
 u8 partyReInit(void) {
-    extern void* partyPtrTbl[2];
-    extern s32 marioGetExtraPartyId(void);
-    extern s32 marioGetPartyId(void);
-    extern void* marioGetPtr(void);
-    extern s32 marioGetCamId(void);
     extern void animPoseSetMaterialFlagOff(s32, u32);
     extern void animPoseSetMaterialLightFlagOn(s32, u32);
     extern void animPoseSetPaperAnimGroup(s32, char*, s32);
-    extern void animPaperPoseRelease(s32);
     extern void partyChgRunMode(void*, s32);
     extern void partyChgMot(void*, s32);
     extern void partyClearFootmark(void);
     extern void chuchu_reinit(void);
     extern void unk_JP_US_EU_36_80151d20(void);
-    extern s32 partyGetHp(s32);
-    extern s32 pouchGetPartyColor(s32);
-    extern s32 strcmp(const char*, const char*);
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
     void* party;
     void* player;
     char* pose;
@@ -1186,15 +1075,7 @@ void partyUsePost(void* party) {
     }
 }
 u8 N__partyChgRunMode(void* pParty, int currRunModeId, int newRunModeId) {
-    extern void partyClearJumpPara(void*);
     extern void L_partyForceSlitOff(void*);
-    extern s32 partyGetHp(s32);
-    extern s32 pouchGetPartyColor(s32);
-    extern s32 strcmp(const char*, const char*);
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
-    extern u8 partyDataTbl[];
     void* player;
     char* pose;
     s32 member;
@@ -1288,14 +1169,6 @@ void N_partyForceChgRunMode(void* pParty, int newRunMode, u8 subMotionId) {
 #pragma use_lmw_stmw off
 void unk_800bc660(void* party) {
     extern u32 vec3_802cb178[];
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
-    extern u8 partyDataTbl[];
-    extern void partyClearJumpPara(void* party);
-    extern s32 partyGetHp(s32 partyId);
-    extern s32 pouchGetPartyColor(s32 partyId);
-    extern s32 strcmp(const char* a, const char* b);
     extern void partyChgMot(void* party, s32 mot);
 
     u32* base;
@@ -1460,7 +1333,6 @@ void unk_800bc660(void* party) {
 
 
 void partyMain(void) {
-    extern void* marioGetPtr(void);
     extern void unk_8014140c(void);
     extern s32 marioBgmodeChk(void);
     extern void driveParty(void* party);
@@ -1517,8 +1389,6 @@ u8 driveParty(void* party) {
 }
 
 s32 partyDoWork(void) {
-    extern void* marioGetPtr(void);
-    extern void partyChgRunMode(void* party, s32 mode);
     extern f32 float_0_80421218;
 
     void* mario = marioGetPtr();
@@ -1615,15 +1485,8 @@ u8 partyHelloMain(void* pParty) {
     extern f32 angleABf(f32, f32, f32, f32);
     extern void partyMoveNoHosei(void*);
     extern f32 partyToMovedir(f32, void*);
-    extern void partyClearJumpPara(void*);
     extern void allPartyForceRideOn(void);
     extern u32 psndSFXOn_3D(s32, void*);
-    extern s32 partyGetHp(s32);
-    extern s32 pouchGetPartyColor(s32);
-    extern s32 strcmp(const char*, const char*);
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
     extern f32 float_0p5_80421288;
     extern f32 float_0_80421218;
     extern f32 float_1_80421200;
@@ -1844,7 +1707,6 @@ done:
 
 
 void partyGoodbyeInit(void* party) {
-    extern u8 partyDataTbl[];
     extern void* party_dp;
     extern void vivianUnhold(void*);
     extern u32 marioGetoffYoshi(void);
@@ -1879,23 +1741,8 @@ void partyGoodbyeInit(void* party) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 partyGoodbyeMain(void* pParty) {
-    extern void* marioGetPtr(void);
-    extern s32 vivianGetStatus(void);
-    extern s32 yoshiGetStatus(void);
     extern u32 psndSFXOn_3D(s32 id, void* pos);
-    extern f32 distABf(f32 ax, f32 az, f32 bx, f32 bz);
-    extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
-    extern void movePos(f32 dist, f32 dir, f32* x, f32* z);
-    extern f32 revise360(f32 angle);
-    extern s32 partyGetHp(s32 partyId);
-    extern s32 pouchGetPartyColor(s32 partyId);
-    extern s32 strcmp(const char* a, const char* b);
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern u8 partyDataTbl[];
     extern void* party_dp;
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
     extern f32 float_0_80421218;
     extern f32 float_0p5_80421288;
     extern f32 float_1p6_80421284;
@@ -2054,14 +1901,9 @@ s32 partyDokanInit(void* party) {
     typedef struct VecLocal { f32 x; f32 y; f32 z; } VecLocal;
 
     extern f32 revise360(f64);
-    extern void animPaperPoseRelease(s32);
-    extern s32 animPaperPoseEntry(char*, s32);
     extern void animPoseSetPaperAnimGroup(s32, char*, s32);
     extern void animPoseSetMaterialLightFlagOff(s32, s32);
     extern void L_partyVivianTailStop(void*);
-    extern s32 strcmp(const char*, const char*);
-    extern s32 partyGetHp(s32);
-    extern s32 pouchGetPartyColor(s32);
 
     extern char str_p_roll_802cb36c[];
     extern char str_p_plane_802cb374[];
@@ -2070,9 +1912,6 @@ s32 partyDokanInit(void* party) {
     extern char str_p_slit_802cb388[];
     extern char str_PM_D_1A_802cb390[];
 
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
 
     extern VecLocal vec3_802cb178[];
 
@@ -2272,18 +2111,10 @@ done:
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 partyDokanMain(void* pParty) {
-    extern f32 revise360(f32 angle);
     extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
-    extern s32 strcmp(const char* a, const char* b);
     extern void animPoseSetMaterialLightFlagOff(s32 pose, s32 flag);
     extern void animPoseSetPaperAnimGroup(s32 pose, char* anim, s32 flag);
-    extern void animPaperPoseRelease(s32 pose);
     extern void animPoseSetMaterialLightFlagOn(s32 pose, s32 flag);
-    extern void L_partyVivianTailStart(void* party);
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyPtrTbl[2];
     extern u8 vec3_802cb178[];
     extern f32 float_0_80421218;
     extern f32 float_neg5_804212b0;
@@ -2457,7 +2288,6 @@ s32 partyDokanMain(void* pParty) {
 
 
 void partyDokanEnd(int partyId, u8 param_2) {
-    extern void L_partyVivianTailStart(void* party);
 
     void* party;
 
@@ -2525,16 +2355,12 @@ void allPartyRideShip(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void getRidePos(void* pParty, void* out) {
-    extern f32 toMovedir(f32 angle);
     extern f64 sin(f64 x);
     extern f64 cos(f64 x);
-    extern s32 yoshiGetStatus(void);
-    extern s32 marioGetPartyId(void);
     extern f32 toMovedir2(f32 angle, f32 add);
     extern void sincosf(f32 angle, f32* outSin, f32* outCos);
     extern u32 N_marioShipGetDir(void);
     extern f32 toMovedirSimple(f32 angle);
-    extern void* partyPtrTbl[2];
     extern f32 float_180_80421214;
     extern f32 float_0_80421218;
     extern f32 float_10_8042123c;
@@ -2744,16 +2570,8 @@ void partyRideMain(void* pParty) {
     extern f64 toMovedir(f64 angle);
     extern f64 toMovedirSimple(f64 angle);
     extern void partyMoveNoHosei(void* party);
-    extern void partyChgRunMode(void* party, s32 mode);
     extern void partyGetAppearPos(void* party, VecLocal* out);
     extern void partyGetAppearPos2(void* party, VecLocal* out);
-    extern void partyClearJumpPara(void* party);
-    extern s32 partyGetHp(s32 partyId);
-    extern s32 pouchGetPartyColor(s32 partyId);
-    extern s32 strcmp(const char* a, const char* b);
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
     extern VecLocal vec3_802cb178[];
 
     s32 p = (s32)pParty;
@@ -3049,14 +2867,6 @@ void partyRideMain(void* pParty) {
 #pragma use_lmw_stmw off
 void party_force_ride_yoshi(void* pParty) {
     extern void N_partyForceChgRunMode(void* party, s32 newRunMode, s32 subMotionId);
-    extern void getRidePos(void* party, void* pos);
-    extern s32 partyGetHp(s32 partyId);
-    extern s32 pouchGetPartyColor(s32 partyId);
-    extern s32 strcmp(const char* a, const char* b);
-    extern f32 toMovedir(f32 angle);
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
     extern f32 float_0_80421218;
 
     u32 pos[3];
@@ -3109,8 +2919,6 @@ void party_force_ride_yoshi(void* pParty) {
 
 
 void party_ride_yoshi_force_move(void) {
-    extern void getRidePos(void* party, void* pos);
-    extern f32 toMovedir(f32 angle);
     s32 id;
     void* party;
     u32 pos[3];
@@ -3134,19 +2942,8 @@ s32 partyRideYoshiMain(void* pParty) {
         f32 y;
         f32 z;
     } VecLocal;
-    extern void getRidePos(void* party, void* pos);
-    extern f32 distABf(f32 ax, f32 az, f32 bx, f32 bz);
-    extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
-    extern s32 partyGetHp(s32 partyId);
-    extern s32 pouchGetPartyColor(s32 partyId);
-    extern s32 strcmp(const char* a, const char* b);
-    extern void movePos(f32 dist, f32 dir, f32* x, f32* z);
     extern f32 toMovedir(f32 dir);
     extern u8 partyGetAppearPos(void* party, s32 out);
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
     extern f32 float_0_80421218;
     extern f32 float_0p5_80421288;
     extern f32 float_1p6_80421284;
@@ -3301,8 +3098,6 @@ u8 party_damage_return(void* pParty) {
         f32 y;
         f32 z;
     } VecLocal;
-    extern s32 partyGetHp(s32 partyId);
-    extern s32 pouchGetPartyColor(s32 partyId);
     extern s32 strcmp(char* a, char* b);
     extern s32 sysMsec2Frame(s32 msec);
     extern void marioGetScreenPos(VecLocal* pos, f32* x, f32* y, f32* z);
@@ -3311,12 +3106,7 @@ u8 party_damage_return(void* pParty) {
     extern u8 partyGetAppearPos(void* party, s32 out);
     extern void partyMove(void* party);
     extern u32 hitGetAttr(void* hit);
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern s32 vivianGetStatus(void);
     extern void vivianShadow(void* party);
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
     extern f32 float_0_80421218;
     extern f32 float_15_8042126c;
     extern f32 float_neg100_80421270;
@@ -3513,7 +3303,6 @@ void partySetCamId(void* party, s32 camId) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 partyMakeDispDir(void* pParty) {
-    extern f32 revise360(f32 angle);
     extern f32 float_0_80421218;
     extern f32 float_10_8042123c;
     extern f32 float_170_80421250;
@@ -3791,10 +3580,8 @@ u8 partyDisp(s32 param_1, void* pParty) {
     extern void PSMTXTrans(Mtx34 mtx, f32 x, f32 y, f32 z);
     extern void PSMTXRotRad(Mtx34 mtx, s32 axis, f32 rad);
     extern void PSMTXConcat(Mtx34 a, Mtx34 b, Mtx34 out);
-    extern f32 revise360(f32 angle);
     extern void animPoseDrawMtx(s32 poseId, Mtx34 mtx, s32 mode, f32 rot, f32 scale);
     extern void animPoseSetLocalTimeRate(f32 rate, s32 poseId);
-    extern void* partyPtrTbl[2];
     extern f32 float_neg6p8_804211f0;
     extern f32 float_6p8_804211f4;
     extern f32 float_1p2_804211f8;
@@ -4015,16 +3802,8 @@ void partyShadowOff(void* party) {
 #pragma use_lmw_stmw off
 void partySetFamicomMode(void* pParty, int mode) {
     extern void L_partyForceSlitOff(void* party);
-    extern s32 pouchGetPartyColor(s32 partyId);
-    extern void animPoseRelease(s32 poseId);
-    extern s32 animPoseEntry(char* group, s32 flags);
-    extern s32 partyGetHp(s32 partyId);
     extern s32 strcmp(char* a, char* b);
     extern char** party_dp;
-    extern char* yoshigroup[];
-    extern char* partyPoseTbl[][15];
-    extern char* partyDotPoseTbl[][15];
-    extern char* yoshiDotPoseTbl[][15];
     extern char str_d_mario_802cb340[];
 
     char* group;

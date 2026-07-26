@@ -4,13 +4,13 @@
 
 extern void* mapalloc_base_ptr;
 extern void* R_battlemapalloc_base_ptr;
+extern u32* wp;
+extern s32 g_bFirstSmartAlloc;
+extern void sysWaitDrawSync(void);
 
 void _mapFree(void* base, void* ptr);
 void GXInitTexObjData(void* texObj, void* data);
 void OSFreeToHeap(OSHeapHandle heap, void* ptr);
-void* OSAllocFromHeap(OSHeapHandle heap, u32 size);
-void DCFlushRange(void* ptr, u32 size);
-void* memset(void* ptr, int value, u32 size);
 
 //.sdata
 s32 size_table[6][2] = {
@@ -27,7 +27,6 @@ void* heapEnd[5];
 void* heapStart[5];
 OSHeapHandle heapHandle[5];
 
-#pragma optimize_for_size off
 #pragma optimize_for_size off
 void memInit(void) {
     extern void* OSGetArenaLo(void);
@@ -166,8 +165,6 @@ void __memFree(s32 heap, void* ptr) {
 }
 
 void N_battleMapAlloc(void) {
-    extern void* mapalloc_base_ptr;
-    extern void* R_battlemapalloc_base_ptr;
     extern unsigned int R_battlemapalloc_size;
     extern void* _mapAlloc(void*, unsigned int);
     void* ptr;
@@ -190,8 +187,6 @@ void N_battleMapFree(void) {
 }
 
 void* _mapAlloc(void* base, u32 size) {
-    extern void* memset(void* ptr, int value, u32 size);
-    extern void DCFlushRange(void* ptr, u32 size);
     u32 aligned;
     u32 need;
     u32 bestSize;
@@ -240,8 +235,6 @@ void* _mapAlloc(void* base, u32 size) {
 }
 
 void* _mapAllocTail(void* base, u32 size) {
-    extern void* memset(void* ptr, int value, u32 size);
-    extern void DCFlushRange(void* ptr, u32 size);
     u32 aligned;
     u32 need;
     u32 bestSize;
@@ -331,8 +324,6 @@ void _mapFree(void* base, void* ptr) {
 }
 
 void smartInit(void) {
-    extern u32* wp;
-    extern s32 g_bFirstSmartAlloc;
     u32 size;
     u32* alloc;
     u32* p;
@@ -389,9 +380,6 @@ void smartInit(void) {
 #pragma use_lmw_stmw on
 
 void L_smartReInit(void) {
-    extern u32* wp;
-    extern s32 g_bFirstSmartAlloc;
-    extern void* memset(void* ptr, int value, u32 size);
     u32* p;
     s32 i;
 
@@ -433,7 +421,6 @@ void L_smartReInit(void) {
 
 
 void smartAutoFree(s32 kind) {
-    extern u32* wp;
     extern void smartFree(void*);
     void* entry;
     void* next;
@@ -462,7 +449,6 @@ void smartAutoFree(s32 kind) {
 }
 
 void smartFree(void* entry) {
-    extern u32* wp;
     void* prev;
     void* next;
     u32 size;
@@ -533,11 +519,8 @@ void* smartAlloc(u32 param_1, u8 param_2) {
         struct SmartAllocationData* pPrev;
     } SmartAllocationData;
     extern void smartAutoFree(s32 kind);
-    extern void sysWaitDrawSync(void);
     extern void _fileGarbage(s32 kind);
     extern void smartGarbage(void);
-    extern u32* wp;
-    extern s32 g_bFirstSmartAlloc;
     SmartAllocationData* entry;
     SmartAllocationData* scan;
     s32 i;
@@ -654,12 +637,10 @@ void* smartAlloc(u32 param_1, u8 param_2) {
 #pragma use_lmw_stmw off
 
 void smartGarbage(void) {
-    extern void sysWaitDrawSync(void);
     extern void* OSGetCurrentThread(void);
     extern void* memmove(void* dst, void* src, u32 size);
     extern void fileGarbageMoveMem(void* dst, char* file);
     extern u8 dvdmgr_thread[];
-    extern u32* wp;
     void* src;
     void* dst;
     u32* entry;

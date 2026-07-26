@@ -1,6 +1,5 @@
 #include <dolphin/types.h>
 
-void* memset(void*, int, unsigned long);
 typedef struct BattleWorkUnit BattleWorkUnit;
 void BtlUnit_GetStatus(BattleWorkUnit* unit, s8 status, s8* turns, s8* strength);
 BOOL BtlUnit_CheckStatus(BattleWorkUnit* unit, s8 status);
@@ -46,13 +45,11 @@ void BattleStatusIconInit(BattleWorkUnit* unit) {
 void BattleStatusIconMain(BattleWorkUnit* unit) {
     typedef s32 (*StatusIconFunc)(BattleWorkUnit*, s32*, s32*);
 
-    extern void* _battleWorkPointer;
     extern void* gp;
     extern void BtlUnit_GetPos(BattleWorkUnit* unit, f32* x, f32* y, f32* z);
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
     extern void BattleStatusIconDisp(s32 param_1, void* unit);
     extern u8 lbl_803B9538[];
-    extern f32 float_0_804287b4;
     extern f32 float_13p44_804287d0;
     extern f32 float_19p2_804287d8;
     extern f32 float_25p6_804287d4;
@@ -334,10 +331,7 @@ s32 _bsi_allergy(BattleWorkUnit* unit, s32* desc, s32* out) {
 
 /* fallback stub-fill: map=_bsi_biribiri addr=0x8025337c size=0x000001e8 */
 s32 _bsi_biribiri(BattleWorkUnit* unit, s32* desc, s32* out) {
-    extern BOOL BtlUnit_CheckStatus(BattleWorkUnit* unit, s8 status);
-    extern void BtlUnit_GetStatus(BattleWorkUnit* unit, s8 status, s8* turns, s8* strength);
     extern s32 irand(s32 max);
-    extern u32 vec3_80302838[];
     extern u32 dat_8042879c;
 
     s8 turns;
@@ -399,10 +393,7 @@ s32 _bsi_biribiri(BattleWorkUnit* unit, s32* desc, s32* out) {
 
 /* fallback stub-fill: map=_bsi_regeneration addr=0x802530fc size=0x00000280 */
 s32 _bsi_regeneration(BattleWorkUnit* unit, s32* desc, s32* out) {
-    extern BOOL BtlUnit_CheckStatus(BattleWorkUnit* unit, s8 status);
-    extern void BtlUnit_GetStatus(BattleWorkUnit* unit, s8 status, s8* turns, s8* strength);
     extern f32 intplGetValue(s32 type, s32 current, f32 start, f32 end, s32 max);
-    extern u32 vec3_80302838[];
     extern u32 dat_804287a0;
     extern u32 dat_804287a4;
     extern u32 float_0p10207_804287a8;

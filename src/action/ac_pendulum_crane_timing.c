@@ -1,5 +1,7 @@
 #include "action/ac_pendulum_crane_timing.h"
 
+#include "system.h"
+
 u16 _hp_tbl[14];
 extern void* _battleWorkPointer;
 extern f32 float_0_80426eb8;
@@ -9,13 +11,10 @@ extern f32 float_90_80426ec4;
 extern f32 float_neg300_80426ee4;
 extern f32 float_30_80426ee8;
 
-f32 compAngle(f32 a, f32 b);
-f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
 void actionCommandDisp(f32 x, f32 y);
 
 /* stub-fill: battleAcMain_PendulumCraneTiming | missing_definition | ghidra_signature */
 s32 battleAcMain_PendulumCraneTiming(s32 work)  {
-    extern void* memset(void*,s32,s32);
     extern void* BattleGetUnitPtr(void*,s32);
     extern void* BtlUnit_GetPartsPtr(void*,s32);
     extern void BtlUnit_SetRotateOffset(void*,f32,f32,f32);
@@ -29,7 +28,6 @@ s32 battleAcMain_PendulumCraneTiming(s32 work)  {
     extern void psndSFXOn(char*);
     extern void psndSFXOff(s32);
     extern char str_SFX_AC_GAUGE_MOVE1_802fe508[];
-    extern void* _battleWorkPointer;
     void* unit;
     u32 state=*(u32*)(work+0x1C9C);
     s32 total;
@@ -203,16 +201,13 @@ void actionCommandDisp(f32 x, f32 y) {
         f32 y;
         f32 z;
     } Vec;
-    extern void* _battleWorkPointer;
     extern u32 vec3_802fe4e8[];
     extern f32 float_neg200_80426ec8;
     extern f32 float_25_80426ecc;
     extern f32 float_1_80426ed0;
     extern f32 float_88_80426ed4;
     extern f32 float_50_80426ed8;
-    extern f32 float_100_80426ec0;
     extern f32 float_neg288_80426ee0;
-    extern f32 float_45_80426ebc;
     extern void* camGetPtr(s32 cameraId);
     extern void iconDispGx(f32 scale, Vec* pos, s32 flags, s32 iconId);
     extern void btlDispGXInit2DRasta(void);

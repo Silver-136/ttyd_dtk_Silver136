@@ -1,7 +1,6 @@
 #include "battle/battle_weapon_power.h"
 
 extern void* _battleWorkPointer;
-s32 weaponGetPowerFromMarioHammerLv(void* attack, void* weapon, void* target);
 s32 weaponGetPowerFromMarioJumpLv(void* attack, void* weapon, void* target);
 void* BattleGetMarioPtr(void* battleWork);
 s32 BattleTransPartyId(s32 id);

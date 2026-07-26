@@ -1,27 +1,28 @@
 #include "unit/party/unit_party_vivian.h"
 
+extern void* _battleWorkPointer;
+extern s32 evtGetValue(void* evt, s32 arg);
+extern f32 evtGetFloat(void* evt, s32 arg);
+extern void evtSetValue(void* evt, s32 arg, s32 value);
+extern s32 BattleTransID(void* evt, s32 id);
+extern void* BattleGetUnitPtr(void* battleWork, s32 id);
+extern void* BattleGetUnitPartsPtr(s32 unitId, s32 partsId);
+extern s32 animEffectAsync(char* name, s32 flags);
+extern f32 intplGetValue(s32 type, f32 start, f32 end, s32 frame, s32 duration);
+extern void animPoseSetEffect(s32 poseId, char* name, s32 flags);
+extern void animPoseSetEffectAnim(s32 poseId, char* name, s32 flags);
+extern void* animPoseGetAnimPosePtr(s32 poseId);
+extern f32 animPoseGetLoopTimes(void* anim);
+extern void psndSFXOn_3D(char* name, void* pos);
+extern char str_PTR_D_4_802f84d0[];
+extern f32 float_0_804241fc;
+extern f32 float_1_80424204;
+extern f32 float_2_8042421c;
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 battle_evt_majo_disp_on(void* evt, s32 isFirstCall) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern f32 evtGetFloat(void* evt, s32 arg);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern void* BattleGetUnitPartsPtr(s32 unitId, s32 partsId);
-    extern s32 animEffectAsync(char* name, s32 flags);
-    extern f32 intplGetValue(s32 type, f32 start, f32 end, s32 frame, s32 duration);
-    extern void animPoseSetEffect(s32 poseId, char* name, s32 flags);
-    extern void animPoseSetEffectAnim(s32 poseId, char* name, s32 flags);
-    extern void* animPoseGetAnimPosePtr(s32 poseId);
-    extern f32 animPoseGetLoopTimes(void* anim);
-    extern void psndSFXOn_3D(char* name, void* pos);
     extern void animPoseSetPaperAnimGroup(s32 poseId, char* group, s32 flags);
-    extern char str_PTR_D_4_802f84d0[];
-    extern f32 float_0_804241fc;
-    extern f32 float_1_80424204;
-    extern f32 float_2_8042421c;
     extern f32 float_200_80424228;
     extern f32 float_0p66667_8042422c;
     s32* args;
@@ -118,24 +119,8 @@ s32 battle_evt_majo_disp_on(void* evt, s32 isFirstCall) {
 #pragma use_lmw_stmw on
 
 s32 battle_evt_majo_disp_off(void* evt, s32 isFirstCall) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern void* BattleGetUnitPartsPtr(s32 unitId, s32 partsId);
-    extern s32 animEffectAsync(char* name, s32 flags);
-    extern f32 intplGetValue(s32 type, f32 start, f32 end, s32 frame, s32 duration);
-    extern void animPoseSetEffect(s32 poseId, char* name, s32 flags);
-    extern void animPoseSetEffectAnim(s32 poseId, char* name, s32 flags);
-    extern void* animPoseGetAnimPosePtr(s32 poseId);
     extern void animPoseSetLocalTime(void* anim, f32 time);
-    extern f32 animPoseGetLoopTimes(void* anim);
-    extern void psndSFXOn_3D(char* name, void* pos);
     extern void animPoseSetPaperAnimGroup(s32 poseId, s32 group, s32 flags);
-    extern char str_PTR_D_4_802f84d0[];
-    extern f32 float_0_804241fc;
-    extern f32 float_1_80424204;
-    extern f32 float_2_8042421c;
     extern f32 float_8_80424220;
     extern f32 float_500_80424224;
     s32* args;
@@ -216,9 +201,6 @@ s32 battle_evt_majo_disp_off(void* evt, s32 isFirstCall) {
 }
 
 s32 _vivian_make_extra_work_area(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern void* BattleAlloc(u32 size);
     void* battleWork;
     s32 id;
@@ -233,7 +215,6 @@ s32 _vivian_make_extra_work_area(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void __makeTechMenuFunc(void* commandWork, s32* count) {
-    extern void* _battleWorkPointer;
     extern void* BattleGetPartyPtr(void* battleWork);
     extern s32 BattleTransPartyId(s32 id);
     extern s32 partyGetTechLv(s32 partyId);
@@ -302,8 +283,6 @@ void __makeTechMenuFunc(void* commandWork, s32* count) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u32 _get_move_frame(void* evt) {
-    extern f32 evtGetFloat(void* evt, s32 arg);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
     extern void PSVECSubtract(f32* a, f32* b, f32* out);
     extern f64 sqrt(f64 value);
 
@@ -341,13 +320,8 @@ u32 _get_move_frame(void* evt) {
 
 /* fallback stub-fill: map=unk_80182cc4 addr=0x80182cc4 size=0x00000260 */
 int unk_80182cc4(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern void BtlUnit_GetScale(void* unit, f32* x, f32* y, f32* z);
     extern f32 BattleGetFloorHeight(void* battleWork, f32 x, f32 y, f32 z);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
     extern f32 float_neg30_80424214;
     extern f32 float_20_80424218;
     s32* args;
@@ -400,11 +374,6 @@ int unk_80182cc4(void* evt) {
     return 2;
 }
 s32 _make_kagenuke_weapon(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
     extern void* memcpy(void* dest, const void* src, u32 size);
 
     void* battleWork = _battleWorkPointer;
@@ -425,13 +394,8 @@ s32 _make_kagenuke_weapon(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u32 _disp_heart_entry(void* evt, int isFirstCall) {
-    extern void* _battleWorkPointer;
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern s32 evtGetValue(void* evt, s32 arg);
     extern void dispEntry(s32 prio, s32 cameraId, void* callback, void* param, f32 z);
     extern void _disp_heart(void);
-    extern f32 float_0_804241fc;
 
     void* battleWork = _battleWorkPointer;
     s32* args = *(s32**)((s32)evt + 0x18);
@@ -464,16 +428,10 @@ u32 _disp_heart_entry(void* evt, int isFirstCall) {
 
 
 void _disp_heart(s32 unused, void* work) {
-    extern void* _battleWorkPointer;
-    extern f32 float_0_804241fc;
     extern f32 float_1p2_80424200;
-    extern f32 float_1_80424204;
     extern f32 float_10_80424208;
     extern f32 float_16_8042420c;
     extern f32 float_5_80424210;
-    extern f32 intplGetValue(s32 type, f32 start, f32 end, s32 frame, s32 duration);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern void* BtlUnit_GetPartsPtr(void* unit, s32 partsId);
     extern void BtlUnit_GetHitPos(void* unit, void* parts, f32* x, f32* y, f32* z);
     extern void iconDispGx(f32* pos, s32 flags, s32 iconId, f32 scale);
@@ -523,7 +481,6 @@ void _disp_heart(s32 unused, void* work) {
 }
 
 s32 _disp_heart_entry_stop(void* evt) {
-    extern s32 evtGetValue(void* evt, s32 arg);
     extern void* evtGetPtrID(s32 id);
 
     void* ptr = evtGetPtrID(evtGetValue(evt, **(s32**)((s32)evt + 0x18)));
@@ -533,8 +490,6 @@ s32 _disp_heart_entry_stop(void* evt) {
 }
 
 s32 _disp_heart_entry_stop_check(void* evt) {
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
-
     evtSetValue(evt, **(s32**)((s32)evt + 0x18), *(s32*)((s32)evt + 0x8C));
     return 2;
 }

@@ -1,16 +1,16 @@
 #include "event/evt_eff.h"
 
 extern s32 evtGetValue();
+extern f32 evtGetFloat(void*, s32);
 extern void* effNameToPtr();
 extern void effDelete();
 extern void effSoftDelete();
+extern s32 strcmp(const char*, const char*);
+extern void effSetName(s32, char*);
 
 u8 evt_eff(s32 pEvt) {
     extern s32 evtGetValue(void*, s32);
-    extern f32 evtGetFloat(void*, s32);
     extern s16* effGetSet(char*);
-    extern s32 strcmp(const char*, const char*);
-    extern void effSetName(s32, char*);
     extern char zero_8042033c;
 
     extern void* effKemuriEntry();
@@ -300,10 +300,7 @@ u8 evt_eff(s32 pEvt) {
 
 s32 evt_eff64(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
-    extern f32 evtGetFloat(void*, s32);
     extern s16* effGetSetN64(char*);
-    extern s32 strcmp(const char*, const char*);
-    extern void effSetName(s32, char*);
     extern char zero_8042033c;
 
     extern void* effAkariChargeN64Entry();
@@ -807,15 +804,12 @@ s32 evt_eff_delete_ptr(void* pEvt) {
 
 u8 evt_eff_fukidashi(s32 pEvt) {
     extern s32 evtGetValue(void*, s32);
-    extern f32 evtGetFloat(void*, s32);
     extern void* marioGetPtr(void);
-    extern s32 strcmp(const char*, const char*);
     extern void* npcNameToPtr(char*);
     extern s32 marioGetPartyId(void);
     extern s32 marioGetExtraPartyId(void);
     extern void* partyGetPtr(s32);
     extern s32 effFukidashiEntry(f64, f64, f64, f64, f64, s32, s32, s32, s32);
-    extern void effSetName(s32, char*);
     extern const char str_me_80420334[];
     extern const char zero_8042033c[];
     extern f32 float_0_80420330;

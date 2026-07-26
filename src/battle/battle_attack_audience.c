@@ -1,4 +1,5 @@
 #include "battle/battle_attack_audience.h"
+#include "battle/battle_audience.h"
 #include "event/evt_cmd.h"
 
 extern void* _battleWorkPointer;
@@ -21,15 +22,11 @@ extern f32 float_1_80422fb0;
 
 void* BattleGetUnitPtr(void* battleWork, s32 unitId);
 void* BtlUnit_GetData(void* unit, s32 kind);
-s32 BattleAudience_GetPresentItemType(void);
-s32 BattleAudience_GetPresentTargetUnitId(void);
-s32 BattleAudience_GetPresentItemNo(void);
-void BattleAudience_SetPresentItemNo(s32 itemNo);
 void pouchGetItem(s32 itemNo);
+void BattleAudience_GetItemOn2(void* itemNo, f32* x, f32* y, f32* z, s32 flag);
 
 
 s32 _get_attack_aud_no(int param_1) {
-    extern void BattleAudience_GetItemOn2(void* itemNo, f32* x, f32* y, f32* z, s32 flag);
     s32 itemNo;
     f32 x;
     f32 y;
@@ -58,9 +55,6 @@ s32 _get_attack_aud_no(int param_1) {
 
 
 s32 _attack_aud(void* event) {
-    extern void BattleAudience_GetItemOn2(void* itemNo, f32* x, f32* y, f32* z, s32 flag);
-    extern void BattleAudience_GetPosition(s32 id, f32* x, f32* y, f32* z);
-    extern void BattleAudience_Attack(s32 id);
     extern void effHitEntry(s32 cameraId, s32 type, f32 x, f32 y, f32 z, f32 scale);
     extern s32 psndSFXOn_3D(char* name, f32* pos);
     extern void psndSFX_pit(s32 id, s32 pitch);
@@ -97,7 +91,6 @@ s32 _attack_aud(void* event) {
 }
 
 s32 _check_aud_item_type(int param_1) {
-    extern void BattleAudience_GetItemOn2(void* itemNo, f32* x, f32* y, f32* z, s32 flag);
     s32 itemNo;
     s32 dst = **(s32**)((s32)param_1 + 0x18);
     s32 result;

@@ -1,5 +1,7 @@
 #include "effect/n64/eff_thunderflare_n64.h"
 
+extern f32 float_0_80426408;
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effThunderflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
@@ -7,7 +9,6 @@ void* effThunderflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effThunderflareMain(void*);
     extern char str_ThunderflareN64_802fc1d0[];
-    extern f32 float_0_80426408;
     void* entry;
     u8* work;
     u8* part;
@@ -81,7 +82,6 @@ void effThunderflareMain(void* effect) {
     extern f32 dispCalcZ(void*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effThunderflareDisp(void);
-    extern f32 float_0_80426408;
     extern f32 float_0p5_8042640c;
     extern f32 float_6p2832_80426410;
     extern f32 float_360_80426414;

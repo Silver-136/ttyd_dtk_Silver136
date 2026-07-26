@@ -1,13 +1,15 @@
 #include "action/ac_repeatedly.h"
 
+#include "system.h"
+
 void BattleAcGaugeSeDelete(void* wp);
 void actionCommandDisp(f32 x, f32 y);
+void battleAcDelete_Repeatedly(void* battleWork);
 
 /* CHATGPT STUB FILL: main/action/ac_repeatedly 20260624_184008 */
 
 /* stub-fill: _init_param | missing_definition | ghidra_signature */
 void _init_param(void* battleWork) {
-    extern s32 irand(s32 max);
     char* battle;
     char* extra;
     char* disp;
@@ -85,16 +87,12 @@ set_same:
 #pragma use_lmw_stmw off
 s32 battleAcMain_Repeatedly(void* battleWork) {
     extern u32 BattleActionCommandGetDifficulty(void* battleWork);
-    extern void* memset(void* dst, s32 val, u32 size);
-    extern void _init_param(void* battleWork);
     extern u32 BattlePadCheckNow(u32 buttons);
     extern void BattleAcGaugeSeInit(void);
     extern u32 OSGetResetButtonState(void);
     extern s32 SIProbe(u32 chan);
-    extern s32 irand(s32 max);
     extern u32 BattlePadCheckTrigger(u32 buttons);
     extern void BattleAcGaugeSeUpdate(f32 value);
-    extern void battleAcDelete_Repeatedly(void* battleWork);
     extern s32 _power_table[];
     extern u32 dat_80422a90;
     extern f32 float_neg300_80422ab8;

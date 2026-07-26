@@ -15,14 +15,11 @@ s32 _getmaxcount(void) {
 s32 battleAcMain_MonosiriTarget(s32 battleWork) {
     extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
     extern void* BtlUnit_GetPartsPtr(void* unit, s32 partId);
-    extern void* memset(void* dest, s32 value, u32 size);
-    extern s32 _getmaxcount(void);
     extern void BtlUnit_GetHitPos(void* unit, void* part, f32* x, f32* y, f32* z);
     extern s32 psndSFXOn(const char* name);
     extern void psndSFXOff(s32 sound);
     extern f32 intplGetValue(f32 start, f32 end, s32 mode, s32 current, s32 total);
     extern s32 BattlePadCheckTrigger(u32 buttons);
-    extern f32 float_0_80428604;
     extern f32 float_neg300_80428624;
     extern f32 float_80_80428628;
     extern f32 float_160_8042862c;

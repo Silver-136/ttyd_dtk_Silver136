@@ -1,17 +1,14 @@
 #include "battle/battle_item_data.h"
 
+#include "driver/camdrv.h"
+#include "statuswindow.h"
+#include "system.h"
+
 extern void* _battleWorkPointer;
 s32 evtGetValue(void* event, s32 arg);
 s32 BattleTransID(void* event, s32 id);
 void* BattleGetUnitPtr(void* battleWork, s32 unitId);
 void BattleStatusWindowSystemOn(void);
-void N_statusClearBlink(void);
-void statusMarioHPBlink(s32 frames);
-void statusPartyHPBlink(s32 frames);
-void statusFPBlink(s32 frames);
-s32 sysMsec2Frame(s32 msec);
-f32 intplGetValue(s32 mode, s32 current, s32 total, f32 start, f32 end);
-void* camGetPtr(s32 cameraId);
 extern f32 float_720_80422824;
 extern f32 float_0_80422804;
 void _nancy_disp(void* unused, void* work);

@@ -1,7 +1,6 @@
 #include "mario/mario_sbr.h"
 
 void* marioGetPtr(void);
-void* memset(void* dst, int value, u32 size);
 s32 hitGetAttr(void);
 f64 cos(f64 value);
 f32 __fabsf(f32 value);
@@ -13,14 +12,23 @@ extern f32 float_90_80420a98;
 extern f32 float_3p1416_80420a9c;
 extern f32 float_0p19_80420aa0;
 extern u8 rubwork[0x68];
+extern f32 float_70_80420a64;
+extern f32 float_280_80420a78;
+extern f32 float_460_80420a7c;
+extern f32 float_260_80420a80;
+extern f32 float_440_80420a84;
+extern f32 float_0p5_80420a88;
+extern f32 float_neg0p5_80420a8c;
+extern f32 float_270_80420a90;
+extern f32 float_1000_80420a94;
+extern void* gp;
+extern s32 yoshiGetStatus(void);
+extern void marioChgMot(s32 motion);
 
 void marioBottomless(void) {
-    extern void* marioGetPtr(void);
     extern f32 float_neg2000_80420aa8;
     extern f32 float_neg450_80420aac;
-    extern void* gp;
     extern s32 marioBgmodeChk(void);
-    extern void marioChgMot(s32 motion);
     extern void seqSetSeq(s32 seq, void* mapName, void* beroName);
     extern s32 marioGetPartyId(void);
     extern s32 marioGetExtraPartyId(void);
@@ -67,7 +75,6 @@ void marioBottomless(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
-    extern void* marioGetPtr(void);
     extern f32 vec3_802c3ea8[3];
     extern f32 float_37_80420aa4;
     typedef struct Vec { f32 x, y, z; } Vec;
@@ -85,7 +92,6 @@ void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void N_marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z) {
-    extern void* marioGetPtr(void);
     extern f32 vec3_802c3eb4[3];
     typedef struct Vec { f32 x, y, z; } Vec;
     void* mario = marioGetPtr();
@@ -110,14 +116,7 @@ void N_marioReloadMapOnBottomlessOff(void) {
 }
 
 s32 marioSetDirEventMain(void) {
-    extern void* marioGetPtr(void);
     extern s32 sysMsec2Frame(s32);
-    extern f32 float_0_80420a60;
-    extern f32 float_0p5_80420a88;
-    extern f32 float_neg0p5_80420a8c;
-    extern f32 float_270_80420a90;
-    extern f32 float_360_80420a68;
-    extern f32 float_1000_80420a94;
 
     void* mario;
     f32 target;
@@ -216,19 +215,7 @@ void marioSetPeakYpos(void) {
 }
 
 void marioAdjustMoveDir(void) {
-    extern void* marioGetPtr(void);
-    extern f32 float_0_80420a60;
-    extern f32 float_360_80420a68;
-    extern f32 float_180_80420a70;
-    extern f32 float_270_80420a90;
     extern f32 float_90_80420a98;
-    extern f32 float_0p5_80420a88;
-    extern f32 float_neg0p5_80420a8c;
-    extern f32 float_1000_80420a94;
-    extern f32 float_280_80420a78;
-    extern f32 float_460_80420a7c;
-    extern f32 float_260_80420a80;
-    extern f32 float_440_80420a84;
 
     void* mario = marioGetPtr();
     f32 out;
@@ -331,18 +318,6 @@ f32 revise360(f32 value) {
 }
 
 f32 toMovedir(f32 angle) {
-    extern void* marioGetPtr(void);
-    extern f32 float_0_80420a60;
-    extern f32 float_360_80420a68;
-    extern f32 float_180_80420a70;
-    extern f32 float_270_80420a90;
-    extern f32 float_0p5_80420a88;
-    extern f32 float_neg0p5_80420a8c;
-    extern f32 float_1000_80420a94;
-    extern f32 float_280_80420a78;
-    extern f32 float_460_80420a7c;
-    extern f32 float_260_80420a80;
-    extern f32 float_440_80420a84;
     void* mario = marioGetPtr();
 
     if (*(u32*)((s32)mario + 0x0) & 0x100000) {
@@ -378,17 +353,6 @@ f32 toMovedir(f32 angle) {
 }
 
 f32 partyToMovedir(void* pParty) {
-    extern f32 float_0_80420a60;
-    extern f32 float_360_80420a68;
-    extern f32 float_180_80420a70;
-    extern f32 float_270_80420a90;
-    extern f32 float_0p5_80420a88;
-    extern f32 float_neg0p5_80420a8c;
-    extern f32 float_1000_80420a94;
-    extern f32 float_280_80420a78;
-    extern f32 float_460_80420a7c;
-    extern f32 float_260_80420a80;
-    extern f32 float_440_80420a84;
     f32 angle;
     void* mario = *(void**)((s32)pParty + 0x160);
 
@@ -424,13 +388,6 @@ f32 partyToMovedir(void* pParty) {
 }
 
 f32 toMovedirSimple(f32 angle) {
-    extern void* marioGetPtr(void);
-    extern f32 float_270_80420a90;
-    extern f32 float_0_80420a60;
-    extern f32 float_0p5_80420a88;
-    extern f32 float_neg0p5_80420a8c;
-    extern f32 float_1000_80420a94;
-    extern f32 float_360_80420a68;
     void* mario = marioGetPtr();
     f32 value = (float_270_80420a90 - angle) + *(f32*)((s32)mario + 0x19C);
     s32 rounded = (s32)(value * float_1000_80420a94 + (value >= float_0_80420a60 ? float_0p5_80420a88 : float_neg0p5_80420a8c));
@@ -445,18 +402,6 @@ f32 toMovedirSimple(f32 angle) {
 }
 
 double toMovedir2(double angle, double add) {
-    extern void* marioGetPtr(void);
-    extern f32 float_0_80420a60;
-    extern f32 float_360_80420a68;
-    extern f32 float_180_80420a70;
-    extern f32 float_270_80420a90;
-    extern f32 float_0p5_80420a88;
-    extern f32 float_neg0p5_80420a8c;
-    extern f32 float_1000_80420a94;
-    extern f32 float_280_80420a78;
-    extern f32 float_460_80420a7c;
-    extern f32 float_260_80420a80;
-    extern f32 float_440_80420a84;
 
     void* mario = marioGetPtr();
     f32 dir;
@@ -511,8 +456,6 @@ double toMovedir2(double angle, double add) {
     return (double)(f32)angle;
 }
 void marioForceMoveMain(void) {
-    extern void* marioGetPtr(void);
-    extern f32 float_0_80420a60;
     extern f32 float_1_80420a74;
     extern f32 marioGetDashSpd(void);
     extern f32 marioGetWalkSpd(void);
@@ -538,8 +481,6 @@ void marioForceMoveMain(void) {
 }
 
 void marioSetForceMove(s16 time, f32 angle, f32 spd) {
-    extern void* marioGetPtr(void);
-    extern void marioChgMot(s32 motion);
     void* mario = marioGetPtr();
     *(u32*)((s32)mario + 0x0) |= 0x20;
     *(f32*)((s32)mario + 0x1A0) = angle;
@@ -563,10 +504,8 @@ void marioSetForceMove(s16 time, f32 angle, f32 spd) {
 }
 
 void marioUpdateKeyData(void) {
-    extern void* marioGetPtr(void);
     extern s32 marioChkKey(void);
     extern s32 marioGetMotSlitCancel3(void);
-    extern void* gp;
     extern u8 DemoPad[];
 
     void* mario = marioGetPtr();
@@ -639,12 +578,8 @@ void marioUpdateKeyData(void) {
 
 void marioGetStick(float* param_1, float* param_2) {
     extern s32 kpaGetStageViewType(void);
-    extern s32 yoshiGetStatus(void);
     extern f32 distABf(double, double, double, double);
     extern f32 angleABf(double, double, double, double);
-    extern f32 float_0_80420a60;
-    extern f32 float_70_80420a64;
-    extern f32 float_360_80420a68;
 
     void* mario = marioGetPtr();
     if ((*(u32*)mario & 0x20) != 0) {
@@ -714,7 +649,6 @@ s32 chkRevolveDir(int* param_1, int* param_2) {
     extern s32 DAT_803dc234;
     extern s16 DAT_803dc264[];
     extern s32 int32_t_803dc248;
-    extern f32 float_180_80420a70;
     extern f32 __fabsf(f32);
 
     s32 left = 0;
@@ -826,18 +760,13 @@ s32 checkOneRevolution(int param_1) {
 
 
 s32 marioGetRub(s32 buttonFlags, s32* outDir, s32* outCount, f32* outMove) {
-    extern void* marioGetPtr(void);
     extern void* memset(void*, int, u32);
     extern u32 kpaGetStageViewType(void);
-    extern s32 yoshiGetStatus(void);
     extern f64 distABf(f64, f64, f64, f64);
     extern f64 angleABf(f64, f64, f64, f64);
     extern s32 chkRevolveDir(s32*, s32*);
     extern s32 checkOneRevolution(s32);
-    extern f32 float_0_80420a60;
     extern f32 float_50_80420a6c;
-    extern f32 float_70_80420a64;
-    extern f32 float_360_80420a68;
     extern u8 rubwork[0x68];
 
     void* player;

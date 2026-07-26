@@ -117,7 +117,6 @@ void effBalloonHeihoDisp(int param_1, void* param_2) {
     extern f32 float_1_80424ca4;
     extern f32 float_0p03125_80424ca8;
     extern f32 float_0p015625_80424cac;
-    extern f32 float_0_80424cb0;
     extern u8 size32x64_tex32x64_vtx[];
     f32 mtxA[3][4];
     f32 mtxB[3][4];

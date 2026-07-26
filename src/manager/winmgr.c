@@ -1,12 +1,23 @@
 #include "manager/winmgr.h"
 
+#include "event/evt_badgeshop.h"
+#include "statuswindow.h"
+
 void* wp;
 void* __memAlloc(s32 heap, u32 size);
-void* memset(void* dst, int val, unsigned long size);
 void __memFree(s32 heap, void* ptr);
 extern u8 itemDataTable[];
 char* msgSearch(char* msg);
 void winMgrHelpDraw(void* win);
+extern char vec3_803003a0[];
+extern void PSMTXConcat(f32[3][4], f32[3][4], f32[3][4]);
+extern void PSMTXScale(f32[3][4], f32, f32, f32);
+extern char str_msg_window_title_5_80300808[];
+extern char str_help_80428008[];
+extern char* mario_status_name_table[];
+extern void FontDrawStart(void);
+extern char name_party0[],name_party1[],name_party2[],name_party4[],name_party5[],name_party6[];
+extern void PSMTXTrans(f32[3][4], f32, f32, f32);
 
 s32 unk_8023f8d0(void* event, s32 isFirstCall) {
     extern void* pouchGetPtr(void);
@@ -103,8 +114,8 @@ void winMgrReInit(void) {
 }
 void winMgrDisp(s32 cameraId, s32 unused, void* win) {
     extern void PSMTXRotRad(f32[3][4], s32, f32);
-    extern void PSMTXScale(f32[3][4], f32, f32, f32);
-    extern void PSMTXConcat(f32[3][4], f32[3][4], f32[3][4]);
+
+
     extern void windowDispGX2_Waku_col(f32, f32, f32, f32, f32, f32[3][4], s32, u32*);
     extern f32 float_deg2rad_80428060;
     extern u32 dat_80427fa0;
@@ -445,13 +456,13 @@ void winMgrHelpDraw(void* win) {
     extern s32 strcmp(char*, char*);
     extern void* lotteryGetPtr(void);
     extern s32 sprintf(char*, char*, ...);
-    extern void FontDrawStart(void);
+
     extern void FontDrawMessage(s32, s32, char*);
-    extern void PSMTXTrans(f32[3][4], f32, f32, f32);
-    extern void PSMTXScale(f32[3][4], f32, f32, f32);
-    extern void PSMTXConcat(f32[3][4], f32[3][4], f32[3][4]);
+
+
+
     extern void iconDispGx2(f32[3][4], s32, s32);
-    extern char vec3_803003a0[];
+
     extern void* gpGlobals;
 
     f32 trans[3][4];
@@ -520,7 +531,7 @@ s32* winMgrSelectEntry(u32 selectType, s32 newItem, s32 isCancellable) {
     extern s32 DAT_803ad0c4; extern u8 DAT_803ad0e1,DAT_803ad0ee,_jdt[];
     extern s32 johoya_get(s32,s32);
     extern u16 badge_bottakuru_table[];
-    extern s32 getBadgeBottakuru100TableMaxCount(void); extern u16 badge_bottakuru100_table[];
+    extern u16 badge_bottakuru100_table[];
     u8* select;
     u8* descList;
     u8* desc;
@@ -716,7 +727,7 @@ s32 winMgrSelectOther(void* select, void* event) {
     extern char* msgSearch(char*);
     extern u8 itemDataTable[];
     extern s16 party_id_table[];
-    extern char name_party0[],name_party1[],name_party2[],name_party4[],name_party5[],name_party6[];
+
     extern char* pouchGetYoshiName(void);
     extern s32 sprintf(char*,char*,...); extern s32 johoya_get(s32,s32);
     extern u8 _jdt[]; extern char DAT_803ad0cc[]; extern char* DAT_803ad0c8;
@@ -818,8 +829,6 @@ s32 unk_8023cf04(void* win) {
 
 void select_main(void* win) {
     extern void psndSFXOn(s32);
-    extern void statusWinForceOpen(void);
-    extern void statusWinForceOff(void);
     extern u32 keyGetDirRep(s32);
     extern u32 keyGetDirTrg(s32);
     extern u16 keyGetButtonTrg(s32);
@@ -960,7 +969,7 @@ void select_disp(void* win) {
     extern void iconDispGx(f64,Vec*,u16,u16); extern void* gpGlobals;
     extern char str_msg_window_title_1_803008c4[],str_msg_window_title_2_80300888[];
     extern char str_msg_window_title_3_8030089c[],str_msg_window_title_4_803008b0[];
-    extern char str_msg_window_title_5_80300808[];
+
     extern s32 sprintf(char*,char*,...);
     u8* w=win; u8* sel=*(u8**)(w+0x2C); u8* rows=*(u8**)(sel+0x30);
     u8* entries=*(u8**)((u8*)wp+4); s32 oldX,oldY,oldW,oldH,i; Vec pos,scale;
@@ -1035,7 +1044,7 @@ void select_disp_party(void* win) {
     extern void winFontSetEdgeWidth(Vec*,Vec*,void*,f32,char*,...);
     extern void iconDispGx(f64,Vec*,u16,u16); extern void* gpGlobals;
     extern char str_msg_window_title_7_80300858[],str_msg_window_title_8_8030086c[];
-    extern char name_party0[],name_party1[],name_party2[],name_party4[],name_party5[],name_party6[];
+
     u8* w=win; u8* sel=*(u8**)(w+0x2C); u8* rows=*(u8**)(sel+0x30);
     u8* entries=*(u8**)((u8*)wp+4); u8* pouch; char* names[7]; s32 oldX,oldY,oldW,oldH,i;
     Vec pos,textScale,iconScale; u32 color=0xFFFFFFFF,fog=0; char* title; f32 width;
@@ -1113,7 +1122,7 @@ void select_disp_mario(void* win) {
     extern void* gpGlobals;
     extern char str_msg_window_title_9_80300830[];
     extern char str_msg_window_title_10_80300844[];
-    extern char* mario_status_name_table[];
+
     extern s32 mario_status_icon_table[];
     extern s16 mario_status_point_table[];
     u8* w=win; u8* sel=*(u8**)(w+0x2C); u8* rows=*(u8**)(sel+0x30);
@@ -1186,7 +1195,7 @@ void select_disp_luigi(void* win) {
     extern void iconDispGx(f64, Vec*, u16, u16);
     extern s32 sprintf(char*, const char*, ...);
     extern void* gpGlobals;
-    extern char str_msg_window_title_5_80300808[];
+
     extern char str_msg_window_title_6_8030081c[];
     extern u8 _jdt[];
     u8* entry = (u8*)win;
@@ -1268,12 +1277,12 @@ void select_disp_luigi(void* win) {
 void select_disp2(void* win) {
     extern char* msgSearch(char*);
     extern u32 FontGetMessageWidthLine(char*, u16*);
-    extern void PSMTXScale(f32[3][4], f32, f32, f32);
-    extern void PSMTXTrans(f32[3][4], f32, f32, f32);
-    extern void PSMTXConcat(f32[3][4], f32[3][4], f32[3][4]);
-    extern void FontDrawStart(void);
+
+
+
+
     extern void FontDrawMessageMtx(f32[3][4], char*);
-    extern char vec3_803003a0[];
+
 
     f32 scaleMtx[3][4];
     f32 transMtx[3][4];
@@ -1394,9 +1403,9 @@ void select_disp3_party(void* win) {
     extern void* pouchGetPtr(void);
     extern s32 sprintf(char* str, const char* fmt, ...);
     extern char* msgSearch(char* msg);
-    extern void winMgrHelpDraw(void* win);
-    extern char vec3_803003a0[];
-    extern char str_help_80428008[];
+
+
+
     extern u16 party_id_table[];
     extern char* party_labelname_table[];
 
@@ -1442,10 +1451,10 @@ void select_disp3_mario(void* win) {
     extern void* pouchGetPtr(void);
     extern s32 sprintf(char* str, const char* fmt, ...);
     extern char* msgSearch(char* msg);
-    extern void winMgrHelpDraw(void* win);
-    extern char vec3_803003a0[];
-    extern char str_help_80428008[];
-    extern char* mario_status_name_table[];
+
+
+
+
 
     char buf[0x50];
     void* data;

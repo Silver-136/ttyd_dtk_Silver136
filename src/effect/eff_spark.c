@@ -1,6 +1,11 @@
 #include "effect/eff_spark.h"
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+extern s32 max_seq_num[];
+extern f32 float_16_804245e8;
+extern f32 float_0_804245ec;
+extern f32 float_1_804245f8;
+
 void* effSparkEntry(s32 type, f32 x, f32 y, f32 z) {
     typedef struct EffectEntry {
         s32 flags;
@@ -14,7 +19,6 @@ void* effSparkEntry(s32 type, f32 x, f32 y, f32 z) {
     extern void* __memAlloc(s32, u32);
     extern void effSparkMain(void);
     extern char str_Spark_8042460c[];
-    extern s32 max_seq_num[];
 
     EffectEntry* effect;
     u8* work;
@@ -65,7 +69,6 @@ void effSparkMain(void* effect) {
     extern void effSparkDisp(s32, void*);
     extern double sin(double);
     extern double cos(double);
-    extern s32 max_seq_num[];
     extern u8 a_data[];
     extern u8 a_data2[];
     extern f32 scale_data[];
@@ -75,9 +78,6 @@ void effSparkMain(void* effect) {
     extern f32 float_0p2_80424600;
     extern f32 float_360_80424604;
     extern f32 float_6p2832_80424608;
-    extern f32 float_16_804245e8;
-    extern f32 float_0_804245ec;
-    extern f32 float_1_804245f8;
 
     u8* work;
     u8* part;
@@ -205,11 +205,8 @@ void effSparkDisp(s32 cameraId, void* effect) {
     extern void GXSetChanMatColor(s32, void*);
     extern void GXBegin(s32, s32, s16);
     extern f32 float_deg2rad_804245e4;
-    extern f32 float_16_804245e8;
-    extern f32 float_0_804245ec;
     extern f32 float_0p5_804245f0;
     extern f32 float_8_804245f4;
-    extern f32 float_1_804245f8;
     extern u32 dat_804245e0;
 
     u8* work;

@@ -15,7 +15,6 @@ extern void* wp;
 extern void animPoseRelease(s32 poseId);
 extern void animPaperPoseRelease(s32 poseId);
 extern void imgRelease(s32 imageId, void* heap);
-extern void* memset(void* dst, int value, unsigned long size);
 extern void* __memAlloc(s32 heap, u32 size);
 extern void* arcOpen(const char* name, s32 unused0, s32 unused1);
 extern char* getMarioStDvdRoot(void);

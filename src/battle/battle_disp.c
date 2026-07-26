@@ -1,14 +1,23 @@
 #include "battle/battle_disp.h"
+#include "battle/battle_camera.h"
 
 extern void* _battleWorkPointer;
 extern f32 float_901_80422238;
 void _btlStockExpDisp(void);
 void dispEntry(s32 cameraId, s32 priority, void* callback, f32 z, void* param);
 extern f32 float_0_80422240;
+extern f32 float_0p5_80422234;
+extern f32 float_1_8042224c;
+extern f32 float_deg2rad_8042223c;
+extern u8 itemDataTable[];
 extern f32 float_2_80422250;
 extern f32 float_4_80422224;
 extern f64 double_to_int_802ee3f8;
 extern s32 _status_pose_table[8];
+extern void* camGetCurPtr(void);
+extern void PSMTXConcat(void* a, void* b, void* out);
+extern void GXLoadPosMtxImm(void* mtx, s32 id);
+extern char* strcpy(char* dst, const char* src);
 void animPoseSetLocalTimeRate(void* pose, f32 rate);
 void animPoseSetEffectAnim(void* pose, s32 value, s32 flag);
 void animPoseSetEffect(void* pose, s32 value, s32 flag);
@@ -17,9 +26,15 @@ void _partsBlurControl(void* part, s32 enable, s32 a3, void* color);
 void _pose_def(void* part);
 void _pose_one_pattern(void* part);
 void _pose_two_pattern(void* part);
-void battleCameraInit(void);
 void battleMenuDispInit(void);
 f32 sinfd(f64);
+void gravityOffsetControl(void* part);
+void floatOffsetControl(void* part);
+void statusPoseControl(void* part);
+f32 getFloatDispOffset(void* part);
+f32 getGravityDispOffset(void* part);
+void BattleStockExpDisp(void);
+void _btlDispTex4(s32 texId, f32* trans0, f32* scale0, f32* rot, f32* trans1, f32* scale1, void* color);
 void TEXGetGXTexObjFromPalette(void* palette, void* texObj, s32 id);
 u16 GXGetTexObjWidth(void* texObj);
 u16 GXGetTexObjHeight(void* texObj);
@@ -60,7 +75,6 @@ void btlDispGXInit2DSub(void) {
 }
 
 void btlDispGXInit2DRasta(void) {
-    extern void btlDispGXInit2DSub(void);
     extern void GXSetVtxDesc(s32 attr, s32 type);
     extern void GXSetVtxAttrFmt(s32 vtxFmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
     extern void GXSetNumTexGens(s32 nTexGens);
@@ -86,7 +100,6 @@ void btlDispGXInit2DRasta(void) {
 }
 
 void btlDispGXInit2D(void) {
-    extern void btlDispGXInit2DSub(void);
     extern void GXSetVtxDesc(s32 attr, s32 type);
     extern void GXSetVtxAttrFmt(s32 vtxFmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
     extern void GXSetNumTexGens(s32 nTexGens);
@@ -129,7 +142,6 @@ void btlDispGXPoint2DRasta(u8 r, u8 g, u8 b, u8 a, f32 x, f32 y) {
 
 void btlDispGXQuads2DRasta(f32 x1, f32 y1, f32 x2, f32 y2, u8 r, u8 g, u8 b, u8 a) {
     extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
-    extern void btlDispGXPoint2DRasta(u8 r, u8 g, u8 b, u8 a, f32 x, f32 y);
 
     GXBegin(0x80, 0, 4);
     btlDispGXPoint2DRasta(r, g, b, a, x1, y1);
@@ -153,10 +165,7 @@ void btlDispGXPoint2D(u8 r, u8 g, u8 b, u8 a, f32 x, f32 y, f32 s, f32 t) {
 }
 
 void btlDispGXQuads2D(f32 x1, f32 y1, f32 x2, f32 y2, u8 r, u8 g, u8 b, u8 a) {
-    extern f32 float_0_80422240;
-    extern f32 float_1_8042224c;
     extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
-    extern void btlDispGXPoint2D(u8 r, u8 g, u8 b, u8 a, f32 x, f32 y, f32 s, f32 t);
 
     GXBegin(0x80, 0, 4);
     btlDispGXPoint2D(r, g, b, a, x1, y1, float_0_80422240, float_0_80422240);
@@ -200,8 +209,6 @@ void btlDispTexPlainGX(s32 texId, u8* color0, u8* color1, u8* color2, u8* color3
     extern void GXSetTevOrder(s32, s32, s32, s32);
     extern void GXSetTevOp(s32, s32);
     extern void GXBegin(s32, s32, s32);
-    extern f32 float_0p5_80422234;
-    extern f32 float_1_8042224c;
     u8 texObj[32];
     volatile f32* fifoF = (volatile f32*)0xCC008000;
     volatile u8* fifoB = (volatile u8*)0xCC008000;
@@ -242,13 +249,8 @@ void btlDispTexPlainGX(s32 texId, u8* color0, u8* color1, u8* color2, u8* color3
 }
 
 void btlDispTexPlane(s32 tpl, void* color, s32 flags, f32 x, f32 y, f32 z, f32 scaleX, f32 scaleY) {
-    extern f32 float_1_8042224c;
-    extern void btlDispTexPlaneInit(void);
-    extern void* camGetCurPtr(void);
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
     extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
     extern void btlDispTexPlainGX(s32 texId, void* color0, void* color1, void* color2, void* color3);
     f32 scaleMtx[3][4];
     f32 transMtx[3][4];
@@ -276,11 +278,7 @@ void btlDispTexPlane(s32 tpl, void* color, s32 flags, f32 x, f32 y, f32 z, f32 s
 }
 
 void btlDispTexPlane2(void* mtx, s32 texId, void* color) {
-    extern void btlDispTexPlaneInit(void);
     extern void PSMTXCopy(void* src, void* dst);
-    extern void* camGetCurPtr(void);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
     extern void btlDispTexPlainGX(s32 texId, void* color0, void* color1, void* color2, void* color3);
     u32 colorCopy0;
     u32 colorCopy1;
@@ -302,11 +300,7 @@ void btlDispTexPlane2(void* mtx, s32 texId, void* color) {
 }
 
 void btlDispTexPlane3(void* mtx, s32 texId, void* color0, void* color1, void* color2, void* color3) {
-    extern void btlDispTexPlaneInit(void);
     extern void PSMTXCopy(void* src, void* dst);
-    extern void* camGetCurPtr(void);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
     extern void btlDispTexPlainGX(s32 texId, void* color0, void* color1, void* color2, void* color3);
     f32 localMtx[3][4];
     u32 local0;
@@ -380,9 +374,6 @@ void btlDispMain(void) {
     extern void btlUnitPartsDisp(void*, void*);
     extern void btlUnitPartsBlurDisp(void*);
     extern void animPoseMain(s32);
-    extern void gravityOffsetControl(void*);
-    extern void floatOffsetControl(void*);
-    extern void statusPoseControl(void*);
     extern void BtlUnit_GetPartsWorldPos(void*, f32*, f32*, f32*);
     extern s32 animPoseTestXLU(s32);
     extern s32 _GetStatusPoseType(void*);
@@ -394,7 +385,6 @@ void btlDispMain(void) {
     extern void BtlUnit_HpGaugeMain(void*);
     extern void BattleStatusEffectMain(void*);
     extern void BattleStatusIconMain(void*);
-    extern void BattleStockExpDisp(void);
     extern void BattleStageDisp(void);
     extern void BattleCommandDisplay(void*);
     extern void BattleAudience_Disp(void);
@@ -510,14 +500,11 @@ void btlDispMain(void) {
 
 
 void btlUnitPartsDisp(s32 cameraId, void* part) {
-    extern f32 float_deg2rad_8042223c;
     extern void PSMTXIdentity(void*);
     extern void PSMTXTrans(void*, f32, f32, f32);
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXRotRad(void*, s32, f32);
     extern void PSMTXConcat(void*, void*, void*);
-    extern f32 getFloatDispOffset(void*);
-    extern f32 getGravityDispOffset(void*);
     extern void animPoseSetMaterialEvtColor(s32, void*);
     extern void animPoseSetMaterialFlagOn(s32, u32);
     extern void animPoseSetMaterialFlagOff(s32, u32);
@@ -632,9 +619,6 @@ void btlUnitPartsDisp(s32 cameraId, void* part) {
 }
 
 void btlUnitItemDisp(s32 param_1, void* unit) {
-    extern void* _battleWorkPointer;
-    extern u8 itemDataTable[];
-    extern f32 float_1_8042224c;
     extern s32 BtlUnit_GetHeight(void* unit);
     extern s32 BtlUnit_EnemyItemCanUseCheck(s32 item);
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
@@ -697,8 +681,6 @@ done:
 }
 
 void btlUnitStolenItemDisp(s32 param_1, void* unit) {
-    extern u8 itemDataTable[];
-    extern f32 float_1_8042224c;
     extern f32 float_5_80422254;
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern s32 BtlUnit_GetHeight(void* unit);
@@ -781,7 +763,6 @@ void btlUnitPartsBlurDisp(s32 param_1, void* part) {
 
 void btlDispEntAnime(void* unit) {
     extern s32 animPoseEntry(void*, s32);
-    extern char* strcpy(char*, const char*);
     void* part;
     void* poseTable;
     void* animData;
@@ -806,7 +787,6 @@ void btlDispEntAnime(void* unit) {
 }
 
 void btlDispChangeAnime(BattleWorkUnitPart* part, const char*name, BOOL a3) {
-    extern char* strcpy(char*, const char*);
 
     strcpy((char*)((s32)part + 0x1C4), name);
     *(u32*)((s32)part + 0x204) |= 2;
@@ -1057,7 +1037,6 @@ void btlDispAnimeSpeed(void* part, f32 speed) {
 }
 
 void btlGetScreenPoint(void* inPos, void* outScreenSpacePos) {
-    extern f32 float_0_80422240;
     extern f32 float_240_80422248;
     extern f32 float_304_80422244;
     extern void* camGetPtr(s32 id);
@@ -1091,10 +1070,6 @@ void btlGetScreenPoint(void* inPos, void* outScreenSpacePos) {
 }
 
 void btlDispTex4(s32 texId, f32* trans, f32* scale, f32* rot, u32* color) {
-    extern void btlDispGetTexSize(s32 texId, u16* width, u16* height);
-    extern void _btlDispTex4(s32 texId, f32* trans0, f32* scale0, f32* rot, f32* trans1, f32* scale1, void* color);
-    extern f32 float_0_80422240;
-    extern f32 float_0p5_80422234;
     extern u32 vec3_802ee3a0[];
     u16 height;
     u16 width;
@@ -1208,12 +1183,10 @@ void btlDispTex4(s32 texId, f32* trans, f32* scale, f32* rot, u32* color) {
 }
 
 void _btlDispTex4(s32 texId, f32* trans0, f32* scale0, f32* rot, f32* trans1, f32* scale1, void* color) {
-    extern f32 float_deg2rad_8042223c;
     extern void PSMTXIdentity(void* mtx);
     extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
     extern void PSMTXRotRad(void* mtx, s32 axis, f32 radians);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
     extern void btlDispTexPlane2(void* mtx, s32 texId, void* color, s32 flags);
     f32 mtx[3][4];
     f32 trans0Mtx[3][4];
@@ -1258,7 +1231,6 @@ void BattleStockExpDisp(void) {
 }
 
 void _btlStockExpDisp(void) {
-    extern void* _battleWorkPointer;
     extern f32 float_13_80422218;
     extern f32 float_308_80422210;
     extern f32 float_3p5_80422214;

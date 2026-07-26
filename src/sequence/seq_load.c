@@ -1,13 +1,25 @@
 #include "sequence/seq_load.h"
+#include "countdown.h"
+#include "driver/camdrv.h"
+#include "driver/fadedrv.h"
+#include "driver/swdrv.h"
+#include "manager/evtmgr.h"
+#include "manager/evtmgr_cmd.h"
+#include "manager/filemgr.h"
+#include "mario/mario.h"
+#include "nameent.h"
+#include "sound.h"
 
 u8 loadMain(void* param_1);
 u8 continueGame(void);
 u8 loadDraw(void);
 
 extern s32* wp;
-extern void* memset(void*, int, unsigned long);
-extern void fileFree(void*);
-extern void fadeReset(s32);
+extern void* gp;
+extern void* evtEntryType(void*, s32, s32, s32);
+extern void seqSetSeq(s32, void*, void*);
+extern s32 cardGetCode(void);
+extern char* msgSearch(char*);
 
 
 s32 unk_800f72e4(void* param_1) {
@@ -31,24 +43,13 @@ u8 seq_loadExit(void) {
 }
 
 u8 seq_loadMain(void* param_1) {
-    extern void* gp;
-    extern s32* wp;
     extern char* dat_ptrarr_802edb88[];
     extern char str_PCTs_w_PCTs_name_tpl_802ee004[];
     extern u32 dat_80422010;
     extern s32 win_dt[];
     extern void* evt_memcard_check;
     extern s32 getMarioStDvdRoot(void);
-    extern s32 fileAsyncf(s32, s32, const char*, ...);
-    extern void* fileAllocf(s32, const char*, ...);
-    extern void* evtEntryType(void*, s32, s32, s32);
-    extern s32 evtCheckID(s32);
-    extern s32 evtGetValue(void*, s32);
-    extern void seqSetSeq(s32, void*, void*);
-    extern s32 cardGetCode(void);
     extern s32 OSGetSoundMode(void);
-    extern void SoundSetOutputMode(s32);
-    extern void fadeEntry(s32, s32, void*);
     char* names[6];
     s32 state = *(s32*)((s32)param_1 + 4);
 
@@ -134,27 +135,17 @@ u8 loadMain(void* param_1) {
         u8 left;
         u8 right;
     } LoadEntry;
-    extern s32* wp;
     extern LoadEntry win_dt[];
     extern LoadEntry win_dt2[];
     extern u16 keyGetButtonTrg(s32);
     extern u16 keyGetButtonRep(s32);
     extern u32 keyGetDirRep(s32);
-    extern s32 cardGetCode(void);
     extern s32 cardIsExec(void);
-    extern s32 fadeIsFinish(void);
     extern void* cardGetFilePtr(void);
-    extern char* msgSearch(char*);
     extern void psndSFXOn(char*);
     extern void psndBGMOff_f_d(s32, s32, s32);
-    extern void fadeEntry(s32, s32, void*);
-    extern void seqSetSeq(s32, void*, void*);
-    extern void* evtEntryType(void*, s32, s32, s32);
-    extern s32 evtCheckID(s32);
-    extern s32 evtGetValue(void*, s32);
     extern void dispEntry(s32, s32, void*, s32, f32);
     extern f64 sin(f64);
-    extern void* gp;
     extern void* evt_memcard_start;
     extern void* evt_continue;
     extern u32 dat_8042202c;
@@ -162,10 +153,6 @@ u8 loadMain(void* param_1) {
     extern u32 dat_80422034;
     extern u32 dat_80422038;
     extern u32 dat_8042203c;
-    extern s32 nameEntPrepare(void);
-    extern void nameEntOn(s32);
-    extern s32 nameEntWait(void);
-    extern s32 nameEntIsCancel(void);
     extern char str_msg_savefile_select_802edfa0[];
     extern char str_msg_savefile_delete__802edfb4[];
     u16 buttons;
@@ -382,8 +369,6 @@ u8 loadMain(void* param_1) {
 
 
 u8 loadDraw(void) {
-    extern s32* wp;
-    extern void* camGetPtr(s32);
     extern void GXSetBlendMode(s32, s32, s32, s32);
     extern void GXSetZCompLoc(s32);
     extern void GXSetAlphaCompare(s32, u8, s32, s32, u8);
@@ -404,7 +389,6 @@ u8 loadDraw(void) {
     extern void FontDrawScale(f32);
     extern void FontDrawEdge(void);
     extern void FontDrawEdgeOff(void);
-    extern char* msgSearch(char*);
     extern s32 sprintf(char*, char*, ...);
     extern char str_PCTd_802EDE90[];
     char number[32];
@@ -445,19 +429,11 @@ u8 loadDraw(void) {
 }
 
 u8 continueGame(void) {
-    extern void* gp;
-    extern s32* wp;
     extern void cardCopy2Main(s32);
     extern void marioPartyKill(void);
-    extern void* marioGetPtr(void);
     extern void psndSetFlag(s32);
     extern void marioPartyEntry(s32);
     extern void psndClearFlag(s32);
-    extern void countDownSaveReStart(void);
-    extern s32 swByteGet(s32);
-    extern void swByteSet(s32, s32);
-    extern void swInit(void);
-    extern void seqSetSeq(s32, void*, void*);
     extern void stg0_00_init(void);
     extern char str_aji_10_802eddcc[];
     extern char str_kpa_00_802eddd4[];

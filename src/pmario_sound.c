@@ -1,4 +1,5 @@
 #include "pmario_sound.h"
+#include "driver/seqdrv.h"
 
 //.bss
 u8 _buf[0x80];
@@ -10,6 +11,25 @@ PaperSoundBGM psbgm[2];
 //.data
 PaperSoundEffectData pssfxlist[3042];
 
+extern s32 init_f;
+extern void* gp;
+extern const f32 float_0_804218d0;
+extern const f32 float_180_804218e0;
+extern const f32 float_360_804218d8;
+extern const f32 float_1000_804218cc;
+extern const f32 float_750_804218dc;
+extern void SoundSongStopCh(s32 channel);
+extern void SoundSSStopCh(s32 channel);
+extern void SoundEfxStop(s32 channel);
+extern void SoundSongSetVolCh(s32 channel, u8 volume);
+extern void SoundSSSetVolCh(s32 channel, u8 volume);
+extern s32 evtGetValue(void* evt, s32 value);
+extern u8 psbgmlist[];
+extern u32 silent_tbl[];
+extern f64 sin(f64 angle);
+extern f64 cos(f64 angle);
+extern char* strcpy(char* dst, const char* src);
+
 //local prototypes
 s32 __psndSFXOn(s32 lookup, u8 volume, u8 a3, u16 a4, Vec* position, u32 a6, u16 distance, s32 a8);
 void psndBGMMain(void);
@@ -19,13 +39,10 @@ s32 psndBGMOff_f_d(s32 name, s32 frames, s32 flags);
 void psndENVOff_f_d(s32 name, s32 frames, s32 flags);
 f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2) {
     extern f32 angleABTBL[];
-    extern const f32 float_0_804218d0;
     extern const f32 float_2_804218fc;
     extern const f32 float_45_804218f8;
     extern const f32 float_90_80421900;
-    extern const f32 float_180_804218e0;
     extern const f32 float_270_80421904;
-    extern const f32 float_360_804218d8;
     extern const f64 double_0p5_802e3c98;
 
     f32 dx;
@@ -101,13 +118,8 @@ f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2) {
 
 u32 calc3D(u32 flags, Vec* pos, u8 volume, u16 distance) {
     extern f64 angleABf(f64, f64, f64, f64);
-    extern f64 cos(f64);
-    extern f64 sin(f64);
     extern f64 sqrt(f64);
-    extern const f32 float_0_804218d0;
     extern const f32 float_6p2832_804218d4;
-    extern const f32 float_360_804218d8;
-    extern const f32 float_180_804218e0;
     extern const f32 float_127_804218e4;
     extern const f32 float_2048_804218e8;
     extern const f32 float_64_804218ec;
@@ -258,8 +270,6 @@ void psndInit(void) {
     extern void SoundInit(void);
     extern void SoundLoadDVD2(const char* path);
     extern void SoundSLibLoadDVD(const char* path);
-    extern char* strcpy(char* dst, const char* src);
-    extern const f32 float_0_804218d0;
     extern const char str__802e3c78[];
     extern const char str_sound_proj_pmario_802e3c80[];
     u8* buf;
@@ -350,7 +360,6 @@ void psndInit(void) {
 }
 
 void psndMain(void) {
-    extern s32 init_f;
     extern void SoundMain(void);
     u8* work;
     s8 count;
@@ -370,7 +379,6 @@ void psndMain(void) {
 
 void psndMainInt(void) {
     extern void SoundMainInt(void);
-    extern s32 init_f;
     if (init_f != 0) {
         SoundMainInt();
     }
@@ -379,7 +387,6 @@ void psndMainInt(void) {
 void psndExit(void) {
     extern void SoundDropData(void);
     extern void DVDMgrSetupCallback(void*);
-    extern s32 init_f;
     SoundDropData();
     DVDMgrSetupCallback(0);
     init_f = 0;
@@ -389,7 +396,6 @@ s32 psndPushGroup(void) {
     extern s32 _psndPushGroup_trg;
     extern void SoundLoadDVD2Free(void);
     extern void SoundLoadDVD2PushGroup(void* tbl);
-    extern s32 init_f;
     static s32 group;
     static u8 tbl[2];
 
@@ -418,9 +424,6 @@ void psndSetPosDirListener(Vec* pos, f32 dir) {
 }
 
 void psndStopAllFadeOut(void) {
-    extern void* gp;
-    extern const f32 float_1000_804218cc;
-    extern const f32 float_750_804218dc;
     u8* sfx;
     u8* work;
     s32 i;
@@ -517,11 +520,7 @@ u32 psndGetFlag(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void psndMapChange(void) {
-    extern void* gp;
-    extern char* strcpy(char* dst, const char* src);
     extern s32 strcmp(const char* s1, const char* s2);
-    extern const f32 float_1000_804218cc;
-    extern const f32 float_750_804218dc;
 
     u8* work;
     u8* sfx;
@@ -590,9 +589,6 @@ void psndMapChange(void) {
 
 
 void psndSFXAllOff(void) {
-    extern void* gp;
-    extern const f32 float_1000_804218cc;
-    extern const f32 float_750_804218dc;
     extern const f64 double_to_int_802e3c60;
     u8* sfx;
     u8* work;
@@ -653,9 +649,6 @@ void psndSFXAllOff(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void L_psndBGM_stop(void) {
-    extern void SoundSSStopCh(s32 id);
-    extern void SoundSongStopCh(s32 id);
-    extern void SoundEfxStop(s32 id);
     PaperSoundEffect* sfx;
     PaperSoundEffect* off;
     PaperSoundEffectData* data;
@@ -709,7 +702,6 @@ void L_psndBGM_stop(void) {
 
 void psndBGM_rate(u32 param_1, u16 param_2) {
     extern void SoundSSSetPlayFreqCh(s32 id);
-    extern u8 psbgmlist[];
     PaperSoundBGM* bgm;
     s32 listIndex;
 
@@ -723,13 +715,9 @@ void psndBGM_rate(u32 param_1, u16 param_2) {
 }
 
 void psndBGMMain(void) {
-    extern s32 seqGetSeq(void);
-    extern void* gp;
     extern u16 SoundSSCheck(s32);
     extern s32 SoundSongCheck(s32);
     extern void SoundSSMuteOff(s32);
-    extern void SoundSongSetVolCh(s32, u8);
-    extern void SoundSSSetVolCh(s32, u8);
     extern void SoundSetFadeTime(u16, u16);
     extern void SoundSongFadeinCh(s32);
     extern void SoundSSFadeoutCh(s32);
@@ -880,18 +868,14 @@ void psndBGMMain(void) {
 }
 
 void psndBGMOn(s32 id, s32 a2) {
-    extern void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 unk1, s32 unk2);
     psndBGMOn_f_d(id, a2, 1000, 750, 0);
 }
 
 void unk_800db778(s32 id, s32 a2, s32 a3, s32 a4) {
-    extern void psndBGMOn_f_d(s32, s32, s32, s32, s32);
     psndBGMOn_f_d(id, a2, a3, 750, a4);
 }
 
 void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
-    extern u8 psbgmlist[];
-    extern s32 evtGetValue(void* evt, s32 value);
     extern s32 strcmp(const char* a, const char* b);
     extern void SoundSetFadeTime(s16 in, s16 out);
     extern void SoundSongContinueCh(s32 ch);
@@ -900,18 +884,12 @@ void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
     extern void SoundSSFadeoutCh(s32 ch);
     extern u32 SoundSongCheck(s32 ch);
     extern u32 SoundSSCheck(s32 ch);
-    extern void SoundSSStopCh(s32 ch);
     extern void SoundSongPlayCh(s32 ch, u32 song);
-    extern void SoundSongSetVolCh(s32 ch, u8 volume);
     extern void SoundSSPlayCh(s32 ch, const char* path);
     extern void SoundSSMuteOn(s32 ch);
-    extern void SoundSSSetVolCh(s32 ch, u8 volume);
     extern void SoundSSSetPanCh(s32 ch, u8 pan);
     extern void SoundSSSetSrndPanCh(s32 ch, u8 pan);
-    extern void psndBGMMain(void);
-    extern void psndBGMOff_f_d(s32 id, s32 fade, s32 unk);
     extern char str_mri_00_802e3c70[];
-    extern void* gp;
     u8* bgm;
     u8* list;
     s32 story;
@@ -1108,19 +1086,11 @@ void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
 }
 
 void psndBGMOff(s32 id) {
-    extern void psndBGMOff_f_d(s32 id, s32 fade, s32 unk);
     psndBGMOff_f_d(id, 1000, 0);
 }
 
 s32 psndBGMOff_f_d(s32 name, s32 frames, s32 flags) {
-    extern u32 silent_tbl[];
-    extern void* gp;
     extern void SoundSetFadeTime(u16, u16);
-    extern s32 evtGetValue(void*, s32);
-    extern void psndBGMOn_f_d(s32, s32, s32, s32, s32);
-    extern void SoundSongStopCh(s32);
-    extern void SoundSSStopCh(s32);
-    extern const f32 float_1000_804218cc;
 
     u8* bgm;
     s32 index;
@@ -1239,7 +1209,6 @@ s32 psndBGMStartCheck(s32 index) {
 }
 
 s32 psndBGMPlayTime(s32 id) {
-    extern void* gp;
     PaperSoundBGM* bgm;
     u32 ticks;
     u64 now;
@@ -1261,13 +1230,9 @@ u8 psndSFXMain(void) {
     extern u32 SoundSongCheck(s32);
     extern u32 SoundEfxCheck(s32);
     extern void SoundSSSetPanCh(s32, u8);
-    extern void SoundSSSetVolCh(s32, u8);
     extern void SoundSSSetSrndPanCh(s32, u8);
-    extern void SoundSongSetVolCh(s32, u8);
     extern void SoundEfxSetPan(s32, u8);
     extern void SoundEfxSetVolume(s32, u8);
-    extern s32 seqGetSeq(void);
-    extern void* gp;
     u8* snd = (u8*)&psnd;
     u8* entry = (u8*)pssfx;
     u8* list = (u8*)pssfxlist;
@@ -1312,12 +1277,6 @@ u8 psndSFXMain(void) {
 
 s32 __psndSFXOn(s32 lookup, u8 volume, u8 a3, u16 a4, Vec* position, u32 a6, u16 distance, s32 a8) {
     extern int strcmp(const char*, const char*);
-    extern s32 evtGetValue(void*, s32);
-    extern void SoundEfxStop(s32);
-    extern void SoundSongStopCh(s32);
-    extern void SoundSSStopCh(s32);
-    extern void* gp;
-    extern const f32 float_1000_804218cc;
 
     u8* listBase = (u8*)pssfxlist;
     u8* entry;
@@ -1556,9 +1515,6 @@ void psndSFX_dist(u32 index, u16 distance) {
     }
 }
 void psndSFXOff(s32 id) {
-    extern void SoundSSStopCh(s32 id);
-    extern void SoundSongStopCh(s32 id);
-    extern void SoundEfxStop(s32 id);
     PaperSoundEffect* sfx;
     PaperSoundEffectData* data;
     s32 listIndex;
@@ -1620,9 +1576,6 @@ u8 psndSFX_get_vol(u32 index) {
 }
 
 void psndENV_stop(u32 envId) {
-    extern void SoundEfxStop(s32);
-    extern void SoundSongStopCh(s32);
-    extern void SoundSSStopCh(s32);
 
     s32 i;
     for (i = 0; i < 16; i++) {
@@ -1681,12 +1634,8 @@ void psndENV_stop(u32 envId) {
 }
 
 u8 psndENVMain(void) {
-    extern s32 seqGetSeq(void);
     extern s32 irand(u32);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern void SoundEfxSetLPF(s32, s16);
-    extern void* gp;
     u8* snd = (u8*)&psnd;
     u8* env = (u8*)psenv;
     s32 target = ((*(u16*)(snd + 0x56) & 0x20) != 0 && (*(u16*)(snd + 0x56) & 0x40) == 0) ? 80 : 100;
@@ -1864,8 +1813,6 @@ u32 psndENVOn_f_d(u32 flags, s32 name, s32 frames, s32 extra) {
     } PSndEnvListEntryLocal;
     extern char* psenvlistname[];
     extern PSndEnvListEntryLocal psenvlist[];
-    extern void* gp;
-    extern const f32 float_1000_804218cc;
     extern int strcmp(const char*, const char*);
     extern s32 irand(s32);
     extern u8 psndENV_stop(u32);
@@ -2005,9 +1952,6 @@ void psndENVOff(s32 id) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void psndENVOff_f_d(s32 name, s32 frames, s32 flags) {
-    extern void* gp;
-    extern u32 silent_tbl[];
-    extern const f32 float_1000_804218cc;
 
     u8* work;
     u8* env;

@@ -1,4 +1,24 @@
 #include "sequence/seq_logo.h"
+#include "driver/envdrv.h"
+extern void* wp;
+extern void* gp;
+extern u8 sRMObjHReso[];
+extern u8 sRMObjHReso_prog[];
+extern u8 GXNtsc480IntDfMarioSt[];
+extern u8 GXNtsc480ProgMarioSt[];
+extern f32 float_0_80420824;
+extern f32 float_1_80420818;
+extern void OSSetProgressiveMode(s32 progressive);
+extern u32 keyGetButtonTrg(s32 pad);
+extern void VIConfigure(void* mode);
+extern void VIFlush(void);
+extern void VISetBlack(s32 black);
+extern void VIWaitForRetrace(void);
+extern void GXSetViewport(f32 left, f32 top, f32 width, f32 height, f32 nearz, f32 farz);
+extern void GXSetScissor(u32 x, u32 y, u32 width, u32 height);
+extern void GXSetPixelFmt(s32 pix_fmt, s32 z_fmt);
+extern void GXSetDispCopySrc(u16 left, u16 top, u16 width, u16 height);
+extern void GXSetDispCopyDst(u16 width, u16 height);
 
 u8 seq_logoInit(void) {
     extern void* memset(void* dst, s32 value, u32 size);
@@ -7,16 +27,8 @@ u8 seq_logoInit(void) {
     extern u32 OSGetResetCode(void);
     extern u32 U_VIGetDTVStatus(void);
     extern u32 OSGetProgressiveMode(void);
-    extern void OSSetProgressiveMode(s32 progressive);
     extern u32 keyGetButton(s32 controller);
-    extern void VIConfigure(void* mode);
-    extern void VIFlush(void);
-    extern void VIWaitForRetrace(void);
-    extern void* wp;
-    extern void* gp;
     extern const char str_PCTs_mariost_tpl_802c3b68[];
-    extern u8 sRMObjHReso[];
-    extern u8 sRMObjHReso_prog[];
 
     memset(wp, 0, 0x20);
     *(s32*)((s32)wp + 4) = -1;
@@ -66,11 +78,9 @@ void seq_logoExit(void) {
     extern void windowTexSetup(void);
     extern void fadeTexSetup(void);
     extern void iconTexSetup(void);
-    extern void envTexSetup(void);
     extern void effTexSetup(void);
     extern void marioPoseInit(void);
     extern void fileFree(void* file);
-    extern void* wp;
 
     fontmgrTexSetup();
     windowTexSetup();
@@ -87,18 +97,11 @@ u8 seq_logoMain(int param_1) {
     extern u32 fadeIsFinish(void);
     extern void DVDMgrSetupCallback(void* callback);
     extern s32 psndPushGroup(void);
-    extern u32 keyGetButtonTrg(s32 pad);
-    extern void VIConfigure(void* mode);
-    extern void VIFlush(void);
-    extern void VISetBlack(s32 black);
-    extern void VIWaitForRetrace(void);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 order);
     extern void seqSetSeq(s32 seq, void* arg1, void* arg2);
     extern void dummy_draw(void);
     extern void progDisp(s32 camId);
     extern u8 logoDisp(void);
-    extern void* wp;
-    extern void* gp;
     extern u32 time_508;
     extern u32 DAT_8041ea7c;
     extern u32 dat_804207c0;
@@ -111,10 +114,6 @@ u8 seq_logoMain(int param_1) {
     extern u32 dat_804207dc;
     extern u32 dat_804207e0;
     extern u32 dat_804207e4;
-    extern f32 float_0_80420824;
-    extern f32 float_1_80420818;
-    extern u8 GXNtsc480IntDfMarioSt[];
-    extern u8 GXNtsc480ProgMarioSt[];
     extern char str_dmo_00_802c3b60[];
 
     u32 color;
@@ -277,18 +276,11 @@ u8 seq_logoMain(int param_1) {
 
 
 void logoDisp(void) {
-    extern void* wp;
-    extern void* gp;
     extern u32 OSGetProgressiveMode(void);
     extern void GXGetProjectionv(f32*);
     extern void GXGetViewportv(f32*);
     extern void GXGetScissor(u32*, u32*, u32*, u32*);
     extern void GXSetProjectionv(f32*);
-    extern void GXSetViewport(f32, f32, f32, f32, f32, f32);
-    extern void GXSetScissor(u32, u32, u32, u32);
-    extern void GXSetPixelFmt(s32, s32);
-    extern void GXSetDispCopySrc(u16, u16, u16, u16);
-    extern void GXSetDispCopyDst(u16, u16);
     extern u32 GXSetDispCopyYScale(f32);
     extern void GXSetDispCopyGamma(s32);
     extern void GXSetScissorBoxOffset(s32, s32);
@@ -322,8 +314,6 @@ void logoDisp(void) {
     extern u16 GXGetTexObjWidth(void*);
     extern u16 GXGetTexObjHeight(void*);
     extern double cos(double);
-    extern u8 sRMObjHReso[];
-    extern u8 sRMObjHReso_prog[];
     extern u32 dat_804207e8;
     extern u32 dat_804207ec;
     extern u32 dat_804207f0;
@@ -452,17 +442,8 @@ void dummy_draw(void) {
     extern s32 OSGetProgressiveMode(void);
     extern u16 GXGetYScaleFactor(u16 efbHeight, u16 xfbHeight);
     extern u32 GXSetDispCopyYScale(u16 yScale);
-    extern void GXSetDispCopySrc(u16 left, u16 top, u16 wd, u16 ht);
-    extern void GXSetDispCopyDst(u16 wd, u16 ht);
-    extern void GXSetPixelFmt(s32 pix_fmt, s32 z_fmt);
-    extern void GXSetScissor(u32 x, u32 y, u32 wd, u32 ht);
-    extern void GXSetViewport(f32 left, f32 top, f32 wd, f32 ht, f32 nearz, f32 farz);
-    extern u8 GXNtsc480ProgMarioSt[];
-    extern u8 GXNtsc480IntDfMarioSt[];
-    extern f32 float_0_80420824;
     extern f32 float_608_80420828;
     extern f32 float_480_8042082c;
-    extern f32 float_1_80420818;
     void* mode;
     u16 y;
 
@@ -485,26 +466,16 @@ void dummy_draw(void) {
 void progDisp(s32 camId) {
     extern void* camGetPtr(s32 camId);
     extern u64 OSGetTime(void);
-    extern u32 keyGetButtonTrg(s32 pad);
     extern u32 keyGetDirTrg(s32 pad);
     extern s32 romFontGetMessage(s32 id);
     extern s32 romFontGetWidth(s32 msg, ...);
     extern void romFontPrintGX();
-    extern void VISetBlack(s32 black);
-    extern void OSSetProgressiveMode(s32 progressive);
-    extern void VIConfigure(void* mode);
-    extern void VIFlush(void);
-    extern void VIWaitForRetrace(void);
-    extern void* wp;
-    extern void* gp;
-    extern u8 sRMObjHReso_prog[];
     extern u32 dat_80420800;
     extern u32 dat_80420804;
     extern u32 dat_80420808;
     extern u32 dat_8042080c;
     extern f32 float_0p5_80420810;
     extern f32 float_neg80_80420814;
-    extern f32 float_1_80420818;
     extern f32 float_neg160_8042081c;
     extern f32 float_neg100_80420820;
     u64 now;

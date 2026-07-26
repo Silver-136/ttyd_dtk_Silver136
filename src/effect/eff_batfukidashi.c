@@ -154,8 +154,6 @@ void effCoinFukidashiDisp(s32 cameraId, void* effect) {
     extern f32 float_deg2rad_804267cc;
     extern f32 float_0p4_804267d0;
     extern f32 float_0p5_804267d4;
-    extern f32 float_0_804267d8;
-    extern f32 float_1_804267dc;
     extern const char str_PCTd_804267e0[];
     extern f32 float_3_804267e4;
     extern f32 float_neg28_804267e8;

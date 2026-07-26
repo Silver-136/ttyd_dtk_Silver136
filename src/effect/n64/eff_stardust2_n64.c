@@ -1,4 +1,12 @@
 #include "effect/n64/eff_stardust2_n64.h"
+extern f64 sin(f64);
+extern f64 cos(f64);
+extern f32 float_1_8042621c;
+extern f32 float_360_80426240;
+extern f32 float_6p2832_80426248;
+extern f32 float_0p1_80426224;
+extern f32 float_0p01_80426238;
+
 
 
 void* effStardust2N64Entry(
@@ -8,19 +16,12 @@ void* effStardust2N64Entry(
     extern void effStardust2Main(void*);
     extern char str_Stardust2N64_802fc088[];
     extern s32 rand(void);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern f32 float_0_80426218;
-    extern f32 float_1_8042621c;
-    extern f32 float_360_80426240;
-    extern f32 float_6p2832_80426248;
-    extern f32 float_0p1_80426224;
     extern f32 float_0p4_80426254;
     extern f32 float_10_80426258;
     extern f32 float_90_8042625c;
     extern f32 float_0p03_80426260;
     extern f32 float_0p04_80426264;
-    extern f32 float_0p01_80426238;
     extern f32 float_0p005_80426268;
 
     void* entry = effEntry();
@@ -114,17 +115,10 @@ u8 effStardust2Main(void* effect) {
     extern f32 dispCalcZ(void*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effStardust2Disp(void);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern f32 float_0p96_80426250;
     extern f32 float_neg0p02_80426234;
-    extern f32 float_0p1_80426224;
-    extern f32 float_0p01_80426238;
-    extern f32 float_1_8042621c;
-    extern f32 float_360_80426240;
     extern f32 float_60_8042623c;
     extern f32 float_120_80426244;
-    extern f32 float_6p2832_80426248;
     extern f32 float_neg0p05_8042624c;
 
     u8* work = *(u8**)((s32)effect + 0xC);

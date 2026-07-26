@@ -1,4 +1,5 @@
 #include "effect/eff_naniga.h"
+#include "effect/eff_kemutest.h"
 
 /* stub-fill: effNanigaEntry | missing_definition | ghidra_signature */
 void* effNanigaEntry(f32 x, f32 y, f32 z, s32 type, s32* items, s32 item) {
@@ -78,7 +79,6 @@ void effNanigaMain(void* effect) {
     extern void animPoseRelease(s32);
     extern s32 irand(s32);
     extern void* effKemuTestEntry(f32, f32, f32, f32, s32);
-    extern void effKemuTestDrawCam(void*, s32);
     extern u32 psndSFXOn_3D(char*, Vec*);
     extern void psndSFXOff(s32);
     extern f64 intplGetValue(f64, f64, s32, s32, s32);

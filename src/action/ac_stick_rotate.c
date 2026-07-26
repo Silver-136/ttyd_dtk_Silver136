@@ -1,11 +1,15 @@
 #include "action/ac_stick_rotate.h"
 
+#include "battle/battle_pad.h"
+#include "system.h"
+
 extern void* _battleWorkPointer;
 extern f32 float_neg300_8042683c;
 extern f32 float_30_80426840;
+extern f32 float_neg200_80426830;
+extern f32 float_70_80426834;
+extern f32 float_1_80426838;
 
-f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
-s32 BattlePadCheckNow(s32 mask);
 void actionCommandDisp(f32 x, f32 y);
 void actionCommandDisp2(f32 x, f32 y);
 
@@ -76,11 +80,6 @@ s32 _CalcRollDir(void) {
 
 /* stub-fill: battleAcMain_StickRotate | missing_definition | ghidra_signature */
 s32 battleAcMain_StickRotate(s32 work)  {
-    extern void* memset(void*, s32, s32);
-    extern s32 BattlePadCheckNow(s32);
-    extern s32 _GetInputDir(void);
-    extern s32 _CalcRollDir(void);
-    extern s32 irand(s32);
     s32 state;
     s32 dir;
     s32 roll;
@@ -299,10 +298,6 @@ s32 _get_icon_id(s8 id) {
 void actionCommandDisp(f32 x, f32 y) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
     extern void iconDispGx(f32, Vec3*, s32, u16);
-    extern s32 _get_icon_id(s8);
-    extern f32 float_neg200_80426830;
-    extern f32 float_70_80426834;
-    extern f32 float_1_80426838;
     u8* battle = _battleWorkPointer;
     u32 state = *(u32*)(battle + 0x1C9C);
     s8* extra = (s8*)(battle + 0x1F4C);
@@ -363,9 +358,6 @@ void actionCommandDisp(f32 x, f32 y) {
 /* stub-fill: actionCommandDisp2 | prototype_only | source_prototype */
 void actionCommandDisp2(f32 x, f32 y) {
     extern void iconDispGx(f32* pos, s32 flags, s32 iconId, f32 scale);
-    extern f32 float_neg200_80426830;
-    extern f32 float_70_80426834;
-    extern f32 float_1_80426838;
     void* battle = _battleWorkPointer;
     s32 state = *(s32*)((s32)battle + 0x1C9C);
     s8* extra = (s8*)((s32)battle + 0x1F4C);

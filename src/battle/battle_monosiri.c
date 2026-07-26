@@ -1,9 +1,8 @@
 #include "battle/battle_monosiri.h"
+#include "driver/swdrv.h"
 
 extern void* _battleWorkPointer;
 extern s32* battle_monosiri_same_tbl[];
-void swSet(s32 id);
-s32 swGet(s32 id);
 
 void* battleGetUnitMonosiriPtr(s32 id) {
     extern u8 monosiriMessageTable[];

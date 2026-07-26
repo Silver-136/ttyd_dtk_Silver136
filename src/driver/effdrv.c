@@ -1,15 +1,5 @@
 #include "driver/effdrv.h"
 
-typedef struct EffEntry {
-    u32 flags;
-    s32 unk4;
-    void* unk8;
-    void* data;
-    void* unk10;
-    void* unk14;
-    char name[0x10];
-} EffEntry;
-
 typedef struct EffWork {
     s32 count;
     EffEntry* entries;

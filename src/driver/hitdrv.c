@@ -2,7 +2,7 @@
 
 extern void* mapGetWork(void);
 extern s32 mapGetJoints(void* mapObj);
-extern void hitEntrySub(void* mapObj, s32 arg1, void* arg2, s32 arg3, s32 arg4);
+extern void* hitEntrySub(void* mapObj, s32 arg1, void* arg2, s32 arg3, s32 arg4);
 
 extern void hitReCalcMatrix2(void* hit, void* arg, s32 flag);
 extern s32 hitCalcVtxPosition(void* hit);
@@ -195,7 +195,7 @@ void* _hitEnt(void* param_1, s32 param_2, s32 param_3, int param_4) {
     return hit;
 }
 
-void hitEntrySub(void* joint, s32 parent, void* parentMtx, s32 rootOnly, s32 groupIndex) {
+void* hitEntrySub(void* joint, s32 parent, void* parentMtx, s32 rootOnly, s32 groupIndex) {
     extern void* _hitEnt(void* joint, s32 parent, s32 parentMtx, s32 groupIndex);
     void* root;
     void* child;
@@ -234,10 +234,12 @@ void hitEntrySub(void* joint, s32 parent, void* parentMtx, s32 rootOnly, s32 gro
         hitChild = _hitEnt(child, parent, (s32)parentMtx, groupIndex);
         *(void**)((s32)root + 0xDC) = hitChild;
     }
+
+    return root;
 }
 
 
-void hitEntry(void* mapObj, void* arg, s32 idx) {
+void* hitEntry(void* mapObj, void* arg, s32 idx) {
     extern void* mapGetWork(void);
     extern s32 mapGetJoints(void* mapObj);
     extern void* _mapAlloc(void* heap, u32 size);
@@ -256,7 +258,7 @@ void hitEntry(void* mapObj, void* arg, s32 idx) {
     size = (u32)((joints + 0x80) * 0xE4 + 0x1F) & ~0x1F;
     *(void**)((s32)group + 0x15C) = _mapAlloc(mapalloc_base_ptr, size);
     memset(*(void**)((s32)group + 0x15C), 0, size);
-    hitEntrySub(mapObj, 0, arg, 1, idx);
+    return hitEntrySub(mapObj, 0, arg, 1, idx);
 }
 
 void hitEntryMOBJ(void* mapObj, void* arg) {
@@ -1335,7 +1337,6 @@ void hitReCalcMatrix(void* hit, void* arg) {
 void hitReCalcMatrix2(void* hit, void* arg, s32 flag) {
     extern void PSMTXConcat(void* a, void* b, void* out);
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
-    extern s32 hitCalcVtxPosition(void* hit);
 
     void* child;
     void* sub;

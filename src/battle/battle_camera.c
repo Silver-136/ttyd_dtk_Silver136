@@ -4,22 +4,17 @@
 
 
 
-void btl_camera_set_mode(s32 priority, s32 mode);
 void* camGetPtr(s32 cameraId);
-void btl_camera_shake_h(s32 priority, f32 a, f32 b, s32 time, s32 type);
+void BtlUnit_GetHomePos(void* unit, f32* x, f32* y, f32* z);
+void padRumbleOn(s32 channel);
 void btl_camera_shake_w(s32 priority, f32 a, f32 b, s32 time, s32 type);
-void btl_camera_set_moveto(s32 priority, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz, s32 frames, s32 type);
 
 /* Reorder pilot prototypes: needed because this file originally relied on source order. */
-void battleCameraInit(void);
-f32 battleCameraGetPosMoveSpeed(void);
 void btl_camera_set_prilimit(s32 limit);
 void btl_camera_set_zoom(s32 priority, f32 zoom);
 void btl_camera_add_zoom(s32 priority, f32 zoom);
-void btl_camera_set_posoffset(s32 priority, f32 x, f32 y, f32 z);
 void btl_camera_off_posoffset_manual(s32 priority);
 void btl_camera_set_zoomSpeedLv(s32 priority, s32 level);
-void btl_camera_set_moveSpeedLv(s32 priority, s32 level);
 void btl_camera_nomove_x_onoff(s32 priority, s32 on);
 void btl_camera_nomove_y_onoff(s32 priority, s32 on);
 void btl_camera_nomove_z_onoff(s32 priority, s32 on);
@@ -33,7 +28,6 @@ s32 evt_btl_camera_set_moveSpeedLv(void* evt);
 s32 evt_btl_camera_set_zoomSpeedLv(void* evt);
 s32 evt_btl_camera_set_mode(void* evt);
 s32 evt_btl_camera_set_zoom(void* evt);
-void battleCameraMain(void);
 u8 battleCameraMoveTo(void);
 s32 evt_btl_camera_set_homing_unitparts(int param_1);
 s32 evt_btl_camera_set_homing_unit_audience(int param_1);
@@ -43,8 +37,6 @@ u8 evt_btl_camera_shake_w(void* event);
 u8 evt_btl_camera_set_moveto(void* event);
 s32 evt_btl_camera_set_posoffset(void* event);
 s32 evt_btl_camera_add_zoom(int param_1);
-void btl_camera_shake_h(s32 priority, f32 a, f32 b, s32 frames, s32 type);
-void btl_camera_shake_w(s32 priority, f32 a, f32 b, s32 frames, s32 type);
 
 void battleCameraInit(void) {
     BattleWork* wp = _battleWorkPointer;
@@ -328,7 +320,6 @@ s32 evt_btl_camera_set_homing_unit(int event) {
     extern void* BattleGetUnitPtr(void*, s32);
     extern s32 BtlUnit_GetBodyPartsId(void*);
     extern void* BattleGetUnitPartsPtr(s32, s32);
-    extern void BtlUnit_GetHomePos(void*, f32*, f32*, f32*);
     extern void BtlUnit_GetHitPos(void*, void*, f32*, f32*, f32*);
     s32* args = *(s32**)(event + 0x18);
     u8* work = (u8*)_battleWorkPointer;
@@ -372,7 +363,6 @@ s32 evt_btl_camera_set_homing_unitparts(int event) {
     extern s32 BattleTransID(void*, s32);
     extern void* BattleGetUnitPtr(void*, s32);
     extern void* BattleGetUnitPartsPtr(s32, s32);
-    extern void BtlUnit_GetHomePos(void*, f32*, f32*, f32*);
     extern void BtlUnit_GetHitPos(void*, void*, f32*, f32*, f32*);
     s32* args = *(s32**)(event + 0x18);
     u8* work = (u8*)_battleWorkPointer;
@@ -624,8 +614,6 @@ u8 evt_btl_camera_set_moveto(void* event) {
 }
 
 void btl_camera_shake_w(s32 priority, f32 a, f32 b, s32 frames, s32 type) {
-    extern void padRumbleOn(s32);
-
     void* work;
 
     work = _battleWorkPointer;
@@ -665,8 +653,6 @@ u8 evt_btl_camera_shake_w(void* event) {
 }
 
 void btl_camera_shake_h(s32 priority, f32 a, f32 b, s32 frames, s32 type) {
-    extern void padRumbleOn(s32);
-
     void* work;
 
     work = _battleWorkPointer;

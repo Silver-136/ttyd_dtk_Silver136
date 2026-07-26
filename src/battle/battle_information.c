@@ -1,7 +1,5 @@
 #include "battle/battle_information.h"
 
-void BattleInformationSetResult(void* info, s32 result);
-
 void BattleInformationSetMode(void* info, s32 mode) {
     *(s32*)((s32)info + 0x0) = mode;
 }

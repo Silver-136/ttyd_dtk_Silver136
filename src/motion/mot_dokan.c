@@ -1,14 +1,15 @@
 #include "motion/mot_dokan.h"
 
+extern void* marioGetPtr(void);
+extern void* partyGetPtr(s32 id);
+extern f32 revise360(f32 angle);
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void _partyEntry(int param_1) {
-    extern void* marioGetPtr(void);
-    extern void* partyGetPtr(s32 id);
     extern void partyChgRunMode(void* party, s32 mode);
     extern s32 partyEntryPos(s32 party, f32 x, f32 y, f32 z);
     extern s32 partyEntry2Pos(s32 party, f32 x, f32 y, f32 z);
-    extern f32 revise360(f32 angle);
     extern char vec3_802f4548[];
     extern char vec3_802f4554[];
     extern f32 float_120_80423084;
@@ -92,19 +93,16 @@ void _partyEntry(int param_1) {
 
 
 void mot_dokan(void) {
-    extern void* marioGetPtr(void);
     extern void _partyEntry(s32 mode);
     extern void marioPaperOn(char* name);
     extern void marioPaperOff(void);
     extern void marioPaperLightOff(void);
     extern void marioChgPaper(char* name);
     extern void marioChgPose(char* name);
-    extern f32 revise360(f32 angle);
     extern s32 marioGetPartyId(void);
     extern s32 marioGetExtraPartyId(void);
     extern void partyDokanEnd(s32 id, s32 dokan);
     extern void marioUpdateCamPos(void);
-    extern void* partyGetPtr(s32 id);
     extern f32 vec3_802f4548[];
     extern char str_PM_D_1B_802f461c[];
     extern char str_M_Z_1_80423044[];

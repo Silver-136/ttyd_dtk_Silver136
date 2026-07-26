@@ -1,7 +1,10 @@
 #include "driver/casedrv.h"
 
 extern void* wp;
+extern void* gp;
 extern void* __memAlloc();
+extern void* memcpy(void* dst, const void* src, u32 size);
+extern const char* hitGetName(void* hit);
 
 u8 caseInit(void) {
     *(s32*)wp = 0x40;
@@ -23,9 +26,7 @@ void caseReInit(void) {
 
 
 s32 caseEntry(void* param) {
-    extern void* wp;
     extern void* memset(void* dst, s32 value, u32 size);
-    extern void* memcpy(void* dst, const void* src, u32 size);
     extern char* strcpy(char* dst, const char* src);
     void* work = wp;
     s32 count = *(s32*)work;
@@ -64,8 +65,6 @@ void caseDelete(s32 id) {
 }
 
 void caseMain(void) {
-    extern void* wp;
-    extern void* gp;
     extern void* marioGetPtr(void);
     extern s32 marioGetPartyId(void);
     extern void* partyGetPtr(s32 id);
@@ -74,7 +73,6 @@ void caseMain(void) {
     extern s32 N_fbatPreventMarioEventChk(void);
     extern s32 marioCaseEventValidChk(void);
     extern s32 yoshiGetStatus(void);
-    extern const char* hitGetName(void* hit);
     extern s32 strcmp(const char* a, const char* b);
     extern s32 keyGetDirTrg(s32 chan);
     extern void* fbatNpcTalkCheck(void);
@@ -82,7 +80,6 @@ void caseMain(void) {
     extern s32 _swGet(s32 flag);
     extern s32 evtCheckID(s32 id);
     extern void* evtEntry(s32 evtCode, s32 evtArg, s32 flags);
-    extern void* memcpy(void* dst, const void* src, u32 size);
     extern void npcStopForEvent(void);
 
     void* player;
@@ -323,9 +320,6 @@ void caseMain(void) {
 }
 
 void* caseCheckHitObj(void* pHit) {
-    extern void* gp;
-    extern void* wp;
-    extern const char* hitGetName(void* hit);
     extern int strcmp(const char* a, const char* b);
     void* entry;
     s32 i;
@@ -353,9 +347,6 @@ void* caseCheckHitObj(void* pHit) {
 }
 
 void* caseCheckHitObj2(u32 pHit) {
-    extern void* gp;
-    extern void* wp;
-    extern const char* hitGetName(void* hit);
     extern int strcmp(const char* a, const char* b);
     void* entry;
     s32 i;

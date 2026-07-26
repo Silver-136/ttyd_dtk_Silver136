@@ -1,4 +1,5 @@
 #include "cam_road.h"
+#include "cam_shift.h"
 
 #define COPY_CAMROAD_BLOCK(dstBase, srcBase)        \
     do {                                            \
@@ -166,7 +167,6 @@ extern const f32 float_90_8041f674;
 extern const f32 float_20_8041f678;
 extern void* wp;
 extern void* mapalloc_base_ptr;
-extern void camShiftInit(void);
 extern void arcOpen(const char* name, void* dst, void* outSize);
 extern const char* getMapDataDvdRoot(void);
 extern int sprintf(char* str, const char* format, ...);

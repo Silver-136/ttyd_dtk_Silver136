@@ -13,6 +13,13 @@ extern int vsprintf(char* buffer, const char* format, void* arg);
 extern void* __memAlloc(s32 heap, u32 size);
 extern void* memmove(void* dst, const void* src, u32 size);
 extern void DVDMgrClose(void* entry);
+extern void OSYieldThread(void);
+extern s32 strcmp(char*, char*);
+extern void* arcOpen(char*, void*, void*);
+extern void* DVDMgrOpen(char*, s32, s32);
+extern u32 DVDMgrGetLength(void*);
+extern void* smartAlloc(u32, s32);
+extern char* strcpy(char*, const char*);
 char* fileAsync(char* name, s32 kind, s32 callback);
 u8 fileInit(void) {
     void* mem;
@@ -329,10 +336,8 @@ void fileGarbageMoveMem(void* param_1, char* param_2) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 _fileGarbage(int mode) {
-    extern void* afp;
     extern char dvdmgr_thread[];
     extern void* OSGetCurrentThread(void);
-    extern void OSYieldThread(void);
     extern void smartFree(void*);
 
     u8* file;
@@ -439,17 +444,8 @@ void fileAlloc(void* name, unsigned long size) {
 }
 
 void _fileAlloc(char* name, s32 kind, s32 unused) {
-    extern void* afp;
-    extern s32 strcmp(char*, char*);
-    extern void OSYieldThread(void);
     extern void _fileGarbage(s32);
-    extern void* arcOpen(char*, void*, void*);
     extern void fileGarbageDataAdrSet(char*, s32);
-    extern void* DVDMgrOpen(char*, s32, s32);
-    extern u32 DVDMgrGetLength(void*);
-    extern void DVDMgrClose(void*);
-    extern void* smartAlloc(u32, s32);
-    extern char* strcpy(char*, const char*);
     extern void DVDMgrRead(void*, void*, u32, s32);
 
     char* file;
@@ -631,16 +627,8 @@ s32 fileAsyncf(s32 id, s32 flags, const char* fmt, ...) {
 }
 
 char* fileAsync(char* name, s32 kind, s32 callback) {
-    extern void* afp;
-    extern s32 strcmp(char*, char*);
     extern void _fileGarbage(s32);
-    extern void* arcOpen(char*, void*, void*);
     extern void fileGarbageDataAdrSet(char*, s32);
-    extern void* DVDMgrOpen(char*, s32, s32);
-    extern u32 DVDMgrGetLength(void*);
-    extern void DVDMgrClose(void*);
-    extern void* smartAlloc(u32, s32);
-    extern char* strcpy(char*, const char*);
     extern void DVDMgrReadAsync(void*, void*, u32, s32, void*);
     extern void dvdReadDoneCallBack(void);
 
@@ -771,6 +759,5 @@ char* fileAsync(char* name, s32 kind, s32 callback) {
 }
 
 void fileSetCurrentArchiveType(s32 type) {
-    extern void* afp;
     ((s32*)afp)[1] = type;
 }

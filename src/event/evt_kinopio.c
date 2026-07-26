@@ -1,16 +1,20 @@
 #include "event/evt_kinopio.h"
 
 void* wp = (void*)0;
-s32 evtSetValue(EventEntry* event, s32 target, s32 value);
-f32 evtSetFloat(EventEntry* event, s32 target, f32 value);
 void marioPaperOff(void);
 void psndSetFlag(s32 flag);
 void psndClearFlag(s32 flag);
+s32 evtGetValue(EventEntry* event, s32 value);
+f32 evtGetFloat(EventEntry* event, s32 value);
+f64 sin(f64 value);
+f64 cos(f64 value);
+extern f32 float_6p2832_80421f18;
+extern f32 float_360_80421f20;
+
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_kinopio_setup(void* pEvt) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* npcNameToPtr(s32 name);
     extern s32 animGroupBaseAsync(const char* name, s32 flags, s32 unused);
     extern char str_p_slit_802ed424[];
@@ -30,7 +34,6 @@ s32 evt_kinopio_setup(void* pEvt) {
 #pragma use_lmw_stmw on
 
 s32 msg_no(void* pEvt) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 index = evtGetValue(pEvt, args[0]);
     void* data = *(void**)wp;
@@ -197,18 +200,13 @@ USER_FUNC(get_from_bed_evt) {
 
 u8 paper_on(s32 pEvt, s32 isFirstCall) {
     extern void* gp;
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
     extern void* marioGetPtr(void);
     extern void marioPaperOn(void* name);
     extern void marioChgPose(void* name);
     extern void marioChgPaper(void* name);
     extern s32 strcmp(void* a, void* b);
-    extern f64 sin(f64 value);
-    extern f64 cos(f64 value);
     extern char str_BGM_FF_GO_SLEEPING1_802ed368[];
     extern char str_M_S_1_80421f24[];
-    extern f32 float_6p2832_80421f18;
-    extern f32 float_360_80421f20;
     extern f32 float_0p2_80421f2c;
     s32* args = *(s32**)(pEvt + 0x18);
     f32 angle = evtGetFloat((void*)pEvt, args[0]);
@@ -244,13 +242,8 @@ USER_FUNC(paper_off) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 offset(s32 pEvt) {
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
     extern void* camGetPtr(s32 id);
-    extern f64 sin(f64 value);
-    extern f64 cos(f64 value);
     extern f32 float_90_80421f1c;
-    extern f32 float_6p2832_80421f18;
-    extern f32 float_360_80421f20;
     s32* args = *(s32**)(pEvt + 0x18);
     f32 dist = evtGetFloat((void*)pEvt, args[0]);
     f32 angle = (float_6p2832_80421f18 * (float_90_80421f1c + *(f32*)((s32)camGetPtr(4) + 0x114))) / float_360_80421f20;

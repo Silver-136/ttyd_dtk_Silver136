@@ -1,11 +1,12 @@
 #include "effect/n64/eff_rothammer_success_n64.h"
 
+extern f32 float_0_80425f94;
+
 void* effRotHammerSuccessN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, s32 lifetime) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effRotHammerSuccessMain(void*);
     extern char str_RotHammerSuccessN64_802fbeac[];
-    extern f32 float_0_80425f94;
     extern f32 float_6p2832_80425f98;
     extern f32 float_360_80425f9c;
     extern f32 float_8_80425fa0;
@@ -74,7 +75,6 @@ void effRotHammerSuccessMain(void* effect) {
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effRotHammerSuccessDisp(void);
     extern const Vec3 vec3_802fbea0;
-    extern f32 float_0_80425f94;
     extern f32 float_0p8_80425f88;
     extern f32 float_0p7_80425f8c;
     extern f32 float_0p2_80425f90;

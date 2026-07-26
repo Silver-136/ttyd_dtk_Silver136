@@ -1,8 +1,9 @@
 #include "mapdata.h"
 
+extern void* world_data[];
+extern int strcmp(const char*, const char*);
+
 char** mapDataPtr(char* name) {
-    extern void* world_data[];
-    extern int strcmp(const char*, const char*);
     void** world;
     void** outer;
     void** area_scan;
@@ -44,8 +45,6 @@ char** mapDataPtr(char* name) {
 }
 
 void* areaDataPtr(char* name) {
-    extern void* world_data[];
-    extern int strcmp(const char*, const char*);
     char* key;
     void** base;
     void** scan;
@@ -76,8 +75,6 @@ void* areaDataPtr(char* name) {
 
 
 u8 relSetEvtAddr(char* name, void* evt) {
-    extern void* world_data[];
-    extern int strcmp(const char*, const char*);
     void** world;
     void** outer;
     void** area_scan;
@@ -119,8 +116,6 @@ u8 relSetEvtAddr(char* name, void* evt) {
 }
 
 void relSetBtlAddr(char* name, int btl1, int btl2) {
-    extern void* world_data[];
-    extern int strcmp(const char*, const char*);
     void** base;
     void** scan;
     void* data;

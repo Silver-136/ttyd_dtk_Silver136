@@ -8,6 +8,16 @@ extern f32 float_320_8042382c;
 extern f32 float_neg240_804237f4;
 extern char str_msg_menu_mochi_item_802f5e44[];
 extern char str_msg_menu_mochi_daiji_802f5e58[];
+extern s32 pouchGetHaveItemCnt(void);
+extern char* msgSearch(char* key);
+extern s32 pouchHaveItem(s32 index);
+extern void winTexInit(void* data);
+extern s32 winMgrAction(s32 entryId);
+extern u8 itemDataTable[];
+extern void winIconInit(void);
+extern void winIconGrayInit(void);
+extern void winFontInit(void);
+extern void* winGetPtr(void);
 extern u16 menu_skip_list[18];
 void winMsgEntry(void* pWin, s32 param_2, char* msg, s32 param_4);
 u16 pouchKeyItem(s32 index);
@@ -233,15 +243,9 @@ void winItemExit(void* work) {
 }
 
 s32 winItemMain(void* pWin) {
-    extern s32 pouchGetHaveItemCnt(void);
-    extern s32 pouchHaveItem(s32 index);
     extern void winMsgEntry(void* win, s32 item, char* text, s32 type);
     extern void winSortEntry(f32 x, f32 y, void* win, s32 type);
-    extern char* msgSearch(char* key);
-    extern u8 itemDataTable[];
     extern void psndSFXOn(s32 id);
-    extern char str_msg_menu_mochi_item_802f5e44[];
-    extern char str_msg_menu_mochi_daiji_802f5e58[];
     u8* w = (u8*)pWin;
     s32 state = *(s32*)(w + 0x20C);
     s32 sub = *(s32*)(w + 0x210);
@@ -464,7 +468,6 @@ u8 winItemDisp(s32 param_1, void* pWin, s32 param_3) {
 
     extern void winBgGX(f32 x, f32 y, void* pWin, s32 type);
     extern void winKirinukiGX(f32 x, f32 y, f32 w, f32 h, void* pWin, s32 flag);
-    extern void winTexInit(void* tpl);
     extern void winTexInit_x2(void* tpl);
     extern void winTexSet(s32 texId, LocalVec* pos, LocalVec* size, u32* color);
     extern void winTexSet_x2(s32 texId0, s32 texId1, LocalVec* pos, LocalVec* size, u32* color);
@@ -558,21 +561,13 @@ u8 winItemDisp(s32 param_1, void* pWin, s32 param_3) {
 
 void item_disp(double x, double y, void* pWin) {
     typedef struct Vec3 { f32 x,y,z; } Vec3;
-    extern s32 pouchGetHaveItemCnt(void);
-    extern s32 pouchHaveItem(s32);
     extern void GXSetScissor(s32,s32,s32,s32);
-    extern void winIconInit(void);
-    extern void winIconGrayInit(void);
     extern void winIconSet(s32,Vec3*,Vec3*,void*);
-    extern void winFontInit(void);
     extern void winFontSet(Vec3*,Vec3*,void*,char*);
-    extern char* msgSearch(char*);
     extern u16 FontGetMessageWidth(char*);
-    extern void winTexInit(void*);
     extern void winTexSet(s32, Vec3*, Vec3*, void*);
     extern void winBookGX(double, double, void*, s32);
     extern char str_msg_menu_sort_narabi_802f5e2c[];
-    extern u8 itemDataTable[];
     extern u32 dat_80423758, dat_8042375c;
     s32 sub = *(s32*)((s32)pWin + 0x210);
     s32 count = sub ? *(u16*)((s32)pWin + 0x3DA) : pouchGetHaveItemCnt();
@@ -639,23 +634,16 @@ void item_disp(double x, double y, void* pWin) {
 
 void itemUseDisp(void* pWinMgr) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
-    extern void* winGetPtr(void);
-    extern s32 winMgrAction(s32 id);
     extern s32 pouchGetHP(void);
     extern s32 pouchGetMaxHP(void);
     extern s32 pouchGetFP(void);
     extern s32 pouchGetMaxFP(void);
-    extern void winTexInit(void* data);
     extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
     extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
     extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void winIconInit(void);
-    extern void winIconGrayInit(void);
     extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
-    extern void winFontInit(void);
     extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* format, ...);
     extern void winFontSetR(Vec3* pos, Vec3* scale, void* color, char* format, ...);
-    extern char* msgSearch(char* key);
     extern s32 marioBgmodeChk(void);
     extern s32 marioGetParty(void);
     extern void* marioGetPtr(void);
@@ -749,12 +737,8 @@ u8 itemUseDisp2(void* pWinMgr) {
         f32 y;
         f32 z;
     } LocalVec;
-    extern void* winGetPtr(void);
-    extern s32 winMgrAction(s32 entryId);
-    extern char* msgSearch(char* msg);
     extern void FontGetMessageWidthLine(char* msg, u16* width);
     extern void winMgrSetSize(s32 entryId, s32 x, s32 y, s32 width, s32 height);
-    extern void winFontInit(void);
     extern void winFontSetPitch(LocalVec* position, LocalVec* scale, u32* color, char* msg, f32 pitch);
     extern u32 dat_804237b0;
     extern LocalVec vec3_802f5df0;

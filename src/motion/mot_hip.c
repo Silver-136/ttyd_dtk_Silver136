@@ -1,9 +1,12 @@
 #include "motion/mot_hip.h"
+#include "bowser/koopa_motion.h"
 
 void mot_hip_post(void);
+extern void* marioGetPtr(void);
+extern void marioOfsRotReset(void);
+extern void psndSFXOff(s32 soundId);
 
 s32 marioChkHipAttack(void) {
-    extern void* marioGetPtr(void);
     extern s32 pouchGetJumpLv(void);
 
     void* mario;
@@ -18,7 +21,6 @@ s32 marioChkHipAttack(void) {
 }
 
 s32 marioChkHipBump(void) {
-    extern void* marioGetPtr(void);
 
     s32 result = 0;
     if (*(u16*)((s32)marioGetPtr() + 0x2E) == 0x11) {
@@ -29,17 +31,13 @@ s32 marioChkHipBump(void) {
 
 
 void mot_hip(void) {
-    extern void* marioGetPtr(void);
-    extern void kpa_hip(void);
     extern void marioAdjustMoveDir(void);
     extern f64 toMovedir(f64);
     extern void marioChgPose(char*);
     extern f64 marioGetScale(void);
     extern u32 psndSFXOn_3D(char*, void*);
-    extern void psndSFXOff(s32);
     extern s32 U_chkground(void);
     extern void marioChgMotSub(s32, s32);
-    extern void marioOfsRotReset(void);
     extern void marioChkLandon(f32*, f32);
     extern char str_M_A_1A_802f94a8[];
     char* mario = marioGetPtr();
@@ -139,7 +137,6 @@ void mot_hip(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 U_chkground(void) {
-    extern void* marioGetPtr(void);
     extern s32 marioChkLandon(f32* ypos, f32 scale);
     extern void camFollowYOn(void);
     extern s32 hitGetAttr(s32 hit);
@@ -189,9 +186,6 @@ s32 U_chkground(void) {
 
 
 void mot_hip_post(void) {
-    extern void* marioGetPtr(void);
-    extern void marioOfsRotReset(void);
-    extern void psndSFXOff(s32 soundId);
 
     void* mario = marioGetPtr();
     s32 soundId;

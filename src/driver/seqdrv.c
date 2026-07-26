@@ -7,7 +7,6 @@ s32 next_p0;
 s32 next_p1;
 u8 seqWork[0x20];
 
-void* memset(void*, int, unsigned long);
 
 void seqInit_MARIOSTORY(void) {
     memset(seqWork, 0, 0x20);

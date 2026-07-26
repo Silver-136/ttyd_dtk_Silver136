@@ -1,9 +1,9 @@
 #include "battle/battle_ac_help.h"
+#include "battle/battle_audience.h"
 
 extern void* _battleWorkPointer;
 extern f32 float_498_804272b8;
 
-void BattleAudience_WinSetActive(s32 active);
 void _ac_help_disp(void);
 void dispEntry(s32 cameraId, s32 renderMode, void* callback, s32 param, f32 priority);
 

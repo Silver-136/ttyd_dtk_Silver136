@@ -18,7 +18,6 @@ typedef struct LstRcKeepDisp {
 
 
 s32 battleAcMain_LstRcKeep(void* battleWork) {
-    extern void* memset(void*, s32, u32);
     extern s32 irand(s32);
     extern u32 BattlePadCheckTrigger(u32);
     extern u32 BattlePadCheckNow(u32);

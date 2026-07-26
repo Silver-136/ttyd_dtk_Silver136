@@ -6,9 +6,12 @@ extern s32 evtMax;
 extern s32 runMainF;
 extern s32 _mariostSystemLevel;
 extern u8 work[];
-void* memset(void* dest, int ch, size_t count);
 void evtStopAll(s32 type);
 void evt_msg_init(void);
+extern s32 priTblNum;
+extern s32 priTbl[];
+extern s32 priTblIndex[];
+extern s32 evtID;
 
 void* evtGetWork(void) {
     if (*(s32*)((s32)gp + 0x14) != 0) {
@@ -19,10 +22,10 @@ void* evtGetWork(void) {
 
 void make_pri_table(void) {
     extern unsigned char work[];
-    extern void* gp;
-    extern s32 priTblNum;
-    extern s32 priTbl[];
-    extern s32 priTblIndex[];
+
+
+
+
     void* set;
     void* entry;
     s32 count;
@@ -65,10 +68,10 @@ void make_pri_table(void) {
 
 void evtmgrInit(void) {
     extern unsigned char work[];
-    extern void* gp;
-    extern s32 evtMax;
-    extern s32 priTblNum;
-    extern s32 runMainF;
+
+
+
+
     extern void* __memAlloc(s32, u32);
     extern void* memset(void*, int, u32);
     extern void evt_msg_init(void);
@@ -142,10 +145,10 @@ void evtEntryRunCheck(void) {
 }
 
 void* evtEntry(void* script, s32 pri, s32 flags) {
-    extern s32 evtID;
-    extern s32 priTblNum;
-    extern s32 priTbl[];
-    extern s32 priTblIndex[];
+
+
+
+
     void* set;
     void* evt;
     void* labelBase;
@@ -236,10 +239,10 @@ void* evtEntry(void* script, s32 pri, s32 flags) {
 }
 
 void* evtEntryType(void* script, s32 pri, s32 flags, s32 type) {
-    extern s32 evtID;
-    extern s32 priTblNum;
-    extern s32 priTbl[];
-    extern s32 priTblIndex[];
+
+
+
+
     void* set;
     void* evt;
     void* labelBase;
@@ -329,14 +332,14 @@ void* evtEntryType(void* script, s32 pri, s32 flags, s32 type) {
     return evt;
 }
 void* evtChildEntry(void* parentEvt, void* evtCode, s32 flags) {
-    extern void* gp;
-    extern f32 evtSpd;
-    extern s32 evtMax;
-    extern s32 evtID;
-    extern s32 runMainF;
-    extern s32 priTblNum;
-    extern s32 priTbl[];
-    extern s32 priTblIndex[];
+
+
+
+
+
+
+
+
     extern u8 work[];
     extern void evtEntryRunCheck(void);
     extern void* memset(void*, int, size_t);
@@ -443,10 +446,10 @@ void* evtChildEntry(void* parentEvt, void* evtCode, s32 flags) {
 }
 
 void* evtBrotherEntry(void* parentEvt, void* evtCode, u32 flags) {
-    extern s32 evtID;
-    extern s32 priTblNum;
-    extern s32 priTbl[];
-    extern s32 priTblIndex[];
+
+
+
+
     void* set;
     void* evt;
     void* labelBase;
@@ -539,7 +542,7 @@ void* evtBrotherEntry(void* parentEvt, void* evtCode, u32 flags) {
 }
 
 void* evtRestart(void* entry) {
-    extern f32 evtSpd;
+
     extern void* evtEntryRunCheck(void);
     unsigned int* ip;
     unsigned int cmd;
@@ -595,10 +598,10 @@ void* evtRestart(void* entry) {
 }
 
 void evtmgrMain(void) {
-    extern s32 priTblNum;
+
     extern s32 evtmgrCmd(void* entry);
     extern void make_pri_table(void);
-    extern s32 priTbl[];
+
     extern s32 priTblId[];
     void* set;
     void* gpPtr;
@@ -724,7 +727,7 @@ void evtDelete(void* evt) {
 }
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-void evtDeleteID(int id) {
+void evtDeleteID(s32 id) {
     void* set;
     register void* entry;
     int i;
@@ -780,7 +783,7 @@ void evtSetType(void* entry, s32 type) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void evtStop(int pEvt, u32 flags) {
-    extern void* gp;
+
     extern u8 work[];
     u8* set = work;
     u8* waiting;
@@ -855,7 +858,7 @@ void evtStop(int pEvt, u32 flags) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void evtStart(void* pEvt, u32 flags) {
-    extern void* gp;
+
     extern u8 work[];
     u8* set = work;
     u8* waiting;
@@ -925,8 +928,6 @@ void evtStart(void* pEvt, u32 flags) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw reset
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw reset
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -955,8 +956,6 @@ void evtStopID(int id) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 void evtStartID(int id) {
     register void* set;
     void* entry;
@@ -976,9 +975,6 @@ void evtStartID(int id) {
         entry = (void*)((int)entry + 0x1B0);
     }
 }
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw reset
-
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw reset
 

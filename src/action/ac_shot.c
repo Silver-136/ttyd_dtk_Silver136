@@ -1,4 +1,5 @@
 #include "action/ac_shot.h"
+#include "battle/battle_sub.h"
 
 extern f32 float_neg200_80424840;
 extern f32 float_0_80424828;
@@ -26,15 +27,14 @@ typedef struct AcShotDisp {
     s32 timer;
 } AcShotDisp;
 
-void* memset(void* dst, int value, u32 size);
-f32 sinfd(f32 angle);
-f32 cosfd(f32 angle);
 void btlGetScreenPoint(AcShotVec* pos, AcShotVec* out);
 f32 intplGetValue(s32 type, s32 current, f32 start, f32 end, s32 max);
 f32 reviseAngle(f32 angle);
 void btlDispTex4(s32 texture, AcShotVec* pos, AcShotVec* scale, AcShotVec* rot, u32* color);
 void _ac_disp_init(void* wp);
 void actionCommandDisp(f32 x, f32 y);
+void _disp_target_mark(s32 unused, void* battleWork);
+void _disp_target_mark_afterimage(s32 unused, void* battleWork);
 extern AcShotVec vec3_802f9b68[];
 
 
@@ -45,8 +45,6 @@ s32 battleAcMain_Shot(void* battleWork) {
     extern s32 psndSFXOn(const char*);
     extern void psndSFXOff(s32);
     extern void dispEntry(s32, s32, void*, void*, f32);
-    extern void _disp_target_mark(s32, void*);
-    extern void _disp_target_mark_afterimage(s32, void*);
     extern void* BattleGetUnitPtr(void* battle, s32 index);
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern s32 BtlUnit_GetHeight(void* unit);
@@ -154,8 +152,6 @@ s32 battleAcResult_Shot(void* wp) {
     return *(s32*)((s32)wp + 0x1CB8);
 }
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void battleAcDisp_Shot(s32 unused, AcShotDisp* disp) {

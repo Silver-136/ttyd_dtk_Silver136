@@ -1,16 +1,43 @@
 #include "mario/mario.h"
+#include "driver/seqdrv.h"
+#include "mario/mario_party.h"
+#include "party/party.h"
+#include "party/party_vivian.h"
+#include "bowser/koopa.h"
+#include "driver/npcdrv.h"
+#include "mario/mario_balloon.h"
+#include "mario/mario_pouch.h"
+
+extern void* mp;
+extern s32 strcmp(const char* a, const char* b);
+extern void marioChgMot(s32 motion);
+extern void marioResetCamShiftRate(void);
+extern void marioResetCamFollowRate(void);
+extern void marioGetRubInit(void);
+extern void marioResetCamShift(void);
+extern void marioMotion(void);
+extern void marioChkGnd(void);
+extern s32 marioGetCamId(void);
+extern s32 marioShipChanging(void);
+extern s32 yoshiGetStatus(void);
+extern void camFollowYOn(void);
+extern void camFollowYOff(void);
+extern f32 marioChkOverhead(void);
+extern void marioSetFallPara(void);
+extern void marioChkToge(void);
+extern void marioMove(void);
+extern void marioJump(void);
+extern void marioChkGnd2(void);
+extern void marioFall(void);
 
 void* marioGetPtr(void) {
-    extern void* mp;
     return mp;
 }
 
 s32 marioGetColor(void) {
-    extern void* mp;
     return *(s8*)((s32)mp + 0x3D);
 }
 void marioSetCharMode(s32 mode) {
-    extern void* mp;
     extern char str_a_mario_802c18a0[];
     extern void* marioAnimeGroupData[];
     extern char str_P_S_1_8041ff18[];
@@ -21,7 +48,6 @@ void marioSetCharMode(s32 mode) {
     extern char str_M_I_2_8041ffe8[];
     extern void peachPreInit(void);
     extern void kpaPreInit(void);
-    extern s32 kpaGetStageViewType(void);
     extern void kpaSetLevel(s32 level);
     extern void animPoseRelease(s32 poseId);
     extern s32 animPoseEntry(void* name, s32 mode);
@@ -29,7 +55,6 @@ void marioSetCharMode(s32 mode) {
     extern u32 animPoseGetMaterialLightFlag(s32 poseId);
     extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
     extern void animPoseSetMaterialLightFlagOn(s32 poseId, u32 flags);
-    extern void npcSetMarioAutoTalkPose(const char* stay, const char* talk);
     extern s32 pouchEquipCheckBadge(s32 badgeId);
     extern void marioSetFamicomMode(s32 mode);
     extern void marioForcePlaneAnime(void);
@@ -200,7 +225,6 @@ void marioSetCharMode(s32 mode) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void marioSetFamicomMode(int param_1) {
-    extern void* mp;
     extern char str_a_mario_802c18a0[];
     extern void* marioAnimeGroupData[2];
     extern char* dotMarioPose[][6];
@@ -209,11 +233,8 @@ void marioSetFamicomMode(int param_1) {
     extern const char str_M_W_1_8041ffa0[6];
     extern const char str_M_R_1_8041ffa8[6];
     extern const char str_M_I_2_8041ffe8[6];
-    extern void marioChgMot(s32 motion);
     extern void animPoseRelease(s32 poseId);
     extern s32 animPoseEntry(void* name, s32 mode);
-    extern void npcSetMarioAutoTalkPose(const char* stay, const char* talk);
-    extern s32 strcmp(const char* a, const char* b);
     char* base;
     char* dotPose;
     void* m;
@@ -310,7 +331,6 @@ void marioSetFamicomMode(int param_1) {
 
 
 void marioSetSpec(void) {
-    extern void* mp;
     extern const f32 float_20_80420088;
     extern const f32 float_47_804200bc;
     extern const f32 float_1_80420008;
@@ -352,8 +372,6 @@ void marioSetSpec(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void marioEntry(void) {
-    extern void* mp;
-    extern s32 strcmp(const char* a, const char* b);
     extern const char str_M_Z_1_8041ff90[6];
     extern const char str_M_S_1_8041ff98[6];
     extern const char str_M_W_1_8041ffa0[6];
@@ -362,7 +380,6 @@ void marioEntry(void) {
     extern const char str_M_J_1C_802c1b34[7];
     extern void* dotMarioPose[][6];
     extern void marioSlitForceCancel(void);
-    extern void marioChgMot(s32 motion);
     extern void marioReInit_ship(void);
     extern void marioReInit_roll(void);
     extern void marioReInit_slit(void);
@@ -432,7 +449,6 @@ void marioEntry(void) {
 
 
 void marioItemGetDisable(void) {
-    extern void* mp;
     void* mario = mp;
 
     *(u32*)mario |= 0x4000;
@@ -440,7 +456,6 @@ void marioItemGetDisable(void) {
 }
 
 void marioItemGetChk(void) {
-    extern void* mp;
     void* mario = mp;
     s32 value = *(s16*)((s32)mario + 0x7A);
 
@@ -455,13 +470,10 @@ void marioItemGetChk(void) {
 }
 
 s32 marioItemGetOk(void) {
-    extern void* mp;
     return ((*(u32*)mp >> 14) & 1) ^ 1;
 }
 
 s32 marioCaseEventValidChk(void) {
-    extern void* mp;
-    extern s32 vivianGetStatus(void);
 
     if (*(u16*)((s32)mp + 0x2E) == 0x18) {
         return 0;
@@ -470,7 +482,6 @@ s32 marioCaseEventValidChk(void) {
 }
 
 s32 unk_8005ca2c(void) {
-    extern void* mp;
     void* mario = mp;
 
     if (*(u16*)((s32)mario + 0x2E) == 0x16 || (*(u32*)mario & 0x00100000) != 0) {
@@ -480,20 +491,12 @@ s32 unk_8005ca2c(void) {
 }
 
 s32 marioCheckMenuDisable(void) {
-    extern void* mp;
     extern void* gp;
     extern s32 strncmp(const char*, const char*, u32);
     extern char str_yuu_804200c8[];
     extern s32 marioChkKey(void);
-    extern s32 kpaGetStageViewType(void);
     extern s32 marioGetPlaneStatus(void);
-    extern s32 marioShipChanging(void);
     extern s32 mario_bomhei_keychk(void);
-    extern s32 vivianGetStatus(void);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32);
-    extern s32 seqGetSeq(void);
-    extern s32 yoshiGetStatus(void);
 
     void* mario = mp;
     void* party;
@@ -556,16 +559,10 @@ s32 marioCheckMenuDisable(void) {
     return marioChkKey() != 0 ? 0 : 1;
 }
 s32 marioChkKey(void) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32);
-    extern s32 seqGetSeq(void);
-    extern void* mp;
-    extern s32 marioShipChanging(void);
     extern s32 marioRollKeyDisable(void);
     extern s32 marioSlitKeyDisable(void);
     extern s32 christineGetStatus(void);
     extern s32 mario_bomhei_keychk2(void);
-    extern s32 yoshiGetStatus(void);
     extern s32 nokonoko_holdItem(void);
     void* party;
 
@@ -610,13 +607,11 @@ s32 marioChkKey(void) {
 }
 
 s32 marioChkCtrl(void) {
-    extern void* mp;
     return *(s8*)((s32)mp + 0x38) == 0;
 }
 
 s32 N_marioChkUseParty(void) {
     extern void* gp;
-    extern void* mp;
 
     if (((u16)*(u32*)((s32)gp + 0x1338) & 0x100F) != 0) {
         return 1;
@@ -629,11 +624,8 @@ u8 marioFBattlePrepare(void) {
         f32 y;
         f32 z;
     } Vec;
-    extern void* mp;
     extern Vec R_last_position;
     extern void marioAdjustMoveDir(void);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 partyId);
     extern void partyUsePost(void* party);
     extern void partyCtrlOff(void);
     void* mario = mp;
@@ -652,14 +644,10 @@ void marioFBattlePost(void) {
         f32 y;
         f32 z;
     } Vec;
-    extern void* mp;
     extern Vec R_last_position;
     extern void marioYoshiForceCancel(void);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32);
     extern void partyGetAppearPos(void*, Vec*);
     extern void partyCtrlOn(void);
-    extern void marioChgMot(s32);
     void* mario;
     void* party;
     Vec pos;
@@ -684,17 +672,14 @@ void marioFBattlePost(void) {
 }
 
 s32 marioCtrlOffChk(void) {
-    extern void* mp;
     return *(s8*)((s32)mp + 0x38);
 }
 
 s32 marioKeyOffChk(void) {
-    extern void* mp;
     return *(s8*)((s32)mp + 0x39);
 }
 
 s32 marioCtrlOff(void) {
-    extern void* mp;
     void* mario = mp;
 
     *(u32*)mario |= 2;
@@ -703,7 +688,6 @@ s32 marioCtrlOff(void) {
 }
 
 s32 marioCtrlOn(void) {
-    extern void* mp;
     void* mario = mp;
 
     (*(u8*)((s32)mario + 0x38))--;
@@ -714,7 +698,6 @@ s32 marioCtrlOn(void) {
 }
 
 s32 marioCtrlOff2(void) {
-    extern void* mp;
     void* mario = mp;
 
     *(u32*)mario |= 4;
@@ -724,7 +707,6 @@ s32 marioCtrlOff2(void) {
 }
 
 s32 marioCtrlOn2(void) {
-    extern void* mp;
     void* mario = mp;
 
     *(u32*)mario &= ~4;
@@ -736,7 +718,6 @@ s32 marioCtrlOn2(void) {
 }
 
 s32 marioKeyOff(void) {
-    extern void* mp;
     void* mario = mp;
 
     *(u32*)mario |= 8;
@@ -745,7 +726,6 @@ s32 marioKeyOff(void) {
 }
 
 s32 marioKeyOn(void) {
-    extern void* mp;
     void* mario = mp;
 
     (*(u8*)((s32)mario + 0x39))--;
@@ -756,10 +736,7 @@ s32 marioKeyOn(void) {
 }
 
 s32 marioSetMutekiTime(s32 msec) {
-    extern void* mp;
     extern s32 sysMsec2Frame(s32 msec);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 partyId);
     void* mario = mp;
     void* party;
 
@@ -772,13 +749,10 @@ s32 marioSetMutekiTime(s32 msec) {
 }
 
 s32 marioBgmodeChk(void) {
-    extern void* mp;
     return (*(u32*)mp >> 25) & 1;
 }
 
 void marioBgmodeOn(void) {
-    extern void* mp;
-    extern void camFollowYOff(void);
     extern const f32 float_20_80420088;
     extern const f32 float_47_804200bc;
     extern const f32 float_1_80420008;
@@ -815,8 +789,6 @@ void marioBgmodeOn(void) {
 }
 
 void marioBgmodeOff(void) {
-    extern void* mp;
-    extern void camFollowYOn(void);
     extern const f32 float_20_80420088;
     extern const f32 float_47_804200bc;
     extern const f32 float_1_80420008;
@@ -853,7 +825,6 @@ void marioBgmodeOff(void) {
 }
 
 s32 marioChkSts(u32 flags) {
-    extern void* mp;
     void* m = mp;
     s32 ret = 0;
 
@@ -880,9 +851,7 @@ s32 marioChkSts(u32 flags) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void marioResetHitObj(char* name) {
-    extern void* mp;
     extern char* hitGetName(void* hit);
-    extern s32 strcmp(const char* a, const char* b);
     void* m;
     void* hit;
 
@@ -935,11 +904,8 @@ void marioReset(void) {
         u32 y;
         u32 z;
     } WordVec;
-    extern void* mp;
     extern void animPoseSetPaperAnimGroup(s32 poseId, s32 a, s32 b);
     extern void animPaperPoseRelease(s32 poseId);
-    extern s32 strcmp(const char* a, const char* b);
-    extern void marioChgMot(s32 motion);
     extern u8 str_a_mario_802c18a0[];
     extern const f32 float_20_80420088;
     extern const f32 float_47_804200bc;
@@ -1021,7 +987,6 @@ void marioOfsRotReset(void) {
         u32 y;
         u32 z;
     } WordVec;
-    extern void* mp;
     extern u8 str_a_mario_802c18a0[];
     void* base = str_a_mario_802c18a0;
     void* mario = mp;
@@ -1033,7 +998,6 @@ void marioOfsRotReset(void) {
 }
 
 void marioSoundInit(void) {
-    extern void* mp;
     void* mario = mp;
 
     *(s32*)((s32)mario + 0x27C) = -1;
@@ -1044,7 +1008,6 @@ void marioSoundInit(void) {
 }
 
 void marioPoseInit(void) {
-    extern void* mp;
     extern void* marioAnimeGroupData[];
     extern s32 animPoseEntry(void* name, s32 flags);
     void* m = mp;
@@ -1066,19 +1029,10 @@ u8 marioInit(void) {
     } VecLocal;
     extern void* __memAlloc(s32, u32);
     extern void* memset(void*, s32, u32);
-    extern void* mp;
     extern void pouchInit(void);
     extern void marioResetGravity(void);
     extern void marioInitCamId(void);
     extern s32 animGroupBaseAsync(void*, s32, s32);
-    extern s32 strcmp(const char*, const char*);
-    extern void marioChgMot(s32);
-    extern void marioBaloonInit(void);
-    extern void marioGetRubInit(void);
-    extern void marioResetCamShift(void);
-    extern void marioResetCamShiftRate(void);
-    extern void marioResetCamFollowRate(void);
-    extern s32 pouchCheckItem(s32);
     extern void pouchGetItem(s32);
     extern void partyInit(void);
     extern void* marioAnimeGroupData[];
@@ -1197,21 +1151,13 @@ void marioReInit(void) {
         f32 y;
         f32 z;
     } VecLocal;
-    extern void* mp;
-    extern s32 marioGetCamId(void);
     extern void animPoseSetPaperAnimGroup(s32, char*, s32);
     extern void animPoseRelease(s32);
     extern void* memset(void*, s32, u32);
     extern void animPoseSetMaterialFlagOff(s32, u32);
     extern void animPoseSetMaterialLightFlagOn(s32, u32);
     extern void partyReInit(void);
-    extern void marioBaloonInit(void);
-    extern void marioGetRubInit(void);
     extern void marioSetCharMode(u32);
-    extern void marioResetCamShift(void);
-    extern void marioResetCamShiftRate(void);
-    extern void marioResetCamFollowRate(void);
-    extern s32 pouchCheckItem(s32);
     extern void pouchGetItem(s32);
     extern s32 g_blurPosId;
     extern f32 g_blurPosX[];
@@ -1358,7 +1304,6 @@ void marioMain(void) {
         u32 z;
     } RawVec;
 
-    extern void* mp;
     extern void* gp;
     extern u8 str_a_mario_802c18a0[];
     extern s32 g_blurPosId;
@@ -1371,15 +1316,12 @@ void marioMain(void) {
     extern s32 pouchEquipCheckBadge(s32 badgeId);
     extern s32 pouchGetHP(void);
     extern void seqSetSeq(s32 seq, char* map, char* bero);
-    extern s32 strcmp(const char* s1, const char* s2);
 
     extern void marioSetCharMode(s32 mode);
-    extern void marioChgMot(s32 motion);
     extern void marioSetDirEventMain(void);
     extern void marioPreCamera(void);
     extern void marioHitCheckWidth(void);
     extern void itemCoinDrop(RawVec* pos);
-    extern void marioMotion(void);
     extern void* marioSearchGround(f64 x, f64 z, f32* outX, f32* outY, f32* outZ);
     extern u8 marioPreDisp(void);
     extern void partyMain(void);
@@ -1392,16 +1334,8 @@ void marioMain(void) {
     extern void peachMain(void);
     extern void marioSearchUnder(void);
     extern void marioBottomless(void);
-    extern void marioChkGnd(void);
-    extern void marioChkToge(void);
     extern void marioBalloonMain(void);
-    extern void marioMove(void);
     extern void mario_kemuri(void);
-    extern f32 marioChkOverhead(void);
-    extern void marioSetFallPara(void);
-    extern void marioJump(void);
-    extern void marioChkGnd2(void);
-    extern void marioFall(void);
     extern void marioBoots(void);
     extern void marioForceMoveMain(void);
 
@@ -1717,18 +1651,7 @@ void marioMain(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void marioCtrlOff2Main(void) {
-    extern void* mp;
-    extern s32 vivianGetStatus(void);
-    extern void marioMotion(void);
-    extern void marioMove(void);
-    extern f32 marioChkOverhead(void);
-    extern void marioChgMot(s32 motion);
-    extern void marioSetFallPara(void);
-    extern void marioJump(void);
-    extern void marioChkGnd2(void);
-    extern void marioFall(void);
     extern s32 marioChkWallAround(void* pos, s32 arg, f32 a, f32 b, f32 c, f32 d);
-    extern void marioChkGnd(void);
     extern f32 float_0_80420020;
     void* mario;
     u16 motion;
@@ -1819,7 +1742,6 @@ void marioMove(void) {
         f32 z;
     } VecLocal;
 
-    extern void* mp;
     extern void* gp;
     extern char str_a_mario_802c18a0[];
     extern char str_M_Z_1_8041ff90[];
@@ -1834,10 +1756,7 @@ void marioMove(void) {
     extern void GXGetViewportv(f32* viewport);
     extern void GXProject(f32 x, f32 y, f32 z, void* model, f32* proj, f32* viewport, f32* outX, f32* outY, f32* outZ);
     extern s32 marioCamZoomOff(void);
-    extern void camFollowYOff(void);
-    extern void camFollowYOn(void);
     extern f32 PSVECDistance(void* a, void* b);
-    extern s32 strcmp(const char* a, const char* b);
     extern f32 float_0_80420020;
     extern f32 float_1_80420008;
     extern f32 float_400_804200b4;
@@ -1976,7 +1895,6 @@ void marioMove(void) {
 #pragma use_lmw_stmw on
 
 u8 marioMoveMain(void) {
-    extern void* mp;
     extern s32 getRollEvtFlag(void);
     extern s32 L_marioChkRub(void);
     extern s32 pouchEquipCheckBadge(s32);
@@ -1990,10 +1908,6 @@ u8 marioMoveMain(void) {
     extern void marioCheckWall_roll(double, double);
     extern void N_dou10_yoko_yari3(void*);
     extern void set_damage_root_ypos(double);
-    extern void marioChgMot(s32);
-    extern void marioChkToge(void);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32);
     extern void movePos(double, double, void*, void*);
     extern void marioSetRollDispDir(void);
     extern void marioShipSetDispDir(void);
@@ -2145,8 +2059,6 @@ u8 marioMoveMain(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 marioChkPushAnime(void) {
-    extern void* mp;
-    extern s32 strcmp(const char* s1, const char* s2);
     extern char str_M_O_1_8041ffe0;
     extern char str_M_O_2_8042009c;
     extern char str_M_O_2R_802c1b6c[];
@@ -2167,7 +2079,6 @@ s32 marioChkPushAnime(void) {
 
 
 s32 marioAnimeId(void) {
-    extern void* mp;
     u32 flags = *(u32*)((s32)mp + 4);
     s32 ret;
 
@@ -2183,11 +2094,7 @@ s32 marioAnimeId(void) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 void unk_800591b4(void) {
-    extern void* mp;
-    extern s32 strcmp(const char* a, const char* b);
     extern const char str_M_D_1_80420094[6];
     extern const char str_M_Z_1_8041ff90[6];
     extern const char str_M_S_1_8041ff98[6];
@@ -2237,19 +2144,9 @@ void unk_800591b4(void) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void marioChgEvtPose(char* name) {
-    extern void* mp;
-    extern s32 strcmp(const char* a, const char* b);
     void* m = mp;
     if (!(*(u32*)((s32)m + 4) & 2) && !(*(u32*)m & 0x80000000)) {
         char* old = *(char**)((s32)m + 0x18);
@@ -2266,11 +2163,7 @@ void marioChgEvtPose(char* name) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 void* toDotMarioPose(char* pose) {
-    extern s32 strcmp(const char* a, const char* b);
-    extern void* mp;
     extern const char str_M_Z_1_8041ff90[6];
     extern const char str_M_S_1_8041ff98[6];
     extern const char str_M_W_1_8041ffa0[6];
@@ -2299,14 +2192,9 @@ void* toDotMarioPose(char* pose) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void marioChgPose(char* pose) {
-    extern void* mp;
-    extern s32 strcmp(const char* a, const char* b);
     extern const char str_M_Z_1_8041ff90[6];
     extern const char str_M_S_1_8041ff98[6];
     extern const char str_M_W_1_8041ffa0[6];
@@ -2357,8 +2245,6 @@ void marioChgPose(char* pose) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void marioChgPoseTime(char* name, s32 time) {
-    extern void* mp;
-    extern s32 strcmp(const char* a, const char* b);
     void* m = mp;
     if (!(*(u32*)((s32)m + 4) & 2) && !(*(u32*)m & 0x80000000)) {
         char* old = *(char**)((s32)m + 0x18);
@@ -2376,8 +2262,6 @@ void marioChgPoseTime(char* name, s32 time) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void marioChgPaper(char* name) {
-    extern void* mp;
-    extern s32 strcmp(const char* a, const char* b);
     void* m = mp;
     if ((*(u32*)((s32)m + 4) & 0x40000000) && !(*(u32*)((s32)m + 4) & 2) && !(*(u32*)m & 0x80000000)) {
         char* old = *(char**)((s32)m + 0x1C);
@@ -2394,7 +2278,6 @@ void marioChgPaper(char* name) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void marioSetPaperAnimeLocalTime(s32 time) {
-    extern void* mp;
     extern void animPoseSetLocalTime(s32 poseId, f32 time);
     void* m = mp;
     s32 index;
@@ -2415,8 +2298,6 @@ void marioSetPaperAnimeLocalTime(s32 time) {
 
 
 s32 marioPaperOn(char* name) {
-    extern void* mp;
-    extern s32 strcmp(const char*, const char*);
     extern void animPaperPoseRelease(s32);
     extern s32 animPaperPoseEntry(char*, s32);
     extern void animPoseSetPaperAnimGroup(s32, char*, s32);
@@ -2445,7 +2326,6 @@ s32 marioPaperOn(char* name) {
 }
 
 void marioPaperOff(void) {
-    extern void* mp;
     extern void animPoseSetPaperAnimGroup(s32 poseId, s32 a, s32 b);
     extern void animPaperPoseRelease(s32 poseId);
     void* mario = mp;
@@ -2463,7 +2343,6 @@ void marioPaperOff(void) {
 }
 
 void marioPaperLightOff(void) {
-    extern void* mp;
     extern void animPoseSetMaterialLightFlagOff(s32 poseId, u32 flag);
 
     animPoseSetMaterialLightFlagOff(*(s32*)((s32)mp + 0x22C), 1);
@@ -2500,7 +2379,6 @@ s32 marioChkInScreen(s32 x, s32 y) {
 }
 
 f32 marioGetScale(void) {
-    extern void* mp;
     extern f32 float_1p2_80420000;
     extern f32 float_2_80420004;
 
@@ -2511,7 +2389,6 @@ f32 marioGetScale(void) {
 }
 
 void marioMakeDispDir(void) {
-    extern void* mp;
     extern f32 revise360(f64);
     extern f32 float_0_80420020;
     extern f32 float_0p5_80420068;
@@ -2621,11 +2498,9 @@ void marioMakeDispDir(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void marioRearAnime(void) {
-    extern void* mp;
     extern f32 revise360(f64 angle);
     extern char* toRearPose(char* name);
     extern char* toFrontPose(char* name);
-    extern s32 strcmp(const char* s1, const char* s2);
     extern f32 float_290_80420060;
     extern f32 float_70_80420064;
     extern const char str_M_Z_1_8041ff90[6];
@@ -2777,7 +2652,6 @@ u8 marioPreDisp(void) {
         f32 y;
         f32 z;
     } VecLocal;
-    extern void* mp;
     extern void marioRearAnime(void);
     extern void marioMakeDispDir(void);
     extern void animPoseSetAnim(s32, char*, s32);
@@ -2787,7 +2661,6 @@ u8 marioPreDisp(void) {
     extern void* camGetPtr(s32);
     extern void PSMTX44MultVec(void*, VecLocal*, VecLocal*);
     extern s32 kpaNoHitEnemyCheck(void);
-    extern s32 marioGetCamId(void);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern s32 shadowEntryMode(double, double, double, double);
     extern double sin(double);
@@ -2900,7 +2773,6 @@ u8 marioPreDisp(void) {
 }
 u8 marioDispBlurSub(s32 param_1, int param_2) {
     typedef f32 MtxLocal[3][4];
-    extern void* mp;
     extern void PSMTXScale(MtxLocal, f32, f32, f32);
     extern void PSMTXTrans(MtxLocal, double, double, double);
     extern void PSMTXRotRad(MtxLocal, double, char);
@@ -2974,7 +2846,6 @@ u8 marioDispBlurSub(s32 param_1, int param_2) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void marioDispBlur(s32 param_1, void* mario) {
-    extern void* mp;
     extern u32 animPoseGetMaterialFlag(s32 poseId);
     extern void marioDispBlurSub(void* data, s32 index);
     extern void animPoseSetMaterialFlagOff(s32 poseId, u32 flag);
@@ -3045,7 +2916,6 @@ void marioDispBlur(s32 param_1, void* mario) {
 
 u8 marioDisp(void) {
     typedef f32 MtxLocal[3][4];
-    extern void* mp;
     extern void PSMTXScale(MtxLocal, f32, f32, f32);
     extern void PSMTXTrans(MtxLocal, double, double, double);
     extern void PSMTXRotRad(MtxLocal, double, char);
@@ -3147,8 +3017,6 @@ u8 marioDisp(void) {
 }
 
 char* toRearPose(char* name) {
-    extern void* mp;
-    extern s32 strcmp(const char*, const char*);
     extern char str_P_Z_1R_802c19a0[], str_P_Z_1_8041ff10[];
     extern char str_P_S_1R_802c19a8[], str_P_S_1_8041ff18[];
     extern char str_P_W_1R_802c19b0[], str_P_W_1_8041ff20[];
@@ -3246,8 +3114,6 @@ char* toRearPose(char* name) {
 }
 
 char* toFrontPose(char* name) {
-    extern void* mp;
-    extern s32 strcmp(const char*, const char*);
     extern char str_P_Z_1R_802c19a0[], str_P_Z_1_8041ff10[];
     extern char str_P_S_1R_802c19a8[], str_P_S_1_8041ff18[];
     extern char str_P_W_1R_802c19b0[], str_P_W_1_8041ff20[];

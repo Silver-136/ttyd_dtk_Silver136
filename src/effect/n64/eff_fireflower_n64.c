@@ -1,4 +1,7 @@
 #include "effect/n64/eff_fireflower_n64.h"
+extern f32 float_0_80425254;
+extern f32 float_neg10_80425278;
+
 
 
 #pragma optimize_for_size off
@@ -9,8 +12,6 @@ void* effFireFlowerN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z) {
     extern void effFireFlowerMain(void*);
     extern s32 rand(void);
     extern char str_FireFlowerN64_802faf18[];
-    extern f32 float_0_80425254;
-    extern f32 float_neg10_80425278;
     extern f32 float_0p5_8042528c;
     extern f32 float_8_80425290;
     extern f32 float_0p05_80425294;
@@ -89,12 +90,10 @@ void effFireFlowerMain(void* effect) {
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
     extern void effFireFlowerDisp(void);
     extern s8 scale_data[];
-    extern f32 float_0_80425254;
     extern f32 float_10_8042526c;
     extern f32 float_0p01_80425270;
     extern f32 float_1_80425250;
     extern f32 float_1p05_80425274;
-    extern f32 float_neg10_80425278;
     extern f32 float_18_8042527c;
     extern f32 float_0p9_80425280;
     extern f32 float_720_80425284;

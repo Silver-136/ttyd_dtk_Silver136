@@ -5,7 +5,6 @@ void* effEntry(void);
 void* __memAlloc(s32 heap, u32 size);
 void effSyuryouMain(void* entry);
 void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
-void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
 void PSMTXRotRad(Mtx m, s8 axis, f32 rad);
 void PSMTXConcat(Mtx a, Mtx b, Mtx out);
 void* camGetPtr(s32 cameraId);
@@ -72,7 +71,6 @@ void effSyuryouMain(void* entry) {
     extern u32 vec3_803029b8[];
     extern const char str_A_1_804288b0[];
     extern const char str_S_1_804288b8[];
-    extern f32 float_1_804288b4;
 
     void* work;
     Vec pos;

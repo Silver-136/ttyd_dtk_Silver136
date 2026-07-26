@@ -1,6 +1,15 @@
 #include "event/evt_sub.h"
+#include "countdown.h"
+#include "effect/eff_stageclear.h"
 
 s32 stop;
+extern void* mapalloc_base_ptr;
+extern void _mapFree(void* heap, void* ptr);
+extern f64 cos(f64);
+extern u32 DAT_800000f8;
+extern f32 float_0_8041fe38;
+extern f64 sin(f64);
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_sub_intpl_init(void* event) {
@@ -70,9 +79,6 @@ s32 evt_sub_intpl_get_value_para(void* event) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_sub_intpl_init_float(void* event) {
@@ -93,8 +99,6 @@ s32 evt_sub_intpl_init_float(void* event) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_sub_intpl_get_float(void* event) {
@@ -126,9 +130,6 @@ s32 evt_sub_intpl_get_float(void* event) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 s32 evt_sub_intpl_msec_init(void* event) {
     extern s32 evtGetValue(void* event, s32 value);
     s32* args = *(s32**)((s32)event + 0x18);
@@ -148,12 +149,6 @@ s32 evt_sub_intpl_msec_init(void* event) {
     *(s32*)((s32)event + 0x198) = t0;
     return 2;
 }
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -213,7 +208,6 @@ s32 evt_sub_spline_init(void* event) {
     extern s32 evtGetValue(void*, s32);
     extern void* _mapAlloc(void*, u32);
     extern void spline_maketable(s32 count, s32 unk4, void* table4, void* tableC);
-    extern void* mapalloc_base_ptr;
     s32* args;
     s32 v0;
     s32 v1;
@@ -253,15 +247,10 @@ s32 evt_sub_spline_init(void* event) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 s32 evt_sub_spline_get_value(EventEntry* event) {
     extern f32 intplGetValue(s32 type, f32 start, f32 end, s32 time, s32 duration);
     extern void spline_getvalue(f32 time, f32* out, s32 count, f32* points, s32 unk4, s32 unkC);
     extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
-    extern void _mapFree(void* heap, void* ptr);
-    extern void* mapalloc_base_ptr;
-    extern f32 float_0_8041fe38;
     extern f32 float_1_8041fe58;
     extern f32 float_1024_8041fe84;
     s32* args;
@@ -338,8 +327,6 @@ s32 evt_sub_spline_get_value_manual(void* event) {
 
 
 s32 evt_sub_spline_free(int param_1) {
-    extern void _mapFree(void* heap, void* ptr);
-    extern void* mapalloc_base_ptr;
     void* spline = *(void**)(param_1 + 0xD8);
 
     _mapFree(mapalloc_base_ptr, *(void**)((s32)spline + 4));
@@ -352,8 +339,6 @@ s32 evt_sub_spline_free(int param_1) {
 s32 evt_sub_get_sincos(void* event) {
     extern f32 evtGetFloat(void* event, s32 value);
     extern void evtSetValue(void* event, s32 id, s32 value);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern const f32 float_3p1416_8041fe7c;
     extern const f32 float_180_8041fe80;
     extern const f32 float_1024_8041fe84;
@@ -393,9 +378,6 @@ s32 evt_sub_rumble_onoff(void* pEvt) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_sub_random(void* param_1) {
@@ -432,9 +414,6 @@ s32 evt_sub_get_stopwatch(void* event) {
     evtSetValue(event, args[1], value);
     return 2;
 }
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -486,11 +465,6 @@ s32 evt_sub_area_check(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 s32 evt_sub_get_dist(void* event) {
     extern s32 evtGetValue(void* event, s32 value);
     extern void evtSetFloat(void* event, s32 id, f32 value);
@@ -685,7 +659,6 @@ s32 evt_sub_animgroup_async(int param_1) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_sub_countdown_start) {
-    extern void countDownStart(s32 time, s32 flags);
     s32* args = event->args;
     s32 time = evtGetValue(event, args[0]);
     s32 flags = evtGetValue(event, args[1]);
@@ -699,7 +672,6 @@ USER_FUNC(evt_sub_countdown_start) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_sub_countdown_get_status) {
-    extern s32 countDownGetStatus(void);
     s32* args = event->args;
     evtSetValue(event, args[0], countDownGetStatus());
     return 2;
@@ -709,12 +681,10 @@ USER_FUNC(evt_sub_countdown_get_status) {
 #pragma use_lmw_stmw on
 
 
-USER_FUNC(evt_sub_countdown_end) { extern void countDownEnd(void); countDownEnd(); return 2; }
+USER_FUNC(evt_sub_countdown_end) { countDownEnd(); return 2; }
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_sub_countdown_flag_onoff) {
-    extern void countDownFlagOn(u16 flag);
-    extern void countDownFlagOff(u16 flag);
     s32* args = event->args;
     s32 on = evtGetValue(event, args[0]);
     s32 flag = evtGetValue(event, args[1]);
@@ -731,7 +701,6 @@ USER_FUNC(evt_sub_countdown_flag_onoff) {
 
 
 USER_FUNC(evt_sub_countdown_set_restart_time) {
-    extern void countDownSetRestartTime(s32 time);
     countDownSetRestartTime(evtGetValue(event, event->args[0]));
     return 2;
 }
@@ -782,7 +751,6 @@ s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
     extern f32 reviseAngle(f32 angle);
     extern void* effItemGetEntry(s32 item);
     extern void* _mapAlloc(void* heap, u32 size);
-    extern void _mapFree(void* heap, void* ptr);
     extern void iconEntry(char* name, s32 icon);
     extern void iconSetPos(f32 x, f32 y, f32 z, char* name);
     extern void iconFlagOn(char* name, u32 flags);
@@ -800,9 +768,7 @@ s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
     extern s32 keyGetButtonTrg(s32 pad);
     extern void pouchAddCoin(s16 coins);
     extern void effSoftDelete(void* eff);
-    extern void* mapalloc_base_ptr;
     extern void* gp;
-    extern u32 DAT_800000f8;
     extern char str_iraiCoin_802c1868[];
     extern char str_BGM_FF_GET_ITEM1_802c1874[];
     extern char coinget_window_desc[];
@@ -812,8 +778,6 @@ s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
     extern f32 float_5_8041fe40;
     extern f32 float_6p2832_8041fe48;
     extern f32 float_360_8041fe4c;
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     s32 coins;
     void* mario;
     void* cam;
@@ -972,7 +936,6 @@ USER_FUNC(stone_bg_open) {
 
 USER_FUNC(stageclear_wait) {
     extern void* effNameToPtr(const char* name);
-    extern s32 effStageClearEndChk(void* eff);
     extern const char str_sub_clear_802c16ec[];
     s32 done = effStageClearEndChk(effNameToPtr(str_sub_clear_802c16ec));
     done = (-done | done) >> 31;
@@ -1026,7 +989,6 @@ s32 unk_80053f10(void* event) {
 s32 evt_sub_check_intersect(EventEntry* event) {
     extern f32 evtGetFloat(EventEntry* event, s32 index);
     extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
-    extern f32 float_0_8041fe38;
     s32* args;
     f32 startX;
     f32 startZ;
@@ -1093,7 +1055,6 @@ s32 irai_mail_check(EventEntry* event) {
     extern void swSet(u32 flag);
     extern void pouchReceiveMail(u32 mail);
     extern void* gp;
-    extern u32 DAT_800000f8;
     s32* args;
     s32 enabled;
     s32 value;

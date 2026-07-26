@@ -7,22 +7,25 @@ u8 kemuri_mugi(void);
 u8 mario_kemuri_landon(void);
 extern f32 float_0_80422a38;
 extern f32 float_0p6_80422a3c;
+extern s32 marioStGetSystemLevel(void);
+extern f32 reviseAngle(f32 angle);
+extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
+extern f32 float_6p2832_80422a24;
+extern f32 float_360_80422a28;
+extern f32 float_0p2_80422a2c;
+extern f32 float_0p5_80422a44;
+extern void* gp;
+extern void effWaterDamageN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
+extern s32 rand(void);
+extern f32 float_1_80422a4c;
+extern f32 float_11_80422a60;
+extern void* effKemuri2Entry(s32 kind, f32 x, f32 y, f32 z, f32 dir);
+extern f32 float_1p5_80422a30;
 
 u8 mario_kemuri(void) {
-    extern void* marioGetPtr(void);
-    extern s32 marioStGetSystemLevel(void);
-    extern u32 hitGetAttr(void* hitObj);
-    extern u8 kemuri_mugi(void);
-    extern u8 mario_kemuri_landon(void);
     extern u8 kemuri(void);
-    extern f32 reviseAngle(f32 angle);
-    extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
     extern void effKemuri7N64Entry(s32 kind, f32 x, f32 y, f32 z, f32 dir, f32 side);
     extern s32 kpaGetBodyStatus(void);
-    extern f32 float_6p2832_80422a24;
-    extern f32 float_360_80422a28;
-    extern f32 float_0p2_80422a2c;
-    extern f32 float_0p5_80422a44;
     static s32 ct_481;
     static s32 left_or_right_482;
     void* mario;
@@ -137,15 +140,9 @@ void unk_8013587c(void) {
 }
 
 u8 mario_kemuri_landon(void) {
-    extern void* marioGetPtr(void);
     extern s32 strcmp(const char* a, const char* b);
-    extern void* gp;
     extern char str_mri_05_802f3738[];
-    extern void effWaterDamageN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
     extern void effRippleEntry(s32 type, f32 x, f32 y, f32 z);
-    extern s32 rand(void);
-    extern f32 float_1_80422a4c;
-    extern f32 float_11_80422a60;
     static s32 cnt_491;
     static s32 cnt2_492;
     void* mario;
@@ -203,22 +200,13 @@ u8 mario_kemuri_landon(void) {
 
 
 u8 kemuri_mugi(void) {
-    extern void* marioGetPtr(void);
-    extern void* gp;
     extern s32 strncmp(const char* a, const char* b, u32 n);
-    extern void effWaterDamageN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
     extern void effMugiKemuriEntry(f32 x, f32 y, f32 z, f32 dir);
     extern void effMugiKemuri2Entry(s32 kind, f32 x, f32 y, f32 z, f32 dir, f32 rand, f32 side);
-    extern f32 reviseAngle(f32 angle);
-    extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
-    extern s32 rand(void);
     extern char str_mri_80422a5c[];
-    extern f32 float_11_80422a60;
     extern f32 float_0p8_80422a64;
     extern f32 float_14_80422a68;
     extern f32 float_35_80422a6c;
-    extern f32 float_6p2832_80422a24;
-    extern f32 float_360_80422a28;
     extern f32 float_neg0p4_80422a70;
     extern f32 float_3_80422a74;
     extern f32 float_5_80422a78;
@@ -293,26 +281,16 @@ u8 kemuri_mugi(void) {
 }
 
 u8 kemuri(void) {
-    extern void* marioGetPtr(void);
     extern void* effKemuriEntry(s32 kind, f32 x, f32 y, f32 z, f32 dir);
-    extern void* effKemuri2Entry(s32 kind, f32 x, f32 y, f32 z, f32 dir);
-    extern f32 reviseAngle(f32 angle);
-    extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
     extern s32 kpaGetLevel(void);
     extern f32 kpaGetBaseScale(void);
     extern s32 kpaGetStageViewType(void);
     extern f32 toMovedirSimple(f32 angle);
     extern f32 float_0_80422a38;
     extern f32 float_0p6_80422a3c;
-    extern f32 float_6p2832_80422a24;
-    extern f32 float_360_80422a28;
-    extern f32 float_0p2_80422a2c;
-    extern f32 float_1p5_80422a30;
     extern f32 float_10_80422a34;
     extern f32 float_180_80422a40;
-    extern f32 float_0p5_80422a44;
     extern f32 float_15_80422a48;
-    extern f32 float_1_80422a4c;
     extern f32 float_20_80422a50;
     extern f32 float_50_80422a54;
     extern f32 float_4_80422a58;
@@ -414,16 +392,7 @@ u8 kemuri(void) {
 }
 
 u8 party_kemuri(void* party) {
-    extern s32 marioStGetSystemLevel(void);
-    extern u32 hitGetAttr(void* hitObj);
-    extern f32 reviseAngle(f32 angle);
-    extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
-    extern void* effKemuri2Entry(s32 kind, f32 x, f32 y, f32 z, f32 dir);
     extern f32 float_2_80422a20;
-    extern f32 float_6p2832_80422a24;
-    extern f32 float_360_80422a28;
-    extern f32 float_0p2_80422a2c;
-    extern f32 float_1p5_80422a30;
     f32 s;
     f32 c;
     f32 angle;

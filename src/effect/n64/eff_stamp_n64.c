@@ -1,5 +1,13 @@
 #include "effect/n64/eff_stamp_n64.h"
 
+extern f32 float_6p2832_80426198;
+extern f32 float_90_8042619c;
+extern f32 float_360_804261a0;
+extern f32 float_1_8042616c;
+extern f32 float_0p1_80426174;
+extern double cos(double);
+extern double sin(double);
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effStampN64Entry(s32 type, f32 x, f32 y, f32 z) {
@@ -7,14 +15,7 @@ void* effStampN64Entry(s32 type, f32 x, f32 y, f32 z) {
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effStampMain(void*);
     extern char str_StampN64_802fc030[];
-    extern f32 float_6p2832_80426198;
-    extern f32 float_90_8042619c;
-    extern f32 float_360_804261a0;
-    extern f32 float_1_8042616c;
     extern f32 float_0_80426168;
-    extern f32 float_0p1_80426174;
-    extern double cos(double);
-    extern double sin(double);
     void* entry;
     u8* work;
     u8* part;
@@ -112,11 +113,6 @@ void effStampMain(void* effect) {
     extern void effStampDisp(void);
     extern const Vec3 vec3_802fc018;
     extern f32 float_0p9_80426170;
-    extern f32 float_6p2832_80426198;
-    extern f32 float_90_8042619c;
-    extern f32 float_360_804261a0;
-    extern f32 float_1_8042616c;
-    extern f32 float_0p1_80426174;
     extern f32 float_2p4_80426178;
     extern f32 float_0p2_8042617c;
     extern f32 float_0p07_80426180;
@@ -125,8 +121,6 @@ void effStampMain(void* effect) {
     extern f32 float_0p05_80426188;
     extern f32 float_0p6_80426190;
     extern f32 float_10_80426194;
-    extern double cos(double);
-    extern double sin(double);
     u8* work;
     u8* part;
     Vec3 dispPos;

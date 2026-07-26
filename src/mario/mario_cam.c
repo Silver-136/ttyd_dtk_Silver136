@@ -16,6 +16,16 @@ extern f32 float_0p06_80424ae4;
 extern f32 float_2_80424ae8;
 extern u32 vec3_802fa748[];
 extern u32 vec3_802fa754[];
+extern s32 marioBgmodeChk(void);
+extern void PSVECSubtract(void* a, void* b, void* out);
+extern void PSVECNormalize(void* src, void* dst);
+extern void PSVECScale(void* src, void* dst, f32 scale);
+extern void PSVECAdd(void* a, void* b, void* out);
+extern s32 evt_cam3d_evt_set(void* event);
+extern f32 float_3p5_80424aac;
+extern f32 float_5_80424aa0;
+extern f32 float_320_80424aa8;
+extern f32 float_450_80424a9c;
 
 typedef struct MarioCamEventWork {
     s32 args[2];
@@ -345,19 +355,8 @@ s32 marioCamZoomOff(void) {
 u8 marioCamZoomUp(void) {
     extern s32 marioGetPartyId(void);
     extern void* partyGetPtr(s32 id);
-    extern s32 marioBgmodeChk(void);
     extern f32 toMovedir(f32 angle);
     extern void cloudGetAt(void* pos);
-    extern void PSVECSubtract(void* a, void* b, void* out);
-    extern void PSVECNormalize(void* src, void* dst);
-    extern void PSVECScale(void* src, void* dst, f32 scale);
-    extern void PSVECAdd(void* a, void* b, void* out);
-    extern s32 evt_cam3d_evt_set(void* event);
-    extern f32 float_0_80424aa4;
-    extern f32 float_3p5_80424aac;
-    extern f32 float_5_80424aa0;
-    extern f32 float_320_80424aa8;
-    extern f32 float_450_80424a9c;
     extern f32 float_750_80424ab0;
     extern f32 float_neg70_80424ab4;
     extern f32 float_70_80424ab8;
@@ -460,18 +459,7 @@ u8 marioCamZoomUp(void) {
 }
 
 u8 marioCamZoomUpLevelMain(void) {
-    extern s32 marioBgmodeChk(void);
-    extern void PSVECSubtract(void* a, void* b, void* out);
-    extern void PSVECNormalize(void* src, void* dst);
-    extern void PSVECScale(void* src, void* dst, f32 scale);
-    extern void PSVECAdd(void* a, void* b, void* out);
-    extern s32 evt_cam3d_evt_set(void* event);
-    extern f32 float_0_80424aa4;
-    extern f32 float_3p5_80424aac;
-    extern f32 float_5_80424aa0;
-    extern f32 float_320_80424aa8;
     extern f32 float_440_80424a98;
-    extern f32 float_450_80424a9c;
     extern f32 float_475_80424a94;
     extern f32 float_520_80424a90;
     extern const u32 vec3_802fa76c[];

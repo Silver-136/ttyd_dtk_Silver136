@@ -1,6 +1,8 @@
 #include "effect/eff_stageclear.h"
 
 void effStageClearMain(void* effect);
+extern void* gp;
+extern s32 irand(s32 range);
 
 void* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
     typedef struct EffEntryRaw {
@@ -31,11 +33,9 @@ void* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
         s32 count;
     } TexIdEntry;
 
-    extern void* gp;
     extern void* effMiniGameEntry(s32 type);
     extern EffEntryRaw* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
-    extern s32 irand(s32 range);
     extern void effGetTexObj(s32 id, void* texObj);
     extern u16 GXGetTexObjWidth(void* texObj);
     extern TexIdEntry texid_tbl[];
@@ -195,12 +195,10 @@ void effStageClearMain(void* effect) {
     extern s32 evt_shake[];
     extern u8 shake_dt[];
     extern u8 shake_dt2[];
-    extern void* gp;
     extern f32 float_0p9_80427450;
     extern f32 float_100_80427478;
     extern void* evtEntry(void* script, s32 priority, s32 flags);
     extern void psndSFXOn(s32 id);
-    extern s32 irand(s32 range);
     extern s32 rand(void);
     extern void effConfettiEntry(f32 x, f32 y, f32 z, s32 type, s32 life);
     extern f32 dispCalcZ(void* pos);

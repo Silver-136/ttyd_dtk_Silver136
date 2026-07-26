@@ -1,18 +1,16 @@
 #include "action/ac_timing_wide.h"
 
+#include "system.h"
+
 extern f32 float_30_80426874;
 extern f32 float_neg300_80426878;
 
-f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
 void actionCommandDisp(f32 x, f32 y);
 
 s32 battleAcMain_TimingWide(void* battleWork) {
-    extern void* memset(void* dest, int ch, u32 count);
-    extern s32 irand(s32 range);
     extern s32 BattlePadCheckTrigger(s32 button);
     extern s32 BattlePadCheckUp(s32 button);
     extern s32 BattlePadCheckNow(s32 button);
-    extern f32 float_neg300_80426878;
     extern f32 float_0_8042687c;
 
     s32 work;

@@ -8,7 +8,7 @@ void* effPacknBfireN64Entry(f32 x, f32 y, f32 z, f32 dstX, f32 dstY, f32 dstZ, f
 }
 
 void effPacknBfireMain(void* effect) {
-    extern void effDelete(void*); extern void* effPacknBfireN64Entry(f32,f32,f32,f32,f32,f32,f32,s32,s32,s32);
+    extern void effDelete(void*);
     extern f32 dispCalcZ(void*); extern void dispEntry(s32,s32,void*,void*,f32); extern void effPacknBfireDisp(void);
     extern f32 float_1_80425c80,float_0p97_80425c8c,float_0p02_80425c90,float_0p05_80425c94,float_0p1_80425c98,float_0p9_80425c9c,float_0p2_80425ca0,float_neg0p6_80425ca4,float_0_80425c6c;
     u8* work=*(u8**)((s32)effect+0xC); s32 type=*(s32*)work,i;

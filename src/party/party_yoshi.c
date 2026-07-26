@@ -1,11 +1,34 @@
 #include "party/party_yoshi.h"
 
+#include "system.h"
+
 extern s32 evt_yoshi_frm;
 extern f32 evt_yoshi_spd;
 extern f32 float_26_804211e0;
 extern f32 float_20_804211e4;
+extern f32 float_0_80421138;
+extern char str_PYS_S_2_802cb148[];
+extern char str_M_Y_2_80421148;
+extern s32 marioGetPartyId(void);
+extern s32 marioGetExtraPartyId(void);
+extern void* partyGetPtr(s32 id);
+extern void* marioGetPtr(void);
+extern void partyChgRunMode(void* party, s32 mode);
+extern void marioChgPose(char* pose);
+extern void marioChgMot(s32 motion);
+extern void partyChgPose(void* party, char* pose);
+extern u32 hitGetAttr(void* hit);
+extern void __memFree(s32 heap, void* ptr);
+extern char str_M_S_1_804211e8;
+extern f32 float_1_80421160;
+extern f32 float_0p01_8042117c;
+extern f32 float_neg0p4_80421158;
+extern f32 float_neg15_8042115c;
+extern f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2);
+extern f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2);
+extern f32 revise360(f32 angle);
+extern void marioSetSplash(s32 type, void* pos);
 
-s32 sysMsec2Frame(s32 msec);
 u8 yoshi_use(s32 pParty);
 void inertia(void* pParty);
 
@@ -24,12 +47,7 @@ s32 evt_get_yoshi_frm(void) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 void L_sweatEntry(void* pParty, void* hitobjStandOn) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
     void* party;
     s32 status;
 
@@ -76,8 +94,6 @@ void L_sweatMain(void* pParty) {
     }
 }
 s32 yoshiGetStatus(void) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
     void* party;
     u8 state;
     s32 status;
@@ -103,9 +119,6 @@ s32 yoshiGetStatus(void) {
 }
 
 void marioRideYoshi(void) {
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32 id);
     extern void* __memAlloc(s32 heap, u32 size);
     extern void* memset(void* ptr, s32 value, u32 size);
     extern void party_force_ride_yoshi(void* party);
@@ -130,8 +143,6 @@ void marioRideYoshi(void) {
 }
 
 u32 marioGetoffYoshi(void) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
     void* party;
     void* party2;
     s32 status;
@@ -167,14 +178,6 @@ u32 marioGetoffYoshi(void) {
 }
 
 u8 marioYoshiForceCancel(void) {
-    extern void* marioGetPtr(void);
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32);
-    extern void marioChgPose(char*);
-    extern void partyChgRunMode(void*, s32);
-    extern void __memFree(s32, void*);
-    extern char str_M_S_1_804211e8;
     void* player = marioGetPtr();
     void* party = partyGetPtr(marioGetPartyId());
     void* check = partyGetPtr(marioGetPartyId());
@@ -230,11 +233,8 @@ u8 marioYoshiForceCancel(void) {
 }
 
 void yoshi_bye(void* pParty) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
     extern void partyGoodbyeInit(void* party);
     extern s32 partyGoodbyeMain(void* party);
-    extern void partyChgRunMode(void* party, s32 mode);
     void* party;
     s32 status;
     u8 state;
@@ -272,15 +272,6 @@ void yoshi_bye(void* pParty) {
 }
 
 u8 yoshi_exit(void* pParty) {
-    extern void* marioGetPtr(void);
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32);
-    extern void marioChgPose(char*);
-    extern void marioChgMot(s32);
-    extern void partyChgRunMode(void*, s32);
-    extern void __memFree(s32, void*);
-    extern char str_M_S_1_804211e8;
     void* player;
     void* party;
     void* check;
@@ -342,8 +333,6 @@ u8 yoshi_exit(void* pParty) {
 }
 
 void yoshi_jumpStand(void) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
 
     void* party = partyGetPtr(marioGetPartyId());
     u8 state;
@@ -364,16 +353,6 @@ void yoshi_jumpStand(void) {
 
 /* fallback stub-fill: map=unk_800b65d4 addr=0x800b65d4 size=0x00000164 */
 int unk_800b65d4(void* pParty) {
-    extern void* marioGetPtr(void);
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32);
-    extern void marioChgMot(s32);
-    extern void partyChgPose(void*, char*);
-    extern void marioChgPose(char*);
-    extern void partyChgRunMode(void*, s32);
-    extern char str_PYS_S_2_802cb148[];
-    extern char str_M_Y_2_80421148;
     void* player = marioGetPtr();
     void* yoshi;
     void* extra;
@@ -416,7 +395,6 @@ int unk_800b65d4(void* pParty) {
 int unk_800b6468(void* pParty) {
     extern s32 strcmp(const char*, const char*);
     extern void animPoseSetLocalTime(s32, f32);
-    extern char str_PYS_S_2_802cb148[];
     extern char str_PYS_R_2_802cb158[];
     extern char str_PYS_F_1_802cb168[];
     void* player = *(void**)((s32)pParty + 0x160);
@@ -461,21 +439,14 @@ void yoshi_init(void* party) {
 u8 yoshi_use(s32 pParty) {
     extern void* __memAlloc(s32, s32);
     extern void* memset(void*, s32, u32);
-    extern void __memFree(s32, void*);
     extern void partyUpdateKeyData(void*);
     extern void L_partyClearCont(void*);
     extern s32 marioKeyOffChk(void);
-    extern void partyChgRunMode(void*, s32);
     extern f64 angleABf(f64, f64, f64, f64);
     extern f64 distABf(f64, f64, f64, f64);
-    extern f32 evt_yoshi_spd;
-    extern s32 evt_yoshi_frm;
     extern void searchGround(void*);
     extern void marioChgSmallJumpMotion(void);
     extern void partyChkGnd(void*);
-    extern void inertia(void*);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32);
     extern f64 toMovedir(f64);
     extern void movePos(f64, f64, f32*, f32*);
     void* party = (void*)pParty;
@@ -652,14 +623,7 @@ u8 yoshi_use(s32 pParty) {
 }
 
 u8 L_yoshiFlyMove(void* pParty) {
-    extern void* marioGetPtr(void);
-    extern f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2);
-    extern f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2);
-    extern f32 revise360(f32 angle);
-    extern f32 float_0_80421138;
     extern f32 float_0p1_80421188;
-    extern f32 float_1_80421160;
-    extern f32 float_0p01_8042117c;
     void* mario;
     f32 x;
     f32 z;
@@ -689,12 +653,8 @@ u8 L_yoshiFlyMove(void* pParty) {
     return 0;
 }
 void inertia(void* pParty) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
-    extern f32 float_0_80421138;
     extern f32 float_neg0p07_80421174;
     extern f32 float_neg0p5_80421178;
-    extern f32 float_0p01_8042117c;
     extern f32 float_256_80421180;
     extern f32 float_16_80421184;
 
@@ -780,24 +740,9 @@ void inertia(void* pParty) {
 
 u8 searchGround(s32 pParty) {
     extern void* partySearchGround(f64,f64,void*);
-    extern u32 hitGetAttr(void*);
     extern void psndSFXOff(s32);
-    extern void marioSetSplash(s32,void*);
-    extern void marioChgMot(s32);
-    extern void partyChgPose(void*,char*);
-    extern void marioChgPose(char*);
-    extern void partyChgRunMode(void*,s32);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32);
-    extern void* marioGetPtr(void);
     extern f64 fabs(f64);
-    extern f32 float_0_80421138;
-    extern f32 float_1_80421160;
-    extern f32 float_neg0p4_80421158;
-    extern f32 float_neg15_8042115c;
     extern f32 float_neg6_80421168;
-    extern char str_PYS_S_2_802cb148[];
-    extern char str_M_Y_2_80421148;
     void* party=(void*)pParty;void* player=*(void**)(pParty+0x160);void* hit=0;void* extra;u32 attr;f32 distance;u32 pos[3];
     if((*(u32*)party&0x02000000)==0){distance=(f32)fabs(*(f32*)(pParty+0x11C));if(distance<float_1_80421160)distance=float_1_80421160;hit=partySearchGround(distance,distance,party);}
     if(hit!=0){attr=hitGetAttr(hit);if(*(s32*)(pParty+0x168)!=-1){psndSFXOff(*(s32*)(pParty+0x168));*(s32*)(pParty+0x168)=-1;}
@@ -813,22 +758,7 @@ u8 searchGround(s32 pParty) {
 #pragma use_lmw_stmw off
 void searchGround2(void* pParty) {
     extern void* partySearchGround(f32 height, f32 y, void* party);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
-    extern u32 hitGetAttr(void* hit);
-    extern void marioSetSplash(s32 type, void* pos);
-    extern void* marioGetPtr(void);
-    extern void marioChgMot(s32 motion);
-    extern void partyChgPose(void* party, char* pose);
-    extern void marioChgPose(char* pose);
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern s32 marioGetExtraPartyId(void);
     extern f32 float_11_80421154;
-    extern f32 float_0_80421138;
-    extern f32 float_neg0p4_80421158;
-    extern f32 float_neg15_8042115c;
-    extern char str_PYS_S_2_802cb148[];
-    extern char str_M_Y_2_80421148;
 
     void* hit = 0;
     void* player = *(void**)((s32)pParty + 0x160);
@@ -971,23 +901,11 @@ void searchGround2(void* pParty) {
 
 
 u8 checkWall(void* pParty, f32 speed, f32 direction) {
-    extern void* marioGetPtr(void);
     extern void* partySearchWallFront(f32, f32, void*, void*);
     extern void* dou10_yoko_yari2(void*);
-    extern u32 hitGetAttr(void*);
     extern u32 marioChkBero(void*);
-    extern void marioChgMot(s32);
-    extern void partyChgPose(void*, char*);
-    extern void marioChgPose(char*);
-    extern void partyChgRunMode(void*, s32);
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32);
     extern void movePos(f32, f32, f32*, f32*);
     extern void unk_US_EU_04_800c27c0(f32, f32, f32, void*, void*);
-    extern f32 float_0_80421138;
-    extern char str_PYS_S_2_802cb148[];
-    extern char str_M_Y_2_80421148;
     void* player = marioGetPtr();
     void* hit;
     void* yoshi;
@@ -1070,12 +988,7 @@ spike:
 }
 
 u8 L_getStick(void* pParty, f32* outDirection, f32* outSpeed) {
-    extern f32 distABf(f32, f32, f32, f32);
-    extern f32 angleABf(f32, f32, f32, f32);
-    extern f32 revise360(f32);
     extern f32 marioGetMoveRate(void);
-    extern u32 hitGetAttr(void*);
-    extern f32 float_0_80421138;
     extern f32 float_70_8042113c;
     extern f32 float_1p5_80421140;
     extern f32 float_0p75_80421144;

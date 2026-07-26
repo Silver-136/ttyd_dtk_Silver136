@@ -2,6 +2,12 @@
 
 void* twodPtr;
 
+extern f32 float_0_80422f80;
+extern f32 float_1_80422f84;
+extern s32 evtGetValue(void* event, s32 value);
+extern f32 evtGetFloat(void* event, s32 value);
+extern s32 strcmp(const char* s1, const char* s2);
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void twoddisp_disp(void) {
@@ -17,13 +23,10 @@ void twoddisp_disp(void) {
     extern int sprintf(char* str, char* fmt, ...);
     extern void FontDrawColor(void* color);
     extern void FontDrawString(f32 x, f32 y, char* str);
-    extern f32 float_0_80422f80;
-    extern f32 float_1_80422f84;
     extern u32 unk_804295f0;
     extern u32 unk_804295f4;
     extern u32 dat_80422f78;
     extern u32 dat_80422f7c;
-    extern void* twodPtr;
     u32 fogColor1;
     u32 fogColor2;
     u32 color1;
@@ -93,10 +96,7 @@ s32 evt_twoddisp_init(void* event) {
     extern void* _mapAlloc(void* heap, u32 size);
     extern void* mapalloc_base_ptr;
     extern void* twoddisp_main_event;
-    extern void* twodPtr;
     extern s32 twodID;
-    extern f32 float_0_80422f80;
-    extern f32 float_1_80422f84;
     void* child;
     void* entry;
     s32 i;
@@ -145,11 +145,7 @@ s32 evt_twoddisp_init(void* event) {
 
 
 s32 evt_twoddisp_entry(void* pEvt) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern s32 strcmp(const char* s1, const char* s2);
     extern char* strcpy(char* dst, const char* src);
-    extern f32 float_0_80422f80;
-    extern f32 float_1_80422f84;
     s32* args = *(s32**)((s32)pEvt + 0x18);
     char* name = (char*)evtGetValue(pEvt, args[0]);
     s32 value = evtGetValue(pEvt, args[1]);
@@ -180,9 +176,6 @@ s32 evt_twoddisp_entry(void* pEvt) {
 
 
 s32 evt_twoddisp_set_position(int param_1) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern f32 evtGetFloat(void* event, s32 value);
-    extern s32 strcmp(const char* s1, const char* s2);
     void* event = (void*)param_1;
     s32* args = *(s32**)((s32)event + 0x18);
     char* name = (char*)evtGetValue(event, args[0]);
@@ -208,9 +201,6 @@ s32 evt_twoddisp_set_position(int param_1) {
 
 
 s32 evt_twoddisp_set_base_position(void* pEvt) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern f32 evtGetFloat(void* event, s32 value);
-    extern s32 strcmp(const char* s1, const char* s2);
     s32* args = *(s32**)((s32)pEvt + 0x18);
     char* name = (char*)evtGetValue(pEvt, args[0]);
     s32 i = 0;
@@ -233,8 +223,6 @@ s32 evt_twoddisp_set_base_position(void* pEvt) {
     return 2;
 }
 s32 evt_twoddisp_flag_onoff(int param_1) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern s32 strcmp(const char* s1, const char* s2);
     void* event = (void*)param_1;
     s32* args = *(s32**)((s32)event + 0x18);
     s32 onoff = evtGetValue(event, args[0]);

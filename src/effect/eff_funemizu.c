@@ -5,6 +5,10 @@ typedef struct FunemizuColorEntry {
     u32 color;
 } FunemizuColorEntry;
 
+extern f32 float_0_804279d0;
+extern f32 float_0p5_804279d4;
+extern f32 float_1_804279dc;
+
 u32 unk_802294a4(void) {
     extern FunemizuColorEntry unk_803b3b00[];
     extern void* gp;
@@ -44,9 +48,6 @@ void* effFunemizuEntry(double x, double y, double z, double scale, double angle,
     extern s32 irand(s32 range);
     extern void effFunemizuMain(void* effect);
     extern const char str_funemizu_802ff1c0[];
-    extern f32 float_0p5_804279d4;
-    extern f32 float_0_804279d0;
-    extern f32 float_1_804279dc;
     extern f32 float_0p1_804279f0;
     extern f32 float_100_80427a00;
 
@@ -136,9 +137,6 @@ void effFunemizuMain(void* effect) {
     } EffectEntryLocal;
 
     extern const VecLocal vec3_802ff1a8;
-    extern f32 float_0_804279d0;
-    extern f32 float_0p5_804279d4;
-    extern f32 float_1_804279dc;
     extern f32 float_10_804279e8;
     extern f32 float_0p05_804279ec;
     extern f32 float_0p1_804279f0;
@@ -364,10 +362,7 @@ void effFunemizuShibukiDisp(s32 cameraId, void* effect) {
     extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
     extern f32 float_deg2rad_804279c8;
     extern f32 float_3_804279cc;
-    extern f32 float_0_804279d0;
-    extern f32 float_0p5_804279d4;
     extern f32 float_1p5_804279d8;
-    extern f32 float_1_804279dc;
     extern u32 dat_804279c4;
 
     EffectEntryLocal* eff;

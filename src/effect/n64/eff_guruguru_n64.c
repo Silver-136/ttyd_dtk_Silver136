@@ -1,5 +1,7 @@
 #include "effect/n64/eff_guruguru_n64.h"
 
+extern f32 float_0_80425434;
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effGuruguruN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 radius) {
@@ -7,7 +9,6 @@ void* effGuruguruN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 radius) 
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effGuruguruMain(void*);
     extern char str_GuruguruN64_802fb060[];
-    extern f32 float_0_80425434;
     extern f32 float_1_80425438;
     extern f32 float_20_8042543c;
     void* entry;
@@ -66,7 +67,6 @@ void effGuruguruMain(void* effect) {
     extern f32 float_0p1_80425428;
     extern f32 float_6p2832_8042542c;
     extern f32 float_360_80425430;
-    extern f32 float_0_80425434;
     u8* work;
     u8* part;
     Vec3* base;

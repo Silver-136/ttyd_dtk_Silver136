@@ -3,7 +3,6 @@
 extern void* wp;
 
 void* __memAlloc(s32 heap, u32 size);
-void* memset(void* dst, int value, u32 size);
 
 void zFill(void) {
     extern void* camGetCurPtr(void);

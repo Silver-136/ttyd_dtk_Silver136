@@ -1,7 +1,22 @@
 #include "motion/mot_plane.h"
 
+extern void* marioGetPtr(void);
+extern void marioPaperOff(void);
+extern s32 marioGetColor(void);
+extern char str_PM_P_1B_802c4180[];
+extern void allPartyRideOff2(void);
+extern void camFollowYOn(void);
+extern void marioAdjustMoveDir(void);
+extern u8 str_SFX_MARIO_AIRPLANE1_802c40d8[];
+extern f32 float_0_80420d1c;
+extern f32 float_1_80420d2c;
+extern f32 float_2_80420d28;
+extern f32 float_20_80420d34;
+extern f32 float_37_80420d38;
+extern f32 planeData[];
+extern f32 float_90_80420d14;
+
 s32 marioPlaneGetFlyingDir(void) {
-    extern void* marioGetPtr(void);
 
     void* mario = marioGetPtr();
     if (*(u16*)((s32)mario + 0x2E) != 0x18) {
@@ -15,7 +30,6 @@ s32 marioPlaneGetFlyingDir(void) {
 }
 
 s32 marioGetPlaneStatus(void) {
-    extern void* marioGetPtr(void);
 
     void* mario = marioGetPtr();
     s32 status;
@@ -32,7 +46,6 @@ s32 marioGetPlaneStatus(void) {
 }
 
 s32 mario_plane_cancel(void) {
-    extern void* marioGetPtr(void);
     void* mario = marioGetPtr();
     s32 state;
     s32 result;
@@ -53,14 +66,10 @@ s32 mario_plane_cancel(void) {
 }
 
 u8 marioForcePlaneAnime(void) {
-    extern void* marioGetPtr(void);
-    extern void marioPaperOff(void);
     extern void marioChgPaper(void* paper);
-    extern s32 marioGetColor(void);
     extern void marioPaperOn(void* paper);
     extern void marioChgPose(void* pose);
     extern void* paper_plane[4];
-    extern char str_PM_P_1B_802c4180[];
     extern char str_M_Z_1_80420d88[6];
     void* mario = marioGetPtr();
 
@@ -77,27 +86,21 @@ u8 marioForcePlaneAnime(void) {
 #pragma use_lmw_stmw off
 
 void mot_plane(void) {
-    extern void* marioGetPtr(void);
     extern void* __memAlloc(s32, s32);
     extern void* memset(void*, s32, u32);
     extern void __memFree(s32, void*);
     extern void marioPreJump(void);
     extern void marioChgPose(char*);
     extern void marioMakeJumpPara(void);
-    extern s32 marioGetColor(void);
     extern void marioPaperOn(char*);
-    extern void marioPaperOff(void);
     extern void marioChgPaper(char*);
     extern void allPartyRidePlane(void);
-    extern void allPartyRideOff2(void);
     extern u32 psndSFXOn_3D(s32, void*);
     extern void psndSFXOff(s32);
     extern u32 hitGetAttr(void*);
     extern void flyMain(void);
     extern void camFollowYOff(void);
-    extern void camFollowYOn(void);
     extern s32 sysMsec2Frame(s32);
-    extern void marioAdjustMoveDir(void);
     extern void marioSetFallPara(void);
     extern void marioClearJumpPara(void);
     extern void marioChgMot(s32);
@@ -116,15 +119,8 @@ void mot_plane(void) {
     extern char* paper_plane[];
     extern char str_M_J_1B_802c4170[];
     extern char str_PM_P_1A_802c4178[];
-    extern char str_PM_P_1B_802c4180[];
     extern char str_M_J_1C_802c41a8[];
     extern char str_M_Z_1_80420d88[];
-    extern u8 str_SFX_MARIO_AIRPLANE1_802c40d8[];
-    extern f32 float_0_80420d1c;
-    extern f32 float_1_80420d2c;
-    extern f32 float_2_80420d28;
-    extern f32 float_20_80420d34;
-    extern f32 float_37_80420d38;
 
     typedef struct VecBits {
         u32 x;
@@ -531,7 +527,6 @@ void mot_plane(void) {
 #pragma use_lmw_stmw off
 
 void flyMain(void) {
-    extern void* marioGetPtr(void);
     extern f64 revise360(f64 angle);
     extern f64 sin(f64 angle);
     extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
@@ -540,15 +535,10 @@ void flyMain(void) {
     extern s32 chkCollision(s32* attr);
     extern u32 hitGetAttr(void* hit);
     extern s32 sysMsec2Frame(s32 msec);
-    extern f32 planeData[];
-    extern f32 float_0_80420d1c;
     extern f32 float_0p1_80420d40;
     extern f32 float_0p5_80420d5c;
-    extern f32 float_1_80420d2c;
-    extern f32 float_2_80420d28;
     extern f32 float_6_80420d60;
     extern f32 float_60_80420d3c;
-    extern f32 float_90_80420d14;
     extern f32 float_150_80420d44;
     extern f32 float_180_80420d54;
     extern f32 float_210_80420d4c;
@@ -843,18 +833,9 @@ check_flying:
 
 
 void mot_plane_post(void) {
-    extern void* marioGetPtr(void);
-    extern void camFollowYOn(void);
     extern void psndSFXOff(s32 id);
-    extern void marioPaperOff(void);
     extern void marioChgPaper(s32 mode);
-    extern void marioAdjustMoveDir(void);
     extern void __memFree(s32 heap, void* ptr);
-    extern void allPartyRideOff2(void);
-    extern u8 str_SFX_MARIO_AIRPLANE1_802c40d8[];
-    extern f32 float_20_80420d34;
-    extern f32 float_37_80420d38;
-    extern f32 float_0_80420d1c;
     typedef struct Vec { u32 x, y, z; } Vec;
     u8* data = str_SFX_MARIO_AIRPLANE1_802c40d8;
     void* mario = marioGetPtr();
@@ -893,21 +874,15 @@ void mot_plane_post(void) {
     allPartyRideOff2();
 }
 s32 chkCollision(s32* outAttr) {
-    extern void* marioGetPtr(void);
     extern void sincosf(f32, f32*, f32*);
     extern void* marioHitCheck(f64, f64, f64, f64, f64, f64, void*, s32*, void*, f32*, void*, void*, void*);
     extern void PSVECSubtract(void*, void*, void*);
     extern f32 PSVECMag(void*);
     extern void PSVECNormalize(void*, void*);
     extern void* marioHitCheckVec(void*, void*, f32*, void*, f32*);
-    extern f32 planeData[];
-    extern f32 float_0_80420d1c;
-    extern f32 float_1_80420d2c;
-    extern f32 float_2_80420d28;
     extern f32 float_4_80420d10;
     extern f32 float_10_80420d18;
     extern f32 float_10p1_80420d20;
-    extern f32 float_90_80420d14;
     extern f32 float_neg1_80420d24;
 
     typedef struct Vec { f32 x, y, z; } Vec;

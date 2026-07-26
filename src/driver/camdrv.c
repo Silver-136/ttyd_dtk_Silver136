@@ -1,5 +1,11 @@
 #include "driver/camdrv.h"
 
+#include "battle/battle_camera.h"
+#include "cam_road.h"
+#include "cam_shift.h"
+#include "driver/dispdrv.h"
+#include "driver/seqdrv.h"
+
 typedef struct VecRaw {
     u32 x;
     u32 y;
@@ -16,23 +22,18 @@ typedef union CamDoubleConv {
 
 extern void* camPtrTbl[];
 extern void camLetterBox(void);
-extern void dispSort(void);
-extern void dispReInit(void);
-extern void dispDraw(s32 cameraId);
 extern void sysDummyDraw(void* mtx);
 extern void camEvalNearFar(void* cam);
 extern void GXSetViewport(f32 xOrig, f32 yOrig, f32 wd, f32 ht, f32 nearz, f32 farz);
 extern void GXSetScissor(u32 x, u32 y, u32 w, u32 h);
 extern void* partyGetPtr(s32 id);
 extern s32 bero_get_BeroEXEC(void);
-extern s32 seqGetSeq(void);
 extern s32 marioChkKey(void);
 extern s32 marioChkCtrl(void);
 extern void psndSetFlag(s32 flag);
 extern void psndClearFlag(s32 flag);
 extern void camLetterBoxDraw(void);
 extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
-extern s32 camRoadSetup(const char* name);
 extern const f32 float_0_8041f6b4;
 extern s32 gp;
 extern s32 currentCamNo;
@@ -147,9 +148,7 @@ extern VecRaw vec3_802bf608[];
 extern f32 marioGetCamFollowRate(void);
 extern f32 intplGetValue(f32 start, f32 end, u32 type, s32 time, s32 maxTime);
 extern void camShiftMain(void* cam, void* mario, f32* out);
-extern void camShiftPostMain(void);
 extern void camRoadMain(f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z2, void* out);
-extern void battleCameraMain(void);
 extern void PSMTXCopy(void* src, void* dst);
 extern void PSMTX44Copy(void* src, void* dst);
 
@@ -1388,7 +1387,9 @@ void camSetTypeOrtho(s32 camId) {
     *(s32*)((s32)camPtrTbl[camId] + 0x19C) = 1;
 }
 
-void getScreenPoint(Vec3* pos, Vec3* out) {
+void getScreenPoint(void* position, f32* output) {
+    Vec3* pos = (Vec3*)position;
+    Vec3* out = (Vec3*)output;
     void* cam;
     f32 projection[7];
     f32 viewport[6];

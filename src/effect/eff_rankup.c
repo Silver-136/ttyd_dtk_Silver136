@@ -1,4 +1,7 @@
 #include "effect/eff_rankup.h"
+
+extern f32 float_1_8042818c;
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effRankupEntry(s32 type, f32 x, f32 y, f32 z) {
@@ -6,7 +9,6 @@ void* effRankupEntry(s32 type, f32 x, f32 y, f32 z) {
     extern void* __memAlloc(s32 heap, u32 size);
     extern void effRankupMain(void);
     extern char str_Rankup_80300b00[];
-    extern f32 float_1_8042818c;
 
     void* effect;
     void* work;
@@ -50,7 +52,6 @@ void effRankupMain(void* effect) {
     extern void effRankupDisp(s32 cameraId, void* effect);
     extern char* eff_rankup_str_tbl[];
     extern char str_Z_1_80428188[];
-    extern f32 float_1_8042818c;
     extern f32 float_0p61538_80428190;
 
     void* work;

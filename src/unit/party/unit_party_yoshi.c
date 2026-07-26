@@ -1,13 +1,20 @@
 #include "unit/party/unit_party_yoshi.h"
 
+extern void* _battleWorkPointer;
+extern s32 evtGetValue(void* evt, s32 arg);
+extern f32 evtGetFloat(void* evt, s32 arg);
+extern void evtSetValue(void* evt, s32 arg, s32 value);
+extern s32 BattleTransID(void* evt, s32 id);
+extern void* BattleGetUnitPtr(void* battleWork, s32 id);
+extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+extern f32 float_0_804240b4;
+extern f32 float_1_804240d8;
+extern f32 float_5_804240e0;
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 yoshi_original_color_anim_set(void* evt, s32 releaseOld) {
-    extern void* _battleWorkPointer;
     extern char str_PYS_D_5_802f77d8[];
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern s32 pouchGetPartyColor(s32 partyId);
     extern void* BattleGetUnitPartsPtr(s32 unitId, s32 partsId);
     extern void* animPoseGetAnimPosePtr(s32 poseId);
@@ -76,7 +83,6 @@ s32 yoshi_original_color_anim_set(void* evt, s32 releaseOld) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void __makeTechMenuFunc(void* commandWork, s32* count) {
-    extern void* _battleWorkPointer;
     extern void* BattleGetPartyPtr(void* battleWork);
     extern s32 BattleTransPartyId(s32 id);
     extern s32 partyGetTechLv(s32 partyId);
@@ -138,21 +144,12 @@ void __makeTechMenuFunc(void* commandWork, s32* count) {
 #pragma use_lmw_stmw on
 
 u8 btl_yoshi_yoroyoro_jump_calc_param(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern f32 evtGetFloat(void* evt, s32 arg);
     extern void evtSetFloat(void* evt, s32 arg, f32 value);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern void BtlUnit_SetMoveTargetPos(void* unit, f32 x, f32 y, f32 z);
-    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern void BtlUnit_SetMoveStartPos(void* unit, f32 x, f32 y, f32 z);
     extern void BtlUnit_SetMoveCurrentPos(void* unit, f32 x, f32 y, f32 z);
     extern f32 angleABf(f32 x0, f32 z0, f32 x1, f32 z1);
     extern f32 distABf(f32 x0, f32 z0, f32 x1, f32 z1);
-    extern f32 float_0_804240b4;
-    extern f32 float_1_804240d8;
     s32* args;
     void* battleWork;
     s32 unitId;
@@ -209,18 +206,11 @@ u8 btl_yoshi_yoroyoro_jump_calc_param(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 btl_yoshi_yoroyoro_jump_move(void* evt, s32 first) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern f32 evtGetFloat(void* evt, s32 arg);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern f64 sinfd(f64 angle);
     extern void* BtlUnit_GetPartsPtr(void* unit, s32 partId);
     extern void BtlUnit_SetPos(f32 x, f32 y, f32 z, void* unit);
     extern s32 BtlUnit_GetHeight(void* unit);
     extern s32 effSweatN64Entry(f32 x, f32 y, f32 z, f32 scale, f32 xOffset, s32 a, s32 b);
-    extern f32 float_0_804240b4;
-    extern f32 float_5_804240e0;
     extern f32 float_10_804240e8;
     extern f32 float_180_804240ec;
     extern f32 float_360_804240f0;
@@ -362,12 +352,7 @@ void _yoshi_slide_move_sound(void* unit, void* move) {
 }
 
 s32 _get_nomikomi_hit_position(int param_1) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
     extern f32 evtSetFloat(void* evt, s32 arg, f32 value);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
 
     void* evt = (void*)param_1;
     s32* args = *(s32**)((s32)evt + 0x18);
@@ -408,11 +393,6 @@ s32 _get_nomikomi_hit_position(int param_1) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _get_swallow_param(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
 
     void* battleWork = _battleWorkPointer;
     s32* args = *(s32**)((s32)evt + 0x18);
@@ -431,11 +411,6 @@ s32 _get_swallow_param(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _check_swallow_attribute(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
 
     s32* args = *(s32**)((s32)evt + 0x18);
     void* battleWork = _battleWorkPointer;
@@ -457,12 +432,6 @@ s32 _check_swallow_attribute(void* evt) {
 
 
 s32 _wait_yoshig_run(void* evt) {
-    extern void* _battleWorkPointer;
-    extern f32 float_0_804240b4;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 id = evtGetValue(evt, args[0]);
     void* unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(evt, id));
@@ -477,10 +446,6 @@ s32 _wait_yoshig_run(void* evt) {
     return 2;
 }
 u32 _wait_yoshig_complete(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     s32 id;
     void* unit;
     void* weapon;
@@ -505,10 +470,6 @@ u8 _gundan_yoshi_run_effect(void* evt, s32 first) {
         f32 z;
     } LocalVec;
 
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern void* BattleAlloc(s32 size);
     extern void BattleFree(void* ptr);
     extern void* memset(void* ptr, s32 value, u32 size);
@@ -521,7 +482,6 @@ u8 _gundan_yoshi_run_effect(void* evt, s32 first) {
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 z);
     extern void _btlYoshiDisp(void* camera, void* work);
     extern char str_SFX_BTL_YOSHI_TAIGUN_802f7cb8[];
-    extern f32 float_0_804240b4;
     extern f32 float_3_804240bc;
     extern f32 float_0p1_804240c0;
     extern f32 float_0p001_804240c4;
@@ -529,9 +489,7 @@ u8 _gundan_yoshi_run_effect(void* evt, s32 first) {
     extern f32 float_neg1_804240cc;
     extern f32 float_neg80_804240d0;
     extern f32 float_300_804240d4;
-    extern f32 float_1_804240d8;
     extern f32 float_0p05_804240dc;
-    extern f32 float_5_804240e0;
     extern f32 float_0p0039062_804240e4;
 
     s32* args;
@@ -649,7 +607,6 @@ u8 _gundan_yoshi_run_effect(void* evt, s32 first) {
 
 
 void _btlYoshiDisp(void* camera, void* work) {
-    extern f32 float_0_804240b4;
     extern f32 float_0p4_804240ac;
     extern f32 float_neg0p4_804240b0;
     extern f32 float_20_804240b8;

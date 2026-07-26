@@ -1,9 +1,6 @@
 #include "event/evt_map.h"
 #include "event/evt_cmd.h"
 
-s32 evtGetValue(EventEntry* event, s32 value);
-f32 evtGetFloat(EventEntry* event, s32 value);
-s32 evtSetValue(EventEntry* event, s32 target, s32 value);
 void N_mapDispOn(void);
 void N_mapDispOff(void);
 void mapBlendOff(void);
@@ -20,10 +17,11 @@ void mapReStartAnimationAll(void);
 void mapPauseAnimation(s32 id);
 void mapPauseAnimationAll(void);
 void mapPlayAnimationLv(s32 id, s32 anim, s32 level);
+extern void* marioGetPtr(void);
+extern char* hitGetName(void*);
+extern s32 strcmp(char*, char*);
 
 s32 evt_mapobj_trans(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
-    extern f32 evtGetFloat(void*, s32);
     extern void mapObjTranslate(s32, f32, f32, f32);
     s32* args;
     s32 group;
@@ -47,8 +45,6 @@ s32 evt_mapobj_trans(void* pEvt) {
 }
 
 s32 evt_mapobj_rotate(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
-    extern f32 evtGetFloat(void*, s32);
     extern void mapObjRotate(s32, f32, f32, f32);
     s32* args;
     s32 group;
@@ -72,8 +68,6 @@ s32 evt_mapobj_rotate(void* pEvt) {
 }
 
 s32 evt_mapobj_scale(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
-    extern f32 evtGetFloat(void*, s32);
     extern void mapObjScale(s32, f32, f32, f32);
     s32* args;
     s32 group;
@@ -97,8 +91,6 @@ s32 evt_mapobj_scale(void* pEvt) {
 }
 
 s32 evt_map_set_fog(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
-    extern f32 evtGetFloat(void*, s32);
     extern void mapSetFog(s32, f32, f32, unsigned char*);
     s32* args;
     s32 mode;
@@ -119,7 +111,6 @@ s32 evt_map_set_fog(void* pEvt) {
 }
 
 s32 evt_map_get_fog(void* pEvt) {
-    extern s32 evtSetValue(void*, s32, s32);
     extern f32 evtSetFloat(void*, s32, f32);
     extern void mapGetFog(s32*, f32*, f32*, unsigned char*);
     s32* args;
@@ -149,7 +140,6 @@ USER_FUNC(evt_map_fog_onoff) {
 }
 
 s32 evt_map_set_blend(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
     extern void mapSetBlend(u8*);
     extern void mapSetBlend2(u8*);
     s32* args;
@@ -183,7 +173,6 @@ USER_FUNC(evt_map_blend_off) {
 #pragma use_lmw_stmw off
 s32 evt_map_blend_set_flag(void* pEvt) {
     extern s32 strcmp(char* lhs, char* rhs);
-    extern void* marioGetPtr(void);
     extern s32 marioGetPartyId(void);
     extern s32 marioGetExtraPartyId(void);
     extern void* partyGetPtr(s32 id);
@@ -252,7 +241,6 @@ s32 evt_map_blend_set_flag(void* pEvt) {
 
 
 s32 evt_map_blend_set_mobj_flag(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
     extern void* mobjNameToPtr(char*);
     extern void animPoseSetMaterialFlagOn(s32, u32);
     extern void animPoseSetMaterialFlagOff(s32, u32);
@@ -275,7 +263,6 @@ s32 evt_map_blend_set_mobj_flag(void* pEvt) {
     return 2;
 }
 s32 evt_mapobj_color(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
     extern void mapObjSetColor(s32, u8*);
     extern void mapGrpSetColor(s32, u8*);
     s32* args;
@@ -395,7 +382,6 @@ USER_FUNC(evt_map_set_playrate) {
 
 
 s32 evt_mapobj_flag_onoff(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
     extern void mapObjFlagOff(s32, s32);
     extern void mapObjFlagOn(s32, s32);
     extern void mapGrpFlagOff(s32, s32);
@@ -428,7 +414,6 @@ s32 evt_mapobj_flag_onoff(void* pEvt) {
 }
 
 s32 evt_mapobj_set_offscreen(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
     extern void mapObjSetOffScreen(s32, s32);
     extern void mapGrpSetOffScreen(s32, s32);
     s32* args;
@@ -466,8 +451,6 @@ USER_FUNC(evt_mapobj_clear_offscreen) {
 
 
 s32 evt_mapobj_get_position(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
-    extern s32 evtSetValue(void*, s32, s32);
     extern void mapObjGetPos(s32, float*);
     s32* args;
     float pos[3];
@@ -494,7 +477,6 @@ USER_FUNC(evt_map_set_tevcallback) {
 
 
 s32 evt_map_set_flush_onoff(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
     extern void mapObjFlushOn(s32);
     extern void mapObjFlushOff(s32);
     extern void mapGrpFlushOn(s32);
@@ -525,7 +507,6 @@ s32 evt_map_set_flush_onoff(void* pEvt) {
 }
 
 s32 evt_map_set_flush_color(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
     extern void mapObjSetFlushColor(s32, u8, u8, u8, u8);
     extern void mapGrpSetFlushColor(s32, u8, u8, u8, u8);
     s32* args;
@@ -552,8 +533,6 @@ s32 evt_map_set_flush_color(void* pEvt) {
 }
 
 s32 evt_map_get_flush_color(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
-    extern s32 evtSetValue(void*, s32, s32);
     extern void mapObjGetFlushColor(s32, u8*, u8*, u8*, u8*);
     s32* args;
     u8 r;
@@ -571,10 +550,6 @@ s32 evt_map_get_flush_color(void* pEvt) {
 }
 
 s32 check(void* pEvt) {
-    extern void* marioGetPtr(void);
-    extern char* hitGetName(void*);
-    extern s32 strcmp(char*, char*);
-    extern s32 evtSetValue(void*, s32, s32);
     s32* args;
     void* mario;
     void* hit;
@@ -590,10 +565,6 @@ s32 check(void* pEvt) {
 }
 
 s32 check2(void* pEvt) {
-    extern void* marioGetPtr(void);
-    extern char* hitGetName(void*);
-    extern s32 strcmp(char*, char*);
-    extern s32 evtSetValue(void*, s32, s32);
     s32* args;
     void* mario;
     void* hit;
@@ -667,7 +638,6 @@ s32 evt_map_entry_airport_harbor(void* pEvt) {
 
 
 s32 evt_map_replace_mapobj(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
     extern void mapObjGetPos(s32, f32*);
     extern void mapObjFlagOn(s32, u32);
     extern void effTorchEntry(s32, f32, f32, f32, f32);

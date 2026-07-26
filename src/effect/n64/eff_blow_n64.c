@@ -1,5 +1,6 @@
 #include "effect/n64/eff_blow_n64.h"
 
+extern f32 float_0_80424d00;
 
 void* effBlowN64Entry(f32 x,f32 y,f32 z,f32 dx,f32 dy,f32 dz,s32 type,s32 count) {
     extern void* effEntry(void);extern void* __memAlloc(s32,s32);extern f64 sqrt(f64);extern s32 rand(void);extern void effBlowMain(void*);extern char str_BlowN64_802fabb0[];
@@ -18,7 +19,6 @@ void effBlowMain(int* entry) {
     extern f32 dispCalcZ(void* pos);
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
     extern void effBlowDisp(void);
-    extern f32 float_0_80424d00;
     extern f32 float_0p5_80424d08;
     extern f32 float_4_80424d0c;
     extern f32 float_20_80424d10;
@@ -158,7 +158,6 @@ void effBlowDisp(int param_1, void* param_2) {
     extern void GXBegin(s32 primitive, s32 vtxfmt, s32 count);
     extern void tri2(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g, s32 h);
     extern f32 float_0p03125_80424cfc;
-    extern f32 float_0_80424d00;
     extern f32 float_deg2rad_80424d04;
     extern u32 dat_80424cf8;
     extern u8 size16x16_tex32x32_vtx[];

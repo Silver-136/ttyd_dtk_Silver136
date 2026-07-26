@@ -10,10 +10,11 @@ extern f32 float_360_80423550;
 extern f32 float_neg200_804235fc;
 extern f32 float_20_804234fc;
 extern WinPartyDtEntry winPartyDt[];
+extern void* pouchGetPtr(void);
+extern s32 pouchGetPartyAttackLv(s32 partyId);
 void winMsgEntry(void* pWin, s32 param_2, char* msg, s32 param_4);
 
 void winPartyInit(void* pWin) {
-    extern void* pouchGetPtr(void);
     extern s32 pouchGetPartyColor(s32 id);
     extern s32 animPoseEntry(char* name, s32 arg);
     extern void animPoseSetAnim(s32 poseId, char* anim, s32 loop);
@@ -21,9 +22,6 @@ void winPartyInit(void* pWin) {
     extern s32 marioBgmodeChk(void);
     extern s32 marioGetParty(void);
     extern void* marioGetPtr(void);
-    extern s32 pouchGetPartyAttackLv(s32 partyId);
-    extern WinPartyDtEntry winPartyDt[];
-    extern f32 float_360_80423550;
     extern char str_EFF_m_yoshi_802f4e90[];
     extern char str_EFF_m_yoshi2_802f51f0[];
     extern char str_EFF_m_yoshi3_802f5200[];
@@ -212,15 +210,12 @@ u8 winPartyExit(void* pWin) {
 
 s32 winPartyMain(void* pWin) {
     extern void psndSFXOn(s32 soundId);
-    extern s32 pouchGetPartyAttackLv(s32 partyId);
     extern void winMsgEntry(void* pWin, s32 arg1, char* msg, s32 arg3);
-    extern f32 float_360_80423550;
     extern f32 float_neg200_804235fc;
     extern f32 float_20_804234fc;
     extern f32 float_neg10_80423600;
     extern f32 float_neg26_80423604;
     extern f32 float_5_804235b4;
-    extern WinPartyDtEntry winPartyDt[];
 
     s32 prev;
     s32 count;
@@ -360,7 +355,6 @@ void winPartyMain2(void* work) {
 
 void winPartyDisp(s32 cameraId, void* pWin, s32 index) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
-    extern void* pouchGetPtr(void);
     extern void winBgGX(f32 x, f32 y, void* win, s32 type);
     extern void winKirinukiGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
     extern void winNameGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);

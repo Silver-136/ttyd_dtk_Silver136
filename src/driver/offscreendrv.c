@@ -3,6 +3,7 @@
 extern void* gp;
 extern s32 work;
 extern void* __memAlloc();
+extern s32 strcmp(const char* a, const char* b);
 
 void offscreenInit(void) {
     void* base = &work;
@@ -27,9 +28,6 @@ void offscreenReset(s32 value) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 offscreenEntry(char* name) {
-    extern void* gp;
-    extern s32 work;
-    extern s32 strcmp(const char* a, const char* b);
     extern char* strcpy(char* dst, const char* src);
     void* set = &work;
     s32 count;
@@ -85,8 +83,6 @@ s32 offscreenEntry(char* name) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void offscreenDisp(void) {
-    extern void* gp;
-    extern s32 work;
     extern void GXSetTexCopySrc(u16 x, u16 y, u16 wd, u16 ht);
     extern void GXSetTexCopyDst(u16 wd, u16 ht, s32 fmt, s32 mipmap);
     extern u32 GXGetTexBufferSize(u16 wd, u16 ht, s32 fmt, s32 mipmap, s32 max_lod);
@@ -133,8 +129,6 @@ void offscreenDisp(void) {
 #pragma use_lmw_stmw on
 
 void offscreenMain(void) {
-    extern void* gp;
-    extern s32 work;
     extern void dispEntry(s32 layer, s32 order, void* callback, f32 z, void* user);
     extern void offscreenDisp(void);
     extern const f32 float_0_804203a8;
@@ -171,8 +165,6 @@ void offscreenMain(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void offscreenAddBoundingBox(s32 id, u16 x0, u16 y0, u16 x1, u16 y1) {
-    extern void* gp;
-    extern s32 work;
     extern void* DEMOGetRenderModeObj(void);
     void* set;
     void* entry;
@@ -256,8 +248,6 @@ s32 offscreenGetBoundingBox(int param_1, void* param_2, void* param_3, void* par
 }
 
 void offscreenGetTexObj(s32 id, void** texObj, u32* size) {
-    extern void* gp;
-    extern s32 work;
     void* set = &work;
     u32 flags;
     void* entry;
@@ -287,9 +277,6 @@ void offscreenGetTexObj(s32 id, void** texObj, u32* size) {
 }
 
 s32 offscreenNameToId(char* name) {
-    extern void* gp;
-    extern s32 work;
-    extern s32 strcmp(const char* a, const char* b);
     void* set = &work;
     s32 i;
     s32 count;
@@ -314,9 +301,6 @@ s32 offscreenNameToId(char* name) {
 }
 
 void* offscreenNameToPtr(char* name) {
-    extern void* gp;
-    extern s32 work;
-    extern s32 strcmp(const char* a, const char* b);
     void* set = &work;
     s32 i;
     s32 count;
@@ -341,9 +325,6 @@ void* offscreenNameToPtr(char* name) {
 }
 
 void offscreenDelete(char* name) {
-    extern void* gp;
-    extern s32 work;
-    extern s32 strcmp(const char* a, const char* b);
     void* set = &work;
     s32 i;
     s32 count;

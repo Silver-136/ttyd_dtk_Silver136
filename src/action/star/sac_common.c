@@ -1,18 +1,17 @@
 #include "action/star/sac_common.h"
+#include "battle/battle.h"
+#include "battle/battle_ac_help.h"
+#include "battle/battle_audience.h"
+#include "manager/evtmgr.h"
+#include "system.h"
 
 extern s32 cheerEnable;
 extern s32 handBeatEnable;
-extern void* _battleWorkPointer;
 extern s32 enemy_slide_return_evt[];
 extern s32 enemy_slide_go_evt[];
-
-void BattleAcHelpSetDispType(s32 type);
-void* BattleGetUnitPtr(void* battleWork, s32 unitId);
-void* evtEntry(void* script, s32 type, s32 flags);
-s32 BattleAudience_GetAudienceNum(void);
-void BattleAudienceSoundClap(s32 left, s32 right);
-void BattleAudienceSoundCheerKind(s32 kind, s32 left, s32 right);
-void BattleAudienceSoundWhistleKind(s32 kind);
+extern s32 count;
+extern s32 count2;
+extern u8 volPer;
 
 s32 sac_wao(void) {
     s32 audience = BattleAudience_GetAudienceNum();
@@ -29,16 +28,7 @@ s32 sac_wao(void) {
 }
 
 s32 sac_handbeat(void* event, s32 isFirstCall) {
-    extern s32 BattleAudienceSoundCheck(s32 id);
-    extern void BattleAudienceSoundStop(s32 id);
-    extern void BattleAudienceSoundCheer(s32 kind, s32 flags);
-    extern void BattleAudienceSoundSetVol(s32 id, s32 volume, s32 flags);
-    extern void* BattleAudienceSoundGetPtr(s32 id);
     extern void BattleAudienceSoundHandBeat(void);
-    extern s32 irand(s32 max);
-    extern s32 count;
-    extern s32 count2;
-    extern u8 volPer;
 
     s32 newVol;
     void* sound;
@@ -89,15 +79,6 @@ s32 sac_handbeat_end(void) {
 
 s32 sac_cheer(void* event, s32 isFirstCall) {
     extern s32 evtGetValue(void* event, s32 target);
-    extern s32 BattleAudienceSoundCheck(s32 id);
-    extern void BattleAudienceSoundStop(s32 id);
-    extern void BattleAudienceSoundCheer(s32 kind, s32 flags);
-    extern void BattleAudienceSoundSetVol(s32 id, s32 volume, s32 flags);
-    extern void* BattleAudienceSoundGetPtr(s32 id);
-    extern s32 irand(s32 max);
-    extern s32 count;
-    extern s32 count2;
-    extern u8 volPer;
 
     s32 value;
     s32 newVol;

@@ -1,14 +1,16 @@
 #include "effect/n64/eff_bush_n64.h"
+
+extern s32 rand(void);
+extern f64 double_to_int_802facb0;
+extern f32 float_0_80424ea0;
+
 #pragma optimize_for_size off
 
 void* effBushN64Entry(s32 type, f32 x, f32 y, f32 z) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effBushMain(void);
-    extern s32 rand(void);
     extern char str_BushN64_802facb8[];
-    extern f64 double_to_int_802facb0;
-    extern f32 float_0_80424ea0;
     void* entry;
     u8* work;
     u8* part;
@@ -67,11 +69,9 @@ void effBushMain(void* effect) {
     extern void effDelete(void* effect);
     extern double sin(f64 x);
     extern double cos(f64 x);
-    extern s32 rand(void);
     extern f32 dispCalcZ(LocalVec3* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
     extern void effBushDisp(s32 cameraId, void* effect);
-    extern f64 double_to_int_802facb0;
     extern f32 float_0p3_80424ea4;
     extern f32 float_0p8_80424ea8;
     extern f32 float_6p2832_80424eac;
@@ -183,7 +183,6 @@ void effBushDisp(s32 cameraId, void* effect) {
     extern f32 float_deg2rad_80424e94;
     extern f32 float_4_80424e98;
     extern f32 float_1_80424e9c;
-    extern f32 float_0_80424ea0;
     extern u8 DAT_8039e448[];
     extern u8 DAT_8039e452[];
     extern u8 DAT_8039e44e[];

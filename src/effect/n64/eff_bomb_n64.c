@@ -1,4 +1,9 @@
 #include "effect/n64/eff_bomb_n64.h"
+#include "effect/n64/eff_confetti_n64.h"
+#include "effect/n64/eff_kemuri8_n64.h"
+
+extern f32 float_0_80424d58;
+extern f32 float_1_80424d5c;
 
 void effBombN64SetCamId(void* effect, s32 camId) {
     *(s32*)((s32)*(void**)((s32)effect + 0xC) + 0x40) = camId;
@@ -9,8 +14,6 @@ void* effBombN64Entry(s32 type, f32 x, f32 y, f32 z) {
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effBombMain(void);
     extern char str_BombN64_802fabd0[];
-    extern f32 float_0_80424d58;
-    extern f32 float_1_80424d5c;
     extern f32 float_3_80424d78;
     extern f32 float_9p9_80424d7c;
     extern f32 float_1p6_80424d80;
@@ -77,14 +80,10 @@ void* effBombN64Entry(s32 type, f32 x, f32 y, f32 z) {
 }
 void effBombMain(void* effEntry) {
     extern void effDelete(void* effect);
-    extern void* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z);
-    extern void effKemuri8N64SetCamId(void* effect, s32 camId);
     extern void* effConfettiN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 scale);
-    extern void effConfettiN64SetCamId(void* effect, s32 camId);
     extern f32 dispCalcZ(void* pos);
     extern void dispEntry(s32 camId, s32 layer, void* callback, void* param, f32 z);
     extern void effBombDisp(void);
-    extern f32 float_1_80424d5c;
     extern f32 float_0p4_80424d60;
     extern f32 float_0p6_80424d64;
     extern f32 float_255_80424d68;
@@ -191,8 +190,6 @@ void effBombDisp(s32 cameraId, void* effEntry) {
     extern void tri2(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g, s32 h);
     extern f32 float_deg2rad_80424d50;
     extern f32 float_0p0625_80424d54;
-    extern f32 float_0_80424d58;
-    extern f32 float_1_80424d5c;
     extern u32 dat_80424d48;
     extern u32 dat_80424d4c;
     extern u8 size8x8_tex32x32_vtx[];

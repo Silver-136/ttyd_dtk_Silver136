@@ -1,5 +1,8 @@
 #include "effect/n64/eff_kemuri4_n64.h"
 
+extern f32 float_0_804256a8;
+extern f32 float_1_804256b0;
+
 #pragma optimize_for_size off
 
 void* effKemuri4N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 side) {
@@ -11,8 +14,6 @@ void* effKemuri4N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 side) {
     extern f64 sin(f64);
     extern f64 cos(f64);
     extern char str_Kemuri4N64_802fb22c[];
-    extern f32 float_0_804256a8;
-    extern f32 float_1_804256b0;
     extern f32 float_5p4_804256b4;
     extern f32 float_0p5_804256b8;
     extern f32 float_neg0p07_804256bc;
@@ -79,9 +80,7 @@ void effKemuri4Main(void* effect) {
     extern void PSMTXScale(f32 m[3][4], f32 x, f32 y, f32 z);
     extern void PSMTXConcat(f32 a[3][4], f32 b[3][4], f32 ab[3][4]);
     extern Vec3 vec3_802fb220[];
-    extern f32 float_0_804256a8;
     extern f32 float_0p004_804256c0;
-    extern f32 float_1_804256b0;
     extern f32 float_neg100_804256cc;
     extern f32 float_deg2rad_804256ac;
     u8* work;
@@ -180,7 +179,6 @@ void effKemuri4Disp(s32 cameraId, void* effect) {
     extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
     extern void GXSetTevOp(s32, s32);
     extern f32 float_0p0625_804256a4;
-    extern f32 float_0_804256a8;
     u8 tex[0x20];
     Mtx texMtx;
     Mtx draw;

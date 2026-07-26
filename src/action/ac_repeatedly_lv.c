@@ -3,6 +3,7 @@
 void BattleAcGaugeSeDelete(void* wp);
 void actionCommandDisp(f32 x, f32 y);
 f32 intplGetValue(s32 type, f32 start, f32 end, s32 time, s32 duration);
+void battleAcDelete_RepeatedlyLv(void* battleWork);
 extern f32 float_neg300_80424ba4;
 extern f32 float_30_80424ba8;
 
@@ -69,14 +70,11 @@ void _init_param(void* battleWork) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 battleAcMain_RepeatedlyLv(void* battleWork) {
-    extern void* memset(void* dst, s32 value, u32 size);
-    extern void _init_param(void* battleWork);
     extern u32 BattlePadCheckNow(u32 buttons);
     extern u32 BattlePadCheckTrigger(u32 buttons);
     extern void BattlePadCheckUp(u32 buttons);
     extern void BattleAcGaugeSeInit(void);
     extern void BattleAcGaugeSeUpdate(f32 value);
-    extern void battleAcDelete_RepeatedlyLv(void* battleWork);
     extern s32 irand(s32 max);
     extern u32 dat_80424b68;
     extern f32 float_neg300_80424ba4;

@@ -12,7 +12,6 @@ extern void* mapalloc_base_ptr;
 extern void* gp;
 
 void* evtGetPtrID(s32 id);
-void evtDeleteID(s32 id);
 void psndSFXOff(s32 id);
 void _mapFree(void* heap, void* ptr);
 void mapObjGetPos(s32 id, f32* pos);
@@ -23,11 +22,8 @@ s32 psndSFXOn_3D(s32 sfxId, f32* pos);
 
 s32 evt_moving_floor_alloc(void* event) {
     extern void* _mapAlloc(void*, s32);
-    extern void* mapalloc_base_ptr;
     extern void* memset(void*, s32, s32);
     extern s32 evtSetValue(void*, s32, s32);
-    extern f32 sintbl[];
-    extern void* gp;
     u8* evt = event;
     s32* args = *(s32**)(evt + 0x18);
     s32* lw = (s32*)(evt + 0x9C);
@@ -193,12 +189,7 @@ u8 evt_moving_floor_init(s32 event) {
 }
 
 s32 evt_moving_floor_main(void* event) {
-    extern f32 float_0_80426584;
-    extern f32 float_3_80426590;
-    extern f32 float_5p625_80426594;
     extern f32 float_1000_8042659c;
-    extern f32 sintbl[];
-    extern void* gp;
     s32* args = *(s32**)((s32)event + 0x18);
     void* floor = (void*)evtGetValue(event, args[0]);
     u32 ticks;

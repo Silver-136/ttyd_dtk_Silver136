@@ -3,7 +3,6 @@
 
 void* effEntry(void);
 void* __memAlloc(s32 heap, u32 size);
-void effEnergyMain(void* entry);
 void effDelete(void* entry);
 f32 dispCalcZ(Vec* pos);
 void dispEntry(s32 cameraId, s32 order, void* callback, void* entry);

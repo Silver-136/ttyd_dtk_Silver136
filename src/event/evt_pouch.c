@@ -13,14 +13,12 @@ USER_FUNC(evt_pouch_get_coin) {
 #pragma use_lmw_stmw on
 
 USER_FUNC(evt_pouch_add_coin) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern s32 pouchAddCoin(s32 coins);
     pouchAddCoin(evtGetValue(event, event->args[0]));
     return 2;
 }
 
 USER_FUNC(evt_pouch_set_coin) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern s32 pouchSetCoin(s32 value);
     pouchSetCoin(evtGetValue(event, event->args[0]));
     return 2;
@@ -39,7 +37,6 @@ USER_FUNC(evt_pouch_get_supercoin) {
 #pragma use_lmw_stmw on
 
 USER_FUNC(evt_pouch_set_supercoin) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern s16 pouchSetSuperCoin(s32 newCount);
     pouchSetSuperCoin(evtGetValue(event, event->args[0]));
     return 2;
@@ -58,14 +55,12 @@ USER_FUNC(evt_pouch_get_starpiece) {
 #pragma use_lmw_stmw on
 
 USER_FUNC(evt_pouch_add_starpiece) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern s32 pouchAddStarPiece(s32 amount);
     pouchAddStarPiece(evtGetValue(event, event->args[0]));
     return 2;
 }
 
 USER_FUNC(evt_pouch_get_starstone) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void pouchGetStarStone(s32 id);
     pouchGetStarStone(evtGetValue(event, event->args[0]));
     return 2;
@@ -132,7 +127,6 @@ s32 evt_pouch_remove_item(void* pEvt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 N_evt_pouch_remove_item_index(void* pEvt) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void evtSetValue(EventEntry* event, s32 dst, s32 value);
     extern s32 pouchRemoveItemIndex(s32 itemId, s32 index);
     extern void pouchReviseMarioParam(void);
@@ -190,7 +184,6 @@ s32 evt_pouch_add_keepitem(int param_1) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_pouch_remove_keepitem(int param_1) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void evtSetValue(EventEntry* event, s32 dst, s32 value);
     extern s32 pouchRemoveKeepItem(s32 itemId, s32 index);
     s32* args = *(s32**)(param_1 + 0x18);
@@ -210,7 +203,6 @@ s32 evt_pouch_remove_keepitem(int param_1) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_pouch_check_item) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void evtSetValue(EventEntry* event, s32 dst, s32 value);
     extern s32 pouchCheckItem(s32 itemId);
     s32* args = event->args;
@@ -248,7 +240,6 @@ USER_FUNC(L_evt_pouch_get_hp) {
 #pragma use_lmw_stmw on
 
 USER_FUNC(L_evt_pouch_set_hp) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void pouchSetHP(s32 hp);
     pouchSetHP(evtGetValue(event, event->args[0]));
     return 2;
@@ -267,21 +258,18 @@ USER_FUNC(evt_pouch_get_max_ap) {
 #pragma use_lmw_stmw on
 
 USER_FUNC(evt_pouch_set_ap) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void pouchSetAP(s32 sp);
     pouchSetAP(evtGetValue(event, event->args[0]));
     return 2;
 }
 
 USER_FUNC(evt_pouch_party_join) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void partyJoin(s32 partyId);
     partyJoin(evtGetValue(event, event->args[0]));
     return 2;
 }
 
 USER_FUNC(evt_pouch_party_left) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void partyLeft(s32 partyId);
     partyLeft(evtGetValue(event, event->args[0]));
     return 2;
@@ -351,28 +339,24 @@ USER_FUNC(evt_pouch_get_equipbadgecnt) {
 #pragma use_lmw_stmw on
 
 USER_FUNC(evt_pouch_majinai_set) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void pouchMajinaiInit(s32 value);
     pouchMajinaiInit(evtGetValue(event, event->args[0]));
     return 2;
 }
 
 USER_FUNC(evt_pouch_receive_mail) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void pouchReceiveMail(s32 mail);
     pouchReceiveMail(evtGetValue(event, event->args[0]));
     return 2;
 }
 
 USER_FUNC(evt_pouch_open_mail) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void pouchOpenMail(s32 mail);
     pouchOpenMail(evtGetValue(event, event->args[0]));
     return 2;
 }
 
 USER_FUNC(evt_pouch_set_yoshiname) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void pouchSetYoshiName(char* name);
     pouchSetYoshiName((char*)evtGetValue(event, event->args[0]));
     return 2;

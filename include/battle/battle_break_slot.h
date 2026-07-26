@@ -9,4 +9,10 @@ STATIC_ASSERT_SIZEOF(BattleWorkBreakSlot, 0x134);
 
 void BattleBreakSlot_Init(void);
 void BattleBreakSlot_Main(void);
+void* BattleBreakSlotGetPtr(void);
+void BattleBreakSlot_Disp(void);
+void BattleBreakSlot_PointInc(void);
+s32 BattleBreakSlot_CheckReaction(void);
+s32 BattleBreakSlot_GetBreakTurn(void);
+void BattleBreakSlot_HideReel(void);
 void BattleBreakSlot_End(void);

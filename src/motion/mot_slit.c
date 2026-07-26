@@ -2,6 +2,24 @@
 
 void* marioGetPtr(void);
 void marioChgMot2(s32 motionId);
+extern f32 float_0_80420f9c;
+extern void marioPaperOff(void);
+extern f32 float_180_80420fa8;
+extern void allPartyForceSlitOff(void);
+extern f32 float_270_80420fb8;
+extern void mapResetPaperAmbColor(void);
+extern s32 marioKeyOffChk(void);
+extern void marioAdjustMoveDir(void);
+extern f32 float_10_80421000;
+extern f32 float_20_80420ff4;
+extern void allPartySlitOn(void);
+extern void mapSetPaperAmbColor(void* color);
+extern char vec3_802c42e8[];
+extern u32 dat_80420f98;
+extern f32 float_6_80420fb4;
+extern f32 float_0p004_80420fbc;
+extern s32 marioSlitChkWallAround(void);
+extern f32 float_0p5_80420fd8;
 
 typedef struct SlitVecCopy {
     s32 x;
@@ -24,7 +42,6 @@ void N_marioSlitSetAfterLand(void) {
 }
 
 u32 marioSlitAbilityChk(void) {
-    extern void* marioGetPtr(void);
     extern s32 pouchCheckItem(s32 item);
     extern s32 marioBgmodeChk(void);
     void* mario = marioGetPtr();
@@ -44,8 +61,6 @@ u32 marioSlitAbilityChk(void) {
 }
 
 s32 marioSlitButton(void) {
-    extern void* marioGetPtr(void);
-    extern s32 marioKeyOffChk(void);
     extern s32 marioBgmodeChk(void);
     void* mario = marioGetPtr();
     if (*(u32*)((s32)mario + 0xC) & 2) {
@@ -92,10 +107,7 @@ s32 marioSlitKeyDisable(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u32 U_marioSlitContinueChk(void) {
-    extern void* marioGetPtr(void);
-    extern s32 marioKeyOffChk(void);
     extern s32 marioBgmodeChk(void);
-    extern s32 marioSlitChkWallAround(void);
     extern s32 marioCreviceWallChk(void* pos);
     SlitVecCopy pos;
     void* mario = marioGetPtr();
@@ -133,18 +145,11 @@ u32 U_marioSlitContinueChk(void) {
 #pragma use_lmw_stmw on
 
 s32 marioCreviceWallChk(f32* pos) {
-    extern void* marioGetPtr(void);
     extern f32 toMovedirSimple(f32);
     extern void sincosf(f32, f32*, f32*);
     extern s32 marioHitCheckVec(void*, void*, f32*, void*, f32*);
     extern f64 angleABf(f64, f64, f64, f64);
     extern f32 __fabsf(f32);
-    extern f32 float_0_80420f9c;
-    extern f32 float_0p5_80420fd8;
-    extern f32 float_10_80421000;
-    extern f32 float_20_80420ff4;
-    extern f32 float_180_80420fa8;
-    extern f32 float_270_80420fb8;
 
     typedef struct Vec { f32 x, y, z; } Vec;
 
@@ -261,7 +266,6 @@ s32 marioGetSlitFloorPos(SlitVecCopy* out) {
 }
 
 s32 marioChkSlitThrouh(void) {
-    extern void* marioGetPtr(void);
     void* mario = marioGetPtr();
     s32 timer;
 
@@ -276,7 +280,6 @@ s32 marioChkSlitThrouh(void) {
 }
 
 s32 marioChkSlitThrouhEnd(void) {
-    extern void* marioGetPtr(void);
     void* mario = marioGetPtr();
     s32 timer;
 
@@ -298,7 +301,6 @@ void motSlitContinue(void) {
 }
 
 int marioChkSlitEnd(void) {
-    extern void* marioGetPtr(void);
     void* mario = marioGetPtr();
 
     if (*(u16*)((s32)mario + 0x2E) != 0x15) {
@@ -315,8 +317,6 @@ void motSlitCancel(void) {
 }
 
 u8 motSlitCancel2(void) {
-    extern void* marioGetPtr(void);
-    extern void allPartyForceSlitOff(void);
     void* mario = marioGetPtr();
 
     if (*(u32*)mario & 0x100000) {
@@ -347,15 +347,6 @@ s32 marioGetMotSlitCancel3(void) {
 #pragma use_lmw_stmw on
 
 void marioSlitForceCancel(void) {
-    extern void* marioGetPtr(void);
-    extern void marioPaperOff(void);
-    extern void mapResetPaperAmbColor(void);
-    extern void marioAdjustMoveDir(void);
-    extern void allPartyForceSlitOff(void);
-    extern f32 float_180_80420fa8;
-    extern f32 float_0_80420f9c;
-    extern f32 float_10_80421000;
-    extern f32 float_0p004_80420fbc;
     void* mario = marioGetPtr();
     u32 flags = *(u32*)mario;
     if (flags & 0x100000) {
@@ -383,15 +374,7 @@ void marioSlitForceCancel(void) {
 }
 
 void mot_slit_post(void) {
-    extern void* marioGetPtr(void);
-    extern void marioPaperOff(void);
-    extern void mapResetPaperAmbColor(void);
-    extern void marioAdjustMoveDir(void);
-    extern void allPartyForceSlitOff(void);
     extern void U_allPartySlitOffReq(void);
-    extern f32 float_20_80420ff4;
-    extern f32 float_180_80420fa8;
-    extern f32 float_0_80420f9c;
 
     void* mario = marioGetPtr();
     u16 motion;
@@ -447,8 +430,6 @@ void mot_slit_post(void) {
 }
 
 u8 marioForceSlitAnime(void) {
-    extern void* marioGetPtr(void);
-    extern void marioPaperOff(void);
     extern void marioChgPaper(void* paper);
     extern void marioPaperOn(void* paper);
     extern void marioChgPose(void* pose);
@@ -466,18 +447,10 @@ u8 marioForceSlitAnime(void) {
 }
 
 u8 marioReInit_slit(void) {
-    extern void* marioGetPtr(void);
-    extern void mapSetPaperAmbColor(void* color);
     extern void marioPaperOn(void* paper);
     extern void marioChgPose(void* pose);
     extern void marioChgPaper(void* paper);
-    extern void allPartySlitOn(void);
-    extern f32 float_0_80420f9c;
-    extern f32 float_270_80420fb8;
-    extern f32 float_6_80420fb4;
-    extern u32 dat_80420f98;
     extern char str_M_S_1_80420fa0[6];
-    extern char vec3_802c42e8[];
 
     void* mario = marioGetPtr();
     void* mario2 = marioGetPtr();
@@ -524,11 +497,7 @@ u8 marioReInit_slit(void) {
 #pragma use_lmw_stmw off
 
 void mot_slit(void) {
-    extern void* marioGetPtr(void);
-    extern void mapSetPaperAmbColor(void* color);
-    extern void mapResetPaperAmbColor(void);
     extern void marioPaperOn(char* name);
-    extern void marioPaperOff(void);
     extern void marioChgPose(char* pose);
     extern void marioChgPaper(char* paper);
     extern s32 marioRollChgChk(void);
@@ -536,15 +505,11 @@ void mot_slit(void) {
     extern f64 reviseAngle(f64 angle);
     extern f64 toMovedirSimple(f64 angle);
     extern u32 marioChkKey(void);
-    extern s32 marioKeyOffChk(void);
     extern u32 marioBgmodeChk(void);
     extern s32 marioChkJump(void);
-    extern s32 marioSlitChkWallAround(void);
     extern s32 marioCreviceWallChk(f32* pos);
     extern void marioSetFallPara(void);
-    extern void allPartySlitOn(void);
     extern void allPartySlitOff(void);
-    extern void marioAdjustMoveDir(void);
     extern void marioChgMotSub(s32 motion, s32 arg);
     extern void marioChgMot(s32 motion);
     extern u32 psndSFXOn_3D(s32 id, void* pos);
@@ -556,31 +521,21 @@ void mot_slit(void) {
     extern void* camGetPtr(s32 id);
     extern s32 strcmp(char* a, char* b);
 
-    extern u32 dat_80420f98;
-    extern char vec3_802c42e8[];
     extern char str_M_S_1_80420fa0[];
     extern char str_M_R_1_80420fac[];
     extern char str_M_W_1_80420fc0[];
     extern char str_M_I_Y_80420fd0[];
 
-    extern f32 float_0_80420f9c;
     extern f32 float_1_80420ff8;
     extern f32 float_2_80420ffc;
-    extern f32 float_6_80420fb4;
-    extern f32 float_10_80421000;
     extern f32 float_11_80420ff0;
-    extern f32 float_20_80420ff4;
     extern f32 float_45_80420fe0;
     extern f32 float_90_80420fec;
     extern f32 float_135_80420fe4;
-    extern f32 float_180_80420fa8;
     extern f32 float_225_80420fe8;
     extern f32 float_260_80420fc8;
-    extern f32 float_270_80420fb8;
     extern f32 float_280_80420fcc;
     extern f32 float_315_80420fdc;
-    extern f32 float_0p004_80420fbc;
-    extern f32 float_0p5_80420fd8;
 
     void* player;
     void* p2;

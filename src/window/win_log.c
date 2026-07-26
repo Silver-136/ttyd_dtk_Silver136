@@ -12,17 +12,30 @@ extern f32 float_8_80423b04;
 extern f32 float_320_80423c0c;
 extern f32 float_neg240_80423bf0;
 extern f32 float_neg200_80423c30;
+extern f32 float_60_80423b58;
+extern s16 tubuDt[];
+extern void* gp;
 
 void fileFree(void* ptr);
 void animPoseRelease(s32 poseId);
 void smartFree(void* ptr);
 void _mapFree(void* heap, void* ptr);
 void* _mapAlloc(void* heap, u32 size);
-void* memset(void* ptr, int value, u32 size);
 s32 swByteGet(s32 index);
+s32 swGet(s32 index);
+void* battleGetUnitMonosiriPtr(s32 unit);
+void winTexInit(void* data);
+void winFontInit(void);
+void winIconInit(void);
+s32 sprintf(char* buffer, const char* format, ...);
+void* animPoseGetAnimDataPtr(s32 poseId);
+void animPoseMain(s32 poseId);
+void TEXGetGXTexObjFromPalette(void* tpl, void* texObj, s32 id);
+s32 GXGetTexObjWidth(void* texObj);
+s32 GXGetTexObjHeight(void* texObj);
 void winMsgEntry(void* pWin, s32 param_2, char* msg, s32 param_4);
 
-typedef struct MonosiriWork {
+struct MonosiriWork {
     s32 state;
     s32 param;
     void* file0;
@@ -35,12 +48,9 @@ typedef struct MonosiriWork {
     s32 pose1;
     void* buffer;
     s32 flags;
-} MonosiriWork;
+};
 void winLogInit(void* pWin) {
-    extern s32 swByteGet(s32 index);
-    extern s32 swGet(s32 index);
     extern s32 pouchCheckItem(s32 item);
-    extern void* battleGetUnitMonosiriPtr(s32 unit);
     extern void qqsort(void* base, s32 count, s32 size, void* compare);
     extern s32 compare_func5_2(void* a, void* b);
     extern s32 compare_func6_2(void* a, void* b);
@@ -200,9 +210,7 @@ s32 winLogMain(void* pWin) {
     extern s32 winSortWait(void* win);
     extern void* monosiriInit(s32 enemy, f32 x, f32 y);
     extern s32 monosiriMain(void* work);
-    extern s32 swGet(s32 flag);
     extern u32 keyGetButton(s32 channel);
-    extern s16 tubuDt[];
     s32 state = *(s32*)((s32)pWin + 0xD68);
     s32 cursor = *(s32*)((s32)pWin + 0xD6C);
     s32 page = *(s32*)((s32)pWin + 0x104C);
@@ -342,10 +350,8 @@ s32 winLogMain(void* pWin) {
 }
 
 void winLogMain2(void* pWin) {
-    extern void* gp;
-    extern f32 float_0_80423aec, float_8_80423b04, float_60_80423b58;
+    extern f32 float_0_80423aec;
     extern f32 float_140_80423c20, float_neg160_80423c24;
-    extern f32 float_45_80423bdc, float_0p5_80423af8;
     extern f32 float_6_80423b54, float_4_80423be8;
     s32 i, count = *(s32*)((s32)pWin + 0xD74);
     f32 frame = (f32)*(s32*)((s32)gp + 4);
@@ -392,18 +398,13 @@ void winLogDisp(s32 cameraId, void* pWin, s32 index) {
     extern void winHakoGX(f32 x, f32 y, void* win, s32 type);
     extern void winKirinukiGX(f32 x, f32 y, f32 width, f32 height,
                               void* win, s32 type);
-    extern void winTexInit(void* data);
     extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
     extern void winTexInit_x2(void* data);
     extern void winTexSet_x2(s32 id, s32 frame, Vec3* pos,
                              Vec3* scale, void* color);
-    extern void winFontInit(void);
     extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* text);
-    extern void winIconInit(void);
     extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
-    extern s32 swGet(s32 flag);
     extern u8 itemDataTable[];
-    extern s32 sprintf(char* buffer, const char* format, ...);
     Vec3 pos, scale;
     u32 white = 0xFFFFFFFF;
     f32 x = *(f32*)((s32)pWin + 0xC4 + index * 0x14);
@@ -552,22 +553,14 @@ void mapGX(double x, double y, void* pWin) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
     typedef f32 Mtx[3][4];
     extern void GXSetScissor(u32 x, u32 y, u32 w, u32 h);
-    extern void winTexInit(void* data);
     extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
-    extern void winIconInit(void);
     extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
-    extern s32 swByteGet(s32 index);
-    extern s32 swGet(s32 flag);
     extern double sin(double angle);
     extern void* animPoseGetAnimPosePtr(s32 poseId);
-    extern void* animPoseGetAnimDataPtr(s32 poseId);
     extern void PSMTXTrans(Mtx matrix, f32 x, f32 y, f32 z);
     extern void animPoseSetLocalTime(f32 time, s32 poseId);
-    extern void animPoseMain(s32 poseId);
     extern void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 mode,
                                 f32 rotation, f32 scale);
-    extern s16 tubuDt[];
-    extern void* gp;
     Vec3 pos, scale;
     u32 white = 0xFFFFFFFF;
     s32 i;
@@ -675,19 +668,13 @@ void monoshiriGX(double x, double y, void* pWin) {
     extern void winBookGX(double x, double y, void* win, s32 page);
     extern void winKirinukiGX(double x, double y, double width, double height,
                               void* win, s32 type);
-    extern void winFontInit(void);
     extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* text);
     extern void winFontSetWidth(Vec3* pos, Vec3* scale, void* color,
                                 f32 width, char* text, ...);
     extern u16 FontGetMessageWidth(char* text);
-    extern void winTexInit(void* data);
     extern void winTexSet(s32 texture, Vec3* pos, Vec3* scale, void* color);
-    extern void winIconInit(void);
     extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
-    extern void* battleGetUnitMonosiriPtr(s32 unit);
-    extern s32 swGet(s32 flag);
     extern s32 evtGetValue(void* evt, s32 value);
-    extern s32 sprintf(char* buffer, const char* format, ...);
     extern char* msgSearch(char* key);
     extern char str_msg_menu_monosiri_ka_802f6bb8[];
     extern char str_msg_menu_sort_narabi_802f6be0[];
@@ -808,7 +795,6 @@ MonosiriWork* monosiriInit(s32 param, f32 x, f32 y) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 monosiriMain(void* param_1) {
-    extern void* gp;
     extern char str_jp_80423acc[];
     extern char str_us_80423ad0[];
     extern char str_ge_80423ad4[];
@@ -823,21 +809,15 @@ u8 monosiriMain(void* param_1) {
     extern f32 float_600_80423b4c;
     extern f32 float_neg400_80423b50;
     extern f32 float_6_80423b54;
-    extern f32 float_60_80423b58;
     extern s32 getMarioStDvdRoot(void);
     extern s32 fileAsyncf(s32 kind, s32 unused, char* fmt, s32 root, char* lang, ...);
     extern void* fileAllocf(s32 kind, char* fmt, s32 root, char* lang, ...);
-    extern void TEXGetGXTexObjFromPalette(void* tpl, void* texObj, s32 id);
-    extern s32 GXGetTexObjHeight(void* texObj);
-    extern s32 GXGetTexObjWidth(void* texObj);
     extern s32 GXGetTexBufferSize(s32 width, s32 height, s32 format, s32 mipmap, s32 maxLod);
     extern void* smartAlloc(s32 size, s32 heap);
-    extern void* battleGetUnitMonosiriPtr(s32 enemyType);
     extern s32 animGroupBaseAsync(char* name, s32 battle, s32 unused);
     extern s32 animPoseEntry(char* name, s32 battle);
     extern void animPoseSetAnim(s32 poseId, char* anim, s32 loop);
     extern void animPoseWorldPositionEvalOn(s32 poseId, s32 flag);
-    extern void animPoseMain(s32 poseId);
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
     extern void capture(void);
     extern void monosiri_disp(s32 param_1, void* monosiriWork);
@@ -951,9 +931,6 @@ void monosiriClose(void* work) {
 }
 
 s32 monosiriCloseWait(void* work) {
-    extern f32 float_500_80423b40;
-    extern f32 float_neg300_80423b44;
-
     if (work == NULL) {
         return 1;
     }
@@ -993,13 +970,9 @@ void monosiriExit(void* work) {
 
 void capture(s32 cameraId, void* work) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
-    extern void* animPoseGetAnimDataPtr(s32 poseId);
     extern void GXGetViewportv(f32* viewport);
     extern void GXGetProjectionv(f32* projection);
     extern void GXGetScissor(s32*, s32*, s32*, s32*);
-    extern void TEXGetGXTexObjFromPalette(void*, void*, s32);
-    extern s32 GXGetTexObjWidth(void*);
-    extern s32 GXGetTexObjHeight(void*);
     extern void GXSetViewport(f32, f32, f32, f32, f32, f32);
     extern void GXSetScissor(s32, s32, s32, s32);
     extern void C_MTXPerspective(void*, f32, f32, f32, f32);
@@ -1160,7 +1133,23 @@ void capture(s32 cameraId, void* work) {
 }
 
 void monosiri_disp(s32 param_1,void* work){
-    extern void winHalfBookGX(f32,f32,void*,s32);extern void TEXGetGXTexObjFromPalette(void*,void*,s32);extern s32 GXGetTexObjWidth(void*);extern s32 GXGetTexObjHeight(void*);extern void GXInitTexObjLOD(void*,s32,s32,f32,f32,f32,s32,s32,s32);extern void GXLoadTexObj(void*,s32);extern void GXInitTexObj(void*,void*,s16,s16,s32,s32,s32,s32);extern void GXSetNumTexGens(s32);extern void GXSetNumTevStages(s32);extern void GXSetTevColor(s32,void*);extern void GXSetTevOrder(s32,s32,s32,s32);extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevColorIn(s32,s32,s32,s32,s32);extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);extern void GXSetTevKAlphaSel(s32,s32);extern void GXBegin(s32,s32,s32);extern volatile f32 DAT_cc008000;extern u32 dat_80423ae8,unk_804295f8;
+    extern void winHalfBookGX(f32, f32, void*, s32);
+    extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, s32, s32, s32);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXInitTexObj(void*, void*, s16, s16, s32, s32, s32, s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevKAlphaSel(s32, s32);
+    extern void GXBegin(s32, s32, s32);
+    extern volatile f32 DAT_cc008000;
+    extern u32 dat_80423ae8;
+    extern u32 unk_804295f8;
     u32 texObj[8],tev=dat_80423ae8,alpha;s32 i,w,h;void* file=*(void**)((s32)work+8);f32 x=*(f32*)((s32)work+0x18),y=*(f32*)((s32)work+0x1C);
     if(file==0)return;winHalfBookGX(x,y,**(void***)((s32)file+0xA0),0);TEXGetGXTexObjFromPalette(**(void***)((s32)file+0xA0),texObj,0x37);w=GXGetTexObjWidth(texObj);h=GXGetTexObjHeight(texObj);GXInitTexObjLOD(texObj,1,1,0.0f,0.0f,0.0f,0,0,0);GXLoadTexObj(texObj,0);GXInitTexObj(texObj,**(void***)((s32)work+0x28),(s16)w,(s16)h,5,0,0,0);GXInitTexObjLOD(texObj,1,1,0.0f,0.0f,0.0f,0,0,0);GXLoadTexObj(texObj,1);GXSetNumTexGens(8);GXSetTevColor(1,&tev);alpha=(unk_804295f8&0xFFFFFF00)|*(u8*)((s32)work+0x2C);GXSetTevColor(2,&alpha);GXSetNumTevStages(12);
     for(i=0;i<8;i++){GXSetTevOrder(i,i,1,0xFF);GXSetTevColorOp(i,0,0,0,1,0);GXSetTevAlphaOp(i,0,0,0,1,0);GXSetTevColorIn(i,15,15,15,2);GXSetTevAlphaIn(i,7,4,6,i?0:7);GXSetTevKAlphaSel(i,7);}

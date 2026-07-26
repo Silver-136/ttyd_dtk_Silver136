@@ -2,6 +2,46 @@
 
 void* DemoCurrentBuffer;
 void* rmode;
+extern void* DemoFrameBuffer1;
+extern void* DemoFrameBuffer2;
+extern s32 GPHangWorkaround;
+extern u32 FrameMissThreshold;
+extern u32 FrameCount;
+extern u8 DemoFirstFrame;
+extern f32 float_0_8041fa10;
+extern f32 float_1_8041fa14;
+extern u8 rmodeobj[];
+extern u8 GXNtsc480IntDf[];
+extern u8 GXMpal480IntDf[];
+extern u8 GXPal528IntDf[];
+extern u8 GXEurgb60Hz480IntDf[];
+extern char str_DEMOInit_c_802bfe68[];
+extern char str_DEMOInit_invalid_TV__802bfe74[];
+extern void* DefaultFifoObj;
+extern u32 unk_80429548;
+extern u32 sysGetToken(void);
+extern void __DEMODiagnoseHang(void);
+extern char __GXErrorMessage[];
+extern s32 VIGetTvFormat(void);
+extern void OSPanic(const char* file, s32 line, const char* msg, ...);
+extern void GXAdjustForOverscan(void* src, void* dst, s32 x, s32 y);
+extern void VIConfigure(void* mode);
+extern void* __memAlloc(s32 heap, u32 size);
+extern void* GXInit(void* base, u32 size);
+extern void GXSetViewport(f32 left, f32 top, f32 width, f32 height, f32 nearz, f32 farz);
+extern void GXSetScissor(u32 left, u32 top, u32 width, u32 height);
+extern f32 GXGetYScaleFactor(u16 efbHeight, u16 xfbHeight);
+extern u32 GXSetDispCopyYScale(f32 scale);
+extern void GXSetDispCopySrc(u32 left, u32 top, u32 width, u32 height);
+extern void GXSetDispCopyDst(u16 width, u16 height);
+extern void GXSetCopyFilter(u8 aa, void* sample_pattern, u8 vf, void* vfilter);
+extern void GXSetPixelFmt(s32 pix_fmt, s32 z_fmt);
+extern void GXSetCopyClear(void* color, u32 z);
+extern void GXCopyDisp(void* dest, u8 clear);
+extern void GXSetDispCopyGamma(s32 gamma);
+extern void VISetNextFrameBuffer(void* fb);
+extern void VIFlush(void);
+extern void VIWaitForRetrace(void);
 
 void DEMOInit(void* param_1) {
     typedef struct {
@@ -11,46 +51,11 @@ void DEMOInit(void* param_1) {
     extern void DVDInit(void);
     extern void VIInit(void);
     extern void DEMOPadInit(void);
-    extern s32 VIGetTvFormat(void);
-    extern void OSPanic(const char* file, s32 line, const char* msg, ...);
-    extern void GXAdjustForOverscan(void* src, void* dst, s32 x, s32 y);
     extern void* OSGetArenaLo(void);
     extern void* OSGetArenaHi(void);
     extern void OSSetArenaLo(void* lo);
     extern void memInit(void);
-    extern void VIConfigure(void* mode);
-    extern void* __memAlloc(s32 heap, u32 size);
-    extern void* GXInit(void* base, u32 size);
-    extern void GXSetViewport(f32 left, f32 top, f32 width, f32 height, f32 nearz, f32 farz);
-    extern void GXSetScissor(u32 left, u32 top, u32 width, u32 height);
-    extern f32 GXGetYScaleFactor(u16 efbHeight, u16 xfbHeight);
-    extern u32 GXSetDispCopyYScale(f32 scale);
-    extern void GXSetDispCopySrc(u32 left, u32 top, u32 width, u32 height);
-    extern void GXSetDispCopyDst(u16 width, u16 height);
-    extern void GXSetCopyFilter(u8 aa, void* sample_pattern, u8 vf, void* vfilter);
-    extern void GXSetPixelFmt(s32 pix_fmt, s32 z_fmt);
-    extern void GXSetCopyClear(void* color, u32 z);
-    extern void GXCopyDisp(void* dest, u8 clear);
-    extern void GXSetDispCopyGamma(s32 gamma);
-    extern void VISetNextFrameBuffer(void* fb);
-    extern void VIFlush(void);
-    extern void VIWaitForRetrace(void);
-    extern u8 rmodeobj[];
-    extern u8 GXNtsc480IntDf[];
-    extern u8 GXMpal480IntDf[];
-    extern u8 GXPal528IntDf[];
-    extern u8 GXEurgb60Hz480IntDf[];
-    extern char str_DEMOInit_c_802bfe68[];
-    extern char str_DEMOInit_invalid_TV__802bfe74[];
-    extern void* rmode;
-    extern void* DemoCurrentBuffer;
-    extern void* DemoFrameBuffer1;
-    extern void* DemoFrameBuffer2;
     extern void* DefaultFifo;
-    extern void* DefaultFifoObj;
-    extern u32 unk_80429548;
-    extern f32 float_0_8041fa10;
-    extern f32 float_1_8041fa14;
     GXRenderModeObj* mode;
     u32 color;
     u32 yScale;
@@ -124,18 +129,12 @@ void DEMOInit(void* param_1) {
 }
 
 void DEMOBeforeRender(void) {
-    extern s32 GPHangWorkaround;
-    extern void* rmode;
-    extern u32 sysGetToken(void);
     extern void GXSetDrawSync(u32);
     extern void GXClearGPMetric(void);
-    extern void GXSetViewport(f32, f32, f32, f32, f32, f32);
     extern void GXSetViewportJitter(f32, f32, f32, f32, f32, f32, u32);
     extern u32 VIGetNextField(void);
     extern void GXInvalidateVtxCache(void);
     extern void GXInvalidateTexAll(void);
-    extern f32 float_0_8041fa10;
-    extern f32 float_1_8041fa14;
     u8* mode;
 
     if (GPHangWorkaround != 0) {
@@ -157,12 +156,7 @@ void DEMOBeforeRender(void) {
 }
 
 void DEMODoneRender(void) {
-    extern s32 GPHangWorkaround;
     extern u8 DemoStatEnable;
-    extern void* DemoCurrentBuffer;
-    extern void* DemoFrameBuffer1;
-    extern void* DemoFrameBuffer2;
-    extern u8 DemoFirstFrame;
     extern void GXDrawDone(void);
     extern void DEMOUpdateStats(u8);
     extern void DEMOPrintStats(void);
@@ -170,11 +164,7 @@ void DEMODoneRender(void) {
     extern void GXSetColorUpdate(u32);
     extern void GXSetAlphaCompare(u32, u32, u32, u32, u32);
     extern void GXSetAlphaUpdate(u32);
-    extern void GXCopyDisp(void*, u8);
-    extern void VISetNextFrameBuffer(void*);
     extern void VISetBlack(s32);
-    extern void VIFlush(void);
-    extern void VIWaitForRetrace(void);
     extern void __NoHangDoneRender(void);
 
     if (GPHangWorkaround == 0) {
@@ -217,8 +207,6 @@ void* L_DEMOGetCurrentBuffer(void) {
 }
 
 void DEMOEnableGPHangWorkaround(u32 threshold) {
-    extern s32 GPHangWorkaround;
-    extern u32 FrameMissThreshold;
     extern void VISetPreRetraceCallback(void*);
     extern void GXSetGPMetric(u32, u32);
     extern void __NoHangRetraceCallback(void);
@@ -255,15 +243,11 @@ void DEMOEnableGPHangWorkaround(u32 threshold) {
 }
 
 void __NoHangRetraceCallback(void) {
-    extern u32 FrameCount;
-    extern u32 FrameMissThreshold;
     extern u32 ovFrameCount_510;
     extern u32 lastOvc_511;
     extern void GXGetGPStatus(u8*, u8*, u8*, u8*, u8*);
     extern u32 GXGetOverflowCount(void);
-    extern void __DEMODiagnoseHang(void);
     extern char* strcpy(char*, const char*);
-    extern char __GXErrorMessage[];
     extern char str_WARNING_HANG_AT_HIGH_802bff78[];
     u8 status[5];
     u32 overflow;
@@ -288,20 +272,13 @@ void __NoHangDoneRender(void) {
     typedef struct {
         u32 data[15];
     } GXRenderModeObj;
-    extern u32 sysGetToken(void);
     extern void GXSetZMode(u32 enable, u32 func, u32 update);
     extern void GXSetColorUpdate(u32 enable);
     extern void GXSetAlphaCompare(u32 comp0, u32 ref0, u32 op, u32 comp1, u32 ref1);
     extern void GXSetAlphaUpdate(u32 enable);
-    extern void GXCopyDisp(void* dest, u8 clear);
     extern void GXSetDrawSync(u32 token);
     extern u32 GXReadDrawSync(void);
-    extern void VISetNextFrameBuffer(void* fb);
     extern void VISetBlack(s32 black);
-    extern void VIFlush(void);
-    extern void VIWaitForRetrace(void);
-    extern void __DEMODiagnoseHang(void);
-    extern void* __memAlloc(s32 heap, u32 size);
     extern void __memFree(s32 heap, void* ptr);
     extern void* GXGetCPUFifo(void);
     extern void* GXGetFifoBase(void* fifo);
@@ -310,40 +287,7 @@ void __NoHangDoneRender(void) {
     extern void GXInitFifoBase(void* fifo, void* base, u32 size);
     extern void GXSetCPUFifo(void* fifo);
     extern void GXSetGPFifo(void* fifo);
-    extern s32 VIGetTvFormat(void);
-    extern void OSPanic(const char* file, s32 line, const char* msg, ...);
-    extern void GXAdjustForOverscan(void* src, void* dst, s32 x, s32 y);
-    extern void* GXInit(void* base, u32 size);
-    extern void GXSetViewport(f32 left, f32 top, f32 width, f32 height, f32 nearz, f32 farz);
-    extern void GXSetScissor(u32 left, u32 top, u32 width, u32 height);
-    extern f32 GXGetYScaleFactor(u16 efbHeight, u16 xfbHeight);
-    extern u32 GXSetDispCopyYScale(f32 scale);
-    extern void GXSetDispCopySrc(u32 left, u32 top, u32 width, u32 height);
-    extern void GXSetDispCopyDst(u16 width, u16 height);
-    extern void GXSetCopyFilter(u8 aa, void* sample_pattern, u8 vf, void* vfilter);
-    extern void GXSetPixelFmt(s32 pix_fmt, s32 z_fmt);
-    extern void GXSetCopyClear(void* color, u32 z);
-    extern void GXSetDispCopyGamma(s32 gamma);
-    extern void VIConfigure(void* mode);
     extern void GXSetGPMetric(u32 perf0, u32 perf1);
-    extern u8 rmodeobj[];
-    extern u8 GXNtsc480IntDf[];
-    extern u8 GXMpal480IntDf[];
-    extern u8 GXPal528IntDf[];
-    extern u8 GXEurgb60Hz480IntDf[];
-    extern char str_DEMOInit_c_802bfe68[];
-    extern char str_DEMOInit_invalid_TV__802bfe74[];
-    extern void* rmode;
-    extern void* DemoCurrentBuffer;
-    extern void* DemoFrameBuffer1;
-    extern void* DemoFrameBuffer2;
-    extern void* DefaultFifoObj;
-    extern u32 FrameCount;
-    extern u32 FrameMissThreshold;
-    extern u8 DemoFirstFrame;
-    extern u32 unk_80429548;
-    extern f32 float_0_8041fa10;
-    extern f32 float_1_8041fa14;
     volatile u8* fifo8 = (volatile u8*)0xCC008000;
     volatile u16* fifo16 = (volatile u16*)0xCC008000;
     volatile u32* fifo32 = (volatile u32*)0xCC008000;
@@ -468,7 +412,6 @@ void __DEMODiagnoseHang(void) {
     extern s32 sprintf(char* s, const char* fmt, ...);
     extern char* strcat(char* dst, const char* src);
     extern char* strcpy(char* dst, const char* src);
-    extern char __GXErrorMessage[];
     extern const char str_GP_status_PCTdPCTdPC_802bfea0[];
     extern const char str_GP_hang_due_to_XF_st_802bfebc[];
     extern const char str_GP_hang_due_to_unter_802bfedc[];

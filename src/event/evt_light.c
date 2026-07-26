@@ -1,4 +1,5 @@
 #include "event/evt_light.h"
+#include "driver/lightdrv.h"
 
 typedef struct EvtLightVec {
     f32 x;
@@ -8,12 +9,13 @@ typedef struct EvtLightVec {
 
 extern EvtLightVec vec3_802f3748[];
 extern EvtLightVec vec3_802f3754[];
+extern s32 evtGetValue(void* event, s32 value);
+extern void animPoseSetMaterialLightFlagOn(void* pose, s32 flag);
+extern void animPoseSetMaterialLightFlagOff(void* pose, s32 flag);
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_light_charalight_all_onoff(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern s32 lightGetEntryNum(void);
     extern void* lightNumberToPtr(s32 index);
     s32* args = *(s32**)((s32)event + 0x18);
     s32 on = evtGetValue(event, args[0]);
@@ -37,10 +39,7 @@ s32 evt_light_charalight_all_onoff(void* event, s32 isFirstCall) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_light_mario_lighting_onoff(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
     extern void* marioGetPtr(void);
-    extern void animPoseSetMaterialLightFlagOn(void* pose, s32 flag);
-    extern void animPoseSetMaterialLightFlagOff(void* pose, s32 flag);
     s32* args = *(s32**)((s32)event + 0x18);
     s32 on = evtGetValue(event, args[0]);
     void* mario = marioGetPtr();
@@ -60,11 +59,8 @@ s32 evt_light_mario_lighting_onoff(void* event, s32 isFirstCall) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 s32 evt_light_party_lighting_onoff(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
     extern s32 marioGetPartyId(void);
     extern void* partyGetPtr(s32 id);
-    extern void animPoseSetMaterialLightFlagOn(void* pose, s32 flag);
-    extern void animPoseSetMaterialLightFlagOff(void* pose, s32 flag);
     s32* args = *(s32**)((s32)event + 0x18);
     s32 on = evtGetValue(event, args[0]);
     void* party = partyGetPtr(marioGetPartyId());
@@ -81,10 +77,7 @@ s32 evt_light_party_lighting_onoff(void* event, s32 isFirstCall) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_light_npc_lighting_onoff(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
     extern void* npcNameToPtr(s32 name);
-    extern void animPoseSetMaterialLightFlagOn(void* pose, s32 flag);
-    extern void animPoseSetMaterialLightFlagOff(void* pose, s32 flag);
     s32* args = *(s32**)((s32)event + 0x18);
     s32 on = evtGetValue(event, args[0]);
     void* npc = npcNameToPtr(evtGetValue(event, args[1]));
@@ -101,7 +94,6 @@ s32 evt_light_npc_lighting_onoff(void* event, s32 isFirstCall) {
 #pragma use_lmw_stmw on
 
 s32 evt_light_bind_mapobj(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
     extern void* lightNameToPtr(s32 name);
     extern void* mapGetMapObj(s32 name);
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);

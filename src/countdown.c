@@ -3,7 +3,6 @@
 extern void* gp;
 void* wp;
 
-void* memset(void* dst, int value, u32 size);
 s32 evtGetValue(void* event, s32 value);
 s32 psndSFXOn(const char* name);
 void psndSFXOff(s32 id);

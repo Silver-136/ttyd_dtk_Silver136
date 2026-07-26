@@ -1,11 +1,5 @@
 #include "manager/fontmgr.h"
 
-typedef struct Vec {
-    f32 x;
-    f32 y;
-    f32 z;
-} Vec;
-
 u32 fontColor;
 u8 fontAlpha;
 u32 fontColTbl[8];
@@ -21,6 +15,17 @@ void GXSetNumTevStages(s32 count);
 void GXSetTevColor(s32 reg, void* color);
 void JUTFontSetup(s32 language);
 void _JUTFont_DrawPos(u16 glyph, s16 x, s16 y);
+extern void* camGetCurPtr(void);
+extern s32 charspace[];
+extern s32 sscanf(const char* str, const char* fmt, ...);
+extern s32 msgIconStr2ID(char* name);
+extern s32 strcmp(const char* a, const char* b);
+extern void* pfi;
+extern s32 irand(s32 max);
+extern void* blockGlyph;
+extern const char str_papermarioset_JPN_802c2b30[];
+extern void iconDispGxAlpha(f32 scale, void* pos, s32 flags, s32 iconId, s32 alpha);
+extern Vec vec3_802c2b6c;
 
 void fontmgrInit(void) {
     ;
@@ -31,12 +36,12 @@ void fontmgrTexSetup(void) {
 }
 
 void FontDrawStart(void) {
-    extern u32 fontColor;
-    extern u8 fontAlpha;
-    extern u32 fontColTbl[8];
-    extern s32 fontEdge;
-    extern Vec fontScale;
-    extern Vec vec3_802c2b6c;
+
+
+
+
+
+
     extern void JUTFont_DrawStart(void* color);
     u32 color;
     u32 gxColor;
@@ -52,12 +57,12 @@ void FontDrawStart(void) {
 }
 
 void FontDrawStart_alpha(u8 alpha) {
-    extern u32 fontColor;
-    extern u8 fontAlpha;
-    extern u32 fontColTbl[8];
-    extern s32 fontEdge;
-    extern Vec fontScale;
-    extern Vec vec3_802c2b6c;
+
+
+
+
+
+
     extern void JUTFont_DrawStart(void* color);
     u32 color;
     u32 gxColor;
@@ -188,12 +193,11 @@ void FontDrawScaleVec(Vec* scale) {
 void FontDrawCode(f64 x, f64 y, u16 code) {
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXTransApply(void*, void*, f32, f32, f32);
-    extern void* camGetCurPtr(void);
+
     extern void PSMTXConcat(void*, void*, void*);
     extern void GXLoadPosMtxImm(void*, s32);
     extern void GXSetCurrentMtx(s32);
     extern void GXSetTevColor(s32, void*);
-    extern void _JUTFont_DrawPos(u16, s16, s16);
     extern f32 float_0_804203f8;
     f32 mtx[3][4];
     u32 oldColor;
@@ -225,12 +229,11 @@ void FontDrawCode(f64 x, f64 y, u16 code) {
 }
 
 void FontDrawCodeMtx(void* mtx, u16 code) {
-    extern void* camGetCurPtr(void);
+
     extern void PSMTXConcat(void*, void*, void*);
     extern void GXLoadPosMtxImm(void*, s32);
     extern void GXSetCurrentMtx(s32);
     extern void GXSetTevColor(s32, void*);
-    extern void _JUTFont_DrawPos(u16, s16, s16);
     u32 oldColor;
     u32 edgeColor;
     u32 gxColor;
@@ -293,7 +296,7 @@ void FontDrawStringPitch(f32 x, f32 y, s32 str, f32 pitch) {
 }
 
 void FontDrawStringVecPitch(Vec* pos, char* msg, f32 pitch) {
-    extern void* camGetCurPtr(void);
+
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXTransApply(void*, void*, f32, f32, f32);
     extern void PSMTXConcat(void*, void*, void*);
@@ -301,8 +304,7 @@ void FontDrawStringVecPitch(Vec* pos, char* msg, f32 pitch) {
     extern s32 _ismbblead(s32);
     extern char* msgGetCommand(char*, char*, char*);
     extern void GXSetTevColor(s32, void*);
-    extern void _JUTFont_DrawPos(u16, s16, s16);
-    extern s32 charspace[];
+
     f32 scaleMtx[3][4];
     f32 drawMtx[3][4];
     char command[128];
@@ -376,7 +378,7 @@ void FontDrawStringVecPitch(Vec* pos, char* msg, f32 pitch) {
 }
 
 void FontDrawStringMtx(f32* mtx, void* string) {
-    extern void* camGetCurPtr(void);
+
     extern void PSMTXConcat(void* a, void* b, void* out);
     extern void GXLoadPosMtxImm(void* mtx, s32 id);
     extern s32 _ismbblead(s32 c);
@@ -384,7 +386,7 @@ void FontDrawStringMtx(f32* mtx, void* string) {
     extern void GXSetTevColor(s32 reg, void* color);
     extern const f32 float_0_804203f8;
     extern const f32 float_28_80420434;
-    extern s32 charspace[];
+
     f32 localMtx[3][4];
     char arg[128];
     char cmd[128];
@@ -471,13 +473,12 @@ void FontDrawStringMtx(f32* mtx, void* string) {
 }
 
 void FontDrawStringCenterMtx(void* mtx, char* msg) {
-    extern void* camGetCurPtr(void);
+
     extern void PSMTXConcat(void*, void*, void*);
     extern void GXLoadPosMtxImm(void*, s32);
     extern s32 _ismbblead(s32);
     extern void GXSetTevColor(s32, void*);
-    extern void _JUTFont_DrawPos(u16, s16, s16);
-    extern s32 charspace[];
+
     extern f32 float_0p5_8042041c;
     f32 drawMtx[3][4];
     f32 x;
@@ -538,16 +539,16 @@ void FontDrawStringCenterMtx(void* mtx, char* msg) {
 }
 
 void FontDrawStringShake(double xIn, double yIn, char* str) {
-    extern void* camGetCurPtr(void);
+
     extern void PSMTXScale(f32 mtx[3][4], f32 x, f32 y, f32 z);
     extern void PSMTXTransApply(f32 src[3][4], f32 dst[3][4], f32 x, f32 y, f32 z);
     extern void PSMTXConcat(void* a, void* b, void* out);
     extern void GXLoadPosMtxImm(void* mtx, s32 id);
     extern s32 _ismbblead(s32 c);
-    extern s32 irand(s32 max);
+
     extern void GXSetTevColor(s32 reg, void* color);
     extern const f32 float_0_804203f8;
-    extern s32 charspace[];
+
     f32 scaleMtx[3][4];
     f32 drawMtx[3][4];
     char* p;
@@ -622,19 +623,18 @@ void FontDrawStringShake(double xIn, double yIn, char* str) {
 
 
 void FontDrawMessage(s32 x0, s32 y0, char* msg) {
-    extern void* camGetCurPtr(void);
+
     extern u32 JUTFont_CodeToGlyph(u32 code);
-    extern void _JUTFont_DrawPos(u16 glyph, s16 x, s16 y);
     extern s32 _ismbblead(s32 c);
     extern char* msgGetCommand(char* in, char* cmd, char* arg);
-    extern s32 strcmp(const char* a, const char* b);
-    extern s32 sscanf(const char* str, const char* fmt, ...);
-    extern s32 msgIconStr2ID(char* name);
+
+
+
     extern void iconGetWidthHight(u16* w, u16* h, s32 iconId);
-    extern void iconDispGxAlpha(f32 scale, void* pos, s32 flags, s32 iconId, s32 alpha);
+
     extern void GXSetTevColor(s32 reg, void* color);
     extern void JUTFont_DrawStart(void* color);
-    extern s32 charspace[];
+
     extern u32 dat_804203d8;
     extern const f32 float_0_804203f8;
     extern const f32 float_0p5_8042041c;
@@ -644,7 +644,7 @@ void FontDrawMessage(s32 x0, s32 y0, char* msg) {
     extern const char str_col_80420428[5];
     extern const char str_PCTx_80420424[3];
     extern const char str_icon_80420408[5];
-    extern const char str_papermarioset_JPN_802c2b30[];
+
 
     u16 iconH;
     u16 iconW;
@@ -827,30 +827,29 @@ void FontDrawMessage(s32 x0, s32 y0, char* msg) {
 }
 
 void FontDrawMessageMtx(f32 mtx[3][4], char* msg) {
-    extern void* camGetCurPtr(void);
+
     extern u32 JUTFont_CodeToGlyph(u32 code);
-    extern void _JUTFont_DrawPos(u16 glyph, s16 x, s16 y);
     extern s32 _ismbblead(s32 c);
     extern char* msgGetCommand(char* in, char* cmd, char* arg);
-    extern s32 strcmp(const char* a, const char* b);
-    extern s32 sscanf(const char* str, const char* fmt, ...);
-    extern s32 msgIconStr2ID(char* name);
+
+
+
     extern void iconGetWidthHight(u16* w, u16* h, s32 iconId);
-    extern void iconDispGxAlpha(f32 scale, void* pos, s32 flags, s32 iconId, s32 alpha);
+
     extern void PSMTXMultVec(void* mtx, Vec* src, Vec* dst);
     extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
     extern void PSMTXConcat(void* a, void* b, void* out);
     extern void GXLoadPosMtxImm(void* mtx, s32 id);
     extern void GXSetTevColor(s32 reg, void* color);
     extern void JUTFont_DrawStart(void* color);
-    extern s32 charspace[];
+
     extern u32 dat_804203dc;
     extern const f32 float_0_804203f8;
     extern const f32 float_0p5_8042041c;
     extern const char str_red_80420410[];
     extern const char str_red_80420414[];
     extern const char str_icon_80420408[];
-    extern const char str_papermarioset_JPN_802c2b30[];
+
 
     u16 iconH;
     u16 iconW;
@@ -1059,12 +1058,12 @@ u8 kanjiGetWidth(u16 code) {
 f32 FontGetMessageWidthLine(const char* msg, s32 line) {
     extern s32 _ismbblead(s32 c);
     extern char* msgGetCommand(char* in, char* cmd, char* arg);
-    extern s32 strcmp(const char* a, const char* b);
-    extern s32 sscanf(const char* str, const char* fmt, ...);
-    extern void* camGetCurPtr(void);
-    extern s32 msgIconStr2ID(char* name);
+
+
+
+
     extern void iconGetWidthHight(s16* w, s16* h, u16 id);
-    extern s32 charspace[];
+
     const char* p;
     s32 glyph;
     u32 width;
@@ -1247,8 +1246,8 @@ void JUTFontSetup(s32 language) {
     extern void DVDMgrRead(void*, void*, u32, s32);
     extern void GXInitTexObj(void*, void*, u16, u16, s32, s32, s32, s32);
     extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, s32, s32, s32);
-    extern void* pfi;
-    extern void* blockGlyph;
+
+
     extern u8 fgTexObj[];
     extern char* fontname[];
     extern const char str_PCTs_f_PCTs_bfn_802c2ba0[];
@@ -1338,7 +1337,7 @@ void JUTFontSetup(s32 language) {
 
 s32 JUTFont_CodeToGlyph(s32 code) {
     extern void* pfh;
-    extern void* pfi;
+
     void* entry;
     u16 c;
     s32 count;
@@ -1408,7 +1407,7 @@ s32 JUTFont_CodeToGlyph(s32 code) {
 }
 
 void JUTFont_DrawStart(u32* color) {
-    extern void* camGetCurPtr(void);
+
     extern void __GXSetIndirectMask(u32 mask);
     extern void GXSetCullMode(s32 mode);
     extern void GXSetZCompLoc(s32 beforeTex);
@@ -1489,9 +1488,9 @@ void JUTFont_DrawStart(u32* color) {
 
 void _JUTFont_DrawPos(u16 param_1, s16 param_2, s16 param_3) {
     extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
-    extern s32 irand(s32 max);
+
     extern u32 HSV2RGB(void* hsv);
-    extern void* blockGlyph;
+
     extern u32 dat_804203e0;
     extern const f32 float_1_804203e4;
     extern const f32 float_2_804203e8;

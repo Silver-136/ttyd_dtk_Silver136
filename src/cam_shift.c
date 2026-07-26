@@ -1,4 +1,5 @@
 #include "cam_shift.h"
+#include "cam_road.h"
 
 
 void camShiftInit(void) {
@@ -28,7 +29,6 @@ void camShiftInit(void) {
 void camShiftMain(void* cam, void* mario, f32* out) {
     extern void* gp;
     extern void* wp;
-    extern f32 camRoadGetCurrentShiftXRate(void);
     extern f32 getV60FPS(f32 rate, u32 startHi, u32 startLo, u32 endHi, u32 endLo);
     extern f32 float_0_80421fe8;
     extern f32 float_1_80421ff8;

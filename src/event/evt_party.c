@@ -4,18 +4,26 @@
 extern s32 partyCtrlNo;
 extern f32 float_0_80421d4c;
 
-s32 evtGetValue(EventEntry* event, s32 value);
-f32 evtSetFloat(EventEntry* event, s32 target, f32 value);
 void* partyGetPtr(s32 id);
 void partyInitCamId(void* party);
 void partySetCamId(void* party, s32 camId);
 void partyChgPoseId(void* party, s32 poseId);
 void partyCtrlOff(void);
 void partyCtrlOn(void);
-
-
-
-
+extern void partyChgRunMode(void* party, s32 mode);
+extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+extern s32 nokonokoGetStatus(void* party);
+extern s32 sysMsec2Frame(s32 msec);
+extern s32 vivianGetStatus(void);
+extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
+extern f32 revise360(f32 angle);
+extern s32 bomheiGetStatus(void);
+extern s32 yoshiGetStatus(void);
+extern void movePos(f32* x, f32* z, f32 distance, f32 angle);
+extern s32 hitGetName(void* hit);
+extern f32 float_180_80421d58;
+extern void* camGetPtr(s32 id);
+extern void partySetForceMove(void* party, f32 angle, s32 frames, f32 speed);
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -161,8 +169,8 @@ s32 evt_party_force_reset_outofscreen(EventEntry* event) {
     extern void marioGetScreenPos(float* pos, float* x, float* y, float* z);
     extern s32 marioChkInScreen(s32 x, s32 y);
     extern void partyClearFootmark(void);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern void movePos(f32* x, f32* z, f32 distance, f32 angle);
+
+
     extern void* partyHitCheck(void* party, float* pos, float* dir, float* hitPos, float* out, float* dist);
     extern f32 vec3_802e7bf0[3];
     extern f32 float_1_80421d40;
@@ -233,7 +241,7 @@ s32 evt_party_force_reset_outofscreen(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_party_outofscreen) {
-    extern f32 evtSetFloat(EventEntry* event, s32 target, f32 value);
+
 
     s32* args = event->args;
     void* party;
@@ -258,7 +266,7 @@ USER_FUNC(evt_party_outofscreen) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_party_set_pos) {
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
+
 
     s32* args = event->args;
     void* party;
@@ -283,7 +291,7 @@ USER_FUNC(evt_party_set_pos) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_party_set_hosei_xyz) {
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
+
 
     s32* args = event->args;
     void* party;
@@ -308,7 +316,7 @@ USER_FUNC(evt_party_set_hosei_xyz) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_party_get_pos) {
-    extern f32 evtSetFloat(EventEntry* event, s32 target, f32 value);
+
     extern f32 float_neg5000_80421d60;
 
     s32* args = event->args;
@@ -335,9 +343,9 @@ USER_FUNC(evt_party_get_pos) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_party_set_dir(EventEntry* event, s32 first) {
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
-    extern s32 sysMsec2Frame(s32 msec);
-    extern f32 revise360(f32 angle);
+
+
+
     extern f32 toMovedirSimple(f32 angle);
     extern f32 float_270_80421d5c;
 
@@ -405,10 +413,10 @@ s32 evt_party_set_dir(EventEntry* event, s32 first) {
 #pragma use_lmw_stmw off
 s32 evt_party_set_dir_npc(EventEntry* event, s32 first) {
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern void* camGetPtr(s32 id);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern f32 revise360(f32 angle);
-    extern f32 float_180_80421d58;
+
+
+
+
 
     s32* args = event->args;
     void* party = partyGetPtr(args[0]);
@@ -452,10 +460,10 @@ s32 evt_party_set_dir_npc(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_party_set_dir_pos) {
-    extern void* camGetPtr(s32 id);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern f32 revise360(f32 angle);
-    extern f32 float_180_80421d58;
+
+
+
+
 
     s32* args = event->args;
     void* party = partyGetPtr(args[0]);
@@ -509,7 +517,7 @@ USER_FUNC(evt_party_get_dispdir) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_party_set_dispdir) {
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
+
     extern f32 reviseAngle(f32 angle);
 
     s32* args = event->args;
@@ -532,7 +540,7 @@ USER_FUNC(evt_party_set_dispdir) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_party_stop(EventEntry* event) {
-    extern s32 partyCtrlNo;
+
     extern void* partyGetPtr(s32 partyId);
     extern void partyStop(void* party);
     s32* args;
@@ -556,7 +564,7 @@ s32 evt_party_stop(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_party_run(EventEntry* event) {
-    extern s32 partyCtrlNo;
+
     extern void* partyGetPtr(s32 partyId);
     extern void partyRun(void* party);
     s32* args;
@@ -580,11 +588,11 @@ s32 evt_party_run(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_party_move_pos(EventEntry* event, s32 first) {
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
-    extern s32 sysMsec2Frame(s32 msec);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern void partySetForceMove(void* party, f32 angle, s32 frames, f32 speed);
+
+
+
+
+
 
     void* party;
     s32* args = event->args;
@@ -639,10 +647,10 @@ s32 evt_party_move_pos(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_party_move_pos2(EventEntry* event, s32 first) {
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern void partySetForceMove(void* party, f32 angle, s32 frames, f32 speed);
+
+
+
+
     extern void* gp;
 
     void* party;
@@ -707,18 +715,18 @@ USER_FUNC(evt_party_wait_landon) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_party_jump_pos(EventEntry* event, s32 first) {
-    extern s32 partyCtrlNo;
+
     extern void* partyGetPtr(s32 id);
     extern void partyChgMot(void* party, s32 motion);
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
+
+
     extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern s32 sysMsec2Frame(s32 msec);
-    extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+
+
+
     extern void partyChgPoseId(void* party, s32 poseId);
     extern s32 searchUnder2(f32 x, f32 y, f32 z, f32* out);
-    extern void movePos(f32* x, f32* z, f32 distance, f32 angle);
+
     extern void* partySearchGround(f64 a, f64 b, void* party);
     extern void unk_800bc660(void* party);
     extern const f32 float_neg1000_80421d54;
@@ -1084,8 +1092,8 @@ USER_FUNC(L_evt_party_dokan) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_party_get_status) {
-    extern s32 vivianGetStatus(void);
-    extern s32 bomheiGetStatus(void);
+
+
 
     s32* args = event->args;
     s32 kind = args[0];
@@ -1115,7 +1123,7 @@ USER_FUNC(evt_party_get_status) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_party_get_name_hitobj_head) {
-    extern s32 hitGetName(void* hit);
+
 
     s32* args = event->args;
     s32 name = 0;
@@ -1149,7 +1157,7 @@ USER_FUNC(evt_party_get_name_hitobj_head) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_party_get_name_hitobj_ride) {
-    extern s32 hitGetName(void* hit);
+
 
     s32* args = event->args;
     s32 name = 0;
@@ -1208,8 +1216,8 @@ USER_FUNC(evt_party_get_name_hitobj_ride) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_party_thunders_use(EventEntry* event, s32 first) {
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern s32 bomheiGetStatus(void);
+
+
 
     s32* args = event->args;
     void* party;
@@ -1251,8 +1259,8 @@ s32 evt_party_thunders_use(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_party_vivian_hold(EventEntry* event, s32 first) {
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern s32 vivianGetStatus(void);
+
+
 
     s32* args = event->args;
     void* party;
@@ -1292,7 +1300,7 @@ s32 evt_party_vivian_hold(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u32 evt_party_vivian_unhold(EventEntry* event, s32 first) {
-    extern s32 vivianGetStatus(void);
+
     extern void vivianUnhold(void* party);
 
     s32* args = event->args;
@@ -1317,7 +1325,7 @@ u32 evt_party_vivian_unhold(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 L_evt_party_vivian_tail(EventEntry* event) {
-    extern s32 partyCtrlNo;
+
     extern void* partyGetPtr(s32 partyId);
     extern void L_partyVivianTailStop(void* party);
     extern void L_partyVivianTailStart(void* party);
@@ -1349,8 +1357,8 @@ s32 L_evt_party_vivian_tail(EventEntry* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_party_yoshi_ride(EventEntry* event, s32 first) {
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern s32 yoshiGetStatus(void);
+
+
     extern u32 marioGetoffYoshi(void);
 
     s32* args = event->args;
@@ -1396,12 +1404,12 @@ s32 evt_party_yoshi_ride(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_party_yoshi_fly(EventEntry* event, s32 first) {
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
-    extern s32 sysMsec2Frame(s32 msec);
+
+
     extern void evt_set_yoshi_spd(f32 speed);
     extern void evt_set_yoshi_frm(s32 frame);
     extern s32 evt_get_yoshi_frm(void);
-    extern s32 yoshiGetStatus(void);
+
 
     s32* args = event->args;
     void* party;
@@ -1435,8 +1443,8 @@ s32 evt_party_yoshi_fly(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_party_nokotaro_kick(EventEntry* event, s32 first) {
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern s32 nokonokoGetStatus(void* party);
+
+
 
     s32* args = event->args;
     void* party;
@@ -1478,8 +1486,8 @@ s32 evt_party_nokotaro_kick(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u32 evt_party_nokotaro_kick_hold(EventEntry* event, s32 first) {
-    extern void partyChgRunMode(void* party, s32 mode);
-    extern s32 nokonokoGetStatus(void* party);
+
+
 
     s32* args = event->args;
     void* party;
@@ -1524,7 +1532,7 @@ u32 evt_party_nokotaro_kick_hold(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_party_nokotaro_hold_cancel(EventEntry* event, s32 first) {
-    extern s32 nokonokoGetStatus(void* party);
+
     extern void nokotaro_hold_cancel(void* party);
 
     void* party;
@@ -1581,7 +1589,7 @@ s32 evt_party_nokotaro_hold_cancel(EventEntry* event, s32 first) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_party_nokotaro_get_status) {
-    extern s32 nokonokoGetStatus(void* party);
+
 
     s32* args = event->args;
     void* party;
@@ -1614,7 +1622,7 @@ USER_FUNC(evt_party_nokotaro_get_status) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_party_cloud_breathout(EventEntry* event, s32 first) {
-    extern void partyChgRunMode(void* party, s32 mode);
+
     extern s32 cloudGetStatus(void);
 
     s32* args = event->args;

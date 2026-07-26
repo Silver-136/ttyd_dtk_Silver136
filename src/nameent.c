@@ -8,6 +8,29 @@ extern const char str_PCTs_w_PCTs_name_tpl_802fe4ac[];
 extern char str___80426910[];
 extern char str__80426d80[];
 extern f32 float_0_80426ddc;
+extern void* camGetPtr(s32);
+extern void GXSetZCompLoc(s32);
+extern void GXSetNumChans(s32);
+extern void GXSetNumTevStages(s32);
+extern void GXSetCullMode(s32);
+extern void GXClearVtxDesc(void);
+extern void GXSetCurrentMtx(s32);
+extern void GXSetNumTexGens(s32);
+extern void TEXGetGXTexObjFromPalette(s32, void*, s32);
+extern void GXLoadTexObj(void*, s32);
+extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, s32, s32, s32);
+extern u16 GXGetTexObjWidth(void*);
+extern u16 GXGetTexObjHeight(void*);
+extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+extern void GXSetBlendMode(s32, s32, s32, s32);
+extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
+extern void GXSetZMode(s32, s32, s32);
+extern void GXSetTevOrder(s32, s32, s32, s32);
+extern void GXSetVtxDesc(s32, s32);
+extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+extern void GXLoadPosMtxImm(void*, s32);
+extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+extern void GXBegin(s32, s32, s32);
 
 char* getMarioStDvdRoot(void);
 s32 fileAsyncf(s32 size, s32 flags, const char* fmt, ...);
@@ -19,14 +42,12 @@ void dispEntry(s32 cameraId, s32 renderMode, void* callback, s32 param, f32 prio
 s32 strncmp(const char* s1, const char* s2, u32 n);
 
 void nameEntInit(void) {
-    extern void* wp;
     extern void* memset(void* ptr, s32 value, u32 size);
 
     memset(wp, 0, 0x64);
 }
 
 void nameEntReInit(void) {
-    extern void* wp;
 
     *(s32*)((s32)wp + 4) = 3;
 }
@@ -117,13 +138,11 @@ void nameEntOn(int param_1) {
 
 
 void nameEntOff(void) {
-    extern void* wp;
 
     *(s32*)((s32)wp + 4) = 3;
 }
 
 s32 nameEntWait(void) {
-    extern void* wp;
     s32 value;
 
     *(u16*)wp |= 1;
@@ -132,7 +151,6 @@ s32 nameEntWait(void) {
 }
 
 s32 nameEntIsCancel(void) {
-    extern void* wp;
 
     return (*(u16*)wp >> 1) & 1;
 }
@@ -219,7 +237,6 @@ void nameEntMain(void) {
 
 /* stub-fill: nameMain | prototype_only | source_prototype */
 void nameMain(void) {
-    extern void* wp;
     extern void* gp;
     extern f64 distABf(f64, f64, f64, f64);
     extern u32 keyGetButtonTrg(s32);
@@ -293,9 +310,7 @@ void nameMain(void) {
 void nameEntDisp(void) {
     typedef f32 Mtx[3][4];
     typedef struct Vec { f32 x, y, z; } Vec;
-    extern void* wp;
     extern void* camGetCurPtr(void);
-    extern void* camGetPtr(s32);
     extern void GXGetProjectionv(f32*);
     extern void GXGetViewportv(f32*);
     extern void GXSetProjection(void*, s32);
@@ -416,28 +431,19 @@ void nameEntDisp(void) {
 
 /* stub-fill: nameBG | missing_definition | ghidra_signature */
 void nameBG(void)  {
-    extern void* wp;
-    extern void* camGetPtr(s32);
     extern void GXSetBlendMode(s32,s32,s32,s32);
-    extern void GXSetZCompLoc(s32);
     extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);
     extern void GXSetZMode(s32,s32,s32);
     extern void GXSetFog(s32,f32,f32,f32,f32,void*);
-    extern void GXSetNumChans(s32);
     extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);
-    extern void GXSetNumTevStages(s32);
     extern void GXSetTevOrder(s32,s32,s32,s32);
     extern void GXSetTevOp(s32,s32);
-    extern void GXSetCullMode(s32);
-    extern void GXClearVtxDesc(void);
     extern void GXSetVtxDesc(s32,s32);
     extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
     extern void GXLoadPosMtxImm(void*,s32);
-    extern void GXSetCurrentMtx(s32);
     extern void TEXGetGXTexObjFromPalette(void*,void*,s32);
     extern void GXInitTexObjLOD(void*,s32,s32,f32,f32,f32,s32,s32,s32);
     extern void GXLoadTexObj(void*,s32);
-    extern void GXSetNumTexGens(s32);
     extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
     extern u32 GXGetTexObjHeight(void*);
     extern u32 GXGetTexObjWidth(void*);
@@ -525,33 +531,9 @@ void nameBG(void)  {
 /* stub-fill: nameKirinukiGX | missing_definition | ghidra_signature */
 u8 nameKirinukiGX(f64 x, f64 y, f64 width, f64 height) {
     typedef f32 Mtx[3][4];
-    extern void* wp;
-    extern void* camGetPtr(s32);
-    extern void TEXGetGXTexObjFromPalette(s32, void*, s32);
-    extern void GXLoadTexObj(void*, s32);
-    extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, s32, s32, s32);
-    extern u16 GXGetTexObjWidth(void*);
-    extern u16 GXGetTexObjHeight(void*);
-    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
-    extern void GXSetBlendMode(s32, s32, s32, s32);
-    extern void GXSetZCompLoc(s32);
-    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
-    extern void GXSetZMode(s32, s32, s32);
-    extern void GXSetNumChans(s32);
-    extern void GXSetNumTevStages(s32);
-    extern void GXSetTevOrder(s32, s32, s32, s32);
     extern void GXSetTevOp(s32, s32);
-    extern void GXSetCullMode(s32);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32, s32);
-    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
-    extern void GXLoadPosMtxImm(void*, s32);
-    extern void GXSetCurrentMtx(s32);
-    extern void GXSetNumTexGens(s32);
-    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
     extern void PSMTXScale(Mtx, f32, f32, f32);
     extern void GXLoadTexMtxImm(Mtx, s32, s32);
-    extern void GXBegin(s32, s32, s32);
     u8 texObj[0x20];
     Mtx texMtx;
     volatile f32* fifo = (volatile f32*)0xCC008000;
@@ -633,7 +615,6 @@ void nameMaskGX(f32 scale) {
     extern void GXLoadTexMtxImm(Mtx m, s32 id, s32 type);
     extern void GXSetTexCoordGen2(s32 dstCoord, s32 func, s32 srcParam, s32 mtx, s32 normalize, s32 postMtx);
     extern void GXSetCullMode(s32 mode);
-    extern void GXClearVtxDesc(void);
     extern void GXSetVtxDesc(s32 attr, s32 type);
     extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
     extern void* camGetPtr(s32 cameraId);
@@ -738,39 +719,16 @@ void nameMaskGX(f32 scale) {
 /* stub-fill: nameWinGX | missing_definition | ghidra_signature */
 u8 nameWinGX(f64 x, f64 y, f64 width, f64 height, s32 palette, s32 texture) {
     typedef f32 Mtx[3][4];
-    extern void* camGetPtr(s32);
-    extern void TEXGetGXTexObjFromPalette(s32, void*, s32);
-    extern void GXLoadTexObj(void*, s32);
-    extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, s32, s32, s32);
-    extern u16 GXGetTexObjWidth(void*);
-    extern u16 GXGetTexObjHeight(void*);
-    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
     extern void GXSetTevSwapMode(s32, s32, s32);
-    extern void GXSetZCompLoc(s32);
-    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
-    extern void GXSetBlendMode(s32, s32, s32, s32);
-    extern void GXSetZMode(s32, s32, s32);
     extern void GXSetFog(s32, f32, f32, f32, f32, void*);
-    extern void GXSetNumChans(s32);
-    extern void GXSetNumTevStages(s32);
-    extern void GXSetTevOrder(s32, s32, s32, s32);
     extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
     extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
     extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
     extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
     extern void GXSetTevColor(s32, void*);
     extern void GXSetTevKAlphaSel(s32, s32);
-    extern void GXSetCullMode(s32);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32, s32);
-    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
-    extern void GXLoadPosMtxImm(void*, s32);
-    extern void GXSetCurrentMtx(s32);
-    extern void GXSetNumTexGens(s32);
-    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
     extern void PSMTXScale(Mtx, f32, f32, f32);
     extern void GXLoadTexMtxImm(Mtx, s32, s32);
-    extern void GXBegin(s32, s32, s32);
     u8 texObj[0x20];
     Mtx texMtx;
     volatile f32* fifo = (volatile f32*)0xCC008000;

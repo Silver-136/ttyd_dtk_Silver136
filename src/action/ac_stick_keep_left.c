@@ -3,7 +3,6 @@
 void actionCommandDisp(s32 unused, f32 x, f32 y);
 
 s32 battleAcMain_StickKeepLeft(void* battleWork) {
-    extern void* memset(void* dest, s32 value, u32 size);
     extern s32 irand(s32 max);
     extern u32 BattlePadCheckNow(u32 buttons);
     extern s32 psndSFXOn(const char* name);

@@ -1,7 +1,27 @@
 #include "mario/mariost.h"
+#include "countdown.h"
+#include "driver/arcdrv.h"
+#include "driver/dispdrv.h"
+#include "driver/envdrv.h"
+#include "driver/hitdrv.h"
+#include "driver/lightdrv.h"
+#include "driver/seqdrv.h"
+
+#include "event/evt_badgeshop.h"
+#include "driver/fadedrv.h"
+#include "statuswindow.h"
+
+extern u32 OSGetResetCode(void);
+extern s64 OSGetTime(void);
+extern s32 DvdCheckTreadOn;
+extern void OSYieldThread(void);
+extern void makeKey(void);
+extern void cardMain(void);
+extern void L_gcResetCheck(void);
+extern s32 DVDGetDriveStatus(void);
+extern s32 cardIsExec(void);
 
 void marioStInit(void) {
-    extern u32 OSGetResetCode(void);
     extern void DEMOInit(void*);
     extern void DEMOEnableGPHangWorkaround(s32);
     extern void N_setupErrorHandler(void);
@@ -10,9 +30,7 @@ void marioStInit(void) {
     extern void __GXSetIndirectMask(u32);
     extern void* memset(void*, s32, u32);
     extern void* DEMOGetRenderModeObj(void);
-    extern s64 OSGetTime(void);
     extern s32 VIGetTvFormat(void);
-    extern void badgeShop_init(void);
     extern void yuugijou_init(void);
     extern void johoya_init(void);
     extern void* __memAlloc(s32, u32);
@@ -25,15 +43,12 @@ void marioStInit(void) {
     extern void aramMgrInit(void);
     extern void fileInit(void);
     extern void smartInit(void);
-    extern void dispInit(void);
     extern void camInit(void);
     extern void fontmgrInit(void);
     extern void windowInit(void);
     extern void mapInit(void);
-    extern void hitInit(void);
     extern void itemInit(void);
     extern void iconInit(void);
-    extern void fadeInit(void);
     extern void bgInit(void);
     extern void shadowInit(void);
     extern void evtmgrInit(void);
@@ -45,26 +60,19 @@ void marioStInit(void) {
     extern void marioInit(void);
     extern void caseInit(void);
     extern void imgInit(void);
-    extern void lightInit(void);
     extern void offscreenInit(void);
-    extern void arcInit(void);
     extern void extInit(void);
     extern void swInit(void);
     extern void cardInit(void);
     extern void winInit(void);
-    extern void statusWinInit(void);
-    extern void envInit(void);
-    extern void countDownInit(void);
     extern void nameEntInit(void);
     extern void winMgrInit(void);
-    extern void seqInit_MARIOSTORY(void);
     extern void seqSetSeq(s32, void*, void*);
     extern u32 OSGetSoundMode(void);
     extern void SoundSetOutputMode(s32);
     extern u8 GXNtsc480ProgMarioSt[];
     extern u8 GXNtsc480IntDfMarioSt[];
     extern u32 unk_80429568;
-    extern s32 DvdCheckTreadOn;
     extern u8 DvdCheckThread[];
     extern u8 gcDvdCheckThread(void);
     extern u8 viPostCallback(s32);
@@ -177,10 +185,6 @@ void marioStInit(void) {
 }
 
 void marioStMain(void) {
-    extern void OSYieldThread(void);
-    extern void makeKey(void);
-    extern void seqMain(void);
-    extern void cardMain(void);
     extern void bgMain(void);
     extern void shadowMain(void);
     extern void animMain(void);
@@ -188,15 +192,12 @@ void marioStMain(void) {
     extern void camMain(void);
     extern void windowMain(void);
     extern void mapMain(void);
-    extern void hitMain(void);
     extern void evtmgrMain(void);
     extern void mapDisp(void);
     extern void marioMain(void);
     extern void mobjMain(void);
     extern void npcMain(void);
-    extern void fadeMain(void);
     extern void imgMain(void);
-    extern void lightMain(void);
     extern void offscreenMain(void);
     extern void itemMain(void);
     extern void caseMain(void);
@@ -204,14 +205,9 @@ void marioStMain(void) {
     extern void extMain(void);
     extern void psndMain(void);
     extern void winMain(void);
-    extern void statusWinMain(void);
-    extern void envMain(void);
-    extern void countDownMain(void);
     extern void nameEntMain(void);
     extern void winMgrMain(void);
     extern void effMain(void);
-    extern void L_gcResetCheck(void);
-    extern s32 seqGetSeq(void);
     extern s64 none_key;
     u8* bytes;
     u32* words;
@@ -348,13 +344,10 @@ s32 marioStGetSystemLevel(void) {
 
 
 u8 viPostCallback(s32 param_1) {
-    extern s64 OSGetTime(void);
     extern s32 winCheck(void);
     extern u32 battleDisableHResetCheck(void);
     extern u32 OSGetResetButtonState(void);
-    extern u32 OSGetResetCode(void);
     extern u32 keyGetButton(s32);
-    extern s32 DVDGetDriveStatus(void);
     extern u8 gcRumbleCheck(void);
     extern void psndMainInt(void);
     s64 now;
@@ -435,11 +428,9 @@ u8 viPostCallback(s32 param_1) {
 }
 
 void gcDvdCheckThread(void) {
-    extern s32 DVDGetDriveStatus(void);
     extern u32 VIGetRetraceCount(void);
     extern void SoundCloseCover(void);
     extern void SoundOpenCover(void);
-    extern s32 cardIsExec(void);
     extern void DEMOBeforeRender(void);
     extern void DEMODoneRender(void);
     extern char* romFontGetMessage(s32 id);
@@ -447,9 +438,6 @@ void gcDvdCheckThread(void) {
     extern void C_MTXPerspective(void* mtx, f32 fovY, f32 aspect, f32 nearZ, f32 farZ);
     extern void GXSetProjection(void* mtx, s32 type);
     extern void romFontPrintGX(f32 x, f32 y, f32 scale, void* color, char* msg);
-    extern void makeKey(void);
-    extern void L_gcResetCheck(void);
-    extern void OSYieldThread(void);
     extern u32 dat_80420340;
     extern f32 float_25_80420344;
     extern f32 float_1p2667_80420348;
@@ -537,7 +525,6 @@ void gcDvdCheckThread(void) {
 }
 
 u8 gcRumbleCheck(void) {
-    extern s64 OSGetTime(void);
     extern u32 padGetRumbleStatus(s32);
     s32 local_flags[4];
     static s32 off_trg[4];
@@ -602,10 +589,7 @@ u8 gcRumbleCheck(void) {
 
 void L_gcResetCheck(void) {
     extern s32 R_bReset;
-    extern s32 DvdCheckTreadOn;
     extern char DvdCheckThread[];
-    extern s32 cardIsExec(void);
-    extern void cardMain(void);
     extern void VISetBlack(s32 black);
     extern void VIFlush(void);
     extern void VIWaitForRetrace(void);

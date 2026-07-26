@@ -7,6 +7,9 @@ extern s32 BattleTransID();
 extern void* BattleGetUnitPtr(void*, s32);
 extern void* BtlUnit_GetPartsPtr(void*, s32);
 extern void dispEntry(s32, s32, void*, void*, f32);
+extern void* BattleGetPartyPtr(void* battleWork);
+extern s32 evtGetValue(void* evt, s32 arg);
+extern void evtSetValue(void* evt, s32 arg, s32 value);
 
 
 s32 _chuchu_make_extra_work_area(void* evt) {
@@ -24,8 +27,6 @@ s32 _chuchu_make_extra_work_area(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void __makeTechMenuFunc(void* commandWork, s32* count) {
-    extern void* _battleWorkPointer;
-    extern void* BattleGetPartyPtr(void* battleWork);
     extern s32 BattleTransPartyId(s32 id);
     extern s32 partyGetTechLv(s32 partyId);
     extern char* msgSearch(char* msg);
@@ -89,7 +90,6 @@ void __makeTechMenuFunc(void* commandWork, s32* count) {
 s32 _get_binta_hit_position(int param_1) {
     extern f32 evtSetFloat(void* evt, s32 arg, f32 value);
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
-    extern s32 evtGetValue(void* evt, s32 arg);
 
     void* evt = (void*)param_1;
     s32* args = *(s32**)((s32)evt + 0x18);
@@ -127,8 +127,6 @@ s32 _get_binta_hit_position(int param_1) {
 }
 
 s32 _make_madowase_weapon(void* evt) {
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
     extern void* memcpy(void* dest, const void* src, u32 size);
 
     void* battleWork = _battleWorkPointer;
@@ -149,8 +147,6 @@ s32 _make_madowase_weapon(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _get_itemsteal_param(void* pEvt) {
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
 
     void* battleWork;
     s32* args;
@@ -181,8 +177,6 @@ s32 _get_itemsteal_param(void* pEvt) {
 #pragma use_lmw_stmw on
 
 s32 _chuchu_item_steal(void* evt) {
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
     extern s32 BattleTransID(void* evt, s32 id);
     extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern s32 irand(s32 max);
@@ -324,13 +318,9 @@ void mono_disp(int param_1, void* unit) {
     extern void GXSetVtxDesc(u32 attr, u32 type);
     extern void GXSetVtxAttrFmt(u32 vtxFmt, u32 attr, u32 compCnt, u32 compType, u32 frac);
     extern void GXBegin(u32 prim, u32 vtxFmt, u16 nverts);
-    extern void* BattleGetPartyPtr(void* battleWork);
-    extern void* BtlUnit_GetPartsPtr(void* unit, s32 partId);
     extern s32 camGetCurNo(void);
     extern void camSetCurNo(s32 camNo);
     extern void btlUnitPartsDisp(s32 cameraId, void* part);
-    extern void* _battleWorkPointer;
-    extern s32 mono_alpha;
     extern u32 dat_80424128;
     extern f32 float_0_80424130;
     extern f32 float_neg304_80424134;

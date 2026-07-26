@@ -4,6 +4,8 @@ typedef s16 ItemType16;
 extern s32 mpp;
 extern u8 itemDataTable[];
 extern u8 _party_max_hp_table[];
+extern void* gp;
+extern const char str_name_party3_802cc728[];
 
 s32 pouchCheckItem(s32 item);
 PouchData* pouchGetPtr(void) {
@@ -15,8 +17,6 @@ void pouchInit(void) {
     extern void* memset(void* dest, int ch, u32 count);
     extern char* msgSearch(const char* msg);
     extern char* strcpy(char* dest, const char* src);
-    extern s32 mpp;
-    extern const char str_name_party3_802cc728[];
     s32 i;
     s32 offset;
 
@@ -354,7 +354,6 @@ int pouchGetEmptyKeepItemCnt(void) {
 }
 
 s32 pouchGetItem(s32 itemNo) {
-    extern s32 mpp;
     extern void* yuwp;
     extern s32 marioGetParty(void);
     extern s32 pouchCheckItem(s32 item);
@@ -671,7 +670,6 @@ s32 pouchRemoveItemIndex(u32 itemType, int itemIndex) {
 void unk_800d48b0(u16* src, u16* dst) {
     extern s32 strlen(const char* str);
     extern char* strcpy(char* dst, const char* src);
-    extern void* gp;
     s32 count;
     s32 i;
     u16 value;
@@ -698,7 +696,6 @@ s32 comp_aiueo(short* param_1, short* param_2) {
     extern u32 strlen(char* str);
     extern char* strcpy(char* dst, char* src);
     extern s32 strcmp(char* s1, char* s2);
-    extern void* gp;
 
     u16 name1[64];
     u16 name2[64];
@@ -776,7 +773,6 @@ s32 comp_aiueo_r(short* param_1, short* param_2) {
     extern u32 strlen(char* str);
     extern char* strcpy(char* dst, char* src);
     extern s32 strcmp(char* s1, char* s2);
-    extern void* gp;
 
     u16 name1[64];
     u16 name2[64];
@@ -860,7 +856,6 @@ void pouchSortItem(u32 sortType) {
     extern s32 comp_kind(short* a, short* b);
     extern s32 comp_aiueo_r(short* a, short* b);
     extern s32 comp_kind_r(short* a, short* b);
-    extern s32 mpp;
     s16 items[20];
     s16 keys[122];
     s16 badges[208];
@@ -1934,7 +1929,6 @@ void pouchSetYoshiName(char* name) {
 char* pouchGetYoshiName(void) {
     extern u32 strlen(const char* str);
     extern char* msgSearch(const char* msg);
-    extern const char str_name_party3_802cc728[];
     if (strlen((char*)(mpp + 0x5C0)) < 1) {
         return msgSearch(str_name_party3_802cc728);
     }

@@ -1,11 +1,12 @@
 #include "mario/mario_party.h"
 
+extern void* marioGetPtr(void);
+extern s32 marioKeyOffChk(void);
+extern void* partyGetPtr(s32 partyId);
+extern void* pouchGetPtr(void);
 
 s32 marioUseParty(void) {
-    extern void* marioGetPtr(void);
     extern s32 N_marioChkUseParty(void);
-    extern s32 marioKeyOffChk(void);
-    extern void* partyGetPtr(s32 partyId);
     extern s32 N_fbatPreventMarioEventChk(void);
     extern s32 yoshiGetStatus(void);
     void* mario;
@@ -139,8 +140,6 @@ got_party3:
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 unk_8014140c(void) {
-    extern void* marioGetPtr(void);
-    extern s32 marioKeyOffChk(void);
     extern s32 partyDoWork(void);
     void* mario = marioGetPtr();
     s32 timer;
@@ -168,12 +167,9 @@ s32 unk_8014140c(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 int marioPartyEntry(int partyMemberId) {
-    extern void* marioGetPtr(void);
-    extern void* pouchGetPtr(void);
     extern s32 partyEntry(s32 partyId);
     extern s32 partyEntry2(s32 partyId);
     extern s32 partyKill(s32 partyId);
-    extern void* partyGetPtr(s32 partyId);
     extern void partyHello(void* party);
     void* mario;
     s32 result;
@@ -227,8 +223,6 @@ int marioPartyEntry(int partyMemberId) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 int marioPartyHello(int partyMemberId) {
-    extern void* marioGetPtr(void);
-    extern void* pouchGetPtr(void);
     extern s32 partyEntryHello(s32 partyId);
     extern s32 partyEntry2Hello(s32 partyId);
     void* mario;
@@ -263,7 +257,6 @@ int marioPartyHello(int partyMemberId) {
 
 
 u32 marioPartyGoodbye(void) {
-    extern void* marioGetPtr(void);
     extern void partyGoodbye(s32 partyId);
     s32 result = 0;
     u32 partyId = *(u8*)((s32)marioGetPtr() + 0x245);
@@ -276,7 +269,6 @@ u32 marioPartyGoodbye(void) {
 }
 
 void marioPartyKill(void) {
-    extern void* marioGetPtr(void);
     extern void partyKill(s32 partyId);
     void* mario;
     u32 partyId;
@@ -299,8 +291,6 @@ void marioPartyKill(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 int marioGetParty(void) {
-    extern void* marioGetPtr(void);
-    extern void* partyGetPtr(s32 partyId);
     void* mario = marioGetPtr();
     s32 partyId = *(s8*)((s32)mario + 0x245);
     void* party;
@@ -345,8 +335,6 @@ done:
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 marioGetPartyId(void) {
-    extern void* marioGetPtr(void);
-    extern void* partyGetPtr(s32 partyId);
     void* mario = marioGetPtr();
     s32 partyId = *(s8*)((s32)mario + 0x245);
     void* party;
@@ -374,8 +362,6 @@ s32 marioGetPartyId(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 marioGetExtraPartyId(void) {
-    extern void* marioGetPtr(void);
-    extern void* partyGetPtr(s32 partyId);
     void* mario = marioGetPtr();
     s32 partyId = *(s8*)((s32)mario + 0x245);
     void* party;
@@ -401,24 +387,18 @@ s32 marioGetExtraPartyId(void) {
 
 
 void partyJoin(s32 partyId) {
-    extern void* pouchGetPtr(void);
-
     if (partyId < 8) {
         ((u16*)pouchGetPtr())[partyId * 7] |= 1;
     }
 }
 
 void partyLeft(s32 partyId) {
-    extern void* pouchGetPtr(void);
-
     if (partyId < 8) {
         ((u16*)pouchGetPtr())[partyId * 7] &= ~1;
     }
 }
 
 u32 partyChkJoin(s32 partyId) {
-    extern void* pouchGetPtr(void);
-
     u32 joined = 0;
     if (partyId < 8) {
         joined = ((u16*)pouchGetPtr())[partyId * 7] & 1;
@@ -427,8 +407,6 @@ u32 partyChkJoin(s32 partyId) {
 }
 
 s32 partyGetHp(s32 partyId) {
-    extern void* pouchGetPtr(void);
-
     s32 value = 0;
     if (partyId < 8) {
         value = ((s16*)pouchGetPtr())[partyId * 7 + 3];
@@ -437,8 +415,6 @@ s32 partyGetHp(s32 partyId) {
 }
 
 s32 partyGetTechLv(s32 partyId) {
-    extern void* pouchGetPtr(void);
-
     s32 value = 0;
     if (partyId < 8) {
         value = ((s16*)pouchGetPtr())[partyId * 7 + 6];

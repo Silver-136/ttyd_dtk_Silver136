@@ -11,6 +11,7 @@ void BtlUnit_snd_se(void* unit, const char* name, u32 flags, s32 zero);
 
 extern char str_SFX_VOICE_MARIO_RELI_802f4250[];
 extern char str_SFX_VOICE_MARIO_RELI_802f4268[];
+extern void* _battleWorkPointer;
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _get_local_frame(void* event) {
@@ -69,7 +70,6 @@ void faker_mario_makkuro_set(void) {
     mapSetTevCallback(0xB, callback);
 }
 s32 _mario_makkuro_set(void) {
-    extern void* _battleWorkPointer;
     extern void* BattleGetMarioPtr(void* battleWork);
     extern void* BtlUnit_GetPartsPtr(void* unit, s32 partId);
     extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
@@ -89,7 +89,6 @@ s32 _mario_makkuro_set(void) {
 #pragma use_lmw_stmw off
 s32 _mario_super_emblem_anim_set(void* event, s32 releaseOld) {
     extern s32 evtGetValue(void* event, s32 value);
-    extern void* _battleWorkPointer;
     extern s32 BattleTransID(void* event, s32 id);
     extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern void* BattleGetUnitPartsPtr(s32 unitId, s32 partId);

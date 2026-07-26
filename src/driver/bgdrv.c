@@ -12,7 +12,6 @@ BackgroundWork work[2];
 #define FIFO_F32_BG (*(volatile f32*)0xCC008000)
 #define READ_F32_BG(addr) (*(volatile const f32*)&(addr))
 
-void bgMain(void);
 void bgDisp(s32 cameraId);
 
 extern void* camGetPtr(s32 cameraId);

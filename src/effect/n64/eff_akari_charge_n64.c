@@ -1,12 +1,13 @@
 #include "effect/n64/eff_akari_charge_n64.h"
 
+extern f32 float_0_80424c24;
+extern f32 float_1_80424c2c;
+
 void* effAkariChargeN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effAkariChargeMain(void);
     extern char str_AkariChargeN64_802faad0[];
-    extern f32 float_0_80424c24;
-    extern f32 float_1_80424c2c;
     void* entry;
     void* work;
     s32 i;
@@ -67,7 +68,6 @@ void effAkariChargeMain(void* entry) {
     extern f32 dispCalcZ(void* pos);
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
     extern void effAkariChargeDisp(void);
-    extern f32 float_0_80424c24;
     extern f32 float_6p2832_80424c38;
     extern f32 float_360_80424c3c;
     extern f32 float_1024_80424c40;
@@ -205,9 +205,7 @@ void effAkariChargeDisp(s32 cameraId, void* entry) {
     extern void GXBegin(s32 prim, s32 vtxfmt, s32 count);
     extern void tri2(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g);
     extern f32 float_deg2rad_80424c20;
-    extern f32 float_0_80424c24;
     extern f32 float_0p0625_80424c28;
-    extern f32 float_1_80424c2c;
     extern f32 float_0p0039062_80424c30;
     extern f32 float_0p03125_80424c34;
 

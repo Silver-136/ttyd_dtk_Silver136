@@ -1,11 +1,14 @@
 #include "sequence/seq_e3.h"
 
+#include "driver/fadedrv.h"
+
 extern void* wp;
 extern void* gp;
 extern void str_b_mario_80302608(void);
 extern char str_fOff_peron_803027c0[];
 extern u32 dat_804286e0;
 extern f32 float_270_80428784;
+extern f32 e3_tbl[];
 
 void* getMarioStDvdRoot(void);
 void* fileAllocf(s32 size, const char* fmt, ...);
@@ -13,6 +16,7 @@ void sysWaitDrawSync(void);
 void GXClearBoundingBox(void);
 void GXReadBoundingBox(u16* left, u16* top, u16* right, u16* bottom);
 void e3Disp(s32 camera, void* param);
+void pressStartGX(f32 x, f32 y, u8 alpha);
 s32 offscreenNameToId(char* name);
 void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom);
 void OSCreateAlarm(void* alarm);
@@ -75,22 +79,17 @@ void seq_e3Exit(void) {
 
 /* fallback stub-fill: map=seq_e3Main addr=0x80252818 size=0x00000748 */
 void seq_e3Main(void* sequence) {
-    extern void* wp;
-    extern f32 e3_tbl[];
     extern f32 vec3_80302664[];
     extern f32 vec3_80302670[];
     extern f64 tan(f64 angle);
     extern void* camGetPtr(s32 camera);
     extern u32 fadeIsFinish(void);
-    extern void fadeEntry(s32 type, s32 duration, void* color);
-    extern void fadeSetOffscreenCallback(void* callback, void* param);
     extern u16 keyGetButtonTrg(s32 pad);
     extern void keyGetStickX(s32 pad);
     extern void keyGetStickY(s32 pad);
     extern u32 keyGetDirTrg(s32 pad);
     extern void psndSFXOn(void* sound);
     extern void e3DispOffscreen(void);
-    extern void e3Disp(void);
     extern void dispEntry(s32 camera, s32 mode, void* callback, void* param, f32 order);
     u8* seq = sequence;
     u8* work = wp;
@@ -183,9 +182,6 @@ void seq_e3Main(void* sequence) {
 
 /* stub-fill: e3Disp | prototype_only | source_prototype */
 void e3Disp(s32 cameraId, void* unused) {
-    extern void* wp;
-    extern void* gp;
-    extern f32 e3_tbl[];
     extern void* camGetPtr(s32);
     extern void GXGetProjectionv(f32*);
     extern void GXGetViewportv(f32*);
@@ -193,7 +189,6 @@ void e3Disp(s32 cameraId, void* unused) {
     extern void GXSetViewport(f32,f32,f32,f32,f32,f32);
     extern void winTexInit(void*);
     extern void winTexSet(s32,void*,void*,void*);
-    extern void pressStartGX(f32,f32,s32);
     extern void windowDispGX_Waku_col(f32,f32,f32,f32,f32,s32,u32*);
     extern void FontDrawStart(void);
     extern void FontDrawColor(u32*);
@@ -322,7 +317,6 @@ void e3DispOffscreen(s32 camera, void* param) {
 
 /* stub-fill: pressStartGX | missing_definition | ghidra_signature */
 void pressStartGX(f32 x, f32 y, u8 alpha) {
-    extern void* wp;
     extern void* gpGlobals;
     extern void* camGetCurPtr(void);
     extern void TEXGetGXTexObjFromPalette(void* palette, void* object, s32 index);

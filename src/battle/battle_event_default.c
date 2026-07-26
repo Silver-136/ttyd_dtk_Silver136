@@ -1,14 +1,12 @@
 #include "battle/battle_event_default.h"
+#include "battle/battle_audience.h"
+#include "effect/eff_fire.h"
 extern void* _battleWorkPointer;
 
 extern s32 BattleTransID(void* evt, s32 id);
 extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
 extern void* BattleGetMarioPtr(void* battleWork);
 extern void* BattleGetPartyPtr(void* battleWork);
-
-extern void BattleAudience_Case_Escape_Bad(void);
-extern void BattleAudience_Case_Escape_Good(void);
-extern void BattleAudience_Case_Escape(void);
 
 extern void BattleAcHelpSetHelp(const char* msg);
 extern void BattleAcHelpSetDispType(s32 type);
@@ -22,7 +20,6 @@ extern const char str_msg_ac_escape_802ee90c[];
 
 s32 _backfire(void* evt, s32 firstCall) {
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
-    extern void* effFireEntry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 duration);
     extern void effDelete(void* effect);
     extern void BattleDamageDirect(s32 attacker, void* unit, s32 part, s32 damage, s32 zero, s32 flags, s32 arg7, s32 arg8);
     extern s32 evtGetValue(void* evt, s32 value);

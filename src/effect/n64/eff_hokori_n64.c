@@ -1,5 +1,7 @@
 #include "effect/n64/eff_hokori_n64.h"
 
+extern f32 float_0_80425488;
+
 #pragma optimize_for_size off
 
 void* effHokoriN64Entry(f32 x, f32 y, f32 z, s32 type, s32 duration) {
@@ -8,7 +10,6 @@ void* effHokoriN64Entry(f32 x, f32 y, f32 z, s32 type, s32 duration) {
     extern void effHokoriMain(void* effect);
     extern s32 rand(void);
     extern char str_HokoriN64_802fb0e8[];
-    extern f32 float_0_80425488;
     extern f32 float_neg1_80425498;
     extern f32 float_1_8042549c;
     extern f32 float_200_804254a0;
@@ -160,7 +161,6 @@ void effHokoriDisp(s32 cameraId, void* effect) {
     extern void tri2(s32, s32, s32, s32, s32, s32, s32);
     extern f32 float_0p03125_80425480;
     extern f32 float_0p010417_80425484;
-    extern f32 float_0_80425488;
     extern f32 float_deg2rad_8042548c;
     extern u8 size16x16_tex32x32_vtx[];
     extern u8 size16x32_tex32x64_vtx[];

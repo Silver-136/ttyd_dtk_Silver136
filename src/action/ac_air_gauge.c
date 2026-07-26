@@ -1,8 +1,10 @@
 #include "action/ac_air_gauge.h"
 
+#include "system.h"
+
+void actionCommandDisp(f32 x, f32 y);
+
 s32 battleAcMain_AirGauge(void* battleWork) {
-    extern void* memset(void* dest, int ch, u32 count);
-    extern s32 irand(s32 range);
     extern void BattleAcGaugeSeInit(void);
     extern s32 BattlePadCheckNow(u32 buttons);
     extern s32 BattlePadCheckTrigger(u32 buttons);
@@ -247,7 +249,6 @@ f32 _GetGaugeDecValue(void) {
     extern f32 float_0p44_80426fe0;
     extern f32 float_0p47_80426fe4;
     extern f32 float_0p5_80426fe8;
-    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
 
     s32 battleWork;
     s32 tableBase;
@@ -328,8 +329,6 @@ void battleAcDisp_AirGauge(void* camera, void* wp) {
 
     extern f32 float_neg300_80426fc8;
     extern f32 float_30_80426fcc;
-    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
-    extern void actionCommandDisp(f32 x, f32 y);
 
     disp = (s32)wp + 0x1F20;
     state = *(s32*)((s32)wp + 0x1C9C);

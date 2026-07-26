@@ -1,4 +1,6 @@
 #include "event/evt_mobj.h"
+#include "bowser/kpa_act.h"
+#include "bowser/koopa.h"
 
 s32 evtGetValue(void* evt, s32 value);
 s32 evtSetValue(void* evt, s32 var, s32 value);
@@ -7,7 +9,6 @@ void mobjDelete(s32 name);
 void* mobjNameToPtr(s32 name);
 void* mobjNameToPtrNoAssert(s32 name);
 void* marioGetPtr(void);
-s32 kpaGetLevel(void);
 void* _mapAlloc(void* heap, u32 size);
 void PSMTXTrans(f32* mtx, f32 x, f32 y, f32 z);
 void PSMTXScale(f32* mtx, f32 x, f32 y, f32 z);
@@ -18,6 +19,38 @@ void FontDrawStringMtx(f32* mtx, void* string);
 f32 animPoseGetLoopTimes(void* pose);
 s32 strcmp(const char* a, const char* b);
 s32 mobj_lock(void* pMobj);
+
+extern void partyKeyOff(void);
+extern void* npcNameToPtr(char*);
+extern void* npcGetWorkPtr(void);
+extern s32 offscreenNameToId(char*);
+extern s32 imgEntry(char*, s32);
+extern s32 offscreenEntry(char*);
+extern s32 animPaperPoseGetId(const char*, s32);
+extern void* imgNameToPtr(char*, s32);
+extern s32 evt_img_alloc_capture(void*);
+extern s32 marioGetPartyId(void);
+extern s32 marioCtrlOffChk(void);
+extern s32 marioKeyOffChk(void);
+extern s32 animPaperPoseEntry(const char*, s32);
+extern void psndSFXOn(s32 id);
+extern void* partyGetPtr(s32 id);
+extern char* msgSearch(const char*);
+extern void partyKeyOn(void);
+extern s32 windowCheckID(s32);
+extern s32 msgWindow_Entry(char*, s32, s32);
+extern void imgFreeCapture(void*, s32);
+extern void imgSetShadow(void*, s32);
+extern f64 animTimeGetTime(s32);
+extern char* animPoseGetCurrentAnim(s32 poseId);
+extern void offscreenDelete(char*);
+extern void imgRelease(void*);
+extern f32 evtGetFloat(void* evt, s32 value);
+extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
+extern void* mobjRunEvent(void* mobj, void* evtCode);
+extern char* strcpy(char* dst, const char* src);
+extern s32 evtCheckID(s32 id);
+
 
 extern void* mapalloc_base_ptr;
 void* psw;
@@ -95,7 +128,6 @@ s32 evt_mobj_get_kindname(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_set_scale(void* evt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern const u32 vec3_802c2058[3];
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
@@ -206,7 +238,6 @@ s32 evt_mobj_get_z_position(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_set_position(void* evt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern const u32 vec3_802c2064[3];
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
@@ -241,7 +272,6 @@ s32 evt_mobj_set_position(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_set_x_position(void* evt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
     void* mobj;
@@ -268,7 +298,6 @@ s32 evt_mobj_set_x_position(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_set_y_position(void* evt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
     void* mobj;
@@ -298,7 +327,6 @@ s32 evt_mobj_set_y_position(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_set_z_position(void* evt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
     void* mobj;
@@ -326,8 +354,6 @@ s32 evt_mobj_set_z_position(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_exec_cancel(void* pEvt) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern s32 strcmp(const char* s1, const char* s2);
     extern void* mobjNameToPtr(s32 name);
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 name = evtGetValue(pEvt, args[0]);
@@ -349,7 +375,6 @@ s32 evt_mobj_exec_cancel(void* pEvt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_set_gravity_bound(void* evt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
     f32 gravity = evtGetFloat(evt, args[1]);
@@ -485,10 +510,8 @@ s32 evt_mobj_hit_onoff(void* evt) {
 
 
 s32 mobj_switch_blue(void* mobj) {
-    extern void* mobjRunEvent(void* mobj, void* evtCode);
     extern void marioChgMot(s32 motionId);
     extern u32 psndSFXOn_3D(s32 id, void* pos);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern f32 animPoseGetLoopTimes(s32 poseId);
     extern void* effSmallStarEntry(s32 flags, s32 type, f32 x, f32 y, f32 z, f32 a, f32 b, f32 c);
     extern void effSmallStarCamChg(void* eff, u8 camId);
@@ -533,8 +556,6 @@ s32 mobj_switch_blue(void* mobj) {
 }
 
 s32 evt_mobj_switch_blue(void* pEvt) {
-    extern s32 evtGetValue(void* evt, s32 value);
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
@@ -596,7 +617,6 @@ s32 evt_mobj_switch_blue(void* pEvt) {
 }
 
 s32 evt_mobj_floatswitch_blue(void* evt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
     extern void mobjEntry(s32 name, const char* kind);
     extern void* mobjNameToPtr(s32 name);
@@ -635,7 +655,6 @@ s32 evt_mobj_floatswitch_blue(void* evt) {
 }
 
 s32 evt_mobj_tornadoswitch_blue(void* evt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
     extern void mobjEntry(s32 name, const char* kind);
     extern void* mobjNameToPtr(s32 name);
@@ -676,10 +695,8 @@ s32 evt_mobj_tornadoswitch_blue(void* evt) {
 
 
 s32 mobj_switch_red(void* pMobj) {
-    extern void* mobjRunEvent(void* mobj, void* evtCode);
     extern void marioChgMot(s32 motionId);
     extern u32 psndSFXOn_3D(s32 id, void* pos);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern f32 animPoseGetLoopTimes(s32 poseId);
     extern const char str_A_1_80420208[];
     extern const char str_S_1_8042021c[];
@@ -724,8 +741,6 @@ s32 mobj_switch_red(void* pMobj) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_switch_red(void* pEvt) {
-    extern s32 evtGetValue(void* evt, s32 value);
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
@@ -781,7 +796,6 @@ s32 evt_mobj_switch_red(void* pEvt) {
 
 
 s32 evt_mobj_floatswitch_red(void* evt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
     extern void mobjEntry(s32 name, const char* kind);
     extern void* mobjNameToPtr(s32 name);
@@ -824,12 +838,7 @@ s32 mobj_timerswitch(void* pMobj) {
     extern void marioChgMot(s32);
     extern u32 psndSFXOn_3D(s32, void*);
     extern void* evtEntryType(void*, s8, u32, u32);
-    extern void animPoseSetAnim(s32, const char*, s32);
     extern f64 animPoseGetLoopTimes(s32);
-    extern s32 marioKeyOffChk(void);
-    extern s32 marioCtrlOffChk(void);
-    extern void* mobjRunEvent(void*, void*);
-    extern s32 strcmp(const char*, const char*);
     extern void effSmallStarEntry(void);
     extern void evtSetValue(void*, s32, s32);
     extern void mobjDelete(char*);
@@ -908,12 +917,9 @@ s32 mobj_timerswitch(void* pMobj) {
     return 0;
 }
 s32 evt_mobj_timerswitch(void* pEvt) {
-    extern s32 evtGetValue(void* evt, s32 value);
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
-    extern char* strcpy(char* dst, const char* src);
     extern void mobjSetPosition(f32 x, f32 y, f32 z, char* name);
     extern void mobjCalcMtx(void* mobj);
     extern void* gp;
@@ -985,9 +991,7 @@ s32 evt_mobj_timerswitch(void* pEvt) {
 }
 
 s32 mobj_rideswitch_lightblue(void* pMobj) {
-    extern void* mobjRunEvent(void* mobj, void* evtCode);
     extern u32 psndSFXOn_3D(s32 id, void* pos);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void mobjCalcMtx2(void* mobj);
     extern void* animPoseGetAnimBaseDataPtr(s32 poseId);
     extern f32 PSVECMag(void* vec);
@@ -1088,8 +1092,6 @@ s32 mobj_rideswitch_lightblue(void* pMobj) {
 }
 
 u8 evt_mobj_rideswitch_lightblue(void* pEvt) {
-    extern s32 evtGetValue(void* evt, s32 value);
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
@@ -1144,15 +1146,8 @@ u8 evt_mobj_rideswitch_lightblue(void* pEvt) {
 
 s32 mobj_jumpstand_red(void* pMobj) {
     extern void* marioGetPtr(void);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
-    extern void* mobjRunEvent(void* mobj, void* evtCode);
-    extern s32 strcmp(const char* a, const char* b);
     extern u32 psndSFXOn_3D(s32 id, void* pos);
-    extern void psndSFXOn(s32 id);
     extern s32 irand(s32 max);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
-    extern s32 evtCheckID(s32 id);
     extern f32 animPoseGetLoopTimes(s32 poseId);
     extern void* gp;
     extern const char str_MOBJ_RedJumpStand_802c20f8[];
@@ -1240,7 +1235,6 @@ s32 mobj_jumpstand_red(void* pMobj) {
 }
 
 s32 evt_mobj_jumpstand_red(void* evt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
     extern void mobjEntry(s32 name, const char* kind);
     extern void* mobjNameToPtr(s32 name);
@@ -1278,14 +1272,9 @@ s32 evt_mobj_jumpstand_red(void* evt) {
 
 s32 mobj_jumpstand_blue(void* pMobj) {
     extern void* marioGetPtr(void);
-    extern void* mobjRunEvent(void* mobj, void* evtCode);
     extern void marioChgJumpStandMotion(f32 height);
-    extern s32 strcmp(const char* a, const char* b);
     extern u32 psndSFXOn_3D(s32 id, void* pos);
-    extern void psndSFXOn(s32 id);
     extern s32 irand(s32 max);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
-    extern s32 evtCheckID(s32 id);
     extern f32 animPoseGetLoopTimes(s32 poseId);
     extern void* gp;
     extern const char str_MOBJ_BlueJumpStand_802c2128[];
@@ -1361,8 +1350,6 @@ s32 mobj_jumpstand_blue(void* pMobj) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 evt_mobj_jumpstand_blue(void* pEvt) {
-    extern s32 evtGetValue(void* evt, s32 value);
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
@@ -1423,23 +1410,9 @@ s32 mobj_lv_blk_evt(void* pMobj) {
     extern void* marioGetPtr(void);
     extern char* strcat(char*, const char*);
     extern u32 animGroupBaseAsync(const char*, s32, s32);
-    extern s32 strcmp(const char*, const char*);
     extern s32 pouchGetHammerLv(void);
-    extern void* mobjRunEvent(void*, void*);
     extern void evtSetValue(void*, s32, s32);
-    extern s32 animPaperPoseEntry(const char*, s32);
-    extern s32 offscreenEntry(char*);
-    extern s32 imgEntry(char*, s32);
-    extern s32 offscreenNameToId(char*);
-    extern s32 evt_img_alloc_capture(void*);
-    extern void* imgNameToPtr(char*, s32);
-    extern s32 animPaperPoseGetId(const char*, s32);
-    extern f64 animTimeGetTime(s32);
-    extern void imgSetShadow(void*, s32);
     extern u32 psndSFXOn_3D(s32, void*);
-    extern void imgFreeCapture(void*, s32);
-    extern void imgRelease(void*);
-    extern void offscreenDelete(char*);
     extern void mobjDelete(char*);
     extern void* gp;
     extern const char str_o_802c2158[];
@@ -1569,8 +1542,6 @@ s32 mobj_lv_blk_evt(void* pMobj) {
 }
 
 s32 evt_mobj_lv_blk(void* pEvt) {
-    extern s32 evtGetValue(void* evt, s32 value);
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
@@ -1631,9 +1602,6 @@ s32 evt_mobj_lv_blk(void* pEvt) {
 
 s32 mobj_float_blk(void* mobj) {
     extern s32 hitCheckFilter(s32 flags, f32* outX, f32* outY, f32* outZ, f32* radius, f32* minY, f32* maxY);
-    extern char* animPoseGetCurrentAnim(s32 poseId);
-    extern s32 strcmp(const char* a, const char* b);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void* mobjNameToPtr(char* name);
     extern f32 __fabsf(f32 value);
     extern const char str_S_1_8042021c[];
@@ -1679,13 +1647,11 @@ s32 mobj_float_blk(void* mobj) {
 }
 
 s32 evt_mobj_float_blk(void* pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
     extern void mobjSetPosition(f32 x, f32 y, f32 z, char* name);
     extern void mobjCalcMtx(void* mobj);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern s32 hitCheckFilter(f32 x, f32 y, f32 z, f32 ax, f32 ay, f32 az, s32 flags,
                               void* out0, void* out1, void* out2, void* out3,
                               void* out4, void* out5, void* out6);
@@ -1796,17 +1762,12 @@ s32 evt_mobj_float_blk(void* pEvt) {
 
 
 s32 mobj_switch_float_blk(void* pMobj) {
-    extern char* animPoseGetCurrentAnim(s32 poseId);
-    extern s32 strcmp(const char* a, const char* b);
     extern void* mobjNameToPtr(char* name);
     extern s32 hitCheckFilter(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, s32 flags,
                               void* out0, void* out1, void* out2, void* out3,
                               void* out4, void* out5, void* out6);
-    extern s32 evtCheckID(s32 evtId);
-    extern void* mobjRunEvent(void* pMobj, void* evtCode);
     extern void marioChgMot(s32 motion);
     extern u32 psndSFXOn_3D(s32 id, void* pos);
-    extern void animPoseSetAnim(s32 poseId, const char* animName, s32 flags);
     extern f32 animPoseGetLoopTimes(s32 poseId);
     extern f32 __fabsf(f32 x);
     extern const char* _switch_anim[7];
@@ -2026,14 +1987,11 @@ s32 mobj_switch_float_blk(void* pMobj) {
 }
 
 s32 evt_mobj_switch_float_blk(void* pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
     extern void mobjSetPosition(f32 x, f32 y, f32 z, char* name);
     extern void mobjCalcMtx(void* mobj);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
-    extern char* strcpy(char* dst, const char* src);
     extern s32 hitCheckFilter(f32 x, f32 y, f32 z, f32 ax, f32 ay, f32 az, s32 flags,
                               void* out0, void* out1, void* out2, void* out3,
                               void* out4, void* out5, void* out6);
@@ -2132,9 +2090,7 @@ s32 evt_mobj_switch_float_blk(void* pEvt) {
 #pragma use_lmw_stmw off
 s32 evt_mobj_lock_unlock(void* evt) {
     extern void marioKeyOff(void);
-    extern void partyKeyOff(void);
     extern void marioStSystemLevel(s32 level);
-    extern s32 strcmp(const char* a, const char* b);
     extern const char str_MOBJ_Lock_802c2770[];
     s32* args = *(s32**)((s32)evt + 0x18);
     void* mobj = mobjNameToPtr(evtGetValue(evt, args[0]));
@@ -2159,22 +2115,14 @@ s32 evt_mobj_lock_unlock(void* evt) {
 s32 mobj_lock(void* pMobj) {
     extern void marioKeyOff(void);
     extern void marioKeyOn(void);
-    extern void partyKeyOff(void);
-    extern void partyKeyOn(void);
     extern void marioStSystemLevel(s32);
-    extern void* mobjRunEvent(void*, void*);
-    extern s32 evtCheckID(s32);
     extern s32 pouchCheckItem(s32);
     extern void pouchRemoveItem(s32);
-    extern char* msgSearch(const char*);
-    extern s32 msgWindow_Entry(char*, s32, s32);
     extern void* evtEntryType(void*, s8, u32, u32);
-    extern void animPoseSetAnim(s32, const char*, s32);
     extern f64 animPoseGetLoopTimes(s32);
     extern void evtSetValue(void*, s32, s32);
     extern s32 hitCheckFilter(f32, f32, f32, f32, f32, f32, s32, void*, void*, void*, void*, void*, void*, void*);
     extern u32 psndSFXOn_3D(s32, void*);
-    extern s32 windowCheckID(s32);
     extern void mobjDelete(char*);
     extern void* evt_lock_sound;
     extern const char str_sys_no_key_802c277c[];
@@ -2306,14 +2254,12 @@ s32 mobj_lock(void* pMobj) {
 }
 
 s32 evt_mobj_lock(void* pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
     extern void mobjHitEntry(void* mobj, s32 kind);
     extern void mobjSetPosition(f32 x, f32 y, f32 z, char* name);
     extern void mobjCalcMtx(void* mobj);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void* gp;
     extern const char str_MOBJ_Lock_802c2770[];
     extern const char str_Z_1_8042030c[4];
@@ -2369,8 +2315,6 @@ s32 evt_mobj_lock(void* pEvt) {
 }
 
 s32 mobj_itembox(void* pMobj) {
-    extern s32 strcmp(const char*, const char*);
-    extern void animPoseSetAnim(s32, const char*, s32);
     extern f64 animPoseGetLoopTimes(s32);
     extern void* animPoseGetAnimBaseDataPtr(s32);
     extern void PSVECAdd(void*, void*, void*);
@@ -2378,11 +2322,7 @@ s32 mobj_itembox(void* pMobj) {
     extern void mobjCalcMtx2(void*);
     extern void marioKeyOff(void);
     extern void marioKeyOn(void);
-    extern void partyKeyOff(void);
-    extern void partyKeyOn(void);
     extern void marioStSystemLevel(s32);
-    extern void* mobjRunEvent(void*, void*);
-    extern s32 evtCheckID(s32);
     extern void* evtEntryType(void*, s8, u32, u32);
     extern void evtSetValue(void*, s32, s32);
     extern void* evt_box_sound1;
@@ -2494,8 +2434,6 @@ s32 mobj_itembox(void* pMobj) {
 }
 
 s32 evt_mobj_itembox(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
-    extern f32 evtGetFloat(void*, s32);
     extern u32 animGroupBaseAsync(const char*, s32, s32);
     extern s32 mobjEntry(char*, const char*);
     extern void* mobjNameToPtr(char*);
@@ -2601,8 +2539,6 @@ s32 evt_mobj_itembox(void* pEvt) {
 s32 mobj_signboard(void* mobj) {
     extern void marioKeyOff(void);
     extern void marioKeyOn(void);
-    extern s32 evtCheckID(s32 id);
-    extern void* mobjRunEvent(void* mobj, void* code);
     s32 state = *(s32*)((s32)mobj + 0x1DC);
 
     switch (state) {
@@ -2630,7 +2566,6 @@ s32 mobj_signboard(void* mobj) {
 
 #pragma no_register_save_helpers on
 s32 evt_mobj_signboard(void* evt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
     extern void mobjEntry(s32 name, const char* kind);
     extern void mobjSetPosition(s32 name, f32 x, f32 y, f32 z);
@@ -2680,7 +2615,6 @@ s32 mobj_recovery_blk(void* pMobj) {
     extern void swSet(s32);
     extern s32 pouchGetCoin(void);
     extern void effSoftDelete(void*);
-    extern void animPoseSetAnim(s32, const char*, s32);
     extern void statusWinForceOpen(void);
     extern void statusWinForceOff(void);
     extern void effStardustEntry(f64, f64, f64, f64, f64, s32, s32, s32);
@@ -2688,9 +2622,6 @@ s32 mobj_recovery_blk(void* pMobj) {
     extern void* pouchGetPtr(void);
     extern void marioChgPose(const char*);
     extern s32 pouchAddCoin(s16);
-    extern char* msgSearch(const char*);
-    extern s32 msgWindow_Entry(char*, s32, s32);
-    extern s32 windowCheckID(s32);
     extern void* effCoinFukidashiEntry(f64, f64, f64, s32, s32, s32);
     extern f64 animPoseGetLoopTimes(s32);
     extern const char str_A_1_80420208[];
@@ -2855,13 +2786,11 @@ s32 mobj_recovery_blk(void* pMobj) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_recovery_blk(void* pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
     extern void mobjSetPosition(f32 x, f32 y, f32 z, char* name);
     extern void mobjCalcMtx(void* mobj);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void* gp;
     extern const char str_MOBJ_RecoveryBlock_802c268c[];
     extern const char str_MOBJ_CoinTakenRecove_802c26a0[];
@@ -2926,11 +2855,9 @@ s32 mobj_save_blk(void* pMobj) {
     extern void marioKeyOn(void);
     extern void marioStSystemLevel(s32 level);
     extern void psndSFXOn_3D(s32 id, void* pos);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void* camGetPtr(s32 camId);
     extern f32 animPoseGetLoopTimes(s32 poseId);
     extern void mobjRunEvent(void* mobj, void* evtCode);
-    extern s32 evtCheckID(s32 evtId);
     extern const char str_A_1_80420208[4];
     extern const char str_S_1_8042021c[4];
     extern f32 float_1_80420250;
@@ -2991,13 +2918,11 @@ s32 mobj_save_blk(void* pMobj) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_save_blk(void* pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
     extern void mobjSetPosition(f32 x, f32 y, f32 z, char* name);
     extern void mobjCalcMtx(void* mobj);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void* gp;
     extern const char str_MOBJ_SaveBlock_802c267c[];
     extern const char str_S_1_8042021c[4];
@@ -3052,9 +2977,6 @@ s32 evt_mobj_save_blk(void* pEvt) {
 
 s32 mobj_blk(void* mobj) {
     extern u32 psndSFXOn_3D(s32 id, void* pos);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
-    extern void* mobjRunEvent(void* mobj, void* evtCode);
-    extern s32 evtCheckID(s32 id);
     extern f32 animPoseGetLoopTimes(s32 poseId);
     extern const char str_A_1_80420208[];
     extern const char str_S_1_8042021c[];
@@ -3100,13 +3022,11 @@ s32 mobj_blk(void* mobj) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_blk(void* pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern u32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
     extern void mobjSetPosition(f32 x, f32 y, f32 z, char* name);
     extern void mobjCalcMtx(void* mobj);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void* gp;
     extern const u32 vec3_802c2058[3];
     extern const char str_S_1_8042021c[4];
@@ -3165,12 +3085,8 @@ s32 evt_mobj_blk(void* pEvt) {
 
 
 s32 mobj_badgeblk(void* pMobj) {
-    extern s32 strcmp(const char*, const char*);
-    extern char* strcpy(char*, const char*);
-    extern void animPoseSetAnim(s32, const char*, s32);
     extern f64 animPoseGetLoopTimes(s32);
     extern u32 psndSFXOn_3D(s32, void*);
-    extern void* mobjRunEvent(void*, void*);
     extern s32 pouchAddCoin(s16);
     extern void* itemEntry(char*, s32, u32, s32, void*, f32, f32, f32);
     extern void* itemNameToPtr(char*);
@@ -3260,14 +3176,11 @@ s32 mobj_badgeblk(void* pMobj) {
     return 0;
 }
 s32 evt_mobj_badgeblk(void* pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern u32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
     extern void mobjSetPosition(f32 x, f32 y, f32 z, char* name);
     extern void mobjCalcMtx(void* mobj);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
-    extern char* strcpy(char* dst, const char* src);
     extern void* gp;
     extern const char str_MOBJ_HatenaBlock_802c24cc[];
     extern const char str_MOBJ_BadgeBlock_802c266c[];
@@ -3333,15 +3246,11 @@ s32 evt_mobj_badgeblk(void* pEvt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 mobj_powerupblk(void* pMobj) {
-    extern s32 marioKeyOffChk(void);
-    extern s32 marioCtrlOffChk(void);
     extern s32 marioKeyOff(void);
     extern s32 marioCtrlOff(void);
     extern s32 marioKeyOn(void);
     extern s32 marioCtrlOn(void);
-    extern s32 strcmp(const char* a, const char* b);
     extern u32 psndSFXOn_3D(s32 id, void* pos);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void* itemEntry(char* name, s32 id, u32 mode, s32 collected, void* script, f32 x, f32 y, f32 z);
     extern f64 animPoseGetLoopTimes(s32 poseId);
     extern void itemForceGet(void* item);
@@ -3415,13 +3324,11 @@ s32 mobj_powerupblk(void* pMobj) {
 
 
 s32 evt_mobj_powerupblk(void* evt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
     extern void mobjEntry(s32 name, const char* kind);
     extern void* mobjNameToPtr(s32 name);
     extern void mobjSetPosition(s32 name, f32 x, f32 y, f32 z);
     extern void mobjCalcMtx(void* mobj);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern s32* gp;
     extern const char str_MOBJ_PowerUpBlock_802c2630[];
     extern const char str_S_1_8042021c[];
@@ -3462,21 +3369,8 @@ s32 evt_mobj_powerupblk(void* evt) {
 s32 mobj_brickblk(void* pMobj) {
     extern char* strcat(char*, const char*);
     extern u32 animGroupBaseAsync(const char*, s32, s32);
-    extern void* mobjRunEvent(void*, void*);
     extern void evtSetValue(void*, s32, s32);
-    extern s32 animPaperPoseEntry(const char*, s32);
-    extern s32 offscreenEntry(char*);
-    extern s32 imgEntry(char*, s32);
-    extern s32 offscreenNameToId(char*);
-    extern s32 evt_img_alloc_capture(void*);
-    extern void* imgNameToPtr(char*, s32);
-    extern s32 animPaperPoseGetId(const char*, s32);
-    extern f64 animTimeGetTime(s32);
-    extern void imgSetShadow(void*, s32);
     extern u32 psndSFXOn_3D(s32, void*);
-    extern void imgFreeCapture(void*, s32);
-    extern void imgRelease(void*);
-    extern void offscreenDelete(char*);
     extern void mobjDelete(char*);
     extern void* gp;
     extern const char str_o_802c2290[];
@@ -3574,11 +3468,8 @@ s32 mobj_brickblk(void* pMobj) {
 }
 
 s32 mobj_10countblk(void* pMobj) {
-    extern char* strcpy(char* dst, const char* src);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern u32 psndSFXOn_3D(s32 id, void* pos);
     extern s32 evtSetValue(void* evt, s32 var, s32 value);
-    extern void* mobjRunEvent(void* pMobj, void* evtCode);
     extern s32 pouchAddCoin(s16 coins);
     extern void* itemEntry(char* name, s32 id, u32 mode, s32 collected, void* script, f32 x, f32 y, f32 z);
     extern f64 animPoseGetLoopTimes(s32 poseId);
@@ -3653,15 +3544,11 @@ s32 mobj_10countblk(void* pMobj) {
 }
 
 s32 evt_mobj_brick(void* pEvt) {
-    extern s32 evtGetValue(void*, s32);
-    extern f32 evtGetFloat(void*, s32);
     extern u32 animGroupBaseAsync(const char*, s32, s32);
     extern s32 mobjEntry(char*, const char*);
     extern void* mobjNameToPtr(char*);
     extern void mobjSetPosition(f32, f32, f32, char*);
     extern void mobjCalcMtx(void*);
-    extern void animPoseSetAnim(s32, const char*, s32);
-    extern char* strcpy(char*, const char*);
     extern void* gp;
     extern const char str_MOBJ_FlowBrickBlock_802c24e0[];
     extern const char str_MOBJ_HiddenHatenaBlo_802c24b4[];
@@ -3772,8 +3659,6 @@ s32 evt_mobj_brick(void* pEvt) {
 s32 mobj_breaking_floor(void* pMobj) {
     extern void* marioGetPtr(void);
     extern u32 psndSFXOn_3D(s32 id, void* pos);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
-    extern void* mobjRunEvent(void* pMobj, void* evtCode);
     extern s32 evtSetValue(void* evt, s32 var, s32 value);
     extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
     extern void animPoseSetMaterialEvtColor(s32 poseId, void* color);
@@ -3838,14 +3723,11 @@ s32 mobj_breaking_floor(void* pMobj) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_breaking_floor(void* pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
-    extern char* strcpy(char* dst, const char* src);
     extern u32 animGroupBaseAsync(char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, char* poseName);
     extern void* mobjNameToPtr(char* name);
     extern void mobjSetPosition(f32 x, f32 y, f32 z, char* name);
     extern void mobjCalcMtx(void* mobj);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void* gp;
     extern const char str_MOBJ_BreakingFloor_802c2578[];
     extern const char str_MOBJ_BlackBreakingFl_802c258c[];
@@ -4003,13 +3885,10 @@ u8 kururing_capture(s32 camId, void* mobj) {
 #pragma use_lmw_stmw off
 u8 mobj_kururing_floor(void* pMobj) {
     extern void* marioGetPtr(void);
-    extern s32 marioGetPartyId(void);
     extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32 id);
     extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 __fabsf(f32 x);
     extern s32 pouchGetJumpLv(void);
-    extern void animPoseSetAnim(s32 poseId, const char* anim, s32 flags);
     extern u32 psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
     extern u32 psndSFXOn_3D(s32 id, void* pos);
     extern void* itemNameToPtr(char* name);
@@ -4023,7 +3902,6 @@ u8 mobj_kururing_floor(void* pMobj) {
     extern void* itemHitCheck(f32 x, f32 y, f32 z, f32 radius);
     extern void* npcNearDistCheck(f32 x, f32 y, f32 z, f32 radius);
     extern void* itemNearDistCheck(f32 x, f32 y, f32 z, f32 radius);
-    extern void* npcGetWorkPtr(void);
     extern const char str_A_1_80420208[4];
     extern const char str_A_2_8042020c[4];
     extern const char str_S_1_8042021c[4];
@@ -4259,14 +4137,12 @@ u8 mobj_kururing_floor(void* pMobj) {
 
 
 u8 evt_mobj_kururing_floor(s32 pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern u32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
     extern void mobjCalcMtx(void* mobj);
     extern void mobjCalcMtx2(void* mobj);
     extern void mapGrpFlagOn(char* name, u32 flags);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void animPoseWorldPositionEvalOn(s32 poseId, u8 value);
     extern void* gp;
     extern const u32 vec3_802c2058[3];
@@ -4338,10 +4214,7 @@ s32 kpa_powerup(void* evt) {
         f32 y;
         f32 z;
     } VecLocal;
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern void kpaAddScorePos(s32 score, VecLocal* pos);
-    extern s32 kpaGetLevel(void);
-    extern void kpaAddScore(s32 score);
     extern void kpaPowUp(void);
     s32* args = *(s32**)((s32)evt + 0x18);
     VecLocal pos;
@@ -4365,12 +4238,8 @@ s32 mobj_koopa_ojama_blk_evt(u32* mobj) {
     extern void* itemEntry(char* name, s32 id, u32 mode, s32 collected, void* script, f32 x, f32 y, f32 z);
     extern void itemStatusOn(void* item, u32 flags);
     extern void itemFlagOn(void* item, u16 flags);
-    extern void* mobjRunEvent(void* pMobj, void* evtCode);
     extern s32 evtSetValue(void* evt, s32 var, s32 value);
     extern s32 npcKoopaModeMobjBoundDeadCheck(void* hit);
-    extern s32 kpaGetLevel(void);
-    extern s32 kpaMutekiCheck(void);
-    extern void kpaAddScore(s32 score);
     extern void mobjDelete(char* name);
     extern void* kpa_powerup_evt;
     extern f32 float_25_80420230;
@@ -4460,7 +4329,6 @@ s32 mobj_koopa_ojama_blk_evt(u32* mobj) {
 
 
 s32 evt_mobj_koopa_ojama_blk(void* pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern u32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
@@ -4512,7 +4380,6 @@ s32 mobj_koopa_stone_blk_evt(void) {
 }
 
 s32 evt_mobj_koopa_stone_blk(void* evt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
     extern void mobjEntry(s32 name, const char* kind);
     extern void* mobjNameToPtr(s32 name);
@@ -4555,16 +4422,10 @@ s32 evt_mobj_koopa_stone_blk(void* evt) {
 }
 
 s32 mobj_koopa_brickblk(u32* mobj) {
-    extern s32 kpaGetLevel(void);
     extern s32 npcKoopaModeMobjBoundDeadCheck(void*);
-    extern void* mobjRunEvent(void*, void*);
     extern void evtSetValue(void*, s32, s32);
-    extern s32 kpaMutekiCheck(void);
-    extern void kpaAddScore(s32);
     extern void psndSFXOn_3D(s32, void*);
-    extern s32 strcmp(const char*, const char*);
     extern void effMObjBrokenEntry(double, double, double, s32);
-    extern void animPoseSetAnim(s32, const char*, s32);
     extern double animPoseGetLoopTimes(s32);
     extern void mobjDelete(char*);
     extern const char str_MOBJ_FlowBrickBlock_802c24e0[];
@@ -4677,13 +4538,11 @@ s32 mobj_koopa_brickblk(u32* mobj) {
 }
 
 s32 evt_mobj_koopa_brick(void* pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern u32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
     extern void mobjSetPosition(f32 x, f32 y, f32 z, s32 name);
     extern void mobjCalcMtx(void* mobj);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void* gpGlobals;
     extern const char str_MOBJ_FlowBrickBlock_802c24e0[];
     extern const char str_MOBJ_block_ky_802c24f4[];
@@ -4750,19 +4609,14 @@ s32 evt_mobj_koopa_brick(void* pEvt) {
 
 s32 mobj_koopa_badgeblk(u32* mobj) {
     extern void mobjHitEntry(void*, s32);
-    extern void animPoseSetAnim(s32, const char*, s32);
     extern double animPoseGetLoopTimes(s32);
-    extern char* strcpy(char*, const char*);
-    extern void* mobjRunEvent(void*, void*);
     extern void* itemEntry(char*, s32, s32, s32, void*, f32, f32, f32);
     extern void* itemNameToPtr(char*);
     extern void itemStatusOn(void*, s32);
     extern void itemFlagOn(void*, s32);
-    extern void kpaAddCoin(s32);
     extern void evtSetValue(void*, s32, s32);
     extern void psndSFXOn_3D(s32, void*);
     extern s32 npcKoopaModeMobjBoundDeadCheck(void*);
-    extern s32 kpaGetLevel(void);
     extern void effMObjBrokenEntry(double, double, double, s32);
     extern void mobjDelete(char*);
     extern void* kpa_powerup_evt;
@@ -4850,13 +4704,11 @@ s32 mobj_koopa_badgeblk(u32* mobj) {
 }
 
 s32 evt_mobj_koopa_badgeblk(void* pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern u32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
     extern void mobjSetPosition(f32 x, f32 y, f32 z, s32 name);
     extern void mobjCalcMtx(void* mobj);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void* gpGlobals;
     extern const char str_MOBJ_HatenaBlock_802c24cc[];
     extern const char str_S_1_8042021c[];
@@ -4905,14 +4757,12 @@ s32 evt_mobj_koopa_badgeblk(void* pEvt) {
 }
 
 s32 evt_mobj_koopa_hidden_blk(void* pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern u32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
     extern void mobjSetPosition(f32 x, f32 y, f32 z, s32 name);
     extern void mobjHitEntry(void* mobj, s32 type);
     extern void mobjCalcMtx(void* mobj);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void* gpGlobals;
     extern const char str_MOBJ_HiddenHatenaBlo_802c24b4[];
     extern const char str_S_1_8042021c[];
@@ -4963,8 +4813,6 @@ s32 evt_mobj_koopa_hidden_blk(void* pEvt) {
 }
 
 s32 mobj_koopa_blk(u32* mobj) {
-    extern s32 kpaGetLevel(void);
-    extern void* mobjRunEvent(void*, void*);
     extern void evtSetValue(void*, s32, s32);
     extern s32 npcKoopaModeMobjBoundDeadCheck(void*);
     extern void psndSFXOn_3D(s32, void*);
@@ -5009,13 +4857,11 @@ s32 mobj_koopa_blk(u32* mobj) {
 }
 
 s32 evt_mobj_koopa_blk(void* evt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
     extern void mobjEntry(s32 name, const char* kind);
     extern void mobjSetPosition(s32 name, f32 x, f32 y, f32 z);
     extern void* mobjNameToPtr(s32 name);
     extern void mobjCalcMtx(void* mobj);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern s32* gp;
     extern const char str_MOBJ_Block_802c24a8[];
     extern const char str_S_1_8042021c[];
@@ -5048,16 +4894,11 @@ s32 evt_mobj_koopa_blk(void* evt) {
 }
 
 s32 mobj_koopa_dokan_evt(u32* mobj) {
-    extern s32 strcmp(const char* a, const char* b);
     extern void effMObjBrokenEntry(double x, double y, double z, s32 type);
     extern u32 psndSFXOn_3D(s32 id, void* pos);
-    extern void* mobjRunEvent(void* pMobj, void* evtCode);
     extern s32 evtSetValue(void* evt, s32 var, s32 value);
     extern s32 npcKoopaModeMobjBoundDeadCheck(void* hit);
-    extern s32 kpaMutekiCheck(void);
-    extern void kpaAddScore(s32 score);
     extern void mobjDelete(s32 name);
-    extern s32 kpaGetLevel(void);
     extern const char str_MOBJ_GreenPipe_ks_802c246c[];
     extern const char str_MOBJ_GreenPipe_kl_802c2480[];
     extern f32 float_25_80420230;
@@ -5123,12 +4964,10 @@ s32 mobj_koopa_dokan_evt(u32* mobj) {
 }
 
 s32 evt_mobj_koopa_dokan(void* pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern u32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
     extern void mobjCalcMtx(void* mobj);
-    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void* gpGlobals;
     extern const char str_MOBJ_GreenPipe_ks_802c246c[];
     extern const char str_MOBJ_GreenPipe_kl_802c2480[];
@@ -5191,7 +5030,6 @@ s32 evt_mobj_koopa_dokan(void* pEvt) {
 }
 
 s32 fire_func(void* evt, s32 init) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern s32 irand(s32 max);
     extern void* effFireEntry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 arg);
     extern f32 float_1_80420250;
@@ -5236,12 +5074,8 @@ s32 fire_func(void* evt, s32 init) {
 
 s32 mobj_koopa_sango_evt(u32* mobj) {
     extern void* evtEntry(void*, s32, u32);
-    extern void* mobjRunEvent(void*, void*);
     extern void evtSetValue(void*, s32, s32);
     extern s32 npcKoopaModeMobjBoundDeadCheck(void*);
-    extern s32 kpaGetLevel(void);
-    extern s32 kpaMutekiCheck(void);
-    extern void kpaAddScore(s32);
     extern void psndSFXOn_3D(s32, void*);
     extern void effMObjBrokenEntry(double, double, double, s32);
     extern void mobjDelete(char*);
@@ -5321,7 +5155,6 @@ s32 mobj_koopa_sango_evt(u32* mobj) {
     return 0;
 }
 s32 evt_mobj_koopa_sango(void* pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern u32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
@@ -5375,16 +5208,11 @@ u8 mobj_koopa_fireber_dodai_evt(void* mobj) {
     extern u32 psndSFXOn_3D(s32, void*);
     extern void psndSFXOff(s32);
     extern s32 sprintf(char*, const char*, ...);
-    extern void* npcNameToPtr(char*);
     extern void PSMTXIdentity(void*);
     extern void PSMTXRotRad(void*, double, char);
     extern void PSMTXConcat(void*, void*, void*);
     extern void PSMTXMultVec(void*, void*, void*);
-    extern s32 kpaGetLevel(void);
-    extern void* mobjRunEvent(void*, void*);
     extern void evtSetValue(void*, s32, s32);
-    extern s32 kpaMutekiCheck(void);
-    extern void kpaAddScore(s32);
     extern void effMObjBrokenEntry(double, double, double, s32);
     extern s32 irand(s32);
     extern void npcDelete(void*);
@@ -5504,15 +5332,11 @@ u8 mobj_koopa_fireber_dodai_evt(void* mobj) {
 }
 
 u8 evt_mobj_koopa_fireber_dodai(s32 pEvt) {
-    extern s32 evtGetValue(void*, s32);
-    extern f32 evtGetFloat(void*, s32);
     extern s32 animGroupBaseAsync(const char*, s32, s32);
     extern s32 mobjEntry(char*, const char*);
     extern void* mobjNameToPtr(char*);
     extern s32 sprintf(char*, const char*, ...);
     extern s32 npcEntry(char*, const char*);
-    extern void* npcNameToPtr(char*);
-    extern void animPoseSetAnim(s32, const char*, s32);
     extern void* gp;
     extern const char str_MOBJ_fire_dodai_802c2430[];
     extern const char str_c_fireber_802c2440[];
@@ -5630,7 +5454,6 @@ s32 kpa_get_width(void* evt) {
 
 
 s32 kpa_score_to_str(void* evt) {
-    extern s32 evtGetValue(void* evt, s32 value);
     extern void* psw;
     s32 score = evtGetValue(evt, **(s32**)((s32)evt + 0x18));
     s32 thousands;
@@ -5682,7 +5505,6 @@ void kpa_disp_pole_score(void) {
 }
 
 s32 kpa_disp_pole_score_main(void* evt, s32 isFirstCall) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 order);
     extern void kpa_disp_pole_score(void);
     extern f32 float_0_80420240;
@@ -5731,13 +5553,8 @@ s32 kpa_clear_jump_data(void) {
 
 s32 mobj_koopa_pole_evt(void* pMobj) {
     extern void* marioGetPtr(void);
-    extern s32 kpaGetLevel(void);
-    extern void kpaAddScore(s32);
-    extern void* mobjRunEvent(void*, void*);
-    extern s32 evtCheckID(s32);
     extern void evtSetValue(void*, s32, s32);
     extern void marioKeyOff(void);
-    extern void* npcGetWorkPtr(void);
     extern void npcGroupDead(void*, s32);
     extern void* kpa_pole;
     extern void* kpa_pole_move;
@@ -5852,11 +5669,9 @@ s32 mobj_koopa_pole_evt(void* pMobj) {
 }
 
 s32 evt_mobj_koopa_pole(void* pEvt) {
-    extern f32 evtGetFloat(void* evt, s32 value);
     extern u32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
-    extern char* strcpy(char* dst, const char* src);
     extern char* strcat(char* dst, const char* src);
     extern void* gpGlobals;
     extern const char str_MOBJ_goal_pole_802c2410[];

@@ -1,9 +1,8 @@
 #include "parse.h"
 
+extern char parse[];
 
 u8 parseInit(s32 param_1, s32 param_2) {
-    extern char parse[];
-
     *(s32*)(parse + 0) = param_1;
     *(s32*)(parse + 0x54) = 0;
     *(s32*)(parse + 4) = 0;
@@ -11,7 +10,6 @@ u8 parseInit(s32 param_1, s32 param_2) {
 }
 
 u32 parsePush(char* tagName) {
-    extern char parse[];
     extern char buf_405[];
     extern s32 strcmp(const char*, const char*);
     s32 depth = *(s32*)(parse + 0x54);
@@ -76,14 +74,12 @@ u32 parsePush(char* tagName) {
 }
 
 void parsePop(void) {
-    extern char parse[];
     s32 count;
 
     count = *(s32*)(parse + 0x54);
     *(s32*)(parse + 0x54) = count - 1;
 }
 void parsePopNext(void) {
-    extern char parse[];
     char* base;
     s32 index;
 
@@ -95,7 +91,6 @@ void parsePopNext(void) {
 
 
 s32 parseGet1Next(s32 type, char* out, s32 unused, s32 tokenStart) {
-    extern char parse[];
     extern s32 sscanf(const char*, const char*, ...);
     extern char str_PCTd_804207a0[];
     extern char str_PCTf_804207a4[];
@@ -168,7 +163,6 @@ s32 parseGet1Next(s32 type, char* out, s32 unused, s32 tokenStart) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 int parseTagGet1(char* param_1, int param_2, char* param_3, int param_4) {
-    extern char parse[];
     int ret;
 
     if ((int)parsePush(param_1) != 0) {

@@ -11,6 +11,39 @@ extern f32 float_1_804215f8;
 void partyMoveMain(void* party, s32 hosei);
 f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
 void psndSFXOn_3D(s32 id, void* pos);
+extern void* marioGetPtr(void);
+extern f32 float_150_80421594;
+extern f32 __fabsf(f32 value);
+extern s32 marioGetPartyId(void);
+extern void* partyGetPtr(s32 id);
+extern s32 marioChkSlitThrouh(void);
+extern f32 float_0p5_80421610;
+extern f32 float_0p05_8042160c;
+extern f32 float_neg1_804215c4;
+extern f32 float_0p1_80421614;
+extern s32 N_marioGetMovementSpeed(void);
+extern f32 float_1p65_804215f4;
+extern f32 float_2_804215cc;
+extern f32 float_0p8_804215fc;
+extern void partyGetMoveDirSpd(void* party, f32* dir, f32* spd);
+extern f32 float_neg1p4_80421630;
+extern f32 float_10_80421600;
+extern void unk_JP_US_EU_54_80187d74(void* party);
+extern void unk_JP_US_EU_53_80187d10(void* party);
+extern void party_motion_fall(void* party);
+extern void vivianShadow(void* party);
+extern f32 float_50_80421590;
+extern f32 float_1p8_80421604;
+extern void party_motion_stay(void* party);
+extern void party_motion_homing_walk(void* party);
+extern void party_motion_homing_fly(void* party);
+extern void party_motion_jump(void* party);
+extern void party_motion_upstairs(void* party);
+extern void party_motion_damage(void* party);
+extern void party_motion_behind_mario(void* party);
+extern void party_motion_behind_mario_fly(void* party);
+extern void party_motion_jump2(void* party);
+extern void party_motion_beside_mario(void* party);
 
 void* partyGetFootmarkPtr(s32 id) {
     s32 slotOfs;
@@ -42,11 +75,9 @@ s32 partyGetFootmarkId(void* party) {
 }
 
 u8 L_getTargetPos(u32 param_1, u32* param_2) {
-    extern void* marioGetPtr(void);
     extern void* anotherPartyGetPtr(s32 id);
     extern s32 nokonokoGetStatus(void* party);
     extern f32 PSVECDistance(void* a, void* b);
-    extern f32 float_150_80421594;
     void* mario = marioGetPtr();
     void* party;
     void* mario2;
@@ -75,12 +106,9 @@ u8 L_getTargetPos(u32 param_1, u32* param_2) {
 }
 
 f32 partyGetTargetDir(s32 useParty, f32 x, f32 z) {
-    extern void* marioGetPtr(void);
     extern void* anotherPartyGetPtr(s32 id);
     extern s32 nokonokoGetStatus(void* party);
     extern f32 PSVECDistance(void* a, void* b);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern f32 float_150_80421594;
     void* mario;
     void* player;
     void* party;
@@ -126,7 +154,6 @@ f32 partyGetTargetDir(s32 useParty, f32 x, f32 z) {
 #pragma no_register_save_helpers reset
 
 float partyGetTargetDist(float x, float z, int useParty) {
-    extern void* marioGetPtr(void);
     extern void* anotherPartyGetPtr(int id);
     extern float distABf(float x1, float z1, float x2, float z2);
     extern int nokonokoGetStatus(void* party);
@@ -177,11 +204,9 @@ float partyGetTargetDist(float x, float z, int useParty) {
 }
 
 f32 partyGetTargetDist3D(s32 useParty, void* pos) {
-    extern void* marioGetPtr(void);
     extern void* anotherPartyGetPtr(s32 id);
     extern s32 nokonokoGetStatus(void* party);
     extern f32 PSVECDistance(void* a, void* b);
-    extern f32 float_150_80421594;
     void* mario;
     void* mario2;
     void* party;
@@ -230,12 +255,9 @@ f32 partyGetTargetDist3D(s32 useParty, void* pos) {
 
 /* fallback stub-fill: map=unk_800ccb34 addr=0x800ccb34 size=0x00000160 */
 f32 unk_800ccb34(s32 useParty, f32 y) {
-    extern void* marioGetPtr(void);
     extern void* anotherPartyGetPtr(s32 id);
     extern s32 nokonokoGetStatus(void* party);
     extern f32 PSVECDistance(void* a, void* b);
-    extern f32 __fabsf(f32 value);
-    extern f32 float_150_80421594;
     void* mario;
     void* player;
     void* party;
@@ -279,12 +301,9 @@ f32 unk_800ccb34(s32 useParty, f32 y) {
 }
 
 f32 partyGetTargetDistY(s32 useParty) {
-    extern void* marioGetPtr(void);
     extern void* anotherPartyGetPtr(s32 id);
     extern s32 nokonokoGetStatus(void* party);
     extern f32 PSVECDistance(void* a, void* b);
-    extern f32 float_0_804215b8;
-    extern f32 float_150_80421594;
     void* mario = marioGetPtr();
     void* party;
     s32 invalid;
@@ -317,12 +336,8 @@ f32 partyGetTargetDistY(s32 useParty) {
 }
 
 f32 partyGetTargetMovespd2(void* pParty) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
     extern s32 nokonokoGetStatus(void* party);
     extern f32 PSVECDistance(void* a, void* b);
-    extern f32 float_0_804215b8;
-    extern f32 float_150_80421594;
     void* mario = *(void**)((s32)pParty + 0x160);
     void* party;
     s32 invalid;
@@ -411,7 +426,6 @@ void partyGetReadId2(s32 id, f32* out) {
 }
 
 void partyClearFootmark(void) {
-    extern void* marioGetPtr(void);
     void* mario;
     u8* mark;
     u32 x;
@@ -445,12 +459,8 @@ void partyClearFootmark(void) {
 }
 
 u8 partyClearFootmark2(void) {
-    extern void* marioGetPtr(void);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
     extern s32 nokonokoGetStatus(void* party);
     extern f32 PSVECDistance(void* a, void* b);
-    extern f32 float_150_80421594;
     void* mario = marioGetPtr();
     void* party = partyGetPtr(marioGetPartyId());
     u32 x;
@@ -485,15 +495,9 @@ u8 partyClearFootmark2(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void partyRecordFootmark(void* pParty) {
-    extern void* marioGetPtr(void);
-    extern s32 marioChkSlitThrouh(void);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
     extern s32 nokonokoGetStatus(void* party);
     extern f32 PSVECDistance(void* a, void* b);
     extern void partyClearFootmark2(void);
-    extern u8 footmarkBuf[];
-    extern f32 float_150_80421594;
 
     void* player;
     void* move;
@@ -612,10 +616,6 @@ void partyClearJumpPara(void* party) {
 }
 
 void unk_800cbfbc(void* party, f32 speed) {
-    extern f32 float_0p5_80421610;
-    extern f32 float_0p05_8042160c;
-    extern f32 float_neg1_804215c4;
-    extern f32 float_0p1_80421614;
     void* move;
     f32 current;
     f32 target;
@@ -677,10 +677,6 @@ void unk_800cbf84(void* party, f32 value) {
 }
 
 f32 unk_800cbeb0(void* party) {
-    extern f32 float_0p5_80421610;
-    extern f32 float_0p05_8042160c;
-    extern f32 float_neg1_804215c4;
-    extern f32 float_0p1_80421614;
     void* move;
     f32 current;
     f32 target;
@@ -818,12 +814,6 @@ void unk_800cbc30(void* party) {
 void unk_800cbb10(void* party, f32 value) {
     extern void partyChgPoseId(void* party, s32 pose);
     extern void unk_800cbcc0(void* party, s32 param_2);
-    extern s32 N_marioGetMovementSpeed(void);
-    extern f32 float_1_804215f8;
-    extern f32 float_1p65_804215f4;
-    extern f32 float_2_804215cc;
-    extern f32 float_0p8_804215fc;
-    extern f32 float_0_804215b8;
     void* mario;
     f32 upper;
     f32 lower;
@@ -863,13 +853,11 @@ void unk_800cbb10(void* party, f32 value) {
 
 /* fallback stub-fill: map=unk_800cba60 addr=0x800cba60 size=0x000000b0 */
 void unk_800cba60(void* party) {
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern void* camGetPtr(s32 id);
     extern f32 revise360(f32 angle);
     extern f32 float_270_80421634;
     extern f32 float_90_80421598;
     extern f32 float_180_804215ac;
-    extern f32 float_0_804215b8;
     void* mario = *(void**)((s32)party + 0x160);
     void* cam;
     f32 angle;
@@ -928,7 +916,6 @@ void partyMoveNoHosei(void* party) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void partyMoveMain(void* party, s32 hosei) {
-    extern void partyGetMoveDirSpd(void* party, f32* dir, f32* spd);
     extern void* partySearchFrontWall(f32 spd, f32 dir, void* party, f32* pos);
     extern void unk_800c27c0(void* party, f32* pos, f32* dist, f32 width, f32 height);
     extern void movePos(f32* x, f32* z, f32 spd, f32 dir);
@@ -936,10 +923,6 @@ void partyMoveMain(void* party, s32 hosei) {
     extern f32 toMovedirSimple(f32 angle);
     extern void* partySearchGround(f32 hi, f32 lo, void* party);
     extern u32 hitGetAttr(void* hit);
-    extern f32 float_0_804215b8;
-    extern f32 float_0p75_80421608;
-    extern f32 float_1_804215f8;
-    extern f32 float_neg1p4_80421630;
 
     f32 pos[3];
     f32 headPos[3];
@@ -1170,13 +1153,9 @@ void partyMoveBesideMario(void* pParty, u8 param_2) {
 }
 
 u8 partyMoveCheckWall(void* pParty) {
-    extern void partyGetMoveDirSpd(void* party, f32* dir, f32* spd);
     extern void* partySearchFrontWall(f32 dir, f32 spd, void* party, void* pos);
     extern void* partySearchGround(f32 height, f32 y, void* party);
     extern u32 hitGetAttr(void* hit);
-    extern f32 float_0_804215b8;
-    extern f32 float_10_80421600;
-    extern f32 float_neg1p4_80421630;
     u32 pos[3];
     f32 spd;
     f32 dir;
@@ -1209,28 +1188,17 @@ u8 partyMoveCheckWall(void* pParty) {
         *(f32*)((s32)pParty + 0x114) += *(f32*)((s32)pParty + 0x118);
     }
 }
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 #pragma no_register_save_helpers reset
 #pragma use_lmw_stmw reset
 void partyGetMoveDirSpd(void* pParty, f32* outDir, f32* outSpd) {
     extern s32 partyMarioHosei(void* party);
-    extern void* marioGetPtr(void);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
     extern void* anotherPartyGetPtr(s32 id);
     extern s32 nokonokoGetStatus(void* party);
     extern f32 PSVECDistance(void* a, void* b);
     extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 sqrtf(f32 x);
-    extern u8 footmarkBuf[];
     extern s32 readId[2];
     extern s32 writeId[2];
-    extern f32 float_0_804215b8;
-    extern f32 float_1_804215f8;
-    extern f32 float_0p75_80421608;
-    extern f32 float_150_80421594;
 
     void* player;
     void* source;
@@ -1346,7 +1314,6 @@ void partyGetMoveDirSpd(void* pParty, f32* outDir, f32* outSpd) {
 #pragma no_register_save_helpers reset
 
 int partyMarioHosei(void* pParty) {
-    extern f32 __fabsf(f32 value);
     extern double sin(double x);
     extern double cos(double x);
 
@@ -1431,9 +1398,7 @@ int partyMarioHosei(void* pParty) {
 }
 
 u8 partyChkWall(void* pParty) {
-    extern void partyGetMoveDirSpd(void* party, f32* dir, f32* spd);
     extern void* partySearchFrontWall(f32 dir, f32 spd, void* party, void* pos);
-    extern f32 float_0_804215b8;
     u32 pos[3];
     f32 spd;
     f32 dir;
@@ -1462,14 +1427,10 @@ u8 partyChkWall(void* pParty) {
 #pragma use_lmw_stmw off
 void unk_800ca884(void* party) {
     extern void partyChgPoseId(void* party, int pose);
-    extern void unk_JP_US_EU_54_80187d74(void* party);
     extern void unk_JP_US_EU_35_8015146c(void* party);
-    extern void unk_JP_US_EU_53_80187d10(void* party);
-    extern void party_motion_fall(void* party);
     extern void marioSetSplash(unsigned int type, void* pos);
     extern unsigned int hitGetAttr(void* hit);
     extern void partyChgRunMode(void* party, int mode);
-    extern void vivianShadow(void* party);
 
     unsigned int pos[3];
     unsigned int posX;
@@ -1564,17 +1525,9 @@ tail:
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void partyWalkInit(void* pParty) {
-    extern void* marioGetPtr(void);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
     extern s32 nokonokoGetStatus(void* party);
     extern f32 PSVECDistance(void* a, void* b);
     extern void partyChgPoseId(void* party, s32 pose);
-    extern u8 footmarkBuf[];
-    extern f32 float_150_80421594;
-    extern f32 float_50_80421590;
-    extern f32 float_1p8_80421604;
-    extern f32 float_0_804215b8;
 
     void* player;
     void* move;
@@ -1667,24 +1620,10 @@ void partyWalkInit(void* pParty) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void partyMoveWalk(void* pParty) {
-    extern void* marioGetPtr(void);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
     extern s32 nokonokoGetStatus(void* party);
     extern f32 PSVECDistance(void* a, void* b);
     extern void partyChgPoseId(void* party, s32 pose);
     extern void partyWalkMain(void* party);
-    extern u8 footmarkBuf[];
-    extern f32 float_150_80421594;
-    extern f32 float_50_80421590;
-    extern f32 float_1p8_80421604;
-    extern f32 float_0_804215b8;
-    extern f32 float_1_804215f8;
-    extern f32 float_0p75_80421608;
-    extern f32 float_0p1_80421614;
-    extern f32 float_neg1_804215c4;
-    extern f32 float_0p05_8042160c;
-    extern f32 float_0p5_80421610;
 
     void* player;
     void* party;
@@ -1803,13 +1742,10 @@ void partyMoveWalk(void* pParty) {
 
 
 u8 partyWalkMain(void* pParty) {
-    extern void* marioGetPtr(void);
     extern void* anotherPartyGetPtr(s32 slot);
-    extern s32 marioChkSlitThrouh(void);
     extern s32 nokonokoGetStatus(void* party);
     extern f32 PSVECDistance(void* a, void* b);
     extern void walkMain(void* party);
-    extern f32 float_150_80421594;
     void* player;
     void* source;
     u8* mark;
@@ -1878,14 +1814,8 @@ u8 partyWalkMain(void* pParty) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 void party_move_mode_stay(void* party) {
     extern void partyChgPoseId(void* party, int pose);
-    extern void unk_JP_US_EU_54_80187d74(void* party);
-    extern void party_motion_stay(void* party);
-    extern void unk_JP_US_EU_53_80187d10(void* party);
-    extern void party_motion_fall(void* party);
     extern void marioSetSplash(unsigned int type, void* pos);
     extern unsigned int hitGetAttr(void* hit);
     extern void partyChgRunMode(void* party, int mode);
@@ -1978,21 +1908,9 @@ tail:
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
-#pragma use_lmw_stmw reset
-#pragma no_register_save_helpers reset
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void party_move_mode_walk(void* party) {
-    extern void party_motion_stay(void* party);
-    extern void party_motion_homing_walk(void* party);
-    extern void party_motion_homing_fly(void* party);
-    extern void party_motion_jump(void* party);
-    extern void party_motion_fall(void* party);
-    extern void party_motion_upstairs(void* party);
-    extern void party_motion_damage(void* party);
     extern void marioSetSplash(unsigned int type, void* pos);
     extern unsigned int hitGetAttr(void* hit);
     extern void partyChgRunMode(void* party, int mode);
@@ -2071,12 +1989,6 @@ void party_move_mode_walk(void* party) {
 
 
 void party_move_mode_behind_mario(void* pParty) {
-    extern void party_motion_behind_mario(void* party);
-    extern void party_motion_behind_mario_fly(void* party);
-    extern void party_motion_jump2(void* party);
-    extern void party_motion_fall(void* party);
-    extern void party_motion_upstairs(void* party);
-    extern void party_motion_damage(void* party);
 
     if ((*(u32*)((s32)pParty + 8) & 4) != 0) {
         *(u32*)((s32)pParty + 8) &= ~4;
@@ -2109,11 +2021,6 @@ void party_move_mode_behind_mario(void* pParty) {
 }
 
 void party_move_mode_beside_mario(void* pParty) {
-    extern void party_motion_beside_mario(void* party);
-    extern void party_motion_jump2(void* party);
-    extern void party_motion_fall(void* party);
-    extern void party_motion_upstairs(void* party);
-    extern void party_motion_damage(void* party);
 
     if ((*(u32*)((s32)pParty + 8) & 4) != 0) {
         *(u32*)((s32)pParty + 8) &= ~4;
@@ -2149,20 +2056,9 @@ void partyForceWalk(void* pParty) {
     extern void unk_JP_US_EU_12_800bc660(void* party);
     extern void partyChgPoseId(void* party, s32 pose);
     extern void unk_JP_US_EU_18_800cbcc0(void* party, s32 arg);
-    extern s32 N_marioGetMovementSpeed(void);
     extern s32 partySearchFrontWall(f32 distance, f32 angle, void* party, f32* pos);
     extern void* partySearchGround(f32 height, f32 y, void* party);
     extern u32 hitGetAttr(void* hit);
-    extern void party_motion_jump(void* party);
-    extern void party_motion_fall(void* party);
-    extern void vivianShadow(void* party);
-    extern f32 float_0_804215b8;
-    extern f32 float_1_804215f8;
-    extern f32 float_1p65_804215f4;
-    extern f32 float_2_804215cc;
-    extern f32 float_0p8_804215fc;
-    extern f32 float_10_80421600;
-    extern f32 float_neg1_804215c4;
 
     f32 pos[3];
     f32 speed;
@@ -2295,18 +2191,10 @@ void partyForceWalk(void* pParty) {
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
-#pragma use_lmw_stmw reset
-#pragma no_register_save_helpers reset
-
 u8 partyMoveFlyInit(void* pParty, s32 param_2) {
-    extern void* marioGetPtr(void);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
     extern s32 nokonokoGetStatus(void* party);
     extern f32 PSVECDistance(void* a, void* b);
     extern void partyChgPoseId(void* party, s32 pose);
-    extern f32 float_150_80421594;
-    extern f32 float_50_80421590;
     void* player;
     void* partner;
     u8* mark;
@@ -2379,9 +2267,7 @@ u8 partyMoveFlyInit(void* pParty, s32 param_2) {
     *(u32*)((s32)pParty + 8) |= 2;
 }
 void partyFlyMain(void* pParty) {
-    extern void* marioGetPtr(void);
     extern void* anotherPartyGetPtr(s32 slot);
-    extern void* partyGetPtr(s32 id);
     extern void flyMain(void* party);
     void* source;
     u8* mark;
@@ -2445,20 +2331,7 @@ void partyFlyMain(void* pParty) {
 #pragma use_lmw_stmw off
 void walkMain(void* pParty) {
     extern void partyChgPoseId(void* party, s32 pose);
-    extern void unk_JP_US_EU_54_80187d74(void* party);
-    extern void unk_JP_US_EU_53_80187d10(void* party);
-    extern void party_motion_stay(void* party);
-    extern void party_motion_homing_walk(void* party);
-    extern void party_motion_homing_fly(void* party);
-    extern void party_motion_jump(void* party);
-    extern void party_motion_fall(void* party);
-    extern void party_motion_upstairs(void* party);
-    extern void party_motion_damage(void* party);
-    extern void party_motion_behind_mario(void* party);
-    extern void party_motion_behind_mario_fly(void* party);
     extern void party_motion_behind_mario_continue(void* party);
-    extern void party_motion_jump2(void* party);
-    extern void party_motion_beside_mario(void* party);
     extern void marioSetSplash(u32 type, void* pos);
     extern u32 hitGetAttr(void* hit);
     extern void partyChgRunMode(void* party, s32 mode);
@@ -2647,10 +2520,6 @@ void walkMain(void* pParty) {
 /* stub-fill: flyMain | missing_definition | ghidra_signature */
 u8 flyMain(void* party) {
     extern void partyChgPoseId(void* party, s32 pose);
-    extern void unk_JP_US_EU_54_80187d74(void* party);
-    extern void unk_JP_US_EU_53_80187d10(void* party);
-    extern void party_motion_stay(void* party);
-    extern void party_motion_fall(void* party);
     extern void marioSetSplash(u32 type, void* pos);
     extern u32 hitGetAttr(void* hit);
     extern void partyChgRunMode(void* party, s32 mode);

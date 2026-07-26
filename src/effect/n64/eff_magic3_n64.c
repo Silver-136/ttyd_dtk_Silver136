@@ -1,5 +1,6 @@
 #include "effect/n64/eff_magic3_n64.h"
 
+extern f64 sin(f64);
 
 void* effMagic3N64Entry(f32 x, f32 y, f32 z, s32 type, s32 arg) {
     typedef f32 Mtx[3][4];
@@ -8,7 +9,6 @@ void* effMagic3N64Entry(f32 x, f32 y, f32 z, s32 type, s32 arg) {
     extern void* __memAlloc(s32,s32);
     extern void effMagic3Main(void*);
     extern void* camGetPtr(s32);
-    extern f64 sin(f64);
     extern f64 cos(f64);
     extern void PSMTXRotAxisRad(Mtx,Vec*,f32);
     extern char str_Magic3N64_802fb4a8[];
@@ -54,7 +54,6 @@ void* effMagic3N64Entry(f32 x, f32 y, f32 z, s32 type, s32 arg) {
 void effMagic3Main(void* effect) {
     typedef struct Vec3 { f32 x; f32 y; f32 z; } Vec3;
     extern void effDelete(void*);
-    extern f64 sin(f64);
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effMagic3Disp(s32, s32);

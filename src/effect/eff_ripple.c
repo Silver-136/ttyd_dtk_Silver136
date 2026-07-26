@@ -1,7 +1,6 @@
 #include "effect/eff_ripple.h"
+#include "effect/n64/eff_ripple_n64.h"
 
-void* effRippleN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 time);
-void effRippleN64SetRxRz(void* effect, f32 rx, f32 rz);
 extern char str_RippleN64_802f9bd8[];
 int strcmp(const char* s1, const char* s2);
 

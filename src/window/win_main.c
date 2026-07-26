@@ -1,10 +1,11 @@
 #include "window/win_main.h"
 
+#include "driver/seqdrv.h"
+#include "statuswindow.h"
+
 void* wp;
-void* memset(void*, int, unsigned long);
 void* __memAlloc(s32 heap, u32 size);
 void FontDrawStart(void);
-void statusWinForceOff(void);
 void allPartyForceSlitOff(void);
 void winRootDisp(s32 cameraId, void* work);
 s32 evtSetValue(void* evt, s32 var, s32 value);
@@ -32,6 +33,19 @@ void GXSetTexCoordGen2(s32 texCoord, s32 func, s32 srcParam, s32 mtx, s32 normal
 void GXClearVtxDesc(void);
 void GXSetVtxDesc(s32 attr, s32 type);
 void GXSetVtxAttrFmt(s32 vtxFmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
+void TEXGetGXTexObjFromPalette(s32 tpl, void* texObj, s32 id);
+void GXInitTexObjLOD(void* texObj, s32 minFilt, s32 magFilt, f32 minLod, f32 maxLod, f32 lodBias, s32 biasClamp, s32 doEdgeLod, s32 maxAniso);
+void GXLoadTexObj(void* texObj, s32 mapId);
+void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
+void GXSetZCompLoc(s32 beforeTex);
+void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
+void GXSetTevColor(s32 reg, void* color);
+u16 GXGetTexObjHeight(void* texObj);
+u16 GXGetTexObjWidth(void* texObj);
+void GXLoadPosMtxImm(void* mtx, s32 id);
+void GXSetCurrentMtx(s32 id);
+void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
 void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
 void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
 void PSMTXConcat(void* a, void* b, void* ab);
@@ -47,6 +61,8 @@ extern void* gp;
 extern f32 float_3_8042401c;
 extern f32 float_10_80424020;
 extern f32 float_0p2_80424024;
+void* marioGetPtr(void);
+s32 vsprintf(char* buffer, const char* format, void* args);
 void* camGetPtr(s32 cameraId);
 f64 sin(f64 x);
 void PSVECSubtract(void* a, void* b, void* ab);
@@ -98,9 +114,6 @@ void winOpenDisable(void) {
 
 void winMain(void) {
     extern void* g_winPtr;
-    extern void* marioGetPtr(void);
-    extern s32 seqGetSeq(void);
-    extern s32 seqCheckSeq(void);
     extern s32 keyGetButtonTrg(s32 port);
     extern s32 keyGetButtonRep(s32 port);
     extern s32 keyGetDirTrg(s32 port);
@@ -130,12 +143,10 @@ void winMain(void) {
     extern void marioPartyGoodbye(void);
     extern void marioPartyHello(s32 partyId);
     extern u8 partyDataTbl[];
-    extern void statusWinForceUpdate(void);
     extern s32 strcmp(const char* left, const char* right);
     extern s32 swByteGet(s32 index);
     extern s32 partyChkJoin(s32 partyId);
     extern s32 pouchGetHaveBadgeCnt(void);
-    extern void* gp;
     void* win = g_winPtr;
     void* player = marioGetPtr();
     s32 state = *(s32*)((s32)win + 0x20);
@@ -294,7 +305,6 @@ u8 winDispKoopa(void) {
 s32 itemUseFunc(void* pEvt, int param_2) {
     extern void* marioGetPtr(void);
     extern void* partyGetPtr(s32 slot);
-    extern void statusWinForceOpen(void);
     extern s32 pouchGetHP(void);
     extern void pouchSetHP(s16 hp);
     extern s32 pouchGetFP(void);
@@ -471,7 +481,6 @@ s32 cam_r(void) {
     return 0;
 }
 u32 winGhostDiaryChk(void) {
-    extern s32 seqGetSeq(void);
 
     if (*(s32*)((s32)wp + 0x20) == 0x12D) {
         return 1;
@@ -489,7 +498,6 @@ void winFontSet(void* position, void* scale, void* color, char* format, ...) {
         void* inputArgArea;
         void* regSaveArea;
     } FontVaList;
-    extern s32 vsprintf(char* buffer, const char* format, void* args);
 
     FontVaList args;
     char text[4104];
@@ -530,7 +538,6 @@ void winFontSetR(void* position, void* scale, void* color, char* format, ...) {
         void* inputArgArea;
         void* regSaveArea;
     } FontVaList;
-    extern s32 vsprintf(char* buffer, const char* format, void* args);
 
     FontVaList args;
     char text[4096];
@@ -566,7 +573,6 @@ void winFontSetEdge(void* position, void* scale, void* color, char* format, ...)
         void* inputArgArea;
         void* regSaveArea;
     } FontVaList;
-    extern s32 vsprintf(char* buffer, const char* format, void* args);
 
     FontVaList args;
     char text[4104];
@@ -660,19 +666,6 @@ void winTexInit(s32 texData) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void winTexSet(s32 texId, void* pos, void* size, void* color) {
-    extern void TEXGetGXTexObjFromPalette(s32 tpl, void* texObj, s32 id);
-    extern void GXInitTexObjLOD(void* texObj, s32 minFilt, s32 magFilt, f32 minLod, f32 maxLod, f32 lodBias, s32 biasClamp, s32 doEdgeLod, s32 maxAniso);
-    extern void GXLoadTexObj(void* texObj, s32 mapId);
-    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
-    extern void GXSetZCompLoc(s32 beforeTex);
-    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
-    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
-    extern void GXSetTevColor(s32 reg, void* color);
-    extern u16 GXGetTexObjHeight(void* texObj);
-    extern u16 GXGetTexObjWidth(void* texObj);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
     u8 texObj[0x20];
     f32 trans[3][4];
     f32 scale[3][4];
@@ -718,19 +711,6 @@ void winTexSet(s32 texId, void* pos, void* size, void* color) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void unk_8017c9bc(s32 texId, void* pos, void* size, void* color) {
-    extern void TEXGetGXTexObjFromPalette(s32 tpl, void* texObj, s32 id);
-    extern void GXInitTexObjLOD(void* texObj, s32 minFilt, s32 magFilt, f32 minLod, f32 maxLod, f32 lodBias, s32 biasClamp, s32 doEdgeLod, s32 maxAniso);
-    extern void GXLoadTexObj(void* texObj, s32 mapId);
-    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
-    extern void GXSetZCompLoc(s32 beforeTex);
-    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
-    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
-    extern void GXSetTevColor(s32 reg, void* color);
-    extern u16 GXGetTexObjHeight(void* texObj);
-    extern u16 GXGetTexObjWidth(void* texObj);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
     u8 texObj[0x20];
     f32 trans[3][4];
     f32 scale[3][4];
@@ -769,20 +749,7 @@ void unk_8017c9bc(s32 texId, void* pos, void* size, void* color) {
 #pragma use_lmw_stmw off
 u8 winTexSetRot(s32 texId, void* pos, void* size, void* color, f32 angle) {
     extern f32 float_deg2rad_80424010;
-    extern void TEXGetGXTexObjFromPalette(s32 tpl, void* texObj, s32 id);
-    extern void GXInitTexObjLOD(void* texObj, s32 minFilt, s32 magFilt, f32 minLod, f32 maxLod, f32 lodBias, s32 biasClamp, s32 doEdgeLod, s32 maxAniso);
-    extern void GXLoadTexObj(void* texObj, s32 mapId);
-    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
-    extern void GXSetZCompLoc(s32 beforeTex);
-    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
-    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
-    extern void GXSetTevColor(s32 reg, void* color);
-    extern u16 GXGetTexObjHeight(void* texObj);
-    extern u16 GXGetTexObjWidth(void* texObj);
     extern void PSMTXRotRad(void* mtx, s32 axis, f32 rad);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
     u8 texObj[0x20];
     f32 mtx[3][4];
     f32 rot[3][4];
@@ -869,19 +836,6 @@ u8 winTexInit_x2(s32 texData) {
     GXSetTevSwapMode(1, 0, 0);
 }
 u8 winTexSet_x2(s32 texId0, s32 texId1, void* pos, void* size, void* color) {
-    extern void TEXGetGXTexObjFromPalette(s32 tpl, void* texObj, s32 id);
-    extern void GXInitTexObjLOD(void* texObj, s32 minFilt, s32 magFilt, f32 minLod, f32 maxLod, f32 lodBias, s32 biasClamp, s32 doEdgeLod, s32 maxAniso);
-    extern void GXLoadTexObj(void* texObj, s32 mapId);
-    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
-    extern void GXSetZCompLoc(s32 beforeTex);
-    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
-    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
-    extern void GXSetTevColor(s32 reg, void* color);
-    extern u16 GXGetTexObjHeight(void* texObj);
-    extern u16 GXGetTexObjWidth(void* texObj);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
     u8 texObj[0x20];
     f32 trans[3][4];
     f32 scale[3][4];
@@ -945,7 +899,6 @@ void winIconInit(void) {
 
 u8 winIconGrayInit(void) {
     extern void GXSetTevSwapModeTable(s32 table, s32 r, s32 g, s32 b, s32 a);
-    extern void GXSetTevColor(s32 reg, void* color);
     extern u32 dat_80423ffc;
     u32 color;
     u32 fogColor;
@@ -1010,18 +963,6 @@ u8 winIconGrayInit(void) {
 #pragma use_lmw_stmw off
 u8 winIconSet(s32 iconId, void* pos, void* size, void* color) {
     extern void iconGetTexObj(void* texObj, u16 iconId);
-    extern void GXInitTexObjLOD(void* texObj, s32 minFilt, s32 magFilt, f32 minLod, f32 maxLod, f32 lodBias, s32 biasClamp, s32 doEdgeLod, s32 maxAniso);
-    extern void GXLoadTexObj(void* texObj, s32 mapId);
-    extern void GXSetBlendMode(s32 type, s32 srcFactor, s32 dstFactor, s32 op);
-    extern void GXSetZCompLoc(s32 beforeTex);
-    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
-    extern void GXSetZMode(s32 enable, s32 func, s32 updateEnable);
-    extern void GXSetTevColor(s32 reg, void* color);
-    extern u16 GXGetTexObjHeight(void* texObj);
-    extern u16 GXGetTexObjWidth(void* texObj);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
     u8 texObj[0x20];
     f32 trans[3][4];
     f32 scale[3][4];

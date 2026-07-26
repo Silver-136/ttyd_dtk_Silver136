@@ -1,4 +1,5 @@
 #include "battle/battle_ac.h"
+#include "battle/battle_pad.h"
 
 s32 BattleACPadCheckRecordTrigger(s32 id, u32 mask);
 
@@ -7,8 +8,6 @@ typedef struct BattleACPadRecordWork {
     s32 mButtonsPressedHistory[4];
 } BattleACPadRecordWork;
 
-void BtlPad_WorkInit(void* work);
-void BtlPad_WorkUpdate(void* work, s32 flags);
 s32 psndSFXOn(const char* name);
 void psndSFXOff(s32 id);
 void dispEntry(s32 cameraId, s32 priority, void* callback, f32 z, void* param);
@@ -82,7 +81,7 @@ good:
     BattleAudience_Case_ActionCommandGood(unit);
 }
 
-void BattleActionCommandSetup(void* battleWork, s32 param, void* unit, s32 rawArg, s32 value) {
+void BattleActionCommandSetup(BattleWork* battleWork, s32 param, BattleWorkUnit* unit, s32 rawArg, s32 value) {
     typedef struct ActionCommandEntry {
         s32 id;
         void* mainCallback;
@@ -124,11 +123,11 @@ void BattleActionCommandSetup(void* battleWork, s32 param, void* unit, s32 rawAr
     }
 }
 
-void BattleActionCommandStart(void* work) {
+void BattleActionCommandStart(BattleWork* work) {
     *(s32*)((s32)work + 0x1C9C) = 100;
 }
 
-void BattleActionCommandStop(void* work) {
+void BattleActionCommandStop(BattleWork* work) {
     void (*callback)(void*);
 
     callback = *(void (**)(void*))((s32)work + 0x1CAC);
@@ -137,7 +136,7 @@ void BattleActionCommandStop(void* work) {
     }
 }
 
-void BattleActionCommandCheckDefence(void* unit, s32 value) {
+void BattleActionCommandCheckDefence(BattleWorkUnit* unit, s32 value) {
     extern u8 N_normal_guard_frames[];
     extern u8 N_superguard_frames[];
     u8 normalFrames[7];
@@ -269,11 +268,11 @@ void BattleActionCommandResetDefenceResult(void) {
     BtlPad_WorkInit((void*)((s32)work + 0x1D1C));
 }
 
-s32 BattleActionCommandGetDifficulty(void* work) {
+s32 BattleActionCommandGetDifficulty(BattleWork* work) {
     return *(u8*)((s32)work + 0x1CBD);
 }
 
-void BattleActionCommandSetDifficulty(void* work, void* unit, s32 difficulty) {
+void BattleActionCommandSetDifficulty(BattleWork* work, BattleWorkUnit* unit, s32 difficulty) {
     s32 value;
 
     *(u8*)((s32)work + 0x1CBC) = difficulty;
@@ -292,7 +291,7 @@ void BattleActionCommandSetDifficulty(void* work, void* unit, s32 difficulty) {
     *(u8*)((s32)work + 0x1CBD) = value;
 }
 
-s32 BattleActionCommandGetPrizeLv(void* work, void* unit, s32 base) {
+s32 BattleActionCommandGetPrizeLv(BattleWork* work, BattleWorkUnit* unit, s32 base) {
     s32 difficulty;
     s32 result;
 
@@ -548,7 +547,6 @@ void BattleAcGaugeSeInit(void) {
 }
 
 void BattleAcGaugeSeUpdate(f32 value) {
-    extern f32 float_0_80422188;
     extern f32 float_100_8042218c;
     extern f32 float_0p01_80422190;
     extern f32 float_4092_80422194;

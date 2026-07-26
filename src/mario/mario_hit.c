@@ -1,7 +1,28 @@
 #include "mario/mario_hit.h"
+#include "bowser/koopa_hit.h"
+#include "bowser/koopa_motion.h"
+#include "driver/hitdrv.h"
+#include "mario/mario.h"
+#include "party/party_vivian.h"
+
+s32 chkfilterVec(s32 param_1, int param_2);
+s32 chkfilterVecRoll(s32 param_1, int param_2);
+s32 chkfilterVecVivian(s32 param_1, int param_2);
+extern void marioChgMot(s32 motion);
+extern void marioSetFallPara(void);
+extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
+extern f64 __fabs(f64 value);
+extern f64 angleABf(f64 x1, f64 y1, f64 x2, f64 y2);
+extern f64 sin(f64 angle);
+extern f64 cos(f64 angle);
+extern f32 toMovedir(f64 angle);
+extern f64 sqrt(f64 value);
+extern s32 strcmp(const char* a, const char* b);
+extern void marioSearchFrontWall_staying(f64);
+extern f64 revise360(f64 angle);
+extern s32 jabaraNoHitChk(void);
 
 void marioHitCheckWidth(void) {
-    extern void* marioGetPtr(void);
     extern f32 float_18_80420960;
     extern f32 float_1_804208c4;
     extern f32 float_6_8042099c;
@@ -156,11 +177,7 @@ int marioHitCheckVec(void* param_1, void* param_2, float* param_3, void* param_4
         Vec hitPos;
         f32 radius;
     } HitCheckArg;
-    extern void* marioGetPtr(void);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
     extern f32 float_0p5_804208cc;
     extern f32 float_neg0p5_804208d0;
     extern f32 float_1000_804208a8;
@@ -218,11 +235,7 @@ s32 marioHitCheck(f64 x0, f64 y0, f64 z0, f64 x1, f64 y1, f64 z1, f32* outNx, f3
         Vec hitPos;
         f32 radius;
     } HitCheckArg;
-    extern void* marioGetPtr(void);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
     extern Vec vec3_802c3b78;
     extern Vec vec3_802c3b84;
     extern f32 float_0_804208ac;
@@ -307,13 +320,9 @@ s32 marioHitCheck2(void* start, void* end, f32* outNormal, void* outHitPos, f32*
         f32 radius;
     } HitCheckArg;
 
-    extern void* marioGetPtr(void);
     extern s32 marioGetJabaraState(void);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
     extern s32 chkFilterAttr2(s32, s32);
-    extern s32 chkfilterVecVivian(s32, s32);
-    extern s32 chkfilterVecRoll(s32, s32);
-    extern s32 chkfilterVec(s32, s32);
     extern f32 float_0_804208ac;
     extern f32 float_0p5_804208cc;
     extern f32 float_neg0p5_804208d0;
@@ -433,8 +442,6 @@ jabara_motion:
 }
 
 void clear_hitobj_ride(void) {
-    extern void* marioGetPtr(void);
-    extern void kpaClearHitobjRide(void);
 
     void* mario = marioGetPtr();
     *(s32*)((s32)mario + 0x1E8) = 0;
@@ -444,8 +451,6 @@ void clear_hitobj_ride(void) {
 }
 
 u32 marioChkBero(int param_1) {
-    extern u32 hitGetAttr(void* hit);
-    extern void* marioGetPtr(void);
     void* mario;
     u32 attr;
 
@@ -475,11 +480,7 @@ u8 marioSearchUnder(void) {
         Vec hitPos;
         f32 radius;
     } HitCheckArg;
-    extern void* marioGetPtr(void);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
     extern Vec vec3_802c3b9c;
     extern f32 float_0p5_804208cc;
     extern f32 float_1000_804208a8;
@@ -539,11 +540,7 @@ u8 searchUnder2(double param_1, double param_2, double param_3, float* param_4) 
         Vec hitPos;
         f32 radius;
     } HitCheckArg;
-    extern void* marioGetPtr(void);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
     extern Vec vec3_802c3ba8;
     extern Vec vec3_802c3bb4;
     extern f32 float_37_8042097c;
@@ -603,21 +600,12 @@ void marioChkGnd(void) {
         f32 radius;
     } HitCheckArg;
     extern Vec vec3_802c3b78[];
-    extern void* marioGetPtr(void);
-    extern s32 vivianGetStatus(void);
-    extern void kpaClearHitobjRide(void);
     extern void* marioSearchGround(f64, f64, f32*, f32*, f32*);
     extern void* marioSearchGroundRoll(f64, f64, f32*, f32*, f32*);
     extern void* kpaSearchGround(f64, f32*, f32*, f32*);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
-    extern u32 hitGetAttr(void* hit);
     extern s32 marioChkFrontStep(f32*, void*, void*);
-    extern void marioChgMot(s32 motion);
     extern void marioChgMotSub(s32 motion, s32 param);
-    extern void marioSetFallPara(void);
     extern s32 marioChkShipMoveMode(void);
     extern void marioShipChgFall(void);
     extern void roll_upstairs_on(void);
@@ -762,12 +750,9 @@ void marioChkGnd(void) {
 }
 
 void marioChkGnd2(void) {
-    extern void* marioGetPtr(void);
     extern void* marioSearchGround(f32 param_1, void* yOut, f32 velocityY, void* param_4, void* param_5);
     extern void* kpaSearchGround(f32 param_1, void* yOut, void* param_3, void* param_4);
     extern s32 kpaFireAttackCheck(void);
-    extern void marioChgMot(s32 motion);
-    extern void quake_kpaLandOn(void);
     extern s32 marioBgmodeChk(void);
     extern void camFollowYOn(void);
     extern void kpaCamFollow(void);
@@ -839,7 +824,6 @@ s32 marioSearchGround(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f32* 
         f32 radius;
     } HitCheckArg;
 
-    extern void* marioGetPtr(void);
     extern f64 sin(f64 value);
     extern f64 cos(f64 value);
     extern f64 sqrt(f64 value);
@@ -848,9 +832,6 @@ s32 marioSearchGround(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f32* 
     extern f64 toMovedir(f64 angle);
     extern f64 revise360(f64 angle);
     extern s32 hitCheckVecFilter(HitCheckArg* hit, void* filter);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
     extern void marioUpdateCamCollision(Vec* position);
     extern Vec vec3_802c3bd8;
     extern f32 float_0_804208ac;
@@ -1011,14 +992,7 @@ s32 marioSearchGroundRoll(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f
         f32 radius;
     } HitCheckArg;
 
-    extern void* marioGetPtr(void);
-    extern f64 sqrt(f64 value);
-    extern f64 __fabs(f64 value);
-    extern f64 angleABf(f64 x1, f64 y1, f64 x2, f64 y2);
     extern s32 hitCheckVecFilter(HitCheckArg* hit, void* filter);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
     extern Vec vec3_802c3bd8;
     extern f32 float_0_804208ac;
     extern f32 float_0p01_80420964;
@@ -1168,11 +1142,7 @@ s32 marioSearchGroundRoll(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f
 }
 
 void marioChkToge(void) {
-    extern void* marioGetPtr(void);
-    extern s32 vivianGetStatus(void);
-    extern u32 hitGetAttr(void* hit);
     extern void set_damage_root_ypos(f64 y);
-    extern void marioChgMot(s32 motion);
     extern f32 float_0p5_804208cc;
     void* mario;
     void* hit;
@@ -1215,7 +1185,6 @@ void marioChkToge(void) {
 }
 
 void marioChkLandon(f32 velocityY, s32 param_2) {
-    extern void* marioGetPtr(void);
     extern void marioLandonChk_old(f32 velocityY, s32 param_1);
     extern void marioSearchGround(s32 param_1, f32 velocityY1, f32 velocityY2, void* param_4, void* param_5);
     extern void marioSearchGroundRoll(s32 param_1, f32 velocityY1, f32 velocityY2, void* param_4, void* param_5);
@@ -1250,7 +1219,6 @@ s32 marioLandonChk_old(f64 velocityY, f32* outY) {
         f32 radius;
     } HitCheckArg;
 
-    extern void* marioGetPtr(void);
     extern f32 toMovedir(f64 angle);
     extern f64 revise360(f64 angle);
     extern s32 kpaSearchGround(f64 length, f32* outY, void* outA, void* outB);
@@ -1260,9 +1228,6 @@ s32 marioLandonChk_old(f64 velocityY, f32* outY) {
     extern f64 __fabs(f64 value);
     extern f64 angleABf(f64 x1, f64 y1, f64 x2, f64 y2);
     extern s32 hitCheckVecFilter(HitCheckArg* hit, void* filter);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
     extern Vec vec3_802c3bf0;
     extern f32 float_0_804208ac;
     extern f32 float_0p1_804208ec;
@@ -1391,7 +1356,6 @@ s32 marioChkLandon2(f64 velocityY, f64 yOffset, f32* outY) {
         f32 radius;
     } HitCheckArg;
 
-    extern void* marioGetPtr(void);
     extern f32 toMovedir(f64 angle);
     extern f64 sin(f64 angle);
     extern f64 cos(f64 angle);
@@ -1399,9 +1363,6 @@ s32 marioChkLandon2(f64 velocityY, f64 yOffset, f32* outY) {
     extern f64 __fabs(f64 value);
     extern f64 angleABf(f64 x1, f64 y1, f64 x2, f64 y2);
     extern s32 hitCheckVecFilter(HitCheckArg* hit, void* filter);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
     extern Vec vec3_802c3bf0;
     extern f32 float_0_804208ac;
     extern f32 float_0p1_804208ec;
@@ -1518,13 +1479,10 @@ f64 marioChkOverhead(void) {
         f32 y;
         f32 z;
     } Vec;
-    extern void* marioGetPtr(void);
-    extern s32 jabaraNoHitChk(void);
     extern u8 marioSearchHead_jabara(void);
     extern u8 marioSearchHead(void);
     extern u8 marioSearchHead_roll(void);
     extern void* kpaSearchHead(void*, void*);
-    extern u32 hitGetAttr(void*);
     extern void* mobjHitObjPtrToPtr(s32);
     extern s32 strcmp(char*, char*);
     extern void marioItemGetDisable(void);
@@ -1535,9 +1493,7 @@ f64 marioChkOverhead(void) {
     extern f64 partyGetHeight(void*);
     extern s32 marioChkSlitEnd(void);
     extern void marioChgStayMotion(void);
-    extern void marioChgMot(s32);
     extern void psndSFXOn_3D(s32, void*);
-    extern void marioSetFallPara(void);
     extern char str_MOBJ_PowerUpBlock_802c3d98[];
     extern char str_MOBJ_SaveBlock_802c3dac[];
     extern char str_MOBJ_RecoveryBlock_802c3dbc[];
@@ -1690,11 +1646,8 @@ f64 marioChkOverhead(void) {
 
 double marioChkOverheadJabara(void* param_1, float* param_2) {
     typedef struct Vec { f32 x, y, z; } Vec;
-    extern void* marioGetPtr(void);
-    extern s32 jabaraNoHitChk(void);
     extern void* marioSearchHead_jabara(f64, f32*, f32*, s32*);
     extern void* marioSearchHead(f64, f32*, f32*);
-    extern void marioChgMot(s32);
     extern f32 float_0_804208ac;
     extern f32 float_0p1_804208ec;
     extern f32 float_neg1_804208e4;
@@ -1742,11 +1695,6 @@ s32 marioSearchHead(f64 velocityY, f32* pos, f32* outHeight) {
         f32 y;
         f32 z;
     } Vec;
-    extern void* marioGetPtr(void);
-    extern f32 toMovedir(f64);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
-    extern f64 angleABf(f64, f64, f64, f64);
     extern u8 marioHitCheck2(void);
     extern Vec vec3_802c3c44;
     extern f32 float_0_804208ac;
@@ -1876,14 +1824,8 @@ s32 marioSearchHead_roll(f64 heightAdd, f32* pos, f32* outHeight) {
         Vec hitPos;
         f32 radius;
     } HitCheckArg;
-    extern void* marioGetPtr(void);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern void movePos(f64, f64, void*, void*);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
     extern Vec vec3_802c3c50;
     extern Vec vec3_802c3c5c;
     extern f32 float_neg1_804208e4;
@@ -1977,11 +1919,7 @@ s32 marioSearchHead_roll(f64 heightAdd, f32* pos, f32* outHeight) {
 
 void* marioSearchHead_jabara(f64 height, f32* position, f32* distance, s32* side) {
     typedef struct Vec { f32 x, y, z; } Vec;
-    extern void* marioGetPtr(void);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern s32 marioHitCheck2(void*, void*, f32*, void*, f32*);
-    extern u32 hitGetAttr(void*);
     extern Vec vec3_802c3c68;
     extern f32 float_0_804208ac;
     extern f32 float_0p5_804208cc;
@@ -2035,11 +1973,8 @@ void* marioSearchHead_jabara(f64 height, f32* position, f32* distance, s32* side
 
 void marioCheckWall(f64 speed, f64 angle) {
     typedef struct Vec { f32 x, y, z; } Vec;
-    extern void* marioGetPtr(void);
-    extern void marioSearchFrontWall_staying(f64);
     extern void dou10_yoko_yari(f32*);
     extern void* searchFrontWall(f64, f64, f64, Vec*, f32*);
-    extern u32 hitGetAttr(void*);
     extern char* hitGetName(void*);
     extern s32 strncmp(const char*, const char*, u32);
     extern void movePos(f64, f64, f32*, f32*);
@@ -2115,12 +2050,9 @@ void marioCheckWall(f64 speed, f64 angle) {
 
 void marioSearchFrontWall_staying(f64 angle) {
     typedef struct Vec { f32 x, y, z; } Vec;
-    extern void* marioGetPtr(void);
     extern void* searchFrontWall(f64, f64, f64, Vec*, f32*);
     extern f64 toMovedir(f64);
     extern void movePos(f64, f64, f32*, f32*);
-    extern s32 strcmp(const char*, const char*);
-    extern s32 vivianGetStatus(void);
     extern s32 marioChkWallAround(f64, f64, f64, f64, Vec*, s32);
     extern void* gp;
     extern char str_dou_10_802c3d88[];
@@ -2201,14 +2133,9 @@ void marioCheckWall_roll(f64 speed, f64 angle) {
         f32 radius;
     } HitCheckArg;
 
-    extern void* marioGetPtr(void);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
     extern u8 marioSearchFrontWall_staying(void);
     extern u8 searchFrontWall(s64, s64, s64, void*, s32);
-    extern u32 hitGetAttr(void*);
     extern void movePos(f64, f64, void*, void*);
     extern s32 marioChkWallAround(void*, s32, f32, f32, f32);
     extern Vec vec3_802c3c74;
@@ -2371,12 +2298,7 @@ s32 marioChkFront(f64 angle, f64 maxDist, f32* outDist, f32* pos) {
         Vec hitPos;
         f32 radius;
     } HitCheckArg;
-    extern void sincosf(f32, f32*, f32*);
-    extern void* marioGetPtr(void);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
     extern f64 distABf(f64, f64, f64, f64);
     extern Vec vec3_802c3c80;
     extern f32 float_0_804208ac;
@@ -2455,16 +2377,9 @@ void* searchFrontWall(f64 speed, f64 angle, f64 radius, void* position, s32 outP
         Vec hitPos;
         f32 radius;
     } HitCheckArg;
-    extern void* marioGetPtr(void);
-    extern s32 vivianGetStatus(void);
-    extern void sincosf(f32, f32*, f32*);
     extern s32 marioChkSts(u32);
-    extern s32 strcmp(const char*, const char*);
     extern s32 kpaGetLevel(void);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern s32 chkfilterVecVivian(s32, s32);
-    extern s32 chkfilterVecRoll(s32, s32);
-    extern s32 chkfilterVec(s32, s32);
     extern s32 chkBalloon(void*);
     extern void* gp;
     extern char str_eki_04_802c3d90[];
@@ -2653,15 +2568,8 @@ void* dou10_yoko_yari(float* outSpeed) {
         Vec hitPos;
         f32 radius;
     } HitCheckArg;
-    extern void* marioGetPtr(void);
-    extern f32 toMovedir(f64);
     extern s32 strcmp(char*, char*);
-    extern s32 vivianGetStatus(void);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
-    extern u32 hitGetAttr(void*);
     extern void movePos(f64, f64, void*, void*);
     extern void* gp;
     extern char str_dou_10_802c3d88[];
@@ -2764,14 +2672,8 @@ int dou10_yoko_yari2(float* outSpeed) {
         Vec hitPos;
         f32 radius;
     } HitCheckArg;
-    extern void* marioGetPtr(void);
-    extern f32 toMovedir(f64);
     extern s32 strcmp(char*, char*);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
-    extern u32 hitGetAttr(void*);
     extern void movePos(f64, f64, void*, void*);
     extern void* gp;
     extern char str_dou_10_802c3d88[];
@@ -2851,12 +2753,9 @@ void* N_dou10_yoko_yari3(void) {
         VecLocal hitPos;
         f32 radius;
     } HitCheckArgLocal;
-    extern void* marioGetPtr(void);
     extern void* gp;
-    extern s32 strcmp(const char*, const char*);
     extern char str_dou_10_802c3d88[];
     extern void movePos(f64, f64, f32*, f32*);
-    extern void sincosf(f32, f32*, f32*);
     extern void* hitCheckVecFilter(void*, void*);
     extern f32 float_10_80420904;
     extern f32 float_neg10_8042090c;
@@ -2921,16 +2820,8 @@ s32 marioChkFrontStep(f32* outY, f32* outDrop, f32* outAngle) {
         f32 radius;
     } HitCheckArg;
 
-    extern void* marioGetPtr(void);
-    extern f32 toMovedir(f64);
     extern f64 revise360(f64);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
-    extern f64 angleABf(f64, f64, f64, f64);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
     extern Vec vec3_802c3d04;
     extern f32 float_0_804208ac;
     extern f32 float_0p1_804208ec;
@@ -3077,14 +2968,8 @@ s32 marioChkWallAround(f64 speed, f64 angle, f64 radius, f64 height,
         VecLocal hitPos;
         f32 radius;
     } HitCheckArgLocal;
-    extern void* marioGetPtr(void);
     extern s32 kpaGetStageViewType(void);
-    extern void sincosf(f32, f32*, f32*);
     extern void* hitCheckVecFilter(void*, void*);
-    extern s32 chkfilterVecVivian(s32, s32);
-    extern s32 chkfilterVecRoll(s32, s32);
-    extern s32 chkfilterVec(s32, s32);
-    extern u32 hitGetAttr(void*);
     extern f32 PSVECMag(void*);
     extern void PSVECScale(void*, void*, f32);
     extern void PSVECAdd(void*, void*, void*);
@@ -3260,13 +3145,7 @@ s32 marioSlitChkWallAround(void) {
         f32 radius;
     } HitCheckArg;
 
-    extern void* marioGetPtr(void);
-    extern void sincosf(f32, f32*, f32*);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern s32 chkfilterVecVivian(s32, int);
-    extern s32 chkfilterVecRoll(s32, int);
-    extern s32 chkfilterVec(s32, int);
-    extern u32 hitGetAttr(void*);
     extern Vec vec3_802c3b78;
     extern f32 float_0_804208ac;
     extern f32 float_1_804208c4;
@@ -3421,10 +3300,7 @@ s32 marioSlitChkWallAround(void) {
 
 void marioCheckWallShip(f64 speed, f64 angle) {
     typedef struct VecLocal { f32 x, y, z; } VecLocal;
-    extern void* marioGetPtr(void);
-    extern void marioSearchFrontWall_staying(f64);
     extern void* searchFrontWall(f64, f64, f64, void*, f32*);
-    extern u32 hitGetAttr(void*);
     extern void movePos(f64, f64, f32*, f32*);
     extern s32 marioChkWallAround(f64, f64, f64, f64, void*, s32);
     extern void PSVECSubtract(void*, void*, void*);

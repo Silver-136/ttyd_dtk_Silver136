@@ -1,6 +1,7 @@
 #include "battle/battle_message.h"
 
 extern void* _battleWorkPointer;
+extern s32 evtGetValue(void* evt, s32 arg);
 extern u32 dat_80424bb8;
 extern f32 float_10_80424bbc;
 extern f32 float_neg29_80424bc0;
@@ -13,7 +14,6 @@ void FontDrawMessage(s32 x, s32 y, char* msg);
 
 
 u32 btlevtcmd_AnnounceMessage(int param_1, int param_2) {
-    extern s32 evtGetValue(void* evt, s32 arg);
     extern char* msgSearch(char* msg);
     extern int sprintf(char* str, const char* format, ...);
     extern char* strcpy(char* dst, const char* src);
@@ -107,9 +107,6 @@ void _disp(void) {
 }
 
 s32 btlevtcmd_AnnounceSetParam(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-
     void* battleWork = _battleWorkPointer;
     s32* args = *(s32**)((s32)evt + 0x18);
     s32* params = (s32*)((s32)battleWork + 0x18C8C);

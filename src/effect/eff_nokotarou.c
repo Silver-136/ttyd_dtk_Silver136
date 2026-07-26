@@ -6,6 +6,7 @@ void effNokotarouMain(void* entry);
 
 extern char str_Nokotarou_80302b18[];
 extern f32 float_0_80428a34;
+extern f32 float_1_80428a40;
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -64,7 +65,6 @@ void effNokotarouMain(void* entry) {
     extern char str_MOBJ_EFF_nokotarou3_80302b04[];
     extern char str_S_1_80428a44;
     extern char str_A_1_80428a48;
-    extern f32 float_1_80428a40;
     extern f32 float_0p03125_80428a4c;
 
     void* work;
@@ -151,10 +151,8 @@ void effNokotarouDisp(s32 cameraId, void* entry) {
     extern u32 dat_80428a28;
     extern u32 dat_80428a2c;
     extern f32 float_deg2rad_80428a30;
-    extern f32 float_0_80428a34;
     extern f32 float_2_80428a38;
     extern f32 float_100_80428a3c;
-    extern f32 float_1_80428a40;
 
     u32 color;
     u32 tempColor;

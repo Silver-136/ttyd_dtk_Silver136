@@ -1,9 +1,12 @@
 #include "statuswindow.h"
+#include "driver/seqdrv.h"
 
 void* wp;
 s32 valueCheck(void);
 void statusGetValue(void* out);
-void statusWinForceOff(void);
+extern void* gp;
+extern void* marioGetPtr(void);
+extern void* pouchGetPtr(void);
 void statusWinDisp(void);
 void* __memAlloc(s32 heap, u32 size);
 extern s16 alwaysDt[];
@@ -68,9 +71,7 @@ void statusWinReInit(void) {
 }
 
 void statusWinMain(void) {
-    extern void* marioGetPtr(void);
     extern s32 strcmp(const char*, const char*);
-    extern s32 seqGetSeq(void);
     extern s32 marioChkCtrl(void);
     extern s32 marioChkKey(void);
     extern f32 PSVECDistance(void*, void*);
@@ -78,7 +79,6 @@ void statusWinMain(void) {
     extern double cos(double);
     extern void dispEntry(s32, s32, void*, s32, f32);
     extern void valueUpdate(void);
-    extern void* gp;
     extern char str_yuu_80422c5c[];
     extern f32 float_16_80422c48;
     extern f32 float_28_80422c60;
@@ -230,12 +230,9 @@ u8 gaugeDisp(s32 value, f32 x, f32 y) {
         f32 y;
         f32 z;
     } LocalVec3;
-    extern void* pouchGetPtr(void);
     extern void iconDispGx(LocalVec3* pos, s32 size, s32 iconId, f32 scale);
     extern u16 gauge_wakka[];
     extern u16 gauge_back[];
-    extern f32 float_0_80422be8;
-    extern f32 float_1_80422bf4;
     extern f32 float_12_80422c58;
     s32 max;
     s32 i;
@@ -370,7 +367,6 @@ void statusWinDisp(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void statusGetValue(void* out) {
-    extern void* gp;
     extern void* _battleWorkPointer;
     extern s32 pouchGetHP(void);
     extern s32 pouchGetMaxHP(void);
@@ -380,10 +376,8 @@ void statusGetValue(void* out) {
     extern s32 pouchGetMaxAP(void);
     extern s32 pouchGetStarPoint(void);
     extern s32 pouchGetCoin(void);
-    extern void* pouchGetPtr(void);
     extern s32 marioBgmodeChk(void);
     extern s32 marioGetParty(void);
-    extern void* marioGetPtr(void);
     extern void* BattleGetMarioPtr(void* battleWork);
     extern void* BattleGetPartyPtr(void* battleWork);
     extern s32 BattleTransPartyId(s32 partyId);
@@ -445,7 +439,6 @@ void statusGetValue(void* out) {
 
 
 s32 valueCheck(void) {
-    extern void* gp;
     s16 values[12];
     void* work;
     s32 changed;

@@ -1,9 +1,10 @@
 #include "action/ac_power_gauge_lv2.h"
 
+void actionCommandDisp(f32 x, f32 y);
+
 /* stub-fill: battleAcMain_PowerGaugeLv2 | missing_definition | ghidra_signature */
 s32 battleAcMain_PowerGaugeLv2(s32 battle) {
     extern u32 BattleActionCommandGetDifficulty(void*);
-    extern void* memset(void*, s32, u32);
     extern s32 sysMsec2Frame(s32);
     extern s32 irand(s32);
     extern void BattleAcGaugeSeInit(void);
@@ -201,7 +202,6 @@ void battleAcDisp_PowerGaugeLv2(void* camera, void* wp) {
     extern f32 float_neg300_804281d4;
     extern f32 float_30_804281d8;
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
-    extern void actionCommandDisp(f32 x, f32 y);
 
     PowerGaugeLv2DispWork* disp;
     s32 state;

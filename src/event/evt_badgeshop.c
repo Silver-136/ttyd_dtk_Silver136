@@ -1,7 +1,5 @@
 #include "event/evt_badgeshop.h"
 
-s32 evtGetValue(EventEntry* event, s32 value);
-s32 evtSetValue(EventEntry* event, s32 target, s32 value);
 s32 badgeShop_add(void* shop, s16 item, s32 count);
 s32 badgeShop_get(void* shop, s16 item);
 s32 badgeShop_set(void* shop, s16 item, s32 count);
@@ -10,6 +8,7 @@ extern u8 badgeshopwork[];
 extern s32 badge_special_table[];
 extern s32 badge_starmaniac_table[];
 extern s32 badge_bottakuru_table[];
+extern s32 irand(s32);
 extern s32 badge_bteresa_table[];
 void badgeShop_bottakuruGeneration(void);
 
@@ -77,7 +76,6 @@ void badgeShop_bottakuruGeneration(void) {
         s32 item;
         s32 sort;
     } BottakuruEntry;
-    extern s32 irand(s32);
     extern void qqsort(void*, s32, s32, void*);
     BottakuruEntry entries[17] = {
         {0, 200}, {0, 200}, {0, 200}, {0, 200}, {0, 200}, {0, 200},
@@ -181,7 +179,6 @@ u8 badgeShop_bteresaGeneration(void) {
 
 
 void badgeShop_bargainGeneration(void) {
-    extern s32 irand(s32);
     extern void* memset(void*, s32, s32);
     extern s32 badge_special_table_stage_1_clear[];
     extern s32 badge_special_table_stage_2_clear[];

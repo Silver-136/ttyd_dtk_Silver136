@@ -1,9 +1,9 @@
 #include "battle/battle_event_subset.h"
+#include "battle/battle_sub.h"
+
 extern void* _battleWorkPointer;
 extern s32 evtGetValue(void* evt, s32 var);
-extern s32 evtCheckID(s32 evtId);
 extern void evtSetValue(void* evt, s32 var, s32 value);
-extern s32 BattleTransID(void* evt, s32 id);
 extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
 extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
 extern void* effWhirlwindN64Entry(f32 height, s32 flip, s32 unk, s32 duration);

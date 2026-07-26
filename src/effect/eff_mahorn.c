@@ -9,12 +9,6 @@ extern f32 float_0_804287f8;
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 void* effMahornEntry(s32 kind, s32 count, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
     void* entry = effEntry();
     s32 workCount = count + 1;

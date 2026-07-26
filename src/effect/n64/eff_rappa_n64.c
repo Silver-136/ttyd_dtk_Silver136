@@ -1,5 +1,7 @@
 #include "effect/n64/eff_rappa_n64.h"
 
+extern f32 float_10_80425e74;
+
 void* effRappaN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 baseAngle, f32 spreadAngle) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -12,7 +14,6 @@ void* effRappaN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 baseAngle, 
     extern f32 float_5_80425e7c;
     extern f32 float_0p25_80425e80;
     extern f32 float_360_80425e84;
-    extern f32 float_10_80425e74;
     void* entry;
     u8* work;
     u8* part;
@@ -84,7 +85,6 @@ void effRappaMain(void* effect) {
     extern const Vec3 vec3_802fbdc8;
     extern f32 float_0p8_80425e6c;
     extern f32 float_0p9_80425e70;
-    extern f32 float_10_80425e74;
     u8* work;
     u8* part;
     Vec3 dispPos;

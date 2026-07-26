@@ -1,13 +1,21 @@
 #include "action/star/sac_zubastar.h"
 
 extern void* _battleWorkPointer;
+void BattleFree(void* ptr);
+s32 irand(s32 max);
+extern f32 float_0_80427d40;
+extern f32 float_1_80427d30;
+extern f32 float_2_80427d70;
 
-void* memset(void* dst, int value, u32 size);
 void GXSetTexCopySrc(s32 left, s32 top, s32 wd, s32 ht);
 void GXSetTexCopyDst(s32 wd, s32 ht, s32 fmt, s32 mipmap);
 void GXCopyTex(void* dest, s32 clear);
 void GXPixModeSync(void);
 void* GetZubaStarPtr(void);
+void zubaStarDispStar(void);
+s32 zubastar_get_kouten(f32* outX, f32* outY, f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4);
+void zubastar_capture(void);
+void zubastar_disp_bomb(void);
 
 s32 star_stone_appear(void) {
     s32* ptr = GetZubaStarPtr();
@@ -24,22 +32,16 @@ s32 wait_star_stone_up(void) {
 s32 main_star(void) {
     typedef struct Vec { f32 x, y, z; } Vec;
 
-    extern void* GetZubaStarPtr(void);
-    extern void* _battleWorkPointer;
     extern void* BattleGetMarioPtr(void* battleWork);
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern void* effStarStoneEntry(f32 x, f32 y, f32 z, f32 scale, s32 type);
     extern f32 intplGetValue(f32 start, f32 end, s32 mode, s32 cur, s32 steps);
     extern void dispEntry(s32 camera, s32 mode, void* func, s32 param, f32 order);
-    extern void zubaStarDispStar(void);
 
-    extern f32 float_0_80427d40;
     extern f32 float_neg1000_80427da0;
-    extern f32 float_1_80427d30;
     extern f32 float_37_80427dc4;
     extern f32 float_50_80427da4;
     extern f32 float_neg1_80427d9c;
-    extern f32 float_2_80427d70;
     extern f32 float_2160_80427dc8;
     extern f32 float_300_80427d94;
     extern f32 float_1p5_80427dcc;
@@ -193,7 +195,6 @@ void zubastar_create_takaku(s32 count, void* points) {
         f32 y;
         f32 z;
     } Vec;
-    extern void* GetZubaStarPtr(void);
     extern void* BattleAlloc(u32 size);
     extern const Vec vec3_802fffb8;
 
@@ -224,12 +225,7 @@ void zubastar_create_takaku(s32 count, void* points) {
 void zubastar_bunkatu(void* lineStartRaw, void* lineEndRaw) {
     typedef struct Vec { f32 x, y, z; } Vec;
     typedef struct Takaku { s32 state; s32 vertexCount; Vec* vertices; Vec cur; Vec center; Vec start; Vec target; f32 zRot; f32 zRotStep; f32 yStep; s32 frame; s32 duration; } Takaku;
-    extern void* GetZubaStarPtr(void);
     extern void* BattleAlloc(s32 size);
-    extern void BattleFree(void* ptr);
-    extern s32 irand(s32 max);
-    extern s32 zubastar_get_kouten(f32* outX, f32* outY, f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4);
-    extern f32 float_0_80427d40;
     extern f32 vec3_802fffc4, FLOAT_802fffc8, FLOAT_802fffcc;
     extern f32 vec3_802fffd0, FLOAT_802fffd4, FLOAT_802fffd8;
 
@@ -322,9 +318,7 @@ void zubastar_bunkatu(void* lineStartRaw, void* lineEndRaw) {
 }
 
 s32 zubastar_get_kouten(f32* outX, f32* outY, f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4) {
-    extern f32 float_0_80427d40;
     extern f32 float_1Eneg05_80427dc0;
-    extern f32 float_1_80427d30;
 
     f32 dx1;
     f32 dx2;
@@ -383,9 +377,7 @@ s32 zubastar_main(void* event, s32 isFirstCall) {
     extern void psndSFXOff(s32);
     extern void BattleAudienceSoundCallKind(s32);
     extern void BattleAudienceSoundWhistleKind(s32);
-    extern s32 irand(s32);
     extern void* smartAlloc(s32, s32);
-    extern void zubastar_create_takaku(s32, void*);
     extern void btl_camera_shake_h(f32, f32, s32, s32, s32);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void zubastar_disp2D(void);
@@ -604,23 +596,17 @@ s32 zubastar_bomb(void* evt, s32 isFirstCall) {
         s32 duration;
     } Takaku;
 
-    extern void* GetZubaStarPtr(void);
     extern void dispEntry(s32 camera, s32 mode, void* func, s32 param, f32 order);
-    extern s32 irand(s32 max);
     extern s32 rand(void);
     extern void psndSFXOn(char* name);
     extern f32 intplGetValue(f32 start, f32 end, s32 mode, s32 cur, s32 steps);
-    extern void zubastar_capture(void);
-    extern void zubastar_disp_bomb(void);
     extern char str_btl_wn_sac_zubastar_802fff70[];
-    extern f32 float_0_80427d40;
     extern f32 float_104_80427d60;
     extern f32 float_200_80427d28;
     extern f32 float_600_80427d5c;
     extern f32 float_70_80427d64;
     extern f32 float_32767_80427d68;
     extern f32 float_35_80427d6c;
-    extern f32 float_2_80427d70;
     extern f32 float_neg1p25_80427d74;
 
     char* rodata = str_btl_wn_sac_zubastar_802fff70;
@@ -741,9 +727,7 @@ s32 zubastar_init(void) {
 }
 
 s32 zubastar_end(void) {
-    extern void* GetZubaStarPtr(void);
     extern void effDelete(void* effect);
-    extern void BattleFree(void* ptr);
     extern void smartFree(void* ptr);
 
     void* work;
@@ -781,7 +765,6 @@ void zubastar_capture(void) {
 void zubastar_disp_bomb(void) {
     typedef struct Vec { f32 x, y, z; } Vec;
     typedef struct Takaku { s32 state; s32 vertexCount; Vec* vertices; Vec cur; Vec center; Vec start; Vec target; f32 zRot; f32 zRotStep; f32 yStep; s32 frame; s32 duration; } Takaku;
-    extern void* GetZubaStarPtr(void);
     extern void* camGetPtr(s32 id);
     extern void GXSetCullMode(s32 mode);
     extern void GXSetZCompLoc(s32 loc);
@@ -806,7 +789,7 @@ void zubastar_disp_bomb(void) {
     extern void PSMTXConcat(void* a, void* b, void* out);
     extern void GXLoadPosMtxImm(void* mtx, s32 id);
     extern void GXBegin(s32 prim, s32 vtxfmt, s32 count);
-    extern f32 float_0_80427d40, float_96_80427d4c, float_400_80427d50, float_240_80427d54, float_480_80427d58, float_deg2rad_80427d48;
+    extern f32 float_96_80427d4c, float_400_80427d50, float_240_80427d54, float_480_80427d58, float_deg2rad_80427d48;
 
     void* work = GetZubaStarPtr();
     void* cam = camGetPtr(1);
@@ -884,7 +867,6 @@ void zubastar_disp2D(s32 cameraId) {
     typedef struct LineTracer { s32 state; s32 frame2; Vec curPos; Vec ghosts[4]; Vec startPos; Vec targetPos; s32 frame; s16 curLine; s16 unk62; } LineTracer;
     typedef struct AcGauge { s32 state; s32 moveFrame; f32 percent; f32 inc; f32 fightback; f32 unk14; Vec drawPos; u8 pad24; u8 btnFrame; u8 pad26; u8 pad27; } AcGauge;
 
-    extern void* GetZubaStarPtr(void);
     extern void iconDispGx(f32 scale, Vec* pos, s32 flags, s32 iconId);
     extern void iconDispGxCol(void* mtx, s32 flags, s32 iconId, void* color);
     extern void BattleAcDrawGauge(f32 ratio, s32 x, s32 y, s32 innerBarWidth, s32 param5, s32 b1, s32 b2, s32 b3, s32 flags);
@@ -908,8 +890,8 @@ void zubastar_disp2D(s32 cameraId) {
     extern void GXSetChanMatColor(s32 chan, GXColor* color);
     extern void GXBegin(s32 prim, s32 vtxfmt, s32 count);
     extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
-    extern f32 float_200_80427d28, float_60_80427d2c, float_1_80427d30, float_0p01_80427d34;
-    extern f32 float_128_80427d38, float_255_80427d3c, float_0_80427d40, float_20_80427d44;
+    extern f32 float_200_80427d28, float_60_80427d2c, float_0p01_80427d34;
+    extern f32 float_128_80427d38, float_255_80427d3c, float_20_80427d44;
     extern u32 dat_80427d18, dat_80427d1c;
 
     void* work = GetZubaStarPtr();

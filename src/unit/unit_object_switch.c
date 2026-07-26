@@ -1,11 +1,11 @@
 #include "unit/unit_object_switch.h"
+#include "battle/battle_stage_object.h"
 
 extern void* _battleWorkPointer;
 
 extern s32 evtGetValue(void* event, s32 value);
 extern s32 BattleTransID(void* event, s32 id);
 extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-extern void* BattleGetObjectPtr(s32 id);
 
 static s32 _data[] = {
     -5, 0, 15, 0, -15, 0, 14, 0, -13, 0, 12, 0, -11, 0, 10, 0, -9, 0,

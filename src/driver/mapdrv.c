@@ -1,11 +1,92 @@
 #include "driver/mapdrv.h"
+#include "driver/envdrv.h"
+#include "driver/hitdrv.h"
+#include "driver/lightdrv.h"
+#include "driver/camdrv.h"
+#include "driver/offscreendrv.h"
+#include "memory.h"
+
+extern s32 activeGroup;
+extern s32 mapWork;
+extern void* mapalloc_base_ptr;
+extern s32 error_count;
+extern s32 error_flag;
+extern char error_data[];
+extern s32 unk_8041e678;
+extern s32 mapClipOffFlag;
+extern f32 float_0_8041f930;
+extern f32 float_1_8041f940;
+extern f32 float_deg2rad_8041f948;
+extern void sysWaitDrawSync(void);
+extern s32 strcmp(const char* a, const char* b);
+extern char* strncpy(char* dst, const char* src, u32 n);
+extern char* strcpy(char* dst, const char* src);
+extern char* strcat(char* dst, const char* src);
+extern void GXClearBoundingBox(void);
+extern void PSMTXConcat(void* a, void* b, void* out);
+extern void PSMTXIdentity(void* mtx);
+extern void PSMTXInvXpose(void* src, void* dst);
+extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+extern void PSMTXCopy(void* src, void* dst);
+extern void PSMTXMultVecSR(void* mtx, void* src, void* dst);
+extern void PSVECAdd(void* a, void* b, void* out);
+extern void PSVECScale(void* src, void* dst, f32 scale);
+extern void GXSetCullMode(s32 mode);
+extern void GXSetChanMatColor(s32 chan, void* color);
+extern void GXLoadNrmMtxImm(void* mtx, s32 id);
+extern void GXLoadPosMtxImm(void* mtx, s32 id);
+extern void GXSetCurrentMtx(s32 id);
+extern void GXSetNumTevStages(s32 count);
+extern void GXSetNumTexGens(s32 count);
+extern void GXSetTevOp(s32 stage, s32 mode);
+extern void GXSetTevOrder(s32 stage, s32 texcoord, s32 texmap, s32 color);
+extern void GXSetFog(s32 type, f32 start, f32 end, f32 nearZ, f32 farZ, void* color);
+extern void GXCallDisplayList(void* list, u32 nbytes);
+extern void GXClearVtxDesc(void);
+extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+extern void GXSetArray(s32 attr, void* base, s32 stride);
+extern void GXSetBlendMode(s32 type, s32 src, s32 dst, s32 op);
+extern void GXSetChanAmbColor(s32 chan, void* color);
+extern void GXSetTevKColor(s32 id, void* color);
+extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 cnt, s32 type, s32 frac);
+extern void GXSetVtxDesc(s32 attr, s32 type);
+extern void GXSetZCompLoc(s32 beforeTex);
+extern void GXSetZMode(s32 enable, s32 func, s32 update);
+extern void GXReadBoundingBox(u16* left, u16* top, u16* right, u16* bottom);
+extern void GXInitLightPos(void* light, f32 x, f32 y, f32 z);
+extern void GXInitLightColor(void* light, void* color);
+extern void GXInitLightAttn(void* light, f32 a0, f32 a1, f32 a2, f32 k0, f32 k1, f32 k2);
+extern void GXLoadLightObjImm(void* light, u32 id);
+extern void GXInitLightDir(void* light, f32 x, f32 y, f32 z);
+extern void GXInitLightSpot(void* light, f32 cutoff, s32 fn);
+extern void GXInitLightDistAttn(void* light, f32 refDist, f32 refBrightness, s32 fn);
+
+extern f32 float_0p5_8041f934;
+extern u32 unk_80429524;
+extern u32 dat_8041f8fc;
+extern char float_0_8041f9ac[];
+extern f32 float_1000_8041f954;
+extern f32 float_2_8041f938;
+extern f32 float_3_8041f92c;
+extern f32 float_neg1p0486E06_8041f950;
+extern u16* lightNameToPtr(char* name);
+extern u32 lightid_tbl[];
+extern void mapGrpFlagOff(s32 group, u32 flags);
+extern void mapSetMaterial(void* material, void* context);
+extern void* memcpy(void* dst, const void* src, u32 size);
+extern char str__8041f94c[1];
+extern void arcDelete(s32 type);
+
+extern void GXSetNumChans(s32 count);
+extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
+extern void GXSetTexCoordGen2(s32 coord, s32 func, s32 source, s32 mtx, s32 normalize, s32 postmtx);
+
+u8 makeDisplayList(int entryIdx);
+void _setOffScrnId(void* obj, int offId, int recurse);
+void _mapLoad(void* work, int index, char* name);
 
 
 void mapErrorEntry(s32 type, char* message) {
-    extern char error_data[];
-    extern s32 error_count;
-    extern s32 error_flag;
-    extern char* strncpy(char* dst, const char* src, u32 n);
     char* entry;
 
     entry = error_data;
@@ -23,22 +104,17 @@ void* getMapDataDvdRoot(void) {
 }
 
 void N_mapDispOff(void) {
-    extern s32 unk_8041e678;
     unk_8041e678 = 1;
 }
 
 void N_mapDispOn(void) {
-    extern s32 unk_8041e678;
     unk_8041e678 = 0;
 }
 
 void* mapGetWork(void) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     return (void*)(mapWork + activeGroup * 0x2F4);
 }
 s32 mapGetActiveGroup(void) {
-    extern s32 activeGroup;
     return activeGroup;
 }
 
@@ -153,8 +229,6 @@ s32 mapGetJoints(void* data) {
 }
 
 void mapGetBoundingBox(void* minRaw, void* maxRaw) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     extern void PSMTXMultVec(void*, void*, void*);
     f32* min;
     f32* max;
@@ -197,18 +271,13 @@ void mapGetBoundingBox(void* minRaw, void* maxRaw) {
 
 void mapInit(void) {
     extern void* __memAlloc(s32, u32);
-    extern void* memset(void*, s32, u32);
-    extern void* mapWork;
-    extern s32 activeGroup;
-    extern s32 mapClipOffFlag;
-    mapWork = __memAlloc(0, 0x5E8);
-    memset(mapWork, 0, 0x5E8);
+    mapWork = (s32)__memAlloc(0, 0x5E8);
+    memset((void*)mapWork, 0, 0x5E8);
     activeGroup = 0;
     mapClipOffFlag = 0;
 }
 
 u8 mapBuildTexture(void* objectRaw, int palette, int* names) {
-    extern s32 strcmp(const char*, const char*);
     extern void* TEXGet(s32, s32);
     u8* object;
     u8* joint;
@@ -268,16 +337,8 @@ u8 mapBuildTexture(void* objectRaw, int palette, int* names) {
 }
 
 void* _mapEnt(void* jointRaw, void* parent, void* parentMtx, int entryIdx) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern f32 float_deg2rad_8041f948;
-    extern void PSMTXTrans(void*, f32, f32, f32);
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXRotRad(void*, s32, f32);
-    extern void PSMTXConcat(void*, void*, void*);
-    extern void PSMTXIdentity(void*);
-    extern void PSVECAdd(void*, void*, void*);
-    extern void PSVECScale(void*, void*, f32);
     u8* joint;
     u8* entry;
     u8* object;
@@ -440,12 +501,7 @@ void* mapEntrySub(void* joint, void* parent, void* mtx, int isRoot, int entryIdx
 }
 
 void* mapEntry(void* pJoint, void* pMtx, int entryIdx) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern void* mapalloc_base_ptr;
     extern s32 mapGetJoints(void*);
-    extern void* _mapAlloc(void*, u32);
-    extern void* memset(void*, s32, u32);
     extern void* mapEntrySub(void*, void*, void*, int, int);
     u8* entry;
     u32 size;
@@ -461,22 +517,12 @@ void* mapEntry(void* pJoint, void* pMtx, int entryIdx) {
 }
 
 u8 makeDisplayList(int entryIdx) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     extern s32 unk_8041e680;
-    extern void* mapalloc_base_ptr;
-    extern void* _mapAlloc(void*, u32);
-    extern void* _mapAllocTail(void*, u32);
-    extern void _mapFree(void*, void*);
-    extern void* memset(void*, s32, u32);
-    extern void* memcpy(void*, const void*, u32);
     extern void DCInvalidateRange(void*, u32);
     extern void DCFlushRange(void*, u32);
     extern void GXBeginDisplayList(void*, u32);
     extern void GXResetWriteGatherPipe(void);
     extern u32 GXEndDisplayList(void);
-    extern void mapSetMaterial(void*, void*);
-    extern void GXSetCullMode(s32);
     extern s32 shadowGetCharShadowProjection(void);
     extern u32 culling_678[];
     u8* entry;
@@ -545,9 +591,6 @@ u8 makeDisplayList(int entryIdx) {
 }
 
 void* mapSearchAnmObj(char* name) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
 
     void* group;
     void* work;
@@ -578,10 +621,6 @@ void* mapSearchAnmObj(char* name) {
 }
 
 void mapCheckAnimation(s32 nameValue, s32* outDone, f32* outFrame) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
-    extern f32 float_0_8041f930;
     u8* group;
     u8* entry;
     u8* anim;
@@ -620,9 +659,6 @@ found:
 }
 
 u8 mapPlayAnimationLv(char* name, int mode, int level) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
     u8* group;
     u8* entry;
     u8* anim;
@@ -672,9 +708,6 @@ u8 mapPlayAnimationLv(char* name, int mode, int level) {
 
 
 void mapPauseAnimation(char* name) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
     void* work;
     void* group;
     void* anim;
@@ -708,9 +741,6 @@ found:
 }
 
 void mapReStartAnimation(char* name) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
     void* work;
     void* group;
     void* anim;
@@ -745,8 +775,6 @@ found:
 
 
 void mapPauseAnimationAll(void) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     void* work;
     void* group;
     s32 j;
@@ -770,8 +798,6 @@ void mapPauseAnimationAll(void) {
 }
 
 void mapReStartAnimationAll(void) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     void* work;
     void* group;
     s32 j;
@@ -795,9 +821,6 @@ void mapReStartAnimationAll(void) {
 }
 
 void mapSetPlayRate(char* name, f32 rate) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
     void* work;
     void* group;
     void* anim;
@@ -832,32 +855,19 @@ found:
 
 
 void _mapLoad(void* pWork, int idx, char* pMapName) {
-    extern s32 error_flag;
-    extern s32 error_count;
-    extern void* mapalloc_base_ptr;
     extern void arcOpen(char*, void*, void*);
     extern void* DVDMgrOpen(char*, s32, s32);
     extern s32 DVDMgrGetLength(void*);
     extern void DVDMgrRead(void*, void*, u32, s32);
     extern void DVDMgrClose(void*);
-    extern void* _mapAllocTail(void*, u32);
     extern void UnpackTexPalette(void*);
     extern void GXInvalidateVtxCache(void);
     extern s32 sprintf(char*, const char*, ...);
-    extern char* strncpy(char*, const char*, u32);
-    extern void* memcpy(void*, const void*, u32);
-    extern void* memset(void*, s32, u32);
-    extern s32 strcmp(const char*, const char*);
     extern void* mapSearchDmdJoint(void*, char*);
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void* mapEntry(void*, void*, int);
-    extern void* hitEntry(void*, void*, int);
-    extern s32 activeGroup;
-    extern void camLoadRoad(s32, char*);
-    extern void camSetTypePersp(s32);
     extern u8 mapBuildTexture(void*, int, int*);
     extern void mapGetBoundingBox(void*, void*);
-    extern void makeDisplayList(s32);
     extern u32 unk_80429520;
     u8* entry;
     char filePath[128];
@@ -1039,27 +1049,13 @@ void _mapLoad(void* pWork, int idx, char* pMapName) {
 }
 
 void mapUnLoad(void) {
-    extern void sysWaitDrawSync(void);
-    extern void _mapFree(void* heap, void* ptr);
-    extern void hitReInit(void);
-    extern void lightReInit(void);
-    extern void envReInit(void);
-    extern void camUnLoadRoad(s32 cameraId);
-    extern void camSetTypePersp(s32 cameraId);
     extern s32 arcDataCheck(u32 ptr);
-    extern void strncpy(char* dst, const char* src, u32 n);
-    extern void arcDelete(s32 type);
-    extern void* mapWork;
-    extern s32 activeGroup;
-    extern s32 unk_8041e678;
-    extern void* mapalloc_base_ptr;
-    extern char float_0_8041f9ac[];
     void* work;
     void* entry;
     s32 i;
 
     sysWaitDrawSync();
-    work = mapWork;
+    work = (void*)mapWork;
     activeGroup = 0;
 
     entry = work;
@@ -1118,11 +1114,6 @@ s32 mapPreLoad(void) {
 }
 
 void mapLoad(char* name) {
-    extern void sysWaitDrawSync(void);
-    extern void* memset(void*, s32, u32);
-    extern void _mapLoad(void*, int, char*);
-    extern s32 activeGroup;
-    extern s32 mapWork;
     void* work;
 
     sysWaitDrawSync();
@@ -1134,30 +1125,16 @@ void mapLoad(char* name) {
 }
 
 void bmapUnLoad(void) {
-    extern void sysWaitDrawSync(void);
-    extern void _mapFree(void* heap, void* ptr);
-    extern void* _mapAllocTail(void* heap, u32 size);
-    extern void hitReInit(void);
-    extern void lightReInit(void);
-    extern void envReInit(void);
     extern s32 arcDataCheck(u32 ptr);
-    extern void strncpy(char* dst, const char* src, u32 n);
-    extern void arcDelete(s32 type);
     extern void arcEntry(s32 type, void* data, u32 size);
     extern void aramMgrToMram(void* aram, void* mram);
-    extern void makeDisplayList(s32 index);
-    extern void* mapWork;
-    extern s32 activeGroup;
-    extern s32 unk_8041e678;
-    extern void* mapalloc_base_ptr;
-    extern char float_0_8041f9ac[];
     void* group;
     void* work;
     void* entry;
     s32 i;
 
     sysWaitDrawSync();
-    work = mapWork;
+    work = (void*)mapWork;
     activeGroup = 1;
     group = (void*)((s32)work + 0x2F4);
 
@@ -1234,15 +1211,8 @@ void bmapUnLoad(void) {
 }
 
 void bmapLoad(char* rankStageName, char* battleStageName) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 mapalloc_base_ptr;
-    extern void sysWaitDrawSync(void);
-    extern void _mapFree(s32 base, s32 ptr);
     extern s32 arcDataCheck(u32 data);
     extern void* aramMgrToAram(u32 data, s32 size);
-    extern void* memset(void* dst, s32 value, u32 size);
-    extern void _mapLoad(void* work, s32 index, char* name);
     u8* work;
     u8* entry;
     u8* group;
@@ -1257,7 +1227,7 @@ void bmapLoad(char* rankStageName, char* battleStageName) {
 
     for (i = 0; i < count; i++, entry += 0x178) {
         if (*(s32*)(entry + 0x16C) != 0) {
-            _mapFree(mapalloc_base_ptr, *(s32*)(entry + 0x16C));
+            _mapFree((void*)mapalloc_base_ptr, (void*)*(s32*)(entry + 0x16C));
         }
         *(s32*)(entry + 0x168) = 0;
         *(s32*)(entry + 0x16C) = 0;
@@ -1275,8 +1245,8 @@ void bmapLoad(char* rankStageName, char* battleStageName) {
                     *(u32*)(entry + 0x84),
                     *(s32*)(entry + 0x88)
                 );
-                _mapFree(mapalloc_base_ptr, *(s32*)(entry + 0x84));
-                _mapFree(mapalloc_base_ptr, *(s32*)(entry + 0x7C));
+                _mapFree((void*)mapalloc_base_ptr, (void*)*(s32*)(entry + 0x84));
+                _mapFree((void*)mapalloc_base_ptr, (void*)*(s32*)(entry + 0x7C));
                 *(s32*)(entry + 0x84) = 0;
                 *(s32*)(entry + 0x7C) = 0;
             } else {
@@ -1284,7 +1254,7 @@ void bmapLoad(char* rankStageName, char* battleStageName) {
                     *(u32*)(entry + 0x8C),
                     *(s32*)(entry + 0x90)
                 );
-                _mapFree(mapalloc_base_ptr, *(s32*)(entry + 0x8C));
+                _mapFree((void*)mapalloc_base_ptr, (void*)*(s32*)(entry + 0x8C));
                 *(s32*)(entry + 0x8C) = 0;
             }
         }
@@ -1303,16 +1273,9 @@ void bmapLoad(char* rankStageName, char* battleStageName) {
 
 void mapCalcAnimMatrix(void* pDstMtx, void* pParentMtx, void* pEntry, void* pTrack) {
     typedef f32 Mtx[3][4];
-    extern void PSMTXTrans(void*, f32, f32, f32);
     extern void PSMTXRotRad(void*, s32, f32);
     extern void PSMTXScale(void*, f32, f32, f32);
-    extern void PSMTXIdentity(void*);
-    extern void PSMTXConcat(void*, void*, void*);
-    extern f32 float_0_8041f930;
-    extern f32 float_2_8041f938;
-    extern f32 float_3_8041f92c;
     extern f32 float_neg2_8041f980;
-    extern f32 float_deg2rad_8041f948;
     extern f32 dat_8041f998;
     u8* track;
     f32* previous;
@@ -1429,7 +1392,6 @@ void mapCalcAnimMatrix(void* pDstMtx, void* pParentMtx, void* pEntry, void* pTra
 }
 
 void mapReCalcMatrix(void* obj, void* parentMtx, int recurse) {
-    extern void PSMTXConcat(void* a, void* b, void* out);
 
     void* child;
     u32 flags;
@@ -1550,14 +1512,8 @@ void mapReCalcMatrix(void* obj, void* parentMtx, int recurse) {
 }
 
 void mapMain(void) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     extern s32 gp;
-    extern s32 strcmp(const char* a, const char* b);
-    extern char* strcpy(char* dst, const char* src);
-    extern char* strcat(char* dst, const char* src);
     extern u8 mapCalcAnimMatrix(void* pDstMtx, void* pParentMtx, void* pEntry, void* pTrack);
-    extern u16* lightNameToPtr(char* name);
     extern void PSMTXScale(f32 mtx[3][4], f32 x, f32 y, f32 z);
     extern u8 mapReCalcMatrix(void* obj, s32 mtx, int recurse);
     extern char str_v_8041f99c[];
@@ -2079,32 +2035,12 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
         u8 a;
     } Color;
     extern void* current_mp;
-    extern void* camGetPtr(s32 id);
-    extern void* camGetCurPtr(void);
-    extern void PSMTXConcat(void*, void*, void*);
-    extern void PSMTXInvXpose(void*, void*);
-    extern void GXLoadPosMtxImm(void*, s32);
-    extern void GXLoadNrmMtxImm(void*, s32);
-    extern void GXSetCurrentMtx(s32);
-    extern void GXSetBlendMode(s32, s32, s32, s32);
-    extern void GXSetZCompLoc(s32);
-    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
-    extern void GXSetZMode(s32, s32, s32);
     extern void GXGetCullMode(s32*);
-    extern void GXSetCullMode(s32);
-    extern s32 activeGroup;
-    extern s32 mapWork;
     extern u32 fog_type[];
     extern u32 dat_8041f904;
-    extern f32 float_0_8041f930;
-    extern void GXSetFog(s32, f32, f32, f32, f32, void*);
     extern void mapSetTextureMatrix(void*);
-    extern u32 dat_8041f8fc;
-    extern void GXSetTevKColor(s32, void*);
-    extern void mapSetMaterial(void*, void*);
     extern void mapSetPolygon(s32, s32);
     extern void mapSetPolygonVtxDesc(s32, s32);
-    extern void GXCallDisplayList(void*, u32);
     extern void GXSetTevDirect(s32);
     extern void GXSetNumIndStages(s32);
     extern u32 culling[];
@@ -2485,11 +2421,7 @@ void mapDispMapGrp(void) {
 }
 
 void mapDispMapObj_off(s32 group, void* obj) {
-    extern void sysWaitDrawSync(void);
-    extern void GXClearBoundingBox(void);
     extern void _mapDispMapObj(s32, void*);
-    extern void GXReadBoundingBox(void*, void*, void*, void*);
-    extern void offscreenAddBoundingBox(s32, u16, u16, u16, u16);
     u16 left;
     u16 top;
     u16 right;
@@ -2503,11 +2435,7 @@ void mapDispMapObj_off(s32 group, void* obj) {
 }
 
 void mapDispMapGrp_off(s32 group, void* obj) {
-    extern void sysWaitDrawSync(void);
-    extern void GXClearBoundingBox(void);
     extern void _mapDispMapGrp(s32, void*);
-    extern void GXReadBoundingBox(void*, void*, void*, void*);
-    extern void offscreenAddBoundingBox(s32, u16, u16, u16, u16);
     u16 left;
     u16 top;
     u16 right;
@@ -2522,8 +2450,6 @@ void mapDispMapGrp_off(s32 group, void* obj) {
 
 
 u8 test_kururing_mapdisp(s32 cam) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     extern void _mapDispMapObj(s32 cam, void* obj);
 
     void* work;
@@ -2560,22 +2486,7 @@ u8 test_kururing_mapdisp(s32 cam) {
 
 void _mapDispMapObj_NoMaterial(s32 cameraId, void* mapObj) {
     typedef f32 Mtx[3][4];
-    extern void* camGetPtr(s32 cameraId);
-    extern void PSMTXConcat(void* a, void* b, void* out);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void PSMTXInvXpose(void* src, void* dst);
-    extern void GXLoadNrmMtxImm(void* mtx, s32 id);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXSetNumChans(s32 count);
-    extern void GXSetChanMatColor(s32 chan, void* color);
-    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
-    extern void GXSetNumTexGens(s32 count);
-    extern void GXSetNumTevStages(s32 count);
-    extern void GXSetTevOrder(s32, s32, s32, s32);
-    extern void GXSetTevOp(s32, s32);
     extern void mapSetPolygon(s32 obj, s32 mesh);
-    extern u32 unk_80429524;
     u8* obj;
     void* camera;
     s32 joint;
@@ -2611,23 +2522,8 @@ void _mapDispMapObj_NoMaterial(s32 cameraId, void* mapObj) {
 }
 
 void _mapDispMapGrp_NoMaterial(s32 camId, void* grp) {
-    extern void* camGetPtr(s32 id);
-    extern void PSMTXConcat(void* a, void* b, void* out);
-    extern void PSMTXInvXpose(void* src, void* dst);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void GXLoadNrmMtxImm(void* mtx, s32 id);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXSetNumChans(s32 count);
-    extern void GXSetChanMatColor(s32 chan, void* color);
-    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, s32 lightMask, s32 diffFn, s32 attnFn);
-    extern void GXSetNumTexGens(s32 count);
-    extern void GXSetNumTevStages(s32 count);
-    extern void GXSetTevOrder(s32 stage, s32 texcoord, s32 texmap, s32 color);
-    extern void GXSetTevOp(s32 stage, s32 mode);
     extern u8 mapSetPolygon(int grp, int polygon);
     extern void _mapDispMapObj_NoMaterial(s32 camId, void* obj);
-    extern u32 unk_80429524;
 
     void* cam;
     void* child;
@@ -2730,25 +2626,7 @@ void _mapDispMapGrp_NoMaterial(s32 camId, void* grp) {
 
 void mapDispMapObj_bbox(int cameraId, int obj) {
     typedef f32 Mtx[3][4];
-    extern void sysWaitDrawSync(void);
-    extern void GXClearBoundingBox(void);
-    extern void* camGetPtr(s32 cameraId);
-    extern void PSMTXConcat(void* a, void* b, void* out);
-    extern void GXLoadPosMtxImm(void* mtx, s32 id);
-    extern void PSMTXInvXpose(void* src, void* dst);
-    extern void GXLoadNrmMtxImm(void* mtx, s32 id);
-    extern void GXSetCurrentMtx(s32 id);
-    extern void GXSetCullMode(s32 mode);
-    extern void GXSetNumChans(s32 count);
-    extern void GXSetChanMatColor(s32 chan, void* color);
-    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
-    extern void GXSetNumTexGens(s32 count);
-    extern void GXSetNumTevStages(s32 count);
-    extern void GXSetTevOrder(s32, s32, s32, s32);
-    extern void GXSetTevOp(s32, s32);
     extern void mapSetPolygon(s32 obj, s32 mesh);
-    extern void GXReadBoundingBox(u16* left, u16* top, u16* right, u16* bottom);
-    extern u32 unk_80429524;
     void* camera;
     s32 joint;
     s32 i;
@@ -2792,10 +2670,7 @@ void mapDispMapObj_bbox(int cameraId, int obj) {
 }
 
 void mapDispMapGrp_bbox(s32 group, void* obj) {
-    extern void sysWaitDrawSync(void);
-    extern void GXClearBoundingBox(void);
     extern void _mapDispMapGrp_NoMaterial(s32, void*);
-    extern void GXReadBoundingBox(void*, void*, void*, void*);
     sysWaitDrawSync();
     GXClearBoundingBox();
     _mapDispMapGrp_NoMaterial(group, obj);
@@ -2805,14 +2680,8 @@ void mapDispMapGrp_bbox(s32 group, void* obj) {
 }
 
 void mapDisp(void) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 unk_8041e678;
-    extern s32 mapClipOffFlag;
-    extern void* camGetPtr(s32 cameraId);
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
     extern u8 mapReCalcMatrix(void* obj, s32 mtx, int recurse);
-    extern void PSMTXConcat(void* a, void* b, void* out);
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
     extern void PSMTX44MultVec(void* mtx, void* src, void* dst);
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
@@ -3033,9 +2902,6 @@ void mapDisp(void) {
 int mapSetLight(void* param_1, void** param_2) {
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
     extern int lightGetNearObj(void* pos, void** dst, int count, int flags);
-    extern u16* lightNameToPtr(char* name);
-    extern s32 activeGroup;
-    extern s32 mapWork;
     f32 pos[3];
     void* drawMode;
     u16* light;
@@ -3102,8 +2968,6 @@ int mapSetLight(void* param_1, void** param_2) {
 
 
 void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
-    extern void GXSetTevOrder(s32, s32, s32, s32);
-    extern void GXSetTevOp(s32, s32);
     extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
     extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
     extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
@@ -3111,15 +2975,6 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
     extern void GXSetTevSwapMode(s32, s32, s32);
     extern void GXSetTevKColorSel(s32, s32);
     extern void GXSetTevKAlphaSel(s32, s32);
-    extern void GXSetNumTevStages(s32);
-    extern void GXSetNumTexGens(s32);
-    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
-    extern void GXSetNumChans(s32);
-    extern void GXSetCullMode(s32);
-    extern void GXSetBlendMode(s32, s32, s32, s32);
-    extern void GXSetZCompLoc(s32);
-    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
-    extern void GXSetZMode(s32, s32, s32);
     u32 stages;
     s32 i;
 
@@ -3365,10 +3220,6 @@ void mapSetMaterialLastStageBlend(u32 flags, void* pEvtColor, void* param_3) {
         u8 b;
         u8 a;
     } Color;
-    extern u32 dat_8041f8fc;
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern void GXSetTevKColor(s32 id, void* color);
     Color color;
     Color outColor;
     Color* evtColor;
@@ -3420,13 +3271,8 @@ void mapSetMaterialLastStageBlend(u32 flags, void* pEvtColor, void* param_3) {
 }
 
 void mapSetMaterialFog(void) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     extern s32 fog_type;
     extern u32 dat_8041f900;
-    extern f32 float_0_8041f930;
-    extern void* camGetCurPtr(void);
-    extern void GXSetFog(s32 type, f32 start, f32 end, f32 nearz, f32 farz, void* color);
     void* cam;
     void* work;
     u32 color;
@@ -3459,18 +3305,10 @@ void mapSetMaterialFog(void) {
 
 void mapSetTextureMatrix(void* param_1) {
     extern s32 texmtx_tbl[];
-    extern f32 float_1_8041f940;
-    extern f32 float_0_8041f930;
-    extern f32 float_0p5_8041f934;
-    extern f32 float_deg2rad_8041f948;
 
-    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
     extern void PSMTXRotRad(void* mtx, s32 axis, f32 rad);
-    extern void PSMTXConcat(void* a, void* b, void* out);
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
-    extern void PSMTXCopy(void* src, void* dst);
     extern void GXLoadTexMtxImm(void* mtx, s32 id, s32 type);
-    extern void GXSetTexCoordGen2(s32 coord, s32 func, s32 source, u32 mtx, u32 normalize, s32 postmtx);
 
     f32 outMtx[3][4];
     f32 negCenterMtx[3][4];
@@ -3575,37 +3413,12 @@ void mapSetMaterial(void* param_1, void* param_2) {
     extern void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx);
     extern void* lightGetAmbient(void);
     extern u32 dat_8041f908;
-    extern void* camGetCurPtr(void);
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
-    extern void GXInitLightPos(void* lightObj, f32 x, f32 y, f32 z);
-    extern void GXInitLightColor(void* lightObj, void* color);
-    extern void GXInitLightAttn(void* lightObj, f32 a0, f32 a1, f32 a2, f32 k0, f32 k1, f32 k2);
-    extern void GXLoadLightObjImm(void* lightObj, u32 lightId);
-    extern s32 activeGroup;
-    extern s32 mapWork;
     extern u32 texwrap_tbl[];
     extern s32 mapSetLight(void* mapObj, void* lightList);
-    extern u32 lightid_tbl[];
-    extern s32 strcmp(char* s1, char* s2);
     extern void* TEXGet(s32 table, s32 id);
-    extern f32 float_deg2rad_8041f948;
-    extern f32 float_neg1p0486E06_8041f950;
-    extern f32 float_0_8041f930;
-    extern f32 float_1_8041f940;
     extern u8 vec3_802bf958[];
     extern void PSMTXRotRad(void* mtx, s32 axis, f32 rad);
-    extern void PSMTXConcat(void* a, void* b, void* ab);
-    extern void PSVECScale(void* src, void* dst, f32 scale);
-    extern void PSVECAdd(void* a, void* b, void* out);
-    extern void GXSetNumChans(s32 count);
-    extern void GXSetChanAmbColor(s32 chan, void* color);
-    extern void GXSetChanMatColor(s32 chan, void* color);
-    extern f32 float_0p5_8041f934;
-    extern f32 float_1000_8041f954;
-    extern void PSMTXMultVecSR(void* mtx, void* src, void* dst);
-    extern void GXInitLightDir(void* lightObj, f32 x, f32 y, f32 z);
-    extern void GXInitLightSpot(void* lightObj, f32 cutoff, s32 spotFn);
-    extern void GXInitLightDistAttn(void* lightObj, f32 refDist, f32 refBrightness, s32 distFn);
     extern void GXSetChanCtrl(
         s32 chan,
         s32 enable,
@@ -3955,45 +3768,19 @@ void mapResetPaperAmbColor(void) {
 
 u8 mapSetMaterialLight(u32 materialLightFlag, void* pPos) {
     extern void* lightGetPaper(void);
-    extern void* lightGetPaperCraft(void);
-    extern s32 lightCheckCharaLight(void);
     extern s32 lightGetNearObj(void* pPos, void** pDst, s32 count, s32 flags);
     extern void* lightGetCharaAmbient(void);
-    extern void* camGetCurPtr(void);
 
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
-    extern void PSMTXMultVecSR(void* mtx, void* src, void* dst);
     extern void PSMTXRotRad(void* mtx, s32 axis, f32 rad);
-    extern void PSMTXConcat(void* a, void* b, void* out);
-    extern void PSVECScale(void* src, void* dst, f32 scale);
-    extern void PSVECAdd(void* a, void* b, void* out);
 
-    extern void GXInitLightPos(void* light, f32 x, f32 y, f32 z);
-    extern void GXInitLightDir(void* light, f32 x, f32 y, f32 z);
-    extern void GXInitLightSpot(void* light, f32 angle, s32 fn);
-    extern void GXInitLightDistAttn(void* light, f32 refDistance, f32 refBrightness, s32 fn);
-    extern void GXInitLightColor(void* light, void* color);
-    extern void GXInitLightAttn(void* light, f32 a0, f32 a1, f32 a2, f32 k0, f32 k1, f32 k2);
-    extern void GXLoadLightObjImm(void* light, u32 id);
-    extern void GXSetFog(s32 type, f32 start, f32 end, f32 nearZ, f32 farZ, void* color);
-    extern void GXSetNumChans(u32 nChans);
-    extern void GXSetChanAmbColor(s32 chan, void* color);
-    extern void GXSetChanMatColor(s32 chan, void* color);
-    extern void GXSetChanCtrl(s32 chan, s32 enable, s32 ambSrc, s32 matSrc, u32 lightMask, u32 diffFn, s32 attnFn);
 
     extern u32 dat_8041f914;
     extern u32 dat_8041f918;
     extern u32 dat_8041f91c;
     extern u32 paper_ambient;
     extern u32 paperCraft_ambient;
-    extern u32 lightid_tbl[];
     extern u32 vec3_802bfaa8[];
-    extern f32 float_0_8041f930;
-    extern f32 float_1_8041f940;
-    extern f32 float_deg2rad_8041f948;
-    extern f32 float_neg1p0486E06_8041f950;
-    extern f32 float_0p5_8041f934;
-    extern f32 float_1000_8041f954;
 
     u32 matColor;
     u32 ambColor;
@@ -4179,18 +3966,10 @@ u8 mapSetMaterialLight(u32 materialLightFlag, void* pPos) {
 }
 
 void mapSetPolygon(int param_1, int param_2) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     extern s32 culling[];
     extern s32 attr_fmt[];
-    extern void GXSetCullMode(s32 mode);
-    extern void GXClearVtxDesc(void);
     extern void GXSetVtxAttrFmtv(s32 vtxfmt, void* fmtv);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
-    extern void GXSetArray(s32 attr, void* base, s32 stride);
     extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
-    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 cnt, s32 type, s32 frac);
-    extern void GXCallDisplayList(void* list, u32 nbytes);
 
     s32 obj;
     s32 poly;
@@ -4364,12 +4143,6 @@ void mapSetPolygon(int param_1, int param_2) {
 }
 
 void mapSetPolygonVtxDesc(int obj, int poly) {
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32 attr, s32 type);
-    extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 cnt, s32 type, s32 frac);
-    extern void GXSetArray(s32 attr, void* base, s32 stride);
-    extern s32 activeGroup;
-    extern void* mapWork;
     void* group;
     void* vcd;
     void* arrays;
@@ -4414,7 +4187,6 @@ void mapSetPolygonVtxDesc(int obj, int poly) {
 }
 
 void* mapSearchDmdJointSub(void* param_1, char* param_2) {
-    extern s32 strcmp(const char* a, const char* b);
 
     void* pMVar5;
     char* target;
@@ -4723,10 +4495,6 @@ sib_done:
 }
 
 void* mapSearchDmdJointSub2(void* param_1, char* param_2, char* param_3) {
-    extern char* strcpy(char* dst, const char* src);
-    extern char* strcat(char* dst, const char* src);
-    extern s32 strcmp(const char* a, const char* b);
-    extern char str__8041f94c[1];
 
     void* node;
     char* prefix;
@@ -4918,7 +4686,6 @@ top_sib_done:
 void* mapSearchDmdJoint(void* data, char* name) {
     extern void* mapSearchDmdJointSub(void*, char*);
     extern void* mapSearchDmdJointSub2(void*, char*, char*);
-    extern char str__8041f94c[1];
     if ((s32)*(u8*)name != '|') {
         return mapSearchDmdJointSub(data, name);
     }
@@ -4926,9 +4693,6 @@ void* mapSearchDmdJoint(void* data, char* name) {
 }
 
 void* mapGetMapObj(s32 name) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
     void* work;
     void* group;
     void* obj;
@@ -4960,13 +4724,6 @@ void* mapGetMapObj(s32 name) {
 }
 
 u8 mapObjFlagOn(char* param_1, u32 param_2) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
-    extern char* strncpy(char* dst, const char* src, u32 n);
-    extern char error_data[];
-    extern s32 error_count;
-    extern s32 error_flag;
 
     void* groupBase;
     void* group;
@@ -5019,13 +4776,6 @@ done:
 }
 
 u8 mapObjFlagOff(char* param_1, u32 param_2) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
-    extern char* strncpy(char* dst, const char* src, u32 n);
-    extern char error_data[];
-    extern s32 error_count;
-    extern s32 error_flag;
 
     void* groupBase;
     void* group;
@@ -5376,14 +5126,7 @@ void mapFlgOff(u32* param_1, u32 param_2, int param_3) {
 }
 
 void mapGrpFlagOn(s32 param_1, u32 param_2) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
-    extern char* strncpy(char* dst, const char* src, u32 n);
     extern u8 mapFlgOn(u32* param_1, u32 param_2, int param_3);
-    extern char error_data[];
-    extern s32 error_count;
-    extern s32 error_flag;
 
     void* groupBase;
     void* group;
@@ -5434,14 +5177,7 @@ done:
 }
 
 void mapGrpFlagOff(s32 param_1, u32 param_2) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
-    extern char* strncpy(char* dst, const char* src, u32 n);
     extern u8 mapFlgOff(u32* param_1, u32 param_2, int param_3);
-    extern char error_data[];
-    extern s32 error_count;
-    extern s32 error_flag;
 
     void* groupBase;
     void* group;
@@ -5645,10 +5381,6 @@ void _setOffScrnId(void* param_1, int param_2, int param_3) {
 }
 
 u8 mapObjSetOffScreen(char* param_1, char* param_2) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
-    extern s32 offscreenNameToId(char* name);
 
     void* groupBase;
     void* group;
@@ -5690,11 +5422,6 @@ done:
 }
 
 u8 mapGrpSetOffScreen(char* param_1, char* param_2) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
-    extern s32 offscreenNameToId(char* name);
-    extern u8 _setOffScrnId(void* param_1, int param_2, int param_3);
 
     void* groupBase;
     void* group;
@@ -5736,9 +5463,6 @@ done:
 
 
 void mapObjClearOffScreen(s32 id) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
 
     void* groupBase;
     void* group;
@@ -5779,10 +5503,6 @@ done:
 
 
 void mapGrpClearOffScreen(s32 id) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
-    extern u8 _setOffScrnId(void* param_1, int param_2, int param_3);
 
     void* groupBase;
     void* group;
@@ -5821,13 +5541,7 @@ done:
 }
 
 u8 mapObjRotate(char* name, f32 x, f32 y, f32 z) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
-    extern void PSMTXIdentity(void*);
     extern void PSMTXRotRad(void*, s8, f32);
-    extern void PSMTXConcat(void*, void*, void*);
-    extern f32 float_deg2rad_8041f948;
     void* work;
     void* group;
     void* obj;
@@ -5875,12 +5589,6 @@ found:
 }
 
 u8 mapObjTranslate(char* name, f32 x, f32 y, f32 z) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
-    extern void PSMTXIdentity(void*);
-    extern void PSMTXTrans(void*, f32, f32, f32);
-    extern void PSMTXConcat(void*, void*, void*);
     extern f32 float_10_8041f944;
     void* work;
     void* group;
@@ -5923,12 +5631,7 @@ found:
 }
 
 u8 mapObjScale(char* name, f32 x, f32 y, f32 z) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
-    extern void PSMTXIdentity(void*);
     extern void PSMTXScale(void*, f32, f32, f32);
-    extern void PSMTXConcat(void*, void*, void*);
     void* work;
     void* group;
     void* obj;
@@ -5971,7 +5674,6 @@ found:
 
 void mapObjGetPosSub(int param_1, s32 param_2, int* param_3, int param_4) {
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
-    extern void PSVECAdd(void* a, void* b, void* out);
 
     u32 iVar1;
     u32 iVar2;
@@ -6132,12 +5834,7 @@ void mapObjGetPosSub(int param_1, s32 param_2, int* param_3, int param_4) {
 }
 
 u8 mapObjGetPos(char* param_1, void* param_2) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
     extern void mapObjGetPosSub(void*, void*, s32*, s32);
-    extern void PSVECScale(void*, void*, f32);
-    extern f32 float_1_8041f940;
     extern f32 vec3_802bfb74[3];
     extern f32 vec3_802bfb80[3];
     void* work;
@@ -6188,8 +5885,6 @@ found:
 
 
 void mapSetFog(s32 type, f32 start, f32 end, void* color) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     s32 rgba;
     s32 work;
 
@@ -6202,8 +5897,6 @@ void mapSetFog(s32 type, f32 start, f32 end, void* color) {
 }
 
 void mapGetFog(void* type, f32* start, f32* end, void* color) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     s32 work = mapWork + activeGroup * 0x2F4;
     *(s32*)type = *(s32*)(work + 0x28);
     *start = *(f32*)(work + 0x2C);
@@ -6212,36 +5905,26 @@ void mapGetFog(void* type, f32* start, f32* end, void* color) {
 }
 
 void mapFogOn(void) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     ((u16*)mapWork)[activeGroup * 0x17A + 2] |= 1;
 }
 
 void mapFogOff(void) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     ((u16*)mapWork)[activeGroup * 0x17A + 2] &= ~1;
 }
 
 void mapSetBlend(void* color) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     s32 work = mapWork + activeGroup * 0x2F4;
     *(s32*)(work + 0x16) = *(s32*)color;
     *(u16*)(work + 4) |= 2;
 }
 
 void mapSetBlend2(void* color) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     s32 work = mapWork + activeGroup * 0x2F4;
     *(s32*)(work + 0x1A) = *(s32*)color;
     *(u16*)(work + 4) |= 4;
 }
 
 void mapGetBlend(void* color) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     extern s32 dat_8041f920;
     s32 work = mapWork + activeGroup * 0x2F4;
     if (*(u16*)(work + 4) & 2) {
@@ -6252,8 +5935,6 @@ void mapGetBlend(void* color) {
 }
 
 void mapGetBlend2(void* color) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     extern s32 dat_8041f924;
     s32 work = mapWork + activeGroup * 0x2F4;
     if (*(u16*)(work + 4) & 4) {
@@ -6264,22 +5945,15 @@ void mapGetBlend2(void* color) {
 }
 
 void mapBlendOff(void) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     ((u16*)mapWork)[activeGroup * 0x17A + 2] &= ~2;
 }
 
 
 void mapBlendOff2(void) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     ((u16*)mapWork)[activeGroup * 0x17A + 2] &= ~4;
 }
 
 u8 mapObjSetColor(char* param_1, void* param_2) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
 
     void* groupBase;
     void* group;
@@ -6513,9 +6187,6 @@ u8 setColor(void* param_1, u32* param_2, int param_3) {
 }
 
 void mapGrpSetColor(s32 param_1, void* param_2) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
     extern u8 setColor(void* param_1, u32* param_2, int param_3);
 
     void* obj;
@@ -6566,15 +6237,11 @@ void mapSetProjTexObj(void* texObj, void* imgRef) {
 }
 
 void mapSetProjMtx(void* mtx) {
-    extern void PSMTXCopy(void*, void*);
     extern s32 projMtx[12];
     PSMTXCopy(mtx, projMtx);
 }
 
 void spline_maketable(s32 count, f32* points, f32* table, f32* out) {
-    extern void* mapalloc_base_ptr;
-    extern void* _mapAlloc(void* heap, u32 size);
-    extern void _mapFree(void* heap, void* ptr);
     extern f32 sqrtf(f32);
     extern f32 __float_nan;
 
@@ -6675,8 +6342,6 @@ void spline_maketable(s32 count, f32* points, f32* table, f32* out) {
 }
 
 void spline_getvalue(double time, float* out, int count, float* values, int timesRaw, int slopesRaw) {
-    extern f32 float_2_8041f938;
-    extern f32 float_3_8041f92c;
     f32* times;
     f32* slopes;
     s32 low;
@@ -6737,8 +6402,6 @@ void spline_getvalue(double time, float* out, int count, float* values, int time
 }
 
 s32 mapTestXLU(u32 materialFlag, void* param_2, void* param_3) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     void* work;
 
     if ((materialFlag & 0x40) && (*(u8*)((s32)param_2 + 3) != 0xFF)) {
@@ -6767,19 +6430,10 @@ s32 mapTestXLU(u32 materialFlag, void* param_2, void* param_3) {
 }
 
 void mapSetTevCallback(s32 index, void* callback) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
     *(void**)(mapWork + activeGroup * 0x2F4 + 0x110 + index * 4) = callback;
 }
 
 u8 mapObjFlushOn(char* param_1) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
-    extern char* strncpy(char* dst, const char* src, u32 n);
-    extern char error_data[];
-    extern s32 error_count;
-    extern s32 error_flag;
 
     void* groupBase;
     void* group;
@@ -6830,13 +6484,6 @@ done:
 }
 
 u8 mapObjFlushOff(char* param_1) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
-    extern char* strncpy(char* dst, const char* src, u32 n);
-    extern char error_data[];
-    extern s32 error_count;
-    extern s32 error_flag;
 
     void* groupBase;
     void* group;
@@ -6892,18 +6539,10 @@ void mapGrpFlushOn(s32 group) {
 }
 
 void mapGrpFlushOff(s32 group) {
-    extern void mapGrpFlagOff(s32, u32);
     mapGrpFlagOff(group, 0x100000);
 }
 
 void mapObjSetFlushColor(char* name, u8 r, u8 g, u8 b, u8 a) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
-    extern char* strncpy(char* dst, const char* src, u32 n);
-    extern char error_data[];
-    extern s32 error_count;
-    extern s32 error_flag;
     extern u32 unk_8042952c;
 
     void* groupBase;
@@ -6996,7 +6635,6 @@ second_done:
 void mapGrpSetFlushColor(s32 group, u8 r, u8 g, u8 b, u8 a) {
     extern s32 unk_80429530;
     extern void mapGrpSetColor(s32, void*);
-    extern void mapGrpFlagOff(s32, u32);
     s32 copy;
     s32 color;
     color = unk_80429530;
@@ -7010,13 +6648,6 @@ void mapGrpSetFlushColor(s32 group, u8 r, u8 g, u8 b, u8 a) {
 }
 
 void mapObjGetFlushColor(char* pName, void* param_2, void* param_3, void* param_4, void* param_5) {
-    extern s32 activeGroup;
-    extern s32 mapWork;
-    extern s32 strcmp(const char*, const char*);
-    extern char* strncpy(char* dst, const char* src, u32 n);
-    extern char error_data[];
-    extern s32 error_count;
-    extern s32 error_flag;
 
     void* groupBase;
     void* group;

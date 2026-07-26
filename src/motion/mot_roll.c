@@ -3,6 +3,42 @@
 void* marioGetPtr(void);
 void camFollowYOff(void);
 s32 marioSlitChkWallAround(void);
+extern f32 float_0_80420dd4;
+extern void marioPaperOff(void);
+extern char str_p_roll_802c4248[];
+extern char str_PM_R_1B_802c4258[];
+extern void* camGetPtr(s32 camId);
+extern void psndSFXOff(s32);
+extern f32 revise360(f32);
+extern void marioSetSpec(void);
+extern void marioAdjustMoveDir(void);
+extern void __memFree(s32, void*);
+extern void allPartyRideOff(void);
+extern f32 float_180_80420de0;
+extern f32 float_90_80420df0;
+extern f32 float_270_80420df4;
+extern f32 float_0p004_80420e48;
+extern f32 vec3_802c41bc;
+extern f32 DAT_802c41c0;
+extern f32 DAT_802c41c4;
+extern f32 vec3_802c41c8;
+extern f32 DAT_802c41cc;
+extern f32 DAT_802c41d0;
+extern f32 vec3_802c41d4;
+extern f32 DAT_802c41d8;
+extern f32 DAT_802c41dc;
+extern void marioChgMotSub(s16, s32);
+extern f32 toMovedir(f32);
+extern f32 __fabsf(f32);
+extern f32 float_10_80420dfc;
+extern f32 float_135_80420e00;
+extern f32 float_360_80420df8;
+extern f32 float_1p2_80420e04;
+extern f32 float_14p8_80420e24;
+extern f32 float_neg6_80420e28;
+extern f32 float_6_80420de4;
+extern f32 float_1_80420e2c;
+extern f32 rollData;
 
 void marioRollFixOn(void) {
     void* mario = marioGetPtr();
@@ -68,8 +104,6 @@ s32 getRollEvtFlag(void) {
 }
 
 void marioResetRollSpd(void) {
-    extern void* marioGetPtr(void);
-    extern f32 float_0_80420dd4;
     void* mario = marioGetPtr();
     if (*(u16*)((s32)mario + 0x2E) == 0x16) {
         if (*(void**)((s32)marioGetPtr() + 0x294) != 0) {
@@ -82,14 +116,10 @@ void marioResetRollSpd(void) {
 }
 
 u8 marioForceRollAnime(void) {
-    extern void* marioGetPtr(void);
-    extern void marioPaperOff(void);
     extern void marioChgPaper(void* paper);
     extern void marioPaperOn(void* paper);
     extern void marioChgPose(void* pose);
-    extern char str_p_roll_802c4248[];
     extern char str_M_I_U_80420e1c[6];
-    extern char str_PM_R_1B_802c4258[];
     void* mario = marioGetPtr();
 
     marioPaperOff();
@@ -102,9 +132,6 @@ u8 marioForceRollAnime(void) {
 }
 
 s32 unk_800a1454(void) {
-    extern void* marioGetPtr(void);
-    extern s32 marioSlitChkWallAround(void);
-    extern void* camGetPtr(s32 camId);
     void* mario = marioGetPtr();
     s32 result = 0;
     s32 blocked;
@@ -136,8 +163,6 @@ s32 unk_800a1454(void) {
 }
 
 s32 marioRollCancel(void) {
-    extern void* marioGetPtr(void);
-    extern void* camGetPtr(s32 camId);
     void* mario = marioGetPtr();
 
     if (!(*(u32*)mario & 0x1000000)) {
@@ -152,29 +177,7 @@ s32 marioRollCancel(void) {
 }
 
 void mot_roll_post(void) {
-    extern void* marioGetPtr(void);
-    extern void psndSFXOff(s32);
-    extern f32 revise360(f32);
-    extern void marioSetSpec(void);
-    extern void marioPaperOff(void);
-    extern void marioAdjustMoveDir(void);
     extern void marioChgPose(char*);
-    extern void __memFree(s32, void*);
-    extern void allPartyRideOff(void);
-    extern f32 float_0_80420dd4;
-    extern f32 float_180_80420de0;
-    extern f32 float_90_80420df0;
-    extern f32 float_270_80420df4;
-    extern f32 float_0p004_80420e48;
-    extern f32 vec3_802c41bc;
-    extern f32 DAT_802c41c0;
-    extern f32 DAT_802c41c4;
-    extern f32 vec3_802c41c8;
-    extern f32 DAT_802c41cc;
-    extern f32 DAT_802c41d0;
-    extern f32 vec3_802c41d4;
-    extern f32 DAT_802c41d8;
-    extern f32 DAT_802c41dc;
     extern char str_M_S_1_80420e4c;
 
     void* mario = marioGetPtr();
@@ -236,30 +239,7 @@ void mot_roll_post(void) {
 }
 
 void marioRollForceCancel(void) {
-    extern void* marioGetPtr(void);
-    extern void psndSFXOff(s32);
-    extern f32 revise360(f32);
-    extern void marioSetSpec(void);
-    extern void marioPaperOff(void);
-    extern void marioAdjustMoveDir(void);
     extern void marioChgPose(char*);
-    extern void __memFree(s32, void*);
-    extern void allPartyRideOff(void);
-    extern void marioChgMotSub(s16, s32);
-    extern f32 float_0_80420dd4;
-    extern f32 float_180_80420de0;
-    extern f32 float_90_80420df0;
-    extern f32 float_270_80420df4;
-    extern f32 float_0p004_80420e48;
-    extern f32 vec3_802c41bc;
-    extern f32 DAT_802c41c0;
-    extern f32 DAT_802c41c4;
-    extern f32 vec3_802c41c8;
-    extern f32 DAT_802c41cc;
-    extern f32 DAT_802c41d0;
-    extern f32 vec3_802c41d4;
-    extern f32 DAT_802c41d8;
-    extern f32 DAT_802c41dc;
     extern char str_M_S_1_80420e4c;
 
     void* mario = marioGetPtr();
@@ -324,20 +304,8 @@ void marioRollForceCancel(void) {
     marioChgMotSub(0, 0);
 }
 void marioSetRollDispDir(void) {
-    extern void* marioGetPtr(void);
-    extern f32 revise360(f32);
-    extern f32 toMovedir(f32);
-    extern f32 __fabsf(f32);
-    extern f32 float_0_80420dd4;
-    extern f32 float_10_80420dfc;
-    extern f32 float_90_80420df0;
-    extern f32 float_135_80420e00;
     extern f32 float_170_80420ea8;
-    extern f32 float_180_80420de0;
     extern f32 float_200_80420ea4;
-    extern f32 float_270_80420df4;
-    extern f32 float_360_80420df8;
-    extern f32 float_1p2_80420e04;
     extern f32 float_neg180_80420ea0;
 
     void* mario;
@@ -499,22 +467,13 @@ void rollEvtJumpSetup(void) {
 }
 
 u8 marioReInit_roll(void) {
-    extern void* marioGetPtr(void);
     extern void* __memAlloc(s32, u32);
     extern void* memset(void*, s32, u32);
     extern void marioPaperOn(char*);
     extern void marioChgPose(char*);
     extern void marioChgPaper(char*);
     extern void allPartyForceRideOn(void);
-    extern char str_p_roll_802c4248[];
     extern char str_M_I_U_80420e1c[];
-    extern char str_PM_R_1B_802c4258[];
-    extern f32 float_14p8_80420e24;
-    extern f32 float_0_80420dd4;
-    extern f32 float_neg6_80420e28;
-    extern f32 float_6_80420de4;
-    extern f32 float_1_80420e2c;
-    extern f32 rollData;
     void* player = marioGetPtr();
     void* work = __memAlloc(0, 0x18);
     void* current;
@@ -564,86 +523,49 @@ u8 marioReInit_roll(void) {
 #pragma use_lmw_stmw off
 
 void mot_roll(void) {
-    extern void* marioGetPtr(void);
     extern void* __memAlloc(s32, s32);
     extern void* memset(void*, s32, u32);
-    extern void __memFree(s32, void*);
     extern void* camGetPtr(s32);
-    extern void marioAdjustMoveDir(void);
     extern void marioGetRubInit(void);
     extern void marioPaperOn(char*);
-    extern void marioPaperOff(void);
     extern void marioPaperLightOff(void);
     extern void marioChgPose(char*);
     extern void marioChgPaper(char*);
-    extern void marioSetSpec(void);
     extern void marioOfsRotReset(void);
-    extern void marioChgMotSub(s16, s32);
     extern void allPartyRideShip(void);
-    extern void allPartyRideOff(void);
     extern void camFollowYOff(void);
     extern void camFollowYOn(void);
     extern void marioUpdateCamCollision(void*);
     extern void mot_fall_roll(void);
     extern u8 roll_upstairs(void);
     extern void marioSetRollDispDir(void);
-    extern s32 marioSlitChkWallAround(void);
     extern s32 marioChkBero(void*);
     extern u32 hitGetAttr(void*);
     extern u32 psndSFXOn_3D(s32, void*);
-    extern void psndSFXOff(s32);
-    extern f32 revise360(f32);
-    extern f32 toMovedir(f32);
     extern f32 angleABf(f32, f32, f32, f32);
     extern f32 distABf(f32, f32, f32, f32);
-    extern f32 __fabsf(f32);
     extern f64 sin(f64);
     extern f64 cos(f64);
 
-    extern char str_p_roll_802c4248[];
     extern char str_PM_R_1A_802c4250[];
-    extern char str_PM_R_1B_802c4258[];
     extern char str_PM_R_1C_802c4260[];
     extern char str_M_I_U_80420e1c[];
     extern char str_M_S_1_80420e4c[];
 
-    extern f32 rollData;
     extern f32 vec3_802c41b0;
     extern f32 DAT_802c41b4;
     extern f32 DAT_802c41b8;
-    extern f32 vec3_802c41bc;
-    extern f32 DAT_802c41c0;
-    extern f32 DAT_802c41c4;
-    extern f32 vec3_802c41c8;
-    extern f32 DAT_802c41cc;
-    extern f32 DAT_802c41d0;
-    extern f32 vec3_802c41d4;
-    extern f32 DAT_802c41d8;
-    extern f32 DAT_802c41dc;
 
-    extern f32 float_0_80420dd4;
     extern f32 float_0p5_80420dd8;
     extern f32 float_3p1416_80420ddc;
-    extern f32 float_180_80420de0;
-    extern f32 float_6_80420de4;
     extern f32 float_5_80420de8;
     extern f32 float_neg4_80420dec;
-    extern f32 float_90_80420df0;
-    extern f32 float_270_80420df4;
-    extern f32 float_360_80420df8;
-    extern f32 float_10_80420dfc;
-    extern f32 float_135_80420e00;
-    extern f32 float_1p2_80420e04;
-    extern f32 float_14p8_80420e24;
-    extern f32 float_neg6_80420e28;
-    extern f32 float_1_80420e2c;
     extern f32 float_0p4_80420e30;
     extern f32 float_0p01_80420e34;
     extern f32 float_2_80420e38;
     extern f32 float_0p1_80420e3c;
     extern f32 float_3_80420e40;
     extern f32 float_neg3_80420e44;
-    extern f32 float_0p004_80420e48;
     extern f32 float_1p4_80420e54;
     extern f32 float_1p45_80420e58;
     extern f32 float_0p35_80420e5c;
@@ -1153,7 +1075,6 @@ state_transition_done:
 
 
 void roll_upstairs_on(void) {
-    extern void* marioGetPtr(void);
     extern void marioClearJumpPara(void);
     extern f32 float_4_80420e0c;
     extern f32 float_neg0p42_80420e10;
@@ -1173,7 +1094,6 @@ void roll_upstairs_on(void) {
 
 
 u8 roll_upstairs(void) {
-    extern void* marioGetPtr(void);
     void* mario = marioGetPtr();
 
     *(f32*)((s32)mario + 0x90) += *(f32*)((s32)mario + 0x7C);
@@ -1185,7 +1105,6 @@ u8 roll_upstairs(void) {
 }
 
 void mot_fall_roll(void) {
-    extern void* marioGetPtr(void);
     extern f32 marioGetFallSpd(void);
     extern void* marioChkLandon(f32* y, f32 speed);
     extern void marioLandOn(void);

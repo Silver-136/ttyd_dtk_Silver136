@@ -1,7 +1,30 @@
 #include "motion/mot_jump.h"
+#include "bowser/koopa_motion.h"
 
 extern void* gp;
 extern char str_gon_10_802c40d0[];
+extern void clear_hitobj_ride(void);
+extern void marioSetJumpPara(void);
+extern void marioMakeJumpPara(void);
+extern void marioSetPeakYpos(void);
+extern void marioChgPose(char*);
+extern f32 float_0_80420cc8;
+extern char str_M_J_1B_802c40c8;
+extern char str_M_J_1C_802c40b8;
+extern void marioResetCamFollowRate(void);
+extern void camFollowYOff(void);
+extern u32 hitGetAttr(void*);
+extern void* mobjHitObjPtrToPtr(s32);
+extern s32 marioChkFront(f32, f32, f32*, void*);
+extern f32 revise360(f32);
+extern void sincosf(f32, f32*, f32*);
+extern f64 distABf(f64, f64, f64, f64);
+extern f32 float_0p5_80420cf0;
+extern f32 float_5_80420cf4;
+extern f32 float_30_80420cf8;
+extern f32 float_180_80420cfc;
+extern s32 irand(s32);
+extern void psndSFXOn_3D(void*, void*);
 
 void* marioGetPtr(void);
 void psndSFXOff(s32 id);
@@ -9,7 +32,6 @@ s32 strcmp(const char* a, const char* b);
 void camFollowYOn(void);
 
 u8 marioPreJump(void) {
-    extern void clear_hitobj_ride(void);
     extern u8 marioSetJumpPara(void);
     void* mario = marioGetPtr();
     s32 x;
@@ -36,19 +58,10 @@ f32 marioGetJumpHeight(void) {
 }
 
 void mot_jumpStand(void) {
-    extern void* marioGetPtr(void);
-    extern void clear_hitobj_ride(void);
-    extern void marioSetJumpPara(void);
-    extern void marioMakeJumpPara(void);
-    extern void marioSetPeakYpos(void);
-    extern void marioChgPose(char*);
     extern s32 marioSlitButton(void);
     extern void marioSlitForceCancel(void);
     extern f32 marioJumpStandData[];
-    extern f32 float_0_80420cc8;
     extern f32 float_neg1_80420d08;
-    extern char str_M_J_1B_802c40c8;
-    extern char str_M_J_1C_802c40b8;
 
     void* mario = marioGetPtr();
     void* work;
@@ -160,28 +173,7 @@ void mot_jumpStand(void) {
 }
 
 void mot_jumpSw(void) {
-    extern void* marioGetPtr(void);
-    extern void marioResetCamFollowRate(void);
-    extern void camFollowYOff(void);
-    extern void clear_hitobj_ride(void);
-    extern void marioSetJumpPara(void);
-    extern void marioMakeJumpPara(void);
-    extern void marioSetPeakYpos(void);
-    extern void marioChgPose(char*);
-    extern u32 hitGetAttr(void*);
-    extern void* mobjHitObjPtrToPtr(s32);
-    extern s32 marioChkFront(f32, f32, f32*, void*);
-    extern f32 revise360(f32);
-    extern void sincosf(f32, f32*, f32*);
-    extern f64 distABf(f64, f64, f64, f64);
     extern f32 marioJumpSwData[];
-    extern f32 float_0_80420cc8;
-    extern f32 float_0p5_80420cf0;
-    extern f32 float_5_80420cf4;
-    extern f32 float_30_80420cf8;
-    extern f32 float_180_80420cfc;
-    extern char str_M_J_1B_802c40c8;
-    extern char str_M_J_1C_802c40b8;
 
     typedef struct Vec { f32 x, y, z; } Vec;
 
@@ -286,22 +278,7 @@ jump_setup_done:
 
 
 void mot_jumpNpc(void) {
-    extern void* marioGetPtr(void);
     extern void kpa_jumpNpc(void);
-    extern void marioResetCamFollowRate(void);
-    extern void camFollowYOff(void);
-    extern void clear_hitobj_ride(void);
-    extern void marioSetJumpPara(void);
-    extern void marioMakeJumpPara(void);
-    extern void marioSetPeakYpos(void);
-    extern void marioChgPose(char*);
-    extern u32 hitGetAttr(void*);
-    extern void* mobjHitObjPtrToPtr(s32);
-    extern s32 marioChkFront(f32, f32, f32*, void*);
-    extern f32 revise360(f32);
-    extern void sincosf(f32, f32*, f32*);
-    extern f64 distABf(f64, f64, f64, f64);
-    extern f32 float_0_80420cc8;
     extern f32 float_2p6_80420cd4;
     extern f32 float_neg0p06_80420cd8;
     extern f32 float_neg0p01_80420cdc;
@@ -309,14 +286,8 @@ void mot_jumpNpc(void) {
     extern f32 float_1_80420ce4;
     extern f32 float_neg0p04_80420ce8;
     extern f32 float_neg0p02_80420cec;
-    extern f32 float_0p5_80420cf0;
-    extern f32 float_5_80420cf4;
-    extern f32 float_30_80420cf8;
-    extern f32 float_180_80420cfc;
     extern f32 float_neg0p03_80420d00;
     extern f32 float_0p04_80420d04;
-    extern char str_M_J_1B_802c40c8;
-    extern char str_M_J_1C_802c40b8;
 
     typedef struct Vec { f32 x, y, z; } Vec;
 
@@ -445,17 +416,6 @@ void N_mot_jumpNpc_post(void) {
 }
 
 void mot_jump(void) {
-    extern void* marioGetPtr(void);
-    extern void kpa_jump(void);
-    extern void marioResetCamFollowRate(void);
-    extern void clear_hitobj_ride(void);
-    extern void marioSetJumpPara(void);
-    extern void camFollowYOn(void);
-    extern void camFollowYOff(void);
-    extern void marioChgPose(char*);
-    extern s32 irand(s32);
-    extern void psndSFXOn_3D(void*, void*);
-    extern char str_M_J_1B_802c40c8;
 
     void* mario = marioGetPtr();
     if (*(s8*)((s32)mario + 0x3C) == 2) {
@@ -525,16 +485,6 @@ void mot_jump(void) {
 }
 
 void mot_jumpSmall(void) {
-    extern void* marioGetPtr(void);
-    extern void kpa_jump(void);
-    extern void marioResetCamFollowRate(void);
-    extern void clear_hitobj_ride(void);
-    extern void marioSetJumpPara(void);
-    extern void camFollowYOff(void);
-    extern void marioChgPose(char*);
-    extern s32 irand(s32);
-    extern void psndSFXOn_3D(void*, void*);
-    extern char str_M_J_1B_802c40c8;
 
     void* mario = marioGetPtr();
     if (*(s8*)((s32)mario + 0x3C) == 2) {
@@ -602,7 +552,6 @@ void mot_jumpSmall(void) {
 }
 
 void mot_upstairs(void) {
-    extern void* marioGetPtr(void);
     extern void marioClearJumpPara(void);
     extern void motSlitContinue(void);
     extern void marioChgMot2(s32 motion);
@@ -640,23 +589,16 @@ void mot_upstairs(void) {
 }
 
 void mot_fall(void) {
-    extern void* marioGetPtr(void);
-    extern void kpa_fall(void);
     extern void psndSFXOff(s32);
-    extern void marioResetCamFollowRate(void);
     extern void kpaChgPose(char*, char*);
-    extern void marioChgPose(char*);
     extern s32 marioBgmodeChk(void);
-    extern void camFollowYOn(void);
     extern s32 marioPriCheckJabara(void);
     extern f32 marioGetCamFollowRate(void);
     extern void marioSetCamFollowRate(double);
-    extern f32 float_0_80420cc8;
     extern f32 float_0p1_80420ccc;
     extern f32 float_0p8_80420cd0;
     extern char str_KPA_J_1B_802c40a0;
     extern char str_KPA2_J_1B_802c40ac;
-    extern char str_M_J_1C_802c40b8;
 
     void* mario = marioGetPtr();
     if (*(s8*)((s32)mario + 0x3C) == 2) {
@@ -733,11 +675,8 @@ void mot_fall_post(void) {
 }
 
 void mot_land(void) {
-    extern void* marioGetPtr(void);
-    extern void marioResetCamFollowRate(void);
     extern void psndSFXOff(s32 id);
     extern void marioChgMot(s32 motion);
-    extern f32 float_0_80420cc8;
     void* mario = marioGetPtr();
     u32 flags = *(u32*)((s32)mario + 0xC);
     if (flags & 1) {

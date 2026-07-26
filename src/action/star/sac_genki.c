@@ -1,33 +1,36 @@
 #include "action/star/sac_genki.h"
+#include "battle/battle.h"
 #include "event/evt_cmd.h"
+#include "statuswindow.h"
+#include "effect/eff_recovery.h"
 
-extern void* _battleWorkPointer;
-s32 evtSetValue(EventEntry* event, s32 target, s32 value);
-void statusWinOpen(void);
-void* BattleGetPartyPtr(void* battleWork);
+extern f32 float_0_8042831c;
+extern s32 irand(s32 max);
+extern s32 rand(void);
+extern f64 sin(f64 value);
+extern f64 cos(f64 value);
 void* get_ptr(void);
 void main_star0(s32 index);
 void main_star1(void);
+void main_base(void);
+void main_mario(void);
+void main_target(void);
+void main_weapon(s32 index);
+void main_star(void);
+void disp_2D(void);
+void disp_3D(void);
+void disp_3D_alpha(void);
+void object_entry(void);
+s32 object_get_num(void);
+void weapon_entry(void);
 
 /* stub-fill: main_genki | missing_definition | ghidra_signature */
 s32 main_genki(EventEntry* event, s32 isFirstCall) {
-    extern void* get_ptr(void);
-    extern void* memset(void* dest, s32 value, u32 size);
     extern s32 evtGetValue(EventEntry* event, s32 target);
     extern void* BattleAlloc(u32 size);
-    extern void* effRecoveryEntry(s32 type, s32 arg, f32 x, f32 y, f32 z);
     extern void* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
-    extern void main_base(void);
-    extern void main_mario(void);
-    extern void main_target(void);
-    extern void main_weapon(s32 index);
     extern void main_object(s32 index);
-    extern void main_star(void);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, f32 z, void* param);
-    extern void disp_2D(void);
-    extern void disp_3D(void);
-    extern void disp_3D_alpha(void);
-    extern f32 float_0_8042831c;
     extern f32 float_neg1000_80428320;
     extern f32 float_1_8042830c;
     extern f32 float_901_804283c0;
@@ -81,9 +84,6 @@ s32 main_genki(EventEntry* event, s32 isFirstCall) {
 
 /* stub-fill: main_base | missing_definition | ghidra_signature */
 void main_base(void) {
-    extern void* get_ptr(void);
-    extern s32 irand(s32);
-    extern void object_entry(void);
     u8* work = get_ptr();
     s32* table = *(s32**)(work + 0x5C);
     s32 i;
@@ -172,15 +172,11 @@ void main_base(void) {
 
 /* stub-fill: main_mario | missing_definition | ghidra_signature */
 void main_mario(void) {
-    extern void* get_ptr(void);
     extern s32 keyGetStickX(s32 pad);
-    extern void* _battleWorkPointer;
     extern void* BattleGetMarioPtr(void* battleWork);
     extern s32 BtlUnit_GetBodyPartsId(void* unit);
     extern void* BtlUnit_GetPartsPtr(void* unit, s32 partsId);
     extern void BtlUnit_SetAnim(void* parts, const char* anim, s32 force);
-    extern s32 object_get_num(void);
-    extern void weapon_entry(void);
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern void* effStampN64Entry(s32 type, f32 x, f32 y, f32 z);
     extern char str_M_S_1_804283a8[];
@@ -263,13 +259,11 @@ void main_mario(void) {
 
 /* stub-fill: main_target | missing_definition | ghidra_signature */
 void main_target(void) {
-    extern void* get_ptr(void);
     extern f32 float_30_80428318;
     extern f32 float_1p25_80428304;
     extern f32 float_60_804282e8;
     extern f32 float_360_80428380;
     extern f32 float_neg1p25_804283a4;
-    extern f32 float_0_8042831c;
 
     void* work = get_ptr();
 
@@ -310,13 +304,9 @@ void main_target(void) {
 /* stub-fill: main_weapon | missing_definition | ghidra_signature */
 void main_weapon(s32 index) {
     typedef struct Vec { f32 x, y, z; } Vec;
-    extern void* get_ptr(void);
-    extern void* _battleWorkPointer;
     extern void* BattleGetMarioPtr(void*);
     extern s32 BattleAudience_GetAudienceNum(void);
     extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
-    extern f64 cos(f64);
-    extern f64 sin(f64);
     extern void BtlUnit_snd_se(void*, char*, s32, s16);
     extern void effStardustN64Entry(f32, f32, f32, f32, s32);
     extern void effHitEntry(void);
@@ -444,11 +434,8 @@ void main_weapon(s32 index) {
 
 /* stub-fill: main_object | missing_definition | ghidra_signature */
 void main_object(u32 index) {
-    extern void* get_ptr(void);
-    extern void* _battleWorkPointer;
     extern void* BattleGetMarioPtr(void*);
     extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
-    extern s32 irand(s32);
     extern void* effStardustEntry(f32, f32, f32, f32, f32, s32, s32, s32);
 
     u8* work = get_ptr();
@@ -524,16 +511,10 @@ void main_star(void) {
 
 /* stub-fill: main_star0 | prototype_only | source_prototype */
 void main_star0(s32 index) {
-    extern void* get_ptr(void);
-    extern void* _battleWorkPointer;
     extern void* BattleGetMarioPtr(void*);
     extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
     extern void* effStarStoneEntry(f32, f32, f32, f32, s32);
     extern f64 intplGetValue(f64, f64, s32, s32, s32);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
-    extern s32 rand(void);
-    extern s32 irand(s32);
     u8* work = (u8*)get_ptr();
     s32* star = (s32*)(work + 0x510 + index * 100);
     void* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -621,15 +602,10 @@ void main_star0(s32 index) {
 
 /* stub-fill: main_star1 | prototype_only | source_prototype */
 void main_star1(void) {
-    extern void* get_ptr(void);
-    extern void* _battleWorkPointer;
     extern void* BattleGetMarioPtr(void*);
     extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
     extern void* effStarStoneEntry(f32, f32, f32, f32, s32);
     extern f64 intplGetValue(f64, f64, s32, s32, s32);
-    extern s32 rand(void);
-    extern s32 irand(s32);
-    extern f64 sin(f64);
 
     u8* work = get_ptr();
     void* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -923,7 +899,6 @@ void weapon_entry(void) {
     extern void* BattleGetMarioPtr(void* battleWork);
     extern s32 BtlUnit_GetBodyPartsId(void* unit);
     extern void* BtlUnit_GetPartsPtr(void* unit, s32 partsId);
-    extern s32 irand(s32 max);
     extern void BtlUnit_SetAnim(void* parts, const char* anim, s32 force);
     extern const char str_M_C_2C_80300dfc[];
 

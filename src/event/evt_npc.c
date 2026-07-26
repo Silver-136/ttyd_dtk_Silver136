@@ -1,6 +1,32 @@
 #include "event/evt_npc.h"
 
+#include "battle/battle_information.h"
+#include "driver/seqdrv.h"
+#include "driver/animdrv.h"
+#include "driver/npcdrv.h"
+#include "mario/mario.h"
+#include "mario/mario_party.h"
+#include "mario/mario_pouch.h"
+#include "party/party.h"
+#include "pmario_sound.h"
+#include "manager/evtmgr.h"
+#include "manager/evtmgr_cmd.h"
+
 void _npc_check_coin_group(void* group, s32* coin);
+
+extern void* fbatGetPointer(void);
+extern f32 sqrtf(f32 x);
+extern s32 irand(s32 max);
+extern void npcDeleteGroup(void* npc);
+extern void fbatChangeMode(s16 mode);
+extern char* strcpy(char* dst, const char* src);
+extern s32 strcmp(const char* a, const char* b);
+extern f64 sin(f64 x);
+extern f64 cos(f64 x);
+extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+extern void PSVECSubtract(void* a, void* b, void* out);
+extern void _kamek_houki_kemuri(s32 npc, s32 mode);
+extern f32 reviseAngle(f32 angle);
 
 s32 evt_npc_entry(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
@@ -26,7 +52,6 @@ s32 evt_npc_slave_entry(void* pEvt) {
     extern void* npcNameToPtr(void*);
     extern void* memset(void*, s32, u32);
     extern s32 sprintf(char*, const char*, ...);
-    extern char* strcpy(char*, const char*);
     extern char* strcat(char*, const char*);
     extern s32 npcEntry(char*, s32);
     extern void npcSetSlave(void*, void*, s32);
@@ -66,18 +91,14 @@ s32 evt_npc_slave_entry(void* pEvt) {
 }
 
 USER_FUNC(evt_npc_delete) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern void npcDeleteGroup(void* npc);
     s32 value = evtGetValue(event, event->args[0]);
     npcDeleteGroup(evtNpcNameToPtr(event, value));
     return 2;
 }
 
 USER_FUNC(evt_npc_check_delete) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr_NoAssert(EventEntry* event, s32 name);
-    extern void npcDeleteGroup(void* npc);
     s32 name;
     void* npc;
     name = evtGetValue(event, event->args[0]);
@@ -89,9 +110,7 @@ USER_FUNC(evt_npc_check_delete) {
 }
 
 USER_FUNC(evt_npc_get_ReactionOfLivingBody) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern s32 npcGetReactionOfLivingBody(s32 name);
-    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
@@ -102,16 +121,12 @@ USER_FUNC(evt_npc_get_ReactionOfLivingBody) {
 }
 
 s32 evt_npc_setup(EventEntry* event, s32 isFirstCall) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern void* fbatGetPointer(void);
     extern void* npcNameToPtr_NoAssert(void* name);
     extern void* npcNameToPtr(void* name);
-    extern void evtDeleteID(s32 id);
     extern void* evtEntry(void* code, s32 order, u32 flags);
     extern void npcSetBattleInfo(void* npc, s32 battleInfoId);
     extern char* strcpy(char* dst, char* src);
     extern void animPoseSetAnim(s32 poseId, char* anim, s32 force);
-    extern void fbatChangeMode(s16 mode);
     extern s32 evtCheckID(s32 id);
     void* setup;
     void* iter;
@@ -244,8 +259,6 @@ s32 evt_npc_set_position(void* pEvt) {
 }
 
 USER_FUNC(evt_npc_set_width) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
@@ -255,8 +268,6 @@ USER_FUNC(evt_npc_set_width) {
 }
 
 USER_FUNC(evt_npc_set_height) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
@@ -267,7 +278,6 @@ USER_FUNC(evt_npc_set_height) {
 
 
 USER_FUNC(evt_npc_get_height) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern f32 evtSetFloat(EventEntry* event, s32 target, f32 value);
     s32* args = event->args;
@@ -477,19 +487,9 @@ s32 evt_npc_set_rotate_offset(void* pEvt) {
 }
 
 s32 evt_npc_move_position(EventEntry* event, s32 isFirstCall) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern void PSVECSubtract(void* a, void* b, void* out);
-    extern f32 angleABf(f32 x0, f32 z0, f32 x1, f32 z1);
-    extern void* fbatGetPointer(void);
-    extern void npcTuningRy(void* npc, f32 ry);
-    extern f64 sin(f64 x);
-    extern f64 cos(f64 x);
     extern f64 __frsqrte(f64 x);
-    extern u32 psndGetFlag(void);
     extern u32 animPoseGetMaterialFlag(s32 poseId);
-    extern s32 searchPSSFXList(s32 id);
     extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
     extern f32 float_0_8041fd84;
     extern f32 float_1_8041fd88;
@@ -712,20 +712,9 @@ s32 evt_npc_move_position(EventEntry* event, s32 isFirstCall) {
 }
 
 s32 evt_npc_jump_position(EventEntry* event, s32 isFirstCall) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern void PSVECSubtract(void* a, void* b, void* out);
-    extern f32 angleABf(f32 x0, f32 z0, f32 x1, f32 z1);
-    extern u32 psndGetFlag(void);
     extern u32 animPoseGetMaterialFlag(s32 poseId);
-    extern s32 searchPSSFXList(s32 id);
     extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
-    extern void* fbatGetPointer(void);
-    extern void npcTuningRy(void* npc, f32 ry);
-    extern f64 sin(f64 x);
-    extern f64 cos(f64 x);
-    extern f32 sqrtf(f32 x);
     extern f32 float_0_8041fd84;
     extern f32 float_1_8041fd88;
     extern f32 float_0p5_8041fd90;
@@ -923,11 +912,8 @@ s32 evt_npc_jump_position(EventEntry* event, s32 isFirstCall) {
 }
 
 s32 evt_npc_jump_position_nohit(EventEntry* event, s32 isFirstCall) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern u32 psndGetFlag(void);
     extern u32 animPoseGetMaterialFlag(s32 poseId);
-    extern s32 searchPSSFXList(s32 id);
     extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
     extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 cur, s32 max);
     extern u32 DAT_800000f8;
@@ -999,18 +985,9 @@ s32 evt_npc_jump_position_nohit(EventEntry* event, s32 isFirstCall) {
 }
 
 s32 evt_npc_glide_position(EventEntry* event, s32 isFirstCall) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern void PSVECSubtract(void* a, void* b, void* out);
     extern f32 _intplGetFloat(f32 value, s32 kind);
-    extern void* fbatGetPointer(void);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern void npcTuningRy(void* npc, f32 ry);
-    extern f64 sin(f64 x);
-    extern u32 psndGetFlag(void);
     extern u32 animPoseGetMaterialFlag(s32 poseId);
-    extern s32 searchPSSFXList(s32 id);
     extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
     extern f64 sqrt(f64);
     extern f32 float_0_8041fd84;
@@ -1156,23 +1133,10 @@ s32 evt_npc_return_interrupt(void* pEvt) {
 }
 
 s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern s32 strcmp(const char* a, const char* b);
-    extern void* marioGetPtr(void);
-    extern f32 angleABf(f32 x0, f32 z0, f32 x1, f32 z1);
     extern f32 compAngle(f32 a, f32 b);
     extern f32 reviseAngle(f32 a);
-    extern void npcTuningRy(void* npc, f32 ry);
-    extern void PSVECSubtract(void* a, void* b, void* out);
-    extern void* fbatGetPointer(void);
-    extern f64 sin(f64 x);
-    extern f64 cos(f64 x);
-    extern f32 sqrtf(f32 x);
-    extern u32 psndGetFlag(void);
     extern u32 animPoseGetMaterialFlag(s32 poseId);
-    extern s32 searchPSSFXList(s32 id);
     extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
     extern f32 float_0_8041fd84;
     extern f32 float_1000_8041fd94;
@@ -1332,8 +1296,6 @@ s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
 }
 
 f32 _intplGetFloat(f32 value, s32 kind) {
-    extern f64 cos(f64 x);
-    extern f64 sin(f64 x);
     extern f32 float_0_8041fd84;
     extern volatile f32 float_1_8041fd88;
     extern f32 float_0p5_8041fd90;
@@ -1414,8 +1376,6 @@ f32 _intplGetFloat(f32 value, s32 kind) {
 }
 
 USER_FUNC(evt_npc_set_ry) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
@@ -1429,7 +1389,6 @@ s32 evt_npc_set_ry_lr(void* pEvt) {
     extern f32 evtGetFloat(void* evt, s32 value);
     extern void* evtNpcNameToPtr(void* evt, s32 name);
     extern void* camGetPtr(s32 camera);
-    extern f32 reviseAngle(f32 angle);
     extern f32 float_100_8041fde4;
     extern f32 float_5_8041fde0;
     s32* args = *(s32**)((u8*)pEvt + 0x18);
@@ -1453,7 +1412,6 @@ s32 evt_npc_set_ry_lr(void* pEvt) {
 s32 evt_npc_reverse_ry(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
     extern void* evtNpcNameToPtr(void* event, s32 name);
-    extern f32 reviseAngle(f32 angle);
     extern f32 float_180_8041fdb0;
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 name = evtGetValue(pEvt, args[0]);
@@ -1464,9 +1422,7 @@ s32 evt_npc_reverse_ry(void* pEvt) {
 }
 
 USER_FUNC(evt_npc_get_dir) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
     void* npc = evtNpcNameToPtr(event, name);
@@ -1477,7 +1433,6 @@ USER_FUNC(evt_npc_get_dir) {
 s32 evt_npc_set_anim(void* evt, s32 isFirstCall) {
     extern s32 evtGetValue(void* event, s32 value);
     extern void* evtNpcNameToPtr(void* event, s32 name);
-    extern char* strcpy(char* dst, const char* src);
     extern void animPoseSetAnim(s32 poseId, void* name, s32 force);
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
@@ -1492,9 +1447,7 @@ s32 evt_npc_set_anim(void* evt, s32 isFirstCall) {
 }
 
 s32 evt_npc_set_damage_anim(EventEntry* event) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern char* strcpy(char* dst, const char* src);
     extern void animPoseSetAnim(void* pose, const char* anim, s32 enabled);
     s32 name;
     void* npc;
@@ -1515,9 +1468,7 @@ s32 evt_npc_set_damage_anim(EventEntry* event) {
 }
 
 s32 evt_npc_set_confuse_anim(EventEntry* event) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern char* strcpy(char* dst, const char* src);
     extern void animPoseSetAnim(void* pose, const char* anim, s32 enabled);
     s32 name;
     void* npc;
@@ -1538,9 +1489,7 @@ s32 evt_npc_set_confuse_anim(EventEntry* event) {
 }
 
 s32 evt_npc_set_stop_anim(EventEntry* event) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern char* strcpy(char* dst, const char* src);
     extern void animPoseSetAnim(void* pose, const char* anim, s32 enabled);
     s32 name;
     void* npc;
@@ -1561,9 +1510,7 @@ s32 evt_npc_set_stop_anim(EventEntry* event) {
 }
 
 s32 evt_npc_set_stay_anim(EventEntry* event) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern char* strcpy(char* dst, const char* src);
     extern void animPoseSetAnim(void* pose, const char* anim, s32 enabled);
     s32 name;
     void* npc;
@@ -1584,9 +1531,7 @@ s32 evt_npc_set_stay_anim(EventEntry* event) {
 }
 
 s32 evt_npc_set_talk_anim(EventEntry* event) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern char* strcpy(char* dst, const char* src);
     extern void animPoseSetAnim(void* pose, const char* anim, s32 enabled);
     s32 name;
     void* npc;
@@ -1607,9 +1552,7 @@ s32 evt_npc_set_talk_anim(EventEntry* event) {
 }
 
 s32 evt_npc_set_walk_anim(EventEntry* event) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern char* strcpy(char* dst, const char* src);
     extern void animPoseSetAnim(void* pose, const char* anim, s32 enabled);
     s32 name;
     void* npc;
@@ -1630,9 +1573,7 @@ s32 evt_npc_set_walk_anim(EventEntry* event) {
 }
 
 s32 evt_npc_set_run_anim(EventEntry* event) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern char* strcpy(char* dst, const char* src);
     extern void animPoseSetAnim(void* pose, const char* anim, s32 enabled);
     s32 name;
     void* npc;
@@ -1653,7 +1594,6 @@ s32 evt_npc_set_run_anim(EventEntry* event) {
 }
 
 USER_FUNC(evt_npc_set_paper) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern void animPoseSetPaperAnimGroup(void* pose, s32 anim, s32 enabled);
     extern void animPosePaperPeraOn(void* pose);
@@ -1677,7 +1617,6 @@ USER_FUNC(evt_npc_set_paper) {
 }
 
 USER_FUNC(evt_npc_set_paper_anim) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern void animPoseSetPaperAnim(void* pose, s32 anim, s32 enabled);
     s32* args = event->args;
@@ -1700,9 +1639,7 @@ s32 evt_npc_clear_paper(void* pEvt) {
 }
 
 s32 evt_npc_set_force_regl_anim(EventEntry* event) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern char* strcpy(char* dst, const char* src);
     extern void animPoseSetAnim(void* pose, const char* anim, s32 enabled);
     s32* args;
     s32 name;
@@ -1770,9 +1707,7 @@ s32 evt_npc_flag_onoff(void* pEvt) {
 }
 
 USER_FUNC(evt_npc_flag_check) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
     s32 flag = evtGetValue(event, args[1]);
@@ -1827,9 +1762,7 @@ s32 evt_npc_status_onoff(void* pEvt) {
 }
 
 USER_FUNC(evt_npc_status_check) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
     s32 flag = evtGetValue(event, args[1]);
@@ -1860,7 +1793,6 @@ s32 evt_npc_pera_onoff(void* pEvt) {
 }
 
 USER_FUNC(evt_npc_set_camid) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
@@ -1870,11 +1802,7 @@ USER_FUNC(evt_npc_set_camid) {
 }
 
 f32 _get_target_dir(void* pEvt, void* npc, s32 target) {
-    extern s32 strcmp(const char*, const char*);
-    extern void* marioGetPtr(void);
     extern void* evtNpcNameToPtr(void*, s32);
-    extern void PSVECSubtract(void*, void*, void*);
-    extern f32 angleABf(f32, f32, f32, f32);
     extern char str_mario_8041fdd4[];
     extern f32 float_0_8041fd84;
     f32 targetPos[3];
@@ -1898,7 +1826,6 @@ f32 _get_target_dir(void* pEvt, void* npc, s32 target) {
 }
 
 USER_FUNC(evt_get_target_dir) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern f32 _get_target_dir(EventEntry* event, void* npc, s32 target);
     extern void evtSetFloat(EventEntry* event, s32 index, f32 value);
@@ -1922,7 +1849,6 @@ USER_FUNC(evt_get_target_dir) {
 }
 
 USER_FUNC(evt_set_dir_to_target) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern f32 _get_target_dir(EventEntry* event, void* npc, s32 target);
 
@@ -1944,9 +1870,7 @@ USER_FUNC(evt_set_dir_to_target) {
 }
 
 USER_FUNC(evt_set_dir_to_home) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
 
     s32* args;
     s32 name;
@@ -1972,8 +1896,6 @@ USER_FUNC(evt_set_dir_to_home) {
 s32 evt_npc_add_dirdist(void* pEvt) {
     extern f32 evtGetFloat(void*, s32);
     extern void evtSetFloat(void*, s32, f32);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern f32 float_6p2832_8041fda0;
     extern f32 float_360_8041fda4;
     s32* args;
@@ -2070,9 +1992,7 @@ s32 evt_npc_change_interrupt(void* pEvt) {
 }
 
 USER_FUNC(evt_npc_get_reglid) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
@@ -2099,8 +2019,6 @@ s32 evt_npc_facedirection_add(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
     extern f32 evtGetFloat(void*, s32);
     extern void* evtNpcNameToPtr(void*, s32);
-    extern void* marioGetPtr(void);
-    extern s32 strcmp(const char*, const char*);
     extern f32 npcTransRytoFaceDir(void*);
     extern void evtSetValue(void*, s32, s32);
     extern char str_mario_8041fdd4[];
@@ -2136,7 +2054,6 @@ s32 evt_npc_facedirection_add(void* pEvt) {
 }
 
 void* evtNpcNameToPtr(void* event, s32 name) {
-    extern s32 strcmp(const char*, const char*);
     extern void* npcNameToPtr(void*);
     extern char vec3_802c1470[];
     extern char str_me_8041fd80[];
@@ -2177,7 +2094,6 @@ void* evtNpcNameToPtr(void* event, s32 name) {
 }
 
 void* evtNpcNameToPtr_NoAssert(void* event, s32 name) {
-    extern s32 strcmp(const char*, const char*);
     extern void* npcNameToPtr_NoAssert(void*);
     extern char vec3_802c1470[];
     extern char str_me_8041fd80[];
@@ -2230,7 +2146,6 @@ USER_FUNC(evt_npc_start_for_event) {
 }
 
 USER_FUNC(evt_npc_stop_for_one_event) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern void npcStopForOneEvent(void* npc);
     s32 value = evtGetValue(event, event->args[0]);
@@ -2239,7 +2154,6 @@ USER_FUNC(evt_npc_stop_for_one_event) {
 }
 
 USER_FUNC(evt_npc_start_for_one_event) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern void npcStartForOneEvent(void* npc);
     s32 value = evtGetValue(event, event->args[0]);
@@ -2248,8 +2162,6 @@ USER_FUNC(evt_npc_start_for_one_event) {
 }
 
 USER_FUNC(evt_npc_change_fbat_mode) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern void fbatChangeMode(s16 mode);
     fbatChangeMode((s16)evtGetValue(event, event->args[0]));
     return 2;
 }
@@ -2298,7 +2210,6 @@ s32 evt_npc_set_color(void* pEvt) {
 }
 
 s32 evt_npc_blur_onoff(EventEntry* event) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern void npcBlurOn(void* npc);
     extern void npcBlurOff(void* npc);
@@ -2317,9 +2228,7 @@ s32 evt_npc_blur_onoff(EventEntry* event) {
 }
 
 USER_FUNC(evt_npc_check) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* npcNameToPtr_NoAssert(s32 name);
-    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
     s32* args = event->args;
     if (npcNameToPtr_NoAssert(evtGetValue(event, args[0])) == 0) {
         evtSetValue(event, args[1], 0);
@@ -2330,7 +2239,6 @@ USER_FUNC(evt_npc_check) {
 }
 
 USER_FUNC(evt_npc_set_attack_mode) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
@@ -2340,7 +2248,6 @@ USER_FUNC(evt_npc_set_attack_mode) {
 }
 
 USER_FUNC(evt_npc_set_battle_info) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern void npcSetBattleInfo(void* npc, s32 info);
     s32* args = event->args;
@@ -2368,14 +2275,10 @@ s32 evt_npc_set_battle_rule(void* pEvt) {
 
 s32 evt_npc_battle_start(void* pEvt, s32 isFirstCall) {
     extern s32 evtGetValue(void*, s32);
-    extern void* fbatGetPointer(void);
     extern void* evtNpcNameToPtr(void*, s32);
     extern void marioFBattlePrepare(void);
     extern void marioCtrlOff(void);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32);
     extern void partyCtrlOff(void*);
-    extern void BattleInformationSetResult(void*, s32);
     extern void psndSetFlag(s32);
     extern void seqSetSeq(s32, s32, s32);
     s32* args;
@@ -2408,12 +2311,7 @@ s32 evt_npc_battle_start(void* pEvt, s32 isFirstCall) {
 }
 
 s32 evt_npc_wait_battle_end(void) {
-    extern void* fbatGetPointer(void);
-    extern s32 seqGetSeq(void);
-    extern s32 BattleInformationGetResult(void*);
     extern void marioCtrlOn(void);
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32);
     extern void partyCtrlOn(void*);
     extern void L_psndBGM_stop(void);
     extern void marioFBattlePost(void);
@@ -2438,16 +2336,12 @@ s32 evt_npc_wait_battle_end(void) {
 }
 
 USER_FUNC(evt_npc_get_battle_result) {
-    extern void* fbatGetPointer(void);
-    extern s32 BattleInformationGetResult(void* info);
-    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
     s32 arg = event->args[0];
     evtSetValue(event, arg, BattleInformationGetResult((void*)((s32)fbatGetPointer() + 0x20)));
     return 2;
 }
 
 USER_FUNC(evt_npc_check_escape_battle) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void marioSetMutekiTime(s32 time);
     if (evtGetValue(event, event->args[0]) == 4) {
         marioSetMutekiTime(3000);
@@ -2456,8 +2350,6 @@ USER_FUNC(evt_npc_check_escape_battle) {
 }
 
 USER_FUNC(evt_npc_get_battle_rule_keep_result) {
-    extern void* fbatGetPointer(void);
-    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
     EventEntry* evt = event;
     s32 arg = event->args[0];
     void* fbat = fbatGetPointer();
@@ -2466,10 +2358,8 @@ USER_FUNC(evt_npc_get_battle_rule_keep_result) {
 }
 
 USER_FUNC(evt_npc_get_btlsetup_work) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern s32 npcGetBtlSetupWork(void* npc, s32 index);
-    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
@@ -2481,7 +2371,6 @@ USER_FUNC(evt_npc_get_btlsetup_work) {
 }
 
 USER_FUNC(evt_npc_set_btlsetup_work) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern void npcSetBtlSetupWork(void* npc, s32 index, s32 value);
     EventEntry* evt = event;
@@ -2509,9 +2398,7 @@ s32 evt_npc_set_link(void* pEvt) {
 }
 
 USER_FUNC(evt_npc_get_drop_fixitem) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
@@ -2521,9 +2408,7 @@ USER_FUNC(evt_npc_get_drop_fixitem) {
 }
 
 USER_FUNC(evt_npc_get_drop_item) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
@@ -2542,8 +2427,6 @@ s32 evt_npc_get_drop_heart(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
     extern void* evtNpcNameToPtr(void* event, s32 name);
     extern void evtSetValue(void* event, s32 dst, s32 value);
-    extern s32 pouchEquipCheckBadge(s32 badge);
-    extern s32 irand(s32 max);
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 name = evtGetValue(pEvt, args[0]);
     void* npc = evtNpcNameToPtr(pEvt, name);
@@ -2572,8 +2455,6 @@ s32 evt_npc_get_drop_flower(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
     extern void* evtNpcNameToPtr(void* event, s32 name);
     extern void evtSetValue(void* event, s32 dst, s32 value);
-    extern s32 pouchEquipCheckBadge(s32 badge);
-    extern s32 irand(s32 max);
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 name = evtGetValue(pEvt, args[0]);
     void* npc = evtNpcNameToPtr(pEvt, name);
@@ -2635,7 +2516,6 @@ s32 evt_npc_get_drop_coin(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
     extern void* evtNpcNameToPtr(void* event, s32 name);
     extern void evtSetValue(void* event, s32 dst, s32 value);
-    extern void _npc_check_coin_group(void* group, s32* coin);
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 name = evtGetValue(pEvt, args[0]);
     void* npc = evtNpcNameToPtr(pEvt, name);
@@ -2652,7 +2532,6 @@ s32 evt_npc_get_drop_coin(void* pEvt) {
 }
 
 USER_FUNC(evt_npc_getback_item_entry) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern void npcGetBackItemEntry(void* npc);
     s32 value = evtGetValue(event, event->args[0]);
@@ -2661,9 +2540,7 @@ USER_FUNC(evt_npc_getback_item_entry) {
 }
 
 USER_FUNC(evt_npc_get_unitwork) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
     EventEntry* evt = event;
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
@@ -2674,7 +2551,6 @@ USER_FUNC(evt_npc_get_unitwork) {
 }
 
 USER_FUNC(evt_npc_set_unitwork) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     EventEntry* evt = event;
     s32* args = event->args;
@@ -2709,7 +2585,6 @@ s32 evt_npc_wait_msec(void* pEvt, s32 isFirstCall) {
 }
 
 USER_FUNC(evt_npc_set_balloontype) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     s32* args = event->args;
     s32 name;
@@ -2724,7 +2599,6 @@ s32 evt_npc_set_tribe(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
     extern void* evtNpcNameToPtr(void*, s32);
     extern void* npcGetTribe(s32);
-    extern char* strcpy(char*, const char*);
     extern void animPoseSetAnim(s32, char*, s32);
     extern f32 float_0_8041fd84;
     s32* args;
@@ -2765,7 +2639,6 @@ s32 evt_npc_set_autotalkpose(void* pEvt) {
     extern s32 evtGetValue(void* event, s32 value);
     extern void* evtNpcNameToPtr(void* event, s32 name);
     extern void npcSetMarioAutoTalkPose(const char* stay, const char* talk);
-    extern char* strcpy(char* dst, const char* src);
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 name = evtGetValue(pEvt, args[0]);
     u32 stay = evtGetValue(pEvt, args[1]);
@@ -2786,18 +2659,9 @@ s32 evt_npc_set_autotalkpose(void* pEvt) {
 }
 
 s32 evt_npc_majo_disp_on(EventEntry* event, s32 isFirstCall) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern s32 animGroupBaseAsync(void* name, s32 battle, s32 flags);
-    extern void animPoseSetEffect(s32 poseId, void* name, s32 flag);
-    extern void animPoseSetEffectAnim(s32 poseId, void* name, s32 flag);
-    extern void animPosePaperPeraOn(s32 poseId);
-    extern void animPoseSetLocalTime(s32 poseId, f32 time);
     extern s32 psndSFXOn_3D(s32 id, void* pos);
-    extern s32 animPoseGetVivianType(s32 poseId);
-    extern void* animPoseGetAnimPosePtr(s32 poseId);
-    extern f32 animPoseGetLoopTimes(s32 poseId);
     extern void animPoseSetPaperAnimGroup(s32 poseId, s32 anim, s32 flag);
     extern void* gp;
     extern char str_p_bibi_802c14d8[];
@@ -2896,17 +2760,9 @@ s32 evt_npc_majo_disp_on(EventEntry* event, s32 isFirstCall) {
 }
 
 s32 evt_npc_majo_disp_off(EventEntry* event, s32 isFirstCall) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern s32 psndSFXOn_3D(s32 id, void* pos);
     extern s32 animGroupBaseAsync(void* name, s32 mode, s32 flags);
-    extern s32 animPoseGetVivianType(s32 poseId);
-    extern void animPoseSetEffect(s32 poseId, void* name, s32 flag);
-    extern void animPoseSetEffectAnim(s32 poseId, void* name, s32 flag);
-    extern void animPosePaperPeraOn(s32 poseId);
-    extern void* animPoseGetAnimPosePtr(s32 poseId);
-    extern void animPoseSetLocalTime(s32 poseId, f32 time);
-    extern f32 animPoseGetLoopTimes(s32 poseId);
     extern void* gp;
     extern char str_p_bibi_802c14d8[];
     extern char str_PM_B_1_802c14e0[];
@@ -2992,9 +2848,7 @@ s32 evt_npc_majo_disp_off(EventEntry* event, s32 isFirstCall) {
 }
 
 USER_FUNC(evt_npc_get_kpencount_type) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
     s32* args = event->args;
     s32 name = evtGetValue(event, args[0]);
     s32 dst = args[1];
@@ -3023,7 +2877,6 @@ s32 evt_npc_calc_score(void* pEvt) {
 void _kamek_houki_kemuri(s32 npc, s32 mode) {
     extern void* gp;
     extern void* effKemuri10N64Entry(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, s32 type);
-    extern s32 strcmp(const char* lhs, const char* rhs);
     extern s32 cnt_1369;
     extern f32 float_0_8041fd84;
     extern f32 float_1_8041fd88;
@@ -3062,16 +2915,7 @@ void _kamek_houki_kemuri(s32 npc, s32 mode) {
 
 
 s32 evt_npc_kamek_move_position(EventEntry* event, s32 isFirstCall) {
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern f32 evtGetFloat(EventEntry* event, s32 value);
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern void PSVECSubtract(void* a, void* b, void* out);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern void* fbatGetPointer(void);
-    extern void npcTuningRy(void* npc, f32 ry);
-    extern f64 sin(f64 x);
-    extern f64 cos(f64 x);
-    extern f32 sqrtf(f32 x);
     extern u8 _kamek_houki_kemuri(s32 npc, s32 animState);
     extern f32 float_0_8041fd84;
     extern f32 float_1_8041fd88;
@@ -3217,7 +3061,6 @@ s32 evt_npc_kamek_move_position(EventEntry* event, s32 isFirstCall) {
 s32 evt_npc_kamek_kemuri1(void* pEvt, s32 isFirstCall) {
     extern s32 evtGetValue(void* evt, s32 value);
     extern void* npcNameToPtr(s32 name);
-    extern void _kamek_houki_kemuri(s32 npc, s32 mode);
     extern f32 float_0_8041fd84;
     s32* args = *(s32**)((u8*)pEvt + 0x18);
     u8* npc = npcNameToPtr(evtGetValue(pEvt, args[0]));
@@ -3240,7 +3083,6 @@ s32 evt_npc_kamek_kemuri1(void* pEvt, s32 isFirstCall) {
 s32 evt_npc_kamek_kemuri2(void* pEvt, s32 isFirstCall) {
     extern s32 evtGetValue(void* evt, s32 value);
     extern void* npcNameToPtr(s32 name);
-    extern void _kamek_houki_kemuri(s32 npc, s32 mode);
     extern f32 float_0_8041fd84;
     extern f32 float_1000_8041fd94;
     s32* args = *(s32**)((u8*)pEvt + 0x18);

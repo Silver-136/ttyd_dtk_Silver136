@@ -1,4 +1,13 @@
 #include "party/party_hit.h"
+extern void* marioGetPtr(void);
+extern f32 float_1_8042151c;
+extern char str_MOBJ_HiddenHatenaBlo_802cb8a0[];
+extern char str_MOBJ_HiddenBadgeBloc_802cb8b8[];
+extern char str_MOBJ_Hidden10CountBl_802cb8d0[];
+extern f32 float_45_80421538;
+extern f32 float_6_80421518;
+extern f64 sin(f64 x);
+extern f64 cos(f64 x);
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 chkfilter(s32 param_1, int param_2) {
@@ -6,12 +15,8 @@ s32 chkfilter(s32 param_1, int param_2) {
         u8 pad[0x15];
         char name[16];
     } MobjName;
-    extern void* marioGetPtr(void);
     extern MobjName* mobjHitObjPtrToPtr(int hit);
     extern s32 strcmp(char* a, char* b);
-    extern char str_MOBJ_HiddenHatenaBlo_802cb8a0[];
-    extern char str_MOBJ_HiddenBadgeBloc_802cb8b8[];
-    extern char str_MOBJ_Hidden10CountBl_802cb8d0[];
     u32 attr;
     MobjName* mobj;
 
@@ -46,12 +51,8 @@ s32 chkfilterYoshi(s32 param_1, int param_2) {
         u8 pad[0x15];
         char name[16];
     } MobjName;
-    extern void* marioGetPtr(void);
     extern MobjName* mobjHitObjPtrToPtr(int hit);
     extern s32 strcmp(char* a, char* b);
-    extern char str_MOBJ_HiddenHatenaBlo_802cb8a0[];
-    extern char str_MOBJ_HiddenBadgeBloc_802cb8b8[];
-    extern char str_MOBJ_Hidden10CountBl_802cb8d0[];
     u32 attr;
     MobjName* mobj;
 
@@ -88,12 +89,8 @@ s32 chkfilterNokotaro(s32 param_1, int param_2) {
         u8 pad[0x15];
         char name[16];
     } MobjName;
-    extern void* marioGetPtr(void);
     extern MobjName* mobjHitObjPtrToPtr(int hit);
     extern s32 strcmp(char* a, char* b);
-    extern char str_MOBJ_HiddenHatenaBlo_802cb8a0[];
-    extern char str_MOBJ_HiddenBadgeBloc_802cb8b8[];
-    extern char str_MOBJ_Hidden10CountBl_802cb8d0[];
     u32 attr;
     MobjName* mobj;
 
@@ -321,11 +318,8 @@ s32 partySearchGround(f64 rise, f64 fall, void* party) {
         u32 y;
         u32 z;
     } VecBits;
-    extern void* marioGetPtr(void);
     extern f64 partyGetHeight(void* party);
     extern f64 partyToMovedir(f64 direction, void* party);
-    extern f64 sin(f64 x);
-    extern f64 cos(f64 x);
     extern f32 angleABf(f32 x0, f32 z0, f32 x1, f32 z1);
     extern s32 yoshiGetStatus(void);
     extern void* hitCheckVecFilter(void* work, void* filter);
@@ -521,8 +515,6 @@ s32 partyChkFrontStep(f64 heightAdd, void* pParty, f32* outY, f32* outDiff, f32*
     extern f32 partyGetHeight(void* party);
     extern f32 toMovedir(f32 dir);
     extern f32 revise360(f32 dir);
-    extern f64 sin(f64 x);
-    extern f64 cos(f64 x);
     extern s32 yoshiGetStatus(void);
     extern s32 hitCheckVecFilter(void* work, void* filter);
     extern s32 chkfilterYoshi(s32 a, s32 b);
@@ -676,9 +668,7 @@ void* partySearchWallFront(f64 distance, f64 direction, void* pParty, f32* pos) 
     extern char str_gor_02_802cb898[];
     extern f32 float_0p5_80421504;
     extern f32 float_0p75_80421528;
-    extern f32 float_1_8042151c;
     extern f32 float_11_80421534;
-    extern f32 float_45_80421538;
     extern f32 float_120_80421540;
     extern f32 float_350_80421544;
 
@@ -816,12 +806,9 @@ s32 partySearchFrontWall(f64 distance, f64 angle, void* pParty, f32* pos) {
     extern f32 float_0_80421508;
     extern f32 float_0p5_80421504;
     extern f32 float_0p75_80421528;
-    extern f32 float_1_8042151c;
-    extern f32 float_6_80421518;
     extern f32 float_11_80421534;
     extern f32 float_1000_80421530;
     extern f32 float_neg0p5_8042152c;
-    extern f32 float_45_80421538;
     extern f32 float_neg1_8042153c;
 
     HitWork work;
@@ -920,7 +907,6 @@ void partySearchHead(f64 angle, void* pParty, f32* pos, f32* dist) {
                               void* out4, void* out5, void* out6);
     extern f32 float_0_80421508;
     extern f32 float_10_80421510;
-    extern f32 float_1_8042151c;
     extern f32 float_0p3_80421524;
 
     f32 out0[3];
@@ -1006,7 +992,6 @@ void partySearchHead(f64 angle, void* pParty, f32* pos, f32* dist) {
 
 
 s32 unk_800c27c0(void* flags, void* mario) {
-    extern f32 float_6_80421518;
     extern s32 marioChkWallAround(void* mario, s32 arg, f32 a, f32 b, f32 radius);
     f32 a;
     f32 b;

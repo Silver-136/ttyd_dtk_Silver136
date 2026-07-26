@@ -27,6 +27,7 @@ typedef struct EffSetN64 {
 } EffSetN64;
 
 extern EffSetN64 eff_set_n64[];
+extern s32 _rand_table[];
 extern const char str_effect_n64_tpl_802fbafc[];
 extern const char str_PCTs_e_PCTs_effect_n_802fbb0c[];
 extern const char str_jp_80425b08[3];
@@ -112,7 +113,6 @@ void* effGetSetN64(char* name) {
 
 
 int effTblRandN64(int param_1, int param_2) {
-    extern s32 _rand_table[];
     s32 value;
 
     value = _rand_table[param_2 % 128];

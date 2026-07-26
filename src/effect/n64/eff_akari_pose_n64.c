@@ -1,11 +1,13 @@
 #include "effect/n64/eff_akari_pose_n64.h"
 
+extern s32 max_seq_num[];
+extern f32 float_0_80424c50;
+
 void* effAkariPoseN64Entry(s32 type, s32 count, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effAkariPoseMain(void);
     extern char str_AkariPoseN64_802faaf8[];
-    extern s32 max_seq_num[];
     extern f32 float_0p5_80424c70;
     extern f32 float_neg1_80424c74;
     void* entry;
@@ -52,12 +54,10 @@ void effAkariPoseMain(void* entry) {
     extern f32 dispCalcZ(void* pos);
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
     extern void effAkariPoseDisp(void);
-    extern s32 max_seq_num[];
     extern u8 a_data[];
     extern f32 scale_data[];
     extern u8 a_data2[];
     extern f32 scale_data2[];
-    extern f32 float_0_80424c50;
     extern f32 float_0p1_80424c54;
     extern f32 float_0p2_80424c58;
     extern f32 float_360_80424c5c;
@@ -188,7 +188,6 @@ void effAkariPoseDisp(int param_1, void* param_2) {
     extern void tri2(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g, s32 h);
     extern f32 float_deg2rad_80424c48;
     extern f32 float_0p03125_80424c4c;
-    extern f32 float_0_80424c50;
     extern u8 size16x16_tex32x32_vtx[];
     extern u32 unk_80429640;
     f32 baseMtx[3][4];

@@ -1,4 +1,5 @@
 #include "bowser/koopa_motion.h"
+#include "bowser/koopa_hit.h"
 
 s32 kpaHipAttackOk(void) {
     extern void* marioGetPtr(void);
@@ -509,7 +510,6 @@ void kpa_fall(void) {
     extern s32 kpaGetStageType(void);
     extern s32 kpaGetBodyStatus(void);
     extern void marioChgMot2(s32);
-    extern void kpaClearHitobjRide(void);
     extern char str_SFX_KUPPA_SWIM1_802feb70[];
     extern f32 float_75_80427384;
     extern f32 float_0_804272e0;
@@ -945,7 +945,6 @@ void kpa_swim(void) {
     extern s32 kpaFireAttackCheck(void);
     extern s32 kpaGetBodyStatus(void);
     extern void kpaSwimMove(void);
-    extern void kpaClearHitobjRide(void);
     extern void psndSFXOn_3D(void*, void*);
     extern s32 kpaGetAttackMode(void);
     extern void kpaChgPose(char*, char*);

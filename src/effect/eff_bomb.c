@@ -1,4 +1,6 @@
 #include "effect/eff_bomb.h"
+extern f32 float_0_804247d8;
+extern f32 float_deg2rad_804247c8;
 void* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(s32 type);
     extern void* __memAlloc(s32 heap, u32 size);
@@ -7,8 +9,6 @@ void* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     extern double sin(double x);
     extern double cos(double x);
     extern char str_Bomb_804247e8[];
-    extern f32 float_0_804247d8;
-    extern f32 float_deg2rad_804247c8;
     extern f32 float_10_804247f0;
     extern f32 float_90_804247f4;
     extern f32 float_45_804247f8;
@@ -167,11 +167,9 @@ void effBombDisp(s32 cameraId, void* effect) {
     extern void GXBegin(s32, s32, s16);
     extern u32 dat_804247c0;
     extern u32 dat_804247c4;
-    extern f32 float_deg2rad_804247c8;
     extern f32 float_30_804247cc;
     extern f32 float_1_804247d0;
     extern f32 float_0p0625_804247d4;
-    extern f32 float_0_804247d8;
     extern f32 float_neg0p05_804247dc;
     extern f32 float_0p5_804247e0;
 

@@ -87,5 +87,21 @@ s32 BattleGetSeq(BattleWork* wp, BattleSequence seq);
 
 void* BattleAlloc(u32 size);
 void BattleFree(void* ptr);
+void* BattleGetPartyPtr(BattleWork* wp);
 BattleWorkUnit* BattleGetUnitPtr(BattleWork* wp, s32 index);
 void BattleSetUnitPtr(BattleWork* wp, s32 index, BattleWorkUnit* unit);
+
+void BattleIncSeq(void* battleWork, s32 seqType);
+void BattleStoreCoin(BattleWork* wp, s32 coin);
+void BattleStoreExp(BattleWork* wp, s32 exp);
+void BattleAfterReactionEntry(s32 unitId, s32 arg);
+s32 BattleAfterReactionMain(void);
+void BattleMajinaiDone(void);
+void BattleMajinaiEndCheck(void);
+void BattleStatusWindowAPRecoveryOn(void);
+void BattleStatusWindowAPRecoveryOff(void);
+void BattleStatusWindowEventOn(void);
+void BattleStatusWindowSystemOn(void);
+void BattleStatusWindowSystemOff(void);
+void BattleConsumeReserveItem(void);
+s32 BattleTransPartyIdToUnitKind(s32 partyId);

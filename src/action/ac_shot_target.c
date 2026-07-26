@@ -1,25 +1,27 @@
 #include "action/ac_shot_target.h"
 
+#include "system.h"
+
 extern f32 float_neg200_80427e74;
 extern f32 float_0_80427e78;
 extern u32 dat_80427e58;
+extern f32 vec3_80300258[];
+extern f32 float_2_80427e6c;
 
-void* memset(void* dst, int value, u32 size);
+void _ac_disp_init(void* wp);
+void _ac_rumble_param_set(u32 type, s16* frame1, s16* frame2, f32* strength);
+void actionCommandDisp(f32 x, f32 y);
 
 /* stub-fill: battleAcMain_ShotTarget | missing_definition | ghidra_signature */
 s32 battleAcMain_ShotTarget(void* battleWork) {
-    extern void _ac_disp_init(void*);
     extern void* BattleGetUnitPtr(void*, s32);
     extern void* BtlUnit_GetPartsPtr(void*, s32);
     extern void BtlUnit_GetHitPos(void*, void*, f32*, f32*, f32*);
-    extern void _ac_rumble_param_set(u32, s16*, s16*, f32*);
     extern s32 psndSFXOn(char*);
     extern void psndSFXOff(s32);
     extern f64 sinfd(f64);
     extern f64 distABf(f64, f64, f64, f64);
-    extern s32 irand(s32);
     extern f32 __fabsf(f32);
-    extern f32 vec3_80300258[];
     extern char str_SFX_AC_CURSOR_MOVE1_803002c4[];
 
     u8* bw = battleWork;
@@ -195,8 +197,6 @@ void _ac_rumble_param_set(u32 type, s16* frame1, s16* frame2, f32* strength) {
     extern f32 float_0p8_80427e94;
     extern f32 float_1p5_80427e98;
     extern f32 float_3_80427e9c;
-    extern f32 float_2_80427e6c;
-    extern s32 irand(s32 max);
 
     *frame1 = irand(0x78) + 0x78;
     *frame2 = *frame1 - 1;
@@ -240,7 +240,6 @@ s32 battleAcResult_ShotTarget(void* wp) {
 void battleAcDisp_ShotTarget(s32 unused, void* wp) {
     extern f32 float_30_80427e7c;
     extern f32 intplGetValue(s32 type, s32 current, f32 start, f32 end, s32 max);
-    extern void actionCommandDisp(f32 x, f32 y);
 
     s32 state;
     s32 timer;
@@ -325,12 +324,10 @@ void actionCommandDisp(f32 x, f32 y) {
     extern void* _battleWorkPointer;
     extern void btlGetScreenPoint(f32* in, f32* out);
     extern void btlDispTex4(s32 tex, f32* pos, f32* v0, f32* v1, u32* color);
-    extern f32 vec3_80300258[];
     extern u32 dat_80427e5c;
     extern u32 dat_80427e60;
     extern u32 dat_80427e64;
     extern u32 dat_80427e68;
-    extern f32 float_2_80427e6c;
     extern f32 float_4_80427e70;
 
     void* battleWork;

@@ -1659,9 +1659,6 @@ void DrawWeaponWin(void) {
 }
 
 void BattleMenuDisp_Operation_Init(void* work, s32 flags) {
-    extern void InitSubMenuCommonProcess(void*, void*, void*);
-    extern void InitSubMenuCommonProcess2(void*, void*);
-    extern void InitSubMenuCommonProcess3(void*, void*);
     extern void* BattleGetUnitPtr(void*, s32);
     void* proc;
     void* common;

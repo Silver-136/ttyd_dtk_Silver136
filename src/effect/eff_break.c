@@ -1,18 +1,19 @@
 #include "effect/eff_break.h"
 
+extern void effGetTexObj(s32 texId, void* texObj);
+extern void* gp;
+extern f32 float_0_80427600;
+
 /* stub-fill: effBreakEntry | missing_definition | ghidra_signature */
 void* effBreakEntry(s32 kind, f32 x, f32 y, f32 z, s32 timer) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
-    extern void effGetTexObj(s32 texId, void* texObj);
     extern void effBreakMain(void* effect);
-    extern void* gp;
     extern s16* texid_tbl[];
     extern const char str_Break_80427614[];
     extern f32 float_2_8042761c;
     extern f32 float_36_80427624;
     extern f32 float_72_80427620;
-    extern f32 float_0_80427600;
     extern f32 float_10_80427628;
 
     void* effect = effEntry();
@@ -89,7 +90,6 @@ void effBreakMain(void* effect) {
     extern f32 ty_data[];
     extern f32 ty_data2[];
     extern f32 float_20_80427610;
-    extern f32 float_0_80427600;
 
     void* workBase = *(void**)((s32)effect + 0xC);
     void* work = (void*)((s32)workBase + 0x24);
@@ -181,7 +181,6 @@ void effBreakDisp(s32 cameraId, void* effect) {
     extern void GXClearVtxDesc(void);
     extern void GXSetVtxDesc(s32 attr, s32 type);
     extern void GXSetVtxAttrFmt(s32 vtxfmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
-    extern void effGetTexObj(s32 texId, void* texObj);
     extern void GXLoadTexObj(void* texObj, s32 mapId);
     extern void GXLoadTexMtxImm(void* mtx, s32 id, s32 type);
     extern void GXLoadPosMtxImm(void* mtx, s32 id);
@@ -192,9 +191,7 @@ void effBreakDisp(s32 cameraId, void* effect) {
     extern f32 float_48_804275fc;
     extern f32 float_0p5_80427604;
     extern f32 float_24_80427608;
-    extern f32 float_0_80427600;
     extern f32 float_1_8042760c;
-    extern void* gp;
     extern s32 texid_tbl;
 
     u8 texObj[0x20];

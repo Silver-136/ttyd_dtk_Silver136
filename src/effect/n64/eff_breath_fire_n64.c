@@ -1,5 +1,8 @@
 #include "effect/n64/eff_breath_fire_n64.h"
 
+extern f32 float_0_80424e04;
+extern f32 float_0p05_80424e14;
+
 void* effBreathFireN64Entry(f32 x0, f32 y0, f32 z0, f32 x1, f32 y1, f32 z1,
                             s32 type, s32 count, s32 seed, s32 duration) {
     extern void* effEntry(void);
@@ -7,9 +10,7 @@ void* effBreathFireN64Entry(f32 x0, f32 y0, f32 z0, f32 x1, f32 y1, f32 z1,
     extern s32 effTblRandN64(s32 max, s32 seed);
     extern void effBreathFireMain(void* effect);
     extern char str_BreathFireN64_802fac40[];
-    extern f32 float_0p05_80424e14;
     extern f32 float_0p04_80424e20;
-    extern f32 float_0_80424e04;
     extern f32 float_0p1_80424e24;
     extern f32 float_0p2_80424e28;
     void* entry;
@@ -92,7 +93,6 @@ void effBreathFireMain(void* effect) {
                                        s32 type, s32 count, s32 seed, s32 duration);
     extern f32 float_4_80424e0c;
     extern f32 float_10_80424e10;
-    extern f32 float_0p05_80424e14;
     extern f32 float_2p5_80424e18;
     extern f32 float_0p01_80424e1c;
     f32* work;
@@ -204,7 +204,6 @@ void effBreathFireDisp(s32 cameraId, void* effect) {
     extern f32 float_256_80424df8;
     extern f32 float_0p0078125_80424dfc;
     extern f32 float_0p03125_80424e00;
-    extern f32 float_0_80424e04;
     extern f32 float_deg2rad_80424e08;
     extern u8 DAT_8039e1ce[];
     void* cam;

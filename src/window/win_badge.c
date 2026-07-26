@@ -3,6 +3,10 @@
 extern f32 float_184_804236f8;
 extern f32 float_0p25_804236fc;
 void* pouchGetPtr(void);
+s32 pouchGetHaveBadgeCnt(void);
+void winFontInit(void);
+char* winZenkakuStr(s32 value);
+char* msgSearch(char* key);
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void winMakeEquipList(void* pWin) {
@@ -316,8 +320,6 @@ u8 mario_change(void* pWin) {
 }
 
 s32 winBadgeMain(void* pWin) {
-    extern void* pouchGetPtr(void);
-    extern s32 pouchGetHaveBadgeCnt(void);
     extern s32 pouchEquipCheckBadgeIndex(s32);
     extern s32 pouchHaveBadge(s32);
     extern void pouchEquipBadgeIndex(s32);
@@ -409,7 +411,6 @@ void winBadgeMain2(void* pWin) {
 
 void winBadgeDisp(s32 cameraId, void* pWin, s32 index) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
-    extern void* pouchGetPtr(void);
     extern void winBgGX(f32 x, f32 y, void* win, s32 type);
     extern void winKirinukiGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
     extern void badge_disp(f32 x, f32 y, void* win);
@@ -417,11 +418,8 @@ void winBadgeDisp(s32 cameraId, void* pWin, s32 index) {
     extern void winTexInit_x2(void* data);
     extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
     extern void winTexSet_x2(s32 id, s32 frame, Vec3* pos, Vec3* scale, void* color);
-    extern void winFontInit(void);
     extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* format, ...);
     extern void winFontSetR(Vec3* pos, Vec3* scale, void* color, char* format, ...);
-    extern char* winZenkakuStr(s32 value);
-    extern char* msgSearch(char* key);
     extern char str_msg_menu_badge_nokor_802f54a8[];
     Vec3 pos;
     Vec3 scale;
@@ -492,7 +490,6 @@ void winBadgeDisp(s32 cameraId, void* pWin, s32 index) {
 
 void badge_disp(double x, double y, void* pWin) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
-    extern s32 pouchGetHaveBadgeCnt(void);
     extern s32 pouchHaveBadge(s32 index);
     extern s32 pouchEquipCheckBadgeIndex(s32 index);
     extern void GXSetScissor(s32 x, s32 y, s32 w, s32 h);
@@ -501,13 +498,10 @@ void badge_disp(double x, double y, void* pWin) {
     extern void winIconInit(void);
     extern void winIconGrayInit(void);
     extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
-    extern void winFontInit(void);
     extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* text, ...);
     extern void winFontSetWidth(Vec3* pos, Vec3* scale, void* color, f32 width,
                                 char* text, ...);
     extern u32 FontGetMessageWidth(char* text);
-    extern char* msgSearch(char* key);
-    extern char* winZenkakuStr(s32 value);
     extern s32 sprintf(char* dst, char* format, ...);
     extern u8 itemDataTable[];
     extern char str_msg_menu_sort_narabi_802f5464[];

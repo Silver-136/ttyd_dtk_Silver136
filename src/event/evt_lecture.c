@@ -96,29 +96,7 @@ s32 lect_cam_save(void) {
 #pragma optimize_for_size off
 s32 lect_cam_load(int param_1) {
     extern s32 evtGetValue(void* event, s32 value);
-    extern void* camGetPtr(s32 cameraId);
-    extern void* marioGetPtr(void);
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32 id);
     extern void* gp;
-    extern u32 stPt[3];
-    extern u32 stAt[3];
-    extern u32 stMpos[3];
-    extern u32 stPpos[3];
-    extern u32 stXpos[3];
-    extern f32 stMdir1;
-    extern f32 stMdir2;
-    extern f32 stMdir3;
-    extern f32 stMdir4;
-    extern f32 stPdir1;
-    extern f32 stPdir2;
-    extern f32 stPdir3;
-    extern f32 stPdir4;
-    extern f32 stXdir1;
-    extern f32 stXdir2;
-    extern f32 stXdir3;
-    extern f32 stXdir4;
 
     s32 frames;
     void* cam;

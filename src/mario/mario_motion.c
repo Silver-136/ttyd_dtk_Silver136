@@ -1,4 +1,6 @@
 #include "mario/mario_motion.h"
+#include "bowser/koopa_hit.h"
+#include "bowser/koopa_motion.h"
 
 extern f32 float_0_804209a0;
 const char str_M_I_U_80420a14[] = "M_I_U";
@@ -9,6 +11,31 @@ void marioReInit_ship(void);
 void marioAdjustMoveDir(void);
 void marioChgPose(const void* pose);
 void marioLandOn(void);
+extern void camFollowYOn(void);
+extern s32 marioChkSts(u32);
+extern f32 float_neg0p5_80420a30;
+extern f32 float_6_80420a10;
+extern s32 marioGetPartyId(void);
+extern s32 marioBgmodeChk(void);
+extern f32 marioJumpData[];
+extern f32 marioJumpSwData[];
+extern f32 float_0p5_80420a1c;
+extern f32 float_1_804209b4;
+extern f32 float_neg0p01_804209d4;
+extern f32 float_neg0p002_804209d0;
+extern f32 float_0p34_804209cc;
+extern f32 float_1p7_80420a34;
+extern s32 getRollEvtFlag(void);
+extern void* marioChkLandon(f32, void*);
+extern s32 marioChkInScreen(s32, s32);
+extern s32 marioPriCheckJabara(void);
+extern void* gp;
+extern char str_M_S_1_804209ec[];
+extern f32 float_10_804209c4;
+extern f32 float_90_804209f4;
+extern f32 float_180_80420a08;
+extern f32 float_270_80420a0c;
+extern s32 pouchCheckItem(s32);
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -196,8 +223,6 @@ void marioChgRollMotion(void) {
 #pragma use_lmw_stmw on
 
 void marioChgJumpStandMotion(double param_1) {
-    extern void camFollowYOn(void);
-    extern s32 marioChkSts(u32);
     extern void effKemuriEntry(double, double, double, double, s32);
     extern void yoshi_jumpStand(void);
 
@@ -253,8 +278,6 @@ void marioChgJumpStandMotion(double param_1) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void marioChgSmallJumpMotion(void) {
-    extern f32 float_neg0p5_80420a30;
-    extern f32 float_6_80420a10;
     void* mario = marioGetPtr();
     void* wp;
 
@@ -306,9 +329,7 @@ u32 marioChkItemGetMotion(void) {
     return result;
 }
 s32 marioChkTalkable(void) {
-    extern s32 marioGetPartyId(void);
     extern void* partyGetPtr(s32 id);
-    extern s32 marioBgmodeChk(void);
     extern s32 vivianGetStatus(void);
     void* mario = marioGetPtr();
     void* party;
@@ -330,7 +351,6 @@ s32 marioChkTalkable(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void marioBoots(void) {
-    extern s32 kpaHipAttackOk(void);
     extern s32 marioChkHipAttack(void);
 
     void* mario = marioGetPtr();
@@ -479,17 +499,11 @@ void marioClearJumpPara(void) {
     *(f32*)((s32)mario + 0x88) = zero;
 }
 void marioSetJumpPara(void) {
-    extern f32 marioJumpData[];
-    extern f32 marioJumpSwData[];
-    extern f32 float_0p5_80420a1c;
-    extern f32 float_1_804209b4;
     extern f32 float_2_80420a44;
     extern f32 float_neg0p003_80420a48;
     extern f32 float_0p029_80420a4c;
     extern f32 float_neg0p04_80420a50;
-    extern f32 float_neg0p01_804209d4;
     extern f32 float_2p7_80420a54;
-    extern f32 float_neg0p002_804209d0;
     extern f32 float_0p016_80420a58;
     extern void kpaSetJumpPara(void);
 
@@ -558,14 +572,6 @@ void marioSetJumpPara(void) {
 }
 
 void marioSetFallPara(void) {
-    extern void* marioGetPtr(void);
-    extern f32 marioJumpData[];
-    extern f32 marioJumpSwData[];
-    extern f32 float_1_804209b4;
-    extern f32 float_0p34_804209cc;
-    extern f32 float_neg0p002_804209d0;
-    extern f32 float_neg0p01_804209d4;
-    extern f32 float_0_804209a0;
     void* mario = marioGetPtr();
     f32* data = &marioJumpData[4];
 
@@ -584,9 +590,6 @@ void marioSetFallPara(void) {
     }
 }
 f32 marioGetFallSpd(void) {
-    extern void* marioGetPtr(void);
-    extern f32 marioJumpData[];
-    extern f32 float_0_804209a0;
     void* mario = marioGetPtr();
 
     *(f32*)((s32)mario + 0x84) += *(f32*)((s32)mario + 0x88);
@@ -605,8 +608,6 @@ f32 marioGetFallSpd(void) {
 }
 
 double marioMakeJumpPara(void) {
-    extern f32 float_1_804209b4;
-    extern f32 float_1p7_80420a34;
     void* mario = marioGetPtr();
     f32 div;
 
@@ -622,22 +623,10 @@ double marioMakeJumpPara(void) {
 }
 
 void marioJump(void) {
-    extern void* marioGetPtr(void);
-    extern s32 getRollEvtFlag(void);
     extern void marioSetPeakYpos(void);
-    extern s32 marioChkSts(u32);
-    extern void (*marioMotTbl[][3])(void);
-    extern f32 marioJumpData[];
-    extern f32 marioJumpSwData[];
-    extern f32 float_0_804209a0;
-    extern f32 float_0p34_804209cc;
-    extern f32 float_1_804209b4;
-    extern f32 float_1p7_80420a34;
     extern f32 float_neg0p526_80420a38;
     extern f32 float_neg0p03_80420a3c;
     extern f32 float_neg0p02_80420a40;
-    extern f32 float_neg0p01_804209d4;
-    extern f32 float_neg0p002_804209d0;
     u8* player = marioGetPtr();
     u8* current;
     f32* data;
@@ -713,29 +702,16 @@ void marioJump(void) {
 }
 
 void marioFall(void) {
-    extern void* marioGetPtr(void);
     extern s32 strcmp(char*, char*);
-    extern void kpaClearHitobjRide(void);
-    extern void* marioChkLandon(f32, void*);
-    extern s32 marioChkInScreen(s32, s32);
-    extern s32 getRollEvtFlag(void);
     extern s32 marioKeyOffChk(void);
     extern s32 marioCtrlOffChk(void);
-    extern s32 marioChkSts(u32);
     extern void mot_fall_roll(void);
     extern s32 marioGetRub(s32, void*, void*, void*);
     extern u32 hitGetAttr(void*);
-    extern s32 marioPriCheckJabara(void);
-    extern void camFollowYOn(void);
     extern s32 kpaChkHitobjRide(void);
-    extern void* gp;
-    extern f32 marioJumpData[];
-    extern void (*marioMotTbl[][3])(void);
     extern char str_kpa_03_802c3e9c[];
-    extern f32 float_0_804209a0;
     extern f32 float_0p01_80420a2c;
     extern f32 float_0p1_80420a28;
-    extern f32 float_neg0p5_80420a30;
 
     void* player;
     void* hit;
@@ -890,20 +866,13 @@ void marioLandOn(void) {
         f32 z;
     } Vec;
 
-    extern void* marioGetPtr(void);
     extern u32 hitGetAttr(void* hit);
     extern void kpaCamFollow(void);
-    extern s32 marioBgmodeChk(void);
-    extern void camFollowYOn(void);
     extern u32 psndSFXOn_3D(s32 id, void* position);
     extern f64 distABf(f64 x1, f64 z1, f64 x2, f64 z2);
     extern s32 kpaFireAttackCheck(void);
-    extern void quake_kpaLandOn(void);
-    extern s32 marioPriCheckJabara(void);
     extern void marioChgMot(s32 motion);
-    extern void (*marioMotTbl[][3])(void);
     extern void set_damage_root_ypos(f32 y);
-    extern f32 float_0_804209a0;
 
     void* player = marioGetPtr();
     void* hit = *(void**)((s32)player + 0x1E8);
@@ -1024,7 +993,6 @@ void marioLandOn(void) {
 #undef CHANGE_MOTION
 }
 void mot_talk(void) {
-    extern void* marioGetPtr(void);
     extern void peach_talk(void);
     extern void* marioGetTouchNpcPtr(void);
     extern void marioAdjustMoveDir(void);
@@ -1039,13 +1007,6 @@ void mot_talk(void) {
     extern char str_KPA_S_1_802c3e5c[];
     extern char str_KPA2_S_1_802c3e64[];
     extern char str_M_I_2_80420a20[];
-    extern char str_M_S_1_804209ec[];
-    extern f32 float_0_804209a0;
-    extern f32 float_0p5_80420a1c;
-    extern f32 float_10_804209c4;
-    extern f32 float_90_804209f4;
-    extern f32 float_180_80420a08;
-    extern f32 float_270_80420a0c;
     u8* player = marioGetPtr();
     u8* npc;
     u8* fbat;
@@ -1207,7 +1168,6 @@ s32 marioChkJump(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 marioChkTransform(void) {
-    extern s32 pouchCheckItem(s32);
     extern s32 marioChkShipPlace(s32);
     extern s32 marioChkPlanePlace(s32);
 
@@ -1268,8 +1228,6 @@ s32 marioChkTransform(void) {
 #pragma use_lmw_stmw on
 
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 marioChkItemMotion(void) {
@@ -1350,7 +1308,6 @@ s32 marioRollChgChk(void) {
         f32 z;
     } Vec;
     extern s32 marioGetRub(s32, void*, s32*, void*);
-    extern s32 pouchCheckItem(s32);
     extern s32 marioSlitChkWallAround(void);
     extern s32 marioCreviceWallChk(Vec*);
 
@@ -1444,10 +1401,6 @@ void marioChgMotJump2(void) {
 void mot_kaze(void) {
     extern f32 float_5_80420a00;
     extern f32 float_60_80420a04;
-    extern f32 float_180_80420a08;
-    extern f32 float_270_80420a0c;
-    extern f32 float_6_80420a10;
-    extern f32 float_90_804209f4;
     extern char str_M_P_2_804209f8[];
     extern f32 revise360(double);
 
@@ -1510,12 +1463,7 @@ void mot_kaze(void) {
 
 
 void mot_shadow(void) {
-    extern void* marioGetPtr(void);
     extern void marioChgPose(char*);
-    extern void (*marioMotTbl[][3])(void);
-    extern char str_M_S_1_804209ec[];
-    extern f32 float_0_804209a0;
-    extern f32 float_90_804209f4;
     u8* player = marioGetPtr();
 
     if ((*(u32*)(player + 0xC) & 1) != 0) {
@@ -1564,33 +1512,23 @@ void mot_bottomless(void) {
         f32 z;
     } Vec;
 
-    extern void* marioGetPtr(void);
     extern s32 strcmp(char*, char*);
     extern void marioGetScreenPos(Vec*, f32*, f32*, f32*);
-    extern s32 marioChkInScreen(s32, s32);
     extern f64 distABf(f64, f64, f64, f64);
     extern f64 angleABf(f64, f64, f64, f64);
     extern void movePos(f32*, f32*, f32, f32);
-    extern void* marioChkLandon(f32, void*);
     extern void psndSFXOn_3D(s32, void*);
     extern void marioChgPose(const void*);
     extern void marioDmgRetQuakeOn(void);
     extern s32 pouchAddHP(s16);
     extern s32 pouchGetHP(void);
     extern void marioUpdateCamPos(void);
-    extern void* gp;
-    extern f32 marioJumpData[];
-    extern f32 marioJumpSwData[];
-    extern void (*marioMotTbl[][3])(void);
     extern char str_win_03_802c3e44[];
     extern char str_win_01_802c3e4c[];
     extern char str_tik_01_802c3e54[];
     extern char str_M_D_2_804209dc[];
     extern char str_M_U_3_804209e4[];
-    extern f32 float_0_804209a0;
-    extern f32 float_1_804209b4;
     extern f32 float_8_804209c8;
-    extern f32 float_10_804209c4;
     extern f32 float_13_804209ac;
     extern f32 float_100_804209b8;
     extern f32 float_120_804209bc;
@@ -1598,9 +1536,6 @@ void mot_bottomless(void) {
     extern f32 float_250_804209a8;
     extern f32 float_300_804209c0;
     extern f32 float_neg2000_804209a4;
-    extern f32 float_0p34_804209cc;
-    extern f32 float_neg0p002_804209d0;
-    extern f32 float_neg0p01_804209d4;
     extern f32 float_neg10_804209d8;
 
     void* player;
@@ -1776,13 +1711,10 @@ case_c_wait:
 }
 void mot_forceReset(void) {
     typedef struct Vec { f32 x, y, z; } Vec;
-    extern void* marioGetPtr(void);
     extern void marioSlitForceCancel(void);
     extern void marioReset(void);
-    extern s32 marioGetPartyId(void);
     extern s32 marioGetExtraPartyId(void);
     extern void* partyGetPtr(s32);
-    extern void (*marioMotTbl[][3])(void);
     u8* player = marioGetPtr();
     u8* current;
     u8* party;

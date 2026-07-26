@@ -2,8 +2,7 @@
 #include "event/evt_cmd.h"
 
 extern void* gp;
-s32 evtGetValue(EventEntry* event, s32 value);
-s32 evtSetValue(EventEntry* event, s32 target, s32 value);
+extern s64 OSGetTime(void);
 
 void* lotteryGetPtr(void) {
     return (void*)((s32)gp + 0xA8);
@@ -12,8 +11,6 @@ void* lotteryGetPtr(void) {
 
 /* stub-fill: evt_lottery | missing_definition | ghidra_signature */
 s32 evt_lottery(void* event) {
-    extern void* gp;
-    extern s64 OSGetTime(void);
     extern void OSTicksToCalendarTime(s64,void*);
     extern s32 rand(void);
     extern s32 dbg_lotteryinfo;
@@ -111,8 +108,6 @@ s32 evt_lottery(void* event) {
 /* stub-fill: evt_lottery_buy | missing_definition | ghidra_signature */
 #pragma optimize_for_size off
 s32 evt_lottery_buy(void* pEvt) {
-    extern void* gp;
-    extern s64 OSGetTime(void);
     extern int rand(void);
     extern s32 evtSetValue(void* event, s32 target, s32 value);
 
@@ -184,8 +179,6 @@ USER_FUNC(evt_lottery_todaynum) {
 
 /* stub-fill: evt_lottery_error_check | missing_definition | ghidra_signature */
 s32 evt_lottery_error_check(int param_1) {
-    extern void* gp;
-    extern s64 OSGetTime(void);
     extern void OSTicksToCalendarTime(s64 ticks, void* calendar);
     extern s32 evtSetValue(void* event, s32 target, s32 value);
 

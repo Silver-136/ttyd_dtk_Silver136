@@ -21,6 +21,9 @@ void peachChgPose(void* pose);
 void animPoseRelease(s32 poseId);
 s32 animPoseEntry(const char* name, s32 mode);
 void npcSetMarioAutoTalkPose(const char* stay, const char* talk);
+extern void marioChgMot(s32 motion);
+extern u32 psndSFXOn_3D(s32 id, void* pos);
+extern void marioAdjustMoveDir(void);
 
 void peachSetStsNormal(void) {
     void* mario = marioGetPtr();
@@ -107,7 +110,6 @@ void peachSetStsCarry(void) {
 
 
 void peachChgPose(void* posePtr) {
-    extern void* marioGetPtr(void);
     extern s32 strcmp(const char*, const char*);
     extern char str_P_Z_1_804265f8[];
     extern char str_Z_1_80426600[];
@@ -241,7 +243,6 @@ s32 peachMain(void) {
     extern void marioChkOverhead(void);
     extern void marioChkGnd(void);
     extern void marioChkGnd2(void);
-    extern void marioChgMot(s32 motion);
     extern void marioSetFallPara(void);
     extern void marioJump(void);
     extern void marioFall(void);
@@ -320,11 +321,8 @@ s32 peachMain(void) {
 }
 
 u8 peach_stay(void) {
-    extern void marioChgMot(s32 motion);
     extern void marioChgPose(void* pose);
     extern s32 sysMsec2Frame(s32 msec);
-    extern u32 psndSFXOn_3D(s32 id, void* pos);
-    extern void marioAdjustMoveDir(void);
     void* mario = marioGetPtr();
 
     if (*(u32*)((s32)mario + 0xC) & 1) {
@@ -394,8 +392,6 @@ u8 peach_stay(void) {
 
 u8 peach_walk(void) {
     extern f32 marioGetWalkSpd(void);
-    extern void marioChgMot(s32 motion);
-    extern u32 psndSFXOn_3D(s32 id, void* pos);
     void* mario = marioGetPtr();
 
     if (*(u32*)((s32)mario + 0xC) & 1) {
@@ -453,8 +449,6 @@ u8 peach_walk(void) {
 
 u8 peach_dash(void) {
     extern f32 marioGetDashSpd(void);
-    extern void marioChgMot(s32 motion);
-    extern u32 psndSFXOn_3D(s32 id, void* pos);
     void* mario = marioGetPtr();
 
     if (*(u32*)((s32)mario + 0xC) & 1) {
@@ -538,7 +532,6 @@ u8 peach_dash(void) {
 }
 
 u8 peach_talk(void) {
-    extern void marioAdjustMoveDir(void);
     void* mario = marioGetPtr();
     u32 flags = *(u32*)((s32)mario + 0xC);
 

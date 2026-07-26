@@ -1,5 +1,7 @@
 #include "battle/battle_seq_end.h"
 
+#include "manager/evtmgr.h"
+
 extern void* _battleWorkPointer;
 extern s32 evtGetValue();
 extern void dispEntry(s32, s32, void*, void*, f32);
@@ -18,7 +20,6 @@ extern f32 evtGetFloat();
 extern void* BattleSearchObjectPtr();
 extern void iconDelete();
 extern s32 irand();
-extern void BattleAudienceSoundWhistle();
 extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
 extern void* BtlUnit_GetData(void* unit, s32 dataId);
 
@@ -93,7 +94,6 @@ void btlseqEnd(void* battleWork) {
     extern void _GetExpIcon_Init(void*);
     extern void BattleAudienceSoundCheer(s32,s32);
     extern void BattleAudienceSoundClap(s32,s32);
-    extern void BattleAudienceSoundWhistle(void);
     extern u32 BattlePadCheckNow(u32);
     extern void psndSFXOn(void*);
     extern void _GetExpIcon_End(void*);
@@ -107,7 +107,6 @@ void btlseqEnd(void* battleWork) {
     extern s32 _curtain_close_event[];
     extern char str_BGM_BATTLE_WIN3_802feabc[];
     extern u32 BattlePadCheckTrigger(u32);
-    extern void evtDeleteID(s32);
     extern s16* _get_rank_data(s32);
     extern s32 _rank_up_event[];
     u8* work = *(u8**)((u8*)battleWork + 0xF28);

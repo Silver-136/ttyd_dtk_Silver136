@@ -1,9 +1,14 @@
 #include "unit/party/unit_party_sanders.h"
 
+extern void* _battleWorkPointer;
+extern s32 BattleTransID(void* evt, s32 id);
+extern void* BattleGetUnitPtr(void* battleWork, s32 id);
+extern s32 evtGetValue(void* evt, s32 arg);
+extern f32 evtSetFloat(void* evt, s32 arg, f32 value);
+extern void evtSetValue(void* evt, s32 arg, s32 value);
+extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+
 s32 _sanders_make_extra_work_area(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern void* BattleAlloc(u32 size);
     void* battleWork;
     s32 id;
@@ -18,7 +23,6 @@ s32 _sanders_make_extra_work_area(void* evt) {
 
 
 void __makeTechMenuFunc(void* commandWork, s32* count) {
-    extern void* _battleWorkPointer;
     extern void* BattleGetPartyPtr(void* battleWork);
     extern s32 BattleTransPartyId(s32 id);
     extern s32 partyGetTechLv(s32 partyId);
@@ -73,12 +77,6 @@ void __makeTechMenuFunc(void* commandWork, s32* count) {
 }
 
 s32 _get_bomb_hit_position(int param_1) {
-    extern void* _battleWorkPointer;
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern f32 evtSetFloat(void* evt, s32 arg, f32 value);
-    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
 
     void* evt = (void*)param_1;
     s32* args = *(s32**)((s32)evt + 0x18);
@@ -118,11 +116,6 @@ s32 _get_bomb_hit_position(int param_1) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 s32 _make_counterset_weapon(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
     extern void* memcpy(void* dest, const void* src, u32 size);
 
     void* battleWork = _battleWorkPointer;
@@ -140,13 +133,6 @@ s32 _make_counterset_weapon(void* evt) {
 }
 
 u8 _shot_move(void* evt, s32 isFirstCall) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern f32 evtSetFloat(void* evt, s32 arg, f32 value);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern void BtlUnit_SetPos(void* unit, f32 x, f32 y, f32 z);
     extern f32 angleABf(f32 x0, f32 z0, f32 x1, f32 z1);
     extern f64 cosfd(f64 deg);
@@ -217,13 +203,7 @@ u8 _shot_move(void* evt, s32 isFirstCall) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _judge_on_stage(int param_1) {
-    extern void* _battleWorkPointer;
     extern void* BattleStageGetPtr(void);
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
-    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern f32 __fabsf(f32 value);
     extern f32 float_40_804241c8;
 

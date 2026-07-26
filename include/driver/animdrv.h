@@ -1,3 +1,55 @@
 #pragma once
 
 #include <dolphin/types.h>
+
+void* animGetPtr(void);
+s64 animTimeGetTime(int type);
+void animInit(void);
+void animMain(void);
+void animPoseBattleInit(void);
+s32 animPoseEntry(void* name, s32 mode);
+void animPaperPoseEntry(s32 name, s32 flag);
+s32 animEffectAsync(void* name, s32 mode);
+void animPosePeraOn(s32 poseId);
+void animPosePeraOff(s32 poseId);
+void animPosePaperPeraOn(s32 poseId);
+void animPoseSetLocalTimeRate(s32 poseId, f32 rate);
+void animPoseSetLocalTime(s32 poseId, f32 frame);
+void animPoseSetStartTime(int poseId, s32 unused, s32 start, s32 end);
+void animPoseSetAnim(s32 poseId, void* name, s32 force);
+s32 animPaperPoseGetId(s32 name, s32 flag);
+void animPoseSetPaperAnimGroup(s32 poseId, void* name, s32 flag);
+void animPoseSetPaperAnim(s32 poseId, void* name, s32 enabled);
+void animPoseSetEffect(s32 poseId, void* name, s32 flag);
+void animPoseSetEffectAnim(s32 poseId, void* anim, s32 force);
+void animPoseSetGXFunc(s32 poseId, void* callback, void* user);
+f32 animPoseGetRadius(s32 poseId);
+f32 animPoseGetHeight(s32 poseId);
+f32 animPoseGetLoopTimes(s32 poseId);
+u32 animPoseGetPeraEnd(int poseId);
+void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
+void animPoseSetMaterialFlagOff(s32 poseId, u32 flag);
+void animPoseSetMaterialLightFlagOn(s32 poseId, u32 flag);
+void animPoseSetMaterialLightFlagOff(s32 poseId, u32 flag);
+void animPoseSetMaterialEvtColor(s32 poseId, void* color);
+s32 animPoseGetMaterialFlag(s32 poseId);
+s32 animPoseGetMaterialLightFlag(s32 poseId);
+s32 animPoseGetMaterialEvtColor(s32 poseId);
+u8 animPoseMain(s32 poseIdx);
+void animPoseDraw(int poseIdx, double x, double y, double z, double rot, double scale, int mode);
+void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double scaleValue);
+void animSetPaperTexObj(void* a, void* b, void* c, void* d, void* e, void* f, s32 mode);
+void animPoseRelease(s32 poseId);
+void animPaperPoseRelease(s32 poseId);
+void animPoseAutoRelease(s32 value);
+void animSetPaperTexMtx(void* a, void* b, void* c);
+s32 animGroupBaseAsync(void* name, s32 mode, s32 flags);
+void* animPoseGetAnimPosePtr(s32 poseId);
+s32 animPoseGetAnimDataPtr(s32 poseIdx);
+void* animPoseGetAnimBaseDataPtr(s32 poseId);
+void* animPoseGetCurrentAnim(int poseIdx);
+u32 animPoseTestXLU(s32 poseId);
+void animPoseWorldPositionEvalOn(int poseIdx, u8 enabled);
+void animPoseWorldMatrixEvalOn(int poseIdx, u8 enabled);
+void animPoseVivianMain(s32 poseId, f32* values);
+s32 animPoseGetVivianType(s32 poseId);

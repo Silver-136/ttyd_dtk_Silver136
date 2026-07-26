@@ -1,5 +1,38 @@
 #include "effect/eff_fire.h"
 
+typedef f32 Mtx[3][4];
+
+extern void PSMTXTrans(Mtx, f32, f32, f32);
+extern void PSMTXRotRad(Mtx, f32, char);
+extern void PSMTXScale(Mtx, f32, f32, f32);
+extern void PSMTXConcat(void*, void*, void*);
+extern void GXLoadPosMtxImm(Mtx, s32);
+extern void GXLoadTexMtxImm(Mtx, s32, s32);
+extern void GXSetVtxAttrFmt(u32, s32, u32, u32, u32);
+extern void* camGetPtr(s32);
+extern void effGetTexObj(s32, void*);
+extern void GXLoadTexObj(void*, s32);
+extern void GXSetNumChans(u32);
+extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+extern void GXSetNumTexGens(u32);
+extern void GXSetTexCoordGen2(s32, s32, s32, u32, u32, s32);
+extern void GXClearVtxDesc(void);
+extern void GXSetVtxDesc(s32, s32);
+extern void GXSetNumTevStages(u32);
+extern void GXSetTevOrder(u32, u32, u32, s32);
+extern void GXBegin(s32, s32, s16);
+extern void* __memAlloc(s32, u32);
+extern s32 rand(void);
+extern void effDelete(void*);
+extern void dispEntry(s32, s32, void*, void*, f32);
+extern f32 float_1_80424470;
+extern f32 float_0_80424478;
+extern void GXSetCurrentMtx(u32);
+extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effFireEntry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 duration) {
@@ -46,8 +79,6 @@ void* effFireEntry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 duration) {
         s32 unk88;
     } FireWork;
     extern EffectEntry* effEntry(void);
-    extern void* __memAlloc(s32, u32);
-    extern s32 rand(void);
     extern void effFireMain(void);
     extern char str_Fire_804244d8[];
 
@@ -133,20 +164,14 @@ void* effFireEntry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 duration) {
 
 
 u8 effFireMain(void* effect) {
-    extern void effDelete(void*);
     extern void effFireSparkN64Entry(f32, f32, f32, f32, s32, s32, s32);
-    extern s32 rand(void);
     extern void* effEntry(void);
-    extern void* __memAlloc(s32, u32);
     extern f32 dispCalcZ(void*);
-    extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effFireDisp(void);
     extern void effFireDisp2(void);
     extern void effFireDisp3(void);
     extern void effFireSmokeMain(void);
     extern char str_FireSmoke_802f9510[];
-    extern f32 float_1_80424470;
-    extern f32 float_0_80424478;
     extern f32 float_neg8_80424484;
     extern f32 float_5_8042448c;
     extern f32 float_1p4_804244c8;
@@ -285,38 +310,15 @@ u8 effFireMain(void* effect) {
 }
 
 void effFireDisp(int camId, int effect) {
-    typedef f32 Mtx[3][4];
     typedef struct GXTexObj { u32 data[8]; } GXTexObj;
-    extern void* camGetPtr(s32);
-    extern void effGetTexObj(s32, void*);
-    extern void GXLoadTexObj(void*, s32);
     extern void GXSetBlendMode(u32, u32, u32, u32);
     extern void GXSetZCompLoc(u32);
     extern void GXSetAlphaCompare(u32, u32, u32, u32, u32);
     extern void GXSetZMode(u32, u32, u32);
-    extern void GXSetNumChans(u32);
-    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
-    extern void GXSetNumTexGens(u32);
-    extern void GXSetTexCoordGen2(s32, s32, s32, u32, u32, s32);
-    extern void PSMTXScale(Mtx, f32, f32, f32);
-    extern void PSMTXTrans(Mtx, f32, f32, f32);
-    extern void PSMTXRotRad(Mtx, f32, char);
-    extern void PSMTXConcat(void*, void*, void*);
-    extern void GXLoadTexMtxImm(Mtx, s32, s32);
-    extern void GXLoadPosMtxImm(Mtx, s32);
-    extern void GXSetCurrentMtx(u32);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32, s32);
-    extern void GXSetVtxAttrFmt(u32, s32, u32, u32, u32);
-    extern void GXSetNumTevStages(u32);
-    extern void GXSetTevOrder(u32, u32, u32, s32);
     extern void GXSetTevColorOp(s32, u32, u32, u32, u32, u32);
     extern void GXSetTevAlphaOp(s32, u32, u32, u32, u32, u32);
-    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
-    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
     extern void GXSetTevKColorSel(u32, u32);
     extern void GXSetTevKAlphaSel(u32, u32);
-    extern void GXBegin(s32, s32, s16);
     s32* work = *(s32**)(effect + 0xC);
     char* cam = camGetPtr(camId);
     GXTexObj tex;
@@ -410,31 +412,7 @@ void effFireDisp(int camId, int effect) {
 }
 
 u8 effFireDisp2(s32 camId, s32 effect) {
-    typedef f32 Mtx[3][4];
     typedef struct GXTexObj { u32 data[8]; } GXTexObj;
-    extern void* camGetPtr(s32);
-    extern void effGetTexObj(s32, void*);
-    extern void GXLoadTexObj(void*, s32);
-    extern void GXSetNumChans(u32);
-    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
-    extern void GXSetNumTexGens(u32);
-    extern void GXSetNumTevStages(u32);
-    extern void GXSetTevOrder(u32, u32, u32, s32);
-    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
-    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
-    extern void GXSetTexCoordGen2(s32, s32, s32, u32, u32, s32);
-    extern void PSMTXTrans(Mtx, f32, f32, f32);
-    extern void PSMTXRotRad(Mtx, f32, char);
-    extern void PSMTXScale(Mtx, f32, f32, f32);
-    extern void PSMTXConcat(void*, void*, void*);
-    extern void GXLoadPosMtxImm(Mtx, s32);
-    extern void GXLoadTexMtxImm(Mtx, s32, s32);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32, s32);
-    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
-    extern void GXBegin(s32, s32, s16);
     s32* work = *(s32**)(effect + 0xC);
     char* cam = camGetPtr(camId);
     GXTexObj tex;
@@ -510,33 +488,8 @@ u8 effFireDisp2(s32 camId, s32 effect) {
 
 
 u8 effFireDisp3(s32 camId, s32 effect) {
-    typedef f32 Mtx[3][4];
     typedef struct GXTexObj { u32 data[8]; } GXTexObj;
-    extern void* camGetPtr(s32);
-    extern void effGetTexObj(s32, void*);
-    extern void GXLoadTexObj(void*, s32);
-    extern void GXSetNumChans(u32);
-    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
-    extern void GXSetNumTexGens(u32);
-    extern void GXSetNumTevStages(u32);
-    extern void GXSetTevOrder(u32, u32, u32, s32);
-    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
-    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
-    extern void GXSetTexCoordGen2(s32, s32, s32, u32, u32, s32);
-    extern void PSMTXTrans(Mtx, f32, f32, f32);
-    extern void PSMTXRotRad(Mtx, f32, char);
-    extern void PSMTXScale(Mtx, f32, f32, f32);
-    extern void PSMTXConcat(void*, void*, void*);
-    extern void GXLoadPosMtxImm(Mtx, s32);
-    extern void GXLoadTexMtxImm(Mtx, s32, s32);
-    extern void GXSetCurrentMtx(u32);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32, s32);
-    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
     extern void GXSetCullMode(s32);
-    extern void GXBegin(s32, s32, s16);
     s32* work = *(s32**)(effect + 0xC);
     char* cam = camGetPtr(camId);
     GXTexObj tex;
@@ -622,9 +575,7 @@ u8 effFireSmokeMain(void* effect) {
         s32 timer;
         f32 drawZ;
     } FireSmokeWork;
-    extern void effDelete(void*);
     extern f32 dispCalcZ(Vec3*);
-    extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effFireSmokeDisp(void);
 
     FireSmokeWork* work = *(FireSmokeWork**)((s32)effect + 0xC);
@@ -667,39 +618,18 @@ u8 effFireSmokeMain(void* effect) {
 
 
 u8 effFireSmokeDisp(s32 camId, void* effect) {
-    typedef f32 Mtx[3][4];
     typedef u8 GXColor[4];
     typedef struct GXTexObj { u32 dummy[8]; } GXTexObj;
-    extern void* camGetPtr(s32);
-    extern void effGetTexObj(s32, void*);
-    extern void GXLoadTexObj(void*, s32);
-    extern void GXSetNumChans(u32);
-    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
     extern void GXSetChanMatColor(s32, void*);
-    extern void GXSetNumTexGens(u32);
-    extern void GXSetTexCoordGen2(s32, s32, s32, u32, u32, s32);
-    extern void PSMTXTrans(Mtx, f32, f32, f32);
-    extern void PSMTXRotRad(Mtx, f32, char);
-    extern void PSMTXScale(Mtx, f32, f32, f32);
     extern void PSMTXConcat(Mtx, Mtx, Mtx);
-    extern void GXLoadPosMtxImm(Mtx, s32);
-    extern void GXSetCurrentMtx(u32);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32, s32);
-    extern void GXSetVtxAttrFmt(u32, s32, u32, u32, u32);
-    extern void GXSetNumTevStages(u32);
-    extern void GXSetTevOrder(u32, u32, u32, s32);
     extern void GXSetTevOp(s32, s32);
-    extern void GXBegin(s32, s32, s16);
     extern u8 scale_dt[];
     extern f32 float_0p0078125_8042445c;
     extern f32 float_1p5_80424460;
     extern f32 float_0p8_80424464;
     extern f32 float_deg2rad_80424468;
     extern f32 float_8_8042446c;
-    extern f32 float_1_80424470;
     extern f32 float_0p5_80424474;
-    extern f32 float_0_80424478;
 
     char* work;
     void* cam;

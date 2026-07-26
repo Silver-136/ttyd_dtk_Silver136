@@ -3,6 +3,9 @@
 extern u8 cloud[];
 extern void* cloud_p;
 extern u8 cloud_once_flag;
+extern s32 evtEntry(void* script, s32 priority, s32 flags);
+extern char str_P_oof_cloud_1_802f73c8[];
+extern s32 evtGetValue(void* event, s32 value);
 extern char str_i_name_PCT1d_802f73d8[];
 extern char str_o_name_PCT1d_802f73e4[];
 s32 sprintf(char* str, const char* fmt, ...);
@@ -31,16 +34,13 @@ s32 evt_cloud_main(void* pEvt, s32 firstCall) {
     extern void imgSetShadow(void* image, s32 type);
     extern void imgFreeCapture(s32 image, s32 heap);
     extern void imgRelease(void* image);
-    extern s32 evtEntry(void* script, s32 priority, s32 flags);
     extern void hitObjFlagOn(char* name, s32 flags);
     extern void psndSFXOn_3D(char* name, void* position);
-    extern char str_P_oof_cloud_1_802f73c8[];
     extern char str_P_oof_cloud_2_802f73f0[];
     extern char str_SFX_OFF_CLAUD_WIND2_802f7400[];
     extern char str_SFX_OFF_CLAUD_WIND3_802f7414[];
     extern char str_A_1_80424050[];
     extern char str_A_2_80424058[];
-    extern u8 cloud_once_flag;
 
     u8* cloud = *(u8**)((s32)pEvt + 0x9C);
     void* player = marioGetPtr();
@@ -182,10 +182,7 @@ s32 evt_cloud_init(void) {
 }
 
 s32 evt_cloud_ent(void* pEvt) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern s32 evtEntry(void* script, s32 priority, s32 flags);
     extern void* evt_cloud_main_evt;
-    extern char str_P_oof_cloud_1_802f73c8[];
     extern char* strncpy(char* dest, const char* src, unsigned long n);
     s32* args;
     s32 indirectName;
@@ -239,8 +236,6 @@ s32 evt_cloud_ent(void* pEvt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_cloud_set_cap_size(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern void* cloud_p;
     s32* args = *(s32**)((s32)event + 0x18);
     u16 width = evtGetValue(event, args[0]);
     s32 height = evtGetValue(event, args[1]);
@@ -256,7 +251,6 @@ s32 evt_cloud_set_cap_size(void* event, s32 isFirstCall) {
 
 s32 evt_cloud_get_mode(void* event, s32 isFirstCall) {
     extern void evtSetValue(void* event, s32 target, s32 value);
-    extern void* cloud_p;
     s32* args = *(s32**)((s32)event + 0x18);
     void* cloud = cloud_p;
 

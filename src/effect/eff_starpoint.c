@@ -1,4 +1,6 @@
 #include "effect/eff_starpoint.h"
+
+extern f32 float_0_80426f0c;
 void* effStarPointEntry(double x, double y, double z, s32 kind, s32 count) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
@@ -6,7 +8,6 @@ void* effStarPointEntry(double x, double y, double z, s32 kind, s32 count) {
     extern const char str_StarPoint_802fe534[];
     extern void effStarPointMain(void);
     extern f64 double_to_int_802fe540;
-    extern f32 float_0_80426f0c;
     extern f32 float_6p2832_80426f10;
     extern f32 float_360_80426f14;
     extern f32 float_0p00761_80426f18;
@@ -152,7 +153,6 @@ void effStarPointMain(void* effect) {
     } Vec;
 
     extern u32 vec3_802fe528[];
-    extern f32 float_0_80426f0c;
     extern void effDelete(void* effect);
     extern f32 dispCalcZ(Vec* pos);
     extern void effStarPointDisp(void* camera, void* effect);

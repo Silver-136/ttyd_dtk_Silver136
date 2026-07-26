@@ -5,6 +5,7 @@
 #include "battle/battle_status_effect.h"
 #include "battle/battle_status_icon.h"
 #include "mario/mario_pouch.h"
+#include "manager/evtmgr.h"
 #include "pmario_sound.h"
 #include "system.h"
 
@@ -119,7 +120,6 @@ BattleWorkUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
 }
 
 BOOL BtlUnit_Delete(BattleWorkUnit* unit) {
-    extern void evtDeleteID(s32);
     extern void BattleStatusEffectDelete(void*);
     extern void BattleStatusIconDelete(void*);
     extern void BattleFree(void*);

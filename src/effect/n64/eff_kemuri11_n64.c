@@ -1,10 +1,10 @@
 #include "effect/n64/eff_kemuri11_n64.h"
+#include "effect/n64/eff_kemuri1_n64.h"
 
 void* effKemuri11N64Entry(f32 x, f32 y, f32 z, s32 type) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32, s32);
     extern void effKemuri11Main(void*);
-    extern void* effKemuri1N64Entry(f32, f32, f32, f32, s32);
     extern char str_Kemuri11N64_802fb340[];
     void* entry;
     u8* work;

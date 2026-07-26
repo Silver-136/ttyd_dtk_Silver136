@@ -1,10 +1,10 @@
 #include "battle/battle_unit.h"
 #include "battle/battle_status_effect.h"
+#include "effect/eff_fire.h"
 
 s8 _st_pri_data[0x19];
 extern void* _battleWorkPointer;
 
-void* memset(void* dest, int value, unsigned long size);
 void effDelete(void* effect);
 void effSoftDelete(void* effect);
 void iconDelete(void* icon);
@@ -15,7 +15,6 @@ void BtlUnit_GetPartsWorldPos(BattleWorkUnitPart* part, f32* x, f32* y, f32* z);
 s32 BtlUnit_GetWidth(BattleWorkUnit* unit);
 s32 BtlUnit_GetHeight(BattleWorkUnit* unit);
 void* effIceEntry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 unk);
-void* effFireEntry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 unk);
 void* effSparkEntry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 unk);
 void* effSleepEntry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 unk, f32 time);
 int sprintf(char* str, const char* format, ...);

@@ -1,6 +1,12 @@
 #include "effect/n64/eff_kemuri5_n64.h"
 
 
+extern f64 sin(f64);
+extern f64 cos(f64);
+extern f32 float_0_804256d8;
+extern f32 float_6p2832_804256e4;
+extern f32 float_360_804256e8;
+
 #pragma optimize_for_size off
 
 void* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
@@ -9,12 +15,7 @@ void* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
     extern void effKemuri5Main(void*);
     extern s32 rand(void);
     extern f64 reviseAngle(f64);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern char str_Kemuri5N64_802fb24c[];
-    extern f32 float_0_804256d8;
-    extern f32 float_6p2832_804256e4;
-    extern f32 float_360_804256e8;
     extern f32 float_1_80425704;
     extern f32 float_0p03_80425708;
     extern f32 float_1p7_8042570c;
@@ -64,16 +65,12 @@ void effKemuri5Main(void* effect) {
         f32 z;
     } Vec3;
     extern f32 reviseAngle(f32);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
     extern void effDelete(void*);
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern void effKemuri5Disp(s32, s32);
     extern Vec3 vec3_802fb240;
     extern f32 float_12_804256e0;
-    extern f32 float_6p2832_804256e4;
-    extern f32 float_360_804256e8;
     extern f32 float_0p1_804256ec;
     extern f32 float_0p83_804256f0;
     extern f32 float_0p006_804256f4;
@@ -162,7 +159,6 @@ void effKemuri5Disp(s32 cameraId, void* effect) {
     extern void GXBegin(s32, s32, s32);
     extern void tri2(s32, s32, s32, s32, s32, s32, s32);
     extern f32 float_0p0625_804256d4;
-    extern f32 float_0_804256d8;
     extern f32 float_deg2rad_804256dc;
     u8 tex[0x20];
     Mtx texMtx;

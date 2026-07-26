@@ -1,11 +1,12 @@
 #include "event/evt_urouro.h"
 
+extern s32 evtGetValue(void* event, s32 value);
+extern void* evtNpcNameToPtr(void* event, s32 name);
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 urouro_init_func(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
     extern f32 evtGetFloat(void* event, s32 value);
-    extern void* evtNpcNameToPtr(void* event, s32 name);
     extern void* mapalloc_base_ptr;
     extern void* _mapAlloc(void* heap, u32 size);
     extern s32 sysMsec2Frame(s32 msec);
@@ -91,8 +92,6 @@ s32 urouro_main_func(void* event) {
         f32 direction;
     } PlayerWork;
 
-    extern s32 evtGetValue(void*, s32);
-    extern void* evtNpcNameToPtr(void*, s32);
     extern void* marioGetPtr(void);
     extern s32 irand(s32);
     extern f64 reviseAngle(f64);

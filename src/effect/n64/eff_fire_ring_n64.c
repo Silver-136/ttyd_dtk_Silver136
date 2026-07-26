@@ -1,4 +1,5 @@
 #include "effect/n64/eff_fire_ring_n64.h"
+#include "effect/n64/eff_fire_dust_n64.h"
 
 void effFireRingMain(void* effect);
 
@@ -81,7 +82,6 @@ void* effFireRingN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale
 void effFireRingMain(void* effect) {
     extern void effDelete(void*);
     extern int effTblRandN64(int, int);
-    extern void* effFireDustN64Entry(float, float, float, float, float, int, int, unsigned int);
     extern float dispCalcZ(void*);
     extern void dispEntry(int, int, void*, void*, float);
     extern void effFireRingDisp(int, void*);
@@ -156,7 +156,6 @@ void effFireRingDisp(s32 cameraId, void* effect) {
     extern u32 dat_804251d8;
     extern u32 dat_804251dc;
     extern f32 float_0p015873_804251e0;
-    extern f32 float_0_804251e4;
     extern f32 float_0p032258_804251e8;
     extern char stg__s_v[];
     u8 texObj[0x20];

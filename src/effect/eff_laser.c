@@ -5,7 +5,6 @@ void* effEntry(void);
 void* __memAlloc(s32 heap, u32 size);
 void effLaserMain(void* entry);
 void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
-void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
 void PSMTXRotRad(Mtx m, s8 axis, f32 rad);
 void PSMTXConcat(Mtx a, Mtx b, Mtx out);
 void* camGetPtr(s32 cameraId);

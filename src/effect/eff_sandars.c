@@ -1,23 +1,26 @@
 #include "effect/eff_sandars.h"
+#include "effect/n64/eff_bomb_n64.h"
+
+extern void* gp;
+extern s32 animGroupBaseAsync(const char* name, s32 heap, s32 flags);
+extern char str_EFF_bakuhatu_80300a6c[];
+extern f32 float_4_80428150;
+extern f32 float_0_80428148;
+extern f32 float_deg2rad_80428138;
 
 /* CHATGPT STUB FILL: main/effect/eff_sandars 20260624_184929 */
 
 /* stub-fill: effSandarsEntry | missing_definition | ghidra_signature */
 void* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
-    extern void* gp;
     extern void* effEntry(s32 type);
     extern void* __memAlloc(s32 heap, u32 size);
-    extern s32 animGroupBaseAsync(const char* name, s32 heap, s32 flags);
     extern f64 cos(f64 x);
     extern f64 sin(f64 x);
     extern void effSandarsMain(void);
     extern char str_Sandars_80300a88[];
-    extern char str_EFF_bakuhatu_80300a6c[];
     extern f32 float_1_8042814c;
-    extern f32 float_4_80428150;
     extern f32 float_6p2832_8042815c;
     extern f32 float_360_80428160;
-    extern f32 float_0_80428148;
     extern f32 float_0p2_80428164;
     extern f32 float_51_80428168;
     extern f32 float_1p1_8042816c;
@@ -103,19 +106,15 @@ void* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
 
 /* fallback stub-fill: map=effSandarsMain addr=0x80241d68 size=0x000002dc */
 void effSandarsMain(void* effect) {
-    extern void* gp;
     extern void animPoseRelease(s32 poseId);
     extern void effDelete(void* effect);
     extern void* effBombN64Entry(s32 type);
-    extern void effBombN64SetCamId(void* eff, s32 camId);
-    extern s32 animGroupBaseAsync(const char* name, s32 heap, s32 flags);
     extern s32 animPoseEntry(const char* name, s32 heap);
     extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern f32 dispCalcZ(f32* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, f32 z, void* param);
     extern void effSandarsDisp(s32 cameraId, void* effect);
     extern void effSandarsDisp2(s32 cameraId, void* effect);
-    extern char str_EFF_bakuhatu_80300a6c[];
     extern char str_Z_1_80428158[];
     extern u8 scale_data[];
     extern f32 float_100_80428154;
@@ -215,9 +214,6 @@ void effSandarsDisp(s32 cameraId, void* effect) {
     extern void animPoseSetMaterialEvtColor(s32 poseId, u32* color);
     extern void animPoseMain(s32 poseId);
     extern void animPoseDrawMtx(s32 poseId, f32 mtx[3][4], s32 mode, f32 a, f32 b);
-    extern f32 float_deg2rad_80428138;
-    extern f32 float_0_80428148;
-    extern f32 float_4_80428150;
     extern u32 dat_80428130;
 
     u32 evtColor;
@@ -290,7 +286,6 @@ void effSandarsDisp2(s32 cameraId, void* effect) {
     extern void GXSetCurrentMtx(s32);
     extern void GXSetChanMatColor(s32, u32*);
     extern void GXBegin(s32, s32, s32);
-    extern f32 float_deg2rad_80428138;
     extern u32 dat_80428134;
 
     void* work = *(void**)((s32)effect + 0xC);

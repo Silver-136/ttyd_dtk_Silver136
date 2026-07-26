@@ -1,9 +1,10 @@
 #include "action/ac_power_gauge_lv.h"
 
+#include "system.h"
+
+void actionCommandDisp(f32 x, f32 y);
+
 s32 battleAcMain_PowerGaugeLv(void* wp) {
-    extern void* memset(void* dest, s32 value, u32 size);
-    extern s32 irand(s32 max);
-    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
     extern s32 BattlePadGetNow(void);
     extern f32 float_neg300_80427b48;
     extern f32 float_0_80427b50;
@@ -163,8 +164,6 @@ void battleAcDisp_PowerGaugeLv(void* camera, void* wp) {
 
     extern f32 float_neg300_80427b48;
     extern f32 float_30_80427b4c;
-    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
-    extern void actionCommandDisp(f32 x, f32 y);
 
     disp = (PowerGaugeDispWork*)((s32)wp + 0x1F20);
     state = *(s32*)((s32)wp + 0x1C9C);

@@ -1,8 +1,15 @@
 #include "unit/party/unit_party_nokotarou.h"
+#include "effect/eff_nokotarou.h"
+
+extern void* _battleWorkPointer;
+extern void evtSetValue(void* evt, s32 arg, s32 value);
+extern s32 evtGetValue(void* evt, s32 arg);
+extern s32 BattleTransID(void* evt, s32 id);
+extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void __makeTechMenuFunc(void* commandWork, s32* count) {
-    extern void* _battleWorkPointer;
     extern void* BattleGetPartyPtr(void* battleWork);
     extern s32 BattleTransPartyId(s32 id);
     extern s32 partyGetTechLv(s32 partyId);
@@ -64,9 +71,7 @@ void __makeTechMenuFunc(void* commandWork, s32* count) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _check_mario_move_count(void* evt) {
-    extern void* _battleWorkPointer;
     extern void* BattleGetMarioPtr(void* battleWork);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
 
     s32* args = *(s32**)((s32)evt + 0x18);
     void* battleWork = _battleWorkPointer;
@@ -79,11 +84,6 @@ s32 _check_mario_move_count(void* evt) {
 #pragma use_lmw_stmw on
 
 s32 _color_lv_set(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
 
     s32* args = *(s32**)((s32)evt + 0x18);
     void* battleWork = _battleWorkPointer;
@@ -103,13 +103,8 @@ s32 _color_lv_set(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _tsuranuki_effect_control(void* evt, s32 isFirstCall) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern void* BtlUnit_GetPartsPtr(void* unit, s32 partsId);
-    extern void* effNokotarouEntry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
     extern void effSoftDelete(void* eff);
     extern f32 float_2_804243a8;
     extern f32 float_0p006_804243ac;
@@ -169,12 +164,7 @@ s32 _tsuranuki_effect_control(void* evt, s32 isFirstCall) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _check_guard_koura(void* evt) {
-    extern void* _battleWorkPointer;
-    extern s32 evtGetValue(void* evt, s32 arg);
-    extern s32 BattleTransID(void* evt, s32 id);
-    extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
     extern void* BtlUnit_GetGuardKouraPtr(void* unit);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
 
     void* battleWork = _battleWorkPointer;
     s32* args = *(s32**)((s32)evt + 0x18);

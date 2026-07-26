@@ -1,14 +1,13 @@
 #include "action/ac_button_down.h"
 
+#include "system.h"
+
 extern f32 float_neg300_8042685c;
 extern f32 float_0_80426860;
 
-f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
 void actionCommandDisp(s32 type, f32 x, f32 y);
 
 s32 battleAcMain_ButtonDown(void* battleWork) {
-    extern void* memset(void* dest, int ch, u32 count);
-    extern s32 irand(s32 range);
     extern s32 BattlePadGetTrigger(void);
     extern void psndSFXOn(const char* name);
     extern const char str_SFX_AC_BUTTON_PUSH1_802fdf30[];

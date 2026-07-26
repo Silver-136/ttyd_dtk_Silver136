@@ -1,5 +1,9 @@
 #include "effect/n64/eff_ice_n64.h"
 
+extern f32 float_0_8042551c;
+extern f32 float_2_80425530;
+extern f32 float_10_80425544;
+
 #pragma optimize_for_size off
 
 #pragma optimize_for_size off
@@ -10,9 +14,6 @@ void* effIceN64Entry(s32 type, f32 x, f32 y, f32 z) {
     extern void effIceMain(void*);
     extern s32 rand(void);
     extern char str_IceN64_802fb160[];
-    extern f32 float_10_80425544;
-    extern f32 float_0_8042551c;
-    extern f32 float_2_80425530;
     void* entry;
     u8* work;
     u8* part;
@@ -79,12 +80,10 @@ void effIceMain(void* effect) {
     extern f32 float_0p3_80425524;
     extern f32 float_0p8_80425528;
     extern f32 float_6p2832_8042552c;
-    extern f32 float_2_80425530;
     extern f32 float_360_80425534;
     extern f32 float_neg0p05_80425538;
     extern f32 float_0p2_8042553c;
     extern f32 float_0p92_80425540;
-    extern f32 float_10_80425544;
     extern f32 float_0p5_80425548;
     u8* work;
     u8* part;
@@ -160,7 +159,6 @@ void effIceDisp(s32 cameraId, void* effect) {
     extern void tri2(s32, s32, s32, s32, s32, s32, s32);
     extern f32 float_deg2rad_80425514;
     extern f32 float_0p015625_80425518;
-    extern f32 float_0_8042551c;
     extern f32 float_0p03125_80425520;
     extern u8 ice_vtx[];
     extern u8 ice_s_vtx[];

@@ -31,4 +31,9 @@ typedef struct LightEntry {
 STATIC_ASSERT_SIZEOF(LightEntry, 0x60);
 #endif
 
+s32 lightCheckCharaLight(void);
+s32 lightGetEntryNum(void);
 LightEntry* lightGetPaperCraft(void);
+void lightInit(void);
+void lightMain(void);
+void lightReInit(void);

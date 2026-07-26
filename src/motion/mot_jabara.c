@@ -1,7 +1,25 @@
 #include "motion/mot_jabara.h"
 
+extern void* marioGetPtr(void);
+extern s32 pouchCheckItem(s32 itemId);
+extern s32 strcmp(const char* a, const char* b);
+extern f32 float_0_80420bd4;
+extern void __memFree(s32 heap, void* ptr);
+extern void marioPaperOff(void);
+extern void allPartyRideOff(void);
+extern void marioAdjustMoveDir(void);
+extern void marioClearJumpPara(void);
+extern f32 vec3_802c3fd0[];
+extern f32 float_0p1_80420bd8;
+extern f32 float_180_80420bdc;
+extern f32 float_1p4_80420be0;
+extern f32 float_0p8_80420be4;
+extern f32 float_5_80420be8;
+extern f32 float_0p01_80420c00;
+extern f32 float_20_80420c04;
+extern f32 float_37_80420c08;
+
 s32 marioGetJabaraState(void) {
-    extern void* marioGetPtr(void);
     void* mario = marioGetPtr();
     s32 pose;
     register s32 state = 7;
@@ -28,8 +46,6 @@ s32 marioGetJabaraState(void) {
 }
 
 s32 marioPriCheckJabara(void) {
-    extern void* marioGetPtr(void);
-    extern s32 pouchCheckItem(s32 itemId);
 
     void* mario = marioGetPtr();
     u32 flags = *(u32*)mario;
@@ -44,16 +60,12 @@ s32 marioPriCheckJabara(void) {
 }
 
 int marioChkJabara(void) {
-    extern void* marioGetPtr(void);
-    extern s32 pouchCheckItem(s32 itemId);
-    extern s32 strcmp(const char* a, const char* b);
     extern void marioChgPose(const char* pose);
     extern void marioVoiceGlareOff(void);
     extern void marioVoiceGlareOn(void);
     extern s32 marioGetRub(s32 buttonFlags, s32* out1, s32* out2, s32* out3);
     extern char str_M_I_Y_80420cbc[];
     extern char str_M_S_1_80420c80[];
-    extern f32 float_0_80420bd4;
     void* mario = marioGetPtr();
     s32 v1;
     s32 v2;
@@ -90,19 +102,15 @@ int marioChkJabara(void) {
 #pragma use_lmw_stmw off
 
 void mot_jabara(void) {
-    extern void* marioGetPtr(void);
     extern void* __memAlloc(s32 heap, s32 size);
     extern void* memset(void* dst, s32 value, u32 size);
-    extern void __memFree(s32 heap, void* ptr);
     extern void mot_slit_post(void);
     extern void marioChgPose(char* pose);
     extern void marioPaperOn(char* pose);
-    extern void marioPaperOff(void);
     extern void marioPaperLightOff(void);
     extern void marioChgPaper(char* pose);
     extern void marioChkGnd(void);
     extern void L_allPartyRideOn(void);
-    extern void allPartyRideOff(void);
     extern u32 psndSFXOn_3D(s32 id, void* position);
     extern s32 sysMsec2Frame(s32 msec);
     extern s32 marioGetRub(s32 type, void* dir, void* count, void* scratch);
@@ -118,16 +126,13 @@ void mot_jabara(void) {
     extern f64 marioGetFallSpd(void);
     extern void* marioChkLandon(f32 speed, f32* y);
     extern void* marioChkLandon2(f64 speed, f64 y, f32* outY);
-    extern void marioAdjustMoveDir(void);
     extern void marioChgMotSub(s32 motion, s32 param);
     extern void marioChgMot(s32 motion);
     extern void marioChgSmallJumpMotion(void);
-    extern void marioClearJumpPara(void);
     extern void swingMain(void);
     extern u32 hitGetAttr(void* hit);
     extern char* hitGetName(void* hit);
     extern void hitObjGetPos(char* name, void* outPos);
-    extern s32 strcmp(const char* a, const char* b);
     extern void* evtEntryType(void* script, s32 priority, s32 flags, s32 typeMask);
     extern s32 marioAnimeId(void);
     extern void animPoseSetLocalTime(f64 time, s32 poseId);
@@ -141,21 +146,11 @@ void mot_jabara(void) {
     extern void unk_JP_US_EU_31_8013587c(void);
     extern void quake_evt;
     extern void* gp;
-    extern f32 vec3_802c3fd0[];
-    extern f32 float_0_80420bd4;
-    extern f32 float_0p1_80420bd8;
-    extern f32 float_180_80420bdc;
-    extern f32 float_1p4_80420be0;
-    extern f32 float_0p8_80420be4;
-    extern f32 float_5_80420be8;
     extern f32 float_neg0p1_80420bec;
     extern f32 float_0p18_80420bf0;
     extern f32 float_24_80420bf4;
     extern f32 float_2p4_80420bf8;
     extern f32 float_neg0p4_80420bfc;
-    extern f32 float_0p01_80420c00;
-    extern f32 float_20_80420c04;
-    extern f32 float_37_80420c08;
     extern f32 float_0p2_80420c0c;
     extern f32 float_0p005_80420c10;
     extern f32 float_1p5_80420c14;
@@ -854,7 +849,6 @@ start_crawl:
 
 
 s32 jabaraNoHitChk(void) {
-    extern void* marioGetPtr(void);
 
     void* mario = marioGetPtr();
     u16 motion = *(u16*)((s32)mario + 0x2E);
@@ -873,17 +867,6 @@ s32 jabaraNoHitChk(void) {
 }
 
 void mot_jabara_post(void) {
-    extern void* marioGetPtr(void);
-    extern void marioPaperOff(void);
-    extern void allPartyRideOff(void);
-    extern void marioAdjustMoveDir(void);
-    extern void __memFree(s32 heap, void* ptr);
-    extern void marioClearJumpPara(void);
-    extern f32 vec3_802c3fd0[];
-    extern f32 float_0_80420bd4;
-    extern f32 float_0p01_80420c00;
-    extern f32 float_20_80420c04;
-    extern f32 float_37_80420c08;
     typedef struct Vec { f32 x, y, z; } Vec;
     f32* data = vec3_802c3fd0;
     void* mario = marioGetPtr();
@@ -919,16 +902,9 @@ void mot_jabara_post(void) {
     }
 }
 u8 swingMain(void) {
-    extern void* marioGetPtr(void);
     extern f64 revise360(f64 angle);
     extern f64 __fabs(f64 value);
-    extern f32 float_0_80420bd4;
-    extern f32 float_0p1_80420bd8;
-    extern f32 float_0p8_80420be4;
-    extern f32 float_1p4_80420be0;
-    extern f32 float_5_80420be8;
     extern f32 float_40_80420bd0;
-    extern f32 float_180_80420bdc;
 
     void* player = marioGetPtr();
     void* mot = *(void**)((s32)player + 0x294);
@@ -1100,7 +1076,6 @@ u8 swingMain(void) {
 }
 
 void mot_grasp(void) {
-    extern void* marioGetPtr(void);
 
     void* mario = marioGetPtr();
     u32 flags = *(u32*)((s32)mario + 0xC);

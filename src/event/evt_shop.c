@@ -18,24 +18,30 @@ extern void winMgrHelpDraw();
 extern void winMgrHelpMain();
 extern void* msgSearch();
 extern u8 itemDataTable[];
+extern s32 FontGetMessageWidth(void* msg);
+extern void FontDrawStart(void);
+extern void FontDrawEdge(void);
+extern void FontDrawColor(void* color);
+extern void FontDrawEdgeOff(void);
+extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+extern void iconNumberDispGx(void* mtx, s32 number, s32 flags, void* color);
+extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
+extern void PSMTXConcat(void* a, void* b, void* out);
+extern s32 shopPointList[];
+extern void psndSFXOn(s32 id);
+extern void iconFlagOn(char* name, u32 flag);
+extern char str_shpPCTd_80421eb4[];
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void name_disp(void) {
-    extern s32 FontGetMessageWidth(void* msg);
-    extern void FontDrawStart(void);
-    extern void FontDrawEdge(void);
-    extern void FontDrawColor(void* color);
     extern void FontDrawString(void* msg, f32 x, f32 y);
-    extern void FontDrawEdgeOff(void);
     extern void mapObjGetPos(void* obj, void* pos);
     extern void* camGetPtr(s32 id);
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
     extern void PSMTX44MultVec(void* mtx, void* src, void* dst);
     extern s32 sprintf(char* str, const char* format, ...);
     extern s32 strlen(char* str);
-    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
-    extern void iconNumberDispGx(void* mtx, s32 number, s32 flags, void* color);
     extern u32 dat_80421e78;
     extern u32 dat_80421e7c;
     extern char str_PCTd_80421f04[];
@@ -101,15 +107,6 @@ void help_main(void) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 void help_disp(void* work) {
     void* wp = _wp;
     s32 index = *(s32*)((s32)wp + 0x2C) * 8;
@@ -126,11 +123,7 @@ void help_disp(void* work) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void point_disp(void* win) {
-    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
-    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
-    extern void PSMTXConcat(void* a, void* b, void* out);
     extern void iconDispGx2(void* mtx, s32 flags, s32 icon);
-    extern void iconNumberDispGx(void* mtx, s32 number, s32 flags, void* color);
     extern u16 point_disp_icons[];
     extern u32 dat_80421e80;
     f32 trans[3][4];
@@ -185,15 +178,7 @@ void point_disp(void* win) {
 #pragma use_lmw_stmw off
 void title_disp(void* win) {
     extern char str_msg_shop_point_list4_802ed350[];
-    extern s32 FontGetMessageWidth(void* msg);
-    extern void FontDrawStart(void);
-    extern void FontDrawEdge(void);
-    extern void FontDrawColor(void* color);
-    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
-    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
-    extern void PSMTXConcat(void* a, void* b, void* out);
     extern void FontDrawMessageMtx(void* mtx, void* msg);
-    extern void FontDrawEdgeOff(void);
     extern u32 dat_80421e84;
     f32 trans[3][4];
     f32 scale[3][4];
@@ -233,19 +218,11 @@ void title_disp(void* win) {
 void list_disp(u32* win) {
     extern void* pouchGetPtr(void);
     extern char* msgSearch(const char* msg);
-    extern void FontDrawStart(void);
-    extern void FontDrawEdge(void);
-    extern void FontDrawEdgeOff(void);
-    extern void FontDrawColor(void* color);
     extern void FontDrawMessage(s32 x, s32 y, const char* msg);
     extern void FontDrawMessageMtx(void* mtx, const char* msg);
     extern u32 FontGetMessageWidth(const char* msg);
-    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
-    extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
-    extern void PSMTXConcat(void* a, void* b, void* out);
     extern char* winZenkakuStr(s32 value);
     extern s32 sprintf(char* dst, const char* format, ...);
-    extern s32 shopPointList[];
     extern char str_msg_shop_point_list5_802ed310[];
     extern char str_msg_shop_point_list6_802ed328[];
     extern u32 dat_80421e88, dat_80421e8c, dat_80421e90, dat_80421e94;
@@ -330,7 +307,6 @@ u32 disp_list(void* evt, int param_2) {
     extern void* winMgrEntry(void* desc);
     extern void winMgrCloseAutoDelete(void* win);
     extern s32 keyGetButtonTrg(s32 player);
-    extern void psndSFXOn(s32 id);
 
     if (param_2 != 0) {
         *(void**)((s32)evt + 0x78) = winMgrEntry(list_desc);
@@ -362,7 +338,6 @@ s32 evt_shop_setup(void* event) {
     extern s32 sprintf(char* str, const char* fmt, ...);
     extern void iconEntry(char* name, u16 icon);
     extern void iconSetPos(f32 x, f32 y, f32 z, char* name);
-    extern void iconFlagOn(char* name, u32 flag);
     extern s32 pouchCheckItem(s32 item);
     extern void* npcNameToPtr(char* name);
     extern void* evtEntryType(void* evtCode, s32 priority, u32 flags, u32 type);
@@ -370,14 +345,12 @@ s32 evt_shop_setup(void* event) {
     extern void evtRunCaseEntry(u16 type, s32 a, void* name, s32 b, void* evt, void* arg);
     extern s32 evtGetValue(void* event, s32 value);
     extern void* _wp;
-    extern void* gp;
     extern char mapname;
     extern u8 itemDataTable[];
     extern void* shopper_talk_evt;
     extern void* main_evt;
     extern void* window_desc;
     extern void* evt_shoplist;
-    extern char str_shpPCTd_80421eb4[];
     extern char str_a_shop_keihin_802ed300[];
     extern f32 float_6_80421ebc;
 
@@ -465,7 +438,6 @@ s32 point_disp_onoff(void* event) {
 
 
 s32 point_wait(void) {
-    extern void psndSFXOn(s32 id);
     void* wp = _wp;
     void* pouch = pouchGetPtr();
 
@@ -551,7 +523,6 @@ s32 reset_shop_point(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 chk_shop_point(void* event) {
-    extern s32 shopPointList[];
     s32* args = *(s32**)((s32)event + 0x18);
     void* pouch = pouchGetPtr();
     s32 point;
@@ -608,7 +579,6 @@ check:
 
 
 s32 exchange_shop_point(void) {
-    extern s32 shopPointList[];
     void* pouch = pouchGetPtr();
     s32* list = shopPointList;
     s32 index = 0;
@@ -628,7 +598,6 @@ s32 exchange_shop_point(void) {
 }
 
 s32 shop_point_item(void* pEvt) {
-    extern s32 shopPointList[];
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 point = evtGetValue(pEvt, args[0]);
     s32* list;
@@ -666,8 +635,6 @@ s32 disp_off(void* event) {
     return 2;
 }
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 get_value(void* pEvt) {
@@ -742,24 +709,6 @@ s32 get_fook_evt(void* event) {
     evtSetValue(event, *(s32*)args, *(void**)((s32)data + 4));
     return 2;
 }
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 name_price(int param_1) {
@@ -853,11 +802,8 @@ s32 evt_shop_main_func(void* event) {
     extern s32 evtCheckID(s32 id);
     extern void* mapGetMapObj(char* name);
     extern s32 sprintf(char* s, const char* fmt, ...);
-    extern void iconFlagOn(char* name, u32 flag);
     extern void iconFlagOff(char* name, u32 flag);
-    extern void* gp;
     extern char str_rsh_03_802ed2f8[];
-    extern char str_shpPCTd_80421eb4[];
     extern void* buy_evt;
 
     void* work;

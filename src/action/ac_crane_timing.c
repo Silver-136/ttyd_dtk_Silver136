@@ -1,7 +1,6 @@
 #include "action/ac_crane_timing.h"
 
 s32 battleAcMain_CraneTiming(void* battleWork) {
-    extern void* memset(void* dest, int ch, u32 count);
     extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
     extern void* BtlUnit_GetPartsPtr(void* unit, s32 partId);
     extern s32 irand(s32 range);

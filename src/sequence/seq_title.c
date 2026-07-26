@@ -1,4 +1,8 @@
 #include "sequence/seq_title.h"
+
+#include "driver/fadedrv.h"
+#include "driver/seqdrv.h"
+
 #define PAD_R      0x0020
 #define PAD_L      0x0040
 #define PAD_A      0x0100
@@ -68,7 +72,6 @@ extern u32 dat_8041f578;
 extern u32 dat_8041f57c;
 extern u32 dat_8041f580;
 extern void fileFree(void* file);
-extern s32 seqGetNextSeq(void);
 extern void psndStopAllFadeOut(void);
 extern const f32 float_neg170_8041f5cc;
 extern const f32 float_300_8041f5d0;
@@ -80,9 +83,7 @@ extern u8 psbgm[];
 extern u8 sound[];
 extern u32 psndBGMStartCheck(s32 id);
 extern s32 animGroupBaseAsync(void* name, s32 mode, s32 flags);
-extern s32 seqGetPrevSeq(void);
 extern void fadeEntry(s32 type, s32 duration, void* color);
-extern void fadeSetNarrowFast(void);
 extern s32 fadeIsFinish(void);
 extern void fadeReset(s32 type);
 extern f32 intplGetValue(f32 start, f32 end, s32 type, s32 time, s32 duration);

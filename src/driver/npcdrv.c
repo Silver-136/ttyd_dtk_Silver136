@@ -1,6 +1,11 @@
 #include "driver/npcdrv.h"
+#include "driver/dispdrv.h"
+#include "driver/seqdrv.h"
 
+#include "battle/battle_information.h"
 #include "mario/mariost.h"
+#include "manager/evtmgr.h"
+#include "effect/eff_majinai.h"
 
 // This is only here to make things easier to reference
 typedef struct NPCWork2 {
@@ -12,6 +17,53 @@ NPCWork2 work;
 char MarioStayPose[0x20] = "KPA_S_1";
 char MarioTalkPose[0x20] = "KPA_T_1";
 
+extern s32 strcmp(const char* a, const char* b);
+extern void* animPoseGetAnimPosePtr(s32 poseId);
+extern s32 animPoseEntry(void* name, s32 mode);
+extern void animPoseSetAnim(s32 poseId, void* name, s32 force);
+extern void animPoseSetLocalTimeRate(s32 poseId, f32 rate);
+extern void* marioGetPtr(void);
+extern void* camGetPtr(s32 cameraId);
+extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
+extern void animPoseSetMaterialEvtColor(s32 poseId, void* color);
+extern void animPoseMain(s32 poseId);
+extern void animPoseDrawMtx(s32 poseId, f32 (*mtx)[4], s32 mode, f32 x, f32 y);
+extern char* animPoseGetCurrentAnim(s32 poseId);
+void mtx_setup(void* npc, f32 (*mtx)[4], s32 historyIndex);
+extern f64 atan2(f64 y, f64 x);
+extern f64 sqrt(f64 value);
+extern void sincosf(f32 angle, f32* outSin, f32* outCos);
+extern char* strcpy(char* dest, const char* src);
+extern void animPoseRelease(s32 poseId);
+extern s32 irand(s32 max);
+extern f32 PSVECDistance(void* a, void* b);
+extern void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom);
+extern void GXReadBoundingBox(u16* left, u16* top, u16* right, u16* bottom);
+extern void animPoseSetMaterialFlagOff(s32 poseId, u32 flag);
+extern void PSMTXTransApply(f32 (*src)[4], f32 (*dst)[4], f32 x, f32 y, f32 z);
+extern void GXClearBoundingBox(void);
+extern void sysWaitDrawSync(void);
+extern void evtStartID(s32 id);
+extern void evtStopID(s32 id);
+extern void npcGroupDead(void* npc, s32 scoreType);
+extern void marioKeyOff(void);
+extern void itemFlagOn(void* item, u16 flags);
+extern s32 itemEntry(s32 name, s32 itemId, s32 mode, s32 collectExpr, s32 script, f32 x, f32 y, f32 z);
+void* fbatHitCheck(u32 flags, void* hitInfo);
+extern void* pouchGetPtr(void);
+extern void marioKeyOn(void);
+extern s32 pouchEquipCheckBadge(s32 badgeId);
+extern s32 marioChkTalkable(void);
+extern f32 cloudGetBreathPower(f32 width, void* position);
+extern void kpaAddScorePos(s32 score, void* position);
+extern void psndSFXOn_3D(char* id, void* pos);
+extern void* evtGetPtrID(s32 id);
+extern void partyChgPoseId(void* party, s32 poseId);
+extern void marioChgPose(char* poseName);
+extern s32 marioGetPartyId(void);
+extern s32 marioGetExtraPartyId(void);
+extern void* partyGetPtr(s32 partyId);
+
 NPCWork* npcGetWorkPtr(void) {
     return gp->inBattle ? &work.battle : &work.field;
 }
@@ -19,11 +71,7 @@ NPCWork* npcGetWorkPtr(void) {
 
 u8 npcReleaseFiledNpc(void) {
     extern void* release_wp;
-    extern void* animPoseGetAnimPosePtr(s32);
     extern void* animPoseGetAnimBaseDataPtr(s32);
-    extern char* animPoseGetCurrentAnim(s32);
-    extern void animPoseRelease(s32);
-    extern char* strcpy(char*, const char*);
     s32 wp = (s32)&work;
     char* release = release_wp;
     void* npc;
@@ -58,12 +106,8 @@ u8 npcReleaseFiledNpc(void) {
 
 u8 npcRecoveryFiledNpc(void) {
     extern void* release_wp;
-    extern s32 animPoseEntry(char*, s32);
-    extern void animPoseSetAnim(s32, char*, s32);
-    extern void* animPoseGetAnimPosePtr(s32);
     extern void animPoseWorldPositionEvalOn(s32);
     extern void animPoseWorldMatrixEvalOn(s32);
-    extern void animPoseMain(s32);
     s32 wp = (s32)&work;
     char* release = release_wp;
     void* npc;
@@ -107,7 +151,6 @@ void mtx_setup(void* npc, f32 mtx[3][4], s32 historyIndex) {
     extern f32 reviseAngle(f32 angle);
     extern void PSMTXIdentity(f32 mtx[3][4]);
     extern void PSMTXScaleApply(f32 src[3][4], f32 dst[3][4], f32 x, f32 y, f32 z);
-    extern void PSMTXTransApply(f32 src[3][4], f32 dst[3][4], f32 x, f32 y, f32 z);
     extern void PSMTXRotRad(f32 mtx[3][4], s32 axis, f32 radians);
     extern void PSMTXConcat(f32 a[3][4], f32 b[3][4], f32 c[3][4]);
     extern f32 float_0_8041fc7c;
@@ -217,17 +260,6 @@ void mtx_setup(void* npc, f32 mtx[3][4], s32 historyIndex) {
 
 void npcDisp_xlu(s32 cameraId, void* npc) {
     extern f32 reviseAngle(f32);
-    extern void mtx_setup(void*, f32 (*)[4], s32);
-    extern void animPoseSetMaterialEvtColor(s32, void*);
-    extern void animPoseSetMaterialFlagOn(s32, u32);
-    extern char* animPoseGetCurrentAnim(s32);
-    extern void* animPoseGetAnimPosePtr(s32);
-    extern void* camGetPtr(s32);
-    extern f64 atan2(f64, f64);
-    extern s32 strcmp(const char*, const char*);
-    extern void animPoseSetAnim(s32, char*, s32);
-    extern void animPoseMain(s32);
-    extern void animPoseDrawMtx(s32, f32 (*)[4], s32, f32, f32);
     extern const f32 float_0_8041fc7c;
     extern const f32 float_360_8041fcc0;
     extern const f32 float_rad2deg_8041fcbc;
@@ -314,18 +346,6 @@ void npcDisp_xlu(s32 cameraId, void* npc) {
 
 void npcDisp(s32 cameraId, void* npc) {
     extern f32 reviseAngle(f32);
-    extern void mtx_setup(void*, f32 (*)[4], s32);
-    extern void animPoseSetMaterialEvtColor(s32, void*);
-    extern void animPoseSetMaterialFlagOn(s32, u32);
-    extern void* dispGetCurWork(void);
-    extern char* animPoseGetCurrentAnim(s32);
-    extern void* animPoseGetAnimPosePtr(s32);
-    extern void* camGetPtr(s32);
-    extern f64 atan2(f64, f64);
-    extern s32 strcmp(const char*, const char*);
-    extern void animPoseSetAnim(s32, char*, s32);
-    extern void animPoseMain(s32);
-    extern void animPoseDrawMtx(s32, f32 (*)[4], s32, f32, f32);
     extern const f32 float_0_8041fc7c;
     extern const f32 float_360_8041fcc0;
     extern const f32 float_rad2deg_8041fcbc;
@@ -424,22 +444,7 @@ void npcDisp(s32 cameraId, void* npc) {
 }
 
 void npcDisp_offscreen_xlu(s32 cameraId, void* npc) {
-    extern void sysWaitDrawSync(void);
-    extern void GXClearBoundingBox(void);
     extern f32 reviseAngle(f32);
-    extern void mtx_setup(void*, f32 (*)[4], s32);
-    extern void animPoseSetMaterialEvtColor(s32, void*);
-    extern void animPoseSetMaterialFlagOn(s32, u32);
-    extern char* animPoseGetCurrentAnim(s32);
-    extern void* animPoseGetAnimPosePtr(s32);
-    extern void* camGetPtr(s32);
-    extern f64 atan2(f64, f64);
-    extern s32 strcmp(const char*, const char*);
-    extern void animPoseSetAnim(s32, char*, s32);
-    extern void animPoseMain(s32);
-    extern void animPoseDrawMtx(s32, f32 (*)[4], s32, f32, f32);
-    extern void GXReadBoundingBox(u16*, u16*, u16*, u16*);
-    extern void offscreenAddBoundingBox(s32, u16, u16, u16, u16);
     extern const f32 float_0_8041fc7c;
     extern const f32 float_360_8041fcc0;
     extern const f32 float_rad2deg_8041fcbc;
@@ -536,23 +541,7 @@ void npcDisp_offscreen_xlu(s32 cameraId, void* npc) {
 }
 
 u8 npcDisp_offscreen(s32 cameraId, void* npc) {
-    extern void sysWaitDrawSync(void);
-    extern void GXClearBoundingBox(void);
     extern f32 reviseAngle(f32);
-    extern void mtx_setup(void*, f32 (*)[4], s32);
-    extern void animPoseSetMaterialEvtColor(s32, void*);
-    extern void animPoseSetMaterialFlagOn(s32, u32);
-    extern void* dispGetCurWork(void);
-    extern char* animPoseGetCurrentAnim(s32);
-    extern void* animPoseGetAnimPosePtr(s32);
-    extern void* camGetPtr(s32);
-    extern f64 atan2(f64, f64);
-    extern s32 strcmp(const char*, const char*);
-    extern void animPoseSetAnim(s32, char*, s32);
-    extern void animPoseMain(s32);
-    extern void animPoseDrawMtx(s32, f32 (*)[4], s32, f32, f32);
-    extern void GXReadBoundingBox(u16*, u16*, u16*, u16*);
-    extern void offscreenAddBoundingBox(s32, u16, u16, u16, u16);
     extern const f32 float_0_8041fc7c;
     extern const f32 float_360_8041fcc0;
     extern const f32 float_rad2deg_8041fcbc;
@@ -657,14 +646,6 @@ u8 npcDisp_offscreen(s32 cameraId, void* npc) {
 void npcDisp_blur(s32 cameraId, void* npc) {
     extern f32 reviseAngle(f32);
     extern u32 animPoseGetMaterialFlag(s32);
-    extern void* camGetPtr(s32);
-    extern void animPoseMain(s32);
-    extern void mtx_setup(void*, f32 (*)[4], s32);
-    extern void PSMTXTransApply(f32 (*)[4], f32 (*)[4], f32, f32, f32);
-    extern void animPoseSetMaterialFlagOn(s32, u32);
-    extern void animPoseSetMaterialEvtColor(s32, void*);
-    extern void animPoseDrawMtx(s32, f32 (*)[4], s32, f32, f32);
-    extern void animPoseSetMaterialFlagOff(s32, u32);
     extern const f32 float_6p2832_8041fd10;
     extern const f32 float_360_8041fcc0;
     extern const f32 float_3p1416_8041fd1c;
@@ -778,7 +759,6 @@ void npcDisp_blur(s32 cameraId, void* npc) {
 }
 void npcInit(void) {
     extern void* __memAlloc(s32 heap, u32 size);
-    extern void* memset(void* dst, s32 value, u32 size);
     extern void* release_wp;
     extern s32 g_npcMainCount;
     u8* field = (u8*)&work;
@@ -802,7 +782,6 @@ void npcInit(void) {
 }
 
 void npcReset(s32 battle) {
-    extern void* memset(void* dest, int value, unsigned long size);
     extern s32 npcMainCount;
     void* wp = &work.field;
 
@@ -826,10 +805,6 @@ s32 npcGetReactionOfLivingBody(s32 battle) {
 }
 
 s32 npcEntry(char* name, char* modelName) {
-    extern s32 strcmp(const char*, const char*);
-    extern void* memset(void*, int, unsigned long);
-    extern char* strcpy(char*, const char*);
-    extern s32 animPoseEntry(char*, u32);
     extern void animPosePeraOn(s32);
     extern f32 animPoseGetHeight(s32);
     extern f32 animPoseGetRadius(s32);
@@ -929,7 +904,6 @@ s32 npcEntry(char* name, char* modelName) {
 
 void* npcGetTribe(const char* name) {
     extern char npcTribe[];
-    extern s32 strcmp(const char* s1, const char* s2);
     void* tribe = npcTribe;
 
     while (*(char**)tribe != 0) {
@@ -942,7 +916,6 @@ void* npcGetTribe(const char* name) {
 }
 
 void npcDelete(void* npc) {
-    extern void animPoseRelease(s32 poseId);
     u8* entry = npc;
     s32 i;
     u8* prev;
@@ -982,7 +955,6 @@ void npcDelete(void* npc) {
 
 void _npcDeleteGroup(void* npc) {
     extern void npcDelete(void* npc);
-    extern void animPoseRelease(s32 poseId);
     s32 current;
     s32 child;
     s32 slave;
@@ -1121,26 +1093,15 @@ void npcDeleteGroup(void* npc) {
 }
 
 void npcMain(void) {
-    extern void* marioGetPtr(void);
-    extern void* animPoseGetAnimPosePtr(s32 poseId);
     extern s64 __div2i(s64 dividend, s64 divisor);
     extern f64 __cvt_sll_flt(s32 hi, u32 lo);
-    extern s32 strcmp(const char* a, const char* b);
-    extern void psndSFXOn_3D(char* id, void* pos);
     extern s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* outAngle);
     extern u8 npcMoveG(void* npc);
     extern u8 npcCheckHitMarioSide(s32 npc);
     extern void PSVECSubtract(void* a, void* b, void* out);
-    extern void animPoseSetAnim(s32 poseId, void* animName, s32 force);
-    extern void* evtGetPtrID(s32 id);
-    extern f32 cloudGetBreathPower(f32 width, void* pos);
     extern s32 npcCheckInterrupt(void* npc);
-    extern void* camGetPtr(s32 camId);
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
     extern void PSMTX44MultVec(void* mtx, void* src, void* dst);
-    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
-    extern void animPoseSetMaterialFlagOff(s32 poseId, u32 flag);
-    extern void animPoseSetMaterialEvtColor(s32 poseId, void* color);
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
     extern u8 _fbatFirstAttackAnnouceDisp(s32 cameraId, void* info);
     extern void npcDisp(s32 cameraId, void* npc);
@@ -1159,7 +1120,6 @@ void npcMain(void) {
     extern void fbatEncountCheck(void);
     extern s32 kpaJumpChk(void);
     extern s32 kpaFireAttackCheck(void);
-    extern void kpaAddScorePos(s32 score, void* pos);
     extern void fbatTalkMode(void);
     extern void fbatBattleMode(void);
     extern f64 angleABf(f64 x0, f64 z0, f64 x1, f64 z1);
@@ -1583,7 +1543,6 @@ void npcMain(void) {
 }
 
 void* npcNameToPtr(s32 name) {
-    extern s32 strcmp(const char*, const char*);
     s32 wp = (s32)&work;
     s32 i;
     s32 count;
@@ -1606,7 +1565,6 @@ void* npcNameToPtr(s32 name) {
 }
 
 void* npcNameToPtr_NoAssert(s32 name) {
-    extern s32 strcmp(const char*, const char*);
     s32 wp = (s32)&work;
     s32 i;
     s32 count;
@@ -1632,19 +1590,11 @@ void* npcNameToPtr_NoAssert(s32 name) {
 }
 
 void npcSetMarioAutoTalkPose(const char* stay, const char* talk) {
-    extern char* strcpy(char* dest, const char* src);
     strcpy(MarioStayPose, stay);
     strcpy(MarioTalkPose, talk);
 }
 
 void npcSetTalkPose(char* talkPose) {
-    extern s32 strcmp(const char*, const char*);
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32);
-    extern void partyChgPoseId(void*, s32);
-    extern void marioChgPose(char*);
-    extern void animPoseSetAnim(s32, char*, s32);
     extern char str_x_party_802c1444[];
     extern char str_party_8041fd40[];
     extern char str_extparty_802c1450[];
@@ -1696,13 +1646,6 @@ void npcSetTalkPose(char* talkPose) {
 }
 
 void npcSetStayPose(char* stayPose) {
-    extern s32 strcmp(const char*, const char*);
-    extern s32 marioGetPartyId(void);
-    extern s32 marioGetExtraPartyId(void);
-    extern void* partyGetPtr(s32);
-    extern void partyChgPoseId(void*, s32);
-    extern void marioChgPose(char*);
-    extern void animPoseSetAnim(s32, char*, s32);
     extern char str_x_party_802c1444[];
     extern char str_party_8041fd40[];
     extern char str_extparty_802c1450[];
@@ -1754,12 +1697,9 @@ void npcSetStayPose(char* stayPose) {
 }
 
 u8 npcCheckHitMarioSide(s32 pNpc) {
-    extern void* marioGetPtr(void);
-    extern f32 PSVECDistance(void*, void*);
     extern f32 angleABf(f32, f32, f32, f32);
     extern f32 compAngle(f32, f32);
     extern s32 marioChkWallAround(void*, s32, f32, f32, f32, f32);
-    extern f64 sqrt(f64);
     extern const f32 float_40_8041fd0c;
     extern const f32 float_6p2832_8041fd10;
     extern const f32 float_360_8041fcc0;
@@ -1944,7 +1884,6 @@ f32 npcTransRytoFaceDir(void* npc) {
 
 s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* outAngle) {
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
     extern f32 reviseAngle(f32 angle);
     extern s32 hitCheckFilter(f64 x, f64 y, f64 z, f64 dx, f64 dy, f64 dz, s32 flags,
                               void* outA, void* outB, void* outC, void* dist,
@@ -2242,7 +2181,6 @@ void fbatSetAttackAnnounceEnable(void) {
 u8 _fbatFirstAttackAnnouceDisp(s32 param_1, void* param_2) {
     extern char* msgSearch(char*);
     extern u32 FontGetMessageWidthLine(char*, s16*);
-    extern s32 irand(s32);
     extern void windowDispGX_Waku_col(double, double, double, double, double, u16, u32*);
     extern void FontDrawStart(void);
     extern void FontDrawEdge(void);
@@ -2320,30 +2258,18 @@ u8 _fbatFirstAttackAnnouceDisp(s32 param_1, void* param_2) {
 }
 
 void fbatEncountCheck(void) {
-    extern void* marioGetPtr(void);
     extern s32 marioStGetSystemLevel(void);
     extern s32 marioKeyOffChk(void);
     extern s32 marioCtrlOffChk(void);
     extern s32 N_itemPickUpFromFieldCheck(void);
-    extern void fbatHitCheck(s32 flags, s32 hitInfo);
     extern void marioChgMotJump2(void);
-    extern void animPoseSetAnim(s32 poseId, void* animName, s32 force);
-    extern void* animPoseGetAnimPosePtr(s32 poseId);
     extern f32 angleABf(f64 x0, f64 z0, f64 x1, f64 z1);
     extern f32 reviseAngle(f64 angle);
-    extern void* camGetPtr(s32 camId);
-    extern f64 atan2(f64 y, f64 x);
     extern void effSmallStarEntry();
-    extern void psndSFXOn_3D(char* id, void* pos);
-    extern s32 marioChkTalkable(void);
-    extern f32 PSVECDistance(void* a, void* b);
     extern f32 marioGetDispDir(void);
-    extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
     extern s32 hitCheckFilter(f64 x, f64 y, f64 z, f64 dx, f64 dy, f64 dz, s32 flags,
                               void* outX, void* outY, void* outZ, void* dist,
                               void* outNX, void* outNY, void* outNZ);
-    extern void evtStopID(s32 id);
-    extern void evtStartID(s32 id);
     extern u16 keyGetButtonTrg(s32 controller);
     extern void npcKoopaModeEncountCheck(void);
 
@@ -2704,18 +2630,10 @@ void fbatEncountCheck(void) {
 }
 
 void fbatTalkMode(void) {
-    extern void* marioGetPtr(void);
-    extern void evtStopID(s32 id);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 reviseAngle(f32 angle);
-    extern void marioKeyOff(void);
     extern void partyKeyOff(void);
-    extern void* evtEntry(void* code, s32 order, u32 flags);
     extern void marioChgTalkMotion(void);
-    extern s32 evtCheckID(s32 id);
-    extern void evtStartID(s32 id);
-    extern void animPoseSetAnim(s32 poseId, void* name, s32 force);
-    extern void marioKeyOn(void);
     extern void partyKeyOn(void);
     extern void marioChgStayMotion(void);
     s32 fbatData;
@@ -2776,28 +2694,12 @@ void fbatTalkMode(void) {
 }
 
 void fbatBattleMode(void) {
-    extern void* pouchGetPtr(void);
-    extern void* marioGetPtr(void);
-    extern void evtStopID(s32 id);
-    extern s32 pouchEquipCheckBadge(s32 badgeId);
     extern void marioFBattlePrepare(void);
     extern void seqSetSeq(s32 seq, void* map, void* bero);
     extern void unk_JP_US_EU_01_800591b4(void);
-    extern void BattleInformationSetResult(void* info, s32 result);
-    extern s32 BattleInformationGetResult(void* info);
-    extern void* evtEntry(void* script, s32 priority, s32 flags);
     extern void BattleMajinaiDone(void);
-    extern void marioKeyOff(void);
-    extern void marioKeyOn(void);
-    extern s32 evtCheckID(s32 id);
-    extern void evtStartID(s32 id);
-    extern void animPoseSetLocalTimeRate(s32 poseId, f32 rate);
     extern void marioFBattlePost(void);
     extern void marioChgMoveMotion(void);
-    extern void npcGroupDead(void* npc, s32 wKpaScoreType);
-    extern void animPoseSetAnim(s32 poseId, void* name, s32 force);
-    extern void* itemEntry(void* name, s32 id, u32 mode, s32 wasCollectedExpr, void* pickupScript, f32 x, f32 y, f32 z);
-    extern void itemFlagOn(void* itemEntry, u16 bitMask);
     extern u16 marioSetMutekiTime(s32 msec);
     extern s32 sysMsec2Frame(s32 msec);
     extern f32 float_0_8041fc7c;
@@ -3034,7 +2936,7 @@ case0_flags_done:
                     s32 itemId;
                     itemId = *(s32*)((s32)npc + 0x2AC + i * 4);
                     if (itemId != 0) {
-                        item = itemEntry(0, itemId, 0xB, -1, 0, *(f32*)((s32)npc + 0x8C), *(f32*)((s32)npc + 0x90), *(f32*)((s32)npc + 0x94));
+                        item = (void*)itemEntry(0, itemId, 0xB, -1, 0, *(f32*)((s32)npc + 0x8C), *(f32*)((s32)npc + 0x90), *(f32*)((s32)npc + 0x94));
                         if (item != 0) {
                             itemFlagOn(item, 0x100);
                         }
@@ -3196,7 +3098,6 @@ void npcGroupDead(void* npc, s32 scoreType) {
 }
 
 void* fbatNpcTalkCheck(void) {
-    extern s32 marioChkTalkable(void);
     void* wp = &work.field;
     void* ret;
 
@@ -3211,17 +3112,12 @@ void* fbatNpcTalkCheck(void) {
 }
 
 void fbatHitCheckAll(void) {
-    extern void fbatHitCheck(s32, s32);
     fbatHitCheck(0x13F1, 0);
 }
 
 
 void* fbatHitCheck(u32 flags, void* hitInfo) {
-    extern void* marioGetPtr(void);
-    extern f64 sqrt(f64 value);
-    extern s32 seqGetSeq(void);
     extern s32 vivianGetStatus(void);
-    extern s32 pouchEquipCheckBadge(s32 badge);
     extern s32 marioGetJabaraState(void);
     extern s32 _npcHitCheckSphere(f64 x, f64 y, f64 z, f64 radius,
                                   s32 npc, f32* distance);
@@ -3379,9 +3275,6 @@ s32 _npcHitCheckSphere(f64 x, f64 y, f64 z, f64 radius, s32 npc, f32* outDist) {
 }
 
 s32 _npcHitCheckHammerAllMotion(f64 radius, f64 angle, s32 npc, f32* outDist) {
-    extern void* marioGetPtr(void);
-    extern void sincosf(f32 angle, f32* outSin, f32* outCos);
-    extern f64 sqrt(f64 value);
     f32 steps[12] = {0.0f, 10.0f, 20.0f, 30.0f, 40.0f, 50.0f,
                      60.0f, 70.0f, 80.0f, 90.0f, 100.0f, 110.0f};
     f32 sinA;
@@ -3427,9 +3320,6 @@ s32 _npcHitCheckHammerAllMotion(f64 radius, f64 angle, s32 npc, f32* outDist) {
 }
 
 s32 npcCheckInterrupt(void* pNpc) {
-    extern void* evtGetPtrID(s32 id);
-    extern void* evtEntry(void* code, s32 order, u32 flags);
-    extern void evtDeleteID(s32 id);
     extern const f32 float_0_8041fc7c;
     void* entry;
     u32 interruptFlags;
@@ -3488,8 +3378,6 @@ s32 npcCheckInterrupt(void* pNpc) {
 }
 
 void npcSetupBattleInfo(void* npc, void* battleInfo) {
-    extern void* memset(void* dst, int value, unsigned long size);
-    extern s32 irand(s32 max);
     extern s32 swGet(s32 flag);
     s32 battle;
     u32 setup;
@@ -3657,8 +3545,6 @@ void npcSetBattleInfo(void* npc, s32 info) {
 }
 
 void npcStopForEvent(void) {
-    extern void evtStopID(s32 id);
-    extern void animPoseSetLocalTimeRate(void* pose, f32 rate);
     extern f32 float_0_8041fc7c;
     s32 wp = (s32)&work;
     s32 i;
@@ -3675,7 +3561,7 @@ void npcStopForEvent(void) {
         if (npc != 0 && (*(u32*)npc & 2) && (*(u32*)npc & 0x10000000)) {
             *(u32*)((s32)npc + 0x1D4) |= 0x10000;
             evtStopID(*(s32*)((s32)npc + 0x11C));
-            animPoseSetLocalTimeRate(*(void**)((s32)npc + 0x104), float_0_8041fc7c);
+            animPoseSetLocalTimeRate((s32)*(void**)((s32)npc + 0x104), float_0_8041fc7c);
         }
         i++;
         npc = (void*)((s32)npc + 0x340);
@@ -3683,8 +3569,6 @@ void npcStopForEvent(void) {
 }
 
 void npcStopForOneEvent(void* npc) {
-    extern void evtStopID(s32 id);
-    extern void animPoseSetLocalTimeRate(void* pose, f32 rate);
     extern f32 float_0_8041fc7c;
     u32 flags;
 
@@ -3700,12 +3584,10 @@ void npcStopForOneEvent(void* npc) {
     }
     *(u32*)((s32)npc + 0x1D4) |= 0x10000;
     evtStopID(*(s32*)((s32)npc + 0x11C));
-    animPoseSetLocalTimeRate(*(void**)((s32)npc + 0x104), float_0_8041fc7c);
+    animPoseSetLocalTimeRate((s32)*(void**)((s32)npc + 0x104), float_0_8041fc7c);
 }
 
 void npcStartForEvent(void) {
-    extern void evtStartID(s32 id);
-    extern void animPoseSetLocalTimeRate(void* pose, f32 rate);
     extern f32 float_1_8041fc94;
     s32 wp = (s32)&work;
     s32 i;
@@ -3723,7 +3605,7 @@ void npcStartForEvent(void) {
             (*(u32*)((s32)npc + 0x1D4) & 0x10000)) {
             *(u32*)((s32)npc + 0x1D4) &= ~0x10000;
             evtStartID(*(s32*)((s32)npc + 0x11C));
-            animPoseSetLocalTimeRate(*(void**)((s32)npc + 0x104), float_1_8041fc94);
+            animPoseSetLocalTimeRate((s32)*(void**)((s32)npc + 0x104), float_1_8041fc94);
         }
         i++;
         npc = (void*)((s32)npc + 0x340);
@@ -3731,8 +3613,6 @@ void npcStartForEvent(void) {
 }
 
 void npcStartForOneEvent(void* npc) {
-    extern void evtStartID(s32 id);
-    extern void animPoseSetLocalTimeRate(void* pose, f32 rate);
     extern f32 float_1_8041fc94;
     u32 flags;
 
@@ -3752,11 +3632,10 @@ void npcStartForOneEvent(void* npc) {
     }
     *(u32*)((s32)npc + 0x1D4) = flags & ~0x10000;
     evtStartID(*(s32*)((s32)npc + 0x11C));
-    animPoseSetLocalTimeRate(*(void**)((s32)npc + 0x104), float_1_8041fc94);
+    animPoseSetLocalTimeRate((s32)*(void**)((s32)npc + 0x104), float_1_8041fc94);
 }
 
 void npcSetColor(char* name, void* color) {
-    extern s32 strcmp(const char*, const char*);
     s32 wp = (s32)&work;
     void* npc;
     s32 count;
@@ -3779,7 +3658,6 @@ void npcSetColor(char* name, void* color) {
 }
 
 void npcBlurOn(char* name) {
-    extern s32 strcmp(const char*, const char*);
     s32 wp = (s32)&work;
     void* npc;
     s32 count;
@@ -3817,7 +3695,6 @@ void npcBlurOn(char* name) {
 }
 
 void npcBlurOff(char* name) {
-    extern s32 strcmp(const char*, const char*);
     s32 wp = (s32)&work;
     void* npc;
     s32 count;
@@ -3865,7 +3742,6 @@ void npcSetLink(void* a, void* b) {
 }
 
 void* dbGetDefData(void* entry, const char* name) {
-    extern s32 strcmp(const char* s1, const char* s2);
     void* ret = 0;
 
     for (;;) {
@@ -3883,8 +3759,6 @@ void* dbGetDefData(void* entry, const char* name) {
 }
 
 void npcExecAllInitEvt(void) {
-    extern s32 evtEntry(void* script, s32 type, s32 flags);
-    extern void evtDeleteID(s32 id);
     s32 wp = (s32)&work;
     s32 i;
     s32 count;
@@ -3903,7 +3777,7 @@ void npcExecAllInitEvt(void) {
                     evtDeleteID(*(s32*)((s32)npc + 0x118));
                 }
                 {
-                    s32 evt = evtEntry(*(void**)((s32)npc + 0x120), 0, 0);
+                    s32 evt = (s32)evtEntry(*(void**)((s32)npc + 0x120), 0, 0);
                     *(u8*)(evt + 0x10) = 0;
                     *(void**)(evt + 0x170) = npc;
                     *(s32*)((s32)npc + 0x118) = *(s32*)(evt + 0x15C);
@@ -3918,7 +3792,6 @@ void npcExecAllInitEvt(void) {
 }
 
 s32 npcWaitAllInitEvtEnd(void) {
-    extern s32 evtCheckID(s32 id);
     s32 wp = (s32)&work;
     s32 ret;
     s32 i;
@@ -3953,8 +3826,6 @@ s32 npcWaitAllInitEvtEnd(void) {
 }
 
 void npcExecAllReglEvt(void) {
-    extern s32 evtEntry(void* script, s32 type, s32 flags);
-    extern void evtDeleteID(s32 id);
     s32 wp = (s32)&work;
     s32 i;
     s32 count;
@@ -3972,7 +3843,7 @@ void npcExecAllReglEvt(void) {
                 evtDeleteID(*(s32*)((s32)npc + 0x11C));
             }
             {
-                s32 evt = evtEntry(*(void**)((s32)npc + 0x124), 0, 0x20);
+                s32 evt = (s32)evtEntry(*(void**)((s32)npc + 0x124), 0, 0x20);
                 *(u8*)(evt + 0x10) = 1;
                 *(void**)(evt + 0x170) = npc;
                 *(s32*)((s32)npc + 0x11C) = *(s32*)(evt + 0x15C);
@@ -3984,7 +3855,6 @@ void npcExecAllReglEvt(void) {
 }
 
 s32 _check(void* event, BOOL isFirstCall) {
-    extern void* pouchGetPtr(void);
     extern void evtSetValue(void* event, s32 dst, s32 value);
     s32* args = *(s32**)((s32)event + 0x18);
     s32 dst = args[0];
@@ -3998,8 +3868,6 @@ s32 _check(void* event, BOOL isFirstCall) {
 }
 
 s32 _majinai_effect(void* pEvt, s32 firstCall) {
-    extern void* marioGetPtr(void);
-    extern void* effMajinaiEntry(f32 x, f32 y, f32 z, s32 type);
     extern void effSetName(void* effect, char* name);
     extern void* effNameToPtr(char* name);
     extern f32 float_16_8041fc8c;
@@ -4025,9 +3893,6 @@ s32 _majinai_effect(void* pEvt, s32 firstCall) {
 }
 
 void npcGetBackItemEntry(void* npc) {
-    extern void* itemEntry(void* name, s32 id, u32 mode, s32 collected,
-                           void* script, f32 x, f32 y, f32 z);
-    extern void itemFlagOn(void* item, u16 flags);
     u8* battle = (u8*)npc + 0x230;
     s32 zero = 0;
     s32 i = 0;
@@ -4035,7 +3900,7 @@ void npcGetBackItemEntry(void* npc) {
     do {
         s32 id = *(s32*)(battle + 0x7C);
         if (id != 0) {
-            void* item = itemEntry(0, id, 0xB, -1, 0,
+            void* item = (void*)itemEntry(0, id, 0xB, -1, 0,
                                    *(f32*)((u8*)npc + 0x8C),
                                    *(f32*)((u8*)npc + 0x90),
                                    *(f32*)((u8*)npc + 0x94));
@@ -4050,16 +3915,13 @@ void npcGetBackItemEntry(void* npc) {
 }
 
 void npcClearDeadInfo(void) {
-    extern void* memset(void*, int, unsigned long);
     memset((void*)((s32)*(void**)((s32)gp + 0x168) + 0x4C), 0, 0x500);
 }
 
 void npcKoopaModeEncountCheck(void) {
     extern s32 kpaEnemyHitChk(f64 x, f64 y, f64 z, f64 height, f64 width);
-    extern void npcGroupDead(void* npc, s32 scoreType);
     extern void kpaPowDown(void);
     extern char* hitGetName(void* hit);
-    extern s32 strcmp(const char* lhs, const char* rhs);
     extern char str_a_magu_802c138c[];
     s32 wp = (s32)&work;
     s32 count;
@@ -4116,7 +3978,6 @@ void npcKoopaModeEncountCheck(void) {
 }
 
 s32 npcKoopaModeMobjBoundDeadCheck(void* hit) {
-    extern void npcGroupDead(void* npc, s32 scoreType);
     u8* npcWork = (u8*)&work;
     u8* npc;
     s32 count;
@@ -4146,7 +4007,6 @@ void fbatSandersBombTriggerOn(void) {
 
 s32 npcCalcScore(void* npc) {
     extern s32 kpaMutekiCheck(void);
-    extern void kpaAddScorePos(s32 score, void* position);
     f32 position[3];
     u8* fbat = *(u8**)((u8*)gp + 0x168);
     u16 type = *(u16*)((u8*)npc + 0x31C);
@@ -4175,7 +4035,6 @@ s32 npcCalcScore(void* npc) {
 }
 
 s32 npcCheckBlow(void* npc) {
-    extern f32 cloudGetBreathPower(f32 width, void* position);
     extern f32 float_0_8041fc7c;
     extern f32 float_0p5_8041fc80;
     f32 top[3];

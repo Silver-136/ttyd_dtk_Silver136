@@ -1,4 +1,5 @@
 #include "database.h"
+#include "driver/arcdrv.h"
 
 void setupDataLoad(char* name) {
     extern void* ptr;
@@ -7,7 +8,6 @@ void setupDataLoad(char* name) {
     extern s32 sprintf(char* str, const char* fmt, ...);
     extern s32 strcmp(const char* a, const char* b);
     extern s32 evtGetValue(void* event, s32 arg);
-    extern void* arcOpen(const char* filename, void** address, u32* length);
     extern void* DVDMgrOpen(const char* path, s32 mode, s32 unk);
     extern u32 DVDMgrGetLength(void* entry);
     extern void DVDMgrRead(void* entry, void* dst, u32 size, u32 offset);

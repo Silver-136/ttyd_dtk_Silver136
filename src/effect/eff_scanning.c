@@ -1,4 +1,7 @@
 #include "effect/eff_scanning.h"
+
+extern f32 float_1_804281f8;
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effScanningEntry(s32 type, f32 x, f32 y, f32 z) {
@@ -6,7 +9,6 @@ void* effScanningEntry(s32 type, f32 x, f32 y, f32 z) {
     extern void* __memAlloc(s32 heap, u32 size);
     extern void effScanningMain(void);
     extern char str_Scanning_80300bc0[];
-    extern f32 float_1_804281f8;
 
     void* effect;
     void* work;
@@ -50,7 +52,6 @@ void effScanningMain(void* effect) {
     extern void effScanningDisp(s32 cameraId, void* effect);
     extern char str_EFF_Scan_80300bb4[];
     extern char str_Z_1_804281f4[];
-    extern f32 float_1_804281f8;
 
     void* work;
     f32 pos[3];

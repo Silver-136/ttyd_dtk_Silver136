@@ -8,3 +8,11 @@ typedef struct BackgroundWork {
 
 void bgInit(void);
 void bgReInit(void);
+void bgMain(void);
+void bgEntry(char* name);
+void bgDispOn(void);
+void bgDispOff(void);
+void bgSetScrlOffset(f32 x, f32 y);
+void bgAutoScrollOff(void);
+void bgAutoScrollOn(void);
+void bgSetColor(void* color);

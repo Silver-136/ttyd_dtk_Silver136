@@ -8,14 +8,23 @@ extern char str_PCH_Y_1_802f8ca0[];
 
 s32 marioGetPartyId(void);
 void* partyGetPtr(s32 id);
+extern void psndSFXOn_3D(s32 soundId, void* pos);
+extern void partyChkGnd(void* party);
+extern void* gp;
+extern u8 mobj_list[];
+extern u32 unk_8038e994[];
+extern s32 strcmp(char* a, char* b);
+extern s32 evtGetValue(void* evt, s32 value);
+extern f32 PSVECDistance(f32* a, f32* b);
+extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+extern f32 float_150_8042437c;
+extern f32 float_10000_80424380;
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 search_result(void* pEvt, int param_2) {
     extern s32 sysMsec2Frame(s32 msec);
     extern void effFukidashiEntry(s32 type, s32 a, s32 b, s32 frames, f32 x, f32 y, f32 z, f32 w, f32 v);
-    extern void psndSFXOn_3D(s32 soundId, void* pos);
     extern void partyChgPose(void* party, void* pose);
-    extern void partyChkGnd(void* party);
     void* party;
     s32 frames;
 
@@ -54,23 +63,13 @@ s32 search_result(void* pEvt, int param_2) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 set_msg(void* pEvt) {
-    extern void* gp;
-    extern u8 mobj_list[];
-    extern u32 unk_8038e994[];
     extern s32 marioGetPartyId(void);
     extern void* partyGetPtr(s32 id);
     extern void* itemNearDistCheck(f32 x, f32 y, f32 z, f32 dist);
     extern void* mobjNearDistCheck2(void* list, f32 x, f32 y, f32 z, f32 dist);
-    extern s32 strcmp(char* a, char* b);
-    extern s32 evtGetValue(void* evt, s32 value);
-    extern f32 PSVECDistance(f32* a, f32* b);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 revise360(f32 angle);
     extern f32 partyToMovedir(f32 angle, void* party);
     extern char str_MOBJ_TreasureBox_802f8a08[];
-    extern f32 float_0_80424370;
-    extern f32 float_150_8042437c;
-    extern f32 float_10000_80424380;
     extern f32 float_180_80424384;
 
     void* party;
@@ -214,17 +213,9 @@ s32 post_msg(void* party) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 chuchu_searchObject(void) {
-    extern void* gp;
-    extern u8 mobj_list[];
     extern s32 itemNearDistCheck(f32 x, f32 y, f32 z, f32 dist);
     extern s32 mobjNearDistCheck2(void* list, f32 x, f32 y, f32 z, f32 dist);
-    extern s32 strcmp(char* a, char* b);
-    extern s32 evtGetValue(void* evt, s32 value);
-    extern f32 PSVECDistance(f32* a, f32* b);
-    extern u32 unk_8038e994[];
     extern f32 vec3_802f8c4c[3];
-    extern f32 float_150_8042437c;
-    extern f32 float_10000_80424380;
     void* party;
     void* mario;
     u32* entry;
@@ -313,19 +304,15 @@ void chuchu_use(void* pParty) {
     } Vec3;
     extern void marioStSystemLevel(s32 level);
     extern void partyGetAppearPos3(void* party, Vec3* out);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern char* partyChgPoseId(void* party, s32 poseId);
     extern f32 toMovedir(f32 angle);
-    extern void psndSFXOn_3D(s32 soundId, void* pos);
     extern void partyChgPose(void* party, char* pose);
     extern void* evtEntryType(void* evtCode, s8 priority, u32 flags, u32 types);
     extern void partyChgRunMode(void* party, s32 mode);
     extern void marioChgMot(s32 mot);
-    extern void partyChkGnd(void* party);
     extern void msg_evt;
     extern char str_PCH_A2_1_802f8c58[];
-    extern f32 float_0_80424370;
     extern double double_to_int_802f8c68;
 
     void* player;

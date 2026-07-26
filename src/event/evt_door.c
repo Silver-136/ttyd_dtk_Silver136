@@ -4,11 +4,22 @@
 s32 DoorFLAG;
 s32 door_mapflag;
 
-s32 evtGetValue(EventEntry* event, s32 value);
-s32 evtSetValue(EventEntry* event, s32 target, s32 value);
 void* mapGetMapObj(void);
 void mapErrorEntry(s32 type, s32 value);
 void door_dark_flag_sub(s32 unk0, s32 unk1, s32 unk2, s32 unk3);
+extern void* mapalloc_base_ptr;
+extern const f32 float_10_80421b58;
+extern const f32 float_30_80421b60;
+extern const f32 float_40_80421b5c;
+extern void* marioGetPtr(void);
+extern void* partyGetPtr(s32 id);
+extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
+extern void* npcNameToPtr_NoAssert(void* name);
+extern void* mobjNameToPtrNoAssert(void* name);
+extern void* itemNameToPtr(void* name);
+extern void iconFlagOn(void* icon, u32 flag);
+extern void animPoseSetMaterialFlagOff(s32 poseId, u32 flag);
+extern void iconFlagOff(void* icon, u32 flag);
 /* fallback stub-fill: map=?snd_door_in addr=0x800e9708 size=0x00000028 */
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -41,15 +52,9 @@ static s32 snd_door_out(void) {
 #pragma use_lmw_stmw off
 s32 door_entry(EventEntry* event) {
     typedef struct Vec3 { f32 x; f32 y; f32 z; } Vec3;
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
-    extern void* mapalloc_base_ptr;
     extern void* _mapAlloc(void* heap, s32 size);
     extern void hitObjGetPos(void* hit, Vec3* pos);
     extern void hitObjGetNormal(void* hit, Vec3* normal);
-    extern const f32 float_10_80421b58;
-    extern const f32 float_30_80421b60;
-    extern const f32 float_40_80421b5c;
     extern Vec3 vec3_802e4164;
     extern Vec3 vec3_802e4170;
     s32* args;
@@ -224,13 +229,6 @@ USER_FUNC(animation) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(npc_dark) {
-    extern void* marioGetPtr(void);
-    extern void* partyGetPtr(s32 id);
-    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
-    extern void* npcNameToPtr_NoAssert(void* name);
-    extern void* mobjNameToPtrNoAssert(void* name);
-    extern void* itemNameToPtr(void* name);
-    extern void iconFlagOn(void* icon, u32 flag);
 
     void* info = (void*)evtGetValue(event, event->args[0]);
     void* mario = marioGetPtr();
@@ -296,13 +294,6 @@ USER_FUNC(npc_dark) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(npc_light) {
-    extern void* marioGetPtr(void);
-    extern void* partyGetPtr(s32 id);
-    extern void animPoseSetMaterialFlagOff(s32 poseId, u32 flag);
-    extern void* npcNameToPtr_NoAssert(void* name);
-    extern void* mobjNameToPtrNoAssert(void* name);
-    extern void* itemNameToPtr(void* name);
-    extern void iconFlagOff(void* icon, u32 flag);
 
     void* info = (void*)evtGetValue(event, event->args[0]);
     void* mario = marioGetPtr();
@@ -394,10 +385,6 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
     extern f64 cos(f64 x);
     extern void hitObjGetPos(char* hit, void* out);
     extern void hitObjGetNormal(char* hit, void* out);
-    extern void* marioGetPtr(void);
-    extern const f32 float_10_80421b58;
-    extern const f32 float_30_80421b60;
-    extern const f32 float_40_80421b5c;
     extern const f32 float_50_80421b64;
     extern const f32 float_0_80421b68;
     extern const f32 float_0p5_80421b6c;
@@ -554,15 +541,6 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
     }
 }
 void door_dark_flag_sub(s32 flag, s32 npcNames, s32 mobjNames, s32 itemNames) {
-    extern void* marioGetPtr(void);
-    extern void* partyGetPtr(s32 id);
-    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
-    extern void animPoseSetMaterialFlagOff(s32 poseId, u32 flag);
-    extern void* npcNameToPtr_NoAssert(void* name);
-    extern void* mobjNameToPtrNoAssert(void* name);
-    extern void* itemNameToPtr(void* name);
-    extern void iconFlagOn(void* icon, u32 flag);
-    extern void iconFlagOff(void* icon, u32 flag);
     void* mario;
     void* party0;
     void* party1;
@@ -675,8 +653,6 @@ USER_FUNC(door_dark_flag) {
 
 s32 evt_door_param(EventEntry* event) {
     typedef struct Vec { f32 x; f32 y; f32 z; } Vec;
-    extern s32 evtGetValue(EventEntry* event, s32 value);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
     extern void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, Vec* out0, Vec* out1, s32 useMarioPos);
     extern Vec vec3_802e41b8;
     extern Vec vec3_802e41c4;
@@ -777,7 +753,6 @@ USER_FUNC(evt_door_load_mapflag) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(npc_hide_onoff) {
-    extern void* npcNameToPtr_NoAssert(void* name);
 
     EventEntry* evt = event;
     s32* args = evt->args;
@@ -811,7 +786,6 @@ USER_FUNC(evt_door_data_copy) {
         s32 word[18];
     } DoorCopyData;
 
-    extern void* mapalloc_base_ptr;
     extern void* _mapAlloc(void* heap, u32 size);
 
     s32* args = event->args;

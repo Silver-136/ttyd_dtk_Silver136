@@ -1,23 +1,14 @@
 #include "event/evt_audience.h"
+#include "battle/battle_audience.h"
+#include "system.h"
 extern s32 evtGetValue(void* evt, s32 value);
 extern f32 evtGetFloat(void* evt, s32 value);
 extern void evtSetFloat(void* evt, s32 value, f32 f);
+extern const f32 float_180_80422b5c;
 
-extern void BattleAudience_Case_AcrobatNoTry(void);
-extern void BattleAudienceJoyEnding(void);
-extern void BattleAudienceAddTargetNum(f32 a, f32 b);
-extern void BattleAudience_Delete(s32 id);
 extern s32 BattleAudience_Entry(s32 id, u8 type, s32 arg);
-extern void BattleAudience_SetAnim(s32 id, s32 anim, s32 pose);
-extern void BattleAudience_SetPosition(s32 id, f32 x, f32 y, f32 z);
-extern void BattleAudience_SetRotate(s32 id, f32 x, f32 y, f32 z);
-extern void BattleAudience_SetRotateOffset(s32 id, f32 x, f32 y, f32 z);
 extern u8 BattleAudience_GetSysCtrl(s32 id);
-extern void BattleAudience_ChangeStatus(s32 id, s32 status);
-extern void* BattleAudienceGetPtr(s32 id);
-extern void* BattleAudienceBaseGetPtr(void);
 extern void evtSetValue(void* evt, s32 value, s32 out);
-extern s32 irand(s32 max);
 
 extern const f32 float_0_80422b50;
 s32 evt_audience_base_flag_on(void* evt) {
@@ -171,7 +162,6 @@ s32 evt_audience_set_rotate_offset(void* evt) {
 #pragma use_lmw_stmw off
 s32 evt_audience_move_position_frame(void* evt, s32 isFirstCall) {
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
-    extern const f32 float_180_80422b5c;
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 id = evtGetValue(evt, args[0]);
     f32 x = evtGetFloat(evt, args[1]);
@@ -237,7 +227,6 @@ s32 evt_audience_move_position_frame(void* evt, s32 isFirstCall) {
 #pragma use_lmw_stmw off
 s32 evt_audience_move_position_speed(void* evt, s32 isFirstCall) {
     extern double sqrt(double x);
-    extern const f32 float_180_80422b5c;
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 id = evtGetValue(evt, args[0]);
     f32 x = evtGetFloat(evt, args[1]);
@@ -403,8 +392,6 @@ s32 evt_audience_jump_position_gravity(void* evt, s32 isFirstCall) {
     return 0;
 }
 
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

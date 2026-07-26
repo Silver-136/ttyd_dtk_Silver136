@@ -1,5 +1,8 @@
 #include "effect/n64/eff_kemuri3_n64.h"
 
+extern f32 float_0_80425668;
+extern f32 float_1_8042566c;
+
 void* effKemuri3N64Entry(f32 x, f32 y, f32 z, f32 angle) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -9,8 +12,6 @@ void* effKemuri3N64Entry(f32 x, f32 y, f32 z, f32 angle) {
     extern f64 cos(f64);
     extern char str_Kemuri3N64_802fb20c[];
     extern f32 float_0p3_80425684;
-    extern f32 float_0_80425668;
-    extern f32 float_1_8042566c;
     extern f32 float_1p75_80425688;
     extern f32 float_neg0p08_8042568c;
     extern f32 float_neg3p9_80425690;
@@ -74,9 +75,7 @@ void effKemuri3Main(void* effect) {
     extern void PSMTXConcat(f32 a[3][4], f32 b[3][4], f32 ab[3][4]);
     extern Vec3 vec3_802fb200[];
     extern f32 float_0p85_80425674;
-    extern f32 float_0_80425668;
     extern f32 float_0p004_80425678;
-    extern f32 float_1_8042566c;
     extern f32 float_neg100_8042567c;
     extern f32 float_deg2rad_80425680;
     u8* work;
@@ -172,8 +171,6 @@ void effKemuri3Disp(s32 cameraId, void* effect) {
     extern void GXLoadPosMtxImm(Mtx, s32);
     extern void GXBegin(s32, s32, s32);
     extern f32 float_8_80425664;
-    extern f32 float_0_80425668;
-    extern f32 float_1_8042566c;
     extern f32 float_neg8_80425670;
     volatile f32* fifoF = (volatile f32*)0xCC008000;
     volatile u8* fifoB = (volatile u8*)0xCC008000;

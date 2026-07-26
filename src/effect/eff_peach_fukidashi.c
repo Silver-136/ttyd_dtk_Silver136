@@ -1,6 +1,14 @@
 #include "effect/eff_peach_fukidashi.h"
 
 extern f32 float_0_80426f94;
+extern void* camGetPtr(s32 cameraId);
+extern void* marioGetPtr(void);
+extern double sin(double x);
+extern double cos(double x);
+extern u32 vec3_802fe570[];
+extern f32 float_deg2rad_80426f6c;
+extern f32 float_0p5_80426f70;
+extern f32 float_16_80426f74;
 
 void effPeachFukidashiDisp(s32 cameraId, void* effect);
 void effDelete(void* effect);
@@ -19,17 +27,9 @@ void* effPeachFukidashiEntry(s32 flags, void* owner, s32 timer, double unused0, 
     } Vec;
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
-    extern void* camGetPtr(s32 cameraId);
-    extern void* marioGetPtr(void);
-    extern double sin(double x);
-    extern double cos(double x);
     extern void PSMTXRotAxisRad(Mtx m, Vec* axis, f32 angle);
     extern void effPeachFukidashiMain(void* effect);
     extern const char str_PeachFukidashi_802fe59c[];
-    extern u32 vec3_802fe570[];
-    extern f32 float_deg2rad_80426f6c;
-    extern f32 float_0p5_80426f70;
-    extern f32 float_16_80426f74;
     void* entry;
     s32 work;
     void* cam;
@@ -105,10 +105,6 @@ void effPeachFukidashiDisp(s32 cameraId, void* effect) {
         f32 z;
     } Vec;
 
-    extern void* camGetPtr(s32 cameraId);
-    extern void* marioGetPtr(void);
-    extern double sin(double x);
-    extern double cos(double x);
     extern void PSMTXRotAxisRad(Mtx m, Vec* axis, f32 angle);
     extern void PSMTXTrans(Mtx m, double x, double y, double z);
     extern void PSMTXRotRad(Mtx m, double angle, char axis);
@@ -119,12 +115,8 @@ void effPeachFukidashiDisp(s32 cameraId, void* effect) {
     extern void FontDrawColor(void* color);
     extern void FontDrawStringMtx(void* mtx, char* str);
 
-    extern u32 vec3_802fe570[];
     extern u32 dat_802fe57c[];
     extern u32 dat_80426f68;
-    extern f32 float_deg2rad_80426f6c;
-    extern f32 float_0p5_80426f70;
-    extern f32 float_16_80426f74;
     extern f32 float_0p4_80426f78;
     extern f32 float_0p34_80426f7c;
     extern f32 float_40_80426f80;

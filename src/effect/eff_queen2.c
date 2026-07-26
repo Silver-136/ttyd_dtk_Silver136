@@ -1,4 +1,7 @@
 #include "effect/eff_queen2.h"
+#include "effect/eff_indirect.h"
+#include "effect/eff_teresa.h"
+#include "effect/n64/eff_akari_charge_n64.h"
 #include <dolphin/mtx.h>
 
 void* effEntry(void);
@@ -6,7 +9,6 @@ void* __memAlloc(s32 heap, u32 size);
 void effQueen2Main(void* entry);
 void* camGetPtr(s32 cameraId);
 void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
-void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
 void PSMTXConcat(void* a, void* b, void* out);
 f32 PSVECDistance(Vec* a, Vec* b);
 void GXSetNumChans(s32 num);
@@ -80,9 +82,6 @@ void* effQueen2Entry(s32 type, f32 x, f32 y, f32 z) {
 #pragma use_lmw_stmw off
 void effQueen2Main(void* entry) {
     extern f32 intplGetValue(s32 type, s32 current, f32 start, f32 end, s32 max);
-    extern void* effAkariChargeN64Entry(s32 type, s32 unused, f32 x, f32 y, f32 z, f32 scale);
-    extern void* effTeresaEntry(s32 type, f32 x, f32 y, f32 z);
-    extern void* effIndirectEntry(s32 type, s32 timer, f32 x, f32 y, f32 z);
     extern void effSoftDelete(void* entry);
     extern void effDelete(void* entry);
     extern f32 dispCalcZ(Vec* pos);

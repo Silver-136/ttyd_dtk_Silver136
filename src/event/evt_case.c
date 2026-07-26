@@ -1,5 +1,7 @@
 #include "event/evt_case.h"
 
+#include "manager/evtmgr.h"
+
 extern s32 evtGetValue();
 extern void caseDelete(s32);
 extern s32* caseIdToPtr(s32);
@@ -140,7 +142,6 @@ s32 evt_del_case_evt(void* evt) {
     extern s32 evtGetValue(void* evt, s32 value);
     extern void* caseIdToPtr(s32 id);
     extern s32 evtCheckID(s32 id);
-    extern void evtDeleteID(s32 id);
     extern void caseDelete(s32 id);
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 flag = evtGetValue(evt, args[0]);

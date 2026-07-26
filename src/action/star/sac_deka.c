@@ -2,30 +2,34 @@
 #include "event/evt_cmd.h"
 
 extern void* _battleWorkPointer;
-s32 evtSetValue(EventEntry* event, s32 target, s32 value);
 void effDelete(void* effect);
 void smartFree(void* ptr);
 void mapGrpFlagOff(const char* name, s32 flag);
 extern const char str_stg_b_yuka_80301050[];
+extern f32 float_0_80428424;
+extern f32 float_0p5_804283ec;
+extern f32 float_32767_80428404;
+extern void* memcpy(void* dst, const void* src, u32 size);
 void* get_ptr(void);
 void main_timing(s32 index);
 void main_enemy(void);
 void disp_3D(void);
 void disp_3D_alpha(void);
+void yuka_init(void);
+void main_base(void);
+void main_gauge(void);
+void main_star(void);
+void yuka_main(void);
+void disp_2D(void);
+void yuka_capture(s32 cameraId);
+void create_timing(void);
+void main_enemy_sub(void* unit, s32* count);
 
 USER_FUNC(main_deka) {
     extern void* memset(void* dest, s32 value, u32 size);
-    extern s32 evtGetValue(EventEntry* event, s32 target);
-    extern void yuka_init(void);
-    extern void main_base(void);
-    extern void main_gauge(void);
-    extern void main_star(void);
-    extern void yuka_main(void);
     extern void dispEntry(s32 cameraId, s32 order, void* callback, f32 priority, void* param);
-    extern void disp_2D(void);
     extern void yuka_disp(void);
     extern f32 float_901_80428490;
-    extern f32 float_0_80428424;
 
     void* work;
     s32* args;
@@ -63,7 +67,6 @@ USER_FUNC(main_deka) {
 void yuka_init(void) {
     typedef struct Vec { f32 x, y, z; } Vec;
     typedef f32 Mtx[3][4];
-    extern void* get_ptr(void);
     extern void* mapGetMapObj(const char* name);
     extern void mapGrpFlagOn(const char* name, u32 flags);
     extern void PSMTXMultVec(Mtx matrix, Vec* source, Vec* destination);
@@ -72,9 +75,6 @@ void yuka_init(void) {
     extern void* smartAlloc(u32 size, s32 type);
     extern void dispEntry(s32 camera, s32 renderMode, void* callback,
                           void* param, f32 order);
-    extern void yuka_capture(s32 cameraId);
-    extern const char str_stg_b_yuka_80301050[];
-    extern f32 float_0_80428424;
 
     u8* work = (u8*)get_ptr();
     u8* map = (u8*)mapGetMapObj(str_stg_b_yuka_80301050);
@@ -113,7 +113,6 @@ void yuka_init(void) {
 
 /* stub-fill: yuka_main | prototype_only | source_prototype */
 void yuka_main(void) {
-    extern void* get_ptr(void);
     extern void memcpy_as4(void* dst, const void* src, u32 size);
     extern void PSVECSubtract(const void* a, const void* b, void* out);
     extern void PSVECNormalize(const void* src, void* dst);
@@ -237,8 +236,6 @@ USER_FUNC(yuka_end) {
 
 /* stub-fill: main_base | prototype_only | source_prototype */
 void main_base(void) {
-    extern void* get_ptr(void);
-    extern void create_timing(void);
     extern u32 psndSFXOn(const char* name);
     extern void psndSFXOff(u32 id);
     extern void psndSFX_pit(u32 id, s32 pitch);
@@ -407,11 +404,9 @@ void main_base(void) {
 
 /* stub-fill: main_gauge | prototype_only | source_prototype */
 void main_gauge(void) {
-    extern void* get_ptr(void);
     extern f32 intplGetValue(s32 type, s32 current, f32 start, f32 end, s32 max);
     extern f32 float_500_80428470;
     extern f32 float_neg1000_8042844c;
-    extern f32 float_0_80428424;
     extern u32 vec3_80300ec8[];
 
     void* work = get_ptr();
@@ -491,8 +486,6 @@ void main_timing(s32 index) {
 
 /* stub-fill: main_star | prototype_only | source_prototype */
 void main_star(void) {
-    extern void* _battleWorkPointer;
-    extern void* get_ptr(void);
     extern void* BattleGetMarioPtr(void*);
     extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
     extern void* effStarStoneEntry(f32, f32, f32, f32, s32);
@@ -615,7 +608,6 @@ void main_star(void) {
 
 void main_enemy(void) {
     extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
-    extern void main_enemy_sub(void* unit, s32* count);
 
     void* battleWork;
     void* work;
@@ -640,7 +632,6 @@ void main_enemy(void) {
 
 /* stub-fill: main_enemy_sub | prototype_only | source_prototype */
 void main_enemy_sub(void* unit, s32* count) {
-    extern void* get_ptr(void);
     extern s32 BtlUnit_GetBodyPartsId(void* unit);
     extern void* BtlUnit_GetPartsPtr(void* unit, s32 partId);
     extern s32 BtlUnit_CheckStatus(void* unit, s32 status);
@@ -770,7 +761,6 @@ USER_FUNC(end_deka) {
 /* stub-fill: disp_2D | prototype_only | source_prototype */
 void disp_2D(void) {
     typedef f32 Mtx[3][4];
-    extern void* get_ptr(void);
     extern void PSMTXTrans(Mtx, f32, f32, f32);
     extern void PSMTXScale(Mtx, f32, f32, f32);
     extern void PSMTXConcat(Mtx, Mtx, Mtx);
@@ -882,9 +872,7 @@ void yuka_capture(s32 cameraId) {
     typedef f32 Mtx[3][4];
     typedef f32 Mtx44[4][4];
     typedef struct Vec { f32 x, y, z; } Vec;
-    extern void* get_ptr(void);
     extern void* camGetPtr(s32 cameraId);
-    extern void* memcpy(void* dst, const void* src, u32 size);
     extern f64 tan(f64 value);
     extern void C_MTXLookAt(Mtx dst, Vec* pos, Vec* up, Vec* target);
     extern void C_MTXPerspective(Mtx44 dst, f64 fov, f64 aspect,
@@ -900,10 +888,8 @@ void yuka_capture(s32 cameraId) {
     extern void GXSetZMode(u8 enable, u32 func, u8 update);
     extern void GXCopyTex(void* destination, u8 clear);
     extern void GXPixModeSync(void);
-    extern f32 float_0p5_804283ec;
     extern f32 float_25_8042841c;
     extern f32 float_1_80428420;
-    extern f32 float_32767_80428404;
 
     u8 cameraCopy[0x260];
     u8* work = (u8*)get_ptr();
@@ -952,7 +938,6 @@ void yuka_disp(s32 cameraId) {
         void* pMemory;
     } LocalAlloc;
 
-    extern void* get_ptr(void);
     extern LocalCamera* camGetPtr(s32 cameraId);
     extern void GXSetCullMode(s32 mode);
     extern void GXClearVtxDesc(void);
@@ -1047,10 +1032,7 @@ void* get_ptr(void) {
 
 /* stub-fill: create_timing | missing_definition | ghidra_signature */
 void create_timing(void) {
-    extern void* get_ptr(void);
-    extern void* memcpy(void* dst, const void* src, u32 size);
     extern s32 rand(void);
-    extern f32 float_32767_80428404;
     extern f32 float_40_80428400;
     extern f32 float_30_80428408;
     extern f32 float_20_8042840c;
@@ -1215,9 +1197,7 @@ USER_FUNC(star_stone_appear) {
 }
 
 USER_FUNC(get_ride_pos) {
-    extern s32 evtGetValue(EventEntry* event, s32 target);
     extern void evtSetFloat(EventEntry* event, s32 target, f32 value);
-    extern f32 float_0p5_804283ec;
     extern f32 float_0p25_804283f0;
     extern f32 float_64_804283f4;
     extern f32 float_5_804283f8;

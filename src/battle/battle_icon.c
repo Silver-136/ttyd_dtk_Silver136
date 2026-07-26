@@ -3,7 +3,6 @@
 
 extern void* _battleWorkPointer;
 
-void* memset(void* dst, int value, u32 size);
 void iconDelete(void* icon);
 void* BtlIconGetPtr(s32 id);
 void BtlIcon_Delete(void* icon);

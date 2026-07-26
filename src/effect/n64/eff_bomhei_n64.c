@@ -126,7 +126,6 @@ void effBomheiDisp(s32 cameraId, void* effect) {
     extern f32 float_256_80424da4;
     extern f32 float_0p03125_80424da8;
     extern f32 float_0p0034722_80424dac;
-    extern f32 float_0_80424db0;
     extern f32 float_32_80424db4;
     extern f32 float_deg2rad_80424db8;
     extern f32 float_1_80424dbc;

@@ -1,4 +1,5 @@
 #include "effect/n64/eff_freeze_n64.h"
+#include "effect/n64/eff_glass_n64.h"
 
 typedef struct EffFreezeWork {
     s32 type;
@@ -82,14 +83,12 @@ void* effFreezeN64Entry(s32 type, s32 param2, f32 x, f32 y, f32 z, f32 scale) {
 
 void effFreezeMain(void* effect) {
     extern s32 rand(void);
-    extern void* effGlassN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 timer);
     extern void effDelete(void* effect);
     extern void effVaporN64Entry(f32 x, f32 y, f32 z, s32 type, s32 timer);
     extern f32 dispCalcZ(void* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
     extern void effFreezeDisp(s32 cameraId, void* effect);
     extern f32 float_0_80425384;
-    extern f32 float_10_80425388;
     extern f32 float_3_8042538c;
     extern f32 float_0p3_80425390;
     extern f32 float_0p1_80425394;

@@ -1,6 +1,6 @@
 #include "manager/dvdmgr.h"
 
-typedef struct DVDEntry {
+struct DVDEntry {
     u8 pad0[0x74];
     s32 length;
     s32 pad78;
@@ -10,7 +10,7 @@ typedef struct DVDEntry {
     s32 done;
     void* callback;
     u16 flags;
-} DVDEntry;
+};
 
 u8 dvdmgr_thread[0x318];
 s32 dvdmgr_thread_on;
@@ -52,7 +52,6 @@ void DVDMgrDelete(void) {
 }
 
 s32 compare(u8* lhs, u8* rhs) {
-    extern void* dvdq;
     u32 left;
     u32 right;
 
@@ -69,12 +68,10 @@ s32 compare(u8* lhs, u8* rhs) {
 
 
 void DVDMgrMain(void) {
-    extern void* memset(void* dst, s32 value, u32 size);
     extern void qqsort(void* base, s32 count, s32 size, void* compare);
     extern s32 DVDReadPrio(void* info, void* dst, s32 size, s32 offset, s32 prio);
     extern void DVDClose(void* info);
     extern int compare(void* param_1, void* param_2);
-    extern void* dvdq;
     extern void* _callback;
     u8 order[0x100];
     u8* out;
@@ -179,9 +176,7 @@ void DVDMgrMain(void) {
 void* DVDMgrOpen(const char* path, s32 mode, s32 unk) {
     extern s32 DVDConvertPathToEntrynum(const char* path);
     extern s32 DVDOpen(const char* path, void* info);
-    extern void* memset(void* dst, s32 value, u32 size);
     extern char* strcpy(char* dst, const char* src);
-    extern void* dvdq;
     void* entry;
     s32 i;
 

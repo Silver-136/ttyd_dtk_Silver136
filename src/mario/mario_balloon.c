@@ -1,5 +1,6 @@
 #include "mario/mario_balloon.h"
 
+extern void* marioGetPtr(void);
 extern u32 hitGetAttr(void* hitObj);
 extern void* mobjHitObjPtrToPtr(void* hitObj);
 extern s32 mobjGetHint(void* mobj);
@@ -7,15 +8,12 @@ extern void* caseCheckHitObj(void* hitObj);
 extern s32 marioChkBero(void* hitObj);
 
 void marioBaloonInit(void) {
-    extern void* marioGetPtr(void);
-
     *(s32*)((s32)marioGetPtr() + 0x264) = 0;
 }
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void marioBalloonOn(s32 type) {
-    extern void* marioGetPtr(void);
     extern s32 effMarioBalloonEntry(s32 type, s32 arg1);
     void* mario;
     u32 flags;
@@ -31,7 +29,6 @@ void marioBalloonOn(s32 type) {
 #pragma use_lmw_stmw on
 
 void marioBalloonOff(void) {
-    extern void* marioGetPtr(void);
     extern void effDelete(s32 effect);
     void* mario;
     u32 flags;
@@ -47,7 +44,6 @@ void marioBalloonOff(void) {
 }
 
 u8 marioBalloonMain(void) {
-    extern void* marioGetPtr(void);
     extern s32 marioChkKey(void);
     extern u32 hitGetAttr(void* hitObj);
     extern void* mobjHitObjPtrToPtr(void* hitObj);

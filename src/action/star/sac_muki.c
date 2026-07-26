@@ -2,24 +2,26 @@
 #include "event/evt_cmd.h"
 
 void* get_ptr(void);
+void main_base(void);
+void main_cursor(void);
+void main_point(s32 index);
+void main_icon(s32 index);
+void main_star(void);
+void disp_2D(void);
+void disp_3D(void);
+void disp_3D_alpha(void);
 
 extern void* _battleWorkPointer;
 void effDelete(void* effect);
+void* BattleGetMarioPtr(void* battleWork);
+void* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
+s32 irand(s32 max);
+void* memcpy(void* dest, const void* src, u32 size);
+
+extern f32 float_0_8042854c;
 
 USER_FUNC(main_muki) {
-    extern void* memset(void* dest, s32 value, u32 size);
-    extern s32 evtGetValue(EventEntry* event, s32 target);
-    extern void* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
-    extern void main_base(void);
-    extern void main_cursor(void);
-    extern void main_point(s32 index);
-    extern void main_icon(s32 index);
-    extern void main_star(void);
     extern void dispEntry(s32 cameraId, s32 order, void* callback, f32 priority, void* param);
-    extern void disp_2D(void);
-    extern void disp_3D(void);
-    extern void disp_3D_alpha(void);
-    extern f32 float_0_8042854c;
     extern f32 float_1_8042855c;
     extern f32 float_neg1000_80428580;
     extern f32 float_901_804285e8;
@@ -59,9 +61,6 @@ USER_FUNC(main_muki) {
 
 /* stub-fill: main_base | prototype_only | source_prototype */
 void main_base(void) {
-    extern void* _battleWorkPointer;
-    extern void* get_ptr(void);
-    extern void* BattleGetMarioPtr(void* battleWork);
     extern s32 BtlUnit_GetBodyPartsId(void* unit);
     extern void* BtlUnit_GetPartsPtr(void* unit, s32 partId);
     extern void BtlUnit_SetAnim(void* part, const char* name);
@@ -236,9 +235,6 @@ void main_base(void) {
 
 /* stub-fill: main_cursor | prototype_only | source_prototype */
 void main_cursor(void) {
-    extern void* _battleWorkPointer;
-    extern void* get_ptr(void);
-    extern void* BattleGetMarioPtr(void* battleWork);
     extern u16 keyGetButtonTrg(s32 pad);
     extern u32 keyGetDirTrg(s32 pad);
     extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
@@ -305,11 +301,8 @@ void main_cursor(void) {
 
 /* stub-fill: main_point | prototype_only | source_prototype */
 void main_point(s32 index) {
-    extern void* get_ptr(void);
-    extern s32 irand(s32 max);
     extern f32 intplGetValue(s32 type, s32 current, f32 start, f32 end, s32 max);
     extern char str_btl_wn_sac_mukimuki__80301078[];
-    extern f32 float_0_8042854c;
     extern f32 float_0p5_80428568;
 
     void* work;
@@ -404,12 +397,9 @@ void main_point(s32 index) {
 
 /* stub-fill: main_icon | prototype_only | source_prototype */
 void main_icon(s32 index) {
-    extern void* get_ptr(void);
-    extern s32 irand(s32 max);
     extern f32 intplGetValue(s32 type, s32 current, f32 start, f32 end, s32 max);
     extern u32 vec3_803010e4[];
     extern u32 vec3_803010f0[];
-    extern f32 float_0_8042854c;
     extern f32 float_180_80428598;
     extern f32 float_1080_8042859c;
     extern f32 float_255_804285a0;
@@ -499,11 +489,7 @@ void main_icon(s32 index) {
 
 /* stub-fill: main_star | prototype_only | source_prototype */
 void main_star(void) {
-    extern void* _battleWorkPointer;
-    extern void* get_ptr(void);
-    extern void* BattleGetMarioPtr(void* battleWork);
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
-    extern void* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
     extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
     extern u32 vec3_803010fc[];
     extern u32 vec3_80301108[];
@@ -628,7 +614,6 @@ USER_FUNC(end_muki) {
 /* stub-fill: disp_2D | prototype_only | source_prototype */
 void disp_2D(void) {
     typedef f32 Mtx[3][4];
-    extern void* get_ptr(void);
     extern void* camGetPtr(s32 camera);
     extern void btlGetScreenPoint(f32* in, f32* out);
     extern void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
@@ -737,8 +722,6 @@ void disp_2D(void) {
 void disp_3D(void) {
     typedef f32 Mtx[3][4];
 
-    extern void* get_ptr(void);
-    extern void* memcpy(void* dest, const void* src, u32 size);
     extern void PSMTXScale(Mtx mtx, f32 x, f32 y, f32 z);
     extern void PSMTXTransApply(Mtx src, Mtx dst, f32 x, f32 y, f32 z);
     extern void btlDispTexPlane2(Mtx mtx, s32 texId, void* color);
@@ -746,7 +729,6 @@ void disp_3D(void) {
     extern s32 dat_8030114c[];
     extern u32 dat_8030116c[];
     extern u32 dat_80428518;
-    extern f32 float_0_8042854c;
 
     void* work;
     Mtx mtx;
@@ -819,7 +801,6 @@ void disp_3D(void) {
 
 /* stub-fill: disp_3D_alpha | prototype_only | source_prototype */
 void disp_3D_alpha(void) {
-    extern void* get_ptr(void);
     extern void PSMTXRotRad(f32 matrix[3][4], s32 axis, f32 radians);
     extern void PSMTXScaleApply(f32 src[3][4], f32 dst[3][4], f32 x, f32 y, f32 z);
     extern void PSMTXTransApply(f32 src[3][4], f32 dst[3][4], f32 x, f32 y, f32 z);
@@ -881,9 +862,6 @@ void* get_ptr(void) {
 }
 
 USER_FUNC(set_weapon) {
-    extern s32 evtGetValue(EventEntry* event, s32 target);
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
-    extern void* memcpy(void* dest, const void* src, u32 size);
     extern u8 weapon[];
 
     void* work;
@@ -922,8 +900,6 @@ USER_FUNC(start_game) {
 }
 
 USER_FUNC(wait_game_end) {
-    extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
-
     void* work;
     s32* args;
 

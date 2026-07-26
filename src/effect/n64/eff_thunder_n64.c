@@ -1,4 +1,9 @@
 #include "effect/n64/eff_thunder_n64.h"
+#include "effect/n64/eff_akari_charge_n64.h"
+#include "effect/n64/eff_shock_n64.h"
+
+extern f32 float_0_804263c0;
+extern f32 float_1_804263c4;
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -7,18 +12,14 @@ void* effThunderN64Entry(s32 type, f32 x, f32 y, f32 z, f32 sx, f32 sy) {
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effThunderMain(void*);
     extern void* effThunderflareN64Entry(s32 type, s32 unk, f32 x, f32 y, f32 z, f32 scale);
-    extern void* effAkariChargeN64Entry(s32 type, s32 unk, f32 x, f32 y, f32 z, f32 scale);
-    extern void* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 sx, f32 sy);
     extern char str_ThunderN64_802fc1a8[];
     extern void* gp;
-    extern f32 float_0_804263c0;
     extern f32 float_48_804263d8;
     extern f32 float_32_804263dc;
     extern f32 float_8_804263e0;
     extern f32 float_neg118_804263e4;
     extern f32 float_184_804263e8;
     extern f32 float_79_804263ec;
-    extern f32 float_1_804263c4;
     extern f32 float_neg120_804263f0;
     extern f32 float_189_804263f4;
     extern f32 float_72_804263f8;
@@ -88,7 +89,6 @@ void effThunderMain(void* effect) {
     extern f32 dispCalcZ(void*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effThunderDisp(void);
-    extern f32 float_0_804263c0;
     extern f32 float_256_804263d0;
     extern f32 float_64_804263d4;
     u8* work = *(u8**)((s32)effect + 0xC);
@@ -215,8 +215,6 @@ void effThunderDisp(s32 cameraId, void* effect) {
     extern void tri2();
     extern f32 float_4_804263b8;
     extern f32 float_deg2rad_804263bc;
-    extern f32 float_0_804263c0;
-    extern f32 float_1_804263c4;
     extern f32 float_0p0078125_804263c8;
     extern f32 float_0p03125_804263cc;
     extern u32 dat_804263a8;

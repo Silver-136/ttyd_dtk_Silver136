@@ -1,4 +1,5 @@
 #include "unk_0x8025DE70.h"
+#include "sequence/seq_title.h"
 
 void N_setupErrorHandler(void) {
     extern void OSSetErrorHandler(s32 error, void* handler);
@@ -14,7 +15,6 @@ void N_setupErrorHandler(void) {
 
 /* stub-fill: N_systemErrorHandler | prototype_only | source_prototype */
 void N_systemErrorHandler(u16 error, u8* context, u32 dsisr, u32 dar) {
-    extern s32 N_getDebugMode(void);
     extern char* strcpy(char* dst, const char* src);
     extern char* strcat(char* dst, const char* src);
     extern s32 sprintf(char* dst, const char* fmt, ...);

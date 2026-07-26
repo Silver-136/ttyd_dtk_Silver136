@@ -1,4 +1,10 @@
 #include "sequence/seq_gameover.h"
+#include "countdown.h"
+#include "cam_road.h"
+#include "cam_shift.h"
+
+#include "driver/fadedrv.h"
+#include "statuswindow.h"
 
 extern u8 psbgm[];
 extern u8 sound[];
@@ -43,23 +49,15 @@ s32 N_evt_snd_bgm_unpause(void) {
 void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 param_5, u32 param_6) {
     extern void fadeEntry(s32 type, s32 duration, void* color);
     extern s32 fadeIsFinish(void);
-    extern void fadeTecOff(void);
-    extern void fadeSoftFocusOff(void);
     extern s32 mapPreLoad(void);
     extern void mapLoad(char* map);
     extern void _relUnLoad(void);
     extern void _unload(char* map, char* bero, s32 unk, s32 param_4, u32 param_5, u32 param_6);
     extern char* strcpy(char* dst, const char* src);
-    extern void statusWinForceOff(void);
-    extern void statusWinDispOff(void);
-    extern void statusWinDispOn(void);
     extern void* camGetPtr(s32 camId);
     extern void npcClearDeadInfo(void);
-    extern void countDownEnd(void);
     extern void nameEntReInit(void);
     extern void* marioGetPtr(void);
-    extern void camRoadReset(void);
-    extern void camShiftReset(void);
     extern void marioReset(void);
     extern void marioEntry(void);
     extern void psndBGMOn(u32 id, char* flag);

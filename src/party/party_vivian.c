@@ -4,17 +4,24 @@ extern s32 vivian_cancel_req;
 extern f32 float_35_804242d8;
 extern f32 float_24_804242bc;
 extern f32 float_10_80424270;
+extern void* marioGetPtr(void);
+extern void marioPaperOff(void);
+extern char str_p_bibi_802f898c[];
+extern char str_PM_B_1_802f8994[];
+extern s32 marioGetPartyId(void);
+extern void* partyGetPtr(s32 id);
+extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
+extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+extern f32 float_0p1_804242cc;
+extern f32 float_30_804242d0;
+extern void movePos(f32* x, f32* z, f32 dist, f32 angle);
 
 u8 N_marioForceVivianAnime(void) {
-    extern void* marioGetPtr(void);
-    extern void marioPaperOff(void);
     extern void marioChgPaper(void* name);
     extern void marioPaperOn(void* name);
     extern void marioChgPose(void* pose);
     extern s32 marioAnimeId(void);
     extern void animPoseSetLocalTime(void* pose, f32 time);
-    extern char str_p_bibi_802f898c[];
-    extern char str_PM_B_1_802f8994[];
     extern char str_M_B_3_804242a4;
 
     void* mario = marioGetPtr();
@@ -33,7 +40,6 @@ u8 N_marioForceVivianAnime(void) {
 }
 
 u8 mot_vivian(void) {
-    extern void* marioGetPtr(void);
     extern f32 float_0_80424274;
 
     void* mario = marioGetPtr();
@@ -55,10 +61,6 @@ u8 mot_vivian(void) {
 }
 
 u8 mot_vivian_post(void) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
-    extern void* marioGetPtr(void);
-    extern void marioPaperOff(void);
     extern void partyPaperOff(void* party);
     extern void partyChgRunMode(void* party, s32 mode);
     extern void partyChgPoseId(void* party, s32 pose);
@@ -127,8 +129,6 @@ void vivian_init(void* party) {
 
 
 s32 vivianGetStatus(void) {
-    extern s32 marioGetPartyId(void);
-    extern void* partyGetPtr(s32 id);
 
     void* party = partyGetPtr(marioGetPartyId());
     u8 status;
@@ -204,11 +204,6 @@ s32 N_vivianDisplayTailCheck(void* pParty) {
 
 
 u8 vivianShadow(void* pParty) {
-    extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern void movePos(f32* x, f32* z, f32 dist, f32 angle);
-    extern f32 float_0p1_804242cc;
-    extern f32 float_30_804242d0;
     f32 step;
     f32 dx;
     f32 dy;
@@ -242,11 +237,6 @@ u8 vivianShadow(void* pParty) {
 u8 vivian_move(void* pParty) {
     extern void partyMoveFlyInit(void* party, s32 param);
     extern void partyFlyMain(void* party);
-    extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern void movePos(f32* x, f32* z, f32 dist, f32 angle);
-    extern f32 float_0p1_804242cc;
-    extern f32 float_30_804242d0;
     f32 step;
     f32 dx;
     f32 dy;
@@ -303,9 +293,6 @@ void vivian_use(void* pParty) {
     extern void effRippleSetPosition(f32 x, f32 y, f32 z, void* effect);
     extern char str_PTR_A2_1_802f8974[];
     extern char str_PTR_A2_3_802f8980[];
-    extern char str_p_bibi_802f898c[];
-    extern char str_PM_B_1_802f8994[];
-    extern s32 vivian_cancel_req;
     void* player = *(void**)((s32)pParty + 0x160);
     s32 state;
     f32 speed;

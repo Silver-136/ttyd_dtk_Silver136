@@ -1,7 +1,12 @@
 #include "motion/mot_stay.h"
+#include "bowser/koopa_motion.h"
+
+extern void* marioGetPtr(void);
+extern void psndSFXOff(s32 soundId);
+extern s32 sysMsec2Frame(s32 msec);
+extern void marioChgMot(s32 motion);
 
 void marioVoiceGlareOn(void) {
-    extern void* marioGetPtr(void);
     extern u32 psndSFXOn_3D(s32 soundId, void* position);
 
     void* mario = marioGetPtr();
@@ -14,8 +19,6 @@ void marioVoiceGlareOn(void) {
 }
 
 void marioVoiceGlareOff(void) {
-    extern void* marioGetPtr(void);
-    extern void psndSFXOff(s32 soundId);
 
     void* mario = marioGetPtr();
     s32 soundId = *(s32*)((s32)mario + 0x280);
@@ -29,8 +32,6 @@ void marioVoiceGlareOff(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 marioChkDeepSleep(void) {
-    extern void* marioGetPtr(void);
-    extern s32 sysMsec2Frame(s32 msec);
     register s32 result = 0;
     void* mario = marioGetPtr();
 
@@ -46,8 +47,6 @@ s32 marioChkDeepSleep(void) {
 
 
 u8 mot_stay(void) {
-    extern void* marioGetPtr(void);
-    extern void kpa_stay(void);
     extern void peach_stay(void);
     extern void marioClearJumpPara(void);
     extern s32 marioPriCheckJabara(void);
@@ -69,9 +68,7 @@ u8 mot_stay(void) {
     extern s32 marioChkJump(void);
     extern s32 marioChkTransform(void);
     extern void marioAdjustMoveDir(void);
-    extern void marioChgMot(s32 motion);
     extern void marioChgMot2(s32 motion);
-    extern s32 sysMsec2Frame(s32 msec);
     extern u32 psndSFXOn_3D(s32 id, void* position);
     extern s32 strcmp(char* left, char* right);
     extern f32 float_0_80421010;
@@ -322,8 +319,6 @@ u8 mot_stay(void) {
 }
 
 void marioChgMotAuto(void) {
-    extern void* marioGetPtr(void);
-    extern void marioChgMot(s32 motion);
     extern s32 pouchEquipCheckBadge(s32 badge);
 
     void* mario = marioGetPtr();
@@ -350,8 +345,6 @@ void marioChgMotAuto(void) {
 }
 
 void mot_stay_post(void) {
-    extern void* marioGetPtr(void);
-    extern void psndSFXOff(s32 soundId);
     void* mario = marioGetPtr();
     u16 motion = *(u16*)((s32)mario + 0x2E);
     if (motion != 0x13 && motion != 0x14) {

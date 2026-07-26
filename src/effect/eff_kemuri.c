@@ -1,13 +1,37 @@
 #include "effect/eff_kemuri.h"
 
+extern void* effEntry(void);
+extern void* __memAlloc(s32 heap, u32 size);
+extern f32 float_0_804229a4;
+extern f32 float_1_80422998;
+extern double sin(double x);
+extern void effDelete(void* effect);
+extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
+extern f32 float_0p8_804229d8;
+extern void* camGetPtr(s32);
+extern void effGetTexObj(s32, void*);
+extern void GXLoadTexObj(void*, s32);
+extern void GXSetCurrentMtx(u32);
+extern void GXSetNumChans(u32);
+extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+extern void GXSetNumTevStages(u32);
+extern void GXSetTevOrder(u32, u32, u32, s32);
+extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+extern void GXSetTevColor(s32, void*);
+extern void GXSetNumTexGens(u32);
+extern void GXSetTexCoordGen2(s32, s32, s32, u32, u32, s32);
+extern void GXClearVtxDesc(void);
+extern void GXSetVtxDesc(s32, s32);
+extern void GXSetVtxAttrFmt(u32, s32, u32, u32, u32);
+extern void GXBegin(s32, s32, s16);
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effKemuriEntry(s32 kind, f32 x, f32 y, f32 z) {
-    extern void* effEntry(void);
-    extern void* __memAlloc(s32 heap, u32 size);
     extern char str_Kemuri_802f3728[];
-    extern f32 float_0_804229a4;
-    extern f32 float_1_80422998;
     extern f32 float_3_80422a0c;
     extern f32 float_neg3_80422a10;
     extern void* effKemuriMain(void* effEntry);
@@ -84,22 +108,17 @@ void* effKemuriEntry(s32 kind, f32 x, f32 y, f32 z) {
 
 
 u8 effKemuri2Entry(f32 x, f32 y, f32 z, f32 vx, f32 vz) {
-    extern void* effEntry(void);
-    extern void* __memAlloc(s32 heap, u32 size);
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern void* camGetPtr(s32 cameraId);
     extern f32 reviseAngle(f32 angle);
     extern u8 effKemuri2Main(void* effEntry);
     extern char str_Kemuri2_802f3720[];
     extern f32 float_1000_804229f8;
-    extern f32 float_0_804229a4;
     extern f32 float_360_804229f4;
     extern f32 float_6p2832_804229fc;
     extern f32 float_5_80422a00;
-    extern f32 float_1_80422998;
     extern f32 float_0p7_80422a04;
     extern f32 float_neg20_80422a08;
-    extern double sin(double x);
     extern double cos(double x);
     void* entry;
     void* work;
@@ -148,15 +167,12 @@ u8 effKemuriMain(void* effEntry) {
         f32 z;
     } Vec;
 
-    extern void effDelete(void* effect);
     extern f32 dispCalcZ(Vec* pos);
-    extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern u8 effKemuriDisp(s32 cameraId, void* effEntry);
     extern Vec vec3_802f36f8;
     extern u8 touchdown_scale[];
     extern u8 heavy_scale[];
     extern f32 float_16_804229dc;
-    extern f32 float_0p8_804229d8;
     extern f32 float_0p0078125_804229e0;
     extern f32 float_1p5_804229e4;
     extern f32 float_0p85_804229e8;
@@ -236,17 +252,13 @@ u8 effKemuri2Main(void* effEntry) {
         f32 y;
         f32 z;
     } LocalVec3;
-    extern void effDelete(void* effect);
     extern f32 dispCalcZ(LocalVec3* pos);
-    extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern u8 effKemuri2Disp(s32 cameraId, void* effEntry);
     extern LocalVec3 vec3_802f3704;
     extern f32 float_3p1416_804229c8;
     extern f32 float_30_804229cc;
     extern f32 float_0p9_804229d0;
     extern f32 float_0p95_804229d4;
-    extern f32 float_0p8_804229d8;
-    extern double sin(double x);
     LocalVec3 dispPos;
     LocalVec3 pos;
     void* work;
@@ -294,32 +306,13 @@ u8 effKemuri2Main(void* effEntry) {
 u8 effKemuriDisp(s32 cameraId, void* effEntry) {
     typedef f32 Mtx[3][4];
     typedef struct Tex { u32 data[8]; } Tex;
-    extern void* camGetPtr(s32);
     extern void PSMTXTrans(Mtx, f32, f32, f32);
     extern void PSMTXRotRad(Mtx, f32, char);
     extern void PSMTXScale(Mtx, f32, f32, f32);
     extern void PSMTXConcat(Mtx, Mtx, Mtx);
-    extern void effGetTexObj(s32, void*);
-    extern void GXLoadTexObj(void*, s32);
-    extern void GXSetCurrentMtx(u32);
-    extern void GXSetNumChans(u32);
-    extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);
     extern void GXSetChanMatColor(s32, void*);
-    extern void GXSetNumTevStages(u32);
-    extern void GXSetTevOrder(u32,u32,u32,s32);
-    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);
-    extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
-    extern void GXSetTevColorIn(s32,s32,s32,s32,s32);
-    extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
-    extern void GXSetTevColor(s32, void*);
-    extern void GXSetNumTexGens(u32);
-    extern void GXSetTexCoordGen2(s32,s32,s32,u32,u32,s32);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32,s32);
-    extern void GXSetVtxAttrFmt(u32,s32,u32,u32,u32);
     extern void GXLoadPosMtxImm(Mtx,s32);
     extern void GXLoadTexMtxImm(Mtx,s32,s32);
-    extern void GXBegin(s32,s32,s16);
     extern u32 dat_80422958;
     extern u32 dat_8042295c;
     extern u32 dat_80422960;
@@ -393,36 +386,17 @@ u8 effKemuriDisp(s32 cameraId, void* effEntry) {
 u8 effKemuri2Disp(s32 cameraId, void* effEntry) {
     typedef f32 Mtx[3][4];
     typedef struct Tex { u32 data[8]; } Tex;
-    extern void* camGetPtr(s32);
     extern void PSMTXTrans(Mtx, f32, f32, f32);
     extern void PSMTXRotRad(Mtx, f32, char);
     extern void PSMTXScale(Mtx, f32, f32, f32);
     extern void PSMTXConcat(Mtx, Mtx, Mtx);
-    extern void effGetTexObj(s32, void*);
-    extern void GXLoadTexObj(void*, s32);
-    extern void GXSetTevColor(s32, void*);
-    extern void GXSetNumChans(u32);
-    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
     extern void GXSetBlendMode(s32, s32, s32, s32);
     extern void GXSetZCompLoc(s32);
     extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
     extern void GXSetZMode(s32, s32, s32);
-    extern void GXSetNumTevStages(u32);
-    extern void GXSetTevOrder(u32, u32, u32, s32);
-    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
-    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
-    extern void GXSetNumTexGens(u32);
-    extern void GXSetTexCoordGen2(s32, s32, s32, u32, u32, s32);
     extern void GXSetCullMode(s32);
     extern void mapSetMaterialFog(void);
-    extern void GXClearVtxDesc(void);
-    extern void GXSetVtxDesc(s32, s32);
-    extern void GXSetVtxAttrFmt(u32, s32, u32, u32, u32);
     extern void GXLoadPosMtxImm(Mtx, s32);
-    extern void GXSetCurrentMtx(u32);
-    extern void GXBegin(s32, s32, s16);
     extern u32 unk_804295b8;
     extern u32 dat_80422968;
     extern u32 unk_804295bc;

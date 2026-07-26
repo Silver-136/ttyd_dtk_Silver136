@@ -1,12 +1,14 @@
 #include "event/evt_hit.h"
+
+extern s32 evtGetValue(void* event, s32 value);
+extern void hitObjFlagOff(s32 name, unsigned short flag);
+extern void hitObjFlagOn(s32 name, unsigned short flag);
+extern void hitGrpFlagOff(s32 name, unsigned short flag);
+extern void hitGrpFlagOn(s32 name, unsigned short flag);
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_hitobj_onoff(void* event) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern void hitObjFlagOff(s32 name, unsigned short flag);
-    extern void hitObjFlagOn(s32 name, unsigned short flag);
-    extern void hitGrpFlagOff(s32 name, unsigned short flag);
-    extern void hitGrpFlagOn(s32 name, unsigned short flag);
     s32* args = *(s32**)((s32)event + 0x18);
     s32 name = evtGetValue(event, args[0]);
     s32 isGroup = evtGetValue(event, args[1]);
@@ -30,10 +32,6 @@ s32 evt_hitobj_onoff(void* event) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_hit_damage_return_set(void* event, s32 isFirstCall) {
@@ -43,7 +41,6 @@ s32 evt_hit_damage_return_set(void* event, s32 isFirstCall) {
         f32 y;
         f32 z;
     } HitDamageReturn;
-    extern s32 evtGetValue(void* event, s32 value);
     extern void* _mapAlloc(void* heap, u32 size);
     extern void* memcpy(void* dst, const void* src, u32 size);
     extern void hitObjGetPos(s32 name, void* pos);
@@ -81,26 +78,10 @@ s32 evt_hit_damage_return_set(void* event, s32 isFirstCall) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
 s32 evt_hit_bind_mapobj(void* event) {
-    extern s32 evtGetValue(void* event, s32 value);
     extern void hitBindMapObj(s32 name, s32 mapObjName);
     s32* args = *(s32**)((s32)event + 0x18);
     s32 name = evtGetValue(event, args[0]);
@@ -114,7 +95,6 @@ s32 evt_hit_bind_mapobj(void* event) {
 #pragma use_lmw_stmw on
 
 s32 evt_hit_bind_update(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
     extern void hitBindUpdate(s32 name);
     s32* args = *(s32**)((s32)event + 0x18);
 
@@ -130,7 +110,6 @@ s32 evt_hit_get_position(void* event, s32 isFirstCall) {
         f32 y;
         f32 z;
     } Vec;
-    extern s32 evtGetValue(void* event, s32 value);
     extern void evtSetFloat(void* event, s32 target, f32 value);
     extern void hitObjGetPos(s32 name, Vec* pos);
     Vec pos;
@@ -149,24 +128,7 @@ s32 evt_hit_get_position(void* event, s32 isFirstCall) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 s32 L_evt_hitobj_flag_onoff(void* event) {
-    extern s32 evtGetValue(void* event, s32 value);
-    extern void hitObjFlagOff(s32 name, unsigned short flag);
-    extern void hitObjFlagOn(s32 name, unsigned short flag);
-    extern void hitGrpFlagOff(s32 name, unsigned short flag);
-    extern void hitGrpFlagOn(s32 name, unsigned short flag);
     s32* args = *(s32**)((s32)event + 0x18);
     s32 isGroup = evtGetValue(event, args[0]);
     s32 on = evtGetValue(event, args[1]);
@@ -193,35 +155,7 @@ s32 L_evt_hitobj_flag_onoff(void* event) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 s32 evt_hitobj_attr_onoff(void* event) {
-    extern s32 evtGetValue(void* event, s32 value);
     extern void hitObjAttrOff(s32 name, s32 attr);
     extern void hitObjAttrOn(s32 name, s32 attr);
     extern void hitGrpAttrOff(s32 name, s32 attr);
@@ -249,10 +183,6 @@ s32 evt_hitobj_attr_onoff(void* event) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
-
 
 void name_callback_sub(char* name, void* callback, s32 followSibling) {
     extern void* hitNameToPtr(char* name);
@@ -367,7 +297,6 @@ void name_callback_sub(char* name, void* callback, s32 followSibling) {
 #pragma use_lmw_stmw off
 
 s32 evt_hitobj_name_callback(void* event, s32 isFirstCall) {
-    extern s32 evtGetValue(void* event, s32 value);
     extern void name_callback_sub(s32 name, s32 callback, s32 value);
     s32* args = *(s32**)((s32)event + 0x18);
     s32 name = evtGetValue(event, args[0]);
