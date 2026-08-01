@@ -61,7 +61,7 @@ void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 
     extern s32 mapPreLoad(void);
     extern void mapLoad(char* map);
     extern void _relUnLoad(void);
-    extern void _unload(char* map, char* bero, s32 unk, s32 param_4, u32 param_5, u32 param_6);
+    extern void _unload(char* map, char* bero, s32 unk);
     extern char* strcpy(char* dst, const char* src);
     extern void* camGetPtr(s32 camId);
     extern void npcClearDeadInfo(void);
@@ -111,7 +111,7 @@ void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 
             if (fadeIsFinish() != 0) {
                 _relUnLoad();
                 gpLocal = gp;
-                _unload((char*)((s32)gpLocal + 0x12C), 0, 0, param_4, param_5, param_6);
+                _unload((char*)((s32)gpLocal + 0x12C), 0, 0);
                 gpLocal = gp;
                 strcpy((char*)((s32)gpLocal + 0x14C), (char*)((s32)gpLocal + 0x12C));
                 statusWinForceOff();
@@ -195,7 +195,7 @@ void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 
         case 6:
             if (fadeIsFinish() != 0) {
                 _relUnLoad();
-                _unload(str_sys_00_802c2c18, 0, 0, param_4, param_5, param_6);
+                _unload(str_sys_00_802c2c18, 0, 0);
                 strcpy((char*)((s32)gp + 0x11C), &zero_804204b8);
                 strcpy((char*)((s32)gp + 0x12C), &zero_804204b8);
                 strcpy((char*)((s32)gp + 0x13C), &zero_804204b8);
