@@ -123,3 +123,5 @@ u8 effHolographyDisp(s32 cameraId, void* effect) {
     for(i=0;i<10;i++){a=(s32)(2.0f*(f32)*(s32*)(w+0x24)*(1.0f-0.1f*(f32)i));if(a>255)a=255;color=((u8)*(s32*)(w+0x18)<<24)|((u8)*(s32*)(w+0x1C)<<16)|((u8)*(s32*)(w+0x20)<<8)|(u8)a;GXSetTevColor(1,&color);GXBegin(0x90,0,6);frame++;}
     return 0;
 }
+
+u8 xlu_data[16] = { 0xFF, 0xFF, 0xDC, 0xBE, 0xA0, 0x78, 0x50, 0x28, 0, 0, 0x28, 0x50, 0x78, 0xA0, 0xBE, 0xDC };

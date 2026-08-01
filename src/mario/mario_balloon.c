@@ -55,8 +55,8 @@ u8 marioBalloonMain(void) {
     extern void* fbatNpcTalkCheck(void);
     extern void effDelete(void* eff);
     extern void* effMarioBalloonEntry(s32 type, void* npc);
-    extern char str_MOBJ_TreasureBox_802f35d0[];
-    extern char str_MOBJ_BigTreasureBox_802f35e4[];
+    extern const char str_MOBJ_TreasureBox_802f35d0[17];
+    extern const char str_MOBJ_BigTreasureBox_802f35e4[20];
 
     void* player;
     void* hitObj;
@@ -284,3 +284,6 @@ s32 chkBalloon(void* hitObj) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+const char str_MOBJ_TreasureBox_802f35d0[] = "MOBJ_TreasureBox";
+const char str_MOBJ_BigTreasureBox_802f35e4[] = "MOBJ_BigTreasureBox";

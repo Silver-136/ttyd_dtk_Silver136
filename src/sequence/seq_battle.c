@@ -5,7 +5,7 @@
 #include "sequence/seq_title.h"
 
 extern void* gp;
-extern s32 debug_battle_flag;
+s32 debug_battle_flag;
 extern void* fbatGetPointer(void);
 extern s32 evtGetValue(void* evt, s32 value);
 extern void psndBGMOn(s32 a, s32 bgm);
@@ -19,6 +19,21 @@ extern void padRumbleOff(s32 pad);
 extern void psndSetFlag(s32 flag);
 extern void* camGetPtr(s32 cameraId);
 extern void camSetMode(s32 cameraId, s32 mode);
+extern const u32 vec3_802c2ab0[3];
+extern const char str_gon_11_802c2abc[7];
+extern const char str_bti_01_802c2ac4[7];
+extern const char str_bti_02_802c2acc[7];
+extern const char str_bti_03_802c2ad4[7];
+extern const char str_bti_04_802c2adc[7];
+extern const char str_battle_audience_audi_802c2ae4[36];
+extern const char str_battle_audience_audi_802c2b08[35];
+extern const u32 dat_804203b0;
+extern const u32 dat_804203b4;
+extern const f32 float_3_804203b8;
+extern const char str_PCTs_PCTs_804203bc[6];
+extern const f32 float_0_804203c4;
+extern const f32 float_400_804203c8;
+extern const f32 float_200_804203cc;
 
 void seq_battleInit(void) {
     extern void psndBGMOff(s32 flags);
@@ -62,25 +77,13 @@ void seq_battleExit(void) {
 u8 seq_battleMain(int param_1) {
     extern void fadeEntry(s32, s32, void*);
     extern s32 getMarioStDvdRoot(void);
-    extern u32 fileAsyncf(s32, s32, char*, s32, char*, ...);
+    extern u32 fileAsyncf(s32, s32, const char*, s32, const char*, ...);
     extern u32 fadeIsFinish(void);
-    extern void bmapLoad(char*, char*);
+    extern void bmapLoad(const char*, char*);
     extern s32 battle_init(void);
     extern u32 battleSeqEndCheck(void);
     extern void psndSetPosDirListener(void*, f32);
     extern void seqSetSeq(s32, s32, s32);
-    extern u32 dat_804203b0;
-    extern u32 dat_804203b4;
-    extern char str_PCTs_PCTs_804203bc[];
-    extern char str_battle_audience_audi_802c2ae4[];
-    extern char str_battle_audience_audi_802c2b08[];
-    extern char str_bti_01_802c2ac4[];
-    extern char str_bti_02_802c2acc[];
-    extern char str_bti_03_802c2ad4[];
-    extern char str_bti_04_802c2adc[];
-    extern const f32 float_0_804203c4;
-    extern const f32 float_400_804203c8;
-    extern const f32 float_200_804203cc;
     u32 color;
     void* fbat;
     void* pouch;
@@ -228,7 +231,7 @@ u8 seq_battleMain(int param_1) {
 }
 
 s32 battle_init(void) {
-    extern void msgLoad(char*, s32);
+    extern void msgLoad(const char*, s32);
     extern void N_battleMapAlloc(void);
     extern void animPoseBattleInit(void);
     extern void npcReleaseFiledNpc(void);
@@ -237,7 +240,6 @@ s32 battle_init(void) {
     extern s32 BattleTransPartyIdToUnitKind(s32);
     extern void BattleInfomationSetBattleSetupInfo(void*, void*);
     extern void BattleInit(void*);
-    extern char str_gon_11_802c2abc[];
     u8* fbat;
     u8* pouch;
     u8* npc;
@@ -356,8 +358,6 @@ void battle_exit(void) {
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
     extern void unk_800db778(s32 a, s32 b, s32 c, s32 d);
     extern void psndENVOn(s32 a, s32 env);
-    extern const u32 vec3_802c2ab0[];
-    extern const f32 float_3_804203b8;
     void* craft;
     f32 mtx[3][4];
 
@@ -404,3 +404,19 @@ void battle_exit(void) {
     }
 }
 
+const u32 vec3_802c2ab0[3] = { 0xC3480000, 0x42C80000, 0x42C80000 };
+const char str_gon_11_802c2abc[7] = "gon_11";
+const char str_bti_01_802c2ac4[7] = "bti_01";
+const char str_bti_02_802c2acc[7] = "bti_02";
+const char str_bti_03_802c2ad4[7] = "bti_03";
+const char str_bti_04_802c2adc[7] = "bti_04";
+const char str_battle_audience_audi_802c2ae4[36] = "battle/audience/audience_normal.tpl";
+const char str_battle_audience_audi_802c2b08[35] = "battle/audience/audience_luigi.tpl";
+
+const u32 dat_804203b0 = 0x000000FF;
+const u32 dat_804203b4 = 0x000000FF;
+const f32 float_3_804203b8 = 3.0f;
+const char str_PCTs_PCTs_804203bc[6] = "%s/%s";
+const f32 float_0_804203c4 = 0.0f;
+const f32 float_400_804203c8 = 400.0f;
+const f32 float_200_804203cc = 200.0f;

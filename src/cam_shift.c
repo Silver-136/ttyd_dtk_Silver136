@@ -1,6 +1,8 @@
 #include "cam_shift.h"
 #include "cam_road.h"
 
+u8 work[56];
+void* wp = work;
 
 void camShiftInit(void) {
     extern void* wp;
@@ -204,3 +206,13 @@ void camShiftReset(void) {
     *(f32*)((s32)wp + 0x2C) = zero;
     *(f32*)((s32)wp + 0x30) = zero;
 }
+
+const f32 float_0_80421fe8 = 0.0f;
+const f32 float_300_80421fec = 300.0f;
+const f32 float_3_80421ff0 = 3.0f;
+const f32 float_0p002_80421ff4 = 0.002f;
+const f32 float_1_80421ff8 = 1.0f;
+const f32 float_25_80421ffc = 25.0f;
+const f32 float_neg25_80422000 = -25.0f;
+const f32 float_0p0001_80422004 = 0.0001f;
+const f32 float_neg0p0001_80422008 = -0.0001f;

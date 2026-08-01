@@ -443,3 +443,4 @@ void effStarStoneDraw(void* camera, void* effect) {
     }
 }
 
+const char str_StarStone_802fe6e0[] = "StarStone";

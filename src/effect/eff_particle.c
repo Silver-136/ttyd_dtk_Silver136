@@ -125,15 +125,15 @@ void* effParticleEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, f32 z, f
     extern f32 angleABf(f32 ax, f32 ay, f32 bx, f32 by);
     extern void PSMTXRotRad(f32 mtx[3][4], s32 axis, f32 radians);
     extern void PSMTXConcat(f32 a[3][4], f32 b[3][4], f32 out[3][4]);
-    extern char str_Particle_80300c20[];
-    extern f32 float_1_80428290;
-    extern f32 float_4_80428278;
-    extern f32 float_0_80428288;
-    extern f32 float_5_80428298;
-    extern f32 float_125_8042829c;
-    extern f32 float_25_804282a0;
-    extern f32 float_1000_804282a4;
-    extern f32 float_deg2rad_80428280;
+    extern const char str_Particle_80300c20[];
+    extern const f32 float_1_80428290;
+    extern const f32 float_4_80428278;
+    extern const f32 float_0_80428288;
+    extern const f32 float_5_80428298;
+    extern const f32 float_125_8042829c;
+    extern const f32 float_25_804282a0;
+    extern const f32 float_1000_804282a4;
+    extern const f32 float_deg2rad_80428280;
 
     void* effect;
     void* work;
@@ -143,7 +143,7 @@ void* effParticleEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, f32 z, f
     u32 i;
 
     effect = effEntry(type);
-    *(char**)((s32)effect + 0x14) = str_Particle_80300c20;
+    *(const char**)((s32)effect + 0x14) = str_Particle_80300c20;
     *(s32*)((s32)effect + 8) = 1;
     work = __memAlloc(3, (*(s32*)((s32)effect + 8) * 0xB0) + ((count + 2) << 5));
     *(void**)((s32)effect + 0xC) = work;
@@ -205,7 +205,7 @@ void effParticleMain(void* effect) {
     extern f32 dispCalcZ(f32* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, f32 z, void* param);
     extern void effParticleDisp(s32 cameraId, void* effect);
-    extern f32 float_neg0p03_80428294;
+    extern const f32 float_neg0p03_80428294;
 
     void* work;
     void* particle;
@@ -289,7 +289,7 @@ void effParticleDisp(s32 cameraId, void* effect) {
     extern void GXLoadPosMtxImm(f32[3][4], s32);
     extern void GXSetCurrentMtx(s32);
     extern void GXBegin(s32, s32, s32);
-    extern f32 float_deg2rad_80428280;
+    extern const f32 float_deg2rad_80428280;
     extern u32 hibana_col[];
     extern void* gpGlobals;
 
@@ -352,3 +352,42 @@ void effParticleDisp(s32 cameraId, void* effect) {
         index = *(s32*)particle;
     }
 }
+
+const f32 vec3_80300c00[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_80300c0c[3] = { 0.0f, 0.0f, 0.0f };
+const f64 double_to_int_mask_80300c18 = 4503599627370496.0;
+const char str_Particle_80300c20[] = "Particle";
+const f64 double_0p5_80300c30 = 0.5;
+const f64 double_3_80300c38 = 3.0;
+const f64 double_0_80300c40 = 0.0;
+const f64 double_to_int_80300c48 = 4503601774854144.0;
+
+u32 hibana_col[] = {
+    0x5F280000, 0x69350008, 0x73420010, 0x7D4F0018,
+    0x885D0020, 0x926A0029, 0x9D780031, 0xA7850039,
+    0xB1920041, 0xBCA0004A, 0xC6AD0052, 0xD0BA005A,
+    0xDBC80062, 0xE5D5006A, 0xEFE20073, 0xFAF0007B,
+    0xFFF00083, 0xFFF1108B, 0xFFF22194, 0xFFF3329C,
+    0xFFF444A4, 0xFFF555AC, 0xFFF666B4, 0xFFF777BD,
+    0xFFF888C5, 0xFFF999CD, 0xFFFAAAD5, 0xFFFBBBDE,
+    0xFFFCCCE6, 0xFFFDDDEE, 0xFFFEEEF6, 0xFFFFFFFF,
+};
+
+s32 seed = 1;
+
+const f32 float_4_80428278 = 4.0f;
+const f32 float_8_8042827c = 8.0f;
+const f32 float_deg2rad_80428280 = 0.017453292f;
+const f32 float_0p5_80428284 = 0.5f;
+const f32 float_0_80428288 = 0.0f;
+const f32 float_2_8042828c = 2.0f;
+const f32 float_1_80428290 = 1.0f;
+const f32 float_neg0p03_80428294 = -0.03f;
+const f32 float_5_80428298 = 5.0f;
+const f32 float_125_8042829c = 125.0f;
+const f32 float_25_804282a0 = 25.0f;
+const f32 float_1000_804282a4 = 1000.0f;
+const u32 dat_804282a8 = 0x2F800000;
+const f32 float_neg2_804282ac = -2.0f;
+const f32 float_0p25_804282b0 = 0.25f;
+const f32 float_2p5_804282b4 = 2.5f;

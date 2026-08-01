@@ -461,3 +461,5 @@ s32 mono_off(void* evt) {
     }
     return 0;
 }
+
+s32 mono_alpha;

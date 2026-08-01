@@ -244,3 +244,7 @@ void aramMgrToMram(void* entry, s32 dest) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+u8 work[0x68];
+void* wp = work;
+u8 gap_07_80417E14_sdata[4] = { 0 };

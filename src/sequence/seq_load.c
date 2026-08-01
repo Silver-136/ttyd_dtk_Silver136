@@ -14,7 +14,8 @@ u8 loadMain(void* param_1);
 u8 continueGame(void);
 u8 loadDraw(void);
 
-extern s32* wp;
+u8 work[76];
+s32* wp = (s32*)work;
 extern void* gp;
 extern void* evtEntryType(void*, s32, s32, s32);
 extern void seqSetSeq(s32, void*, void*);
@@ -599,3 +600,40 @@ u8 continueGame(void) {
             break;
     }
 }
+
+const u32 dat_80422010 = 0x000000FF;
+const char str_jp_80422014[] = "jp";
+const char str_us_80422018[] = "us";
+const char str_ge_8042201c[] = "ge";
+const char str_fr_80422020[] = "fr";
+const char str_sp_80422024[] = "sp";
+const char str_it_80422028[] = "it";
+const u32 dat_8042202c = 0x000000FF;
+const u32 dat_80422030 = 0x000000FF;
+const u32 dat_80422034 = 0x000000FF;
+const u32 dat_80422038 = 0x000000FF;
+const u32 dat_8042203c = 0x000000FF;
+const u32 dat_80422040 = 0x000000FF;
+const u32 dat_80422044 = 0xFFFFFFFF;
+const u32 dat_80422048 = 0xA0A0A0FF;
+const u32 dat_8042204c = 0x80808080;
+const u32 dat_80422050 = 0xFFFFFFFF;
+const u32 dat_80422054 = 0xFFFFFFFF;
+const u32 dat_80422058 = 0xC0C0C0FF;
+const u32 dat_8042205c = 0xFFFFFFFF;
+const u32 dat_80422060 = 0x202020FF;
+const u32 dat_80422064 = 0x000000FF;
+const u32 dat_80422068 = 0x000000FF;
+const u32 dat_8042206c = 0xFFFFFFFF;
+const u32 dat_80422070 = 0xFFFFFFFF;
+const u32 dat_80422074 = 0x00000040;
+const u32 dat_80422078 = 0xFFFFFFFF;
+const u32 dat_8042207c = 0xFFFFFFFF;
+const u32 dat_80422080 = 0xFFFFFFFF;
+const u32 dat_80422084 = 0xFFFFFFFF;
+const u32 dat_80422088 = 0x00000040;
+const u32 dat_8042208c = 0xFFFFFFFF;
+const u32 dat_80422090 = 0xFFFFFFFF;
+const u32 dat_80422094 = 0x00000080;
+const u32 dat_80422098 = 0x00000080;
+const char str_next_8042209c[] = "next";

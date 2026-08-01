@@ -22,7 +22,7 @@ typedef struct EffCoinFukidashiWork {
 extern const Vec vec3_802fddb0;
 extern u8 offset_tbl[];
 extern const char str_CoinFukidashi_802fddc8[];
-extern f32 float_0_804267d8;
+extern const f32 float_0_804267d8;
 extern f32 float_1_804267dc;
 extern f32 float_100_804267f4;
 
@@ -304,3 +304,33 @@ void effCoinFukidashiDisp(s32 cameraId, void* effect) {
     GXSetZMode(1, 3, 0);
     FontDrawStringMtx(trans, text);
 }
+
+u8 offset_tbl[] = {
+    0x28, 0x23, 0x1E, 0x19, 0x14, 0x0F, 0x0A, 0x06,
+    0x02, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02, 0x04,
+    0x06, 0x08, 0x0A, 0x0C, 0x0F, 0x11, 0x14, 0x16,
+    0x19, 0x1C, 0x1E, 0x21, 0x23, 0x25, 0x28, 0x28,
+    0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28,
+    0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28,
+    0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28,
+    0x28, 0x28, 0x28, 0x28, 0x28,
+};
+
+const Vec vec3_802fddb0 = { 0.0f, 0.0f, 0.0f };
+__declspec(section ".rodata") const u8 gap_04_802FDDBC_rodata[4] = { 0 };
+const u64 double_to_int_mask_802fddc0 = 0x4330000000000000ULL;
+const char str_CoinFukidashi_802fddc8[] = "CoinFukidashi";
+
+__declspec(section ".sdata2") u32 dat_804267c8 = 0xFFFFFF00;
+__declspec(section ".sdata2") f32 float_deg2rad_804267cc = 0.017453292f;
+__declspec(section ".sdata2") f32 float_0p4_804267d0 = 0.4f;
+__declspec(section ".sdata2") f32 float_0p5_804267d4 = 0.5f;
+__declspec(section ".sdata2") const f32 float_0_804267d8 = 0.0f;
+__declspec(section ".sdata2") f32 float_1_804267dc = 1.0f;
+__declspec(section ".sdata2") char str_PCTd_804267e0[3] = "%d";
+__declspec(section ".sdata2") const u8 gap_09_804267E3_sdata2 = 0;
+__declspec(section ".sdata2") f32 float_3_804267e4 = 3.0f;
+__declspec(section ".sdata2") f32 float_neg28_804267e8 = -28.0f;
+__declspec(section ".sdata2") f32 float_28_804267ec = 28.0f;
+__declspec(section ".sdata2") f32 float_34_804267f0 = 34.0f;
+__declspec(section ".sdata2") f32 float_100_804267f4 = 100.0f;

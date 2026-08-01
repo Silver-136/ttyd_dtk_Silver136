@@ -12,10 +12,8 @@ typedef struct YoshiVec {
     f32 z;
 } YoshiVec;
 
-extern YoshiVec vec3_802f38e0[];
-extern YoshiVec vec3_802f38ec[];
-extern f32 float_0_80422bc0;
 void mot_yoshi(void) {
+    extern f32 float_0_80422bc0;
     void* mario = marioGetPtr();
 
     if ((*(u32*)((s32)mario + 0xC) & 1) != 0) {
@@ -43,6 +41,8 @@ void mot_yoshi(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void mot_yoshi_post(void) {
+    extern YoshiVec vec3_802f38e0[];
+    extern YoshiVec vec3_802f38ec[];
     void* party = partyGetPtr(marioGetPartyId());
     void* mario = marioGetPtr();
     s32 sfxId = *(s32*)((s32)party + 0x168);
@@ -60,3 +60,13 @@ void mot_yoshi_post(void) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+const YoshiVec vec3_802f38e0[] = {
+    { 0.0f, 0.0f, 0.0f },
+};
+
+const YoshiVec vec3_802f38ec[] = {
+    { 0.0f, 0.0f, 0.0f },
+};
+
+const f32 float_0_80422bc0 = 0.0f;

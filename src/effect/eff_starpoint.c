@@ -264,3 +264,6 @@ void effStarPointDisp(void* camera, void* effect) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+const u32 vec3_802fe528[3] = { 0, 0, 0 };
+const char str_StarPoint_802fe534[] = "StarPoint";

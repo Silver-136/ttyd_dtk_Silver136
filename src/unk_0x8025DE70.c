@@ -33,44 +33,47 @@ void N_systemErrorHandler(u16 error, u8* context, u32 dsisr, u32 dar) {
 
     if (N_getDebugMode() < 0) {
         if (error == 3) {
-            strcpy(message, "OS ERROR: ISI\n");
+            strcpy(message, "---- OS_ERROR_ISI ----\n");
         } else if (error < 3) {
             if (error > 1) {
-                strcpy(message, "OS ERROR: DSI\n");
+                strcpy(message, "---- OS_ERROR_DSI ----\n");
             }
         } else if (error == 6) {
-            strcpy(message, "OS ERROR: PROGRAM\n");
+            strcpy(message, "---- OS_ERROR_PROGRAM ----\n");
         }
 
-        sprintf(line, "Context: 0x%08x\n", context);
+        sprintf(line, "---- Context 0x%08x ----\n", context);
         strcat(message, line);
         for (i = 0; i < 16; i++) {
-            sprintf(line, "r%2d 0x%08x  r%2d 0x%08x\n", i,
+            sprintf(line, "r%-2d  = 0x%08x r%-2d  = 0x%08x\n", i,
                     *(u32*)(context + i * 4), i + 16,
                     *(u32*)(context + 0x40 + i * 4));
             strcat(message, line);
         }
-        sprintf(line, "LR 0x%08x CR 0x%08x\n", *(u32*)(context + 0x84),
+        sprintf(line, "LR   = 0x%08x CR   = 0x%08x\n", *(u32*)(context + 0x84),
                 *(u32*)(context + 0x80));
         strcat(message, line);
-        sprintf(line, "SRR0 0x%08x SRR1 0x%08x\n", *(u32*)(context + 0x198),
+        sprintf(line, "SRR0 = 0x%08x SRR1 = 0x%08x\n", *(u32*)(context + 0x198),
                 *(u32*)(context + 0x19C));
         strcat(message, line);
-        sprintf(line, "DSISR 0x%08x DAR 0x%08x\n", dsisr, dar);
+        sprintf(line, "DSISR= 0x%08x DAR  = 0x%08x\n", dsisr, dar);
         strcat(message, line);
         strcat(message, "\n");
-        sprintf(line, "Address Back Chain LR Save\n");
+        sprintf(line, "Address:     Back Chain   LR Save\n");
         strcat(message, line);
         backchain = *(u32**)(context + 4);
         i = 0;
         while (backchain != 0 && backchain != (u32*)-1 && i++ < 16) {
-            sprintf(line, "0x%08x 0x%08x 0x%08x\n", backchain,
+            sprintf(line, "0x%08x:  0x%08x   0x%08x\n", backchain,
                     backchain[0], backchain[1]);
             strcat(message, line);
             backchain = (u32*)backchain[0];
         }
         strcat(message, "\n");
-        sprintf(line, "Instruction at 0x%08x DSISR 0x%08x\n",
+        sprintf(line,
+                "Instruction at 0x%x\n"
+                "(read from SRR0) attempted to access\n"
+                "invalid address 0x%x (read from DAR)\n",
                 *(u32*)(context + 0x198), dar);
         strcat(message, line);
 
@@ -84,4 +87,3 @@ void N_systemErrorHandler(u16 error, u8* context, u32 dsisr, u32 dar) {
     for (;;) {
     }
 }
-

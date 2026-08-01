@@ -825,3 +825,48 @@ USER_FUNC(evt_door_set_param) {
 s32 evt_door_end_wait(void) {
     return DoorFLAG ? 0 : 2;
 }
+
+const char str_SFX_DOOR_OPEN1_802e3f00[] = "SFX_DOOR_OPEN1";
+const char str_SFX_DOOR_OPEN_WOOD1_802e3f10[] = "SFX_DOOR_OPEN_WOOD1";
+const char str_SFX_DOOR_OPEN_WOOD2_802e3f24[] = "SFX_DOOR_OPEN_WOOD2";
+const char str_SFX_DOOR_OPEN_WOOD3_802e3f38[] = "SFX_DOOR_OPEN_WOOD3";
+const char str_SFX_DOOR_OPEN_IRON1_802e3f4c[] = "SFX_DOOR_OPEN_IRON1";
+const char str_SFX_DOOR_OPEN_IRON2_802e3f60[] = "SFX_DOOR_OPEN_IRON2";
+const char str_SFX_DOOR_OPEN_GRILLE_802e3f74[] = "SFX_DOOR_OPEN_GRILLE1";
+const char str_SFX_DOOR_OPEN_SLIDE1_802e3f8c[] = "SFX_DOOR_OPEN_SLIDE1";
+const char str_SFX_DOOR_OPEN_TURN1_802e3fa4[] = "SFX_DOOR_OPEN_TURN1";
+const char str_SFX_DOOR_OPEN_ELEC1_802e3fb8[] = "SFX_DOOR_OPEN_ELEC1";
+const char str_SFX_DOOR_OPEN_STONE1_802e3fcc[] = "SFX_DOOR_OPEN_STONE1";
+const char str_SFX_DOOR_OPEN_CASTLE_802e3fe4[] = "SFX_DOOR_OPEN_CASTLE1";
+const char str_SFX_DOOR_OPEN_CASTLE_802e3ffc[] = "SFX_DOOR_OPEN_CASTLE2";
+const char str_SFX_DOOR_OPEN_METAL1_802e4014[] = "SFX_DOOR_OPEN_METAL1";
+const char str_SFX_DOOR_SHUT1_802e402c[] = "SFX_DOOR_SHUT1";
+const char str_SFX_DOOR_SHUT_WOOD1_802e403c[] = "SFX_DOOR_SHUT_WOOD1";
+const char str_SFX_DOOR_SHUT_WOOD2_802e4050[] = "SFX_DOOR_SHUT_WOOD2";
+const char str_SFX_DOOR_SHUT_IRON1_802e4064[] = "SFX_DOOR_SHUT_IRON1";
+const char str_SFX_DOOR_SHUT_IRON2_802e4078[] = "SFX_DOOR_SHUT_IRON2";
+const char str_SFX_DOOR_SHUT_GRILLE_802e408c[] = "SFX_DOOR_SHUT_GRILLE1";
+const char str_SFX_DOOR_SHUT_SLIDE1_802e40a4[] = "SFX_DOOR_SHUT_SLIDE1";
+const char str_SFX_DOOR_SHUT_TURN1_802e40bc[] = "SFX_DOOR_SHUT_TURN1";
+const char str_SFX_DOOR_SHUT_ELEC1_802e40d0[] = "SFX_DOOR_SHUT_ELEC1";
+const char str_SFX_DOOR_SHUT_STONE1_802e40e4[] = "SFX_DOOR_SHUT_STONE1";
+const char str_SFX_DOOR_SHUT_CASTLE_802e40fc[] = "SFX_DOOR_SHUT_CASTLE1";
+const char str_SFX_DOOR_SHUT_CASTLE_802e4114[] = "SFX_DOOR_SHUT_CASTLE2";
+const char str_SFX_DOOR_SHUT_METAL1_802e412c[] = "SFX_DOOR_SHUT_METAL1";
+const char str_SFX_DOOR_FALL1_802e4144[] = "SFX_DOOR_FALL1";
+const char str_SFX_HOUSE_OPEN1_802e4154[] = "SFX_HOUSE_OPEN1";
+const f32 vec3_802e4164[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802e4170[3] = { 0.0f, 0.0f, 0.0f };
+const char str_S_mise_open_802e417c[] = "S_mise_open";
+const char str_SFX_HOUSE_DOWN1_802e4188[] = "SFX_HOUSE_DOWN1";
+const char str_S_mise_close_802e4198[] = "S_mise_close";
+const char str_SFX_HOUSE_SHUT1_802e41a8[] = "SFX_HOUSE_SHUT1";
+const f32 vec3_802e41b8[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802e41c4[3] = { 0.0f, 0.0f, 0.0f };
+
+const f32 float_10_80421b58 = 10.0f;
+const f32 float_40_80421b5c = 40.0f;
+const f32 float_30_80421b60 = 30.0f;
+const f32 float_50_80421b64 = 50.0f;
+const f32 float_0_80421b68 = 0.0f;
+const f32 float_0p5_80421b6c = 0.5f;

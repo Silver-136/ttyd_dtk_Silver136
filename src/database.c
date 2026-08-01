@@ -1,6 +1,9 @@
 #include "database.h"
 #include "driver/arcdrv.h"
 
+void* ptr;
+u32 size;
+
 void setupDataLoad(char* name) {
     extern void* ptr;
     extern u32 size;
@@ -207,3 +210,11 @@ void setupDataBase(char* area, char* map) {
         parsePop();
     }
 }
+
+const char zero_804207a8 = 0;
+const char str_dir_804207ac[] = "<dir>";
+const f32 float_0_804207b4 = 0.0f;
+const char str_Npc_804207b8[] = "<Npc>";
+
+const char str_PCTs_m_PCTs_s_802c3b20[] = "%s/m/%s/s";
+const char str_muj_20_802c3b2c[] = "muj_20";

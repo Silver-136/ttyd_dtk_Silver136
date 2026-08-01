@@ -1,6 +1,6 @@
 #include "effect/eff_irekaeru.h"
 
-extern f32 float_1_804281ac;
+extern const f32 float_1_804281ac;
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -8,14 +8,14 @@ void* effIrekaeruEntry(s32 type, f32 x, f32 y, f32 z) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
     extern void effIrekaeruMain(void);
-    extern char str_Irekaeru_80300b50[];
+    extern const char str_Irekaeru_80300b50[];
 
     void* effect;
     void* work;
     f32 one;
 
     effect = effEntry();
-    *(char**)((s32)effect + 0x14) = str_Irekaeru_80300b50;
+    *(const char**)((s32)effect + 0x14) = str_Irekaeru_80300b50;
     *(s32*)((s32)effect + 8) = 1;
     work = __memAlloc(3, *(s32*)((s32)effect + 8) * 0x24);
     *(void**)((s32)effect + 0xC) = work;
@@ -50,9 +50,9 @@ void effIrekaeruMain(void* effect) {
     extern f32 dispCalcZ(f32* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, f32 z, void* param);
     extern void effIrekaeruDisp(s32 cameraId, void* effect);
-    extern char* eff_irekae_str_tbl[];
-    extern char str_Z_1_804281a8[];
-    extern f32 float_0p75_804281b0;
+    extern const char* eff_irekae_str_tbl[];
+    extern const char str_Z_1_804281a8[];
+    extern const f32 float_0p75_804281b0;
 
     void* work;
     f32 pos[3];
@@ -118,10 +118,10 @@ void effIrekaeruDisp(s32 cameraId, void* effect) {
     extern void animPoseSetMaterialEvtColor(s32 poseId, u32* color);
     extern void animPoseMain(s32 poseId);
     extern void animPoseDrawMtx(s32 poseId, f32 mtx[3][4], s32 mode, f32 a, f32 b);
-    extern f32 float_deg2rad_8042819c;
-    extern f32 float_0_804281a0;
-    extern f32 float_2_804281a4;
-    extern u32 dat_80428198;
+    extern const f32 float_deg2rad_8042819c;
+    extern const f32 float_0_804281a0;
+    extern const f32 float_2_804281a4;
+    extern const u32 dat_80428198;
 
     u32 evtColor;
     u32 color;
@@ -159,3 +159,26 @@ void effIrekaeruDisp(s32 cameraId, void* effect) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+const char str_EFF_Irekae_80300b08[] = "EFF_Irekae";
+const char str_EFF_Irekae_D_80300b14[] = "EFF_Irekae_D";
+const char str_EFF_Irekae_F_Sp_80300b24[] = "EFF_Irekae_F_Sp";
+const char str_EFF_Irekae_I_80300b34[] = "EFF_Irekae_I";
+const f32 vec3_80300b44[3] = { 0.0f, 0.0f, 0.0f };
+const char str_Irekaeru_80300b50[] = "Irekaeru";
+
+const char* eff_irekae_str_tbl[] = {
+    str_EFF_Irekae_80300b08,
+    str_EFF_Irekae_80300b08,
+    str_EFF_Irekae_D_80300b14,
+    str_EFF_Irekae_F_Sp_80300b24,
+    str_EFF_Irekae_F_Sp_80300b24,
+    str_EFF_Irekae_I_80300b34,
+};
+
+const u32 dat_80428198 = 0xFFFFFF00;
+const f32 float_deg2rad_8042819c = 0.017453292f;
+const f32 float_0_804281a0 = 0.0f;
+const f32 float_2_804281a4 = 2.0f;
+const char str_Z_1_804281a8[] = "Z_1";
+const f32 float_1_804281ac = 1.0f;
+const f32 float_0p75_804281b0 = 0.75f;

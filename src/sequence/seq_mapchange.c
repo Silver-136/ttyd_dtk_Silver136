@@ -49,36 +49,36 @@ typedef struct SeqMapVecRaw {
 // Data
 
 extern void* mapalloc_base_ptr;
-extern char rel_bss[];
+extern char rel_bss[3856];
 extern void* nanNPCWork;
 extern char* dir_str[8];
 extern s32 bdsw;
 extern s32 dbg_lotteryinfo;
 
-extern s32 zero_8041f508;
+extern const char zero_8041f508[];
 extern char lbl_802BF268[];
 
-extern s32 _next_area;
-extern s32 _next_map;
-extern s32 _next_bero;
+extern char _next_area[32];
+extern char _next_map[32];
+extern char _next_bero[32];
 
 extern char str_gor_01_802bf2d4[];
-extern s32 str_title_8041f538;
-extern s32 str_tou_8041f4f4;
-extern s32 str_tou2_8041f4f8;
-extern s32 str_tst_8041f500;
-extern s32 str_jon_8041f504;
-extern s32 str_dmo_8041f540;
-extern s32 str_dig_8041f544;
-extern s32 str_end_8041f548;
-extern s32 str_sys_8041f54c;
+extern const char str_title_8041f538[];
+extern const char str_tou_8041f4f4[];
+extern const char str_tou2_8041f4f8[];
+extern const char str_tst_8041f500[];
+extern const char str_jon_8041f504[];
+extern const char str_dmo_8041f540[];
+extern const char str_dig_8041f544[];
+extern const char str_end_8041f548[];
+extern const char str_sys_8041f54c[];
 extern s32 key_off;
 extern s32 unk_80429500;
 
-extern u32 dat_8041f4c4;
-extern u32 dat_8041f4c8;
-extern u32 dat_8041f4cc;
-extern u32 dat_8041f4d0;
+extern const u32 dat_8041f4c4;
+extern const u32 dat_8041f4c8;
+extern const u32 dat_8041f4cc;
+extern const u32 dat_8041f4d0;
 
 extern const f32 float_1E05_8041f50c;
 extern const f32 float_3p1416_8041f510;
@@ -939,3 +939,51 @@ void _relUnLoad(void) {
         *(void**)((s32)gp + 0x15C) = NULL;
     }
 }
+
+char rel_bss[3856];
+
+char _next_area[32];
+char _next_map[32];
+char _next_bero[32];
+
+const char str_jp_8041f4a8[] = "jp";
+const char str_us_8041f4ac[] = "us";
+const char str_ge_8041f4b0[] = "ge";
+const char str_fr_8041f4b4[] = "fr";
+const char str_sp_8041f4b8[] = "sp";
+const char str_it_8041f4bc[] = "it";
+const char str_du_8041f4c0[] = "du";
+const u32 dat_8041f4c4 = 0xFF;
+const u32 dat_8041f4c8 = 0xFF;
+const u32 dat_8041f4cc = 0xFF;
+const u32 dat_8041f4d0 = 0xFF;
+const char str_e_8041f4d4[] = "e";
+const char str_ne_8041f4d8[] = "ne";
+const char str_n_8041f4dc[] = "n";
+const char str_nw_8041f4e0[] = "nw";
+const char str_w_8041f4e4[] = "w";
+const char str_sw_8041f4e8[] = "sw";
+const char str_s_8041f4ec[] = "s";
+const char str_se_8041f4f0[] = "se";
+const char str_tou_8041f4f4[] = "tou";
+const char str_tou2_8041f4f8[] = "tou2";
+const char str_tst_8041f500[] = "tst";
+const char str_jon_8041f504[] = "jon";
+const char zero_8041f508[] = "";
+const f32 float_1E05_8041f50c = 100000.0f;
+const f32 float_3p1416_8041f510 = 3.141592f;
+const f32 float_2_8041f514 = 2.0f;
+const f32 float_0p125_8041f518 = 0.125f;
+const f32 float_neg30_8041f51c = -30.0f;
+const f32 float_30_8041f520 = 30.0f;
+const f32 float_0_8041f524 = 0.0f;
+const f32 float_10_8041f528 = 10.0f;
+const f32 float_neg1_8041f52c = -1.0f;
+const f32 float_0p01_8041f530 = 0.01f;
+const f32 float_1_8041f534 = 1.0f;
+const char str_title_8041f538[] = "title";
+const char str_dmo_8041f540[] = "dmo";
+const char str_dig_8041f544[] = "dig";
+const char str_end_8041f548[] = "end";
+const char str_sys_8041f54c[] = "sys";
+const f32 float_5_8041f550 = 5.0f;

@@ -4,7 +4,6 @@
 
 extern void* _battleWorkPointer;
 s32 strcmp(const char*, const char*);
-s32 evtCheckID(s32 id);
 void* evtEntry(void* script, s32 priority, s32 flags);
 s32 evtGetValue(void* event, s32 value);
 s32 evtSetValue(void* event, s32 target, s32 value);

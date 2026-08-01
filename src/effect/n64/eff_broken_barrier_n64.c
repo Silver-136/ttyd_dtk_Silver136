@@ -1,9 +1,14 @@
 #include "effect/n64/eff_broken_barrier_n64.h"
+
+const char str_BrokenBarrierN64_802fac88[] = "BrokenBarrierN64";
+f32 scale_data[] = {
+    0.2f, 0.4f, 0.8f, 1.3f, 1.5f, 1.3f, 0.9f, 0.6f, 0.4f, 0.3f,
+    0.2f, 0.4f, 0.8f, 1.3f, 1.5f, 1.3f, 0.9f, 0.6f, 0.4f, 0.3f,
+};
 void* effBrokenBarrierN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effBrokenBarrierMain(void);
-    extern char str_BrokenBarrierN64_802fac88[];
     extern f32 float_30_80424e80;
     extern f32 float_0p33333_80424e84;
     extern f32 float_60_80424e88;
@@ -15,7 +20,7 @@ void* effBrokenBarrierN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 sca
     f32 step;
 
     entry = effEntry();
-    *(char**)((s32)entry + 0x14) = str_BrokenBarrierN64_802fac88;
+    *(const char**)((s32)entry + 0x14) = str_BrokenBarrierN64_802fac88;
     *(s32*)((s32)entry + 8) = 0x3D;
     work = __memAlloc(3, 0x19BC);
     *(void**)((s32)entry + 0xC) = work;
@@ -71,7 +76,6 @@ void effBrokenBarrierMain(void* effect) {
     extern float dispCalcZ(void*);
     extern void dispEntry(int, int, void*, void*, float);
     extern void effBrokenBarrierDisp(int, void*);
-    extern float scale_data[];
     unsigned char* entry = (unsigned char*)effect;
     unsigned char* work = *(unsigned char**)(entry + 0xC);
     unsigned char* part;

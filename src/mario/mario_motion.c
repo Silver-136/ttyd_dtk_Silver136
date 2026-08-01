@@ -1751,3 +1751,19 @@ void mot_forceReset(void) {
         }
     }
 }
+
+typedef struct VecData {
+    f32 x;
+    f32 y;
+    f32 z;
+} VecData;
+
+const VecData vec3_802c3e38 = { 0.0f, 0.0f, 0.0f };
+const char str_win_03_802c3e44[] = "win_03";
+const char str_win_01_802c3e4c[] = "win_01";
+const char str_tik_01_802c3e54[] = "tik_01";
+const char str_KPA_S_1_802c3e5c[] = "KPA_S_1";
+const char str_KPA2_S_1_802c3e64[] = "KPA2_S_1";
+const char str_MOBJ_RedSwitch_802c3e78[] = "MOBJ_RedSwitch";
+const char str_MOBJ_BlueJumpStand_802c3e88[] = "MOBJ_BlueJumpStand";
+const char str_kpa_03_802c3e9c[] = "kpa_03";

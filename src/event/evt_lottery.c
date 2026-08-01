@@ -240,3 +240,4 @@ s32 evt_lottery_error_check(int param_1) {
     return 2;
 }
 
+s32 dbg_lotteryinfo;

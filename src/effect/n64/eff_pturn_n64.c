@@ -88,15 +88,60 @@ void effPturnDisp(void* camera, void* effect) {
 void pturn_main_dispp(void* camera, void* effect) {
     extern void* camGetPtr(s32); extern void PSMTXTrans(void*, f32, f32, f32); extern void PSMTXRotRad(void*, s32, f32); extern void PSMTXScale(void*, f32, f32, f32); extern void PSMTXConcat(void*, void*, void*);
     extern void effGetTexObjN64(s32, void*); extern void GXLoadTexObj(void*, s32); extern void GXLoadPosMtxImm(void*, s32); extern void GXSetCurrentMtx(s32); extern void GXSetTevColor(s32, void*); extern void GXSetNumChans(s32); extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32); extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevColorIn(s32,s32,s32,s32,s32); extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32); extern void GXLoadTexMtxImm(void*,s32,s32); extern void GXSetCullMode(s32); extern void effSetVtxDescN64(void*); extern void GXBegin(s32,s32,s32); extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32); extern f32 float_deg2rad_80425de0,float_1_80425de4,float_0_80425de8,float_0p03125_80425dec;
+    extern u8 size48x48_tex32x32_pturn_vtx[];
     u8 texObj[0x20]; f32 base[3][4],rot[3][4],mtx[3][4],scale[3][4]; u8* work=*(u8**)((s32)effect+0xC); s32 i; u32 color;
     PSMTXTrans(base,*(f32*)(work+8),*(f32*)(work+0xC),*(f32*)(work+0x10)); PSMTXRotRad(rot,0x79,float_deg2rad_80425de0*-*(f32*)((s32)camGetPtr(4)+0x114)); PSMTXConcat(base,rot,base); PSMTXConcat((void*)((s32)camera+0x11C),base,base);
-    for(i=1;i<*(s32*)((s32)effect+8);i++,work+=0x48){if(*(s32*)(work+0x38)<=0&&*(s32*)work!=10)continue;effGetTexObjN64(0x92,texObj);GXLoadTexObj(texObj,0);PSMTXTrans(mtx,*(f32*)(work+0x50),*(f32*)(work+0x54),*(f32*)(work+0x58));PSMTXScale(scale,*(f32*)(work+0x78),*(f32*)(work+0x78),float_1_80425de4);PSMTXRotRad(rot,0x7A,float_deg2rad_80425de0**(f32*)(work+0x88));PSMTXConcat(mtx,scale,mtx);PSMTXConcat(mtx,rot,mtx);PSMTXTrans(scale,float_0_80425de8,*(f32*)(work+0x68),float_0_80425de8);PSMTXConcat(mtx,scale,mtx);PSMTXConcat(base,mtx,mtx);GXLoadPosMtxImm(mtx,0);GXSetCurrentMtx(0);color=*(u32*)(work+0x6C);GXSetTevColor(1,&color);GXSetNumChans(1);GXSetChanCtrl(4,0,0,1,0,0,2);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,4);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,0,8,2,0);GXSetTevAlphaIn(0,0,1,7,7);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);PSMTXScale(scale,float_0p03125_80425dec,float_0p03125_80425dec,float_0_80425de8);GXLoadTexMtxImm(scale,0x1E,1);GXSetCullMode(0);effSetVtxDescN64((void*)0x803A7770);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3,0);}
+    for(i=1;i<*(s32*)((s32)effect+8);i++,work+=0x48){if(*(s32*)(work+0x38)<=0&&*(s32*)work!=10)continue;effGetTexObjN64(0x92,texObj);GXLoadTexObj(texObj,0);PSMTXTrans(mtx,*(f32*)(work+0x50),*(f32*)(work+0x54),*(f32*)(work+0x58));PSMTXScale(scale,*(f32*)(work+0x78),*(f32*)(work+0x78),float_1_80425de4);PSMTXRotRad(rot,0x7A,float_deg2rad_80425de0**(f32*)(work+0x88));PSMTXConcat(mtx,scale,mtx);PSMTXConcat(mtx,rot,mtx);PSMTXTrans(scale,float_0_80425de8,*(f32*)(work+0x68),float_0_80425de8);PSMTXConcat(mtx,scale,mtx);PSMTXConcat(base,mtx,mtx);GXLoadPosMtxImm(mtx,0);GXSetCurrentMtx(0);color=*(u32*)(work+0x6C);GXSetTevColor(1,&color);GXSetNumChans(1);GXSetChanCtrl(4,0,0,1,0,0,2);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,4);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,0,8,2,0);GXSetTevAlphaIn(0,0,1,7,7);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);PSMTXScale(scale,float_0p03125_80425dec,float_0p03125_80425dec,float_0_80425de8);GXLoadTexMtxImm(scale,0x1E,1);GXSetCullMode(0);effSetVtxDescN64(size48x48_tex32x32_pturn_vtx);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3,0);}
 }
 
 
 void pturn_num_dispp(void* camera, void* effect) {
     extern void PSMTXTrans(void*,f32,f32,f32);extern void PSMTXScale(void*,f32,f32,f32);extern void PSMTXRotRad(void*,s32,f32);extern void PSMTXConcat(void*,void*,void*);extern void GXLoadPosMtxImm(void*,s32);extern void GXSetCurrentMtx(s32);extern void GXSetNumChans(s32);extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);extern void GXSetNumTevStages(s32);extern void GXSetTevOrder(s32,s32,s32,s32);extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevColorIn(s32,s32,s32,s32,s32);extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);extern void GXSetTevColor(s32,void*);extern void effGetTexObjN64(s32,void*);extern void GXLoadTexObj(void*,s32);extern void GXSetNumTexGens(s32);extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);extern void GXLoadTexMtxImm(void*,s32,s32);extern void GXSetCullMode(s32);extern void effSetVtxDescN64(void*);extern void GXBegin(s32,s32,s32);extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);extern f32 float_deg2rad_80425de0,float_1_80425de4,float_0_80425de8,float_0p03125_80425dec,float_0p0026042_80425df0;
+    extern u8 size24x24_tex32x32_pturn_vtx[];
     f32 base[3][4],mtx[3][4],scale[3][4],rot[3][4];u8 texObj[0x20];u8* work=*(u8**)((s32)effect+0xC);s32 i;u32 color;
     PSMTXTrans(base,*(f32*)(work+8),*(f32*)(work+0xC),*(f32*)(work+0x10));PSMTXConcat((void*)((s32)camera+0x11C),base,base);
-    for(i=1;i<*(s32*)((s32)effect+8);i++,work+=0x48){PSMTXTrans(mtx,*(f32*)(work+0x50),*(f32*)(work+0x54),*(f32*)(work+0x58));PSMTXScale(scale,*(f32*)(work+0x78),*(f32*)(work+0x78),float_1_80425de4);PSMTXRotRad(rot,0x7A,float_deg2rad_80425de0**(f32*)(work+0x88));PSMTXConcat(mtx,scale,mtx);PSMTXConcat(mtx,rot,mtx);PSMTXTrans(scale,float_0_80425de8,*(f32*)(work+0x68),float_0_80425de8);PSMTXConcat(mtx,scale,mtx);PSMTXConcat(base,mtx,mtx);GXLoadPosMtxImm(mtx,0);GXSetCurrentMtx(0);if(*(s32*)(work+0x38)>0){GXSetNumChans(1);GXSetChanCtrl(4,0,0,1,0,0,2);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,4);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,0,8,2,0);GXSetTevAlphaIn(0,0,1,7,7);color=*(u32*)(work+0x6C);GXSetTevColor(1,&color);effGetTexObjN64(0x53,texObj);GXLoadTexObj(texObj,0);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);PSMTXScale(scale,float_0p03125_80425dec,float_0p0026042_80425df0,float_0_80425de8);GXLoadTexMtxImm(scale,0x1E,1);GXSetCullMode(0);effSetVtxDescN64((void*)0x803A77A8);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3,0);}}
+    for(i=1;i<*(s32*)((s32)effect+8);i++,work+=0x48){PSMTXTrans(mtx,*(f32*)(work+0x50),*(f32*)(work+0x54),*(f32*)(work+0x58));PSMTXScale(scale,*(f32*)(work+0x78),*(f32*)(work+0x78),float_1_80425de4);PSMTXRotRad(rot,0x7A,float_deg2rad_80425de0**(f32*)(work+0x88));PSMTXConcat(mtx,scale,mtx);PSMTXConcat(mtx,rot,mtx);PSMTXTrans(scale,float_0_80425de8,*(f32*)(work+0x68),float_0_80425de8);PSMTXConcat(mtx,scale,mtx);PSMTXConcat(base,mtx,mtx);GXLoadPosMtxImm(mtx,0);GXSetCurrentMtx(0);if(*(s32*)(work+0x38)>0){GXSetNumChans(1);GXSetChanCtrl(4,0,0,1,0,0,2);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,4);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,0,8,2,0);GXSetTevAlphaIn(0,0,1,7,7);color=*(u32*)(work+0x6C);GXSetTevColor(1,&color);effGetTexObjN64(0x53,texObj);GXLoadTexObj(texObj,0);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);PSMTXScale(scale,float_0p03125_80425dec,float_0p0026042_80425df0,float_0_80425de8);GXLoadTexMtxImm(scale,0x1E,1);GXSetCullMode(0);effSetVtxDescN64(size24x24_tex32x32_pturn_vtx);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3,0);}}
 }
+
+u8 size48x48_tex32x32_pturn_vtx[56] = {
+    0xFF, 0xE8, 0xFF, 0xE8, 0x00, 0x00, 0xFE, 0x00,
+    0x02, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x18,
+    0xFF, 0xE8, 0x00, 0x00, 0x02, 0x00, 0xFE, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x18, 0x00, 0x18,
+    0x00, 0x00, 0x06, 0x00, 0x02, 0x00, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xE8, 0x00, 0x18, 0x00, 0x00,
+    0x02, 0x00, 0x06, 0x00, 0xFF, 0xFF, 0xFF, 0xFF,
+};
+
+u8 size24x24_tex32x32_pturn_vtx[56] = {
+    0xFF, 0xF4, 0xFF, 0xF4, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0xFA, 0xFA, 0x00, 0xFF, 0x00, 0x0C,
+    0xFF, 0xF4, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00,
+    0xFA, 0xFA, 0x00, 0xFF, 0x00, 0x0C, 0x00, 0x0C,
+    0x00, 0x00, 0x04, 0x00, 0x04, 0x00, 0xFA, 0xFA,
+    0x00, 0xFF, 0xFF, 0xF4, 0x00, 0x0C, 0x00, 0x00,
+    0x00, 0x00, 0x04, 0x00, 0xFA, 0xFA, 0x00, 0xFF,
+};
+
+const f32 vec3_802fbd78[3] = { 0.0f, 0.0f, 0.0f };
+const char str_PturnN64_802fbd90[] = "PturnN64";
+
+u8 size16x24_tex32x32_l_pturn_vtx[56] = {
+    0xFF, 0xF0, 0xFF, 0xF4, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0xFA, 0xFA, 0x00, 0xFF, 0x00, 0x04,
+    0xFF, 0xF4, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00,
+    0xFA, 0xFA, 0x00, 0xFF, 0x00, 0x04, 0x00, 0x0C,
+    0x00, 0x00, 0x04, 0x00, 0x04, 0x00, 0xFA, 0xFA,
+    0x00, 0xFF, 0xFF, 0xF0, 0x00, 0x0C, 0x00, 0x00,
+    0x00, 0x00, 0x04, 0x00, 0xFA, 0xFA, 0x00, 0xFF,
+};
+
+u8 size16x24_tex32x32_r_pturn_vtx[56] = {
+    0xFF, 0xFC, 0xFF, 0xF4, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0xFA, 0xFA, 0x00, 0xFF, 0x00, 0x10,
+    0xFF, 0xF4, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00,
+    0xFA, 0xFA, 0x00, 0xFF, 0x00, 0x10, 0x00, 0x0C,
+    0x00, 0x00, 0x04, 0x00, 0x04, 0x00, 0xFA, 0xFA,
+    0x00, 0xFF, 0xFF, 0xFC, 0x00, 0x0C, 0x00, 0x00,
+    0x00, 0x00, 0x04, 0x00, 0xFA, 0xFA, 0x00, 0xFF,
+};

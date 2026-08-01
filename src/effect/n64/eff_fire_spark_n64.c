@@ -195,7 +195,7 @@ void effFireSparkDisp(s32 cameraId, void* effect) {
     extern f32 float_deg2rad_80425214;
     extern f32 float_0p03125_80425218;
     extern f32 float_0p0078125_8042521c;
-    extern char stg__s_v[];
+    extern char size4x4_tex32x32_vtx[];
 
     u8 texObj[0x20];
     f32 mtxA[3][4];
@@ -254,7 +254,7 @@ void effFireSparkDisp(s32 cameraId, void* effect) {
     effGetTexObjN64(0x65, texObj);
     GXLoadTexObj(texObj, 1);
     GXSetCullMode(0);
-    effSetVtxDescN64(stg__s_v);
+    effSetVtxDescN64(size4x4_tex32x32_vtx);
 
     part = work;
     for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
@@ -282,3 +282,18 @@ void effFireSparkDisp(s32 cameraId, void* effect) {
 }
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
+
+f32 scale_data[30] = {
+    0.01f, 0.05f, 0.1f, 0.2f, 0.35f, 0.5f, 0.65f, 0.8f, 0.95f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 0.95f, 0.8f, 0.65f, 0.5f, 0.35f, 0.2f, 0.1f, 0.05f, 0.01f,
+};
+
+char size4x4_tex32x32_vtx[56] = {
+    0xFF, 0xFE, 0xFF, 0xFE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 2, 0xFF, 0xFE, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 2, 0, 2, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xFE, 0, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+};
+
+f32 lbl_8039F9B0[2] = { -1.0f, 1.0f };

@@ -73,9 +73,9 @@ extern void DVDMgrRead(void* dvd, void* dst, u32 size, s32 offset);
 extern void DVDMgrClose(void* dvd);
 extern void* UnpackTexPalette(void* data);
 extern const char str_PCTs_PCTs_8041f61c[6];
-extern u32 dat_8041f5f0;
-extern u32 dat_8041f5f4;
-extern u32 dat_8041f5f8;
+extern const u32 dat_8041f5f0;
+extern const u32 dat_8041f5f4;
+extern const u32 dat_8041f5f8;
 
 void bgInit(void) {
     memset(&work[0], 0, sizeof(BackgroundWork));
@@ -439,3 +439,16 @@ void bgDisp(s32 cameraId) {
     FIFO_F32_BG = READ_F32_BG(float_0_8041f608);
     FIFO_F32_BG = READ_F32_BG(float_1_8041f604);
 }
+
+const u32 dat_8041f5f0 = 0xFFFFFFFF;
+const u32 dat_8041f5f4 = 0x00FF00FF;
+const u32 dat_8041f5f8 = 0xFFFFFFFF;
+const f32 float_608_8041f5fc = 608.0f;
+const f32 float_480_8041f600 = 480.0f;
+const f32 float_1_8041f604 = 1.0f;
+const f32 float_0_8041f608 = 0.0f;
+const f32 float_6p2832_8041f60c = 6.2831855f;
+const f32 float_360_8041f610 = 360.0f;
+const f32 float_0p001_8041f614 = 0.001f;
+const f32 float_4_8041f618 = 4.0f;
+const char str_PCTs_PCTs_8041f61c[6] = "%s/%s";

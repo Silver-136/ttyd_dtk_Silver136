@@ -1,11 +1,24 @@
 #include "mario/mario_pouch.h"
 
 typedef s16 ItemType16;
-extern s32 mpp;
 extern u8 itemDataTable[];
-extern u8 _party_max_hp_table[];
 extern void* gp;
-extern const char str_name_party3_802cc728[];
+
+const char str_name_party3_802cc728[] = "name_party3";
+
+u8 _party_max_hp_table[] = {
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 10, 0, 20, 0, 30, 0, 200,
+    0, 10, 0, 15, 0, 25, 0, 200,
+    0, 20, 0, 30, 0, 40, 0, 200,
+    0, 10, 0, 20, 0, 30, 0, 200,
+    0, 15, 0, 25, 0, 35, 0, 200,
+    0, 15, 0, 20, 0, 30, 0, 200,
+    0, 15, 0, 20, 0, 25, 0, 200,
+};
+
+u32 gap_08_8041EB04_sbss;
+s32 mpp;
 
 s32 pouchCheckItem(s32 item);
 PouchData* pouchGetPtr(void) {
@@ -1815,7 +1828,7 @@ void pouchAddKpaScore(s32 value) {
 }
 
 void pouchGetStarStone(s32 id) {
-    extern f32 float_2_80421878;
+    extern const f32 float_2_80421878;
 
     if (*(u16*)(mpp + 0x8C) == 0) {
         *(f32*)(mpp + 0x84) = float_2_80421878;
@@ -1934,3 +1947,6 @@ char* pouchGetYoshiName(void) {
     }
     return (char*)(mpp + 0x5C0);
 }
+
+const f32 float_2_80421878 = 2.0f;
+const f32 float_0_8042187c = 0.0f;

@@ -18,7 +18,7 @@ extern void* windowGetPointer(s32 id);
 extern s32 marioGetPartyId(void);
 extern void* partyGetPtr(s32 id);
 extern char* strcpy(char* dst, const char* src);
-extern char str_DIRECT_802cc71c[];
+extern const char str_DIRECT_802cc71c[];
 extern char* strcat(char* dst, const char* src);
 extern char* partyMsgStr[11];
 extern u8 msgWindow_Add(char* msg, s32 windowId);
@@ -42,7 +42,7 @@ s32 _evt_msg_print(void* param_1, int param_2, u32 param_3, char* param_4, s32 p
     extern void BtlUnit_GetTalkTogePos(s32 unitIdx, f32* x, f32* y, f32* z);
     extern f32 getScreenPoint(f32* src, f32* dst);
     extern f32 __fabsf(f32 value);
-    extern f32 float_300_80421874;
+    extern const f32 float_300_80421874;
 
     void* evt;
     void* win;
@@ -67,7 +67,7 @@ s32 _evt_msg_print(void* param_1, int param_2, u32 param_3, char* param_4, s32 p
             displayMsg = param_4;
         } else {
             searchMsg = param_4;
-            displayMsg = str_DIRECT_802cc71c;
+            displayMsg = (char*)str_DIRECT_802cc71c;
         }
 
         *(s32*)((s32)evt + 0x178) = msgWindow_Entry(searchMsg, param_5, *(s16*)((s32)evt + 0x190));
@@ -229,7 +229,7 @@ s32 evt_msg_print(void* evtEntry, int param_2) {
 
 
 s32 evt_msg_print_party(void* pEvt, int param_2) {
-    extern char str_party_8042186c[];
+    extern const char str_party_8042186c[];
     static char partyLabel[0x40];
     EvtEntry* evt = pEvt;
     s32 first = param_2;
@@ -246,7 +246,7 @@ s32 evt_msg_print_party(void* pEvt, int param_2) {
     }
     strcpy(partyLabel, msg);
     strcat(partyLabel, partyMsgStr[kind]);
-    return _evt_msg_print(evt, first, 0, partyLabel, 0, str_party_8042186c);
+    return _evt_msg_print(evt, first, 0, partyLabel, 0, (char*)str_party_8042186c);
 }
 
 s32 evt_msg_print_party_add(int param_1, int param_2) {
@@ -487,7 +487,7 @@ s32 evt_msg_select(void* pEvt, int param_2) {
         if (!(flags & 1)) {
             msg = msgSearch(msg);
         } else {
-            displayMsg = str_DIRECT_802cc71c;
+            displayMsg = (char*)str_DIRECT_802cc71c;
         }
         *(s32*)((s32)evt + 0x17C) = msgWindow_Entry(msg, 0, 0x14);
         window = windowGetPointer(*(s32*)((s32)evt + 0x17C));
@@ -577,29 +577,29 @@ void unk_800d1364(char* dst, char* value) {
     extern char* strcat(char*, const char*);
     extern char* strstr(const char*, const char*);
     extern u32 strlen(const char*);
-    extern char str_AN_80421844[];
-    extern char str_AN_ITEM_802cc674[];
-    extern char str_ITEM_802cc66c[];
-    extern char str_an_8042183c[];
-    extern char str_a_80421840[];
-    extern char str_M_8042184c[];
-    extern char str_F_80421850[];
-    extern char str_N_80421800[];
-    extern char str_MPLdie_802cc680[];
-    extern char str_FPLdie_802cc68c[];
-    extern char str_NPLdie_802cc698[];
-    extern char str_Einen_802cc6a4[];
-    extern char str_Ein_ITEM_802cc6ac[];
-    extern char str_ein_ITEM_802cc6b8[];
-    extern char str_Einen_ITEM_802cc6c4[];
-    extern char str_einen_ITEM_802cc6d4[];
-    extern char* PTR_str_Einen_802cc608_804163e8[];
-    extern char* dat_ptrarr_804163b8[];
-    extern char* PTR_str_ein_8042177c_804163d0[];
-    extern char* PTR_str_einen_802cc610_80416400[];
+    extern const char str_AN_80421844[];
+    extern const char str_AN_ITEM_802cc674[];
+    extern const char str_ITEM_802cc66c[];
+    extern const char str_an_8042183c[];
+    extern const char str_a_80421840[];
+    extern const char str_M_8042184c[];
+    extern const char str_F_80421850[];
+    extern const char str_N_80421800[];
+    extern const char str_MPLdie_802cc680[];
+    extern const char str_FPLdie_802cc68c[];
+    extern const char str_NPLdie_802cc698[];
+    extern const char str_Einen_802cc6a4[];
+    extern const char str_Ein_ITEM_802cc6ac[];
+    extern const char str_ein_ITEM_802cc6b8[];
+    extern const char str_Einen_ITEM_802cc6c4[];
+    extern const char str_einen_ITEM_802cc6d4[];
+    extern char* lbl_804163B8[];
+    extern char* lbl_804163D0[];
+    extern char* lbl_804163E8[];
+    extern char* lbl_80416400[];
     char buffer[2572];
     char* marker;
-    char* article;
+    const char* article;
     u32 prefix;
     s32 form;
 
@@ -655,7 +655,7 @@ void unk_800d1364(char* dst, char* value) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
-            strcat(buffer, PTR_str_Einen_802cc608_804163e8[form]);
+            strcat(buffer, lbl_804163E8[form]);
             strcat(buffer, marker + 7);
             strcpy(dst, buffer);
             marker = strstr(dst, str_ITEM_802cc66c);
@@ -670,28 +670,28 @@ void unk_800d1364(char* dst, char* value) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
-            strcat(buffer, dat_ptrarr_804163b8[form]);
+            strcat(buffer, lbl_804163B8[form]);
             strcat(buffer, value);
             strcat(buffer, marker + 10);
         } else if ((marker = strstr(dst, str_ein_ITEM_802cc6b8)) != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
-            strcat(buffer, PTR_str_ein_8042177c_804163d0[form]);
+            strcat(buffer, lbl_804163D0[form]);
             strcat(buffer, value);
             strcat(buffer, marker + 10);
         } else if ((marker = strstr(dst, str_Einen_ITEM_802cc6c4)) != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
-            strcat(buffer, PTR_str_Einen_802cc608_804163e8[form]);
+            strcat(buffer, lbl_804163E8[form]);
             strcat(buffer, value);
             strcat(buffer, marker + 12);
         } else if ((marker = strstr(dst, str_einen_ITEM_802cc6d4)) != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
-            strcat(buffer, PTR_str_einen_802cc610_80416400[form]);
+            strcat(buffer, lbl_80416400[form]);
             strcat(buffer, value);
             strcat(buffer, marker + 12);
         } else if ((marker = strstr(dst, str_ITEM_802cc66c)) != 0) {
@@ -747,10 +747,10 @@ void unk_800d0a4c(char* dst, char* value) {
     extern char* strncpy(char* dst, const char* src, u32 count);
     extern s32 sprintf(char* dst, const char* format, ...);
     extern char unk_803dd6c8[], unk_803de0c8[];
-    extern char str_COIN_802cc618[], str_POINT_802cc628[];
-    extern char str_Punkte_802cc630[], str_moneta_802cc638[], str_monete_802cc640[];
-    extern char str_point_802cc648[], str_OGGETTO_802cc650[];
-    extern char str_oggetto_802cc65c[], str_oggtti_802cc664[];
+    extern const char str_COIN_802cc618[], str_POINT_802cc628[];
+    extern const char str_Punkte_802cc630[], str_moneta_802cc638[], str_monete_802cc640[];
+    extern const char str_point_802cc648[], str_OGGETTO_802cc650[];
+    extern const char str_oggetto_802cc65c[], str_oggtti_802cc664[];
     char number[16];
     char* marker;
     u32 prefix;
@@ -878,3 +878,144 @@ s32 unk_800d0998(EvtEntry* evt) {
     return 2;
 }
 
+const char str_Einen_802cc608[] = "Einen ";
+const char str_einen_802cc610[] = "einen ";
+const char str_COIN_802cc618[] = "<COIN>";
+const char str_M_nzen_802cc620[] = "M\xFC" "nzen";
+const char str_POINT_802cc628[] = "<POINT>";
+const char str_Punkte_802cc630[] = "Punkte";
+const char str_moneta_802cc638[] = "moneta";
+const char str_monete_802cc640[] = "monete";
+const char str_point_802cc648[] = "<point>";
+const char str_OGGETTO_802cc650[] = "<OGGETTO>";
+const char str_oggetto_802cc65c[] = "oggetto";
+const char str_oggtti_802cc664[] = "oggtti";
+const char str_ITEM_802cc66c[] = "<ITEM>";
+const char str_AN_ITEM_802cc674[] = "<AN_ITEM>";
+const char str_MPLdie_802cc680[] = "<MPLdie>";
+const char str_FPLdie_802cc68c[] = "<FPLdie>";
+const char str_NPLdie_802cc698[] = "<NPLdie>";
+const char str_Einen_802cc6a4[] = "<Einen>";
+const char str_Ein_ITEM_802cc6ac[] = "<Ein_ITEM>";
+const char str_ein_ITEM_802cc6b8[] = "<ein_ITEM>";
+const char str_Einen_ITEM_802cc6c4[] = "<Einen_ITEM>";
+const char str_einen_ITEM_802cc6d4[] = "<einen_ITEM>";
+const char str_PLles_802cc6e4[] = "<PLles>";
+const char str_Un_ITEM_802cc6ec[] = "<Un_ITEM>";
+const char str_un_ITEM_802cc6f8[] = "<un_ITEM>";
+const char str_PLunos_802cc704[] = "<PLunos>";
+const char str_PLunas_802cc710[] = "<PLunas>";
+const char str_DIRECT_802cc71c[] = "DIRECT";
+
+const f32 float_0_80421710 = 0.0f;
+const char str_kur_80421714[] = "_kur";
+const char str_nok_8042171c[] = "_nok";
+const char str_bom_80421724[] = "_bom";
+const char str_yos_8042172c[] = "_yos";
+const char str_win_80421734[] = "_win";
+const char str_viv_8042173c[] = "_viv";
+const char str_chu_80421744[] = "_chu";
+const char str_jug_8042174c[] = "_jug";
+const char str_tel_80421754[] = "_tel";
+const char str_lui_8042175c[] = "_lui";
+const char str_Ein_80421764[] = "Ein ";
+const char str_Eine_8042176c[] = "Eine ";
+const char str_Die_80421774[] = "Die ";
+const char str_ein_8042177c[] = "ein ";
+const char str_eine_80421784[] = "eine ";
+const char str_die_8042178c[] = "die ";
+const char str_Un_80421794[] = "Un ";
+const char str_Une_80421798[] = "Une ";
+const char str_Les_804217a0[] = "Les ";
+const char str_un_804217a8[] = "un ";
+const char str_une_804217ac[] = "une ";
+const char str_les_804217b4[] = "les ";
+const char str_Una_804217bc[] = "Una ";
+const char str_Unos_804217c4[] = "Unos ";
+const char str_Unas_804217cc[] = "Unas ";
+const char str_una_804217d4[] = "una ";
+const char str_unos_804217dc[] = "unos ";
+const char str_unas_804217e4[] = "unas ";
+const char str_NUM_804217ec[] = "<NUM>";
+const char str_PCTd_804217f4[] = "%d";
+const char str_S_804217f8[] = "<S>";
+const char str_s_804217fc[] = "s";
+const char str_N_80421800[] = "<N>";
+const char str_X_80421804[] = "<X>";
+const char str_x_80421808[] = "x";
+const char str_M_nze_8042180c[] = "M\xFC" "nze";
+const char str_Punkt_80421814[] = "Punkt";
+const char str_punto_8042181c[] = "punto";
+const char str_punti_80421824[] = "punti";
+const char str_Punto_8042182c[] = "Punto";
+const char str_Punti_80421834[] = "Punti";
+const char str_an_8042183c[] = "an ";
+const char str_a_80421840[] = "a ";
+const char str_AN_80421844[] = "<AN>";
+const char str_M_8042184c[] = "<M>";
+const char str_F_80421850[] = "<F>";
+const char str_un_80421854[] = "<un>";
+const char str_MNA_8042185c[] = "<MNA>";
+const char str_FNA_80421864[] = "<FNA>";
+const char str_party_8042186c[] = "party";
+const f32 float_300_80421874 = 300.0f;
+
+char* partyMsgStr[11] = {
+    (char*)&float_0_80421710,
+    (char*)str_kur_80421714,
+    (char*)str_nok_8042171c,
+    (char*)str_bom_80421724,
+    (char*)str_yos_8042172c,
+    (char*)str_win_80421734,
+    (char*)str_viv_8042173c,
+    (char*)str_chu_80421744,
+    (char*)str_jug_8042174c,
+    (char*)str_tel_80421754,
+    (char*)str_lui_8042175c,
+};
+
+char* battlePartyMsgStr[7] = {
+    (char*)str_kur_80421714,
+    (char*)str_nok_8042171c,
+    (char*)str_yos_8042172c,
+    (char*)str_win_80421734,
+    (char*)str_viv_8042173c,
+    (char*)str_bom_80421724,
+    (char*)str_chu_80421744,
+};
+
+char* lbl_804163B8[6] = {
+    (char*)str_Ein_80421764, (char*)str_Eine_8042176c, (char*)str_Ein_80421764,
+    (char*)str_Die_80421774, (char*)str_Die_80421774, (char*)str_Die_80421774,
+};
+char* lbl_804163D0[6] = {
+    (char*)str_ein_8042177c, (char*)str_eine_80421784, (char*)str_ein_8042177c,
+    (char*)str_die_8042178c, (char*)str_die_8042178c, (char*)str_die_8042178c,
+};
+char* lbl_804163E8[6] = {
+    (char*)str_Einen_802cc608, (char*)str_Eine_8042176c, (char*)str_Ein_80421764,
+    (char*)str_Die_80421774, (char*)str_Die_80421774, (char*)str_Die_80421774,
+};
+char* lbl_80416400[6] = {
+    (char*)str_einen_802cc610, (char*)str_eine_80421784, (char*)str_ein_8042177c,
+    (char*)str_die_8042178c, (char*)str_die_8042178c, (char*)str_die_8042178c,
+};
+char* lbl_80416418[3] = {
+    (char*)str_Un_80421794, (char*)str_Une_80421798, (char*)str_Les_804217a0,
+};
+char* lbl_80416424[3] = {
+    (char*)str_un_804217a8, (char*)str_une_804217ac, (char*)str_les_804217b4,
+};
+char* lbl_80416430[6] = {
+    (char*)str_Un_80421794, (char*)str_Una_804217bc, (char*)&float_0_80421710,
+    (char*)&float_0_80421710, (char*)str_Unos_804217c4, (char*)str_Unas_804217cc,
+};
+char* lbl_80416448[6] = {
+    (char*)str_un_804217a8, (char*)str_una_804217d4, (char*)&float_0_80421710,
+    (char*)&float_0_80421710, (char*)str_unos_804217dc, (char*)str_unas_804217e4,
+};
+
+char unk_803deac8[0xA00];
+char unk_803de0c8[0xA00];
+char unk_803dd6c8[0xA00];
+char unk_803dccc8[0xA00];

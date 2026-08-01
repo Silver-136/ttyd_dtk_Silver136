@@ -1585,6 +1585,30 @@ s32 evt_brother_evt_id(void* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
+extern const char str_ADDR_PCT08X_802bffb8[];
+extern const char str_FLOAT_PCT4_2f_802bffc8[];
+extern const char str_UF_PCT3d_PCTd_802bffdc[];
+extern const char str_UW_PCT3d_PCT08X_802bffec[];
+extern const char str_UW_PCT3d_PCT4_2f_802bfffc[];
+extern const char str_UW_PCT3d_PCTd_802c0010[];
+extern const char str_GSW_PCT3d_PCT08X_802c0020[];
+extern const char str_GSW_PCT3d_PCT4_2f_802c0030[];
+extern const char str_GSW_PCT3d_PCTd_802c0044[];
+extern const char str_LSW_PCT3d_PCT08X_802c0054[];
+extern const char str_LSW_PCT3d_PCT4_2f_802c0064[];
+extern const char str_LSW_PCT3d_PCTd_802c0078[];
+extern const char str_GSWF_PCT3d_PCTd_802c0088[];
+extern const char str_LSWF_PCT3d_PCTd_802c0098[];
+extern const char str_GF_PCT3d_PCTd_802c00a8[];
+extern const char str_LF_PCT3d_PCTd_802c00b8[];
+extern const char str_GW_PCT3d_PCT08X_802c00c8[];
+extern const char str_GW_PCT3d_PCT4_2f_802c00d8[];
+extern const char str_GW_PCT3d_PCTd_802c00ec[];
+extern const char str_LW_PCT3d_PCT08X_802c00fc[];
+extern const char str_LW_PCT3d_PCT4_2f_802c010c[];
+extern const char str_LW_PCT3d_PCTd_802c0120[];
+extern const char str_PCTd_802c0130[];
+
 int evt_debug_put_reg(void* param_1) {
     extern int sprintf(char* str, const char* format, ...);
     extern s32 swByteGet(s32 index);
@@ -1592,63 +1616,11 @@ int evt_debug_put_reg(void* param_1) {
     extern s32 swGet(s32 index);
     extern s32 _swGet(s32 index);
 
-    static char out[256];
-    static const struct {
-        f64 d;
-        char addr[0x10];
-        char flt0[0x14];
-        char uf[0x10];
-        char uwAddr[0x10];
-        char uwFloat[0x14];
-        char uwInt[0x10];
-        char gswAddr[0x10];
-        char gswFloat[0x14];
-        char gswInt[0x10];
-        char lswAddr[0x10];
-        char lswFloat[0x14];
-        char lswInt[0x10];
-        char gswf[0x10];
-        char lswf[0x10];
-        char gf[0x10];
-        char lf[0x10];
-        char gwAddr[0x10];
-        char gwFloat[0x14];
-        char gwInt[0x10];
-        char lwAddr[0x10];
-        char lwFloat[0x14];
-        char lwInt[0x10];
-        char def[0x10];
-    } fmt = {
-        4503601774854144.0,
-        "ADDR:%08X",
-        "FLOAT:%4.2f",
-        "UF:%3d:%d",
-        "UW:%08X",
-        "UW:%3d:%4.2f",
-        "UW:%3d:%d",
-        "GSW:%08X",
-        "GSW:%3d:%4.2f",
-        "GSW:%3d:%d",
-        "LSW:%08X",
-        "LSW:%3d:%4.2f",
-        "LSW:%3d:%d",
-        "GSWF:%3d:%d",
-        "LSWF:%3d:%d",
-        "GF:%3d:%d",
-        "LF:%3d:%d",
-        "GW:%3d:%08X",
-        "GW:%3d:%4.2f",
-        "GW:%3d:%d",
-        "LW:%3d:%08X",
-        "LW:%3d:%4.2f",
-        "LW:%3d:%d",
-        "%d"
-    };
+    static char str[256];
 
     u8* e;
     s32* args;
     u8* work;
-    const char* base;
     s32 value;
     s32 idx;
     s32 fetched;
@@ -1661,103 +1633,126 @@ int evt_debug_put_reg(void* param_1) {
     args = *(s32**)(e + 0x18);
     work = (u8*)evtGetWork();
     value = args[0];
-    base = (const char*)&fmt;
 
     if (value <= -270000000) {
-        sprintf(out, base + 0x8, value);
+        sprintf(str, str_ADDR_PCT08X_802bffb8, value);
     } else if (value <= -220000000) {
         fvalue = (f32)(value + 230000000) * 0.0009765625f;
-        sprintf(out, base + 0x18, (f64)fvalue);
+        sprintf(str, str_FLOAT_PCT4_2f_802bffc8, (f64)fvalue);
     } else if (value <= -200000000) {
         idx = value + 210000000;
         q = idx >> 5;
         bit = idx & 31;
         mask = 1U << bit;
         fetched = *(s32*)(*(s32*)(e + 0x158) + q * 4) & mask;
-        sprintf(out, base + 0x2C, idx, fetched);
+        sprintf(str, str_UF_PCT3d_PCTd_802bffdc, idx, fetched);
     } else if (value <= -180000000) {
         idx = value + 190000000;
         fetched = *(s32*)(*(s32*)(e + 0x154) + idx * 4);
         if (fetched <= -270000000) {
-            sprintf(out, base + 0x3C, fetched);
+            sprintf(str, str_UW_PCT3d_PCT08X_802bffec, fetched);
         } else if (fetched <= -220000000) {
             fvalue = (f32)(fetched + 230000000) * 0.0009765625f;
-            sprintf(out, base + 0x4C, idx, (f64)fvalue);
+            sprintf(str, str_UW_PCT3d_PCT4_2f_802bfffc, idx, (f64)fvalue);
         } else {
-            sprintf(out, base + 0x60, idx, fetched);
+            sprintf(str, str_UW_PCT3d_PCTd_802c0010, idx, fetched);
         }
     } else if (value <= -160000000) {
         idx = value + 170000000;
         fetched = swByteGet(idx);
         if (fetched <= -270000000) {
-            sprintf(out, base + 0x70, fetched);
+            sprintf(str, str_GSW_PCT3d_PCT08X_802c0020, fetched);
         } else if (fetched <= -220000000) {
             fvalue = (f32)(fetched + 230000000) * 0.0009765625f;
-            sprintf(out, base + 0x80, idx, (f64)fvalue);
+            sprintf(str, str_GSW_PCT3d_PCT4_2f_802c0030, idx, (f64)fvalue);
         } else {
-            sprintf(out, base + 0x94, idx, fetched);
+            sprintf(str, str_GSW_PCT3d_PCTd_802c0044, idx, fetched);
         }
     } else if (value <= -140000000) {
         idx = value + 150000000;
         fetched = _swByteGet(idx);
         if (fetched <= -270000000) {
-            sprintf(out, base + 0xA4, fetched);
+            sprintf(str, str_LSW_PCT3d_PCT08X_802c0054, fetched);
         } else if (fetched <= -220000000) {
             fvalue = (f32)(fetched + 230000000) * 0.0009765625f;
-            sprintf(out, base + 0xB4, idx, (f64)fvalue);
+            sprintf(str, str_LSW_PCT3d_PCT4_2f_802c0064, idx, (f64)fvalue);
         } else {
-            sprintf(out, base + 0xC8, idx, fetched);
+            sprintf(str, str_LSW_PCT3d_PCTd_802c0078, idx, fetched);
         }
     } else if (value <= -120000000) {
         idx = value + 130000000;
         fetched = swGet(idx);
-        sprintf(out, base + 0xD8, idx, fetched);
+        sprintf(str, str_GSWF_PCT3d_PCTd_802c0088, idx, fetched);
     } else if (value <= -100000000) {
         idx = value + 110000000;
         fetched = _swGet(idx);
-        sprintf(out, base + 0xE8, idx, fetched);
+        sprintf(str, str_LSWF_PCT3d_PCTd_802c0098, idx, fetched);
     } else if (value <= -80000000) {
         idx = value + 90000000;
         q = idx >> 5;
         bit = idx & 31;
         mask = 1U << bit;
         fetched = *(s32*)(work + 0x84 + q * 4) & mask;
-        sprintf(out, base + 0xF8, idx, fetched);
+        sprintf(str, str_GF_PCT3d_PCTd_802c00a8, idx, fetched);
     } else if (value <= -60000000) {
         idx = value + 70000000;
         q = idx >> 5;
         bit = idx & 31;
         mask = 1U << bit;
         fetched = *(s32*)(e + 0xDC + q * 4) & mask;
-        sprintf(out, base + 0x108, idx, fetched);
+        sprintf(str, str_LF_PCT3d_PCTd_802c00b8, idx, fetched);
     } else if (value <= -40000000) {
         idx = value + 50000000;
         fetched = *(s32*)(work + 0x4 + idx * 4);
         if (fetched <= -270000000) {
-            sprintf(out, base + 0x118, idx, fetched);
+            sprintf(str, str_GW_PCT3d_PCT08X_802c00c8, idx, fetched);
         } else if (fetched <= -220000000) {
             fvalue = (f32)(fetched + 230000000) * 0.0009765625f;
-            sprintf(out, base + 0x128, idx, (f64)fvalue);
+            sprintf(str, str_GW_PCT3d_PCT4_2f_802c00d8, idx, (f64)fvalue);
         } else {
-            sprintf(out, base + 0x13C, idx, fetched);
+            sprintf(str, str_GW_PCT3d_PCTd_802c00ec, idx, fetched);
         }
     } else if (value <= -20000000) {
         idx = value + 30000000;
         fetched = *(s32*)(e + 0x9C + idx * 4);
         if (fetched <= -270000000) {
-            sprintf(out, base + 0x14C, idx, fetched);
+            sprintf(str, str_LW_PCT3d_PCT08X_802c00fc, idx, fetched);
         } else if (fetched <= -220000000) {
             fvalue = (f32)(fetched + 230000000) * 0.0009765625f;
-            sprintf(out, base + 0x15C, idx, (f64)fvalue);
+            sprintf(str, str_LW_PCT3d_PCT4_2f_802c010c, idx, (f64)fvalue);
         } else {
-            sprintf(out, base + 0x170, idx, fetched);
+            sprintf(str, str_LW_PCT3d_PCTd_802c0120, idx, fetched);
         }
     } else {
-        sprintf(out, base + 0x180, value);
+        sprintf(str, str_PCTd_802c0130, value);
     }
 
     return 2;
 }
+
+const char str_ADDR_PCT08X_802bffb8[] = "ADDR:%08X";
+const char str_FLOAT_PCT4_2f_802bffc8[] = "FLOAT:%4.2f";
+const char str_UF_PCT3d_PCTd_802bffdc[] = "UF:%3d:%d";
+const char str_UW_PCT3d_PCT08X_802bffec[] = "UW:%08X";
+const char str_UW_PCT3d_PCT4_2f_802bfffc[] = "UW:%3d:%4.2f";
+const char str_UW_PCT3d_PCTd_802c0010[] = "UW:%3d:%d";
+const char str_GSW_PCT3d_PCT08X_802c0020[] = "GSW:%08X";
+const char str_GSW_PCT3d_PCT4_2f_802c0030[] = "GSW:%3d:%4.2f";
+const char str_GSW_PCT3d_PCTd_802c0044[] = "GSW:%3d:%d";
+const char str_LSW_PCT3d_PCT08X_802c0054[] = "LSW:%08X";
+const char str_LSW_PCT3d_PCT4_2f_802c0064[] = "LSW:%3d:%4.2f";
+const char str_LSW_PCT3d_PCTd_802c0078[] = "LSW:%3d:%d";
+const char str_GSWF_PCT3d_PCTd_802c0088[] = "GSWF:%3d:%d";
+const char str_LSWF_PCT3d_PCTd_802c0098[] = "LSWF:%3d:%d";
+const char str_GF_PCT3d_PCTd_802c00a8[] = "GF:%3d:%d";
+const char str_LF_PCT3d_PCTd_802c00b8[] = "LF:%3d:%d";
+const char str_GW_PCT3d_PCT08X_802c00c8[] = "GW:%3d:%08X";
+const char str_GW_PCT3d_PCT4_2f_802c00d8[] = "GW:%3d:%4.2f";
+const char str_GW_PCT3d_PCTd_802c00ec[] = "GW:%3d:%d";
+const char str_LW_PCT3d_PCT08X_802c00fc[] = "LW:%3d:%08X";
+const char str_LW_PCT3d_PCT4_2f_802c010c[] = "LW:%3d:%4.2f";
+const char str_LW_PCT3d_PCTd_802c0120[] = "LW:%3d:%d";
+const char str_PCTd_802c0130[0xE] = "%d";
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
@@ -2849,4 +2844,3 @@ f32 evtSetFloat(struct EventEntry* entry, s32 index, f32 value) {
     }
     return value;
 }
-

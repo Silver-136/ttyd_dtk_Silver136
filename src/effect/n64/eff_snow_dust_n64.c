@@ -308,3 +308,58 @@ u8 effSnowDustDisp(s32 cameraId, s32 effectAddress) {
     return 0;
 }
 
+__declspec(section ".data") f32 negone_one_374[2] = { -1.0f, 1.0f };
+__declspec(section ".data") f32 gap_05_803ABA50_data[2] = { -1.0f, 1.0f };
+__declspec(section ".data") f32 one_negone_373[2] = { 1.0f, -1.0f };
+__declspec(section ".data") f32 gap_05_803ABA60_data[2] = { 1.0f, -1.0f };
+__declspec(section ".data") f32 negone_one_360[2] = { -1.0f, 1.0f };
+__declspec(section ".data") f32 gap_05_803ABA70_data[2] = { -1.0f, 1.0f };
+__declspec(section ".data") f32 one_negone_359[2] = { 1.0f, -1.0f };
+
+typedef struct EffN64Vertex {
+    s16 x;
+    s16 y;
+    s16 z;
+    s16 s;
+    s16 t;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} EffN64Vertex;
+
+EffN64Vertex size8x8_tex64x64_vtx[4] = {
+    { -4, -4, 0, 0, 0, 0x00, 0x00, 0x00, 0xFF },
+    { 4, -4, 0, 2048, 0, 0x00, 0x00, 0x00, 0xFF },
+    { 4, 4, 0, 2048, 2048, 0x00, 0x00, 0x00, 0xFF },
+    { -4, 4, 0, 0, 2048, 0x00, 0x00, 0x00, 0xFF },
+};
+
+EffN64Vertex size4x4_tex64x64_vtx[4] = {
+    { -2, -2, 0, 0, 0, 0x00, 0x00, 0x00, 0xFF },
+    { 2, -2, 0, 2048, 0, 0x00, 0x00, 0x00, 0xFF },
+    { 2, 2, 0, 2048, 2048, 0x00, 0x00, 0x00, 0xFF },
+    { -2, 2, 0, 0, 2048, 0x00, 0x00, 0x00, 0xFF },
+};
+
+EffN64Vertex size12x12_tex64x64_vtx[4] = {
+    { -6, -6, 0, 0, 0, 0x00, 0x00, 0x00, 0xFF },
+    { 6, -6, 0, 2048, 0, 0x00, 0x00, 0x00, 0xFF },
+    { 6, 6, 0, 2048, 2048, 0x00, 0x00, 0x00, 0xFF },
+    { -6, 6, 0, 0, 2048, 0x00, 0x00, 0x00, 0xFF },
+};
+
+EffN64Vertex size16x16_tex64x64_vtx[4] = {
+    { -8, -8, 0, 0, 0, 0x00, 0x00, 0x00, 0xFF },
+    { 8, -8, 0, 2048, 0, 0x00, 0x00, 0x00, 0xFF },
+    { 8, 8, 0, 2048, 2048, 0x00, 0x00, 0x00, 0xFF },
+    { -8, 8, 0, 0, 2048, 0x00, 0x00, 0x00, 0xFF },
+};
+
+EffN64Vertex size32x32_tex32x32_vtx[5] = {
+    { -32, 0, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0x00 },
+    { 0, -32, 0, 1024, 0, 0xFF, 0xFF, 0xFF, 0x00 },
+    { 32, 0, 0, 1024, 1024, 0xFF, 0xFF, 0xFF, 0x00 },
+    { 0, 32, 0, 0, 1024, 0xFF, 0xFF, 0xFF, 0x00 },
+    { 0, 0, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF },
+};

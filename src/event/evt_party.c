@@ -2,7 +2,7 @@
 #include "event/evt_cmd.h"
 
 extern s32 partyCtrlNo;
-extern f32 float_0_80421d4c;
+extern const f32 float_0_80421d4c;
 
 void* partyGetPtr(s32 id);
 void partyInitCamId(void* party);
@@ -21,7 +21,7 @@ extern s32 bomheiGetStatus(void);
 extern s32 yoshiGetStatus(void);
 extern void movePos(f32* x, f32* z, f32 distance, f32 angle);
 extern s32 hitGetName(void* hit);
-extern f32 float_180_80421d58;
+extern const f32 float_180_80421d58;
 extern void* camGetPtr(s32 id);
 extern void partySetForceMove(void* party, f32 angle, s32 frames, f32 speed);
 
@@ -733,7 +733,7 @@ s32 evt_party_jump_pos(EventEntry* event, s32 first) {
     extern const f32 float_20_80421d48;
     extern const f32 float_0p5_80421d44;
     extern const f32 float_1_80421d40;
-    extern f32 float_0_80421d4c;
+    extern const f32 float_0_80421d4c;
     extern const f32 float_37_80421d50;
 
     s32* args = event->args;
@@ -1699,3 +1699,17 @@ s32 N_evt_party_cloud_lock_animations_on_off(EventEntry* event, s32 first) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+const f32 vec3_802e7bf0[3] = { 0.0f, -1.0f, 0.0f };
+
+const f32 float_1_80421d40 = 1.0f;
+const f32 float_0p5_80421d44 = 0.5f;
+const f32 float_20_80421d48 = 20.0f;
+const f32 float_0_80421d4c = 0.0f;
+const f32 float_37_80421d50 = 37.0f;
+const f32 float_neg1000_80421d54 = -1000.0f;
+const f32 float_180_80421d58 = 180.0f;
+const f32 float_270_80421d5c = 270.0f;
+const f32 float_neg5000_80421d60 = -5000.0f;
+const f32 float_100_80421d64 = 100.0f;
+const f32 float_50_80421d68 = 50.0f;

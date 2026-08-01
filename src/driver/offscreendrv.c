@@ -1,7 +1,8 @@
 #include "driver/offscreendrv.h"
 
 extern void* gp;
-extern s32 work;
+static u32 work_backing[3];
+static s32 work;
 extern void* __memAlloc();
 extern s32 strcmp(const char* a, const char* b);
 
@@ -371,3 +372,5 @@ s32 offscreenGetBoundingBox_BeforeFrame(int param_1, void* param_2, void* param_
     *(u16*)param_5 = *(u16*)((s32)entry + 0x4E);
     return 1;
 }
+
+const f32 float_0_804203a8 = 0.0f;

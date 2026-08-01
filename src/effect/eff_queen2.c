@@ -27,9 +27,9 @@ void GXSetCurrentMtx(s32 id);
 void GXDrawSphere(s32 rows, s32 cols);
 
 extern u32 unk_80429908;
-extern f32 float_10_80428a78;
+extern const f32 float_10_80428a78;
 extern const Vec vec3_80302b58;
-extern char str_Queen2_80302b70[];
+extern const char str_Queen2_80302b70[];
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effQueen2Entry(s32 type, f32 x, f32 y, f32 z) {
@@ -42,7 +42,7 @@ void* effQueen2Entry(s32 type, f32 x, f32 y, f32 z) {
     f32 scale;
     s32 zero;
 
-    *(char**)((s32)entry + 0x14) = str_Queen2_80302b70;
+    *(char**)((s32)entry + 0x14) = (char*)str_Queen2_80302b70;
     *(s32*)((s32)entry + 8) = 1;
     work = __memAlloc(3, (u32)(*(s32*)((s32)entry + 8) * 0x2C));
     *(void**)((s32)entry + 0xC) = work;
@@ -173,7 +173,7 @@ void effQueen2Main(void* entry) {
         }
     }
     dispCalcZ(&pos);
-    dispEntry(4, 2, effQueen2Disp, 0.0f, entry);
+    dispEntry(4, 2, effQueen2Disp, float_0_80428a7c, entry);
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
@@ -219,3 +219,16 @@ void effQueen2Disp(s32 cameraId, void* entry) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+const Vec vec3_80302b58 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_80302b64 = { 0.0f, 0.0f, 0.0f };
+const char str_Queen2_80302b70[] = "Queen2";
+__declspec(section ".rodata") const char gap_04_80302B77_rodata[1] = { 0 };
+
+const f32 float_10_80428a78 = 10.0f;
+const f32 float_0_80428a7c = 0.0f;
+const f32 float_128_80428a80 = 128.0f;
+const f32 float_3_80428a84 = 3.0f;
+const f32 float_1_80428a88 = 1.0f;
+const f32 gap_09_80428A8C_sdata2 = 0.0f;
+
+__declspec(section ".sdata2") u32 unk_80429908;

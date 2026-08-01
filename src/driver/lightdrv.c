@@ -137,7 +137,7 @@ int lightEntry(char* pName, int lightType, void* pos, void* rot, GXColor* color,
     extern s32 sprintf(char* buffer, const char* format, ...);
     extern void strcpy(char* dst, const char* src);
     extern const char str_PCTs_PCT04d_802bf930[];
-    extern Vec decay_tbl[4];
+    extern Vec dat_802bf900[4];
     LightWorkSet* set;
     LightEntry* entry;
     s32 i;
@@ -205,7 +205,7 @@ int lightEntry(char* pName, int lightType, void* pos, void* rot, GXColor* color,
     entry->color = *color;
     entry->spotAngle = (f32)spotAngle;
     entry->attenAngle = (f32)angleAtten;
-    entry->attenDistCoef = decay_tbl[distanceAttenType];
+    entry->attenDistCoef = dat_802bf900[distanceAttenType];
 
     entry->flags |= LIGHT_ENABLED;
     if (lightType == 2) {
@@ -452,3 +452,46 @@ LightEntry* lightNumberToPtr(s32 index) {
     }
     return 0;
 }
+
+const Vec vec3_802bf870 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_802bf87c = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_802bf888 = { 0.0f, 0.0f, 1048576.0f };
+const Vec vec3_802bf894 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_802bf8a0 = { -200.0f, 100.0f, 100.0f };
+const Vec vec3_802bf8ac = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_802bf8b8 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_802bf8c4 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_802bf8d0 = { 0.0f, 0.0f, 1.0f };
+const Vec vec3_802bf8dc = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_802bf8e8 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_802bf8f4 = { 0.0f, 1000.0f, 0.0f };
+const Vec dat_802bf900[4] = {
+    { 1.0f, 0.0f, 0.0f },
+    { 0.0f, 0.1f, 0.0f },
+    { 0.0f, 0.0f, 0.01f },
+    { 0.0f, 0.0f, 0.01f },
+};
+const char str_PCTs_PCT04d_802bf930[] = "%s_%04d";
+const char str_PAPERI_802bf938[] = "PAPERI";
+const char str_PAPERCRAFT_802bf940[] = "PAPERCRAFT";
+const char str_BooBoo_802bf94c[] = "BooBoo";
+
+LightEntry paperLight3D;
+LightEntry paperLight3DImg;
+LightEntry paperCraft;
+LightEntry booLight;
+
+LightWorkSet work[2];
+
+const GXColor dat_8041f8b0 = { 0xFF, 0xFF, 0xFF, 0xFF };
+const GXColor dat_8041f8b4 = { 0xFF, 0xFF, 0xFF, 0xFF };
+const GXColor dat_8041f8b8 = { 0xFF, 0xFF, 0xFF, 0xFF };
+const GXColor dat_8041f8bc = { 0xFF, 0xFF, 0xFF, 0xFF };
+const f32 float_1p0486E06_8041f8c0 = 1048576.0f;
+const char str_PAPER_8041f8c4[] = "PAPER";
+const u16 gap_09_8041F8CA_sdata2 = 0;
+const f32 float_0_8041f8cc = 0.0f;
+const f32 float_1_8041f8d0 = 1.0f;
+const f32 float_3_8041f8d4 = 3.0f;
+const f32 float_10_8041f8d8 = 10.0f;
+const u32 gap_09_8041F8DC_sdata2 = 0;

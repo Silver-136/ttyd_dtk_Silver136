@@ -11,7 +11,7 @@ void* effSheepEntry(s32 type, f32 x, f32 y, f32 z) {
     extern void* gp;
     extern void* _battleWorkPointer;
     extern void effSheepMain(void);
-    extern char str_sheep_80427ec4[];
+    extern const char str_sheep_80427ec4[];
     extern f32 float_0_80427ea8;
     extern f32 float_10_80427eac;
     extern f32 float_1_80427ecc;
@@ -29,7 +29,7 @@ void* effSheepEntry(s32 type, f32 x, f32 y, f32 z) {
         y = BattleGetFloorHeight(_battleWorkPointer, x, y, z);
     }
 
-    *(void**)((s32)effect + 0x14) = str_sheep_80427ec4;
+    *(void**)((s32)effect + 0x14) = (void*)str_sheep_80427ec4;
     *(s32*)((s32)effect + 8) = 0x33;
     work = __memAlloc(3, *(s32*)((s32)effect + 8) * 0x34);
     *(void**)((s32)effect + 0xC) = work;
@@ -102,10 +102,10 @@ void effSheepMain(void* effect) {
     extern f64 dispCalcZ(Vec*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effSheepDisp(s32, void*);
-    extern char str_EFF_hituji_80300340[];
+    extern const char str_EFF_hituji_80300340[];
     extern char str_A_1_80427eb0[];
-    extern char str_SFX_ITEM_SLEEP1_80300320[];
-    extern char str_SFX_ITEM_SLEEP2_80300330[];
+    extern const char str_SFX_ITEM_SLEEP1_80300320[];
+    extern const char str_SFX_ITEM_SLEEP2_80300330[];
 
     u8* entry = effect;
     u8* work = *(u8**)(entry + 0x0C);
@@ -139,8 +139,8 @@ void effSheepMain(void* effect) {
 
         switch (state) {
             case 0:
-                if (animGroupBaseAsync(str_EFF_hituji_80300340, inBattle, 0) != 0) {
-                    *(s32*)(part + 0x20) = animPoseEntry(str_EFF_hituji_80300340, inBattle);
+                if (animGroupBaseAsync((char*)str_EFF_hituji_80300340, inBattle, 0) != 0) {
+                    *(s32*)(part + 0x20) = animPoseEntry((char*)str_EFF_hituji_80300340, inBattle);
                     animPoseSetAnim(*(s32*)(part + 0x20), str_A_1_80427eb0, 1);
                     (*(s32*)(part + 0x24))++;
                 }
@@ -154,9 +154,9 @@ void effSheepMain(void* effect) {
                     pos.y = base.y + *(f32*)(part + 0x08);
                     pos.z = base.z + *(f32*)(part + 0x0C);
                     if (i == 1) {
-                        *(s32*)(part + 0x30) = psndSFXOn_3D(str_SFX_ITEM_SLEEP1_80300320, &pos);
+                        *(s32*)(part + 0x30) = psndSFXOn_3D((char*)str_SFX_ITEM_SLEEP1_80300320, &pos);
                     } else if (i == count - 1) {
-                        *(s32*)(part + 0x30) = psndSFXOn_3D(str_SFX_ITEM_SLEEP2_80300330, &pos);
+                        *(s32*)(part + 0x30) = psndSFXOn_3D((char*)str_SFX_ITEM_SLEEP2_80300330, &pos);
                     }
                     (*(s32*)(part + 0x24))++;
                 }
@@ -258,3 +258,8 @@ void effSheepDisp(s32 cameraId, void* effect) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+const char str_SFX_ITEM_SLEEP1_80300320[] = "SFX_ITEM_SLEEP1";
+const char str_SFX_ITEM_SLEEP2_80300330[] = "SFX_ITEM_SLEEP2";
+const char str_EFF_hituji_80300340[] = "EFF_hituji";
+const char str_sheep_80427ec4[] = "sheep";

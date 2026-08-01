@@ -1,5 +1,12 @@
 #include "effect/n64/eff_butterfly_n64.h"
 
+const char str_ButterflyN64_802facf0[] = "ButterflyN64";
+s8 y_data[] = {
+    -1, -2, -3, -4, -5, -6, -7, -8, -9, -10,
+    -11, -12, -13, -14, -15, -16, -17, -18, -19, -17,
+    -15, -13, -11, -9, -7, -5, -3, -1, 0, 0,
+};
+
 typedef struct EffButterflyWork {
     s32 type;
     s32 timer;
@@ -23,7 +30,6 @@ void* effEntry(void);
 void* __memAlloc(s32 heap, s32 size);
 void effButterflyMain(void* effect);
 
-extern char str_ButterflyN64_802facf0[];
 extern f32 float_50_80424f08;
 extern f32 float_30_80424f0c;
 
@@ -36,7 +42,7 @@ void* effButterflyN64Entry(s32 type, f32 x, f32 y, f32 z) {
     f32 f30;
     f32 f50;
 
-    *(char**)((s32)entry + 0x14) = str_ButterflyN64_802facf0;
+    *(const char**)((s32)entry + 0x14) = str_ButterflyN64_802facf0;
     *(s32*)((s32)entry + 0x8) = 1;
     work = __memAlloc(3, 0x48);
     *(EffButterflyWork**)((s32)entry + 0xC) = work;
@@ -199,7 +205,6 @@ void effButterflyDisp(int cameraId, int effect) {
     extern void effSetVtxDescN64(void*);
     extern void GXBegin(int, int, int);
     extern void tri2(int, int, int, int, int, int, int);
-    extern signed char y_data[];
     extern unsigned char but_02_v[];
     extern unsigned char dat_80424ee0;
     extern float float_0p3_80424ee4;

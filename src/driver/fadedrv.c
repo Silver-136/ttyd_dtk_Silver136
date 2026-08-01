@@ -11,7 +11,7 @@ typedef struct FadeVecRaw {
 extern void UnpackTexPalette(void* palette);
 extern void DVDMgrClose(s32 entry);
 extern const FadeVecRaw vec3_802bf668;
-extern void* wp;
+static void* wp;
 extern void animPoseRelease(s32 poseId);
 extern void animPaperPoseRelease(s32 poseId);
 extern void imgRelease(s32 imageId, void* heap);
@@ -61,8 +61,8 @@ extern void GXSetVtxDesc(s32 attr, s32 type);
 extern void GXSetVtxAttrFmt(s32 vtxFmt, s32 attr, s32 compCnt, s32 compType, s32 frac);
 extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
 
-extern u32 dat_8041f7a0;
-extern u32 dat_8041f7a4;
+extern const u32 dat_8041f7a0;
+extern const u32 dat_8041f7a4;
 
 extern void TEXGetGXTexObjFromPalette(void* palette, void* texObj, s32 index);
 extern void GXLoadTexObj(void* texObj, s32 mapId);
@@ -78,8 +78,8 @@ extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
 extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
 extern void GXSetTevColor(s32 reg, void* color);
 
-extern u32 dat_8041f798;
-extern u32 dat_8041f79c;
+extern const u32 dat_8041f798;
+extern const u32 dat_8041f79c;
 extern u32 unk_80429518;
 
 extern const f32 float_0p04_8041f7b0;
@@ -917,7 +917,7 @@ void disp_texture(void) {
     extern const f32 float_neg0p5_8041f7f8;
     extern const f32 float_deg2rad_8041f7fc;
     extern const f32 float_304_8041f800;
-    extern const u8 i4tex_949;
+    static u8 i4tex = 0xFF;
 
     void* fade;
     void* cam;
@@ -1049,13 +1049,13 @@ void disp_texture(void) {
     } else if (*(s32*)((s32)fade + 0xC) == 13) {
         GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
         GXSetCurrentMtx(0);
-        GXInitTexObj(texObj, &i4tex_949, 1, 1, 0, 0, 0, 0);
+        GXInitTexObj(texObj, &i4tex, 1, 1, 0, 0, 0, 0);
         GXLoadTexObj(texObj, 0);
         PSMTXIdentity((void*)((s32)fade + 0x34));
     } else if (*(s32*)((s32)fade + 0xC) < 16) {
         GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
         GXSetCurrentMtx(0);
-        GXInitTexObj(texObj, &i4tex_949, 1, 1, 0, 0, 0, 0);
+        GXInitTexObj(texObj, &i4tex, 1, 1, 0, 0, 0, 0);
         GXLoadTexObj(texObj, 0);
         PSMTXIdentity((void*)((s32)fade + 0x34));
 
@@ -1637,3 +1637,52 @@ void* fadeGetTpl(void) {
 void fadeSetNarrowFast(void) {
     *(u16*)((s32)wp + 0xB0) |= 8;
 }
+
+const u32 dat_8041f778 = 0xF0F0F0FF;
+const u32 dat_8041f77c = 0xF0F0F0FF;
+const u32 dat_8041f780 = 0xF0F0F0FF;
+const u32 dat_8041f784 = 0xF0F0F0FF;
+const u32 dat_8041f788 = 0xF0F0F0FF;
+const u32 dat_8041f78c = 0xF0F0F0FF;
+const u32 dat_8041f790 = 0xFFFFFFFF;
+const u32 dat_8041f794 = 0xFFFFFFFF;
+const u32 dat_8041f798 = 0x19232AFF;
+const u32 dat_8041f79c = 0xE6E6E6FF;
+const u32 dat_8041f7a0 = 0x000000FF;
+const u32 dat_8041f7a4 = 0xFFFFFFFF;
+const f32 float_0_8041f7a8 = 0.0f;
+const f32 float_1_8041f7ac = 1.0f;
+const f32 float_0p04_8041f7b0 = 0.04f;
+const f32 float_255_8041f7b4 = 255.0f;
+const f32 float_2_8041f7b8 = 2.0f;
+const f32 float_3p1416_8041f7bc = 3.141592f;
+const f32 float_0p5_8041f7c0 = 0.5f;
+const f32 float_180_8041f7c4 = 180.0f;
+const f32 float_24_8041f7c8 = 24.0f;
+const f32 float_64_8041f7cc = 64.0f;
+const f32 float_48_8041f7d0 = 48.0f;
+const f32 float_neg32_8041f7d4 = -32.0f;
+const f32 float_608_8041f7d8 = 608.0f;
+const f32 float_480_8041f7dc = 480.0f;
+const f32 float_32_8041f7e0 = 32.0f;
+const f32 float_neg24_8041f7e4 = -24.0f;
+const f32 float_6p2832_8041f7e8 = 6.2831855f;
+const f32 float_360_8041f7ec = 360.0f;
+const f32 float_neg10000_8041f7f0 = -10000.0f;
+const f32 float_100_8041f7f4 = 100.0f;
+const f32 float_neg0p5_8041f7f8 = -0.5f;
+const f32 float_deg2rad_8041f7fc = 0.017453292f;
+const f32 float_304_8041f800 = 304.0f;
+const f32 float_1000_8041f804 = 1000.0f;
+const f32 float_10_8041f808 = 10.0f;
+const char str_A_2_8041f80c[] = "A_2";
+const f32 float_0p98_8041f810 = 0.98f;
+const f32 float_3_8041f814 = 3.0f;
+const f32 float_1p5_8041f818 = 1.5f;
+const f32 float_999_8041f81c = 999.0f;
+const f32 float_neg100_8041f820 = -100.0f;
+const char str_A_1_8041f824[] = "A_1";
+const char str_Z_1_8041f828[] = "Z_1";
+const char str_Z_2_8041f82c[] = "Z_2";
+const char str_A_3_8041f830[] = "A_3";
+const u32 gap_09_8041F834_sdata2 = 0;

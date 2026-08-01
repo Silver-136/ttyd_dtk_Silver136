@@ -235,3 +235,46 @@ void effSunlightDisp(s32 cameraId, void* effect)  {
     }
     GXSetProjectionv(projection);
 }
+
+typedef struct EffN64Vertex {
+    s16 x;
+    s16 y;
+    s16 z;
+    s16 s;
+    s16 t;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} EffN64Vertex;
+
+EffN64Vertex testsrc__s_v[28] = {
+    {    531,    442,     25,      0,      0, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    707,    284,     25,    512,      0, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   1610,   1287,     25,    512,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   1434,   1445,     25,      0,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   1351,   -188,     25,      0,      0, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   1508,   -248,     25,    512,      0, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   1750,    382,     25,    512,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   1593,    442,     25,      0,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   -676,    699,      2,      0,      0, 0xFF, 0xFF, 0xFF, 0x7E },
+    {   -490,    377,      2,    512,      0, 0xFF, 0xFF, 0xFF, 0x7E },
+    {   1264,   1390,      2,    512,   2048, 0xFF, 0xFF, 0xFF, 0x7E },
+    {   1078,   1711,      2,      0,   2048, 0xFF, 0xFF, 0xFF, 0x7E },
+    {   -991,    848,     27,      0,      0, 0xFF, 0xFF, 0xFF, 0xE5 },
+    {   -949,    755,     27,    512,      0, 0xFF, 0xFF, 0xFF, 0xE5 },
+    {    583,   1437,     27,    512,   2048, 0xFF, 0xFF, 0xFF, 0xE5 },
+    {    542,   1530,     27,      0,   2048, 0xFF, 0xFF, 0xFF, 0xE5 },
+    {    571,   -206,     25,      0,      0, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    711,   -301,     25,    512,      0, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   1768,   1266,     25,    512,    745, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   1628,   1361,     25,      0,    745, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   -508,    202,     25,      0,      0, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   -407,     68,     25,    512,      0, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   1462,   1476,     25,    512,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   1361,   1611,     25,      0,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    483,   -973,      2,   -559,     68, 0xFF, 0xFF, 0xFF, 0x7E },
+    {    811,  -1148,      2,    -47,     68, 0xFF, 0xFF, 0xFF, 0x7E },
+    {   2078,   1236,      2,    -47,   2116, 0xFF, 0xFF, 0xFF, 0x7E },
+    {   1750,   1411,      2,   -559,   2116, 0xFF, 0xFF, 0xFF, 0x7E },
+};

@@ -179,3 +179,22 @@ s32 sac_ac_help_off(void) {
     BattleAcHelpSetDispType(0);
     return 2;
 }
+
+const char str_SFX_VOICE_MARIO_HAPP_80300e40[] = "SFX_VOICE_MARIO_HAPPY1";
+const char str_sac_treasure_80300e58[] = "sac_treasure";
+const char str_treasure_map_80300e68[] = "treasure_map";
+const char str_sac_itemget_80300e78[] = "sac_itemget";
+const char str_itemget_80300e84[] = "itemget";
+const char str_stardust_80300e8c[] = "stardust";
+
+/*
+ * Uninitialized small-data objects emit in reverse declaration order under
+ * this unit's compiler settings.
+ */
+s32 count;
+s32 count2;
+s32 handBeatEnable;
+s32 cheerEnable;
+u8 volPer;
+
+const char str_M_P_2_804283c8[] = "M_P_2";

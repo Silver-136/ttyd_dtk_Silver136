@@ -366,3 +366,14 @@ void mot_stay_post(void) {
         }
     }
 }
+
+const char str_M_S_1R_802c4398[] = "M_S_1R";
+const char str_M_N_5A_802c43a0[] = "M_N_5A";
+
+const char str_M_S_1_80421008[] = "M_S_1";
+const f32 float_0_80421010 = 0.0f;
+const char str_M_I_S_80421014[] = "M_I_S";
+const char str_M_S_3_8042101c[] = "M_S_3";
+const char str_M_I_Y_80421024[] = "M_I_Y";
+const char str_M_U_2_8042102c[] = "M_U_2";
+const char str_M_I_5_80421034[] = "M_I_5";

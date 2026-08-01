@@ -9,11 +9,15 @@ u8 shadowCharShadowDisp_Projection(void);
 void depthShadowEnd(s32 param_1, u32* param_2);
 void projShadowEnd(s32 param_1, u32* param_2);
 
-void* cswp;
-void* pswp;
-void* dswp;
-u8 rampTex16[0x20];
-u8 rampTex8[0x20];
+extern u8 char_shadow_work[];
+extern u8 proj_shadow_work[];
+extern u8 depth_shadow_work[];
+extern u8 rampTex16[32];
+extern u8 rampTex8[32];
+
+void* cswp = char_shadow_work;
+void* pswp = proj_shadow_work;
+void* dswp = depth_shadow_work;
 
 extern u8 shadowConfig[];
 extern void* smartTexObj(void*, s32);
@@ -1276,3 +1280,49 @@ void depthShadowEnd(s32 param_1, u32* param_2) {
         param_2[0] |= 1;
     }
 }
+
+const f32 vec3_802bfd10[3] = { 0.0f, -1.0f, 0.0f };
+const f32 vec3_802bfd1c[3] = { 0.0f, 1000.0f, 0.0f };
+const f32 vec3_802bfd28[3] = { 0.0f, 0.0f, -1.0f };
+const f32 vec3_802bfd34[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802bfd40[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802bfd4c[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802bfd58[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802bfd64[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802bfd70[3] = { 0.0f, 0.0f, 0.0f };
+const char str_result_scene_8bit_de_802bfd7c[] = "result scene (8bit depth)";
+const char str_actual_depth_from_th_802bfd98[] = "actual depth from the light (8bit depth)";
+const char str_projected_shadow_dep_802bfdc4[] = "projected shadow depth map (8bit depth)";
+const char str_result_scene_16bit_d_802bfdec[] = "result scene (16bit depth)";
+const char str_actual_depth_from_th_802bfe08[] = "actual depth from the light (16bit depth)";
+const char str_projected_shadow_dep_802bfe34[] = "projected shadow depth map (16bit depth)";
+
+u8 char_shadow_work[284];
+u8 proj_shadow_work[260];
+u8 depth_shadow_work[260];
+
+u8 rampTex8[32];
+u8 rampTex16[32];
+f32 tmp_vp[6];
+s32 tmp_sci[4];
+f32 tmp_view[3][4];
+
+u16 ShadowSizeTbl[4] = { 400, 256, 128, 64 };
+u32 gap_07_804150F4_sdata[3] = { 0, 0, 0 };
+u8 cube_dl_bottom[32] = {
+    0x80, 0x00, 0x04, 0x38, 0x01, 0x39, 0x01, 0x3A,
+    0x01, 0x3B, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+u8 cube_dl_side[32] = {
+    0x98, 0x00, 0x0A, 0x35, 0x02, 0x38, 0x01, 0x36,
+    0x02, 0x39, 0x01, 0x37, 0x02, 0x3A, 0x01, 0x38,
+    0x02, 0x3B, 0x01, 0x39, 0x02, 0x38, 0x01, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+u32 color_tbl[3] = { 0x6E, 0, 0x16 };
+u32 gap_07_8041514C_sdata[5] = { 0, 0, 0, 0, 0 };
+u32 color_tbl_nodecay[3] = { 0x6E, 0x6E, 0x6E };
+u32 gap_07_8041516C_sdata[5] = { 0, 0, 0, 0, 0 };
+u32 color_tbl_cube[3] = { 0x8E, 0, 0x16 };

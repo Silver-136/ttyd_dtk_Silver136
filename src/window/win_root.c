@@ -2324,3 +2324,4 @@ void unk_80152bdc(s32 cameraId, void* win) {
     }
 }
 
+char _tmp_1042[64];

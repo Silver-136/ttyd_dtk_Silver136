@@ -216,3 +216,6 @@ void effSnowmanMain(void* effect) {
 void effSnowmanDisp(void) {
     ;
 }
+
+const f32 vec3_802fbfb0[3] = { 0.0f, 0.0f, 0.0f };
+const char str_SnowmanN64_802fbfd0[] = "SnowmanN64";

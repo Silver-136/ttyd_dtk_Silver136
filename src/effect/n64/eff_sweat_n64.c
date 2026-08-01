@@ -182,3 +182,6 @@ void effSweatDisp(s32 cameraId, void* effect) {
     }
 }
 
+const f32 vec3_802fc138[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802fc144[3] = { 0.0f, 0.0f, 0.0f };
+const char str_SweatN64_802fc150[] = "SweatN64";

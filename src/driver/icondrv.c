@@ -1,5 +1,6 @@
 #include "driver/icondrv.h"
 #define ICON_SDA_U16_TABLE(base, index) (*(u16*)((s32)&(base) + ((index) * 2)))
+
 extern s32 work;
 extern void* gp;
 
@@ -29,8 +30,6 @@ extern void DVDMgrReadAsync(void* entry, void* dst, s32 size, s32 offset, void* 
 extern void _callback_tpl(void* unused, void* fileInfo);
 extern void _callback_bin(void* unused, void* fileInfo);
 
-extern const char str_PCTs_icon_tpl_802bf858[];
-extern const char str_PCTs_icon_bin_802bf864[];
 extern const f32 float_deg2rad_8041f8a0;
 
 typedef struct IconVecRaw {
@@ -45,8 +44,8 @@ extern const IconVecRaw vec3_802bf818;
 
 extern const f32 float_1_8041f88c;
 
-extern u16 unk_80415040;
-extern u16 unk_8041504c;
+u16 unk_80415040[6] = { 0x49, 0x4A, 0x4B, 0x4C, 0x49, 0x4D };
+u16 unk_8041504c[6] = { 0x67, 0x68, 0x69, 0x6A, 0x67, 0x6B };
 
 extern void* icon_bin;
 extern void* icon_tpl;
@@ -97,7 +96,7 @@ void iconInit(void) {
     icon_tpl_ok = 0;
     icon_bin_ok = 0;
 
-    sprintf(path, str_PCTs_icon_tpl_802bf858, getMarioStDvdRoot());
+    sprintf(path, "%s/icon.tpl", getMarioStDvdRoot());
     entry = DVDMgrOpen(path, 2, 0);
 
     if (entry != NULL) {
@@ -107,7 +106,7 @@ void iconInit(void) {
         DVDMgrReadAsync(entry, icon_tpl, size, 0, _callback_tpl);
     }
 
-    sprintf(path, str_PCTs_icon_bin_802bf864, getMarioStDvdRoot());
+    sprintf(path, "%s/icon.bin", getMarioStDvdRoot());
     entry = DVDMgrOpen(path, 2, 0);
 
     if (entry != NULL) {
@@ -927,7 +926,7 @@ void iconGetTexObj(u32* texObj, u16 iconId) {
     extern void GXInitTexObj(void* obj, void* image_ptr, u16 width, u16 height, s32 format, s32 wrap_s, s32 wrap_t, u8 mipmap);
     extern void TEXGetGXTexObjFromPalette(void* tpl, void* obj, u32 id);
     extern void GXInitTexObjLOD(void* obj, s32 minFilt, s32 magFilt, f32 minLod, f32 maxLod, f32 lodBias, u8 biasClamp, u8 doEdgeLod, s32 maxAniso);
-    extern u8 dummy_651;
+    extern u8 dummy_651[1];
     extern f32 float_0_8041f87c;
     void* entry;
     void* bin;
@@ -1105,7 +1104,7 @@ void iconGX(void* mtx, void* icon) {
     extern void GXBegin(s32, s32, s32);
     extern u32 dat_8041f868;
     extern u32 dat_8041f86c;
-    extern u8 dummy_672;
+    extern u8 dummy_672[1];
     u16* data;
     Mtx scale;
     Mtx model;
@@ -1658,3 +1657,46 @@ u32 iconNumberDispGx3D(void* mtx, s32 number, s32 small, u32* color) {
 
     return x;
 }
+
+const IconVecRaw vec3_802bf818 = { 0, 0, 0 };
+const IconVecRaw vec3_802bf824 = { 0, 0, 0 };
+const IconVecRaw vec3_802bf830 = { 0, 0, 0 };
+const IconVecRaw vec3_802bf83c = { 0, 0, 0 };
+
+s32 work_tail[3];
+s32 work;
+s32 icon_bin_ok;
+s32 icon_tpl_ok;
+void* icon_bin;
+void* icon_tpl;
+
+u8 gap_07_80415058_sdata[8] = { 0 };
+u8 dummy_651[1] = { 0 };
+u8 gap_07_80415061_sdata[31] = { 0 };
+u8 dummy_672[1] = { 0 };
+u8 gap_07_80415081_sdata[3] = { 0 };
+u16 suuji[10] = { 0x1E1, 0x1E3, 0x1E5, 0x1E7, 0x1E9, 0x1EB, 0x1ED, 0x1EF, 0x1F1, 0x1F3 };
+u16 suuji_s[10] = { 0x1E2, 0x1E4, 0x1E6, 0x1E8, 0x1EA, 0x1EC, 0x1EE, 0x1F0, 0x1F2, 0x1F4 };
+
+const u32 dat_8041f858 = 0xFFFFFFFF;
+const u32 dat_8041f85c = 0xFFFFFFFF;
+const u32 dat_8041f860 = 0xFFFFFF00;
+const u32 dat_8041f864 = 0xFFFFFFFF;
+const u32 dat_8041f868 = 0xFFFFFFFF;
+const u32 dat_8041f86c = 0x555555FF;
+const u32 dat_8041f870 = 0xFFFFFFFF;
+const f32 float_10_8041f874 = 10.0f;
+const f32 float_8_8041f878 = 8.0f;
+const f32 float_0_8041f87c = 0.0f;
+const f32 float_20_8041f880 = 20.0f;
+const f32 float_16_8041f884 = 16.0f;
+const f32 float_neg1_8041f888 = -1.0f;
+const f32 float_1_8041f88c = 1.0f;
+const f32 float_0p5_8041f890 = 0.5f;
+const f32 float_0p6_8041f894 = 0.6f;
+const f32 float_0p8_8041f898 = 0.8f;
+const f32 float_0p9_8041f89c = 0.9f;
+const f32 float_deg2rad_8041f8a0 = 0.017453292f;
+const char str_aji_8041f8a4[] = "aji";
+const f32 float_200_8041f8a8 = 200.0f;
+const u32 gap_09_8041F8AC_sdata2 = 0;

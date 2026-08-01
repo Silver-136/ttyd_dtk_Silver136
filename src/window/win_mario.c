@@ -545,3 +545,5 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     winFontSetR(&pos, &scale, &white, "%s", winZenkakuStr(*(s16*)(pouch + 0x9C)));
     (void)cameraId;
 }
+
+char unk_803e5f78[0x100];

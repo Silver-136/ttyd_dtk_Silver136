@@ -4,7 +4,6 @@ extern void partyChgRunMode(void*, s32);
 extern void psndSFXOff(s32);
 extern s32 marioGetPartyId(void);
 extern void* partyGetPtr(s32 partyId);
-extern char str_M_S_1_804213d0;
 extern void partyGetAppearPos(void*, void*);
 extern u32 hitGetAttr(void* hit);
 extern void* mobjHitObjPtrToPtr(void* hit);
@@ -130,6 +129,7 @@ u8 bomhei_use_cancel(void) {
 u8 bomhei_use_cancel2(void) {
     extern void marioChgPose(char*);
     extern void __memFree(s32, void*);
+    extern char str_M_S_1_804213d0;
     void* party = partyGetPtr(marioGetPartyId());
     void* player;
 
@@ -165,6 +165,7 @@ u8 bomhei_use_post(void* party) {
     extern void __memFree(s32, void*);
     extern char str_M_W_1_804213c0;
     extern char str_M_R_1_804213c8;
+    extern char str_M_S_1_804213d0;
     extern char str_M_J_1B_802cb468[];
     void* player = *(void**)((s32)party + 0x160);
     char* pose;
@@ -991,3 +992,96 @@ void* check_front(void* pParty) {
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
+const u32 vec3_802cb398[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb3a4[] = { 0x00000000, 0xBF800000, 0x00000000 };
+const u32 dat_802cb3b0[] = {
+    0x00000000, 0x0000002D, 0xFFFFFFD3, 0x0000005A,
+    0xFFFFFFA6, 0x00000087, 0xFFFFFF79, 0x000000B4,
+};
+const u32 vec3_802cb3d0[] = { 0x00000000, 0xBF800000, 0x00000000 };
+const char str_MOBJ_BombRock_802cb3dc[] = "MOBJ_BombRock";
+const char str_muj_05_802cb400[] = "muj_05";
+const char str_A_dokuro_bero_802cb408[] = "A_dokuro_bero";
+const char str_MOBJ_RedJumpStand_802cb418[] = "MOBJ_RedJumpStand";
+const char str_MOBJ_RedJumpStand2_802cb42c[] = "MOBJ_RedJumpStand2";
+const char str_MOBJ_BlueJumpStand_802cb440[] = "MOBJ_BlueJumpStand";
+const char str_MOBJ_BlueJumpStand2_802cb454[] = "MOBJ_BlueJumpStand2";
+const char str_M_J_1B_802cb468[] = "M_J_1B";
+
+const f32 float_0p8_804212d8 = 0.8f;
+const f32 float_0_804212dc = 0.0f;
+const f32 float_100_804212e0 = 100.0f;
+const f32 float_60_804212e4 = 60.0f;
+const f32 float_120_804212e8 = 120.0f;
+const f32 float_240_804212ec = 240.0f;
+const f32 float_300_804212f0 = 300.0f;
+const f32 float_50_804212f4 = 50.0f;
+const f32 float_30_804212f8 = 30.0f;
+const f32 float_2_804212fc = 2.0f;
+const f32 float_6_80421300 = 6.0f;
+const f32 float_4_80421304 = 4.0f;
+const f32 float_0p5_80421308 = 0.5f;
+const f32 float_neg0p5_8042130c = -0.5f;
+const f32 float_1000_80421310 = 1000.0f;
+const f32 float_180_80421314 = 180.0f;
+const char str_M_U_2_80421318[] = "M_U_2";
+const char str_M_W_7_80421320[] = "M_W_7";
+const char str_M_C_1_80421328[] = "M_C_1";
+const char str_R_1_80421330[] = "R_1";
+const f32 float_neg6_80421334 = -6.0f;
+const f32 float_18_80421338 = 18.0f;
+const f32 float_7p5_8042133c = 7.5f;
+const f32 float_0p83333_80421340 = 0.8333333f;
+const char str_J_1A_80421344[] = "J_1A";
+const char str_L_1_8042134c[] = "L_1";
+const char str_L_2_80421350[] = "L_2";
+const f32 float_36_80421354 = 36.0f;
+const f32 float_0p25_80421358 = 0.25f;
+const f32 float_38_8042135c = 38.0f;
+const f32 float_20_80421360 = 20.0f;
+const f32 float_3p5556_80421364 = 3.5555556f;
+const f32 float_0p35556_80421368 = 0.35555556f;
+const f32 float_10p5_8042136c = 10.5f;
+const f32 float_neg0p33333_80421370 = -0.33333334f;
+const char str_S_1_80421374[] = "S_1";
+const char str_W_1_80421378[] = "W_1";
+const char str_W_2_8042137c[] = "W_2";
+const f32 float_0p6_80421380 = 0.6f;
+const f32 float_0p1_80421384 = 0.1f;
+const f32 float_neg1_80421388 = -1.0f;
+const char str_A_3_8042138c[] = "A_3";
+const f32 float_8_80421390 = 8.0f;
+const f32 float_neg300_80421394 = -300.0f;
+const f32 float_200_80421398 = 200.0f;
+const char str_J_1B_8042139c[] = "J_1B";
+const f32 float_37_804213a4 = 37.0f;
+const f32 float_11_804213a8 = 11.0f;
+const f32 float_25_804213ac = 25.0f;
+const f32 float_neg2000_804213b0 = -2000.0f;
+const char str_F_1_804213b4[] = "F_1";
+const f32 float_638_804213b8 = 638.0f;
+const f32 float_12p5_804213bc = 12.5f;
+const char str_M_W_1_804213c0[] = "M_W_1";
+const char str_M_R_1_804213c8[] = "M_R_1";
+const char str_M_S_1_804213d0[] = "M_S_1";
+const f32 float_28_804213d8 = 28.0f;
+
+s32 m_w_7_sync[] = {
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+    9, 9, 8, 7, 5, 3, 1, 0, 0, 0,
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+    10, 10, 10, 9, 8, 6, 4, 3, 2, 1,
+    0, 0, 0, 0, 0,
+};
+
+extern u8 evt_cam_shake(s32 evt, s32 init);
+
+s32 longQuake_evt[] = {
+    0x0005005B, (s32)evt_cam_shake, 0x00000004, 0xF24A7A8F,
+    0xF24A7A8F, 0x00000258, 0x00000002, 0x00000001,
+};
+
+s32 quake_evt[] = {
+    0x0005005B, (s32)evt_cam_shake, 0x00000004, 0xF24A7A8F,
+    0xF24A7A8F, 0x000000C8, 0x00000002, 0x00000001,
+};

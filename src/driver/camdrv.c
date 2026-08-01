@@ -38,7 +38,7 @@ extern const f32 float_0_8041f6b4;
 extern s32 gp;
 extern s32 currentCamNo;
 extern u32 unk_80429510;
-extern u32 dat_8041f6b0;
+extern const u32 dat_8041f6b0;
 extern f32 PSVECDistance(void* a, void* b);
 extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
 extern void C_MTXPerspective(void* mtx, f32 fovy, f32 aspect, f32 near, f32 far);
@@ -68,7 +68,6 @@ extern void GXSetProjectionv(f32* projection);
 extern void* mapGetWork(void);
 extern void PSVECSubtract(void* a, void* b, void* out);
 extern f32 PSVECDotProduct(void* a, void* b);
-extern void PSMTXMultVec(void* mtx, void* src, void* dst);
 typedef void (*CamCallback)(void*);
 void* camEntryPersp(
     CamCallback callback,
@@ -93,7 +92,6 @@ extern const f32 float_400_8041f700;
 extern void C_MTXLookAt(void* mtx, void* eye, void* up, void* target);
 extern void PSMTXRotRad(void* mtx, s32 axis, f32 rad);
 extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
-extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
 extern void PSMTXConcat(void* a, void* b, void* out);
 extern void PSMTX44Concat(void* a, void* b, void* out);
 extern void C_MTXOrtho(void* mtx, f32 top, f32 bottom, f32 left, f32 right, f32 near, f32 far);
@@ -850,8 +848,8 @@ void camEvalNearFar(void* cam) {
         } else {
             PSMTXMultVec(
                 camWork->viewMtx,
-                &((CamEvalMap*)map)->point,
-                &transformed
+                (Vec*)&((CamEvalMap*)map)->point,
+                (Vec*)&transformed
             );
 
             z = transformed.z;
@@ -1624,3 +1622,50 @@ after_initial_check:
 
     dispEntry(*(s32*)((s32)cam + 0x1E8), 3, camLetterBoxDraw, NULL, float_0_8041f6b4);
 }
+
+void* camPtrTbl[13];
+
+VecRaw camPtDefault = { 0x00000000, 0x00000000, 0x447A0000 };
+VecRaw camAtDefault = { 0x00000000, 0x00000000, 0x00000000 };
+VecRaw camUpDefault = { 0x00000000, 0x3F800000, 0x00000000 };
+
+s32 currentCamNo;
+
+const u32 dat_8041f6b0 = 0xFFFFFFFF;
+const f32 float_0_8041f6b4 = 0.0f;
+const f32 float_304_8041f6b8 = 304.0f;
+const f32 float_240_8041f6bc = 240.0f;
+const f32 float_1_8041f6c0 = 1.0f;
+const f32 float_0p01_8041f6c4 = 0.01f;
+const f32 float_1E05_8041f6c8 = 100000.0f;
+const f32 float_25_8041f6cc = 25.0f;
+const f32 float_32768_8041f6d0 = 32768.0f;
+const f32 float_100_8041f6d4 = 100.0f;
+const f32 float_1p2667_8041f6d8 = 1.2666667f;
+const f32 float_608_8041f6dc = 608.0f;
+const f32 float_480_8041f6e0 = 480.0f;
+const f32 dat_8041f6e4 = 1000000000.0f;
+const f32 dat_8041f6e8 = -1000000000.0f;
+const f32 float_neg1_8041f6ec = -1.0f;
+const f32 float_deg2rad_8041f6f0 = 0.017453292f;
+const f32 float_0p5_8041f6f4 = 0.5f;
+const f32 float_0p2_8041f6f8 = 0.2f;
+const f32 float_8_8041f6fc = 8.0f;
+const f32 float_400_8041f700 = 400.0f;
+const f32 float_neg240_8041f704 = -240.0f;
+const f32 float_neg304_8041f708 = -304.0f;
+const char str_off_8041f70c[] = "off";
+const char str_off2_8041f710[] = "off2";
+const char str_bg_8041f718[] = "bg";
+const char str_3d_8041f71c[] = "3d";
+const f32 float_10000_8041f720 = 10000.0f;
+const f32 float_0p3_8041f724 = 0.3f;
+const f32 float_1p3333_8041f728 = 1.3333334f;
+const char str_3dimg_8041f72c[] = "3dimg";
+const f32 float_24_8041f734 = 24.0f;
+const f32 float_0p1_8041f738 = 0.1f;
+const char str_2d_8041f73c[] = "2d";
+const char str_fade_8041f740[] = "fade";
+const char str_fade2_8041f748[] = "fade2";
+const char str_dbg_8041f750[] = "dbg";
+const char str_dbg3d_8041f754[] = "dbg3d";

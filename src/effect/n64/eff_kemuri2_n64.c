@@ -228,3 +228,9 @@ void effKemuri2Disp(s32 cameraId, void* effect) {
         main_dl(type);
     }
 }
+
+s8 anim_data_0[15] = { 0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6, -1 };
+s8 anim_data_1[17] = { 0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 7, -1 };
+s8* anim_data_table[2] = { anim_data_0, anim_data_1 };
+
+const Vec3 vec3_802fb1d8 = { 0.0f, 0.0f, 0.0f };

@@ -311,3 +311,4 @@ void effSetPeachFukiBatu(char* name) {
     *(u32*)work |= 0x80;
 }
 
+const char str_PeachFukidashi_802fe59c[] = "PeachFukidashi";

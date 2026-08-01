@@ -3,7 +3,6 @@
 #include "manager/evtmgr.h"
 
 void* BattleGetUnitPtr(void* battleWork, s32 unitId);
-s32 evtCheckID(s32 eventId);
 s32 BattleCheckEndUnitInitEvent(void* battleWork);
 void* evtEntry(void* script, s32 priority, s32 flags);
 s32 BtlUnit_CheckData(void* unit, s32 id);
@@ -177,4 +176,3 @@ s32 BattleRunWaitEvent(void* unit) {
 
     return 0;
 }
-

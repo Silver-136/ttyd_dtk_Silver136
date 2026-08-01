@@ -1,27 +1,39 @@
 #include "sdk/DEMOInit.h"
 
-void* DemoCurrentBuffer;
+const char str_DEMOInit_c_802bfe68[] = "DEMOInit.c";
+const char str_DEMOInit_invalid_TV__802bfe74[] = "DEMOInit: invalid TV format\n";
+const char str_GP_status_PCTdPCTdPC_802bfea0[] = "GP status %d%d%d%d%d%d -->\n";
+const char str_GP_hang_due_to_XF_st_802bfebc[] = "GP hang due to XF stall bug.\n";
+const char str_GP_hang_due_to_unter_802bfedc[] = "GP hang due to unterminated primitive.\n";
+const char str_GP_hang_due_to_illeg_802bff04[] = "GP hang due to illegal instruction.\n";
+const char str_GP_appears_to_be_not_802bff2c[] = "GP appears to be not hung (waiting for input).\n";
+const char str_GP_is_in_unknown_sta_802bff5c[] = "GP is in unknown state.\n";
+const char str_WARNING_HANG_AT_HIGH_802bff78[] = "---------WARNING : HANG AT HIGH WATERMARK----------\n";
+
+u8 rmodeobj[0x3C];
+char __GXErrorMessage[0x400];
+
+u8 DemoFirstFrame = 1;
+
+s32 GPHangWorkaround;
+u32 FrameMissThreshold;
+u32 FrameCount;
 void* rmode;
-extern void* DemoFrameBuffer1;
-extern void* DemoFrameBuffer2;
-extern s32 GPHangWorkaround;
-extern u32 FrameMissThreshold;
-extern u32 FrameCount;
-extern u8 DemoFirstFrame;
-extern f32 float_0_8041fa10;
-extern f32 float_1_8041fa14;
-extern u8 rmodeobj[];
+void* DefaultFifoObj;
+void* DefaultFifo;
+void* DemoCurrentBuffer;
+void* DemoFrameBuffer2;
+void* DemoFrameBuffer1;
+
 extern u8 GXNtsc480IntDf[];
 extern u8 GXMpal480IntDf[];
 extern u8 GXPal528IntDf[];
 extern u8 GXEurgb60Hz480IntDf[];
-extern char str_DEMOInit_c_802bfe68[];
-extern char str_DEMOInit_invalid_TV__802bfe74[];
-extern void* DefaultFifoObj;
-extern u32 unk_80429548;
 extern u32 sysGetToken(void);
 extern void __DEMODiagnoseHang(void);
-extern char __GXErrorMessage[];
+extern u32 unk_80429548;
+extern const f32 float_0_8041fa10;
+extern const f32 float_1_8041fa14;
 extern s32 VIGetTvFormat(void);
 extern void OSPanic(const char* file, s32 line, const char* msg, ...);
 extern void GXAdjustForOverscan(void* src, void* dst, s32 x, s32 y);
@@ -55,7 +67,6 @@ void DEMOInit(void* param_1) {
     extern void* OSGetArenaHi(void);
     extern void OSSetArenaLo(void* lo);
     extern void memInit(void);
-    extern void* DefaultFifo;
     GXRenderModeObj* mode;
     u32 color;
     u32 yScale;
@@ -127,6 +138,9 @@ void DEMOInit(void* param_1) {
         VIWaitForRetrace();
     }
 }
+
+const f32 float_0_8041fa10 = 0.0f;
+const f32 float_1_8041fa14 = 1.0f;
 
 void DEMOBeforeRender(void) {
     extern void GXSetDrawSync(u32);
@@ -243,24 +257,23 @@ void DEMOEnableGPHangWorkaround(u32 threshold) {
 }
 
 void __NoHangRetraceCallback(void) {
-    extern u32 ovFrameCount_510;
-    extern u32 lastOvc_511;
+    static u32 ovFrameCount;
+    static u32 lastOvc;
     extern void GXGetGPStatus(u8*, u8*, u8*, u8*, u8*);
     extern u32 GXGetOverflowCount(void);
     extern char* strcpy(char*, const char*);
-    extern char str_WARNING_HANG_AT_HIGH_802bff78[];
     u8 status[5];
     u32 overflow;
 
     FrameCount++;
     GXGetGPStatus(&status[0], &status[1], &status[2], &status[3], &status[4]);
     overflow = GXGetOverflowCount();
-    if (status[0] == 0 || overflow != lastOvc_511) {
-        ovFrameCount_510 = 0;
-        lastOvc_511 = overflow;
+    if (status[0] == 0 || overflow != lastOvc) {
+        ovFrameCount = 0;
+        lastOvc = overflow;
     } else {
-        ovFrameCount_510++;
-        if (ovFrameCount_510 >= FrameMissThreshold) {
+        ovFrameCount++;
+        if (ovFrameCount >= FrameMissThreshold) {
             __DEMODiagnoseHang();
             strcpy(__GXErrorMessage, str_WARNING_HANG_AT_HIGH_802bff78);
         }
@@ -412,12 +425,6 @@ void __DEMODiagnoseHang(void) {
     extern s32 sprintf(char* s, const char* fmt, ...);
     extern char* strcat(char* dst, const char* src);
     extern char* strcpy(char* dst, const char* src);
-    extern const char str_GP_status_PCTdPCTdPC_802bfea0[];
-    extern const char str_GP_hang_due_to_XF_st_802bfebc[];
-    extern const char str_GP_hang_due_to_unter_802bfedc[];
-    extern const char str_GP_hang_due_to_illeg_802bff04[];
-    extern const char str_GP_appears_to_be_not_802bff2c[];
-    extern const char str_GP_is_in_unknown_sta_802bff5c[];
     char msg[4096];
     char add[4112];
     s32 xfTop0;

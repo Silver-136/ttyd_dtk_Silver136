@@ -285,3 +285,7 @@ void effHibashiraDisp(s32 cameraId, void* entry) {
     }
 }
 
+const u32 vec3_80302a18[] = { 0x00000000, 0x00000000, 0x00000000 };
+const char str_EFF_hibashira_80302a24[] = "EFF_hibashira";
+const char str_EFF_hibashira2_80302a34[] = "EFF_hibashira2";
+const char str_hibashira_80302a44[] = "hibashira";

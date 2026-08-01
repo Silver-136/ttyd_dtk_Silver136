@@ -26,7 +26,7 @@ u8 mario_kemuri(void) {
     extern u8 kemuri(void);
     extern void effKemuri7N64Entry(s32 kind, f32 x, f32 y, f32 z, f32 dir, f32 side);
     extern s32 kpaGetBodyStatus(void);
-    static s32 ct_481;
+    static s32 ct_481 = 8;
     static s32 left_or_right_482;
     void* mario;
     u32 attr;
@@ -144,7 +144,7 @@ u8 mario_kemuri_landon(void) {
     extern char str_mri_05_802f3738[];
     extern void effRippleEntry(s32 type, f32 x, f32 y, f32 z);
     static s32 cnt_491;
-    static s32 cnt2_492;
+    static s32 cnt2_492 = 10;
     void* mario;
     s32 add;
     u16 state;
@@ -211,8 +211,8 @@ u8 kemuri_mugi(void) {
     extern f32 float_3_80422a74;
     extern f32 float_5_80422a78;
     static f32 dir_519;
-    static s32 ct_520;
-    static s32 ct2_521;
+    static s32 ct_520 = 4;
+    static s32 ct2_521 = 10;
     static s32 left_or_right_522;
     void* mario;
     u16 state;
@@ -294,7 +294,7 @@ u8 kemuri(void) {
     extern f32 float_20_80422a50;
     extern f32 float_50_80422a54;
     extern f32 float_4_80422a58;
-    static s32 ct_552;
+    static s32 ct_552 = 4;
     static f32 dir_551;
     void* mario;
     void* effect;

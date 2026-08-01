@@ -102,7 +102,6 @@ s32 BtlUnit_GetTotalHitDamage(BattleWorkUnit* unit);
 void BtlUnit_SetStatus(BattleWorkUnit* unit, s32 status, s32 turns, s32 strength);
 void BattleRunHitEventDirect(BattleWorkUnit* unit, s32 flags, s32 arg);
 f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
-void BattleActionCommandDeclareACResult(BattleWork* battleWork, s32 result);
 void BattleAcrobatStart(BattleWork* battleWork, s32 unitId, s32 a, s32 b, s32 c, s32 d);
 s32 BattleAcrobatMain(BattleWork* battleWork);
 void BattleAcrobatGetResult(BattleWork* battleWork, s32* result1, s32* result2);
@@ -148,11 +147,10 @@ void* BattleSetConfuseAct(BattleWork* battleWork, BattleWorkUnit* unit);
 void itemDelete(void* item);
 s32 itemEntry(s32 a, s32 item, s32 mode, s32 c, s32 d, f32 x, f32 y, f32 z);
 extern u8 itemDataTable[];
-extern s32 _mario_acrobat_voice_table[];
-extern s32 _mario_attack_voice_table[];
+extern const void* _mario_acrobat_voice_table[];
+extern const void* _mario_attack_voice_table[];
 extern s32 subsetevt_confuse_flustered[];
 void BattleGetFirstAttackUnit(BattleWork* battleWork, BattleWorkUnitPart** part, BattleWorkUnit** unit);
-void BattleActionCommandResult(BattleWork* battleWork);
 void BattleAudience_Case_Appeal(BattleWorkUnit* unit);
 USER_FUNC(btlevtcmd_WaitEventEnd) {
     s32 id;
@@ -6515,7 +6513,7 @@ USER_FUNC(btlevtcmd_AudienceDeclareACResult) {
         *(u8*)((s32)battleWork + 0x19074) = 0;
     }
 
-    BattleActionCommandDeclareACResult(battleWork, result);
+    ((void (*)(BattleWork*, s32))BattleActionCommandDeclareACResult)(battleWork, result);
 
     return EVT_RETURN_DONE;
 }
@@ -8536,10 +8534,10 @@ USER_FUNC(btlevtcmd_snd_voice) {
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
 
     if (voiceType == 1) {
-        se = _mario_acrobat_voice_table[irand(5)];
+        se = (s32)_mario_acrobat_voice_table[irand(5)];
         BtlUnit_snd_se(unit, se, -250000000, 0);
     } else if (voiceType == 2) {
-        se = _mario_attack_voice_table[irand(10)];
+        se = (s32)_mario_attack_voice_table[irand(10)];
         BtlUnit_snd_se(unit, se, -250000000, 0);
     }
 
@@ -8863,3 +8861,78 @@ USER_FUNC(btlevtcmd_ftof) {
 
     return EVT_RETURN_DONE;
 }
+
+const u32 vec3_802ee458[3] = { 0, 0, 0 };
+const u32 vec3_802ee464[3] = { 0, 0, 0 };
+const u32 vec3_802ee470[3] = { 0, 0, 0 };
+const u32 vec3_802ee47c[3] = { 0, 0, 0 };
+const u32 vec3_802ee488[3] = { 0, 0, 0 };
+const u32 vec3_802ee494[3] = { 0, 0, 0 };
+
+const char str_SFX_VOICE_MARIO_AC3__802ee4a0[] = "SFX_VOICE_MARIO_AC3_1";
+const char str_SFX_VOICE_MARIO_AC3__802ee4b8[] = "SFX_VOICE_MARIO_AC3_2";
+const char str_SFX_VOICE_MARIO_AC3__802ee4d0[] = "SFX_VOICE_MARIO_AC3_3";
+const char str_SFX_VOICE_MARIO_AC3__802ee4e8[] = "SFX_VOICE_MARIO_AC3_4";
+const char str_SFX_VOICE_MARIO_AC3__802ee500[] = "SFX_VOICE_MARIO_AC3_5";
+const char str_SFX_VOICE_MARIO_AC1__802ee518[] = "SFX_VOICE_MARIO_AC1_1";
+const char str_SFX_VOICE_MARIO_AC1__802ee530[] = "SFX_VOICE_MARIO_AC1_2";
+const char str_SFX_VOICE_MARIO_AC1__802ee548[] = "SFX_VOICE_MARIO_AC1_3";
+const char str_SFX_VOICE_MARIO_AC1__802ee560[] = "SFX_VOICE_MARIO_AC1_4";
+const char str_SFX_VOICE_MARIO_AC1__802ee578[] = "SFX_VOICE_MARIO_AC1_5";
+const char str_SFX_VOICE_MARIO_AC2__802ee590[] = "SFX_VOICE_MARIO_AC2_1";
+const char str_SFX_VOICE_MARIO_AC2__802ee5a8[] = "SFX_VOICE_MARIO_AC2_2";
+const char str_SFX_VOICE_MARIO_AC2__802ee5c0[] = "SFX_VOICE_MARIO_AC2_3";
+const char str_SFX_VOICE_MARIO_AC2__802ee5d8[] = "SFX_VOICE_MARIO_AC2_4";
+const char str_SFX_VOICE_MARIO_AC2__802ee5f0[] = "SFX_VOICE_MARIO_AC2_5";
+
+const u32 double_to_int_802ee608[2] = { 0x43300000, 0x80000000 };
+const u32 double_0p01_802ee610[2] = { 0x3F847AE1, 0x40000000 };
+
+const char str_SFX_SYSTEM_NICE_25PE_802ee618[] = "SFX_SYSTEM_NICE_25PERCENT1";
+const char str_SFX_SYSTEM_NICE_50PE_802ee634[] = "SFX_SYSTEM_NICE_50PERCENT1";
+const char str_SFX_SYSTEM_NICE1_802ee650[] = "SFX_SYSTEM_NICE1";
+const char str_SFX_SYSTEM_GOOD1_802ee664[] = "SFX_SYSTEM_GOOD1";
+const char str_SFX_SYSTEM_GREAT1_802ee678[] = "SFX_SYSTEM_GREAT1";
+const char str_SFX_SYSTEM_WONDERFUL_802ee68c[] = "SFX_SYSTEM_WONDERFUL1";
+const char str_SFX_SYSTEM_EXCELLENT_802ee6a4[] = "SFX_SYSTEM_EXCELLENT1";
+const char str_SFX_BTL_ACROBAT_MISS_802ee6bc[] = "SFX_BTL_ACROBAT_MISS1";
+
+const u32 double_0p5_802ee6d8[2] = { 0x3FE00000, 0x00000000 };
+const u32 double_3_802ee6e0[2] = { 0x40080000, 0x00000000 };
+const u32 double_0_802ee6e8[2] = { 0x00000000, 0x00000000 };
+const u32 double_20_802ee6f0[2] = { 0x40340000, 0x00000000 };
+const u32 double_6_802ee6f8[2] = { 0x40180000, 0x00000000 };
+const u32 double_47_802ee700[2] = { 0x40478000, 0x00000000 };
+const u32 double_1p12_802ee708[2] = { 0x3FF1EB85, 0x1EB851EC };
+const u32 double_1_802ee710[2] = { 0x3FF00000, 0x00000000 };
+const u32 double_0p53_802ee718[2] = { 0x3FE0F5C2, 0x8F5C28F6 };
+const u32 double_1p25_802ee720[2] = { 0x3FF40000, 0x00000000 };
+const u32 double_0p8_802ee728[2] = { 0x3FE99999, 0x9999999A };
+const u32 double_16p5_802ee730[2] = { 0x40308000, 0x00000000 };
+const u32 double_33_802ee738[2] = { 0x40408000, 0x00000000 };
+const u32 double_to_int_mask_802ee740[2] = { 0x43300000, 0x00000000 };
+
+const char str_SFX_ITEM_MARIO_USE1_802ee748[] = "SFX_ITEM_MARIO_USE1";
+const char str_SFX_ITEM_PARTY_USE1_802ee75c[] = "SFX_ITEM_PARTY_USE1";
+const char str_SFX_ENM_ITEM_USE1_802ee770[] = "SFX_ENM_ITEM_USE1";
+
+const void* _mario_acrobat_voice_table[5] = {
+    str_SFX_VOICE_MARIO_AC3__802ee4a0,
+    str_SFX_VOICE_MARIO_AC3__802ee4b8,
+    str_SFX_VOICE_MARIO_AC3__802ee4d0,
+    str_SFX_VOICE_MARIO_AC3__802ee4e8,
+    str_SFX_VOICE_MARIO_AC3__802ee500,
+};
+
+const void* _mario_attack_voice_table[10] = {
+    str_SFX_VOICE_MARIO_AC1__802ee518,
+    str_SFX_VOICE_MARIO_AC1__802ee530,
+    str_SFX_VOICE_MARIO_AC1__802ee548,
+    str_SFX_VOICE_MARIO_AC1__802ee560,
+    str_SFX_VOICE_MARIO_AC1__802ee578,
+    str_SFX_VOICE_MARIO_AC2__802ee590,
+    str_SFX_VOICE_MARIO_AC2__802ee5a8,
+    str_SFX_VOICE_MARIO_AC2__802ee5c0,
+    str_SFX_VOICE_MARIO_AC2__802ee5d8,
+    str_SFX_VOICE_MARIO_AC2__802ee5f0,
+};

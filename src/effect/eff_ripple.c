@@ -1,7 +1,7 @@
 #include "effect/eff_ripple.h"
 #include "effect/n64/eff_ripple_n64.h"
 
-extern char str_RippleN64_802f9bd8[];
+const char str_RippleN64_802f9bd8[] = "RippleN64";
 int strcmp(const char* s1, const char* s2);
 
 void* effRippleEntry(f32 x, f32 y, f32 z, f32 scale, s32 time) {
@@ -27,4 +27,3 @@ void effRippleSetPosition(void* effect, f32 x, f32 y, f32 z) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-

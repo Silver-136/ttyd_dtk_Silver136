@@ -845,9 +845,9 @@ u8 BattleAudienceCtrlProcessKinopioTransEvt(int audienceId) {
     void* target;
     void* part;
     s32 partId;
-    f32 x;
-    f32 y;
-    f32 z;
+    static f32 x;
+    static f32 y;
+    static f32 z;
     s8 status;
     s8 turns;
 
@@ -1470,3 +1470,4 @@ u8 BattleAudienceCtrlProcessKinopioEat(int audienceId) {
     }
 }
 
+s32 intrudeSound;

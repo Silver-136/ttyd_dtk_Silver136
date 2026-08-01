@@ -222,3 +222,31 @@ s32 _get_flower_suitoru_point(void* evt) {
     return 2;
 }
 
+const char str_freeze_n64_802ee788[] = "freeze_n64";
+const char str_SFX_SYSTEM_LUCKY1_802ee794[] = "SFX_SYSTEM_LUCKY1";
+const char str_SFX_MARIO_AVOID1_802ee7a8[] = "SFX_MARIO_AVOID1";
+const char str_SFX_BTL_ATTACK_MISS1_802ee7bc[] = "SFX_BTL_ATTACK_MISS1";
+const char str_p_b_st_802ee7d4[] = "p_b_st";
+const char str_PM_F_3A_802ee7dc[] = "PM_F_3A";
+const char str_PM_F_3B_802ee7e4[] = "PM_F_3B";
+const char str_PM_Y_2A_802ee7ec[] = "PM_Y_2A";
+const char str_PM_Y_2B_802ee7f4[] = "PM_Y_2B";
+const char str_SFX_BTL_PARTY_IN1_802ee7fc[] = "SFX_BTL_PARTY_IN1";
+const char str_SFX_BTL_PARTY_CHANGE_802ee810[] = "SFX_BTL_PARTY_CHANGE1";
+const char str_SFX_PARTY_OUT1_802ee828[] = "SFX_PARTY_OUT1";
+const char str_SFX_MARIO_APPEAL1_802ee838[] = "SFX_MARIO_APPEAL1";
+const char str_SFX_BTL_MARIO_DEFENC_802ee84c[] = "SFX_BTL_MARIO_DEFENCE1";
+const char str_SFX_BTL_MARIO_DEFENC_802ee864[] = "SFX_BTL_MARIO_DEFENCE2";
+const char str_btl_msg_defend_comma_802ee87c[] = "btl_msg_defend_command_exec";
+const char str_SFX_MARIO_BATTLE_STA_802ee898[] = "SFX_MARIO_BATTLE_STAMP1";
+const char str_SFX_MARIO_RUN_AWAY_M_802ee8b0[] = "SFX_MARIO_RUN_AWAY_MISS1";
+const char str_SFX_MARIO_RUN_AWAY1_802ee8cc[] = "SFX_MARIO_RUN_AWAY1";
+const char str_btl_msg_cant_move_ze_802ee8e0[] = "btl_msg_cant_move_zero_gravity";
+const char str_recovery_802ee900[] = "recovery";
+const char str_msg_ac_escape_802ee90c[] = "msg_ac_escape";
+const f64 double_to_int_802ee920 = 4503601774854144.0;
+
+const u8 zero_804222f8 = 0;
+const f32 float_1_804222fc = 1.0f;
+const f32 float_0p4_80422300 = 0.4f;
+const f32 float_1p6_80422304 = 1.6f;

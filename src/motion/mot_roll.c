@@ -5,8 +5,6 @@ void camFollowYOff(void);
 s32 marioSlitChkWallAround(void);
 extern f32 float_0_80420dd4;
 extern void marioPaperOff(void);
-extern char str_p_roll_802c4248[];
-extern char str_PM_R_1B_802c4258[];
 extern void* camGetPtr(s32 camId);
 extern void psndSFXOff(s32);
 extern f32 revise360(f32);
@@ -18,15 +16,6 @@ extern f32 float_180_80420de0;
 extern f32 float_90_80420df0;
 extern f32 float_270_80420df4;
 extern f32 float_0p004_80420e48;
-extern f32 vec3_802c41bc;
-extern f32 DAT_802c41c0;
-extern f32 DAT_802c41c4;
-extern f32 vec3_802c41c8;
-extern f32 DAT_802c41cc;
-extern f32 DAT_802c41d0;
-extern f32 vec3_802c41d4;
-extern f32 DAT_802c41d8;
-extern f32 DAT_802c41dc;
 extern void marioChgMotSub(s16, s32);
 extern f32 toMovedir(f32);
 extern f32 __fabsf(f32);
@@ -38,8 +27,6 @@ extern f32 float_14p8_80420e24;
 extern f32 float_neg6_80420e28;
 extern f32 float_6_80420de4;
 extern f32 float_1_80420e2c;
-extern f32 rollData;
-
 void marioRollFixOn(void) {
     void* mario = marioGetPtr();
 
@@ -119,6 +106,8 @@ u8 marioForceRollAnime(void) {
     extern void marioChgPaper(void* paper);
     extern void marioPaperOn(void* paper);
     extern void marioChgPose(void* pose);
+    extern char str_p_roll_802c4248[];
+    extern char str_PM_R_1B_802c4258[];
     extern char str_M_I_U_80420e1c[6];
     void* mario = marioGetPtr();
 
@@ -179,6 +168,15 @@ s32 marioRollCancel(void) {
 void mot_roll_post(void) {
     extern void marioChgPose(char*);
     extern char str_M_S_1_80420e4c;
+    extern f32 vec3_802c41bc;
+    extern f32 DAT_802c41c0;
+    extern f32 DAT_802c41c4;
+    extern f32 vec3_802c41c8;
+    extern f32 DAT_802c41cc;
+    extern f32 DAT_802c41d0;
+    extern f32 vec3_802c41d4;
+    extern f32 DAT_802c41d8;
+    extern f32 DAT_802c41dc;
 
     void* mario = marioGetPtr();
     void* tmp;
@@ -241,6 +239,15 @@ void mot_roll_post(void) {
 void marioRollForceCancel(void) {
     extern void marioChgPose(char*);
     extern char str_M_S_1_80420e4c;
+    extern f32 vec3_802c41bc;
+    extern f32 DAT_802c41c0;
+    extern f32 DAT_802c41c4;
+    extern f32 vec3_802c41c8;
+    extern f32 DAT_802c41cc;
+    extern f32 DAT_802c41d0;
+    extern f32 vec3_802c41d4;
+    extern f32 DAT_802c41d8;
+    extern f32 DAT_802c41dc;
 
     void* mario = marioGetPtr();
     void* tmp;
@@ -473,7 +480,10 @@ u8 marioReInit_roll(void) {
     extern void marioChgPose(char*);
     extern void marioChgPaper(char*);
     extern void allPartyForceRideOn(void);
+    extern char str_p_roll_802c4248[];
+    extern char str_PM_R_1B_802c4258[];
     extern char str_M_I_U_80420e1c[];
+    extern f32 rollData;
     void* player = marioGetPtr();
     void* work = __memAlloc(0, 0x18);
     void* current;
@@ -548,6 +558,8 @@ void mot_roll(void) {
     extern f64 cos(f64);
 
     extern char str_PM_R_1A_802c4250[];
+    extern char str_p_roll_802c4248[];
+    extern char str_PM_R_1B_802c4258[];
     extern char str_PM_R_1C_802c4260[];
     extern char str_M_I_U_80420e1c[];
     extern char str_M_S_1_80420e4c[];
@@ -555,6 +567,16 @@ void mot_roll(void) {
     extern f32 vec3_802c41b0;
     extern f32 DAT_802c41b4;
     extern f32 DAT_802c41b8;
+    extern f32 vec3_802c41bc;
+    extern f32 DAT_802c41c0;
+    extern f32 DAT_802c41c4;
+    extern f32 vec3_802c41c8;
+    extern f32 DAT_802c41cc;
+    extern f32 DAT_802c41d0;
+    extern f32 vec3_802c41d4;
+    extern f32 DAT_802c41d8;
+    extern f32 DAT_802c41dc;
+    extern f32 rollData;
 
     extern f32 float_0p5_80420dd8;
     extern f32 float_3p1416_80420ddc;
@@ -1131,3 +1153,33 @@ void mot_fall_roll(void) {
         roll_flyout_flag2 = 0;
     }
 }
+
+typedef struct RollVecData {
+    f32 x;
+    f32 y;
+    f32 z;
+} RollVecData;
+
+const RollVecData vec3_802c41b0 = { 0.0f, 40.0f, 0.0f };
+const RollVecData vec3_802c41bc = { 0.0f, 0.0f, 0.0f };
+const RollVecData vec3_802c41c8 = { 0.0f, 0.0f, 0.0f };
+const RollVecData vec3_802c41d4 = { 0.0f, 0.0f, 0.0f };
+const RollVecData vec3_802c41e0 = { 0.0f, 0.0f, 0.0f };
+const RollVecData vec3_802c41ec = { 0.0f, 0.0f, 0.0f };
+const RollVecData vec3_802c41f8 = { 0.0f, 0.0f, 0.0f };
+const RollVecData vec3_802c4204 = { 0.0f, -1.0f, 0.0f };
+const RollVecData vec3_802c4210 = { 0.0f, 0.0f, 0.0f };
+const char str_p_roll_802c4248[] = "p_roll";
+const char str_PM_R_1A_802c4250[] = "PM_R_1A";
+const char str_PM_R_1B_802c4258[] = "PM_R_1B";
+const char str_PM_R_1C_802c4260[] = "PM_R_1C";
+const char str_eki_04_802c4268[] = "eki_04";
+
+f32 rollData[] = {
+    3.0f, -0.05f, -0.5f, 0.5f, 7.0f, 180.0f,
+    140.0f, 10.0f, 1.2f, 2.0f, 0.8f,
+};
+
+f32 roll_grx;
+f32 roll_grz;
+s32 roll_flyout_flag2;

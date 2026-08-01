@@ -1,26 +1,27 @@
 #include "effect/eff_teresa.h"
 
+typedef struct EffTeresaVec {
+    f32 x;
+    f32 y;
+    f32 z;
+} EffTeresaVec;
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 extern f32 float_0_80427ab4;
 extern f32 float_30_80427ad4;
 
 void* effTeresaEntry(s32 type, f32 x, f32 y, f32 z) {
-    typedef struct Vec {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec;
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
     extern const char str_Teresa_802ff24c[];
     extern void effTeresaMain(void);
-    extern const Vec vec3_802ff228;
-    extern u32 psndSFXOn_3D(s32 lookup, Vec* position);
+    extern const EffTeresaVec vec3_802ff228;
+    extern u32 psndSFXOn_3D(s32 lookup, EffTeresaVec* position);
 
     void* entry;
     void* work;
-    Vec pos;
+    EffTeresaVec pos;
     f32 modeFloat;
     s32 zero;
     s32 alpha;
@@ -59,24 +60,19 @@ void* effTeresaEntry(s32 type, f32 x, f32 y, f32 z) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
 /* CHATGPT STUB FILL: main/effect/eff_teresa 20260624_184823 */
 
 /* stub-fill: effTeresaMain | prototype_only | source_prototype */
 void effTeresaMain(void* effect) {
-    typedef struct VecLocal {
-        f32 x;
-        f32 y;
-        f32 z;
-    } VecLocal;
-
     extern void* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
     extern void effDelete(void* effect);
-    extern u32 psndSFXOn_3D(s32 lookup, VecLocal* position);
-    extern f32 dispCalcZ(VecLocal* pos);
+    extern u32 psndSFXOn_3D(s32 lookup, EffTeresaVec* position);
+    extern f32 dispCalcZ(EffTeresaVec* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* dispFunc, void* data, f32 z);
     extern void effTeresaDisp(s32 cameraId, void* effect);
-    extern VecLocal vec3_802ff234;
-    extern VecLocal vec3_802ff240;
+    extern const EffTeresaVec vec3_802ff234;
+    extern const EffTeresaVec vec3_802ff240;
     extern f32 float_0p1_80427abc;
     extern f32 float_0p8_80427ac0;
     extern f32 float_1_80427ac4;
@@ -87,7 +83,7 @@ void effTeresaMain(void* effect) {
     extern f32 float_0p98_80427adc;
 
     void* work = *(void**)((s32)effect + 0xC);
-    VecLocal pos = vec3_802ff234;
+    EffTeresaVec pos = vec3_802ff234;
 
     pos.x = *(f32*)((s32)work + 4);
     pos.y = *(f32*)((s32)work + 8);
@@ -98,7 +94,7 @@ void effTeresaMain(void* effect) {
             if (*(f32*)((s32)work + 0x34) > float_0p1_80427abc) {
                 *(f32*)((s32)work + 0x34) *= float_0p8_80427ac0;
             } else {
-                VecLocal sndPos = vec3_802ff240;
+                EffTeresaVec sndPos = vec3_802ff240;
                 *(s32*)((s32)work + 0x3C) = 1;
                 effKemuTestEntry(8, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8),
                                  *(f32*)((s32)work + 0xC), float_1_80427ac4);
@@ -131,6 +127,7 @@ void effTeresaMain(void* effect) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void effTeresaDisp(s32 cameraId, void* effect) {
@@ -296,3 +293,7 @@ void effTeresaDisp(s32 cameraId, void* effect) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+const EffTeresaVec vec3_802ff228 = { 0.0f, 0.0f, 0.0f };
+const EffTeresaVec vec3_802ff234 = { 0.0f, 0.0f, 0.0f };
+const EffTeresaVec vec3_802ff240 = { 0.0f, 0.0f, 0.0f };
+const char str_Teresa_802ff24c[] = "Teresa";

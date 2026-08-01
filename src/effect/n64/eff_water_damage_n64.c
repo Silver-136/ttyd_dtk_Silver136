@@ -330,3 +330,44 @@ void effWaterDamageDisp2(s32 cameraId, void* effect) {
     }
 }
 
+__declspec(section ".data") f32 negone_one_374[2] = { -1.0f, 1.0f };
+__declspec(section ".data") f32 gap_05_803AB8A8_data[2] = { -1.0f, 1.0f };
+__declspec(section ".data") f32 one_negone_373[2] = { 1.0f, -1.0f };
+__declspec(section ".data") f32 gap_05_803AB8B8_data[2] = { 1.0f, -1.0f };
+__declspec(section ".data") f32 negone_one_360[2] = { -1.0f, 1.0f };
+__declspec(section ".data") f32 gap_05_803AB8C8_data[2] = { -1.0f, 1.0f };
+__declspec(section ".data") f32 one_negone_359[2] = { 1.0f, -1.0f };
+__declspec(section ".data") f32 gap_05_803AB8D8_data[2] = { 1.0f, -1.0f };
+
+typedef struct EffN64Vertex {
+    s16 x;
+    s16 y;
+    s16 z;
+    s16 s;
+    s16 t;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} EffN64Vertex;
+
+EffN64Vertex size8x8_tex16x16_0_vtx[4] = {
+    { -4, -4, 0, 0, 0, 0x00, 0x00, 0x00, 0xFF },
+    { 4, -4, 0, 512, 0, 0x00, 0x00, 0x00, 0xFF },
+    { 4, 4, 0, 512, 512, 0x00, 0x00, 0x00, 0xFF },
+    { -4, 4, 0, 0, 512, 0x00, 0x00, 0x00, 0xFF },
+};
+
+EffN64Vertex size8x8_tex16x16_1_vtx[4] = {
+    { -5, -3, 0, 0, 0, 0x00, 0x00, 0x00, 0xFF },
+    { 5, -3, 0, 512, 0, 0x00, 0x00, 0x00, 0xFF },
+    { 5, 3, 0, 512, 512, 0x00, 0x00, 0x00, 0xFF },
+    { -5, 3, 0, 0, 512, 0x00, 0x00, 0x00, 0xFF },
+};
+
+EffN64Vertex size8x8_tex16x16_2_vtx[4] = {
+    { -3, -5, 0, 0, 0, 0x00, 0x00, 0x00, 0xFF },
+    { 3, -5, 0, 512, 0, 0x00, 0x00, 0x00, 0xFF },
+    { 3, 5, 0, 512, 512, 0x00, 0x00, 0x00, 0xFF },
+    { -3, 5, 0, 0, 512, 0x00, 0x00, 0x00, 0xFF },
+};

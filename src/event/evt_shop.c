@@ -1,8 +1,8 @@
 #include "event/evt_shop.h"
 
-extern void* _wp;
+void* _wp;
 extern void* gp;
-extern char mapname;
+char mapname[16];
 extern void evtSetValue();
 extern s32 evtGetValue();
 extern void* pouchGetPtr();
@@ -30,7 +30,7 @@ extern void PSMTXConcat(void* a, void* b, void* out);
 extern s32 shopPointList[];
 extern void psndSFXOn(s32 id);
 extern void iconFlagOn(char* name, u32 flag);
-extern char str_shpPCTd_80421eb4[];
+extern const char str_shpPCTd_80421eb4[];
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -345,7 +345,7 @@ s32 evt_shop_setup(void* event) {
     extern void evtRunCaseEntry(u16 type, s32 a, void* name, s32 b, void* evt, void* arg);
     extern s32 evtGetValue(void* event, s32 value);
     extern void* _wp;
-    extern char mapname;
+    extern char mapname[16];
     extern u8 itemDataTable[];
     extern void* shopper_talk_evt;
     extern void* main_evt;
@@ -377,7 +377,7 @@ s32 evt_shop_setup(void* event) {
     work = _mapAlloc(mapalloc_base_ptr, 0xD8);
     memset(work, 0, 0xD8);
     _wp = work;
-    strncpy(&mapname, (char*)((s32)gp + 0x12C), 0xF);
+    strncpy(mapname, (char*)((s32)gp + 0x12C), 0xF);
 
     *(void**)((s32)work + 0x04) = objList;
     *(void**)((s32)work + 0x08) = buyList;
@@ -941,3 +941,36 @@ s32 evtShopIsActive(void) {
     }
     return 0;
 }
+
+const char str_item_first_hit_802ed268[] = "item_first_hit";
+const char str_mri_07_802ed278[] = "mri_07";
+const char str_stg2_shop_04_1_802ed280[] = "stg2_shop_04_1";
+const char str_usu_01_802ed290[] = "usu_01";
+const char str_usugurashop_04_1_802ed298[] = "usugurashop_04_1";
+const char str_rsh_03_a_802ed2ac[] = "rsh_03_a";
+const char str_rsh_03_b_802ed2b8[] = "rsh_03_b";
+const char str_rsh_03_c_802ed2c4[] = "rsh_03_c";
+const char str_stg6_shop_04_1_802ed2d0[] = "stg6_shop_04_1";
+const char str_scrl_auto_once_stop_802ed2e0[] = "<scrl_auto><once_stop>";
+const char str_rsh_03_802ed2f8[] = "rsh_03";
+const char str_a_shop_keihin_802ed300[] = "a_shop_keihin";
+const char str_msg_shop_point_list5_802ed310[] = "msg_shop_point_list5";
+const char str_msg_shop_point_list6_802ed328[] = "msg_shop_point_list6";
+const char str_msg_shop_point_list4_802ed350[] = "msg_shop_point_list4";
+
+const u32 dat_80421e78 = 0xFFFFFFFF;
+const u32 dat_80421e7c = 0xFFFFFFFF;
+const u32 dat_80421e80 = 0xFFFFFFFF;
+const u32 dat_80421e84 = 0xFFFFFFFF;
+const u32 dat_80421e88 = 0xFFFFFFFF;
+const u32 dat_80421e8c = 0xFFFFFFFF;
+const u32 dat_80421e90 = 0xF00000FF;
+const u32 dat_80421e94 = 0x000000FF;
+const u32 dat_80421e98 = 0xF00000FF;
+const u32 dat_80421e9c = 0x000000FF;
+const u32 dat_80421ea0 = 0xF00000FF;
+const u32 dat_80421ea4 = 0x000000FF;
+const char str_mario_80421ea8[] = "mario";
+const char str_me_80421eb0[] = "me";
+const char str_shpPCTd_80421eb4[] = "shp%d";
+const f32 float_6_80421ebc = 6.0f;

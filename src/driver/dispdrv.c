@@ -20,7 +20,7 @@ extern DispWork** pSortWork;
 extern s32 entry_n;
 extern void* currentWorkPtr;
 extern DispWork* pDispWork;
-extern const f32 offset_tbl[11];
+extern f32 offset_tbl[10];
 extern void* camGetPtr(s32 cameraId);
 extern void PSMTXMultVec(void* mtx, void* src, void* dst);
 extern void PSMTX44MultVec(void* mtx, void* src, void* dst);
@@ -203,3 +203,27 @@ f32 dispCalcZ(void* pos) {
 void* dispGetCurWork(void) {
     return currentWorkPtr;
 }
+
+f32 offset_tbl[10] = {
+    400000.0f,
+    400000.0f,
+    600000.0f,
+    100000.0f,
+    100000.0f,
+    300000.0f,
+    900000.0f,
+    1100000.0f,
+    1000000.0f,
+    500000.0f,
+};
+
+DispWork* pDispWork;
+DispWork** pSortWork;
+s32 entry_n;
+void* currentWorkPtr;
+
+const f32 float_5000_8041f760 = 5000.0f;
+const f32 float_0_8041f764 = 0.0f;
+const f32 float_10000_8041f768 = 10000.0f;
+const f32 float_neg1_8041f76c = -1.0f;
+const f32 float_1_8041f770 = 1.0f;

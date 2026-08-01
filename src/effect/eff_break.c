@@ -2,7 +2,6 @@
 
 extern void effGetTexObj(s32 texId, void* texObj);
 extern void* gp;
-extern f32 float_0_80427600;
 
 /* stub-fill: effBreakEntry | missing_definition | ghidra_signature */
 void* effBreakEntry(s32 kind, f32 x, f32 y, f32 z, s32 timer) {
@@ -15,6 +14,7 @@ void* effBreakEntry(s32 kind, f32 x, f32 y, f32 z, s32 timer) {
     extern f32 float_36_80427624;
     extern f32 float_72_80427620;
     extern f32 float_10_80427628;
+    extern f32 float_0_80427600;
 
     void* effect = effEntry();
     s32 language = *(s32*)((s32)gp + 0x16C);
@@ -90,6 +90,7 @@ void effBreakMain(void* effect) {
     extern f32 ty_data[];
     extern f32 ty_data2[];
     extern f32 float_20_80427610;
+    extern f32 float_0_80427600;
 
     void* workBase = *(void**)((s32)effect + 0xC);
     void* work = (void*)((s32)workBase + 0x24);
@@ -192,6 +193,7 @@ void effBreakDisp(s32 cameraId, void* effect) {
     extern f32 float_0p5_80427604;
     extern f32 float_24_80427608;
     extern f32 float_1_8042760c;
+    extern f32 float_0_80427600;
     extern s32 texid_tbl;
 
     u8 texObj[0x20];
@@ -290,3 +292,56 @@ void effBreakDisp(s32 cameraId, void* effect) {
     }
 }
 
+const f32 vec3_802fef20[3] = { 0.0f, 0.0f, 0.0f };
+
+u32 ty_data[21] = {
+    0x40400000, 0x40400000, 0x40324925, 0x40249249,
+    0x4016DB6E, 0x40092492, 0x3FF6DB6E, 0x3FDB6DB7,
+    0x3FC00000, 0x3FA49249, 0x3F892492, 0x3F5B6DB7,
+    0x3F249249, 0x3EDB6DB7, 0x3E5B6DB7, 0x00000000,
+    0x3DAAAAAB, 0x3E2AAAAB, 0x3E800000, 0x3E000000,
+    0x00000000,
+};
+
+u32 ty_data2[21] = {
+    0x00000000, 0x3E19999A, 0x3E99999A, 0x3EE66666,
+    0x3F19999A, 0x3F400000, 0x3F666666, 0x3F866666,
+    0x3F99999A, 0x3FACCCCD, 0x3FC00000, 0x3FD33333,
+    0x3FE66666, 0x3FF9999A, 0x40066666, 0x40100000,
+    0x4019999A, 0x40233333, 0x402CCCCD, 0x40366666,
+    0x40400000,
+};
+
+static s16 tex_jp[] = { 0x91, 0x92, 0x93, 0x94, 0x95, 0x96 };
+static s16 tex_us[] = { 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0 };
+static s16 tex_lang3[] = { 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C };
+static s16 tex_lang4[] = { 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2 };
+static s16 tex_lang5[] = { 0x9F, 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5 };
+static s16 tex_lang6[] = { 0x91, 0x92, 0x93, 0x94, 0x95, 0x96 };
+
+typedef struct BreakTextureList {
+    s16* ids;
+    s32 count;
+} BreakTextureList;
+
+static BreakTextureList texid_tbl[6] = {
+    { tex_jp, 6 },
+    { tex_us, 6 },
+    { tex_lang3, 6 },
+    { tex_lang4, 6 },
+    { tex_lang5, 7 },
+    { tex_lang6, 6 },
+};
+
+const f32 float_deg2rad_804275f8 = 0.017453292f;
+const f32 float_48_804275fc = 48.0f;
+const f32 float_0_80427600 = 0.0f;
+const f32 float_0p5_80427604 = 0.5f;
+const f32 float_24_80427608 = 24.0f;
+const f32 float_1_8042760c = 1.0f;
+const f32 float_20_80427610 = 20.0f;
+const char str_Break_80427614[] = "Break";
+const f32 float_2_8042761c = 2.0f;
+const f32 float_72_80427620 = 72.0f;
+const f32 float_36_80427624 = 36.0f;
+const f32 float_10_80427628 = 10.0f;

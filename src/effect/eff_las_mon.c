@@ -11,11 +11,11 @@ void animPoseSetMaterialEvtColor(s32 poseId, void* color);
 void animPoseMain(s32 poseId);
 void animPoseDrawMtx(s32 poseId, Mtx matrix, f32 arg2, s32 pass, f32 arg4);
 
-extern char str_LasMon_80302ab8[];
-extern u32 dat_804289b0;
-extern f32 float_0_804289b4;
-extern f32 float_10_804289b8;
-extern f32 float_1_804289c0;
+extern const char str_LasMon_80302ab8[];
+extern const u32 dat_804289b0;
+extern const f32 float_0_804289b4;
+extern const f32 float_10_804289b8;
+extern const f32 float_1_804289c0;
 #pragma use_lmw_stmw off
 void* effLasMonEntry(s32 type, f32 x, f32 y, f32 z) {
     extern void* effEntry(void);
@@ -29,7 +29,7 @@ void* effLasMonEntry(s32 type, f32 x, f32 y, f32 z) {
     s32 alpha;
     s32 timer;
 
-    *(char**)((s32)entry + 0x14) = str_LasMon_80302ab8;
+    *(char**)((s32)entry + 0x14) = (char*)str_LasMon_80302ab8;
     *(s32*)((s32)entry + 8) = 1;
     work = __memAlloc(3, (u32)(*(s32*)((s32)entry + 8) * 0x24));
     *(void**)((s32)entry + 0xC) = work;
@@ -168,3 +168,15 @@ void effLasMonDisp(s32 cameraId, void* entry) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+const u32 vec3_80302a98[3] = { 0, 0, 0 };
+const char str_MOBJ_EFF_las_mon_80302aa4[] = "MOBJ_EFF_las_mon";
+const char str_LasMon_80302ab8[] = "LasMon";
+__declspec(section ".rodata") const char gap_04_80302ABF_rodata[1] = { 0 };
+
+const u32 dat_804289b0 = 0xFFFFFF00;
+const f32 float_0_804289b4 = 0.0f;
+const f32 float_10_804289b8 = 10.0f;
+const char str_A_1_804289bc[] = "A_1";
+const f32 float_1_804289c0 = 1.0f;
+const char str_S_1_804289c4[] = "S_1";

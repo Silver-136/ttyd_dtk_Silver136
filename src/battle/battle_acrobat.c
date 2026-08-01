@@ -99,3 +99,10 @@ s32 BattleAcrobatGetResult(void* battleWork, s32* result1, s32* result2) {
     *result2 = *(s32*)((s32)battleWork + 0x271C);
     return 2;
 }
+
+const f32 vec3_802f96b8[3] = {
+    0.0f, 0.0f, 0.0f,
+};
+
+const f32 float_15_804245d8 = 15.0f;
+const f32 float_0p67_804245dc = 0.67f;

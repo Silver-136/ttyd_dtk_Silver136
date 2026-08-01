@@ -172,3 +172,38 @@ s32 lect_juyoitem_rel_get(void* event) {
     evtSetValue(event, **(s32**)((s32)event + 0x18), lect_work);
     return 2;
 }
+
+u32 all_juyoitem_lecture[7] = {
+    0x0002005B,
+    0x00000000,
+    0xFE363C80,
+    0x0001005E,
+    0xFE363C80,
+    0x00000002,
+    0x00000001,
+};
+
+static u8 all_juyoitem_lecture_padding[4] = { 0 };
+
+/*
+ * This unit emits uninitialized small-data storage in reverse declaration
+ * order.  Physical declarations therefore run opposite the target symbols.
+ */
+u32 stPt[3];
+u32 stAt[3];
+u32 stMpos[3];
+u32 stPpos[3];
+u32 stXpos[3];
+f32 stMdir1;
+f32 stMdir2;
+f32 stMdir3;
+f32 stMdir4;
+f32 stPdir1;
+f32 stPdir2;
+f32 stPdir3;
+f32 stPdir4;
+f32 stXdir1;
+f32 stXdir2;
+f32 stXdir3;
+f32 stXdir4;
+void* lect_work;

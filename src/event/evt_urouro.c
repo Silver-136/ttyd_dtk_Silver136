@@ -190,8 +190,8 @@ s32 urouro_main_func(void* event) {
                 if (speed > maxSpeed) {
                     speed = maxSpeed;
                 }
-                npc->moveX = speed * (f32)sin((6.283185f * npc->jumpAngle) / 360.0f);
-                npc->moveZ = speed * -(f32)cos((6.283185f * npc->jumpAngle) / 360.0f);
+                npc->moveX = speed * (f32)sin((6.2831855f * npc->jumpAngle) / 360.0f);
+                npc->moveZ = speed * -(f32)cos((6.2831855f * npc->jumpAngle) / 360.0f);
 
                 if ((psndGetFlag() & 0x100) != 0 &&
                     (animPoseGetMaterialFlag(npc->poseId) & 0x1800) == 0) {
@@ -227,4 +227,3 @@ s32 urouro_main_func(void* event) {
     }
     return 0;
 }
-

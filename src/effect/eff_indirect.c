@@ -17,8 +17,6 @@ void dispEntry(s32 prio, s32 type, void* callback, void* entry, f32 z);
 void effIndirectDisp(s32 cameraId, void* effect);
 
 extern void* gp;
-extern u32 vec3_80302990[];
-extern char str_Indirect_803029a8[];
 extern f32 float_0_8042888c;
 extern f32 float_neg300_80428890;
 extern f32 float_60_80428894;
@@ -27,6 +25,7 @@ extern f32 float_neg0p05_80428898;
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effIndirectEntry(s32 type, s32 timer, f32 x, f32 y, f32 z) {
+    extern char str_Indirect_803029a8[];
     void* entry = effEntry();
     void* work;
     void* buffer;
@@ -65,6 +64,7 @@ void* effIndirectEntry(s32 type, s32 timer, f32 x, f32 y, f32 z) {
 
 
 void effIndirectMain(void* entry) {
+    extern u32 vec3_80302990[];
     EffIndirectVecRaw dispPos;
     EffIndirectVecRaw pos;
     void* work = *(void**)((s32)entry + 0xC);
@@ -235,3 +235,5 @@ void effIndirectDisp(s32 cameraId, void* effect) {
     *fifo = halfWidth; *fifo = halfWidth; *fifo = 0.0f; *fifo = 0.0f; *fifo = vMax;
 }
 
+const u32 vec3_80302990[] = { 0x00000000, 0x00000000, 0x00000000 };
+const char str_Indirect_803029a8[] = "Indirect";

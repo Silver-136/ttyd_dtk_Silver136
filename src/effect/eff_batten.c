@@ -87,8 +87,8 @@ void effBattenMain(void* effect) {
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effBattenDisp(s32, void*);
     extern void effBattenDisp2(s32, void*);
-    extern char str_EFF_batten_x_80300364[];
-    extern char str_EFF_batten_rocket_80300374[];
+    extern const char str_EFF_batten_x_80300364[];
+    extern const char str_EFF_batten_rocket_80300374[];
     extern char str_A_1_80427f00[];
     extern char str_A_2_80427f04[];
 
@@ -106,19 +106,19 @@ void effBattenMain(void* effect) {
 
     if (type == 1 || type == 2) {
         char* anim = type == 2 ? str_A_2_80427f04 : str_A_1_80427f00;
-        if (animGroupBaseAsync(str_EFF_batten_x_80300364, inBattle, 0) == 0) {
+        if (animGroupBaseAsync((char*)str_EFF_batten_x_80300364, inBattle, 0) == 0) {
             return;
         }
         if (*(s32*)(work + 0x24) == -1) {
-            *(s32*)(work + 0x24) = animPoseEntry(str_EFF_batten_x_80300364, inBattle);
+            *(s32*)(work + 0x24) = animPoseEntry((char*)str_EFF_batten_x_80300364, inBattle);
             animPoseSetAnim(*(s32*)(work + 0x24), anim, 1);
         }
     } else if (type == 3) {
-        if (animGroupBaseAsync(str_EFF_batten_rocket_80300374, inBattle, 0) == 0) {
+        if (animGroupBaseAsync((char*)str_EFF_batten_rocket_80300374, inBattle, 0) == 0) {
             return;
         }
         if (*(s32*)(work + 0x24) == -1) {
-            *(s32*)(work + 0x24) = animPoseEntry(str_EFF_batten_rocket_80300374, inBattle);
+            *(s32*)(work + 0x24) = animPoseEntry((char*)str_EFF_batten_rocket_80300374, inBattle);
             animPoseSetAnim(*(s32*)(work + 0x24), str_A_1_80427f00, 1);
         }
     }
@@ -361,3 +361,6 @@ void effBattenDisp2(s32 cameraId, void* effect) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+const char str_EFF_batten_x_80300364[] = "EFF_batten_x";
+const char str_EFF_batten_rocket_80300374[] = "EFF_batten_rocket";
+const char str_Batten_80300398[] = "Batten";

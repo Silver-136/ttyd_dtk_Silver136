@@ -10,9 +10,9 @@ void camCtrlOff(s32 id);
 void psndSetFlag(s32 flag);
 void psndClearFlag(s32 flag);
 extern void* gp;
-extern f32 float_0p01_80421040;
-extern f32 float_0_80421044;
-extern f32 float_100_80421048;
+extern const f32 float_0p01_80421040;
+extern const f32 float_0_80421044;
+extern const f32 float_100_80421048;
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_cam_ctrl_onoff) {
@@ -801,3 +801,10 @@ s32 evt_cam_letter_box_camid(void* pEvt) {
     return 2;
 }
 
+const f32 float_0p01_80421040 = 0.01f;
+const f32 float_0_80421044 = 0.0f;
+const f32 float_100_80421048 = 100.0f;
+const f32 float_deg2rad_8042104c = 0.017453292f;
+const f32 float_13000_80421050 = 13000.0f;
+const f32 float_50_80421054 = 50.0f;
+const f32 float_1_80421058 = 1.0f;

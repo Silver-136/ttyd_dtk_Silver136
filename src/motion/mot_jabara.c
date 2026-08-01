@@ -3,21 +3,11 @@
 extern void* marioGetPtr(void);
 extern s32 pouchCheckItem(s32 itemId);
 extern s32 strcmp(const char* a, const char* b);
-extern f32 float_0_80420bd4;
 extern void __memFree(s32 heap, void* ptr);
 extern void marioPaperOff(void);
 extern void allPartyRideOff(void);
 extern void marioAdjustMoveDir(void);
 extern void marioClearJumpPara(void);
-extern f32 vec3_802c3fd0[];
-extern f32 float_0p1_80420bd8;
-extern f32 float_180_80420bdc;
-extern f32 float_1p4_80420be0;
-extern f32 float_0p8_80420be4;
-extern f32 float_5_80420be8;
-extern f32 float_0p01_80420c00;
-extern f32 float_20_80420c04;
-extern f32 float_37_80420c08;
 
 s32 marioGetJabaraState(void) {
     void* mario = marioGetPtr();
@@ -46,7 +36,6 @@ s32 marioGetJabaraState(void) {
 }
 
 s32 marioPriCheckJabara(void) {
-
     void* mario = marioGetPtr();
     u32 flags = *(u32*)mario;
     s32 item;
@@ -66,6 +55,7 @@ int marioChkJabara(void) {
     extern s32 marioGetRub(s32 buttonFlags, s32* out1, s32* out2, s32* out3);
     extern char str_M_I_Y_80420cbc[];
     extern char str_M_S_1_80420c80[];
+    extern f32 float_0_80420bd4;
     void* mario = marioGetPtr();
     s32 v1;
     s32 v2;
@@ -102,6 +92,16 @@ int marioChkJabara(void) {
 #pragma use_lmw_stmw off
 
 void mot_jabara(void) {
+    extern f32 vec3_802c3fd0[];
+    extern f32 float_0_80420bd4;
+    extern f32 float_0p1_80420bd8;
+    extern f32 float_180_80420bdc;
+    extern f32 float_1p4_80420be0;
+    extern f32 float_0p8_80420be4;
+    extern f32 float_5_80420be8;
+    extern f32 float_0p01_80420c00;
+    extern f32 float_20_80420c04;
+    extern f32 float_37_80420c08;
     extern void* __memAlloc(s32 heap, s32 size);
     extern void* memset(void* dst, s32 value, u32 size);
     extern void mot_slit_post(void);
@@ -138,6 +138,7 @@ void mot_jabara(void) {
     extern void animPoseSetLocalTime(f64 time, s32 poseId);
     extern f64 sin(f64 angle);
     extern f64 cos(f64 angle);
+    extern f64 double_1p5708_802c4070;
     extern void sincosf(f32 angle, f32* outSin, f32* outCos);
     extern s32 hitCheckFilter(f64 x, f64 y, f64 z, f64 dx, f64 dy, f64 dz, s32 flags,
                               void* out0, void* out1, void* out2, void* radius,
@@ -619,7 +620,7 @@ void mot_jabara(void) {
             WF(0x18) = temp;
             MODEL[0] += temp * (f32)cos((f64)((float_3p1416_80420c90 * VIEW_DIR) / float_180_80420bdc));
             MODEL[2] += temp * (f32)sin((f64)((float_3p1416_80420c90 * VIEW_DIR) / float_180_80420bdc));
-            fall = float_neg1_80420c94 * (f32)sin((f64)1.5708f);
+            fall = float_neg1_80420c94 * (f32)sin(double_1p5708_802c4070);
             hit = marioChkLandon2((f64)fall, (f64)MODEL[1], &landY);
             if (hit == 0) {
                 POS[1] += fall;
@@ -867,6 +868,11 @@ s32 jabaraNoHitChk(void) {
 }
 
 void mot_jabara_post(void) {
+    extern f32 vec3_802c3fd0[];
+    extern f32 float_0_80420bd4;
+    extern f32 float_0p01_80420c00;
+    extern f32 float_20_80420c04;
+    extern f32 float_37_80420c08;
     typedef struct Vec { f32 x, y, z; } Vec;
     f32* data = vec3_802c3fd0;
     void* mario = marioGetPtr();
@@ -902,6 +908,12 @@ void mot_jabara_post(void) {
     }
 }
 u8 swingMain(void) {
+    extern f32 float_0_80420bd4;
+    extern f32 float_0p1_80420bd8;
+    extern f32 float_180_80420bdc;
+    extern f32 float_1p4_80420be0;
+    extern f32 float_0p8_80420be4;
+    extern f32 float_5_80420be8;
     extern f64 revise360(f64 angle);
     extern f64 __fabs(f64 value);
     extern f32 float_40_80420bd0;
@@ -1085,3 +1097,94 @@ void mot_grasp(void) {
     }
 }
 
+typedef struct VecData {
+    f32 x;
+    f32 y;
+    f32 z;
+} VecData;
+
+const VecData vec3_802c3fd0 = { 0.0f, 40.0f, 0.0f };
+const VecData vec3_802c3fdc = { 0.0f, 0.0f, 0.0f };
+const VecData vec3_802c3fe8 = { 0.0f, 0.0f, 0.0f };
+const VecData vec3_802c3ff4 = { 0.0f, 0.0f, 0.0f };
+
+const char str_M_J_1A_802c4000[] = "M_J_1A";
+const char str_p_jyabara_802c4008[] = "p_jyabara";
+const char str_PM_J_1B_802c4014[] = "PM_J_1B";
+const char str_PM_J_3B_802c401c[] = "PM_J_3B";
+const char str_PM_J_2B_802c4024[] = "PM_J_2B";
+const char str_M_J_5A_802c402c[] = "M_J_5A";
+const char str_PM_J_1C_802c4034[] = "PM_J_1C";
+const char str_M_J_1C_802c403c[] = "M_J_1C";
+const char str_PM_J_1D_802c4044[] = "PM_J_1D";
+const char str_eki_02_802c404c[] = "eki_02";
+const char str_PM_J_1F_802c4054[] = "PM_J_1F";
+const char str_PM_J_1G_802c405c[] = "PM_J_1G";
+const char str_PM_J_1H_802c4064[] = "PM_J_1H";
+const f64 double_1p5708_802c4070 = 1.5707963705062866;
+const char str_M_J_1B_802c4078[] = "M_J_1B";
+
+const f32 float_40_80420bd0 = 40.0f;
+const f32 float_0_80420bd4 = 0.0f;
+const f32 float_0p1_80420bd8 = 0.1f;
+const f32 float_180_80420bdc = 180.0f;
+const f32 float_1p4_80420be0 = 1.4f;
+const f32 float_0p8_80420be4 = 0.8f;
+const f32 float_5_80420be8 = 5.0f;
+const f32 float_neg0p1_80420bec = -0.1f;
+const f32 float_0p18_80420bf0 = 0.18f;
+const f32 float_24_80420bf4 = 24.0f;
+const f32 float_2p4_80420bf8 = 2.4f;
+const f32 float_neg0p4_80420bfc = -0.4f;
+const f32 float_0p01_80420c00 = 0.01f;
+const f32 float_20_80420c04 = 20.0f;
+const f32 float_37_80420c08 = 37.0f;
+const f32 float_0p2_80420c0c = 0.2f;
+const f32 float_0p005_80420c10 = 0.005f;
+const f32 float_1p5_80420c14 = 1.5f;
+const f32 float_0p4_80420c18 = 0.4f;
+const f32 float_1p7_80420c1c = 1.7f;
+const f32 float_0p3_80420c20 = 0.3f;
+const f32 float_1p6_80420c24 = 1.6f;
+const f32 float_480_80420c28 = 480.0f;
+const f32 float_50_80420c2c = 50.0f;
+const f32 float_25_80420c30 = 25.0f;
+const f32 float_200_80420c34 = 200.0f;
+const f32 float_10p45_80420c38 = 10.45f;
+const f32 float_0p278_80420c3c = 0.278f;
+const f32 float_neg0p031_80420c40 = -0.031f;
+const f32 float_8_80420c44 = 8.0f;
+const f32 float_neg0p84_80420c48 = -0.84f;
+const f32 float_0p08_80420c4c = 0.08f;
+const f32 float_neg0p015_80420c50 = -0.015f;
+const f32 float_4p3_80420c54 = 4.3f;
+const f32 float_0p5_80420c58 = 0.5f;
+const f32 float_100_80420c5c = 100.0f;
+const f32 float_3p5_80420c60 = 3.5f;
+const f32 float_9_80420c64 = 9.0f;
+const f32 float_neg6_80420c68 = -6.0f;
+const f32 float_neg450_80420c6c = -450.0f;
+const f32 float_neg190_80420c70 = -190.0f;
+const f32 float_neg8_80420c74 = -8.0f;
+const f32 float_4_80420c78 = 4.0f;
+const f32 float_2_80420c7c = 2.0f;
+const char str_M_S_1_80420c80[] = "M_S_1";
+const f32 float_0p6_80420c88 = 0.6f;
+const f32 float_neg0p6_80420c8c = -0.6f;
+const f32 float_3p1416_80420c90 = 3.1415927f;
+const f32 float_neg1_80420c94 = -1.0f;
+const char str_M_S_4_80420c98[] = "M_S_4";
+const f32 float_10_80420ca0 = 10.0f;
+const f32 float_1_80420ca4 = 1.0f;
+const char str_M_W_6_80420ca8[] = "M_W_6";
+const f32 float_90_80420cb0 = 90.0f;
+const f32 float_270_80420cb4 = 270.0f;
+const f32 float_neg0p5_80420cb8 = -0.5f;
+const char str_M_I_Y_80420cbc[] = "M_I_Y";
+
+extern u8 evt_cam_shake(s32 evt, s32 init);
+
+s32 quake_evt[] = {
+    0x0005005B, (s32)evt_cam_shake, 0x00000004, 0xF24A7A80,
+    0xF24A7A8F, 0x000000F0, 0x00000002, 0x00000001,
+};

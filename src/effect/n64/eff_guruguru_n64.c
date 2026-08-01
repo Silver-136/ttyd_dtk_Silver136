@@ -108,6 +108,13 @@ void effGuruguruMain(void* effect) {
     }
 }
 
+char size16x16_tex32x32_vtx[56] = {
+    0xFF, 0xF8, 0xFF, 0xF8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 8, 0xFF, 0xF8, 0, 0, 0, 0x40, 0, 0, 0, 0, 0, 0xFF,
+    0, 8, 0, 8, 0, 0, 0, 0x40, 0, 0x20, 0, 0, 0, 0xFF,
+    0xFF, 0xF8, 0, 8, 0, 0, 0, 0, 0, 0x20, 0, 0, 0, 0xFF,
+};
+
 
 void effGuruguruDisp(int cameraId, int effect) {
     typedef float Mtx[3][4];
@@ -185,3 +192,4 @@ void effGuruguruDisp(int cameraId, int effect) {
     }
 }
 
+const f32 vec3_802fb048[3] = { 0.0f, 0.0f, 0.0f };

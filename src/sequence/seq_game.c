@@ -6,10 +6,11 @@
 
 extern s32 gp;
 extern u64 OSGetTime(void);
-extern s32 dat_8041f498;
-extern s32 dat_8041f49c;
-extern s32 dat_8041f4a0;
-extern s32 maku_spread;
+extern const s32 dat_8041f498;
+extern const s32 dat_8041f49c;
+extern const s32 dat_8041f4a0;
+extern s32 maku_spread[];
+extern s32 evt_fade_entry(void* evt);
 extern void evtEntryType(void* script, s32 type, s32 a, s32 b);
 extern void seqSetSeq(s32 seq, s32 arg1, s32 arg2);
 extern void psndSetPosDirListener(void* pos, void* cam, f32 dir);
@@ -84,3 +85,21 @@ void seq_gameMain(void* seq) {
 void seq_gameExit(void) {
     *(u32*)gp &= ~2;
 }
+
+s32 maku_spread[] = {
+    0x0001000A,
+    2000,
+    0x0006005B,
+    (s32)evt_fade_entry,
+    39,
+    0,
+    0,
+    0,
+    0,
+    2,
+    1,
+};
+
+const s32 dat_8041f498 = 0xFF;
+const s32 dat_8041f49c = 0xFF;
+const s32 dat_8041f4a0 = 0xFF;

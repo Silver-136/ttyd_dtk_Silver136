@@ -875,3 +875,10 @@ u8 evt_eff_fukidashi(s32 pEvt) {
     }
     return 2;
 }
+
+const f32 float_2_80420328 = 2.0f;
+const f32 float_3_8042032c = 3.0f;
+const f32 float_0_80420330 = 0.0f;
+const char str_me_80420334[3] = "me";
+const f32 float_30_80420338 = 30.0f;
+const char zero_8042033c[1] = "";

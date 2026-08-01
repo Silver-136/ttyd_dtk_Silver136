@@ -27,8 +27,9 @@ extern f32 BeroPT[];
 extern s32 BeroNOWNUM;
 extern f32 float_360_804204e4;
 extern f32 float_neg1_80420508;
-extern u8 default_entevt;
+extern s32 default_entevt[];
 extern f32 float_6p2832_804204e0;
+extern const char* const lbl_802C2C28[8];
 
 
 extern s32 strncmp(const char*, const char*, u32);
@@ -383,7 +384,6 @@ s32 evt_bero_get_into_info(void* pEvt) {
     extern BeroInfoLocal* BeroINFOARR[];
     extern BeroInfoLocal bero_null;
     extern char float_0_8042051c;
-    static const char* directions[8] = { "n", "ne", "e", "se", "s", "sw", "w", "nw" };
     u8* event = pEvt;
     s32* lw = (s32*)(event + 0x9C);
     char* currentName = (char*)((u8*)gp + 0x11C);
@@ -420,7 +420,7 @@ found:
             if ((info->type & 0xFFF) < 2) {
                 direction = 0;
                 for (i = 0; i < 8; i++) {
-                    if (strncmp(directions[i], info->hitName, strlen(directions[i])) == 0) {
+                    if (strncmp(lbl_802C2C28[i], info->hitName, strlen(lbl_802C2C28[i])) == 0) {
                         break;
                     }
                     direction++;
@@ -443,7 +443,7 @@ found:
             if ((first->type & 0xFFF) < 2) {
                 direction = 0;
                 for (i = 0; i < 8; i++) {
-                    if (strncmp(directions[i], first->hitName, strlen(directions[i])) == 0) {
+                    if (strncmp(lbl_802C2C28[i], first->hitName, strlen(lbl_802C2C28[i])) == 0) {
                         break;
                     }
                     direction++;
@@ -510,8 +510,7 @@ s32 evt_bero_get_info_num(void* pEvt, s32 isFirstCall) {
     } BeroInfoLocal;
     extern s32 evtGetValue(void*, s32);
     extern BeroInfoLocal* BeroINFOARR[];
-    extern u8 default_outevt;
-    static const char* directions[8] = { "n", "ne", "e", "se", "s", "sw", "w", "nw" };
+    extern s32 default_outevt[];
     u8* event = pEvt;
     s32* args = *(s32**)(event + 0x18);
     s32* lw = (s32*)(event + 0x9C);
@@ -527,7 +526,7 @@ s32 evt_bero_get_info_num(void* pEvt, s32 isFirstCall) {
         if ((info->type & 0xFFF) < 2) {
             direction = 0;
             for (i = 0; i < 8; i++) {
-                if (strncmp(directions[i], info->hitName, strlen(directions[i])) == 0) {
+                if (strncmp(lbl_802C2C28[i], info->hitName, strlen(lbl_802C2C28[i])) == 0) {
                     direction = i;
                     break;
                 }
@@ -1140,3 +1139,50 @@ s32 evt_camera_change_event_from_road(void) {
     return 2;
 }
 
+extern s32 evt_mario_key_onoff(void);
+
+s32 default_entevt[] = {
+    0x00020032, 0xFE363C80, 0, 2, 1,
+};
+
+s32 default_outevt[] = {
+    0x00020032, 0xFE363C80, 0, 2, 1,
+};
+
+s32 evt_bero_info_run_none[] = {
+    0x0002005B, (s32)evt_mario_key_onoff, 1, 2, 1,
+};
+
+s32 evt_bero_info_run_gate[] = {
+    0x0002005B, (s32)evt_mario_key_onoff, 1, 2, 1,
+};
+
+void* BeroINFOARR[16];
+s32 BeroSW[16];
+s32 BeroID[16];
+
+s32 BeroEXEC;
+s32 BeroNUM;
+s32 BeroNOWNUM;
+s32 BeroCAM;
+f32 BeroOX;
+f32 BeroOY;
+f32 BeroOZ;
+f32 BeroSX;
+f32 BeroSY;
+f32 BeroSZ;
+f32 BeroEX;
+f32 BeroEY;
+f32 BeroEZ;
+f32 BeroPT[3];
+f32 BeroAT[3];
+s32 BeroMarioGO;
+
+const char str_n_804204c0[] = "n_";
+const char str_ne_804204c4[] = "ne_";
+const char str_e_804204c8[] = "e_";
+const char str_se_804204cc[] = "se_";
+const char str_s_804204d0[] = "s_";
+const char str_sw_804204d4[] = "sw_";
+const char str_w_804204d8[] = "w_";
+const char str_nw_804204dc[] = "nw_";

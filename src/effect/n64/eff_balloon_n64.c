@@ -1,4 +1,9 @@
 #include "effect/n64/eff_balloon_n64.h"
+
+const f32 vec3_802fab50[3] = { 0.0f, 0.0f, 0.0f };
+
+extern const char str_BalloonN64_802fab68[];
+
 void effBalloonMain(void* entry);
 void effBalloonDisp(s32 cameraId, void* effect);
 
@@ -17,7 +22,6 @@ typedef struct EffBalloonWork {
 void* effEntry(void);
 void* __memAlloc(s32 heap, s32 size);
 
-extern char str_BalloonN64_802fab68[];
 extern f32 float_0_80424cbc;
 
 #pragma no_register_save_helpers on
@@ -27,7 +31,7 @@ void* effBalloonN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unk14, f32 scale) {
     EffBalloonWork* work;
     f32 zero;
 
-    *(char**)((s32)entry + 0x14) = str_BalloonN64_802fab68;
+    *(const char**)((s32)entry + 0x14) = str_BalloonN64_802fab68;
     *(s32*)((s32)entry + 0x8) = 1;
     work = __memAlloc(3, 0xCC);
     *(EffBalloonWork**)((s32)entry + 0xC) = work;
@@ -147,3 +151,5 @@ void effBalloonDisp(s32 cameraId, void* effect) {
     PSMTXTrans(m,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC));PSMTXRotRad(r,0x79,-*(f32*)((u8*)camGetPtr(4)+0x114)*0.0174533f);PSMTXConcat(m,r,m);PSMTXScale(s,*(f32*)(w+0x10),*(f32*)(w+0x10),1.0f);PSMTXConcat(m,s,m);PSMTXConcat((u8*)cam+0x11C,m,m);GXLoadPosMtxImm(m,0);GXSetCurrentMtx(0);GXSetCullMode(0);
     if(type<100){GXBegin(0x90,0,3);tri1(0x15,2,1);}else{GXBegin(0x90,0,6);tri1(0,1,2);tri1(0,0x15,1);}for(i=0;i<19;i++){GXBegin(0x90,0,3);tri1(1,i+2,i+3);}
 }
+
+const char str_BalloonN64_802fab68[] = "BalloonN64";

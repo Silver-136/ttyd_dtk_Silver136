@@ -1,13 +1,37 @@
 #include "effect/n64/eff_akari_pose_n64.h"
 
-extern s32 max_seq_num[];
+const char str_AkariPoseN64_802faaf8[] = "AkariPoseN64";
+
+f32 scale_data[] = {
+    0.9f, 1.0f, 1.0f, 0.9f, 0.85f, 0.8f, 0.75f, 0.7f,
+    0.65f, 0.6f, 0.55f, 0.5f, 0.45f, 0.4f, 0.35f, 0.3f,
+    0.25f, 0.2f, 0.15f, 0.1f, 0.05f, 0.03f, 0.02f, 0.01f,
+};
+
+f32 scale_data2[] = {
+    0.9f, 1.0f, 1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f,
+    0.4f, 0.3f, 0.2f, 0.1f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+};
+
+s32 max_seq_num[] = { 24, 12 };
+u8 a_data[] = {
+    0xFA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+};
+u8 a_data2[] = {
+    0xFA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
 extern f32 float_0_80424c50;
 
 void* effAkariPoseN64Entry(s32 type, s32 count, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effAkariPoseMain(void);
-    extern char str_AkariPoseN64_802faaf8[];
     extern f32 float_0p5_80424c70;
     extern f32 float_neg1_80424c74;
     void* entry;
@@ -17,7 +41,7 @@ void* effAkariPoseN64Entry(s32 type, s32 count, s32 timer, f32 x, f32 y, f32 z, 
     f32 halfSeq;
 
     entry = effEntry();
-    *(char**)((s32)entry + 0x14) = str_AkariPoseN64_802faaf8;
+    *(const char**)((s32)entry + 0x14) = str_AkariPoseN64_802faaf8;
     *(s32*)((s32)entry + 8) = count + 1;
     work = __memAlloc(3, (count + 1) * 0x38);
     *(void**)((s32)entry + 0xC) = work;
@@ -54,10 +78,6 @@ void effAkariPoseMain(void* entry) {
     extern f32 dispCalcZ(void* pos);
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
     extern void effAkariPoseDisp(void);
-    extern u8 a_data[];
-    extern f32 scale_data[];
-    extern u8 a_data2[];
-    extern f32 scale_data2[];
     extern f32 float_0p1_80424c54;
     extern f32 float_0p2_80424c58;
     extern f32 float_360_80424c5c;
@@ -245,4 +265,3 @@ void effAkariPoseDisp(int param_1, void* param_2) {
         }
     }
 }
-

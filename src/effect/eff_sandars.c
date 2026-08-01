@@ -3,10 +3,10 @@
 
 extern void* gp;
 extern s32 animGroupBaseAsync(const char* name, s32 heap, s32 flags);
-extern char str_EFF_bakuhatu_80300a6c[];
-extern f32 float_4_80428150;
-extern f32 float_0_80428148;
-extern f32 float_deg2rad_80428138;
+extern const char str_EFF_bakuhatu_80300a6c[];
+extern const f32 float_4_80428150;
+extern const f32 float_0_80428148;
+extern const f32 float_deg2rad_80428138;
 
 /* CHATGPT STUB FILL: main/effect/eff_sandars 20260624_184929 */
 
@@ -17,14 +17,14 @@ void* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     extern f64 cos(f64 x);
     extern f64 sin(f64 x);
     extern void effSandarsMain(void);
-    extern char str_Sandars_80300a88[];
-    extern f32 float_1_8042814c;
-    extern f32 float_6p2832_8042815c;
-    extern f32 float_360_80428160;
-    extern f32 float_0p2_80428164;
-    extern f32 float_51_80428168;
-    extern f32 float_1p1_8042816c;
-    extern f32 float_15_80428170;
+    extern const char str_Sandars_80300a88[];
+    extern const f32 float_1_8042814c;
+    extern const f32 float_6p2832_8042815c;
+    extern const f32 float_360_80428160;
+    extern const f32 float_0p2_80428164;
+    extern const f32 float_51_80428168;
+    extern const f32 float_1p1_8042816c;
+    extern const f32 float_15_80428170;
 
     void* effect;
     void* work;
@@ -38,7 +38,7 @@ void* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     effect = effEntry(type);
     count = (type == 5) ? 1 : 6;
     heap = (*(s32*)((s32)gp + 0x14) != 0);
-    *(char**)((s32)effect + 0x14) = str_Sandars_80300a88;
+    *(const char**)((s32)effect + 0x14) = str_Sandars_80300a88;
     *(s32*)((s32)effect + 8) = count;
     work = __memAlloc(3, count * 0x44);
     *(void**)((s32)effect + 0xC) = work;
@@ -115,9 +115,9 @@ void effSandarsMain(void* effect) {
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, f32 z, void* param);
     extern void effSandarsDisp(s32 cameraId, void* effect);
     extern void effSandarsDisp2(s32 cameraId, void* effect);
-    extern char str_Z_1_80428158[];
+    extern const char str_Z_1_80428158[];
     extern u8 scale_data[];
-    extern f32 float_100_80428154;
+    extern const f32 float_100_80428154;
 
     void* work;
     void* part;
@@ -214,7 +214,7 @@ void effSandarsDisp(s32 cameraId, void* effect) {
     extern void animPoseSetMaterialEvtColor(s32 poseId, u32* color);
     extern void animPoseMain(s32 poseId);
     extern void animPoseDrawMtx(s32 poseId, f32 mtx[3][4], s32 mode, f32 a, f32 b);
-    extern u32 dat_80428130;
+    extern const u32 dat_80428130;
 
     u32 evtColor;
     u32 color;
@@ -286,7 +286,7 @@ void effSandarsDisp2(s32 cameraId, void* effect) {
     extern void GXSetCurrentMtx(s32);
     extern void GXSetChanMatColor(s32, u32*);
     extern void GXBegin(s32, s32, s32);
-    extern u32 dat_80428134;
+    extern const u32 dat_80428134;
 
     void* work = *(void**)((s32)effect + 0xC);
     void* camera = camGetPtr(cameraId);
@@ -347,3 +347,30 @@ void effSandarsDisp2(s32 cameraId, void* effect) {
     }
 }
 
+const f32 vec3_80300a60[3] = { 0.0f, 0.0f, 0.0f };
+const char str_EFF_bakuhatu_80300a6c[] = "EFF_bakuhatu";
+const f64 double_to_int_mask_80300a80 = 4503599627370496.0;
+const char str_Sandars_80300a88[] = "Sandars";
+const f64 double_to_int_80300a90 = 4503601774854144.0;
+
+u8 scale_data[] = {
+    0, 0, 0, 13, 28, 44, 60, 75, 89, 101, 111, 117, 120, 75, 0,
+};
+
+const u32 dat_80428130 = 0xFFFFFF00;
+const u32 dat_80428134 = 0xFFFFFF00;
+const f32 float_deg2rad_80428138 = 0.017453292f;
+const f32 float_32_8042813c = 32.0f;
+const f32 float_0p5_80428140 = 0.5f;
+const f32 float_16_80428144 = 16.0f;
+const f32 float_0_80428148 = 0.0f;
+const f32 float_1_8042814c = 1.0f;
+const f32 float_4_80428150 = 4.0f;
+const f32 float_100_80428154 = 100.0f;
+const char str_Z_1_80428158[] = "Z_1";
+const f32 float_6p2832_8042815c = 6.2831855f;
+const f32 float_360_80428160 = 360.0f;
+const f32 float_0p2_80428164 = 0.2f;
+const f32 float_51_80428168 = 51.0f;
+const f32 float_1p1_8042816c = 1.1f;
+const f32 float_15_80428170 = 15.0f;

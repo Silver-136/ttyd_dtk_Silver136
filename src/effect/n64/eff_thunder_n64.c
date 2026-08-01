@@ -354,3 +354,6 @@ void effThunderDisp(s32 cameraId, void* effect) {
         GXBegin(0x90, 0, type == 1 ? 0x120 : 0xE4);
     }
 }
+
+const f32 vec3_802fc190[3] = { 0.0f, 0.0f, 0.0f };
+const char str_ThunderN64_802fc1a8[] = "ThunderN64";

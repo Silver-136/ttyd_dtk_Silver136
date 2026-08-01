@@ -1,8 +1,13 @@
 #include "driver/imgdrv.h"
 
-extern void* wp;
+static u32 work[2];
+static void* wp = work;
 
 void* __memAlloc(s32 heap, u32 size);
+
+extern const u32 vec3_802c2a98[3];
+extern const u32 dat_80420368;
+extern const u32 dat_8042036c;
 
 void zFill(void) {
     extern void* camGetCurPtr(void);
@@ -34,7 +39,16 @@ void zFill(void) {
     extern const f32 float_6p2832_8042039c;
     extern const f32 float_360_804203a0;
     extern const f32 float_neg1000_804203a4;
-    extern const u8 depth_image_444[];
+    static u32 depth_image[32] = {
+        0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+        0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+        0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+        0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+        0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+        0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+        0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+        0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+    };
     void* cam;
     u8 texObj[0x20];
     f32 mtx[3][4];
@@ -53,7 +67,7 @@ void zFill(void) {
     negHalfDepth = -halfDepth;
     negFarX = -farX;
 
-    GXInitTexObj(texObj, (void*)depth_image_444, 4, 4, 0x11, 1, 1, 0);
+    GXInitTexObj(texObj, depth_image, 4, 4, 0x11, 1, 1, 0);
     GXLoadTexObj(texObj, 0);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
@@ -107,7 +121,6 @@ void zFill(void) {
 
 
 u8 imgDisp(s32 param_1, void* param_2) {
-    extern void* wp;
     extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
     extern void PSMTXConcat(void* a, void* b, void* out);
@@ -382,9 +395,6 @@ u8 imgDisp_ProjPlane(s32 param_1, int param_2) {
     extern const f32 float_24_80420384;
     extern const f32 float_32_80420388;
     extern const f32 float_neg24_8042038c;
-    extern const u32 vec3_802c2a98[];
-    extern u32 dat_80420368;
-    extern u32 dat_8042036c;
     u32 mode;
     u32 flags;
     f32 mtx[3][4];
@@ -596,7 +606,6 @@ u8 imgCapture_Prim(int param_1, int param_2) {
 }
 
 s32 imgCapture(s32 layer) {
-    extern void* wp;
     extern void* gp;
     extern void imgCapture_Prim(void* img, s32 index);
     s32 i = 0;
@@ -635,7 +644,6 @@ void imgInit(void) {
     memset(*(void**)((s32)wp + 4), 0, *(s32*)wp * 0x158);
 }
 void imgAutoRelease(s32 value) {
-    extern void* wp;
     extern void* memset(void* dst, s32 value, u32 size);
     extern void smartFree(void* ptr);
     s32 count;
@@ -676,7 +684,6 @@ void imgAutoRelease(s32 value) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 imgEntry(s32 name, s32 flag) {
-    extern void* wp;
     extern s32 strcmp(const char* a, const char* b);
     extern char* strcpy(char* dst, const char* src);
     extern void PSMTXIdentity(void* mtx);
@@ -767,7 +774,6 @@ s32 imgEntry(s32 name, s32 flag) {
 
 void imgMain(void) {
     extern void* gp;
-    extern void* wp;
     extern void dispEntry(s32 layer, s32 order, void* callback, f32 z, void* user);
     extern void animPoseSetMaterialFlagOff(void* pose, u32 flag);
     extern void animPoseSetMaterialFlagOn(void* pose, u32 flag);
@@ -834,7 +840,6 @@ void imgMain(void) {
 }
 
 void* imgNameToPtr(s32 name, s32 flag) {
-    extern void* wp;
     extern s32 strcmp(const char* a, const char* b);
     s32 count;
     s32 i;
@@ -1133,3 +1138,21 @@ u8 imgShadowDisp(s32 param_1, void* param_2) {
         }
     }
 }
+
+const u32 vec3_802c2a98[3] = { 0, 0, 0 };
+const u32 dat_80420368 = 0xFFFFFFFF;
+const u32 dat_8042036c = 0xFFFFFFFF;
+const f32 float_0_80420370 = 0.0f;
+const f32 float_1_80420374 = 1.0f;
+const f32 float_64_80420378 = 64.0f;
+const f32 float_48_8042037c = 48.0f;
+const f32 float_neg32_80420380 = -32.0f;
+const f32 float_24_80420384 = 24.0f;
+const f32 float_32_80420388 = 32.0f;
+const f32 float_neg24_8042038c = -24.0f;
+const f32 float_3p1416_80420390 = 3.141592f;
+const f32 float_0p5_80420394 = 0.5f;
+const f32 float_180_80420398 = 180.0f;
+const f32 float_6p2832_8042039c = 6.2831855f;
+const f32 float_360_804203a0 = 360.0f;
+const f32 float_neg1000_804203a4 = -1000.0f;

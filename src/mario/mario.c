@@ -8,7 +8,17 @@
 #include "mario/mario_balloon.h"
 #include "mario/mario_pouch.h"
 
-extern void* mp;
+typedef struct MarioVec {
+    f32 x;
+    f32 y;
+    f32 z;
+} MarioVec;
+
+u32 gap_08_8041E904_sbss;
+void* mp;
+MarioVec R_last_position;
+s32 blurPosId;
+MarioVec blurPos[8];
 extern s32 strcmp(const char* a, const char* b);
 extern void marioChgMot(s32 motion);
 extern void marioResetCamShiftRate(void);
@@ -619,18 +629,12 @@ s32 N_marioChkUseParty(void) {
     return *(s8*)((s32)mp + 0x38);
 }
 u8 marioFBattlePrepare(void) {
-    typedef struct Vec {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec;
-    extern Vec R_last_position;
     extern void marioAdjustMoveDir(void);
     extern void partyUsePost(void* party);
     extern void partyCtrlOff(void);
     void* mario = mp;
 
-    R_last_position = *(Vec*)((s32)mario + 0x8C);
+    R_last_position = *(MarioVec*)((s32)mario + 0x8C);
     marioAdjustMoveDir();
     if (*(u16*)((s32)mario + 0x2E) != 0x14) {
         *(u32*)mario |= 0x1000;
@@ -639,23 +643,17 @@ u8 marioFBattlePrepare(void) {
     partyCtrlOff();
 }
 void marioFBattlePost(void) {
-    typedef struct Vec {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec;
-    extern Vec R_last_position;
     extern void marioYoshiForceCancel(void);
-    extern void partyGetAppearPos(void*, Vec*);
+    extern void partyGetAppearPos(void*, MarioVec*);
     extern void partyCtrlOn(void);
     void* mario;
     void* party;
-    Vec pos;
+    MarioVec pos;
 
     mario = mp;
     *(u32*)mario &= ~0x1000;
     if (*(u16*)((s32)mario + 0x2E) == 0x14) {
-        *(Vec*)((s32)mario + 0x8C) = R_last_position;
+        *(MarioVec*)((s32)mario + 0x8C) = R_last_position;
     }
     if (*(u16*)((s32)mario + 0x2E) == 0x1A) {
         marioYoshiForceCancel();
@@ -663,7 +661,7 @@ void marioFBattlePost(void) {
     party = partyGetPtr(marioGetPartyId());
     if (party != 0) {
         partyGetAppearPos(party, &pos);
-        *(Vec*)((s32)party + 0x58) = pos;
+        *(MarioVec*)((s32)party + 0x58) = pos;
     }
     partyCtrlOn();
     if (*(u16*)((s32)mario + 0x2E) == 0x12 || *(u16*)((s32)mario + 0x2E) == 0x14) {

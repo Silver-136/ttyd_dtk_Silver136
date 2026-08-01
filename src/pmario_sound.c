@@ -9,9 +9,10 @@ PaperSoundEffect pssfx[40];
 PaperSoundBGM psbgm[2];
 
 //.data
-PaperSoundEffectData pssfxlist[3042];
+extern PaperSoundEffectData pssfxlist[];
 
-extern s32 init_f;
+s32 init_f;
+s32 _psndPushGroup_trg;
 extern void* gp;
 extern const f32 float_0_804218d0;
 extern const f32 float_180_804218e0;
@@ -2023,3 +2024,25 @@ s32 psndENV_LPF(u32 param_1, short param_2) {
     *(u16*)(work + 0x20 + offset) = param_2;
     return 1;
 }
+
+u32 silent_tbl[10] = {
+    10, 20, 30, 40, 50,
+    60, 70, 80, 90, 100,
+};
+
+const f32 float_0_804218c8 = 0.0f;
+const f32 float_1000_804218cc = 1000.0f;
+const f32 float_0_804218d0 = 0.0f;
+const f32 float_6p2832_804218d4 = 6.2831855f;
+const f32 float_360_804218d8 = 360.0f;
+const f32 float_750_804218dc = 750.0f;
+const f32 float_180_804218e0 = 180.0f;
+const f32 float_127_804218e4 = 127.0f;
+const f32 float_2048_804218e8 = 2048.0f;
+const f32 float_64_804218ec = 64.0f;
+const f32 float_0p5_804218f0 = 0.5f;
+const f32 float_200_804218f4 = 200.0f;
+const f32 float_45_804218f8 = 45.0f;
+const f32 float_2_804218fc = 2.0f;
+const f32 float_90_80421900 = 90.0f;
+const f32 float_270_80421904 = 270.0f;

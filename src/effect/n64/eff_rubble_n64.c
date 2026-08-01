@@ -120,3 +120,6 @@ void effRubbleDisp(s32 cameraId, void* effect) {
     PSMTXTrans(trans,*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC));PSMTXRotRad(rot,0x78,float_deg2rad_80425fb4**(f32*)(work+0x24));PSMTXConcat(trans,rot,trans);PSMTXRotRad(rot,0x79,float_deg2rad_80425fb4**(f32*)(work+0x2C));PSMTXConcat(trans,rot,trans);PSMTXRotRad(rot,0x7A,float_deg2rad_80425fb4**(f32*)(work+0x28));PSMTXConcat(trans,rot,trans);PSMTXScale(scale,*(f32*)(work+0x3C),*(f32*)(work+0x3C),*(f32*)(work+0x3C));PSMTXConcat(trans,scale,trans);PSMTXConcat((void*)((s32)camGetPtr(cameraId)+0x11C),trans,trans);GXLoadPosMtxImm(trans,0);GXSetCurrentMtx(0);GXSetTevColor(1,&color);GXSetNumChans(1);GXSetChanCtrl(4,0,0,1,0,0,2);GXSetNumTexGens(0);GXSetNumTevStages(1);GXSetTevOrder(0,0xFF,0xFF,4);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,0,2,1,0);GXSetTevAlphaIn(0,0,0,0,1);GXSetCullMode(0);
     if(type==3){effSetVtxDescN64((void*)0x803A82B8);GXBegin(0x90,0,0x1E);}else{effSetVtxDescN64((void*)0x803A8130);GXBegin(0x90,0,0x1E);}tri2(0,1,2,0,3,4,5,0);tri2(6,7,8,0,9,10,11,0);tri2(12,13,14,0,15,16,17,0);
 }
+
+const f32 vec3_802fbec8[3] = { 0.0f, 0.0f, 0.0f };
+const char str_RubbleN64_802fbee0[] = "RubbleN64";

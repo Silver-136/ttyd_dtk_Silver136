@@ -1266,3 +1266,40 @@ void* eventStgDtPtr(s32 id) {
 s32 eventStgNum(void) {
     return 10;
 }
+
+const char str_jp_80421d70[] = "広場";
+const char str_Plaza_80421d78[] = "Plaza";
+const char zero_80421d80[] = "";
+const char str_dokan_80421d84[] = "dokan";
+const char str_stg_1_80421d8c[] = "stg_1";
+const char str_Quiz_80421d94[] = "Quiz";
+const char str_jp_80421d9c[] = "カギ";
+const char str_Key_80421da4[] = "Key";
+const char str_jp_80421da8[] = "錠前";
+const char str_Lock_80421db0[] = "Lock";
+const char str_jp_80421db8[] = "かぎ";
+const char str_Key_2_80421dc0[] = "Key 2";
+const char str_Key_3_80421dc8[] = "Key 3";
+const char str_Key_4_80421dd0[] = "Key 4";
+const char str_event_80421dd8[] = "event";
+const char str_stg_2_80421de0[] = "stg_2";
+const char str_start_80421de8[] = "start";
+const char str_Match_80421df0[] = "Match";
+const char str_fall_80421df8[] = "fall";
+const char str_stg_4_80421e00[] = "stg_4";
+const char str_Dinge_80421e08[] = "Dinge";
+const char str_jp_80421e10[] = "わら";
+const char str_ana_80421e18[] = "ana";
+const char str_stg_5_80421e1c[] = "stg_5";
+const char str_Start_80421e24[] = "Start";
+const char str_stg_6_80421e2c[] = "stg_6";
+const char str_Bub_80421e34[] = "Bub";
+const char str_Day_2_80421e38[] = "Day 2";
+const char str_stg_7_80421e40[] = "stg_7";
+const char str_stg_8_80421e48[] = "stg_8";
+const char str_jp_80421e50[] = "鍵";
+const char str_owari_80421e54[] = "owari";
+const char str_jp_80421e5c[] = "海上";
+const char str_Koops_80421e64[] = "Koops";
+const char str_jp_80421e6c[] = "月";
+const char str_Moon_80421e70[] = "Moon";

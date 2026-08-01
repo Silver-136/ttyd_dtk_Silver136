@@ -7,6 +7,13 @@ extern void* __memAlloc(s32 heap, u32 size);
 extern f32 float_1_80424624;
 
 const char str_Updown_802f9708[] = "Updown";
+u16 icon_id[] = { 482, 484, 486, 488, 490, 492, 494, 496, 498, 500 };
+u8 scale_data[] = {
+    120, 0,   115, 13,  110, 28, 104, 44, 99, 59,
+    94,  74,  89,  88,  85,  100, 82, 111, 80, 120,
+    80,  123, 84,  120, 89,  113, 95, 105, 100, 100,
+};
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effUpdownEntry(f32 x, s32 type, f32 y, s32 arg1, f32 z, s32 arg2) {
@@ -56,7 +63,6 @@ u8 effUpdownMain(void* effect) {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effUpdownDisp(void);
-    extern u8 scale_data[];
     extern f64 sin(f64);
 
     UpdownWork* work;
@@ -220,7 +226,6 @@ void effUpdownDisp(s32 cameraId, void* effect) {
     extern void GXSetCurrentMtx(u32);
     extern void polygon(s32, s32, f32, f32, f32, f32, f32, f32);
     extern void iconGetTexObj(void*, u16);
-    extern u16 icon_id[];
     extern f32 float_3p1416_80424620;
     extern f32 float_1_80424624;
     extern f32 float_deg2rad_80424628;

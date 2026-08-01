@@ -232,6 +232,8 @@ void effHitDisp(s32 cameraId, void* effect) {
     }
 }
 
+u8 fire_data[13] = { 0xFF, 0xFF, 0xC8, 0x82, 0x3C, 0, 0, 0, 0, 0, 0, 0, 0 };
+
 void main_dl(void* effect, f32 model[3][4]) {
     typedef f32 Mtx[3][4];
     extern void* camGetPtr(s32);
@@ -291,4 +293,3 @@ void main_dl(void* effect, f32 model[3][4]) {
         tri2(0, 1, 2, 0, 0, 2, 3);
     }
 }
-

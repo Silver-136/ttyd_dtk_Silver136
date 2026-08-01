@@ -1,4 +1,12 @@
 #include "effect/n64/eff_explosion_n64.h"
+
+char size32x32_tex32x32_vtx[56] = {
+    0xFF, 0xF0, 0xFF, 0xF0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x10, 0xFF, 0xF0, 0, 0, 0xFC, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x10, 0, 0x10, 0, 0, 0xFC, 0, 4, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xF0, 0, 0x10, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+};
+
 void effExplosionMain(void* effect);
 void effExplosionDisp(s32 cameraId, void* effect);
 
@@ -69,6 +77,7 @@ void* effExplosionN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scal
 
     return entry;
 }
+
 #pragma use_lmw_stmw on
 #pragma no_register_save_helpers off
 
@@ -122,3 +131,5 @@ void effExplosionDisp(s32 cameraId, void* effect) {
     PSMTXScale(s,0.00390625f,0.03125f,0.0f);PSMTXTrans(t,(f32)((frame+1)*32),0.0f,0.0f);PSMTXConcat(s,t,s);GXLoadTexMtxImm(s,0x21,1);
     GXSetCullMode(0);effSetVtxDescN64((void*)0x8039F2E0);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3,0);
 }
+
+const Vec3 vec3_802fae38 = { 0.0f, 0.0f, 0.0f };

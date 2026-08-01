@@ -202,3 +202,12 @@ void battleAcDisp_CraneTiming(void) {
 void battleAcDelete_CraneTiming(void* wp) {
     *(s32*)((s32)wp + 0x1C9C) = 1002;
 }
+
+const f64 double_5_802fe680 = 5.0;
+const f64 double_20_802fe688 = 20.0;
+
+const f32 float_neg300_80427070 = -300.0f;
+const f32 float_0_80427074 = 0.0f;
+const f32 float_1p5_80427078 = 1.5f;
+const f32 float_5_8042707c = 5.0f;
+const f32 float_neg1_80427080 = -1.0f;

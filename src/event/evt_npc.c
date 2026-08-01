@@ -3297,3 +3297,47 @@ s32 evt_npc_release_filednpc(void* pEvt) {
     }
     return 2;
 }
+
+const char str_me_8041fd80[] = "me";
+const f32 float_0_8041fd84 = 0.0f;
+const f32 float_1_8041fd88 = 1.0f;
+const f32 float_neg1_8041fd8c = -1.0f;
+const f32 float_0p5_8041fd90 = 0.5f;
+const f32 float_1000_8041fd94 = 1000.0f;
+const f32 float_0p1_8041fd98 = 0.1f;
+const f32 float_20_8041fd9c = 20.0f;
+const f32 float_6p2832_8041fda0 = 6.2831855f;
+const f32 float_360_8041fda4 = 360.0f;
+const f32 float_3p1416_8041fda8 = 3.1415927f;
+const f32 float_2_8041fdac = 2.0f;
+const f32 float_180_8041fdb0 = 180.0f;
+const f32 float_36_8041fdb4 = 36.0f;
+const f32 float_18_8041fdb8 = 18.0f;
+const f32 float_3_8041fdbc = 3.0f;
+const f32 float_10_8041fdc0 = 10.0f;
+const f32 float_8_8041fdc4 = 8.0f;
+const f32 float_0p66667_8041fdc8 = 0.6666667f;
+const char str_party_8041fdcc[] = "party";
+const char str_mario_8041fdd4[] = "mario";
+const f32 float_90_8041fddc = 90.0f;
+const f32 float_5_8041fde0 = 5.0f;
+const f32 float_100_8041fde4 = 100.0f;
+const f32 float_4_8041fde8 = 4.0f;
+const f32 float_15_8041fdec = 15.0f;
+const f32 float_40_8041fdf0 = 40.0f;
+const f32 float_1p5708_8041fdf4 = 1.5707964f;
+const f32 float_60_8041fdf8 = 60.0f;
+const f32 float_neg4_8041fdfc = -4.0f;
+const f32 float_neg980_8041fe00 = -980.0f;
+const f32 float_0p0005_8041fe04 = 0.0005f;
+const char str_sPCTd_8041fe08[] = "_s%d";
+
+s32 npc_init_evt[] = {
+    0x0004005B,
+    (s32)evt_npc_flag_onoff,
+    1,
+    (s32)(void*)str_me_8041fd80,
+    0x600,
+    2,
+    1,
+};

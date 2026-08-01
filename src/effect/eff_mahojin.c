@@ -414,3 +414,4 @@ void effMahojinDisp(s32 cameraId, void* effect) {
     }
 }
 
+const char str_Mahojin_802fefb4[] = "Mahojin";

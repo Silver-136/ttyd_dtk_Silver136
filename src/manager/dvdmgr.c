@@ -13,9 +13,9 @@ struct DVDEntry {
 };
 
 u8 dvdmgr_thread[0x318];
-s32 dvdmgr_thread_on;
-void* _callback;
 void* dvdq;
+void* _callback;
+s32 dvdmgr_thread_on;
 
 void DVDMgrMain(void);
 void OSYieldThread(void);
@@ -258,3 +258,4 @@ void DVDMgrSetupCallback(void* callback) {
     _callback = callback;
 }
 
+u8 stack[0x4000];

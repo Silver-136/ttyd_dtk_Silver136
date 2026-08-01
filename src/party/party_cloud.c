@@ -157,6 +157,8 @@ f32 cloudGetBreathPower(void* pos, f32 radius) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+f32 cloud_at[3];
 s32 cloudGetHitBreathout(int param_1) {
     void* party;
     s32 ret;
@@ -669,4 +671,3 @@ done:
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-

@@ -7,9 +7,9 @@ s32 battleAcMain_GaugeTiming2(void* battleWork) {
     extern s32 irand(s32);
     extern u32 BattlePadCheckTrigger(u32);
     extern s32 psndSFXOn(char*);
-    extern char str_SFX_AC_COMMAND_NG1_80300998[];
-    extern char str_SFX_AC_PONE1_803009ac[];
-    extern char str_SFX_AC_COMMAND_OK1_803009bc[];
+    extern const char str_SFX_AC_COMMAND_NG1_80300998[];
+    extern const char str_SFX_AC_PONE1_803009ac[];
+    extern const char str_SFX_AC_COMMAND_OK1_803009bc[];
     u8* bw = (u8*)battleWork;
     u8* unit = *(u8**)(bw + 0x1C90);
     u8* extra = bw + 0x1F4C;
@@ -136,13 +136,13 @@ state_1000:
             if (distance < 0.0f) distance = -distance;
             if (*(s8*)(extra + 0x38 + i) == 0 && threshold + 6.0f < *(f32*)(extra + 4)) {
                 *(s8*)(extra + 0x38 + i) = -1;
-                psndSFXOn(str_SFX_AC_COMMAND_NG1_80300998);
+                psndSFXOn((char*)str_SFX_AC_COMMAND_NG1_80300998);
             }
             *(s32*)(extra + 0x10) = 0;
             if (*(s8*)(extra + 0x38 + i) == 0 && distance <= 6.0f) {
                 *(s32*)(extra + 0x10) = 1;
                 if (*(s32*)(extra + 0x48 + i * 4) == -1)
-                    *(s32*)(extra + 0x48 + i * 4) = psndSFXOn(str_SFX_AC_PONE1_803009ac);
+                    *(s32*)(extra + 0x48 + i * 4) = psndSFXOn((char*)str_SFX_AC_PONE1_803009ac);
             }
         }
         if (autoInput && *(s32*)(extra + 0x10) != 0) trigger = 1;
@@ -154,12 +154,12 @@ state_1000:
                     if (distance <= 6.0f) {
                         *(s8*)(extra + 0x38 + i) = 1;
                         (*(s32*)(bw + 0x1CE8))++;
-                        psndSFXOn(str_SFX_AC_COMMAND_OK1_803009bc);
+                        psndSFXOn((char*)str_SFX_AC_COMMAND_OK1_803009bc);
                     } else {
                         *(s8*)(extra + 0x40 + i) = 1;
                         if (i == count - 1) {
                             *(s8*)(extra + 0x38 + i) = -1;
-                            psndSFXOn(str_SFX_AC_COMMAND_NG1_80300998);
+                            psndSFXOn((char*)str_SFX_AC_COMMAND_NG1_80300998);
                         }
                     }
                     break;
@@ -169,6 +169,10 @@ state_1000:
     }
     return 1;
 }
+
+const char str_SFX_AC_COMMAND_NG1_80300998[] = "SFX_AC_COMMAND_NG1";
+const char str_SFX_AC_PONE1_803009ac[] = "SFX_AC_PONE1";
+const char str_SFX_AC_COMMAND_OK1_803009bc[] = "SFX_AC_COMMAND_OK1";
 
 s32 battleAcResult_GaugeTiming2(void* wp) {
     return *(s32*)((s32)wp + 0x1CB8);
@@ -312,4 +316,3 @@ void actionCommandDisp(f32 x, f32 y) {
         }
     }
 }
-

@@ -19,7 +19,19 @@ void mapPauseAnimationAll(void);
 void mapPlayAnimationLv(s32 id, s32 anim, s32 level);
 extern void* marioGetPtr(void);
 extern char* hitGetName(void*);
-extern s32 strcmp(char*, char*);
+extern s32 strcmp(const char*, const char*);
+
+const u32 dat_8041fa38 = 0x000000FF;
+const f32 float_3_8041fa3c = 3.0f;
+const f32 float_0p6_8041fa40 = 0.6f;
+const f32 float_0p4_8041fa44 = 0.4f;
+const f32 float_1024_8041fa48 = 1024.0f;
+const char str_mario_8041fa4c[] = "mario";
+const char str_party_8041fa54[] = "party";
+
+const char str_p_hikohki_802c0188[] = "p_hikohki";
+const char str_p_hune_802c0194[] = "p_hune";
+const char str_extparty_802c019c[] = "extparty";
 
 s32 evt_mapobj_trans(void* pEvt) {
     extern void mapObjTranslate(s32, f32, f32, f32);
@@ -172,17 +184,12 @@ USER_FUNC(evt_map_blend_off) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_map_blend_set_flag(void* pEvt) {
-    extern s32 strcmp(char* lhs, char* rhs);
     extern s32 marioGetPartyId(void);
     extern s32 marioGetExtraPartyId(void);
     extern void* partyGetPtr(s32 id);
     extern void* evtNpcNameToPtr(EventEntry* event, char* name);
     extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
     extern void animPoseSetMaterialFlagOff(s32 poseId, u32 flag);
-    extern char str_mario_8041fa4c[6];
-    extern char str_party_8041fa54[6];
-    extern char str_extparty_802c019c[];
-
     s32* args = ((EventEntry*)pEvt)->args;
     s32 mode = evtGetValue((EventEntry*)pEvt, args[0]);
     char* name = (char*)evtGetValue((EventEntry*)pEvt, args[1]);
@@ -457,9 +464,9 @@ s32 evt_mapobj_get_position(void* pEvt) {
 
     args = *(s32**)((s32)pEvt + 0x18);
     mapObjGetPos(evtGetValue(pEvt, args[0]), pos);
-    evtSetValue(pEvt, args[1], (s32)(pos[0] * 1024.0f));
-    evtSetValue(pEvt, args[2], (s32)(pos[1] * 1024.0f));
-    evtSetValue(pEvt, args[3], (s32)(pos[2] * 1024.0f));
+    evtSetValue(pEvt, args[1], (s32)(pos[0] * float_1024_8041fa48));
+    evtSetValue(pEvt, args[2], (s32)(pos[1] * float_1024_8041fa48));
+    evtSetValue(pEvt, args[3], (s32)(pos[2] * float_1024_8041fa48));
     return 2;
 }
 #pragma no_register_save_helpers on
@@ -582,11 +589,9 @@ s32 check2(void* pEvt) {
 #pragma use_lmw_stmw off
 s32 evt_map_entry_airport_harbor(void* pEvt) {
     extern void* mapGetMapObj(char* name);
-    extern s32 animGroupBaseAsync(char* name, s32 mode, s32 flags);
+    extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
     extern s32 pouchCheckItem(s32 itemId);
     extern void evtRunCaseEntry(s32 type, s32 flag, s32 caseId, s32 unk, s32* script, void* data);
-    extern char str_p_hikohki_802c0188[];
-    extern char str_p_hune_802c0194[];
     extern s32 evt_ride_airport[];
     extern s32 evt_nonride_airport[];
 
@@ -655,10 +660,10 @@ s32 evt_map_replace_mapobj(void* pEvt) {
     mapObjFlagOn(id, 0x4000);
     switch (kind) {
         case 0:
-            effTorchEntry(0, pos[0], pos[1] - 3.0f, pos[2], 0.6f);
+            effTorchEntry(0, pos[0], pos[1] - float_3_8041fa3c, pos[2], float_0p6_8041fa40);
             break;
         case 1:
-            eff = effFireEntry(5, 0, pos[0], pos[1], pos[2], 0.4f);
+            eff = effFireEntry(5, 0, pos[0], pos[1], pos[2], float_0p4_8041fa44);
             *(s32*)((s32)*(void**)((s32)eff + 0xC) + 0x88) = 1;
             break;
     }
@@ -673,3 +678,39 @@ USER_FUNC(N_evt_mapdisp_onoff) {
     }
     return 2;
 }
+
+s32 evt_ride_airport[] = {
+    0x0005005B, (s32)evt_mapobj_flag_onoff, 1, 0, LW(0), 0x100,
+    0x00010003, 0,
+    0x0006005B, (s32)evt_map_get_flush_color, LW(0), LW(10), LW(11), LW(12), LW(13),
+    0x00020035, LW(13), 2,
+    0x0002001B, LW(13), 100,
+    0x00020032, LW(13), 100,
+    0x00000021,
+    0x0007005B, (s32)evt_map_set_flush_color, 1, LW(0), 240, 240, 100, LW(13),
+    0x0004005B, (s32)evt_map_set_flush_onoff, 1, 1, LW(0),
+    0x0002005B, (s32)check, LW(10),
+    0x00020018, LW(10), 1,
+    0x00010009, 1,
+    0x00010004, 0,
+    0x00000021,
+    0x00000002,
+    0x00000001
+};
+
+s32 evt_nonride_airport[] = {
+    0x00010003, 0,
+    0x0006005B, (s32)evt_map_get_flush_color, LW(0), LW(10), LW(11), LW(12), LW(13),
+    0x00020036, LW(13), 2,
+    0x0002001A, LW(13), 0,
+    0x00020032, LW(13), 0,
+    0x00000021,
+    0x0007005B, (s32)evt_map_set_flush_color, 1, LW(0), 240, 240, 100, LW(13),
+    0x0002005B, (s32)check2, LW(10),
+    0x00020018, LW(10), 1,
+    0x00010009, 1,
+    0x00010004, 0,
+    0x00000021,
+    0x00000002,
+    0x00000001
+};

@@ -60,6 +60,20 @@ extern f32 float_0p5_8042024c;
 extern f32 float_1_80420250;
 extern u32 dat_80420224;
 extern const char str_me_80420324[3];
+
+u8 evt_cam_shake(s32 evt, s32 init);
+s32 fire_func(void* evt, s32 init);
+
+s32 evt_shake[] = {
+    0x0005005B, (s32)evt_cam_shake, 0x00000004, 0xF24A7A80,
+    0xF24A7A8A, 0x000000C8, 0x00000002, 0x00000001,
+};
+
+s32 evt_fire[] = {
+    0x0005005B, (s32)fire_func, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0xFE363C83, 0x00000002, 0x00000001,
+};
+
 s32 evt_mobj_entry(void* evt) {
     extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
     extern void mobjEntry(s32 name, const char* kind);
@@ -842,7 +856,7 @@ s32 mobj_timerswitch(void* pMobj) {
     extern void effSmallStarEntry(void);
     extern void evtSetValue(void*, s32, s32);
     extern void mobjDelete(char*);
-    extern void* evt_shake;
+    extern s32 evt_shake[8];
     extern const char str_A_1_80420208[];
     extern const char str_A_2_8042020c[];
     extern const char str_S_1_8042021c[];
@@ -5079,7 +5093,7 @@ s32 mobj_koopa_sango_evt(u32* mobj) {
     extern void psndSFXOn_3D(s32, void*);
     extern void effMObjBrokenEntry(double, double, double, s32);
     extern void mobjDelete(char*);
-    extern void* evt_fire;
+    extern s32 evt_fire[8];
     extern f32 float_10_80420294;
     extern f32 float_30_80420298;
     extern f32 float_60_8042029c;

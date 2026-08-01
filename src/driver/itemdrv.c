@@ -1383,6 +1383,43 @@ u32 itemStatus(void* item, u32 flags) {
     return *(u32*)((s32)item + 0x38) & flags;
 }
 
+u8 work[56];
+
+const u32 dat_804210a8 = 0x000000FF;
+const u32 dat_804210ac = 0x000000FF;
+const u32 dat_804210b0 = 0xFFFFFFFF;
+const f32 float_0_804210b4 = 0.0f;
+const f32 float_20_804210b8 = 20.0f;
+const f32 float_1_804210bc = 1.0f;
+const f32 float_4_804210c0 = 4.0f;
+const f32 float_neg1_804210c4 = -1.0f;
+const f32 float_10_804210c8 = 10.0f;
+const f32 float_15_804210cc = 15.0f;
+const f32 float_0p5_804210d0 = 0.5f;
+const f32 float_180_804210d4 = 180.0f;
+const f32 float_100_804210d8 = 100.0f;
+const f32 float_35_804210dc = 35.0f;
+const f32 float_16_804210e0 = 16.0f;
+const f32 float_500_804210e4 = 500.0f;
+const f32 float_90_804210e8 = 90.0f;
+const f32 float_30_804210ec = 30.0f;
+const f32 float_0p67_804210f0 = 0.67f;
+const f32 float_1E06_804210f4 = 1000000.0f;
+const f32 float_6p2832_804210f8 = 6.28318548f;
+const f32 float_360_804210fc = 360.0f;
+const f32 float_neg980_80421100 = -980.0f;
+const f32 float_0p25_80421104 = 0.25f;
+const f32 float_neg1000_80421108 = -1000.0f;
+const f32 float_0p7_8042110c = 0.7f;
+const f32 float_8_80421110 = 8.0f;
+const f32 float_1024_80421114 = 1024.0f;
+const f32 float_50_80421118 = 50.0f;
+const f32 float_62_8042111c = 62.0f;
+const f32 float_85_80421120 = 85.0f;
+const f32 float_120_80421124 = 120.0f;
+const f32 float_12_80421128 = 12.0f;
+const f32 float_1000_8042112c = 1000.0f;
+
 void itemPickUp(void* item) {
     u32 status;
 
@@ -1397,4 +1434,3 @@ void itemPickUp(void* item) {
 
     *(u32*)((s32)item + 0x38) &= ~0x100;
 }
-

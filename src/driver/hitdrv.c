@@ -60,9 +60,9 @@ void* _hitEnt(void* param_1, s32 param_2, s32 param_3, int param_4) {
     extern f32 PSVECDistance(void* a, void* b);
     extern void* _mapAlloc(void* heap, s32 size);
     extern void* mapalloc_base_ptr;
-    extern f32 float_deg2rad_8041f850;
-    extern f32 float_0p5_8041f84c;
-    extern f32 float_0p1_8041f83c;
+    extern const f32 float_deg2rad_8041f850;
+    extern const f32 float_0p5_8041f84c;
+    extern const f32 float_0p1_8041f83c;
 
     void* map;
     void* group;
@@ -336,7 +336,7 @@ void hitMain(void) {
     extern void* unk_8041e628;
     extern void mapCalcAnimMatrix(void* dst, void* parent, void* entry, void* track);
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
-    extern f32 float_10_8041f840;
+    extern const f32 float_10_8041f840;
     void* map = mapGetWork();
     void* group;
     void* hit;
@@ -1701,10 +1701,10 @@ s32 hitCheckVecFilter(s32* work, void* filter) {
 
     extern void* mapGetWork(void);
     extern void* unk_8041e628;
-    extern f32 float_0_8041f838;
-    extern f32 float_1_8041f844;
-    extern f32 float_neg1_8041f848;
-    extern f32 float_0p5_8041f84c;
+    extern const f32 float_0_8041f838;
+    extern const f32 float_1_8041f844;
+    extern const f32 float_neg1_8041f848;
+    extern const f32 float_0p5_8041f84c;
     extern f32 PSVECSquareMag(void* v);
     extern void PSVECScale(void* src, void* dst, f32 scale);
     extern void PSVECAdd(void* a, void* b, void* out);
@@ -2280,9 +2280,9 @@ void* hitCheckSphereFilter(void* filter, f32 x, f32 y, f32 z, f32 radius) {
     extern void PSVECCrossProduct(void* a, void* b, void* out);
     extern void PSVECScale(void* src, void* dst, f32 scale);
     extern void PSVECAdd(void* a, void* b, void* out);
-    extern f32 float_neg1_8041f848;
-    extern f32 float_0_8041f838;
-    extern f32 float_0p5_8041f84c;
+    extern const f32 float_neg1_8041f848;
+    extern const f32 float_0_8041f838;
+    extern const f32 float_0p5_8041f84c;
 
     typedef s32 (*HitSphereFilterFunc)(void* work, void* hit);
 
@@ -2738,7 +2738,7 @@ void hitObjGetPos(char* name, f32* out) {
     extern s32 strcmp(const char* str1, const char* str2);
     extern void hitObjGetPosSub(void* hit, void* pos, s32* count, s32 recursive);
     extern void PSVECScale(void* src, void* dst, f32 scale);
-    extern f32 float_1_8041f844;
+    extern const f32 float_1_8041f844;
 
     void* map;
     void* group;
@@ -3103,7 +3103,7 @@ void hitBindUpdate(char* name) {
     extern void mapErrorEntry(s32 type, char* message);
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
     extern void hitReCalcMatrix(void* hit, void* arg);
-    extern f32 float_10_8041f840;
+    extern const f32 float_10_8041f840;
 
     s32 groupIndex;
     void* hit;
@@ -3156,3 +3156,22 @@ found:
         }
     }
 }
+
+const f32 vec3_802bf7b8[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802bf7c4[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802bf7d0[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802bf7dc[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802bf7e8[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802bf7f4[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802bf800[3] = { 0.0f, 0.0f, 0.0f };
+
+void* unk_8041e628;
+
+const f32 float_0_8041f838 = 0.0f;
+const f32 float_0p1_8041f83c = 0.1f;
+const f32 float_10_8041f840 = 10.0f;
+const f32 float_1_8041f844 = 1.0f;
+const f32 float_neg1_8041f848 = -1.0f;
+const f32 float_0p5_8041f84c = 0.5f;
+const f32 float_deg2rad_8041f850 = 0.017453292f;
+const u32 gap_09_8041F854_sdata2 = 0;

@@ -1,6 +1,6 @@
 #include "effect/eff_rankup.h"
 
-extern f32 float_1_8042818c;
+extern const f32 float_1_8042818c;
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -8,14 +8,14 @@ void* effRankupEntry(s32 type, f32 x, f32 y, f32 z) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
     extern void effRankupMain(void);
-    extern char str_Rankup_80300b00[];
+    extern const char str_Rankup_80300b00[];
 
     void* effect;
     void* work;
     f32 one;
 
     effect = effEntry();
-    *(char**)((s32)effect + 0x14) = str_Rankup_80300b00;
+    *(const char**)((s32)effect + 0x14) = str_Rankup_80300b00;
     *(s32*)((s32)effect + 8) = 1;
     work = __memAlloc(3, *(s32*)((s32)effect + 8) * 0x24);
     *(void**)((s32)effect + 0xC) = work;
@@ -50,9 +50,9 @@ void effRankupMain(void* effect) {
     extern f32 dispCalcZ(f32* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, f32 z, void* param);
     extern void effRankupDisp(s32 cameraId, void* effect);
-    extern char* eff_rankup_str_tbl[];
-    extern char str_Z_1_80428188[];
-    extern f32 float_0p61538_80428190;
+    extern const char* eff_rankup_str_tbl[];
+    extern const char str_Z_1_80428188[];
+    extern const f32 float_0p61538_80428190;
 
     void* work;
     f32 pos[3];
@@ -113,10 +113,10 @@ void effRankupDisp(s32 cameraId, void* effect) {
     extern void animPoseSetMaterialEvtColor(s32 poseId, u32* color);
     extern void animPoseMain(s32 poseId);
     extern void animPoseDrawMtx(s32 poseId, f32 mtx[3][4], s32 mode, f32 a, f32 b);
-    extern f32 float_deg2rad_8042817c;
-    extern f32 float_0_80428180;
-    extern f32 float_6_80428184;
-    extern u32 dat_80428178;
+    extern const f32 float_deg2rad_8042817c;
+    extern const f32 float_0_80428180;
+    extern const f32 float_6_80428184;
+    extern const u32 dat_80428178;
 
     u32 evtColor;
     u32 color;
@@ -154,3 +154,28 @@ void effRankupDisp(s32 cameraId, void* effect) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+const char str_EFF_Rankup_80300a98[] = "EFF_Rankup";
+const char str_EFF_Rankup_us_80300aa4[] = "EFF_Rankup_us";
+const char str_EFF_Rankup_ge_80300ab4[] = "EFF_Rankup_ge";
+const char str_EFF_Rankup_fr_80300ac4[] = "EFF_Rankup_fr";
+const char str_EFF_Rankup_sp_80300ad4[] = "EFF_Rankup_sp";
+const char str_EFF_Rankup_it_80300ae4[] = "EFF_Rankup_it";
+const f32 vec3_80300af4[3] = { 0.0f, 0.0f, 0.0f };
+const char str_Rankup_80300b00[] = "Rankup";
+
+const char* eff_rankup_str_tbl[] = {
+    str_EFF_Rankup_80300a98,
+    str_EFF_Rankup_us_80300aa4,
+    str_EFF_Rankup_ge_80300ab4,
+    str_EFF_Rankup_fr_80300ac4,
+    str_EFF_Rankup_sp_80300ad4,
+    str_EFF_Rankup_it_80300ae4,
+};
+
+const u32 dat_80428178 = 0xFFFFFF00;
+const f32 float_deg2rad_8042817c = 0.017453292f;
+const f32 float_0_80428180 = 0.0f;
+const f32 float_6_80428184 = 6.0f;
+const char str_Z_1_80428188[] = "Z_1";
+const f32 float_1_8042818c = 1.0f;
+const f32 float_0p61538_80428190 = 0.61538464f;

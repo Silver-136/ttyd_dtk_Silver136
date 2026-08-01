@@ -1349,7 +1349,7 @@ u8 BattleAudienceApSrcCtrlProcess(void) {
                         *(f32*)(star + 0x30) = *(f32*)(star + 0x18);
                         *(f32*)(star + 0x34) = *(f32*)(star + 0x1C);
                         *(f32*)(star + 0x38) = *(f32*)(star + 0x20);
-                        statusGetApPos(&pos);
+                        statusGetApPos((f32*)&pos);
                         *(f32*)(star + 0x24) = pos.x;
                         *(f32*)(star + 0x28) = pos.y;
                         *(f32*)(star + 0x2C) = pos.z;
@@ -1376,7 +1376,7 @@ u8 BattleAudienceApSrcCtrlProcess(void) {
                         *(s32*)(star + 4) = 0x14;
                         *(s32*)(star + 0x3C) = 0;
                         *(s32*)(star + 0x40) = 0xF;
-                        statusGetApPos(&pos);
+                        statusGetApPos((f32*)&pos);
                         *(f32*)(star + 0x18) = pos.x;
                         *(f32*)(star + 0x1C) = pos.y;
                         *(f32*)(star + 0x20) = pos.z;

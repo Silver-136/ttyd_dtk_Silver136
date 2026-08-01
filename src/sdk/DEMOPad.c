@@ -1,6 +1,15 @@
 #include "sdk/DEMOPad.h"
 
-extern u8 DemoPad[];
+u8 DemoPad[0x78];
+u32 DemoNumValidPads;
+u8 Pad[0x30];
+
+u32 PadChanMask[] = {
+    0x80000000,
+    0x40000000,
+    0x20000000,
+    0x10000000,
+};
 
 void DEMOPadCopy(void* newPadState, void* padState) {
     u16 dirs;
@@ -85,9 +94,6 @@ void DEMOPadCopy(void* newPadState, void* padState) {
 
 
 void DEMOPadRead(void) {
-    extern u8 Pad[];
-    extern u32 PadChanMask[];
-    extern s32 DemoNumValidPads;
     extern void PADRead(void*);
     extern void PADClamp(void*);
     extern void PADReset(u32);
@@ -132,4 +138,3 @@ void DEMOPadInit(void) {
         }
     }
 }
-

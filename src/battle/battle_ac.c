@@ -12,8 +12,8 @@ s32 psndSFXOn(const char* name);
 void psndSFXOff(s32 id);
 void dispEntry(s32 cameraId, s32 priority, void* callback, f32 z, void* param);
 extern const char str_SFX_AC_POWER_GAUGE1_802ee034[20];
-extern f32 float_0_80422188;
-extern f32 float_900_804221a8;
+extern const f32 float_0_80422188;
+extern const f32 float_900_804221a8;
 
 void BattleActionCommandManagerInit(struct BattleWork* work) {
     BtlPad_WorkInit((void*)((s32)work + 0x1D1C));
@@ -579,3 +579,23 @@ void BattleAcGaugeSeDelete(void) {
         *(s32*)((s32)work + 0x1F18) = -1;
     }
 }
+
+//.rodata
+const u8 N_normal_guard_frames[7] = { 10, 9, 8, 8, 7, 6, 5 };
+const u8 N_superguard_frames[7] = { 5, 4, 3, 3, 2, 1, 1 };
+const Vec vec3_802ee028 = { 0.0f, 0.0f, 0.0f };
+const char str_SFX_AC_POWER_GAUGE1_802ee034[20] = "SFX_AC_POWER_GAUGE1";
+const f64 double_to_int_802ee048 = 4503601774854144.0;
+
+//.sdata2
+const u32 dat_80422180 = 0x00E486FF;
+const u32 dat_80422184 = 0xFF0000FF;
+const f32 float_0_80422188 = 0.0f;
+const f32 float_100_8042218c = 100.0f;
+const f32 float_0p01_80422190 = 0.01f;
+const f32 float_4092_80422194 = 4092.0f;
+const f32 float_1_80422198 = 1.0f;
+const f32 float_2_8042219c = 2.0f;
+const f32 float_0p5_804221a0 = 0.5f;
+const f32 float_0p25_804221a4 = 0.25f;
+const f32 float_900_804221a8 = 900.0f;

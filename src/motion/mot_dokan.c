@@ -235,3 +235,43 @@ void mot_dokan(void) {
         marioChgPaper(str_PM_D_1B_802f461c);
     }
 }
+
+const f32 vec3_802f4548[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f4554[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f4560[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f456c[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f4578[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f4584[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f4590[3] = { 0.0f, 16.0f, 0.0f };
+const f32 vec3_802f459c[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f45a8[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f45b4[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f45c0[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f45cc[3] = { 0.0f, 16.0f, 0.0f };
+const f32 vec3_802f45d8[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f45e4[3] = { 1.0f, 1.0f, 1.0f };
+const f32 vec3_802f45f0[3] = { 1.0f, 1.0f, 1.0f };
+
+const char str_p_dokan_y_802f45fc[] = "p_dokan_y";
+const char str_PM_D_1A_802f4608[] = "PM_D_1A";
+const char str_p_dokan_x_802f4610[] = "p_dokan_x";
+const char str_PM_D_1B_802f461c[] = "PM_D_1B";
+
+const f32 float_0_80423040 = 0.0f;
+const char str_M_Z_1_80423044[] = "M_Z_1";
+const f32 float_30_8042304c = 30.0f;
+const f32 float_90_80423050 = 90.0f;
+const f32 float_270_80423054 = 270.0f;
+const f32 float_neg30_80423058 = -30.0f;
+const f32 float_neg0p005_8042305c = -0.005f;
+const f32 float_neg2_80423060 = -2.0f;
+const f32 float_0p03_80423064 = 0.03f;
+const f32 float_1_80423068 = 1.0f;
+const f32 float_0p05_8042306c = 0.05f;
+const f32 float_neg0p02_80423070 = -0.02f;
+const f32 float_16_80423074 = 16.0f;
+const f32 float_neg3_80423078 = -3.0f;
+const f32 float_540_8042307c = 540.0f;
+const f32 float_180_80423080 = 180.0f;
+const f32 float_120_80423084 = 120.0f;
+const f32 float_neg120_80423088 = -120.0f;

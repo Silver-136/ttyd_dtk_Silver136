@@ -18,6 +18,16 @@ void L_psndBGM_stop(void);
 void psndClearFlag(s32 flag);
 void N_pouchUnEquipBadgeID(s32 badgeId);
 
+s32 fall_data[] = {
+    200, 170, 140, 110, 80, 50, 20, 10, 26, 29, 30, 29, 26,
+    10, 0, 12, 15, 16, 15, 11, 6, 0, 4, 3, 1, 0,
+};
+
+s32 fall_data2[] = {
+    200, 170, 140, 110, 80, 50, 20, 0, 12, 15,
+    16, 15, 11, 6, 0, 4, 3, 1, 0,
+};
+
 void seq_gameOverInit(void) {
     winReInit();
     L_camDispOn(4);
@@ -44,7 +54,6 @@ s32 N_evt_snd_bgm_unpause(void) {
     }
     return 2;
 }
-
 
 void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 param_5, u32 param_6) {
     extern void fadeEntry(s32 type, s32 duration, void* color);
@@ -203,3 +212,57 @@ void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 
     }
 }
 
+const char str_anm_hokori_802c2c00[] = "anm_hokori";
+const u32 vec3_802c2c0c[3] = { 0, 0, 0 };
+const char str_sys_00_802c2c18[] = "sys_00";
+
+extern char str_n_804204c0[];
+extern char str_ne_804204c4[];
+extern char str_e_804204c8[];
+extern char str_se_804204cc[];
+extern char str_s_804204d0[];
+extern char str_sw_804204d4[];
+extern char str_w_804204d8[];
+extern char str_nw_804204dc[];
+
+const char* const lbl_802C2C28[] = {
+    str_n_804204c0,
+    str_ne_804204c4,
+    str_e_804204c8,
+    str_se_804204cc,
+    str_s_804204d0,
+    str_sw_804204d4,
+    str_w_804204d8,
+    str_nw_804204dc,
+};
+
+void* work;
+void** wp = &work;
+
+const char str_g_80420448[] = "g";
+const char str_a_8042044c[] = "a";
+const char str_m_80420450[] = "m";
+const char str_e_80420454[] = "e";
+const char str_o_80420458[] = "o";
+const char str_v_8042045c[] = "v";
+const char str_e2_80420460[] = "e2";
+const char str_r_80420464[] = "r";
+const char str_f_80420468[] = "f";
+const char str_i_8042046c[] = "i";
+const char str_n_80420470[] = "n";
+const char str_d_80420474[] = "d";
+const char str_e3_80420478[] = "e3";
+const char str_l_8042047c[] = "l";
+const char str_j_80420480[] = "j";
+const char str_u_80420484[] = "u";
+const char str_e4_80420488[] = "e4";
+const char str_g1_8042048c[] = "g1";
+const char str_o289_80420490[] = "o289";
+const char str_M_D_2_80420498[] = "M_D_2";
+const u32 dat_804204a0 = 0xFF;
+const u32 dat_804204a4 = 0xFF;
+const u32 dat_804204a8 = 0xFF;
+const u32 dat_804204ac = 0xFF;
+const f32 float_0_804204b0 = 0.0f;
+const f32 float_0p01_804204b4 = 0.01f;
+const char zero_804204b8 = '\0';

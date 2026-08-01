@@ -170,3 +170,18 @@ s32 _binta_effect(void* evt) {
 
     return 2;
 }
+
+const char str_SFX_PARTY_BATTLE_DIE_802ee928[] = "SFX_PARTY_BATTLE_DIE1";
+const char str_recovery_802ee940[] = "recovery";
+const char str_SFX_BTL_ENEMY_DIE1_1_802ee94c[] = "SFX_BTL_ENEMY_DIE1_1";
+const char str_SFX_BTL_ENEMY_DIE1_2_802ee964[] = "SFX_BTL_ENEMY_DIE1_2";
+const char str_kemuri_test_802ee97c[] = "kemuri_test";
+const char str_star_point_802ee988[] = "star_point";
+const char str_SFX_BTL_DAMAGE_PRESS_802ee994[] = "SFX_BTL_DAMAGE_PRESS1";
+const char str_SFX_BTL_ATTACK_MISS2_802ee9ac[] = "SFX_BTL_ATTACK_MISS2";
+const char str_SFX_VOICE_MARIO_DAMA_802ee9c4[] = "SFX_VOICE_MARIO_DAMAGED1";
+const char str_SFX_BTL_ATTACK_MISS3_802ee9e0[] = "SFX_BTL_ATTACK_MISS3";
+const char str_SFX_BTL_POS_CHANGE1_802ee9f8[] = "SFX_BTL_POS_CHANGE1";
+const char str_SFX_ENM_ESCAPE1_802eea0c[] = "SFX_ENM_ESCAPE1";
+const char str_SFX_BTL_CLAUD_BREATH_802eea1c[] = "SFX_BTL_CLAUD_BREATH3";
+const f32 float_0_80422308 = 0.0f;

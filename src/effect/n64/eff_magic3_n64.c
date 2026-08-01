@@ -185,3 +185,13 @@ void effMagic3Disp(s32 cameraId, void* effect) {
 #pragma use_lmw_stmw on
 #pragma no_register_save_helpers off
 
+u8 size32x16_tex64x32_vtx[56] = {
+    0xFF, 0xF0, 0xFF, 0xF8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x10, 0xFF, 0xF8, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x10, 0, 8, 0, 0, 8, 0, 4, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xF0, 0, 8, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+};
+
+const f32 vec3_802fb470[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802fb47c[3] = { 0.0f, 0.0f, 0.0f };
+const char str_Magic3N64_802fb4a8[] = "Magic3N64";

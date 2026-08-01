@@ -11,7 +11,6 @@ extern void marioPaperOff(void);
 extern f64 cos(f64);
 extern f64 sin(f64);
 extern f32 float_20_80420eb4;
-extern char str_PM_H_1A_802c42d0[];
 extern void* __memAlloc(s32, u32);
 extern void allPartyRideOff(void);
 extern f32 float_40_80420eb0;
@@ -121,6 +120,7 @@ void marioReInit_ship(void) {
     extern void allPartyForceRideOn(void);
     extern void* paper_ship[];
     extern char str_M_Z_1_80420f14[];
+    extern char str_PM_H_1A_802c42d0[];
     extern f32 float_4p25_80420efc;
     extern f32 float_neg15_80420f28;
 
@@ -243,6 +243,7 @@ void mot_ship(void) {
     extern char str_M_J_1B_802c42c8[];
     extern char str_M_Z_1_80420f14[];
     extern char str_dou_03_802c42d8[];
+    extern char str_PM_H_1A_802c42d0[];
     extern s32 sound_evt[];
     extern s32 sound_evt2[];
     extern void* gp;
@@ -1214,3 +1215,49 @@ s32 checkHarbor(f32* outPos) {
     }
     return 0;
 }
+
+const char str_SFX_MARIO_SHIP1_1_802c4270[] = "SFX_MARIO_SHIP1_1";
+const char str_SFX_MARIO_SHIP2_802c4284[] = "SFX_MARIO_SHIP2";
+const char str_p_hune_802c4294[] = "p_hune";
+const char str_p_hune_g_802c429c[] = "p_hune_g";
+const char str_p_hune_y_802c42a8[] = "p_hune_y";
+const char str_p_hune_v_802c42b4[] = "p_hune_v";
+const char str_M_J_1B_802c42c8[] = "M_J_1B";
+const char str_PM_H_1A_802c42d0[] = "PM_H_1A";
+const char str_dou_03_802c42d8[] = "dou_03";
+const char str_PM_H_1B_802c42e0[] = "PM_H_1B";
+
+extern s32 evt_snd_sfxon_3d(void* evt);
+
+s32 sound_evt[] = {
+    0x0006005B, (s32)evt_snd_sfxon_3d, (s32)(void*)str_SFX_MARIO_SHIP1_1_802c4270,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0, 0x00010009, 0x0000000C,
+    0x0006005B, (s32)evt_snd_sfxon_3d, (s32)(void*)str_SFX_MARIO_SHIP1_1_802c4270,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0, 0x00010009, 0x0000000C,
+    0x0006005B, (s32)evt_snd_sfxon_3d, (s32)(void*)str_SFX_MARIO_SHIP1_1_802c4270,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0, 0x00010009, 0x0000000C,
+    0x0006005B, (s32)evt_snd_sfxon_3d, (s32)(void*)str_SFX_MARIO_SHIP1_1_802c4270,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0, 2, 1,
+};
+
+s32 sound_evt2[] = {
+    0x0006005B, (s32)evt_snd_sfxon_3d, (s32)(void*)str_SFX_MARIO_SHIP2_802c4284,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0, 0x00010009, 0x0000000C,
+    0x0006005B, (s32)evt_snd_sfxon_3d, (s32)(void*)str_SFX_MARIO_SHIP2_802c4284,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0, 0x00010009, 0x0000000C,
+    0x0006005B, (s32)evt_snd_sfxon_3d, (s32)(void*)str_SFX_MARIO_SHIP2_802c4284,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0, 0x00010009, 0x0000000C,
+    0x0006005B, (s32)evt_snd_sfxon_3d, (s32)(void*)str_SFX_MARIO_SHIP2_802c4284,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0, 2, 1,
+};
+
+f32 shipData[] = {
+    -0.05f, -0.7f, 0.02f, 0.02f, 2.0f, 0.01f,
+};
+
+char* paper_ship[] = {
+    (char*)str_p_hune_802c4294,
+    (char*)str_p_hune_g_802c429c,
+    (char*)str_p_hune_y_802c42a8,
+    (char*)str_p_hune_v_802c42b4,
+};

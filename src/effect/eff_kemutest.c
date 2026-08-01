@@ -403,3 +403,4 @@ void effKemuTestSetRxRz(void* effect, f32 rx, f32 rz) {
     *(f32*)((s32)work + 0x54) = rz;
 }
 
+const char str_KemuTest_802fe670[] = "KemuTest";

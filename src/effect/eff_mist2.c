@@ -233,3 +233,4 @@ void effMist2Disp(s32 cameraId, void* effect) {
     }
 }
 
+const char str_Mist2_80428270[] = "Mist2";

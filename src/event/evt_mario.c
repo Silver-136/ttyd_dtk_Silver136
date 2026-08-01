@@ -2955,3 +2955,47 @@ s32 evt_mario_paper_plane(EventEntry* event, s32 first) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+const char str_M_Z_1_80421980[] = "M_Z_1";
+const char str_M_Z_9_80421988[] = "M_Z_9";
+const char str_M_S_1_80421990[] = "M_S_1";
+const char str_M_S_3_80421998[] = "M_S_3";
+const char str_M_W_1_804219a0[] = "M_W_1";
+const char str_M_R_1_804219a8[] = "M_R_1";
+const char str_M_H_1_804219b0[] = "M_H_1";
+const char str_M_H_2_804219b8[] = "M_H_2";
+const char str_M_H_3_804219c0[] = "M_H_3";
+const char str_M_H_4_804219c8[] = "M_H_4";
+const char str_M_H_5_804219d0[] = "M_H_5";
+const char str_M_H_6_804219d8[] = "M_H_6";
+const char str_M_H_7_804219e0[] = "M_H_7";
+const char str_M_H_8_804219e8[] = "M_H_8";
+const char str_M_H_9_804219f0[] = "M_H_9";
+const char str_M_O_1_804219f8[] = "M_O_1";
+const char str_M_O_2_80421a00[] = "M_O_2";
+const char str_M_B_1_80421a08[] = "M_B_1";
+const char str_M_B_2_80421a10[] = "M_B_2";
+const char str_M_D_1_80421a18[] = "M_D_1";
+const char str_M_D_2_80421a20[] = "M_D_2";
+const char str_M_U_3_80421a28[] = "M_U_3";
+const char str_M_D_6_80421a30[] = "M_D_6";
+const char str_M_P_1_80421a38[] = "M_P_1";
+const char str_M_P_2_80421a40[] = "M_P_2";
+const char str_M_I_1_80421a48[] = "M_I_1";
+const char str_M_I_2_80421a50[] = "M_I_2";
+const char str_M_I_S_80421a58[] = "M_I_S";
+const char str_M_X_1_80421a60[] = "M_X_1";
+const char str_M_I_U_80421a68[] = "M_I_U";
+const char str_M_U_2_80421a70[] = "M_U_2";
+const char str_M_W_7_80421a78[] = "M_W_7";
+const char str_M_C_1_80421a80[] = "M_C_1";
+const char str_M_C_2_80421a88[] = "M_C_2";
+const char str_M_Y_1_80421a90[] = "M_Y_1";
+const char str_M_Y_2_80421a98[] = "M_Y_2";
+const char str_M_Y_3_80421aa0[] = "M_Y_3";
+const char str_M_B_3_80421aa8[] = "M_B_3";
+const char str_M_B_4_80421ab0[] = "M_B_4";
+const char str_M_S_4_80421ab8[] = "M_S_4";
+const char str_M_W_6_80421ac0[] = "M_W_6";
+const char str_M_V_2_80421ac8[] = "M_V_2";
+const char str_M_I_Y_80421ad0[] = "M_I_Y";

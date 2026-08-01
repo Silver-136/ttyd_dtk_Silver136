@@ -104,3 +104,31 @@ void effLensflareDisp(s32 cameraId, void* effect) {
     for(i=1;i<*(s32*)((u8*)effect+8);i++,p+=0x34,angle+=10,yrot+=35){f32 sc=*(f32*)(p+0x28);if(sc==0.0f)continue;color=0xFFFFFF00|(u8)((*(s32*)(p+0x14)*alpha)>>8);GXSetTevColor(1,&color);PSMTXRotRad(r,0x7A,*(f32*)(p+0x20)*0.0174533f);PSMTXTrans(m,*(f32*)(p+0x2C),0.0f,0.0f);PSMTXConcat(r,m,m);PSMTXScale(s,sc,sc,sc);PSMTXConcat(m,s,m);PSMTXConcat(base,m,m);GXLoadPosMtxImm(m,0);GXBegin(0x90,0,6);tri2(12,13,14,0,12,14,15,0);PSMTXScale(s,2.3f-sc,2.3f-sc,2.3f-sc);PSMTXConcat(m,s,m);GXLoadPosMtxImm(m,0);GXBegin(0x90,0,6);tri2(8,9,10,0,8,10,11,0);PSMTXRotRad(r,0x7A,(14.0f+*(f32*)(p+0x20))*0.0174533f);PSMTXRotRad(s,0x79,(f32)(flags+angle)*0.0174533f);PSMTXConcat(r,s,r);PSMTXTrans(m,20.0f,0.0f,0.0f);PSMTXConcat(r,m,m);PSMTXConcat(base,m,m);GXLoadPosMtxImm(m,0);GXBegin(0x90,0,6);tri2(4,5,6,0,4,6,7,0);}
 }
 
+u8 size48x48_tex32x32_vtx[56] = {
+    0xFF, 0xE8, 0xFF, 0xE8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x18, 0xFF, 0xE8, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x18, 0, 0x18, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xE8, 0, 0x18, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+};
+
+u8 size10x10_tex32x32_vtx[224] = {
+    0, 0, 0xFF, 0xFB, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x0A, 0xFF, 0xFB, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x0A, 0, 5, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0xFF,
+    0, 0, 0, 5, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+    0, 0, 0xFF, 0xFB, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+    0, 0x0A, 0xFF, 0xFB, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0xFF,
+    0, 0x0A, 0, 5, 0, 0, 4, 0, 8, 0, 0, 0, 0, 0xFF,
+    0, 0, 0, 5, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xFB, 0xFF, 0xFB, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0xFF,
+    0, 5, 0xFF, 0xFB, 0, 0, 4, 0, 8, 0, 0, 0, 0, 0xFF,
+    0, 5, 0, 5, 0, 0, 4, 0, 0x0C, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xFB, 0, 5, 0, 0, 0, 0, 0x0C, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xFB, 0xFF, 0xFB, 0, 0, 0, 0, 0x0C, 0, 0, 0, 0, 0xFF,
+    0, 5, 0xFF, 0xFB, 0, 0, 4, 0, 0x0C, 0, 0, 0, 0, 0xFF,
+    0, 5, 0, 5, 0, 0, 4, 0, 0x10, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xFB, 0, 5, 0, 0, 0, 0, 0x10, 0, 0, 0, 0, 0xFF,
+};
+
+const f32 vec3_802fb3f0[3] = { 0.0f, 0.0f, 0.0f };
+const char str_LensflareN64_802fb408[] = "LensflareN64";

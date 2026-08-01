@@ -1,6 +1,7 @@
 #include "event/evt_kinopio.h"
 
-void* wp = (void*)0;
+void* work;
+void* wp = &work;
 void marioPaperOff(void);
 void psndSetFlag(s32 flag);
 void psndClearFlag(s32 flag);
@@ -8,10 +9,6 @@ s32 evtGetValue(EventEntry* event, s32 value);
 f32 evtGetFloat(EventEntry* event, s32 value);
 f64 sin(f64 value);
 f64 cos(f64 value);
-extern f32 float_6p2832_80421f18;
-extern f32 float_360_80421f20;
-
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_kinopio_setup(void* pEvt) {
@@ -207,6 +204,8 @@ u8 paper_on(s32 pEvt, s32 isFirstCall) {
     extern s32 strcmp(void* a, void* b);
     extern char str_BGM_FF_GO_SLEEPING1_802ed368[];
     extern char str_M_S_1_80421f24[];
+    extern f32 float_6p2832_80421f18;
+    extern f32 float_360_80421f20;
     extern f32 float_0p2_80421f2c;
     s32* args = *(s32**)(pEvt + 0x18);
     f32 angle = evtGetFloat((void*)pEvt, args[0]);
@@ -243,7 +242,9 @@ USER_FUNC(paper_off) {
 #pragma use_lmw_stmw off
 u8 offset(s32 pEvt) {
     extern void* camGetPtr(s32 id);
+    extern f32 float_6p2832_80421f18;
     extern f32 float_90_80421f1c;
+    extern f32 float_360_80421f20;
     s32* args = *(s32**)(pEvt + 0x18);
     f32 dist = evtGetFloat((void*)pEvt, args[0]);
     f32 angle = (float_6p2832_80421f18 * (float_90_80421f1c + *(f32*)((s32)camGetPtr(4) + 0x114))) / float_360_80421f20;
@@ -286,9 +287,35 @@ USER_FUNC(snd_on) {
 s32 N_cameraman_on(void) {
     extern void* npcNameToPtr(const char* name);
     extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
+    extern const char str_kinopio_cameraman_802ed37c[];
     void* npc;
 
-    npc = npcNameToPtr("å®¿å±‹ã®ã‚«ãƒ¡ãƒ©ãƒžãƒ³");
+    npc = npcNameToPtr(str_kinopio_cameraman_802ed37c);
     animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), 0x1800);
     return 2;
 }
+
+const char str_BGM_FF_GO_SLEEPING1_802ed368[] = "BGM_FF_GO_SLEEPING1";
+const char str_kinopio_cameraman_802ed37c[] =
+    "\x8F\x68\x89\xAE\x82\xCC\x83\x4A\x83\x81\x83\x89\x83\x7D\x83\x93";
+const char str_c_jugem_c_802ed390[] = "c_jugem_c";
+const char str_cameraman_802ed39c[] = "\x83\x4A\x83\x81\x83\x89\x83\x7D\x83\x93";
+const char str_bom_02_802ed3a8[] = "bom_02";
+const char str_gor_01_802ed3b0[] = "gor_01";
+const char str_muj_01_802ed3b8[] = "muj_01";
+const char str_nok_00_802ed3c0[] = "nok_00";
+const char str_pik_04_802ed3c8[] = "pik_04";
+const char str_usu_00_802ed3d0[] = "usu_00";
+const char str_confetti_802ed3d8[] = "confetti";
+const char str_SFX_VOICE_MARIO_FIND_802ed3e4[] = "SFX_VOICE_MARIO_FIND";
+const char str_SFX_EVT_50_HOTEL_SHU_802ed3fc[] = "SFX_EVT_50_HOTEL_SHU";
+const char str_breakfast_802ed418[] = "breakfast";
+const char str_p_slit_802ed424[] = "p_slit";
+const char str_PM_S_3A_802ed42c[] = "PM_S_3A";
+
+const char str_mario_80421f10[] = "mario";
+const f32 float_6p2832_80421f18 = 6.2831855f;
+const f32 float_90_80421f1c = 90.0f;
+const f32 float_360_80421f20 = 360.0f;
+const char str_M_S_1_80421f24[] = "M_S_1";
+const f32 float_0p2_80421f2c = 0.2f;

@@ -5,7 +5,6 @@
 extern s32 evtGetValue();
 extern f32 evtGetFloat();
 extern void* gp;
-extern u32 dat_80422a88;
 
 s32 evt_fade_in(void* pEvt, int param_2) {
     extern u32 dat_80422a80;
@@ -43,6 +42,7 @@ s32 evt_fade_out(void* pEvt, int param_2) {
 
 
 s32 evt_fade_entry(void* pEvt) {
+    extern u32 dat_80422a88;
     s32* args;
     s32 type;
     s32 duration;
@@ -239,3 +239,7 @@ s32 evt_fade_reset(void* param_1) {
     fadeReset(evtGetValue(param_1, **(s32**)((s32)param_1 + 0x18)));
     return 2;
 }
+
+const u32 dat_80422a80 = 0x000000FF;
+const u32 dat_80422a84 = 0x000000FF;
+const u32 dat_80422a88 = 0x000000FF;

@@ -1,6 +1,12 @@
 #include "effect/eff_mist.h"
+
+typedef struct EffMistVec {
+    f32 x;
+    f32 y;
+    f32 z;
+} EffMistVec;
+
 void* effMistEntry(f32 x, f32 y, f32 z, f32 angle, s32 type, s32 timer) {
-    typedef struct Vec { f32 x; f32 y; f32 z; } Vec;
     typedef struct EffEntryLocal {
         u32 flags;
         u32 unk4;
@@ -12,9 +18,9 @@ void* effMistEntry(f32 x, f32 y, f32 z, f32 angle, s32 type, s32 timer) {
     } EffEntryLocal;
     typedef struct MistWork {
         s32 type;
-        Vec pos;
-        Vec scale;
-        Vec vel;
+        EffMistVec pos;
+        EffMistVec scale;
+        EffMistVec vel;
         f32 yVel;
         f32 yAccel;
         f32 yScale;
@@ -34,7 +40,7 @@ void* effMistEntry(f32 x, f32 y, f32 z, f32 angle, s32 type, s32 timer) {
     extern f64 sin(f64 x);
     extern f64 cos(f64 x);
     extern void effMistMain(void* effect);
-    extern char str_Mist_80427a64[5];
+    extern const char str_Mist_80427a64[5];
     extern f32 float_255_80427a40;
     extern f32 float_0_80427a4c;
     extern f32 float_10_80427a70;
@@ -71,7 +77,7 @@ void* effMistEntry(f32 x, f32 y, f32 z, f32 angle, s32 type, s32 timer) {
     if (type == 4) {
         count = 2;
     }
-    eff->typeName = str_Mist_80427a64;
+    eff->typeName = (char*)str_Mist_80427a64;
     eff->count = count;
     work = (MistWork*)__memAlloc(3, count * 0x48);
     eff->work = work;
@@ -175,7 +181,6 @@ void* effMistEntry(f32 x, f32 y, f32 z, f32 angle, s32 type, s32 timer) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void effMistMain(void* effect) {
-    typedef struct Vec { f32 x; f32 y; f32 z; } Vec;
     typedef struct EffEntryLocal {
         u32 flags;
         u32 unk4;
@@ -187,9 +192,9 @@ void effMistMain(void* effect) {
     } EffEntryLocal;
     typedef struct MistWork {
         s32 type;
-        Vec pos;
-        Vec scale;
-        Vec vel;
+        EffMistVec pos;
+        EffMistVec scale;
+        EffMistVec vel;
         f32 yVel;
         f32 yAccel;
         f32 yScale;
@@ -204,10 +209,10 @@ void effMistMain(void* effect) {
     } MistWork;
     extern void effDelete(void* effect);
     extern s32 irand(s32 range);
-    extern f32 dispCalcZ(Vec* pos);
+    extern f32 dispCalcZ(EffMistVec* pos);
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 z);
     extern void effMistDisp(s32 cameraId, void* effect);
-    extern Vec vec3_802ff210;
+    extern const EffMistVec vec3_802ff210;
     extern f32 float_0p9_80427a54;
     extern f32 float_0p88_80427a58;
     extern f32 float_1p02_80427a5c;
@@ -218,8 +223,8 @@ void effMistMain(void* effect) {
     EffEntryLocal* eff;
     MistWork* work;
     MistWork* child;
-    Vec pos;
-    Vec pos2;
+    EffMistVec pos;
+    EffMistVec pos2;
     s32 type;
     s32 timer;
     s32 i;
@@ -303,7 +308,6 @@ void effMistMain(void* effect) {
 
 
 void effMistDisp(s32 cameraId, void* effect) {
-    typedef struct Vec { f32 x; f32 y; f32 z; } Vec;
     typedef struct EffEntryLocal {
         u32 flags;
         u32 unk4;
@@ -315,9 +319,9 @@ void effMistDisp(s32 cameraId, void* effect) {
     } EffEntryLocal;
     typedef struct MistWork {
         s32 type;
-        Vec pos;
-        Vec scale;
-        Vec vel;
+        EffMistVec pos;
+        EffMistVec scale;
+        EffMistVec vel;
         f32 yVel;
         f32 yAccel;
         f32 yScale;
@@ -452,3 +456,6 @@ void effMistDisp(s32 cameraId, void* effect) {
         *fifo = half; *fifo = half; *fifo = zero; *fifo = zero; *fifo = one;
     }
 }
+
+const EffMistVec vec3_802ff210 = { 0.0f, 0.0f, 0.0f };
+const char str_Mist_80427a64[5] = "Mist";

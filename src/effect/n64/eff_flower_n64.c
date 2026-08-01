@@ -2,6 +2,8 @@
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
+int kaiten_412;
+
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 

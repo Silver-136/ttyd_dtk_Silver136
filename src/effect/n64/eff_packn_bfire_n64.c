@@ -95,3 +95,13 @@ void effPacknBfireDisp(s32 cameraId, void* effect) {
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
     }
 }
+
+u8 size64x64_tex32x32_vtx[56] = {
+    0xFF, 0xE0, 0xFF, 0xE0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x20, 0xFF, 0xE0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x20, 0, 0x20, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xE0, 0, 0x20, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+};
+
+const f32 vec3_802fbc40[3] = { 0.0f, 0.0f, 0.0f };
+const char str_PacknBfireN64_802fbc4c[] = "PacknBfireN64";

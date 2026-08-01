@@ -207,3 +207,6 @@ void mot_hip_post(void) {
         *(s32*)((s32)mario + 0x28C) = -1;
     }
 }
+
+const char str_M_A_1A_802f94a8[] = "M_A_1A";
+const char str_M_A_1B_802f94b0[] = "M_A_1B";

@@ -468,6 +468,19 @@ s32 evt_item_get_important_item(s32 pEvt, s32 param_2) {
     return 2;
 }
 
+const f32 float_0p5_80421070 = 0.5f;
+const f32 float_0p1_80421074 = 0.1f;
+const f32 float_6p2832_80421078 = 6.2831855f;
+const f32 float_360_8042107c = 360.0f;
+const f32 float_0p00761_80421080 = 0.00761f;
+const f32 float_0p16605_80421084 = 0.16605f;
+const f32 float_1_80421088 = 1.0f;
+const f32 float_3p1416_8042108c = 3.1415927f;
+const f32 float_1p5708_80421090 = 1.5707964f;
+const f32 float_4p7124_80421094 = 4.712389f;
+const f32 float_0p03705_80421098 = 0.03705f;
+const f32 float_0p4967_8042109c = 0.4967f;
+const f32 float_0_804210a0 = 0.0f;
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-

@@ -20,6 +20,69 @@ extern void cardMain(void);
 extern void L_gcResetCheck(void);
 extern s32 DVDGetDriveStatus(void);
 extern s32 cardIsExec(void);
+extern const u32 dat_80420340;
+extern const f32 float_25_80420344;
+extern const f32 float_1p2667_80420348;
+extern const f32 float_1_8042034c;
+extern const f32 float_10000_80420350;
+extern const f32 float_0p5_80420354;
+extern const f32 float_60_80420358;
+extern const f32 float_0_8042035c;
+extern const u8 unk_80429568[4];
+
+u8 sRMObjHReso[0x3C] = {
+    0x00, 0x00, 0x00, 0x00, 0x02, 0x60, 0x01, 0xC0,
+    0x01, 0xC0, 0x00, 0x1B, 0x00, 0x10, 0x02, 0x9A,
+    0x01, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
+    0x00, 0x00, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
+    0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
+    0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
+    0x06, 0x06, 0x08, 0x08, 0x0A, 0x0C, 0x0A, 0x08,
+    0x08, 0x00, 0x00, 0x00,
+};
+
+u8 sRMObjHReso_prog[0x3C] = {
+    0x00, 0x00, 0x00, 0x02, 0x02, 0x60, 0x01, 0xC0,
+    0x01, 0xC0, 0x00, 0x1B, 0x00, 0x10, 0x02, 0x9A,
+    0x01, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
+    0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
+    0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
+    0x06, 0x06, 0x08, 0x08, 0x0A, 0x0C, 0x0A, 0x08,
+    0x08, 0x00, 0x00, 0x00,
+};
+
+u8 GXNtsc480IntDfMarioSt[0x3C] = {
+    0x00, 0x00, 0x00, 0x00, 0x02, 0x60, 0x01, 0xE0,
+    0x01, 0xE0, 0x00, 0x1E, 0x00, 0x00, 0x02, 0x94,
+    0x01, 0xE0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
+    0x00, 0x00, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
+    0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
+    0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
+    0x06, 0x06, 0x08, 0x08, 0x0A, 0x0C, 0x0A, 0x08,
+    0x08, 0x00, 0x00, 0x00,
+};
+
+u8 GXNtsc480ProgMarioSt[0x3C] = {
+    0x00, 0x00, 0x00, 0x02, 0x02, 0x60, 0x01, 0xE0,
+    0x01, 0xE0, 0x00, 0x1E, 0x00, 0x00, 0x02, 0x94,
+    0x01, 0xE0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
+    0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
+    0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06,
+    0x06, 0x06, 0x08, 0x08, 0x0A, 0x0C, 0x0A, 0x08,
+    0x08, 0x00, 0x00, 0x00,
+};
+
+const f32 vec3_802c2a70[3] = { 0.0f, 0.0f, 0.0f };
+
+GlobalWork marioSt;
+GlobalWork* gp = &marioSt;
+s64 none_key;
+s32 _mariostSystemLevel;
+s32 R_bReset;
+s32 DvdCheckTreadOn;
+u8 DvdCheckThread[0x318];
 
 void marioStInit(void) {
     extern void DEMOInit(void*);
@@ -70,16 +133,13 @@ void marioStInit(void) {
     extern void seqSetSeq(s32, void*, void*);
     extern u32 OSGetSoundMode(void);
     extern void SoundSetOutputMode(s32);
-    extern u8 GXNtsc480ProgMarioSt[];
-    extern u8 GXNtsc480IntDfMarioSt[];
-    extern u32 unk_80429568;
-    extern u8 DvdCheckThread[];
     extern u8 gcDvdCheckThread(void);
     extern u8 viPostCallback(s32);
     void* rmode;
     s64 now;
     u32 reset;
     u32 clear;
+    static u8 stack[0x1000];
 
     reset = OSGetResetCode();
     if ((s32)reset < 0 && (OSGetResetCode() & 2) == 0) {
@@ -95,7 +155,7 @@ void marioStInit(void) {
     DEMOEnableGPHangWorkaround(5);
     N_setupErrorHandler();
     DEMOPadInit();
-    clear = unk_80429568;
+    clear = *(const u32*)unk_80429568;
     GXSetCopyClear(&clear, 0xFFFFFF);
     __GXSetIndirectMask(0);
     memset(gp, 0, 0x13D8);
@@ -134,7 +194,7 @@ void marioStInit(void) {
     *(void**)((s32)gp + 0x1284) = __memAlloc(0, 0xA7800);
     VISetPostRetraceCallback(viPostCallback);
     romFontInit();
-    OSCreateThread(DvdCheckThread, gcDvdCheckThread, 0, DvdCheckThread + 0x1000, 0x1000, 0x10, 1);
+    OSCreateThread(DvdCheckThread, gcDvdCheckThread, 0, stack + sizeof(stack), sizeof(stack), 0x10, 1);
     DvdCheckTreadOn = 1;
     OSResumeThread(DvdCheckThread);
     DVDMgrInit();
@@ -208,7 +268,6 @@ void marioStMain(void) {
     extern void nameEntMain(void);
     extern void winMgrMain(void);
     extern void effMain(void);
-    extern s64 none_key;
     u8* bytes;
     u32* words;
     s32 i;
@@ -302,7 +361,6 @@ void marioStDisp(void) {
 }
 
 void marioStSystemLevel(s32 level) {
-    extern s32 _mariostSystemLevel;
     extern void evtStartAll(s32 mask);
     extern void evtStopAll(s32 mask);
 
@@ -438,13 +496,6 @@ void gcDvdCheckThread(void) {
     extern void C_MTXPerspective(void* mtx, f32 fovY, f32 aspect, f32 nearZ, f32 farZ);
     extern void GXSetProjection(void* mtx, s32 type);
     extern void romFontPrintGX(f32 x, f32 y, f32 scale, void* color, char* msg);
-    extern u32 dat_80420340;
-    extern f32 float_25_80420344;
-    extern f32 float_1p2667_80420348;
-    extern f32 float_1_8042034c;
-    extern f32 float_10000_80420350;
-    extern f32 float_0p5_80420354;
-    extern f32 float_60_80420358;
     f32 projection[4][4];
     u32 color;
     char* message;
@@ -527,8 +578,8 @@ void gcDvdCheckThread(void) {
 u8 gcRumbleCheck(void) {
     extern u32 padGetRumbleStatus(s32);
     s32 local_flags[4];
-    static s32 off_trg[4];
-    static s64 off_time[4];
+    static s32 off_trg[4] = { 0 };
+    static s64 off_time[4] = { 0 };
     s64 now;
     s32 i;
 
@@ -588,8 +639,6 @@ u8 gcRumbleCheck(void) {
 }
 
 void L_gcResetCheck(void) {
-    extern s32 R_bReset;
-    extern char DvdCheckThread[];
     extern void VISetBlack(s32 black);
     extern void VIFlush(void);
     extern void VIWaitForRetrace(void);
@@ -640,3 +689,13 @@ void L_gcResetCheck(void) {
         }
     }
 }
+
+const u32 dat_80420340 = 0xFFFFFFFF;
+const f32 float_25_80420344 = 25.0f;
+const f32 float_1p2667_80420348 = 1.26666665f;
+const f32 float_1_8042034c = 1.0f;
+const f32 float_10000_80420350 = 10000.0f;
+const f32 float_0p5_80420354 = 0.5f;
+const f32 float_60_80420358 = 60.0f;
+const f32 float_0_8042035c = 0.0f;
+const u8 unk_80429568[4] = { 0, 0, 0, 0 };

@@ -6,6 +6,16 @@ extern void hitObjFlagOn(s32 name, unsigned short flag);
 extern void hitGrpFlagOff(s32 name, unsigned short flag);
 extern void hitGrpFlagOn(s32 name, unsigned short flag);
 
+typedef struct HitDamageReturn {
+    s32 name;
+    f32 x;
+    f32 y;
+    f32 z;
+} HitDamageReturn;
+
+HitDamageReturn* hitDmgretPtr;
+const f32 float_neg1000_804203d0 = -1000.0f;
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_hitobj_onoff(void* event) {
@@ -35,19 +45,11 @@ s32 evt_hitobj_onoff(void* event) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_hit_damage_return_set(void* event, s32 isFirstCall) {
-    typedef struct HitDamageReturn {
-        s32 name;
-        f32 x;
-        f32 y;
-        f32 z;
-    } HitDamageReturn;
     extern void* _mapAlloc(void* heap, u32 size);
     extern void* memcpy(void* dst, const void* src, u32 size);
     extern void hitObjGetPos(s32 name, void* pos);
     extern void hitGrpDamageReturnSet(s32 name, void* entry);
     extern void* mapalloc_base_ptr;
-    extern HitDamageReturn* hitDmgretPtr;
-    extern f32 float_neg1000_804203d0;
     s32* args = *(s32**)((s32)event + 0x18);
     HitDamageReturn* src = (HitDamageReturn*)evtGetValue(event, args[0]);
     HitDamageReturn* entry;
@@ -308,4 +310,3 @@ s32 evt_hitobj_name_callback(void* event, s32 isFirstCall) {
 
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
-

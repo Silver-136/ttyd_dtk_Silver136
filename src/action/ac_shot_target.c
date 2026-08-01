@@ -5,7 +5,6 @@
 extern f32 float_neg200_80427e74;
 extern f32 float_0_80427e78;
 extern u32 dat_80427e58;
-extern f32 vec3_80300258[];
 extern f32 float_2_80427e6c;
 
 void _ac_disp_init(void* wp);
@@ -14,6 +13,7 @@ void actionCommandDisp(f32 x, f32 y);
 
 /* stub-fill: battleAcMain_ShotTarget | missing_definition | ghidra_signature */
 s32 battleAcMain_ShotTarget(void* battleWork) {
+    extern f32 vec3_80300258[];
     extern void* BattleGetUnitPtr(void*, s32);
     extern void* BtlUnit_GetPartsPtr(void*, s32);
     extern void BtlUnit_GetHitPos(void*, void*, f32*, f32*, f32*);
@@ -22,7 +22,7 @@ s32 battleAcMain_ShotTarget(void* battleWork) {
     extern f64 sinfd(f64);
     extern f64 distABf(f64, f64, f64, f64);
     extern f32 __fabsf(f32);
-    extern char str_SFX_AC_CURSOR_MOVE1_803002c4[];
+    extern const char str_SFX_AC_CURSOR_MOVE1_803002c4[];
 
     u8* bw = battleWork;
     u8* extra = bw + 0x1F4C;
@@ -69,7 +69,7 @@ s32 battleAcMain_ShotTarget(void* battleWork) {
             case 100:
                 *(s32*)extra = *(s32*)(bw + 0x1CD0);
                 *(s32*)(bw + 0x1C9C) = 1000;
-                *(s32*)(extra + 0x38) = psndSFXOn(str_SFX_AC_CURSOR_MOVE1_803002c4);
+                *(s32*)(extra + 0x38) = psndSFXOn((char*)str_SFX_AC_CURSOR_MOVE1_803002c4);
                 /* Fall through into the active cursor update. */
             case 1000:
                 timer = *(s16*)(bw + 0x1D18);
@@ -321,6 +321,7 @@ void _ac_disp_init(void* wp) {
 
 /* stub-fill: actionCommandDisp | prototype_only | source_prototype */
 void actionCommandDisp(f32 x, f32 y) {
+    extern f32 vec3_80300258[];
     extern void* _battleWorkPointer;
     extern void btlGetScreenPoint(f32* in, f32* out);
     extern void btlDispTex4(s32 tex, f32* pos, f32* v0, f32* v1, u32* color);
@@ -397,3 +398,13 @@ void actionCommandDisp(f32 x, f32 y) {
     btlDispTex4(0x57, p1, b, a, &color);
 }
 
+const f32 vec3_80300258[] = { 0.0f, 60.0f, 0.0f };
+const f32 vec3_80300264[] = { 1.0f, 1.0f, 1.0f };
+const f32 vec3_80300270[] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_8030027c[] = { 1.0f, 1.0f, 1.0f };
+const f32 vec3_80300288[] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_80300294[] = { 1.0f, 1.0f, 1.0f };
+const f32 vec3_803002a0[] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_803002ac[] = { 1.0f, 1.0f, 1.0f };
+const f32 vec3_803002b8[] = { 0.0f, 0.0f, 0.0f };
+const char str_SFX_AC_CURSOR_MOVE1_803002c4[] = "SFX_AC_CURSOR_MOVE1";

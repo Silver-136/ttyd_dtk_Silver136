@@ -1,12 +1,5 @@
 #include "himo.h"
 
-extern f32 float_0_8042423c;
-extern f32 float_0p5_80424230;
-extern f32 float_1_80424244;
-extern f32 float_3p1416_80424248;
-extern f32 float_10_80424240;
-extern double double_to_int_802f8920;
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void vivihimo(f32 param_1, f32 param_2, f32 param_3, f32 param_4, f32* mtxA, f32* mtxB) {
@@ -24,6 +17,11 @@ void vivihimo(f32 param_1, f32 param_2, f32 param_3, f32 param_4, f32* mtxA, f32
     extern void spline_maketable(s32 count, f32* points, f32* out1, f32* out2);
     extern s32 camGetCurNo(void);
     extern void vivihimoDisp(s32 camera, void* work);
+    extern f32 float_0_8042423c;
+    extern f32 float_0p5_80424230;
+    extern f32 float_1_80424244;
+    extern f32 float_3p1416_80424248;
+    extern f32 float_10_80424240;
     extern f32 float_0p1_80424258;
     extern f32 float_0p2_80424264;
     extern f32 float_0p25_80424260;
@@ -124,15 +122,20 @@ void vivihimoDisp(s32 cameraId, void* work) {
     extern void PSMTXConcat(void* a, void* b, void* out);
     extern void GXLoadPosMtxImm(void* mtx, s32 id);
     extern void GXBegin(u32 prim, u32 fmt, u16 count);
+    extern f32 float_0_8042423c;
+    extern f32 float_0p5_80424230;
+    extern f32 float_1_80424244;
+    extern f32 float_3p1416_80424248;
+    extern f32 float_10_80424240;
     extern f32 float_0p066667_80424234;
     extern f32 float_0p82_8042424c;
     extern f32 float_neg1p2881_80424238;
     extern f32 float_1p2881_80424250;
     extern f32 float_15_80424254;
     extern double double_1p2881_802f8918;
-    extern u8 lbl_80418360[];
-    extern u8 lbl_80418380[];
-    extern u8 lbl_804183a0[];
+    extern u8 Pos[];
+    extern u8 Nrm[];
+    extern u8 Col[];
 
     f32 pos[3];
     f32 mtx[12];
@@ -159,9 +162,9 @@ void vivihimoDisp(s32 cameraId, void* work) {
     GXSetVtxAttrFmt(0, 0xA, 0, 1, 7);
     GXSetVtxAttrFmt(0, 0xB, 1, 5, 0);
     GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
-    GXSetArray(9, lbl_80418360, 3);
-    GXSetArray(0xA, lbl_80418380, 3);
-    GXSetArray(0xB, lbl_804183a0, 4);
+    GXSetArray(9, Pos, 3);
+    GXSetArray(0xA, Nrm, 3);
+    GXSetArray(0xB, Col, 4);
 
     invTan = float_0p5_80424230 / (f32)tan(double_1p2881_802f8918);
     angleTan = (f32)tan(float_neg1p2881_80424238);
@@ -241,3 +244,33 @@ void vivihimoDisp(s32 cameraId, void* work) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+u8 Pos[6] = { 1, 0, 0, 0xFF, 0, 0 };
+u8 gap_07_80418366_sdata[26] = { 0 };
+u8 Nrm[3] = { 0, 0, 0x7F };
+u8 gap_07_80418383_sdata[29] = { 0 };
+u8 Col[4] = { 0xFF, 0xFF, 0xFF, 0xFF };
+
+const f32 vec3_802f8908[3] = { 0.0f, 0.0f, 0.0f };
+const f64 double_1p2881_802f8918 = 1.288053035736084;
+const f64 double_to_int_802f8920 = 4503601774854144.0;
+const f64 double_0p5_802f8928 = 0.5;
+const f64 double_3_802f8930 = 3.0;
+const f64 double_0_802f8938 = 0.0;
+const f64 double_to_int_mask_802f8940 = 4503599627370496.0;
+
+const f32 float_0p5_80424230 = 0.5f;
+const f32 float_0p066667_80424234 = 0.06666667f;
+const f32 float_neg1p2881_80424238 = -1.288053f;
+const f32 float_0_8042423c = 0.0f;
+const f32 float_10_80424240 = 10.0f;
+const f32 float_1_80424244 = 1.0f;
+const f32 float_3p1416_80424248 = 3.1415927f;
+const f32 float_0p82_8042424c = 0.82f;
+const f32 float_1p2881_80424250 = 1.288053f;
+const f32 float_15_80424254 = 15.0f;
+const f32 float_0p1_80424258 = 0.1f;
+const f32 float_2p5_8042425c = 2.5f;
+const f32 float_0p25_80424260 = 0.25f;
+const f32 float_0p2_80424264 = 0.2f;
+const f32 float_neg1_80424268 = -1.0f;
+const f32 float_0p33333_8042426c = 0.33333334f;

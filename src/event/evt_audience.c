@@ -545,3 +545,8 @@ s32 evt_audience_joy_ending(void* evt) {
     BattleAudienceJoyEnding();
     return 2;
 }
+
+const f32 float_0_80422b50 = 0.0f;
+const f32 float_0p5_80422b54 = 0.5f;
+const f32 float_2_80422b58 = 2.0f;
+const f32 float_180_80422b5c = 180.0f;

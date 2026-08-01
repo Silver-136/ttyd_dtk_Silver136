@@ -127,3 +127,9 @@ void effKumokumoChipDisp(s32 cameraId, void* effect) {
     GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,4,2,8,15);GXSetTevAlphaIn(0,7,5,4,7);GXSetCullMode(0);effSetVtxDescN64((void*)0x803A51D8);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3);
 }
 
+u8 size32x32_tex32x32_vtx[56] = {
+    0xFF, 0xF0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x10, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x10, 0, 0x20, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xF0, 0, 0x20, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+};

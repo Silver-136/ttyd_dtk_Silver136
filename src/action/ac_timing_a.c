@@ -31,7 +31,44 @@ extern f32 float_1_80422718;
 extern f32 float_neg300_8042271c;
 extern f32 float_30_80422720;
 extern f32 float_0_80422724;
-s32* _ac_timing_a_timing_tbl[4];
+
+s32 _ac_timing_a_timing_lv_0[] = {
+    4, 10, 5, 9, 6, 8, 7, 7, 8, 6, 9, 5, 99999, 1,
+};
+
+s32 _ac_timing_a_timing_lv_1[] = {
+    0, 10, 1, 9, 2, 8, 3, 7, 4, 6, 5, 5, 6, 4, 7, 4, 8, 3, 9, 2, 99999, 1,
+};
+
+s32 _ac_timing_a_timing_lv_2[] = {
+    0, 9, 1, 8, 2, 7, 3, 6, 4, 5, 5, 4, 6, 3, 7, 2, 8, 1, 9, 1, 99999, 1,
+};
+
+s32 _ac_timing_a_timing_lv_3[] = {
+    0, 8, 1, 7, 2, 6, 3, 5, 4, 4, 5, 3, 6, 2, 8, 1, 9, 1, 99999, 1,
+};
+
+s32 _ac_timing_a_timing_lv_4[] = {
+    0, 7, 1, 6, 2, 5, 3, 4, 4, 3, 5, 2, 8, 1, 9, 1, 99999, 1,
+};
+
+s32 _ac_timing_a_timing_lv_5[] = {
+    0, 6, 1, 5, 2, 4, 3, 3, 4, 2, 8, 1, 9, 1, 99999, 1,
+};
+
+s32 _ac_timing_a_timing_lv_6[] = {
+    0, 5, 1, 4, 2, 3, 3, 2, 8, 1, 9, 1, 99999, 1,
+};
+
+s32* _ac_timing_a_timing_tbl[] = {
+    _ac_timing_a_timing_lv_0,
+    _ac_timing_a_timing_lv_1,
+    _ac_timing_a_timing_lv_2,
+    _ac_timing_a_timing_lv_3,
+    _ac_timing_a_timing_lv_4,
+    _ac_timing_a_timing_lv_5,
+    _ac_timing_a_timing_lv_6,
+};
 
 
 s32 battleAcMain_TimingA(int param_1) {

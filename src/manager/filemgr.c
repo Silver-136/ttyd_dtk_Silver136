@@ -560,6 +560,9 @@ void _fileAlloc(char* name, s32 kind, s32 unused) {
     }
 }
 
+const char str_filemgr_c_802f9470[] = "filemgr.c";
+const char str_invalid_version_numb_802f947c[] = "invalid version number for texture palette";
+
 
 void fileFree(void* file) {
     if (file == 0) {
@@ -761,3 +764,7 @@ char* fileAsync(char* name, s32 kind, s32 callback) {
 void fileSetCurrentArchiveType(s32 type) {
     ((s32*)afp)[1] = type;
 }
+
+char _filename[0x400];
+s32 fileWork[6];
+void* afp = fileWork;

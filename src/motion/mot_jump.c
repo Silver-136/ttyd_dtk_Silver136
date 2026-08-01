@@ -2,15 +2,11 @@
 #include "bowser/koopa_motion.h"
 
 extern void* gp;
-extern char str_gon_10_802c40d0[];
 extern void clear_hitobj_ride(void);
 extern void marioSetJumpPara(void);
 extern void marioMakeJumpPara(void);
 extern void marioSetPeakYpos(void);
 extern void marioChgPose(char*);
-extern f32 float_0_80420cc8;
-extern char str_M_J_1B_802c40c8;
-extern char str_M_J_1C_802c40b8;
 extern void marioResetCamFollowRate(void);
 extern void camFollowYOff(void);
 extern u32 hitGetAttr(void*);
@@ -19,10 +15,6 @@ extern s32 marioChkFront(f32, f32, f32*, void*);
 extern f32 revise360(f32);
 extern void sincosf(f32, f32*, f32*);
 extern f64 distABf(f64, f64, f64, f64);
-extern f32 float_0p5_80420cf0;
-extern f32 float_5_80420cf4;
-extern f32 float_30_80420cf8;
-extern f32 float_180_80420cfc;
 extern s32 irand(s32);
 extern void psndSFXOn_3D(void*, void*);
 
@@ -58,6 +50,9 @@ f32 marioGetJumpHeight(void) {
 }
 
 void mot_jumpStand(void) {
+    extern f32 float_0_80420cc8;
+    extern char str_M_J_1B_802c40c8;
+    extern char str_M_J_1C_802c40b8;
     extern s32 marioSlitButton(void);
     extern void marioSlitForceCancel(void);
     extern f32 marioJumpStandData[];
@@ -173,6 +168,13 @@ void mot_jumpStand(void) {
 }
 
 void mot_jumpSw(void) {
+    extern f32 float_0_80420cc8;
+    extern f32 float_0p5_80420cf0;
+    extern f32 float_5_80420cf4;
+    extern f32 float_30_80420cf8;
+    extern f32 float_180_80420cfc;
+    extern char str_M_J_1B_802c40c8;
+    extern char str_M_J_1C_802c40b8;
     extern f32 marioJumpSwData[];
 
     typedef struct Vec { f32 x, y, z; } Vec;
@@ -278,6 +280,13 @@ jump_setup_done:
 
 
 void mot_jumpNpc(void) {
+    extern f32 float_0_80420cc8;
+    extern f32 float_0p5_80420cf0;
+    extern f32 float_5_80420cf4;
+    extern f32 float_30_80420cf8;
+    extern f32 float_180_80420cfc;
+    extern char str_M_J_1B_802c40c8;
+    extern char str_M_J_1C_802c40b8;
     extern void kpa_jumpNpc(void);
     extern f32 float_2p6_80420cd4;
     extern f32 float_neg0p06_80420cd8;
@@ -407,6 +416,7 @@ void mot_jumpNpc(void) {
 }
 
 void N_mot_jumpNpc_post(void) {
+    extern char str_gon_10_802c40d0[];
     void* mario = marioGetPtr();
     if (strcmp((char*)((s32)gp + 0x12C), str_gon_10_802c40d0) == 0) {
         if (*(u32*)((s32)mario + 4) & 0x20000) {
@@ -416,6 +426,7 @@ void N_mot_jumpNpc_post(void) {
 }
 
 void mot_jump(void) {
+    extern char str_M_J_1B_802c40c8;
 
     void* mario = marioGetPtr();
     if (*(s8*)((s32)mario + 0x3C) == 2) {
@@ -485,6 +496,7 @@ void mot_jump(void) {
 }
 
 void mot_jumpSmall(void) {
+    extern char str_M_J_1B_802c40c8;
 
     void* mario = marioGetPtr();
     if (*(s8*)((s32)mario + 0x3C) == 2) {
@@ -552,6 +564,7 @@ void mot_jumpSmall(void) {
 }
 
 void mot_upstairs(void) {
+    extern char str_M_J_1B_802c40c8;
     extern void marioClearJumpPara(void);
     extern void motSlitContinue(void);
     extern void marioChgMot2(s32 motion);
@@ -589,6 +602,8 @@ void mot_upstairs(void) {
 }
 
 void mot_fall(void) {
+    extern f32 float_0_80420cc8;
+    extern char str_M_J_1C_802c40b8;
     extern void psndSFXOff(s32);
     extern void kpaChgPose(char*, char*);
     extern s32 marioBgmodeChk(void);
@@ -675,6 +690,7 @@ void mot_fall_post(void) {
 }
 
 void mot_land(void) {
+    extern f32 float_0_80420cc8;
     extern void psndSFXOff(s32 id);
     extern void marioChgMot(s32 motion);
     void* mario = marioGetPtr();
@@ -713,3 +729,45 @@ void mot_land(void) {
             break;
     }
 }
+
+typedef struct VecData {
+    f32 x;
+    f32 y;
+    f32 z;
+} VecData;
+
+const VecData vec3_802c4088 = { 0.0f, 0.0f, 0.0f };
+const VecData vec3_802c4094 = { 0.0f, 0.0f, 0.0f };
+const char str_KPA_J_1B_802c40a0[] = "KPA_J_1B";
+const char str_KPA2_J_1B_802c40ac[] = "KPA2_J_1B";
+const char str_M_J_1C_802c40b8[] = "M_J_1C";
+const char str_M_J_1B_802c40c8[] = "M_J_1B";
+const char str_gon_10_802c40d0[] = "gon_10";
+
+f32 marioJumpStandData[] = {
+    1.52f, -0.188f, 2.925f, -0.847f, -0.1f,
+    -0.4f, 0.024f, -0.004f, 0.125f, 0.7f,
+};
+
+f32 marioJumpSwData[] = {
+    2.5f, -0.1f, 0.02f, -0.01f,
+    -0.08f, -0.4f, 0.0f, -0.002f,
+};
+
+const f32 float_0_80420cc8 = 0.0f;
+const f32 float_0p1_80420ccc = 0.1f;
+const f32 float_0p8_80420cd0 = 0.8f;
+const f32 float_2p6_80420cd4 = 2.6f;
+const f32 float_neg0p06_80420cd8 = -0.06f;
+const f32 float_neg0p01_80420cdc = -0.01f;
+const f32 float_neg0p002_80420ce0 = -0.002f;
+const f32 float_1_80420ce4 = 1.0f;
+const f32 float_neg0p04_80420ce8 = -0.04f;
+const f32 float_neg0p02_80420cec = -0.02f;
+const f32 float_0p5_80420cf0 = 0.5f;
+const f32 float_5_80420cf4 = 5.0f;
+const f32 float_30_80420cf8 = 30.0f;
+const f32 float_180_80420cfc = 180.0f;
+const f32 float_neg0p03_80420d00 = -0.03f;
+const f32 float_0p04_80420d04 = 0.04f;
+const f32 float_neg1_80420d08 = -1.0f;

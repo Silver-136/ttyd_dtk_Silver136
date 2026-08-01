@@ -156,3 +156,12 @@ void effKemuri6Disp(s32 cameraId, void* effect) {
         PSMTXConcat((f32 (*)[4])(camera+0x11C),trans,trans);GXLoadPosMtxImm(trans,0);GXBegin(0x90,0,6);tri2(0,3,1,0,0,2,3);}}
 }
 
+u8 kmr_a_1_v[56] = {
+    0xFF, 0xF8, 0, 7, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF,
+    0, 7, 0, 7, 0, 0, 2, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xF8, 0xFF, 0xF8, 0, 0, 0, 0, 2, 0, 0xFF, 0xFF, 0xFF, 0xFF,
+    0, 7, 0xFF, 0xF8, 0, 0, 2, 0, 2, 0, 0xFF, 0xFF, 0xFF, 0xFF,
+};
+
+const f32 vec3_802fb260[3] = { 0.0f, 0.0f, 0.0f };
+const char str_Kemuri6N64_802fb26c[] = "Kemuri6N64";

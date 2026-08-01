@@ -3,11 +3,9 @@
 extern void* marioGetPtr(void);
 extern void marioPaperOff(void);
 extern s32 marioGetColor(void);
-extern char str_PM_P_1B_802c4180[];
 extern void allPartyRideOff2(void);
 extern void camFollowYOn(void);
 extern void marioAdjustMoveDir(void);
-extern u8 str_SFX_MARIO_AIRPLANE1_802c40d8[];
 extern f32 float_0_80420d1c;
 extern f32 float_1_80420d2c;
 extern f32 float_2_80420d28;
@@ -70,6 +68,7 @@ u8 marioForcePlaneAnime(void) {
     extern void marioPaperOn(void* paper);
     extern void marioChgPose(void* pose);
     extern void* paper_plane[4];
+    extern char str_PM_P_1B_802c4180[];
     extern char str_M_Z_1_80420d88[6];
     void* mario = marioGetPtr();
 
@@ -117,8 +116,10 @@ void mot_plane(void) {
     extern void* evtEntry(void*, s32, s32);
     extern s32 sound_evt[];
     extern char* paper_plane[];
+    extern u8 str_SFX_MARIO_AIRPLANE1_802c40d8[];
     extern char str_M_J_1B_802c4170[];
     extern char str_PM_P_1A_802c4178[];
+    extern char str_PM_P_1B_802c4180[];
     extern char str_M_J_1C_802c41a8[];
     extern char str_M_Z_1_80420d88[];
 
@@ -836,6 +837,7 @@ void mot_plane_post(void) {
     extern void psndSFXOff(s32 id);
     extern void marioChgPaper(s32 mode);
     extern void __memFree(s32 heap, void* ptr);
+    extern u8 str_SFX_MARIO_AIRPLANE1_802c40d8[];
     typedef struct Vec { u32 x, y, z; } Vec;
     u8* data = str_SFX_MARIO_AIRPLANE1_802c40d8;
     void* mario = marioGetPtr();
@@ -1006,3 +1008,58 @@ s32 chkCollision(s32* outAttr) {
 
     return hitAny;
 }
+
+typedef struct PlaneVecData {
+    f32 x;
+    f32 y;
+    f32 z;
+} PlaneVecData;
+
+const char str_SFX_MARIO_AIRPLANE1_802c40d8[] = "SFX_MARIO_AIRPLANE1";
+const PlaneVecData vec3_802c40ec = { 0.0f, 40.0f, 0.0f };
+const char str_p_hikohki_802c40f8[] = "p_hikohki";
+const char str_p_hikohki_g_802c4104[] = "p_hikohki_g";
+const char str_p_hikohki_y_802c4110[] = "p_hikohki_y";
+const char str_p_hikohki_v_802c411c[] = "p_hikohki_v";
+const PlaneVecData vec3_802c4128 = { 0.0f, 0.0f, 0.0f };
+const PlaneVecData vec3_802c4134 = { 0.0f, 0.0f, 0.0f };
+const PlaneVecData vec3_802c4140 = { 0.0f, 0.0f, 0.0f };
+const PlaneVecData vec3_802c414c = { 0.0f, 0.0f, 0.0f };
+const PlaneVecData vec3_802c4158 = { 0.0f, 0.0f, 0.0f };
+const char str_M_J_1B_802c4170[] = "M_J_1B";
+const char str_PM_P_1A_802c4178[] = "PM_P_1A";
+const char str_PM_P_1B_802c4180[] = "PM_P_1B";
+const char str_tik_01_802c4188[] = "tik_01";
+const char str_tik_19_802c4190[] = "tik_19";
+const char str_mri_19_802c4198[] = "mri_19";
+const char str_las_25_802c41a0[] = "las_25";
+const char str_M_J_1C_802c41a8[] = "M_J_1C";
+
+f32 planeData[] = {
+    5.0f, -0.02f, -0.03f, 25.0f, -45.0f, 0.4f, 1.0f, 0.1f,
+    -0.1f, 1.5f, 0.2f, 0.05f, 3.4f, 1.0f, 0.025f, 0.045f,
+    0.8f, 1.5f, -0.3f, -5.0f, 3.9f, -0.112f, 0.118f, 0.5f,
+    0.4f, -8.0f, -2.0f, -4.0f, -2.0f, 0.2f, 0.0f, 1.2f,
+    1.0f, 15.0f, -30.0f, 12.0f, 0.0f, 30.0f, -30.0f, 6.0f,
+    28.0f,
+};
+
+extern s32 evt_snd_sfxon_3d(void* evt);
+
+s32 sound_evt[] = {
+    0x0006005B, (s32)evt_snd_sfxon_3d, (s32)(void*)str_SFX_MARIO_AIRPLANE1_802c40d8,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0, 0x00010009, 0x0000000C,
+    0x0006005B, (s32)evt_snd_sfxon_3d, (s32)(void*)str_SFX_MARIO_AIRPLANE1_802c40d8,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0, 0x00010009, 0x0000000C,
+    0x0006005B, (s32)evt_snd_sfxon_3d, (s32)(void*)str_SFX_MARIO_AIRPLANE1_802c40d8,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0, 0x00010009, 0x0000000C,
+    0x0006005B, (s32)evt_snd_sfxon_3d, (s32)(void*)str_SFX_MARIO_AIRPLANE1_802c40d8,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0, 2, 1,
+};
+
+char* paper_plane[] = {
+    (char*)str_p_hikohki_802c40f8,
+    (char*)str_p_hikohki_g_802c4104,
+    (char*)str_p_hikohki_y_802c4110,
+    (char*)str_p_hikohki_v_802c411c,
+};

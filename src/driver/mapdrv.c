@@ -6,6 +6,10 @@
 #include "driver/offscreendrv.h"
 #include "memory.h"
 
+typedef struct MapTexObjCopy {
+    s32 word[8];
+} MapTexObjCopy;
+
 extern s32 activeGroup;
 extern s32 mapWork;
 extern void* mapalloc_base_ptr;
@@ -6227,12 +6231,9 @@ done:
 }
 
 void mapSetProjTexObj(void* texObj, void* imgRef) {
-    typedef struct TexObjCopy {
-        s32 word[8];
-    } TexObjCopy;
-    extern TexObjCopy projTexObj;
+    extern MapTexObjCopy projTexObj;
     extern void* projTexImgRef;
-    projTexObj = *(TexObjCopy*)texObj;
+    projTexObj = *(MapTexObjCopy*)texObj;
     projTexImgRef = imgRef;
 }
 
@@ -6699,3 +6700,24 @@ done:
         *(u8*)param_5 = *(u8*)((s32)obj + 0x0F);
     }
 }
+
+char error_data[1152];
+
+u32 gap_08_8041E6DC_sbss;
+u32 paper_ambient;
+u32 paperCraft_ambient;
+MapTexObjCopy projTexObj;
+void* projTexImgRef;
+s32 projMtx[12];
+s32 __mapdrv_make_dl;
+s32 unk_8041e678;
+s32 error_count;
+s32 error_flag;
+void* current_mp;
+s32 mapClipOffFlag;
+s32 activeGroup;
+s32 mapWork;
+
+u32 scrl_uv_1622[4] = { 0, 0, 0, 0 };
+u32 fog_type[5] = { 2, 4, 5, 6, 7 };
+u32 gap_07_804150D4_sdata[3] = { 0, 0, 0 };

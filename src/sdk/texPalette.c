@@ -7,7 +7,7 @@ void* UnpackTexPalette(void* data) {
     u16 i;
 
     if (*(u32*)data != 0x20AF30) {
-        OSPanic("texPalette.c", 0x24, "invalid version numb");
+        OSPanic("texPalette.c", 0x24, "invalid version number for texture palette");
     }
 
     table = *(void**)((s32)data + 8);
@@ -83,4 +83,3 @@ void TEXGetGXTexObjFromPalette(void* palette, void* texObj, s32 id) {
                     0,
                     *(u8*)((s32)desc + 0x20));
 }
-

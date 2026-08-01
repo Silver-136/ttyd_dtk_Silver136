@@ -165,3 +165,13 @@ void effKemuri7Disp(s32 cameraId, void* effect) {
         PSMTXConcat((f32 (*)[4])(camera+0x11C),(f32 (*)[4])(work+0x30),draw);if(*(f32*)(work+0x60)==float_0_80425768){PSMTXScale(texMtx,float_neg1_8042576c,float_1_80425770,float_1_80425770);PSMTXConcat(draw,texMtx,draw);}
         GXLoadPosMtxImm(draw,0);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3);}}
 }
+
+u8 foot_vtx[56] = {
+    0xFF, 0xFB, 0, 0, 0xFF, 0xFB, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+    0, 5, 0, 0, 0xFF, 0xFB, 4, 0, 4, 0, 0, 0, 0, 0xFF,
+    0, 5, 0, 0, 0, 5, 4, 0, 0, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xFB, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+};
+
+const Vec3 vec3_802fb280 = { 0.0f, 0.0f, 0.0f };
+const char str_Kemuri7N64_802fb28c[] = "Kemuri7N64";

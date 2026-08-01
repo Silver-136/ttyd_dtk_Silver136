@@ -1,11 +1,8 @@
 #include "party/party_hit.h"
 extern void* marioGetPtr(void);
-extern f32 float_1_8042151c;
-extern char str_MOBJ_HiddenHatenaBlo_802cb8a0[];
-extern char str_MOBJ_HiddenBadgeBloc_802cb8b8[];
-extern char str_MOBJ_Hidden10CountBl_802cb8d0[];
-extern f32 float_45_80421538;
-extern f32 float_6_80421518;
+extern const char str_MOBJ_HiddenHatenaBlo_802cb8a0[];
+extern const char str_MOBJ_HiddenBadgeBloc_802cb8b8[];
+extern const char str_MOBJ_Hidden10CountBl_802cb8d0[];
 extern f64 sin(f64 x);
 extern f64 cos(f64 x);
 #pragma no_register_save_helpers on
@@ -16,7 +13,7 @@ s32 chkfilter(s32 param_1, int param_2) {
         char name[16];
     } MobjName;
     extern MobjName* mobjHitObjPtrToPtr(int hit);
-    extern s32 strcmp(char* a, char* b);
+    extern s32 strcmp(char* a, const char* b);
     u32 attr;
     MobjName* mobj;
 
@@ -52,7 +49,7 @@ s32 chkfilterYoshi(s32 param_1, int param_2) {
         char name[16];
     } MobjName;
     extern MobjName* mobjHitObjPtrToPtr(int hit);
-    extern s32 strcmp(char* a, char* b);
+    extern s32 strcmp(char* a, const char* b);
     u32 attr;
     MobjName* mobj;
 
@@ -90,7 +87,7 @@ s32 chkfilterNokotaro(s32 param_1, int param_2) {
         char name[16];
     } MobjName;
     extern MobjName* mobjHitObjPtrToPtr(int hit);
-    extern s32 strcmp(char* a, char* b);
+    extern s32 strcmp(char* a, const char* b);
     u32 attr;
     MobjName* mobj;
 
@@ -654,6 +651,8 @@ s32 partyChkFrontStep(f64 heightAdd, void* pParty, f32* outY, f32* outDiff, f32*
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* partySearchWallFront(f64 distance, f64 direction, void* pParty, f32* pos) {
+    extern f32 float_1_8042151c;
+    extern f32 float_45_80421538;
     typedef struct VecLocal {
         f32 x;
         f32 y;
@@ -665,7 +664,7 @@ void* partySearchWallFront(f64 distance, f64 direction, void* pParty, f32* pos) 
     extern s32 strcmp(const char* a, const char* b);
     extern void* marioHitCheckVec(void* pos, void* dir, void* outNorm, void* outHitPos, f32* dist);
     extern void* gp;
-    extern char str_gor_02_802cb898[];
+    extern const char str_gor_02_802cb898[];
     extern f32 float_0p5_80421504;
     extern f32 float_0p75_80421528;
     extern f32 float_11_80421534;
@@ -783,6 +782,9 @@ void* partySearchWallFront(f64 distance, f64 direction, void* pParty, f32* pos) 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 partySearchFrontWall(f64 distance, f64 angle, void* pParty, f32* pos) {
+    extern f32 float_1_8042151c;
+    extern f32 float_6_80421518;
+    extern f32 float_45_80421538;
     typedef struct VecLocal {
         f32 x;
         f32 y;
@@ -901,6 +903,7 @@ s32 partySearchFrontWall(f64 distance, f64 angle, void* pParty, f32* pos) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void partySearchHead(f64 angle, void* pParty, f32* pos, f32* dist) {
+    extern f32 float_1_8042151c;
     extern void sincosf(f32 angle, f32* cosOut, f32* sinOut);
     extern s32 hitCheckFilter(f64 x, f64 y, f64 z, f64 vx, f64 vy, f64 vz, s32 flags,
                               void* out0, void* out1, void* out2, f32* outDist,
@@ -992,6 +995,7 @@ void partySearchHead(f64 angle, void* pParty, f32* pos, f32* dist) {
 
 
 s32 unk_800c27c0(void* flags, void* mario) {
+    extern f32 float_6_80421518;
     extern s32 marioChkWallAround(void* mario, s32 arg, f32 a, f32 b, f32 radius);
     f32 a;
     f32 b;
@@ -1155,3 +1159,59 @@ s32 unk_800c2010(void* party, f32* pos) {
     delta = __fabsf(delta);
     return delta <= float_10_80421510;
 }
+
+const u32 vec3_802cb770[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb77c[] = { 0x00000000, 0xBF800000, 0x00000000 };
+const u32 vec3_802cb788[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb794[] = { 0x00000000, 0xBF800000, 0x00000000 };
+const u32 vec3_802cb7a0[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb7ac[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb7b8[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb7c4[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb7d0[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb7dc[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb7e8[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb7f4[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb800[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb80c[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb818[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb824[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb830[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb83c[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb848[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb854[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb860[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802cb86c[] = { 0x00000000, 0x00000000, 0x00000000 };
+const char str_gor_02_802cb898[] = "gor_02";
+const char str_MOBJ_HiddenHatenaBlo_802cb8a0[] = "MOBJ_HiddenHatenaBlock";
+const char str_MOBJ_HiddenBadgeBloc_802cb8b8[] = "MOBJ_HiddenBadgeBlock";
+const char str_MOBJ_Hidden10CountBl_802cb8d0[] = "MOBJ_Hidden10CountBlock";
+
+const f32 float_270_80421500 = 270.0f;
+const f32 float_0p5_80421504 = 0.5f;
+const f32 float_0_80421508 = 0.0f;
+const f32 float_180_8042150c = 180.0f;
+const f32 float_10_80421510 = 10.0f;
+const f32 float_20_80421514 = 20.0f;
+const f32 float_6_80421518 = 6.0f;
+const f32 float_1_8042151c = 1.0f;
+const f32 float_100_80421520 = 100.0f;
+const f32 float_0p3_80421524 = 0.3f;
+const f32 float_0p75_80421528 = 0.75f;
+const f32 float_neg0p5_8042152c = -0.5f;
+const f32 float_1000_80421530 = 1000.0f;
+const f32 float_11_80421534 = 11.0f;
+const f32 float_45_80421538 = 45.0f;
+const f32 float_neg1_8042153c = -1.0f;
+const f32 float_120_80421540 = 120.0f;
+const f32 float_350_80421544 = 350.0f;
+const f32 float_0p01_80421548 = 0.01f;
+const f32 float_0p265_8042154c = 0.265f;
+const f32 float_3p1416_80421550 = 3.1415927f;
+const f32 float_2_80421554 = 2.0f;
+const f32 float_0p1_80421558 = 0.1f;
+const f32 float_5_8042155c = 5.0f;
+const f32 float_0p375_80421560 = 0.375f;
+const f32 float_neg10000_80421564 = -10000.0f;
+const f32 float_50_80421568 = 50.0f;
+const f32 float_30_8042156c = 30.0f;

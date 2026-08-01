@@ -247,3 +247,57 @@ u8 effMissStarDisp(s32 cameraId, void* effEntry) {
     return 0;
 }
 
+f32 spd_tbl[45] = {
+    0.0f, 4.5f, 0.0f,
+    1.0f, 4.0f, 0.0f,
+    2.0f, 3.0f, 0.0f,
+    3.0f, 2.0f, 0.0f,
+    3.5f, 1.0f, 0.0f,
+    4.0f, 0.0f, 0.0f,
+    4.5f, 0.0f, 0.0f,
+    5.0f, 0.0f, 0.0f,
+    4.5f, 0.0f, 0.0f,
+    4.0f, 0.0f, 0.0f,
+    3.5f, -1.0f, 0.0f,
+    3.0f, -2.0f, 0.0f,
+    2.0f, -3.0f, 0.0f,
+    1.0f, -4.0f, 0.0f,
+    0.0f, -4.5f, 0.0f,
+};
+
+f32 scale_tbl[45] = {
+    1.0f, 1.0f, 1.0f,
+    0.8f, 0.8f, 0.8f,
+    0.9f, 0.9f, 0.9f,
+    1.1f, 1.1f, 1.1f,
+    1.0f, 1.0f, 1.0f,
+    0.8f, 0.8f, 0.8f,
+    0.9f, 0.9f, 0.9f,
+    1.1f, 1.1f, 1.1f,
+    1.0f, 1.0f, 1.0f,
+    0.8f, 0.8f, 0.8f,
+    0.9f, 0.9f, 0.9f,
+    1.1f, 1.1f, 1.1f,
+    1.0f, 1.0f, 1.0f,
+    0.8f, 0.8f, 0.8f,
+    0.9f, 0.9f, 0.9f,
+};
+
+const f32 vec3_802f3c90[3] = {
+    0.0f, 0.0f, 0.0f,
+};
+
+const char str_SmallStar_802f3c9c[] = "SmallStar";
+const f64 double_to_int_802f3ca8 = 4503601774854144.0;
+
+const f32 float_deg2rad_80422e50 = 0.017453292f;
+const f32 float_neg16_80422e54 = -16.0f;
+const f32 float_16_80422e58 = 16.0f;
+const f32 float_0_80422e5c = 0.0f;
+const f32 float_1_80422e60 = 1.0f;
+const f32 float_0p8_80422e64 = 0.8f;
+const f32 float_0p5_80422e68 = 0.5f;
+const f32 float_0p4_80422e6c = 0.4f;
+const f32 float_0p7_80422e70 = 0.7f;
+const f32 float_2_80422e74 = 2.0f;
+const f32 float_255_80422e78 = 255.0f;

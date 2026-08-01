@@ -254,3 +254,37 @@ void main_dl(void* effect, void* view) {
     }
 }
 
+typedef struct EffN64Vertex {
+    s16 x;
+    s16 y;
+    s16 z;
+    s16 s;
+    s16 t;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} EffN64Vertex;
+
+EffN64Vertex stg_thruhammer_v[20] = {
+    {    -34,     -2,     20,   4267,   1024, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    -52,     50,      0,   3840,   2048, 0xFF, 0xFF, 0xFF, 0x00 },
+    {    -34,     -2,    -20,   3413,   1024, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    -52,     50,    -30,   3413,   2048, 0xFF, 0xFF, 0xFF, 0x00 },
+    {    -26,     50,    -45,   2987,   2048, 0xFF, 0xFF, 0xFF, 0x00 },
+    {      0,     -2,    -40,   2560,   1024, 0xFF, 0xFF, 0xFF, 0xFF },
+    {      0,     50,    -60,   2560,   2048, 0xFF, 0xFF, 0xFF, 0x00 },
+    {     26,     50,    -45,   2133,   2048, 0xFF, 0xFF, 0xFF, 0x00 },
+    {     34,     -2,    -20,   1707,   1024, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    -52,     50,     30,   4267,   2048, 0xFF, 0xFF, 0xFF, 0x00 },
+    {    -26,     50,     45,   4693,   2048, 0xFF, 0xFF, 0xFF, 0x00 },
+    {      0,     -2,     40,   5120,   1024, 0xFF, 0xFF, 0xFF, 0xFF },
+    {      0,     50,     60,   5120,   2048, 0xFF, 0xFF, 0xFF, 0x00 },
+    {     26,     50,     45,   5547,   2048, 0xFF, 0xFF, 0xFF, 0x00 },
+    {     52,     50,    -30,   1707,   2048, 0xFF, 0xFF, 0xFF, 0x00 },
+    {     52,     50,      0,   1280,   2048, 0xFF, 0xFF, 0xFF, 0x00 },
+    {     34,     -2,     20,    853,   1024, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     52,     50,     30,    853,   2048, 0xFF, 0xFF, 0xFF, 0x00 },
+    {     26,     50,     45,    427,   2048, 0xFF, 0xFF, 0xFF, 0x00 },
+    {      0,     -2,     40,      0,   1024, 0xFF, 0xFF, 0xFF, 0xFF },
+};

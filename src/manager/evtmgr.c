@@ -1,17 +1,20 @@
 #include "manager/evtmgr.h"
 
 extern void* gp;
-extern f32 evtSpd;
-extern s32 evtMax;
-extern s32 runMainF;
 extern s32 _mariostSystemLevel;
-extern u8 work[];
 void evtStopAll(s32 type);
 void evt_msg_init(void);
-extern s32 priTblNum;
-extern s32 priTbl[];
-extern s32 priTblIndex[];
-extern s32 evtID;
+
+u8 work[0x140];
+s32 priTbl[0x100];
+s32 priIDTbl[0x100];
+
+s32 evtID = 1;
+f32 evtSpd = 1.0f;
+
+s32 evtMax;
+s32 priTblNum;
+s32 runMainF;
 
 void* evtGetWork(void) {
     if (*(s32*)((s32)gp + 0x14) != 0) {
@@ -21,7 +24,6 @@ void* evtGetWork(void) {
 }
 
 void make_pri_table(void) {
-    extern unsigned char work[];
 
 
 
@@ -41,7 +43,7 @@ void make_pri_table(void) {
     count = 0;
     for (i = 0; i < *(s32*)set; i++) {
         if ((*(u8*)((s32)entry + 8) & 1) != 0) {
-            priTblIndex[count] = i;
+            priIDTbl[count] = i;
             priTbl[count] = *(s32*)((s32)entry + 0x15C);
             count++;
         }
@@ -51,15 +53,15 @@ void make_pri_table(void) {
 
     for (i = 0; i < count - 1; i++) {
         for (j = i + 1; j < count; j++) {
-            s32 idxA = priTblIndex[i];
-            s32 idxB = priTblIndex[j];
+            s32 idxA = priIDTbl[i];
+            s32 idxB = priIDTbl[j];
             void* base = *(void**)((s32)set + 0x90);
             if (*(u8*)((s32)base + idxA * 0x1B0 + 0xB) < *(u8*)((s32)base + idxB * 0x1B0 + 0xB)) {
                 s32 idA = priTbl[i];
                 s32 idB = priTbl[j];
-                priTblIndex[i] = idxB;
+                priIDTbl[i] = idxB;
                 priTbl[j] = idA;
-                priTblIndex[j] = idxA;
+                priIDTbl[j] = idxA;
                 priTbl[i] = idB;
             }
         }
@@ -67,7 +69,6 @@ void make_pri_table(void) {
 }
 
 void evtmgrInit(void) {
-    extern unsigned char work[];
 
 
 
@@ -227,7 +228,7 @@ void* evtEntry(void* script, s32 pri, s32 flags) {
     } while (op == 0 || op >= 2);
 
     if (runMainF != 0 && (*(u8*)((s32)evt + 8) & 0x20) != 0) {
-        priTblIndex[priTblNum] = index;
+        priIDTbl[priTblNum] = index;
         priTbl[priTblNum] = *(s32*)((s32)evt + 0x15C);
         priTblNum++;
     }
@@ -321,7 +322,7 @@ void* evtEntryType(void* script, s32 pri, s32 flags, s32 type) {
     } while (op == 0 || op >= 2);
 
     if (runMainF != 0 && (*(u8*)((s32)evt + 8) & 0x20) != 0) {
-        priTblIndex[priTblNum] = index;
+        priIDTbl[priTblNum] = index;
         priTbl[priTblNum] = *(s32*)((s32)evt + 0x15C);
         priTblNum++;
     }
@@ -340,7 +341,6 @@ void* evtChildEntry(void* parentEvt, void* evtCode, s32 flags) {
 
 
 
-    extern u8 work[];
     extern void evtEntryRunCheck(void);
     extern void* memset(void*, int, size_t);
 
@@ -434,7 +434,7 @@ void* evtChildEntry(void* parentEvt, void* evtCode, s32 flags) {
     } while (op != 0);
 
     if (runMainF != 0) {
-        priTblIndex[priTblNum] = index;
+        priIDTbl[priTblNum] = index;
         priTbl[priTblNum] = *(s32*)((s32)evt + 0x15C);
         priTblNum++;
     }
@@ -530,7 +530,7 @@ void* evtBrotherEntry(void* parentEvt, void* evtCode, u32 flags) {
     } while (op == 0 || op >= 2);
 
     if (runMainF != 0) {
-        priTblIndex[priTblNum] = index;
+        priIDTbl[priTblNum] = index;
         priTbl[priTblNum] = *(s32*)((s32)evt + 0x15C);
         priTblNum++;
     }
@@ -602,7 +602,6 @@ void evtmgrMain(void) {
     extern s32 evtmgrCmd(void* entry);
     extern void make_pri_table(void);
 
-    extern s32 priTblId[];
     void* set;
     void* gpPtr;
     void* entry;
@@ -639,7 +638,7 @@ void evtmgrMain(void) {
     make_pri_table();
     i = 0;
     while (i < priTblNum) {
-        entry = (void*)((s32)*(void**)((s32)set + 0x90) + priTblId[i] * 0x1B0);
+        entry = (void*)((s32)*(void**)((s32)set + 0x90) + priIDTbl[i] * 0x1B0);
         if ((*(u8*)((s32)entry + 8) & 1) != 0 &&
             *(s32*)((s32)entry + 0x15C) == priTbl[i] &&
             (*(u8*)((s32)entry + 8) & 0x92) == 0) {
@@ -784,7 +783,6 @@ void evtSetType(void* entry, s32 type) {
 #pragma use_lmw_stmw off
 void evtStop(int pEvt, u32 flags) {
 
-    extern u8 work[];
     u8* set = work;
     u8* waiting;
     u8* entry;
@@ -859,7 +857,6 @@ void evtStop(int pEvt, u32 flags) {
 #pragma use_lmw_stmw off
 void evtStart(void* pEvt, u32 flags) {
 
-    extern u8 work[];
     u8* set = work;
     u8* waiting;
     u8* entry;

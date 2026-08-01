@@ -4,10 +4,7 @@ extern u8 cloud[];
 extern void* cloud_p;
 extern u8 cloud_once_flag;
 extern s32 evtEntry(void* script, s32 priority, s32 flags);
-extern char str_P_oof_cloud_1_802f73c8[];
 extern s32 evtGetValue(void* event, s32 value);
-extern char str_i_name_PCT1d_802f73d8[];
-extern char str_o_name_PCT1d_802f73e4[];
 s32 sprintf(char* str, const char* fmt, ...);
 
 s32 evt_cloud_main(void* pEvt, s32 firstCall) {
@@ -26,6 +23,7 @@ s32 evt_cloud_main(void* pEvt, s32 firstCall) {
     extern void mapGrpSetOffScreen(char* objectName, char* offscreenName);
     extern void mapGrpClearOffScreen(char* objectName);
     extern char* strcpy(char* dest, const char* src);
+    extern char str_P_oof_cloud_1_802f73c8[];
     extern void imgEntry(char* name, s32 heap);
     extern void* imgNameToPtr(char* name, s32 heap);
     extern s32 animPaperPoseGetId(char* name, s32 heap);
@@ -158,6 +156,8 @@ s32 evt_cloud_main(void* pEvt, s32 firstCall) {
 }
 
 s32 evt_cloud_init(void) {
+    extern char str_i_name_PCT1d_802f73d8[];
+    extern char str_o_name_PCT1d_802f73e4[];
     char* iName;
     s32 zero;
     char* oName;
@@ -183,6 +183,7 @@ s32 evt_cloud_init(void) {
 
 s32 evt_cloud_ent(void* pEvt) {
     extern void* evt_cloud_main_evt;
+    extern char str_P_oof_cloud_1_802f73c8[];
     extern char* strncpy(char* dest, const char* src, unsigned long n);
     s32* args;
     s32 indirectName;
@@ -261,3 +262,23 @@ s32 evt_cloud_get_mode(void* event, s32 isFirstCall) {
     evtSetValue(event, args[0], *(s32*)((s32)cloud + 4));
     return 2;
 }
+
+u8 cloud_once_flag;
+void* cloud_p;
+u8 cloud[0xC80];
+
+const char str_P_oof_cloud_1_802f73c8[] = "P_oof_cloud_1";
+const char str_i_name_PCT1d_802f73d8[] = "i_name_%1d";
+const char str_o_name_PCT1d_802f73e4[] = "o_name_%1d";
+const char str_P_oof_cloud_2_802f73f0[] = "P_oof_cloud_2";
+const char str_SFX_OFF_CLAUD_WIND2_802f7400[] = "SFX_OFF_CLAUD_WIND2";
+const char str_SFX_OFF_CLAUD_WIND3_802f7414[] = "SFX_OFF_CLAUD_WIND3";
+const f64 double_to_int_mask_802f7428 = 4503599627370496.0;
+const f64 double_to_int_802f7430 = 4503601774854144.0;
+
+u32 evt_cloud_main_evt[4] = {
+    0x0001005B,
+    (u32)evt_cloud_main,
+    2,
+    1,
+};

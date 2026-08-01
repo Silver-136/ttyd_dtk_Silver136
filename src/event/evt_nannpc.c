@@ -5,11 +5,11 @@ extern u8 extLoadShadowRenderMode(void);
 extern u8 extLoadShadowVertex(void);
 extern u8 extLoadShadowTev(void);
 extern u8 extDrawShadow(void);
-extern void* nanNPCWork;
+void* nanNPCWork;
 s32 evtGetValue(void* event, s32 arg);
 extern s32 extGetPoseNum(void);
 extern u8* gpGlobals;
-extern char makestring[];
+char makestring[16];
 extern char str_PCT06x_8042285c[];
 extern f32 evtGetFloat(void*, s32);
 
@@ -247,7 +247,11 @@ void nannpc_ext_disp(void) {
 
 
 u8 nannpc_ext_shadow_disp(void) {
-    static f32 mt[3][4];
+    static f32 mt[3][4] = {
+        { 10.0f, 0.0f, 0.0f, 0.0f },
+        { 0.0f, 10.0f, 0.0f, 0.1f },
+        { 0.0f, 0.0f, 10.0f, 0.0f },
+    };
 
     extLoadShadowMtx(mt);
     extLoadShadowRenderMode();

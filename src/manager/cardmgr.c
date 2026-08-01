@@ -6,6 +6,10 @@ extern u8 _mariost_icon_tex[];
 extern u8 _mariost_banner_tex[];
 extern char str_PCT2d_PCT2d_save_dat_802cb100[];
 extern u8 _mariost_icon_tlut[];
+extern char str_mariost_save_file_802cb0e0[];
+extern char str_Paper_Mario_802cb0f4[];
+extern const char str_123_80421134[4];
+extern char* version;
 extern void* yuwp;
 extern void* bdsw;
 
@@ -23,7 +27,6 @@ void cardBufReset(void) {
     extern void* memcpy(void* dst, const void* src, u32 size);
 
 
-    extern void* version;
 
     struct Calendar {
         s32 sec;
@@ -152,12 +155,10 @@ u8 cardInit(void) {
     extern void OSTicksToCalendarTime(u64, CalendarTime*);
     extern void CARDInit(void);
 
-    extern char str_Paper_Mario_802cb0f4[];
 
 
 
 
-    extern char version[];
     CalendarTime calendar;
     u8* header;
     u8* save;
@@ -292,7 +293,6 @@ u8 cardMain(void) {
     extern s32 CARDGetResultCode(s32);
     extern void write_main(void); extern void write_header_main(void); extern void read_main(void); extern void read_all_main(void); extern void create_main(void);
     extern void mountDetachCallback(void); extern void mountAttachCallback(s32,s32); extern void checkCallback(s32,s32); extern void formatCallback(s32,s32);
-    extern char str_mariost_save_file_802cb0e0;
     s32 command,state,result,retry,sector; u32 memSize;
     if((*(u16*)wp&0x8000)!=0){result=CARDProbe(0);if(*(s32*)((s32)wp+0xE4)!=-(result==0))*(u16*)wp|=0x4000;*(s32*)((s32)wp+0xE4)=-(result==0);if(*(s32*)((s32)wp+0xEC)>0)(*(s32*)((s32)wp+0xEC))--;}
     command=*(s32*)((s32)wp+0xE0);
@@ -304,7 +304,7 @@ u8 cardMain(void) {
     if(state==0){*(u16*)wp|=1;for(retry=0;retry<=1000000;retry++){result=CARDProbeEx(0,&memSize,&sector);if(result!=-1)break;}if(retry>1000000)result=-0x80;if(result==0&&sector!=0x2000)result=-2;*(s32*)((s32)wp+0x9C)=result;*(s32*)((s32)wp+8)=result==0||result==-2?0:-1;*(u16*)wp&=~1;}
     else if(state==1){CARDSetFastMode(1);*(u16*)wp|=1;CARDMountAsync(*(s32*)((s32)wp+8),*(s32*)((s32)wp+4),mountDetachCallback,mountAttachCallback);}
     else if(state==2){*(u16*)wp|=1;if(command==6)CARDFormatAsync(*(s32*)((s32)wp+8),formatCallback);else CARDCheckAsync(*(s32*)((s32)wp+8),checkCallback);}
-    else if(state==3){*(u16*)wp|=1;if(command==7){result=CARDDelete(*(s32*)((s32)wp+8),&str_mariost_save_file_802cb0e0);if(result==-4)result=0;}else result=CARDUnmount(*(s32*)((s32)wp+8));*(s32*)((s32)wp+0x9C)=result;*(u16*)wp&=~1;}
+    else if(state==3){*(u16*)wp|=1;if(command==7){result=CARDDelete(*(s32*)((s32)wp+8),str_mariost_save_file_802cb0e0);if(result==-4)result=0;}else result=CARDUnmount(*(s32*)((s32)wp+8));*(s32*)((s32)wp+0x9C)=result;*(u16*)wp&=~1;}
     else if((command==6&&state==4)||(command==7&&state==5)){*(s32*)((s32)wp+0xE0)=0;*(s32*)((s32)wp+0xE4)=0;*(u16*)wp|=0x100;*(u16*)wp&=~2;return 0;}
     else{*(u16*)wp|=1;result=CARDUnmount(*(s32*)((s32)wp+8));*(s32*)((s32)wp+0x9C)=result;*(u16*)wp&=~1;}
     *(s32*)((s32)wp+0xD8)=state+1;return 0;
@@ -316,7 +316,6 @@ void cardCopy2Main(s32 fileNo) {
 
 
     extern void _jdt;
-    extern char str_123_80421134[];
     extern void* memcpy(void* dst, const void* src, u32 size);
     extern char* strcpy(char* dst, const char* src);
     extern void* pouchGetPtr(void);
@@ -354,7 +353,7 @@ void cardCopy2Main(s32 fileNo) {
     time = OSGetTime();
     *(s32*)((s32)gp + 0x34) = (s32)time;
     *(s32*)((s32)gp + 0x30) = (s32)(time >> 32);
-    strcpy((char*)((s32)gp + 0x13C), str_123_80421134);
+    strcpy((char*)((s32)gp + 0x13C), (char*)str_123_80421134);
     *(s32*)((s32)gp + 0x15C) = 0;
     *(s32*)((s32)gp + 0x1274) = old1274;
     *(s32*)((s32)gp + 0x1294) = old1294;
@@ -372,7 +371,6 @@ void cardCopy2Main(s32 fileNo) {
 void cardErase(s32 fileNo) {
     extern void* memset(void* ptr, s32 value, u32 size);
     extern char* strcpy(char* dst, const char* src);
-    extern void* version;
 
     char* buf;
     s32 i;
@@ -452,7 +450,6 @@ void cardWrite(s32 fileNo) {
 
 
     extern void _jdt;
-    extern void* version;
 
     char* buf;
     void* mario;
@@ -575,7 +572,6 @@ void write_main(void) {
     extern s64 OSGetTime(void);
     extern void OSTicksToCalendarTime(u32 hi, u32 lo, void* calendar);
 
-    extern char version[];
 
     struct Calendar {
         s32 sec;
@@ -1156,7 +1152,6 @@ u8 read_main(void) {
     extern void readCallback(s32, s32);
     extern void memcard_open(void);
     extern s32 strcmp(char*, char*);
-    extern char version[];
     s32 state, result, retry, sector, i;
     u32 memSize, sum;
     u8* buffer;
@@ -1313,12 +1308,10 @@ void read_all_main(void) {
     extern u64 OSGetTime(void);
     extern void OSTicksToCalendarTime(u64 ticks, CalendarTime* calendar);
     extern s32 strcmp(char* a, char* b);
-    extern char str_Paper_Mario_802cb0f4[];
 
 
 
 
-    extern char version[];
 
     u16* flags = (u16*)wp;
     s32 state;
@@ -1633,9 +1626,6 @@ u8 create_main(void) {
     extern void statusCallback(s32, s32);
     extern void* memset(void*, s32, u32);
     extern char* strcpy(char*, char*);
-    extern char str_mariost_save_file_802cb0e0;
-    extern char str_Paper_Mario_802cb0f4;
-    extern char version[];
     s32 state, result, retry, i, j;
     u32 memSize, sum;
     s32 sectorSize;
@@ -1664,11 +1654,11 @@ u8 create_main(void) {
         case 1: CARDSetFastMode(1); *(u16*)wp |= 1; CARDMountAsync(*(s32*)((s32)wp + 8), *(s32*)((s32)wp + 4), mountDetachCallback, mountAttachCallback); break;
         case 2: *(u16*)wp |= 1; CARDCheckAsync(*(s32*)((s32)wp + 8), checkCallback); break;
         case 3:
-            *(u16*)wp |= 1; result = CARDDelete(*(s32*)((s32)wp + 8), &str_mariost_save_file_802cb0e0); if (result == -4) result = 0; *(s32*)((s32)wp + 0x9C) = result; *(u16*)wp &= ~1; break;
-        case 4: *(u16*)wp |= 1; CARDCreateAsync(*(s32*)((s32)wp + 8), &str_mariost_save_file_802cb0e0, 0x22000, (void*)((s32)wp + 0x1C), createCallback); break;
+            *(u16*)wp |= 1; result = CARDDelete(*(s32*)((s32)wp + 8), str_mariost_save_file_802cb0e0); if (result == -4) result = 0; *(s32*)((s32)wp + 0x9C) = result; *(u16*)wp &= ~1; break;
+        case 4: *(u16*)wp |= 1; CARDCreateAsync(*(s32*)((s32)wp + 8), str_mariost_save_file_802cb0e0, 0x22000, (void*)((s32)wp + 0x1C), createCallback); break;
         case 5:
             buffer = *(u8**)((s32)wp + 0xA8);
-            memset(buffer, 0, 0x1E46); strcpy((char*)buffer, &str_Paper_Mario_802cb0f4);
+            memset(buffer, 0, 0x1E46); strcpy((char*)buffer, str_Paper_Mario_802cb0f4);
             buffer[0x1FFC] = 0xFF; buffer[0x1FFD] = 0xFF; buffer[0x1FFE] = 0xFF; buffer[0x1FFF] = 0xFF;
             sum = 0; for (i = 0; i < 0x1E46; i++) sum += buffer[i];
             *(u32*)(buffer + 0x1FF8) = sum; *(u32*)(buffer + 0x1FFC) = ~sum;
@@ -1752,7 +1742,6 @@ u8 memcard_open(void) {
     extern s32 CARDOpen(s32 chan, const char* fileName, void* fileInfo);
     extern s32 CARDFreeBlocks(s32 chan, s32* bytesNotUsed, s32* filesNotUsed);
     extern s32 strcmp(const char* a, const char* b);
-    extern char str_mariost_save_file_802cb0e0[];
 
     s32 result;
     s32 retry;
@@ -1858,3 +1847,8 @@ u8 memcard_open(void) {
     return 0;
 }
 
+const char str_010_80421130[] = "010";
+const char str_123_80421134[] = "123";
+
+char* version = (char*)str_010_80421130;
+void* wp;

@@ -9,7 +9,7 @@ void dispEntry(s32 cameraId, s32 order, void* callback, void* entry);
 void effEnergyDisp(void* camera, void* entry);
 
 extern char str_Energy_80302aec[];
-extern const Vec vec3_80302ae0;
+extern Vec vec3_80302ae0;
 extern f32 float_0_80428a18;
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -202,3 +202,19 @@ void effEnergyDisp(void* cameraArg, void* effect) {
     *fifo = halfWidth; *fifo = halfWidth; *fifo = 0.0f; *fifo = 0.0f; *fifo = 1.0f;
 }
 
+u32 color_tbl[10] = {
+    0x38F22CFF,
+    0xEAFAB7FF,
+    0x59B4FFFF,
+    0xA2F8FDFF,
+    0xFFA326FF,
+    0xFDF189FF,
+    0xFDFB7EFF,
+    0xFFFFFFFF,
+    0xF55AC5FF,
+    0xFDBCFBFF,
+};
+
+__declspec(section ".rodata") Vec vec3_80302ae0 = { 0.0f, 0.0f, 0.0f };
+__declspec(section ".rodata") char str_Energy_80302aec[] = "Energy";
+__declspec(section ".rodata") u8 gap_04_80302AF3_rodata[5] = { 0 };

@@ -1,6 +1,10 @@
 #include "effect/eff_majinai.h"
 #include <dolphin/mtx.h>
 
+__declspec(section ".rodata") u32 vec3_80302f80[3] = { 0, 0, 0 };
+__declspec(section ".rodata") char str_MOBJ_EFF_majinai_80302f8c[] = "MOBJ_EFF_majinai";
+__declspec(section ".rodata") char str_Majinai_80302fa0[] = "Majinai";
+
 void* effEntry(void);
 void* __memAlloc(s32 heap, u32 size);
 void effMajinaiMain(void* entry);
@@ -20,7 +24,6 @@ extern f32 float_deg2rad_80428b20;
 extern f32 float_0_80428b24;
 extern f32 float_10_80428b28;
 extern f32 float_1_80428b3c;
-extern char str_Majinai_80302fa0[];
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effMajinaiEntry(f32 x, f32 y, f32 z, s32 type) {
@@ -74,7 +77,7 @@ void effMajinaiMain(void* effect) {
     extern u32 animGroupBaseAsync(char*, s32, s32);
     extern s32 animPoseEntry(char*, s32);
     extern void animPoseSetAnim(s32, char*, s32);
-    extern f64 animPoseGetLoopTimes(s32);
+    extern f32 animPoseGetLoopTimes(s32);
     extern void animPoseSetMaterialFlagOn(s32, u32);
     extern void animPoseSetMaterialFlagOff(s32, u32);
     extern void animPoseRelease(s32);
@@ -87,14 +90,13 @@ void effMajinaiMain(void* effect) {
     extern f32 dispCalcZ(void*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effMajinaiDisp(s32, void*);
-    extern char str_MOBJ_EFF_majinai_80302f8c[];
     extern char str_A_1_80428b2c[];
     extern u32 dat_80428b14;
     extern u32 dat_80428b18;
 
     u8* entry = effect;
     u8* work = *(u8**)(entry + 0xC);
-    f32 pos[3];
+    u32 pos[3];
     s32 inBattle = *(s32*)((u8*)gp + 0x14) != 0;
     s32 state;
     void* mapWork;
@@ -102,9 +104,12 @@ void effMajinaiMain(void* effect) {
     s32 value;
     s32 i;
 
-    pos[0] = *(f32*)(work + 4);
-    pos[1] = *(f32*)(work + 8);
-    pos[2] = *(f32*)(work + 0xC);
+    pos[0] = vec3_80302f80[0];
+    pos[1] = vec3_80302f80[1];
+    pos[2] = vec3_80302f80[2];
+    *(f32*)&pos[0] = *(f32*)(work + 4);
+    *(f32*)&pos[1] = *(f32*)(work + 8);
+    *(f32*)&pos[2] = *(f32*)(work + 0xC);
     if ((*(u32*)entry & 4) != 0) {
         *(u32*)entry &= ~4;
         if (*(s32*)(work + 0x1C) != -1) {
@@ -146,7 +151,7 @@ void effMajinaiMain(void* effect) {
             void* part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
             animPoseSetMaterialFlagOn(*(s32*)((u8*)part + 0x70), 0x800);
         }
-        if (animPoseGetLoopTimes(*(s32*)(work + 0x1C)) >= 0.93) {
+        if (animPoseGetLoopTimes(*(s32*)(work + 0x1C)) >= 0.93f) {
             f32 radius = 45.0f * *(f32*)(work + 0x10);
             effStardustEntry(*(f32*)(work + 4),
                 *(f32*)(work + 8) + 55.0f * *(f32*)(work + 0x10),
@@ -154,7 +159,7 @@ void effMajinaiMain(void* effect) {
             (*(s32*)(work + 0x18))++;
         }
     } else if (state == 2) {
-        if (animPoseGetLoopTimes(*(s32*)(work + 0x1C)) >= 1.0) {
+        if (animPoseGetLoopTimes(*(s32*)(work + 0x1C)) >= 1.0f) {
             (*(s32*)(work + 0x18))++;
         }
     } else if (state == 3) {
@@ -231,4 +236,3 @@ void effMajinaiDisp(s32 cameraId, void* entry) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-

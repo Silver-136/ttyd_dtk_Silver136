@@ -475,3 +475,44 @@ u8 effMugiKemuri2Disp(s32 cameraId, void* effEntry) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+const f32 vec3_802f3ab0[3] = {
+    0.0f, 0.0f, 0.0f,
+};
+
+const f32 vec3_802f3abc[3] = {
+    0.0f, 0.0f, 0.0f,
+};
+
+const f32 vec3_802f3ac8[3] = {
+    0.0f, 0.0f, 0.0f,
+};
+
+const char str_EFF_Hana_802f3ad4[] = "EFF_Hana";
+const char str_EFF_Mugi_802f3ae0[] = "EFF_Mugi";
+const f64 double_0p005_802f3af0 = 0.005;
+const char str_MugiKemuri2_802f3af8[] = "MugiKemuri2";
+const f64 double_to_int_802f3b08 = 4503601774854144.0;
+const char str_MugiKemuri_802f3b10[] = "MugiKemuri";
+
+const u32 dat_80422d58 = 0xFFFFFF00;
+const u32 dat_80422d5c = 0xFFFFFF00;
+const f32 float_deg2rad_80422d60 = 0.017453292f;
+const f32 float_0_80422d64 = 0.0f;
+const f32 float_15_80422d68 = 15.0f;
+const char str_win_80422d6c[] = "win";
+const char str_Z_1_80422d70[] = "Z_1";
+const f32 float_0p85_80422d74 = 0.85f;
+const f32 float_0p004_80422d78 = 0.004f;
+const f32 float_1_80422d7c = 1.0f;
+const f32 float_neg100_80422d80 = -100.0f;
+const f32 float_0p7_80422d84 = 0.7f;
+const f32 float_5p4_80422d88 = 5.4f;
+const f32 float_0p5_80422d8c = 0.5f;
+const f32 float_neg0p07_80422d90 = -0.07f;
+const f32 float_0p003_80422d94 = 0.003f;
+const f32 float_6p2832_80422d98 = 6.2831855f;
+const f32 float_360_80422d9c = 360.0f;
+const f32 float_0p3_80422da0 = 0.29999998f;
+const f32 float_1p75_80422da4 = 1.75f;
+const f32 float_neg0p08_80422da8 = -0.08f;
+const f32 float_neg3p9_80422dac = -3.9f;

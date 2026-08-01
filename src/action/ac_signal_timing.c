@@ -23,10 +23,10 @@ s32 battleAcMain_SignalTiming(int work) {
     extern s32 BattlePadGetTrigger(void);
     extern s32 irand(s32);
     extern void psndSFXOn(char*);
-    extern char str_SFX_AC_COMMAND_NG1_802ff7b0[];
-    extern char str_SFX_AC_COMMAND_OK1_802ff79c[];
-    extern char str_SFX_AC_PI1_802ff780[];
-    extern char str_SFX_AC_PONE1_802ff78c[];
+    extern const char str_SFX_AC_COMMAND_NG1_802ff7b0[];
+    extern const char str_SFX_AC_COMMAND_OK1_802ff79c[];
+    extern const char str_SFX_AC_PI1_802ff780[];
+    extern const char str_SFX_AC_PONE1_802ff78c[];
     u8* wp=(u8*)work;u8* extra=wp+0x1F4C;s32 state;u32 trig;s32 valid;s32 frame;s32 start;s32 end;s32 i;s32 button;s32 done=0;
     do{
         state=*(s32*)(wp+0x1C9C);
@@ -40,10 +40,10 @@ s32 battleAcMain_SignalTiming(int work) {
         case 99:
             if(*(s16*)(wp+0x1D18)<1){frame=*(s32*)(wp+0x1F54);*(s32*)(wp+0x1F60)=frame**(s32*)(wp+0x1CD0);*(s32*)(wp+0x1F64)=(frame+1)**(s32*)(wp+0x1CD0)-1;*(s32*)(wp+0x1F68)=*(s32*)(wp+0x1F60);*(s32*)(wp+0x1F6C)=*(s32*)(wp+0x1F68)+_get_ok_frame_range(*(s32*)(wp+0x1F78))-1;*(s32*)(wp+0x1C9C)=1000;}else{(*(s16*)(wp+0x1D18))--;*(s32*)(wp+0x1CB8)=2;*(s32*)(wp+0x1C9C)=1002;done=1;}break;
         case 1000:
-            *(s32*)(wp+0x1F74)=(*(s32*)(wp+0x1F58)+1)**(s32*)(wp+0x1CD0)-1;(*(s32*)(wp+0x1F58))++;psndSFXOn(*(s32*)(wp+0x1F58)<*(s32*)(wp+0x1CE0)+1?str_SFX_AC_PI1_802ff780:str_SFX_AC_PONE1_802ff78c);*(s32*)(wp+0x1F70)=0;*(s32*)(wp+0x1C9C)=1001;break;
+            *(s32*)(wp+0x1F74)=(*(s32*)(wp+0x1F58)+1)**(s32*)(wp+0x1CD0)-1;(*(s32*)(wp+0x1F58))++;psndSFXOn((char*)(*(s32*)(wp+0x1F58)<*(s32*)(wp+0x1CE0)+1?str_SFX_AC_PI1_802ff780:str_SFX_AC_PONE1_802ff78c));*(s32*)(wp+0x1F70)=0;*(s32*)(wp+0x1C9C)=1001;break;
         case 1001:
             (*(s32*)(wp+0x1F5C))++;frame=*(s32*)(wp+0x1F5C);start=*(s32*)(wp+0x1F68);end=*(s32*)(wp+0x1F6C);valid=(frame>=start&&frame<=end&&*(s32*)(wp+0x1F70)==0);*(s32*)(wp+0x1F7C)=valid;
-            trig=BattlePadCheckTrigger(*(u32*)(wp+0x1F80));if(trig&&valid){*(s32*)(wp+0x1F70)=1;(*(s32*)extra)++;*(s32*)(wp+0x1CEC)=1;psndSFXOn(str_SFX_AC_COMMAND_OK1_802ff79c);}else if(frame>end&&*(s32*)(wp+0x1F70)==0){*(s32*)(wp+0x1F70)=1;*(s32*)(wp+0x1CEC)=-1;psndSFXOn(str_SFX_AC_COMMAND_NG1_802ff7b0);}
+            trig=BattlePadCheckTrigger(*(u32*)(wp+0x1F80));if(trig&&valid){*(s32*)(wp+0x1F70)=1;(*(s32*)extra)++;*(s32*)(wp+0x1CEC)=1;psndSFXOn((char*)str_SFX_AC_COMMAND_OK1_802ff79c);}else if(frame>end&&*(s32*)(wp+0x1F70)==0){*(s32*)(wp+0x1F70)=1;*(s32*)(wp+0x1CEC)=-1;psndSFXOn((char*)str_SFX_AC_COMMAND_NG1_802ff7b0);}
             if(*(s32*)(wp+0x1F70)&&*(s32*)(wp+0x1F54)<*(s32*)(wp+0x1CC8)+*(s32*)(wp+0x1CE0)){(*(s32*)(wp+0x1F54))++;frame=*(s32*)(wp+0x1F54);*(s32*)(wp+0x1F68)=frame**(s32*)(wp+0x1CD0);*(s32*)(wp+0x1F6C)=*(s32*)(wp+0x1F68)+_get_ok_frame_range(*(s32*)(wp+0x1F78))-1;*(s32*)(wp+0x1F70)=0;}
             if(*(s32*)(wp+0x1F58)**(s32*)(wp+0x1CD0)<=frame){*(s32*)(wp+0x1C9C)=1000;}break;
         case 1002:*(s32*)(wp+0x1C9C)=1003;break;
@@ -123,6 +123,7 @@ void battleAcDisp_SignalTiming(void* camera, void* wp) {
             break;
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -241,3 +242,7 @@ void actionCommandDisp(f32 x, f32 y) {
     }
 }
 
+const char str_SFX_AC_PI1_802ff780[] = "SFX_AC_PI1";
+const char str_SFX_AC_PONE1_802ff78c[] = "SFX_AC_PONE1";
+const char str_SFX_AC_COMMAND_OK1_802ff79c[] = "SFX_AC_COMMAND_OK1";
+const char str_SFX_AC_COMMAND_NG1_802ff7b0[] = "SFX_AC_COMMAND_NG1";

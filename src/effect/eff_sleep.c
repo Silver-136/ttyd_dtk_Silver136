@@ -235,3 +235,23 @@ void effSleepDisp(void* cameraArg, void* effect) {
     }
 }
 
+const Vec vec3_80302ac0 = { 0.0f, 0.0f, 0.0f };
+__declspec(section ".rodata") const u8 gap_04_80302ACC_rodata[4] = { 0 };
+const f64 double_to_int_mask_80302ad0 = 4503599627370496.0;
+
+const u32 dat_804289c8 = 0xFFFFFF00;
+const f32 float_deg2rad_804289cc = 0.017453292f;
+const f32 float_8_804289d0 = 8.0f;
+const f32 float_6p2832_804289d4 = 6.2831855f;
+const f32 float_0p015625_804289d8 = 0.015625f;
+const f32 float_0p5_804289dc = 0.5f;
+const f32 float_1_804289e0 = 1.0f;
+const f32 float_0_804289e4 = 0.0f;
+const f32 float_0p125_804289e8 = 0.125f;
+const f32 float_4_804289ec = 4.0f;
+const char str_Sleep_804289f0[] = "Sleep";
+const u8 gap_09_804289F6_sdata2[2] = { 0 };
+const f32 float_360_804289f8 = 360.0f;
+const f32 float_16_804289fc = 16.0f;
+const f32 float_0p2_80428a00 = 0.2f;
+const f32 gap_09_80428A04_sdata2 = 0.0f;

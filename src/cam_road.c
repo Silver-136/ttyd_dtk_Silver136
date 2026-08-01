@@ -183,8 +183,8 @@ extern const f32 float_0p008_8041f634;
 extern const f32 float_2_8041f63c;
 extern const f32 float_3_8041f640;
 
-extern char str_PCTs_PCTs_8041f6a0;
-extern char str_1_01_8041f6a8;
+extern const char str_PCTs_PCTs_8041f6a0[];
+extern const char str_1_01_8041f6a8[];
 
 s32 camRoadSetup(const char* name) {
     void* file;
@@ -218,7 +218,7 @@ s32 camRoadSetup(const char* name) {
     arcOpen(name, wp, &length);
 
     if (*(void**)wp == NULL) {
-        sprintf(path, &str_PCTs_PCTs_8041f6a0, getMapDataDvdRoot(), name);
+        sprintf(path, str_PCTs_PCTs_8041f6a0, getMapDataDvdRoot(), name);
 
         file = DVDMgrOpen(path, 2, 0);
     if (file != NULL) {
@@ -263,7 +263,7 @@ s32 camRoadSetup(const char* name) {
         (void*)(*(s32*)((s32)*(void**)wp + 0x108) + (s32)*(void**)wp);
     }
 
-    if (strcmp((char*)((s32)*(void**)wp + 0x44), &str_1_01_8041f6a8) == 0) {
+    if (strcmp((char*)((s32)*(void**)wp + 0x44), str_1_01_8041f6a8) == 0) {
         *(s32*)((s32)wp + 0x1D0) = 0x65;
     } else {
         *(s32*)((s32)wp + 0x1D0) = 0x64;
@@ -1900,3 +1900,38 @@ void camRoadCurveOff(char* name) {
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
+u8 work[0x210];
+void* wp = work;
+
+const f32 float_0p005_8041f628 = 0.005f;
+const f32 float_0_8041f62c = 0.0f;
+const f32 float_0p004_8041f630 = 0.004f;
+const f32 float_0p008_8041f634 = 0.008f;
+const f32 float_1_8041f638 = 1.0f;
+const f32 float_2_8041f63c = 2.0f;
+const f32 float_3_8041f640 = 3.0f;
+const f32 float_10_8041f644 = 10.0f;
+const f32 float_3p1416_8041f648 = 3.141592f;
+const f32 float_0p5_8041f64c = 0.5f;
+const f32 float_0p5_8041f650 = 0.500001f;
+const f32 float_6p2832_8041f654 = 6.2831855f;
+const f32 float_3p1416_8041f658 = 3.1415927f;
+const f32 float_neg3p1416_8041f65c = -3.1415927f;
+const f32 float_rad2deg_8041f660 = 57.29578f;
+const f32 float_360_8041f664 = 360.0f;
+const f32 float_180_8041f668 = 180.0f;
+const f32 float_0p01_8041f66c = 0.01f;
+const f32 float_0p3_8041f670 = 0.3f;
+const f32 float_90_8041f674 = 90.0f;
+const f32 float_20_8041f678 = 20.0f;
+const f32 dat_8041f67c = -100000000.0f;
+const f32 float_neg1E06_8041f680 = -1000000.0f;
+const f32 float_neg1_8041f684 = -1.0f;
+const f32 dat_8041f688 = 100000000.0f;
+const f32 float_640_8041f68c = 640.0f;
+const f32 float_480_8041f690 = 480.0f;
+const f32 float_1E06_8041f694 = 1000000.0f;
+const f32 float_100_8041f698 = 100.0f;
+const f32 float_deg2rad_8041f69c = 0.017453292f;
+const char str_PCTs_PCTs_8041f6a0[] = "%s/%s";
+const char str_1_01_8041f6a8[] = "1.01";

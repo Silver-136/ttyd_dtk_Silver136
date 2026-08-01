@@ -14,9 +14,35 @@ typedef struct MobjWork {
     MobjSet koopa;
 } MobjWork;
 
-extern MobjWork work;
+u32 gap_08_8041E924_sbss;
+s32 koopaRunFlag;
+MobjWork work;
+
+u32 cubeMSJ[5] = {
+    0x00010000, 0x00000000, 0x80000000, 0x00000000, 0x00000000,
+};
+u32 front2MSJ[5] = {
+    0x00010000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+};
+
+const char vec3_802c1f58[12] = {0};
+const char vec3_802c1f64[12] = {0};
+const char vec3_802c1f70[12] = {0};
+const u32 vec3_802c1f7c[3] = { 0x3F800000, 0x3F800000, 0x3F800000 };
+const char vec3_802c1f88[12] = {0};
+const char vec3_802c1f94[12] = {0};
+const char vec3_802c1fa0[12] = {0};
+const char vec3_802c1fac[12] = {0};
+const char vec3_802c1fb8[12] = {0};
+const char vec3_802c1fc4[12] = {0};
+
+const char str_MOBJ_KururinFloor_802c1fd0[] = "MOBJ_KururinFloor";
+const char str_MOBJ_TreasureBox_802c1fe4[] = "MOBJ_TreasureBox";
+const char str_MOBJ_BigTreasureBox_802c1ff8[] = "MOBJ_BigTreasureBox";
+const char str_MOBJ_GrayTreasureBox_802c200c[] = "MOBJ_GrayTreasureBox";
+const char str_MOBJ_BlackTreasureBo_802c2024[] = "MOBJ_BlackTreasureBox";
+
 extern void* gp;
-extern s32 koopaRunFlag;
 extern void* mapalloc_base_ptr;
 
 void* _mapAlloc(void* heap, u32 size);
@@ -308,7 +334,6 @@ int mobjEntry(char* name, char* pAnimPoseName) {
     extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void animPoseSetMaterialLightFlagOn(s32 poseId, u32 flags);
     extern void mobjHitEntry(void* pMobj, s32 param_2);
-    extern char vec3_802c1f58[];
     extern f32 float_1_804201c0;
     extern const char str_S_1_804201ec;
     MobjSet* set;
@@ -533,7 +558,6 @@ void mobjMain(void) {
     extern f32 float_2p5_804201d8;
     extern f32 float_deg2rad_804201cc;
     extern const char str_HOBJ_804201d0[];
-    extern const char vec3_802c1f58[];
 
     MobjSet* set;
     void* player;
@@ -1235,10 +1259,6 @@ s32 mobjCheckExec(void) {
 }
 s32 mobjCheckItemboxOpen(void* entry) {
     extern s32 strcmp(const char* a, const char* b);
-    extern const char str_MOBJ_TreasureBox_802c1fe4[];
-    extern const char str_MOBJ_BigTreasureBox_802c1ff8[];
-    extern const char str_MOBJ_GrayTreasureBox_802c200c[];
-    extern const char str_MOBJ_BlackTreasureBo_802c2024[];
 
     if (strcmp((char*)((s32)entry + 0x15), str_MOBJ_TreasureBox_802c1fe4) == 0 ||
         strcmp((char*)((s32)entry + 0x15), str_MOBJ_BigTreasureBox_802c1ff8) == 0 ||
@@ -1263,11 +1283,6 @@ u32* mobjNearDistCheck2(double param_1, double param_2, double param_3, double p
     extern u32 evtGetValue(void* event, s32 value);
     extern void PSVECSubtract(Vec3* a, Vec3* b, Vec3* out);
     extern f32 PSVECMag(Vec3* vec);
-    extern const char str_MOBJ_TreasureBox_802c1fe4[];
-    extern const char str_MOBJ_BigTreasureBox_802c1ff8[];
-    extern const char str_MOBJ_GrayTreasureBox_802c200c[];
-    extern const char str_MOBJ_BlackTreasureBo_802c2024[];
-    extern const char str_MOBJ_KururinFloor_802c1fd0[];
     MobjSet* set;
     s32 i;
     s32 count;
@@ -1353,4 +1368,3 @@ u32* mobjNearDistCheck2(double param_1, double param_2, double param_3, double p
     }
     return best;
 }
-

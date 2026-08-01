@@ -10,17 +10,17 @@ void dispEntry(s32 cameraId, s32 order, void* callback, void* entry);
 f64 cos(f64 value);
 f64 sin(f64 value);
 
-extern char str_Machinegun_80302a8c[];
-extern Vec vec3_80302a80;
-extern f32 float_6p2832_804289a0;
-extern f32 float_360_804289a4;
-extern f32 float_0p9_804289a8;
+extern const char str_Machinegun_80302a8c[];
+extern const Vec vec3_80302a80;
+extern const f32 float_6p2832_804289a0;
+extern const f32 float_360_804289a4;
+extern const f32 float_0p9_804289a8;
 #pragma use_lmw_stmw off
 void* effMachinegunEntry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 speed, f32 field10) {
     void* entry = effEntry();
     void* work;
 
-    *(char**)((s32)entry + 0x14) = str_Machinegun_80302a8c;
+    *(char**)((s32)entry + 0x14) = (char*)str_Machinegun_80302a8c;
     *(s32*)((s32)entry + 8) = 1;
     work = __memAlloc(3, 0x28);
     *(void**)((s32)entry + 0xC) = work;
@@ -150,3 +150,19 @@ void effMachinegunDisp(void* cameraArg, void* effect) {
     *fifo = halfWidth; *fifo = halfWidth; *fifo = 0.0f; *fifo = 0.0f; *fifo = 2.0f;
 }
 
+const Vec vec3_80302a80 = { 0.0f, 0.0f, 0.0f };
+const char str_Machinegun_80302a8c[] = "Machinegun";
+__declspec(section ".rodata") const u8 gap_04_80302A97_rodata[1] = { 0 };
+
+const u32 str_tl_80428980 = 0x7C746C00;
+const f32 float_deg2rad_80428984 = 0.017453292f;
+const f32 float_180_80428988 = 180.0f;
+const f32 float_32_8042898c = 32.0f;
+const f32 float_0p5_80428990 = 0.5f;
+const f32 float_16_80428994 = 16.0f;
+const f32 float_0_80428998 = 0.0f;
+const f32 float_2_8042899c = 2.0f;
+const f32 float_6p2832_804289a0 = 6.2831855f;
+const f32 float_360_804289a4 = 360.0f;
+const f32 float_0p9_804289a8 = 0.9f;
+const f32 gap_09_804289AC_sdata2 = 0.0f;

@@ -3,6 +3,8 @@
 #include "manager/evtmgr_cmd.h"
 
 
+__declspec(section ".sdata2") const u32 unk_80429590;
+__declspec(section ".sdata2") const u32 gap_10_80429594_sbss2;
 
 s32 evt_bg_disp_onoff(struct EventEntry* param_1) {
     if (evtGetValue(param_1, **(s32**)((s32)param_1 + 0x18)) != 0) {
@@ -17,7 +19,6 @@ s32 evt_bg_disp_onoff(struct EventEntry* param_1) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_bg_set_color(struct EventEntry* param_1) {
-    extern s32 unk_80429590;
     s32* args = *(s32**)((s32)param_1 + 0x18);
     s32 r = evtGetValue(param_1, args[0]);
     s32 g = evtGetValue(param_1, args[1]);

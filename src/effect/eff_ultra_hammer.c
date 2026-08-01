@@ -1,16 +1,106 @@
 #include "effect/eff_ultra_hammer.h"
 #include <dolphin/mtx.h>
 
+__declspec(section ".rodata") const u32 dat_80303010[3] = { 0, 30, 15 };
+__declspec(section ".rodata") const Vec vec3_8030301c = { 0.0f, 0.0f, 0.0f };
+__declspec(section ".rodata") char str_UltraHammer_80303028[] = "UltraHammer";
+__declspec(section ".rodata") const u32 gap_04_80303034_rodata = 0;
+
+__declspec(section ".data") f32 negone_one_374[2] = { -1.0f, 1.0f };
+__declspec(section ".data") const u32 gap_05_803BAC90_data[2] = { 0, 0 };
+__declspec(section ".data") f32 one_negone_373[2] = { 1.0f, -1.0f };
+__declspec(section ".data") const u32 gap_05_803BACA0_data[2] = { 0, 0 };
+__declspec(section ".data") f32 negone_one_360[2] = { -1.0f, 1.0f };
+__declspec(section ".data") const u32 gap_05_803BACB0_data[2] = { 0, 0 };
+__declspec(section ".data") f32 one_negone_359[2] = { 1.0f, -1.0f };
+
+__declspec(section ".data") u32 wakka_vertex_tbl[63] = {
+    0x5F1B0000, 0xDD8750E6, 0x0000C1A7, 0x3AC70000, 0xAB871EE6, 0x00009D53,
+    0x00000000, 0x986EE11A, 0x00009D53, 0xC5390000, 0xAB87AF1A, 0x0000C1A7,
+    0xA0E50000, 0xDD879C00, 0x0000FC6E, 0xA0E50000, 0x1B54AF1A, 0x00003735,
+    0xC5390000, 0x4D54E11A, 0x00005B88, 0x00000000, 0x606D1EE6, 0x00005B88,
+    0x3AC70000, 0x4D5450E6, 0x00003735, 0x5F1B0000, 0x1B546400, 0x0000FC6E,
+    0x2F8D0000, 0xECFB2873, 0x0000DF0B, 0x1D630000, 0xD3FB0F73, 0x0000CCE1,
+    0x00000000, 0xCA6EF08D, 0x0000CCE1, 0xE29D0000, 0xD3FBD78D, 0x0000DF0B,
+    0xD0730000, 0xECFBCE00, 0x0000FC6E, 0xD0730000, 0x0BE1D78D, 0x000019D1,
+    0xE29D0000, 0x24E1F08D, 0x00002BFB, 0x00000000, 0x2E6D0F73, 0x00002BFB,
+    0x1D630000, 0x24E12873, 0x000019D1, 0x2F8D0000, 0x0BE13200, 0x0000FC6E,
+    0x00000000, 0xCA6E0000, 0x0000986E,
+};
+__declspec(section ".data") const u32 gap_05_803BADBC_data = 0;
+__declspec(section ".data") u32 wakka_texcoord0_tbl[42] = {
+    0x60000000, 0x64000000, 0x64002000, 0x60002000, 0x68000000, 0x68002000,
+    0x6C000000, 0x6C002000, 0x20000000, 0x24000000, 0x24002000, 0x20002000,
+    0x28000000, 0x28002000, 0x2C000000, 0x2C002000, 0x30000000, 0x30002000,
+    0x34000000, 0x34002000, 0x38000000, 0x38002000, 0x3C000000, 0x3C002000,
+    0x40000000, 0x40002000, 0x44000000, 0x44002000, 0x48000000, 0x48002000,
+    0x4C000000, 0x4C002000, 0x50000000, 0x50002000, 0x54000000, 0x54002000,
+    0x58000000, 0x58002000, 0x5C000000, 0x5C002000, 0x70000000, 0x70002000,
+};
+
+#define WAKKA_DL(name, a, b, c, d, e) \
+    __declspec(section ".sdata") u32 name[8] = { 0x980004##a, 0x0000##b, 0x0000##c, 0x0000##d, 0x0000##e, 0, 0, 0 }
+
+__declspec(section ".sdata") u8 wakka_normal_tbl[3] = { 0x00, 0x40, 0x00 };
+__declspec(section ".sdata") u8 gap_07_8041E0E3_sdata[29] = { 0 };
+__declspec(section ".sdata") u8 wakka_color0_tbl[8] = {
+    0xFF, 0xFF, 0xFF, 0x7F, 0xFF, 0xFF, 0xFF, 0x00,
+};
+__declspec(section ".sdata") u8 gap_07_8041E108_sdata[24] = { 0 };
+WAKKA_DL(wakka_dl_0_0, 01, 0200, 0315, 0114, 0000);
+WAKKA_DL(wakka_dl_0_1, 02, 0501, 0216, 0415, 0100);
+WAKKA_DL(wakka_dl_0_2, 03, 0702, 0517, 0616, 0400);
+WAKKA_DL(wakka_dl_0_3, 27, 2614, 0013, 2700, 0300);
+WAKKA_DL(wakka_dl_0_4, 26, 2427, 2612, 2513, 2700);
+WAKKA_DL(wakka_dl_0_5, 25, 2226, 2411, 2312, 2500);
+WAKKA_DL(wakka_dl_0_6, 24, 2025, 2210, 2111, 2300);
+WAKKA_DL(wakka_dl_0_7, 23, 1E24, 200F, 1F10, 2100);
+WAKKA_DL(wakka_dl_0_8, 22, 1C23, 1E0E, 1D0F, 1F00);
+WAKKA_DL(wakka_dl_0_9, 21, 1A22, 1C0D, 1B0E, 1D00);
+WAKKA_DL(wakka_dl_0_10, 20, 1821, 1A0C, 190D, 1B00);
+WAKKA_DL(wakka_dl_0_11, 1F, 1620, 180B, 170C, 1900);
+WAKKA_DL(wakka_dl_0_12, 1E, 141F, 160A, 150B, 1700);
+WAKKA_DL(wakka_dl_0_13, 1D, 121E, 1409, 130A, 1500);
+WAKKA_DL(wakka_dl_0_14, 1C, 101D, 1208, 1109, 1300);
+WAKKA_DL(wakka_dl_0_15, 1B, 0E1C, 1007, 0F08, 1100);
+WAKKA_DL(wakka_dl_0_16, 1A, 0C1B, 0E06, 0D07, 0F00);
+WAKKA_DL(wakka_dl_0_17, 19, 091A, 0C05, 0A06, 0D00);
+WAKKA_DL(wakka_dl_0_18, 18, 0819, 0904, 0B05, 0A00);
+WAKKA_DL(wakka_dl_0_19, 29, 012903, 0728, 012817, 0600);
+#undef WAKKA_DL
+
+__declspec(section ".data") void* wakka_dl_0_tbl[20] = {
+    wakka_dl_0_0, wakka_dl_0_1, wakka_dl_0_2, wakka_dl_0_3, wakka_dl_0_4,
+    wakka_dl_0_5, wakka_dl_0_6, wakka_dl_0_7, wakka_dl_0_8, wakka_dl_0_9,
+    wakka_dl_0_10, wakka_dl_0_11, wakka_dl_0_12, wakka_dl_0_13, wakka_dl_0_14,
+    wakka_dl_0_15, wakka_dl_0_16, wakka_dl_0_17, wakka_dl_0_18, wakka_dl_0_19,
+};
+__declspec(section ".data") u32 scroll_tbl[25] = {
+    0x00000000, 0xBE155556, 0xBE955556, 0xBEE00001, 0xBF155556,
+    0xBF3AAAAB, 0xBF600001, 0xBF82AAAB, 0xBF955556, 0xBFA80000,
+    0xBFBAAAAB, 0xBFCD5555, 0xBFE00000, 0xBFF2AAAB, 0xC002AAAB,
+    0xC00C0000, 0xC0155555, 0xC01EAAAB, 0xC0280000, 0xC0315555,
+    0xC03AAAAB, 0xC0440000, 0xC04D5555, 0xC056AAAB, 0xC0600000,
+};
+__declspec(section ".data") const u32 gap_05_803BAF1C_data = 0;
+__declspec(section ".sdata") u8 wakka_dl_0_size_tbl[20] = {
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+};
+__declspec(section ".sdata") const u32 gap_07_8041E3B4_sdata = 0;
+
+__declspec(section ".sdata2") u32 dat_80428b88 = 0xFFFFFF00;
+__declspec(section ".sdata2") f32 float_deg2rad_80428b8c = 0.017453292f;
+__declspec(section ".sdata2") f32 float_0p6_80428b90 = 0.6f;
+__declspec(section ".sdata2") f32 float_neg1_80428b94 = -1.0f;
+__declspec(section ".sdata2") f32 float_1_80428b98 = 1.0f;
+__declspec(section ".sdata2") f32 float_0_80428b9c = 0.0f;
+__declspec(section ".sdata2") f32 float_3p5_80428ba0 = 3.5f;
+__declspec(section ".sdata2") f32 float_neg4_80428ba4 = -4.0f;
+
 void effDelete(void* entry);
 f32 dispCalcZ(Vec* pos);
 void dispEntry(s32 cameraId, s32 order, void* callback, void* entry);
 void effUltraHammerDisp(void* camera, void* entry);
-
-extern const Vec vec3_8030301c;
-extern f32 scroll_tbl[];
-extern f32 float_3p5_80428ba0;
-extern f32 float_1_80428b98;
-extern f32 float_0_80428b9c;
 
 /* stub-fill: effUltraHammerEntry | missing_definition | ghidra_signature */
 #pragma no_register_save_helpers on
@@ -19,10 +109,6 @@ void* effUltraHammerEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
     extern void effUltraHammerMain(void* entry);
-    extern char str_UltraHammer_80303028[];
-    extern u32 dat_80303010[];
-    extern f32 float_neg4_80428ba4;
-
     void* entry;
     void* work;
     void* child;
@@ -99,7 +185,7 @@ void effUltraHammerMain(void* entry) {
                 *(s32*)((s32)work + 0x28) = timer - 1;
             } else if (*(s32*)((s32)work + 0x24) < 0x19) {
                 hammerScale = float_3p5_80428ba0;
-                scroll = scroll_tbl[*(s32*)((s32)work + 0x24)];
+                scroll = ((f32*)scroll_tbl)[*(s32*)((s32)work + 0x24)];
                 *(f32*)((s32)work + 0x14) = scroll;
                 *(f32*)((s32)work + 0x10) = hammerScale;
                 *(s32*)((s32)work + 0x24) = *(s32*)((s32)work + 0x24) + 1;
@@ -149,15 +235,6 @@ void effUltraHammerDisp(void* cameraArg, void* effect) {
     extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
     extern void GXSetArray(s32 attr, void* base, s32 stride);
     extern void GXCallDisplayList(void* list, u32 size);
-    extern f32 float_deg2rad_80428b8c;
-    extern u32 dat_80428b88;
-    extern f32 float_0p6_80428b90;
-    extern f32 float_neg1_80428b94;
-    extern u8 wakka_vertex_tbl[];
-    extern u8 wakka_texcoord0_tbl[];
-    extern void* wakka_dl_0_tbl[];
-    extern u8 wakka_dl_0_size_tbl[];
-
     u8 textureObject[0x20];
     f32 base[3][4];
     f32 transform[3][4];

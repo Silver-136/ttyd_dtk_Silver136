@@ -1,8 +1,8 @@
 #include "driver/seqdrv.h"
 
-s32 now_seq;
-s32 next_seq;
-s32 prev_seq;
+s32 now_seq = -1;
+s32 next_seq = -1;
+s32 prev_seq = -1;
 s32 next_p0;
 s32 next_p1;
 u8 seqWork[0x20];

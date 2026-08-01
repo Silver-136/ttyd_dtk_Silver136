@@ -1,4 +1,16 @@
 #include "effect/n64/eff_fall_leaf_n64.h"
+
+char size12x12_tex64x64_vtx[112] = {
+    0xFF, 0xFA, 0xFF, 0xFA, 0, 0, 0, 0, 0, 0, 0x19, 0x55, 0x11, 0xFF,
+    0, 6, 0xFF, 0xFA, 0, 0, 8, 0, 0, 0, 0x19, 0x55, 0x11, 0xFF,
+    0, 6, 0, 6, 0, 0, 8, 0, 8, 0, 0x68, 0xAC, 0x10, 0xFF,
+    0xFF, 0xFA, 0, 6, 0, 0, 0, 0, 8, 0, 0x68, 0xAC, 0x10, 0xFF,
+    0xFF, 0xFA, 0xFF, 0xFA, 0, 0, 0, 0, 8, 0, 0x18, 0x37, 0x21, 0xFF,
+    0, 6, 0xFF, 0xFA, 0, 0, 8, 0, 8, 0, 0x18, 0x37, 0x21, 0xFF,
+    0, 6, 0, 6, 0, 0, 8, 0, 0x10, 0, 0x30, 0x6C, 0x25, 0xFF,
+    0xFF, 0xFA, 0, 6, 0, 0, 0, 0, 0x10, 0, 0x30, 0x6C, 0x25, 0xFF,
+};
+
 extern f32 float_2_80425158;
 extern f32 float_10_80425178;
 
@@ -194,7 +206,6 @@ void effFallLeafDisp(s32 cameraId, void* effect) {
     extern f32 float_0p0078125_80425140;
     extern f32 float_1_80425144;
     extern f32 float_0p015625_80425148;
-    extern char size12x12_tex64x64_vtx[];
     u8 texObj[0x20];
     f32 baseMtx[3][4];
     f32 transMtx[3][4];
@@ -281,3 +292,5 @@ void effFallLeafDisp(s32 cameraId, void* effect) {
 }
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
+
+const f32 vec3_802fae60[3] = { 0.0f, 0.0f, 0.0f };

@@ -1,6 +1,7 @@
 #include "driver/casedrv.h"
 
-extern void* wp;
+static u32 work[2];
+static void* wp = work;
 extern void* gp;
 extern void* __memAlloc();
 extern void* memcpy(void* dst, const void* src, u32 size);

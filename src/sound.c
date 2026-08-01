@@ -6,11 +6,12 @@ extern void __memFree(s32 heap, void* ptr);
 extern void sndSeqVolume(s32 volume, s32 frames, void* seq, s32 flag);
 extern void sndStreamFree(void* stream);
 extern void sndRemoveEmitter(void* emitter);
-extern char str_PCTs_PCTsPCTs_802e3cd0[];
 extern char* getMarioStDvdRoot(void);
 extern char str_436[];
 extern void sndSeqContinue(void* seq);
 extern void cache_flush(void*);
+
+char aramMemArray[0x20];
 
 void* sndMalloc(s32 size) {
     extern void* __memAlloc(s32 heap, s32 size);
@@ -24,7 +25,6 @@ void sndFree(void* ptr) {
 }
 
 void SoundInit(void) {
-    extern char aramMemArray[];
     extern char revH[];
     extern char revS[];
     extern char cho[];
@@ -295,11 +295,11 @@ s32 loadDVD_callback(u32 offset, s32 length) {
 
 
 s32 SoundLoadDVD2(s32 name) {
-    extern char str_pool_80421944[];
-    extern char str_proj_8042194c[];
-    extern char str_sdir_80421954[];
-    extern char str_samp_8042195c[];
-    extern int sprintf(char* s, char* format, ...);
+    extern const char str_pool_80421944[];
+    extern const char str_proj_8042194c[];
+    extern const char str_sdir_80421954[];
+    extern const char str_samp_8042195c[];
+    extern int sprintf(char* s, const char* format, ...);
     extern char* strcpy(char* dst, char* src);
     extern void* DVDMgrOpen(char* path, s32 mode, s32 unk);
     extern u32 DVDMgrGetLength(void* handle);
@@ -318,7 +318,7 @@ s32 SoundLoadDVD2(s32 name) {
         return 0;
     }
 
-    sprintf(str_436, str_PCTs_PCTsPCTs_802e3cd0, getMarioStDvdRoot(), name, str_pool_80421944);
+    sprintf(str_436, "%s/%s%s", getMarioStDvdRoot(), name, str_pool_80421944);
     handle = DVDMgrOpen(str_436, 2, 0);
     if (handle == NULL) {
         data = NULL;
@@ -344,7 +344,7 @@ s32 SoundLoadDVD2(s32 name) {
     }
     *(u8**)(sound + *(u32*)(sound + 0xE0) * 4) = data;
 
-    sprintf(str_436, str_PCTs_PCTsPCTs_802e3cd0, getMarioStDvdRoot(), name, str_proj_8042194c);
+    sprintf(str_436, "%s/%s%s", getMarioStDvdRoot(), name, str_proj_8042194c);
     handle = DVDMgrOpen(str_436, 2, 0);
     if (handle == NULL) {
         data = NULL;
@@ -370,7 +370,7 @@ s32 SoundLoadDVD2(s32 name) {
     }
     *(u8**)(sound + 0x20 + *(u32*)(sound + 0xE0) * 4) = data;
 
-    sprintf(str_436, str_PCTs_PCTsPCTs_802e3cd0, getMarioStDvdRoot(), name, str_sdir_80421954);
+    sprintf(str_436, "%s/%s%s", getMarioStDvdRoot(), name, str_sdir_80421954);
     handle = DVDMgrOpen(str_436, 2, 0);
     if (handle == NULL) {
         data = NULL;
@@ -396,7 +396,7 @@ s32 SoundLoadDVD2(s32 name) {
     }
     *(u8**)(sound + 0x40 + *(u32*)(sound + 0xE0) * 4) = data;
 
-    sprintf(str_436, str_PCTs_PCTsPCTs_802e3cd0, getMarioStDvdRoot(), name, str_samp_8042195c);
+    sprintf(str_436, "%s/%s%s", getMarioStDvdRoot(), name, str_samp_8042195c);
     strcpy(sound + 0x22A, str_436);
     sndSetSampleDataUploadCallback(loadDVD_callback, 0x20000);
     return 1;
@@ -462,10 +462,10 @@ void SoundLoadDVD2Free(void) {
 #pragma use_lmw_stmw on
 
 s32 SoundSLibLoadDVD(s32 name) {
-    extern char str_slib_8042192c[];
-    extern char str_stbl_80421934[];
-    extern char str_etbl_8042193c[];
-    extern int sprintf(char* s, char* format, ...);
+    extern const char str_slib_8042192c[];
+    extern const char str_stbl_80421934[];
+    extern const char str_etbl_8042193c[];
+    extern int sprintf(char* s, const char* format, ...);
     extern void* DVDMgrOpen(char* path, s32 mode, s32 unk);
     extern u32 DVDMgrGetLength(void* handle);
     extern s32 DVDMgrRead(void* handle, void* dst, u32 size, u32 offset);
@@ -484,7 +484,7 @@ s32 SoundSLibLoadDVD(s32 name) {
         return 0;
     }
 
-    sprintf(str_436, str_PCTs_PCTsPCTs_802e3cd0, getMarioStDvdRoot(), name, str_slib_8042192c);
+    sprintf(str_436, "%s/%s%s", getMarioStDvdRoot(), name, str_slib_8042192c);
     handle = DVDMgrOpen(str_436, 2, 0);
     if (handle == NULL) {
         data = NULL;
@@ -540,7 +540,7 @@ s32 SoundSLibLoadDVD(s32 name) {
         data += *(s32*)data;
     }
 
-    sprintf(str_436, str_PCTs_PCTsPCTs_802e3cd0, getMarioStDvdRoot(), name, str_stbl_80421934);
+    sprintf(str_436, "%s/%s%s", getMarioStDvdRoot(), name, str_stbl_80421934);
     handle = DVDMgrOpen(str_436, 2, 0);
     if (handle == NULL) {
         data = NULL;
@@ -566,7 +566,7 @@ s32 SoundSLibLoadDVD(s32 name) {
     }
     *(u8**)(sound + 0x80 + *(u32*)(sound + 0xE4) * 4) = data;
 
-    sprintf(str_436, str_PCTs_PCTsPCTs_802e3cd0, getMarioStDvdRoot(), name, str_etbl_8042193c);
+    sprintf(str_436, "%s/%s%s", getMarioStDvdRoot(), name, str_etbl_8042193c);
     handle = DVDMgrOpen(str_436, 2, 0);
     if (handle == NULL) {
         data = NULL;
@@ -2028,13 +2028,13 @@ void SoundSSPlayCh(s32 a, s32 b) {
 }
 
 void SoundSSPlayChEx(s32 index, char* name, s32 useSlot) {
-    extern f32 float_0_80421908;
-    extern f32 float_127_80421918;
-    extern char str_stm_8042191c[];
+    extern const f32 float_0_80421908;
+    extern const f32 float_127_80421918;
+    extern const char str_stm_8042191c[];
     extern s32 OSDisableInterrupts(void);
     extern void OSRestoreInterrupts(s32 level);
     extern void DVDMgrClose(void* handle);
-    extern int sprintf(char* s, char* format, ...);
+    extern int sprintf(char* s, const char* format, ...);
     extern void* DVDMgrOpen(char* path, s32 zero, s32 zero2);
     extern void DVDMgrReadAsync(void* handle, void* dst, s32 size, s32 offset, void* callback);
     void* entry;
@@ -2115,7 +2115,7 @@ void SoundSSPlayChEx(s32 index, char* name, s32 useSlot) {
     if (useSlot != 0) {
         *(u16*)entry = *(u16*)entry | 0x400;
     }
-    sprintf(str_436, str_PCTs_PCTsPCTs_802e3cd0, getMarioStDvdRoot(), name, str_stm_8042191c);
+    sprintf(str_436, "%s/%s%s", getMarioStDvdRoot(), name, str_stm_8042191c);
     *(void**)((s32)entry + 0x28) = DVDMgrOpen(str_436, 0, 0);
     if (*(void**)((s32)entry + 0x28) == 0) {
         *(u16*)entry = 0;
@@ -2375,7 +2375,7 @@ void SoundSSContinueCh(s32 index) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundSSSetPanCh(s32 index, u8 pan) {
-    extern f32 float_63_8042190c;
+    extern const f32 float_63_8042190c;
     extern void sndStreamMixParameter(void* stream, s32 volume, s32 pan, s32 aux, s32 zero);
     void* entry;
     u32 pan8;
@@ -2413,7 +2413,7 @@ void SoundSSSetPanCh(s32 index, u8 pan) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundSSSetVolCh(s32 index, u8 volume) {
-    extern f32 float_63_8042190c;
+    extern const f32 float_63_8042190c;
     extern void sndStreamMixParameter(void* stream, s32 volume, s32 pan, s32 aux, s32 zero);
     void* entry;
     s32 offset;
@@ -2475,7 +2475,7 @@ s32 SoundSSGetVolCh(s32 index) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void SoundSSSetSrndPanCh(s32 index, u8 pan) {
-    extern f32 float_63_8042190c;
+    extern const f32 float_63_8042190c;
     extern void sndStreamMixParameter(void* stream, s32 volume, s32 pan, s32 aux, s32 zero);
     s32 offset;
     void* entry;
@@ -2876,3 +2876,36 @@ void SoundAIDMACallback(void) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+char revH[0x1E0];
+char revS[0x154];
+char cho[0x9C];
+char dly[0x60];
+char sound[0x15C4];
+char str_436[0x100];
+
+s16 dtbl[16] = {
+    1, 7, 24, 59, 83, 111, 236, 555,
+    742, 885, 1052, 2221, 3285, 4432, 6962, 9300,
+};
+
+const f32 float_0_80421908 = 0.0f;
+const f32 float_63_8042190c = 63.0f;
+const f32 float_1000_80421910 = 1000.0f;
+const f32 float_1_80421914 = 1.0f;
+const f32 float_127_80421918 = 127.0f;
+const char str_stm_8042191c[] = ".stm";
+const f32 float_6p2832_80421924 = 6.2831855f;
+const f32 float_360_80421928 = 360.0f;
+const char str_slib_8042192c[] = ".slib";
+const char str_stbl_80421934[] = ".stbl";
+const char str_etbl_8042193c[] = ".etbl";
+const char str_pool_80421944[] = ".pool";
+const char str_proj_8042194c[] = ".proj";
+const char str_sdir_80421954[] = ".sdir";
+const char str_samp_8042195c[] = ".samp";
+const f32 float_3_80421964 = 3.0f;
+const f32 float_0p1_80421968 = 0.1f;
+const f32 float_0p3_8042196c = 0.3f;
+const f32 float_0p8_80421970 = 0.8f;
+const f32 float_2_80421974 = 2.0f;
+const f32 float_0p5_80421978 = 0.5f;

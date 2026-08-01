@@ -195,3 +195,6 @@ void effSnowDisp(s32 cameraId, void* effect) {
     GXLoadTexObj(tex, 0);
     GXBegin(0x80, 0, 4);
 }
+
+const f32 vec3_802fbf78[3] = { 0.0f, 0.0f, 0.0f };
+const char str_SnowN64_802fbf84[] = "SnowN64";

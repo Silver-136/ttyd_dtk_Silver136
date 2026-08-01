@@ -1,5 +1,7 @@
 #include "effect/n64/eff_akari_charge_n64.h"
 
+const char str_AkariChargeN64_802faad0[] = "AkariChargeN64";
+
 extern f32 float_0_80424c24;
 extern f32 float_1_80424c2c;
 
@@ -7,7 +9,6 @@ void* effAkariChargeN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effAkariChargeMain(void);
-    extern char str_AkariChargeN64_802faad0[];
     void* entry;
     void* work;
     s32 i;
@@ -16,7 +17,7 @@ void* effAkariChargeN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale
     u8* particle;
 
     entry = effEntry();
-    *(char**)((s32)entry + 0x14) = str_AkariChargeN64_802faad0;
+    *(const char**)((s32)entry + 0x14) = str_AkariChargeN64_802faad0;
     *(s32*)((s32)entry + 8) = 0x16;
     work = __memAlloc(3, 0x5D8);
     *(void**)((s32)entry + 0xC) = work;
@@ -304,4 +305,3 @@ void effAkariChargeDisp(s32 cameraId, void* entry) {
         GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
     }
 }
-

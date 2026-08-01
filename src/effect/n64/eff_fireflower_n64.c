@@ -238,3 +238,25 @@ void effFireFlowerDisp(s32 cameraId, void* effect) {
     effGetTexObjN64(0x37,tex); GXLoadTexObj(tex,0); GXLoadTexObj(tex,1); GXSetNumTexGens(2); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D); GXSetTexCoordGen2(1,1,4,0x21,0,0x7D); PSMTXScale(s,0.03125f,0.0078125f,0.0f); PSMTXTrans(m,0.0f,32.0f*(3-frame),0.0f); PSMTXConcat(s,m,m); GXLoadTexMtxImm(m,0x1E,1); PSMTXTrans(m,*(f32*)(w+0x2C),0.0f,0.0f); PSMTXScale(s,*(f32*)(w+0x30),*(f32*)(w+0x30),*(f32*)(w+0x30)); PSMTXConcat(m,s,m); PSMTXConcat(base,m,m); PSMTXConcat((u8*)cam+0x11C,m,m); GXLoadPosMtxImm(m,0); GXSetCurrentMtx(0); effSetVtxDescN64((void*)0x8039FA60); GXBegin(0x90,0,6); tri2(0,1,2,0,0,2,3,0);
 }
 
+char size4x4_tex4x4_vtx[56] = {
+    0xFF, 0xFE, 0xFF, 0xFE, 0, 0, 0, 0, 0, 0, 0xFF, 0, 0, 0xFF,
+    0, 2, 0xFF, 0xFE, 0, 0, 2, 0, 0, 0, 0xFF, 0, 0, 0xFF,
+    0, 2, 0, 2, 0, 0, 2, 0, 2, 0, 0xFF, 0, 0, 0xFF,
+    0xFF, 0xFE, 0, 2, 0, 0, 0, 0, 2, 0, 0xFF, 0, 0, 0xFF,
+};
+
+char size16x16_tex16x16_vtx[56] = {
+    0xFF, 0xF8, 0xFF, 0xF8, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF,
+    0, 8, 0xFF, 0xF8, 0, 0, 2, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF,
+    0, 8, 0, 8, 0, 0, 2, 0, 2, 0, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xF8, 0, 8, 0, 0, 0, 0, 2, 0, 0xFF, 0xFF, 0xFF, 0xFF,
+};
+
+char size32x32_tex32x32_vtx[56] = {
+    0xFF, 0xF0, 0, 0, 0, 2, 0, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF,
+    0, 0x10, 0, 0, 0, 2, 4, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF,
+    0, 0x10, 0, 0x20, 0, 2, 4, 0, 4, 0, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xF0, 0, 0x20, 0, 2, 0, 0, 4, 0, 0xFF, 0xFF, 0xFF, 0xFF,
+};
+
+s8 scale_data[16] = { 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 103, 105, 103, 100, 0 };

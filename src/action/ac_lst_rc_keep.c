@@ -1,5 +1,28 @@
 #include "action/ac_lst_rc_keep.h"
 
+const char str_AcSkl1_802f9d90[] = "_AcSkl1";
+const char str_AcSkl2_802f9d98[] = "_AcSkl2";
+const char str_AcSkl3_802f9da0[] = "_AcSkl3";
+const char str_AcSkl4_802f9da8[] = "_AcSkl4";
+
+const f32 vec3_802f9db0[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f9dbc[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f9dc8[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f9dd4[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f9de0[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f9dec[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f9df8[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f9e04[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f9e10[3] = { 0.0f, 0.0f, 0.0f };
+
+s32 ac_lstrckeep_ok_frame[] = { 80, 70, 60, 40, 20, 10, 5 };
+char* ac_lstrckeep_iconname[] = {
+    (char*)str_AcSkl1_802f9d90,
+    (char*)str_AcSkl2_802f9d98,
+    (char*)str_AcSkl3_802f9da0,
+    (char*)str_AcSkl4_802f9da8,
+};
+
 void actionCommandDisp(f32 x, f32 y, s32 icon);
 
 extern f32 float_neg300_80424968;
@@ -23,9 +46,6 @@ s32 battleAcMain_LstRcKeep(void* battleWork) {
     extern u32 BattlePadCheckNow(u32);
     extern u32 BattleActionCommandGetDifficulty(void*);
     extern void iconDelete(char*);
-    extern s32 ac_lstrckeep_ok_frame[];
-    extern char* ac_lstrckeep_iconname[];
-
     void* extra;
     void* disp;
     s32 autoCommand;

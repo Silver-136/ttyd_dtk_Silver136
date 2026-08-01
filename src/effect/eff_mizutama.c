@@ -36,7 +36,7 @@ void* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     extern f64 sin(f64 value);
     extern f64 cos(f64 value);
     extern void effMizutamaMain(void*);
-    extern char str_mizutama_802fefec[];
+    extern const char str_mizutama_802fefec[];
 
     extern f32 float_1_804277dc;
     extern f32 float_0_804277d8;
@@ -80,7 +80,7 @@ void* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
             break;
     }
 
-    entry->name = str_mizutama_802fefec;
+    entry->name = (char*)str_mizutama_802fefec;
     entry->count = count;
     work = __memAlloc(3, entry->count * sizeof(EffMizutamaWork));
     entry->work = work;
@@ -198,8 +198,6 @@ void effMizutamaMain(void* entry) {
     }
 }
 
-
-
 /* CHATGPT STUB FILL: main/effect/eff_mizutama 20260624_184823 */
 
 /* stub-fill: effMizutamaDisp | prototype_only | source_prototype */
@@ -312,3 +310,5 @@ void effMizutamaDisp(s32 cameraId, void* effect) {
     }
 }
 
+const EffMizutamaVec vec3_802fefe0 = { 0.0f, 0.0f, 0.0f };
+const char str_mizutama_802fefec[] = "mizutama";

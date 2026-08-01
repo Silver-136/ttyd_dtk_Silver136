@@ -259,6 +259,13 @@ void effGarekiDisp(s32 cameraId, void* effect) {
         }
     }
 }
+
+f32 trans_data[16] = {
+    -5.0f, -4.0f, -3.0f, -2.0f, 2.0f, -3.0f, 5.0f, -4.0f,
+    -4.0f, 2.0f, -1.0f, 4.0f, 3.0f, 2.0f, 5.0f, 4.0f,
+};
+
+f32 vx_data[8] = { -1.0f, -0.5f, 0.5f, 1.0f, -1.0f, -0.5f, 0.5f, 1.0f };
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
@@ -290,4 +297,3 @@ void gareki_dl(int index) {
             GXBegin(0x90, 0, 6); tri2(54,55,56,54,57,58,59); break;
     }
 }
-

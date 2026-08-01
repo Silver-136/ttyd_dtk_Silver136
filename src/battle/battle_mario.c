@@ -77,12 +77,12 @@ s32 _whirlwind_effect(void* evt) {
 }
 
 s32 _jump_star_effect(void* evt, s32 first) {
-    extern f32 float_neg10_804223c4;
-    extern f32 float_10_804223d0;
-    extern f32 float_0p1_804223dc;
-    extern f32 float_0p05_804223e4;
-    extern f32 float_0p8_804223f4;
-    extern f32 float_2_804223f8;
+    extern const f32 float_neg10_804223c4;
+    extern const f32 float_10_804223d0;
+    extern const f32 float_0p1_804223dc;
+    extern const f32 float_0p05_804223e4;
+    extern const f32 float_0p8_804223f4;
+    extern const f32 float_2_804223f8;
     s32* args;
     void* battleWork;
     void* unit;
@@ -160,7 +160,7 @@ s32 _bgset_iron_frame_check(void* evt) {
 
 
 s32 _wait_jyabara_hit_iron_frame(void* evt) {
-    extern f32 float_130_804223f0;
+    extern const f32 float_130_804223f0;
     s32* args;
     s32 type;
     void* unit;
@@ -190,9 +190,9 @@ s32 _tatsumaki_effect(void* evt, s32 first) {
     extern s32 psndSFXOn(const char* name);
     extern void psndSFX_pos(s32 id, void* pos);
     extern void psndSFXOff(s32 id);
-    extern f32 float_0_804223b4;
-    extern f32 float_3_804223e8;
-    extern f32 float_80_804223ec;
+    extern const f32 float_0_804223b4;
+    extern const f32 float_3_804223e8;
+    extern const f32 float_80_804223ec;
     extern const char str_SFX_BTL_JUMP_TATUMAK_802ef638[];
     s32* args = *(s32**)((s32)evt + 0x18);
     void* unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(evt, evtGetValue(evt, args[0])));
@@ -339,17 +339,17 @@ s32 _hammer_star_effect(void* evt, s32 first) {
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
     extern f32 sinfd(f32 angle);
     extern f32 cosfd(f32 angle);
-    extern f32 float_210_804223bc;
-    extern f32 float_420_804223c0;
-    extern f32 float_neg10_804223c4;
-    extern f32 float_150_804223c8;
-    extern f32 float_neg60_804223cc;
-    extern f32 float_10_804223d0;
-    extern f32 float_0p85_804223d4;
-    extern f32 float_26_804223d8;
-    extern f32 float_0p1_804223dc;
-    extern f32 float_0p08_804223e0;
-    extern f32 float_0p05_804223e4;
+    extern const f32 float_210_804223bc;
+    extern const f32 float_420_804223c0;
+    extern const f32 float_neg10_804223c4;
+    extern const f32 float_150_804223c8;
+    extern const f32 float_neg60_804223cc;
+    extern const f32 float_10_804223d0;
+    extern const f32 float_0p85_804223d4;
+    extern const f32 float_26_804223d8;
+    extern const f32 float_0p1_804223dc;
+    extern const f32 float_0p08_804223e0;
+    extern const f32 float_0p05_804223e4;
     s32* args;
     void* battleWork;
     void* unit;
@@ -401,8 +401,8 @@ s32 _kaiten_hammer_acrobat_rotate(void* evt, s32 first) {
     extern void BtlUnit_AddRotate(void* unit, f32 x, f32 y, f32 z);
     extern void BtlUnit_SetRotate(void* unit, f32 x, f32 y, f32 z);
     extern void BtlUnit_SetAnim(void* part, s32 anim);
-    extern f32 float_360_804223b8;
-    extern f32 float_0_804223b4;
+    extern const f32 float_360_804223b8;
+    extern const f32 float_0_804223b4;
     s32* args;
     void* battleWork;
     void* unit;
@@ -494,7 +494,7 @@ s32 _mario_fire_ball_controll(void* evt, s32 first) {
 }
 
 s32 _fire_wave(void* evt, s32 first) {
-    extern f32 float_0p6_804223b0;
+    extern const f32 float_0p6_804223b0;
     s32* args;
     f32 x;
     f32 y;
@@ -577,3 +577,51 @@ s32 _paper_light_off(void* evt) {
     return 2;
 }
 
+const f32 vec3_802ef5d8[3] = { 0.0f, 10.0f, 0.0f };
+const char str_btl_msg_mj_power_up_802ef5e4[] = "btl_msg_mj_power_up";
+const char str_btl_msg_mj_defence_u_802ef5f8[] = "btl_msg_mj_defence_up";
+const char str_btl_msg_mj_exp_up_802ef610[] = "btl_msg_mj_exp_up";
+const char str_mjef_coinup_802ef624[] = "mjef_coinup";
+const f64 double_to_int_802ef630 = 4503601774854144.0;
+const char str_SFX_BTL_JUMP_TATUMAK_802ef638[] = "SFX_BTL_JUMP_TATUMAKI2";
+
+const char str_M_A_5_80422310[] = "M_A_5";
+const char str_M_D_2_80422318[] = "M_D_2";
+const char str_M_W_1_80422320[] = "M_W_1";
+const char str_M_N_7_80422328[] = "M_N_7";
+const char str_M_U_3_80422330[] = "M_U_3";
+const char str_M_S_1_80422338[] = "M_S_1";
+const char str_M_I_S_80422340[] = "M_I_S";
+const char str_M_B_2_80422348[] = "M_B_2";
+const char str_M_I_Y_80422350[] = "M_I_Y";
+const char str_M_B_1_80422358[] = "M_B_1";
+const char str_M_A_4_80422360[] = "M_A_4";
+const char str_M_A_6_80422368[] = "M_A_6";
+const char str_M_Z_1_80422370[] = "M_Z_1";
+const char str_M_C_3_80422378[] = "M_C_3";
+const char str_M_V_2_80422380[] = "M_V_2";
+const char str_M_H_7_80422388[] = "M_H_7";
+const char str_M_H_8_80422390[] = "M_H_8";
+const char str_M_H_3_80422398[] = "M_H_3";
+const char str_M_H_4_804223a0[] = "M_H_4";
+const u8 zero_804223a8 = 0;
+const f32 float_1_804223ac = 1.0f;
+const f32 float_0p6_804223b0 = 0.6f;
+const f32 float_0_804223b4 = 0.0f;
+const f32 float_360_804223b8 = 360.0f;
+const f32 float_210_804223bc = 210.0f;
+const f32 float_420_804223c0 = 420.0f;
+const f32 float_neg10_804223c4 = -10.0f;
+const f32 float_150_804223c8 = 150.0f;
+const f32 float_neg60_804223cc = -60.0f;
+const f32 float_10_804223d0 = 10.0f;
+const f32 float_0p85_804223d4 = 0.85f;
+const f32 float_26_804223d8 = 26.0f;
+const f32 float_0p1_804223dc = 0.1f;
+const f32 float_0p08_804223e0 = 0.08f;
+const f32 float_0p05_804223e4 = 0.05f;
+const f32 float_3_804223e8 = 3.0f;
+const f32 float_80_804223ec = 80.0f;
+const f32 float_130_804223f0 = 130.0f;
+const f32 float_0p8_804223f4 = 0.8f;
+const f32 float_2_804223f8 = 2.0f;

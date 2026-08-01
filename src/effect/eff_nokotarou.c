@@ -4,9 +4,9 @@ void* effEntry(void);
 void* __memAlloc(s32 heap, u32 size);
 void effNokotarouMain(void* entry);
 
-extern char str_Nokotarou_80302b18[];
-extern f32 float_0_80428a34;
-extern f32 float_1_80428a40;
+extern const char str_Nokotarou_80302b18[];
+extern const f32 float_0_80428a34;
+extern const f32 float_1_80428a40;
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -16,7 +16,7 @@ void* effNokotarouEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 field1C) {
     f32 zero;
     s32 alpha;
 
-    *(char**)((s32)entry + 0x14) = str_Nokotarou_80302b18;
+    *(char**)((s32)entry + 0x14) = (char*)str_Nokotarou_80302b18;
     *(s32*)((s32)entry + 8) = 1;
     work = __memAlloc(3, 0x38);
     *(void**)((s32)entry + 0xC) = work;
@@ -212,3 +212,18 @@ void effNokotarouDisp(s32 cameraId, void* entry) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+const u32 vec3_80302af8[3] = { 0, 0, 0 };
+const char str_MOBJ_EFF_nokotarou3_80302b04[] = "MOBJ_EFF_nokotarou3";
+const char str_Nokotarou_80302b18[] = "Nokotarou";
+__declspec(section ".rodata") const u8 gap_04_80302B22_rodata[6] = { 0 };
+
+const u32 dat_80428a28 = 0xFFFFFF00;
+const u32 dat_80428a2c = 0xFFFFFF00;
+const f32 float_deg2rad_80428a30 = 0.017453292f;
+const f32 float_0_80428a34 = 0.0f;
+const f32 float_2_80428a38 = 2.0f;
+const f32 float_100_80428a3c = 100.0f;
+const f32 float_1_80428a40 = 1.0f;
+const char str_S_1_80428a44[] = "S_1";
+const char str_A_1_80428a48[] = "A_1";
+const f32 float_0p03125_80428a4c = 0.03125f;

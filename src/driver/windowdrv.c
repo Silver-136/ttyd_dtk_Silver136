@@ -41,20 +41,6 @@ extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
 extern void TEXGetGXTexObjFromPalette(void* palette, void* texObj, s32 id);
 extern void* UnpackTexPalette(void* data);
 extern f32 __fabsf(f32);
-extern f32 float_0_80420538;
-extern f32 float_0p33333_80420540;
-extern f32 float_0p66667_80420544;
-extern f32 float_136_80420560;
-extern f32 float_176_80420550;
-extern f32 float_1_80420548;
-extern f32 float_40_8042056c;
-extern f32 float_416_8042055c;
-extern f32 float_488_80420564;
-extern f32 float_560_8042054c;
-extern f32 float_72_80420554;
-extern f32 float_neg136_80420568;
-extern f32 float_neg176_80420558;
-
 void windowInit(void) {
     void* win = __memAlloc(0, 0x1F8);
     WinObjects = win;
@@ -204,6 +190,7 @@ void windowMain(void) {
 
 void windowDispGX_Kanban(f32 x, f32 y, f32 width, f32 height, s32 type, u8 alpha) {
     extern void GXSetFog(s32 type, f32 startz, f32 endz, f32 nearz, f32 farz, void* color);
+    extern f32 float_0_80420538, float_0p33333_80420540, float_0p66667_80420544, float_136_80420560, float_176_80420550, float_1_80420548, float_40_8042056c, float_416_8042055c, float_488_80420564, float_560_8042054c, float_72_80420554, float_neg136_80420568, float_neg176_80420558;
 
     extern u32 dat_80420528;
     extern u32 dat_8042052c;
@@ -323,6 +310,7 @@ void windowDispGX_Kanban(f32 x, f32 y, f32 width, f32 height, s32 type, u8 alpha
 
 void windowDispGX_System(f32 x, f32 y, f32 width, f32 height, s32 unused, u8 alpha) {
     extern void GXSetFog(s32 type, f32 startz, f32 endz, f32 nearz, f32 farz, void* color);
+    extern f32 float_0_80420538, float_0p33333_80420540, float_0p66667_80420544, float_136_80420560, float_176_80420550, float_1_80420548, float_40_8042056c, float_416_8042055c, float_488_80420564, float_560_8042054c, float_72_80420554, float_neg136_80420568, float_neg176_80420558;
 
     extern u32 dat_80420528;
     extern u32 dat_80420530;
@@ -619,6 +607,7 @@ void windowDispGX_System(f32 x, f32 y, f32 width, f32 height, s32 unused, u8 alp
 
 u8 _windowDispGX_Message(f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 tailY, s32 kind, u32 flags, u8 alpha, s32 dark) {
     extern void PSMTXTransApply(void* src, void* dst, f32 x, f32 y, f32 z);
+    extern f32 float_0_80420538, float_0p33333_80420540, float_0p66667_80420544, float_136_80420560, float_176_80420550, float_1_80420548, float_40_8042056c, float_416_8042055c, float_488_80420564, float_560_8042054c, float_72_80420554, float_neg136_80420568, float_neg176_80420558;
     extern u32 dat_80420534;
     extern f32 float_neg1_80420570;
     extern f32 float_536_80420574;
@@ -1211,6 +1200,7 @@ void windowDispGX_Message(f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 ta
     typedef struct GXColorLocal { u8 r, g, b, a; } GXColorLocal;
     extern void GXSetFog(s32, f32, f32, f32, f32, GXColorLocal);
     extern void _windowDispGX_Message(f32, f32, f32, f32, f32, f32, s32, u32, u8, s32);
+    extern f32 float_0_80420538;
     extern GXColorLocal dat_80420528;
     GXColorLocal fog = dat_80420528;
 
@@ -1248,6 +1238,7 @@ void windowDispGX_Message(f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 ta
 void windowDispGX_Waku_col(double x, double y, double width, double height, double curve, u16 gxTexMapID, u32* color) {
     extern void GXSetFog(s32 type, f32 startz, f32 endz, f32 nearz, f32 farz, void* color);
     extern void PSMTXIdentity(void* mtx);
+    extern f32 float_0_80420538, float_0p33333_80420540, float_0p66667_80420544, float_1_80420548;
     extern u32 dat_80420528;
 
     void* cam;
@@ -1378,6 +1369,7 @@ void windowDispGX_Waku_col(double x, double y, double width, double height, doub
 
 void windowDispGX2_Waku_col(f32 x, f32 y, f32 width, f32 height, f32 curve, void* mtx, u16 gxTexMapID, u32* color) {
     extern void GXSetFog(s32 type, f32 startz, f32 endz, f32 nearz, f32 farz, void* color);
+    extern f32 float_0_80420538, float_0p33333_80420540, float_0p66667_80420544, float_1_80420548;
     extern f32 float_0p5_8042053c;
     extern u32 dat_80420528;
 
@@ -1653,3 +1645,39 @@ void* windowGetPointer(s32 id) {
 void* getWakuTexObj(s32 id) {
     return (void*)((s32)wakuTexObj + id * 0x20);
 }
+
+const char str_font_msgWindow_tpl_802c3080[] = "font/msgWindow.tpl";
+const char str_PCTs_f_msgWindow_tpl_802c3094[] = "%s/f/msgWindow.tpl";
+
+const u32 dat_80420528 = 0xFFFFFFFF;
+const u32 dat_8042052c = 0xFFFFFF00;
+const u32 dat_80420530 = 0xFFFFFF00;
+const u32 dat_80420534 = 0xFFFFFF00;
+const f32 float_0_80420538 = 0.0f;
+const f32 float_0p5_8042053c = 0.5f;
+const f32 float_0p33333_80420540 = 0.3333333432674408f;
+const f32 float_0p66667_80420544 = 0.6666666865348816f;
+const f32 float_1_80420548 = 1.0f;
+const f32 float_560_8042054c = 560.0f;
+const f32 float_176_80420550 = 176.0f;
+const f32 float_72_80420554 = 72.0f;
+const f32 float_neg176_80420558 = -176.0f;
+const f32 float_416_8042055c = 416.0f;
+const f32 float_136_80420560 = 136.0f;
+const f32 float_488_80420564 = 488.0f;
+const f32 float_neg136_80420568 = -136.0f;
+const f32 float_40_8042056c = 40.0f;
+const f32 float_neg1_80420570 = -1.0f;
+const f32 float_536_80420574 = 536.0f;
+const f32 float_neg24_80420578 = -24.0f;
+const f32 float_0p7_8042057c = 0.699999988079071f;
+const f32 float_0p38_80420580 = 0.3799999952316284f;
+const f32 float_0p175_80420584 = 0.17499999701976776f;
+const f32 float_0p225_80420588 = 0.22499999403953552f;
+const f32 float_0p8_8042058c = 0.800000011920929f;
+const f32 float_1p2_80420590 = 1.2000000476837158f;
+const f32 float_0p05_80420594 = 0.05000000074505806f;
+const f32 float_0p005_80420598 = 0.004999999888241291f;
+const f32 float_10_8042059c = 10.0f;
+const f32 dat_ptr_804205a0 = -0.0f;
+const f32 float_32_804205a4 = 32.0f;

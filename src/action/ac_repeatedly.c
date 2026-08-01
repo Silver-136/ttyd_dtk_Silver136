@@ -281,6 +281,10 @@ s32 battleAcMain_Repeatedly(void* battleWork) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+s32 _power_table[7] = {
+    55, 50, 45, 40, 35, 30, 25,
+};
+
 
 s32 battleAcResult_Repeatedly(void* wp) {
     return *(s32*)((s32)wp + 0x1CB8);
@@ -522,4 +526,3 @@ void actionCommandDisp(f32 x, f32 y) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-

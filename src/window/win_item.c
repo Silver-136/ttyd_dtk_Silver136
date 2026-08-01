@@ -784,3 +784,8 @@ u8 itemUseDisp2(void* pWinMgr) {
     }
     return 0;
 }
+
+u16 menu_skip_list[18] = {
+    9, 10, 11, 6, 7, 8, 5, 3, 2,
+    4, 50, 114, 115, 116, 117, 118, 119, 120,
+};

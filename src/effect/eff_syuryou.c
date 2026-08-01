@@ -13,7 +13,6 @@ void animPoseSetMaterialEvtColor(s32 poseId, void* color);
 void animPoseMain(s32 poseId);
 void animPoseDrawMtx(s32 poseId, Mtx matrix, f32 arg2, s32 pass, f32 arg4);
 
-extern char str_Syuryou_803029e4[];
 extern u32 dat_804288a0;
 extern f32 float_deg2rad_804288a4;
 extern f32 float_0_804288a8;
@@ -22,6 +21,7 @@ extern f32 float_1_804288b4;
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effSyuryouEntry(s32 type, s32 timer, f32 x, f32 y, f32 z) {
+    extern char str_Syuryou_803029e4[];
     void* entry = effEntry();
     void* work;
 
@@ -50,7 +50,6 @@ void* effSyuryouEntry(s32 type, s32 timer, f32 x, f32 y, f32 z) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-
 
 /* CHATGPT STUB FILL: main/effect/eff_syuryou 20260624_184929 */
 
@@ -144,7 +143,6 @@ void effSyuryouMain(void* entry) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void effSyuryouDisp(s32 cameraId, void* entry) {
@@ -187,3 +185,7 @@ void effSyuryouDisp(s32 cameraId, void* entry) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+const u32 vec3_803029b8[] = { 0x00000000, 0x00000000, 0x00000000 };
+const char str_EFF_batug_tue_803029c4[] = "EFF_batug_tue";
+const char str_MOBJ_EFF_baria_803029d4[] = "MOBJ_EFF_baria";
+const char str_Syuryou_803029e4[] = "Syuryou";

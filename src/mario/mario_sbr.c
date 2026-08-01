@@ -4,30 +4,30 @@ void* marioGetPtr(void);
 s32 hitGetAttr(void);
 f64 cos(f64 value);
 f32 __fabsf(f32 value);
-extern f32 float_0_80420a60;
-extern f32 float_360_80420a68;
-extern f32 float_180_80420a70;
-extern f32 float_1_80420a74;
-extern f32 float_90_80420a98;
-extern f32 float_3p1416_80420a9c;
-extern f32 float_0p19_80420aa0;
+extern const f32 float_0_80420a60;
+extern const f32 float_360_80420a68;
+extern const f32 float_180_80420a70;
+extern const f32 float_1_80420a74;
+extern const f32 float_90_80420a98;
+extern const f32 float_3p1416_80420a9c;
+extern const f32 float_0p19_80420aa0;
 extern u8 rubwork[0x68];
-extern f32 float_70_80420a64;
-extern f32 float_280_80420a78;
-extern f32 float_460_80420a7c;
-extern f32 float_260_80420a80;
-extern f32 float_440_80420a84;
-extern f32 float_0p5_80420a88;
-extern f32 float_neg0p5_80420a8c;
-extern f32 float_270_80420a90;
-extern f32 float_1000_80420a94;
+extern const f32 float_70_80420a64;
+extern const f32 float_280_80420a78;
+extern const f32 float_460_80420a7c;
+extern const f32 float_260_80420a80;
+extern const f32 float_440_80420a84;
+extern const f32 float_0p5_80420a88;
+extern const f32 float_neg0p5_80420a8c;
+extern const f32 float_270_80420a90;
+extern const f32 float_1000_80420a94;
 extern void* gp;
 extern s32 yoshiGetStatus(void);
 extern void marioChgMot(s32 motion);
 
 void marioBottomless(void) {
-    extern f32 float_neg2000_80420aa8;
-    extern f32 float_neg450_80420aac;
+    extern const f32 float_neg2000_80420aa8;
+    extern const f32 float_neg450_80420aac;
     extern s32 marioBgmodeChk(void);
     extern void seqSetSeq(s32 seq, void* mapName, void* beroName);
     extern s32 marioGetPartyId(void);
@@ -76,7 +76,7 @@ void marioBottomless(void) {
 #pragma use_lmw_stmw off
 void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
     extern f32 vec3_802c3ea8[3];
-    extern f32 float_37_80420aa4;
+    extern const f32 float_37_80420aa4;
     typedef struct Vec { f32 x, y, z; } Vec;
     void* mario = marioGetPtr();
     Vec pos = *(Vec*)vec3_802c3ea8;
@@ -215,7 +215,7 @@ void marioSetPeakYpos(void) {
 }
 
 void marioAdjustMoveDir(void) {
-    extern f32 float_90_80420a98;
+    extern const f32 float_90_80420a98;
 
     void* mario = marioGetPtr();
     f32 out;
@@ -456,7 +456,7 @@ double toMovedir2(double angle, double add) {
     return (double)(f32)angle;
 }
 void marioForceMoveMain(void) {
-    extern f32 float_1_80420a74;
+    extern const f32 float_1_80420a74;
     extern f32 marioGetDashSpd(void);
     extern f32 marioGetWalkSpd(void);
     void* mario = marioGetPtr();
@@ -766,7 +766,7 @@ s32 marioGetRub(s32 buttonFlags, s32* outDir, s32* outCount, f32* outMove) {
     extern f64 angleABf(f64, f64, f64, f64);
     extern s32 chkRevolveDir(s32*, s32*);
     extern s32 checkOneRevolution(s32);
-    extern f32 float_50_80420a6c;
+    extern const f32 float_50_80420a6c;
     extern u8 rubwork[0x68];
 
     void* player;
@@ -905,3 +905,35 @@ s32 marioGetRub(s32 buttonFlags, s32* outDir, s32* outCount, f32* outMove) {
     *(s32*)(rubwork + 0xC) = next;
     return ret;
 }
+
+typedef struct VecData {
+    f32 x;
+    f32 y;
+    f32 z;
+} VecData;
+
+const VecData vec3_802c3ea8 = { 0.0f, 0.0f, 0.0f };
+const VecData vec3_802c3eb4 = { 0.0f, 0.0f, 0.0f };
+
+u8 rubwork[0x68];
+
+const f32 float_0_80420a60 = 0.0f;
+const f32 float_70_80420a64 = 70.0f;
+const f32 float_360_80420a68 = 360.0f;
+const f32 float_50_80420a6c = 50.0f;
+const f32 float_180_80420a70 = 180.0f;
+const f32 float_1_80420a74 = 1.0f;
+const f32 float_280_80420a78 = 280.0f;
+const f32 float_460_80420a7c = 460.0f;
+const f32 float_260_80420a80 = 260.0f;
+const f32 float_440_80420a84 = 440.0f;
+const f32 float_0p5_80420a88 = 0.5f;
+const f32 float_neg0p5_80420a8c = -0.5f;
+const f32 float_270_80420a90 = 270.0f;
+const f32 float_1000_80420a94 = 1000.0f;
+const f32 float_90_80420a98 = 90.0f;
+const f32 float_3p1416_80420a9c = 3.1415927f;
+const f32 float_0p19_80420aa0 = 0.190000057f;
+const f32 float_37_80420aa4 = 37.0f;
+const f32 float_neg2000_80420aa8 = -2000.0f;
+const f32 float_neg450_80420aac = -450.0f;

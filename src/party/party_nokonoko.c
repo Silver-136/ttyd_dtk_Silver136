@@ -1,6 +1,7 @@
 #include "party/party_nokonoko.h"
 
-extern s32 nokoSe;
+s32 nokoSe;
+u32 gap_08_8041EAFC_sbss;
 extern f32 float_37_80421678;
 extern f32 float_24_80421708;
 extern f32 float_0_80421644;
@@ -227,15 +228,15 @@ u8 nokonoko_use(void* party) {
     extern void marioAdjustMoveDir(void);
     extern void nokonoko_finish(void*);
     extern void partyClearJumpPara(void*);
-    extern void partyChgPose(void*, char*);
+    extern void partyChgPose(void*, const char*);
     extern void marioChgSmallJumpMotion(void);
     extern void marioChgMot(s32);
     extern f64 toMovedir(f64);
     extern u32 psndSFXOn_3D(s32, void*);
     extern void partyMove(void*);
     extern void partyMoveNoHosei(void*);
-    extern char str_PNK_K_2_802cc5f0[];
-    extern char str_PNK_A_1_802cc5f8[];
+    extern const char str_PNK_K_2_802cc5f0[];
+    extern const char str_PNK_A_1_802cc5f8[];
     extern f32 float_18p5_80421680;
     extern f32 float_2_80421684;
     extern f32 float_45_80421688;
@@ -929,3 +930,7 @@ void lookupSafetyPosSub(double height, double angle, float* inPos, float* outPos
         outPos[2] = inPos[2];
     }
 }
+
+const u32 vec3_802cc5d8[] = { 0, 0, 0 };
+const char str_PNK_K_2_802cc5f0[] = "PNK_K_2";
+const char str_PNK_A_1_802cc5f8[] = "PNK_A_1";

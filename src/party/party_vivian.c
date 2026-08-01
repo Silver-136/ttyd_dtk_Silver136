@@ -403,3 +403,4 @@ void vivian_use(void* pParty) {
     }
 }
 
+s32 vivian_cancel_req;

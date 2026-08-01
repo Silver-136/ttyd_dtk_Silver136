@@ -1020,3 +1020,31 @@ void BattleConsumeReserveItem(void) {
         offset += 4;
     } while (i < 4);
 }
+
+//.sdata
+extern BattleUnitData unitdata_Mario;
+extern BattleUnitData unit_system;
+
+BattleUnitSetup entryunit_mario = {
+    &unitdata_Mario,
+    0,
+    { 0 },
+    0x04000002,
+    { -100.0f, 0.0f, -5.0f },
+    { 0 },
+};
+
+BattleUnitSetup entryunit_system = {
+    &unit_system,
+    0,
+    { 0 },
+    0x04000002,
+    { 0.0f, 0.0f, 0.0f },
+    { 0 },
+};
+
+//.sdata2
+const f32 float_0_80422170 = 0.0f;
+const f32 float_1_80422174 = 1.0f;
+const f32 float_neg140_80422178 = -140.0f;
+const f32 float_5_8042217c = 5.0f;

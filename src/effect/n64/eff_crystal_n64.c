@@ -1,4 +1,19 @@
 #include "effect/n64/eff_crystal_n64.h"
+
+char size108x108_tex32x32_vtx[56] = {
+    0xFF, 0xCA, 0xFF, 0xCA, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x36, 0xFF, 0xCA, 0, 1, 4, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x36, 0, 0x36, 0, 1, 4, 0, 4, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xCA, 0, 0x36, 0, 1, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+};
+
+char size100x100_tex32x32_vtx[56] = {
+    0xFF, 0xCE, 0xFF, 0xCE, 0xFF, 0xFF, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x32, 0xFF, 0xCE, 0xFF, 0xFF, 4, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 0x32, 0, 0x32, 0xFF, 0xFF, 4, 0, 4, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xCE, 0, 0x32, 0xFF, 0xFF, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+};
+
 void* effCrystalN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -235,8 +250,6 @@ void effCrystalDisp(s32 cameraId, void* effect) {
     extern f32 float_0p03125_80425044;
     extern f32 float_0p0625_80425048;
     extern f32 float_0_8042504c;
-    extern char size108x108_tex32x32_vtx[];
-    extern char size100x100_tex32x32_vtx[];
     u8 texObj[0x20];
     f32 baseMtx[3][4];
     f32 transMtx[3][4];

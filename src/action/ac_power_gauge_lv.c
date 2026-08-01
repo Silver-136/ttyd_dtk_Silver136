@@ -324,3 +324,26 @@ void actionCommandDisp(f32 x, f32 y) {
             break;
     }
 }
+
+const f32 vec3_802ff340[7][3] = {
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },
+};
+
+const u32 dat_80427b28 = 0xFFFFFFFF;
+const f32 float_neg200_80427b2c = -200.0f;
+const f32 float_25_80427b30 = 25.0f;
+const f32 float_1_80427b34 = 1.0f;
+const f32 float_100_80427b38 = 100.0f;
+const f32 float_neg220_80427b3c = -220.0f;
+const f32 float_70_80427b40 = 70.0f;
+const f32 float_56_80427b44 = 56.0f;
+const f32 float_neg300_80427b48 = -300.0f;
+const f32 float_30_80427b4c = 30.0f;
+const f32 float_0_80427b50 = 0.0f;
+const f32 float_101_80427b54 = 101.0f;

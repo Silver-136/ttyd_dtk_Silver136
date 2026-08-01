@@ -7,7 +7,6 @@ extern void* mapalloc_base_ptr;
 extern void _mapFree(void* heap, void* ptr);
 extern f64 cos(f64);
 extern u32 DAT_800000f8;
-extern f32 float_0_8041fe38;
 extern f64 sin(f64);
 
 #pragma no_register_save_helpers on
@@ -251,6 +250,7 @@ s32 evt_sub_spline_get_value(EventEntry* event) {
     extern f32 intplGetValue(s32 type, f32 start, f32 end, s32 time, s32 duration);
     extern void spline_getvalue(f32 time, f32* out, s32 count, f32* points, s32 unk4, s32 unkC);
     extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
+    extern f32 float_0_8041fe38;
     extern f32 float_1_8041fe58;
     extern f32 float_1024_8041fe84;
     s32* args;
@@ -989,6 +989,7 @@ s32 unk_80053f10(void* event) {
 s32 evt_sub_check_intersect(EventEntry* event) {
     extern f32 evtGetFloat(EventEntry* event, s32 index);
     extern s32 evtSetValue(EventEntry* event, s32 index, s32 value);
+    extern f32 float_0_8041fe38;
     s32* args;
     f32 startX;
     f32 startZ;
@@ -1106,3 +1107,67 @@ USER_FUNC(mail_evt_gor_04_keyoff_check) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+const u32 dat_8041fe10 = 0xFF;
+const char str_M_N_3_8041fe14[] = "M_N_3";
+const char str_M_P_2_8041fe1c[] = "M_P_2";
+const char str_S_8041fe24[] = "S";
+const char str_next_8041fe28[] = "next";
+const char str_M_D_2_8041fe30[] = "M_D_2";
+const f32 float_0_8041fe38 = 0.0f;
+const f32 float_60_8041fe3c = 60.0f;
+const f32 float_5_8041fe40 = 5.0f;
+const f32 float_100_8041fe44 = 100.0f;
+const f32 float_6p2832_8041fe48 = 6.2831855f;
+const f32 float_360_8041fe4c = 360.0f;
+const f32 float_0p00761_8041fe50 = 0.00761f;
+const f32 float_0p16605_8041fe54 = 0.16605f;
+const f32 float_1_8041fe58 = 1.0f;
+const f32 float_3p1416_8041fe5c = 3.1415927f;
+const f32 float_1p5708_8041fe60 = 1.5707964f;
+const f32 float_4p7124_8041fe64 = 4.712389f;
+const f32 float_10_8041fe68 = 10.0f;
+const f32 float_0p03705_8041fe6c = 0.03705f;
+const f32 float_0p4967_8041fe70 = 0.4967f;
+const f32 float_62_8041fe74 = 62.0f;
+const f32 float_52_8041fe78 = 52.0f;
+const f32 float_3p1416_8041fe7c = 3.141592f;
+const f32 float_180_8041fe80 = 180.0f;
+const f32 float_1024_8041fe84 = 1024.0f;
+
+s32 evt_sub_stopwatch[] = {
+    0x00010005,
+    0,
+    0x00010009,
+    1,
+    6,
+    2,
+    1,
+};
+
+u32 kusa_data[] = {
+    0xF24A7A80,
+    0xF24A7302,
+    0xF24A6E82,
+    0xF24A719F,
+    0xF24A7766,
+    0xF24A7A80,
+    0xF24A7766,
+    0xF24A719F,
+    0xF24A6E82,
+    0xF24A70BB,
+    0xF24A759F,
+    0xF24A7A80,
+};
+
+s32 coinget_window_desc[] = {
+    0,
+    0,
+    8,
+    -175,
+    120,
+    350,
+    42,
+    0xE1D79BFF,
+    0,
+    (s32)coingetDisp,
+};

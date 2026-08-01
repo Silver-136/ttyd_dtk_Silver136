@@ -104,6 +104,9 @@ u8 effSstarMain(int* effect) {
     return 0;
 }
 
+const f32 vec3_802fbfe0[3] = { 0.0f, 0.0f, 0.0f };
+const char str_SstarN64_802fc008[] = "SstarN64";
+
 
 u8 effSstarDisp(s32 cameraId, s32 effectAddress) {
     typedef f32 Mtx[3][4];
@@ -210,4 +213,3 @@ u8 effSstarDisp(s32 cameraId, s32 effectAddress) {
     GXBegin(0x90, 0, 6);
     return 0;
 }
-

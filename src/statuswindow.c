@@ -1,6 +1,14 @@
 #include "statuswindow.h"
 #include "driver/seqdrv.h"
 
+typedef struct StatusIcon {
+    s16 x;
+    s16 y;
+    u16 iconId;
+    u16 pad;
+    f32 scale;
+} StatusIcon;
+
 void* wp;
 s32 valueCheck(void);
 void statusGetValue(void* out);
@@ -9,12 +17,12 @@ extern void* marioGetPtr(void);
 extern void* pouchGetPtr(void);
 void statusWinDisp(void);
 void* __memAlloc(s32 heap, u32 size);
-extern s16 alwaysDt[];
-extern f32 float_0_80422be8;
-extern f32 float_1_80422bf4;
-extern f32 float_neg304_80422c68;
-extern f32 float_208_80422c6c;
-extern f32 float_334_80422c70;
+extern StatusIcon alwaysDt[];
+extern const f32 float_0_80422be8;
+extern const f32 float_1_80422bf4;
+extern const f32 float_neg304_80422c68;
+extern const f32 float_208_80422c6c;
+extern const f32 float_334_80422c70;
 
 
 void statusWinInit(void) {
@@ -79,13 +87,13 @@ void statusWinMain(void) {
     extern double cos(double);
     extern void dispEntry(s32, s32, void*, s32, f32);
     extern void valueUpdate(void);
-    extern char str_yuu_80422c5c[];
-    extern f32 float_16_80422c48;
-    extern f32 float_28_80422c60;
-    extern f32 float_60_80422bec;
-    extern f32 float_3p1416_80422bf0;
-    extern f32 float_0p5_80422bf8;
-    extern f32 float_500_80422c64;
+    extern const char str_yuu_80422c5c[];
+    extern const f32 float_16_80422c48;
+    extern const f32 float_28_80422c60;
+    extern const f32 float_60_80422bec;
+    extern const f32 float_3p1416_80422bf0;
+    extern const f32 float_0p5_80422bf8;
+    extern const f32 float_500_80422c64;
     void* player;
     s32 seq;
     u16 flags;
@@ -233,7 +241,7 @@ u8 gaugeDisp(s32 value, f32 x, f32 y) {
     extern void iconDispGx(LocalVec3* pos, s32 size, s32 iconId, f32 scale);
     extern u16 gauge_wakka[];
     extern u16 gauge_back[];
-    extern f32 float_12_80422c58;
+    extern const f32 float_12_80422c58;
     s32 max;
     s32 i;
     s32 enabled;
@@ -288,21 +296,14 @@ u8 gaugeDisp(s32 value, f32 x, f32 y) {
 
 
 void statusWinDisp(void) {
-    typedef struct StatusIcon {
-        s16 x;
-        s16 y;
-        u16 iconId;
-        u16 pad;
-        f32 scale;
-    } StatusIcon;
     extern void PSMTXTrans(f32 mtx[3][4], f32 x, f32 y, f32 z);
     extern void PSMTXScale(f32 mtx[3][4], f32 x, f32 y, f32 z);
     extern void PSMTXConcat(f32 a[3][4], f32 b[3][4], f32 out[3][4]);
     extern void iconDispGxCol(f32 mtx[3][4], s32 flags, s32 iconId, u32* color);
     extern void iconNumberDispGx(f32 mtx[3][4], s32 value, s32 type, u32* color);
     extern void gaugeDisp(f32 x, f32 y, s32 value);
-    extern u32 dat_80422bcc;
-    extern u32 dat_80422bc8;
+    extern const u32 dat_80422bcc;
+    extern const u32 dat_80422bc8;
     StatusIcon* icon;
     f32 trans[3][4];
     f32 scale[3][4];
@@ -776,8 +777,8 @@ void statusGetApPos(f32* out) {
         f32 z;
     } StatusVec;
     StatusVec pos;
-    s16 xOffset = alwaysDt[0x90 / 2];
-    s16 yOffset = alwaysDt[0x92 / 2];
+    s16 xOffset = alwaysDt[12].x;
+    s16 yOffset = alwaysDt[12].y;
     void* work = wp;
 
     pos.x = *(f32*)((s32)work + 0x20) + xOffset;
@@ -810,3 +811,107 @@ void statusPartyHPBlink(s32 value) {
     *(u32*)((s32)wp + 0x80) |= 8;
     *(s32*)((s32)wp + 0x88) = value;
 }
+
+StatusIcon alwaysDt[13] = {
+    { 108, 40, 0x1D8, 0, 1.0f },
+    { 38, 40, 0x1AB, 0, 1.0f },
+    { 124, 34, 0x1E0, 0, 1.0f },
+    { 288, 40, 0x1D9, 0, 1.0f },
+    { 220, 40, 0x1B9, 0, 1.0f },
+    { 305, 34, 0x1E0, 0, 1.0f },
+    { 492, 40, 0x1DB, 0, 1.0f },
+    { 400, 40, 0x1BB, 0, 1.0f },
+    { 490, 40, 0x1BC, 0, 1.0f },
+    { 422, 34, 0x1DE, 0, 1.0f },
+    { 512, 34, 0x1DE, 0, 1.0f },
+    { 360, 76, 0x1DA, 0, 1.0f },
+    { 220, 80, 0x1BA, 0, 0.9f },
+};
+
+StatusIcon partysDt[3] = {
+    { 108, 76, 0x1D8, 0, 1.0f },
+    { 38, 80, 0x1AC, 0, 1.0f },
+    { 124, 70, 0x1E0, 0, 1.0f },
+};
+
+u16 party_icon[8] = {
+    0x1AC, 0x1AC, 0x1AD, 0x1AE, 0x1AF, 0x1B6, 0x1B7, 0x1B8,
+};
+
+u16 gauge_back[8] = {
+    0x1BF, 0x1C0, 0x1C1, 0x1C2, 0x1C3, 0x1C4, 0x1C5, 0x1C6,
+};
+
+u16 gauge_wakka[16] = {
+    0x1C8, 0x1C9, 0x1CA, 0x1CB, 0x1CC, 0x1CD, 0x1CE, 0x1CF,
+    0x1D0, 0x1D1, 0x1D2, 0x1D3, 0x1D4, 0x1D5, 0x1D6, 0x1D7,
+};
+
+u16 party_icon_tbl[6] = {
+    0x215, 0x22B, 0x22C, 0x22D, 0x22E, 0x22F,
+};
+
+u16 gear_icon_tbl[6] = {
+    0x216, 0x230, 0x231, 0x232, 0x233, 0x234,
+};
+
+u16 badge_icon_tbl[6] = {
+    0x217, 0x235, 0x236, 0x235, 0x237, 0x238,
+};
+
+u16 journal_icon_tbl[6] = {
+    0x218, 0x239, 0x239, 0x239, 0x23A, 0x23B,
+};
+
+const f32 dat_802f3a30[6] = {
+    0.0f, 10.0f, 3.0f,
+    8.0f, 8.0f, 0.0f,
+};
+
+const f64 double_to_int_802f3a48 = 4503601774854144.0;
+
+const char str_SFX_COUNT_COIN1_802f3a50[] = "SFX_COUNT_COIN1";
+
+const u32 dat_80422bc8 = 0xFFFFFFFF;
+const u32 dat_80422bcc = 0xFFFFFFFF;
+const u32 dat_80422bd0 = 0xFFFFFFFF;
+const u32 dat_80422bd4 = 0xFFFFFFFF;
+const u32 dat_80422bd8 = 0xFFFFFFFF;
+const u32 dat_80422bdc = 0xFFFFFFFF;
+const u32 dat_80422be0 = 0xFFFFFFFF;
+const u32 dat_80422be4 = 0xFFFFFFFF;
+const f32 float_0_80422be8 = 0.0f;
+const f32 float_60_80422bec = 60.0f;
+const f32 float_3p1416_80422bf0 = 3.1415927f;
+const f32 float_1_80422bf4 = 1.0f;
+const f32 float_0p5_80422bf8 = 0.5f;
+const f32 float_120_80422bfc = 120.0f;
+const f32 float_6_80422c00 = 6.0f;
+const f32 float_10_80422c04 = 10.0f;
+const f32 float_2_80422c08 = 2.0f;
+const f32 float_38_80422c0c = 38.0f;
+const f32 float_186_80422c10 = 186.0f;
+const f32 float_3_80422c14 = 3.0f;
+const f32 float_292_80422c18 = 292.0f;
+const f32 float_358_80422c1c = 358.0f;
+const f32 float_462_80422c20 = 462.0f;
+const f32 float_572_80422c24 = 572.0f;
+const f32 float_260_80422c28 = 260.0f;
+const f32 float_4_80422c2c = 4.0f;
+const f32 float_87_80422c30 = 87.0f;
+const f32 float_78_80422c34 = 78.0f;
+const f32 float_neg180_80422c38 = -180.0f;
+const f32 float_neg190_80422c3c = -190.0f;
+const f32 float_0p75_80422c40 = 0.75f;
+const f32 float_neg250_80422c44 = -250.0f;
+const f32 float_16_80422c48 = 16.0f;
+const f32 float_50_80422c4c = 50.0f;
+const f32 float_neg130_80422c50 = -130.0f;
+const f32 float_25_80422c54 = 25.0f;
+const f32 float_12_80422c58 = 12.0f;
+const char str_yuu_80422c5c[] = "yuu";
+const f32 float_28_80422c60 = 28.0f;
+const f32 float_500_80422c64 = 500.0f;
+const f32 float_neg304_80422c68 = -304.0f;
+const f32 float_208_80422c6c = 208.0f;
+const f32 float_334_80422c70 = 334.0f;

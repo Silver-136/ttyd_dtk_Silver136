@@ -1,7 +1,24 @@
 #include "effect/eff_spark.h"
+
+f32 scale_data[] = {
+    0.9f,  1.0f,  1.0f,  0.9f,  0.85f, 0.8f,  0.75f, 0.7f,
+    0.65f, 0.6f,  0.55f, 0.5f,  0.45f, 0.4f,  0.35f, 0.3f,
+    0.25f, 0.2f,  0.15f, 0.1f,  0.05f, 0.03f, 0.02f, 0.01f,
+};
+
+s32 max_seq_num[] = { 24, 12 };
+u8 a_data[] = {
+    250, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+};
+f32 scale_data2[] = {
+    0.9f, 1.0f, 1.0f, 0.9f, 0.8f, 0.7f,
+    0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.1f,
+};
+u8 a_data2[] = { 250, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255 };
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-extern s32 max_seq_num[];
 extern f32 float_16_804245e8;
 extern f32 float_0_804245ec;
 extern f32 float_1_804245f8;
@@ -69,10 +86,6 @@ void effSparkMain(void* effect) {
     extern void effSparkDisp(s32, void*);
     extern double sin(double);
     extern double cos(double);
-    extern u8 a_data[];
-    extern u8 a_data2[];
-    extern f32 scale_data[];
-    extern f32 scale_data2[];
     extern VecLocal vec3_802f96d0;
     extern f32 float_0p1_804245fc;
     extern f32 float_0p2_80424600;
@@ -296,4 +309,3 @@ void effSparkDisp(s32 cameraId, void* effect) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-

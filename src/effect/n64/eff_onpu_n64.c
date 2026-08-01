@@ -189,3 +189,12 @@ void effOnpuDisp(s32 cameraId, void* effect) {
     tri2(0, 1, 2, 0, 0, 2, 3, 0);
 }
 
+u8 size16x32_tex16x32_vtx[56] = {
+    0xFF, 0xF8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 8, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 8, 0, 0x20, 0, 0, 2, 0, 4, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xF8, 0, 0x20, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+};
+
+const f32 vec3_802fbb28[3] = { 0.0f, 0.0f, 0.0f };
+const char str_OnpuN64_802fbb40[] = "OnpuN64";

@@ -2,7 +2,6 @@
 #include "battle/battle_audience.h"
 
 extern void* _battleWorkPointer;
-extern f32 float_498_804272b8;
 
 void _ac_help_disp(void);
 void dispEntry(s32 cameraId, s32 renderMode, void* callback, s32 param, f32 priority);
@@ -28,6 +27,8 @@ void BattleAcHelpInit(void) {
 }
 
 void BattleAcHelpMain(void) {
+    extern f32 float_498_804272b8;
+
     void* battleWork = _battleWorkPointer;
     void* acHelp = (void*)((s32)battleWork + 0x19008);
 
@@ -82,3 +83,16 @@ void _ac_help_disp(void) {
     FontDrawStart_alpha(alpha);
     FontDrawMessage((s32)x, (s32)float_neg148_804272b4 + ((s32)lines - 1) * 0x1D, msg);
 }
+
+const u8 str_message_not_found_802feb30[27] = {
+    0x82, 0xDF, 0x82, 0xC1, 0x82, 0xB9, 0x81, 0x5B, 0x82,
+    0xB6, 0x82, 0xAA, 0x82, 0xDD, 0x82, 0xC2, 0x82, 0xA9,
+    0x82, 0xE8, 0x82, 0xDC, 0x82, 0xB9, 0x82, 0xF1, 0x00,
+};
+const u32 dat_804272a0 = 0xFFFFFF00;
+const f32 float_0_804272a4 = 0.0f;
+const f32 float_20_804272a8 = 20.0f;
+const f32 float_neg145_804272ac = -145.0f;
+const f32 float_10_804272b0 = 10.0f;
+const f32 float_neg148_804272b4 = -148.0f;
+const f32 float_498_804272b8 = 498.0f;

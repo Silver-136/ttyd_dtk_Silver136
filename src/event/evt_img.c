@@ -6,6 +6,8 @@ extern void* imgNameToPtr(s32 name, s32 flag);
 extern void* gp;
 extern s64 animTimeGetTime(s32 flag);
 extern void animPoseSetMaterialFlagOn(void* pose, s32 flag);
+extern const s32 vec3_802c2a88[3];
+extern const f32 float_1_80420360;
 
 s32 evt_img_entry(void* event, s32 isFirstCall) {
     extern void imgEntry(s32 name, s32 flag);
@@ -196,7 +198,6 @@ s32 evt_img_onoff(void* event) {
 
 s32 evt_img_set_virtual_point(void* event) {
     extern void imgSetVirtualPoint(void* img, void* vec);
-    extern s32 vec3_802c2a88[3];
     s32* args = *(s32**)((s32)event + 0x18);
     s32 name = evtGetValue(event, args[0]);
     f32 x = evtGetFloat(event, args[1]);
@@ -235,7 +236,6 @@ s32 evt_img_release(void* event) {
     return 2;
 }
 s32 evt_img_wait_animend(void* event, s32 isFirstCall) {
-    extern f32 float_1_80420360;
     s32* args = *(s32**)((s32)event + 0x18);
     void* img = imgNameToPtr(evtGetValue(event, args[0]), ((u32)(-*(s32*)((s32)gp + 0x14)) | (u32)*(s32*)((s32)gp + 0x14)) >> 31);
 
@@ -263,6 +263,9 @@ s32 evt_img_set_shadow(void* event, s32 isFirstCall) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+const s32 vec3_802c2a88[3] = { 0, 0, 0 };
+const f32 float_1_80420360 = 1.0f;
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

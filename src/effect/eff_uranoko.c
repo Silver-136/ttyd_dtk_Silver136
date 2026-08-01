@@ -13,12 +13,12 @@ void animPoseSetMaterialEvtColor(s32 poseId, void* color);
 void animPoseMain(s32 poseId);
 void animPoseDrawMtx(s32 poseId, Mtx matrix, f32 arg2, s32 pass, f32 arg4);
 
-extern char str_Uranoko_80302a10[];
-extern u32 dat_804288c0;
-extern f32 float_deg2rad_804288c4;
-extern f32 float_0_804288c8;
-extern f32 float_6_804288cc;
-extern f32 float_1_804288d4;
+extern const char str_Uranoko_80302a10[];
+extern const u32 dat_804288c0;
+extern const f32 float_deg2rad_804288c4;
+extern const f32 float_0_804288c8;
+extern const f32 float_6_804288cc;
+extern const f32 float_1_804288d4;
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effUranokoEntry(s32 type, s32 timer, f32 x, f32 y, f32 z) {
@@ -29,7 +29,7 @@ void* effUranokoEntry(s32 type, s32 timer, f32 x, f32 y, f32 z) {
     f32 scale0;
     s32 zero;
 
-    *(char**)((s32)entry + 0x14) = str_Uranoko_80302a10;
+    *(const char**)((s32)entry + 0x14) = str_Uranoko_80302a10;
     *(s32*)((s32)entry + 8) = 1;
     work = __memAlloc(3, (u32)(*(s32*)((s32)entry + 8) * 0x28));
     callback = effUranokoMain;
@@ -76,7 +76,7 @@ void effUranokoMain(void* entry) {
     extern f32 dispCalcZ(Vec* pos);
     extern void dispEntry(s32 cameraId, s32 order, void* callback, void* param, f32 z);
     extern void effUranokoDisp(s32 cameraId, void* entry);
-    extern u32 vec3_803029f0[];
+    extern const u32 vec3_803029f0[];
     extern const char str_A_1_804288d0[];
     extern f32 float_0p125_804288d8;
 
@@ -125,6 +125,7 @@ void effUranokoMain(void* entry) {
         }
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -171,3 +172,14 @@ void effUranokoDisp(s32 cameraId, void* entry) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+const u32 vec3_803029f0[3] = { 0, 0, 0 };
+const char str_MOBJ_EFF_uranoko_803029fc[] = "MOBJ_EFF_uranoko";
+const char str_Uranoko_80302a10[] = "Uranoko";
+
+const u32 dat_804288c0 = 0xFFFFFF00;
+const f32 float_deg2rad_804288c4 = 0.017453292f;
+const f32 float_0_804288c8 = 0.0f;
+const f32 float_6_804288cc = 6.0f;
+const char str_A_1_804288d0[] = "A_1";
+const f32 float_1_804288d4 = 1.0f;
+const f32 float_0p125_804288d8 = 0.125f;

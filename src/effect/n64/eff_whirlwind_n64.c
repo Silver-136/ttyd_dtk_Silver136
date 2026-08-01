@@ -1,5 +1,10 @@
 #include "effect/n64/eff_whirlwind_n64.h"
 
+const char str_WhirlwindN64_802faa90[] = "WhirlwindN64";
+u8 col_r[] = { 0xFF, 0xFF, 0x40 };
+u8 col_g[] = { 0xFF, 0x40, 0x40 };
+u8 col_b[] = { 0xFF, 0x40, 0xFF };
+
 extern f32 float_0_80424bd4;
 
 void* effWhirlwindN64Entry(f32 scale, s32 type, void* follow, s32 lifetime) {
@@ -7,10 +12,6 @@ void* effWhirlwindN64Entry(f32 scale, s32 type, void* follow, s32 lifetime) {
     extern void* __memAlloc(s32 heap, u32 size);
     extern s32 rand(void);
     extern void effWhirlwindMain(void*);
-    extern const char str_WhirlwindN64_802faa90[];
-    extern u8 col_r[];
-    extern u8 col_g[];
-    extern u8 col_b[];
     extern f32 float_1p2_80424c04;
     extern f32 float_60_80424c08;
     extern f32 float_1_80424c0c;
@@ -318,4 +319,3 @@ void effWhirlwindDisp(s32 cameraId, void* entry) {
         tri2(0x13, 0x12, 0x19, 0, 0x13, 0x19, 0x18);
     }
 }
-

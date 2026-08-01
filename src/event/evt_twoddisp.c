@@ -2,8 +2,6 @@
 
 void* twodPtr;
 
-extern f32 float_0_80422f80;
-extern f32 float_1_80422f84;
 extern s32 evtGetValue(void* event, s32 value);
 extern f32 evtGetFloat(void* event, s32 value);
 extern s32 strcmp(const char* s1, const char* s2);
@@ -27,6 +25,8 @@ void twoddisp_disp(void) {
     extern u32 unk_804295f4;
     extern u32 dat_80422f78;
     extern u32 dat_80422f7c;
+    extern f32 float_0_80422f80;
+    extern f32 float_1_80422f84;
     u32 fogColor1;
     u32 fogColor2;
     u32 color1;
@@ -97,6 +97,8 @@ s32 evt_twoddisp_init(void* event) {
     extern void* mapalloc_base_ptr;
     extern void* twoddisp_main_event;
     extern s32 twodID;
+    extern f32 float_0_80422f80;
+    extern f32 float_1_80422f84;
     void* child;
     void* entry;
     s32 i;
@@ -146,6 +148,8 @@ s32 evt_twoddisp_init(void* event) {
 
 s32 evt_twoddisp_entry(void* pEvt) {
     extern char* strcpy(char* dst, const char* src);
+    extern f32 float_0_80422f80;
+    extern f32 float_1_80422f84;
     s32* args = *(s32**)((s32)pEvt + 0x18);
     char* name = (char*)evtGetValue(pEvt, args[0]);
     s32 value = evtGetValue(pEvt, args[1]);
@@ -250,3 +254,26 @@ s32 evt_twoddisp_flag_onoff(int param_1) {
     }
     return 2;
 }
+
+s32 twoddisp_main_event[] = {
+    0x00010005,
+    0,
+    0x0001005B,
+    0,
+    0x00010009,
+    1,
+    6,
+    2,
+    1,
+};
+
+u8 gap_07_80417C9C_sdata[4] = { 0 };
+
+s32 twodID;
+
+const u32 dat_80422f78 = 0x000000FF;
+const u32 dat_80422f7c = 0xFFFFFFFF;
+const f32 float_0_80422f80 = 0.0f;
+const f32 float_1_80422f84 = 1.0f;
+const f32 float_1000_80422f88 = 1000.0f;
+const u32 gap_09_80422F8C_sdata2 = 0;

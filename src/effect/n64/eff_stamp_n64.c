@@ -174,3 +174,16 @@ void effStampDisp(s32 cameraId, void* effect) {
     GXSetNumChans(1);GXSetChanCtrl(4,0,0,1,0,0,2);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,4);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,2,3,1,0);GXSetTevAlphaIn(0,0,1,7,7);PSMTXTrans(base,*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC));PSMTXRotRad(rot,0x79,float_deg2rad_80426160*-*(f32*)((s32)camGetPtr(4)+0x114));PSMTXConcat(base,rot,base);PSMTXConcat((void*)((s32)camGetPtr(cameraId)+0x11C),base,base);color=*(u32*)(work+0x34);GXSetTevColor(1,&color);color=*(u32*)(work+0x38);GXSetTevColor(2,&color);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);PSMTXScale(scale,float_0p03125_80426164,float_0p03125_80426164,float_0_80426168);GXLoadTexMtxImm(scale,0x1E,1);effGetTexObjN64(0x2B,texObj);GXLoadTexObj(texObj,0);GXSetCullMode(0);effSetVtxDescN64((void*)0x803A8D80);
     for(i=1;i<*(s32*)((s32)effect+8);i++,part+=0x40){PSMTXTrans(mtx,*(f32*)(part+4),*(f32*)(part+8),*(f32*)(part+0xC));PSMTXRotRad(rot,0x7A,float_deg2rad_80426160**(f32*)(part+0x2C));PSMTXScale(scale,*(f32*)(part+0x20),*(f32*)(part+0x1C),float_1_8042616c);PSMTXConcat(mtx,rot,mtx);PSMTXConcat(mtx,scale,mtx);PSMTXConcat(base,mtx,mtx);GXLoadPosMtxImm(mtx,0);GXSetCurrentMtx(0);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3,0);}
 }
+
+u8 size16x16_tex64x32_vtx[] = {
+    0xFF, 0xF8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08,
+    0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x10,
+    0x00, 0x00, 0x08, 0x00, 0x04, 0x00, 0x00, 0x00,
+    0x00, 0xFF, 0xFF, 0xF6, 0x00, 0x10, 0x00, 0x00,
+    0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0xFF,
+};
+
+const f32 vec3_802fc018[3] = { 0.0f, 0.0f, 0.0f };
+const char str_StampN64_802fc030[] = "StampN64";

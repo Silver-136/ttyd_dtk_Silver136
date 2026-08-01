@@ -236,3 +236,6 @@ u8 effShockDisp(s32 cameraId, s32 effectAddress) {
     }
     return 0;
 }
+
+const f32 vec3_802fbef0[3] = { 0.0f, 0.0f, 0.0f };
+const char str_ShockN64_802fbf08[] = "ShockN64";

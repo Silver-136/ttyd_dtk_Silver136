@@ -11,8 +11,8 @@ void* effNanigaEntry(f32 x, f32 y, f32 z, s32 type, s32* items, s32 item) {
     extern void* camGetPtr(s32);
     extern void PSMTXMultVec(f32[3][4], f32*, f32*);
     extern void PSMTX44MultVec(f32[4][4], f32*, f32*);
-    extern char str_Naniga_80300a54[];
-    extern char str_EFF_naniga_80300a48[];
+    extern const char str_Naniga_80300a54[];
+    extern const char str_EFF_naniga_80300a48[];
     extern void* gpGlobals;
 
     void* effect = effEntry();
@@ -21,7 +21,7 @@ void* effNanigaEntry(f32 x, f32 y, f32 z, s32 type, s32* items, s32 item) {
     s32 index = 0;
     s32 random;
 
-    *(char**)((s32)effect + 0x14) = str_Naniga_80300a54;
+    *(const char**)((s32)effect + 0x14) = str_Naniga_80300a54;
     *(s32*)((s32)effect + 8) = 1;
     *(void**)((s32)effect + 0xC) = work;
     *(void**)((s32)effect + 0x10) = effNanigaMain;
@@ -56,7 +56,7 @@ void* effNanigaEntry(f32 x, f32 y, f32 z, s32 type, s32* items, s32 item) {
         work[18] = 0;
     }
 
-    animGroupBaseAsync(str_EFF_naniga_80300a48,
+    animGroupBaseAsync((char*)str_EFF_naniga_80300a48,
                        *(s32*)((s32)gpGlobals + 0x14) != 0, 0);
     work[16] = -1;
     work[17] = 0xFF;
@@ -92,10 +92,10 @@ void effNanigaMain(void* effect) {
     extern void effNanigaDisp(void*);
     extern void effNanigaDisp2(void*);
     extern void effNanigaDisp3(void*);
-    extern char str_SFX_ITEM_WHAT1_80300a28[];
-    extern char str_SFX_ITEM_WHAT2_80300a38[];
-    extern char str_EFF_naniga_80300a48[];
-    extern char str_A_1_80428120[];
+    extern const char str_SFX_ITEM_WHAT1_80300a28[];
+    extern const char str_SFX_ITEM_WHAT2_80300a38[];
+    extern const char str_EFF_naniga_80300a48[];
+    extern const char str_A_1_80428120[];
     u8* eff = (u8*)effect;
     u8* work = *(u8**)(eff + 0xC);
     Vec pos;
@@ -124,7 +124,7 @@ void effNanigaMain(void* effect) {
                                                    0.5f + (f32)irand(200) / 100.0f, 2);
                     effKemuTestDrawCam(smoke, 8);
                 }
-                psndSFXOn_3D(str_SFX_ITEM_WHAT1_80300a28, &pos);
+                psndSFXOn_3D((char*)str_SFX_ITEM_WHAT1_80300a28, &pos);
             }
             if (--*(s32*)(work + 0x24) < 0) {
                 *(s32*)(work + 0x24) = 0x3C;
@@ -135,7 +135,7 @@ void effNanigaMain(void* effect) {
             if (--*(s32*)(work + 0x24) < 0) {
                 *(s32*)(work + 0x24) = 0;
                 (*(s32*)(work + 0x20))++;
-                *(u32*)(work + 0x4C) = psndSFXOn_3D(str_SFX_ITEM_WHAT2_80300a38, &pos);
+                *(u32*)(work + 0x4C) = psndSFXOn_3D((char*)str_SFX_ITEM_WHAT2_80300a38, &pos);
             }
             break;
         case 3:
@@ -179,9 +179,9 @@ void effNanigaMain(void* effect) {
             break;
         case 10:
             if (*(s32*)(work + 0x24) != 0) (*(s32*)(work + 0x24))--;
-            else if (animGroupBaseAsync(str_EFF_naniga_80300a48, 0, 0) != 0) {
-                *(s32*)(work + 0x40) = animPoseEntry(str_EFF_naniga_80300a48, 0);
-                animPoseSetAnim(*(s32*)(work + 0x40), str_A_1_80428120, 1);
+            else if (animGroupBaseAsync((char*)str_EFF_naniga_80300a48, 0, 0) != 0) {
+                *(s32*)(work + 0x40) = animPoseEntry((char*)str_EFF_naniga_80300a48, 0);
+                animPoseSetAnim(*(s32*)(work + 0x40), (char*)str_A_1_80428120, 1);
                 (*(s32*)(work + 0x20))++;
             }
             break;
@@ -245,7 +245,7 @@ void effNanigaDisp(s32 cameraId, void* effect) {
     extern void GXLoadPosMtxImm(f32[3][4], s32);
     extern void GXSetCurrentMtx(s32);
     extern void GXBegin(s32, s32, s32);
-    extern f32 float_deg2rad_804280f0;
+    extern const f32 float_deg2rad_804280f0;
     extern void* gpGlobals;
     extern u8 itemDataTable[];
 
@@ -337,11 +337,11 @@ void effNanigaDisp2(s32 cameraId, void* effect) {
     extern void animPoseSetMaterialEvtColor(s32 poseId, u32* color);
     extern void animPoseMain(s32 poseId);
     extern void animPoseDrawMtx(s32 poseId, f32 mtx[3][4], s32 mode, f32 a, f32 b);
-    extern f32 float_20_804280f4;
-    extern f32 float_deg2rad_804280f0;
-    extern f32 float_0_804280f8;
-    extern f32 float_10_804280fc;
-    extern u32 dat_804280e0;
+    extern const f32 float_20_804280f4;
+    extern const f32 float_deg2rad_804280f0;
+    extern const f32 float_0_804280f8;
+    extern const f32 float_10_804280fc;
+    extern const u32 dat_804280e0;
 
     u32 evtColor;
     u32 color;
@@ -389,10 +389,10 @@ void effNanigaDisp3(s32 cameraId, void* effect) {
     extern void PSMTXConcat(f32 a[3][4], f32 b[3][4], f32 ab[3][4]);
     extern void iconDispGxCol(f32 mtx[3][4], s32 unk, s32 iconId, u32* color);
     extern u8 itemDataTable[];
-    extern f32 float_16_804280ec;
-    extern f32 float_deg2rad_804280f0;
-    extern u32 dat_804280e4;
-    extern u32 dat_804280e8;
+    extern const f32 float_16_804280ec;
+    extern const f32 float_deg2rad_804280f0;
+    extern const u32 dat_804280e4;
+    extern const u32 dat_804280e8;
 
     u32 color2;
     u32 color1;
@@ -430,3 +430,35 @@ void effNanigaDisp3(s32 cameraId, void* effect) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+const char str_SFX_ITEM_WHAT3_803009d0[] = "SFX_ITEM_WHAT3";
+const char str_SFX_ITEM_WHAT4_803009e0[] = "SFX_ITEM_WHAT4";
+const char str_SFX_ITEM_WHAT5_803009f0[] = "SFX_ITEM_WHAT5";
+const f32 vec3_80300a00[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_80300a0c[3] = { 0.0f, 0.0f, 0.0f };
+const f64 double_to_int_mask_80300a18 = 4503599627370496.0;
+const f64 double_to_int_80300a20 = 4503601774854144.0;
+const char str_SFX_ITEM_WHAT1_80300a28[] = "SFX_ITEM_WHAT1";
+const char str_SFX_ITEM_WHAT2_80300a38[] = "SFX_ITEM_WHAT2";
+const char str_EFF_naniga_80300a48[] = "EFF_naniga";
+const char str_Naniga_80300a54[] = "Naniga";
+
+const u32 dat_804280e0 = 0xFFFFFF00;
+const u32 dat_804280e4 = 0xFFFFFFFF;
+const u32 dat_804280e8 = 0xFFFFFFFF;
+const f32 float_16_804280ec = 16.0f;
+const f32 float_deg2rad_804280f0 = 0.017453292f;
+const f32 float_20_804280f4 = 20.0f;
+const f32 float_0_804280f8 = 0.0f;
+const f32 float_10_804280fc = 10.0f;
+const f32 float_1p5_80428100 = 1.5f;
+const f32 float_40_80428104 = 40.0f;
+const f32 float_0p5_80428108 = 0.5f;
+const f32 float_1_8042810c = 1.0f;
+const f32 float_neg40_80428110 = -40.0f;
+const f32 float_0p9_80428114 = 0.9f;
+const f32 float_100_80428118 = 100.0f;
+const f32 float_4_8042811c = 4.0f;
+const char str_A_1_80428120[] = "A_1";
+const f32 float_1024_80428124 = 1024.0f;
+const f32 float_0p8_80428128 = 0.8f;
+const f32 float_3_8042812c = 3.0f;

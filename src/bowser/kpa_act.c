@@ -232,7 +232,7 @@ void kpaAddCoinPos(s32 coin, f32* pos) {
     extern void* ksdp;
     extern s32 pouchAddKpaCoin(s32 coin);
     extern void pouchAddKpaScore(s32 score);
-    extern s32 strlen(const char* str);
+    extern u32 strlen(const char* str);
     extern f32 float_10_804272c8;
     extern f32 float_0p5_804272c4;
     extern f32 float_20_804272cc;
@@ -316,7 +316,7 @@ void kpaAddScore(s32 score) {
 void kpaAddScorePos(s32 score, f32* pos) {
     extern void* ksdp;
     extern void pouchAddKpaScore(s32 score);
-    extern s32 strlen(const char* str);
+    extern u32 strlen(const char* str);
     extern f32 float_10_804272c8;
     extern f32 float_0p5_804272c4;
     extern f32 float_20_804272cc;
@@ -387,3 +387,26 @@ s32 kpa_chg_pose(void* evt) {
     return 2;
 }
 
+const u32 vec3_802feb58[3] = { 0, 0, 0 };
+
+u32 kpa_score_disp_evt[9] = {
+    0x00010005,
+    0,
+    0x0001005B,
+    (u32)kpa_score_disp_main,
+    0x00010009,
+    1,
+    6,
+    2,
+    1,
+};
+
+void* ksdp;
+
+const u32 dat_804272c0 = 0xFFFFFFFF;
+const f32 float_0p5_804272c4 = 0.5f;
+const f32 float_10_804272c8 = 10.0f;
+const f32 float_20_804272cc = 20.0f;
+const f32 float_0_804272d0 = 0.0f;
+const f32 float_1_804272d4 = 1.0f;
+const f32 float_300_804272d8 = 300.0f;

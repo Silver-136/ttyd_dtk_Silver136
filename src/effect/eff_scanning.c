@@ -1,6 +1,6 @@
 #include "effect/eff_scanning.h"
 
-extern f32 float_1_804281f8;
+extern const f32 float_1_804281f8;
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -8,14 +8,14 @@ void* effScanningEntry(s32 type, f32 x, f32 y, f32 z) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
     extern void effScanningMain(void);
-    extern char str_Scanning_80300bc0[];
+    extern const char str_Scanning_80300bc0[];
 
     void* effect;
     void* work;
     f32 one;
 
     effect = effEntry();
-    *(char**)((s32)effect + 0x14) = str_Scanning_80300bc0;
+    *(const char**)((s32)effect + 0x14) = str_Scanning_80300bc0;
     *(s32*)((s32)effect + 8) = 1;
     work = __memAlloc(3, *(s32*)((s32)effect + 8) * 0x24);
     *(void**)((s32)effect + 0xC) = work;
@@ -50,8 +50,8 @@ void effScanningMain(void* effect) {
     extern f32 dispCalcZ(f32* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, f32 z, void* param);
     extern void effScanningDisp(s32 cameraId, void* effect);
-    extern char str_EFF_Scan_80300bb4[];
-    extern char str_Z_1_804281f4[];
+    extern const char str_EFF_Scan_80300bb4[];
+    extern const char str_Z_1_804281f4[];
 
     void* work;
     f32 pos[3];
@@ -103,9 +103,9 @@ void effScanningDisp(s32 cameraId, void* effect) {
     extern void PSMTXConcat(f32 a[3][4], f32 b[3][4], f32 ab[3][4]);
     extern void animPoseMain(s32 poseId);
     extern void animPoseDrawMtx(s32 poseId, f32 mtx[3][4], s32 mode, f32 a, f32 b);
-    extern f32 float_deg2rad_804281e8;
-    extern f32 float_0_804281ec;
-    extern f32 float_10_804281f0;
+    extern const f32 float_deg2rad_804281e8;
+    extern const f32 float_0_804281ec;
+    extern const f32 float_10_804281f0;
 
     f32 transMtx[3][4];
     f32 scaleMtx[3][4];
@@ -136,3 +136,12 @@ void effScanningDisp(s32 cameraId, void* effect) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+const f32 vec3_80300ba8[3] = { 0.0f, 0.0f, 0.0f };
+const char str_EFF_Scan_80300bb4[] = "EFF_Scan";
+const char str_Scanning_80300bc0[] = "Scanning";
+
+const f32 float_deg2rad_804281e8 = 0.017453292f;
+const f32 float_0_804281ec = 0.0f;
+const f32 float_10_804281f0 = 10.0f;
+const char str_Z_1_804281f4[] = "Z_1";
+const f32 float_1_804281f8 = 1.0f;

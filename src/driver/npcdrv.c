@@ -14,6 +14,9 @@ typedef struct NPCWork2 {
 } NPCWork2;
 
 NPCWork2 work;
+void* release_wp;
+s32 npcMainCount;
+s32 dbg_battleskip;
 char MarioStayPose[0x20] = "KPA_S_1";
 char MarioTalkPose[0x20] = "KPA_T_1";
 

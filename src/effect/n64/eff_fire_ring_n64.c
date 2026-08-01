@@ -28,6 +28,18 @@ typedef struct EffFireRingWork {
     u8 pad_53;
 } EffFireRingWork;
 
+typedef struct EffN64Vertex {
+    s16 x;
+    s16 y;
+    s16 z;
+    s16 s;
+    s16 t;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} EffN64Vertex;
+
 void* effEntry(void);
 void* __memAlloc(s32 heap, s32 size);
 
@@ -157,7 +169,7 @@ void effFireRingDisp(s32 cameraId, void* effect) {
     extern u32 dat_804251dc;
     extern f32 float_0p015873_804251e0;
     extern f32 float_0p032258_804251e8;
-    extern char stg__s_v[];
+    extern EffN64Vertex stg__s_v[];
     u8 texObj[0x20];
     f32 mtxA[3][4];
     f32 mtxB[3][4];
@@ -238,3 +250,66 @@ void effFireRingDisp(s32 cameraId, void* effect) {
 }
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
+
+EffN64Vertex stg__s_v[60] = {
+    {     99,      0,    205,   9173,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     54,      0,    113,   9641,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {      0,      0,    125,  10780,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {      0,      0,    228,  11247,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    178,      0,    142,   7566,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     98,      0,     78,   8034,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     54,      0,    113,   9173,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     99,      0,    205,   9640,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    222,      0,     51,   5960,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    122,      0,     28,   6427,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     98,      0,     78,   7566,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    178,      0,    142,   8034,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    222,      0,    -51,   4353,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    122,      0,    -28,   4820,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    122,      0,     28,   5960,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    222,      0,     51,   6427,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    178,      0,   -142,   2746,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     98,      0,    -78,   3213,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    122,      0,    -28,   4353,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    222,      0,    -51,   4820,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     99,      0,   -205,   1139,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     54,      0,   -113,   1607,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     98,      0,    -78,   2746,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    178,      0,   -142,   3213,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     27,      0,   -119,    570,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     54,      0,   -113,   1139,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     99,      0,   -205,   1607,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     49,      0,   -216,    570,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {      0,      0,    228,  10780,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {      0,      0,    125,  11247,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    -54,      0,    113,  12387,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    -99,      0,    205,  12854,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {      0,      0,   -228,  22027,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    -99,      0,   -205,  20420,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   -178,      0,   -142,  18814,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   -222,      0,    -51,  17207,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   -222,      0,     51,  15600,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   -178,      0,    142,  13993,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    -99,      0,    205,  12387,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {      0,      0,   -125,  22494,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     27,      0,   -119,  23064,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {     49,      0,   -216,  23064,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    -54,      0,   -113,  20888,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {      0,      0,   -125,  22027,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {      0,      0,   -228,  22494,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    -98,      0,    -78,  19281,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    -54,      0,   -113,  20420,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    -99,      0,   -205,  20888,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   -122,      0,    -28,  17674,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    -98,      0,    -78,  18814,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   -178,      0,   -142,  19281,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   -122,      0,     28,  16068,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   -122,      0,    -28,  17207,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   -222,      0,    -51,  17674,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    -98,      0,     78,  14461,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   -122,      0,     28,  15600,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   -222,      0,     51,  16067,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    -54,      0,    113,  12854,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {    -98,      0,     78,  13993,   2048, 0xFF, 0xFF, 0xFF, 0xFF },
+    {   -178,      0,    142,  14461,   4096, 0xFF, 0xFF, 0xFF, 0xFF },
+};

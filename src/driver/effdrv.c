@@ -5,6 +5,8 @@ typedef struct EffWork {
     EffEntry* entries;
     void* unk8;
     s32 unkC;
+    void* unk10;
+    s32 unk14;
 } EffWork;
 
 typedef struct EffGp {
@@ -12,8 +14,201 @@ typedef struct EffGp {
     s32 unk14;
 } EffGp;
 
-extern EffWork* wp;
+typedef struct EffSetEntry {
+    s16 id;
+    s16 pad;
+    const char* name;
+} EffSetEntry;
+
+EffWork work;
+EffWork* wp = &work;
 extern EffGp* gp;
+
+const char str_kemuri_802c1c80[] = "kemuri";
+const char str_confetti_802c1c88[] = "confetti";
+const char str_fukidashi_802c1c94[] = "fukidashi";
+const char str_butterfly_802c1ca0[] = "butterfly";
+const char str_damage_star_802c1cac[] = "damage_star";
+const char str_small_star_802c1cb8[] = "small_star";
+const char str_mario_balloon_802c1cc4[] = "mario_balloon";
+const char str_stardust_802c1cd4[] = "stardust";
+const char str_recovery_802c1ce0[] = "recovery";
+const char str_miss_star_802c1cec[] = "miss_star";
+const char str_breath_fire_802c1cf8[] = "breath_fire";
+const char str_confusion_802c1d04[] = "confusion";
+const char str_updown_802c1d10[] = "updown";
+const char str_charge_802c1d18[] = "charge";
+const char str_toge_flush_802c1d20[] = "toge_flush";
+const char str_ripple_802c1d2c[] = "ripple";
+const char str_coin_fukidashi_802c1d34[] = "coin_fukidashi";
+const char str_star_point_802c1d44[] = "star_point";
+const char str_puni_balloon_802c1d50[] = "puni_balloon";
+const char str_p_fukidashi_802c1d60[] = "p_fukidashi";
+const char str_kemuri_test_802c1d6c[] = "kemuri_test";
+const char str_starstone_802c1d78[] = "starstone";
+const char str_itemget_802c1d84[] = "itemget";
+const char str_status_802c1d8c[] = "status";
+const char str_pointget_802c1d94[] = "pointget";
+const char str_levelup_802c1da0[] = "levelup";
+const char str_stageclear_802c1da8[] = "stageclear";
+const char str_fpdamage_802c1db4[] = "fpdamage";
+const char str_mobj_broken_802c1dc0[] = "mobj_broken";
+const char str_mahojin_802c1dcc[] = "mahojin";
+const char str_mizutama_802c1dd4[] = "mizutama";
+const char str_minigame_802c1de0[] = "minigame";
+const char str_splash_802c1dec[] = "splash";
+const char str_treasure_map_802c1df4[] = "treasure_map";
+const char str_funemizu_802c1e04[] = "funemizu";
+const char str_teresa_802c1e10[] = "teresa";
+const char str_batten_802c1e18[] = "batten";
+const char str_naniga_802c1e20[] = "naniga";
+const char str_sandars_802c1e28[] = "sandars";
+const char str_boomerang_802c1e30[] = "boomerang";
+const char str_irekae_802c1e3c[] = "irekae";
+const char str_rankup_802c1e44[] = "rankup";
+const char str_scanning_802c1e4c[] = "scanning";
+const char str_particle_802c1e58[] = "particle";
+const char str_mahorn_802c1e64[] = "mahorn";
+const char str_spirit_802c1e6c[] = "spirit";
+const char str_indirect_802c1e74[] = "indirect";
+const char str_syuryou_802c1e80[] = "syuryou";
+const char str_uranoko_802c1e88[] = "uranoko";
+const char str_hibashira_802c1e90[] = "hibashira";
+const char str_number_802c1e9c[] = "number";
+const char str_machingegun_802c1ea4[] = "machingegun";
+const char str_las_mon_802c1eb0[] = "las_mon";
+const char str_energy_802c1eb8[] = "energy";
+const char str_biribirikinoko_802c1ec0[] = "biribirikinoko";
+const char str_nokotarou_802c1ed0[] = "nokotarou";
+const char str_queen2_802c1edc[] = "queen2";
+const char str_gonbaba_breath_802c1ee4[] = "gonbaba_breath";
+const char str_majinai_802c1ef4[] = "majinai";
+const char str_mahorn2_802c1efc[] = "mahorn2";
+const char str_ultra_hammer_802c1f04[] = "ultra_hammer";
+
+const char str_hit_804200e8[] = "hit";
+const char str_mugi_804200ec[] = "mugi";
+const char str_nice_804200f4[] = "nice";
+const char str_torch_804200fc[] = "torch";
+const char str_spark_80420104[] = "spark";
+const char str_ice_8042010c[] = "ice";
+const char str_fire_80420110[] = "fire";
+const char str_bomb_80420118[] = "bomb";
+const char str_fall_80420120[] = "fall";
+const char str_break_80420128[] = "break";
+const char str_nozle_80420130[] = "nozle";
+const char str_kiss_80420138[] = "kiss";
+const char str_mist_80420140[] = "mist";
+const char str_sheep_80420148[] = "sheep";
+const char str_toiki_80420150[] = "toiki";
+const char str_mist2_80420158[] = "mist2";
+const char str_ibuki_80420160[] = "ibuki";
+const char str_laser_80420168[] = "laser";
+const char str_sleep_80420170[] = "sleep";
+const char str_queen_80420178[] = "queen";
+const char str_jp_80420180[] = "jp";
+const char str_us_80420184[] = "us";
+const char str_ge_80420188[] = "ge";
+const char str_fr_8042018c[] = "fr";
+const char str_sp_80420190[] = "sp";
+const char str_it_80420194[] = "it";
+const char str_du_80420198[] = "du";
+
+const char* prefix_tbl[] = {
+    str_jp_80420180,
+    str_us_80420184,
+    str_ge_80420188,
+    str_fr_8042018c,
+    str_sp_80420190,
+    str_it_80420194,
+    str_du_80420198,
+};
+
+EffSetEntry eff_set_table[] = {
+    { 0, 0, str_kemuri_802c1c80 },
+    { 1, 0, str_confetti_802c1c88 },
+    { 2, 0, str_fukidashi_802c1c94 },
+    { 3, 0, str_butterfly_802c1ca0 },
+    { 4, 0, str_hit_804200e8 },
+    { 5, 0, str_damage_star_802c1cac },
+    { 6, 0, str_small_star_802c1cb8 },
+    { 7, 0, str_mario_balloon_802c1cc4 },
+    { 8, 0, str_mugi_804200ec },
+    { 9, 0, str_stardust_802c1cd4 },
+    { 10, 0, str_recovery_802c1ce0 },
+    { 11, 0, str_miss_star_802c1cec },
+    { 12, 0, str_nice_804200f4 },
+    { 13, 0, str_breath_fire_802c1cf8 },
+    { 14, 0, str_torch_804200fc },
+    { 15, 0, str_confusion_802c1d04 },
+    { 16, 0, str_spark_80420104 },
+    { 17, 0, str_updown_802c1d10 },
+    { 18, 0, str_charge_802c1d18 },
+    { 19, 0, str_toge_flush_802c1d20 },
+    { 20, 0, str_ice_8042010c },
+    { 21, 0, str_fire_80420110 },
+    { 22, 0, str_bomb_80420118 },
+    { 23, 0, str_ripple_802c1d2c },
+    { 24, 0, str_coin_fukidashi_802c1d34 },
+    { 25, 0, str_star_point_802c1d44 },
+    { 26, 0, str_puni_balloon_802c1d50 },
+    { 27, 0, str_p_fukidashi_802c1d60 },
+    { 28, 0, str_kemuri_test_802c1d6c },
+    { 29, 0, str_starstone_802c1d78 },
+    { 30, 0, str_itemget_802c1d84 },
+    { 31, 0, str_status_802c1d8c },
+    { 32, 0, str_pointget_802c1d94 },
+    { 33, 0, str_levelup_802c1da0 },
+    { 34, 0, str_stageclear_802c1da8 },
+    { 35, 0, str_fall_80420120 },
+    { 36, 0, str_fpdamage_802c1db4 },
+    { 37, 0, str_break_80420128 },
+    { 38, 0, str_mobj_broken_802c1dc0 },
+    { 39, 0, str_mahojin_802c1dcc },
+    { 40, 0, str_nozle_80420130 },
+    { 41, 0, str_mizutama_802c1dd4 },
+    { 42, 0, str_minigame_802c1de0 },
+    { 43, 0, str_splash_802c1dec },
+    { 44, 0, str_treasure_map_802c1df4 },
+    { 45, 0, str_kiss_80420138 },
+    { 46, 0, str_funemizu_802c1e04 },
+    { 47, 0, str_mist_80420140 },
+    { 48, 0, str_teresa_802c1e10 },
+    { 49, 0, str_batten_802c1e18 },
+    { 50, 0, str_sheep_80420148 },
+    { 51, 0, str_naniga_802c1e20 },
+    { 52, 0, str_sandars_802c1e28 },
+    { 53, 0, str_boomerang_802c1e30 },
+    { 54, 0, str_irekae_802c1e3c },
+    { 55, 0, str_rankup_802c1e44 },
+    { 56, 0, str_scanning_802c1e4c },
+    { 57, 0, str_toiki_80420150 },
+    { 58, 0, str_mist2_80420158 },
+    { 59, 0, str_particle_802c1e58 },
+    { 60, 0, str_ibuki_80420160 },
+    { 61, 0, str_mahorn_802c1e64 },
+    { 62, 0, str_spirit_802c1e6c },
+    { 63, 0, str_indirect_802c1e74 },
+    { 64, 0, str_syuryou_802c1e80 },
+    { 65, 0, str_uranoko_802c1e88 },
+    { 66, 0, str_hibashira_802c1e90 },
+    { 67, 0, str_number_802c1e9c },
+    { 68, 0, str_laser_80420168 },
+    { 69, 0, str_machingegun_802c1ea4 },
+    { 70, 0, str_las_mon_802c1eb0 },
+    { 71, 0, str_sleep_80420170 },
+    { 72, 0, str_energy_802c1eb8 },
+    { 73, 0, str_biribirikinoko_802c1ec0 },
+    { 74, 0, str_nokotarou_802c1ed0 },
+    { 75, 0, str_queen_80420178 },
+    { 76, 0, str_queen2_802c1edc },
+    { 77, 0, str_gonbaba_breath_802c1ee4 },
+    { 78, 0, str_majinai_802c1ef4 },
+    { 79, 0, str_mahorn2_802c1efc },
+    { 80, 0, str_ultra_hammer_802c1f04 },
+};
+
+EffSetEntry gap_05_80309A30_data = { -1, 0, 0 };
 
 void __memFree(s32 heap, void* ptr);
 void UnpackTexPalette(void* tpl);
@@ -84,17 +279,19 @@ void effTexSetup(void) {
 void effGetTexObj(s32 id, void* texObj) {
     extern void GXInitTexObj(void*, void*, s32, s32, s32, s32, s32, s32);
     extern void TEXGetGXTexObjFromPalette(void*, s32, void*);
+    static u8 dummy[32] = {0};
+    static u8 dummy2[8] = {0};
 
     if (id < 0x76) {
         if (wp->unkC == 0) {
-            GXInitTexObj(texObj, (void*)0x80420188, 1, 1, 0, 0, 0, 0);
+            GXInitTexObj(texObj, dummy, 1, 1, 0, 0, 0, 0);
         } else {
             TEXGetGXTexObjFromPalette(wp->unk8, id, texObj);
         }
     } else {
         void* file = *(void**)((s32)wp + 0x10);
         if (file == 0) {
-            GXInitTexObj(texObj, (void*)0x8042018C, 1, 1, 0, 0, 0, 0);
+            GXInitTexObj(texObj, dummy2, 1, 1, 0, 0, 0, 0);
         } else {
             TEXGetGXTexObjFromPalette(*(void**)*(void**)((s32)file + 0xA0), id - 0x76, texObj);
         }
@@ -162,11 +359,10 @@ void effMain(void) {
     extern void* getMarioStDvdRoot(void);
     extern void* fileAsyncf(s32, s32, const char*, ...);
     extern void* fileAllocf(s32, const char*, ...);
-    extern char* prefix_tbl[];
     s32 i;
     s32 count;
     void* entry;
-    char* prefix;
+    const char* prefix;
 
     count = wp->count;
     entry = wp->entries;
@@ -254,12 +450,6 @@ void* effNameToPtr(char* name) {
 #pragma use_lmw_stmw off
 void* effGetSet(char* name) {
     extern s32 strcmp(const char* s1, const char* s2);
-    typedef struct EffSetEntry {
-        s16 id;
-        s16 pad;
-        char* name;
-    } EffSetEntry;
-    extern EffSetEntry eff_set_table[];
     EffSetEntry* entry = eff_set_table;
     s32 i = 0;
     while (entry->id != -1) {
@@ -526,4 +716,3 @@ void effDrawMayaPoly(void* data) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-

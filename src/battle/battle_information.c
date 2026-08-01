@@ -1,4 +1,5 @@
 #include "battle/battle_information.h"
+#include "mario/mario_pouch.h"
 
 void BattleInformationSetMode(void* info, s32 mode) {
     *(s32*)((s32)info + 0x0) = mode;
@@ -43,7 +44,7 @@ void BattleInformationSetDropMaterial(void* fbatBattleInfo) {
     extern s32 evtGetValue(void* event, s32 value);
     extern s32 irand(s32 max);
     extern s32 pouchEquipCheckBadge(s32 badgeId);
-    extern s32 N_item_hog_table[];
+    extern const s32 N_item_hog_table[];
     extern void* _battleWorkPointer;
     void* info = *(void**)((s32)fbatBattleInfo + 0xC);
     void* setup = *(void**)((s32)info + 0x18);
@@ -178,3 +179,31 @@ void BattleInformationSetDropMaterial(void* fbatBattleInfo) {
         *(s32*)((s32)info + 0xC) = hogItems[irand(25)];
     }
 }
+
+const s32 N_item_hog_table[25] = {
+    ITEM_DRIED_SHROOM,
+    ITEM_DRIED_SHROOM,
+    ITEM_DRIED_SHROOM,
+    ITEM_FRIGHT_MASK,
+    ITEM_MUSHROOM,
+    ITEM_HONEY_SYRUP,
+    ITEM_TASTY_TONIC,
+    ITEM_FIRE_FLOWER,
+    ITEM_VOLT_SHROOM,
+    ITEM_POW_BLOCK,
+    ITEM_NULL,
+    ITEM_NULL,
+    ITEM_NULL,
+    ITEM_NULL,
+    ITEM_NULL,
+    ITEM_NULL,
+    ITEM_NULL,
+    ITEM_NULL,
+    ITEM_NULL,
+    ITEM_NULL,
+    ITEM_NULL,
+    ITEM_NULL,
+    ITEM_NULL,
+    ITEM_NULL,
+    ITEM_NULL,
+};

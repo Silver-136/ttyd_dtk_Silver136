@@ -4,12 +4,12 @@ void* effEntry(void);
 void* __memAlloc(s32 heap, u32 size);
 void effMahornMain(void* entry);
 
-extern char str_Mahorn_80302968[];
 extern f32 float_0_804287f8;
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effMahornEntry(s32 kind, s32 count, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
+    extern char str_Mahorn_80302968[];
     void* entry = effEntry();
     s32 workCount = count + 1;
     void* work;
@@ -245,3 +245,20 @@ void effMahornDisp(s32 cameraId, void* effect) {
         }
     }
 }
+
+const u32 vec3_80302950[] = { 0x00000000, 0x00000000, 0x00000000 };
+const char str_Mahorn_80302968[] = "Mahorn";
+
+u8 scale_dt[21] = {
+    0, 7, 14, 22, 30, 38, 47, 55, 63, 71, 78,
+    84, 90, 94, 98, 100, 100, 85, 51, 16, 0,
+};
+
+static u8 scale_dt_padding[3] = { 0 };
+
+u8 scale_dt2[21] = {
+    0, 19, 41, 63, 82, 95, 100, 99, 95, 89, 81,
+    71, 61, 51, 40, 30, 20, 12, 6, 2, 0,
+};
+
+static u8 scale_dt2_padding[3] = { 0 };

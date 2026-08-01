@@ -1,7 +1,7 @@
 #include "action/ac_monosiri_target.h"
 
 extern void* _battleWorkPointer;
-extern s32 _frame_table[4];
+extern s32 _frame_table[7];
 extern f32 float_0_80428604;
 
 s32 BattleActionCommandGetDifficulty(void* battleWork);
@@ -269,3 +269,19 @@ void actionCommandDisp(f32 x, f32 y) {
         iconDispGx(1.0f, iconPosition, 0x10, normalIcon);
     }
 }
+
+const u32 vec3_80301220[] = { 0x3F800000, 0x3F800000, 0x3F800000 };
+const u32 vec3_8030122c[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_80301238[] = { 0x3F800000, 0x3F800000, 0x3F800000 };
+const u32 vec3_80301244[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_80301250[] = { 0x3F800000, 0x3F800000, 0x3F800000 };
+const u32 vec3_8030125c[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_80301268[] = { 0x00000000, 0x00000000, 0x3F800000 };
+const u32 vec3_80301274[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_80301280[] = { 0x3F800000, 0x3F800000, 0x3F800000 };
+const u32 vec3_8030128c[] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_80301298[] = { 0x00000000, 0x00000000, 0x00000000 };
+
+s32 _frame_table[7] = {
+    240, 180, 120, 90, 70, 40, 20,
+};

@@ -7,8 +7,6 @@ typedef struct EvtLightVec {
     f32 z;
 } EvtLightVec;
 
-extern EvtLightVec vec3_802f3748[];
-extern EvtLightVec vec3_802f3754[];
 extern s32 evtGetValue(void* event, s32 value);
 extern void animPoseSetMaterialLightFlagOn(void* pose, s32 flag);
 extern void animPoseSetMaterialLightFlagOff(void* pose, s32 flag);
@@ -94,6 +92,8 @@ s32 evt_light_npc_lighting_onoff(void* event, s32 isFirstCall) {
 #pragma use_lmw_stmw on
 
 s32 evt_light_bind_mapobj(void* event, s32 isFirstCall) {
+    extern EvtLightVec vec3_802f3748[];
+    extern EvtLightVec vec3_802f3754[];
     extern void* lightNameToPtr(s32 name);
     extern void* mapGetMapObj(s32 name);
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
@@ -142,3 +142,11 @@ s32 evt_light_bind_mapobj(void* event, s32 isFirstCall) {
     PSVECAdd(&base, &pos, (void*)((s32)light + 0x24));
     return 0;
 }
+
+const EvtLightVec vec3_802f3748[1] = {
+    { 0.0f, 0.0f, 0.0f },
+};
+
+const EvtLightVec vec3_802f3754[1] = {
+    { 0.0f, 0.0f, 0.0f },
+};

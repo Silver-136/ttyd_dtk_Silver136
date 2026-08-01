@@ -9,7 +9,6 @@ typedef struct BatstageVec3 {
 extern s32 evtGetValue(void* event, s32 value);
 extern void BattleStageReturnStgDarkBase(s32 value1, s32 value2);
 extern void BattleStageReturnAudDarkBase(s32 value1, s32 value2);
-extern char dat_802f38f8[];
 
 #define COPY_BATSTAGE_NAMES(dstBase, srcBase)       \
     do {                                            \
@@ -130,6 +129,7 @@ s32 evt_batstage_return_aud_dark_base(void* event, s32 isFirstCall) {
 
 
 s32 evt_batstage_light_set_player_on(void* event, s32 isFirstCall) {
+    extern char dat_802f38f8[];
     extern s32 BattleStageGetLightNumberByName(char* name);
     extern s32 BattleStageSysLightEntry(char* name);
     extern void BattleStageLightSetLightColor(s32 lightId, u8 r, u8 g, u8 b, s32 fadeFrames, s32 unk);
@@ -290,6 +290,7 @@ s32 evt_batstage_light_set_player_on(void* event, s32 isFirstCall) {
     return 2;
 }
 s32 evt_batstage_light_set_player_off(void* event, s32 isFirstCall) {
+    extern char dat_802f38f8[];
     extern s32 BattleStageGetLightNumberByName(const char* name);
     extern void BattleStageLightRelease(s32 lightId, s32 fadeFrames, s32 unk);
 
@@ -316,3 +317,45 @@ s32 evt_batstage_light_set_player_off(void* event, s32 isFirstCall) {
 
     return 2;
 }
+
+const char dat_802f38f8[3][0x20] = {
+    "sys_activeUnit_1",
+    "sys_activeUnit_2",
+    "sys_activeUnit_3",
+};
+
+const BatstageVec3 dat_802f3958[3] = {
+    { 100.0f, 250.0f, 70.0f },
+    { -300.0f, 250.0f, 70.0f },
+    { -120.0f, 250.0f, -70.0f },
+};
+
+const BatstageVec3 dat_802f397c[3] = {
+    { 100.0f, 0.0f, -70.0f },
+    { -300.0f, 0.0f, -70.0f },
+    { -120.0f, 0.0f, -70.0f },
+};
+
+const BatstageVec3 dat_802f39a0[3] = {
+    { 15.0f, 0.0f, 15.0f },
+    { -15.0f, 0.0f, 15.0f },
+    { 0.0f, 0.0f, -15.0f },
+};
+
+const BatstageVec3 dat_802f39c4[3] = {
+    { 0.0f, 0.0f, -1.0f },
+    { 0.0f, 0.0f, -1.0f },
+    { 0.0f, 0.0f, -1.0f },
+};
+
+const char dat_802f39e8[9] = {
+    'x', 'x', 'x',
+    'x', 'x', 'x',
+    'x', 'x', 'x',
+};
+
+const char str_sys_activeUnit_1_802f39f4[] = "sys_activeUnit_1";
+const char str_sys_activeUnit_2_802f3a08[] = "sys_activeUnit_2";
+const char str_sys_activeUnit_3_802f3a1c[] = "sys_activeUnit_3";
+
+const u8 unk_804295d8[3];

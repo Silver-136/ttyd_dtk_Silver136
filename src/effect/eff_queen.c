@@ -13,12 +13,12 @@ void animPoseSetMaterialEvtColor(s32 poseId, void* color);
 void animPoseMain(s32 poseId);
 void animPoseDrawMtx(s32 poseId, Mtx matrix, f32 arg2, s32 pass, f32 arg4);
 
-extern u32 dat_80428a50;
-extern f32 float_deg2rad_80428a54;
-extern f32 float_0_80428a58;
-extern f32 float_10_80428a5c;
-extern char str_Queen_80428a68;
-extern f32 float_1_80428a70;
+extern const u32 dat_80428a50;
+extern const f32 float_deg2rad_80428a54;
+extern const f32 float_0_80428a58;
+extern const f32 float_10_80428a5c;
+extern const char str_Queen_80428a68[];
+extern const f32 float_1_80428a70;
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effQueenEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
@@ -31,7 +31,7 @@ void* effQueenEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
     s32 minusOne;
     s32 alpha;
 
-    *(char**)((s32)entry + 0x14) = &str_Queen_80428a68;
+    *(char**)((s32)entry + 0x14) = (char*)str_Queen_80428a68;
     *(s32*)((s32)entry + 8) = 1;
     work = __memAlloc(3, (u32)(*(s32*)((s32)entry + 8) * 0x2C));
     callback = effQueenMain;
@@ -187,3 +187,17 @@ void effQueenDisp(s32 cameraId, void* entry) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+const u32 vec3_80302b28[3] = { 0, 0, 0 };
+const char str_MOBJ_EFF_queen_torna_80302b34[] = "MOBJ_EFF_queen_tornade";
+__declspec(section ".rodata") const u8 gap_04_80302B4B_rodata[5] = { 0 };
+
+const u32 dat_80428a50 = 0xFFFFFF00;
+const f32 float_deg2rad_80428a54 = 0.017453292f;
+const f32 float_0_80428a58 = 0.0f;
+const f32 float_10_80428a5c = 10.0f;
+const char str_S_1_80428a60[] = "S_1";
+const f32 float_0p8_80428a64 = 0.8f;
+const char str_Queen_80428a68[] = "Queen";
+const u8 gap_09_80428A6E_sdata2[2] = { 0 };
+const f32 float_1_80428a70 = 1.0f;
+const f32 gap_09_80428A74_sdata2 = 0.0f;

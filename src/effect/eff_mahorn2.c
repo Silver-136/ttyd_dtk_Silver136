@@ -1,5 +1,17 @@
 #include "effect/eff_mahorn2.h"
 
+__declspec(section ".rodata") u32 vec3_80302fa8[3] = { 0, 0, 0 };
+__declspec(section ".rodata") u32 vec3_80302fb4[3] = { 0, 0, 0 };
+__declspec(section ".rodata") u32 vec3_80302fc0[3] = { 0, 0, 0 };
+__declspec(section ".rodata") f32 dat_80302fcc[6] = {
+    0.0f, 2.0f, 2.0f, 12.0f, 12.0f, 14.0f,
+};
+__declspec(section ".rodata") f32 dat_80302fe4[6] = {
+    0.0f, 0.5f, 0.5f, 0.5f, 0.5f, 1.0f,
+};
+__declspec(section ".rodata") char str_Mahorn2_80302ffc[] = "Mahorn2";
+__declspec(section ".rodata") u32 gap_04_80303004_rodata = 0;
+
 /* CHATGPT FALLBACK MISSING STUBS: main/effect/eff_mahorn2 20260624_191429 */
 
 /* fallback stub-fill: map=effMahorn2Entry addr=0x8025d3f8 size=0x00000344 */
@@ -11,7 +23,6 @@ void* effMahorn2Entry(f32 x, f32 y, f32 z, f32 targetX, f32 targetY,
     extern f64 sin(f64 angle);
     extern f64 cos(f64 angle);
     extern void effMahorn2Main(void* entry);
-    extern char str_Mahorn2_80302ffc[];
     extern f32 float_0_80428b58;
     extern f32 float_6_80428b7c;
     extern f32 float_6p2832_80428b80;

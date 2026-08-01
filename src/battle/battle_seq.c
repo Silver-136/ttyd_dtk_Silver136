@@ -39,8 +39,8 @@ void btlseqAct(void* battleWork);
 extern u8 subsetevt_happy_heart[];
 extern u8 subsetevt_happy_flower[];
 extern char str_SFX_CONDITION_BREAK__802efb94[];
-extern f32 float_1_8042256c;
-extern f32 float_900_80422594;
+extern const f32 float_1_8042256c;
+extern const f32 float_900_80422594;
 extern u8 subsetevt_status_recovery[];
 extern char str_SFX_REST_CONDITION1_802efb80[];
 extern u8 subsetevt_regeneration[];
@@ -1314,7 +1314,7 @@ void _rule_disp(void) {
     extern char* _rule_msg_table_1bu[];
     extern char* _rule_msg_table_2bu[];
     extern char* _rule_msg_table_after[];
-    extern u32 dat_80422554;
+    extern const u32 dat_80422554;
     char buffer[256];
     void* information;
     char* message;
@@ -1967,11 +1967,11 @@ void _mapobj_data_touch_scale(s32 id) {
 
 s32 _set_haikei_entry_scale(void* work, s32 reset) {
     extern void* _battleWorkPointer;
-    extern f32 float_0_80422568;
-    extern f32 float_1_8042256c;
-    extern f32 float_90_80422578;
-    extern f32 float_100_8042257c;
-    extern f32 float_110_80422574;
+    extern const f32 float_0_80422568;
+    extern const f32 float_1_8042256c;
+    extern const f32 float_90_80422578;
+    extern const f32 float_100_8042257c;
+    extern const f32 float_110_80422574;
     extern char str_A1_80422564[];
     extern char str_A2_80422570[];
     extern void* mapGetMapObj(char* name);
@@ -2101,3 +2101,29 @@ s32 _set_haikei_entry_scale(void* work, s32 reset) {
 
     return touched != 0 ? 0 : 2;
 }
+
+const u32 dat_80422550 = 0x000000FF;
+const u32 dat_80422554 = 0xFFFFFFFF;
+const char str_a_80422558[2] = "a";
+const u8 gap_after_str_a_8042255a[2] = {0};
+const char str_test_8042255c[5] = "test";
+const u8 gap_after_str_test_80422561[3] = {0};
+const char str_A1_80422564[3] = "A1";
+const u8 gap_09_80422567_sdata2 = 0;
+const f32 float_0_80422568 = 0.0f;
+const f32 float_1_8042256c = 1.0f;
+const char str_A2_80422570[3] = "A2";
+const u8 gap_09_80422573_sdata2 = 0;
+const f32 float_110_80422574 = 110.0f;
+const f32 float_90_80422578 = 90.0f;
+const f32 float_100_8042257c = 100.0f;
+const f32 float_1000_80422580 = 1000.0f;
+const f32 float_2_80422584 = 2.0f;
+const f32 float_10_80422588 = 10.0f;
+const f32 float_94_8042258c = 94.0f;
+const f32 float_120_80422590 = 120.0f;
+const f32 float_900_80422594 = 900.0f;
+const f32 float_45_80422598 = 45.0f;
+const f32 float_60_8042259c = 60.0f;
+const f32 float_0p75_804225a0 = 0.75f;
+const u32 gap_09_804225A4_sdata2 = 0;

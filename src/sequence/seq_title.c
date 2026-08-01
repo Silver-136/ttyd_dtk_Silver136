@@ -56,21 +56,21 @@ extern void GXSetTevSwapModeTable(s32 table, s32 r, s32 g, s32 b, s32 a);
 #define FIFO_F32 (*(volatile f32*)0xCC008000)
 extern u32 vec3_802bf3f8[];
 extern u32 vec3_802bf404[];
-extern u32 dat_8041f584;
-extern u32 dat_8041f588;
-extern u32 dat_8041f58c;
-extern u32 dat_8041f590;
-extern u32 dat_8041f558;
-extern u32 dat_8041f55c;
-extern u32 dat_8041f560;
-extern u32 dat_8041f564;
-extern u32 dat_8041f568;
-extern u32 dat_8041f56c;
-extern u32 dat_8041f570;
-extern u32 dat_8041f574;
-extern u32 dat_8041f578;
-extern u32 dat_8041f57c;
-extern u32 dat_8041f580;
+extern const u32 dat_8041f584;
+extern const u32 dat_8041f588;
+extern const u32 dat_8041f58c;
+extern const u32 dat_8041f590;
+extern const u32 dat_8041f558;
+extern const u32 dat_8041f55c;
+extern const u32 dat_8041f560;
+extern const u32 dat_8041f564;
+extern const u32 dat_8041f568;
+extern const u32 dat_8041f56c;
+extern const u32 dat_8041f570;
+extern const u32 dat_8041f574;
+extern const u32 dat_8041f578;
+extern const u32 dat_8041f57c;
+extern const u32 dat_8041f580;
 extern void fileFree(void* file);
 extern void psndStopAllFadeOut(void);
 extern const f32 float_neg170_8041f5cc;
@@ -91,7 +91,6 @@ extern s32 getMarioStDvdRoot(void);
 extern void fileAsyncf(s32 id, s32 flags, void* path, ...);
 extern s32 psndSFXOn(s32 id);
 extern void psndBGMOff_f_d(s32 flags, s32 duration, s32 fadeType);
-extern void seqSetSeq(s32 seq, void* arg1, void* arg2);
 extern s32 pouchGetHP(void);
 extern void pouchSetHP(s32 hp);
 extern u32 keyGetButtonTrg(s32 controller);
@@ -511,7 +510,7 @@ void titleMain(void* seq) {
                 *(s32*)(gp + 0x110) = 0xA;
                 *(s32*)(gp + 0x114) = 0;
 
-                seqSetSeq(3, (void*)((s32)vec + 0x104), 0);
+                seqSetSeq(3, (s32)vec + 0x104, 0);
             }
             break;
     }
@@ -999,5 +998,45 @@ void pressStartGX(u8 alpha, f32 x, f32 y) {
     GXSetTevSwapModeTable(1, 0, 1, 2, 3);
 }
 
+u8 work2[0x34];
+s32 wp2 = (s32)work2;
+
+const u32 dat_8041f558 = 0xFFFFFFFF;
+const u32 dat_8041f55c = 0x000000FF;
+const u32 dat_8041f560 = 0xFFFFFFFF;
+const u32 dat_8041f564 = 0x000000FF;
+const u32 dat_8041f568 = 0xFFFFFFFF;
+const u32 dat_8041f56c = 0x000000FF;
+const u32 dat_8041f570 = 0xFFFFFFFF;
+const u32 dat_8041f574 = 0xFFFFFFFF;
+const u32 dat_8041f578 = 0xFFFFFFFF;
+const u32 dat_8041f57c = 0x000000FF;
+const u32 dat_8041f580 = 0x000000FF;
+const u32 dat_8041f584 = 0xFFFFFFFF;
+const u32 dat_8041f588 = 0xFFFFFFFF;
+const u32 dat_8041f58c = 0xFFFFFFFF;
+const u32 dat_8041f590 = 0xFAFAFAFF;
+const f32 float_1_8041f594 = 1.0f;
+const f32 float_neg200_8041f598 = -200.0f;
+const f32 float_0_8041f59c = 0.0f;
+const f32 float_neg0p5_8041f5a0 = -0.5f;
+const f32 float_0p5_8041f5a4 = 0.5f;
+const f32 float_20_8041f5a8 = 20.0f;
+const f32 float_6p2832_8041f5ac = 6.2831855f;
+const f32 float_120_8041f5b0 = 120.0f;
+const f32 float_459_8041f5b4 = 459.0f;
+const f32 float_neg122_8041f5b8 = -122.0f;
+const f32 float_0p8_8041f5bc = 0.8f;
+const f32 float_60_8041f5c0 = 60.0f;
+const f32 float_220_8041f5c4 = 220.0f;
+const f32 float_200_8041f5c8 = 200.0f;
+const f32 float_neg170_8041f5cc = -170.0f;
+const f32 float_300_8041f5d0 = 300.0f;
+const f32 float_neg300_8041f5d4 = -300.0f;
+const f32 float_0p1_8041f5d8 = 0.1f;
+const f32 float_400_8041f5dc = 400.0f;
+const f32 float_neg400_8041f5e0 = -400.0f;
+const f32 float_1000_8041f5e4 = 1000.0f;
+const f32 float_neg1000_8041f5e8 = -1000.0f;
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset

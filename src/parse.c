@@ -1,6 +1,7 @@
 #include "parse.h"
 
-extern char parse[];
+char parse[88];
+char buf_405[128];
 
 u8 parseInit(s32 param_1, s32 param_2) {
     *(s32*)(parse + 0) = param_1;
@@ -10,7 +11,7 @@ u8 parseInit(s32 param_1, s32 param_2) {
 }
 
 u32 parsePush(char* tagName) {
-    extern char buf_405[];
+    extern char buf_405[128];
     extern s32 strcmp(const char*, const char*);
     s32 depth = *(s32*)(parse + 0x54);
     s32* starts = (s32*)(parse + 4);
@@ -176,3 +177,6 @@ int parseTagGet1(char* param_1, int param_2, char* param_3, int param_4) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+const char str_PCTd_804207a0[] = "%d";
+const char str_PCTf_804207a4[] = "%f";

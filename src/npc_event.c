@@ -4,15 +4,15 @@
 #include "effect/n64/eff_magic1_n64.h"
 
 extern char str_slave_0_802ed598[];
-extern f32 float_0_80421f8c;
-extern f32 float_5_80421f84;
-extern f32 float_1_80421f88;
-extern f32 float_neg1_80421f90;
+extern const f32 float_0_80421f8c;
+extern const f32 float_5_80421f84;
+extern const f32 float_1_80421f88;
+extern const f32 float_neg1_80421f90;
 extern char* strcpy(char* dst, const char* src);
-extern f32 float_30_80421fb4;
+extern const f32 float_30_80421fb4;
 extern s32 strcmp(const char* a, const char* b);
 extern char str_kemuri_test_802ed438[];
-extern f32 float_neg75_80421fa0;
+extern const f32 float_neg75_80421fa0;
 const char str_me_80421f30[] = "me";
 
 void* evtNpcNameToPtr(EventEntry* event, const void* name);
@@ -224,7 +224,7 @@ s32 _2d_get_dead_jump_offset(int param_1) {
 
 s32 killer_make_name(void* pEvt) {
     extern s32 strlen(const char* str);
-    static char name[64];
+    static char name[32];
     s32* args = *(s32**)((s32)pEvt + 0x18);
     void* npc = evtNpcNameToPtr(pEvt, str_me_80421f30);
     s32 index = evtGetValue(pEvt, args[0]);
@@ -792,3 +792,44 @@ s32 gesso_ground_check(int param_1) {
     evtSetValue((void*)param_1, args[0], hit != NULL);
     return 2;
 }
+
+const char str_mario_80421f34[] = "mario";
+const char zero_80421f3c[] = "";
+const char str_A_1_80421f40[] = "A_1";
+const char str_S_1_80421f44[] = "S_1";
+const char str_S_3_80421f48[] = "S_3";
+const char str_A_2_80421f4c[] = "A_2";
+const char str_A_3_80421f50[] = "A_3";
+const char str_A_4_80421f54[] = "A_4";
+const char str_Z_3_80421f58[] = "Z_3";
+const u32 dat_80421f5c = 0xFFFFFFFF;
+const char str_W_1_80421f60[] = "W_1";
+const char str_B_1A_80421f64[] = "B_1A";
+const char str_A_1B_80421f6c[] = "A_1B";
+const char str_B_2_80421f74[] = "B_2";
+const char str_R_1_80421f78[] = "R_1";
+const char str_Z_1_80421f7c[] = "Z_1";
+const char str_B_1_80421f80[] = "B_1";
+const f32 float_5_80421f84 = 5.0f;
+const f32 float_1_80421f88 = 1.0f;
+const f32 float_0_80421f8c = 0.0f;
+const f32 float_neg1_80421f90 = -1.0f;
+const f32 float_255_80421f94 = 255.0f;
+const char str_none_80421f98[] = "\x82\xC8\x82\xB5";
+const f32 float_neg75_80421fa0 = -75.0f;
+const char str_mobj9_80421fa4[] = "mobj9";
+const f32 float_35_80421fac = 35.0f;
+const f32 float_15_80421fb0 = 15.0f;
+const f32 float_30_80421fb4 = 30.0f;
+const f32 float_2_80421fb8 = 2.0f;
+const f32 float_90_80421fbc = 90.0f;
+const f32 float_0p25_80421fc0 = 0.25f;
+const f32 float_10_80421fc4 = 10.0f;
+const f32 float_300_80421fc8 = 300.0f;
+const f32 float_20_80421fcc = 20.0f;
+const f32 float_1000_80421fd0 = 1000.0f;
+const f32 float_0p5_80421fd4 = 0.5f;
+const f32 float_neg980_80421fd8 = -980.0f;
+const f32 float_6p2832_80421fdc = 6.2831855f;
+const f32 float_360_80421fe0 = 360.0f;
+const f32 float_18_80421fe4 = 18.0f;

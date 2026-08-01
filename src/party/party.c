@@ -9,7 +9,6 @@ void* partyPtrTbl[2];
 void animPoseSetMaterialLightFlagOff(void* pose, s32 flag);
 s32 marioGetCamId(void);
 void partyChgRunMode(void* party, s32 mode);
-extern f32 float_18p5_804212d4;
 s32 partyEntryMain(s32 partyMemberId);
 s32 marioGetPartyId(void);
 s32 marioGetExtraPartyId(void);
@@ -466,6 +465,8 @@ s32 yoshiSetColor(void) {
 }
 
 f32 partyGetHeight(void* party) {
+    extern f32 float_18p5_804212d4;
+
     if ((s32)*(u8*)((s32)party + 0x31) == 4) {
         if ((*(u32*)((s32)party + 0x0) & 0x100) != 0) {
             return float_18p5_804212d4 + *(f32*)((s32)party + 0xF0);
@@ -3929,3 +3930,90 @@ void partySetFamicomMode(void* pParty, int mode) {
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
+const f32 float_neg6p8_804211f0 = -6.8f;
+const f32 float_6p8_804211f4 = 6.8f;
+const f32 float_1p2_804211f8 = 1.2f;
+const f32 float_2_804211fc = 2.0f;
+const f32 float_1_80421200 = 1.0f;
+const f32 float_neg1_80421204 = -1.0f;
+const f32 float_90_80421208 = 90.0f;
+const f32 float_270_8042120c = 270.0f;
+const f32 float_deg2rad_80421210 = 0.017453292f;
+const f32 float_180_80421214 = 180.0f;
+const f32 float_0_80421218 = 0.0f;
+const f32 float_3_8042121c = 3.0f;
+const f32 float_3p5_80421220 = 3.5f;
+const f32 float_4_80421224 = 4.0f;
+const f32 float_0p75_80421228 = 0.75f;
+const f32 float_5000_8042122c = 5000.0f;
+const f32 float_10000_80421230 = 10000.0f;
+const f32 float_13p333_80421234 = 13.333333f;
+const f32 float_1000_80421238 = 1000.0f;
+const f32 float_10_8042123c = 10.0f;
+const f32 float_290_80421240 = 290.0f;
+const f32 float_250_80421244 = 250.0f;
+const f32 float_190_80421248 = 190.0f;
+const f32 float_350_8042124c = 350.0f;
+const f32 float_170_80421250 = 170.0f;
+const f32 float_0p125_80421254 = 0.125f;
+const f32 float_20_80421258 = 20.0f;
+const f32 float_neg40_8042125c = -40.0f;
+const f32 float_neg30_80421260 = -30.0f;
+const f32 float_220_80421264 = 220.0f;
+const f32 float_210_80421268 = 210.0f;
+const f32 float_15_8042126c = 15.0f;
+const f32 float_neg100_80421270 = -100.0f;
+const f32 float_240_80421274 = 240.0f;
+const f32 float_neg6_80421278 = -6.0f;
+const f32 float_neg2000_8042127c = -2000.0f;
+const f32 float_200_80421280 = 200.0f;
+const f32 float_1p6_80421284 = 1.6f;
+const f32 float_0p5_80421288 = 0.5f;
+const f32 float_0p4_8042128c = 0.4f;
+const f32 float_30_80421290 = 30.0f;
+const f32 float_16_80421294 = 16.0f;
+const f32 float_neg1p6_80421298 = -1.6f;
+const f32 float_0p0625_8042129c = 0.0625f;
+const f32 float_3p1416_804212a0 = 3.1415927f;
+const f32 float_12_804212a4 = 12.0f;
+const f32 float_22_804212a8 = 22.0f;
+const f32 float_40_804212ac = 40.0f;
+const f32 float_neg5_804212b0 = -5.0f;
+const f32 float_5_804212b4 = 5.0f;
+const f32 float_0p2_804212b8 = 0.2f;
+const f32 float_neg4_804212bc = -4.0f;
+const f32 float_1p5_804212c0 = 1.5f;
+const f32 float_neg3_804212c4 = -3.0f;
+const f32 float_neg1p5_804212c8 = -1.5f;
+const f32 float_26_804212cc = 26.0f;
+const f32 float_50_804212d0 = 50.0f;
+const f32 float_18p5_804212d4 = 18.5f;
+
+const char str_c_babyyoshi_802cb1a8[] = "c_babyyoshi";
+const char str_c_babyyoshi2_802cb1b4[] = "c_babyyoshi2";
+const char str_c_babyyoshi3_802cb1c4[] = "c_babyyoshi3";
+const char str_c_babyyoshi4_802cb1d4[] = "c_babyyoshi4";
+const char str_c_babyyoshi5_802cb1e4[] = "c_babyyoshi5";
+const char str_c_babyyoshi6_802cb1f4[] = "c_babyyoshi6";
+const char str_c_babyyoshi7_802cb204[] = "c_babyyoshi7";
+const char str_d_mario_802cb340[] = "d_mario";
+const char str_PM_D_1B_802cb358[] = "PM_D_1B";
+const char str_p_dokan_y_802cb360[] = "p_dokan_y";
+const char str_p_roll_802cb36c[] = "p_roll";
+const char str_p_plane_802cb374[] = "p_plane";
+const char str_p_dokan_x_802cb37c[] = "p_dokan_x";
+const char str_p_slit_802cb388[] = "p_slit";
+const char str_PM_D_1A_802cb390[] = "PM_D_1A";
+
+char* yoshigroup[] = {
+    (char*)str_c_babyyoshi_802cb1a8,
+    (char*)str_c_babyyoshi2_802cb1b4,
+    (char*)str_c_babyyoshi3_802cb1c4,
+    (char*)str_c_babyyoshi4_802cb1d4,
+    (char*)str_c_babyyoshi5_802cb1e4,
+    (char*)str_c_babyyoshi6_802cb1f4,
+    (char*)str_c_babyyoshi7_802cb204,
+};
+
+void* party_dp;
+s32 partyCtrlNo;

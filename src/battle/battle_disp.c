@@ -1274,3 +1274,44 @@ void _btlStockExpDisp(void) {
         }
     }
 }
+
+const u32 vec3_802ee3a0[3] = {
+    0x00000000, 0x00000000, 0x00000000,
+};
+
+const u32 vec3_802ee3ac[3] = {
+    0x3F800000, 0x3F800000, 0x3F800000,
+};
+
+const u32 vec3_802ee3b8[3] = {
+    0xBF800000, 0x3F800000, 0x3F800000,
+};
+
+const u32 vec3_802ee3c4[3] = {
+    0xBF800000, 0xBF800000, 0x3F800000,
+};
+
+const u32 vec3_802ee3d0[3] = {
+    0x3F800000, 0xBF800000, 0x3F800000,
+};
+
+const u32 vec3_802ee3dc[3] = {
+    0x00000000, 0x00000000, 0xC2C80000,
+};
+
+const u32 vec3_802ee3e8[3] = {
+    0x00000000, 0x00000000, 0xC2C80000,
+};
+
+const char str_p_b_st_802ee408[] = "p_b_st";
+const char str_PM_Y_1B_802ee410[] = "PM_Y_1B";
+const char str_PM_C_1A_802ee418[] = "PM_C_1A";
+const char str_PM_F_2_802ee420[] = "PM_F_2";
+const char str_PM_C_1B_802ee428[] = "PM_C_1B";
+const char str_PM_F_1B_802ee430[] = "PM_F_1B";
+const char str_PM_F_1A_802ee438[] = "PM_F_1A";
+const char str_PM_Y_1A_802ee440[] = "PM_Y_1A";
+
+s32 _status_pose_table[8] = {
+    0x1B, 2, 9, 1, 4, 5, 3, -1,
+};

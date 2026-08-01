@@ -2,10 +2,10 @@
 
 #include <dolphin/os.h>
 
-extern void* mapalloc_base_ptr;
-extern void* R_battlemapalloc_base_ptr;
-extern u32* wp;
-extern s32 g_bFirstSmartAlloc;
+void* mapalloc_base_ptr;
+void* R_battlemapalloc_base_ptr;
+s32 g_bFirstSmartAlloc;
+u32 R_battlemapalloc_size;
 extern void sysWaitDrawSync(void);
 
 void _mapFree(void* base, void* ptr);
@@ -13,13 +13,16 @@ void GXInitTexObjData(void* texObj, void* data);
 void OSFreeToHeap(OSHeapHandle heap, void* ptr);
 
 //.sdata
-s32 size_table[6][2] = {
+s32 size_table[5][2] = {
 	{1, 0x1C84}, //0x721000, 7300 KiB/7.13 MiB
 	{1, 0xD90}, //0x364000, 3472 KiB/3.39 MiB
 	{1, 0xE0}, //0x38000, 224 KiB
 	{1, 0x80}, //0x20000, 128 KiB
 	{0, 0x64}
 };
+
+u32 smartWork[0x3807];
+u32* wp = smartWork;
 
 //.sbss
 u32 mapalloc_size;
@@ -165,7 +168,6 @@ void __memFree(s32 heap, void* ptr) {
 }
 
 void N_battleMapAlloc(void) {
-    extern unsigned int R_battlemapalloc_size;
     extern void* _mapAlloc(void*, unsigned int);
     void* ptr;
     unsigned int size;
@@ -710,4 +712,3 @@ void* smartTexObj(void* texObj, void** data) {
     }
     return texObj;
 }
-

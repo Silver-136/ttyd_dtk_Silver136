@@ -350,8 +350,8 @@ void DrawMainIconCircle(f32 angle, s32 unused, void* iconInfo, f32 mtx[3][4], vo
     extern f32 float_0p005_8042250c;
     extern f32 float_0p66_80422520;
     extern u32 dat_8042240c;
-    extern u8 dat_80422410;
-    extern u8 dat_80422414;
+    extern const u32 dat_80422410;
+    extern const u32 dat_80422414;
 
     extern void* camGetPtr(s32 cameraId);
     extern void btlDispGXInit2D(void);
@@ -1894,3 +1894,131 @@ void DrawMultiItemWin(void) {
     }
 }
 
+const f32 dat_802ef650[32] = {
+    -20.0f, 40.0f, 0.0f, 40.0f, 0.0f, 20.0f, -20.0f, 20.0f,
+    20.0f, 40.0f, 20.0f, 20.0f, 0.0f, 20.0f, 0.0f, 40.0f,
+    -20.0f, 20.0f, 0.0f, 20.0f, 0.0f, 0.0f, -20.0f, 0.0f,
+    0.0f, 20.0f, 20.0f, 20.0f, 20.0f, 0.0f, 0.0f, 0.0f,
+};
+
+const f32 dat_802ef6d0[32] = {
+    0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+    0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+    1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+};
+
+const f32 vec3_802ef750[3] = {-60.0f, 35.0f, 0.0f};
+const f32 vec3_802ef75c[3] = {-60.0f, 35.0f, 0.0f};
+const f32 vec3_802ef768[3] = {-60.0f, 35.0f, 0.0f};
+const f32 vec3_802ef774[3] = {-60.0f, 35.0f, 0.0f};
+const f64 double_to_int_802ef780 = 4503601774854144.0;
+const u8 str_no_description_802ef788[25] = {
+    0x82, 0xB9, 0x82, 0xC2, 0x82, 0xDF, 0x82, 0xA2,
+    0x82, 0xCD, 0x81, 0x40, 0x82, 0xC8, 0x82, 0xA2,
+    0x82, 0xCC, 0x82, 0xBE, 0x81, 0x49, 0x81, 0x49,
+    0x00,
+};
+const char str_SFX_BTL_SYS_CAUTION_802ef7a4[] = "SFX_BTL_SYS_CAUTION_THROW1";
+const char str_btl_cost_disp_FP_802ef7c0[] = "btl_cost_disp_FP";
+const char str_btl_cost_disp_AP_802ef7d4[] = "btl_cost_disp_AP";
+const char str_btl_disp_HP_802ef7e8[] = "btl_disp_HP";
+const char str_btl_disp_slash_802ef7f4[] = "btl_disp_slash";
+const f64 double_to_int_mask_802ef808 = 4503599627370496.0;
+const char str_PCTs_battle_common_b_802ef810[] = "%s/battle/common/battle_common.tpl";
+
+f32 kakutable[15] = {
+    240.0f, 120.0f, 0.0f, 0.0f, 0.0f,
+    270.0f, 180.0f, 90.0f, 0.0f, 0.0f,
+    270.0f, 203.0f, 157.0f, 90.0f, 0.0f,
+};
+
+u8 seleItemCoordCol[4] = {0xFF, 0xC0, 0xC0, 0xCF};
+u16 danger_icon_tbl[6] = {6, 7, 8, 7, 9, 10};
+u16 peril_icon_tbl[6] = {11, 12, 13, 14, 15, 16};
+s8 seq_510;
+
+const u32 dat_80422400 = 0xE1E1E1FF;
+const u32 dat_80422404 = 0x000000FF;
+const u32 dat_80422408 = 0x808080FF;
+const u32 dat_8042240c = 0xE1E1E1FF;
+const u32 dat_80422410 = 0x000000FF;
+const u32 dat_80422414 = 0x000000FF;
+const u32 dat_80422418 = 0xFFFFFF00;
+const u32 dat_8042241c = 0xFFFFFF00;
+const f32 float_3p0039_80422420 = 3.00390625f;
+const u32 dat_80422424 = 0xFFFFFFFF;
+const u32 dat_80422428 = 0xFFFFFFCF;
+const f32 float_0_8042242c = 0.0f;
+const f32 float_12_80422430 = 12.0f;
+const f32 float_3p1416_80422434 = 3.1415927410125732f;
+const f32 float_180_80422438 = 180.0f;
+const f32 float_270_8042243c = 270.0f;
+const f32 float_90_80422440 = 90.0f;
+const f32 float_360_80422444 = 360.0f;
+const f32 float_deg2rad_80422448 = 0.01745329238474369f;
+const f32 float_20_8042244c = 20.0f;
+const f32 float_neg60_80422450 = -60.0f;
+const f32 float_55_80422454 = 55.0f;
+const f32 float_0p1_80422458 = 0.1f;
+const f32 float_1_8042245c = 1.0f;
+const f32 float_neg200_80422460 = -200.0f;
+const f32 float_neg100_80422464 = -100.0f;
+const f32 float_neg40_80422468 = -40.0f;
+const f32 float_10_8042246c = 10.0f;
+const f32 float_155_80422470 = 155.0f;
+const f32 float_15_80422474 = 15.0f;
+const f32 float_0p75_80422478 = 0.75f;
+const f32 float_164_8042247c = 164.0f;
+const f32 float_24_80422480 = 24.0f;
+const f32 float_400_80422484 = 400.0f;
+const f32 float_50_80422488 = 50.0f;
+const f32 float_0p8_8042248c = 0.8f;
+const f32 float_4_80422490 = 4.0f;
+const f32 float_28_80422494 = 28.0f;
+const f32 float_52_80422498 = 52.0f;
+const f32 float_neg120_8042249c = -120.0f;
+const f32 float_60_804224a0 = 60.0f;
+const f32 float_1p5_804224a4 = 1.5f;
+const f32 float_neg28_804224a8 = -28.0f;
+const f32 float_neg12_804224ac = -12.0f;
+const f32 float_5_804224b0 = 5.0f;
+const f32 float_0p5_804224b4 = 0.5f;
+const f32 float_255_804224b8 = 255.0f;
+const f32 float_144_804224bc = 144.0f;
+const f32 float_neg152_804224c0 = -152.0f;
+const f32 float_neg136_804224c4 = -136.0f;
+const f32 float_152_804224c8 = 152.0f;
+const f32 float_136_804224cc = 136.0f;
+const f32 float_neg119_804224d0 = -119.0f;
+const f32 float_2_804224d4 = 2.0f;
+const f32 float_neg104_804224d8 = -104.0f;
+const f32 float_22_804224dc = 22.0f;
+const f32 float_120_804224e0 = 120.0f;
+const f32 float_72_804224e4 = 72.0f;
+const f32 float_25_804224e8 = 25.0f;
+const f32 float_30_804224ec = 30.0f;
+const f32 float_26_804224f0 = 26.0f;
+const f32 float_92_804224f4 = 92.0f;
+const f32 float_100_804224f8 = 100.0f;
+const f32 float_76_804224fc = 76.0f;
+const f32 float_78_80422500 = 78.0f;
+const f32 float_35_80422504 = 35.0f;
+const f32 float_1p3_80422508 = 1.3f;
+const f32 float_0p005_8042250c = 0.005f;
+const f32 float_8_80422510 = 8.0f;
+const f32 float_neg4_80422514 = -4.0f;
+const f32 float_neg3p0769_80422518 = -3.076923131942749f;
+const f32 float_7p5_8042251c = 7.5f;
+const f32 float_0p66_80422520 = 0.66f;
+const f32 float_neg5_80422524 = -5.0f;
+const f32 float_64_80422528 = 64.0f;
+const f32 float_neg64_8042252c = -64.0f;
+const f32 float_80_80422530 = 80.0f;
+const f32 float_neg67_80422534 = -67.0f;
+const f32 float_52p5_80422538 = 52.5f;
+const f32 float_0p9_8042253c = 0.9f;
+const f32 float_4p7124_80422540 = 4.71238899230957f;
+const f32 float_22p5_80422544 = 22.5f;
+const f32 float_105_80422548 = 105.0f;
+const f32 float_neg180_8042254c = -180.0f;

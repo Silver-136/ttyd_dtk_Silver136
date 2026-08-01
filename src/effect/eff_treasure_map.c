@@ -1,5 +1,11 @@
 #include "effect/eff_treasure_map.h"
 
+typedef struct EffTreasureMapVec {
+    f32 x;
+    f32 y;
+    f32 z;
+} EffTreasureMapVec;
+
 extern f32 float_0_80427934;
 
 #pragma no_register_save_helpers on
@@ -38,27 +44,21 @@ void* effTreasureMapEntry(s32 kind, f32 x, f32 y, f32 z) {
 
 /* stub-fill: effTreasureMapMain | prototype_only | source_prototype */
 void effTreasureMapMain(void* effect) {
-    typedef struct VecLocal {
-        f32 x;
-        f32 y;
-        f32 z;
-    } VecLocal;
-
     extern void* gp;
     extern s32 animGroupBaseAsync(void* name, s32 battle, s32 flags);
     extern s32 animPoseEntry(void* name, s32 battle);
     extern void animPoseSetAnim(s32 poseId, void* animName, s32 force);
     extern void animPoseRelease(s32 poseId);
     extern void effDelete(void* effect);
-    extern f32 dispCalcZ(VecLocal* pos);
+    extern f32 dispCalcZ(EffTreasureMapVec* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* dispFunc, void* data, f32 z);
     extern void effTreasureMapDisp(s32 cameraId, void* effect);
-    extern VecLocal vec3_802ff058;
-    extern char str_EFF_treasure_map_802ff064[];
+    extern const EffTreasureMapVec vec3_802ff058;
+    extern const char str_EFF_treasure_map_802ff064[];
     extern char str_Z_1_8042793c[];
 
     void* work = *(void**)((s32)effect + 0xC);
-    VecLocal pos = vec3_802ff058;
+    EffTreasureMapVec pos = vec3_802ff058;
     s32 flag = *(s32*)((s32)gp + 0x14);
     s32 inBattle = ((u32)(-flag) | (u32)flag) >> 31;
 
@@ -67,10 +67,10 @@ void effTreasureMapMain(void* effect) {
     pos.z = *(f32*)((s32)work + 0xC);
 
     if (*(s32*)((s32)work + 0x24) == -1) {
-        if (animGroupBaseAsync(str_EFF_treasure_map_802ff064, inBattle, 0) == 0) {
+        if (animGroupBaseAsync((void*)str_EFF_treasure_map_802ff064, inBattle, 0) == 0) {
             return;
         }
-        *(s32*)((s32)work + 0x24) = animPoseEntry(str_EFF_treasure_map_802ff064, inBattle);
+        *(s32*)((s32)work + 0x24) = animPoseEntry((void*)str_EFF_treasure_map_802ff064, inBattle);
         animPoseSetAnim(*(s32*)((s32)work + 0x24), str_Z_1_8042793c, 1);
     }
 
@@ -95,6 +95,7 @@ void effTreasureMapMain(void* effect) {
         dispEntry(*(s32*)((s32)work + 0x28), 2, effTreasureMapDisp, effect, dispCalcZ(&pos));
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -161,3 +162,6 @@ void effTreasureMapDisp(s32 cameraId, void* effect) {
     }
 }
 
+const EffTreasureMapVec vec3_802ff058 = { 0.0f, 0.0f, 0.0f };
+const char str_EFF_treasure_map_802ff064[] = "EFF_treasure_map";
+const char str_Treasure_Map_802ff078[] = "Treasure_Map";

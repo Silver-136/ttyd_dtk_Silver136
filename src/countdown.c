@@ -206,3 +206,6 @@ void countDownFlagOff(u16 flag) {
     *(u16*)wp &= ~flag;
 }
 
+const u64 double_to_int_802fde40 = 0x4330000080000000ULL;
+const char str_SFX_STG2_BOMB_TIMER1_802fde48[24] = "SFX_STG2_BOMB_TIMER1";
+const char str_SFX_STG7_ALART_WARNI_802fde60[] = "SFX_STG7_ALART_WARNING1";

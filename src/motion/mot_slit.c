@@ -2,24 +2,23 @@
 
 void* marioGetPtr(void);
 void marioChgMot2(s32 motionId);
-extern f32 float_0_80420f9c;
+extern const f32 float_0_80420f9c;
 extern void marioPaperOff(void);
-extern f32 float_180_80420fa8;
+extern const f32 float_180_80420fa8;
 extern void allPartyForceSlitOff(void);
-extern f32 float_270_80420fb8;
+extern const f32 float_270_80420fb8;
 extern void mapResetPaperAmbColor(void);
 extern s32 marioKeyOffChk(void);
 extern void marioAdjustMoveDir(void);
-extern f32 float_10_80421000;
-extern f32 float_20_80420ff4;
+extern const f32 float_10_80421000;
+extern const f32 float_20_80420ff4;
 extern void allPartySlitOn(void);
 extern void mapSetPaperAmbColor(void* color);
-extern char vec3_802c42e8[];
-extern u32 dat_80420f98;
-extern f32 float_6_80420fb4;
-extern f32 float_0p004_80420fbc;
+extern const u32 dat_80420f98;
+extern const f32 float_6_80420fb4;
+extern const f32 float_0p004_80420fbc;
 extern s32 marioSlitChkWallAround(void);
-extern f32 float_0p5_80420fd8;
+extern const f32 float_0p5_80420fd8;
 
 typedef struct SlitVecCopy {
     s32 x;
@@ -447,6 +446,7 @@ u8 marioForceSlitAnime(void) {
 }
 
 u8 marioReInit_slit(void) {
+    extern char vec3_802c42e8[];
     extern void marioPaperOn(void* paper);
     extern void marioChgPose(void* pose);
     extern void marioChgPaper(void* paper);
@@ -497,6 +497,7 @@ u8 marioReInit_slit(void) {
 #pragma use_lmw_stmw off
 
 void mot_slit(void) {
+    extern char vec3_802c42e8[];
     extern void marioPaperOn(char* name);
     extern void marioChgPose(char* pose);
     extern void marioChgPaper(char* paper);
@@ -1211,3 +1212,45 @@ done:
 
 #pragma no_register_save_helpers reset
 #pragma use_lmw_stmw reset
+
+const char vec3_802c42e8[12] = { 0 };
+const f32 vec3_802c42f4[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802c4300[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802c430c[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802c4318[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802c4324[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802c4330[3] = { 0.0f, 0.0f, 0.0f };
+const char str_p_slit_802c433c[] = "p_slit";
+const char str_PM_S_1A_802c4344[] = "PM_S_1A";
+const char str_PM_S_1B_802c434c[] = "PM_S_1B";
+const char str_PM_S_1D_802c4354[] = "PM_S_1D";
+const char str_PM_S_1E_802c435c[] = "PM_S_1E";
+const char str_PM_S_2_802c4364[] = "PM_S_2";
+const char str_PM_S_1H_802c436c[] = "PM_S_1H";
+const char str_PM_S_1F_802c4374[] = "PM_S_1F";
+const char str_PM_S_1G_802c437c[] = "PM_S_1G";
+const char str_PM_S_1C_802c4384[] = "PM_S_1C";
+
+const u32 dat_80420f98 = 0xFF;
+const f32 float_0_80420f9c = 0.0f;
+const char str_M_S_1_80420fa0[] = "M_S_1";
+const f32 float_180_80420fa8 = 180.0f;
+const char str_M_R_1_80420fac[] = "M_R_1";
+const f32 float_6_80420fb4 = 6.0f;
+const f32 float_270_80420fb8 = 270.0f;
+const f32 float_0p004_80420fbc = 0.004f;
+const char str_M_W_1_80420fc0[] = "M_W_1";
+const f32 float_260_80420fc8 = 260.0f;
+const f32 float_280_80420fcc = 280.0f;
+const char str_M_I_Y_80420fd0[] = "M_I_Y";
+const f32 float_0p5_80420fd8 = 0.5f;
+const f32 float_315_80420fdc = 315.0f;
+const f32 float_45_80420fe0 = 45.0f;
+const f32 float_135_80420fe4 = 135.0f;
+const f32 float_225_80420fe8 = 225.0f;
+const f32 float_90_80420fec = 90.0f;
+const f32 float_11_80420ff0 = 11.0f;
+const f32 float_20_80420ff4 = 20.0f;
+const f32 float_1_80420ff8 = 1.0f;
+const f32 float_2_80420ffc = 2.0f;
+const f32 float_10_80421000 = 10.0f;

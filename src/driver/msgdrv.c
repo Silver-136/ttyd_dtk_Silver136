@@ -2,7 +2,15 @@
 
 #include "driver/camdrv.h"
 
-void* msgWork;
+typedef struct MsgIcon {
+    const char* name;
+    s32 id;
+} MsgIcon;
+
+u8 msgWork[36];
+u8 msgSEflag[4];
+char* msgSortDvdData;
+void* msgw = msgWork;
 extern void* gp;
 
 void* windowGetPointer(s32 id);
@@ -66,7 +74,7 @@ void msgLoad(char* roomName, s32 index) {
         s32 count;
         void* lookup;
     } MsgFileLocal;
-    extern void* msgWork;
+    extern u8 msgWork[36];
     extern void* gp;
     extern char* language_dir[];
     extern char str_PCTs_PCTs_txt_802c342c[];
@@ -168,7 +176,7 @@ s32 msgMain(int* param_1) {
     extern void animPosePaperPeraOn(s32 poseId);
     extern void animPoseSetPaperAnim(s32 poseId, char* name);
     extern void* gp;
-    extern u8 msgSEflag;
+    extern u8 msgSEflag[4];
     extern char* paperPoseTbl[];
     extern char str_p_b_st_802c3424[];
     extern f32 float_0p36_80420794;
@@ -194,7 +202,7 @@ s32 msgMain(int* param_1) {
 #define ELAPSED_MS() ((s32)((*(u64*)((s32)gp + 0x18) - *(u64*)(work + 0x30)) / (*(u32*)0x800000F8 / 4000)))
 #define CALLBACK(which) do { callback = *(void (**)(s32, int*))(work + 0xF1FC); if (callback != 0) callback((which), param_1); } while (0)
 
-    msgSEflag = 0;
+    msgSEflag[0] = 0;
 
     if (U32(4) & 2) {
         CALLBACK(0);
@@ -342,9 +350,9 @@ s32 msgMain(int* param_1) {
                     if ((event[0] & 8) && result != 3) {
                         I32(0xF250) = 15;
                     }
-                    if (result != 1 && msgSEflag == 0) {
+                    if (result != 1 && msgSEflag[0] == 0) {
                         psndSFXOnVol(0x20044, *(s8*)(*param_1 + 0xF22C));
-                        msgSEflag = 1;
+                        msgSEflag[0] = 1;
                     }
                 }
                 break;
@@ -796,7 +804,7 @@ s32 msg_compare(s32* a, s32* b) {
 }
 
 void* msgSearch(void* msgId) {
-    extern void* msgWork;
+    extern u8 msgWork[36];
     extern void* gp;
     extern char* ErrMessage[];
     u8* files = (u8*)&msgWork;
@@ -882,10 +890,6 @@ char* msgGetCommand(char* param_1, char* param_2, char* param_3) {
 }
 
 s32 msgIconStr2ID(char* param_1) {
-    typedef struct MsgIcon {
-        const char* name;
-        s32 id;
-    } MsgIcon;
     extern MsgIcon msgIcon[];
     register MsgIcon* icon = msgIcon;
     u32 i;
@@ -1762,3 +1766,98 @@ void selectWindow_Disp(s32 unused, void* win) {
     iconDispGxAlpha(float_1_80420618, &iconPos, 0x14, 0x1F8,
                     (u8)*(u16*)(window + 6));
 }
+
+extern const char R_no_messages_JP[];
+extern const char R_no_messages_US[];
+extern const char R_no_messages_DE[];
+extern const char R_no_messages_FR[];
+extern const char R_no_messages_ES[];
+extern const char R_no_messages_IT[];
+extern const char R_no_messages_DU[];
+
+const char str_PM_Y_1B_802c3288[] = "PM_Y_1B";
+const char str_PM_Y_2B_802c3290[] = "PM_Y_2B";
+const char str_PM_F_1B_802c3298[] = "PM_F_1B";
+const char str_PM_F_3B_802c32a0[] = "PM_F_3B";
+const char str_PM_C_1B_802c32a8[] = "PM_C_1B";
+const char str_PM_C_2B_802c32b0[] = "PM_C_2B";
+
+const char str_msg_JP_802c32b8[] = "msg/JP";
+const char str_msg_US_802c32c0[] = "msg/US";
+const char str_msg_DE_802c32c8[] = "msg/DE";
+const char str_msg_FR_802c32d0[] = "msg/FR";
+const char str_msg_SP_802c32d8[] = "msg/SP";
+const char str_msg_IT_802c32e0[] = "msg/IT";
+
+char* ErrMessage[] = {
+    (char*)R_no_messages_JP, (char*)R_no_messages_US,
+    (char*)R_no_messages_DE, (char*)R_no_messages_FR,
+    (char*)R_no_messages_ES, (char*)R_no_messages_IT,
+    (char*)R_no_messages_DU
+};
+char* paperPoseTbl[] = {
+    (char*)str_PM_Y_1B_802c3288, (char*)str_PM_Y_2B_802c3290,
+    (char*)str_PM_F_1B_802c3298, (char*)str_PM_F_3B_802c32a0,
+    (char*)str_PM_C_1B_802c32a8, (char*)str_PM_C_2B_802c32b0
+};
+char* language_dir[] = {
+    (char*)str_msg_JP_802c32b8, (char*)str_msg_US_802c32c0,
+    (char*)str_msg_DE_802c32c8, (char*)str_msg_FR_802c32d0,
+    (char*)str_msg_SP_802c32d8, (char*)str_msg_IT_802c32e0,
+    (char*)str_msg_US_802c32c0
+};
+
+extern const char str_PAD_A_804205a8[];
+extern const char str_PAD_B_804205b0[];
+extern const char str_STICK_LEFT_802c31fc[];
+extern const char str_STICK_804205b8[];
+extern const char str_AC_ON_804205c0[];
+extern const char str_BUTTON_L_802c3208[];
+extern const char str_BUTTON_R_802c3214[];
+extern const char str_HM_804205c8[];
+extern const char str_PAD_X_804205cc[];
+extern const char str_PAD_X_ON_802c3220[];
+extern const char str_PAD_Y_804205d4[];
+extern const char str_PAD_Y_ON_802c322c[];
+extern const char str_PAD_Z_OFF_802c3238[];
+extern const char str_PAD_ST_OFF_802c3244[];
+extern const char str_black_key_802c3250[];
+extern const char str_ANM_PAD_A_802c325c[];
+extern const char str_ANM_STICK_RIGHT_802c3268[];
+extern const char str_ANM_PAD_START_802c3278[];
+
+MsgIcon msgIcon[] = {
+    { str_PAD_A_804205a8, 0x6C },
+    { str_PAD_B_804205b0, 0x6E },
+    { str_STICK_LEFT_802c31fc, 0x80 },
+    { str_STICK_804205b8, 0x81 },
+    { str_AC_ON_804205c0, 0x9D },
+    { str_BUTTON_L_802c3208, 0x86 },
+    { str_BUTTON_R_802c3214, 0x88 },
+    { str_HM_804205c8, 0x1A7 },
+    { str_PAD_X_804205cc, 0x70 },
+    { str_PAD_X_ON_802c3220, 0x71 },
+    { str_PAD_Y_804205d4, 0x72 },
+    { str_PAD_Y_ON_802c322c, 0x73 },
+    { str_PAD_Z_OFF_802c3238, 0x8A },
+    { str_PAD_ST_OFF_802c3244, 0x8C },
+    { str_black_key_802c3250, 0x138 },
+    { str_ANM_PAD_A_802c325c, 0x20E },
+    { str_ANM_STICK_RIGHT_802c3268, 0x20F },
+    { str_ANM_PAD_START_802c3278, 0x210 }
+};
+
+u8 msgWindowOpen_SE_Data[96] = {
+    0, 0, 0, 0x16, 0, 0, 0, 0x17,
+    0, 0, 0, 0x1A, 0, 0, 0, 0x1B,
+    0, 0, 0, 0x20, 0, 0, 0, 0x21,
+    0, 0, 0, 0x1C, 0, 0, 0, 0x1D,
+    0, 0, 0, 0x20, 0, 0, 0, 0x21,
+    0, 0, 0, 0x1C, 0, 0, 0, 0x1D,
+    0, 0, 0, 0x18, 0, 0, 0, 0x19,
+    0, 0, 0, 0x22, 0, 0, 0, 0x23,
+    0, 0, 0, 0x24, 0, 0, 0, 0x25,
+    0, 0, 0, 0x26, 0, 0, 0, 0x27,
+    0, 0, 0, 0x1E, 0, 0, 0, 0x1F,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+};

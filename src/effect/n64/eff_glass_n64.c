@@ -138,3 +138,17 @@ void effGlassDisp(s32 cameraId, void* effect) {
     color=((u8)*(s32*)(w+0x18)<<24)|((u8)*(s32*)(w+0x1C)<<16)|((u8)*(s32*)(w+0x20)<<8)|(u8)*(s32*)(w+0x24); GXSetTevColor(1,&color); color=((u8)*(s32*)(w+0x28)<<24)|((u8)*(s32*)(w+0x2C)<<16)|((u8)*(s32*)(w+0x30)<<8)|(u8)alpha; GXSetTevColor(2,&color); GXSetCullMode(0); effSetVtxDescN64((void*)0x803A0368); GXBegin(0x90,0,6); tri2(0,1,2,0,0,2,3,0);
 }
 
+char size16x16_tex32x32_vtx[56] = {
+    0xFF, 0xF8, 0xFF, 0xF8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 8, 0xFF, 0xF8, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 8, 0, 8, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xF8, 0, 8, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+};
+
+char size48x48_tex32x32_vtx[70] = {
+    0xFF, 0xE0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0, 0, 0,
+    0xFF, 0xE0, 0, 0, 4, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0, 0, 0x20, 0, 0,
+    0, 0, 4, 0, 4, 0, 0xFF, 0xFF, 0xFF, 0, 0, 0, 0, 0x20, 0, 0,
+    0, 0, 4, 0, 0xFF, 0xFF, 0xFF, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0xFF, 0xFF, 0xFF, 0xC8,
+};

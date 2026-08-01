@@ -227,3 +227,26 @@ void effHokoriDisp(s32 cameraId, void* effect) {
     }
 }
 
+u8 size16x32_tex32x64_vtx[56] = {
+    0xFF, 0xF8, 0xFF, 0xE0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+    0, 8, 0xFF, 0xE0, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0xFF,
+    0, 8, 0, 0, 0, 0, 4, 0, 0x0B, 0xE0, 0, 0, 0, 0xFF,
+    0xFF, 0xF8, 0, 0, 0, 0, 0, 0, 0x0B, 0xE0, 0, 0, 0, 0xFF,
+};
+
+u8 size16x16_tex32x32_vtx[56] = {
+    0xFF, 0xF8, 0xFF, 0xF0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 8, 0xFF, 0xF0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 8, 0, 0, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xF8, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+};
+
+u8 size8x8_tex32x32_vtx[56] = {
+    0xFF, 0xFC, 0xFF, 0xFC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 4, 0xFF, 0xFC, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 4, 0, 4, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xFC, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+};
+
+const f32 vec3_802fb0d0[3] = { 0.0f, 0.0f, 0.0f };
+const char str_HokoriN64_802fb0e8[] = "HokoriN64";

@@ -2,10 +2,6 @@
 
 extern void* _battleWorkPointer;
 extern s32 evtGetValue(void* evt, s32 arg);
-extern u32 dat_80424bb8;
-extern f32 float_10_80424bbc;
-extern f32 float_neg29_80424bc0;
-extern f32 float_3_80424bc4;
 
 s32 FontGetMessageWidthLine(char* msg, u16* lines);
 void windowDispGX_Waku_col(s32 texture, void* color, f32 x, f32 y, f32 width, f32 height, f32 curve);
@@ -81,6 +77,10 @@ u32 btlevtcmd_AnnounceMessage(int param_1, int param_2) {
 }
 
 void _disp(void) {
+    extern u32 dat_80424bb8;
+    extern f32 float_10_80424bbc;
+    extern f32 float_neg29_80424bc0;
+    extern f32 float_3_80424bc4;
     register void* work = (void*)((s32)_battleWorkPointer + 0x20000);
     u16 lines[2];
     u32 color;
@@ -115,3 +115,9 @@ s32 btlevtcmd_AnnounceSetParam(void* evt) {
     params[index + 1] = evtGetValue(evt, args[1]);
     return 2;
 }
+
+const u32 dat_80424bb8 = 0xFFFFFFFF;
+const f32 float_10_80424bbc = 10.0f;
+const f32 float_neg29_80424bc0 = -29.0f;
+const f32 float_3_80424bc4 = 3.0f;
+const f32 float_900_80424bc8 = 900.0f;

@@ -3982,3 +3982,9 @@ char* animPoseGetGroupName(s32 poseIdx, s32 groupIdx) {
     data = *(s32*)(*(s32*)(*(s32*)(base + 8) + 0xA0) + 0);
     return (char*)(*(s32*)(data + 0x1A8) + offset);
 }
+
+f32 tanfTbl[0xB2];
+u8 work[0x110];
+u8 g_modeling_mtx_stack[0x600];
+
+s32 wp = (s32)work;

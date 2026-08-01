@@ -229,3 +229,13 @@ void effMagicHoraoDisp(s32 cameraId, void* effect) {
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
     }
 }
+
+u8 size64x64_tex64x64_vtx[56] = {
+    0xF3, 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0x0C, 0x80, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0xFF,
+    0x0C, 0x80, 0x19, 0, 0, 0, 8, 0, 8, 0, 0, 0, 0, 0xFF,
+    0xF3, 0x80, 0x19, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0xFF,
+};
+
+const f32 vec3_802fb4b8[3] = { 0.0f, 0.0f, 0.0f };
+const char str_MagicHoraoN64_802fb4d0[] = "MagicHoraoN64";

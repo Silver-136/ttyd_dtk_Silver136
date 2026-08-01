@@ -2,7 +2,7 @@
 
 typedef f32 Mtx[3][4];
 
-extern f64 double_to_int_802fe558;
+extern const f64 double_to_int_802fe558;
 extern double sin(double x);
 extern f32 float_deg2rad_80426f40;
 extern f32 float_10_80426f44;
@@ -462,3 +462,7 @@ void balloon_1(void* camera, void* effect) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+const u32 vec3_802fe548[3] = { 0, 0, 0 };
+const f64 double_to_int_802fe558 = 4503601774854144.0;
+const char str_PuniBalloon_802fe560[] = "PuniBalloon";

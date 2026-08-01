@@ -132,3 +132,13 @@ void effOpukuWprotectDisp(s32 cameraId, void* effect) {
     PSMTXScale(scale,0.1f,0.1f,0.1f); PSMTXConcat(base,scale,scale); GXLoadPosMtxImm(scale,0); GXSetCurrentMtx(0); effSetVtxDescN64(vertices);
     GXBegin(0x90,0,0x3C); GXBegin(0x90,0,0x18);
 }
+
+u8 size8x8_tex32x32_vtx[56] = {
+    0xFF, 0xFC, 0xFF, 0xFC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 4, 0xFF, 0xFC, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0xFF,
+    0, 4, 0, 4, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0xFF,
+    0xFF, 0xFC, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0xFF,
+};
+
+const f32 vec3_802fbc10[3] = { 0.0f, 0.0f, 0.0f };
+const char str_OpukuWprotectN64_802fbc28[] = "OpukuWprotectN64";
