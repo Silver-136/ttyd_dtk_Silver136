@@ -302,8 +302,13 @@ void statusWinDisp(void) {
     extern void iconDispGxCol(f32 mtx[3][4], s32 flags, s32 iconId, u32* color);
     extern void iconNumberDispGx(f32 mtx[3][4], s32 value, s32 type, u32* color);
     extern void gaugeDisp(f32 x, f32 y, s32 value);
+    extern s32 pouchGetPartyColor(s32 partyId);
     extern const u32 dat_80422bcc;
     extern const u32 dat_80422bc8;
+    extern const u32 dat_80422bd0;
+    extern const f32 float_78_80422c34;
+    extern StatusIcon partysDt[];
+    extern u16 party_icon[];
     StatusIcon* icon;
     f32 trans[3][4];
     f32 scale[3][4];
@@ -311,6 +316,7 @@ void statusWinDisp(void) {
     f32 y;
     u32 color;
     s32 blink;
+    s32 party;
     s32 i;
 
     x = *(f32*)((char*)wp + 0x20);
@@ -323,6 +329,9 @@ void statusWinDisp(void) {
 
     icon = (StatusIcon*)alwaysDt;
     for (i = 0; i < 13; i++, icon++) {
+        if (icon->iconId == 0x1DA && *(u16*)((char*)pouchGetPtr() + 0x8C) == 0) {
+            break;
+        }
         if (blink ||
             (((*(u32*)((char*)wp + 0x80) & 1) == 0 || i != 1) &&
              ((*(u32*)((char*)wp + 0x80) & 2) == 0 || i != 4) &&
@@ -362,6 +371,42 @@ void statusWinDisp(void) {
     }
     if (((*(u32*)((char*)wp + 0x80) & 4) == 0) || blink) {
         gaugeDisp(260.0f + x, 4.0f + (y - 87.0f), *(s16*)((char*)wp + 0x62));
+    }
+
+    party = *(s16*)((char*)wp + 0x58);
+    if (party != 0) {
+        partysDt[1].iconId = party_icon[party];
+        if (party == 4) {
+            switch (pouchGetPartyColor(4)) {
+                case 0: partysDt[1].iconId = 0x1AF; break;
+                case 1: partysDt[1].iconId = 0x1B0; break;
+                case 2: partysDt[1].iconId = 0x1B1; break;
+                case 3: partysDt[1].iconId = 0x1B2; break;
+                case 4: partysDt[1].iconId = 0x1B3; break;
+                case 5: partysDt[1].iconId = 0x1B4; break;
+                default: partysDt[1].iconId = 0x1B5; break;
+            }
+        }
+        icon = partysDt;
+        for (i = 0; i < 3; i++, icon++) {
+            if (((*(u32*)((char*)wp + 0x80) & 8) == 0) || blink || i != 1) {
+                PSMTXTrans(trans, x + (f32)icon->x, y - (f32)icon->y, 0.0f);
+                PSMTXScale(scale, icon->scale, icon->scale, icon->scale);
+                PSMTXConcat(trans, scale, trans);
+                color = dat_80422bd0;
+                iconDispGxCol(trans, 0x10, icon->iconId, &color);
+            }
+        }
+        if (((*(u32*)((char*)wp + 0x80) & 8) == 0) || blink) {
+            PSMTXTrans(trans, ((120.0f + x) - 6.0f) - 10.0f,
+                        4.0f + 2.0f + (y - float_78_80422c34), 0.0f);
+            color = dat_80422bc8;
+            iconNumberDispGx(trans, *(s16*)((char*)wp + 0x5A), 0, &color);
+        }
+        PSMTXTrans(trans, ((186.0f + x) - 6.0f) - 10.0f,
+                    4.0f + 2.0f + (y - float_78_80422c34), 0.0f);
+        color = dat_80422bc8;
+        iconNumberDispGx(trans, *(s16*)((char*)wp + 0x5C), 1, &color);
     }
 }
 

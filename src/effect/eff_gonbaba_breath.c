@@ -3,57 +3,222 @@
 __declspec(section ".rodata") u32 vec3_80302b78[3] = { 0, 0, 0 };
 __declspec(section ".rodata") u32 gap_04_80302B84_rodata = 0;
 
+/* Target-owned eff_gonbaba_breath .sdata2 scalar catalog. */
+extern const f32 float_6p2832_80428a90;
+extern const f32 float_360_80428a94;
+extern const f32 float_2_80428a98;
+extern const f32 float_deg2rad_80428a9c;
+extern const f32 float_90_80428aa0;
+extern const f32 float_270_80428aa4;
+extern const f32 float_4_80428aa8;
+extern const f32 float_16_80428aac;
+extern const f32 float_0p5_80428ab0;
+extern const f32 float_0_80428ab4;
+extern const f32 float_1_80428ab8;
+extern const f32 float_1p4_80428abc;
+extern const f32 float_1p5_80428ac0;
+extern const f32 float_0p25_80428ac4;
+extern const f32 float_1p05_80428ac8;
+extern const f32 float_0p995_80428acc;
+extern const f32 float_1p03_80428ad0;
+extern const f32 float_0p125_80428ad4;
+extern const f32 float_0p9_80428ad8;
+extern const f32 float_neg2p4_80428adc;
+extern const f32 float_0p1_80428ae0;
+extern const f32 float_neg2_80428ae4;
+extern const f32 float_240_80428ae8;
+extern const f32 float_10_80428aec;
+extern const f32 float_0p00761_80428af0;
+extern const f32 float_0p16605_80428af4;
+extern const f32 float_3p1416_80428af8;
+extern const f32 float_1p5708_80428afc;
+extern const f32 float_4p7124_80428b00;
+extern const f32 float_0p03705_80428b04;
+extern const f32 float_0p4967_80428b08;
+extern const f32 float_225_80428b0c;
+
 /* CHATGPT STUB FILL: main/effect/eff_gonbaba_breath 20260624_185035 */
 
 /* stub-fill: init_breath | missing_definition | ghidra_signature */
 void init_breath(void* workPtr, s32 index, s32 type) {
     extern s32 irand(s32);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
-    extern u8 col_tbl[];
+    extern u8* col_tbl[];
     extern u8* PTR_col_normal_8041e0a0;
-    u8* work=workPtr;
-    f32 angle,speed;
+    u8* work = workPtr;
+    f32 angle;
+    f32 speed;
+    f32 sinv;
+    f32 cosv;
+    f32 t;
+    f32 t2;
     s32 colorType;
 
-    *(s32*)work=type;
-    if(type<10) {
-        if(type==7) {
-            *(s32*)(work+0x44)=index<<3;
-            *(f32*)(work+4)=0.0f; *(f32*)(work+8)=0.0f; *(f32*)(work+0xC)=0.0f;
-            *(f32*)(work+0x40)=0.0f; *(f32*)(work+0x10)=-2.0f; *(f32*)(work+0x14)=0.1f;
-            *(s32*)(work+0x1C)=0x40; *(s32*)(work+0x3C)=0xFF;
-            return;
+    *(s32*)work = type;
+
+    if (type < 10) {
+        if (type >= 0 && type < 7) {
+            *(s32*)(work + 0x44) = index << 2;
+            *(f32*)(work + 4) = float_0_80428ab4;
+            *(f32*)(work + 8) = float_0_80428ab4;
+            *(f32*)(work + 0xC) = float_0_80428ab4;
+            *(f32*)(work + 0x40) = float_0_80428ab4;
+            *(f32*)(work + 0x10) = float_neg2p4_80428adc;
+            *(f32*)(work + 0x14) = float_0p1_80428ae0;
+            *(s32*)(work + 0x1C) = 0x40;
+            *(s32*)(work + 0x3C) = 0xFF;
+        } else if (type == 7) {
+            *(s32*)(work + 0x44) = index << 3;
+            *(f32*)(work + 4) = float_0_80428ab4;
+            *(f32*)(work + 8) = float_0_80428ab4;
+            *(f32*)(work + 0xC) = float_0_80428ab4;
+            *(f32*)(work + 0x40) = float_0_80428ab4;
+            *(f32*)(work + 0x10) = float_neg2_80428ae4;
+            *(f32*)(work + 0x14) = float_0p1_80428ae0;
+            *(s32*)(work + 0x1C) = 0x40;
+            *(s32*)(work + 0x3C) = 0xFF;
         }
-        if(type>=0) {
-            *(s32*)(work+0x44)=index<<2;
-            *(f32*)(work+4)=0.0f; *(f32*)(work+8)=0.0f; *(f32*)(work+0xC)=0.0f;
-            *(f32*)(work+0x40)=0.0f; *(f32*)(work+0x10)=-2.4f; *(f32*)(work+0x14)=0.1f;
-            *(s32*)(work+0x1C)=0x40; *(s32*)(work+0x3C)=0xFF;
-            return;
+    } else if (type < 0x11) {
+        angle = (float_240_80428ae8 + (f32)irand(0x3C)) * float_6p2832_80428a90 / float_360_80428a94;
+        speed = ((f32)(irand(0x32) + 10) / float_10_80428aec) * float_1p5_80428ac0;
+
+        *(s32*)(work + 0x44) = index;
+        *(f32*)(work + 4) = float_0_80428ab4;
+        *(f32*)(work + 8) = float_0_80428ab4;
+        *(f32*)(work + 0xC) = float_0_80428ab4;
+
+        if (float_3p1416_80428af8 < angle) {
+            if (float_4p7124_80428b00 <= angle) {
+                t = float_1p5708_80428afc - (angle - float_4p7124_80428b00);
+                t2 = t * t;
+                sinv = -(((float_0p00761_80428af0 * t2 -
+                           float_0p16605_80428af4) * t2 + float_1_80428ab8) * t);
+            } else {
+                t = angle - float_3p1416_80428af8;
+                t2 = t * t;
+                sinv = -(((float_0p00761_80428af0 * t2 -
+                           float_0p16605_80428af4) * t2 + float_1_80428ab8) * t);
+            }
+        } else if (float_1p5708_80428afc < angle) {
+            t = float_1p5708_80428afc - (angle - float_1p5708_80428afc);
+            t2 = t * t;
+            sinv = ((float_0p00761_80428af0 * t2 -
+                     float_0p16605_80428af4) * t2 + float_1_80428ab8) * t;
+        } else {
+            t2 = angle * angle;
+            sinv = ((float_0p00761_80428af0 * t2 -
+                     float_0p16605_80428af4) * t2 + float_1_80428ab8) * angle;
         }
-        return;
-    }
-    if(type==0x11) {
-        angle=(225.0f+(f32)irand(0x5A))*6.2832f/360.0f;
-        speed=((f32)(irand(0x32)+10)/10.0f)*1.5f;
-        *(s32*)(work+0x44)=irand(100); *(s32*)(work+0x1C)=0x3C; colorType=-1;
-    } else if(type<0x11) {
-        angle=(240.0f+(f32)irand(0x3C))*6.2832f/360.0f;
-        speed=((f32)(irand(0x32)+10)/10.0f)*1.5f;
-        *(s32*)(work+0x44)=index; *(s32*)(work+0x1C)=0x1E; colorType=type%10;
-    } else return;
-    *(f32*)(work+4)=0.0f; *(f32*)(work+8)=0.0f; *(f32*)(work+0xC)=0.0f;
-    *(f32*)(work+0x10)=speed*(f32)sin(angle); *(f32*)(work+0x14)=speed*(f32)cos(angle);
-    *(f32*)(work+0x40)=1.0f; *(s32*)(work+0x3C)=0xFF;
-    if(colorType<0) {
-        *(s32*)(work+0x24)=PTR_col_normal_8041e0a0[0xC]; *(s32*)(work+0x28)=PTR_col_normal_8041e0a0[0xD];
-        *(s32*)(work+0x2C)=PTR_col_normal_8041e0a0[0xE]; *(s32*)(work+0x30)=PTR_col_normal_8041e0a0[0];
-        *(s32*)(work+0x34)=PTR_col_normal_8041e0a0[1]; *(s32*)(work+0x38)=PTR_col_normal_8041e0a0[2];
-    } else {
-        u8* colors=col_tbl+colorType*16;
-        *(s32*)(work+0x24)=colors[0xC]; *(s32*)(work+0x28)=colors[0xD]; *(s32*)(work+0x2C)=colors[0xE];
-        *(s32*)(work+0x30)=colors[0]; *(s32*)(work+0x34)=colors[1]; *(s32*)(work+0x38)=colors[2];
+
+        *(f32*)(work + 0x10) = speed * sinv;
+
+        if (float_3p1416_80428af8 < angle) {
+            if (float_4p7124_80428b00 <= angle) {
+                t = float_1p5708_80428afc - (angle - float_4p7124_80428b00);
+                t2 = t * t;
+                cosv = (float_0p03705_80428b04 * t2 -
+                        float_0p4967_80428b08) * t2 + float_1_80428ab8;
+            } else {
+                t = angle - float_3p1416_80428af8;
+                t2 = t * t;
+                cosv = -((float_0p03705_80428b04 * t2 -
+                          float_0p4967_80428b08) * t2 + float_1_80428ab8);
+            }
+        } else if (float_1p5708_80428afc < angle) {
+            t = float_1p5708_80428afc - (angle - float_1p5708_80428afc);
+            t2 = t * t;
+            cosv = -((float_0p03705_80428b04 * t2 -
+                      float_0p4967_80428b08) * t2 + float_1_80428ab8);
+        } else {
+            t2 = angle * angle;
+            cosv = (float_0p03705_80428b04 * t2 -
+                    float_0p4967_80428b08) * t2 + float_1_80428ab8;
+        }
+
+        *(f32*)(work + 0x14) = speed * cosv;
+        *(f32*)(work + 0x40) = float_1_80428ab8;
+        *(s32*)(work + 0x1C) = 0x1E;
+        *(s32*)(work + 0x3C) = 0xFF;
+
+        colorType = type % 10;
+        {
+            u8* colors = col_tbl[colorType];
+            *(s32*)(work + 0x24) = colors[0xC];
+            *(s32*)(work + 0x28) = colors[0xD];
+            *(s32*)(work + 0x2C) = colors[0xE];
+            *(s32*)(work + 0x30) = colors[0];
+            *(s32*)(work + 0x34) = colors[1];
+            *(s32*)(work + 0x38) = colors[2];
+        }
+
+    } else if (type == 0x11) {
+        angle = (float_225_80428b0c + (f32)irand(0x5A)) * float_6p2832_80428a90 / float_360_80428a94;
+        speed = ((f32)(irand(0x32) + 10) / float_10_80428aec) * float_1p5_80428ac0;
+
+        *(s32*)(work + 0x44) = irand(100);
+        *(f32*)(work + 4) = float_0_80428ab4;
+        *(f32*)(work + 8) = float_0_80428ab4;
+        *(f32*)(work + 0xC) = float_0_80428ab4;
+
+        if (float_3p1416_80428af8 < angle) {
+            if (float_4p7124_80428b00 <= angle) {
+                t = float_1p5708_80428afc - (angle - float_4p7124_80428b00);
+                t2 = t * t;
+                sinv = -(((float_0p00761_80428af0 * t2 -
+                           float_0p16605_80428af4) * t2 + float_1_80428ab8) * t);
+            } else {
+                t = angle - float_3p1416_80428af8;
+                t2 = t * t;
+                sinv = -(((float_0p00761_80428af0 * t2 -
+                           float_0p16605_80428af4) * t2 + float_1_80428ab8) * t);
+            }
+        } else if (float_1p5708_80428afc < angle) {
+            t = float_1p5708_80428afc - (angle - float_1p5708_80428afc);
+            t2 = t * t;
+            sinv = ((float_0p00761_80428af0 * t2 -
+                     float_0p16605_80428af4) * t2 + float_1_80428ab8) * t;
+        } else {
+            t2 = angle * angle;
+            sinv = ((float_0p00761_80428af0 * t2 -
+                     float_0p16605_80428af4) * t2 + float_1_80428ab8) * angle;
+        }
+
+        *(f32*)(work + 0x10) = speed * sinv;
+
+        if (float_3p1416_80428af8 < angle) {
+            if (float_4p7124_80428b00 <= angle) {
+                t = float_1p5708_80428afc - (angle - float_4p7124_80428b00);
+                t2 = t * t;
+                cosv = (float_0p03705_80428b04 * t2 -
+                        float_0p4967_80428b08) * t2 + float_1_80428ab8;
+            } else {
+                t = angle - float_3p1416_80428af8;
+                t2 = t * t;
+                cosv = -((float_0p03705_80428b04 * t2 -
+                          float_0p4967_80428b08) * t2 + float_1_80428ab8);
+            }
+        } else if (float_1p5708_80428afc < angle) {
+            t = float_1p5708_80428afc - (angle - float_1p5708_80428afc);
+            t2 = t * t;
+            cosv = -((float_0p03705_80428b04 * t2 -
+                      float_0p4967_80428b08) * t2 + float_1_80428ab8);
+        } else {
+            t2 = angle * angle;
+            cosv = (float_0p03705_80428b04 * t2 -
+                    float_0p4967_80428b08) * t2 + float_1_80428ab8;
+        }
+
+        *(f32*)(work + 0x14) = speed * cosv;
+        *(f32*)(work + 0x40) = float_1_80428ab8;
+        *(s32*)(work + 0x1C) = 0x3C;
+        *(s32*)(work + 0x3C) = 0xFF;
+
+        *(s32*)(work + 0x24) = PTR_col_normal_8041e0a0[0xC];
+        *(s32*)(work + 0x28) = PTR_col_normal_8041e0a0[0xD];
+        *(s32*)(work + 0x2C) = PTR_col_normal_8041e0a0[0xE];
+        *(s32*)(work + 0x30) = PTR_col_normal_8041e0a0[0];
+        *(s32*)(work + 0x34) = PTR_col_normal_8041e0a0[1];
+        *(s32*)(work + 0x38) = PTR_col_normal_8041e0a0[2];
+
     }
 }
 
@@ -66,7 +231,6 @@ void* effGonbabaBreathEntry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 timer)
     extern void effGonbabaBreathMain(void* entry);
     extern void init_breath(void* work, s32 index, s32 type);
     extern char str_GonbabaBreath_80302b90[];
-    extern f32 float_0_80428ab4;
 
     void* entry;
     void* work;
@@ -138,64 +302,150 @@ void* effGonbabaBreathEntry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 timer)
 void effGonbabaBreathMain(void* effect) {
     extern void effDelete(void*);
     extern void effSoftDelete(void*);
-    extern void init_breath(void*,s32,s32);
-    extern f64 intplGetValue(f64,f64,s32,s32,s32);
+    extern void init_breath(void*, s32);
+    extern f64 intplGetValue(f64, f64, s32, s32, s32);
     extern f64 dispCalcZ(f32*);
-    extern void dispEntry(s32,s32,void*,void*,f32);
+    extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effGonbabaBreathDisp(void);
-    u8* entry=effect;
-    u8* base=*(u8**)(entry+0xC);
-    s32 count=*(s32*)(entry+8);
+    u8* entry = effect;
+    u8* prev = *(u8**)(entry + 0xC);
+    s32 count = *(s32*)(entry + 8);
     u32 position[3];
     s32 i;
-    position[0]=vec3_80302b78[0]; position[1]=vec3_80302b78[1]; position[2]=vec3_80302b78[2];
-    *(f32*)&position[0]=*(f32*)(base+4); *(f32*)&position[1]=*(f32*)(base+8); *(f32*)&position[2]=*(f32*)(base+0xC);
-    if((*(u32*)entry&4)!=0) {
-        *(u32*)entry&=~4; *(s32*)(base+0x1C)=0x20;
-        if(*(void**)(base+0x4C)!=0) effSoftDelete(*(void**)(base+0x4C));
-    }
-    if(*(s32*)(base+0x1C)<1000) --*(s32*)(base+0x1C);
-    ++*(s32*)(base+0x20);
-    if(*(s32*)(base+0x1C)<0x20) *(s32*)(base+0x3C)=*(s32*)(base+0x1C)<<3;
-    if(*(s32*)(base+0x1C)<0) { effDelete(effect); return; }
-    for(i=1;i<count;i++) {
-        u8* work=base+i*0x50;
-        s32 type=*(s32*)work;
-        s32 duration;
-        if(*(s32*)(work+0x44)!=0) { --*(s32*)(work+0x44); continue; }
-        if(type<10) {
-            if(type==7) {
-                if(*(s32*)(work+0x1C)==0) { init_breath(work,0,type); continue; }
-            } else if(type>=0 && type<7) {
-                if(*(s32*)(work+0x1C)==0) { init_breath(work,i,type); continue; }
-            } else continue;
-            duration=0x40;
-        } else if(type==0x11) {
-            if(*(s32*)(work+0x1C)==0) { init_breath(work,0,type); continue; }
-            duration=0x3C;
-        } else if(type<0x11) {
-            if(*(s32*)(work+0x1C)==0) { init_breath(work,i,type); continue; }
-            duration=0x1E;
-        } else continue;
-        --*(s32*)(work+0x1C);
-        if(*(s32*)(work+0x1C)<(type<10?0x20:0x10))
-            *(s32*)(work+0x3C)=*(s32*)(work+0x1C)<<(type<10?3:4);
-        if(*(f32*)(work+0x40)>=1.4f) *(f32*)(work+0x40)*=(type<10?1.05f:1.03f);
-        else *(f32*)(work+0x40)+=(1.5f-*(f32*)(work+0x40))*(type<10?0.25f:0.125f);
-        *(f32*)(work+0x10)*=(type<10?0.995f:0.9f);
-        *(f32*)(work+0x14)*=(type<10?1.05f:0.9f);
-        *(f32*)(work+4)+=*(f32*)(work+0x10);
-        *(f32*)(work+8)+=*(f32*)(work+0x14);
-        if(type>=10) {
-            s32 elapsed=duration-*(s32*)(work+0x1C);
-            *(s32*)(work+0x24)=(s32)intplGetValue((f32)*(s32*)(work+0x24),(f32)*(s32*)(work+0x30),11,elapsed,duration);
-            *(s32*)(work+0x28)=(s32)intplGetValue((f32)*(s32*)(work+0x28),(f32)*(s32*)(work+0x34),11,elapsed,duration);
-            *(s32*)(work+0x2C)=(s32)intplGetValue((f32)*(s32*)(work+0x2C),(f32)*(s32*)(work+0x38),11,elapsed,duration);
+
+    position[0] = vec3_80302b78[0];
+    position[1] = vec3_80302b78[1];
+    position[2] = vec3_80302b78[2];
+    *(f32*)&position[0] = *(f32*)(prev + 4);
+    *(f32*)&position[1] = *(f32*)(prev + 8);
+    *(f32*)&position[2] = *(f32*)(prev + 0xC);
+    if ((*(u32*)entry & 4) != 0) {
+        *(u32*)entry &= ~4;
+        *(s32*)(prev + 0x1C) = 0x20;
+        if (*(void**)(prev + 0x4C) != 0) {
+            effSoftDelete(*(void**)(prev + 0x4C));
         }
     }
-    dispEntry(4,2,effGonbabaBreathDisp,effect,(f32)dispCalcZ((f32*)position));
+    if (*(s32*)(prev + 0x1C) < 1000) {
+        --*(s32*)(prev + 0x1C);
+    }
+    ++*(s32*)(prev + 0x20);
+    if (*(s32*)(prev + 0x1C) < 0x20) {
+        *(s32*)(prev + 0x3C) = *(s32*)(prev + 0x1C) << 3;
+    }
+    if (*(s32*)(prev + 0x1C) < 0) {
+        effDelete(effect);
+    } else {
+        for (i = 1; i < count; i++) {
+            u8* work = prev + 0x50;
+            s32 type;
+            if (*(s32*)(prev + 0x94) == 0) {
+                type = *(s32*)work;
+                if (type < 10) {
+                    if (type == 7) {
+                        if (*(s32*)(prev + 0x6C) == 0) {
+                            init_breath(work, 0);
+                        } else {
+                            --*(s32*)(prev + 0x6C);
+                            if (*(s32*)(prev + 0x6C) < 0x20) {
+                                *(s32*)(prev + 0x8C) = *(s32*)(prev + 0x6C) << 3;
+                            }
+                            if (*(f32*)(prev + 0x90) >= float_1p4_80428abc) {
+                                *(f32*)(prev + 0x90) *= float_1p03_80428ad0;
+                            } else {
+                                *(f32*)(prev + 0x90) +=
+                                    (float_1p5_80428ac0 - *(f32*)(prev + 0x90)) * float_0p25_80428ac4;
+                            }
+                            *(f32*)(prev + 0x60) *= float_0p995_80428acc;
+                            *(f32*)(prev + 0x64) *= float_1p05_80428ac8;
+                            *(f32*)(prev + 0x54) += *(f32*)(prev + 0x60);
+                            *(f32*)(prev + 0x58) += *(f32*)(prev + 0x64);
+                        }
+                    } else if (type >= 0 && type < 7) {
+                        if (*(s32*)(prev + 0x6C) == 0) {
+                            init_breath(work, i);
+                        } else {
+                            --*(s32*)(prev + 0x6C);
+                            if (*(s32*)(prev + 0x6C) < 0x20) {
+                                *(s32*)(prev + 0x8C) = *(s32*)(prev + 0x6C) << 3;
+                            }
+                            if (*(f32*)(prev + 0x90) >= float_1p4_80428abc) {
+                                *(f32*)(prev + 0x90) *= float_1p05_80428ac8;
+                            } else {
+                                *(f32*)(prev + 0x90) +=
+                                    (float_1p5_80428ac0 - *(f32*)(prev + 0x90)) * float_0p25_80428ac4;
+                            }
+                            *(f32*)(prev + 0x60) *= float_0p995_80428acc;
+                            *(f32*)(prev + 0x64) *= float_1p05_80428ac8;
+                            *(f32*)(prev + 0x54) += *(f32*)(prev + 0x60);
+                            *(f32*)(prev + 0x58) += *(f32*)(prev + 0x64);
+                        }
+                    }
+                } else if (type == 0x11) {
+                    if (*(s32*)(prev + 0x6C) == 0) {
+                        init_breath(work, 0);
+                    } else {
+                        --*(s32*)(prev + 0x6C);
+                        if (*(s32*)(prev + 0x6C) < 0x20) {
+                            *(s32*)(prev + 0x8C) = *(s32*)(prev + 0x6C) << 3;
+                        }
+                        if (*(f32*)(prev + 0x90) >= float_1p4_80428abc) {
+                            *(f32*)(prev + 0x90) *= float_1p03_80428ad0;
+                        } else {
+                            *(f32*)(prev + 0x90) +=
+                                (float_1p5_80428ac0 - *(f32*)(prev + 0x90)) * float_0p125_80428ad4;
+                        }
+                        *(f32*)(prev + 0x60) *= float_0p9_80428ad8;
+                        *(f32*)(prev + 0x64) *= float_0p9_80428ad8;
+                        *(f32*)(prev + 0x54) += *(f32*)(prev + 0x60);
+                        *(f32*)(prev + 0x58) += *(f32*)(prev + 0x64);
+                        *(s32*)(prev + 0x74) = (s32)intplGetValue(
+                            (f32)*(s32*)(prev + 0x74), (f32)*(s32*)(prev + 0x80), 11,
+                            0x3C - *(s32*)(prev + 0x6C), 0x3C);
+                        *(s32*)(prev + 0x78) = (s32)intplGetValue(
+                            (f32)*(s32*)(prev + 0x78), (f32)*(s32*)(prev + 0x84), 11,
+                            0x3C - *(s32*)(prev + 0x6C), 0x3C);
+                        *(s32*)(prev + 0x7C) = (s32)intplGetValue(
+                            (f32)*(s32*)(prev + 0x7C), (f32)*(s32*)(prev + 0x88), 11,
+                            0x3C - *(s32*)(prev + 0x6C), 0x3C);
+                    }
+                } else if (type < 0x11) {
+                    if (*(s32*)(prev + 0x6C) == 0) {
+                        init_breath(work, i);
+                    } else {
+                        --*(s32*)(prev + 0x6C);
+                        if (*(s32*)(prev + 0x6C) < 0x10) {
+                            *(s32*)(prev + 0x8C) = *(s32*)(prev + 0x6C) << 4;
+                        }
+                        if (*(f32*)(prev + 0x90) >= float_1p4_80428abc) {
+                            *(f32*)(prev + 0x90) *= float_1p03_80428ad0;
+                        } else {
+                            *(f32*)(prev + 0x90) +=
+                                (float_1p5_80428ac0 - *(f32*)(prev + 0x90)) * float_0p125_80428ad4;
+                        }
+                        *(f32*)(prev + 0x60) *= float_0p9_80428ad8;
+                        *(f32*)(prev + 0x64) *= float_0p9_80428ad8;
+                        *(f32*)(prev + 0x54) += *(f32*)(prev + 0x60);
+                        *(f32*)(prev + 0x58) += *(f32*)(prev + 0x64);
+                        *(s32*)(prev + 0x74) = (s32)intplGetValue(
+                            (f32)*(s32*)(prev + 0x74), (f32)*(s32*)(prev + 0x80), 11,
+                            0x1E - *(s32*)(prev + 0x6C), 0x1E);
+                        *(s32*)(prev + 0x78) = (s32)intplGetValue(
+                            (f32)*(s32*)(prev + 0x78), (f32)*(s32*)(prev + 0x84), 11,
+                            0x1E - *(s32*)(prev + 0x6C), 0x1E);
+                        *(s32*)(prev + 0x7C) = (s32)intplGetValue(
+                            (f32)*(s32*)(prev + 0x7C), (f32)*(s32*)(prev + 0x88), 11,
+                            0x1E - *(s32*)(prev + 0x6C), 0x1E);
+                    }
+                }
+            } else {
+                --*(s32*)(prev + 0x94);
+            }
+            prev = work;
+        }
+        dispEntry(4, 2, effGonbabaBreathDisp, effect, (f32)dispCalcZ((f32*)position));
+    }
 }
-
 
 /* CHATGPT STUB FILL: main/effect/eff_gonbaba_breath 20260624_185035 */
 
@@ -228,7 +478,6 @@ void effGonbabaBreathDisp(s32 cameraId, void* effect) {
     extern void GXBegin(s32, s32, s32);
     extern f64 sin(f64);
     extern f64 cos(f64);
-    extern f32 float_deg2rad_80428a9c;
     extern u8 col_tbl[];
 
     u8 texObj[0x20];
@@ -248,14 +497,14 @@ void effGonbabaBreathDisp(s32 cameraId, void* effect) {
         PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
     } else {
         void* camera3d = camGetPtr(4);
-        f32 angle = 6.2832f * *(f32*)((u8*)camera3d + 0x114) / 360.0f;
+        f32 angle = (*(volatile const f32*)&float_6p2832_80428a90) * *(f32*)((u8*)camera3d + 0x114) / (*(volatile const f32*)&float_360_80428a94);
         PSMTXTrans(trans,
-            *(f32*)(work + 4) - 2.0f * (f32)sin(angle),
+            *(f32*)(work + 4) - (*(volatile const f32*)&float_2_80428a98) * (f32)sin(angle),
             *(f32*)(work + 8),
-            *(f32*)(work + 0xC) + 2.0f * (f32)cos(angle));
+            *(f32*)(work + 0xC) + (*(volatile const f32*)&float_2_80428a98) * (f32)cos(angle));
     }
     PSMTXRotRad(rot, 'y', float_deg2rad_80428a9c * (*(f32*)(work + 0x48) - *(f32*)((u8*)camera + 0x114)));
-    if (*(f32*)(work + 0x48) > 90.0f && *(f32*)(work + 0x48) < 270.0f) {
+    if (*(f32*)(work + 0x48) > (*(volatile const f32*)&float_90_80428aa0) && *(f32*)(work + 0x48) < (*(volatile const f32*)&float_270_80428aa4)) {
         PSMTXScale(scaleMtx, *(f32*)(work + 0x40), *(f32*)(work + 0x40), -*(f32*)(work + 0x40));
     } else {
         PSMTXScale(scaleMtx, *(f32*)(work + 0x40), *(f32*)(work + 0x40), *(f32*)(work + 0x40));
@@ -299,29 +548,32 @@ void effGonbabaBreathDisp(s32 cameraId, void* effect) {
             GXSetCurrentMtx(0);
             if (childType < 10) {
                 s32 j;
+                f32 edgeHalf = (*(volatile const f32*)&float_0p5_80428ab0);
+                f32 edgeFour = (*(volatile const f32*)&float_4_80428aa8);
+                f32 edgeSixteen = (*(volatile const f32*)&float_16_80428aac);
                 for (j = 0; j < 3; j++) {
-                    f32 edge = -((4.0f * (f32)j) - 16.0f) * 0.5f;
+                    f32 edge = -((edgeFour * (f32)j) - edgeSixteen) * edgeHalf;
                     color = *(u32*)(col_tbl + colorSet * 16 + j * 4);
                     ((u8*)&color)[3] = (u8)alpha;
                     GXSetChanMatColor(4, &color);
                     GXBegin(0x80, 0, 4);
-                    *fifo = -edge; *fifo = edge; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
-                    *fifo = edge; *fifo = edge; *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
-                    *fifo = edge; *fifo = -edge; *fifo = 0.0f; *fifo = 1.0f; *fifo = 1.0f;
-                    *fifo = -edge; *fifo = -edge; *fifo = 0.0f; *fifo = 0.0f; *fifo = 1.0f;
+                    *fifo = -edge; *fifo = edge; *fifo = (*(volatile const f32*)&float_0_80428ab4); *fifo = (*(volatile const f32*)&float_0_80428ab4); *fifo = (*(volatile const f32*)&float_0_80428ab4);
+                    *fifo = edge; *fifo = edge; *fifo = (*(volatile const f32*)&float_0_80428ab4); *fifo = (*(volatile const f32*)&float_1_80428ab8); *fifo = (*(volatile const f32*)&float_0_80428ab4);
+                    *fifo = edge; *fifo = -edge; *fifo = (*(volatile const f32*)&float_0_80428ab4); *fifo = (*(volatile const f32*)&float_1_80428ab8); *fifo = (*(volatile const f32*)&float_1_80428ab8);
+                    *fifo = -edge; *fifo = -edge; *fifo = (*(volatile const f32*)&float_0_80428ab4); *fifo = (*(volatile const f32*)&float_0_80428ab4); *fifo = (*(volatile const f32*)&float_1_80428ab8);
                 }
             } else {
-                f32 halfWidth = -4.0f * 0.5f;
+                f32 halfWidth = (*(volatile const f32*)&float_neg2_80428ae4);
                 ((u8*)&color)[0] = *(u8*)(child + 0x74);
                 ((u8*)&color)[1] = *(u8*)(child + 0x78);
                 ((u8*)&color)[2] = *(u8*)(child + 0x7C);
                 ((u8*)&color)[3] = (u8)alpha;
                 GXSetChanMatColor(4, &color);
                 GXBegin(0x80, 0, 4);
-                *fifo = halfWidth; *fifo = 2.0f; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
-                *fifo = 2.0f; *fifo = 2.0f; *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
-                *fifo = 2.0f; *fifo = halfWidth; *fifo = 0.0f; *fifo = 1.0f; *fifo = 1.0f;
-                *fifo = halfWidth; *fifo = halfWidth; *fifo = 0.0f; *fifo = 0.0f; *fifo = 1.0f;
+                *fifo = halfWidth; *fifo = (*(volatile const f32*)&float_2_80428a98); *fifo = (*(volatile const f32*)&float_0_80428ab4); *fifo = (*(volatile const f32*)&float_0_80428ab4); *fifo = (*(volatile const f32*)&float_0_80428ab4);
+                *fifo = (*(volatile const f32*)&float_2_80428a98); *fifo = (*(volatile const f32*)&float_2_80428a98); *fifo = (*(volatile const f32*)&float_0_80428ab4); *fifo = (*(volatile const f32*)&float_1_80428ab8); *fifo = (*(volatile const f32*)&float_0_80428ab4);
+                *fifo = (*(volatile const f32*)&float_2_80428a98); *fifo = halfWidth; *fifo = (*(volatile const f32*)&float_0_80428ab4); *fifo = (*(volatile const f32*)&float_1_80428ab8); *fifo = (*(volatile const f32*)&float_1_80428ab8);
+                *fifo = halfWidth; *fifo = halfWidth; *fifo = (*(volatile const f32*)&float_0_80428ab4); *fifo = (*(volatile const f32*)&float_0_80428ab4); *fifo = (*(volatile const f32*)&float_1_80428ab8);
             }
         }
     }
@@ -367,3 +619,39 @@ u8* col_tbl[8] = {
 };
 
 __declspec(section ".sdata") u8 gap_07_8041E0A4_sdata[28] = { 0 };
+/*
+ * Complete target .sdata2 catalog for eff_gonbaba_breath.
+ * Target order/size is 32 x f32 = 0x80 bytes.
+ */
+__declspec(section ".sdata2") const f32 float_6p2832_80428a90 = 6.2831855f;
+__declspec(section ".sdata2") const f32 float_360_80428a94 = 360.0f;
+__declspec(section ".sdata2") const f32 float_2_80428a98 = 2.0f;
+__declspec(section ".sdata2") const f32 float_deg2rad_80428a9c = 0.017453292f;
+__declspec(section ".sdata2") const f32 float_90_80428aa0 = 90.0f;
+__declspec(section ".sdata2") const f32 float_270_80428aa4 = 270.0f;
+__declspec(section ".sdata2") const f32 float_4_80428aa8 = 4.0f;
+__declspec(section ".sdata2") const f32 float_16_80428aac = 16.0f;
+__declspec(section ".sdata2") const f32 float_0p5_80428ab0 = 0.5f;
+__declspec(section ".sdata2") const f32 float_0_80428ab4 = 0.0f;
+__declspec(section ".sdata2") const f32 float_1_80428ab8 = 1.0f;
+__declspec(section ".sdata2") const f32 float_1p4_80428abc = 1.4f;
+__declspec(section ".sdata2") const f32 float_1p5_80428ac0 = 1.5f;
+__declspec(section ".sdata2") const f32 float_0p25_80428ac4 = 0.25f;
+__declspec(section ".sdata2") const f32 float_1p05_80428ac8 = 1.05f;
+__declspec(section ".sdata2") const f32 float_0p995_80428acc = 0.995f;
+__declspec(section ".sdata2") const f32 float_1p03_80428ad0 = 1.03f;
+__declspec(section ".sdata2") const f32 float_0p125_80428ad4 = 0.125f;
+__declspec(section ".sdata2") const f32 float_0p9_80428ad8 = 0.9f;
+__declspec(section ".sdata2") const f32 float_neg2p4_80428adc = -2.4f;
+__declspec(section ".sdata2") const f32 float_0p1_80428ae0 = 0.1f;
+__declspec(section ".sdata2") const f32 float_neg2_80428ae4 = -2.0f;
+__declspec(section ".sdata2") const f32 float_240_80428ae8 = 240.0f;
+__declspec(section ".sdata2") const f32 float_10_80428aec = 10.0f;
+__declspec(section ".sdata2") const f32 float_0p00761_80428af0 = 0.00761f;
+__declspec(section ".sdata2") const f32 float_0p16605_80428af4 = 0.16605f;
+__declspec(section ".sdata2") const f32 float_3p1416_80428af8 = 3.1415927f;
+__declspec(section ".sdata2") const f32 float_1p5708_80428afc = 1.5707964f;
+__declspec(section ".sdata2") const f32 float_4p7124_80428b00 = 4.712389f;
+__declspec(section ".sdata2") const f32 float_0p03705_80428b04 = 0.03705f;
+__declspec(section ".sdata2") const f32 float_0p4967_80428b08 = 0.4967f;
+__declspec(section ".sdata2") const f32 float_225_80428b0c = 225.0f;

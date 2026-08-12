@@ -54,7 +54,7 @@ s32 BattleAudience_GetPPAudienceNum_L(void);
 s32 BattleAudience_GetPPAudienceNum_R(void);
 s32 BattleAudience_GetPPAudienceNum_Sub(s32 id);
 s32 BattleAudienceNumToTargetSub(void);
-u8 BattleAudienceAddTargetNumSub(void);
+void BattleAudienceAddTargetNumSub(f32 amount);
 void BattleAudienceSoundCheer(s32 vol, s32 frames);
 s32 BattleAudienceSound1(const char* name, s32 kind, s32 arg);
 s32 BattleAudienceSound2(const char* name, s32 kind);
@@ -505,16 +505,24 @@ void BattleAudience_PerPhase(int phaseId) {
         *(s32*)(base + 0x138E0) = 0;
     }
 }
-
-
 s32 BattleAudience_CheckReactionPerPhase(void) {
     extern void* msg_heavy_bomb_fire;
     extern void* msg_puni_all_escape;
+    extern void* msg_puni_all_enter;
+    extern void* msg_pansy_sing;
+    extern void BattleBreakSlot_DecBreakTurn(void);
+    extern s32 BattleAudienceItemOn(s32 memberIdx, s32 itemType, s32 count);
+    extern s32 BattleAudienceDetectPakkunEatTarget(s32 memberIdx);
     u8* base;
     u8* member;
     s32* state;
     s32 count;
     s32 i;
+    s32 j;
+    s32 event;
+    s32 candidateCount;
+    s32 phaseEvents[14];
+    s32 candidates[201];
 
     base = BattleAudienceBaseGetPtr();
     pouchGetPtr();
@@ -533,7 +541,7 @@ s32 BattleAudience_CheckReactionPerPhase(void) {
             count = 0;
             for (i = 0; i < 200; i++) {
                 member = BattleAudienceGetPtr(i);
-                if (BattleAudience_GetSysCtrl(i) == 1 && member[0x1B] == 9 &&
+                if ((BattleAudience_GetSysCtrl(i) & 0xFF) == 1 && member[0x1B] == 9 &&
                     member[0x19] == 0x12) {
                     (*(s32*)(member + 0x12C))--;
                     if (*(s32*)(member + 0x12C) < 1) {
@@ -547,7 +555,7 @@ s32 BattleAudience_CheckReactionPerPhase(void) {
         case 7:
             for (i = 0; i < 200; i++) {
                 member = BattleAudienceGetPtr(i);
-                if (BattleAudience_GetSysCtrl(i) == 1 && member[0x1B] == 9 &&
+                if ((BattleAudience_GetSysCtrl(i) & 0xFF) == 1 && member[0x1B] == 9 &&
                     member[0x19] == 0x13) {
                     break;
                 }
@@ -582,18 +590,506 @@ s32 BattleAudience_CheckReactionPerPhase(void) {
             }
             break;
         case 13:
-            *(s32*)(base + 0x137D8) = 0;
-            *state = 14;
+            count = *(s32*)(base + 0x13904);
+            memcpy(phaseEvents, base + 0x138CC, count * 4);
+            *(s32*)(base + 0x13904) = 0;
+
+            for (i = 0; i < count; i++) {
+                event = phaseEvents[i];
+
+                switch (event) {
+                    case 0:
+                        for (j = 0; j < 60; j++) {
+                            if ((check_exe_phase_evt_status(j, 0) & 0xFF) != 0) {
+                                BattleAudienceAddPhaseEvtList(0);
+                                break;
+                            }
+                        }
+                        break;
+
+                    case 1:
+                        for (j = 0; j < 60; j++) {
+                            if ((check_exe_phase_evt_status(j, 8) & 0xFF) != 0) {
+                                member = BattleAudienceGetPtr(j);
+                                if (member[0x19] != 0x11) {
+                                    BattleAudienceAddPhaseEvtList(1);
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+
+                    case 2:
+                        for (j = 0; j < 60; j++) {
+                            if ((check_exe_phase_evt_status(j, 4) & 0xFF) != 0) {
+                                BattleAudienceAddPhaseEvtList(2);
+                                break;
+                            }
+                        }
+                        break;
+
+                    case 3:
+                        if (*(s32*)(base + 0x137B0) != 0) {
+                            j = 0;
+                            while (j < *(s32*)(base + 0x13790)) {
+                                if ((BattleAudience_GetExist(j) & 0xFF) == 0) {
+                                    BattleAudienceAddPhaseEvtList(3);
+                                    break;
+                                }
+
+                                member = BattleAudienceGetPtr(j);
+                                if ((*(u32*)member & 0x80) == 0) {
+                                    j++;
+                                } else {
+                                    j += 2;
+                                }
+                            }
+                        }
+                        break;
+
+                    case 4:
+                        for (j = 0; j < 60; j++) {
+                            if ((check_exe_phase_evt_status(j, 2) & 0xFF) != 0) {
+                                BattleAudienceAddPhaseEvtList(4);
+                                break;
+                            }
+                        }
+                        break;
+
+                    case 5:
+                        for (j = 0; j < 60; j++) {
+                            if ((check_exe_phase_evt_status(j, 1) & 0xFF) != 0) {
+                                BattleAudienceAddPhaseEvtList(5);
+                                break;
+                            }
+                        }
+                        break;
+
+                    case 6:
+                        for (j = 0; j < 60; j++) {
+                            if ((check_exe_phase_evt_status(j, 1) & 0xFF) != 0) {
+                                BattleAudienceAddPhaseEvtList(6);
+                                break;
+                            }
+                        }
+                        break;
+
+                    case 7:
+                        for (j = 0; j < 60; j++) {
+                            if ((check_exe_phase_evt_status(j, 3) & 0xFF) != 0) {
+                                BattleAudienceAddPhaseEvtList(7);
+                                break;
+                            }
+                        }
+                        break;
+
+                    case 8:
+                        for (j = 0; j < 60; j++) {
+                            if ((check_exe_phase_evt_status(j, 5) & 0xFF) != 0) {
+                                BattleAudienceAddPhaseEvtList(8);
+                                break;
+                            }
+                        }
+                        break;
+
+                    case 9:
+                        if ((*(u32*)base & 0x4000) == 0) {
+                            for (j = 0; j < 60; j++) {
+                                if ((check_exe_phase_evt_status(j, 5) & 0xFF) != 0) {
+                                    BattleAudienceAddPhaseEvtList(9);
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+
+                    case 10:
+                        for (j = 0; j < 60; j++) {
+                            if ((check_exe_phase_evt_status(j, 6) & 0xFF) != 0) {
+                                BattleAudienceAddPhaseEvtList(10);
+                                break;
+                            }
+                        }
+                        break;
+
+                    case 11:
+                        if ((*(u32*)base & 0x4000) == 0) {
+                            for (j = 0; j < 60; j++) {
+                                if ((check_exe_phase_evt_status(j, 9) & 0xFF) != 0) {
+                                    member = BattleAudienceGetPtr(j);
+                                    if (member[0x19] != 0x12) {
+                                        BattleAudienceAddPhaseEvtList(11);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+
+                    case 12:
+                        if ((*(u32*)base & 0x4000) == 0) {
+                            for (j = 0; j < 60; j++) {
+                                if ((check_exe_phase_evt_status(j, 0xB) & 0xFF) != 0 &&
+                                    BattleAudienceDetectPakkunEatTarget(j) != -1) {
+                                    BattleAudienceAddPhaseEvtList(12);
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+
+                    case 13:
+                        for (j = 0; j < 60; j++) {
+                            if ((check_exe_phase_evt_status(j, 0xC) & 0xFF) != 0) {
+                                BattleAudienceAddPhaseEvtList(13);
+                                break;
+                            }
+                        }
+                        break;
+                }
+            }
+
+            count = *(s32*)(base + 0x13904);
+            if (count < 1) {
+                *(s32*)(base + 0x13904) = 0;
+            } else {
+                i = irand(count);
+                *(s32*)(base + 0x138CC) =
+                    *(s32*)(base + 0x138CC + i * 4);
+                *(s32*)(base + 0x13904) = 1;
+            }
+
+            *state = 12;
+            *(s32*)(base + 0x137E0) = 0;
+
+        case 12:
+            if (*(s32*)(base + 0x13904) != 1) {
+                *state = 15;
+                break;
+            }
+
+            event = *(s32*)(base + 0x138CC);
+            switch (event) {
+                case 0:
+                    candidateCount = 0;
+                    for (i = 0; i < 60; i++) {
+                        if ((check_exe_phase_evt_status(i, 0) & 0xFF) != 0) {
+                            candidates[candidateCount++] = i;
+                        }
+                    }
+                    i = irand(candidateCount);
+                    BattleAudienceItemOn(candidates[i], 0, 1);
+                    *(s32*)(base + 0x13904) = 0;
+                    break;
+
+                case 1:
+                    for (i = 0; i < 200; i++) {
+                        if ((check_exe_phase_evt_status(i, 8) & 0xFF) != 0) {
+                            member = BattleAudienceGetPtr(i);
+                            if (member[0x19] != 0x11) {
+                                BattleAudience_ChangeStatus(i, 0x11);
+                                member = BattleAudienceGetPtr(i);
+                                *(s32*)(member + 0x12C) = 5;
+                            }
+                        }
+                    }
+                    *(s32*)(base + 0x13904) = 0;
+                    break;
+
+                case 2:
+                    for (i = 0; i < 60; i++) {
+                        if ((check_exe_phase_evt_status(i, 4) & 0xFF) != 0) {
+                            BattleAudienceItemOn(i, 0xEE, 100);
+                        }
+                    }
+                    *(s32*)(base + 0x13904) = 0;
+                    break;
+
+                case 3:
+                    switch (*(s32*)(base + 0x137E0)) {
+                        case 0:
+                            BattleAudienceAddPuni(200);
+                            *(s32*)(base + 0x137E0) = 5;
+                            break;
+
+                        case 5:
+                            for (i = 0; i < 200; i++) {
+                                if ((BattleAudience_GetSysCtrl(i) & 0xFF) != 0) {
+                                    member = BattleAudienceGetPtr(i);
+                                    if (member[0x19] == 0xB) {
+                                        break;
+                                    }
+                                }
+                            }
+                            if (i == 200) {
+                                *(s32*)(base + 0x137E0) = 10;
+                            }
+                            break;
+
+                        case 10:
+                            *(s32*)(base + 0x137E0) = 15;
+                            *(void**)(base + 4) =
+                                evtEntry(&msg_puni_all_enter, 0, 0x20);
+                            break;
+
+                        case 15:
+                            if (!evtCheckID(
+                                    *(s32*)(*(u8**)(base + 4) + 0x15C))) {
+                                *(s32*)(base + 4) = 0;
+                                *(s32*)(base + 0x13904) = 0;
+                            }
+                            break;
+                    }
+                    break;
+
+                case 4:
+                    if (*(s32*)(base + 0x137E0) != 5) {
+                        if (*(s32*)(base + 0x137E0) > 4) {
+                            return 1;
+                        }
+                        if (*(s32*)(base + 0x137E0) != 0) {
+                            return 1;
+                        }
+
+                        candidateCount = 0;
+                        for (i = 0; i < 60; i++) {
+                            if ((check_exe_phase_evt_status(i, 2) & 0xFF) != 0) {
+                                candidates[candidateCount++] = i;
+                            }
+                        }
+                        i = irand(candidateCount);
+                        BattleAudience_ChangeStatus(candidates[i], 0xE);
+                        *(s32*)(base + 0x137E0) = 5;
+                    }
+
+                    for (i = 0; i < 60; i++) {
+                        if ((BattleAudience_GetSysCtrl(i) & 0xFF) != 0) {
+                            member = BattleAudienceGetPtr(i);
+                            if (member[0x19] == 0xE) {
+                                break;
+                            }
+                        }
+                    }
+                    if (i == 60) {
+                        *(s32*)(base + 0x13904) = 0;
+                    }
+                    break;
+
+                case 5:
+                    for (i = 0; i < 60; i++) {
+                        if ((check_exe_phase_evt_status(i, 1) & 0xFF) != 0) {
+                            BattleAudienceItemOn(i, 0xED, 100);
+                        }
+                    }
+                    *(s32*)(base + 0x13904) = 0;
+                    break;
+
+                case 6:
+                    candidateCount = 0;
+                    for (i = 0; i < 60; i++) {
+                        if ((check_exe_phase_evt_status(i, 1) & 0xFF) != 0) {
+                            candidates[candidateCount++] = i;
+                        }
+                    }
+                    i = irand(candidateCount);
+                    BattleAudienceItemOn(candidates[i], 0, 1);
+                    *(s32*)(base + 0x13904) = 0;
+                    break;
+
+                case 7:
+                    candidateCount = 0;
+                    for (i = 0; i < 60; i++) {
+                        if ((check_exe_phase_evt_status(i, 3) & 0xFF) != 0) {
+                            candidates[candidateCount++] = i;
+                        }
+                    }
+                    i = irand(candidateCount);
+                    BattleAudienceItemOn(candidates[i], 0xEF, 1);
+                    *(s32*)(base + 0x13904) = 0;
+                    break;
+
+                case 8:
+                    candidateCount = 0;
+                    for (i = 0; i < 60; i++) {
+                        if ((check_exe_phase_evt_status(i, 5) & 0xFF) != 0) {
+                            candidates[candidateCount++] = i;
+                        }
+                    }
+                    i = irand(candidateCount);
+                    BattleAudienceItemOn(candidates[i], 0, 1);
+                    *(s32*)(base + 0x13904) = 0;
+                    break;
+
+                case 9:
+                    if (*(s32*)(base + 0x137E0) != 5) {
+                        if (*(s32*)(base + 0x137E0) > 4) {
+                            return 1;
+                        }
+                        if (*(s32*)(base + 0x137E0) != 0) {
+                            return 1;
+                        }
+
+                        candidateCount = 0;
+                        for (i = 0; i < 60; i++) {
+                            if ((check_exe_phase_evt_status(i, 5) & 0xFF) != 0) {
+                                candidates[candidateCount++] = i;
+                            }
+                        }
+                        i = irand(candidateCount);
+                        BattleAudience_ChangeStatus(candidates[i], 0xF);
+                        *(s32*)(base + 0x137E0) = 5;
+                    }
+
+                    for (i = 0; i < 60; i++) {
+                        if ((BattleAudience_GetSysCtrl(i) & 0xFF) != 0) {
+                            member = BattleAudienceGetPtr(i);
+                            if (member[0x19] == 0xF) {
+                                break;
+                            }
+                        }
+                    }
+                    if (i == 60) {
+                        *(s32*)(base + 0x13904) = 0;
+                    }
+                    break;
+
+                case 10:
+                    switch (*(s32*)(base + 0x137E0)) {
+                        case 0:
+                            candidateCount = 0;
+                            for (i = 0; i < 60; i++) {
+                                if ((check_exe_phase_evt_status(i, 6) & 0xFF) != 0) {
+                                    candidates[candidateCount++] = i;
+                                }
+                            }
+                            i = irand(candidateCount);
+                            BattleAudience_ChangeStatus(candidates[i], 0x10);
+                            *(s32*)(base + 0x137E0) = 5;
+
+                        case 5:
+                            for (i = 0; i < 60; i++) {
+                                if ((BattleAudience_GetSysCtrl(i) & 0xFF) != 0) {
+                                    member = BattleAudienceGetPtr(i);
+                                    if (member[0x19] == 0x10) {
+                                        break;
+                                    }
+                                }
+                            }
+                            if (i == 60) {
+                                *(s32*)(base + 0x137E0) = 10;
+                            }
+                            break;
+
+                        case 10:
+                            *(s32*)(base + 0x137E0) = 15;
+                            *(void**)(base + 4) =
+                                evtEntry(&msg_pansy_sing, 0, 0x20);
+                            break;
+
+                        case 15:
+                            if (!evtCheckID(
+                                    *(s32*)(*(u8**)(base + 4) + 0x15C))) {
+                                *(s32*)(base + 4) = 0;
+                                *(s32*)(base + 0x13904) = 0;
+                            }
+                            break;
+                    }
+                    break;
+
+                case 11:
+                    candidateCount = 0;
+                    for (i = 0; i < 60; i++) {
+                        if ((check_exe_phase_evt_status(i, 9) & 0xFF) != 0) {
+                            member = BattleAudienceGetPtr(i);
+                            if (member[0x19] != 0x12) {
+                                candidates[candidateCount++] = i;
+                            }
+                        }
+                    }
+                    i = irand(candidateCount);
+                    event = candidates[i];
+                    member = BattleAudienceGetPtr(event);
+                    BattleAudience_ChangeStatus(event, 0x12);
+                    *(s32*)(member + 0x12C) = 5;
+                    *(s32*)(base + 0x13904) = 0;
+                    break;
+
+                case 12:
+                    if (*(s32*)(base + 0x137E0) != 5) {
+                        if (*(s32*)(base + 0x137E0) > 4) {
+                            return 1;
+                        }
+                        if (*(s32*)(base + 0x137E0) != 0) {
+                            return 1;
+                        }
+
+                        candidateCount = 0;
+                        for (i = 0; i < 60; i++) {
+                            if ((check_exe_phase_evt_status(i, 0xB) & 0xFF) != 0 &&
+                                BattleAudienceDetectPakkunEatTarget(i) != -1) {
+                                candidates[candidateCount++] = i;
+                            }
+                        }
+                        i = irand(candidateCount);
+                        BattleAudience_ChangeStatus(candidates[i], 0x14);
+                        *(s32*)(base + 0x137E0) = 5;
+                    }
+
+                    for (i = 0; i < 60; i++) {
+                        if ((BattleAudience_GetSysCtrl(i) & 0xFF) != 0) {
+                            member = BattleAudienceGetPtr(i);
+                            if (member[0x19] == 0x14) {
+                                break;
+                            }
+                        }
+                    }
+                    if (i == 60) {
+                        *(s32*)(base + 0x13904) = 0;
+                    }
+                    break;
+
+                case 13:
+                    for (i = 0; i < 60; i++) {
+                        if ((check_exe_phase_evt_status(i, 0xC) & 0xFF) != 0) {
+                            BattleAudienceItemOn(i, 0, 1);
+                            break;
+                        }
+                    }
+                    *(s32*)(base + 0x13904) = 0;
+                    break;
+            }
             break;
+
         case 14:
             *state = 15;
             break;
         case 15:
+            for (i = 0; i < 200; i++) {
+                member = BattleAudienceGetPtr(i);
+                if ((BattleAudience_GetSysCtrl(i) & 0xFF) == 1 && member[0x19] == 0xD) {
+                    (*(s32*)(member + 0x12C))--;
+                    if (*(s32*)(member + 0x12C) < 1) {
+                        BattleAudience_ChangeStatus(i, 3);
+                        *(s32*)(member + 0x12C) = 0;
+                    }
+                }
+            }
+            for (i = 0; i < 200; i++) {
+                member = BattleAudienceGetPtr(i);
+                if ((BattleAudience_GetSysCtrl(i) & 0xFF) == 1 &&
+                    member[0x1B] == 8 && member[0x19] == 0x11) {
+                    (*(s32*)(member + 0x12C))--;
+                    if (*(s32*)(member + 0x12C) < 1) {
+                        *(s32*)(member + 4) = 4;
+                    }
+                }
+            }
+            BattleBreakSlot_DecBreakTurn();
             *(u32*)base &= ~8;
             *(s32*)(base + 0x137D8) = 0;
-            return 1;
+            return 0;
     }
-    return 0;
+    return 1;
 }
 
 u8 BattleAudience_Disp(void) {
@@ -655,9 +1151,13 @@ void BattleAudience_End(void) {
 u8 BattleAudienceSettingAudience(void) {
     extern f32 pouchGetAudienceNum(void);
     extern void* memset(void*, s32, u32);
+    extern void* memcpy(void*, const void*, u32);
     extern const u8 audience_kind[];
+    extern f32 float_0p5_80424a78;
     u8* base;
     u8* pouch;
+    u8* battle;
+    u32* composition;
     s32 weights[12];
     s32 counts[13];
     s32 order[12];
@@ -672,6 +1172,8 @@ u8 BattleAudienceSettingAudience(void) {
     s32 j;
 
     base = BattleAudienceBaseGetPtr();
+    battle = _battleWorkPointer;
+    composition = (u32*)(*(u8**)(*(u8**)(battle + 0x2738) + 0xC) + 0xAC);
     pouch = pouchGetPtr();
     if (*(s16*)(pouch + 0x88) == 0) {
         *(s32*)(base + 0x13790) = 50;
@@ -686,16 +1188,23 @@ u8 BattleAudienceSettingAudience(void) {
         *(s32*)(base + 0x13790) = 0;
     }
     *(f32*)(base + 0x13778) = 1.0f;
-    *(f32*)(base + 0x1377C) = pouchGetAudienceNum() +
-        0.01f * (pouchGetAudienceNum() - *(f32*)(base + 0x13778)) *
-        (f32)(irand(10) + irand(10) - 13);
-    if (*(f32*)(base + 0x1377C) < 0.0f) {
-        *(f32*)(base + 0x1377C) = 0.0f;
+    if ((*(u32*)(battle + 0x19078) & 0x10000) == 0) {
+        *(f32*)(base + 0x1377C) = pouchGetAudienceNum() +
+            0.01f * (pouchGetAudienceNum() - *(f32*)(base + 0x13778)) *
+            (f32)(irand(10) + irand(10) - 13);
+    } else {
+        *(f32*)(base + 0x1377C) = (f32)*(s32*)(battle + 0x19084);
+        if (*(f32*)(base + 0x1377C) > (f32)*(s32*)(base + 0x13790)) {
+            *(f32*)(base + 0x1377C) = (f32)*(s32*)(base + 0x13790);
+        }
     }
-    if (*(f32*)(base + 0x1377C) > (f32)*(s32*)(base + 0x13790)) {
-        *(f32*)(base + 0x1377C) = (f32)*(s32*)(base + 0x13790);
+    if (composition[0] == 4) {
+        *(f32*)(base + 0x13780) = float_0p5_80424a78 * *(f32*)(base + 0x1377C);
+    } else if (composition[0] >= 2 && composition[0] < 7) {
+        *(f32*)(base + 0x13780) = (f32)*(s32*)(base + 0x13790) - *(f32*)(base + 0x1377C);
+    } else if ((s32)composition[0] >= 0) {
+        *(f32*)(base + 0x13780) = 0.0f;
     }
-    *(f32*)(base + 0x13780) = 0.0f;
     for (i = 0; i < 12; i++) {
         weights[i] = 1;
         order[i] = i;
@@ -767,7 +1276,6 @@ u8 BattleAudienceSettingAudience(void) {
     memcpy(base + 0x13794, weights, 0x30);
     return 0;
 }
-
 
 void BattleAudienceGuestTPLRead(s32 index, u32 memberKind, char* tplName) {
     extern s32 sprintf(char* dst, const char* format, ...);
@@ -2820,7 +3328,7 @@ void BattleAudienceAddTargetNum(f32 added, f32 carry) {
             *(f32*)(base + 0x13780) = float_0_80424988;
         }
     }
-    ((void (*)(f32))BattleAudienceAddTargetNumSub)(step);
+    BattleAudienceAddTargetNumSub(step);
     if (*(f32*)(base + 0x1377C) < float_0_80424988) {
         *(f32*)(base + 0x1377C) = float_0_80424988;
     }
@@ -2836,8 +3344,18 @@ void BattleAudienceAddTargetNum(f32 added, f32 carry) {
     }
 }
 
-u8 BattleAudienceAddTargetNumSub(void) {
-    return 0;
+void BattleAudienceAddTargetNumSub(f32 amount) {
+    void* audience = BattleAudienceBaseGetPtr();
+    f32 remaining = amount;
+    f32 step;
+
+    if (remaining == float_0_80424988) {
+        return;
+    }
+    if (remaining > float_0_80424988) {
+        step = float_1_80424990;
+        *(f32*)((u8*)audience + 0x1377C) += step;
+    }
 }
 
 void BattleAudienceAddAudienceNum(s32 amount) {
@@ -4357,11 +4875,11 @@ void BattleAudience_Case_FallObject_Stage(void) {
 }
 
 void BattleAudience_Case_FallObject_Aud(int memberIdx, u8 objectType) {
-    static const s32 nearOffsets[8][2] = {
+    const s32 nearOffsets[8][2] = {
         {-1, -1}, {0, -1}, {1, -1}, {-1, 0},
         {1, 0}, {-1, 1}, {0, 1}, {1, 1}
     };
-    static const s32 wideOffsets[24][2] = {
+    const s32 wideOffsets[24][2] = {
         {-2, -2}, {-1, -2}, {0, -2}, {1, -2}, {2, -2},
         {-2, -1}, {-1, -1}, {0, -1}, {1, -1}, {2, -1},
         {-2, 0}, {-1, 0}, {1, 0}, {2, 0},
@@ -4377,21 +4895,26 @@ void BattleAudience_Case_FallObject_Aud(int memberIdx, u8 objectType) {
 
     base = BattleAudienceBaseGetPtr();
 
-    if (BattleAudience_GetSysCtrl(memberIdx) == 1) {
-        member = BattleAudienceGetPtr(memberIdx);
-        if (*(u8*)((s32)member + 0x19) != 0xF) {
-            BattleAudience_ChangeStatus(memberIdx, 10);
-        }
-    }
-
     if (objectType == 6) {
+        if ((BattleAudience_GetSysCtrl(memberIdx) & 0xFF) == 1) {
+            member = BattleAudienceGetPtr(memberIdx);
+            if (*(u8*)((s32)member + 0x19) != 0xF) {
+                BattleAudience_ChangeStatus(memberIdx, 10);
+            }
+        }
         for (i = 0; i < 200; i++) {
-            if (BattleAudience_GetEscapeChangeOK(i) != 0) {
+            if ((BattleAudience_GetEscapeChangeOK(i) & 0xFF) != 0) {
                 BattleAudience_ChangeStatus(i, 0xC);
                 *(f32*)((s32)base + 0x1377C) -= float_1_80424990;
             }
         }
     } else if (objectType == 2) {
+        if ((BattleAudience_GetSysCtrl(memberIdx) & 0xFF) == 1) {
+            member = BattleAudienceGetPtr(memberIdx);
+            if (*(u8*)((s32)member + 0x19) != 0xF) {
+                BattleAudience_ChangeStatus(memberIdx, 10);
+            }
+        }
         *(f32*)((s32)base + 0x1377C) -= float_1_80424990;
     } else {
         if (objectType == 7) {
@@ -4402,10 +4925,16 @@ void BattleAudience_Case_FallObject_Aud(int memberIdx, u8 objectType) {
             count = 8;
         }
 
+        if ((BattleAudience_GetSysCtrl(memberIdx) & 0xFF) == 1) {
+            member = BattleAudienceGetPtr(memberIdx);
+            if (*(u8*)((s32)member + 0x19) != 0xF) {
+                BattleAudience_ChangeStatus(memberIdx, 10);
+            }
+        }
         for (i = 0; i < count; i++) {
             other = BattleAudience_GetAudienceNoFromOffset(
                 memberIdx, offsets[i][0], offsets[i][1]);
-            if (other != -1 && BattleAudience_GetEscapeChangeOK(other) != 0) {
+            if (other != -1 && (BattleAudience_GetEscapeChangeOK(other) & 0xFF) != 0) {
                 BattleAudience_ChangeStatus(other, 0xC);
                 *(f32*)((s32)base + 0x1377C) -= float_1_80424990;
             }

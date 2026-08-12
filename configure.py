@@ -771,7 +771,6 @@ config.libs = [
         "host": False,
         "objects": [
             Object(NonMatching, "party/party.c"),
-            Object(NonMatching, "party/party_2.c"),
             Object(NonMatching, "party/party_bomhei.c"),
             Object(NonMatching, "party/party_chuchu.c"),
             Object(NonMatching, "party/party_cloud.c"),
@@ -779,7 +778,11 @@ config.libs = [
             Object(NonMatching, "party/party_hit.c"),
             Object(NonMatching, "party/party_kuribo.c"),
             Object(NonMatching, "party/party_motion.c"),
-            Object(NonMatching, "party/party_move.c"),
+            Object(
+                NonMatching,
+                "party/party_move.c",
+                symbol_mappings={"flyMain_800C7FF8": "flyMain"},
+            ),
             Object(NonMatching, "party/party_nokonoko.c"),
             Object(NonMatching, "party/party_vivian.c"),
             Object(NonMatching, "party/party_yoshi.c"),

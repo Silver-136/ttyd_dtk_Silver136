@@ -1096,15 +1096,26 @@ void npcDeleteGroup(void* npc) {
 }
 
 void npcMain(void) {
+    extern void* marioGetPtr(void);
+    extern void* animPoseGetAnimPosePtr(s32 poseId);
     extern s64 __div2i(s64 dividend, s64 divisor);
     extern f64 __cvt_sll_flt(s32 hi, u32 lo);
+    extern s32 strcmp(const char* a, const char* b);
+    extern void psndSFXOn_3D(char* id, void* pos);
     extern s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* outAngle);
     extern u8 npcMoveG(void* npc);
     extern u8 npcCheckHitMarioSide(s32 npc);
     extern void PSVECSubtract(void* a, void* b, void* out);
+    extern void animPoseSetAnim(s32 poseId, void* animName, s32 force);
+    extern void* evtGetPtrID(s32 id);
+    extern f32 cloudGetBreathPower(f32 width, void* pos);
     extern s32 npcCheckInterrupt(void* npc);
+    extern void* camGetPtr(s32 camId);
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
     extern void PSMTX44MultVec(void* mtx, void* src, void* dst);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flag);
+    extern void animPoseSetMaterialFlagOff(s32 poseId, u32 flag);
+    extern void animPoseSetMaterialEvtColor(s32 poseId, void* color);
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
     extern u8 _fbatFirstAttackAnnouceDisp(s32 cameraId, void* info);
     extern void npcDisp(s32 cameraId, void* npc);
@@ -1123,11 +1134,16 @@ void npcMain(void) {
     extern void fbatEncountCheck(void);
     extern s32 kpaJumpChk(void);
     extern s32 kpaFireAttackCheck(void);
+    extern void kpaAddScorePos(s32 score, void* pos);
     extern void fbatTalkMode(void);
     extern void fbatBattleMode(void);
     extern f64 angleABf(f64 x0, f64 z0, f64 x1, f64 z1);
     extern f64 compAngle(f64 a, f64 b);
     extern f64 reviseAngle(f64 angle);
+    extern f64 sqrt(f64 value);
+    extern s32 seqGetSeq(void);
+    extern s32 vivianGetStatus(void);
+    extern s32 kpaGetLevel(void);
 
     extern s32 npcMainCount;
     extern u32 DAT_800000f8;
@@ -1207,6 +1223,12 @@ void npcMain(void) {
     f32 kpaPos[3];
     f32 offsetAngle;
     f32 waterScale;
+    f32 dx;
+    f32 dz;
+    f32 distance;
+    f32 eventAngle;
+    u8 evtType;
+    s32 interrupt;
 
     npcWork = (void*)&work;
     if (*(s32*)((s32)gp + 0x14) != 0) {
@@ -1273,6 +1295,9 @@ void npcMain(void) {
                 *(f32*)((s32)npc + 0x180) = (f32)(dval / (f64)float_1E06_8041fd50);
                 dval = __cvt_sll_flt((s32)((*(s64*)((s32)npc + 0x190) << 3) >> 32), (u32)(*(s64*)((s32)npc + 0x190) << 3));
                 *(f32*)((s32)npc + 0x1A4) = (f32)(dval / (f64)float_1E06_8041fd50);
+                dval = __cvt_sll_flt((s32)((*(s64*)((s32)npc + 0x198) << 3) >> 32),
+                                     (u32)(*(s64*)((s32)npc + 0x198) << 3));
+                *(f32*)((s32)npc + 0x1A8) = (f32)(dval / (f64)float_1E06_8041fd50);
             }
 
             jumpFlags = *(u32*)((s32)npc + 0x1D4);
@@ -1329,7 +1354,7 @@ void npcMain(void) {
 
             PSVECSubtract((void*)((s32)npc + 0x8C), (void*)((s32)npc + 0x98), tmpVec);
             if (((flags & 0x400) != 0) && (*(f32*)((s32)npc + 0x1A4) > float_0_8041fc7c)) {
-                speed = tmpVec[0] * tmpVec[0] + tmpVec[2] * tmpVec[2];
+                speed = (f32)sqrt((f64)(tmpVec[0] * tmpVec[0] + tmpVec[2] * tmpVec[2]));
                 speedRatio = speed / *(f32*)((s32)npc + 0x1A4);
                 tribe = *(void**)((s32)npc + 0x28);
                 if (speedRatio >= float_0p1_8041fcdc) {
@@ -1361,6 +1386,154 @@ void npcMain(void) {
                         tmpVec[2] = *(f32*)((s32)npc + 0x94);
                         if (cloudGetBreathPower(*(f32*)((s32)npc + 0x14C), tmpVec) > float_0_8041fc7c) {
                             *(u32*)((s32)npc + 0x140) |= 8;
+                        } else {
+                            tmpVec[0] = *(f32*)((s32)npc + 0x8C);
+                            tmpVec[1] = *(f32*)((s32)npc + 0x90) -
+                                        (*(f32*)((s32)npc + 0x150) * float_0p5_8041fc80);
+                            tmpVec[2] = *(f32*)((s32)npc + 0x94);
+                            if (cloudGetBreathPower(*(f32*)((s32)npc + 0x14C), tmpVec) >
+                                float_0_8041fc7c) {
+                                *(u32*)((s32)npc + 0x140) |= 8;
+                            } else {
+                                tmpVec[0] = *(f32*)((s32)npc + 0x8C);
+                                tmpVec[1] = *(f32*)((s32)npc + 0x90) -
+                                            *(f32*)((s32)npc + 0x150);
+                                tmpVec[2] = *(f32*)((s32)npc + 0x94);
+                                if (cloudGetBreathPower(*(f32*)((s32)npc + 0x14C), tmpVec) >
+                                    float_0_8041fc7c) {
+                                    *(u32*)((s32)npc + 0x140) |= 8;
+                                }
+                            }
+                        }
+                    }
+
+                    evtType = *(u8*)((s32)evt + 0x10);
+                    if ((*(s32*)((s32)npc + 0x1F8) != 0) &&
+                        ((evtType == 1) || (evtType == 2))) {
+                        interrupt = 0;
+                        if (*(s32*)((s32)npc + 0x1F8) == 1) {
+                            dx = *(f32*)((s32)npc + 0x1FC) - *(f32*)((s32)npc + 0x8C);
+                            dz = *(f32*)((s32)npc + 0x204) - *(f32*)((s32)npc + 0x94);
+                            distance = (f32)sqrt((f64)(dx * dx + dz * dz));
+                            if (distance > *(f32*)((s32)npc + 0x214)) {
+                                interrupt = 1;
+                            }
+                        } else if (*(s32*)((s32)npc + 0x1F8) == 2) {
+                            f32* range = (f32*)((s32)npc + ((evtType == 2) ? 0x214 : 0x208));
+                            x = *(f32*)((s32)npc + 0x8C);
+                            z = *(f32*)((s32)npc + 0x94);
+                            if ((x < (*(f32*)((s32)npc + 0x1FC) - range[0])) ||
+                                (x > (*(f32*)((s32)npc + 0x1FC) + range[0])) ||
+                                (z < (*(f32*)((s32)npc + 0x204) - range[2])) ||
+                                (z > (*(f32*)((s32)npc + 0x204) + range[2]))) {
+                                interrupt = 1;
+                            }
+                        }
+                        if (interrupt != 0) {
+                            *(u32*)((s32)npc + 0x140) |= 4;
+                        }
+                    }
+
+                    if (evtType == 2) {
+                        player = marioGetPtr();
+                        dx = *(f32*)((s32)player + 0x8C) - *(f32*)((s32)npc + 0x8C);
+                        y = *(f32*)((s32)player + 0x90) - *(f32*)((s32)npc + 0x90);
+                        dz = *(f32*)((s32)player + 0x94) - *(f32*)((s32)npc + 0x94);
+                        distance = (f32)sqrt((f64)(dx * dx + dz * dz));
+                        interrupt = 1;
+                        if (((*(u32*)player & 0x82000000) == 0) &&
+                            ((*(u32*)((s32)player + 8) & 1) == 0) &&
+                            ((*(u32*)player & 0xA) == 0) &&
+                            (*(s32*)((s32)gp + 0x164) == 0) && (seqGetSeq() == 2) &&
+                            (*(u16*)((s32)player + 0x2E) != 0x19) &&
+                            ((vivianGetStatus() == 0) || (vivianGetStatus() == 1)) &&
+                            (distance >= float_0p25_8041fd58 * *(f32*)((s32)npc + 0x228)) &&
+                            (distance <= *(f32*)((s32)npc + 0x228)) &&
+                            (y <= *(f32*)((s32)npc + 0x20C)) &&
+                            (-y <= *(f32*)((s32)npc + 0x218))) {
+                            eventAngle = (f32)compAngle(*(f32*)((s32)npc + 0x144),
+                                                       (f32)angleABf(float_0_8041fc7c,
+                                                                   float_0_8041fc7c, dx, dz));
+                            if ((eventAngle <= float_0p5_8041fc80 *
+                                               *(f32*)((s32)npc + 0x22C)) &&
+                                (eventAngle >= -(float_0p5_8041fc80 *
+                                                *(f32*)((s32)npc + 0x22C)))) {
+                                interrupt = 0;
+                            }
+                        }
+                        if (interrupt != 0) {
+                            *(u32*)((s32)npc + 0x140) |= 2;
+                        }
+                    }
+
+                    if ((evtType == 1) || (evtType == 4)) {
+                        player = marioGetPtr();
+                        dx = *(f32*)((s32)player + 0x8C) - *(f32*)((s32)npc + 0x8C);
+                        y = *(f32*)((s32)player + 0x90) - *(f32*)((s32)npc + 0x90);
+                        dz = *(f32*)((s32)player + 0x94) - *(f32*)((s32)npc + 0x94);
+                        distance = (f32)sqrt((f64)(dx * dx + dz * dz));
+                        if ((flags & 0x8000000) != 0) {
+                            f32 levelOffsets[4];
+                            levelOffsets[0] = dat_802c1210;
+                            levelOffsets[1] = DAT_802c1214;
+                            levelOffsets[2] = DAT_802c1218;
+                            levelOffsets[3] = dat_802c121c;
+                            distance -= levelOffsets[kpaGetLevel()];
+                            if (distance < float_0_8041fc7c) {
+                                distance = float_0_8041fc7c;
+                            }
+                        }
+                        eventAngle = float_270_8041fcc4;
+                        if (reviseAngle(*(f32*)((s32)npc + 0x144)) < float_180_8041fccc) {
+                            eventAngle = float_90_8041fcb0;
+                        }
+                        interrupt = 0;
+                        if (((*(u32*)player & 0x82000000) == 0) &&
+                            ((*(u32*)((s32)player + 8) & 1) == 0) &&
+                            ((*(u32*)player & 0xA) == 0) &&
+                            (*(s32*)((s32)gp + 0x164) == 0) && (seqGetSeq() == 2) &&
+                            (*(u16*)((s32)player + 0x2E) != 0x19) &&
+                            ((vivianGetStatus() == 0) || (vivianGetStatus() == 1)) &&
+                            (y <= *(f32*)((s32)npc + 0x20C)) &&
+                            (-y <= *(f32*)((s32)npc + 0x218))) {
+                            if (distance <= float_0p25_8041fd58 * *(f32*)((s32)npc + 0x220)) {
+                                interrupt = 1;
+                            } else if (distance <= *(f32*)((s32)npc + 0x220)) {
+                                dval = compAngle(eventAngle,
+                                                angleABf(float_0_8041fc7c,
+                                                         float_0_8041fc7c, dx, dz));
+                                if ((dval <= (f64)(float_0p5_8041fc80 *
+                                                   *(f32*)((s32)npc + 0x224))) &&
+                                    (dval >= (f64)(-(float_0p5_8041fc80 *
+                                                    *(f32*)((s32)npc + 0x224))))) {
+                                    interrupt = 1;
+                                }
+                            }
+                        }
+                        if ((interrupt != 0) && (evtType == 4)) {
+                            if (*(s32*)((s32)npc + 0x1F8) == 1) {
+                                dx = *(f32*)((s32)npc + 0x1FC) - *(f32*)((s32)npc + 0x8C);
+                                dz = *(f32*)((s32)npc + 0x204) - *(f32*)((s32)npc + 0x94);
+                                distance = (f32)sqrt((f64)(dx * dx + dz * dz));
+                                if (distance > float_0p75_8041fcd4 *
+                                               *(f32*)((s32)npc + 0x214)) {
+                                    interrupt = 0;
+                                }
+                            } else if (*(s32*)((s32)npc + 0x1F8) == 2) {
+                                dx = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x214);
+                                dz = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x21C);
+                                x = *(f32*)((s32)npc + 0x8C);
+                                z = *(f32*)((s32)npc + 0x94);
+                                if ((x < (*(f32*)((s32)npc + 0x1FC) - dx)) ||
+                                    (x > (*(f32*)((s32)npc + 0x1FC) + dx)) ||
+                                    (z < (*(f32*)((s32)npc + 0x204) - dz)) ||
+                                    (z > (*(f32*)((s32)npc + 0x204) + dz))) {
+                                    interrupt = 0;
+                                }
+                            }
+                        }
+                        if (interrupt != 0) {
+                            *(u32*)((s32)npc + 0x140) |= 1;
                         }
                     }
                     npcCheckInterrupt(npc);
@@ -3126,6 +3299,10 @@ void* fbatHitCheck(u32 flags, void* hitInfo) {
                                   s32 npc, f32* distance);
     extern f32 float_1000_8041fca8;
     extern f32 float_0p5_8041fc80;
+    extern char str_fb_sensei_shita_802c13e8[];
+    extern char str_fb_sensei_sareta_802c13f8[];
+    extern s32 dat_8041fc70;
+    extern s32 dat_8041fc74;
     s32 npcWork;
     s32 player;
     s32 npc;
@@ -3149,7 +3326,17 @@ void* fbatHitCheck(u32 flags, void* hitInfo) {
         unknownFlags |= 1;
     }
 
-    if ((flags & 0x30) != 0 && seqGetSeq() == 2 && vivianGetStatus() == 0) {
+    if ((flags & 0x30) != 0 &&
+        ((flags & 0x10) == 0 || *(s16*)(player + 0x4C) < 1) &&
+        (*(u32*)player & 0x82000000) == 0 &&
+        ((*(u32*)(npcWork + 8) & 1) != 0 || (*(u32*)player & 0xA) == 0) &&
+        *(s32*)((s32)gp + 0x164) == 0 &&
+        seqGetSeq() == 2 &&
+        *(u16*)(player + 0x2E) != 0x19 &&
+        vivianGetStatus() == 0 &&
+        *(u16*)(player + 0x2E) != 0x1F &&
+        *(u16*)(player + 0x2E) != 0x20 &&
+        *(u16*)(*(s32*)(npcWork + 0xC) + 0x320) == 0) {
         for (i = 0; i < count; i++, npc += 0x340) {
             u32 npcFlags;
             f32 dx;
@@ -3160,9 +3347,7 @@ void* fbatHitCheck(u32 flags, void* hitInfo) {
                 continue;
             }
             npcFlags = *(u32*)npc;
-            if ((npcFlags & 2) == 0 || (npcFlags & 0x20) != 0 ||
-                (npcFlags & 0x08000000) != 0 ||
-                (*(u32*)(npc + 0x1D4) & 4) != 0) {
+            if ((npcFlags & 2) == 0) {
                 continue;
             }
             if ((flags & 0x1000) == 0) {
@@ -3172,11 +3357,20 @@ void* fbatHitCheck(u32 flags, void* hitInfo) {
             } else if ((npcFlags & 8) != 0) {
                 continue;
             }
+            if ((flags & 0x2000) != 0 &&
+                (*(u32*)(npc + 4) & 1) == 0) {
+                continue;
+            }
+            if ((npcFlags & 0x20) != 0 ||
+                (*(u32*)(npc + 0x1D4) & 4) != 0 ||
+                (npcFlags & 0x08000000) != 0) {
+                continue;
+            }
 
             if (*(f32*)(player + 0x90) >=
                     *(f32*)(npc + 0x90) + *(f32*)(npc + 0x150) ||
                 *(f32*)(npc + 0x90) >=
-                    *(f32*)(player + 0x90) + *(f32*)(player + 0xFC)) {
+                    *(f32*)(player + 0x90) + *(f32*)(player + 0x1BC)) {
                 continue;
             }
 
@@ -3184,39 +3378,619 @@ void* fbatHitCheck(u32 flags, void* hitInfo) {
             dz = *(f32*)(player + 0x94) - *(f32*)(npc + 0x94);
             distance = (f32)sqrt((f64)(dx * dx + dz * dz));
             if (distance < float_0p5_8041fc80 *
-                               (*(f32*)(player + 0xF8) + *(f32*)(npc + 0x14C)) &&
+                               (*(f32*)(player + 0x1B8) + *(f32*)(npc + 0x14C)) &&
                 distance < bestDistance) {
                 bestDistance = distance;
                 bestNpc = npc;
-                if ((flags & 0x10) != 0) {
+                if ((flags & 0x10) != 0 &&
+                    (*(u32*)(npc + 0x1D4) & 0x10000) == 0) {
+                    if (*(s32*)(npc + 0x2F8) != 0 &&
+                        evtGetPtrID(*(s32*)(npc + 0x11C)) != 0) {
+                        attackMode = *(u32*)(npc + 0x2F8);
+                    }
                     hitFlags = pouchEquipCheckBadge(0x1D) == 0 ?
                                    0x10000000 : 0x10000;
+                    if ((flags & 0x2000) == 0) {
+                        s32 announceData;
+
+                        announceData = *(s32*)((s32)gp + 0x168);
+                        *(s32*)(announceData + 0x550) = 0;
+                        *(s32*)(announceData + 0x554) = hitFlags;
+                        *(s32*)(announceData + 0x55C) = 0;
+                        switch (*(s32*)(announceData + 0x554)) {
+                            case 0x20000:
+                            case 0x40000:
+                            case 0x80000:
+                            case 0x100000:
+                            case 0x200000:
+                            case 0x400000:
+                            case 0x800000:
+                            case 0x1000000:
+                                *(char**)(announceData + 0x568) =
+                                    str_fb_sensei_shita_802c13e8;
+                                *(s32*)(announceData + 0x558) = 2;
+                                *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                break;
+                            case 0x10000000:
+                                *(char**)(announceData + 0x568) =
+                                    str_fb_sensei_sareta_802c13f8;
+                                *(s32*)(announceData + 0x558) = 1;
+                                *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                break;
+                            default:
+                                *(s32*)(announceData + 0x558) = 0;
+                                break;
+                        }
+                    }
                 }
                 if ((flags & 0x20) != 0 && marioGetJabaraState() == 6) {
+                    s32 announceData;
+
                     hitFlags = 0x20000;
+                    if ((flags & 0x2000) == 0) {
+                        announceData = *(s32*)((s32)gp + 0x168);
+                        *(s32*)(announceData + 0x550) = 0;
+                        *(s32*)(announceData + 0x554) = 0x20000;
+                        *(s32*)(announceData + 0x55C) = 0;
+                        switch (*(s32*)(announceData + 0x554)) {
+                            case 0x20000:
+                            case 0x40000:
+                            case 0x80000:
+                            case 0x100000:
+                            case 0x200000:
+                            case 0x400000:
+                            case 0x800000:
+                            case 0x1000000:
+                                *(char**)(announceData + 0x568) =
+                                    str_fb_sensei_shita_802c13e8;
+                                *(s32*)(announceData + 0x558) = 2;
+                                *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                break;
+                            case 0x10000000:
+                                *(char**)(announceData + 0x568) =
+                                    str_fb_sensei_sareta_802c13f8;
+                                *(s32*)(announceData + 0x558) = 1;
+                                *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                break;
+                            default:
+                                *(s32*)(announceData + 0x558) = 0;
+                                break;
+                        }
+                    }
+                } else if ((flags & 0x20) != 0 &&
+                           *(u16*)(player + 0x2E) == 0x10) {
+                    s32 announceData;
+
+                    hitFlags = 0x40000;
+                    if ((flags & 0x2000) == 0) {
+                        announceData = *(s32*)((s32)gp + 0x168);
+                        *(s32*)(announceData + 0x550) = 0;
+                        *(s32*)(announceData + 0x554) = 0x40000;
+                        *(s32*)(announceData + 0x55C) = 0;
+                        switch (*(s32*)(announceData + 0x554)) {
+                            case 0x20000:
+                            case 0x40000:
+                            case 0x80000:
+                            case 0x100000:
+                            case 0x200000:
+                            case 0x400000:
+                            case 0x800000:
+                            case 0x1000000:
+                                *(char**)(announceData + 0x568) =
+                                    str_fb_sensei_shita_802c13e8;
+                                *(s32*)(announceData + 0x558) = 2;
+                                *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                break;
+                            case 0x10000000:
+                                *(char**)(announceData + 0x568) =
+                                    str_fb_sensei_sareta_802c13f8;
+                                *(s32*)(announceData + 0x558) = 1;
+                                *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                break;
+                            default:
+                                *(s32*)(announceData + 0x558) = 0;
+                                break;
+                        }
+                    }
+                } else if ((flags & 0x20) != 0) {
+                    s32 announceData;
+
+                    hitFlags = 0x20000;
+                    if ((flags & 0x2000) == 0) {
+                        announceData = *(s32*)((s32)gp + 0x168);
+                        *(s32*)(announceData + 0x550) = 0;
+                        *(s32*)(announceData + 0x554) = 0x20000;
+                        *(s32*)(announceData + 0x55C) = 0;
+                        switch (*(s32*)(announceData + 0x554)) {
+                            case 0x20000:
+                            case 0x40000:
+                            case 0x80000:
+                            case 0x100000:
+                            case 0x200000:
+                            case 0x400000:
+                            case 0x800000:
+                            case 0x1000000:
+                                *(char**)(announceData + 0x568) =
+                                    str_fb_sensei_shita_802c13e8;
+                                *(s32*)(announceData + 0x558) = 2;
+                                *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                break;
+                            case 0x10000000:
+                                *(char**)(announceData + 0x568) =
+                                    str_fb_sensei_sareta_802c13f8;
+                                *(s32*)(announceData + 0x558) = 1;
+                                *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                break;
+                            default:
+                                *(s32*)(announceData + 0x558) = 0;
+                                break;
+                        }
+                    }
                 }
                 if ((flags & 0x2000) != 0) {
-                    break;
+                    continue;
                 }
             }
         }
     }
 
-    if ((flags & 1) != 0) {
+    if ((flags & 0x40) != 0 && bestNpc == 0 &&
+        ((flags & 0x10) == 0 || *(s16*)(player + 0x4C) < 1) &&
+        (flags & 1) == 0) {
+        extern s32 _npcHitCheckHammerAllMotion(f64 radius, f64 angle,
+                                                s32 npc, f32* outDist);
+        extern f64 reviseAngle(f64 angle);
+        extern const f32 float_1p5_8041fcac;
+        extern const f32 float_90_8041fcb0;
+        f32 radius = float_1p5_8041fcac * *(f32*)(player + 0x1B8);
+        f64 angle = reviseAngle(*(f32*)(player + 0x1AC) -
+                                float_90_8041fcb0 +
+                                *(f32*)((s32)camGetPtr(4) + 0x114));
+
         npc = *(s32*)(npcWork + 0xC);
         for (i = 0; i < count; i++, npc += 0x340) {
             f32 distance;
-            if (npc != 0 && (*(u32*)npc & 2) != 0 &&
-                (*(u32*)npc & 0x20000020) == 0 &&
-                _npcHitCheckSphere(*(f32*)(player + 0x8C),
-                                   *(f32*)(player + 0x90) +
-                                       float_0p5_8041fc80 * *(f32*)(player + 0xFC),
-                                   *(f32*)(player + 0x94), 30.0, npc,
-                                   &distance) != 0 &&
+            u32 npcFlags;
+
+            if (npc == 0) {
+                continue;
+            }
+            npcFlags = *(u32*)npc;
+            if ((npcFlags & 2) == 0) {
+                continue;
+            }
+            if ((flags & 0x1000) == 0) {
+                if ((npcFlags & 8) == 0) {
+                    continue;
+                }
+            } else if ((npcFlags & 8) != 0) {
+                continue;
+            }
+            if ((flags & 0x2000) != 0 &&
+                (*(u32*)(npc + 4) & 2) == 0) {
+                continue;
+            }
+            if ((npcFlags & 0x20000000) != 0 ||
+                (npcFlags & 0x20) != 0 ||
+                (*(u32*)(npc + 0x1D4) & 4) != 0 ||
+                (npcFlags & 0x08000000) != 0) {
+                continue;
+            }
+            if (_npcHitCheckHammerAllMotion(radius, angle, npc, &distance) != 0 &&
                 distance < bestDistance) {
                 bestDistance = distance;
                 bestNpc = npc;
-                hitFlags = 0x1000000;
+                hitFlags = 0x100000;
+                if ((flags & 0x2000) != 0) {
+                    continue;
+                }
+
+                {
+                    s32 announceData;
+
+                    announceData = *(s32*)((s32)gp + 0x168);
+                    *(s32*)(announceData + 0x550) = 0;
+                    *(s32*)(announceData + 0x554) = 0x100000;
+                    *(s32*)(announceData + 0x55C) = 0;
+                    switch (*(s32*)(announceData + 0x554)) {
+                        case 0x20000:
+                        case 0x40000:
+                        case 0x80000:
+                        case 0x100000:
+                        case 0x200000:
+                        case 0x400000:
+                        case 0x800000:
+                        case 0x1000000:
+                            *(char**)(announceData + 0x568) =
+                                str_fb_sensei_shita_802c13e8;
+                            *(s32*)(announceData + 0x558) = 2;
+                            *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                            break;
+                        case 0x10000000:
+                            *(char**)(announceData + 0x568) =
+                                str_fb_sensei_sareta_802c13f8;
+                            *(s32*)(announceData + 0x558) = 1;
+                            *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                            break;
+                        default:
+                            *(s32*)(announceData + 0x558) = 0;
+                            break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    if ((flags & 0x80) != 0 && bestNpc == 0 &&
+        ((flags & 0x10) == 0 || *(s16*)(player + 0x4C) < 1)) {
+        if ((flags & 1) != 0) {
+            if (*(u16*)(player + 0x2E) == 0x13) {
+
+                extern f32 marioGetAngleKaitenHammer(void);
+                extern s32 pouchGetHammerLv(void);
+                extern const f32 float_1p5_8041fcac;
+                f32 hammerAngle = marioGetAngleKaitenHammer();
+
+                if (hammerAngle >= 0.0f) {
+                    f32 radius = float_1p5_8041fcac * *(f32*)(player + 0x1B8);
+                    f32 sinAngle;
+                    f32 cosAngle;
+                    f32 hitX;
+                    f32 hitY;
+                    f32 hitZ;
+
+                    sincosf(hammerAngle, &sinAngle, &cosAngle);
+                    hitX = sinAngle * radius + *(f32*)(player + 0x8C);
+                    hitY = *(f32*)(player + 0x90) + 15.0f;
+                    hitZ = cosAngle * radius + *(f32*)(player + 0x94);
+
+                    npc = *(s32*)(npcWork + 0xC);
+                    for (i = 0; i < count; i++, npc += 0x340) {
+                        f32 distance;
+                        u32 npcFlags;
+
+                        if (npc == 0) {
+                            continue;
+                        }
+                        npcFlags = *(u32*)npc;
+                        if ((npcFlags & 2) == 0) {
+                            continue;
+                        }
+                        if ((flags & 0x1000) == 0) {
+                            if ((npcFlags & 8) == 0) {
+                                continue;
+                            }
+                        } else if ((npcFlags & 8) != 0) {
+                            continue;
+                        }
+                        if ((flags & 0x2000) != 0 &&
+                            (*(u32*)(npc + 4) & 2) == 0) {
+                            continue;
+                        }
+                        if ((npcFlags & 0x20000000) != 0 ||
+                            (npcFlags & 0x20) != 0 ||
+                            (*(u32*)(npc + 0x1D4) & 4) != 0 ||
+                            (npcFlags & 0x08000000) != 0) {
+                            continue;
+                        }
+                        if (_npcHitCheckSphere(
+                                hitX, hitY, hitZ, 12.0, npc, &distance) != 0 &&
+                            distance < bestDistance) {
+                            bestDistance = distance;
+                            bestNpc = npc;
+                            hitFlags =
+                                pouchGetHammerLv() < 3 ? 0x200000 : 0x400000;
+                            if ((flags & 0x2000) != 0) {
+                                continue;
+                            }
+
+                            {
+                                s32 announceData;
+
+                                announceData = *(s32*)((s32)gp + 0x168);
+                                *(s32*)(announceData + 0x550) = 0;
+                                *(s32*)(announceData + 0x554) = hitFlags;
+                                *(s32*)(announceData + 0x55C) = 0;
+                                switch (*(s32*)(announceData + 0x554)) {
+                                    case 0x20000:
+                                    case 0x40000:
+                                    case 0x80000:
+                                    case 0x100000:
+                                    case 0x200000:
+                                    case 0x400000:
+                                    case 0x800000:
+                                    case 0x1000000:
+                                        *(char**)(announceData + 0x568) =
+                                            str_fb_sensei_shita_802c13e8;
+                                        *(s32*)(announceData + 0x558) = 2;
+                                        *(s32*)(announceData + 0x56C) =
+                                            dat_8041fc70;
+                                        break;
+                                    case 0x10000000:
+                                        *(char**)(announceData + 0x568) =
+                                            str_fb_sensei_sareta_802c13f8;
+                                        *(s32*)(announceData + 0x558) = 1;
+                                        *(s32*)(announceData + 0x56C) =
+                                            dat_8041fc74;
+                                        break;
+                                    default:
+                                        *(s32*)(announceData + 0x558) = 0;
+                                        break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                }
+        } else {
+
+            extern s32 _npcHitCheckHammerAllMotion(f64 radius, f64 angle,
+                                                    s32 npc, f32* outDist);
+            extern f64 reviseAngle(f64 angle);
+            extern s32 pouchGetHammerLv(void);
+            extern const f32 float_1p5_8041fcac;
+            extern const f32 float_90_8041fcb0;
+            f32 radius = float_1p5_8041fcac * *(f32*)(player + 0x1B8);
+            f64 angle = reviseAngle(*(f32*)(player + 0x1AC) -
+                                    float_90_8041fcb0 +
+                                    *(f32*)((s32)camGetPtr(4) + 0x114));
+
+            npc = *(s32*)(npcWork + 0xC);
+            for (i = 0; i < count; i++, npc += 0x340) {
+                f32 distance;
+                u32 npcFlags;
+
+                if (npc == 0) {
+                    continue;
+                }
+                npcFlags = *(u32*)npc;
+                if ((npcFlags & 2) == 0) {
+                    continue;
+                }
+                if ((flags & 0x1000) == 0) {
+                    if ((npcFlags & 8) == 0) {
+                        continue;
+                    }
+                } else if ((npcFlags & 8) != 0) {
+                    continue;
+                }
+                if ((flags & 0x2000) != 0 &&
+                    (*(u32*)(npc + 4) & 2) == 0) {
+                    continue;
+                }
+                if ((npcFlags & 0x20000000) != 0 ||
+                    (npcFlags & 0x20) != 0 ||
+                    (*(u32*)(npc + 0x1D4) & 4) != 0 ||
+                    (npcFlags & 0x08000000) != 0) {
+                    continue;
+                }
+                if (_npcHitCheckHammerAllMotion(radius, angle, npc, &distance) != 0 &&
+                    distance < bestDistance) {
+                    bestDistance = distance;
+                    bestNpc = npc;
+                    hitFlags = pouchGetHammerLv() < 3 ? 0x200000 : 0x400000;
+                    if ((flags & 0x2000) != 0) {
+                        continue;
+                    }
+
+                    {
+                        s32 announceData;
+
+                        announceData = *(s32*)((s32)gp + 0x168);
+                        *(s32*)(announceData + 0x550) = 0;
+                        *(s32*)(announceData + 0x554) = hitFlags;
+                        *(s32*)(announceData + 0x55C) = 0;
+                        switch (*(s32*)(announceData + 0x554)) {
+                            case 0x20000:
+                            case 0x40000:
+                            case 0x80000:
+                            case 0x100000:
+                            case 0x200000:
+                            case 0x400000:
+                            case 0x800000:
+                            case 0x1000000:
+                                *(char**)(announceData + 0x568) =
+                                    str_fb_sensei_shita_802c13e8;
+                                *(s32*)(announceData + 0x558) = 2;
+                                *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                break;
+                            case 0x10000000:
+                                *(char**)(announceData + 0x568) =
+                                    str_fb_sensei_sareta_802c13f8;
+                                *(s32*)(announceData + 0x558) = 1;
+                                *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                break;
+                            default:
+                                *(s32*)(announceData + 0x558) = 0;
+                                break;
+                        }
+                    }
+                    break;
+                }
+            }
+            }
+    }
+
+    if ((flags & 0x100) != 0 && bestNpc == 0 &&
+        ((flags & 0x10) == 0 || *(s16*)(player + 0x4C) < 1)) {
+        extern s32 nokonokoGetStatus(void* party);
+        s32 party = (s32)partyGetPtr(marioGetPartyId());
+
+        if (party != 0 && (flags & 1) != 0 &&
+            *(u8*)(party + 0x33) == 2 && (*(u32*)party & 0x100) != 0) {
+            s32 koopsStatus = nokonokoGetStatus((void*)party);
+
+            if (koopsStatus >= 2 && koopsStatus <= 5) {
+                f32 partyX = *(f32*)(party + 0x58);
+                f32 partyY = *(f32*)(party + 0x5C);
+                f32 partyZ = *(f32*)(party + 0x60);
+                f32 partyRadius = float_0p5_8041fc80 * *(f32*)(party + 0xF4);
+                f32 partyHalfHeight = float_0p5_8041fc80 * *(f32*)(party + 0xF0);
+
+            npc = *(s32*)(npcWork + 0xC);
+            for (i = 0; i < count; i++, npc += 0x340) {
+                f32 distance;
+                u32 npcFlags;
+
+                if (npc == 0) {
+                    continue;
+                }
+                npcFlags = *(u32*)npc;
+                if ((npcFlags & 2) == 0) {
+                    continue;
+                }
+                if ((flags & 0x1000) == 0) {
+                    if ((npcFlags & 8) == 0) {
+                        continue;
+                    }
+                } else if ((npcFlags & 8) != 0) {
+                    continue;
+                }
+                if ((flags & 0x2000) != 0 &&
+                    (*(u32*)(npc + 4) & 4) == 0) {
+                    continue;
+                }
+                if ((npcFlags & 0x20000000) != 0 ||
+                    (npcFlags & 0x20) != 0 ||
+                    (*(u32*)(npc + 0x1D4) & 4) != 0 ||
+                    (npcFlags & 0x08000000) != 0) {
+                    continue;
+                }
+                if (_npcHitCheckSphere(partyX, partyY + partyHalfHeight,
+                                       partyZ, partyRadius, npc, &distance) != 0 &&
+                    distance < bestDistance) {
+                    bestDistance = distance;
+                    bestNpc = npc;
+                    hitFlags = 0x800000;
+                    if ((flags & 0x2000) != 0) {
+                        continue;
+                    }
+
+                    {
+                        s32 announceData;
+
+                        announceData = *(s32*)((s32)gp + 0x168);
+                        *(s32*)(announceData + 0x550) = 0;
+                        *(s32*)(announceData + 0x554) = 0x800000;
+                        *(s32*)(announceData + 0x55C) = 0;
+                        switch (*(s32*)(announceData + 0x554)) {
+                            case 0x20000:
+                            case 0x40000:
+                            case 0x80000:
+                            case 0x100000:
+                            case 0x200000:
+                            case 0x400000:
+                            case 0x800000:
+                            case 0x1000000:
+                                *(char**)(announceData + 0x568) =
+                                    str_fb_sensei_shita_802c13e8;
+                                *(s32*)(announceData + 0x558) = 2;
+                                *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                break;
+                            case 0x10000000:
+                                *(char**)(announceData + 0x568) =
+                                    str_fb_sensei_sareta_802c13f8;
+                                *(s32*)(announceData + 0x558) = 1;
+                                *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                break;
+                            default:
+                                *(s32*)(announceData + 0x558) = 0;
+                                break;
+                        }
+                    }
+                    break;
+                }
+            }
+            }
+        }
+    }
+
+    if ((flags & 0x200) != 0 && bestNpc == 0 &&
+        ((flags & 0x10) == 0 || *(s16*)(player + 0x4C) < 1)) {
+        s32 party = (s32)partyGetPtr(marioGetPartyId());
+
+        if (party != 0 && (flags & 1) != 0 &&
+            *(s8*)(party + 0x31) == 3) {
+            f32 partyX = *(f32*)(party + 0x58);
+            f32 partyY = *(f32*)(party + 0x5C);
+            f32 partyZ = *(f32*)(party + 0x60);
+            f32 partyHalfHeight = float_0p5_8041fc80 * *(f32*)(party + 0xF0);
+
+            npc = *(s32*)(npcWork + 0xC);
+            for (i = 0; i < count; i++, npc += 0x340) {
+                f32 distance;
+                u32 npcFlags;
+
+                if (npc == 0) {
+                    continue;
+                }
+                npcFlags = *(u32*)npc;
+                if ((npcFlags & 2) == 0) {
+                    continue;
+                }
+                if ((flags & 0x1000) == 0) {
+                    if ((npcFlags & 8) == 0) {
+                        continue;
+                    }
+                } else if ((npcFlags & 8) != 0) {
+                    continue;
+                }
+                if ((flags & 0x2000) != 0 &&
+                    (*(u32*)(npc + 4) & 8) == 0) {
+                    continue;
+                }
+                if ((npcFlags & 0x20000000) != 0 ||
+                    (npcFlags & 0x20) != 0 ||
+                    (*(u32*)(npc + 0x1D4) & 4) != 0 ||
+                    (npcFlags & 0x08000000) != 0) {
+                    continue;
+                }
+                if (_npcHitCheckSphere(partyX, partyY + partyHalfHeight,
+                                       partyZ, 30.0, npc, &distance) != 0 &&
+                    distance < bestDistance) {
+                    bestDistance = distance;
+                    bestNpc = npc;
+                    hitFlags = 0x1000000;
+                    if ((flags & 0x2000) != 0) {
+                        continue;
+                    }
+
+                    {
+                        s32 announceData;
+
+                        announceData = *(s32*)((s32)gp + 0x168);
+                        *(s32*)(announceData + 0x550) = 0;
+                        *(s32*)(announceData + 0x554) = 0x1000000;
+                        *(s32*)(announceData + 0x55C) = 0;
+                        switch (*(s32*)(announceData + 0x554)) {
+                            case 0x20000:
+                            case 0x40000:
+                            case 0x80000:
+                            case 0x100000:
+                            case 0x200000:
+                            case 0x400000:
+                            case 0x800000:
+                            case 0x1000000:
+                                *(char**)(announceData + 0x568) =
+                                    str_fb_sensei_shita_802c13e8;
+                                *(s32*)(announceData + 0x558) = 2;
+                                *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                break;
+                            case 0x10000000:
+                                *(char**)(announceData + 0x568) =
+                                    str_fb_sensei_sareta_802c13f8;
+                                *(s32*)(announceData + 0x558) = 1;
+                                *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                break;
+                            default:
+                                *(s32*)(announceData + 0x558) = 0;
+                                break;
+                        }
+                    }
+                    break;
+                }
             }
         }
     }

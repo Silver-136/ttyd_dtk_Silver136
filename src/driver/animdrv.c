@@ -198,8 +198,6 @@ void animPose_AllocBuffer(void* pPose) {
     extern void initTestHeap(void);
     extern void animPoseRefresh(void);
     s32 pose = (s32)pPose;
-    s32 file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
-    s32 data = **(s32**)(*(s32*)(file + 8) + 0xA0);
     s32 ret;
     s32 otherPose;
     s32 i;
@@ -232,21 +230,19 @@ void animPose_AllocBuffer(void* pPose) {
     *(s32*)(pose + (destination)) = ret; \
 } while (0)
 
-    ALLOC_INLINE(0x48, *(u32*)(data + 0xF0) * 0xC);
-    ALLOC_INLINE(0x4C, *(u32*)(data + 0xF0) * 0xC);
-    ALLOC_INLINE(0x50, *(u32*)(data + 0xF8) * 0xC);
-#undef ALLOC_INLINE
-
-    *(s32*)(pose + 0x54) = testAlloc(*(s32*)(data + 0xF8) * 0xC);
-    *(s32*)(pose + 0x58) = testAlloc(*(s32*)(data + 0x13C));
+    ALLOC_INLINE(0x48, *(u32*)(**(s32**)(*(s32*)(*(s32*)wp + (*(s32*)(pose + 0x10) << 4) + 8) + 0xA0) + 0xF0) * 0xC);
+    ALLOC_INLINE(0x4C, *(u32*)(**(s32**)(*(s32*)(*(s32*)wp + (*(s32*)(pose + 0x10) << 4) + 8) + 0xA0) + 0xF0) * 0xC);
+    ALLOC_INLINE(0x50, *(u32*)(**(s32**)(*(s32*)(*(s32*)wp + (*(s32*)(pose + 0x10) << 4) + 8) + 0xA0) + 0xF8) * 0xC);
+    ALLOC_INLINE(0x54, *(u32*)(**(s32**)(*(s32*)(*(s32*)wp + (*(s32*)(pose + 0x10) << 4) + 8) + 0xA0) + 0xF8) * 0xC);
+    ALLOC_INLINE(0x58, *(u32*)(**(s32**)(*(s32*)(*(s32*)wp + (*(s32*)(pose + 0x10) << 4) + 8) + 0xA0) + 0x13C));
     *(s32*)(pose + 0x5C) = *(s32*)(pose + 0x58);
-    *(s32*)(pose + 0x60) = testAlloc(*(s32*)(data + 0x140) << 2);
-    *(s32*)(pose + 0x64) = testAlloc(*(s32*)(data + 0x140) << 2);
-    *(s32*)(pose + 0x68) = testAlloc(*(s32*)(data + 0x12C) * 0x18);
+    ALLOC_INLINE(0x60, *(u32*)(**(s32**)(*(s32*)(*(s32*)wp + (*(s32*)(pose + 0x10) << 4) + 8) + 0xA0) + 0x140) << 2);
+    ALLOC_INLINE(0x64, *(u32*)(**(s32**)(*(s32*)(*(s32*)wp + (*(s32*)(pose + 0x10) << 4) + 8) + 0xA0) + 0x140) << 2);
+    ALLOC_INLINE(0x68, *(u32*)(**(s32**)(*(s32*)(*(s32*)wp + (*(s32*)(pose + 0x10) << 4) + 8) + 0xA0) + 0x12C) * 0x18);
     *(s32*)(pose + 0x6C) = *(s32*)(pose + 0x68);
     *(s32*)(pose + 0x3C) = -1;
+#undef ALLOC_INLINE
 }
-
 
 void animPoseRefresh(void) {
     extern void* __memAlloc(s32 heap, u32 size);
@@ -1216,8 +1212,8 @@ u8 animPoseMain(s32 poseIdx) {
     s32 visCount;
     s32 nodeCount;
     s32 texCount;
-    s32 i;
-    s32 j;
+    u32 i;
+    u32 j;
     s32 count;
     s32 idx;
     u8* upd;
@@ -2292,6 +2288,7 @@ void renderProc(int shapeIdx, int animFrame0) {
     extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
     extern void GXSetArray(s32, void*, s32);
     extern void GXBegin(s32, s32, s32);
+    extern void materialProc(s32);
     s32 work;
     s32 pose;
     s32 poseData;
@@ -2311,6 +2308,7 @@ void renderProc(int shapeIdx, int animFrame0) {
     if (shapeIdx == -1) {
         return;
     }
+    materialProc(shapeIdx);
 
     PSMTXConcat((u8*)camGetCurPtr() + 0x11C, (void*)g_modeling_mtx, posMtx);
     GXLoadPosMtxImm(posMtx, 0);
@@ -2650,6 +2648,8 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double sc
     extern void PSMTXCopy(void* src, void* dst);
     extern void evalProc(s32 parent, s32 group);
     extern u8 animPoseMain(s32 poseId);
+    extern s32 strcmp(const char*, const char*);
+    extern s32 gp;
     extern void _animPoseDrawMtx(void* pose, void* mtx, s32 mode, double rot, double scale);
     extern void* g_modeling_mtx;
     extern s32 g_modeling_mtx_lv;
@@ -2657,7 +2657,7 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double sc
     extern f32 float_0_8041fb28;
     extern f32 float_0p5_8041fb44;
     extern f32 float_1_8041fb24;
-    extern f32 float_deg2rad_8041fbb4;
+    extern f32 float_deg2rad_8041fb2c;
     s32 work;
     s32 poses;
     s32 pose;
@@ -2668,39 +2668,39 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double sc
     s32 count;
     s32 posCount;
     s32 nrmCount;
+    s32 animCount;
+    s32 animIdx;
+    s32 nameOffset;
+    s64 time;
+    u32 ticks;
     void* src;
     Mtx rotMtx;
     Mtx scaleMtx;
     Mtx tempMtx;
     Mtx paperMtx;
     Mtx workMtx;
+    static Mtx paperDrawMtx;
 
     work = wp;
     poses = *(s32*)(work + 0x10);
     pose = poses + poseId * 0x170;
     effectId = *(s32*)(pose + 0x90);
 
-    file = *(s32*)work + (*(s32*)(pose + 0x10) << 4);
-    file = *(s32*)(file + 8);
-    data = *(s32*)(*(s32*)(file + 0xA0));
-
     if (effectId == -1) {
-        if (((mode != 2) || ((*(u32*)(data + 0xC4) & 1) == 0)) &&
-            ((*(u32*)(data + 0xC4) & (1 << mode)) == 0)) {
-            return;
-        }
-        _animPoseDrawMtx((void*)pose, mtx, mode, rotValue, scaleValue);
-        return;
+        goto direct_pose;
     }
 
     if ((*(u32*)pose & 0xC0) != 0) {
+        file = *(s32*)work + (*(s32*)(pose + 0x10) << 4);
+        file = *(s32*)(file + 8);
+        data = *(s32*)(*(s32*)(file + 0xA0));
         src = mtx;
         if (((*(u32*)pose & 8) == 0) && (rotValue != (double)float_0_8041fb28)) {
-            PSMTXRotRad(rotMtx, (double)(float_deg2rad_8041fbb4 * (f32)rotValue), 'y');
+            PSMTXRotRad(rotMtx, (double)(float_deg2rad_8041fb2c * (f32)rotValue), 'y');
             PSMTXConcat(mtx, rotMtx, tempMtx);
             src = tempMtx;
         }
-        if (scaleValue != (double)float_0_8041fb28) {
+        if (scaleValue != (double)float_1_8041fb24) {
             PSMTXScale(scaleMtx, (f32)scaleValue, (f32)scaleValue, (f32)scaleValue);
             PSMTXConcat(src, scaleMtx, tempMtx);
             src = tempMtx;
@@ -2736,6 +2736,55 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double sc
             *(s32*)(work + 0xFC) = *(s32*)(work + 0xEC) + *(s32*)(work + 0xF4) * 0xC;
             *(s32*)(work + 0xF4) += nrmCount;
         }
+
+        animIdx = *(s32*)(pose + 0x94);
+        if (animIdx != -1) {
+            animCount = *(s32*)(data + 0x148);
+            if (animIdx < 0) {
+                animIdx = 0;
+                nameOffset = 0;
+                while (animIdx < animCount) {
+                    if (strcmp((char*)(*(s32*)(data + 0x1AC) + nameOffset),
+                               (char*)*(s32*)(pose + 0x94)) == 0) {
+                        break;
+                    }
+                    nameOffset += 0x40;
+                    animIdx++;
+                }
+            } else if (animIdx >= animCount) {
+                animIdx = 0;
+            }
+
+            if (animIdx != *(s32*)(drawPose + 0x14)) {
+                *(s32*)(drawPose + 0x14) = animIdx;
+                if (*(s32*)(drawPose + 0x90) != -1 && (*(u32*)drawPose & 2) != 0) {
+                    *(u32*)drawPose |= 4;
+                }
+                ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+                if (*(s32*)(drawPose + 0xC) == 0) {
+                    time = *(s64*)(gp + 0x40) / ticks;
+                } else {
+                    time = *(s64*)(gp + 0x38) / ticks;
+                }
+                *(s64*)(drawPose + 0x18) = time;
+                *(s32*)(drawPose + 0x3C) = -1;
+                *(f32*)(drawPose + 0x40) = float_0_8041fb28;
+                *(s32*)(drawPose + 0x80) = 0;
+                *(f32*)(drawPose + 0x84) = float_0_8041fb28;
+            }
+        }
+
+        ticks = (*(u32*)0x800000F8 >> 2) / 1000;
+        if (*(s32*)(drawPose + 0xC) == 0) {
+            time = *(s64*)(gp + 0x40) / ticks;
+        } else {
+            time = *(s64*)(gp + 0x38) / ticks;
+        }
+        *(s64*)(drawPose + 0x18) = time;
+        *(s32*)(drawPose + 0x3C) = -1;
+        *(f32*)(drawPose + 0x40) = float_0_8041fb28;
+        *(s32*)(drawPose + 0x80) = 0;
+        *(f32*)(drawPose + 0x84) = float_0_8041fb28;
         *(s32*)(drawPose + 0x18) = *(s32*)(pose + 0x18);
         *(s32*)(drawPose + 0x1C) = *(s32*)(pose + 0x1C);
         animPoseMain(effectId);
@@ -2754,21 +2803,72 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double sc
     *(s32*)(drawPose + 0xF0) = *(s32*)(pose + 0xF0);
     *(s32*)(drawPose + 0xF4) = *(s32*)(pose + 0xF4);
 
-    PSMTXScale(paperMtx, *(f32*)(pose + 0x10C), *(f32*)(pose + 0x110), float_1_8041fb24);
-    PSMTXTrans(workMtx, (double)*(f32*)(pose + 0x104), (double)*(f32*)(pose + 0x108),
-               (double)float_0_8041fb28);
-    PSMTXConcat(paperMtx, workMtx, paperMtx);
-    PSMTXCopy(paperMtx, (void*)(work + 0x3C));
-    *(s32*)(work + 0xCC) = work + 0x3C;
-    *(s32*)(work + 0xD0) = 0;
-    *(s32*)(work + 0xD4) = 0;
+    if ((*(u32*)pose & 2) == 0) {
+        PSMTXScale(paperMtx, *(f32*)(pose + 0x10C), *(f32*)(pose + 0x110),
+                   float_1_8041fb24);
+        PSMTXTrans(workMtx, (double)*(f32*)(pose + 0x104), (double)*(f32*)(pose + 0x108),
+                   (double)float_0_8041fb28);
+        PSMTXConcat(paperMtx, workMtx, paperMtx);
+        PSMTXTrans(workMtx, (double)float_0p5_8041fb44, (double)float_1_8041fb24,
+                   (double)float_0_8041fb28);
+        PSMTXConcat(paperMtx, workMtx, paperMtx);
+        PSMTXScale(workMtx, float_1_8041fb24 / *(f32*)(pose + 0xF8),
+                   float_1_8041fb24 / *(f32*)(pose + 0xFC), float_1_8041fb24);
+        PSMTXConcat(paperMtx, workMtx, paperMtx);
+        PSMTXTrans(workMtx, (double)-float_0p5_8041fb44, (double)-float_1_8041fb24,
+                   (double)float_0_8041fb28);
+        PSMTXConcat(paperMtx, workMtx, paperMtx);
+        PSMTXCopy(paperMtx, (void*)(work + 0x3C));
+        *(s32*)(work + 0xCC) = work + 0x3C;
+        *(s32*)(work + 0xD0) = 0;
+        *(s32*)(work + 0xD4) = 0;
+    } else {
+        PSMTXScale(paperMtx, *(f32*)(pose + 0x10C), *(f32*)(pose + 0x110),
+                   float_1_8041fb24);
+        PSMTXTrans(workMtx, (double)*(f32*)(pose + 0x104), (double)*(f32*)(pose + 0x108),
+                   (double)float_0_8041fb28);
+        PSMTXConcat(paperMtx, workMtx, paperMtx);
+        PSMTXCopy(paperMtx, (void*)(work + 0x3C));
+        *(s32*)(work + 0xCC) = work + 0x3C;
+        *(s32*)(work + 0xD0) = 0;
+        *(s32*)(work + 0xD4) = 0;
 
-    _animPoseDrawMtx((void*)drawPose, mtx, mode, rotValue, scaleValue);
-    *(s32*)(work + 0xCC) = 0;
-    *(s32*)(work + 0xD0) = 0;
-    *(s32*)(work + 0xD4) = 0;
-    if ((*(u32*)(drawPose + 4) & 2) != 0) {
-        *(s32*)(work + 0xE8) = 0;
+        PSMTXScale(paperMtx, *(f32*)(pose + 0xF8), *(f32*)(pose + 0xFC),
+                   *(f32*)(pose + 0xF8));
+        if (*(s32*)(work + 0x10C) == 0) {
+            PSMTXTrans(workMtx, (double)float_0_8041fb28,
+                       (double)*(f32*)(pose + 0x100), (double)float_0_8041fb28);
+        } else {
+            PSMTXTrans(workMtx, (double)float_0_8041fb28,
+                       (double)(2.0f * *(f32*)(pose + 0x100)),
+                       (double)float_0_8041fb28);
+        }
+        PSMTXConcat(workMtx, paperMtx, paperMtx);
+        PSMTXConcat(mtx, paperMtx, paperDrawMtx);
+        mtx = paperDrawMtx;
+    }
+
+direct_pose:
+    if (effectId == -1) {
+        file = *(s32*)work + (*(s32*)(pose + 0x10) << 4);
+        file = *(s32*)(file + 8);
+        data = *(s32*)(*(s32*)(file + 0xA0));
+        if (((mode != 2) || ((*(u32*)(data + 0xC4) & 1) == 0)) &&
+            ((*(u32*)(data + 0xC4) & (1 << mode)) == 0)) {
+            return;
+        }
+    }
+
+    if (effectId == -1) {
+        _animPoseDrawMtx((void*)pose, mtx, mode, rotValue, scaleValue);
+    } else {
+        _animPoseDrawMtx((void*)drawPose, mtx, mode, rotValue, scaleValue);
+        *(s32*)(work + 0xCC) = 0;
+        *(s32*)(work + 0xD0) = 0;
+        *(s32*)(work + 0xD4) = 0;
+        if ((*(u32*)(drawPose + 4) & 2) != 0) {
+            *(s32*)(work + 0xE8) = 0;
+        }
     }
 }
 

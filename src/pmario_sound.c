@@ -1235,36 +1235,45 @@ u8 psndSFXMain(void) {
     extern void SoundEfxSetPan(s32, u8);
     extern void SoundEfxSetVolume(s32, u8);
     u8* snd = (u8*)&psnd;
-    u8* entry = (u8*)pssfx;
-    u8* list = (u8*)pssfxlist;
+    PaperSoundEffect* entry = pssfx;
     s32 i;
 
-    for (i = 0; i < 40; i++, entry += 0x28) {
-        s32 listId = *(s32*)entry;
-        s32 handle = *(s32*)(entry + 0x18);
+    for (i = 0; i < 40; i++, entry++) {
+        u32 listId = entry->listIndex;
+        s32 handle = entry->effectId;
         u32 kind;
         s32 volume;
-        if (listId == -1 || (*(u16*)(entry + 6) & 1) != 0) continue;
-        kind = *(u32*)(list + (listId & 0x1FFF) * 0x14 + 4);
+        if (listId == (u32)-1 || (entry->unk6 & 1) != 0) continue;
+        kind = pssfxlist[listId & 0x1FFF].unk4;
         if ((kind & 0x80000000) != 0) {
-            if (SoundSSCheck(handle) == 0) { *(s32*)entry = -1; *(s32*)(entry + 0x18) = -1; continue; }
+            if (SoundSSCheck(handle) == 0) { entry->listIndex = (u32)-1; entry->effectId = -1; continue; }
         } else if ((kind & 0x40000000) != 0) {
-            if (SoundSongCheck(handle) == 0) { *(s32*)entry = -1; *(s32*)(entry + 0x18) = -1; continue; }
+            if (SoundSongCheck(handle) == 0) { entry->listIndex = (u32)-1; entry->effectId = -1; continue; }
         } else if (SoundEfxCheck(handle) == 0) {
-            *(s32*)entry = -1; *(s32*)(entry + 0x18) = -1; continue;
+            entry->listIndex = (u32)-1; entry->effectId = -1; continue;
         }
-        volume = (*(u8*)(entry + 8) * *(u8*)(entry + 9)) / 127 - *(u16*)(entry + 0x10);
+        if ((entry->unk6 & 2) != 0) continue;
+        volume = (entry->volume * entry->unk9[0]) / 127 - *(u16*)&entry->unk9[7];
         if (volume < 0) volume = 0;
         if (volume > 127) volume = 127;
         if ((kind & 0x80000000) != 0) {
-            SoundSSSetPanCh(handle, *(u8*)(entry + 0xA));
+            SoundSSSetPanCh(handle, entry->unk9[1]);
             SoundSSSetVolCh(handle, volume);
-            SoundSSSetSrndPanCh(handle, *(u8*)(entry + 0xB));
+            SoundSSSetSrndPanCh(handle, entry->unk9[2]);
         } else if ((kind & 0x40000000) != 0) {
             SoundSongSetVolCh(handle, volume);
         } else {
-            SoundEfxSetPan(handle, *(u8*)(entry + 0xA));
+            SoundEfxSetPan(handle, entry->unk9[1]);
             SoundEfxSetVolume(handle, volume);
+        }
+        if ((entry->unk6 & 0xA30) == 0 && (*(u16*)(snd + 0x56) & 0x80) != 0) {
+            if ((kind & 0x80000000) != 0) {
+                SoundSSSetVolCh(handle, 0);
+            } else if ((kind & 0x40000000) != 0) {
+                SoundSongSetVolCh(handle, 0);
+            } else {
+                SoundEfxSetVolume(handle, 0);
+            }
         }
     }
     if (*(u8*)(snd + 0x24) == 2 && --*(s16*)(snd + 0x28) < 1) *(u8*)(snd + 0x24) = 0;
@@ -1814,6 +1823,8 @@ u32 psndENVOn_f_d(u32 flags, s32 name, s32 frames, s32 extra) {
     } PSndEnvListEntryLocal;
     extern char* psenvlistname[];
     extern PSndEnvListEntryLocal psenvlist[];
+    extern void* gp;
+    extern const f32 float_1000_804218cc;
     extern int strcmp(const char*, const char*);
     extern s32 irand(s32);
     extern u8 psndENV_stop(u32);
@@ -1826,14 +1837,19 @@ u32 psndENVOn_f_d(u32 flags, s32 name, s32 frames, s32 extra) {
     u16* activeIdPtr = (u16*)(work + 0x18 + slot2);
     u16 activeId;
     PSndEnvListEntryLocal* list;
+    char** nameEntry;
     s32 i;
 
+    nameEntry = psenvlistname;
     if (name < 0) {
-        for (i = 0; i < 0x76; i++) {
-            if (strcmp(psenvlistname[i], (char*)name) == 0) {
+        i = 0;
+        do {
+            if (strcmp(*nameEntry, (char*)name) == 0) {
                 break;
             }
-        }
+            i++;
+            nameEntry++;
+        } while (i < 0x76);
         name = i;
         if (name >= 0x76) {
             name = 0;
@@ -1911,13 +1927,13 @@ u32 psndENVOn_f_d(u32 flags, s32 name, s32 frames, s32 extra) {
             u8* dst = NULL;
             s32 idx;
 
+            dst = NULL;
             for (idx = 0; idx < 0x10; idx++) {
                 if (*(s16*)((s32)&psenv[idx] + 4) == 0) {
                     dst = (u8*)&psenv[idx];
                     break;
                 }
             }
-
             if (dst != NULL) {
                 *(u16*)(dst + 4) = listId;
                 *(u32*)dst = list->soundId;
@@ -1935,7 +1951,10 @@ u32 psndENVOn_f_d(u32 flags, s32 name, s32 frames, s32 extra) {
                 dst[0xD] = 0;
                 *(u16*)(dst + 0xE) = 0;
 
-                if (dst[8] == 2 || dst[8] == 0) {
+                if (dst[8] == 2) {
+                    *(u16*)(dst + 0xE) = dst[0xA] * *(s16*)((s32)gp + 4);
+                    *(s16*)(dst + 0xE) += *(s16*)((s32)gp + 4) * (s16)irand(dst[9]);
+                } else if (dst[8] < 2 && dst[8] == 0) {
                     *(u16*)(dst + 0xE) = dst[0xA] * *(s16*)((s32)gp + 4);
                     *(s16*)(dst + 0xE) += *(s16*)((s32)gp + 4) * (s16)irand(dst[9]);
                 }

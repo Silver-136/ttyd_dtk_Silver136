@@ -202,17 +202,34 @@ void effFallMain(void* effect) {
     extern f32 dispCalcZ(void*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effFallDisp(void);
+    extern void effFallDispWater(void);
+    extern void effFallDispInseki(void);
     extern void psndSFXOn(s32);
+    extern void psndSFXOff(s32);
+    extern void animPoseRelease(s32);
+    extern s32 animGroupBaseAsync(void*, s32, s32);
+    extern s32 animPoseEntry(void*, s32);
+    extern void animPoseSetAnim(s32, void*, s32);
+    extern u8 animPoseMain(s32);
+    extern f64 animPoseGetLoopTimes(s32);
+    extern void effKemuri1N64Entry(f64, f64, f64, f64, s32);
+    extern void* evtEntry(void*, s32, u32);
+    extern u32 psndSFXOn_3D(char*, void*);
+    extern s32 evt_shake[];
+    extern void* gp;
     extern f64 distABf(f64, f64, f64, f64);
     extern f64 angleABf(f64, f64, f64, f64);
     extern void effWaterDamageN64Entry(f64, f64, f64, f64, s32, s32);
+    extern f64 intplGetValue(f64, f64, s32, s32, s32);
     u8* base = *(u8**)((u8*)effect + 0xC);
     s32 count = *(s32*)((u8*)effect + 8);
     s32 type = *(s32*)base;
     s32 alive = 0;
+    s32 animMode;
     s32 i;
     f32 pos[3];
 
+    animMode = (*(s32*)((u8*)gp + 0x14) != 0);
     pos[0] = *(f32*)(base + 4);
     pos[1] = *(f32*)(base + 8);
     pos[2] = *(f32*)(base + 0xC);
@@ -228,7 +245,303 @@ void effFallMain(void* effect) {
             continue;
         }
         alive++;
-        if (type == 3) {
+        if (type == 8) {
+            s32 pose = *(s32*)(p + 0x5C);
+
+            switch (*state) {
+            case 0:
+                if (animGroupBaseAsync(
+                        "EFF_light", animMode, 0) != 0) {
+                    pose = animPoseEntry(
+                        "EFF_light", animMode);
+                    *(s32*)(p + 0x5C) = pose;
+                    animPoseSetAnim(pose, "Z_1", 1);
+                    (*state)++;
+                }
+                break;
+
+            case 1:
+            case 2:
+                *y += *vy;
+                *vy -= *gravity;
+
+                if (*y < *(f32*)(base + 8)) {
+                    *y = *(f32*)(base + 8);
+                    *timer = 0;
+                    (*state)++;
+                }
+
+                if (*state == 1 &&
+                    *y < *(f32*)(base + 8) + 30.0f) {
+                    effKemuri1N64Entry(
+                        (f64)(pos[0] + *(f32*)(p + 4)),
+                        (f64)(pos[1] + *(f32*)(base + 8)),
+                        (f64)(pos[2] + *(f32*)(p + 0xC)),
+                        0.0,
+                        4);
+                    evtEntry(evt_shake, 0, 0);
+                    animPoseSetAnim(
+                        *(s32*)(p + 0x5C),
+                        "A_1",
+                        1);
+                    (*state)++;
+                    psndSFXOn_3D(
+                        "SFX_BTL_STAGE_DAMAGE",
+                        pos);
+                }
+                break;
+
+            case 3:
+                if (animPoseGetLoopTimes(
+                        *(s32*)(p + 0x5C)) >= 1.0) {
+                    (*timer)++;
+                    if (*(s32*)(p + 0x20) < *timer) {
+                        (*state)++;
+                    }
+                }
+                break;
+
+            case 4:
+                *alpha -= 10;
+                if (*alpha < 0) {
+                    *alpha = 0;
+                    (*state)++;
+                }
+                break;
+
+            case 5:
+                animPoseRelease(*(s32*)(p + 0x5C));
+                *(s32*)(p + 0x5C) = -1;
+                (*state)++;
+                break;
+
+            case 6:
+                alive--;
+                break;
+            }
+
+            if (*(s32*)(p + 0x5C) != -1) {
+                animPoseMain(*(s32*)(p + 0x5C));
+            }
+        } else if (type == 7 && *state >= 8) {
+            if (*state == 8) {
+                psndSFXOff(*(s32*)(p + 0x64));
+                if (*(s32*)(p + 0x5C) != -1) {
+                    animPoseRelease(*(s32*)(p + 0x5C));
+                }
+                if (*(s32*)(p + 0x60) != -1) {
+                    animPoseRelease(*(s32*)(p + 0x60));
+                }
+                *(s32*)(p + 0x5C) = -1;
+                *(s32*)(p + 0x60) = -1;
+                (*state)++;
+            } else if (*state == 9) {
+                alive--;
+            }
+        } else if (type == 4 || type == 5) {
+            s32 pose = *(s32*)(p + 0x5C);
+            const char* animName =
+                type == 5 ? "EFF_Baketu" : "EFF_Tarai";
+
+            switch (*state) {
+            case 0:
+                if (animGroupBaseAsync((void*)animName, animMode, 0) != 0) {
+                    if (pose == -1) {
+                        pose = animPoseEntry((void*)animName, animMode);
+                        *(s32*)(p + 0x5C) = pose;
+                        animPoseSetAnim(pose, "Z_1", 1);
+                    }
+                    if (*timer != 0) {
+                        (*timer)--;
+                    }
+                    if (*timer == 0) {
+                        (*state)++;
+                    }
+                }
+                break;
+
+            case 1:
+                *y += *vy;
+                *vy -= *gravity;
+                if (distABf(
+                        *(f32*)(p + 4),
+                        *(f32*)(p + 0xC),
+                        0.0,
+                        0.0) >=
+                    (f64)(0.5f * *(f32*)(base + 0x10))) {
+                    if (*y < *(f32*)(base + 8)) {
+                        *y = *(f32*)(base + 8);
+                        *vy *= -0.3f;
+                        (*state)++;
+                    }
+                } else if (
+                    *y < *(f32*)(base + 8) +
+                             *(f32*)(base + 0x14)) {
+                    *y = *(f32*)(base + 8) +
+                         *(f32*)(base + 0x14);
+                    *vy *= -0.3f;
+                    (*state)++;
+                }
+                break;
+
+            case 2: {
+                f32 angle;
+
+                *y += *vy;
+                *vy -= *gravity;
+
+                angle =
+                    6.2832f *
+                    (f32)angleABf(
+                        0.0,
+                        0.0,
+                        *(f32*)(p + 4),
+                        *(f32*)(p + 0xC));
+                if (i == 1) {
+                    angle =
+                        6.2832f * *(f32*)(base + 0x18);
+                }
+                angle /= 360.0f;
+
+                *(f32*)(p + 4) +=
+                    2.0f * (f32)sin((f64)angle);
+                *(f32*)(p + 0xC) -=
+                    2.0f * (f32)cos((f64)angle);
+
+                if (*y < *(f32*)(base + 8)) {
+                    *y = *(f32*)(base + 8);
+                    *vy *= -0.5f;
+                    *y = *(f32*)(base + 8);
+                    *timer = 0;
+                    if (*vy < 1.0f) {
+                        (*state)++;
+                    }
+                }
+                break;
+            }
+
+            case 3:
+                (*timer)++;
+                if (*timer > 30) {
+                    (*state)++;
+                }
+                break;
+
+            case 4:
+                *alpha -= 10;
+                if (*alpha < 0) {
+                    *alpha = 0;
+                    (*state)++;
+                    animPoseRelease(*(s32*)(p + 0x5C));
+                    *(s32*)(p + 0x5C) = -1;
+                }
+                break;
+
+            case 5:
+                alive--;
+                break;
+            }
+
+            if (*state > 1) {
+                f32 target =
+                    type == 5 ? 430.0f : 360.0f;
+
+                *(f32*)(p + 0x48) +=
+                    (target - *(f32*)(p + 0x48)) /
+                    10.0f;
+            }
+
+            if (*(s32*)(p + 0x5C) != -1) {
+                animPoseMain(*(s32*)(p + 0x5C));
+            }
+        } else if (type == 6) {
+            s32 pose = *(s32*)(p + 0x5C);
+
+            switch (*state) {
+            case 0:
+                if (animGroupBaseAsync(
+                        "EFF_koopa", animMode, 0) != 0) {
+                    if (pose == -1) {
+                        pose = animPoseEntry(
+                            "EFF_koopa", animMode);
+                        *(s32*)(p + 0x5C) = pose;
+                        animPoseSetAnim(pose, "Z_1", 1);
+                        psndSFXOn_3D(
+                            "SFX_BTL_STAGE_FALL_K", pos);
+                    }
+
+                    *(f32*)(p + 4) += *(f32*)(p + 0x50);
+                    *(f32*)(p + 8) += *(f32*)(p + 0x54);
+                    *(f32*)(p + 0xC) += *(f32*)(p + 0x58);
+
+                    (*timer)++;
+                    if (*timer > 30) {
+                        *timer = 0;
+                        (*state)++;
+
+                        effKemuri1N64Entry(
+                            (f64)(pos[0] + *(f32*)(p + 4)),
+                            (f64)(pos[1] + *(f32*)(p + 8)),
+                            (f64)(pos[2] + *(f32*)(p + 0xC)),
+                            0.0,
+                            4);
+                        evtEntry(evt_shake, 0, 0);
+                    }
+                }
+                break;
+
+            case 1:
+                *(f32*)(p + 0x48) =
+                    (f32)intplGetValue(
+                        30.0, -27.0, 11, *timer, 180);
+                if (*(f32*)(p + 0x48) < 0.0f) {
+                    *(f32*)(p + 0x4C) =
+                        *(f32*)(p + 0x48);
+                    *(f32*)(p + 0x48) = 0.0f;
+                }
+
+                (*timer)++;
+                if (*timer > 180) {
+                    *timer = 0;
+                    (*state)++;
+                }
+
+                if (*timer == 100) {
+                    psndSFXOn_3D(
+                        "SFX_BTL_STAGE_FALL_K", pos);
+                }
+                break;
+
+            case 2:
+                *(f32*)(p + 0x48) =
+                    (f32)intplGetValue(
+                        -27.0, 80.0, 11, *timer, 200);
+                if (*(f32*)(p + 0x48) < 0.0f) {
+                    *(f32*)(p + 0x4C) =
+                        *(f32*)(p + 0x48);
+                    *(f32*)(p + 0x48) = 0.0f;
+                }
+
+                (*timer)++;
+                if (*timer > 200) {
+                    animPoseRelease(
+                        *(s32*)(p + 0x5C));
+                    alive--;
+                    pose = -1;
+                    *(s32*)(p + 0x5C) = -1;
+                }
+
+                if (*timer == 70) {
+                    psndSFXOn_3D(
+                        "SFX_BTL_STAGE_FALL_K", pos);
+                }
+                break;
+            }
+
+            if (pose != -1) {
+                animPoseMain(pose);
+            }
+        } else if (type == 3) {
             switch (*state) {
             case 0:
                 *y += *vy;
@@ -337,18 +650,37 @@ void effFallMain(void* effect) {
         }
     }
 
-    if (alive == 0 || (*(u32*)effect & 4)) {
+    if ((*(u32*)effect & 4) != 0) {
         *(u32*)effect &= ~4;
+        for (i = 0; i < count; i++) {
+            u8* p = base + i * 0x68;
+            if (*(s32*)(p + 0x5C) != -1) {
+                animPoseRelease(*(s32*)(p + 0x5C));
+            }
+            if (*(s32*)(p + 0x60) != -1) {
+                animPoseRelease(*(s32*)(p + 0x60));
+            }
+            psndSFXOff(*(s32*)(p + 0x64));
+        }
+        effDelete(effect);
+    } else if (alive == 0) {
         effDelete(effect);
     } else {
-        dispEntry(4, 1, effFallDisp, effect, dispCalcZ(pos));
+        if (type == 3) {
+            dispEntry(4, 2, effFallDispWater, effect, dispCalcZ(pos));
+        } else if (type == 7) {
+            dispEntry(4, 2, effFallDispInseki, effect, dispCalcZ(pos));
+        } else if (type == 4 || type == 5) {
+            dispEntry(4, 0, effFallDisp, effect, dispCalcZ(pos));
+        } else {
+            dispEntry(4, 2, effFallDisp, effect, dispCalcZ(pos));
+        }
     }
 }
 
 /* stub-fill: effFallDisp | missing_definition | ghidra_signature */
 void effFallDisp(s32 cameraId, void* effect) {
-    extern void mapSetMaterialFog(void);
-    extern void effGetTexObj(void*, s32, s32);
+    extern void effGetTexObj(s32, void*);
     extern void GXLoadTexObj(void*, s32);
     extern void GXBegin(s32, s32, s32);
     extern void PSMTXTrans(void*, f32, f32, f32);
@@ -373,6 +705,8 @@ void effFallDisp(s32 cameraId, void* effect) {
     extern void GXSetCurrentMtx(s32);
     extern void GXSetChanMatColor(s32, void*);
     extern void GXLoadTexMtxImm(void*, s32, s32);
+    extern void PSMTXRotAxisRad(void*, void*, f32);
+    extern void animPoseDrawMtx(s32, void*, s32, f64, f64);
     u8* base = *(u8**)((u8*)effect + 0xC);
     s32 count = *(s32*)((u8*)effect + 8);
     s32 type = *(s32*)base;
@@ -383,12 +717,17 @@ void effFallDisp(s32 cameraId, void* effect) {
     f32 baseMtx[3][4];
     f32 rot[3][4];
     f32 texMtx[3][4];
+    f32 poseAxis[3];
+    f32 poseAxisAngle;
+    u8* camera;
+    u8* rotationCamera;
     s32 i;
 
-    mapSetMaterialFog();
+    camera = camGetPtr(cameraId);
     PSMTXTrans(trans, *(f32*)(base + 4), *(f32*)(base + 8), *(f32*)(base + 0xC));
+    rotationCamera = camGetPtr(cameraId);
     PSMTXRotRad(rot, 0x79,
-                0.017453292f * -*(f32*)((u8*)camGetPtr(cameraId) + 0x114));
+                0.017453292f * -*(f32*)(rotationCamera + 0x114));
     PSMTXConcat(trans, rot, baseMtx);
     GXSetNumChans(1);
     GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
@@ -405,14 +744,76 @@ void effFallDisp(s32 cameraId, void* effect) {
     GXSetVtxAttrFmt(0, 13, 1, 4, 0);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-    effGetTexObj(tex, type == 2 ? 0x33 : 0x32, 0);
-    GXLoadTexObj(tex, 0);
+    poseAxisAngle = 6.2832f * *(f32*)(base + 0x18);
+    if (type == 2) {
+        effGetTexObj(0x33, tex);
+        GXLoadTexObj(tex, 0);
+    } else if (type >= 0 && type < 2) {
+        effGetTexObj(0x32, tex);
+        GXLoadTexObj(tex, 0);
+    }
     for (i = 1; i < count; i++) {
         u8* p = base + i * 0x68;
         u32 color;
-        if (*(s32*)(p + 0x38) < 0) {
+
+        if (type == 4 || type == 5) {
+            s32 pose = *(s32*)(p + 0x5C);
+            f32 scaleValue;
+            f32 centerOffset;
+
+            poseAxis[0] =
+                (f32)cos((f64)(poseAxisAngle / 360.0f));
+            poseAxis[1] = 0.0f;
+            poseAxis[2] =
+                (f32)sin((f64)(poseAxisAngle / 360.0f));
+
+            PSMTXTrans(
+                trans,
+                *(f32*)(p + 4),
+                *(f32*)(p + 8),
+                *(f32*)(p + 0xC));
+
+            scaleValue = *(f32*)(p + 0x2C);
+            PSMTXScale(
+                scale,
+                scaleValue,
+                scaleValue,
+                scaleValue);
+            PSMTXConcat(trans, scale, trans);
+
+            centerOffset = type == 4 ? 8.0f : 16.0f;
+            PSMTXTrans(
+                scale,
+                0.0f,
+                centerOffset,
+                0.0f);
+            PSMTXConcat(trans, scale, trans);
+
+            PSMTXRotAxisRad(
+                rot,
+                poseAxis,
+                0.017453292f * -*(f32*)(p + 0x48));
+            PSMTXConcat(trans, rot, trans);
+
+            PSMTXTrans(
+                scale,
+                0.0f,
+                -centerOffset,
+                0.0f);
+            PSMTXConcat(trans, scale, trans);
+            PSMTXConcat(baseMtx, trans, trans);
+
+            if (pose != -1) {
+                animPoseDrawMtx(
+                    pose, trans, 1, 0.0, 10.0);
+                animPoseDrawMtx(
+                    pose, trans, 2, 0.0, 10.0);
+                animPoseDrawMtx(
+                    pose, trans, 3, 0.0, 10.0);
+            }
             continue;
         }
+
         PSMTXTrans(trans, *(f32*)(p + 4), *(f32*)(p + 8), *(f32*)(p + 0xC));
         if (type < 2) {
             PSMTXRotRad(rot, 0x79, 0.017453292f * *(f32*)(p + 0x18));
@@ -427,7 +828,7 @@ void effFallDisp(s32 cameraId, void* effect) {
         PSMTXScale(scale, *(f32*)(p + 0x2C), *(f32*)(p + 0x2C), *(f32*)(p + 0x2C));
         PSMTXConcat(trans, scale, model);
         PSMTXConcat(baseMtx, model, model);
-        PSMTXConcat((u8*)camGetPtr(cameraId) + 0x118, model, model);
+        PSMTXConcat(camera + 0x118, model, model);
         GXLoadPosMtxImm(model, 0);
         GXSetCurrentMtx(0);
         color = *(u32*)(p + 0x3C);

@@ -1,44 +1,152 @@
 #include "effect/n64/eff_kumokumo_chip_n64.h"
 
 
-void* effKumokumoChipN64Entry(f32 x0, f32 y0, f32 z0, f32 x1, f32 y1, f32 z1, f32 step, f32 scale, s32 type) {
+void* effKumokumoChipN64Entry(
+    f32 x0, f32 y0, f32 z0,
+    f32 x1, f32 y1, f32 z1,
+    f32 step, f32 scale, s32 type)
+{
     extern void* effEntry(void);
     extern void* __memAlloc(s32, s32);
     extern void effKumokumoChipMain(void*);
-    extern f32 sqrtf(f32);
+    extern f64 __frsqrte(f64);
+    extern f32 __float_nan;
     extern char str_KumokumoChipN64_802fb384[];
+
     void* entry;
     u8* work;
-    f32 dx, dy, dz, dist;
+    f32 dx;
+    f32 dy;
+    f32 dz;
+    f32 len;
+    f32 lenSq;
     s32 count;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_KumokumoChipN64_802fb384;
     *(s32*)((s32)entry + 8) = 1;
+
     work = __memAlloc(3, 0x48);
+
+    dy = y1 - y0;
     *(u8**)((s32)entry + 0xC) = work;
     *(void**)((s32)entry + 0x10) = effKumokumoChipMain;
-    *(u32*)entry |= 2;
+
     dx = x1 - x0;
-    dy = y1 - y0;
     dz = z1 - z0;
-    dist = sqrtf(dx * dx + dy * dy + dz * dz);
-    count = step > 0.0f ? (s32)(dist / step) : 0;
+
+    *(u32*)entry |= 2;
+
+    lenSq = dz * dz + dx * dx + dy * dy;
+
     *(s32*)work = type;
     *(s32*)(work + 0x20) = 0;
-    if (count == 0) {
+
+    len = lenSq;
+
+    if (lenSq != 0.0f) {
+        f64 d;
+
+        d = (f64)lenSq;
+
+        if (d > 0.0) {
+            f64 inv;
+
+            inv = __frsqrte(d);
+            inv = 0.5 * inv * -(d * inv * inv - 3.0);
+            inv = 0.5 * inv * -(d * inv * inv - 3.0);
+            len = (f32)(
+                d * 0.5 * inv *
+                -(d * inv * inv - 3.0));
+        } else if (d < 0.0) {
+            len = __float_nan;
+        } else {
+            u32 bits;
+            u32 kindBits;
+            s32 kind;
+
+            bits = *(u32*)&lenSq;
+            kindBits = bits & 0x7F800000;
+
+            if (kindBits == 0x7F800000) {
+                if ((bits & 0x7FFFFF) == 0) {
+                    kind = 2;
+                } else {
+                    kind = 1;
+                }
+            } else if ((kindBits < 0x7F800000) &&
+                       (kindBits == 0)) {
+                if ((bits & 0x7FFFFF) == 0) {
+                    kind = 3;
+                } else {
+                    kind = 5;
+                }
+            } else {
+                kind = 4;
+            }
+
+            if (kind == 1) {
+                len = __float_nan;
+            } else {
+                len = lenSq;
+            }
+        }
+    }
+
+    if (step > 0.0f) {
+        count = (s32)(len / step);
+    } else {
+        count = 0;
+    }
+
+    if (count != 0) {
+        f32 invCount;
+
+        invCount = 1.0f / (f32)count;
+        *(f32*)(work + 0x10) = dx * invCount;
+        *(f32*)(work + 0x14) = dy * invCount;
+        *(f32*)(work + 0x18) = dz * invCount;
+    } else {
         *(f32*)(work + 0x10) = 0.0f;
         *(f32*)(work + 0x14) = 0.0f;
         *(f32*)(work + 0x18) = 0.0f;
-    } else {
-        *(f32*)(work + 0x10) = dx / count;
-        *(f32*)(work + 0x14) = dy / count;
-        *(f32*)(work + 0x18) = dz / count;
     }
+
+    if (count < 0) {
+        *(s32*)(work + 0x1C) = 1000;
+    } else {
+        *(s32*)(work + 0x1C) = count;
+    }
+
+    *(s32*)(work + 0x30) = 0;
     *(f32*)(work + 4) = x0;
     *(f32*)(work + 8) = y0;
     *(f32*)(work + 0xC) = z0;
-    *(f32*)(work + 0x1C) = scale;
+    *(f32*)(work + 0x44) = scale;
+
+    switch (type) {
+    case 0:
+    case 2:
+        *(s32*)(work + 0x24) = 0xD7;
+        *(s32*)(work + 0x28) = 0xD7;
+        *(s32*)(work + 0x2C) = 0xB9;
+        *(s32*)(work + 0x34) = 0xD7;
+        *(s32*)(work + 0x38) = 200;
+        *(s32*)(work + 0x3C) = 100;
+        *(s32*)(work + 0x40) = 0xFF;
+        break;
+
+    default:
+        *(s32*)(work + 0x24) = 0xFF;
+        *(s32*)(work + 0x28) = 0xFF;
+        *(s32*)(work + 0x2C) = 0xFF;
+        *(s32*)(work + 0x34) = 0xDC;
+        *(s32*)(work + 0x38) = 0xF5;
+        *(s32*)(work + 0x3C) = 0xFF;
+        *(s32*)(work + 0x40) = 0xFF;
+        break;
+    }
+
     return entry;
 }
 

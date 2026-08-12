@@ -350,8 +350,22 @@ void btlseqFirstAct(void* battleWork) {
     extern s32 BattleStatusChangeAnnouceMain(void*);
     extern void BattleStatusChangeMsgAdjust(void*);
     extern void BattleStage_WallCloseCheck(void);
+    extern s32 evtCheckID(s32);
+    extern void BattleStage_NozzleWorkCheck(s32);
+    extern void BattleGetFirstAttackUnit(void*, void**, void**);
+    extern void* _GetFirstAttackWeapon(u32);
+    extern void BattleStatusWindowEventOff(void);
+    extern u32 BtlUnit_GetBelong(void*);
+    extern void BattleAudience_Case_FirstAttack_Good(void);
+    extern void BattleAudience_Case_FirstAttack_Bad(void);
+    extern void* BattleGetPartyPtr(void*);
+    extern void* BattleGetMarioPtr(void*);
+    extern u8 _default_haikei_set_entry_event[];
     s32 seq;
     void* unit;
+    void* target;
+    void* event;
+    void* weapon;
     s32 i;
     s32 messageBusy;
     s32 announceBusy;
@@ -359,11 +373,68 @@ void btlseqFirstAct(void* battleWork) {
     seq = BattleGetSeq(battleWork, 2);
     switch (seq) {
         case 0x2000000:
-            *(s32*)((s32)battleWork + 0xEFC) = 0;
-            for (i = 0; i < 64; i++) {
-                unit = BattleGetUnitPtr(battleWork, i);
-                if (unit != NULL) {
-                    *(u32*)((s32)unit + 0x27C) &= ~0x80000000;
+            i = *(s32*)(*(s32*)((s32)battleWork + 0x2738) + 8);
+            if (i == 0) {
+                *(s32*)((s32)battleWork + 0xEFC) = 0;
+                evtEntry(_default_haikei_set_entry_event, 10, 0);
+                for (i = 0; i < 64; i++) {
+                    unit = BattleGetUnitPtr(battleWork, i);
+                    if (unit != NULL && *(void**)((s32)unit + 0x284) != NULL) {
+                        event = evtEntry(*(void**)((s32)unit + 0x284), 10, 0);
+                        *(s32*)((s32)unit + 0x288) = *(s32*)((s32)event + 0x15C);
+                        *(s32*)((s32)event + 0x160) = *(s32*)unit;
+                    }
+                }
+                BattleSetSeq(battleWork, 2, 0x2000001);
+                return;
+            }
+            if (i >= 1 && i < 4) {
+                *(s32*)((s32)battleWork + 0xEFC) = 10;
+            } else {
+                *(s32*)((s32)battleWork + 0xEFC) = 0;
+            }
+            *(u32*)((s32)battleWork + 0x1720) |= 2;
+            BattleGetFirstAttackUnit(battleWork, &unit, &target);
+            *(s32*)((s32)battleWork + 0x420) = *(s32*)unit;
+            *(u32*)((s32)unit + 0x27C) |= 0x80000000;
+            event = evtEntry(*(void**)((s32)target + 0x2B0), 10, 0x20);
+            if (event != NULL) {
+                *(s32*)((s32)event + 0x160) = *(s32*)target;
+                *(s32*)((s32)target + 0x278) = 0x39;
+                *(s32*)((s32)target + 0x2B4) = *(s32*)((s32)event + 0x15C);
+            }
+            *(u32*)((s32)unit + 0x1C) |= 0x04000000;
+            if (i < 9) {
+                weapon = _GetFirstAttackWeapon(i);
+                *(void**)((s32)unit + 0x2A0) = *(void**)((s32)weapon + 0xB0);
+                *(s32*)((s32)unit + 0x2AC) = 0;
+                BattleStatusWindowEventOff();
+            }
+            if ((s8)BtlUnit_GetBelong(unit) == 0) {
+                BattleAudience_Case_FirstAttack_Good();
+            } else {
+                BattleAudience_Case_FirstAttack_Bad();
+            }
+            event = evtEntry(*(void**)((s32)unit + 0x2A0), 10, 0);
+            if (event != NULL) {
+                *(s32*)((s32)event + 0x160) = *(s32*)unit;
+                *(s32*)((s32)unit + 0x2A8) = *(s32*)((s32)event + 0x15C);
+            }
+            if (i < 7) {
+                if (i > 0) {
+                    target = BattleGetPartyPtr(battleWork);
+                    if (target != NULL) {
+                        event = evtEntry(*(void**)((s32)target + 0x284), 10, 0);
+                        *(s32*)((s32)target + 0x288) = *(s32*)((s32)event + 0x15C);
+                        *(s32*)((s32)event + 0x160) = *(s32*)target;
+                    }
+                }
+            } else if (i < 9) {
+                target = BattleGetMarioPtr(battleWork);
+                if (target != NULL) {
+                    event = evtEntry(*(void**)((s32)target + 0x284), 10, 0);
+                    *(s32*)((s32)target + 0x288) = *(s32*)((s32)event + 0x15C);
+                    *(s32*)((s32)event + 0x160) = *(s32*)target;
                 }
             }
             BattleSetSeq(battleWork, 2, 0x2000001);
@@ -427,11 +498,60 @@ void btlseqFirstAct(void* battleWork) {
             }
             break;
         case 0x2000009:
-            BattleStage_WallCloseCheck();
+            if (*(s32*)((s32)battleWork + 0x19058) != 0 &&
+                !evtCheckID(*(s32*)((s32)battleWork + 0x19058))) {
+                *(s32*)((s32)battleWork + 0x19058) = 0;
+            }
+            if (*(s32*)((s32)battleWork + 0x19058) == 0) {
+                BattleSetSeq(battleWork, 2, 0x200000A);
+            }
             break;
         case 0x200000A:
             *(s32*)((s32)battleWork + 0x1905C) = 0;
             BattleSetSeq(battleWork, 2, 0x200000B);
+            break;
+        case 0x200000B:
+            messageBusy = 1;
+            if (*(u16*)((s32)battleWork + 0x18FFA) < 300) {
+                (*(u16*)((s32)battleWork + 0x18FFA))++;
+            }
+            if (*(s32*)((s32)battleWork + 0x1905C) != 0) {
+                if (evtCheckID(*(s32*)((s32)battleWork + 0x1905C))) {
+                    messageBusy = 0;
+                } else {
+                    *(s32*)((s32)battleWork + 0x1905C) = 0;
+                }
+            }
+            if (!BattleWaitAllActiveEvtEnd(battleWork)) {
+                messageBusy = 0;
+            }
+            if (BattleStatusChangeAnnouceMain(battleWork) != 0) {
+                messageBusy = 0;
+            }
+            if (BattleStatusChangeMsgMain(battleWork) != 0) {
+                messageBusy = 0;
+            }
+            if (messageBusy) {
+                BattleSetSeq(battleWork, 2, 0x200000C);
+            }
+            break;
+        case 0x200000C:
+            if ((*(u32*)((s32)battleWork + 0x1720) & 2) != 0) {
+                BattleSetSeq(battleWork, 2, 0x200000E);
+                return;
+            }
+            BattleStage_NozzleWorkCheck(0);
+            BattleSetSeq(battleWork, 2, 0x200000D);
+        case 0x200000D:
+            if (BattleWaitAllActiveEvtEnd(battleWork)) {
+                BattleSetSeq(battleWork, 2, 0x200000E);
+            } else {
+                break;
+            }
+        case 0x200000E:
+            *(u32*)((s32)battleWork + 0x1720) &= ~2;
+            BattleSetSeq(battleWork, 0, 2);
+            BattleSetSeq(battleWork, 3, 0x3000000);
             break;
     }
 }
@@ -1376,6 +1496,9 @@ void btlseqMove(void* battleWork) {
     extern void BattleRunPhaseEvent(void*, s32);
     extern void BattleSetTotalHitDamage(void*, s32);
     extern u32 BattlePhaseEndCheck(void);
+    extern u32 BattleAudience_CheckReactionPerPhase(void);
+    extern s32 BattleStatusChangeMsgMain(void*);
+    extern s32 BattleStatusChangeAnnouceMain(void*);
     void* unit;
     s32 seq;
     s32 i;
@@ -1417,6 +1540,36 @@ void btlseqMove(void* battleWork) {
                 BattleIncSeq(battleWork, 5);
                 advance = 1;
                 break;
+            case 0x5000006:
+                for (i = 0; i < 64; i++) {
+                    id = *(s32*)((s32)battleWork + 0x120 + i * 8);
+                    if (id != -1) {
+                        unit = BattleGetUnitPtr(battleWork, id);
+                        if (unit != NULL && *(void**)((s32)unit + 0x284) != NULL) {
+                            break;
+                        }
+                    }
+                }
+                if (i < 64) {
+                    BattleRunPhaseEvent(unit, 0);
+                    *(s32*)((s32)battleWork + 0x120 + i * 8) = -1;
+                    BattleIncSeq(battleWork, 5);
+                } else {
+                    BattleSetSeq(battleWork, 5, 0x500000A);
+                    advance = 1;
+                }
+                break;
+            case 0x5000007:
+                if (BattleWaitAllActiveEvtEnd(battleWork)) {
+                    if (!BattleCheckConcluded(battleWork)) {
+                        BattleSetSeq(battleWork, 5, 0x5000006);
+                        advance = 1;
+                    } else {
+                        BattleSetSeq(battleWork, 0, 3);
+                        BattleSetSeq(battleWork, 7, 0x7000000);
+                    }
+                }
+                break;
             case 0x5000008:
                 for (i = 0; i < 64; i++) {
                     unit = BattleGetUnitPtr(battleWork, i);
@@ -1426,6 +1579,11 @@ void btlseqMove(void* battleWork) {
                         *(s8*)((s32)unit + 0x270) = 0;
                         *(s32*)((s32)unit + 0x268) = 0;
                         *(s8*)((s32)unit + 0x271) = 0;
+                        *(s32*)((s32)unit + 0x26C) = 0;
+                        *(s8*)((s32)unit + 0x272) = 0;
+                        *(s32*)((s32)unit + 0x274) = 0;
+                        *(s8*)((s32)unit + 0x273) = 0;
+                        *(s8*)((s32)unit + 0x21) = 0;
                     }
                 }
                 for (i = 0; i < 64; i++) {
@@ -1459,6 +1617,29 @@ void btlseqMove(void* battleWork) {
                     if (!BattlePhaseEndCheck()) {
                         BattleSetSeq(battleWork, 5, 0x5000008);
                     }
+                } else {
+                    BattleSetSeq(battleWork, 0, 3);
+                    BattleSetSeq(battleWork, 7, 0x7000000);
+                }
+                break;
+            default:
+                if (seq == 0x500000B) {
+                    if (!(BattleAudience_CheckReactionPerPhase() & 0xFF) &&
+                        BattleWaitAllActiveEvtEnd(battleWork)) {
+                        BattleIncSeq(battleWork, 5);
+                    }
+                } else if (seq == 0x500000C) {
+                    i = BattleStatusChangeMsgMain(battleWork);
+                    id = BattleStatusChangeAnnouceMain(battleWork);
+                    if (id == 0 && i == 0) {
+                        BattleIncSeq(battleWork, 4);
+                        BattleSetSeq(battleWork, 5, 0x5000000);
+                    }
+                } else if (seq == 0x500000D) {
+                    BattleIncSeq(battleWork, 5);
+                } else if (seq == 0x500000E) {
+                    BattleIncSeq(battleWork, 4);
+                    BattleSetSeq(battleWork, 5, 0x5000000);
                 }
                 break;
         }

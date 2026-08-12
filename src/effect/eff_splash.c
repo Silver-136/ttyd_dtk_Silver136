@@ -490,17 +490,36 @@ void effSplashDisp(s32 cameraId, void* entry) {
     f32 model[3][4];
     Work* work = *(Work**)((u8*)entry + 0xC);
     s32 count = *(s32*)((u8*)entry + 8);
-    s32 first = work->type == 3 ? 6 : (work->type == 2 ? 1 : 2);
-    u8* camera = camGetPtr(cameraId);
+    s32 first = 0;
+    u8* viewCamera = camGetPtr(cameraId);
+    u8* camera;
     s32 i;
+    f32 cameraAngle;
+    f32 degreesToRadians;
 
+    switch (work->type) {
+        case 0:
+        case 1:
+        case 4:
+            first = 2;
+            break;
+        case 2:
+            first = 1;
+            break;
+        case 3:
+            first = 6;
+            break;
+    }
     PSMTXTrans(trans, work->pos.x, work->pos.y, work->pos.z);
     camera = camGetPtr(4);
-    PSMTXRotRad(rot, 'y', 0.017453292f * -*(f32*)(camera + 0x114));
+    cameraAngle = *(f32*)(camera + 0x114);
+    cameraAngle = -cameraAngle;
+    degreesToRadians = 0.017453292f;
+    PSMTXRotRad(rot, 'y', degreesToRadians * cameraAngle);
     PSMTXScale(scale, work->scale.x, work->scale.y, work->scale.z);
     PSMTXConcat(trans, rot, baseMtx);
     PSMTXConcat(baseMtx, scale, baseMtx);
-    PSMTXConcat(((u8*)camGetPtr(cameraId)) + 0x118, baseMtx, baseMtx);
+    PSMTXConcat(viewCamera + 0x11C, baseMtx, baseMtx);
 
     GXSetNumChans(1);
     GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);

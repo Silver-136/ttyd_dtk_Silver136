@@ -1478,9 +1478,7 @@ void JUTFont_DrawStart(u32* color) {
 
 void _JUTFont_DrawPos(u16 param_1, s16 param_2, s16 param_3) {
     extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
-
     extern u32 HSV2RGB(void* hsv);
-
     u32 magic;
     u8* widthEntry;
     u8* entry;
@@ -1490,14 +1488,14 @@ void _JUTFont_DrawPos(u16 param_1, s16 param_2, s16 param_3) {
     s32 col;
     s32 row;
     s32 page;
-    f32 u0;
-    f32 v0;
-    f32 u1;
-    f32 v1;
+    s32 u0;
+    s32 v0;
+    s32 u1;
+    s32 v1;
     s32 x0;
     s32 y0;
-    f32 x1;
-    f32 y1;
+    s32 x1;
+    s32 y1;
     s32 rndU;
     s32 rndV;
     u32 color;
@@ -1506,6 +1504,7 @@ void _JUTFont_DrawPos(u16 param_1, s16 param_2, s16 param_3) {
     f32 cellH;
     f32 glyphW;
     f32 glyphH;
+    f32 texU;
     volatile u16* fifo16;
     volatile u8* fifo8;
 
@@ -1530,27 +1529,28 @@ void _JUTFont_DrawPos(u16 param_1, s16 param_2, s16 param_3) {
     }
 
     code -= *(u16*)((s32)blockGlyph + 8);
+    glyphH = (f32)widthEntry[1] * float_1_804203e4;
+    cellH = (f32)*(u16*)((s32)blockGlyph + 0xE);
     col = code / *(u16*)((s32)blockGlyph + 0x16);
     row = col / *(u16*)((s32)blockGlyph + 0x18);
-    page = col - row * *(u16*)((s32)blockGlyph + 0x18);
     cellW = (f32)*(u16*)((s32)blockGlyph + 0xC);
-    cellH = (f32)*(u16*)((s32)blockGlyph + 0xE);
-    glyphW = ((f32)*(u16*)((s32)blockGlyph + 0xE) - float_2_804203e8) * float_1_804203e4;
-    glyphH = (f32)widthEntry[1] * float_1_804203e4;
-    u0 = (f32)(code - col * *(u16*)((s32)blockGlyph + 0x16)) * cellW + (f32)widthEntry[0];
-    v0 = float_2_804203e8 + (f32)page * cellH;
-    u1 = u0 + (f32)widthEntry[1];
-    v1 = v0 + (cellH - float_2_804203e8);
-    x0 = param_2;
-    y0 = param_3 - 2;
-    x1 = (f32)param_2 + glyphH;
-    y1 = (f32)(param_3 - 2) - glyphW;
+    glyphW = (cellH - float_2_804203e8) * float_1_804203e4;
+    texU = (f32)(code - col * *(u16*)((s32)blockGlyph + 0x16)) * cellW + (f32)widthEntry[0];
     fifo16 = (volatile u16*)0xCC008000;
     fifo8 = (volatile u8*)0xCC008000;
 
     GXBegin(0x80, 0, 4);
     rndU = irand(0x40) & 0xFF;
     rndV = irand(0x40) & 0xFF;
+    page = col - row * *(u16*)((s32)blockGlyph + 0x18);
+    u0 = (s32)texU;
+    v0 = (s32)(float_2_804203e8 + (f32)page * cellH);
+    u1 = (s32)(texU + (f32)widthEntry[1]);
+    v1 = (s32)((f32)(u16)v0 + (cellH - float_2_804203e8));
+    x0 = param_2;
+    y0 = param_3 - 2;
+    x1 = (s32)((f32)param_2 + glyphH);
+    y1 = (s32)((f32)(param_3 - 2) - glyphW);
 
     *fifo16 = (u16)x0;
     *fifo16 = (u16)y0;

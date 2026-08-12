@@ -92,7 +92,6 @@ void DEMOPadCopy(void* newPadState, void* padState) {
     }
 }
 
-
 void DEMOPadRead(void) {
     extern void PADRead(void*);
     extern void PADClamp(void*);
@@ -125,16 +124,53 @@ void DEMOPadRead(void) {
 }
 
 void DEMOPadInit(void) {
+    typedef struct DemoPadStatus {
+        u16 buttons;
+        s8 stickX;
+        s8 stickY;
+        s8 substickX;
+        s8 substickY;
+        u8 triggerLeft;
+        u8 triggerRight;
+        u8 analogA;
+        u8 analogB;
+        s8 error;
+        u8 pad;
+        u16 buttonsPressed;
+        u16 buttonsReleased;
+        u16 stickDirs;
+        u16 stickDirsPressed;
+        u16 stickDirsReleased;
+        s16 stickXDelta;
+        s16 stickYDelta;
+        s16 substickXDelta;
+        s16 substickYDelta;
+    } DemoPadStatus;
     extern void PADInit(void);
-    u8* pad;
+    DemoPadStatus* pad;
     s32 i;
-    s32 j;
 
     PADInit();
-    pad = DemoPad;
-    for (i = 0; i < 4; i++, pad += 0x1E) {
-        for (j = 0; j < 0x1E; j++) {
-            pad[j] = 0;
-        }
+    pad = (DemoPadStatus*)DemoPad;
+    for (i = 0; i < 4; i++, pad++) {
+        pad->buttons = 0;
+        pad->stickX = 0;
+        pad->stickY = 0;
+        pad->substickX = 0;
+        pad->substickY = 0;
+        pad->triggerLeft = 0;
+        pad->triggerRight = 0;
+        pad->analogA = 0;
+        pad->analogB = 0;
+        pad->error = 0;
+        pad->buttonsPressed = 0;
+        pad->buttonsReleased = 0;
+        pad->stickDirs = 0;
+        pad->stickDirsPressed = 0;
+        pad->stickDirsReleased = 0;
+        pad->stickXDelta = 0;
+        pad->stickYDelta = 0;
+        pad->substickXDelta = 0;
+        pad->substickYDelta = 0;
     }
 }

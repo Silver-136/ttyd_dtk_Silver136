@@ -123,87 +123,60 @@ void* effBoobooN64Entry(void) {
 }
 
 void effBoobooMain(void* effect) {
-    extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
-    extern void effBoobooDisp(s32 cameraId, void* effect);
-    extern f32 float_2_80424de8;
-    extern f32 float_0_80424dec;
-    extern f32 float_4_80424df0;
-    extern f32 float_12_80424df4;
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void effBoobooDisp(s32, void*);
+    extern f32 float_2_80424de8, float_0_80424dec, float_4_80424df0, float_12_80424df4;
     extern u8 anime_data_walk[];
-    EffBoobooWork* work;
+    EffBoobooWork* work = *(EffBoobooWork**)((u8*)effect + 0xC);
+    u8* bytes;
+    u8* slot;
+    s32* wordSlot;
     s32 i;
-    u8* byteWork;
 
-    work = *(EffBoobooWork**)((s32)effect + 0xC);
     work->unk_04++;
-    byteWork = (u8*)work;
-
-    for (i = 0; i < 11; i++) {
-        s8 frame = *(s8*)(byteWork + i + 0x13C);
-        u8 state = *(u8*)(byteWork + i + 0xFA);
+    bytes = (u8*)work;
+    wordSlot = (s32*)work;
+    for (i = 0; i < 11; i++, wordSlot++) {
+        s8 frame;
+        u8 state;
         s32 done = 0;
-
+        slot = bytes + i;
+        state = *(u8*)(slot + 0xFA);
+        frame = *(s8*)(slot + 0x13C);
         switch (state) {
-            case 0:
-                done = 1;
-                break;
-            case 1:
-                done = 1;
-                *(u8*)(byteWork + i + 0x105) = 1;
+            case 0: done = 1; break;
+            case 1: *(u8*)(slot + 0x105) = 1; done = 1; break;
+            case 3:
+                *(u8*)(slot + 0x105) = anime_data_walk[frame % 8];
+                *(f32*)((u8*)wordSlot + 0xB8) += (f32)sin((float_6p2832_80424ddc * (f32)(frame * 10)) / float_360_80424de0);
+                if (frame >= 36) { done = 1; *(u8*)(slot + 0x13C) = 0; }
                 break;
             case 2:
-                *(u8*)(byteWork + i + 0x105) = anime_data_walk[frame % 8];
-                work->unk_110[i] = float_2_80424de8 *
-                    (f32)sin((float_6p2832_80424ddc * (f32)(frame * 20)) / float_360_80424de0);
+                *(u8*)(slot + 0x105) = anime_data_walk[frame % 8];
+                *(f32*)((u8*)wordSlot + 0x110) = float_2_80424de8 * (f32)sin((float_6p2832_80424ddc * (f32)(frame * 20)) / float_360_80424de0);
                 done = 1;
-                if (frame > 8) {
-                    done = 1;
-                    work->unk_110[i] = float_0_80424dec;
-                    *(u8*)(byteWork + i + 0x13C) = 0;
-                }
-                break;
-            case 3:
-                *(u8*)(byteWork + i + 0x105) = anime_data_walk[frame % 8];
-                work->unk_b8[i] +=
-                    (f32)sin((float_6p2832_80424ddc * (f32)(frame * 10)) / float_360_80424de0);
-                if (frame > 0x23) {
-                    done = 1;
-                    *(u8*)(byteWork + i + 0x13C) = 0;
-                }
+                if (frame >= 9) { *(f32*)((u8*)wordSlot + 0x110) = float_0_80424dec; *(u8*)(slot + 0x13C) = 0; }
                 break;
             case 4:
-                *(u8*)(byteWork + i + 0x105) = anime_data_walk[frame % 8];
-                work->unk_110[i] = float_4_80424df0 *
-                    (f32)sin((float_6p2832_80424ddc * (f32)(frame * 20)) / float_360_80424de0);
-                if (frame > 8) {
-                    done = 1;
-                    work->unk_110[i] = float_0_80424dec;
-                    *(u8*)(byteWork + i + 0x13C) = 0;
-                }
+                *(u8*)(slot + 0x105) = anime_data_walk[frame % 8];
+                *(f32*)((u8*)wordSlot + 0x110) = float_4_80424df0 * (f32)sin((float_6p2832_80424ddc * (f32)(frame * 20)) / float_360_80424de0);
+                if (frame >= 9) { done = 1; *(f32*)((u8*)wordSlot + 0x110) = float_0_80424dec; *(u8*)(slot + 0x13C) = 0; }
                 break;
             default:
-                *(u8*)(byteWork + i + 0x105) = anime_data_walk[frame % 8];
-                work->unk_110[i] = float_12_80424df4 *
-                    (f32)sin((float_6p2832_80424ddc * (f32)(frame * 5)) / float_360_80424de0);
-                if (frame > 0x23) {
-                    done = 1;
-                    work->unk_110[i] = float_0_80424dec;
-                    *(u8*)(byteWork + i + 0x13C) = 0;
-                }
+                *(u8*)(slot + 0x105) = anime_data_walk[frame % 8];
+                *(f32*)((u8*)wordSlot + 0x110) = float_12_80424df4 * (f32)sin((float_6p2832_80424ddc * (f32)(frame * 5)) / float_360_80424de0);
+                if (frame >= 36) { done = 1; *(f32*)((u8*)wordSlot + 0x110) = float_0_80424dec; *(u8*)(slot + 0x13C) = 0; }
                 break;
         }
-
-        (*(s8*)(byteWork + i + 0x13C))++;
-        if (done && ((work->unk_08[i] & 2) != 0)) {
-            work->unk_08[i] &= ~2;
-            *(u8*)(byteWork + i + 0xFA) = *(u8*)(byteWork + i + 0xEF);
-            *(u8*)(byteWork + i + 0x13C) = 0;
+        (*(s8*)(slot + 0x13C))++;
+        if (done && ((*wordSlot & 2) != 0)) {
+            *wordSlot &= ~2;
+            *(u8*)(slot + 0xFA) = *(u8*)(slot + 0xEF);
+            *(u8*)(slot + 0x13C) = 0;
         }
     }
-
     dispEntry(4, 0, effBoobooDisp, effect, float_0_80424dec);
 }
-
 
 s32 texture_dl(int effect, int index, s32 texture) {
     extern void GXSetNumChans(s32); extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);

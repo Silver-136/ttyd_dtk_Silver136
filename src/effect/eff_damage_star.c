@@ -192,6 +192,7 @@ void effDamageStarDisp(s32 cameraId, void* effect) {
     extern void PSMTXScale(Mtx, f32, f32, f32);
     extern void PSMTXIdentity(Mtx);
     extern void PSMTXScaleApply(Mtx, Mtx, f32, f32, f32);
+    extern void PSMTXTransApply(Mtx, Mtx, f32, f32, f32);
     extern void PSMTXConcat(Mtx, Mtx, Mtx);
     extern void effGetTexObj(s32, void*);
     extern void GXLoadTexObj(void*, s32);
@@ -215,11 +216,17 @@ void effDamageStarDisp(s32 cameraId, void* effect) {
     extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
     extern void GXSetTevColorIn(s32,s32,s32,s32,s32);
     extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetTevOp(s32, s32);
     extern void GXLoadPosMtxImm(Mtx,s32);
     extern void GXSetCurrentMtx(s32);
     extern void GXBegin(s32,s32,s32);
     extern u32 dat_80422c78;
+    extern u32 dat_80422c7c;
     extern u8 color_rotation_data[];
+    extern f32 float_neg12_80422ca0, float_12_80422c9c, float_10_80422ca4;
+    extern f32 float_neg1p5_80422ca8, float_neg2_80422cb4, float_2_80422c94;
+    extern f32 float_0_80422c80, float_1_80422c98;
     Mtx rotate, trans, scale, base, model;
     Tex tex;
     volatile f32* fifo = (volatile f32*)0xCC008000;
@@ -229,6 +236,7 @@ void effDamageStarDisp(s32 cameraId, void* effect) {
     u32 color;
     s32 i;
     s32 frame;
+    char* anim;
 
     camera = (char*)camGetPtr(cameraId);
     PSMTXRotRad(rotate, -0.017453292f * *(f32*)(camera + 0x114), 'y');
@@ -277,5 +285,66 @@ void effDamageStarDisp(s32 cameraId, void* effect) {
         *fifo=8.0f;*fifo=-8.0f;*fifo=0.0f;*fifo=2.0f;*fifo=1.0f;
         *fifo=-8.0f;*fifo=-8.0f;*fifo=0.0f;*fifo=0.0f;*fifo=1.0f;
     }
+
+    camera = (char*)camGetPtr(cameraId);
+    PSMTXRotRad(rotate, -0.017453292f * *(f32*)(camera + 0x114), 'y');
+    PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+    PSMTXConcat(trans, rotate, base);
+    if (*(f32*)(work + 0x38) > float_0_80422c80) {
+        PSMTXScale(scale, float_neg12_80422ca0, float_12_80422c9c, float_12_80422c9c);
+    } else {
+        PSMTXScale(scale, float_12_80422c9c, float_12_80422c9c, float_12_80422c9c);
+    }
+    PSMTXConcat(base, scale, base);
+    PSMTXTrans(trans, float_10_80422ca4, float_neg1p5_80422ca8, float_0_80422c80);
+    PSMTXConcat(base, trans, base);
+    anim = *(char**)(work + 0x44);
+    PSMTXConcat(base, (f32(*)[4])(anim + 0x14), base);
+    PSMTXConcat(base, (f32(*)[4])(anim + 0x48), base);
+    PSMTXTransApply(base, model, float_0_80422c80, float_0_80422c80, float_0_80422c80);
+    PSMTXConcat((f32(*)[4])(camera + 0x48), model, model);
+    GXLoadPosMtxImm(model, 0);
+    GXSetCurrentMtx(0);
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(0, 3, 0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 1, 3, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 15, 15, 15, 15);
+    GXSetTevAlphaIn(0, 7, 7, 7, 4);
+    GXSetCullMode(0);
+    if (*(s32*)work == 1) {
+        effGetTexObj(0x27, &tex);
+        GXLoadTexObj(&tex, 3);
+    }
+    GXBegin(0x80, 0, 4);
+    *fifo=float_neg2_80422cb4;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_0_80422c80;
+    *fifo=float_2_80422c94;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_2_80422c94;*fifo=float_0_80422c80;
+    *fifo=float_2_80422c94;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_2_80422c94;*fifo=float_1_80422c98;
+    *fifo=float_neg2_80422cb4;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_1_80422c98;
+
+    PSMTXConcat((f32(*)[4])(camera + 0x48), base, model);
+    GXLoadPosMtxImm(model, 0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 1, 2, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 15, 2, 8, 15);
+    GXSetTevAlphaIn(0, 7, 7, 7, 4);
+    color = dat_80422c7c;
+    GXSetTevColor(1, &color);
+    if (*(s32*)work == 1) {
+        effGetTexObj(0x13, &tex);
+        GXLoadTexObj(&tex, 2);
+        GXSetTevOp(0, 3);
+    }
+    GXBegin(0x80, 0, 4);
+    *fifo=float_neg2_80422cb4;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_0_80422c80;
+    *fifo=float_2_80422c94;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_2_80422c94;*fifo=float_0_80422c80;
+    *fifo=float_2_80422c94;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_1_80422c98;*fifo=float_1_80422c98;
+    *fifo=float_neg2_80422cb4;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_1_80422c98;
 }
 

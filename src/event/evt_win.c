@@ -580,6 +580,38 @@ void evt_unitwin_disp_func(s32 cameraId, void* work) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
     extern s32 pouchGetStarPiece(void);
     extern s32 pouchGetSuperCoin(void);
+    extern s32 pouchGetHaveItemCnt(void);
+    extern s32 pouchGetHaveBadgeCnt(void);
+    extern s16 pouchHaveItem(s32 index);
+    extern s16 pouchHaveBadge(s32 index);
+    extern s32 pouchGetKeepItemCnt(void);
+    extern s16 pouchKeepItem(s32 index);
+    extern s32 pouchGetPartyColor(s32 partyId);
+    extern s32 partyChkJoin(s32 partyId);
+    extern s32 badgeShop_get(void* shop, s16 item);
+    extern s32 badgeShop_ThrowCheck(s32 item);
+    extern void FontDrawScale(f32 scale);
+    extern u16 FontGetMessageWidth(char* text);
+    extern char* strcpy(char* dst, const char* src);
+    extern void GXGetScissor(s32* x, s32* y, s32* w, s32* h);
+    extern void GXSetScissor(s32 x, s32 y, s32 w, s32 h);
+    extern void iconDispGx(f32 scale, Vec3* pos, s32 flags, s32 iconId);
+    extern void iconDispGxCol(Mtx m, s32 flags, s32 iconId, u32* color);
+    extern void iconFlagOff(char* name, u16 flags);
+    extern void iconFlagOn(char* name, u16 flags);
+    extern void iconSetPos(f32 x, f32 y, f32 z, char* name);
+    extern u32 badge_bottakuru100_table[];
+    extern u8 bdsw[];
+    extern u8 _jdt[];
+    extern s32 johoya_get(s32 table, s16 id);
+    extern s32 party_id_table[];
+    extern s32 party_icon_table[];
+    extern char* party_labelname_table[];
+    extern s32 mario_status_icon_table[];
+    extern char* mario_status_name_table[];
+    extern char* mario_status_labelname_table[];
+    extern s32 mario_status_henka_table[];
+    extern char* pouchGetYoshiName(void);
     extern void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
     extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
     extern void PSMTXConcat(Mtx a, Mtx b, Mtx out);
@@ -594,16 +626,21 @@ void evt_unitwin_disp_func(s32 cameraId, void* work) {
     extern s32 sprintf(char* buffer, const char* format, ...);
     extern void iconDispGx2(Mtx m, s32 alpha, s32 icon);
     extern void iconNumberDispGx(Mtx m, s32 number, s32 flag, void* color);
+    extern void statusWinForceUpdateCoin(void);
     extern void mapObjGetPos(void* object, Vec3* position);
     extern void* camGetPtr(s32 cameraId);
     extern void GXSetProjection(void* matrix, s32 type);
     extern void GXGetProjectionv(f32* projection);
+    void* pouch = pouchGetPtr();
     extern void GXGetViewportv(f32* viewport);
     extern void GXProject(f32 x, f32 y, f32 z, void* matrix,
                           f32* projection, f32* viewport,
                           f32* screenX, f32* screenY, f32* screenZ);
     Mtx trans, scale;
     u32 white = 0xFFFFFFFF;
+    u32 titleFrameColor = 0xFFFFFFFF;
+    u32 titleFontColor = 0xFFFFFFFF;
+    u32 descriptionFrameColor = 0xFFFFFFFF;
     u16 flags = *(u16*)work;
     s32 value;
     s32 i;
@@ -616,15 +653,15 @@ void evt_unitwin_disp_func(s32 cameraId, void* work) {
         char* itemDescription = *(char**)(itemDataTable + item * 0x28 + 8);
 
         windowDispGX_Waku_col(-150.0f, 120.0f, 300.0f, 50.0f,
-                              20.0f, 0, &white);
+                              20.0f, 0, &titleFrameColor);
         FontDrawStart();
         FontDrawEdge();
-        FontDrawColor(&white);
+        FontDrawColor(&titleFontColor);
         FontDrawString(-((f32)strlen(itemName) * 24.0f) * 0.25f,
                        108.0f, itemName);
         FontDrawEdgeOff();
         windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f,
-                              20.0f, 0, &white);
+                              20.0f, 0, &descriptionFrameColor);
         FontDrawStart();
         FontDrawMessage(-220, -138, msgSearch(itemDescription));
 
@@ -686,6 +723,7 @@ void evt_unitwin_disp_func(s32 cameraId, void* work) {
             if (delta == 0) delta = value > *(s32*)((s32)work + 0x2C) ? 1 : -1;
             if ((*(u32*)((s32)work + 0x5C) & 1) != 0) {
                 *(s32*)((s32)work + 0x2C) += delta;
+                statusWinForceUpdateCoin();
             }
             *(s32*)((s32)work + 0x5C) += 1;
         }
@@ -700,7 +738,7 @@ void evt_unitwin_disp_func(s32 cameraId, void* work) {
         PSMTXTrans(trans, -126.0f, -168.0f, 0.0f);
         iconNumberDispGx(trans, *(s32*)((s32)work + 0x30), 0, &white);
         if ((*(u32*)((s32)gp + 0x1C) & 3) == 0) {
-            s32 target = *(s16*)((s32)pouchGetPtr() + 0x9C);
+            s32 target = *(s16*)((s32)pouch + 0x9C);
             s32 shown = *(s32*)((s32)work + 0x30);
             s32 delta = (target - shown) / 10;
             if (delta == 0 && target != shown)
@@ -724,38 +762,1077 @@ void evt_unitwin_disp_func(s32 cameraId, void* work) {
         }
     }
     {
-        s32 menuState = *(s32*)((s32)work + 0x50);
-        if (menuState == 2 || menuState == 3 ||
-            (menuState >= 0xB && menuState <= 0x10)) {
-            char* title;
+        s32 menuState;
+        f32 scrollY;
+        f32 selectedRow;
+        s32 freeRows;
+        s32 listHeight;
+        s32 oldX, oldY, oldW, oldH;
+        s32 visible;
+        s32 itemIndex;
+        s32 itemId;
+        s32 limit;
+        s32 titleOffset;
+        s32 priceX;
+        f32 priceScale;
+        char* title;
+        char* description;
+        char priceText[0x20];
+        Vec3 iconPos;
+        Vec3 priceIconPos;
+        Mtx listTrans;
+        Mtx listScale;
 
-            if (menuState == 2 || menuState == 3)
-                title = msgSearch("msg_window_title_1");
-            else if (menuState == 0xC)
-                title = msgSearch("msg_window_title_2");
-            else if (menuState == 0x10)
-                title = msgSearch("msg_window_title_4");
-            else
-                title = msgSearch("msg_window_title_3");
-            windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f, 220.0f,
+        menuState = *(s32*)((s32)work + 0x50);
+        scrollY = *(f32*)((s32)work + 0x44);
+        selectedRow = *(f32*)((s32)work + 0x34);
+
+        switch (menuState) {
+        case 4:
+            visible = 0;
+            description = 0;
+            freeRows = 8 - pouchGetKeepItemCnt();
+            if (freeRows < 1)
+                freeRows = 0;
+
+            windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f,
+                                  (f32)(220 - freeRows * 24),
                                   20.0f, 0, &white);
             windowDispGX_Waku_col(51.0f, 114.0f, 150.0f, 28.0f,
                                   8.0f, 0, &white);
             FontDrawStart();
             FontDrawEdge();
             FontDrawColor(&white);
+            FontDrawString(81.0f, 111.0f, msgSearch("msg_window_title_1"));
+            FontDrawEdgeOff();
+
+            GXGetScissor(&oldX, &oldY, &oldW, &oldH);
+            GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - freeRows * 24);
+
+            for (i = 0; i < 0x20; i++) {
+                itemId = (s32)pouchKeepItem(i);
+                if (itemId != 0) {
+                    iconPos.x = 11.0f;
+                    iconPos.y = scrollY + (f32)(0x38 - visible * 24);
+                    iconPos.z = 0.0f;
+                    iconDispGx(0.5f, &iconPos, 0x10,
+                               (s32)*(s16*)(itemDataTable + itemId * 0x28 + 0x20));
+
+                    FontDrawStart();
+                    FontDrawString(36.0f,
+                                   scrollY + (f32)(0x50 - visible * 24),
+                                   *(char**)(itemDataTable + itemId * 0x28));
+
+                    if ((f32)visible == selectedRow)
+                        description = *(char**)(itemDataTable + itemId * 0x28 + 8);
+
+                    visible++;
+                }
+            }
+
+            GXSetScissor(oldX, oldY, oldW, oldH);
+
+            if (description != 0) {
+                windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f,
+                                      20.0f, 0, &white);
+                FontDrawStart();
+                FontDrawMessage(-220, -138, msgSearch(description));
+            }
+            break;
+
+        case 2:
+        case 3:
+        case 0xB:
+        case 0xC:
+        case 0xD:
+        case 0xE:
+        case 0xF:
+        case 0x10:
+            visible = 0;
+            description = 0;
+
+            if (menuState == 2 || menuState == 3) {
+                freeRows = 8 - pouchGetHaveItemCnt();
+                if (freeRows < 1)
+                    freeRows = 0;
+                limit = 0x14;
+                title = msgSearch("msg_window_title_1");
+                titleOffset = 0x1E;
+            } else if (menuState == 0xC) {
+                freeRows = 8 - pouchGetHaveBadgeCnt();
+                if (freeRows < 1)
+                    freeRows = 0;
+                limit = 200;
+                title = msgSearch("msg_window_title_2");
+                titleOffset = 0x28;
+            } else if (menuState == 0xE) {
+                freeRows = 8 - *(s32*)((s32)work + 0x58);
+                if (freeRows < 0)
+                    freeRows = 0;
+                limit = 0x152;
+                title = msgSearch("msg_window_title_3");
+                titleOffset = 0x14;
+            } else if (menuState == 0xF) {
+                limit = *(s32*)((s32)work + 0x58);
+                freeRows = 8 - limit;
+                if (freeRows < 0)
+                    freeRows = 0;
+                title = msgSearch("msg_window_title_3");
+                titleOffset = 0x14;
+            } else if (menuState == 0x10) {
+                freeRows = 8 - *(s32*)((s32)work + 0x58);
+                if (freeRows < 0)
+                    freeRows = 0;
+                limit = 0x152;
+                title = msgSearch("msg_window_title_4");
+                titleOffset = 0x1E;
+            } else {
+                freeRows = 8 - *(s32*)((s32)work + 0x58);
+                if (freeRows < 0)
+                    freeRows = 0;
+                limit = 99;
+                title = msgSearch("msg_window_title_2");
+                titleOffset = 0x28;
+            }
+
+            listHeight = 220 - freeRows * 24;
+            windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f, (f32)listHeight,
+                                  20.0f, 0, &white);
+            windowDispGX_Waku_col(51.0f, 114.0f, 150.0f, 28.0f,
+                                  8.0f, 0, &white);
+            FontDrawStart();
+            FontDrawEdge();
+            FontDrawColor(&white);
+            FontDrawString((f32)(0x33 + titleOffset), 111.0f, title);
+            FontDrawEdgeOff();
+
+            if (menuState != 3) {
+                PSMTXTrans(listTrans, 244.0f, 82.0f, 0.0f);
+                PSMTXScale(listScale, 0.6f, 0.6f, 0.6f);
+                PSMTXConcat(listTrans, listScale, listTrans);
+                iconDispGxCol(listTrans, 0x10, 0x213, &white);
+
+                priceIconPos.x = 244.0f;
+                priceIconPos.y = 86.0f;
+                priceIconPos.z = 0.0f;
+                if (menuState == 0xD) {
+                    itemIndex = 0x195;
+                } else if (menuState == 0x10) {
+                    itemIndex = 0x147;
+                } else {
+                    itemIndex = 0x193;
+                }
+                iconDispGx(0.6f, &priceIconPos, 0x10, itemIndex);
+            }
+
+            GXGetScissor(&oldX, &oldY, &oldW, &oldH);
+            GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - freeRows * 24);
+
+            for (i = 0; i < limit; i++) {
+                u32 itemColor;
+                s32 iconFlags;
+
+                itemId = 0;
+                itemColor = 0xFFFFFFFF;
+                iconFlags = 0x10;
+
+                switch (menuState) {
+                case 2:
+                case 3:
+                    itemId = (s32)pouchHaveItem(i);
+                    break;
+                case 0xB:
+                    if ((s16)badgeShop_get(bdsw + 0x19, (s16)(i + 0xF0)) -
+                        badgeShop_ThrowCheck(i + 0xF0) > 0) {
+                        itemId = i + 0xF0;
+                    }
+                    break;
+                case 0xC:
+                    itemId = (s32)pouchHaveBadge(i);
+                    break;
+                case 0xD:
+                    if ((s16)badgeShop_get(bdsw + 0x32, (s16)(i + 0xF0)) > 0)
+                        itemId = i + 0xF0;
+                    break;
+                case 0xE:
+                    if ((s16)badgeShop_get(bdsw + 0x4B, (s16)(i + 1)) > 0)
+                        itemId = i + 1;
+                    break;
+                case 0xF:
+                    itemId = (s32)badge_bottakuru100_table[i];
+                    break;
+                case 0x10:
+                    if ((s16)badgeShop_get(bdsw + 0xA0, (s16)(i + 1)) > 0)
+                        itemId = i + 1;
+                    break;
+                }
+
+                if (itemId != 0) {
+                    if (menuState == 0xD &&
+                        pouchGetStarPiece() <
+                            (s32)*(s16*)(itemDataTable + itemId * 0x28 + 0x18)) {
+                        iconFlags |= 0x20;
+                        itemColor = 0xA0A0A0FF;
+                    }
+
+                    iconPos.x = 11.0f;
+                    iconPos.y = scrollY + (f32)(0x38 - visible * 24);
+                    iconPos.z = 0.0f;
+                    iconDispGx(0.5f, &iconPos, iconFlags,
+                               (s32)*(s16*)(itemDataTable + itemId * 0x28 + 0x20));
+
+                    FontDrawStart();
+                    FontDrawScale(0.8f);
+                    FontDrawColor(&itemColor);
+                    FontDrawString(36.0f,
+                                   scrollY + (f32)(0x50 - visible * 24) - 2.0f,
+                                   *(char**)(itemDataTable + itemId * 0x28));
+
+                    if (menuState != 3) {
+                        s32 price;
+
+                        priceX = 0;
+                        priceScale = 1.0f;
+
+                        if (menuState == 0xE) {
+                            price = ((u32)*(u16*)(itemDataTable + itemId * 0x28 + 0x14) * 12) / 10;
+                            sprintf(priceText, "%2d", price);
+                        } else if (menuState == 0xC || menuState == 2) {
+                            price = (u32)*(u16*)(itemDataTable + itemId * 0x28 + 0x1A);
+                            sprintf(priceText, "%2d", price);
+                        } else if (menuState == 0xB) {
+                            price = (u32)*(u16*)(itemDataTable + itemId * 0x28 + 0x14);
+                            sprintf(priceText, "%2d", price);
+                        } else if (menuState == 0xD) {
+                            price = (u32)*(u16*)(itemDataTable + itemId * 0x28 + 0x18);
+                            sprintf(priceText, "%2d", price);
+                        } else if (menuState == 0x10) {
+                            price = ((u32)*(u16*)(itemDataTable + itemId * 0x28 + 0x14) * 2 + 2) / 3;
+                            sprintf(priceText, "%4d", price);
+                            priceX = -20;
+                            priceScale = 0.8f;
+                        } else {
+                            s32 mult = evtGetValue(0, -0x0A21F957) + 0xB;
+                            price = ((u32)*(u16*)(itemDataTable + itemId * 0x28 + 0x14) * mult) / 10;
+                            sprintf(priceText, "%3d", price);
+                            priceX = -14;
+                        }
+
+                        FontDrawStart();
+                        FontDrawScale(priceScale);
+                        FontDrawColor(&itemColor);
+                        FontDrawString((f32)(0xE2 + priceX),
+                                       scrollY + (f32)(0x50 - visible * 24),
+                                       priceText);
+                    }
+
+                    if ((f32)visible == selectedRow)
+                        description = *(char**)(itemDataTable + itemId * 0x28 + 8);
+
+                    visible++;
+                }
+            }
+
+            GXSetScissor(oldX, oldY, oldW, oldH);
+
+            if (description != 0) {
+                windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f,
+                                      20.0f, 0, &white);
+                FontDrawStart();
+                FontDrawMessage(-220, -138, msgSearch(description));
+            }
+            break;
+
+        case 0x11:
+        case 0x12:
+            freeRows = 8 - *(s32*)((s32)work + 0x58);
+            if (freeRows < 0)
+                freeRows = 0;
+
+            if (menuState == 0x11) {
+                title = msgSearch("msg_window_title_5");
+                limit = (s32)&_jdt[0x21];
+            } else {
+                title = msgSearch("msg_window_title_6");
+                limit = (s32)&_jdt[0x2E];
+            }
+
+            listHeight = 220 - freeRows * 24;
+            windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f,
+                                  (f32)listHeight, 20.0f, 0, &white);
+            windowDispGX_Waku_col(51.0f, 114.0f, 150.0f, 28.0f,
+                                  8.0f, 0, &white);
+
+            FontDrawStart();
+            FontDrawEdge();
+            FontDrawColor(&white);
             FontDrawString(71.0f, 111.0f, title);
             FontDrawEdgeOff();
-            if (menuState != 3) {
-                PSMTXTrans(trans, 244.0f, 82.0f, 0.0f);
-                PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
-                PSMTXConcat(trans, scale, trans);
-                iconDispGx2(trans, 0x10, 0x213);
+
+            if (menuState == 0x11) {
+                PSMTXTrans(listTrans, 244.0f, 82.0f, 0.0f);
+                PSMTXScale(listScale, 0.6f, 0.6f, 0.6f);
+                PSMTXConcat(listTrans, listScale, listTrans);
+                iconDispGxCol(listTrans, 0x10, 0x213, &white);
+
+                iconPos.x = 244.0f;
+                iconPos.y = 86.0f;
+                iconPos.z = 0.0f;
+                iconDispGx(0.6f, &iconPos, 0x10, 0x193);
             }
+
+            GXGetScissor(&oldX, &oldY, &oldW, &oldH);
+            GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - freeRows * 24);
+
+            visible = 0;
+            description = *(char**)_jdt;
+            for (i = 0; i < *(s32*)((s32)work + 0x58); i++) {
+                itemId = *(s16*)(description + 0x0C);
+
+                if ((s16)johoya_get(limit, (s16)itemId) == 0) {
+                    sprintf(priceText, "%3d",
+                            (s32)*(s16*)(description + 0x0A));
+                    white = 0x000000FF;
+                } else {
+                    sprintf(priceText, "");
+                    white = 0xA0A0A0FF;
+                }
+
+                FontDrawStart();
+
+                title = *(char**)(description + 4);
+                itemIndex = *(s16*)(description + 8);
+                value = (u8)title[itemIndex];
+                title[itemIndex] = 0;
+
+                FontDrawColor(&white);
+                FontDrawScale(0.8f);
+                FontDrawString(1.0f,
+                               scrollY + (f32)(0x50 - visible),
+                               title);
+
+                title[itemIndex] = (char)value;
+
+                if (menuState == 0x11) {
+                    FontDrawStart();
+                    FontDrawColor(&white);
+                    FontDrawString(221.0f,
+                                   scrollY + (f32)(0x50 - visible),
+                                   priceText);
+                }
+
+                visible += 0x18;
+                description += 0x10;
+            }
+
+            GXSetScissor(oldX, oldY, oldW, oldH);
+            break;
+
+        case 5:
+        case 6:
+        case 7:
+        {
+            s32 partyIndex;
+            s32 partyId;
+            s32 techLevel;
+            s32 selectableState;
+            s32 row;
+            s32 iconId;
+            s32 iconFlags;
+            u32 rowColor;
+            char* partyName;
+            char partnerValue[0x20];
+            char helper[0x20];
+            char direction[0x20];
+            char partnerHelp[0x100];
+
+            partnerHelp[0] = 0;
+            freeRows = 8 - *(s32*)((s32)work + 0x58);
+            if (freeRows < 0)
+                freeRows = 0;
+
+            windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f,
+                                  (f32)(220 - freeRows * 24),
+                                  20.0f, 0, &white);
+            windowDispGX_Waku_col(16.0f, 114.0f, 120.0f, 28.0f,
+                                  8.0f, 0, &white);
+            FontDrawStart();
+            FontDrawEdge();
+            FontDrawColor(&white);
+            FontDrawString(41.0f, 111.0f, msgSearch("msg_window_title_7"));
+            FontDrawEdgeOff();
+
+            windowDispGX_Waku_col(167.0f, 114.0f, 85.0f, 28.0f,
+                                  8.0f, 0, &white);
+            FontDrawStart();
+            FontDrawEdge();
+            FontDrawColor(&white);
+            FontDrawString(177.0f, 111.0f, msgSearch("msg_window_title_8"));
+            FontDrawEdgeOff();
+
+            GXGetScissor(&oldX, &oldY, &oldW, &oldH);
+            GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - freeRows * 24);
+
+            row = 0;
+            partyIndex = 0;
+            while ((partyId = party_id_table[partyIndex]) != 0) {
+                s32 drawRow;
+
+                drawRow = 0;
+                selectableState = 0;
+                iconFlags = 0x10;
+                rowColor = 0xFFFFFFFF;
+
+                if (menuState == 5 || menuState == 6) {
+                    if (partyChkJoin(partyId) != 0) {
+                        s32 special = evtGetValue(0, 0xF8406022);
+                        techLevel = *(s16*)((s32)pouch + partyId * 0xE + 0xC);
+                        drawRow = 1;
+
+                        if (special == 0) {
+                            if (techLevel < 1) {
+                                selectableState = 0;
+                            } else {
+                                selectableState = 1;
+                                iconFlags |= 0x20;
+                                rowColor = 0xA0A0A0FF;
+                            }
+                        } else {
+                            if (techLevel < 2) {
+                                selectableState = 0;
+                            } else {
+                                selectableState = 2;
+                                iconFlags |= 0x20;
+                                rowColor = 0xA0A0A0FF;
+                            }
+                        }
+                    }
+                } else {
+                    if (partyChkJoin(partyId) != 0 &&
+                        *(s32*)((s32)work + 0x4C) != partyId) {
+                        techLevel = *(s16*)((s32)pouch + partyId * 0xE + 0xC);
+                        drawRow = 1;
+                        if (techLevel < 1) {
+                            selectableState = 1;
+                            iconFlags |= 0x20;
+                            rowColor = 0xA0A0A0FF;
+                        } else {
+                            selectableState = 0;
+                        }
+                    }
+                }
+
+                if (drawRow) {
+                    iconId = party_icon_table[partyIndex];
+                    if (iconId == 0x160) {
+                        switch (pouchGetPartyColor(4)) {
+                        case 0: iconId = 0x160; break;
+                        case 1: iconId = 0x161; break;
+                        case 2: iconId = 0x162; break;
+                        case 3: iconId = 0x163; break;
+                        case 4: iconId = 0x164; break;
+                        case 5: iconId = 0x165; break;
+                        default: iconId = 0x166; break;
+                        }
+                    }
+
+                    iconPos.x = 11.0f;
+                    iconPos.y = scrollY + (f32)(0x38 - row * 24);
+                    iconPos.z = 0.0f;
+                    iconDispGx(0.5f, &iconPos, iconFlags, iconId);
+
+                    FontDrawStart();
+                    FontDrawColor(&rowColor);
+                    if (partyIndex == 3) {
+                        partyName = pouchGetYoshiName();
+                    } else {
+                        partyName = msgSearch(party_labelname_table[partyIndex]);
+                    }
+                    FontDrawString(36.0f,
+                                   scrollY + (f32)(0x50 - row * 24),
+                                   partyName);
+
+                    techLevel = *(s16*)((s32)pouch + partyId * 0xE + 0xC);
+                    sprintf(partnerValue, "%d", techLevel);
+                    FontDrawStart();
+                    FontDrawString(236.0f,
+                                   scrollY + (f32)(0x50 - row * 24),
+                                   partnerValue);
+
+                    if ((f32)row == selectedRow) {
+                        if (selectableState == 0)
+                            sprintf(helper, "help");
+                        else
+                            sprintf(helper, "helperr");
+
+                        if (menuState == 5 || menuState == 6)
+                            sprintf(direction, "lankup");
+                        else
+                            sprintf(direction, "lankdown");
+
+                        sprintf(partnerHelp, "%s_%s_lank%d%s",
+                                helper, direction, techLevel + 1,
+                                party_labelname_table[partyIndex]);
+                    }
+
+                    row++;
+                }
+
+                partyIndex++;
+            }
+
+            GXSetScissor(oldX, oldY, oldW, oldH);
+
+            if (partnerHelp[0] != 0) {
+                windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f,
+                                      20.0f, 0, &white);
+                FontDrawStart();
+                FontDrawMessage(-220, -138, msgSearch(partnerHelp));
+            }
+            break;
+        }
+
+        case 8:
+        {
+            s32** pointTable;
+            s32 statusCount;
+            s32 statusIndex;
+            s32 row;
+            s32 other;
+            s32 disabledCount;
+            s32 blocked;
+            s32 iconFlags;
+            s32 currentValue;
+            s32 delta;
+            s32 previewValue;
+            u32 rowColor;
+            char statText[0x40];
+            char statHelp[0x100];
+            char helper[0x20];
+            Vec3 previewPos;
+
+            pointTable = (s32**)&mario_status_point_table;
+            statHelp[0] = 0;
+            statusCount = *(s32*)((s32)work + 0x58);
+
+            freeRows = 8 - *(s32*)((s32)work + 0x58);
+            if (freeRows < 0)
+                freeRows = 0;
+
+            windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f,
+                                  (f32)(220 - freeRows * 24),
+                                  20.0f, 0, &white);
+            windowDispGX_Waku_col(16.0f, 114.0f, 120.0f, 28.0f,
+                                  8.0f, 0, &white);
+            FontDrawStart();
+            FontDrawEdge();
+            FontDrawColor(&white);
+            FontDrawString(21.0f, 111.0f, msgSearch("msg_window_title_9"));
+            FontDrawEdgeOff();
+
+            windowDispGX_Waku_col(167.0f, 114.0f, 85.0f, 28.0f,
+                                  8.0f, 0, &white);
+            FontDrawStart();
+            FontDrawEdge();
+            FontDrawColor(&white);
+            FontDrawString(177.0f, 111.0f, msgSearch("msg_window_title_10"));
+            FontDrawEdgeOff();
+
+            GXGetScissor(&oldX, &oldY, &oldW, &oldH);
+            GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - freeRows * 24);
+
+            row = 0;
+            for (statusIndex = 0; statusIndex < statusCount; statusIndex++) {
+                s16* pointPtr;
+
+                pointPtr = (s16*)pointTable[statusIndex];
+                currentValue = *pointPtr;
+                delta = mario_status_henka_table[statusIndex];
+                disabledCount = 0;
+
+                for (other = 0; other < *(s32*)((s32)work + 0x58); other++) {
+                    if ((f32)other != selectedRow) {
+                        s16* otherPtr = (s16*)pointTable[other];
+                        if ((s32)*otherPtr - mario_status_henka_table[other] < 1)
+                            disabledCount++;
+                    }
+                }
+
+                blocked = disabledCount != 0;
+                if (blocked) {
+                    iconFlags = 0x30;
+                    rowColor = 0xA0A0A0FF;
+                } else {
+                    iconFlags = 0x10;
+                    rowColor = 0xFFFFFFFF;
+                }
+
+                iconPos.x = 11.0f;
+                iconPos.y = scrollY + (f32)(0x38 - row * 24);
+                iconPos.z = 0.0f;
+                iconDispGx(0.5f, &iconPos, iconFlags,
+                           mario_status_icon_table[statusIndex]);
+
+                sprintf(statText, "%s%3d",
+                        mario_status_name_table[statusIndex],
+                        currentValue);
+                FontDrawStart();
+                FontDrawColor(&rowColor);
+                FontDrawString(36.0f,
+                               scrollY + (f32)(0x50 - row * 24),
+                               statText);
+
+                if ((f32)row == selectedRow) {
+                    if (blocked)
+                        sprintf(helper, "helperr");
+                    else
+                        sprintf(helper, "help");
+
+                    sprintf(statHelp, "%s_levelup%s",
+                            helper,
+                            mario_status_labelname_table[statusIndex]);
+                    previewValue = currentValue + delta * 2;
+
+                    if (previewValue < 1)
+                        sprintf(statText, "--");
+                    else
+                        sprintf(statText, "%3d", previewValue);
+
+                    FontDrawStart();
+                    FontDrawString(206.0f,
+                                   scrollY + (f32)(0x50 - row * 24),
+                                   statText);
+
+                    previewPos.x = 187.0f;
+                    previewPos.y = scrollY + (f32)(0x38 - row * 24);
+                    previewPos.z = 0.0f;
+
+                    itemIndex = 0x1BD;
+                    if (previewValue < 1)
+                        itemIndex = 0x16A;
+
+                    iconDispGx(0.5f, &previewPos, iconFlags, itemIndex);
+                } else {
+                    previewValue = currentValue - delta;
+                    if (previewValue < 1)
+                        sprintf(statText, "--");
+                    else
+                        sprintf(statText, "%3d", previewValue);
+
+                    FontDrawStart();
+                    FontDrawString(206.0f,
+                                   scrollY + (f32)(0x50 - row * 24),
+                                   statText);
+                }
+
+                row++;
+            }
+
+            GXSetScissor(oldX, oldY, oldW, oldH);
+
+            if (statHelp[0] != 0) {
+                windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f,
+                                      20.0f, 0, &white);
+                FontDrawStart();
+                FontDrawMessage(-220, -138, msgSearch(statHelp));
+            }
+            break;
+        }
+
+        case 9:
+        {
+            s32** pointTable;
+            s32 statusCount;
+            s32 statusIndex;
+            s32 row;
+            s32 other;
+            s32 disabledCount;
+            s32 blocked;
+            s32 iconFlags;
+            s32 currentValue;
+            s32 delta;
+            s32 previewValue;
+            u32 rowColor;
+            char statText[0x40];
+            char statHelp[0x100];
+            char helper[0x20];
+            Vec3 previewPos;
+
+            pointTable = (s32**)&mario_status_point_table;
+            statHelp[0] = 0;
+            statusCount = *(s32*)((s32)work + 0x58);
+
+            freeRows = 8 - *(s32*)((s32)work + 0x58);
+            if (freeRows < 0)
+                freeRows = 0;
+
+            windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f,
+                                  (f32)(220 - freeRows * 24),
+                                  20.0f, 0, &white);
+            windowDispGX_Waku_col(16.0f, 114.0f, 120.0f, 28.0f,
+                                  8.0f, 0, &white);
+            FontDrawStart();
+            FontDrawEdge();
+            FontDrawColor(&white);
+            FontDrawString(21.0f, 111.0f, msgSearch("msg_window_title_9"));
+            FontDrawEdgeOff();
+
+            windowDispGX_Waku_col(167.0f, 114.0f, 85.0f, 28.0f,
+                                  8.0f, 0, &white);
+            FontDrawStart();
+            FontDrawEdge();
+            FontDrawColor(&white);
+            FontDrawString(177.0f, 111.0f, msgSearch("msg_window_title_10"));
+            FontDrawEdgeOff();
+
+            GXGetScissor(&oldX, &oldY, &oldW, &oldH);
+            GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - freeRows * 24);
+
+            row = 0;
+            for (statusIndex = 0; statusIndex < statusCount; statusIndex++) {
+                s16* pointPtr;
+
+                pointPtr = (s16*)pointTable[statusIndex];
+                currentValue = *pointPtr;
+                delta = mario_status_henka_table[statusIndex];
+                disabledCount = 0;
+
+                for (other = 0; other < *(s32*)((s32)work + 0x58); other++) {
+                    if ((f32)other != selectedRow) {
+                        s16* otherPtr = (s16*)pointTable[other];
+                        if ((s32)*otherPtr - mario_status_henka_table[other] < 1)
+                            disabledCount++;
+                    }
+                }
+
+                blocked = disabledCount > 1;
+                if (blocked) {
+                    iconFlags = 0x30;
+                    rowColor = 0xA0A0A0FF;
+                } else {
+                    iconFlags = 0x10;
+                    rowColor = 0xFFFFFFFF;
+                }
+
+                iconPos.x = 11.0f;
+                iconPos.y = scrollY + (f32)(0x38 - row * 24);
+                iconPos.z = 0.0f;
+                iconDispGx(0.5f, &iconPos, iconFlags,
+                           mario_status_icon_table[statusIndex]);
+
+                sprintf(statText, "%s%3d",
+                        mario_status_name_table[statusIndex],
+                        currentValue);
+                FontDrawStart();
+                FontDrawColor(&rowColor);
+                FontDrawString(36.0f,
+                               scrollY + (f32)(0x50 - row * 24),
+                               statText);
+
+                if ((f32)row == selectedRow) {
+                    if (blocked)
+                        sprintf(helper, "helperr");
+                    else
+                        sprintf(helper, "help");
+
+                    sprintf(statHelp, "%s_levelup%s",
+                            helper,
+                            mario_status_labelname_table[statusIndex]);
+                    previewValue = currentValue + delta;
+
+                    if (previewValue < 1)
+                        sprintf(statText, "--");
+                    else
+                        sprintf(statText, "%3d", previewValue);
+
+                    FontDrawStart();
+                    FontDrawString(206.0f,
+                                   scrollY + (f32)(0x50 - row * 24),
+                                   statText);
+
+                    previewPos.x = 187.0f;
+                    previewPos.y = scrollY + (f32)(0x38 - row * 24);
+                    previewPos.z = 0.0f;
+
+                    itemIndex = 0x1BD;
+                    if (previewValue < 1)
+                        itemIndex = 0x16A;
+
+                    iconDispGx(0.5f, &previewPos, iconFlags, itemIndex);
+                }
+
+                row++;
+            }
+
+            GXSetScissor(oldX, oldY, oldW, oldH);
+
+            if (statHelp[0] != 0) {
+                windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f,
+                                      20.0f, 0, &white);
+                FontDrawStart();
+                FontDrawMessage(-220, -138, msgSearch(statHelp));
+            }
+            break;
+        }
+
+        case 10:
+        {
+            s32** pointTable;
+            s32 statusIndex;
+            s32 row;
+            s32 blocked;
+            s32 iconFlags;
+            s32 currentValue;
+            s32 delta;
+            s32 previewValue;
+            u32 rowColor;
+            char statText[0x40];
+            char statHelp[0x100];
+            char helper[0x20];
+            Vec3 previewPos;
+
+            pointTable = (s32**)&mario_status_point_table;
+            statHelp[0] = 0;
+
+            freeRows = 8 - *(s32*)((s32)work + 0x58);
+            if (freeRows < 0)
+                freeRows = 0;
+
+            windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f,
+                                  (f32)(220 - freeRows * 24),
+                                  20.0f, 0, &white);
+            windowDispGX_Waku_col(16.0f, 114.0f, 120.0f, 28.0f,
+                                  8.0f, 0, &white);
+            FontDrawStart();
+            FontDrawEdge();
+            FontDrawColor(&white);
+            FontDrawString(21.0f, 111.0f, msgSearch("msg_window_title_9"));
+            FontDrawEdgeOff();
+
+            windowDispGX_Waku_col(167.0f, 114.0f, 85.0f, 28.0f,
+                                  8.0f, 0, &white);
+            FontDrawStart();
+            FontDrawEdge();
+            FontDrawColor(&white);
+            FontDrawString(177.0f, 111.0f, msgSearch("msg_window_title_10"));
+            FontDrawEdgeOff();
+
+            GXGetScissor(&oldX, &oldY, &oldW, &oldH);
+            GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - freeRows * 24);
+
+            row = 0;
+            for (statusIndex = 0; statusIndex < 3; statusIndex++) {
+                s16* pointPtr;
+
+                if (statusIndex == *(s32*)((s32)work + 0x4C))
+                    continue;
+
+                pointPtr = (s16*)pointTable[statusIndex];
+                currentValue = *pointPtr;
+                delta = mario_status_henka_table[statusIndex];
+                blocked = currentValue - delta < 1;
+
+                if (blocked) {
+                    iconFlags = 0x30;
+                    rowColor = 0xA0A0A0FF;
+                } else {
+                    iconFlags = 0x10;
+                    rowColor = 0xFFFFFFFF;
+                }
+
+                iconPos.x = 11.0f;
+                iconPos.y = scrollY + (f32)(0x38 - row * 24);
+                iconPos.z = 0.0f;
+                iconDispGx(0.5f, &iconPos, iconFlags,
+                           mario_status_icon_table[statusIndex]);
+
+                sprintf(statText, "%s%3d",
+                        mario_status_name_table[statusIndex],
+                        currentValue);
+                FontDrawStart();
+                FontDrawColor(&rowColor);
+                FontDrawString(36.0f,
+                               scrollY + (f32)(0x50 - row * 24),
+                               statText);
+
+                if ((f32)row == selectedRow) {
+                    if (blocked)
+                        sprintf(helper, "helperr");
+                    else
+                        sprintf(helper, "help");
+
+                    sprintf(statHelp, "%s_leveldown%s",
+                            helper,
+                            mario_status_labelname_table[statusIndex]);
+                    previewValue = currentValue - delta;
+
+                    if (previewValue < 1)
+                        sprintf(statText, "--");
+                    else
+                        sprintf(statText, "%3d", previewValue);
+
+                    FontDrawStart();
+                    FontDrawString(206.0f,
+                                   scrollY + (f32)(0x50 - row * 24),
+                                   statText);
+
+                    previewPos.x = 187.0f;
+                    previewPos.y = scrollY + (f32)(0x38 - row * 24);
+                    previewPos.z = 0.0f;
+
+                    itemIndex = 0x1BE;
+                    if (previewValue < 1)
+                        itemIndex = 0x16A;
+
+                    iconDispGx(0.5f, &previewPos, iconFlags, itemIndex);
+                }
+
+                row++;
+            }
+
+            GXSetScissor(oldX, oldY, oldW, oldH);
+
+            if (statHelp[0] != 0) {
+                windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f,
+                                      20.0f, 0, &white);
+                FontDrawStart();
+                FontDrawMessage(-220, -138, msgSearch(statHelp));
+            }
+            break;
+        }
+
+        default:
+            break;
         }
     }
-    (void)cameraId;
+
+    {
+        s32 menuState;
+        char helpText[0x88];
+        char* secondLine;
+        char* p;
+        char* msg;
+        s32 lineCount;
+        s32 firstWidth;
+        s32 secondWidth;
+        s32 maxWidth;
+        s32 xOffset;
+        u32 helpColor;
+
+        menuState = *(s32*)((s32)work + 0x50);
+
+        if (menuState == 0 || menuState == 1) {
+            iconFlagOn(str_yubicursor_2_802f7124, 2);
+        } else {
+            secondLine = 0;
+            helpText[0] = 0;
+
+            switch (menuState) {
+            case 2:
+            case 0xC:
+                msg = msgSearch("msg_window_select_2");
+                strcpy(helpText, msg);
+                break;
+            case 3:
+                msg = msgSearch("msg_window_select_3");
+                strcpy(helpText, msg);
+                break;
+            case 4:
+                msg = msgSearch("msg_window_select_4");
+                strcpy(helpText, msg);
+                break;
+            case 5:
+                msg = msgSearch("msg_window_select_11");
+                strcpy(helpText, msg);
+                break;
+            case 6:
+                msg = msgSearch("msg_window_select_11");
+                strcpy(helpText, msg);
+                break;
+            case 7:
+                msg = msgSearch("msg_window_select_12");
+                strcpy(helpText, msg);
+                break;
+            case 8:
+            case 9:
+                msg = msgSearch("msg_window_select_9");
+                strcpy(helpText, msg);
+                break;
+            case 10:
+                msg = msgSearch("msg_window_select_9_");
+                strcpy(helpText, msg);
+                break;
+            case 0xB:
+            case 0xE:
+            case 0xF:
+                msg = msgSearch("msg_window_select_6");
+                strcpy(helpText, msg);
+                break;
+            case 0xD:
+            case 0x10:
+                msg = msgSearch("msg_window_select_10");
+                strcpy(helpText, msg);
+                break;
+            case 0x11:
+                msg = msgSearch("msg_window_select_8");
+                strcpy(helpText, msg);
+                break;
+            case 0x12:
+                msg = msgSearch("msg_window_select_7");
+                strcpy(helpText, msg);
+                break;
+            default:
+                helpText[0] = 0;
+                break;
+            }
+            lineCount = 1;
+            p = helpText;
+            while (*p != 0) {
+                if (*p == '\n') {
+                    *p = 0;
+                    secondLine = p + 1;
+                    lineCount = 2;
+                    break;
+                }
+                p++;
+            }
+
+            helpColor = 0xFFFFFFFF;
+            windowDispGX_Waku_col(-280.0f, 100.0f, 240.0f,
+                                  (f32)(45 + (lineCount - 1) * 24),
+                                  20.0f, 0, &helpColor);
+            FontDrawStart();
+
+            firstWidth = (s32)(FontGetMessageWidth(helpText) & 0xFFFF);
+            if (secondLine != 0)
+                secondWidth = (s32)(FontGetMessageWidth(secondLine) & 0xFFFF);
+            else
+                secondWidth = 0;
+
+            maxWidth = firstWidth;
+            if (secondWidth > maxWidth)
+                maxWidth = secondWidth;
+
+            if (maxWidth < 0xE5) {
+                xOffset = (0xE4 - maxWidth) / 2;
+            } else {
+                FontDrawScale(228.0f / (f32)maxWidth);
+                xOffset = 0;
+            }
+
+            FontDrawString((f32)(xOffset - 0x112), 90.0f, helpText);
+            if (secondLine != 0)
+                FontDrawString((f32)(xOffset - 0x112), 66.0f, secondLine);
+
+            iconFlagOff(str_yubicursor_2_802f7124, 2);
+            iconSetPos(*(f32*)((s32)work + 0x3C),
+                       *(f32*)((s32)work + 0x40),
+                       0.0f,
+                       str_yubicursor_2_802f7124);
+        }
+    }
 }
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 set_new_goods_list(void* pEvt) {

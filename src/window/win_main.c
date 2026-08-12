@@ -63,6 +63,9 @@ extern f32 float_10_80424020;
 extern f32 float_0p2_80424024;
 void* marioGetPtr(void);
 s32 vsprintf(char* buffer, const char* format, void* args);
+u32 FontGetMessageWidth(char* msg);
+void winFontSet(void* position, void* scale, void* color, char* format, ...);
+void winFontSetEdge(void* position, void* scale, void* color, char* format, ...);
 void* camGetPtr(s32 cameraId);
 f64 sin(f64 x);
 void PSVECSubtract(void* a, void* b, void* ab);
@@ -128,6 +131,7 @@ void winMain(void) {
     extern void fbatChangeMode(s32 mode);
     extern void marioCtrlOff(void);
     extern void marioCtrlOff2(void);
+    extern void marioCtrlOn(void);
     extern void marioCtrlOn2(void);
     extern void partyCtrlOff(void);
     extern void partyCtrlOn(void);
@@ -147,6 +151,39 @@ void winMain(void) {
     extern s32 swByteGet(s32 index);
     extern s32 partyChkJoin(s32 partyId);
     extern s32 pouchGetHaveBadgeCnt(void);
+    extern void* evtEntryType(void*, s8, u32, u32);
+    extern s32 evtCheckID(s32);
+    extern s32 evt_item_use[];
+    extern s32 evt_diary_read[];
+    extern void pouchRemoveItemIndex(s32, s32);
+    extern void evtYuuWindow(void);
+    extern s32 evtYuuWindowEndChk(void);
+    extern u8 winPartyDt[];
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void winDisp(void);
+    extern void winDispKoopa(void);
+    extern s32 kpaGetStageViewType(void);
+    extern void kpaPauseSE2(void);
+    extern void npcStopForEvent(void);
+    extern void npcStartForEvent(void);
+    extern s32 getMarioStDvdRoot(void);
+    extern u32 fileAsyncf(s32, s32, char*, s32, char*, ...);
+    extern void* fileAllocf(s32, char*, s32, char*, ...);
+    extern char* winGetMapTplName(void);
+    extern s32 strncmp(const char*, const char*, u32);
+    extern char str_PCTs_w_PCTs_win_tpl_802f7398[];
+    extern char str_PCTs_w_PCTs_mail_tpl_802f73a8[];
+    extern char str_PCTs_w_PCTs_PCTs_802f73bc[];
+    extern char str_jp_80423f5c[];
+    extern char str_us_80423f60[];
+    extern char str_ge_80423f64[];
+    extern char str_fr_80423f68[];
+    extern char str_sp_80423f6c[];
+    extern char str_it_80423f70[];
+    extern char str_yuu_80424028[];
+    extern char str_yuu_8042402c[];
+    extern f32 float_250_80424034;
+    extern f32 float_500_80424038;
     void* win = g_winPtr;
     void* player = marioGetPtr();
     s32 state = *(s32*)((s32)win + 0x20);
@@ -169,7 +206,10 @@ void winMain(void) {
         s32 openMenu = 0;
         u32 buttons = *(u32*)((s32)win + 4);
 
-        if (*(u8*)((s32)player + 0x3C) == 2) {
+        if ((*(u16*)win & 0x1000) != 0) {
+            *(s32*)((u8*)win + 0x1C) = 0;
+            openMenu = 1;
+        } else if (*(u8*)((s32)player + 0x3C) == 2) {
             if ((buttons & 0x1000) != 0) {
                 *(s32*)((s32)win + 0x1C) = 0;
                 openMenu = 1;
@@ -177,7 +217,7 @@ void winMain(void) {
         } else if ((buttons & 0x1000) != 0) {
             *(s32*)((s32)win + 0x1C) = 0;
             openMenu = 1;
-        } else if ((keyGetButton(0) & 0x40) == 0 &&
+        } else if ((keyGetButton(0) & 0x10) == 0 &&
                    strcmp((char*)gp + 0x13C, "yuu") != 0) {
             if ((buttons & 1) != 0) {
                 if (swByteGet(0) >= 7 || partyChkJoin(1) == 0) {
@@ -191,46 +231,93 @@ void winMain(void) {
                        (swByteGet(0) >= 0x14 || pouchGetHaveBadgeCnt() != 0)) {
                 *(s32*)((s32)win + 0x1C) = 3;
                 openMenu = 1;
+            } else if ((buttons & 4) != 0) {
+                *(s32*)((s32)win + 0x1C) = 4;
+                openMenu = 1;
             }
         }
         if (marioStGetSystemLevel() == 0 &&
             marioCheckMenuDisable() == 0 &&
             mobjCheckExec() == 0 && fadeIsFinish() != 0 &&
             openMenu != 0) {
-            void* camera = camGetPtr(1);
+            char* lang;
+            void* camera;
+            if ((keyGetButton(0) & 0x40) != 0 ||
+                ((*(u32*)gp & 0x1000) != 0 && evtGetValue(0, -170000000) < 7)) {
+                goto win_main_done;
+            }
+            camera = camGetPtr(1);
             *(u16*)camera |= 0x200;
-            *(s32*)((s32)win + 0x1C) = 0;
-            marioStSystemLevel(4);
+            if ((*(u32*)gp & 0x1000) != 0) {
+                *(s32*)((s32)win + 0x1C) = 1;
+            }
+            if ((*(u16*)win & 0x1000) == 0) marioStSystemLevel(4);
+            else npcStopForEvent();
             fbatChangeMode(7);
-            marioCtrlOff2();
+            if (*(u8*)((u8*)player + 0x3C) == 2 && kpaGetStageViewType() == 0) marioCtrlOff();
+            else marioCtrlOff2();
             partyCtrlOff();
             psndSetFlag(0x80);
+            if (*(u8*)((u8*)player + 0x3C) == 2) kpaPauseSE2();
+            if ((*(u32*)player & 0x8000000) == 0) *(u16*)win &= ~0x2000;
+            else *(u16*)win |= 0x2000;
             padRumbleHardOff(0);
             padRumbleHardOff(1);
             padRumbleHardOff(2);
             padRumbleHardOff(3);
-            *(s32*)((s32)win + 0x20) = 1;
+            lang = (*(s32*)((u8*)gp + 0x16C) == 0) ? str_jp_80423f5c : str_us_80423f60;
+            fileAsyncf(4, 0, str_PCTs_w_PCTs_mail_tpl_802f73a8,
+                       getMarioStDvdRoot(), lang);
+            fileAsyncf(4, 0, str_PCTs_w_PCTs_PCTs_802f73bc,
+                       getMarioStDvdRoot(), lang, winGetMapTplName());
+            *(s32*)((u8*)win + 0x24) = 0;
+            if (strncmp((char*)gp + 0x12C, str_yuu_8042402c, 4) == 0) {
+                *(s32*)((u8*)win + 0x20) = 400;
+            } else {
+                *(s32*)((u8*)win + 0x20) = 1;
+            }
         }
     } else if (state == 1) {
-        if (*(void**)((s32)win + 0x28) != 0) *(s32*)((s32)win + 0x20) = 2;
+        char* languages[6];
+        languages[0] = str_jp_80423f5c;
+        languages[1] = str_us_80423f60;
+        languages[2] = str_ge_80423f64;
+        languages[3] = str_fr_80423f68;
+        languages[4] = str_sp_80423f6c;
+        languages[5] = str_it_80423f70;
+        if (fileAsyncf(4, 0, str_PCTs_w_PCTs_win_tpl_802f7398,
+                       getMarioStDvdRoot(), languages[*(s32*)((u8*)gp + 0x16C)]) != 0) {
+            *(void**)((u8*)win + 0x28) = fileAllocf(
+                4, str_PCTs_w_PCTs_win_tpl_802f7398, getMarioStDvdRoot(),
+                languages[*(s32*)((u8*)gp + 0x16C)]);
+            *(s32*)((u8*)win + 0x20) = 2;
+        }
     } else if (state == 2) {
-        s32 result = winRootMain(win);
-        if (result == -2) {
-            *(s32*)((s32)win + 0x20) = 100;
-        } else if (result == -3) {
-            *(s32*)((s32)win + 0x20) = 200;
-        } else if (result < 0) {
-            *(s32*)((s32)win + 0x20) = 3;
+        if (*(u8*)((u8*)player + 0x3C) == 0) {
+            s32 result = winRootMain(win);
+            if (result == -2) {
+                *(s32*)((s32)win + 0x20) = 100;
+            } else if (result == -3) {
+                if (*(s32*)((u8*)win + 0x2D4) == 0x4E) *(s32*)((u8*)win + 0x20) = 300;
+                else *(s32*)((u8*)win + 0x20) = 200;
+            } else if (result < 0) {
+                *(s32*)((s32)win + 0x20) = 3;
+            }
+        } else if ((*(u32*)((u8*)win + 4) & 0x1000) != 0) {
+            kpaPauseSE2();
+            *(s32*)((u8*)win + 0x20) = 3;
         }
     } else if (state == 3) {
         void* camera = camGetPtr(1);
         *(u16*)camera &= ~0x200;
-        marioCtrlOn2();
+        if (*(u8*)((u8*)player + 0x3C) == 2 && kpaGetStageViewType() == 0) marioCtrlOn();
+        else marioCtrlOn2();
         partyCtrlOn();
         fbatChangeMode(1);
         psndClearFlag(0x80);
         statusWinForceUpdate();
-        marioStSystemLevel(0);
+        if ((*(u16*)win & 0x1000) == 0) marioStSystemLevel(0);
+        else npcStartForEvent();
         if (*(void**)((s32)win + 0x28) != 0) {
             fileFree(*(void**)((s32)win + 0x28));
         }
@@ -256,6 +343,74 @@ void winMain(void) {
             marioPartyHello(*(s32*)((s32)win + 0x1BC +
                                     *(s32*)((s32)win + 0x1DC) * 4));
             *(s32*)((s32)win + 0x20) = 3;
+        }
+    } else if (state == 200) {
+        void* partyOrder[8];
+        void* evt;
+        s32 currentParty;
+        s32 partyCount = 0;
+        s32 i;
+
+        if (marioBgmodeChk() == 0) {
+            currentParty = marioGetParty();
+        } else {
+            currentParty = *(s8*)((u8*)player + 0x247);
+        }
+        for (i = 0; i < 7; i++) {
+            if (*(s32*)(winPartyDt + i * 0x24) == currentParty) {
+                partyOrder[partyCount++] = winPartyDt + i * 0x24;
+            }
+        }
+        for (i = 0; i < 7; i++) {
+            if (*(s32*)(winPartyDt + i * 0x24) != currentParty) {
+                partyOrder[partyCount++] = winPartyDt + i * 0x24;
+            }
+        }
+        evt = evtEntryType(evt_item_use, 0, 0, 0);
+        *(void**)((u8*)win + 0x3C) = evt;
+        *(s32*)((u8*)evt + 0x9C + 10 * 4) = *(s32*)((u8*)win + 0x2D4);
+        if (*(s32*)((u8*)win + 0x2DC) == 0) {
+            *(s32*)((u8*)evt + 0x9C + 11 * 4) = 0;
+        } else {
+            *(s32*)((u8*)evt + 0x9C + 11 * 4) =
+                *(s32*)partyOrder[*(s32*)((u8*)win + 0x2DC) - 1];
+        }
+        psndClearFlag(0x80);
+        *(s32*)((u8*)win + 0x20) = 201;
+        pouchRemoveItemIndex(*(s32*)((u8*)win + 0x2D4),
+                             *(s32*)((u8*)win + 0x2D8));
+    } else if (state == 201) {
+        void* evt = *(void**)((u8*)win + 0x3C);
+        if (evtCheckID(*(s32*)((u8*)evt + 0x15C)) == 0) {
+            *(s32*)((u8*)win + 0x20) = 3;
+        }
+    } else if (state == 300) {
+        *(void**)((u8*)win + 0x3C) = evtEntryType(evt_diary_read, 0, 0, 0);
+        *(s32*)((u8*)win + 0x20) = 301;
+    } else if (state == 301) {
+        void* evt = *(void**)((u8*)win + 0x3C);
+        if (evtCheckID(*(s32*)((u8*)evt + 0x15C)) == 0) {
+            *(s32*)((u8*)win + 0x20) = 3;
+        }
+    } else if (state == 400) {
+        evtYuuWindow();
+        *(s32*)((u8*)win + 0x20) = 401;
+    } else if (state == 401) {
+        if (evtYuuWindowEndChk() != 0) {
+            *(s32*)((u8*)win + 0x20) = 3;
+        }
+    }
+
+win_main_done:
+    if (*(s32*)((u8*)win + 0x20) == 2) {
+        if (*(s8*)((u8*)player + 0x3C) == 0) {
+            if ((*(u16*)win & 0x1000) == 0) {
+                dispEntry(1, 0, winDisp, 0, float_250_80424034);
+            } else {
+                dispEntry(1, 0, winDisp, 0, float_500_80424038);
+            }
+        } else if (*(s8*)((u8*)player + 0x3C) == 2) {
+            dispEntry(1, 0, winDispKoopa, 0, float_250_80424034);
         }
     }
 }
@@ -527,10 +682,48 @@ void winFontSet(void* position, void* scale, void* color, char* format, ...) {
     FontDrawMessageMtx(translation, format);
 }
 
-/* fallback stub-fill: map=winFontSetPitch addr=0x8017d52c size=0x00000180 */
-int winFontSetPitch() {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void winFontSetPitch(void* position, void* scale, void* color, f32 width, char* format, ...) {
+    typedef struct FontVaList {
+        u32 regInfo;
+        void* inputArgArea;
+        void* regSaveArea;
+    } FontVaList;
+    typedef struct LocalVec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } LocalVec;
+
+    FontVaList args;
+    char text[4096];
+    LocalVec localPosition;
+    LocalVec localScale;
+    u32 localColor;
+    f32 messageWidth;
+
+    if (strstr(format, &str_PCT_80424014) != 0) {
+        args.regInfo = 0x04010000;
+        args.inputArgArea = (u8*)&args + 0x1044;
+        args.regSaveArea = (u8*)&args - 0x7C;
+        vsprintf(text, format, &args);
+        format = text;
+    }
+
+    messageWidth = *(f32*)((s32)scale + 0) *
+                   (f32)(FontGetMessageWidth(format) & 0xFFFF);
+    if (messageWidth > width) {
+        *(f32*)((s32)scale + 0) *= width / messageWidth;
+    }
+
+    localColor = *(u32*)color;
+    localScale = *(LocalVec*)scale;
+    localPosition = *(LocalVec*)position;
+    winFontSet(&localPosition, &localScale, &localColor, format);
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void winFontSetR(void* position, void* scale, void* color, char* format, ...) {
     typedef struct FontVaList {
@@ -607,10 +800,48 @@ void winFontSetEdge(void* position, void* scale, void* color, char* format, ...)
 
 /* CHATGPT FALLBACK MISSING STUBS: main/window/win_main 20260624_191429 */
 
-/* fallback stub-fill: map=unk_8017d10c addr=0x8017d10c size=0x00000180 */
-int unk_8017d10c() {
-    return 0;
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+void unk_8017d10c(void* position, void* scale, void* color, f32 width, char* format, ...) {
+    typedef struct FontVaList {
+        u32 regInfo;
+        void* inputArgArea;
+        void* regSaveArea;
+    } FontVaList;
+    typedef struct LocalVec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } LocalVec;
+
+    FontVaList args;
+    char text[4096];
+    LocalVec localPosition;
+    LocalVec localScale;
+    u32 localColor;
+    f32 messageWidth;
+
+    if (strstr(format, &str_PCT_80424014) != 0) {
+        args.regInfo = 0x04010000;
+        args.inputArgArea = (u8*)&args + 0x1044;
+        args.regSaveArea = (u8*)&args - 0x7C;
+        vsprintf(text, format, &args);
+        format = text;
+    }
+
+    messageWidth = *(f32*)((s32)scale + 0) *
+                   (f32)(FontGetMessageWidth(format) & 0xFFFF);
+    if (messageWidth > width) {
+        *(f32*)((s32)scale + 0) *= width / messageWidth;
+    }
+
+    localColor = *(u32*)color;
+    localScale = *(LocalVec*)scale;
+    localPosition = *(LocalVec*)position;
+    winFontSetEdge(&localPosition, &localScale, &localColor, format);
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 #pragma no_register_save_helpers on

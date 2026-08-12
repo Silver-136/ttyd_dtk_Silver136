@@ -421,6 +421,7 @@ void winBadgeDisp(s32 cameraId, void* pWin, s32 index) {
     extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* format, ...);
     extern void winFontSetR(Vec3* pos, Vec3* scale, void* color, char* format, ...);
     extern char str_msg_menu_badge_nokor_802f54a8[];
+    extern f32 float_4_804236c0;
     Vec3 pos;
     Vec3 scale;
     u32 white = 0xFFFFFFFF;
@@ -445,6 +446,8 @@ void winBadgeDisp(s32 cameraId, void* pWin, s32 index) {
             winTexInit(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
             winTexSet(0xB4, &pos, &scale, &white);
             winTexInit_x2(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
+            pos.x -= float_4_804236c0;
+            pos.y += float_4_804236c0;
             winTexSet_x2(tab + 0x1A, 0xB4, &pos, &scale, &white);
         } else {
             winTexInit_x2(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
@@ -486,7 +489,6 @@ void winBadgeDisp(s32 cameraId, void* pWin, s32 index) {
     badge_disp(x, y, pWin);
     (void)cameraId;
 }
-
 
 void badge_disp(double x, double y, void* pWin) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;

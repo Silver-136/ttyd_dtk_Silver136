@@ -93,16 +93,12 @@ void BattleStageMain(void) {
     s32 total;
     s32 frame;
 
-    batSpotMain();
     stage = (void*)((s32)_battleWorkPointer + 0x163FC);
+    batSpotMain();
     for (i = 0; i < 12; i++) {
         light = (u8*)stage + (i * 0xE8) + 4;
         if ((*(u32*)light & 1) == 0) {
-            if (*(void**)(light + 0xE4) != 0) {
-                BattleFree(*(void**)(light + 0xE4));
-                *(void**)(light + 0xE4) = 0;
-            }
-            continue;
+            goto inactive_entry;
         }
         remain = *(s32*)(light + 0x30);
         total = *(s32*)(light + 0x34);
@@ -113,7 +109,7 @@ void BattleStageMain(void) {
             light[0x26] = (u8)(s32)intplGetValue(light[0x2A], light[0x2E], (s8)light[0x38], total-remain, total);
             if (((*(u32*)light & 2) != 0) && light[0x24] == 0 && light[0x25] == 0 && light[0x26] == 0) {
                 *(u32*)light = 0;
-                continue;
+                goto next_entry;
             }
         }
         remain = *(s32*)(light + 0x48);
@@ -168,9 +164,32 @@ void BattleStageMain(void) {
             *(f32*)(light + 0xB8) = (f32)intplGetValue(*(f32*)(light + 0xC4), *(f32*)(light + 0xD0), (s8)light[0xE0], total-remain, total);
             *(f32*)(light + 0xBC) = (f32)intplGetValue(*(f32*)(light + 0xC8), *(f32*)(light + 0xD4), (s8)light[0xE0], total-remain, total);
         }
+        goto next_entry;
+
+inactive_entry:
+        if (*(void**)(light + 0xE4) != 0) {
+            BattleFree(*(void**)(light + 0xE4));
+            *(void**)(light + 0xE4) = 0;
+        }
+next_entry:
+        ;
     }
 
     light = (u8*)stage + 0xAE8;
+    remain = *(s32*)(light + 8);
+    total = *(s32*)(light + 0x10);
+    if (remain > 0) {
+        *(s32*)(light + 8) = --remain;
+        light[0] = (u8)(s32)intplGetValue(light[2], light[4], (s8)light[0x18], total-remain, total);
+    }
+    remain = *(s32*)(light + 0xC);
+    total = *(s32*)(light + 0x14);
+    if (remain > 0) {
+        *(s32*)(light + 0xC) = --remain;
+        light[1] = (u8)(s32)intplGetValue(light[3], light[5], (s8)light[0x19], total-remain, total);
+    }
+
+    light += 0x20;
     remain = *(s32*)(light + 8);
     total = *(s32*)(light + 0x10);
     if (remain > 0) {

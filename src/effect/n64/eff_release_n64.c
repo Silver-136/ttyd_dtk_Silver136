@@ -95,19 +95,12 @@ void effReleaseMain(void* effect) {
         *(s32*)effect &= ~4;
         *(s32*)(work + 0x14) = 0x10;
     }
-    if (*(s32*)(work + 0x14) < 1000) {
-        *(s32*)(work + 0x14) -= 1;
-    }
+    if (*(s32*)(work + 0x14) < 1000) *(s32*)(work + 0x14) -= 1;
     *(s32*)(work + 0x18) += 1;
     timer = *(s32*)(work + 0x14);
     frame = *(s32*)(work + 0x18);
-    if (timer < 0) {
-        effDelete(effect);
-        return;
-    }
-    if (timer < 0x10) {
-        *(s32*)(work + 0x28) = timer << 4;
-    }
+    if (timer < 0) { effDelete(effect); return; }
+    if (timer < 0x10) *(s32*)(work + 0x28) = timer << 4;
 
     phase = (6.2832f * (f32)(frame * 12)) / 360.0f;
     pulse = 0.5f + 0.5f * (f32)sin(phase);
@@ -116,19 +109,16 @@ void effReleaseMain(void* effect) {
         s32 stateTimer = *(s32*)(work + 0x74) + 1;
         *(s32*)(work + 0x74) = stateTimer;
         *(s32*)(work + 0x50) = (frame & 3) * 0x1E + 200;
-        *(f32*)(work + 0x40) =
-            0.04f * (f32)sin((6.2832f * (f32)(frame * 20)) / 360.0f) + 0.5f;
+        *(f32*)(work + 0x40) = 0.04f * (f32)sin((6.2832f * (f32)(frame * 20)) / 360.0f) + 0.5f;
         if (*(s32*)work != 0) {
-            *(f32*)(work + 8) +=
-                (f32)sin((6.2832f * (f32)frame) / 360.0f);
-            *(f32*)(work + 0xC) +=
-                (f32)cos((6.2832f * 1.2356f * (f32)frame) / 360.0f);
+            *(f32*)(work + 8) += (f32)sin((6.2832f * (f32)frame) / 360.0f);
+            *(f32*)(work + 0xC) += (f32)cos((6.2832f * 1.2356f * (f32)frame) / 360.0f);
             if (stateTimer > 0x32) {
                 *(s32*)(work + 0x74) = 0;
                 *(s32*)(work + 0x70) = *(s32*)(work + 4) == 3 ? 100 : 1;
             }
         }
-    } else if (mode == 0x100) {
+    } else if (mode == 1) {
         *(f32*)(work + 0x40) = 0.5f + 0.04f * (f32)frame;
         *(f32*)(work + 0x44) = 1.2f * *(f32*)(work + 0x40) + 4.0f;
         *(f32*)(work + 0x48) = pulse;
@@ -136,7 +126,7 @@ void effReleaseMain(void* effect) {
         *(s32*)(work + 0x50) = *(s32*)(work + 0x28);
         *(s32*)(work + 0x54) = *(s32*)(work + 0x28);
         *(s32*)(work + 0x58) = 0;
-    } else if (mode == 0x400) {
+    } else if (mode == 4) {
         *(f32*)(work + 0x40) = frame < 2 ? 8.0f : (frame == 2 ? 4.0f : 0.0f);
         *(f32*)(work + 0x44) = pulse;
         *(f32*)(work + 0x48) = pulse * 0.75f;
@@ -152,11 +142,20 @@ void effReleaseMain(void* effect) {
         *(s32*)(work + 0x58) = *(s32*)(work + 0x28);
         *(s32*)(work + 0x5C) = *(s32*)(work + 0x28);
     }
+    if (*(s32*)(work + 0x50) > 0xFF) *(s32*)(work + 0x50) = 0xFF;
+    if (*(s32*)(work + 0x50) < 0) *(s32*)(work + 0x50) = 0;
     if (*(f32*)(work + 0x40) < 0.0f) *(f32*)(work + 0x40) = 0.0f;
+    if (*(s32*)(work + 0x54) > 0xFF) *(s32*)(work + 0x54) = 0xFF;
+    if (*(s32*)(work + 0x54) < 0) *(s32*)(work + 0x54) = 0;
     if (*(f32*)(work + 0x44) < 0.0f) *(f32*)(work + 0x44) = 0.0f;
+    if (*(s32*)(work + 0x58) > 0xFF) *(s32*)(work + 0x58) = 0xFF;
+    if (*(s32*)(work + 0x58) < 0) *(s32*)(work + 0x58) = 0;
+    if (*(f32*)(work + 0x48) < 0.0f) *(f32*)(work + 0x48) = 0.0f;
+    if (*(s32*)(work + 0x5C) > 0xFF) *(s32*)(work + 0x5C) = 0xFF;
+    if (*(s32*)(work + 0x5C) < 0) *(s32*)(work + 0x5C) = 0;
+    if (*(f32*)(work + 0x4C) < 0.0f) *(f32*)(work + 0x4C) = 0.0f;
     dispEntry(4, 2, effReleaseDisp, effect, dispCalcZ(&pos));
 }
-
 
 void effReleaseDisp(s32 cameraId, void* effect) {
     extern void* camGetPtr(s32);
@@ -223,17 +222,40 @@ void effReleaseDisp(s32 cameraId, void* effect) {
         color = (*(s32*)(work + 0x1C) << 24) | (*(s32*)(work + 0x20) << 16) |
                 (*(s32*)(work + 0x24) << 8) | alpha;
         GXSetTevColor(1, &color);
-        texture = 0x44 + i;
-        effGetTexObjN64(texture, texObj);
-        GXLoadTexObj(texObj, 0);
-        PSMTXScale(scale, i == 1 ? 0.00390625f : 0.015625f,
-                          i == 2 ? 0.015625f : 0.03125f, 0.0f);
-        GXLoadTexMtxImm(scale, 0x1E, 1);
-        effSetVtxDescN64(i == 0 ? (void*)0x803A7D30 : (i == 1 ? (void*)0x803A7D68 : (void*)0x803A7F28));
-        GXBegin(0x90, 0, i == 1 ? 12 : 6);
-        tri2(0, 1, 2, 0, 0, 2, 3, 0);
-        if (i == 1) tri2(4, 5, 6, 4, 4, 6, 7, 0);
-        if (i == 2) {
+        if (i == 0) {
+            effGetTexObjN64(0x44, texObj);
+            GXLoadTexObj(texObj, 0);
+            PSMTXScale(scale, 0.03125f, 0.03125f, 0.0f);
+            GXLoadTexMtxImm(scale, 0x1E, 1);
+            effSetVtxDescN64((void*)0x803A7D30);
+            GXBegin(0x90, 0, 6);
+            tri2(0, 1, 2, 0, 0, 2, 3, 0);
+        } else if (i == 1) {
+            effGetTexObjN64(0x45, texObj);
+            GXLoadTexObj(texObj, 0);
+            effSetVtxDescN64((void*)0x803A7D68);
+            PSMTXScale(scale, 0.00390625f, 0.00390625f, 0.0f);
+            GXLoadTexMtxImm(scale, 0x1E, 1);
+            GXBegin(0x90, 0, 12);
+            tri2(0, 1, 2, 0, 0, 2, 3, 0);
+            tri2(0x1C, 0x1D, 0x1E, 0x1C, 0x1C, 0x1E, 0x1F, 0);
+        } else if (i == 2) {
+            effGetTexObjN64(0x46, texObj);
+            GXLoadTexObj(texObj, 0);
+            PSMTXScale(scale, 0.015625f, 0.015625f, 0.0f);
+            GXLoadTexMtxImm(scale, 0x1E, 1);
+            effSetVtxDescN64((void*)0x803A7F28);
+            GXBegin(0x90, 0, 6);
+            tri2(0, 1, 2, 0, 0, 2, 3, 0);
+            effGetTexObjN64(0x47, texObj);
+            GXLoadTexObj(texObj, 0);
+            PSMTXScale(scale, 0.015625f, 0.03125f, 0.0f);
+            GXLoadTexMtxImm(scale, 0x1E, 1);
+            effSetVtxDescN64((void*)0x803A7F60);
+            GXBegin(0x90, 0, 12);
+            tri2(0, 1, 2, 0, 0, 2, 3, 0);
+            tri2(4, 5, 6, 4, 4, 6, 7, 0);
+        } else if (i == 3) {
             effGetTexObjN64(0x47, texObj);
             GXLoadTexObj(texObj, 0);
             PSMTXScale(scale, 0.015625f, 0.03125f, 0.0f);

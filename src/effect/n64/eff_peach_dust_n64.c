@@ -2,13 +2,80 @@
 
 
 void* effPeachDustN64Entry(f32 x, f32 y, f32 z, s32 unused, f32 angle, s32 type) {
-    extern void* effEntry(void); extern void* __memAlloc(s32,s32); extern void effPeachDustMain(void*); extern char str_PeachDustN64_802fbc80[];
-    extern s32 rand(void); extern f64 sin(f64),cos(f64); extern f32 float_6p2832_80425cf0,float_360_80425cf4,float_0p1_80425cec,float_0p04_80425cf8,float_0p001_80425cfc,float_0_80425cd4;
-    void* entry;u8* work;u8* part;s32 i,r;f32 a;
-    entry=effEntry();*(char**)((s32)entry+0x14)=str_PeachDustN64_802fbc80;*(s32*)((s32)entry+8)=0x65;work=__memAlloc(3,0x115C);*(u8**)((s32)entry+0xC)=work;*(void**)((s32)entry+0x10)=effPeachDustMain;
-    *(s32*)work=type;*(f32*)(work+4)=x;*(f32*)(work+8)=y;*(f32*)(work+0xC)=z;*(s32*)(work+0x1C)=0x50;*(s32*)(work+0x20)=0;
-    a=float_6p2832_80425cf0*angle/float_360_80425cf4;part=work+0x2C;
-    for(i=0;i<100;i++,part+=0x2C){r=rand()%20-10;*(f32*)(part+4)=(f32)r*(f32)cos(a);*(f32*)(part+8)=(f32)(i/16);*(f32*)(part+0xC)=(f32)r*(f32)sin(a);*(f32*)(part+0x10)=float_0p04_80425cf8**(f32*)(part+4);*(f32*)(part+0x14)=float_0p04_80425cf8**(f32*)(part+8);*(f32*)(part+0x18)=float_0p001_80425cfc*(f32)(rand()%10);*(s32*)(part+0x1C)=rand()%7+0x1E;*(s32*)(part+0x20)=0;*(s32*)(part+0x28)=-1;}
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32, s32);
+    extern void effPeachDustMain(void*);
+    extern char str_PeachDustN64_802fbc80[];
+    extern u8 data[];
+    extern s32 rand(void);
+    extern f64 sin(f64), cos(f64);
+    extern f32 float_6p2832_80425cf0, float_360_80425cf4;
+    extern f32 float_0p1_80425cec, float_0p04_80425cf8;
+    extern f32 float_0p001_80425cfc, float_0_80425cd4;
+    void* entry;
+    u8* work;
+    u8* part;
+    u8* pattern;
+    s32 row;
+    s32 column;
+    s32 count;
+    s32 random;
+    f32 baseX;
+    f32 radians;
+
+    entry = effEntry();
+    *(char**)((s32)entry + 0x14) = str_PeachDustN64_802fbc80;
+    *(s32*)((s32)entry + 8) = 0x65;
+    work = __memAlloc(3, 0x115C);
+    *(u8**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effPeachDustMain;
+    *(s32*)work = type;
+    *(f32*)(work + 4) = x;
+    *(f32*)(work + 8) = y;
+    *(f32*)(work + 0xC) = z;
+    *(s32*)(work + 0x1C) = 0x50;
+    *(s32*)(work + 0x20) = 0;
+
+    count = 1;
+    row = 0;
+    part = work + 0x2C;
+    while (row < 16 && count <= 100) {
+        pattern = data + (15 - row) * 16 + type * 0x100;
+        column = 0;
+        while (column < 16 && count <= 100) {
+            if (pattern[column] != '.') {
+                random = rand() % 20 - 10;
+                radians = float_6p2832_80425cf0 * angle / float_360_80425cf4;
+                baseX = float_0p1_80425cec * (f32)random + (f32)((column - 8) * 2);
+                *(f32*)(part + 4) = baseX * (f32)cos((f64)radians);
+                random = rand() % 20 - 10;
+                *(f32*)(part + 8) = float_0p1_80425cec * (f32)random + (f32)(row * 2);
+                *(f32*)(part + 0xC) = baseX * (f32)sin((f64)radians);
+                *(f32*)(part + 0x10) = float_0p04_80425cf8 * *(f32*)(part + 4);
+                *(f32*)(part + 0x14) = float_0p04_80425cf8 * *(f32*)(part + 8);
+                *(f32*)(part + 0x18) = float_0p001_80425cfc * (f32)(rand() % 10);
+                *(s32*)(part + 0x1C) = rand() % 7 + 0x1E;
+                *(s32*)(part + 0x20) = 0;
+                part += 0x2C;
+                count++;
+            }
+            column++;
+        }
+        row++;
+    }
+    while (count < 0x65) {
+        *(f32*)(part + 4) = float_0_80425cd4;
+        *(f32*)(part + 8) = float_0_80425cd4;
+        *(f32*)(part + 0xC) = float_0_80425cd4;
+        *(f32*)(part + 0x10) = float_0_80425cd4;
+        *(f32*)(part + 0x14) = float_0_80425cd4;
+        *(f32*)(part + 0x18) = float_0_80425cd4;
+        *(s32*)(part + 0x1C) = -1;
+        *(s32*)(part + 0x20) = 0;
+        *(f32*)(part + 0x24) = float_0_80425cd4;
+        part += 0x2C;
+        count++;
+    }
     return entry;
 }
 

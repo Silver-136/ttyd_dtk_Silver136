@@ -392,6 +392,7 @@ u8 msgDisp(f64 baseX, f64 baseY, s32* smart, u8 alpha) {
     extern void FontDrawRainbowColor(void);
     extern void FontDrawRainbowColorOff(void);
     extern void FontDrawColorIDX(s32);
+    extern void GXSetTevColor(s32, void*);
     extern s32 irand(s32);
     extern void PSMTXIdentity(void*);
     extern void PSMTXTrans(void*, f32, f32, f32);
@@ -413,6 +414,12 @@ u8 msgDisp(f64 baseX, f64 baseY, s32* smart, u8 alpha) {
     extern f32 float_0p02_8042078c;
     extern f32 float_3p2_80420790;
     extern f32 float_4_8042076c;
+    extern f32 float_10_80420624;
+    extern f32 float_32_80420678;
+    extern u32 dat_804205dc;
+    extern u32 dat_804205e0;
+    extern u32 dat_804205e4;
+    extern u32 dat_804205e8;
     s32 work = *smart;
     u32* entry = (u32*)(work + 0x3C);
     s32 count = *(s32*)(work + 0x10);
@@ -480,9 +487,74 @@ u8 msgDisp(f64 baseX, f64 baseY, s32* smart, u8 alpha) {
             case 0xFFFF:
                 return 0;
             default:
+            {
+                s32 fade = 0;
+                s32 skip = 0;
+                u32 drawAlpha = 0xFF;
+
+                if ((*(u32*)(work + 4) & 0x40) != 0) {
+                    s32 pageIndex = *(s32*)(work + 0xF03C);
+                    s32 page = work + pageIndex * 4;
+                    s32 currentY = *(s32*)(work + 0x28);
+                    s32 pageY = *(s32*)(page + 0xF044);
+                    s32 entryY = *(s16*)((u8*)entry + 8);
+
+                    if (currentY == pageY) {
+                        if (entryY + *(s32*)(page + 0xF048) < 1) {
+                            skip = 1;
+                        } else {
+                            fade = 1;
+                        }
+                    } else if (currentY < pageY) {
+                        if (entryY + pageY < 1) {
+                            s32 delta = pageY - currentY;
+                            if (delta > 100) delta = 100;
+                            drawAlpha = ((100 - delta) * 255) / 100;
+                            if (pageIndex != *(s32*)(work + 0xF040) - 1) {
+                                if (entryY + *(s32*)(page + 0xF048) < 1) skip = 1;
+                                else fade = 1;
+                            }
+                        } else {
+                            fade = 1;
+                        }
+                    } else if (entryY + *(s32*)(page + 0xF048) < 1) {
+                        s32 delta = currentY - pageY;
+                        if (delta > 100) delta = 100;
+                        drawAlpha = (delta * 255) / 100;
+                        if (pageIndex != *(s32*)(work + 0xF040) - 2) {
+                            if (entryY + *(s32*)(page + 0xF04C) < 1) skip = 1;
+                            else fade = 1;
+                        }
+                    } else {
+                        fade = 1;
+                    }
+                }
+
+                if (skip || (f32)(*(s32*)(work + 0x28) +
+                    *(s16*)((u8*)entry + 8)) >= float_32_80420678 * scale -
+                    float_10_80420624) {
+                    break;
+                }
+
+                if (fade) {
+                    u32 color = (*(s32*)(*(s32*)(work + 0xF24C) + 8) == 3 ||
+                                 *(s32*)(*(s32*)(work + 0xF24C) + 8) == 8 ||
+                                 *(s32*)(*(s32*)(work + 0xF24C) + 8) == 9)
+                                    ? dat_804205e0 : dat_804205dc;
+                    color = (color & 0xFFFFFF00) | drawAlpha;
+                    GXSetTevColor(1, &color);
+                    FontDrawScale(scale);
+                    FontDrawCode(x, y, code);
+                    FontDrawColor_();
+                    break;
+                }
                 if ((flags & 1) != 0) {
                     f32 mtx[12];
                     s32 halfWidth = kanjiGetWidth(code) >> 1;
+                    if ((flags & 2) != 0) {
+                        irand(10000);
+                        irand(10000);
+                    }
                     PSMTXTrans(mtx, (f32)-halfWidth, float_12_80420780,
                                float_0_80420600);
                     PSMTXScaleApply(mtx, mtx, *(f32*)((u8*)entry + 0x14),
@@ -514,12 +586,14 @@ u8 msgDisp(f64 baseX, f64 baseY, s32* smart, u8 alpha) {
                                 float_0p02_8042078c * x;
                     f32 drawX = x + float_3p2_80420790 * (f32)cos(phase);
                     f32 drawY = y + float_3p2_80420790 * (f32)sin(phase);
-                    u32 color = FontGetDrawColor();
+                    u32 color = dat_804205e4;
                     FontDrawScale(scale);
                     FontDrawColor(&color);
                     FontDrawCode(drawX, drawY, code);
                     FontDrawEdge();
                     FontDrawRainbowColor();
+                    color = dat_804205e8;
+                    FontDrawColor(&color);
                     FontDrawCode(drawX - float_4_8042076c,
                                  drawY + float_4_8042076c, code);
                     FontDrawEdgeOff();
@@ -530,6 +604,7 @@ u8 msgDisp(f64 baseX, f64 baseY, s32* smart, u8 alpha) {
                     FontDrawCode(x, y, code);
                 }
                 break;
+            }
         }
     }
     return result;
@@ -750,13 +825,166 @@ u8 msgAnalize(void* smart, s32 textAddress) {
                 *(u32*)(work + 4) |= 0x10;
             } else if (strcmp(command, "clear") == 0) {
                 style[2] = 11;
-            } else if (strcmp(command, "se") == 0 || strcmp(command, "vol") == 0) {
-                sscanf(argument, "%d", &entry[0]);
-                *(u16*)((u8*)entry + 4) = strcmp(command, "se") == 0 ? 0xFFFA : 0xFFF9;
-                entry[3] = time;
+            } else if (strcmp(command, "wpos") == 0) {
+                s16 left, top, right, bottomPos;
+                sscanf(argument, "%hd%hd%hd%hd", &left, &top, &right, &bottomPos);
+                *(u16*)((u8*)style + 2) |= 4;
+                *(f32*)((u8*)style + 0xC) = (f32)left;
+                *(f32*)((u8*)style + 0x10) = (f32)top;
+                *(f32*)((u8*)style + 0x14) = (f32)right;
+                *(f32*)((u8*)style + 0x18) = (f32)bottomPos;
+            } else if (strcmp(command, "select") == 0) {
+                s16 first, second;
+                style[2] = 5;
+                *(u32*)(work + 4) |= 0x20;
+                sscanf(argument, "%hd%hd%hd%hd", &first, &second,
+                       (s16*)(work + 0xF244), (s16*)(work + 0xF246));
+                *(u8*)(work + 0xF241) = (u8)first;
+                *(u8*)(work + 0xF242) = (u8)second;
+                *(u8*)(work + 0xF240) = 1;
+                flags |= 0x100;
+                speed = 0;
+            } else if (strcmp(command, "se") == 0) {
+                sscanf(argument, "%d", &entry[0]); *(u16*)((u8*)entry + 4) = 0xFFFA;
+                count++;
+            } else if (strcmp(command, "vol") == 0) {
+                sscanf(argument, "%d", &entry[0]); *(u16*)((u8*)entry + 4) = 0xFFF9;
                 count++;
             } else if (strcmp(command, "nowinse") == 0) {
                 *(u16*)((u8*)style + 2) |= 8;
+            } else if (strcmp(command, "icon") == 0) {
+                extern void iconGetWidthHight(u16*, u16*, s32);
+                extern MsgIcon msgIcon[];
+                extern const char R_no_messages_JP[];
+                extern const char str_HM_804205c8[];
+                char iconName[32];
+                s32 iconId, xOffset, yOffset, advanceOffset;
+                s32 namedSpecial = 0;
+                s32 i;
+                f32 iconScale;
+                u16 iconWidth, iconHeight;
+
+                if (argument[0] >= '0' && argument[0] <= '9') {
+                    /*
+                     * Keep the accepted source's compiler-owned numeric format
+                     * literal alive.  A2's target-base reference removed this
+                     * 12-byte rebuilt .rodata contribution and made the whole
+                     * section farther from the target even though msgAnalize
+                     * itself improved.
+                     */
+                    sscanf(argument, "%d%f%d%d%d",
+                           &iconId, &iconScale, &xOffset, &yOffset,
+                           &advanceOffset);
+                } else {
+                    sscanf(argument, (char*)R_no_messages_JP + 0x358,
+                           iconName, &iconScale, &xOffset, &yOffset,
+                           &advanceOffset);
+
+                    if (strcmp(iconName, str_HM_804205c8) == 0) {
+                        namedSpecial = 1;
+                    }
+
+                    iconId = -1;
+                    for (i = 0; i < 0x12; i++) {
+                        if (strcmp(msgIcon[i].name, iconName) == 0) {
+                            iconId = msgIcon[i].id;
+                            break;
+                        }
+                    }
+                    if (iconId < 0) {
+                        iconId = 0;
+                    }
+                }
+
+                if (namedSpecial == 0) {
+                    entry[0] = iconId;
+                    iconGetWidthHight(&iconWidth, &iconHeight, iconId);
+                    *(u16*)((u8*)entry + 4) = 0xFFF8;
+                    *(s16*)((u8*)entry + 6) = (s16)(x + xOffset +
+                        (s32)(0.5f * (f32)iconWidth * iconScale));
+                    *(s16*)((u8*)entry + 8) =
+                        (s16)(y - (s32)((f32)iconHeight * iconScale));
+                    *(s16*)((u8*)entry + 0xA) = (s16)yOffset;
+                    entry[3] = time;
+                    *(f32*)((u8*)entry + 0x10) = iconScale;
+                    x += advanceOffset + 0x28;
+                    count++;
+                    time += speed;
+                } else {
+                    u16 glyph;
+                    u16 width;
+                    s32 advance;
+
+                    if (*(s32*)((s32)gp + 0x16C) == 0) {
+                        u32 hmCode = 0x10000;
+                        hmCode -= 0x6B4B;
+                        glyph = kanjiSearch(hmCode);
+                    } else {
+                        glyph = hankakuSearch(-0x30);
+                    }
+
+                    width = kanjiGetWidth(glyph) + 4;
+                    advance = (s32)(scaleX * width);
+
+                    *(u16*)((u8*)entry + 4) = glyph;
+                    *(s16*)((u8*)entry + 6) = (s16)x;
+                    *(s16*)((u8*)entry + 8) =
+                        (s16)(y - (s32)(float_10_80420624 * scaleY));
+                    *(f32*)((u8*)entry + 0x10) = scaleX;
+                    entry[0] = flags;
+                    entry[0] |= 8;
+                    if ((flags & 1) != 0) {
+                        *(f32*)((u8*)entry + 0x14) = dynamic;
+                    }
+                    entry[3] = time;
+                    x += advance;
+                    count++;
+                    time += speed;
+                }
+            } else if (strcmp(command, "anim") == 0) {
+                extern s32 animPoseEntry(const char*, s32);
+                extern void animPoseSetAnim(s32, const char*, s32);
+                extern void animPoseSetMaterialFlagOn(s32, s32);
+                extern void animPoseSetMaterialFlagOff(s32, s32);
+                extern void animPoseSetGXFunc(s32, void*, s32);
+                extern void msgDispKeyWait_render(void*);
+                extern void* msgw;
+                char groupName[32];
+                char animName[32];
+                s32 animX, animY, reverse;
+                f32 animScale;
+                s32 pose;
+                sscanf(argument, "%s%s%d%d%f", groupName, animName,
+                       &animX, &animY, &animScale, &reverse);
+                pose = animPoseEntry(groupName, 2);
+                entry[0] = pose;
+                animPoseSetAnim(pose, animName, 1);
+                animPoseSetMaterialFlagOn(pose, 0x1800);
+                animPoseSetMaterialFlagOff(pose, 0x40);
+                animPoseSetGXFunc(*(s32*)((s32)msgw + 0x20), msgDispKeyWait_render, 0);
+                *(u16*)((u8*)entry + 4) = 0xFFF4;
+                *(s16*)((u8*)entry + 6) = (s16)animX;
+                *(s16*)((u8*)entry + 8) = (s16)(bottom - animY);
+                *(f32*)((u8*)entry + 0x10) = animScale;
+                *(f32*)((u8*)entry + 0x14) = reverse ? 180.0f : 0.0f;
+                count++;
+                time += speed;
+            } else if (strcmp(command, "paper") == 0) {
+                extern void* npcNameToPtr(char*);
+                char name[32];
+                s32 paperValue;
+                sscanf(argument, "%s%d", name, &paperValue);
+                entry[0] = strcmp(name, "me") == 0 ? 0 : (u32)npcNameToPtr(name);
+                *(u16*)((u8*)entry + 4) = 0xFFF3;
+                entry[3] = paperValue;
+                count++;
+            } else if (strcmp(command, "/paper\0") == 0) {
+                extern void* npcNameToPtr(char*);
+                char name[32];
+                sscanf(argument, "%s", name);
+                entry[0] = strcmp(name, "me") == 0 ? 0 : (u32)npcNameToPtr(name);
+                *(u16*)((u8*)entry + 4) = 0xFFF2;
+                count++;
             }
             continue;
         }

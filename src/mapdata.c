@@ -75,43 +75,78 @@ void* areaDataPtr(char* name) {
 
 
 u8 relSetEvtAddr(char* name, void* evt) {
-    void** world;
-    void** outer;
-    void** area_scan;
+    void** base;
+    void** cursor;
+    void** areaCursor;
     void* area;
+    void* canonicalArea;
     void* map;
-    int outer_i;
-    int outer_count;
-    int map_i;
-    int map_count;
+    void* found;
+    char* areaName;
+    s32 worldCount;
+    s32 areaIndex;
+    s32 lookupCount;
+    s32 lookupIndex;
+    s32 mapCount;
+    s32 mapIndex;
 
-    world = world_data;
-    area_scan = world;
-    outer_count = 0;
-    while (area_scan[2] != 0) {
-        area_scan++;
-        outer_count++;
+    base = world_data;
+    found = 0;
+    areaIndex = 0;
+    areaCursor = base;
+    while (1) {
+        cursor = base;
+        worldCount = 0;
+        while (cursor[2] != 0) {
+            cursor++;
+            worldCount++;
+        }
+        if (areaIndex >= worldCount) {
+            break;
+        }
+        area = areaCursor[2];
+        areaName = *(char**)area;
+
+        cursor = base;
+        lookupCount = 0;
+        while (cursor[2] != 0) {
+            cursor++;
+            lookupCount++;
+        }
+        canonicalArea = 0;
+        cursor = base;
+        lookupIndex = 0;
+        while (lookupIndex < lookupCount) {
+            if (strcmp(*(const char**)cursor[2], areaName) == 0) {
+                canonicalArea = base[lookupIndex + 2];
+                break;
+            }
+            cursor++;
+            lookupIndex++;
+        }
+
+        mapCount = 0;
+        while (*(void**)((s32)canonicalArea + 0x10 + mapCount * 4) != 0) {
+            mapCount++;
+        }
+        mapIndex = 0;
+        while (mapIndex < mapCount) {
+            map = *(void**)((s32)area + 0x10 + mapIndex * 4);
+            if (strcmp(*(const char**)map, name) == 0) {
+                found = map;
+                break;
+            }
+            mapIndex++;
+        }
+        if (found != 0) {
+            break;
+        }
+        areaCursor++;
+        areaIndex++;
     }
 
-    outer_i = 0;
-    outer = world;
-    while (outer_i < outer_count) {
-        area = outer[2];
-        map_count = 0;
-        while (*(void**)((s32)area + 0x10 + map_count * 4) != 0) {
-            map_count++;
-        }
-        map_i = 0;
-        while (map_i < map_count) {
-            map = *(void**)((s32)area + 0x10 + map_i * 4);
-            if (strcmp(*(const char**)map, name) == 0) {
-                *(void**)((s32)map + 4) = evt;
-                return;
-            }
-            map_i++;
-        }
-        outer++;
-        outer_i++;
+    if (found != 0) {
+        *(void**)((s32)found + 4) = evt;
     }
 }
 

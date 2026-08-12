@@ -11,6 +11,8 @@ void* lotteryGetPtr(void) {
 
 /* stub-fill: evt_lottery | missing_definition | ghidra_signature */
 s32 evt_lottery(void* event) {
+    extern void* gp;
+    extern s64 OSGetTime(void);
     extern void OSTicksToCalendarTime(s64,void*);
     extern s32 rand(void);
     extern s32 dbg_lotteryinfo;
@@ -95,13 +97,52 @@ s32 evt_lottery(void* event) {
                     } while (candidate == *(s16*)(work + 0x20));
                     *number = (s16)candidate;
                     *flags |= 0x2000;
+                } else if (days == *third) {
+                    s32 candidate;
+                    do {
+                        candidate = *(s16*)(work + 0x20) % 100 + (rand() % 100) * 100;
+                    } while (candidate == *(s16*)(work + 0x20) ||
+                             candidate / 1000 == *(s16*)(work + 0x20) / 1000);
+                    *number = (s16)candidate;
+                    *flags |= 0x4000;
+                } else if (days == *fourth) {
+                    s32 candidate;
+                    do {
+                        candidate = *(s16*)(work + 0x20) % 10 + (rand() % 1000) * 10;
+                    } while (candidate == *(s16*)(work + 0x20) ||
+                             candidate / 1000 == *(s16*)(work + 0x20) / 1000 ||
+                             candidate / 100 % 10 == *(s16*)(work + 0x20) / 100 % 10);
+                    *number = (s16)candidate;
+                    *flags |= 0x8000;
+                } else {
+                    s32 candidate;
+                    do {
+                        candidate = rand() % 10000;
+                    } while (candidate == *(s16*)(work + 0x20) ||
+                             candidate / 1000 == *(s16*)(work + 0x20) / 1000 ||
+                             candidate / 100 % 10 == *(s16*)(work + 0x20) / 100 % 10 ||
+                             candidate / 10 % 10 == *(s16*)(work + 0x20) / 10 % 10);
+                    *number = (s16)candidate;
                 }
             }
+        } else {
+            *flags |= 4;
+            *number = -1;
+            *signTime = now;
         }
     }
     evtSetValue(event, args[1], *flags);
     evtSetValue(event, args[2], *number);
     OSTicksToCalendarTime(now, calNow);
+    if (*flags & 2) {
+        s64 ticksPerDay = (s64)(*(u32*)0x800000F8 >> 2) * 60 * 60 * 24;
+        s64 baseTime = *(s64*)(work + 0x18);
+        OSTicksToCalendarTime(baseTime, calNow);
+        OSTicksToCalendarTime(baseTime + ticksPerDay * *(s16*)(work + 0x22), calNow);
+        OSTicksToCalendarTime(baseTime + ticksPerDay * *(s16*)(work + 0x24), calNow);
+        OSTicksToCalendarTime(baseTime + ticksPerDay * *(s16*)(work + 0x26), calNow);
+        OSTicksToCalendarTime(baseTime + ticksPerDay * *(s16*)(work + 0x28), calNow);
+    }
     return 2;
 }
 

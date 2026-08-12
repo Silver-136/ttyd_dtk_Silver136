@@ -643,7 +643,7 @@ u8 effCalcMayaAnim(void* anim) {
 }
 
 #pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma use_lmw_stmw on
 void effDrawMayaPoly(void* data) {
     extern void GXClearVtxDesc(void);
     extern void GXSetVtxDesc(u8 attr, u8 type);
@@ -651,12 +651,12 @@ void effDrawMayaPoly(void* data) {
     extern void GXSetCullMode(u32 mode);
     extern void GXBegin(u8 primitive, u8 vtxfmt, u16 nverts);
     volatile s16* fifo;
-    s32 i;
     s32 offset;
+    s32 i;
     s16* poly;
     s32 count;
-    s32 chunks;
-    s32 rem;
+    s32 vertices;
+    s16 a, b, c, d, e;
 
     GXClearVtxDesc();
     GXSetVtxDesc(9, 1);
@@ -668,51 +668,35 @@ void effDrawMayaPoly(void* data) {
     i = 0;
     offset = 0;
     fifo = (volatile s16*)0xCC008000;
+
     while (i < *(s32*)((s32)data + 8)) {
         poly = *(s16**)(*(s32*)((s32)data + 0xC) + offset);
-        count = *poly;
+        count = (u16)*poly;
         GXBegin(0xA0, 0, count);
         poly++;
-        if (count > 0) {
-            chunks = (u32)count >> 2;
-            while (chunks != 0) {
-                fifo[0] = poly[0];
-                fifo[0] = poly[1];
-                fifo[0] = poly[2];
-                fifo[0] = poly[3];
-                fifo[0] = poly[4];
-                fifo[0] = poly[5];
-                fifo[0] = poly[6];
-                fifo[0] = poly[7];
-                fifo[0] = poly[8];
-                fifo[0] = poly[9];
-                fifo[0] = poly[10];
-                fifo[0] = poly[11];
-                fifo[0] = poly[12];
-                fifo[0] = poly[13];
-                fifo[0] = poly[14];
-                fifo[0] = poly[15];
-                fifo[0] = poly[16];
-                fifo[0] = poly[17];
-                fifo[0] = poly[18];
-                fifo[0] = poly[19];
-                poly += 20;
-                chunks--;
-            }
-            rem = count & 3;
-            while (rem != 0) {
-                fifo[0] = poly[0];
-                fifo[0] = poly[1];
-                fifo[0] = poly[2];
-                fifo[0] = poly[3];
-                fifo[0] = poly[4];
-                poly += 5;
-                rem--;
-            }
+
+        vertices = count;
+        while (vertices > 0) {
+            a = poly[0];
+            b = poly[1];
+            c = poly[2];
+            fifo[0] = a;
+            fifo[0] = b;
+            fifo[0] = c;
+
+            d = poly[3];
+            e = poly[4];
+            fifo[0] = d;
+            fifo[0] = e;
+
+            poly += 5;
+            vertices--;
         }
+
         offset += 4;
         i++;
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on

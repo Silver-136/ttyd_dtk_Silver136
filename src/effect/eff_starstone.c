@@ -242,8 +242,13 @@ void effStarStoneDisp_1(s32 cameraId, s32 effectAddress) {
     extern void* diamond_7_dl_1_tbl[];
     extern u8 diamond_7_dl_0_size_tbl[];
     extern u8 diamond_7_dl_1_size_tbl[];
+    extern void effGetTexObj(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXLoadTexMtxImm(Mtx, s32, s32);
     u8* work = *(u8**)(effectAddress + 0xC);
     u8* camera = camGetPtr(cameraId);
+    u8 texObj[0x20];
     Mtx trans, scale, rot;
     s32 type = *(s32*)work;
     s32 color = *(s32*)(work + 0x5C);
@@ -317,8 +322,86 @@ void effStarStoneDisp_1(s32 cameraId, s32 effectAddress) {
     } else {
         for (i=0;i<33;i++) GXCallDisplayList(diamond_7_dl_1_tbl[i], diamond_7_dl_1_size_tbl[i] << 5);
     }
-}
 
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    PSMTXTrans(trans, *(f32*)(work + 0x24), *(f32*)(work + 0x28), 0.0f);
+    GXLoadTexMtxImm(trans, 0x1E, 1);
+    GXSetNumTevStages(2);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevOp(0, 0);
+    GXSetTevOrder(1, 0xFF, 0xFF, 0xFF);
+    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(1, 0, 2, 0, 0);
+    GXSetTevAlphaIn(1, 0, 5, 0, 7);
+    color = *(s32*)(work + 0x5C);
+    GXSetTevColor(1, &color);
+
+    PSMTXTrans(trans, *(f32*)(work + 8), *(f32*)(work + 0xC), *(f32*)(work + 0x10));
+    size = *(f32*)(work + 0x14);
+    PSMTXScale(scale, size, size, size);
+    PSMTXConcat(trans, scale, trans);
+    PSMTXRotRad(rot, 0.017453292f * *(f32*)(work + 0x1C), 'y');
+    PSMTXConcat(trans, rot, trans);
+    PSMTXConcat(camera + 0x118, trans, trans);
+    GXLoadPosMtxImm(trans, 0);
+    GXSetCurrentMtx(0);
+    effGetTexObj(type == 0 ? 0x2E : 0x2F, texObj);
+    GXLoadTexObj(texObj, 0);
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(1, 3, 0);
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 2);
+    GXSetVtxAttrFmt(0, 9, 1, 3, 11);
+    GXSetArray(9, (void*)(type == 0 ? 0x803AF180 : 0x803AF780), 6);
+    GXSetVtxDesc(10, 2);
+    GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+    GXSetArray(10, (void*)(type == 0 ? 0x803AF280 : 0x803AF880), 3);
+    GXSetVtxDesc(11, 2);
+    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+    GXSetArray(11, (void*)(type == 0 ? 0x803AF3A0 : 0x803AFA20), 4);
+    GXSetVtxDesc(13, 2);
+    GXSetVtxAttrFmt(0, 13, 1, 3, 13);
+    GXSetArray(13, (void*)(type == 0 ? 0x803AF300 : 0x803AF900), 4);
+    if (type == 0) {
+        for (i = 0; i < 34; i++) GXCallDisplayList(diamond_1_dl_0_tbl[i], diamond_1_dl_0_size_tbl[i] << 5);
+    } else {
+        for (i = 0; i < 34; i++) GXCallDisplayList(diamond_7_dl_0_tbl[i], diamond_7_dl_0_size_tbl[i] << 5);
+    }
+
+    effGetTexObj(0x2D, texObj);
+    GXLoadTexObj(texObj, 0);
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(1, 3, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 2);
+    GXSetVtxAttrFmt(0, 9, 1, 3, 11);
+    GXSetArray(9, (void*)(type == 0 ? 0x803AF180 : 0x803AF780), 6);
+    GXSetVtxDesc(10, 2);
+    GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+    GXSetArray(10, (void*)(type == 0 ? 0x803AF280 : 0x803AF880), 3);
+    GXSetVtxDesc(11, 2);
+    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+    if (type != 0) GXSetArray(11, (void*)0x803AFA20, 4);
+    GXSetVtxDesc(13, 2);
+    GXSetVtxAttrFmt(0, 13, 1, 3, 13);
+    GXSetArray(13, (void*)(type == 0 ? 0x803AF300 : 0x803AF900), 4);
+    if (type == 0) {
+        for (i = 0; i < 34; i++) GXCallDisplayList(diamond_1_dl_1_tbl[i], diamond_1_dl_1_size_tbl[i] << 5);
+    } else {
+        for (i = 0; i < 33; i++) GXCallDisplayList(diamond_7_dl_1_tbl[i], diamond_7_dl_1_size_tbl[i] << 5);
+    }
+}
 
 /* CHATGPT STUB FILL: main/effect/eff_starstone 20260624_184128 */
 

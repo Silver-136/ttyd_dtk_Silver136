@@ -52,121 +52,163 @@ u8 fileInit(void) {
 
 
 void fileGarbageDataAdrClear(int fileEntry) {
-    char* data = **(char***)(fileEntry + 0xA0);
-    int kind = *(u8*)(fileEntry + 1);
-    int i;
-    int j;
-    char* item;
-    char** field;
+    extern void OSPanic(char*, int, char*);
+    extern char str_filemgr_c_802f9470[];
+    extern char str_invalid_version_numb_802f947c[];
+    int* data = (int*)**(void***)(fileEntry + 0xA0);
+    u32 i;
+    int offset;
+    int* item;
 
-    switch (kind) {
+    switch (*(s8*)(fileEntry + 1)) {
         case 1:
-            field = (char**)(data + 0x14C);
-            if (*field >= data) {
-                field[0] -= (int)data;
-                field[1] -= (int)data;
-                field[2] -= (int)data;
-                field[3] -= (int)data;
-                field[4] -= (int)data;
-                field[5] -= (int)data;
-                field[6] -= (int)data;
-                field[7] -= (int)data;
-                field[8] -= (int)data;
-                field[9] -= (int)data;
-                field[10] -= (int)data;
-                field[11] -= (int)data;
-                field[12] -= (int)data;
-                field[13] -= (int)data;
-                field[14] -= (int)data;
-                field[15] -= (int)data;
-                field[16] -= (int)data;
-                field[17] -= (int)data;
-                field[18] -= (int)data;
-                field[19] -= (int)data;
-                field[20] -= (int)data;
-                field[21] -= (int)data;
-                field[22] -= (int)data;
-                field[23] -= (int)data;
-                field[24] -= (int)data;
-            }
-            break;
-        case 5:
-            if (kind == 5) {
-                for (i = 0; i < *(int*)(data + 0x148); i++) {
-                    field = (char**)(*(char**)(data + 0x1AC) + i * 0x40 + 0x3C);
-                    item = *field;
-                    if (*(char**)(item + 0x24) >= item) {
-                        for (j = 0x24; j <= 0x40; j += 4) {
-                            *(char**)(item + j) -= (int)item;
-                        }
-                    }
-                    *field -= (int)data;
-                }
-            }
-            field = (char**)(data + 0x14C);
-            if (*field >= data) {
-                for (i = 0; i < 25; i++, field++) {
-                    *field -= (int)data;
-                }
+            if ((int*)data[0x53] >= data) {
+                data[0x53] -= (int)data;
+                data[0x54] -= (int)data;
+                data[0x55] -= (int)data;
+                data[0x56] -= (int)data;
+                data[0x57] -= (int)data;
+                data[0x58] -= (int)data;
+                data[0x59] -= (int)data;
+                data[0x5A] -= (int)data;
+                data[0x5B] -= (int)data;
+                data[0x5C] -= (int)data;
+                data[0x5D] -= (int)data;
+                data[0x5E] -= (int)data;
+                data[0x5F] -= (int)data;
+                data[0x60] -= (int)data;
+                data[0x61] -= (int)data;
+                data[0x62] -= (int)data;
+                data[0x63] -= (int)data;
+                data[0x64] -= (int)data;
+                data[0x65] -= (int)data;
+                data[0x66] -= (int)data;
+                data[0x67] -= (int)data;
+                data[0x68] -= (int)data;
+                data[0x69] -= (int)data;
+                data[0x6A] -= (int)data;
+                data[0x6B] -= (int)data;
             }
             break;
         case 2:
-            field = (char**)(data + 0x24);
-            if (*field >= data) {
-                for (i = 0; i < 8; i++, field++) {
-                    *field -= (int)data;
-                }
+            if ((int*)data[9] >= data) {
+                data[9] -= (int)data;
+                data[10] -= (int)data;
+                data[11] -= (int)data;
+                data[12] -= (int)data;
+                data[13] -= (int)data;
+                data[14] -= (int)data;
+                data[15] -= (int)data;
+                data[16] -= (int)data;
             }
             break;
         case 3:
-        case 6:
-        case 10:
-            field = (char**)(data + 0x48);
-            if (*field >= data) {
-                *field -= (int)data;
+            if ((int*)data[0x12] >= data) {
+                data[0x12] -= (int)data;
             }
             break;
         case 4:
-            field = (char**)(data + 8);
-            if (*field >= data) {
-                for (i = 0; (u16)i < *(u32*)(data + 4); i++) {
-                    for (j = 0; j < 2; j++) {
-                        field = (char**)(*(char**)(data + 8) + i * 8 + j * 4);
-                        item = *field;
-                        if (item != 0) {
-                            if (*(u8*)(item + (j == 0 ? 0x23 : 2)) != 0) {
-                                *(char**)(item + 8) -= (int)data;
-                                *(u8*)(item + (j == 0 ? 0x23 : 2)) = 0;
-                            }
-                            *field -= (int)data;
+            if (data[0] != 0x20AF30) {
+                OSPanic(str_filemgr_c_802f9470, 0x99, str_invalid_version_numb_802f947c);
+            }
+            if ((int*)data[2] >= data) {
+                for (i = 0; (u16)i < (u32)data[1]; i++) {
+                    offset = (u16)i * 8;
+                    item = *(int**)(data[2] + offset);
+                    if (item != 0) {
+                        if (*(u8*)((int)item + 0x23) != 0) {
+                            *(u8*)((int)item + 0x23) = 0;
+                            item[2] -= (int)data;
                         }
+                        *(int*)(data[2] + offset) -= (int)data;
+                    }
+                    item = *(int**)(data[2] + offset + 4);
+                    if (item != 0) {
+                        if (*(u8*)((int)item + 2) != 0) {
+                            *(u8*)((int)item + 2) = 0;
+                            item = *(int**)(data[2] + offset + 4);
+                            item[2] -= (int)data;
+                        }
+                        *(int*)(data[2] + offset + 4) -= (int)data;
                     }
                 }
-                *(char**)(data + 8) -= (int)data;
+                data[2] -= (int)data;
+            }
+            break;
+        case 5:
+            if ((int*)data[0x53] >= data) {
+                offset = 0;
+                for (i = 0; i < (u32)data[0x52]; i++, offset += 0x40) {
+                    item = *(int**)(data[0x6B] + offset + 0x3C);
+                    *(int*)(data[0x6B] + offset + 0x3C) = (int)item - (int)data;
+                    if ((int*)item[9] >= item) {
+                        item[9] -= (int)item;
+                        item[10] -= (int)item;
+                        item[11] -= (int)item;
+                        item[12] -= (int)item;
+                        item[13] -= (int)item;
+                        item[14] -= (int)item;
+                        item[15] -= (int)item;
+                        item[16] -= (int)item;
+                    }
+                }
+                data[0x53] -= (int)data;
+                data[0x54] -= (int)data;
+                data[0x55] -= (int)data;
+                data[0x56] -= (int)data;
+                data[0x57] -= (int)data;
+                data[0x58] -= (int)data;
+                data[0x59] -= (int)data;
+                data[0x5A] -= (int)data;
+                data[0x5B] -= (int)data;
+                data[0x5C] -= (int)data;
+                data[0x5D] -= (int)data;
+                data[0x5E] -= (int)data;
+                data[0x5F] -= (int)data;
+                data[0x60] -= (int)data;
+                data[0x61] -= (int)data;
+                data[0x62] -= (int)data;
+                data[0x63] -= (int)data;
+                data[0x64] -= (int)data;
+                data[0x65] -= (int)data;
+                data[0x66] -= (int)data;
+                data[0x67] -= (int)data;
+                data[0x68] -= (int)data;
+                data[0x69] -= (int)data;
+                data[0x6A] -= (int)data;
+                data[0x6B] -= (int)data;
+            }
+            break;
+        case 6:
+            if ((int*)data[0x12] >= data) {
+                data[0x12] -= (int)data;
             }
             break;
         case 7:
-            field = (char**)(data + 0x64);
-            if (*field >= data) {
-                for (i = 0; i < 3; i++, field++) {
-                    *field -= (int)data;
-                }
+            if ((int*)data[0x19] >= data) {
+                data[0x19] -= (int)data;
+                data[0x1A] -= (int)data;
+                data[0x1B] -= (int)data;
             }
             break;
         case 8:
-            field = (char**)(data + 0xC8);
-            if (*field >= data) {
-                for (i = 0; i < 23; i++, field++) {
-                    *field -= (int)data;
+            if ((int*)data[0x32] >= data) {
+                for (i = 0x32; i <= 0x48; i++) {
+                    data[i] -= (int)data;
                 }
             }
             break;
         case 9:
-            field = (char**)(data + 0x58);
-            if (*field >= data) {
-                for (i = 0; i < 4; i++, field++) {
-                    *field -= (int)data;
-                }
+            if ((int*)data[0x16] >= data) {
+                data[0x16] -= (int)data;
+                data[0x17] -= (int)data;
+                data[0x18] -= (int)data;
+                data[0x19] -= (int)data;
+            }
+            break;
+        case 10:
+            if ((int*)data[0x12] >= data) {
+                data[0x12] -= (int)data;
             }
             break;
     }

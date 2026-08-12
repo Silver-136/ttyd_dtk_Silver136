@@ -265,6 +265,29 @@ void effNozleDisp(s32 cameraId, void* effect) {
     extern void PSMTXConcat(void*, void*, void*);
     extern void GXLoadPosMtxImm(void*, s32);
     extern void GXLoadTexMtxImm(void*, s32, s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXSetArray(s32, void*, s32);
+    extern void GXCallDisplayList(void*, u32);
+    extern s8 nozle_1_vertex_tbl[];
+    extern s8 nozle_1_normal_tbl[];
+    extern u8 nozle_1_color0_tbl[];
+    extern s8 nozle_1_texcoord0_tbl[];
+    extern s8 nozle_1_texcoord1_tbl[];
+    extern void* nozle_1_dl_0_tbl[];
+    extern u8 nozle_1_dl_0_size_tbl[];
+    extern void* nozle_1_dl_1_tbl[];
+    extern u8 nozle_1_dl_1_size_tbl[];
+    extern s16 nozle_3_vertex_tbl[];
+    extern s8 nozle_3_normal_tbl[];
+    extern u8 nozle_3_color0_tbl[];
+    extern s16 nozle_3_texcoord0_tbl[];
+    extern s16 nozle_3_texcoord1_tbl[];
+    extern void* nozle_3_dl_0_tbl[];
+    extern u8 nozle_3_dl_0_size_tbl[];
+    extern void* nozle_3_dl_1_tbl[];
+    extern u8 nozle_3_dl_1_size_tbl[];
 
     s32* work = *(s32**)((u8*)effect + 0xC);
     u8* camera = camGetPtr(cameraId);
@@ -274,6 +297,7 @@ void effNozleDisp(s32 cameraId, void* effect) {
     f32 m2[3][4];
     f32 model[3][4];
     f32 scale = *(f32*)(work + 10);
+    s32 i;
 
     GXSetBlendMode(1, 4, 5, 0);
     GXSetZCompLoc(1);
@@ -326,5 +350,87 @@ void effNozleDisp(s32 cameraId, void* effect) {
     GXSetTevColorIn(2, 0, 15, 10, 0);
     GXSetTevAlphaIn(2, 0, 7, 5, 7);
     GXSetCullMode(0);
+
+    if (*work == 2) {
+        GXClearVtxDesc();
+        GXSetVtxDesc(9, 3);
+        GXSetVtxAttrFmt(0, 9, 1, 3, 7);
+        GXSetArray(9, nozle_3_vertex_tbl, 6);
+        GXSetVtxDesc(10, 3);
+        GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+        GXSetArray(10, nozle_3_normal_tbl, 3);
+        GXSetVtxDesc(11, 3);
+        GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+        GXSetArray(11, nozle_3_color0_tbl, 4);
+        GXSetVtxDesc(13, 3);
+        GXSetVtxAttrFmt(0, 13, 1, 3, 14);
+        GXSetArray(13, nozle_3_texcoord0_tbl, 4);
+        GXSetVtxDesc(14, 3);
+        GXSetVtxAttrFmt(0, 14, 1, 3, 14);
+        GXSetArray(14, nozle_3_texcoord1_tbl, 4);
+        for (i = 0; i < 17; i++) {
+            GXCallDisplayList(nozle_3_dl_1_tbl[i], (u32)nozle_3_dl_1_size_tbl[i] << 5);
+        }
+
+        GXClearVtxDesc();
+        GXSetVtxDesc(9, 3);
+        GXSetVtxAttrFmt(0, 9, 1, 3, 7);
+        GXSetArray(9, nozle_3_vertex_tbl, 6);
+        GXSetVtxDesc(10, 3);
+        GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+        GXSetArray(10, nozle_3_normal_tbl, 3);
+        GXSetVtxDesc(11, 3);
+        GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+        GXSetArray(11, nozle_3_color0_tbl, 4);
+        GXSetVtxDesc(13, 3);
+        GXSetVtxAttrFmt(0, 13, 1, 3, 14);
+        GXSetArray(13, nozle_3_texcoord0_tbl, 4);
+        GXSetVtxDesc(14, 3);
+        GXSetVtxAttrFmt(0, 14, 1, 3, 14);
+        GXSetArray(14, nozle_3_texcoord1_tbl, 4);
+        for (i = 0; i < 17; i++) {
+            GXCallDisplayList(nozle_3_dl_0_tbl[i], (u32)nozle_3_dl_0_size_tbl[i] << 5);
+        }
+    } else if (*work == 0) {
+        GXClearVtxDesc();
+        GXSetVtxDesc(9, 2);
+        GXSetVtxAttrFmt(0, 9, 1, 3, 7);
+        GXSetArray(9, nozle_1_vertex_tbl, 6);
+        GXSetVtxDesc(10, 2);
+        GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+        GXSetArray(10, nozle_1_normal_tbl, 3);
+        GXSetVtxDesc(11, 2);
+        GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+        GXSetArray(11, nozle_1_color0_tbl, 4);
+        GXSetVtxDesc(13, 2);
+        GXSetVtxAttrFmt(0, 13, 1, 3, 14);
+        GXSetArray(13, nozle_1_texcoord0_tbl, 4);
+        GXSetVtxDesc(14, 2);
+        GXSetVtxAttrFmt(0, 14, 1, 3, 14);
+        GXSetArray(14, nozle_1_texcoord1_tbl, 4);
+        for (i = 0; i < 10; i++) {
+            GXCallDisplayList(nozle_1_dl_0_tbl[i], (u32)nozle_1_dl_0_size_tbl[i] << 5);
+        }
+
+        GXClearVtxDesc();
+        GXSetVtxDesc(9, 2);
+        GXSetVtxAttrFmt(0, 9, 1, 3, 7);
+        GXSetArray(9, nozle_1_vertex_tbl, 6);
+        GXSetVtxDesc(10, 2);
+        GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+        GXSetArray(10, nozle_1_normal_tbl, 3);
+        GXSetVtxDesc(11, 2);
+        GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+        GXSetArray(11, nozle_1_color0_tbl, 4);
+        GXSetVtxDesc(13, 2);
+        GXSetVtxAttrFmt(0, 13, 1, 3, 14);
+        GXSetArray(13, nozle_1_texcoord0_tbl, 4);
+        GXSetVtxDesc(14, 2);
+        GXSetVtxAttrFmt(0, 14, 1, 3, 14);
+        GXSetArray(14, nozle_1_texcoord1_tbl, 4);
+        for (i = 0; i < 10; i++) {
+            GXCallDisplayList(nozle_1_dl_1_tbl[i], (u32)nozle_1_dl_1_size_tbl[i] << 5);
+        }
+    }
 }
 

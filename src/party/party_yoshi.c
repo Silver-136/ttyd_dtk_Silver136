@@ -395,30 +395,40 @@ int unk_800b65d4(void* pParty) {
 int unk_800b6468(void* pParty) {
     extern s32 strcmp(const char*, const char*);
     extern void animPoseSetLocalTime(s32, f32);
+    extern const char str_PYS_S_2_802cb148[8];
     extern const char str_PYS_R_2_802cb158[8];
     extern const char str_PYS_F_1_802cb168[8];
     void* player = *(void**)((s32)pParty + 0x160);
     u16 time;
-    u16 limit;
 
-    if (strcmp(*(char**)((s32)pParty + 0x18), (char*)str_PYS_S_2_802cb148) == 0) {
-        limit = 0x33;
-    } else if (strcmp(*(char**)((s32)pParty + 0x18), (char*)str_PYS_R_2_802cb158) == 0) {
-        limit = 9;
-    } else if (strcmp(*(char**)((s32)pParty + 0x18), (char*)str_PYS_F_1_802cb168) == 0) {
-        limit = 9;
-    } else {
-        return 0;
+    if (strcmp(*(char**)((s32)pParty + 0x18), str_PYS_S_2_802cb148) == 0) {
+        time = *(u16*)((s32)player + 0x28) + 1;
+        *(u16*)((s32)player + 0x28) = time;
+        if (time >= 0x34) {
+            *(u16*)((s32)player + 0x28) = 0;
+        }
+        *(u16*)((s32)pParty + 0x20) = *(u16*)((s32)player + 0x28);
+        animPoseSetLocalTime(*(s32*)((s32)pParty + 0xC),
+                             (f32)*(u16*)((s32)player + 0x28));
+    } else if (strcmp(*(char**)((s32)pParty + 0x18), str_PYS_R_2_802cb158) == 0) {
+        time = *(u16*)((s32)player + 0x28) + 1;
+        *(u16*)((s32)player + 0x28) = time;
+        if (time >= 10) {
+            *(u16*)((s32)player + 0x28) = 0;
+        }
+        *(u16*)((s32)pParty + 0x20) = *(u16*)((s32)player + 0x28);
+        animPoseSetLocalTime(*(s32*)((s32)pParty + 0xC),
+                             (f32)*(u16*)((s32)player + 0x28));
+    } else if (strcmp(*(char**)((s32)pParty + 0x18), str_PYS_F_1_802cb168) == 0) {
+        time = *(u16*)((s32)player + 0x28) + 1;
+        *(u16*)((s32)player + 0x28) = time;
+        if (time >= 10) {
+            *(u16*)((s32)player + 0x28) = 0;
+        }
+        *(u16*)((s32)pParty + 0x20) = *(u16*)((s32)player + 0x28);
+        animPoseSetLocalTime(*(s32*)((s32)pParty + 0xC),
+                             (f32)*(u16*)((s32)player + 0x28));
     }
-
-    time = *(u16*)((s32)player + 0x20) + 1;
-    *(u16*)((s32)player + 0x20) = time;
-    if (time > limit) {
-        time = 0;
-        *(u16*)((s32)player + 0x20) = 0;
-    }
-    *(u16*)((s32)pParty + 0x20) = time;
-    animPoseSetLocalTime(*(s32*)((s32)pParty + 0xC), (f32)time);
     return 0;
 }
 
@@ -439,14 +449,21 @@ void yoshi_init(void* party) {
 u8 yoshi_use(s32 pParty) {
     extern void* __memAlloc(s32, s32);
     extern void* memset(void*, s32, u32);
+    extern void __memFree(s32, void*);
     extern void partyUpdateKeyData(void*);
     extern void L_partyClearCont(void*);
     extern s32 marioKeyOffChk(void);
-    extern f64 angleABf(f64, f64, f64, f64);
-    extern f64 distABf(f64, f64, f64, f64);
+    extern void partyChgRunMode(void*, s32);
+    extern f32 angleABf(f32, f32, f32, f32);
+    extern f32 distABf(f32, f32, f32, f32);
+    extern f32 evt_yoshi_spd;
+    extern s32 evt_yoshi_frm;
     extern void searchGround(void*);
     extern void marioChgSmallJumpMotion(void);
     extern void partyChkGnd(void*);
+    extern void inertia(void*);
+    extern s32 marioGetExtraPartyId(void);
+    extern void* partyGetPtr(s32);
     extern f64 toMovedir(f64);
     extern void movePos(f64, f64, f32*, f32*);
     void* party = (void*)pParty;

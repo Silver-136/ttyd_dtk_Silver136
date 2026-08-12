@@ -1303,19 +1303,31 @@ void BattleAudienceCtrlProcessKinopioFireSub(s32 param_1) {
     }
 }
 
-u8 BattleAudienceCtrlProcessKinopioEat(int audienceId) {
+void BattleAudienceCtrlProcessKinopioEat(int audienceId) {
+    extern void* BattleAudienceBaseGetPtr(void);
     extern char* BattleAudienceGetPtr(s32);
     extern char* BattleStageGetPtr(void);
     extern s32 BattleAudienceDetectPakkunEatTarget(s32);
+    extern void BattleAudience_SetAnim(s32, s32, s32);
+    extern void BattleAudience_ChangeStatus(s32, s32);
     extern void BattleAudienceSoundPakkunEat(s32);
     extern u32 BattleAudience_GetExist(s32);
+    extern s32 irand(s32);
+    extern s32 rand(void);
     extern void* memcpy(void*, void*, u32);
+    extern void BattleAudience_Delete(s32);
+    extern f32 float_270_804244e0;
+    extern f32 float_90_804244e4;
+    extern f32 float_0_804244e8;
     extern f32 float_6_804244ec;
     extern f32 float_neg60_804244f0;
     extern f32 float_60_804244f4;
+    extern f32 float_1_804244f8;
+    extern f32 float_neg1_804244fc;
     extern f32 float_neg100_80424500;
+    extern f32 float_0p1_80424504;
 
-    void* base;
+    char* base;
     char* audience;
     char* stage;
     char* target;
@@ -1324,7 +1336,7 @@ u8 BattleAudienceCtrlProcessKinopioEat(int audienceId) {
     s32 count;
     s32 offset;
     s32 i;
-    s32 targets[69];
+    s32 targets[60];
     f32 value;
 
     base = BattleAudienceBaseGetPtr();
@@ -1376,15 +1388,15 @@ u8 BattleAudienceCtrlProcessKinopioEat(int audienceId) {
         } else if (state < 3) {
             if (state != 1) {
                 if (state > 0) {
-                    return 0;
+                    return;
                 }
                 if (state < 0) {
-                    return 0;
+                    return;
                 }
                 found = BattleAudienceDetectPakkunEatTarget(audienceId);
                 if (found == -1) {
                     BattleAudience_ChangeStatus(audienceId, 0);
-                    return 0;
+                    return;
                 }
                 *(s16*)(audience + 0xF0) = found;
                 target = BattleAudienceGetPtr(*(s16*)(audience + 0xF0));
@@ -1422,7 +1434,7 @@ u8 BattleAudienceCtrlProcessKinopioEat(int audienceId) {
         } else if (state < 5) {
             target = BattleAudienceGetPtr(*(s16*)(audience + 0xF0));
             *(u32*)target = 0;
-            *(f32*)((s32)base + 0x1377C) -= float_1_804244f8;
+            *(f32*)(base + 0x1377C) -= float_1_804244f8;
             BattleAudienceSoundPakkunEat(audienceId);
             (*(s32*)(audience + 4))++;
         }

@@ -64,11 +64,120 @@ void* effPturnN64Entry(s32 type, s32 number, f32 x, f32 y, f32 z) {
 
 
 void effPturnMain(void* effect) {
-    extern void effDelete(void*); extern void* effPturnN64Entry(f32,f32,f32,s32,s32); extern f64 cos(f64); extern f32 dispCalcZ(void*); extern void dispEntry(s32,s32,void*,void*,f32); extern void effPturnDisp(void); extern f32 float_6p2832_80425df4,float_0p05_80425df8,float_360_80425dfc,float_1_80425de4,float_0_80425de8,float_4_80425e00,float_neg2_80425e04,float_neg0p5_80425e08,float_10_80425e0c;
-    u8* work=*(u8**)((s32)effect+0xC);s32 type=*(s32*)work,timer,frame,i;
-    if(*(s32*)effect&4){*(s32*)effect&=~4;*(s32*)(work+0x28)=0x15;} if(*(s32*)(work+0x28)<100)*(s32*)(work+0x28)-=1; timer=*(s32*)(work+0x28);if(timer<0){effDelete(effect);return;}*(s32*)(work+0x2C)+=1;frame=*(s32*)(work+0x2C);
-    for(i=1;i<*(s32*)((s32)effect+8);i++,work+=0x48){*(f32*)(work+0x50)+=*(f32*)(work+0x5C);*(f32*)(work+0x54)+=*(f32*)(work+0x60);*(f32*)(work+0x58)+=*(f32*)(work+0x64);if(timer==0x14){*(f32*)(work+0x60)=float_4_80425e00;*(f32*)(work+0x5C)=float_neg2_80425e04;}if(timer<0x14){*(f32*)(work+0x68)*=float_0p05_80425df8;*(f32*)(work+0x60)+=float_neg0p5_80425e08;*(f32*)(work+0x88)+=float_10_80425e0c;}if(timer<10)*(s32*)(work+0x6C)=timer*0x19;}
-    dispEntry(4,2,effPturnDisp,effect,dispCalcZ(work+8));
+    extern void effDelete(void*);
+    extern void* effPturnN64Entry(f32, f32, f32, s32, s32);
+    extern f64 cos(f64);
+    extern f32 dispCalcZ(void*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void effPturnDisp(void);
+    extern f32 scale_dat[];
+    extern f32 float_6p2832_80425df4, float_0p05_80425df8;
+    extern f32 float_360_80425dfc, float_1_80425de4, float_0_80425de8;
+    extern f32 float_4_80425e00, float_neg2_80425e04;
+    extern f32 float_neg0p5_80425e08, float_10_80425e0c;
+    extern f64 double_to_int_802fbd88;
+    u8* work = *(u8**)((s32)effect + 0xC);
+    f32 position[3];
+    s32 type;
+    s32 timer;
+    s32 frame;
+    s32 current;
+    s32 target;
+    f32 baseScale;
+    f32 angle;
+    f32 fade;
+    u32 conversion[4];
+    s32 i;
+
+    position[0] = *(f32*)(work + 8);
+    position[1] = *(f32*)(work + 0xC);
+    position[2] = *(f32*)(work + 0x10);
+
+    if ((*(u32*)effect & 4) != 0) {
+        *(u32*)effect &= ~4;
+        *(s32*)(work + 0x28) = 0x15;
+    }
+    if (*(s32*)(work + 0x28) < 100) {
+        *(s32*)(work + 0x28) -= 1;
+    }
+    if (*(s32*)(work + 0x28) < 0) {
+        effDelete(effect);
+        return;
+    }
+
+    *(s32*)(work + 0x2C) += 1;
+    if (*(s32*)(work + 0x2C) > 0x4F1A0) {
+        *(s32*)(work + 0x2C) = 0x100;
+    }
+    type = *(s32*)work;
+    timer = *(s32*)(work + 0x28);
+    frame = *(s32*)(work + 0x2C);
+    current = *(s32*)(work + 0x38);
+    target = *(s32*)(work + 0x3C);
+    baseScale = *(f32*)(work + 0x34);
+
+    if (type == 0) {
+        if (*(s32*)(work + 0x44) > 0) {
+            *(s32*)(work + 0x44) -= 1;
+        } else if (current != target) {
+            if (current < 0) {
+                current = 0;
+            }
+            if (current > target) {
+                *(s32*)(work + 0x28) = type != 0 ? 0x3C : 0x64;
+                *(s32*)(work + 0x2C) = 1;
+                *(s32*)(work + 0x38) += 1;
+                *(s32*)(work + 0x70) = 0;
+            } else if (current < target) {
+                effPturnN64Entry(*(f32*)(work + 8),
+                                 *(f32*)(work + 0xC) + *(f32*)(work + 0x68),
+                                 *(f32*)(work + 0x10), 10, 0);
+                *(s32*)(work + 0x38) -= 1;
+            }
+            *(s32*)(work + 0x44) = 8;
+        }
+    }
+
+    conversion[0] = 0x43300000;
+    conversion[1] = (frame * 12) ^ 0x80000000;
+    conversion[2] = 0x43300000;
+    conversion[3] = timer ^ 0x80000000;
+    angle = float_6p2832_80425df4 * (f32)(*(f64*)&conversion[0] - double_to_int_802fbd88);
+    fade = float_0p05_80425df8 * (f32)(*(f64*)&conversion[2] - double_to_int_802fbd88);
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, work += 0x48) {
+        s32 settled = 0;
+        f32 scale;
+        if (*(s32*)(work + 0x70) > 8 || type == 10) {
+            settled = 1;
+        }
+        scale = float_1_80425de4;
+        if (!settled) {
+            scale = scale_dat[*(s32*)(work + 0x70)];
+        }
+        *(f32*)(work + 0x78) = scale * baseScale;
+        *(f32*)(work + 0x68) = float_0_80425de8;
+        if (type & 1) {
+            *(f32*)(work + 0x68) = float_4_80425e00 * (f32)cos((f64)(angle / float_360_80425dfc));
+        }
+
+        *(f32*)(work + 0x50) += *(f32*)(work + 0x5C);
+        *(f32*)(work + 0x54) += *(f32*)(work + 0x60);
+        *(f32*)(work + 0x58) += *(f32*)(work + 0x64);
+        if (timer == 0x14) {
+            *(f32*)(work + 0x60) = float_4_80425e00;
+            *(f32*)(work + 0x5C) = float_neg2_80425e04;
+        }
+        if (timer < 0x14) {
+            *(f32*)(work + 0x68) *= fade;
+            *(f32*)(work + 0x60) += float_neg0p5_80425e08;
+            *(f32*)(work + 0x88) += float_10_80425e0c;
+        }
+        if (timer < 10) {
+            *(s32*)(work + 0x6C) = timer * 0x19;
+        }
+        *(s32*)(work + 0x70) += 1;
+    }
+    dispEntry(4, 2, effPturnDisp, effect, dispCalcZ(position));
 }
 
 void effPturnDisp(void* camera, void* effect) {

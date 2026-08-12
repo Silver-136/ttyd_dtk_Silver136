@@ -173,8 +173,76 @@ void countDownMain(void) {
 
 /* stub-fill: countDownDisp | missing_definition | ghidra_signature */
 u8 countDownDisp(void) {
-    extern void PSMTXTrans(void*,f32,f32,f32);extern void PSMTXScale(void*,f32,f32,f32);extern void PSMTXConcat(void*,void*,void*);extern void iconDispGxCol(void*,s32,s32,void*);extern void* wp;u8* work=wp;f32 base[3][4],scale[3][4],mtx[3][4];s32 t=*(s32*)(work+0x18);s32 sec=t/1000; s32 digits[3];s32 i;u32 color=0xFFFFFFFF;
-    PSMTXTrans(base,*(f32*)(work+0x20)+*(f32*)(work+0x28),*(f32*)(work+0x24)+*(f32*)(work+0x2C),0.0f);PSMTXScale(scale,2.5f,1.0f,1.0f);PSMTXConcat(base,scale,mtx);iconDispGxCol(mtx,0x10,0x1FD,&color);digits[0]=sec/100;digits[1]=(sec/10)%10;digits[2]=sec%10;for(i=0;i<3;i++){PSMTXTrans(scale,-50.0f+i*30.0f,8.0f,0.0f);PSMTXConcat(base,scale,mtx);iconDispGxCol(mtx,0x10,0x1FE+digits[i],&color);}return 0;
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern u8 iconDispGxCol(void*, s32, s32, void*);
+    extern void* wp;
+    u8* work = wp;
+    f32 trans[3][4];
+    f32 scale[3][4];
+    f32 mtx[3][4];
+    s32 digits[3];
+    s32 color0 = -1;
+    s32 color1 = -1;
+    s32 remaining;
+    s32 seconds;
+    s32 millis;
+    s32 ticksPerMs;
+    s32 i;
+    s32 x;
+    u8 result = 0;
+
+    ticksPerMs = (((*(u32*)0x800000F8 >> 2) * 0x10624DD3U) >> 6);
+    remaining = *(s32*)(work + 0x18) -
+                (s32)(*(s64*)(work + 8) / ticksPerMs);
+    if ((*(u16*)work & 4) == 0) {
+        if ((*(u16*)work & 2) != 0) {
+            remaining = 0;
+        }
+
+        seconds = remaining / 1000;
+        millis = remaining % 1000;
+        PSMTXTrans(trans,
+                   *(f32*)(work + 0x20) + *(f32*)(work + 0x28),
+                   *(f32*)(work + 0x24) + *(f32*)(work + 0x2C),
+                   0.0f);
+        PSMTXScale(scale, 2.5f, 1.0f, 1.0f);
+        PSMTXConcat(trans, scale, mtx);
+        color0 = -103;
+        iconDispGxCol(mtx, 0x10, 0x1FD, &color0);
+
+        digits[0] = seconds / 100;
+        seconds %= 100;
+        digits[1] = seconds / 10;
+        digits[2] = seconds % 10;
+        x = -50;
+        for (i = 0; i < 3; i++, x += 30) {
+            PSMTXTrans(mtx, (f32)x, 8.0f, 0.0f);
+            PSMTXConcat(trans, mtx, mtx);
+            color0 = color1;
+            iconDispGxCol(mtx, 0x10, digits[i] + 0x1FE, &color0);
+        }
+
+        PSMTXTrans(mtx, 28.0f, 10.0f, 0.0f);
+        PSMTXConcat(trans, mtx, mtx);
+        color0 = -1;
+        iconDispGxCol(mtx, 0x10, 0x208, &color0);
+
+        digits[0] = millis / 100;
+        millis %= 100;
+        digits[1] = millis / 10;
+        x = 40;
+        for (i = 0; i < 2; i++, x += 15) {
+            PSMTXTrans(mtx, (f32)x, 8.0f, 0.0f);
+            PSMTXScale(scale, 0.5f, 0.5f, 0.5f);
+            PSMTXConcat(mtx, scale, mtx);
+            PSMTXConcat(trans, mtx, mtx);
+            color0 = color1;
+            result = iconDispGxCol(mtx, 0x10, digits[i] + 0x1FE, &color0);
+        }
+    }
+    return result;
 }
 
 s32 countDownGetStatus(void) {

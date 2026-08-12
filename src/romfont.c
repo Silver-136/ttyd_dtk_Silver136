@@ -351,73 +351,102 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, u32* color, const char* format, ...
 /* stub-fill: romFontGetWidth | missing_definition | ghidra_signature */
 int romFontGetWidth(s32 message, s32 entry) {
     extern u8* wp;
-    s32 width = 0;
-    s32 index = 0;
-    s32 maximum = 0;
+    u8* font;
+    s32 width;
+    s32 index;
+    s32 maximum;
+    u8 character;
+    u16 wideCharacter;
+    s32 first;
+    s32 count;
+    s32 current;
 
+    font = wp;
+    width = 0;
+    index = 0;
+    maximum = 0;
     do {
-        u8 character = *(u8*)(message + index);
-        if (*(s32*)(wp + 8) == 0) {
-            if (character < 0x20 || character > 0x7F) {
-                if ((character < 0x80 || character > 0x9F) && character < 0xE0) {
-                    if (character == 0) {
-                        if (maximum < width) maximum = width;
-                        return maximum;
-                    }
-                    if (character == '\n') {
-                        if (maximum < width) maximum = width;
-                        width = 0;
-                    }
-                    index++;
-                    if (character == '\n') continue;
-                } else {
-                    s32 first = *(s32*)wp;
-                    s32 count = *(s32*)(wp + 4);
-                    s32 current = first;
-                    entry = first;
-                    while (count > 0) {
+        character = *(u8*)(message + index);
+        wideCharacter = *(u16*)(message + index);
+        if (*(s32*)(font + 8) != 0) {
+            if (character == 0) {
+                if (maximum < width) {
+                    maximum = width;
+                }
+                return maximum;
+            }
+            if (character == '\n') {
+                if (maximum < width) {
+                    maximum = width;
+                }
+                width = 0;
+                index++;
+            } else {
+                first = *(s32*)font;
+                count = *(s32*)(font + 4);
+                current = first;
+                entry = first;
+                if (count > 0) {
+                    do {
                         entry = current;
-                        if (*(s16*)(current + 0x120) == *(s16*)(message + index)) break;
+                        if (*(u16*)(current + 0x120) == character) {
+                            break;
+                        }
                         current += 0x140;
                         count--;
                         entry = first;
-                    }
-                    index += 2;
-                }
-            } else {
-                s32 first = *(s32*)wp;
-                s32 count = *(s32*)(wp + 4);
-                s32 current = first;
-                entry = first;
-                while (count > 0) {
-                    entry = current;
-                    if (*(u16*)(current + 0x120) == character) break;
-                    current += 0x140;
-                    count--;
-                    entry = first;
+                    } while (count != 0);
                 }
                 index++;
             }
+        } else if (character >= 0x20 && character < 0x80) {
+            first = *(s32*)font;
+            count = *(s32*)(font + 4);
+            current = first;
+            entry = first;
+            if (count > 0) {
+                do {
+                    entry = current;
+                    if (*(u16*)(current + 0x120) == character) {
+                        break;
+                    }
+                    current += 0x140;
+                    count--;
+                    entry = first;
+                } while (count != 0);
+            }
+            index++;
+        } else if ((character >= 0x80 && character < 0xA0) || character >= 0xE0) {
+            first = *(s32*)font;
+            count = *(s32*)(font + 4);
+            current = first;
+            entry = first;
+            if (count > 0) {
+                do {
+                    entry = current;
+                    if (*(u16*)(current + 0x120) == wideCharacter) {
+                        break;
+                    }
+                    current += 0x140;
+                    count--;
+                    entry = first;
+                } while (count != 0);
+            }
+            index += 2;
         } else {
-            if (character == 0) return width <= maximum ? maximum : width;
+            if (character == 0) {
+                if (maximum < width) {
+                    maximum = width;
+                }
+                return maximum;
+            }
             if (character == '\n') {
-                if (maximum < width) maximum = width;
+                if (maximum < width) {
+                    maximum = width;
+                }
                 width = 0;
                 index++;
-                continue;
-            }
-            {
-                s32 first = *(s32*)wp;
-                s32 count = *(s32*)(wp + 4);
-                s32 current = first;
-                entry = first;
-                while (count > 0) {
-                    entry = current;
-                    if (*(u16*)(current + 0x120) == character) break;
-                    current += 0x140;
-                    count--;
-                    entry = first;
-                }
+            } else {
                 index++;
             }
         }

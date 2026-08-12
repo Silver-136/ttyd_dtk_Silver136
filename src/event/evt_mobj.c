@@ -4622,10 +4622,23 @@ s32 evt_mobj_koopa_brick(void* pEvt) {
 }
 
 s32 mobj_koopa_badgeblk(u32* mobj) {
+    typedef struct ItemWork {
+        u8 pad0[0x34];
+        f32 boundRate;
+        f32 gravity;
+        f32 boundLimit;
+        f32 jumpPower;
+        u8 pad44[4];
+        s32 timerA;
+        s32 timerB;
+        f32 field50;
+        s32 field54;
+    } ItemWork;
+    extern void* marioGetPtr(void);
     extern void mobjHitEntry(void*, s32);
     extern double animPoseGetLoopTimes(s32);
     extern void* itemEntry(char*, s32, s32, s32, void*, f32, f32, f32);
-    extern void* itemNameToPtr(char*);
+    extern ItemWork* itemNameToPtr(char*);
     extern void itemStatusOn(void*, s32);
     extern void itemFlagOn(void*, s32);
     extern void evtSetValue(void*, s32, s32);
@@ -4643,9 +4656,11 @@ s32 mobj_koopa_badgeblk(u32* mobj) {
     extern f32 float_0p7_804202b8;
     extern f32 float_500_804202bc;
     extern f32 float_120_804202c0;
-    void* item;
-    u32 action = mobj[0x77];
+    ItemWork* item;
+    u32 action;
 
+    marioGetPtr();
+    action = mobj[0x77];
     if (action == 0) {
         if ((*mobj & 8) != 0) {
             if (mobj[0x78] == 0x4000000) {
@@ -4660,14 +4675,14 @@ s32 mobj_koopa_badgeblk(u32* mobj) {
                         item = itemNameToPtr((char*)((s32)mobj + 5));
                         itemStatusOn(item, 0x10);
                         itemFlagOn(item, 0x14);
-                        *(s32*)((s32)item + 0x48) = 0;
-                        *(s32*)((s32)item + 0x4C) = 10000;
-                        *(f32*)((s32)item + 0x34) = float_0p45_804202b4;
-                        *(f32*)((s32)item + 0x38) = float_0p7_804202b8;
-                        *(f32*)((s32)item + 0x3C) = 0.0f;
-                        *(f32*)((s32)item + 0x40) = float_500_804202bc;
-                        *(f32*)((s32)item + 0x50) = float_120_804202c0;
-                        *(s32*)((s32)item + 0x54) = 0x5A;
+                        item->timerB = 10000;
+                        item->timerA = 0;
+                        item->boundRate = float_0p45_804202b4;
+                        item->gravity = float_0p7_804202b8;
+                        item->boundLimit = 0.0f;
+                        item->jumpPower = float_500_804202bc;
+                        item->field50 = float_120_804202c0;
+                        item->field54 = 0x5A;
                         psndSFXOn_3D(0x836, mobj + 0xE);
                     } else {
                         kpaAddCoin(1);

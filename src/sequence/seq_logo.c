@@ -276,11 +276,18 @@ u8 seq_logoMain(int param_1) {
 
 
 void logoDisp(void) {
+    extern void* wp;
+    extern void* gp;
     extern u32 OSGetProgressiveMode(void);
     extern void GXGetProjectionv(f32*);
     extern void GXGetViewportv(f32*);
     extern void GXGetScissor(u32*, u32*, u32*, u32*);
     extern void GXSetProjectionv(f32*);
+    extern void GXSetViewport(f32, f32, f32, f32, f32, f32);
+    extern void GXSetScissor(u32, u32, u32, u32);
+    extern void GXSetPixelFmt(s32, s32);
+    extern void GXSetDispCopySrc(u16, u16, u16, u16);
+    extern void GXSetDispCopyDst(u16, u16);
     extern u32 GXSetDispCopyYScale(f32);
     extern void GXSetDispCopyGamma(s32);
     extern void GXSetScissorBoxOffset(s32, s32);
@@ -297,6 +304,8 @@ void logoDisp(void) {
     extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
     extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
     extern void GXSetTevColor(s32, void*);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetChanMatColor(s32, void*);
     extern void GXSetBlendMode(s32, s32, s32, s32);
     extern void GXSetZCompLoc(s32);
     extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
@@ -314,6 +323,8 @@ void logoDisp(void) {
     extern u16 GXGetTexObjWidth(void*);
     extern u16 GXGetTexObjHeight(void*);
     extern double cos(double);
+    extern u8 sRMObjHReso[];
+    extern u8 sRMObjHReso_prog[];
     extern u32 dat_804207e8;
     extern u32 dat_804207ec;
     extern u32 dat_804207f0;
@@ -338,6 +349,30 @@ void logoDisp(void) {
 
 #define FIFO (*(volatile f32*)0xCC008000)
 #define VERTEX(px,py,s,t) do { FIFO=(px); FIFO=(py); FIFO=0.0f; FIFO=(s); FIFO=(t); } while (0)
+#define DRAW_SETUP(orthoTop) do { \
+    GXSetBlendMode(1, 4, 5, 0); \
+    GXSetZCompLoc(1); \
+    GXSetAlphaCompare(7, 0, 0, 7, 0); \
+    GXSetZMode(0, 3, 0); \
+    C_MTXOrtho(ortho, (orthoTop), 448.0f, 0.0f, 608.0f, -100.0f, 100.0f); \
+    GXSetProjection(ortho, 1); \
+    PSMTXIdentity(model); \
+    GXLoadPosMtxImm(model, 0); \
+    GXSetCurrentMtx(0); \
+    GXSetCullMode(0); \
+    GXClearVtxDesc(); \
+    GXSetVtxDesc(9, 1); \
+    GXSetVtxDesc(13, 1); \
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0); \
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0); \
+} while (0)
+#define DRAW_QUAD(l,t,r,b) do { \
+    GXBegin(0x80, 0, 4); \
+    VERTEX((l), (t), 0.0f, 0.0f); \
+    VERTEX((r), (t), 1.0f, 0.0f); \
+    VERTEX((r), (b), 1.0f, 1.0f); \
+    VERTEX((l), (b), 0.0f, 1.0f); \
+} while (0)
 
     if (*(void**)wp == 0) return;
     GXGetProjectionv(projection);
@@ -356,84 +391,86 @@ void logoDisp(void) {
     palette = (void*)**(u32**)((s32)*(void**)wp + 0xA0);
     state = *(s32*)((s32)wp + 4);
     if (state == 2) {
-        texId = 0;
-        left = 117.0f; right = 493.0f; top = 154.0f; bottom = 258.0f;
+        TEXGetGXTexObjFromPalette(palette, texObj, 0);
+        GXLoadTexObj(texObj, 0);
+        GXSetNumChans(0);
         color0 = dat_804207f0;
         color1 = (*(s32*)((s32)gp + 0xD8) == 0) ? dat_804207f4 : dat_804207f8;
-    } else if (state == 4) {
-        texId = 2;
-        left = 189.0f; right = 421.0f; top = 150.0f; bottom = 262.0f;
-        color0 = dat_804207fc;
-        color1 = dat_804207fc;
-    } else if (state == 3) {
-        texId = 1;
-        left = 0.0f; right = 608.0f; top = 0.0f; bottom = 448.0f;
-        color0 = 0xFFFFFFFF;
-        color1 = 0xFFFFFFFF;
-    } else {
-        texId = 7;
-        left = 0.0f; right = 608.0f; top = 0.0f; bottom = 448.0f;
-        color0 = dat_804207e8;
-        color1 = dat_804207ec;
-    }
-
-    TEXGetGXTexObjFromPalette(palette, texObj, texId);
-    GXLoadTexObj(texObj, 0);
-    GXSetNumChans(state == 4 ? 1 : 0);
-    GXSetTevColor(1, &color0);
-    GXSetTevColor(2, &color1);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(0, 0, 0, 0xFF);
-    if (state == 3) {
-        GXSetTevOp(0, 3);
-    } else {
+        GXSetTevColor(1, &color0);
+        GXSetTevColor(2, &color1);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(0, 0, 0, 0xFF);
         GXSetTevColorOp(0, 0, 0, 0, 1, 0);
         GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
         GXSetTevColorIn(0, 2, 4, 8, 15);
-        if (state == 2) {
-            GXSetTevAlphaIn(0, 7, 4, 1, 7);
-        } else {
-            GXSetTevAlphaIn(0, 4, 7, 7, 7);
+        GXSetTevAlphaIn(0, 4, 7, 7, 7);
+        DRAW_SETUP(-23.0f);
+        DRAW_QUAD(117.0f, 154.0f, 493.0f, 258.0f);
+    } else if (state < 2) {
+        if (state != -1 && state > -2) {
+        TEXGetGXTexObjFromPalette(palette, texObj, 7);
+        GXLoadTexObj(texObj, 0);
+        GXSetNumChans(0);
+        color0 = dat_804207e8;
+        color1 = dat_804207ec;
+        GXSetTevColor(1, &color0);
+        GXSetTevColor(2, &color1);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 2, 4, 8, 15);
+        GXSetTevAlphaIn(0, 7, 4, 1, 7);
+        DRAW_SETUP(-23.0f);
+        DRAW_QUAD(0.0f, 0.0f, 608.0f, 448.0f);
         }
-    }
-    GXSetBlendMode(1, 4, 5, 0);
-    GXSetZCompLoc(1);
-    GXSetAlphaCompare(7, 0, 0, 7, 0);
-    GXSetZMode(0, 3, 0);
-    C_MTXOrtho(ortho, state == 2 ? -23.0f : 0.0f, 448.0f,
-               0.0f, 608.0f, -100.0f, 100.0f);
-    GXSetProjection(ortho, 1);
-    PSMTXIdentity(model);
-    GXLoadPosMtxImm(model, 0);
-    GXSetCurrentMtx(0);
-    GXSetCullMode(0);
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 1);
-    GXSetVtxDesc(13, 1);
-    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
-    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
-
-    if (state == 3) {
+    } else if (state == 4) {
+        TEXGetGXTexObjFromPalette(palette, texObj, 2);
+        GXLoadTexObj(texObj, 0);
+        GXSetNumChans(1);
+        GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+        color0 = dat_804207fc;
+        GXSetChanMatColor(4, &color0);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(0, 0, 0, 4);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 10, 15, 15, 15);
+        GXSetTevAlphaIn(0, 4, 7, 7, 7);
+        DRAW_SETUP(0.0f);
+        DRAW_QUAD(189.0f, 150.0f, 421.0f, 262.0f);
+    } else if (state < 4) {
+        TEXGetGXTexObjFromPalette(palette, texObj, 1);
+        GXLoadTexObj(texObj, 0);
+        GXSetNumChans(0);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevOp(0, 3);
+        DRAW_SETUP(0.0f);
         width = (f32)GXGetTexObjWidth(texObj);
         height = (f32)GXGetTexObjHeight(texObj);
         left = (608.0f - width) * 0.5f;
         right = left + width;
         top = (448.0f - height) * 0.5f - 20.0f;
         bottom = top + height;
+        DRAW_QUAD(left, top, right, bottom);
     }
-    GXBegin(0x80, 0, 4);
-    VERTEX(left, top, 0.0f, 0.0f);
-    VERTEX(right, top, 1.0f, 0.0f);
-    VERTEX(right, bottom, 1.0f, 1.0f);
-    VERTEX(left, bottom, 0.0f, 1.0f);
 
     GXSetProjectionv(projection);
     GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
     GXSetScissor(scissorX, scissorY, scissorW, scissorH);
 #undef VERTEX
 #undef FIFO
+#undef DRAW_QUAD
+#undef DRAW_SETUP
 }
 
 #pragma no_register_save_helpers on

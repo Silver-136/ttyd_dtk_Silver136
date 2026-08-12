@@ -1,9 +1,109 @@
 #include "effect/n64/eff_packn_bfire_n64.h"
 void* effPacknBfireN64Entry(f32 x, f32 y, f32 z, f32 dstX, f32 dstY, f32 dstZ, f32 scale, s32 type, s32 duration, s32 time) {
-    extern void* effEntry(void); extern void* __memAlloc(s32,s32); extern void effPacknBfireMain(void*); extern char str_PacknBfireN64_802fbc4c[];
-    extern f32 float_0_80425c6c,float_1_80425c80; void* entry; u8* work; s32 count,i;
-    entry=effEntry(); count=type==2?8:1; *(char**)((s32)entry+0x14)=str_PacknBfireN64_802fbc4c; *(s32*)((s32)entry+8)=count; work=__memAlloc(3,count*0x7C); *(u8**)((s32)entry+0xC)=work; *(void**)((s32)entry+0x10)=effPacknBfireMain; *(s32*)entry|=2;
-    for(i=0;i<count;i++,work+=0x7C){ *(s32*)work=type; *(f32*)(work+4)=x;*(f32*)(work+8)=y;*(f32*)(work+0xC)=z;*(f32*)(work+0x10)=dstX;*(f32*)(work+0x14)=dstY;*(f32*)(work+0x18)=dstZ;*(s32*)(work+0x1C)=duration;*(s32*)(work+0x20)=time<1?1000:time;*(s32*)(work+0x24)=0;*(f32*)(work+0x60)=(dstX-x)/(f32)duration;*(f32*)(work+0x64)=(dstY-y)/(f32)duration;*(f32*)(work+0x68)=(dstZ-z)/(f32)duration;*(f32*)(work+0x48)=scale;*(f32*)(work+0x6C)=float_0_80425c6c; }
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32, s32);
+    extern void effPacknBfireMain(void*);
+    extern s32 rand(void);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern char str_PacknBfireN64_802fbc4c[];
+    extern f32 float_0_80425c6c;
+    extern f32 float_6p2832_80425c70;
+    extern f32 float_360_80425c74;
+    extern f32 float_1_80425c80;
+    extern f32 float_0p2_80425ca0;
+    extern f32 float_0p3_80425cac;
+    extern f32 float_neg10_80425cb0;
+    extern f32 float_5_80425cb4;
+    extern f32 float_3_80425cb8;
+    extern f32 float_2_80425cbc;
+    extern f32 float_neg45_80425cc0;
+    void* entry;
+    u8* work;
+    s32 count;
+    s32 i;
+    s32 angle;
+    s32 angleOffset;
+    f32 radians;
+
+    entry = effEntry();
+    count = 1;
+    if (type == 2) {
+        count = 8;
+    }
+    *(char**)((s32)entry + 0x14) = str_PacknBfireN64_802fbc4c;
+    *(s32*)((s32)entry + 8) = count;
+    work = __memAlloc(3, count * 0x7C);
+    *(u8**)((s32)entry + 0xC) = work;
+    *(void**)((s32)entry + 0x10) = effPacknBfireMain;
+    *(s32*)entry |= 2;
+    if (time < 1) {
+        *(s32*)(work + 0x20) = 1000;
+    } else {
+        *(s32*)(work + 0x20) = time;
+    }
+    *(s32*)work = type;
+    *(s32*)(work + 0x24) = 0;
+    *(s32*)(work + 0x1C) = duration;
+    *(s32*)(work + 0x34) = 0;
+    *(f32*)(work + 4) = x;
+    *(f32*)(work + 8) = y;
+    *(f32*)(work + 0xC) = z;
+    *(f32*)(work + 0x10) = dstX;
+    *(f32*)(work + 0x14) = dstY;
+    *(f32*)(work + 0x18) = dstZ;
+    *(f32*)(work + 0x60) = (dstX - x) / (f32)duration;
+    *(f32*)(work + 0x64) = (dstY - y) / (f32)duration;
+    *(f32*)(work + 0x68) = (dstZ - z) / (f32)duration;
+    *(f32*)(work + 0x48) = scale;
+
+    if (type == 1) {
+        *(s32*)(work + 0x28) = 0xFF;
+        *(s32*)(work + 0x2C) = 0x58;
+        *(s32*)(work + 0x30) = 0x46;
+        *(s32*)(work + 0x34) = 0x37;
+        *(s32*)(work + 0x38) = 0x0B;
+        *(s32*)(work + 0x3C) = 0x33;
+        *(s32*)(work + 0x40) = 0x7B;
+        *(s32*)(work + 0x44) = 0xFF;
+        *(f32*)(work + 0x4C) = (f32)(rand() % 65);
+        *(f32*)(work + 0x50) = (f32)(rand() % 65);
+        *(f32*)(work + 0x70) = float_0p2_80425ca0;
+        *(f32*)(work + 0x6C) = float_0p3_80425cac;
+        *(f32*)(work + 0x54) = float_0_80425c6c;
+        *(f32*)(work + 0x58) = float_0_80425c6c;
+        *(f32*)(work + 0x74) = float_0_80425c6c;
+        *(f32*)(work + 0x78) = float_neg10_80425cb0;
+    } else if (type != 0) {
+        *(s32*)(work + 0x28) = 0xFF;
+        *(s32*)(work + 0x2C) = 0x58;
+        *(s32*)(work + 0x30) = 0x46;
+        *(s32*)(work + 0x34) = 0x37;
+        *(s32*)(work + 0x38) = 0x0B;
+        *(s32*)(work + 0x3C) = 0x33;
+        *(s32*)(work + 0x40) = 0x7B;
+        *(s32*)(work + 0x44) = 0xFF;
+        angle = rand() % 361;
+        angleOffset = 0;
+        for (i = 0; i < count; i++) {
+            *(f32*)(work + 4) = x;
+            *(f32*)(work + 8) = y;
+            *(f32*)(work + 0xC) = z;
+            radians = (float_6p2832_80425c70 * (f32)(angle + (angleOffset >> 3))) / float_360_80425c74;
+            *(f32*)(work + 0x60) = float_5_80425cb4 * (f32)sin((f64)radians);
+            *(f32*)(work + 0x64) = float_2_80425cbc * (f32)cos((f64)radians) + float_3_80425cb8;
+            *(f32*)(work + 0x4C) = (f32)(rand() % 65);
+            *(f32*)(work + 0x50) = (f32)(rand() % 65);
+            angleOffset += 360;
+            *(f32*)(work + 0x70) = float_1_80425c80;
+            *(f32*)(work + 0x6C) = float_1_80425c80;
+            *(f32*)(work + 0x54) = float_0_80425c6c;
+            *(f32*)(work + 0x58) = float_0_80425c6c;
+            *(f32*)(work + 0x74) = float_neg45_80425cc0;
+            *(f32*)(work + 0x78) = float_neg10_80425cb0;
+            work += 0x7C;
+        }
+    }
     return entry;
 }
 

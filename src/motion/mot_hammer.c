@@ -250,32 +250,54 @@ s32 marioChkHammer2(void) {
 
 
 void mot_hammer2(void) {
+    extern void* marioGetPtr(void);
+    extern s32 pouchGetHammerLv(void);
+    extern void marioChgPose(char* pose);
     extern void marioPaperOn(char* pose);
+    extern void marioPaperOff(void);
     extern void marioChgPaper(char* pose);
     extern void marioPaperLightOff(void);
+    extern u32 psndSFXOn_3D(s32 id, void* position);
     extern void psndSFXOff(u32 id);
+    extern s32 marioAnimeId(void);
+    extern void animPoseSetLocalTime(f32 time, s32 poseId);
     extern s32 marioGetRub(s32 type, void* dir, void* count, void* scratch);
     extern f64 revise360(f64 angle);
+    extern void marioAdjustMoveDir(void);
     extern void marioChgMotSub(s32 motion, s32 param);
+    extern s32 sysMsec2Frame(s32 msec);
+    extern void* effUltraHammerEntry(f32, f32, f32, f32, s32, s32);
     extern char str_M_H_3_80420b18;
     extern char str_M_H_6_80420b20;
     extern char str_M_H_9_80420b28;
     extern char str_P_H_1A_802c3f8c;
     extern char str_P_H_1B_802c3f84;
     extern char str_P_H_1C_802c3f7c;
+    extern char str_p_kaiten_h_802c3f70;
+    extern char str_M_H_3A_802c3f94, str_M_H_6A_802c3f9c, str_M_H_9A_802c3fa4;
+    extern char str_M_H_3B_802c3fac, str_M_H_6B_802c3fb4, str_M_H_9B_802c3fbc;
+    extern char str_M_S_1_80420b6c;
     extern f32 float_0_80420ab8;
-    extern f32 float_30_80420ae4;
     extern f32 float_1_80420b48;
     extern f32 float_6_80420b30;
     extern f32 float_18_80420b58;
     extern f32 float_24_80420b64;
+    extern f32 float_30_80420ae4;
     extern f32 float_36_80420aec;
     extern f32 float_42_80420b4c;
     extern f32 float_54_80420b44;
     extern f32 float_72_80420b34;
+    extern f32 float_180_80420ac8;
+    extern f32 float_270_80420ac4;
     extern f32 float_38_80420b0c;
     extern f32 float_15_80420b10;
     extern f32 float_10_80420b14;
+    extern f32 float_20_80420af0, float_22_80420b68;
+    extern f32 float_0p01_80420b00;
+    extern f32 float_0p005_80420b3c, float_0p2_80420b5c, float_0p3_80420b50;
+    extern f32 float_0p4_80420b38, float_1p5_80420b60, float_1p6_80420b54;
+    extern f32 float_1p7_80420b40;
+    extern f32 vec3_802c3ec8[];
 
     void* player = marioGetPtr();
     u8 dir[4];
@@ -283,6 +305,7 @@ void mot_hammer2(void) {
     u8 scratch[4];
     f32 low;
     f32 high;
+    f32 threshold;
     f32 direction;
     s32 level;
     s32 rub;
@@ -306,6 +329,7 @@ void mot_hammer2(void) {
 #define CHARGE_ANGLE (*(f32*)((s32)player + 0x2C8))
 #define CHARGE_FLAGS (*(u16*)((s32)player + 0x2CC))
 #define SOUND_ID (*(s32*)((s32)player + 0x2D0))
+#define HIT_COUNT (*(s16*)((s32)player + 0x2C4))
 
     if ((TRIG_FLAGS & 1) != 0) {
         TRIG_FLAGS &= ~1;
@@ -344,7 +368,11 @@ void mot_hammer2(void) {
         case 1:
             TIMER--;
             if (TIMER > 0) return;
-            marioPaperOn(&str_P_H_1C_802c3f7c);
+            if (DISP_TARGET == float_180_80420ac8 && *(s8*)((s32)player + 0x43) == 1)
+                DISP_FLAGS |= 0x80000000;
+            if (DISP_TARGET == float_0_80420ab8 && *(s8*)((s32)player + 0x43) == 0)
+                DISP_FLAGS |= 0x20000000;
+            marioPaperOn(&str_p_kaiten_h_802c3f70);
             marioChgPaper(&str_P_H_1C_802c3f7c);
             marioPaperLightOff();
             SOUND_ID = psndSFXOn_3D(0x162, POS);
@@ -374,17 +402,45 @@ void mot_hammer2(void) {
                 marioChgPaper(&str_P_H_1B_802c3f84);
             }
             marioChgPaper(&str_P_H_1A_802c3f8c);
+            threshold = MOTION_COUNT < 2 ? low : high;
             if ((CHARGE_FLAGS & 1) == 0) {
                 CHARGE_ANGLE += float_6_80420b30;
+                if (CHARGE_ANGLE >= threshold) {
+                    CHARGE_ANGLE = threshold;
+                    CHARGE_FLAGS |= 1;
+                    CHARGE_FLAGS |= 0x1000;
+                }
+            } else if ((CHARGE_FLAGS & 0x10) == 0) {
+                CHARGE_ANGLE += float_1_80420b48;
                 if (CHARGE_ANGLE >= high) {
                     CHARGE_ANGLE = high;
-                    CHARGE_FLAGS |= 1;
+                    CHARGE_FLAGS |= 0x10;
                 }
             } else {
                 CHARGE_ANGLE -= float_1_80420b48;
                 if (CHARGE_ANGLE <= low) {
                     CHARGE_ANGLE = low;
-                    CHARGE_FLAGS &= ~1;
+                    CHARGE_FLAGS &= ~0x10;
+                }
+            }
+            if (CHARGE_FLAGS & 0x1000) {
+                CHARGE_FLAGS &= ~0x1000;
+                *(f32*)((s32)player + 0x154) =
+                    CHARGE == 1 ? float_0p2_80420b5c :
+                    (CHARGE == 2 ? float_0p3_80420b50 : float_0p4_80420b38);
+                *(f32*)((s32)player + 0x158) = float_0p005_80420b3c;
+                *(f32*)((s32)player + 0x68) =
+                    CHARGE == 1 ? float_1p5_80420b60 :
+                    (CHARGE == 2 ? float_1p6_80420b54 : float_1p7_80420b40);
+                *(f32*)((s32)player + 0x6C) = vec3_802c3ec8[0];
+                *(f32*)((s32)player + 0x70) = vec3_802c3ec8[1];
+                *(f32*)((s32)player + 0x74) = vec3_802c3ec8[2];
+                if (!(CHARGE_FLAGS & 0x2000)) {
+                    CHARGE_FLAGS |= 0x2000;
+                    level = pouchGetHammerLv();
+                    if (level == 1) marioChgPose(&str_M_H_3A_802c3f94);
+                    else if (level == 2) marioChgPose(&str_M_H_6A_802c3f9c);
+                    else if (level == 3) marioChgPose(&str_M_H_9A_802c3fa4);
                 }
             }
             animPoseSetLocalTime(CHARGE_ANGLE / float_6_80420b30, POSE_IDS[marioAnimeId()]);
@@ -394,34 +450,72 @@ void mot_hammer2(void) {
                     psndSFXOff(SOUND_ID);
                     SOUND_ID = -1;
                 }
+                *(f32*)((s32)player + 0x154) = float_0_80420ab8;
+                *(f32*)((s32)player + 0x158) = float_0p01_80420b00;
+                level = pouchGetHammerLv();
+                if (level == 1) marioChgPose(&str_M_H_3B_802c3fac);
+                else if (level == 2) marioChgPose(&str_M_H_6B_802c3fb4);
+                else if (level == 3) marioChgPose(&str_M_H_9B_802c3fbc);
                 marioChgPaper(&str_P_H_1C_802c3f7c);
                 SUBMOTION = 20;
                 TIMER = CHARGE == 3 ? 48 : (CHARGE == 2 ? 66 : 72);
+                HIT_COUNT = 0;
+                CHARGE_RATE = CHARGE == 3 ? float_38_80420b0c :
+                              (CHARGE == 2 ? float_22_80420b68 : float_15_80420b10);
+                effUltraHammerEntry(POS[0], POS[1] + float_20_80420af0, POS[2],
+                                    float_1_80420b48, *(s8*)((s32)player + 0x43) != 0,
+                                    TIMER);
             }
             break;
         case 20:
             direction = DISP_DIR;
+            HIT_COUNT = 10;
             DISP_FLAGS |= 0x20000000;
-            DISP_DIR += (CHARGE == 3 ? float_42_80420b4c : float_30_80420ae4) *
-                        (*(s8*)((s32)player + 0x43) ? -1.0f : 1.0f);
+            DISP_DIR += CHARGE_RATE * (*(s8*)((s32)player + 0x43) ? -1.0f : 1.0f);
             if ((s32)(direction / 360.0f) != (s32)(DISP_DIR / 360.0f)) {
                 psndSFXOn_3D(0x163, POS);
             }
+            if (HIT_COUNT == 1) psndSFXOn_3D(0x163, POS);
             TIMER--;
+            if (CHARGE > 2 && TIMER == 10) {
+                marioPaperOff();
+                marioChgPose(&str_M_S_1_80420b6c);
+                DISP_FLAGS &= ~0xA0000004;
+            }
             if (TIMER <= 0) {
-                DISP_DIR = (f32)revise360(DISP_DIR);
-                marioAdjustMoveDir();
+                if (CHARGE < 3) {
+                    TIMER = sysMsec2Frame(300);
+                } else {
+                    DISP_DIR = (f32)revise360(DISP_DIR);
+                    marioAdjustMoveDir();
+                    TIMER = 30;
+                }
                 SUBMOTION = 22;
-                TIMER = 30;
             }
             break;
         case 22:
             if (--TIMER <= 0) {
-                marioPaperOff();
-                DISP_FLAGS &= ~0xA0000000;
-                FLAGS &= ~0x80;
-                marioAdjustMoveDir();
-                marioChgMotSub(0, 0);
+                if (CHARGE < 3) {
+                    marioPaperOff();
+                    marioChgPose(&str_M_S_1_80420b6c);
+                    DISP_FLAGS &= ~0xA0000004;
+                    DISP_DIR = (f32)revise360(DISP_DIR);
+                    marioAdjustMoveDir();
+                }
+                DISP_FLAGS &= ~0x20000000;
+                SUBMOTION = 23;
+                TIMER = 1;
+                TIMER--;
+                if (TIMER <= 0) {
+                    TIMER = 1;
+                    TIMER--;
+                    if (TIMER <= 0) {
+                        DISP_FLAGS &= ~4;
+                        FLAGS &= ~0x80;
+                        marioAdjustMoveDir();
+                        marioChgMotSub(0, 0);
+                    }
+                }
             }
             break;
     }
@@ -429,6 +523,7 @@ void mot_hammer2(void) {
 
 #undef CHARGE_FLAGS
 #undef SOUND_ID
+#undef HIT_COUNT
 #undef CHARGE_ANGLE
 #undef CHARGE_RATE
 #undef HAMMER_HIT

@@ -77,22 +77,91 @@ void* effOpukuWprotectN64Entry(s32 type, f32 x, f32 y, f32 z, s32 timer, f32 sca
 #pragma no_register_save_helpers off
 
 void effOpukuWprotectMain(void* effect) {
-    extern void effDelete(void*); extern void effWaterDamageN64Entry(f32,f32,f32,f32,s32,s32);
-    extern f64 sin(f64), cos(f64); extern f32 dispCalcZ(void*); extern void dispEntry(s32,s32,void*,void*,f32);
-    extern void effOpukuWprotectDisp(void); extern f32 float_24_80425c30,float_2_80425c34,float_6p2832_80425c38,float_360_80425c3c;
-    extern f32 float_32_80425c44,float_127_80425c40,float_0p01_80425c48,float_256_80425c50,float_0p2_80425c54,float_128_80425c58,float_0_80425c10;
-    u8* work=*(u8**)((s32)effect+0xC); s32 type=*(s32*)work; s32 timer; s32 frame;
-    if(*(s32*)effect&4){ *(s32*)effect&=~4; *(s32*)(work+0x10)=type==1?4:0x10; }
-    if(*(s32*)(work+0x10)<1000) *(s32*)(work+0x10)-=1;
-    *(s32*)(work+0x14)+=1; if(*(s32*)(work+0x14)>0x4F1A0)*(s32*)(work+0x14)=0x100; timer=*(s32*)(work+0x10); frame=*(s32*)(work+0x14);
-    if(timer<0){ if(type==1){ effWaterDamageN64Entry(*(f32*)(work+4),float_24_80425c30+*(f32*)(work+8),*(f32*)(work+0xC),float_2_80425c34,0,0x1E); effWaterDamageN64Entry(*(f32*)(work+4),float_24_80425c30+*(f32*)(work+8),*(f32*)(work+0xC),float_2_80425c34,1,0x1E); } effDelete(effect); return; }
-    if(type==0){ if(timer<0x10){*(s32*)(work+0x24)=timer<<4;*(s32*)(work+0x28)=timer<<4;} if(frame<0x10){*(s32*)(work+0x24)=(frame<<4)+0xF;*(s32*)(work+0x28)=(frame<<4)+0xF;} }
-    else if(frame<4){ *(s32*)(work+0x24)=(frame<<6)+0x3F; *(s32*)(work+0x28)=*(s32*)(work+0x24); }
-    *(s32*)(work+0x1C)=(s32)(float_32_80425c44*(f32)sin((f64)(float_6p2832_80425c38*(f32)(frame*7)/float_360_80425c3c))+float_127_80425c40);
-    *(f32*)(work+0x34)+=float_0p2_80425c54; if(*(f32*)(work+0x34)>=float_128_80425c58)*(f32*)(work+0x34)=float_0_80425c10;
-    dispEntry(4,2,effOpukuWprotectDisp,effect,dispCalcZ(work+4));
-}
+    typedef struct Vec3 { f32 x,y,z; } Vec3;
+    extern void effDelete(void*);
+    extern void effWaterDamageN64Entry(f32,f32,f32,f32,s32,s32);
+    extern f64 sin(f64), cos(f64);
+    extern s32 rand(void);
+    extern f32 dispCalcZ(void*);
+    extern void dispEntry(s32,s32,void*,void*,f32);
+    extern void effOpukuWprotectDisp(void);
+    extern f32 float_24_80425c30,float_2_80425c34,float_6p2832_80425c38,float_360_80425c3c;
+    extern f32 float_32_80425c44,float_127_80425c40,float_0p01_80425c48,float_6_80425c4c;
+    extern f32 float_256_80425c50,float_0p2_80425c54,float_128_80425c58,float_240_80425c5c;
+    extern f32 float_0p97_80425c60,float_480_80425c64,float_10_80425c18,float_0p1_80425c24,float_0_80425c10;
+    extern f32 vec3_802fbc10[3];
+    u8* work = *(u8**)((s32)effect + 0xC);
+    Vec3 pos;
+    s32 type = *(s32*)work;
+    s32 timer;
+    s32 frame;
+    s32 i;
+    f32 phase;
+    f32 angle;
+    f32 sin1;
+    f32 sin6;
+    f32 cos2;
+    f32 cos1;
 
+    pos.x=vec3_802fbc10[0]; pos.y=vec3_802fbc10[1]; pos.z=vec3_802fbc10[2];
+    pos.x=*(f32*)(work+4); pos.y=*(f32*)(work+8); pos.z=*(f32*)(work+0xC);
+    if (*(s32*)effect & 4) {
+        *(s32*)effect &= ~4;
+        *(s32*)(work + 0x10) = type == 1 ? 4 : 0x10;
+    }
+    if (*(s32*)(work + 0x10) < 1000) *(s32*)(work + 0x10) -= 1;
+    *(s32*)(work + 0x14) += 1;
+    if (*(s32*)(work + 0x14) > 0x4F1A0) *(s32*)(work + 0x14) = 0x100;
+    timer = *(s32*)(work + 0x10);
+    frame = *(s32*)(work + 0x14);
+    if (timer < 0) {
+        if (type == 1) {
+            effWaterDamageN64Entry(*(f32*)(work+4),float_24_80425c30+*(f32*)(work+8),*(f32*)(work+0xC),float_2_80425c34,0,0x1E);
+            effWaterDamageN64Entry(*(f32*)(work+4),float_24_80425c30+*(f32*)(work+8),*(f32*)(work+0xC),float_2_80425c34,1,0x1E);
+        }
+        effDelete(effect);
+        return;
+    }
+    if (type == 0) {
+        if (timer < 0x10) { *(s32*)(work+0x24)=timer<<4; *(s32*)(work+0x28)=timer<<4; }
+        if (frame < 0x10) { *(s32*)(work+0x24)=(frame<<4)+0xF; *(s32*)(work+0x28)=(frame<<4)+0xF; }
+    } else if (frame < 4) {
+        *(s32*)(work+0x24)=(frame<<6)+0x3F;
+        *(s32*)(work+0x28)=*(s32*)(work+0x24);
+    }
+    *(s32*)(work+0x1C)=(u8)(s32)(float_32_80425c44*(f32)sin((f64)(float_6p2832_80425c38*(f32)(frame*7)/float_360_80425c3c))+float_127_80425c40);
+    phase = float_0p01_80425c48 * (f32)frame;
+    angle = float_6p2832_80425c38 * phase / float_360_80425c3c;
+    sin1=(f32)sin(angle);
+    sin6=(f32)sin(float_6p2832_80425c38*float_6_80425c4c*phase/float_360_80425c3c);
+    cos2=(f32)cos(float_6p2832_80425c38*float_2_80425c34*phase/float_360_80425c3c);
+    cos1=(f32)cos(angle);
+    *(s32*)(work+0x30) = (s32)(float_32_80425c44*cos1 + float_32_80425c44*cos2 + float_32_80425c44*sin6*sin1 + float_256_80425c50);
+    *(f32*)(work+0x34)+=float_0p2_80425c54;
+    if (*(f32*)(work+0x34) >= float_128_80425c58) *(f32*)(work+0x34)=float_0_80425c10;
+    for (i = 0; i < 4; i++) {
+        u8* particle = work + i * 4;
+        *(s32*)(particle+0x88) += 1;
+        if (*(s32*)(particle+0x88) >= 0) {
+            if (*(s32*)(particle+0x88) == 0) {
+                s32 r;
+                *(f32*)(particle+0x38)=float_0_80425c10;
+                *(f32*)(particle+0x48)=float_240_80425c5c;
+                r=rand(); *(f32*)(particle+0x58)=float_0p2_80425c54*(f32)((r%11)-5);
+                r=rand(); *(f32*)(particle+0x68)=(f32)((r%11)+2);
+                r=rand(); *(f32*)(particle+0x78)=(f32)((r%11)+1);
+            }
+            *(f32*)(particle+0x38)+=*(f32*)(particle+0x58);
+            *(f32*)(particle+0x48)+=*(f32*)(particle+0x68);
+            *(f32*)(particle+0x58)*=float_0p97_80425c60;
+            *(f32*)(particle+0x68)=float_0p1_80425c24*(float_10_80425c18-*(f32*)(particle+0x68))+*(f32*)(particle+0x68);
+            if (float_480_80425c64 < *(f32*)(particle+0x48)) {
+                *(s32*)(particle+0x88)=-(rand()%11)-1;
+            }
+        }
+    }
+    dispEntry(4,2,effOpukuWprotectDisp,effect,dispCalcZ(&pos));
+}
 
 void effOpukuWprotectDisp(s32 cameraId, void* effect) {
     typedef f32 Mtx[3][4]; typedef struct Vtx { s16 x,y,z,s,t; u8 r,g,b,a; } Vtx;

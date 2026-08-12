@@ -46,7 +46,6 @@ void nameEntInit(void) {
 
     memset(wp, 0, 0x64);
 }
-
 void nameEntReInit(void) {
 
     *(s32*)((s32)wp + 4) = 3;
@@ -242,31 +241,32 @@ void nameMain(void) {
     extern u32 keyGetButtonTrg(s32);
     extern u32 keyGetDirRep(s32);
     extern void psndSFXOn(void*);
+    extern f64 sin(f64);
+    extern f32 float_2_80426e1c;
+    extern f32 float_4_80426e80;
+    extern f32 float_60_80426e84;
+    extern f32 float_0p125_80426e88;
     u8* work = wp;
     f32 dist = (f32)distABf(*(f32*)(work + 0x24), *(f32*)(work + 0x28),
                             *(f32*)(work + 0x1C), *(f32*)(work + 0x20));
-    u32 buttons;
-    u32 direction;
     s32 state = *(s32*)(work + 8);
 
     if (state == 100) {
-        buttons = keyGetButtonTrg(0);
-        if ((buttons & 0x100) != 0) {
+        if ((keyGetButtonTrg(0) & 0x100) != 0) {
             if (*(s32*)(work + 0x5C) == 0) {
-                *(s32*)(work + 8) = 101;
-                psndSFXOn((void*)0x12);
+                (*(s32*)(work + 8))++;
+                psndSFXOn((void*)0x20012);
             } else {
                 *(s32*)(work + 8) = 0;
-                psndSFXOn((void*)0x13);
+                psndSFXOn((void*)0x20013);
             }
-        } else if ((buttons & 0x200) != 0) {
+        } else if ((keyGetButtonTrg(0) & 0x200) != 0) {
             *(s32*)(work + 8) = 0;
-            psndSFXOn((void*)0x13);
+            psndSFXOn((void*)0x20013);
         } else {
-            direction = keyGetDirRep(0);
-            if ((direction & 0x3000) != 0) {
+            if ((keyGetDirRep(0) & 0x3000) != 0) {
                 *(s32*)(work + 0x5C) = 1 - *(s32*)(work + 0x5C);
-                psndSFXOn((void*)5);
+                psndSFXOn((void*)0x20005);
             }
         }
         *(f32*)(work + 0x24) = -60.0f;
@@ -274,36 +274,38 @@ void nameMain(void) {
         *(f32*)(work + 0x54) += 0.05f;
         if (*(f32*)(work + 0x54) > 1.0f) *(f32*)(work + 0x54) = 1.0f;
     } else if (state == 0 && (*(u16*)work & 1) != 0 && *(s32*)((u8*)gp + 8) == 0) {
-        buttons = keyGetButtonTrg(0);
-        direction = keyGetDirRep(0);
-        if ((buttons & 0x100) != 0 || (buttons & 0x1000) != 0) {
+        if ((keyGetButtonTrg(0) & 0x100) != 0 || (keyGetButtonTrg(0) & 0x1000) != 0) {
             *(s32*)(work + 8) = 100;
             *(s32*)(work + 0x5C) = 0;
-            psndSFXOn((void*)0x12);
-        } else if ((buttons & 0x200) != 0) {
+            psndSFXOn((void*)0x20012);
+        } else if ((keyGetButtonTrg(0) & 0x200) != 0) {
             *(s32*)(work + 8) = 100;
             *(s32*)(work + 0x5C) = 1;
-            psndSFXOn((void*)0x13);
-        } else if ((direction & 0x4000) != 0 && dist < 10.0f) {
+            psndSFXOn((void*)0x20013);
+        } else if ((keyGetDirRep(0) & 0x4000) != 0 && dist < 10.0f) {
             (*(s32*)(work + 0x14))--;
             if (*(s32*)(work + 0x14) < 0) *(s32*)(work + 0x14) = 8;
-            psndSFXOn((void*)5);
-        } else if ((direction & 0x8000) != 0 && dist < 10.0f) {
+            psndSFXOn((void*)0x20005);
+        } else if ((keyGetDirRep(0) & 0x8000) != 0 && dist < 10.0f) {
             (*(s32*)(work + 0x14))++;
             if (*(s32*)(work + 0x14) > 8) *(s32*)(work + 0x14) = 0;
-            psndSFXOn((void*)5);
-        } else if ((direction & 0x1000) != 0 && dist < 10.0f) {
+            psndSFXOn((void*)0x20005);
+        } else if ((keyGetDirRep(0) & 0x1000) != 0 && dist < 10.0f) {
             (*(s32*)(work + 0x18))--;
             if (*(s32*)(work + 0x18) < 0) *(s32*)(work + 0x18) = 13;
-            psndSFXOn((void*)5);
-        } else if ((direction & 0x2000) != 0 && dist < 10.0f) {
+            psndSFXOn((void*)0x20005);
+        } else if ((keyGetDirRep(0) & 0x2000) != 0 && dist < 10.0f) {
             (*(s32*)(work + 0x18))++;
             if (*(s32*)(work + 0x18) > 13) *(s32*)(work + 0x18) = 0;
-            psndSFXOn((void*)5);
+            psndSFXOn((void*)0x20005);
         }
     }
-    *(f32*)(work + 0x24) += (*(f32*)(work + 0x1C) - *(f32*)(work + 0x24)) * 0.5f;
-    *(f32*)(work + 0x28) += (*(f32*)(work + 0x20) - *(f32*)(work + 0x28)) * 0.5f;
+    {
+        f32 smooth = (float_4_80426e80 * (f32)*(u32*)((u8*)gp + 4)) / float_60_80426e84;
+        *(f32*)(work + 0x1C) += (*(f32*)(work + 0x24) - *(f32*)(work + 0x1C)) / smooth;
+        *(f32*)(work + 0x20) += (*(f32*)(work + 0x28) - *(f32*)(work + 0x20)) / smooth;
+        *(f32*)(work + 0x1C) += __fabs(float_2_80426e1c * (f32)sin((f64)((f32)*(u32*)((u8*)gp + 0x1C) * float_0p125_80426e88)));
+    }
 }
 
 /* stub-fill: nameEntDisp | prototype_only | source_prototype */
@@ -717,7 +719,7 @@ void nameMaskGX(f32 scale) {
 /* CHATGPT STUB FILL: main/nameent 20260624_184008 */
 
 /* stub-fill: nameWinGX | missing_definition | ghidra_signature */
-u8 nameWinGX(f64 x, f64 y, f64 width, f64 height, s32 palette, s32 texture) {
+void nameWinGX(f64 x, f64 y, f64 width, f64 height, s32 palette, s32 texture) {
     typedef f32 Mtx[3][4];
     extern void GXSetTevSwapMode(s32, s32, s32);
     extern void GXSetFog(s32, f32, f32, f32, f32, void*);
@@ -729,21 +731,28 @@ u8 nameWinGX(f64 x, f64 y, f64 width, f64 height, s32 palette, s32 texture) {
     extern void GXSetTevKAlphaSel(s32, s32);
     extern void PSMTXScale(Mtx, f32, f32, f32);
     extern void GXLoadTexMtxImm(Mtx, s32, s32);
-    u8 texObj[0x20];
-    Mtx texMtx;
+    u8 texObj0[0x20];
+    u8 texObj1[0x20];
+    u8 texObj2[0x20];
+    u8 texObj3[0x20];
+    Mtx texMtx0;
+    Mtx texMtx1;
+    Mtx texMtx2;
+    Mtx texMtx3;
     volatile f32* fifo = (volatile f32*)0xCC008000;
-    f32 right = (f32)(x + width - 16.0);
-    f32 bottom = (f32)(y - height + 16.0);
-    s32 ids[4] = { 4, 7, 6, 3 };
     u32 fogColor = 0xFFFFFFFF;
     u32 tevColor = 0x00000080;
-    s32 i;
+    f32 zero = 0.0f;
+    f32 sixteen = 16.0f;
+    f32 one = 1.0f;
+    f64 sixteenD = 16.0;
+    s32 ids[4] = { 4, 7, 6, 3 };
 
     GXSetZCompLoc(1);
     GXSetAlphaCompare(7, 0, 0, 7, 0);
     GXSetBlendMode(1, 4, 5, 7);
     GXSetZMode(0, 7, 0);
-    GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &fogColor);
+    GXSetFog(0, zero, zero, zero, zero, &fogColor);
     GXSetNumChans(0);
     GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
     GXSetNumTevStages(3);
@@ -776,26 +785,71 @@ u8 nameWinGX(f64 x, f64 y, f64 width, f64 height, s32 palette, s32 texture) {
     GXLoadPosMtxImm((u8*)camGetPtr(1) + 0x118, 0);
     GXSetCurrentMtx(0);
 
-#pragma unroll 4
-    for (i = 0; i < 4; i++) {
-        f32 left = i == 1 || i == 3 ? right : (f32)x;
-        f32 top = i >= 2 ? bottom + 16.0f : (f32)y;
-        f32 quadRight = left + (i == 1 || i == 3 ? 16.0f : (f32)width - 16.0f);
-        f32 quadBottom = top - (i >= 2 ? 16.0f : (f32)height - 16.0f);
-        TEXGetGXTexObjFromPalette(palette, texObj, texture + ids[i]);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
-        GXSetNumTexGens(2);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   __fabs(quadRight - left) / (f32)GXGetTexObjWidth(texObj),
-                   __fabs(top - quadBottom) / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        *fifo = left; *fifo = top; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
-        *fifo = left; *fifo = quadBottom; *fifo = 0.0f; *fifo = 0.0f; *fifo = 1.0f;
-        *fifo = quadRight; *fifo = quadBottom; *fifo = 0.0f; *fifo = 1.0f; *fifo = 1.0f;
-        *fifo = quadRight; *fifo = top; *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
+    {
+        f32 rightEdge = (f32)(x + width - sixteenD);
+        f32 bottomEdge = (f32)(y - height) + sixteen;
+
+#define DRAW_NAME_REGION(obj, mtx, left, top, right, bottom, w, h, detail, mask) \
+    GXSetNumTexGens(2); \
+    TEXGetGXTexObjFromPalette(palette, obj, texture + ids[0]); \
+    GXInitTexObjLOD(obj, 1, 1, zero, zero, zero, 0, 0, 0); \
+    GXLoadTexObj(obj, 0); \
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D); \
+    PSMTXScale(mtx, __fabs(w) / (f32)GXGetTexObjWidth(obj), \
+                  __fabs(h) / (f32)GXGetTexObjHeight(obj), one); \
+    GXLoadTexMtxImm(mtx, 0x1E, 1); \
+    TEXGetGXTexObjFromPalette(palette, obj, texture + detail); \
+    GXInitTexObjLOD(obj, 1, 1, zero, zero, zero, 0, 0, 0); \
+    GXLoadTexObj(obj, 1); \
+    TEXGetGXTexObjFromPalette(palette, obj, texture + mask); \
+    GXInitTexObjLOD(obj, 1, 1, zero, zero, zero, 0, 0, 0); \
+    GXLoadTexObj(obj, 2); \
+    GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D); \
+    PSMTXScale(mtx, __fabs(w) / (f32)GXGetTexObjWidth(obj), \
+                  __fabs(h) / (f32)GXGetTexObjHeight(obj), one); \
+    GXLoadTexMtxImm(mtx, 0x21, 1); \
+    GXBegin(0x80, 0, 4); \
+    *fifo = left;  *fifo = top;    *fifo = zero; *fifo = zero; *fifo = zero; \
+    *fifo = left;  *fifo = bottom; *fifo = zero; *fifo = zero; *fifo = one;  \
+    *fifo = right; *fifo = bottom; *fifo = zero; *fifo = one;  *fifo = one;  \
+    *fifo = right; *fifo = top;    *fifo = zero; *fifo = one;  *fifo = zero
+
+    {
+        f32 left = (f32)x;
+        f32 top = (f32)y;
+        f32 w = (f32)(width - sixteenD);
+        f32 h = (f32)(height - sixteenD);
+        f32 right = (f32)(x + w);
+        f32 bottom = (f32)(y - h);
+        DRAW_NAME_REGION(texObj0, texMtx0, left, top, right, bottom, w, h, 5, 0);
     }
-    return 0;
+    {
+        f32 left = rightEdge;
+        f32 top = (f32)y;
+        f32 w = sixteen;
+        f32 h = (f32)(height - sixteenD);
+        f32 right = left + sixteen;
+        f32 bottom = (f32)(y - h);
+        DRAW_NAME_REGION(texObj1, texMtx1, left, top, right, bottom, w, h, ids[1], 2);
+    }
+    {
+        f32 left = (f32)x;
+        f32 top = bottomEdge;
+        f32 w = (f32)(width - sixteenD);
+        f32 h = sixteen;
+        f32 right = (f32)(x + w);
+        f32 bottom = top - sixteen;
+        DRAW_NAME_REGION(texObj2, texMtx2, left, top, right, bottom, w, h, ids[2], 1);
+    }
+    {
+        f32 left = rightEdge;
+        f32 top = bottomEdge;
+        f32 w = sixteen;
+        f32 h = sixteen;
+        f32 right = left + sixteen;
+        f32 bottom = top - sixteen;
+        DRAW_NAME_REGION(texObj3, texMtx3, left, top, right, bottom, w, h, 8, ids[3]);
+    }
+#undef DRAW_NAME_REGION
+    }
 }

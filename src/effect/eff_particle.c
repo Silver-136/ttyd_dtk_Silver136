@@ -1,12 +1,25 @@
 #include "effect/eff_particle.h"
 
+extern f64 __frsqrte(f64 value);
+
 /* CHATGPT STUB FILL: main/effect/eff_particle 20260624_184929 */
 
 /* stub-fill: ParticleEmit | prototype_only | source_prototype */
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void ParticleEmit(void* emitter, void* particle, f32 matrix[3][4]) {
     extern s32 seed;
     extern f64 log(f64);
-    extern f64 sqrt(f64);
+    extern f32 __float_nan;
+    extern const f32 vec3_80300c00[];
+    extern const f32 float_0p5_80428284;
+    extern const f32 float_0_80428288;
+    extern const f32 float_2_8042828c;
+    extern const f32 float_1_80428290;
+    extern const u32 dat_804282a8;
+    extern const f32 float_neg2_804282ac;
+    extern const f32 float_0p25_804282b0;
+    extern const f32 float_2p5_804282b4;
     extern void PSVECScale(f32*, f32*, f32);
     extern void PSMTXMultVec(f32[3][4], f32*, f32*);
     extern void PSVECAdd(f32*, f32*, f32*);
@@ -19,18 +32,54 @@ void ParticleEmit(void* emitter, void* particle, f32 matrix[3][4]) {
     f32 x;
     f32 z;
     f32 length;
+    const u8* constPool = (const u8*)vec3_80300c00;
+    f32 randomScale = *(const f32*)&dat_804282a8;
 
     if (use_last_431 == 0) {
         f32 y;
         f32 factor;
         do {
             seed = seed * 0x5EEDF715 + 0x1B0CB173;
-            x = (f32)seed / 2147483648.0f;
+            x = float_2_8042828c * (randomScale * (f32)(u32)seed) - float_1_80428290;
             seed = seed * 0x5EEDF715 + 0x1B0CB173;
-            y = (f32)seed / 2147483648.0f;
+            y = float_2_8042828c * (randomScale * (f32)(u32)seed) - float_1_80428290;
             length = x * x + y * y;
-        } while (length > 1.0f);
-        factor = (f32)sqrt((-2.0f * (f32)log(length)) / length);
+        } while (length > float_1_80428290);
+        factor = (float_neg2_804282ac * (f32)log(length)) / length;
+        {
+            f64 value = factor;
+            if (value > *(const f64*)(constPool + 0x40)) {
+                f64 half = *(const f64*)(constPool + 0x30);
+                f64 three = *(const f64*)(constPool + 0x38);
+                f64 inv = __frsqrte(value);
+                inv = half * inv * (three - value * inv * inv);
+                inv = half * inv * (three - value * inv * inv);
+                factor = (f32)(value * half * inv * (three - value * inv * inv));
+            } else if (value < *(const f64*)(constPool + 0x40)) {
+                factor = __float_nan;
+            } else {
+                u32 exponent = *(u32*)&factor & 0x7F800000;
+                s32 kind;
+                if (exponent == 0x7F800000) {
+                    if ((*(u32*)&factor & 0x7FFFFF) == 0) {
+                        kind = 2;
+                    } else {
+                        kind = 1;
+                    }
+                } else if (exponent < 0x7F800000 && exponent == 0) {
+                    if ((*(u32*)&factor & 0x7FFFFF) == 0) {
+                        kind = 3;
+                    } else {
+                        kind = 5;
+                    }
+                } else {
+                    kind = 4;
+                }
+                if (kind == 1) {
+                    factor = __float_nan;
+                }
+            }
+        }
         y2_430 = y * factor;
         gaussian = x * factor;
         use_last_431 = 1;
@@ -43,26 +92,63 @@ void ParticleEmit(void* emitter, void* particle, f32 matrix[3][4]) {
         (s32)(((f32*)matrix)[0x18] * gaussian + ((f32*)matrix)[0x17]);
     do {
         seed = seed * 0x5EEDF715 + 0x1B0CB173;
-        x = (f32)seed / 2147483648.0f;
+        x = float_2_8042828c * (randomScale * (f32)(u32)seed) - float_1_80428290;
         seed = seed * 0x5EEDF715 + 0x1B0CB173;
-        z = (f32)seed / 2147483648.0f;
+        z = float_2_8042828c * (randomScale * (f32)(u32)seed) - float_1_80428290;
         length = x * x + z * z;
-    } while (length > 1.0f);
+    } while (length > float_1_80428290);
 
-    x *= 0.5f;
-    z *= 0.5f;
+    x *= float_0p5_80428284;
+    z *= float_0p5_80428284;
     *(f32*)((s32)particle + 0x10) = x;
-    *(f32*)((s32)particle + 0x14) = (f32)sqrt(1.0f - length * 0.25f);
+    {
+        f32 root = float_1_80428290 - length * float_0p25_804282b0;
+        f64 value = root;
+        if (value > *(const f64*)(constPool + 0x40)) {
+            f64 half = *(const f64*)(constPool + 0x30);
+            f64 three = *(const f64*)(constPool + 0x38);
+            f64 inv = __frsqrte(value);
+            inv = half * inv * (three - value * inv * inv);
+            inv = half * inv * (three - value * inv * inv);
+            root = (f32)(value * half * inv * (three - value * inv * inv));
+        } else if (value < *(const f64*)(constPool + 0x40)) {
+            root = __float_nan;
+        } else {
+            u32 exponent = *(u32*)&root & 0x7F800000;
+            s32 kind;
+            if (exponent == 0x7F800000) {
+                if ((*(u32*)&root & 0x7FFFFF) == 0) {
+                    kind = 2;
+                } else {
+                    kind = 1;
+                }
+            } else if (exponent < 0x7F800000 && exponent == 0) {
+                if ((*(u32*)&root & 0x7FFFFF) == 0) {
+                    kind = 3;
+                } else {
+                    kind = 5;
+                }
+            } else {
+                kind = 4;
+            }
+            if (kind == 1) {
+                root = __float_nan;
+            }
+        }
+        *(f32*)((s32)particle + 0x14) = root;
+    }
     *(f32*)((s32)particle + 0x18) = z;
     PSVECScale((f32*)((s32)particle + 0x10),
                (f32*)((s32)particle + 0x10), *(f32*)((s32)work + 0xAC));
     PSMTXMultVec(matrix, (f32*)((s32)particle + 0x10),
                  (f32*)((s32)particle + 0x10));
     PSVECScale((f32*)((s32)particle + 0x10),
-               (f32*)((s32)particle + 4), 2.5f);
+               (f32*)((s32)particle + 4), float_2p5_804282b4);
     PSVECAdd((f32*)((s32)matrix + 0x30),
              (f32*)((s32)particle + 4), (f32*)((s32)particle + 4));
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 void EmitterEmit(void* emitter, void* data) {
     extern void ParticleEmit(void* emitter, void* particle, void* data);

@@ -519,11 +519,8 @@ party/party_kuribo.c:
 	.sbss       start:0x8041EAE0 end:0x8041EAE8
 	.sdata2     start:0x80421570 end:0x80421590
 
-party/party_2.c:
-	.text       start:0x800C5794 end:0x800C7FF8
-
 party/party_move.c:
-	.text       start:0x800C7FF8 end:0x800CD21C
+	.text       start:0x800C5794 end:0x800CD21C
 	.rodata     start:0x802CBFC0 end:0x802CC5D8
 	.bss        start:0x803DC2C8 end:0x803DCCC8
 	.sbss       start:0x8041EAE8 end:0x8041EAF8

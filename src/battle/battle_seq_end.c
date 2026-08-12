@@ -22,6 +22,7 @@ extern void iconDelete();
 extern s32 irand();
 extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
 extern void* BtlUnit_GetData(void* unit, s32 dataId);
+extern void BattleAudienceSoundWhistle(void);
 
 typedef struct RankUpData {
     s16 level;
@@ -75,6 +76,7 @@ void btlseqEnd(void* battleWork) {
     extern void btlsubResetMoveColorLvAll(void*);
     extern void* BattleAlloc(s32);
     extern void btlseqEnd_DispInit(void*);
+    extern void btlseqEnd_DispMain(s32, void*);
     extern s32 irand(s32);
     extern void _ExecAllUnitBattleEndEvent(void);
     extern void btl_camera_set_moveSpeedLv(s32,s32);
@@ -109,6 +111,10 @@ void btlseqEnd(void* battleWork) {
     extern u32 BattlePadCheckTrigger(u32);
     extern s16* _get_rank_data(s32);
     extern s32 _rank_up_event[];
+    extern s32 _event_MajinaiEnd[];
+    extern void* BattleGetMarioPtr(void*);
+    extern void BtlUnit_SetBodyAnim(void*, const char*);
+    extern char str_M_V_1_80427298[];
     u8* work = *(u8**)((u8*)battleWork + 0xF28);
     s32 state;
     void* fbat;
@@ -207,6 +213,18 @@ void btlseqEnd(void* battleWork) {
             }
             break;
 
+        case 0x0700000A:
+            if (*(s16*)(work + 8) < 1) {
+                if ((*(u32*)((u8*)battleWork + 0xEF4) & 0x400000) == 0) {
+                    BattleSetSeq(battleWork, 7, 0x07000019);
+                } else {
+                    BattleSetSeq(battleWork, 7, 0x0700000E);
+                }
+            } else {
+                BattleSetSeq(battleWork, 7, 0x0700000B);
+            }
+            break;
+
         case 0x0700000B:
             if (*(s16*)(work + 0xA) < 1) {
                 if (*(s32*)(work + 4) < 1000) {
@@ -247,6 +265,28 @@ void btlseqEnd(void* battleWork) {
             if (--*(s32*)(work + 4) < 1) {
                 *(void**)(work + 0x29C) = 0;
                 BattleSetSeq(battleWork, 7, 0x0700000E);
+            }
+            break;
+
+        case 0x0700000E:
+            if ((*(u32*)((u8*)battleWork + 0xEF4) & 0x400000) == 0) {
+                BattleSetSeq(battleWork, 7, 0x07000010);
+            } else {
+                void* mario = BattleGetMarioPtr(battleWork);
+                evt = evtEntry(_event_MajinaiEnd, 10, 0);
+                *(s32*)((u8*)evt + 0x160) = *(s32*)mario;
+                *(s32*)((u8*)mario + 0x238) = *(s32*)evt;
+                BattleSetSeq(battleWork, 7, 0x0700000F);
+            }
+            break;
+
+        case 0x0700000F:
+            if (BattleWaitAllActiveEvtEnd(battleWork) != 0) {
+                if (*(s16*)(work + 8) < 1) {
+                    BattleSetSeq(battleWork, 7, 0x07000019);
+                } else {
+                    BattleSetSeq(battleWork, 7, 0x07000010);
+                }
             }
             break;
 
@@ -344,6 +384,15 @@ void btlseqEnd(void* battleWork) {
             }
             break;
 
+        case 0x07000019:
+            {
+                void* mario = BattleGetMarioPtr(battleWork);
+                BtlUnit_SetBodyAnim(mario, str_M_V_1_80427298);
+                *(s32*)(work + 4) = 60;
+                BattleSetSeq(battleWork, 7, 0x0700001A);
+            }
+            break;
+
         case 0x0700001A:
             if (--*(s32*)(work + 4) < 1) {
                 BattleSetSeq(battleWork, 7, 0x0700001B);
@@ -368,6 +417,7 @@ void btlseqEnd(void* battleWork) {
             }
             break;
     }
+    btlseqEnd_DispMain(8, battleWork);
 }
 
 void _ExecAllUnitBattleEndEvent(void) {
@@ -1639,4 +1689,3 @@ s32 _get_rank_up_msg(void* event) {
     evtSetValue(event, out, data->message);
     return 2;
 }
-

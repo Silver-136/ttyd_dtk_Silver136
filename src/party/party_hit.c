@@ -782,121 +782,92 @@ void* partySearchWallFront(f64 distance, f64 direction, void* pParty, f32* pos) 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 partySearchFrontWall(f64 distance, f64 angle, void* pParty, f32* pos) {
-    extern f32 float_1_8042151c;
-    extern f32 float_6_80421518;
-    extern f32 float_45_80421538;
-    typedef struct VecLocal {
-        f32 x;
-        f32 y;
-        f32 z;
-    } VecLocal;
     typedef struct HitWork {
-        VecLocal start;
-        VecLocal dir;
-        VecLocal hitPos;
-        VecLocal normal;
+        u8 pad[0xC];
+        f32 start[3];
+        f32 dir[3];
+        f32 hitPos[3];
+        f32 normal[3];
         f32 dist;
     } HitWork;
-    extern void sincosf(f32 angle, f32* cosOut, f32* sinOut);
-    extern f32 partyGetHeight(void* party);
+    typedef struct VecBits { u32 x, y, z; } VecBits;
+    extern void sincosf(f32, f32*, f32*);
+    extern f32 partyGetHeight(void*);
     extern s32 yoshiGetStatus(void);
-    extern s32 hitCheckVecFilter(void* work, void* filter);
-    extern s32 chkfilterYoshi(s32 a, s32 b);
-    extern s32 chkfilterNokotaro(s32 a, s32 b);
-    extern s32 chkfilter(s32 a, s32 b);
-    extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
-    extern f32 float_0_80421508;
-    extern f32 float_0p5_80421504;
-    extern f32 float_0p75_80421528;
-    extern f32 float_11_80421534;
-    extern f32 float_1000_80421530;
-    extern f32 float_neg0p5_8042152c;
-    extern f32 float_neg1_8042153c;
-
-    HitWork work;
-    f32 s;
-    f32 c;
-    f32 radius;
-    f32 dist;
-    f32 bias;
-    f32 dot;
+    extern s32 hitCheckVecFilter(void*, void*);
+    extern s32 chkfilterYoshi(s32, s32), chkfilterNokotaro(s32, s32), chkfilter(s32, s32);
+    extern f32 angleABf(f32, f32, f32, f32);
+    extern const VecBits vec3_802cb770;
+    extern f32 float_0_80421508, float_0p5_80421504, float_0p75_80421528;
+    extern f32 float_1_8042151c, float_6_80421518, float_11_80421534;
+    extern f32 float_45_80421538, float_1000_80421530, float_neg0p5_8042152c, float_neg1_8042153c;
+    HitWork work1;
+    HitWork work2;
+    f32 s, c, radius, roundedDist, bias, dot;
+    f32 nx, ny, nz;
+    register const VecBits* zeroVec = &vec3_802cb770;
     s32 hit;
 
     sincosf((f32)angle, &c, &s);
-    radius = *(f32*)((s32)pParty + 0xF4);
-    if ((*(u32*)pParty & 0x100) != 0) {
-        radius = float_6_80421518;
-    }
-    radius = (f32)(float_0p5_80421504 * radius + distance);
-    dist = radius;
+    radius = *(f32*)((u8*)pParty + 0xF4);
+    if ((*(u32*)pParty & 0x100) != 0) radius = float_6_80421518;
+    radius = float_0p5_80421504 * radius + (f32)distance;
+    roundedDist = radius;
 
-    work.start.x = *(f32*)((s32)pParty + 0x58);
-    work.start.y = *(f32*)((s32)pParty + 0x5C) + float_0p75_80421528 * partyGetHeight(pParty);
-    work.start.z = *(f32*)((s32)pParty + 0x60);
-    work.dir.x = c;
-    work.dir.y = float_0_80421508;
-    work.dir.z = s;
-    work.dist = radius;
-    if (yoshiGetStatus() != 0) {
-        hit = hitCheckVecFilter(&work, chkfilterYoshi);
-    } else if (*(s8*)((s32)pParty + 0x31) == 2 && (*(u32*)pParty & 0x100) != 0) {
-        hit = hitCheckVecFilter(&work, chkfilterNokotaro);
-    } else {
-        hit = hitCheckVecFilter(&work, chkfilter);
-    }
+    work1.start[0] = *(f32*)((u8*)pParty + 0x58);
+    work1.start[1] = *(f32*)((u8*)pParty + 0x5C) + float_0p75_80421528 * partyGetHeight(pParty);
+    work1.start[2] = *(f32*)((u8*)pParty + 0x60);
+    *(u32*)&work1.dir[0] = zeroVec->x;
+    *(u32*)&work1.dir[1] = zeroVec->y;
+    *(u32*)&work1.dir[2] = zeroVec->z;
+    work1.dir[0] = c;
+    work1.dir[2] = s;
+    work1.dist = radius;
+    if (yoshiGetStatus() != 0) hit = hitCheckVecFilter(&work1, chkfilterYoshi);
+    else if (*(s8*)((u8*)pParty + 0x31) == 2 && (*(u32*)pParty & 0x100)) hit = hitCheckVecFilter(&work1, chkfilterNokotaro);
+    else hit = hitCheckVecFilter(&work1, chkfilter);
     if (hit != 0) {
-        bias = float_neg0p5_8042152c;
-        if (work.dist >= float_0_80421508) {
-            bias = float_0p5_80421504;
-        }
-        dist = (f32)(s32)(float_1000_80421530 * work.dist + bias) / float_1000_80421530;
+        bias = work1.dist >= float_0_80421508 ? float_0p5_80421504 : float_neg0p5_8042152c;
+        roundedDist = (f32)(s32)(float_1000_80421530 * work1.dist + bias) / float_1000_80421530;
+        nx = work1.normal[0]; ny = work1.normal[1]; nz = work1.normal[2];
+        *(f32*)((u8*)pParty + 0xEC) = roundedDist;
+        dot = ((f32)distance * c) * nx + ((f32)distance * s) * nz;
+        pos[0] += float_0p5_80421504 * -(dot * nx - (f32)distance * c);
+        pos[2] += float_0p5_80421504 * -(dot * nz - (f32)distance * s);
+        return hit;
     }
 
     if (hit == 0) {
-        work.start.x = *(f32*)((s32)pParty + 0x58);
-        work.start.y = *(f32*)((s32)pParty + 0x5C) + float_11_80421534;
-        if (*(s8*)((s32)pParty + 0x31) == 3 && (*(u32*)pParty & 0x100) != 0) {
-            work.start.y = *(f32*)((s32)pParty + 0x5C) + float_1_8042151c;
-        }
-        work.start.z = *(f32*)((s32)pParty + 0x60);
-        work.dir.x = c;
-        work.dir.y = float_0_80421508;
-        work.dir.z = s;
-        work.dist = radius;
-        if (yoshiGetStatus() != 0) {
-            hit = hitCheckVecFilter(&work, chkfilterYoshi);
-        } else if (*(s8*)((s32)pParty + 0x31) == 2 && (*(u32*)pParty & 0x100) != 0) {
-            hit = hitCheckVecFilter(&work, chkfilterNokotaro);
-        } else {
-            hit = hitCheckVecFilter(&work, chkfilter);
-        }
+        f32 height = float_11_80421534;
+        if (*(s8*)((u8*)pParty + 0x31) == 3 && (*(u32*)pParty & 0x100)) height = float_1_8042151c;
+        work2.start[0] = *(f32*)((u8*)pParty + 0x58);
+        work2.start[1] = *(f32*)((u8*)pParty + 0x5C) + height;
+        work2.start[2] = *(f32*)((u8*)pParty + 0x60);
+        work2.dir[0] = c; work2.dir[1] = float_0_80421508; work2.dir[2] = s;
+        work2.dist = radius;
+        if (yoshiGetStatus() != 0) hit = hitCheckVecFilter(&work2, chkfilterYoshi);
+        else if (*(s8*)((u8*)pParty + 0x31) == 2 && (*(u32*)pParty & 0x100)) hit = hitCheckVecFilter(&work2, chkfilterNokotaro);
+        else hit = hitCheckVecFilter(&work2, chkfilter);
         if (hit != 0) {
-            bias = float_neg0p5_8042152c;
-            if (work.dist >= float_0_80421508) {
-                bias = float_0p5_80421504;
-            }
-            dist = (f32)(s32)(float_1000_80421530 * work.dist + bias) / float_1000_80421530;
-            if (angleABf(float_0_80421508, float_0_80421508, work.normal.x * work.normal.x + work.normal.z * work.normal.z, -work.normal.y) >= float_45_80421538) {
-                *(f32*)((s32)pParty + 0xEC) = dist;
-                dot = ((f32)distance * c) * work.normal.x + ((f32)distance * s) * work.normal.z;
-                pos[0] = float_0p5_80421504 * -(dot * work.normal.x - ((f32)distance * c)) + pos[0];
-                pos[2] = float_0p5_80421504 * -(dot * work.normal.z - ((f32)distance * s)) + pos[2];
-                return hit;
-            }
+            bias = work2.dist >= float_0_80421508 ? float_0p5_80421504 : float_neg0p5_8042152c;
+            roundedDist = (f32)(s32)(float_1000_80421530 * work2.dist + bias) / float_1000_80421530;
+            nx = work2.normal[0]; ny = work2.normal[1]; nz = work2.normal[2];
         }
-        hit = 0;
-        *(f32*)((s32)pParty + 0xEC) = float_neg1_8042153c;
-        pos[0] += (f32)distance * c;
-        pos[2] += (f32)distance * s;
-    } else {
-        *(f32*)((s32)pParty + 0xEC) = dist;
-        dot = ((f32)distance * c) * work.normal.x + ((f32)distance * s) * work.normal.z;
-        pos[0] = float_0p5_80421504 * -(dot * work.normal.x - ((f32)distance * c)) + pos[0];
-        pos[2] = float_0p5_80421504 * -(dot * work.normal.z - ((f32)distance * s)) + pos[2];
+        if (hit == 0 || angleABf(float_0_80421508, float_0_80421508,
+                                 (f32)sqrt((f64)(nx * nx + nz * nz)), -ny) < float_45_80421538) {
+            *(f32*)((u8*)pParty + 0xEC) = float_neg1_8042153c;
+            pos[0] = (f32)((f64)pos[0] + distance * (f64)c);
+            pos[2] = (f32)((f64)pos[2] + distance * (f64)s);
+            return 0;
+        }
     }
-
+    *(f32*)((u8*)pParty + 0xEC) = roundedDist;
+    dot = ((f32)distance * c) * nx + ((f32)distance * s) * nz;
+    pos[0] += float_0p5_80421504 * -(dot * nx - (f32)distance * c);
+    pos[2] += float_0p5_80421504 * -(dot * nz - (f32)distance * s);
     return hit;
 }
+
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 

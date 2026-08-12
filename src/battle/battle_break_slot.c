@@ -62,6 +62,8 @@ void BattleBreakSlot_Init(void) {
 /* CHATGPT STUB FILL: main/battle/battle_break_slot 20260624_185954 */
 
 /* stub-fill: BattleBreakSlot_Main | missing_definition | header_prototype */
+f32 updown;
+
 void BattleBreakSlot_Main(void) {
     extern s32 keyGetButtonTrg(s32);
     extern s32 rand(void);
@@ -69,36 +71,88 @@ void BattleBreakSlot_Main(void) {
     extern void psndSFXOff(s32);
     extern f32 intplGetValue(f64, f64, s32, s32, s32);
     extern f64 sin(f64);
+    extern void* effBreakEntry(s32, f32, f32, f32, s32);
+    extern void BattleAudienceSoundBooing(void);
+    extern void BattleAudienceSoundCheer(s32, s32);
+    extern f32 float_0_8042689c;
+    extern f32 float_80_804268c0;
+    extern f32 float_5_804268c4;
+    extern f32 float_2_804268c8;
+    extern f32 float_3_804268cc;
+    extern char str_SFX_BTL_SYS_BREAK1_802fe298[];
+    extern char str_SFX_HP_RECOVER_BIG1_802fe2ac[];
+    extern u8 star_effect[];
+    extern u8 kinoko_effect[];
+    extern u8 flower_effect[];
+    extern u8 shine_effect[];
+    extern u8 doku_kinoko_effect[];
+    extern void* evtEntry(void*, s32, s32);
+    extern s32 pouchGetMaxAP(void);
+    extern s32 pouchGetAP(void);
+    extern void pouchSetAP(s16);
+    extern void* g_BattleWork;
+    extern u8 msg_hp_max[];
+    extern u8 msg_fp_max[];
+    extern u8 msg_star_max[];
+    extern u8 msg_super_max[];
+    extern u8 msg_fault[];
+    extern s32 BattleAudience_GetExist(s32);
+    extern void* BattleAudienceGetPtr(s32);
+    extern void BattleAudienceSoundStop(s32);
+    extern void btl_camera_noshake(s32);
+    extern s32 BattleAudienceAddAudienceNum(s32);
+    extern void BattleAudienceSoundRun(s32);
+    extern void* BattleGetMarioPtr(void*);
+    extern void* BattleGetPartyPtr(void*);
+    u8* battleWork = (u8*)g_BattleWork;
+    u8* audienceWork = (u8*)BattleAudienceBaseGetPtr();
     u8* work = BattleBreakSlotGetPtr();
     u8* reel;
     s32 state = *(s32*)(work + 4);
     s32 count;
     s32 i;
 
+    BattleGetMarioPtr(battleWork);
+    BattleGetPartyPtr(battleWork);
+
     switch (state) {
         case 0:
             count = 0;
+            reel = BattleBreakSlotReelGetPtr(0);
             for (i = 0; i < 3; i++) {
-                reel = BattleBreakSlotReelGetPtr(i);
-                if (*(s32*)(reel + 8) == 2) count++;
+                if (*(s32*)(reel + 8) == 2) {
+                    count++;
+                }
+                reel += 0x5C;
             }
-            if (count == 2 && *(s32*)((u8*)BattleBreakSlotReelGetPtr(0) + 0x1C) !=
-                              *(s32*)((u8*)BattleBreakSlotReelGetPtr(1) + 0x1C)) {
-                *(s32*)(work + 4) = 1;
-                *(s32*)(work + 8) = 0;
+            if (count == 2) {
+                s32 icon1;
+                reel = BattleBreakSlotReelGetPtr(1);
+                icon1 = *(s32*)(reel + 0x1C);
+                reel = BattleBreakSlotReelGetPtr(0);
+                if (*(s32*)(reel + 0x1C) != icon1) {
+                    *(s32*)(work + 4) = 1;
+                    *(s32*)(work + 8) = 0;
+                }
             }
             break;
+
         case 1:
             if (*(s32*)(work + 8) == 60) {
+                reel = BattleBreakSlotReelGetPtr(0);
                 for (i = 0; i < 2; i++) {
-                    reel = BattleBreakSlotReelGetPtr(i);
                     *(s32*)(reel + 8) = 3;
                     *(s32*)(reel + 0xC) = 0;
+                    reel += 0x5C;
                 }
             }
             count = 0;
+            reel = BattleBreakSlotReelGetPtr(0);
             for (i = 0; i < 3; i++) {
-                if (*(s32*)((u8*)BattleBreakSlotReelGetPtr(i) + 8) == 0) count++;
+                if (*(s32*)(reel + 8) == 0) {
+                    count++;
+                }
+                reel += 0x5C;
             }
             if (count == 3) {
                 *(s32*)(work + 4) = 8;
@@ -106,68 +160,246 @@ void BattleBreakSlot_Main(void) {
             }
             (*(s32*)(work + 8))++;
             break;
+
         case 2:
             count = 0;
+            reel = BattleBreakSlotReelGetPtr(0);
             for (i = 0; i < 3; i++) {
-                s32 reelState = *(s32*)((u8*)BattleBreakSlotReelGetPtr(i) + 8);
-                if (reelState == 6 || reelState == 10) count++;
+                s32 reelState = *(s32*)(reel + 8);
+                if (reelState == 6 || reelState == 10) {
+                    count++;
+                }
+                reel += 0x5C;
             }
             if (count == 3) {
                 *(s32*)(work + 4) = 3;
                 *(s32*)(work + 8) = 0;
+                reel = BattleBreakSlotReelGetPtr(0);
                 for (i = 0; i < 3; i++) {
-                    reel = BattleBreakSlotReelGetPtr(i);
-                    if (*(s32*)(reel + 8) == 6) *(s32*)(reel + 8) = 7;
+                    if (*(s32*)(reel + 8) == 6) {
+                        *(s32*)(reel + 8) = 7;
+                    }
+                    reel += 0x5C;
                 }
-                *(s32*)(work + 0x14) = psndSFXOn((void*)"SFX_BTL_SLOT_START1");
+                *(s32*)(work + 0x12C) = psndSFXOn((void*)"SFX_BTL_SLOT_START1");
             }
             break;
+
         case 3:
             count = 0;
+            reel = BattleBreakSlotReelGetPtr(0);
             for (i = 0; i < 3; i++) {
-                if (*(s32*)((u8*)BattleBreakSlotReelGetPtr(i) + 8) == 10) count++;
+                if (*(s32*)(reel + 8) == 10) {
+                    count++;
+                }
+                reel += 0x5C;
             }
             if (count == 3) {
                 *(s32*)(work + 4) = 4;
                 *(s32*)(work + 8) = 0;
-                psndSFXOff(*(s32*)(work + 0x14));
+                psndSFXOff(*(s32*)(work + 0x12C));
             }
             if ((keyGetButtonTrg(0) & 0x100) && *(s32*)(work + 8) > 14) {
+                reel = BattleBreakSlotReelGetPtr(0);
                 for (i = 0; i < 3; i++) {
-                    reel = BattleBreakSlotReelGetPtr(i);
                     if (*(s32*)(reel + 8) == 8) {
                         *(s32*)(reel + 8) = 9;
                         *(f32*)(reel + 0x54) = -1.0f;
                         break;
                     }
+                    reel += 0x5C;
                 }
             }
             (*(s32*)(work + 8))++;
             break;
+
         case 4:
             if (*(s32*)(work + 8) == 20) {
                 count = 0;
+                reel = BattleBreakSlotReelGetPtr(0);
                 for (i = 0; i < 2; i++) {
-                    reel = BattleBreakSlotReelGetPtr(i);
-                    if (*(s32*)(reel + 0x1C) == *(s32*)(reel + 0x78)) count++;
+                    if (*(s32*)(reel + 0x1C) == *(s32*)(reel + 0x78)) {
+                        count++;
+                    }
+                    reel += 0x5C;
                 }
                 *(s32*)(work + 4) = count == 2 ? 5 : 7;
+                reel = BattleBreakSlotReelGetPtr(0);
                 for (i = 0; i < 3; i++) {
-                    reel = BattleBreakSlotReelGetPtr(i);
                     *(s32*)(reel + 8) = count == 2 ? 11 : 12;
                     *(s32*)(reel + 0xC) = 0;
+                    reel += 0x5C;
                 }
             }
             (*(s32*)(work + 8))++;
             break;
+
         case 5:
-        case 7:
             count = 0;
+            reel = BattleBreakSlotReelGetPtr(0);
             for (i = 0; i < 3; i++) {
-                if (*(s32*)((u8*)BattleBreakSlotReelGetPtr(i) + 8) == 0) count++;
+                if (*(s32*)(reel + 8) == 0) {
+                    count++;
+                }
+                reel += 0x5C;
             }
             if (count == 3) {
-                *(s32*)(work + 4) = state == 5 ? 6 : 8;
+                *(s32*)(work + 4) = 6;
+                *(s32*)(work + 8) = 0;
+            }
+            break;
+
+        case 6:
+            if (*(s32*)(work + 8) == 0) {
+                reel = BattleBreakSlotReelGetPtr(0);
+                if (*(s32*)(reel + 0x1C) == 4) {
+                    *(s32*)(work + 8) = 0x65;
+                    BattleAudienceSoundBooing();
+                } else {
+                    effBreakEntry(0, float_80_804268c0, float_0_8042689c,
+                                  float_0_8042689c, 0xF0);
+                }
+            }
+            count = *(s32*)(work + 8);
+            if (count == 0x14 || count == 0x28 || count == 0x3C ||
+                count == 0x50 || count == 0x64 || count == 0x78) {
+                psndSFXOn(str_SFX_BTL_SYS_BREAK1_802fe298);
+                btl_camera_shake_h(0, float_5_804268c4, float_0_8042689c, 10, 0);
+            }
+            if (*(s32*)(work + 8) == 0x78) {
+                BattleAudienceSoundCheer(0xF0, 0xF0);
+            }
+            if (*(s32*)(work + 8) == 0x82) {
+                reel = BattleBreakSlotReelGetPtr(0);
+                switch (*(s32*)(reel + 0x1C)) {
+                    case 0:
+                        evtEntry(kinoko_effect, 0, 0x20);
+                        *(s32*)(work + 0x10) = 4;
+                        *(f32*)(work + 0x14) = float_2_804268c8;
+                        break;
+                    case 1:
+                        evtEntry(flower_effect, 0, 0x20);
+                        *(s32*)(work + 0x10) = 4;
+                        *(f32*)(work + 0x14) = float_2_804268c8;
+                        break;
+                    case 2:
+                        evtEntry(star_effect, 0, 0x20);
+                        pouchSetAP((s16)pouchGetMaxAP());
+                        psndSFXOn(str_SFX_HP_RECOVER_BIG1_802fe2ac);
+                        *(s32*)(work + 0x10) = 4;
+                        *(f32*)(work + 0x14) = float_2_804268c8;
+                        break;
+                    case 3:
+                        evtEntry(shine_effect, 0, 0x20);
+                        pouchSetAP((s16)pouchGetMaxAP());
+                        *(s32*)(work + 0x10) = 6;
+                        *(f32*)(work + 0x14) = float_3_804268cc;
+                        break;
+                    case 4:
+                        evtEntry(doku_kinoko_effect, 0, 0x20);
+                        pouchSetAP((s16)(pouchGetAP() / 2));
+                        break;
+                }
+            }
+            if (*(s32*)(work + 8) == 0x8C) {
+                reel = BattleBreakSlotReelGetPtr(0);
+                if (*(s32*)(reel + 0x1C) >= 0 && *(s32*)(reel + 0x1C) < 5) {
+                    btl_camera_set_mode(0, 6);
+                    btl_camera_set_moveSpeedLv(0, 2);
+                }
+                if (*(u32*)((u8*)g_BattleWork + 0xEF4) & 0x100) {
+                    btl_camera_set_mode(0, 0);
+                }
+            }
+            if (*(s32*)(work + 8) == 0xB4) {
+                s32 icon;
+                s32 maxAudience;
+
+                updown = float_0_8042689c;
+                reel = BattleBreakSlotReelGetPtr(0);
+                icon = *(s32*)(reel + 0x1C);
+                if (icon == 3) {
+                    maxAudience = *(s32*)(audienceWork + 0x13790);
+                    updown = (f32)BattleAudienceAddAudienceNum(maxAudience);
+                } else if (icon < 3) {
+                    if (icon > -1) {
+                        maxAudience = *(s32*)(audienceWork + 0x13790);
+                        updown = (f32)BattleAudienceAddAudienceNum(maxAudience / 2);
+                    }
+                } else if (icon < 5) {
+                    maxAudience = *(s32*)(audienceWork + 0x13790);
+                    updown = (f32)BattleAudienceAddAudienceNum(-maxAudience);
+                }
+
+                if (*(u32*)((u8*)g_BattleWork + 0xEF4) & 0x100) {
+                    updown = float_0_8042689c;
+                }
+            }
+            if (*(s32*)(work + 8) == 0xD1 &&
+                float_0_8042689c != updown) {
+                BattleAudienceSoundRun(0);
+            }
+            if (*(s32*)(work + 8) == 0xD2) {
+                if ((*(u32*)((u8*)g_BattleWork + 0x2754) & 2) == 0) {
+                    btl_camera_shake_h(0, float_2_804268c8,
+                                       float_2_804268c8, 1000, 0);
+                }
+                for (i = 0; i < 200; i++) {
+                    u8* audience;
+                    if ((BattleAudience_GetExist(i) & 0xFF) != 1) {
+                        continue;
+                    }
+                    audience = BattleAudienceGetPtr(i);
+                    if (audience[0x19] == 0xB || audience[0x19] == 0xC) {
+                        (*(s32*)(work + 8))--;
+                        break;
+                    }
+                }
+                if (i == 200) {
+                    btl_camera_noshake(0);
+                    BattleAudienceSoundStop(0xD);
+                }
+            }
+            if (*(s32*)(work + 8) == 0xDC && i == 200) {
+                btl_camera_set_mode(0, 0);
+                btl_camera_noshake(0);
+            }
+            if (*(s32*)(work + 8) == 0x10E) {
+                BattleAudienceAddTargetNum(float_0_8042689c, updown);
+                *(s32*)(work + 4) = 8;
+                *(u32*)work &= ~4;
+                reel = BattleBreakSlotReelGetPtr(0);
+                switch (*(s32*)(reel + 0x1C)) {
+                    case 0:
+                        *(void**)(work + 0x130) = evtEntry(msg_hp_max, 0, 0x20);
+                        break;
+                    case 1:
+                        *(void**)(work + 0x130) = evtEntry(msg_fp_max, 0, 0x20);
+                        break;
+                    case 2:
+                        *(void**)(work + 0x130) = evtEntry(msg_star_max, 0, 0x20);
+                        break;
+                    case 3:
+                        *(void**)(work + 0x130) = evtEntry(msg_super_max, 0, 0x20);
+                        break;
+                    case 4:
+                        *(void**)(work + 0x130) = evtEntry(msg_fault, 0, 0x20);
+                        break;
+                }
+            }
+            (*(s32*)(work + 8))++;
+            break;
+        case 7:
+            count = 0;
+            reel = BattleBreakSlotReelGetPtr(0);
+            for (i = 0; i < 3; i++) {
+                if (*(s32*)(reel + 8) == 0) {
+                    count++;
+                }
+                reel += 0x5C;
+            }
+            if (count == 3) {
+                *(s32*)(work + 4) = 8;
                 *(s32*)(work + 8) = 0;
             }
             break;
@@ -176,8 +408,8 @@ void BattleBreakSlot_Main(void) {
             break;
     }
 
-    for (i = 0; i < 3; i++) {
-        reel = BattleBreakSlotReelGetPtr(i);
+    reel = BattleBreakSlotReelGetPtr(0);
+    for (i = 0; i < 3; i++, reel += 0x5C) {
         switch (*(s32*)(reel + 8)) {
             case 0:
                 *(u32*)reel &= ~1;
@@ -283,6 +515,12 @@ void BattleBreakSlot_Main(void) {
                 *(f32*)(reel + 0x28) = 0.0f;
                 if (*(f32*)(reel + 0x24) >= 128.0f) {
                     *(f32*)(reel + 0x24) -= 128.0f;
+                    *(s32*)(reel + 0x1C) += 1;
+                    if (*(s32*)(reel + 0x1C) >= *(s32*)(reel + 0x18)) {
+                        *(s32*)(reel + 0x1C) = 0;
+                    }
+                    *(s32*)(reel + 0x10) =
+                        (*(s32**)(reel + 0x14))[*(s32*)(reel + 0x1C)];
                 }
                 *(s32*)(reel + 0xC) += 1;
                 if (*(s32*)(reel + 0xC) > 20) {
@@ -298,20 +536,50 @@ void BattleBreakSlot_Main(void) {
                 *(f32*)(reel + 0x28) = 0.0f;
                 if (*(f32*)(reel + 0x24) >= 128.0f) {
                     *(f32*)(reel + 0x24) -= 128.0f;
+                    *(s32*)(reel + 0x1C) += 1;
+                    if (*(s32*)(reel + 0x1C) >= *(s32*)(reel + 0x18)) {
+                        *(s32*)(reel + 0x1C) = 0;
+                    }
+                    *(s32*)(reel + 0x10) =
+                        (*(s32**)(reel + 0x14))[*(s32*)(reel + 0x1C)];
                 }
                 break;
 
             case 9:
                 *(f32*)(reel + 0x50) += *(f32*)(reel + 0x54);
-                if (*(f32*)(reel + 0x50) < 20.0f) *(f32*)(reel + 0x50) = 20.0f;
+                if (*(f32*)(reel + 0x50) < 20.0f) {
+                    *(f32*)(reel + 0x50) = 20.0f;
+                }
                 *(f32*)(reel + 0x20) = -128.0f + 128.0f * (f32)i;
                 *(f32*)(reel + 0x24) += *(f32*)(reel + 0x50);
                 *(f32*)(reel + 0x28) = 0.0f;
-                if (*(f32*)(reel + 0x50) >= 0.0f && *(f32*)(reel + 0x24) >= 128.0f) {
+                if (*(f32*)(reel + 0x50) >= 0.0f &&
+                    *(f32*)(reel + 0x24) >= 128.0f) {
                     *(f32*)(reel + 0x24) -= 128.0f;
-                    *(s32*)(reel + 8) = 10;
-                    *(s32*)(reel + 0xC) = 0;
-                    *(f32*)(reel + 0x54) = *(f32*)(reel + 0x50);
+                    *(s32*)(reel + 0x1C) += 1;
+                    if (*(s32*)(reel + 0x1C) == *(s32*)(reel + 0x18)) {
+                        *(s32*)(reel + 0x1C) = 0;
+                    }
+                    *(s32*)(reel + 0x10) =
+                        (*(s32**)(reel + 0x14))[*(s32*)(reel + 0x1C)];
+
+                    if (((*(u32*)audienceWork & 0x4000) == 0 ||
+                         *(s32*)((u8*)BattleBreakSlotReelGetPtr(0) + 0x10) != 4 ||
+                         *(s32*)((u8*)BattleBreakSlotReelGetPtr(1) + 0x10) != 4 ||
+                         *(s32*)(reel + 0x10) != 4) &&
+                        ((*(u32*)work & 2) == 0 ||
+                         *(s32*)((u8*)BattleBreakSlotReelGetPtr(0) + 0x10) != 4 ||
+                         *(s32*)((u8*)BattleBreakSlotReelGetPtr(1) + 0x10) != 4 ||
+                         *(s32*)(reel + 0x10) != 4) &&
+                        ((*(u32*)work & 1) == 0 || *(s32*)(reel + 0x10) == 3) &&
+                        ((*(u32*)work & 4) == 0 || *(s32*)(reel + 0x10) == 3) &&
+                        ((*(u32*)(battleWork + 0x19078) & 0x80000) == 0 ||
+                         *(s32*)(reel + 0x10) == *(s32*)(battleWork + 0x1908C))) {
+                        *(f32*)(reel + 0x24) = 0.0f;
+                        *(s32*)(reel + 8) = 10;
+                        *(s32*)(reel + 0xC) = 0;
+                        *(f32*)(reel + 0x54) = *(f32*)(reel + 0x50);
+                    }
                 }
                 break;
 
@@ -359,6 +627,7 @@ void BattleBreakSlot_Main(void) {
         }
     }
 }
+
 
 void BattleBreakSlot_Disp(void) {
     volatile f32 priority = float_490_804268ac;

@@ -1171,9 +1171,13 @@ void DrawSubMenuCommonProcess(f32* outX, f32* outY, void* matrices,
     window = *(void**)((s32)battleWork + 0x1C78);
     cursor = *(void**)window;
     unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
-    menuCursor = (void*)((s32)battleWork +
-                         (*(s32*)((s32)unit + 8) == 0xDE ? 0x1BB4 : 0x1BC0));
-    visible = *(s32*)((s32)cursor + 8) < 6 ? *(s32*)((s32)cursor + 8) : 6;
+    if (*(s32*)((s32)unit + 8) == 0xDE)
+        menuCursor = (void*)((s32)battleWork + 0x1BB4);
+    else
+        menuCursor = (void*)((s32)battleWork + 0x1BC0);
+    visible = 6;
+    if (*(s32*)((s32)cursor + 8) < 6)
+        visible = *(s32*)((s32)cursor + 8);
     relative = *(s32*)((s32)cursor + 4);
     absolute = *(s32*)cursor;
     if (relative < absolute) {

@@ -91,6 +91,29 @@ void seq_e3Main(void* sequence) {
     extern void psndSFXOn(void* sound);
     extern void e3DispOffscreen(void);
     extern void dispEntry(s32 camera, s32 mode, void* callback, void* param, f32 order);
+    extern void swInit(void);
+    extern void swByteSet(s32 index, u8 value);
+    extern s32 eventStgNum(void);
+    extern void* eventStgDtPtr(s32 index);
+    extern void marioChgShipMotion(void);
+    extern void marioChgStayMotion(void);
+    extern void marioPartyKill(void);
+    extern void marioPartyEntry(s32 party);
+    extern void seqSetSeq(s32 seq, const char* map, const char* bero);
+    extern void* pouchGetPtr(void);
+    extern void* memset(void*, s32, u32);
+    extern void pouchSetMaxHP(s32 value);
+    extern void pouchSetHP(s32 value);
+    extern void pouchSetMaxFP(s32 value);
+    extern void pouchSetFP(s32 value);
+    extern void pouchGetItem(s32 item);
+    extern void pouchEquipBadgeID(s32 item);
+    extern void pouchReviseMarioParam(void);
+    extern void pouchRevisePartyParam(void);
+    extern void statusWinForceUpdate(void);
+    extern char str_gor_00_803027f4[];
+    extern char str_hei_00_803027fc[];
+    extern char str_dokan_2_80302804[];
     u8* seq = sequence;
     u8* work = wp;
     u8* camera = camGetPtr(4);
@@ -129,9 +152,7 @@ void seq_e3Main(void* sequence) {
             *(s32*)(seq + 0xC) += 1;
         }
     } else if (state == 3) {
-        if (fadeIsFinish()) {
-            *(s32*)(seq + 0xC) += 1;
-        }
+        if (fadeIsFinish()) *(s32*)(seq + 0xC) += 1;
     } else if (state == 4) {
         oldSelection = *(s32*)(work + 0xC);
         keyGetStickX(0);
@@ -165,8 +186,100 @@ void seq_e3Main(void* sequence) {
         fadeEntry(4, 200, &color);
         *(s32*)(seq + 0xC) += 1;
     } else if (state == 101) {
-        if (fadeIsFinish()) {
-            *(s32*)(seq + 0xC) += 1;
+        if (fadeIsFinish()) *(s32*)(seq + 0xC) += 1;
+    } else if (state == 102) {
+        s32 stage;
+        s32 recordIndex = 0;
+        s32 recordCount;
+        u8* stageData = 0;
+        u8* record = 0;
+        u16 mapId = *(u16*)&e3_tbl[*(s32*)(work + 0xC) * 3];
+        s32 found = 0;
+
+        swInit();
+        for (stage = 0; stage < eventStgNum() && !found; stage++) {
+            stageData = eventStgDtPtr(stage);
+            record = *(u8**)(stageData + 8);
+            recordCount = *(s32*)(stageData + 0xC);
+            for (recordIndex = 0; recordIndex < recordCount; recordIndex++, record += 0x20) {
+                if (*(u16*)(record + 4) == mapId) {
+                    found = 1;
+                    break;
+                }
+            }
+        }
+        swByteSet(0, (u8)mapId);
+        {
+            s32 i;
+            for (i = 0; i < stage - 1; i++) {
+                s32 j;
+                u8* priorStage = eventStgDtPtr(i);
+                u8* priorRecord = *(u8**)(priorStage + 8);
+                for (j = 0; j < *(s32*)(priorStage + 0xC); j++, priorRecord += 0x20) {
+                    void (*init)(void) = *(void (**)(void))(priorRecord + 0x1C);
+                    if (init != 0) init();
+                }
+            }
+        }
+        stageData = eventStgDtPtr(stage - 1);
+        record = *(u8**)(stageData + 8);
+        {
+            s32 i;
+            for (i = 0; i <= recordIndex; i++, record += 0x20) {
+                void (*init)(void) = *(void (**)(void))(record + 0x1C);
+                if (init != 0) init();
+            }
+        }
+        record = *(u8**)(stageData + 8) + recordIndex * 0x20;
+        if (*(u8*)record == 1) marioChgShipMotion();
+        else if (*(u8*)record == 0) marioChgStayMotion();
+        marioPartyKill();
+        if (*(u8*)(record + 1) != 0) marioPartyEntry(*(u8*)(record + 1));
+        if (*(u8*)(record + 2) != 0) marioPartyEntry(*(u8*)(record + 2));
+        if (*(s32*)(work + 0xC) == 0) {
+            seqSetSeq(1, str_gor_00_803027f4, 0);
+        } else if (*(s32*)(work + 0xC) == 1) {
+            seqSetSeq(1, str_hei_00_803027fc, str_dokan_2_80302804);
+        } else {
+            seqSetSeq(1, *(char**)(record + 0x14), *(char**)(record + 0x18));
+        }
+        {
+            u8* pouch = pouchGetPtr();
+            s32 i;
+            memset(pouch + 0x192, 0, 0x28);
+            pouch = pouchGetPtr();
+            memset(pouch + 0x1BA, 0, 0x40);
+            pouch = pouchGetPtr();
+            memset(pouch + 0x1FA, 0, 0x190);
+            pouch = pouchGetPtr();
+            memset(pouch + 0x38A, 0, 0x190);
+            pouchSetMaxHP(0x14);
+            pouchSetHP(0x14);
+            pouchSetMaxFP(0x14);
+            pouchSetFP(0x14);
+            for (i = 0; i < 8; i++) {
+                pouch = pouchGetPtr();
+                *(s16*)(pouch + i * 0xE + 6) = 0x14;
+                pouch = pouchGetPtr();
+                *(s16*)(pouch + i * 0xE + 8) = 1;
+            }
+            for (i = 0; i < 2; i++) {
+                pouchGetItem(0x81);
+                pouchGetItem(0x82);
+                pouchGetItem(0x84);
+                pouchGetItem(0x8B);
+            }
+            pouch = pouchGetPtr();
+            *(s16*)(pouch + 0x92) = 0x14;
+            pouch = pouchGetPtr();
+            *(s16*)(pouch + 0x94) = 0x14;
+            pouchGetItem(0xF2);
+            pouchGetItem(0xF7);
+            pouchEquipBadgeID(0xF2);
+            pouchEquipBadgeID(0xF7);
+            pouchReviseMarioParam();
+            pouchRevisePartyParam();
+            statusWinForceUpdate();
         }
     }
 

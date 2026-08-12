@@ -57,6 +57,7 @@ void* effCoinN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     u8* work;
     u8* sub;
     s32 i;
+    s32 count;
     s32* data;
 
     entry = effEntry();
@@ -73,18 +74,22 @@ void* effCoinN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     *(f32*)(work + 0xC) = y;
     *(f32*)(work + 0x10) = z;
 
+    i = 1;
+    count = 4;
     sub = work + 0x24;
     data = _data;
-    for (i = 1; i < 5; i++) {
-        *(f32*)(sub + 8) = (f32)data[1];
-        *(f32*)(sub + 0xC) = (f32)data[2];
-        *(f32*)(sub + 0x10) = (f32)data[3];
+    do {
+        s32* record = data + (i - 1) * 5;
+        i++;
+        *(f32*)(sub + 8) = (f32)record[1];
+        *(f32*)(sub + 0xC) = (f32)record[2];
+        *(f32*)(sub + 0x10) = (f32)record[3];
         *(s32*)(sub + 4) = -1;
-        *(s32*)(sub + 0x20) = data[0];
-        *(f32*)(sub + 0x1C) = scale * (f32)data[4] * float_0p01_80424f64;
-        data += 5;
+        *(s32*)(sub + 0x20) = record[0];
+        *(f32*)(sub + 0x1C) = scale * (f32)record[4] * float_0p01_80424f64;
         sub += 0x24;
-    }
+        count--;
+    } while (count != 0);
 
     return entry;
 }

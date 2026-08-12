@@ -243,12 +243,18 @@ void winItemExit(void* work) {
 }
 
 s32 winItemMain(void* pWin) {
+    extern s32 pouchGetHaveItemCnt(void);
+    extern s32 pouchHaveItem(s32 index);
     extern void winMsgEntry(void* win, s32 item, char* text, s32 type);
     extern void winSortEntry(f32 x, f32 y, void* win, s32 type);
+    extern char* msgSearch(char* key);
+    extern u8 itemDataTable[];
     extern void psndSFXOn(s32 id);
+    extern char str_msg_menu_mochi_item_802f5e44[];
+    extern char str_msg_menu_mochi_daiji_802f5e58[];
     u8* w = (u8*)pWin;
     s32 state = *(s32*)(w + 0x20C);
-    s32 sub = *(s32*)(w + 0x210);
+    u32 sub = *(u32*)(w + 0x210);
     s32 count;
     s32 pages;
     s32 cursor;
@@ -411,6 +417,7 @@ s32 winItemMain(void* pWin) {
     }
     return 0;
 }
+
 void winItemMain2(void* pWin) {
     f32 scale = float_190_80423848;
     f32 rate = float_0p25_8042384c;
@@ -670,28 +677,52 @@ void itemUseDisp(void* pWinMgr) {
             currentParty = *(s8*)((u8*)marioGetPtr() + 0x247);
         }
         partyCount = 0;
-        for (i = 0; i < 7; i++) {
-            u8* party = winPartyDt + i * 0x24;
-            if (*(s32*)party == currentParty) {
-                partyOrder[partyCount++] = party;
-            }
-        }
-        for (i = 0; i < 7; i++) {
-            u8* party = winPartyDt + i * 0x24;
-            if (*(s32*)party != currentParty) {
-                partyOrder[partyCount++] = party;
-            }
-        }
+        if (*(s32*)(winPartyDt + 0x00) == currentParty)
+            partyOrder[partyCount++] = winPartyDt + 0x00;
+        if (*(s32*)(winPartyDt + 0x24) == currentParty)
+            partyOrder[partyCount++] = winPartyDt + 0x24;
+        if (*(s32*)(winPartyDt + 0x48) == currentParty)
+            partyOrder[partyCount++] = winPartyDt + 0x48;
+        if (*(s32*)(winPartyDt + 0x6C) == currentParty)
+            partyOrder[partyCount++] = winPartyDt + 0x6C;
+        if (*(s32*)(winPartyDt + 0x90) == currentParty)
+            partyOrder[partyCount++] = winPartyDt + 0x90;
+        if (*(s32*)(winPartyDt + 0xB4) == currentParty)
+            partyOrder[partyCount++] = winPartyDt + 0xB4;
+        if (*(s32*)(winPartyDt + 0xD8) == currentParty)
+            partyOrder[partyCount++] = winPartyDt + 0xD8;
+        if (*(s32*)(winPartyDt + 0x00) != currentParty)
+            partyOrder[partyCount++] = winPartyDt + 0x00;
+        if (*(s32*)(winPartyDt + 0x24) != currentParty)
+            partyOrder[partyCount++] = winPartyDt + 0x24;
+        if (*(s32*)(winPartyDt + 0x48) != currentParty)
+            partyOrder[partyCount++] = winPartyDt + 0x48;
+        if (*(s32*)(winPartyDt + 0x6C) != currentParty)
+            partyOrder[partyCount++] = winPartyDt + 0x6C;
+        if (*(s32*)(winPartyDt + 0x90) != currentParty)
+            partyOrder[partyCount++] = winPartyDt + 0x90;
+        if (*(s32*)(winPartyDt + 0xB4) != currentParty)
+            partyOrder[partyCount++] = winPartyDt + 0xB4;
+        if (*(s32*)(winPartyDt + 0xD8) != currentParty)
+            partyOrder[partyCount++] = winPartyDt + 0xD8;
         scale.x = scale.y = scale.z = 1.0f;
         pos.z = 0.0f;
         for (i = 0; i < count; i++) {
+            s32 rowOffset;
+            if (i == 0) {
+                rowOffset = 0;
+            } else if (i == 1) {
+                rowOffset = 44;
+            } else {
+                rowOffset = (i + 1) * 28;
+            }
             if (timer != 0 && i != cursor) {
                 winIconGrayInit();
             } else {
                 winIconInit();
             }
             pos.x = (f32)(x + 30);
-            pos.y = (f32)(y - 20 - i * 60);
+            pos.y = (f32)(y - 20 - rowOffset);
             winIconSet(i == 0 ? 0x1A6 : *(s16*)((u8*)partyOrder[i - 1] + 4), &pos, &scale,
                        timer != 0 && i != cursor ? &gray : &white);
 
@@ -699,14 +730,14 @@ void itemUseDisp(void* pWinMgr) {
             GXSetTevColorIn(0, 0, 0, 0, 2);
             GXSetTevAlphaIn(0, 0, 4, 5, 7);
             pos.x = (f32)(x + 220);
-            pos.y = (f32)(y - 19 - i * 60);
+            pos.y = (f32)(y - 19 - rowOffset);
             winTexSet(0xAF, &pos, &scale, &white);
             pos.y -= 22.0f;
             winTexSet(0xAF, &pos, &scale, &white);
 
             winFontInit();
             pos.x = (f32)(x + 50);
-            pos.y = (f32)(y - 8 - i * 60);
+            pos.y = (f32)(y - 8 - rowOffset);
             if (i == 0) {
                 winFontSet(&pos, &scale, &white, msgSearch("name_mario"));
                 pos.x = (f32)(x + 110);

@@ -404,6 +404,7 @@ u8 nokonoko_use(void* party) {
                 revise360(float_50_80421694 * turn +
                           *(f32*)((s32)party + 0x10C));
         }
+        *(f32*)((s32)party + 0x114) += *(f32*)((s32)party + 0x104);
         partyMoveNoHosei(party);
         break;
     }

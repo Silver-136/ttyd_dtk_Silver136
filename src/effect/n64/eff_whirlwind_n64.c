@@ -147,7 +147,7 @@ void effWhirlwindMain(int* entry) {
     VecLocal pos;
     VecLocal drawPos;
     s32* work;
-    u32 timer;
+    s32 timer;
     s32 type;
     u32 i;
 
@@ -158,23 +158,23 @@ void effWhirlwindMain(int* entry) {
     work[9]--;
     work[10]++;
     timer = work[9];
-    if ((s32)timer < 0) {
+    if (timer < 0) {
         effDelete(entry);
     } else {
         type = work[0];
         if (type == 8) {
-            if ((s32)timer > 5) {
+            if (timer > 5) {
                 work[7] = (s32)(float_0p05_80424be4 * (f32)(255 - work[7]) + (f32)work[7]);
             }
-            work[5] = (s32)(((f32)work[6] * (f32)timer) / (f32)work[8]);
-            if ((s32)timer < 10) work[7] = timer * 25;
+            ((f32*)work)[5] = (((f32*)work)[6] * (f32)timer) / (f32)work[8];
+            if (timer < 10) work[7] = timer * 25;
         } else {
-            if ((s32)timer > 5) {
+            if (timer > 5) {
                 work[7] = (s32)(float_0p3_80424be8 * (f32)(100 - work[7]) + (f32)work[7]);
             }
-            if ((s32)timer < 10) {
+            if (timer < 10) {
                 work[7] = (s32)((f32)work[7] * float_0p8_80424bec);
-                work[5] = (s32)(float_0p1_80424bf0 * (float_2_80424be0 * (f32)work[6] - (f32)work[5]) + (f32)work[5]);
+                ((f32*)work)[5] = float_0p1_80424bf0 * (float_2_80424be0 * ((f32*)work)[6] - ((f32*)work)[5]) + ((f32*)work)[5];
             }
         }
         if (work[1] != 0) {
@@ -184,15 +184,15 @@ void effWhirlwindMain(int* entry) {
         }
         for (i = 1; (s32)i < entry[2]; i++) {
             if (type == 8) {
-                if ((i & 1) == 0) work[0x21] = (s32)(float_0p2_80424bf4 * (float_neg40_80424bfc - (f32)work[0x21]) + (f32)work[0x21]);
-                else work[0x21] = (s32)(float_0p2_80424bf4 * (float_40_80424bf8 - (f32)work[0x21]) + (f32)work[0x21]);
-                work[0x1D] = (s32)((f32)work[0x1D] + (f32)work[0x20]);
-                work[0x1E] = (s32)((f32)work[0x1E] + (f32)work[0x21]);
-                work[0x1F] = (s32)((f32)work[0x1F] + (f32)work[0x22]);
-            } else if ((s32)timer < 10) {
-                work[0x1E] = (s32)((f32)work[0x1E] + ((f32)work[0x21] * (f32)timer) / float_10_80424c00);
+                if ((i & 1) == 0) ((f32*)work)[0x21] = float_0p2_80424bf4 * (float_neg40_80424bfc - ((f32*)work)[0x21]) + ((f32*)work)[0x21];
+                else ((f32*)work)[0x21] = float_0p2_80424bf4 * (float_40_80424bf8 - ((f32*)work)[0x21]) + ((f32*)work)[0x21];
+                ((f32*)work)[0x1D] += ((f32*)work)[0x20];
+                ((f32*)work)[0x1E] += ((f32*)work)[0x21];
+                ((f32*)work)[0x1F] += ((f32*)work)[0x22];
+            } else if (timer < 10) {
+                ((f32*)work)[0x1E] += (((f32*)work)[0x21] * (f32)timer) / float_10_80424c00;
             } else {
-                work[0x1E] = (s32)((f32)work[0x1E] + (f32)work[0x21]);
+                ((f32*)work)[0x1E] += ((f32*)work)[0x21];
             }
             work += 0x12;
         }

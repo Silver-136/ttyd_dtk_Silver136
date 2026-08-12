@@ -322,52 +322,51 @@ void kpaAddScorePos(s32 score, f32* pos) {
     extern f32 float_20_804272cc;
     extern f32 float_0_804272d0;
     s32 i;
-    s32 digit;
     s32 started;
-    s32 value;
     s32 offset;
+    s8 digit10000;
+    s8 digit1000;
+    s8 digit100;
+    s8 digit10;
+    s8 digit1;
     char* out;
+    u8* slot;
 
     if (score > 10000) {
         score = 10000;
     }
     pouchAddKpaScore(score);
 
-    for (i = 0; i < 50; i++) {
-        offset = i * 0x18;
-        if (*(u8*)((s32)ksdp + offset + 8) == 0) {
+    for (i = 0, slot = ksdp; i < 50; i++, slot += 0x18) {
+        if (slot[8] == 0) {
+            digit10000 = score / 10000;
+            score %= 10000;
+            digit1000 = score / 1000;
+            score %= 1000;
+            digit100 = score / 100;
+            score %= 100;
+            digit10 = score / 10;
+            digit1 = score % 10;
+            offset = i * 0x18;
             out = (char*)((s32)ksdp + offset);
-            value = score;
             started = 0;
 
-            digit = value / 10000;
-            value -= digit * 10000;
-            if (digit != 0) {
-                *out++ = digit + '0';
-                started = 1;
+            if (digit10000 != 0) {
+                out[started++] = digit10000 + '0';
             }
-            digit = value / 1000;
-            value -= digit * 1000;
-            if (started != 0 || digit != 0) {
-                *out++ = digit + '0';
-                started++;
+            if (started != 0 || digit1000 != 0) {
+                out[started++] = digit1000 + '0';
             }
-            digit = value / 100;
-            value -= digit * 100;
-            if (started != 0 || digit != 0) {
-                *out++ = digit + '0';
-                started++;
+            if (started != 0 || digit100 != 0) {
+                out[started++] = digit100 + '0';
             }
-            digit = value / 10;
-            value -= digit * 10;
-            if (started != 0 || digit != 0) {
-                *out++ = digit + '0';
-                started++;
+            if (started != 0 || digit10 != 0) {
+                out[started++] = digit10 + '0';
             }
-            if (started != 0 || value != 0) {
-                *out++ = value + '0';
+            if (started != 0 || digit1 != 0) {
+                out[started++] = digit1 + '0';
             }
-            *out = 0;
+            out[started] = 0;
 
             *(u8*)((s32)ksdp + offset + 8) = 0x1E;
             *(f32*)((s32)ksdp + offset + 0xC) = pos[0] - float_0p5_804272c4 * (float_10_804272c8 * (f32)strlen((char*)((s32)ksdp + offset)));

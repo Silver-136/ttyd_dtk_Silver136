@@ -348,6 +348,9 @@ u8 bomhei_use_main(void* party) {
     extern void partyMoveNoHosei(void*);
     extern void partyMove(void*);
     extern u32 psndSFXOn_3D(s32, void*);
+    extern void psndSFXOff(s32);
+    extern void partyGetAppearPos(void*, void*);
+    extern void partyChgRunMode(void*, s32);
     extern char str_R_1_80421330[];
     extern char str_J_1A_80421344[];
     extern char str_L_1_8042134c[];
@@ -358,6 +361,10 @@ u8 bomhei_use_main(void* party) {
     extern f32 float_0p83333_80421340;
     extern s32 sysMsec2Frame(s32);
     extern f32 float_36_80421354;
+    extern f32 float_0p25_80421358;
+    extern char str_M_W_7_80421320[];
+    extern s32 m_w_7_sync[];
+    extern s32 strcmp(const char*, const char*);
     extern f32 float_2_804212fc;
     extern f32 float_38_8042135c;
     extern f32 float_20_80421360;
@@ -441,12 +448,17 @@ u8 bomhei_use_main(void* party) {
         }
         break;
     case 10:
+        {
+        f32 height = float_36_80421354;
         if ((*(u32*)work & 2) != 0) {
             partyChgPose(party, str_L_2_80421350);
         }
+        if (strcmp(*(char**)((s32)player + 0x18), str_M_W_7_80421320) == 0) {
+            height += (f32)m_w_7_sync[*(u8*)((s32)party + 0x17B)] * float_0p25_80421358;
+        }
         *(f32*)((s32)party + 0x58) = *(f32*)((s32)player + 0x8C);
         *(f32*)((s32)party + 0x5C) =
-            *(f32*)((s32)player + 0x90) + float_36_80421354;
+            *(f32*)((s32)player + 0x90) + height;
         *(f32*)((s32)party + 0x60) = *(f32*)((s32)player + 0x94);
         movePos(float_neg6_80421334,
                 toMovedirSimple(*(f32*)((s32)player + 0x1B0)),
@@ -469,6 +481,7 @@ u8 bomhei_use_main(void* party) {
             }
         }
         break;
+        }
     case 20:
         psndSFXOn_3D(0x939, (void*)((s32)player + 0x8C));
         *(u8*)((s32)party + 0x17A) = 30;

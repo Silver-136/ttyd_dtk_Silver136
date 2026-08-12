@@ -44,6 +44,7 @@ class Object:
             "mw_version": None,
             "shift_jis": None,
             "source": name,
+            "symbol_mappings": None,
         }
         self.options.update(options)
 
@@ -1221,6 +1222,9 @@ def generate_objdiff_config(
         for key, value in obj.options.items():
             if value is not None or key not in options:
                 options[key] = value
+
+        if options["symbol_mappings"] is not None:
+            unit_config["symbol_mappings"] = options["symbol_mappings"]
 
         unit_src_path = src_dir / str(options["source"])
 

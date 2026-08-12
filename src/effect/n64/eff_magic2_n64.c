@@ -67,48 +67,40 @@ void* effMagic2N64Entry(s32 type, s32 arg, f32 x, f32 y, f32 z, f32 scale) {
 
 void effMagic2Main(void* effect) {
     typedef struct Vec3 { f32 x; f32 y; f32 z; } Vec3;
-    extern void effDelete(void*);
-    extern f64 sin(f64);
-    extern f32 dispCalcZ(Vec3*);
-    extern void dispEntry(s32, s32, void*, void*, f32);
-    extern void effMagic2Disp(s32, s32);
-    extern f32 float_0p7_80425a48;
-    extern f32 float_6p2832_80425a4c;
-    extern f32 float_360_80425a50;
-    extern f32 float_0p4_80425a54;
-    extern f32 float_0p1_80425a58;
-    extern f32 float_0p3_80425a5c;
-    u8* work;
-    Vec3 pos;
-    s32 timer;
-    s32 i;
-
-    work = *(u8**)((s32)effect + 0xC);
-    pos.x = *(f32*)(work + 0x10); pos.y = *(f32*)(work + 0x14); pos.z = *(f32*)(work + 0x18);
-    *(s32*)(work + 0x28) -= 1;
-    *(s32*)(work + 0x2C) += 1;
-    timer = *(s32*)(work + 0x28);
-    if (timer < 0) { effDelete(effect); return; }
-    if (*(s32*)(work + 0x2C) < 11) *(s32*)(work + 0x24) = (*(s32*)(work + 0x2C) * 0xFF) / 10;
-    if (timer < 6) *(s32*)(work + 0x24) = (timer * 0xFF) / 6;
-    if (timer < 10 && *(s32*)work == 0) *(s32*)(work + 0x1C) = (s32)((f32)*(s32*)(work + 0x1C) * float_0p7_80425a48);
-    for (i = 0; i < *(s32*)((s32)effect + 8); i++) {
-        f32 wave = (f32)sin((f64)(float_6p2832_80425a4c * (f32)(timer * 10) / float_360_80425a50));
-        if (*(s32*)work == 1)
-            *(s32*)(work + 0x1C) = (s32)(float_0p4_80425a54 * (((f32)*(s32*)(work + 0x20) * float_0p1_80425a58 * wave + (f32)*(s32*)(work + 0x20)) - (f32)*(s32*)(work + 0x1C)) + (f32)*(s32*)(work + 0x1C));
-        else
-            *(s32*)(work + 0x1C) = (s32)(float_0p3_80425a5c * (((f32)*(s32*)(work + 0x20) * float_0p1_80425a58 * wave + (f32)*(s32*)(work + 0x20)) - (f32)*(s32*)(work + 0x1C)) + (f32)*(s32*)(work + 0x1C));
-        *(s32*)(work + 0x58) += *(s32*)(work + 0x5C);
-        *(s32*)(work + 0x50) += *(s32*)(work + 0x54);
-        *(s32*)(work + 0x30) += *(s32*)(work + 0x34);
-        *(s32*)(work + 0x38) += *(s32*)(work + 0x3C);
-        if (*(s32*)(work + 0x30) < 0) *(s32*)(work + 0x30) += 0x100;
-        if (*(s32*)(work + 0x38) < 0) *(s32*)(work + 0x38) += 0x100;
-        work += 0x60;
+    extern void effDelete(void*); extern f64 sin(f64); extern void* camGetPtr(s32);
+    extern void PSMTXMultVec(void*,Vec3*,Vec3*); extern void PSMTX44MultVec(void*,Vec3*,Vec3*);
+    extern f32 dispCalcZ(void*); extern void dispEntry(s32,s32,void*,void*,f32); extern void effMagic2Disp(s32,s32);
+    extern f32 vec3_802fb440[3], vec3_802fb44c[3];
+    extern f32 float_0p7_80425a48,float_6p2832_80425a4c,float_360_80425a50,float_0p4_80425a54,float_0p1_80425a58,float_0p3_80425a5c;
+    extern f32 float_304_80425a60,float_240_80425a64,float_0_80425a34;
+    u8* work=*(u8**)((s32)effect+0xC); Vec3 displayPos,projected; s32 timer,i; void* camera; f32 wave;
+    displayPos.x=vec3_802fb440[0]; displayPos.y=vec3_802fb440[1]; displayPos.z=vec3_802fb440[2];
+    displayPos.x=*(f32*)(work+0x10); displayPos.y=*(f32*)(work+0x14); displayPos.z=*(f32*)(work+0x18);
+    *(s32*)(work+0x28)-=1; *(s32*)(work+0x2C)+=1; timer=*(s32*)(work+0x28);
+    if(timer<0){effDelete(effect);return;}
+    if(*(s32*)(work+0x2C)<11) *(s32*)(work+0x24)=(*(s32*)(work+0x2C)*0xFF)/10;
+    if(timer<6) *(s32*)(work+0x24)=(timer*0xFF)/6;
+    if(timer<10&&*(s32*)work==0) *(f32*)(work+0x1C)*=float_0p7_80425a48;
+    if(*(s32*)work==1){
+        wave=(f32)sin((f64)(float_6p2832_80425a4c*(f32)(timer*10)/float_360_80425a50));
+        *(f32*)(work+0x1C)=float_0p4_80425a54*((*(f32*)(work+0x20)*float_0p1_80425a58*wave+*(f32*)(work+0x20))-*(f32*)(work+0x1C))+*(f32*)(work+0x1C);
+    }else{
+        wave=(f32)sin((f64)(float_6p2832_80425a4c*(f32)(timer*10)/float_360_80425a50));
+        *(f32*)(work+0x1C)=float_0p3_80425a5c*((*(f32*)(work+0x20)*float_0p1_80425a58*wave+*(f32*)(work+0x20))-*(f32*)(work+0x1C))+*(f32*)(work+0x1C);
     }
-    dispEntry(4, 2, effMagic2Disp, effect, dispCalcZ(&pos));
+    projected.x=vec3_802fb44c[0]; projected.y=vec3_802fb44c[1]; projected.z=vec3_802fb44c[2];
+    projected.x=*(f32*)(work+4); projected.y=*(f32*)(work+8); projected.z=*(f32*)(work+0xC);
+    camera=camGetPtr(4); PSMTXMultVec((u8*)camera+0x11C,&projected,&projected);
+    camera=camGetPtr(4); PSMTX44MultVec((u8*)camera+0x15C,&projected,&projected);
+    *(s32*)(work+0x10)=(s32)(float_304_80425a60*projected.x); *(s32*)(work+0x14)=(s32)(float_240_80425a64*projected.y); *(s32*)(work+0x18)=(s32)float_0_80425a34;
+    for(i=0;i<*(s32*)((s32)effect+8);i++){
+        *(f32*)(work+0x58)+=*(f32*)(work+0x5C); *(f32*)(work+0x50)+=*(f32*)(work+0x54);
+        *(s32*)(work+0x30)+=*(s32*)(work+0x34); *(s32*)(work+0x38)+=*(s32*)(work+0x3C);
+        *(s32*)(work+0x40)+=*(s32*)(work+0x44); *(s32*)(work+0x48)+=*(s32*)(work+0x4C);
+        if(*(s32*)(work+0x40)<0)*(s32*)(work+0x40)+=0x100; if(*(s32*)(work+0x48)<0)*(s32*)(work+0x48)+=0x100; work+=0x60;
+    }
+    dispEntry(4,2,effMagic2Disp,effect,dispCalcZ(&displayPos));
 }
-
 
 void effMagic2Disp(s32 cameraId, void* effect) {
     typedef f32 Mtx[3][4];

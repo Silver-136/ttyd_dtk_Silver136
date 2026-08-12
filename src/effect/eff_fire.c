@@ -487,46 +487,78 @@ u8 effFireDisp2(s32 camId, s32 effect) {
 }
 
 
+static u8 col_tbl[0x60] = {
+    0xAC, 0x2E, 0x00, 0xFF, 0xE0, 0x22, 0x00, 0xFF,
+    0xFD, 0x5F, 0x00, 0xFF, 0xFD, 0x5F, 0x04, 0xFF,
+    0xFF, 0x69, 0x00, 0xFF, 0xFF, 0x8A, 0x00, 0xFF,
+    0xFF, 0xB7, 0x00, 0xFF, 0xFF, 0xD7, 0x00, 0xFF,
+    0x0A, 0xE0, 0xFF, 0xFF, 0x10, 0xC3, 0xFF, 0xFF,
+    0x09, 0x61, 0xFF, 0xFF, 0x09, 0x61, 0xFF, 0xFF,
+    0xD1, 0xF9, 0xFF, 0xFF, 0xD1, 0xF9, 0xFF, 0xFF,
+    0xA3, 0xE5, 0xFF, 0xFF, 0x3A, 0xCA, 0xFF, 0xFF,
+    0x5B, 0xF6, 0x3D, 0xFF, 0x3B, 0xDE, 0x1C, 0xFF,
+    0x3B, 0xDE, 0x1C, 0xFF, 0x1D, 0xB9, 0x00, 0xFF,
+    0xDE, 0xF6, 0x18, 0xFF, 0xA0, 0xF6, 0x06, 0xFF,
+    0xA0, 0xF6, 0x06, 0xFF, 0x92, 0xE4, 0x00, 0xFF,
+};
+
 u8 effFireDisp3(s32 camId, s32 effect) {
     typedef struct GXTexObj { u32 data[8]; } GXTexObj;
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
     extern void GXSetCullMode(s32);
+    extern void PSMTXIdentity(Mtx);
+    extern void PSMTXMultVec(Mtx, Vec3*, Vec3*);
+    extern f32 getScreenPoint(f32*, f32*);
+    extern f32 float_deg2rad_80424468;
+    extern f32 float_32_80424488;
+    extern f32 float_5_8042448c;
+    extern f32 float_0p6_80424490;
+    extern f32 float_13p333_80424494;
+    extern f32 float_0p33333_80424498;
+    extern f32 float_16_8042449c;
+    extern f32 float_40_804244a0;
+    extern f32 float_0p5_80424474;
     s32* work = *(s32**)(effect + 0xC);
     char* cam = camGetPtr(camId);
     GXTexObj tex;
-    Mtx trans, rot, scale, model;
-    f32 sx = *(f32*)&work[0x1E];
-    f32 sy = *(f32*)&work[0x1F];
-    s32 i;
+    Mtx trans, rot, scale, model, local, draw;
+    f32 baseScale = *(f32*)&work[9];
+    f32 sx = baseScale * *(f32*)&work[0x1E];
+    f32 sy = baseScale * *(f32*)&work[0x1F];
+    f32 texScale = float_1_80424470 / (f32)work[0xD];
+    s32 i, pass;
+    u8* colors;
+    f32 y0, y1, v0, v1;
+    Vec3 point;
+    f32 screen[2];
 
     effGetTexObj(0x49, &tex);
     GXLoadTexObj(&tex, 0);
+    effGetTexObj(0x49, &tex);
     GXLoadTexObj(&tex, 1);
     GXSetNumChans(1);
     GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
     GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
-    PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
-    PSMTXTrans(trans, 0.0f, *(f32*)&work[0x1A], 0.0f);
+    PSMTXScale(scale, texScale, float_1_80424470, float_1_80424470);
+    PSMTXTrans(trans, (f32)work[10], float_0_80424478, float_0_80424478);
     PSMTXConcat(scale, trans, trans);
     GXLoadTexMtxImm(trans, 0x1E, 1);
-    PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
-    PSMTXTrans(trans, *(f32*)&work[0x1B], 0.0f, 0.0f);
+    PSMTXScale(scale, texScale, float_1_80424470, float_1_80424470);
+    PSMTXTrans(trans, (f32)work[11], float_0_80424478, float_0_80424478);
     PSMTXConcat(scale, trans, trans);
     GXLoadTexMtxImm(trans, 0x21, 1);
     PSMTXTrans(trans, *(f32*)&work[1], *(f32*)&work[2], *(f32*)&work[3]);
-    PSMTXRotRad(rot, -0.017453292f * *(f32*)(cam + 0x114), 'y');
-    PSMTXScale(scale, sx, sy, sx);
+    PSMTXRotRad(rot, -float_deg2rad_80424468 * *(f32*)(cam + 0x114), 'y');
+    PSMTXScale(scale, sx, sy, baseScale);
     PSMTXConcat(trans, rot, model);
     PSMTXConcat(model, scale, model);
-    PSMTXConcat(cam + 0x118, model, model);
-    GXLoadPosMtxImm(model, 0);
-    GXSetCurrentMtx(0);
     GXClearVtxDesc();
     GXSetVtxDesc(9, 1);
     GXSetVtxDesc(11, 1);
     GXSetVtxDesc(13, 1);
-    GXSetNumTevStages((work[0x22] != 0) ? 4 : 3);
+    GXSetNumTevStages(3);
     GXSetTevOrder(0, 0, 0, -1);
     GXSetTevColorOp(0, 0, 0, 0, 1, 0);
     GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
@@ -546,15 +578,86 @@ u8 effFireDisp3(s32 camId, s32 effect) {
     GXSetVtxAttrFmt(0, 9, 1, 4, 0);
     GXSetVtxAttrFmt(0, 11, 1, 5, 0);
     GXSetVtxAttrFmt(0, 13, 1, 4, 0);
-    GXBegin(0x80, 0, 12);
-    for (i = 0; i < 12; i++) {
-        *(volatile f32*)0xCC008000 = (i & 1) ? 32.0f : -32.0f;
-        *(volatile f32*)0xCC008000 = (i & 2) ? 64.0f : 0.0f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile u32*)0xCC008000 = 0xFFFFFFFF;
-        *(volatile f32*)0xCC008000 = (f32)(i & 1);
-        *(volatile f32*)0xCC008000 = (f32)((i >> 1) & 1);
+    colors = col_tbl + (work[0] - 5) * 0x20;
+    work[0x1A] = 10000;
+    work[0x1B] = -10000;
+    work[0x1C] = -10000;
+    work[0x1D] = 10000;
+    for (pass = 0; pass < 2; pass++, colors += 0x10) {
+        if (pass == 0) {
+            PSMTXIdentity(local);
+        } else {
+            PSMTXTrans(trans, float_0_80424478, float_5_8042448c, float_1_80424470);
+            PSMTXScale(scale, float_0p6_80424490, float_0p6_80424490,
+                       float_0p6_80424490);
+            PSMTXConcat(trans, scale, local);
+        }
+        PSMTXConcat(model, local, draw);
+        PSMTXConcat(cam + 0x118, draw, local);
+        GXLoadPosMtxImm(local, 0);
+        GXSetCurrentMtx(0);
+        GXBegin(0x80, 0, 12);
+        for (i = 0; i < 3; i++) {
+            y0 = float_13p333_80424494 * (f32)(i + 1);
+            y1 = float_13p333_80424494 * (f32)i;
+            v0 = float_0p33333_80424498 * (f32)(2 - i);
+            v1 = float_0p33333_80424498 * (f32)(3 - i);
+
+            *(volatile f32*)0xCC008000 = -float_32_80424488 * float_0p5_80424474;
+            *(volatile f32*)0xCC008000 = y0;
+            *(volatile f32*)0xCC008000 = float_0_80424478;
+            *(volatile u32*)0xCC008000 = *(u32*)(colors + (i + 1) * 4);
+            *(volatile f32*)0xCC008000 = float_0_80424478;
+            *(volatile f32*)0xCC008000 = v0;
+
+            *(volatile f32*)0xCC008000 = float_16_8042449c;
+            *(volatile f32*)0xCC008000 = y0;
+            *(volatile f32*)0xCC008000 = float_0_80424478;
+            *(volatile u32*)0xCC008000 = *(u32*)(colors + (i + 1) * 4);
+            *(volatile f32*)0xCC008000 = float_1_80424470;
+            *(volatile f32*)0xCC008000 = v0;
+
+            *(volatile f32*)0xCC008000 = float_16_8042449c;
+            *(volatile f32*)0xCC008000 = y1;
+            *(volatile f32*)0xCC008000 = float_0_80424478;
+            *(volatile u32*)0xCC008000 = *(u32*)(colors + i * 4);
+            *(volatile f32*)0xCC008000 = float_1_80424470;
+            *(volatile f32*)0xCC008000 = v1;
+
+            *(volatile f32*)0xCC008000 = -float_32_80424488 * float_0p5_80424474;
+            *(volatile f32*)0xCC008000 = y1;
+            *(volatile f32*)0xCC008000 = float_0_80424478;
+            *(volatile u32*)0xCC008000 = *(u32*)(colors + i * 4);
+            *(volatile f32*)0xCC008000 = float_0_80424478;
+            *(volatile f32*)0xCC008000 = v1;
+        }
+
+#define UPDATE_FIRE_BOUND(px, py) \
+        point.x = (px); \
+        point.y = (py); \
+        point.z = float_0_80424478; \
+        PSMTXMultVec(draw, &point, &point); \
+        getScreenPoint(&point.x, screen); \
+        if (screen[0] < (f32)work[0x1A]) work[0x1A] = (s32)screen[0]; \
+        if ((f32)work[0x1B] < screen[0]) work[0x1B] = (s32)screen[0]; \
+        if ((f32)work[0x1C] < screen[1]) work[0x1C] = (s32)screen[1]; \
+        if (screen[1] < (f32)work[0x1D]) work[0x1D] = (s32)screen[1]
+
+        UPDATE_FIRE_BOUND(-float_32_80424488 * float_0p5_80424474, float_40_804244a0);
+        UPDATE_FIRE_BOUND(float_16_8042449c, float_40_804244a0);
+        UPDATE_FIRE_BOUND(float_16_8042449c, float_0_80424478);
+        UPDATE_FIRE_BOUND(-float_32_80424488 * float_0p5_80424474, float_0_80424478);
+#undef UPDATE_FIRE_BOUND
     }
+    work[0x1A] += 0x130;
+    work[0x1B] += 0x130;
+    work[0x1C] = 0xF0 - work[0x1C];
+    work[0x1D] = 0xF0 - work[0x1D];
+    if (work[0x1A] < 0) work[0x1A] = 0;
+    if (work[0x1B] > 0x260) work[0x1B] = 0x260;
+    if (work[0x1C] < 0) work[0x1C] = 0;
+    if (work[0x1D] > 0x1E0) work[0x1D] = 0x1E0;
+    work[0x19] = 1;
     return 0;
 }
 #pragma no_register_save_helpers on
@@ -707,3 +810,15 @@ u8 effFireSmokeDisp(s32 camId, void* effect) {
     *(volatile f32*)0xCC008000 = float_0_80424478;
     *(volatile f32*)0xCC008000 = float_1_80424470;
 }
+
+const f32 float_0p95_8042447c = 0.95f;
+const f32 float_0p99_80424480 = 0.99f;
+const f32 float_24_804244a4 = 24.0f;
+const f32 float_12_804244a8 = 12.0f;
+const f32 float_20_804244ac = 20.0f;
+const f32 float_25_804244b0 = 25.0f;
+const f32 float_0p7854_804244b4 = 0.7853982f;
+const f32 float_2_804244b8 = 2.0f;
+const f32 float_0p03125_804244bc = 0.03125f;
+const f32 float_0p01_804244c0 = 0.01f;
+const f32 float_neg0p01_804244c4 = -0.01f;

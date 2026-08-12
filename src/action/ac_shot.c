@@ -45,107 +45,267 @@ s32 battleAcMain_Shot(void* battleWork) {
     extern s32 psndSFXOn(const char*);
     extern void psndSFXOff(s32);
     extern void dispEntry(s32, s32, void*, void*, f32);
-    extern void* BattleGetUnitPtr(void* battle, s32 index);
-    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
-    extern s32 BtlUnit_GetHeight(void* unit);
+    extern void* BattleGetUnitPtr(void*, s32);
+    extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
+    extern s32 BtlUnit_GetHeight(void*);
     extern const char str_SFX_AC_CURSOR_MOVE1_802f9bb0[];
+    extern f32 float_0_80424828;
+    extern f32 float_1_8042482c;
+    extern f32 float_neg1_8042483c;
+    extern f32 float_100_80424848;
+    extern f32 float_neg1000_8042485c;
+    extern f32 float_70_80424860;
+    extern f32 float_50_80424868;
     u8* bw = battleWork;
-    u8* disp = bw + 0x1F20;
-    s32 state = *(s32*)(bw + 0x1C9C);
-    s32 done = 0;
+    u8* extra = bw + 0x1F4C;
+    s32 state;
+    s32 done;
+    s32 value;
+    s32 index;
+    s32 i;
+    f32 randomValue;
+    f32 score;
+    f32 minScore;
+    f32 velocity;
     void* unit;
 
-    switch (state) {
-        case 0:
-            _ac_disp_init(battleWork);
-            *(s32*)(bw + 0x1CB8) = 1;
-            *(f32*)(disp + 0x0C) = (f32)*(s32*)(bw + 0x1CD8);
-            *(f32*)(disp + 0x10) = (f32)*(s32*)(bw + 0x1CDC);
-            *(f32*)(disp + 0x14) = (f32)*(s32*)(bw + 0x1CE0);
-            *(f32*)(disp + 0x18) = (f32)*(s32*)(bw + 0x1CE4);
-            *(f32*)(disp + 0x24) =
-                (f32)irand((s32)(*(f32*)(disp + 0x18) - *(f32*)(disp + 0x14))) +
-                *(f32*)(disp + 0x14);
-            *(f32*)(disp + 0x28) = (f32)*(s32*)(bw + 0x1CE8) * 0.1f;
-            *(s32*)(disp + 0x08) = 0;
-            unit = BattleGetUnitPtr(battleWork, *(s32*)(bw + 0x1CD0));
-            BtlUnit_GetPos(unit, (f32*)(disp + 0x30),
-                          (f32*)(disp + 0x34), (f32*)(disp + 0x38));
-            *(f32*)(disp + 0x34) +=
-                *(f32*)((s32)unit + 0x114) *
-                (f32)BtlUnit_GetHeight(unit) * 0.5f;
-            *(s32*)(disp + 0x64) = -1;
-            *(s32*)(bw + 0x1C9C) = 99;
-            break;
+    do {
+        state = *(s32*)(bw + 0x1C9C);
+        done = 0;
+        switch (state) {
+            case 0:
+                _ac_disp_init(battleWork);
+                *(s32*)(bw + 0x1CB8) = 1;
+                *(f32*)(extra + 0x0C) = (f32)*(s32*)(bw + 0x1CD0);
+                *(f32*)(extra + 0x10) = (f32)*(s32*)(bw + 0x1CD4);
+                *(f32*)(extra + 0x14) = (f32)*(s32*)(bw + 0x1CD8);
+                *(f32*)(extra + 0x18) = (f32)*(s32*)(bw + 0x1CDC);
+                *(f32*)(extra + 0x20) = float_100_80424848 * *(f32*)(extra + 0x0C) /
+                                        *(f32*)(extra + 0x10);
+                *(f32*)(extra + 0x1C) = *(f32*)(extra + 0x20);
+                value = irand((s32)(*(f32*)(extra + 0x18) - *(f32*)(extra + 0x14)));
+                *(f32*)(extra + 0x24) = *(f32*)(extra + 0x14) + (f32)value;
+                *(f32*)(extra + 0x28) = 0.1f * (f32)*(s32*)(bw + 0x1CE0);
+                *(s32*)(extra + 0x08) = 0;
+                *(s32*)(bw + 0x1C98) = 30;
+                unit = BattleGetUnitPtr(battleWork, *(s32*)(bw + 0x1CC8));
+                BtlUnit_GetPos(unit, (f32*)(extra + 0x30), (f32*)(extra + 0x34),
+                               (f32*)(extra + 0x38));
+                *(f32*)(extra + 0x34) += *(f32*)((s32)unit + 0x114) *
+                                         (f32)BtlUnit_GetHeight(unit) * 0.5f;
+                *(s32*)(bw + 0x1CE8) = 0;
+                *(s32*)(bw + 0x1CF4) = 0;
+                for (i = 0; i < 3; i++) {
+                    *(f32*)(extra + 0x40 + i * 4) = float_neg1000_8042485c;
+                    *(f32*)(extra + 0x4C + i * 4) = float_0_80424828;
+                    *(f32*)(extra + 0x58 + i * 4) = float_0_80424828;
+                }
+                *(s32*)(extra + 0x64) = -1;
+                *(s32*)(bw + 0x1C9C) = 99;
+                break;
 
-        case 99:
-            *(s32*)disp = 0x168;
-            *(s32*)(bw + 0x1C9C) = 1000;
-            *(s32*)(disp + 0x64) = psndSFXOn(str_SFX_AC_CURSOR_MOVE1_802f9bb0);
-            break;
+            case 99:
+            case 100:
+                *(s32*)extra = 0x168;
+                *(s32*)(bw + 0x1C9C) = 1000;
+                *(s32*)(extra + 0x64) = psndSFXOn(str_SFX_AC_CURSOR_MOVE1_802f9bb0);
+                break;
 
-        case 1000:
-            if (BattlePadCheckTrigger(0x100) == 0) {
-                *(s32*)disp -= 1;
-                if (*(s32*)disp < 1) {
-                    *(s32*)(bw + 0x1CB8) = 0;
-                    *(s32*)(bw + 0x1C9C) = 1002;
+            case 1000:
+                if ((*(u32*)(bw + 0x1C94) & 1) != 0 &&
+                    (*(u32*)(*(s32*)(bw + 0x1C90) + 0x27C) & 0x10) != 0) {
+                    if ((*(u32*)(bw + 0x1C94) & 2) != 0) {
+                        *(s32*)(bw + 0x1C98) -= 1;
+                        if (*(s32*)(bw + 0x1C98) >= 0) {
+                            break;
+                        }
+                    }
+                    randomValue = *(f32*)(extra + 0x10) - *(f32*)(extra + 0x0C);
+                    if (randomValue != float_0_80424828) {
+                        value = irand((s32)randomValue);
+                        randomValue = *(f32*)(extra + 0x0C) + (f32)value;
+                    } else {
+                        randomValue = *(f32*)(extra + 0x0C);
+                    }
+                    score = *(f32*)(extra + 0x10) * (f32)(s32)randomValue /
+                            float_100_80424848;
+                    minScore = *(f32*)(extra + 0x0C);
+                    if (score < minScore) {
+                        score = minScore;
+                    }
+                    *(s32*)(bw + 0x1CEC) = (s32)score;
+                    *(s32*)(bw + 0x1CF0) = (s32)*(f32*)(extra + 0x24);
+                    *(s32*)(bw + 0x1CE8) = 1;
+                    index = *(s32*)(extra + 0x08);
+                    *(f32*)(extra + 0x40 + index * 4) = *(f32*)(extra + 0x24);
+                    *(f32*)(extra + 0x4C + index * 4) = *(f32*)(extra + 0x2C);
+                    *(f32*)(extra + 0x58 + index * 4) = float_70_80424860;
+                    *(s32*)(extra + 0x08) = index + 1;
+                    *(s32*)(bw + 0x1CF4) += 1;
+                    if (*(s32*)(extra + 0x08) >= *(s32*)(bw + 0x1CCC)) {
+                        *(s32*)(bw + 0x1CB8) = 2;
+                        return 0;
+                    }
+                    if ((*(u32*)(bw + 0x1C94) & 2) != 0) {
+                        *(s32*)(bw + 0x1C98) = 30;
+                    }
+                } else {
+                    if (BattlePadCheckTrigger(0x100) == 0 &&
+                        *(s32*)(bw + 0x1CE8) == 0 &&
+                        *(s16*)(bw + 0x1D18) <= 0) {
+                        *(s32*)extra -= 1;
+                        if (*(s32*)extra < 1) {
+                            score = *(f32*)(extra + 0x10) * *(f32*)(extra + 0x1C) /
+                                    float_100_80424848;
+                            minScore = *(f32*)(extra + 0x0C);
+                            if (score < minScore) {
+                                score = minScore;
+                            }
+                            *(s32*)(bw + 0x1CEC) = (s32)score;
+                            *(s32*)(bw + 0x1CF0) = (s32)*(f32*)(extra + 0x24);
+                            *(s32*)(bw + 0x1CE8) = 1;
+                            index = *(s32*)(extra + 0x08);
+                            *(f32*)(extra + 0x40 + index * 4) = *(f32*)(extra + 0x24);
+                            *(f32*)(extra + 0x4C + index * 4) = *(f32*)(extra + 0x2C);
+                            *(f32*)(extra + 0x58 + index * 4) = float_70_80424860;
+                            *(s32*)(extra + 0x08) = index + 1;
+                            *(s32*)(bw + 0x1CF4) += 1;
+                            if (*(s32*)(extra + 0x08) >= *(s32*)(bw + 0x1CCC)) {
+                                *(s32*)(bw + 0x1CB8) = 0;
+                                *(s32*)(bw + 0x1C9C) = 1002;
+                            } else {
+                                *(s32*)extra = 0x168;
+                            }
+                            done = 1;
+                        }
+                    } else if (*(s32*)(bw + 0x1CE8) == 0) {
+                        *(s32*)(bw + 0x1C9C) = 1001;
+                    }
+                    velocity = *(f32*)(extra + 0x28);
+                    if (velocity != float_0_80424828) {
+                        *(f32*)(extra + 0x24) += velocity;
+                        if (velocity > float_0_80424828) {
+                            if (*(f32*)(extra + 0x24) >= *(f32*)(extra + 0x18)) {
+                                *(f32*)(extra + 0x24) = *(f32*)(extra + 0x18);
+                                *(f32*)(extra + 0x28) *= float_neg1_8042483c;
+                            }
+                        } else if (*(f32*)(extra + 0x24) <= *(f32*)(extra + 0x14)) {
+                            *(f32*)(extra + 0x24) = *(f32*)(extra + 0x14);
+                            *(f32*)(extra + 0x28) *= float_neg1_8042483c;
+                        }
+                    }
+                    *(f32*)(extra + 0x2C) += 8.0f;
+                }
+                break;
+
+            case 1001:
+                if (*(s16*)(bw + 0x1D18) > 0) {
+                    score = float_50_80424868 * *(f32*)(extra + 0x10) /
+                            float_100_80424848;
+                    minScore = *(f32*)(extra + 0x0C);
+                    if (score < minScore) {
+                        score = minScore;
+                    }
+                    *(s32*)(bw + 0x1CEC) = (s32)score;
+                    *(s32*)(bw + 0x1CF0) = (s32)*(f32*)(extra + 0x24);
+                    *(s32*)(bw + 0x1CE8) = 1;
+                    index = *(s32*)(extra + 0x08);
+                    *(f32*)(extra + 0x40 + index * 4) = *(f32*)(extra + 0x24);
+                    *(f32*)(extra + 0x4C + index * 4) = *(f32*)(extra + 0x2C);
+                    *(f32*)(extra + 0x58 + index * 4) = float_70_80424860;
+                    *(s32*)(extra + 0x08) = index + 1;
+                    *(s32*)(bw + 0x1CF4) += 1;
+                    if (*(s32*)(extra + 0x08) >= *(s32*)(bw + 0x1CCC)) {
+                        *(s16*)(bw + 0x1D18) -= 1;
+                        *(s32*)(bw + 0x1CB8) = 2;
+                        *(s32*)(bw + 0x1C9C) = 1002;
+                    } else {
+                        *(s32*)(bw + 0x1C9C) = 1000;
+                    }
                     done = 1;
                 }
-            } else {
-                *(s32*)(bw + 0x1C9C) = 1001;
-            }
-            *(f32*)(disp + 0x24) += *(f32*)(disp + 0x28);
-            *(f32*)(disp + 0x2C) += 8.0f;
-            break;
+                *(f32*)(extra + 0x1C) += float_1_8042482c;
+                if (*(f32*)(extra + 0x1C) > float_100_80424848) {
+                    *(f32*)(extra + 0x1C) = float_100_80424848;
+                }
+                if ((*(u32*)(bw + 0x1CC4) & 1) != 0) {
+                    score = (*(f32*)(extra + 0x0C) + *(f32*)(extra + 0x10)) *
+                            0.5f;
+                    *(s32*)(bw + 0x1CEC) = (s32)score;
+                    *(s32*)(bw + 0x1CF0) = (s32)*(f32*)(extra + 0x24);
+                    *(s32*)(bw + 0x1CE8) = 1;
+                    index = *(s32*)(extra + 0x08);
+                    *(f32*)(extra + 0x40 + index * 4) = *(f32*)(extra + 0x24);
+                    *(f32*)(extra + 0x4C + index * 4) = *(f32*)(extra + 0x2C);
+                    *(f32*)(extra + 0x58 + index * 4) = float_70_80424860;
+                    *(s32*)(extra + 0x08) = index + 1;
+                    *(s32*)(bw + 0x1CF4) += 1;
+                    if (*(s32*)(extra + 0x08) >= *(s32*)(bw + 0x1CCC)) {
+                        *(s32*)(bw + 0x1C9C) = 1002;
+                        *(s32*)(bw + 0x1CB8) = 2;
+                    } else {
+                        *(s32*)(bw + 0x1C9C) = 1000;
+                    }
+                } else if (BattlePadCheckNow(0x100) == 0) {
+                    score = *(f32*)(extra + 0x10) * *(f32*)(extra + 0x1C) /
+                            float_100_80424848;
+                    minScore = *(f32*)(extra + 0x0C);
+                    if (score < minScore) {
+                        score = minScore;
+                    }
+                    *(s32*)(bw + 0x1CEC) = (s32)score;
+                    *(s32*)(bw + 0x1CF0) = (s32)*(f32*)(extra + 0x24);
+                    *(s32*)(bw + 0x1CE8) = 1;
+                    index = *(s32*)(extra + 0x08);
+                    *(f32*)(extra + 0x40 + index * 4) = *(f32*)(extra + 0x24);
+                    *(f32*)(extra + 0x4C + index * 4) = *(f32*)(extra + 0x2C);
+                    *(f32*)(extra + 0x58 + index * 4) = float_70_80424860;
+                    *(s32*)(extra + 0x08) = index + 1;
+                    *(s32*)(bw + 0x1CF4) += 1;
+                    if (*(s32*)(extra + 0x08) >= *(s32*)(bw + 0x1CCC)) {
+                        *(s32*)(bw + 0x1C9C) = 1002;
+                        *(s32*)(bw + 0x1CB8) = 2;
+                    } else {
+                        *(s32*)(bw + 0x1C9C) = 1000;
+                    }
+                }
+                break;
 
-        case 1001:
-            if (BattlePadCheckNow(0x100) == 0) {
-                *(s32*)(bw + 0x1CB8) = 2;
-                *(s32*)(bw + 0x1C9C) = 1002;
-                done = 1;
-            }
-            break;
-
-        case 1002:
-            *(s32*)(bw + 0x1C9C) = 1003;
-            break;
-
-        case 1003:
-            break;
-
-        case 1004:
-            *(s32*)(disp + 0x3C) = 0x3C;
-            *(s32*)(bw + 0x1C9C) = 1005;
-            if (*(s32*)(disp + 0x64) != -1) {
-                psndSFXOff(*(s32*)(disp + 0x64));
-            }
-            break;
-
-        case 1005:
-            *(s32*)(disp + 0x3C) -= 1;
-            if (*(s32*)(disp + 0x3C) < 1) {
-                *(s32*)(bw + 0x1C9C) = 1006;
-            }
-            break;
-
-        case 1006:
-            *(void**)(bw + 0x1CA0) = 0;
-            *(void**)(bw + 0x1CA4) = 0;
-            *(void**)(bw + 0x1CA8) = 0;
-            *(void**)(bw + 0x1CAC) = 0;
-            break;
-    }
-
-    if (!done) {
-        state = *(s32*)(bw + 0x1C9C);
-        if (state == 1000 || state == 1001) {
-            dispEntry(2, 1, _disp_target_mark, battleWork, 900.0f);
+            case 1002:
+                *(s32*)(bw + 0x1C9C) = 1003;
+                break;
+            case 1003:
+                break;
+            case 1004:
+                *(s32*)(extra + 0x3C) = 60;
+                *(s32*)(bw + 0x1C9C) = 1005;
+                if (*(s32*)(extra + 0x64) != -1) {
+                    psndSFXOff(*(s32*)(extra + 0x64));
+                }
+                break;
+            case 1005:
+                *(s32*)(extra + 0x3C) -= 1;
+                if (*(s32*)(extra + 0x3C) < 1) {
+                    *(s32*)(bw + 0x1C9C) = 1006;
+                }
+                break;
+            case 1006:
+                *(void**)(bw + 0x1CA0) = 0;
+                *(void**)(bw + 0x1CA4) = 0;
+                *(void**)(bw + 0x1CA8) = 0;
+                *(void**)(bw + 0x1CAC) = 0;
+                break;
         }
-        dispEntry(2, 1, _disp_target_mark_afterimage, battleWork, 900.0f);
-        return 1;
-    }
-    return 0;
+
+        if (!done) {
+            state = *(s32*)(bw + 0x1C9C);
+            if (state == 1000 || state == 1001) {
+                dispEntry(2, 1, _disp_target_mark, battleWork, 900.0f);
+            }
+            dispEntry(2, 1, _disp_target_mark_afterimage, battleWork, 900.0f);
+            return 1;
+        }
+    } while (1);
 }
 
 s32 battleAcResult_Shot(void* wp) {

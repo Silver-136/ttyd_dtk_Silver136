@@ -779,172 +779,204 @@ void kpaAttackStart2(void) {
 void kpaFireAttack(void) {
     extern void* marioGetPtr(void);
     extern void marioChgPose(void*);
-    extern u32 psndSFXOn_3D(void*, void*);
-    extern void psndSFXOff(u32);
+    extern u32 psndSFXOn_3D(s32, void*);
+    extern void psndSFXOff(s32);
     extern s32 sysMsec2Frame(s32);
     extern void* effGonbabaBreathEntry(f64, f64, f64, f64, s32, s32);
     extern void* fireefp;
     extern f32 baseScaleTbl[4];
+    extern f32 float_0p4_80426740;
+    extern const char str_KPA_W_1_802fd2c4[], str_KPA2_W_1_802fd2cc[];
+    extern const char str_KPA_R_1_802fd2d8[], str_KPA2_R_1_802fd2e0[];
     u8* mario = marioGetPtr();
     u8* work = *(u8**)(mario + 0x298);
     s32 state = *(s32*)(work + 0x13C);
-    s32 level;
-    s32 left;
-    f32 dir;
-    f32 scale;
+
+#define SELECT_POSE(normalPose, twoDPose)                                      \
+    (((*(u32*)((u8*)marioGetPtr() + 0x14) & 1) != 0) ? (void*)(twoDPose) :    \
+                                                   (void*)(normalPose))
+#define START_SOUND()                                                         \
+    do {                                                                      \
+        u8* soundMario = marioGetPtr();                                        \
+        u8* soundWork = *(u8**)(soundMario + 0x298);                           \
+        s32 soundId = *(s32*)(soundWork + 0x14C);                              \
+        if ((u32)(soundId + 0x10000) == 0xFFFF) {                            \
+            *(u32*)(soundWork + 0x14C) = psndSFXOn_3D(0x821,                 \
+                                                       soundMario + 0x8C);     \
+            psndSFXOn_3D(0x131, soundMario + 0x8C);                     \
+        }                                                                      \
+    } while (0)
+#define STOP_SOUND()                                                          \
+    do {                                                                      \
+        u8* soundMario = marioGetPtr();                                        \
+        u8* soundWork = *(u8**)(soundMario + 0x298);                           \
+        s32 soundId = *(s32*)(soundWork + 0x14C);                              \
+        if ((u32)(soundId + 0x10000) != 0xFFFF) {                            \
+            psndSFXOff(soundId);                                               \
+            *(s32*)(soundWork + 0x14C) = -1;                                  \
+        }                                                                      \
+    } while (0)
+#define SPAWN_FIRE()                                                          \
+    do {                                                                      \
+        u8* fireMario = marioGetPtr();                                         \
+        u8* fireWork = *(u8**)(fireMario + 0x298);                             \
+        if (fireefp == NULL) {                                                 \
+            s32 left;                                                         \
+            f32 side;                                                         \
+            u32 level;                                                        \
+            u8* levelMario;                                                   \
+            f32 scale;                                                        \
+            u8* flagMario;                                                    \
+            f32 yExtra;                                                       \
+            f64 power;                                                        \
+            s32 kind;                                                         \
+            left = (*(f32*)(fireMario + 0x1AC) >= 90.0f &&                    \
+                    *(f32*)(fireMario + 0x1AC) <= 270.0f);                    \
+            side = left ? 1.0f : -1.0f;                                      \
+            level = 0;                                                        \
+            levelMario = marioGetPtr();                                       \
+            if ((s32)*(u8*)(levelMario + 0x3C) == 2) {                         \
+                u8* levelWork = *(u8**)(levelMario + 0x298);                   \
+                level = *(u32*)(levelWork + 4);                                \
+            }                                                                  \
+            scale = baseScaleTbl[level];                                      \
+            flagMario = marioGetPtr();                                        \
+            yExtra = ((*(u32*)(flagMario + 0x14) & 1) == 0) ? 6.0f : 0.0f;    \
+            power = float_0p4_80426740;                                       \
+            kind = 7;                                                         \
+            if (*(u32*)(fireWork + 4) == 0) power = 0.3;                       \
+            else if (*(u32*)(fireWork + 4) == 1) power = 1.0;                  \
+            else if (*(u32*)(fireWork + 4) == 2) power = 1.4;                  \
+            else if (*(u32*)(fireWork + 4) == 3) { power = 1.5; kind = 0; }    \
+            fireefp = effGonbabaBreathEntry(                                  \
+                *(f32*)(fireMario + 0x8C) + 40.0f * side * scale,             \
+                *(f32*)(fireMario + 0x90) + 20.0f * scale + yExtra,           \
+                *(f32*)(fireMario + 0x94), power, kind, 0);                   \
+            {                                                                 \
+                s32 targetLeft = (*(f32*)(fireMario + 0x1B0) >= 90.0f &&       \
+                                  *(f32*)(fireMario + 0x1B0) <= 270.0f);        \
+                u8* effectWork = *(u8**)((u8*)fireefp + 0xC);                 \
+                *(f32*)(effectWork + 0x48) = targetLeft ? 180.0f : 0.0f;       \
+                if (*(void**)(effectWork + 0x4C) != NULL) {                   \
+                    u8* child = *(u8**)((u8*)*(void**)(effectWork + 0x4C) + 0xC);\
+                    *(f32*)(child + 0x48) = targetLeft ? 180.0f : 0.0f;         \
+                }                                                             \
+            }                                                                 \
+        }                                                                      \
+    } while (0)
 
     switch (state) {
         case 1:
-            *(u32*)mario &= ~0x7800;
+            *(u32*)mario &= ~0xF0000;
             *(s16*)(mario + 0x50) = 0;
             *(s32*)(work + 0xD8) = *(s32*)(work + 4) == 0 ? 12 : 8;
             *(s32*)(work + 0xE0) = 0;
             *(s32*)(work + 0x140) = 0;
-            *(s32*)(work + 0x13C) = 20;
-            if ((*(u32*)mario & 0x200000) == 0) {
-                *(f32*)(mario + 0x88) = 0.0f;
+            *(s32*)(work + 0x13C) = 0x14;
+            if ((*(u32*)mario & 0x20) == 0) {
+                *(f32*)(mario + 0x180) = 0.0f;
                 *(f32*)(mario + 0x2DC) = 0.0f;
             }
-        case 20:
-            mario = marioGetPtr();
-            marioChgPose((*(u32*)(mario + 0x14) & 1) ? (void*)"KPA2_A_1A" : (void*)"KPA_A_1A");
+        case 0x14:
+            marioChgPose(SELECT_POSE("KPA_A_1A", "KPA2_A_1A"));
             *(s32*)(work + 0x140) = 6;
-            *(s32*)(work + 0x13C) = 21;
+            *(s32*)(work + 0x13C) = 0x15;
             break;
-        case 21:
-            if (--*(s32*)(work + 0x140) < 1) {
-                mario = marioGetPtr();
-                marioChgPose((*(u32*)(mario + 0x14) & 1) ? (void*)"KPA2_A_1B" : (void*)"KPA_A_1B");
+        case 0x15:
+            if (--*(s32*)(work + 0x140) <= 0) {
+                marioChgPose(SELECT_POSE("KPA_A_1B", "KPA2_A_1B"));
                 *(s32*)(work + 0x140) = 8;
-                *(s32*)(work + 0x13C) = 22;
-                mario = marioGetPtr();
-                work = *(u8**)(mario + 0x298);
-                if (*(s32*)(work + 0x14C) == -1) {
-                    *(u32*)(work + 0x14C) = psndSFXOn_3D((void*)0x821, mario + 0x8C);
-                    psndSFXOn_3D((void*)0x131, mario + 0x8C);
-                }
+                *(s32*)(work + 0x13C) = 0x16;
+                START_SOUND();
             }
             break;
-        case 22:
-            mario = marioGetPtr();
-            work = *(u8**)(mario + 0x298);
-            if (fireefp == NULL) {
-                left = (*(f32*)(mario + 0x1A4) >= 90.0f && *(f32*)(mario + 0x1A4) <= 270.0f);
-                dir = left ? 1.0f : -1.0f;
-                level = (*(u8*)(mario + 0x3C) == 2) ? *(s32*)(work + 4) : 0;
-                scale = baseScaleTbl[level];
-                fireefp = effGonbabaBreathEntry(
-                    *(f32*)(mario + 0x8C) + 40.0f * dir * scale,
-                    *(f32*)(mario + 0x90) + 20.0f * scale +
-                        ((*(u32*)(mario + 0x14) & 1) ? 0.0f : 6.0f),
-                    *(f32*)(mario + 0x94),
-                    *(s32*)(work + 4) == 0 ? 0.3 : *(s32*)(work + 4) == 1 ? 1.0 :
-                    *(s32*)(work + 4) == 2 ? 1.4 : 1.5,
-                    *(s32*)(work + 4) == 3 ? 0 : 7, 0);
-                left = (*(f32*)(mario + 0xAC) >= 90.0f && *(f32*)(mario + 0xAC) <= 270.0f);
-                *(f32*)((u8*)*(void**)((u8*)fireefp + 0xC) + 0x48) = left ? 180.0f : 0.0f;
-                if (*(void**)((u8*)*(void**)((u8*)fireefp + 0xC) + 0x4C)) {
-                    u8* child = *(u8**)((u8*)*(void**)((u8*)*(void**)((u8*)fireefp + 0xC) + 0x4C) + 0xC);
-                    *(f32*)(child + 0x48) = left ? 180.0f : 0.0f;
-                }
-            }
-            if (--*(s32*)(work + 0x140) < 1) {
+        case 0x16:
+            SPAWN_FIRE();
+            if (--*(s32*)(work + 0x140) <= 0) {
                 *(s32*)(work + 0x140) = sysMsec2Frame(400);
-                mario = marioGetPtr();
-                marioChgPose((*(u32*)(mario + 0x14) & 1) ? (void*)"KPA2_A_1C" : (void*)"KPA_A_1C");
-                *(s32*)(work + 0x13C) = 23;
+                marioChgPose(SELECT_POSE("KPA_A_1C", "KPA2_A_1C"));
+                *(s32*)(work + 0x13C) = 0x17;
             }
             break;
-        case 23:
-            if (--*(s32*)(work + 0x140) < 1 && *(s32*)(work + 0x144) == 0) {
-                mario = marioGetPtr();
-                marioChgPose((*(u32*)(mario + 0x14) & 1) ? (void*)"KPA2_A_1D" : (void*)"KPA_A_1D");
-                *(s32*)(work + 0x13C) = 24;
+        case 0x17:
+            SPAWN_FIRE();
+            if (--*(s32*)(work + 0x140) <= 0 &&
+                ((*(u16*)(mario + 0x24A) & 0x200) == 0) &&
+                (*(s32*)(work + 0x144) == 0)) {
+                marioChgPose(SELECT_POSE("KPA_A_1D", "KPA2_A_1D"));
+                *(s32*)(work + 0x13C) = 0x18;
                 *(s32*)(work + 0x140) = 6;
-                if (*(s32*)(work + 0x14C) != -1) {
-                    psndSFXOff(*(u32*)(work + 0x14C));
-                    *(s32*)(work + 0x14C) = -1;
-                }
+                STOP_SOUND();
             }
             break;
-        case 24:
-            if (--*(s32*)(work + 0x140) < 1) {
+        case 0x18:
+            if (--*(s32*)(work + 0x140) <= 0) {
                 *(s32*)(work + 0x13C) = 0;
-                mario = marioGetPtr();
-                marioChgPose((*(u32*)(mario + 0x14) & 1) ? (void*)"KPA2_S_1" : (void*)"KPA_S_1");
+                marioChgPose(SELECT_POSE("KPA_S_1", "KPA2_S_1"));
             }
             break;
     }
 
     state = *(s32*)(work + 0x13C);
     switch (state) {
-        case 30:
+        case 0x1E:
             *(s32*)(work + 0xD8) = *(s32*)(work + 4) == 0 ? 12 : 8;
             *(s32*)(work + 0xE0) = 0;
             *(s32*)(work + 0x140) = 0;
-            *(s32*)(work + 0x13C) = 40;
-            if ((*(u32*)mario & 0x200000) == 0) {
-                *(f32*)(mario + 0x88) = 0.0f;
+            *(s32*)(work + 0x13C) = 0x28;
+            if ((*(u32*)mario & 0x20) == 0) {
+                *(f32*)(mario + 0x180) = 0.0f;
                 *(f32*)(mario + 0x2DC) = 0.0f;
             }
-        case 40:
-            mario = marioGetPtr();
-            marioChgPose((*(u32*)(mario + 0x14) & 1) ? (void*)"KPA2_A_1A" : (void*)"KPA_A_1A");
+        case 0x28:
+            marioChgPose(SELECT_POSE("KPA_A_1A", "KPA2_A_1A"));
             *(s32*)(work + 0x140) = 6;
-            *(s32*)(work + 0x13C) = 41;
+            *(s32*)(work + 0x13C) = 0x29;
             break;
-        case 41:
-            if (--*(s32*)(work + 0x140) < 1) {
-                mario = marioGetPtr();
-                marioChgPose((*(u32*)(mario + 0x14) & 1) ? (void*)"KPA2_A_1B" : (void*)"KPA_A_1B");
+        case 0x29:
+            if (--*(s32*)(work + 0x140) <= 0) {
+                marioChgPose(SELECT_POSE("KPA_A_1B", "KPA2_A_1B"));
                 *(s32*)(work + 0x140) = 8;
-                *(s32*)(work + 0x13C) = 42;
+                *(s32*)(work + 0x13C) = 0x2A;
+                START_SOUND();
             }
             break;
-        case 42:
-            mario = marioGetPtr();
-            work = *(u8**)(mario + 0x298);
-            if (fireefp == NULL) {
-                left = (*(f32*)(mario + 0x1A4) >= 90.0f && *(f32*)(mario + 0x1A4) <= 270.0f);
-                dir = left ? 1.0f : -1.0f;
-                level = (*(u8*)(mario + 0x3C) == 2) ? *(s32*)(work + 4) : 0;
-                scale = baseScaleTbl[level];
-                fireefp = effGonbabaBreathEntry(
-                    *(f32*)(mario + 0x8C) + 40.0f * dir * scale,
-                    *(f32*)(mario + 0x90) + 20.0f * scale +
-                        ((*(u32*)(mario + 0x14) & 1) ? 0.0f : 6.0f),
-                    *(f32*)(mario + 0x94),
-                    *(s32*)(work + 4) == 0 ? 0.3 : *(s32*)(work + 4) == 1 ? 1.0 :
-                    *(s32*)(work + 4) == 2 ? 1.4 : 1.5,
-                    *(s32*)(work + 4) == 3 ? 0 : 7, 0);
-                left = (*(f32*)(mario + 0xAC) >= 90.0f && *(f32*)(mario + 0xAC) <= 270.0f);
-                *(f32*)((u8*)*(void**)((u8*)fireefp + 0xC) + 0x48) = left ? 180.0f : 0.0f;
-                if (*(void**)((u8*)*(void**)((u8*)fireefp + 0xC) + 0x4C)) {
-                    u8* child = *(u8**)((u8*)*(void**)((u8*)*(void**)((u8*)fireefp + 0xC) + 0x4C) + 0xC);
-                    *(f32*)(child + 0x48) = left ? 180.0f : 0.0f;
-                }
-            }
-            if (--*(s32*)(work + 0x140) < 1) {
+        case 0x2A:
+            SPAWN_FIRE();
+            if (--*(s32*)(work + 0x140) <= 0) {
                 *(s32*)(work + 0x140) = sysMsec2Frame(400);
-                mario = marioGetPtr();
-                marioChgPose((*(u32*)(mario + 0x14) & 1) ? (void*)"KPA2_A_1C" : (void*)"KPA_A_1C");
-                *(s32*)(work + 0x13C) = 43;
+                marioChgPose(SELECT_POSE("KPA_A_1C", "KPA2_A_1C"));
+                *(s32*)(work + 0x13C) = 0x2B;
             }
             break;
-        case 43:
-            if (--*(s32*)(work + 0x140) < 1 && *(s32*)(work + 0x144) == 0) {
-                mario = marioGetPtr();
-                marioChgPose((*(u32*)(mario + 0x14) & 1) ? (void*)"KPA2_A_1D" : (void*)"KPA_A_1D");
-                *(s32*)(work + 0x13C) = 44;
+        case 0x2B:
+            SPAWN_FIRE();
+            if (--*(s32*)(work + 0x140) <= 0 &&
+                ((*(u16*)(mario + 0x24A) & 0x200) == 0) &&
+                *(s32*)(work + 0x144) == 0) {
+                marioChgPose(SELECT_POSE("KPA_A_1D", "KPA2_A_1D"));
+                *(s32*)(work + 0x13C) = 0x2C;
                 *(s32*)(work + 0x140) = 6;
+                STOP_SOUND();
             }
             break;
-        case 44:
-            if (--*(s32*)(work + 0x140) < 1) {
+        case 0x2C:
+            if (--*(s32*)(work + 0x140) <= 0) {
                 *(s32*)(work + 0x13C) = 0;
+                if (*(u16*)(mario + 0x2E) == 1) {
+                    marioChgPose(SELECT_POSE(str_KPA_R_1_802fd2d8, str_KPA2_R_1_802fd2e0));
+                } else if (*(u16*)(mario + 0x2E) == 0) {
+                    marioChgPose(SELECT_POSE("KPA_S_1", "KPA2_S_1"));
+                } else {
+                    marioChgPose(SELECT_POSE(str_KPA_W_1_802fd2c4, str_KPA2_W_1_802fd2cc));
+                }
             }
             break;
     }
+#undef SPAWN_FIRE
+#undef STOP_SOUND
+#undef START_SOUND
+#undef SELECT_POSE
 }
 
 u8 kpaCancelAttackMode(void) {

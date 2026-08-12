@@ -373,109 +373,262 @@ void battleAcDelete_PowerGauge(void* wp) {
 /* stub-fill: actionCommandDisp | prototype_only | source_prototype */
 void actionCommandDisp(f32 x, f32 y) {
     typedef struct VecLocal {
-        f32 x, y, z;
+        f32 x;
+        f32 y;
+        f32 z;
     } VecLocal;
+
+    typedef struct PowerGaugeDispWorkLocal {
+        u8 pad_00[0x28];
+        f32 ratioGaugeFilled;
+    } PowerGaugeDispWorkLocal;
+
+    typedef struct PowerGaugeExtraWorkLocal {
+        s32 field_00;
+        f32 gaugeValue;
+        u8 pad_08[0xA];
+        s8 inputMode;
+    } PowerGaugeExtraWorkLocal;
+
     extern void* _battleWorkPointer;
-    extern void* camGetPtr(s32);
-    extern void BattleAcDrawGauge(s32, s32, s32, s32, s32, s32, s32, s32);
-    extern s32 BattleACGetButtonIcon(u32, s32);
-    extern void iconDispGx(f64, VecLocal*, s32, s32);
+    extern void* camGetPtr(s32 cameraId);
+    extern void BattleAcDrawGauge(
+        s32 x, s32 y, s32 icon, s32 mode, s32 value,
+        s32 bar1, s32 bar2, s32 flags);
+    extern u16 BattleACGetButtonIcon(u32 button, s32 pressed);
+    extern void iconDispGx(f64 scale, VecLocal* pos, u16 flags, u16 iconId);
 
-    u8* wp = (u8*)_battleWorkPointer;
-    u8* extra = wp + 0x1F4C;
-    s32* params = (s32*)(wp + 0x1CC8);
-    f32 value = *(f32*)(extra + 4);
-    f32 ratio = value / 100.0f;
-    u32 flags = *(u32*)(wp + 0x1C94);
-    s32 mode = *(s32*)(wp + 0x1C9C);
-    s32 left = 0;
-    s32 right = 0;
-    s32 left2 = 0;
-    s32 right2 = 0;
-    VecLocal pos;
+    u8* battleWork = (u8*)_battleWorkPointer;
+    PowerGaugeDispWorkLocal* dispWork =
+        (PowerGaugeDispWorkLocal*)(battleWork + 0x1F20);
+    PowerGaugeExtraWorkLocal* extraWork =
+        (PowerGaugeExtraWorkLocal*)(battleWork + 0x1F4C);
+    s32* params = (s32*)(battleWork + 0x1CC8);
+    u32 acFlags;
+    s32 state;
+    u16 pressedIcon = 0;
+    u16 releasedIcon = 0;
+    u16 pressedSecondIcon = 0;
+    u16 releasedSecondIcon = 0;
+    f32 ratio;
 
-    camGetPtr(1);
+    camGetPtr(8);
+
+    ratio = extraWork->gaugeValue / 100.0f;
     if (ratio > 1.0f) {
         ratio = 1.0f;
     }
-    *(f32*)(wp + 0x1F28) = ratio;
+    dispWork->ratioGaugeFilled = ratio;
 
-    if ((flags & 2) == 0) {
-        BattleAcDrawGauge((s32)x, (s32)y, 0xB2, 2, params[4], 100, 100, 0);
+    if ((*(u32*)(battleWork + 0x1CC4) & 2) != 0) {
+        BattleAcDrawGauge(
+            (s32)x, (s32)y, 0xB2, 1, 100, 100, 100, 0);
     } else {
-        BattleAcDrawGauge((s32)x, (s32)y, 0xB2, 1, 100, 100, 100, 0);
+        BattleAcDrawGauge(
+            (s32)x, (s32)y, 0xB2, 2, params[4], 100, 100, 0);
     }
 
-    if ((flags & 4) == 0) {
-        pos.x = x - 288.0f + (176.0f * (f32)params[4]) / 100.0f;
-        pos.y = y + 45.0f;
-        pos.z = 0.0f;
-        iconDispGx(1.0, &pos, 0x10, 0x9E);
+    acFlags = *(u32*)(battleWork + 0x1CC4);
+
+    if ((acFlags & 4) == 0) {
+        VecLocal gaugeMarker = {0.0f, 0.0f, 0.0f};
+
+        gaugeMarker.x =
+            (x + -288.0f) + (f32)(params[4] * 176) / 100.0f;
+        gaugeMarker.y = y + 45.0f;
+        iconDispGx(1.0, &gaugeMarker, 0x10, 0x9E);
     } else {
-        pos.x = x - 80.0f - ((flags & 8) ? 12.0f : 0.0f);
-        pos.y = y + 18.0f;
-        pos.z = 0.0f;
-        iconDispGx(1.0, &pos, 0x10,
-                   (value < (f32)params[4] || value > 100.0f) ? 0x99 : 0x9D);
+        s32 markerIcon;
+
+        if (extraWork->gaugeValue < (f32)params[4] ||
+            extraWork->gaugeValue > 100.0f) {
+            markerIcon = 0x99;
+        } else {
+            markerIcon = 0x9D;
+        }
+
+        if ((acFlags & 8) == 0) {
+            VecLocal marker = {0.0f, 0.0f, 0.0f};
+
+            marker.x = 120.0f + (x + -200.0f);
+            marker.y = y + 18.0f;
+            iconDispGx(1.0, &marker, 0x10, markerIcon);
+        } else {
+            VecLocal marker = {0.0f, 0.0f, 0.0f};
+
+            marker.x = (120.0f + (x + -200.0f)) - 12.0f;
+            marker.y = y + 18.0f;
+            iconDispGx(1.0, &marker, 0x10, markerIcon);
+        }
     }
 
     if (params[0] == 2) {
-        left = BattleACGetButtonIcon(0x100, 1);
-        right = BattleACGetButtonIcon(0x100, 0);
+        pressedIcon = BattleACGetButtonIcon(0x100, 1);
+        releasedIcon = BattleACGetButtonIcon(0x100, 0);
+        pressedSecondIcon = 0;
+        releasedSecondIcon = 0;
     } else if (params[0] < 2) {
         if (params[0] == 0) {
-            left = 0x87;
-            right = 0x86;
-            left2 = 0x89;
-            right2 = 0x88;
+            pressedIcon = 0x87;
+            releasedIcon = 0x86;
+            pressedSecondIcon = 0x89;
+            releasedSecondIcon = 0x88;
         } else if (params[0] > -1) {
-            left = BattleACGetButtonIcon(0x100, 1);
-            right = BattleACGetButtonIcon(0x100, 0);
+            pressedIcon = BattleACGetButtonIcon(0x100, 1);
+            releasedIcon = BattleACGetButtonIcon(0x100, 0);
+            pressedSecondIcon = 0;
+            releasedSecondIcon = 0;
         }
     } else if (params[0] < 4) {
-        left = BattleACGetButtonIcon(0x20, 1);
-        right = BattleACGetButtonIcon(0x20, 0);
+        pressedIcon = BattleACGetButtonIcon(0x20, 1);
+        releasedIcon = BattleACGetButtonIcon(0x20, 0);
+        pressedSecondIcon = 0;
+        releasedSecondIcon = 0;
     }
 
-    if (mode == 1002) {
+    state = *(s32*)(battleWork + 0x1C9C);
+
+    if (state == 1002) {
         return;
     }
-    if (mode < 1002) {
-        if (mode > 100) {
-            if (mode < 1000) {
+
+    if (state < 1002) {
+        if (state > 100) {
+            if (state < 1000) {
                 return;
             }
-        } else if (mode < 99) {
+
+            if (extraWork->inputMode == 0) {
+                if (((extraWork->gaugeValue < (f32)params[4]) ||
+                     (extraWork->gaugeValue > 100.0f)) &&
+                    (*(s32*)(battleWork + 0x1CE8) != 0)) {
+                    if (pressedSecondIcon != 0) {
+                        VecLocal first = {0.0f, 0.0f, 0.0f};
+                        VecLocal second = {0.0f, 0.0f, 0.0f};
+
+                        first.x = x + -225.0f;
+                        first.y = y + 80.0f;
+                        iconDispGx(
+                            1.0, &first, 0x10, pressedIcon);
+
+                        second.x = x + -225.0f + 56.0f;
+                        second.y = y + 80.0f;
+                        iconDispGx(
+                            1.0, &second, 0x10, pressedSecondIcon);
+                        return;
+                    } else {
+                        VecLocal single = {0.0f, 0.0f, 0.0f};
+
+                        single.x = x + -225.0f + 28.0f;
+                        single.y = y + 80.0f;
+                        iconDispGx(
+                            1.0, &single, 0x10, pressedIcon);
+                        return;
+                    }
+                }
+
+                if (pressedSecondIcon != 0) {
+                    VecLocal first = {0.0f, 0.0f, 0.0f};
+                    VecLocal second = {0.0f, 0.0f, 0.0f};
+
+                    first.x = x + -225.0f;
+                    first.y = y + 80.0f;
+                    iconDispGx(
+                        1.0, &first, 0x10, releasedIcon);
+
+                    second.x = x + -225.0f + 56.0f;
+                    second.y = y + 80.0f;
+                    iconDispGx(
+                        1.0, &second, 0x10, releasedSecondIcon);
+                    return;
+                } else {
+                    VecLocal single = {0.0f, 0.0f, 0.0f};
+
+                    single.x = x + -225.0f + 28.0f;
+                    single.y = y + 80.0f;
+                    iconDispGx(
+                        1.0, &single, 0x10, releasedIcon);
+                    return;
+                }
+            } else {
+                if ((f32)params[4] <= extraWork->gaugeValue &&
+                    extraWork->gaugeValue <= 100.0f) {
+                    if (pressedSecondIcon != 0) {
+                        VecLocal first = {0.0f, 0.0f, 0.0f};
+                        VecLocal second = {0.0f, 0.0f, 0.0f};
+
+                        first.x = x + -225.0f;
+                        first.y = y + 80.0f;
+                        iconDispGx(
+                            1.0, &first, 0x10, pressedIcon);
+
+                        second.x = x + -225.0f + 56.0f;
+                        second.y = y + 80.0f;
+                        iconDispGx(
+                            1.0, &second, 0x10, pressedSecondIcon);
+                        return;
+                    } else {
+                        VecLocal single = {0.0f, 0.0f, 0.0f};
+
+                        single.x = x + -225.0f + 28.0f;
+                        single.y = y + 80.0f;
+                        iconDispGx(
+                            1.0, &single, 0x10, pressedIcon);
+                        return;
+                    }
+                }
+
+                if (pressedSecondIcon != 0) {
+                    VecLocal first = {0.0f, 0.0f, 0.0f};
+                    VecLocal second = {0.0f, 0.0f, 0.0f};
+
+                    first.x = x + -225.0f;
+                    first.y = y + 80.0f;
+                    iconDispGx(
+                        1.0, &first, 0x10, releasedIcon);
+
+                    second.x = x + -225.0f + 56.0f;
+                    second.y = y + 80.0f;
+                    iconDispGx(
+                        1.0, &second, 0x10, releasedSecondIcon);
+                    return;
+                } else {
+                    VecLocal single = {0.0f, 0.0f, 0.0f};
+
+                    single.x = x + -225.0f + 28.0f;
+                    single.y = y + 80.0f;
+                    iconDispGx(
+                        1.0, &single, 0x10, releasedIcon);
+                    return;
+                }
+            }
+        }
+
+        if (state < 99) {
             return;
         }
-    } else if (mode > 1005) {
+    } else if (state > 1005) {
         return;
     }
-    {
-        s32 primary;
-        s32 secondary;
-        s32 usePressed = 0;
-        if (*(u8*)(extra + 0x12) == 0) {
-            if ((value < (f32)params[4] || value > 100.0f) &&
-                *(s32*)(wp + 0x1CB8) != 0) {
-                usePressed = 1;
-            }
-        } else if ((f32)params[4] <= value && value <= 100.0f) {
-            usePressed = 1;
-        }
-        primary = usePressed ? left : right;
-        secondary = usePressed ? left2 : right2;
-        pos.y = y + 80.0f;
-        pos.z = 0.0f;
-        pos.x = x - 225.0f;
-        if (secondary != 0) {
-            iconDispGx(1.0, &pos, 0x10, primary);
-            pos.x += 56.0f;
-            iconDispGx(1.0, &pos, 0x10, secondary);
-        } else {
-            pos.x += 28.0f;
-            iconDispGx(1.0, &pos, 0x10, primary);
-        }
+
+    if (pressedSecondIcon == 0) {
+        VecLocal single = {0.0f, 0.0f, 0.0f};
+
+        single.x = x + -225.0f + 28.0f;
+        single.y = y + 80.0f;
+        iconDispGx(1.0, &single, 0x10, releasedIcon);
+    } else {
+        VecLocal first = {0.0f, 0.0f, 0.0f};
+        VecLocal second = {0.0f, 0.0f, 0.0f};
+
+        first.x = x + -225.0f;
+        first.y = y + 80.0f;
+        iconDispGx(1.0, &first, 0x10, releasedIcon);
+
+        second.x = x + -225.0f + 56.0f;
+        second.y = y + 80.0f;
+        iconDispGx(
+            1.0, &second, 0x10, releasedSecondIcon);
     }
 }
 

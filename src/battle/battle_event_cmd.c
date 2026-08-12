@@ -5694,10 +5694,17 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
     extern void BtlUnit_SetMoveCurrentPos(BattleWorkUnit*, f32, f32, f32);
     extern void BtlUnit_GetPos(BattleWorkUnit*, f32*, f32*, f32*);
     extern void BtlUnit_SetPos(BattleWorkUnit*, f32, f32, f32);
-    extern f32 angleABf(f32, f32, f32, f32);
-    extern f32 distABf(f32, f32, f32, f32);
-    extern void btlMovePos(f32*, f32*, f32, f32);
+    extern f32 angleABf(f32, f32, f32, f32), distABf(f32, f32, f32, f32);
+    extern f32 reviseAngle(f32);
+    extern f64 sin(f64);
+    extern f64 __fabs(f64);
+    extern const u32 double_20_802ee6f0[], double_6_802ee6f8[], double_47_802ee700[];
+    extern const u32 double_1p12_802ee708[], double_1_802ee710[], double_0p53_802ee718[];
+    extern const u32 double_1p25_802ee720[], double_0p8_802ee728[], double_16p5_802ee730[], double_33_802ee738[];
+    extern f32 float_0_80422280, float_360_804222bc, float_6p2832_804222c0;
+    extern f32 float_3p1416_804222c4, float_90_804222c8, float_1p8_804222cc;
     extern void BtlUnit_LoadSeMode(s32, s32, void*, void*);
+    extern void psndSFXOn_3D(char*, void*);
     s32* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));
     f32 tx = (f32)evtGetValue(event, args[1]);
@@ -5707,63 +5714,99 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
     s32 mode = evtGetValue(event, args[5]);
     s32 sound = evtGetValue(event, args[6]);
     BattleWorkUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 remainder;
+    u8* u = (u8*)unit;
+    f32 x, y, z, remainder, s;
 
     if (isFirstCall != 0) {
-        *(u8*)((s32)event + 0xD) = 1;
+        *(u8*)((u8*)event + 0xD) = 1;
         if (mode == 1) {
-            *(u8*)((s32)event + 0xD) = 2;
+            *(u8*)((u8*)event + 0xD) = 2;
         } else {
             BtlUnit_SetMoveTargetPos(unit, tx, ty, tz);
             BtlUnit_GetPos(unit, &x, &y, &z);
             BtlUnit_SetMoveCurrentPos(unit, x, y, z);
-            *(f32*)((s32)unit + 0x17C) = angleABf(x, z, tx, tz);
-            *(f32*)((s32)unit + 0x180) = distABf(x, z, tx, tz);
-            if (tx - x > 0.0f) {
-                *(s8*)((s32)unit + 0x188) = 1;
-            } else if (tx - x < 0.0f) {
-                *(s8*)((s32)unit + 0x188) = -1;
-            }
-            *(s32*)((s32)unit + 0x16C) = frames;
-            if (frames == 0) {
-                frames = (s32)(*(f32*)((s32)unit + 0x180) / *(f32*)((s32)unit + 0x170));
-                *(s32*)((s32)unit + 0x16C) = frames;
+            *(f32*)(u + 0x17C) = angleABf(x, z, tx, tz);
+            *(f32*)(u + 0x180) = distABf(x, z, tx, tz);
+            if (tx - x > float_0_80422280) *(s8*)(u + 0x188) = 1;
+            else if (tx - x < float_0_80422280) *(s8*)(u + 0x188) = -1;
+            *(s32*)(u + 0x16C) = frames;
+            if (*(s32*)(u + 0x16C) == 0) {
+                *(s32*)(u + 0x16C) = (s32)(*(f32*)(u + 0x180) / *(f32*)(u + 0x170));
             } else {
-                *(f32*)((s32)unit + 0x170) = *(f32*)((s32)unit + 0x180) / (f32)frames;
+                *(f32*)(u + 0x170) = *(f32*)(u + 0x180) / (f32)*(s32*)(u + 0x16C);
             }
-            if (frames == 0) {
-                return EVT_RETURN_DONE;
+            remainder = (f32)*(s32*)(u + 0x16C) * *(f32*)(u + 0x170) - *(f32*)(u + 0x180);
+            if (*(s32*)(u + 0x16C) == 0) return EVT_RETURN_DONE;
+            *(f32*)(u + 0x1A8) = (*(f32*)(u + 0x160) - *(f32*)(u + 0x154)) / (f32)*(s32*)(u + 0x16C);
+            *(f32*)(u + 0x1AC) = (*(f32*)(u + 0x164) - *(f32*)(u + 0x158)) / (f32)*(s32*)(u + 0x16C);
+            *(f32*)(u + 0x1B0) = (*(f32*)(u + 0x168) - *(f32*)(u + 0x15C)) / (f32)*(s32*)(u + 0x16C);
+            *(f32*)(u + 0x178) = float_0_80422280;
+            /* Keep the accepted compiler-owned scalar-pool contribution until
+             * the complete target .sdata2 catalog is integrated. */
+            *(f32*)(u + 0x174) = 3.1416f / (f32)*(s32*)(u + 0x16C);
+            *(f32*)(u + 0x170) += -remainder / (f32)*(s32*)(u + 0x16C);
+            *(f32*)(u + 0x1B4) = float_90_804222c8;
+            if (mode < 3) *(f32*)(u + 0x1B8) = float_360_804222bc / (f32)*(s32*)(u + 0x16C);
+            else *(f32*)(u + 0x1B8) = (f32)(360 / *(s32*)(u + 0x16C));
+            *(f32*)(u + 0x184) = (f32)(((f64)*(f32*)(u + 0x180) - *(f64*)double_20_802ee6f0) / *(f64*)double_6_802ee6f8 + *(f64*)double_47_802ee700);
+            if (mode == 2) *(f32*)(u + 0x184) = (f32)((f64)*(f32*)(u + 0x184) * *(f64*)double_1p12_802ee708);
+            if (mode == 4) *(f32*)(u + 0x184) = (f32)((f64)*(f32*)(u + 0x184) * *(f64*)double_1p25_802ee720);
+            *(f32*)(u + 0x1BC) = float_0_80422280;
+            s = (f32)sin((float_6p2832_804222c0 * *(f32*)(u + 0x1B4)) / float_360_804222bc);
+            if (mode < 3) *(f32*)(u + 0x178) += (f32)((f64)*(f32*)(u + 0x174) * (*(f64*)double_0p53_802ee718 * (f64)s + *(f64*)double_1_802ee710));
+            else *(f32*)(u + 0x178) += (f32)((f64)*(f32*)(u + 0x174) * (*(f64*)double_0p8_802ee728 * (f64)s + *(f64*)double_1_802ee710));
+            BtlUnit_LoadSeMode(2, sound, u + 0x1C4, u + 0x18C);
+            if (*(char**)(u + 0x18C) != NULL) {
+                Vec pos;
+                pos.x = *(f32*)(u + 0x154); pos.y = *(f32*)(u + 0x158); pos.z = *(f32*)(u + 0x15C);
+                psndSFXOn_3D(*(char**)(u + 0x18C), &pos);
             }
-            remainder = (f32)frames * *(f32*)((s32)unit + 0x170) - *(f32*)((s32)unit + 0x180);
-            *(f32*)((s32)unit + 0x148) = (tx - x) / (f32)frames;
-            *(f32*)((s32)unit + 0x14C) = (ty - y) / (f32)frames;
-            *(f32*)((s32)unit + 0x150) = (tz - z) / (f32)frames;
-            *(f32*)((s32)unit + 0x178) = 0.0f;
-            *(f32*)((s32)unit + 0x174) = 3.1416f / (f32)frames;
-            *(f32*)((s32)unit + 0x170) += -remainder / (f32)frames;
-            BtlUnit_LoadSeMode(2, sound, (void*)((s32)unit + 0x1C4), (void*)((s32)unit + 0x18C));
         }
     }
 
-    if (*(u8*)((s32)event + 0xD) == 2) {
-        return EVT_RETURN_BLOCK;
+    if (*(u8*)((u8*)event + 0xD) == 2) {
+        if (BtlUnit_GetACPossibility(unit) == 0) return EVT_RETURN_DONE;
+        *(f32*)(u + 0x178) = -(*(f32*)(u + 0x1BC) - *(f32*)(u + 0x1BC));
+        *(f32*)(u + 0x174) = float_1p8_804222cc;
+        *(s32*)(u + 0x16C) = 1;
+        *(f32*)(u + 0x1B4) = float_90_804222c8;
+        *(f32*)(u + 0x1B8) = (f32)(360 / *(s32*)(u + 0x16C));
+        *(f32*)(u + 0x184) = (f32)(__fabs((f64)(*(f32*)(u + 0x1BC) - *(f32*)(u + 0x1BC))) / *(f64*)double_16p5_802ee730);
+        BtlUnit_GetPos(unit, (f32*)(u + 0x154), (f32*)(u + 0x158), (f32*)(u + 0x15C));
+        *(u8*)((u8*)event + 0xD) = 3;
+    } else if (*(s8*)((u8*)event + 0xD) > 0 && *(s8*)((u8*)event + 0xD) < 2) {
+        *(f32*)(u + 0x154) += *(f32*)(u + 0x1A8);
+        *(f32*)(u + 0x158) += *(f32*)(u + 0x1AC);
+        *(f32*)(u + 0x15C) += *(f32*)(u + 0x1B0);
+        BtlUnit_GetPos(unit, &x, &y, &z);
+        *(f32*)(u + 0x1BC) = y;
+        x = *(f32*)(u + 0x154);
+        y = *(f32*)(u + 0x184) * (f32)sin((f64)*(f32*)(u + 0x178)) + *(f32*)(u + 0x158);
+        z = *(f32*)(u + 0x15C);
+        BtlUnit_SetPos(unit, x, y, z);
+        if (y < *(f32*)(u + 0x164) && *(s32*)(u + 0x16C) < 3) {
+            y = *(f32*)(u + 0x164); BtlUnit_SetPos(unit, x, y, z);
+        }
+        *(f32*)(u + 0x1BC) = y;
+        s = (f32)sin((float_6p2832_804222c0 * *(f32*)(u + 0x1B4)) / float_360_804222bc);
+        if (mode < 3) *(f32*)(u + 0x178) += (f32)((f64)*(f32*)(u + 0x174) * (*(f64*)double_0p53_802ee718 * (f64)s + *(f64*)double_1_802ee710));
+        else *(f32*)(u + 0x178) += (f32)((f64)*(f32*)(u + 0x174) * (*(f64*)double_0p8_802ee728 * (f64)s + *(f64*)double_1_802ee710));
+        *(f32*)(u + 0x1B4) = reviseAngle(*(f32*)(u + 0x1B4) + *(f32*)(u + 0x1B8));
+        if (--*(s32*)(u + 0x16C) == 0) {
+            y = *(f32*)(u + 0x164); BtlUnit_SetPos(unit, x, y, z);
+            *(f32*)(u + 0x178) = -(*(f32*)(u + 0x1BC) - *(f32*)(u + 0x1BC));
+            *(f32*)(u + 0x174) = float_1p8_804222cc;
+            return 1;
+        }
+    } else if (*(s8*)((u8*)event + 0xD) < 4) {
+        s = (f32)sin((float_6p2832_804222c0 * *(f32*)(u + 0x1B4)) / float_360_804222bc);
+        *(f32*)(u + 0x154) += (f32)(((f64)*(f32*)(u + 0x184) * (f64)s) / *(f64*)double_33_802ee738);
+        *(f32*)(u + 0x158) = -(*(f32*)(u + 0x184) * s - *(f32*)(u + 0x158));
+        *(f32*)(u + 0x1B4) = reviseAngle(*(f32*)(u + 0x1B4) + *(f32*)(u + 0x1B8));
+        BtlUnit_SetPos(unit, *(f32*)(u + 0x154), *(f32*)(u + 0x158), *(f32*)(u + 0x15C));
+        if (--*(s32*)(u + 0x16C) == 0) return 1;
     }
-    *(f32*)((s32)unit + 0x154) += *(f32*)((s32)unit + 0x148);
-    *(f32*)((s32)unit + 0x158) += *(f32*)((s32)unit + 0x14C);
-    *(f32*)((s32)unit + 0x15C) += *(f32*)((s32)unit + 0x150);
-    btlMovePos((f32*)((s32)unit + 0x154), (f32*)((s32)unit + 0x15C),
-               *(f32*)((s32)unit + 0x170), *(f32*)((s32)unit + 0x17C));
-    BtlUnit_SetPos(unit, *(f32*)((s32)unit + 0x154), *(f32*)((s32)unit + 0x158),
-                   *(f32*)((s32)unit + 0x15C));
-    *(s32*)((s32)unit + 0x16C) -= 1;
-    if (*(s32*)((s32)unit + 0x16C) > 0) {
-        return EVT_RETURN_BLOCK;
-    }
-    BtlUnit_SetPos(unit, tx, ty, tz);
-    return EVT_RETURN_DONE;
+    return EVT_RETURN_BLOCK;
 }
 
 s32 btlevtcmd_GetTakeoffPosition(EventEntry* event, BOOL isFirstCall) {

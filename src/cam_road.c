@@ -383,7 +383,7 @@ s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
     u32 dir2;
     u32* dirPtr;
 
-    volatile u32 scratch[96];
+    volatile u32 scratch[228];
     volatile u32 e01[3];
     volatile u32 e20[3];
     volatile u32 e12[3];
@@ -672,8 +672,8 @@ s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
     f32* normals;
     s32 count;
     s32 roadMode;
-    f32 start;
-    f32 end;
+    s32 start;
+    s32 end;
     f32 limitA;
     f32 limitB;
     f32 best = dat_8041f688;
@@ -682,8 +682,8 @@ s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
 
     if (type != 0) {
         count = *(s32*)((s32)road + 0x64) / 2;
-        start = 0.0f;
-        end = 1.40129846e-45f;
+        start = 0;
+        end = 1;
         limitA = 0.0f;
         limitB = 0.0f;
         roadMode = 0;

@@ -48,7 +48,6 @@ void* BattleGetObjectPtr(s32 id) {
     }
     return 0;
 }
-
 void* BattleSearchObjectPtr(const char* name) {
     extern void* _battleWorkPointer;
     extern s32 strcmp(const char* str1, const char* str2);
@@ -151,6 +150,7 @@ void BattleStageObjectInit(void) {
         *(f32*)(slot+0x10)=0.0f;
         *(f32*)(slot+0x14)=0.0f;
         *(f32*)(slot+0x18)=0.0f;
+        mapGrpFlagOff(*(char**)objectData, 1);
         objectData+=0x68;
     }
 }
@@ -1575,6 +1575,10 @@ s32 _object_fall_attack(void* evt, s32 firstCall) {
     extern void* pouchGetPtr(void);
     extern void* BattleAudienceBaseGetPtr(void);
     extern s32 BattleAudience_HaitiRandForFallObject(void);
+    extern void* BattleGetSystemPtr(void* battle);
+    extern s32 BattleSamplingEnemy(void* targetWork, void* weapon, s32 attackerIdx,
+                                   s32 enemyBelong, u32 targetClassFlags,
+                                   u32 targetPropertyFlags, s32 direction);
     char* battle;
     char* fallData;
     u8* work;
@@ -1584,6 +1588,8 @@ s32 _object_fall_attack(void* evt, s32 firstCall) {
     u32* copySrc;
     u8* pouch;
     u8* audience;
+    void* systemUnit;
+    u8 targetWork[0xB64];
     s32* args;
     s32 total;
     s32 random;
@@ -1660,8 +1666,13 @@ s32 _object_fall_attack(void* evt, s32 firstCall) {
                     *(s32*)((char*)evt + 0x74) = 1;
                 }
             }
-            entry[0x14] = 1;
-            active = 1;
+            if (*(s32*)(entry + 4) == 0) {
+                systemUnit = BattleGetSystemPtr(g_BattleWork);
+                BattleSamplingEnemy(targetWork, entry + 0x28, *(s32*)systemUnit, 1,
+                                    *(u32*)(entry + 0x8C), *(u32*)(entry + 0x90), 0);
+                entry[0x14] = 1;
+                active = 1;
+            }
         }
         if (!active) {
             evtSetValue(evt, args[0], *(s32*)((char*)evt + 0x74));

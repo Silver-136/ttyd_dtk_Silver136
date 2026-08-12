@@ -1225,83 +1225,160 @@ s32 N_evt_mario_party_door_halve_hitbox(void) {
 }
 
 s32 evt_mario_party_door_move(void* pEvt, s32 first) {
-    extern f32 evtGetFloat(void* evt, s32 value);
+    extern f32 evtGetFloat(void*, s32);
     extern f64 distABf(f64, f64, f64, f64);
     extern f64 angleABf(f64, f64, f64, f64);
-    extern void marioSetForceMove(f64 angle, f64 speed, s32 frames);
-    extern void partyMoveBehindMario3(f64 angle, void* party, s32 mode);
+    extern void marioSetForceMove(f64, f64, s32);
+    extern void partyMoveBehindMario3(f64, void*, s32);
+    extern void N_partyFollowCloseOff(void*);
+    extern void* camGetPtr(s32);
     extern void* gp;
-    extern const f32 float_0_80421adc;
-    extern const f32 float_600_80421b04;
-    extern const f32 float_535_80421b08;
-    extern const f32 float_0p4_80421b0c;
+    extern char str_pik_00_802e3ed8[];
+    extern char str_muj_01_802e3ee0[];
+    extern const f32 float_0_80421adc, float_600_80421b04, float_535_80421b08;
+    extern const f32 float_0p4_80421b0c, float_90_80421b18, float_270_80421b1c;
+    extern const f32 float_330_80421b28, float_60_80421b2c, float_120_80421b30;
+    extern const f32 float_180_80421b34, float_240_80421b38, float_300_80421b3c;
+    extern const f32 float_30_80421b40;
     s32* args = *(s32**)((s32)pEvt + 0x18);
     u8* state = (u8*)pEvt + 0x78;
     void* mario = marioGetPtr();
     f32 targetX = evtGetFloat(pEvt, args[0]);
     f32 targetZ = evtGetFloat(pEvt, args[1]);
     f32 speed = evtGetFloat(pEvt, args[2]);
-    s32 ids[2];
-    s32 i;
+    void* party;
+    f32 pos[3];
+    f32 sx, sy, sz;
+    f32 angle;
+    f32 cameraAngle;
+    s32 frames;
+    s32 phase;
 
-    ids[0] = marioGetPartyId();
-    ids[1] = marioGetExtraPartyId();
     if (first != 0) {
-        for (i = 0; i < 2; i++) {
-            void* party = partyGetPtr(ids[i]);
-            if (party != 0) {
-                f32 pos[3], sx, sy, sz;
-                pos[0] = *(f32*)((s32)party + 0x58);
-                pos[1] = *(f32*)((s32)party + 0x5C);
-                pos[2] = *(f32*)((s32)party + 0x60);
-                marioGetScreenPos(pos, &sx, &sy, &sz);
-                if (sx < float_0_80421adc || sx > float_600_80421b04 ||
-                    sy < float_0_80421adc || sy > float_535_80421b08 ||
-                    pos[1] < *(f32*)((s32)mario + 0x90)) {
-                    *(f32*)((s32)party + 0x58) = *(f32*)((s32)mario + 0x8C);
-                    *(f32*)((s32)party + 0x5C) = *(f32*)((s32)mario + 0x90);
-                    *(f32*)((s32)party + 0x60) = *(f32*)((s32)mario + 0x94);
-                }
-                *(u32*)((s32)party + 8) |= 0x100;
-                N_partyFollowCloseOn(party);
-                *(u32*)party |= 0x40000;
-                *(u32*)((s32)party + 8) |= 0x400;
+        party = partyGetPtr(marioGetPartyId());
+        if (party != 0) {
+            pos[0] = *(f32*)((s32)party + 0x58);
+            pos[1] = *(f32*)((s32)party + 0x5C);
+            pos[2] = *(f32*)((s32)party + 0x60);
+            marioGetScreenPos(pos, &sx, &sy, &sz);
+            if (sx < float_0_80421adc || sx > float_600_80421b04 || sy < float_0_80421adc || sy > float_535_80421b08) {
+                *(f32*)((s32)party + 0x58) = *(f32*)((s32)mario + 0x8C);
+                *(f32*)((s32)party + 0x5C) = *(f32*)((s32)mario + 0x90);
+                *(f32*)((s32)party + 0x60) = *(f32*)((s32)mario + 0x94);
             }
+            if (*(f32*)((s32)party + 0x5C) < *(f32*)((s32)mario + 0x90)) {
+                *(f32*)((s32)party + 0x58) = *(f32*)((s32)mario + 0x8C);
+                *(f32*)((s32)party + 0x5C) = *(f32*)((s32)mario + 0x90);
+                *(f32*)((s32)party + 0x60) = *(f32*)((s32)mario + 0x94);
+            }
+            *(u32*)((s32)party + 8) |= 0x100;
+            N_partyFollowCloseOn(party);
+            *(u32*)party |= 0x40000;
+            *(u32*)((s32)party + 8) |= 0x400;
+        }
+        party = partyGetPtr(marioGetExtraPartyId());
+        if (party != 0) {
+            pos[0] = *(f32*)((s32)party + 0x58);
+            pos[1] = *(f32*)((s32)party + 0x5C);
+            pos[2] = *(f32*)((s32)party + 0x60);
+            marioGetScreenPos(pos, &sx, &sy, &sz);
+            if (sx < float_0_80421adc || sx > float_600_80421b04 || sy < float_0_80421adc || sy > float_535_80421b08) {
+                *(f32*)((s32)party + 0x58) = *(f32*)((s32)mario + 0x8C);
+                *(f32*)((s32)party + 0x5C) = *(f32*)((s32)mario + 0x90);
+                *(f32*)((s32)party + 0x60) = *(f32*)((s32)mario + 0x94);
+            }
+            if (*(f32*)((s32)party + 0x5C) < *(f32*)((s32)mario + 0x90)) {
+                *(f32*)((s32)party + 0x58) = *(f32*)((s32)mario + 0x8C);
+                *(f32*)((s32)party + 0x5C) = *(f32*)((s32)mario + 0x90);
+                *(f32*)((s32)party + 0x60) = *(f32*)((s32)mario + 0x94);
+            }
+            *(u32*)((s32)party + 8) |= 0x100;
+            N_partyFollowCloseOn(party);
+            *(u32*)party |= 0x40000;
+            *(u32*)((s32)party + 8) |= 0x400;
         }
         *(u32*)state = 0;
         *(u32*)(state + 8) = 0;
     }
-    switch (*(u32*)state) {
-        case 0: {
-            f32 distance = (f32)distABf(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x94),
-                                        targetX, targetZ);
-            f32 angle = (f32)angleABf(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x94),
-                                      targetX, targetZ);
-            s32 frames;
+
+    phase = *(s32*)state;
+    if (phase == 0) {
+            f32 distance = (f32)distABf(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x94), targetX, targetZ);
+            angle = (f32)angleABf(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x94), targetX, targetZ);
             *(f32*)((s32)mario + 0x1A4) = angle;
             if ((*(u32*)mario & 0x2000000) != 0) speed *= float_0p4_80421b0c;
             frames = (s32)((f32)*(s32*)((s32)gp + 4) * (distance / speed));
             marioSetForceMove(angle, speed / (f32)*(s32*)((s32)gp + 4), frames);
             *(u32*)state = 2;
-            break;
-        }
-        case 2:
+    } else {
+        if (phase == 2) {
             if ((*(u32*)mario & 0x40000000) != 0) return 0;
             *(s32*)(state + 4) = sysMsec2Frame(10);
             *(u32*)state = 4;
-        case 4:
+            phase = 4;
+        }
+        if (phase == 4) {
             if (--*(s32*)(state + 4) < 1) {
                 *(s32*)(state + 4) = sysMsec2Frame(400);
                 *(u32*)state = 6;
-                for (i = 0; i < 2; i++) {
-                    void* party = partyGetPtr(ids[i]);
-                    if (party != 0) partyMoveBehindMario3(180.0, party, 0);
+                cameraAngle = *(f32*)((s32)camGetPtr(4) + 0x114);
+                party = partyGetPtr(marioGetPartyId());
+                if (party != 0) {
+                    if (strcmp((char*)((s32)gp + 0x12C), str_pik_00_802e3ed8) == 0)
+                        angle = *(f32*)((s32)party + 0x58) <= float_0_80421adc ? float_90_80421b18 : float_270_80421b1c;
+                    else if (strcmp((char*)((s32)gp + 0x12C), str_muj_01_802e3ee0) == 0)
+                        angle = float_330_80421b28;
+                    else if (cameraAngle <= float_60_80421b2c || cameraAngle >= float_120_80421b30)
+                        angle = (cameraAngle <= float_240_80421b38 || cameraAngle >= float_300_80421b3c) ? float_270_80421b1c : float_180_80421b34;
+                    else angle = float_180_80421b34;
+                    partyMoveBehindMario3(angle, party, 0);
+                    if (*(u8*)((s32)party + 0x32)) *(u32*)((s32)party + 4) |= 0x10;
+                }
+                party = partyGetPtr(marioGetExtraPartyId());
+                if (party != 0) {
+                    if (strcmp((char*)((s32)gp + 0x12C), str_pik_00_802e3ed8) == 0)
+                        angle = *(f32*)((s32)party + 0x58) <= float_0_80421adc ? float_90_80421b18 : float_270_80421b1c;
+                    else if (strcmp((char*)((s32)gp + 0x12C), str_muj_01_802e3ee0) == 0) angle = float_30_80421b40;
+                    else angle = float_270_80421b1c;
+                    partyMoveBehindMario3(angle, party, 0);
+                    if (*(u8*)((s32)party + 0x32)) *(u32*)((s32)party + 4) |= 0x10;
                 }
             }
-            break;
-        case 6:
+        } else if (phase == 6) {
+            if (--*(s32*)(state + 4) < 1) {
+                cameraAngle = *(f32*)((s32)camGetPtr(4) + 0x114);
+                party = partyGetPtr(marioGetPartyId());
+                if (party != 0) {
+                    if (strcmp((char*)((s32)gp + 0x12C), str_pik_00_802e3ed8) == 0)
+                        angle = *(f32*)((s32)party + 0x58) <= float_0_80421adc ? float_90_80421b18 : float_270_80421b1c;
+                    else if (strcmp((char*)((s32)gp + 0x12C), str_muj_01_802e3ee0) == 0) angle = float_330_80421b28;
+                    else if (cameraAngle <= float_60_80421b2c || cameraAngle >= float_120_80421b30)
+                        angle = (cameraAngle <= float_240_80421b38 || cameraAngle >= float_300_80421b3c) ? float_270_80421b1c : float_180_80421b34;
+                    else angle = float_180_80421b34;
+                    partyMoveBehindMario3(angle, party, 0);
+                    if (*(u8*)((s32)party + 0x32)) *(u32*)((s32)party + 4) |= 0x10;
+                    N_partyFollowCloseOff(party);
+                    *(u32*)party &= ~0x40000;
+                    *(u32*)((s32)party + 8) &= ~0x100;
+                }
+                party = partyGetPtr(marioGetExtraPartyId());
+                if (party != 0) {
+                    if (strcmp((char*)((s32)gp + 0x12C), str_pik_00_802e3ed8) == 0)
+                        angle = *(f32*)((s32)party + 0x58) <= float_0_80421adc ? float_90_80421b18 : float_270_80421b1c;
+                    else if (strcmp((char*)((s32)gp + 0x12C), str_muj_01_802e3ee0) == 0) angle = float_30_80421b40;
+                    else angle = float_270_80421b1c;
+                    partyMoveBehindMario3(angle, party, 0);
+                    if (*(u8*)((s32)party + 0x32)) *(u32*)((s32)party + 4) |= 0x10;
+                    N_partyFollowCloseOff(party);
+                    *(u32*)party &= ~0x40000;
+                    *(u32*)((s32)party + 8) &= ~0x100;
+                }
+                *(u32*)state = 8;
+                *(s32*)(state + 4) = 1;
+            }
+        } else if (phase == 8) {
             if (--*(s32*)(state + 4) < 1) return 2;
-            break;
+        }
     }
     return 0;
 }
@@ -1312,11 +1389,19 @@ s32 evt_mario_party_bero_move(void* pEvt, s32 first) {
     extern f64 angleABf(f64, f64, f64, f64);
     extern void marioSetForceMove(f64 angle, f64 speed, s32 frames);
     extern void partyMoveBehindMario3(void* party, s32 mode);
+    extern void N_partyFollowCloseOff(void* party);
+    extern void unk_800cba60(void* party);
     extern void* gp;
     extern const f32 float_0_80421adc;
     extern const f32 float_600_80421b04;
     extern const f32 float_535_80421b08;
     extern const f32 float_0p4_80421b0c;
+    extern const f32 float_90_80421b18;
+    extern const f32 float_270_80421b1c;
+    extern const f32 float_220_80421b10;
+    extern const f32 float_140_80421b14;
+    extern const f32 float_225_80421b20;
+    extern const f32 float_135_80421b24;
     s32* args = *(s32**)((s32)pEvt + 0x18);
     u8* state = (u8*)pEvt + 0x78;
     void* mario = marioGetPtr();
@@ -1325,12 +1410,11 @@ s32 evt_mario_party_bero_move(void* pEvt, s32 first) {
     f32 speed = evtGetFloat(pEvt, args[2]);
     s32 ids[2];
     s32 i;
+    s32 phase;
 
-    ids[0] = marioGetPartyId();
-    ids[1] = marioGetExtraPartyId();
     if (first != 0) {
-        for (i = 0; i < 2; i++) {
-            void* party = partyGetPtr(ids[i]);
+        {
+            void* party = partyGetPtr(marioGetPartyId());
             if (party != 0) {
                 f32 pos[3];
                 f32 sx, sy, sz;
@@ -1339,8 +1423,37 @@ s32 evt_mario_party_bero_move(void* pEvt, s32 first) {
                 pos[2] = *(f32*)((s32)party + 0x60);
                 marioGetScreenPos(pos, &sx, &sy, &sz);
                 if (sx < float_0_80421adc || sx > float_600_80421b04 ||
-                    sy < float_0_80421adc || sy > float_535_80421b08 ||
-                    pos[1] < *(f32*)((s32)mario + 0x90)) {
+                    sy < float_0_80421adc || sy > float_535_80421b08) {
+                    *(f32*)((s32)party + 0x58) = *(f32*)((s32)mario + 0x8C);
+                    *(f32*)((s32)party + 0x5C) = *(f32*)((s32)mario + 0x90);
+                    *(f32*)((s32)party + 0x60) = *(f32*)((s32)mario + 0x94);
+                }
+                if (*(f32*)((s32)party + 0x5C) < *(f32*)((s32)mario + 0x90)) {
+                    *(f32*)((s32)party + 0x58) = *(f32*)((s32)mario + 0x8C);
+                    *(f32*)((s32)party + 0x5C) = *(f32*)((s32)mario + 0x90);
+                    *(f32*)((s32)party + 0x60) = *(f32*)((s32)mario + 0x94);
+                }
+                N_partyFollowCloseOn(party);
+                *(u32*)party |= 0x40000;
+                *(u32*)((s32)party + 8) |= 0x400;
+            }
+        }
+        {
+            void* party = partyGetPtr(marioGetExtraPartyId());
+            if (party != 0) {
+                f32 pos[3];
+                f32 sx, sy, sz;
+                pos[0] = *(f32*)((s32)party + 0x58);
+                pos[1] = *(f32*)((s32)party + 0x5C);
+                pos[2] = *(f32*)((s32)party + 0x60);
+                marioGetScreenPos(pos, &sx, &sy, &sz);
+                if (sx < float_0_80421adc || sx > float_600_80421b04 ||
+                    sy < float_0_80421adc || sy > float_535_80421b08) {
+                    *(f32*)((s32)party + 0x58) = *(f32*)((s32)mario + 0x8C);
+                    *(f32*)((s32)party + 0x5C) = *(f32*)((s32)mario + 0x90);
+                    *(f32*)((s32)party + 0x60) = *(f32*)((s32)mario + 0x94);
+                }
+                if (*(f32*)((s32)party + 0x5C) < *(f32*)((s32)mario + 0x90)) {
                     *(f32*)((s32)party + 0x58) = *(f32*)((s32)mario + 0x8C);
                     *(f32*)((s32)party + 0x5C) = *(f32*)((s32)mario + 0x90);
                     *(f32*)((s32)party + 0x60) = *(f32*)((s32)mario + 0x94);
@@ -1353,8 +1466,10 @@ s32 evt_mario_party_bero_move(void* pEvt, s32 first) {
         *(u32*)state = 0;
         *(u32*)(state + 8) = 0;
     }
-    switch (*(u32*)state) {
-        case 0: {
+    ids[0] = marioGetPartyId();
+    ids[1] = marioGetExtraPartyId();
+    phase = *(s32*)state;
+    if (phase == 0) {
             f32 distance = (f32)distABf(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x94),
                                         targetX, targetZ);
             f32 angle = (f32)angleABf(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x94),
@@ -1365,21 +1480,81 @@ s32 evt_mario_party_bero_move(void* pEvt, s32 first) {
             frames = (s32)((f32)*(s32*)((s32)gp + 4) * (distance / speed));
             marioSetForceMove(angle, speed / (f32)*(s32*)((s32)gp + 4), frames);
             *(u32*)state = 2;
-            break;
-        }
-        case 2:
-            if ((*(u32*)mario & 0x40000000) != 0) return 0;
+    } else {
+        if (phase == 2) {
+            if ((*(u32*)mario & 0x40000000) != 0) {
+                return 0;
+            }
             *(s32*)(state + 4) = sysMsec2Frame(10);
             *(u32*)state = 4;
-        case 4:
+            phase = 4;
+        }
+        if (phase == 4) {
+            if (--*(s32*)(state + 4) < 1) {
+                {
+                    void* party = partyGetPtr(marioGetPartyId());
+                    if (party != 0) {
+                        f32 direction = *(f32*)((s32)mario + 0x1B0);
+                        s32 facingAway = direction >= float_90_80421b18 &&
+                                         direction <= float_270_80421b1c;
+                        f32 offset;
+                        if (*(u8*)((s32)party + 0x32) != 0) {
+                            offset = facingAway ? float_225_80421b20 : float_135_80421b24;
+                        } else {
+                            offset = facingAway ? float_220_80421b10 : float_140_80421b14;
+                        }
+                        revise360(*(f32*)((s32)mario + 0x19C) + offset);
+                        partyMoveBehindMario3(party, 0);
+                        if (*(u8*)((s32)party + 0x32) == 1) {
+                            *(u32*)((s32)party + 4) |= 0x10;
+                        }
+                    }
+                }
+                {
+                    void* party = partyGetPtr(marioGetExtraPartyId());
+                    if (party != 0) {
+                        f32 direction = *(f32*)((s32)mario + 0x1B0);
+                        s32 facingAway = direction >= float_90_80421b18 &&
+                                         direction <= float_270_80421b1c;
+                        f32 offset;
+                        if (*(u8*)((s32)party + 0x32) != 0) {
+                            offset = facingAway ? float_225_80421b20 : float_135_80421b24;
+                        } else {
+                            offset = facingAway ? float_220_80421b10 : float_140_80421b14;
+                        }
+                        revise360(*(f32*)((s32)mario + 0x19C) + offset);
+                        partyMoveBehindMario3(party, 0);
+                        if (*(u8*)((s32)party + 0x32) == 1) {
+                            *(u32*)((s32)party + 4) |= 0x10;
+                        }
+                    }
+                }
+                *(s32*)(state + 4) = sysMsec2Frame(400);
+                *(u32*)state = 6;
+            }
+        } else if (phase == 6) {
+            for (i = 0; i < 2; i++) {
+                void* party = partyGetPtr(ids[i]);
+                if (party != 0 && (*(u32*)party & 0x80000) != 0) {
+                    *(s32*)(state + 4) = 0;
+                }
+            }
             if (--*(s32*)(state + 4) < 1) {
                 for (i = 0; i < 2; i++) {
                     void* party = partyGetPtr(ids[i]);
-                    if (party != 0) partyMoveBehindMario3(party, 0);
+                    if (party != 0) {
+                        N_partyFollowCloseOff(party);
+                        *(u32*)party &= ~0x40000;
+                        *(u32*)((s32)party + 8) &= ~0x400;
+                        if (*(u8*)((s32)party + 0x32) == 1) {
+                            unk_800cba60(party);
+                            *(u32*)((s32)party + 4) &= ~0x10;
+                        }
+                    }
                 }
                 return 2;
             }
-            break;
+        }
     }
     return 0;
 }
@@ -2999,3 +3174,87 @@ const char str_M_S_4_80421ab8[] = "M_S_4";
 const char str_M_W_6_80421ac0[] = "M_W_6";
 const char str_M_V_2_80421ac8[] = "M_V_2";
 const char str_M_I_Y_80421ad0[] = "M_I_Y";
+
+
+/* Target-owned data required by the recovered door-move state machine/object layout. */
+const f64 double_to_int_802e3eb8 = 4503601774854144.0;
+
+extern const char str_M_J_1A_802e3e1c[];
+extern const char str_M_J_1B_802e3e24[];
+extern const char str_M_J_1C_802e3e2c[];
+extern const char str_M_H_3A_802e3e34[];
+extern const char str_M_H_3B_802e3e3c[];
+extern const char str_M_H_6A_802e3e44[];
+extern const char str_M_H_6B_802e3e4c[];
+extern const char str_M_H_9A_802e3e54[];
+extern const char str_M_H_9B_802e3e5c[];
+extern const char str_M_A_1A_802e3e64[];
+extern const char str_M_A_1B_802e3e6c[];
+extern const char str_M_A_2A_802e3e74[];
+extern const char str_M_A_2B_802e3e7c[];
+extern const char str_M_A_2C_802e3e84[];
+extern const char str_M_J_5A_802e3e8c[];
+extern const char str_M_J_5B_802e3e94[];
+
+char* a_mario_group[] = {
+    (char*)str_M_Z_1_80421980,
+    (char*)str_M_Z_9_80421988,
+    (char*)str_M_S_1_80421990,
+    (char*)str_M_S_3_80421998,
+    (char*)str_M_W_1_804219a0,
+    (char*)str_M_R_1_804219a8,
+    (char*)str_M_J_1A_802e3e1c,
+    (char*)str_M_J_1B_802e3e24,
+    (char*)str_M_J_1C_802e3e2c,
+    (char*)str_M_H_1_804219b0,
+    (char*)str_M_H_2_804219b8,
+    (char*)str_M_H_3_804219c0,
+    (char*)str_M_H_3A_802e3e34,
+    (char*)str_M_H_3B_802e3e3c,
+    (char*)str_M_H_4_804219c8,
+    (char*)str_M_H_5_804219d0,
+    (char*)str_M_H_6_804219d8,
+    (char*)str_M_H_6A_802e3e44,
+    (char*)str_M_H_6B_802e3e4c,
+    (char*)str_M_H_7_804219e0,
+    (char*)str_M_H_8_804219e8,
+    (char*)str_M_H_9_804219f0,
+    (char*)str_M_H_9A_802e3e54,
+    (char*)str_M_H_9B_802e3e5c,
+    (char*)str_M_O_1_804219f8,
+    (char*)str_M_O_2_80421a00,
+    (char*)str_M_B_1_80421a08,
+    (char*)str_M_B_2_80421a10,
+    (char*)str_M_D_1_80421a18,
+    (char*)str_M_D_2_80421a20,
+    (char*)str_M_U_3_80421a28,
+    (char*)str_M_D_6_80421a30,
+    (char*)str_M_P_1_80421a38,
+    (char*)str_M_P_2_80421a40,
+    (char*)str_M_I_1_80421a48,
+    (char*)str_M_I_2_80421a50,
+    (char*)str_M_I_S_80421a58,
+    (char*)str_M_X_1_80421a60,
+    (char*)str_M_I_U_80421a68,
+    (char*)str_M_A_1A_802e3e64,
+    (char*)str_M_A_1B_802e3e6c,
+    (char*)str_M_U_2_80421a70,
+    (char*)str_M_W_7_80421a78,
+    (char*)str_M_C_1_80421a80,
+    (char*)str_M_C_2_80421a88,
+    (char*)str_M_Y_1_80421a90,
+    (char*)str_M_Y_2_80421a98,
+    (char*)str_M_Y_3_80421aa0,
+    (char*)str_M_A_2A_802e3e74,
+    (char*)str_M_A_2B_802e3e7c,
+    (char*)str_M_A_2C_802e3e84,
+    (char*)str_M_B_3_80421aa8,
+    (char*)str_M_B_4_80421ab0,
+    (char*)str_M_J_5A_802e3e8c,
+    (char*)str_M_J_5B_802e3e94,
+    (char*)str_M_S_4_80421ab8,
+    (char*)str_M_W_6_80421ac0,
+    (char*)str_M_V_2_80421ac8,
+    (char*)str_M_I_Y_80421ad0,
+    0,
+};

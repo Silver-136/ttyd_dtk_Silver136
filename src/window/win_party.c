@@ -41,6 +41,7 @@ void winPartyInit(void* pWin) {
     void* pouch;
     void* dt;
     void* scan;
+    void* dtScan;
     char* eff;
     char* anim;
     s32 i;
@@ -49,6 +50,7 @@ void winPartyInit(void* pWin) {
     s32 poseId;
     s32 color;
     s32 active;
+    s32 groups;
     s32 currentParty;
     f32 angle;
 
@@ -56,46 +58,18 @@ void winPartyInit(void* pWin) {
     dt = winPartyDt;
     *(s32*)((s32)pWin + 0x1E0) = 0;
 
-    for (i = 0; i < 7; i++) {
-        partyId = *(s32*)((s32)dt + i * 0x24);
+    i = 0;
+    dtScan = dt;
+    do {
+        partyId = *(s32*)dtScan;
         scan = pouch;
-        for (j = 0; j < 8; j++) {
+        j = 0;
+        do {
             if (j == partyId &&
-                (*(u16*)((s32)scan + j * 0xE) & 1) != 0 &&
-                (*(u16*)((s32)scan + j * 0xE) & 2) == 0) {
-                if ((*(u16*)pWin & 0x2000) == 0) {
-                    if (j == 4) {
-                        color = pouchGetPartyColor(4);
-                        switch (color) {
-                            case 0:
-                                eff = str_EFF_m_yoshi_802f4e90;
-                                break;
-                            case 1:
-                                eff = str_EFF_m_yoshi2_802f51f0;
-                                break;
-                            case 2:
-                                eff = str_EFF_m_yoshi3_802f5200;
-                                break;
-                            case 3:
-                                eff = str_EFF_m_yoshi4_802f5210;
-                                break;
-                            case 4:
-                                eff = str_EFF_m_yoshi5_802f5220;
-                                break;
-                            case 5:
-                                eff = str_EFF_m_yoshi6_802f5230;
-                                break;
-                            default:
-                                eff = str_EFF_m_yoshi7_802f5240;
-                                break;
-                        }
-                        anim = str_W_1_804234b8;
-                    } else {
-                        eff = *(char**)((s32)dt + i * 0x24 + 0x10);
-                        anim = *(char**)((s32)dt + i * 0x24 + 0x14);
-                    }
-                } else {
-                    eff = *(char**)((s32)dt + i * 0x24 + 0x18);
+                (*(u16*)scan & 1) != 0 &&
+                (*(u16*)scan & 2) == 0) {
+                if ((*(u16*)pWin & 0x2000) != 0) {
+                    eff = *(char**)((s32)dtScan + 0x18);
                     color = pouchGetPartyColor(4);
                     switch (color) {
                         case 0:
@@ -120,39 +94,90 @@ void winPartyInit(void* pWin) {
                             anim = str_R_11_80423580;
                             break;
                     }
+                } else if (j == 4) {
+                    color = pouchGetPartyColor(4);
+                    switch (color) {
+                        case 0:
+                            eff = str_EFF_m_yoshi_802f4e90;
+                            break;
+                        case 1:
+                            eff = str_EFF_m_yoshi2_802f51f0;
+                            break;
+                        case 2:
+                            eff = str_EFF_m_yoshi3_802f5200;
+                            break;
+                        case 3:
+                            eff = str_EFF_m_yoshi4_802f5210;
+                            break;
+                        case 4:
+                            eff = str_EFF_m_yoshi5_802f5220;
+                            break;
+                        case 5:
+                            eff = str_EFF_m_yoshi6_802f5230;
+                            break;
+                        default:
+                            eff = str_EFF_m_yoshi7_802f5240;
+                            break;
+                    }
+                    anim = str_W_1_804234b8;
+                } else {
+                    eff = *(char**)((s32)dtScan + 0x10);
+                    anim = *(char**)((s32)dtScan + 0x14);
                 }
                 poseId = animPoseEntry(eff, 0);
                 *(s32*)((s32)pWin + 0x1A0 + *(s32*)((s32)pWin + 0x1E0) * 4) = poseId;
-                animPoseSetAnim(poseId, anim, 1);
-                animPoseSetMaterialFlagOn(poseId, 0x1800);
+                animPoseSetAnim(*(s32*)((s32)pWin + 0x1A0 + *(s32*)((s32)pWin + 0x1E0) * 4), anim, 1);
+                animPoseSetMaterialFlagOn(*(s32*)((s32)pWin + 0x1A0 + *(s32*)((s32)pWin + 0x1E0) * 4), 0x1800);
                 *(s32*)((s32)pWin + 0x1BC + *(s32*)((s32)pWin + 0x1E0) * 4) = j;
                 (*(s32*)((s32)pWin + 0x1E0))++;
             }
-        }
-    }
+            j++;
+            scan = (void*)((s32)scan + 0xE);
+        } while (j < 8);
+        i++;
+        dtScan = (void*)((s32)dtScan + 0x24);
+    } while (i < 7);
 
     *(s32*)((s32)pWin + 0x1DC) = 0;
+    scan = pWin;
     for (i = 0; i < *(s32*)((s32)pWin + 0x1E0); i++) {
         if (marioBgmodeChk() == 0) {
             currentParty = marioGetParty();
         } else {
             currentParty = *(s8*)((s32)marioGetPtr() + 0x247);
         }
-        if (currentParty == *(s32*)((s32)pWin + 0x1BC + i * 4)) {
+        if (currentParty == *(s32*)((s32)scan + 0x1BC)) {
             *(s32*)((s32)pWin + 0x1DC) = i;
             break;
         }
+        scan = (void*)((s32)scan + 4);
     }
 
     active = 0;
-    for (i = 0; i < 8; i++) {
-        if (*(s32*)((s32)pWin + 0x1BC + *(s32*)((s32)pWin + 0x1DC) * 4) ==
-            *(s32*)((s32)dt + i * 0x24)) {
-            active = i;
+    groups = 2;
+    dtScan = dt;
+    do {
+        partyId = *(s32*)((s32)pWin + 0x1BC + *(s32*)((s32)pWin + 0x1DC) * 4);
+        if (partyId == *(s32*)dtScan) {
+            *(s32*)((s32)pWin + 0x1D8) = active;
             break;
         }
-    }
-    *(s32*)((s32)pWin + 0x1D8) = active;
+        if (partyId == *(s32*)((s32)dtScan + 0x24)) {
+            *(s32*)((s32)pWin + 0x1D8) = active + 1;
+            break;
+        }
+        if (partyId == *(s32*)((s32)dtScan + 0x48)) {
+            *(s32*)((s32)pWin + 0x1D8) = active + 2;
+            break;
+        }
+        if (partyId == *(s32*)((s32)dtScan + 0x6C)) {
+            *(s32*)((s32)pWin + 0x1D8) = active + 3;
+            break;
+        }
+        dtScan = (void*)((s32)dtScan + 0x90);
+        active += 4;
+        groups--;
+    } while (groups != 0);
     *(s32*)((s32)pWin + 0x1FC) = *(s32*)((s32)pWin + 0x1DC);
     angle = (float_360_80423550 / (f32)*(s32*)((s32)pWin + 0x1E0)) *
             (f32)*(s32*)((s32)pWin + 0x1DC);
@@ -160,16 +185,32 @@ void winPartyInit(void* pWin) {
     *(f32*)((s32)pWin + 0x1E4) = angle;
     *(s32*)((s32)pWin + 0x200) = 0;
     *(s32*)((s32)pWin + 0x204) =
-        pouchGetPartyAttackLv(*(s32*)((s32)dt + active * 0x24)) + 2;
+        pouchGetPartyAttackLv(*(s32*)((s32)dt + *(s32*)((s32)pWin + 0x1D8) * 0x24)) + 2;
 
     color = pouchGetPartyColor(4);
-    if (color < 0) {
-        color = 6;
+    switch (color) {
+        case 0:
+            *(s32*)((s32)winPartyDt + 0x70) = 0x160;
+            break;
+        case 1:
+            *(s32*)((s32)winPartyDt + 0x70) = 0x161;
+            break;
+        case 2:
+            *(s32*)((s32)winPartyDt + 0x70) = 0x162;
+            break;
+        case 3:
+            *(s32*)((s32)winPartyDt + 0x70) = 0x163;
+            break;
+        case 4:
+            *(s32*)((s32)winPartyDt + 0x70) = 0x164;
+            break;
+        case 5:
+            *(s32*)((s32)winPartyDt + 0x70) = 0x165;
+            break;
+        default:
+            *(s32*)((s32)winPartyDt + 0x70) = 0x166;
+            break;
     }
-    if (color > 6) {
-        color = 6;
-    }
-    *(s32*)((s32)winPartyDt + 0x70) = 0x160 + color;
 }
 
 void winPartyInit2(void* pWin) {
@@ -351,8 +392,6 @@ void winPartyMain2(void* work) {
 
     *(f32*)((s32)work + 0x1E4) = (target - current) * rate + current;
 }
-
-
 void winPartyDisp(s32 cameraId, void* pWin, s32 index) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
     extern void winBgGX(f32 x, f32 y, void* win, s32 type);
@@ -370,6 +409,7 @@ void winPartyDisp(s32 cameraId, void* pWin, s32 index) {
     extern void winFontSetR(Vec3* pos, Vec3* scale, void* color, char* text, ...);
     extern char* msgSearch(char* key);
     extern char* winZenkakuStr(s32 value);
+    extern u32 FontGetMessageWidth(char* text);
     Vec3 pos;
     Vec3 scale;
     u32 white = 0xFFFFFFFF;
@@ -391,17 +431,19 @@ void winPartyDisp(s32 cameraId, void* pWin, s32 index) {
         winKirinukiGX(x - 10.0f, y + 136.0f, 240.0f, 76.0f, pWin, 0);
 
         for (row = 0; row < 2; row++) {
+            char* text = msgSearch(row == 0 ? "msg_menu_party_rank" : "msg_menu_party_name");
+            volatile u32 width = FontGetMessageWidth(text) & 0xFFFF;
             winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
-            GXSetTevColorIn(0, 0, 0, 0, 2);
-            GXSetTevAlphaIn(0, 0, 4, 5, 7);
+            GXSetTevColorIn(0, 15, 15, 15, 2);
+            GXSetTevAlphaIn(0, 7, 1, 4, 7);
             pos.x = x + 33.0f;
             pos.y = y + 110.0f - (f32)(row * 32);
             winTexSet(0xAF, &pos, &scale, row == 0 ? &white : &gray);
             winFontInit();
             pos.x = x + 45.0f;
             pos.y += 12.0f;
-            winFontSet(&pos, &scale, row == 0 ? &white : &gray,
-                       msgSearch(row == 0 ? "msg_menu_party_rank" : "msg_menu_party_name"));
+            winFontSet(&pos, &scale, row == 0 ? &white : &gray, text);
+            (void)width;
         }
 
         winIconInit();

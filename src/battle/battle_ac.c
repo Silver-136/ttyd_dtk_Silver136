@@ -430,23 +430,31 @@ s32 BattleACGetButtonIcon(int button, int pressed) {
     return icon;
 }
 
-u8 BattleAcDrawGauge(s64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
-                     s32 param_5, s32 bar1EndPercent, s32 bar2EndPercent,
-                     s32 bar3EndPercent, s32 flags) {
+void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
+                       s32 param_5, s32 bar1EndPercent, s32 bar2EndPercent,
+                       s32 bar3EndPercent, s32 flags) {
     extern void* camGetPtr(s32);
     extern void iconDispGx(f32, Vec*, s32, s32);
     extern void GXLoadPosMtxImm(void*, s32);
     extern void btlDispGXInit2DRasta(void);
     extern void btlDispGXQuads2DRasta(f32, f32, f32, f32, u8, u8, u8, u8);
+    extern const u32 dat_80422180;
+    extern const u32 dat_80422184;
+    extern const f32 float_0_80422188;
+    extern const f32 float_100_8042218c;
+    BattleWork* work;
     void* camera;
     Vec position;
-    f32 ratio;
+    u32 color;
     f32 left;
     f32 right;
     f32 top;
     f32 bottom;
+    s32 filled;
+    s32 segmentEnd;
 
-    ratio = *(f64*)&ratioFilled;
+    color = dat_80422180;
+    work = _battleWorkPointer;
     camera = camGetPtr(8);
     position.x = x - 200;
     position.y = y + 25;
@@ -535,7 +543,94 @@ u8 BattleAcDrawGauge(s64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
             }
         }
     }
-    return ratio >= 1.0f;
+
+    if (ratioFilled < float_0_80422188) {
+        return;
+    }
+
+    if ((flags & 3) != 0) {
+        if ((flags & 1) != 0) {
+            ((u8*)&color)[0] =
+                ((u8*)&color)[0] * *(u8*)((u8*)work + 0x1F2C) / 0xFF;
+            ((u8*)&color)[1] =
+                ((u8*)&color)[1] * *(u8*)((u8*)work + 0x1F2D) / 0xFF;
+            ((u8*)&color)[2] =
+                ((u8*)&color)[2] * *(u8*)((u8*)work + 0x1F2E) / 0xFF;
+            ((u8*)&color)[3] =
+                ((u8*)&color)[3] * *(u8*)((u8*)work + 0x1F2F) / 0xFF;
+        } else {
+            color = dat_80422184;
+        }
+
+        if (ratioFilled <= float_0_80422188) {
+            return;
+        }
+
+        left = x - 289;
+        right = left + innerBarWidth * ratioFilled;
+        top = y + 32;
+        bottom = y + 50;
+        if (left <= right) {
+            btlDispGXInit2DRasta();
+            GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
+            btlDispGXQuads2DRasta(
+                left, top, right, bottom,
+                ((u8*)&color)[0], ((u8*)&color)[1],
+                ((u8*)&color)[2], ((u8*)&color)[3]);
+        }
+        return;
+    }
+
+    if (ratioFilled > float_0_80422188) {
+        filled = (s32)(float_100_8042218c * ratioFilled);
+
+        segmentEnd = filled < bar1EndPercent ? filled : bar1EndPercent;
+        if (segmentEnd > float_0_80422188) {
+            left = x - 289;
+            right = left + innerBarWidth * segmentEnd / 100;
+            if (left <= right) {
+                btlDispGXInit2DRasta();
+                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
+                btlDispGXQuads2DRasta(left, top, right, bottom, 0, 0xE4, 0x86, 0xFF);
+            }
+        }
+
+        segmentEnd = filled < bar2EndPercent ? filled : bar2EndPercent;
+        if (segmentEnd > bar1EndPercent) {
+            left = x + innerBarWidth * bar1EndPercent / 100 - 289;
+            right = x + innerBarWidth * segmentEnd / 100 - 289;
+            if (left <= right) {
+                btlDispGXInit2DRasta();
+                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
+                btlDispGXQuads2DRasta(left, top, right, bottom, 0x2E, 0xB4, 0xF2, 0xFF);
+            }
+        }
+
+        segmentEnd = filled < bar3EndPercent ? filled : bar3EndPercent;
+        if (segmentEnd > bar2EndPercent) {
+            left = x + innerBarWidth * bar2EndPercent / 100 - 289;
+            right = x + innerBarWidth * segmentEnd / 100 - 289;
+            if (left <= right) {
+                btlDispGXInit2DRasta();
+                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
+                btlDispGXQuads2DRasta(left, top, right, bottom, 0x75, 0x70, 0xFF, 0xFF);
+            }
+        }
+
+        if (filled > float_100_8042218c) {
+            filled = float_100_8042218c;
+        }
+        if (filled > bar3EndPercent) {
+            left = x + innerBarWidth * bar3EndPercent / 100 - 289;
+            right = x + innerBarWidth * filled / 100 - 289;
+            if (left <= right) {
+                btlDispGXInit2DRasta();
+                GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
+                btlDispGXQuads2DRasta(left, top, right, bottom, 0xF3, 4, 0xBC, 0xFF);
+            }
+        }
+    }
+    return;
 }
 
 void BattleAcGaugeSeInit(void) {

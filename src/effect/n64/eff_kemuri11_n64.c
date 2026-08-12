@@ -21,7 +21,11 @@ void* effKemuri11N64Entry(f32 x, f32 y, f32 z, s32 type) {
     else if (type == 5) kind = 7;
     else if (type == 4) kind = 6;
     else kind = 5;
-    count = (kind == 2 || kind == 5) ? 3 : 2;
+
+    if (kind == 2 || kind == 5) count = 3;
+    else if (kind < 2) count = kind == 0 ? 3 : 1;
+    else count = 2;
+
     *(char**)((s32)entry + 0x14) = str_Kemuri11N64_802fb340;
     *(s32*)((s32)entry + 8) = count + 1;
     work = __memAlloc(3, (count + 1) * 0x58);
@@ -36,11 +40,48 @@ void* effKemuri11N64Entry(f32 x, f32 y, f32 z, s32 type) {
     *(f32*)(work + 0xC) = z;
     *(s16*)(work + 0x38) = 0;
     *(s16*)(work + 0x3A) = 0xFF;
-    part = work + 0x58;
+
+    if (kind < 2) {
+            work[0x50] = 0; work[0x51] = 0xFF;
+            work[0x52] = 0x7A; work[0x53] = 0xF0;
+            work[0x54] = 0xFF; work[0x55] = 0xFA;
+    } else if (kind == 2) {
+            work[0x50] = 0x7D; work[0x51] = 0x78;
+            work[0x52] = 0x64; work[0x53] = 0xFF;
+            work[0x54] = 0xFF; work[0x55] = 0xF0;
+    } else if (kind == 3) {
+            work[0x50] = 0xDC; work[0x51] = 0xD2;
+            work[0x52] = 0xC8; work[0x53] = 0xFF;
+            work[0x54] = 0xFF; work[0x55] = 0xFA;
+    } else if (kind == 5) {
+            work[0x50] = 0xE1; work[0x51] = 0xCC;
+            work[0x52] = 0x5D; work[0x53] = 0xE8;
+            work[0x54] = 0xE7; work[0x55] = 0xAB;
+    } else if (kind == 6) {
+            *(s16*)(work + 0x28) = 0;
+            *(s16*)(work + 0x2A) = 0x32;
+            work[0x50] = 0xD4; work[0x51] = 0xB7;
+            work[0x52] = 5; work[0x53] = 0xC1;
+            work[0x54] = 0xA3; work[0x55] = 9;
+    } else if (kind == 7) {
+            *(s16*)(work + 0x28) = 0;
+            *(s16*)(work + 0x2A) = 0x32;
+            work[0x50] = 0x21; work[0x51] = 0x8C;
+            work[0x52] = 0x8D; work[0x53] = 0x18;
+            work[0x54] = 0xA5; work[0x55] = 0xA3;
+    } else {
+            *(s16*)(work + 0x28) = 0;
+            *(s16*)(work + 0x2A) = 0x32;
+            work[0x50] = 0xD0; work[0x51] = 0x88;
+            work[0x52] = 0x28; work[0x53] = 0xD8;
+            work[0x54] = 0xA9; work[0x55] = 0x41;
+    }
+
+    part = work;
     for (i = 1; i < count + 1; i++) {
         *(s32*)(part + 0xA4) = kind < 2 ? -((i - 1) * 2) - 1 : -((i - 1) * 3) - 1;
-        *(f32*)(part + 0x8C) = (f32)(i * 0x1E);
-        *(f32*)(part + 0x88) = 0.0f;
+        *(f32*)(part + 0x8C) = 0.0f;
+        *(f32*)(part + 0x88) = -(f32)(i * 0x1E);
         part += 0x58;
     }
     if (kind == 6) effKemuri1N64Entry(x, y, z, 0.0f, 5);
@@ -63,10 +104,19 @@ void effKemuri11Main(void* effect) {
     extern f32 float_360_8042588c;
     extern f32 float_0p5_80425890;
     extern f32 float_32_80425894;
+    extern f32 float_8_80425898;
+    extern f32 float_16_8042589c;
     extern f32 float_0p9_804258a0;
+    extern f32 float_0p75_804258a4;
+    extern f32 float_0p99_804258a8;
+    extern f32 float_0p88_804258ac;
+    extern f32 float_0p98_804258b0;
+    extern f32 float_0p95_804258b4;
+    extern f32 float_1p002_804258b8;
+    extern f32 float_128_804258bc;
     u8* work;
-    u8* part;
     Vec3 pos;
+    u16 kind;
     s32 i;
 
     work = *(u8**)((s32)effect + 0xC);
@@ -74,34 +124,101 @@ void effKemuri11Main(void* effect) {
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);
-    *(s32*)(work + 0x28) += 1;
-    *(s32*)(work + 0x24) -= 1;
-    if (*(s32*)(work + 0x24) < 0) { effDelete(effect); return; }
-    if (*(s32*)(work + 0x28) > 7) {
-        if (*(u16*)work < 2) *(s32*)(work + 0x38) = (s32)((f32)*(s32*)(work + 0x38) * float_0p8_80425880);
-        else *(s32*)(work + 0x38) = (s32)((f32)*(s32*)(work + 0x38) * float_0p94_80425884);
-    }
-    part = work + 0x58;
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
-        *(s32*)(part + 0xA4) += 1;
-        if (*(s32*)(part + 0xA4) == 0) {
-            *(f32*)(part + 0x5C) = 0.0f;
-            *(f32*)(part + 0x60) = 0.0f;
-            *(f32*)(part + 0x64) = 0.0f;
-            *(f32*)(part + 0x68) = -float_0p5_80425890 * (f32)sin((f64)(float_6p2832_80425888 * *(f32*)(part + 0x8C) / float_360_8042588c));
-            *(f32*)(part + 0x6C) = float_0p5_80425890 * (f32)cos((f64)(float_6p2832_80425888 * *(f32*)(part + 0x8C) / float_360_8042588c));
-            *(f32*)(part + 0x94) = float_32_80425894;
-            *(f32*)(part + 0x98) = float_32_80425894;
-            *(f32*)(part + 0xA0) = float_32_80425894;
+    ++*(s32*)(work + 0x2C);
+    --*(s32*)(work + 0x28);
+    if (*(s32*)(work + 0x28) < 0) {
+        effDelete(effect);
+    } else {
+        kind = *(u16*)work;
+        if (kind < 2) {
+            if (*(s32*)(work + 0x2C) > 7) {
+                *(s32*)(work + 0x38) = (s32)((f32)*(s32*)(work + 0x38) * float_0p8_80425880);
+            }
+        } else if (*(s32*)(work + 0x2C) > 7) {
+            *(s32*)(work + 0x38) = (s32)((f32)*(s32*)(work + 0x38) * float_0p94_80425884);
         }
-        *(f32*)(part + 0x94) += *(f32*)(part + 0x98);
-        *(f32*)(part + 0x9C) += *(f32*)(part + 0xA0);
-        *(f32*)(part + 0x98) *= float_0p9_804258a0;
-        part += 0x58;
-    }
-    dispEntry(4, 2, effKemuri11Disp, effect, dispCalcZ(&pos));
-}
 
+        for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
+            ++*(s32*)(work + 0xA4);
+            if (*(s32*)(work + 0xA4) >= 0) {
+                if (*(s32*)(work + 0xA4) == 0) {
+                    f32 value;
+                    *(f32*)(work + 0x5C) = 0.0f;
+                    *(f32*)(work + 0x60) = 0.0f;
+                    *(f32*)(work + 0x64) = 0.0f;
+                    *(f32*)(work + 0x68) = -float_0p5_80425890 *
+                        (f32)sin((f64)(float_6p2832_80425888 * *(f32*)(work + 0x8C) / float_360_8042588c));
+                    *(f32*)(work + 0x6C) = float_0p5_80425890 *
+                        (f32)cos((f64)(float_6p2832_80425888 * *(f32*)(work + 0x8C) / float_360_8042588c));
+                    *(f32*)(work + 0x70) = 0.0f;
+                    *(f32*)(work + 0x94) = float_32_80425894;
+                    *(f32*)(work + 0x98) = float_32_80425894;
+                    *(f32*)(work + 0xA0) = float_32_80425894;
+                    *(f32*)(work + 0x78) = float_8_80425898 - (f32)i;
+
+                    if (kind == 3) {
+                        value = (f32)(i + 3);
+                        *(f32*)(work + 0x74) = value;
+                        *(f32*)(work + 0x7C) = float_0p5_80425890 * value;
+                        *(f32*)(work + 0x94) = float_16_8042589c;
+                        *(f32*)(work + 0x98) = float_16_8042589c;
+                        *(f32*)(work + 0xA0) = float_16_8042589c;
+                    } else if (kind < 3) {
+                        if (kind < 2) {
+                            value = float_0p5_80425890 + (f32)i;
+                            *(f32*)(work + 0x74) = value;
+                            *(f32*)(work + 0x7C) = float_0p5_80425890 * value;
+                        } else {
+                            value = (f32)(i + 2);
+                            *(f32*)(work + 0x74) = value;
+                            *(f32*)(work + 0x7C) = float_0p5_80425890 * value;
+                        }
+                    } else if (kind == 5) {
+                        value = (f32)(i + 2);
+                        *(f32*)(work + 0x74) = value;
+                        *(f32*)(work + 0x7C) = float_0p5_80425890 * value;
+                    } else {
+                        value = float_0p5_80425890 * (f32)(i + 3);
+                        *(f32*)(work + 0x74) = value;
+                        *(f32*)(work + 0x7C) = float_0p5_80425890 * value;
+                        *(f32*)(work + 0x78) *= float_0p8_80425880;
+                        *(f32*)(work + 0x94) = float_16_8042589c;
+                        if (kind == 6 || kind == 7) {
+                            *(f32*)(work + 0x98) = float_8_80425898;
+                            *(f32*)(work + 0xA0) = float_8_80425898;
+                        } else {
+                            *(f32*)(work + 0x98) = float_16_8042589c;
+                            *(f32*)(work + 0xA0) = float_16_8042589c;
+                        }
+                    }
+                    *(f32*)(work + 0x9C) = float_32_80425894;
+                }
+
+                *(f32*)(work + 0x94) += *(f32*)(work + 0x98);
+                *(f32*)(work + 0x9C) += *(f32*)(work + 0xA0);
+                if (kind == 2 || kind == 5) {
+                    *(f32*)(work + 0x98) *= float_0p75_804258a4;
+                    *(f32*)(work + 0xA0) *= float_0p99_804258a8;
+                } else if (kind < 2) {
+                    *(f32*)(work + 0x98) *= float_0p9_804258a0;
+                } else if (kind == 6 || kind == 7) {
+                    *(f32*)(work + 0x98) *= float_0p88_804258ac;
+                    *(f32*)(work + 0xA0) *= float_0p98_804258b0;
+                } else {
+                    *(f32*)(work + 0x98) *= float_0p75_804258a4;
+                    *(f32*)(work + 0xA0) *= float_0p95_804258b4;
+                }
+                *(f32*)(work + 0x74) *= float_1p002_804258b8;
+                *(f32*)(work + 0x7C) *= float_1p002_804258b8;
+                if (*(f32*)(work + 0x94) > float_128_804258bc) {
+                    *(f32*)(work + 0x94) = float_128_804258bc;
+                }
+            }
+            work += 0x58;
+        }
+        dispEntry(4, 2, effKemuri11Disp, effect, dispCalcZ(&pos));
+    }
+}
 
 void effKemuri11Disp(s32 cameraId, void* effect) {
     typedef f32 Mtx[3][4];

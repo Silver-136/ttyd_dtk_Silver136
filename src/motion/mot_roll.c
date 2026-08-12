@@ -656,8 +656,8 @@ void mot_roll(void) {
         work = *(void**)((s32)marioGetPtr() + 0x294);
         memset(work, 0, 0x18);
         marioGetPtr();
-        work = *(void**)((s32)marioGetPtr() + 0x294);
-        if (work != 0) {
+        if (*(void**)((s32)marioGetPtr() + 0x294) != 0) {
+            work = *(void**)((s32)marioGetPtr() + 0x294);
             *(s32*)((s32)work + 0x14) = -1;
         }
         P32(0x44) = 0;
@@ -710,7 +710,8 @@ state_0:
         marioGetRubInit();
         PU32(0x00) |= 0x01000000U;
         P32(0x08) = 0x10;
-        PU32(0x04) |= 0x108U;
+        PU32(0x04) |= 0x8U;
+        PU32(0x04) |= 0x100U;
 
         marioPaperOn(str_p_roll_802c4248);
         marioChgPose(str_M_I_U_80420e1c);

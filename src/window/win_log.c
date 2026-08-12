@@ -70,21 +70,56 @@ void winLogInit(void* pWin) {
     submenu = (u8*)pWin + 0xD7C;
     *(s32*)(submenu + submenuCount * 0x1C) = 0;
     submenuCount++;
+    for (i = 0; i < submenuCount; i++) {
+        u8* item = submenu + i * 0x1C;
+        *(f32*)(item + 4) = 0.0f;
+        *(f32*)(item + 0xC) = 0.0f;
+        *(f32*)(item + 8) = 45.0f * (f32)submenuCount * 0.5f - 45.0f * (f32)i;
+        *(f32*)(item + 0x10) = *(f32*)(item + 8);
+    }
     if (swByteGet(0) > 0x12) {
         *(s32*)(submenu + submenuCount * 0x1C) = 1;
         submenuCount++;
+        for (i = 0; i < submenuCount; i++) {
+            u8* item = submenu + i * 0x1C;
+            *(f32*)(item + 4) = 0.0f;
+            *(f32*)(item + 0xC) = 0.0f;
+            *(f32*)(item + 8) = 45.0f * (f32)submenuCount * 0.5f - 45.0f * (f32)i;
+            *(f32*)(item + 0x10) = *(f32*)(item + 8);
+        }
     }
     if (swByteGet(0) > 6) {
         *(s32*)(submenu + submenuCount * 0x1C) = 4;
         submenuCount++;
+        for (i = 0; i < submenuCount; i++) {
+            u8* item = submenu + i * 0x1C;
+            *(f32*)(item + 4) = 0.0f;
+            *(f32*)(item + 0xC) = 0.0f;
+            *(f32*)(item + 8) = 45.0f * (f32)submenuCount * 0.5f - 45.0f * (f32)i;
+            *(f32*)(item + 0x10) = *(f32*)(item + 8);
+        }
     }
     if (swByteGet(0) > 0x13) {
         *(s32*)(submenu + submenuCount * 0x1C) = 2;
         submenuCount++;
+        for (i = 0; i < submenuCount; i++) {
+            u8* item = submenu + i * 0x1C;
+            *(f32*)(item + 4) = 0.0f;
+            *(f32*)(item + 0xC) = 0.0f;
+            *(f32*)(item + 8) = 45.0f * (f32)submenuCount * 0.5f - 45.0f * (f32)i;
+            *(f32*)(item + 0x10) = *(f32*)(item + 8);
+        }
     }
     if (swGet(0x40) != 0) {
         *(s32*)(submenu + submenuCount * 0x1C) = 3;
         submenuCount++;
+        for (i = 0; i < submenuCount; i++) {
+            u8* item = submenu + i * 0x1C;
+            *(f32*)(item + 4) = 0.0f;
+            *(f32*)(item + 0xC) = 0.0f;
+            *(f32*)(item + 8) = 45.0f * (f32)submenuCount * 0.5f - 45.0f * (f32)i;
+            *(f32*)(item + 0x10) = *(f32*)(item + 8);
+        }
     }
     *(s32*)((s32)pWin + 0xD78) = submenuCount;
     for (i = 0; i < submenuCount; i++) {
@@ -127,6 +162,7 @@ void winLogInit(void* pWin) {
     qqsort(badgeIds, badgeCount, 2, compare_func5_2);
     qqsort(recipeIds, recipeCount, 2, compare_func6_2);
 }
+
 void winLogInit2(void* pWin) {
     f32 f45;
     f32 f05;
@@ -211,6 +247,10 @@ s32 winLogMain(void* pWin) {
     extern void* monosiriInit(s32 enemy, f32 x, f32 y);
     extern s32 monosiriMain(void* work);
     extern u32 keyGetButton(s32 channel);
+    extern f32 float_255_80423c28;
+    extern f32 float_120_80423bcc;
+    extern f32 float_neg130_80423c2c;
+    extern f32 float_20_80423c08;
     s32 state = *(s32*)((s32)pWin + 0xD68);
     s32 cursor = *(s32*)((s32)pWin + 0xD6C);
     s32 page = *(s32*)((s32)pWin + 0x104C);
@@ -218,10 +258,10 @@ s32 winLogMain(void* pWin) {
     u32 pressed = *(u32*)((s32)pWin + 4);
     u32 repeat = *(u32*)((s32)pWin + 0x10);
     u32 directions = *(u32*)((s32)pWin + 0xC);
+    s32 i;
 
     if (state == 0) {
         s32 oldCursor = cursor;
-        s32 i;
         if ((pressed & 0x200) != 0) {
             psndSFXOn(0x20013);
             return -1;
@@ -243,8 +283,33 @@ s32 winLogMain(void* pWin) {
             *(s32*)((s32)pWin + 0xD88 + cursor * 0x20) = 10;
             state = *(s32*)((s32)pWin + 0xD74 + cursor * 0x20) + 10;
             *(s32*)((s32)pWin + 0xD68) = state;
+            switch (*(s32*)((s32)pWin + 0xD7C + cursor * 0x1C)) {
+            case 0:
+                *(f32*)((s32)pWin + 0xE3C) = float_20_80423c08;
+                break;
+            case 1:
+                *(f32*)((s32)pWin + 0xE68) = float_20_80423c08;
+                *(f32*)((s32)pWin + 0xE70) = float_255_80423c28;
+                break;
+            case 2:
+                *(f32*)((s32)pWin + 0xE88) = float_neg130_80423c2c;
+                *(f32*)((s32)pWin + 0xE90) = float_120_80423bcc;
+                *(f32*)((s32)pWin + 0xEB0) = float_neg200_80423c30;
+                *(f32*)((s32)pWin + 0xEB8) = float_60_80423b58;
+                break;
+            case 3:
+                *(f32*)((s32)pWin + 0xF88) = float_neg130_80423c2c;
+                *(f32*)((s32)pWin + 0xF90) = float_120_80423bcc;
+                *(f32*)((s32)pWin + 0xFB0) = float_neg200_80423c30;
+                *(f32*)((s32)pWin + 0xFB8) = float_60_80423b58;
+                break;
+            }
             psndSFXOn(0x20012);
         }
+        *(f32*)((s32)pWin + 0x158) = float_neg128_80423c34;
+        *(f32*)((s32)pWin + 0x15C) =
+            float_8_80423b04 + float_45_80423bdc * (f32)count *
+            float_0p5_80423af8 - float_45_80423bdc * (f32)cursor;
     } else if (state == 10) {
         f32 moveX = 0.0f;
         f32 moveY = 0.0f;
@@ -272,7 +337,14 @@ s32 winLogMain(void* pWin) {
             *(f32*)((s32)pWin + 0xE24) = 468.0f;
     } else if (state == 11 || state == 12 || state == 13) {
         if ((pressed & 0x200) != 0) {
+            for (i = 0; i < count; i++) {
+                *(s32*)((s32)pWin + 0xD88 + i * 0x20) = 40;
+            }
+            *(s32*)((s32)pWin + 0xD88 + cursor * 0x20) = 20;
             *(s32*)((s32)pWin + 0xD68) = 0;
+            *(f32*)((s32)pWin + 0x1034) = float_320_80423c0c;
+            *(f32*)((s32)pWin + 0x103C) = float_neg240_80423bf0;
+            psndSFXOn(0x20013);
         } else if ((repeat & 0x1000) != 0 && cursor > 0) {
             *(s32*)((s32)pWin + 0xD6C) = cursor - 1;
         } else if ((repeat & 0x2000) != 0 && cursor + 1 < count) {
@@ -353,41 +425,81 @@ void winLogMain2(void* pWin) {
     extern f32 float_0_80423aec;
     extern f32 float_140_80423c20, float_neg160_80423c24;
     extern f32 float_6_80423b54, float_4_80423be8;
-    s32 i, count = *(s32*)((s32)pWin + 0xD74);
-    f32 frame = (f32)*(s32*)((s32)gp + 4);
-    f32 denom8 = (float_8_80423b04 * frame) / float_60_80423b58;
+    s32 i;
+    s32 count = *(s32*)((s32)pWin + 0xD70);
     u8* entry = (u8*)pWin + 0xD78;
-    for (i=0; i<count; i++, entry+=0x1C) {
-        s32 state=*(s32*)(entry+0x14);
-        switch(state) {
-            case 10: case 20:
-                *(f32*)(entry+0xC)=float_0_80423aec; *(f32*)(entry+0x10)=float_140_80423c20;
-                *(s32*)(entry+0x18)=0; *(s32*)(entry+0x14)=state+1; break;
+    #define FPS_FLOAT ((f32)*(s32*)((s32)gp + 4))
+    #define DENOM8 ((float_8_80423b04 * FPS_FLOAT) / float_60_80423b58)
+    #define DENOM6 ((float_6_80423b54 * FPS_FLOAT) / float_60_80423b58)
+    #define DENOM4 ((float_4_80423be8 * FPS_FLOAT) / float_60_80423b58)
+
+    for (i = 0; i < count; i++, entry += 0x20) {
+        s32 state = *(s32*)(entry + 0x10);
+        switch (state) {
+            case 10:
+            case 20:
+                *(f32*)(entry + 8) = float_0_80423aec;
+                *(f32*)(entry + 0xC) = float_140_80423c20;
+                *(s32*)(entry + 0x14) = 0;
+                *(s32*)(entry + 0x10) = state + 1;
+                break;
             case 11:
-                if (++*(s32*)(entry+0x18)>8) { *(f32*)(entry+0xC)=float_neg160_80423c24; *(f32*)(entry+0x10)=float_140_80423c20; *(s32*)(entry+0x18)=0; *(s32*)(entry+0x14)=12; } break;
+                if (++*(s32*)(entry + 0x14) > 8) {
+                    *(f32*)(entry + 8) = float_neg160_80423c24;
+                    *(f32*)(entry + 0xC) = float_140_80423c20;
+                    *(s32*)(entry + 0x14) = 0;
+                    *(s32*)(entry + 0x10) = state + 1;
+                }
+                break;
             case 21:
-                if (++*(s32*)(entry+0x18)>8) { *(f32*)(entry+0xC)=float_0_80423aec; *(f32*)(entry+0x10)=float_45_80423bdc*(f32)count*float_0p5_80423af8-float_45_80423bdc*(f32)i; *(s32*)(entry+0x18)=0; *(s32*)(entry+0x14)=22; } break;
+                if (++*(s32*)(entry + 0x14) > 8) {
+                    *(f32*)(entry + 8) = float_0_80423aec;
+                    *(f32*)(entry + 0xC) = float_45_80423bdc * (f32)count * float_0p5_80423af8 - float_45_80423bdc * (f32)i;
+                    *(s32*)(entry + 0x14) = 0;
+                    *(s32*)(entry + 0x10) = state + 1;
+                }
+                break;
             case 30:
-                *(f32*)(entry+0xC)=float_0_80423aec; *(f32*)(entry+0x10)=float_neg160_80423c24; *(s32*)(entry+0x18)=0; *(s32*)(entry+0x14)=31; break;
+                *(f32*)(entry + 8) = float_0_80423aec;
+                *(f32*)(entry + 0xC) = float_neg160_80423c24;
+                *(s32*)(entry + 0x14) = 0;
+                *(s32*)(entry + 0x10) = state + 1;
+                break;
             case 40:
-                *(f32*)(entry+0xC)=float_0_80423aec; *(f32*)(entry+0x10)=float_45_80423bdc*(f32)count*float_0p5_80423af8-float_45_80423bdc*(f32)i; *(s32*)(entry+0x18)=0; *(s32*)(entry+0x14)=41; break;
+                *(f32*)(entry + 8) = float_0_80423aec;
+                *(f32*)(entry + 0xC) = float_45_80423bdc * (f32)count * float_0p5_80423af8 - float_45_80423bdc * (f32)i;
+                *(s32*)(entry + 0x14) = 0;
+                *(s32*)(entry + 0x10) = state + 1;
+                break;
         }
-        *(f32*)(entry+4) += (*(f32*)(entry+0xC)-*(f32*)(entry+4))/denom8;
-        *(f32*)(entry+8) += (*(f32*)(entry+0x10)-*(f32*)(entry+8))/denom8;
+        *(f32*)entry += (*(f32*)(entry + 8) - *(f32*)entry) / DENOM8;
+        *(f32*)(entry + 4) += (*(f32*)(entry + 0xC) - *(f32*)(entry + 4)) / DENOM8;
     }
-    #define STEP(cur,tgt,d) (*(f32*)((s32)pWin+(cur)) += (*(f32*)((s32)pWin+(tgt))-*(f32*)((s32)pWin+(cur)))/(d))
-    STEP(0x158,0x15C,denom8); STEP(0xE64,0xE68,denom8); STEP(0xE6C,0xE70,denom8);
-    STEP(0xE74,0xE78,denom8); STEP(0xE7C,0xE80,denom8);
-    STEP(0xE84,0xE88,(float_4_80423be8*frame)/float_60_80423b58);
-    *(f32*)((s32)pWin+0xEA8)=(f32)(*(s32*)((s32)pWin+0xEA0)*0xE8);
-    STEP(0xEA4,0xEA8,(float_6_80423b54*frame)/float_60_80423b58);
-    STEP(0xEAC,0xEB0,(float_6_80423b54*frame)/float_60_80423b58); STEP(0xEB4,0xEB8,(float_6_80423b54*frame)/float_60_80423b58);
-    STEP(0xEBC,0xEC0,(float_6_80423b54*frame)/float_60_80423b58); STEP(0xEC4,0xEC8,(float_6_80423b54*frame)/float_60_80423b58);
-    *(f32*)((s32)pWin+0xFA8)=(f32)(*(s32*)((s32)pWin+0xFA0)*0xE8);
-    STEP(0xFA4,0xFA8,(float_6_80423b54*frame)/float_60_80423b58);
-    STEP(0xFAC,0xFB0,(float_6_80423b54*frame)/float_60_80423b58); STEP(0xFB4,0xFB8,(float_6_80423b54*frame)/float_60_80423b58);
-    STEP(0xFBC,0xFC0,(float_6_80423b54*frame)/float_60_80423b58); STEP(0xFC4,0xFC8,(float_6_80423b54*frame)/float_60_80423b58);
+
+    #define STEP(cur, tgt, d) (*(f32*)((s32)pWin + (cur)) += (*(f32*)((s32)pWin + (tgt)) - *(f32*)((s32)pWin + (cur))) / (d))
+    STEP(0xE2C, 0xE28, DENOM8);
+    STEP(0xE34, 0xE30, DENOM8);
+    STEP(0xE68, 0xE64, DENOM8);
+    STEP(0xE70, 0xE6C, DENOM8);
+    STEP(0xE78, 0xE74, DENOM8);
+    STEP(0xE80, 0xE7C, DENOM4);
+    *(f32*)((s32)pWin + 0xEA8) = (f32)(*(s32*)((s32)pWin + 0xEA0) * 0xE8);
+    STEP(0xEA4, 0xEA8, DENOM6);
+    STEP(0xE84, 0xE88, DENOM6);
+    STEP(0xE8C, 0xE90, DENOM6);
+    STEP(0xEAC, 0xEB0, DENOM6);
+    STEP(0xEB4, 0xEB8, DENOM6);
+    *(f32*)((s32)pWin + 0xFA8) = (f32)(*(s32*)((s32)pWin + 0xFA0) * 0xE8);
+    STEP(0xFA4, 0xFA8, DENOM6);
+    STEP(0xF84, 0xF88, DENOM6);
+    STEP(0xF8C, 0xF90, DENOM6);
+    STEP(0xFAC, 0xFB0, DENOM6);
+    STEP(0xFB4, 0xFB8, DENOM6);
     #undef STEP
+    #undef DENOM4
+    #undef DENOM6
+    #undef DENOM8
+    #undef FPS_FLOAT
 }
 
 void winLogDisp(s32 cameraId, void* pWin, s32 index) {
@@ -404,15 +516,63 @@ void winLogDisp(s32 cameraId, void* pWin, s32 index) {
                              Vec3* scale, void* color);
     extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* text);
     extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
+    extern void effStarStoneDraw(void* camera, void* effect);
+    extern u16 FontGetMessageWidth(char* text);
+    extern void PSMTXRotRad(void* mtx, s32 axis, f32 radians);
+    extern void PSMTXMultVec(void* mtx, Vec3* src, Vec3* dst);
+    extern void winKageGX(f32 x, f32 y, f32 z, f32 scale,
+                          void* win, void* color);
+    extern u32 dat_80423aa4;
+    extern u32 dat_80423aa8;
+    extern u32 dat_80423ab0;
+    extern u32 dat_80423ab4;
+    extern u32 dat_80423ab8;
+    extern u32 dat_80423abc;
+    extern f32 float_50_80423b64;
+    extern f32 float_120_80423bcc;
+    extern f32 float_100_80423b60;
+    extern f32 float_0p75_80423b10;
+    extern f32 float_128_80423c10;
+    extern f32 float_4_80423be8;
+    extern f32 float_10_80423c14;
+    extern f32 float_0p43633_80423bfc;
+    extern f32 float_deg2rad_80423c00;
+    extern f32 float_51p429_80423c04;
+    extern f32 float_20_80423c08;
+    extern f32 float_30_80423bc0;
+    extern f32 float_1_80423af0;
+    extern u32 dat_80423aac;
     extern u8 itemDataTable[];
     Vec3 pos, scale;
-    u32 white = 0xFFFFFFFF;
+    u8* catalog = (u8*)str_msg_menu_kiroku_map_802f6708;
+    volatile u32 white = dat_80423aa4;
+    volatile u32 submenuWhite = dat_80423aa4;
     f32 x = *(f32*)((s32)pWin + 0xC4 + index * 0x14);
     f32 y = *(f32*)((s32)pWin + 0xC8 + index * 0x14);
-    s32 submenu = *(s32*)((s32)pWin + 0xD6C);
-    s32 state = *(s32*)((s32)pWin + 0xD68);
     s32 i;
-    char countText[256];
+    s32 width;
+    char badgeText[256];
+    char recipeText[256];
+    Vec3 badgeFontPos, badgeFontCallPos, badgeFontScale;
+    Vec3 badgeTexPos, badgeTexCallPos, badgeTexScale;
+    Vec3 badgeIconPos, badgeIconCallPos, badgeIconScale;
+    Vec3 recipeFontPos, recipeFontCallPos, recipeFontScale;
+    Vec3 recipeTexPos, recipeTexCallPos, recipeTexScale;
+    Vec3 recipeIconPos, recipeIconCallPos, recipeIconScale;
+    u32 badgeFontColor;
+    u32 badgeTexColor;
+    u32 badgeIconColor;
+    u32 recipeFontColor;
+    u32 recipeTexColor;
+    u32 recipeIconColor;
+    u16 messageWidth;
+    u16 scaledWidth;
+    Vec3 submenuSelectedPos, submenuSelectedCallPos, submenuSelectedScale;
+    Vec3 submenuSelectedIconPos, submenuSelectedIconCallPos, submenuSelectedIconScale;
+    Vec3 submenuNormalPos, submenuNormalCallPos, submenuNormalScale;
+    u32 submenuSelectedColor;
+    u32 submenuSelectedIconColor;
+    u32 submenuNormalColor;
 
     winBgGX(x, y, pWin, 4);
     if (y + *(f32*)((s32)pWin + 0xE34) > -480.0f) {
@@ -420,103 +580,247 @@ void winLogDisp(s32 cameraId, void* pWin, s32 index) {
               y + *(f32*)((s32)pWin + 0xE34), pWin);
     }
     if (y + *(f32*)((s32)pWin + 0xE70) > -480.0f) {
-        u32 crystalColor = 0xFFFFFF00 |
-                           ((u32)*(s32*)((s32)pWin + 0xE78) & 0xFF);
+        Vec3 crystalPos;
+        Vec3 crystalScale;
+        u32 crystalColor;
+        s32 crystalAlpha;
+
         winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
-        scale.x = 1.0f;
-        scale.y = 1.0f;
-        scale.z = 1.0f;
-        pos.x = x + *(f32*)((s32)pWin + 0xE68);
-        pos.y = y + *(f32*)((s32)pWin + 0xE70);
-        pos.z = 0.0f;
-        winTexSet(0x24, &pos, &scale, &crystalColor);
+
+        crystalAlpha = (s32)*(f32*)((s32)pWin + 0xE78);
+        crystalColor = dat_80423aa8;
+        ((u8*)&crystalColor)[3] = (u8)crystalAlpha;
+
+        crystalScale = *(Vec3*)(catalog + 0x80);
+        crystalPos = *(Vec3*)(catalog + 0x74);
+        crystalPos.x = x + *(f32*)((s32)pWin + 0xE68);
+        crystalPos.y = y + *(f32*)((s32)pWin + 0xE70);
+        winTexSet(0x24, &crystalPos, &crystalScale, &crystalColor);
+
+        {
+            f32 rotateX[3][4];
+            f32 rotateY[3][4];
+            Vec3 orbit;
+            u32 shadowColor;
+            void* effect;
+            void* allocation;
+            u8* effectWork;
+            u8* drawWork;
+            s32 stoneIndex;
+            s32 drawIndex;
+            f32 degreeToRad;
+            f32 stoneAngleStep;
+            f32 shadowYOffset;
+            f32 effectYOffset;
+
+            degreeToRad = float_deg2rad_80423c00;
+            stoneAngleStep = float_51p429_80423c04;
+            shadowYOffset = float_30_80423bc0;
+            effectYOffset = float_20_80423c08;
+            effectWork = (u8*)pWin;
+
+            for (stoneIndex = 0; stoneIndex < 7; stoneIndex++) {
+                orbit = *(Vec3*)(catalog + 0x8C);
+                PSMTXRotRad(rotateX, 'x', float_0p43633_80423bfc);
+                PSMTXRotRad(rotateY, 'y',
+                    degreeToRad *
+                    (stoneAngleStep * (f32)stoneIndex -
+                     *(f32*)((s32)pWin + 0xE80)));
+                PSMTXMultVec(rotateY, &orbit, &orbit);
+                PSMTXMultVec(rotateX, &orbit, &orbit);
+
+                shadowColor = dat_80423aac;
+                winKageGX(orbit.x + x + *(f32*)((s32)pWin + 0xE68),
+                          orbit.y + y + *(f32*)((s32)pWin + 0xE70) -
+                              shadowYOffset,
+                          orbit.z, float_1_80423af0, pWin, &shadowColor);
+
+                effect = *(void**)(effectWork + 0xE44);
+                allocation = *(void**)((s32)effect + 0xC);
+                *(f32*)((s32)allocation + 8) =
+                    orbit.x + x + *(f32*)((s32)pWin + 0xE68);
+
+                effect = *(void**)(effectWork + 0xE44);
+                allocation = *(void**)((s32)effect + 0xC);
+                *(f32*)((s32)allocation + 0xC) =
+                    effectYOffset + orbit.y + y +
+                    *(f32*)((s32)pWin + 0xE70);
+
+                effect = *(void**)(effectWork + 0xE44);
+                allocation = *(void**)((s32)effect + 0xC);
+                *(f32*)((s32)allocation + 0x10) = orbit.z;
+
+                effectWork += 4;
+            }
+
+            drawWork = (u8*)pWin;
+            for (drawIndex = 0; drawIndex < 7; drawIndex++, drawWork += 4) {
+                effStarStoneDraw((void*)8, *(void**)(drawWork + 0xE44));
+            }
+        }
     }
     if (*(f32*)((s32)pWin + 0xE84) < 320.0f &&
-        *(f32*)((s32)pWin + 0xE8C) > -240.0f) {
+        *(f32*)((s32)pWin + 0xE8C) > float_neg240_80423bf0) {
+        char* format = (char*)catalog + 0x4C8;
+
         winHakoGX(x + *(f32*)((s32)pWin + 0xE84),
                   y + *(f32*)((s32)pWin + 0xE8C), pWin, 0);
+
+        badgeFontColor = dat_80423ab0;
         winKirinukiGX(x + *(f32*)((s32)pWin + 0xEAC) - 50.0f,
-                      y + *(f32*)((s32)pWin + 0xEB4) - 120.0f,
-                      100.0f, 30.0f, pWin, 0);
-        sprintf(countText, "%d/%d", *(s32*)((s32)pWin + 0xE98),
+                      y + *(f32*)((s32)pWin + 0xEB4) - float_120_80423bcc,
+                      float_100_80423b60, float_30_80423bc0, pWin, 0);
+
+        if (*(s32*)((s32)gp + 0x16C) != 0) {
+            format = "%d/%d";
+        }
+        sprintf(badgeText, format, *(s32*)((s32)pWin + 0xE98),
                 *(s32*)((s32)pWin + 0xE94));
-        scale.x = 0.75f;
-        scale.y = 0.75f;
-        scale.z = 1.0f;
-        pos.x = x + *(f32*)((s32)pWin + 0xEAC) - 50.0f;
-        pos.y = y + *(f32*)((s32)pWin + 0xEB4) - 128.0f;
-        pos.z = 0.0f;
+
+        messageWidth = FontGetMessageWidth(badgeText);
+        scaledWidth = (u16)(float_0p75_80423b10 * (f32)messageWidth);
+
         winFontInit();
-        winFontSet(&pos, &scale, &white, countText);
+        badgeFontScale = *(Vec3*)(catalog + 0xA4);
+        badgeFontPos = *(Vec3*)(catalog + 0x98);
+        badgeFontPos.x =
+            x + *(f32*)((s32)pWin + 0xEAC) - float_50_80423b64 +
+            (f32)((100 - scaledWidth) / 2);
+        badgeFontPos.y =
+            y + *(f32*)((s32)pWin + 0xEB4) - 128.0f;
+        badgeFontCallPos = badgeFontPos;
+        winFontSet(&badgeFontCallPos, &badgeFontScale,
+                   &badgeFontColor, badgeText);
+
         winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
-        pos.x = x + *(f32*)((s32)pWin + 0xEAC);
-        pos.y = y + *(f32*)((s32)pWin + 0xEB4);
-        winTexSet(0x95, &pos, &scale, &white);
+        badgeTexColor = white;
+        badgeTexScale = *(Vec3*)(catalog + 0xBC);
+        badgeTexPos = *(Vec3*)(catalog + 0xB0);
+        badgeTexPos.x = x + *(f32*)((s32)pWin + 0xEAC);
+        badgeTexPos.y = y + *(f32*)((s32)pWin + 0xEB4);
+        badgeTexCallPos = badgeTexPos;
+        winTexSet(0x95, &badgeTexCallPos, &badgeTexScale, &badgeTexColor);
+
         {
             s16 badgeId = *(s16*)((s32)pWin + 0xEBC +
                                   *(s32*)((s32)pWin + 0xE9C) * 2);
             if (swGet(badgeId + 0x80) != 0) {
                 winIconInit();
-                pos.y -= 4.0f;
+                badgeIconColor = white;
+                badgeIconScale = *(Vec3*)(catalog + 0xD4);
+                badgeIconPos = *(Vec3*)(catalog + 0xC8);
+                badgeIconPos.x = x + *(f32*)((s32)pWin + 0xEAC);
+                badgeIconPos.y =
+                    y + *(f32*)((s32)pWin + 0xEB4) - 4.0f;
+                badgeIconCallPos = badgeIconPos;
                 winIconSet(*(u16*)(itemDataTable +
                                    (badgeId + 0xF0) * 0x28 + 0x20),
-                           &pos, &scale, &white);
+                           &badgeIconCallPos, &badgeIconScale, &badgeIconColor);
             }
         }
     }
-    if (*(f32*)((s32)pWin + 0xF84) < 320.0f &&
-        *(f32*)((s32)pWin + 0xF8C) > -240.0f) {
+    if (*(f32*)((s32)pWin + 0xF84) < float_320_80423c0c &&
+        *(f32*)((s32)pWin + 0xF8C) > float_neg240_80423bf0) {
+        char* format = (char*)catalog + 0x4C8;
+
         winHakoGX(x + *(f32*)((s32)pWin + 0xF84),
                   y + *(f32*)((s32)pWin + 0xF8C), pWin, 1);
-        winKirinukiGX(x + *(f32*)((s32)pWin + 0xFAC) - 50.0f,
-                      y + *(f32*)((s32)pWin + 0xFB4) - 120.0f,
-                      100.0f, 30.0f, pWin, 0);
-        sprintf(countText, "%d/%d", *(s32*)((s32)pWin + 0xF98),
+
+        recipeFontColor = dat_80423ab4;
+        winKirinukiGX(x + *(f32*)((s32)pWin + 0xFAC) - float_50_80423b64,
+                      y + *(f32*)((s32)pWin + 0xFB4) - float_120_80423bcc,
+                      float_100_80423b60, float_30_80423bc0, pWin, 0);
+
+        if (*(s32*)((s32)gp + 0x16C) != 0) {
+            format = "%d/%d";
+        }
+        sprintf(recipeText, format, *(s32*)((s32)pWin + 0xF98),
                 *(s32*)((s32)pWin + 0xF94));
-        scale.x = 0.75f;
-        scale.y = 0.75f;
-        scale.z = 1.0f;
-        pos.x = x + *(f32*)((s32)pWin + 0xFAC) - 50.0f;
-        pos.y = y + *(f32*)((s32)pWin + 0xFB4) - 128.0f;
-        pos.z = 0.0f;
+
+        messageWidth = FontGetMessageWidth(recipeText);
+        scaledWidth = (u16)(float_0p75_80423b10 * (f32)messageWidth);
+
         winFontInit();
-        winFontSet(&pos, &scale, &white, countText);
+        recipeFontScale = *(Vec3*)(catalog + 0xEC);
+        recipeFontPos = *(Vec3*)(catalog + 0xE0);
+        recipeFontPos.x =
+            x + *(f32*)((s32)pWin + 0xFAC) - float_50_80423b64 +
+            (f32)((100 - scaledWidth) / 2);
+        recipeFontPos.y =
+            y + *(f32*)((s32)pWin + 0xFB4) - float_128_80423c10;
+        recipeFontCallPos = recipeFontPos;
+        winFontSet(&recipeFontCallPos, &recipeFontScale,
+                   &recipeFontColor, recipeText);
+
         winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
-        pos.x = x + *(f32*)((s32)pWin + 0xFAC);
-        pos.y = y + *(f32*)((s32)pWin + 0xFB4);
-        winTexSet(0x96, &pos, &scale, &white);
+        recipeTexColor = white;
+        recipeTexScale = *(Vec3*)(catalog + 0x104);
+        recipeTexPos = *(Vec3*)(catalog + 0xF8);
+        recipeTexPos.x = x + *(f32*)((s32)pWin + 0xFAC);
+        recipeTexPos.y = y + *(f32*)((s32)pWin + 0xFB4);
+        recipeTexCallPos = recipeTexPos;
+        winTexSet(0x96, &recipeTexCallPos, &recipeTexScale, &recipeTexColor);
+
         {
             s16 recipeId = *(s16*)((s32)pWin + 0xFBC +
                                    *(s32*)((s32)pWin + 0xF9C) * 2);
             if (swGet(recipeId + 0x41) != 0) {
                 winIconInit();
-                pos.y -= 10.0f;
+                recipeIconColor = white;
+                recipeIconScale = *(Vec3*)(catalog + 0x11C);
+                recipeIconPos = *(Vec3*)(catalog + 0x110);
+                recipeIconPos.x = x + *(f32*)((s32)pWin + 0xFAC);
+                recipeIconPos.y =
+                    y + *(f32*)((s32)pWin + 0xFB4) - float_10_80423c14;
+                recipeIconCallPos = recipeIconPos;
                 winIconSet(*(u16*)(itemDataTable +
                                    (recipeId + 0xB3) * 0x28 + 0x20),
-                           &pos, &scale, &white);
+                           &recipeIconCallPos, &recipeIconScale, &recipeIconColor);
             }
         }
     }
-    if (state == 14 || (u32)(state - 20) < 3 || state == 1001) {
-        monoshiriGX(x - 170.0f, y + 130.0f, pWin);
+    {
+        s32 state = *(s32*)((s32)pWin + 0xD68);
+        if (state == 14 || (u32)(state - 20) < 3 || state == 1001) {
+            monoshiriGX(x - 170.0f, y + 130.0f, pWin);
+        }
     }
-    winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
-    scale.x = 1.0f; scale.y = 1.0f; scale.z = 1.0f; pos.z = 0.0f;
-    for (i = 0; i < *(s32*)((s32)pWin + 0xD70); i++) {
-        u8* entry = (u8*)pWin + 0xD74 + i * 0x20;
-        pos.x = x + *(f32*)(entry + 4);
-        pos.y = y + *(f32*)(entry + 8);
-        if (i == submenu) {
-            winTexSet(0xB5, &pos, &scale, &white);
-            winTexInit_x2(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
-            pos.x -= 8.0f;
-            pos.y += 8.0f;
-            winTexSet_x2(*(s32*)entry + 0x1F, 0xB5,
-                         &pos, &scale, &white);
-        } else {
-            winTexInit_x2(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
-            winTexSet_x2(*(s32*)entry + 0x1F, 0xB5,
-                         &pos, &scale, &white);
+    {
+        u8* entry = (u8*)pWin + 0xD74;
+        for (i = 0; i < *(s32*)((s32)pWin + 0xD70); i++, entry += 0x20) {
+            if (i == *(s32*)((s32)pWin + 0xD6C)) {
+                winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
+                submenuSelectedColor = dat_80423ab8;
+                submenuSelectedScale = *(Vec3*)(catalog + 0x134);
+                submenuSelectedPos = *(Vec3*)(catalog + 0x128);
+                submenuSelectedPos.x = x + *(f32*)(entry + 4);
+                submenuSelectedPos.y = y + *(f32*)(entry + 8);
+                submenuSelectedCallPos = submenuSelectedPos;
+                winTexSet(0xB5, &submenuSelectedCallPos, &submenuSelectedScale,
+                          &submenuSelectedColor);
+
+                winTexInit_x2(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
+                submenuSelectedIconColor = submenuWhite;
+                submenuSelectedIconScale = *(Vec3*)(catalog + 0x14C);
+                submenuSelectedIconPos = *(Vec3*)(catalog + 0x140);
+                submenuSelectedIconPos.x = x + *(f32*)(entry + 4) - 8.0f;
+                submenuSelectedIconPos.y = y + *(f32*)(entry + 8) + 8.0f;
+                submenuSelectedIconCallPos = submenuSelectedIconPos;
+                winTexSet_x2(*(s32*)entry + 0x1F, 0xB5,
+                             &submenuSelectedIconCallPos, &submenuSelectedIconScale,
+                             &submenuSelectedIconColor);
+            } else {
+                winTexInit_x2(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
+                submenuNormalColor = dat_80423abc;
+                submenuNormalScale = *(Vec3*)(catalog + 0x164);
+                submenuNormalPos = *(Vec3*)(catalog + 0x158);
+                submenuNormalPos.x = x + *(f32*)(entry + 4);
+                submenuNormalPos.y = y + *(f32*)(entry + 8);
+                submenuNormalCallPos = submenuNormalPos;
+                winTexSet_x2(*(s32*)entry + 0x1F, 0xB5,
+                             &submenuNormalCallPos, &submenuNormalScale,
+                             &submenuNormalColor);
+            }
         }
     }
     (void)cameraId;
@@ -562,6 +866,18 @@ void mapGX(double x, double y, void* pWin) {
     extern void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 mode,
                                 f32 rotation, f32 scale);
     Vec3 pos, scale;
+    Vec3 mapPos, mapScale;
+    Vec3 selectedPos, selectedScale;
+    Vec3 normalPos, normalScale;
+    Vec3 iconPos, iconScale;
+    Vec3 borderLeftPos, borderLeftScale;
+    Vec3 borderRightPos, borderRightScale;
+    Vec3 borderTopPos, borderTopScale;
+    Vec3 borderBottomPos, borderBottomScale;
+    Vec3 arrowTopPos, arrowTopScale;
+    Vec3 arrowRightPos, arrowRightScale;
+    Vec3 arrowBottomPos, arrowBottomScale;
+    Vec3 arrowLeftPos, arrowLeftScale;
     u32 white = 0xFFFFFFFF;
     s32 i;
     s16* area;
@@ -574,10 +890,14 @@ void mapGX(double x, double y, void* pWin) {
     GXSetScissor((u32)((f32)x + 72.0f), (u32)(118.0f - (f32)y),
                  0x1D0, 0xF4);
     winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x30) + 0xA0));
-    pos.x = (f32)x + 74.0f + *(f32*)((s32)pWin + 0xE38);
-    pos.y = (f32)y + 120.0f + *(f32*)((s32)pWin + 0xE3C);
-    pos.z = 0.0f; scale.x = 1.0f; scale.y = 1.0f; scale.z = 1.0f;
-    winTexSet(0, &pos, &scale, &white);
+    mapPos.x = (f32)x + 74.0f + *(f32*)((s32)pWin + 0xE38);
+    mapPos.y = (f32)y + 120.0f + *(f32*)((s32)pWin + 0xE3C);
+    mapPos.z = 0.0f;
+    mapScale.x = 1.0f;
+    mapScale.y = 1.0f;
+    mapScale.z = 1.0f;
+    winTexSet(0, &mapPos, &mapScale, &white);
+    scale = mapScale;
     winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
     area = tubuDt;
     for (i = 0; i < 0x5D; i++, area += 6) {
@@ -594,19 +914,31 @@ void mapGX(double x, double y, void* pWin) {
         if (!available) {
             continue;
         }
-        pos.x = (f32)x + 74.0f + *(f32*)((s32)pWin + 0xE38) + (f32)area[0];
-        pos.y = (f32)y + 120.0f + *(f32*)((s32)pWin + 0xE3C) + (f32)area[1];
-        texture = 0xB8;
         if (*(s32*)((s32)pWin + 0xE14) == i) {
+            selectedPos.x = (f32)x + 74.0f + *(f32*)((s32)pWin + 0xE38) + (f32)area[0];
+            selectedPos.y = (f32)y + 120.0f + *(f32*)((s32)pWin + 0xE3C) + (f32)area[1];
+            selectedPos.z = 0.0f;
+            selectedScale = mapScale;
             texture = ((*(u32*)((s32)gp + 0x1C) >> 4) & 1) ? 0xB9 : 0xBA;
-        } else if (*((u8*)area + 4) != 0) {
-            texture = 0xBA;
+            winTexSet(texture, &selectedPos, &selectedScale, &white);
+        } else {
+            normalPos.x = (f32)x + 74.0f + *(f32*)((s32)pWin + 0xE38) + (f32)area[0];
+            normalPos.y = (f32)y + 120.0f + *(f32*)((s32)pWin + 0xE3C) + (f32)area[1];
+            normalPos.z = 0.0f;
+            normalScale = mapScale;
+            texture = 0xB8;
+            if (*((u8*)area + 4) != 0) {
+                texture = 0xBA;
+            }
+            winTexSet(texture, &normalPos, &normalScale, &white);
         }
-        winTexSet(texture, &pos, &scale, &white);
     }
     winIconInit();
-    pos.x = (f32)x; pos.y = (f32)y;
-    winIconSet(0x1A6, &pos, &scale, &white);
+    iconPos.x = (f32)x;
+    iconPos.y = (f32)y;
+    iconPos.z = 0.0f;
+    iconScale = mapScale;
+    winIconSet(0x1A6, &iconPos, &iconScale, &white);
     if (*(s32*)((s32)pWin + 0xE1C) != -1) {
         s32 poseId = *(s32*)((s32)pWin + 0x188);
         s32 mapPoseId = *(s32*)((s32)pWin + 0xE1C);
@@ -632,35 +964,53 @@ void mapGX(double x, double y, void* pWin) {
     }
     GXSetScissor(0, 0, 0x260, 0x1E0);
     winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
-    pos.x = (f32)x - 234.0f;
-    pos.y = (f32)y;
-    winTexSet(0xBF, &pos, &scale, &white);
-    pos.x = (f32)x + 234.0f;
-    winTexSet(0xBF, &pos, &scale, &white);
-    pos.x = (f32)x;
-    pos.y = (f32)y + 124.0f;
-    winTexSet(0xBF, &pos, &scale, &white);
-    pos.y = (f32)y - 124.0f;
-    winTexSet(0xBF, &pos, &scale, &white);
+    borderLeftPos.x = (f32)x - 234.0f;
+    borderLeftPos.y = (f32)y;
+    borderLeftPos.z = 0.0f;
+    borderLeftScale = mapScale;
+    winTexSet(0xBF, &borderLeftPos, &borderLeftScale, &white);
+    borderRightPos.x = (f32)x + 234.0f;
+    borderRightPos.y = (f32)y;
+    borderRightPos.z = 0.0f;
+    borderRightScale = mapScale;
+    winTexSet(0xBF, &borderRightPos, &borderRightScale, &white);
+    borderTopPos.x = (f32)x;
+    borderTopPos.y = (f32)y + 124.0f;
+    borderTopPos.z = 0.0f;
+    borderTopScale = mapScale;
+    winTexSet(0xBF, &borderTopPos, &borderTopScale, &white);
+    borderBottomPos.x = (f32)x;
+    borderBottomPos.y = (f32)y - 124.0f;
+    borderBottomPos.z = 0.0f;
+    borderBottomScale = mapScale;
+    winTexSet(0xBF, &borderBottomPos, &borderBottomScale, &white);
 
     pulse = 2.0f * (f32)sin((double)((f32)*(u32*)((s32)gp + 0x1C) * 0.125f));
     if (pulse < 0.0f) pulse = -pulse;
-    pos.x = (f32)x;
-    pos.y = (f32)y + 120.0f +
+    arrowTopPos.x = (f32)x;
+    arrowTopPos.y = (f32)y + 120.0f +
             (*(f32*)((s32)pWin + 0xE3C) == -240.0f ? 0.0f : pulse);
-    winTexSet(0xBD, &pos, &scale, &white);
-    pos.x = (f32)x + 220.0f +
+    arrowTopPos.z = 0.0f;
+    arrowTopScale = mapScale;
+    winTexSet(0xBD, &arrowTopPos, &arrowTopScale, &white);
+    arrowRightPos.x = (f32)x + 220.0f +
             (*(f32*)((s32)pWin + 0xE38) == -148.0f ? 0.0f : pulse);
-    pos.y = (f32)y;
-    winTexSet(0xBC, &pos, &scale, &white);
-    pos.x = (f32)x;
-    pos.y = (f32)y - 120.0f -
+    arrowRightPos.y = (f32)y;
+    arrowRightPos.z = 0.0f;
+    arrowRightScale = mapScale;
+    winTexSet(0xBC, &arrowRightPos, &arrowRightScale, &white);
+    arrowBottomPos.x = (f32)x;
+    arrowBottomPos.y = (f32)y - 120.0f -
             (*(f32*)((s32)pWin + 0xE3C) == 0.0f ? 0.0f : pulse);
-    winTexSet(0xBE, &pos, &scale, &white);
-    pos.x = (f32)x - 220.0f -
+    arrowBottomPos.z = 0.0f;
+    arrowBottomScale = mapScale;
+    winTexSet(0xBE, &arrowBottomPos, &arrowBottomScale, &white);
+    arrowLeftPos.x = (f32)x - 220.0f -
             (*(f32*)((s32)pWin + 0xE38) == 0.0f ? 0.0f : pulse);
-    pos.y = (f32)y;
-    winTexSet(0xBB, &pos, &scale, &white);
+    arrowLeftPos.y = (f32)y;
+    arrowLeftPos.z = 0.0f;
+    arrowLeftScale = mapScale;
+    winTexSet(0xBB, &arrowLeftPos, &arrowLeftScale, &white);
 }
 
 void monoshiriGX(double x, double y, void* pWin) {
@@ -682,6 +1032,8 @@ void monoshiriGX(double x, double y, void* pWin) {
     extern char str_btl_un_hatena_802f6b28[];
     extern char str_btl_un_rampell_802f6b38[];
     Vec3 pos, scale;
+    Vec3 titlePos, titleScale;
+    Vec3 countPos, countScale;
     u32 white = 0xFFFFFFFF;
     s32 page = *(s32*)((s32)pWin + 0x104C);
     s32 count = *(s32*)((s32)pWin + 0x1040);
@@ -696,23 +1048,26 @@ void monoshiriGX(double x, double y, void* pWin) {
     winBookGX(x, y, pWin, 1);
     winKirinukiGX((double)((f32)x - 110.0f), (double)((f32)y - 160.0f),
                   100.0, 50.0, pWin, 0);
-    scale.x = 0.75f; scale.y = 0.75f; scale.z = 1.0f; pos.z = 0.0f;
+    titleScale.x = 0.75f; titleScale.y = 0.75f; titleScale.z = 1.0f;
+    titlePos.z = 0.0f;
     title = msgSearch(str_msg_menu_monosiri_ka_802f6bb8);
     titleWidth = 0.75f * (f32)FontGetMessageWidth(title);
     if (titleWidth > 80.0f) {
-        scale.x *= 80.0f / titleWidth;
+        titleScale.x *= 80.0f / titleWidth;
         titleWidth = 80.0f;
     }
     winFontInit();
-    pos.x = (f32)x - 108.0f + (100.0f - titleWidth) * 0.5f;
-    pos.y = (f32)y - 166.0f;
-    winFontSetWidth(&pos, &scale, &white, 80.0f, title);
+    titlePos.x = (f32)x - 108.0f + (100.0f - titleWidth) * 0.5f;
+    titlePos.y = (f32)y - 166.0f;
+    winFontSetWidth(&titlePos, &titleScale, &white, 80.0f, title);
     sprintf(countText, "%d/%d", *(s32*)((s32)pWin + 0x1044), count);
-    scale.x = 0.75f;
+    countScale.x = 0.75f; countScale.y = 0.75f; countScale.z = 1.0f;
+    countPos.z = 0.0f;
     countWidth = 0.75f * (f32)FontGetMessageWidth(countText);
-    pos.x = (f32)x - 108.0f + (100.0f - countWidth) * 0.5f;
-    pos.y = (f32)y - 184.0f;
-    winFontSet(&pos, &scale, &white, countText);
+    countPos.x = (f32)x - 108.0f + (100.0f - countWidth) * 0.5f;
+    countPos.y = (f32)y - 184.0f;
+    winFontSet(&countPos, &countScale, &white, countText);
+    scale.x = 0.75f; scale.y = 0.75f; scale.z = 1.0f; pos.z = 0.0f;
     winFontInit();
     for (i = 0; i < 16; i++) {
         idx = page * 16 + i;
@@ -767,6 +1122,7 @@ void monoshiriGX(double x, double y, void* pWin) {
     winIconInit();
     winIconSet(0x219, &pos, &scale, &white);
 }
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 MonosiriWork* monosiriInit(s32 param, f32 x, f32 y) {
@@ -970,29 +1326,30 @@ void monosiriExit(void* work) {
 
 void capture(s32 cameraId, void* work) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
-    extern void GXGetViewportv(f32* viewport);
-    extern void GXGetProjectionv(f32* projection);
+    extern void GXGetViewportv(f32*);
+    extern void GXGetProjectionv(f32*);
     extern void GXGetScissor(s32*, s32*, s32*, s32*);
     extern void GXSetViewport(f32, f32, f32, f32, f32, f32);
     extern void GXSetScissor(s32, s32, s32, s32);
     extern void C_MTXPerspective(void*, f32, f32, f32, f32);
     extern void C_MTXLookAt(void*, Vec3*, Vec3*, Vec3*);
-    extern f64 tan(f64 value);
+    extern f64 tan(f64);
     extern void GXSetProjection(void*, s32);
     extern void GXSetProjectionv(f32*);
     extern void PSMTXTrans(void*, f32, f32, f32);
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXConcat(void*, void*, void*);
-    extern void* camGetPtr(s32 cameraId);
+    extern void* camGetPtr(s32);
     extern void* camGetCurPtr(void);
     extern void PSMTXCopy(void*, void*);
-    extern s32 animPoseGetVivianType(s32 poseId);
-    extern void animPoseVivianMain(s32 poseId, Vec3* offset);
+    extern s32 animPoseGetVivianType(s32);
+    extern void animPoseVivianMain(s32, Vec3*);
     extern void animPoseSetMaterialFlagOn(s32, u32);
     extern void animPosePeraOff(s32);
     extern void PSMTXIdentity(void*);
     extern void animPoseDrawMtx(s32, void*, s32, f32, f32);
     extern void animPosePeraOn(s32);
+    extern void* animPoseGetAnimPosePtr(s32);
     extern void sysWaitDrawSync(void);
     extern void GXClearBoundingBox(void);
     extern void GXReadBoundingBox(u16*, u16*, u16*, u16*);
@@ -1011,10 +1368,7 @@ void capture(s32 cameraId, void* work) {
     f32 drawMtx[3][4];
     u32 savedCamera[152];
     u32 texObj[8];
-    Vec3 center;
-    Vec3 up;
-    Vec3 camera;
-    Vec3 vivianOffset;
+    Vec3 center, up, camera, vivianOffset;
     s32 sx, sy, sw, sh;
     s32 width, height;
     s32 poseId = *(s32*)((s32)work + 0x20);
@@ -1046,14 +1400,9 @@ void capture(s32 cameraId, void* work) {
     C_MTXPerspective(perspective, 25.0f, 1.2667f, 1.0f, 1000.0f);
     GXSetProjection(perspective, 0);
 
-    center.x = centerX;
-    center.y = centerY;
-    center.z = 0.0f;
-    up.x = 0.0f;
-    up.y = 1.0f;
-    up.z = 0.0f;
-    camera.x = centerX;
-    camera.y = centerY;
+    center.x = centerX; center.y = centerY; center.z = 0.0f;
+    up.x = 0.0f; up.y = 1.0f; up.z = 0.0f;
+    camera.x = centerX; camera.y = centerY;
     if ((maxX - minX) / (f32)width <= (maxY - minY) / (f32)height) {
         camera.z = ((608.0f * (maxY - centerY)) / 480.0f) /
                    (f32)tan(0.2181661564992912);
@@ -1066,9 +1415,7 @@ void capture(s32 cameraId, void* work) {
     count = *(s32*)(*(s32*)((s32)work + 0xC) + 0xA4) >> 4;
     for (i = 0; i < count; i++, table += 4) {
         if (table[0] == *(s32*)((s32)work + 4)) {
-            tx = (f32)table[1];
-            ty = (f32)table[2];
-            scale = (f32)table[3];
+            tx = (f32)table[1]; ty = (f32)table[2]; scale = (f32)table[3];
             break;
         }
     }
@@ -1080,15 +1427,11 @@ void capture(s32 cameraId, void* work) {
     sysWaitDrawSync();
     GXClearBoundingBox();
     activeCamera = camGetPtr(cameraId);
-    for (i = 0; i < 152; i++) {
-        savedCamera[i] = *(u32*)((s32)activeCamera + i * 4);
-    }
+    for (i = 0; i < 152; i++) savedCamera[i] = *(u32*)((s32)activeCamera + i * 4);
     activeCamera = camGetCurPtr();
     PSMTXCopy(view, (void*)((s32)activeCamera + 0x18));
     if (animPoseGetVivianType(poseId) != 0) {
-        vivianOffset.x = 0.0f;
-        vivianOffset.y = 0.0f;
-        vivianOffset.z = 0.0f;
+        vivianOffset.x = 0.0f; vivianOffset.y = 0.0f; vivianOffset.z = 0.0f;
         animPoseVivianMain(poseId, &vivianOffset);
     }
     animPoseSetMaterialFlagOn(poseId, 0x1800);
@@ -1100,16 +1443,63 @@ void capture(s32 cameraId, void* work) {
     animPosePeraOn(poseId);
 
     if (*(s32*)((s32)work + 4) == 0x6B) {
-        extern s32 irand(s32 range);
+        extern s32 dat_8041fb08;
+        extern char* g_moamoa_chain_tbl[];
+        extern void* smartAlloc(u32, s32);
+        extern s32 animPoseGetGroupIdx(s32, char*);
+        extern void PSVECScale(Vec3*, Vec3*, f32);
+        extern void PSVECAdd(Vec3*, Vec3*, Vec3*);
+        extern s32 irand(s32);
+        void* pose = animPoseGetAnimPosePtr(poseId);
+        Vec3* worldPos = **(Vec3***)((s32)pose + 0x15C);
+        s32* chainCounts = *(s32**)smartAlloc(dat_8041fb08 * 4, 3);
+        s32* chainIndices = *(s32**)smartAlloc(500 * 4, 3);
         s32 secondaryPose = *(s32*)((s32)work + 0x24);
+        s32 chain;
+        Vec3 first, second, blended;
+        f32 ratio;
 
+        memset(chainCounts, 0, dat_8041fb08 * 4);
+        i = 0;
+        count = 62;
+        do {
+            chain = i % dat_8041fb08;
+            chainIndices[i] = chainCounts[chain]++;
+            chain = (i + 1) % dat_8041fb08;
+            chainIndices[i + 1] = chainCounts[chain]++;
+            chain = (i + 2) % dat_8041fb08;
+            chainIndices[i + 2] = chainCounts[chain]++;
+            chain = (i + 3) % dat_8041fb08;
+            chainIndices[i + 3] = chainCounts[chain]++;
+            chain = (i + 4) % dat_8041fb08;
+            chainIndices[i + 4] = chainCounts[chain]++;
+            chain = (i + 5) % dat_8041fb08;
+            chainIndices[i + 5] = chainCounts[chain]++;
+            chain = (i + 6) % dat_8041fb08;
+            chainIndices[i + 6] = chainCounts[chain]++;
+            chain = (i + 7) % dat_8041fb08;
+            chainIndices[i + 7] = chainCounts[chain]++;
+            i += 8;
+            count--;
+        } while (count != 0);
+        while (i < 500) {
+            chain = i % dat_8041fb08;
+            chainIndices[i] = chainCounts[chain]++;
+            i++;
+        }
         animPoseSetMaterialFlagOn(secondaryPose, 0x1800);
         animPosePeraOff(secondaryPose);
         for (i = 0; i < 500; i++) {
-            PSMTXTrans(drawMtx,
-                       (f32)(irand(10) - 5),
-                       (f32)(irand(10) - 5),
-                       (f32)(irand(10) - 5));
+            chain = i % dat_8041fb08;
+            ratio = (f32)chainIndices[i] / (f32)chainCounts[chain];
+            PSVECScale(&worldPos[animPoseGetGroupIdx(poseId, g_moamoa_chain_tbl[chain * 2])],
+                       &first, ratio);
+            PSVECScale(&worldPos[animPoseGetGroupIdx(poseId, g_moamoa_chain_tbl[chain * 2 + 1])],
+                       &second, 1.0f - ratio);
+            PSVECAdd(&first, &second, &blended);
+            PSMTXTrans(drawMtx, blended.x + (f32)(5 - irand(10)),
+                       blended.y + (f32)(5 - irand(10)),
+                       blended.z + (f32)(5 - irand(10)));
             animPoseDrawMtx(secondaryPose, drawMtx, 1, 0.0f, 1.0f);
             animPoseDrawMtx(secondaryPose, drawMtx, 2, 0.0f, 1.0f);
             animPoseDrawMtx(secondaryPose, drawMtx, 3, 0.0f, 1.0f);
@@ -1126,8 +1516,7 @@ void capture(s32 cameraId, void* work) {
     GXSetZMode(1, 3, 1);
     GXCopyTex(**(void***)((s32)work + 0x28), 1);
     GXPixModeSync();
-    GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3],
-                  viewport[4], viewport[5]);
+    GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
     GXSetProjectionv(projection);
     GXSetScissor(sx, sy, sw, sh);
 }

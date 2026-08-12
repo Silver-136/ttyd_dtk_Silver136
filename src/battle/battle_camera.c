@@ -28,7 +28,9 @@ s32 evt_btl_camera_set_moveSpeedLv(void* evt);
 s32 evt_btl_camera_set_zoomSpeedLv(void* evt);
 s32 evt_btl_camera_set_mode(void* evt);
 s32 evt_btl_camera_set_zoom(void* evt);
-u8 battleCameraMoveTo(void);
+void battleCameraMoveTo(f32 posX, f32 posY, f32 posZ, f32 targetX, f32 targetY,
+                        f32 targetZ, s32 useOffset, s32 clampX, f32* moveX,
+                        f32* moveY, f32* moveZ, f32* targetMoveX, f32* targetMoveY, f32* targetMoveZ);
 s32 evt_btl_camera_set_homing_unitparts(int param_1);
 s32 evt_btl_camera_set_homing_unit_audience(int param_1);
 s32 evt_btl_camera_set_homing_unit(int param_1);
@@ -112,12 +114,22 @@ void battleCameraMain(void) {
     f32 width2;
     f32 midpoint;
 
-    *(f32*)(view + 0x34) = *(f32*)((u8*)camera + 0x2C);
-    *(f32*)(view + 0x38) = *(f32*)((u8*)camera + 0x30);
-    *(f32*)(view + 0x3C) = *(f32*)((u8*)camera + 0x34);
-    *(f32*)(view + 0x40) = *(f32*)((u8*)camera + 0x44);
-    *(f32*)(view + 0x44) = *(f32*)((u8*)camera + 0x48);
-    *(f32*)(view + 0x48) = *(f32*)((u8*)camera + 0x4C);
+    *(f32*)(view + 0x0C) = *(f32*)((u8*)camera + 0x2C);
+    *(f32*)(view + 0x10) = *(f32*)((u8*)camera + 0x30);
+    *(f32*)(view + 0x14) = *(f32*)((u8*)camera + 0x34);
+    *(f32*)(view + 0x18) = *(f32*)((u8*)camera + 0x44);
+    *(f32*)(view + 0x1C) = *(f32*)((u8*)camera + 0x48);
+    *(f32*)(view + 0x20) = *(f32*)((u8*)camera + 0x4C);
+    *(f32*)((u8*)camera + 0x38) = *(f32*)(view + 0x0C);
+    *(f32*)((u8*)camera + 0x3C) = *(f32*)(view + 0x10);
+    *(f32*)((u8*)camera + 0x40) = *(f32*)(view + 0x14);
+    *(f32*)((u8*)camera + 0x50) = *(f32*)(view + 0x18);
+    *(f32*)((u8*)camera + 0x54) = *(f32*)(view + 0x1C);
+    *(f32*)((u8*)camera + 0x58) = *(f32*)(view + 0x20);
+
+    if (camera->mode != 3) {
+        *(s32*)((u8*)camera + 0x84) = 0;
+    }
 
     switch (camera->mode) {
         case 0:
@@ -257,8 +269,210 @@ void battleCameraMain(void) {
     *(f32*)((u8*)camera + 0x70) = dz;
 }
 
-u8 battleCameraMoveTo(void) {
-    return 0;
+void battleCameraMoveTo(f32 posX, f32 posY, f32 posZ, f32 targetX, f32 targetY,
+                        f32 targetZ, s32 useOffset, s32 clampX, f32* moveX,
+                        f32* moveY, f32* moveZ, f32* targetMoveX, f32* targetMoveY, f32* targetMoveZ) {
+    typedef struct LocalCamera {
+        u8 pad0[0xC];
+        Vec position;
+        Vec target;
+        Vec up;
+    } LocalCamera;
+    extern BattleWorkUnit* BattleGetMarioPtr(BattleWork* battleWork);
+    extern f32 float_0_8042273c;
+    extern f32 float_0p25_80422740;
+    extern f32 float_600_80422744;
+    extern f32 float_0p5_80422748;
+    extern f32 float_100_8042274c;
+    extern f32 float_neg100_80422750;
+    extern f32 float_1p5_80422754;
+    extern f32 float_1_80422758;
+    extern f32 float_15_8042275c;
+    extern f32 float_5_80422760;
+    extern f32 float_200_80422764;
+    BattleWork* battleWork;
+    BattleWorkCamera* cameraWork;
+    BattleWorkUnit* mario;
+    LocalCamera* camera;
+    f32 limitOffset;
+    f32 upperLimit;
+    f32 lowerLimit;
+    f32 homeZ;
+    s16 level;
+
+    camera = camGetPtr(4);
+    battleWork = _battleWorkPointer;
+    cameraWork = &battleWork->camera;
+    mario = BattleGetMarioPtr(battleWork);
+
+    if (cameraWork->moveSpeedLevel < 0 || cameraWork->moveSpeedLevel >= 5) {
+        cameraWork->moveSpeedLevel = 1;
+    }
+    if (cameraWork->zoomSpeedLevel < 0 || cameraWork->zoomSpeedLevel >= 6) {
+        cameraWork->zoomSpeedLevel = 1;
+    }
+
+    if (useOffset == 1) {
+        if (battleWork->flags & 0x100) {
+            homeZ = mario->homePosition.z;
+            posX += float_0_8042273c;
+            posY += float_0p25_80422740 * -homeZ;
+            posZ += homeZ;
+            targetX += float_0_8042273c;
+            targetY += float_0p25_80422740 * -homeZ;
+            targetZ += homeZ;
+        }
+        posX += cameraWork->offset.x;
+        posY += cameraWork->offset.y;
+        posZ += cameraWork->offset.z;
+        targetX += cameraWork->offset.x;
+        targetY += cameraWork->offset.y;
+        targetZ += cameraWork->offset.z;
+    }
+
+    limitOffset = (float_600_80422744 - posZ) * float_0p5_80422748;
+    if (limitOffset < float_0_8042273c) {
+        limitOffset = float_0_8042273c;
+    }
+    if (clampX == 1) {
+        upperLimit = float_100_8042274c + limitOffset;
+        lowerLimit = float_neg100_80422750 - limitOffset;
+        if (posX > upperLimit) {
+            posX = upperLimit;
+        }
+        if (posX < lowerLimit) {
+            posX = lowerLimit;
+        }
+        if (targetX > upperLimit) {
+            targetX = upperLimit;
+        }
+        if (targetX < lowerLimit) {
+            targetX = lowerLimit;
+        }
+    }
+
+    level = cameraWork->moveSpeedLevel;
+    switch (level) {
+    case 0:
+        *moveX = (posX - camera->position.x) / float_1p5_80422754;
+        *moveY = (posY - camera->position.y) / float_1p5_80422754;
+        *targetMoveX = (targetX - camera->target.x) / float_1p5_80422754;
+        *targetMoveY = (targetY - camera->target.y) / float_1p5_80422754;
+        camera->position.x += *moveX;
+        camera->position.y += *moveY;
+        camera->target.x += *targetMoveX;
+        camera->target.y += *targetMoveY;
+        camera->up.x = float_0_8042273c;
+        camera->up.y = float_1_80422758;
+        camera->up.z = float_0_8042273c;
+        break;
+    case 1:
+        *moveX = (posX - camera->position.x) / float_15_8042275c;
+        *moveY = (posY - camera->position.y) / float_15_8042275c;
+        *targetMoveX = (targetX - camera->target.x) / float_15_8042275c;
+        *targetMoveY = (targetY - camera->target.y) / float_15_8042275c;
+        camera->position.x += *moveX;
+        camera->position.y += *moveY;
+        camera->position.z += *moveZ;
+        camera->target.x += *targetMoveX;
+        camera->target.y += *targetMoveY;
+        camera->up.x = float_0_8042273c;
+        camera->up.y = float_1_80422758;
+        camera->up.z = float_0_8042273c;
+        break;
+    case 2:
+        *moveX = (posX - camera->position.x) / float_5_80422760;
+        *moveY = (posY - camera->position.y) / float_5_80422760;
+        *targetMoveX = (targetX - camera->target.x) / float_5_80422760;
+        *targetMoveY = (targetY - camera->target.y) / float_5_80422760;
+        camera->position.x += *moveX;
+        camera->position.y += *moveY;
+        camera->target.x += *targetMoveX;
+        camera->target.y += *targetMoveY;
+        camera->up.x = float_0_8042273c;
+        camera->up.y = float_1_80422758;
+        camera->up.z = float_0_8042273c;
+        break;
+    case 3:
+        *moveX = posX - camera->position.x;
+        *moveY = posY - camera->position.y;
+        *targetMoveX = targetX - camera->target.x;
+        *targetMoveY = targetY - camera->target.y;
+        camera->position.x += *moveX;
+        camera->position.y += *moveY;
+        camera->target.x += *targetMoveX;
+        camera->target.y += *targetMoveY;
+        camera->up.x = float_0_8042273c;
+        camera->up.y = float_1_80422758;
+        camera->up.z = float_0_8042273c;
+        break;
+    case 4:
+        *moveX = (posX - camera->position.x) / float_200_80422764;
+        *moveY = (posY - camera->position.y) / float_200_80422764;
+        *targetMoveX = (targetX - camera->target.x) / float_200_80422764;
+        *targetMoveY = (targetY - camera->target.y) / float_200_80422764;
+        camera->position.x += *moveX;
+        camera->position.y += *moveY;
+        camera->target.x += *targetMoveX;
+        camera->target.y += *targetMoveY;
+        camera->up.x = float_0_8042273c;
+        camera->up.y = float_1_80422758;
+        camera->up.z = float_0_8042273c;
+        break;
+    case 5:
+        *moveX = (posX - camera->position.x) / float_100_8042274c;
+        *moveY = (posY - camera->position.y) / float_100_8042274c;
+        *targetMoveX = (targetX - camera->target.x) / float_100_8042274c;
+        *targetMoveY = (targetY - camera->target.y) / float_100_8042274c;
+        camera->position.x += *moveX;
+        camera->position.y += *moveY;
+        camera->target.x += *targetMoveX;
+        camera->target.y += *targetMoveY;
+        camera->up.x = float_0_8042273c;
+        camera->up.y = float_1_80422758;
+        camera->up.z = float_0_8042273c;
+        break;
+    }
+
+    level = cameraWork->zoomSpeedLevel;
+    switch (level) {
+    case 0:
+        *moveZ = (posZ - camera->position.z) / float_1p5_80422754;
+        *targetMoveZ = (targetZ - camera->target.z) / float_1p5_80422754;
+        camera->position.z += *moveZ;
+        camera->target.z += *targetMoveZ;
+        break;
+    case 1:
+        *moveZ = (posZ - camera->position.z) / float_15_8042275c;
+        *targetMoveZ = (targetZ - camera->target.z) / float_15_8042275c;
+        camera->position.z += *moveZ;
+        camera->target.z += *targetMoveZ;
+        break;
+    case 2:
+        *moveZ = (posZ - camera->position.z) / float_5_80422760;
+        *targetMoveZ = (targetZ - camera->target.z) / float_5_80422760;
+        camera->position.z += *moveZ;
+        camera->target.z += *targetMoveZ;
+        break;
+    case 3:
+        *moveZ = posZ - camera->position.z;
+        *targetMoveZ = targetZ - camera->target.z;
+        camera->position.z += *moveZ;
+        camera->target.z += *targetMoveZ;
+        break;
+    case 4:
+        *moveZ = (posZ - camera->position.z) / float_200_80422764;
+        *targetMoveZ = (targetZ - camera->target.z) / float_200_80422764;
+        camera->position.z += *moveZ;
+        camera->target.z += *targetMoveZ;
+        break;
+    case 5:
+        *moveZ = (posZ - camera->position.z) / float_100_8042274c;
+        *targetMoveZ = (targetZ - camera->target.z) / float_100_8042274c;
+        camera->position.z += *moveZ;
+        camera->target.z += *targetMoveZ;
+        break;
+    }
 }
 
 f32 battleCameraGetPosMoveSpeed(void) {

@@ -52,7 +52,7 @@ void _btlcmd_MakeActClassTable(void* battleWork) {
         char* name;
         u16 icon;
         u16 pad;
-        s32 disabledGrey;
+        s32 errorMessageType;
     } ActionEntry;
 
     extern char* msgSearch(const char* msg);
@@ -95,29 +95,29 @@ void _btlcmd_MakeActClassTable(void* battleWork) {
         if (kind == 0xDE) {
             table[0].type = 0;
             table[0].enabled = 1;
-            table[0].disabledGrey = 0;
+            table[0].errorMessageType = 0;
             if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
                 table[0].enabled = 0;
-                table[0].disabledGrey = 3;
+                table[0].errorMessageType = 3;
             }
             if (*(s8*)((s32)pouch + 0x98) < 1) {
                 table[0].enabled = 0;
             }
             if (*(u8*)((s32)unit + 0x300) != 0) {
                 table[0].enabled = 0;
-                table[0].disabledGrey = 3;
+                table[0].errorMessageType = 3;
             }
             if (*(s32*)((s32)battleWork + 0x19050) > 0) {
                 table[0].enabled = 0;
-                table[0].disabledGrey = 3;
+                table[0].errorMessageType = 3;
             }
             if ((*(u32*)((s32)npcInfo + 4) & 0x1000000) != 0) {
                 table[0].enabled = 0;
-                table[0].disabledGrey = 3;
+                table[0].errorMessageType = 3;
             }
             if ((*(u32*)((s32)battleWork + 0xEF4) & 0x6800000) != 0) {
                 table[0].enabled = 0;
-                table[0].disabledGrey = 3;
+                table[0].errorMessageType = 3;
             }
             table[0].name = msgSearch(str_btl_cmd_act_jump_802f0018);
             level = *(s8*)((s32)pouch + 0x98);
@@ -136,18 +136,18 @@ void _btlcmd_MakeActClassTable(void* battleWork) {
             table[count].type = 6;
             if (*(s8*)((s32)unit + 0x12B) == 0) {
                 table[count].enabled = 1;
-                table[count].disabledGrey = 0;
+                table[count].errorMessageType = 0;
             } else {
                 table[count].enabled = 0;
-                table[count].disabledGrey = 3;
+                table[count].errorMessageType = 3;
             }
             if (*(u16*)((s32)unit + 0x13C) != 0) {
                 table[count].enabled = 0;
-                table[count].disabledGrey = 3;
+                table[count].errorMessageType = 3;
             }
             if ((*(u32*)((s32)battleWork + 0xEF4) & 0x4800000) != 0) {
                 table[count].enabled = 0;
-                table[count].disabledGrey = 3;
+                table[count].errorMessageType = 3;
             }
             table[count].name = msgSearch(str_btl_cmd_act_tech_par_802f002c);
             table[count].icon = 0x157;
@@ -157,29 +157,29 @@ void _btlcmd_MakeActClassTable(void* battleWork) {
         if (kind == 0xDE && *(s8*)((s32)pouch + 0x99) > 0) {
             table[next].type = 1;
             table[next].enabled = 1;
-            table[next].disabledGrey = 0;
+            table[next].errorMessageType = 0;
             if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
                 table[next].enabled = 0;
-                table[next].disabledGrey = 3;
+                table[next].errorMessageType = 3;
             }
             if (*(s8*)((s32)pouch + 0x99) < 1) {
                 table[next].enabled = 0;
             }
             if (*(u8*)((s32)unit + 0x2FF) != 0) {
                 table[next].enabled = 0;
-                table[next].disabledGrey = 3;
+                table[next].errorMessageType = 3;
             }
             if (*(s32*)((s32)battleWork + 0x19054) > 0) {
                 table[next].enabled = 0;
-                table[next].disabledGrey = 3;
+                table[next].errorMessageType = 3;
             }
             if ((*(u32*)((s32)npcInfo + 4) & 0x2000000) != 0) {
                 table[next].enabled = 0;
-                table[next].disabledGrey = 3;
+                table[next].errorMessageType = 3;
             }
             if ((*(u32*)((s32)battleWork + 0xEF4) & 0x5800000) != 0) {
                 table[next].enabled = 0;
-                table[next].disabledGrey = 3;
+                table[next].errorMessageType = 3;
             }
             table[next].name = msgSearch(str_btl_cmd_act_hammer_802f0044);
             level = *(s8*)((s32)pouch + 0x99);
@@ -198,23 +198,23 @@ void _btlcmd_MakeActClassTable(void* battleWork) {
             table[next].type = 2;
             if (*(s8*)((s32)unit + 0x12B) == 0) {
                 table[next].enabled = 1;
-                table[next].disabledGrey = 0;
+                table[next].errorMessageType = 0;
             } else {
                 table[next].enabled = 0;
-                table[next].disabledGrey = 3;
+                table[next].errorMessageType = 3;
             }
             if (kind == 0xDE) {
                 if (*(s32*)((s32)battleWork + 0x19058) > 0) {
                     table[next].enabled = 0;
-                    table[next].disabledGrey = 3;
+                    table[next].errorMessageType = 3;
                 }
             } else if (*(u16*)((s32)unit + 0x13E) != 0) {
                 table[next].enabled = 0;
-                table[next].disabledGrey = 3;
+                table[next].errorMessageType = 3;
             }
             if ((*(u32*)((s32)battleWork + 0xEF4) & 0x1F800000) != 0) {
                 table[next].enabled = 0;
-                table[next].disabledGrey = 3;
+                table[next].errorMessageType = 3;
             }
             table[next].name = msgSearch(str_btl_cmd_act_item_802eff0c);
             table[next].icon = 0x154;
@@ -225,14 +225,14 @@ void _btlcmd_MakeActClassTable(void* battleWork) {
         if (kind == 0xDE && *(u16*)((s32)pouch + 0x8C) != 0) {
             table[count].type = 4;
             table[count].enabled = 1;
-            table[count].disabledGrey = 0;
+            table[count].errorMessageType = 0;
             if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
                 table[count].enabled = 0;
-                table[count].disabledGrey = 3;
+                table[count].errorMessageType = 3;
             }
             if ((*(u32*)((s32)battleWork + 0xEF4) & 0x1B800000) != 0) {
                 table[count].enabled = 0;
-                table[count].disabledGrey = 3;
+                table[count].errorMessageType = 3;
             }
             table[count].name = msgSearch(str_btl_cmd_act_super_ac_802f0058);
             table[count].icon = 0x155;
@@ -243,10 +243,10 @@ void _btlcmd_MakeActClassTable(void* battleWork) {
         if ((*(u32*)((s32)battleWork + 0xEF4) & 0x8000000) == 0) {
             table[next].type = 5;
             table[next].enabled = 1;
-            table[next].disabledGrey = 0;
+            table[next].errorMessageType = 0;
             if ((*(u32*)((s32)battleWork + 0xEF4) & 0x1F800000) != 0) {
                 table[next].enabled = 0;
-                table[next].disabledGrey = 3;
+                table[next].errorMessageType = 3;
             }
             table[next].name = msgSearch(str_btl_cmd_act_operatio_802f0074);
             table[next].icon = 0x156;
@@ -256,12 +256,12 @@ void _btlcmd_MakeActClassTable(void* battleWork) {
         if ((*(u32*)((s32)battleWork + 0xEF4) & 0x8000000) != 0) {
             table[count].type = 0xD;
             table[count].enabled = 1;
-            table[count].disabledGrey = 0;
+            table[count].errorMessageType = 0;
             table[count].name = msgSearch(str_btl_cmd_act_lecture__802f008c);
             table[count].icon = 0x156;
             if ((*(u32*)((s32)battleWork + 0xEF4) & 0x10800000) != 0) {
                 table[count].enabled = 0;
-                table[count].disabledGrey = 3;
+                table[count].errorMessageType = 3;
             }
             count++;
         }
@@ -415,9 +415,12 @@ void _btlcmd_MakeSelectWeaponTable(void* battleWork, s32 type) {
     s32 item;
     void* unit;
 
+    unit = BattleGetUnitPtr(battleWork, *(s32*)((u8*)battleWork + 0x420));
     command = (u8*)battleWork + 0x171C;
     pouch = pouchGetPtr();
-    unit = BattleGetUnitPtr(battleWork, *(s32*)((u8*)battleWork + 0x420));
+    if (command == 0) {
+        return;
+    }
     _btlcmd_GetCursorPtr(command, type, (void**)&cursor);
     count = 0;
 
@@ -440,6 +443,12 @@ void _btlcmd_MakeSelectWeaponTable(void* battleWork, s32 type) {
                     else if (i == 1) weapon = marioWeapon_KaitenHammer;
                     else weapon = marioWeapon_UltraHammer;
                     *(u16*)(entry + 0xC) = (u16)_getHammerIconId();
+                }
+                if ((*(u32*)((u8*)battleWork + 0xEF4) & 0x09000000) != 0 &&
+                    *(s32*)((u8*)battleWork + 0x424) != -1) {
+                    void* specialUnit = BattleGetUnitPtr(
+                        battleWork, *(s32*)((u8*)battleWork + 0x424));
+                    weapon = (u8*)BtlUnit_GetData(specialUnit, 0x44);
                 }
                 *(void**)entry = weapon;
                 if (*(char**)weapon != 0) {
@@ -605,7 +614,7 @@ void _btlcmd_MakeOperationTable(void* battleWork) {
         char* name;
         u16 icon;
         u16 pad;
-        s32 disabledGrey;
+        s32 errorMessageType;
         s32 cost;
         char* desc;
     } OperationEntry;
@@ -657,10 +666,10 @@ void _btlcmd_MakeOperationTable(void* battleWork) {
             table[0].type = 0;
             if (*(s8*)((s32)unit + 0x12B) == 0) {
                 table[0].enabled = 1;
-                table[0].disabledGrey = 0;
+                table[0].errorMessageType = 0;
             } else {
                 table[0].enabled = 0;
-                table[0].disabledGrey = 3;
+                table[0].errorMessageType = 3;
             }
             table[0].name = msgSearch(str_btl_cmd_op_chg_party_802eff40);
             partner = unit;
@@ -672,11 +681,11 @@ void _btlcmd_MakeOperationTable(void* battleWork) {
             table[0].desc = (char*)str_btl_hlp_cmd_operatio_802eff58;
             if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
                 table[0].enabled = 0;
-                table[0].disabledGrey = 3;
+                table[0].errorMessageType = 3;
             }
             if ((*(u32*)((s32)npcInfo + 4) & 0x4000000) != 0) {
                 table[0].enabled = 0;
-                table[0].disabledGrey = 3;
+                table[0].errorMessageType = 3;
             }
             table[0].cost = 0;
             count = 1;
@@ -687,7 +696,7 @@ void _btlcmd_MakeOperationTable(void* battleWork) {
             table[count].enabled = 1;
             table[count].name = msgSearch(str_btl_cmd_op_appeal_802eff7c);
             table[count].icon = 0x16C;
-            table[count].disabledGrey = 0;
+            table[count].errorMessageType = 0;
             table[count].cost = 0;
             table[count].desc = (char*)str_btl_hlp_cmd_operatio_802eff90;
             count++;
@@ -701,13 +710,13 @@ void _btlcmd_MakeOperationTable(void* battleWork) {
             table[count].type = 1;
             table[count].enabled = BtlUnit_CheckWeaponCost(unit, weapon);
             table[count].cost = BtlUnit_GetWeaponCost(unit, weapon);
-            table[count].disabledGrey = table[count].enabled == 0 ? 1 : 0;
+            table[count].errorMessageType = table[count].enabled == 0 ? 1 : 0;
             table[count].name = msgSearch(*(char**)weapon);
             table[count].icon = 0x16E;
             table[count].desc = *(char**)((s32)weapon + 0xC);
             if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
                 table[count].enabled = 0;
-                table[count].disabledGrey = 3;
+                table[count].errorMessageType = 3;
             }
             count++;
         }
@@ -720,13 +729,13 @@ void _btlcmd_MakeOperationTable(void* battleWork) {
             table[count].type = 2;
             table[count].enabled = BtlUnit_CheckWeaponCost(unit, weapon);
             table[count].cost = BtlUnit_GetWeaponCost(unit, weapon);
-            table[count].disabledGrey = table[count].enabled == 0 ? 1 : 0;
+            table[count].errorMessageType = table[count].enabled == 0 ? 1 : 0;
             table[count].name = msgSearch(*(char**)weapon);
             table[count].icon = 0x16F;
             table[count].desc = *(char**)((s32)weapon + 0xC);
             if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
                 table[count].enabled = 0;
-                table[count].disabledGrey = 3;
+                table[count].errorMessageType = 3;
             }
             count++;
         }
@@ -735,12 +744,12 @@ void _btlcmd_MakeOperationTable(void* battleWork) {
         table[count].enabled = 1;
         table[count].name = msgSearch(str_btl_cmd_op_defend_802effb0);
         table[count].icon = 0x16D;
-        table[count].disabledGrey = 0;
+        table[count].errorMessageType = 0;
         table[count].cost = 0;
         table[count].desc = (char*)str_btl_hlp_cmd_operatio_802effc4;
         if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
             table[count].enabled = 0;
-            table[count].disabledGrey = 3;
+            table[count].errorMessageType = 3;
         }
 
         table[count + 1].type = 3;
@@ -748,15 +757,15 @@ void _btlcmd_MakeOperationTable(void* battleWork) {
         table[count + 1].name = msgSearch(str_btl_cmd_op_escape_802effe4);
         table[count + 1].icon = 0x16B;
         table[count + 1].cost = 0;
-        table[count + 1].disabledGrey = table[count + 1].enabled == 0 ? 1 : 0;
+        table[count + 1].errorMessageType = table[count + 1].enabled == 0 ? 1 : 0;
         table[count + 1].desc = (char*)str_btl_hlp_cmd_operatio_802efff8;
         if ((*(u32*)((s32)unit + 0x104) & 2) != 0) {
             table[count + 1].enabled = 0;
-            table[count + 1].disabledGrey = 3;
+            table[count + 1].errorMessageType = 3;
         }
         if ((*(u32*)((s32)(*(void**)((s32)battleWork + 0x2738)) + 0x10) & 0x10) != 0) {
             table[count + 1].enabled = 0;
-            table[count + 1].disabledGrey = 3;
+            table[count + 1].errorMessageType = 3;
         }
 
         *(s32*)((s32)cursor + 8) = count + 2;
@@ -767,6 +776,17 @@ void _btlcmd_MakeOperationTable(void* battleWork) {
 }
 
 void _btlcmd_MakeMultiItemTable(void* battleWork) {
+    typedef struct MultiItemEntry {
+        u8 pad0[4];
+        s32 enabled;
+        char* name;
+        u16 icon;
+        u8 padE[2];
+        char* description;
+        u8 weaponCost;
+        u8 disabled;
+        u8 pad16[2];
+    } MultiItemEntry;
     extern void* BattleGetUnitPtr(void*, s32);
     extern void _btlcmd_GetCursorPtr(void*, s32, void**);
     extern char* msgSearch(char*);
@@ -778,7 +798,7 @@ void _btlcmd_MakeMultiItemTable(void* battleWork) {
     extern u8 badgeWeapon_2KaiItem[];
     extern u8 badgeWeapon_3KaiItem[];
     u8* command;
-    u8* entry;
+    MultiItemEntry* table;
     u8* itemTable;
     void* unit;
     BattleWorkCommandCursor* cursor;
@@ -787,49 +807,61 @@ void _btlcmd_MakeMultiItemTable(void* battleWork) {
 
     unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
     command = (u8*)battleWork + 0x171C;
-    if (command == 0) return;
-    _btlcmd_GetCursorPtr(command, 3, (void**)&cursor);
-    entry = command + 0x450;
-    entry[0xE] = 1;
-    *(s32*)(entry + 4) = 1;
-    *(char**)(entry + 8) = msgSearch(str_btl_cmd_act_item_802eff0c);
-    *(u16*)(entry + 0xC) = 0x154;
-    *(void**)(entry + 0x10) = 0;
-    entry[0x14] = 0;
-    count = 1;
-    itemTable = (u8*)0x803108A8;
-    if (*(u8*)((s32)unit + 0x2F3)) {
-        entry = command + 0x450 + count * 0x18;
-        entry[0xE] = 2;
-        *(s32*)(entry + 4) = BtlUnit_CheckWeaponCost(unit, badgeWeapon_2KaiItem);
-        itemId = *(s32*)((s32)unit + 8) == 0xDE ? 0xFE : 0xFF;
-        *(char**)(entry + 8) = msgSearch(*(char**)(itemTable + itemId * 0x28 + 4));
-        *(u16*)(entry + 0xC) = *(u16*)(itemTable + itemId * 0x28 + 0x20);
-        *(char**)(entry + 0x10) = *(char**)(itemTable + itemId * 0x28 + 8);
-        entry[0x14] = BtlUnit_GetWeaponCost(unit, badgeWeapon_2KaiItem);
-        entry[0x15] = *(s32*)(entry + 4) == 0;
-        count++;
-    }
-    if (*(u8*)((s32)unit + 0x2F4)) {
-        entry = command + 0x450 + count * 0x18;
-        entry[0xE] = 3;
-        *(s32*)(entry + 4) = BtlUnit_CheckWeaponCost(unit, badgeWeapon_3KaiItem);
-        if (*(s32*)((s32)unit + 8) == 0xDE) {
-            itemId = 0x149;
-            *(char**)(entry + 8) = msgSearch(*(char**)(itemTable + itemId * 0x28 + 4));
-            *(u16*)(entry + 0xC) = *(u16*)(itemTable + itemId * 0x28 + 0x20);
-            *(char**)(entry + 0x10) = *(char**)(itemTable + itemId * 0x28 + 8);
-        } else {
-            *(char**)(entry + 8) = msgSearch(str_in_3kai_item_p_802eff20);
-            *(u16*)(entry + 0xC) = 0x65;
-            *(char**)(entry + 0x10) = str_msg_3kai_item_p_802eff30;
+    if (command != 0) {
+        _btlcmd_GetCursorPtr(command, 3, (void**)&cursor);
+        table = (MultiItemEntry*)(command + 0x450);
+        table[0].padE[0] = 1;
+        table[0].enabled = 1;
+        table[0].name = msgSearch(str_btl_cmd_act_item_802eff0c);
+        table[0].icon = 0x154;
+        table[0].description = 0;
+        table[0].weaponCost = 0;
+        count = 1;
+        itemTable = (u8*)0x803108A8;
+        if (*(u8*)((s32)unit + 0x2F3) != 0) {
+            table[1].padE[0] = 2;
+            if (*(s32*)((s32)unit + 8) == 0xDE) {
+                table[1].enabled = BtlUnit_CheckWeaponCost(unit, badgeWeapon_2KaiItem);
+                itemId = 0xFE;
+                table[1].name = msgSearch(*(char**)(itemTable + itemId * 0x28 + 4));
+                table[1].icon = *(u16*)(itemTable + itemId * 0x28 + 0x20);
+                table[1].description = *(char**)(itemTable + itemId * 0x28 + 8);
+                table[1].weaponCost = BtlUnit_GetWeaponCost(unit, badgeWeapon_2KaiItem);
+            } else {
+                table[1].enabled = BtlUnit_CheckWeaponCost(unit, badgeWeapon_2KaiItem);
+                itemId = 0xFF;
+                table[1].name = msgSearch(*(char**)(itemTable + itemId * 0x28 + 4));
+                table[1].icon = *(u16*)(itemTable + itemId * 0x28 + 0x20);
+                table[1].description = *(char**)(itemTable + itemId * 0x28 + 8);
+                table[1].weaponCost = BtlUnit_GetWeaponCost(unit, badgeWeapon_2KaiItem);
+            }
+            table[1].disabled = table[1].enabled == 0;
+            count = 2;
         }
-        entry[0x14] = BtlUnit_GetWeaponCost(unit, badgeWeapon_3KaiItem);
-        entry[0x15] = *(s32*)(entry + 4) == 0;
-        count++;
+        if (*(u8*)((s32)unit + 0x2F4) != 0) {
+            table[count].padE[0] = 3;
+            if (*(s32*)((s32)unit + 8) == 0xDE) {
+                table[count].enabled = BtlUnit_CheckWeaponCost(unit, badgeWeapon_3KaiItem);
+                itemId = 0x149;
+                table[count].name = msgSearch(*(char**)(itemTable + itemId * 0x28 + 4));
+                table[count].icon = *(u16*)(itemTable + itemId * 0x28 + 0x20);
+                table[count].description = *(char**)(itemTable + itemId * 0x28 + 8);
+                table[count].weaponCost = BtlUnit_GetWeaponCost(unit, badgeWeapon_3KaiItem);
+            } else {
+                table[count].enabled = BtlUnit_CheckWeaponCost(unit, badgeWeapon_3KaiItem);
+                table[count].name = msgSearch(str_in_3kai_item_p_802eff20);
+                table[count].icon = 0x65;
+                table[count].description = str_msg_3kai_item_p_802eff30;
+                table[count].weaponCost = BtlUnit_GetWeaponCost(unit, badgeWeapon_3KaiItem);
+            }
+            table[count].disabled = table[count].enabled == 0;
+            count++;
+        }
+        cursor->numOptions = count;
+        if (cursor->numOptions <= cursor->absolutePos) {
+            cursor->absolutePos = cursor->numOptions - 1;
+        }
     }
-    cursor->numOptions = count;
-    if (cursor->absolutePos >= count) cursor->absolutePos = count - 1;
 }
 
 u32 _battleGetPartyIcon(s32 unitKind) {

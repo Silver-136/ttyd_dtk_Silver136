@@ -22,7 +22,16 @@ void animPoseSetLocalTimeRate(void* pose, f32 rate);
 void animPoseSetEffectAnim(void* pose, s32 value, s32 flag);
 void animPoseSetEffect(void* pose, s32 value, s32 flag);
 void animPoseSetMaterialLightFlagOn(void* pose, s32 flag);
-void _partsBlurControl(void* part, s32 enable, s32 a3, void* color);
+typedef struct BattleWorkUnitPartBlur {
+    u32 flags;
+    f32 orientation[3][4];
+    f32 rotation;
+    u32 baseColor;
+    u32 blurColors[2];
+} BattleWorkUnitPartBlur;
+
+extern void PSMTXCopy(void* src, void* dst);
+void _partsBlurControl(f64 rotation, void* part, u32 flags, void* orientation, void* color);
 void _pose_def(void* part);
 void _pose_one_pattern(void* part);
 void _pose_two_pattern(void* part);
@@ -374,10 +383,18 @@ void btlDispMain(void) {
     extern void btlUnitPartsDisp(void*, void*);
     extern void btlUnitPartsBlurDisp(void*);
     extern void animPoseMain(s32);
+    extern void gravityOffsetControl(void*);
+    extern void floatOffsetControl(void*);
+    extern void statusPoseControl(void*);
     extern void BtlUnit_GetPartsWorldPos(void*, f32*, f32*, f32*);
     extern s32 animPoseTestXLU(s32);
     extern s32 _GetStatusPoseType(void*);
     extern s32 BtlUnit_CheckStatus(void*, s32);
+    extern s32 BtlUnit_CheckStatusFlag(void*, u32);
+    extern s32 BtlUnit_CanActStatus(void*);
+    extern const char* BtlUnit_GetPoseNameFromType(void*, s32);
+    extern void animPoseSetAnim(s32, const char*, s32);
+    extern void* searchPoseTbl(void*, s32);
     extern void btlDispAnimeSpeed(f32, void*);
     extern void* BattleGetUnitPtr(void*, s32);
     extern void BtlUnit_OffUnitFlag(void*, u32);
@@ -385,6 +402,7 @@ void btlDispMain(void) {
     extern void BtlUnit_HpGaugeMain(void*);
     extern void BattleStatusEffectMain(void*);
     extern void BattleStatusIconMain(void*);
+    extern void BattleStockExpDisp(void);
     extern void BattleStageDisp(void);
     extern void BattleCommandDisplay(void*);
     extern void BattleAudience_Disp(void);
@@ -395,6 +413,10 @@ void btlDispMain(void) {
     u8* part;
     s32 i;
     s32 poseType;
+    s32 unitKind;
+    s32 flags;
+    s32 effectFlag;
+    const char* poseName;
     u8 shown, target;
     s8 turns, strength;
     f32 x, y, z, ox, oy, oz, floor;
@@ -455,15 +477,70 @@ void btlDispMain(void) {
             if (*(s32*)(part + 0x1C0) != -1) {
                 if ((*(u32*)(part + 0x204) & 2) == 0) {
                     poseType = _GetStatusPoseType(unit);
-                    if (BtlUnit_CheckStatus(unit, 0x17) != 0) {
+                    unitKind = *(s32*)(unit + 8);
+                    if (unitKind < 1 || unitKind >= 0xD8) {
+                        if (poseType == 0x1C && !BtlUnit_CheckStatus(unit, 0x16) &&
+                            (*(u32*)(unit + 0x138) & 0x20000000)) {
+                            poseName = BtlUnit_GetPoseNameFromType(part, 0x39);
+                            if (poseName == NULL) poseName = searchPoseTbl(*(void**)(part + 0x1BC), 0x1C);
+                        } else if (poseType == 0x1C && !BtlUnit_CheckStatus(unit, 0x16) &&
+                                   (*(u32*)(unit + 0x138) & 0x10000000)) {
+                            poseName = BtlUnit_GetPoseNameFromType(part, 0x38);
+                            if (poseName == NULL) poseName = searchPoseTbl(*(void**)(part + 0x1BC), 0x1C);
+                        } else {
+                            poseName = searchPoseTbl(*(void**)(part + 0x1BC), poseType);
+                        }
+                        if (BtlUnit_CheckStatusFlag(unit, 0x1000000) && BtlUnit_CanActStatus(unit))
+                            poseName = BtlUnit_GetPoseNameFromType(part, 0x2D);
+                    } else {
+                        poseName = searchPoseTbl(*(void**)(part + 0x1BC), poseType);
+                    }
+                    if (BtlUnit_CheckStatus(unit, 0x13) != 0) {
                         btlDispAnimeSpeed(2.0f, part);
-                    } else if (BtlUnit_CheckStatus(unit, 0x18) != 0) {
+                    } else if (BtlUnit_CheckStatus(unit, 0x14) != 0) {
                         btlDispAnimeSpeed(0.5f, part);
                     } else {
                         btlDispAnimeSpeed(1.0f, part);
                     }
                 } else {
+                    poseName = (const char*)(part + 0x1C4);
                     btlDispAnimeSpeed(1.0f, part);
+                }
+                if (*(u32*)(part + 0x204) & 1) {
+                    effectFlag = 0;
+                    flags = *(u32*)(part + 0x204) & ~0x201;
+                    *(u32*)(part + 0x204) = flags;
+                    animPoseSetAnim(*(s32*)(part + 0x1C0), poseName, flags != 0);
+                    part[0x214] = 0;
+                    if (!(flags & 4)) {
+                        part[0x215] = 1;
+                        if (BtlUnit_CheckStatus(unit, 0x12) || part[0x4F3] != 0xFF) {
+                            effectFlag = 1;
+                            part[0x215] = 7;
+                        }
+                    } else {
+                        part[0x215] = 0;
+                    }
+                    if (!(flags & 2) || (flags & 8) || (flags & 0x80)) {
+                        part[0x215] = 1;
+                        if (BtlUnit_CheckStatus(unit, 0x12) || part[0x4F3] != 0xFF) {
+                            effectFlag = 1;
+                            part[0x215] = 7;
+                        }
+                        if (BtlUnit_CheckStatus(unit, 7)) {
+                            effectFlag = 1;
+                            part[0x215] = 4;
+                        }
+                    }
+                    if (effectFlag && (*(u32*)(part + 0x1AC) & 0x8000)) {
+                        effectFlag = 0;
+                        part[0x215] = 0;
+                    }
+                    flags = *(u32*)(part + 0x204);
+                    if (!(flags & 4)) {
+                        if (effectFlag && !(flags & 0x40)) *(u32*)(part + 0x204) = flags | 0x40;
+                        else if (!effectFlag && (flags & 0x40)) *(u32*)(part + 0x204) = flags & ~0x40;
+                    }
                 }
                 gravityOffsetControl(part);
                 floatOffsetControl(part);
@@ -498,18 +575,20 @@ void btlDispMain(void) {
     }
 }
 
-
 void btlUnitPartsDisp(s32 cameraId, void* part) {
     extern void PSMTXIdentity(void*);
     extern void PSMTXTrans(void*, f32, f32, f32);
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXRotRad(void*, s32, f32);
     extern void PSMTXConcat(void*, void*, void*);
+    extern void PSMTXCopy(void*, void*);
     extern void animPoseSetMaterialEvtColor(s32, void*);
     extern void animPoseSetMaterialFlagOn(s32, u32);
     extern void animPoseSetMaterialFlagOff(s32, u32);
     extern void animPoseDrawMtx(s32, void*, s32, f32, f32);
     extern s32 BtlUnit_CheckStatus(void*, s32);
+    extern void btlUnitPartsBlurControl(f64, void*, s32, void*, void*);
+    extern f32 float_neg5_80422268;
     f32 translateNeg[3][4];
     f32 translatePos[3][4];
     f32 translateDisp[3][4];
@@ -528,6 +607,8 @@ void btlUnitPartsDisp(s32 cameraId, void* part) {
     f32 partTranslate[3][4];
     f32 partDisp[3][4];
     f32 partScale[3][4];
+    f32 blurMtx[3][4];
+    f32 zMtx[3][4];
     u8* p;
     u8* unit;
     u32 color;
@@ -598,6 +679,29 @@ void btlUnitPartsDisp(s32 cameraId, void* part) {
     } else {
         PSMTXConcat(translateWorld, result, result);
     }
+    PSMTXCopy(result, blurMtx);
+    PSMTXTrans(zMtx, float_0_80422240, float_0_80422240, float_neg5_80422268);
+    PSMTXConcat(zMtx, blurMtx, blurMtx);
+    *(u32*)(p + 0x218) = *(u32*)(p + 0x4F4);
+    if ((*(u32*)(p + 0x204) & 0x10) != 0) {
+        p[0x218] = 0;
+        p[0x219] = 0;
+        p[0x21A] = 0;
+    }
+    if ((*(u32*)(p + 0x204) & 0x20) != 0) {
+        p[0x218] = 0;
+        p[0x219] = 0;
+        p[0x21A] = 0;
+    }
+    if (p[0x218] == 0xFF && p[0x219] == 0xFF && p[0x21A] == 0xFF) {
+        if (BtlUnit_CheckStatus(unit, 4) != 0) {
+            p[0x218] = (p[0x218] * 0xA0) / 0xFF;
+            p[0x21A] = (p[0x218] * 0xA0) / 0xFF;
+        }
+        p[0x218] = (p[0x218] * unit[0x312]) / 0xFF;
+        p[0x219] = (p[0x219] * unit[0x312]) / 0xFF;
+        p[0x21A] = (p[0x21A] * unit[0x312]) / 0xFF;
+    }
     color = *(u32*)(p + 0x218);
     animPoseSetMaterialEvtColor(*(s32*)(p + 0x1C0), &color);
     animPoseSetMaterialFlagOn(*(s32*)(p + 0x1C0), 0x40);
@@ -605,7 +709,7 @@ void btlUnitPartsDisp(s32 cameraId, void* part) {
     if (callback != 0) {
         callback(part, 0);
     }
-    if (BtlUnit_CheckStatus(unit, 0x13) == 0) {
+    if (BtlUnit_CheckStatus(unit, 0x10) == 0) {
         animPoseSetMaterialFlagOff(*(s32*)(p + 0x1C0), 0x800000);
     } else {
         animPoseSetMaterialFlagOn(*(s32*)(p + 0x1C0), 0x800000);
@@ -616,6 +720,7 @@ void btlUnitPartsDisp(s32 cameraId, void* part) {
     if (callback != 0) {
         callback(part, 1);
     }
+    btlUnitPartsBlurControl((f64)float_0_80422240, part, 0, blurMtx, &color);
 }
 
 void btlUnitItemDisp(s32 param_1, void* unit) {
@@ -697,19 +802,36 @@ void btlUnitStolenItemDisp(s32 param_1, void* unit) {
                *(u16*)(itemDataTable + item * 0x28 + 0x20));
 }
 
-void btlUnitPartsBlurControl(void* part, s32 a2, s32 a3, s32* color) {
+void btlUnitPartsBlurControl(f64 rotation, void* part, s32 a3, void* orientation, s32* color) {
     s32 local;
     if ((*(u32*)((s32)part + 0x1AC) & 0x04000000) != 0) {
         local = *color;
-        _partsBlurControl(part, 1, a3, &local);
+        _partsBlurControl(rotation, part, 1, orientation, &local);
     } else {
         local = *color;
-        _partsBlurControl(part, 0, a3, &local);
+        _partsBlurControl(rotation, part, 0, orientation, &local);
     }
 }
 
-void _partsBlurControl(void* part, s32 enable, s32 a3, void* color) {
-    ;
+void _partsBlurControl(f64 rotation, void* part, u32 flags, void* orientation, void* color) {
+    BattleWorkUnitPartBlur* blurWork;
+    u32* blurFlags;
+    s32 i;
+
+    blurFlags = (u32*)((u8*)part + 0x21C);
+    blurWork = (BattleWorkUnitPartBlur*)((u8*)part + 0x228);
+    for (i = 9; i > 0; i--) {
+        blurWork[i] = blurWork[i - 1];
+    }
+    blurWork[0].flags = flags;
+    PSMTXCopy(orientation, blurWork[0].orientation);
+    blurWork[0].rotation = (f32)rotation;
+    blurWork[0].baseColor = *(u32*)color;
+    blurWork[0].blurColors[0] = *(u32*)((u8*)part + 0x220);
+    blurWork[0].blurColors[1] = *(u32*)((u8*)part + 0x224);
+    if (((*blurFlags & 1) != 0) && ((blurWork[1].flags & 1) != 0)) {
+        blurWork[0].flags &= ~1;
+    }
 }
 
 void btlUnitPartsBlurDisp(s32 param_1, void* part) {

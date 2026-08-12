@@ -7,6 +7,7 @@ s32 battleAcMain_GaugeTiming2(void* battleWork) {
     extern s32 irand(s32);
     extern u32 BattlePadCheckTrigger(u32);
     extern s32 psndSFXOn(char*);
+    extern f32 __fabsf(f32);
     extern const char str_SFX_AC_COMMAND_NG1_80300998[];
     extern const char str_SFX_AC_PONE1_803009ac[];
     extern const char str_SFX_AC_COMMAND_OK1_803009bc[];
@@ -14,30 +15,32 @@ s32 battleAcMain_GaugeTiming2(void* battleWork) {
     u8* unit = *(u8**)(bw + 0x1C90);
     u8* extra = bw + 0x1F4C;
     u8* acWork = bw + 0x1F20;
-    s32 state = *(s32*)(bw + 0x1C9C);
-    s32 count = *(s32*)(bw + 0x1CD0);
     s32 autoInput = 0;
     s32 i;
 
-    if (*(s8*)(unit + 0x307) != 0) autoInput = 1;
-    if (state == 1000) goto state_1000;
-    if (state > 999) {
-        if (state == 1004) goto state_1004;
-        if (state > 1003) {
-            if (state > 1005) return 1;
+    if (*(u8*)(unit + 0x307) != 0) autoInput = 1;
+    switch (*(s32*)(bw + 0x1C9C)) {
+        case 0:
+            goto state_0;
+        case 99:
+            goto return_one;
+        case 100:
+            goto state_100;
+        case 1000:
+            goto state_1000;
+        case 1001:
+            goto state_1001;
+        case 1002:
+            goto state_1002;
+        case 1003:
+            goto state_1003;
+        case 1004:
+            goto state_1004;
+        case 1005:
             goto state_1005;
-        }
-        if (state == 1002) goto state_1002;
-        if (state < 1002) goto state_1001;
-        goto state_1003;
+        default:
+            goto return_one;
     }
-    if (state == 99) return 1;
-    if (state < 99) {
-        if (state != 0) return 1;
-        goto state_0;
-    }
-    if (state > 100) return 1;
-    goto state_100;
 
 state_0:
     {
@@ -55,38 +58,46 @@ state_0:
         *(s32*)(extra + 0x10) = 0;
         *(f32*)(extra + 0x04) = 0.0f;
         *(s32*)(bw + 0x1CE8) = 0;
-        *(u16*)(extra + 0x68) = (u16)(count * 60);
-        for (i = 0; i < count; i++) {
-            *(f32*)(extra + 0x18 + i * 4) = (f32)((100 / count) * (i + 1)) - 4.0f;
+        *(u16*)(extra + 0x68) = (u16)(*(s32*)(bw + 0x1CD0) * 60);
+        for (i = 0; i < *(s32*)(bw + 0x1CD0); i++) {
+            f32* threshold = (f32*)(extra + 0x18 + i * 4);
+            *threshold = (f32)((100 / *(s32*)(bw + 0x1CD0)) * (i + 1));
+            *threshold = *threshold - 4.0f;
             *(s8*)(extra + 0x38 + i) = 0;
             *(s8*)(extra + 0x40 + i) = 0;
             *(s32*)(extra + 0x48 + i * 4) = -1;
         }
         *(u32*)(extra + 0x14) = 0x100;
         *(s32*)(bw + 0x1CEC) = 0;
-        return 1;
+        goto return_one;
     }
 state_100:
     {
         if ((*(u32*)(bw + 0x1C94) & 1) && (*(u32*)(unit + 0x27C) & 0x10)) {
-            *(u8*)(extra + 0x6A) = irand(100) < 0;
-            *(s32*)(bw + 0x1C98) = 0x1E;
+            s32 random = irand(100);
+            if (random < 0) {
+                *(u8*)(extra + 0x6A) = 1;
+                *(s32*)(bw + 0x1C98) = 0x1E;
+            } else {
+                *(s32*)(bw + 0x1C98) = 0x1E;
+                *(u8*)(extra + 0x6A) = 0;
+            }
             *(s32*)(bw + 0x1C9C) = 1001;
-            return 1;
+            goto return_one;
         }
         *(s32*)(bw + 0x1C9C) = 1000;
     }
     goto state_1000;
 state_1001:
     {
-        if (--*(s32*)(bw + 0x1C98) > -1) return 1;
+        if (--*(s32*)(bw + 0x1C98) > -1) goto return_one;
         if (*(u8*)(extra + 0x6A) == 0) {
             *(s32*)(bw + 0x1CB8) = 0;
             *(s32*)(bw + 0x1CE8) = 0;
         } else {
             *(s32*)(bw + 0x1CB8) = 2;
             (*(s32*)(bw + 0x1CB4))++;
-            *(s32*)(bw + 0x1CE8) = irand(count) + 1;
+            *(s32*)(bw + 0x1CE8) = irand(*(s32*)(bw + 0x1CD0)) + 1;
         }
         *(u32*)(bw + 0x1CC0) |= 1;
         return 0;
@@ -102,9 +113,9 @@ state_1003:
     }
 state_1004:
     {
-        if (--*(s32*)(extra + 0x6C) > 0) return 1;
+        if (--*(s32*)(extra + 0x6C) > 0) goto return_one;
         *(s32*)(bw + 0x1C9C) = 1005;
-        return 1;
+        goto return_one;
     }
 state_1005:
     {
@@ -117,59 +128,100 @@ state_1005:
 state_1000:
     (*(s32*)extra)++;
     {
-        u32 trigger = BattlePadCheckTrigger(*(u32*)(extra + 0x14));
+        s32 trigger = 0;
         s32 allFinished = 1;
-        for (i = 0; i < count; i++) {
+        if (BattlePadCheckTrigger(*(u32*)(extra + 0x14)) != 0) {
+            trigger = 1;
+        }
+        for (i = 0; i < *(s32*)(bw + 0x1CD0); i++) {
             if (*(s8*)(extra + 0x38 + i) == 0) { allFinished = 0; break; }
         }
-        if (*(s32*)(extra + 0x0C) < *(s32*)extra && allFinished) {
-            if (*(s32*)(bw + 0x1CE8) < 1) *(s32*)(bw + 0x1CB8) = 0;
-            else { *(s32*)(bw + 0x1CB8) = 2; (*(s32*)(bw + 0x1CB4))++; }
+        if (*(s32*)extra > *(s32*)(extra + 0x0C) && allFinished) {
+            if (*(s32*)(bw + 0x1CE8) > 0) {
+                *(s32*)(bw + 0x1CB8) = 2;
+                (*(s32*)(bw + 0x1CB4))++;
+            } else {
+                *(s32*)(bw + 0x1CB8) = 0;
+            }
             *(s32*)(bw + 0x1C9C) = 1002;
-            return 1;
+            goto return_one;
         }
         (*(s32*)(extra + 8))++;
         *(f32*)(extra + 4) = 100.0f * (f32)*(s32*)(extra + 8) / (f32)*(s32*)(extra + 0x0C);
-        for (i = 0; i < count; i++) {
+        {
+            const char* ngSound = str_SFX_AC_COMMAND_NG1_80300998;
+        for (i = 0; i < *(s32*)(bw + 0x1CD0); i++) {
             f32 threshold = *(f32*)(extra + 0x18 + i * 4);
-            f32 distance = *(f32*)(extra + 4) - threshold;
-            if (distance < 0.0f) distance = -distance;
-            if (*(s8*)(extra + 0x38 + i) == 0 && threshold + 6.0f < *(f32*)(extra + 4)) {
+            if (*(s8*)(extra + 0x38 + i) == 0 &&
+                *(f32*)(extra + 4) > threshold + 6.0f) {
                 *(s8*)(extra + 0x38 + i) = -1;
-                psndSFXOn((char*)str_SFX_AC_COMMAND_NG1_80300998);
-            }
-            *(s32*)(extra + 0x10) = 0;
-            if (*(s8*)(extra + 0x38 + i) == 0 && distance <= 6.0f) {
-                *(s32*)(extra + 0x10) = 1;
-                if (*(s32*)(extra + 0x48 + i * 4) == -1)
-                    *(s32*)(extra + 0x48 + i * 4) = psndSFXOn((char*)str_SFX_AC_PONE1_803009ac);
+                    psndSFXOn((char*)ngSound);
             }
         }
-        if (autoInput && *(s32*)(extra + 0x10) != 0) trigger = 1;
-        if (trigger != 0) {
-            for (i = 0; i < count; i++) {
-                f32 distance = *(f32*)(extra + 4) - *(f32*)(extra + 0x18 + i * 4);
-                if (distance < 0.0f) distance = -distance;
-                if (*(s8*)(extra + 0x38 + i) == 0) {
-                    if (distance <= 6.0f) {
+        }
+        *(s32*)(extra + 0x10) = 0;
+        {
+            const char* poneSound = str_SFX_AC_PONE1_803009ac;
+        for (i = 0; i < *(s32*)(bw + 0x1CD0); i++) {
+            f64 distance = (f64)__fabsf(
+                *(f32*)(extra + 4) - *(f32*)(extra + 0x18 + i * 4));
+            if (*(s8*)(extra + 0x38 + i) == 0 && distance <= 6.0) {
+                *(s32*)(extra + 0x10) = 1;
+                if (*(s32*)(extra + 0x48 + i * 4) == -1)
+                        *(s32*)(extra + 0x48 + i * 4) = psndSFXOn((char*)poneSound);
+            }
+        }
+        }
+        {
+            s32 autoTrigger = 0;
+            s32 handled = 0;
+            const char* ngSound = str_SFX_AC_COMMAND_NG1_80300998;
+            const char* okSound = str_SFX_AC_COMMAND_OK1_803009bc;
+
+            if (autoInput) {
+                for (i = 0; i < *(s32*)(bw + 0x1CD0); i++) {
+                    f64 distance = (f64)__fabsf(
+                        *(f32*)(extra + 4) - *(f32*)(extra + 0x18 + i * 4));
+                    if (*(s8*)(extra + 0x38 + i) == 0 && distance <= 6.0) {
+                        autoTrigger = 1;
+                        break;
+                    }
+                }
+            }
+            if (trigger != 0 || autoTrigger) {
+            for (i = 0; i < *(s32*)(bw + 0x1CD0); i++) {
+                f64 distance = (f64)__fabsf(
+                    *(f32*)(extra + 4) - *(f32*)(extra + 0x18 + i * 4));
+                    if (*(s8*)(extra + 0x38 + i) == 0 && !handled) {
+                        if (distance > 6.0) {
+                            f64 spacing = (f64)__fabsf(
+                                *(f32*)(extra + 0x1C) - *(f32*)(extra + 0x18));
+                            if (distance < spacing) {
+                                *(s8*)(extra + 0x40 + i) = 1;
+                                if (i == *(s32*)(bw + 0x1CD0) - 1) {
+                                    *(s8*)(extra + 0x38 + i) = -1;
+                                    psndSFXOn((char*)ngSound);
+                                    handled = 1;
+                                }
+                            }
+                        } else if (autoTrigger || *(s8*)(extra + 0x40 + i) == 0) {
                         *(s8*)(extra + 0x38 + i) = 1;
                         (*(s32*)(bw + 0x1CE8))++;
-                        psndSFXOn((char*)str_SFX_AC_COMMAND_OK1_803009bc);
-                    } else {
-                        *(s8*)(extra + 0x40 + i) = 1;
-                        if (i == count - 1) {
+                            psndSFXOn((char*)okSound);
+                            handled = 1;
+                        } else {
                             *(s8*)(extra + 0x38 + i) = -1;
-                            psndSFXOn((char*)str_SFX_AC_COMMAND_NG1_80300998);
+                            psndSFXOn((char*)ngSound);
+                            handled = 1;
                         }
                     }
-                    break;
                 }
             }
         }
     }
+return_one:
     return 1;
 }
-
 const char str_SFX_AC_COMMAND_NG1_80300998[] = "SFX_AC_COMMAND_NG1";
 const char str_SFX_AC_PONE1_803009ac[] = "SFX_AC_PONE1";
 const char str_SFX_AC_COMMAND_OK1_803009bc[] = "SFX_AC_COMMAND_OK1";
@@ -245,6 +297,7 @@ void actionCommandDisp(f32 x, f32 y) {
     extern void* _battleWorkPointer;
     extern void* camGetPtr(s32);
     extern void btlDispGXInit2DRasta(void);
+    extern void GXLoadPosMtxImm(void*, s32);
     extern void btlDispTexPlane(f64, f64, f64, f64, f64, s32, u32*, s32);
     extern void btlDispGXQuads2DRasta(f64, f64, f64, f64, s32, s32, s32, s32);
     extern s32 BattleACGetButtonIcon(s32, s32);
@@ -259,17 +312,20 @@ void actionCommandDisp(f32 x, f32 y) {
     u16 width = *(u16*)(extra + 0x68);
     s32 segments = 0;
     s32 remainder = 0;
-    s32 pressed = BattleACGetButtonIcon(0x100, 1);
-    s32 normal = BattleACGetButtonIcon(0x100, 0);
+    s32 pressed;
+    s32 normal;
+    u8* camera;
     Vec pos;
     s32 i;
 
-    camGetPtr(1);
+    camGetPtr(8);
+    camera = camGetPtr(8);
     if ((s32)width - 0x10 > 0) {
         segments = ((s32)width - 0x0D) / 4;
         remainder = (s32)width - 0x10 - segments * 4;
     }
     btlDispGXInit2DRasta();
+    GXLoadPosMtxImm(camera + 0x11C, 0);
     btlDispTexPlane(left, y + 41.0f, 0.0, 1.0, 1.0, 0x59, &color, 0);
     for (i = 0; i < segments; i++) {
         f32 partX = left + 10.0f + (f32)(i * 4);
@@ -294,6 +350,8 @@ void actionCommandDisp(f32 x, f32 y) {
         pos.z = 0.0f;
         iconDispGx(0.75, &pos, 0x10, value >= threshold || distance <= 6.0f ? 0x9D : 0x99);
     }
+    pressed = BattleACGetButtonIcon(0x100, 1);
+    normal = BattleACGetButtonIcon(0x100, 0);
     if (*(s32*)(bw + 0x1C9C) == 1000) {
         pos.x = x - 225.0f + 28.0f;
         pos.y = y + 55.0f;

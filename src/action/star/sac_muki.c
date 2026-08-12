@@ -235,67 +235,145 @@ void main_base(void) {
 
 /* stub-fill: main_cursor | prototype_only | source_prototype */
 void main_cursor(void) {
-    extern u16 keyGetButtonTrg(s32 pad);
-    extern u32 keyGetDirTrg(s32 pad);
-    extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
-    extern void* effHitEntry(f32 x, f32 y, f32 z, s32 type, s32 count, s32 arg);
+    extern s32 BtlUnit_GetBodyPartsId(void*);
+    extern void* BtlUnit_GetPartsPtr(void*, s32);
+    extern void BtlUnit_SetAnim(void*, const char*);
+    extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
+    extern s32 BattleAudience_GetAudienceNum(void);
+    extern void BattleAudienceSoundCallKind(s32);
+    extern void BattleAudienceSoundHandBeat(void);
+    extern void BattleAudienceSoundBooingKind(s32);
+    extern u16 keyGetButtonTrg(s32);
+    extern u32 keyGetDirTrg(s32);
+    extern f64 intplGetValue(f64, f64, s32, s32, s32);
+    extern void effHitEntry(void);
+    extern void* effStampN64Entry(s32, f32, f32, f32);
+    extern s32 psndSFXOn(const char*);
+    extern char str_btl_wn_sac_mukimuki__80301078[];
+    extern char str_M_I_Y_80428530[];
+    extern char str_M_D_1_804285b4[];
+    extern u32 vec3_803010b4[];
+    extern u32 dat_804284e8;
+    extern u32 dat_804284ec;
+    extern u32 dat_804284f0;
+    extern u32 dat_804284f4;
+    extern f32 float_20_804285bc;
+    extern f32 float_10_804285c0;
+    u8* ro = (u8*)str_btl_wn_sac_mukimuki__80301078;
     u8* work = get_ptr();
     void* mario = BattleGetMarioPtr(_battleWorkPointer);
-    s32 state = *(s32*)(work + 0x38);
-    s32 index = *(s32*)(work + 0x40);
-    u32 dir;
-    (void)mario;
-    if (state == 1 && *(s32*)(work + 0x108) >= 5) {
-        *(s32*)(work + 0x38) = 2;
-        *(f32*)(work + 0x44) = *(f32*)(work + 0x110);
-        *(f32*)(work + 0x48) = *(f32*)(work + 0x114);
-        *(f32*)(work + 0x4C) = *(f32*)(work + 0x118) + 5.0f;
-        *(s32*)(work + 0x40) = 4;
-        index = 4;
-        state = 2;
-    }
-    if (state == 2) {
-        if ((keyGetButtonTrg(0) & 0x100) != 0) {
-            u8* point = *(u8**)(work + 0x98) + index * 0x24;
-            *(s32*)(work + 0x38) = 5;
-            *(s32*)point = 5;
-            effHitEntry(*(f32*)(work + 0x44), *(f32*)(work + 0x48), *(f32*)(work + 0x4C), 0, 5, 0);
-            if (*(s32*)(point + 8) == 0) {
-                *(f32*)(work + 0x14) += 0.2f;
-                if (*(f32*)(work + 0x14) > 9.0f) *(f32*)(work + 0x14) = 9.0f;
-                *(s32*)(work + 0x24) = 30;
-            } else if (*(s32*)(point + 8) == 1) {
-                *(f32*)(work + 0x1C) += 0.2f;
-                if (*(f32*)(work + 0x1C) > 9.0f) *(f32*)(work + 0x1C) = 9.0f;
-                *(s32*)(work + 0x28) = 30;
+    void* part = BtlUnit_GetPartsPtr(mario, BtlUnit_GetBodyPartsId(mario));
+    s32 audience = BattleAudience_GetAudienceNum();
+    s32 index;
+    s32 oldValue;
+    u8* point;
+    void* effect;
+    f32 x, y, z;
+
+    switch (*(s32*)(work + 0x38)) {
+        case 1:
+            if (*(s32*)(work + 0x108) < 5) return;
+            *(s32*)(work + 0x38) = 2;
+            *(u32*)(work + 0x44) = *(u32*)(work + 0x110);
+            *(u32*)(work + 0x48) = *(u32*)(work + 0x114);
+            *(u32*)(work + 0x4C) = *(u32*)(work + 0x118);
+            *(f32*)(work + 0x4C) += 5.0f;
+            *(u32*)(work + 0x68) = vec3_803010b4[0];
+            *(u32*)(work + 0x6C) = vec3_803010b4[1];
+            *(u32*)(work + 0x70) = vec3_803010b4[2];
+            *(s32*)(work + 0x40) = 4;
+            *(u32*)(work + 0x74) = dat_804284e8;
+        case 2:
+            *(u32*)(work + 0x74) = dat_804284ec;
+            if (*(s32*)(work + 0x34) > 0x77) {
+                BtlUnit_SetAnim(part, str_M_I_Y_80428530);
+                *(u32*)work &= ~1;
+                *(s32*)(work + 0x34) = 0;
             }
-            return;
-        }
-        dir = keyGetDirTrg(0);
-        if ((dir & 0x8000) && index % 3 != 2) index++;
-        else if ((dir & 0x4000) && index % 3 != 0) index--;
-        else if ((dir & 0x1000) && index / 3 != 0) index -= 3;
-        else if ((dir & 0x2000) && index / 3 != 2) index += 3;
-        if (index != *(s32*)(work + 0x40)) {
-            *(f32*)(work + 0x50) = *(f32*)(work + 0x44);
-            *(f32*)(work + 0x54) = *(f32*)(work + 0x48);
-            *(s32*)(work + 0x40) = index;
-            *(s32*)(work + 0x38) = 3;
+            if (keyGetButtonTrg(0) & 0x100) {
+                *(s32*)(work + 0x38) = 5;
+                index = *(s32*)(work + 0x40);
+                point = *(u8**)(work + 0x98 + index * 0x24);
+                if (point != 0) {
+                    *(s32*)point = 5;
+                    effHitEntry();
+                    if (*(s32*)(point + 8) == 1) {
+                        oldValue = (s32)*(f32*)(work + 0x1C);
+                        *(f32*)(work + 0x1C) += 0.2f;
+                        if (*(f32*)(work + 0x1C) > 9.0f) *(f32*)(work + 0x1C) = 9.0f;
+                        if (oldValue < (s32)*(f32*)(work + 0x1C)) {
+                            *(s32*)(work + 0x28) = 0x3C;
+                            psndSFXOn((char*)ro + 0x158);
+                            if (audience > 0 && audience < 50) BattleAudienceSoundCallKind(1);
+                            if (audience > 49 && audience < 100) { BattleAudienceSoundCallKind(1); BattleAudienceSoundHandBeat(); }
+                            if (audience > 99 && audience < 150) BattleAudienceSoundCallKind(2);
+                            if (audience > 149) { BattleAudienceSoundCallKind(2); BattleAudienceSoundHandBeat(); }
+                        }
+                        psndSFXOn((char*)ro + 0x16C);
+                    } else if (*(s32*)(point + 8) == 0) {
+                        oldValue = (s32)*(f32*)(work + 0x14);
+                        *(f32*)(work + 0x14) += 0.2f;
+                        if (*(f32*)(work + 0x14) > 9.0f) *(f32*)(work + 0x14) = 9.0f;
+                        if (oldValue < (s32)*(f32*)(work + 0x14)) {
+                            *(s32*)(work + 0x24) = 0x3C;
+                            psndSFXOn((char*)ro + 0x158);
+                            if (audience > 0 && audience < 50) BattleAudienceSoundCallKind(1);
+                            if (audience > 49 && audience < 100) { BattleAudienceSoundCallKind(1); BattleAudienceSoundHandBeat(); }
+                            if (audience > 99 && audience < 150) BattleAudienceSoundCallKind(2);
+                            if (audience > 149) { BattleAudienceSoundCallKind(2); BattleAudienceSoundHandBeat(); }
+                        }
+                        psndSFXOn((char*)ro + 0x16C);
+                    } else if (*(s32*)(point + 8) == 2) {
+                        BtlUnit_SetAnim(part, str_M_D_1_804285b4);
+                        BtlUnit_GetPos(mario, &x, &y, &z);
+                        effect = effStampN64Entry(2, x, y + float_20_804285bc, z + float_10_804285c0);
+                        *(u8*)((s32)*(void**)((s32)effect + 0xC) + 0x38) = 0;
+                        *(u8*)((s32)*(void**)((s32)effect + 0xC) + 0x39) = 200;
+                        *(u8*)((s32)*(void**)((s32)effect + 0xC) + 0x3A) = 0;
+                        *(u8*)((s32)*(void**)((s32)effect + 0xC) + 0x3B) = 0;
+                        *(u8*)((s32)*(void**)((s32)effect + 0xC) + 0x3C) = 10;
+                        *(u8*)((s32)*(void**)((s32)effect + 0xC) + 0x3D) = 0;
+                        *(s32*)(work + 0x34) = 0;
+                        *(u32*)work |= 1;
+                        psndSFXOn((char*)ro + 0x180);
+                        if (audience > 0 && audience < 50) BattleAudienceSoundBooingKind(1);
+                        if (audience > 49 && audience < 100) BattleAudienceSoundBooingKind(1);
+                        if (audience > 99 && audience < 150) BattleAudienceSoundBooingKind(2);
+                        if (audience > 149) BattleAudienceSoundBooingKind(3);
+                    }
+                }
+            }
+            if ((keyGetDirTrg(0) & 0x8000) && *(s32*)(work + 0x40) % 3 != 2) { *(s32*)(work + 0x38) = 3; *(s32*)(work + 0x40) += 1; }
+            if ((keyGetDirTrg(0) & 0x4000) && *(s32*)(work + 0x40) % 3 != 0) { *(s32*)(work + 0x38) = 3; *(s32*)(work + 0x40) -= 1; }
+            if ((keyGetDirTrg(0) & 0x1000) && *(s32*)(work + 0x40) / 3 != 0) { *(s32*)(work + 0x38) = 3; *(s32*)(work + 0x40) -= 3; }
+            if ((keyGetDirTrg(0) & 0x2000) && *(s32*)(work + 0x40) / 3 != 2) { *(s32*)(work + 0x38) = 3; *(s32*)(work + 0x40) += 3; }
+            break;
+        case 3:
+            *(s32*)(work + 0x38) = 4;
             *(s32*)(work + 0x3C) = 0;
-        }
-    } else if (state == 3) {
-        *(s32*)(work + 0x38) = 4;
-        *(s32*)(work + 0x3C) = 0;
-    } else if (state == 4) {
-        u8* point = work + 0x80 + index * 0x24;
-        s32 timer = ++*(s32*)(work + 0x3C);
-        *(f32*)(work + 0x44) = (f32)intplGetValue(*(f32*)(work + 0x50), *(f32*)(point + 0x18), 4, timer, 5);
-        *(f32*)(work + 0x48) = (f32)intplGetValue(*(f32*)(work + 0x54), *(f32*)(point + 0x1C), 4, timer, 5);
-        if (timer >= 5) *(s32*)(work + 0x38) = 2;
-    } else if (state == 5) {
-        *(s32*)(work + 0x38) = 6;
-    } else if (state == 6) {
-        *(s32*)(work + 0x38) = 2;
+            *(u32*)(work + 0x50) = *(u32*)(work + 0x44);
+            *(u32*)(work + 0x54) = *(u32*)(work + 0x48);
+            *(u32*)(work + 0x58) = *(u32*)(work + 0x4C);
+            index = *(s32*)(work + 0x40);
+            *(u32*)(work + 0x5C) = *(u32*)(work + 0x80 + index * 0x24);
+            *(u32*)(work + 0x60) = *(u32*)(work + 0x84 + index * 0x24);
+            *(u32*)(work + 0x64) = *(u32*)(work + 0x88 + index * 0x24);
+            psndSFXOn((char*)ro + 0x194);
+        case 4:
+            *(s32*)(work + 0x3C) += 1;
+            *(u32*)(work + 0x74) = dat_804284f0;
+            *(f32*)(work + 0x44) = (f32)intplGetValue(*(f32*)(work + 0x50), *(f32*)(work + 0x5C), 4, *(s32*)(work + 0x3C), (*(u32*)work & 1) ? 0x19 : 5);
+            *(f32*)(work + 0x48) = (f32)intplGetValue(*(f32*)(work + 0x54), *(f32*)(work + 0x60), 4, *(s32*)(work + 0x3C), (*(u32*)work & 1) ? 0x19 : 5);
+            if (((*(u32*)work & 1) && *(s32*)(work + 0x3C) > 0x18) || (!(*(u32*)work & 1) && *(s32*)(work + 0x3C) > 4)) *(s32*)(work + 0x38) = 2;
+            break;
+        case 5:
+            *(s32*)(work + 0x38) = 6;
+            *(s32*)(work + 0x3C) = 0;
+        case 6:
+            *(s32*)(work + 0x3C) += 1;
+            *(u32*)(work + 0x74) = dat_804284f4;
+            if (*(s32*)(work + 0x3C) > 0) { *(s32*)(work + 0x38) = 2; *(s32*)(work + 0x3C) = 0; }
+            break;
     }
 }
 
@@ -801,6 +879,7 @@ void disp_3D(void) {
 
 /* stub-fill: disp_3D_alpha | prototype_only | source_prototype */
 void disp_3D_alpha(void) {
+    extern void* get_ptr(void);
     extern void PSMTXRotRad(f32 matrix[3][4], s32 axis, f32 radians);
     extern void PSMTXScaleApply(f32 src[3][4], f32 dst[3][4], f32 x, f32 y, f32 z);
     extern void PSMTXTransApply(f32 src[3][4], f32 dst[3][4], f32 x, f32 y, f32 z);
@@ -813,9 +892,10 @@ void disp_3D_alpha(void) {
 
     u8* work = get_ptr();
     s32 i;
+    s32 offset;
 
-    for (i = 0; i < 9; i++) {
-        s32* icon = (s32*)(work + 0x1BC + i * 0x38);
+    for (i = 0, offset = 0; i < 9; i++, offset += 0x38) {
+        s32* icon = (s32*)(work + 0x1BC + offset);
 
         if (icon[0] > 0 && icon[0] < 10 && icon[2] >= 0 && icon[2] < 3) {
             f32 matrix[3][4];

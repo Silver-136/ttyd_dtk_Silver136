@@ -282,32 +282,41 @@ void actionCommandDisp(f32 x, f32 y) {
     button = params[0] == 0 ? 0x20 : (params[0] == 2 ? 0x40000 : 0x100);
     pressedIcon = BattleACGetButtonIcon(button, 1);
     normalIcon = BattleACGetButtonIcon(button, 0);
-    if (*(s32*)(wp + 0x1C9C) == 1002) {
+    if (*(u32*)(wp + 0x1C9C) == 1002) {
         return;
     }
-    if (*(s32*)(wp + 0x1C9C) < 1002) {
-        if (*(s32*)(wp + 0x1C9C) > 100) {
-            if (*(s32*)(wp + 0x1C9C) < 1000) {
+    if (*(u32*)(wp + 0x1C9C) < 1002) {
+        if (*(u32*)(wp + 0x1C9C) > 100) {
+            if (*(u32*)(wp + 0x1C9C) < 1000) {
                 return;
             }
-        } else if (*(s32*)(wp + 0x1C9C) < 99) {
+            pos.x = x - 228.0f + 28.0f;
+            pos.y = y + 55.0f;
+            pos.z = 0.0f;
+            if (*(u8*)(extra + 0x16) != 0) {
+                if (*(s32*)(extra + 0x10) != 0) {
+                    iconDispGx(1.0, &pos, 0x10, (u16)pressedIcon);
+                    return;
+                }
+                iconDispGx(1.0, &pos, 0x10, (u16)normalIcon);
+                return;
+            }
+            if (*(s32*)(extra + 0x10) != 0) {
+                iconDispGx(1.0, &pos, 0x10, (u16)normalIcon);
+                return;
+            }
+            iconDispGx(1.0, &pos, 0x10, (u16)pressedIcon);
             return;
         }
-    } else if (*(s32*)(wp + 0x1C9C) > 1005) {
+        if (*(u32*)(wp + 0x1C9C) < 99) {
+            return;
+        }
+    } else if (*(u32*)(wp + 0x1C9C) > 1005) {
         return;
     }
-    {
-        pos.x = x - 228.0f + 28.0f;
-        pos.y = y + 55.0f;
-        pos.z = 0.0f;
-        if (*(s32*)(wp + 0x1C9C) == 1000 || *(s32*)(wp + 0x1C9C) == 1001) {
-            if (*(u8*)(extra + 0x16) != 0) {
-                normalIcon = *(s32*)(extra + 0x10) != 0 ? pressedIcon : normalIcon;
-            } else {
-                normalIcon = *(s32*)(extra + 0x10) != 0 ? normalIcon : pressedIcon;
-            }
-        }
-        iconDispGx(1.0, &pos, 0x10, (u16)normalIcon);
-    }
+    pos.x = x - 228.0f + 28.0f;
+    pos.y = y + 55.0f;
+    pos.z = 0.0f;
+    iconDispGx(1.0, &pos, 0x10, (u16)normalIcon);
 }
 

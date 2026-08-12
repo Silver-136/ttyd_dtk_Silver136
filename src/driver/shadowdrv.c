@@ -411,68 +411,59 @@ void shadowCharShadowDisp_Collision(void) {
     extern f32 float_150_8041fa00;
     extern f32 vec3_802bfd10[];
     u8 data[0x40];
-    void* entry;
+    f32 size;
+    f32 zero;
+    s32 result;
     void* mtx;
     s32 i;
-    f32 size;
-    f32 nx;
-    f32 ny;
-    f32 nz;
+    u16* entry;
 
-    entry = *(void**)((s32)cswp + 0x108);
+    entry = *(u16**)((s32)cswp + 0x108);
     camGetCurPtr();
+    zero = float_0_8041f9d4;
     i = 0;
-    while (1) {
-        if (*(s32*)((s32)cswp + 0x104) <= i) {
-            return;
-        }
-        mtx = (void*)((s32)entry + 0x2C);
-        if (*(f32*)((s32)entry + 0x10) != float_0_8041f9d4 && (*(u16*)entry & 2) == 0) {
-            if (*(u8*)((s32)entry + 2) == 3 || (*(u16*)entry & 1) == 0) {
-                PSMTXTrans(
-                    mtx,
-                    *(f32*)((s32)entry + 4),
-                    float_1p5_8041fa04 + *(f32*)((s32)entry + 8),
-                    *(f32*)((s32)entry + 0xC)
-                );
-                *(f32*)((s32)entry + 0x54) = *(f32*)((s32)entry + 0x10);
-                *(f32*)((s32)entry + 0x2C) = *(f32*)((s32)entry + 0x10);
-                *(u32*)((s32)entry + 0x40) = *(u32*)((s32)entry + 0x14);
+    while (i < *(s32*)((s32)cswp + 0x104)) {
+        mtx = entry + 0x16;
+        if (*(f32*)(entry + 8) != zero && (*entry & 2) == 0) {
+            if (*(u8*)(entry + 1) == 3 || (*entry & 1) == 0) {
+                PSMTXTrans(mtx, *(f32*)(entry + 2), float_1p5_8041fa04 + *(f32*)(entry + 4),
+                           *(f32*)(entry + 6));
+                *(f32*)(entry + 0x2A) = *(f32*)(entry + 8);
+                *(f32*)(entry + 0x16) = *(f32*)(entry + 8);
+                *(u32*)(entry + 0x20) = *(u32*)(entry + 10);
             } else {
-                *(u32*)((s32)data + 0x0C) = *(u32*)((s32)entry + 4);
-                *(f32*)((s32)data + 0x10) = *(f32*)((s32)entry + 8) + float_1_8041f9e4;
-                *(u32*)((s32)data + 0x14) = *(u32*)((s32)entry + 0xC);
-                *(u32*)((s32)data + 0x18) = *(u32*)((s32)vec3_802bfd10 + 0);
-                *(u32*)((s32)data + 0x1C) = *(u32*)((s32)vec3_802bfd10 + 4);
-                *(u32*)((s32)data + 0x20) = *(u32*)((s32)vec3_802bfd10 + 8);
-                *(f32*)((s32)data + 0x3C) = float_150_8041fa00;
-                if (hitCheckVecFilter(data, _filter) != 0) {
-                    size = *(f32*)((s32)entry + 0x10);
-                    nx = *(f32*)((s32)data + 0x30);
-                    ny = *(f32*)((s32)data + 0x34);
-                    nz = *(f32*)((s32)data + 0x38);
-                    *(f32*)((s32)entry + 0x38) = *(f32*)((s32)data + 0x24) + nx;
-                    *(f32*)((s32)entry + 0x48) = *(f32*)((s32)data + 0x28) + ny;
-                    *(f32*)((s32)entry + 0x58) = *(f32*)((s32)data + 0x2C) + nz;
-                    *(f32*)((s32)entry + 0x3C) = nx * size;
-                    *(f32*)((s32)entry + 0x40) = ny * *(f32*)((s32)entry + 0x14);
-                    *(f32*)((s32)entry + 0x44) = nz * size;
-                    *(f32*)((s32)entry + 0x4C) = float_0_8041f9d4;
-                    *(f32*)((s32)entry + 0x50) = nz * size;
-                    *(f32*)((s32)entry + 0x54) = -ny * size;
-                    *(f32*)((s32)entry + 0x2C) = size * (-ny * ny - nz * nz);
-                    *(f32*)((s32)entry + 0x30) = size * nx * ny;
-                    *(f32*)((s32)entry + 0x34) = size * nx * nz;
-                } else {
-                    i++;
-                    entry = (void*)((s32)entry + 0x5C);
-                    continue;
+                *(u32*)(data + 0x0C) = *(u32*)(entry + 2);
+                *(f32*)(data + 0x10) = *(f32*)(entry + 4) + float_1_8041f9e4;
+                *(u32*)(data + 0x14) = *(u32*)(entry + 6);
+                *(u32*)(data + 0x18) = *(u32*)((u8*)vec3_802bfd10 + 0);
+                *(u32*)(data + 0x1C) = *(u32*)((u8*)vec3_802bfd10 + 4);
+                *(u32*)(data + 0x20) = *(u32*)((u8*)vec3_802bfd10 + 8);
+                *(f32*)(data + 0x3C) = float_150_8041fa00;
+                result = hitCheckVecFilter(data, _filter);
+                if (result == 0) {
+                    goto next;
                 }
+                size = *(f32*)(entry + 8);
+                *(f32*)(entry + 0x1C) = *(f32*)(data + 0x24) + *(f32*)(data + 0x30);
+                *(f32*)(entry + 0x24) = *(f32*)(data + 0x28) + *(f32*)(data + 0x34);
+                *(f32*)(entry + 0x2C) = *(f32*)(data + 0x2C) + *(f32*)(data + 0x38);
+                *(f32*)(entry + 0x1E) = *(f32*)(data + 0x30) * size;
+                *(f32*)(entry + 0x20) = *(f32*)(data + 0x34) * *(f32*)(entry + 10);
+                *(f32*)(entry + 0x22) = *(f32*)(data + 0x38) * size;
+                *(f32*)(entry + 0x26) = zero;
+                *(f32*)(entry + 0x28) = *(f32*)(data + 0x38) * size;
+                *(f32*)(entry + 0x2A) = -*(f32*)(data + 0x34) * size;
+                *(f32*)(entry + 0x16) = size *
+                    (-*(f32*)(data + 0x34) * *(f32*)(data + 0x34) -
+                     *(f32*)(data + 0x38) * *(f32*)(data + 0x38));
+                *(f32*)(entry + 0x18) = size * *(f32*)(data + 0x30) * *(f32*)(data + 0x34);
+                *(f32*)(entry + 0x1A) = size * *(f32*)(data + 0x30) * *(f32*)(data + 0x38);
             }
-            *(u16*)entry |= 2;
+            *entry |= 2;
         }
+next:
         i++;
-        entry = (void*)((s32)entry + 0x5C);
+        entry += 0x2E;
     }
 }
 

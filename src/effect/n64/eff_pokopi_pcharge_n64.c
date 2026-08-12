@@ -25,26 +25,25 @@ void* effPokopiPchargeN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 lif
     *(void**)((s32)entry + 0x10) = effPokopiPchargeMain;
     *(s32*)entry |= 2;
     *(s32*)base = type;
+    *(s32*)(base + 0x14) = 0;
+    *(s32*)(base + 0x10) = lifetime < 1 ? 1000 : lifetime;
+    *(s32*)(base + 0x24) = 0;
     *(f32*)(base + 4) = x;
     *(f32*)(base + 8) = y;
     *(f32*)(base + 0xC) = z;
-    *(s32*)(base + 0x10) = lifetime < 1 ? 1000 : lifetime;
-    *(s32*)(base + 0x14) = 0;
+    *(f32*)(base + 0x34) = scale;
     *(s32*)(base + 0x18) = 0xFF;
     *(s32*)(base + 0x1C) = 0xFF;
     *(s32*)(base + 0x20) = 0xFF;
-    *(s32*)(base + 0x24) = 0;
     *(s32*)(base + 0x28) = 0xFF;
     *(s32*)(base + 0x2C) = 0xF5;
     *(s32*)(base + 0x30) = 0;
-    *(f32*)(base + 0x34) = scale;
-    *(f32*)(base + 0x38) = (f32)vx_data[type];
     *(f32*)(base + 0x44) = 1.0f;
+    *(f32*)(base + 0x38) = (f32)vx_data[type];
 
     baseAngle = rand() % 360;
     part = base + 0x48;
     for (i = 1; i < count; i++, part += 0x48) {
-        r = rand() % 10;
         *(s32*)part = type % 3;
         *(s32*)(part + 0x14) = 0;
         *(f32*)(part + 0x3C) = (f32)(rand() % 360);
@@ -55,6 +54,7 @@ void* effPokopiPchargeN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 lif
         case 0:
         case 1:
         case 2:
+            r = rand() % 10;
             *(s32*)(part + 0x10) = 20;
             *(f32*)(part + 0x34) = 1.0f - 0.1f * (f32)(i % 3);
             *(f32*)(part + 0x38) = -(0.2f * (f32)r + 0.2f);
@@ -62,6 +62,7 @@ void* effPokopiPchargeN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 lif
             break;
         case 3:
         case 5:
+            r = rand() % 10;
             *(s32*)(part + 0x10) = 20;
             *(f32*)(part + 0x34) = 1.0f - 0.1f * (f32)(i % 3);
             *(f32*)(part + 0x38) = 0.2f * (f32)r + 0.2f;
@@ -69,6 +70,7 @@ void* effPokopiPchargeN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 lif
             break;
         case 4:
         case 12:
+            r = rand() % 10;
             *(s32*)(part + 0x10) = 20;
             *(f32*)(part + 0x34) = 1.0f - 0.3f * (f32)(i % 3);
             *(f32*)(part + 0x38) = 0.2f * (f32)r + 0.6f;
@@ -76,18 +78,21 @@ void* effPokopiPchargeN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 lif
             break;
         case 6:
         case 7:
+            r = rand() % 10;
             *(s32*)(part + 0x10) = 10;
             *(f32*)(part + 0x34) = 1.0f - 0.3f * (f32)(i % 3);
             *(f32*)(part + 0x38) = -(f32)(r + 4);
             *(f32*)(part + 0x40) = 0.0f;
             break;
         case 8:
+            r = rand() % 10;
             *(s32*)(part + 0x10) = 20;
             *(f32*)(part + 0x34) = 1.0f - 0.3f * (f32)(i % 3);
             *(f32*)(part + 0x38) = 0.2f * (f32)r + 0.6f;
             *(f32*)(part + 0x40) = -1.0f;
             break;
         case 9:
+            r = rand() % 10;
             *(s32*)(part + 0x10) = 20;
             *(f32*)(part + 0x34) = 1.0f - 0.3f * (f32)(i % 3);
             *(f32*)(part + 0x38) = -(0.2f * (f32)r + 0.6f);
@@ -100,12 +105,14 @@ void* effPokopiPchargeN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 lif
             *(s32*)(base + 0x30) = 10;
             break;
         case 10:
+            r = rand() % 10;
             *(s32*)(part + 0x10) = 10;
             *(f32*)(part + 0x34) = -0.5f * (0.3f * (f32)(i % 3) - 1.0f);
             *(f32*)(part + 0x38) = 0.1f * (f32)r + 2.0f;
             *(f32*)(part + 0x40) = 0.0f;
             break;
         case 11:
+            r = rand() % 10;
             *(s32*)(part + 0x10) = 30;
             *(f32*)(part + 0x34) = 1.0f - 0.3f * (f32)(i % 3);
             *(f32*)(part + 0x38) = 0.05f * (f32)r + 0.2f;

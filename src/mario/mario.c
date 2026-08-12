@@ -72,6 +72,16 @@ void marioSetCharMode(s32 mode) {
     extern void marioForceRollAnime(void);
     extern void marioForceSlitAnime(void);
     extern void N_marioForceVivianAnime(void);
+    extern void marioChgPose(char* pose);
+    extern char str_M_Y_2_804200d4[];
+    extern char str_M_Y_1_804200dc[];
+    extern char str_M_Z_1_8041ff90[];
+    extern char str_M_W_1_8041ffa0[];
+    extern char str_M_R_1_8041ffa8[];
+    extern char str_M_J_1B_802c1b24[];
+    extern char str_M_J_1C_802c1b34[];
+    extern void* dotMarioPose[][6];
+    extern s32 strcmp(const char*, const char*);
     extern f32 float_1_80420008;
     extern f32 float_2_80420004;
     extern f32 float_10_80420078;
@@ -86,6 +96,42 @@ void marioSetCharMode(s32 mode) {
     u32 materialFlags;
     u32 lightFlags;
     s8 color;
+
+#define SET_YOSHI_POSE(poseName) \
+    do { \
+        char* dotPose; \
+        if ((*(u32*)(player + 4) & 2) == 0) { \
+            if (*(char**)(player + 0x18) != 0 && \
+                strcmp(*(char**)(player + 0x18), (poseName)) == 0) { \
+                break; \
+            } \
+            if ((*(u32*)player & 0x80000000) == 0) { \
+                *(char**)(player + 0x18) = (poseName); \
+                *(s16*)(player + 0x28) = 0; \
+                *(u32*)(player + 4) &= ~0x30000000; \
+                *(u32*)(player + 0xC) |= 0x1000; \
+            } else { \
+                dotPose = 0; \
+                if (strcmp(str_M_Z_1_8041ff90, (poseName)) == 0) \
+                    dotPose = dotMarioPose[*(s8*)(player + 0x3D)][0]; \
+                else if (strcmp(str_M_S_1_8041ff98, (poseName)) == 0) \
+                    dotPose = dotMarioPose[*(s8*)(player + 0x3D)][1]; \
+                else if (strcmp(str_M_W_1_8041ffa0, (poseName)) == 0) \
+                    dotPose = dotMarioPose[*(s8*)(player + 0x3D)][2]; \
+                else if (strcmp(str_M_R_1_8041ffa8, (poseName)) == 0) \
+                    dotPose = dotMarioPose[*(s8*)(player + 0x3D)][3]; \
+                else if (strcmp(str_M_J_1B_802c1b24, (poseName)) == 0 || \
+                         strcmp(str_M_J_1C_802c1b34, (poseName)) == 0) \
+                    dotPose = dotMarioPose[*(s8*)(player + 0x3D)][5]; \
+                if (dotPose != 0) { \
+                    *(char**)(player + 0x18) = dotPose; \
+                    *(s16*)(player + 0x28) = 0; \
+                    *(u32*)(player + 4) &= ~0x30000000; \
+                    *(u32*)(player + 0xC) |= 0x1000; \
+                } \
+            } \
+        } \
+    } while (0)
 
     if (mode == 1) {
         *(s8*)(player + 0x3C) = 1;
@@ -202,13 +248,25 @@ void marioSetCharMode(s32 mode) {
             case 8:
                 marioForceRollAnime();
                 return;
-            case 9:
+        }
+        if ((*(u32*)(player + 4) & 0x01000000) != 0) {
                 marioForceSlitAnime();
                 return;
+        }
+        switch (*(u16*)(player + 0x2E)) {
             case 10:
                 N_marioForceVivianAnime();
                 return;
+            case 11:
+                SET_YOSHI_POSE(str_M_Y_2_804200d4);
+                SET_YOSHI_POSE(str_M_Y_1_804200dc);
+                return;
         }
+    }
+
+    if (*(u16*)(player + 0x2E) == 6 || *(u16*)(player + 0x2E) == 7 ||
+        *(u16*)(player + 0x2E) == 9) {
+        return;
     }
 
     if (*(s8*)(player + 0x3C) == 1) {
@@ -230,6 +288,7 @@ void marioSetCharMode(s32 mode) {
         *(f32*)(player + 0x104) = float_1_80420008;
         *(f32*)(player + 0x108) = float_2p25_804200b8;
     }
+#undef SET_YOSHI_POSE
 }
 
 #pragma no_register_save_helpers on

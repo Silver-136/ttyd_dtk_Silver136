@@ -16,9 +16,13 @@ void* effKemuri1N64Entry(f32 x, f32 y, f32 z, f32 angle, s32 type) {
 
     if (type == 3) {
         count = 4;
-    } else if (type == 2) {
-        count = 1;
-    } else if (type >= 4 && type < 8) {
+    } else if (type < 3) {
+        if (type > 1) {
+            count = 1;
+        } else {
+            count = 3;
+        }
+    } else if (type < 8) {
         count = 9;
     } else {
         count = 3;
@@ -31,12 +35,19 @@ void* effKemuri1N64Entry(f32 x, f32 y, f32 z, f32 angle, s32 type) {
     if (type == 3) {
         *(s32*)(work + 0x38) = 2;
         *(s32*)(work + 0x4C) = 0x81;
-    } else if (type == 2 || (type >= 4 && type < 8)) {
+    } else if (type < 3) {
+        if (type < 2) {
+            if (type > -1) {
+                *(s32*)(work + 0x38) = 0;
+                *(s32*)(work + 0x4C) = 0xF;
+            }
+        } else {
+            *(s32*)(work + 0x38) = 3;
+            *(s32*)(work + 0x4C) = 0x41;
+        }
+    } else if (type < 8) {
         *(s32*)(work + 0x38) = 3;
         *(s32*)(work + 0x4C) = 0x41;
-    } else if (type >= 0) {
-        *(s32*)(work + 0x38) = 0;
-        *(s32*)(work + 0x4C) = 0xF;
     }
     *(s32*)(work + 0x3C) = 0;
     *(s16*)work = type;
@@ -44,58 +55,85 @@ void* effKemuri1N64Entry(f32 x, f32 y, f32 z, f32 angle, s32 type) {
     *(f32*)(work + 8) = y;
     *(f32*)(work + 0xC) = z;
     part = work + 0x50;
-    for (i = 1; i < count; i++, part += 0x50) {
-        f32 rad;
-        *(f32*)(part + 4) = 0.0f;
-        *(f32*)(part + 8) = 0.0f;
-        *(f32*)(part + 0xC) = 0.0f;
-        *(f32*)(part + 0x30) = 0.0f;
-        *(f32*)(part + 0x34) = 0.0f;
-        if (type == 3) {
-            if (i == 1) rad = 2.3562f;
-            else if (i == 2) rad = -2.3562f;
-            else rad = 0.34907f;
+    if (type == 3) {
+        for (i = 1; i < count; i++, part += 0x50) {
+            f32 rad;
+            if (i - 1 == 1) {
+                rad = -2.3562f;
+                *(f32*)(part + 8) = 4.0f;
+                *(f32*)(part + 0x20) = 0.85f;
+            } else if (i - 1 < 1) {
+                rad = 2.3562f;
+                *(f32*)(part + 8) = 0.0f;
+                *(f32*)(part + 0x20) = 0.95f;
+            } else {
+                rad = 0.34907f;
+                *(f32*)(part + 8) = 10.0f;
+                *(f32*)(part + 0x20) = 0.75f;
+            }
             *(f32*)(part + 4) = 25.0f * -(f32)sin(rad);
-            *(f32*)(part + 8) = i == 2 ? 4.0f : (i == 1 ? 0.0f : 10.0f);
             *(f32*)(part + 0xC) = 25.0f * -(f32)cos(rad);
-            *(f32*)(part + 0x20) = i == 1 ? 0.95f : (i == 2 ? 0.85f : 0.75f);
             *(f32*)(part + 0x24) = -0.04f;
             *(f32*)(part + 0x28) = 0.94f;
-        } else if (type < 2 && type >= 0) {
-            f32 direction = reviseAngle(180.0f * (f32)(i - 1) + 90.0f);
-            rad = 6.2832f * direction / 360.0f;
-            *(f32*)(part + 0x10) = -3.0f;
-            *(f32*)(part + 0x14) = 0.3f;
-            *(f32*)(part + 0x20) = 1.75f;
-            *(f32*)(part + 0x24) = -0.16f;
-            *(f32*)(part + 0x2C) = 4.0f;
-            *(f32*)(part + 0x30) = (f32)sin(rad);
-            *(f32*)(part + 0x34) = (f32)cos(rad);
-        } else if (type < 8) {
-            rad = 6.2832f * (angle + (f32)(((i - 1) * 360) / (count - 1))) / 360.0f;
+            *(f32*)(part + 0x30) = 0.0f;
+            *(f32*)(part + 0x34) = 0.0f;
+            *(u8*)(part + 0x44) = 0xFF;
+            *(u8*)(part + 0x45) = 0xFF;
+            *(u8*)(part + 0x46) = 0xFF;
+        }
+    } else if (type < 3) {
+        if (type < 2 && type > -1) {
+            for (i = 1; i < count; i++, part += 0x50) {
+                f32 direction;
+                f32 rad;
+                *(f32*)(part + 0x10) = -3.0f;
+                *(f32*)(part + 0x14) = 0.3f;
+                *(f32*)(part + 0x18) = 0.0f;
+                *(f32*)(part + 0x1C) = 0.0f;
+                *(f32*)(part + 0x20) = 1.75f;
+                *(f32*)(part + 0x24) = -0.16f;
+                *(f32*)(part + 0x28) = 0.0f;
+                *(f32*)(part + 0x2C) = 0.0f;
+                *(f32*)(part + 4) = 0.0f;
+                *(f32*)(part + 8) = 0.0f;
+                *(f32*)(part + 0xC) = 4.0f;
+                direction = reviseAngle(180.0f * (f32)(i - 1) + 90.0f);
+                rad = 6.2832f * direction / 360.0f;
+                *(f32*)(part + 0x30) = (f32)sin(rad);
+                *(f32*)(part + 0x34) = (f32)cos(rad);
+                *(u8*)(part + 0x44) = 0xFF;
+                *(u8*)(part + 0x45) = 0xFF;
+                *(u8*)(part + 0x46) = 0xFF;
+            }
+        }
+    } else if (type < 8) {
+        for (i = 1; i < count; i++, part += 0x50) {
+            f32 rad;
             *(f32*)(part + 0x10) = -3.0f;
             *(f32*)(part + 0x14) = 0.93f;
+            *(f32*)(part + 0x20) = 0.0f;
             *(f32*)(part + 0x24) = 0.1f;
             *(f32*)(part + 0x28) = 0.94f;
             *(f32*)(part + 0x2C) = 0.94f;
+            rad = 6.2832f * (angle + (f32)(((i - 1) * 360) / (count - 1))) / 360.0f;
             *(f32*)(part + 4) = 10.0f * -(f32)sin(rad);
             *(f32*)(part + 8) = 0.0f;
             *(f32*)(part + 0xC) = 10.0f * -(f32)cos(rad);
             *(f32*)(part + 0x30) = (f32)sin(rad);
             *(f32*)(part + 0x34) = (f32)cos(rad);
-        }
-        if (type == 5) {
-            *(u8*)(part + 0x44) = 0xDD;
-            *(u8*)(part + 0x45) = 0xB7;
-            *(u8*)(part + 0x46) = 5;
-        } else if (type == 6) {
-            *(u8*)(part + 0x44) = 0x21;
-            *(u8*)(part + 0x45) = 0x8C;
-            *(u8*)(part + 0x46) = 0x8D;
-        } else {
-            *(u8*)(part + 0x44) = 0xFF;
-            *(u8*)(part + 0x45) = 0xFF;
-            *(u8*)(part + 0x46) = 0xFF;
+            if (type == 6) {
+                *(u8*)(part + 0x44) = 0x21;
+                *(u8*)(part + 0x45) = 0x8C;
+                *(u8*)(part + 0x46) = 0x8D;
+            } else if (type == 5) {
+                *(u8*)(part + 0x44) = 0xDD;
+                *(u8*)(part + 0x45) = 0xB7;
+                *(u8*)(part + 0x46) = 5;
+            } else {
+                *(u8*)(part + 0x44) = 0xFF;
+                *(u8*)(part + 0x45) = 0xFF;
+                *(u8*)(part + 0x46) = 0xFF;
+            }
         }
     }
     return entry;

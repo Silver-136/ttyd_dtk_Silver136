@@ -255,31 +255,69 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
     extern void* BattleGetUnitPtr(void*, s32);
     extern s32 BattleAudience_GetWaiting(s32);
     extern s32 irand(s32);
+    extern u16 keyGetButtonTrg(s32 channel);
     extern void memcpy(void*, void*, u32);
     extern void animPoseRelease(s32);
     extern void animPoseMain(void);
+    extern void bakuGameMarioSurpriseReset(void*, void*);
+    extern void bakuGameEnemySurpriseReset(void);
+    extern void bakuGameAudienceSurpriseReset(void);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void evtSetValue(void*, s32, s32);
     extern void evtSetFloat(void*, s32, f32);
     extern u8 weapon[];
+    extern const u32 dat_802ff408[3];
+    extern f32 float_1p5_80427ba0;
+    extern f32 float_neg0p3_80427ba4;
+    extern f32 float_110_80427ba8;
+    extern const char str_SFX_BTL_SAC_TIME1_802ff628[];
+    extern s32 psndSFXChk(u32 id);
+    extern void psndSFXOff(s32 id);
+    extern s32 psndSFXOn(const char* name);
     extern f64 intplGetValue(f64, f64, s32, s32, s32);
     u32* work = GetBakuGamePtr();
     s32* args = *(s32**)((u8*)event + 8);
+    u32 buttonMasks[3];
+    void* mario;
+    void* party;
     s32 i;
 
-    BattleGetUnitPtr(g_BattleWork, BattleTransID(event, -3));
-    BattleGetUnitPtr(g_BattleWork, BattleTransID(event, -4));
+    mario = BattleGetUnitPtr(g_BattleWork, BattleTransID(event, -3));
+    party = BattleGetUnitPtr(g_BattleWork, BattleTransID(event, -4));
+    buttonMasks[0] = dat_802ff408[0];
+    buttonMasks[1] = dat_802ff408[1];
+    buttonMasks[2] = dat_802ff408[2];
     if (isFirstCall != 0) {
         s32 canThrow = 0;
+        s32 ceilingSafe = 1;
+        void* unit;
         work[1] = 0;
         bakuGameDecideButton(1);
         for (i = 0; i < 3; i++) {
             u8* slot = (u8*)work + 0xC + i * 0x24;
             *(s32*)slot = 0;
+            *(u32*)(slot + 8) = buttonMasks[i];
             *(f32*)(slot + 0x10) = 100.0f;
             *(f32*)(slot + 0x20) = 0.0f;
         }
         memcpy(work + 0x3E, weapon, 0xC0);
+        for (i = 0; i < 0x40; i++) {
+            unit = BattleGetUnitPtr(g_BattleWork, i);
+            if (unit != 0 && *(s8*)((u8*)unit + 0xC) == 1) {
+                if (*(s16*)((u8*)unit + 0xCC) >= 100) {
+                    ceilingSafe = 1;
+                    break;
+                }
+                if ((*(u32*)((u8*)unit + 0x104) & 0x20000) == 0) {
+                    ceilingSafe = 0;
+                }
+            }
+        }
+        if (ceilingSafe) {
+            *work |= 1;
+        } else {
+            *work &= ~1U;
+        }
         for (i = 0; i < 200; i++) {
             if (bakuGameAudienceCanThrowPos(i) == 1 && BattleAudience_GetWaiting(i)) {
                 canThrow = 1;
@@ -377,6 +415,27 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
             }
             return 2;
     }
+    for (i = 0; i < 3; i++) {
+        u8* slot = (u8*)work + 0xC + i * 0x24;
+        s32 state = *(s32*)slot;
+        if (state == 0) {
+            *(s32*)slot = 5;
+        } else if (state == 10) {
+            *(s32*)slot = 15;
+            *(f32*)(slot + 0x20) = float_1_80427b60;
+        } else if (state == 12) {
+            *(f32*)(slot + 0x20) = (f32)intplGetValue(
+                float_0_80427b70, float_1_80427b60, 4,
+                *(s32*)(slot + 4), 30);
+            if (++*(s32*)(slot + 4) > 30) {
+                *(s32*)slot = 15;
+            }
+        } else if (state == 15 &&
+                   (*(u32*)(slot + 8) & keyGetButtonTrg(0)) != 0 &&
+                   work[0x3D] == 0) {
+            *(f32*)(slot + 0x10) -= float_100_80427b78;
+        }
+    }
     switch (work[0x70]) {
     case 0:
         if ((*work & 1) != 0) {
@@ -412,6 +471,38 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
     case 10:
         work[0x80] = 0x54;
         break;
+    }
+    if ((s32)work[0x1F] > 9 && (s32)work[0x1F] < 21 &&
+        (s32)work[0x3C] < 1) {
+        work[1] = 20;
+        if (*(u8*)((u8*)work + 0xCC) == 1) {
+            bakuGameEnemySurpriseReset();
+        } else if (*(u8*)((u8*)work + 0xCC) == 0) {
+            bakuGameMarioSurpriseReset(mario, party);
+        } else if (*(u8*)((u8*)work + 0xCC) < 3) {
+            bakuGameAudienceSurpriseReset();
+        }
+    }
+    if ((s32)work[0x1F] > 9 && (s32)work[0x1F] < 31) {
+        if ((keyGetButtonTrg(0) & 0x700) != 0) {
+            *(f32*)(work + 0x35) = float_1p5_80427ba0;
+        }
+        *(f32*)(work + 0x36) = float_neg0p3_80427ba4;
+        *(f32*)(work + 0x34) += *(f32*)(work + 0x35);
+        *(f32*)(work + 0x34) += *(f32*)(work + 0x36);
+        if (*(f32*)(work + 0x34) > float_110_80427ba8) {
+            *(f32*)(work + 0x34) = float_110_80427ba8;
+        }
+        if (*(f32*)(work + 0x34) < float_0_80427b70) {
+            *(f32*)(work + 0x34) = float_0_80427b70;
+            if (psndSFXChk(work[0x6E]) == 0) {
+                psndSFXOff(work[0x6E]);
+            }
+        }
+        if (*(f32*)(work + 0x34) > float_0_80427b70 &&
+            psndSFXChk(work[0x6E]) == -1) {
+            work[0x6E] = psndSFXOn(str_SFX_BTL_SAC_TIME1_802ff628);
+        }
     }
     if ((s32)work[0x3B] != -1) {
         animPoseMain();

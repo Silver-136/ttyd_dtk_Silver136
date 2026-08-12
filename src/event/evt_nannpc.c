@@ -347,11 +347,15 @@ void nannpc_ext_dispent(void) {
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void nannpc_ext_disp(void);
     extern void nannpc_ext_shadow_disp(void);
-    s32 layer;
+    extern f32 float_0_80422870;
 
-    layer = (*(u32*)((u8*)nanNPCWork + 0x10) & 1) == 0 ? 1 : 2;
-    dispEntry(4, layer, nannpc_ext_disp, 0, 0.0f);
-    dispEntry(4, 2, nannpc_ext_shadow_disp, 0, 0.0f);
+    if ((*(u32*)((u8*)nanNPCWork + 0x10) & 1) == 0) {
+        dispEntry(4, 1, nannpc_ext_disp, 0, float_0_80422870);
+        dispEntry(4, 2, nannpc_ext_shadow_disp, 0, float_0_80422870);
+    } else {
+        dispEntry(4, 2, nannpc_ext_disp, 0, float_0_80422870);
+        dispEntry(4, 2, nannpc_ext_shadow_disp, 0, float_0_80422870);
+    }
 }
 
 s32 evt_nannpc_init(void* event, s32 firstCall) {

@@ -779,9 +779,10 @@ void disp_3D(void) {
     extern void PSMTXTransApply(void*, void*, f32, f32, f32);
     extern void iconNumberDispGx3D(void*, s32, s32, void*);
     extern void iconDispGxCol(void*, u16, u16, void*);
+    extern s32 pouchGetPartyColor(s32);
     u8* work = get_ptr();
     void* mario = BattleGetMarioPtr(g_BattleWork);
-    void* party = BattleGetPartyPtr(g_BattleWork);
+    BattleWorkUnit* party = BattleGetPartyPtr(g_BattleWork);
     f32 mx, my, mz, px, py, pz;
     f32 mtx[3][4];
     u32 color;
@@ -867,6 +868,33 @@ void disp_3D(void) {
             } else if (kind == 1) {
                 icon = 0x1AB;
                 if (entry[1] % 12 >= 0 && entry[1] % 12 < 6) {
+                    flags = 0x20;
+                    scale = 2.0f;
+                }
+            } else if (kind == 2 || kind == 3 || kind == 4) {
+                if (party->currentType == UNIT_GOOMBELLA) {
+                    icon = 0x1AC;
+                } else if (party->currentType == UNIT_KOOPS) {
+                    icon = 0x1AD;
+                } else if (party->currentType == UNIT_YOSHI) {
+                    s32 partyColor = pouchGetPartyColor(4);
+                    if (partyColor == 0) icon = 0x1AF;
+                    else if (partyColor == 1) icon = 0x1B0;
+                    else if (partyColor == 2) icon = 0x1B1;
+                    else if (partyColor == 3) icon = 0x1B2;
+                    else if (partyColor == 4) icon = 0x1B3;
+                    else if (partyColor == 5) icon = 0x1B4;
+                    else if (partyColor == 6) icon = 0x1B5;
+                } else if (party->currentType == UNIT_FLURRIE) {
+                    icon = 0x1B6;
+                } else if (party->currentType == UNIT_VIVIAN) {
+                    icon = 0x1B7;
+                } else if (party->currentType == UNIT_BOBBERY) {
+                    icon = 0x1AE;
+                } else if (party->currentType == UNIT_MS_MOWZ) {
+                    icon = 0x1B8;
+                }
+                if (kind == 3 && entry[1] % 12 >= 0 && entry[1] % 12 < 6) {
                     flags = 0x20;
                     scale = 2.0f;
                 }

@@ -284,105 +284,159 @@ u8 itemMain(void) {
     extern void iconSetPos(f64, f64, f64, char*);
     extern void iconSetScale(f64, char*);
     extern void iconSetAlpha(char*, u8);
+    extern void iconDelete(char*);
+    extern s32 strcmp(char*, char*);
+    extern void pouchArriveBadge(s16, char*);
+    extern void effSoftDelete(void*);
+    extern void* effHagetakaFlushN64Entry(s32, f32, f32, f32, f32);
+    extern s32 irand(s32);
     extern void* hitCheckFilter(f64, f64, f64, f64, f64, f64, s32, void*, void*, void*, void*, void*, void*, void*);
     extern f32 float_0p5_804210d0, float_12_80421128;
     extern f32 float_16_804210e0, float_neg1000_80421108;
     extern f32 float_0_804210b4, float_20_804210b8, float_neg1_804210c4;
     void* workSet = work;
+    void* otherWork;
     void* player;
-    void* item;
+    u8* item;
+    u8* scan;
     void* party;
-    s32 count, i;
+    s32 count, i, j;
     u16 mode;
 
-    if (*(s32*)((s32)gp + 0x14) != 0) workSet = (void*)((s32)workSet + 0x1C);
+    if (*(s32*)((s32)gp + 0x14) != 0) workSet = work + 0x1C;
     player = marioGetPtr();
     item = itemHitCheck(*(f32*)((s32)player + 0x8C), *(f32*)((s32)player + 0x90),
                         *(f32*)((s32)player + 0x94),
                         float_0p5_804210d0 * *(f32*)((s32)player + 0x1B8) + float_12_80421128);
     if (itemGetCheck(item) != 0) {
-        *(u16*)((s32)item + 0x24) = 2;
-        *(u16*)((s32)item + 0x26) = 0;
+        *(u16*)(item + 0x24) = 2;
+        *(u16*)(item + 0x26) = 0;
     }
     count = *(s32*)workSet;
-    item = *(void**)((s32)workSet + 4);
-    for (i = 0; i < count; i++, item = (void*)((s32)item + 0x98)) {
+    item = *(u8**)((s32)workSet + 4);
+    for (i = 0; i < count; i++, item += 0x98) {
         s32 update = 1;
         if ((*(u16*)item & 1) == 0) continue;
-        mode = *(u16*)((s32)item + 0x24);
+        mode = *(u16*)(item + 0x24);
         if (mode == 0 || mode == 1 || (mode >= 3 && mode < 7) || mode == 9 || mode > 10) {
             if ((*(u32*)((s32)gp + 0x18) & 0xF) != 0) update = 0;
         }
         if (!update) {
-            *(u32*)((s32)item + 0x70) = *(u32*)((s32)gp + 0x38);
-            *(u32*)((s32)item + 0x74) = *(u32*)((s32)gp + 0x3C);
+            *(u32*)(item + 0x68) = *(u32*)((s32)gp + 0x38);
+            *(u32*)(item + 0x6C) = *(u32*)((s32)gp + 0x3C);
             continue;
         }
-        if (mode == 2) *(u32*)((s32)item + 0x38) &= ~0x100;
+        if (mode == 2) {
+            *(u32*)(item + 0x38) &= ~0x100;
+        } else if (*(s64*)(item + 0x78) == 0) {
+            *(u32*)(item + 0x38) &= ~0x100;
+        } else if ((*(u32*)(item + 0x38) & 0x4000) == 0) {
+            s64 elapsed = ((*(s64*)((s32)gp + 0x38) - *(s64*)(item + 0x68)) * 8) /
+                          (*(u32*)0x800000F8 / 500000);
+            *(s64*)(item + 0x78) = (s64)((f32)*(s64*)(item + 0x78) - (f32)elapsed);
+            if (*(s64*)(item + 0x78) <= 0) {
+                *(u16*)(item + 0x24) = 9;
+                *(u16*)(item + 0x26) = 0;
+            } else if (*(s64*)(item + 0x78) < 3000 && ((*(s64*)(item + 0x78) >> 4) & 1)) {
+                *(u32*)(item + 0x38) ^= 0x100;
+            }
+        } else {
+            *(u32*)(item + 0x38) &= ~0x100;
+        }
         switch (mode) {
         case 1: {
-            f32 oldY = *(f32*)((s32)item + 0x40);
+            f32 oldY = *(f32*)(item + 0x40);
             f32 nextY;
             f32 distance;
             f32 normalX, normalY, normalZ;
             u32 hitWork[2];
             void* hit = 0;
-            if ((*(u32*)((s32)item + 0x38) & 0x100000) == 0) {
+            if ((*(u32*)(item + 0x38) & 0x100000) == 0) {
                 distance = 21.0f;
-                hit = hitCheckFilter(*(f32*)((s32)item + 0x3C), oldY + float_20_804210b8,
-                                     *(f32*)((s32)item + 0x44), float_0_804210b4,
+                hit = hitCheckFilter(*(f32*)(item + 0x3C), oldY + float_20_804210b8,
+                                     *(f32*)(item + 0x44), float_0_804210b4,
                                      float_neg1_804210c4, float_0_804210b4, 0,
                                      hitWork, &nextY, &normalX, &distance, &normalY, 0, &normalZ);
             }
             if (hit == 0) {
-                *(u16*)((s32)item + 0x24) = 3;
-                *(u16*)((s32)item + 0x26) = 0;
+                *(u16*)(item + 0x24) = 3;
+                *(u16*)(item + 0x26) = 0;
             } else {
-                *(f32*)((s32)item + 0x40) = nextY;
+                *(f32*)(item + 0x40) = nextY;
             }
             break;
         }
         case 2:
             itemseq_GetItem(item);
             break;
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-        case 10:
+        case 3: case 4: case 5: case 6: case 10:
             itemseq_Bound(item);
             break;
         case 8:
             party = partyGetPtr(marioGetPartyId());
             if (party == 0) {
-                *(u16*)((s32)item + 0x24) = 3;
-                *(u16*)((s32)item + 0x26) = 0;
-                *(u32*)((s32)item + 0x38) &= ~0x1000;
+                *(u16*)(item + 0x24) = 3;
+                *(u16*)(item + 0x26) = 0;
+                *(u32*)(item + 0x38) &= ~0x1000;
             } else {
-                *(f32*)((s32)item + 0x3C) = *(f32*)((s32)party + 0xC);
-                *(f32*)((s32)item + 0x40) = *(f32*)((s32)party + 0x10) + 15.0f;
-                *(f32*)((s32)item + 0x44) = *(f32*)((s32)party + 0x14);
+                *(f32*)(item + 0x3C) = *(f32*)((s32)party + 0xC);
+                *(f32*)(item + 0x40) = *(f32*)((s32)party + 0x10) + 15.0f;
+                *(f32*)(item + 0x44) = *(f32*)((s32)party + 0x14);
+            }
+            break;
+        case 9:
+            scan = *(u8**)((s32)workSet + 4);
+            for (j = 0; j < *(s32*)workSet; j++, scan += 0x98) {
+                if (strcmp((char*)(scan + 0xC), (char*)(item + 0xC)) == 0) {
+                    if (*(s32*)((s32)gp + 0x14) == 0 && *(s32*)(scan + 4) > 0xEF &&
+                        *(s32*)(scan + 4) < 0x153 && (*(u32*)(scan + 0x38) & 0x1000000)) {
+                        pouchArriveBadge(*(s16*)(scan + 4), (char*)(item + 0xC));
+                    }
+                    if (*(s32*)(scan + 4) > 0x71 && *(s32*)(scan + 4) < 0x79) {
+                        effSoftDelete(*(void**)(scan + 0x1C));
+                    } else {
+                        iconDelete((char*)(scan + 0xC));
+                    }
+                    *(u16*)scan &= ~1;
+                }
             }
             break;
         }
         if ((*(u16*)item & 1) != 0) {
-            if (*(s32*)((s32)item + 4) > 0x71 && *(s32*)((s32)item + 4) < 0x79) {
-                void* eff = *(void**)((s32)item + 0x84);
-                void* alloc = *(void**)((s32)eff + 4);
-                *(f32*)((s32)alloc + 8) = *(f32*)((s32)item + 0x3C);
-                *(f32*)((s32)alloc + 0xC) = (*(u32*)((s32)item + 0x38) & 0x100)
+            if (*(s32*)(item + 4) > 0x71 && *(s32*)(item + 4) < 0x79) {
+                void* eff = *(void**)(item + 0x1C);
+                u8* alloc = *(u8**)((s32)eff + 4);
+                *(f32*)(alloc + 8) = *(f32*)(item + 0x3C);
+                *(f32*)(alloc + 0xC) = (*(u32*)(item + 0x38) & 0x100)
                                                 ? float_neg1000_80421108
-                                                : *(f32*)((s32)item + 0x40) + float_16_804210e0;
-                *(f32*)((s32)alloc + 0x10) = *(f32*)((s32)item + 0x44);
-            } else if ((*(u32*)((s32)item + 0x38) & 0x100) == 0) {
-                iconSetPos(*(f32*)((s32)item + 0x3C), *(f32*)((s32)item + 0x40),
-                           *(f32*)((s32)item + 0x44), (char*)((s32)item + 0xC));
-                iconSetScale(*(f32*)((s32)item + 0x48), (char*)((s32)item + 0xC));
-                iconSetAlpha((char*)((s32)item + 0xC), *(u8*)((s32)item + 0x54));
+                                                : *(f32*)(item + 0x40) + float_16_804210e0;
+                *(f32*)(alloc + 0x10) = *(f32*)(item + 0x44);
+            } else if ((*(u32*)(item + 0x38) & 0x100) == 0) {
+                iconSetPos(*(f32*)(item + 0x3C), *(f32*)(item + 0x40),
+                           *(f32*)(item + 0x44), (char*)(item + 0xC));
+                iconSetScale(*(f32*)(item + 0x48), (char*)(item + 0xC));
+                iconSetAlpha((char*)(item + 0xC), *(u8*)(item + 0x54));
             } else {
-                iconSetPos(*(f32*)((s32)item + 0x3C), float_neg1000_80421108,
-                           *(f32*)((s32)item + 0x44), (char*)((s32)item + 0xC));
+                iconSetPos(*(f32*)(item + 0x3C), float_neg1000_80421108,
+                           *(f32*)(item + 0x44), (char*)(item + 0xC));
             }
+            *(u32*)(item + 0x68) = *(u32*)((s32)gp + 0x38);
+            *(u32*)(item + 0x6C) = *(u32*)((s32)gp + 0x3C);
+            if ((*(s32*)(item + 4) == 0x79 || *(s32*)(item + 4) == 0x7A) && irand(1000) < 30) {
+                f32 dx = (f32)(10 - irand(20));
+                f32 dy = (f32)(irand(20) + 10);
+                effHagetakaFlushN64Entry(0, *(f32*)(item + 0x3C) + dx,
+                    *(f32*)(item + 0x40) + dy, *(f32*)(item + 0x44), 1.0f);
+            }
+        }
+    }
+
+    otherWork = (*(s32*)((s32)gp + 0x14) != 0) ? (void*)work : (void*)(work + 0x1C);
+    item = *(u8**)((s32)otherWork + 4);
+    for (i = 0; i < *(s32*)otherWork; i++, item += 0x98) {
+        if ((*(u32*)item & 0x10000) != 0) {
+            *(u32*)(item + 0x68) = *(u32*)((s32)gp + 0x38);
+            *(u32*)(item + 0x6C) = *(u32*)((s32)gp + 0x3C);
         }
     }
     return 0;
@@ -870,12 +924,20 @@ void winFullDisp(void* winMgrEntry) {
     }
 }
 
-u8 itemseq_GetItem(void* item, s32 p2, s32 p3, s32 p4, u32* p5, u32 p6) {
+void itemseq_GetItem(void* item, s32 p2, s32 p3, s32 p4, u32* p5, u32 p6) {
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+
     extern void* marioGetPtr(void);
     extern void* camGetPtr(s32);
     extern s32 pouchGetItem(s32);
+    extern void pouchRemoveItem(s32);
     extern void swSet(u32);
     extern void _swSet(u32);
+    extern u32 swGet(u32);
     extern void marioKeyOff(void);
     extern void marioCtrlOff(void);
     extern void marioCtrlOn(void);
@@ -888,6 +950,9 @@ u8 itemseq_GetItem(void* item, s32 p2, s32 p3, s32 p4, u32* p5, u32 p6) {
     extern void marioChgStayMotion(void);
     extern void* effItemGetEntry(f64, f64, f64, s32);
     extern void iconFlagOn(char*, u32);
+    extern void iconFlagOff(char*, u32);
+    extern void iconChange(char*, u16);
+    extern void* iconNameToPtr(char*);
     extern void marioSetCamId(s32);
     extern u32 psndBGMChkSilent(s32);
     extern s32 psndBGMChk(s32);
@@ -895,81 +960,210 @@ u8 itemseq_GetItem(void* item, s32 p2, s32 p3, s32 p4, u32* p5, u32 p6) {
     extern void psndBGMOn(s32, char*);
     extern u32 psndSFXOn_3D(char*, void*);
     extern void effStardustEntry(f64, f64, f64, f64, f64, s32, s32, s32);
+    extern s32 strcmp(const char*, const char*);
+    extern void effSoftDelete(void*);
+    extern void iconDelete(char*);
+    extern void* evtEntry(void*, s32, s32);
+    extern void* evtEntryType(void*, s8, u32, u32);
+    extern s32 evtCheckID(s32);
+    extern void pouchArriveBadge(s32);
+    extern u32 evtGetValue(void*, s32);
+    extern void evtSetValue(void*, s32, u32);
     extern u32 winMgrAction(s32);
     extern void winMgrCloseAutoDelete(s32);
+    extern s32 winMgrEntry(void*);
+    extern void winMgrOpen(s32);
+    extern void winMgrSetParam(s32, void*);
+    extern void* winMgrSelectEntry(s32, s32, s32);
+    extern s32 winMgrSelect(void*);
+    extern void winMgrSelectDelete(void*);
+    extern u32 windowCheckID(s32);
     extern u32 keyGetButtonTrg(s32);
+    extern s32 sprintf(char*, const char*, ...);
+    extern s32 msgWindow_Entry(char*, s32, s16);
+
+    extern u8 itemdrv_window_desc[];
+    extern u8 all_juyoitem_lecture[];
+
     extern char str_BGM_FF_GET_STARPIECE_802c91d8[];
     extern char str_BGM_FF_GET_KEYITEM1_802c91f0[];
     extern char str_BGM_FF_GET_BADGE1_802c9204[];
     extern char str_BGM_FF_GET_IMPORTANT_802c9218[];
     extern char str_BGM_FF_GET_ITEM1_802c9234[];
+    extern char str_item_first_hit_802c9248[];
+    extern char str_iPCT05x_802c9258[];
     extern char str_SFX_COIN_GET1_802c90c0[];
     extern char str_SFX_EVT_GAME_MONTE_C_802c90d0[];
     extern char str_SFX_HEART_GET1_802c90ec[];
     extern char str_SFX_FLOWER_GET1_802c90fc[];
+
     extern f32 float_0p7_8042110c;
     extern f32 float_1_804210bc;
     extern f32 float_85_80421120;
     extern f32 float_120_80421124;
-    void* player = marioGetPtr();
-    u16* mode = (u16*)((s32)item + 0x26);
-    u16* flags = (u16*)item;
-    u32* status = (u32*)((s32)item + 0x38);
-    f32* pos = (f32*)((s32)item + 0x3C);
-    s32 itemId = *(s32*)((s32)item + 0x4);
-    s32 effectType = 7;
-    s32 bgmType = -1;
+
+    u8* workSet;
+    void* player;
+    u16* mode;
+    u16* flags;
+    u32* status;
+    f32* pos;
+    s32 itemId;
+    s32 effectType;
+    s32 bgmType;
     void* effect;
-    f32 soundPos[3];
+    VecLocal soundPos0;
+    VecLocal soundPos1;
+
+    workSet = work;
+    if (*(s32*)((s32)gp + 0x14) != 0) {
+        workSet += 0x1C;
+    }
+
+    player = marioGetPtr();
+    mode = (u16*)((s32)item + 0x26);
+    flags = (u16*)item;
+    status = (u32*)((s32)item + 0x38);
+    pos = (f32*)((s32)item + 0x3C);
 
     switch (*mode) {
     case 0:
         *status &= ~0x10000;
-        if ((*flags & 0x100) == 0) *status &= ~0x4000000;
-        else *status |= 0x4000000;
+        if ((*flags & 0x100) == 0) {
+            *status &= ~0x4000000;
+        } else {
+            *status |= 0x4000000;
+        }
         *flags &= ~0x100;
+
         if ((*flags & 0x200) != 0) {
+            itemId = *(s32*)((s32)item + 4);
+
             if (pouchGetItem(itemId) != 0) {
+                void* entry;
+                s32 i;
+
                 if ((*flags & 0x20) != 0) {
                     swSet(*(u32*)((s32)item + 8));
                 } else if ((*flags & 0x40) != 0) {
                     _swSet(*(u32*)((s32)item + 8));
                 }
+
+                if (*(void**)((s32)item + 0x20) != 0) {
+                    void* evt;
+                    evt = evtEntry(*(void**)((s32)item + 0x20), 0, 0x20);
+                    *(s32*)((s32)evt + 0x9C) =
+                        (s32)(1024.0f * pos[0]) - 230000000;
+                    *(s32*)((s32)evt + 0xA0) =
+                        (s32)(1024.0f * pos[1]) - 230000000;
+                    *(s32*)((s32)evt + 0xA4) =
+                        (s32)(1024.0f * pos[2]) - 230000000;
+                }
+
                 *status |= 1;
-                return 0;
+                *(u32*)((s32)item + 0x78) = 0;
+                *(u32*)((s32)item + 0x7C) = 0;
+
+                soundPos0.x = pos[0];
+                soundPos0.y = pos[1];
+                soundPos0.z = pos[2];
+
+                if (itemId == 0x7B) {
+                    psndSFXOn_3D(str_SFX_HEART_GET1_802c90ec, &soundPos0);
+                } else if (itemId < 0x7B) {
+                    if (itemId == 0x79) {
+                        effStardustEntry(
+                            soundPos0.x, soundPos0.y + 35.0f, soundPos0.z,
+                            16.0, 16.0, 1, 3, 30);
+                        psndSFXOn_3D(str_SFX_COIN_GET1_802c90c0, &soundPos0);
+                    } else if (itemId > 0x78) {
+                        effStardustEntry(
+                            soundPos0.x, soundPos0.y + 35.0f, soundPos0.z,
+                            16.0, 16.0, 1, 3, 30);
+                        psndSFXOn_3D(
+                            str_SFX_EVT_GAME_MONTE_C_802c90d0, &soundPos0);
+                    }
+                } else if (itemId != 0x7D && itemId < 0x7D) {
+                    psndSFXOn_3D(str_SFX_FLOWER_GET1_802c90fc, &soundPos0);
+                }
+
+                entry = *(void**)(workSet + 4);
+                for (i = 0; i < *(s32*)workSet;
+                     i++, entry = (void*)((s32)entry + 0x98)) {
+                    if (strcmp(
+                            (char*)((s32)entry + 0xC),
+                            (char*)((s32)item + 0xC)) == 0) {
+                        if (*(s32*)((s32)gp + 0x14) == 0 &&
+                            *(s32*)((s32)entry + 4) >= 0xF0 &&
+                            *(s32*)((s32)entry + 4) < 0x153 &&
+                            (*(u32*)((s32)entry + 0x38) & 0x1000000) != 0) {
+                            pouchArriveBadge(*(s32*)((s32)entry + 4));
+                        }
+
+                        if (*(s32*)((s32)entry + 4) >= 0x72 &&
+                            *(s32*)((s32)entry + 4) < 0x79) {
+                            effSoftDelete(*(void**)((s32)entry + 0x1C));
+                        } else {
+                            iconDelete((char*)((s32)entry + 0xC));
+                        }
+
+                        *(u16*)entry &= ~1;
+                    }
+                }
+                return;
             }
+
             *(u16*)((s32)item + 0x24) = 4;
             *mode = 0;
-            return 0;
+            return;
         }
+
         *mode = 1;
-        *(u32*)((s32)item + 0x68) = 0;
-        *(u32*)((s32)item + 0x6C) = 0;
+        *(u32*)((s32)item + 0x78) = 0;
+        *(u32*)((s32)item + 0x7C) = 0;
         *(u16*)camGetPtr(4) |= 0x200;
         marioKeyOff();
         marioStSystemLevel(2);
         psndSetFlag(0x80);
+
         *(f32*)((s32)player + 0x174) = 0.0f;
         *(f32*)((s32)player + 0x17C) = 0.0f;
         *(f32*)((s32)player + 0x180) = 0.0f;
         *(f32*)((s32)player + 0x18C) = 0.0f;
+
+        itemId = *(s32*)((s32)item + 4);
         if (itemId == 7 || itemId == 8 || itemId == 10 || itemId == 11) {
             *status |= 0x2000;
         }
+
     case 1:
-        if (((*flags & 0x1000) == 0 || (*flags & 0x4000) != 0) && marioChkItemGetMotion() == 0) {
-            u16 motion = *(u16*)((s32)player + 0x2E);
-            if (motion != 5 && (u16)(motion - 6) > 2 && motion != 0xF && motion != 0xE) {
-                return 0;
+        if (((*flags & 0x1000) == 0 || (*flags & 0x4000) != 0) &&
+            marioChkItemGetMotion() == 0) {
+            u16 motion;
+
+            motion = *(u16*)((s32)player + 0x2E);
+            if (motion != 5 &&
+                (u16)(motion - 6) > 2 &&
+                motion != 0xF &&
+                motion != 0xE) {
+                return;
             }
+
             *mode = 8;
-            return 0;
+            return;
         }
+
         *mode = 2;
         marioChgGetItemMotion();
+
+        effectType = 7;
+        bgmType = -1;
+
         pos[0] = *(f32*)((s32)player + 0x8C);
         pos[1] = *(f32*)((s32)player + 0x90) + 50.0f;
         pos[2] = *(f32*)((s32)player + 0x94);
+
+        itemId = *(s32*)((s32)item + 4);
         if (itemId == 0x57) {
             effectType = 4;
             bgmType = -1;
@@ -992,66 +1186,152 @@ u8 itemseq_GetItem(void* item, s32 p2, s32 p3, s32 p4, u32* p5, u32 p6) {
             effectType = 5;
             bgmType = 2;
         }
-        effect = effItemGetEntry(*(f32*)((s32)player + 0x8C),
-                                 *(f32*)((s32)player + 0x90) + 62.0f,
-                                 *(f32*)((s32)player + 0x94), effectType);
-        *(void**)((s32)item + 0x84) = effect;
+
+        effect = effItemGetEntry(
+            *(f32*)((s32)player + 0x8C),
+            *(f32*)((s32)player + 0x90) + 62.0f,
+            *(f32*)((s32)player + 0x94),
+            effectType);
+
+        *(void**)(workSet + 0x0C) = effect;
+
         if ((*status & 0x2000) == 0) {
-            iconFlagOn(*(char**)((s32)item + 0xC), 0x100);
+            *(s32*)(*(u8**)((s32)effect + 0x0C) + 0x38) = 5;
+            iconFlagOn((char*)((s32)item + 0xC), 0x100);
             if (effectType == 0 || effectType == 3) {
                 marioSetCamId(5);
             }
         } else {
-            iconFlagOn(*(char**)((s32)item + 0xC), 0x200);
+            *(s32*)(*(u8**)((s32)effect + 0x0C) + 0x38) = 5;
+            iconFlagOn((char*)((s32)item + 0xC), 0x200);
             marioSetCamId(7);
         }
+
         if ((*flags & 0x8000) == 0) {
-            if (psndBGMChkSilent(0) != 0) *flags |= 8;
+            if (psndBGMChkSilent(0) != 0) {
+                *flags |= 8;
+            }
+
             if (bgmType == 2) {
-                if ((*flags & 8) == 0) psndBGMOff(0x3800);
+                if ((*flags & 8) == 0) {
+                    psndBGMOff(0x3800);
+                }
                 psndBGMOn(0x211, str_BGM_FF_GET_BADGE1_802c9204);
             } else if (bgmType == 0) {
-                if ((*flags & 8) == 0) psndBGMOff(0x3800);
+                if ((*flags & 8) == 0) {
+                    psndBGMOff(0x3800);
+                }
                 psndBGMOn(0x211, str_BGM_FF_GET_STARPIECE_802c91d8);
             } else if (bgmType == 1) {
-                if ((*flags & 8) == 0) psndBGMOff(0x3800);
+                if ((*flags & 8) == 0) {
+                    psndBGMOff(0x3800);
+                }
                 psndBGMOn(0x211, str_BGM_FF_GET_KEYITEM1_802c91f0);
             } else if (bgmType == 3) {
-                if ((*flags & 8) == 0) psndBGMOff(0x3800);
+                if ((*flags & 8) == 0) {
+                    psndBGMOff(0x3800);
+                }
                 psndBGMOn(0x211, str_BGM_FF_GET_IMPORTANT_802c9218);
             } else {
-                if ((*flags & 8) == 0) psndBGMOff(0x3800);
+                if ((*flags & 8) == 0) {
+                    psndBGMOff(0x3800);
+                }
                 psndBGMOn(0x211, str_BGM_FF_GET_ITEM1_802c9234);
             }
         }
+
+        if (effectType == 8) {
+            u32 count;
+
+            count = evtGetValue(0, -0xA21FE5E);
+            evtSetValue(0, -0xA21FE5E, count + 1);
+        }
+
         *flags &= ~0x2000;
-        soundPos[0] = pos[0];
-        soundPos[1] = pos[1];
-        soundPos[2] = pos[2];
+
+        soundPos1.x = pos[0];
+        soundPos1.y = pos[1];
+        soundPos1.z = pos[2];
+
         if (itemId == 0x7B) {
-            psndSFXOn_3D(str_SFX_HEART_GET1_802c90ec, soundPos);
+            psndSFXOn_3D(str_SFX_HEART_GET1_802c90ec, &soundPos1);
         } else if (itemId < 0x7B) {
             if (itemId == 0x79) {
-                effStardustEntry(soundPos[0], soundPos[1] + 35.0f, soundPos[2],
-                                 16.0, 16.0, 1, 3, 30);
-                psndSFXOn_3D(str_SFX_COIN_GET1_802c90c0, soundPos);
+                effStardustEntry(
+                    soundPos1.x, soundPos1.y + 35.0f, soundPos1.z,
+                    16.0, 16.0, 1, 3, 30);
+                psndSFXOn_3D(str_SFX_COIN_GET1_802c90c0, &soundPos1);
             } else if (itemId > 0x78) {
-                effStardustEntry(soundPos[0], soundPos[1] + 35.0f, soundPos[2],
-                                 16.0, 16.0, 1, 3, 30);
-                psndSFXOn_3D(str_SFX_EVT_GAME_MONTE_C_802c90d0, soundPos);
+                effStardustEntry(
+                    soundPos1.x, soundPos1.y + 35.0f, soundPos1.z,
+                    16.0, 16.0, 1, 3, 30);
+                psndSFXOn_3D(
+                    str_SFX_EVT_GAME_MONTE_C_802c90d0, &soundPos1);
             }
         } else if (itemId != 0x7D && itemId < 0x7D) {
-            psndSFXOn_3D(str_SFX_FLOWER_GET1_802c90fc, soundPos);
+            psndSFXOn_3D(str_SFX_FLOWER_GET1_802c90fc, &soundPos1);
+        }
+
+        *(s32*)((s32)item + 0x28) =
+            winMgrEntry(itemdrv_window_desc);
+        winMgrOpen(*(s32*)((s32)item + 0x28));
+        winMgrSetParam(*(s32*)((s32)item + 0x28), item);
+
+        if ((*status & 0x2000) == 0) {
+            *(s32*)((s32)item + 0x2C) =
+                winMgrEntry(itemdrv_window_desc + 0x28);
+            winMgrOpen(*(s32*)((s32)item + 0x2C));
+            winMgrSetParam(*(s32*)((s32)item + 0x2C), item);
+        }
+
+        if (pouchGetItem(*(s32*)((s32)item + 4)) != 0) {
+            if ((*flags & 0x20) != 0) {
+                swSet(*(u32*)((s32)item + 8));
+            } else if ((*flags & 0x40) != 0) {
+                _swSet(*(u32*)((s32)item + 8));
+            }
+
+            if (*(void**)((s32)item + 0x20) != 0) {
+                void* evt;
+
+                evt = evtEntry(*(void**)((s32)item + 0x20), 0, 0x20);
+                *(s32*)((s32)evt + 0x9C) =
+                    (s32)(1024.0f * pos[0]) - 230000000;
+                *(s32*)((s32)evt + 0xA0) =
+                    (s32)(1024.0f * pos[1]) - 230000000;
+                *(s32*)((s32)evt + 0xA4) =
+                    (s32)(1024.0f * pos[2]) - 230000000;
+            }
+
+            *status |= 1;
+        } else {
+            *(s32*)((s32)item + 0x30) =
+                winMgrEntry(itemdrv_window_desc + 0x50);
+            winMgrOpen(*(s32*)((s32)item + 0x30));
+            winMgrSetParam(*(s32*)((s32)item + 0x30), item);
+        }
+
+        if (*(s32*)((s32)item + 4) == 0x49) {
+            iconChange((char*)((s32)item + 0xC), 0x11B);
+        }
+
+        if (*(void**)((s32)item + 0x1C) == 0) {
+            u8* icon;
+            icon = iconNameToPtr((char*)((s32)item + 0xC));
+            *(u16*)icon |= 0x80;
         }
         break;
+
     case 2:
         if ((*status & 0x2000) == 0) {
             marioCtrlOff();
             *status |= 0x1000000;
         }
         *mode = 3;
+
     case 3:
-        if ((*flags & 0x8000) == 0 && (*flags & 0x2000) == 0 &&
+        if ((*flags & 0x8000) == 0 &&
+            (*flags & 0x2000) == 0 &&
             psndBGMChk(1) != 0) {
             *flags |= 0x2000;
             psndBGMOff(0x201);
@@ -1059,26 +1339,325 @@ u8 itemseq_GetItem(void* item, s32 p2, s32 p3, s32 p4, u32* p5, u32 p6) {
                 psndBGMOn(0xA0, 0);
             }
         }
+
         if (winMgrAction(*(s32*)((s32)item + 0x28)) == 0 &&
             (keyGetButtonTrg(0) & 0x300) != 0) {
             winMgrCloseAutoDelete(*(s32*)((s32)item + 0x28));
+
             if ((*status & 0x2000) == 0) {
                 winMgrCloseAutoDelete(*(s32*)((s32)item + 0x2C));
             }
-            *mode = 6;
+
+            if ((*flags & 0x8000) == 0 &&
+                (*flags & 0x2000) == 0) {
+                psndBGMOff(0x201);
+                if ((*flags & 8) == 0) {
+                    psndBGMOn(0xA0, 0);
+                }
+            }
+
+            if ((*status & 0x2000) != 0) {
+                *mode = 6;
+                break;
+            }
+
+            itemId = *(s32*)((s32)item + 4);
+            if (itemId >= 0x79 &&
+                itemId < 0xEC &&
+                itemId != 0x7D &&
+                swGet(0xEB) == 0 &&
+                (*(u32*)gp & 0x1000) == 0) {
+                char* msg;
+
+                swSet(0xEB);
+                *mode = 4;
+                msg = msgSearch(str_item_first_hit_802c9248);
+                *(s32*)(workSet + 0x18) =
+                    msgWindow_Entry(msg, 0, 0);
+                break;
+            }
+
+            effSoftDelete(*(void**)(workSet + 0x0C));
+            marioSetCamId(4);
+            iconFlagOff((char*)((s32)item + 0xC), 0x100);
+
+            if (*(s32*)((s32)item + 4) == 0x49) {
+                iconChange((char*)((s32)item + 0xC), 0x11C);
+            }
+
+            if (*(void**)((s32)item + 0x1C) == 0) {
+                u8* icon;
+                icon = iconNameToPtr((char*)((s32)item + 0xC));
+                *(u16*)icon &= ~0x80;
+            }
+
+            if ((*status & 1) == 0) {
+                *mode = 5;
+                winMgrCloseAutoDelete(*(s32*)((s32)item + 0x30));
+                marioChgStayMotion();
+                iconFlagOn((char*)((s32)item + 0xC), 2);
+
+                itemId = *(s32*)((s32)item + 4);
+                if (itemId >= 0xF0 && itemId < 0x153) {
+                    *(void**)(workSet + 0x10) =
+                        winMgrSelectEntry(2, itemId, 1);
+                } else {
+                    *(void**)(workSet + 0x10) =
+                        winMgrSelectEntry(1, itemId, 1);
+                }
+            } else {
+                void* entry;
+                s32 i;
+
+                marioStSystemLevel(0);
+                psndClearFlag(0x80);
+
+                if ((*status & 0x1000000) != 0) {
+                    *status &= ~0x1000000;
+                    marioCtrlOn();
+                }
+
+                marioKeyOn();
+                marioChgStayMotion();
+                *(u16*)camGetPtr(4) &= ~0x200;
+
+                entry = *(void**)(workSet + 4);
+                for (i = 0; i < *(s32*)workSet;
+                     i++, entry = (void*)((s32)entry + 0x98)) {
+                    if (strcmp(
+                            (char*)((s32)entry + 0xC),
+                            (char*)((s32)item + 0xC)) == 0) {
+                        if (*(s32*)((s32)gp + 0x14) == 0 &&
+                            *(s32*)((s32)entry + 4) >= 0xF0 &&
+                            *(s32*)((s32)entry + 4) < 0x153 &&
+                            (*(u32*)((s32)entry + 0x38) & 0x1000000) != 0) {
+                            pouchArriveBadge(*(s32*)((s32)entry + 4));
+                        }
+
+                        if (*(s32*)((s32)entry + 4) >= 0x72 &&
+                            *(s32*)((s32)entry + 4) < 0x79) {
+                            effSoftDelete(*(void**)((s32)entry + 0x1C));
+                        } else {
+                            iconDelete((char*)((s32)entry + 0xC));
+                        }
+
+                        *(u16*)entry &= ~1;
+                    }
+                }
+            }
         }
         break;
+
+    case 4:
+        if (windowCheckID(*(s32*)(workSet + 0x18)) == 0) {
+            void* entry;
+            s32 i;
+
+            effSoftDelete(*(void**)(workSet + 0x0C));
+            marioSetCamId(4);
+            iconFlagOff((char*)((s32)item + 0xC), 0x100);
+            marioStSystemLevel(0);
+            psndClearFlag(0x80);
+
+            if ((*status & 0x1000000) != 0) {
+                *status &= ~0x1000000;
+                marioCtrlOn();
+            }
+
+            marioKeyOn();
+            marioChgStayMotion();
+            *(u16*)camGetPtr(4) &= ~0x200;
+
+            entry = *(void**)(workSet + 4);
+            for (i = 0; i < *(s32*)workSet;
+                 i++, entry = (void*)((s32)entry + 0x98)) {
+                if (strcmp(
+                        (char*)((s32)entry + 0xC),
+                        (char*)((s32)item + 0xC)) == 0) {
+                    if (*(s32*)((s32)gp + 0x14) == 0 &&
+                        *(s32*)((s32)entry + 4) >= 0xF0 &&
+                        *(s32*)((s32)entry + 4) < 0x153 &&
+                        (*(u32*)((s32)entry + 0x38) & 0x1000000) != 0) {
+                        pouchArriveBadge(*(s32*)((s32)entry + 4));
+                    }
+
+                    if (*(s32*)((s32)entry + 4) >= 0x72 &&
+                        *(s32*)((s32)entry + 4) < 0x79) {
+                        effSoftDelete(*(void**)((s32)entry + 0x1C));
+                    } else {
+                        iconDelete((char*)((s32)entry + 0xC));
+                    }
+
+                    *(u16*)entry &= ~1;
+                }
+            }
+        }
+        break;
+
+    case 5:
+        {
+            s32 selected;
+
+            selected = winMgrSelect(*(void**)(workSet + 0x10));
+            if (selected != 0) {
+                winMgrSelectDelete(*(void**)(workSet + 0x10));
+
+                if (selected < 0) {
+                    if ((*status & 0x4000000) != 0) {
+                        *flags |= 0x100;
+                    }
+                } else {
+                    u8* icon;
+
+                    pouchRemoveItem(selected);
+
+                    if (pouchGetItem(*(s32*)((s32)item + 4)) != 0) {
+                        if ((*flags & 0x20) != 0) {
+                            swSet(*(u32*)((s32)item + 8));
+                        } else if ((*flags & 0x40) != 0) {
+                            _swSet(*(u32*)((s32)item + 8));
+                        }
+
+                        if (*(void**)((s32)item + 0x20) != 0) {
+                            void* evt;
+
+                            evt = evtEntry(
+                                *(void**)((s32)item + 0x20), 0, 0x20);
+                            *(s32*)((s32)evt + 0x9C) =
+                                (s32)(1024.0f * pos[0]) - 230000000;
+                            *(s32*)((s32)evt + 0xA0) =
+                                (s32)(1024.0f * pos[1]) - 230000000;
+                            *(s32*)((s32)evt + 0xA4) =
+                                (s32)(1024.0f * pos[2]) - 230000000;
+                        }
+
+                        *status |= 1;
+                    }
+
+                    *status &= ~1;
+                    *(s32*)((s32)item + 4) = selected;
+                    *(u32*)((s32)item + 0x20) = 0;
+                    *(u32*)((s32)item + 8) = 0;
+                    *flags &= ~0x60;
+
+                    iconChange(
+                        (char*)((s32)item + 0xC),
+                        *(u16*)((s32)itemDataTable +
+                                selected * 0x28 + 0x20));
+
+                    (*(s32*)(workSet + 8))++;
+
+                    icon = iconNameToPtr((char*)((s32)item + 0xC));
+                    sprintf(
+                        (char*)(icon + 0x18),
+                        str_iPCT05x_802c9258,
+                        *(s32*)(workSet + 8));
+                    sprintf(
+                        (char*)((s32)item + 0xC),
+                        str_iPCT05x_802c9258,
+                        *(s32*)(workSet + 8));
+
+                    *flags |= 0x100;
+                }
+
+                *flags &= ~0x1000;
+                *(f32*)((s32)item + 0x50) = float_85_80421120;
+                *(f32*)((s32)item + 0x58) = float_120_80421124;
+                *(f32*)((s32)item + 0x80) = float_0p7_8042110c;
+                *(f32*)((s32)item + 0x84) = float_1_804210bc;
+
+                *(s32*)((s32)item + 0x28) =
+                    winMgrEntry(itemdrv_window_desc + 0x78);
+                winMgrOpen(*(s32*)((s32)item + 0x28));
+                winMgrSetParam(*(s32*)((s32)item + 0x28), item);
+
+                marioChgGetItemMotion();
+                iconFlagOff((char*)((s32)item + 0xC), 2);
+
+                if ((*(u32*)player & 0x02000000) != 0) {
+                    *status |= 0x8000;
+                }
+
+                *mode = 9;
+            }
+        }
+        break;
+
+    case 6:
+        {
+            u8* evt;
+
+            evt = evtEntryType(all_juyoitem_lecture, 0, 0, 0);
+            *(void**)(workSet + 0x14) = evt;
+            *(void**)(evt + 0xBC) = item;
+            *(void**)(evt + 0xC0) = *(void**)(workSet + 0x0C);
+
+            psndClearFlag(0x80);
+            *mode = 7;
+        }
+        break;
+
+    case 7:
+        {
+            u8* evt;
+
+            evt = *(u8**)(workSet + 0x14);
+            if (evtCheckID(*(s32*)(evt + 0x15C)) == 0) {
+                void* entry;
+                s32 i;
+
+                marioStSystemLevel(0);
+                psndClearFlag(0x80);
+
+                if ((*status & 0x1000000) != 0) {
+                    *status &= ~0x1000000;
+                    marioCtrlOn();
+                }
+
+                marioKeyOn();
+                marioChgStayMotion();
+                *(u16*)camGetPtr(4) &= ~0x200;
+
+                entry = *(void**)(workSet + 4);
+                for (i = 0; i < *(s32*)workSet;
+                     i++, entry = (void*)((s32)entry + 0x98)) {
+                    if (strcmp(
+                            (char*)((s32)entry + 0xC),
+                            (char*)((s32)item + 0xC)) == 0) {
+                        if (*(s32*)((s32)gp + 0x14) == 0 &&
+                            *(s32*)((s32)entry + 4) >= 0xF0 &&
+                            *(s32*)((s32)entry + 4) < 0x153 &&
+                            (*(u32*)((s32)entry + 0x38) & 0x1000000) != 0) {
+                            pouchArriveBadge(*(s32*)((s32)entry + 4));
+                        }
+
+                        if (*(s32*)((s32)entry + 4) >= 0x72 &&
+                            *(s32*)((s32)entry + 4) < 0x79) {
+                            effSoftDelete(*(void**)((s32)entry + 0x1C));
+                        } else {
+                            iconDelete((char*)((s32)entry + 0xC));
+                        }
+
+                        *(u16*)entry &= ~1;
+                    }
+                }
+            }
+        }
+        break;
+
     case 8:
         if ((*(u32*)player & 0x02000000) != 0) {
             *status |= 0x8000;
         }
-        *(u32*)((s32)item + 0x68) = 0;
-        *(u32*)((s32)item + 0x6C) = 0;
+
+        *(u32*)((s32)item + 0x78) = 0;
+        *(u32*)((s32)item + 0x7C) = 0;
+
         if ((*status & 0x1000) == 0) {
             *(f32*)((s32)item + 0x50) = float_85_80421120;
-            *(f32*)((s32)item + 0x5C) = float_120_80421124;
+            *(f32*)((s32)item + 0x58) = float_120_80421124;
             *(f32*)((s32)item + 0x80) = float_0p7_8042110c;
-            *(f32*)((s32)item + 0x58) = float_1_804210bc;
+            *(f32*)((s32)item + 0x84) = float_1_804210bc;
             *status |= 8;
             *(u16*)((s32)item + 0x24) = 6;
             *mode = 0;
@@ -1095,14 +1674,18 @@ u8 itemseq_GetItem(void* item, s32 p2, s32 p3, s32 p4, u32* p5, u32 p6) {
             *status &= ~0x1000;
             *flags &= ~0x1000;
         }
+
         marioStSystemLevel(0);
         psndClearFlag(0x80);
+
         if ((*status & 0x1000000) != 0) {
             *status &= ~0x1000000;
             marioCtrlOn();
         }
+
         marioKeyOn();
         break;
+
     case 9:
         if ((keyGetButtonTrg(0) & 0x100) != 0) {
             winMgrCloseAutoDelete(*(s32*)((s32)item + 0x28));
@@ -1110,30 +1693,39 @@ u8 itemseq_GetItem(void* item, s32 p2, s32 p3, s32 p4, u32* p5, u32 p6) {
             *(u16*)((s32)item + 0x24) = 6;
             *mode = 0;
             *flags &= ~0x10;
-            if ((itemId < 1 || itemId > 0x78) &&
-                (itemId < 0xF0 || itemId > 0x152)) {
-                *(u32*)((s32)item + 0x68) = 0;
-                *(u32*)((s32)item + 0x6C) = 20000;
+
+            itemId = *(s32*)((s32)item + 4);
+            if (itemId < 1 || itemId > 0x78) {
+                if (itemId < 0xF0 || itemId > 0x152) {
+                    *(u32*)((s32)item + 0x7C) = 20000;
+                    *(u32*)((s32)item + 0x78) = 0;
+                } else {
+                    *(u32*)((s32)item + 0x7C) = 0;
+                    *(u32*)((s32)item + 0x78) = 0;
+                }
             } else {
-                *(u32*)((s32)item + 0x68) = 0;
-                *(u32*)((s32)item + 0x6C) = 0;
+                *(u32*)((s32)item + 0x7C) = 0;
+                *(u32*)((s32)item + 0x78) = 0;
             }
+
             *status |= 0x10000;
             *status &= ~0x1000;
             *flags &= ~2;
+
             marioStSystemLevel(0);
             psndClearFlag(0x80);
+
             if ((*status & 0x1000000) != 0) {
                 *status &= ~0x1000000;
                 marioCtrlOn();
             }
+
             marioKeyOn();
             marioChgStayMotion();
             *(u16*)camGetPtr(4) &= ~0x200;
         }
         break;
     }
-    return 0;
 }
 
 u8 itemseq_Bound(void* item) {
@@ -1163,12 +1755,12 @@ u8 itemseq_Bound(void* item) {
     camGetPtr(4);
     if (*(u16*)((s32)item + 0x26) == 0) {
         *(u16*)((s32)item + 0x26) = 1;
-        *(u32*)((s32)item + 0x60) = 0;
         *(u32*)((s32)item + 0x64) = 0;
-        *(u32*)((s32)item + 0x68) = *(u32*)((s32)gp + 0x38);
+        *(u32*)((s32)item + 0x60) = 0;
         *(u32*)((s32)item + 0x6C) = *(u32*)((s32)gp + 0x3C);
-        *(u32*)((s32)item + 0x70) = *(u32*)((s32)gp + 0x38);
+        *(u32*)((s32)item + 0x68) = *(u32*)((s32)gp + 0x38);
         *(u32*)((s32)item + 0x74) = *(u32*)((s32)gp + 0x3C);
+        *(u32*)((s32)item + 0x70) = *(u32*)((s32)gp + 0x38);
         *(s32*)((s32)item + 0x8C) = 0;
         if ((*(u16*)item & 0x10) != 0) return 0;
         switch (*(u16*)((s32)item + 0x24)) {
@@ -1205,6 +1797,9 @@ u8 itemseq_Bound(void* item) {
             *status |= 0x24;
             break;
         }
+    }
+    if (*(u16*)((s32)item + 0x26) != 1) {
+        return 0;
     }
     speed = *(f32*)((s32)item + 0x50);
     angle = *(s32*)((s32)item + 0x54);
@@ -1289,48 +1884,288 @@ void itemSetPosition(void* item, f32 x, f32 y, f32 z) {
     *(f32*)((s32)item + 0x44) = z;
 }
 
-s32 itemHitCheckSide(f64 moveX, f64 moveZ, s32 item, f32* outX, f32* outZ, s32* outAngle) {
-    extern f64 angleABf(f64, f64, f64, f64);
+s32 itemHitCheckSide(f32 moveX, f32 moveZ, void* item, f32* outX, f32* outZ, s32* outAngle) {
+    extern f32 angleABf(f32, f32, f32, f32);
     extern void sincosf(f32, f32*, f32*);
-    extern s32 hitCheckFilter(f64, f64, f64, f64, f64, f64, s32, void*, void*, void*, void*, void*, void*, void*);
-    extern f64 reviseAngle(f64);
-    extern f64 sqrt(f64);
-    extern f32 float_0_804210b4, float_10_804210c8, float_15_804210cc;
-    extern f32 float_0p5_804210d0, float_180_804210d4, float_100_804210d8;
-    f32 sinv, cosv, radius, normalX, normalZ, hitX, hitY, hitZ, length;
+    extern s32 hitCheckFilter(
+        f64, f64, f64, f64, f64, f64, s32,
+        void*, void*, void*, void*, void*, void*, void*);
+    extern f32 reviseAngle(f32);
+    extern f64 __frsqrte(f64);
+    extern f32 __float_nan;
+
+    extern f32 float_0_804210b4;
+    extern f32 float_10_804210c8;
+    extern f32 float_15_804210cc;
+    extern f32 float_0p5_804210d0;
+    extern f32 float_180_804210d4;
+    extern f32 float_100_804210d8;
+
+    /*
+     * Declaration order is intentional.  The target's two hitCheckFilter
+     * calls pass stack slots in the descending sequence:
+     *   hitWork, hitX, hitY, radius, normalX, hitZ, normalZ,
+     * with sin/cos immediately below those slots.
+     */
     u32 hitWork[2];
-    f64 dot, incoming, normalAngle;
+    f32 hitX;
+    f32 hitY;
+    f32 radius;
+    f32 normalX;
+    f32 hitZ;
+    f32 normalZ;
+    f32 sinv;
+    f32 cosv;
+    f32 lenSq;
     s32 hit;
 
-    *outX = *(f32*)(item + 0x3C);
-    *outZ = *(f32*)(item + 0x44);
-    if (moveX == float_0_804210b4 && moveZ == float_0_804210b4) return 0;
-    sincosf((f32)angleABf(float_0_804210b4, float_0_804210b4, moveX, moveZ), &sinv, &cosv);
-    length = (f32)sqrt(moveX * moveX + (f64)(f32)(moveZ * moveZ));
-    radius = float_10_804210c8 + length;
-    hit = hitCheckFilter(*(f32*)(item + 0x3C), *(f32*)(item + 0x40) + float_15_804210cc,
-                         *(f32*)(item + 0x44), sinv, float_0_804210b4, cosv, 0,
-                         hitWork, &hitX, &hitY, &radius, &normalX, &hitZ, &normalZ);
-    if (hit == 0) {
-        radius = float_10_804210c8 + length;
-        hit = hitCheckFilter(*(f32*)(item + 0x3C), *(f32*)(item + 0x40) + float_15_804210cc,
-                             *(f32*)(item + 0x44), sinv, float_0_804210b4, cosv, 0,
-                             hitWork, &hitX, &hitY, &radius, &normalX, &hitZ, &normalZ);
-        if (hit == 0) {
-            *outX += (f32)moveX;
-            *outZ += (f32)moveZ;
-            return 0;
-        }
+    *outX = *(f32*)((s32)item + 0x3C);
+    *outZ = *(f32*)((s32)item + 0x44);
+
+    if (moveX == float_0_804210b4 &&
+        moveZ == float_0_804210b4) {
+        return 0;
     }
-    dot = moveX * normalX + (f64)(f32)(moveZ * normalZ);
-    *outX += float_0p5_804210d0 * -(f32)(dot * normalX - moveX);
-    *outZ += float_0p5_804210d0 * -(f32)(dot * normalZ - moveZ);
-    incoming = reviseAngle(float_180_804210d4 + (f32)*outAngle);
-    normalAngle = reviseAngle(angleABf(float_0_804210b4, float_0_804210b4,
-                                      float_100_804210d8 * normalX, float_100_804210d8 * normalZ));
-    incoming = reviseAngle((f32)(normalAngle - incoming));
-    *outAngle = (s32)reviseAngle((f32)(normalAngle + incoming));
-    return hit;
+
+    sincosf(
+        angleABf(
+            float_0_804210b4,
+            float_0_804210b4,
+            moveX,
+            moveZ),
+        &sinv,
+        &cosv);
+
+    lenSq = moveX * moveX + moveZ * moveZ;
+
+    {
+        f32 moveLen;
+
+        /*
+         * Keep lenSq itself live.  The previous A1 type-punned lenSq
+         * directly, which forced an unconditional early stack spill.
+         * The target spills only inside the non-positive classification
+         * path, so classify a branch-local copy instead.
+         */
+        if (lenSq > float_0_804210b4) {
+            f64 d;
+            f64 inv;
+
+            d = (f64)lenSq;
+            inv = __frsqrte(d);
+            inv = 0.5 * inv * -(d * inv * inv - 3.0);
+            inv = 0.5 * inv * -(d * inv * inv - 3.0);
+            moveLen = (f32)(
+                d * 0.5 * inv *
+                -(d * inv * inv - 3.0));
+        } else if ((f64)lenSq < 0.0) {
+            moveLen = __float_nan;
+        } else {
+            f32 classifyValue;
+            u32 bits;
+            u32 kindBits;
+            s32 kind;
+
+            classifyValue = lenSq;
+            bits = *(u32*)&classifyValue;
+            kindBits = bits & 0x7F800000;
+
+            if (kindBits == 0x7F800000) {
+                if ((bits & 0x7FFFFF) == 0) {
+                    kind = 2;
+                } else {
+                    kind = 1;
+                }
+            } else if (kindBits < 0x7F800000) {
+                if (kindBits == 0) {
+                    if ((bits & 0x7FFFFF) == 0) {
+                        kind = 3;
+                    } else {
+                        kind = 5;
+                    }
+                } else {
+                    kind = 4;
+                }
+            } else {
+                kind = 4;
+            }
+
+            if (kind == 1) {
+                moveLen = __float_nan;
+            } else {
+                moveLen = lenSq;
+            }
+        }
+
+        radius = float_10_804210c8 + moveLen;
+    }
+
+    hit = hitCheckFilter(
+        *(f32*)((s32)item + 0x3C),
+        *(f32*)((s32)item + 0x40) + float_15_804210cc,
+        *(f32*)((s32)item + 0x44),
+        sinv,
+        float_0_804210b4,
+        cosv,
+        0,
+        hitWork,
+        &hitX,
+        &hitY,
+        &radius,
+        &normalX,
+        &hitZ,
+        &normalZ);
+
+    if (hit != 0) {
+        f32 dot;
+        f32 reflectX;
+        f32 reflectZ;
+        f32 incoming;
+        f32 normalAngle;
+
+        dot = moveX * normalX + moveZ * normalZ;
+
+        reflectX = -(dot * normalX - moveX);
+        reflectZ = -(dot * normalZ - moveZ);
+        reflectX = float_0p5_804210d0 * reflectX;
+        reflectZ = float_0p5_804210d0 * reflectZ;
+
+        *outX = *outX + reflectX;
+        *outZ = *outZ + reflectZ;
+
+        incoming = reviseAngle(
+            float_180_804210d4 + *outAngle);
+
+        normalAngle = reviseAngle(
+            angleABf(
+                float_0_804210b4,
+                float_0_804210b4,
+                float_100_804210d8 * normalX,
+                float_100_804210d8 * normalZ));
+
+        incoming = reviseAngle(normalAngle - incoming);
+
+        *outAngle =
+            (s32)reviseAngle(normalAngle + incoming);
+
+        return hit;
+    }
+
+    {
+        f32 moveLen;
+
+        if (lenSq > float_0_804210b4) {
+            f64 d;
+            f64 inv;
+
+            d = (f64)lenSq;
+            inv = __frsqrte(d);
+            inv = 0.5 * inv * -(d * inv * inv - 3.0);
+            inv = 0.5 * inv * -(d * inv * inv - 3.0);
+            moveLen = (f32)(
+                d * 0.5 * inv *
+                -(d * inv * inv - 3.0));
+        } else if ((f64)lenSq < 0.0) {
+            moveLen = __float_nan;
+        } else {
+            f32 classifyValue;
+            u32 bits;
+            u32 kindBits;
+            s32 kind;
+
+            classifyValue = lenSq;
+            bits = *(u32*)&classifyValue;
+            kindBits = bits & 0x7F800000;
+
+            if (kindBits == 0x7F800000) {
+                if ((bits & 0x7FFFFF) == 0) {
+                    kind = 2;
+                } else {
+                    kind = 1;
+                }
+            } else if (kindBits < 0x7F800000) {
+                if (kindBits == 0) {
+                    if ((bits & 0x7FFFFF) == 0) {
+                        kind = 3;
+                    } else {
+                        kind = 5;
+                    }
+                } else {
+                    kind = 4;
+                }
+            } else {
+                kind = 4;
+            }
+
+            if (kind == 1) {
+                moveLen = __float_nan;
+            } else {
+                moveLen = lenSq;
+            }
+        }
+
+        radius = float_10_804210c8 + moveLen;
+    }
+
+    hit = hitCheckFilter(
+        *(f32*)((s32)item + 0x3C),
+        *(f32*)((s32)item + 0x40) + float_15_804210cc,
+        *(f32*)((s32)item + 0x44),
+        sinv,
+        float_0_804210b4,
+        cosv,
+        0,
+        hitWork,
+        &hitX,
+        &hitY,
+        &radius,
+        &normalX,
+        &hitZ,
+        &normalZ);
+
+    /*
+     * Target lays out the successful second-hit path first and branches
+     * to the no-hit movement tail.  Keep that polarity instead of A1's
+     * early no-hit return.
+     */
+    if (hit != 0) {
+        f32 dot;
+        f32 reflectX;
+        f32 reflectZ;
+        f32 incoming;
+        f32 normalAngle;
+
+        dot = moveX * normalX + moveZ * normalZ;
+
+        reflectX = -(dot * normalX - moveX);
+        reflectZ = -(dot * normalZ - moveZ);
+        reflectX = float_0p5_804210d0 * reflectX;
+        reflectZ = float_0p5_804210d0 * reflectZ;
+
+        *outX = *outX + reflectX;
+        *outZ = *outZ + reflectZ;
+
+        incoming = reviseAngle(
+            float_180_804210d4 + *outAngle);
+
+        normalAngle = reviseAngle(
+            angleABf(
+                float_0_804210b4,
+                float_0_804210b4,
+                float_100_804210d8 * normalX,
+                float_100_804210d8 * normalZ));
+
+        incoming = reviseAngle(normalAngle - incoming);
+
+        *outAngle =
+            (s32)reviseAngle(normalAngle + incoming);
+
+        return hit;
+    }
+
+    *outX = *outX + moveX;
+    *outZ = *outZ + moveZ;
+    return 0;
 }
 
 void itemForceGet(void* item) {

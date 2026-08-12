@@ -340,31 +340,49 @@ s32 evt_bero_get_info(void* evt, s32 isFirstCall) {
     extern BeroInfo* BeroINFOARR[];
     extern void* hitNameToPtr(const char* name);
     extern void mapErrorEntry(s32);
+    BeroInfo** infoArr = BeroINFOARR;
     EventEntry* event = evt;
     BeroInfo* info;
-    BeroInfo** infoArr = BeroINFOARR;
-    s32* sw = BeroSW;
-    s32 count = 0;
-    int i;
+    s32* sw;
+    s32 count;
 
-    for (i = 0; i < 16; i++) {
-        infoArr[i] = NULL;
-    }
+    infoArr[0] = NULL;
+    infoArr[1] = NULL;
+    infoArr[2] = NULL;
+    infoArr[3] = NULL;
+    infoArr[4] = NULL;
+    infoArr[5] = NULL;
+    infoArr[6] = NULL;
+    infoArr[7] = NULL;
+    infoArr[8] = NULL;
+    infoArr[9] = NULL;
+    infoArr[10] = NULL;
+    infoArr[11] = NULL;
+    infoArr[12] = NULL;
+    infoArr[13] = NULL;
+    infoArr[14] = NULL;
+    infoArr[15] = NULL;
+
     info = *(BeroInfo**)((s32)event + 0x9C);
-    while (info->name != NULL) {
-        if (hitNameToPtr(info->name) == NULL) {
+    for (;;) {
+        void* hit = hitNameToPtr(info->name);
+        if (info->name == NULL) {
+            break;
+        }
+        if (hit == NULL) {
             mapErrorEntry(1);
         }
         info++;
     }
+
+    sw = BeroSW;
     info = *(BeroInfo**)((s32)event + 0x9C);
+    count = 0;
     while (info->name != NULL) {
-        *infoArr = info;
-        infoArr++;
+        *infoArr++ = info;
         count++;
         info++;
-        *sw = -1;
-        sw++;
+        *sw++ = -1;
     }
     BeroNUM = count;
     BeroEXEC = 0;
@@ -486,14 +504,33 @@ u32 evt_bero_read_mario_pera(int param_1, int param_2) {
     return ((~((state - 100) | (100 - state))) >> 31) & EVT_RETURN_DONE;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_bero_id_filter(int param_1) {
+    extern void* BeroINFOARR[];
+    extern s32 strcmp(const char* a, const char* b);
     EventEntry* event = (EventEntry*)param_1;
     s32* args = event->args;
     s32 id = evtGetValue(event, args[0]);
+    s32 filtered = id;
+    void** info = BeroINFOARR;
 
-    evtSetValue(event, args[0], (s32)bero_id_filter((char*)id));
+    if (filtered < 0 || filtered >= 16) {
+        if (&filtered != NULL) {
+            filtered = 0;
+        }
+        while (*(char**)*info != NULL && strcmp(*(char**)*info, (char*)id) != 0) {
+            if (&filtered != NULL) {
+                filtered++;
+            }
+            info++;
+        }
+    }
+    evtSetValue(event, args[0], filtered);
     return EVT_RETURN_DONE;
 }
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
 s32 evt_bero_get_info_num(void* pEvt, s32 isFirstCall) {
     typedef struct BeroInfoLocal {
@@ -861,14 +898,34 @@ s32 evt_bero_switch_off(void* pEvt) {
     return EVT_RETURN_DONE;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_bero_get_number(void* pEvt) {
+    extern s32 strcmp(const char*, const char*);
+    extern void* BeroINFOARR[];
+    void** info = BeroINFOARR;
     EventEntry* event = pEvt;
     s32* args = event->args;
     s32 id = evtGetValue(event, args[0]);
+    s32 original = id;
 
-    *(s32*)((s32)event + 0xA0) = (s32)bero_id_filter((char*)id);
+    if (id < 0 || id >= 16) {
+        if (&id != NULL) {
+            id = 0;
+        }
+        while (*(char**)*info != NULL && strcmp(*(char**)*info, (char*)original) != 0) {
+            if (&id != NULL) {
+                id++;
+            }
+            info++;
+        }
+    }
+    *(s32*)((s32)event + 0xA0) = id;
     return EVT_RETURN_DONE;
 }
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_bero_case_id_save(void* pEvt) {

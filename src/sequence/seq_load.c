@@ -136,26 +136,54 @@ u8 loadMain(void* param_1) {
         u8 left;
         u8 right;
     } LoadEntry;
+    extern s32* wp;
     extern LoadEntry win_dt[];
     extern LoadEntry win_dt2[];
+    extern LoadEntry win_dt3[];
     extern u16 keyGetButtonTrg(s32);
     extern u16 keyGetButtonRep(s32);
     extern u32 keyGetDirRep(s32);
+    extern s32 cardGetCode(void);
     extern s32 cardIsExec(void);
+    extern s32 fadeIsFinish(void);
     extern void* cardGetFilePtr(void);
+    extern char* msgSearch(char*);
     extern void psndSFXOn(char*);
+    extern void psndBGMOff(s32);
+    extern void psndBGMOn(s32, char*);
+    extern void psndENVOff(s32);
+    extern void psndENVOn(s32, char*);
     extern void psndBGMOff_f_d(s32, s32, s32);
+    extern void fadeEntry(s32, s32, void*);
+    extern void seqSetSeq(s32, void*, void*);
+    extern void* evtEntryType(void*, s32, s32, s32);
+    extern s32 evtCheckID(s32);
+    extern s32 evtGetValue(void*, s32);
     extern void dispEntry(s32, s32, void*, s32, f32);
     extern f64 sin(f64);
+    extern s32 OSGetSoundMode(void);
+    extern void OSSetSoundMode(s32);
+    extern void* gp;
     extern void* evt_memcard_start;
+    extern void* evt_memcard_copy;
     extern void* evt_continue;
     extern u32 dat_8042202c;
     extern u32 dat_80422030;
     extern u32 dat_80422034;
     extern u32 dat_80422038;
     extern u32 dat_8042203c;
+    extern f32 float_30_80422114;
+    extern f32 float_50_80422154;
+    extern f32 float_neg74_8042215c;
+    extern f32 float_4_80422160;
+    extern s32 nameEntPrepare(void);
+    extern void nameEntOn(s32);
+    extern s32 nameEntWait(void);
+    extern s32 nameEntIsCancel(void);
     extern char str_msg_savefile_select_802edfa0[];
     extern char str_msg_savefile_delete__802edfb4[];
+    extern char str_msg_savefile_copy_se_802edfd0[];
+    extern char str_msg_savefile_copy_po_802edfec[];
     u16 buttons;
     u32 direction;
     s32 cardCode;
@@ -249,6 +277,13 @@ u8 loadMain(void* param_1) {
             } else if (selection == 6) {
                 wp[6] = 10;
                 psndSFXOn((char*)0x13);
+            } else if (selection == 7) {
+                psndSFXOn((char*)0x12);
+                psndBGMOff(0x800);
+                wp[6] = 100;
+            } else if (selection == 8) {
+                psndSFXOn((char*)0x12);
+                wp[6] = 200;
             }
         } else if ((buttons & 0x200) != 0) {
             psndSFXOn((char*)0x13);
@@ -359,6 +394,149 @@ u8 loadMain(void* param_1) {
         }
         *(f32*)&wp[4] = win_dt2[wp[8]].x + win_dt2[wp[8]].cursorX;
         *(f32*)&wp[5] = win_dt2[wp[8]].y + win_dt2[wp[8]].cursorY;
+    } else if (wp[6] == 0x32) {
+        *(char**)&wp[14] = msgSearch(str_msg_savefile_copy_se_802edfd0);
+        oldSelection = wp[8];
+        if ((direction & 0x1000) != 0) {
+            wp[8] = win_dt2[oldSelection].up;
+        } else if ((direction & 0x2000) != 0) {
+            wp[8] = win_dt2[oldSelection].down;
+        } else if ((direction & 0x4000) != 0) {
+            wp[8] = win_dt2[oldSelection].left;
+        } else if ((direction & 0x8000) != 0) {
+            wp[8] = win_dt2[oldSelection].right;
+        } else if ((buttons & 0x200) != 0) {
+            wp[8] = 5;
+            wp[6] = 1;
+            psndSFXOn((char*)0x13);
+        } else if ((buttons & 0x100) != 0 && oldSelection < 4) {
+            fileFlags = *(u16*)((u8*)cardGetFilePtr() + wp[8] * 0x4000 + 0x2000);
+            if ((fileFlags & 3) == 0) {
+                wp[6] = 0x33;
+                wp[12] = wp[8];
+                wp[13] = (wp[12] + 1) % 4;
+                wp[8] = wp[13];
+                psndSFXOn((char*)0x12);
+            }
+        }
+        if (oldSelection != (u32)wp[8] && wp[8] < 4) {
+            psndSFXOn((char*)9);
+        }
+        *(f32*)&wp[4] = win_dt2[wp[8]].x + win_dt2[wp[8]].cursorX;
+        *(f32*)&wp[5] = win_dt2[wp[8]].y + win_dt2[wp[8]].cursorY;
+    } else if (wp[6] == 0x33) {
+        *(char**)&wp[14] = msgSearch(str_msg_savefile_copy_po_802edfec);
+        oldSelection = wp[8];
+        if ((direction & 0x1000) != 0) {
+            do wp[8] = win_dt3[wp[8]].up; while (wp[8] == wp[12]);
+        } else if ((direction & 0x2000) != 0) {
+            do wp[8] = win_dt3[wp[8]].down; while (wp[8] == wp[12]);
+        } else if ((direction & 0x4000) != 0) {
+            do wp[8] = win_dt3[wp[8]].left; while (wp[8] == wp[12]);
+        } else if ((direction & 0x8000) != 0) {
+            do wp[8] = win_dt3[wp[8]].right; while (wp[8] == wp[12]);
+        } else if ((buttons & 0x200) != 0) {
+            wp[8] = wp[12];
+            wp[6] = 0x32;
+            psndSFXOn((char*)0x13);
+        } else if ((buttons & 0x100) != 0) {
+            wp[6] = 0x34;
+            wp[13] = wp[8];
+            psndSFXOn((char*)0x12);
+        }
+        if (oldSelection != (u32)wp[8] && wp[8] < 4) {
+            psndSFXOn((char*)9);
+        }
+        wp[13] = wp[8];
+        *(f32*)&wp[4] = win_dt2[wp[8]].x + win_dt2[wp[8]].cursorX;
+        *(f32*)&wp[5] = win_dt2[wp[8]].y + win_dt2[wp[8]].cursorY;
+    } else if (wp[6] == 0x34) {
+        *(u16*)wp |= 0x40;
+        wp[15] = (s32)evtEntryType(&evt_memcard_copy, 0, 0, 0);
+        *(s32*)(wp[15] + 0x9C) = wp[12];
+        *(s32*)(wp[15] + 0xA0) = wp[13];
+        wp[6]++;
+    } else if (wp[6] == 0x35) {
+        if (evtCheckID(*(s32*)(wp[15] + 0x15C)) == 0) {
+            if (evtGetValue(NULL, -90000000) != 0) {
+                *(u16*)wp |= 0x80;
+                *(s32*)((u8*)param_1 + 4) = 1;
+                return 0;
+            }
+            *(u16*)wp &= ~0x40;
+            wp[8] = 5;
+            wp[6] = 1;
+        }
+    } else if (wp[6] == 100) {
+        s32 oldMode = wp[11];
+        *(u16*)wp |= 1;
+        if ((direction & 0x1000) != 0) {
+            wp[11]--;
+            psndSFXOn((char*)5);
+        } else if ((direction & 0x2000) != 0) {
+            wp[11]++;
+            psndSFXOn((char*)5);
+        } else if ((buttons & 0x100) != 0) {
+            if (wp[11] == 0) {
+                OSSetSoundMode(0);
+                *(s32*)((u8*)gp + 0x1274) = 0;
+            } else if (wp[11] == 1) {
+                OSSetSoundMode(1);
+                *(s32*)((u8*)gp + 0x1274) = 0;
+            } else {
+                OSSetSoundMode(1);
+                *(s32*)((u8*)gp + 0x1274) = 1;
+            }
+            SoundSetOutputMode(OSGetSoundMode() == 0 ? 0 : 1);
+            psndSFXOn((char*)0x12);
+            psndBGMOn(0xA0, NULL);
+            psndENVOff(0x200);
+            wp[9] = wp[11];
+            *(u16*)wp &= ~1;
+            wp[6] = 1;
+        } else if ((buttons & 0x200) != 0) {
+            psndSFXOn((char*)0x13);
+            psndBGMOn(0xA0, NULL);
+            psndENVOff(0x200);
+            wp[11] = wp[9];
+            SoundSetOutputMode(OSGetSoundMode() == 0 ? 0 : 1);
+            *(u16*)wp &= ~1;
+            wp[6] = 1;
+        }
+        if (wp[11] > 2) wp[11] = 0;
+        if (wp[11] < 0) wp[11] = 2;
+        if (wp[11] != oldMode) {
+            SoundSetOutputMode(wp[11]);
+            psndENVOn(0x110, (char*)0x75);
+        }
+        *(f32*)&wp[4] = float_neg74_8042215c;
+        *(f32*)&wp[5] = float_4_80422160 -
+                         (float_50_80422154 * (f32)wp[11] - float_50_80422154);
+    } else if (wp[6] == 200) {
+        *(u16*)wp |= 1;
+        if ((direction & 0x1000) != 0) {
+            wp[12]--;
+            psndSFXOn((char*)5);
+        } else if ((direction & 0x2000) != 0) {
+            wp[12]++;
+            psndSFXOn((char*)5);
+        } else if ((buttons & 0x100) != 0) {
+            *(s32*)((u8*)gp + 0x1270) = (wp[12] == 0);
+            psndSFXOn((char*)0x12);
+            wp[10] = wp[12];
+            *(u16*)wp &= ~1;
+            wp[6] = 1;
+        } else if ((buttons & 0x200) != 0) {
+            psndSFXOn((char*)0x13);
+            wp[12] = wp[10];
+            *(u16*)wp &= ~1;
+            wp[6] = 1;
+        }
+        if (wp[12] > 1) wp[12] = 0;
+        if (wp[12] < 0) wp[12] = 1;
+        *(f32*)&wp[4] = float_neg74_8042215c;
+        *(f32*)&wp[5] = float_4_80422160 -
+                         (float_50_80422154 * (f32)wp[12] - float_30_80422114);
     }
 
     *(f32*)&wp[2] += (*(f32*)&wp[4] - *(f32*)&wp[2]) * 0.25f;
@@ -367,7 +545,6 @@ u8 loadMain(void* param_1) {
     dispEntry(1, 0, loadDraw, 0, 1000.0f);
     return 0;
 }
-
 
 u8 loadDraw(void) {
     extern void GXSetBlendMode(s32, s32, s32, s32);
@@ -383,6 +560,21 @@ u8 loadDraw(void) {
     extern void GXClearVtxDesc(void);
     extern void GXSetVtxDesc(s32, s32);
     extern void GXSetNumTexGens(s32);
+    extern void GXGetViewportv(f32*);
+    extern void GXGetProjectionv(f32*);
+    extern void GXSetProjection(void*, s32);
+    extern void GXLoadPosMtxImm(void*, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetViewport(f32, f32, f32, f32, f32, f32);
+    extern void GXSetProjectionv(f32*);
+    extern void GXSetFog(s32, f32, f32, f32, f32, void*);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern f32 float_0_804220a4;
+    extern u32 dat_80422050;
+    extern void TEXGetGXTexObjFromPalette(void*, void*, s32);
+    extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, s32, s32, s32);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
     extern void FontDrawStart(void);
     extern f32 FontGetMessageWidth(char*);
     extern void FontDrawMessage(f32, f32, char*);
@@ -393,39 +585,60 @@ u8 loadDraw(void) {
     extern s32 sprintf(char*, char*, ...);
     extern char str_PCTd_802EDE90[];
     char number[32];
+    u8 texObj[32];
     char* message;
     f32 width;
     s32 state = wp[0];
+    f32 viewport[6];
+    f32 projection[7];
+    void* camera = camGetPtr(1);
+    u32 fog = dat_80422050;
 
-    camGetPtr(1);
-    GXSetBlendMode(1, 4, 5, 0);
-    GXSetZCompLoc(0);
-    GXSetAlphaCompare(7, 0, 0, 7, 0);
-    GXSetZMode(0, 3, 0);
-    GXSetNumChans(1);
-    GXSetChanCtrl(4, 0, 0, 0, 0, 2, 2);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(0, 0, 0, 4);
-    GXSetTevOp(0, 0);
-    GXSetCullMode(0);
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 1);
-    GXSetVtxDesc(13, 1);
-    GXSetNumTexGens(1);
+    if (wp[6] < 0x20 || wp[6] > 0x27) {
+        GXGetViewportv(viewport);
+        GXGetProjectionv(projection);
+        GXSetProjection((u8*)camera + 0x15C, *(s32*)((u8*)camera + 0x19C));
+        GXSetBlendMode(0, 1, 0, 0);
+        GXSetZCompLoc(0);
+        GXSetAlphaCompare(6, 0x80, 1, 0, 0);
+        GXSetZMode(0, 7, 0);
+        GXSetFog(0, float_0_804220a4, float_0_804220a4, float_0_804220a4, float_0_804220a4, &fog);
+        GXSetNumChans(0);
+        GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevOp(0, 3);
+        GXSetCullMode(0);
+        GXClearVtxDesc();
+        GXSetVtxDesc(9, 1);
+        GXSetVtxDesc(13, 1);
+        GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+        GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+        GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
+        GXSetCurrentMtx(0);
+        TEXGetGXTexObjFromPalette(**(void***)((s32)wp[1] + 0xA0), texObj, 0x35);
+        GXInitTexObjLOD(texObj, 1, 1, float_0_804220a4, float_0_804220a4,
+                        float_0_804220a4, 0, 0, 0);
+        GXLoadTexObj(texObj, 0);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
 
-    FontDrawStart();
-    FontDrawColor(0xFFFFFFFF);
-    FontDrawScale(1.0f);
-    FontDrawEdge();
-    if (state < 2) message = msgSearch((char*)0x802EDEA0);
-    else if (state < 5) message = msgSearch((char*)0x802EDEB0);
-    else message = msgSearch((char*)0x802EDEC0);
-    width = FontGetMessageWidth(message);
-    FontDrawMessage(304.0f - width * 0.5f, 360.0f, message);
-    sprintf(number, str_PCTd_802EDE90, wp[8]);
-    width = FontGetMessageWidth(number);
-    FontDrawMessage(304.0f - width * 0.5f, 390.0f, number);
-    FontDrawEdgeOff();
+        FontDrawStart();
+        FontDrawColor(0xFFFFFFFF);
+        FontDrawScale(1.0f);
+        FontDrawEdge();
+        if (state < 2) message = msgSearch((char*)0x802EDEA0);
+        else if (state < 5) message = msgSearch((char*)0x802EDEB0);
+        else message = msgSearch((char*)0x802EDEC0);
+        width = FontGetMessageWidth(message);
+        FontDrawMessage(304.0f - width * 0.5f, 360.0f, message);
+        sprintf(number, str_PCTd_802EDE90, wp[8]);
+        width = FontGetMessageWidth(number);
+        FontDrawMessage(304.0f - width * 0.5f, 390.0f, number);
+        FontDrawEdgeOff();
+        GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
+        GXSetProjectionv(projection);
+    }
     return 0;
 }
 

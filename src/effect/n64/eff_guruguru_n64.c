@@ -16,6 +16,9 @@ void* effGuruguruN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 radius) 
     u8* part;
     s32 i;
     s32 angle;
+    f32 zero;
+    f32 one;
+    f32 twenty;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_GuruguruN64_802fb060;
@@ -23,32 +26,70 @@ void* effGuruguruN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 radius) 
     work = __memAlloc(3, (count + 1) * 0x30);
     *(void**)((s32)entry + 0xC) = work;
     *(void**)((s32)entry + 0x10) = effGuruguruMain;
-
     *(s32*)work = type;
     *(f32*)(work + 4) = x;
     *(f32*)(work + 8) = y;
     *(f32*)(work + 0xC) = z;
-    *(f32*)(work + 0x10) = float_0_80425434;
+    zero = float_0_80425434;
+    one = float_1_80425438;
+    twenty = float_20_8042543c;
+    *(f32*)(work + 0x10) = zero;
     *(s32*)(work + 0x24) = 0;
     *(f32*)(work + 0x14) = radius;
     *(s32*)(work + 0x28) = 1;
-    *(f32*)(work + 0x2C) = float_1_80425438;
+    *(f32*)(work + 0x2C) = one;
 
     part = work + 0x30;
-    for (i = 1; i < count + 1; i++) {
+    for (i = 1; i + 3 < count + 1; i += 4, part += 0xC0) {
         angle = ((i - 1) * 0x168) / count;
-        *(f32*)(part + 4) = float_0_80425434;
-        *(f32*)(part + 8) = float_0_80425434;
-        *(f32*)(part + 0xC) = float_0_80425434;
+        *(f32*)(part + 4) = zero;
+        *(f32*)(part + 8) = zero;
+        *(f32*)(part + 0xC) = zero;
         *(f32*)(part + 0x18) = (f32)angle;
-        *(f32*)(part + 0x1C) = float_20_8042543c;
-        *(f32*)(part + 0x20) = float_0_80425434;
+        *(f32*)(part + 0x1C) = twenty;
+        *(f32*)(part + 0x20) = zero;
         *(s32*)(part + 0x24) = angle;
-        part += 0x30;
-    }
 
+        angle = (i * 0x168) / count;
+        *(f32*)(part + 0x34) = zero;
+        *(f32*)(part + 0x38) = zero;
+        *(f32*)(part + 0x3C) = zero;
+        *(f32*)(part + 0x48) = (f32)angle;
+        *(f32*)(part + 0x4C) = twenty;
+        *(f32*)(part + 0x50) = zero;
+        *(s32*)(part + 0x54) = angle;
+
+        angle = ((i + 1) * 0x168) / count;
+        *(f32*)(part + 0x64) = zero;
+        *(f32*)(part + 0x68) = zero;
+        *(f32*)(part + 0x6C) = zero;
+        *(f32*)(part + 0x78) = (f32)angle;
+        *(f32*)(part + 0x7C) = twenty;
+        *(f32*)(part + 0x80) = zero;
+        *(s32*)(part + 0x84) = angle;
+
+        angle = ((i + 2) * 0x168) / count;
+        *(f32*)(part + 0x94) = zero;
+        *(f32*)(part + 0x98) = zero;
+        *(f32*)(part + 0x9C) = zero;
+        *(f32*)(part + 0xA8) = (f32)angle;
+        *(f32*)(part + 0xAC) = twenty;
+        *(f32*)(part + 0xB0) = zero;
+        *(s32*)(part + 0xB4) = angle;
+    }
+    for (; i < count + 1; i++, part += 0x30) {
+        angle = ((i - 1) * 0x168) / count;
+        *(f32*)(part + 4) = zero;
+        *(f32*)(part + 8) = zero;
+        *(f32*)(part + 0xC) = zero;
+        *(f32*)(part + 0x18) = (f32)angle;
+        *(f32*)(part + 0x1C) = twenty;
+        *(f32*)(part + 0x20) = zero;
+        *(s32*)(part + 0x24) = angle;
+    }
     return entry;
 }
+
 #pragma use_lmw_stmw on
 #pragma no_register_save_helpers off
 

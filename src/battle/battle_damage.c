@@ -78,6 +78,7 @@ void BattleDamageDirect(s32 unitIdx, BattleWorkUnit* unit, BattleWorkUnitPart* p
     extern u32 BtlUnit_GetBelong(BattleWorkUnit*);
     extern void effHitEntry(void);
     extern void effIceN64Entry(f32, f32, f32, s32);
+    extern void effKemuri12N64Entry(f32, f32, f32, f32, s32, s32);
     extern void effDamageStarEntry(f32, f32, f32, f32, f32, s32, s32);
     extern void BattleRunHitEvent(BattleWorkUnit*, s32);
     f32 hitX;
@@ -124,6 +125,8 @@ void BattleDamageDirect(s32 unitIdx, BattleWorkUnit* unit, BattleWorkUnitPart* p
         BtlUnit_GetHitPos(unit, part, &hitX, &hitY, &hitZ);
         if ((flags & 0xFF) == 0x1A) {
             effIceN64Entry(hitX, hitY, hitZ, 0);
+        } else if ((flags & 0xFF) >= 0x18 && (flags & 0xFF) < 0x1A) {
+            effKemuri12N64Entry(hitX, hitY, hitZ, 1.0f, 0, 0x1E);
         }
         effHitEntry();
         if (BtlUnit_GetBelong(unit) == 0) {
@@ -871,13 +874,22 @@ s32 BattleSetStatusDamage(u32* result, BattleWorkUnit* unit, BattleWorkUnitPart*
     extern void BtlUnit_GetPos(BattleWorkUnit*, f32*, f32*, f32*);
     extern s32 BtlUnit_GetHeight(BattleWorkUnit*);
     extern void* effStampN64Entry(f32, f32, f32, s32);
+    extern void* effUpdownEntry(f32, s32, f32, s32, f32, s32);
+    extern u8 BattleStatusChangeInfoSetAnnouce(void*, s32, u8, u32);
+    extern void BattleStatusChangeMsgSetAnnouce(void*, s32, s32);
     s8 chargeStrength;
     s32 invalid = 0;
     s32 setResult = 0;
     u32 resistance;
-    Vec position;
+    Vec hitPosition;
+    f32 positionX;
+    f32 positionY;
+    f32 positionZ;
     void* effect;
     u8* effectWork;
+    s8 appliedTurns;
+    s8 appliedStrength;
+    s32 announced;
 
     BtlUnit_GetStatus(unit, 0x10, NULL, &chargeStrength);
     switch ((u32)status) {
@@ -962,26 +974,26 @@ s32 BattleSetStatusDamage(u32* result, BattleWorkUnit* unit, BattleWorkUnitPart*
     }
 
     if (setResult != 0) {
-        BtlUnit_GetPos(unit, &position.x, &position.y, &position.z);
+        BtlUnit_GetPos(unit, &positionX, &positionY, &positionZ);
         if ((*(u32*)((u8*)unit + 0x104) & 0x2000) == 0) {
-            position.y += BtlUnit_GetHeight(unit) / 2;
+            positionY += BtlUnit_GetHeight(unit) / 2;
         } else {
-            position.y -= BtlUnit_GetHeight(unit) / 2;
+            positionY -= BtlUnit_GetHeight(unit) / 2;
         }
         if (*(s32*)((u8*)unit + 8) == 0x83 ||
             *(s32*)((u8*)unit + 8) == 0x94 ||
             *(s32*)((u8*)unit + 8) == 0xAA) {
-            position.x -= 300.0f;
-            position.z += 30.0f;
+            positionX -= 300.0f;
+            positionZ += 30.0f;
         } else if (*(s32*)((u8*)unit + 8) == 0x96) {
-            position.z += 40.0f;
+            positionZ += 40.0f;
         }
 
         effect = NULL;
         switch ((u32)status) {
         case 0:
-            effect = effStampN64Entry(position.x, position.y,
-                                      position.z + 10.0f, 2);
+            effect = effStampN64Entry(positionX, positionY,
+                                      positionZ + 10.0f, 2);
             effectWork = *(u8**)((u8*)effect + 0xC);
             effectWork[0x38] = 0xA0;
             effectWork[0x39] = 0xDC;
@@ -991,11 +1003,11 @@ s32 BattleSetStatusDamage(u32* result, BattleWorkUnit* unit, BattleWorkUnitPart*
             effectWork[0x3D] = 10;
             break;
         case 1:
-            effStampN64Entry(position.x, position.y, position.z + 10.0f, 0);
+            effStampN64Entry(positionX, positionY, positionZ + 10.0f, 0);
             break;
         case 2:
-            effect = effStampN64Entry(position.x, position.y,
-                                      position.z + 10.0f, 2);
+            effect = effStampN64Entry(positionX, positionY,
+                                      positionZ + 10.0f, 2);
             effectWork = *(u8**)((u8*)effect + 0xC);
             effectWork[0x38] = 0xDC;
             effectWork[0x39] = 0x6E;
@@ -1005,8 +1017,8 @@ s32 BattleSetStatusDamage(u32* result, BattleWorkUnit* unit, BattleWorkUnitPart*
             effectWork[0x3D] = 10;
             break;
         case 3:
-            effect = effStampN64Entry(position.x, position.y,
-                                      position.z + 10.0f, 2);
+            effect = effStampN64Entry(positionX, positionY,
+                                      positionZ + 10.0f, 2);
             effectWork = *(u8**)((u8*)effect + 0xC);
             effectWork[0x38] = 0;
             effectWork[0x39] = 0x6E;
@@ -1016,8 +1028,8 @@ s32 BattleSetStatusDamage(u32* result, BattleWorkUnit* unit, BattleWorkUnitPart*
             effectWork[0x3D] = 10;
             break;
         case 4:
-            effect = effStampN64Entry(position.x, position.y,
-                                      position.z + 10.0f, 2);
+            effect = effStampN64Entry(positionX, positionY,
+                                      positionZ + 10.0f, 2);
             effectWork = *(u8**)((u8*)effect + 0xC);
             effectWork[0x38] = 0;
             effectWork[0x39] = 0xDC;
@@ -1027,11 +1039,11 @@ s32 BattleSetStatusDamage(u32* result, BattleWorkUnit* unit, BattleWorkUnitPart*
             effectWork[0x3D] = 10;
             break;
         case 5:
-            effStampN64Entry(position.x, position.y, position.z + 10.0f, 1);
+            effStampN64Entry(positionX, positionY, positionZ + 10.0f, 1);
             break;
         case 6:
-            effect = effStampN64Entry(position.x, position.y,
-                                      position.z + 10.0f, 2);
+            effect = effStampN64Entry(positionX, positionY,
+                                      positionZ + 10.0f, 2);
             effectWork = *(u8**)((u8*)effect + 0xC);
             effectWork[0x38] = 0xDC;
             effectWork[0x39] = 0xDC;
@@ -1041,8 +1053,8 @@ s32 BattleSetStatusDamage(u32* result, BattleWorkUnit* unit, BattleWorkUnitPart*
             effectWork[0x3D] = 10;
             break;
         case 7:
-            effect = effStampN64Entry(position.x, position.y,
-                                      position.z + 10.0f, 2);
+            effect = effStampN64Entry(positionX, positionY,
+                                      positionZ + 10.0f, 2);
             effectWork = *(u8**)((u8*)effect + 0xC);
             effectWork[0x38] = 0xDC;
             effectWork[0x39] = 0xDC;
@@ -1052,14 +1064,116 @@ s32 BattleSetStatusDamage(u32* result, BattleWorkUnit* unit, BattleWorkUnitPart*
             effectWork[0x3D] = 0;
             break;
         case 8:
-        case 9:
-            effect = effStampN64Entry(position.x, position.y,
-                                      position.z + 10.0f, 2);
+            effect = effStampN64Entry(positionX, positionY,
+                                      positionZ + 10.0f, 2);
+            effectWork = *(u8**)((u8*)effect + 0xC);
+            effectWork[0x38] = 0xDC;
+            effectWork[0x39] = 0xDC;
+            effectWork[0x3A] = 0;
+            effectWork[0x3B] = 0xDC;
+            effectWork[0x3C] = 0;
+            effectWork[0x3D] = 0;
             break;
+        case 9:
+            effect = effStampN64Entry(positionX, positionY,
+                                      positionZ + 10.0f, 2);
+            effectWork = *(u8**)((u8*)effect + 0xC);
+            effectWork[0x38] = 0xDC;
+            effectWork[0x39] = 0xDC;
+            effectWork[0x3A] = 0xDC;
+            effectWork[0x3B] = 0;
+            effectWork[0x3C] = 0x6E;
+            effectWork[0x3D] = 0xDC;
+            break;
+        default:
+            effect = effStampN64Entry(positionX, positionY,
+                                      positionZ + 10.0f, 2);
+            effectWork = *(u8**)((u8*)effect + 0xC);
+            if ((u32)status == 0xA || (u32)status == 0xC) {
+                effectWork[0x38] = 0xDC; effectWork[0x39] = 0xDC; effectWork[0x3A] = 0xDC;
+                effectWork[0x3B] = 0xDC; effectWork[0x3C] = 0; effectWork[0x3D] = 0;
+            } else if ((u32)status == 0xB || (u32)status == 0xD) {
+                effectWork[0x38] = 0xDC; effectWork[0x39] = 0; effectWork[0x3A] = 0;
+                effectWork[0x3B] = 10; effectWork[0x3C] = 10; effectWork[0x3D] = 10;
+            } else if ((u32)status == 0xE) {
+                effectWork[0x38] = 0xDC; effectWork[0x39] = 0xDC; effectWork[0x3A] = 0xDC;
+                effectWork[0x3B] = 0; effectWork[0x3C] = 0; effectWork[0x3D] = 0xDC;
+            } else if ((u32)status == 0xF) {
+                effectWork[0x38] = 0; effectWork[0x39] = 0; effectWork[0x3A] = 0xDC;
+                effectWork[0x3B] = 10; effectWork[0x3C] = 10; effectWork[0x3D] = 10;
+            } else if ((u32)status == 0x10) {
+                effectWork[0x38] = 0xDC; effectWork[0x39] = 0xDC; effectWork[0x3A] = 0xDC;
+                effectWork[0x3B] = 0xDC; effectWork[0x3C] = 0xDC; effectWork[0x3D] = 0;
+            } else if ((u32)status == 0x12) {
+                effectWork[0x38] = 0xDC; effectWork[0x39] = 0xDC; effectWork[0x3A] = 0xDC;
+                effectWork[0x3B] = 0x6E; effectWork[0x3C] = 0x6E; effectWork[0x3D] = 0x6E;
+            } else if ((u32)status == 0x13) {
+                effectWork[0x38] = 0xDC; effectWork[0x39] = 0xDC; effectWork[0x3A] = 0xDC;
+                effectWork[0x3B] = 0xDC; effectWork[0x3C] = 0x6E; effectWork[0x3D] = 0;
+            } else if ((u32)status == 0x14) {
+                effectWork[0x38] = 0xDC; effectWork[0x39] = 0x6E; effectWork[0x3A] = 0;
+                effectWork[0x3B] = 10; effectWork[0x3C] = 10; effectWork[0x3D] = 10;
+            } else if ((u32)status == 0x15 || (u32)status == 0x16) {
+                effectWork[0x38] = 0xDC; effectWork[0x39] = 0xDC; effectWork[0x3A] = 0;
+                effectWork[0x3B] = 0; effectWork[0x3C] = 0; effectWork[0x3D] = 0xDC;
+            } else if ((u32)status == 0x17) {
+                effectWork[0x38] = 0xDC; effectWork[0x39] = 0xDC; effectWork[0x3A] = 0xDC;
+                effectWork[0x3B] = 0xDC; effectWork[0x3C] = 0x6E; effectWork[0x3D] = 0x6E;
+            } else if ((u32)status == 0x18) {
+                effectWork[0x38] = 0xDC; effectWork[0x39] = 0xDC; effectWork[0x3A] = 0xDC;
+                effectWork[0x3B] = 0xA0; effectWork[0x3C] = 0xDC; effectWork[0x3D] = 0;
+            } else if ((u32)status == 0x1B) {
+                effectWork[0x38] = 0xDC; effectWork[0x39] = 0xDC; effectWork[0x3A] = 0xDC;
+                effectWork[0x3B] = 10; effectWork[0x3C] = 10; effectWork[0x3D] = 10;
+            } else {
+                effectWork[0x38] = 200; effectWork[0x39] = 200; effectWork[0x3A] = 200;
+                effectWork[0x3B] = 10; effectWork[0x3C] = 10; effectWork[0x3D] = 10;
+            }
+            break;
+        }
+        if ((u32)status == 0x10 ||
+            ((u32)status >= 0xA && (u32)status < 0xE)) {
+            effUpdownEntry(positionX, 0, positionY, (s32)strength,
+                           positionZ + 15.0f, 0x3C);
+        } else if ((u32)status == 0xE || (u32)status == 0xF) {
+            effUpdownEntry(positionX, 1, positionY, (s32)strength,
+                           positionZ + 20.0f, 0x3C);
         }
     }
 
-    return setResult == 0 ? 1 : 1;
+    announced = 0;
+
+    if (setResult != 0) {
+        BtlUnit_GetStatus(unit, status, &appliedTurns, &appliedStrength);
+        if ((u32)status == 0x10) {
+            if (appliedStrength > 0) {
+                if (chargeStrength == appliedStrength) {
+                    BattleStatusChangeInfoSetAnnouce(unit, 0x10, appliedStrength, 0);
+                    BattleStatusChangeMsgSetAnnouce(unit, 0x10, 0);
+                    announced = 1;
+                } else {
+                    BattleStatusChangeInfoSetAnnouce(unit, 0x10, appliedStrength, 1);
+                    BattleStatusChangeMsgSetAnnouce(unit, 0x10, 1);
+                    announced = 1;
+                }
+            }
+        } else if ((u32)status == 4) {
+            if (appliedStrength > 0) {
+                BattleStatusChangeInfoSetAnnouce(unit, 4, appliedStrength, 1);
+                BattleStatusChangeMsgSetAnnouce(unit, 4, 1);
+                announced = 1;
+            }
+        } else if (((u32)status < 0x10 ||
+                    ((u32)status >= 0x12 && (u32)status <= 0x18)) &&
+                   appliedTurns > 0) {
+            BattleStatusChangeInfoSetAnnouce(unit, (s32)status, appliedTurns, 1);
+            BattleStatusChangeMsgSetAnnouce(unit, (s32)status, 1);
+            announced = 1;
+        }
+    }
+    BtlUnit_GetHitPos(unit, part, &hitPosition.x, &hitPosition.y, &hitPosition.z);
+
+    return announced == 0 ? 1 : ((u32)status > 0x18 ? 1 : 1);
 }
 
 /* MANUAL_AUTOMATION_STUBS_END main/battle/battle_damage */
