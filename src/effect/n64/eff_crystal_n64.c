@@ -96,7 +96,9 @@ void effCrystalMain(void* effect) {
     extern f32 float_10_80425058;
     extern f32 float_15_8042505c;
     extern f32 float_1p1_80425060;
+    extern LocalVec3 vec3_802fadb0;
     u8* work;
+    LocalVec3 displayPos;
     LocalVec3 pos;
     s32 timer;
     s32 frame;
@@ -106,9 +108,11 @@ void effCrystalMain(void* effect) {
     s32 colorB;
 
     work = *(u8**)((s32)effect + 0xC);
+    pos = vec3_802fadb0;
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);
+    displayPos = pos;
 
     if ((*(u32*)effect & 4) != 0) {
         *(u32*)effect &= ~4;
@@ -132,8 +136,8 @@ void effCrystalMain(void* effect) {
         alpha = frame * 0x10 - 1;
     }
     if (timer < 0x10) {
-        alpha = (alpha * timer) / 0xFF;
         alpha2 = timer << 4;
+        alpha = (alpha * alpha2) / 0x100;
     }
 
     switch (*(s32*)(work + 0x1C)) {
@@ -216,7 +220,7 @@ void effCrystalMain(void* effect) {
             break;
     }
 
-    dispEntry(*(s32*)(work + 0x38), 2, effCrystalDisp, effect, dispCalcZ(&pos));
+    dispEntry(*(s32*)(work + 0x38), 2, effCrystalDisp, effect, dispCalcZ(&displayPos));
 }
 
 #pragma no_register_save_helpers on

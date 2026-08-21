@@ -1,19 +1,32 @@
 #include "effect/n64/eff_kemuri10_n64.h"
 
+extern f64 __frsqrte(f64 value);
+extern f32 __float_nan[];
+
 void* effKemuri10N64Entry(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, f32 speed, s32 camera) {
+    typedef union FloatBits {
+        f32 value;
+        u32 bits;
+    } FloatBits;
+
     extern void* effEntry(void);
     extern void* __memAlloc(s32, s32);
     extern void effKemuri10Main(void*);
-    extern f32 sqrtf(f32);
-    extern char str_Kemuri10N64_802fb318[];
+    extern const u8 vec3_802fb2e8[];
+    extern f32 float_0p1_80425858;
+
+    const u8* roBase = vec3_802fb2e8;
     void* entry = effEntry();
     u8* work;
-    f32 len;
-    f32 horiz;
-    f32 crossLen;
-    f32 nx;
-    f32 ny;
-    f32 nz;
+    f32 lengthSq;
+    f32 length;
+    f32 invLength;
+    f64 value;
+    f64 inv;
+    s32 kind;
+    FloatBits classify1;
+    FloatBits classify2;
+    FloatBits classify3;
     f32 rx;
     f32 ry;
     f32 rz;
@@ -24,72 +37,180 @@ void* effKemuri10N64Entry(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, f32 speed
     if (dx == 0.0f && dy == 0.0f && dz == 0.0f) {
         return 0;
     }
-    len = sqrtf(dx * dx + dy * dy + dz * dz);
-    if (len == 0.0f) {
+
+    lengthSq = dy * dy + dx * dx + dz * dz;
+    if (lengthSq == 0.0f) {
         return 0;
     }
 
-    nx = dx / len;
-    ny = dy / len;
-    nz = dz / len;
-    if (nx != 0.0f || nz != 0.0f) {
-        rx = -nx;
+    value = (f64)lengthSq;
+    if (lengthSq > 0.0f) {
+        inv = __frsqrte(value);
+        inv = *(const f64*)(roBase + 0x18) * inv *
+              -((value * inv * inv) - *(const f64*)(roBase + 0x20));
+        inv = *(const f64*)(roBase + 0x18) * inv *
+              -((value * inv * inv) - *(const f64*)(roBase + 0x20));
+        length = (f32)(value * *(const f64*)(roBase + 0x18) * inv *
+                       -((value * inv * inv) - *(const f64*)(roBase + 0x20)));
+    } else if (value < *(const f64*)(roBase + 0x28)) {
+        length = __float_nan[0];
+    } else {
+        classify1.value = lengthSq;
+        if ((classify1.bits & 0x7F800000) == 0x7F800000) {
+            if ((classify1.bits & 0x7FFFFF) == 0) {
+                kind = 2;
+            } else {
+                kind = 1;
+            }
+        } else if ((classify1.bits & 0x7F800000) >= 0x7F800000) {
+            kind = 4;
+        } else if ((classify1.bits & 0x7F800000) == 0) {
+            if ((classify1.bits & 0x7FFFFF) == 0) {
+                kind = 3;
+            } else {
+                kind = 5;
+            }
+        } else {
+            kind = 4;
+        }
+        if (kind == 1) {
+            length = __float_nan[0];
+        } else {
+            length = lengthSq;
+        }
+    }
+
+    invLength = 1.0f / length;
+    dx *= invLength;
+    dy *= invLength;
+    dz *= invLength;
+
+    if (dx != 0.0f || dz != 0.0f) {
+        rx = dz;
         ry = 0.0f;
-        rz = nz;
+        rz = -dx;
     } else {
         rx = 1.0f;
-        ry = 0.0f;
         rz = 0.0f;
+        ry = 0.0f;
     }
 
-    horiz = sqrtf(rx * rx + ry * ry + rz * rz);
-    if (horiz == 0.0f) {
+    lengthSq = ry * ry + rx * rx + rz * rz;
+    if (lengthSq == 0.0f) {
         return 0;
     }
-    rx = rz / horiz;
-    ry = 0.0f;
-    rz = -nx / horiz;
 
-    ux = rz * ny - ry * nz;
-    uy = rx * nz - rz * nx;
-    uz = ry * nx - rx * ny;
-    crossLen = sqrtf(ux * ux + uy * uy + uz * uz);
-    if (crossLen == 0.0f) {
+    value = (f64)lengthSq;
+    if (lengthSq > 0.0f) {
+        inv = __frsqrte(value);
+        inv = *(const f64*)(roBase + 0x18) * inv *
+              -((value * inv * inv) - *(const f64*)(roBase + 0x20));
+        inv = *(const f64*)(roBase + 0x18) * inv *
+              -((value * inv * inv) - *(const f64*)(roBase + 0x20));
+        length = (f32)(value * *(const f64*)(roBase + 0x18) * inv *
+                       -((value * inv * inv) - *(const f64*)(roBase + 0x20)));
+    } else if (value < *(const f64*)(roBase + 0x28)) {
+        length = __float_nan[0];
+    } else {
+        classify2.value = lengthSq;
+        if ((classify2.bits & 0x7F800000) == 0x7F800000) {
+            if ((classify2.bits & 0x7FFFFF) == 0) {
+                kind = 2;
+            } else {
+                kind = 1;
+            }
+        } else if ((classify2.bits & 0x7F800000) >= 0x7F800000) {
+            kind = 4;
+        } else if ((classify2.bits & 0x7F800000) == 0) {
+            if ((classify2.bits & 0x7FFFFF) == 0) {
+                kind = 3;
+            } else {
+                kind = 5;
+            }
+        } else {
+            kind = 4;
+        }
+        if (kind == 1) {
+            length = __float_nan[0];
+        } else {
+            length = lengthSq;
+        }
+    }
+
+    invLength = 1.0f / length;
+    rx *= invLength;
+    rz *= invLength;
+    ry *= invLength;
+
+    uy = rz * dx - rx * dz;
+    ux = ry * dz - rz * dy;
+    uz = rx * dy - ry * dx;
+
+    lengthSq = uy * uy + ux * ux + uz * uz;
+    if (lengthSq == 0.0f) {
         return 0;
     }
-    ux /= crossLen;
-    uy /= crossLen;
-    uz /= crossLen;
 
-    *(char**)((u8*)entry + 0x14) = str_Kemuri10N64_802fb318;
+    value = (f64)lengthSq;
+    if (lengthSq > 0.0f) {
+        inv = __frsqrte(value);
+        inv = *(const f64*)(roBase + 0x18) * inv *
+              -((value * inv * inv) - *(const f64*)(roBase + 0x20));
+        inv = *(const f64*)(roBase + 0x18) * inv *
+              -((value * inv * inv) - *(const f64*)(roBase + 0x20));
+        length = (f32)(value * *(const f64*)(roBase + 0x18) * inv *
+                       -((value * inv * inv) - *(const f64*)(roBase + 0x20)));
+    } else if (value < *(const f64*)(roBase + 0x28)) {
+        length = __float_nan[0];
+    } else {
+        classify3.value = lengthSq;
+        if ((classify3.bits & 0x7F800000) == 0x7F800000) {
+            if ((classify3.bits & 0x7FFFFF) == 0) {
+                kind = 2;
+            } else {
+                kind = 1;
+            }
+        } else if ((classify3.bits & 0x7F800000) >= 0x7F800000) {
+            kind = 4;
+        } else if ((classify3.bits & 0x7F800000) == 0) {
+            if ((classify3.bits & 0x7FFFFF) == 0) {
+                kind = 3;
+            } else {
+                kind = 5;
+            }
+        } else {
+            kind = 4;
+        }
+        if (kind == 1) {
+            length = __float_nan[0];
+        } else {
+            length = lengthSq;
+        }
+    }
+
+    invLength = 1.0f / length;
+    ux *= invLength;
+    uy *= invLength;
+    uz *= invLength;
+
+    *(char**)((u8*)entry + 0x14) = (char*)(roBase + 0x30);
     *(s32*)((u8*)entry + 8) = 1;
     work = __memAlloc(3, 0x70);
     *(u8**)((u8*)entry + 0xC) = work;
     *(void**)((u8*)entry + 0x10) = effKemuri10Main;
+
     *(s32*)work = camera;
     *(f32*)(work + 4) = x;
     *(f32*)(work + 8) = y;
     *(f32*)(work + 0xC) = z;
-    *(f32*)(work + 0x10) = -4.0f * nx;
-    *(f32*)(work + 0x14) = -4.0f * ny;
-    *(f32*)(work + 0x18) = -4.0f * nz;
-    *(f32*)(work + 0x1C) = rx;
-    *(f32*)(work + 0x20) = ux;
-    *(f32*)(work + 0x24) = nx;
-    *(f32*)(work + 0x28) = 0.0f;
-    *(f32*)(work + 0x2C) = ry;
-    *(f32*)(work + 0x30) = uy;
-    *(f32*)(work + 0x34) = ny;
-    *(f32*)(work + 0x38) = 0.0f;
-    *(f32*)(work + 0x3C) = rz;
-    *(f32*)(work + 0x40) = uz;
-    *(f32*)(work + 0x44) = nz;
-    *(f32*)(work + 0x48) = 0.0f;
-    *(f32*)(work + 0x4C) = speed;
-    *(f32*)(work + 0x50) = 278.0f;
-    *(f32*)(work + 0x54) = 32.0f;
-    *(s32*)(work + 0x58) = 0;
+    *(f32*)(work + 0x10) = 4.0f * -dx;
+    *(f32*)(work + 0x14) = 4.0f * -dy;
+    *(f32*)(work + 0x18) = 4.0f * -dz;
+
     *(s32*)(work + 0x5C) = 0x10;
+    *(f32*)(work + 0x4C) = 278.0f;
+    *(f32*)(work + 0x50) = 32.0f;
+    *(s32*)(work + 0x58) = 0;
     *(s32*)(work + 0x60) = 0;
     *(u8*)(work + 0x64) = 0xF8;
     *(u8*)(work + 0x65) = 0x5C;
@@ -97,7 +218,22 @@ void* effKemuri10N64Entry(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, f32 speed
     *(u8*)(work + 0x67) = 0xF8;
     *(u8*)(work + 0x68) = 0x5C;
     *(u8*)(work + 0x69) = 0xE5;
+
+    *(f32*)(work + 0x1C) = rx;
+    *(f32*)(work + 0x2C) = ry;
+    *(f32*)(work + 0x3C) = rz;
+    *(f32*)(work + 0x20) = ux;
+    *(f32*)(work + 0x30) = uy;
+    *(f32*)(work + 0x40) = uz;
+    *(f32*)(work + 0x24) = dx;
+    *(f32*)(work + 0x34) = dy;
+    *(f32*)(work + 0x44) = dz;
+    *(f32*)(work + 0x28) = 0.0f;
+    *(f32*)(work + 0x38) = 0.0f;
+    *(f32*)(work + 0x48) = 0.0f;
+    *(f32*)(work + 0x54) = float_0p1_80425858 * speed;
     *(s32*)(work + 0x6C) = 4;
+
     return entry;
 }
 

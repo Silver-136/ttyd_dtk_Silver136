@@ -5,6 +5,8 @@ extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
 extern void GXSetTevColorIn(s32,s32,s32,s32,s32);
 extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
 
+extern const f32 float_360_80426524;
+extern const f32 float_0p1_80426528;
 
 void* effWaterDamageN64Entry(f64 x, f64 y, f64 z, f64 scale, s32 type, s32 timer) {
     typedef struct WaterPart {
@@ -28,14 +30,18 @@ void* effWaterDamageN64Entry(f64 x, f64 y, f64 z, f64 scale, s32 type, s32 timer
     extern void* __memAlloc(s32, u32);
     extern void effWaterDamageMain(void*);
     extern s32 rand(void);
+    extern s32 irand(s32);
     extern f64 sin(f64);
     extern f64 cos(f64);
+    extern void* marioGetPtr(void);
+    extern void* camGetPtr(s32);
     extern char str_WaterDamageN64_802fc280[];
     void* entry;
     WaterPart* work;
     s32 count;
     s32 altDisp;
     s32 i;
+    s32 phase;
 
     entry = effEntry();
     altDisp = type > 9;
@@ -71,7 +77,8 @@ void* effWaterDamageN64Entry(f64 x, f64 y, f64 z, f64 scale, s32 type, s32 timer
     work[0].b = 0xFF;
     work[0].altDisp = altDisp;
 
-    for (i = 1; i < count; i++) {
+    phase = 3;
+    for (i = 1; i < count; i++, phase += 3) {
         WaterPart* part = &work[i];
         part->x = 0.0f;
         part->y = 0.0f;
@@ -100,28 +107,54 @@ void* effWaterDamageN64Entry(f64 x, f64 y, f64 z, f64 scale, s32 type, s32 timer
                 part->size = 0.4f;
                 part->timer = i;
                 break;
-            case 6:
-            {
-                f32 angle = 6.2832f * (f32)i / (f32)count;
-                part->x = 10.0f * (f32)sin(angle);
-                part->z = 10.0f * (f32)cos(angle);
-                part->vx = part->x / 12.0f;
-                part->vy = 1.0f + (f32)(rand() % 10) * 0.1f;
-                part->vz = part->z / 12.0f;
-                part->size = 1.0f;
+            case 4:
+                part->vx = (f32)((rand() % 7) - 3);
+                part->vy = (f32)((rand() % 3) + 1);
+                part->vz = (f32)((rand() % 7) - 3);
                 break;
-            }
-            default:
+            case 5:
                 part->vx = 0.3f * (f32)((rand() % 10) - 5);
                 part->vy = 0.3f * (f32)((rand() % 10) + 5);
                 part->vz = 0.3f * (f32)((rand() % 10) - 5);
                 part->size = 1.0f;
                 part->timer = i;
                 break;
+            case 6:
+            {
+                f32 angle = 6.2832f * (f32)i / (f32)count;
+                part->x = 10.0f * (f32)sin(angle);
+                part->z = 10.0f * (f32)cos(angle);
+                part->vx = part->x / 12.0f;
+                part->vy = 0.3f * (f32)(rand() % 5);
+                part->vz = part->z / 12.0f;
+                part->size = 1.0f;
+                part->timer = phase;
+                break;
+            }
+            case 7:
+            default:
+            {
+                void* player = marioGetPtr();
+                f32 direction = (f32)(irand(90) - 45) - *(f32*)((u8*)player + 0x100) +
+                                *(f32*)((u8*)camGetPtr(0) + 0x114);
+                f32 angle = 6.2832f * direction / float_360_80426524;
+                part->x = (f32)sin(angle);
+                part->z = (f32)cos(angle);
+                part->vx = *(f32*)((u8*)player + 0x1B0) * part->x * 0.5f;
+                part->vy = float_0p1_80426528 * (f32)((rand() % 10) + 5);
+                part->vz = *(f32*)((u8*)player + 0x1B0) * part->z * 0.5f;
+                part->size = 1.0f;
+                part->timer = phase;
+                break;
+            }
         }
+        part->alpha = 0xFF;
     }
     return entry;
 }
+
+const f32 float_360_80426524 = 360.0f;
+const f32 float_0p1_80426528 = 0.1f;
 
 void effWaterDamageMain(void* effect) {
     typedef struct Vec3 {

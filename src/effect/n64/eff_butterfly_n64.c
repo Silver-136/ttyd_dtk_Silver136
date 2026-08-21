@@ -92,7 +92,8 @@ void effButterflyMain(void* effect) {
     extern f32 float_0_80424ef8;
     extern f32 float_1_80424f04;
     EffButterflyWork* work;
-    LocalVec3 pos;
+    volatile LocalVec3 pos;
+    LocalVec3 depthPos;
     f32 dx;
     f32 dy;
     f32 dz;
@@ -103,9 +104,13 @@ void effButterflyMain(void* effect) {
     f32 angle;
 
     work = *(EffButterflyWork**)((s32)effect + 0xC);
+    pos.x = float_0_80424ef8;
+    pos.y = float_0_80424ef8;
+    pos.z = float_0_80424ef8;
     pos.x = work->x;
     pos.y = work->y;
     pos.z = work->z;
+    depthPos = *(LocalVec3*)&pos;
 
     if ((*(u32*)effect & 4) != 0) {
         *(u32*)effect = *(u32*)effect & ~4;
@@ -173,10 +178,7 @@ void effButterflyMain(void* effect) {
     work->x += *(f32*)((s32)work + 0x3C);
     work->y += *(f32*)((s32)work + 0x40);
     work->z += *(f32*)((s32)work + 0x44);
-    pos.x = work->x;
-    pos.y = work->y;
-    pos.z = work->z;
-    dispEntry(4, 1, effButterflyDisp, effect, dispCalcZ(&pos));
+    dispEntry(4, 1, effButterflyDisp, effect, dispCalcZ(&depthPos));
 }
 
 void effButterflyDisp(int cameraId, int effect) {

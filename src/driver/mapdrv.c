@@ -343,16 +343,29 @@ u8 mapBuildTexture(void* objectRaw, int palette, int* names) {
 void* _mapEnt(void* jointRaw, void* parent, void* parentMtx, int entryIdx) {
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXRotRad(void*, s32, f32);
+    extern void PSMTXMultVec(void*, void*, void*);
+    extern f32 PSVECSquareDistance(void*, void*);
+    extern void OSPanic(char*, s32, char*);
+    extern char str_mapdrv_c_802bfcd0[];
+    extern f32 float_20000_8041f9b8;
     u8* joint;
     u8* entry;
     u8* object;
     u8* drawMode;
+    u8* material;
+    u8* layer;
     s32 remaining;
+    s32 translucentCount;
+    s32 punchthroughCount;
+    s32 i;
+    s32 j;
     f32 trans[3][4];
     f32 scale[3][4];
     f32 rotX[3][4];
     f32 rotY[3][4];
     f32 rotZ[3][4];
+    f32 center[3];
+    f32 corner[3];
 
     joint = jointRaw;
     entry = (u8*)(mapWork + activeGroup * 0x2F4 + entryIdx * 0x178);
@@ -383,17 +396,46 @@ void* _mapEnt(void* jointRaw, void* parent, void* parentMtx, int entryIdx) {
     *(void**)(object + 0xE4) = 0;
     *(void**)(object + 0xE8) = 0;
     drawMode = *(u8**)(joint + 0x58);
-    if (drawMode != 0) {
+    if (drawMode == 0) {
+        OSPanic(str_mapdrv_c_802bfcd0, 0x2E5, (char*)0x802BFCDC);
+    } else {
         if ((drawMode[2] & 1) != 0) {
             *(u32*)object |= 8;
         }
-        if (drawMode[0] == 0) {
-            *(u8*)(object + 4) = (*(u32*)object & 8) ? 3 : 0;
-        } else if (drawMode[0] == 1) {
-            *(u8*)(object + 4) = (*(u32*)object & 8) ? 3 : 0;
-        } else if (drawMode[0] == 2) {
+        if (drawMode[0] == 2) {
             *(u8*)(object + 4) = (*(u32*)object & 8) ? 4 : 1;
-        } else if (drawMode[0] == 3) {
+        } else if (drawMode[0] < 2) {
+            if (drawMode[0] == 0) {
+                translucentCount = 0;
+                punchthroughCount = 0;
+                for (i = 0; i < *(s32*)(joint + 0x5C); i++) {
+                    material = *(u8**)(joint + 0x60 + i * 8);
+                    if (*(s8*)(material + 0xA) == 2) {
+                        translucentCount++;
+                    } else if (*(s8*)(material + 0xA) == 1) {
+                        punchthroughCount++;
+                    }
+                    for (j = 0; j < 8; j++) {
+                        layer = *(u8**)(material + 0xC + j * 4);
+                        if (layer == 0) {
+                            break;
+                        }
+                        if (*(s8*)(layer + 0xA) == 2) {
+                            translucentCount++;
+                        } else if (*(s8*)(layer + 0xA) == 1) {
+                            punchthroughCount++;
+                        }
+                    }
+                }
+                if (translucentCount == 0) {
+                    *(u8*)(object + 4) = punchthroughCount == 0 ? 0 : 1;
+                } else {
+                    *(u8*)(object + 4) = 2;
+                }
+            } else {
+                *(u8*)(object + 4) = (*(u32*)object & 8) ? 3 : 0;
+            }
+        } else if (drawMode[0] < 4) {
             *(u8*)(object + 4) = (*(u32*)object & 8) ? 5 : 2;
         }
         if ((drawMode[2] & 2) != 0) {
@@ -401,6 +443,25 @@ void* _mapEnt(void* jointRaw, void* parent, void* parentMtx, int entryIdx) {
             if ((drawMode[2] & 0x10) != 0) {
                 *(u32*)object |= 0x8000;
             }
+            if (drawMode[0] == 2) {
+                *(u8*)(object + 4) = 1;
+            } else if (drawMode[0] < 2) {
+                *(u8*)(object + 4) = drawMode[0] == 0 ? 2 : 0;
+            } else {
+                *(u8*)(object + 4) = 2;
+            }
+        }
+        if ((*(u32*)object & 0x10) == 0) {
+            if (parent != 0 &&
+                ((*(u32*)parent & 0x10) != 0 || (*(u32*)parent & 0x20) != 0)) {
+                *(u32*)object |= 0x20;
+                if ((*(u32*)parent & 0x8000) != 0) {
+                    *(u32*)object |= 0x8000;
+                }
+            }
+        } else if (parent != 0 &&
+                   ((*(u32*)parent & 0x10) != 0 || (*(u32*)parent & 0x20) != 0)) {
+            *(u32*)object &= ~0x10;
         }
         if ((drawMode[2] & 4) != 0) {
             *(u32*)object |= 4;
@@ -413,6 +474,13 @@ void* _mapEnt(void* jointRaw, void* parent, void* parentMtx, int entryIdx) {
     } else {
         PSVECAdd(joint + 0x3C, joint + 0x48, object + 0x10);
         PSVECScale(object + 0x10, object + 0x10, 0.5f);
+    }
+    if (*(s32*)(joint + 0x5C) != 0) {
+        PSMTXMultVec(object + 0x1C, object + 0x10, center);
+        PSMTXMultVec(object + 0x1C, joint + 0x48, corner);
+        if (PSVECSquareDistance(center, corner) < float_20000_8041f9b8) {
+            *(u32*)object |= 2;
+        }
     }
     return object;
 }
@@ -663,12 +731,16 @@ found:
 }
 
 u8 mapPlayAnimationLv(char* name, int mode, int level) {
+    extern void* gp;
+    extern s64 __div2i(s64, s64);
     u8* group;
     u8* entry;
     u8* anim;
     s32 entryIndex;
     s32 animIndex;
     s32 found;
+    u64* clock;
+    u32 ticks;
 
     group = (u8*)(mapWork + activeGroup * 0x2F4);
     entry = group;
@@ -700,8 +772,23 @@ u8 mapPlayAnimationLv(char* name, int mode, int level) {
         } else if (level == 4) {
             *(u16*)anim |= 0x800;
         }
-        *(f32*)(anim + 0x10) = 0.0f;
-        *(f32*)(anim + 0x14) = 0.0f;
+        if ((*(u16*)anim & 0x100) != 0) {
+            clock = (u64*)((u8*)gp + 0x48);
+        } else if ((*(u16*)anim & 0x200) != 0) {
+            clock = (u64*)((u8*)gp + 0x50);
+        } else if ((*(u16*)anim & 0x400) != 0) {
+            clock = (u64*)((u8*)gp + 0x58);
+        } else if ((*(u16*)anim & 0x800) != 0) {
+            clock = (u64*)((u8*)gp + 0x60);
+        } else if (*(s32*)((u8*)gp + 0x14) != 0) {
+            clock = (u64*)((u8*)gp + 0x38);
+        } else {
+            clock = (u64*)((u8*)gp + 0x40);
+        }
+        ticks = (*(u32*)0x800000F8 >> 2) / 4000;
+        *(s64*)(anim + 8) = __div2i(*(s64*)clock, (s64)(s32)ticks);
+        *(f32*)(anim + 0x10) = float_0_8041f930;
+        *(f32*)(anim + 0x14) = float_1_8041f940;
         *(u16*)anim |= 1;
         if (mode == 1) {
             *(u16*)anim |= 4;
@@ -872,7 +959,19 @@ void _mapLoad(void* pWork, int idx, char* pMapName) {
     extern void* mapEntry(void*, void*, int);
     extern u8 mapBuildTexture(void*, int, int*);
     extern void mapGetBoundingBox(void*, void*);
+    extern s32 shadowGetCharShadowProjection(void);
+    extern s32 lightEntry(char*, s32, void*, void*, void*, s32, u32, double, double);
     extern u32 unk_80429520;
+    extern void* current_mp;
+    extern char str_animation_table_802bfbe4[];
+    extern char str_ambientLight_802bfc88[];
+    extern char str_pointLight_802bfc98[];
+    extern char str_directionalLight_802bfca4[];
+    extern char str_spotLight_802bfcb8[];
+    extern u32 dat_8041f90c;
+    extern u32 dat_8041f910;
+    extern u32 paper_ambient;
+    extern u32 paperCraft_ambient;
     u8* entry;
     char filePath[128];
     char arcName[132];
@@ -885,6 +984,19 @@ void _mapLoad(void* pWork, int idx, char* pMapName) {
     char* stringTable;
     u8* mainData;
     u32* info;
+    void* chunk;
+    u32* animTable;
+    u8* animData;
+    u8* object;
+    u8* joint;
+    u32 animCount;
+    u32 objectIndex;
+    u8* lightTable;
+    u8* light;
+    f32 lightPosition[3];
+    u32 lightColor;
+    s32 lightType;
+    u32 lightFlags;
     void* mapJoint;
     void* hitJoint;
     f32 matrix[3][4];
@@ -965,28 +1077,54 @@ void _mapLoad(void* pWork, int idx, char* pMapName) {
     chunkTable = *(u8**)(entry + 0x60);
     stringTable = *(char**)(entry + 0x64);
     info = 0;
-    *(void**)(entry + 0x94) = 0;
-    *(void**)(entry + 0x98) = 0;
-    *(void**)(entry + 0x9C) = 0;
-    *(void**)(entry + 0xA0) = 0;
-    *(void**)(entry + 0xA4) = 0;
     for (i = 0; i < *(u32*)(entry + 0x48); i++) {
         u32 chunkOffset = *(u32*)(chunkTable + i * 8);
         char* chunkName = stringTable + *(u32*)(chunkTable + i * 8 + 4);
         if (strcmp(chunkName, "information") == 0) {
             info = (u32*)(mainData + chunkOffset);
-        } else if (strcmp(chunkName, "texture_table") == 0) {
-            *(void**)(entry + 0x94) = mainData + chunkOffset;
-        } else if (strcmp(chunkName, "light_table") == 0) {
-            *(void**)(entry + 0x98) = mainData + chunkOffset;
-        } else if (strcmp(chunkName, "fog_table") == 0) {
-            *(void**)(entry + 0x9C) = mainData + chunkOffset;
-        } else if (strcmp(chunkName, "material_name_table") == 0) {
-            *(void**)(entry + 0xA0) = mainData + chunkOffset;
-        } else if (strcmp(chunkName, "vcd_table") == 0) {
-            *(void**)(entry + 0xA4) = mainData + chunkOffset;
+            break;
         }
     }
+    chunk = 0;
+    for (i = 0; i < *(u32*)(entry + 0x48); i++) {
+        if (strcmp(stringTable + *(u32*)(chunkTable + i * 8 + 4), "texture_table") == 0) {
+            chunk = mainData + *(u32*)(chunkTable + i * 8);
+            break;
+        }
+    }
+    *(void**)(entry + 0x94) = chunk;
+    chunk = 0;
+    for (i = 0; i < *(u32*)(entry + 0x48); i++) {
+        if (strcmp(stringTable + *(u32*)(chunkTable + i * 8 + 4), "light_table") == 0) {
+            chunk = mainData + *(u32*)(chunkTable + i * 8);
+            break;
+        }
+    }
+    *(void**)(entry + 0x98) = chunk;
+    chunk = 0;
+    for (i = 0; i < *(u32*)(entry + 0x48); i++) {
+        if (strcmp(stringTable + *(u32*)(chunkTable + i * 8 + 4), "fog_table") == 0) {
+            chunk = mainData + *(u32*)(chunkTable + i * 8);
+            break;
+        }
+    }
+    *(void**)(entry + 0x9C) = chunk;
+    chunk = 0;
+    for (i = 0; i < *(u32*)(entry + 0x48); i++) {
+        if (strcmp(stringTable + *(u32*)(chunkTable + i * 8 + 4), "material_name_table") == 0) {
+            chunk = mainData + *(u32*)(chunkTable + i * 8);
+            break;
+        }
+    }
+    *(void**)(entry + 0xA0) = chunk;
+    chunk = 0;
+    for (i = 0; i < *(u32*)(entry + 0x48); i++) {
+        if (strcmp(stringTable + *(u32*)(chunkTable + i * 8 + 4), "vcd_table") == 0) {
+            chunk = mainData + *(u32*)(chunkTable + i * 8);
+            break;
+        }
+    }
+    *(void**)(entry + 0xA4) = chunk;
     if (info != 0) {
         mapJoint = mapSearchDmdJoint((void*)info[1], (char*)info[2]);
         hitJoint = mapSearchDmdJoint((void*)info[1], (char*)info[3]);
@@ -999,6 +1137,32 @@ void _mapLoad(void* pWork, int idx, char* pMapName) {
         *(void**)(entry + 0xA8) = mapEntry(mapJoint, matrix, idx);
         *(void**)(entry + 0xAC) = hitEntry(hitJoint, matrix, idx);
     }
+
+    lightTable = *(u8**)(entry + 0x98);
+    for (i = 0; i < *(u32*)lightTable; i++) {
+        light = *(u8**)(lightTable + 4 + i * 4);
+        lightType = 1;
+        lightFlags = 0;
+        PSVECScale(light + 8, lightPosition, 10.0f);
+        if (strcmp(*(char**)(light + 4), str_ambientLight_802bfc88) == 0) {
+            lightType = 0;
+        } else if (strcmp(*(char**)(light + 4), str_pointLight_802bfc98) == 0) {
+            lightType = 1;
+        } else if (strcmp(*(char**)(light + 4), str_directionalLight_802bfca4) == 0) {
+            lightType = 2;
+        } else if (strcmp(*(char**)(light + 4), str_spotLight_802bfcb8) == 0) {
+            lightType = 3;
+        }
+        if (*(u32*)(light + 0x40) == 0x012D60D8) {
+            lightFlags = *(u32*)(light + 0x3C);
+        }
+        lightColor = *(u32*)(light + 0x2C);
+        lightEntry(*(char**)light, lightType, lightPosition, light + 0x14, &lightColor,
+                   *(s32*)(light + 0x38), lightFlags,
+                   *(f32*)(light + 0x30), *(f32*)(light + 0x34));
+    }
+    paper_ambient = dat_8041f90c;
+    paperCraft_ambient = dat_8041f910;
 
     if (*(void**)(entry + 0x9C) == 0) {
         *(u32*)(entry + 0x24) = 0;
@@ -1049,7 +1213,40 @@ void _mapLoad(void* pWork, int idx, char* pMapName) {
     *(f32*)(entry + 0x104) = min[0];
     *(f32*)(entry + 0x108) = min[1];
     *(f32*)(entry + 0x10C) = min[2];
+
+    animTable = 0;
+    for (i = 0; i < *(u32*)(entry + 0x48); i++) {
+        if (strcmp(stringTable + *(u32*)(chunkTable + i * 8 + 4), str_animation_table_802bfbe4) == 0) {
+            animTable = (u32*)(mainData + *(u32*)(chunkTable + i * 8));
+            break;
+        }
+    }
+    if (animTable != 0) {
+        animCount = *animTable;
+        *(u32*)(entry + 0x160) = animCount;
+        if (animCount != 0) {
+            *(void**)(entry + 0x164) = _mapAlloc(mapalloc_base_ptr, animCount << 5);
+            memset(*(void**)(entry + 0x164), 0, animCount << 5);
+            animData = *(u8**)(entry + 0x164);
+            for (i = 0; i < animCount; i++, animData += 0x20) {
+                *(u32*)animData = 0;
+                *(void**)(animData + 0x18) = (void*)animTable[i + 1];
+            }
+        }
+    }
     makeDisplayList(idx);
+    object = *(u8**)(entry + 0x154);
+    for (objectIndex = 0; objectIndex < *(u32*)(entry + 0x150); objectIndex++, object += 0x134) {
+        joint = *(u8**)(object + 8);
+        if (*(s32*)(joint + 0x5C) > 0 && *(s32*)(joint + 0x5C) < 9 &&
+            ((*(u8*)(*(u8**)(joint + 0x58) + 2) & 8) == 0) &&
+            *(u32*)(*(u8**)(joint + 0x58) + 4) == 0 &&
+            (shadowGetCharShadowProjection() == 0 || (*(u32*)object & 4) == 0) &&
+            (*(u16*)(entry + 4) & 0x8000) != 0) {
+            *(u32*)object |= 0x100;
+        }
+    }
+    current_mp = 0;
 }
 
 void mapUnLoad(void) {
@@ -1556,6 +1753,7 @@ void mapMain(void) {
     s32 obj;
     s32 objIndex;
     s32 searchEntry;
+    s32 searchBase;
     s32 searchEntryIndex;
     s32 matTable;
     s32 matIndex;
@@ -1568,14 +1766,7 @@ void mapMain(void) {
     s32 nextKeyBase;
     s32 component;
     s32 outOffset;
-    s32 nowHi;
-    s32 nowLo;
-    s32 timeOff;
-    s32 g;
-    s32 denom;
     u64 rawTime;
-    u64 now;
-    u64 old;
     f32 frame;
     f32 duration;
     f32 delta;
@@ -1630,45 +1821,52 @@ void mapMain(void) {
             lightColorTracks = W(animData, 0x1C);
 
             if ((flags & 1) && !(flags & 2)) {
-                g = gp;
                 if (flags & 0x100) {
-                    timeOff = 0x48;
+                    rawTime = *(u64*)((s32)gp + 0x48);
                 } else if (flags & 0x200) {
-                    timeOff = 0x50;
+                    rawTime = *(u64*)((s32)gp + 0x50);
                 } else if (flags & 0x400) {
-                    timeOff = 0x58;
+                    rawTime = *(u64*)((s32)gp + 0x58);
                 } else if (flags & 0x800) {
-                    timeOff = 0x60;
-                } else if (W(g, 0x14) != 0) {
-                    timeOff = 0x38;
+                    rawTime = *(u64*)((s32)gp + 0x60);
+                } else if (W(gp, 0x14) != 0) {
+                    rawTime = *(u64*)((s32)gp + 0x38);
                 } else {
-                    timeOff = 0x40;
+                    rawTime = *(u64*)((s32)gp + 0x40);
                 }
-                nowHi = W(g, timeOff);
-                nowLo = W(g, timeOff + 4);
-                rawTime = ((u64)(u32)nowHi << 32) | (u32)nowLo;
-                denom = (*(u32*)0x800000F8) / 4000;
-                now = rawTime / (u32)denom;
 
                 if (!(flags & 0x10)) {
-                    old = *(u64*)((s32)animEntry + 0x8);
-                    delta = (f32)(now - old);
+                    delta = (f32)(
+                        (u64)((s64)rawTime /
+                              (s32)(((*(u32*)0x800000F8) >> 2) / 1000U)) -
+                        *(u64*)((s32)animEntry + 0x8));
                     frame = F(animEntry, 0x10);
-                    delta = ((f32)W(g, 0x4) * delta) / 1000.0f;
+                    delta = ((f32)W(gp, 0x4) * delta) / float_1000_8041f954;
                     if (delta < frame) {
                         F(animEntry, 0x10) = frame - (frame - delta);
                     } else {
                         F(animEntry, 0x10) = F(animEntry, 0x14) * (delta - frame) + frame;
                     }
-                    *(u64*)((s32)animEntry + 0x8) = now - (u64)(((1000.0f * F(animEntry, 0x10)) / (f32)W(g, 0x4)));
+
+                    *(u64*)((s32)animEntry + 0x8) =
+                        (u64)((s64)rawTime /
+                              (s32)(((*(u32*)0x800000F8) >> 2) / 1000U));
+                    *(u64*)((s32)animEntry + 0x8) -=
+                        (u64)((float_1000_8041f954 * F(animEntry, 0x10)) /
+                              (f32)W(gp, 0x4));
                 } else if (flags & 0x20) {
-                    *(u64*)((s32)animEntry + 0x8) = now - (u64)(((1000.0f * F(animEntry, 0x10)) / (f32)W(g, 0x4)));
+                    *(u64*)((s32)animEntry + 0x8) =
+                        (u64)((s64)rawTime /
+                              (s32)(((*(u32*)0x800000F8) >> 2) / 1000U));
+                    *(u64*)((s32)animEntry + 0x8) -=
+                        (u64)((float_1000_8041f954 * F(animEntry, 0x10)) /
+                              (f32)W(gp, 0x4));
                     H(animEntry, 0x0) &= (u16)~0x20;
                     H(animEntry, 0x0) &= (u16)~0x10;
                 }
 
                 frame = F(animEntry, 0x10);
-                duration = F(animData, 0x8);
+                duration = F(W(animEntry, 0x18), 0x8);
                 if (duration <= frame) {
                     if (!(H(animEntry, 0x0) & 4)) {
                         F(animEntry, 0x10) = duration;
@@ -1678,7 +1876,13 @@ void mapMain(void) {
                             frame -= duration;
                         }
                         F(animEntry, 0x10) = frame;
-                        *(u64*)((s32)animEntry + 0x8) = now - (u64)(((1000.0f * F(animEntry, 0x10)) / (f32)W(g, 0x4)));
+
+                        *(u64*)((s32)animEntry + 0x8) =
+                            (u64)((s64)rawTime /
+                                  (s32)(((*(u32*)0x800000F8) >> 2) / 1000U));
+                        *(u64*)((s32)animEntry + 0x8) -=
+                            (u64)((float_1000_8041f954 * F(animEntry, 0x10)) /
+                                  (f32)W(gp, 0x4));
                     }
                 }
 
@@ -1687,8 +1891,9 @@ void mapMain(void) {
                         track = W(meshTracks, 4 + trackIndex * 4);
                         obj = 0;
                         if (W(track, 0) != 0) {
-                            searchEntry = group;
-                            for (searchEntryIndex = 0; searchEntryIndex < W(group, 0) && obj == 0; searchEntryIndex++, searchEntry += 0x178) {
+                            searchBase = mapWork + activeGroup * 0x2F4;
+                            searchEntry = searchBase;
+                            for (searchEntryIndex = 0; searchEntryIndex < W(searchBase, 0) && obj == 0; searchEntryIndex++, searchEntry += 0x178) {
                                 dobj = W(searchEntry, 0x154);
                                 for (objIndex = 0; objIndex < W(searchEntry, 0x150); objIndex++, dobj += 0x134) {
                                     if (strcmp(*(char**)W(dobj, 0x8), (char*)W(track, 0)) == 0) {
@@ -1713,8 +1918,9 @@ void mapMain(void) {
                         track = W(trackList, 4);
                         strcpy(nameBuf, (char*)W(track, 0));
                         matIndex = 0;
-                        searchEntry = group;
-                        for (searchEntryIndex = 0; searchEntryIndex < W(group, 0) && matIndex == 0; searchEntryIndex++, searchEntry += 0x178) {
+                        searchBase = mapWork + activeGroup * 0x2F4;
+                            searchEntry = searchBase;
+                        for (searchEntryIndex = 0; searchEntryIndex < W(searchBase, 0) && matIndex == 0; searchEntryIndex++, searchEntry += 0x178) {
                             matTable = W(searchEntry, 0xA0);
                             if (matTable == 0) {
                                 break;
@@ -1733,12 +1939,15 @@ void mapMain(void) {
                             for (keyIndex = 1; keyIndex <= lastKey; keyIndex++, keyBase += 0x68) {
                                 nextKeyBase = keyBase + 0x68;
                                 frame = F(animEntry, 0x10);
-                                if (F(nextKeyBase, 0x14) < frame && keyIndex != lastKey) {
-                                    continue;
+                                if (frame > F(nextKeyBase, 0x14)) {
+                                    if (keyIndex != lastKey) {
+                                        continue;
+                                    }
+                                    frame = F(nextKeyBase, 0x14);
                                 }
                                 for (component = 0; component < 5; component++) {
                                     outOffset = W(track, 4) * 0x1C + 0x2C + component * 4;
-                                    if (F(keyBase, 0x28 + component * 0x14) == zero) {
+                                    if (W(keyBase, 0x28 + component * 0x14) == 0) {
                                         t0 = F(keyBase, 0x14);
                                         t1 = F(nextKeyBase, 0x14);
                                         span = t1 - t0;
@@ -1766,8 +1975,9 @@ void mapMain(void) {
                         strcpy(nameBuf, (char*)W(track, 0));
                         strcat(nameBuf, str_v_8041f99c);
                         matIndex = 0;
-                        searchEntry = group;
-                        for (searchEntryIndex = 0; searchEntryIndex < W(group, 0) && matIndex == 0; searchEntryIndex++, searchEntry += 0x178) {
+                        searchBase = mapWork + activeGroup * 0x2F4;
+                            searchEntry = searchBase;
+                        for (searchEntryIndex = 0; searchEntryIndex < W(searchBase, 0) && matIndex == 0; searchEntryIndex++, searchEntry += 0x178) {
                             matTable = W(searchEntry, 0xA0);
                             if (matTable == 0) break;
                             for (objIndex = 0; objIndex < W(matTable, 0); objIndex++) {
@@ -1784,10 +1994,13 @@ void mapMain(void) {
                             for (keyIndex = 1; keyIndex <= lastKey; keyIndex++, keyBase += 0x68) {
                                 nextKeyBase = keyBase + 0x68;
                                 frame = F(animEntry, 0x10);
-                                if (F(nextKeyBase, 0x14) < frame && keyIndex != lastKey) continue;
+                                if (frame > F(nextKeyBase, 0x14)) {
+                                    if (keyIndex != lastKey) continue;
+                                    frame = F(nextKeyBase, 0x14);
+                                }
                                 for (component = 0; component < 5; component++) {
                                     outOffset = W(track, 4) * 0x1C + 0x2C + component * 4;
-                                    if (F(keyBase, 0x28 + component * 0x14) == zero) {
+                                    if (W(keyBase, 0x28 + component * 0x14) == 0) {
                                         t0 = F(keyBase, 0x14); t1 = F(nextKeyBase, 0x14); span = t1 - t0; den = span; if (span == zero) den = eps;
                                         u = (frame - t0) / den; u2 = u * u; u3 = u2 * u;
                                         curValue = F(keyBase, 0x18 + component * 0x14); nextValue = F(nextKeyBase, 0x18 + component * 0x14);
@@ -1807,8 +2020,9 @@ void mapMain(void) {
                         strcpy(nameBuf, (char*)W(track, 0));
                         strcat(nameBuf, str_v_x_8041f9a0);
                         matIndex = 0;
-                        searchEntry = group;
-                        for (searchEntryIndex = 0; searchEntryIndex < W(group, 0) && matIndex == 0; searchEntryIndex++, searchEntry += 0x178) {
+                        searchBase = mapWork + activeGroup * 0x2F4;
+                            searchEntry = searchBase;
+                        for (searchEntryIndex = 0; searchEntryIndex < W(searchBase, 0) && matIndex == 0; searchEntryIndex++, searchEntry += 0x178) {
                             matTable = W(searchEntry, 0xA0);
                             if (matTable == 0) break;
                             for (objIndex = 0; objIndex < W(matTable, 0); objIndex++) {
@@ -1825,10 +2039,13 @@ void mapMain(void) {
                             for (keyIndex = 1; keyIndex <= lastKey; keyIndex++, keyBase += 0x68) {
                                 nextKeyBase = keyBase + 0x68;
                                 frame = F(animEntry, 0x10);
-                                if (F(nextKeyBase, 0x14) < frame && keyIndex != lastKey) continue;
+                                if (frame > F(nextKeyBase, 0x14)) {
+                                    if (keyIndex != lastKey) continue;
+                                    frame = F(nextKeyBase, 0x14);
+                                }
                                 for (component = 0; component < 5; component++) {
                                     outOffset = W(track, 4) * 0x1C + 0x2C + component * 4;
-                                    if (F(keyBase, 0x28 + component * 0x14) == zero) {
+                                    if (W(keyBase, 0x28 + component * 0x14) == 0) {
                                         t0 = F(keyBase, 0x14); t1 = F(nextKeyBase, 0x14); span = t1 - t0; den = span; if (span == zero) den = eps;
                                         u = (frame - t0) / den; u2 = u * u; u3 = u2 * u;
                                         curValue = F(keyBase, 0x18 + component * 0x14); nextValue = F(nextKeyBase, 0x18 + component * 0x14);
@@ -1853,8 +2070,9 @@ void mapMain(void) {
                         track = W(trackList, 4);
                         strcpy(nameBuf2, (char*)W(track, 0));
                         matIndex = 0;
-                        searchEntry = group;
-                        for (searchEntryIndex = 0; searchEntryIndex < W(group, 0) && matIndex == 0; searchEntryIndex++, searchEntry += 0x178) {
+                        searchBase = mapWork + activeGroup * 0x2F4;
+                            searchEntry = searchBase;
+                        for (searchEntryIndex = 0; searchEntryIndex < W(searchBase, 0) && matIndex == 0; searchEntryIndex++, searchEntry += 0x178) {
                             matTable = W(searchEntry, 0xA0);
                             if (matTable == 0) break;
                             for (objIndex = 0; objIndex < W(matTable, 0); objIndex++) {
@@ -1868,8 +2086,11 @@ void mapMain(void) {
                             for (keyIndex = 1; keyIndex <= lastKey; keyIndex++, keyBase += 0x54) {
                                 nextKeyBase = keyBase + 0x54;
                                 frame = F(animEntry, 0x10);
-                                if (F(nextKeyBase, 8) < frame && keyIndex != lastKey) continue;
-                                if (F(keyBase, 0x1C) == zero) {
+                                if (frame > F(nextKeyBase, 8)) {
+                                    if (keyIndex != lastKey) continue;
+                                    frame = F(nextKeyBase, 8);
+                                }
+                                if (W(keyBase, 0x1C) == 0) {
                                     t0 = F(keyBase, 8); t1 = F(nextKeyBase, 8); span = t1 - t0; den = span; if (span == zero) den = eps;
                                     u = (frame - t0) / den; u2 = u * u; u3 = u2 * u;
                                     curValue = F(keyBase, 0x0C); nextValue = F(nextKeyBase, 0x0C);
@@ -1886,8 +2107,9 @@ void mapMain(void) {
                         strcpy(nameBuf2, (char*)W(track, 0));
                         strcat(nameBuf2, str_v_8041f99c);
                         matIndex = 0;
-                        searchEntry = group;
-                        for (searchEntryIndex = 0; searchEntryIndex < W(group, 0) && matIndex == 0; searchEntryIndex++, searchEntry += 0x178) {
+                        searchBase = mapWork + activeGroup * 0x2F4;
+                            searchEntry = searchBase;
+                        for (searchEntryIndex = 0; searchEntryIndex < W(searchBase, 0) && matIndex == 0; searchEntryIndex++, searchEntry += 0x178) {
                             matTable = W(searchEntry, 0xA0);
                             if (matTable == 0) break;
                             for (objIndex = 0; objIndex < W(matTable, 0); objIndex++) {
@@ -1900,8 +2122,11 @@ void mapMain(void) {
                             keyBase = track;
                             for (keyIndex = 1; keyIndex <= lastKey; keyIndex++, keyBase += 0x54) {
                                 nextKeyBase = keyBase + 0x54; frame = F(animEntry, 0x10);
-                                if (F(nextKeyBase, 8) < frame && keyIndex != lastKey) continue;
-                                if (F(keyBase, 0x1C) == zero) {
+                                if (frame > F(nextKeyBase, 8)) {
+                                    if (keyIndex != lastKey) continue;
+                                    frame = F(nextKeyBase, 8);
+                                }
+                                if (W(keyBase, 0x1C) == 0) {
                                     t0 = F(keyBase, 8); t1 = F(nextKeyBase, 8); span = t1 - t0; den = span; if (span == zero) den = eps;
                                     u = (frame - t0) / den; u2 = u * u; u3 = u2 * u;
                                     curValue = F(keyBase, 0x0C); nextValue = F(nextKeyBase, 0x0C); tan0 = F(keyBase, 0x14); tan1 = F(nextKeyBase, 0x10);
@@ -1915,8 +2140,9 @@ void mapMain(void) {
                         strcpy(nameBuf2, (char*)W(track, 0));
                         strcat(nameBuf2, str_v_x_8041f9a0);
                         matIndex = 0;
-                        searchEntry = group;
-                        for (searchEntryIndex = 0; searchEntryIndex < W(group, 0) && matIndex == 0; searchEntryIndex++, searchEntry += 0x178) {
+                        searchBase = mapWork + activeGroup * 0x2F4;
+                            searchEntry = searchBase;
+                        for (searchEntryIndex = 0; searchEntryIndex < W(searchBase, 0) && matIndex == 0; searchEntryIndex++, searchEntry += 0x178) {
                             matTable = W(searchEntry, 0xA0);
                             if (matTable == 0) break;
                             for (objIndex = 0; objIndex < W(matTable, 0); objIndex++) {
@@ -1929,8 +2155,11 @@ void mapMain(void) {
                             keyBase = track;
                             for (keyIndex = 1; keyIndex <= lastKey; keyIndex++, keyBase += 0x54) {
                                 nextKeyBase = keyBase + 0x54; frame = F(animEntry, 0x10);
-                                if (F(nextKeyBase, 8) < frame && keyIndex != lastKey) continue;
-                                if (F(keyBase, 0x1C) == zero) {
+                                if (frame > F(nextKeyBase, 8)) {
+                                    if (keyIndex != lastKey) continue;
+                                    frame = F(nextKeyBase, 8);
+                                }
+                                if (W(keyBase, 0x1C) == 0) {
                                     t0 = F(keyBase, 8); t1 = F(nextKeyBase, 8); span = t1 - t0; den = span; if (span == zero) den = eps;
                                     u = (frame - t0) / den; u2 = u * u; u3 = u2 * u;
                                     curValue = F(keyBase, 0x0C); nextValue = F(nextKeyBase, 0x0C); tan0 = F(keyBase, 0x14); tan1 = F(nextKeyBase, 0x10);
@@ -1954,9 +2183,12 @@ void mapMain(void) {
                             for (keyIndex = 1; keyIndex <= lastKey; keyIndex++, keyBase += 0xB8) {
                                 nextKeyBase = keyBase + 0xB8;
                                 frame = F(animEntry, 0x10);
-                                if (F(nextKeyBase, 8) < frame && keyIndex != lastKey) continue;
+                                if (frame > F(nextKeyBase, 8)) {
+                                    if (keyIndex != lastKey) continue;
+                                    frame = F(nextKeyBase, 8);
+                                }
                                 for (component = 0; component < 9; component++) {
-                                    if (F(keyBase, 0x1C + component * 0x14) == zero) {
+                                    if (W(keyBase, 0x1C + component * 0x14) == 0) {
                                         t0 = F(keyBase, 8); t1 = F(nextKeyBase, 8); span = t1 - t0; den = span; if (span == zero) den = eps;
                                         u = (frame - t0) / den; u2 = u * u; u3 = u2 * u;
                                         curValue = F(keyBase, 0x0C + component * 0x14); nextValue = F(nextKeyBase, 0x0C + component * 0x14);
@@ -1989,9 +2221,12 @@ void mapMain(void) {
                             for (keyIndex = 1; keyIndex <= lastKey; keyIndex++, keyBase += 0x68) {
                                 nextKeyBase = keyBase + 0x68;
                                 frame = F(animEntry, 0x10);
-                                if (F(nextKeyBase, 8) < frame && keyIndex != lastKey) continue;
+                                if (frame > F(nextKeyBase, 8)) {
+                                    if (keyIndex != lastKey) continue;
+                                    frame = F(nextKeyBase, 8);
+                                }
                                 for (component = 0; component < 5; component++) {
-                                    if (F(keyBase, 0x1C + component * 0x14) == zero) {
+                                    if (W(keyBase, 0x1C + component * 0x14) == 0) {
                                         t0 = F(keyBase, 8); t1 = F(nextKeyBase, 8); span = t1 - t0; den = span; if (span == zero) den = eps;
                                         u = (frame - t0) / den; u2 = u * u; u3 = u2 * u;
                                         curValue = F(keyBase, 0x0C + component * 0x14); nextValue = F(nextKeyBase, 0x0C + component * 0x14);
@@ -2039,12 +2274,37 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
         u8 a;
     } Color;
     extern void* current_mp;
+    extern void* camGetPtr(s32 id);
+    extern void* camGetCurPtr(void);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void PSMTXInvXpose(void*, void*);
+    extern void GXLoadPosMtxImm(void*, s32);
+    extern void GXLoadNrmMtxImm(void*, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXSetBlendMode(s32, s32, s32, s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
+    extern void GXSetZMode(s32, s32, s32);
+    extern void GXGetProjectionv(f32*);
+    extern void GXSetProjectionv(f32*);
     extern void GXGetCullMode(s32*);
+    extern void GXSetCullMode(s32);
+    extern s32 activeGroup;
+    extern s32 mapWork;
     extern u32 fog_type[];
     extern u32 dat_8041f904;
+    extern f32 float_0_8041f930;
+    extern f32 float_1_8041f940;
+    extern f32 float_neg2_8041f980;
+    extern f32 float_0p01_8041f994;
+    extern void GXSetFog(s32, f32, f32, f32, f32, void*);
     extern void mapSetTextureMatrix(void*);
+    extern u32 dat_8041f8fc;
+    extern void GXSetTevKColor(s32, void*);
+    extern void mapSetMaterial(void*, void*);
     extern void mapSetPolygon(s32, s32);
     extern void mapSetPolygonVtxDesc(s32, s32);
+    extern void GXCallDisplayList(void*, u32);
     extern void GXSetTevDirect(s32);
     extern void GXSetNumIndStages(s32);
     extern u32 culling[];
@@ -2070,6 +2330,10 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
     Color* objectColor;
     Color* materialColor;
     Color* blendColor;
+    f32 projection[7];
+    f32 siblingScale;
+    u8* sibling;
+    s32 siblingCount;
     Mtx normal;
     Mtx model;
 
@@ -2082,6 +2346,27 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
     groupFlags = *(u16*)(group + 4);
 
     if ((flags & 0x20) != 0) {
+        if ((flags & 0x8000) != 0) {
+            siblingCount = 0;
+            sibling = joint;
+            do {
+                drawMode = sibling;
+                sibling = *(u8**)(drawMode + 0x14);
+            } while (*(u8**)(drawMode + 0x14) != 0);
+            while (drawMode != joint) {
+                drawMode = *(u8**)(drawMode + 0x10);
+                siblingCount++;
+            }
+            siblingScale = float_0p01_8041f994 * (f32)siblingCount;
+            GXGetProjectionv(projection);
+            projection[5] *= float_1_8041f940
+                + (siblingScale * float_neg2_8041f980
+                    * *(f32*)(camera + 0x34) * *(f32*)(camera + 0x30))
+                    / (float_1_8041f940
+                        * (*(f32*)(camera + 0x34) + *(f32*)(camera + 0x30))
+                        * (float_1_8041f940 + siblingScale));
+            GXSetProjectionv(projection);
+        }
         blendMode = obj[4];
         if (*(s32*)(joint + 0x5C) > 0) {
             material = *(void**)(joint + 0x60);
@@ -2979,8 +3264,46 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
     extern void GXSetTevSwapMode(s32, s32, s32);
     extern void GXSetTevKColorSel(s32, s32);
     extern void GXSetTevKAlphaSel(s32, s32);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void GXLoadTexMtxImm(void*, s32, s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern u32 scrl_uv_1622[4];
+    extern f32 queen_uv[4];
+    extern f32 float_100_8041f964;
+    extern f32 float_neg100_8041f968;
+    extern f32 float_6p2832_8041f958;
+    extern f32 float_360_8041f95c;
+    extern f32 float_127_8041f960;
+    extern u32 unk_80429528;
+    extern void* gpGlobals;
+    extern f64 sin(f64);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetTevKColor(s32, void*);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void* shadowGetCharShadowProjection(void);
+    extern void* shadowGetCharShadowTexObj(void);
+    extern u32 shadowGetCharShadowColor(void);
+    extern void* shadowGetCharShadowProjTexMtx(void);
+    extern void GXLoadTexObj(void*, s32);
+    extern s32 texmtx_tbl[];
+    extern void GXSetTevSwapModeTable(s32, s32, s32, s32, s32);
+    extern void* smartTexObj(void*, void**);
+    extern f32 projMtx[3][4];
+    extern u8 projTexObj[];
+    extern void* projTexImgRef;
+    extern u32 dat_8041f8e0;
+    extern u32 dat_8041f8e4;
+    extern void* shadowGetDepthShadowTexObj(void);
+    extern void* shadowGetDepthShadowDepthMtx(void);
+    extern void* shadowGetDepthShadowConfig(void);
+    extern void* shadowGetRamp8TexObj(void);
     u32 stages;
     s32 i;
+    f32 texMtx[3][4];
+    f32 shadowMtx[3][4];
+    f32 projectionMtx[3][4];
+    f32 depthMtx[3][4];
+    f32* scroll = (f32*)scrl_uv_1622;
 
     if ((s32)texCount < 1) {
         GXSetTevOrder(0, 0xFF, 0xFF, 0);
@@ -3151,6 +3474,79 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
                 GXSetTevSwapMode(2, 0, 0);
                 stages = 3;
                 break;
+            case 8: {
+                u32 tevColor = unk_80429528;
+                f32 angle = (float_6p2832_8041f958 *
+                             (f32)(*(u32*)((s32)gpGlobals + 0x1C) << 1)) /
+                            float_360_8041f95c;
+                s32 pulse = (s32)(float_127_8041f960 * (f32)sin((f64)angle) +
+                                  float_127_8041f960);
+                ((u8*)&tevColor)[0] = (u8)pulse;
+                GXSetTevColor(1, &tevColor);
+                GXSetTevOrder(0, 0, 0, 0);
+                GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+                GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+                GXSetTevColorIn(0, 0xF, 10, 8, 2);
+                GXSetTevAlphaIn(0, 7, 5, 4, 1);
+                GXSetTevSwapMode(0, 0, 0);
+                stages = 1;
+                break;
+            }
+            case 9:
+                scroll[0] += queen_uv[0];
+                if (scroll[0] > float_100_8041f964) {
+                    scroll[0] -= float_100_8041f964;
+                }
+                if (scroll[0] < float_neg100_8041f968) {
+                    scroll[0] += float_100_8041f964;
+                }
+                scroll[1] += queen_uv[1];
+                if (scroll[1] > float_100_8041f964) {
+                    scroll[1] -= float_100_8041f964;
+                }
+                if (scroll[1] < float_neg100_8041f968) {
+                    scroll[1] += float_100_8041f964;
+                }
+                scroll[2] += queen_uv[2];
+                if (scroll[2] > float_100_8041f964) {
+                    scroll[2] -= float_100_8041f964;
+                }
+                if (scroll[2] < float_neg100_8041f968) {
+                    scroll[2] += float_100_8041f964;
+                }
+                scroll[3] += queen_uv[3];
+                if (scroll[3] > float_100_8041f964) {
+                    scroll[3] -= float_100_8041f964;
+                }
+                if (scroll[3] < float_neg100_8041f968) {
+                    scroll[3] += float_100_8041f964;
+                }
+                PSMTXTrans(texMtx, scroll[0], scroll[1], 0.0f);
+                GXLoadTexMtxImm(texMtx, 0x1E, 1);
+                GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+                PSMTXTrans(texMtx, scroll[2], scroll[3], 0.0f);
+                GXLoadTexMtxImm(texMtx, 0x21, 1);
+                GXSetTexCoordGen2(1, 1, 5, 0x21, 0, 0x7D);
+                GXSetTevOrder(0, 0, 0, 0xFF);
+                GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+                GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+                GXSetTevColorIn(0, 0xF, 0xF, 0xF, 8);
+                GXSetTevAlphaIn(0, 7, 7, 7, 4);
+                GXSetTevSwapMode(0, 0, 0);
+                GXSetTevOrder(1, 1, 1, 0xFF);
+                GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+                GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+                GXSetTevColorIn(1, 0, 8, 4, 0xF);
+                GXSetTevAlphaIn(1, 0, 7, 4, 4);
+                GXSetTevSwapMode(1, 0, 0);
+                GXSetTevOrder(2, 0xFF, 0xFF, 0);
+                GXSetTevColorOp(2, 0, 0, 0, 1, 0);
+                GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
+                GXSetTevColorIn(2, 0xF, 0, 10, 0xF);
+                GXSetTevAlphaIn(2, 7, 0, 5, 7);
+                GXSetTevSwapMode(2, 0, 0);
+                stages = 3;
+                break;
             case 0xC:
                 GXSetTevOrder(0, 0, 0, 0xFF);
                 GXSetTevColorOp(0, 0, 0, 0, 1, 0);
@@ -3194,6 +3590,74 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
         GXSetTevAlphaIn(stages, 7, 0, 6, 7);
         GXSetTevSwapMode(stages, 0, 0);
         stages++;
+    }
+
+    if ((materialFlag & 4) != 0 &&
+        shadowGetCharShadowProjection() != 0 &&
+        shadowGetCharShadowTexObj() != 0) {
+        u32 shadowColor = shadowGetCharShadowColor();
+        PSMTXConcat(shadowGetCharShadowProjTexMtx(), (void*)pMtx, shadowMtx);
+        GXSetTexCoordGen2(texCount, 0, 0, texmtx_tbl[texCount], 0, 0x7D);
+        GXLoadTexMtxImm(shadowMtx, texmtx_tbl[texCount], 0);
+        GXLoadTexObj(shadowGetCharShadowTexObj(), texCount);
+        GXSetTevOrder(stages, texCount, texCount, 0xFF);
+        GXSetTevColorOp(stages, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(stages, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(stages, 0, 0xE, 8, 0xF);
+        GXSetTevAlphaIn(stages, 7, 7, 7, 0);
+        GXSetTevSwapMode(stages, 0, 0);
+        GXSetTevKColor(1, &shadowColor);
+        GXSetTevKColorSel(stages, 0xD);
+        stages++;
+        texCount++;
+    }
+
+    if ((materialFlag & 0x400) != 0) {
+        u32 projectionColor = dat_8041f8e0;
+        s32 nextStage;
+        GXSetTevColorOp(stages - 1, 0, 0, 0, 1, 1);
+        GXSetTevAlphaOp(stages - 1, 0, 0, 0, 1, 1);
+        PSMTXConcat(projMtx, (void*)pMtx, projectionMtx);
+        GXSetTexCoordGen2(texCount, 0, 0, texmtx_tbl[texCount], 0, 0x7D);
+        GXLoadTexMtxImm(projectionMtx, texmtx_tbl[texCount], 0);
+        GXLoadTexObj(smartTexObj(projTexObj, &projTexImgRef), texCount);
+        GXSetTevOrder(stages, texCount, texCount, 0xFF);
+        GXSetTevColorOp(stages, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(stages, 0, 0, 1, 1, 0);
+        GXSetTevColorIn(stages, 0xF, 0xF, 0xF, 2);
+        GXSetTevAlphaIn(stages, 7, 7, 7, 4);
+        GXSetTevSwapMode(stages, 3, 3);
+        GXSetTevSwapModeTable(3, 0, 1, 2, 0);
+        GXSetTevColor(2, &projectionColor);
+        nextStage = stages + 1;
+        texCount++;
+        GXSetTevOrder(nextStage, 0xFF, 0xFF, 0xFF);
+        GXSetTevColorOp(nextStage, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(nextStage, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(nextStage, 2, 0, 1, 0xF);
+        GXSetTevAlphaIn(nextStage, 7, 7, 7, 1);
+        GXSetTevSwapMode(nextStage, 0, 0);
+        stages += 2;
+    }
+
+    if ((materialFlag & 0x10000) != 0 && shadowGetDepthShadowTexObj() != 0) {
+        u8* depthConfig = (u8*)shadowGetDepthShadowConfig();
+        if (*(s32*)(depthConfig + 0x3C) == 1) {
+            u32 rampColor = dat_8041f8e4;
+            GXSetTevColor(2, &rampColor);
+            GXSetTevOrder(stages, texCount, texCount, 0xFF);
+            GXSetTevColorIn(stages, 0xF, 8, 3, 0xF);
+            GXSetTevColorOp(stages, 0, 0, 0, 1, 0);
+            GXSetTevAlphaIn(stages, 7, 7, 7, 0);
+            GXSetTevAlphaOp(stages, 0, 0, 0, 1, 0);
+            GXSetTevSwapMode(stages, 0, 0);
+            GXSetTexCoordGen2(texCount, 0, 0, texmtx_tbl[texCount], 0, 0x7D);
+            GXLoadTexObj(shadowGetRamp8TexObj(), texCount);
+            PSMTXConcat(shadowGetDepthShadowDepthMtx(), (void*)pMtx, depthMtx);
+            GXLoadTexMtxImm(depthMtx, texmtx_tbl[texCount], 0);
+            stages++;
+            texCount++;
+        }
     }
 
     GXSetNumTevStages(stages);
@@ -6721,3 +7185,5 @@ s32 mapWork;
 u32 scrl_uv_1622[4] = { 0, 0, 0, 0 };
 u32 fog_type[5] = { 2, 4, 5, 6, 7 };
 u32 gap_07_804150D4_sdata[3] = { 0, 0, 0 };
+
+const f32 mapdrv_float_1000_owned = 1000.0f;

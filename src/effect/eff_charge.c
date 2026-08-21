@@ -102,17 +102,11 @@ void effChargeMain(void* effect) {
     extern double sin(double);
     extern double cos(double);
     extern VecLocal vec3_802f9710;
-    extern f32 float_6p2832_8042467c;
-    extern f32 float_360_80424680;
-    extern f32 float_100_80424684;
-    extern f32 float_0p2_80424688;
-    extern f32 float_80_8042468c;
 
     u8* work;
     u8* part;
     VecLocal pos;
     s32 frame;
-    s32 alpha;
     s32 i;
     s32 temp;
     f32 angle0;
@@ -123,6 +117,8 @@ void effChargeMain(void* effect) {
     f32 cos1;
     f32 radius;
     s32 parity;
+    s32 delta0;
+    s32 delta1;
 
     work = *(u8**)((s32)effect + 0xC);
     pos = vec3_802f9710;
@@ -139,51 +135,44 @@ void effChargeMain(void* effect) {
     }
 
     frame = *(s32*)(work + 0x1C);
-    if (frame < 0x15) {
-        alpha = frame * 0xC;
+    if (frame <= 0x14) {
+        *(s32*)(work + 0x14) = frame * 0xC;
     } else {
-        alpha = 0xFF;
+        *(s32*)(work + 0x14) = 0xFF;
     }
     if (frame & 1) {
-        alpha /= 2;
+        *(s32*)(work + 0x14) /= 2;
     }
-    *(s32*)(work + 0x14) = alpha;
     parity = frame & 1;
 
     part = work + 0x48;
     for (i = 1; i < *(s32*)((s32)effect + 8); i++, part += 0x48) {
         radius = *(f32*)(part + 0x2C);
-        angle1 = (float_6p2832_8042467c * *(f32*)(part + 0x20)) / float_360_80424680;
+        angle1 = (6.2831854820251465f * *(f32*)(part + 0x20)) / 360.0f;
         sin1 = (f32)sin(angle1);
         cos1 = (f32)cos(angle1);
-        angle0 = (float_6p2832_8042467c * *(f32*)(part + 0x24)) / float_360_80424680;
+        angle0 = (6.2831854820251465f * *(f32*)(part + 0x24)) / 360.0f;
         sin0 = (f32)sin(angle0);
         cos0 = (f32)cos(angle0);
         *(f32*)(part + 8) = cos0 * radius * sin1;
         *(f32*)(part + 0xC) = cos0 * radius * cos1;
         *(f32*)(part + 0x10) = radius * sin0;
-        temp = (s32)((float_100_80424684 - radius) * 0x1FE);
+        temp = (s32)(100.0f - radius) * 0x1FE;
         temp = temp / 100;
-        if (temp < 0) {
-            temp = -temp;
-        }
         *(s32*)(part + 0x14) = temp;
         if (*(s32*)(part + 0x14) > 0xFF) {
             *(s32*)(part + 0x14) = 0xFF;
         }
-        *(f32*)(part + 0x28) = float_0p2_80424688 + (radius / float_80_8042468c);
+        *(f32*)(part + 0x28) = 0.20000000298023224f + (radius / 80.0f);
         *(f32*)(part + 0x2C) = radius - (f32)(((i & 3) * 2) + 2);
-        if (*(f32*)(part + 0x2C) < float_0_80424660) {
-            *(f32*)(part + 0x2C) = float_0_80424660;
-            *(f32*)(part + 0x28) = float_0_80424660;
+        if (*(f32*)(part + 0x2C) < 0.0f) {
+            *(f32*)(part + 0x2C) = 0.0f;
+            *(f32*)(part + 0x28) = 0.0f;
         }
-        if (parity) {
-            *(f32*)(part + 0x20) += 5.0f;
-            *(f32*)(part + 0x24) += 2.0f;
-        } else {
-            *(f32*)(part + 0x20) += 2.0f;
-            *(f32*)(part + 0x24) += 5.0f;
-        }
+        delta0 = parity ? 5 : 2;
+        delta1 = parity ? 2 : 5;
+        *(f32*)(part + 0x20) += (f32)delta0;
+        *(f32*)(part + 0x24) += (f32)delta1;
     }
     dispEntry(4, 2, effChargeDisp, effect, dispCalcZ(&pos));
 }
@@ -225,14 +214,6 @@ void effChargeDisp(s32 cameraId, void* effect) {
     extern void GXSetCurrentMtx(u32);
     extern void GXBegin(s32, s32, s16);
     extern u32 unk_80429610;
-    extern f32 float_1_80424658;
-    extern f32 float_deg2rad_8042465c;
-    extern f32 float_neg8_80424664;
-    extern f32 float_8_80424668;
-    extern f32 float_neg24_8042466c;
-    extern f32 float_neg12_80424670;
-    extern f32 float_12_80424674;
-    extern f32 float_neg36_80424678;
 
     u8* work;
     u8* part;
@@ -249,10 +230,10 @@ void effChargeDisp(s32 cameraId, void* effect) {
     s32 i;
 
     work = *(u8**)((s32)effect + 0xC);
-    PSMTXScale(base, *(f32*)(work + 0x28), *(f32*)(work + 0x28), float_1_80424658);
+    PSMTXScale(base, *(f32*)(work + 0x28), *(f32*)(work + 0x28), 1.0f);
     PSMTXTransApply(base, base, *(f32*)(work + 8), *(f32*)(work + 0xC), *(f32*)(work + 0x10));
     cam = camGetPtr(cameraId);
-    PSMTXRotRad(rot, float_deg2rad_8042465c * -*(f32*)((s32)cam + 0x114), 'y');
+    PSMTXRotRad(rot, 0.01745329238474369f * -*(f32*)((s32)cam + 0x114), 'y');
     PSMTXConcat(base, rot, base);
     effGetTexObj(0x1E, &texObj);
     GXLoadTexObj(&texObj, 0);
@@ -284,7 +265,7 @@ void effChargeDisp(s32 cameraId, void* effect) {
 
     part = work + 0x48;
     for (i = 1; i < *(s32*)((s32)effect + 8); i++, part += 0x48) {
-        if (*(f32*)(part + 0x28) != float_0_80424660) {
+        if (*(f32*)(part + 0x28) != 0.0f) {
             color2 = ((*(u32*)(work + 0x30) & 0xFF) << 24) | ((*(u32*)(work + 0x34) & 0xFF) << 16) |
                      ((*(u32*)(work + 0x38) & 0xFF) << 8) | (*(u32*)(part + 0x14) & 0xFF);
             GXSetTevColor(1, &color2);
@@ -299,15 +280,15 @@ void effChargeDisp(s32 cameraId, void* effect) {
             GXBegin(0x80, 0, 4);
             fifo = (volatile f32*)0xCC008000;
             if ((i & 1) == 0) {
-                *fifo = float_neg8_80424664; *fifo = float_neg8_80424664; *fifo = float_0_80424660; *fifo = float_0_80424660; *fifo = float_0_80424660;
-                *fifo = float_8_80424668; *fifo = float_neg8_80424664; *fifo = float_0_80424660; *fifo = float_1_80424658; *fifo = float_0_80424660;
-                *fifo = float_8_80424668; *fifo = float_neg24_8042466c; *fifo = float_0_80424660; *fifo = float_1_80424658; *fifo = float_1_80424658;
-                *fifo = float_neg8_80424664; *fifo = float_neg24_8042466c; *fifo = float_0_80424660; *fifo = float_0_80424660; *fifo = float_1_80424658;
+                *fifo = -8.0f; *fifo = -8.0f; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
+                *fifo = 8.0f; *fifo = -8.0f; *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
+                *fifo = 8.0f; *fifo = -24.0f; *fifo = 0.0f; *fifo = 1.0f; *fifo = 1.0f;
+                *fifo = -8.0f; *fifo = -24.0f; *fifo = 0.0f; *fifo = 0.0f; *fifo = 1.0f;
             } else {
-                *fifo = float_neg12_80424670; *fifo = float_neg12_80424670; *fifo = float_0_80424660; *fifo = float_0_80424660; *fifo = float_0_80424660;
-                *fifo = float_12_80424674; *fifo = float_neg12_80424670; *fifo = float_0_80424660; *fifo = float_1_80424658; *fifo = float_0_80424660;
-                *fifo = float_12_80424674; *fifo = float_neg36_80424678; *fifo = float_0_80424660; *fifo = float_1_80424658; *fifo = float_1_80424658;
-                *fifo = float_neg12_80424670; *fifo = float_neg36_80424678; *fifo = float_0_80424660; *fifo = float_0_80424660; *fifo = float_1_80424658;
+                *fifo = -12.0f; *fifo = -12.0f; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
+                *fifo = 12.0f; *fifo = -12.0f; *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
+                *fifo = 12.0f; *fifo = -36.0f; *fifo = 0.0f; *fifo = 1.0f; *fifo = 1.0f;
+                *fifo = -12.0f; *fifo = -36.0f; *fifo = 0.0f; *fifo = 0.0f; *fifo = 1.0f;
             }
         }
     }

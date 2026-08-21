@@ -17,69 +17,102 @@ void* effDamageStarEntry(f32 x, f32 y, f32 z, f32 speed, f32 baseRot, s32 kind, 
     extern f32 float_6p2832_80422ce0;
     extern f32 float_1p5_80422cd0;
     extern f32 float_0p2_80422d04;
-    extern f32 sin(f32);
-    extern f32 cos(f32);
+    extern f32 float_0p16605_80422cec;
+    extern f32 float_3p1416_80422cf0;
+    extern f32 float_0p4967_80422d00;
+    extern f32 float_0p00761_80422ce8;
+    extern f32 float_0p03705_80422cfc;
+    extern f32 float_1p5708_80422cf4;
+    extern f32 float_4p7124_80422cf8;
     void* entry;
-    void* work;
-    void* part;
+    u8* work;
+    u8* part;
     s32 effCount;
     s32 size;
     s32 i;
     f32 angle;
     f32 spread;
     f32 dir;
+    f32 t;
+    f32 t2;
     f32 s;
     f32 c;
 
     entry = effEntry();
-    if (count > 20) {
-        count = 20;
-    }
+    if (count > 20) count = 20;
     effCount = count + 2;
     *(void**)((s32)entry + 0x14) = str_DamageStar_802f3a80;
     *(s32*)((s32)entry + 0x8) = effCount;
-
     size = effCount * 0x48;
     work = __memAlloc(3, size);
     *(void**)((s32)entry + 0xC) = work;
     memset(work, 0, size);
-
     *(void**)((s32)entry + 0x10) = effDamageStarMain;
-    *(void**)((s32)work + 0x44) = effMayaAnimAlloc(&damageStar_effAnimDt);
-    effPlayMayaAnim(*(void**)((s32)work + 0x44));
-
-    *(s32*)((s32)work + 0x0) = kind;
-    *(f32*)((s32)work + 0x4) = x;
-    *(f32*)((s32)work + 0x8) = y;
-    *(f32*)((s32)work + 0xC) = z;
-    *(f32*)((s32)work + 0x1C) = speed;
-    *(f32*)((s32)work + 0x38) = baseRot;
-    *(s32*)((s32)work + 0x24) = 99;
-    *(s32*)((s32)work + 0x28) = 0;
-    *(s32*)((s32)work + 0x3C) = count;
-    *(s32*)((s32)work + 0x40) = *(s32*)((s32)gpGlobals + 0x1C);
+    *(void**)(work + 0x44) = effMayaAnimAlloc(&damageStar_effAnimDt);
+    effPlayMayaAnim(*(void**)(work + 0x44));
+    *(s32*)(work + 0x0) = kind;
+    *(f32*)(work + 0x4) = x;
+    *(f32*)(work + 0x8) = y;
+    *(f32*)(work + 0xC) = z;
+    *(f32*)(work + 0x1C) = speed;
+    *(f32*)(work + 0x38) = baseRot;
+    *(s32*)(work + 0x24) = 99;
+    *(s32*)(work + 0x28) = 0;
+    *(s32*)(work + 0x3C) = count;
+    *(s32*)(work + 0x40) = *(s32*)((s32)gpGlobals + 0x1C);
 
     spread = float_30_80422cdc - (f32)effCount;
-    part = (void*)((s32)work + 0x48);
-    for (i = 1; i < effCount; i++, part = (void*)((s32)part + 0x48)) {
-        dir = (f32)((i * ((i & 1) != 0 ? 1 : -1)) / 2);
-        *(f32*)((s32)part + 0x38) = baseRot + spread * dir;
-        *(f32*)((s32)part + 0x4) = float_0_80422c80;
-        *(f32*)((s32)part + 0x8) = float_0_80422c80;
-        *(f32*)((s32)part + 0xC) = float_0_80422c80;
-        angle = (float_6p2832_80422ce0 * *(f32*)((s32)part + 0x38)) / float_360_80422ce4;
-        s = sin(angle);
-        c = cos(angle);
-        *(f32*)((s32)part + 0x10) = -(speed * s) * float_1p5_80422cd0;
-        *(f32*)((s32)part + 0x14) = (speed * c) * float_1p5_80422cd0;
-        *(f32*)((s32)part + 0x18) = float_0_80422c80;
-        *(f32*)((s32)part + 0x1C) = float_0_80422c80;
-        *(s32*)((s32)part + 0x20) = 0xFF;
-        *(f32*)((s32)part + 0x2C) = float_0p2_80422d04;
-        *(f32*)((s32)part + 0x30) = float_0p2_80422d04;
-        *(f32*)((s32)part + 0x34) = float_0p2_80422d04;
-    }
+    part = work + 0x48;
+    for (i = 1; i < effCount; i++, part += 0x48) {
+        dir = (f32)((i * ((i & 1) ? 1 : -1)) / 2);
+        *(f32*)(part + 0x38) = baseRot + spread * dir;
+        *(f32*)(part + 0x4) = float_0_80422c80;
+        *(f32*)(part + 0x8) = float_0_80422c80;
+        *(f32*)(part + 0xC) = float_0_80422c80;
+        angle = (float_6p2832_80422ce0 * *(f32*)(part + 0x38)) / float_360_80422ce4;
 
+        if (angle > float_3p1416_80422cf0) {
+            if (angle >= float_4p7124_80422cf8) {
+                t = float_1p5708_80422cf4 - (angle - float_4p7124_80422cf8);
+                t2 = t * t;
+                s = -(((float_0p00761_80422ce8 * t2 - float_0p16605_80422cec) * t2 + float_1_80422c98) * t);
+            } else {
+                t = angle - float_3p1416_80422cf0;
+                t2 = t * t;
+                s = -(((float_0p00761_80422ce8 * t2 - float_0p16605_80422cec) * t2 + float_1_80422c98) * t);
+            }
+        } else if (angle > float_1p5708_80422cf4) {
+            t = float_1p5708_80422cf4 - (angle - float_1p5708_80422cf4);
+            t2 = t * t;
+            s = ((float_0p00761_80422ce8 * t2 - float_0p16605_80422cec) * t2 + float_1_80422c98) * t;
+        } else {
+            t2 = angle * angle;
+            s = ((float_0p00761_80422ce8 * t2 - float_0p16605_80422cec) * t2 + float_1_80422c98) * angle;
+        }
+        *(f32*)(part + 0x10) = -(speed * s) * float_1p5_80422cd0;
+
+        if (angle > float_3p1416_80422cf0) {
+            if (angle >= float_4p7124_80422cf8) t = float_1p5708_80422cf4 - (angle - float_4p7124_80422cf8);
+            else t = angle - float_3p1416_80422cf0;
+            t2 = t * t;
+            c = (float_0p03705_80422cfc * t2 - float_0p4967_80422d00) * t2 + float_1_80422c98;
+            if (angle < float_4p7124_80422cf8) c = -c;
+        } else if (angle > float_1p5708_80422cf4) {
+            t = float_1p5708_80422cf4 - (angle - float_1p5708_80422cf4);
+            t2 = t * t;
+            c = -((float_0p03705_80422cfc * t2 - float_0p4967_80422d00) * t2 + float_1_80422c98);
+        } else {
+            t2 = angle * angle;
+            c = (float_0p03705_80422cfc * t2 - float_0p4967_80422d00) * t2 + float_1_80422c98;
+        }
+        *(f32*)(part + 0x14) = (speed * c) * float_1p5_80422cd0;
+        *(f32*)(part + 0x18) = float_0_80422c80;
+        *(f32*)(part + 0x1C) = float_0_80422c80;
+        *(s32*)(part + 0x20) = 0xFF;
+        *(f32*)(part + 0x2C) = float_0p2_80422d04;
+        *(f32*)(part + 0x30) = float_0p2_80422d04;
+        *(f32*)(part + 0x34) = float_0p2_80422d04;
+    }
     return entry;
 }
 

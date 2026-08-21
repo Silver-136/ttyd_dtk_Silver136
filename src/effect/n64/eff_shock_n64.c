@@ -140,7 +140,7 @@ void effShockMain(void* effect) {
 #pragma no_register_save_helpers off
 
 
-u8 effShockDisp(s32 cameraId, s32 effectAddress) {
+void effShockDisp(s32 cameraId, s32 effectAddress) {
     typedef f32 Mtx[3][4];
     typedef struct GXTexObj { u32 data[8]; } GXTexObj;
     extern void* camGetPtr(s32);
@@ -168,6 +168,8 @@ u8 effShockDisp(s32 cameraId, s32 effectAddress) {
     extern void GXSetCurrentMtx(s32);
     extern void GXSetCullMode(s32);
     extern void GXBegin(s32, s32, s16);
+    extern u32 dat_80425fd0;
+    extern u32 unk_80429804;
     u8* work = *(u8**)(effectAddress + 0xC);
     char* camera = camGetPtr(cameraId);
     GXTexObj tex;
@@ -177,16 +179,20 @@ u8 effShockDisp(s32 cameraId, s32 effectAddress) {
 
     PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
     PSMTXRotRad(rot, -0.017453292f * *(f32*)((char*)camGetPtr(4) + 0x114), 'y');
-    PSMTXConcat(trans, rot, model);
-    PSMTXConcat(camera + 0x118, model, model);
+    PSMTXConcat(trans, rot, trans);
+    PSMTXConcat(camera + 0x118, trans, model);
     color = (*(u8*)(work + 0x30) << 24) | (*(u8*)(work + 0x34) << 16) |
             (*(u8*)(work + 0x38) << 8) | *(u8*)(work + 0x18);
     GXSetTevColor(1, &color);
     color = (*(u8*)(work + 0x3C) << 24) | (*(u8*)(work + 0x40) << 16) |
-            (*(u8*)(work + 0x44) << 8) | 0xFF;
+            (*(u8*)(work + 0x44) << 8) | (unk_80429804 & 0xFF);
     GXSetTevColor(2, &color);
     GXSetCullMode(0);
     if ((u32)(type - 1) < 2 || type == 3) {
+        if (type == 1) {
+            color = (dat_80425fd0 & 0xFFFFFF00) | *(u8*)(work + 0x14);
+            GXSetTevColor(1, &color);
+        }
         PSMTXTrans(trans, 0.0f, *(f32*)(work + 0x2C), 0.0f);
         PSMTXScale(scale, 0.25f * *(f32*)(work + 0x24),
                    0.25f * *(f32*)(work + 0x24), 1.0f);
@@ -210,31 +216,31 @@ u8 effShockDisp(s32 cameraId, s32 effectAddress) {
         GXSetTevAlphaIn(0, 7, 5, 4, 7);
         effSetVtxDescN64((void*)0x803A8460);
         GXBegin(0x90, 0, 0x90);
-        tri2(0x30,0x31,0x32,0,0x30,0x32,0x33,0);
-        tri2(0x31,0x34,0x35,0,0x31,0x35,0x32,0);
-        tri2(0x34,0x36,0x37,0,0x34,0x37,0x35,0);
-        tri2(0x38,0x30,0x33,0,0x38,0x33,0x39,0);
-        tri2(0x3A,0x38,0x39,0,0x3A,0x39,0x3B,0);
-        tri2(0x3C,0x3A,0x3B,0,0x3C,0x3B,0x3D,0);
-        tri2(0x3E,0x3C,0x3D,0,0x3E,0x3D,0x3F,0);
-        tri2(0x36,0x40,0x41,0,0x36,0x41,0x37,0);
-        GXSetNumTevStages(1);
-        GXSetTevOrder(0, 0, 0, 4);
-        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-        GXSetTevColorIn(0, 2, 8, 10, 15);
-        GXSetTevAlphaIn(0, 7, 7, 7, 1);
+        tri2(0x30,0x31,0x32,0,0x30,0x32,0x33,0); tri2(0x31,0x34,0x35,0,0x31,0x35,0x32,0);
+        tri2(0x34,0x36,0x37,0,0x34,0x37,0x35,0); tri2(0x38,0x30,0x33,0,0x38,0x33,0x39,0);
+        tri2(0x3A,0x38,0x39,0,0x3A,0x39,0x3B,0); tri2(0x3C,0x3A,0x3B,0,0x3C,0x3B,0x3D,0);
+        tri2(0x3E,0x3C,0x3D,0,0x3E,0x3D,0x3F,0); tri2(0x36,0x40,0x41,0,0x36,0x41,0x37,0);
+        tri2(0x42,0x43,0x44,0,0x42,0x44,0x45,0); tri2(0x44,0x46,0x47,0,0x44,0x47,0x45,0);
+        tri2(0x48,0x47,0x46,0,0x48,0x46,0x49,0); tri2(0x4A,0x48,0x49,0,0x4A,0x49,0x4B,0);
+        tri2(0x40,0x4A,0x4B,0,0x40,0x4B,0x41,0); tri2(0x4C,0x3E,0x3F,0,0x4C,0x3F,0x4D,0);
+        tri2(0x4E,0x4F,0x57,0,0x4E,0x57,0x58,0); tri2(0x4F,0x50,0x59,0,0x4F,0x59,0x57,0);
+        tri2(0x50,0x52,0x5A,0,0x50,0x5A,0x59,0); tri2(0x51,0x4E,0x58,0,0x51,0x58,0x5B,0);
+        tri2(0x40,0x51,0x5B,0,0x40,0x5B,0x41,0); tri2(0x52,0x56,0x5C,0,0x52,0x5C,0x5A,0);
+        tri2(0x53,0x4C,0x4D,0,0x53,0x4D,0x5D,0); tri2(0x54,0x53,0x5D,0,0x54,0x5D,0x5E,0);
+        tri2(0x55,0x54,0x5E,0,0x55,0x5E,0x5F,0); tri2(0x56,0x55,0x5F,0,0x56,0x5F,0x5C,0);
+        GXSetNumTevStages(1); GXSetTevOrder(0,0,0,4); GXSetTevColorOp(0,0,0,0,1,0);
+        GXSetTevAlphaOp(0,0,0,0,1,0); GXSetTevColorIn(0,2,8,10,15); GXSetTevAlphaIn(0,7,7,7,1);
         GXBegin(0x90, 0, 0x90);
-        tri2(0,1,2,0,0,2,3,0);
-        tri2(1,4,5,0,1,5,2,0);
-        tri2(4,6,7,0,4,7,5,0);
-        tri2(8,0,3,0,8,3,9,0);
-        tri2(10,8,9,0,10,9,11,0);
-        tri2(12,10,11,0,12,11,13,0);
-        tri2(14,12,13,0,14,13,15,0);
-        tri2(6,16,17,0,6,17,7,0);
+        tri2(0,1,2,0,0,2,3,0); tri2(1,4,5,0,1,5,2,0); tri2(4,6,7,0,4,7,5,0);
+        tri2(8,0,3,0,8,3,9,0); tri2(10,8,9,0,10,9,11,0); tri2(12,10,11,0,12,11,13,0);
+        tri2(14,12,13,0,14,13,15,0); tri2(6,16,17,0,6,17,7,0);
+        tri2(18,19,20,0,18,20,21,0); tri2(20,22,23,0,20,23,21,0); tri2(24,23,22,0,24,22,25,0);
+        tri2(26,24,25,0,26,25,27,0); tri2(16,26,27,0,16,27,17,0); tri2(28,14,15,0,28,15,29,0);
+        tri2(30,31,39,0,30,39,40,0); tri2(31,32,41,0,31,41,39,0); tri2(32,34,42,0,32,42,41,0);
+        tri2(33,30,40,0,33,40,43,0); tri2(18,33,43,0,18,43,19,0); tri2(34,38,44,0,34,44,42,0);
+        tri2(35,28,29,0,35,29,45,0); tri2(36,35,45,0,36,45,46,0); tri2(37,36,46,0,37,46,47,0);
+        tri2(38,37,47,0,38,47,44,0);
     }
-    return 0;
 }
 
 const f32 vec3_802fbef0[3] = { 0.0f, 0.0f, 0.0f };

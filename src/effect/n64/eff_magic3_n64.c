@@ -10,38 +10,84 @@ void* effMagic3N64Entry(f32 x, f32 y, f32 z, s32 type, s32 arg) {
     extern void effMagic3Main(void*);
     extern void* camGetPtr(s32);
     extern f64 cos(f64);
+    extern f32 sqrtf(f32);
     extern void PSMTXRotAxisRad(Mtx,Vec*,f32);
     extern char str_Magic3N64_802fb4a8[];
+    extern const f32 vec3_802fb470[];
     void* entry = effEntry();
     u8* work;
     u8* camera;
     Mtx rot;
     Vec axis;
+    Vec direction;
+    Vec perpendicular;
+    f32 length;
+    f32 perpendicularLengthSq;
     f32 cameraAngle;
     f32 spread;
     s32 i;
 
-    if (entry == 0) return 0;
-    camera = camGetPtr(4);
-    cameraAngle = 6.2832f * *(f32*)(camera + 0x114) / 360.0f;
-    axis.x = (f32)sin(cameraAngle);
-    axis.y = 0.0f;
-    axis.z = -(f32)cos(cameraAngle);
+    direction.x = 0.0f;
+    direction.y = -1.0f;
+    direction.z = 0.0f;
+    length = sqrtf(direction.x * direction.x + direction.y * direction.y + direction.z * direction.z);
+    if (length == 0.0f) {
+        return 0;
+    }
+    direction.x /= length;
+    direction.y /= length;
+    direction.z /= length;
+    if (direction.x != 0.0f) {
+        perpendicular.x = -direction.y / direction.x;
+        perpendicular.y = 1.0f;
+        perpendicular.z = 0.0f;
+    } else if (direction.y != 0.0f) {
+        perpendicular.x = 1.0f;
+        perpendicular.y = -direction.x / direction.y;
+        perpendicular.z = 0.0f;
+    } else {
+        perpendicular.x = 1.0f;
+        perpendicular.y = 0.0f;
+        perpendicular.z = -direction.x / direction.z;
+    }
+    perpendicularLengthSq = perpendicular.x * perpendicular.x +
+                            perpendicular.y * perpendicular.y +
+                            perpendicular.z * perpendicular.z;
+    if (perpendicularLengthSq == 0.0f) {
+        return 0;
+    }
+    direction.x *= 18.0f;
+    direction.y *= 18.0f;
+    direction.z *= 18.0f;
+
     *(char**)((u8*)entry + 0x14) = str_Magic3N64_802fb4a8;
     *(s32*)((u8*)entry + 8) = 5;
     work = __memAlloc(3, 0xF0);
     *(u8**)((u8*)entry + 0xC) = work;
     *(void**)((u8*)entry + 0x10) = effMagic3Main;
     for (i = 0; i < 5; i++, work += 0x30) {
-        spread = 100.0f * (f32)i * 0.25f - 50.0f;
+        camera = camGetPtr(4);
+        cameraAngle = 6.2832f * *(f32*)(camera + 0x114) / 360.0f;
+        axis.x = vec3_802fb470[0];
+        axis.y = vec3_802fb470[1];
+        axis.z = vec3_802fb470[2];
+        axis.x = (f32)sin(cameraAngle);
+        axis.z = -(f32)cos(cameraAngle);
+        if (i == 1) {
+            spread = 0.0f;
+        } else {
+            spread = 100.0f * (f32)i * 0.25f - 50.0f;
+        }
         PSMTXRotAxisRad(rot, &axis, spread * 0.017453292f);
         *(s32*)work = type;
         *(f32*)(work + 4) = x;
         *(f32*)(work + 8) = y;
         *(f32*)(work + 0xC) = z;
-        *(f32*)(work + 0x10) = 0.6f * rot[0][1] * 18.0f;
-        *(f32*)(work + 0x14) = rot[1][1] * 18.0f;
-        *(f32*)(work + 0x18) = 0.6f * rot[2][1] * 18.0f;
+        *(f32*)(work + 0x10) = 0.6f *
+                               (rot[0][0] * direction.x + rot[0][1] * direction.y + rot[0][2] * direction.z);
+        *(f32*)(work + 0x14) = rot[1][0] * direction.x + rot[1][1] * direction.y + rot[1][2] * direction.z;
+        *(f32*)(work + 0x18) = 0.6f *
+                               (rot[2][0] * direction.x + rot[2][1] * direction.y + rot[2][2] * direction.z);
         *(f32*)(work + 0x1C) = (f32)(50 - i * 25);
         *(f32*)(work + 0x20) = 0.5f;
         *(s32*)(work + 0x28) = arg;

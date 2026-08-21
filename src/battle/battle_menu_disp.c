@@ -26,45 +26,61 @@ extern double sin(double);
 
 extern const char str_PCTs_battle_common_b_802ef810[];
 
-u8 SelectedItemCoordinateColorUpDate(void) {
+void SelectedItemCoordinateColorUpDate(void) {
     extern s8 seq_510;
-    extern u8 seleItemCoordCol[];
+    extern u8 seleItemCoordCol[4];
 
     if (seq_510 == 3) {
         seleItemCoordCol[1]--;
-        if (seleItemCoordCol[1] == 0xC0) {
-            seq_510 = 4;
+        if (seleItemCoordCol[1] != 0xC0) {
+            return;
         }
-    } else if (seq_510 > 2) {
+        seq_510 = 4;
+        return;
+    }
+    if (seq_510 > 2) {
         if (seq_510 == 5) {
             seleItemCoordCol[2]--;
-            if (seleItemCoordCol[2] == 0xC0) {
-                seq_510 = 0;
+            if (seleItemCoordCol[2] != 0xC0) {
+                return;
             }
-        } else if (seq_510 == 4) {
-            seleItemCoordCol[0]++;
-            if (seleItemCoordCol[0] == 0xFF) {
-                seq_510 = 5;
-            }
+            seq_510 = 0;
+            return;
         }
-    } else if (seq_510 == 1) {
-        seleItemCoordCol[0]--;
-        if (seleItemCoordCol[0] == 0xC0) {
-            seq_510 = 2;
+        if (seq_510 > 4) {
+            return;
         }
-    } else if (seq_510 < 1) {
-        if (seq_510 >= 0) {
-            seleItemCoordCol[1]++;
-            if (seleItemCoordCol[1] == 0xFF) {
-                seq_510 = 1;
-            }
+        seleItemCoordCol[0]++;
+        if (seleItemCoordCol[0] != 0xFF) {
+            return;
         }
-    } else {
-        seleItemCoordCol[2]++;
-        if (seleItemCoordCol[2] == 0xFF) {
-            seq_510 = 3;
-        }
+        seq_510 = 5;
+        return;
     }
+    if (seq_510 == 1) {
+        seleItemCoordCol[0]--;
+        if (seleItemCoordCol[0] != 0xC0) {
+            return;
+        }
+        seq_510 = 2;
+        return;
+    }
+    if (seq_510 < 1) {
+        if (seq_510 < 0) {
+            return;
+        }
+        seleItemCoordCol[1]++;
+        if (seleItemCoordCol[1] != 0xFF) {
+            return;
+        }
+        seq_510 = 1;
+        return;
+    }
+    seleItemCoordCol[2]++;
+    if (seleItemCoordCol[2] != 0xFF) {
+        return;
+    }
+    seq_510 = 3;
 }
 
 s32 BattleMenuKeyOKInACT(void* work) {
@@ -511,6 +527,8 @@ void DrawSubIconSub(void* menu, s32 phase, f32 baseMtx[3][4], s32 enabled,
     extern void FontDrawStringMtx(f32 mtx[3][4], char* text);
     extern u16 FontGetMessageWidth(char* text);
     extern char* msgSearch(char* key);
+    extern char str_btl_cost_disp_FP_802ef7c0[];
+    extern char str_btl_cost_disp_AP_802ef7d4[];
     extern char str_btl_disp_HP_802ef7e8[];
     extern char str_btl_disp_slash_802ef7f4[];
     void* battleWork;
@@ -532,6 +550,11 @@ void DrawSubIconSub(void* menu, s32 phase, f32 baseMtx[3][4], s32 enabled,
     s32 hp;
     s32 maxHp;
     char digits[4];
+    char digit[2];
+    s32 digitValues[3];
+    s32 digitOffsets[3];
+    s32 digitCount;
+    s32 i;
 
     battleWork = _battleWorkPointer;
     camera = camGetPtr(8);
@@ -585,24 +608,74 @@ void DrawSubIconSub(void* menu, s32 phase, f32 baseMtx[3][4], s32 enabled,
     FontDrawStringMtx(draw, name);
 
     if (fpCost != 0) {
-        digits[0] = '0' + (fpCost / 100) % 10;
-        digits[1] = '0' + (fpCost / 10) % 10;
-        digits[2] = '0' + fpCost % 10;
-        digits[3] = 0;
-        PSMTXTrans(trans, 76.0f, 25.0f, 0.0f);
+        digitValues[2] = fpCost / 100;
+        digitValues[1] = (fpCost % 100) / 10;
+        digitValues[0] = (fpCost % 100) % 10;
+        if (digitValues[2] < 1) {
+            if (digitValues[1] < 1) {
+                digitOffsets[0] = 14;
+                digitCount = 1;
+                digitOffsets[1] = 0;
+            } else {
+                digitOffsets[0] = 21;
+                digitCount = 2;
+                digitOffsets[1] = 7;
+            }
+        } else {
+            digitOffsets[0] = 28;
+            digitCount = 3;
+            digitOffsets[1] = 14;
+        }
+        digitOffsets[2] = 0;
         PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
+        for (i = 0; i < digitCount; i++) {
+            digit[0] = digitValues[i] + '0';
+            digit[1] = 0;
+            PSMTXTrans(trans, 72.0f + 4.0f + (f32)digitOffsets[i], 25.0f, 0.0f);
+            PSMTXConcat(baseMtx, trans, draw);
+            PSMTXConcat(draw, scale, draw);
+            FontDrawStringMtx(draw, digit);
+        }
+        PSMTXTrans(trans, 120.0f, 22.0f, 0.0f);
+        PSMTXScale(scale, 0.8f, 0.8f, 0.8f);
         PSMTXConcat(baseMtx, trans, draw);
         PSMTXConcat(draw, scale, draw);
-        FontDrawStringMtx(draw, digits);
+        FontDrawStringMtx(draw, msgSearch(str_btl_cost_disp_FP_802ef7c0));
     }
     if (spCost != 0) {
-        digits[0] = '0' + (spCost / 100) % 10;
-        digits[1] = '0' + (spCost / 10) % 10;
-        digits[2] = '0' + spCost % 10;
-        digits[3] = 0;
-        PSMTXTrans(trans, 76.0f, 25.0f, 0.0f);
+        digitValues[2] = spCost / 100;
+        digitValues[1] = (spCost % 100) / 10;
+        digitValues[0] = (spCost % 100) % 10;
+        if (digitValues[2] < 1) {
+            if (digitValues[1] < 1) {
+                digitOffsets[0] = 14;
+                digitCount = 1;
+                digitOffsets[1] = 0;
+            } else {
+                digitOffsets[0] = 21;
+                digitCount = 2;
+                digitOffsets[1] = 7;
+            }
+        } else {
+            digitOffsets[0] = 28;
+            digitCount = 3;
+            digitOffsets[1] = 14;
+        }
+        digitOffsets[2] = 0;
+        PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
+        for (i = 0; i < digitCount; i++) {
+            digit[0] = digitValues[i] + '0';
+            digit[1] = 0;
+            PSMTXTrans(trans, 72.0f + 4.0f + (f32)digitOffsets[i], 25.0f, 0.0f);
+            PSMTXConcat(baseMtx, trans, draw);
+            PSMTXConcat(draw, scale, draw);
+            FontDrawStringMtx(draw, digit);
+        }
+        PSMTXTrans(trans, 120.0f, 22.0f, 0.0f);
+        PSMTXScale(scale, 0.8f, 0.8f, 0.8f);
         PSMTXConcat(baseMtx, trans, draw);
-        FontDrawStringMtx(draw, digits);
+        PSMTXConcat(draw, scale, draw);
+        FontDrawStringMtx(draw, msgSearch(str_btl_cost_disp_AP_802ef7d4));
     }
     if (table != 0) {
         table += (base + phase) * 0x18;
@@ -1512,14 +1585,19 @@ void DrawMainMenu(void) {
             positions[i][0] += offsetX;
             positions[i][1] += offsetY;
             positions[i][2] = offsetY;
-            value = 270.0f + 90.0f * *(s32*)((s32)window + 0x48 + i * 4) /
-                    (*(s32*)((s32)gp + 4) * 10 / 60);
-            if (value >= 360.0f) value = 0.0f;
-            PSMTXRotRad(rot, 'x', value * 0.01745329f);
-            PSMTXTrans(trans, positions[i][0] + (i == *(s32*)cursor ? 20.0f : 0.0f),
-                       positions[i][1], positions[i][2]);
-            PSMTXConcat(trans, rot, matrices[i]);
-            if (i == *(s32*)cursor) *(u32*)((s32)window + 0x20 + i * 4) |= 2;
+            if (i == *(s32*)cursor) {
+                value = 270.0f + 90.0f * *(s32*)((s32)window + 0x48 + i * 4) /
+                        (*(s32*)((s32)gp + 4) * 10 / 60);
+                if (value >= 360.0f) value = 0.0f;
+                PSMTXRotRad(rot, 'x', value * 0.01745329f);
+                PSMTXTrans(trans, positions[i][0] + 20.0f,
+                           positions[i][1], positions[i][2]);
+                PSMTXConcat(trans, rot, matrices[i]);
+                *(u32*)((s32)window + 0x20 + i * 4) |= 2;
+            } else {
+                PSMTXTrans(matrices[i], positions[i][0],
+                           positions[i][1], positions[i][2]);
+            }
             angles[i] = 0.0f;
             if (currentAngle >= targetAngle &&
                 *(s32*)((s32)window + 0x48 + i * 4) >= *(s32*)((s32)gp + 4) * 10 / 60) {
@@ -1540,6 +1618,58 @@ void DrawMainMenu(void) {
                        positions[i][1], positions[i][2]);
             if (i == *(s32*)cursor) *(u32*)((s32)window + 0x20 + i * 4) |= 2;
             angles[i] = 0.0f;
+            break;
+        case 4:
+            targetAngle = *(f32*)(0x80363560 + count * 20 +
+                *(s32*)((s32)window + 0x84 + i * 4) * 4);
+            if (targetAngle == 0.0f) {
+                targetAngle = 360.0f;
+            }
+            targetAngle = 3.1416f * targetAngle / 180.0f;
+            currentAngle = *(s32*)((s32)window + 0x48 + i * 4) *
+                           (12.0f / *(s32*)((s32)gp + 4));
+            currentAngle += 3.1416f * *(f32*)(0x80363560 + count * 20 +
+                *(s32*)((s32)window + 0x70 + i * 4) * 4) / 180.0f;
+            if (currentAngle >= targetAngle) {
+                *(s32*)((s32)window + 0x34 + i * 4) = 3;
+                *(s32*)((s32)window + 0x48 + i * 4) = -1;
+                currentAngle = targetAngle;
+            }
+            GetRingCenter(positions[i]);
+            GetRingOffset(currentAngle, &offsetX, &offsetY);
+            positions[i][0] += offsetX;
+            positions[i][1] += offsetY;
+            positions[i][2] = offsetY;
+            PSMTXTrans(matrices[i], positions[i][0], positions[i][1], positions[i][2]);
+            angles[i] = 0.0f;
+            *(u32*)((s32)window + 0x20 + i * 4) &= ~2;
+            *(s32*)((s32)window + 0x48 + i * 4) += 1;
+            break;
+        case 5:
+            currentAngle = *(f32*)(0x80363560 + count * 20 +
+                *(s32*)((s32)window + 0x70 + i * 4) * 4);
+            if (currentAngle == 0.0f) {
+                currentAngle = 360.0f;
+            }
+            targetAngle = 3.1416f * *(f32*)(0x80363560 + count * 20 +
+                *(s32*)((s32)window + 0x84 + i * 4) * 4) / 180.0f;
+            currentAngle = 3.1416f * currentAngle / 180.0f -
+                           *(s32*)((s32)window + 0x48 + i * 4) *
+                           (12.0f / *(s32*)((s32)gp + 4));
+            if (currentAngle <= targetAngle) {
+                *(s32*)((s32)window + 0x34 + i * 4) = 3;
+                *(s32*)((s32)window + 0x48 + i * 4) = -1;
+                currentAngle = targetAngle;
+            }
+            GetRingCenter(positions[i]);
+            GetRingOffset(currentAngle, &offsetX, &offsetY);
+            positions[i][0] += offsetX;
+            positions[i][1] += offsetY;
+            positions[i][2] = offsetY;
+            PSMTXTrans(matrices[i], positions[i][0], positions[i][1], positions[i][2]);
+            angles[i] = 0.0f;
+            *(u32*)((s32)window + 0x20 + i * 4) &= ~2;
+            *(s32*)((s32)window + 0x48 + i * 4) += 1;
             break;
         case 10:
             *(u32*)((s32)window + 0x20 + i * 4) |= 3;
@@ -1626,7 +1756,10 @@ void DrawWeaponWin(void) {
     extern u8 DrawMainIcon(s32, s32, s32, s32, s32);
     extern u8 DrawMenuCursorAndScrollArrow(f32*);
     extern u32 BtlUnit_GetWeaponCost(void*, void*);
+    extern void DrawMenuHelpWin(f32, f32, char*);
     extern f32 vec3_802ef750[3];
+    extern u8 itemDataTable[];
+    extern u8 ItemWeaponData_CookingItem[];
     void* battleWork = _battleWorkPointer;
     u8* window = *(u8**)((s32)battleWork + 0x1C78);
     s32* cursor = *(s32**)window;
@@ -1642,6 +1775,8 @@ void DrawWeaponWin(void) {
     s32 i, index;
     u8* entry;
     void* weapon;
+    void* selectedWeapon = *(void**)(entries + cursor[0] * 0x1C);
+    char* helpMsg;
 
     DrawSubMenuCommonProcess(&outX, &outY, mainMatrices, (s32)positions, (s32)angles, subMatrices);
     for (i = 0; i < 7; i++) {
@@ -1660,6 +1795,24 @@ void DrawWeaponWin(void) {
     DrawSubIcon(window, subMatrices, enabled, icons, names, costs, spCosts, NULL, 0);
     cursorPos[0] = vec3_802ef750[0]; cursorPos[1] = vec3_802ef750[1]; cursorPos[2] = vec3_802ef750[2];
     DrawMenuCursorAndScrollArrow(cursorPos);
+    entry = entries + cursor[0] * 0x1C;
+    if (selectedWeapon == NULL) {
+        index = *(s32*)(entry + 0x14);
+        helpMsg = *(char**)(itemDataTable + index * 0x28 + 8);
+    } else if (*(s32*)((s32)selectedWeapon + 8) == 0) {
+        if (selectedWeapon == ItemWeaponData_CookingItem) {
+            index = *(s32*)(entry + 0x14);
+            helpMsg = *(char**)(itemDataTable + index * 0x28 + 8);
+        } else {
+            helpMsg = *(char**)((s32)selectedWeapon + 0xC);
+        }
+    } else {
+        index = *(s32*)((s32)selectedWeapon + 8);
+        helpMsg = *(char**)(itemDataTable + index * 0x28 + 8);
+    }
+    if (helpMsg != NULL) {
+        DrawMenuHelpWin(outX, outY, helpMsg);
+    }
 }
 
 void BattleMenuDisp_Operation_Init(void* work, s32 flags) {

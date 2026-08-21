@@ -1,7 +1,7 @@
 #include "effect/n64/eff_cloud_n64.h"
 
 extern s32 rand(void);
-extern f32 float_0_80424f18;
+extern const f32 float_0_80424f18;
 
 #pragma optimize_for_size off
 
@@ -231,6 +231,17 @@ u8 effCloudMain(u32* effect) {
 void effCloudDisp(int cameraId, int effectAddress) {
     typedef float Mtx[3][4];
     typedef struct SmartAllocationData { void* pMemory; } SmartAllocationData;
+    typedef struct CloudRibbonVertex {
+        s16 x;
+        s16 z;
+        s16 y;
+        s16 s;
+        s16 t;
+        u8 r;
+        u8 g;
+        u8 b;
+        u8 a;
+    } CloudRibbonVertex;
     extern void* camGetPtr(int);
     extern void GXSetNumChans(int);
     extern void GXSetChanCtrl(int, int, int, int, int, int, int);
@@ -250,12 +261,30 @@ void effCloudDisp(int cameraId, int effectAddress) {
     extern void GXLoadPosMtxImm(Mtx, int);
     extern void GXSetCurrentMtx(int);
     extern void GXSetCullMode(int);
-    extern SmartAllocationData* smartAlloc(void*, int);
+    extern SmartAllocationData* smartAlloc(unsigned int, int);
     extern void* memset(void*, int, unsigned int);
     extern void effSetVtxDescN64(void*);
     extern void GXBegin(int, int, int);
-    extern float float_0p015625_80424f10;
-    extern float float_0p03125_80424f14;
+    extern void DCFlushRange(void*, u32);
+    extern void GXInvalidateVtxCache(void);
+    extern void tri2(s16, s16, s16, s16, s16, s16, s16);
+    extern const float float_0p015625_80424f10;
+    extern const float float_0p03125_80424f14;
+    extern const float float_0_80424f18;
+    extern const float float_6p2832_80424f1c;
+    extern const float float_360_80424f20;
+    extern const float float_255_80424f24;
+    extern const float float_180_80424f28;
+    extern const float float_neg180_80424f2c;
+    extern const float float_0p5_80424f30;
+    extern const float float_16_80424f34;
+    extern const float float_3_80424f38;
+    extern const float float_24_80424f3c;
+    extern const float float_0p8_80424f40;
+    extern const float float_0p4_80424f44;
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern f64 angleABf(f64, f64, f64, f64);
     extern unsigned char unk_8042966c;
     unsigned char texObj[0x20];
     Mtx texMtx;
@@ -263,14 +292,16 @@ void effCloudDisp(int cameraId, int effectAddress) {
     unsigned char* work = *(unsigned char**)(entry + 0xC);
     unsigned char* camera = (unsigned char*)camGetPtr(cameraId);
     SmartAllocationData* allocation;
-    float* vertices;
+    CloudRibbonVertex* vertices;
     unsigned int color1;
     unsigned int color2;
     int type = *(int*)work;
     int frame = *(int*)(work + 0x14);
     int alpha = *(int*)(work + 0x24);
+    float scale = *(float*)(work + 0x34);
     int i;
     int strip;
+    int active;
 
     GXSetNumChans(1);
     GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
@@ -319,31 +350,193 @@ void effCloudDisp(int cameraId, int effectAddress) {
     GXLoadPosMtxImm((float (*)[4])(camera + 0x11C), 0);
     GXSetCurrentMtx(0);
     GXSetCullMode(0);
-    allocation = smartAlloc(camera + 0x11C, 3);
-    vertices = (float*)allocation->pMemory;
+    allocation = smartAlloc(0x690, 3);
+    vertices = (CloudRibbonVertex*)allocation->pMemory;
     memset(vertices, 0, 0x690);
     effSetVtxDescN64(vertices);
 
-    for (i = 0; i < 30; i++) {
-        int next = (i + *(int*)(work + 0x2A8)) % 30;
-        float x = ((float*)(work + 0x50))[next];
-        float y = ((float*)(work + 0xC8))[next];
-        float z = ((float*)(work + 0x140))[next];
-        float width = *(float*)(work + 0x34) * (1.0f - (float)i / 30.0f);
-        vertices[i * 6 + 0] = x - width;
-        vertices[i * 6 + 1] = y;
-        vertices[i * 6 + 2] = z;
-        vertices[i * 6 + 3] = x + width;
-        vertices[i * 6 + 4] = y;
-        vertices[i * 6 + 5] = z;
-    }
-    for (strip = 0; strip < 29; strip++) {
-        GXBegin(0x90, 0, 6);
-        *(volatile unsigned short*)0xCC008000 = strip * 2;
-        *(volatile unsigned short*)0xCC008000 = strip * 2 + 1;
-        *(volatile unsigned short*)0xCC008000 = strip * 2 + 2;
-        *(volatile unsigned short*)0xCC008000 = strip * 2 + 1;
-        *(volatile unsigned short*)0xCC008000 = strip * 2 + 3;
-        *(volatile unsigned short*)0xCC008000 = strip * 2 + 2;
+    active = 0;
+    i = 0;
+    do {
+        int next = (i + *(int*)(work + 0x2A8) + 1) % 30;
+        if (((int*)(work + 0x230))[next] != 0) active++;
+        next = (i + *(int*)(work + 0x2A8) + 2) % 30;
+        if (((int*)(work + 0x230))[next] != 0) active++;
+        next = (i + *(int*)(work + 0x2A8) + 3) % 30;
+        if (((int*)(work + 0x230))[next] != 0) active++;
+        i += 3;
+    } while (i < 30);
+    if (active > 1) {
+        int first = -1;
+        int alphaProgress = 0;
+        int vertexIndex;
+        float angle;
+        CloudRibbonVertex* out = vertices;
+
+        for (i = 0; i < 30; i++, out += 2) {
+            int next = (i + *(int*)(work + 0x2A8) + 1) % 30;
+            int alphaAngle = alphaProgress / (active - 1);
+            int alpha2 = (int)(float_255_80424f24 *
+                               (float)sin((float_6p2832_80424f1c *
+                                          (float)alphaAngle) /
+                                         float_360_80424f20));
+
+            if (alpha2 > 200) {
+                alpha2 = 200;
+            }
+
+            if (((int*)(work + 0x230))[next] != 0) {
+                int ahead;
+                int behind;
+                int stamp;
+                int age;
+                int phase;
+                int fade;
+                int edge;
+                int center;
+                s16 texS;
+                float x;
+                float z;
+                float y;
+                float radius;
+                float radians;
+                float sideX;
+                float sideZ;
+
+                if (first == -1) {
+                    ahead = next + 1;
+                    if (ahead >= 30) {
+                        ahead = 0;
+                    }
+                    angle = -(float)angleABf(
+                        ((float*)(work + 0xC8))[ahead],
+                        -((float*)(work + 0x50))[ahead],
+                        ((float*)(work + 0xC8))[next],
+                        -((float*)(work + 0x50))[next]);
+                    first = i;
+                } else if (i != 29) {
+                    float forwardAngle;
+                    float backwardAngle;
+                    float delta;
+
+                    ahead = next + 1;
+                    behind = next - 1;
+                    if (ahead >= 30) {
+                        ahead = 0;
+                    }
+                    if (behind < 0) {
+                        behind = 29;
+                    }
+
+                    forwardAngle = -(float)angleABf(
+                        ((float*)(work + 0xC8))[ahead],
+                        -((float*)(work + 0x50))[ahead],
+                        ((float*)(work + 0xC8))[next],
+                        -((float*)(work + 0x50))[next]);
+                    backwardAngle = -(float)angleABf(
+                        ((float*)(work + 0xC8))[next],
+                        -((float*)(work + 0x50))[next],
+                        ((float*)(work + 0xC8))[behind],
+                        -((float*)(work + 0x50))[behind]);
+
+                    delta = backwardAngle - forwardAngle;
+                    if (delta > float_180_80424f28) {
+                        forwardAngle += float_360_80424f20;
+                    } else if (delta < float_neg180_80424f2c) {
+                        backwardAngle += float_360_80424f20;
+                    }
+                    angle = (forwardAngle + backwardAngle) * float_0p5_80424f30;
+                }
+
+                stamp = ((int*)(work + 0x1B8))[next];
+                age = frame - stamp;
+                phase = (frame - stamp * 80) * 4;
+                x = ((float*)(work + 0x50))[next];
+                z = ((float*)(work + 0xC8))[next];
+                y = ((float*)(work + 0x140))[next];
+
+                radius = ((float)age +
+                          float_3_80424f38 *
+                              (float)sin((float_6p2832_80424f1c *
+                                          (float)phase) /
+                                         float_360_80424f20) +
+                          float_16_80424f34) *
+                         scale;
+
+                texS = (s16)((int)(float_24_80424f3c *
+                                   ((float*)(work + 0x2AC))[next]) +
+                             ((frame << 5) & 0x7E0));
+
+                fade = 255 - age * 100;
+                center = 255;
+                edge = 255;
+                if (fade < 0) {
+                    int oldFade = fade;
+                    fade = 0;
+                    edge = (int)(float_0p8_80424f40 * (float)oldFade) + 255;
+                    if (edge < 0) {
+                        int oldEdge = edge;
+                        edge = 0;
+                        center = (int)(float_0p4_80424f44 * (float)oldEdge) + 255;
+                        if (center < 0) {
+                            center = 0;
+                        }
+                    }
+                }
+
+                radians = (float_6p2832_80424f1c * angle) /
+                          float_360_80424f20;
+                sideX = radius * (float)sin(radians);
+                sideZ = radius * (float)cos(radians);
+                alphaProgress += 180;
+
+                out[0].x = (s16)(x + sideX);
+                out[0].z = (s16)(z + sideZ);
+                out[0].y = (s16)(y + float_0_80424f18);
+                out[0].s = texS;
+                out[0].t = 0x400;
+                out[0].r = (u8)center;
+                out[0].g = (u8)edge;
+                out[0].b = (u8)fade;
+                out[0].a = (u8)alpha2;
+
+                out[1].x = (s16)(x - sideX);
+                out[1].z = (s16)(z - sideZ);
+                out[1].y = (s16)(y + float_0_80424f18);
+                out[1].s = texS;
+                out[1].t = 0;
+                out[1].r = (u8)center;
+                out[1].g = (u8)edge;
+                out[1].b = (u8)fade;
+                out[1].a = (u8)alpha2;
+            }
+        }
+
+        DCFlushRange(vertices, 0x690);
+        GXInvalidateVtxCache();
+
+        vertexIndex = first << 1;
+        for (strip = first; strip < 29; strip++, vertexIndex += 2) {
+            GXBegin(0x90, 0, 6);
+            tri2((s16)vertexIndex, (s16)(vertexIndex + 2),
+                 (s16)(vertexIndex + 1), vertexIndex,
+                 (s16)(vertexIndex + 1), (s16)(vertexIndex + 2),
+                 (s16)(vertexIndex + 3));
+        }
     }
 }
+
+const f32 float_0p015625_80424f10 = 0.015625f;
+const f32 float_0p03125_80424f14 = 0.03125f;
+const f32 float_0_80424f18 = 0.0f;
+const f32 float_6p2832_80424f1c = 6.2832f;
+const f32 float_360_80424f20 = 360.0f;
+const f32 float_255_80424f24 = 255.0f;
+const f32 float_180_80424f28 = 180.0f;
+const f32 float_neg180_80424f2c = -180.0f;
+const f32 float_0p5_80424f30 = 0.5f;
+const f32 float_16_80424f34 = 16.0f;
+const f32 float_3_80424f38 = 3.0f;
+const f32 float_24_80424f3c = 24.0f;
+const f32 float_0p8_80424f40 = 0.8f;
+const f32 float_0p4_80424f44 = 0.4f;

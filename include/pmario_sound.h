@@ -58,7 +58,7 @@ void L_psndBGM_stop(void);
 void psndBGM_rate(u32 value, u16 rate);
 void psndBGMOn(s32 id, s32 value);
 void unk_800db778(s32 id, s32 a2, s32 a3, s32 a4);
-void psndBGMOn_f_d(s32 id, s32 value, s32 fade, s32 fadeOut, s32 unused);
+s32 psndBGMOn_f_d(s32 id, s32 value, s32 fade, s32 fadeOut, s32 unused);
 void psndBGMOff(s32 id);
 s32 psndBGMOff_f_d(s32 name, s32 frames, s32 flags);
 s32 psndBGMChk(s32 index);

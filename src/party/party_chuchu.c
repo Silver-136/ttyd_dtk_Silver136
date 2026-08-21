@@ -91,22 +91,22 @@ s32 set_msg(void* pEvt) {
     s32 i;
 
     party = partyGetPtr(marioGetPartyId());
+    mario = *(void**)((s32)party + 0x160);
     *(s32*)((s32)pEvt + 0x9C) = 0;
     *(s32*)((s32)pEvt + 0xA0) = 0;
     if (party == 0) {
         return 2;
     }
 
-    mario = *(void**)((s32)party + 0x160);
-    foundType = -1;
-    angle = float_0_80424370;
-
-    for (pass = 0; pass < 2 && foundType < 0; pass++) {
+    pass = 0;
+    do {
         if (pass == 0) {
             range = float_150_8042437c;
         } else {
             range = float_10000_80424380;
         }
+
+        foundType = -1;
 
         item = itemNearDistCheck(*(f32*)((s32)mario + 0x8C),
                                  *(f32*)((s32)mario + 0x90),
@@ -167,12 +167,14 @@ s32 set_msg(void* pEvt) {
         if (foundMap != 0) {
             dist = PSVECDistance(bestMapPos, (f32*)((s32)mario + 0x8C));
             if (dist < best) {
+                best = dist;
                 angle = revise360(angleABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60),
                                            bestMapPos[0], bestMapPos[2]) - *(f32*)((s32)party + 0xF8));
                 foundType = 2;
             }
         }
-    }
+        pass++;
+    } while (foundType < 0 && pass < 2);
 
     if (foundType < 0) {
         *(char**)((s32)pEvt + 0x9C) = str_MOBJ_TreasureBox_802f8a08 + 0x288;
@@ -196,6 +198,7 @@ s32 set_msg(void* pEvt) {
 
     return 2;
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

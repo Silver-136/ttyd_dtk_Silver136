@@ -1,6 +1,7 @@
 #include "sound.h"
 
 void SoundSSPlayChEx_main(s32 result, s32 userData);
+s32 _sscallback(void* outA, u32 countA, void* outB, u32 countB, u32 streamId);
 extern char sound[];
 extern void __memFree(s32 heap, void* ptr);
 extern void sndSeqVolume(s32 volume, s32 frames, void* seq, s32 flag);
@@ -2210,7 +2211,6 @@ void SoundSSPlayChEx_main(s32 result, s32 userData) {
     extern u32 sndStreamAllocLength(u32, u32);
     extern u32 sndStreamAllocEx(u32, void*, u32, u32, u32, u32, u32, u32, u32, u32, u32, void*, u32, void*);
     extern void sndStreamMixParameter(void*, u32, u32, u32, u32);
-    extern void _sscallback(void);
     extern f32 float_63_8042190c;
     u8* base;
     u8* entry;

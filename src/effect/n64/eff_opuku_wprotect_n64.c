@@ -175,8 +175,10 @@ void effOpukuWprotectDisp(s32 cameraId, void* effect) {
     extern void GXSetCullMode(s32); extern void GXLoadPosMtxImm(Mtx,s32); extern void GXSetCurrentMtx(s32); extern void effSetVtxDescN64(void*);
     extern void GXBegin(s32,s32,s32); extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32); extern void DCFlushRange(void*,s32);
     extern void GXInvalidateVtxCache(void); extern u8 point_data[]; extern u32 gpGlobals[];
+    extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);
+    extern f32 float_0p0625_80425c28, float_0p3_80425c2c;
     u8* work=*(u8**)((u8*)effect+0xC); u8* camera=camGetPtr(cameraId); Mtx base,scale,trans; u8 tex[0x20];
-    Vtx* vertices=smartAlloc(0x460,3); u32 color1,color2; u32 retrace=gpGlobals[0]>>1; s32 i;
+    Vtx* vertices=*(Vtx**)smartAlloc(0x460,3); u32 color1,color2; u32 retrace=gpGlobals[0]>>1; s32 i;
     PSMTXTrans(base,*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC)); PSMTXConcat((f32 (*)[4])(camera+0x11C),base,base);
     for(i=0;i<40;i++) {
         s8* p=(s8*)point_data+i*12; f32 x=(f32)(p[0]*10),y=(f32)(p[1]*10),z=(f32)(p[2]*10);
@@ -197,9 +199,24 @@ void effOpukuWprotectDisp(s32 cameraId, void* effect) {
         PSMTXScale(scale,*(f32*)(work+0x78+i*4),*(f32*)(work+0x78+i*4),*(f32*)(work+0x78+i*4)); PSMTXConcat(trans,scale,trans); PSMTXConcat(base,trans,trans);
         GXLoadPosMtxImm(trans,0); GXSetCurrentMtx(0); effSetVtxDescN64((void*)0x803A6A90); GXBegin(0x90,0,6); tri2(0,1,2,0,0,2,3,0);
     }
-    GXSetNumChans(1); GXSetNumTevStages(2); effGetTexObjN64(0x90,tex); GXLoadTexObj(tex,0); DCFlushRange(vertices,0x460); GXInvalidateVtxCache();
+    GXSetNumChans(1); GXSetChanCtrl(4,0,0,1,0,0,2); GXSetNumTevStages(2);
+    GXSetTevOrder(0,0,0,4); GXSetTevColorOp(0,0,0,0,1,0); GXSetTevAlphaOp(0,0,0,0,1,0);
+    GXSetTevColorIn(0,15,10,8,15); GXSetTevAlphaIn(0,6,5,4,7);
+    GXSetTevOrder(1,0,0,4); GXSetTevColorOp(1,0,0,0,1,0); GXSetTevAlphaOp(1,0,0,0,1,0);
+    GXSetTevColorIn(1,2,0,0,15); GXSetTevAlphaIn(1,7,7,7,0);
+    effGetTexObjN64(0x90,tex); GXLoadTexObj(tex,0); GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D); PSMTXScale(scale,float_0p0625_80425c28,0.03125f,0.0f);
+    GXLoadTexMtxImm(scale,0x1E,1); color1=((u8)*(s32*)(work+0x18)<<24)|((u8)*(s32*)(work+0x1C)<<16)|
+        ((u8)*(s32*)(work+0x20)<<8)|(u8)(float_0p3_80425c2c*(f32)*(s32*)(work+0x24));
+    GXSetTevColor(1,&color1); GXSetCullMode(1); DCFlushRange(vertices,0x460); GXInvalidateVtxCache();
     PSMTXScale(scale,0.1f,0.1f,0.1f); PSMTXConcat(base,scale,scale); GXLoadPosMtxImm(scale,0); GXSetCurrentMtx(0); effSetVtxDescN64(vertices);
-    GXBegin(0x90,0,0x3C); GXBegin(0x90,0,0x18);
+    GXBegin(0x90,0,0x3C);
+    tri2(0,1,2,0,0,2,3,0); tri2(4,0,3,0,4,3,5,0); tri2(6,7,8,0,6,8,9,0);
+    tri2(10,11,12,0,10,12,13,0); tri2(14,15,16,0,14,16,17,0); tri2(16,18,19,0,16,19,17,0);
+    tri2(18,20,21,0,18,21,19,0); tri2(22,23,4,0,22,4,5,0); tri2(24,25,26,0,24,26,27,0);
+    tri2(26,28,29,0,26,29,27,0);
+    effSetVtxDescN64(vertices+28); GXBegin(0x90,0,0x18);
+    tri2(0,2,6,0,0,6,1,0); tri2(3,7,4,0,3,4,8,0); tri2(4,5,9,0,4,9,8,0); tri2(5,10,11,0,5,11,9,0);
 }
 
 u8 size8x8_tex32x32_vtx[56] = {

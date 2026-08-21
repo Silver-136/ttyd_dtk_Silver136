@@ -16,6 +16,7 @@ typedef struct ExtGp {
 
 ExtWork work[2];
 extern ExtGp* gp;
+static u32 sintbl[450];
 
 void GXTexModeSync(void);
 void PSMTXCopy(void* dst, void* src);
@@ -304,7 +305,7 @@ void extMain(void) {
             entry[1] = (s32)(f32)pose[4];
         }
         if ((pose[0] & 2) != 0) {
-            diff = float_90_80421898 + (angle - (f32)pose[1]);
+            diff = float_90_80421898 + (angle - *(f32*)&pose[1]);
             while (diff < float_neg360_8042189c) {
                 diff += float_360_80421890;
             }
@@ -313,7 +314,7 @@ void extMain(void) {
             }
             if ((float_90_80421898 < diff && diff <= float_270_804218a0) ||
                 (diff < float_neg90_804218a4 && float_neg270_804218a8 <= diff)) {
-                pose[7] = (u32)target;
+                *(f32*)&pose[7] = target;
             } else {
                 cam = camGetPtr(4);
                 diff = float_rad2deg_8042188c *
@@ -325,24 +326,25 @@ void extMain(void) {
                 if (diff < float_0_80421888) {
                     diff += float_360_80421890;
                 }
-                pose[7] = (u32)diff;
+                *(f32*)&pose[7] = diff;
             }
-            while (float_180_80421894 < (f32)pose[7] - (f32)pose[5]) {
-                pose[5] = (u32)((f32)pose[5] + float_360_80421890);
+            while (float_180_80421894 < *(f32*)&pose[7] - *(f32*)&pose[5]) {
+                *(f32*)&pose[5] += float_360_80421890;
             }
-            while ((f32)pose[7] - (f32)pose[5] < float_neg180_804218ac) {
-                pose[5] = (u32)((f32)pose[5] - float_360_80421890);
+            while (*(f32*)&pose[7] - *(f32*)&pose[5] < float_neg180_804218ac) {
+                *(f32*)&pose[5] -= float_360_80421890;
             }
-            pose[5] = (u32)((((f32)pose[7] - (f32)pose[5]) * float_0p1_804218b0) + (f32)pose[5]);
-            diff = (f32)pose[5];
+            *(f32*)&pose[5] = ((*(f32*)&pose[7] - *(f32*)&pose[5]) * float_0p1_804218b0) +
+                              *(f32*)&pose[5];
+            diff = *(f32*)&pose[5];
             while (diff < float_0_80421888) {
                 diff += float_360_80421890;
             }
             while (diff >= float_360_80421890) {
                 diff -= float_360_80421890;
             }
-            s = sin(diff);
-            c = cos(diff);
+            s = *(f32*)&sintbl[(s32)diff];
+            c = *(f32*)&sintbl[(s32)diff + 90];
             *(f32*)pose[3] = c;
             *(f32*)(pose[3] + 0x28) = c;
             *(f32*)(pose[3] + 8) = s;

@@ -171,6 +171,7 @@ void effKamekiTornadeMain(void* effect) {
 
 u8 effKamekiTornadeDisp(s32 cameraId, s32 effectAddress) {
     typedef f32 Mtx[3][4];
+    typedef struct Vec { f32 x, y, z; } Vec;
     extern void* camGetPtr(s32);
     extern void* smartAlloc(u32, s32);
     extern void effGetTexObjN64(s32, void*);
@@ -190,12 +191,21 @@ u8 effKamekiTornadeDisp(s32 cameraId, s32 effectAddress) {
     extern void PSMTXRotRad(Mtx, f32, char);
     extern void PSMTXScale(Mtx, f32, f32, f32);
     extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void PSMTXMultVec(Mtx, Vec*, Vec*);
     extern void GXLoadTexMtxImm(Mtx, s32, s32);
     extern void GXLoadPosMtxImm(Mtx, s32);
     extern void GXSetCurrentMtx(s32);
     extern void effSetVtxDescN64(void*);
     extern void GXBegin(s32, s32, s16);
     extern void tri2(s32, s32, s32, s32, s32, s32, s32);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern void* memcpy(void*, const void*, u32);
+    extern void DCFlushRange(void*, u32);
+    extern void GXInvalidateVtxCache(void);
+    extern f32 float_6p2832_80425554;
+    extern f32 float_360_80425558;
+    extern f32 float_100_8042555c;
     extern f32 float_deg2rad_80425560;
     extern f32 float_0p02_80425568;
     extern f32 float_0p015625_80425574;
@@ -211,6 +221,8 @@ u8 effKamekiTornadeDisp(s32 cameraId, s32 effectAddress) {
     u32 color1;
     s32 alpha = (s32)((f32)(*(s32*)(work + 0x24) >> 1) * *(f32*)(work + 0x148));
     s32 strand;
+    s16* templateVertices;
+    s32 vertex;
 
     GXSetNumChans(0);
     GXSetNumTevStages(3);
@@ -242,14 +254,34 @@ u8 effKamekiTornadeDisp(s32 cameraId, s32 effectAddress) {
     GXSetTevColor(1, &color0);
     GXSetTevColor(2, &color1);
     GXSetCullMode(0);
+    templateVertices = smartAlloc(0x1C0, 3);
+    for (vertex = 0; vertex < 16; vertex++) {
+        s16* first = templateVertices + vertex * 7;
+        s16* second = templateVertices + (vertex + 16) * 7;
+        f32 angle = (float_6p2832_80425554 * (f32)(vertex * 24)) / float_360_80425558;
+        first[0] = (s16)(float_100_8042555c * (f32)cos(angle));
+        first[1] = 0;
+        first[2] = (s16)(float_100_8042555c * (f32)sin(angle));
+        first[3] = (s16)(vertex * 0x80);
+        first[4] = 0;
+        second[0] = first[0];
+        second[1] = 0;
+        second[2] = first[2];
+        second[3] = (s16)(vertex * 0x200);
+        second[4] = 0x400;
+    }
     PSMTXRotRad(rotation, float_deg2rad_80425560 * *(f32*)(work + 0x144), 'z');
     PSMTXScale(scale, float_0p1_80425564, float_0p1_80425564, float_0p1_80425564);
     PSMTXConcat(rotation, scale, base);
     for (strand = 0; strand < 7; strand++) {
         s32 segment;
-        void* vertices = smartAlloc(0x1C0, 3);
+        s16* vertices = smartAlloc(0x1C0, 3);
         f32 strandScale = *(f32*)(work + 0x98 + strand * 4) * *(f32*)(work + 0x34);
-        effSetVtxDescN64(vertices);
+        f32 radius = float_10_8042556c * *(f32*)(work + 0xF8 + strand * 4);
+        f32 phase = (float_6p2832_80425554 * *(f32*)(work + 0xB8 + strand * 4)) /
+                    float_360_80425558;
+        Vec pos;
+        memcpy(vertices, templateVertices, 0x1C0);
         PSMTXTrans(transform,
                    float_10_8042556c * *(f32*)(work + 0x38 + strand * 4),
                    float_10_8042556c * *(f32*)(work + 0x58 + strand * 4),
@@ -258,7 +290,43 @@ u8 effKamekiTornadeDisp(s32 cameraId, s32 effectAddress) {
         PSMTXConcat(transform, rotation, transform);
         PSMTXScale(scale, strandScale, *(f32*)(work + 0x34), strandScale);
         PSMTXConcat(transform, scale, transform);
+        PSMTXTrans(scale, radius * (f32)sin(phase), float_0_80425570, radius * (f32)cos(phase));
+        PSMTXConcat(transform, scale, transform);
         PSMTXConcat(base, transform, transform);
+        for (vertex = 0; vertex < 16; vertex++) {
+            s16* v = vertices + vertex * 7;
+            pos.x = (f32)v[0];
+            pos.y = (f32)v[1];
+            pos.z = (f32)v[2];
+            PSMTXMultVec(transform, &pos, &pos);
+            v[0] = (s16)pos.x;
+            v[1] = (s16)pos.y;
+            v[2] = (s16)pos.z;
+        }
+        PSMTXTrans(transform,
+                   float_10_8042556c * *(f32*)(work + 0x3C + strand * 4),
+                   float_10_8042556c * *(f32*)(work + 0x5C + strand * 4),
+                   float_10_8042556c * *(f32*)(work + 0x7C + strand * 4));
+        PSMTXRotRad(rotation, float_deg2rad_80425560 * *(f32*)(work + 0x11C + strand * 4), 'z');
+        PSMTXConcat(transform, rotation, transform);
+        strandScale = *(f32*)(work + 0x9C + strand * 4) * *(f32*)(work + 0x34);
+        PSMTXScale(scale, strandScale, *(f32*)(work + 0x34), strandScale);
+        PSMTXConcat(transform, scale, transform);
+        PSMTXTrans(scale, radius * (f32)sin(phase), float_0_80425570, radius * (f32)cos(phase));
+        PSMTXConcat(transform, scale, transform);
+        PSMTXConcat(base, transform, transform);
+        for (vertex = 16; vertex < 32; vertex++) {
+            s16* v = vertices + vertex * 7;
+            pos.x = (f32)v[0];
+            pos.y = (f32)v[1];
+            pos.z = (f32)v[2];
+            PSMTXMultVec(transform, &pos, &pos);
+            v[0] = (s16)pos.x;
+            v[1] = (s16)pos.y;
+            v[2] = (s16)pos.z;
+        }
+        GXInvalidateVtxCache();
+        DCFlushRange(vertices, 0x1C0);
         PSMTXScale(scale, float_0p015625_80425574, float_0p03125_80425578, float_0_80425570);
         PSMTXTrans(rotation, *(f32*)(work + 0x13C) + (f32)(strand * 4), float_0_80425570, float_0_80425570);
         PSMTXConcat(scale, rotation, scale);
@@ -269,6 +337,7 @@ u8 effKamekiTornadeDisp(s32 cameraId, s32 effectAddress) {
         GXLoadTexMtxImm(scale, 0x21, 1);
         GXLoadPosMtxImm((f32 (*)[4])(camera + 0x11C), 0);
         GXSetCurrentMtx(0);
+        effSetVtxDescN64(vertices);
         for (segment = 0; segment < 15; segment++) {
             GXBegin(0x90, 0, 6);
             tri2(segment + 0x10, segment + 1, segment, 0,

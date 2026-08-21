@@ -7,3 +7,4 @@ void marioReInit(void);
 void marioEntry(void);
 s32 marioChkKey(void);
 s32 marioChkCtrl(void);
+void marioMoveMain(void);

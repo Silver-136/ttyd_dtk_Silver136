@@ -1505,194 +1505,156 @@ void hitReCalcMatrix2(void* hit, void* arg, s32 flag) {
 #pragma use_lmw_stmw on
 s32 hitCalcVtxPosition(void* hit) {
     extern void* mapGetWork(void);
-    extern void PSMTXMultVec(void* mtx, void* src, void* dst);
-    extern void PSVECSubtract(void* a, void* b, void* out);
-    extern void PSVECCrossProduct(void* a, void* b, void* out);
-
+    extern void PSMTXMultVec(void*, void*, void*);
+    extern void PSVECSubtract(void*, void*, void*);
+    extern void PSVECCrossProduct(void*, void*, void*);
     void* model;
     void* joint;
     void* shape;
-    void* poly;
-    void* triOut;
-    void* vertexBase;
-    void* map;
-    s32 count;
-    s32 jointIndex;
+    s32* poly;
+    void* tri;
+    s32 count = 0;
     s32 jointOffset;
+    s32 jointIndex;
     s32 shapeIndex;
     s32 triIndex;
     s32 triOffset;
     s32 vertexCount;
-    s32 firstIndex;
-    s32 secondIndex;
-    s32 thirdIndex;
-    s32 tmpIndex;
-    s32 stride;
-    s32 baseOffset;
-    s32 vcdFlags;
-    s32 bitCount;
-    s32 i;
-    s32 v0;
-    s32 v1;
-    s32 v2;
-    s32 src0;
-    s32 src1;
-    s32 src2;
-    u32 vtxDesc;
-    f32 local0[3];
-    f32 local1[3];
-    f32 local2[3];
-
-    count = 0;
+    s32 index0;
+    s32 index1;
+    s32 index2;
+    s32 temp;
 
     if (*(s32*)((s32)hit + 0xAC) == 0) {
         return 0;
     }
-
-    model = *(void**)((s32)hit + 0x08);
+    model = *(void**)((s32)hit + 8);
     jointOffset = 0;
-    jointIndex = 0;
-
-    while (jointIndex < *(s32*)((s32)model + 0x5C)) {
+    for (jointIndex = 0; jointIndex < *(s32*)((s32)model + 0x5C); jointIndex++) {
         joint = *(void**)((s32)model + jointOffset + 0x64);
         if (joint != 0) {
-            if (*(u8*)((s32)joint + 0x03) == 0) {
+            if (*(u8*)((s32)joint + 3) == 0) {
                 shape = joint;
-                shapeIndex = 0;
-                while (shapeIndex < *(s32*)((s32)joint + 0x04)) {
-                    poly = *(void**)((s32)shape + 0x10);
+                for (shapeIndex = 0; shapeIndex < *(s32*)((s32)joint + 4); shapeIndex++) {
+                    poly = *(s32**)((s32)shape + 0x10);
                     triOffset = count * 0x54;
-                    triIndex = 0;
-                    vertexCount = *(s32*)poly;
-
-                    while (triIndex < vertexCount - 2) {
-                        triOut = (void*)(*(s32*)((s32)hit + 0xAC) + triOffset);
-                        firstIndex = *(s16*)((s32)poly + triIndex * 0x18 + 0x04);
-                        secondIndex = *(s16*)((s32)poly + (triIndex + 1) * 0x18 + 0x04);
-                        thirdIndex = *(s16*)((s32)poly + (triIndex + 2) * 0x18 + 0x04);
-                        vertexBase = (void*)(**(s32**)((s32)joint + 0x0C) + 0x04);
-
+                    for (triIndex = 0; triIndex < *poly - 2; triIndex++) {
+                        tri = (void*)(*(s32*)((s32)hit + 0xAC) + triOffset);
+                        index0 = *(s16*)((s32)poly + triIndex * 0x18 + 4);
+                        index1 = *(s16*)((s32)poly + (triIndex + 1) * 0x18 + 4);
+                        index2 = *(s16*)((s32)poly + (triIndex + 2) * 0x18 + 4);
                         count++;
                         triOffset += 0x54;
-
-                        PSMTXMultVec(
-                            (void*)((s32)hit + 0x0C),
-                            (void*)((s32)vertexBase + firstIndex * 0x0C),
-                            triOut
-                        );
-
-                        if ((triIndex & 1) == 0) {
-                            tmpIndex = secondIndex;
-                            secondIndex = thirdIndex;
-                            thirdIndex = tmpIndex;
-                        }
-
-                        PSMTXMultVec(
-                            (void*)((s32)hit + 0x0C),
-                            (void*)((s32)vertexBase + secondIndex * 0x0C),
-                            (void*)((s32)triOut + 0x0C)
-                        );
-
-                        PSMTXMultVec(
-                            (void*)((s32)hit + 0x0C),
-                            (void*)((s32)vertexBase + thirdIndex * 0x0C),
-                            (void*)((s32)triOut + 0x18)
-                        );
-
-                        PSVECSubtract((void*)((s32)triOut + 0x18), triOut, (void*)((s32)triOut + 0x24));
-                        PSVECSubtract(triOut, (void*)((s32)triOut + 0x0C), (void*)((s32)triOut + 0x30));
-                        PSVECSubtract((void*)((s32)triOut + 0x0C), (void*)((s32)triOut + 0x18), (void*)((s32)triOut + 0x3C));
-                        PSVECCrossProduct((void*)((s32)triOut + 0x24), (void*)((s32)triOut + 0x30), (void*)((s32)triOut + 0x48));
-
-                        triIndex++;
+                        PSMTXMultVec((void*)((s32)hit + 0xC),
+                                     (void*)(**(s32**)((s32)joint + 0xC) + 4 + index0 * 0xC), tri);
+                        temp = index1;
+                        if ((triIndex & 1) == 0) temp = index2;
+                        PSMTXMultVec((void*)((s32)hit + 0xC),
+                                     (void*)(**(s32**)((s32)joint + 0xC) + 4 + temp * 0xC),
+                                     (void*)((s32)tri + 0xC));
+                        temp = index2;
+                        if ((triIndex & 1) == 0) temp = index1;
+                        PSMTXMultVec((void*)((s32)hit + 0xC),
+                                     (void*)(**(s32**)((s32)joint + 0xC) + 4 + temp * 0xC),
+                                     (void*)((s32)tri + 0x18));
+                        PSVECSubtract((void*)((s32)tri + 0x18), tri, (void*)((s32)tri + 0x24));
+                        PSVECSubtract(tri, (void*)((s32)tri + 0xC), (void*)((s32)tri + 0x30));
+                        PSVECSubtract((void*)((s32)tri + 0xC), (void*)((s32)tri + 0x18), (void*)((s32)tri + 0x3C));
+                        PSVECCrossProduct((void*)((s32)tri + 0x24), (void*)((s32)tri + 0x30), (void*)((s32)tri + 0x48));
                     }
-
-                    shape = (void*)((s32)shape + 0x04);
-                    shapeIndex++;
+                    shape = (void*)((s32)shape + 4);
                 }
             } else {
-                map = mapGetWork();
-                vcdFlags = *(s32*)((s32)joint + 0x08);
-                bitCount = 0;
-                i = 0;
-                while (i < 12) {
-                    bitCount += (vcdFlags >> i) & 1;
-                    i++;
+                void* map = mapGetWork();
+                u32 flags = *(u32*)((s32)joint + 8);
+                s32 bits = 0;
+                s32 stride;
+                s32 i;
+                s32 baseOffset = count * 0x54;
+                f32 vertex0[3];
+                f32 vertex1[3];
+                f32 vertex2[3];
+                (void)map;
+                for (i = 0; i < 12; i++) {
+                    bits += (flags >> i) & 1;
                 }
-                stride = bitCount * 2;
-                if (stride == 0) {
-                    stride = 6;
-                }
-
+                stride = bits * 2;
                 shape = joint;
-                baseOffset = count * 0x54;
-                shapeIndex = 0;
-                while (shapeIndex < *(s32*)((s32)joint + 0x04)) {
-                    poly = *(void**)((s32)shape + 0x10);
-                    vertexCount = *(u16*)((s32)poly + 0x01);
-                    triIndex = 0;
+                for (shapeIndex = 0; shapeIndex < *(s32*)((s32)joint + 4); shapeIndex++) {
+                    poly = *(s32**)((s32)shape + 0x10);
+                    vertexCount = *(u16*)((s32)poly + 1);
                     triOffset = baseOffset;
-
-                    while (triIndex < vertexCount - 2) {
-                        firstIndex = *(u16*)((s32)poly + 0x03);
-                        secondIndex = *(u16*)((s32)poly + stride * (triIndex + 1) + 0x03);
-                        thirdIndex = *(u16*)((s32)poly + stride * (triIndex + 2) + 0x03);
-                        triOut = (void*)(*(s32*)((s32)hit + 0xAC) + triOffset);
-                        vertexBase = (void*)(**(s32**)((s32)joint + 0x0C) + 0x04);
-
-                        if ((triIndex & 1) == 0) {
-                            tmpIndex = secondIndex;
-                            secondIndex = thirdIndex;
-                            thirdIndex = tmpIndex;
-                        }
-
-                        src0 = (s32)vertexBase + firstIndex * 6;
-                        src1 = (s32)vertexBase + secondIndex * 6;
-                        src2 = (s32)vertexBase + thirdIndex * 6;
-
-                        local0[0] = (f32)*(s16*)(src0 + 0);
-                        local0[1] = (f32)*(s16*)(src0 + 2);
-                        local0[2] = (f32)*(s16*)(src0 + 4);
-                        local1[0] = (f32)*(s16*)(src1 + 0);
-                        local1[1] = (f32)*(s16*)(src1 + 2);
-                        local1[2] = (f32)*(s16*)(src1 + 4);
-                        local2[0] = (f32)*(s16*)(src2 + 0);
-                        local2[1] = (f32)*(s16*)(src2 + 2);
-                        local2[2] = (f32)*(s16*)(src2 + 4);
-
-                        PSMTXMultVec((void*)((s32)hit + 0x0C), local0, triOut);
-                        PSMTXMultVec((void*)((s32)hit + 0x0C), local1, (void*)((s32)triOut + 0x0C));
-                        PSMTXMultVec((void*)((s32)hit + 0x0C), local2, (void*)((s32)triOut + 0x18));
-
-                        PSVECSubtract((void*)((s32)triOut + 0x18), triOut, (void*)((s32)triOut + 0x24));
-                        PSVECSubtract(triOut, (void*)((s32)triOut + 0x0C), (void*)((s32)triOut + 0x30));
-                        PSVECSubtract((void*)((s32)triOut + 0x0C), (void*)((s32)triOut + 0x18), (void*)((s32)triOut + 0x3C));
-                        PSVECCrossProduct((void*)((s32)triOut + 0x24), (void*)((s32)triOut + 0x30), (void*)((s32)triOut + 0x48));
-
-                        if (*(f32*)((s32)triOut + 0x48) != 0.0f ||
-                            *(f32*)((s32)triOut + 0x4C) != 0.0f ||
-                            *(f32*)((s32)triOut + 0x50) != 0.0f) {
+                    for (triIndex = 0; triIndex < vertexCount - 2; triIndex++) {
+                        s32 vertexBase = **(s32**)((s32)joint + 0xC) + 4;
+                        register u8* qbase;
+                        register u32 qoffset;
+                        register u32 qreg;
+                        register f32 qvalue;
+                        index0 = *(u16*)((s32)poly + stride * triIndex + 3);
+                        index1 = *(u16*)((s32)poly + stride * (triIndex + 1) + 3);
+                        index2 = *(u16*)((s32)poly + stride * (triIndex + 2) + 3);
+                        tri = (void*)(*(s32*)((s32)hit + 0xAC) + triOffset);
+                        temp = index1;
+                        if ((triIndex & 1) == 0) temp = index2;
+                        index1 = temp;
+                        temp = index2;
+                        if ((triIndex & 1) == 0) temp = *(u16*)((s32)poly + stride * (triIndex + 1) + 3);
+                        index2 = temp;
+                        qreg = *(u32*)((s32)*(void**)((s32)map + *(s16*)((s32)hit + 0xAA) * 0x178 + 0xA4) + 0x44);
+                        qreg = (qreg << 8) | 7;
+                        qreg |= qreg << 16;
+                        asm { mtspr GQR5, qreg }
+                        qbase = (u8*)vertexBase;
+                        qoffset = index0 * 6;
+                        asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
+                        vertex0[0] = qvalue;
+                        qoffset += 2;
+                        asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
+                        vertex0[1] = qvalue;
+                        qoffset += 2;
+                        asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
+                        vertex0[2] = qvalue;
+                        qoffset = index1 * 6;
+                        asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
+                        vertex1[0] = qvalue;
+                        qoffset += 2;
+                        asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
+                        vertex1[1] = qvalue;
+                        qoffset += 2;
+                        asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
+                        vertex1[2] = qvalue;
+                        qoffset = index2 * 6;
+                        asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
+                        vertex2[0] = qvalue;
+                        qoffset += 2;
+                        asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
+                        vertex2[1] = qvalue;
+                        qoffset += 2;
+                        asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
+                        vertex2[2] = qvalue;
+                        PSMTXMultVec((void*)((s32)hit + 0xC), vertex0, tri);
+                        PSMTXMultVec((void*)((s32)hit + 0xC), vertex1, (void*)((s32)tri + 0xC));
+                        PSMTXMultVec((void*)((s32)hit + 0xC), vertex2, (void*)((s32)tri + 0x18));
+                        PSVECSubtract((void*)((s32)tri + 0x18), tri, (void*)((s32)tri + 0x24));
+                        PSVECSubtract(tri, (void*)((s32)tri + 0xC), (void*)((s32)tri + 0x30));
+                        PSVECSubtract((void*)((s32)tri + 0xC), (void*)((s32)tri + 0x18), (void*)((s32)tri + 0x3C));
+                        PSVECCrossProduct((void*)((s32)tri + 0x24), (void*)((s32)tri + 0x30), (void*)((s32)tri + 0x48));
+                        if (*(f32*)((s32)tri + 0x48) != 0.0f ||
+                            *(f32*)((s32)tri + 0x4C) != 0.0f ||
+                            *(f32*)((s32)tri + 0x50) != 0.0f) {
                             triOffset += 0x54;
                             baseOffset += 0x54;
                             count++;
                         }
-
-                        triIndex++;
                     }
-
-                    shape = (void*)((s32)shape + 0x08);
-                    shapeIndex++;
+                    shape = (void*)((s32)shape + 8);
                 }
             }
         }
-
-        jointOffset += 0x08;
-        jointIndex++;
+        jointOffset += 8;
     }
-
     return count;
 }
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw on
@@ -2086,29 +2048,51 @@ s32 hitCheckVecFilter(s32* work, void* filter) {
 s32 hitCheckFilter(f64 x, f64 y, f64 z, f64 vx, f64 vy, f64 vz, s32 filter,
                    f32* outX, f32* outY, f32* outZ, f32* outDist,
                    f32* outNX, f32* outNY, f32* outNZ) {
-    s32 work[16];
-    f32* values = (f32*)work;
+    typedef struct HitVec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } HitVec;
+    typedef struct HitCheckWork {
+        s32 unk0;
+        s32 unk4;
+        s32 unk8;
+        HitVec position;
+        HitVec direction;
+        HitVec hitPosition;
+        HitVec hitNormal;
+        f32 distance;
+    } HitCheckWork;
+
+    extern const f32 vec3_802bf7b8[3];
+    extern const f32 vec3_802bf7c4[3];
+    HitVec position = *(const HitVec*)vec3_802bf7b8;
+    HitVec direction = *(const HitVec*)vec3_802bf7c4;
+    HitCheckWork work;
     s32 result;
 
-    values[3] = (f32)x;
-    values[4] = (f32)y;
-    values[5] = (f32)z;
-    values[6] = (f32)vx;
-    values[7] = (f32)vy;
-    values[8] = (f32)vz;
-    values[15] = *outDist;
-    work[1] = filter;
+    position.x = (f32)x;
+    position.y = (f32)y;
+    position.z = (f32)z;
+    direction.x = (f32)vx;
+    direction.y = (f32)vy;
+    direction.z = (f32)vz;
+    work.position = position;
+    work.direction = direction;
+    work.distance = *outDist;
 
-    result = hitCheckVecFilter(work, (void*)filter);
-    if (result != 0) {
-        *outDist = values[15];
-        *outX = values[9];
-        *outY = values[10];
-        *outZ = values[11];
-        *outNX = values[12];
-        *outNY = values[13];
-        *outNZ = values[14];
+    result = hitCheckVecFilter((s32*)&work, (void*)filter);
+    if (result == 0) {
+        return 0;
     }
+
+    *outDist = work.distance;
+    *outX = work.hitPosition.x;
+    *outY = work.hitPosition.y;
+    *outZ = work.hitPosition.z;
+    *outNX = work.hitNormal.x;
+    *outNY = work.hitNormal.y;
+    *outNZ = work.hitNormal.z;
     return result;
 }
 

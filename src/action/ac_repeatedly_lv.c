@@ -1,9 +1,8 @@
 #include "action/ac_repeatedly_lv.h"
 
 void BattleAcGaugeSeDelete(void* wp);
-void actionCommandDisp(f32 x, f32 y);
+static void actionCommandDisp(f32 x, f32 y);
 f32 intplGetValue(s32 type, f32 start, f32 end, s32 time, s32 duration);
-void battleAcDelete_RepeatedlyLv(void* battleWork);
 extern const u32 dat_80424b68;
 extern const u32 dat_80424b6c;
 extern const f32 float_neg200_80424b70;
@@ -24,9 +23,6 @@ extern const f32 float_30_80424ba8;
 extern const f32 float_0p4_80424bac;
 extern const f32 float_1p5_80424bb0;
 
-/* CHATGPT STUB FILL: main/action/ac_repeatedly_lv 20260624_184008 */
-
-/* stub-fill: _init_param | missing_definition | ghidra_signature */
 void _init_param(void* battleWork) {
     u8* work = battleWork;
     u32* buttons = (u32*)(work + 0x1F4C);
@@ -369,7 +365,7 @@ void battleAcDelete_RepeatedlyLv(void* wp) {
 }
 
 
-void actionCommandDisp(f32 x, f32 y) {
+static void actionCommandDisp(f32 x, f32 y) {
     typedef struct Vec { f32 x, y, z; } Vec;
     typedef f32 Mtx[3][4];
     extern void* g_BattleWork;

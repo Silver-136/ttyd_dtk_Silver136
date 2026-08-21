@@ -4,6 +4,8 @@
 
 #include <dolphin/types.h>
 
+struct BattleWork;
+struct BattleWorkUnit;
 
 typedef enum BattleCommandFlags {
     COMMAND_ACT_MENU = (1 << 0),       // Display the main Action Menu
@@ -31,3 +33,5 @@ typedef struct BattleWorkCommand {
     u8 unk560[0x574 - 0x560];            //0x560
 } BattleWorkCommand;
 STATIC_ASSERT_SIZEOF(BattleWorkCommand, 0x574);
+
+void* BattleSetConfuseAct(struct BattleWork* battleWork, struct BattleWorkUnit* unit);

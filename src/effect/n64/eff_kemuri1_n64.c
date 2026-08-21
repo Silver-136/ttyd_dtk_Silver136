@@ -147,59 +147,56 @@ void effKemuri1Main(void* effect) {
     extern void effKemuri1Disp(s32, s32);
     extern Vec3 vec3_802fb1b0[];
     extern f32 float_16_804255c8;
-    u8* work;
-    u8* part;
-    Vec3 pos;
-    s32 frame;
-    s32 fade;
+    u8* work = *(u8**)((s32)effect + 0xC);
+    u8* part = work + 0x50;
+    Vec3 pos = vec3_802fb1b0[0];
+    s32 oldFrame = *(s32*)(work + 0x3C);
+    s32 nextFrame = oldFrame + 1;
+    s32 texture1;
+    s32 texture0;
     s32 i;
+    u16 type = *(u16*)work;
 
-    work = *(u8**)((s32)effect + 0xC);
-    pos = vec3_802fb1b0[0];
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);
-    *(s32*)(work + 0x3C) += 1;
-    frame = (s32)(float_16_804255c8 * (f32)*(s32*)(work + 0x3C) / (f32)*(s32*)(work + 0x4C));
-    fade = (s32)(float_16_804255c8 * (f32)(*(s32*)(work + 0x3C) - 1) / (f32)*(s32*)(work + 0x4C));
-    if (frame > 15) {
+    texture1 = (s32)(float_16_804255c8 * (f32)nextFrame / (f32)*(s32*)(work + 0x4C));
+    texture0 = (s32)(float_16_804255c8 * (f32)oldFrame / (f32)*(s32*)(work + 0x4C));
+    *(s32*)(work + 0x3C) = nextFrame;
+    if (texture1 > 15) texture1 = 15;
+    if (texture0 >= 16) {
         effDelete(effect);
         return;
     }
-    *(s32*)(work + 0x40) = fade;
-    *(s32*)(work + 0x48) = frame;
-    part = work + 0x28;
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
-        if (*(u16*)work == 3) {
-            *(f32*)(part + 0x18) += *(f32*)(part + 0x30);
-            *(f32*)(part + 0x30) += *(f32*)(part + 0x34);
-            *(f32*)(part + 0x34) *= *(f32*)(part + 0x38);
-        } else if (*(u16*)work < 2) {
-            *(f32*)(part + 0x2C) += *(f32*)(part + 0x34);
+    *(s32*)(work + 0x40) = texture0;
+    *(s32*)(work + 0x48) = texture1;
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, part += 0x50) {
+        if (type == 3) {
+            *(f32*)(part + 8) += *(f32*)(part + 0x20);
+            *(f32*)(part + 0x20) += *(f32*)(part + 0x24);
+            *(f32*)(part + 0x24) *= *(f32*)(part + 0x28);
+        } else if (type < 2) {
+            *(f32*)(part + 0x18) += *(f32*)(part + 0x1C);
+            *(f32*)(part + 0x14) += *(f32*)(part + 0x18);
+            *(f32*)(part + 0x10) += *(f32*)(part + 0x14);
+            *(f32*)(part + 4) += *(f32*)(part + 0x10) * *(f32*)(part + 0x30);
+            *(f32*)(part + 0xC) += *(f32*)(part + 0x10) * *(f32*)(part + 0x34);
             *(f32*)(part + 0x28) += *(f32*)(part + 0x2C);
-            *(f32*)(part + 0x20) += *(f32*)(part + 0x28);
-            *(f32*)(part + 4) += *(f32*)(part + 0x20) * *(f32*)(part + 0x40);
-            *(f32*)(part + 8) += *(f32*)(part + 0x20) * *(f32*)(part + 0x42);
-            *(f32*)(part + 0x38) += *(f32*)(part + 0x3C);
-            *(f32*)(part + 0x34) += *(f32*)(part + 0x38);
-            *(f32*)(part + 0x30) += *(f32*)(part + 0x34);
-            *(f32*)(part + 0x18) += *(f32*)(part + 0x30);
-        } else if (*(u16*)work < 8) {
-            *(f32*)(part + 4) += *(f32*)(part + 0x20) * *(f32*)(part + 0x40);
-            *(f32*)(part + 8) += *(f32*)(part + 0x20) * *(f32*)(part + 0x42);
-            *(f32*)(part + 0x20) *= *(f32*)(part + 0x24);
-            *(f32*)(part + 0x18) += *(f32*)(part + 0x30);
-            *(f32*)(part + 0x30) += *(f32*)(part + 0x34);
-            *(f32*)(part + 0x34) *= *(f32*)(part + 0x38);
-            *(f32*)(part + 0x30) *= *(f32*)(part + 0x3C);
+            *(f32*)(part + 0x24) += *(f32*)(part + 0x28);
+            *(f32*)(part + 0x20) += *(f32*)(part + 0x24);
+            *(f32*)(part + 8) += *(f32*)(part + 0x20);
+        } else if (type < 8) {
+            *(f32*)(part + 4) += *(f32*)(part + 0x10) * *(f32*)(part + 0x30);
+            *(f32*)(part + 0xC) += *(f32*)(part + 0x10) * *(f32*)(part + 0x34);
+            *(f32*)(part + 0x10) *= *(f32*)(part + 0x14);
+            *(f32*)(part + 8) += *(f32*)(part + 0x20);
+            *(f32*)(part + 0x20) += *(f32*)(part + 0x24);
+            *(f32*)(part + 0x24) *= *(f32*)(part + 0x28);
+            *(f32*)(part + 0x20) *= *(f32*)(part + 0x2C);
         }
-        part += 0x50;
     }
-    if (*(s32*)((s32)effect + 8) < 2) {
-        effDelete(effect);
-    } else {
-        dispEntry(4, 2, effKemuri1Disp, effect, dispCalcZ(&pos));
-    }
+    if ((u32)(*(s32*)((s32)effect + 8) - 1) < 1U) effDelete(effect);
+    else dispEntry(4, 2, effKemuri1Disp, effect, dispCalcZ(&pos));
 }
 
 

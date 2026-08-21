@@ -1017,6 +1017,10 @@ s32 BattleCommandInput(void* battleWork) {
     extern void BattleStageOffLightInCommand(void);
     extern void BattleStageOffLightFriendInCommand(void);
     extern void BattleStageOffLightEnemyInCommand(void);
+    extern s32 _check_present_item(void);
+    extern void _btlcmd_GetCursorPtr(void*, s32, void**);
+    extern s32 _btlcmd_SelectWeaponDecide(void*, s32, s32);
+    extern void BattleStageOnLightEnemyInCommand(void);
     extern void BtlUnit_SetCommandAnimPose(void*);
     extern void BattleCommandDisplay_ActMenuSetup(void*, u32);
     extern s32 BattleCommandDisplay_ActMenuMain(void*);
@@ -1042,6 +1046,7 @@ s32 BattleCommandInput(void* battleWork) {
     extern u8 _btl_cmd_error_msg_event[];
     u8* command;
     void* unit;
+    void* cursor;
     void* event;
     s32 state;
     s32 result;
@@ -1050,24 +1055,41 @@ s32 BattleCommandInput(void* battleWork) {
     command = (u8*)battleWork + 0x171C;
     unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
     if (command == NULL) return 1;
+    _btlcmd_GetCursorPtr(command, 0xE, &cursor);
+    if (_check_present_item() != 0) {
+        BattleAcHelpSetDispType(0);
+    }
+    _commandRestoreRec();
     loop = 1;
     while (loop) {
         loop = 0;
         state = *(s32*)command;
         switch (state) {
             case 0:
+                if (*(u8*)((s32)battleWork + 0x1C74) != 0) {
+                    result = *(s32*)(command + 0x540);
+                    if (result >= 0xB && result < 0xD) {
+                        *(s32*)(command + 0x540) = *(s32*)(command + 0x544);
+                    }
+                    if (*(u8*)((s32)battleWork + 0x1C74) == 2) {
+                        *(u8*)((s32)battleWork + 0x1C74) = 0;
+                    }
+                }
                 command[0x551] = 0;
                 *(u32*)((s32)battleWork + 0xEF8) |= 1;
                 BtlUnit_SetCommandAnimPose(unit);
                 if (*(s8*)((s32)unit + 0x20) < 5 || *(s8*)((s32)unit + 0x20) > 9) {
                     BattleCommandDisplay_ActMenuSetup(battleWork, 0);
                     *(s32*)command = 2;
+                    BattleStageOnLightInCommand();
+                    BattleStageOffLightFriendInCommand();
+                    BattleStageOffLightEnemyInCommand();
                 } else {
+                    BattleStageOnLightInCommand();
+                    BattleStageOffLightFriendInCommand();
+                    BattleStageOffLightEnemyInCommand();
                     *(s32*)command = 5;
                 }
-                BattleStageOnLightInCommand();
-                BattleStageOffLightFriendInCommand();
-                BattleStageOffLightEnemyInCommand();
                 break;
             case 1:
                 BattleCommandDisplay_ActMenuSetup(battleWork, 1);
@@ -1089,13 +1111,32 @@ s32 BattleCommandInput(void* battleWork) {
                 break;
             case 5:
             case 6:
-                BattleCommandDisplay_WeaponSelectMenuSetup(battleWork,
-                    *(s32*)(command + 0x540), state == 5);
-                BattleStageOffLightFriendInCommand();
-                BattleStageOffLightEnemyInCommand();
-                *(s32*)command = 7;
-                _commandRestoreRec();
-                loop = 1;
+                result = *(s32*)(command + 0x540);
+                if ((result != 0 || (*(u32*)((s32)battleWork + 0xEF4) & 0x200) == 0) &&
+                    (result != 1 || (*(u32*)((s32)battleWork + 0xEF4) & 0x400) == 0)) {
+                    if (state == 5) {
+                        if (result == 2 &&
+                            (*(u8*)((s32)unit + 0x2F3) != 0 || *(u8*)((s32)unit + 0x2F4) != 0)) {
+                            BattleCommandDisplay_WeaponSelectMenuSetup(battleWork, 2, 0);
+                        } else {
+                            BattleCommandDisplay_WeaponSelectMenuSetup(battleWork, result, 1);
+                        }
+                    } else {
+                        BattleCommandDisplay_WeaponSelectMenuSetup(battleWork, result, 0);
+                    }
+                    BattleStageOffLightFriendInCommand();
+                    BattleStageOffLightEnemyInCommand();
+                    *(s32*)command = 7;
+                    _commandRestoreRec();
+                    result = BattleCommandDisplay_WeaponSelectMenuMain(battleWork,
+                        *(s32*)(command + 0x540));
+                    if (result != 0) loop = 1;
+                } else {
+                    _btlcmd_SelectWeaponDecide(battleWork, result, 0);
+                    BattleCommandDisplay_TargetSelectMenuSetup(battleWork);
+                    *(s32*)command = 10;
+                    BattleStageOnLightEnemyInCommand();
+                }
                 break;
             case 7:
                 result = BattleCommandDisplay_WeaponSelectMenuMain(battleWork,
@@ -1114,6 +1155,10 @@ s32 BattleCommandInput(void* battleWork) {
                 }
                 break;
             case 10:
+                _btlcmd_GetCursorPtr(command, *(s32*)(command + 0x540), &cursor);
+                BattleAcHelpSetHelp(
+                    *(char**)((s32)*(void**)(command + 0x80 +
+                        *(s32*)cursor * 0x1C) + 0x70));
                 BattleAcHelpSetDispType(1);
                 *(s32*)command = 11;
                 break;
@@ -2645,7 +2690,7 @@ void BattleDrawEnemyHPBar(float* position, int unit, void* color) {
 }
 
 
-void* BattleSetConfuseAct(void* battleWork, void* unit) {
+void* BattleSetConfuseAct(struct BattleWork* battleWork, struct BattleWorkUnit* unit) {
     extern s32 subsetevt_confuse_flustered[];
     extern u8 btldefaultevt_ChangeParty[];
     extern u8 btldefaultevt_Escape[];
@@ -2656,14 +2701,17 @@ void* BattleSetConfuseAct(void* battleWork, void* unit) {
     extern void _btlcmd_GetCursorPtr(void*, s32, void**);
     extern void _btlcmd_MakeSelectWeaponTable(void*, s32);
     extern void _btlcmd_MakeOperationTable(void*);
+    extern void _btlcmd_SelectWeaponDecide(void*, s32, s32);
     extern s32 irand(s32);
     u8* command;
     BattleWorkCommandCursor* cursor;
     u16 choices[28];
-    s32 count;
-    s32 i;
+    u32 count;
+    u32 i;
     s32 type;
     u8* entry;
+    u8* weapon;
+    s8 numTargets;
 
     command = (u8*)battleWork + 0x171C;
     if (*(u8*)((s32)unit + 0x20) == 3) {
@@ -2674,7 +2722,7 @@ void* BattleSetConfuseAct(void* battleWork, void* unit) {
         return subsetevt_confuse_flustered;
     }
     type = *(s32*)((s32)unit + 8);
-    if (type != 0xDE && (type < 0xE0 || type > 0xE6)) {
+    if (type != 0xDE && (type < 0xE0 || type >= 0xE7)) {
         return subsetevt_confuse_flustered;
     }
     if (*(u8*)(command + 0x550) != 0) {
@@ -2684,37 +2732,86 @@ void* BattleSetConfuseAct(void* battleWork, void* unit) {
     _btlcmd_MakeActClassTable(battleWork);
     _btlcmd_GetCursorPtr(command, 0xE, (void**)&cursor);
     count = 0;
-    for (i = 0; i < cursor->numOptions; i++) {
-        entry = command + 8 + i * 0x14;
+    for (i = 0; (s32)(i & 0xFF) < cursor->numOptions; i++) {
+        entry = command + 8 + (i & 0xFF) * 0x14;
         type = *(s32*)entry;
         if (*(s32*)(entry + 4) != 0 && type != 4 && type != 2) {
-            choices[count++] = (u16)i;
+            choices[count++ & 0xFF] = (u16)(i & 0xFF);
         }
     }
-    choices[count] = 0xFFFF;
-    if (count == 0) return subsetevt_confuse_flustered;
-    cursor->absolutePos = (s16)choices[irand(count)];
+    choices[count & 0xFF] = 0xFFFF;
+    if ((count & 0xFF) == 0) return subsetevt_confuse_flustered;
+    cursor->absolutePos = (s16)choices[irand(count & 0xFF)];
     entry = command + 8 + cursor->absolutePos * 0x14;
     type = *(s32*)entry;
     *(s32*)(command + 0x540) = type;
     if (*(s32*)(entry + 4) == 0) return subsetevt_confuse_flustered;
 
-    if (type == 4 || type == 5) {
+    if (type == 4 ||
+        (type >= 0 && type < 3) ||
+        (type >= 6 && type < 9)) {
+        _btlcmd_MakeSelectWeaponTable(battleWork, type);
+        _btlcmd_GetCursorPtr(command, *(s32*)(command + 0x540), (void**)&cursor);
+        count = 0;
+        for (i = 0; (s32)(i & 0xFF) < cursor->numOptions; i++) {
+            entry = command + 0x80 + (i & 0xFF) * 0x1C;
+            weapon = *(u8**)entry;
+            if (*(s32*)(entry + 4) != 0 &&
+                (*(u32*)(weapon + 0x74) & 0x00010000) != 0 &&
+                (*(u32*)(weapon + 0x64) & 0x02000000) == 0 &&
+                (*(u32*)(weapon + 0x64) & 0x01000000) != 0) {
+                choices[count++ & 0xFF] = (u16)(i & 0xFF);
+            }
+        }
+        choices[count & 0xFF] = 0xFFFF;
+        if ((count & 0xFF) == 0) {
+            return 0;
+        }
+        cursor->absolutePos = (s16)choices[irand(count & 0xFF)];
+
+        entry = command + 0x80 + cursor->absolutePos * 0x1C;
+        if (*(s32*)(entry + 4) == 0) {
+            return subsetevt_confuse_flustered;
+        }
+
+        _btlcmd_SelectWeaponDecide(
+            battleWork, *(s32*)(command + 0x540), cursor->absolutePos);
+
+        entry = command + 0x80 + cursor->absolutePos * 0x1C;
+        weapon = *(u8**)entry;
+        if ((*(u32*)(weapon + 0x74) & 0x00010000) == 0) {
+            return subsetevt_confuse_flustered;
+        }
+        if ((*(u32*)(weapon + 0x64) & 0x02000000) != 0 ||
+            (*(u32*)(weapon + 0x64) & 0x01000000) == 0) {
+            return subsetevt_confuse_flustered;
+        }
+
+        numTargets = *(s8*)((s32)battleWork + 0xE94);
+        if (numTargets < 1) {
+            return subsetevt_confuse_flustered;
+        }
+        *(u8*)((s32)battleWork + 0xEDF) = (u8)irand(numTargets);
+        *(u32*)((s32)battleWork + 0xEF4) |= 4;
+        return *(void**)(weapon + 0xB0);
+    }
+
+    if (type == 5) {
         _btlcmd_MakeOperationTable(battleWork);
         _btlcmd_GetCursorPtr(command, 5, (void**)&cursor);
         count = 0;
-        for (i = 0; i < cursor->numOptions; i++) {
-            entry = command + 0x2CC + i * 0x1C;
+        for (i = 0; (s32)(i & 0xFF) < cursor->numOptions; i++) {
+            entry = command + 0x2CC + (i & 0xFF) * 0x1C;
             if (*(s32*)(entry + 4) != 0) {
                 type = *(s32*)entry;
                 if (type == 0 || type == 6 || type == 3) {
-                    choices[count++] = (u16)i;
+                    choices[count++ & 0xFF] = (u16)(i & 0xFF);
                 }
             }
         }
-        choices[count] = 0xFFFF;
-        if (count == 0) return subsetevt_confuse_flustered;
-        cursor->absolutePos = (s16)choices[irand(count)];
+        choices[count & 0xFF] = 0xFFFF;
+        if ((count & 0xFF) == 0) return subsetevt_confuse_flustered;
+        cursor->absolutePos = (s16)choices[irand(count & 0xFF)];
         entry = command + 0x2CC + cursor->absolutePos * 0x1C;
         if (*(s32*)(entry + 4) == 0) return subsetevt_confuse_flustered;
         type = *(s32*)entry;
@@ -2731,23 +2828,6 @@ void* BattleSetConfuseAct(void* battleWork, void* unit) {
                 return btldefaultevt_DefendParty;
             default:
                 return subsetevt_confuse_flustered;
-        }
-    }
-
-    if (type == 0 || type == 1 || type == 2 ||
-        type == 6 || type == 7 || type == 8) {
-        _btlcmd_MakeSelectWeaponTable(battleWork, type);
-        _btlcmd_GetCursorPtr(command, type, (void**)&cursor);
-        count = 0;
-        for (i = 0; i < cursor->numOptions; i++) {
-            entry = command + 0x80 + i * 0x1C;
-            if (*(s32*)(entry + 4) != 0) {
-                choices[count++] = (u16)i;
-            }
-        }
-        choices[count] = 0xFFFF;
-        if (count != 0) {
-            cursor->absolutePos = (s16)choices[irand(count)];
         }
     }
     return subsetevt_confuse_flustered;

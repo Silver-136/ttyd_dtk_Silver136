@@ -1,13 +1,14 @@
 #include "battle/battle_audience.h"
+#include "battle/battle_break_slot.h"
 #include "battle/battle_weapon_power.h"
+#include "driver/camdrv.h"
+#include "manager/evtmgr.h"
 #include "statuswindow.h"
 extern void* _battleWorkPointer;
 
 extern void psndSFXOn(const char* name);
 extern s32 irand(s32 max);
 extern s32 rand(void);
-extern s32 evtCheckID(s32 eventId);
-extern void* evtEntry(void* evt, s32 order, u32 flags);
 extern s32 BtlUnit_GetBodyPartsId(void* unit);
 extern void* BattleGetUnitPtr(void* battle, s32 unitIdx);
 extern void* BattleGetMarioPtr(void* battleWork);
@@ -19,7 +20,6 @@ extern s32 psndSFX_get_vol(s32 sfxId);
 extern char* strcpy(char* dst, const char* src);
 extern void psndSFX_pit(s32 sfxId, s32 pitch);
 extern void* BattleGetUnitPartsPtr(s32 unitIdx, s32 partIdx);
-extern void* camGetPtr(s32 cameraId);
 extern void* memcpy(void* dst, const void* src, u32 size);
 
 extern const char str_btl_msg_audience_pun_802f9e28[];
@@ -37,7 +37,7 @@ s32 BattleAudience_GetExist(s32 id);
 s32 BattleAudience_GetSysCtrl(s32 id);
 void BattleAudience_WinSetActive(s32 active);
 u8 BattleAudienceCtrlProcess(void);
-u8 BattleAudienceItemCtrlProcess(void);
+void BattleAudienceItemCtrlProcess(void);
 u8 BattleAudienceApSrcCtrlProcess(void);
 u8 BattleAudienceWinCtrlProcess(void);
 u8 BattleAudienceSoundMain(void);
@@ -122,6 +122,8 @@ extern const f32 float_neg0p2_804249a8;
 extern const f32 float_neg0p25_804249b0;
 extern void BattleAudienceAddTargetNum(f32 value, f32 unused);
 extern void BattleAudienceAddPhaseEvtList(s32 id);
+s32 BattleAudienceItemOn(u32 memberIdx, u16 itemType, int numberItems);
+s32 BattleAudienceDetectPakkunEatTarget(s32 memberIdx);
 extern s32 BattleAudience_GetPPAudienceNum_RL_Sub(s32 side);
 extern void BattleAudienceSoundWhistleKind(s32 kind);
 
@@ -510,9 +512,6 @@ s32 BattleAudience_CheckReactionPerPhase(void) {
     extern void* msg_puni_all_escape;
     extern void* msg_puni_all_enter;
     extern void* msg_pansy_sing;
-    extern void BattleBreakSlot_DecBreakTurn(void);
-    extern s32 BattleAudienceItemOn(s32 memberIdx, s32 itemType, s32 count);
-    extern s32 BattleAudienceDetectPakkunEatTarget(s32 memberIdx);
     u8* base;
     u8* member;
     s32* state;
@@ -1294,7 +1293,6 @@ void BattleAudienceGuestTPLRead(s32 index, u32 memberKind, char* tplName) {
 
 u8 BattleAudienceCtrlProcess(void) {
     extern void BattleAudienceCtrlProcessKinopio(s32 id);
-    extern s32 BattleAudienceItemOn(s32 memberIdx, s32 itemType, s32 num);
 
     void* battleWork;
     u8* base;
@@ -1556,9 +1554,23 @@ s32 BattleAudienceDetectTargetPlayer(void) {
     return (s32)BattleGetUnitPtr(battle, candidates[irand(count)]);
 }
 
-u8 BattleAudienceItemCtrlProcess(void) {
+void BattleAudienceItemCtrlProcess(void) {
     extern void* BtlUnit_GetPartsPtr(void* unit, s32 partIdx);
     extern void BtlUnit_GetHitPos(void* unit, void* part, f32*, f32*, f32*);
+    extern void BtlUnit_GetStatus(void* unit, s32 type, s8* turns, s8* strength);
+    extern s32 BtlUnit_CheckShadowGuard(void* unit);
+    extern s32 BtlUnit_GetUnitId(void* unit);
+    extern s32 pouchGetEmptyHaveItemCnt(void);
+    extern void BattleAudience_SetPresentItemType(s32 type);
+    extern void BattleAudience_SetPresentTargetUnitId(s32 unitId);
+    extern void BattleAudience_SetPresentItemNo(s32 itemNo);
+    extern s32 BattleAudience_GetPresentItemType(void);
+    extern const u8 weapon_data_akikan[];
+    extern const u8 weapon_data_brick[];
+    extern const u8 weapon_data_bone[];
+    extern const u8 weapon_data_hammer[];
+    extern const f32 float_neg0p2_80424a74;
+    extern const f32 float_1p5_804249e0;
     u8* base;
     u8* item;
     u8* owner;
@@ -1574,6 +1586,9 @@ u8 BattleAudienceItemCtrlProcess(void) {
     s32 partIdx;
     s32 i;
     s32 j;
+    s8 statusTurns;
+    s8 statusStrength;
+    s32 presentType;
 
     base = BattleAudienceBaseGetPtr();
     item = BattleAudienceItemGetPtr(0);
@@ -1599,14 +1614,14 @@ u8 BattleAudienceItemCtrlProcess(void) {
                 *(s32*)(item + 4) = 1;
             case 1:
                 if (*(s32*)(item + 8) < 1) {
-                    item[0x44] = 1;
+                    *(s32*)(item + 0x44) = 1;
                     for (j = 0; j < 100; j++) {
                         if (j == i) {
                             continue;
                         }
                         other = BattleAudienceItemGetPtr(j);
                         if ((*(u32*)other & 1) != 0 && *(s32*)(other + 4) == 1) {
-                            item[0x44] = 2;
+                            *(s32*)(item + 0x44) = 2;
                             break;
                         }
                     }
@@ -1639,6 +1654,9 @@ u8 BattleAudienceItemCtrlProcess(void) {
                 }
                 break;
             case 2:
+                if ((*(u32*)((s32)_battleWorkPointer + 0xEF4) & 0x80) == 0) {
+                    *(s32*)(item + 0x44) = 0;
+                }
                 if (*(s32*)(item + 8) == 20) {
                     BattleAudience_ChangeStatus(ownerIdx, 0);
                 }
@@ -1658,14 +1676,73 @@ u8 BattleAudienceItemCtrlProcess(void) {
                 }
                 break;
             case 3:
-                if (item[0x44] == 0) {
-                    *(s32*)(item + 4) = 4;
-                } else if (item[0x44] == 2) {
+                if ((*(u32*)((s32)_battleWorkPointer + 0xEF4) & 0x80) == 0) {
+                    *(s32*)(item + 0x44) = 0;
+                }
+                target = *(void**)(item + 0x40);
+                BtlUnit_GetStatus(target, 0x12, &statusTurns, &statusStrength);
+                if (statusTurns > 0 || BtlUnit_CheckShadowGuard(target) != 0) {
+                    *(s32*)(item + 0x44) = 0;
+                }
+                if ((*(u32*)item & 4) != 0) {
+                    *(s32*)(item + 0x44) = 0;
+                }
+                if (*(s32*)(item + 0x10) >= 0x80 && *(s32*)(item + 0x10) < 0xEC &&
+                    pouchGetEmptyHaveItemCnt() < 1) {
+                    *(s32*)(item + 0x44) = 0;
+                }
+                if (*(s32*)(item + 0x44) == 0) {
                     *(s32*)(item + 4) = 4;
                 } else {
-                    *(u32*)item &= ~2;
-                    *(s32*)(item + 8) = 5;
-                    *(s32*)(item + 4) = 7;
+                    (*(s32*)(base + 0x137F8))++;
+                    if (*(s32*)(base + 0x137F8) > 3) {
+                        *(s32*)(base + 0x137F8) = 3;
+                    }
+                    if (*(s32*)(item + 0x44) == 2) {
+                        *(s32*)(item + 4) = 4;
+                    } else {
+                        if (*(s32*)(item + 0x10) >= 0x79 && *(s32*)(item + 0x10) < 0xEC) {
+                            BattleAudience_SetPresentItemType(0);
+                        } else if (*(s32*)(item + 0x10) >= 0xEC && *(s32*)(item + 0x10) < 0xF0) {
+                            BattleAudience_SetPresentItemType(1);
+                        }
+                        BattleAudience_SetPresentTargetUnitId(BtlUnit_GetUnitId(target));
+                        switch (*(s32*)(item + 0x10)) {
+                            case 0xEC:
+                                memcpy(base + 0x137FC, weapon_data_akikan, 0xC0);
+                                *(s32*)(base + 0x1381C) += *(s32*)(base + 0x137F8) - 1;
+                                break;
+                            case 0xED:
+                                memcpy(base + 0x137FC, weapon_data_brick, 0xC0);
+                                *(s32*)(base + 0x1381C) += *(s32*)(base + 0x137F8) - 1;
+                                break;
+                            case 0xEE:
+                                memcpy(base + 0x137FC, weapon_data_bone, 0xC0);
+                                *(s32*)(base + 0x1381C) += *(s32*)(base + 0x137F8) - 1;
+                                break;
+                            case 0xEF:
+                                memcpy(base + 0x137FC, weapon_data_hammer, 0xC0);
+                                *(s32*)(base + 0x1381C) += *(s32*)(base + 0x137F8) - 1;
+                                break;
+                        }
+                        BattleAudience_SetPresentItemNo(*(s32*)(item + 0x10));
+                        presentType = BattleAudience_GetPresentItemType();
+                        if (presentType == 1) {
+                            BattleAudienceSoundStop(10);
+                            BattleAudienceSoundStop(11);
+                            if (*(f32*)(item + 0x28) < float_0_80424988) {
+                                *(f32*)(item + 0x28) *= float_neg0p2_80424a74;
+                            }
+                            *(f32*)(item + 0x2C) = float_1p5_804249e0;
+                            *(f32*)(item + 0x30) = float_0_80424988;
+                            *(s32*)(item + 4) = 4;
+                        } else if (presentType == 0) {
+                            *(u32*)item &= ~2;
+                            *(s32*)(item + 8) = 5;
+                            *(s32*)(item + 4) = 7;
+                        }
+                        *(s32*)(base + 0x137F8) = 0;
+                    }
                 }
                 break;
             case 4:
@@ -1733,7 +1810,6 @@ clear_item:
             *(s16*)(owner + 0x1C) = -1;
         }
     }
-    return 0;
 }
 
 u8 BattleAudienceApSrcCtrlProcess(void) {

@@ -107,147 +107,138 @@ void main_base(void) {
     extern u32 DAT_80301368;
     extern u32 vec3_8030136c[];
     extern u32 vec3_80301378[];
-
     u8* work = get_ptr();
     s32 audience = BattleAudience_GetAudienceNum();
-    s32 state = *(s32*)work;
     s32 i;
 
-    if (state == 3) {
-        if (*(s32*)(work + 4) == 0) {
-            if (*(s32*)(work + 0x22C) != 4) {
-                return;
-            }
-            psndSFXOn(str_SFX_BTL_SAC_SUKKIRI2_80301500);
-            memcpy(work + 0x184, work + 0xDC, 0xA8);
-            *(u32*)(work + 0x14) = *(u32*)(work + 0x10);
-            for (i = 0; i < 7; i++) {
-                *(s32*)(work + 0xDC + i * 0x18) = 0;
-            }
-        }
-        *(f32*)(work + 0x24) =
-            (f32)intplGetValue(-60.0, 0.0, 0,
-                               *(s32*)(work + 4), 0xF);
-        *(s32*)(work + 4) += 1;
-        if (*(s32*)(work + 4) > 0xE) {
-            *(s32*)work = 5;
-            *(s32*)(work + 4) = 0;
-            *(s32*)(work + 0x22C) = 8;
-        }
-    } else if (state < 3) {
-        if (state == 1) {
+    switch (*(s32*)work) {
+        case 1:
             *(s32*)work = 2;
             *(s32*)(work + 4) = 0;
-        } else if (state < 1) {
-            return;
-        }
-
-        if (*(s32*)(work + 0xC) == 0) {
-            *(f32*)(work + 0xD0) =
-                (f32)intplGetValue(-1000.0, 0.0, 4,
-                                   *(s32*)(work + 4), 0xF);
-            *(u32*)(work + 0xD4) = DAT_80301364;
-            *(u32*)(work + 0xD8) = DAT_80301368;
-        }
-
-        if (*(s32*)(work + 4) == 0) {
-            if (*(s32*)(work + 0x22C) != 4) {
-                return;
+        case 2:
+            if (*(s32*)(work + 0xC) == 0) {
+                *(f32*)(work + 0xD0) =
+                    (f32)intplGetValue(-1000.0, 0.0, 4, *(s32*)(work + 4), 0xF);
+                *(u32*)(work + 0xD4) = DAT_80301364;
+                *(u32*)(work + 0xD8) = DAT_80301368;
             }
-            memcpy(work + 0x184, work + 0xDC, 0xA8);
-            *(u32*)(work + 0x14) = *(u32*)(work + 0x10);
-
-            if (*(s32*)(work + 0xC) < 5) {
-                *(s32*)(work + 0x10) = 0;
-                *(s32*)(work + 0x18) = *(s32*)(work + 0xC) + 3;
-                *(s32*)(work + 0x1C) = *(s32*)(work + 0xC) * 10 + 0xB4;
-                for (i = 0; i < 7; i++) {
-                    *(s32*)(work + 0xDC + i * 0x18) =
-                        i < *(s32*)(work + 0x18) ? 1 : 0;
+            if (*(s32*)(work + 4) == 0) {
+                if (*(s32*)(work + 0x22C) != 4) {
+                    return;
                 }
-            } else {
+                memcpy(work + 0x184, work + 0xDC, 0xA8);
+                *(u32*)(work + 0x14) = *(u32*)(work + 0x10);
+                if (*(s32*)(work + 0xC) < 5) {
+                    *(s32*)(work + 0x10) = 0;
+                    *(s32*)(work + 0x18) = *(s32*)(work + 0xC) + 3;
+                    *(s32*)(work + 0x1C) = *(s32*)(work + 0xC) * 10 + 0xB4;
+                    for (i = 0; i < 7; i++) {
+                        *(s32*)(work + 0xDC + i * 0x18) =
+                            i < *(s32*)(work + 0x18) ? 1 : 0;
+                    }
+                } else {
+                    for (i = 0; i < 7; i++) {
+                        *(s32*)(work + 0xDC + i * 0x18) = 0;
+                    }
+                }
+            }
+            *(f32*)(work + 0x24) =
+                (f32)intplGetValue(-80.0, 0.0, 0, *(s32*)(work + 4), 0xF);
+            *(s32*)(work + 4) += 1;
+            if (*(s32*)(work + 4) > 0xE) {
+                if (*(s32*)(work + 0xC) < 5) {
+                    *(s32*)work = 4;
+                } else {
+                    *(s32*)work = 5;
+                    *(s32*)(work + 4) = 0;
+                    *(s32*)(work + 0x22C) = 8;
+                }
+                *(u32*)(work + 0xD0) = vec3_8030136c[0];
+                *(u32*)(work + 0xD4) = vec3_8030136c[1];
+                *(u32*)(work + 0xD8) = vec3_8030136c[2];
+            }
+            break;
+
+        case 3:
+            if (*(s32*)(work + 4) == 0) {
+                if (*(s32*)(work + 0x22C) != 4) {
+                    return;
+                }
+                psndSFXOn(str_SFX_BTL_SAC_SUKKIRI2_80301500);
+                memcpy(work + 0x184, work + 0xDC, 0xA8);
+                *(u32*)(work + 0x14) = *(u32*)(work + 0x10);
                 for (i = 0; i < 7; i++) {
                     *(s32*)(work + 0xDC + i * 0x18) = 0;
                 }
             }
-        }
-
-        *(f32*)(work + 0x24) =
-            (f32)intplGetValue(-80.0, 0.0, 0,
-                               *(s32*)(work + 4), 0xF);
-        *(s32*)(work + 4) += 1;
-        if (*(s32*)(work + 4) > 0xE) {
-            if (*(s32*)(work + 0xC) < 5) {
-                *(s32*)work = 4;
-            } else {
+            *(f32*)(work + 0x24) =
+                (f32)intplGetValue(-60.0, 0.0, 0, *(s32*)(work + 4), 0xF);
+            *(s32*)(work + 4) += 1;
+            if (*(s32*)(work + 4) > 0xE) {
                 *(s32*)work = 5;
                 *(s32*)(work + 4) = 0;
                 *(s32*)(work + 0x22C) = 8;
             }
-            *(u32*)(work + 0xD0) = vec3_8030136c[0];
-            *(u32*)(work + 0xD4) = vec3_8030136c[1];
-            *(u32*)(work + 0xD8) = vec3_8030136c[2];
-        }
-    } else if (state == 5) {
-        *(s32*)(work + 4) += 1;
-        if (*(s32*)(work + 4) < 0x1F) {
-            *(f32*)(work + 0xD0) =
-                (f32)intplGetValue(0.0, -1000.0, 4,
-                                   *(s32*)(work + 4), 0x1E);
-            *(u32*)(work + 0xD4) = vec3_80301378[1];
-            *(u32*)(work + 0xD8) = vec3_80301378[2];
-        }
-    } else if (state < 5) {
-        *(s32*)(work + 0x1C) -= 1;
-        if (*(s32*)(work + 0x1C) < 1) {
-            *(s32*)work = 3;
-            *(s32*)(work + 4) = 0;
-        } else {
-            u16 buttons = keyGetButtonTrg(0);
+            break;
 
-            if ((buttons & 0xF00) != 0) {
-                buttons = keyGetButtonTrg(0);
-                if ((*(u32*)(work + 0xE4 + *(s32*)(work + 0x10) * 0x18) & buttons) == 0) {
-                    *(s32*)work = 3;
-                    *(s32*)(work + 4) = 0;
-                } else {
-                    *(s32*)(work + 0x10) += 1;
-                    psndSFXOn(str_SFX_BTL_SAC_SUKKIRI1_80301518);
-
-                    if (*(s32*)(work + 0x10) >= *(s32*)(work + 0x18)) {
-                        void* event;
-                        s32 value;
-
-                        *(s32*)work = 2;
+        case 4:
+            *(s32*)(work + 0x1C) -= 1;
+            if (*(s32*)(work + 0x1C) < 1) {
+                *(s32*)work = 3;
+                *(s32*)(work + 4) = 0;
+            } else {
+                u16 buttons = keyGetButtonTrg(0);
+                if ((buttons & 0xF00) != 0) {
+                    buttons = keyGetButtonTrg(0);
+                    if ((*(u32*)(work + 0xE4 + *(s32*)(work + 0x10) * 0x18) & buttons) == 0) {
+                        *(s32*)work = 3;
                         *(s32*)(work + 4) = 0;
-                        *(s32*)(work + 0xC) += 1;
-                        *(s32*)(work + 0x22C) = 5;
-                        event = evtEntry(nice_event, 0, 0x20);
-                        value = *(s32*)(work + 0xC) + 1;
-                        if (value >= 6) {
-                            value = 6;
-                        }
-                        *(s32*)((s32)event + 0x9C) = value;
-
-                        if (audience > 0 && audience < 0x32) {
-                            BattleAudienceSoundCallKind(1);
-                        }
-                        if (audience > 0x31 && audience < 100) {
-                            BattleAudienceSoundCallKind(1);
-                            BattleAudienceSoundWhistleKind(1);
-                        }
-                        if (audience > 99 && audience < 0x96) {
-                            BattleAudienceSoundCallKind(2);
-                            BattleAudienceSoundWhistleKind(2);
-                        }
-                        if (audience > 0x95) {
-                            BattleAudienceSoundCallKind(2);
-                            BattleAudienceSoundWhistleKind(3);
+                    } else {
+                        *(s32*)(work + 0x10) += 1;
+                        psndSFXOn(str_SFX_BTL_SAC_SUKKIRI1_80301518);
+                        if (*(s32*)(work + 0x10) >= *(s32*)(work + 0x18)) {
+                            void* event;
+                            s32 value;
+                            *(s32*)work = 2;
+                            *(s32*)(work + 4) = 0;
+                            *(s32*)(work + 0xC) += 1;
+                            *(s32*)(work + 0x22C) = 5;
+                            event = evtEntry(nice_event, 0, 0x20);
+                            value = *(s32*)(work + 0xC) + 1;
+                            if (value >= 6) {
+                                value = 6;
+                            }
+                            *(s32*)((s32)event + 0x9C) = value;
+                            if (audience > 0 && audience < 0x32) {
+                                BattleAudienceSoundCallKind(1);
+                            }
+                            if (audience > 0x31 && audience < 100) {
+                                BattleAudienceSoundCallKind(1);
+                                BattleAudienceSoundWhistleKind(1);
+                            }
+                            if (audience > 99 && audience < 0x96) {
+                                BattleAudienceSoundCallKind(2);
+                                BattleAudienceSoundWhistleKind(2);
+                            }
+                            if (audience > 0x95) {
+                                BattleAudienceSoundCallKind(2);
+                                BattleAudienceSoundWhistleKind(3);
+                            }
                         }
                     }
                 }
             }
-        }
+            break;
+
+        case 5:
+            *(s32*)(work + 4) += 1;
+            if (*(s32*)(work + 4) < 0x1F) {
+                *(f32*)(work + 0xD0) =
+                    (f32)intplGetValue(0.0, -1000.0, 4, *(s32*)(work + 4), 0x1E);
+                *(u32*)(work + 0xD4) = vec3_80301378[1];
+                *(u32*)(work + 0xD8) = vec3_80301378[2];
+            }
+            break;
     }
 }
 
@@ -820,3 +811,5 @@ void set_tev(void* param) {
     *(s32*)((s32)param + 0x14) = 0;
     *(s32*)((s32)param + 0x10) = 0;
 }
+
+const u32 dat_80301384[] = { 0x100, 0x200, 0x400, 0x800 };

@@ -529,45 +529,64 @@ s32 evt_btl_camera_set_mode(void* evt) {
 }
 
 s32 evt_btl_camera_set_homing_unit(int event) {
+    typedef struct Vec3f_HomingUnit {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3f_HomingUnit;
     extern s32 evtGetValue(void*, s32);
     extern s32 BattleTransID(void*, s32);
     extern void* BattleGetUnitPtr(void*, s32);
     extern s32 BtlUnit_GetBodyPartsId(void*);
     extern void* BattleGetUnitPartsPtr(s32, s32);
     extern void BtlUnit_GetHitPos(void*, void*, f32*, f32*, f32*);
+    extern const Vec3f_HomingUnit vec3_802f0264;
+    extern const Vec3f_HomingUnit vec3_802f0270;
     s32* args = *(s32**)(event + 0x18);
-    u8* work = (u8*)_battleWorkPointer;
+    u8* work;
     s32 unit1;
     s32 unit2;
     s32 partId;
-    f32 pos[3];
+    f32 pos1[3];
+    f32 pos2[3];
+    Vec3f_HomingUnit target1;
+    Vec3f_HomingUnit target2;
     void* unit;
     void* part;
 
     evtGetValue((void*)event, args[0]);
     unit1 = evtGetValue((void*)event, args[1]);
     unit2 = evtGetValue((void*)event, args[2]);
+    work = (u8*)_battleWorkPointer;
     unit1 = BattleTransID((void*)event, unit1);
     *(s32*)(work + 0x2764) = unit1;
-    unit = BattleGetUnitPtr(work, unit1);
+    unit = BattleGetUnitPtr(work, *(s32*)(work + 0x2764));
     partId = BtlUnit_GetBodyPartsId(unit);
     *(s32*)(work + 0x276C) = partId;
-    BattleGetUnitPartsPtr(unit1, partId);
-    BtlUnit_GetHomePos(unit, &pos[0], &pos[1], &pos[2]);
-    *(f32*)(work + 0x2810) = pos[0];
-    *(f32*)(work + 0x2814) = pos[1];
-    *(f32*)(work + 0x2818) = pos[2];
+    BattleGetUnitPartsPtr(*(s32*)(work + 0x2764), *(s32*)(work + 0x276C));
+    BtlUnit_GetHomePos(unit, &pos1[0], &pos1[1], &pos1[2]);
+    target1 = vec3_802f0264;
+    target1.x = pos1[0];
+    target1.y = pos1[1];
+    target1.z = pos1[2];
+    *(f32*)(work + 0x2810) = target1.x;
+    *(f32*)(work + 0x2814) = target1.y;
+    *(f32*)(work + 0x2818) = target1.z;
     if (unit2 != -1) {
         unit2 = BattleTransID((void*)event, unit2);
         *(s32*)(work + 0x2768) = unit2;
-        unit = BattleGetUnitPtr(work, unit2);
+        unit = BattleGetUnitPtr(work, *(s32*)(work + 0x2768));
         partId = BtlUnit_GetBodyPartsId(unit);
         *(s32*)(work + 0x2770) = partId;
-        part = BattleGetUnitPartsPtr(unit2, partId);
-        BtlUnit_GetHitPos(unit, part, &pos[0], &pos[1], &pos[2]);
-        *(f32*)(work + 0x281C) = pos[0];
-        *(f32*)(work + 0x2820) = pos[1];
-        *(f32*)(work + 0x2824) = pos[2];
+        part = BattleGetUnitPartsPtr(*(s32*)(work + 0x2768), *(s32*)(work + 0x2770));
+        BtlUnit_GetHitPos(unit, part, &pos2[0], &pos2[1], &pos2[2]);
+        target2 = vec3_802f0270;
+        target2.x = pos2[0];
+        target2.y = pos2[1];
+        target2.z = pos2[2];
+        *(f32*)(work + 0x281C) = target2.x;
+        *(f32*)(work + 0x2820) = target2.y;
+        *(f32*)(work + 0x2824) = target2.z;
     }
     return 2;
 }

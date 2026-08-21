@@ -1,3 +1,4 @@
+#include "mario/mario_pouch.h"
 #include "window/win_mario.h"
 
 char tmp2[0x100];
@@ -16,10 +17,7 @@ typedef struct WinMarioLinkEntry {
 extern WinMarioLinkEntry linkDt[];
 extern char* hammer_help[4];
 extern char* boots_help[4];
-s32 pouchGetHammerLv(void);
-s32 pouchGetJumpLv(void);
 void winMsgEntry(void* pWin, s32 param_2, char* msg, s32 param_4);
-void* pouchGetPtr(void);
 void winTexInit(void* data);
 void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
 void winIconInit(void);
@@ -162,115 +160,337 @@ void winMarioExit(void* wp) {
 }
 
 s32 winMarioMain(void* pWin) {
+    typedef struct WinMarioLinkFull {
+        s16 x;
+        s16 y;
+        char* pose;
+        char* unk_08;
+        char* paperPose;
+        u16 requiredItem;
+        u16 pad_12;
+        char* msg;
+        u8 up;
+        u8 down;
+        u8 left;
+        u8 right;
+    } WinMarioLinkFull;
+
     extern void psndSFXOn(s32);
-    extern s32 pouchCheckItem(s32);
     extern void* superActionTable[];
-    extern void winMsgEntry(void*, s32, char*, s32);
-    extern u8 DAT_80377708[];
-    s32 open = *(s32*)((s32)pWin + 0x190);
+    extern void animPoseSetAnim(s32, char*, s32);
+    extern f64 animPoseGetLoopTimes(s32);
+    extern s32 marioGetColor(void);
+    extern s32 strcmp(const char*, const char*);
+    extern char* hammer_pose[];
+    extern char str_S_1_80423890[];
+    extern char str_S_2_80423a1c[];
+    extern char str_S_3_80423a20[];
+    extern char str_S_4_80423a24[];
+    extern char str_R_1_8042389c[];
+    extern char str_R_15_80423a28[];
+    extern char str_R_17_80423a30[];
+    extern char str_R_18_80423a38[];
+    extern char str_M_S_1_80423888[];
+    extern const f32 float_0p89_80423a40;
+
+    WinMarioLinkFull* links = (WinMarioLinkFull*)linkDt;
+    WinMarioLinkFull* row;
+    s32 open;
     s32 state;
-    s32 cursor;
-    s32 count;
-    u32 pressed;
+    s32 available;
+    s32 color;
+    char* pose;
+    u32 buttons;
     u32 dirs;
 
+    open = *(s32*)((s32)pWin + 0x190);
     if (open == 1) {
         goto star_list;
     }
-    if (open > 0 || open < 0) {
+    if (open > 0) {
+        return 0;
+    }
+    if (open < 0) {
         return 0;
     }
 
-    pressed = *(u32*)((s32)pWin + 4);
-    dirs = *(u32*)((s32)pWin + 0x10);
-    if ((pressed & 0x100) != 0) {
-        if (*(s32*)((s32)pWin + 0x160) == 12) {
+    buttons = *(u32*)((s32)pWin + 0x4);
+    if ((buttons & 0x100) != 0) {
+        if (*(s32*)((s32)pWin + 0x160) == 0xC) {
             *(s32*)((s32)pWin + 0x190) = 1;
             *(s32*)((s32)pWin + 0x194) = 0;
             psndSFXOn(0x20012);
         }
+        goto update_display;
+    }
+
+    if ((buttons & 0x200) != 0) {
+        psndSFXOn(0x20013);
+
+        if ((*(u16*)pWin & 0x2000) == 0) {
+            pose = str_M_S_1_80423888;
+        } else {
+            if (strcmp(str_S_1_80423890, str_S_1_80423890) == 0) {
+                color = marioGetColor();
+                if (color == 2) {
+                    pose = str_S_3_80423a20;
+                } else if (color < 2) {
+                    if (color == 0) {
+                        pose = str_S_1_80423890;
+                    } else if (color >= 0) {
+                        pose = str_S_2_80423a1c;
+                    }
+                } else if (color < 4) {
+                    pose = str_S_4_80423a24;
+                }
+            } else {
+                color = marioGetColor();
+                if (color == 2) {
+                    pose = str_R_17_80423a30;
+                } else if (color < 2) {
+                    if (color == 0) {
+                        pose = str_R_1_8042389c;
+                    } else if (color >= 0) {
+                        pose = str_R_15_80423a28;
+                    }
+                } else if (color < 4) {
+                    pose = str_R_18_80423a38;
+                }
+            }
+        }
+
+        animPoseSetAnim(*(s32*)((s32)pWin + 0x188), pose, 0);
+        return -1;
+    }
+
+    if ((buttons & 0x1000) != 0) {
+        return -2;
+    }
+
+    dirs = *(u32*)((s32)pWin + 0x10);
+
+    if ((dirs & 0x1000) != 0) {
+        do {
+            state = *(s32*)((s32)pWin + 0x160);
+            state = links[state].up;
+            *(s32*)((s32)pWin + 0x160) = state;
+            row = &links[state];
+
+            if (state == 0xB || state == 0xC) {
+                available = *(s32*)((s32)pWin + 0x198);
+            } else {
+                if (row->requiredItem == 0) {
+                    break;
+                }
+                available = pouchCheckItem(row->requiredItem);
+            }
+        } while (available == 0);
+
+        psndSFXOn(0x20005);
+        goto update_display;
+    }
+
+    if ((dirs & 0x2000) != 0) {
+        do {
+            state = *(s32*)((s32)pWin + 0x160);
+            state = links[state].down;
+            *(s32*)((s32)pWin + 0x160) = state;
+            row = &links[state];
+
+            if (state == 0xB || state == 0xC) {
+                available = *(s32*)((s32)pWin + 0x198);
+            } else {
+                if (row->requiredItem == 0) {
+                    break;
+                }
+                available = pouchCheckItem(row->requiredItem);
+            }
+        } while (available == 0);
+
+        psndSFXOn(0x20005);
+        goto update_display;
+    }
+
+    if ((dirs & 0x4000) != 0) {
+        do {
+            state = *(s32*)((s32)pWin + 0x160);
+            state = links[state].left;
+            *(s32*)((s32)pWin + 0x160) = state;
+            row = &links[state];
+
+            if (state == 0xB || state == 0xC) {
+                available = *(s32*)((s32)pWin + 0x198);
+            } else {
+                if (row->requiredItem == 0) {
+                    break;
+                }
+                available = pouchCheckItem(row->requiredItem);
+            }
+        } while (available == 0);
+
+        psndSFXOn(0x20005);
+        goto update_display;
+    }
+
+    if ((dirs & 0x8000) != 0) {
+        do {
+            state = *(s32*)((s32)pWin + 0x160);
+            state = links[state].right;
+            *(s32*)((s32)pWin + 0x160) = state;
+            row = &links[state];
+
+            if (state == 0xB || state == 0xC) {
+                available = *(s32*)((s32)pWin + 0x198);
+            } else {
+                if (row->requiredItem == 0) {
+                    break;
+                }
+                available = pouchCheckItem(row->requiredItem);
+            }
+        } while (available == 0);
+
+        psndSFXOn(0x20005);
+    }
+
+update_display:
+    state = *(s32*)((s32)pWin + 0x160);
+    row = &links[state];
+
+    *(f32*)((s32)pWin + 0x158) = (f32)row->x;
+    *(f32*)((s32)pWin + 0x15C) = (f32)row->y;
+
+    if (state == 2) {
+        if ((*(u16*)pWin & 0x2000) == 0) {
+            pose = hammer_pose[pouchGetHammerLv()];
+        } else {
+            if (strcmp(row->paperPose, str_S_1_80423890) == 0) {
+                color = marioGetColor();
+                if (color == 2) {
+                    pose = str_S_3_80423a20;
+                } else if (color < 2) {
+                    if (color == 0) {
+                        pose = str_S_1_80423890;
+                    } else if (color >= 0) {
+                        pose = str_S_2_80423a1c;
+                    }
+                } else if (color < 4) {
+                    pose = str_S_4_80423a24;
+                }
+            } else {
+                color = marioGetColor();
+                if (color == 2) {
+                    pose = str_R_17_80423a30;
+                } else if (color < 2) {
+                    if (color == 0) {
+                        pose = str_R_1_8042389c;
+                    } else if (color >= 0) {
+                        pose = str_R_15_80423a28;
+                    }
+                } else if (color < 4) {
+                    pose = str_R_18_80423a38;
+                }
+            }
+        }
+
+        animPoseSetAnim(*(s32*)((s32)pWin + 0x188), pose, 0);
+
+        if (*(s32*)((s32)pWin + 0x18C) == 0) {
+            if (animPoseGetLoopTimes(*(s32*)((s32)pWin + 0x188)) >=
+                float_0p89_80423a40) {
+                *(s32*)((s32)pWin + 0x18C) = 0x1E;
+            }
+        } else {
+            *(s32*)((s32)pWin + 0x18C) =
+                *(s32*)((s32)pWin + 0x18C) - 1;
+        }
+
+        if ((*(u16*)pWin & 0x2000) != 0) {
+            *(s32*)((s32)pWin + 0x18C) = 0;
+        }
     } else {
-        if ((pressed & 0x200) != 0) {
-            psndSFXOn(0x20013);
-            return -1;
+        *(s32*)((s32)pWin + 0x18C) = 0;
+
+        if ((*(u16*)pWin & 0x2000) == 0) {
+            pose = row->pose;
+        } else {
+            if (strcmp(row->paperPose, str_S_1_80423890) == 0) {
+                color = marioGetColor();
+                if (color == 2) {
+                    pose = str_S_3_80423a20;
+                } else if (color < 2) {
+                    if (color == 0) {
+                        pose = str_S_1_80423890;
+                    } else if (color >= 0) {
+                        pose = str_S_2_80423a1c;
+                    }
+                } else if (color < 4) {
+                    pose = str_S_4_80423a24;
+                }
+            } else {
+                color = marioGetColor();
+                if (color == 2) {
+                    pose = str_R_17_80423a30;
+                } else if (color < 2) {
+                    if (color == 0) {
+                        pose = str_R_1_8042389c;
+                    } else if (color >= 0) {
+                        pose = str_R_15_80423a28;
+                    }
+                } else if (color < 4) {
+                    pose = str_R_18_80423a38;
+                }
+            }
         }
-        if ((pressed & 0x1000) != 0) {
-            return -2;
-        }
-        state = *(s32*)((s32)pWin + 0x160);
-        if ((dirs & 0x1000) != 0) {
-            do {
-                state = DAT_80377708[state * 0x1C];
-            } while (state != 11 && state != 12 &&
-                     *(u16*)(DAT_80377708 - 8 + state * 0x1C) != 0 &&
-                     pouchCheckItem(*(u16*)(DAT_80377708 - 8 + state * 0x1C)) == 0);
-        }
-        if ((dirs & 0x2000) != 0) {
-            do {
-                state = DAT_80377708[state * 0x1C + 1];
-            } while (state != 11 && state != 12 &&
-                     *(u16*)(DAT_80377708 - 8 + state * 0x1C) != 0 &&
-                     pouchCheckItem(*(u16*)(DAT_80377708 - 8 + state * 0x1C)) == 0);
-        }
-        if ((dirs & 0x4000) != 0) {
-            do {
-                state = DAT_80377708[state * 0x1C + 2];
-            } while (state != 11 && state != 12 &&
-                     *(u16*)(DAT_80377708 - 8 + state * 0x1C) != 0 &&
-                     pouchCheckItem(*(u16*)(DAT_80377708 - 8 + state * 0x1C)) == 0);
-        }
-        if ((dirs & 0x8000) != 0) {
-            do {
-                state = DAT_80377708[state * 0x1C + 3];
-            } while (state != 11 && state != 12 &&
-                     *(u16*)(DAT_80377708 - 8 + state * 0x1C) != 0 &&
-                     pouchCheckItem(*(u16*)(DAT_80377708 - 8 + state * 0x1C)) == 0);
-        }
-        *(s32*)((s32)pWin + 0x160) = state;
-        if ((dirs & 0xF000) != 0) {
-            psndSFXOn(0x20005);
-        }
+
+        animPoseSetAnim(*(s32*)((s32)pWin + 0x188), pose, 0);
     }
 
     state = *(s32*)((s32)pWin + 0x160);
-    *(f32*)((s32)pWin + 0x158) = (f32)linkDt[state].x;
-    *(f32*)((s32)pWin + 0x15C) = (f32)linkDt[state].y;
-    if (state == 2) {
-        winMsgEntry(pWin, 0, hammer_help[pouchGetHammerLv()], 0);
-    } else if (state == 3) {
+    if (state == 3) {
         winMsgEntry(pWin, 0, boots_help[pouchGetJumpLv()], 0);
+    } else if (state == 2) {
+        winMsgEntry(pWin, 0, hammer_help[pouchGetHammerLv()], 0);
     } else {
-        winMsgEntry(pWin, 0, linkDt[state].msg, 0);
+        winMsgEntry(pWin, 0, row->msg, 0);
     }
     return 0;
 
 star_list:
-    cursor = *(s32*)((s32)pWin + 0x194);
-    count = *(s32*)((s32)pWin + 0x198);
     dirs = *(u32*)((s32)pWin + 0x10);
-    pressed = *(u32*)((s32)pWin + 4);
     if ((dirs & 0x1000) != 0) {
-        cursor--;
-        if (cursor < 0) {
-            cursor = count - 1;
+        *(s32*)((s32)pWin + 0x194) =
+            *(s32*)((s32)pWin + 0x194) - 1;
+        if (*(s32*)((s32)pWin + 0x194) < 0) {
+            *(s32*)((s32)pWin + 0x194) =
+                *(s32*)((s32)pWin + 0x198) - 1;
         }
         psndSFXOn(0x20005);
     } else if ((dirs & 0x2000) != 0) {
-        cursor++;
-        if (cursor >= count) {
-            cursor = 0;
+        *(s32*)((s32)pWin + 0x194) =
+            *(s32*)((s32)pWin + 0x194) + 1;
+        if (*(s32*)((s32)pWin + 0x194) >=
+            *(s32*)((s32)pWin + 0x198)) {
+            *(s32*)((s32)pWin + 0x194) = 0;
         }
         psndSFXOn(0x20005);
-    } else if ((pressed & 0x200) != 0) {
-        *(s32*)((s32)pWin + 0x190) = 0;
-        psndSFXOn(0x20013);
-    } else if ((pressed & 0x1000) != 0) {
-        return -2;
+    } else {
+        buttons = *(u32*)((s32)pWin + 0x4);
+        if ((buttons & 0x200) != 0) {
+            *(s32*)((s32)pWin + 0x190) = 0;
+            psndSFXOn(0x20013);
+        } else if ((buttons & 0x1000) != 0) {
+            return -2;
+        }
     }
-    *(s32*)((s32)pWin + 0x194) = cursor;
+
     *(f32*)((s32)pWin + 0x158) = -280.0f;
-    *(f32*)((s32)pWin + 0x15C) = 118.0f - 26.0f * (f32)cursor;
-    winMsgEntry(pWin, 0, *(char**)((s32)superActionTable[cursor] + 0xC), 0);
+    *(f32*)((s32)pWin + 0x15C) =
+        118.0f - 26.0f * (f32)*(s32*)((s32)pWin + 0x194);
+    winMsgEntry(
+        pWin,
+        0,
+        *(char**)((s32)superActionTable[*(s32*)((s32)pWin + 0x194)] + 0xC),
+        0);
     return 0;
 }
 
@@ -294,158 +514,264 @@ char* unk_801703e8(s32 value, s32 width) {
 }
 
 void fukidashi(double x, double y, void* menu, s32 type) {
-    extern s32 pouchCheckItem(s32 item);
     extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
     extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
     extern u8 itemDataTable[];
-    Vec3 p0, p1, p2;
-    Vec3 s0, s1, s2;
-    u32 c0 = 0xFFFFFFFF;
-    u32 c1 = 0xFFFFFFFF;
-    u32 c2 = 0xFFFFFFFF;
-    s32 level;
-    s32 icon;
-    f32 bx;
-    f32 by;
+    extern char str_msg_menu_mario_lv_802f5e88[];
+    extern u32 dat_804238b8;
+    extern u32 dat_804238bc;
+    extern u32 dat_804238c0;
+    extern u32 dat_804238c4;
+    extern u32 dat_804238c8;
+    extern u32 dat_804238cc;
 
-    s0.x = s0.y = s0.z = 1.0f;
-    s1.x = s1.y = s1.z = 1.0f;
-    s2.x = s2.y = s2.z = 1.0f;
-    p0.z = p1.z = p2.z = 0.0f;
+    char* base = str_msg_menu_mario_lv_802f5e88;
+    s32 level;
+    u16 icon;
+    Vec3 h_src0, h_pos0, h_scale0;
+    Vec3 h_src1, h_pos1, h_scale1;
+    Vec3 h_src2, h_pos2, h_scale2;
+    u32 h_color0, h_color1, h_color2;
+    Vec3 j_src0, j_pos0, j_scale0;
+    Vec3 j_src1, j_pos1, j_scale1;
+    Vec3 j_src2, j_pos2, j_scale2;
+    u32 j_color0, j_color1, j_color2;
+    Vec3 p_src0, p_pos0, p_scale0;
+    Vec3 p_src1, p_pos1, p_scale1;
+    Vec3 p_src2, p_pos2, p_scale2;
+    u32 p_color0, p_color1, p_color2;
+    Vec3 a_src0, a_pos0, a_scale0;
+    Vec3 a_src1, a_pos1, a_scale1;
+    Vec3 a_src2, a_pos2, a_scale2;
+    u32 a_color0, a_color1, a_color2;
+    Vec3 b_src0, b_pos0, b_scale0;
+    Vec3 b_src1, b_pos1, b_scale1;
+    Vec3 b_src2, b_pos2, b_scale2;
+    u32 b_color0, b_color1, b_color2;
+    Vec3 t_src0, t_pos0, t_scale0;
+    Vec3 t_src1, t_pos1, t_scale1;
+    Vec3 t_src2, t_pos2, t_scale2;
+    u32 t_color0, t_color1, t_color2;
 
     switch (type) {
         case 2:
             level = pouchGetHammerLv();
-            if (level > 0) {
-                level = pouchGetHammerLv();
-                icon = *(s16*)(itemDataTable + (level + 8) * 0x28 + 0x28);
-                winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
-                GXSetTevColorIn(0, 0, 0, 0, 2);
-                GXSetTevAlphaIn(0, 0, 4, 5, 7);
-                bx = (f32)x - 230.0f;
-                by = (f32)y + 72.0f;
-                p0.x = bx + 5.0f;
-                p0.y = by - 5.0f;
-                winTexSet(0xB1, &p0, &s0, &c0);
-                p1.x = bx;
-                p1.y = by;
-                winTexSet(0xB1, &p1, &s1, &c1);
-                winIconInit();
-                p2.x = bx - 6.0f;
-                p2.y = by;
-                winIconSet(icon, &p2, &s2, &c2);
+            if (level <= 0) {
+                break;
             }
+            level = pouchGetHammerLv();
+            icon = *(u16*)(itemDataTable + level * 0x28 + 0x160);
+            winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
+            GXSetTevColorIn(0, 15, 15, 15, 2);
+            GXSetTevAlphaIn(0, 7, 1, 4, 7);
+
+            h_src0 = *(Vec3*)(base + 0x1CC);
+            h_src0.x = (f32)x - 230.0f + 5.0f;
+            h_src0.y = (f32)y + 72.0f - 5.0f;
+            h_pos0 = h_src0;
+            h_scale0 = *(Vec3*)(base + 0x1D8);
+            h_color0 = dat_804238c4;
+            winTexSet(0xB1, &h_pos0, &h_scale0, &h_color0);
+
+            h_src1 = *(Vec3*)(base + 0x1E4);
+            h_src1.x = (f32)x - 230.0f;
+            h_src1.y = (f32)y + 72.0f;
+            h_pos1 = h_src1;
+            h_scale1 = *(Vec3*)(base + 0x1F0);
+            h_color1 = dat_804238c8;
+            winTexSet(0xB1, &h_pos1, &h_scale1, &h_color1);
+
+            winIconInit();
+
+            h_src2 = *(Vec3*)(base + 0x1FC);
+            h_src2.x = (f32)x - 230.0f - 6.0f;
+            h_src2.y = (f32)y + 72.0f;
+            h_pos2 = h_src2;
+            h_scale2 = *(Vec3*)(base + 0x208);
+            h_color2 = dat_804238cc;
+            winIconSet(icon, &h_pos2, &h_scale2, &h_color2);
             break;
 
         case 3:
             level = pouchGetJumpLv();
-            if (level > 0) {
-                level = pouchGetJumpLv();
-                icon = *(s16*)(itemDataTable + (level + 5) * 0x28 + 0x28);
-                winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
-                GXSetTevColorIn(0, 0, 0, 0, 2);
-                GXSetTevAlphaIn(0, 0, 4, 5, 7);
-                bx = (f32)x - 210.0f;
-                by = (f32)y + 20.0f;
-                p0.x = bx + 5.0f;
-                p0.y = by - 5.0f;
-                winTexSet(0xB1, &p0, &s0, &c0);
-                p1.x = bx;
-                p1.y = by;
-                winTexSet(0xB1, &p1, &s1, &c1);
-                winIconInit();
-                p2.x = bx - 6.0f;
-                p2.y = by;
-                winIconSet(icon, &p2, &s2, &c2);
+            if (level <= 0) {
+                break;
             }
+            level = pouchGetJumpLv();
+            icon = *(u16*)(itemDataTable + level * 0x28 + 0xE8);
+            winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
+            GXSetTevColorIn(0, 15, 15, 15, 2);
+            GXSetTevAlphaIn(0, 7, 1, 4, 7);
+
+            j_src0 = *(Vec3*)(base + 0x1CC);
+            j_src0.x = (f32)x - 210.0f + 5.0f;
+            j_src0.y = (f32)y + 20.0f - 5.0f;
+            j_pos0 = j_src0;
+            j_scale0 = *(Vec3*)(base + 0x1D8);
+            j_color0 = dat_804238c4;
+            winTexSet(0xB1, &j_pos0, &j_scale0, &j_color0);
+
+            j_src1 = *(Vec3*)(base + 0x1E4);
+            j_src1.x = (f32)x - 210.0f;
+            j_src1.y = (f32)y + 20.0f;
+            j_pos1 = j_src1;
+            j_scale1 = *(Vec3*)(base + 0x1F0);
+            j_color1 = dat_804238c8;
+            winTexSet(0xB1, &j_pos1, &j_scale1, &j_color1);
+
+            winIconInit();
+
+            j_src2 = *(Vec3*)(base + 0x1FC);
+            j_src2.x = (f32)x - 210.0f - 6.0f;
+            j_src2.y = (f32)y + 20.0f;
+            j_pos2 = j_src2;
+            j_scale2 = *(Vec3*)(base + 0x208);
+            j_color2 = dat_804238cc;
+            winIconSet(icon, &j_pos2, &j_scale2, &j_color2);
             break;
 
         case 7:
-            level = pouchCheckItem(2);
-            icon = *(s16*)(itemDataTable + 2 * 0x28 + 0x28);
-            if (level != 0) {
-                winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
-                GXSetTevColorIn(0, 0, 0, 0, 2);
-                GXSetTevAlphaIn(0, 0, 4, 5, 7);
-                bx = (f32)x - 80.0f;
-                by = (f32)y + 90.0f;
-                p0.x = bx + 5.0f;
-                p0.y = by - 5.0f;
-                winTexSet(0xB1, &p0, &s0, &c0);
-                p1.x = bx;
-                p1.y = by;
-                winTexSet(0xB1, &p1, &s1, &c1);
-                winIconInit();
-                p2.x = bx + 6.0f;
-                p2.y = by;
-                winIconSet(icon, &p2, &s2, &c2);
+            if (pouchCheckItem(2) == 0) {
+                break;
             }
+            icon = *(u16*)(itemDataTable + 0x70);
+            winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
+            GXSetTevColorIn(0, 15, 15, 15, 2);
+            GXSetTevAlphaIn(0, 7, 1, 4, 7);
+
+            p_src0 = *(Vec3*)(base + 0x184);
+            p_src0.x = (f32)x - 80.0f + 5.0f;
+            p_src0.y = (f32)y + 90.0f - 5.0f;
+            p_pos0 = p_src0;
+            p_scale0 = *(Vec3*)(base + 0x190);
+            p_color0 = dat_804238b8;
+            winTexSet(0xB1, &p_pos0, &p_scale0, &p_color0);
+
+            p_src1 = *(Vec3*)(base + 0x19C);
+            p_src1.x = (f32)x - 80.0f;
+            p_src1.y = (f32)y + 90.0f;
+            p_pos1 = p_src1;
+            p_scale1 = *(Vec3*)(base + 0x1A8);
+            p_color1 = dat_804238bc;
+            winTexSet(0xB1, &p_pos1, &p_scale1, &p_color1);
+
+            winIconInit();
+
+            p_src2 = *(Vec3*)(base + 0x1B4);
+            p_src2.x = (f32)x - 80.0f + 6.0f;
+            p_src2.y = (f32)y + 90.0f;
+            p_pos2 = p_src2;
+            p_scale2 = *(Vec3*)(base + 0x1C0);
+            p_color2 = dat_804238c0;
+            winIconSet(icon, &p_pos2, &p_scale2, &p_color2);
             break;
 
         case 8:
-            level = pouchCheckItem(4);
-            icon = *(s16*)(itemDataTable + 4 * 0x28 + 0x28);
-            if (level != 0) {
-                winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
-                GXSetTevColorIn(0, 0, 0, 0, 2);
-                GXSetTevAlphaIn(0, 0, 4, 5, 7);
-                bx = (f32)x - 80.0f;
-                by = (f32)y + 20.0f;
-                p0.x = bx + 5.0f;
-                p0.y = by - 5.0f;
-                winTexSet(0xB1, &p0, &s0, &c0);
-                p1.x = bx;
-                p1.y = by;
-                winTexSet(0xB1, &p1, &s1, &c1);
-                winIconInit();
-                p2.x = bx + 6.0f;
-                p2.y = by;
-                winIconSet(icon, &p2, &s2, &c2);
+            if (pouchCheckItem(4) == 0) {
+                break;
             }
+            icon = *(u16*)(itemDataTable + 0xC0);
+            winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
+            GXSetTevColorIn(0, 15, 15, 15, 2);
+            GXSetTevAlphaIn(0, 7, 1, 4, 7);
+
+            a_src0 = *(Vec3*)(base + 0x184);
+            a_src0.x = (f32)x - 80.0f + 5.0f;
+            a_src0.y = (f32)y + 20.0f - 5.0f;
+            a_pos0 = a_src0;
+            a_scale0 = *(Vec3*)(base + 0x190);
+            a_color0 = dat_804238b8;
+            winTexSet(0xB1, &a_pos0, &a_scale0, &a_color0);
+
+            a_src1 = *(Vec3*)(base + 0x19C);
+            a_src1.x = (f32)x - 80.0f;
+            a_src1.y = (f32)y + 20.0f;
+            a_pos1 = a_src1;
+            a_scale1 = *(Vec3*)(base + 0x1A8);
+            a_color1 = dat_804238bc;
+            winTexSet(0xB1, &a_pos1, &a_scale1, &a_color1);
+
+            winIconInit();
+
+            a_src2 = *(Vec3*)(base + 0x1B4);
+            a_src2.x = (f32)x - 80.0f + 6.0f;
+            a_src2.y = (f32)y + 20.0f;
+            a_pos2 = a_src2;
+            a_scale2 = *(Vec3*)(base + 0x1C0);
+            a_color2 = dat_804238c0;
+            winIconSet(icon, &a_pos2, &a_scale2, &a_color2);
             break;
 
         case 9:
-            level = pouchCheckItem(5);
-            icon = *(s16*)(itemDataTable + 5 * 0x28 + 0x28);
-            if (level != 0) {
-                winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
-                GXSetTevColorIn(0, 0, 0, 0, 2);
-                GXSetTevAlphaIn(0, 0, 4, 5, 7);
-                bx = (f32)x - 30.0f;
-                by = (f32)y + 130.0f;
-                p0.x = bx + 5.0f;
-                p0.y = by - 5.0f;
-                winTexSet(0xB1, &p0, &s0, &c0);
-                p1.x = bx;
-                p1.y = by;
-                winTexSet(0xB1, &p1, &s1, &c1);
-                winIconInit();
-                p2.x = bx + 6.0f;
-                p2.y = by;
-                winIconSet(icon, &p2, &s2, &c2);
+            if (pouchCheckItem(5) == 0) {
+                break;
             }
+            icon = *(u16*)(itemDataTable + 0xE8);
+            winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
+            GXSetTevColorIn(0, 15, 15, 15, 2);
+            GXSetTevAlphaIn(0, 7, 1, 4, 7);
+
+            b_src0 = *(Vec3*)(base + 0x184);
+            b_src0.x = (f32)x - 30.0f + 5.0f;
+            b_src0.y = (f32)y + 130.0f - 5.0f;
+            b_pos0 = b_src0;
+            b_scale0 = *(Vec3*)(base + 0x190);
+            b_color0 = dat_804238b8;
+            winTexSet(0xB1, &b_pos0, &b_scale0, &b_color0);
+
+            b_src1 = *(Vec3*)(base + 0x19C);
+            b_src1.x = (f32)x - 30.0f;
+            b_src1.y = (f32)y + 130.0f;
+            b_pos1 = b_src1;
+            b_scale1 = *(Vec3*)(base + 0x1A8);
+            b_color1 = dat_804238bc;
+            winTexSet(0xB1, &b_pos1, &b_scale1, &b_color1);
+
+            winIconInit();
+
+            b_src2 = *(Vec3*)(base + 0x1B4);
+            b_src2.x = (f32)x - 30.0f + 6.0f;
+            b_src2.y = (f32)y + 130.0f;
+            b_pos2 = b_src2;
+            b_scale2 = *(Vec3*)(base + 0x1C0);
+            b_color2 = dat_804238c0;
+            winIconSet(icon, &b_pos2, &b_scale2, &b_color2);
             break;
 
         case 10:
-            level = pouchCheckItem(3);
-            icon = *(s16*)(itemDataTable + 3 * 0x28 + 0x28);
-            if (level != 0) {
-                winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
-                GXSetTevColorIn(0, 0, 0, 0, 2);
-                GXSetTevAlphaIn(0, 0, 4, 5, 7);
-                bx = (f32)x - 30.0f;
-                by = (f32)y + 60.0f;
-                p0.x = bx + 5.0f;
-                p0.y = by - 5.0f;
-                winTexSet(0xB1, &p0, &s0, &c0);
-                p1.x = bx;
-                p1.y = by;
-                winTexSet(0xB1, &p1, &s1, &c1);
-                winIconInit();
-                p2.x = bx + 6.0f;
-                p2.y = by;
-                winIconSet(icon, &p2, &s2, &c2);
+            if (pouchCheckItem(3) == 0) {
+                break;
             }
+            icon = *(u16*)(itemDataTable + 0x98);
+            winTexInit(**(void***)((u8*)*(void**)((u8*)menu + 0x28) + 0xA0));
+            GXSetTevColorIn(0, 15, 15, 15, 2);
+            GXSetTevAlphaIn(0, 7, 1, 4, 7);
+
+            t_src0 = *(Vec3*)(base + 0x184);
+            t_src0.x = (f32)x - 30.0f + 5.0f;
+            t_src0.y = (f32)y + 60.0f - 5.0f;
+            t_pos0 = t_src0;
+            t_scale0 = *(Vec3*)(base + 0x190);
+            t_color0 = dat_804238b8;
+            winTexSet(0xB1, &t_pos0, &t_scale0, &t_color0);
+
+            t_src1 = *(Vec3*)(base + 0x19C);
+            t_src1.x = (f32)x - 30.0f;
+            t_src1.y = (f32)y + 60.0f;
+            t_pos1 = t_src1;
+            t_scale1 = *(Vec3*)(base + 0x1A8);
+            t_color1 = dat_804238bc;
+            winTexSet(0xB1, &t_pos1, &t_scale1, &t_color1);
+
+            winIconInit();
+
+            t_src2 = *(Vec3*)(base + 0x1B4);
+            t_src2.x = (f32)x - 30.0f + 6.0f;
+            t_src2.y = (f32)y + 60.0f;
+            t_pos2 = t_src2;
+            t_scale2 = *(Vec3*)(base + 0x1C0);
+            t_color2 = dat_804238c0;
+            winIconSet(icon, &t_pos2, &t_scale2, &t_color2);
             break;
     }
 }

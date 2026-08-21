@@ -257,18 +257,38 @@ void fileGarbageDataAdrSet(char* data, int kind) {
         case 5:
             field = (char**)(data + 0x14C);
             if (*field < data) {
-                for (i = 0; i < 25; i++, field++) {
+                field[0] += (int)data;
+                field[1] += (int)data;
+                field[2] += (int)data;
+                field[3] += (int)data;
+                field[4] += (int)data;
+                field[5] += (int)data;
+                field[6] += (int)data;
+                field[7] += (int)data;
+                field[8] += (int)data;
+                field[9] += (int)data;
+                field[10] += (int)data;
+                field[11] += (int)data;
+                field[12] += (int)data;
+                field[13] += (int)data;
+                field[14] += (int)data;
+                field[15] += (int)data;
+                field[16] += (int)data;
+                field[17] += (int)data;
+                field[18] += (int)data;
+                field[19] += (int)data;
+                field[20] += (int)data;
+                field[21] += (int)data;
+                field[22] += (int)data;
+                field[23] += (int)data;
+                field[24] += (int)data;
+                for (i = 0; i < *(int*)(data + 0x148); i++) {
+                    field = (char**)(*(char**)(data + 0x1AC) + i * 0x40 + 0x3C);
                     *field += (int)data;
-                }
-                if (kind == 5) {
-                    for (i = 0; i < *(int*)(data + 0x148); i++) {
-                        field = (char**)(*(char**)(data + 0x1AC) + i * 0x40 + 0x3C);
-                        *field += (int)data;
-                        item = *field;
-                        if (*(char**)(item + 0x24) < item) {
-                            for (j = 0x24; j <= 0x40; j += 4) {
-                                *(char**)(item + j) += (int)item;
-                            }
+                    item = *field;
+                    if (*(char**)(item + 0x24) < item) {
+                        for (j = 0x24; j <= 0x40; j += 4) {
+                            *(char**)(item + j) += (int)item;
                         }
                     }
                 }
@@ -277,9 +297,14 @@ void fileGarbageDataAdrSet(char* data, int kind) {
         case 2:
             field = (char**)(data + 0x24);
             if (*field < data) {
-                for (i = 0; i < 8; i++, field++) {
-                    *field += (int)data;
-                }
+                field[0] += (int)data;
+                field[1] += (int)data;
+                field[2] += (int)data;
+                field[3] += (int)data;
+                field[4] += (int)data;
+                field[5] += (int)data;
+                field[6] += (int)data;
+                field[7] += (int)data;
             }
             break;
         case 3:
@@ -315,25 +340,46 @@ void fileGarbageDataAdrSet(char* data, int kind) {
         case 7:
             field = (char**)(data + 0x64);
             if (*field < data) {
-                for (i = 0; i < 3; i++, field++) {
-                    *field += (int)data;
-                }
+                field[0] += (int)data;
+                field[1] += (int)data;
+                field[2] += (int)data;
             }
             break;
         case 8:
             field = (char**)(data + 0xC8);
             if (*field < data) {
-                for (i = 0; i < 23; i++, field++) {
-                    *field += (int)data;
-                }
+                field[0] += (int)data;
+                field[1] += (int)data;
+                field[2] += (int)data;
+                field[3] += (int)data;
+                field[4] += (int)data;
+                field[5] += (int)data;
+                field[6] += (int)data;
+                field[7] += (int)data;
+                field[8] += (int)data;
+                field[9] += (int)data;
+                field[10] += (int)data;
+                field[11] += (int)data;
+                field[12] += (int)data;
+                field[13] += (int)data;
+                field[14] += (int)data;
+                field[15] += (int)data;
+                field[16] += (int)data;
+                field[17] += (int)data;
+                field[18] += (int)data;
+                field[19] += (int)data;
+                field[20] += (int)data;
+                field[21] += (int)data;
+                field[22] += (int)data;
             }
             break;
         case 9:
             field = (char**)(data + 0x58);
             if (*field < data) {
-                for (i = 0; i < 4; i++, field++) {
-                    *field += (int)data;
-                }
+                field[0] += (int)data;
+                field[1] += (int)data;
+                field[2] += (int)data;
+                field[3] += (int)data;
             }
             break;
     }

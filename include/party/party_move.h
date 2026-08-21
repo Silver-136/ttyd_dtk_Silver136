@@ -14,7 +14,7 @@ f32 partyGetTargetDistY(s32 useParty);
 f32 partyGetTargetMovespd2(void* pParty);
 void partyNextReadId(s32 id);
 void partyClearFootmark(void);
-u8 partyClearFootmark2(void);
+void partyClearFootmark2(void);
 void partyRecordFootmark(void* pParty);
 void partyClearJumpPara(void* party);
 void unk_800cbfbc(void* party, f32 speed);

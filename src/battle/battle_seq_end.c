@@ -2,6 +2,8 @@
 
 #include "manager/evtmgr.h"
 
+__declspec(section ".rodata") const char str_levelup_802fe808[8] = "levelup";
+
 extern void* _battleWorkPointer;
 extern s32 evtGetValue();
 extern void dispEntry(s32, s32, void*, void*, f32);
@@ -79,24 +81,42 @@ void btlseqEnd(void* battleWork) {
     extern void btlseqEnd_DispMain(s32, void*);
     extern s32 irand(s32);
     extern void _ExecAllUnitBattleEndEvent(void);
-    extern void btl_camera_set_moveSpeedLv(s32,s32);
-    extern void btl_camera_set_mode(s32,s32);
-    extern void btl_camera_set_posoffset(f64,f64,f64,s32);
-    extern void fadeEntry(s32,s32,void*);
+    extern void _check_audience_battle_end_exec(void);
+    extern void BattleAudienceSoundSetVolAll(s32, s32);
+    extern void BattleInformationSetResult(void*, s32);
+    extern s32 BattleInformationGetResult(void*);
+    extern void btl_camera_set_moveSpeedLv(s32, s32);
+    extern void btl_camera_set_mode(s32, s32);
+    extern void btl_camera_set_posoffset(f64, f64, f64, s32);
+    extern void fadeEntry(s32, s32, void*);
     extern void psndBGMOff(s32);
     extern s32 fadeIsFinish(void);
-    extern void seqSetSeq(s32,void*,void*);
+    extern void seqSetSeq(s32, void*, void*);
     extern void* fbatGetPointer(void);
-    extern void* evtEntry(void*,s32,s32);
+    extern void* evtEntry(void*, s32, s32);
     extern s32 evtCheckID(s32);
+    extern void evtDeleteID(s32);
     extern s32 BattleWaitAllActiveEvtEnd(void*);
     extern void _BattleMarioKouraDelete(void);
+    extern void* BattleGetPartyPtr(void*);
+    extern s32 BtlUnit_GetEnemyBelong(void*);
+    extern u32 BtlUnit_CheckStatusFlag(void*, u32);
+    extern void BtlUnit_OffStatusFlag(void*, s32);
+    extern s32 BtlUnit_GetBodyPartsId(void*);
+    extern void* BtlUnit_GetPartsPtr(void*, s32);
+    extern void BattleConsumeReserveItem(void);
+    extern void BtlUnit_SetStatus(void*, s32, s32, s32);
+    extern void BattleInformationSetDropMaterial(void*);
+    extern void BattleMajinaiDone(void);
+    extern void BattleMajinaiEndCheck(void);
+    extern u32 BtlUnit_CheckStatus(void*, s32);
     extern void BattleFogForceStop(void);
     extern s32 BattleGetStockExp(void*);
     extern void _GetExpIcon_Init(void*);
-    extern void BattleAudienceSoundCheer(s32,s32);
-    extern void BattleAudienceSoundClap(s32,s32);
+    extern void BattleAudienceSoundCheer(s32, s32);
+    extern void BattleAudienceSoundClap(s32, s32);
     extern u32 BattlePadCheckNow(u32);
+    extern void* effPointGetEntry(f64, f64, f64, s32, s32, s32);
     extern void psndSFXOn(void*);
     extern void _GetExpIcon_End(void*);
     extern void effSoftDelete(void*);
@@ -106,31 +126,121 @@ void btlseqEnd(void* battleWork) {
     extern void BattleStatusWindowSystemOn(void);
     extern void BattleStatusWindowEventOn(void);
     extern void psndBGMOn(s32, void*);
-    extern s32 _curtain_close_event[];
-    extern char str_BGM_BATTLE_WIN3_802feabc[];
     extern u32 BattlePadCheckTrigger(u32);
-    extern s16* _get_rank_data(s32);
+    extern void pouchReviseMarioParam(void);
+    extern void BtlUnit_SetParamFromPouch(void*);
+    extern s32 BattleTransPartyId(s32);
+    extern void BtlUnit_snd_se(void*, const char*, s32, s16);
+    extern void BtlUnit_SetBodyAnim(void*, const char*);
+    extern void effRecoveryEntry(f64, f64, f64, s32, s32);
+    extern void BtlUnit_SetBodyAnimType(void*, s32);
+    extern void BattleSetMarioParamToFieldBattle(void*);
+    extern void BattleFree(void*);
+    extern void* marioGetPtr(void);
+    extern s32 marioPartyEntry(s32);
+    extern void marioPartyKill(void);
+    extern s32 marioGetPartyId(void);
+    extern void* partyGetPtr(s32);
+    extern void BtlActRec_JudgeRuleKeep(void);
+    extern void BattleAudienceSoundStop(s32);
+
+    extern s32 _curtain_close_event[];
+    extern s32 _move_to_flower_event[];
+    extern s32 _move_to_heart_event[];
+    extern s32 _move_to_badge_point_event[];
+    extern s32 _jump_event[];
     extern s32 _rank_up_event[];
     extern s32 _event_MajinaiEnd[];
-    extern void* BattleGetMarioPtr(void*);
-    extern void BtlUnit_SetBodyAnim(void*, const char*);
+    extern s32 marioAttackEvent_MajinaiExpUp[];
+    extern u8 pose_table_nokotarou_stay[];
+
+    extern char str_BGM_BATTLE_WIN1_802fea88[];
+    extern char str_BGM_BATTLE_WIN2_802fea98[];
+    extern char str_BGM_BATTLE_WIN3_802feabc[];
+    extern char str_SFX_STAR_POINT_GET1_802feaa8[];
+    extern char str_SFX_VOICE_MARIO_PAUS_802feae4[];
+    extern char str_SFX_VOICE_MARIO_PAUS_802feacc[];
+    extern char str_SFX_VOICE_MARIO_RELI_802feb14[];
+    extern char str_SFX_VOICE_MARIO_RELI_802feafc[];
     extern char str_M_V_1_80427298[];
-    u8* work = *(u8**)((u8*)battleWork + 0xF28);
+    extern char str_M_V_2_80427160[];
+
+    extern u32 dat_80427140;
+    extern u32 dat_80427144;
+    extern f32 float_0_804271c0;
+    extern f32 float_90_804271e4;
+    extern f32 float_40_80427294;
+
+    u8* bw = (u8*)battleWork;
+    u8* work = *(u8**)(bw + 0xF28);
+    u8* info = *(u8**)(bw + 0x2738);
+    u8* pouch = (u8*)pouchGetPtr();
+    u8* fbat;
+    u8* evt;
+    u8* mario;
+    u8* party;
+    u8* part;
+    u8* npcInfo;
+    u8* npc;
+    u8* player;
+    u8* fieldParty;
+    RankUpData* rank;
     s32 state;
-    void* fbat;
-    void* evt;
-    u32 fadeColor = 0;
+    s32 result;
+    s32 alliance;
+    s32 enemyAlliance;
+    s32 status;
+    s32 partyId;
+    s32 unitKind;
+    s32 valid;
+    u32 flags;
+    u32 fadeColor;
 
     _audience_Whistle_control();
     state = BattleGetSeq(battleWork, 7);
+
     switch (state) {
         case 0x07000000:
             btlsubResetMoveColorLvAll(battleWork);
-            BattleSetSeq(battleWork, 7, 0x07000005);
-            work = BattleAlloc(0x2AC);
-            *(u8**)((u8*)battleWork + 0xF28) = work;
+            mario = (u8*)BattleGetMarioPtr(battleWork);
+            alliance = *(s8*)(mario + 0xC);
+            enemyAlliance = BtlUnit_GetEnemyBelong(mario);
+            flags = *(u32*)(bw + 0xEF4);
+
+            if ((flags & 0x40) != 0) {
+                BattleInformationSetResult(info, 4);
+            } else if ((flags & 0x20) != 0) {
+                BattleInformationSetResult(info, 5);
+            } else if (*(s32*)(bw + 0xC + alliance * 8) != 0) {
+                BattleInformationSetResult(info, 3);
+            } else if (*(s32*)(bw + 0xC + enemyAlliance * 8) != 0) {
+                BattleInformationSetResult(info, 1);
+            } else if ((flags & 0x10) != 0) {
+                BattleInformationSetResult(info, 4);
+            }
+
+            result = BattleInformationGetResult(info);
+            if (result == 3) {
+                BattleSetSeq(battleWork, 7, 0x07000001);
+            } else if (result < 3 && result == 1) {
+                fbat = (u8*)fbatGetPointer();
+                if (*(void**)(fbat + 0x3C) != 0) {
+                    BattleSetSeq(battleWork, 7, 0x07000003);
+                    return;
+                }
+                _check_audience_battle_end_exec();
+                BattleSetSeq(battleWork, 7, 0x07000005);
+                _BattleMarioKouraDelete();
+            } else {
+                _ExecAllUnitBattleEndEvent();
+                BattleSetSeq(battleWork, 7, 0x0700001D);
+                BattleAudienceSoundSetVolAll(0, 30);
+            }
+
+            work = (u8*)BattleAlloc(0x2AC);
+            *(u8**)(bw + 0xF28) = work;
             btlseqEnd_DispInit(battleWork);
-            *(s32*)work = 0;
+            *(s32*)(work + 0x0) = 0;
             *(void**)(work + 0x29C) = 0;
             *(s32*)(work + 0x2A0) = irand(120) + 60;
             *(s32*)(work + 0x2A4) = 0;
@@ -140,49 +250,108 @@ void btlseqEnd(void* battleWork) {
             _ExecAllUnitBattleEndEvent();
             btl_camera_set_moveSpeedLv(0, 2);
             btl_camera_set_mode(0, 0x13);
-            btl_camera_set_posoffset(0.0, 0.0, 0.0, 0);
-            fadeEntry(9, 200, &fadeColor);
+            btl_camera_set_posoffset(
+                (f64)float_0_804271c0,
+                (f64)float_0_804271c0,
+                (f64)float_0_804271c0,
+                0);
+            fadeColor = dat_80427140;
+            fadeEntry(10, 200, &fadeColor);
             psndBGMOff(0x201);
             BattleSetSeq(battleWork, 7, 0x07000002);
             break;
 
         case 0x07000002:
             if (fadeIsFinish() != 0) {
-                BattleSetSeq(battleWork, 7, 0x0700001F);
+                npcInfo = *(u8**)(info + 0xC);
+                if ((*(u32*)(npcInfo + 4) & 0x40) == 0) {
+                    seqSetSeq(5, (void*)1, 0);
+                } else {
+                    BattleSetSeq(battleWork, 7, 0x0700001F);
+                }
             }
             break;
 
         case 0x07000003:
-            fbat = fbatGetPointer();
-            evt = evtEntry(*(void**)((u8*)fbat + 0x3C), 10, 0);
-            *(s32*)((u8*)fbat + 0x40) = *(s32*)evt;
+            fbat = (u8*)fbatGetPointer();
+            evt = (u8*)evtEntry(*(void**)(fbat + 0x3C), 10, 0);
+            *(s32*)(fbat + 0x40) = *(s32*)(evt + 0x15C);
             BattleSetSeq(battleWork, 7, 0x07000004);
             return;
 
         case 0x07000004:
-            fbat = fbatGetPointer();
-            if (!evtCheckID(*(s32*)((u8*)fbat + 0x40)) &&
+            fbat = (u8*)fbatGetPointer();
+            if (!evtCheckID(*(s32*)(fbat + 0x40)) &&
                 BattleWaitAllActiveEvtEnd(battleWork) != 0) {
-                if (*(s32*)((u8*)fbat + 0x44) != 0) {
+                if (*(s32*)(fbat + 0x44) != 0) {
                     BattleSetSeq(battleWork, 3, 0x03000001);
                     BattleSetSeq(battleWork, 0, 2);
                     return;
                 }
                 BattleSetSeq(battleWork, 7, 0x07000005);
                 _BattleMarioKouraDelete();
-                work = BattleAlloc(0x2AC);
-                *(u8**)((u8*)battleWork + 0xF28) = work;
+                work = (u8*)BattleAlloc(0x2AC);
+                *(u8**)(bw + 0xF28) = work;
                 btlseqEnd_DispInit(battleWork);
-                *(s32*)work = 0;
+                *(s32*)(work + 0x0) = 0;
                 return;
             }
             break;
+
+        case 0x07000005:
+            mario = (u8*)BattleGetMarioPtr(battleWork);
+            party = (u8*)BattleGetPartyPtr(battleWork);
+
+            if (party != 0 && BtlUnit_CheckStatusFlag(party, 1) != 0) {
+                *(u8*)(party + 0x12B) = 0;
+                BtlUnit_OffStatusFlag(party, 1);
+                result = BtlUnit_GetBodyPartsId(party);
+                part = (u8*)BtlUnit_GetPartsPtr(party, result);
+                *(void**)(part + 0x1BC) = pose_table_nokotarou_stay;
+            }
+
+            BattleConsumeReserveItem();
+            for (status = 0; (s8)status < 28; status++) {
+                if ((s8)status >= 28 || (s8)status < 25) {
+                    if (party != 0) {
+                        BtlUnit_SetStatus(party, status, 0, 0);
+                    }
+                    BtlUnit_SetStatus(mario, status, 0, 0);
+                }
+            }
+
+            if ((*(u32*)(mario + 0x104) & 0x10) != 0) {
+                party = (u8*)BattleGetPartyPtr(battleWork);
+                if (party != 0) {
+                    evt = (u8*)evtEntry(BtlUnit_GetData(party, 3), 10, 0);
+                    *(s32*)(evt + 0x160) = *(s32*)(party + 0x0);
+                    *(s32*)(party + 0x2A8) = *(s32*)(evt + 0x15C);
+                }
+                break;
+            }
+
+            BattleSetSeq(battleWork, 7, 0x07000006);
+            /* fall through */
 
         case 0x07000006:
             if (BattleWaitAllActiveEvtEnd(battleWork) != 0) {
                 BattleAudienceSoundClap(-1, 0);
                 _ExecAllUnitBattleEndEvent();
-                BattleSetSeq(battleWork, 7, 0x07000008);
+                BattleInformationSetDropMaterial(info);
+                pouch = (u8*)pouchGetPtr();
+                mario = (u8*)BattleGetMarioPtr(battleWork);
+
+                if (*(u8*)(pouch + 0x5BA) == 3) {
+                    *(u8*)(bw + 0x18FF9) = 3;
+                    BattleMajinaiDone();
+                    BattleMajinaiEndCheck();
+                    evt = (u8*)evtEntry(marioAttackEvent_MajinaiExpUp, 10, 0);
+                    *(s32*)(evt + 0x160) = *(s32*)(mario + 0x0);
+                    *(s32*)(mario + 0x2A8) = *(s32*)(evt + 0x15C);
+                    BattleSetSeq(battleWork, 7, 0x07000007);
+                } else {
+                    BattleSetSeq(battleWork, 7, 0x07000008);
+                }
             }
             break;
 
@@ -195,32 +364,95 @@ void btlseqEnd(void* battleWork) {
         case 0x07000008:
             BattleFogForceStop();
             *(s32*)(work + 0xC) = 0;
-            *(s16*)(work + 8) = BattleGetStockExp(battleWork);
-            if (*(s16*)(work + 8) > 100) *(s16*)(work + 8) = 100;
+            *(s16*)(work + 8) = (s16)BattleGetStockExp(battleWork);
+
+            if (*(u8*)(bw + 0x18FF9) == 3) {
+                *(s16*)(work + 8) <<= 1;
+            }
+            if (*(s16*)(pouch + 0x8A) > 98) {
+                *(s16*)(work + 8) = 0;
+            }
+            if (*(s16*)(work + 8) > 100) {
+                *(s16*)(work + 8) = 100;
+            }
+
             *(s16*)(work + 0xA) = *(s16*)(work + 8);
-            if (*(s16*)(work + 8) > 0) _GetExpIcon_Init(work);
+            *(u32*)(bw + 0xEF8) &= ~2U;
+
+            if (*(s16*)(work + 8) > 0) {
+                _GetExpIcon_Init(work);
+            }
+
             *(s32*)(work + 4) = 120;
             btl_camera_set_moveSpeedLv(0, 2);
-            btl_camera_set_mode(0, 0x11);
-            btl_camera_set_posoffset(0.0, 0.0, 0.0, 0);
+            if ((*(u32*)(bw + 0xEF4) & 0x100) == 0) {
+                btl_camera_set_mode(0, 0x11);
+            } else {
+                btl_camera_set_mode(0, 0x12);
+            }
+            btl_camera_set_posoffset(
+                (f64)float_0_804271c0,
+                (f64)float_0_804271c0,
+                (f64)float_0_804271c0,
+                0);
             BattleSetSeq(battleWork, 7, 0x07000009);
             BattleAudienceSoundCheer(60, 60);
             BattleAudienceSoundClap(-1, 0);
             BattleAudienceSoundWhistle();
+
+            valid = 0;
+            party = (u8*)BattleGetPartyPtr(battleWork);
+            if (party != 0 && BtlUnit_CheckStatus(party, 0x1B) != 0) {
+                valid = 1;
+            }
+            psndBGMOff(0x400);
+            if (valid) {
+                psndBGMOn(1, str_BGM_BATTLE_WIN2_802fea98);
+            } else {
+                psndBGMOn(1, str_BGM_BATTLE_WIN1_802fea88);
+            }
+            /* fall through */
+
         case 0x07000009:
-            if (--*(s32*)(work + 4) < 1) {
+            *(s32*)(work + 4) -= 1;
+            if (*(s32*)(work + 4) < 1) {
                 BattleSetSeq(battleWork, 7, 0x0700000A);
             }
             break;
 
         case 0x0700000A:
             if (*(s16*)(work + 8) < 1) {
-                if ((*(u32*)((u8*)battleWork + 0xEF4) & 0x400000) == 0) {
+                if ((*(u32*)(bw + 0xEF4) & 0x400000) == 0) {
                     BattleSetSeq(battleWork, 7, 0x07000019);
                 } else {
                     BattleSetSeq(battleWork, 7, 0x0700000E);
                 }
             } else {
+                mario = (u8*)BattleGetMarioPtr(battleWork);
+                party = (u8*)BattleGetPartyPtr(battleWork);
+
+                evt = (u8*)evtEntry(BtlUnit_GetData(mario, 0x40), 10, 0);
+                if (evt != 0) {
+                    *(s32*)(evt + 0x160) = *(s32*)(mario + 0x0);
+                    *(s32*)(mario + 0x2A8) = *(s32*)(evt + 0x15C);
+                }
+                if (party != 0) {
+                    evt = (u8*)evtEntry(BtlUnit_GetData(party, 0x40), 10, 0);
+                    if (evt != 0) {
+                        *(s32*)(evt + 0x160) = *(s32*)(party + 0x0);
+                        *(s32*)(party + 0x2A8) = *(s32*)(evt + 0x15C);
+                    }
+                }
+
+                if (*(void**)(work + 0x29C) == 0) {
+                    *(void**)(work + 0x29C) = effPointGetEntry(
+                        (f64)float_0_804271c0,
+                        (f64)float_90_804271e4,
+                        (f64)float_0_804271c0,
+                        0,
+                        *(s16*)(work + 8),
+                        0);
+                }
                 BattleSetSeq(battleWork, 7, 0x0700000B);
             }
             break;
@@ -244,38 +476,53 @@ void btlseqEnd(void* battleWork) {
                 }
                 if ((*(s32*)(work + 4) & 3) == 0 || *(s32*)(work + 4) > 999) {
                     *(s16*)(work + 0xA) -= 1;
+                    *(s16*)(pouch + 0x96) += 1;
                     if ((*(s32*)(work + 4) & 7) == 0) {
-                        psndSFXOn((void*)0x2000B);
+                        psndSFXOn(str_SFX_STAR_POINT_GET1_802feaa8);
+                    }
+                }
+
+                if (*(s16*)(pouch + 0x96) > 99) {
+                    *(s16*)(pouch + 0x96) = 0;
+                    *(s32*)(work + 0xC) = 1;
+                    if (*(s16*)(pouch + 0x8A) + 1 > 98) {
+                        *(s16*)(work + 0xA) = 0;
                     }
                 }
             }
             break;
 
         case 0x0700000C:
-            if (--*(s32*)(work + 4) < 1) {
+            *(s32*)(work + 4) -= 1;
+            if (*(s32*)(work + 4) < 1) {
                 *(s32*)(work + 4) = 60;
                 _GetExpIcon_End(work);
                 BattleSetSeq(battleWork, 7, 0x0700000D);
                 effSoftDelete(*(void**)(work + 0x29C));
-                *(s32*)(work + 4) = (*(s32*)(work + 0xC) == 0) ? 5 : 60;
+                if (*(s32*)(work + 0xC) == 0) {
+                    *(s32*)(work + 4) = 5;
+                } else {
+                    *(s32*)(work + 4) = 60;
+                }
             }
             break;
 
         case 0x0700000D:
-            if (--*(s32*)(work + 4) < 1) {
+            *(s32*)(work + 4) -= 1;
+            if (*(s32*)(work + 4) < 1) {
                 *(void**)(work + 0x29C) = 0;
                 BattleSetSeq(battleWork, 7, 0x0700000E);
             }
             break;
 
         case 0x0700000E:
-            if ((*(u32*)((u8*)battleWork + 0xEF4) & 0x400000) == 0) {
+            if ((*(u32*)(bw + 0xEF4) & 0x400000) == 0) {
                 BattleSetSeq(battleWork, 7, 0x07000010);
             } else {
-                void* mario = BattleGetMarioPtr(battleWork);
-                evt = evtEntry(_event_MajinaiEnd, 10, 0);
-                *(s32*)((u8*)evt + 0x160) = *(s32*)mario;
-                *(s32*)((u8*)mario + 0x238) = *(s32*)evt;
+                mario = (u8*)BattleGetMarioPtr(battleWork);
+                evt = (u8*)evtEntry(_event_MajinaiEnd, 10, 0);
+                *(s32*)(evt + 0x160) = *(s32*)(mario + 0x0);
+                *(s32*)(mario + 0x2A8) = *(s32*)(evt + 0x15C);
                 BattleSetSeq(battleWork, 7, 0x0700000F);
             }
             break;
@@ -291,7 +538,7 @@ void btlseqEnd(void* battleWork) {
             break;
 
         case 0x07000010:
-            *(u32*)(work + 0x30) &= ~1;
+            *(u32*)(work + 0x30) &= ~1U;
             if (*(s32*)(work + 0xC) == 0) {
                 BattleSetSeq(battleWork, 7, 0x07000019);
             } else {
@@ -307,8 +554,8 @@ void btlseqEnd(void* battleWork) {
 
         case 0x07000011:
             if (*(s32*)(work + 4) == 0) {
-                evt = evtEntry(_curtain_close_event, 10, 0);
-                *(s32*)(work + 0x1FC) = *(s32*)evt;
+                evt = (u8*)evtEntry(_curtain_close_event, 10, 0);
+                *(s32*)(work + 0x1FC) = *(s32*)(evt + 0x15C);
                 BattleStatusWindowSystemOff();
                 psndBGMOff(0x400);
                 psndBGMOn(1, str_BGM_BATTLE_WIN3_802feabc);
@@ -319,6 +566,70 @@ void btlseqEnd(void* battleWork) {
                 BattleStatusWindowSystemOn();
                 BattleStatusWindowEventOn();
                 BattleSetSeq(battleWork, 7, 0x07000012);
+            }
+            break;
+
+        case 0x07000012:
+            result = *(s32*)(work + 0x10);
+
+            if (*(s32*)(work + 0x1FC) != 0) {
+                if (evtCheckID(*(s32*)(work + 0x1FC))) {
+                    break;
+                }
+                *(s32*)(work + 0x1FC) = 0;
+            }
+
+            if (BattlePadCheckTrigger(0x80000) != 0 &&
+                (u32)*(s32*)(work + 0x10) < (u32)(*(s32*)(work + 0x18) - 1)) {
+                *(s32*)(work + 0x10) += 1;
+            }
+            if (BattlePadCheckTrigger(0x40000) != 0 &&
+                *(s32*)(work + 0x10) > 0) {
+                *(s32*)(work + 0x10) -= 1;
+            }
+
+            if (*(s32*)(work + 0x10) != result) {
+                evt = 0;
+                if (*(s32*)(work + 0x10) == 1) {
+                    evt = (u8*)evtEntry(_move_to_flower_event, 10, 0);
+                } else if (*(s32*)(work + 0x10) < 1) {
+                    if (*(s32*)(work + 0x10) > -1) {
+                        evt = (u8*)evtEntry(_move_to_heart_event, 10, 0);
+                    }
+                } else if (*(s32*)(work + 0x10) < 3) {
+                    evt = (u8*)evtEntry(_move_to_badge_point_event, 10, 0);
+                }
+                *(u32*)(work + 0x30) &= ~0x20U;
+                if (evt != 0) {
+                    *(s32*)(work + 0x1FC) = *(s32*)(evt + 0x15C);
+                    break;
+                }
+            }
+
+            if (BattlePadCheckTrigger(0x100) != 0) {
+                valid = 0;
+                result = *(s32*)(work + 0x10);
+                if (result == 1) {
+                    if (*(s16*)(pouch + 0x90) < 200) {
+                        valid = 1;
+                    }
+                } else if (result < 1) {
+                    if (result > -1 && *(s16*)(pouch + 0x8E) < 200) {
+                        valid = 1;
+                    }
+                } else if (result < 3 && *(s16*)(pouch + 0x94) < 99) {
+                    valid = 1;
+                }
+
+                if (valid) {
+                    *(s32*)(work + 0x24) = 0;
+                    *(s32*)(work + 0x28) = 0;
+                    *(s32*)(work + 0x2C) = 2;
+                    *(u32*)(work + 0x30) &= ~0x20U;
+                    BattleSetSeq(battleWork, 7, 0x07000014);
+                    evt = (u8*)evtEntry(_jump_event, 10, 0);
+                    *(s32*)(work + 0x1FC) = *(s32*)(evt + 0x15C);
+                }
             }
             break;
 
@@ -336,15 +647,15 @@ void btlseqEnd(void* battleWork) {
                 }
             }
             if (BattlePadCheckTrigger(0x200) != 0) {
-                *(u32*)(work + 0x30) &= ~0x10;
+                *(u32*)(work + 0x30) &= ~0x10U;
                 BattleSetSeq(battleWork, 7, 0x07000012);
             }
             if (BattlePadCheckTrigger(0x100) != 0) {
                 if (*(s32*)(work + 0x24) == 0) {
-                    *(u32*)(work + 0x30) &= ~0x18;
+                    *(u32*)(work + 0x30) &= ~0x18U;
                     BattleSetSeq(battleWork, 7, 0x07000015);
                 } else {
-                    *(u32*)(work + 0x30) &= ~0x10;
+                    *(u32*)(work + 0x30) &= ~0x10U;
                     BattleSetSeq(battleWork, 7, 0x07000012);
                 }
             }
@@ -357,8 +668,105 @@ void btlseqEnd(void* battleWork) {
             }
             break;
 
+        case 0x07000015:
+            *(s16*)(pouch + 0x8A) += 1;
+
+            result = *(s32*)(work + 0x10);
+            if (result == 1) {
+                *(s16*)(pouch + 0x90) += 5;
+            } else if (result < 1) {
+                if (result > -1) {
+                    *(s16*)(pouch + 0x8E) += 5;
+                }
+            } else if (result < 3) {
+                *(s16*)(pouch + 0x94) += 3;
+            }
+
+            pouchReviseMarioParam();
+            *(s16*)(pouch + 0x70) = *(s16*)(pouch + 0x72);
+            *(s16*)(pouch + 0x74) = *(s16*)(pouch + 0x76);
+
+            mario = (u8*)BattleGetMarioPtr(battleWork);
+            BtlUnit_SetParamFromPouch(mario);
+
+            party = (u8*)BattleGetPartyPtr(battleWork);
+            if (party != 0) {
+                partyId = BattleTransPartyId(*(s32*)(party + 8));
+                if (partyId != 0 && partyId < 8) {
+                    *(s16*)(pouch + partyId * 0xE + 6) =
+                        *(s16*)(pouch + partyId * 0xE + 2);
+                    *(s16*)(party + 0x10C) = *(s16*)(party + 0x108);
+                }
+            }
+
+            valid = 1;
+            npcInfo = *(u8**)(info + 0xC);
+            mario = (u8*)BattleGetMarioPtr(battleWork);
+            party = (u8*)BattleGetPartyPtr(battleWork);
+            flags = *(u32*)(mario + 0x138);
+            if ((flags & 0x10000000) == 0 && (flags & 0x20000000) == 0) {
+                if (party != 0 && BtlUnit_CheckStatus(party, 0x1B) != 0) {
+                    valid = 0;
+                }
+            } else {
+                valid = 0;
+            }
+
+            if (valid) {
+                if ((*(u32*)(npcInfo + 4) & 0x20000000) == 0) {
+                    BtlUnit_snd_se(
+                        mario,
+                        str_SFX_VOICE_MARIO_PAUS_802feae4,
+                        (s32)0xF1194D80,
+                        0);
+                } else {
+                    BtlUnit_snd_se(
+                        mario,
+                        str_SFX_VOICE_MARIO_PAUS_802feacc,
+                        (s32)0xF1194D80,
+                        0);
+                }
+            }
+
+            mario = (u8*)BattleGetMarioPtr(battleWork);
+            BtlUnit_SetBodyAnim(mario, str_M_V_2_80427160);
+            BattleAudienceSoundCheer(180, 40);
+            *(s32*)(work + 4) = 180;
+            BattleSetSeq(battleWork, 7, 0x07000016);
+
+            mario = (u8*)BattleGetMarioPtr(battleWork);
+            party = (u8*)BattleGetPartyPtr(battleWork);
+            if (mario != 0) {
+                effRecoveryEntry(
+                    (f64)*(f32*)(mario + 0x3C),
+                    (f64)(float_40_80427294 + *(f32*)(mario + 0x40)),
+                    (f64)*(f32*)(mario + 0x44),
+                    4,
+                    0);
+            }
+            if (party != 0) {
+                effRecoveryEntry(
+                    (f64)*(f32*)(party + 0x3C),
+                    (f64)(float_40_80427294 + *(f32*)(party + 0x40)),
+                    (f64)*(f32*)(party + 0x44),
+                    4,
+                    0);
+            }
+            break;
+
         case 0x07000016:
             *(s32*)(work + 4) -= 1;
+            if (*(s32*)(work + 4) == 120) {
+                mario = (u8*)BattleGetMarioPtr(battleWork);
+                if (mario != 0) {
+                    effRecoveryEntry(
+                        (f64)*(f32*)(mario + 0x3C),
+                        (f64)(float_40_80427294 + *(f32*)(mario + 0x40)),
+                        (f64)*(f32*)(mario + 0x44),
+                        5,
+                        0);
+                }
+            }
             if (*(s32*)(work + 4) < 1) {
                 if (*(s32*)(work + 0x2A4) != 0) {
                     evtDeleteID(*(s32*)(work + 0x2A4));
@@ -368,16 +776,18 @@ void btlseqEnd(void* battleWork) {
             break;
 
         case 0x07000017:
-            {
-                s16* rank = _get_rank_data(0);
-                if (rank == 0) {
-                    BattleSetSeq(battleWork, 7, 0x0700001C);
-                    break;
-                }
-                evt = evtEntry(_rank_up_event, 10, 0);
-                *(s32*)(work + 0x2A8) = *(s32*)evt;
-                BattleSetSeq(battleWork, 7, 0x07000018);
+            rank = _get_rank_data(*(s16*)(pouch + 0x8A));
+            if (rank == 0) {
+                BattleSetSeq(battleWork, 7, 0x0700001C);
+                break;
             }
+            rank = _get_rank_data(*(s16*)(pouch + 0x8A));
+            *(s16*)(pouch + 0x88) = rank->field_0x2;
+            evt = (u8*)evtEntry(_rank_up_event, 10, 0);
+            *(s32*)(work + 0x2A8) = *(s32*)(evt + 0x15C);
+            BattleSetSeq(battleWork, 7, 0x07000018);
+            /* fall through */
+
         case 0x07000018:
             if (!evtCheckID(*(s32*)(work + 0x2A8))) {
                 BattleSetSeq(battleWork, 7, 0x0700001C);
@@ -385,16 +795,57 @@ void btlseqEnd(void* battleWork) {
             break;
 
         case 0x07000019:
-            {
-                void* mario = BattleGetMarioPtr(battleWork);
-                BtlUnit_SetBodyAnim(mario, str_M_V_1_80427298);
-                *(s32*)(work + 4) = 60;
-                BattleSetSeq(battleWork, 7, 0x0700001A);
+            valid = 1;
+            npcInfo = *(u8**)(info + 0xC);
+            mario = (u8*)BattleGetMarioPtr(battleWork);
+            party = (u8*)BattleGetPartyPtr(battleWork);
+            flags = *(u32*)(mario + 0x138);
+
+            if ((flags & 0x10000000) == 0 && (flags & 0x20000000) == 0) {
+                if (party != 0 && BtlUnit_CheckStatus(party, 0x1B) != 0) {
+                    valid = 0;
+                }
+            } else {
+                valid = 0;
             }
+
+            if (!valid) {
+                if ((*(u32*)(npcInfo + 4) & 0x20000000) == 0) {
+                    BtlUnit_snd_se(
+                        mario,
+                        str_SFX_VOICE_MARIO_RELI_802feb14,
+                        (s32)0xF1194D80,
+                        0);
+                } else {
+                    BtlUnit_snd_se(
+                        mario,
+                        str_SFX_VOICE_MARIO_RELI_802feafc,
+                        (s32)0xF1194D80,
+                        0);
+                }
+            }
+
+            mario = (u8*)BattleGetMarioPtr(battleWork);
+            BtlUnit_SetBodyAnim(mario, str_M_V_1_80427298);
+            *(s32*)(work + 4) = 60;
+            BattleSetSeq(battleWork, 7, 0x0700001A);
             break;
 
         case 0x0700001A:
-            if (--*(s32*)(work + 4) < 1) {
+            *(s32*)(work + 4) -= 1;
+            if (*(s32*)(work + 4) < 1) {
+                mario = (u8*)BattleGetMarioPtr(battleWork);
+                BtlUnit_SetBodyAnimType(mario, 0x2A);
+
+                party = (u8*)BattleGetPartyPtr(battleWork);
+                if (party != 0) {
+                    party = (u8*)BattleGetPartyPtr(battleWork);
+                    if (*(s32*)(party + 8) != 0xE1 ||
+                        *(u8*)(party + 0x12B) < 1) {
+                        party = (u8*)BattleGetPartyPtr(battleWork);
+                        BtlUnit_SetBodyAnimType(party, 0x2A);
+                    }
+                }
                 BattleSetSeq(battleWork, 7, 0x0700001B);
             }
             break;
@@ -405,18 +856,68 @@ void btlseqEnd(void* battleWork) {
 
         case 0x0700001C:
             BattleSetSeq(battleWork, 7, 0x0700001D);
+            BattleAudienceSoundSetVolAll(0, 30);
+            fbat = (u8*)fbatGetPointer();
+            npc = *(u8**)(fbat + 8);
+            if (npc != 0) {
+                *(u32*)(npc + 0x140) |= 0x100;
+            }
             break;
 
         case 0x0700001D:
-            fadeEntry(9, 200, &fadeColor);
+            fadeColor = dat_80427144;
+            fadeEntry(10, 200, &fadeColor);
             BattleSetSeq(battleWork, 7, 0x0700001E);
             psndBGMOff(0x201);
+            /* fall through */
+
         case 0x0700001E:
             if (fadeIsFinish() != 0) {
                 BattleSetSeq(battleWork, 7, 0x0700001F);
             }
             break;
+
+        case 0x0700001F:
+            party = (u8*)BattleGetPartyPtr(battleWork);
+            if (party == 0) {
+                unitKind = 0;
+            } else {
+                unitKind = *(s32*)(party + 8);
+            }
+            partyId = BattleTransPartyId(unitKind);
+
+            npcInfo = *(u8**)(info + 0xC);
+            mario = (u8*)BattleGetMarioPtr(battleWork);
+            if ((*(u32*)(npcInfo + 4) & 0x40) != 0 &&
+                *(s16*)(mario + 0x10C) < 1) {
+                *(s16*)(mario + 0x10C) = 1;
+            }
+
+            BattleSetMarioParamToFieldBattle(battleWork);
+            BattleFree(*(void**)(bw + 0xF28));
+            *(void**)(bw + 0xF28) = 0;
+            BattleSetSeq(battleWork, 0, 4);
+
+            player = (u8*)marioGetPtr();
+            *(u32*)(player + 4) &= ~1U;
+
+            if (unitKind == 0) {
+                marioPartyKill();
+            } else {
+                marioPartyEntry(partyId);
+            }
+
+            partyId = marioGetPartyId();
+            fieldParty = (u8*)partyGetPtr(partyId);
+            if (fieldParty != 0) {
+                *(u32*)(fieldParty + 4) &= ~1U;
+            }
+
+            BtlActRec_JudgeRuleKeep();
+            BattleAudienceSoundStop(1);
+            break;
     }
+
     btlseqEnd_DispMain(8, battleWork);
 }
 
@@ -769,11 +1270,6 @@ void _GetExpIcon_Init(void* seqEndWork) {
 
 /* stub-fill: _GetExpIcon_Main | prototype_only | source_prototype */
 void _GetExpIcon_Main(void* battleWork) {
-    typedef struct VecLocal {
-        f32 x;
-        f32 y;
-        f32 z;
-    } VecLocal;
     extern void iconFlagOff(char* name, u16 flags);
     extern void iconFlagOn(char* name, u16 flags);
     extern void iconSetAlpha(char* name, u8 alpha);
@@ -786,84 +1282,121 @@ void _GetExpIcon_Main(void* battleWork) {
     void* seqEndWork;
     s16 remaining;
     s32 tens;
-    s32 ones;
     s32 i;
-    s32 iconOffset;
     s32 posOffset;
+    s32 iconOffset;
     s32 alpha;
+    s32 ones;
+    s32 zero;
+    s32 alphaStep;
+    s32 alphaMax;
+    f32 step;
+    f32 countScale;
+    f32 centerOffset;
+    f32 x;
     f32 baseY;
 
     seqEndWork = *(void**)((s32)battleWork + 0xF28);
+    step = float_36_80427234;
     remaining = *(s16*)((s32)seqEndWork + 0xA);
-    tens = remaining / 10;
-    iconOffset = 0;
+    i = 0;
     posOffset = 0;
-    for (i = 0; i < tens; i++) {
-        iconFlagOff((char*)((s32)*(void**)((s32)seqEndWork + 0x34 + iconOffset) + 0x18), 2);
-        alpha = *(s32*)((s32)seqEndWork + 0x80 + iconOffset);
-        if (alpha < 1) {
-            *(s32*)((s32)seqEndWork + 0x80 + iconOffset) = 0x40;
+    tens = remaining / 10;
+    countScale = float_18_80427230;
+    centerOffset = float_24_8042722c;
+    iconOffset = 0;
+
+    for (; i < tens; i++) {
+        void* slot = (void*)((s32)seqEndWork + iconOffset);
+
+        iconFlagOff((char*)((s32)*(void**)((s32)slot + 0x34) + 0x18), 2);
+
+        alpha = *(s32*)((s32)slot + 0x80);
+        if (alpha <= 0) {
+            *(s32*)((s32)slot + 0x80) = 0x40;
         } else {
-            alpha += 0x40;
-            if (alpha > 0xFF) {
-                alpha = 0xFF;
+            *(s32*)((s32)slot + 0x80) = alpha + 0x40;
+            if (*(s32*)((s32)slot + 0x80) > 0xFF) {
+                *(s32*)((s32)slot + 0x80) = 0xFF;
             }
-            *(s32*)((s32)seqEndWork + 0x80 + iconOffset) = alpha;
         }
-        if (*(s32*)((s32)seqEndWork + 0xCC + iconOffset) < 0x10) {
-            *(s32*)((s32)seqEndWork + 0xCC + iconOffset) += 1;
+
+        alpha = *(s32*)((s32)slot + 0xCC);
+        if (alpha < 0x10) {
+            *(s32*)((s32)slot + 0xCC) = alpha + 1;
         }
-        *(f32*)((s32)seqEndWork + 0x118 + posOffset) =
-            float_36_80427234 * (f32)i - (float_18_80427230 * (f32)tens - float_24_8042722c);
-        iconOffset += 4;
+
+        x = -(countScale * (f32)(*(s16*)((s32)seqEndWork + 0xA) / 10) - centerOffset);
+        x = step * (f32)i + x;
+        *(f32*)((s32)seqEndWork + 0x118 + posOffset) = x;
+
         posOffset += 0xC;
+        iconOffset += 4;
     }
 
     iconOffset = i << 2;
+    zero = 0;
     for (; i < 10; i++) {
-        iconFlagOn((char*)((s32)*(void**)((s32)seqEndWork + 0x34 + iconOffset) + 0x18), 2);
-        *(s32*)((s32)seqEndWork + 0x80 + iconOffset) = 0;
-        *(s32*)((s32)seqEndWork + 0xCC + iconOffset) = 0;
+        void* slot = (void*)((s32)seqEndWork + iconOffset);
+
+        iconFlagOn((char*)((s32)*(void**)((s32)slot + 0x34) + 0x18), 2);
+        *(s32*)((s32)slot + 0x80) = zero;
+        *(s32*)((s32)slot + 0xCC) = zero;
         iconOffset += 4;
     }
 
+    i = 10;
     iconOffset = 0x28;
+    alphaStep = 0x40;
+    alphaMax = 0xFF;
     ones = remaining % 10;
-    for (i = 10; i - 10U < ones; i++) {
-        iconFlagOff((char*)((s32)*(void**)((s32)seqEndWork + 0x34 + iconOffset) + 0x18), 2);
-        alpha = *(s32*)((s32)seqEndWork + 0x80 + iconOffset);
-        if (alpha < 1) {
-            *(s32*)((s32)seqEndWork + 0x80 + iconOffset) = 0x40;
+
+    for (; i - 10 < ones; i++) {
+        void* slot = (void*)((s32)seqEndWork + iconOffset);
+
+        iconFlagOff((char*)((s32)*(void**)((s32)slot + 0x34) + 0x18), 2);
+
+        alpha = *(s32*)((s32)slot + 0x80);
+        if (alpha <= 0) {
+            *(s32*)((s32)slot + 0x80) = alphaStep;
         } else {
-            alpha += 0x40;
-            if (alpha > 0xFF) {
-                alpha = 0xFF;
+            *(s32*)((s32)slot + 0x80) = alpha + 0x40;
+            if (*(s32*)((s32)slot + 0x80) > alphaMax) {
+                *(s32*)((s32)slot + 0x80) = alphaMax;
             }
-            *(s32*)((s32)seqEndWork + 0x80 + iconOffset) = alpha;
         }
+
         iconOffset += 4;
     }
 
     iconOffset = i << 2;
+    zero = 0;
     for (; i < 0x13; i++) {
-        iconFlagOn((char*)((s32)*(void**)((s32)seqEndWork + 0x34 + iconOffset) + 0x18), 2);
-        *(s32*)((s32)seqEndWork + 0x80 + iconOffset) = 0;
+        void* slot = (void*)((s32)seqEndWork + iconOffset);
+
+        iconFlagOn((char*)((s32)*(void**)((s32)slot + 0x34) + 0x18), 2);
+        *(s32*)((s32)slot + 0x80) = zero;
         iconOffset += 4;
     }
 
     baseY = float_0_804271c0;
-    iconOffset = 0;
+    i = 0;
     posOffset = 0;
-    for (i = 0; i < 0x13; i++) {
-        iconSetAlpha((char*)((s32)*(void**)((s32)seqEndWork + 0x34 + iconOffset) + 0x18),
-                     (u8)*(s32*)((s32)seqEndWork + 0x80 + iconOffset));
+    iconOffset = 0;
+    do {
+        void* slot = (void*)((s32)seqEndWork + iconOffset);
+
+        iconSetAlpha((char*)((s32)*(void**)((s32)slot + 0x34) + 0x18),
+                     (u8)*(s32*)((s32)slot + 0x80));
         iconSetPos(*(f32*)((s32)seqEndWork + 0x118 + posOffset),
                    *(f32*)((s32)seqEndWork + 0x11C + posOffset) + baseY,
                    *(f32*)((s32)seqEndWork + 0x120 + posOffset),
-                   (char*)((s32)*(void**)((s32)seqEndWork + 0x34 + iconOffset) + 0x18));
+                   (char*)((s32)*(void**)((s32)slot + 0x34) + 0x18));
+
+        i++;
         iconOffset += 4;
         posOffset += 0xC;
-    }
+    } while (i < 0x13);
 }
 
 void _GetExpIcon_Disp(void) {
@@ -1057,51 +1590,70 @@ s32 _lvup_disp_flag_onoff(void* event) {
 
 /* stub-fill: _lvup_spot_on | missing_definition | ghidra_signature */
 s32 _lvup_spot_on(void* event) {
+    typedef struct Vec3f_LvupSpotOn {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3f_LvupSpotOn;
     extern char str_msg_menu_mario_name__802fe738[];
     extern u32 dat_8042716c;
     extern f32 float_25_804271e0;
     extern f32 float_neg50_80427208;
     extern void* BatSpotGetPtr(void);
+    char* base = str_msg_menu_mario_name__802fe738;
     u8* spot = BatSpotGetPtr();
     s32* args = *(s32**)((u8*)event + 0x18);
     u32 id;
     u8* entry;
-    char* base = str_msg_menu_mario_name__802fe738;
+    Vec3f_LvupSpotOn pos0;
+    Vec3f_LvupSpotOn pos1;
+    Vec3f_LvupSpotOn pos2;
+    Vec3f_LvupSpotOn pos3;
+    Vec3f_LvupSpotOn pos4;
 
     *(s32*)(spot + 8) = 1;
     id = evtGetValue(event, *args);
     entry = *(u8**)(spot + 4) + id * 0x2C;
-    if (id == 2) {
-        *(f32*)(entry + 0) = float_neg50_80427208 + float_25_804271e0 * 2.0f;
-        *(u32*)(entry + 4) = *(u32*)(base + 0x1B8);
-        *(u32*)(entry + 8) = *(u32*)(base + 0x1BC);
-    } else if ((s32)id < 2) {
-        if (id == 0) {
-            *(f32*)(entry + 0) = float_neg50_80427208;
-            *(u32*)(entry + 4) = *(u32*)(base + 0x1A0);
-            *(u32*)(entry + 8) = *(u32*)(base + 0x1A4);
-        } else if ((s32)id > -1) {
-            *(f32*)(entry + 0) = float_neg50_80427208 + float_25_804271e0 * (f32)id;
-            *(u32*)(entry + 4) = *(u32*)(base + 0x1AC);
-            *(u32*)(entry + 8) = *(u32*)(base + 0x1B0);
-        }
-    } else if (id == 4) {
-        *(f32*)(entry + 0) = float_neg50_80427208 + float_25_804271e0 * 4.0f;
-        *(u32*)(entry + 4) = *(u32*)(base + 0x1D0);
-        *(u32*)(entry + 8) = *(u32*)(base + 0x1D4);
-    } else if ((s32)id < 4) {
-        *(f32*)(entry + 0) = float_neg50_80427208 + float_25_804271e0 * (f32)id;
-        *(u32*)(entry + 4) = *(u32*)(base + 0x1C4);
-        *(u32*)(entry + 8) = *(u32*)(base + 0x1C8);
+    switch (id) {
+        case 0:
+            pos0.x = float_neg50_80427208;
+            pos0.y = *(f32*)(base + 0x1A0);
+            pos0.z = *(f32*)(base + 0x1A4);
+            *(Vec3f_LvupSpotOn*)(entry + 4) = pos0;
+            break;
+        case 1:
+            pos1.x = float_neg50_80427208 + float_25_804271e0 * (f32)id;
+            pos1.y = *(f32*)(base + 0x1AC);
+            pos1.z = *(f32*)(base + 0x1B0);
+            *(Vec3f_LvupSpotOn*)(entry + 4) = pos1;
+            break;
+        case 2:
+            pos2.x = float_neg50_80427208 + float_25_804271e0 * 2.0f;
+            pos2.y = *(f32*)(base + 0x1B8);
+            pos2.z = *(f32*)(base + 0x1BC);
+            *(Vec3f_LvupSpotOn*)(entry + 4) = pos2;
+            break;
+        case 3:
+            pos3.x = float_neg50_80427208 + float_25_804271e0 * (f32)id;
+            pos3.y = *(f32*)(base + 0x1C4);
+            pos3.z = *(f32*)(base + 0x1C8);
+            *(Vec3f_LvupSpotOn*)(entry + 4) = pos3;
+            break;
+        case 4:
+            pos4.x = float_neg50_80427208 + float_25_804271e0 * 4.0f;
+            pos4.y = *(f32*)(base + 0x1D0);
+            pos4.z = *(f32*)(base + 0x1D4);
+            *(Vec3f_LvupSpotOn*)(entry + 4) = pos4;
+            break;
     }
-    *(u32*)(entry + 0xC) = *(u32*)(base + 0x1D8);
-    *(u32*)(entry + 0x10) = *(u32*)(base + 0x1DC);
-    *(u32*)(entry + 0x14) = *(u32*)(base + 0x1E0);
-    *(u32*)(entry + 0x18) = *(u32*)(base + 0x1E4);
-    *(u32*)(entry + 0x1C) = *(u32*)(base + 0x1E8);
-    *(u32*)(entry + 0x20) = *(u32*)(base + 0x1EC);
-    *(u32*)(entry + 0x24) = dat_8042716c;
-    *(u16*)(entry + 0x28) |= 2;
+    *(u32*)(entry + 0x10) = *(u32*)(base + 0x1D8);
+    *(u32*)(entry + 0x14) = *(u32*)(base + 0x1DC);
+    *(u32*)(entry + 0x18) = *(u32*)(base + 0x1E0);
+    *(u32*)(entry + 0x1C) = *(u32*)(base + 0x1E4);
+    *(u32*)(entry + 0x20) = *(u32*)(base + 0x1E8);
+    *(u32*)(entry + 0x24) = *(u32*)(base + 0x1EC);
+    *(u32*)(entry + 0x28) = dat_8042716c;
+    *(u16*)entry |= 2;
     return 2;
 }
 
@@ -1528,65 +2080,285 @@ s32 _keta_get(s32 value) {
 /* stub-fill: _lvup_select_object_disp | prototype_only | source_prototype */
 void _lvup_select_object_disp(void) {
     typedef f32 Mtx[3][4];
-    typedef struct VecLocal { f32 x,y,z; } VecLocal;
-    typedef struct ColorLocal { u8 r,g,b,a; } ColorLocal;
-    extern void* _battleWorkPointer;
-    extern void PSMTXIdentity(Mtx);
-    extern void PSMTXTrans(Mtx,f64,f64,f64);
-    extern void PSMTXScale(Mtx,f32,f32,f32);
-    extern void PSMTXRotRad(Mtx,f64,char);
-    extern void PSMTXConcat(void*,void*,void*);
-    extern void btlDispTexPlane2(void*,s32,ColorLocal*);
-    extern void btlDispTexPlane(f64,f64,f64,f64,f64,s32,ColorLocal*,s32);
-    extern void iconNumberDispGx3D(void*,s32,s32,ColorLocal*);
-    extern void iconDispGxCol(void*,s32,s32,ColorLocal*);
-    extern s32 _keta_get(u32);
-    u8* battle = (u8*)_battleWorkPointer;
-    u8* seq = *(u8**)(battle + 0xF28);
-    Mtx model, trans, scale, rx, ry, rz;
-    ColorLocal color;
-    s32 i;
-    u8* obj;
-    s32 texture;
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+    typedef struct ColorLocal {
+        u8 r;
+        u8 g;
+        u8 b;
+        u8 a;
+    } ColorLocal;
+    typedef struct LvupObjectLocal {
+        VecLocal translation;
+        VecLocal scale;
+        VecLocal rotation;
+        u16 current;
+        u16 maximum;
+        u8 state;
+        u8 timer;
+        u8 pad_2a[2];
+        s32 visible;
+        ColorLocal color;
+    } LvupObjectLocal;
+    typedef struct SeqEndLocal {
+        u8 pad_000[0x200];
+        LvupObjectLocal object[3];
+    } SeqEndLocal;
 
-    for (i=0; i<3; i++) {
-        obj = seq + 0x34 + i*0x34;
-        if (obj[0x28] == 4) { obj[0x28]=5; obj[0x29]=1; }
-        if (obj[0x28] == 5) {
-            obj[0x29]--;
-            if (obj[0x29] == 0) { obj[0x29]=8; *(s32*)(obj+0x2C)^=1; }
+    extern void* _battleWorkPointer;
+    extern void* gp;
+    extern s32 hp_tex_tbl[6];
+    extern s32 fp_tex_tbl[6];
+    extern s32 bp_tex_tbl[6];
+
+    extern void PSMTXIdentity(Mtx);
+    extern void PSMTXTrans(Mtx, f32, f32, f32);
+    extern void PSMTXScale(Mtx, f32, f32, f32);
+    extern void PSMTXRotRad(Mtx, s32, f32);
+    extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void btlDispTexPlane2(Mtx, s32, ColorLocal*, s32);
+    extern void btlDispTexPlane(f32, f32, f32, f32, f32, s32, ColorLocal*, s32);
+    extern void iconNumberDispGx3D(Mtx, s32, s32, ColorLocal*);
+    extern void iconDispGxCol(Mtx, s32, s32, ColorLocal*);
+    extern s32 _keta_get(s32);
+
+    /* Constants not present in the accepted anonymous pool. */
+    extern f32 float_8_80427194;
+    extern f32 float_6_80427198;
+    extern f32 float_1p2_804271ac;
+    extern f32 float_3_804271b0;
+    extern f32 float_4_804271bc;
+
+    Mtx model;
+    Mtx trans;
+    Mtx scale;
+    Mtx rotX;
+    Mtx rotY;
+    Mtx rotZ;
+    Mtx currentMtx;
+    Mtx maximumMtx;
+    Mtx dividerMtx;
+    Mtx overlayScale;
+    VecLocal dividerPos;
+    VecLocal currentPos;
+    VecLocal maximumPos;
+    ColorLocal color0a;
+    ColorLocal color0b;
+    ColorLocal color1a;
+    ColorLocal color1b;
+    ColorLocal color2a;
+    ColorLocal color2b;
+    ColorLocal currentColor;
+    ColorLocal maximumColor;
+    ColorLocal dividerColor;
+    ColorLocal simpleColor;
+    SeqEndLocal* seq;
+    LvupObjectLocal* obj;
+    s32 i;
+    s32 offset;
+    s32 count;
+    s32 state;
+    s32 digits;
+
+    offset = 0;
+    count = 3;
+    seq = *(SeqEndLocal**)((u8*)_battleWorkPointer + 0xF28);
+
+    do {
+        obj = (LvupObjectLocal*)((u8*)seq + 0x200 + offset);
+        state = obj->state;
+        if (state == 5) {
+            goto decrement_timer;
+        }
+        if (state < 5 && state > 3) {
+            obj->state = 5;
+            obj->timer = 1;
+decrement_timer:
+            obj->timer--;
+            if (obj->timer == 0) {
+                obj->timer = 8;
+                if (obj->visible == 0) {
+                    obj->visible = 1;
+                } else {
+                    obj->visible = 0;
+                }
+            }
         } else {
-            *(s32*)(obj+0x2C)=1;
+            obj->visible = 1;
         }
-    }
-    for (i=0; i<3; i++) {
-        obj = seq + 0x34 + i*0x34;
-        if (*(s32*)(obj+0x2C)==0) continue;
+        offset += 0x34;
+        count--;
+    } while (count != 0);
+
+    if (seq->object[0].visible != 0) {
         PSMTXIdentity(model);
-        PSMTXTrans(trans,*(f32*)(obj+0),*(f32*)(obj+4),*(f32*)(obj+8));
-        PSMTXScale(scale,*(f32*)(obj+0x18),*(f32*)(obj+0x1C),*(f32*)(obj+0x20));
-        PSMTXRotRad(rx,0.017453292f**(f32*)(obj+0xC),'x');
-        PSMTXRotRad(ry,0.017453292f**(f32*)(obj+0x10),'y');
-        PSMTXRotRad(rz,0.017453292f**(f32*)(obj+0x14),'z');
-        PSMTXConcat(rz,scale,model); PSMTXConcat(rz,model,model);
-        PSMTXConcat(rx,model,model); PSMTXConcat(ry,model,model); PSMTXConcat(trans,model,model);
-        color=*(ColorLocal*)(obj+0x30);
-        texture=0x31+i;
-        btlDispTexPlane2(model,texture,&color);
-        btlDispTexPlane(*(f32*)obj-16.0f,*(f32*)(obj+4)+20.0f,*(f32*)(obj+8)+2.0f,
-                        *(f32*)(obj+0x18),*(f32*)(obj+0x1C),texture,&color,0);
-        if (obj[0x28]==1 && *(u16*)(obj+0x24)!=*(u16*)(obj+0x26)) {
-            PSMTXTrans(trans,*(f32*)obj-14.0f,*(f32*)(obj+4)-96.0f**(f32*)(obj+0x1C)-2.0f,*(f32*)(obj+8)+5.0f);
-            PSMTXScale(scale,0.8f,0.8f,1.0f); PSMTXConcat(trans,scale,trans);
-            iconNumberDispGx3D(trans,*(u16*)(obj+0x24),0,&color);
-            PSMTXTrans(trans,*(f32*)obj,*(f32*)(obj+4)-96.0f**(f32*)(obj+0x1C),*(f32*)(obj+8)+5.0f);
-            PSMTXScale(scale,-0.6f,0.6f,1.0f); PSMTXConcat(trans,scale,trans);
-            iconDispGxCol(trans,0,0x16B,&color);
-        } else if (obj[0x28]==2 || obj[0x28]==5) {
-            PSMTXTrans(trans,*(f32*)obj,*(f32*)(obj+4)-96.0f**(f32*)(obj+0x1C)-2.0f,*(f32*)(obj+8)+5.0f);
-            iconNumberDispGx3D(trans,*(u16*)(obj+0x26),0,&color);
-        }
+        PSMTXTrans(trans,
+                   seq->object[0].translation.x,
+                   seq->object[0].translation.y,
+                   seq->object[0].translation.z);
+        PSMTXScale(scale,
+                   seq->object[0].scale.x,
+                   seq->object[0].scale.y,
+                   seq->object[0].scale.z);
+        PSMTXRotRad(rotX, 'x', 0.017453292f * seq->object[0].rotation.x);
+        PSMTXRotRad(rotY, 'y', 0.017453292f * seq->object[0].rotation.y);
+        PSMTXRotRad(rotZ, 'z', 0.017453292f * seq->object[0].rotation.z);
+        PSMTXConcat(rotZ, scale, model);
+        PSMTXConcat(rotZ, model, model);
+        PSMTXConcat(rotX, model, model);
+        PSMTXConcat(rotY, model, model);
+        PSMTXConcat(trans, model, model);
+
+        color0a = seq->object[0].color;
+        btlDispTexPlane2(model, 0x31, &color0a, 0);
+
+        color0b = seq->object[0].color;
+        btlDispTexPlane(
+            seq->object[0].translation.x - 16.0f,
+            20.0f + seq->object[0].translation.y,
+            2.0f + seq->object[0].translation.z,
+            seq->object[0].scale.x,
+            seq->object[0].scale.y,
+            hp_tex_tbl[*(s32*)((u8*)gp + 0x16C)],
+            &color0b,
+            0);
     }
+
+    if (seq->object[1].visible != 0) {
+        PSMTXIdentity(model);
+        PSMTXTrans(trans,
+                   seq->object[1].translation.x,
+                   seq->object[1].translation.y,
+                   seq->object[1].translation.z);
+        PSMTXScale(scale,
+                   seq->object[1].scale.x,
+                   seq->object[1].scale.y,
+                   seq->object[1].scale.z);
+        PSMTXRotRad(rotX, 'x', 0.017453292f * seq->object[1].rotation.x);
+        PSMTXRotRad(rotY, 'y', 0.017453292f * seq->object[1].rotation.y);
+        PSMTXRotRad(rotZ, 'z', 0.017453292f * seq->object[1].rotation.z);
+        PSMTXConcat(rotZ, scale, model);
+        PSMTXConcat(rotZ, model, model);
+        PSMTXConcat(rotX, model, model);
+        PSMTXConcat(rotY, model, model);
+        PSMTXConcat(trans, model, model);
+
+        color1a = seq->object[1].color;
+        btlDispTexPlane2(model, 0x32, &color1a, 0);
+
+        color1b = seq->object[1].color;
+        btlDispTexPlane(
+            seq->object[1].translation.x - 16.0f,
+            20.0f + seq->object[1].translation.y,
+            2.0f + seq->object[1].translation.z,
+            seq->object[1].scale.x,
+            seq->object[1].scale.y,
+            fp_tex_tbl[*(s32*)((u8*)gp + 0x16C)],
+            &color1b,
+            0);
+    }
+
+    if (seq->object[2].visible != 0) {
+        PSMTXIdentity(model);
+        PSMTXTrans(trans,
+                   seq->object[2].translation.x,
+                   seq->object[2].translation.y,
+                   seq->object[2].translation.z);
+        PSMTXScale(scale,
+                   seq->object[2].scale.x,
+                   seq->object[2].scale.y,
+                   seq->object[2].scale.z);
+        PSMTXRotRad(rotX, 'x', 0.017453292f * seq->object[2].rotation.x);
+        PSMTXRotRad(rotY, 'y', 0.017453292f * seq->object[2].rotation.y);
+        PSMTXRotRad(rotZ, 'z', 0.017453292f * seq->object[2].rotation.z);
+        PSMTXConcat(rotZ, scale, model);
+        PSMTXConcat(rotZ, model, model);
+        PSMTXConcat(rotX, model, model);
+        PSMTXConcat(rotY, model, model);
+        PSMTXConcat(trans, model, model);
+
+        color2a = seq->object[2].color;
+        btlDispTexPlane2(model, 0x33, &color2a, 0);
+
+        color2b = seq->object[2].color;
+        btlDispTexPlane(
+            seq->object[2].translation.x - 16.0f,
+            20.0f + seq->object[2].translation.y,
+            2.0f + seq->object[2].translation.z,
+            seq->object[2].scale.x,
+            seq->object[2].scale.y,
+            bp_tex_tbl[*(s32*)((u8*)gp + 0x16C)],
+            &color2b,
+            0);
+    }
+
+    i = 0;
+    offset = 0;
+    do {
+        obj = (LvupObjectLocal*)((u8*)seq + 0x200 + offset);
+        if (obj->visible != 0) {
+            if (obj->state == 1) {
+                if (obj->current != obj->maximum) {
+                    currentPos.x = obj->translation.x - 14.0f;
+                    currentPos.y =
+                        obj->translation.y - (96.0f * obj->scale.y + 2.0f);
+                    currentPos.z = obj->translation.z + 5.0f;
+                    PSMTXScale(overlayScale, 0.8f, 0.8f, 1.0f);
+                    PSMTXTrans(currentMtx, currentPos.x, currentPos.y, currentPos.z);
+                    PSMTXConcat(currentMtx, overlayScale, currentMtx);
+                    currentColor = obj->color;
+                    iconNumberDispGx3D(currentMtx, obj->current, 0, &currentColor);
+
+                    maximumPos = obj->translation;
+                    digits = _keta_get(obj->maximum);
+                    maximumPos.x =
+                        float_1p2_804271ac * (f32)(digits * 8 + 6) + maximumPos.x;
+                    maximumPos.y =
+                        maximumPos.y - (96.0f * obj->scale.y + float_3_804271b0);
+                    maximumPos.z = maximumPos.z + 5.0f;
+                    PSMTXTrans(maximumMtx, maximumPos.x, maximumPos.y, maximumPos.z);
+                    PSMTXScale(
+                        overlayScale,
+                        float_1p2_804271ac,
+                        float_1p2_804271ac,
+                        1.0f);
+                    PSMTXConcat(maximumMtx, overlayScale, maximumMtx);
+                    maximumColor = obj->color;
+                    iconNumberDispGx3D(
+                        maximumMtx, obj->maximum, 0, &maximumColor);
+
+                    dividerPos = obj->translation;
+                    dividerPos.y =
+                        dividerPos.y - 96.0f * obj->scale.y;
+                    dividerPos.z = dividerPos.z + 5.0f;
+                    PSMTXTrans(
+                        dividerMtx, dividerPos.x, dividerPos.y, dividerPos.z);
+                    PSMTXScale(overlayScale, -0.6f, 0.6f, 1.0f);
+                    PSMTXConcat(dividerMtx, overlayScale, dividerMtx);
+                    dividerColor = obj->color;
+                    iconDispGxCol(
+                        dividerMtx, 0, 0x16B, &dividerColor);
+                }
+            } else if (obj->state == 2 || obj->state == 5) {
+                maximumPos = obj->translation;
+                digits = _keta_get(obj->maximum);
+                maximumPos.y =
+                    maximumPos.y - (96.0f * obj->scale.y + 2.0f);
+                maximumPos.x =
+                    maximumPos.x + ((f32)(digits * 4) - float_4_804271bc);
+                maximumPos.z = maximumPos.z + 5.0f;
+                PSMTXTrans(maximumMtx, maximumPos.x, maximumPos.y, maximumPos.z);
+                simpleColor = obj->color;
+                iconNumberDispGx3D(
+                    maximumMtx, obj->maximum, 0, &simpleColor);
+            }
+        }
+        i++;
+        offset += 0x34;
+    } while (i < 3);
 }
 
 void _check_audience_battle_end_exec(void) {

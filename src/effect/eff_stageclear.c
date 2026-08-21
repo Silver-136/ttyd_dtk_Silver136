@@ -4,6 +4,24 @@ void effStageClearMain(void* effect);
 extern void* gp;
 extern s32 irand(s32 range);
 
+typedef struct StageClearVecCatalog {
+    f32 x;
+    f32 y;
+    f32 z;
+} StageClearVecCatalog;
+
+/*
+ * Target .rodata prefix.  Keep the compiler-generated signed-int conversion
+ * doubles immediately after this prefix; they correspond to the target
+ * double_to_int_802fed50 / double_to_int_mask_802fed58 objects.
+ */
+const StageClearVecCatalog vec3_802fed18 = { 0.0f, 0.0f, 0.0f };
+const StageClearVecCatalog vec3_802fed24 = { 0.0f, 0.0f, 0.0f };
+const StageClearVecCatalog vec3_802fed30 = { 0.0f, 1.0f, 0.0f };
+const StageClearVecCatalog vec3_802fed3c = { 0.0f, 0.0f, 0.0f };
+const f64 double_0p21817_802fed48 = 0.21816615760326385;
+
+
 void* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
     typedef struct EffEntryRaw {
         u32 flags;
@@ -40,15 +58,15 @@ void* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
     extern u16 GXGetTexObjWidth(void* texObj);
     extern TexIdEntry texid_tbl[];
     extern const char str_StageClear_802fed60[];
-    extern f32 float_1_80427464;
-    extern f32 float_0_80427460;
-    extern f32 float_0p2_80427488;
-    extern f32 float_96_8042748c;
-    extern f32 float_60_80427490;
-    extern f32 float_0p8_8042747c;
-    extern f32 float_16_80427480;
-    extern f32 float_0p5_80427470;
-    extern f32 float_8_80427484;
+    extern const f32 float_1_80427464;
+    extern const f32 float_0_80427460;
+    extern const f32 float_0p2_80427488;
+    extern const f32 float_96_8042748c;
+    extern const f32 float_60_80427490;
+    extern const f32 float_0p8_8042747c;
+    extern const f32 float_16_80427480;
+    extern const f32 float_0p5_80427470;
+    extern const f32 float_8_80427484;
 
     EffEntryRaw* entry;
     StageClearWork* work;
@@ -171,11 +189,7 @@ void* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
 }
 
 void effStageClearMain(void* effect) {
-    typedef struct VecRaw {
-        f32 x;
-        f32 y;
-        f32 z;
-    } VecRaw;
+    typedef StageClearVecCatalog VecRaw;
     typedef struct StageClearWork {
         s32 type;
         f32 x;
@@ -190,13 +204,12 @@ void effStageClearMain(void* effect) {
         s32 done;
     } StageClearWork;
 
-    extern VecRaw vec3_802fed18;
     extern u8 scale_dt[];
     extern s32 evt_shake[];
     extern u8 shake_dt[];
     extern u8 shake_dt2[];
-    extern f32 float_0p9_80427450;
-    extern f32 float_100_80427478;
+    extern const f32 float_0p9_80427450;
+    extern const f32 float_100_80427478;
     extern void* evtEntry(void* script, s32 priority, s32 flags);
     extern void psndSFXOn(s32 id);
     extern s32 rand(void);
@@ -301,36 +314,101 @@ void effStageClearMain(void* effect) {
 
 /* stub-fill: effStageClearDisp | prototype_only | source_prototype */
 void effStageClearDisp(s32 cameraId, void* effect) {
-    typedef f32 Mtx[3][4]; typedef u8 TexObj[0x20]; typedef struct Color{u8 r,g,b,a;}Color;
+    typedef f32 Mtx[3][4]; typedef u8 TexObj[0x20];
     extern void* camGetPtr(s32); extern void PSMTXTrans(Mtx,f64,f64,f64); extern void PSMTXScale(Mtx,f32,f32,f32);
     extern void PSMTXConcat(void*,void*,void*); extern void GXSetBlendMode(s32,s32,s32,s32); extern void GXSetZMode(s32,s32,s32);
+    extern void GXSetZCompLoc(s32); extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);
+    extern void GXGetProjectionv(void*); extern void GXGetViewportv(void*); extern void GXSetProjection(void*,s32);
+    extern void GXSetProjectionv(void*); extern void GXSetViewport(f32,f32,f32,f32,f32,f32);
     extern void GXSetNumChans(s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
     extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32); extern void GXSetTevOp(s32,s32);
+    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevColorIn(s32,s32,s32,s32,s32); extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
+    extern void GXSetTevColor(s32,void*);
+    extern void GXSetTevSwapModeTable(s32,s32,s32,s32,s32); extern void GXSetTevSwapMode(s32,s32,s32);
     extern void GXSetCullMode(s32); extern void GXClearVtxDesc(void); extern void GXSetVtxDesc(s32,s32); extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
     extern void effGetTexObj(s32,void*); extern void GXLoadTexObj(void*,s32); extern void GXLoadPosMtxImm(void*,s32); extern void GXSetCurrentMtx(s32);
     extern void GXLoadTexMtxImm(void*,s32,s32); extern void GXBegin(s32,s32,s32); extern volatile f32 DAT_cc008000;
-    u8* base=*(u8**)((u8*)effect+0xC); void* cam=camGetPtr(3); Mtx baseMtx,trans,scale,model; TexObj tex;
-    s32 type=*(s32*)base; s32 frame=*(s32*)(base+0x1C); s32 i; s32 pass; u8* child; f32 size=0.9f*1.7f**(f32*)(base+0x14);
-    if(*(s32*)0x80000000!=0) size*=0.6f;
-    GXSetBlendMode(1,4,5,0);GXSetZMode(0,3,0);PSMTXTrans(trans,*(f32*)(base+4),*(f32*)(base+8),*(f32*)(base+0xC));
+    extern void C_MTXLightPerspective(Mtx,f32,f32,f32,f32,f32,f32);
+    extern void C_MTXLookAt(Mtx,void*,void*,void*); extern f64 tan(f64);
+    typedef struct TexIdEntry { s16* ids; s32 unused; s32 count; } TexIdEntry;
+    extern TexIdEntry texid_tbl[]; extern s32 niji_tbl[];
+    extern const u32 dat_80427448; extern const u32 dat_8042744c;
+    extern const f64 double_0p21817_802fed48;
+    extern const f32 float_0_80427460; extern const f32 float_0p5_80427470; extern const f32 float_0p6_80427458;
+    extern const f32 float_0p9_80427450; extern const f32 float_1p7_80427454; extern const f32 float_1_80427464;
+    extern const f32 float_24_80427474; extern const f32 float_25_80427468; extern const f32 float_640_8042746c;
+    typedef struct Vec { f32 x,y,z; } Vec;
+    u8* base=*(u8**)((u8*)effect+0xC); void* cam; Mtx baseMtx,trans,scale,model,perspective,lookAt; TexObj tex;
+    Vec eye,target,up;
+    f32 projection[7]; f32 viewport[6];
+    s32 type=*(s32*)base; s32 frame=*(s32*)(base+0x1C); s32 i; s32 pass; u8* child;
+    f32 size=float_0p9_80427450*float_1p7_80427454**(f32*)(base+0x14);
+    camGetPtr(cameraId);
+    if(*(s32*)((u8*)gp+0x16C)!=0) size*=float_0p6_80427458;
+    GXGetProjectionv(projection); GXGetViewportv(viewport);
+    cam=camGetPtr(3); GXSetProjection((u8*)cam+0x15C,*(s32*)((u8*)cam+0x19C));
+    GXSetBlendMode(1,4,5,0); GXSetZCompLoc(1); GXSetAlphaCompare(7,0,0,7,0); GXSetZMode(0,3,0);
+    PSMTXTrans(trans,*(f32*)(base+4),*(f32*)(base+8),*(f32*)(base+0xC));
     PSMTXScale(scale,size,size,size);PSMTXConcat(trans,scale,baseMtx);GXSetNumChans(0);GXSetNumTexGens(2);
     GXSetTexCoordGen2(0,1,4,0x3C,0,0x7D);GXSetTexCoordGen2(1,1,0,0x1E,0,0x7D);GXSetCullMode(0);GXClearVtxDesc();
     GXSetVtxDesc(9,1);GXSetVtxDesc(13,1);GXSetVtxAttrFmt(0,9,1,4,0);GXSetVtxAttrFmt(0,13,1,4,0);
     for(pass=1;pass>=0;pass--){
         child=base+0x2C;
         for(i=1;i<*(s32*)((u8*)effect+8);i++,child+=0x2C){
-            if(type%10==0) effGetTexObj(0x40+i,tex); else effGetTexObj(0x49+i,tex);
-            GXLoadTexObj(tex,0);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetTevOp(0,type%10?3:0);
-            PSMTXTrans(trans,*(f32*)(child+4)+(pass?4.0f:0.0f),*(f32*)(child+8)-(pass?4.0f:0.0f),0.0f);
+            if(type%10==0 && pass==0) {
+                s32 lang=*(s32*)((u8*)gp+0x16C);
+                s32 texId=texid_tbl[lang].ids[i-1];
+                u32 tevColor;
+                if(texId==-1) continue;
+                effGetTexObj(texId,tex); GXLoadTexObj(tex,0);
+                effGetTexObj(niji_tbl[lang],tex); GXLoadTexObj(tex,1);
+                GXSetNumTevStages(3); GXSetTevOrder(0,0,0,0xFF);
+                GXSetTevColorOp(0,0xE,0,0,1,0); GXSetTevAlphaOp(0,0xE,0,0,1,0);
+                GXSetTevColorIn(0,8,15,8,15); GXSetTevAlphaIn(0,4,7,4,7);
+                GXSetTevSwapModeTable(1,0,1,2,0); GXSetTevSwapMode(0,1,1);
+                GXSetTevOrder(1,1,1,0xFF); GXSetTevColorOp(1,0,0,0,1,0); GXSetTevAlphaOp(1,0,0,0,1,0);
+                GXSetTevColorIn(1,15,0,8,15); GXSetTevAlphaIn(1,7,7,7,0);
+                GXSetTevOrder(2,0,0,0xFF); GXSetTevColorOp(2,0,0,0,1,0); GXSetTevAlphaOp(2,0,0,0,1,0);
+                GXSetTevColorIn(2,2,0,1,15); GXSetTevAlphaIn(2,7,7,7,4);
+                tevColor=dat_8042744c; GXSetTevColor(1,&tevColor);
+            } else {
+                if(type%10==0) effGetTexObj(0x40+i,tex); else effGetTexObj(i+(pass?0x4F:0x49),tex);
+                GXLoadTexObj(tex,0);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);
+            }
+            if (type%10 != 0 && pass != 0) {
+                u32 tevColor=dat_80427448;
+                GXSetTevColorOp(0,0,0,0,1,0); GXSetTevAlphaOp(0,0,0,0,1,0);
+                GXSetTevColorIn(0,15,8,2,15); GXSetTevAlphaIn(0,7,4,5,7);
+                GXSetTevColor(1,&tevColor);
+            } else if (type%10 != 0) {
+                GXSetTevOp(0,type%10?3:0);
+            }
+            PSMTXTrans(trans,*(f32*)(child+4)+(f32)(pass*4),*(f32*)(child+8)-(f32)(pass*4),float_0_80427460);
             PSMTXScale(scale,*(f32*)(child+0x14),*(f32*)(child+0x14),*(f32*)(child+0x14));
             PSMTXConcat(baseMtx,trans,model);PSMTXConcat(model,scale,model);PSMTXConcat((u8*)cam+0x11C,model,model);
-            GXLoadPosMtxImm(model,0);GXSetCurrentMtx(0);PSMTXTrans(trans,(f64)-frame,0.0,0.0);GXLoadTexMtxImm(trans,0x1E,1);
-            GXBegin(0x80,0,4);DAT_cc008000=-24;DAT_cc008000=24;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;
-            DAT_cc008000=24;DAT_cc008000=24;DAT_cc008000=0;DAT_cc008000=1;DAT_cc008000=0;
-            DAT_cc008000=24;DAT_cc008000=-24;DAT_cc008000=0;DAT_cc008000=1;DAT_cc008000=1;
-            DAT_cc008000=-24;DAT_cc008000=-24;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=1;
+            GXLoadPosMtxImm(model,0);GXSetCurrentMtx(0);
+            eye.x=float_0_80427460; eye.y=float_0_80427460;
+            eye.z=float_1_80427464/(f32)tan(*(volatile const f64*)&double_0p21817_802fed48);
+            target.x=float_0_80427460; target.y=float_0_80427460; target.z=float_0_80427460;
+            up.x=float_0_80427460; up.y=float_1_80427464; up.z=float_0_80427460;
+            C_MTXLightPerspective(perspective,float_25_80427468,float_640_8042746c,
+                                  float_0p5_80427470,float_0p5_80427470,float_0p5_80427470,float_0p5_80427470);
+            C_MTXLookAt(lookAt,&eye,&target,&up);
+            PSMTXConcat(perspective,lookAt,perspective);
+            PSMTXConcat(perspective,model,model);
+            PSMTXTrans(trans,(f64)-frame,float_0_80427460,float_0_80427460);
+            PSMTXConcat(model,trans,model);
+            GXLoadTexMtxImm(model,0x1E,1);
+            GXBegin(0x80,0,4);DAT_cc008000=-float_24_80427474;DAT_cc008000=float_24_80427474;DAT_cc008000=float_0_80427460;DAT_cc008000=float_0_80427460;DAT_cc008000=float_0_80427460;
+            DAT_cc008000=float_24_80427474;DAT_cc008000=float_24_80427474;DAT_cc008000=float_0_80427460;DAT_cc008000=float_1_80427464;DAT_cc008000=float_0_80427460;
+            DAT_cc008000=float_24_80427474;DAT_cc008000=-float_24_80427474;DAT_cc008000=float_0_80427460;DAT_cc008000=float_1_80427464;DAT_cc008000=float_1_80427464;
+            DAT_cc008000=-float_24_80427474;DAT_cc008000=-float_24_80427474;DAT_cc008000=float_0_80427460;DAT_cc008000=float_0_80427460;DAT_cc008000=float_1_80427464;
         }
     }
+    GXSetTevSwapModeTable(1,0,1,2,3);
+    GXSetProjectionv(projection);
+    GXSetViewport(viewport[0],viewport[1],viewport[2],viewport[3],viewport[4],viewport[5]);
 }
 
 s32 effStageClearEndChk(void* effect) {
@@ -338,3 +416,30 @@ s32 effStageClearEndChk(void* effect) {
     s32 value = *(s32*)((s32)work + 0x28);
     return (u32)(-value | value) >> 31;
 }
+
+/*
+ * Target-owned read-only catalogs.  These definitions are intentionally late:
+ * the consuming functions above see extern declarations, preserving their
+ * target-shaped load/codegen while restoring the owning object's sections.
+ */
+const char str_StageClear_802fed60[] = "StageClear";
+
+const u32 dat_80427448 = 0x00000080;
+const u32 dat_8042744c = 0x363636FF;
+const f32 float_0p9_80427450 = 0.9f;
+const f32 float_1p7_80427454 = 1.7f;
+const f32 float_0p6_80427458 = 0.6f;
+const f32 float_48_8042745c = 48.0f;
+const f32 float_0_80427460 = 0.0f;
+const f32 float_1_80427464 = 1.0f;
+const f32 float_25_80427468 = 25.0f;
+const f32 float_640_8042746c = 640.0f;
+const f32 float_0p5_80427470 = 0.5f;
+const f32 float_24_80427474 = 24.0f;
+const f32 float_100_80427478 = 100.0f;
+const f32 float_0p8_8042747c = 0.8f;
+const f32 float_16_80427480 = 16.0f;
+const f32 float_8_80427484 = 8.0f;
+const f32 float_0p2_80427488 = 0.2f;
+const f32 float_96_8042748c = 96.0f;
+const f32 float_60_80427490 = 60.0f;

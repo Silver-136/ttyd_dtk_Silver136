@@ -12,7 +12,7 @@ void vivihimo(f32 param_1, f32 param_2, f32 param_3, f32 param_4, f32* mtxA, f32
     extern void PSMTXCopy(void* src, void* dst);
     extern void PSVECNormalize(void* src, void* dst);
     extern void PSVECSubtract(void* a, void* b, void* out);
-    extern double __frsqrte(double x);
+    extern f32 sqrtf(f32 x);
     extern double sin(double x);
     extern void spline_maketable(s32 count, f32* points, f32* out1, f32* out2);
     extern s32 camGetCurNo(void);
@@ -31,41 +31,51 @@ void vivihimo(f32 param_1, f32 param_2, f32 param_3, f32 param_4, f32* mtxA, f32
     extern double double_to_int_mask_802f8940;
     extern void* gp;
 
-    f32 posA[3];
-    f32 posB[3];
+    typedef struct Work {
+        Vec3 posA;
+        Vec3 posB;
+        f32 mtxCopyA[12];
+        f32 mtxCopyB[12];
+        Vec3 points[4];
+        f32 tableA[4];
+        f32 tableB[13];
+    } Work;
+    Work work;
     Vec3 dir;
     Vec3 delta;
-    f32 mtxCopyA[12];
-    f32 mtxCopyB[12];
-    f32 points[13];
-    f32 tableA[4];
-    f32 tableB[13];
     f32 magA;
     f32 magB;
     f32 width;
     f32 wobble;
     f32 amount;
+    f32 pi;
+    f32 quarter;
+    f32 ten;
+    f32 third;
+    f32 baseX;
+    f32 deltaY;
+    f32 deltaZ;
     s32 i;
     s32 retrace;
 
-    posA[0] = mtxA[3];
-    posA[1] = mtxA[7] + param_3;
-    posA[2] = mtxA[11];
-    posB[0] = mtxB[3];
-    posB[1] = mtxB[7] + param_4;
-    posB[2] = mtxB[11];
+    work.posA.x = mtxA[3];
+    work.posA.y = mtxA[7] + param_3;
+    work.posA.z = mtxA[11];
+    work.posB.x = mtxB[3];
+    work.posB.y = mtxB[7] + param_4;
+    work.posB.z = mtxB[11];
 
     magA = PSVECMag(mtxA);
     magB = PSVECMag(mtxA + 8);
     width = (float_0p5_80424230 * magA) * (float_0p5_80424230 * magA) +
             (float_0p5_80424230 * magB) * (float_0p5_80424230 * magB);
     if (width > float_0_8042423c) {
-        width = __frsqrte(width) * width;
+        width = sqrtf(width);
     }
     width = param_2 * (float_0p5_80424230 * width);
 
-    PSMTXCopy(mtxA, mtxCopyA);
-    PSMTXCopy(mtxB, mtxCopyB);
+    PSMTXCopy(mtxA, work.mtxCopyA);
+    PSMTXCopy(mtxB, work.mtxCopyB);
 
     dir.x = mtxA[0];
     dir.y = mtxA[1];
@@ -78,11 +88,17 @@ void vivihimo(f32 param_1, f32 param_2, f32 param_3, f32 param_4, f32* mtxA, f32
         retrace = *(s32*)((s32)gp + 0x1C);
         wobble = float_2p5_8042425c *
                  (f32)sin(float_0p1_80424258 * ((f32)retrace * param_1));
-        PSVECSubtract(posB, posA, &delta);
+        PSVECSubtract(&work.posB, &work.posA, &delta);
+        pi = float_3p1416_80424248;
+        quarter = float_0p25_80424260;
+        ten = float_10_80424240;
+        third = float_0p33333_8042426c;
+        baseX = dir.x;
+        deltaY = delta.y;
+        deltaZ = delta.z;
 
         for (i = 0; i < 4; i++) {
-            amount = float_10_80424240 *
-                     (f32)sin(float_3p1416_80424248 * (f32)i * float_0p25_80424260) + wobble;
+            amount = ten * (f32)sin(pi * (f32)i * quarter) + wobble;
             if (i == 1) {
                 amount = width * float_0p2_80424264 * amount;
             } else if (i == 2) {
@@ -90,18 +106,14 @@ void vivihimo(f32 param_1, f32 param_2, f32 param_3, f32 param_4, f32* mtxA, f32
             } else {
                 amount = width * float_neg1_80424268 * (f32)(i & 1) * amount;
             }
-            points[i * 3 + 0] = dir.x * amount + float_0p33333_8042426c * delta.x * (f32)i + posA[0];
-            points[i * 3 + 1] = dir.y * amount + float_0p33333_8042426c * delta.y * (f32)i + posA[1];
-            points[i * 3 + 2] = dir.z * amount + float_0p33333_8042426c * delta.z * (f32)i + posA[2];
+            work.points[i].x = baseX * amount + third * delta.x * (f32)i + work.posA.x;
+            work.points[i].y = dir.y * amount + third * deltaY * (f32)i + work.posA.y;
+            work.points[i].z = dir.z * amount + third * deltaZ * (f32)i + work.posA.z;
         }
-        points[0] = posA[0];
-        points[1] = posA[1];
-        points[2] = posA[2];
-        points[9] = posB[0];
-        points[10] = posB[1];
-        points[11] = posB[2];
-        spline_maketable(4, points, tableA, tableB);
-        vivihimoDisp(camGetCurNo(), &posA);
+        work.points[0] = work.posA;
+        work.points[3] = work.posB;
+        spline_maketable(4, (f32*)work.points, work.tableA, work.tableB);
+        vivihimoDisp(camGetCurNo(), &work);
     }
 }
 #pragma no_register_save_helpers off

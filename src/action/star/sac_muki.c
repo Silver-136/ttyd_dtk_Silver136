@@ -575,26 +575,10 @@ void main_star(void) {
     u8* work = get_ptr();
     void* mario = BattleGetMarioPtr(_battleWorkPointer);
     s32 state = *(s32*)(work + 0x3B4);
+    f32 scale;
 
-    if (state != 2) {
-        if (state > 1) {
-            if (state < 4) {
-                *(s32*)(work + 0x3B8) += 1;
-                *(f32*)(work + 0x3C0) =
-                    (f32)intplGetValue(*(f32*)(work + 0x3CC),
-                                       *(f32*)(work + 0x3D8), 1,
-                                       *(s32*)(work + 0x3B8), 0x3C);
-                if (*(s32*)(work + 0x3B8) > 0x3B) {
-                    *(s32*)(work + 0x3B4) = 5;
-                    *(s32*)(work + 0x3B8) = 0;
-                }
-            }
-            goto update_effect;
-        }
-        if (state <= 0) {
-            goto update_effect;
-        }
-
+    switch (state) {
+    case 1:
         *(s32*)(work + 0x3B4) = 2;
         *(s32*)(work + 0x3B8) = 0;
         *(void**)(work + 0x404) = effStarStoneEntry(2, 0.0f, -1000.0f, 0.0f, 1.0f);
@@ -618,13 +602,10 @@ void main_star(void) {
         *(u32*)(work + 0x3F8) = vec3_80301108[0];
         *(u32*)(work + 0x3FC) = vec3_80301108[1];
         *(u32*)(work + 0x400) = vec3_80301108[2];
-    }
-
-    *(s32*)(work + 0x3B8) += 1;
-    if (*(s32*)(work + 0x3B8) < 0x65) {
-        f32 scale = (f32)intplGetValue(0.0, 2.0, 0,
-                                      *(s32*)(work + 0x3B8), 100);
-
+        /* fallthrough */
+    case 2:
+        *(s32*)(work + 0x3B8) += 1;
+        if (*(s32*)(work + 0x3B8) < 0x65) {
         *(f32*)(work + 0x3BC) =
             (f32)intplGetValue(*(f32*)(work + 0x3C8),
                                *(f32*)(work + 0x3D4), 0,
@@ -637,27 +618,42 @@ void main_star(void) {
             (f32)intplGetValue(*(f32*)(work + 0x3D0),
                                *(f32*)(work + 0x3DC), 0,
                                *(s32*)(work + 0x3B8), 100);
+        scale = (f32)intplGetValue(0.0, 2.0, 0,
+                                  *(s32*)(work + 0x3B8), 100);
         *(f32*)(work + 0x3EC) = scale;
         *(f32*)(work + 0x3F0) = scale;
         *(f32*)(work + 0x3F4) = scale;
-    } else {
-        *(u32*)(work + 0x3BC) = *(u32*)(work + 0x3D4);
-        *(u32*)(work + 0x3C0) = *(u32*)(work + 0x3D8);
-        *(u32*)(work + 0x3C4) = *(u32*)(work + 0x3DC);
-        *(f32*)(work + 0x3EC) = 2.0f;
-        *(f32*)(work + 0x3F0) = 2.0f;
-        *(f32*)(work + 0x3F4) = 2.0f;
-    }
-    *(f32*)(work + 0x3FC) =
-        (f32)intplGetValue(0.0, 2160.0, 4,
-                           *(s32*)(work + 0x3B8), 0x78);
-    if (*(s32*)(work + 0x3B8) > 0x77) {
-        *(s32*)(work + 0x3B4) = 3;
-        *(s32*)(work + 0x3B8) = 0;
-        *(u32*)(work + 0x3C8) = *(u32*)(work + 0x3BC);
-        *(u32*)(work + 0x3CC) = *(u32*)(work + 0x3C0);
-        *(u32*)(work + 0x3D0) = *(u32*)(work + 0x3C4);
-        *(f32*)(work + 0x3D8) = 300.0f;
+        } else {
+            *(u32*)(work + 0x3BC) = *(u32*)(work + 0x3D4);
+            *(u32*)(work + 0x3C0) = *(u32*)(work + 0x3D8);
+            *(u32*)(work + 0x3C4) = *(u32*)(work + 0x3DC);
+            *(f32*)(work + 0x3EC) = 2.0f;
+            *(f32*)(work + 0x3F0) = 2.0f;
+            *(f32*)(work + 0x3F4) = 2.0f;
+        }
+        *(f32*)(work + 0x3FC) =
+            (f32)intplGetValue(0.0, 2160.0, 4,
+                               *(s32*)(work + 0x3B8), 0x78);
+        if (*(s32*)(work + 0x3B8) > 0x77) {
+            *(s32*)(work + 0x3B4) = 3;
+            *(s32*)(work + 0x3B8) = 0;
+            *(u32*)(work + 0x3C8) = *(u32*)(work + 0x3BC);
+            *(u32*)(work + 0x3CC) = *(u32*)(work + 0x3C0);
+            *(u32*)(work + 0x3D0) = *(u32*)(work + 0x3C4);
+            *(f32*)(work + 0x3D8) = 300.0f;
+        }
+        break;
+    case 3:
+        *(s32*)(work + 0x3B8) += 1;
+        *(f32*)(work + 0x3C0) =
+            (f32)intplGetValue(*(f32*)(work + 0x3CC),
+                               *(f32*)(work + 0x3D8), 1,
+                               *(s32*)(work + 0x3B8), 0x3C);
+        if (*(s32*)(work + 0x3B8) > 0x3B) {
+            *(s32*)(work + 0x3B4) = 5;
+            *(s32*)(work + 0x3B8) = 0;
+        }
+        break;
     }
 
 update_effect:

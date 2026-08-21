@@ -2514,10 +2514,24 @@ void _animPoseDrawMtx(void* pPose, void* pMtx, int dispMode, double rotValue, do
     extern void DCFlushRange(void* ptr, u32 size);
     extern void GXInvalidateVtxCache(void);
     extern void dispProc(s32 parent, s32 group, s32 frame0, s32 frame1, f32 blend);
+    extern void* camGetPtr(s32 cameraId);
+    extern double atan2(double y, double x);
     extern void* g_modeling_mtx;
     extern s32 g_modeling_mtx_lv;
     extern u8 g_modeling_mtx_stack[];
     extern f32 float_0_8041fb28;
+    extern f32 float_1_8041fb24;
+    extern f32 float_neg1_8041fb6c;
+    extern f32 float_neg90_8041fb70;
+    extern f32 float_rad2deg_8041fb74;
+    extern f32 float_360_8041fb78;
+    extern f32 float_neg360_8041fb7c;
+    extern f32 float_90_8041fb80;
+    extern f32 float_270_8041fb84;
+    extern f32 float_neg270_8041fb88;
+    extern f32 float_180_8041fb8c;
+    extern f32 float_neg180_8041fb90;
+    extern f32 float_0p1_8041fb94;
     extern f32 float_deg2rad_8041fbb4;
     s32 work;
     s32 pose;
@@ -2526,13 +2540,20 @@ void _animPoseDrawMtx(void* pPose, void* pMtx, int dispMode, double rotValue, do
     s32 data;
     s32 animTable;
     s32 animData;
-    s32 poseId;
+    u32 poseId;
+    s32 posCount;
+    s32 nrmCount;
+    s32 totalCount;
     s32 frame0;
     s32 frame1;
     f32 blend;
     u32 color0;
     u32 color1;
     void* drawMtx;
+    void* cam;
+    f32 angle;
+    f32 targetAngle;
+    f32 delta;
     Mtx rotMtx;
     Mtx scaleMtx;
     Mtx tempMtx;
@@ -2602,22 +2623,101 @@ void _animPoseDrawMtx(void* pPose, void* pMtx, int dispMode, double rotValue, do
         PSMTXConcat(pMtx, rotMtx, tempMtx);
         drawMtx = tempMtx;
     } else if ((*(u32*)pose & 8) != 0) {
+        /* Preserve the TU's existing compiler-owned 90.0f pool entry. */
         *(f32*)(pose + 0x70) = (f32)rotValue + 90.0f;
+        cam = camGetPtr(4);
+        angle = float_rad2deg_8041fb74 *
+            (f32)atan2((double)-(*(f32*)((s32)cam + 0x18) - *(f32*)((s32)cam + 0xC)),
+                       (double)-(*(f32*)((s32)cam + 0x20) - *(f32*)((s32)cam + 0x14)));
+        while (angle < float_neg360_8041fb7c) {
+            angle += float_360_8041fb78;
+        }
+        while (angle >= float_360_8041fb78) {
+            angle -= float_360_8041fb78;
+        }
+        if (angle < float_0_8041fb28) {
+            angle += float_360_8041fb78;
+        }
+        delta = angle - *(f32*)(pose + 0x70);
+        while (delta < float_neg360_8041fb7c) {
+            delta += float_360_8041fb78;
+        }
+        while (delta >= float_360_8041fb78) {
+            delta -= float_360_8041fb78;
+        }
+        if (((delta > float_90_8041fb80) && (delta <= float_270_8041fb84)) ||
+            ((delta < float_neg90_8041fb70) && (delta >= float_neg270_8041fb88))) {
+            cam = camGetPtr(4);
+            targetAngle = float_rad2deg_8041fb74 *
+                (f32)atan2((double)-(*(f32*)((s32)cam + 0x18) - *(f32*)((s32)cam + 0xC)),
+                           (double)-(*(f32*)((s32)cam + 0x20) - *(f32*)((s32)cam + 0x14)));
+            while (targetAngle < float_neg360_8041fb7c) targetAngle += float_360_8041fb78;
+            while (targetAngle >= float_360_8041fb78) targetAngle -= float_360_8041fb78;
+            if (targetAngle < float_0_8041fb28) targetAngle += float_360_8041fb78;
+            targetAngle += float_180_8041fb8c;
+            while (targetAngle < float_neg360_8041fb7c) targetAngle += float_360_8041fb78;
+            while (targetAngle >= float_360_8041fb78) targetAngle -= float_360_8041fb78;
+            *(f32*)(pose + 0x7C) = targetAngle;
+        } else {
+            cam = camGetPtr(4);
+            targetAngle = float_rad2deg_8041fb74 *
+                (f32)atan2((double)-(*(f32*)((s32)cam + 0x18) - *(f32*)((s32)cam + 0xC)),
+                           (double)-(*(f32*)((s32)cam + 0x20) - *(f32*)((s32)cam + 0x14)));
+            while (targetAngle < float_neg360_8041fb7c) targetAngle += float_360_8041fb78;
+            while (targetAngle >= float_360_8041fb78) targetAngle -= float_360_8041fb78;
+            if (targetAngle < float_0_8041fb28) targetAngle += float_360_8041fb78;
+            *(f32*)(pose + 0x7C) = targetAngle;
+        }
+        while ((*(f32*)(pose + 0x7C) - *(f32*)(pose + 0x74)) > float_180_8041fb8c) {
+            *(f32*)(pose + 0x74) += float_360_8041fb78;
+        }
+        while ((*(f32*)(pose + 0x7C) - *(f32*)(pose + 0x74)) < float_neg180_8041fb90) {
+            *(f32*)(pose + 0x74) -= float_360_8041fb78;
+        }
+        delta = *(f32*)(pose + 0x7C) - *(f32*)(pose + 0x74);
+        if ((*(u32*)pose & 0x100) != 0) {
+            *(f32*)(pose + 0x74) = *(f32*)(pose + 0x7C);
+        } else {
+            *(f32*)(pose + 0x74) += float_0p1_8041fb94 * delta;
+        }
         if (*(f32*)(pose + 0x74) != float_0_8041fb28) {
             PSMTXRotRad(rotMtx, (double)(float_deg2rad_8041fbb4 * *(f32*)(pose + 0x74)), 'y');
             PSMTXConcat(pMtx, rotMtx, tempMtx);
             drawMtx = tempMtx;
         }
+        if (*(f32*)(pose + 0x78) == float_neg1_8041fb6c) {
+            PSMTXScale(rotMtx, float_1_8041fb24, float_1_8041fb24, float_neg1_8041fb6c);
+            PSMTXConcat(drawMtx, rotMtx, tempMtx);
+            drawMtx = tempMtx;
+        }
     }
-    if (scaleValue != (double)float_0_8041fb28) {
+    if (scaleValue != (double)float_1_8041fb24) {
         PSMTXScale(scaleMtx, (f32)scaleValue, (f32)scaleValue, (f32)scaleValue);
         PSMTXConcat(drawMtx, scaleMtx, tempMtx);
         drawMtx = tempMtx;
     }
 
     if (*(s32*)(pose + 0x3C) == -1) {
-        poseId = (pose - poses) / 0x170;
-        animPoseMain(poseId);
+        poseId = ((u32)pose - (u32)poses) / 0x170;
+        if ((*(u32*)(pose + 4) & 2) == 0) {
+            animPoseMain(poseId);
+        } else {
+            posCount = *(s32*)(data + 0xF0);
+            nrmCount = *(s32*)(data + 0xF8);
+            totalCount = posCount + nrmCount;
+            if (totalCount <= *(s32*)(work + 0xF0)) {
+                if (*(s32*)(work + 0xF0) < *(s32*)(work + 0xF4) + totalCount) {
+                    *(s32*)(work + 0xF4) = 0;
+                }
+                *(s32*)(work + 0xE8) = 1;
+                *(s32*)(work + 0xF8) = *(s32*)(work + 0xEC) + *(s32*)(work + 0xF4) * 0xC;
+                *(s32*)(work + 0xF4) += posCount;
+                *(s32*)(work + 0xFC) = *(s32*)(work + 0xEC) + *(s32*)(work + 0xF4) * 0xC;
+                *(s32*)(work + 0xF4) += nrmCount;
+            }
+            animPoseMain(poseId);
+            *(s32*)(work + 0xE8) = 0;
+        }
     }
 
     g_modeling_mtx_lv = 0;

@@ -45,7 +45,6 @@ s32 urouro_init_func(void* event, s32 isFirstCall) {
     *(u32*)npc |= 0x400000;
     return 2;
 }
-
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -116,19 +115,9 @@ s32 urouro_main_func(void* event) {
     f64 distance;
     f64 angle;
 
-    if (state == 2) {
-        random = irand((s32)work[5] / 2 + 1);
-        work[2] = (s32)work[5] / 2 + random;
-        random = irand(60);
-        npc->rotationY = (f32)reviseAngle(npc->rotationY + (f32)random - 30.0f);
-        npc->jumpAngle = npc->rotationY;
-        work[3] = 0;
-        if (work[0] & 0x10000) {
-            work[3] = irand(1000) % 3 + 2;
-        }
-        work[1] = 3;
-    } else if ((s32)state < 2) {
-        if (state == 0) {
+    if (state != 2) {
+        if ((s32)state < 2) {
+            if (state == 0) {
             random = irand((s32)work[4] / 2 + 1);
             work[2] = (s32)work[4] / 2 + random;
             work[2] = ((s32)work[2] / 20) * 20;
@@ -137,11 +126,11 @@ s32 urouro_main_func(void* event) {
             npc->rotationY = (f32)reviseAngle(npc->rotationY + (f32)random - 30.0f);
             npc->jumpAngle = npc->rotationY;
             work[1] = 1;
-        } else if ((s32)state >= 0) {
+            } else if ((s32)state >= 0) {
             distance = distABf(npc->position.x, npc->position.z,
-                               (f32)work[7], (f32)work[9]);
+                               ((f32*)work)[7], ((f32*)work)[9]);
             if (animPoseGetPeraEnd(npc->poseId) != 0) {
-                if (distance <= (f32)work[10]) {
+                if (distance <= ((f32*)work)[10]) {
                     if (work[0] & 1) {
                         work[0] &= ~3;
                     }
@@ -151,7 +140,7 @@ s32 urouro_main_func(void* event) {
                     }
                     if (work[0] & 2) {
                         angle = reviseAngle(angleABf(npc->position.x, npc->position.z,
-                                                     (f32)work[7], (f32)work[9]));
+                                                     ((f32*)work)[7], ((f32*)work)[9]));
                         npc->rotationY = (f32)angle;
                         npc->jumpAngle = npc->rotationY;
                         work[0] &= ~2;
@@ -165,7 +154,7 @@ s32 urouro_main_func(void* event) {
                 angle = compAngle(angleABf(npc->position.x, npc->position.z,
                                            player->position.x, player->position.z),
                                   player->direction);
-                if (__fabsf((f32)angle) < 90.0f && distance < (f32)work[10]) {
+                if (__fabsf((f32)angle) < 90.0f && distance < ((f32*)work)[10]) {
                     npc->rotationY = (f32)reviseAngle(npc->jumpAngle - 180.0f);
                     npc->jumpAngle = npc->rotationY;
                     work[0] &= ~3;
@@ -174,7 +163,7 @@ s32 urouro_main_func(void* event) {
 
             if (animPoseGetPeraEnd(npc->poseId) != 0 && npc->wallStop != 0) {
                 npc->rotationY = (f32)reviseAngle(angleABf(npc->position.x, npc->position.z,
-                                                           (f32)work[7], (f32)work[9]));
+                                                           ((f32*)work)[7], ((f32*)work)[9]));
                 npc->jumpAngle = npc->rotationY;
                 work[0] &= ~3;
             }
@@ -211,19 +200,31 @@ s32 urouro_main_func(void* event) {
                     npc->soundDistance += 1000.0f * npc->walkingSpeed;
                 }
             }
-        }
-    } else if ((s32)state < 4) {
-        work[2]--;
-        if (work[2] == 0) {
-            random = irand((s32)work[6] / 2 + 1);
-            work[2] = (s32)work[6] / 2 + random;
-            if (work[3] == 0) {
-                work[1] = 0;
-            } else {
-                work[3]--;
-                npc->rotationY = (f32)reviseAngle(180.0f + npc->rotationY);
+            }
+        } else if ((s32)state < 4) {
+            work[2]--;
+            if (work[2] == 0) {
+                random = irand((s32)work[6] / 2 + 1);
+                work[2] = (s32)work[6] / 2 + random;
+                if (work[3] == 0) {
+                    work[1] = 0;
+                } else {
+                    work[3]--;
+                    npc->rotationY = (f32)reviseAngle(180.0f + npc->rotationY);
+                }
             }
         }
+    } else {
+        random = irand((s32)work[5] / 2 + 1);
+        work[2] = (s32)work[5] / 2 + random;
+        random = irand(60);
+        npc->rotationY = (f32)reviseAngle(npc->rotationY + (f32)random - 30.0f);
+        npc->jumpAngle = npc->rotationY;
+        work[3] = 0;
+        if (work[0] & 0x10000) {
+            work[3] = irand(1000) % 3 + 2;
+        }
+        work[1] = 3;
     }
     return 0;
 }

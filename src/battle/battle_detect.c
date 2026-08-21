@@ -1,11 +1,9 @@
 #include "battle/battle_detect.h"
-
-extern void* _battleWorkPointer;
-extern void* BattleGetUnitPtr(void*, s32);
+#include "battle/battle.h"
+#include "system.h"
 
 void _btlSamplingEnemy(void* targetWork) {
     extern void* BtlUnit_GetPartsPtr(void*, s32);
-    extern s32 BtlUnit_CheckStatus(void*, s32);
     extern void BtlUnit_GetPartsWorldPos(void*, f32*, f32*, f32*);
     extern s32 BtlCompForwardLv(f32, s32);
     extern void* battleGetUnitMonosiriPtr(s32);
@@ -372,11 +370,8 @@ void BattleSamplingEnemyUpdate(void) {
 }
 
 void BattleChoiceSamplingEnemy(void* targetWork, u32 weighting, int* unitIdx, int* partIdx) {
-    extern s32 BtlUnit_CanActStatus(void*);
-    extern s32 BtlUnit_CheckStatus(void*, s32);
     extern s32 BtlUnit_GetMaxFp(void*);
     extern s32 BtlUnit_GetFp(void*);
-    extern s32 irand(s32);
     extern u8 itemDataTable[];
     u32 weights[74];
     s8* order;

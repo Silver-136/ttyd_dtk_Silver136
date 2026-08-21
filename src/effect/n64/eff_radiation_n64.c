@@ -240,9 +240,14 @@ void effRadiationDisp(s32 cameraId, void* effect) {
     extern void effSetVtxDescN64(void*);
     extern void GXBegin(s32, s32, s32);
     extern void tri2(s32, s32, s32, s32, s32, s32, s32, s32);
-    extern f32 float_0p03125_80425e18, float_0_80425e1c, float_deg2rad_80425e24;
+    extern void tri1(s32, s32, s32, s32);
+    extern f32 float_0p03125_80425e18, float_0_80425e1c, float_255_80425e20;
+    extern f32 float_deg2rad_80425e24, float_0p25_80425e28, float_3_80425e2c;
+    extern f32 float_0p3_80425e30, float_0p5_80425e34, float_0p9_80425e38;
+    extern u32 dat_80425e10, dat_80425e14;
     u8 texObj[0x20];
     f32 trans[3][4], rot[3][4], mtx[3][4], scale[3][4];
+    u8* camera = camGetPtr(cameraId);
     u8* work = *(u8**)((s32)effect + 0xC);
     s32 type = *(s32*)work, i;
     u32 color;
@@ -254,35 +259,77 @@ void effRadiationDisp(s32 cameraId, void* effect) {
     }
     GXSetNumChans(1);
     GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(0, 0, 0, 0xFF);
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(0, 2, 1, 8, 0);
-    GXSetTevAlphaIn(0, 0, 1, 7, 7);
-    effGetTexObjN64(0x2C, texObj);
-    GXLoadTexObj(texObj, 0);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-    PSMTXScale(scale, float_0p03125_80425e18, float_0p03125_80425e18, float_0_80425e1c);
-    GXLoadTexMtxImm(scale, 0x1E, 1);
+    if (type >= 0 && type < 2) {
+        GXSetNumTevStages(1);
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 2, 0xC, 8, 0xF);
+        GXSetTevAlphaIn(0, 7, 1, 4, 7);
+        effGetTexObjN64(0x2C, texObj);
+        GXLoadTexObj(texObj, 0);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+        PSMTXScale(scale, float_0p03125_80425e18, float_0p03125_80425e18,
+                   float_0_80425e1c);
+        GXLoadTexMtxImm(scale, 0x1E, 1);
+    } else {
+        GXSetNumTevStages(1);
+        GXSetTevOrder(0, 0xFF, 0xFF, 4);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 0xF, 0xF, 0xF, 2);
+        GXSetTevAlphaIn(0, 7, 7, 7, 5);
+        GXSetNumTexGens(0);
+    }
     GXSetCullMode(0);
     PSMTXTrans(trans, *(f32*)(work + 0x10), *(f32*)(work + 0x14), *(f32*)(work + 0x18));
     for (i = 1; i < *(s32*)((s32)effect + 8); i++, work += 0x9C) {
+        f32 alpha = (f32)*(s32*)(work + 0xC0) / float_255_80425e20;
         PSMTXRotRad(rot, 0x78, float_deg2rad_80425e24 * *(f32*)(work + 0xF8));
         PSMTXConcat(trans, rot, mtx);
-        PSMTXRotRad(rot, 0x79, float_deg2rad_80425e24 * *(f32*)(work + 0xFC));
-        PSMTXConcat(mtx, rot, mtx);
-        PSMTXRotRad(rot, 0x7A, float_deg2rad_80425e24 * *(f32*)(work + 0x100));
-        PSMTXConcat(mtx, rot, mtx);
-        PSMTXTrans(scale, *(f32*)(work + 0xF4), float_0_80425e1c, float_0_80425e1c);
-        PSMTXConcat(mtx, scale, mtx);
+        if (type < 2) {
+            PSMTXRotRad(rot, 0x79, float_deg2rad_80425e24 * *(f32*)(work + 0xFC));
+            PSMTXConcat(mtx, rot, mtx);
+            PSMTXRotRad(rot, 0x7A, float_deg2rad_80425e24 * *(f32*)(work + 0x100));
+            PSMTXConcat(mtx, rot, mtx);
+            PSMTXTrans(scale, *(f32*)(work + 0xF4), float_0_80425e1c,
+                       float_0_80425e1c);
+            PSMTXConcat(mtx, scale, mtx);
+            color = (dat_80425e14 & 0xFFFFFF00) | (*(u32*)(work + 0xC0) & 0xFF);
+        } else {
+            f32 xScale;
+            f32 yScale;
+            PSMTXRotRad(rot, 0x7A, float_deg2rad_80425e24 * *(f32*)(work + 0x100));
+            PSMTXConcat(mtx, rot, mtx);
+            PSMTXRotRad(rot, 0x79, float_deg2rad_80425e24 * *(f32*)(work + 0xFC));
+            PSMTXConcat(mtx, rot, mtx);
+            PSMTXTrans(scale, *(f32*)(work + 0xF4), float_0_80425e1c,
+                       float_0_80425e1c);
+            PSMTXConcat(mtx, scale, mtx);
+            xScale = float_0p25_80425e28 * (float_3_80425e2c + alpha);
+            switch (i & 3) {
+                case 0: yScale = float_0p3_80425e30 * alpha; break;
+                case 1: yScale = float_0p5_80425e34 * alpha; break;
+                case 2: yScale = float_0p9_80425e38 * alpha; break;
+                default: yScale = alpha; break;
+            }
+            PSMTXScale(scale, xScale, yScale, xScale);
+            PSMTXConcat(mtx, scale, mtx);
+            color = (dat_80425e10 & 0xFFFFFF00) | (*(u32*)(work + 0xC0) & 0xFF);
+        }
+        PSMTXConcat(camera + 0x30, mtx, mtx);
         GXLoadPosMtxImm(mtx, 0);
         GXSetCurrentMtx(0);
-        color = *(u32*)(work + 0xC0);
         GXSetTevColor(1, &color);
-        effSetVtxDescN64((void*)0x803A78A0);
-        GXBegin(0x90, 0, 6);
-        tri2(0, 1, 2, 0, 0, 2, 3, 0);
+        if (type >= 0 && type < 2) {
+            effSetVtxDescN64((void*)0x803A7850);
+            GXBegin(0x90, 0, 6);
+            tri2(0, 1, 2, 0, 0, 2, 3, 0);
+        } else {
+            effSetVtxDescN64((void*)0x80419B60);
+            GXBegin(0x90, 0, 3);
+            tri1(0, 1, 2, 0);
+        }
     }
 }

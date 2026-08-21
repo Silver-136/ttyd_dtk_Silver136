@@ -20,8 +20,8 @@ typedef struct EffSetEntry {
     const char* name;
 } EffSetEntry;
 
-EffWork work;
-EffWork* wp = &work;
+static EffWork work;
+static EffWork* wp = &work;
 extern EffGp* gp;
 
 const char str_kemuri_802c1c80[] = "kemuri";
@@ -216,7 +216,7 @@ void DVDMgrClose(void* entry);
 s32 strcmp(const char* s1, const char* s2);
 char* strcpy(char* dst, const char* src);
 
-void _callback_tpl(void* unk, void* dvdEntry) {
+static void _callback_tpl(void* unk, void* dvdEntry) {
     void* closeEntry = *(void**)((s32)dvdEntry + 0x2C);
 
     UnpackTexPalette(wp->unk8);
@@ -225,7 +225,6 @@ void _callback_tpl(void* unk, void* dvdEntry) {
 }
 
 void effInit(void) {
-    extern EffWork* wp;
     extern void* __memAlloc(s32 heap, u32 size);
     extern void* memset(void* dst, s32 value, u32 size);
     extern void effInit64(void);
@@ -247,7 +246,6 @@ void effTexSetup(void) {
     extern s32 DVDMgrGetLength(void*);
     extern void* __memAlloc(s32, u32);
     extern void DVDMgrReadAsync(void*, void*, u32, s32, void (*)(void*, void*));
-    extern void _callback_tpl(void*, void*);
     extern void UnpackTexPalette(void*);
     extern void effTexSetupN64(void);
     char path[0x80];
@@ -298,7 +296,6 @@ void effGetTexObj(s32 id, void* texObj) {
     }
 }
 void effAutoRelease(s32 value) {
-    extern EffWork* wp;
     extern void __memFree(s32 heap, void* ptr);
     s32 i = 0;
     s32 zero = 0;
@@ -421,7 +418,6 @@ void effSoftDelete(EffEntry* entry) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effNameToPtr(char* name) {
-    extern EffWork* wp;
     extern s32 strcmp(const char* s1, const char* s2);
     s32 i = 0;
     s32 count = wp->count;
@@ -502,8 +498,18 @@ u8 effCalcMayaAnimMatrix(int param_1, int* param_2, s32 param_3, float* param_4)
     f32 t;
     f32 t2;
     f32 t3;
-    f32 scale;
+    register u32 qreg;
+    register f32 prevValue;
+    register f32 prevIn;
+    register f32 prevOut;
+    register f32 nextValue;
+    register f32 nextIn;
+    register f32 nextOut;
+    volatile f32 retainedScale;
 
+    retainedScale = 1.0f / 250.0f;
+    qreg = 0x06070607;
+    asm { mtspr GQR5, qreg }
     time = *(f32*)(param_1 + 4);
     last = *param_2 - 1;
     for (i = 1; i < *param_2; i++) {
@@ -517,10 +523,16 @@ u8 effCalcMayaAnimMatrix(int param_1, int* param_2, s32 param_3, float* param_4)
             time = frameTime;
         }
         for (j = 0; j < 22; j++) {
-            s16* p = prev + j * 4;
-            s16* n = next + j * 4;
+            register s16* p = prev + j * 4;
+            register s16* n = next + j * 4;
+            asm { psq_l prevValue, 2(p), 1, 5 }
+            asm { psq_l prevIn, 4(p), 1, 5 }
+            asm { psq_l prevOut, 6(p), 1, 5 }
+            asm { psq_l nextValue, 2(n), 1, 5 }
+            asm { psq_l nextIn, 4(n), 1, 5 }
+            asm { psq_l nextOut, 6(n), 1, 5 }
             if (*(s8*)((s32)p + 9) != 0) {
-                v[j] = (f32)p[1] * (1.0f / 250.0f);
+                v[j] = prevValue;
             } else {
                 span = (f32)*next - (f32)*prev;
                 if (span == float_0_804201a0) {
@@ -529,11 +541,10 @@ u8 effCalcMayaAnimMatrix(int param_1, int* param_2, s32 param_3, float* param_4)
                 t = (time - (f32)*prev) / span;
                 t2 = t * t;
                 t3 = t2 * t;
-                scale = 1.0f / 250.0f;
-                v[j] = ((f32)p[1] * scale) * (float_1_804201b0 + (float_2_804201b4 * t3 - float_3_804201a8 * t2)) +
-                       ((f32)n[1] * scale) * (float_neg2_804201ac * t3 + float_3_804201a8 * t2) +
-                       ((f32)p[3] * scale) * (span * (t + -(float_2_804201b4 * t2 - t3))) +
-                       ((f32)n[2] * scale) * (span * (t3 - t2));
+                v[j] = prevValue * (float_1_804201b0 + (float_2_804201b4 * t3 - float_3_804201a8 * t2)) +
+                       nextValue * (float_neg2_804201ac * t3 + float_3_804201a8 * t2) +
+                       prevOut * (span * (t + -(float_2_804201b4 * t2 - t3))) +
+                       nextIn * (span * (t3 - t2));
             }
         }
         PSMTXTrans(m12, (double)v[0], (double)v[1], (double)v[2]);

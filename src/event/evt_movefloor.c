@@ -106,47 +106,50 @@ USER_FUNC(evt_moving_floor_free) {
 
 u8 evt_moving_floor_init(s32 event) {
     extern s32 evtGetValue(void*, s32);
+    extern f32 float_1_804265a4;
     u8* evt = (u8*)event;
     s32* args = *(s32**)(evt + 0x18);
     u32* floor = (u32*)evtGetValue(evt, args[0]);
-    s32 direction = 0;
-    f32 fraction = 0.0f;
-    s32 kind = floor[8];
+    s32 direction;
+    f32 fraction;
+    s32 kind = (s32)floor[8];
 
     if (kind == 3) {
         switch (floor[9]) {
             case 0:
-                direction = 1; fraction = 0.5f; floor[0] &= ~1; floor[10] = 0; floor[25] = 1.0f;
+                direction = 1; fraction = 0.5f; floor[0] &= ~1; floor[10] = 0; *(f32*)&floor[25] = float_1_804265a4;
                 break;
             case 1:
-                direction = 0; fraction = 0.0f; floor[0] |= 1; floor[10] = 0; floor[25] = 0.5f;
+                direction = 0; fraction = 0.0f; floor[0] |= 1; floor[10] = 0; *(f32*)&floor[25] = 0.5f;
                 break;
             case 2:
-                direction = 1; fraction = 0.5f; floor[0] &= ~1; floor[10] = 2; floor[25] = 1.0f;
+                direction = 1; fraction = 0.5f; floor[0] &= ~1; floor[10] = 2; *(f32*)&floor[25] = float_1_804265a4;
                 break;
             case 3:
-                direction = 0; fraction = 0.0f; floor[0] |= 1; floor[10] = 2; floor[25] = 0.5f;
+                direction = 0; fraction = 0.0f; floor[0] |= 1; floor[10] = 2; *(f32*)&floor[25] = 0.5f;
                 break;
             case 4:
-                direction = 0; fraction = 0.5f; floor[0] &= ~1; floor[10] = 0; floor[25] = 1.0f;
+                direction = 0; fraction = 0.5f; floor[0] &= ~1; floor[10] = 0; *(f32*)&floor[25] = float_1_804265a4;
                 break;
             case 5:
-                direction = 1; fraction = 0.0f; floor[0] |= 1; floor[10] = 0; floor[25] = 0.5f;
+                direction = 1; fraction = 0.0f; floor[0] |= 1; floor[10] = 0; *(f32*)&floor[25] = 0.5f;
                 break;
             case 6:
-                direction = 0; fraction = 0.5f; floor[0] &= ~1; floor[10] = 2; floor[25] = 1.0f;
+                direction = 0; fraction = 0.5f; floor[0] &= ~1; floor[10] = 2; *(f32*)&floor[25] = float_1_804265a4;
                 break;
             case 7:
-                direction = 1; fraction = 0.0f; floor[0] |= 1; floor[10] = 2; floor[25] = 0.5f;
+                direction = 1; fraction = 0.0f; floor[0] |= 1; floor[10] = 2; *(f32*)&floor[25] = 0.5f;
                 break;
         }
-        if (++floor[9] > 7) {
+        floor[9]++;
+        if ((s32)floor[9] > 7) {
             floor[9] = 0;
         }
     } else if (kind < 3) {
         direction = floor[9];
         fraction = 0.0f;
-        if (++floor[9] > 1) {
+        floor[9]++;
+        if ((s32)floor[9] > 1) {
             floor[9] = 0;
         }
     } else if (kind == 5) {
@@ -156,19 +159,20 @@ u8 evt_moving_floor_init(s32 event) {
         fraction = 0.0f;
         switch (floor[9]) {
             case 0:
-                floor[10] = 2; direction = 0; floor[25] = 1.0f;
+                floor[10] = 2; direction = 0; *(f32*)&floor[25] = float_1_804265a4;
                 break;
             case 1:
-                floor[10] = 0; direction = 0; floor[25] = 1.0f;
+                floor[10] = 0; direction = 0; *(f32*)&floor[25] = float_1_804265a4;
                 break;
             case 2:
-                floor[10] = 2; direction = 1; floor[25] = 1.0f;
+                floor[10] = 2; direction = 1; *(f32*)&floor[25] = float_1_804265a4;
                 break;
             case 3:
-                floor[10] = 0; direction = 1; floor[25] = 1.0f;
+                floor[10] = 0; direction = 1; *(f32*)&floor[25] = float_1_804265a4;
                 break;
         }
-        if (++floor[9] > 3) {
+        floor[9]++;
+        if ((s32)floor[9] > 3) {
             floor[9] = 0;
         }
     }
@@ -176,11 +180,14 @@ u8 evt_moving_floor_init(s32 event) {
     if (direction == 0) {
         *(f32*)&floor[2] = (*(f32*)&floor[floor[10] + 14] - *(f32*)&floor[floor[10] + 11]) /
                            (f32)(s32)floor[floor[10] + 26];
-        *(f32*)&floor[3] = *(f32*)&floor[floor[10] + 11] * (1.0f - fraction) +
-                           *(f32*)&floor[floor[10] + 14] * fraction;
     } else {
         *(f32*)&floor[2] = (*(f32*)&floor[floor[10] + 11] - *(f32*)&floor[floor[10] + 14]) /
                            (f32)(s32)floor[floor[10] + 26];
+    }
+    if (direction == 0) {
+        *(f32*)&floor[3] = *(f32*)&floor[floor[10] + 11] * (1.0f - fraction) +
+                           *(f32*)&floor[floor[10] + 14] * fraction;
+    } else {
         *(f32*)&floor[3] = *(f32*)&floor[floor[10] + 14] * (1.0f - fraction) +
                            *(f32*)&floor[floor[10] + 11] * fraction;
     }

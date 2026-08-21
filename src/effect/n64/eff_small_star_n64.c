@@ -1,5 +1,8 @@
 #include "effect/n64/eff_small_star_n64.h"
 
+extern f64 __frsqrte(f64);
+extern f32 __float_nan[];
+
 void* effSmallStarN64Entry(f32 x, f32 y, f32 z, f32 dirX, f32 dirY, f32 dirZ, s32 type, s32 count) {
     typedef f32 Mtx[3][4];
     typedef struct Vec {
@@ -12,17 +15,37 @@ void* effSmallStarN64Entry(f32 x, f32 y, f32 z, f32 dirX, f32 dirY, f32 dirZ, s3
     extern void PSMTXRotAxisRad(Mtx, Vec*, f32);
     extern void PSMTXMultVec(Mtx, Vec*, Vec*);
     extern f64 sqrt(f64);
+    extern const f64 double_0p5_802fbf50;
+    extern const f64 double_3_802fbf58;
+    extern const f64 double_0_802fbf60;
+    extern const f32 float_neg1_8042603c;
     extern f64 sin(f64);
     extern f64 cos(f64);
     extern char str_SmallStarN64_802fbf68[];
+    extern const f32 vec3_802fbf18[3];
+    extern const f32 vec3_802fbf24[3];
+    extern const f32 vec3_802fbf30[3];
     static f32 rotation;
     void* entry = effEntry();
     u8* part;
-    Vec direction;
-    Vec axis;
-    Vec radial;
+    Vec cameraAxis4;
+    Vec cameraAxis3;
+    Vec directionVec;
+    Vec rotAxis;
     Mtx matrix;
+    f32 axisX;
+    f32 axisY;
+    f32 axisZ;
     f32 length;
+    f32 lengthSq;
+    f32 scale;
+    f64 value64;
+    f64 inv;
+    f64 square;
+    f32 classifyValue;
+    u32 bits;
+    u32 exp;
+    s32 kind;
     f32 angle;
     f32 camAngle;
     s32 i;
@@ -30,33 +53,146 @@ void* effSmallStarN64Entry(f32 x, f32 y, f32 z, f32 dirX, f32 dirY, f32 dirZ, s3
     if (count == 0) {
         return 0;
     }
-    length = (f32)sqrt((f64)(dirX * dirX + dirY * dirY + dirZ * dirZ));
-    if (length == 0.0f) {
+    lengthSq = dirX * dirX + dirY * dirY + dirZ * dirZ;
+    if (lengthSq == 0.0f) {
         return 0;
     }
-    direction.x = -dirX / length;
-    direction.y = -dirY / length;
-    direction.z = -dirZ / length;
-    if (direction.x == 0.0f) {
-        axis.x = 1.0f;
-        axis.y = direction.y == 0.0f ? 0.0f : -direction.x / direction.y;
-        axis.z = direction.y == 0.0f ? -direction.x / direction.z : 0.0f;
+    value64 = (f64)lengthSq;
+    if (lengthSq > 0.0f) {
+        inv = __frsqrte(value64);
+
+        square = inv * inv;
+        inv = double_0p5_802fbf50 * inv *
+              (double_3_802fbf58 - value64 * square);
+
+        square = inv * inv;
+        inv = double_0p5_802fbf50 * inv *
+              (double_3_802fbf58 - value64 * square);
+
+        square = inv * inv;
+        inv = double_0p5_802fbf50 * inv *
+              (double_3_802fbf58 - value64 * square);
+
+        length = (f32)(value64 * inv);
+    } else if (value64 < double_0_802fbf60) {
+        length = __float_nan[0];
+    } else {
+        classifyValue = lengthSq;
+        bits = *(u32*)&classifyValue;
+        exp = bits;
+        exp &= 0x7F800000;
+
+        if (exp >= 0x7F800000) {
+            if (exp == 0x7F800000) {
+                if ((bits & 0x7FFFFF) != 0) {
+                    kind = 1;
+                } else {
+                    kind = 2;
+                }
+            } else {
+                kind = 4;
+            }
+        } else if (exp == 0) {
+            if ((bits & 0x7FFFFF) != 0) {
+                kind = 5;
+            } else {
+                kind = 3;
+            }
+        } else {
+            kind = 4;
+        }
+
+        if (kind == 1) {
+            length = __float_nan[0];
+        } else {
+            length = lengthSq;
+        }
     }
-    else {
-        axis.x = -direction.y / direction.x;
-        axis.y = 1.0f;
-        axis.z = 0.0f;
+    scale = float_neg1_8042603c / length;
+    dirX *= scale;
+    dirY *= scale;
+    dirZ *= scale;
+
+    if (dirX == 0.0f) {
+        axisX = 1.0f;
+        if (dirY == 0.0f) {
+            axisY = 0.0f;
+            axisZ = -dirX / dirZ;
+        } else {
+            axisY = -dirX / dirY;
+            axisZ = 0.0f;
+        }
+    } else {
+        axisX = -dirY / dirX;
+        axisY = 1.0f;
+        axisZ = 0.0f;
     }
-    length = (f32)sqrt((f64)(axis.x * axis.x + axis.y * axis.y + axis.z * axis.z));
-    if (length == 0.0f) {
+
+    lengthSq = axisY * axisY + axisX * axisX + axisZ * axisZ;
+    if (lengthSq == 0.0f) {
         return 0;
     }
-    axis.x = axis.x * 8.0f / length;
-    axis.y = axis.y * 8.0f / length;
-    axis.z = axis.z * 8.0f / length;
-    direction.x *= 8.0f;
-    direction.y *= 8.0f;
-    direction.z *= 8.0f;
+    value64 = (f64)lengthSq;
+    if (lengthSq > 0.0f) {
+        inv = __frsqrte(value64);
+
+        square = inv * inv;
+        inv = double_0p5_802fbf50 * inv *
+              (double_3_802fbf58 - value64 * square);
+
+        square = inv * inv;
+        inv = double_0p5_802fbf50 * inv *
+              (double_3_802fbf58 - value64 * square);
+
+        square = inv * inv;
+        inv = double_0p5_802fbf50 * inv *
+              (double_3_802fbf58 - value64 * square);
+
+        length = (f32)(value64 * inv);
+    } else if (value64 < double_0_802fbf60) {
+        length = __float_nan[0];
+    } else {
+        classifyValue = lengthSq;
+        bits = *(u32*)&classifyValue;
+        exp = bits;
+        exp &= 0x7F800000;
+
+        if (exp >= 0x7F800000) {
+            if (exp == 0x7F800000) {
+                if ((bits & 0x7FFFFF) != 0) {
+                    kind = 1;
+                } else {
+                    kind = 2;
+                }
+            } else {
+                kind = 4;
+            }
+        } else if (exp == 0) {
+            if ((bits & 0x7FFFFF) != 0) {
+                kind = 5;
+            } else {
+                kind = 3;
+            }
+        } else {
+            kind = 4;
+        }
+
+        if (kind == 1) {
+            length = __float_nan[0];
+        } else {
+            length = lengthSq;
+        }
+    }
+    scale = 1.0f / length;
+    axisX *= scale;
+    axisY *= scale;
+    axisZ *= scale;
+    dirX *= 8.0f;
+    dirY *= 8.0f;
+    dirZ *= 8.0f;
+    axisX *= 8.0f;
+    axisY *= 8.0f;
+    axisZ *= 8.0f;
 
     *(char**)((u8*)entry + 0x14) = str_SmallStarN64_802fbf68;
     *(s32*)((u8*)entry + 8) = count;
@@ -70,43 +206,76 @@ void* effSmallStarN64Entry(f32 x, f32 y, f32 z, f32 dirX, f32 dirY, f32 dirZ, s3
         *(f32*)(part + 8) = y;
         *(f32*)(part + 0xC) = z;
         *(s8*)(part + 0x30) = 4;
-        radial = axis;
+
         if (type == 3) {
             angle = count == 1 ? 0.0f : 100.0f * (f32)i / (f32)(count - 1) - 50.0f;
-            radial.x = (f32)sin((6.2832f * camAngle) / 360.0f);
-            radial.y = 0.0f;
-            radial.z = -(f32)cos((6.2832f * camAngle) / 360.0f);
-            PSMTXRotAxisRad(matrix, &radial, 0.017453292f * angle);
-            PSMTXMultVec(matrix, &direction, &radial);
-        }
-        else if (type >= 0 && type < 3) {
+
+            cameraAxis3 = *(const Vec*)vec3_802fbf24;
+            cameraAxis3.x = (f32)sin((6.2832f * camAngle) / 360.0f);
+            cameraAxis3.z = -(f32)cos((6.2832f * camAngle) / 360.0f);
+            rotAxis = cameraAxis3;
+
+            PSMTXRotAxisRad(matrix, &rotAxis, 0.017453292f * angle);
+            *(f32*)(part + 0x10) =
+                matrix[0][0] * dirX + matrix[0][1] * dirY + matrix[0][2] * dirZ;
+            *(f32*)(part + 0x14) =
+                matrix[1][0] * dirX + matrix[1][1] * dirY + matrix[1][2] * dirZ;
+            *(f32*)(part + 0x18) =
+                matrix[2][0] * dirX + matrix[2][1] * dirY + matrix[2][2] * dirZ;
+        } else if (type >= 3) {
+            if (type < 5) {
+                angle = 360.0f * (f32)i / (f32)(count - 1);
+
+                cameraAxis4 = *(const Vec*)vec3_802fbf30;
+                cameraAxis4.x = (f32)sin((6.2832f * camAngle) / 360.0f);
+                cameraAxis4.z = -(f32)cos((6.2832f * camAngle) / 360.0f);
+                rotAxis = cameraAxis4;
+
+                PSMTXRotAxisRad(matrix, &rotAxis, 0.017453292f * angle);
+                *(f32*)(part + 0x10) =
+                    matrix[0][0] * dirX + matrix[0][1] * dirY + matrix[0][2] * dirZ;
+                *(f32*)(part + 0x14) =
+                    matrix[1][0] * dirX + matrix[1][1] * dirY + matrix[1][2] * dirZ;
+                *(f32*)(part + 0x18) =
+                    matrix[2][0] * dirX + matrix[2][1] * dirY + matrix[2][2] * dirZ;
+            }
+        } else if (type >= 0) {
             angle = 360.0f * (f32)i / (f32)(count - 1);
-            PSMTXRotAxisRad(matrix, &direction, 0.017453292f * angle);
-            PSMTXMultVec(matrix, &axis, &radial);
-            radial.x += direction.x;
-            radial.y += direction.y;
-            radial.z += direction.z;
+
+            directionVec = *(const Vec*)vec3_802fbf18;
+            directionVec.x = dirX;
+            directionVec.y = dirY;
+            directionVec.z = dirZ;
+            rotAxis = directionVec;
+
+            PSMTXRotAxisRad(matrix, &rotAxis, 0.017453292f * angle);
+            *(f32*)(part + 0x10) =
+                matrix[0][0] * axisX + matrix[0][1] * axisY +
+                matrix[0][2] * axisZ + dirX;
+            *(f32*)(part + 0x14) =
+                matrix[1][0] * axisX + matrix[1][1] * axisY +
+                matrix[1][2] * axisZ + dirY;
+            *(f32*)(part + 0x18) =
+                matrix[2][0] * axisX + matrix[2][1] * axisY +
+                matrix[2][2] * axisZ + dirZ;
         }
-        else if (type < 5) {
-            angle = 360.0f * (f32)i / (f32)(count - 1);
-            radial.x = (f32)sin((6.2832f * camAngle) / 360.0f);
-            radial.y = 0.0f;
-            radial.z = -(f32)cos((6.2832f * camAngle) / 360.0f);
-            PSMTXRotAxisRad(matrix, &radial, 0.017453292f * angle);
-            PSMTXMultVec(matrix, &direction, &radial);
-        }
-        *(f32*)(part + 0x10) = radial.x;
-        *(f32*)(part + 0x14) = radial.y;
-        *(f32*)(part + 0x18) = radial.z;
+
         if (type == 2) {
+            *(f32*)(part + 0x20) = 20.0f;
             *(f32*)(part + 0x10) *= 0.5f;
             *(f32*)(part + 0x14) *= 0.5f;
             *(f32*)(part + 0x18) *= 0.5f;
-            *(f32*)(part + 0x20) = 20.0f;
             *(s32*)(part + 0x28) = 0x28;
-        }
-        else {
-            *(f32*)(part + 0x20) = type == 0 ? 0.0f : 20.0f;
+        } else if (type >= 2) {
+            if (type < 5) {
+                *(f32*)(part + 0x20) = 20.0f;
+                *(s32*)(part + 0x28) = 0x18;
+            }
+        } else if (type == 0) {
+            *(f32*)(part + 0x20) = 0.0f;
+            *(s32*)(part + 0x28) = 0x18;
+        } else if (type >= 0) {
+            *(f32*)(part + 0x20) = 20.0f;
             *(s32*)(part + 0x28) = 0x18;
         }
         *(f32*)(part + 0x1C) = 0.0f;
@@ -254,4 +423,7 @@ const f32 vec3_802fbf18[3] = { 0.0f, 0.0f, 0.0f };
 const f32 vec3_802fbf24[3] = { 0.0f, 0.0f, 0.0f };
 const f32 vec3_802fbf30[3] = { 0.0f, 0.0f, 0.0f };
 const f32 vec3_802fbf3c[3] = { 0.0f, 0.0f, 0.0f };
+const f64 double_0p5_802fbf50 = 0.5;
+const f64 double_3_802fbf58 = 3.0;
+const f64 double_0_802fbf60 = 0.0;
 const char str_SmallStarN64_802fbf68[] = "SmallStarN64";

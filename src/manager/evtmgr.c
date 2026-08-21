@@ -782,7 +782,6 @@ void evtSetType(void* entry, s32 type) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void evtStop(int pEvt, u32 flags) {
-
     u8* set = work;
     u8* waiting;
     u8* entry;
@@ -806,6 +805,7 @@ void evtStop(int pEvt, u32 flags) {
             }
             if ((nested[0xC] & flags) != 0) nested[8] |= 2;
         }
+
         entry = *(u8**)(nestedSet + 0x90);
         count = *(s32*)nestedSet;
         for (i = 0; i < count; i++, entry += 0x1B0) {
@@ -830,17 +830,45 @@ void evtStop(int pEvt, u32 flags) {
     entry = *(u8**)(set + 0x90);
     count = *(s32*)set;
     for (i = 0; i < count; i++, entry += 0x1B0) {
-        if ((entry[8] & 1) != 0 && *(u8**)(entry + 0x74) == (u8*)pEvt) {
-            u8* childSet = work;
+        if ((entry[8] & 1) != 0 && *(void**)(entry + 0x74) == (void*)pEvt) {
+            u8* entrySet = work;
+            u8* nested = *(u8**)(entry + 0x70);
             u8* child;
             s32 childCount;
-            if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
-            if (*(u8**)(entry + 0x70) != 0) evtStop((s32)*(void**)(entry + 0x70), flags);
-            child = *(u8**)(childSet + 0x90);
-            childCount = *(s32*)childSet;
-            while (childCount-- > 0) {
-                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) evtStop((s32)child, flags);
-                child += 0x1B0;
+            s32 j;
+
+            if (*(s32*)((u8*)gp + 0x14) != 0) entrySet += 0xA0;
+            if (nested != 0) {
+                u8* nestedSet = work;
+                if (*(s32*)((u8*)gp + 0x14) != 0) nestedSet += 0xA0;
+                if (*(u8**)(nested + 0x70) != 0) evtStop((s32)*(void**)(nested + 0x70), flags);
+                child = *(u8**)(nestedSet + 0x90);
+                childCount = *(s32*)nestedSet;
+                for (j = 0; j < childCount; j++, child += 0x1B0) {
+                    if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == nested) evtStop((s32)child, flags);
+                }
+                if ((nested[0xC] & flags) != 0) nested[8] |= 2;
+            }
+
+            child = *(u8**)(entrySet + 0x90);
+            childCount = *(s32*)entrySet;
+            for (j = 0; j < childCount; j++, child += 0x1B0) {
+                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) {
+                    u8* childSet = work;
+                    u8* grandchild;
+                    s32 grandchildCount;
+                    if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
+                    if (*(u8**)(child + 0x70) != 0) evtStop((s32)*(void**)(child + 0x70), flags);
+                    grandchild = *(u8**)(childSet + 0x90);
+                    grandchildCount = *(s32*)childSet;
+                    while (grandchildCount-- > 0) {
+                        if ((grandchild[8] & 1) != 0 && *(u8**)(grandchild + 0x74) == child) {
+                            evtStop((s32)grandchild, flags);
+                        }
+                        grandchild += 0x1B0;
+                    }
+                    if ((child[0xC] & flags) != 0) child[8] |= 2;
+                }
             }
             if ((entry[0xC] & flags) != 0) entry[8] |= 2;
         }
@@ -850,13 +878,9 @@ void evtStop(int pEvt, u32 flags) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw reset
-
-
-
 #pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma use_lmw_stmw on
 void evtStart(void* pEvt, u32 flags) {
-
     u8* set = work;
     u8* waiting;
     u8* entry;
@@ -906,16 +930,44 @@ void evtStart(void* pEvt, u32 flags) {
     count = *(s32*)set;
     for (i = 0; i < count; i++, entry += 0x1B0) {
         if ((entry[8] & 1) != 0 && *(void**)(entry + 0x74) == pEvt) {
-            u8* childSet = work;
+            u8* entrySet = work;
+            u8* nested = *(u8**)(entry + 0x70);
             u8* child;
             s32 childCount;
-            if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
-            if (*(u8**)(entry + 0x70) != 0) evtStart(*(void**)(entry + 0x70), flags);
-            child = *(u8**)(childSet + 0x90);
-            childCount = *(s32*)childSet;
-            while (childCount-- > 0) {
-                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) evtStart(child, flags);
-                child += 0x1B0;
+            s32 j;
+
+            if (*(s32*)((u8*)gp + 0x14) != 0) entrySet += 0xA0;
+            if (nested != 0) {
+                u8* nestedSet = work;
+                if (*(s32*)((u8*)gp + 0x14) != 0) nestedSet += 0xA0;
+                if (*(u8**)(nested + 0x70) != 0) evtStart(*(void**)(nested + 0x70), flags);
+                child = *(u8**)(nestedSet + 0x90);
+                childCount = *(s32*)nestedSet;
+                for (j = 0; j < childCount; j++, child += 0x1B0) {
+                    if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == nested) evtStart(child, flags);
+                }
+                if ((nested[0xC] & flags) != 0) nested[8] &= ~2;
+            }
+
+            child = *(u8**)(entrySet + 0x90);
+            childCount = *(s32*)entrySet;
+            for (j = 0; j < childCount; j++, child += 0x1B0) {
+                if ((child[8] & 1) != 0 && *(u8**)(child + 0x74) == entry) {
+                    u8* childSet = work;
+                    u8* grandchild;
+                    s32 grandchildCount;
+                    if (*(s32*)((u8*)gp + 0x14) != 0) childSet += 0xA0;
+                    if (*(u8**)(child + 0x70) != 0) evtStart(*(void**)(child + 0x70), flags);
+                    grandchild = *(u8**)(childSet + 0x90);
+                    grandchildCount = *(s32*)childSet;
+                    while (grandchildCount-- > 0) {
+                        if ((grandchild[8] & 1) != 0 && *(u8**)(grandchild + 0x74) == child) {
+                            evtStart(grandchild, flags);
+                        }
+                        grandchild += 0x1B0;
+                    }
+                    if ((child[0xC] & flags) != 0) child[8] &= ~2;
+                }
             }
             if ((entry[0xC] & flags) != 0) entry[8] &= ~2;
         }

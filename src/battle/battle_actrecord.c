@@ -68,6 +68,7 @@ high_dispatch:
 void BtlActRec_JudgeRuleKeep(void) {
     extern s32 _check_no_use(s32);
     extern s32 _check_use(u32);
+    extern u32 _check_turn_count_0_end(s32);
     extern void* BattleGetMarioPtr(void*);
     extern void* BattleGetPartyPtr(void*);
     char* battle = _battleWorkPointer;
@@ -154,8 +155,49 @@ void BtlActRec_JudgeRuleKeep(void) {
             else info[0x19] = 6;
             return;
         default:
-            info[0x19] = 6;
-            return;
+            break;
+    }
+    if (rule >= 60 && rule <= 62) {
+        if (rule == 62) {
+            value = rec[0] + rec[1] + rec[2] + rec[3] + rec[9] + rec[10] +
+                    rec[13] + rec[23] + rec[25] + rec[27] + rec[29] + rec[30] +
+                    rec[11] + rec[12] + rec[14] + rec[24] + rec[26] + rec[28];
+        } else if (rule == 60) {
+            value = rec[0] + rec[1] + rec[2] + rec[3] + rec[9] + rec[10] +
+                    rec[13] + rec[23] + rec[25] + rec[27];
+        } else {
+            value = rec[29] + rec[30] + rec[11] + rec[12] + rec[14] +
+                    rec[24] + rec[26] + rec[28];
+        }
+        _check_turn_count_0_end(value);
+        return;
+    }
+    if (rule >= 63 && rule <= 65) {
+        if (rule == 65) {
+            value = rec[0] + rec[1] + rec[2] + rec[9] + rec[29] + rec[11];
+        } else if (rule == 63) {
+            value = rec[0] + rec[1] + rec[2] + rec[9];
+        } else {
+            value = rec[29] + rec[11];
+        }
+        _check_turn_count_0_end(value);
+        return;
+    }
+    if (rule == 66) {
+        value = rec[1] + rec[2] + rec[3] + rec[9] + rec[10] + rec[13] +
+                rec[23] + rec[25] + rec[17] + rec[27];
+        info[0x19] = value == 0 ? 6 : 1;
+        return;
+    }
+    if (rule == 67) {
+        value = rec[0] + rec[2] + rec[3] + rec[9] + rec[10] + rec[13] +
+                rec[23] + rec[25] + rec[17] + rec[27];
+        info[0x19] = value == 0 ? 6 : 1;
+        return;
+    }
+    if (rule >= 60) {
+        info[0x19] = 6;
+        return;
     }
     if ((rule & 1) != 0 || rule == 20 || rule == 22 || rule == 24 || rule == 26 || rule == 28 || rule == 30 || rule == 32 || rule == 34 || rule == 36 || rule == 38 || rule == 40 || rule == 42 || rule == 44 || rule == 46 || rule == 48 || rule == 50 || rule == 52 || rule == 54 || rule == 56) {
         info[0x19] = _check_no_use(value);

@@ -2,6 +2,7 @@
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
 #include "effect/eff_miss_star.h"
+#include "effect/eff_updown.h"
 
 #include "system.h"
 
@@ -874,7 +875,6 @@ s32 BattleSetStatusDamage(u32* result, BattleWorkUnit* unit, BattleWorkUnitPart*
     extern void BtlUnit_GetPos(BattleWorkUnit*, f32*, f32*, f32*);
     extern s32 BtlUnit_GetHeight(BattleWorkUnit*);
     extern void* effStampN64Entry(f32, f32, f32, s32);
-    extern void* effUpdownEntry(f32, s32, f32, s32, f32, s32);
     extern u8 BattleStatusChangeInfoSetAnnouce(void*, s32, u8, u32);
     extern void BattleStatusChangeMsgSetAnnouce(void*, s32, s32);
     s8 chargeStrength;
@@ -1390,9 +1390,11 @@ s32 _checkDamageCode_EmergencyRevival(int param_1, u32* param_2) {
 /* AUTOSTUB BattleCheckDamage size 0xA00 */
 s32 BattleCheckDamage(BattleWorkUnit* attacker, BattleWorkUnit* target,
                       BattleWorkUnitPart* part, void* weapon, s32 flags) {
+    extern void BattleInitCounterPreCheckWork(void*);
     extern s32 BattleCheckCounter(void*, BattleWorkUnit*, BattleWorkUnit*, BattleWorkUnitPart*, void*, u32*);
     extern s32 BtlUnit_GetACPossibility(BattleWorkUnit*);
     extern s32 BattleActionCommandGetDefenceResult(void);
+    extern void BtlUnit_GetHitPos(BattleWorkUnit*, BattleWorkUnitPart*, f32*, f32*, f32*);
     extern void* effNiceEntry(f32, f32, f32, s32);
     extern void psndSFXOn(const char*);
     extern void BattleAudience_Case_GuardGood(void);
@@ -1402,6 +1404,19 @@ s32 BattleCheckDamage(BattleWorkUnit* attacker, BattleWorkUnit* target,
     extern void BattleCheckPikkyoro(void*, u32*);
     extern s32 BattleCalculateDamage(BattleWorkUnit*, BattleWorkUnit*, BattleWorkUnitPart*, void*, u32*, u32);
     extern s32 BattleCalculateFpDamage(BattleWorkUnit*, BattleWorkUnit*, BattleWorkUnitPart*, void*, u32*, u32);
+    extern u32 hitGetAttr(void*);
+    extern s32 irand(s32);
+    extern void BattleAudience_Case_EnemyDamage(void);
+    extern void BattleAudience_Case_EnemyNoDamage(void);
+    extern void BattleAudience_Case_Countered(void);
+    extern void BattleActionCommandStop(void*);
+    extern void BattleAcHelpSetDispType(s32);
+    extern void BattleFogForceStop(void);
+    extern void* effBombEntry(f32, f32, f32, f32, s32);
+    extern void psndSFXOn_3D(const char*, Vec*);
+    extern char str_SFX_BTL_THUNDERS_ATT_802ee08c[];
+    extern u32 BattleSetStatusDamageFromWeapon(BattleWorkUnit*, BattleWorkUnit*, BattleWorkUnitPart*, void*, u32);
+    extern void BattleDamageDirect(s32, BattleWorkUnit*, BattleWorkUnitPart*, s32, s32, s32, s32, s32);
     extern char str_SFX_SYSTEM_GREAT1_802ee064[];
     extern char str_SFX_SYSTEM_NICE1_802ee078[];
     u32 result[8];
@@ -1412,6 +1427,8 @@ s32 BattleCheckDamage(BattleWorkUnit* attacker, BattleWorkUnit* target,
     s32 damage;
     s32 fpDamage;
     s32 defence;
+    s32 returnCode = -1;
+    s32 pattern;
     u8 counterType;
     BOOL flip;
 
@@ -1421,6 +1438,9 @@ s32 BattleCheckDamage(BattleWorkUnit* attacker, BattleWorkUnit* target,
     BattleInitCounterPreCheckWork(counterWork);
     if (target == NULL) {
         return 0x12;
+    }
+    if (part != NULL) {
+        *(BattleWorkUnitPart**)((u8*)target + 0x0C) = part;
     }
 
     if ((*(u32*)((u8*)weapon + 0x74) & 0x20) == 0 &&
@@ -1433,6 +1453,8 @@ s32 BattleCheckDamage(BattleWorkUnit* attacker, BattleWorkUnit* target,
         result[0] |= 0x80000;
         psndSFXOn(str_SFX_SYSTEM_GREAT1_802ee064);
         BattleAudience_Case_GuardGood();
+        *(s32*)((u8*)attacker + 0x28C) += 1;
+        *(s8*)((u8*)target + 0x28D) = *(s8*)((u8*)attacker + 0x28C);
         counterType = *(u8*)((u8*)weapon + 0x13);
         if (counterType == 3 || counterType == 4 || counterType >= 5) {
             result[7] = result[0] | 0x12A;
@@ -1502,6 +1524,7 @@ s32 BattleCheckDamage(BattleWorkUnit* attacker, BattleWorkUnit* target,
                                    result + 7, result[0]);
     fpDamage = BattleCalculateFpDamage(attacker, target, part, weapon,
                                        result + 7, result[0]);
+    *(s32*)((u8*)target + 0x2A0) += 1;
     if ((result[0] & 0x40000) == 0) {
         if ((result[0] & 0x40000000) != 0) {
             statusResult = BattleSetStatusDamageFromWeapon(attacker, target,
@@ -1534,11 +1557,90 @@ s32 BattleCheckDamage(BattleWorkUnit* attacker, BattleWorkUnit* target,
     if ((statusResult & 8) != 0) {
         result[7] = result[0] | 0x1D;
     }
-    *(s8*)((u8*)target + 0x119) = damage;
-    *(s8*)((u8*)target + 0x11A) = fpDamage;
+
+    if ((result[0] & 0x100) != 0 && (statusResult & 0x10) != 0) {
+        result[6] = 0x717;
+        *(s8*)((u8*)target + 0x119) = 0;
+        _checkDamageCode_EmergencyRevival((s32)target, result + 6);
+        BattleRunHitEvent(target, result[6]);
+        returnCode = 0x12;
+        goto finish;
+    }
+    if ((result[0] & 0x100) != 0 &&
+        (*(u32*)((u8*)weapon + 0x74) & 0x10000000) != 0 &&
+        BtlUnit_CheckStatus(target, 7) != 0 && irand(100) > -1) {
+        result[5] = 0x8717;
+        _checkDamageCode_EmergencyRevival((s32)target, result + 5);
+        BattleRunHitEvent(target, result[5]);
+        returnCode = 0x12;
+        goto finish;
+    }
+
+    if (statusResult != 0 || damage != 0 || fpDamage != 0 || flip) {
+        returnCode = 0x12;
+        if (*(s32*)((u8*)target + 8) > 0 && *(s32*)((u8*)target + 8) < 0xD8 &&
+            (damage > 0 || statusResult != 0)) {
+            BattleAudience_Case_EnemyDamage();
+        }
+    } else {
+        returnCode = 0x13;
+        if (*(s32*)((u8*)target + 8) > 0 && *(s32*)((u8*)target + 8) < 0xD8 &&
+            *(u8*)((u8*)weapon + 0x6D) != 0x1B) {
+            BattleAudience_Case_EnemyNoDamage();
+        }
+    }
+
+    pattern = *(u8*)((u8*)weapon + 0x6D);
+    if (pattern == 0x14 && counterWork[8] != 0) pattern = 0;
+    if (pattern == 0x0E || pattern == 0x10) {
+        if ((*(u32*)((u8*)target + 0x27C) & 0x4000) != 0) pattern = 0;
+        if (*(u8*)(*(u8**)((u8*)target + 0x10) + 0xB7) <= irand(100)) pattern = 0;
+        if ((result[0] & 0x20000) == 0) pattern = 0;
+    }
+    BattleDamageDirect(*(s32*)((u8*)attacker + 8), target, part, damage, fpDamage,
+                       result[7], pattern, (statusResult & 0x20) == 0);
 
 finish:
-    return 0x12;
+    *(s32*)((u8*)attacker + 0x28C) += 1;
+    *(s8*)((u8*)target + 0x28D) = *(s8*)((u8*)attacker + 0x28C);
+    if (counterWork[8] != 0) {
+        if (counterWork[1] != 0) counterWork[9] += damage * 50 / 100;
+        if (counterWork[6] != 0) counterWork[9] += damage * 50 / 100;
+        if (counterWork[7] != 0) counterWork[9] += damage * 50 / 100;
+        if (counterWork[3] != 0) {
+            result[4] = 0;
+            BattleSetStatusDamage(result + 4, attacker, part, 0, 4, 100, 0, 3, 1);
+        }
+        if (counterWork[5] != 0) {
+            result[3] = 0;
+            BattleSetStatusDamage(result + 3, attacker, part, 0, 7, 100, 0, 3, 1);
+        }
+        if (counterWork[2] != 0) {
+            result[2] = 0;
+            BattleSetStatusDamage(result + 2, attacker, part, 0, 3, 100, 0, 3, 1);
+        }
+        if (counterWork[4] != 0) {
+            result[1] = 0;
+            BattleSetStatusDamage(result + 1, attacker, part, 0, 9, 100, 0, 3, 1);
+        }
+        if (counterWork[9] == 0) counterWork[9] = 1;
+        if (*(u8*)((u8*)attacker + 0x13C) == 0) BattleAudience_Case_Countered();
+        if (counterWork[6] != 0) {
+            BtlUnit_GetHitPos(target, part, &hitPos.x, &hitPos.y, &hitPos.z);
+            effBombEntry(hitPos.x, hitPos.y, hitPos.z, 1.0f, 0);
+            psndSFXOn_3D(str_SFX_BTL_THUNDERS_ATT_802ee08c, &hitPos);
+            BattleFogForceStop();
+        }
+        BattleActionCommandStop(_battleWorkPointer);
+        BattleAcHelpSetDispType(0);
+        BattleDamageDirect(-5, attacker, NULL, counterWork[9], 0, counterWork[8], 0, 1);
+        if (counterWork[10] != 0) {
+            *(s8*)((u8*)target + 0x119) = 0;
+            BattleRunHitEvent(target, counterWork[10]);
+        }
+        returnCode = -1;
+    }
+    return returnCode;
 }
 
 /* MANUAL_AUTOMATION_STUBS_END main/battle/battle_damage */

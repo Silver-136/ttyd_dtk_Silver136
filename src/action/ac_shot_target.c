@@ -321,6 +321,11 @@ void _ac_disp_init(void* wp) {
 
 /* stub-fill: actionCommandDisp | prototype_only | source_prototype */
 void actionCommandDisp(f32 x, f32 y) {
+    typedef struct Vec3Local {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3Local;
     extern f32 vec3_80300258[];
     extern void* _battleWorkPointer;
     extern void btlGetScreenPoint(f32* in, f32* out);
@@ -333,12 +338,20 @@ void actionCommandDisp(f32 x, f32 y) {
 
     void* battleWork;
     void* work;
-    f32 p0[3];
-    f32 p1[3];
-    f32 a[3];
-    f32 b[3];
-    f32 pos[3];
-    u32 color;
+    Vec3Local p0;
+    Vec3Local p1;
+    Vec3Local a0;
+    Vec3Local b0;
+    Vec3Local a1;
+    Vec3Local b1;
+    Vec3Local a2;
+    Vec3Local b2;
+    Vec3Local a3;
+    Vec3Local b3;
+    u32 color0;
+    u32 color1;
+    u32 color2;
+    u32 color3;
     s32 state;
 
     battleWork = _battleWorkPointer;
@@ -353,49 +366,37 @@ void actionCommandDisp(f32 x, f32 y) {
     }
 
     *(f32*)((s32)work + 0x24) += float_2_80427e6c;
-    btlGetScreenPoint((f32*)((s32)work + 0x14), p0);
-    a[0] = vec3_80300258[3];
-    a[1] = vec3_80300258[4];
-    a[2] = vec3_80300258[5];
-    b[0] = vec3_80300258[6];
-    b[1] = vec3_80300258[7];
-    b[2] = vec3_80300258[8];
-    color = dat_80427e5c;
-    btlDispTex4(0x58, p0, b, a, &color);
+    btlGetScreenPoint((f32*)((s32)work + 0x14), (f32*)&p0);
+    a0 = *(Vec3Local*)&vec3_80300258[3];
+    b0 = *(Vec3Local*)&vec3_80300258[6];
+    color0 = dat_80427e5c;
+    btlDispTex4(0x58, (f32*)&p0, (f32*)&b0, (f32*)&a0, &color0);
 
-    p0[0] += float_4_80427e70;
-    p0[1] -= float_4_80427e70;
-    p0[2] -= float_2_80427e6c;
-    a[0] = vec3_80300258[9];
-    a[1] = vec3_80300258[10];
-    a[2] = vec3_80300258[11];
-    b[0] = vec3_80300258[12];
-    b[1] = vec3_80300258[13];
-    b[2] = vec3_80300258[14];
-    color = dat_80427e60;
-    btlDispTex4(0x58, p0, b, a, &color);
+    p0.x += float_4_80427e70;
+    p0.y -= float_4_80427e70;
+    p0.z -= float_2_80427e6c;
+    a1 = *(Vec3Local*)&vec3_80300258[9];
+    b1 = *(Vec3Local*)&vec3_80300258[12];
+    color1 = dat_80427e60;
+    btlDispTex4(0x58, (f32*)&p0, (f32*)&b1, (f32*)&a1, &color1);
 
-    btlGetScreenPoint((f32*)((s32)work + 8), p1);
-    a[0] = vec3_80300258[15];
-    a[1] = vec3_80300258[16];
-    a[2] = *(f32*)((s32)work + 0x24);
-    b[0] = vec3_80300258[18];
-    b[1] = vec3_80300258[19];
-    b[2] = *(f32*)((s32)work + 0x24);
-    color = dat_80427e64;
-    btlDispTex4(0x57, p1, b, a, &color);
+    btlGetScreenPoint((f32*)((s32)work + 8), (f32*)&p1);
+    a2 = *(Vec3Local*)&vec3_80300258[15];
+    a2.z = *(f32*)((s32)work + 0x24);
+    b2 = *(Vec3Local*)&vec3_80300258[18];
+    b2.z = *(f32*)((s32)work + 0x24);
+    color2 = dat_80427e64;
+    btlDispTex4(0x57, (f32*)&p1, (f32*)&b2, (f32*)&a2, &color2);
 
-    p1[0] += float_4_80427e70;
-    p1[1] -= float_4_80427e70;
-    p1[2] -= float_2_80427e6c;
-    a[0] = vec3_80300258[21];
-    a[1] = vec3_80300258[22];
-    a[2] = *(f32*)((s32)work + 0x24);
-    b[0] = vec3_80300258[24];
-    b[1] = vec3_80300258[25];
-    b[2] = *(f32*)((s32)work + 0x24);
-    color = dat_80427e68;
-    btlDispTex4(0x57, p1, b, a, &color);
+    p1.x += float_4_80427e70;
+    p1.y -= float_4_80427e70;
+    p1.z -= float_2_80427e6c;
+    a3 = *(Vec3Local*)&vec3_80300258[21];
+    a3.z = *(f32*)((s32)work + 0x24);
+    b3 = *(Vec3Local*)&vec3_80300258[24];
+    b3.z = *(f32*)((s32)work + 0x24);
+    color3 = dat_80427e68;
+    btlDispTex4(0x57, (f32*)&p1, (f32*)&b3, (f32*)&a3, &color3);
 }
 
 const f32 vec3_80300258[] = { 0.0f, 60.0f, 0.0f };

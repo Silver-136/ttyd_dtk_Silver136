@@ -2,9 +2,9 @@
 
 extern void* gp;
 extern void* mapalloc_base_ptr;
-u8 work[0x1E0];
-void* env_tpl;
+static u8 work[0x1E0];
 s32 tpl_ok;
+void* env_tpl;
 
 extern f32 float_10_80424894;
 extern f32 float_0_804248ac;
@@ -55,7 +55,7 @@ static void* env_current_work(void) {
     return ptr;
 }
 
-void _callback(void* unused, void* entry) {
+static void _callback(void* unused, void* entry) {
     void* closeEntry = *(void**)((s32)entry + 0x2C);
     UnpackTexPalette(env_tpl);
     DVDMgrClose(closeEntry);
@@ -263,13 +263,22 @@ void envDisp_DepthOfField(void) {
     extern void GXClearVtxDesc(void);
     extern void GXSetVtxDesc(s32, s32);
     extern void GXBegin(s32, s32, s16);
+    extern f32 float_6p2832_804248c8;
+    extern f32 float_0p25_804248ec;
+    extern f32 float_3p1416_804248f0;
+    extern f32 float_0p03705_80424914;
+    extern f32 float_0p4967_80424918;
+    extern f32 float_1p5708_8042491c;
+    extern f32 float_4p7124_80424920;
+    extern f32 float_0p00761_80424924;
+    extern f32 float_0p16605_80424928;
+    extern f32 float_100_8042492c;
+    extern f32 float_0p5_804248a8;
     u8* env = (u8*)work;
     char* cam;
     Mtx mtx;
     u32 dofFlags;
-    s32 direction;
     s32 sample;
-    s32 vertex;
     u32 tevColor;
 
     if (*(s32*)((s32)gp + 0x14) != 0) {
@@ -299,52 +308,91 @@ void envDisp_DepthOfField(void) {
     GXSetCullMode(0);
 
     dofFlags = *(u32*)(env + 0x88);
-    for (direction = 0; direction < 2; direction++) {
-        f32 amount = *(f32*)(env + 0x8C + direction * 4);
-        if ((dofFlags & (1 << direction)) == 0 || amount == 0.0f) {
-            continue;
-        }
-        for (sample = 0; sample < 4; sample++) {
-            f32 phase = (f32)sample * 1.5708f;
-            f32 offset = amount * phase * 0.01f;
-            PSMTXTrans(mtx, direction ? offset : 0.0f, direction ? 0.0f : offset, 0.0f);
-            GXLoadTexMtxImm(mtx, 0x1E + sample * 3, 1);
-            GXSetTexCoordGen2(sample, 1, 4, 0x1E + sample * 3, 0, 0x7D);
-            GXSetTevKColorSel(sample, 6);
-            GXSetTevKAlphaSel(sample, 6);
-            GXSetTevOrder(sample, sample, 0, -1);
-            GXSetTevColorOp(sample, 0, 0, 0, 1, sample == 3);
-            GXSetTevAlphaOp(sample, 0, 0, 0, 1, sample == 3);
-            GXSetTevColorIn(sample, 15, 8, 14, sample == 0 ? 15 : 0);
-            GXSetTevAlphaIn(sample, 7, 4, 6, sample == 0 ? 7 : 0);
-            GXSetTevSwapMode(sample, 0, 0);
-        }
-        tevColor = ((u32)env[0x8A + direction] << 24) | 0xFF;
-        GXSetTevKColor(0, &tevColor);
-        GXSetTexCoordGen2(4, 1, 4, 0x3C, 0, 0x7D);
-        if (direction != 0) {
-            u32 white = 0xFFFFFFFF;
-            GXSetTevColor(2, &white);
-        }
-        GXSetTevKColorSel(4, 0xC);
-        GXSetTevKAlphaSel(4, 0x1C);
-        GXSetTevOrder(4, 4, 1, -1);
-        GXSetTevColorOp(4, 8, 0, 0, 1, 0);
-        GXSetTevAlphaOp(4, 8, 0, 0, 1, 0);
-        GXSetTevColorIn(4, 8, 14, 2, 15);
-        GXSetTevAlphaIn(4, 4, 6, 1, 7);
-        GXSetTevSwapMode(4, 0, 0);
-        GXSetNumTexGens(5);
-        GXSetNumTevStages(5);
-        GXBegin(0x80, 0, 4);
-        for (vertex = 0; vertex < 4; vertex++) {
-            *(volatile f32*)0xCC008000 = (vertex & 1) ? 320.0f : -320.0f;
-            *(volatile f32*)0xCC008000 = (vertex & 2) ? -240.0f : 240.0f;
-            *(volatile f32*)0xCC008000 = 0.0f;
-            *(volatile f32*)0xCC008000 = (f32)(vertex & 1);
-            *(volatile f32*)0xCC008000 = (f32)((vertex >> 1) & 1);
-        }
+
+#define DRAW_DOF_PASS(flag, amountOffset, colorOffset, secondPass) \
+    if ((dofFlags & flag) != 0 && *(f32*)(env + amountOffset) != 0.0f) { \
+        f32 amount = *(f32*)(env + amountOffset); \
+        for (sample = 0; sample < 4; sample++) { \
+            f32 angle = float_6p2832_804248c8 * (f32)sample * float_0p25_804248ec; \
+            f32 s; \
+            f32 c; \
+            f32 t; \
+            if (angle > float_3p1416_804248f0) { \
+                if (angle >= float_4p7124_80424920) { \
+                    t = float_1p5708_8042491c - (angle - float_4p7124_80424920); \
+                    s = -(((float_0p00761_80424924 * t * t - float_0p16605_80424928) * t * t) * t); \
+                } else { \
+                    t = angle - float_3p1416_804248f0; \
+                    s = -(((float_0p00761_80424924 * t * t - float_0p16605_80424928) * t * t) * t); \
+                } \
+            } else if (angle > float_1p5708_8042491c) { \
+                t = float_1p5708_8042491c - (angle - float_1p5708_8042491c); \
+                s = ((float_0p00761_80424924 * t * t - float_0p16605_80424928) * t * t) * t; \
+            } else { \
+                s = ((float_0p00761_80424924 * angle * angle - float_0p16605_80424928) * angle * angle) * angle; \
+            } \
+            if (angle > float_3p1416_804248f0) { \
+                if (angle >= float_4p7124_80424920) { \
+                    t = float_1p5708_8042491c - (angle - float_4p7124_80424920); \
+                    c = (float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t; \
+                } else { \
+                    t = angle - float_3p1416_804248f0; \
+                    c = -((float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t); \
+                } \
+            } else if (angle > float_1p5708_8042491c) { \
+                t = float_1p5708_8042491c - (angle - float_1p5708_8042491c); \
+                c = -((float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t); \
+            } else { \
+                c = (float_0p03705_80424914 * angle * angle - float_0p4967_80424918) * angle * angle; \
+            } \
+            PSMTXTrans(mtx, amount * s / float_100_8042492c, amount * c / float_100_8042492c, 0.0f); \
+            GXLoadTexMtxImm(mtx, 0x1E + sample * 3, 1); \
+            GXSetTexCoordGen2(sample, 1, 4, 0x1E + sample * 3, 0, 0x7D); \
+            GXSetTevKColorSel(sample, 6); \
+            GXSetTevKAlphaSel(sample, 6); \
+            GXSetTevOrder(sample, sample, 0, -1); \
+            GXSetTevColorOp(sample, 0, 0, 0, 1, sample == 3); \
+            GXSetTevAlphaOp(sample, 0, 0, 0, 1, sample == 3); \
+            GXSetTevColorIn(sample, 15, 8, 14, sample == 0 ? 15 : 0); \
+            GXSetTevAlphaIn(sample, 7, 4, 6, sample == 0 ? 7 : 0); \
+            GXSetTevSwapMode(sample, 0, 0); \
+        } \
+        tevColor = ((u32)env[colorOffset] << 24) | 0xFF; \
+        GXSetTevKColor(0, &tevColor); \
+        GXSetTexCoordGen2(4, 1, 4, 0x3C, 0, 0x7D); \
+        if (secondPass) { u32 white = 0xFFFFFFFF; GXSetTevColor(2, &white); } \
+        GXSetTevKColorSel(4, 0xC); \
+        GXSetTevKAlphaSel(4, 0x1C); \
+        GXSetTevOrder(4, 4, 1, -1); \
+        GXSetTevColorOp(4, 8, 0, 0, 1, 0); \
+        GXSetTevAlphaOp(4, 8, 0, 0, 1, 0); \
+        GXSetTevColorIn(4, 8, 14, secondPass ? 12 : 2, 15); \
+        GXSetTevAlphaIn(4, 4, 6, secondPass ? 2 : 1, 7); \
+        GXSetTevSwapMode(4, 0, 0); \
+        if (secondPass) { \
+            GXSetTevOrder(5, 0xFF, 0xFF, -1); \
+            GXSetTevColorOp(5, 0, 0, 0, 1, 0); \
+            GXSetTevAlphaOp(5, 0, 0, 0, 1, 0); \
+            GXSetTevColorIn(5, 2, 15, 9, 15); \
+            GXSetTevAlphaIn(5, 1, 7, 9, 7); \
+            GXSetTevSwapMode(5, 0, 0); \
+        } \
+        { \
+        f32 halfW = (f32)*(u16*)((u8*)gp + 0x170) * float_0p5_804248a8; \
+        f32 halfH = (f32)*(u16*)((u8*)gp + 0x172) * float_0p5_804248a8; \
+        GXSetNumTexGens(5); \
+        GXSetNumTevStages(secondPass ? 6 : 5); \
+        GXBegin(0x80, 0, 4); \
+        *(volatile f32*)0xCC008000 = -halfW; *(volatile f32*)0xCC008000 = halfH;  *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; \
+        *(volatile f32*)0xCC008000 = halfW;  *(volatile f32*)0xCC008000 = halfH;  *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; \
+        *(volatile f32*)0xCC008000 = halfW;  *(volatile f32*)0xCC008000 = -halfH; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; \
+        *(volatile f32*)0xCC008000 = -halfW; *(volatile f32*)0xCC008000 = -halfH; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; \
+        } \
     }
+
+    DRAW_DOF_PASS(1, 0x8C, 0x8A, 0);
+    DRAW_DOF_PASS(2, 0x90, 0x8B, 1);
+#undef DRAW_DOF_PASS
 }
 
 void envDisp_Blur(void) {
@@ -689,15 +737,22 @@ void envDisp_FF(void) {
     extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
     extern void GXBegin(s32, s32, s32);
     extern s32 rand(void);
+    extern f64 __frsqrte(f64);
     extern volatile f32 DAT_cc008000;
     extern f32 float_0_804248ac;
     extern f32 float_0p5_804248a8;
     extern f32 float_1000_804248b0;
     extern f32 float_6p2832_804248c8;
     extern f32 float_3p1416_804248f0;
+    extern f32 float_0p03705_80424914;
+    extern f32 float_0p4967_80424918;
     extern f32 float_1p5708_8042491c;
     extern f32 float_4p7124_80424920;
+    extern f32 float_0p00761_80424924;
+    extern f32 float_0p16605_80424928;
     extern f32 float_100_8042492c;
+    extern f64 double_0p5_802f9c60;
+    extern f64 double_3_802f9c68;
 
     void* envWork;
     void* gpPtr;
@@ -710,6 +765,10 @@ void envDisp_FF(void) {
     f32 jitter;
     f32 half;
     f32 zero;
+    f32 t;
+    f64 radiusValue;
+    f64 estimate;
+    s32 radiusSquare;
 
     envWork = work;
     gpPtr = gp;
@@ -744,20 +803,41 @@ void envDisp_FF(void) {
 
         half = float_0p5_804248a8;
         zero = float_0_804248ac;
-        radius = ((f32)*(u16*)((s32)gpPtr + 0x170) + (f32)*(u16*)((s32)gpPtr + 0x172)) * half;
+        radiusSquare = (((s32)(*(u16*)((s32)gpPtr + 0x170) >> 1) *
+                         (s32)*(u16*)((s32)gpPtr + 0x170)) >> 1) +
+                       (((s32)(*(u16*)((s32)gpPtr + 0x172) >> 1) *
+                         (s32)*(u16*)((s32)gpPtr + 0x172)) >> 1);
+        radiusValue = (f64)(f32)radiusSquare;
+        estimate = __frsqrte(radiusValue);
+        estimate = double_0p5_802f9c60 * estimate *
+                   (double_3_802f9c68 - radiusValue * estimate * estimate);
+        estimate = double_0p5_802f9c60 * estimate *
+                   (double_3_802f9c68 - radiusValue * estimate * estimate);
+        estimate = double_0p5_802f9c60 * estimate *
+                   (double_3_802f9c68 - radiusValue * estimate * estimate);
+        radius = (f32)(radiusValue * estimate);
         GXBegin(0xA8, 0, 2000);
         for (i = 0; i < 1000; i++) {
             angle = (float_6p2832_804248c8 * (f32)i) / float_1000_804248b0;
             if (angle > float_3p1416_804248f0) {
-                angle -= float_3p1416_804248f0;
-                x = -angle;
+                if (angle >= float_4p7124_80424920) {
+                    t = float_1p5708_8042491c - (angle - float_4p7124_80424920);
+                    x = -(((float_0p00761_80424924 * t * t - float_0p16605_80424928) * t * t) * t);
+                    y = (float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t;
+                } else {
+                    t = angle - float_3p1416_804248f0;
+                    x = -(((float_0p00761_80424924 * t * t - float_0p16605_80424928) * t * t) * t);
+                    y = -((float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t);
+                }
+            } else if (angle > float_1p5708_8042491c) {
+                t = float_1p5708_8042491c - (angle - float_1p5708_8042491c);
+                x = ((float_0p00761_80424924 * t * t - float_0p16605_80424928) * t * t) * t;
+                y = -((float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t);
             } else {
-                x = angle;
-            }
-            if (angle > float_1p5708_8042491c) {
-                y = float_4p7124_80424920 - angle;
-            } else {
-                y = angle;
+                x = ((float_0p00761_80424924 * angle * angle - float_0p16605_80424928) *
+                     angle * angle) * angle;
+                y = (float_0p03705_80424914 * angle * angle - float_0p4967_80424918) *
+                    angle * angle;
             }
             jitter = (f32)(rand() % 10) / float_100_8042492c;
 
@@ -779,17 +859,33 @@ void envDisp_FF(void) {
 
 void envTevLoadTexMtxImm(s32 type, s32 texMtx, s32 texMtx2, s32 mtxType) {
     typedef f32 Mtx[3][4];
+    typedef struct Vec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
     extern void PSMTXRotRad(void*, f32, char);
     extern void PSMTXConcat(void*, void*, void*);
     extern void PSMTXInvXpose(void*, void*);
     extern void PSVECNormalize(void*, void*);
+    extern void PSMTXMultVecSR(void*, void*, void*);
+    extern void C_VECHalfAngle(void*, void*, void*);
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXTrans(void*, f32, f32, f32);
     extern void PSMTXIdentity(void*);
     extern void GXLoadTexMtxImm(void*, s32, s32);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern Vec vec3_802f9c10;
+    extern f32 float_3p1416_804248f0;
+    extern f32 float_180_804248f4;
     char* env = (char*)work;
     Mtx matrix;
     Mtx temp;
+    Vec direction;
+    Vec halfAngle;
+    f32 angleY;
+    f32 angleZ;
     f32 scale;
 
     if (*(s32*)((char*)gp + 0x14) != 0) env += 0xF0;
@@ -823,11 +919,26 @@ void envTevLoadTexMtxImm(s32 type, s32 texMtx, s32 texMtx2, s32 mtxType) {
             GXLoadTexMtxImm(matrix, texMtx, mtxType);
             break;
         case 2:
+            angleY = (float_3p1416_804248f0 * *(f32*)(env + 0x80)) / float_180_804248f4;
+            angleZ = (float_3p1416_804248f0 * *(f32*)(env + 0x84)) / float_180_804248f4;
+            direction.x = -(f32)cos(angleZ) * (f32)sin(angleY);
+            direction.y = -(f32)sin(angleZ);
+            direction.z = -(f32)cos(angleZ) * (f32)cos(angleY);
+            PSMTXMultVecSR(*(void**)(env + 0x70), &direction, &direction);
+            C_VECHalfAngle(&direction, &vec3_802f9c10, &halfAngle);
             PSMTXInvXpose(*(void**)(env + 0x78), matrix);
             PSVECNormalize(matrix, matrix);
             PSVECNormalize((char*)matrix + 0x10, (char*)matrix + 0x10);
             PSVECNormalize((char*)matrix + 0x20, (char*)matrix + 0x20);
             PSMTXIdentity(temp);
+            temp[0][0] = halfAngle.x;
+            temp[0][1] = halfAngle.y;
+            temp[0][2] = halfAngle.z;
+            PSMTXConcat(temp, matrix, matrix);
+            scale = float_20_804248f8 * *(f32*)(env + 0x7C);
+            PSMTXScale(temp, scale, 0.0f, 0.0f);
+            PSMTXConcat(temp, matrix, matrix);
+            PSMTXTrans(temp, -scale, 0.0f, 0.0f);
             PSMTXConcat(temp, matrix, matrix);
             GXLoadTexMtxImm(matrix, texMtx, mtxType);
             break;
@@ -1390,3 +1501,22 @@ void envSetYami(int data) {
     *(s32*)(data + 0x18) = color;
     *(s32*)(data + 0x10) = texMap + 2;
 }
+
+/*
+ * Target-owned DepthOfField scalar subset.
+ *
+ * Keep these definitions after the function bodies so earlier consumers retain
+ * their existing opaque/local-extern compiler view.  The order below follows
+ * the target .sdata2 order for this proven subset.
+ */
+const f32 float_0p5_804248a8 = 0.5f;
+const f32 float_6p2832_804248c8 = 6.2831855f;
+const f32 float_0p25_804248ec = 0.25f;
+const f32 float_3p1416_804248f0 = 3.1415927f;
+const f32 float_0p03705_80424914 = 0.03705f;
+const f32 float_0p4967_80424918 = 0.4967f;
+const f32 float_1p5708_8042491c = 1.5707964f;
+const f32 float_4p7124_80424920 = 4.712389f;
+const f32 float_0p00761_80424924 = 0.00761f;
+const f32 float_0p16605_80424928 = 0.16605f;
+const f32 float_100_8042492c = 100.0f;

@@ -219,11 +219,21 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
     VecLocal min;
     VecLocal max;
     VecLocal pos;
-    f32 m0[3][4];
-    f32 m1[3][4];
-    f32 m2[3][4];
-    f32 m3[3][4];
-    f32 m4[3][4];
+    f32 trans2[3][4];
+    f32 scale2[3][4];
+    f32 xrot2[3][4];
+    f32 yrot2[3][4];
+    f32 zrot2[3][4];
+    f32 trans1[3][4];
+    f32 scale1[3][4];
+    f32 xrot1[3][4];
+    f32 yrot1[3][4];
+    f32 zrot1[3][4];
+    f32 trans0[3][4];
+    f32 scale0[3][4];
+    f32 xrot0[3][4];
+    f32 yrot0[3][4];
+    f32 zrot0[3][4];
     f32 result[3][4];
     void* poseData;
     void* hit;
@@ -270,49 +280,67 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
         *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * float_2p5_804201d8 * *(f32*)((s32)pMobj + 0x4C);
     }
 
-    if (param_2 >= 0 && param_2 < 3) {
+    if (param_2 == 1) {
         PSVECAdd((VecLocal*)((s32)pMobj + 0x38), (VecLocal*)((s32)pMobj + 0x190), &pos);
-        PSMTXTrans(m0, (double)pos.x, (double)pos.y, (double)pos.z);
-        PSMTXScale(m1, *(f32*)((s32)pMobj + 0x184), *(f32*)((s32)pMobj + 0x188), *(f32*)((s32)pMobj + 0x18C));
-        PSMTXRotRad(m2, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x50)), 'x');
-        PSMTXRotRad(m3, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x54)), 'y');
-        PSMTXRotRad(m4, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x58)), 'z');
-        PSMTXConcat(m0, m4, m0);
-        PSMTXConcat(m0, m3, m0);
-        PSMTXConcat(m0, m2, m0);
-        PSMTXConcat(m0, m1, result);
-        if (param_2 == 1) {
-            memcpy((void*)((s32)pMobj + 0x90), headDJ, 0x68);
-            strcpy((char*)((s32)pMobj + 0x78), str_MOBJ_804201f4);
-            strcat((char*)((s32)pMobj + 0x78), (char*)((s32)pMobj + 5));
-            *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
-            hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
-            *(void**)((s32)pMobj + 0x74) = hit;
-            *(void**)((s32)hit + 0xD0) = pMobj;
-        } else if (param_2 == 0) {
-            memcpy((void*)((s32)pMobj + 0x90), cubeDJ, 0x68);
-            strcpy((char*)((s32)pMobj + 0x78), str_MOBJ_804201f4);
-            strcat((char*)((s32)pMobj + 0x78), (char*)((s32)pMobj + 5));
-            *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
-            hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
-            *(void**)((s32)pMobj + 0x74) = hit;
-            *(void**)((s32)hit + 0xD0) = pMobj;
-        } else {
-            memcpy((void*)((s32)pMobj + 0x90), frontDJ, 0x68);
-            strcpy((char*)((s32)pMobj + 0x78), str_MOBJ_804201f4);
-            strcat((char*)((s32)pMobj + 0x78), (char*)((s32)pMobj + 5));
-            *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
-            hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
-            *(void**)((s32)pMobj + 0x74) = hit;
-            *(void**)((s32)hit + 0xD0) = pMobj;
-            memcpy((void*)((s32)pMobj + 0x118), front2DJ, 0x68);
-            strcpy((char*)((s32)pMobj + 0x100), str_MOBJ_804201fc);
-            strcat((char*)((s32)pMobj + 0x100), (char*)((s32)pMobj + 5));
-            *(char**)((s32)pMobj + 0x118) = (char*)((s32)pMobj + 0x100);
-            hit = hitEntryMOBJ((void*)((s32)pMobj + 0x118), result);
-            *(void**)((s32)pMobj + 0xFC) = hit;
-            *(void**)((s32)hit + 0xD0) = pMobj;
-        }
+        PSMTXTrans(trans1, (double)pos.x, (double)pos.y, (double)pos.z);
+        PSMTXScale(scale1, *(f32*)((s32)pMobj + 0x184), *(f32*)((s32)pMobj + 0x188), *(f32*)((s32)pMobj + 0x18C));
+        PSMTXRotRad(xrot1, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x50)), 'x');
+        PSMTXRotRad(yrot1, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x54)), 'y');
+        PSMTXRotRad(zrot1, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x58)), 'z');
+        PSMTXConcat(trans1, zrot1, trans1);
+        PSMTXConcat(trans1, yrot1, trans1);
+        PSMTXConcat(trans1, xrot1, trans1);
+        PSMTXConcat(trans1, scale1, result);
+        memcpy((void*)((s32)pMobj + 0x90), headDJ, 0x68);
+        strcpy((char*)((s32)pMobj + 0x78), str_MOBJ_804201f4);
+        strcat((char*)((s32)pMobj + 0x78), (char*)((s32)pMobj + 5));
+        *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
+        hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
+        *(void**)((s32)pMobj + 0x74) = hit;
+        *(void**)((s32)hit + 0xD0) = pMobj;
+    } else if (param_2 == 0) {
+        PSVECAdd((VecLocal*)((s32)pMobj + 0x38), (VecLocal*)((s32)pMobj + 0x190), &pos);
+        PSMTXTrans(trans0, (double)pos.x, (double)pos.y, (double)pos.z);
+        PSMTXScale(scale0, *(f32*)((s32)pMobj + 0x184), *(f32*)((s32)pMobj + 0x188), *(f32*)((s32)pMobj + 0x18C));
+        PSMTXRotRad(xrot0, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x50)), 'x');
+        PSMTXRotRad(yrot0, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x54)), 'y');
+        PSMTXRotRad(zrot0, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x58)), 'z');
+        PSMTXConcat(trans0, zrot0, trans0);
+        PSMTXConcat(trans0, yrot0, trans0);
+        PSMTXConcat(trans0, xrot0, trans0);
+        PSMTXConcat(trans0, scale0, result);
+        memcpy((void*)((s32)pMobj + 0x90), cubeDJ, 0x68);
+        strcpy((char*)((s32)pMobj + 0x78), str_MOBJ_804201f4);
+        strcat((char*)((s32)pMobj + 0x78), (char*)((s32)pMobj + 5));
+        *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
+        hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
+        *(void**)((s32)pMobj + 0x74) = hit;
+        *(void**)((s32)hit + 0xD0) = pMobj;
+    } else if (param_2 == 2) {
+        PSVECAdd((VecLocal*)((s32)pMobj + 0x38), (VecLocal*)((s32)pMobj + 0x190), &pos);
+        PSMTXTrans(trans2, (double)pos.x, (double)pos.y, (double)pos.z);
+        PSMTXScale(scale2, *(f32*)((s32)pMobj + 0x184), *(f32*)((s32)pMobj + 0x188), *(f32*)((s32)pMobj + 0x18C));
+        PSMTXRotRad(xrot2, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x50)), 'x');
+        PSMTXRotRad(yrot2, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x54)), 'y');
+        PSMTXRotRad(zrot2, (double)(float_deg2rad_804201cc * *(f32*)((s32)pMobj + 0x58)), 'z');
+        PSMTXConcat(trans2, zrot2, trans2);
+        PSMTXConcat(trans2, yrot2, trans2);
+        PSMTXConcat(trans2, xrot2, trans2);
+        PSMTXConcat(trans2, scale2, result);
+        memcpy((void*)((s32)pMobj + 0x90), frontDJ, 0x68);
+        strcpy((char*)((s32)pMobj + 0x78), str_MOBJ_804201f4);
+        strcat((char*)((s32)pMobj + 0x78), (char*)((s32)pMobj + 5));
+        *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
+        hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
+        *(void**)((s32)pMobj + 0x74) = hit;
+        *(void**)((s32)hit + 0xD0) = pMobj;
+        memcpy((void*)((s32)pMobj + 0x118), front2DJ, 0x68);
+        strcpy((char*)((s32)pMobj + 0x100), str_MOBJ_804201fc);
+        strcat((char*)((s32)pMobj + 0x100), (char*)((s32)pMobj + 5));
+        *(char**)((s32)pMobj + 0x118) = (char*)((s32)pMobj + 0x100);
+        hit = hitEntryMOBJ((void*)((s32)pMobj + 0x118), result);
+        *(void**)((s32)pMobj + 0xFC) = hit;
+        *(void**)((s32)hit + 0xD0) = pMobj;
     }
     return 0;
 }

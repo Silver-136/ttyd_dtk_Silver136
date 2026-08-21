@@ -54,7 +54,7 @@ void* effRecoverHeartN64Entry(s32 type, s32 direction, f32 x, f32 y, f32 z) {
         *(f32*)(work + 0x84) = zero;
         *(f32*)(work + 0x5C) = onePointFour;
     } else {
-        *(f32*)(work + 0x4C) = (f32)(((((mode & 1) << 1) - 1) * (0 >> 1)) << 2);
+        *(f32*)(work + 0x4C) = zero;
         onePointFour = float_1p4_80425eb4;
         *(f32*)(work + 0x5C) = onePointFour;
         *(s32*)(work + 0x7C) = 0xB;
@@ -160,7 +160,6 @@ void effRecoverHeartMain(void* effect) {
     dispEntry(4, 2, effRecoverHeartDisp, effect, dispCalcZ(&dispPos));
 }
 
-
 void effRecoverHeartDisp(s32 cameraId, void* effect) {
     extern void* camGetPtr(s32);
     extern void PSMTXTrans(void*, f32, f32, f32);
@@ -187,54 +186,217 @@ void effRecoverHeartDisp(s32 cameraId, void* effect) {
     extern void effSetVtxDescN64(void*);
     extern void GXBegin(s32, s32, s32);
     extern void tri2(s32, s32, s32, s32, s32, s32, s32, s32);
+    extern u8 lbl_803A7A00[];
+    extern u32 unk_804297e0;
     extern f32 float_deg2rad_80425e88;
-    u8* work = *(u8**)((s32)effect + 0xC);
-    u8* part = work + 0x48;
-    void* camera = camGetPtr(cameraId);
-    f32 base[3][4], rot[3][4], trans[3][4], scale[3][4], model[3][4];
-    u8 texObj[0x20];
-    s32 type = *(s32*)work;
-    s32 direction = *(s32*)(work + 0x44);
-    s32 i;
-    s32 texture;
+    extern f32 float_0p03125_80425e8c;
+    extern f32 float_0_80425e90;
+    extern f32 float_1_80425e94;
+    extern f32 float_0p0026042_80425e98;
 
-    PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
-    PSMTXRotRad(rot, 0x79, float_deg2rad_80425e88 * -*(f32*)((u8*)camGetPtr(4) + 0x114));
+    void* camera;
+    u8* work;
+    u8* part;
+    u8* vtxBase;
+    s32 directionFlag;
+    s32 type;
+    s32 direction;
+    s32 quotient;
+    s32 remainder;
+    s32 directTexY;
+    s32 segmentCount;
+    s32 texture;
+    s32 texY;
+    s32 i;
+
+    f32 trans[3][4];
+    f32 scale[3][4];
+    f32 rot[3][4];
+    f32 base[3][4];
+    f32 model[3][4];
+    f32 final[3][4];
+    u8 texObj[0x20];
+    u32 color;
+    u32 colorWork;
+
+    vtxBase = lbl_803A7A00;
+    camera = camGetPtr(cameraId);
+    work = *(u8**)((s32)effect + 0xC);
+    directionFlag = *(s32*)(work + 0x44);
+
+    PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8),
+               *(f32*)(work + 0xC));
+    PSMTXRotRad(rot, 0x79,
+                float_deg2rad_80425e88 *
+                    -*(f32*)((u8*)camGetPtr(4) + 0x114));
     PSMTXConcat(trans, rot, base);
+
+    type = *(s32*)work;
+    direction = *(s32*)(work + 0x40);
+    part = work + 0x48;
+
     GXSetNumChans(1);
     GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
     GXSetCullMode(0);
 
+    quotient = direction / 10;
+    remainder = direction % 10;
+    directTexY = 0x160 - (direction << 5);
+
     for (i = 1; i < *(s32*)((s32)effect + 8); i++, part += 0x48) {
-        u32 color;
-        if (*(s32*)(part + 0x34) > 0) continue;
-        color = 0xFFFFFF00 | (*(s32*)(part + 0x28) & 0xFF);
-        GXSetTevColor(1, &color);
-        GXSetNumTevStages(1);
-        GXSetTevOrder(0, 0, 0, 4);
-        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-        GXSetTevColorIn(0, 0, 8, 10, 0);
-        GXSetTevAlphaIn(0, 0, 4, 7, 7);
-        texture = (type == 0 || type == 2) ? (direction == 0 ? 0x50 : 0x51) : 0x52;
-        effGetTexObjN64(texture, texObj);
-        GXLoadTexObj(texObj, 0);
-        PSMTXScale(scale, 0.03125f, 0.03125f, 0.0f);
-        GXLoadTexMtxImm(scale, 0x1E, 1);
-        PSMTXTrans(trans, *(f32*)(part + 4) + *(f32*)(part + 0x1C),
-                          *(f32*)(part + 8), *(f32*)(part + 0xC));
-        PSMTXScale(scale, *(f32*)(part + 0x38), *(f32*)(part + 0x3C), 1.0f);
-        PSMTXConcat(trans, scale, trans);
-        PSMTXConcat(base, trans, model);
-        PSMTXRotRad(rot, 0x7A, float_deg2rad_80425e88 * *(f32*)(part + 0x24));
-        PSMTXConcat(model, rot, model);
-        PSMTXConcat((u8*)camera + 0x11C, model, model);
-        GXLoadPosMtxImm(model, 0);
-        GXSetCurrentMtx(0);
-        effSetVtxDescN64((void*)0x803A7A78);
-        GXBegin(0x90, 0, 6);
-        tri2(0, 1, 2, 0, 0, 2, 3, 0);
+        if (*(s32*)(part + 0x34) < 1) {
+            colorWork = unk_804297e0;
+            ((u8*)&colorWork)[3] = (u8)*(s32*)(part + 0x28);
+            color = colorWork;
+            GXSetTevColor(1, &color);
+
+            if (*(s32*)(part + 0x28) == 0xFF) {
+                GXSetNumTevStages(1);
+                GXSetTevOrder(0, 0, 0, 4);
+                GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+                GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+                GXSetTevColorIn(0, 0xF, 8, 10, 0xF);
+                GXSetTevAlphaIn(0, 7, 7, 7, 4);
+            } else {
+                GXSetNumTevStages(1);
+                GXSetTevOrder(0, 0, 0, 4);
+                GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+                GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+                GXSetTevColorIn(0, 0xF, 8, 10, 0xF);
+                GXSetTevAlphaIn(0, 7, 4, 1, 7);
+            }
+
+            if (type == 0 || type == 2) {
+                texture = 0x51;
+                if (directionFlag == 0) {
+                    texture = 0x50;
+                }
+            } else {
+                texture = 0x52;
+            }
+
+            effGetTexObjN64(texture, texObj);
+            GXLoadTexObj(texObj, 0);
+            PSMTXScale(scale, float_0p03125_80425e8c,
+                       float_0p03125_80425e8c, float_0_80425e90);
+            GXLoadTexMtxImm(scale, 0x1E, 1);
+
+            PSMTXTrans(trans,
+                       *(f32*)(part + 4) + *(f32*)(part + 0x1C),
+                       *(f32*)(part + 8), *(f32*)(part + 0xC));
+            PSMTXScale(scale, *(f32*)(part + 0x38),
+                       *(f32*)(part + 0x3C), float_1_80425e94);
+            PSMTXConcat(trans, scale, trans);
+            PSMTXConcat(base, trans, model);
+            PSMTXRotRad(rot, 0x7A,
+                        float_deg2rad_80425e88 *
+                            *(f32*)(part + 0x24));
+            PSMTXConcat(model, rot, final);
+
+            if (i == 1 && type != 2) {
+                effSetVtxDescN64(vtxBase + 0x40);
+                PSMTXConcat((u8*)camera + 0x11C, final, trans);
+                GXLoadPosMtxImm(trans, 0);
+                GXSetCurrentMtx(0);
+                GXBegin(0x90, 0, 6);
+                tri2(0, 1, 2, 0, 0, 2, 3, 0);
+
+                GXSetNumTevStages(1);
+                GXSetTevOrder(0, 0, 0, 4);
+                GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+                GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+                GXSetTevColorIn(0, 0xF, 8, 10, 0xF);
+                GXSetTevAlphaIn(0, 7, 4, 1, 7);
+
+                effGetTexObjN64(0x53, texObj);
+                GXLoadTexObj(texObj, 0);
+                PSMTXScale(scale, float_0p03125_80425e8c,
+                           float_0p0026042_80425e98,
+                           float_0_80425e90);
+
+                if (direction < 10 && directionFlag == 0) {
+                    texY = directTexY;
+                    PSMTXTrans(trans, float_0_80425e90, (f32)texY,
+                               float_0_80425e90);
+                    PSMTXConcat(scale, trans, scale);
+                    GXLoadTexMtxImm(scale, 0x1E, 1);
+
+                    if (type == 0) {
+                        effSetVtxDescN64(vtxBase + 0xB0);
+                    } else {
+                        effSetVtxDescN64(vtxBase + 0x158);
+                    }
+
+                    PSMTXConcat((u8*)camera + 0x11C, model, trans);
+                    GXLoadPosMtxImm(trans, 0);
+                    GXSetCurrentMtx(0);
+                    GXBegin(0x90, 0, 6);
+                    tri2(0, 1, 2, 0, 0, 2, 3, 0);
+                } else {
+                    segmentCount = 10;
+                    if (directionFlag == 0) {
+                        segmentCount = quotient;
+                    }
+
+                    texY = 0x160 - (remainder << 5);
+                    PSMTXTrans(trans, float_0_80425e90, (f32)texY,
+                               float_0_80425e90);
+                    PSMTXConcat(scale, trans, scale);
+                    GXLoadTexMtxImm(scale, 0x1E, 1);
+
+                    if (type == 0) {
+                        effSetVtxDescN64(vtxBase + 0x120);
+                    } else {
+                        effSetVtxDescN64(vtxBase + 0x1C8);
+                    }
+
+                    PSMTXConcat((u8*)camera + 0x11C, model, trans);
+                    GXLoadPosMtxImm(trans, 0);
+                    GXSetCurrentMtx(0);
+                    GXBegin(0x90, 0, 6);
+                    tri2(0, 1, 2, 0, 0, 2, 3, 0);
+
+                    PSMTXScale(scale, float_0p03125_80425e8c,
+                               float_0p0026042_80425e98,
+                               float_0_80425e90);
+                    texY = 0x160 - (segmentCount << 5);
+                    PSMTXTrans(trans, float_0_80425e90, (f32)texY,
+                               float_0_80425e90);
+                    PSMTXConcat(scale, trans, scale);
+                    GXLoadTexMtxImm(scale, 0x1E, 1);
+
+                    if (type == 0) {
+                        effSetVtxDescN64(vtxBase + 0xE8);
+                    } else {
+                        effSetVtxDescN64(vtxBase + 0x190);
+                    }
+
+                    GXBegin(0x90, 0, 6);
+                    tri2(0, 1, 2, 0, 0, 2, 3, 0);
+                }
+            } else {
+                PSMTXConcat((u8*)camera + 0x11C, final, trans);
+                GXLoadPosMtxImm(trans, 0);
+                GXSetCurrentMtx(0);
+                effSetVtxDescN64(vtxBase + 0x78);
+                GXBegin(0x90, 0, 6);
+                tri2(0, 1, 2, 0, 0, 2, 3, 0);
+            }
+        }
     }
 }
+
+const f32 float_deg2rad_80425e88 = 0.017453292f;
+const f32 float_0p03125_80425e8c = 0.03125f;
+const f32 float_0_80425e90 = 0.0f;
+const f32 float_1_80425e94 = 1.0f;
+const f32 float_0p0026042_80425e98 = 0.0026041667f;
+const f32 float_0p05_80425e9c = 0.05f;
+const f32 float_6p2832_80425ea0 = 6.2831855f;
+const f32 float_360_80425ea4 = 360.0f;
+const f32 float_neg30_80425ea8 = -30.0f;
+const f32 float_8_80425eac = 8.0f;
+const f32 float_0p9_80425eb0 = 0.9f;
+const f32 float_1p4_80425eb4 = 1.4f;

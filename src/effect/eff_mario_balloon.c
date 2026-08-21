@@ -90,6 +90,7 @@ void effMarioBalloonDisp(s32 cameraId, void* effect) {
     extern void PSMTXRotRad(Mtx,f32,char);
     extern void PSMTXScale(Mtx,f32,f32,f32);
     extern void PSMTXConcat(Mtx,Mtx,Mtx);
+    extern void PSMTXTransApply(Mtx,Mtx,f32,f32,f32);
     extern void PSMTXInvXpose(Mtx,void*);
     extern void effGetTexObj(s32,void*);
     extern void GXLoadTexObj(void*,s32);
@@ -120,6 +121,7 @@ void effMarioBalloonDisp(s32 cameraId, void* effect) {
     extern f32 float_deg2rad_80422d18;
     extern f32 float_0p7_80422d1c;
     extern f32 float_1_80422d20;
+    extern f32 float_neg1_80422d24;
     extern f32 float_0_80422d28;
     extern f32 float_neg20_80422d3c;
     extern f32 float_32_80422d40;
@@ -151,7 +153,10 @@ void effMarioBalloonDisp(s32 cameraId, void* effect) {
     if (*(s32*)work==1) {
         effGetTexObj(0x11,&tex); GXLoadTexObj(&tex,0);
         GXSetTevColorIn(0,15,15,15,15); GXSetTevAlphaIn(0,7,7,7,4);
-        GXLoadPosMtxImm(trans,0); GXSetCullMode(0); GXBegin(0x80,0,4);
+        PSMTXTransApply(trans,model,float_1_80422d20,float_neg1_80422d24,float_0_80422d28);
+        GXLoadPosMtxImm(model,0);
+        GXSetBlendMode(1,4,5,0); GXSetZCompLoc(1); GXSetAlphaCompare(7,0,0,7,0);
+        GXSetZMode(0,3,0); GXSetCullMode(0); GXBegin(0x80,0,4);
     } else {
         effGetTexObj(0x10,&tex); GXLoadTexObj(&tex,0); color=dat_80422d10;
         GXSetTevColor(1,&color); GXSetTevColorIn(0,15,2,8,15); GXSetTevAlphaIn(0,7,7,7,4);

@@ -593,22 +593,32 @@ void unk_800d1364(char* dst, char* value) {
     extern const char str_ein_ITEM_802cc6b8[];
     extern const char str_Einen_ITEM_802cc6c4[];
     extern const char str_einen_ITEM_802cc6d4[];
+    extern const char str_PLles_802cc6e4[];
+    extern const char str_Un_ITEM_802cc6ec[];
+    extern const char str_un_ITEM_802cc6f8[];
+    extern const char str_PLunos_802cc704[];
+    extern const char str_PLunas_802cc710[];
+    extern const char str_un_80421854[];
+    extern const char str_MNA_8042185c[];
+    extern const char str_FNA_80421864[];
     extern char* lbl_804163B8[];
     extern char* lbl_804163D0[];
     extern char* lbl_804163E8[];
     extern char* lbl_80416400[];
+    extern char* lbl_80416418[];
+    extern char* lbl_80416424[];
+    extern char* lbl_80416430[];
+    extern char* lbl_80416448[];
     char buffer[2572];
     char* marker;
     const char* article;
     u32 prefix;
     s32 form;
+    s32 language = *(s32*)((s32)gp + 0x11D8);
 
-    switch (*(s32*)((s32)gp + 0x11D8)) {
-    case 0:
+    if (language == 0) {
         strcpy(buffer, dst);
-        break;
-    case 1:
-    case 6:
+    } else if (language == 1 || language == 6) {
         switch (*value) {
         case 'A': case 'E': case 'I': case 'O': case 'U':
         case 'a': case 'e': case 'i': case 'o': case 'u': article = str_an_8042183c; break;
@@ -634,8 +644,7 @@ void unk_800d1364(char* dst, char* value) {
                 strcat(buffer, value); strcat(buffer, marker + 6);
             }
         }
-        break;
-    case 2:
+    } else if (language == 2) {
         form = 0;
         if (strstr(value, str_M_8042184c) != 0) {
             form = 0;
@@ -701,15 +710,120 @@ void unk_800d1364(char* dst, char* value) {
             strcat(buffer, value);
             strcat(buffer, marker + 6);
         }
-        break;
-    default:
+    } else if (language == 3) {
+        form = 0;
+        if (strstr(value, str_M_8042184c) != 0) {
+            form = 0;
+        } else if (strstr(value, str_F_80421850) != 0) {
+            form = 1;
+        } else if (strstr(value, str_PLles_802cc6e4) != 0) {
+            form = 2;
+        }
+        marker = strstr(dst, str_un_80421854);
+        if (marker != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix);
+            buffer[prefix] = 0;
+            strcat(buffer, lbl_80416424[form]);
+            strcat(buffer, marker + 4);
+            strcpy(dst, buffer);
+            marker = strstr(dst, str_ITEM_802cc66c);
+            if (marker != 0) {
+                prefix = strlen(dst) - strlen(marker);
+                strncpy(buffer, dst, prefix);
+                buffer[prefix] = 0;
+                strcat(buffer, value);
+                strcat(buffer, marker + 6);
+            }
+        } else if ((marker = strstr(dst, str_Un_ITEM_802cc6ec)) != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix);
+            buffer[prefix] = 0;
+            strcat(buffer, lbl_80416418[form]);
+            strcat(buffer, value);
+            strcat(buffer, marker + 9);
+        } else if ((marker = strstr(dst, str_un_ITEM_802cc6f8)) != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix);
+            buffer[prefix] = 0;
+            strcat(buffer, lbl_80416424[form]);
+            strcat(buffer, value);
+            strcat(buffer, marker + 9);
+        } else if ((marker = strstr(dst, str_ITEM_802cc66c)) != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix);
+            buffer[prefix] = 0;
+            strcat(buffer, value);
+            strcat(buffer, marker + 6);
+        }
+    } else if (language == 4) {
+        form = 0;
+        if (strstr(value, str_M_8042184c) != 0) {
+            form = 0;
+        } else if (strstr(value, str_F_80421850) != 0) {
+            form = 1;
+        } else if (strstr(value, str_MNA_8042185c) != 0) {
+            form = 2;
+        } else if (strstr(value, str_FNA_80421864) != 0) {
+            form = 3;
+        } else if (strstr(value, str_PLunos_802cc704) != 0) {
+            form = 4;
+        } else if (strstr(value, str_PLunas_802cc710) != 0) {
+            form = 5;
+        }
+        marker = strstr(dst, str_un_80421854);
+        if (marker != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix);
+            buffer[prefix] = 0;
+            strcat(buffer, lbl_80416448[form]);
+            strcat(buffer, marker + 4);
+            strcpy(dst, buffer);
+            marker = strstr(dst, str_ITEM_802cc66c);
+            if (marker != 0) {
+                prefix = strlen(dst) - strlen(marker);
+                strncpy(buffer, dst, prefix);
+                buffer[prefix] = 0;
+                strcat(buffer, value);
+                strcat(buffer, marker + 6);
+            }
+        } else if ((marker = strstr(dst, str_Un_ITEM_802cc6ec)) != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix);
+            buffer[prefix] = 0;
+            strcat(buffer, lbl_80416430[form]);
+            strcat(buffer, value);
+            strcat(buffer, marker + 9);
+        } else if ((marker = strstr(dst, str_un_ITEM_802cc6f8)) != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix);
+            buffer[prefix] = 0;
+            strcat(buffer, lbl_80416448[form]);
+            strcat(buffer, value);
+            strcat(buffer, marker + 9);
+        } else if ((marker = strstr(dst, str_ITEM_802cc66c)) != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix);
+            buffer[prefix] = 0;
+            strcat(buffer, value);
+            strcat(buffer, marker + 6);
+        }
+    } else if (language == 5) {
+        marker = strstr(dst, str_ITEM_802cc66c);
+        if (marker != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix);
+            buffer[prefix] = 0;
+            strcat(buffer, value);
+            strcat(buffer, marker + 6);
+        }
+    } else {
         marker = strstr(dst, str_ITEM_802cc66c);
         if (marker != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix); buffer[prefix] = 0;
             strcat(buffer, value); strcat(buffer, marker + 6);
         } else strcpy(buffer, dst);
-        break;
     }
     strcpy(dst, buffer);
 }

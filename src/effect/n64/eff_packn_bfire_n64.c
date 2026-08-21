@@ -109,15 +109,75 @@ void* effPacknBfireN64Entry(f32 x, f32 y, f32 z, f32 dstX, f32 dstY, f32 dstZ, f
 
 void effPacknBfireMain(void* effect) {
     extern void effDelete(void*);
-    extern f32 dispCalcZ(void*); extern void dispEntry(s32,s32,void*,void*,f32); extern void effPacknBfireDisp(void);
-    extern f32 float_1_80425c80,float_0p97_80425c8c,float_0p02_80425c90,float_0p05_80425c94,float_0p1_80425c98,float_0p9_80425c9c,float_0p2_80425ca0,float_neg0p6_80425ca4,float_0_80425c6c;
-    u8* work=*(u8**)((s32)effect+0xC); s32 type=*(s32*)work,i;
-    if(*(s32*)effect&4){*(s32*)effect&=~4;*(s32*)(work+0x20)=0x10;} if(*(s32*)(work+0x20)<1000)*(s32*)(work+0x20)-=1;*(s32*)(work+0x24)+=1;
-    if(*(s32*)(work+0x20)<0){effDelete(effect);return;}
-    if(type==1){*(f32*)(work+0x60)*=float_0p97_80425c8c;*(f32*)(work+0x68)*=float_0p97_80425c8c;*(f32*)(work+0x64)+=float_0p02_80425c90*(float_1_80425c80-*(f32*)(work+0x64));}
-    else if(type<1 && (*(s32*)(work+0x24)&3)==0) effPacknBfireN64Entry(*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC),*(f32*)(work+0x10),*(f32*)(work+0x14),*(f32*)(work+0x18),float_1_80425c80,1,*(s32*)(work+0x1C),*(s32*)(work+0x1C));
-    else if(type<3) for(i=0;i<*(s32*)((s32)effect+8);i++,work+=0x7C){*(f32*)(work+0x60)*=float_0p9_80425c9c;*(f32*)(work+0x64)-=float_0p2_80425ca0;*(f32*)(work+4)+=*(f32*)(work+0x60);*(f32*)(work+8)+=*(f32*)(work+0x64);if(*(f32*)(work+8)<float_0_80425c6c){*(f32*)(work+8)=float_0_80425c6c;*(f32*)(work+0x64)*=float_neg0p6_80425ca4;}}
-    dispEntry(4,2,effPacknBfireDisp,effect,dispCalcZ((u8*)*(void**)((s32)effect+0xC)+4));
+    extern f32 dispCalcZ(void*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
+    extern void effPacknBfireDisp(void);
+    extern f32 float_1_80425c80, float_0p97_80425c8c, float_0p02_80425c90;
+    extern f32 float_0p05_80425c94, float_0p1_80425c98, float_0p9_80425c9c;
+    extern f32 float_0p2_80425ca0, float_neg0p6_80425ca4, float_0p07_80425ca8;
+    extern f32 float_0_80425c6c;
+    u8* work = *(u8**)((s32)effect + 0xC);
+    s32 type = *(s32*)work;
+    s32 i;
+    f32 x = *(f32*)(work + 4);
+    f32 y = *(f32*)(work + 8);
+    f32 z = *(f32*)(work + 0xC);
+
+    if (*(s32*)effect & 4) {
+        *(s32*)effect &= ~4;
+        *(s32*)(work + 0x20) = 0x10;
+    }
+    if (*(s32*)(work + 0x20) < 1000) {
+        *(s32*)(work + 0x20) -= 1;
+    }
+    *(s32*)(work + 0x24) += 1;
+    if (*(s32*)(work + 0x20) == 1 && type == 1) {
+        effPacknBfireN64Entry(x, y, z, *(f32*)(work + 0x10), *(f32*)(work + 0x14),
+                             *(f32*)(work + 0x18), float_1_80425c80, 2, 0x20, 0x20);
+    }
+    if (*(s32*)(work + 0x20) < 0) {
+        effDelete(effect);
+    } else {
+        if (type == 1) {
+            *(f32*)(work + 0x60) *= float_0p97_80425c8c;
+            *(f32*)(work + 0x68) *= float_0p97_80425c8c;
+            *(f32*)(work + 0x64) += float_0p02_80425c90 *
+                                    (float_1_80425c80 - *(f32*)(work + 0x64));
+            *(f32*)(work + 4) += *(f32*)(work + 0x60);
+            *(f32*)(work + 8) += *(f32*)(work + 0x64);
+            *(f32*)(work + 0xC) += *(f32*)(work + 0x68);
+            *(f32*)(work + 0x70) += float_0p05_80425c94 *
+                                    (float_1_80425c80 - *(f32*)(work + 0x70));
+            *(f32*)(work + 0x6C) += float_0p1_80425c98 *
+                                    (float_1_80425c80 - *(f32*)(work + 0x6C));
+            *(f32*)(work + 0x74) += *(f32*)(work + 0x78);
+        } else if (type < 1) {
+            if (type >= 0 && (*(s32*)(work + 0x24) & 3) == 0) {
+                effPacknBfireN64Entry(*(f32*)(work + 4), *(f32*)(work + 8),
+                                     *(f32*)(work + 0xC), *(f32*)(work + 0x10),
+                                     *(f32*)(work + 0x14), *(f32*)(work + 0x18),
+                                     float_1_80425c80, 1, *(s32*)(work + 0x1C),
+                                     *(s32*)(work + 0x1C));
+            }
+        } else if (type < 3) {
+            for (i = 0; i < *(s32*)((s32)effect + 8); i++, work += 0x7C) {
+                *(f32*)(work + 0x60) *= float_0p9_80425c9c;
+                *(f32*)(work + 0x64) -= float_0p2_80425ca0;
+                *(f32*)(work + 4) += *(f32*)(work + 0x60);
+                *(f32*)(work + 8) += *(f32*)(work + 0x64);
+                if (*(f32*)(work + 8) < float_0_80425c6c) {
+                    *(f32*)(work + 8) = float_0_80425c6c;
+                    if (*(f32*)(work + 0x64) < float_0_80425c6c) {
+                        *(f32*)(work + 0x64) *= float_neg0p6_80425ca4;
+                    }
+                }
+                *(f32*)(work + 0x70) += float_0p07_80425ca8 * -*(f32*)(work + 0x70);
+                *(f32*)(work + 0x6C) += float_0p05_80425c94 * -*(f32*)(work + 0x6C);
+                *(f32*)(work + 0x74) += *(f32*)(work + 0x78);
+            }
+        }
+        dispEntry(4, 2, effPacknBfireDisp, effect, dispCalcZ(&x));
+    }
 }
 
 
@@ -146,7 +206,14 @@ void effPacknBfireDisp(s32 cameraId, void* effect) {
     extern void effSetVtxDescN64(void*);
     extern void GXBegin(s32, s32, s32);
     extern void tri2(s32, s32, s32, s32, s32, s32, s32, s32);
-    extern f32 float_deg2rad_80425c68;
+    extern f64 angleABf(f64, f64, f64, f64);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern f32 float_deg2rad_80425c7c;
+    extern f32 float_6p2832_80425c70;
+    extern f32 float_360_80425c74;
+    extern f32 float_128_80425c78;
+    extern f32 float_0_80425c6c;
     u8* part = *(u8**)((s32)effect + 0xC);
     void* camera = camGetPtr(cameraId);
     f32 trans[3][4], rot[3][4], scale[3][4], model[3][4], texMtx[3][4];
@@ -154,14 +221,50 @@ void effPacknBfireDisp(s32 cameraId, void* effect) {
     u32 color;
     s32 i;
 
-    GXSetNumChans(0);
-    GXSetNumTevStages(2);
-    GXSetTevOrder(0, 0, 0, 0xFF);
-    GXSetTevOrder(1, 1, 1, 0xFF);
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(0, 0, 2, 8, 0);
-    GXSetTevAlphaIn(0, 0, 1, 7, 7);
+    if (*(s32*)part != 0) {
+        u32 color1 = ((u8*)part)[0x28] << 24 | ((u8*)part)[0x2C] << 16 |
+                     ((u8*)part)[0x30] << 8 | ((u8*)part)[0x34];
+        u32 color2 = ((u8*)part)[0x38] << 24 | ((u8*)part)[0x2C] << 16 |
+                     ((u8*)part)[0x40] << 8 | ((u8*)part)[0x44];
+        GXSetTevColor(1, &color1);
+        GXSetTevColor(2, &color2);
+        GXSetNumChans(0);
+        GXSetNumTevStages(5);
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 3);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 3);
+        GXSetTevColorIn(0, 0xF, 0xF, 0xF, 8);
+        GXSetTevAlphaIn(0, 7, 7, 7, 4);
+        GXSetTevOrder(1, 1, 1, 0xFF);
+        GXSetTevColorOp(1, 0, 0, 0, 0, 0);
+        GXSetTevAlphaOp(1, 0, 0, 0, 0, 0);
+        GXSetTevColorIn(1, 0xF, 6, 8, 4);
+        GXSetTevAlphaIn(1, 7, 2, 4, 3);
+        GXSetTevOrder(2, 1, 1, 0xFF);
+        GXSetTevColorOp(2, 1, 0, 0, 1, 0);
+        GXSetTevAlphaOp(2, 1, 0, 0, 1, 0);
+        GXSetTevColorIn(2, 0xF, 6, 6, 0);
+        GXSetTevAlphaIn(2, 7, 1, 2, 0);
+        GXSetTevOrder(3, 1, 1, 0xFF);
+        GXSetTevColorOp(3, 0, 0, 0, 0, 0);
+        GXSetTevAlphaOp(3, 0, 0, 0, 0, 0);
+        GXSetTevColorIn(3, 0xF, 0, 8, 2);
+        GXSetTevAlphaIn(3, 7, 0, 3, 7);
+        GXSetTevOrder(4, 1, 1, 0xFF);
+        GXSetTevColorOp(4, 1, 0, 0, 1, 0);
+        GXSetTevAlphaOp(4, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(4, 0xF, 6, 8, 0);
+        GXSetTevAlphaIn(4, 7, 7, 7, 0);
+    } else {
+        GXSetNumChans(0);
+        GXSetNumTevStages(2);
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevOrder(1, 1, 1, 0xFF);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 0, 2, 8, 0);
+        GXSetTevAlphaIn(0, 0, 1, 7, 7);
+    }
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
     GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
@@ -173,14 +276,28 @@ void effPacknBfireDisp(s32 cameraId, void* effect) {
     for (i = 0; i < *(s32*)((s32)effect + 8); i++, part += 0x7C) {
         *(f32*)(part + 0x4C) += *(f32*)(part + 0x54);
         *(f32*)(part + 0x50) += *(f32*)(part + 0x58);
+        {
+            f32 zero = float_0_80425c6c;
+            f32 angle = (f32)angleABf(zero, zero, *(f32*)(part + 0x60), *(f32*)(part + 0x64));
+            f32 radians = float_6p2832_80425c70 * (*(f32*)(part + 0x74) - angle) /
+                          float_360_80425c74;
+            *(f32*)(part + 0x54) = (f32)sin(radians);
+            *(f32*)(part + 0x58) = (f32)cos(radians);
+        }
+        if (*(f32*)(part + 0x4C) < float_0_80425c6c) {
+            *(f32*)(part + 0x4C) += float_128_80425c78;
+        }
+        if (*(f32*)(part + 0x50) > float_128_80425c78) {
+            *(f32*)(part + 0x50) -= float_128_80425c78;
+        }
         color = *(u32*)(part + 0x28);
         GXSetTevColor(1, &color);
         PSMTXTrans(trans, *(f32*)(part + 4), *(f32*)(part + 8), *(f32*)(part + 0xC));
-        PSMTXRotRad(rot, 0x79, float_deg2rad_80425c68 * -*(f32*)((u8*)camGetPtr(4) + 0x114));
+        PSMTXRotRad(rot, 0x79, float_deg2rad_80425c7c * -*(f32*)((u8*)camGetPtr(4) + 0x114));
         PSMTXConcat(trans, rot, model);
         PSMTXScale(scale, *(f32*)(part + 0x48), *(f32*)(part + 0x48), *(f32*)(part + 0x48));
         PSMTXConcat(model, scale, model);
-        PSMTXRotRad(rot, 0x7A, float_deg2rad_80425c68 * *(f32*)(part + 0x74));
+        PSMTXRotRad(rot, 0x7A, float_deg2rad_80425c7c * *(f32*)(part + 0x74));
         PSMTXScale(scale, *(f32*)(part + 0x70), *(f32*)(part + 0x6C), 1.0f);
         PSMTXConcat(rot, scale, scale);
         PSMTXConcat(model, scale, model);

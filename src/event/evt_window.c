@@ -1,5 +1,6 @@
 #include "event/evt_window.h"
 #include "event/evt_cmd.h"
+#include "manager/winmgr.h"
 
 extern void* mapalloc_base_ptr;
 extern void* coin_desc;
@@ -19,16 +20,6 @@ s32 pouchGetCoin(void);
 s32 pouchGetSuperCoin(void);
 s32 pouchGetStarPiece(void);
 s32 pouchCheckItem(s32 item);
-void* winMgrEntry(void* desc);
-void winMgrSetParam(void* win, void* param);
-void winMgrOpen(void* win);
-void winMgrCloseAutoDelete(void* win);
-s32 winMgrAction(void* win);
-void* winMgrSelectEntry(void* table, s32 start, s32 type);
-s32 winMgrSelectOther(void* select, EventEntry* event);
-s32 winMgrSelect(void* select);
-s32 unk_8023cf04(void* select);
-void winMgrSelectDelete(void* select);
 void marioKeyOff(void);
 void marioKeyOn(void);
 char* msgSearch(const char* msg);
@@ -39,7 +30,7 @@ void FontDrawMessage(s32 x, s32 y, char* msg);
 USER_FUNC(evt_win_item_select) {
     s32* args = event->args;
     s32 writeIndex = evtGetValue(event, args[0]);
-    void* table = (void*)evtGetValue(event, args[1]);
+    u32 table = evtGetValue(event, args[1]);
     void* select;
     s32 result;
     s32 index;
@@ -67,7 +58,7 @@ USER_FUNC(evt_win_item_select) {
 #pragma use_lmw_stmw off
 USER_FUNC(evt_win_other_select) {
     s32* args = event->args;
-    void* table = (void*)evtGetValue(event, args[0]);
+    u32 table = evtGetValue(event, args[0]);
     void* select;
     s32 result;
 
@@ -177,7 +168,7 @@ void oneMessageDisp(void* entry) {
     s32 x;
     s32 color;
 
-    if (winMgrAction(*(void**)((s32)data + 8)) != 0) {
+    if (winMgrAction(*(s32*)((s32)data + 8)) != 0) {
         return;
     }
     if (*(s32*)((s32)data + 4) == 0) {
@@ -219,7 +210,7 @@ s32 evt_win_one_message(EventEntry* event, s32 isFirstCall) {
         work[2] = (s32)winMgrEntry(&one_msg_desc);
         work[0] = 0;
         work[1] = value;
-        winMgrSetParam((void*)work[2], work);
+        winMgrSetParam(work[2], (s32)work);
     }
 
     work = *(s32**)((s32)event + 0x78);
@@ -229,12 +220,12 @@ s32 evt_win_one_message(EventEntry* event, s32 isFirstCall) {
         work[0]++;
     } else if (state < 3) {
         if (state == 1) {
-            if (winMgrAction((void*)work[2]) == 0) {
+            if (winMgrAction(work[2]) == 0) {
                 work[0]++;
             }
         } else if (state < 1) {
             if (state >= 0) {
-                winMgrOpen((void*)work[2]);
+                winMgrOpen(work[2]);
                 work[0]++;
             }
         } else if ((keyGetButtonTrg(0) & 0x100) != 0) {
@@ -249,7 +240,7 @@ s32 evt_win_one_message(EventEntry* event, s32 isFirstCall) {
             _mapFree(mapalloc_base_ptr, work);
             return 2;
         }
-        if (state < 5 && winMgrAction((void*)work[2]) == 0) {
+        if (state < 5 && winMgrAction(work[2]) == 0) {
             work[0]++;
         }
     }
@@ -358,7 +349,7 @@ USER_FUNC(evt_win_coin_on) {
     type = evtGetValue(event, args[0]);
 
     *(s32*)((s32)work + 0xC) = type;
-    *(void**)work = winMgrEntry(coin_desc);
+    *(s32*)work = winMgrEntry(coin_desc);
     *(s32*)((s32)work + 8) = 0;
     switch (type) {
         case 0:
@@ -371,8 +362,8 @@ USER_FUNC(evt_win_coin_on) {
             *(s32*)((s32)work + 4) = pouchGetStarPiece();
             break;
     }
-    winMgrSetParam(*(void**)work, work);
-    winMgrOpen(*(void**)work);
+    winMgrSetParam(*(s32*)work, (s32)work);
+    winMgrOpen(*(s32*)work);
     evtSetValue(event, args[1], (s32)work);
     return 2;
 }
@@ -402,7 +393,7 @@ USER_FUNC(evt_win_coin_off) {
     if (*(s32*)((s32)work + 4) != current) {
         return 0;
     }
-    winMgrCloseAutoDelete(*(void**)work);
+    winMgrCloseAutoDelete(*(s32*)work);
     _mapFree(mapalloc_base_ptr, work);
     return 2;
 }
@@ -442,4 +433,3 @@ USER_FUNC(mainwindow_opendisable) {
     winOpenDisable();
     return 2;
 }
-

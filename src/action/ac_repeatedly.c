@@ -3,12 +3,8 @@
 #include "system.h"
 
 void BattleAcGaugeSeDelete(void* wp);
-void actionCommandDisp(f32 x, f32 y);
-void battleAcDelete_Repeatedly(void* battleWork);
+static void actionCommandDisp(f32 x, f32 y);
 
-/* CHATGPT STUB FILL: main/action/ac_repeatedly 20260624_184008 */
-
-/* stub-fill: _init_param | missing_definition | ghidra_signature */
 void _init_param(void* battleWork) {
     char* battle;
     char* extra;
@@ -376,7 +372,7 @@ void battleAcDelete_Repeatedly(void* wp) {
 }
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-void actionCommandDisp(f32 x, f32 y) {
+static void actionCommandDisp(f32 x, f32 y) {
     typedef struct Vec {
         f32 x;
         f32 y;
@@ -388,7 +384,7 @@ void actionCommandDisp(f32 x, f32 y) {
     extern void BattleAcDrawGauge(f32 ratio, s32 x, s32 y, s32 innerBarWidth, s32 param5,
                                   s32 bar1, s32 bar2, s32 bar3, s32 flags);
     extern void* _battleWorkPointer;
-    extern Vec vec3_802f3760;
+    extern Vec vec3_802f3760[];
     extern f32 float_neg200_80422a94;
     extern f32 float_70_80422a98;
     extern f32 float_1_80422a9c;
@@ -402,7 +398,11 @@ void actionCommandDisp(f32 x, f32 y) {
     void* battleWork;
     void* disp;
     void* extra;
-    Vec pos;
+    Vec gaugePos;
+    Vec dimPos;
+    Vec selectedPos;
+    Vec offPos;
+    Vec onPos;
     f32 target;
     f32 ratio;
     s32 iconOn;
@@ -417,32 +417,7 @@ void actionCommandDisp(f32 x, f32 y) {
     disp = (void*)((s32)battleWork + 0x1F20);
     extra = (void*)((s32)battleWork + 0x1F4C);
 
-    if (*(s32*)((s32)battleWork + 0x1CC8) == 0x10) {
-        i = 0;
-        while (i < 2) {
-            if (i == 0) {
-                iconOn = 0x6D;
-                iconOff = 0x6C;
-                selected = (*(s32*)extra == *(s32*)((s32)extra + 4));
-            } else {
-                iconOn = 0x6F;
-                iconOff = 0x6E;
-                selected = (*(s32*)extra == *(s32*)((s32)extra + 8));
-            }
-            pos = vec3_802f3760;
-            pos.x = (float_neg200_80422a94 + x) + (f32)(i * 0x28);
-            pos.y = float_70_80422a98 + y;
-            if (selected) {
-                if (((*(s32*)disp / 7) & 1) != 0) {
-                    iconOn = iconOff;
-                }
-                iconDispGx(&pos, 0x10, iconOn, float_1_80422a9c);
-            } else {
-                iconDispGx(&pos, 0x10, iconOff, float_0p5_80422aa0);
-            }
-            i++;
-        }
-    } else {
+    if (*(s32*)((s32)battleWork + 0x1CC8) != 0x10) {
         switch (*(s32*)extra) {
             case 0x100:
                 iconOn = 0x6D;
@@ -465,13 +440,44 @@ void actionCommandDisp(f32 x, f32 y) {
                 iconOff = 0x81;
                 break;
         }
-        pos = vec3_802f3760;
-        pos.x = float_neg200_80422a94 + x;
-        pos.y = float_70_80422a98 + y;
         if (((*(s32*)disp / 7) & 1) != 0) {
-            iconDispGx(&pos, 0x10, iconOff, float_1_80422a9c);
+            onPos.x = float_neg200_80422a94 + x;
+            onPos.y = float_70_80422a98 + y;
+            onPos.z = vec3_802f3760[0].z;
+            iconDispGx(&onPos, 0x10, iconOff, float_1_80422a9c);
         } else {
-            iconDispGx(&pos, 0x10, iconOn, float_1_80422a9c);
+            offPos.x = float_neg200_80422a94 + x;
+            offPos.y = float_70_80422a98 + y;
+            offPos.z = vec3_802f3760[1].z;
+            iconDispGx(&offPos, 0x10, iconOn, float_1_80422a9c);
+        }
+    } else {
+        i = 0;
+        while (i < 2) {
+            if (i == 0) {
+                iconOn = 0x6D;
+                iconOff = 0x6C;
+                selected = (*(s32*)extra == *(s32*)((s32)extra + 4));
+            } else {
+                iconOn = 0x6F;
+                iconOff = 0x6E;
+                selected = (*(s32*)extra == *(s32*)((s32)extra + 8));
+            }
+            if (selected) {
+                if (((*(s32*)disp / 7) & 1) != 0) {
+                    iconOn = iconOff;
+                }
+                selectedPos.x = (float_neg200_80422a94 + x) + (f32)(i * 0x28);
+                selectedPos.y = float_70_80422a98 + y;
+                selectedPos.z = vec3_802f3760[2].z;
+                iconDispGx(&selectedPos, 0x10, iconOn, float_1_80422a9c);
+            } else {
+                dimPos.x = (float_neg200_80422a94 + x) + (f32)(i * 0x28);
+                dimPos.y = float_70_80422a98 + y;
+                dimPos.z = vec3_802f3760[3].z;
+                iconDispGx(&dimPos, 0x10, iconOff, float_0p5_80422aa0);
+            }
+            i++;
         }
     }
 
@@ -515,11 +521,11 @@ void actionCommandDisp(f32 x, f32 y) {
     }
     BattleAcDrawGauge(ratio, (s32)x, (s32)y, *(u8*)((s32)extra + 0x2A), 2, percent, 100, 100, flags);
 
-    pos = vec3_802f3760;
-    pos.x = (float_neg288_80422aac + x) +
+    gaugePos.x = (float_neg288_80422aac + x) +
             (float_176_80422ab0 * *(f32*)((s32)extra + 0x10)) / float_100_80422aa4;
-    pos.y = float_45_80422ab4 + y;
-    iconDispGx(&pos, 0x10, 0x9E, float_1_80422a9c);
+    gaugePos.y = float_45_80422ab4 + y;
+    gaugePos.z = vec3_802f3760[4].z;
+    iconDispGx(&gaugePos, 0x10, 0x9E, float_1_80422a9c);
 
     *(s32*)disp += 1;
     *(s32*)((s32)disp + 4) += 1;

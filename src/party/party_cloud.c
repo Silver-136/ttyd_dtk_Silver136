@@ -1,5 +1,11 @@
 #include "party/party_cloud.h"
 
+#include "driver/effdrv.h"
+#include "driver/hitdrv.h"
+#include "memory.h"
+#include "party/party_move.h"
+#include "system.h"
+
 extern f32 float_0_804242e0;
 extern f32 float_neg1_80424318;
 extern f32 float_24_804242f8;
@@ -29,11 +35,7 @@ extern void marioAdjustMoveDir(void);
 extern f32 revise360(f32 angle);
 extern f64 sin(f64 x);
 extern void psndSFXOff(s32 soundId);
-extern void effSoftDelete(void* effect);
-extern void __memFree(s32 heap, void* ptr);
-extern void movePos(f32* x, f32* z, f32 speed, f32 dir);
 extern void partyChgRunMode(void* party, s32 mode);
-extern void partyChgMot(void* party, s32 mot);
 extern f32 float_90_80424304;
 extern f32 float_270_80424308;
 extern void marioChgMot(s32 mot);
@@ -282,7 +284,6 @@ void cloud_init(void* party) {
     *(s32*)((s32)party + 0x178) = zero;
 }
 u8 cloud_use(void* pParty) {
-    extern void N_cloud_use(void* party);
     extern s32 partyChgPoseId(void* party, s32 poseId);
     extern void partyChgPose(void* party, s32 pose);
     extern f32 float_neg90_8042432c;
@@ -346,37 +347,19 @@ u8 cloud_use(void* pParty) {
 }
 
 
-/* CHATGPT FALLBACK MISSING STUBS: main/party/party_cloud 20260624_191429 */
-
-/* fallback stub-fill: map=N_cloud_use addr=0x80186ee0 size=0x00000b64 */
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void N_cloud_use(void* pParty) {
-    extern void* __memAlloc(s32 heap, s32 size);
     extern void* memset(void* ptr, s32 value, u32 size);
     extern void marioChgPose(char* pose);
-    extern void partyChgPose(void* party, char* pose);
     extern void partyUpdateKeyData(void* party);
-    extern void partyChgMoveMode(void* party, s32 mode);
-    extern void movePos(f32 speed, f32 dir, f32* x, f32* z);
-    extern f32 toMovedir(f32 dir);
-    extern void psndSFXOff(s32 id);
-    extern void effSoftDelete(void* effect);
-    extern s32 sysMsec2Frame(s32 msec);
-    extern void sincosf(f32 angle, f32* outA, f32* outB);
     extern void* hitCheckFilter(f32 x, f32 y, f32 z, f32 dirX, f32 dirY, f32 dirZ, s32 flags,
                                 void* outA, void* outB, void* outC, void* outD, void* outE, void* outF, void* outG);
-    extern u32 hitGetAttr(void* hit);
     extern void getHitBreatheout2(void* party, f32 angle);
     extern s32 marioKeyOffChk(void);
     extern u8 vec3_802f89c0[];
-    extern f32 float_0_804242e0;
-    extern f32 float_18_804242fc;
-    extern f32 float_90_80424304;
-    extern f32 float_270_80424308;
     extern f32 float_neg90_8042432c;
     extern f32 float_3p3_80424330;
-    extern f32 float_10_80424334;
     extern f32 float_2_80424340;
     extern f32 float_neg45_80424344;
     extern char str_M_A_2A_802f89d8[];
@@ -443,7 +426,7 @@ void N_cloud_use(void* pParty) {
                 dir += 90.0f;
             }
             dir = toMovedir(dir);
-            movePos(3.3f, dir, (f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C));
+            movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C), 3.3f, dir);
             *(f32*)((s32)pParty + 0x98) += 10.0f;
             *(f32*)((s32)pParty + 0x58) +=
                 (*(f32*)((s32)pParty + 0x94) - *(f32*)((s32)pParty + 0x58)) /
@@ -469,7 +452,7 @@ void N_cloud_use(void* pParty) {
                 dir += 90.0f;
             }
             dir = toMovedir(dir);
-            movePos(3.3f, dir, (f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C));
+            movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C), 3.3f, dir);
             *(f32*)((s32)pParty + 0x98) += 10.0f;
             *(f32*)((s32)pParty + 0x58) = *(f32*)((s32)pParty + 0x94);
             *(f32*)((s32)pParty + 0x5C) = *(f32*)((s32)pParty + 0x98);
@@ -495,7 +478,7 @@ void N_cloud_use(void* pParty) {
                 dir += 90.0f;
             }
             dir = toMovedir(dir);
-            movePos(3.3f, dir, (f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C));
+            movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C), 3.3f, dir);
             *(f32*)((s32)pParty + 0x98) += 10.0f;
             *(f32*)((s32)pParty + 0x58) = *(f32*)((s32)pParty + 0x94);
             *(f32*)((s32)pParty + 0x5C) = *(f32*)((s32)pParty + 0x98);
@@ -516,7 +499,7 @@ void N_cloud_use(void* pParty) {
                 dir += float_90_80424304;
             }
             dir = toMovedir(dir);
-            movePos(float_3p3_80424330, dir, (f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C));
+            movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C), float_3p3_80424330, dir);
             *(f32*)((s32)pParty + 0x98) += float_10_80424334;
             *(f32*)((s32)pParty + 0x58) = *(f32*)((s32)pParty + 0x94);
             *(f32*)((s32)pParty + 0x5C) = *(f32*)((s32)pParty + 0x98);
@@ -537,7 +520,7 @@ void N_cloud_use(void* pParty) {
                 dir += float_90_80424304;
             }
             dir = toMovedir(dir);
-            movePos(float_3p3_80424330, dir, &moveX, &moveZ);
+            movePos(&moveX, &moveZ, float_3p3_80424330, dir);
             *(f32*)((s32)pParty + 0x58) = moveX;
             *(f32*)((s32)pParty + 0x60) = moveZ;
             *(f32*)((s32)pParty + 0x5C) = *(f32*)((s32)player + 0x90) + float_10_80424334;
@@ -608,7 +591,7 @@ void N_cloud_use(void* pParty) {
                 dir += 90.0f;
             }
             dir = toMovedir(dir);
-            movePos(3.3f, dir, (f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C));
+            movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C), 3.3f, dir);
             *(f32*)((s32)pParty + 0x98) += 10.0f;
             *(f32*)((s32)pParty + 0x58) = *(f32*)((s32)pParty + 0x94);
             *(f32*)((s32)pParty + 0x5C) = *(f32*)((s32)pParty + 0x98);
@@ -643,7 +626,7 @@ void N_cloud_use(void* pParty) {
                 dir += 90.0f;
             }
             dir = toMovedir(dir);
-            movePos(3.3f, dir, (f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C));
+            movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C), 3.3f, dir);
             *(f32*)((s32)pParty + 0x98) += 10.0f;
             *(f32*)((s32)pParty + 0x58) = *(f32*)((s32)pParty + 0x94);
             *(f32*)((s32)pParty + 0x5C) = *(f32*)((s32)pParty + 0x98);

@@ -257,33 +257,37 @@ void main_dl(void* effect, f32 model[3][4]) {
     extern u8 size32x32_tex32x32_vtx[];
     u8* entry = (u8*)effect;
     u8* part = *(u8**)(entry + 0xC);
+    Mtx setupTrans;
     Mtx texMtx;
-    Mtx trans;
-    Mtx rotY;
-    Mtx rotZ;
     Mtx draw;
-    s32 frame = (s32)(float_5_80425458 * *(f32*)(part + 0x38));
+    Mtx rotZ;
+    Mtx rotY;
+    f32 animation = float_5_80425458 * *(f32*)(part + 0x38);
+    s32 frame = (s32)animation;
+    s32 animationDone = animation >= float_4_8042545c;
+    f32 angleScale;
     s32 i;
 
     PSMTXScale(texMtx, float_0p03125_80425460, float_0p0078125_80425464, float_0_80425468);
-    PSMTXTrans(trans, float_0_80425468, float_96_8042546c, float_0_80425468);
-    PSMTXConcat(texMtx, trans, texMtx);
+    PSMTXTrans(setupTrans, float_0_80425468, float_96_8042546c, float_0_80425468);
+    PSMTXConcat(texMtx, setupTrans, texMtx);
     GXLoadTexMtxImm(texMtx, 0x1E, 1);
     PSMTXScale(texMtx, float_0p03125_80425460, float_0p0078125_80425464, float_0_80425468);
     GXLoadTexMtxImm(texMtx, 0x21, 1);
-    if (float_5_80425458 * *(f32*)(part + 0x38) >= float_4_8042545c) {
+    if (animationDone) {
         PSMTXScale(texMtx, float_0_80425468, float_0_80425468, float_0_80425468);
         GXLoadTexMtxImm(texMtx, 0x21, 1);
     }
+    angleScale = float_deg2rad_80425470;
     part += 0x44;
     for (i = 1; i < *(s32*)(entry + 8); i++, part += 0x44) {
         u8* camera;
-        PSMTXRotRad(rotY, float_deg2rad_80425470 * *(f32*)(part + 0x24), 'y');
-        PSMTXRotRad(rotZ, float_deg2rad_80425470 * *(f32*)(part + 0x1C), 'z');
-        PSMTXTrans(trans, *(f32*)(part + 4), *(f32*)(part + 8), *(f32*)(part + 0xC));
+        PSMTXRotRad(rotY, angleScale * *(f32*)(part + 0x24), 'y');
+        PSMTXRotRad(rotZ, angleScale * *(f32*)(part + 0x1C), 'z');
+        PSMTXTrans(draw, *(f32*)(part + 4), *(f32*)(part + 8), *(f32*)(part + 0xC));
         PSMTXConcat(rotY, rotZ, rotZ);
-        PSMTXConcat(rotZ, trans, trans);
-        PSMTXConcat(model, trans, draw);
+        PSMTXConcat(rotZ, draw, draw);
+        PSMTXConcat(model, draw, draw);
         camera = (u8*)camGetPtr(4);
         PSMTXConcat((f32 (*)[4])(camera + 0x11C), draw, draw);
         GXLoadPosMtxImm(draw, 0);

@@ -413,7 +413,6 @@ void marioMotion(void) {
         marioMotTbl[*(u16*)((s32)mario + 0x2E)][0]();
     } while (*(u32*)((s32)mario + 0xC) & 1);
 }
-
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -1419,7 +1418,21 @@ void mot_kaze(void) {
         marioChgPose(str_M_P_2_804209f8);
     }
 
-    if (*(s32*)((s32)mario + 0x44) == 100) {
+    switch (*(s32*)((s32)mario + 0x44)) {
+    case 0:
+        *(f32*)((s32)mario + 0x2B8) += float_5_80420a00;
+        if (*(f32*)((s32)mario + 0x2B8) > float_60_80420a04) {
+            *(f32*)((s32)mario + 0x2B8) = float_60_80420a04;
+        }
+        *(f32*)((s32)mario + 0x1AC) = revise360((double)(*(f32*)((s32)mario + 0x1AC) + *(f32*)((s32)mario + 0x2B8)));
+        if ((*(u16*)((s32)mario + 0x24A) & 0x10) == 0) {
+            *(f32*)((s32)mario + 0x1B0) = (*(f32*)((s32)mario + 0x1AC) > float_90_804209f4 && *(f32*)((s32)mario + 0x1AC) < float_270_80420a0c) ? float_180_80420a08 : float_0_804209a0;
+            *(s32*)((s32)mario + 0x44) = 100;
+            *(s32*)((s32)mario + 0x48) = 10;
+        }
+        break;
+
+    case 100:
         *(f32*)((s32)mario + 0x2B8) -= float_6_80420a10;
         if (*(f32*)((s32)mario + 0x2B8) < float_0_804209a0) {
             void* wp;
@@ -1445,19 +1458,11 @@ void mot_kaze(void) {
         }
         *(f32*)((s32)mario + 0x1AC) = revise360((double)(*(f32*)((s32)mario + 0x1AC) + *(f32*)((s32)mario + 0x2B8)));
         *(f32*)((s32)mario + 0x1B0) = (*(f32*)((s32)mario + 0x1AC) > float_90_804209f4 && *(f32*)((s32)mario + 0x1AC) < float_270_80420a0c) ? float_180_80420a08 : float_0_804209a0;
-    } else if (*(s32*)((s32)mario + 0x44) == 0) {
-        *(f32*)((s32)mario + 0x2B8) += float_5_80420a00;
-        if (*(f32*)((s32)mario + 0x2B8) > float_60_80420a04) {
-            *(f32*)((s32)mario + 0x2B8) = float_60_80420a04;
-        }
-        *(f32*)((s32)mario + 0x1AC) = revise360((double)(*(f32*)((s32)mario + 0x1AC) + *(f32*)((s32)mario + 0x2B8)));
-        if ((*(u16*)((s32)mario + 0x24A) & 0x10) == 0) {
-            *(f32*)((s32)mario + 0x1B0) = (*(f32*)((s32)mario + 0x1AC) > float_90_804209f4 && *(f32*)((s32)mario + 0x1AC) < float_270_80420a0c) ? float_180_80420a08 : float_0_804209a0;
-            *(s32*)((s32)mario + 0x44) = 100;
-            *(s32*)((s32)mario + 0x48) = 10;
-        }
+        break;
+
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

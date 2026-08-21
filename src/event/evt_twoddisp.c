@@ -96,6 +96,7 @@ s32 evt_twoddisp_init(void* event) {
     extern void* _mapAlloc(void* heap, u32 size);
     extern void* mapalloc_base_ptr;
     extern void* twoddisp_main_event;
+    extern void* twodPtr;
     extern s32 twodID;
     extern f32 float_0_80422f80;
     extern f32 float_1_80422f84;
@@ -130,7 +131,31 @@ s32 evt_twoddisp_init(void* event) {
     twodID = *(s32*)((s32)child + 0x15C);
 
     twodPtr = _mapAlloc(mapalloc_base_ptr, 0x1450);
-    for (i = 0; i < 100; i++) {
+#define INIT_TWOD_ENTRY(ptr) \
+    do { \
+        *(u8*)((s32)(ptr) + 0x0) = 0; \
+        *(u16*)((s32)(ptr) + 0x10) = 0; \
+        *(u16*)((s32)(ptr) + 0x12) = 0; \
+        *(f32*)((s32)(ptr) + 0x14) = float_0_80422f80; \
+        *(f32*)((s32)(ptr) + 0x1C) = float_0_80422f80; \
+        *(f32*)((s32)(ptr) + 0x18) = float_0_80422f80; \
+        *(f32*)((s32)(ptr) + 0x20) = float_0_80422f80; \
+        *(s32*)((s32)(ptr) + 0x24) = 0; \
+        *(f32*)((s32)(ptr) + 0x28) = float_1_80422f84; \
+    } while (0)
+    for (i = 0; i < 96; i += 8) {
+        entry = (void*)((s32)twodPtr + (i * 0x34));
+        INIT_TWOD_ENTRY((u8*)entry + 0x000);
+        INIT_TWOD_ENTRY((u8*)entry + 0x034);
+        INIT_TWOD_ENTRY((u8*)entry + 0x068);
+        INIT_TWOD_ENTRY((u8*)entry + 0x09C);
+        INIT_TWOD_ENTRY((u8*)entry + 0x0D0);
+        INIT_TWOD_ENTRY((u8*)entry + 0x104);
+        INIT_TWOD_ENTRY((u8*)entry + 0x138);
+        INIT_TWOD_ENTRY((u8*)entry + 0x16C);
+    }
+#undef INIT_TWOD_ENTRY
+    for (; i < 100; i++) {
         entry = (void*)((s32)twodPtr + (i * 0x34));
         *(u8*)((s32)entry + 0x0) = 0;
         *(u16*)((s32)entry + 0x10) = 0;
@@ -144,7 +169,6 @@ s32 evt_twoddisp_init(void* event) {
     }
     return 2;
 }
-
 
 s32 evt_twoddisp_entry(void* pEvt) {
     extern char* strcpy(char* dst, const char* src);

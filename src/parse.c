@@ -91,75 +91,162 @@ void parsePopNext(void) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 parseGet1Next(s32 type, char* out, s32 unused, s32 tokenStart) {
-    extern s32 sscanf(const char*, const char*, ...);
-    extern char str_PCTd_804207a0[];
-    extern char str_PCTf_804207a4[];
-    s32 depth = *(s32*)(parse + 0x54);
-    s32* starts = (s32*)(parse + 4);
-    s32* ends = (s32*)(parse + 0x2C);
-    s32 start = starts[depth];
-    s32 end = ends[depth];
-    s32 found = 0;
-    s32 tokenEnd = 0;
+    extern s32 sscanf(char*, char*, ...);
+    extern const char str_PCTd_804207a0[3];
+    extern const char str_PCTf_804207a4[3];
+    char* input;
+    char* scan;
+    char* src;
+    char* dst;
+    char* dstNext;
+    s32* position;
+    s32 result;
+    s32 start;
+    s32 end;
+    s32 found;
+    s32 tokenEnd;
+    s32 count;
+    s32 remain;
     s32 i;
+    u8 raw;
+    s8 c;
 
     (void)unused;
-    if (type == 3) {
-        s32 x = parseGet1Next(2, out, unused, tokenStart);
-        s32 y = parseGet1Next(2, out + 4, unused, tokenStart);
-        s32 z = parseGet1Next(2, out + 8, unused, tokenStart);
-        return x * y * z;
+    (void)tokenStart;
+
+    result = 1;
+    switch (type) {
+        case 3:
+            goto vector;
+        default:
+            goto scalar;
     }
 
+vector:
+    result *= ((s32 (*)())parseGet1Next)(2, out);
+    result *= ((s32 (*)())parseGet1Next)(2, out + 4);
+    result *= ((s32 (*)())parseGet1Next)(2, out + 8);
+    return result;
+
+scalar:
+    found = 0;
+    input = *(char**)parse;
+    position = (s32*)(parse + (*(s32*)(parse + 0x54) << 2));
+    start = *(s32*)((s32)position + 4);
+    end = *(s32*)((s32)position + 0x2C);
+    position = (s32*)((s32)position + 4);
+
     for (i = start; i < end; i++) {
-        char c = parse[i];
-        if (c == '/' && parse[i + 1] == '/') {
-            while (i < end && parse[i] != '\n') {
+        scan = input + i;
+        raw = (u8)*scan;
+
+        if (raw == '/' && (u8)scan[1] == '/') {
+            remain = end - i;
+            if (i < end) {
+                do {
+                    if ((u32)(s8)*scan == '/n') {
+                        break;
+                    }
+                    i++;
+                    scan++;
+                    remain--;
+                } while (remain != 0);
+            }
+        } else {
+            c = (s8)raw;
+            if (c != ' ' && c != '\t' && c != '\n' && c != '\r') {
+                tokenStart = i;
                 i++;
-            }
-        } else if (c != ' ' && c != '\t' && c != '\n' && c != '\r') {
-            tokenStart = i;
-            found = 1;
-            for (i = i + 1; i < end; i++) {
-                c = parse[i];
-                if (c == ' ' || c == '\t' || c == '\n' || c == '\r' ||
-                    (c == '/' && parse[i + 1] == '/')) {
-                    tokenEnd = i;
-                    found = 2;
-                    break;
+                remain = end - i;
+                found = 1;
+
+                if (i < end) {
+                    do {
+                        raw = (u8)input[i];
+                        c = (s8)raw;
+
+                        if (c == ' ' ||
+                            (u8)(raw - (u8)'\t') <= 1 ||
+                            c == '\r' ||
+                            (c == '/' && (u8)input[i + 1] == '/')) {
+                            tokenEnd = i;
+                            found = 2;
+                            break;
+                        }
+
+                        i++;
+                        remain--;
+                    } while (remain != 0);
                 }
+                break;
             }
-            break;
         }
     }
+
     if (found < 2) {
         return 0;
     }
-    if (type == 1) {
-        sscanf(parse + tokenStart, str_PCTd_804207a0, out);
-        starts[depth] = tokenEnd;
-    } else if (type == 0) {
-        s32 count = 0;
-        char* src = parse + tokenStart;
-        for (i = tokenStart; i < end; i++, src++) {
-            if (*src == '"') {
-                i++;
-                src++;
-                while (i < end && *src != '"') {
-                    out[count++] = *src++;
+
+    switch (type) {
+        case 0:
+            i = tokenStart;
+            dst = out;
+            scan = input + tokenStart;
+            count = 0;
+
+            for (; i < end; i++) {
+                dstNext = dst;
+
+                if (*scan == '"') {
                     i++;
+                    remain = end - i;
+                    src = input + i;
+                    scan++;
+
+                    if (i < end) {
+                        do {
+                            if (*src == '"') {
+                                break;
+                            }
+
+                            *dst = *src;
+                            dst++;
+                            dstNext++;
+                            count++;
+                            i++;
+                            scan++;
+                            src++;
+                            remain--;
+                        } while (remain != 0);
+                    }
                 }
+
+                scan++;
+                dst = dstNext;
             }
-        }
-        out[count] = 0;
-        starts[depth] = i;
-    } else if (type == 2) {
-        sscanf(parse + tokenStart, str_PCTf_804207a4, out);
-        starts[depth] = tokenEnd;
+
+            out[count] = '\0';
+            *position = i;
+            break;
+
+        case 1:
+            sscanf(input + tokenStart, (char*)str_PCTd_804207a0, out);
+            *position = tokenEnd;
+            break;
+
+        case 2:
+            sscanf(input + tokenStart, (char*)str_PCTf_804207a4, out);
+            *position = tokenEnd;
+            break;
     }
+
     return 1;
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

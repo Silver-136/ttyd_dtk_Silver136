@@ -1,5 +1,6 @@
 #include "action/ac_power_gauge.h"
 
+#include "driver/camdrv.h"
 #include "system.h"
 
 void actionCommandDisp(f32 x, f32 y);
@@ -368,9 +369,6 @@ void battleAcDelete_PowerGauge(void* wp) {
 }
 
 
-/* CHATGPT STUB FILL: main/action/ac_power_gauge 20260624_184823 */
-
-/* stub-fill: actionCommandDisp | prototype_only | source_prototype */
 void actionCommandDisp(f32 x, f32 y) {
     typedef struct VecLocal {
         f32 x;
@@ -391,7 +389,6 @@ void actionCommandDisp(f32 x, f32 y) {
     } PowerGaugeExtraWorkLocal;
 
     extern void* _battleWorkPointer;
-    extern void* camGetPtr(s32 cameraId);
     extern void BattleAcDrawGauge(
         s32 x, s32 y, s32 icon, s32 mode, s32 value,
         s32 bar1, s32 bar2, s32 flags);

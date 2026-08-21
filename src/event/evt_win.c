@@ -557,7 +557,6 @@ int unk_8017a844(void* pEvt) {
 s32 evt_unitwin_main_func(void* pEvt) {
     extern f32 float_1000_80423f3c;
     extern void dispEntry(s32 cameraId, s32 order, void* callback, f32 priority);
-    extern void evt_unitwin_disp_func(s32 param_1, void* param_2);
     void* work = *(void**)((s32)pEvt + 0x9C);
     u16 flags = *(u16*)((s32)work + 0x54);
 

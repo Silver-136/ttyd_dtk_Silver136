@@ -490,7 +490,8 @@ s32 itemUseFunc(void* pEvt, int param_2) {
         cnt = 0;
     }
 
-    if (cnt == 0) {
+    switch (cnt) {
+    case 0:
         statusWinForceOpen();
         if (partyId == 0) {
             pouchSetHP((s16)(pouchGetHP() + *(u8*)((s32)itemData + 0x1D)));
@@ -503,9 +504,7 @@ s32 itemUseFunc(void* pEvt, int param_2) {
         }
         cnt++;
         return 0;
-    }
-
-    if (cnt == 1) {
+    case 1:
         if (partyId != 0) {
             cnt = 200;
             return 0;
@@ -519,16 +518,13 @@ s32 itemUseFunc(void* pEvt, int param_2) {
                          *(f32*)((s32)mario + 0x94), 0);
         cnt++;
         return 0;
-    }
-    if (cnt == 0x1F) {
+    case 0x1F:
         cnt = 0x20;
         return 0;
-    }
-    if (cnt == 0x3C) {
+    case 0x3C:
         cnt = 100;
         return 0;
-    }
-    if (cnt == 100) {
+    case 100:
         if (*(u8*)((s32)itemData + 0x1E) == 0) {
             cnt = 999;
             return 0;
@@ -538,12 +534,10 @@ s32 itemUseFunc(void* pEvt, int param_2) {
                          *(f32*)((s32)mario + 0x94), 1);
         cnt = 999;
         return 0;
-    }
-    if (cnt == 0x82) {
+    case 0x82:
         cnt = 999;
         return 0;
-    }
-    if (cnt == 200) {
+    case 200:
         if (*(u8*)((s32)itemData + 0x1D) == 0) {
             cnt = 300;
             return 0;
@@ -555,16 +549,13 @@ s32 itemUseFunc(void* pEvt, int param_2) {
             -*(f32*)((s32)party + 0xF0) * float_0p5_80424000;
         cnt++;
         return 0;
-    }
-    if (cnt == 0xE6) {
+    case 0xE6:
         cnt = 0xE7;
         return 0;
-    }
-    if (cnt == 0x104) {
+    case 0x104:
         cnt = 300;
         return 0;
-    }
-    if (cnt == 300) {
+    case 300:
         if (*(u8*)((s32)itemData + 0x1E) == 0) {
             cnt = 999;
             return 0;
@@ -574,10 +565,11 @@ s32 itemUseFunc(void* pEvt, int param_2) {
                          *(f32*)((s32)party + 0x60), 1);
         cnt++;
         return 0;
-    }
-    if (cnt == 0x14A) {
+    case 0x14A:
         cnt = 999;
         return 0;
+    default:
+        break;
     }
     if (cnt >= 999 && cnt < 0x3E9) {
         return 2;

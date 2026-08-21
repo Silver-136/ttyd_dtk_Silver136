@@ -1802,27 +1802,33 @@ USER_FUNC(evt_npc_set_camid) {
 }
 
 f32 _get_target_dir(void* pEvt, void* npc, s32 target) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
     extern void* evtNpcNameToPtr(void*, s32);
-    extern char str_mario_8041fdd4[];
+    extern char str_mario_8041fdd4;
     extern f32 float_0_8041fd84;
-    f32 targetPos[3];
-    f32 npcPos[3];
-    f32 diff[3];
+    Vec3 targetPos;
+    Vec3 npcPos;
+    Vec3 diff;
     void* ptr;
 
-    if (strcmp((char*)target, str_mario_8041fdd4) == 0) {
+    if (strcmp((char*)target, &str_mario_8041fdd4) == 0) {
         ptr = marioGetPtr();
+        targetPos.x = *(f32*)((s32)ptr + 0x8C);
+        targetPos.y = *(f32*)((s32)ptr + 0x90);
+        targetPos.z = *(f32*)((s32)ptr + 0x94);
     } else {
         ptr = evtNpcNameToPtr(pEvt, target);
+        targetPos.x = *(f32*)((s32)ptr + 0x8C);
+        targetPos.y = *(f32*)((s32)ptr + 0x90);
+        targetPos.z = *(f32*)((s32)ptr + 0x94);
     }
-    targetPos[0] = *(f32*)((s32)ptr + 0x8C);
-    targetPos[1] = *(f32*)((s32)ptr + 0x90);
-    targetPos[2] = *(f32*)((s32)ptr + 0x94);
-    npcPos[0] = *(f32*)((s32)npc + 0x8C);
-    npcPos[1] = *(f32*)((s32)npc + 0x90);
-    npcPos[2] = *(f32*)((s32)npc + 0x94);
-    PSVECSubtract(targetPos, npcPos, diff);
-    return angleABf(float_0_8041fd84, float_0_8041fd84, diff[0], diff[2]);
+    npcPos = *(Vec3*)((s32)npc + 0x8C);
+    PSVECSubtract(&targetPos, &npcPos, &diff);
+    return angleABf(float_0_8041fd84, float_0_8041fd84, diff.x, diff.z);
 }
 
 USER_FUNC(evt_get_target_dir) {
@@ -2929,11 +2935,10 @@ s32 evt_npc_kamek_move_position(EventEntry* event, s32 isFirstCall) {
 
     s32* args;
     void* npc;
-    void* fbat;
     s32 name;
     f32 targetX;
-    f32 targetZ;
     f32 arc;
+    f32 targetZ;
     f32 duration;
     f32 step;
     s32 flags;
@@ -3029,8 +3034,9 @@ s32 evt_npc_kamek_move_position(EventEntry* event, s32 isFirstCall) {
         }
 
         if (((*(u32*)((s32)npc + 0x1D4) & 2) != 0) && (*(f32*)((s32)npc + 0x1B0) > float_0p1_8041fd98)) {
-            fbat = fbatGetPointer();
-            if ((npc != *(void**)((s32)fbat + 8)) || ((*(s16*)fbat != 5) && (*(s16*)fbat != 6))) {
+            if ((npc != *(void**)((s32)fbatGetPointer() + 8)) ||
+                ((*(s16*)fbatGetPointer() != 5) &&
+                 (*(s16*)fbatGetPointer() != 6))) {
                 npcTuningRy(npc, *(f32*)((s32)npc + 0x1AC));
             }
         }
@@ -3056,7 +3062,6 @@ s32 evt_npc_kamek_move_position(EventEntry* event, s32 isFirstCall) {
     }
     return 2;
 }
-
 
 s32 evt_npc_kamek_kemuri1(void* pEvt, s32 isFirstCall) {
     extern s32 evtGetValue(void* evt, s32 value);

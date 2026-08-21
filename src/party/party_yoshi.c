@@ -756,19 +756,218 @@ void inertia(void* pParty) {
 }
 
 u8 searchGround(s32 pParty) {
-    extern void* partySearchGround(f64,f64,void*);
+    extern void* partySearchGround(f64, f64, void*);
     extern void psndSFXOff(s32);
     extern f64 fabs(f64);
+    extern void set_damage_root_ypos(f64);
+    extern s32 partyChkFrontStep(f64, void*, f32*, void*, void*);
     extern const f32 float_neg6_80421168;
-    void* party=(void*)pParty;void* player=*(void**)(pParty+0x160);void* hit=0;void* extra;u32 attr;f32 distance;u32 pos[3];
-    if((*(u32*)party&0x02000000)==0){distance=(f32)fabs(*(f32*)(pParty+0x11C));if(distance<float_1_80421160)distance=float_1_80421160;hit=partySearchGround(distance,distance,party);}
-    if(hit!=0){attr=hitGetAttr(hit);if(*(s32*)(pParty+0x168)!=-1){psndSFXOff(*(s32*)(pParty+0x168));*(s32*)(pParty+0x168)=-1;}
-        if((attr&0x200)!=0){if(*(u8*)(pParty+0x39)==5)return 0;*(u8*)(pParty+0x39)=0x46;pos[0]=*(u32*)(pParty+0x58);pos[1]=*(u32*)(pParty+0x5C);pos[2]=*(u32*)(pParty+0x60);marioSetSplash(0,pos);*(void**)(pParty+0x138)=0;
-            if((*(u32*)party&0x10)==0){*(u32*)party|=0x10;*(f32*)(pParty+0x11C)=float_neg0p4_80421158;*(f32*)(pParty+0x174)=float_neg0p4_80421158;*(f32*)(pParty+0x178)=float_0_80421138;*(f32*)(pParty+0x118)=float_0_80421138;}
-            *(f32*)(pParty+0x178)+=*(f32*)(pParty+0x118);*(f32*)(pParty+0x174)+=*(f32*)(pParty+0x178);*(f32*)(pParty+0x11C)+=*(f32*)(pParty+0x174);if(*(f32*)(pParty+0x11C)<float_neg15_8042115c)*(f32*)(pParty+0x11C)=float_neg15_8042115c;*(f32*)(pParty+0x5C)+=*(f32*)(pParty+0x11C);*(u32*)party|=0x02000000;if(*(f32*)(pParty+0x11C)<=float_neg6_80421168){*(f32*)(pParty+0x11C)=float_neg6_80421168;*(f32*)(pParty+0x174)=float_0_80421138;*(f32*)(pParty+0x178)=float_0_80421138;*(f32*)(pParty+0x118)=float_0_80421138;}*(f32*)((s32)player+0x7C)=*(f32*)(pParty+0x11C);*(f32*)((s32)player+0x80)=*(f32*)(pParty+0x174);*(f32*)((s32)player+0x84)=*(f32*)(pParty+0x178);*(f32*)((s32)player+0x88)=*(f32*)(pParty+0x118);marioChgMot(0x1F);return 0;}
-        if((attr&0xC00)!=0){*(void**)(pParty+0x138)=0;marioChgMot(0x20);*(u8*)(pParty+0x39)=10;partyChgPose(party,(char*)str_PYS_S_2_802cb148);marioChgPose((char*)str_M_Y_2_80421148);*(f32*)((s32)player+0x2C8)=float_0_80421138;*(f32*)((s32)player+0x2CC)=float_0_80421138;partyChgRunMode(party,0xD);extra=partyGetPtr(marioGetExtraPartyId());if(extra!=0)partyChgRunMode(extra,0xD);return 0;}
+    extern const f32 float_8_80421164;
+    extern const f32 float_11_80421154;
+    extern const f32 float_5_8042116c;
+    extern const f32 float_30_80421170;
+    extern const u32 vec3_802cb118[3];
+    extern const u32 vec3_802cb124[3];
+    extern const u32 vec3_802cb130[3];
+    void* party = (void*)pParty;
+    void* player = *(void**)(pParty + 0x160);
+    void* hit = 0;
+    void* other;
+    u32 attr;
+    u8 motion;
+    s32 status;
+    f32 distance;
+    f32 groundY;
+    f32 stepY;
+    u32 stepOut1;
+    u32 stepOut2;
+    u32 pos[3];
+
+    if ((*(u32*)party & 0x02000000) == 0) {
+        distance = (f32)fabs(*(f32*)(pParty + 0x11C));
+        if ((f32)fabs(*(f32*)(pParty + 0x11C)) < float_1_80421160) {
+            distance = float_1_80421160;
+        }
+        hit = partySearchGround(distance, distance, party);
+        groundY = *(f32*)(pParty + 0xE4);
     }
-    *(void**)(pParty+0x138)=hit;if(hit==0){*(u32*)party&=~2;if((*(u32*)party&0x10)==0){*(u32*)party|=0x10;*(f32*)(pParty+0x11C)=float_neg0p4_80421158;*(f32*)(pParty+0x174)=float_neg0p4_80421158;*(f32*)(pParty+0x178)=float_0_80421138;*(f32*)(pParty+0x118)=float_0_80421138;}*(f32*)(pParty+0x178)+=*(f32*)(pParty+0x118);*(f32*)(pParty+0x174)+=*(f32*)(pParty+0x178);*(f32*)(pParty+0x11C)+=*(f32*)(pParty+0x174);if(*(f32*)(pParty+0x11C)<float_neg15_8042115c)*(f32*)(pParty+0x11C)=float_neg15_8042115c;*(f32*)(pParty+0x5C)+=*(f32*)(pParty+0x11C);}else{*(u32*)party|=2;*(f32*)(pParty+0x114)=float_0_80421138;*(f32*)(pParty+0x5C)=*(f32*)(pParty+0xE4);}return 0;
+
+    if (hit != 0) {
+        attr = hitGetAttr(hit);
+        if (*(s32*)(pParty + 0x168) != -1) {
+            psndSFXOff(*(s32*)(pParty + 0x168));
+            *(s32*)(pParty + 0x168) = -1;
+        }
+
+        if ((attr & 0x200) != 0) {
+            if (*(u8*)(pParty + 0x39) == 5) {
+                return 0;
+            }
+            *(u8*)(pParty + 0x39) = 0x46;
+            pos[0] = *(u32*)(pParty + 0x58);
+            pos[1] = *(u32*)(pParty + 0x5C);
+            pos[2] = *(u32*)(pParty + 0x60);
+            marioSetSplash(0, pos);
+            *(void**)(pParty + 0x138) = 0;
+
+            other = partyGetPtr(marioGetPartyId());
+            status = 5;
+            if (other == 0 || *(s8*)((s32)other + 0x31) != 4 || (*(u32*)other & 0x100) == 0) {
+                status = 0;
+            } else {
+                motion = *(u8*)((s32)other + 0x39);
+                if (motion >= 0xA && motion <= 0xD) status = 1;
+                else if (motion >= 0x14 && motion <= 0x16) status = 2;
+                else if (motion >= 0x64 && motion <= 0x65) status = 5;
+                else if (motion >= 0x3C && motion <= 0x41) status = 3;
+                else if (motion >= 0x32 && motion <= 0x34) status = 4;
+            }
+            if (status == 1 && (*(u32*)*(void**)(pParty + 0x160) & 0xF0000) == 0) {
+                *(void**)((s32)*(void**)(pParty + 0x160) + 0x1E8) = 0;
+            }
+
+            if ((*(u32*)party & 0x20) == 0) {
+                *(u32*)party |= 0x20;
+                *(f32*)(pParty + 0x11C) = float_neg0p4_80421158;
+                *(f32*)(pParty + 0x174) = float_neg0p4_80421158;
+                *(f32*)(pParty + 0x178) = float_0_80421138;
+                *(f32*)(pParty + 0x118) = float_0_80421138;
+            }
+            *(f32*)(pParty + 0x178) += *(f32*)(pParty + 0x118);
+            *(f32*)(pParty + 0x174) += *(f32*)(pParty + 0x178);
+            *(f32*)(pParty + 0x11C) += *(f32*)(pParty + 0x174);
+            if (*(f32*)(pParty + 0x11C) < float_neg15_8042115c) {
+                *(f32*)(pParty + 0x11C) = float_neg15_8042115c;
+            }
+            *(f32*)(pParty + 0x5C) += *(f32*)(pParty + 0x11C);
+            set_damage_root_ypos((f64)(*(f32*)((s32)player + 0x90) - float_8_80421164));
+            *(u32*)((s32)player + 0x98) = vec3_802cb118[0];
+            *(u32*)((s32)player + 0x9C) = vec3_802cb118[1];
+            *(u32*)((s32)player + 0xA0) = vec3_802cb118[2];
+            *(u32*)((s32)player + 0xA4) = vec3_802cb124[0];
+            *(u32*)((s32)player + 0xA8) = vec3_802cb124[1];
+            *(u32*)((s32)player + 0xAC) = vec3_802cb124[2];
+            other = partyGetPtr(marioGetExtraPartyId());
+            if (other != 0) {
+                *(u32*)((s32)other + 0x7C) = vec3_802cb130[0];
+                *(u32*)((s32)other + 0x80) = vec3_802cb130[1];
+                *(u32*)((s32)other + 0x84) = vec3_802cb130[2];
+            }
+            *(u32*)party |= 0x02000000;
+            if (*(f32*)(pParty + 0x11C) <= float_neg6_80421168) {
+                *(f32*)(pParty + 0x11C) = float_neg6_80421168;
+                *(f32*)(pParty + 0x174) = float_0_80421138;
+                *(f32*)(pParty + 0x178) = float_0_80421138;
+                *(f32*)(pParty + 0x118) = float_0_80421138;
+            }
+            *(f32*)((s32)player + 0x7C) = *(f32*)(pParty + 0x11C);
+            *(f32*)((s32)player + 0x80) = *(f32*)(pParty + 0x174);
+            *(f32*)((s32)player + 0x84) = *(f32*)(pParty + 0x178);
+            *(f32*)((s32)player + 0x88) = *(f32*)(pParty + 0x118);
+            marioChgMot(0x1F);
+            return 0;
+        }
+
+        if ((attr & 0xC00) != 0) {
+            player = marioGetPtr();
+            *(void**)(pParty + 0x138) = 0;
+            other = partyGetPtr(marioGetPartyId());
+            status = 5;
+            if (other == 0 || *(s8*)((s32)other + 0x31) != 4 || (*(u32*)other & 0x100) == 0) {
+                status = 0;
+            } else {
+                motion = *(u8*)((s32)other + 0x39);
+                if (motion >= 0xA && motion <= 0xD) status = 1;
+                else if (motion >= 0x14 && motion <= 0x16) status = 2;
+                else if (motion >= 0x64 && motion <= 0x65) status = 5;
+                else if (motion >= 0x3C && motion <= 0x41) status = 3;
+                else if (motion >= 0x32 && motion <= 0x34) status = 4;
+            }
+            if (status == 1 && (*(u32*)*(void**)(pParty + 0x160) & 0xF0000) == 0) {
+                *(void**)((s32)*(void**)(pParty + 0x160) + 0x1E8) = 0;
+            }
+            marioChgMot(0x20);
+            *(u8*)(pParty + 0x39) = 10;
+            partyChgPose(party, (char*)str_PYS_S_2_802cb148);
+            marioChgPose((char*)str_M_Y_2_80421148);
+            *(f32*)((s32)player + 0x2C8) = float_0_80421138;
+            *(f32*)((s32)player + 0x2CC) = float_0_80421138;
+            partyChgRunMode(party, 0xD);
+            other = partyGetPtr(marioGetExtraPartyId());
+            if (other != 0) partyChgRunMode(other, 0xD);
+            partyChgRunMode(party, 0xD);
+            other = partyGetPtr(marioGetExtraPartyId());
+            if (other != 0) partyChgRunMode(other, 0xD);
+            return 0;
+        }
+
+        if ((hitGetAttr(hit) & 0x40000000) != 0) {
+            *(void**)((s32)player + 0x208) = hit;
+        }
+        if ((*(u32*)party & 0x30) == 0) {
+            if (partyChkFrontStep(float_11_80421154, party, &stepY, &stepOut1, &stepOut2) != 0) {
+                distance = stepY - *(f32*)(pParty + 0x5C);
+                if (distance <= float_11_80421154 && distance >= float_5_8042116c &&
+                    *(f32*)(pParty + 0xE0) <= float_30_80421170) {
+                    *(f32*)(pParty + 0x120) = stepY;
+                    if (*(f32*)(pParty + 0x104) != float_0_80421138 && *(u8*)(pParty + 0x39) != 5) {
+                        *(u8*)(pParty + 0x39) = 0x28;
+                        return 0;
+                    }
+                }
+            }
+        }
+    }
+
+    *(void**)(pParty + 0x138) = hit;
+    other = partyGetPtr(marioGetPartyId());
+    status = 5;
+    if (other == 0 || *(s8*)((s32)other + 0x31) != 4 || (*(u32*)other & 0x100) == 0) {
+        status = 0;
+    } else {
+        motion = *(u8*)((s32)other + 0x39);
+        if (motion >= 0xA && motion <= 0xD) status = 1;
+        else if (motion >= 0x14 && motion <= 0x16) status = 2;
+        else if (motion >= 0x64 && motion <= 0x65) status = 5;
+        else if (motion >= 0x3C && motion <= 0x41) status = 3;
+        else if (motion >= 0x32 && motion <= 0x34) status = 4;
+    }
+    if (status == 1 && (*(u32*)*(void**)(pParty + 0x160) & 0xF0000) == 0) {
+        *(void**)((s32)*(void**)(pParty + 0x160) + 0x1E8) = hit;
+    }
+
+    if (hit == 0) {
+        *(u32*)party &= ~2;
+        if ((*(u32*)party & 0x20) == 0) {
+            *(u32*)party |= 0x20;
+            *(f32*)(pParty + 0x11C) = float_neg0p4_80421158;
+            *(f32*)(pParty + 0x174) = float_neg0p4_80421158;
+            *(f32*)(pParty + 0x178) = float_0_80421138;
+            *(f32*)(pParty + 0x118) = float_0_80421138;
+        }
+        *(f32*)(pParty + 0x178) += *(f32*)(pParty + 0x118);
+        *(f32*)(pParty + 0x174) += *(f32*)(pParty + 0x178);
+        *(f32*)(pParty + 0x11C) += *(f32*)(pParty + 0x174);
+        if (*(f32*)(pParty + 0x11C) < float_neg15_8042115c) {
+            *(f32*)(pParty + 0x11C) = float_neg15_8042115c;
+        }
+        *(f32*)(pParty + 0x5C) += *(f32*)(pParty + 0x11C);
+    } else {
+        *(u32*)party |= 2;
+        if ((*(u32*)party & 0x20) != 0) {
+            *(u32*)party &= ~0x70;
+            *(u32*)player &= ~0xF0000;
+            *(f32*)(pParty + 0x114) = float_0_80421138;
+            *(f32*)(pParty + 0x5C) = groundY;
+            if (*(s32*)(pParty + 0x168) != -1) {
+                psndSFXOff(*(s32*)(pParty + 0x168));
+                *(s32*)(pParty + 0x168) = -1;
+            }
+        } else {
+            *(f32*)(pParty + 0x5C) = groundY;
+        }
+    }
+    return 0;
 }
 
 #pragma no_register_save_helpers on
@@ -922,6 +1121,7 @@ u8 checkWall(void* pParty, f32 speed, f32 direction) {
     extern void* dou10_yoko_yari2(void*);
     extern u32 marioChkBero(void*);
     extern void movePos(f32, f32, f32*, f32*);
+    extern f32 toMovedir(f32);
     extern void unk_US_EU_04_800c27c0(f32, f32, f32, void*, void*);
     void* player = marioGetPtr();
     void* hit;
@@ -932,6 +1132,36 @@ u8 checkWall(void* pParty, f32 speed, f32 direction) {
     s32 out;
     u8 state;
     f32 pos[3];
+
+#define HANDLE_SPIKE() do { \
+    player = marioGetPtr(); \
+    *(void**)((s32)pParty + 0x138) = 0; \
+    yoshi = partyGetPtr(marioGetPartyId()); \
+    status = 5; \
+    if (yoshi == 0 || *(s8*)((s32)yoshi + 0x31) != 4 || \
+        (*(u32*)yoshi & 0x100) == 0) { \
+        status = 0; \
+    } else { \
+        state = *(u8*)((s32)yoshi + 0x39); \
+        if (state >= 0xA && state <= 0xD) status = 1; \
+        else if (state >= 0x14 && state <= 0x16) status = 2; \
+        else if (state >= 0x64 && state <= 0x65) status = 5; \
+        else if (state >= 0x3C && state <= 0x41) status = 3; \
+        else if (state >= 0x32 && state <= 0x34) status = 4; \
+    } \
+    if (status == 1 && (*(u32*)*(void**)((s32)pParty + 0x160) & 0xF0000) == 0) { \
+        *(void**)((s32)*(void**)((s32)pParty + 0x160) + 0x1E8) = 0; \
+    } \
+    marioChgMot(0x20); \
+    *(u8*)((s32)pParty + 0x39) = 10; \
+    partyChgPose(pParty, (char*)str_PYS_S_2_802cb148); \
+    marioChgPose((char*)str_M_Y_2_80421148); \
+    *(f32*)((s32)player + 0x2C8) = float_0_80421138; \
+    *(f32*)((s32)player + 0x2CC) = float_0_80421138; \
+    partyChgRunMode(pParty, 0xD); \
+    extra = partyGetPtr(marioGetExtraPartyId()); \
+    if (extra != 0) partyChgRunMode(extra, 0xD); \
+} while (0)
 
     pos[0] = *(f32*)((s32)pParty + 0x58);
     pos[1] = *(f32*)((s32)pParty + 0x5C);
@@ -952,7 +1182,9 @@ u8 checkWall(void* pParty, f32 speed, f32 direction) {
             }
         }
         attr = hitGetAttr(hit);
-        if ((attr & 0x800) != 0) goto spike;
+        if ((attr & 0x800) != 0) {
+            HANDLE_SPIKE();
+        }
         if ((attr & 0x800004) != 0 && (attr & 0x80080) == 0) {
             movePos(speed, direction, (f32*)((s32)pParty + 0x58),
                     (f32*)((s32)pParty + 0x60));
@@ -963,44 +1195,45 @@ u8 checkWall(void* pParty, f32 speed, f32 direction) {
         *(f32*)((s32)pParty + 0x60) = pos[2];
     } else {
         if (speed == float_0_80421138) {
-            *(void**)((s32)pParty + 0x12C) = 0;
-            *(void**)((s32)player + 0x1E4) = 0;
+            pos[0] = *(f32*)((s32)pParty + 0x58);
+            pos[1] = *(f32*)((s32)pParty + 0x5C);
+            pos[2] = *(f32*)((s32)pParty + 0x60);
+            hit = partySearchWallFront(speed, direction, pParty, pos);
+            *(void**)((s32)pParty + 0x12C) = hit;
+            *(void**)((s32)player + 0x1E4) = hit;
+            if (hit == 0) {
+                direction = toMovedir(*(f32*)((s32)pParty + 0xFC));
+                pos[0] = *(f32*)((s32)pParty + 0x58);
+                pos[1] = *(f32*)((s32)pParty + 0x5C);
+                pos[2] = *(f32*)((s32)pParty + 0x60);
+                hit = partySearchWallFront(speed, direction, pParty, pos);
+                *(void**)((s32)pParty + 0x12C) = hit;
+                *(void**)((s32)player + 0x1E4) = hit;
+            }
+            if ((*(u32*)pParty & 0x100) != 0) {
+                pos[0] = *(f32*)((s32)pParty + 0x58);
+                pos[1] = *(f32*)((s32)pParty + 0x5C);
+                pos[2] = *(f32*)((s32)pParty + 0x60);
+                hit = partySearchWallFront(speed, direction, pParty, pos);
+                if (hit == 0) {
+                    *(void**)((s32)pParty + 0x130) = 0;
+                    *(void**)((s32)player + 0x1E8) = 0;
+                } else {
+                    *(void**)((s32)pParty + 0x130) = *(void**)((s32)pParty + 0x12C);
+                    *(void**)((s32)player + 0x1E8) = *(void**)((s32)pParty + 0x12C);
+                }
+            }
         }
         hit = dou10_yoko_yari2(&out);
-        if (hit != 0 && (hitGetAttr(hit) & 0x800) != 0) goto spike;
+        if (hit != 0 && (hitGetAttr(hit) & 0x800) != 0) {
+            HANDLE_SPIKE();
+            return 0;
+        }
     }
     unk_US_EU_04_800c27c0(speed, direction, direction, pParty, pos);
     *(f32*)((s32)pParty + 0x58) = pos[0];
     *(f32*)((s32)pParty + 0x60) = pos[2];
-    return 0;
-
-spike:
-    player = marioGetPtr();
-    *(void**)((s32)pParty + 0x138) = 0;
-    yoshi = partyGetPtr(marioGetPartyId());
-    if (yoshi == 0 || *(s8*)((s32)yoshi + 0x31) != 4 ||
-        (*(u32*)yoshi & 0x100) == 0) {
-        status = 0;
-    } else {
-        state = *(u8*)((s32)yoshi + 0x39);
-        if (state >= 0xA && state <= 0xD) status = 1;
-        else if (state >= 0x14 && state <= 0x16) status = 2;
-        else if (state >= 0x64 && state <= 0x65) status = 5;
-        else if (state >= 0x3C && state <= 0x41) status = 3;
-        else if (state >= 0x32 && state <= 0x34) status = 4;
-    }
-    if (status == 1 && (*(u32*)*(void**)((s32)pParty + 0x160) & 0xF0000) == 0) {
-        *(void**)((s32)*(void**)((s32)pParty + 0x160) + 0x1E8) = 0;
-    }
-    marioChgMot(0x20);
-    *(u8*)((s32)pParty + 0x39) = 10;
-    partyChgPose(pParty, (char*)str_PYS_S_2_802cb148);
-    marioChgPose((char*)str_M_Y_2_80421148);
-    *(f32*)((s32)player + 0x2C8) = float_0_80421138;
-    *(f32*)((s32)player + 0x2CC) = float_0_80421138;
-    partyChgRunMode(pParty, 0xD);
-    extra = partyGetPtr(marioGetExtraPartyId());
-    if (extra != 0) partyChgRunMode(extra, 0xD);
+#undef HANDLE_SPIKE
     return 0;
 }
 

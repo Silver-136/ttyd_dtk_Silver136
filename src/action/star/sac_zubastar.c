@@ -3,9 +3,9 @@
 extern void* _battleWorkPointer;
 void BattleFree(void* ptr);
 s32 irand(s32 max);
-extern f32 float_0_80427d40;
-extern f32 float_1_80427d30;
-extern f32 float_2_80427d70;
+extern const f32 float_0_80427d40;
+extern const f32 float_1_80427d30;
+extern const f32 float_2_80427d70;
 
 void GXSetTexCopySrc(s32 left, s32 top, s32 wd, s32 ht);
 void GXSetTexCopyDst(s32 wd, s32 ht, s32 fmt, s32 mipmap);
@@ -38,13 +38,13 @@ s32 main_star(void) {
     extern f32 intplGetValue(f32 start, f32 end, s32 mode, s32 cur, s32 steps);
     extern void dispEntry(s32 camera, s32 mode, void* func, s32 param, f32 order);
 
-    extern f32 float_neg1000_80427da0;
-    extern f32 float_37_80427dc4;
-    extern f32 float_50_80427da4;
-    extern f32 float_neg1_80427d9c;
-    extern f32 float_2160_80427dc8;
-    extern f32 float_300_80427d94;
-    extern f32 float_1p5_80427dcc;
+    extern const f32 float_neg1000_80427da0;
+    extern const f32 float_37_80427dc4;
+    extern const f32 float_50_80427da4;
+    extern const f32 float_neg1_80427d9c;
+    extern const f32 float_2160_80427dc8;
+    extern const f32 float_300_80427d94;
+    extern const f32 float_1p5_80427dcc;
     extern Vec vec3_802fffa0;
     extern Vec vec3_802fffac;
 
@@ -318,7 +318,7 @@ void zubastar_bunkatu(void* lineStartRaw, void* lineEndRaw) {
 }
 
 s32 zubastar_get_kouten(f32* outX, f32* outY, f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4) {
-    extern f32 float_1Eneg05_80427dc0;
+    extern const f32 float_1Eneg05_80427dc0;
 
     f32 dx1;
     f32 dx2;
@@ -375,207 +375,507 @@ s32 zubastar_main(void* event, s32 isFirstCall) {
     extern u32 GXGetTexBufferSize(s32, s32, s32, s32, s32);
     extern s32 keyGetButtonTrg(s32);
     extern void psndSFXOff(s32);
+    extern s32 psndSFXOn(char*);
+    extern s32 psndSFXChk(s32);
+    extern void psndSFX_pit(s32, s32);
+    extern void* evtEntry(void*, s32, u32);
+    extern s32 nice_event[];
+    extern s32 rand(void);
     extern void BattleAudienceSoundCallKind(s32);
     extern void BattleAudienceSoundWhistleKind(s32);
     extern void* smartAlloc(s32, s32);
     extern void btl_camera_shake_h(f32, f32, s32, s32, s32);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void zubastar_disp2D(void);
-    extern f64 intplGetValue(f64, f64, s32, s32, s32);
+    extern f32 intplGetValue(f32, f32, s32, s32, s32);
+    extern char str_SFX_BTL_SAC_ZUBA_STA_80300138[];
+    extern char str_SFX_BTL_SAC_ZUBA_STA_80300150[];
+    extern const f32 float_32767_80427d68;
+    extern const f32 float_683_80427dac;
+    extern const f32 float_4096_80427db0;
+    extern const f32 float_100_80427d78;
+    extern const f32 float_2p8_80427d7c;
+    extern const f32 float_neg96_80427d80;
+    extern const f32 float_240_80427d54;
+    extern const f32 float_344_80427d84;
+    extern const f32 float_264_80427d88;
+    extern const f32 float_neg240_80427d8c;
+    extern const f32 float_5_80427d90;
+    extern const f32 float_300_80427d94;
+    extern const f32 float_8_80427d98;
+    extern const f32 float_200_80427d28;
+    extern const f32 float_neg1_80427d9c;
+    extern const f32 float_neg1000_80427da0;
+    extern const f32 float_50_80427da4;
+    extern const f32 float_0p25_80427da8;
+    extern const f32 float_neg0p9_80427db4;
+    extern const f32 float_0p1_80427db8;
+    extern const f32 float_900_80427dbc;
+    extern const Vec vec3_8030000c;
+    extern const Vec vec3_80300018;
+    extern const Vec vec3_80300024;
+    extern const Vec vec3_80300030;
+    extern const Vec vec3_8030003c;
     u8* work = GetZubaStarPtr();
+    Vec lineEnd;
+    Vec lineStart;
+    Vec fragments[4] = {
+        { 0.0f, 240.0f, 0.0f },
+        { 304.0f, 240.0f, 0.0f },
+        { 304.0f, -240.0f, 0.0f },
+        { 0.0f, -240.0f, 0.0f }
+    };
+    f32 gapDowns[17];
+    f32 gapUps[17];
+    f32 lineDowns[18];
+    f32 lineUps[18];
     s32 audience = BattleAudience_GetAudienceNum();
-    s32* state = (s32*)work;
+    s32* state = (s32*)(work + 4);
+    void* evt;
+    s32 rank;
+    s32 pitch;
 
     if (isFirstCall != 0) {
-        Vec fragments[4];
         u32 size = GXGetTexBufferSize(400, 0x1E0, 4, 0, 0);
-        *(void**)(work + 0x5D8) = smartAlloc(size, 1);
-        fragments[0].x = -200.0f; fragments[0].y = 240.0f; fragments[0].z = 0.0f;
-        fragments[1].x = 200.0f; fragments[1].y = 240.0f; fragments[1].z = 0.0f;
-        fragments[2].x = -200.0f; fragments[2].y = -240.0f; fragments[2].z = 0.0f;
-        fragments[3].x = 200.0f; fragments[3].y = -240.0f; fragments[3].z = 0.0f;
+        *(void**)(work + 0x588) = smartAlloc(size, 1);
+        fragments[0] = vec3_8030000c;
+        fragments[1] = vec3_80300018;
+        fragments[2] = vec3_80300024;
+        fragments[3] = vec3_80300030;
         zubastar_create_takaku(4, fragments);
-        *(f32*)(work + 0xA0) = 0.0f;
-        *(f32*)(work + 0xA4) = 300.0f;
-        *(f32*)(work + 0xA8) = 0.0f;
+        *(Vec*)(work + 0x20) = vec3_8030003c;
     }
 
     switch (*state) {
         case 0:
             *state = 5;
-            *(s32*)(work + 0x94) = 5;
+            *(s32*)(work + 0x18) = 5;
             break;
         case 5:
-            *state = 10;
-            *(s32*)(work + 4) = 0;
-            if (*(s32*)(work + 0x518) == 0) {
-                *(s32*)(work + 0x518) = 1;
+            *state = 6;
+            *(s32*)(work + 8) = 0;
+            if (*(s32*)(work + 0x7C) == 0) {
+                *(s32*)(work + 0x7C) = 5;
             }
-            if (*(s32*)(work + 0x518) == 5) {
-                *(s32*)(work + 0x518) = 6;
+            if (*(s32*)(work + 0x7C) == 15) {
+                *(s32*)(work + 0x7C) = 16;
             }
-        case 10:
-            if (*(s32*)(work + 0x94) == 10 && *(s32*)(work + 0x518) == 2) {
-                *state = 11;
+        case 6:
+            if (*(s32*)(work + 0x18) == 10 && *(s32*)(work + 0x7C) == 10) {
+                *state = 10;
             }
             break;
-        case 11:
-            *state = 12;
+        case 10:
+            *state = 11;
             *(s32*)(work + 0xC) = 300;
-        case 12:
-            if (*(f32*)(work + 0x520) < 100.0f) {
-                if (--*(s32*)(work + 0xC) < 1) {
-                    *state = 13;
-                    psndSFXOff(*(s32*)(work + 0x530));
+        case 11:
+            if (*(f32*)(work + 0x84) < float_100_80427d78) {
+                (*(s32*)(work + 0xC))--;
+                if (*(s32*)(work + 0xC) < 1) {
+                    *state = 12;
+                    psndSFXOff(*(s32*)(work + 0xA4));
                 } else if (keyGetButtonTrg(0) & 0x100) {
-                    *(f32*)(work + 0x524) = 2.8f;
+                    *(f32*)(work + 0x88) = float_2p8_80427d7c;
                 }
             } else {
-                *state = 14;
-                (*(s32*)(work + 8))++;
-                psndSFXOff(*(s32*)(work + 0x530));
+                *state = 13;
+                (*(s32*)(work + 0x10))++;
+                evt = evtEntry(nice_event, 0, 0x20);
+                rank = *(s32*)(work + 0x10) + 1;
+                if (rank >= 6) {
+                    rank = 6;
+                }
+                *(s32*)((u8*)evt + 0x9C) = rank;
+                psndSFXOff(*(s32*)(work + 0xA4));
             }
+            break;
+        case 12:
+            *(s32*)(work + 0x7C) = 20;
+            psndSFXOff(*(s32*)(work + 0xA4));
+            *state = 30;
             break;
         case 13:
-            *(s32*)(work + 0x518) = 5;
-            psndSFXOff(*(s32*)(work + 0x530));
-            *state = 0x1E;
-            break;
-        case 14:
-            *(s32*)(work + 0x518) = 4;
-            *(s32*)(work + 0x51C) = 0;
-            psndSFXOff(*(s32*)(work + 0x530));
+            *(s32*)(work + 0x7C) = 15;
+            *(s32*)(work + 0x80) = 0;
+            psndSFXOff(*(s32*)(work + 0xA4));
             if (audience > 0 && audience < 50) {
                 BattleAudienceSoundCallKind(1);
-            } else if (audience < 100) {
+            }
+            if (audience > 49 && audience < 100) {
                 BattleAudienceSoundCallKind(1);
                 BattleAudienceSoundWhistleKind(1);
-            } else {
+            }
+            if (audience > 99 && audience < 150) {
                 BattleAudienceSoundCallKind(2);
-                BattleAudienceSoundWhistleKind(audience > 150 ? 3 : 2);
+                BattleAudienceSoundWhistleKind(2);
             }
-            *state = 15;
-            *(s32*)(work + 0x94) = 15;
-            break;
-        case 15:
-            if (*(s32*)(work + 0x94) == 20) {
-                *state = 16;
-                *(s32*)(work + 4) = 0;
+            if (audience > 149) {
+                BattleAudienceSoundCallKind(2);
+                BattleAudienceSoundWhistleKind(3);
+            }
+            *state = 21;
+            *(s32*)(work + 0x18) = 15;
+        case 21:
+            if (*(s32*)(work + 0x18) == 20) {
+                *state = 25;
+                *(s32*)(work + 8) = 0;
             }
             break;
-        case 16:
-            *state = 17;
-            *(s32*)(work + 0x94) = 25;
+        case 25: {
+            s32 offset;
+            s32 lineCount;
+            s32 i;
+            s32 j;
+            s32 upperIndex;
+            s32 lowerIndex;
+            s32 next;
+            s32 enabled;
+            f32 t;
+            u8* line;
+
+            *state = 26;
+            *(s32*)(work + 0x18) = 25;
+
             if (irand(2) == 0) {
-                *(f32*)(work + 0xA0) = -96.0f;
+                *(f32*)(work + 0x5C) = float_0_80427d40;
+                *(f32*)(work + 0x60) = float_240_80427d54;
+                *(f32*)(work + 0x64) = float_0_80427d40;
+                *(f32*)(work + 0x68) = float_0_80427d40;
+                *(f32*)(work + 0x6C) = float_neg240_80427d8c;
+                *(f32*)(work + 0x70) = float_0_80427d40;
             } else {
-                *(f32*)(work + 0xA0) = 96.0f;
+                *(f32*)(work + 0x5C) = float_0_80427d40;
+                *(f32*)(work + 0x60) = float_neg240_80427d8c;
+                *(f32*)(work + 0x64) = float_0_80427d40;
+                *(f32*)(work + 0x68) = float_0_80427d40;
+                *(f32*)(work + 0x6C) = float_240_80427d54;
+                *(f32*)(work + 0x70) = float_0_80427d40;
+            }
+
+            lineUps[0] = float_neg96_80427d80;
+            lineDowns[0] = float_neg96_80427d80;
+            lineCount = 1;
+            offset = 0;
+            for (i = 0; i < 16; i++, offset += 0x1C) {
+                line = work + 0x3C8 + offset;
+                if (*(s32*)line == 5) {
+                    if (*(f32*)(line + 0x10) == float_240_80427d54) {
+                        lineUps[lineCount] = *(f32*)(line + 0xC);
+                        lineDowns[lineCount] = *(f32*)(line + 0x14);
+                    } else {
+                        lineUps[lineCount] = *(f32*)(line + 0x14);
+                        lineDowns[lineCount] = *(f32*)(line + 0xC);
+                    }
+                    lineCount++;
+                }
+            }
+
+            lineUps[lineCount] = float_344_80427d84;
+            lineDowns[lineCount] = float_264_80427d88;
+
+            for (i = 0; i < lineCount; i++) {
+                for (j = i + 1; j < lineCount + 1; j++) {
+                    if (lineUps[j] < lineUps[i]) {
+                        t = lineUps[i];
+                        lineUps[i] = lineUps[j];
+                        lineUps[j] = t;
+                    }
+                    if (lineDowns[j] < lineDowns[i]) {
+                        t = lineDowns[i];
+                        lineDowns[i] = lineDowns[j];
+                        lineDowns[j] = t;
+                    }
+                }
+            }
+
+            for (i = 0; i < lineCount; i++) {
+                gapUps[i] = lineUps[i + 1] - lineUps[i];
+                gapDowns[i] = lineDowns[i + 1] - lineDowns[i];
+            }
+
+            upperIndex = 0;
+            lowerIndex = 0;
+            for (i = 0; i < lineCount; i++) {
+                if (gapUps[upperIndex] < gapUps[i]) {
+                    upperIndex = i;
+                }
+                if (gapDowns[lowerIndex] < gapDowns[i]) {
+                    lowerIndex = i;
+                }
+            }
+
+            t = lineUps[upperIndex] +
+                (gapUps[upperIndex] * (f32)rand()) / float_32767_80427d68;
+            if (*(f32*)(work + 0x60) == float_240_80427d54) {
+                *(f32*)(work + 0x5C) = t;
+            } else {
+                *(f32*)(work + 0x68) = t;
+            }
+
+            t = lineUps[lowerIndex] +
+                (gapUps[lowerIndex] * (f32)rand()) / float_32767_80427d68;
+            if (*(f32*)(work + 0x60) == float_neg240_80427d8c) {
+                *(f32*)(work + 0x5C) = t;
+            } else {
+                *(f32*)(work + 0x68) = t;
+            }
+
+            lineEnd.x = *(f32*)(work + 0x68);
+            lineEnd.y = *(f32*)(work + 0x6C);
+            lineEnd.z = *(f32*)(work + 0x70);
+            lineStart.x = *(f32*)(work + 0x5C);
+            lineStart.y = *(f32*)(work + 0x60);
+            lineStart.z = *(f32*)(work + 0x64);
+            zubastar_bunkatu(&lineStart, &lineEnd);
+            break;
+        }
+        case 26:
+            if (*(s32*)(work + 0x18) == 30) {
+                (*(s32*)(work + 8))++;
+                if (*(s32*)(work + 8) < 3) {
+                    *state = 25;
+                } else {
+                    *state = 32;
+                }
             }
             break;
-        case 17:
-            if (*(s32*)(work + 0x94) == 30) {
-                (*(s32*)(work + 4))++;
-                *state = *(s32*)(work + 4) < 3 ? 16 : 32;
+        case 30:
+            *state = 31;
+            *(s32*)(work + 0x18) = 15;
+        case 31:
+            if (*(s32*)(work + 0x18) == 20) {
+                *state = 35;
             }
             break;
         case 32:
-            *state = *(s32*)(work + 8) < 5 ? 0 : 33;
-            break;
-        case 33:
-            *state = 0x24;
-            *(s32*)(work + 0x94) = 25;
-            break;
-        case 0x24:
-            if (*(s32*)(work + 0x94) == 30) {
-                *state = 0x26;
-                *(s32*)(work + 4) = 60;
-                btl_camera_shake_h(5.0f, 5.0f, 0, 60, 0);
+            if (*(s32*)(work + 0x10) < 5) {
+                *state = 0;
+            } else {
+                *state = 35;
             }
             break;
-        case 0x26:
-            if (--*(s32*)(work + 4) < 1) {
-                *state = 0x28;
+        case 35:
+            *state = 36;
+            *(s32*)(work + 0x18) = 25;
+            *(f32*)(work + 0x5C) = float_neg96_80427d80;
+            *(f32*)(work + 0x60) = float_240_80427d54;
+            *(f32*)(work + 0x64) = float_0_80427d40;
+            *(f32*)(work + 0x68) = float_neg96_80427d80;
+            *(f32*)(work + 0x6C) = float_neg240_80427d8c;
+            *(f32*)(work + 0x70) = float_0_80427d40;
+            break;
+        case 36:
+            if (*(s32*)(work + 0x18) == 30) {
+                *state = 38;
+                *(s32*)(work + 8) = 60;
+                btl_camera_shake_h(float_5_80427d90, float_5_80427d90, 0, 60, 0);
             }
             break;
-        case 0x28:
-            {
-                s32 i;
-                for (i = 0; i < 16; i++) {
-                    *(s32*)(work + 0xC0 + i * 0x1C) = 0;
-                }
+        case 38:
+            (*(s32*)(work + 8))--;
+            if (*(s32*)(work + 8) < 1) {
+                *state = 40;
+            }
+            break;
+        case 40: {
+            s32 i;
+            for (i = 0; i < 16; i++) {
+                *(s32*)(work + 0x3C8 + i * 0x1C) = 0;
             }
             return 2;
+        }
     }
-    switch (*(s32*)(work + 0x94)) {
-    case 5:
-        *(s32*)(work + 0x94) = 6;
-        *(s32*)(work + 0x98) = 0;
-    case 6:
-        (*(s32*)(work + 0x98))++;
-        *(f32*)(work + 0xA0) = 0.0f;
-        *(f32*)(work + 0xA4) = (f32)intplGetValue(
-            300.0, 300.0, 4, *(s32*)(work + 0x98), 15);
-        *(f32*)(work + 0xA8) = 0.0f;
-        if (*(s32*)(work + 0x98) > 14) {
-            *(s32*)(work + 0x94) = 10;
+
+    switch (*(s32*)(work + 0x18)) {
+        case 0:
+            break;
+        case 5:
+            *(s32*)(work + 0x18) = 6;
+            *(s32*)(work + 0x1C) = 0;
+        case 6:
+            (*(s32*)(work + 0x1C))++;
+            *(f32*)(work + 0x20) = float_0_80427d40;
+            *(f32*)(work + 0x24) = (f32)intplGetValue(float_300_80427d94, float_300_80427d94, 4, *(s32*)(work + 0x1C), 15);
+            *(f32*)(work + 0x28) = float_0_80427d40;
+            if (*(s32*)(work + 0x1C) > 14) *(s32*)(work + 0x18) = 10;
+            break;
+        case 10:
+            *(f32*)(work + 0x20) = float_0_80427d40;
+            *(f32*)(work + 0x24) = float_300_80427d94;
+            *(f32*)(work + 0x28) = float_0_80427d40;
+            break;
+        case 15:
+            *(s32*)(work + 0x18) = 16;
+            *(s32*)(work + 0x1C) = 0;
+        case 16:
+            (*(s32*)(work + 0x1C))++;
+            *(f32*)(work + 0x20) = float_0_80427d40;
+            *(f32*)(work + 0x24) = (f32)intplGetValue(float_300_80427d94, float_300_80427d94, 4, *(s32*)(work + 0x1C), 15);
+            *(f32*)(work + 0x28) = float_0_80427d40;
+            if (*(s32*)(work + 0x1C) > 14) *(s32*)(work + 0x18) = 20;
+            break;
+        case 25: {
+            s16 lineIndex = 0;
+            s32 i;
+            *(s32*)(work + 0x18) = 26;
+            *(s32*)(work + 0x74) = 0;
+            for (i = 0; i < 16; i++, lineIndex++) {
+                u8* line = work + 0x3C8 + i * 0x1C;
+                if (*(s32*)line == 0) {
+                    *(s16*)(work + 0x78) = lineIndex;
+                    *(s32*)line = 5;
+                    *(s32*)(line + 4) = 0;
+                    *(f32*)(line + 0xC) = *(f32*)(work + 0x5C);
+                    *(f32*)(line + 0x10) = *(f32*)(work + 0x60);
+                    *(f32*)(line + 0x14) = *(f32*)(work + 0x5C);
+                    *(f32*)(line + 0x18) = *(f32*)(work + 0x60);
+                    *(s32*)(line + 8) = 0;
+                    break;
+                }
+            }
+            psndSFXOn(str_SFX_BTL_SAC_ZUBA_STA_80300138);
         }
-        break;
-    case 10:
-        *(f32*)(work + 0xA0) = 0.0f;
-        *(f32*)(work + 0xA4) = 300.0f;
-        *(f32*)(work + 0xA8) = 0.0f;
-        break;
+        case 26: {
+            s16 lineIndex;
+            u8* line;
+            (*(s32*)(work + 0x74))++;
+            *(f32*)(work + 0x20) = (f32)intplGetValue(*(f32*)(work + 0x5C), *(f32*)(work + 0x68), 0, *(s32*)(work + 0x74), 15);
+            *(f32*)(work + 0x24) = (f32)intplGetValue(*(f32*)(work + 0x60), *(f32*)(work + 0x6C), 0, *(s32*)(work + 0x74), 15);
+            lineIndex = *(s16*)(work + 0x78);
+            line = work + 0x3C8 + lineIndex * 0x1C;
+            *(f32*)(line + 0x14) = *(f32*)(work + 0x20);
+            *(f32*)(line + 0x18) = *(f32*)(work + 0x24);
+            if (*(s32*)(work + 0x74) > 14) {
+                *(s32*)(work + 0x18) = 27;
+                *(s32*)(work + 0x1C) = 0;
+                btl_camera_shake_h(float_8_80427d98, float_0_80427d40, 0, 30, 0);
+            }
+            break;
+        }
+        case 27:
+            if (++*(s32*)(work + 0x1C) > 4) *(s32*)(work + 0x18) = 28;
+            break;
+        case 28:
+            *(s32*)(work + 0x18) = 30;
+        case 30:
+            *(f32*)(work + 0x20) = float_0_80427d40;
+            *(f32*)(work + 0x24) = float_neg1000_80427da0;
+            *(f32*)(work + 0x28) = float_0_80427d40;
+            break;
     }
-    switch (*(s32*)(work + 0x518)) {
-    case 1:
-        *(s32*)(work + 0x518) = 2;
-        *(s32*)(work + 0x51C) = 0;
-        *(f32*)(work + 0x520) = 0.0f;
-        *(f32*)(work + 0x524) = 0.0f;
-        *(f32*)(work + 0x528) = -1.0f;
-        *(s32*)(work + 0x52C) = 0xFF;
-        break;
-    case 2:
-        *(f32*)(work + 0x520) += *(f32*)(work + 0x524);
-        *(f32*)(work + 0x520) += *(f32*)(work + 0x528);
-        if (*(f32*)(work + 0x520) > 100.0f) {
-            *(f32*)(work + 0x520) = 100.0f;
-        }
-        if (*(f32*)(work + 0x520) < 0.0f) {
-            *(f32*)(work + 0x520) = 0.0f;
-        }
-        *(f32*)(work + 0x524) -= 0.25f;
-        if (*(f32*)(work + 0x524) < 0.0f) {
-            *(f32*)(work + 0x524) = 0.0f;
-        }
-        (*(s32*)(work + 0x52C))++;
-        if (*(s32*)(work + 0x52C) > 7) {
-            *(s32*)(work + 0x52C) = 0;
-        }
-        break;
+
+    switch (*(s32*)(work + 0x7C)) {
+        case 0:
+            break;
+        case 5:
+            *(s32*)(work + 0x7C) = 6;
+            *(s32*)(work + 0x80) = 0;
+            *(f32*)(work + 0x94) = float_neg1000_80427da0;
+            *(f32*)(work + 0x98) = float_0_80427d40;
+            *(f32*)(work + 0x9C) = float_0_80427d40;
+            *(f32*)(work + 0x90) = float_200_80427d28;
+            *(f32*)(work + 0x84) = float_0_80427d40;
+            *(f32*)(work + 0x88) = float_0_80427d40;
+            *(f32*)(work + 0x8C) = float_neg1_80427d9c;
+            *(u8*)(work + 0xA0) = 0xFF;
+            *(u8*)(work + 0xA1) = 0;
+            break;
+        case 6:
+            (*(s32*)(work + 0x80))++;
+            *(f32*)(work + 0x94) =
+                (f32)intplGetValue(float_neg1000_80427da0, float_50_80427da4, 4, *(s32*)(work + 0x80), 30);
+            if (*(s32*)(work + 0x80) > 29) {
+                *(s32*)(work + 0x7C) = 10;
+            }
+            break;
+        case 10:
+            *(f32*)(work + 0x84) += *(f32*)(work + 0x88);
+            *(f32*)(work + 0x84) += *(f32*)(work + 0x8C);
+            if (*(f32*)(work + 0x84) > float_100_80427d78) {
+                *(f32*)(work + 0x84) = float_100_80427d78;
+            }
+            if (*(f32*)(work + 0x84) < float_0_80427d40) {
+                *(f32*)(work + 0x84) = float_0_80427d40;
+            }
+            *(f32*)(work + 0x88) -= float_0p25_80427da8;
+            if (*(f32*)(work + 0x88) < float_0_80427d40) {
+                *(f32*)(work + 0x88) = float_0_80427d40;
+            }
+            (*(u8*)(work + 0xA1))++;
+            if (*(u8*)(work + 0xA1) > 7) {
+                *(u8*)(work + 0xA1) = 0;
+            }
+
+            if (*(f32*)(work + 0x84) <= float_0_80427d40) {
+                *(f32*)(work + 0x84) = float_0_80427d40;
+                if (psndSFXChk(*(s32*)(work + 0xA4)) == 0) {
+                    psndSFXOff(*(s32*)(work + 0xA4));
+                }
+            }
+            if (*(f32*)(work + 0x84) > float_0_80427d40 &&
+                psndSFXChk(*(s32*)(work + 0xA4)) == -1) {
+                *(s32*)(work + 0xA4) =
+                    psndSFXOn(str_SFX_BTL_SAC_ZUBA_STA_80300150);
+            }
+            if (psndSFXChk(*(s32*)(work + 0xA4)) == 0) {
+                pitch = (s32)(float_683_80427dac * (f32)*(s32*)(work + 0x10) +
+                    (float_4096_80427db0 * *(f32*)(work + 0x84)) / float_100_80427d78);
+                psndSFX_pit(*(s32*)(work + 0xA4), pitch);
+            }
+            break;
+        case 15:
+            *(f32*)(work + 0x84) = float_100_80427d78;
+            *(f32*)(work + 0x88) = float_0_80427d40;
+            *(f32*)(work + 0x8C) = float_0_80427d40;
+            *(u8*)(work + 0xA1) = 0;
+            (*(s32*)(work + 0x80))++;
+            *(f32*)(work + 0x94) =
+                (f32)intplGetValue(float_50_80427da4, float_neg1000_80427da0, 4, *(s32*)(work + 0x80), 30);
+            if (*(s32*)(work + 0x80) > 29) {
+                *(s32*)(work + 0x80) = 30;
+            }
+            break;
+        case 16:
+            *(s32*)(work + 0x7C) = 6;
+            *(s32*)(work + 0x80) = 0;
+            *(f32*)(work + 0x84) = float_0_80427d40;
+            *(f32*)(work + 0x88) = float_0_80427d40;
+            *(f32*)(work + 0x8C) = float_neg0p9_80427db4 - float_0p1_80427db8 * (f32)*(s32*)(work + 0x10);
+            break;
+        case 20:
+            *(s32*)(work + 0x7C) = 21;
+            *(s32*)(work + 0x80) = 0;
+            break;
+        case 21:
+            (*(s32*)(work + 0x80))++;
+            *(f32*)(work + 0x94) =
+                (f32)intplGetValue(float_50_80427da4, float_neg1000_80427da0, 4, *(s32*)(work + 0x80), 30);
+            if (*(s32*)(work + 0x80) > 29) {
+                *(s32*)(work + 0x80) = 30;
+            }
+            break;
     }
+
     {
-        Vec* ghosts = (Vec*)(work + 0xAC);
+        Vec* ghosts = (Vec*)(work + 0x2C);
         ghosts[3] = ghosts[2];
         ghosts[2] = ghosts[1];
         ghosts[1] = ghosts[0];
-        ghosts[0].x = *(f32*)(work + 0xA0);
-        ghosts[0].y = *(f32*)(work + 0xA4);
-        ghosts[0].z = *(f32*)(work + 0xA8);
+        ghosts[0].x = *(f32*)(work + 0x20);
+        ghosts[0].y = *(f32*)(work + 0x24);
+        ghosts[0].z = *(f32*)(work + 0x28);
     }
     {
         s32 i;
         for (i = 0; i < 16; i++) {
-            u8* line = work + 0xC0 + i * 0x1C;
+            u8* line = work + 0x3C8 + i * 0x1C;
             if (*(s32*)line == 5) {
                 (*(s32*)(line + 4))++;
-                if (*(s32*)(line + 4) > 60) {
-                    *(s32*)(line + 4) = 0;
-                }
+                if (*(s32*)(line + 4) > 60) *(s32*)(line + 4) = 0;
             }
         }
     }
-    dispEntry(1, 1, zubastar_disp2D, 0, 900.0f);
+    dispEntry(1, 1, zubastar_disp2D, 0, float_900_80427dbc);
     return 0;
 }
 
@@ -601,13 +901,13 @@ s32 zubastar_bomb(void* evt, s32 isFirstCall) {
     extern void psndSFXOn(char* name);
     extern f32 intplGetValue(f32 start, f32 end, s32 mode, s32 cur, s32 steps);
     extern char str_btl_wn_sac_zubastar_802fff70[];
-    extern f32 float_104_80427d60;
-    extern f32 float_200_80427d28;
-    extern f32 float_600_80427d5c;
-    extern f32 float_70_80427d64;
-    extern f32 float_32767_80427d68;
-    extern f32 float_35_80427d6c;
-    extern f32 float_neg1p25_80427d74;
+    extern const f32 float_104_80427d60;
+    extern const f32 float_200_80427d28;
+    extern const f32 float_600_80427d5c;
+    extern const f32 float_70_80427d64;
+    extern const f32 float_32767_80427d68;
+    extern const f32 float_35_80427d6c;
+    extern const f32 float_neg1p25_80427d74;
 
     char* rodata = str_btl_wn_sac_zubastar_802fff70;
     void* work = GetZubaStarPtr();
@@ -789,7 +1089,7 @@ void zubastar_disp_bomb(void) {
     extern void PSMTXConcat(void* a, void* b, void* out);
     extern void GXLoadPosMtxImm(void* mtx, s32 id);
     extern void GXBegin(s32 prim, s32 vtxfmt, s32 count);
-    extern f32 float_96_80427d4c, float_400_80427d50, float_240_80427d54, float_480_80427d58, float_deg2rad_80427d48;
+    extern const f32 float_96_80427d4c, float_400_80427d50, float_240_80427d54, float_480_80427d58, float_deg2rad_80427d48;
 
     void* work = GetZubaStarPtr();
     void* cam = camGetPtr(1);
@@ -852,7 +1152,7 @@ void zubastar_disp_bomb(void) {
             v = &frag->vertices[j];
             fifo[0] = v->x;
             fifo[0] = v->y;
-            fifo[0] = float_0_80427d40;
+            fifo[0] = (*(volatile const f32*)&float_0_80427d40);
             fifo[0] = (texXOff + v->x) / texW;
             fifo[0] = (texYBase - v->y) / texH;
         }
@@ -890,8 +1190,8 @@ void zubastar_disp2D(s32 cameraId) {
     extern void GXSetChanMatColor(s32 chan, GXColor* color);
     extern void GXBegin(s32 prim, s32 vtxfmt, s32 count);
     extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
-    extern f32 float_200_80427d28, float_60_80427d2c, float_0p01_80427d34;
-    extern f32 float_128_80427d38, float_255_80427d3c, float_20_80427d44;
+    extern const f32 float_200_80427d28, float_60_80427d2c, float_0p01_80427d34;
+    extern const f32 float_128_80427d38, float_255_80427d3c, float_20_80427d44;
     extern u32 dat_80427d18, dat_80427d1c;
 
     void* work = GetZubaStarPtr();
@@ -971,3 +1271,47 @@ void zubastar_disp2D(s32 cameraId) {
         }
     }
 }
+
+/* Target sac_zubastar .sdata2 float catalog; keep in target order. */
+const f32 float_200_80427d28 = 200.0f;
+const f32 float_60_80427d2c = 60.0f;
+const f32 float_1_80427d30 = 1.0f;
+const f32 float_0p01_80427d34 = 0.01f;
+const f32 float_128_80427d38 = 128.0f;
+const f32 float_255_80427d3c = 255.0f;
+const f32 float_0_80427d40 = 0.0f;
+const f32 float_20_80427d44 = 20.0f;
+const f32 float_deg2rad_80427d48 = 0.01745329238474369f;
+const f32 float_96_80427d4c = 96.0f;
+const f32 float_400_80427d50 = 400.0f;
+const f32 float_240_80427d54 = 240.0f;
+const f32 float_480_80427d58 = 480.0f;
+const f32 float_600_80427d5c = 600.0f;
+const f32 float_104_80427d60 = 104.0f;
+const f32 float_70_80427d64 = 70.0f;
+const f32 float_32767_80427d68 = 32767.0f;
+const f32 float_35_80427d6c = 35.0f;
+const f32 float_2_80427d70 = 2.0f;
+const f32 float_neg1p25_80427d74 = -1.25f;
+const f32 float_100_80427d78 = 100.0f;
+const f32 float_2p8_80427d7c = 2.8f;
+const f32 float_neg96_80427d80 = -96.0f;
+const f32 float_344_80427d84 = 344.0f;
+const f32 float_264_80427d88 = 264.0f;
+const f32 float_neg240_80427d8c = -240.0f;
+const f32 float_5_80427d90 = 5.0f;
+const f32 float_300_80427d94 = 300.0f;
+const f32 float_8_80427d98 = 8.0f;
+const f32 float_neg1_80427d9c = -1.0f;
+const f32 float_neg1000_80427da0 = -1000.0f;
+const f32 float_50_80427da4 = 50.0f;
+const f32 float_0p25_80427da8 = 0.25f;
+const f32 float_683_80427dac = 683.0f;
+const f32 float_4096_80427db0 = 4096.0f;
+const f32 float_neg0p9_80427db4 = -0.9f;
+const f32 float_0p1_80427db8 = 0.1f;
+const f32 float_900_80427dbc = 900.0f;
+const f32 float_1Eneg05_80427dc0 = 0.00001f;
+const f32 float_37_80427dc4 = 37.0f;
+const f32 float_2160_80427dc8 = 2160.0f;
+const f32 float_1p5_80427dcc = 1.5f;

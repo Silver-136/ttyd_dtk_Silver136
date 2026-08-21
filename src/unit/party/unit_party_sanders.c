@@ -30,48 +30,53 @@ void __makeTechMenuFunc(void* commandWork, s32* count) {
     extern u8 lbl_803875D0[];
     s32 techLv;
     void* party;
-    u8* entry;
+    u8* data;
 
     party = BattleGetPartyPtr(_battleWorkPointer);
     techLv = partyGetTechLv(BattleTransPartyId(*(s32*)((s32)party + 8)));
 
-    entry = (u8*)commandWork + *count * 0x1C;
-    *(s32*)(entry + 0x90) = -1;
-    *(s32*)(entry + 0x94) = 0;
-    *(void**)(entry + 0x80) = lbl_803875D0 + 0x650;
-    *(s32*)(entry + 0x84) = 0;
-    *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
-    *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+    data = lbl_803875D0;
+    *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
+    *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
+    *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x650;
+    *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
+    *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
+        *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
+    *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
+        msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
     *count = *count + 1;
 
     if (techLv >= 0) {
-        entry = (u8*)commandWork + *count * 0x1C;
-        *(s32*)(entry + 0x90) = -1;
-        *(s32*)(entry + 0x94) = 0;
-        *(void**)(entry + 0x80) = lbl_803875D0 + 0x710;
-        *(s32*)(entry + 0x84) = 0;
-        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
-        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
+        *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
+        *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x710;
+        *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
+        *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
+            *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
+        *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
+            msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
         *count = *count + 1;
     }
     if (techLv >= 1) {
-        entry = (u8*)commandWork + *count * 0x1C;
-        *(s32*)(entry + 0x90) = -1;
-        *(s32*)(entry + 0x94) = 0;
-        *(void**)(entry + 0x80) = lbl_803875D0 + 0x7D0;
-        *(s32*)(entry + 0x84) = 0;
-        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
-        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
+        *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
+        *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x7D0;
+        *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
+        *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
+            *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
+        *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
+            msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
         *count = *count + 1;
     }
     if (techLv >= 2) {
-        entry = (u8*)commandWork + *count * 0x1C;
-        *(s32*)(entry + 0x90) = -1;
-        *(s32*)(entry + 0x94) = 0;
-        *(void**)(entry + 0x80) = lbl_803875D0 + 0x890;
-        *(s32*)(entry + 0x84) = 0;
-        *(u16*)(entry + 0x8C) = *(u16*)(*(s32*)(entry + 0x80) + 4);
-        *(void**)(entry + 0x88) = msgSearch(**(char***)(entry + 0x80));
+        *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
+        *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
+        *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x890;
+        *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
+        *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
+            *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
+        *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
+            msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
         *count = *count + 1;
     }
 }
@@ -228,4 +233,3 @@ s32 _judge_on_stage(int param_1) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-

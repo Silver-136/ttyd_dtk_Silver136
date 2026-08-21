@@ -258,10 +258,27 @@ void fadeEntry(s32 type, s32 time, void* data) {
     extern const char str_OFF_d_dokan_right_802bf6e8[];
     extern const char str_OFF_d_meku_802bf73c[];
     extern const char str_OFF_d_four_meku_5sec_802bf748[];
+    extern const char str_OFF_f_in_out_mario_802bf760[];
+    extern const char str_OFF_f_in_out_peach_802bf774[];
+    extern const char str_OFF_f_in_out_kuppa_802bf788[];
     extern const char str_A_1_8041f824[];
     extern const char str_A_2_8041f80c[];
+    extern const char str_A_3_8041f830[];
     extern const char str_Z_1_8041f828[];
     extern const char str_Z_2_8041f82c[];
+#define str_OFF_d_maku_up_down_802bf6fc (stringBase + 0x94)
+#define str_OFF_d_maku_left_righ_802bf710 (stringBase + 0xA8)
+#define str_OFF_d_maku_center_802bf728 (stringBase + 0xC0)
+#define str_OFF_d_dokan_up_802bf6c4 (stringBase + 0x5C)
+#define str_OFF_d_dokan_down_802bf6b0 (stringBase + 0x48)
+#define str_OFF_d_dokan_left_802bf6d4 (stringBase + 0x6C)
+#define str_OFF_d_dokan_right_802bf6e8 (stringBase + 0x80)
+#define str_OFF_d_meku_802bf73c (stringBase + 0xD4)
+#define str_OFF_d_four_meku_5sec_802bf748 (stringBase + 0xE0)
+#define str_OFF_f_in_out_mario_802bf760 (stringBase + 0xF8)
+#define str_OFF_f_in_out_peach_802bf774 (stringBase + 0x10C)
+#define str_OFF_f_in_out_kuppa_802bf788 (stringBase + 0x120)
+    const char* stringBase = (const char*)&vec3_802bf668;
     s32 work;
     s32 entry;
     s32 reset;
@@ -321,7 +338,8 @@ void fadeEntry(s32 type, s32 time, void* data) {
         reset = work + 8;
     } else if (type < 0x3F) {
         slot = 3;
-        if ((u32)(type - 0x32) <= 8) {
+        if ((type == 0x32) || (type == 0x35) || (type == 0x36) ||
+            (type == 0x38) || (type == 0x3A)) {
             reset = work + 8;
         }
     } else if (type < 0x41) {
@@ -382,36 +400,43 @@ void fadeEntry(s32 type, s32 time, void* data) {
         case 0x16:
             *(const char**)(entry + 0x60) = str_OFF_d_maku_up_down_802bf6fc;
             *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x17:
             *(const char**)(entry + 0x60) = str_OFF_d_maku_up_down_802bf6fc;
             *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x18:
         case 0x1A:
         case 0x40:
             *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
             *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x19:
         case 0x1B:
         case 0x3F:
             *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
             *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x1C:
             *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
             *(const char**)(entry + 0x64) = str_Z_1_8041f828;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x1D:
         case 0x25:
             *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
             *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x1E:
         case 0x26:
             *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
             *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x1F:
         case 0x21:
@@ -419,62 +444,131 @@ void fadeEntry(s32 type, s32 time, void* data) {
         case 0x28:
             *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
             *(const char**)(entry + 0x64) = str_Z_2_8041f82c;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x20:
         case 0x24:
             *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
             *(const char**)(entry + 0x64) = str_Z_1_8041f828;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x29:
             *(const char**)(entry + 0x60) = str_OFF_d_dokan_up_802bf6c4;
             *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x2A:
             *(const char**)(entry + 0x60) = str_OFF_d_dokan_up_802bf6c4;
             *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x2B:
             *(const char**)(entry + 0x60) = str_OFF_d_dokan_down_802bf6b0;
             *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x2C:
             *(const char**)(entry + 0x60) = str_OFF_d_dokan_down_802bf6b0;
             *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x2D:
             *(const char**)(entry + 0x60) = str_OFF_d_dokan_left_802bf6d4;
             *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x2E:
             *(const char**)(entry + 0x60) = str_OFF_d_dokan_left_802bf6d4;
             *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x2F:
             *(const char**)(entry + 0x60) = str_OFF_d_dokan_right_802bf6e8;
             *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x30:
             *(const char**)(entry + 0x60) = str_OFF_d_dokan_right_802bf6e8;
             *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x31:
         case 0x34:
             *(const char**)(entry + 0x60) = str_OFF_d_meku_802bf73c;
             *(const char**)(entry + 0x64) = str_Z_1_8041f828;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x32:
         case 0x35:
             *(const char**)(entry + 0x60) = str_OFF_d_meku_802bf73c;
             *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            *(s32*)(entry + 0x68) = 2;
             break;
         case 0x33:
             *(const char**)(entry + 0x60) = str_OFF_d_four_meku_5sec_802bf748;
             *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x36:
+            *(const char**)(entry + 0x60) = str_OFF_f_in_out_mario_802bf760;
+            *(const char**)(entry + 0x64) = str_A_3_8041f830;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x37:
+            *(const char**)(entry + 0x60) = str_OFF_f_in_out_mario_802bf760;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x38:
+            *(const char**)(entry + 0x60) = str_OFF_f_in_out_peach_802bf774;
+            *(const char**)(entry + 0x64) = str_A_3_8041f830;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x39:
+            *(const char**)(entry + 0x60) = str_OFF_f_in_out_peach_802bf774;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x3A:
+            *(const char**)(entry + 0x60) = str_OFF_f_in_out_kuppa_802bf788;
+            *(const char**)(entry + 0x64) = str_A_3_8041f830;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x3B:
+            *(const char**)(entry + 0x60) = str_OFF_f_in_out_kuppa_802bf788;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x3C:
+            *(const char**)(entry + 0x60) = str_OFF_f_in_out_mario_802bf760;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x3D:
+            *(const char**)(entry + 0x60) = str_OFF_f_in_out_peach_802bf774;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x3E:
+            *(const char**)(entry + 0x60) = str_OFF_f_in_out_kuppa_802bf788;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            *(s32*)(entry + 0x68) = 2;
             break;
         default:
             return;
     }
-    *(s32*)(entry + 0x68) = 2;
+#undef str_OFF_d_maku_up_down_802bf6fc
+#undef str_OFF_d_maku_left_righ_802bf710
+#undef str_OFF_d_maku_center_802bf728
+#undef str_OFF_d_dokan_up_802bf6c4
+#undef str_OFF_d_dokan_down_802bf6b0
+#undef str_OFF_d_dokan_left_802bf6d4
+#undef str_OFF_d_dokan_right_802bf6e8
+#undef str_OFF_d_meku_802bf73c
+#undef str_OFF_d_four_meku_5sec_802bf748
+#undef str_OFF_f_in_out_mario_802bf760
+#undef str_OFF_f_in_out_peach_802bf774
+#undef str_OFF_f_in_out_kuppa_802bf788
 }
 
 void fadeTecOn(void) {

@@ -88,7 +88,6 @@ u8 mario_kemuri(void) {
     }
     return 0;
 }
-
 void mario_simple_kemuri(void) {
     void* mario;
     void* effect;
@@ -391,65 +390,89 @@ u8 kemuri(void) {
     return 0;
 }
 
-u8 party_kemuri(void* party) {
+void party_kemuri(void* party) {
+    extern s32 marioStGetSystemLevel(void);
+    extern u32 hitGetAttr(void* hitObj);
+    extern f32 reviseAngle(f32 angle);
+    extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
+    extern void* effKemuri2Entry(s32 kind, f32 x, f32 y, f32 z, f32 dir);
     extern f32 float_2_80422a20;
-    f32 s;
-    f32 c;
-    f32 angle;
-    f32 speed;
-    u8 count;
-
+    extern f32 float_6p2832_80422a24;
+    extern f32 float_360_80422a28;
+    extern f32 float_0p2_80422a2c;
+    extern f32 float_1p5_80422a30;
     if (marioStGetSystemLevel() != 0) {
-        return 0;
+        return;
     }
     if (*(u8*)((s32)party + 0x34) == 10) {
-        return 0;
+        return;
     }
     if (*(u8*)((s32)party + 0x32) == 1) {
-        return 0;
+        return;
     }
 
     if (*(u8*)((s32)party + 0x34) == 3 && *(u8*)((s32)party + 0x31) == 4) {
+        f32 s;
+        f32 c;
+        f32 angle;
+        f32 speed;
+        u8 count;
+
         if (*(void**)((s32)party + 0x138) == 0) {
             *(u8*)((s32)party + 0x2C) = 4;
-            return 0;
+            return;
         }
         if ((hitGetAttr(*(void**)((s32)party + 0x138)) & 0x100) != 0) {
-            return 0;
+            return;
         }
         if (*(f32*)((s32)party + 0x104) < float_2_80422a20) {
-            return 0;
+            return;
         }
-    } else {
-        if (*(u8*)((s32)party + 0x36) != 1) {
-            return 0;
+        count = *(u8*)((s32)party + 0x2C);
+        *(u8*)((s32)party + 0x2C) = count + 1;
+        if ((s8)count <= 6) {
+            return;
         }
+        *(u8*)((s32)party + 0x2C) = 0;
+        angle = reviseAngle(-*(f32*)((s32)party + 0x100));
+        sincosf((float_6p2832_80422a24 * angle) / float_360_80422a28, &s, &c);
+        speed = *(f32*)((s32)party + 0xF4);
+        effKemuri2Entry(0,
+                        *(f32*)((s32)party + 0x58) + float_0p2_80422a2c * (speed * s),
+                        *(f32*)((s32)party + 0x5C) + float_1p5_80422a30,
+                        *(f32*)((s32)party + 0x60) + float_0p2_80422a2c * (speed * c),
+                        0.0f);
+        return;
+    } else if (*(u8*)((s32)party + 0x36) == 1) {
+        f32 s;
+        f32 c;
+        f32 angle;
+        f32 speed;
+        u8 count;
+
         if (*(void**)((s32)party + 0x138) == 0) {
             *(u8*)((s32)party + 0x2C) = 4;
-            return 0;
+            return;
         }
         if ((hitGetAttr(*(void**)((s32)party + 0x138)) & 0x100) != 0) {
-            return 0;
+            return;
         }
         if (*(f32*)((s32)party + 0x104) < float_2_80422a20) {
-            return 0;
+            return;
         }
+        count = *(u8*)((s32)party + 0x2C);
+        *(u8*)((s32)party + 0x2C) = count + 1;
+        if ((s8)count <= 6) {
+            return;
+        }
+        *(u8*)((s32)party + 0x2C) = 0;
+        angle = reviseAngle(-*(f32*)((s32)party + 0x100));
+        sincosf((float_6p2832_80422a24 * angle) / float_360_80422a28, &s, &c);
+        speed = *(f32*)((s32)party + 0xF4);
+        effKemuri2Entry(0,
+                        *(f32*)((s32)party + 0x58) + float_0p2_80422a2c * (speed * s),
+                        *(f32*)((s32)party + 0x5C) + float_1p5_80422a30,
+                        *(f32*)((s32)party + 0x60) + float_0p2_80422a2c * (speed * c),
+                        0.0f);
     }
-
-    count = *(u8*)((s32)party + 0x2C);
-    *(u8*)((s32)party + 0x2C) = count + 1;
-    if ((s8)count <= 6) {
-        return 0;
-    }
-    *(u8*)((s32)party + 0x2C) = 0;
-
-    angle = reviseAngle(-*(f32*)((s32)party + 0x100));
-    sincosf((float_6p2832_80422a24 * angle) / float_360_80422a28, &s, &c);
-    speed = *(f32*)((s32)party + 0xF4);
-    effKemuri2Entry(0,
-                    *(f32*)((s32)party + 0x58) + float_0p2_80422a2c * (speed * s),
-                    *(f32*)((s32)party + 0x5C) + float_1p5_80422a30,
-                    *(f32*)((s32)party + 0x60) + float_0p2_80422a2c * (speed * c),
-                    0.0f);
-    return 0;
 }

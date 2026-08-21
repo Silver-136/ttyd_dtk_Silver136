@@ -947,22 +947,25 @@ s32 marioChkShipMoveMode(void) {
 }
 
 void shipMove(void) {
-    extern void movePos(f32, f32, f32*, f32*);
-    extern f64 distABf(f64, f64, f64, f64);
-    extern f64 angleABf(f64, f64, f64, f64);
-    extern u32 psndSFXOn_3D(void*, void*);
+    extern void* marioGetPtr(void);
+    extern void movePos(f32,f32,f32*,f32*);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern f64 distABf(f64,f64,f64,f64);
+    extern f64 angleABf(f64,f64,f64,f64);
+    extern u32 psndSFXOn_3D(void*,void*);
     extern void psndSFXOff(s32);
-    extern void psndSFX_pos(s32, void*);
+    extern void psndSFX_pos(s32,void*);
     extern f32 __fabsf(f32);
     extern f32 shipData[];
+    extern f32 float_0_80420eb8;
     extern f32 float_180_80420ed8;
     extern f32 float_3p1416_80420edc;
     extern f32 float_1_80420ee0;
     extern f32 float_0p01_80420ee4;
     extern f32 float_0p2_80420ee8;
-
-    void* player;
-    void* ship;
+    u8* player;
+    u8* ship;
     f32 stick;
     f32 x;
     f32 z;
@@ -972,134 +975,108 @@ void shipMove(void) {
     f32 max;
 
     player = marioGetPtr();
-    stick = *(f32*)((s32)player + 0x194);
+    stick = *(f32*)(player+0x194);
     x = float_0_80420eb8;
-
-    if (*(s32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x30) != 0) {
-        ship = *(void**)((s32)marioGetPtr() + 0x294);
-        *(s32*)((s32)ship + 0x30) -= 1;
-        ship = *(void**)((s32)marioGetPtr() + 0x294);
-        movePos(*(f32*)((s32)ship + 0x2C), *(f32*)((s32)ship + 0x28), &x, &z);
-        ship = *(void**)((s32)marioGetPtr() + 0x294);
-        *(f32*)((s32)ship + 0x14) += x;
-        ship = *(void**)((s32)marioGetPtr() + 0x294);
-        *(f32*)((s32)ship + 0x18) += z;
-        max = shipData[4];
-        ship = *(void**)((s32)marioGetPtr() + 0x294);
-        if (*(f32*)((s32)ship + 0x14) > max) {
-            *(f32*)((s32)ship + 0x14) = max;
+    if (*(s32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x30) != 0) {
+        ship = *(u8**)((u8*)marioGetPtr()+0x294);
+        *(s32*)(ship+0x30) -= 1;
+        ship = *(u8**)((u8*)marioGetPtr()+0x294);
+        movePos(*(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x2C),
+                *(f32*)(ship+0x28),&x,&z);
+        ship = *(u8**)((u8*)marioGetPtr()+0x294);
+        *(f32*)(ship+0x14) += x;
+        ship = *(u8**)((u8*)marioGetPtr()+0x294);
+        *(f32*)(ship+0x18) += z;
+        if (*(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x14) > shipData[4]) {
+            *(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x14) = shipData[4];
         }
-        ship = *(void**)((s32)marioGetPtr() + 0x294);
-        if (*(f32*)((s32)ship + 0x14) < -max) {
-            *(f32*)((s32)ship + 0x14) = -max;
+        if (*(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x14) < -shipData[4]) {
+            *(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x14) = -shipData[4];
         }
-        ship = *(void**)((s32)marioGetPtr() + 0x294);
-        if (*(f32*)((s32)ship + 0x18) > max) {
-            *(f32*)((s32)ship + 0x18) = max;
+        if (*(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x18) > shipData[4]) {
+            *(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x18) = shipData[4];
         }
-        ship = *(void**)((s32)marioGetPtr() + 0x294);
-        if (*(f32*)((s32)ship + 0x18) < -max) {
-            *(f32*)((s32)ship + 0x18) = -max;
+        if (*(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x18) < -shipData[4]) {
+            *(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x18) = -shipData[4];
         }
     }
-
-    ship = *(void**)((s32)marioGetPtr() + 0x294);
-    x = *(f32*)((s32)ship + 0x14);
-    ship = *(void**)((s32)marioGetPtr() + 0x294);
-    z = *(f32*)((s32)ship + 0x18);
+    x = *(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x14);
+    z = *(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x18);
     targetX = x;
     targetZ = z;
-    if (stick != float_0_80420eb8) {
-        f32 rad = (*(f32*)((s32)player + 0x198) * float_3p1416_80420edc) / float_180_80420ed8;
-        targetX = stick * (f32)sin(rad);
-        targetZ = stick * -(f32)cos(rad);
+    if (*(f32*)(player+0x194) != float_0_80420eb8) {
+        targetX = stick * (f32)sin((float_3p1416_80420edc * *(f32*)(player+0x198)) / float_180_80420ed8);
+        targetZ = stick * -(f32)cos((float_3p1416_80420edc * *(f32*)(player+0x198)) / float_180_80420ed8);
     }
-
     max = shipData[4];
-    if (stick != float_0_80420eb8 || *(s32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x30) != 0) {
+    if (stick != float_0_80420eb8 || *(s32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x30) != 0) {
         if (targetX <= x) {
-            x += ((targetX - float_1_80420ee0) - x) * shipData[3];
-            if (x <= -max) {
-                x = -max;
-            }
+            x = ((targetX - float_1_80420ee0) - x) * shipData[3] + x;
+            if (x <= -max) x = -max;
         } else {
-            x += ((targetX + float_1_80420ee0) - x) * shipData[3];
-            if (x >= max) {
-                x = max;
-            }
+            x = ((targetX + float_1_80420ee0) - x) * shipData[3] + x;
+            if (x >= max) x = max;
         }
         if (targetZ <= z) {
-            z += ((targetZ - float_1_80420ee0) - z) * shipData[3];
-            if (z <= -max) {
-                z = -max;
-            }
+            z = ((targetZ - float_1_80420ee0) - z) * shipData[3] + z;
+            if (z <= -max) z = -max;
         } else {
-            z += ((targetZ + float_1_80420ee0) - z) * shipData[3];
-            if (z >= max) {
-                z = max;
-            }
+            z = ((targetZ + float_1_80420ee0) - z) * shipData[3] + z;
+            if (z >= max) z = max;
         }
     }
-
     if (stick == float_0_80420eb8) {
         f32 damp = shipData[0];
-        if (*(void**)((s32)player + 0x1E0) != 0) {
-            damp = shipData[1];
-        }
+        if (*(void**)(player+0x1E0) != 0) damp = shipData[1];
         x = -x * __fabsf(damp) + x;
         z = -z * __fabsf(damp) + z;
-        if (__fabsf(x) < float_0p01_80420ee4) {
-            x = float_0_80420eb8;
-        }
-        if (__fabsf(z) < float_0p01_80420ee4) {
-            z = float_0_80420eb8;
-        }
+        if (__fabsf(x) < float_0p01_80420ee4) x = float_0_80420eb8;
+        if (__fabsf(z) < float_0p01_80420ee4) z = float_0_80420eb8;
     }
-
-    ship = *(void**)((s32)marioGetPtr() + 0x294);
-    *(f32*)((s32)ship + 0x14) = x;
-    ship = *(void**)((s32)marioGetPtr() + 0x294);
-    *(f32*)((s32)ship + 0x18) = z;
-
-    len = (f32)distABf(float_0_80420eb8, float_0_80420eb8, x, z);
+    *(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x14) = x;
+    *(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x18) = z;
+    len = (f32)distABf(float_0_80420eb8,float_0_80420eb8,x,z);
     if (stick == float_0_80420eb8) {
         if (len < shipData[5]) {
-            ship = *(void**)((s32)marioGetPtr() + 0x294);
-            *(f32*)((s32)ship + 0x14) = float_0_80420eb8;
-            ship = *(void**)((s32)marioGetPtr() + 0x294);
-            *(f32*)((s32)ship + 0x18) = float_0_80420eb8;
+            *(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x14) = float_0_80420eb8;
+            *(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x18) = float_0_80420eb8;
             len = float_0_80420eb8;
         }
     } else if (len >= max) {
         len = max;
     }
-    *(f32*)((s32)player + 0x180) = len;
+    *(f32*)(player+0x180) = len;
     if (len != float_0_80420eb8) {
-        ship = *(void**)((s32)marioGetPtr() + 0x294);
-        *(f32*)((s32)player + 0x1A4) =
-            (f32)angleABf(float_0_80420eb8, float_0_80420eb8,
-                          *(f32*)((s32)ship + 0x14), *(f32*)((s32)ship + 0x18));
+        ship = *(u8**)((u8*)marioGetPtr()+0x294);
+        *(f32*)(player+0x1A4) = (f32)angleABf(float_0_80420eb8,float_0_80420eb8,
+                                              *(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x14),
+                                              *(f32*)(ship+0x18));
     }
     if (len < float_1_80420ee0) {
         if (len <= float_0p2_80420ee8) {
-            ship = *(void**)((s32)marioGetPtr() + 0x294);
-            if (ship != 0 && *(s32*)((s32)ship + 0x38) != -1) {
-                psndSFXOff(*(s32*)((s32)ship + 0x38));
-                *(s32*)((s32)ship + 0x38) = -1;
+            marioGetPtr();
+            if (*(u8**)((u8*)marioGetPtr()+0x294) != 0 &&
+                *(s32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x38) != -1) {
+                psndSFXOff(*(s32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x38));
+                *(s32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x38) = -1;
             }
         }
     } else {
-        ship = *(void**)((s32)marioGetPtr() + 0x294);
-        if (ship != 0 && *(s32*)((s32)ship + 0x38) == -1) {
-            *(u32*)((s32)ship + 0x38) = psndSFXOn_3D((void*)0x190, (void*)((s32)player + 0x8C));
+        ship = *(u8**)((u8*)marioGetPtr()+0x294);
+        if (*(u8**)((u8*)marioGetPtr()+0x294) != 0 &&
+            *(s32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x38) == -1) {
+            *(u32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x38) =
+                psndSFXOn_3D((void*)0x190,player+0x8C);
         }
     }
-    ship = *(void**)((s32)marioGetPtr() + 0x294);
-    if (*(s32*)((s32)ship + 0x38) != -1) {
-        psndSFX_pos(*(s32*)((s32)ship + 0x38), (void*)((s32)player + 0x8C));
+    if (*(s32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x38) != -1) {
+        psndSFX_pos(*(s32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x38),player+0x8C);
     }
-    *(f32*)((s32)player + 0x18C) = len;
+    *(f32*)(player+0x18C) = len;
 }
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 s32 checkHarbor(f32* outPos) {
     extern f32 toMovedir(f32);
@@ -1114,15 +1091,23 @@ s32 checkHarbor(f32* outPos) {
 
     f32 sx;
     f32 sz;
+    f32 scratch0;
+    f32 scratch1;
+    f32 scratch2;
     f32 radius;
-    f32 pos[3];
-    f32 scratchA[3];
-    f32 scratchB[3];
-    f32 scratchC[3];
+    f32 pos0[3];
+    f32 pos1[3];
+    f32 pos2[3];
+    f32 scratch3;
+    f32 scratch4;
+    f32 scratch5;
     void* mario;
     void* hit;
     u32 attr;
     s32 kind;
+    s32 roundX;
+    s32 roundY;
+    s32 roundZ;
     f32 angle;
 
     mario = marioGetPtr();
@@ -1134,7 +1119,7 @@ s32 checkHarbor(f32* outPos) {
                          float_20_80420eb4 + *(f32*)((s32)mario + 0x90),
                          float_40_80420eb0 * sz + *(f32*)((s32)mario + 0x94),
                          float_0_80420eb8, float_neg1_80420ebc, float_0_80420eb8,
-                         0, scratchA, scratchB, scratchC, &radius, scratchA, scratchB, scratchC);
+                         0, &scratch0, &scratch1, &scratch2, &radius, &scratch3, &scratch4, &scratch5);
     if (hit != 0) {
         kind = 0;
         attr = hitGetAttr(hit);
@@ -1148,10 +1133,13 @@ s32 checkHarbor(f32* outPos) {
             kind = 4;
         }
         if (kind != 0) {
-            hitObjGetPos(hitGetName(hit), pos);
-            outPos[0] = (f32)((s32)((float_100_80420ec4 * pos[0] + float_0p5_80420ec0) / float_100_80420ec4));
-            outPos[1] = (f32)((s32)((float_100_80420ec4 * pos[1] + float_0p5_80420ec0) / float_100_80420ec4));
-            outPos[2] = (f32)((s32)((float_100_80420ec4 * pos[2] + float_0p5_80420ec0) / float_100_80420ec4));
+            hitObjGetPos(hitGetName(hit), pos0);
+            roundX = (s32)((float_100_80420ec4 * pos0[0] + float_0p5_80420ec0) / float_100_80420ec4);
+            roundY = (s32)((float_100_80420ec4 * pos0[1] + float_0p5_80420ec0) / float_100_80420ec4);
+            roundZ = (s32)((float_100_80420ec4 * pos0[2] + float_0p5_80420ec0) / float_100_80420ec4);
+            outPos[0] = (f32)roundX;
+            outPos[1] = (f32)roundY;
+            outPos[2] = (f32)roundZ;
             return 1;
         }
     }
@@ -1163,7 +1151,7 @@ s32 checkHarbor(f32* outPos) {
                          float_20_80420eb4 + *(f32*)((s32)mario + 0x90),
                          float_40_80420eb0 * sz + *(f32*)((s32)mario + 0x94),
                          float_0_80420eb8, float_neg1_80420ebc, float_0_80420eb8,
-                         0, scratchA, scratchB, scratchC, &radius, scratchA, scratchB, scratchC);
+                         0, &scratch0, &scratch1, &scratch2, &radius, &scratch3, &scratch4, &scratch5);
     if (hit != 0) {
         kind = 0;
         attr = hitGetAttr(hit);
@@ -1177,10 +1165,13 @@ s32 checkHarbor(f32* outPos) {
             kind = 4;
         }
         if (kind != 0) {
-            hitObjGetPos(hitGetName(hit), pos);
-            outPos[0] = (f32)((s32)((float_100_80420ec4 * pos[0] + float_0p5_80420ec0) / float_100_80420ec4));
-            outPos[1] = (f32)((s32)((float_100_80420ec4 * pos[1] + float_0p5_80420ec0) / float_100_80420ec4));
-            outPos[2] = (f32)((s32)((float_100_80420ec4 * pos[2] + float_0p5_80420ec0) / float_100_80420ec4));
+            hitObjGetPos(hitGetName(hit), pos1);
+            roundX = (s32)((float_100_80420ec4 * pos1[0] + float_0p5_80420ec0) / float_100_80420ec4);
+            roundY = (s32)((float_100_80420ec4 * pos1[1] + float_0p5_80420ec0) / float_100_80420ec4);
+            roundZ = (s32)((float_100_80420ec4 * pos1[2] + float_0p5_80420ec0) / float_100_80420ec4);
+            outPos[0] = (f32)roundX;
+            outPos[1] = (f32)roundY;
+            outPos[2] = (f32)roundZ;
             return 1;
         }
     }
@@ -1192,7 +1183,7 @@ s32 checkHarbor(f32* outPos) {
                          float_20_80420eb4 + *(f32*)((s32)mario + 0x90),
                          float_40_80420eb0 * sz + *(f32*)((s32)mario + 0x94),
                          float_0_80420eb8, float_neg1_80420ebc, float_0_80420eb8,
-                         0, scratchA, scratchB, scratchC, &radius, scratchA, scratchB, scratchC);
+                         0, &scratch0, &scratch1, &scratch2, &radius, &scratch3, &scratch4, &scratch5);
     if (hit != 0) {
         kind = 0;
         attr = hitGetAttr(hit);
@@ -1206,15 +1197,21 @@ s32 checkHarbor(f32* outPos) {
             kind = 4;
         }
         if (kind != 0) {
-            hitObjGetPos(hitGetName(hit), pos);
-            outPos[0] = (f32)((s32)((float_100_80420ec4 * pos[0] + float_0p5_80420ec0) / float_100_80420ec4));
-            outPos[1] = (f32)((s32)((float_100_80420ec4 * pos[1] + float_0p5_80420ec0) / float_100_80420ec4));
-            outPos[2] = (f32)((s32)((float_100_80420ec4 * pos[2] + float_0p5_80420ec0) / float_100_80420ec4));
+            hitObjGetPos(hitGetName(hit), pos2);
+            roundX = (s32)((float_100_80420ec4 * pos2[0] + float_0p5_80420ec0) / float_100_80420ec4);
+            roundY = (s32)((float_100_80420ec4 * pos2[1] + float_0p5_80420ec0) / float_100_80420ec4);
+            roundZ = (s32)((float_100_80420ec4 * pos2[2] + float_0p5_80420ec0) / float_100_80420ec4);
+            outPos[0] = (f32)roundX;
+            outPos[1] = (f32)roundY;
+            outPos[2] = (f32)roundZ;
             return 1;
         }
     }
     return 0;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 const char str_SFX_MARIO_SHIP1_1_802c4270[] = "SFX_MARIO_SHIP1_1";
 const char str_SFX_MARIO_SHIP2_802c4284[] = "SFX_MARIO_SHIP2";

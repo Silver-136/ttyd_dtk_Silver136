@@ -1479,11 +1479,12 @@ void JUTFont_DrawStart(u32* color) {
 void _JUTFont_DrawPos(u16 param_1, s16 param_2, s16 param_3) {
     extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nVerts);
     extern u32 HSV2RGB(void* hsv);
-    u32 magic;
+
     u8* widthEntry;
     u8* entry;
     u16 firstCode;
-    s32 count;
+    u32 count;
+    s32 i;
     s32 code;
     s32 col;
     s32 row;
@@ -1492,72 +1493,108 @@ void _JUTFont_DrawPos(u16 param_1, s16 param_2, s16 param_3) {
     s32 v0;
     s32 u1;
     s32 v1;
-    s32 x0;
-    s32 y0;
     s32 x1;
+    s32 y0;
     s32 y1;
     s32 rndU;
-    s32 rndV;
+    u32 widthByte;
+    s32 rndURight;
+    s32 rndVBottom;
     u32 color;
-    u32 hsv;
+    u32 hsvBase;
+    u32 hsv0;
+    u32 hsv1;
+    u32 hsv2;
+    u32 hsv3;
+    u8 hueOffset;
+    u8 hueLeft;
+    u8 hueRight;
     f32 cellW;
     f32 cellH;
     f32 glyphW;
     f32 glyphH;
     f32 texU;
+    register f64 texWidth;
     volatile u16* fifo16;
     volatile u8* fifo8;
 
+    count = *(u32*)((s32)pfh + 0xC);
     entry = (u8*)((s32)pfh + 0x20);
-    magic = 0x57494431;
-    count = *(s32*)((s32)pfh + 0xC);
     widthEntry = 0;
-    code = param_1;
-    for (;;) {
-        if (count == 0) {
-            return;
-        }
-        if (*(u32*)entry == magic) {
-            firstCode = *(u16*)((s32)entry + 8);
-            if ((u32)code >= firstCode && (u32)code <= *(u16*)((s32)entry + 0xA)) {
-                widthEntry = (u8*)((s32)entry + ((code - firstCode) * 2) + 0xC);
+
+    for (i = 0; i < count; i++) {
+        switch (*(s32*)entry) {
+            case 0x57494431:
+                firstCode = *(u16*)((s32)entry + 8);
+                if ((u32)param_1 < firstCode) {
+                    break;
+                }
+                if ((u32)param_1 > *(u16*)((s32)entry + 0xA)) {
+                    break;
+                }
+
+                widthEntry =
+                    (u8*)((s32)entry +
+                          (((u32)param_1 - firstCode) * 2) + 0xC);
+                goto width_found;
+
+            default:
                 break;
-            }
         }
+
         entry = (u8*)((s32)entry + *(s32*)((s32)entry + 4));
-        count--;
     }
 
-    code -= *(u16*)((s32)blockGlyph + 8);
-    glyphH = (f32)widthEntry[1] * float_1_804203e4;
+width_found:
+
+    code = (u16)param_1 - *(u16*)((s32)blockGlyph + 8);
     cellH = (f32)*(u16*)((s32)blockGlyph + 0xE);
     col = code / *(u16*)((s32)blockGlyph + 0x16);
     row = col / *(u16*)((s32)blockGlyph + 0x18);
     cellW = (f32)*(u16*)((s32)blockGlyph + 0xC);
+
     glyphW = (cellH - float_2_804203e8) * float_1_804203e4;
-    texU = (f32)(code - col * *(u16*)((s32)blockGlyph + 0x16)) * cellW + (f32)widthEntry[0];
+    texU =
+        (f32)(code - col * *(u16*)((s32)blockGlyph + 0x16)) *
+            cellW +
+        (f32)widthEntry[0];
+    widthByte = widthEntry[1];
+    glyphH = (f32)widthByte * float_1_804203e4;
+    texWidth = (f64)widthByte;
+
     fifo16 = (volatile u16*)0xCC008000;
     fifo8 = (volatile u8*)0xCC008000;
 
     GXBegin(0x80, 0, 4);
     rndU = irand(0x40) & 0xFF;
-    rndV = irand(0x40) & 0xFF;
-    page = col - row * *(u16*)((s32)blockGlyph + 0x18);
-    u0 = (s32)texU;
-    v0 = (s32)(float_2_804203e8 + (f32)page * cellH);
-    u1 = (s32)(texU + (f32)widthEntry[1]);
-    v1 = (s32)((f32)(u16)v0 + (cellH - float_2_804203e8));
-    x0 = param_2;
-    y0 = param_3 - 2;
+    widthByte = irand(0x40) & 0xFF;
+
+    page =
+        col -
+        (col / *(u16*)((s32)blockGlyph + 0x18)) *
+            *(u16*)((s32)blockGlyph + 0x18);
+    v0 =
+        (s32)(float_2_804203e8 +
+              (f32)page * cellH);
     x1 = (s32)((f32)param_2 + glyphH);
-    y1 = (s32)((f32)(param_3 - 2) - glyphW);
+    y0 = param_3 - 2;
 
-    *fifo16 = (u16)x0;
+    hueOffset =
+        (u8)param_2 -
+        (u8)((*(s32*)((s32)gp + 0x1C) & 0xFF) << 1);
+    hueLeft = (u8)((s32)param_2 + (s32)hueOffset);
+
+    *fifo16 = (u16)param_2;
     *fifo16 = (u16)y0;
     *fifo16 = 0;
-    hsv = dat_804203e0;
-    ((u8*)&hsv)[0] = (u8)(param_2 + ((s32)(u8)param_2 - ((*(s32*)((s32)gp + 0x1C) & 0xFF) << 1)));
-    color = HSV2RGB(&hsv);
+
+    hsvBase = dat_804203e0;
+    ((u8*)&hsvBase)[0] = hueLeft;
+    hsv0 = hsvBase;
+    color = HSV2RGB(&hsv0);
+
+    u0 = (s32)texU;
+
     *fifo8 = ((u8*)&color)[0];
     *fifo8 = ((u8*)&color)[1];
     *fifo8 = ((u8*)&color)[2];
@@ -1565,44 +1602,61 @@ void _JUTFont_DrawPos(u16 param_1, s16 param_2, s16 param_3) {
     *fifo16 = (u16)u0;
     *fifo16 = (u16)v0;
     *fifo8 = (u8)rndU;
-    *fifo8 = (u8)rndV;
+    *fifo8 = (u8)widthByte;
 
     *fifo16 = (u16)x1;
     *fifo16 = (u16)y0;
     *fifo16 = 0;
-    hsv = dat_804203e0;
-    ((u8*)&hsv)[0] = (u8)((s32)x1 + ((s32)(u8)param_2 - ((*(s32*)((s32)gp + 0x1C) & 0xFF) << 1)));
-    color = HSV2RGB(&hsv);
+
+    hueRight = (u8)((s32)x1 + (s32)hueOffset);
+    ((u8*)&hsvBase)[0] = hueRight;
+    hsv1 = hsvBase;
+    color = HSV2RGB(&hsv1);
+
+    u1 = (s32)(texU + (f32)texWidth);
+    rndURight = (s32)((f32)(u8)rndU + glyphH);
+
     *fifo8 = ((u8*)&color)[0];
     *fifo8 = ((u8*)&color)[1];
     *fifo8 = ((u8*)&color)[2];
     *fifo8 = ((u8*)&color)[3];
     *fifo16 = (u16)u1;
     *fifo16 = (u16)v0;
-    *fifo8 = (u8)(rndU + glyphH);
-    *fifo8 = (u8)rndV;
+    *fifo8 = (u8)rndURight;
+    *fifo8 = (u8)widthByte;
+
+    y1 = (s32)((f32)y0 - glyphW);
 
     *fifo16 = (u16)x1;
     *fifo16 = (u16)y1;
     *fifo16 = 0;
-    hsv = dat_804203e0;
-    ((u8*)&hsv)[0] = (u8)((s32)x1 + ((s32)(u8)param_2 - ((*(s32*)((s32)gp + 0x1C) & 0xFF) << 1)));
-    color = HSV2RGB(&hsv);
+
+    ((u8*)&hsvBase)[0] = hueRight;
+    hsv2 = hsvBase;
+    color = HSV2RGB(&hsv2);
+
+    v1 =
+        (s32)((f32)(u16)v0 +
+              (cellH - float_2_804203e8));
+    rndVBottom = (s32)((f32)(u8)widthByte + glyphW);
+
     *fifo8 = ((u8*)&color)[0];
     *fifo8 = ((u8*)&color)[1];
     *fifo8 = ((u8*)&color)[2];
     *fifo8 = ((u8*)&color)[3];
     *fifo16 = (u16)u1;
     *fifo16 = (u16)v1;
-    *fifo8 = (u8)(rndU + glyphH);
-    *fifo8 = (u8)(rndV + glyphW);
+    *fifo8 = (u8)rndURight;
+    *fifo8 = (u8)rndVBottom;
 
-    *fifo16 = (u16)x0;
+    *fifo16 = (u16)param_2;
     *fifo16 = (u16)y1;
     *fifo16 = 0;
-    hsv = dat_804203e0;
-    ((u8*)&hsv)[0] = (u8)(param_2 + ((s32)(u8)param_2 - ((*(s32*)((s32)gp + 0x1C) & 0xFF) << 1)));
-    color = HSV2RGB(&hsv);
+
+    ((u8*)&hsvBase)[0] = hueLeft;
+    hsv3 = hsvBase;
+    color = HSV2RGB(&hsv3);
+
     *fifo8 = ((u8*)&color)[0];
     *fifo8 = ((u8*)&color)[1];
     *fifo8 = ((u8*)&color)[2];
@@ -1610,8 +1664,7 @@ void _JUTFont_DrawPos(u16 param_1, s16 param_2, s16 param_3) {
     *fifo16 = (u16)u0;
     *fifo16 = (u16)v1;
     *fifo8 = (u8)rndU;
-    *fifo8 = (u8)(rndV + glyphW);
-    return;
+    *fifo8 = (u8)rndVBottom;
 }
 
 u32 fontColTbl[3] = {0x1E1414FF, 0xDCDCDCFF, 0xB47814FF};

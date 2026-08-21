@@ -290,18 +290,219 @@ void effFunemizuMain(void* effect) {
 
 /* stub-fill: effFunemizuDisp | prototype_only | source_prototype */
 void effFunemizuDisp(s32 cameraId, void* effect) {
-    typedef f32 Mtx[3][4]; typedef u8 TexObj[0x20];
-    extern void* camGetPtr(s32);extern void PSMTXTrans(Mtx,f64,f64,f64);extern void PSMTXScale(Mtx,f32,f32,f32);extern void PSMTXRotRad(Mtx,f64,char);extern void PSMTXConcat(void*,void*,void*);
-    extern void GXSetBlendMode(s32,s32,s32,s32);extern void GXSetZCompLoc(s32);extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);extern void GXSetZMode(s32,s32,s32);extern void GXSetNumChans(s32);extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);extern void GXSetNumTexGens(s32);extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);extern void GXSetNumTevStages(s32);extern void GXSetTevOrder(s32,s32,s32,s32);extern void GXSetTevOp(s32,s32);extern void GXSetCullMode(s32);extern void GXClearVtxDesc(void);extern void GXSetVtxDesc(s32,s32);extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);extern void GXSetArray(s32,void*,s32);extern void GXLoadPosMtxImm(void*,s32);extern void GXSetCurrentMtx(s32);extern void GXLoadTexMtxImm(void*,s32,s32);extern void GXCallDisplayList(void*,u32);extern void effGetTexObj(s32,void*);extern void GXLoadTexObj(void*,s32);
-    extern u8 funemizu_dl_0_tbl[];extern u8 funemizu_dl_1_tbl[];extern u8 gor_fune_dl_0_tbl[];extern u8 gor_fune_dl_1_tbl[];
-    u8* w=*(u8**)((u8*)effect+0xC);void* cam=camGetPtr(cameraId);Mtx root,trans,rot,scale,model;TexObj tex;s32 mode=*(s32*)w;s32 side;s32 i;u8* list;
-    GXSetBlendMode(1,4,5,0);GXSetZCompLoc(1);GXSetAlphaCompare(7,0,0,7,0);GXSetZMode(1,3,0);PSMTXTrans(trans,*(f32*)(w+4),*(f32*)(w+8),*(f32*)(w+0xC));PSMTXRotRad(rot,0.017453292f*(*(f32*)(w+0x14)-*(f32*)((u8*)camGetPtr(cameraId)+0x114)),'y');PSMTXScale(scale,*(f32*)(w+0x44),*(f32*)(w+0x44),*(f32*)(w+0x44));PSMTXConcat(trans,rot,trans);PSMTXConcat(trans,scale,trans);PSMTXTrans(rot,-15.0f,0.0f,0.0f);PSMTXConcat(trans,rot,trans);PSMTXConcat((u8*)cam+0x11C,trans,root);
-    GXSetNumChans(1);GXSetChanCtrl(4,0,0,1,0,0,2);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,4);GXSetTevOp(0,0);effGetTexObj(0x43,tex);GXLoadTexObj(tex,0);
-    for(side=0;side<2;side++){
-        GXSetCullMode(side?1:2);PSMTXTrans(trans,0.0f,0.0f,side?-1.0f:1.0f);PSMTXConcat(root,trans,model);PSMTXScale(scale,*(f32*)(w+0x18),*(f32*)(w+0x20),*(f32*)(w+0x18));PSMTXConcat(model,scale,model);GXLoadPosMtxImm(model,0);GXSetCurrentMtx(0);PSMTXTrans(trans,*(f32*)(w+0x28),0.0f,0.0f);GXLoadTexMtxImm(trans,0x1E,1);
-        GXClearVtxDesc();GXSetVtxDesc(9,2);GXSetVtxDesc(10,2);GXSetVtxDesc(11,2);GXSetVtxDesc(13,2);GXSetVtxAttrFmt(0,9,1,3,mode?8:9);GXSetVtxAttrFmt(0,10,0,1,6);GXSetVtxAttrFmt(0,11,1,5,0);GXSetVtxAttrFmt(0,13,1,3,mode?14:12);
-        list=mode?gor_fune_dl_0_tbl:funemizu_dl_0_tbl;for(i=0;i<(mode?2:3);i++)GXCallDisplayList(list+i*0x40,0x40);
-        PSMTXScale(scale,*(f32*)(w+0x1C),*(f32*)(w+0x24),*(f32*)(w+0x1C));PSMTXConcat(model,scale,model);GXLoadPosMtxImm(model,0);PSMTXTrans(trans,*(f32*)(w+0x2C),0.0f,0.0f);GXLoadTexMtxImm(trans,0x1E,1);list=mode?gor_fune_dl_1_tbl:funemizu_dl_1_tbl;for(i=0;i<(mode?2:4);i++)GXCallDisplayList(list+i*0x40,0x40);
+    typedef f32 Mtx[3][4];
+    typedef u8 TexObj[0x20];
+    extern void* camGetPtr(s32);
+    extern void PSMTXTrans(Mtx, f64, f64, f64);
+    extern void PSMTXScale(Mtx, f32, f32, f32);
+    extern void PSMTXRotRad(Mtx, f64, char);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXSetBlendMode(s32, s32, s32, s32);
+    extern void GXSetZCompLoc(s32);
+    extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
+    extern void GXSetZMode(s32, s32, s32);
+    extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevOp(s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXClearVtxDesc(void);
+    extern void GXSetVtxDesc(s32, s32);
+    extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXSetArray(s32, void*, s32);
+    extern void GXLoadPosMtxImm(void*, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void GXLoadTexMtxImm(void*, s32, s32);
+    extern void GXCallDisplayList(void*, u32);
+    extern void effGetTexObj(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern FunemizuColorEntry unk_803b3b00[];
+    extern void* gp;
+    extern u32 dat_804279c0;
+    extern s32 strcmp(const char*, const char*);
+    extern s32 strncmp(const char*, const char*, s32);
+    extern u8 funemizu_vertex_tbl[];
+    extern u8 funemizu_normal_tbl[];
+    extern u8 funemizu_color0_tbl[];
+    extern u8 funemizu_texcoord0_tbl[];
+    extern void* funemizu_dl_0_tbl[];
+    extern u8 funemizu_dl_0_size_tbl[];
+    extern void* funemizu_dl_1_tbl[];
+    extern u8 funemizu_dl_1_size_tbl[];
+    extern u8 gor_fune_vertex_tbl[];
+    extern u8 gor_fune_normal_tbl[];
+    extern u8 gor_fune_color0_tbl[];
+    extern u8 gor_fune_texcoord0_tbl[];
+    extern void* gor_fune_dl_0_tbl[];
+    extern u8 gor_fune_dl_0_size_tbl[];
+    extern void* gor_fune_dl_1_tbl[];
+    extern u8 gor_fune_dl_1_size_tbl[];
+    u8* w = *(u8**)((u8*)effect + 0xC);
+    void* cam = camGetPtr(cameraId);
+    Mtx root, trans, rot, scale, model;
+    TexObj tex;
+    FunemizuColorEntry* entry;
+    void** lists;
+    u8* sizes;
+    u8* colors;
+    u32 color;
+    s32 mode = *(s32*)w;
+    s32 side;
+    s32 i;
+    s32 count;
+    f32 direction;
+
+    entry = unk_803b3b00;
+    while (entry != 0 && entry->name != 0) {
+        if (strcmp(entry->name, (const char*)((s32)gp + 0x12C)) == 0) {
+            color = entry->color;
+            goto color_found;
+        }
+        entry++;
+    }
+    entry = unk_803b3b00;
+    while (entry != 0 && entry->name != 0) {
+        if (strncmp(entry->name, (const char*)((s32)gp + 0x12C), 3) == 0) {
+            color = entry->color;
+            goto color_found;
+        }
+        entry++;
+    }
+    color = dat_804279c0;
+color_found:
+    colors = mode == 0 ? funemizu_color0_tbl : gor_fune_color0_tbl;
+    colors[0] = color >> 24;
+    colors[1] = color >> 16;
+    colors[2] = color >> 8;
+
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(1, 3, 0);
+    PSMTXTrans(trans, *(f32*)(w + 4), *(f32*)(w + 8), *(f32*)(w + 0xC));
+    PSMTXRotRad(rot, 0.017453292f * (*(f32*)(w + 0x14) - *(f32*)((u8*)camGetPtr(cameraId) + 0x114)), 'y');
+    PSMTXScale(scale, *(f32*)(w + 0x44), *(f32*)(w + 0x44), *(f32*)(w + 0x44));
+    PSMTXConcat(trans, rot, trans);
+    PSMTXConcat(trans, scale, trans);
+    PSMTXTrans(rot, -15.0f, 0.0f, 0.0f);
+    PSMTXConcat(trans, rot, trans);
+    PSMTXConcat((u8*)cam + 0x11C, trans, root);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevOp(0, 0);
+    effGetTexObj(0x43, tex);
+    GXLoadTexObj(tex, 0);
+
+    for (side = 0; side < 2; side++) {
+        GXSetCullMode(side == 0 ? 2 : 1);
+        direction = -(2.0f * (f32)side - 1.0f);
+        PSMTXTrans(trans, 0.0f, 0.0f, direction);
+        PSMTXConcat(root, trans, trans);
+        PSMTXScale(scale, 1.0f, 1.0f, direction);
+        PSMTXConcat(trans, scale, trans);
+        PSMTXScale(scale, *(f32*)(w + 0x18), *(f32*)(w + 0x20), *(f32*)(w + 0x18));
+        PSMTXConcat(trans, scale, model);
+        GXLoadPosMtxImm(model, 0);
+        GXSetCurrentMtx(0);
+        PSMTXTrans(scale, *(f32*)(w + 0x28), 0.0f, 0.0f);
+        GXLoadTexMtxImm(scale, 0x1E, 1);
+
+        if (mode == 0) {
+            GXClearVtxDesc();
+            GXSetVtxDesc(9, 2);
+            GXSetVtxAttrFmt(0, 9, 1, 3, 9);
+            GXSetArray(9, funemizu_vertex_tbl, 6);
+            GXSetVtxDesc(10, 2);
+            GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+            GXSetArray(10, funemizu_normal_tbl, 3);
+            GXSetVtxDesc(11, 2);
+            GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+            GXSetArray(11, funemizu_color0_tbl, 4);
+            GXSetVtxDesc(13, 2);
+            GXSetVtxAttrFmt(0, 13, 1, 3, 12);
+            GXSetArray(13, funemizu_texcoord0_tbl, 4);
+            sizes = funemizu_dl_0_size_tbl;
+            lists = funemizu_dl_0_tbl;
+            for (i = 0; i < 3; i++) {
+                GXCallDisplayList(lists[i], (u32)sizes[i] << 5);
+            }
+        } else {
+            GXClearVtxDesc();
+            GXSetVtxDesc(9, 2);
+            GXSetVtxAttrFmt(0, 9, 1, 3, 8);
+            GXSetArray(9, gor_fune_vertex_tbl, 6);
+            GXSetVtxDesc(10, 2);
+            GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+            GXSetArray(10, gor_fune_normal_tbl, 3);
+            GXSetVtxDesc(11, 2);
+            GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+            GXSetArray(11, gor_fune_color0_tbl, 4);
+            GXSetVtxDesc(13, 2);
+            GXSetVtxAttrFmt(0, 13, 1, 3, 14);
+            GXSetArray(13, gor_fune_texcoord0_tbl, 4);
+            sizes = gor_fune_dl_0_size_tbl;
+            lists = gor_fune_dl_0_tbl;
+            for (i = 0; i < 2; i++) {
+                GXCallDisplayList(lists[i], (u32)sizes[i] << 5);
+            }
+        }
+
+        PSMTXScale(scale, *(f32*)(w + 0x1C), *(f32*)(w + 0x24), *(f32*)(w + 0x1C));
+        PSMTXConcat(trans, scale, model);
+        GXLoadPosMtxImm(model, 0);
+        GXSetCurrentMtx(0);
+        PSMTXTrans(scale, *(f32*)(w + 0x2C), 0.0f, 0.0f);
+        GXLoadTexMtxImm(scale, 0x1E, 1);
+        if (mode == 0) {
+            GXClearVtxDesc();
+            GXSetVtxDesc(9, 2);
+            GXSetVtxAttrFmt(0, 9, 1, 3, 9);
+            GXSetArray(9, funemizu_vertex_tbl, 6);
+            GXSetVtxDesc(10, 2);
+            GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+            GXSetArray(10, funemizu_normal_tbl, 3);
+            GXSetVtxDesc(11, 2);
+            GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+            GXSetArray(11, funemizu_color0_tbl, 4);
+            GXSetVtxDesc(13, 2);
+            GXSetVtxAttrFmt(0, 13, 1, 3, 12);
+            GXSetArray(13, funemizu_texcoord0_tbl, 4);
+            sizes = funemizu_dl_1_size_tbl;
+            lists = funemizu_dl_1_tbl;
+            for (i = 0; i < 4; i++) {
+                GXCallDisplayList(lists[i], (u32)sizes[i] << 5);
+            }
+        } else {
+            GXClearVtxDesc();
+            GXSetVtxDesc(9, 2);
+            GXSetVtxAttrFmt(0, 9, 1, 3, 8);
+            GXSetArray(9, gor_fune_vertex_tbl, 6);
+            GXSetVtxDesc(10, 2);
+            GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+            GXSetArray(10, gor_fune_normal_tbl, 3);
+            GXSetVtxDesc(11, 2);
+            GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+            GXSetArray(11, gor_fune_color0_tbl, 4);
+            GXSetVtxDesc(13, 2);
+            GXSetVtxAttrFmt(0, 13, 1, 3, 14);
+            GXSetArray(13, gor_fune_texcoord0_tbl, 4);
+            sizes = gor_fune_dl_1_size_tbl;
+            lists = gor_fune_dl_1_tbl;
+            for (i = 0; i < 2; i++) {
+                GXCallDisplayList(lists[i], (u32)sizes[i] << 5);
+            }
+        }
     }
 }
 

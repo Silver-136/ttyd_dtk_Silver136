@@ -227,17 +227,22 @@ USER_FUNC(uranaisi_supercoin_setreadflag) {
 }
 
 int uranaisi_data_make_next(s32 param_1, u32 param_2) {
+    extern const char str_enddata_802fdda8[];
+    extern const char zero_804267c0[];
     char label[64];
     char key[72];
     char* scan;
-    s32 maxLabel = evtGetValue(NULL, GSW(0));
+    UranaisiData* data = &_udt;
+    s32 maxLabel;
     s32 count;
     s32 index;
     s32 field;
     s32 pos;
     s32 done;
     s32 labelNo;
-    s32* nextBest = (s32*)((s32)&_udt + 0x34);
+    s32* nextBest = (s32*)((s32)data + 0x34);
+
+    maxLabel = evtGetValue(NULL, GSW(0));
 
     if ((param_2 & 1) == 0) {
         *nextBest = -1;
@@ -290,11 +295,11 @@ int uranaisi_data_make_next(s32 param_1, u32 param_2) {
             }
         }
 
-        if (strcmp(label, "enddata") == 0) {
+        if (strcmp(label, str_enddata_802fdda8) == 0) {
             return count;
         }
 
-        if (strcmp(label, "") != 0) {
+        if (strcmp(label, zero_804267c0) != 0) {
             labelNo = search_evt_no(label);
             if (labelNo != -1) {
                 if ((param_2 & 1) == 0) {
@@ -306,8 +311,8 @@ int uranaisi_data_make_next(s32 param_1, u32 param_2) {
                         count++;
                     }
                 } else if (labelNo == *nextBest) {
-                    *(s16*)((s32)_udt.table + count * 6 + 2) = labelNo;
-                    *(s16*)((s32)_udt.table + count * 6 + 4) = index;
+                    *(s16*)((s32)data->table + count * 6 + 2) = labelNo;
+                    *(s16*)((s32)data->table + count * 6 + 4) = index;
                     count++;
                 }
             }

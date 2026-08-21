@@ -1,20 +1,22 @@
+#include "driver/hitdrv.h"
+#include "mario/mario.h"
+#include "mario/mario_party.h"
+#include "party/party.h"
+#include "party/party_motion.h"
+#include "party/party_move.h"
 #include "party/party_vivian.h"
+#include "pmario_sound.h"
+#include "system.h"
 
 extern s32 vivian_cancel_req;
 extern f32 float_35_804242d8;
 extern f32 float_24_804242bc;
 extern f32 float_10_80424270;
-extern void* marioGetPtr(void);
 extern void marioPaperOff(void);
 extern char str_p_bibi_802f898c[];
 extern char str_PM_B_1_802f8994[];
-extern s32 marioGetPartyId(void);
-extern void* partyGetPtr(s32 id);
-extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
-extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
 extern f32 float_0p1_804242cc;
 extern f32 float_30_804242d0;
-extern void movePos(f32* x, f32* z, f32 dist, f32 angle);
 
 u8 N_marioForceVivianAnime(void) {
     extern void marioChgPaper(void* name);
@@ -235,8 +237,6 @@ u8 vivianShadow(void* pParty) {
 
 
 u8 vivian_move(void* pParty) {
-    extern void partyMoveFlyInit(void* party, s32 param);
-    extern void partyFlyMain(void* party);
     f32 step;
     f32 dx;
     f32 dy;
@@ -273,7 +273,6 @@ u8 vivian_move(void* pParty) {
 
 
 void vivian_use(void* pParty) {
-    extern void L_partyForceSlitOff(void* party);
     extern void marioChgMot(s32 mot);
     extern void marioPaperOn(char* name);
     extern void marioChgPaper(char* name);
@@ -281,18 +280,15 @@ void vivian_use(void* pParty) {
     extern void partyPaperOn(void* party, char* name);
     extern void partyChgPaper(void* party, char* name);
     extern void partyChgPose(void* party, char* name);
-    extern void movePos(f32* x, f32* z, f32 distance, f32 angle);
     extern f32 toMovedirSimple(f32 dir);
     extern f32 toMovedir(f32 dir);
     extern void marioGetScreenPos(f32* position, f32* x, f32* y, f32* z);
     extern void* marioSearchGround(f32 width, f32 depth, f32* groundY,
                                    f32* outX, f32* outZ);
-    extern u32 hitGetAttr(void* hit);
     extern s32 strcmp(const char* a, const char* b);
     extern void* gp;
     extern void unk_800c27c0(void* party, f32 zero, void* playerPos,
                              f32 direction, f32 value, f32 half);
-    extern u32 psndSFXOn_3D(s32 id, void* pos);
     extern void* effRippleEntry(void);
     extern void effRippleSetCamId(void* effect, s32 camId);
     extern void effRippleSetPosition(void* effect, f32 x, f32 y, f32 z);

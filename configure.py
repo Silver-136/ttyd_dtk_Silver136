@@ -332,8 +332,16 @@ config.libs = [
             Object(NonMatching, "action/ac_power_gauge.c"),
             Object(NonMatching, "action/ac_power_gauge_lv.c"),
             Object(NonMatching, "action/ac_power_gauge_lv2.c"),
-            Object(NonMatching, "action/ac_repeatedly.c"),
-            Object(NonMatching, "action/ac_repeatedly_lv.c"),
+            Object(
+                NonMatching,
+                "action/ac_repeatedly.c",
+                symbol_mappings={"_init_param_80137004": "_init_param"},
+            ),
+            Object(
+                NonMatching,
+                "action/ac_repeatedly_lv.c",
+                symbol_mappings={"_init_param_801ABA30": "_init_param"},
+            ),
             Object(NonMatching, "action/ac_shot.c"),
             Object(NonMatching, "action/ac_shot_target.c"),
             Object(NonMatching, "action/ac_signal_timing.c"),

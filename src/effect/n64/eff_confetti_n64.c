@@ -44,19 +44,32 @@ void* effConfettiN64Entry(f32 x, f32 y, f32 z, s32 type, s32 timer) {
     f32 radius;
     f32 angle;
     f32 randScale;
+    f32 sinAngle0;
+    f32 cosAngle0;
+    f32 sinAngle1;
+    f32 cosAngle1;
+    f32 fullCircle;
+    f32 radians;
+    f32 percent;
 
     entry = effEntry();
-    typeMod = type % 10;
+    typeMod = type - (type / 10) * 10;
     switch (typeMod) {
         case 0:
-        case 4:
             count = 0xC;
             break;
         case 1:
-        case 5:
             count = 0x12;
             break;
         case 2:
+            count = 0x18;
+            break;
+        case 4:
+            count = 0xC;
+            break;
+        case 5:
+            count = 0x12;
+            break;
         case 6:
             count = 0x18;
             break;
@@ -90,47 +103,55 @@ void* effConfettiN64Entry(f32 x, f32 y, f32 z, s32 type, s32 timer) {
     *(s32*)(work + 0x28) = 0xFF;
     *(s32*)(work + 0x34) = 4;
 
-    baseAngle = rand() % 0x168;
+    r = rand();
+    baseAngle = r - (r / 0x168) * 0x168;
+    fullCircle = float_360_80424fb8;
+    radians = float_6p2832_80424fb4;
+    percent = float_0p01_80424f94;
     radius = float_0p5_80424fb0 * spread + float_0p5_80424fb0 * spread;
-    part = work;
+    part = work + 0x38;
     for (i = 0; i < count; i++, part += 0x38) {
-        *(s32*)(part + 0x38) = type;
         r = rand();
-        randScale = spread * float_0p01_80424f94 * (f32)(r % 0x65);
-        angle = (float_6p2832_80424fb4 * ((f32)baseAngle + (float_360_80424fb8 * (f32)i) / (f32)count)) /
-                float_360_80424fb8;
+        randScale = spread * percent * (f32)(r - (r / 0x65) * 0x65);
+        angle = (radians * ((f32)baseAngle + (fullCircle * (f32)i) / (f32)count)) /
+                fullCircle;
+        *(s32*)part = type;
+        sinAngle0 = (f32)sin(angle);
+        cosAngle0 = (f32)cos(angle);
+        sinAngle1 = (f32)sin(angle);
+        cosAngle1 = (f32)cos(angle);
 
         if (typeMod == 3) {
             r = rand();
-            *(f32*)(part + 0x3C) = float_0p1_80424f7c * (f32)(r % 0x2BD) - float_35_80424f80;
-            *(f32*)(part + 0x40) = float_0_80424f78;
+            *(f32*)(part + 4) = float_0p1_80424f7c * (f32)(r - (r / 0x2BD) * 0x2BD) - float_35_80424f80;
+            *(f32*)(part + 8) = float_0_80424f78;
             r = rand();
-            *(f32*)(part + 0x44) = float_0p1_80424f7c * (f32)(r % 0x12D) - float_15_80424f84;
+            *(f32*)(part + 0xC) = float_0p1_80424f7c * (f32)(r - (r / 0x12D) * 0x12D) - float_15_80424f84;
             r = rand();
-            *(f32*)(part + 0x48) = float_0p03_80424f88 *
-                ((float_0p1_80424f7c * (f32)(r % 0x65) + *(f32*)(part + 0x3C)) - float_5_80424f8c);
+            *(f32*)(part + 0x10) = float_0p03_80424f88 *
+                ((float_0p1_80424f7c * (f32)(r - (r / 0x65) * 0x65) + *(f32*)(part + 4)) - float_5_80424f8c);
             r = rand();
-            *(f32*)(part + 0x4C) =
-                -(float_0p01_80424f94 * float_0p1_80424f7c * (f32)(r % 0x321) - float_neg1p7_80424f90);
+            *(f32*)(part + 0x14) =
+                -(float_0p01_80424f94 * float_0p1_80424f7c * (f32)(r - (r / 0x321) * 0x321) - float_neg1p7_80424f90);
             r = rand();
-            *(f32*)(part + 0x50) =
-                float_0p05_80424f98 * (float_0p1_80424f7c * (f32)(r % 0xC9) - float_10_80424f9c);
-            *(s32*)(part + 0x58) = 0x78;
-            *(s32*)(part + 0x68) = i * 3;
+            *(f32*)(part + 0x18) =
+                float_0p05_80424f98 * (float_0p1_80424f7c * (f32)(r - (r / 0xC9) * 0xC9) - float_10_80424f9c);
+            *(s32*)(part + 0x20) = 0x78;
+            *(s32*)(part + 0x30) = i * 3;
         } else {
-            *(f32*)(part + 0x3C) = (f32)cos(angle) * randScale * (f32)sin(angle);
-            *(f32*)(part + 0x40) = (f32)cos(angle) * randScale * (f32)cos(angle);
-            *(f32*)(part + 0x44) = randScale * (f32)sin(angle);
-            *(f32*)(part + 0x48) = (f32)cos(angle) * radius * (f32)sin(angle);
-            *(f32*)(part + 0x4C) = (f32)cos(angle) * radius * (f32)cos(angle) + float_1_80424fbc;
-            *(f32*)(part + 0x50) = radius * (f32)sin(angle);
+            *(f32*)(part + 4) = cosAngle1 * randScale * sinAngle0;
+            *(f32*)(part + 8) = cosAngle1 * randScale * cosAngle0;
+            *(f32*)(part + 0xC) = randScale * sinAngle1;
+            *(f32*)(part + 0x10) = cosAngle1 * radius * sinAngle0;
+            *(f32*)(part + 0x14) = cosAngle1 * radius * cosAngle0 + float_1_80424fbc;
+            *(f32*)(part + 0x18) = radius * sinAngle1;
             if (typeMod < 4) {
-                *(f32*)(part + 0x54) = float_0_80424f78;
+                *(f32*)(part + 0x1C) = float_0_80424f78;
             } else {
-                *(f32*)(part + 0x54) =
+                *(f32*)(part + 0x1C) =
                     -(float_0p02_80424fc4 * (f32)((i + 1) % 3) - float_neg0p02_80424fc0);
             }
-            *(s32*)(part + 0x68) = i & 3;
+            *(s32*)(part + 0x30) = i & 3;
         }
     }
 
@@ -357,4 +378,3 @@ void effConfettiDisp(s32 cameraId, void* effect) {
 }
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
-

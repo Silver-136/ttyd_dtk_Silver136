@@ -585,7 +585,7 @@ void kpa_hip(void) {
     extern void* evtEntry(void*, s32, s32);
     extern void marioChgMotSub(s32, s32);
     extern s32 quake_kpaHipAttack_evt[];
-    extern char str_SFX_KUPPA_SWIM1_802feb70[];
+    extern char str_KPA2_J_1C_802fec00[];
     u8* mario = marioGetPtr();
     f32 landY[5];
     f32 fall;
@@ -593,7 +593,7 @@ void kpa_hip(void) {
 
     if (*(u32*)(mario + 0xC) & 1) {
         *(u32*)(mario + 0xC) &= ~1;
-        *(u32*)mario &= ~0x800;
+        *(u32*)mario &= ~0x80000;
         psndSFXOn_3D(0x81F, mario + 0x8C);
         marioAdjustMoveDir();
         *(s32*)(mario + 0x44) = 10;
@@ -603,53 +603,38 @@ void kpa_hip(void) {
         *(f32*)(mario + 0x84) = 0.0f;
         *(f32*)(mario + 0x88) = 0.0f;
         *(f32*)(mario + 0x180) = 0.0f;
-        marioChgPose(str_SFX_KUPPA_SWIM1_802feb70 + 0x90);
+        marioChgPose(str_KPA2_J_1C_802fec00);
     }
 
-    if (*(f32*)(mario + 0x90) <= *(f32*)(mario + 0xD8) &&
+    if (*(f32*)(mario + 0xD8) >= *(f32*)(mario + 0x90) &&
         (*(u32*)(mario + 4) & 0x100)) {
         camFollowYOn();
     }
 
-    switch (*(s32*)(mario + 0x44)) {
-        case 10:
-            marioChkLandon(*(f32*)(mario + 0x7C), landY);
-            if (--*(s32*)(mario + 0x48) > 0) {
-                return;
-            }
-            *(s32*)(mario + 0x44) = 20;
-            *(f32*)(mario + 0x80) = -0.4744f;
-            *(f32*)(mario + 0x84) = 0.4704f;
-            *(f32*)(mario + 0x88) = -0.1904f;
-            *(f32*)(mario + 0x7C) = *(f32*)(mario + 0x80);
-            break;
-
-        case 20:
-            break;
-
-        case 21:
-            if (--*(s32*)(mario + 0x48) > 0) {
-                return;
-            }
-            if (*(f32*)(mario + 0x90) > 75.0f) {
-                camFollowYOn();
-            }
-            if ((*(u16*)(mario + 0x24C) & 0x100) && *(void**)(mario + 0x244) == 0) {
-                *(s32*)(mario + 0x44) = 20;
-                *(f32*)(mario + 0x80) = -0.4744f;
-                *(f32*)(mario + 0x84) = 0.4704f;
-                *(f32*)(mario + 0x88) = -0.1904f;
-                *(f32*)(mario + 0x7C) = *(f32*)(mario + 0x80);
-                return;
-            }
-            *(u32*)mario &= ~0x80000;
-            marioChgMotSub(0, 0);
-            return;
-
-        default:
-            return;
+    if (*(s32*)(mario + 0x44) == 20) {
+        goto falling;
     }
+    if (*(s32*)(mario + 0x44) < 20) {
+        if (*(s32*)(mario + 0x44) != 10) {
+            return;
+        }
+        marioChkLandon(0.0f, landY);
+        if (--*(s32*)(mario + 0x48) > 0) {
+            return;
+        }
+        *(s32*)(mario + 0x44) = 20;
+        *(f32*)(mario + 0x80) = -0.4744f;
+        *(f32*)(mario + 0x84) = 0.4704f;
+        *(f32*)(mario + 0x88) = -0.1904f;
+        *(f32*)(mario + 0x7C) = *(f32*)(mario + 0x80);
+        goto falling;
+    }
+    if (*(s32*)(mario + 0x44) >= 22) {
+        return;
+    }
+    goto state_21;
 
+falling:
     fall = marioGetFallSpd();
     hit = marioChkLandon(fall, landY);
     if (fall < -100.0f) {
@@ -662,9 +647,9 @@ void kpa_hip(void) {
     if (hit == 0) {
         *(f32*)(mario + 0x90) += fall;
     } else {
-        *(void**)(mario + 0x240) = hit;
-        *(void**)(mario + 0x244) = 0;
-        *(u16*)(mario + 0x2E) = 0x15;
+        *(void**)(mario + 0x1E8) = hit;
+        *(void**)(mario + 0x1EC) = 0;
+        *(u16*)(mario + 0x2E) = 0x11;
         *(s32*)(mario + 0x44) = 21;
         *(s32*)(mario + 0x48) = 20;
         *(f32*)(mario + 0x90) = landY[0];
@@ -673,6 +658,28 @@ void kpa_hip(void) {
         *(s16*)(mario + 0x50) = 0;
         *(s16*)(mario + 0x52) = 0;
     }
+    goto done;
+
+state_21:
+    if (--*(s32*)(mario + 0x48) > 0) {
+        return;
+    }
+    if (*(f32*)(mario + 0x90) > 75.0f) {
+        camFollowYOn();
+    }
+    if ((*(u16*)(mario + 0x24A) & 0x100) && *(void**)(mario + 0x1E8) == 0) {
+        *(s32*)(mario + 0x44) = 20;
+        *(f32*)(mario + 0x80) = -0.4744f;
+        *(f32*)(mario + 0x84) = 0.4704f;
+        *(f32*)(mario + 0x88) = -0.1904f;
+        *(f32*)(mario + 0x7C) = *(f32*)(mario + 0x80);
+        return;
+    }
+    *(u32*)mario &= ~0x80;
+    marioChgMotSub(0, 0);
+
+done:
+    return;
 }
 
 s32 kpaPowUp(void) {
@@ -755,65 +762,85 @@ void kpa_powup(void) {
     extern void marioChgMot(s32);
     extern void kpaMSetMutekiTimer(void);
     extern void kpaMutekiOn(void);
+    extern f32 kpaGetWidth(s32);
     extern void marioResetCamShiftRate(void);
-    extern char str_SFX_KUPPA_SWIM1_802feb70[];
+    extern char str_KPA_Y_1_802febec[];
+    extern char str_KPA2_Y_1_802febf4[];
+    extern f32 float_0_804272e0;
+    extern f32 float_5_8042732c;
+    extern f32 float_24_80427360;
+    extern f32 float_74_80427364;
+    extern f32 float_103p6_80427368;
+    extern f32 float_222_8042736c;
+    extern f32 float_20_80427370;
+    extern f32 scaleDt[];
     u8* mario = marioGetPtr();
     u8* work;
     s32 level;
-    s32 step;
+    f32 step;
     f32 oldScale;
     f32 newScale;
+    f32 scaleDelta;
 
     if (*(u32*)(mario + 0xC) & 1) {
         *(u32*)(mario + 0xC) &= ~1;
         *(u32*)mario &= ~0x7800;
         *(s16*)(mario + 0x50) = 0;
         *(s32*)(mario + 0x48) = 0;
-        kpaChgPose(str_SFX_KUPPA_SWIM1_802feb70 + 0x7C,
-                   str_SFX_KUPPA_SWIM1_802feb70 + 0x84);
+        kpaChgPose(str_KPA_Y_1_802febec, str_KPA2_Y_1_802febf4);
         *(s32*)(mario + 0x44) = 0;
         if ((*(u32*)mario & 0x200000) == 0) {
-            *(f32*)(mario + 0x180) = 0.0f;
+            *(f32*)(mario + 0x180) = float_0_804272e0;
         }
         *(u32*)mario |= 0x400000;
         psndSFXOn_3D(0x111, mario + 0x8C);
     }
 
     level = kpaGetLevel();
-    if (level >= 4) {
-        marioChgMot(0);
-        return;
-    }
-
-    oldScale = kpaGetBaseScale(level - 1);
-    newScale = kpaGetBaseScale(level);
-    if (*(s32*)(mario + 0x44) == 0) {
-        *(s32*)(mario + 0x48) = 5;
-        *(s32*)(mario + 0x44) = 1;
-        psndSFXOn_3D(0x823, mario + 0x8C);
-        return;
-    }
-
-    if (--*(s32*)(mario + 0x48) < 1) {
-        step = *(s32*)(mario + 0x44);
-        *(s32*)(mario + 0x48) = 5;
-        *(f32*)(mario + 0xC8) = oldScale + ((newScale - oldScale) / 5.0f) * (f32)step;
-        *(f32*)(mario + 0xCC) = *(f32*)(mario + 0xC8);
-        *(s32*)(mario + 0x44) = step + 1;
-        if (step == 5) {
-            u8* other = marioGetPtr();
-            work = *(u8**)(other + 0x298);
-            if (*(s32*)(work + 4) == 3) {
-                kpaMSetMutekiTimer();
-                kpaMutekiOn();
+    if (level < 4) {
+        oldScale = kpaGetBaseScale(level - 1);
+        newScale = kpaGetBaseScale(level);
+        scaleDelta = (newScale - oldScale) / float_5_8042732c;
+        if (*(s32*)(mario + 0x44) == 0) {
+            *(s32*)(mario + 0x48) = 5;
+            *(s32*)(mario + 0x44) = 1;
+            psndSFXOn_3D(0x823, mario + 0x8C);
+        } else if (--*(s32*)(mario + 0x48) < 1) {
+            step = scaleDt[*(s32*)(mario + 0x44) - 1];
+            *(s32*)(mario + 0x48) = 5;
+            *(f32*)(mario + 0xC8) = scaleDelta * step + oldScale;
+            *(f32*)(mario + 0xCC) = *(f32*)(mario + 0xC8);
+            *(s32*)(mario + 0x44) += 1;
+            if (step == float_5_8042732c) {
+                u8* other = marioGetPtr();
+                u8* current;
+                work = *(u8**)(other + 0x298);
+                if (*(s32*)(work + 4) == 3) {
+                    kpaMSetMutekiTimer();
+                    kpaMutekiOn();
+                }
+                current = marioGetPtr();
+                work = *(u8**)(current + 0x298);
+                *(f32*)(current + 0x1B8) = kpaGetWidth(*(s32*)(work + 4));
+                work = *(u8**)(current + 0x298);
+                if (*(s32*)(work + 4) == 0) {
+                    *(f32*)(current + 0x1BC) = float_24_80427360;
+                } else if (*(s32*)(work + 4) == 1) {
+                    *(f32*)(current + 0x1BC) = float_74_80427364;
+                } else if (*(s32*)(work + 4) == 2) {
+                    *(f32*)(current + 0x1BC) = float_103p6_80427368;
+                } else if (*(s32*)(work + 4) == 3) {
+                    *(f32*)(current + 0x1BC) = float_222_8042736c;
+                }
+                marioResetCamShiftRate();
+                *(f32*)(other + 0x138) = -20.0f * (f32)*(s32*)(*(u8**)(other + 0x298) + 4);
+                *(u32*)mario &= ~0x400000;
+                marioChgMot(0);
+                *(s16*)(mario + 0x4C) = 0;
             }
-            kpaSetSpec();
-            marioResetCamShiftRate();
-            *(f32*)(other + 0x138) = -20.0f * (f32)*(s32*)(work + 4);
-            *(u32*)mario &= ~0x400000;
-            marioChgMot(0);
-            *(s16*)(mario + 0x4C) = 0;
         }
+    } else {
+        marioChgMot(0);
     }
 }
 
@@ -828,63 +855,87 @@ void kpa_powdown(void) {
     extern void kpaMutekiOff(void);
     extern f32 kpaGetWidth(s32);
     extern void marioResetCamShiftRate(void);
-    extern char str_SFX_KUPPA_SWIM1_802feb70[];
+    extern char str_KPA_D_1_802febd8[];
+    extern char str_KPA2_D_1_802febe0[];
+    extern f32 float_0_804272e0;
+    extern f32 float_5_8042732c;
+    extern f32 float_24_80427360;
+    extern f32 float_74_80427364;
+    extern f32 float_103p6_80427368;
+    extern f32 float_222_8042736c;
+    extern f32 float_20_80427370;
+    extern f32 scaleDt[];
     u8* mario = marioGetPtr();
     u8* work;
     s32 level;
-    s32 step;
     f32 oldScale;
     f32 newScale;
+    f32 scaleDelta;
+    f32 step;
 
     if (*(u32*)(mario + 0xC) & 1) {
         *(u32*)(mario + 0xC) &= ~1;
-        *(u32*)mario &= ~0x7800;
+        *(u32*)mario &= ~0xF0000;
         *(s16*)(mario + 0x50) = 0;
         *(s32*)(mario + 0x48) = 0;
-        kpaChgPose(str_SFX_KUPPA_SWIM1_802feb70 + 0x68,
-                   str_SFX_KUPPA_SWIM1_802feb70 + 0x70);
+        kpaChgPose(str_KPA_D_1_802febd8, str_KPA2_D_1_802febe0);
         *(s32*)(mario + 0x44) = 0;
-        if ((*(u32*)mario & 0x200000) == 0) {
-            *(f32*)(mario + 0x180) = 0.0f;
+        if ((*(u32*)mario & 0x20) == 0) {
+            *(f32*)(mario + 0x180) = float_0_804272e0;
         }
-        *(u32*)mario |= 0x400000;
+        *(u32*)mario |= 0x10000000;
         psndSFXOn_3D(0x11D, mario + 0x8C);
     }
 
     level = kpaGetLevel();
-    if (level < 0) {
-        marioChgMot(0);
-        return;
-    }
-
-    oldScale = kpaGetBaseScale(level + 1);
-    newScale = kpaGetBaseScale(level);
-    if (*(s32*)(mario + 0x44) == 0) {
-        *(s32*)(mario + 0x48) = 5;
-        *(s32*)(mario + 0x44) = 1;
-        psndSFXOn_3D(0x824, mario + 0x8C);
-        return;
-    }
-
-    if (--*(s32*)(mario + 0x48) < 1) {
-        step = *(s32*)(mario + 0x44);
-        *(s32*)(mario + 0x48) = 5;
-        *(f32*)(mario + 0xC8) = oldScale - ((oldScale - newScale) / 5.0f) * (f32)step;
-        *(f32*)(mario + 0xCC) = *(f32*)(mario + 0xC8);
-        *(s32*)(mario + 0x44) = step + 1;
-        if (step == 5) {
-            u8* other = marioGetPtr();
-            kpaMutekiOff();
-            work = *(u8**)(other + 0x298);
-            *(f32*)(other + 0x1B8) = kpaGetWidth(*(s32*)(work + 4));
-            kpaSetSpec();
-            marioResetCamShiftRate();
-            *(f32*)(other + 0x138) = -20.0f * (f32)*(s32*)(work + 4);
-            *(u32*)mario &= ~0x400000;
-            marioChgMot(0);
+    if (level >= 0) {
+        oldScale = kpaGetBaseScale(level + 1);
+        newScale = kpaGetBaseScale(level);
+        scaleDelta = (oldScale - newScale) / float_5_8042732c;
+        switch (*(s32*)(mario + 0x44)) {
+            case 0:
+                *(s32*)(mario + 0x48) = 5;
+                *(s32*)(mario + 0x44) = 1;
+                psndSFXOn_3D(0x824, mario + 0x8C);
+                break;
+            default:
+              if (--*(s32*)(mario + 0x48) < 1) {
+                step = scaleDt[*(s32*)(mario + 0x44) - 1];
+                *(s32*)(mario + 0x48) = 5;
+                *(f32*)(mario + 0xC8) = -(scaleDelta * step - oldScale);
+                *(f32*)(mario + 0xCC) = *(f32*)(mario + 0xC8);
+                *(s32*)(mario + 0x44) += 1;
+                if (step == float_5_8042732c) {
+                    u8* other = marioGetPtr();
+                    u8* current;
+                    kpaMutekiOff();
+                    current = marioGetPtr();
+                    work = *(u8**)(current + 0x298);
+                    *(f32*)(current + 0x1B8) = kpaGetWidth(*(s32*)(work + 4));
+                    work = *(u8**)(current + 0x298);
+                    if (*(s32*)(work + 4) == 0) {
+                        *(f32*)(current + 0x1BC) = float_24_80427360;
+                    } else if (*(s32*)(work + 4) == 1) {
+                        *(f32*)(current + 0x1BC) = float_74_80427364;
+                    } else if (*(s32*)(work + 4) == 2) {
+                        *(f32*)(current + 0x1BC) = float_103p6_80427368;
+                    } else if (*(s32*)(work + 4) == 3) {
+                        *(f32*)(current + 0x1BC) = float_222_8042736c;
+                    }
+                    marioResetCamShiftRate();
+                    *(f32*)(other + 0x138) = float_20_80427370 * (f32)-*(s32*)(*(u8**)(other + 0x298) + 4);
+                    *(u32*)mario &= ~0x10000000;
+                    marioChgMot(0);
+                }
+              }
+              break;
         }
+    } else {
+        marioChgMot(0);
     }
 }
+
+
 
 void kpaSwimMove(void) {
     extern void* marioGetPtr(void);
@@ -941,6 +992,13 @@ void kpaSwimMove(void) {
 /* stub-fill: kpa_swim | missing_definition | ghidra_signature */
 void kpa_swim(void) {
     extern void* marioGetPtr(void);
+    extern s32 irand(s32 value);
+    extern void* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle);
+    extern f32 float_0p6_804272e8;
+    extern f32 float_225_804272ec;
+    extern f32 float_135_804272f0;
+    extern f32 float_180_804272f4;
+    extern f32 float_3_804272f8;
     extern void kpaAttackStart2(void);
     extern s32 kpaFireAttackCheck(void);
     extern s32 kpaGetBodyStatus(void);
@@ -953,11 +1011,18 @@ void kpa_swim(void) {
     extern void kpaSetFallPara(void);
     extern void marioChgMot(s32);
     extern s32 kpaChkHitobjRide(void);
+    extern u32 marioBgmodeChk(void);
+    extern void camFollowYOn(void);
     extern char str_SFX_KUPPA_SWIM1_802feb70[];
     u8* mario = marioGetPtr();
     u8* work;
     s32 state;
     f32 jump;
+    s32 timer;
+    s32 threshold;
+    s32 randomX;
+    s32 randomY;
+    f32 angle;
 
     if (*(u32*)(mario + 0xC) & 1) {
         *(u32*)(mario + 0xC) &= ~1;
@@ -984,6 +1049,41 @@ void kpa_swim(void) {
         }
     }
     kpaSwimMove();
+
+    mario = marioGetPtr();
+    work = *(u8**)(mario + 0x298);
+    timer = ++*(s32*)(work + 0x150);
+    state = *(s32*)(mario + 0x44);
+    if (state == 30 || state == 31) {
+        if (timer > 0) {
+            *(s32*)(work + 0x150) = 0;
+            randomX = irand(40) - 20;
+            randomY = irand(40) - 20;
+            angle = float_135_804272f0;
+            if (*(f32*)(mario + 0x1A4) < float_180_804272f4) {
+                angle = float_225_804272ec;
+            }
+            effMizutamaEntry(0,
+                *(f32*)(mario + 0x8C) + (f32)randomX,
+                *(f32*)(mario + 0x90) + float_0p6_804272e8 * *(f32*)(mario + 0x1BC) + (f32)randomY,
+                *(f32*)(mario + 0x94), angle);
+        }
+    } else {
+        threshold = 30;
+        if (state >= 0 && state < 20) {
+            threshold = 10;
+        }
+        if (timer > threshold) {
+            *(s32*)(work + 0x150) = 0;
+            angle = float_135_804272f0;
+            if (*(f32*)(mario + 0x1A4) < float_180_804272f4) {
+                angle = float_225_804272ec;
+            }
+            effMizutamaEntry(0, *(f32*)(mario + 0x8C),
+                *(f32*)(mario + 0x90) + *(f32*)(mario + 0x1BC) / float_3_804272f8,
+                *(f32*)(mario + 0x94), angle);
+        }
+    }
 
     state = *(s32*)(mario + 0x44);
     switch (state) {
@@ -1099,6 +1199,44 @@ void kpa_swim(void) {
             } else {
                 *(s32*)(mario + 0x44) = 31;
             }
+
+            mario = marioGetPtr();
+            work = *(u8**)(mario + 0x298);
+            timer = ++*(s32*)(work + 0x150);
+            state = *(s32*)(mario + 0x44);
+            if (state == 30 || state == 31) {
+                if (timer > 0) {
+                    *(s32*)(work + 0x150) = 0;
+                    randomX = irand(40) - 20;
+                    randomY = irand(40) - 20;
+                    angle = float_135_804272f0;
+                    if (*(f32*)(mario + 0x1A4) < float_180_804272f4) {
+                        angle = float_225_804272ec;
+                    }
+                    effMizutamaEntry(0,
+                        *(f32*)(mario + 0x8C) + (f32)randomX,
+                        *(f32*)(mario + 0x90) + float_0p6_804272e8 * *(f32*)(mario + 0x1BC) + (f32)randomY,
+                        *(f32*)(mario + 0x94), angle);
+                }
+            } else {
+                threshold = 30;
+                if (state >= 0 && state < 20) {
+                    threshold = 10;
+                }
+                if (timer > threshold) {
+                    *(s32*)(work + 0x150) = 0;
+                    angle = float_135_804272f0;
+                    if (*(f32*)(mario + 0x1A4) < float_180_804272f4) {
+                        angle = float_225_804272ec;
+                    }
+                    effMizutamaEntry(0, *(f32*)(mario + 0x8C),
+                        *(f32*)(mario + 0x90) + *(f32*)(mario + 0x1BC) / float_3_804272f8,
+                        *(f32*)(mario + 0x94), angle);
+                }
+            }
+            if (marioBgmodeChk() != 1) {
+                camFollowYOn();
+            }
             break;
 
         case 31:
@@ -1115,6 +1253,41 @@ void kpa_swim(void) {
             if (kpaChkHitobjRide() != 0) {
                 *(f32*)(mario + 0x2DC) = 0.0f;
                 *(f32*)(mario + 0x180) = 0.0f;
+            }
+
+            mario = marioGetPtr();
+            work = *(u8**)(mario + 0x298);
+            timer = ++*(s32*)(work + 0x150);
+            state = *(s32*)(mario + 0x44);
+            if (state == 30 || state == 31) {
+                if (timer > 0) {
+                    *(s32*)(work + 0x150) = 0;
+                    randomX = irand(40) - 20;
+                    randomY = irand(40) - 20;
+                    angle = float_135_804272f0;
+                    if (*(f32*)(mario + 0x1A4) < float_180_804272f4) {
+                        angle = float_225_804272ec;
+                    }
+                    effMizutamaEntry(0,
+                        *(f32*)(mario + 0x8C) + (f32)randomX,
+                        *(f32*)(mario + 0x90) + float_0p6_804272e8 * *(f32*)(mario + 0x1BC) + (f32)randomY,
+                        *(f32*)(mario + 0x94), angle);
+                }
+            } else {
+                threshold = 30;
+                if (state >= 0 && state < 20) {
+                    threshold = 10;
+                }
+                if (timer > threshold) {
+                    *(s32*)(work + 0x150) = 0;
+                    angle = float_135_804272f0;
+                    if (*(f32*)(mario + 0x1A4) < float_180_804272f4) {
+                        angle = float_225_804272ec;
+                    }
+                    effMizutamaEntry(0, *(f32*)(mario + 0x8C),
+                        *(f32*)(mario + 0x90) + *(f32*)(mario + 0x1BC) / float_3_804272f8,
+                        *(f32*)(mario + 0x94), angle);
+                }
             }
             break;
 
@@ -1172,4 +1345,3 @@ void quake_kpaHipAttack(void) {
     extern s32 quake_kpaHipAttack_evt[8];
     evtEntry(quake_kpaHipAttack_evt, 0, 0);
 }
-

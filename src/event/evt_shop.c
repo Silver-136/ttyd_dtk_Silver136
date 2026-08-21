@@ -226,15 +226,22 @@ void list_disp(u32* win) {
     extern char str_msg_shop_point_list5_802ed310[];
     extern char str_msg_shop_point_list6_802ed328[];
     extern u32 dat_80421e88, dat_80421e8c, dat_80421e90, dat_80421e94;
-    extern u32 dat_80421e98, dat_80421e9c;
+    extern u32 dat_80421e98, dat_80421e9c, dat_80421ea0, dat_80421ea4;
+    extern const f32 float_0p64_80421edc;
+    extern const f32 float_60_80421ee0;
+    extern const f32 float_38p4_80421ee4;
     void* pouch;
     s32* list;
     char buffer[256];
     char* text;
     u32 color;
+    u32 labelColorOn;
+    u32 labelColorOff;
     f32 trans[3][4];
     f32 scale[3][4];
     f32 width;
+    f32 scaledWidth;
+    f32 availableWidth;
     f32 x;
     s32 row;
     s32 index;
@@ -293,12 +300,48 @@ void list_disp(u32* win) {
         FontDrawMessage(win[6] + ((s32)win[8] / 2 - (FontGetMessageWidth(buffer) & 0xFFFF)) - 90,
                         win[7] - 20 - row, buffer);
 
+        text = msgSearch(str_msg_shop_point_list5_802ed310);
+        scaledWidth = float_0p64_80421edc * (f32)(u16)FontGetMessageWidth(text);
+
         FontDrawStart();
-        color = (*(u32*)((s32)pouch + 0x5B4) & bit) ? dat_80421e98 : dat_80421e9c;
-        FontDrawColor(&color);
+        if ((*(u32*)((s32)pouch + 0x5B4) & bit) != 0) {
+            labelColorOn = dat_80421e98;
+            FontDrawColor(&labelColorOn);
+        } else {
+            labelColorOff = dat_80421e9c;
+            FontDrawColor(&labelColorOff);
+        }
+
+        if (scaledWidth <= float_60_80421ee0) {
+            PSMTXTrans(trans, (f32)(win[6] + (s32)win[8] / 2 - 88),
+                       (f32)(win[7] - 28 - row), 0.0f);
+            PSMTXScale(scale, float_0p64_80421edc, float_0p64_80421edc,
+                       float_0p64_80421edc);
+        } else {
+            PSMTXTrans(trans, (f32)(win[6] + (s32)win[8] / 2 - 88),
+                       (f32)(win[7] - 28 - row), 0.0f);
+            PSMTXScale(scale, float_38p4_80421ee4 / scaledWidth,
+                       float_0p64_80421edc, float_0p64_80421edc);
+        }
+        PSMTXConcat(trans, scale, trans);
+        FontDrawMessageMtx(trans, text);
+
         text = msgSearch(*(char**)(itemDataTable + item * 0x28 + 4));
-        FontDrawMessage(win[6] + (s32)win[8] / 2 - 88, win[7] - 28 - row, text);
-        row += 24;
+        FontDrawStart();
+        color = (*(u32*)((s32)pouch + 0x5B4) & bit) ? dat_80421ea0 : dat_80421ea4;
+        FontDrawColor(&color);
+        PSMTXTrans(trans, (f32)(win[6] + (s32)win[8] / 2 - 10),
+                   (f32)(win[7] - 20 - row), 0.0f);
+        availableWidth = (f32)((s32)win[8] / 2 - 10);
+        width = (f32)(u16)FontGetMessageWidth(text);
+        if (availableWidth < width) {
+            PSMTXScale(scale, availableWidth / width, 1.0f, 1.0f);
+        } else {
+            PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
+        }
+        PSMTXConcat(trans, scale, trans);
+        FontDrawMessageMtx(trans, text);
+        row += 26;
     }
 }
 

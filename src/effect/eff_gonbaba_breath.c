@@ -228,7 +228,6 @@ void init_breath(void* workPtr, s32 index, s32 type) {
 void* effGonbabaBreathEntry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 timer) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
-    extern void effGonbabaBreathMain(void* entry);
     extern void init_breath(void* work, s32 index, s32 type);
     extern char str_GonbabaBreath_80302b90[];
 
@@ -306,7 +305,6 @@ void effGonbabaBreathMain(void* effect) {
     extern f64 intplGetValue(f64, f64, s32, s32, s32);
     extern f64 dispCalcZ(f32*);
     extern void dispEntry(s32, s32, void*, void*, f32);
-    extern void effGonbabaBreathDisp(void);
     u8* entry = effect;
     u8* prev = *(u8**)(entry + 0xC);
     s32 count = *(s32*)(entry + 8);

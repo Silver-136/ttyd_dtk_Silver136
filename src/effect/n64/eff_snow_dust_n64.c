@@ -3,12 +3,80 @@
 extern void* camGetPtr(s32);
 
 void* effSnowDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 arg4, f32 arg5, f32 scale, s32 count, s32 lifetime) {
-    extern void* effEntry(void); extern void* __memAlloc(s32,u32); extern s32 rand(void); extern void effSnowDustMain(void);
-    void* effect=effEntry(); u8* work; s32 i; f32 step;
-    *(s32*)((s32)effect+8)=count+1; work=__memAlloc(3,(count+1)*0x6C); *(u8**)((s32)effect+0xC)=work; *(void**)((s32)effect+0x10)=effSnowDustMain; *(u32*)effect|=2;
-    *(s32*)work=type;*(f32*)(work+4)=x;*(f32*)(work+8)=y;*(f32*)(work+0xC)=z;*(f32*)(work+0x10)=arg4;*(f32*)(work+0x14)=arg5;*(s32*)(work+0x34)=lifetime>0?lifetime:1000;*(s32*)(work+0x38)=0;*(s32*)(work+0x3C)=255;*(s32*)(work+0x40)=255;*(s32*)(work+0x44)=255;*(f32*)(work+0x5C)=scale;*(s32*)(work+0x68)=4;
-    if(type==0){*(s32*)(work+0x4C)=255;*(s32*)(work+0x50)=255;*(s32*)(work+0x54)=255;*(s32*)(work+0x58)=255;}else if(type==1){*(s32*)(work+0x4C)=0;*(s32*)(work+0x50)=127;*(s32*)(work+0x54)=255;*(s32*)(work+0x58)=255;}else{*(s32*)(work+0x4C)=127;*(s32*)(work+0x50)=127;*(s32*)(work+0x54)=127;*(s32*)(work+0x58)=127;}
-    step=(lifetime<30?(f32)lifetime:30.0f)/(f32)count;for(i=1;i<=count;i++){u8* p=work+i*0x6C;*(s32*)(p+0x30)=-(s32)((f32)i*step)-1;}return effect;
+    extern void* effEntry(void);
+    extern void* __memAlloc(s32, u32);
+    extern s32 rand(void);
+    extern void effSnowDustMain(void);
+    extern char str_SnowDustN64_802fc2b0[];
+    void* effect = effEntry();
+    u8* work;
+    s32 i;
+    s32 value;
+    s32 remaining;
+    f32 step;
+
+    *(char**)((s32)effect + 0x14) = str_SnowDustN64_802fc2b0;
+    *(s32*)((s32)effect + 8) = count + 1;
+    work = __memAlloc(3, (count + 1) * 0x6C);
+    *(u8**)((s32)effect + 0xC) = work;
+    *(void**)((s32)effect + 0x10) = effSnowDustMain;
+    *(u32*)effect |= 2;
+    *(s32*)work = type;
+    *(s32*)(work + 0x38) = 0;
+    *(s32*)(work + 0x34) = lifetime < 1 ? 1000 : lifetime;
+    *(s32*)(work + 0x48) = 255;
+    *(f32*)(work + 4) = x;
+    *(f32*)(work + 8) = y;
+    *(f32*)(work + 0xC) = z;
+    *(f32*)(work + 0x5C) = scale;
+    *(f32*)(work + 0x10) = arg4;
+    *(f32*)(work + 0x14) = arg5;
+    *(s32*)(work + 0x68) = 4;
+    *(s32*)(work + 0x3C) = 255;
+    *(s32*)(work + 0x40) = 255;
+    *(s32*)(work + 0x44) = 255;
+
+    if (type == 0) {
+        *(s32*)(work + 0x4C) = 255;
+        *(s32*)(work + 0x50) = 255;
+        *(s32*)(work + 0x54) = 255;
+        *(s32*)(work + 0x58) = 255;
+    } else if (type == 1) {
+        *(s32*)(work + 0x4C) = 0;
+        *(s32*)(work + 0x50) = 127;
+        *(s32*)(work + 0x54) = 255;
+        *(s32*)(work + 0x58) = 255;
+    } else if (type == 2) {
+        *(s32*)(work + 0x4C) = 255;
+        *(s32*)(work + 0x50) = 255;
+        *(s32*)(work + 0x54) = 128;
+        *(s32*)(work + 0x58) = 255;
+    } else if (type == 6) {
+        *(s32*)(work + 0x3C) = 203;
+        *(s32*)(work + 0x40) = 148;
+        *(s32*)(work + 0x44) = 205;
+        *(s32*)(work + 0x4C) = 203;
+        *(s32*)(work + 0x50) = 148;
+        *(s32*)(work + 0x54) = 205;
+    } else {
+        value = rand();
+        *(s32*)(work + 0x3C) = value % 127 + 128;
+        remaining = 255 - *(s32*)(work + 0x3C);
+        *(s32*)(work + 0x40) = rand() % remaining + 128;
+        remaining -= *(s32*)(work + 0x40) - 128;
+        *(s32*)(work + 0x44) = rand() % remaining + 128;
+        *(s32*)(work + 0x4C) = 127;
+        *(s32*)(work + 0x50) = 127;
+        *(s32*)(work + 0x54) = 127;
+        *(s32*)(work + 0x58) = 127;
+    }
+
+    step = (*(s32*)(work + 0x34) < 30 ? (f32)*(s32*)(work + 0x34) : 30.0f) / (f32)count;
+    for (i = 1; i <= count; i++) {
+        u8* particle = work + i * 0x6C;
+        *(s32*)(particle + 0x30) = -(s32)((f32)i * step) - 1;
+    }
+    return effect;
 }
 
 u8 effSnowDustMain(s32 effectAddress) {
@@ -91,7 +159,7 @@ u8 effSnowDustMain(s32 effectAddress) {
             *(s32*)(part + 0x44) = *(s32*)(work + 0x44);
         }
 
-        if (type == 0 || type == 1 || type == 6) {
+        if (type == 0 || type == 1) {
             if (frame == 0) {
                 *(f32*)(part + 0x18) = 0.0f;
                 *(f32*)(part + 0x1C) = 0.0f;
@@ -100,26 +168,14 @@ u8 effSnowDustMain(s32 effectAddress) {
                 *(f32*)(part + 0x60) = 0.0f;
                 *(f32*)(part + 0x64) = 0.0f;
                 *(f32*)(part + 0x5C) = 0.5f + 0.05f * (f32)(rand() % 10);
-                if (type == 6) {
-                    *(s32*)(part + 0x38) = irand(360);
-                }
             }
-            *(u8*)(part + 0x48) = type == 6 ? 255 : a_data[frame];
+            *(u8*)(part + 0x48) = a_data[frame];
+            *(f32*)(part + 4) += *(f32*)(part + 0x18);
             *(f32*)(part + 8) += *(f32*)(part + 0x1C);
             *(f32*)(part + 0x60) += 0.2f;
             *(f32*)(part + 0x64) += 0.6f;
+            *(f32*)(part + 0x18) += 0.04f * (*(f32*)(part + 0x24) - *(f32*)(part + 0x18));
             *(f32*)(part + 0x1C) += 0.04f * (*(f32*)(part + 0x28) - *(f32*)(part + 0x1C));
-            if (type != 6) {
-                *(f32*)(part + 4) += *(f32*)(part + 0x18);
-                *(f32*)(part + 0x18) += 0.04f * (*(f32*)(part + 0x24) - *(f32*)(part + 0x18));
-            } else {
-                f32 distance = (f32)distABf(position.x, position.z,
-                                            *(f32*)(part + 4), *(f32*)(part + 0xC));
-                f32 orbit = 6.2832f * (f32)*(s32*)(part + 0x38) / 360.0f;
-                *(f32*)(part + 4) = position.x + distance * 0.97f * (f32)sin(orbit);
-                *(f32*)(part + 0xC) = position.z + distance * 0.97f * (f32)cos(orbit);
-                *(s32*)(part + 0x38) = (*(s32*)(part + 0x38) + 4) % 360;
-            }
         } else if (type == 2 || type == 3) {
             if (frame == 0) {
                 if (type == 2) {
@@ -142,6 +198,28 @@ u8 effSnowDustMain(s32 effectAddress) {
             *(f32*)(part + 0x64) += 0.6f;
             *(f32*)(part + 0x18) += 0.04f * (*(f32*)(part + 0x24) - *(f32*)(part + 0x18));
             *(f32*)(part + 0x1C) += 0.04f * (*(f32*)(part + 0x28) - *(f32*)(part + 0x1C));
+        } else if (type == 6) {
+            if (frame == 0) {
+                *(f32*)(part + 0x1C) = 0.0f;
+                *(f32*)(part + 0x28) = 0.05f * (f32)(-(rand() % 10) - 2);
+                *(f32*)(part + 0x60) = 0.0f;
+                *(f32*)(part + 0x64) = 0.0f;
+                *(f32*)(part + 0x5C) = 0.5f + 0.05f * (f32)(rand() % 10);
+                *(s32*)(part + 0x38) = irand(360);
+            }
+            *(u8*)(part + 0x48) = 255;
+            *(f32*)(part + 8) += *(f32*)(part + 0x1C);
+            *(f32*)(part + 0x60) += 0.2f;
+            *(f32*)(part + 0x64) += 0.6f;
+            *(f32*)(part + 0x1C) += 0.04f * (*(f32*)(part + 0x28) - *(f32*)(part + 0x1C));
+            {
+                f32 distance = (f32)distABf(position.x, position.z,
+                                            *(f32*)(part + 4), *(f32*)(part + 0xC));
+                f32 orbit = 6.2832f * (f32)*(s32*)(part + 0x38) / 360.0f;
+                *(f32*)(part + 4) = position.x + distance * 0.97f * (f32)sin(orbit);
+                *(f32*)(part + 0xC) = position.z + distance * 0.97f * (f32)cos(orbit);
+                *(s32*)(part + 0x38) = (*(s32*)(part + 0x38) + 4) % 360;
+            }
         } else {
             if (frame == 0) {
                 s32 red = rand() % 127 + 128;
@@ -206,65 +284,86 @@ u8 effSnowDustDisp(s32 cameraId, s32 effectAddress) {
             *(s32*)(work + 0x58);
     GXSetTevColor(2, &color);
 
-    GXSetNumChans(0);
-    if (type == 2 || type == 3) {
+    if (type == 0 || type == 6) {
+        GXSetNumChans(0);
+        GXSetNumTevStages(2);
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xF);
+        GXSetTevAlphaIn(0, 7, 4, 1, 7);
+        GXSetTevOrder(1, 1, 1, 0xFF);
+        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(1, 4, 2, 8, 0xF);
+        GXSetTevAlphaIn(1, 7, 7, 7, 0);
+        effGetTexObjN64(8, texObj);
+        GXLoadTexObj(texObj, 0);
+        effGetTexObjN64(0x65, texObj);
+        GXLoadTexObj(texObj, 1);
+        GXSetNumTexGens(2);
+        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+        GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
+        PSMTXScale(texMtx0, 0.015625f, 0.015625f, 0.0f);
+        PSMTXScale(texMtx1, 0.015625f, 0.015625f, 0.0f);
+    } else if (type == 1) {
+        GXSetNumChans(0);
+        GXSetNumTevStages(3);
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xF);
+        GXSetTevAlphaIn(0, 7, 4, 1, 7);
+        GXSetTevOrder(1, 1, 1, 0xFF);
+        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(1, 4, 2, 8, 0xF);
+        GXSetTevAlphaIn(1, 7, 7, 7, 0);
+        GXSetTevOrder(2, 1, 1, 0xFF);
+        GXSetTevColorOp(2, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(2, 0, 0xC, 8, 0xF);
+        GXSetTevAlphaIn(2, 7, 7, 7, 0);
+        effGetTexObjN64(0x66, texObj);
+        GXLoadTexObj(texObj, 0);
+        effGetTexObjN64(0x65, texObj);
+        GXLoadTexObj(texObj, 1);
+        GXSetNumTexGens(2);
+        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+        GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
+        PSMTXScale(texMtx0, 0.03125f, 0.03125f, 0.0f);
+        PSMTXScale(texMtx1, 0.03125f, 0.03125f, 0.0f);
+    } else if (type == 2 || type == 3) {
+        GXSetNumChans(0);
         GXSetNumTevStages(1);
         GXSetTevOrder(0, 0, 0, 0xFF);
         GXSetTevColorOp(0, 0, 0, 0, 1, 0);
         GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-        GXSetTevColorIn(0, 2, 1, 8, 0);
-        GXSetTevAlphaIn(0, 0, 4, 5, 7);
+        GXSetTevColorIn(0, 4, 2, 8, 0xF);
+        GXSetTevAlphaIn(0, 7, 4, 1, 7);
         effGetTexObjN64(0x67, texObj);
         GXLoadTexObj(texObj, 0);
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
         PSMTXScale(texMtx0, 0.00390625f, 0.015625f, 0.0f);
     } else if (type == 4 || type == 5) {
+        GXSetNumChans(0);
         GXSetNumTevStages(2);
         GXSetTevOrder(0, 0, 0, 0xFF);
         GXSetTevColorOp(0, 0, 0, 0, 1, 0);
         GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-        GXSetTevColorIn(0, 0, 8, 7, 2);
-        GXSetTevAlphaIn(0, 0, 4, 5, 7);
+        GXSetTevColorIn(0, 0xF, 8, 5, 2);
+        GXSetTevAlphaIn(0, 7, 4, 1, 7);
         GXSetTevOrder(1, 0xFF, 0xFF, 0xFF);
         GXSetTevColorOp(1, 1, 0, 0, 1, 0);
         GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
-        GXSetTevColorIn(1, 0, 1, 7, 0);
-        GXSetTevAlphaIn(1, 0, 0, 0, 0);
+        GXSetTevColorIn(1, 0xF, 4, 5, 0);
+        GXSetTevAlphaIn(1, 7, 7, 7, 0);
         effGetTexObjN64(0x68, texObj);
         GXLoadTexObj(texObj, 0);
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
         PSMTXScale(texMtx0, 0.015625f, 0.015625f, 0.0f);
-    } else {
-        GXSetNumTevStages(2);
-        GXSetTevOrder(0, 0, 0, 0xFF);
-        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-        GXSetTevColorIn(0, 0, 0, 0, 0);
-        GXSetTevAlphaIn(0, 0, 4, 5, 7);
-        GXSetTevOrder(1, 1, 1, 0xFF);
-        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
-        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
-        GXSetTevColorIn(1, 2, 1, 8, 0);
-        GXSetTevAlphaIn(1, 0, 0, 0, 0);
-        effGetTexObjN64(type == 1 ? 0x66 : type == 6 ? 8 : 0x68, texObj);
-        GXLoadTexObj(texObj, 0);
-        if (type == 1 || type == 6) {
-            effGetTexObjN64(0x65, texObj);
-            GXLoadTexObj(texObj, 1);
-            GXSetNumTexGens(2);
-            GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-            GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
-            PSMTXScale(texMtx0, type == 1 ? 0.03125f : 0.015625f,
-                       type == 1 ? 0.03125f : 0.015625f, 0.0f);
-            PSMTXScale(texMtx1, type == 1 ? 0.03125f : 0.015625f,
-                       type == 1 ? 0.03125f : 0.015625f, 0.0f);
-        } else {
-            GXSetNumTexGens(1);
-            GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-            PSMTXScale(texMtx0, 0.015625f, 0.015625f, 0.0f);
-        }
     }
     GXSetCullMode(0);
 

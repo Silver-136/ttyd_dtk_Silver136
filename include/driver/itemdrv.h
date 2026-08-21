@@ -19,3 +19,5 @@ void itemFlagOn(void* item, u32 flags);
 void itemFlagOff(void* item, u32 flags);
 void itemStatusOn(void* item, u32 flags);
 u32 itemStatus(void* item, u32 flags);
+u8 itemseq_Bound(void* item);
+s32 itemHitCheckSide(f32 moveX, f32 moveZ, void* item, f32* outX, f32* outZ, s32* outAngle);

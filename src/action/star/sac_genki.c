@@ -769,149 +769,365 @@ void disp_2D(void) {
 
 /* stub-fill: disp_3D | missing_definition | ghidra_signature */
 void disp_3D(void) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+
     extern u8* get_ptr(void);
-    extern void* g_BattleWork;
     extern void* BattleGetMarioPtr(void*);
     extern void* BattleGetPartyPtr(void*);
     extern void BtlUnit_GetHomePos(void*, f32*, f32*, f32*);
+    extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
     extern void PSMTXTrans(void*, f32, f32, f32);
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXTransApply(void*, void*, f32, f32, f32);
     extern void iconNumberDispGx3D(void*, s32, s32, void*);
     extern void iconDispGxCol(void*, u16, u16, void*);
     extern s32 pouchGetPartyColor(s32);
-    u8* work = get_ptr();
-    void* mario = BattleGetMarioPtr(g_BattleWork);
-    BattleWorkUnit* party = BattleGetPartyPtr(g_BattleWork);
-    f32 mx, my, mz, px, py, pz;
+    extern void btlDispTex4(s32, Vec3*, Vec3*, Vec3*, u32*);
+    extern Vec3 vec3_80300c50[];
+
+    extern u32 dat_804282b8;
+    extern u32 dat_804282bc;
+    extern u32 dat_804282c0;
+    extern u32 dat_804282c4;
+    extern u32 dat_804282c8;
+    extern u32 dat_804282cc;
+    extern u32 dat_804282d0;
+
+    extern f32 float_3p1416_804282e0;
+    extern f32 float_180_804282e4;
+    extern f32 float_60_804282e8;
+    extern f32 float_10_804282ec;
+    extern f32 float_5_804282f0;
+    extern f32 float_6_804282f4;
+    extern f32 float_8_804282f8;
+    extern f32 float_0p5_804282fc;
+    extern f32 float_90_80428300;
+    extern f32 float_1p25_80428304;
+    extern f32 float_2_80428308;
+    extern f32 float_1_8042830c;
+    extern f32 float_20_80428310;
+    extern f32 float_85_80428314;
+    extern f32 float_30_80428318;
+
+    u8* work;
+    void* mario;
+    BattleWorkUnit* party;
+    Vec3* vecBase;
+    f32 mx;
+    f32 my;
+    f32 mz;
+    f32 px;
+    f32 py;
+    f32 pz;
     f32 mtx[3][4];
+    f32 mtx2[3][4];
+    Vec3 firstLow;
+    Vec3 firstHigh;
+    Vec3 firstTrans;
+    Vec3 partyLow;
+    Vec3 partyHigh;
+    Vec3 partyTrans;
+    Vec3 centerLow;
+    Vec3 centerHigh;
+    Vec3 noPartyLow;
+    Vec3 noPartyHigh;
+    Vec3 commonTrans;
+    Vec3 posA;
+    Vec3 posATemp;
+    Vec3 scaleA;
+    Vec3 rotA;
+    Vec3 rotATemp;
+    Vec3 posB;
+    Vec3 posBTemp;
+    Vec3 scaleB;
+    Vec3 rotB;
+    Vec3 rotBTemp;
     u32 color;
+    u32 colorA;
+    u32 colorB;
     s32 frame;
-    f32 x;
+    f32 angle;
+    f32 stateF;
     s32 i;
 
-    (void)(3.141592f * *(f32*)(work + 0x6C) / 180.0f);
-    if (*(s32*)(work + 4) == 0) {
-        return;
-    }
-    BtlUnit_GetHomePos(mario, &mx, &my, &mz);
-    my += 60.0f;
-    {
-        u8* data = *(u8**)(*(u8**)(work + 0x34) + 0xC);
-        *(f32*)(data + 8) = mx;
-        *(f32*)(data + 0xC) = my - 10.0f;
-        *(f32*)(data + 0x10) = mz + 5.0f;
-    }
-    x = *(f32*)(work + 0x1C) < 10.0f ? mx : mx + 6.0f;
-    PSMTXTrans(mtx, x, my, mz + 8.0f);
-    frame = *(s32*)(work + 0x28) % 12;
-    if (frame >= 0 && frame < 6) {
-        color = 0xFFFFFFFF;
-        iconNumberDispGx3D(mtx, (s32)*(f32*)(work + 0x1C), 0, &color);
-    }
-    if (*(s32*)(work + 0x50) == -1) {
+    vecBase = vec3_80300c50;
+    work = get_ptr();
+    mario = BattleGetMarioPtr(_battleWorkPointer);
+    party = BattleGetPartyPtr(_battleWorkPointer);
+    angle = (float_3p1416_804282e0 * *(f32*)(work + 0x6C)) /
+            float_180_804282e4;
+
+    if (*(s32*)(work + 4) != 0) {
         u8* data;
+
         BtlUnit_GetHomePos(mario, &mx, &my, &mz);
-        my += 90.0f;
-        data = *(u8**)(*(u8**)(work + 0x3C) + 0xC);
+        my += 60.0f;
+        data = *(u8**)(*(u8**)(work + 0x34) + 0xC);
         *(f32*)(data + 8) = mx;
         *(f32*)(data + 0xC) = my - 10.0f;
         *(f32*)(data + 0x10) = mz + 5.0f;
-        x = *(f32*)(work + 0x24) < 10.0f ? mx : mx + 6.0f;
-        PSMTXTrans(mtx, x, my, mz + 8.0f);
-        frame = *(s32*)(work + 0x30) % 12;
-        if (frame >= 0 && frame < 6) {
-            color = 0xFFFFFFFF;
-            iconNumberDispGx3D(mtx, (s32)*(f32*)(work + 0x24), 0, &color);
+
+        if (*(f32*)(work + 0x1C) >= 10.0f) {
+            firstHigh = vecBase[14];
+            firstHigh.x = mx + 6.0f;
+            firstHigh.y = my;
+            firstHigh.z = mz + 8.0f;
+            firstTrans = firstHigh;
+        } else {
+            firstLow = vecBase[13];
+            firstLow.x = mx;
+            firstLow.y = my;
+            firstLow.z = mz + 8.0f;
+            firstTrans = firstLow;
         }
-    } else {
-        u8* data;
-        BtlUnit_GetHomePos(party, &px, &py, &pz);
-        py += 60.0f;
-        data = *(u8**)(*(u8**)(work + 0x38) + 0xC);
-        *(f32*)(data + 8) = px;
-        *(f32*)(data + 0xC) = py - 10.0f;
-        *(f32*)(data + 0x10) = pz + 5.0f;
-        x = *(f32*)(work + 0x20) < 10.0f ? px : px + 6.0f;
-        PSMTXTrans(mtx, x, py, pz + 8.0f);
-        frame = *(s32*)(work + 0x2C) % 12;
+        PSMTXTrans(mtx, firstTrans.x, firstTrans.y, firstTrans.z);
+
+        frame = *(s32*)(work + 0x28) % 12;
         if (frame >= 0 && frame < 6) {
-            color = 0xFFFFFFFF;
-            iconNumberDispGx3D(mtx, (s32)*(f32*)(work + 0x20), 0, &color);
+            color = dat_804282b8;
+            iconNumberDispGx3D(
+                mtx, (s32)*(f32*)(work + 0x1C), 0, &color);
         }
-        BtlUnit_GetHomePos(mario, &mx, &my, &mz);
-        BtlUnit_GetHomePos(party, &px, &py, &pz);
-        mx = 0.5f * (mx + px);
-        my += 90.0f;
-        data = *(u8**)(*(u8**)(work + 0x3C) + 0xC);
-        *(f32*)(data + 8) = mx;
-        *(f32*)(data + 0xC) = my - 10.0f;
-        *(f32*)(data + 0x10) = mz + 5.0f;
-        x = *(f32*)(work + 0x24) < 10.0f ? mx : mx + 6.0f;
-        PSMTXTrans(mtx, x, my, mz + 8.0f);
-        frame = *(s32*)(work + 0x30) % 12;
-        if (frame >= 0 && frame < 6) {
-            color = 0xFFFFFFFF;
-            iconNumberDispGx3D(mtx, (s32)*(f32*)(work + 0x24), 0, &color);
+
+        if (*(s32*)(work + 0x50) == -1) {
+            BtlUnit_GetHomePos(mario, &mx, &my, &mz);
+            my += 90.0f;
+            data = *(u8**)(*(u8**)(work + 0x3C) + 0xC);
+            *(f32*)(data + 8) = mx;
+            *(f32*)(data + 0xC) = my - 10.0f;
+            *(f32*)(data + 0x10) = mz + 5.0f;
+
+            if (*(f32*)(work + 0x24) >= 10.0f) {
+                noPartyHigh = vecBase[20];
+                noPartyHigh.x = mx + 6.0f;
+                noPartyHigh.y = my;
+                noPartyHigh.z = mz + 8.0f;
+                commonTrans = noPartyHigh;
+            } else {
+                noPartyLow = vecBase[19];
+                noPartyLow.x = mx;
+                noPartyLow.y = my;
+                noPartyLow.z = mz + 8.0f;
+                commonTrans = noPartyLow;
+            }
+            PSMTXTrans(mtx, commonTrans.x, commonTrans.y, commonTrans.z);
+
+            frame = *(s32*)(work + 0x30) % 12;
+            if (frame >= 0 && frame < 6) {
+                color = dat_804282c4;
+                iconNumberDispGx3D(
+                    mtx, (s32)*(f32*)(work + 0x24), 0, &color);
+            }
+        } else {
+            BtlUnit_GetHomePos(party, &px, &py, &pz);
+            py += 60.0f;
+            data = *(u8**)(*(u8**)(work + 0x38) + 0xC);
+            *(f32*)(data + 8) = px;
+            *(f32*)(data + 0xC) = py - 10.0f;
+            *(f32*)(data + 0x10) = pz + 5.0f;
+
+            if (*(f32*)(work + 0x20) >= 10.0f) {
+                partyHigh = vecBase[16];
+                partyHigh.x = px + 6.0f;
+                partyHigh.y = py;
+                partyHigh.z = pz + 8.0f;
+                partyTrans = partyHigh;
+            } else {
+                partyLow = vecBase[15];
+                partyLow.x = px;
+                partyLow.y = py;
+                partyLow.z = pz + 8.0f;
+                partyTrans = partyLow;
+            }
+            PSMTXTrans(mtx, partyTrans.x, partyTrans.y, partyTrans.z);
+
+            frame = *(s32*)(work + 0x2C) % 12;
+            if (frame >= 0 && frame < 6) {
+                color = dat_804282bc;
+                iconNumberDispGx3D(
+                    mtx, (s32)*(f32*)(work + 0x20), 0, &color);
+            }
+
+            BtlUnit_GetHomePos(mario, &mx, &my, &mz);
+            BtlUnit_GetHomePos(party, &px, &py, &pz);
+            mx = 0.5f * (mx + px);
+            my += 90.0f;
+            data = *(u8**)(*(u8**)(work + 0x3C) + 0xC);
+            *(f32*)(data + 8) = mx;
+            *(f32*)(data + 0xC) = my - 10.0f;
+            *(f32*)(data + 0x10) = mz + 5.0f;
+
+            if (*(f32*)(work + 0x24) >= 10.0f) {
+                centerHigh = vecBase[18];
+                centerHigh.x = mx + 6.0f;
+                centerHigh.y = my;
+                centerHigh.z = mz + 8.0f;
+                commonTrans = centerHigh;
+            } else {
+                centerLow = vecBase[17];
+                centerLow.x = mx;
+                centerLow.y = my;
+                centerLow.z = mz + 8.0f;
+                commonTrans = centerLow;
+            }
+            PSMTXTrans(mtx, commonTrans.x, commonTrans.y, commonTrans.z);
+
+            frame = *(s32*)(work + 0x30) % 12;
+            if (frame >= 0 && frame < 6) {
+                color = dat_804282c0;
+                iconNumberDispGx3D(
+                    mtx, (s32)*(f32*)(work + 0x24), 0, &color);
+            }
         }
     }
 
     for (i = 0; i < 10; i++) {
-        s32* entry = (s32*)(work + 0x358 + i * 0x2C);
-        if (entry[0] == 2) {
-            s32 kind = entry[2];
-            u16 icon = 0;
-            u16 flags = 0;
-            f32 scale = 1.25f;
-            if (kind == 0) {
-                icon = 0x1AB;
-            } else if (kind == 1) {
-                icon = 0x1AB;
-                if (entry[1] % 12 >= 0 && entry[1] % 12 < 6) {
-                    flags = 0x20;
-                    scale = 2.0f;
-                }
-            } else if (kind == 2 || kind == 3 || kind == 4) {
-                if (party->currentType == UNIT_GOOMBELLA) {
-                    icon = 0x1AC;
-                } else if (party->currentType == UNIT_KOOPS) {
-                    icon = 0x1AD;
-                } else if (party->currentType == UNIT_YOSHI) {
-                    s32 partyColor = pouchGetPartyColor(4);
-                    if (partyColor == 0) icon = 0x1AF;
-                    else if (partyColor == 1) icon = 0x1B0;
-                    else if (partyColor == 2) icon = 0x1B1;
-                    else if (partyColor == 3) icon = 0x1B2;
-                    else if (partyColor == 4) icon = 0x1B3;
-                    else if (partyColor == 5) icon = 0x1B4;
-                    else if (partyColor == 6) icon = 0x1B5;
-                } else if (party->currentType == UNIT_FLURRIE) {
-                    icon = 0x1B6;
-                } else if (party->currentType == UNIT_VIVIAN) {
-                    icon = 0x1B7;
-                } else if (party->currentType == UNIT_BOBBERY) {
-                    icon = 0x1AE;
-                } else if (party->currentType == UNIT_MS_MOWZ) {
-                    icon = 0x1B8;
-                }
-                if (kind == 3 && entry[1] % 12 >= 0 && entry[1] % 12 < 6) {
-                    flags = 0x20;
-                    scale = 2.0f;
-                }
-            } else if (kind == 5) {
-                icon = 0x1B9;
-                if (entry[1] % 12 >= 0 && entry[1] % 12 < 6) {
-                    flags = 0x20;
-                    scale = 2.0f;
-                }
-            } else if (kind == 6) {
-                icon = 0x14B;
-            }
-            PSMTXScale(mtx, scale, scale, 1.0f);
-            PSMTXTransApply(mtx, mtx, (f32)entry[3], (f32)entry[4], (f32)entry[5]);
-            color = 0xFFFFFFFF;
-            iconDispGxCol(mtx, flags, icon, &color);
+        s32* entry;
+        s32 kind;
+        u16 icon;
+        u16 flags;
+        f32 scale;
+
+        entry = (s32*)(work + 0x358 + i * 0x2C);
+        if (entry[0] != 2) {
+            continue;
         }
+
+        kind = entry[2];
+        icon = 0;
+        flags = 0;
+        scale = 1.25f;
+
+        if (kind == 0) {
+            icon = 0x1AB;
+        } else if (kind == 1) {
+            icon = 0x1AB;
+            if (entry[1] % 12 >= 0 && entry[1] % 12 < 6) {
+                flags = 0x20;
+                scale = 2.0f;
+            }
+        } else if (kind == 2 || kind == 3 || kind == 4) {
+            switch (party->currentType) {
+                case UNIT_GOOMBELLA:
+                    icon = 0x1AC;
+                    break;
+                case UNIT_KOOPS:
+                    icon = 0x1AD;
+                    break;
+                case UNIT_YOSHI:
+                    switch (pouchGetPartyColor(4)) {
+                        case 0:
+                            icon = 0x1AF;
+                            break;
+                        case 1:
+                            icon = 0x1B0;
+                            break;
+                        case 2:
+                            icon = 0x1B1;
+                            break;
+                        case 3:
+                            icon = 0x1B2;
+                            break;
+                        case 4:
+                            icon = 0x1B3;
+                            break;
+                        case 5:
+                            icon = 0x1B4;
+                            break;
+                        case 6:
+                            icon = 0x1B5;
+                            break;
+                    }
+                    break;
+                case UNIT_FLURRIE:
+                    icon = 0x1B6;
+                    break;
+                case UNIT_VIVIAN:
+                    icon = 0x1B7;
+                    break;
+                case UNIT_BOBBERY:
+                    icon = 0x1AE;
+                    break;
+                case UNIT_MS_MOWZ:
+                    icon = 0x1B8;
+                    break;
+                default:
+                    icon = 0;
+                    break;
+            }
+
+            if (kind == 3 &&
+                entry[1] % 12 >= 0 && entry[1] % 12 < 6) {
+                flags = 0x20;
+                scale = 2.0f;
+            }
+        } else if (kind == 5) {
+            icon = 0x1B9;
+            if (entry[1] % 12 >= 0 && entry[1] % 12 < 6) {
+                flags = 0x20;
+                scale = 2.0f;
+            }
+        } else if (kind == 6) {
+            icon = 0x14B;
+        }
+
+        PSMTXScale(mtx, scale, scale, 1.0f);
+        PSMTXTransApply(
+            mtx, mtx, (f32)entry[3], (f32)entry[4], (f32)entry[5]);
+        color = dat_804282c8;
+        iconDispGxCol(mtx, flags, icon, &color);
+    }
+
+    if (*(s32*)(work + 0x64) > 1 &&
+        *(s32*)(work + 0x64) < 4) {
+        PSMTXScale(
+            mtx2,
+            0.5f,
+            0.5f,
+            0.5f);
+
+        BtlUnit_GetPos(mario, &mx, &my, &mz);
+        mx = float_85_80428314 * (f32)cos((f64)angle) + mx;
+        my = float_85_80428314 * (f32)sin((f64)angle) +
+             my + float_30_80428318;
+        mx += 10.0f;
+        mz += 10.0f;
+
+        stateF = (f32)*(s32*)(work + 0x68);
+
+        rotATemp = vecBase[23];
+        rotA = rotATemp;
+        rotA.z = 6.0f * stateF;
+
+        scaleA = vecBase[22];
+
+        posATemp = vecBase[21];
+        posATemp.x = mx;
+        posATemp.y = my;
+        posATemp.z = mz;
+        posA = posATemp;
+
+        colorA = dat_804282cc;
+        btlDispTex4(0x57, &posA, &scaleA, &rotA, &colorA);
+
+        rotBTemp = vecBase[26];
+        rotB = rotBTemp;
+        rotB.z = -(6.0f * stateF);
+
+        scaleB = vecBase[25];
+
+        posBTemp = vecBase[24];
+        posBTemp.x = mx;
+        posBTemp.y = my;
+        posBTemp.z = mz;
+        posB = posBTemp;
+
+        colorB = dat_804282d0;
+        btlDispTex4(0x58, &posB, &scaleB, &rotB, &colorB);
     }
 }
 

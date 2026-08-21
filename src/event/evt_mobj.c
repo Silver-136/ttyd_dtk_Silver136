@@ -2394,17 +2394,29 @@ s32 mobj_itembox(void* pMobj) {
         if (strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_TreasureBox_802c26f8) == 0 ||
             strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_GrayTreasureBox_802c2720) == 0) {
             evt = evtEntryType(&evt_box_sound1, 0, 0, 0);
+            ix = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x38));
+            *(s32*)((s32)evt + 0x18) = ix - 230000000;
+            iy = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x3C));
+            *(s32*)((s32)evt + 0x1C) = iy - 230000000;
+            iz = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x40));
+            *(s32*)((s32)evt + 0x20) = iz - 230000000;
         } else if (strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_BlackTreasureBo_802c2738) == 0) {
             evt = evtEntryType(&evt_box_sound3, 0, 0, 0);
+            ix = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x38));
+            *(s32*)((s32)evt + 0x18) = ix - 230000000;
+            iy = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x3C));
+            *(s32*)((s32)evt + 0x1C) = iy - 230000000;
+            iz = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x40));
+            *(s32*)((s32)evt + 0x20) = iz - 230000000;
         } else {
             evt = evtEntryType(&evt_box_sound2, 0, 0, 0);
+            ix = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x38));
+            *(s32*)((s32)evt + 0x18) = ix - 230000000;
+            iy = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x3C));
+            *(s32*)((s32)evt + 0x1C) = iy - 230000000;
+            iz = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x40));
+            *(s32*)((s32)evt + 0x20) = iz - 230000000;
         }
-        ix = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x38));
-        iy = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x3C));
-        iz = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x40));
-        *(s32*)((s32)evt + 0x18) = ix - 230000000;
-        *(s32*)((s32)evt + 0x1C) = iy - 230000000;
-        *(s32*)((s32)evt + 0x20) = iz - 230000000;
         animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_A_1_80420208, 1);
         *(s32*)((s32)pMobj + 0x1CC) = 0;
         mobjRunEvent(pMobj, *(void**)((s32)pMobj + 0x1D8));
@@ -3120,7 +3132,7 @@ s32 mobj_badgeblk(void* pMobj) {
     void* item;
     u32 action = *(u32*)((s32)pMobj + 0x1DC);
 
-    if (action == 0) {
+    switch (action) { case 0:
         if ((*(u32*)pMobj & 8) != 0) {
             if (strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_BadgeBlock_802c266c) == 0 ||
                 strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_BrickBadgeBlock_802c25bc) == 0 ||
@@ -3159,7 +3171,7 @@ s32 mobj_badgeblk(void* pMobj) {
             }
             *(s32*)((s32)pMobj + 0x1DC) += 1;
         }
-    } else if (action == 1) {
+        break; case 1:
         if (animPoseGetLoopTimes(*(s32*)((s32)pMobj + 0x70)) >= (double)float_1_80420250) {
             animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_S_2_804202b0, 1);
             *(u32*)pMobj &= ~8;
@@ -3171,14 +3183,14 @@ s32 mobj_badgeblk(void* pMobj) {
                 strcpy((char*)((s32)pMobj + 0x15), str_MOBJ_Block_802c24a8);
             }
         }
-    } else if (action == 0x5A) {
+        break; case 0x5A:
         if ((*(u32*)pMobj & 8) != 0) {
             *(u32*)pMobj &= ~8;
             animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_A_2_8042020c, 1);
             psndSFXOn_3D(0x1B7, (void*)((s32)pMobj + 0x38));
             *(s32*)((s32)pMobj + 0x1DC) += 1;
         }
-    } else if ((s32)action < 0x5C) {
+        break; case 0x5B:
         if ((*(u32*)pMobj & 8) == 0) {
             *(s32*)((s32)pMobj + 0x1DC) = 0x5A;
         } else if (animPoseGetLoopTimes(*(s32*)((s32)pMobj + 0x70)) >= (double)float_1_80420250) {
@@ -3186,7 +3198,7 @@ s32 mobj_badgeblk(void* pMobj) {
             *(s32*)((s32)pMobj + 0x1DC) = 0x5A;
             *(u32*)pMobj &= ~8;
         }
-    }
+        break; }
     return 0;
 }
 s32 evt_mobj_badgeblk(void* pEvt) {
@@ -3495,34 +3507,9 @@ s32 mobj_10countblk(void* pMobj) {
     u32 action = *(u32*)((s32)pMobj + 0x1DC);
     u32 flags;
 
-    if (action == 0x5A) {
-        if ((*(u32*)pMobj & 8) != 0) {
-            psndSFXOn_3D(0x1B7, (void*)((s32)pMobj + 0x38));
-            animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_A_3_80420210, 1);
-            *(u32*)pMobj &= ~8;
-            *(s32*)((s32)pMobj + 0x1DC) = *(s32*)((s32)pMobj + 0x1DC) + 1;
-        }
-    } else if ((s32)action < 0x5A) {
-        if (action == 1) {
-            if (*(s32*)((s32)pMobj + 0x1B0) > 0) {
-                *(s32*)((s32)pMobj + 0x1B0) = *(s32*)((s32)pMobj + 0x1B0) - 1;
-            }
-            if (*(s32*)((s32)pMobj + 0x1B0) < 1) {
-                *(s32*)((s32)pMobj + 0x1DC) = 0x5A;
-                animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_S_2_804202b0, 1);
-                strcpy((char*)((s32)pMobj + 0x15), str_MOBJ_Block_802c24a8);
-            } else if ((*(u32*)pMobj & 8) != 0) {
-                psndSFXOn_3D(0x1BF, (void*)((s32)pMobj + 0x38));
-                pouchAddCoin(1);
-                itemEntry(0, 0x79, 0xF, -1, 0,
-                          *(f32*)((s32)pMobj + 0x38),
-                          *(f32*)((s32)pMobj + 0x3C),
-                          *(f32*)((s32)pMobj + 0x40));
-                *(u32*)pMobj &= ~8;
-                animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_A_1_80420208, 1);
-            }
-        } else if ((s32)action < 1) {
-            if (((s32)action > -1) && ((*(u32*)pMobj & 8) != 0)) {
+    switch (action) {
+        case 0:
+            if ((*(u32*)pMobj & 8) != 0) {
                 flags = *(u32*)pMobj;
                 if ((flags & 0x800) != 0) {
                     *(u32*)pMobj = flags & ~0x800;
@@ -3544,25 +3531,60 @@ s32 mobj_10countblk(void* pMobj) {
                 *(s32*)((s32)pMobj + 0x1DC) = *(s32*)((s32)pMobj + 0x1DC) + 1;
                 *(u32*)pMobj &= ~8;
             }
-        }
-    } else if ((s32)action < 0x5C) {
-        if ((*(u32*)pMobj & 8) == 0) {
-            *(s32*)((s32)pMobj + 0x1DC) = 0x5A;
-        } else if (animPoseGetLoopTimes(*(s32*)((s32)pMobj + 0x70)) >= float_1_80420250) {
-            animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_S_2_804202b0, 1);
-            *(s32*)((s32)pMobj + 0x1DC) = 0x5A;
-            *(u32*)pMobj &= ~8;
-        }
+            break;
+
+        case 1:
+            if (*(s32*)((s32)pMobj + 0x1B0) > 0) {
+                *(s32*)((s32)pMobj + 0x1B0) = *(s32*)((s32)pMobj + 0x1B0) - 1;
+            }
+            if (*(s32*)((s32)pMobj + 0x1B0) < 1) {
+                *(s32*)((s32)pMobj + 0x1DC) = 0x5A;
+                animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_S_2_804202b0, 1);
+                strcpy((char*)((s32)pMobj + 0x15), str_MOBJ_Block_802c24a8);
+            } else if ((*(u32*)pMobj & 8) != 0) {
+                psndSFXOn_3D(0x1BF, (void*)((s32)pMobj + 0x38));
+                pouchAddCoin(1);
+                itemEntry(0, 0x79, 0xF, -1, 0,
+                          *(f32*)((s32)pMobj + 0x38),
+                          *(f32*)((s32)pMobj + 0x3C),
+                          *(f32*)((s32)pMobj + 0x40));
+                *(u32*)pMobj &= ~8;
+                animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_A_1_80420208, 1);
+            }
+            break;
+
+        case 0x5A:
+            if ((*(u32*)pMobj & 8) != 0) {
+                psndSFXOn_3D(0x1B7, (void*)((s32)pMobj + 0x38));
+                animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_A_3_80420210, 1);
+                *(u32*)pMobj &= ~8;
+                *(s32*)((s32)pMobj + 0x1DC) = *(s32*)((s32)pMobj + 0x1DC) + 1;
+            }
+            break;
+
+        case 0x5B:
+            if ((*(u32*)pMobj & 8) == 0) {
+                *(s32*)((s32)pMobj + 0x1DC) = 0x5A;
+            } else if (animPoseGetLoopTimes(*(s32*)((s32)pMobj + 0x70)) >= float_1_80420250) {
+                animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_S_2_804202b0, 1);
+                *(s32*)((s32)pMobj + 0x1DC) = 0x5A;
+                *(u32*)pMobj &= ~8;
+            }
+            break;
     }
     return 0;
 }
 
 s32 evt_mobj_brick(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
+    extern f32 evtGetFloat(void*, s32);
     extern u32 animGroupBaseAsync(const char*, s32, s32);
     extern s32 mobjEntry(char*, const char*);
     extern void* mobjNameToPtr(char*);
     extern void mobjSetPosition(f32, f32, f32, char*);
     extern void mobjCalcMtx(void*);
+    extern void animPoseSetAnim(s32, const char*, s32);
+    extern char* strcpy(char*, const char*);
     extern void* gp;
     extern const char str_MOBJ_FlowBrickBlock_802c24e0[];
     extern const char str_MOBJ_HiddenHatenaBlo_802c24b4[];
@@ -3599,36 +3621,28 @@ s32 evt_mobj_brick(void* pEvt) {
     switch (kind) {
         case 0:
             poseName = str_MOBJ_FlowBrickBlock_802c24e0;
-            mainFunc = mobj_brickblk;
             break;
         case 1:
             poseName = str_MOBJ_BrickHatenaBloc_802c25a4;
-            mainFunc = mobj_badgeblk;
             break;
         case 2:
             poseName = str_MOBJ_BrickBadgeBlock_802c25bc;
-            mainFunc = mobj_badgeblk;
             break;
         case 3:
             poseName = str_MOBJ_10CountBlock_802c25d4;
-            mainFunc = mobj_10countblk;
             break;
         case 10:
         case 11:
             poseName = str_MOBJ_HiddenHatenaBlo_802c24b4;
-            mainFunc = (kind == 10) ? mobj_brickblk : mobj_badgeblk;
             break;
         case 12:
             poseName = str_MOBJ_HiddenBadgeBloc_802c25e8;
-            mainFunc = mobj_badgeblk;
             break;
         case 13:
             poseName = str_MOBJ_Hidden10CountBl_802c2600;
-            mainFunc = mobj_10countblk;
             break;
         default:
             poseName = str_MOBJ_FlowBrickBlock_802c24e0;
-            mainFunc = mobj_brickblk;
             break;
     }
     if (animGroupBaseAsync(poseName, inBattle, 0) == 0) {
@@ -3643,6 +3657,22 @@ s32 evt_mobj_brick(void* pEvt) {
     if (kind > 9) {
         *(u32*)mobj |= 0x800;
     }
+    switch (kind) {
+        case 0:
+        case 10:
+            mainFunc = mobj_brickblk;
+            break;
+        case 1:
+        case 2:
+        case 11:
+        case 12:
+            mainFunc = mobj_badgeblk;
+            break;
+        case 3:
+        case 13:
+            mainFunc = mobj_10countblk;
+            break;
+    }
     *(void**)((s32)mobj + 0x1D0) = mainFunc;
     *(void**)((s32)mobj + 0x1D4) = evtCode;
     *(u32*)mobj |= 4;
@@ -3651,19 +3681,38 @@ s32 evt_mobj_brick(void* pEvt) {
     *(s32*)((s32)mobj + 0x1DC) = 0;
     *(s32*)((s32)mobj + 0x1A0) = item;
     mobjCalcMtx(mobj);
-    animPoseSetAnim(*(s32*)((s32)mobj + 0x70), (kind == 13) ? str_S_3_80420214 : str_S_1_8042021c, 1);
+    if (kind < 10) {
+        animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_1_8042021c, 1);
+    } else if (kind == 13) {
+        animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_3_80420214, 1);
+    } else {
+        animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_1_8042021c, 1);
+    }
     if (evtGetValue(pEvt, swSet) != 0) {
-        doneName = str_MOBJ_Block_802c24a8;
-        if (kind == 0 || kind == 10) {
-            animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_1_8042021c, 1);
-            *(s32*)((s32)mobj + 0x1DC) = 99;
-        } else {
-            if (kind == 2 || kind == 12) {
+        doneName = NULL;
+        switch (kind) {
+            case 0:
+            case 10:
+                animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_1_8042021c, 1);
+                *(s32*)((s32)mobj + 0x1DC) = 99;
+                break;
+            case 1:
+            case 11:
+            case 3:
+            case 13:
+                animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_2_804202b0, 1);
+                doneName = str_MOBJ_Block_802c24a8;
+                *(s32*)((s32)mobj + 0x1DC) = 0x5A;
+                break;
+            case 2:
+            case 12:
+                animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_2_804202b0, 1);
                 doneName = str_MOBJ_PinkBlock_802c2620;
-            }
-            animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_2_804202b0, 1);
+                *(s32*)((s32)mobj + 0x1DC) = 0x5A;
+                break;
+        }
+        if (doneName != NULL) {
             strcpy((char*)((s32)mobj + 0x15), doneName);
-            *(s32*)((s32)mobj + 0x1DC) = 0x5A;
         }
         *(u32*)mobj &= ~0x800;
     }
@@ -4442,89 +4491,118 @@ s32 mobj_koopa_brickblk(u32* mobj) {
     extern void effMObjBrokenEntry(double, double, double, s32);
     extern double animPoseGetLoopTimes(s32);
     extern void mobjDelete(char*);
-    extern const char str_MOBJ_FlowBrickBlock_802c24e0[];
-    extern const char str_MOBJ_block_ky_802c24f4[];
-    extern const char str_MOBJ_bigblock_01_802c2504[];
-    extern const char str_MOBJ_bigblock_02_802c2518[];
+    extern const u8 vec3_802c2058[];
     extern const char str_A_1_80420208[];
     extern const char str_S_1_8042021c[];
     extern f32 float_1_80420250;
     extern f32 float_12p5_80420268;
     extern f32 float_25_80420230;
+    const u8* vecBase;
     s32 level;
     s32 score;
     s32 valid;
-    u32 hitKind;
+
+    vecBase = vec3_802c2058;
+    valid = 0;
 
     switch (mobj[0x77]) {
         case 0:
             if ((*mobj & 8) == 0) {
                 break;
             }
-            valid = 0;
+
             level = kpaGetLevel();
-            hitKind = mobj[0x78];
-            if (level == 2) {
-                if (hitKind == 0x20000000 || hitKind == 0x10000000 ||
-                    hitKind == 0x04000000) {
-                    valid = 1;
-                }
-            } else if (level < 2) {
-                if (level == 0) {
-                    if (hitKind == 0x20000000) {
+            switch (level) {
+                case 0:
+                    if (mobj[0x78] == 0x20000000) {
                         valid = 1;
                     }
-                } else if (level > -1 &&
-                           (hitKind == 0x20000000 || hitKind == 0x04000000)) {
+                    break;
+
+                case 1:
+                    if (mobj[0x78] == 0x20000000 ||
+                        mobj[0x78] == 0x04000000) {
+                        valid = 1;
+                    }
+                    break;
+
+                case 2:
+                    if (mobj[0x78] == 0x20000000 ||
+                        mobj[0x78] == 0x10000000 ||
+                        mobj[0x78] == 0x04000000) {
+                        valid = 1;
+                    }
+                    break;
+
+                case 3:
                     valid = 1;
-                }
-            } else if (level < 4) {
-                valid = 1;
+                    break;
             }
 
-            if (valid != 0) {
-                mobjRunEvent(mobj, (void*)mobj[0x75]);
-                evtSetValue(0, mobj[0x79], 1);
+            if (valid == 0) {
                 if (mobj[0x78] == 0x04000000) {
                     npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
+                    mobj[0x77] = 20;
+                } else {
+                    *mobj &= ~8;
                 }
-                if ((void*)mobj[0x1D] != 0) {
-                    *(u16*)mobj[0x1D] |= 1;
-                }
-                *mobj |= 2;
-                score = 400;
-                if (kpaMutekiCheck() != 0) {
-                    score = 500;
-                }
-                kpaAddScore(score);
-                mobj[0x77] = 10;
-            } else if (mobj[0x78] == 0x04000000) {
-                npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
-                mobj[0x77] = 20;
-            } else {
-                *mobj &= ~8;
+                break;
             }
+
+            mobjRunEvent(mobj, (void*)mobj[0x75]);
+            evtSetValue(0, mobj[0x79], 1);
+
+            if (mobj[0x78] == 0x04000000) {
+                npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
+            }
+
+            if ((void*)mobj[0x1D] != 0) {
+                *(u16*)mobj[0x1D] |= 1;
+            }
+
+            *mobj |= 2;
+            valid = kpaMutekiCheck();
+            score = 400;
+            if (valid != 0) {
+                score = 500;
+            }
+            kpaAddScore(score);
+            mobj[0x77] = 10;
             break;
 
         case 10:
             psndSFXOn_3D(0x1B8, mobj + 0xE);
-            if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_FlowBrickBlock_802c24e0) == 0) {
-                effMObjBrokenEntry((double)(f32)mobj[0xE],
-                                   (double)(float_12p5_80420268 + (f32)mobj[0xF]),
-                                   (double)(float_12p5_80420268 + (f32)mobj[0x10]), 0);
-            } else if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_block_ky_802c24f4) == 0) {
-                effMObjBrokenEntry((double)(f32)mobj[0xE],
-                                   (double)(float_12p5_80420268 + (f32)mobj[0xF]),
-                                   (double)(float_12p5_80420268 + (f32)mobj[0x10]), 1);
-            } else if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_bigblock_01_802c2504) == 0) {
-                effMObjBrokenEntry((double)(f32)mobj[0xE],
-                                   (double)(float_25_80420230 + (f32)mobj[0xF]),
-                                   (double)(float_25_80420230 + (f32)mobj[0x10]), 3);
-            } else if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_bigblock_02_802c2518) == 0) {
-                effMObjBrokenEntry((double)(f32)mobj[0xE],
-                                   (double)(float_25_80420230 + (f32)mobj[0xF]),
-                                   (double)(float_25_80420230 + (f32)mobj[0x10]), 4);
+
+            if (strcmp((char*)((s32)mobj + 0x15),
+                       (const char*)(vecBase + 0x488)) == 0) {
+                effMObjBrokenEntry(
+                    (double)((f32*)mobj)[0xE],
+                    (double)(float_12p5_80420268 + ((f32*)mobj)[0xF]),
+                    (double)(float_12p5_80420268 + ((f32*)mobj)[0x10]),
+                    0);
+            } else if (strcmp((char*)((s32)mobj + 0x15),
+                              (const char*)(vecBase + 0x49C)) == 0) {
+                effMObjBrokenEntry(
+                    (double)((f32*)mobj)[0xE],
+                    (double)(float_12p5_80420268 + ((f32*)mobj)[0xF]),
+                    (double)(float_12p5_80420268 + ((f32*)mobj)[0x10]),
+                    1);
+            } else if (strcmp((char*)((s32)mobj + 0x15),
+                              (const char*)(vecBase + 0x4AC)) == 0) {
+                effMObjBrokenEntry(
+                    (double)((f32*)mobj)[0xE],
+                    (double)(float_25_80420230 + ((f32*)mobj)[0xF]),
+                    (double)(float_25_80420230 + ((f32*)mobj)[0x10]),
+                    3);
+            } else if (strcmp((char*)((s32)mobj + 0x15),
+                              (const char*)(vecBase + 0x4C0)) == 0) {
+                effMObjBrokenEntry(
+                    (double)((f32*)mobj)[0xE],
+                    (double)(float_25_80420230 + ((f32*)mobj)[0xF]),
+                    (double)(float_25_80420230 + ((f32*)mobj)[0x10]),
+                    4);
             }
+
             mobj[0x77] = 99;
             break;
 
@@ -4537,17 +4615,23 @@ s32 mobj_koopa_brickblk(u32* mobj) {
         case 21:
             if ((*mobj & 8) == 0) {
                 mobj[0x77] = 0;
-            } else if (animPoseGetLoopTimes(mobj[0x1C]) >= (double)float_1_80420250) {
-                animPoseSetAnim(mobj[0x1C], str_S_1_8042021c, 1);
-                mobj[0x77] = 0;
-                *mobj &= ~8;
+                break;
             }
+
+            if (animPoseGetLoopTimes(mobj[0x1C]) < (double)float_1_80420250) {
+                break;
+            }
+
+            animPoseSetAnim(mobj[0x1C], str_S_1_8042021c, 1);
+            mobj[0x77] = 0;
+            *mobj &= ~8;
             break;
 
         case 99:
             mobjDelete((char*)((s32)mobj + 5));
             break;
     }
+
     return 0;
 }
 
@@ -5103,8 +5187,12 @@ s32 fire_func(void* evt, s32 init) {
 
 s32 mobj_koopa_sango_evt(u32* mobj) {
     extern void* evtEntry(void*, s32, u32);
+    extern void* mobjRunEvent(void*, void*);
     extern void evtSetValue(void*, s32, s32);
     extern s32 npcKoopaModeMobjBoundDeadCheck(void*);
+    extern s32 kpaGetLevel(void);
+    extern s32 kpaMutekiCheck(void);
+    extern void kpaAddScore(s32);
     extern void psndSFXOn_3D(s32, void*);
     extern void effMObjBrokenEntry(double, double, double, s32);
     extern void mobjDelete(char*);
@@ -5119,9 +5207,7 @@ s32 mobj_koopa_sango_evt(u32* mobj) {
     u32 action = mobj[0x77];
 
     if (action == 0) {
-        if ((*mobj & 8) == 0) {
-            return 0;
-        }
+        if ((*mobj & 8) == 0) return 0;
         level = kpaGetLevel();
         if (!(level == 3 || (level > -1 && level < 3 && mobj[0x78] == 0x20000000))) {
             *mobj &= ~8;
@@ -5129,12 +5215,8 @@ s32 mobj_koopa_sango_evt(u32* mobj) {
         }
         mobjRunEvent(mobj, (void*)mobj[0x75]);
         evtSetValue(0, mobj[0x79], 1);
-        if (mobj[0x78] == 0x4000000) {
-            npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
-        }
-        if ((void*)mobj[0x1D] != 0) {
-            *(u16*)mobj[0x1D] |= 1;
-        }
+        if (mobj[0x78] == 0x4000000) npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
+        if ((void*)mobj[0x1D] != 0) *(u16*)mobj[0x1D] |= 1;
         *mobj |= 2;
         score = kpaMutekiCheck() != 0 ? 500 : 400;
         kpaAddScore(score);
@@ -5142,37 +5224,35 @@ s32 mobj_koopa_sango_evt(u32* mobj) {
         return 0;
     }
     if (action == 10) {
-        if (mobj[0x78] == 0x20000000) {
-            psndSFXOn_3D(0xB67, mobj + 0xE);
-        }
+        if (mobj[0x78] == 0x20000000) psndSFXOn_3D(0xB67, mobj + 0xE);
         evt = evtEntry(&evt_fire, 0, 0);
-        *(s32*)((s32)evt + 0x15C) = (s32)(float_1024_80420290 * (f32)mobj[0xE]) - 230000000;
-        *(s32*)((s32)evt + 0x160) = (s32)(float_1024_80420290 * (f32)mobj[0xF]) - 230000000;
-        *(s32*)((s32)evt + 0x164) = (s32)(float_1024_80420290 * (float_10_80420294 + (f32)mobj[0x10])) - 230000000;
-        *(s32*)((s32)evt + 0x168) = 0x5A;
+        *(s32*)((s32)evt + 0x9C) = (s32)(float_1024_80420290 * ((f32*)mobj)[0xE]) - 230000000;
+        *(s32*)((s32)evt + 0xA0) = (s32)(float_1024_80420290 * ((f32*)mobj)[0xF]) - 230000000;
+        *(s32*)((s32)evt + 0xA4) = (s32)(float_1024_80420290 * (float_10_80420294 + ((f32*)mobj)[0x10])) - 230000000;
+        *(s32*)((s32)evt + 0xA8) = 0x5A;
         mobj[0x77]++;
         return 0;
     }
     if (action == 0x14) {
         evt = evtEntry(&evt_fire, 0, 0);
-        *(s32*)((s32)evt + 0x15C) = (s32)(float_1024_80420290 * (float_10_80420294 + (f32)mobj[0xE])) - 230000000;
-        *(s32*)((s32)evt + 0x160) = (s32)(float_1024_80420290 * (float_30_80420298 + (f32)mobj[0xF])) - 230000000;
-        *(s32*)((s32)evt + 0x164) = (s32)(float_1024_80420290 * (float_10_80420294 + (f32)mobj[0x10])) - 230000000;
-        *(s32*)((s32)evt + 0x168) = 0x50;
+        *(s32*)((s32)evt + 0x9C) = (s32)(float_1024_80420290 * (float_10_80420294 + ((f32*)mobj)[0xE])) - 230000000;
+        *(s32*)((s32)evt + 0xA0) = (s32)(float_1024_80420290 * (float_30_80420298 + ((f32*)mobj)[0xF])) - 230000000;
+        *(s32*)((s32)evt + 0xA4) = (s32)(float_1024_80420290 * (float_10_80420294 + ((f32*)mobj)[0x10])) - 230000000;
+        *(s32*)((s32)evt + 0xA8) = 0x50;
         mobj[0x77]++;
         return 0;
     }
     if (action == 0x1E) {
         evt = evtEntry(&evt_fire, 0, 0);
-        *(s32*)((s32)evt + 0x15C) = (s32)(float_1024_80420290 * ((f32)mobj[0xE] - float_10_80420294)) - 230000000;
-        *(s32*)((s32)evt + 0x160) = (s32)(float_1024_80420290 * (float_60_8042029c + (f32)mobj[0xF])) - 230000000;
-        *(s32*)((s32)evt + 0x164) = (s32)(float_1024_80420290 * (float_10_80420294 + (f32)mobj[0x10])) - 230000000;
-        *(s32*)((s32)evt + 0x168) = 0x46;
+        *(s32*)((s32)evt + 0x9C) = (s32)(float_1024_80420290 * (((f32*)mobj)[0xE] - float_10_80420294)) - 230000000;
+        *(s32*)((s32)evt + 0xA0) = (s32)(float_1024_80420290 * (float_60_8042029c + ((f32*)mobj)[0xF])) - 230000000;
+        *(s32*)((s32)evt + 0xA4) = (s32)(float_1024_80420290 * (float_10_80420294 + ((f32*)mobj)[0x10])) - 230000000;
+        *(s32*)((s32)evt + 0xA8) = 0x46;
         mobj[0x77]++;
         return 0;
     }
     if (action == 0x62) {
-        effMObjBrokenEntry((double)(f32)mobj[0xE], (double)(f32)mobj[0xF], (double)(float_10_80420294 + (f32)mobj[0x10]), 7);
+        effMObjBrokenEntry((double)((f32*)mobj)[0xE], (double)((f32*)mobj)[0xF], (double)(float_10_80420294 + ((f32*)mobj)[0x10]), 7);
         mobj[0x77]++;
         return 0;
     }
@@ -5183,6 +5263,7 @@ s32 mobj_koopa_sango_evt(u32* mobj) {
     mobjDelete((char*)((s32)mobj + 5));
     return 0;
 }
+
 s32 evt_mobj_koopa_sango(void* pEvt) {
     extern u32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
@@ -5237,7 +5318,7 @@ u8 mobj_koopa_fireber_dodai_evt(void* mobj) {
     extern u32 psndSFXOn_3D(s32, void*);
     extern void psndSFXOff(s32);
     extern s32 sprintf(char*, const char*, ...);
-    extern void PSMTXIdentity(void*);
+    extern void PSMTXIdentity(void*); extern void PSMTXTransApply(void*, void*, f32, f32, f32);
     extern void PSMTXRotRad(void*, double, char);
     extern void PSMTXConcat(void*, void*, void*);
     extern void PSMTXMultVec(void*, void*, void*);
@@ -5261,12 +5342,12 @@ u8 mobj_koopa_fireber_dodai_evt(void* mobj) {
     extern f32 float_0p2_8042028c;
     void* player = marioGetPtr();
     void* npc = 0;
-    char buf[32];
+    char buf[32], deleteBuf[32];
     f32 m0[3][4];
     f32 m1[3][4];
     s32 i;
     s32 score;
-    u32 action;
+    u32 action; f32 fallStep, maxScale, scaleStep, randDiv;
 
     if (*(s32*)((s32)mobj + 0x1DC) < 10) {
         if (distABf((double)*(f32*)((s32)player + 0x8C), (double)*(f32*)((s32)player + 0x90),
@@ -5279,9 +5360,9 @@ u8 mobj_koopa_fireber_dodai_evt(void* mobj) {
         } else if (psndSFXChk(*(u32*)((s32)mobj + 0x1B4)) != 0) {
             *(u32*)((s32)mobj + 0x1B4) = psndSFXOn_3D(0x1CD, (void*)((s32)mobj + 0x38));
         }
-        PSMTXIdentity(m0);
+        PSMTXIdentity(m0); PSMTXTransApply(m0, m0, -*(f32*)((s32)mobj + 0x38), -*(f32*)((s32)mobj + 0x3C), -*(f32*)((s32)mobj + 0x40));
         PSMTXRotRad(m1, (double)(float_deg2rad_80420264 * *(f32*)((s32)mobj + 0x1AC)), 'Z');
-        PSMTXConcat(m1, m0, m0);
+        PSMTXConcat(m1, m0, m0); PSMTXTransApply(m0, m0, *(f32*)((s32)mobj + 0x38), *(f32*)((s32)mobj + 0x3C), *(f32*)((s32)mobj + 0x40));
         for (i = 0; i < *(s32*)((s32)mobj + 0x1A4); i++) {
             sprintf(buf, str_PCTsPCT2x_80420258, (char*)((s32)mobj + 5), i);
             npc = npcNameToPtr(buf);
@@ -5289,7 +5370,7 @@ u8 mobj_koopa_fireber_dodai_evt(void* mobj) {
         }
     }
 
-    action = *(u32*)((s32)mobj + 0x1DC);
+    fallStep = float_0p2_8042028c; maxScale = float_3_80420288; scaleStep = float_0p04_80420284; randDiv = float_200_80420270; action = *(u32*)((s32)mobj + 0x1DC);
     if (action == 0) {
         if ((*(u32*)mobj & 8) != 0) {
             i = kpaGetLevel();
@@ -5321,7 +5402,7 @@ u8 mobj_koopa_fireber_dodai_evt(void* mobj) {
             *(f32*)((s32)npc + 0x11C) = *(f32*)((s32)npc + 0x8C);
             *(f32*)((s32)npc + 0x120) = *(f32*)((s32)npc + 0x90);
             *(f32*)((s32)npc + 0x124) = *(f32*)((s32)npc + 0x94);
-            *(f32*)((s32)npc + 0x128) = (f32)irand(0x65) / float_200_80420270;
+            *(f32*)((s32)npc + 0x128) = (f32)irand(0x65) / randDiv;
             *(f32*)((s32)npc + 0x12C) = float_6_80420274 - (f32)irand(0x65) / float_75_80420278;
             *(f32*)((s32)npc + 0x130) = float_4p8_8042027c;
             *(f32*)((s32)npc + 0x1A4) = float_2_80420280;
@@ -5334,8 +5415,8 @@ u8 mobj_koopa_fireber_dodai_evt(void* mobj) {
         *(s32*)((s32)mobj + 0x1DC) = *(s32*)((s32)mobj + 0x1DC) + 1;
     } else if (action == 99) {
         for (i = 0; i < *(s32*)((s32)mobj + 0x1A4); i++) {
-            sprintf(buf, str_PCTsPCT2x_80420258, (char*)((s32)mobj + 5), i);
-            npcDelete(npcNameToPtr(buf));
+            sprintf(deleteBuf, str_PCTsPCT2x_80420258, (char*)((s32)mobj + 5), i);
+            npcDelete(npcNameToPtr(deleteBuf));
         }
         mobjDelete((char*)((s32)mobj + 5));
     } else if ((s32)action < 99 && (s32)action < 0xD) {
@@ -5345,13 +5426,13 @@ u8 mobj_koopa_fireber_dodai_evt(void* mobj) {
             *(f32*)((s32)npc + 0x198) += *(f32*)((s32)npc + 0x128);
             *(f32*)((s32)npc + 0x90) += *(f32*)((s32)npc + 0x12C);
             *(f32*)((s32)npc + 0x19C) += *(f32*)((s32)npc + 0x130);
-            *(f32*)((s32)npc + 0xA4) += float_0p04_80420284;
-            if (*(f32*)((s32)npc + 0xA4) > float_3_80420288) {
-                *(f32*)((s32)npc + 0xA4) = float_3_80420288;
+            *(f32*)((s32)npc + 0xA4) += scaleStep;
+            if (*(f32*)((s32)npc + 0xA4) > maxScale) {
+                *(f32*)((s32)npc + 0xA4) = maxScale;
             }
             *(f32*)((s32)npc + 0xA8) = *(f32*)((s32)npc + 0xA4);
             *(f32*)((s32)npc + 0xAC) = *(f32*)((s32)npc + 0xA4);
-            *(f32*)((s32)npc + 0x12C) -= float_0p2_8042028c;
+            *(f32*)((s32)npc + 0x12C) -= fallStep;
         }
         if (npc != 0 && *(f32*)((s32)npc + 0x1A4) <= *(f32*)((s32)npc + 0x1A0)) {
             *(s32*)((s32)mobj + 0x1DC) = 99;
@@ -5601,7 +5682,27 @@ s32 mobj_koopa_pole_evt(void* pMobj) {
     void* npcWork;
     void* npc;
 
-    if (action == 0) {
+    if (action == 0x33) goto action_33;
+    if ((s32)action >= 0x33) {
+        if (action == 0x5D) goto action_5D;
+        if ((s32)action >= 0x5D) {
+            if (action >= 0x5F) goto done;
+            goto action_5E;
+        }
+        if (action == 0x5B) goto action_5B;
+        if ((s32)action >= 0x5B) goto action_5C;
+        if ((s32)action >= 0x5A) goto action_5A;
+        goto done;
+    }
+    if (action == 10) goto action_10;
+    if ((s32)action >= 10) {
+        if ((s32)action >= 0x32) goto action_32;
+        if ((s32)action < 0xC) goto action_11;
+        goto done;
+    }
+    if (action != 0) goto done;
+
+action_0:
         if ((*(u32*)pMobj & 8) != 0) {
             if (*(s8*)((s32)player + 0x3C) == 2) {
                 level = kpaGetLevel();
@@ -5632,10 +5733,13 @@ s32 mobj_koopa_pole_evt(void* pMobj) {
                 *(u32*)pMobj &= ~8;
             }
         }
-    } else if (action == 10) {
+        goto done;
+action_10:
+        player = marioGetPtr();
+        score = 0;
         level = kpaGetLevel();
         if (level == 3) {
-            score = 2000;
+            kpaAddScore(2000);
         } else if (level < 2) {
             if (*(f32*)((s32)player + 0x90) < float_170_80420234) {
                 if (*(f32*)((s32)player + 0x90) < float_100_80420238) {
@@ -5646,21 +5750,24 @@ s32 mobj_koopa_pole_evt(void* pMobj) {
             } else {
                 score = 1000;
             }
+            kpaAddScore(score);
         } else {
-            score = 1000;
+            kpaAddScore(1000);
         }
-        kpaAddScore(score);
         player = mobjRunEvent(pMobj, &kpa_pole);
         *(s32*)((s32)player + 0x15C) = score;
         *(u32*)((s32)pMobj + 0x1DC) += 1;
-    } else if (action > 10 && action < 0x32) {
+        goto done;
+action_11:
         if (!evtCheckID(*(s32*)((s32)pMobj + 0x1CC))) {
             *(u32*)((s32)pMobj + 0x1DC) = 0x5A;
         }
-    } else if (action == 0x32) {
+        goto done;
+action_32:
+        player = marioGetPtr();
         level = kpaGetLevel();
         if (level == 3) {
-            score = 2000;
+            kpaAddScore(2000);
         } else if (level < 2) {
             if (*(f32*)((s32)player + 0x90) < float_170_80420234) {
                 if (*(f32*)((s32)player + 0x90) < float_100_80420238) {
@@ -5677,23 +5784,38 @@ s32 mobj_koopa_pole_evt(void* pMobj) {
         }
         mobjRunEvent(pMobj, &kpa_pole_move);
         *(u32*)((s32)pMobj + 0x1DC) += 1;
-    } else if (action == 0x33) {
+        goto done;
+action_33:
         if (!evtCheckID(*(s32*)((s32)pMobj + 0x1CC))) {
             *(u32*)((s32)pMobj + 0x1DC) = 0x5A;
         }
-    } else if (action == 0x5A) {
+        goto done;
+action_5A:
         mobjRunEvent(pMobj, &kpa_move_to_toride);
         *(u32*)((s32)pMobj + 0x1DC) += 1;
-    } else if (action == 0x5B || action == 0x5D) {
+        return 0;
+action_5B:
         if (evtCheckID(*(s32*)((s32)pMobj + 0x1CC))) {
             return 0;
         }
         *(s32*)((s32)pMobj + 0x1CC) = 0;
         *(u32*)((s32)pMobj + 0x1DC) += 1;
-    } else if (action == 0x5C) {
+        return 0;
+action_5C:
         mobjRunEvent(pMobj, *(void**)((s32)pMobj + 0x1D8));
         *(u32*)((s32)pMobj + 0x1DC) += 1;
-    }
+        return 0;
+action_5D:
+        if (evtCheckID(*(s32*)((s32)pMobj + 0x1CC))) {
+            return 0;
+        }
+        *(s32*)((s32)pMobj + 0x1CC) = 0;
+        *(u32*)((s32)pMobj + 0x1DC) += 1;
+        goto done;
+action_5E:
+        mobjRunEvent(pMobj, *(void**)((s32)pMobj + 0x1D4));
+        *(u32*)((s32)pMobj + 0x1DC) += 1;
+done:
     return 0;
 }
 

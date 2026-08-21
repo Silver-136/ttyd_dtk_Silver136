@@ -236,20 +236,52 @@ void main_dl(void* effect, void* view) {
     extern void GXLoadTexMtxImm(void*, s32, s32);
     extern void GXBegin(s32, s32, s32);
     extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);
+    extern f32 float_0p25_80426374;
+    extern f32 float_0p12903_80426378;
     u8* work = *(u8**)((s32)effect + 0xC);
-    f32 trans[3][4], rot[3][4], scale[3][4];
+    f32 trans[3][4];
+    f32 rot[3][4];
+    f32 scale[3][4];
     s32 i;
+
     for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
         u8* part = work + i * 0x58;
         if (*(s32*)(part + 0x4C) >= 0) {
             PSMTXTrans(trans, *(f32*)(part + 4), *(f32*)(part + 8), *(f32*)(part + 0xC));
             PSMTXRotRad(rot, 0x7A, 0.017453292f * *(f32*)(part + 0x34));
             PSMTXConcat(trans, rot, trans);
-            PSMTXScale(scale, 0.3f * *(f32*)(part + 0x1C), 0.3f * *(f32*)(part + 0x20), 0.3f * *(f32*)(part + 0x24));
-            PSMTXConcat(trans, scale, trans); PSMTXConcat(view, trans, trans);
-            GXLoadPosMtxImm(trans, 0); GXSetCurrentMtx(0);
-            PSMTXScale(scale, 0.015873f, 0.032258f, 0.0f); GXLoadTexMtxImm(scale, 0x1E, 1);
-            GXBegin(0x90, 0, 0x36); tri2(0,1,2,0,2,3,4,0); tri2(2,4,5,0,1,3,2,0);
+            PSMTXScale(scale, 0.3f * *(f32*)(part + 0x1C),
+                       0.3f * *(f32*)(part + 0x20),
+                       0.3f * *(f32*)(part + 0x24));
+            PSMTXConcat(trans, scale, trans);
+            PSMTXRotRad(rot, 0x79, 0.017453292f * *(f32*)(part + 0x30));
+            PSMTXConcat(trans, rot, trans);
+            PSMTXConcat(view, trans, trans);
+            GXLoadPosMtxImm(trans, 0);
+            GXSetCurrentMtx(0);
+
+            PSMTXScale(scale, 0.015873f, 0.032258f, 0.0f);
+            PSMTXTrans(trans, 0.0f,
+                       *(f32*)(part + 0x3C) * float_0p25_80426374, 0.0f);
+            PSMTXConcat(scale, trans, scale);
+            GXLoadTexMtxImm(scale, 0x1E, 1);
+
+            PSMTXScale(scale, float_0p12903_80426378, float_0p12903_80426378, 0.0f);
+            PSMTXTrans(trans, 0.0f,
+                       *(f32*)(part + 0x44) * float_0p25_80426374, 0.0f);
+            PSMTXConcat(scale, trans, scale);
+            GXLoadTexMtxImm(scale, 0x21, 1);
+
+            GXBegin(0x90, 0, 0x36);
+            tri2(0, 1, 2, 0, 2, 3, 4, 0);
+            tri2(2, 4, 5, 0, 1, 3, 2, 0);
+            tri2(4, 6, 5, 0, 5, 6, 7, 0);
+            tri2(5, 7, 8, 0, 0, 9, 1, 0);
+            tri2(10, 9, 0, 0, 11, 10, 0, 0);
+            tri2(11, 12, 10, 0, 13, 12, 11, 0);
+            tri2(8, 14, 15, 0, 7, 14, 8, 0);
+            tri2(8, 15, 16, 0, 15, 17, 16, 0);
+            tri2(16, 17, 18, 0, 16, 18, 19, 0);
         }
     }
 }

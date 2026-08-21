@@ -44,16 +44,26 @@ BattleWorkUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     extern void BtlUnit_SetScale(BattleWorkUnit*, f32, f32, f32);
     extern void BtlUnit_SetBaseScale(BattleWorkUnit*, f32, f32, f32);
     extern void BtlUnit_HpGaugeInit(BattleWorkUnit*);
+    extern void BtlUnit_SetPartsBaseScale(BattleWorkUnitPart*, f32, f32, f32);
+    extern void BtlUnit_SetPartsScale(BattleWorkUnitPart*, f32, f32, f32);
+    extern void BtlUnit_SetPartsBaseRotate(BattleWorkUnitPart*, f32, f32, f32);
+    extern void BtlUnit_SetPartsRotate(BattleWorkUnitPart*, f32, f32, f32);
+    extern void BtlUnit_SetPartsRotateOffset(BattleWorkUnitPart*, f32, f32, f32);
     BattleWork* wp = _battleWorkPointer;
     BattleWorkUnit* unit;
+    BattleWorkUnitPart* part;
+    u8* partData;
+    s32 partCount;
     BattleUnitType type;
     int i;
 
-    for (i = 0; i < 64; i++) {
+    i = 0;
+    do {
         if (BattleGetUnitPtr(wp, i) == NULL) {
             break;
         }
-    }
+        i++;
+    } while (i < 64);
     if (i >= 64) {
         return NULL;
     }
@@ -116,6 +126,68 @@ BattleWorkUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     unit->work[1] = *(s32*)((s32)setup + 0x1C);
     unit->work[2] = *(s32*)((s32)setup + 0x20);
     unit->work[3] = *(s32*)((s32)setup + 0x24);
+
+    partCount = *(u8*)((s32)unit->data + 0xB4);
+    part = BattleAlloc(partCount * sizeof(BattleWorkUnitPart));
+    memset(part, 0, partCount * sizeof(BattleWorkUnitPart));
+    unit->parts = part;
+    partData = *(u8**)((s32)unit->data + 0xB8);
+    while (1) {
+        part->data = (BattleUnitPartData*)partData;
+        part->owner = unit;
+        part->attributes = *(s32*)(partData + 0x40);
+        *(s32*)((s32)part + 0x1B0) = *(s32*)(partData + 0x44);
+        if (part->attributes & 1) {
+            unit->talkPartId = *(s32*)partData;
+        }
+        *(s32*)((s32)part + 0x1B4) = *(s32*)(partData + 0x38);
+        *(s32*)((s32)part + 0x1B8) = *(s32*)(partData + 0x3C);
+        *(s16*)((s32)part + 0x1A2) = *(s16*)(partData + 0x30);
+        *(s16*)((s32)part + 0x1A4) = *(s16*)(partData + 0x32);
+        *(f32*)((s32)part + 0x78) = 1.0f;
+        *(u8*)((s32)part + 0xBC) = 0;
+        *(s8*)((s32)part + 0xBD) = wp->allianceInfo[unit->alliance].attackDirection;
+        part->positionOffset.x = *(f32*)(partData + 0xC);
+        part->positionOffset.y = *(f32*)(partData + 0x10);
+        part->positionOffset.z = *(f32*)(partData + 0x14);
+        BtlUnit_SetPartsBaseScale(part, 1.0f, 1.0f, 1.0f);
+        BtlUnit_SetPartsScale(part, 1.0f, 1.0f, 1.0f);
+        BtlUnit_SetPartsBaseRotate(part, 0.0f, 0.0f, 0.0f);
+        BtlUnit_SetPartsRotate(part, 0.0f, 0.0f, 0.0f);
+        BtlUnit_SetPartsRotateOffset(part, 0.0f, 0.0f, 0.0f);
+        *(u8*)((s32)part + 0x4FC) = 0;
+        partCount--;
+        part->hitBaseOffset.x = *(f32*)(partData + 0x18);
+        part->hitBaseOffset.y = *(f32*)(partData + 0x1C);
+        part->hitBaseOffset.z = *(f32*)(partData + 0x20);
+        part->hitOffset.x = 0.0f;
+        part->hitOffset.y = 0.0f;
+        part->hitOffset.z = 0.0f;
+        part->hitCursorBaseOffset.x = *(f32*)(partData + 0x24);
+        part->hitCursorBaseOffset.y = *(f32*)(partData + 0x28);
+        part->hitCursorBaseOffset.z = *(f32*)(partData + 0x2C);
+        part->hitCursorOffset.x = 0.0f;
+        part->hitCursorOffset.y = 0.0f;
+        part->hitCursorOffset.z = 0.0f;
+        *(u32*)((s32)part + 0x4F0) = 0xFFFFFFFF;
+        *(s16*)((s32)part + 0x1A0) = *(s32*)((s32)setup + 0x18);
+        part->poseTable = *(BattlePoseEntry**)(partData + 0x48);
+        *(s32*)((s32)part + 0x1C0) = -1;
+        *(u8*)((s32)part + 0x1C4) = 0;
+        *(f32*)((s32)part + 0x208) = 1.0f;
+        *(f32*)((s32)part + 0x20C) = 1.0f;
+        *(u8*)((s32)part + 0x214) = 0;
+        *(u8*)((s32)part + 0x215) = 0;
+        *(s32*)((s32)part + 0x4E8) = -1;
+        part->partName = *(char**)(partData + 4);
+        if (partCount <= 0) {
+            break;
+        }
+        part->nextPart = part + 1;
+        partData += 0x4C;
+        part++;
+    }
+    part->nextPart = NULL;
     return unit;
 }
 
@@ -2208,17 +2280,30 @@ void BtlUnit_ControlPoseSoundMain(void* part) {
     while (*(char**)entry != 0) {
         if (strcmp(*(char**)entry, animName) == 0 && *(f32*)(entry + 4) <= *(f32*)(p + 0x4D8) &&
             *(f32*)(p + 0x4DC) < *(f32*)(entry + 4)) {
-            if (*(void**)(entry + 8) != 0) {
-                soundId = ((s32 (*)(void*, void*, void*))*(void**)(entry + 8))
-                              (*(void**)(p + 0x4EC), entry, p + 0x4D0);
-            } else {
-                soundId = BtlUnit_snd_se(*(void**)(p + 0x4EC), *(char**)(entry + 0xC),
-                                         -250000000, *(s16*)(entry + 0x10));
-            }
             if ((*(u16*)(entry + 0x12) & 1) != 0) {
+                if (*(void**)(entry + 8) != 0) {
+                    soundId = ((s32 (*)(void*, void*, void*))*(void**)(entry + 8))
+                                  (*(void**)(p + 0x4EC), entry, p + 0x4D0);
+                } else {
+                    soundId = BtlUnit_snd_se(*(void**)(p + 0x4EC), *(char**)(entry + 0xC),
+                                             -250000000, *(s16*)(entry + 0x10));
+                }
                 psndSFX_vol(soundId, 0x7F);
+                (*(s32*)(p + 0x4E0))++;
+                if (*(s32*)((u8*)*(void**)(p + 0x4EC) + 0x2C) !=
+                    BattleGetSeq(_battleWorkPointer, 4)) {
+                    psndSFX_vol(soundId, (u8)((f64)0x7F * 0.7));
+                }
+            } else {
+                if (*(void**)(entry + 8) != 0) {
+                    ((s32 (*)(void*, void*, void*))*(void**)(entry + 8))
+                        (*(void**)(p + 0x4EC), entry, p + 0x4D0);
+                } else {
+                    BtlUnit_snd_se(*(void**)(p + 0x4EC), *(char**)(entry + 0xC),
+                                   -250000000, *(s16*)(entry + 0x10));
+                }
+                (*(s32*)(p + 0x4E0))++;
             }
-            (*(s32*)(p + 0x4E0))++;
         }
         entry += 0x14;
     }

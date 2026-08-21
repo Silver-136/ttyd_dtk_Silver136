@@ -98,6 +98,7 @@ s32 pressCheck(int param_1) {
 #pragma no_register_save_helpers reset
 
 
+#pragma use_lmw_stmw off
 s32 _2d_dead_jump(EventEntry* event, s32 first) {
     extern void* evtNpcNameToPtr(EventEntry* event, const void* name);
     extern void PSVECSubtract(void* a, void* b, void* out);
@@ -119,6 +120,7 @@ s32 _2d_dead_jump(EventEntry* event, s32 first) {
     f32 height = evtGetFloat(event, args[6]);
     f32 floorY = (f32)evtGetValue(event, args[7]);
     void* npc = evtNpcNameToPtr(event, name);
+    f32 h = height;
     s32 ret = 0;
 
     *(u32*)((s32)npc + 0x1D4) |= 0x10;
@@ -175,7 +177,6 @@ s32 _2d_dead_jump(EventEntry* event, s32 first) {
                 return 1;
             }
         } else {
-            f32 h = height;
             if (float_0_80421f8c < dy) {
                 h = height + dy;
             }
@@ -196,6 +197,7 @@ s32 _2d_dead_jump(EventEntry* event, s32 first) {
     }
     return ret;
 }
+#pragma use_lmw_stmw reset
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -569,6 +571,8 @@ s32 limitSpd(int param_1) {
 s32 zakoEntryDokan(EventEntry* event) {
     extern void* npcNameToPtr(const char* name);
     extern void* evtEntry(void* script, s32 order, u32 flags);
+    extern void* marioGetPtr(void);
+    extern char* hitGetName(void* hit);
     extern u32 vec3_802ed9a8[];
     extern f32 float_35_80421fac;
     void* owner;
@@ -577,6 +581,7 @@ s32 zakoEntryDokan(EventEntry* event) {
     char mobjName[32];
     char names[56];
     char* name;
+    void* mario;
     s32 i;
 
     owner = evtNpcNameToPtr(event, str_me_80421f30);
@@ -591,6 +596,22 @@ s32 zakoEntryDokan(EventEntry* event) {
         strcpy(names + 0x10, str_kemuri_test_802ed438 + 0x714);
         strcpy(names + 0x20, str_kemuri_test_802ed438 + 0x724);
         strcpy(mobjName, str_kemuri_test_802ed438 + 0x734);
+    }
+
+    mario = marioGetPtr();
+    if (*(void**)((s32)mario + 0x1E8) != NULL &&
+        strcmp(hitGetName(*(void**)((s32)mario + 0x1E8)), mobjName) == 0) {
+        return 2;
+    }
+    mario = marioGetPtr();
+    if (*(void**)((s32)mario + 0x1EC) != NULL &&
+        strcmp(hitGetName(*(void**)((s32)mario + 0x1EC)), mobjName) == 0) {
+        return 2;
+    }
+    mario = marioGetPtr();
+    if (*(void**)((s32)mario + 0x1E4) != NULL &&
+        strcmp(hitGetName(*(void**)((s32)mario + 0x1E4)), mobjName) == 0) {
+        return 2;
     }
 
     name = names;
@@ -623,6 +644,7 @@ s32 zakoEntryDokan(EventEntry* event) {
     }
     return 2;
 }
+
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
@@ -641,7 +663,11 @@ s32 dokanCheck(int param_1) {
         strcpy(name, str_kemuri_test_802ed438 + 0x6C0);
     }
     mobj = mobjNameToPtrNoAssert(name);
-    evtSetValue((void*)param_1, args[0], mobj != NULL);
+    if (mobj != NULL) {
+        evtSetValue((void*)param_1, args[0], 1);
+    } else {
+        evtSetValue((void*)param_1, args[0], 0);
+    }
     return 2;
 }
 

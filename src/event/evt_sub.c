@@ -778,6 +778,14 @@ s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
     extern f32 float_5_8041fe40;
     extern f32 float_6p2832_8041fe48;
     extern f32 float_360_8041fe4c;
+    extern f32 float_3p1416_8041fe5c;
+    extern f32 float_0p00761_8041fe50;
+    extern f32 float_0p16605_8041fe54;
+    extern f32 float_1_8041fe58;
+    extern f32 float_1p5708_8041fe60;
+    extern f32 float_4p7124_8041fe64;
+    extern f32 float_0p03705_8041fe6c;
+    extern f32 float_0p4967_8041fe70;
     s32 coins;
     void* mario;
     void* cam;
@@ -801,8 +809,42 @@ s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
     cam = camGetPtr(0);
     angle = reviseAngle((float_100_8041fe44 * *(f32*)((s32)cam + 0x114) + float_5_8041fe40) / float_100_8041fe44);
     angle = float_6p2832_8041fe48 * angle / float_360_8041fe4c;
-    sx = float_10_8041fe68 * (f32)sin(angle);
-    cz = float_10_8041fe68 * (f32)cos(angle);
+    if (angle <= float_3p1416_8041fe5c) {
+        if (angle <= float_1p5708_8041fe60) {
+            sx = ((float_0p00761_8041fe50 * angle * angle - float_0p16605_8041fe54) * angle * angle + float_1_8041fe58) * angle;
+        } else {
+            sx = float_1p5708_8041fe60 - (angle - float_1p5708_8041fe60);
+            sx = ((float_0p00761_8041fe50 * sx * sx - float_0p16605_8041fe54) * sx * sx + float_1_8041fe58) * sx;
+        }
+    } else {
+        if (angle < float_4p7124_8041fe64) {
+            sx = angle - float_3p1416_8041fe5c;
+            sx = -(((float_0p00761_8041fe50 * sx * sx - float_0p16605_8041fe54) * sx * sx + float_1_8041fe58) * sx);
+        } else {
+            sx = float_1p5708_8041fe60 - (angle - float_4p7124_8041fe64);
+            sx = -(((float_0p00761_8041fe50 * sx * sx - float_0p16605_8041fe54) * sx * sx + float_1_8041fe58) * sx);
+        }
+    }
+    sx *= float_10_8041fe68;
+    if (angle <= float_3p1416_8041fe5c) {
+        if (angle <= float_1p5708_8041fe60) {
+            cz = (float_0p03705_8041fe6c * angle * angle - float_0p4967_8041fe70) * angle * angle + float_1_8041fe58;
+        } else {
+            cz = float_1p5708_8041fe60 - (angle - float_1p5708_8041fe60);
+            cz *= cz;
+            cz = -((float_0p03705_8041fe6c * cz - float_0p4967_8041fe70) * cz + float_1_8041fe58);
+        }
+    } else {
+        if (angle < float_4p7124_8041fe64) {
+            cz = (angle - float_3p1416_8041fe5c) * (angle - float_3p1416_8041fe5c);
+            cz = -((float_0p03705_8041fe6c * cz - float_0p4967_8041fe70) * cz + float_1_8041fe58);
+        } else {
+            cz = float_1p5708_8041fe60 - (angle - float_4p7124_8041fe64);
+            cz *= cz;
+            cz = (float_0p03705_8041fe6c * cz - float_0p4967_8041fe70) * cz + float_1_8041fe58;
+        }
+    }
+    cz *= float_10_8041fe68;
     if (isFirstCall != 0) {
         *(s32*)((s32)event + 0x78) = 0;
         *(void**)((s32)event + 0x7C) = effItemGetEntry(7);

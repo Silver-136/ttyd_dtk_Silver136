@@ -7,7 +7,10 @@ extern f32 float_neg128_80423c34;
 extern f32 float_500_80423b40;
 extern f32 float_neg300_80423b44;
 extern f32 float_45_80423bdc;
+extern f32 float_1_80423af0;
+extern f32 float_0p04_80423af4;
 extern f32 float_0p5_80423af8;
+extern f32 float_neg0p5_80423afc;
 extern f32 float_8_80423b04;
 extern f32 float_320_80423c0c;
 extern f32 float_neg240_80423bf0;
@@ -1176,7 +1179,6 @@ u8 monosiriMain(void* param_1) {
     extern void animPoseWorldPositionEvalOn(s32 poseId, s32 flag);
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
     extern void capture(void);
-    extern void monosiri_disp(s32 param_1, void* monosiriWork);
 
     void* work = param_1;
     char* langs[6];
@@ -1527,6 +1529,11 @@ void monosiri_disp(s32 param_1,void* work){
     extern void GXLoadTexObj(void*, s32);
     extern void GXInitTexObj(void*, void*, s16, s16, s32, s32, s32, s32);
     extern void GXSetNumTexGens(s32);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXLoadTexMtxImm(void*, s32, s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
     extern void GXSetNumTevStages(s32);
     extern void GXSetTevColor(s32, void*);
     extern void GXSetTevOrder(s32, s32, s32, s32);
@@ -1539,8 +1546,8 @@ void monosiri_disp(s32 param_1,void* work){
     extern volatile f32 DAT_cc008000;
     extern u32 dat_80423ae8;
     extern u32 unk_804295f8;
-    u32 texObj[8],tev=dat_80423ae8,alpha;s32 i,w,h;void* file=*(void**)((s32)work+8);f32 x=*(f32*)((s32)work+0x18),y=*(f32*)((s32)work+0x1C);
-    if(file==0)return;winHalfBookGX(x,y,**(void***)((s32)file+0xA0),0);TEXGetGXTexObjFromPalette(**(void***)((s32)file+0xA0),texObj,0x37);w=GXGetTexObjWidth(texObj);h=GXGetTexObjHeight(texObj);GXInitTexObjLOD(texObj,1,1,0.0f,0.0f,0.0f,0,0,0);GXLoadTexObj(texObj,0);GXInitTexObj(texObj,**(void***)((s32)work+0x28),(s16)w,(s16)h,5,0,0,0);GXInitTexObjLOD(texObj,1,1,0.0f,0.0f,0.0f,0,0,0);GXLoadTexObj(texObj,1);GXSetNumTexGens(8);GXSetTevColor(1,&tev);alpha=(unk_804295f8&0xFFFFFF00)|*(u8*)((s32)work+0x2C);GXSetTevColor(2,&alpha);GXSetNumTevStages(12);
+    u32 texObj[8],tev=dat_80423ae8,alpha;s32 i,w,h;void* file=*(void**)((s32)work+8);f32 x=*(f32*)((s32)work+0x18),y=*(f32*)((s32)work+0x1C);f32 a[3][4],b[3][4],c[3][4];
+    if(file==0)return;winHalfBookGX(x,y,**(void***)((s32)file+0xA0),0);TEXGetGXTexObjFromPalette(**(void***)((s32)file+0xA0),texObj,0x37);w=GXGetTexObjWidth(texObj);h=GXGetTexObjHeight(texObj);TEXGetGXTexObjFromPalette(**(void***)((s32)file+0xA0),texObj,0x37);GXInitTexObjLOD(texObj,1,1,0.0f,0.0f,0.0f,0,0,0);GXLoadTexObj(texObj,0);GXInitTexObj(texObj,**(void***)((s32)work+0x28),(s16)w,(s16)h,5,0,0,0);GXInitTexObjLOD(texObj,1,1,0.0f,0.0f,0.0f,0,0,0);GXLoadTexObj(texObj,1);GXSetNumTexGens(8);for(i=0;i<8;i++){f32 s=float_1_80423af0-float_0p04_80423af4*(f32)(7-i);PSMTXTrans(a,float_0p5_80423af8,float_0p5_80423af8,0.0f);PSMTXScale(b,s,s,s);PSMTXTrans(c,float_neg0p5_80423afc,float_neg0p5_80423afc,0.0f);PSMTXConcat(a,b,a);PSMTXConcat(a,c,a);GXLoadTexMtxImm(a,0x1E+i*3,1);GXSetTexCoordGen2(i,1,4,0x1E+i*3,0,0x7D);}GXSetTevColor(1,&tev);alpha=(unk_804295f8&0xFFFFFF00)|*(u8*)((s32)work+0x2C);GXSetTevColor(2,&alpha);GXSetNumTevStages(12);
     for(i=0;i<8;i++){GXSetTevOrder(i,i,1,0xFF);GXSetTevColorOp(i,0,0,0,1,0);GXSetTevAlphaOp(i,0,0,0,1,0);GXSetTevColorIn(i,15,15,15,2);GXSetTevAlphaIn(i,7,4,6,i?0:7);GXSetTevKAlphaSel(i,7);}
     GXSetTevOrder(8,7,1,0xFF);GXSetTevColorOp(8,0,0,0,1,0);GXSetTevAlphaOp(8,0,0,0,1,0);GXSetTevColorIn(8,0,8,9,15);GXSetTevAlphaIn(8,0,7,4,4);GXSetTevOrder(9,0xFF,0xFF,0xFF);GXSetTevColorOp(9,0,0,0,1,0);GXSetTevAlphaOp(9,0,0,0,1,0);GXSetTevColorIn(9,15,15,15,0);GXSetTevAlphaIn(9,7,0,6,7);GXSetTevOrder(10,7,0,0xFF);GXSetTevColorOp(10,0,0,0,1,0);GXSetTevAlphaOp(10,0,0,0,1,0);GXSetTevColorIn(10,15,8,0,15);GXSetTevAlphaIn(10,7,7,7,0);GXSetTevOrder(11,7,0,0xFF);GXSetTevColorOp(11,0,0,0,1,0);GXSetTevAlphaOp(11,0,0,0,1,0);GXSetTevColorIn(11,8,0,1,15);GXSetTevAlphaIn(11,7,7,7,4);
     GXBegin(0x80,0,4);DAT_cc008000=x+32.0f;DAT_cc008000=y-8.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=x+32.0f;DAT_cc008000=y-168.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=x+248.0f;DAT_cc008000=y-168.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=1.0f;DAT_cc008000=x+248.0f;DAT_cc008000=y-8.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=0.0f;

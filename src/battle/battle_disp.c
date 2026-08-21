@@ -588,139 +588,601 @@ void btlUnitPartsDisp(s32 cameraId, void* part) {
     extern void animPoseDrawMtx(s32, void*, s32, f32, f32);
     extern s32 BtlUnit_CheckStatus(void*, s32);
     extern void btlUnitPartsBlurControl(f64, void*, s32, void*, void*);
+    extern f32 angleABf(f32, f32, f32, f32);
+    extern f32 reviseAngle(f32);
+    extern f32 float_270_80422258;
+    extern f32 float_90_8042225c;
+    extern f32 float_neg1_80422260;
+    extern f32 float_180_80422264;
     extern f32 float_neg5_80422268;
-    f32 translateNeg[3][4];
-    f32 translatePos[3][4];
-    f32 translateDisp[3][4];
-    f32 translateWorld[3][4];
-    f32 rotateX[3][4];
-    f32 rotateY[3][4];
-    f32 rotateZ[3][4];
-    f32 scale[3][4];
-    f32 work[3][4];
-    f32 result[3][4];
-    f32 partTranslateNeg[3][4];
-    f32 partTranslatePos[3][4];
-    f32 partRotateX[3][4];
-    f32 partRotateY[3][4];
-    f32 partRotateZ[3][4];
-    f32 partTranslate[3][4];
-    f32 partDisp[3][4];
-    f32 partScale[3][4];
-    f32 blurMtx[3][4];
-    f32 zMtx[3][4];
+
+    /*
+     * The target frame contains 29 distinct 0x30-byte matrices occupying
+     * r1+0x10 through r1+0x550.  MWCC allocates these aggregates downward;
+     * this declaration order mirrors the target slots from high to low.
+     */
+    f32 unitResult[3][4];       /* target r1+0x550 */
+    f32 result[3][4];           /* target r1+0x520 */
+    f32 altPartScale[3][4];     /* target r1+0x4F0 */
+    f32 blurMtx[3][4];          /* target r1+0x4C0 */
+    f32 work[3][4];             /* target r1+0x490 */
+    f32 altPartTranslate[3][4]; /* target r1+0x460 */
+    f32 altPartTranslateNeg[3][4]; /* target r1+0x430 */
+    f32 altPartTranslatePos[3][4]; /* target r1+0x400 */
+    f32 altPartRotateX[3][4];   /* target r1+0x3D0 */
+    f32 altPartRotateY[3][4];   /* target r1+0x3A0 */
+    f32 altPartRotateZ[3][4];   /* target r1+0x370 */
+    f32 altWork[3][4];          /* target r1+0x340 */
+    f32 unitWorld[3][4];        /* target r1+0x310 */
+    f32 unitDisp[3][4];         /* target r1+0x2E0 */
+    f32 unitRotateX[3][4];      /* target r1+0x2B0 */
+    f32 unitRotateY[3][4];      /* target r1+0x280 */
+    f32 unitRotateZ[3][4];      /* target r1+0x250 */
+    f32 unitTranslateNeg[3][4]; /* target r1+0x220 */
+    f32 unitTranslatePos[3][4]; /* target r1+0x1F0 */
+    f32 unitScale[3][4];        /* target r1+0x1C0 */
+    f32 partTranslate[3][4];    /* target r1+0x190 */
+    f32 partDisp[3][4];         /* target r1+0x160 */
+    f32 partRotateX[3][4];      /* target r1+0x130 */
+    f32 partRotateY[3][4];      /* target r1+0x100 */
+    f32 partRotateZ[3][4];      /* target r1+0x0D0 */
+    f32 partTranslateNeg[3][4]; /* target r1+0x0A0 */
+    f32 partTranslatePos[3][4]; /* target r1+0x070 */
+    f32 partScale[3][4];        /* target r1+0x040 */
+    f32 zMtx[3][4];             /* target r1+0x010 */
+
+    u32 materialColor;
+    u32 blurColor;
     u8* p;
     u8* unit;
-    u32 color;
+    u8* battleWork;
+    u8* camera;
     void (*callback)(void*, s32);
+    f32 zSign;
+    f32 faceAngle;
+    f32 drawRot;
+    f32 cameraCorrection;
+    f32 cameraAngle;
+    f32 angle;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 floatOffset;
+    f32 gravityOffset;
+    f32 side;
+    f32 faceValue;
+    s32 order;
 
     p = part;
+    battleWork = (u8*)_battleWorkPointer;
+    zSign = float_1_8042224c;
+    unit = *(u8**)(p + 0x4EC);
+
     if (*(s32*)(p + 0x1C0) < 0) {
         return;
     }
-    unit = *(u8**)(p + 0x4EC);
-    PSMTXTrans(translateNeg, -*(f32*)(unit + 0x78), -*(f32*)(unit + 0x7C),
-               -*(f32*)(unit + 0x80));
-    PSMTXTrans(translatePos, *(f32*)(unit + 0x78), *(f32*)(unit + 0x7C),
-               *(f32*)(unit + 0x80));
-    PSMTXTrans(translateDisp, *(f32*)(unit + 0x54), *(f32*)(unit + 0x58),
-               *(f32*)(unit + 0x5C));
-    PSMTXTrans(translateWorld, *(f32*)(unit + 0x3C), *(f32*)(unit + 0x40),
-               *(f32*)(unit + 0x44));
-    PSMTXRotRad(rotateX, 0x78,
-                float_deg2rad_8042223c * (*(f32*)(unit + 0x6C) + *(f32*)(unit + 0x60)));
-    PSMTXRotRad(rotateY, 0x79,
-                float_deg2rad_8042223c * (*(f32*)(unit + 0x70) + *(f32*)(unit + 0x64)));
-    PSMTXRotRad(rotateZ, 0x7A,
-                float_deg2rad_8042223c * (*(f32*)(unit + 0x74) + *(f32*)(unit + 0x68)));
-    PSMTXScale(scale,
-               *(f32*)(unit + 0x114) * *(f32*)(unit + 0x9C) * *(f32*)(unit + 0x90),
-               *(f32*)(unit + 0x114) * *(f32*)(unit + 0xA0) * *(f32*)(unit + 0x94),
-               *(f32*)(unit + 0xA4) * *(f32*)(unit + 0x98));
+
+    /*
+     * Common unit transform.  unitWorld is intentionally materialized even
+     * though the final target paths do not consume it.
+     */
+    PSMTXTrans(
+        unitTranslateNeg,
+        -*(f32*)(unit + 0x78),
+        -*(f32*)(unit + 0x7C),
+        -*(f32*)(unit + 0x80));
+    PSMTXTrans(
+        unitTranslatePos,
+        *(f32*)(unit + 0x78),
+        *(f32*)(unit + 0x7C),
+        *(f32*)(unit + 0x80));
+    PSMTXTrans(
+        unitDisp,
+        *(f32*)(unit + 0x54),
+        *(f32*)(unit + 0x58),
+        *(f32*)(unit + 0x5C));
+    PSMTXTrans(
+        unitWorld,
+        *(f32*)(unit + 0x3C),
+        *(f32*)(unit + 0x40),
+        *(f32*)(unit + 0x44));
+
+    PSMTXRotRad(
+        unitRotateX,
+        0x78,
+        float_deg2rad_8042223c *
+            (*(f32*)(unit + 0x6C) + *(f32*)(unit + 0x60)));
+    PSMTXRotRad(
+        unitRotateY,
+        0x79,
+        float_deg2rad_8042223c *
+            (*(f32*)(unit + 0x70) + *(f32*)(unit + 0x64)));
+    PSMTXRotRad(
+        unitRotateZ,
+        0x7A,
+        float_deg2rad_8042223c *
+            (*(f32*)(unit + 0x74) + *(f32*)(unit + 0x68)));
+
+    PSMTXScale(
+        unitScale,
+        *(f32*)(unit + 0x114) *
+            *(f32*)(unit + 0x9C) *
+            *(f32*)(unit + 0x90),
+        *(f32*)(unit + 0x114) *
+            *(f32*)(unit + 0xA0) *
+            *(f32*)(unit + 0x94),
+        *(f32*)(unit + 0xA4) *
+            *(f32*)(unit + 0x98));
+
     PSMTXIdentity(work);
-    PSMTXConcat(scale, work, work);
-    PSMTXConcat(translateNeg, work, work);
-    PSMTXConcat(rotateY, work, work);
-    PSMTXConcat(rotateZ, work, work);
-    PSMTXConcat(rotateX, work, work);
-    PSMTXConcat(translatePos, work, result);
-    PSMTXConcat(translateDisp, result, result);
-    if ((*(u32*)(p + 0x1AC) & 0x10000000) == 0) {
-        PSMTXTrans(partTranslateNeg, -*(f32*)(p + 0x54), -*(f32*)(p + 0x58),
-                   -*(f32*)(p + 0x5C));
-        PSMTXTrans(partTranslatePos, *(f32*)(p + 0x54), *(f32*)(p + 0x58),
-                   *(f32*)(p + 0x5C));
-        PSMTXRotRad(partRotateX, 0x78,
-                    float_deg2rad_8042223c * (*(f32*)(p + 0x48) + *(f32*)(p + 0x3C)));
-        PSMTXRotRad(partRotateY, 0x79,
-                    float_deg2rad_8042223c * (*(f32*)(p + 0x4C) + *(f32*)(p + 0x40)));
-        PSMTXRotRad(partRotateZ, 0x7A,
-                    float_deg2rad_8042223c * (*(f32*)(p + 0x50) + *(f32*)(p + 0x44)));
-        PSMTXTrans(partTranslate,
-                   *(f32*)(unit + 0x3C) + *(f32*)(p + 0x24),
-                   *(f32*)(unit + 0x40) + *(f32*)(p + 0x28) + getGravityDispOffset(part) +
-                       getFloatDispOffset(part),
-                   *(f32*)(unit + 0x44) + *(f32*)(p + 0x2C));
-        PSMTXTrans(partDisp, *(f32*)(p + 0x30), *(f32*)(p + 0x34), *(f32*)(p + 0x38));
-        PSMTXScale(partScale,
-                   *(f32*)(p + 0x6C) * *(f32*)(p + 0x60),
-                   *(f32*)(p + 0x70) * *(f32*)(p + 0x64),
-                   *(f32*)(p + 0x74) * *(f32*)(p + 0x68));
+    PSMTXConcat(unitScale, work, work);
+    PSMTXConcat(unitTranslateNeg, work, work);
+    PSMTXConcat(unitRotateY, work, work);
+    PSMTXConcat(unitRotateZ, work, work);
+    PSMTXConcat(unitRotateX, work, work);
+    PSMTXConcat(unitTranslatePos, work, unitResult);
+    PSMTXConcat(unitDisp, unitResult, unitResult);
+
+    /*
+     * Target lays the 0x10000000 path out ahead of the branch-on-zero path.
+     * The zero case enters the normal owner-relative path.
+     */
+    if ((*(u32*)(p + 0x1AC) & 0x10000000) != 0) {
+        faceAngle = float_270_80422258;
+        if (*(s8*)(p + 0xBD) >= 0) {
+            faceAngle = float_90_8042225c;
+        }
+
+        x = *(f32*)(p + 0x18);
+        floatOffset = getFloatDispOffset(part);
+        gravityOffset = getGravityDispOffset(part);
+        y = *(f32*)(p + 0x1C) + gravityOffset + floatOffset;
+        z = *(f32*)(p + 0x20);
+
+        camera = (u8*)camGetCurPtr();
+        cameraAngle = angleABf(
+            *(f32*)(camera + 0x0C),
+            *(f32*)(camera + 0x14),
+            *(f32*)(camera + 0x18),
+            *(f32*)(camera + 0x20));
+        angle = angleABf(
+            *(f32*)(camera + 0x0C),
+            *(f32*)(camera + 0x14),
+            x,
+            z);
+        cameraCorrection = reviseAngle(cameraAngle - angle);
+
+        PSMTXTrans(
+            altPartTranslateNeg,
+            -*(f32*)(p + 0x54),
+            -*(f32*)(p + 0x58),
+            -*(f32*)(p + 0x5C));
+        PSMTXTrans(
+            altPartTranslatePos,
+            *(f32*)(p + 0x54),
+            *(f32*)(p + 0x58),
+            *(f32*)(p + 0x5C));
+
+        PSMTXRotRad(
+            altPartRotateX,
+            0x78,
+            float_deg2rad_8042223c *
+                (*(f32*)(p + 0x48) + *(f32*)(p + 0x3C)));
+        PSMTXRotRad(
+            altPartRotateY,
+            0x79,
+            float_deg2rad_8042223c *
+                (cameraCorrection +
+                 (*(f32*)(p + 0x4C) + *(f32*)(p + 0x40))));
+        PSMTXRotRad(
+            altPartRotateZ,
+            0x7A,
+            float_deg2rad_8042223c *
+                (*(f32*)(p + 0x50) + *(f32*)(p + 0x44)));
+
+        PSMTXTrans(altPartTranslate, x, y, z);
+
+        drawRot =
+            reviseAngle(float_neg1_80422260 * faceAngle -
+                        float_90_8042225c);
+
+        angle = reviseAngle(
+            *(f32*)(p + 0x40) +
+            drawRot +
+            *(f32*)(p + 0x4C));
+
+        camera = (u8*)camGetCurPtr();
+        cameraAngle = angleABf(
+            *(f32*)(camera + 0x0C),
+            *(f32*)(camera + 0x14),
+            *(f32*)(camera + 0x18),
+            *(f32*)(camera + 0x20));
+        angle = reviseAngle(angle + cameraAngle);
+
+        if (angle >= float_90_8042225c &&
+            angle <= float_270_80422258) {
+            zSign *= float_neg1_80422260;
+            PSMTXRotRad(
+                altPartRotateY,
+                0x79,
+                float_deg2rad_8042223c *
+                    -(float_2_80422250 *
+                          (float_180_80422264 -
+                           (angle - cameraAngle)) -
+                      (cameraCorrection +
+                       (*(f32*)(p + 0x4C) +
+                        *(f32*)(p + 0x40)))));
+        }
+
+        if ((*(u32*)(p + 0x1AC) & 0x08000000) == 0) {
+            PSMTXScale(
+                altPartScale,
+                *(f32*)(unit + 0x114) *
+                    *(f32*)(p + 0x6C) *
+                    *(f32*)(p + 0x60),
+                *(f32*)(unit + 0x114) *
+                    *(f32*)(p + 0x70) *
+                    *(f32*)(p + 0x64),
+                zSign *
+                    *(f32*)(p + 0x74) *
+                    *(f32*)(p + 0x68));
+        } else {
+            PSMTXScale(
+                altPartScale,
+                *(f32*)(p + 0x6C) *
+                    *(f32*)(p + 0x60),
+                *(f32*)(p + 0x70) *
+                    *(f32*)(p + 0x64),
+                zSign *
+                    *(f32*)(p + 0x74) *
+                    *(f32*)(p + 0x68));
+        }
+
+        PSMTXIdentity(altWork);
+        PSMTXConcat(altPartScale, altWork, altWork);
+        PSMTXConcat(altPartTranslateNeg, altWork, altWork);
+        PSMTXConcat(altPartRotateZ, altWork, altWork);
+        PSMTXConcat(altPartRotateX, altWork, altWork);
+        PSMTXConcat(altPartRotateY, altWork, altWork);
+        PSMTXConcat(altPartTranslatePos, altWork, altWork);
+        PSMTXConcat(altPartTranslate, altWork, result);
+
+        PSMTXCopy(result, blurMtx);
+        PSMTXTrans(
+            zMtx,
+            float_0_80422240,
+            float_0_80422240,
+            float_neg5_80422268);
+        PSMTXConcat(zMtx, blurMtx, blurMtx);
+    } else {
+        /*
+         * Normal owner-relative path.  A zero part face direction falls back
+         * to the alliance attack direction exactly as target PPC does.
+         */
+        faceAngle = float_270_80422258;
+        if (*(s8*)(unit + 0x189) >= 0) {
+            faceAngle = float_90_8042225c;
+        }
+
+        faceValue = (f32)*(s8*)(p + 0xBD);
+        side = float_1_8042224c;
+        if (faceValue <= float_0_80422240) {
+            side = float_neg1_80422260;
+            if (faceValue >= float_0_80422240) {
+                side = (f32)*(s8*)(
+                    battleWork +
+                    ((s8)*(s8*)(unit + 0x0C) * 8) +
+                    0x0A);
+            }
+        }
+
+        x = *(f32*)(unit + 0x3C) +
+            *(f32*)(p + 0x24) * side;
+        floatOffset = getFloatDispOffset(part);
+        gravityOffset = getGravityDispOffset(part);
+        y = *(f32*)(unit + 0x40) +
+            *(f32*)(p + 0x28) +
+            gravityOffset +
+            floatOffset;
+        z = *(f32*)(unit + 0x44) +
+            *(f32*)(p + 0x2C);
+
+        cameraCorrection = float_0_80422240;
+        if ((*(u32*)(*(u8**)(p + 0x4EC) + 0x104) &
+             0x04000000) != 0) {
+            camera = (u8*)camGetCurPtr();
+            cameraAngle = angleABf(
+                *(f32*)(camera + 0x0C),
+                *(f32*)(camera + 0x14),
+                *(f32*)(camera + 0x18),
+                *(f32*)(camera + 0x20));
+            angle = angleABf(
+                *(f32*)(camera + 0x0C),
+                *(f32*)(camera + 0x14),
+                x,
+                z);
+            cameraCorrection =
+                reviseAngle(cameraAngle - angle);
+        }
+
+        PSMTXTrans(
+            partTranslateNeg,
+            -*(f32*)(p + 0x54),
+            -*(f32*)(p + 0x58),
+            -*(f32*)(p + 0x5C));
+        PSMTXTrans(
+            partTranslatePos,
+            *(f32*)(p + 0x54),
+            *(f32*)(p + 0x58),
+            *(f32*)(p + 0x5C));
+
+        PSMTXRotRad(
+            partRotateX,
+            0x78,
+            float_deg2rad_8042223c *
+                (*(f32*)(p + 0x48) + *(f32*)(p + 0x3C)));
+        PSMTXRotRad(
+            partRotateY,
+            0x79,
+            float_deg2rad_8042223c *
+                (cameraCorrection +
+                 (*(f32*)(p + 0x4C) + *(f32*)(p + 0x40))));
+        PSMTXRotRad(
+            partRotateZ,
+            0x7A,
+            float_deg2rad_8042223c *
+                (*(f32*)(p + 0x50) + *(f32*)(p + 0x44)));
+
+        PSMTXTrans(partTranslate, x, y, z);
+        PSMTXTrans(
+            partDisp,
+            *(f32*)(p + 0x30),
+            *(f32*)(p + 0x34),
+            *(f32*)(p + 0x38));
+
+        drawRot =
+            reviseAngle(float_neg1_80422260 * faceAngle -
+                        float_90_8042225c);
+
+        /*
+         * When the unit itself is not locked against facing adjustment, the
+         * target may rebuild the unit matrix with a mirrored Z scale and a
+         * part-selected rotation concatenation order.
+         */
+        if ((*(u32*)(*(u8**)(p + 0x4EC) + 0x1C) &
+             0x01000000) == 0) {
+            angle = reviseAngle(
+                *(f32*)(p + 0x40) +
+                *(f32*)(unit + 0x64) +
+                *(f32*)(p + 0x4C) +
+                drawRot +
+                *(f32*)(unit + 0x70));
+
+            camera = (u8*)camGetCurPtr();
+            cameraAngle = angleABf(
+                *(f32*)(camera + 0x0C),
+                *(f32*)(camera + 0x14),
+                *(f32*)(camera + 0x18),
+                *(f32*)(camera + 0x20));
+            angle = reviseAngle(angle + cameraAngle);
+
+            if (angle >= float_90_8042225c &&
+                angle <= float_270_80422258) {
+                PSMTXScale(
+                    unitScale,
+                    *(f32*)(unit + 0x114) *
+                        *(f32*)(unit + 0x9C) *
+                        *(f32*)(unit + 0x90),
+                    *(f32*)(unit + 0x114) *
+                        *(f32*)(unit + 0xA0) *
+                        *(f32*)(unit + 0x94),
+                    float_neg1_80422260 *
+                        *(f32*)(unit + 0xA4) *
+                        *(f32*)(unit + 0x98));
+
+                PSMTXIdentity(work);
+                PSMTXConcat(unitScale, work, work);
+                PSMTXConcat(unitTranslateNeg, work, work);
+
+                order = *(s8*)(p + 0x4FC);
+                switch (order) {
+                    case 0:
+                        PSMTXConcat(unitRotateY, work, work);
+                        PSMTXConcat(unitRotateZ, work, work);
+                        PSMTXConcat(unitRotateX, work, work);
+                        break;
+                    case 1:
+                        PSMTXConcat(unitRotateY, work, work);
+                        PSMTXConcat(unitRotateX, work, work);
+                        PSMTXConcat(unitRotateZ, work, work);
+                        break;
+                    case 2:
+                        PSMTXConcat(unitRotateX, work, work);
+                        PSMTXConcat(unitRotateY, work, work);
+                        PSMTXConcat(unitRotateZ, work, work);
+                        break;
+                    case 3:
+                        PSMTXConcat(unitRotateX, work, work);
+                        PSMTXConcat(unitRotateZ, work, work);
+                        PSMTXConcat(unitRotateY, work, work);
+                        break;
+                    case 4:
+                        PSMTXConcat(unitRotateZ, work, work);
+                        PSMTXConcat(unitRotateX, work, work);
+                        PSMTXConcat(unitRotateY, work, work);
+                        break;
+                    case 5:
+                        PSMTXConcat(unitRotateZ, work, work);
+                        PSMTXConcat(unitRotateY, work, work);
+                        PSMTXConcat(unitRotateX, work, work);
+                        break;
+                }
+
+                PSMTXConcat(
+                    unitTranslatePos,
+                    work,
+                    unitResult);
+                PSMTXConcat(
+                    unitDisp,
+                    unitResult,
+                    unitResult);
+            }
+        }
+
+        PSMTXScale(
+            partScale,
+            *(f32*)(p + 0x6C) *
+                *(f32*)(p + 0x60),
+            *(f32*)(p + 0x70) *
+                *(f32*)(p + 0x64),
+            float_1_8042224c *
+                *(f32*)(p + 0x74) *
+                *(f32*)(p + 0x68));
+
         PSMTXIdentity(work);
-        PSMTXConcat(result, work, work);
+        PSMTXConcat(unitResult, work, work);
         PSMTXConcat(partScale, work, work);
         PSMTXConcat(partTranslateNeg, work, work);
-        PSMTXConcat(partRotateY, work, work);
-        PSMTXConcat(partRotateZ, work, work);
-        PSMTXConcat(partRotateX, work, work);
+
+        order = *(s8*)(p + 0x4FC);
+        switch (order) {
+            case 0:
+                PSMTXConcat(partRotateY, work, work);
+                PSMTXConcat(partRotateZ, work, work);
+                PSMTXConcat(partRotateX, work, work);
+                break;
+            case 1:
+                PSMTXConcat(partRotateY, work, work);
+                PSMTXConcat(partRotateX, work, work);
+                PSMTXConcat(partRotateZ, work, work);
+                break;
+            case 2:
+                PSMTXConcat(partRotateX, work, work);
+                PSMTXConcat(partRotateY, work, work);
+                PSMTXConcat(partRotateZ, work, work);
+                break;
+            case 3:
+                PSMTXConcat(partRotateX, work, work);
+                PSMTXConcat(partRotateZ, work, work);
+                PSMTXConcat(partRotateY, work, work);
+                break;
+            case 4:
+                PSMTXConcat(partRotateZ, work, work);
+                PSMTXConcat(partRotateX, work, work);
+                PSMTXConcat(partRotateY, work, work);
+                break;
+            case 5:
+                PSMTXConcat(partRotateZ, work, work);
+                PSMTXConcat(partRotateY, work, work);
+                PSMTXConcat(partRotateX, work, work);
+                break;
+        }
+
         PSMTXConcat(partTranslatePos, work, work);
         PSMTXConcat(partTranslate, work, result);
         PSMTXConcat(partDisp, result, result);
-    } else {
-        PSMTXConcat(translateWorld, result, result);
+
+        PSMTXCopy(result, blurMtx);
+        PSMTXTrans(
+            zMtx,
+            float_0_80422240,
+            float_0_80422240,
+            float_neg5_80422268);
+        PSMTXConcat(zMtx, blurMtx, blurMtx);
     }
-    PSMTXCopy(result, blurMtx);
-    PSMTXTrans(zMtx, float_0_80422240, float_0_80422240, float_neg5_80422268);
-    PSMTXConcat(zMtx, blurMtx, blurMtx);
+
+    /*
+     * Rendering/material tail.  Target uses two distinct 4-byte color locals
+     * and reloads the callback pointer at both call sites.
+     */
     *(u32*)(p + 0x218) = *(u32*)(p + 0x4F4);
+
     if ((*(u32*)(p + 0x204) & 0x10) != 0) {
         p[0x218] = 0;
         p[0x219] = 0;
         p[0x21A] = 0;
     }
+
     if ((*(u32*)(p + 0x204) & 0x20) != 0) {
         p[0x218] = 0;
         p[0x219] = 0;
         p[0x21A] = 0;
     }
-    if (p[0x218] == 0xFF && p[0x219] == 0xFF && p[0x21A] == 0xFF) {
+
+    if (p[0x218] == 0xFF &&
+        p[0x219] == 0xFF &&
+        p[0x21A] == 0xFF) {
         if (BtlUnit_CheckStatus(unit, 4) != 0) {
-            p[0x218] = (p[0x218] * 0xA0) / 0xFF;
-            p[0x21A] = (p[0x218] * 0xA0) / 0xFF;
+            p[0x218] =
+                (p[0x218] * 0xA0) / 0xFF;
+            p[0x21A] =
+                (p[0x218] * 0xA0) / 0xFF;
         }
-        p[0x218] = (p[0x218] * unit[0x312]) / 0xFF;
-        p[0x219] = (p[0x219] * unit[0x312]) / 0xFF;
-        p[0x21A] = (p[0x21A] * unit[0x312]) / 0xFF;
+
+        p[0x218] =
+            (p[0x218] * unit[0x312]) / 0xFF;
+        p[0x219] =
+            (p[0x219] * unit[0x312]) / 0xFF;
+        p[0x21A] =
+            (p[0x21A] * unit[0x312]) / 0xFF;
     }
-    color = *(u32*)(p + 0x218);
-    animPoseSetMaterialEvtColor(*(s32*)(p + 0x1C0), &color);
-    animPoseSetMaterialFlagOn(*(s32*)(p + 0x1C0), 0x40);
-    callback = *(void (**)(void*, s32))(p + 0x210);
+
+    materialColor = *(u32*)(p + 0x218);
+    animPoseSetMaterialEvtColor(
+        *(s32*)(p + 0x1C0),
+        &materialColor);
+    animPoseSetMaterialFlagOn(
+        *(s32*)(p + 0x1C0),
+        0x40);
+
+    callback =
+        *(void (**)(void*, s32))(p + 0x210);
     if (callback != 0) {
         callback(part, 0);
     }
-    if (BtlUnit_CheckStatus(unit, 0x10) == 0) {
-        animPoseSetMaterialFlagOff(*(s32*)(p + 0x1C0), 0x800000);
+
+    if (BtlUnit_CheckStatus(unit, 0x10) != 0) {
+        animPoseSetMaterialFlagOn(
+            *(s32*)(p + 0x1C0),
+            0x800000);
     } else {
-        animPoseSetMaterialFlagOn(*(s32*)(p + 0x1C0), 0x800000);
+        animPoseSetMaterialFlagOff(
+            *(s32*)(p + 0x1C0),
+            0x800000);
     }
-    animPoseDrawMtx(*(s32*)(p + 0x1C0), result, 1, 0.0f, 2.0f);
-    animPoseDrawMtx(*(s32*)(p + 0x1C0), result, 2, 0.0f, 2.0f);
-    animPoseDrawMtx(*(s32*)(p + 0x1C0), result, 3, 0.0f, 2.0f);
+
+    animPoseDrawMtx(
+        *(s32*)(p + 0x1C0),
+        result,
+        1,
+        drawRot,
+        float_2_80422250);
+    animPoseDrawMtx(
+        *(s32*)(p + 0x1C0),
+        result,
+        2,
+        drawRot,
+        float_2_80422250);
+    animPoseDrawMtx(
+        *(s32*)(p + 0x1C0),
+        result,
+        3,
+        drawRot,
+        float_2_80422250);
+
+    callback =
+        *(void (**)(void*, s32))(p + 0x210);
     if (callback != 0) {
         callback(part, 1);
     }
-    btlUnitPartsBlurControl((f64)float_0_80422240, part, 0, blurMtx, &color);
+
+    blurColor = *(u32*)(p + 0x218);
+    btlUnitPartsBlurControl(
+        (f64)drawRot,
+        part,
+        0,
+        blurMtx,
+        &blurColor);
 }
 
 void btlUnitItemDisp(s32 param_1, void* unit) {
@@ -1192,116 +1654,299 @@ void btlGetScreenPoint(void* inPos, void* outScreenSpacePos) {
 }
 
 void btlDispTex4(s32 texId, f32* trans, f32* scale, f32* rot, u32* color) {
-    extern u32 vec3_802ee3a0[];
-    u16 height;
+    typedef struct VecBits {
+        u32 x;
+        u32 y;
+        u32 z;
+    } VecBits;
+    typedef union DoubleWords {
+        f64 value;
+        struct {
+            u32 hi;
+            u32 lo;
+        } words;
+    } DoubleWords;
+
+    extern const VecBits vec3_802ee3a0[];
+
+    register const VecBits* catalog = vec3_802ee3a0;
+
     u16 width;
+    u16 height;
+
     u32 color0;
     u32 color1;
     u32 color2;
     u32 color3;
-    u32 base0[3];
-    u32 size0[3];
-    u32 rot0[3];
-    u32 off0[3];
-    u32 one0[3];
-    u32 base1[3];
-    u32 size1[3];
-    u32 rot1[3];
-    u32 off1[3];
-    u32 one1[3];
-    u32 base2[3];
-    u32 size2[3];
-    u32 rot2[3];
-    u32 off2[3];
-    u32 one2[3];
-    u32 base3[3];
-    u32 size3[3];
-    u32 rot3[3];
-    u32 off3[3];
-    u32 one3[3];
-    f32 zero = float_0_80422240;
+
+    VecBits offset;
+
+    VecBits base0;
+    VecBits size0;
+    VecBits rot0;
+    VecBits off0;
+    VecBits one0;
+
+    VecBits base1;
+    VecBits size1;
+    VecBits rot1;
+    VecBits off1;
+    VecBits one1;
+
+    VecBits base2;
+    VecBits size2;
+    VecBits rot2;
+    VecBits off2;
+    VecBits one2;
+
+    VecBits base3;
+    VecBits size3;
+    VecBits rot3;
+    VecBits off3;
+    VecBits one3;
+
+    DoubleWords widthConv;
+    DoubleWords heightConv;
+
     f32 halfW;
     f32 halfH;
     f32 negW;
-    f32 negH;
+
+    /*
+     * These sixteen scalar temporaries mirror the target's call setup:
+     * each call loads color + four Vec3 values completely before any of the
+     * stack destinations are written.  The target can therefore keep twelve
+     * of them in r14-r25 and use r0/r10-r12 for the remaining four.
+     */
+    register u32 v0;
+    register u32 v1;
+    register u32 v2;
+    register u32 v3;
+    register u32 v4;
+    register u32 v5;
+    register u32 v6;
+    register u32 v7;
+    register u32 v8;
+    register u32 v9;
+    register u32 v10;
+    register u32 v11;
+    register u32 v12;
+    register u32 v13;
+    register u32 v14;
+    register u32 v15;
+
+    /*
+     * Target initializes the persistent offset Z before the texture-size
+     * call, then reuses that scratch Vec throughout all four call blocks.
+     */
+    *(f32*)&offset.z = float_0_80422240;
 
     btlDispGetTexSize(texId, &width, &height);
-    color0 = *color;
-    halfW = float_0p5_80422234 * (f32)width * scale[0];
-    halfH = float_0p5_80422234 * (f32)height * scale[1];
+
+    /*
+     * Reconstruct MWCC's unsigned-u16 conversion scratch explicitly.  The
+     * target uses the conversion double at vec3_802ee3a0 + 0x60, allowing
+     * the same rodata base register to remain live across the function.
+     */
+    widthConv.words.hi = 0x43300000;
+    widthConv.words.lo = width;
+    heightConv.words.hi = 0x43300000;
+    heightConv.words.lo = height;
+
+    halfW =
+        float_0p5_80422234 *
+        (f32)(widthConv.value -
+              *(const f64*)((const u8*)catalog + 0x60)) *
+        scale[0];
+    halfH =
+        float_0p5_80422234 *
+        (f32)(heightConv.value -
+              *(const f64*)((const u8*)catalog + 0x60)) *
+        scale[1];
     negW = -halfW;
-    negH = -halfH;
 
-    base0[0] = *(u32*)&trans[0];
-    base0[1] = *(u32*)&trans[1];
-    base0[2] = *(u32*)&trans[2];
-    size0[0] = *(u32*)&scale[0];
-    size0[1] = *(u32*)&scale[1];
-    size0[2] = *(u32*)&scale[2];
-    rot0[0] = *(u32*)&rot[0];
-    rot0[1] = *(u32*)&rot[1];
-    rot0[2] = *(u32*)&rot[2];
-    *(f32*)&off0[0] = negW;
-    *(f32*)&off0[1] = halfH;
-    *(f32*)&off0[2] = zero;
-    one0[0] = vec3_802ee3a0[3];
-    one0[1] = vec3_802ee3a0[4];
-    one0[2] = vec3_802ee3a0[5];
-    _btlDispTex4(texId, (f32*)base0, (f32*)size0, (f32*)rot0, (f32*)off0, (f32*)one0, &color0);
+    *(f32*)&offset.x = negW;
+    *(f32*)&offset.y = halfH;
 
-    color1 = *color;
-    base1[0] = *(u32*)&trans[0];
-    base1[1] = *(u32*)&trans[1];
-    base1[2] = *(u32*)&trans[2];
-    size1[0] = *(u32*)&scale[0];
-    size1[1] = *(u32*)&scale[1];
-    size1[2] = *(u32*)&scale[2];
-    rot1[0] = *(u32*)&rot[0];
-    rot1[1] = *(u32*)&rot[1];
-    rot1[2] = *(u32*)&rot[2];
-    *(f32*)&off1[0] = halfW;
-    *(f32*)&off1[1] = halfH;
-    *(f32*)&off1[2] = zero;
-    one1[0] = vec3_802ee3a0[6];
-    one1[1] = vec3_802ee3a0[7];
-    one1[2] = vec3_802ee3a0[8];
-    _btlDispTex4(texId, (f32*)base1, (f32*)size1, (f32*)rot1, (f32*)off1, (f32*)one1, &color1);
+    v0 = *color;
+    v1 = catalog[1].x;
+    v2 = catalog[1].y;
+    v3 = catalog[1].z;
+    v4 = offset.x;
+    v5 = offset.y;
+    v6 = offset.z;
+    v7 = ((VecBits*)rot)->x;
+    v8 = ((VecBits*)rot)->y;
+    v9 = ((VecBits*)rot)->z;
+    v10 = ((VecBits*)scale)->x;
+    v11 = ((VecBits*)scale)->y;
+    v12 = ((VecBits*)scale)->z;
+    v13 = ((VecBits*)trans)->x;
+    v14 = ((VecBits*)trans)->y;
+    v15 = ((VecBits*)trans)->z;
 
-    color2 = *color;
-    base2[0] = *(u32*)&trans[0];
-    base2[1] = *(u32*)&trans[1];
-    base2[2] = *(u32*)&trans[2];
-    size2[0] = *(u32*)&scale[0];
-    size2[1] = *(u32*)&scale[1];
-    size2[2] = *(u32*)&scale[2];
-    rot2[0] = *(u32*)&rot[0];
-    rot2[1] = *(u32*)&rot[1];
-    rot2[2] = *(u32*)&rot[2];
-    *(f32*)&off2[0] = halfW;
-    *(f32*)&off2[1] = negH;
-    *(f32*)&off2[2] = zero;
-    one2[0] = vec3_802ee3a0[9];
-    one2[1] = vec3_802ee3a0[10];
-    one2[2] = vec3_802ee3a0[11];
-    _btlDispTex4(texId, (f32*)base2, (f32*)size2, (f32*)rot2, (f32*)off2, (f32*)one2, &color2);
+    color0 = v0;
+    one0.x = v1;
+    one0.y = v2;
+    one0.z = v3;
+    off0.x = v4;
+    off0.y = v5;
+    off0.z = v6;
+    rot0.x = v7;
+    rot0.y = v8;
+    rot0.z = v9;
+    size0.x = v10;
+    size0.y = v11;
+    size0.z = v12;
+    base0.x = v13;
+    base0.y = v14;
+    base0.z = v15;
 
-    color3 = *color;
-    base3[0] = *(u32*)&trans[0];
-    base3[1] = *(u32*)&trans[1];
-    base3[2] = *(u32*)&trans[2];
-    size3[0] = *(u32*)&scale[0];
-    size3[1] = *(u32*)&scale[1];
-    size3[2] = *(u32*)&scale[2];
-    rot3[0] = *(u32*)&rot[0];
-    rot3[1] = *(u32*)&rot[1];
-    rot3[2] = *(u32*)&rot[2];
-    *(f32*)&off3[0] = negW;
-    *(f32*)&off3[1] = negH;
-    *(f32*)&off3[2] = zero;
-    one3[0] = vec3_802ee3a0[12];
-    one3[1] = vec3_802ee3a0[13];
-    one3[2] = vec3_802ee3a0[14];
-    _btlDispTex4(texId, (f32*)base3, (f32*)size3, (f32*)rot3, (f32*)off3, (f32*)one3, &color3);
+    _btlDispTex4(
+        texId,
+        (f32*)&base0,
+        (f32*)&size0,
+        (f32*)&rot0,
+        (f32*)&off0,
+        (f32*)&one0,
+        &color0);
+
+    *(f32*)&offset.x = halfW;
+
+    v0 = *color;
+    v1 = catalog[2].x;
+    v2 = catalog[2].y;
+    v3 = catalog[2].z;
+    v4 = offset.x;
+    v5 = offset.y;
+    v6 = offset.z;
+    v7 = ((VecBits*)rot)->x;
+    v8 = ((VecBits*)rot)->y;
+    v9 = ((VecBits*)rot)->z;
+    v10 = ((VecBits*)scale)->x;
+    v11 = ((VecBits*)scale)->y;
+    v12 = ((VecBits*)scale)->z;
+    v13 = ((VecBits*)trans)->x;
+    v14 = ((VecBits*)trans)->y;
+    v15 = ((VecBits*)trans)->z;
+
+    color1 = v0;
+    one1.x = v1;
+    one1.y = v2;
+    one1.z = v3;
+    off1.x = v4;
+    off1.y = v5;
+    off1.z = v6;
+    rot1.x = v7;
+    rot1.y = v8;
+    rot1.z = v9;
+    size1.x = v10;
+    size1.y = v11;
+    size1.z = v12;
+    base1.x = v13;
+    base1.y = v14;
+    base1.z = v15;
+
+    _btlDispTex4(
+        texId,
+        (f32*)&base1,
+        (f32*)&size1,
+        (f32*)&rot1,
+        (f32*)&off1,
+        (f32*)&one1,
+        &color1);
+
+    halfH = -halfH;
+    *(f32*)&offset.y = halfH;
+    *(f32*)&offset.x = halfW;
+
+    v0 = *color;
+    v1 = catalog[3].x;
+    v2 = catalog[3].y;
+    v3 = catalog[3].z;
+    v4 = offset.x;
+    v5 = offset.y;
+    v6 = offset.z;
+    v7 = ((VecBits*)rot)->x;
+    v8 = ((VecBits*)rot)->y;
+    v9 = ((VecBits*)rot)->z;
+    v10 = ((VecBits*)scale)->x;
+    v11 = ((VecBits*)scale)->y;
+    v12 = ((VecBits*)scale)->z;
+    v13 = ((VecBits*)trans)->x;
+    v14 = ((VecBits*)trans)->y;
+    v15 = ((VecBits*)trans)->z;
+
+    color2 = v0;
+    one2.x = v1;
+    one2.y = v2;
+    one2.z = v3;
+    off2.x = v4;
+    off2.y = v5;
+    off2.z = v6;
+    rot2.x = v7;
+    rot2.y = v8;
+    rot2.z = v9;
+    size2.x = v10;
+    size2.y = v11;
+    size2.z = v12;
+    base2.x = v13;
+    base2.y = v14;
+    base2.z = v15;
+
+    _btlDispTex4(
+        texId,
+        (f32*)&base2,
+        (f32*)&size2,
+        (f32*)&rot2,
+        (f32*)&off2,
+        (f32*)&one2,
+        &color2);
+
+    *(f32*)&offset.x = negW;
+
+    v0 = *color;
+    v1 = catalog[4].x;
+    v2 = catalog[4].y;
+    v3 = catalog[4].z;
+    v4 = offset.x;
+    v5 = offset.y;
+    v6 = offset.z;
+    v7 = ((VecBits*)rot)->x;
+    v8 = ((VecBits*)rot)->y;
+    v9 = ((VecBits*)rot)->z;
+    v10 = ((VecBits*)scale)->x;
+    v11 = ((VecBits*)scale)->y;
+    v12 = ((VecBits*)scale)->z;
+    v13 = ((VecBits*)trans)->x;
+    v14 = ((VecBits*)trans)->y;
+    v15 = ((VecBits*)trans)->z;
+
+    color3 = v0;
+    one3.x = v1;
+    one3.y = v2;
+    one3.z = v3;
+    off3.x = v4;
+    off3.y = v5;
+    off3.z = v6;
+    rot3.x = v7;
+    rot3.y = v8;
+    rot3.z = v9;
+    size3.x = v10;
+    size3.y = v11;
+    size3.z = v12;
+    base3.x = v13;
+    base3.y = v14;
+    base3.z = v15;
+
+    _btlDispTex4(
+        texId,
+        (f32*)&base3,
+        (f32*)&size3,
+        (f32*)&rot3,
+        (f32*)&off3,
+        (f32*)&one3,
+        &color3);
 }
 
 void _btlDispTex4(s32 texId, f32* trans0, f32* scale0, f32* rot, f32* trans1, f32* scale1, void* color) {
@@ -1367,31 +2012,46 @@ void _btlStockExpDisp(void) {
     extern f32 vec3_802ee3e8[3];
     extern void iconDispGx(f64 scale, f32* pos, u16 flags, u16 iconId);
     s32 value;
-    u32 i;
+    s32 tens;
+    s32 ones;
+    s32 i;
     Vec pos;
     static f32 x;
     static f32 y;
+    f32 c13;
+    f32 c308;
+    f32 c3p5;
+    f32 c220;
+    f32 c4;
+    f32 c20;
+    f32 c10;
+    f32 c16;
 
     value = *(s32*)((s32)_battleWorkPointer + 0xF04);
     if (value > 0) {
         if (value > 100) {
             value = 100;
         }
-
-        for (i = 0; i < value % 10; i++) {
-            pos.x = -(float_13_80422218 * (f32)i -
-                      ((float_308_80422210 + x) - float_3p5_80422214));
-            pos.y = y - float_220_8042221c;
-            pos.z = vec3_802ee3dc[2];
+        tens = value / 10;
+        ones = value - tens * 10;
+        c13 = float_13_80422218;
+        c308 = float_308_80422210;
+        c3p5 = float_3p5_80422214;
+        c220 = float_220_8042221c;
+        for (i = 0; i < ones; i++) {
+            pos = *(Vec*)vec3_802ee3dc;
+            pos.x = (c308 + x - c3p5) - c13 * (f32)i;
+            pos.y = y - c220;
             iconDispGx(float_0p35_80422220, (f32*)&pos, 0x10, 0x194);
         }
-
-        for (i = 0; i < value / 10; i++) {
-            pos.x = float_4_80422224 +
-                    -(float_20_8042222c * (f32)i -
-                      ((float_308_80422210 + x) - float_10_80422228));
-            pos.y = float_16_80422230 + (y - float_220_8042221c);
-            pos.z = vec3_802ee3e8[2];
+        c4 = float_4_80422224;
+        c20 = float_20_8042222c;
+        c10 = float_10_80422228;
+        c16 = float_16_80422230;
+        for (i = 0; i < tens; i++) {
+            pos = *(Vec*)vec3_802ee3e8;
+            pos.x = c4 + (c308 + x - c10) - c20 * (f32)i;
+            pos.y = c16 + (y - c220);
             iconDispGx(float_0p5_80422234, (f32*)&pos, 0x10, 0x194);
         }
     }

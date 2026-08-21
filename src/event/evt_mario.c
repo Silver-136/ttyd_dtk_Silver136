@@ -85,6 +85,11 @@ s32 evt_mario_dokan_prepare(EventEntry* event) {
 #pragma use_lmw_stmw on
 
 s32 evt_mario_paper_pose_dokan(EventEntry* event, s32 first) {
+    typedef struct LocalVec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } LocalVec3;
     extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
     extern void marioSlitForceCancel(void);
     extern void marioRollForceCancel(void);
@@ -98,6 +103,7 @@ s32 evt_mario_paper_pose_dokan(EventEntry* event, s32 first) {
     extern const f32 float_neg8_80421b50;
     extern const f32 float_0_80421adc;
     extern const f32 float_30_80421b40;
+    extern const f32 float_0p1_80421b54;
     extern char str_M_Z_1_80421980[];
     extern char str_p_dokan_y_802e3ee8[];
     extern char str_PM_D_1A_802e3ef4[];
@@ -110,8 +116,12 @@ s32 evt_mario_paper_pose_dokan(EventEntry* event, s32 first) {
     f32 s;
     f32 c;
     f32 z;
+    u32* dataBase;
+    LocalVec3 firstModelPos;
+    LocalVec3 state0ModelPos;
     void* party;
 
+    dataBase = vec3_802e3cd8;
     args = event->args;
     mario = marioGetPtr();
     mode = evtGetValue(event, args[0]);
@@ -121,21 +131,21 @@ s32 evt_mario_paper_pose_dokan(EventEntry* event, s32 first) {
         *(s32*)((s32)event + 0x7C) = 0;
         if (*(u16*)(mario + 0x2E) == 0x1D) {
             marioPaperOff();
-            *(u32*)(mario + 0xC8) = vec3_802e3cd8[0x24];
-            *(u32*)(mario + 0xCC) = vec3_802e3cd8[0x25];
-            *(u32*)(mario + 0xD0) = vec3_802e3cd8[0x26];
-            *(u32*)(mario + 0xBC) = vec3_802e3cd8[0x27];
-            *(u32*)(mario + 0xC0) = vec3_802e3cd8[0x28];
-            *(u32*)(mario + 0xC4) = vec3_802e3cd8[0x29];
-            *(u32*)(mario + 0xB0) = vec3_802e3cd8[0x2A];
-            *(u32*)(mario + 0xB4) = vec3_802e3cd8[0x2B];
-            *(u32*)(mario + 0xB8) = vec3_802e3cd8[0x2C];
-            *(u32*)(mario + 0x98) = vec3_802e3cd8[0x2D];
-            *(u32*)(mario + 0x9C) = vec3_802e3cd8[0x2E];
-            *(u32*)(mario + 0xA0) = vec3_802e3cd8[0x2F];
-            *(u32*)(mario + 0xA4) = vec3_802e3cd8[0x30];
-            *(u32*)(mario + 0xA8) = vec3_802e3cd8[0x31];
-            *(u32*)(mario + 0xAC) = vec3_802e3cd8[0x32];
+            *(u32*)(mario + 0xC8) = dataBase[0x24];
+            *(u32*)(mario + 0xCC) = dataBase[0x25];
+            *(u32*)(mario + 0xD0) = dataBase[0x26];
+            *(u32*)(mario + 0xBC) = dataBase[0x27];
+            *(u32*)(mario + 0xC0) = dataBase[0x28];
+            *(u32*)(mario + 0xC4) = dataBase[0x29];
+            *(u32*)(mario + 0xB0) = dataBase[0x2A];
+            *(u32*)(mario + 0xB4) = dataBase[0x2B];
+            *(u32*)(mario + 0xB8) = dataBase[0x2C];
+            *(u32*)(mario + 0x98) = dataBase[0x2D];
+            *(u32*)(mario + 0x9C) = dataBase[0x2E];
+            *(u32*)(mario + 0xA0) = dataBase[0x2F];
+            *(u32*)(mario + 0xA4) = dataBase[0x30];
+            *(u32*)(mario + 0xA8) = dataBase[0x31];
+            *(u32*)(mario + 0xAC) = dataBase[0x32];
         } else if (mode == 2) {
             *(s32*)((s32)event + 0x7C) = 10;
         } else if (mode < 2) {
@@ -165,20 +175,20 @@ s32 evt_mario_paper_pose_dokan(EventEntry* event, s32 first) {
             marioRollForceCancel();
             partyShadowOff(partyGetPtr(marioGetPartyId()));
             partyShadowOff(partyGetPtr(marioGetExtraPartyId()));
-            marioPaperOn(str_p_dokan_y_802e3ee8);
+            marioPaperOn((char*)((u8*)dataBase + 0x210));
             marioPaperLightOff();
-            marioChgPaper(str_PM_D_1A_802e3ef4);
+            marioChgPaper((char*)((u8*)dataBase + 0x21C));
             marioChgPose(str_M_Z_1_80421980);
-            *(u32*)(mario + 4) |= 0x108;
+            *(u32*)(mario + 4) |= 8;
+            *(u32*)(mario + 4) |= 0x100;
             *(f32*)(mario + 0x1AC) = *(f32*)(mario + 0x1B0);
             *(f32*)(mario + 0x2B8) = float_0_80421adc;
-            z = float_0_80421adc;
+            firstModelPos = *(const LocalVec3*)(dataBase + 0x33);
+            firstModelPos.z = float_0_80421adc;
             if ((*(u32*)mario & 0x02000000) != 0) {
-                z = float_neg16_80421b4c;
+                firstModelPos.z = float_neg16_80421b4c;
             }
-            *(u32*)(mario + 0x98) = vec3_802e3cd8[0x33];
-            *(u32*)(mario + 0x9C) = vec3_802e3cd8[0x34];
-            *(f32*)(mario + 0xA0) = z;
+            *(LocalVec3*)(mario + 0x98) = firstModelPos;
             *(s32*)((s32)event + 0x78) = 0;
             marioNoUpdateCamPos();
             if ((*(u32*)mario & 0x02000000) == 0) {
@@ -192,16 +202,15 @@ s32 evt_mario_paper_pose_dokan(EventEntry* event, s32 first) {
 
     switch (*(s32*)((s32)event + 0x7C)) {
         case 0:
-            *(u32*)(mario + 0xC8) = vec3_802e3cd8[0x39];
-            *(u32*)(mario + 0xCC) = vec3_802e3cd8[0x3A];
-            *(u32*)(mario + 0xD0) = vec3_802e3cd8[0x3B];
-            z = float_0_80421adc;
+            *(u32*)(mario + 0xC8) = dataBase[0x39];
+            *(u32*)(mario + 0xCC) = dataBase[0x3A];
+            *(u32*)(mario + 0xD0) = dataBase[0x3B];
+            state0ModelPos = *(const LocalVec3*)(dataBase + 0x3C);
+            state0ModelPos.z = float_0_80421adc;
             if ((*(u32*)mario & 0x02000000) != 0) {
-                z = float_neg16_80421b4c;
+                state0ModelPos.z = float_neg16_80421b4c;
             }
-            *(u32*)(mario + 0x98) = vec3_802e3cd8[0x3C];
-            *(u32*)(mario + 0x9C) = vec3_802e3cd8[0x3D];
-            *(f32*)(mario + 0xA0) = z;
+            *(LocalVec3*)(mario + 0x98) = state0ModelPos;
             if ((*(u32*)mario & 0x02000000) == 0) {
                 *(f32*)(mario + 0x94) += float_neg8_80421b50;
             }
@@ -213,6 +222,17 @@ s32 evt_mario_paper_pose_dokan(EventEntry* event, s32 first) {
                 *(u32*)((s32)party + 0x70) = *(u32*)(mario + 0xC8);
                 *(u32*)((s32)party + 0x74) = *(u32*)(mario + 0xCC);
                 *(u32*)((s32)party + 0x78) = *(u32*)(mario + 0xD0);
+                *(u32*)((s32)party + 0x64) = dataBase[0x3F];
+                *(u32*)((s32)party + 0x68) = dataBase[0x40];
+                *(u32*)((s32)party + 0x6C) = dataBase[0x41];
+                *(u32*)((s32)party + 0x7C) = dataBase[0x42];
+                *(u32*)((s32)party + 0x80) = dataBase[0x43];
+                *(u32*)((s32)party + 0x84) = dataBase[0x44];
+                *(u32*)((s32)party + 0x88) = dataBase[0x45];
+                *(u32*)((s32)party + 0x8C) = *(u32*)(mario + 0xB4);
+                *(u32*)((s32)party + 0x90) = dataBase[0x47];
+                *(u32*)((s32)party + 0x68) = *(u32*)(mario + 0x9C);
+                *(u32*)((s32)party + 0x6C) = *(u32*)(mario + 0xA0);
             }
             party = partyGetPtr(marioGetExtraPartyId());
             if (party != NULL) {
@@ -222,6 +242,17 @@ s32 evt_mario_paper_pose_dokan(EventEntry* event, s32 first) {
                 *(u32*)((s32)party + 0x70) = *(u32*)(mario + 0xC8);
                 *(u32*)((s32)party + 0x74) = *(u32*)(mario + 0xCC);
                 *(u32*)((s32)party + 0x78) = *(u32*)(mario + 0xD0);
+                *(u32*)((s32)party + 0x64) = dataBase[0x48];
+                *(u32*)((s32)party + 0x68) = dataBase[0x49];
+                *(u32*)((s32)party + 0x6C) = dataBase[0x4A];
+                *(u32*)((s32)party + 0x7C) = dataBase[0x4B];
+                *(u32*)((s32)party + 0x80) = dataBase[0x4C];
+                *(u32*)((s32)party + 0x84) = dataBase[0x4D];
+                *(u32*)((s32)party + 0x88) = dataBase[0x4E];
+                *(u32*)((s32)party + 0x8C) = *(u32*)(mario + 0xB4);
+                *(u32*)((s32)party + 0x90) = dataBase[0x50];
+                *(u32*)((s32)party + 0x68) = *(u32*)(mario + 0x9C);
+                *(u32*)((s32)party + 0x6C) = *(u32*)(mario + 0xA0);
             }
             ret = 2;
             break;
@@ -229,14 +260,15 @@ s32 evt_mario_paper_pose_dokan(EventEntry* event, s32 first) {
         case 2:
             marioSlitForceCancel();
             marioRollForceCancel();
-            marioPaperOn(str_p_dokan_y_802e3ee8);
+            marioPaperOn((char*)((u8*)dataBase + 0x210));
             marioPaperLightOff();
-            marioChgPaper(str_PM_D_1A_802e3ef4);
+            marioChgPaper((char*)((u8*)dataBase + 0x21C));
             marioChgPose(str_M_Z_1_80421980);
-            *(u32*)(mario + 4) |= 0x108;
-            *(u32*)(mario + 0xC8) = vec3_802e3cd8[0x36];
-            *(u32*)(mario + 0xCC) = vec3_802e3cd8[0x37];
-            *(u32*)(mario + 0xD0) = vec3_802e3cd8[0x38];
+            *(u32*)(mario + 4) |= 8;
+            *(u32*)(mario + 4) |= 0x100;
+            *(u32*)(mario + 0xC8) = dataBase[0x36];
+            *(u32*)(mario + 0xCC) = dataBase[0x37];
+            *(u32*)(mario + 0xD0) = dataBase[0x38];
             *(f32*)(mario + 0x2B8) = float_30_80421b40;
             *(s32*)((s32)event + 0x78) = 8;
             *(s32*)((s32)event + 0x7C) = 3;
@@ -259,8 +291,18 @@ s32 evt_mario_paper_pose_dokan(EventEntry* event, s32 first) {
             break;
 
         case 10:
-            *(s32*)((s32)event + 0x78) -= 1;
-            if (*(s32*)((s32)event + 0x78) <= 0) {
+            *(f32*)(mario + 0x2B8) = float_30_80421b40;
+            *(s32*)((s32)event + 0x78) += 1;
+            if (*(s32*)((s32)event + 0x78) > 10) {
+                *(f32*)(mario + 0x1AC) += *(f32*)(mario + 0x2B8);
+                *(f32*)(mario + 0x2B8) += float_0p1_80421b54;
+                if (*(f32*)(mario + 0x2B8) > float_30_80421b40) {
+                    *(f32*)(mario + 0x2B8) = float_30_80421b40;
+                }
+            }
+            if (*(s32*)((s32)event + 0x78) >= sysMsec2Frame(300)) {
+                partyGoodbye(marioGetPartyId());
+                partyGoodbye(marioGetExtraPartyId());
                 ret = 2;
             }
             break;
@@ -268,6 +310,11 @@ s32 evt_mario_paper_pose_dokan(EventEntry* event, s32 first) {
         case 20:
             ret = 2;
             break;
+    }
+
+    if (ret == 2) {
+        *(u8*)(mario + 0x3E) = (u8)mode;
+        marioChgMot(0x1D);
     }
 
     return ret;
@@ -1887,6 +1934,45 @@ s32 evt_mario_jump_jumpstand(EventEntry* event, s32 first) {
         goto state2_fall;
     }
 
+    goto state2_done;
+
+state2_fall:
+    movePos(*(f32*)(mario + 0x180), *(f32*)(mario + 0x1A4), mario + 0x8C, mario + 0x94);
+    marioMakeJumpPara();
+    speedY = *(f32*)(mario + 0x7C);
+    mario2 = marioGetPtr();
+    if ((*(u32*)mario2 & 0x400000) == 0) {
+        hit = marioSearchGround(speedY, speedY, &groundY, &outA, &outB);
+    } else {
+        hit = marioSearchGroundRoll(float_11_80421af0, *(f32*)((s32)mario2 + 0x7C), &groundY, &outA, &outB);
+    }
+    landed = 0;
+    if (hit != 0 && groundY >= (*(f32*)((s32)mario2 + 0x90) + speedY)) {
+        f32 dx;
+        marioClearJumpPara();
+        *(void**)((s32)mario2 + 0x1E8) = hit;
+        *(f32*)((s32)mario2 + 0x90) = groundY;
+        *(u32*)mario2 &= ~(0x2000 | 0x4000 | 0x8000 | 0x10000);
+        dx = distABf(*(f32*)((s32)mario2 + 0x8C), *(f32*)((s32)mario2 + 0x94), *(f32*)((s32)mario2 + 0x11C), *(f32*)((s32)mario2 + 0x124));
+        if (dx < float_0_80421adc) dx = -dx;
+        *(f32*)((s32)mario2 + 0x128) = dx;
+        *(s16*)((s32)mario2 + 0x50) = 0;
+        *(s16*)((s32)mario2 + 0x52) = 0;
+        *(u32*)mario2 &= ~0x800000;
+        camFollowYOn();
+        landed = 1;
+    }
+    if (landed != 0) {
+        *(s32*)(work + 8) = 0;
+    } else {
+        *(f32*)(mario + 0x90) += *(f32*)(mario + 0x7C);
+    }
+    *(s32*)(work + 8) -= 1;
+    if (*(s32*)(work + 8) < 1) *(s32*)work = 20;
+    goto finish;
+
+state2_done:
+
     state = *(s32*)work;
     if (state == 10) {
         if (*(f32*)(mario + 0x90) < yA) {
@@ -1965,44 +2051,6 @@ state1_move:
     }
     goto finish;
 
-state2_fall:
-    movePos(*(f32*)(mario + 0x180), *(f32*)(mario + 0x1A4), mario + 0x8C, mario + 0x94);
-    marioMakeJumpPara();
-    speedY = *(f32*)(mario + 0x7C);
-    mario2 = marioGetPtr();
-    if ((*(u32*)mario2 & 0x400000) == 0) {
-        hit = marioSearchGround(speedY, speedY, &groundY, &outA, &outB);
-    } else {
-        hit = marioSearchGroundRoll(float_11_80421af0, *(f32*)((s32)mario2 + 0x7C), &groundY, &outA, &outB);
-    }
-    landed = 0;
-    if (hit != 0 && groundY >= (*(f32*)((s32)mario2 + 0x90) + speedY)) {
-        f32 dx;
-        marioClearJumpPara();
-        *(void**)((s32)mario2 + 0x1E8) = hit;
-        *(f32*)((s32)mario2 + 0x90) = groundY;
-        *(u32*)mario2 &= ~(0x2000 | 0x4000 | 0x8000 | 0x10000);
-        dx = distABf(*(f32*)((s32)mario2 + 0x8C), *(f32*)((s32)mario2 + 0x94), *(f32*)((s32)mario2 + 0x11C), *(f32*)((s32)mario2 + 0x124));
-        if (dx < float_0_80421adc) {
-            dx = -dx;
-        }
-        *(f32*)((s32)mario2 + 0x128) = dx;
-        *(s16*)((s32)mario2 + 0x50) = 0;
-        *(s16*)((s32)mario2 + 0x52) = 0;
-        *(u32*)mario2 &= ~0x800000;
-        camFollowYOn();
-        landed = 1;
-    }
-    if (landed != 0) {
-        *(s32*)(work + 8) = 0;
-    } else {
-        *(f32*)(mario + 0x90) += *(f32*)(mario + 0x7C);
-    }
-    *(s32*)(work + 8) -= 1;
-    if (*(s32*)(work + 8) < 1) {
-        *(s32*)work = 20;
-    }
-
 finish:
     if (*(s32*)work == 20) {
         *(f32*)(mario + 0x7C) = float_0_80421adc;
@@ -2020,8 +2068,6 @@ finish:
     }
     return ret;
 }
-
-
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

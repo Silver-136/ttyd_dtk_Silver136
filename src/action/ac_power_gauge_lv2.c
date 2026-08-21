@@ -2,186 +2,282 @@
 
 void actionCommandDisp(f32 x, f32 y);
 
-/* stub-fill: battleAcMain_PowerGaugeLv2 | missing_definition | ghidra_signature */
+const f32 vec3_80300b60[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_80300b6c[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_80300b78[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_80300b84[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_80300b90[3] = { 0.0f, 0.0f, 0.0f };
+
 s32 battleAcMain_PowerGaugeLv2(s32 battle) {
     extern u32 BattleActionCommandGetDifficulty(void*);
     extern s32 sysMsec2Frame(s32);
     extern s32 irand(s32);
     extern void BattleAcGaugeSeInit(void);
-    extern void BattleAcGaugeSeUpdate(f32);
+    extern void BattleAcGaugeSeUpdate(f64);
     extern void BattleAcGaugeSeDelete(void);
     extern u32 BattlePadCheckNow(u32);
     extern s32 _power_table[];
     extern s32 _power_table2[];
     extern u32 dat_804281b8;
 
-    s32* timer = (s32*)(battle + 0x1F4C);
-    u32 difficulty = BattleActionCommandGetDifficulty((void*)battle);
-    s8 autoInput = *(s8*)(*(s32*)(battle + 0x1C90) + 0x307);
-    s32 state = *(s32*)(battle + 0x1C9C);
+    s32 bw;
+    s32 work;
+    s32 disp;
+    s32 unit;
+    u32 difficulty;
+    s32 autoCommand;
+    s32 state;
 
-    if (state == 1000) goto state_1000;
+    bw = battle;
+    work = bw + 0x1F4C;
+    disp = bw + 0x1F20;
+    difficulty = BattleActionCommandGetDifficulty((void*)bw);
+    unit = *(s32*)(bw + 0x1C90);
+    autoCommand = 0;
+    if (*(u8*)(unit + 0x307) != 0) {
+        autoCommand = 1;
+    }
+
+    state = *(s32*)(bw + 0x1C9C);
+
+    if (state == 1000) {
+        goto state_1000;
+    }
     if (state >= 1000) {
-        if (state == 1004) goto state_1004;
-        if (state > 1003) {
-            if (state > 1005) return 1;
-            goto state_1005;
-        }
-        if (state == 1002) goto state_1002;
-        if (state < 1002) goto state_1001;
+        goto high_states;
+    }
+    if (state == 99) {
+        goto return_one;
+    }
+    if (state >= 99) {
+        goto low_99_plus;
+    }
+    if (state == 0) {
+        goto state_0;
+    }
+    goto return_one;
+
+low_99_plus:
+    if (state >= 101) {
+        goto return_one;
+    }
+    goto state_100;
+
+high_states:
+    if (state == 1004) {
+        goto state_1004;
+    }
+    if (state >= 1004) {
+        goto high_1004_plus;
+    }
+    if (state == 1002) {
+        goto state_1002;
+    }
+    if (state >= 1002) {
         goto state_1003;
     }
-    if (state == 99) return 1;
-    if (state < 99) { if (state != 0) return 1; goto state_0; }
-    if (state > 100) return 1;
-    goto state_100;
+    goto state_1001;
+
+high_1004_plus:
+    if (state >= 1006) {
+        goto return_one;
+    }
+    goto state_1005;
 
 state_0:
     {
         s32 i;
-        memset((void*)(battle + 0x1F20), 0, 0x2C);
-        *(f32*)(battle + 0x1F34) = -300.0f;
-        *(f32*)(battle + 0x1F38) = 0.0f;
-        *(s32*)(battle + 0x1F40) = 0x14;
-        *(f32*)(battle + 0x1F48) = 0.0f;
-        *(u32*)(battle + 0x1F2C) = dat_804281b8;
-        *(u8*)(battle + 0x1F30) = 0;
-        *(u8*)(battle + 0x1F31) = 0xF0;
-        *(u8*)(battle + 0x1F32) = 0xF0;
-        *(u8*)(battle + 0x1F33) = 0;
-        *timer = 0;
-        *(s32*)(battle + 0x1CE8) = 0;
-        *(s32*)(battle + 0x1C9C) = 99;
-        *(s32*)(battle + 0x1CB8) = 1;
-        *(s32*)(battle + 0x1F50) = sysMsec2Frame(7000);
-        *(f32*)(battle + 0x1F54) = 0.0f;
-        *(f32*)(battle + 0x1F5C) = 0.01f * (f32)*(s32*)(battle + 0x1CCC);
-        *(f32*)(battle + 0x1F60) = 0.01f * (f32)*(u32*)(battle + 0x1CD0);
-        *(s32*)(battle + 0x1F64) = 0;
-        *(s32*)(battle + 0x1F68) = 0;
-        *(s32*)(battle + 0x1F58) = 0x100;
+        s32 offset;
+        s32 seconds;
+        s32 random;
+
+        memset((void*)disp, 0, 0x2C);
+        *(f32*)(disp + 0x14) = -300.0f;
+        *(f32*)(disp + 0x18) = 0.0f;
+        *(s32*)(disp + 0x20) = 0x14;
+        *(f32*)(disp + 0x28) = 0.0f;
+        *(u32*)(disp + 0xC) = dat_804281b8;
+        *(s8*)(disp + 0x10) = 0;
+        *(s8*)(disp + 0x11) = -0x10;
+        *(s8*)(disp + 0x12) = -0x10;
+        *(s8*)(disp + 0x13) = 0;
+
+        *(s32*)(work + 0x0) = 0;
+        *(s32*)(bw + 0x1CE8) = 0;
+        *(s32*)(bw + 0x1C9C) = 99;
+        *(s32*)(bw + 0x1CB8) = 1;
+        *(s32*)(work + 0x4) = sysMsec2Frame(7000);
+        *(f32*)(work + 0x8) = 0.0f;
+        *(f32*)(work + 0x10) =
+            0.01f * (f32)*(s32*)(bw + 0x1CCC);
+        *(f32*)(work + 0x14) =
+            0.01f * (f32)*(s32*)(bw + 0x1CD0);
+        *(s32*)(work + 0x18) = 0;
+        *(s32*)(work + 0x1C) = 0;
+        *(s32*)(work + 0xC) = 0x100;
+
         sysMsec2Frame(1000);
-        for (i = 0; i < 3; i++) {
-            *(s16*)((s32)timer + 0x20 + i * 2) =
-                (s16)irand(sysMsec2Frame(250)) + (s16)(i + 1) * (s16)sysMsec2Frame(1000);
-        }
-        return 1;
+        i = 0;
+        offset = 0;
+        do {
+            seconds = sysMsec2Frame(1000);
+            seconds = (offset + 1) * seconds;
+            random = irand(sysMsec2Frame(250));
+            i++;
+            *(s16*)(work + 0x20 + offset) = random + seconds;
+            offset += 2;
+        } while (i < 3);
+
+        goto return_one;
     }
+
 state_100:
-    {
-        if ((*(u32*)(battle + 0x1C94) & 1) &&
-            (*(u32*)(*(s32*)(battle + 0x1C90) + 0x27C) & 0x10)) {
-            if (irand(100) < 0) {
-                *(s32*)(battle + 0x1CE8) = irand(*(s32*)(battle + 0x1CD4) - 1) + 1;
-            } else {
-                *(s32*)(battle + 0x1CE8) = 0;
-            }
-            *(s32*)(battle + 0x1C98) = 0x1E;
-            *(s32*)(battle + 0x1C9C) = 1001;
-            return 1;
-        }
-        BattleAcGaugeSeInit();
-        *(s32*)(battle + 0x1C9C) = 1000;
-    }
-    goto state_1000;
-state_1001:
-    {
-        *(s32*)(battle + 0x1C98) -= 1;
-        if (*(s32*)(battle + 0x1C98) > -1) {
-            return 1;
-        }
-        if (*(s32*)(battle + 0x1CE8) < *(s32*)(battle + 0x1CD8)) {
-            *(s32*)(battle + 0x1CB8) = 0;
+    if (((*(u32*)(bw + 0x1C94) & 1) != 0) &&
+        ((*(u32*)(unit + 0x27C) & 0x10) != 0)) {
+        if (irand(100) >= 0) {
+            *(s32*)(bw + 0x1C98) = 0x1E;
+            *(s32*)(bw + 0x1CE8) = 0;
         } else {
-            *(s32*)(battle + 0x1CB8) = 2;
-            *(s32*)(battle + 0x1CB4) += 1;
+            *(s32*)(bw + 0x1CE8) =
+                irand(*(s32*)(bw + 0x1CD4) - 1) + 1;
+            *(s32*)(bw + 0x1C98) = 0x1E;
         }
-        return 0;
+        *(s32*)(bw + 0x1C9C) = 1001;
+        goto return_one;
     }
-state_1002:
-    *(s32*)(battle + 0x1C9C) = 1003;
-state_1003:
-    {
-        *(u32*)(battle + 0x1CC0) |= 1;
-        BattleAcGaugeSeDelete();
-        *(s32*)(battle + 0x1F74) = 0x3C;
-        *(s32*)(battle + 0x1C9C) = 1004;
-    }
-state_1004:
-    {
-        *(s32*)(battle + 0x1F74) -= 1;
-        if (*(s32*)(battle + 0x1F74) > 0) {
-            return 1;
-        }
-        *(s32*)(battle + 0x1C9C) = 1005;
-        return 1;
-    }
-state_1005:
-    {
-        *(s32*)(battle + 0x1CA0) = 0;
-        *(s32*)(battle + 0x1CA8) = 0;
-        *(s32*)(battle + 0x1CA4) = 0;
-        *(s32*)(battle + 0x1CAC) = 0;
-        return 0;
-    }
+
+    BattleAcGaugeSeInit();
+    *(s32*)(bw + 0x1C9C) = 1000;
+
 state_1000:
-    *timer += 1;
-    if (*timer > *(s32*)(battle + 0x1F50)) {
-        if (*(s32*)(battle + 0x1CE8) < *(s32*)(battle + 0x1CD8)) {
-            *(s32*)(battle + 0x1CB8) = 0;
-            *(u32*)(battle + 0x1CB8) &= ~2;
+    *(s32*)(work + 0x0) = *(s32*)(work + 0x0) + 1;
+    if (*(s32*)(work + 0x0) > *(s32*)(work + 0x4)) {
+        if (*(s32*)(bw + 0x1CE8) < *(s32*)(bw + 0x1CD8)) {
+            *(s32*)(bw + 0x1CB8) = 0;
+            *(u32*)(bw + 0x1CB8) =
+                *(u32*)(bw + 0x1CB8) & ~2;
         } else {
-            *(s32*)(battle + 0x1CB8) = 2;
-            *(s32*)(battle + 0x1CB4) += 1;
+            *(s32*)(bw + 0x1CB8) = 2;
+            *(s32*)(bw + 0x1CB4) =
+                *(s32*)(bw + 0x1CB4) + 1;
         }
-        *(s32*)(battle + 0x1C9C) = 1002;
+        *(s32*)(bw + 0x1C9C) = 1002;
+        goto return_one;
     } else {
         s32 i;
-        s32 window = sysMsec2Frame(750);
-        s32 valid = 1;
-        s32 pressed = BattlePadCheckNow(*(u32*)(battle + 0x1F58)) != 0;
-        *(s32*)(battle + 0x1F68) = 1;
+        s32 offset;
+        s32 window;
+        s32 pressed;
+        s32 start;
+
+        pressed = BattlePadCheckNow(*(u32*)(work + 0xC)) != 0;
+        window = sysMsec2Frame(750);
+
+        *(s32*)(work + 0x1C) = 1;
+        offset = 0;
         for (i = 0; i < 3; i++) {
-            s32 start = *(s16*)((s32)timer + 0x20 + i * 2);
-            if (start <= *timer && *timer < start + window) {
-                *(s32*)(battle + 0x1F68) = 0;
+            start = *(s16*)(work + 0x20 + offset);
+            if (start <= *(s32*)(work + 0x0) &&
+                *(s32*)(work + 0x0) < start + window) {
+                *(s32*)(work + 0x1C) = 0;
                 break;
             }
+            offset += 2;
         }
-        if (autoInput != 0) {
-            pressed = *(s32*)(battle + 0x1F68) != 0;
+
+        if (autoCommand != 0) {
+            pressed = *(s32*)(work + 0x1C) != 0;
         }
-        if (*(s32*)(battle + 0x1F64) == 0) {
-            if (pressed) {
-                if (*(s32*)(battle + 0x1F68) == 0) {
-                    *(f32*)(battle + 0x1F54) -=
-                        0.01f * *(f32*)(battle + 0x1F5C) * (f32)_power_table2[difficulty];
+
+        if (*(s32*)(work + 0x18) == 0) {
+            if (pressed != 0) {
+                if (*(s32*)(work + 0x1C) != 0) {
+                    *(f32*)(work + 0x8) +=
+                        0.01f * *(f32*)(work + 0x10) *
+                        (f32)_power_table[difficulty];
                 } else {
-                    *(f32*)(battle + 0x1F54) +=
-                        0.01f * *(f32*)(battle + 0x1F5C) * (f32)_power_table[difficulty];
+                    *(f32*)(work + 0x8) -=
+                        0.01f * *(f32*)(work + 0x10) *
+                        (f32)_power_table2[difficulty];
                 }
             }
-            if (*(f32*)(battle + 0x1F54) < 100.0f) {
-                *(f32*)(battle + 0x1F54) -= *(f32*)(battle + 0x1F60);
+
+            if (*(f32*)(work + 0x8) >= 100.0f) {
+                *(f32*)(work + 0x8) = 100.0f;
+                *(s32*)(work + 0x18) = 1;
             } else {
-                *(f32*)(battle + 0x1F54) = 100.0f;
-                *(s32*)(battle + 0x1F64) = 1;
+                *(f32*)(work + 0x8) -= *(f32*)(work + 0x14);
             }
-            if (*(f32*)(battle + 0x1F54) <= 0.0f) {
-                *(f32*)(battle + 0x1F54) = 0.0f;
+
+            if (*(f32*)(work + 0x8) <= 0.0f) {
+                *(f32*)(work + 0x8) = 0.0f;
             }
         }
-        BattleAcGaugeSeUpdate(*(f32*)(battle + 0x1F54));
-        *(s32*)(battle + 0x1CE8) =
-            (s32)(*(f32*)(battle + 0x1F54) * (f32)*(u32*)(battle + 0x1CD4) / 100.0f);
-        if (*(s32*)(battle + 0x1CE8) >= *(s32*)(battle + 0x1CD4)) {
-            *(s32*)(battle + 0x1CE8) = *(s32*)(battle + 0x1CD4) - 1;
+
+        BattleAcGaugeSeUpdate(*(f32*)(work + 0x8));
+
+        *(s32*)(bw + 0x1CE8) =
+            (s32)(*(f32*)(work + 0x8) *
+                  (f32)*(s32*)(bw + 0x1CD4) / 100.0f);
+
+        if (*(s32*)(bw + 0x1CE8) >= *(s32*)(bw + 0x1CD4)) {
+            *(s32*)(bw + 0x1CE8) =
+                *(s32*)(bw + 0x1CD4) - 1;
         }
-        if ((*(u32*)(battle + 0x1CC4) & 1) == 0 && *(f32*)(battle + 0x1F54) >= 100.0f) {
-            *(s32*)(battle + 0x1CE8) += 1;
+
+        if ((*(u32*)(bw + 0x1CC4) & 1) == 0) {
+            if (*(f32*)(work + 0x8) >= 100.0f) {
+                *(s32*)(bw + 0x1CE8) =
+                    *(s32*)(bw + 0x1CE8) + 1;
+            }
         }
-        (void)valid;
     }
+    goto return_one;
+
+state_1001:
+    *(s32*)(bw + 0x1C98) =
+        *(s32*)(bw + 0x1C98) - 1;
+    if (*(s32*)(bw + 0x1C98) >= 0) {
+        goto return_one;
+    }
+
+    if (*(s32*)(bw + 0x1CE8) >= *(s32*)(bw + 0x1CD8)) {
+        *(s32*)(bw + 0x1CB8) = 2;
+        *(s32*)(bw + 0x1CB4) =
+            *(s32*)(bw + 0x1CB4) + 1;
+    } else {
+        *(s32*)(bw + 0x1CB8) = 0;
+    }
+    return 0;
+
+state_1002:
+    *(s32*)(bw + 0x1C9C) = 1003;
+
+state_1003:
+    *(u32*)(bw + 0x1CC0) =
+        *(u32*)(bw + 0x1CC0) | 1;
+    BattleAcGaugeSeDelete();
+    *(s32*)(work + 0x28) = 0x3C;
+    *(s32*)(bw + 0x1C9C) = 1004;
+
+state_1004:
+    *(s32*)(work + 0x28) =
+        *(s32*)(work + 0x28) - 1;
+    if (*(s32*)(work + 0x28) > 0) {
+        goto return_one;
+    }
+
+    *(s32*)(bw + 0x1C9C) = 1005;
+    goto return_one;
+
+state_1005:
+    *(s32*)(bw + 0x1CA0) = 0;
+    *(s32*)(bw + 0x1CA8) = 0;
+    *(s32*)(bw + 0x1CA4) = 0;
+    *(s32*)(bw + 0x1CAC) = 0;
+    return 0;
+
+return_one:
     return 1;
 }
 
@@ -248,9 +344,6 @@ void battleAcDelete_PowerGaugeLv2(void* wp) {
     *(s32*)((s32)wp + 0x1C9C) = 1003;
 }
 
-/* CHATGPT STUB FILL: main/action/ac_power_gauge_lv2 20260624_184929 */
-
-/* stub-fill: actionCommandDisp | prototype_only | source_prototype */
 void actionCommandDisp(f32 x, f32 y) {
     extern void* camGetPtr(s32);
     extern void iconDispGx(f32, f32*, s32, s32);

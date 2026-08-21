@@ -152,22 +152,42 @@ USER_FUNC(evt_map_fog_onoff) {
 }
 
 s32 evt_map_set_blend(void* pEvt) {
+    extern s32 evtGetValue(void*, s32);
     extern void mapSetBlend(u8*);
     extern void mapSetBlend2(u8*);
+    extern u32 unk_80429550;
+    extern u32 unk_80429554;
     s32* args;
     s32 mode;
-    u8 color[4];
+    s32 red;
+    s32 green;
+    s32 blue;
+    s32 alpha;
 
     args = *(s32**)((s32)pEvt + 0x18);
     mode = evtGetValue(pEvt, args[0]);
-    color[0] = evtGetValue(pEvt, args[1]);
-    color[1] = evtGetValue(pEvt, args[2]);
-    color[2] = evtGetValue(pEvt, args[3]);
-    color[3] = evtGetValue(pEvt, args[4]);
+    red = evtGetValue(pEvt, args[1]);
+    green = evtGetValue(pEvt, args[2]);
+    blue = evtGetValue(pEvt, args[3]);
+    alpha = evtGetValue(pEvt, args[4]);
     if (mode == 0) {
-        mapSetBlend(color);
+        u32 scratch = unk_80429550;
+        u32 color;
+        ((u8*)&scratch)[0] = red;
+        ((u8*)&scratch)[1] = green;
+        ((u8*)&scratch)[2] = blue;
+        ((u8*)&scratch)[3] = alpha;
+        color = scratch;
+        mapSetBlend((u8*)&color);
     } else {
-        mapSetBlend2(color);
+        u32 scratch = unk_80429554;
+        u32 color;
+        ((u8*)&scratch)[0] = red;
+        ((u8*)&scratch)[1] = green;
+        ((u8*)&scratch)[2] = blue;
+        ((u8*)&scratch)[3] = alpha;
+        color = scratch;
+        mapSetBlend2((u8*)&color);
     }
     return 2;
 }

@@ -1164,7 +1164,6 @@ s32 _nozzle_work_effect(void* event, s32 isFirstCall) {
     s32 effType;
     char* soundName;
     s32 active;
-    s32 i;
     void* obj;
     char* objName;
     s32 soundOff;
@@ -1208,49 +1207,30 @@ s32 _nozzle_work_effect(void* event, s32 isFirstCall) {
         }
 
         if (nozzleType > 0 && nozzleType < 4) {
-            for (i = 0; i < 3; i++) {
-                if (i == 0) {
-                    objName = vec3_802f42b8 + 0xC0;
-                    soundOff = 0x8C;
-                    effOff = 0x7C;
-                } else if (i == 1) {
-                    objName = vec3_802f42b8 + 0xCC;
-                    soundOff = 0x90;
-                    effOff = 0x80;
-                } else {
-                    objName = vec3_802f42b8 + 0xD8;
-                    soundOff = 0x94;
-                    effOff = 0x84;
-                }
-
-                obj = BattleSearchObjectPtr(objName);
-                dir = _get_nozzle_dir(i);
-                if (*(u8*)((s32)base - 0x7D60 + i) != 0) {
-                    if (soundName != 0) {
-                        *(s32*)((s32)event + soundOff) = psndSFXOn_3D(soundName, (void*)((s32)obj + 4));
-                    } else {
-                        *(s32*)((s32)event + soundOff) = -1;
-                    }
-                    angle = reviseAngle(float_90_80422fd4 + dir);
-                    z = float_10_80423000 * sinfd(dir) + *(f32*)((s32)obj + 0xC);
-                    x = *(f32*)((s32)obj + 0x4) - (float_10_80423000 * cosfd(dir));
-                    y = float_12_80423004 + *(f32*)((s32)obj + 0x8);
-                    *(void**)((s32)event + effOff) = effNozleEntry(effType, 0x5A, x, y, z, float_neg80_80423008, angle);
-                } else {
-                    if (soundName != 0) {
-                        *(s32*)((s32)event + soundOff) = psndSFXOn_3D(soundName, (void*)((s32)obj + 4));
-                    } else {
-                        *(s32*)((s32)event + soundOff) = -1;
-                    }
-                    x = *(f32*)((s32)obj + 0x4);
-                    y = float_20_8042300c + *(f32*)((s32)obj + 0x8);
-                    z = float_8_80423010 + *(f32*)((s32)obj + 0xC);
-                    *(void**)((s32)event + effOff) = effNozleEntry(effType, 0x5A, x, y, z, float_0_80422fd0, float_0_80422fd0);
-                    if (typeArg == 0) {
-                        effConfettiN64Entry(4, 0x5A, x, y, z, float_1_80423014);
-                    }
-                }
+#define DO_NOZZLE(INDEX, NAMEOFF, SOUNDOFF, EFFOFF) \
+            obj = BattleSearchObjectPtr(vec3_802f42b8 + (NAMEOFF)); \
+            dir = _get_nozzle_dir(INDEX); \
+            if (*(u8*)((s32)base - 0x7D60 + (INDEX)) != 0) { \
+                if (soundName == 0) *(s32*)((s32)event + (SOUNDOFF)) = -1; \
+                else *(s32*)((s32)event + (SOUNDOFF)) = psndSFXOn_3D(soundName, (void*)((s32)obj + 4)); \
+                angle = reviseAngle(float_90_80422fd4 + dir); \
+                z = float_10_80423000 * sinfd(dir) + *(f32*)((s32)obj + 0xC); \
+                x = *(f32*)((s32)obj + 4) - float_10_80423000 * cosfd(dir); \
+                y = float_12_80423004 + *(f32*)((s32)obj + 8); \
+                *(void**)((s32)event + (EFFOFF)) = effNozleEntry(effType, 0x5A, x, y, z, float_neg80_80423008, angle); \
+            } else { \
+                if (soundName == 0) *(s32*)((s32)event + (SOUNDOFF)) = -1; \
+                else *(s32*)((s32)event + (SOUNDOFF)) = psndSFXOn_3D(soundName, (void*)((s32)obj + 4)); \
+                x = *(f32*)((s32)obj + 4); \
+                y = float_20_8042300c + *(f32*)((s32)obj + 8); \
+                z = float_8_80423010 + *(f32*)((s32)obj + 0xC); \
+                *(void**)((s32)event + (EFFOFF)) = effNozleEntry(effType, 0x5A, x, y, z, float_0_80422fd0, float_0_80422fd0); \
+                if (typeArg == 0) effConfettiN64Entry(4, 0x5A, x, y, z, float_1_80423014); \
             }
+            DO_NOZZLE(0, 0xC0, 0x8C, 0x7C);
+            DO_NOZZLE(1, 0xCC, 0x90, 0x80);
+            DO_NOZZLE(2, 0xD8, 0x94, 0x84);
+#undef DO_NOZZLE
             active = 1;
         } else if (typeArg != 0 && *(void**)((s32)base - 0x7D44) == 0) {
             *(s32*)((s32)event + 0x78) = 0x78;
@@ -1292,7 +1272,6 @@ s32 _nozzle_work_effect(void* event, s32 isFirstCall) {
     evtSetValue(event, dst, 1);
     return 2;
 }
-
 
 s32 BattleFogEndCheck(void) {
     extern void* _battleWorkPointer;

@@ -1,6 +1,10 @@
 #include "manager/winmgr.h"
+#include "manager/evtmgr.h"
 
+#include "dolphin/gx.h"
+#include "dolphin/mtx.h"
 #include "event/evt_badgeshop.h"
+#include "mario/mario_pouch.h"
 #include "statuswindow.h"
 
 void* wp;
@@ -503,13 +507,13 @@ void winMgrHelpDraw(void* win) {
     extern s32 strcmp(char*, char*);
     extern void* lotteryGetPtr(void);
     extern s32 sprintf(char*, char*, ...);
-
+    extern void FontDrawStart(void);
     extern void FontDrawMessage(s32, s32, char*);
-
-
-
+    extern void PSMTXTrans(f32[3][4], f32, f32, f32);
+    extern void PSMTXScale(f32[3][4], f32, f32, f32);
+    extern void PSMTXConcat(f32[3][4], f32[3][4], f32[3][4]);
     extern void iconDispGx2(f32[3][4], s32, s32);
-
+    extern char vec3_803003a0[];
     extern void* gpGlobals;
 
     f32 trans[3][4];
@@ -529,30 +533,45 @@ void winMgrHelpDraw(void* win) {
     if (strcmp(help, msgSearch(&vec3_803003a0[0x554])) == 0) {
         void* lottery = lotteryGetPtr();
         sprintf(buffer, help, *(s16*)((s32)lottery + 0x20));
-        help = buffer;
+        FontDrawStart();
+        FontDrawMessage(-210, cursor * 28 - 144, buffer);
+    } else {
+        FontDrawStart();
+        FontDrawMessage(-210, cursor * 28 - 144, help);
     }
-    FontDrawStart();
-    FontDrawMessage(-210, cursor * 28 - 144, help);
     GXSetScissor(0, 0, 0x260, 0x1E0);
 
     if (lineCount > 2) {
         x = *(s32*)((s32)win + 0x18) + *(s32*)((s32)win + 0x20) - 12;
-        if ((*(u32*)((s32)gpGlobals + 0x1C) & 0x1F) < 0x14) {
-            if (cursor != 0) {
-                y = *(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) + 44;
-                PSMTXTrans(trans, (f32)x, (f32)y, 0.0f);
-                PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
-                PSMTXConcat(trans, scale, trans);
-                iconDispGx2(trans, 0x10, 0x1BD);
-            }
-            if (cursor + 2 != lineCount) {
+        if (cursor == 0) {
+            if ((*(u32*)((s32)gpGlobals + 0x1C) & 0x1F) < 0x14) {
                 y = *(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) - 4;
                 PSMTXTrans(trans, (f32)x, (f32)y, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(trans, scale, trans);
                 iconDispGx2(trans, 0x10, 0x1BE);
             }
-        }
+        } else if (cursor + 2 == lineCount) {
+            if ((*(u32*)((s32)gpGlobals + 0x1C) & 0x1F) < 0x14) {
+                y = *(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) + 44;
+                PSMTXTrans(trans, (f32)x, (f32)y, 0.0f);
+                PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
+                PSMTXConcat(trans, scale, trans);
+                iconDispGx2(trans, 0x10, 0x1BD);
+            }
+        } else if ((*(u32*)((s32)gpGlobals + 0x1C) & 0x1F) < 0x14) {
+            y = *(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) + 44;
+            PSMTXTrans(trans, (f32)x, (f32)y, 0.0f);
+            PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
+            PSMTXConcat(trans, scale, trans);
+            iconDispGx2(trans, 0x10, 0x1BD);
+
+            y = *(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) - 4;
+            PSMTXTrans(trans, (f32)x, (f32)y, 0.0f);
+            PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
+            PSMTXConcat(trans, scale, trans);
+            iconDispGx2(trans, 0x10, 0x1BE);
+            }
 
         y = *(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) + 10;
         PSMTXTrans(trans, (f32)x, (f32)y, 0.0f);
@@ -770,7 +789,7 @@ s32 winMgrSelect(void* select) {
     return 0;
 }
 
-s32 winMgrSelectOther(void* selectRaw, void* eventRaw) {
+s32 winMgrSelectOther(void* selectRaw, EventEntry* event) {
     typedef struct SelectRow {
         u16 flags;
         u16 value;
@@ -792,11 +811,6 @@ s32 winMgrSelectOther(void* selectRaw, void* eventRaw) {
         s32 rowCount;
         s32 newItem;
     } SelectEntry;
-
-    typedef struct EventMini {
-        u8 pad00[0x9C];
-        s32 lwData[8];
-    } EventMini;
 
     typedef struct ItemDataMini {
         char* stringId;
@@ -829,7 +843,6 @@ s32 winMgrSelectOther(void* selectRaw, void* eventRaw) {
     extern s32 mario_status_henka_table[];
 
     SelectEntry* select = (SelectEntry*)selectRaw;
-    EventMini* event = (EventMini*)eventRaw;
     u8* rodata = (u8*)vec3_803003a0;
     u8* jdt = _jdt;
     ItemDataMini* item;
@@ -1271,20 +1284,7 @@ void select_disp(void* win) {
 }
 
 void select_disp_party(void* win) {
-    typedef struct Vec {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec;
-    typedef struct GXColorLocal {
-        u8 r;
-        u8 g;
-        u8 b;
-        u8 a;
-    } GXColorLocal;
-
     extern void* wp;
-    extern void* pouchGetPtr(void);
     extern char* pouchGetYoshiName(void);
     extern char* msgSearch(char*);
     extern u16 FontGetMessageWidth(char*);
@@ -1306,7 +1306,7 @@ void select_disp_party(void* win) {
 
     u8* w = win;
     u8* sel = *(u8**)(w + 0x2C);
-    u8* pouch;
+    PouchData* pouch;
 
     s32 oldX;
     s32 oldY;
@@ -1338,13 +1338,13 @@ void select_disp_party(void* win) {
     pouch = pouchGetPtr();
 
     {
-    GXColorLocal normal = {0, 0, 0, 0xFF};
-    GXColorLocal disabled = {0xA0, 0xA0, 0xA0, 0xFF};
-    GXColorLocal iconBase = {0xFF, 0xFF, 0xFF, 0xFF};
-    GXColorLocal titleBase = {0xFF, 0xFF, 0xFF, 0xFF};
+    GXColor normal = {0, 0, 0, 0xFF};
+    GXColor disabled = {0xA0, 0xA0, 0xA0, 0xFF};
+    GXColor iconBase = {0xFF, 0xFF, 0xFF, 0xFF};
+    GXColor titleBase = {0xFF, 0xFF, 0xFF, 0xFF};
 
     if ((*(u32*)(*(u8**)((u8*)wp + 4) + *(s32*)(sel + 0x2C) * 0x44) & 4) == 0) {
-        GXColorLocal fog = {0xFF, 0xFF, 0xFF, 0xFF};
+        GXColor fog = {0xFF, 0xFF, 0xFF, 0xFF};
         GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &fog);
 
         GXGetScissor(&oldX, &oldY, &oldW, &oldH);
@@ -1376,8 +1376,8 @@ void select_disp_party(void* win) {
                 Vec workPos = {0.0f, 0.0f, 0.0f};
                 Vec textPos = {0.0f, 0.0f, 0.0f};
                 Vec textScale = {1.0f, 1.0f, 1.0f};
-                GXColorLocal* colorPtr;
-                GXColorLocal textColor;
+                GXColor* colorPtr;
+                GXColor textColor;
                 u16 nameWidth;
 
                 workPos.x = (f32)(*(s32*)(w + 0x18) + 0x3C);
@@ -1412,7 +1412,7 @@ void select_disp_party(void* win) {
                 {
                     Vec partyIconPos = {0.0f, 0.0f, 0.0f};
                     Vec partyIconScale = {1.0f, 1.0f, 1.0f};
-                    GXColorLocal partyIconColor;
+                    GXColor partyIconColor;
                     s16 icon;
 
                     partyIconColor = iconBase;
@@ -1440,16 +1440,14 @@ void select_disp_party(void* win) {
                 }
 
                 {
-                    GXColorLocal techColor;
+                    GXColor techColor;
                     s32 techOffset = 0;
                     s32 techIndex = 0;
 
                     techColor = iconBase;
 
-                    while (techIndex <
-                           *(s16*)(pouch +
-                                  party_id_table[ROW_VALUE()] * 0xE +
-                                  0xC)) {
+                    while (techIndex < pouch->partyData[
+                               party_id_table[ROW_VALUE()]].techLevel) {
                         if ((ROW_FLAGS() & 1) == 0) {
                             winIconInit();
                         } else {
@@ -1492,7 +1490,7 @@ void select_disp_party(void* win) {
 
         winFontInit();
         {
-            GXColorLocal titleColor;
+            GXColor titleColor;
             Vec titlePos = {0.0f, 0.0f, 0.0f};
             Vec titleScale = {1.0f, 1.0f, 1.0f};
 
@@ -1515,7 +1513,7 @@ void select_disp_party(void* win) {
 
         winFontInit();
         {
-            GXColorLocal titleColor;
+            GXColor titleColor;
             Vec titlePos = {0.0f, 0.0f, 0.0f};
             Vec titleScale = {1.0f, 1.0f, 1.0f};
 
@@ -1571,12 +1569,6 @@ void select_disp_party(void* win) {
 }
 
 void select_disp_mario(void* win) {
-    typedef struct Vec {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec;
-
     extern void* wp;
     extern void* gp;
     extern void pouchGetPtr(void);
@@ -2092,78 +2084,129 @@ void select_disp_luigi(void* win) {
     }
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void select_disp2(void* win) {
     extern char* msgSearch(char*);
     extern u32 FontGetMessageWidthLine(char*, u16*);
-
-
-
-
     extern void FontDrawMessageMtx(f32[3][4], char*);
 
+    typedef struct DescMini {
+        u8 pad00[0x10];
+        s32 y;
+        u8 pad14[4];
+        s32 height;
+    } DescMini;
+    typedef struct EntryMini {
+        u32 flags;
+        u8 pad04[0x14];
+        s32 x;
+        s32 y;
+        s32 width;
+        s32 height;
+        u8 pad28[0x1C];
+    } EntryMini;
+    typedef struct WorkMini {
+        u8 pad00[4];
+        EntryMini* entries;
+    } WorkMini;
+    typedef struct SelectMini {
+        u8 pad00[4];
+        s32 type;
+        u8 pad08[0x1C];
+        s32 entryIndices[3];
+    } SelectMini;
+    typedef struct WindowMini {
+        u8 pad00[0x18];
+        s32 x;
+        s32 y;
+        s32 width;
+        s32 height;
+        DescMini* desc;
+        SelectMini* select;
+    } WindowMini;
 
     f32 scaleMtx[3][4];
     f32 transMtx[3][4];
-    void* select = *(void**)((s32)win + 0x2C);
-    char* message = msgSearch(&vec3_803003a0[0x358]);
-    void* entries = *(void**)((s32)wp + 4);
-    void* linked;
+    WindowMini* window = win;
+    SelectMini* select = window->select;
+    char* strings = vec3_803003a0;
+    char* message = msgSearch(strings + 0x358);
+    EntryMini* linked;
     u16 lines;
-    u32 messageWidth;
+    u16 messageWidth;
     f32 drawnWidth;
-    f32 scale;
     f32 x;
     f32 y;
-    s32 type = *(s32*)((s32)select + 4);
-    s32 index;
 
-    switch (type) {
+    switch (select->type) {
         case 3:
-            message = msgSearch(&vec3_803003a0[0x36C]);
+        case 0xC:
+            message = msgSearch(strings + 0x36C);
             break;
         case 4:
-            message = msgSearch(&vec3_803003a0[0x380]);
+            message = msgSearch(strings + 0x380);
             break;
         case 5:
-            message = msgSearch(&vec3_803003a0[0x394]);
+            message = msgSearch(strings + 0x394);
+            break;
+        case 6:
+        case 7:
+            message = msgSearch(strings + 0x3A8);
+            break;
+        case 8:
+            message = msgSearch(strings + 0x3C0);
+            break;
+        case 9:
+            message = msgSearch(strings + 0x3D8);
+            break;
+        case 10:
+            message = msgSearch(strings + 0x3EC);
             break;
         case 0xB:
-            message = msgSearch(&vec3_803003a0[0x404]);
+        case 0xE:
+        case 0xF:
+            message = msgSearch(strings + 0x404);
+            break;
+        case 0xD:
+        case 0x10:
+            message = msgSearch(strings + 0x418);
+            break;
+        case 0x11:
+            message = msgSearch(strings + 0x430);
+            break;
+        case 0x12:
+            message = msgSearch(strings + 0x444);
             break;
     }
 
-    index = *(s32*)((s32)select + 0x28);
-    linked = (void*)((s32)entries + index * 0x44);
-    if ((*(u32*)linked & 4) == 0) {
+    if ((((WorkMini*)wp)->entries[select->entryIndices[1]].flags & 4) == 0) {
         messageWidth = FontGetMessageWidthLine(message, &lines);
         drawnWidth = (f32)messageWidth;
-        scale = 1.0f;
-        if (drawnWidth > (f32)(*(s32*)((s32)win + 0x20) - 30)) {
-            scale = (f32)(*(s32*)((s32)win + 0x20) - 30) / drawnWidth;
-            drawnWidth = (f32)(*(s32*)((s32)win + 0x20) - 30);
+        if (drawnWidth <= (f32)(window->width - 30)) {
+            PSMTXScale(scaleMtx, 1.0f, 1.0f, 1.0f);
+        } else {
+            PSMTXScale(scaleMtx, (f32)(window->width - 30) / drawnWidth, 1.0f, 1.0f);
+            drawnWidth = (f32)(window->width - 30);
         }
-
-        PSMTXScale(scaleMtx, scale, 1.0f, 1.0f);
-        x = (f32)*(s32*)((s32)win + 0x18) +
-            ((f32)*(s32*)((s32)win + 0x20) - drawnWidth) * 0.5f;
-        y = (f32)(*(s32*)((s32)win + 0x1C) -
-            (*(s32*)((s32)win + 0x24) - (lines + 1) * 24) / 2);
+        x = (f32)(window->x + (u16)(((f32)window->width - drawnWidth) * 0.5f));
+        y = (f32)(window->y - (window->height - (lines + 1) * 24) / 2);
         PSMTXTrans(transMtx, x, y, 0.0f);
         PSMTXConcat(transMtx, scaleMtx, transMtx);
         FontDrawStart();
         FontDrawMessageMtx(transMtx, message);
 
-        if ((*(u32*)linked & 1) != 0) {
-            void* desc = *(void**)((s32)win + 0x28);
-            *(s32*)((s32)linked + 0x18) = *(s32*)((s32)win + 0x18);
-            *(s32*)((s32)linked + 0x1C) =
-                *(s32*)((s32)desc + 0x10) + ((u32)lines * 22 >> 1);
-            *(s32*)((s32)linked + 0x20) = *(s32*)((s32)win + 0x20);
-            *(s32*)((s32)linked + 0x24) =
-                *(s32*)((s32)desc + 0x18) + (u32)lines * 22;
+        linked = &((WorkMini*)wp)->entries[select->entryIndices[1]];
+        if ((linked->flags & 1) != 0) {
+            linked->x = window->x;
+            linked->y = window->desc->y + ((u32)lines * 22 >> 1);
+            linked->width = window->width;
+            linked->height = window->desc->height + (u32)lines * 22;
         }
     }
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 void select_main3(void* win) {
     extern void FontGetMessageWidthLine(char* msg, u16* lines);
@@ -2217,13 +2260,15 @@ void select_disp3(void* win) {
     }
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void select_disp3_party(void* win) {
     extern void* pouchGetPtr(void);
     extern s32 sprintf(char* str, const char* fmt, ...);
     extern char* msgSearch(char* msg);
-
-
-
+    extern void winMgrHelpDraw(void* win);
+    extern char vec3_803003a0[];
+    extern char str_help_80428008[];
     extern u16 party_id_table[];
     extern char* party_labelname_table[];
 
@@ -2237,7 +2282,9 @@ void select_disp3_party(void* win) {
     char* state;
     s32 index;
     s32 count;
+    char* base;
 
+    base = vec3_803003a0;
     data = *(void**)((s32)win + 0x2C);
     pouch = pouchGetPtr();
     if ((*(u32*)((s32)*(void**)((s32)wp + 4) + *(s32*)((s32)data + 0x2C) * 0x44) & 4) == 0) {
@@ -2246,22 +2293,22 @@ void select_disp3_party(void* win) {
         flags = *(u16*)((s32)list + (index << 2));
         label = str_help_80428008;
         if (flags & 2) {
-            label = &vec3_803003a0[0x30C];
-            if (*(s32*)((s32)data + 4) == 6) {
-                state = &vec3_803003a0[0x334];
-            } else {
-                state = &vec3_803003a0[0x33C];
-            }
-            party = *(u16*)((s32)list + (index << 2) + 2);
-            count = *(s16*)((s32)pouch + party_id_table[party] * 0xE + 0xC) + 1;
-            sprintf(buf, &vec3_803003a0[0x348], label, state, count, party_labelname_table[party]);
-            *(char**)((s32)win + 0x34) = msgSearch(buf);
-        } else {
-            *(char**)((s32)win + 0x34) = msgSearch(label);
+            label = &base[0x30C];
         }
+        if (*(s32*)((s32)data + 4) == 6 || *(s32*)((s32)data + 4) == 7) {
+            state = &base[0x334];
+        } else {
+            state = &base[0x33C];
+        }
+        party = *(u16*)((s32)list + (index << 2) + 2);
+        count = *(s16*)((s32)pouch + party_id_table[party] * 0xE + 0xC) + 1;
+        sprintf(buf, &base[0x348], label, state, count, party_labelname_table[party]);
+        *(char**)((s32)win + 0x34) = msgSearch(buf);
         winMgrHelpDraw(win);
     }
 }
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
 /* Reorder pilot candidate: functions arranged in _main.map order for main/manager/winmgr. */
 

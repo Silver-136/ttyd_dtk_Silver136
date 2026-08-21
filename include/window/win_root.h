@@ -11,6 +11,8 @@ void winBookGX(double x, double y, void* pWin, s32 page);
 void winHalfBookGX(double x, double y, void* file, s32 side);
 void winHakoGX(double x, double y, void* pWin, s32 type);
 void winWazaGX(double x, double y, double w, double h, void* pWin);
+void winSortGX(void* pWin);
+void winMailDisp(void* pWin);
 s32 compare_func5_2(void* param_1, void* param_2);
 s32 compare_func6_2(void* param_1, void* param_2);
 void winSortEntry(void* win, s32 type, f32 a, f32 b);

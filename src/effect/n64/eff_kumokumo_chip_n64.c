@@ -1,4 +1,9 @@
 #include "effect/n64/eff_kumokumo_chip_n64.h"
+#include "driver/effdrv.h"
+#include "memory.h"
+
+void effKumokumoChipMain(void* effect);
+void effKumokumoChipDisp(s32 cameraId, void* effect);
 
 
 void* effKumokumoChipN64Entry(
@@ -6,9 +11,6 @@ void* effKumokumoChipN64Entry(
     f32 x1, f32 y1, f32 z1,
     f32 step, f32 scale, s32 type)
 {
-    extern void* effEntry(void);
-    extern void* __memAlloc(s32, s32);
-    extern void effKumokumoChipMain(void*);
     extern f64 __frsqrte(f64);
     extern f32 __float_nan;
     extern char str_KumokumoChipN64_802fb384[];
@@ -156,10 +158,8 @@ void effKumokumoChipMain(void* effect) {
         f32 y;
         f32 z;
     } Vec3;
-    extern void effDelete(void*);
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
-    extern void effKumokumoChipDisp(s32, s32);
     extern const Vec3 vec3_802fb378;
     u8* work;
     Vec3 dispPos;
@@ -235,7 +235,7 @@ void effKumokumoChipDisp(s32 cameraId, void* effect) {
     GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,4,2,8,15);GXSetTevAlphaIn(0,7,5,4,7);GXSetCullMode(0);effSetVtxDescN64((void*)0x803A51D8);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3);
 }
 
-u8 size32x32_tex32x32_vtx[56] = {
+static u8 size32x32_tex32x32_vtx[56] = {
     0xFF, 0xF0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF,
     0, 0x10, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0xFF,
     0, 0x10, 0, 0x20, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0xFF,

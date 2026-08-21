@@ -10,6 +10,7 @@
 #include "event/evt_badgeshop.h"
 #include "driver/fadedrv.h"
 #include "statuswindow.h"
+#include "window/win_main.h"
 
 extern u32 OSGetResetCode(void);
 extern s64 OSGetTime(void);
@@ -264,7 +265,6 @@ void marioStMain(void) {
     extern void iconMain(void);
     extern void extMain(void);
     extern void psndMain(void);
-    extern void winMain(void);
     extern void nameEntMain(void);
     extern void winMgrMain(void);
     extern void effMain(void);

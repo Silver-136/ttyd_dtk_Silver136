@@ -147,31 +147,98 @@ void effOpukuJetwDisp(s32 cameraId, void* effect) {
     extern void GXSetCurrentMtx(s32); extern void effSetVtxDescN64(void*); extern void GXBegin(s32, s32, s32);
     extern void tri2(s32, s32, s32, s32, s32, s32, s32, s32);
     extern f32 float_deg2rad_80425b40, float_0p03125_80425b44, float_0_80425b48, float_1_80425b4c;
-    extern u8 size32x16_tex64x32_vtx[];
-    f32 trans[3][4], rot[3][4], scale[3][4];
+    extern f32 float_10_80425b50, float_0p01_80425b54;
+    extern u8 adata[], a2data[], size16x16_tex32x32_vtx[];
+    extern s32 dat_ry[];
+    f32 trans[3][4], rot[3][4], scale[3][4], model[3][4];
     u8 texObj[0x20];
     u8* work = *(u8**)((s32)effect + 0xC);
     void* camera = camGetPtr(cameraId);
-    u32 color;
+    u8* data;
+    s32 count;
+    s32 spokes;
+    s32 phase = *(s32*)(work + 0x14);
+    s32 frame = *(s32*)(work + 0x10);
+    s32 outer;
+    u8 color[4];
+
+    if (*(s32*)work == 0) {
+        data = adata;
+        count = 20;
+        spokes = 3;
+    } else {
+        data = a2data;
+        count = 11;
+        spokes = 3;
+    }
 
     PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
     PSMTXRotRad(rot, 0x79, float_deg2rad_80425b40 * -*(f32*)((s32)camGetPtr(4) + 0x114));
     PSMTXScale(scale, *(f32*)(work + 0x34), *(f32*)(work + 0x34), *(f32*)(work + 0x34));
-    PSMTXConcat(trans, rot, trans); PSMTXConcat(trans, scale, trans);
-    PSMTXConcat((void*)((s32)camera + 0x11C), trans, trans);
+    PSMTXConcat(trans, rot, trans); PSMTXConcat(trans, scale, model);
+    PSMTXConcat((void*)((s32)camera + 0x11C), model, model);
     GXSetNumChans(0); GXSetNumTevStages(1); GXSetTevOrder(0, 0, 0, 0xFF);
     GXSetTevColorOp(0, 0, 0, 0, 1, 0); GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(0, 3, 2, 8, 0); GXSetTevAlphaIn(0, 0, 1, 7, 7);
+    GXSetTevColorIn(0, 4, 2, 8, 0xF); GXSetTevAlphaIn(0, 7, 1, 4, 7);
     effGetTexObjN64(0x34, texObj); GXLoadTexObj(texObj, 0);
     GXSetNumTexGens(1); GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
     PSMTXScale(scale, float_0p03125_80425b44, float_0p03125_80425b44, float_0_80425b48);
     GXLoadTexMtxImm(scale, 0x1E, 1); GXSetCullMode(0);
     PSMTXRotRad(rot, 0x7A, float_deg2rad_80425b40 * *(f32*)(work + 0x38));
     PSMTXScale(scale, *(f32*)(work + 0x3C), *(f32*)(work + 0x40), float_1_80425b4c);
-    PSMTXConcat(rot, scale, scale); PSMTXConcat(trans, scale, trans);
-    color = *(u32*)(work + 0x24); GXSetTevColor(2, &color); GXSetTevColor(1, &color);
-    GXLoadPosMtxImm(trans, 0); GXSetCurrentMtx(0); effSetVtxDescN64(size32x16_tex64x32_vtx);
-    GXBegin(0x90, 0, 6); tri2(0, 1, 2, 0, 0, 2, 3, 0);
+    PSMTXConcat(rot, scale, scale); PSMTXConcat(model, scale, model);
+
+    color[0] = work[0x28];
+    color[1] = work[0x2C];
+    color[2] = work[0x30];
+    color[3] = work[0x24];
+    GXSetTevColor(2, color);
+    if (frame >= count - 1) {
+        color[0] = work[0x18];
+        color[1] = work[0x1C];
+        color[2] = work[0x20];
+        color[3] = work[0x24];
+        GXSetTevColor(1, color);
+        GXLoadPosMtxImm(model, 0);
+        GXSetCurrentMtx(0);
+        effSetVtxDescN64(size16x16_tex32x32_vtx);
+        GXBegin(0x90, 0, 6);
+        tri2(0, 1, 2, 0, 0, 2, 3, 0);
+    }
+
+    for (outer = 0; outer < count / 2; outer++, phase += 2) {
+        s32 index = phase % count;
+        s32 inner;
+
+        for (inner = 0; inner < spokes; inner++, index += count) {
+            u8* rec;
+            s32 baseIndex;
+
+            if (index > *(s32*)(work + 0x14) * 5 || count - 1 - index > frame) {
+                continue;
+            }
+            baseIndex = index * 10;
+            rec = data + baseIndex + inner * count * 10;
+            PSMTXTrans(trans, (f32)(s8)rec[0], float_10_80425b50 + (f32)(s8)rec[1], float_0_80425b48);
+            PSMTXScale(scale, float_0p01_80425b54 * (f32)*(s16*)(rec + 2),
+                       float_0p01_80425b54 * (f32)*(s16*)(rec + 4), float_1_80425b4c);
+            PSMTXConcat(trans, scale, trans);
+            PSMTXRotRad(rot, 0x7A,
+                        float_deg2rad_80425b40 * (f32)(*(s16*)(rec + 6) + dat_ry[(inner + outer) & 7]));
+            PSMTXConcat(trans, rot, trans);
+            PSMTXConcat(model, trans, trans);
+            GXLoadPosMtxImm(trans, 0);
+            GXSetCurrentMtx(0);
+            color[0] = work[0x18];
+            color[1] = work[0x1C];
+            color[2] = work[0x20];
+            color[3] = (u8)(((u32)work[0x24] * data[baseIndex + 8]) >> 8);
+            GXSetTevColor(1, color);
+            effSetVtxDescN64(size16x16_tex32x32_vtx);
+            GXBegin(0x90, 0, 6);
+            tri2(0, 1, 2, 0, 0, 2, 3, 0);
+        }
+    }
 }
 
 u8 size16x16_tex32x32_vtx[56] = {

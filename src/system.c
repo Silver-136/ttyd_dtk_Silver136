@@ -1249,9 +1249,11 @@ f32 sysFrame2SecFloat(f32 frame) {
     return frame / float_60_8041f450;
 }
 
+#pragma optimize_for_size off
 s32 sysMsec2Frame(s32 msec) {
     return (msec * *(s32*)(gp + 0x4)) / 1000;
 }
+#pragma optimize_for_size on
 
 f32 sysMsec2FrameFloat(f32 msec) {
     return (msec * (f32)*(s32*)(gp + 0x4)) / float_1000_8041f44c;

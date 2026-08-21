@@ -63,6 +63,7 @@ USER_FUNC(evt_cam_get_at) {
 
 
 u8 evt_cam_shake(s32 pEvt, s32 param_2) {
+    extern f32 evtGetFloat(void* event, s32 arg);
     extern void PSMTX44Trans(void* mtx, f32 x, f32 y, f32 z);
     extern void padRumbleOn(s32 controller);
     extern void padRumbleOff(s32 controller);
@@ -77,11 +78,11 @@ u8 evt_cam_shake(s32 pEvt, s32 param_2) {
     f32 y = evtGetFloat((void*)pEvt, args[2]);
     s32 duration = evtGetValue((void*)pEvt, args[3]);
     u64 now = *(u64*)pEvt;
-    s32 ticks = (*(u32*)0x800000F8) / 4000;
+    s32 ticks = (*(s32*)0x800000F8) / 4000;
     void* cam;
     f32 len;
-    u32 onTime;
-    u32 offTime;
+    s32 onTime;
+    s32 offTime;
     u64 elapsed;
 
     if (param_2 != 0) {
@@ -112,20 +113,20 @@ u8 evt_cam_shake(s32 pEvt, s32 param_2) {
     }
 
     len = (f32)sqrt((double)((x * x) + (y * y)));
-    onTime = (u32)(float_13000_80421050 * len);
-    offTime = (u32)(float_50_80421054 * (float_1_80421058 - len));
+    onTime = (s32)(float_13000_80421050 * len);
+    offTime = (s32)(float_50_80421054 * (float_1_80421058 - len));
     if ((onTime != 0) && (offTime != 0)) {
         elapsed = now - *(u64*)(pEvt + 0x88);
         if (*(s32*)(pEvt + 0x84) == 0) {
             padRumbleOn(0);
             if ((u32)(elapsed / ticks) > onTime) {
-                *(s32*)(pEvt + 0x84) = 1;
+                *(s32*)(pEvt + 0x84) = 1 - *(s32*)(pEvt + 0x84);
                 *(u64*)(pEvt + 0x88) = now;
             }
         } else {
             padRumbleOff(0);
             if ((u32)(elapsed / ticks) > offTime) {
-                *(s32*)(pEvt + 0x84) = 0;
+                *(s32*)(pEvt + 0x84) = 1 - *(s32*)(pEvt + 0x84);
                 *(u64*)(pEvt + 0x88) = now;
             }
         }
@@ -133,6 +134,7 @@ u8 evt_cam_shake(s32 pEvt, s32 param_2) {
 
     return 0;
 }
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 

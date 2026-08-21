@@ -82,6 +82,24 @@ s32 setupDataCheck(void) {
 
 
 void setupDataBase(char* area, char* map) {
+    typedef struct DeadInfo {
+        u32 word0;
+        u32 word1;
+        u32 word2;
+        u32 word3;
+        u32 word4;
+    } DeadInfo;
+    typedef struct NpcAiTypeTable {
+        char* name;
+        u32 flags;
+        void* initEvt;
+        void* moveEvt;
+        void* deadEvt;
+        void* findEvt;
+        void* lostEvt;
+        void* returnEvt;
+        void* blowEvt;
+    } NpcAiTypeTable;
     extern void* fbatGetPointer(void);
     extern s32 strcmp(const char* a, const char* b);
     extern char* strcpy(char* dst, const char* src);
@@ -89,17 +107,26 @@ void setupDataBase(char* area, char* map) {
     extern void* memcpy(void* dst, const void* src, u32 size);
     extern void parseInit(void* data, u32 size);
     extern u32 parsePush(const char* tag);
-    extern void parseTagGet1(const char* tag, s32 type, void* out, ...);
+    extern void parseTagGet1(const char* tag, s32 type, void* out);
     extern void parsePopNext(void);
     extern void parsePop(void);
     extern void* npcGetTribe(char* name);
     extern s32 npcEntry(char* name, char* model);
     extern void* npcNameToPtr(char* name);
+    extern void* dbGetDefData(void* table, char* name);
+    extern void* areaDataPtr(char* area);
+    extern void npcSetBattleInfo(void* npc, s32 info);
+    extern void animPoseSetAnim(s32 poseId, char* anim, s32 force);
     extern void* ptr;
     extern u32 size;
     extern void* _map_attr_data[];
+    extern NpcAiTypeTable npc_ai_type_table[];
+    extern void* npc_define_territory_type[];
     extern char str_Npc_804207b8[];
     extern char str_dir_804207ac[];
+    extern char str_BTLNO_INVALID_802c3b10[];
+    extern char zero_804207a8;
+    extern f32 float_0_804207b4;
 
     void* fbat = fbatGetPointer();
     u8* dead = (u8*)fbat + 0x4C;
@@ -108,7 +135,10 @@ void setupDataBase(char* area, char* map) {
     void** previousAttr;
     void* tribe;
     void* npc;
-    u32 index;
+    NpcAiTypeTable* ai;
+    void* areaData;
+    s32 battleInfo;
+    s32 index;
     u32 attrFlags;
     char name[76];
     char tribeName[64];
@@ -130,26 +160,32 @@ void setupDataBase(char* area, char* map) {
     }
     currentAttr = attr;
 
-    for (index = 0; index < 64; index++) {
-        u8* entry = dead + index * 0x14;
-        if (entry[0] == 0) {
-            memset(entry, 0, 0x14);
-            strcpy((char*)entry, map);
-            break;
-        }
-        if (strcmp((char*)entry, map) == 0) {
-            break;
-        }
+    {
+        u8* deadScan = (u8*)fbat;
+
+        index = 0;
+        do {
+            if (strcmp((char*)deadScan + 0x4C, &zero_804207a8) == 0) {
+                u8* entry = dead + index * 0x14;
+                memset(entry, 0, 0x14);
+                strcpy((char*)entry, map);
+                break;
+            }
+            if (strcmp((char*)deadScan + 0x4C, map) == 0) {
+                break;
+            }
+            index++;
+            deadScan += 0x14;
+        } while (index < 64);
     }
 
-    if (index > 0 && index < 64) {
-        u8 saved[20];
-        memcpy(saved, dead + index * 0x14, 0x14);
+    if (index > 0) {
+        DeadInfo saved = *(DeadInfo*)(dead + index * 0x14);
         while (index > 0) {
-            memcpy(dead + index * 0x14, dead + (index - 1) * 0x14, 0x14);
+            *(DeadInfo*)(dead + index * 0x14) = *(DeadInfo*)(dead + (index - 1) * 0x14);
             index--;
         }
-        memcpy(dead, saved, 0x14);
+        *(DeadInfo*)dead = saved;
     }
 
     attrFlags = (u32)currentAttr[2];
@@ -173,24 +209,24 @@ void setupDataBase(char* area, char* map) {
     if (ptr != 0) {
         parseInit(ptr, size);
         while (parsePush(str_Npc_804207b8) != 0) {
-            parseTagGet1("<name>", 0, name, 0);
-            parseTagGet1("<tribe>", 0, tribeName, 0);
-            parseTagGet1("<position>", 3, position, 0);
-            parseTagGet1(str_dir_804207ac, 2, &direction, 0);
-            parseTagGet1("<aitype>", 0, aiType, 0);
-            parseTagGet1("<territory_type>", 0, territoryType, 0);
-            parseTagGet1("<territory_base>", 3, territoryBase, 0);
-            parseTagGet1("<territory_loiter>", 3, territoryLoiter, 0);
-            parseTagGet1("<territory_homing>", 3, territoryHoming, 0);
-            parseTagGet1("<search_range>", 2, &searchRange, 0);
-            parseTagGet1("<search_angle>", 2, &searchAngle, 0);
-            parseTagGet1("<homing_range>", 2, &homingRange, 0);
-            parseTagGet1("<homing_angle>", 2, &homingAngle, 0);
-            parseTagGet1("<btl_setup_no>", 0, battleSetup, 0);
+            parseTagGet1("<name>", 0, name);
+            parseTagGet1("<tribe>", 0, tribeName);
+            parseTagGet1("<position>", 3, position);
+            parseTagGet1(str_dir_804207ac, 2, &direction);
+            parseTagGet1("<aitype>", 0, aiType);
+            parseTagGet1("<territory_type>", 0, territoryType);
+            parseTagGet1("<territory_base>", 3, territoryBase);
+            parseTagGet1("<territory_loiter>", 3, territoryLoiter);
+            parseTagGet1("<territory_homing>", 3, territoryHoming);
+            parseTagGet1("<search_range>", 2, &searchRange);
+            parseTagGet1("<search_angle>", 2, &searchAngle);
+            parseTagGet1("<homing_range>", 2, &homingRange);
+            parseTagGet1("<homing_angle>", 2, &homingAngle);
+            parseTagGet1("<btl_setup_no>", 0, battleSetup);
             parsePopNext();
 
             if ((attrFlags & 1) == 0 ||
-                ((*(u32*)(dead + 0x10) & (1U << (index & 31))) == 0)) {
+                ((*(u32*)(dead + 0x10) & (1U << (index & 63))) == 0)) {
                 tribe = npcGetTribe(tribeName);
                 npcEntry(name, *(char**)((s32)tribe + 4));
                 npc = npcNameToPtr(name);
@@ -204,6 +240,59 @@ void setupDataBase(char* area, char* map) {
                 *(f32*)((s32)npc + 0x14C) = *(f32*)((s32)tribe + 0x28);
                 *(f32*)((s32)npc + 0x150) = *(f32*)((s32)tribe + 0x2C);
                 *(u32*)npc &= ~2U;
+
+                for (ai = npc_ai_type_table; ai->name != 0; ai++) {
+                    if (strcmp(ai->name, aiType) == 0) {
+                        *(u32*)npc |= ai->flags;
+                        *(void**)((u8*)npc + 0x120) = ai->initEvt;
+                        *(void**)((u8*)npc + 0x124) = ai->moveEvt;
+                        *(void**)((u8*)npc + 0x12C) = ai->deadEvt;
+                        *(void**)((u8*)npc + 0x130) = ai->findEvt;
+                        *(void**)((u8*)npc + 0x134) = ai->lostEvt;
+                        *(void**)((u8*)npc + 0x138) = ai->returnEvt;
+                        *(void**)((u8*)npc + 0x13C) = ai->blowEvt;
+                        break;
+                    }
+                }
+
+                *(s32*)((u8*)npc + 0x1F8) = (s32)dbGetDefData(npc_define_territory_type, territoryType);
+                *(f32*)((u8*)npc + 0x1FC) = territoryBase[0];
+                *(f32*)((u8*)npc + 0x200) = territoryBase[1];
+                *(f32*)((u8*)npc + 0x204) = territoryBase[2];
+                *(f32*)((u8*)npc + 0x208) = territoryLoiter[0];
+                *(f32*)((u8*)npc + 0x20C) = territoryLoiter[1];
+                *(f32*)((u8*)npc + 0x210) = territoryLoiter[2];
+                *(f32*)((u8*)npc + 0x214) = territoryHoming[0];
+                *(f32*)((u8*)npc + 0x218) = territoryHoming[1];
+                *(f32*)((u8*)npc + 0x21C) = territoryHoming[2];
+                *(f32*)((u8*)npc + 0x220) = searchRange;
+                *(f32*)((u8*)npc + 0x224) = searchAngle;
+                *(f32*)((u8*)npc + 0x228) = homingRange;
+                *(f32*)((u8*)npc + 0x22C) = homingAngle;
+                *(void**)((u8*)npc + 0x1E0) = *(void**)((u8*)tribe + 0x40);
+                *(void**)((u8*)npc + 0x1E4) = *(void**)((u8*)tribe + 0x44);
+                *(u16*)((u8*)npc + 0x1E8) = *(u16*)((u8*)tribe + 0x48);
+                *(void**)((u8*)npc + 0x1EC) = *(void**)((u8*)tribe + 0x4C);
+                *(void**)((u8*)npc + 0x1F0) = *(void**)((u8*)tribe + 0x50);
+                *(u16*)((u8*)npc + 0x1D8) = 1;
+                *(f32*)((u8*)npc + 0x1DC) = float_0_804207b4;
+
+                areaData = areaDataPtr(area);
+                battleInfo = -1;
+                if (strcmp(battleSetup, str_BTLNO_INVALID_802c3b10) != 0) {
+                    battleInfo = (s32)dbGetDefData(*(void***)((u8*)areaData + 0xC), battleSetup);
+                }
+                npcSetBattleInfo(npc, battleInfo);
+                if (*(char**)((u8*)tribe + 0x10) != 0) {
+                    strcpy((char*)npc + 0x4C, *(char**)((u8*)tribe + 0x10));
+                }
+                if (*(char**)((u8*)tribe + 0x14) != 0) {
+                    strcpy((char*)npc + 0x6C, *(char**)((u8*)tribe + 0x14));
+                }
+                if (*(char**)((u8*)tribe + 8) != 0) {
+                    strcpy((char*)npc + 0x2C, *(char**)((u8*)tribe + 8));
+                    animPoseSetAnim(*(s32*)((u8*)npc + 0x104), (char*)npc + 0x2C, 1);
+                }
             }
             index++;
         }

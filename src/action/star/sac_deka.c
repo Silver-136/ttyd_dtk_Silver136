@@ -70,44 +70,44 @@ void yuka_init(void) {
     extern void* mapGetMapObj(const char* name);
     extern void mapGrpFlagOn(const char* name, u32 flags);
     extern void PSMTXMultVec(Mtx matrix, Vec* source, Vec* destination);
-    extern u32 GXGetTexBufferSize(u16 width, u16 height, u32 format,
-                                  u8 mipmap, u8 maxLevel);
+    extern u32 GXGetTexBufferSize(u16 width, u16 height, u32 format, u8 mipmap, u8 maxLevel);
     extern void* smartAlloc(u32 size, s32 type);
-    extern void dispEntry(s32 camera, s32 renderMode, void* callback,
-                          void* param, f32 order);
-
+    extern void dispEntry(s32 camera, s32 renderMode, void* callback, void* param, f32 order);
+    extern f32 float_0p0078125_80428444;
+    extern f32 vec3_80300e98[], vec3_80300ea4[], vec3_80300eb0[];
     u8* work = (u8*)get_ptr();
     u8* map = (u8*)mapGetMapObj(str_stg_b_yuka_80301050);
     u8* joint = *(u8**)(map + 8);
-    s32 width;
-    s32 height;
+    u8* memory;
+    s32 width, height, row, column;
     u32 textureSize;
-
     mapGrpFlagOn(str_stg_b_yuka_80301050, 0x400001);
-    PSMTXMultVec((f32(*)[4])(map + 0x1C), (Vec*)(joint + 0x3C),
-                 (Vec*)(work + 4));
-    PSMTXMultVec((f32(*)[4])(map + 0x1C), (Vec*)(joint + 0x48),
-                 (Vec*)(work + 0x10));
-
+    PSMTXMultVec((f32(*)[4])(map + 0x1C), (Vec*)(joint + 0x3C), (Vec*)(work + 4));
+    PSMTXMultVec((f32(*)[4])(map + 0x1C), (Vec*)(joint + 0x48), (Vec*)(work + 0x10));
     width = (s32)(*(f32*)(work + 0x10) - *(f32*)(work + 4));
-    *(s32*)(work + 0x1C) = width;
-    *(s32*)(work + 0x24) = width;
+    *(s32*)(work + 0x1C) = width; *(s32*)(work + 0x24) = width;
     height = (s32)(*(f32*)(work + 0x18) - *(f32*)(work + 0xC));
-    *(s32*)(work + 0x20) = height;
-    *(s32*)(work + 0x28) = height;
+    *(s32*)(work + 0x20) = height; *(s32*)(work + 0x28) = height;
     *(u32*)(work + 0x24) += *(u32*)(work + 0x24) & 1;
     *(u32*)(work + 0x28) += *(u32*)(work + 0x28) & 1;
-    if (*(s32*)(work + 0x24) > 0x260) {
-        *(s32*)(work + 0x24) = 0x260;
-    }
-    if (*(s32*)(work + 0x28) > 0x1E0) {
-        *(s32*)(work + 0x28) = 0x1E0;
-    }
-
-    textureSize = GXGetTexBufferSize((u16)*(u32*)(work + 0x24),
-                                     (u16)*(u32*)(work + 0x28), 4, 0, 0);
+    if (*(s32*)(work + 0x24) > 0x260) *(s32*)(work + 0x24) = 0x260;
+    if (*(s32*)(work + 0x28) > 0x1E0) *(s32*)(work + 0x28) = 0x1E0;
+    textureSize = GXGetTexBufferSize((u16)*(u32*)(work + 0x24), (u16)*(u32*)(work + 0x28), 4, 0, 0);
     *(void**)work = smartAlloc(textureSize, 2);
     *(void**)(work + 0x2C) = smartAlloc(0x3870, 2);
+    memory = **(u8***)(work + 0x2C);
+    for (row = 0; row < 2; row++) {
+        for (column = 0; column < 0x81; column++) {
+            f32* vertex = (f32*)(memory + row * 0x60C + column * 0xC);
+            f32 x = *(f32*)(work + 4) + (f32)*(s32*)(work + 0x1C) * float_0p0078125_80428444 * (f32)column;
+            f32 z = *(f32*)(work + 0xC) + (f32)*(s32*)(work + 0x20) * (f32)row;
+            vertex[0] = x; vertex[1] = vec3_80300ea4[1]; vertex[2] = z;
+            vertex[0x306] = x; vertex[0x307] = vec3_80300e98[1]; vertex[0x308] = z;
+            vertex[0x60C] = vec3_80300eb0[0]; vertex[0x60D] = vec3_80300eb0[1]; vertex[0x60E] = vec3_80300eb0[2];
+            *(f32*)(memory + 0x3060 + row * 0x204 + column * 4) = float_0p0078125_80428444 * (f32)column;
+            *(f32*)(memory + 0x3468 + row * 0x204 + column * 4) = (f32)row;
+        }
+    }
     dispEntry(2, 0, yuka_capture, 0, float_0_80428424);
 }
 
@@ -486,6 +486,8 @@ void main_timing(s32 index) {
 
 /* stub-fill: main_star | prototype_only | source_prototype */
 void main_star(void) {
+    extern void* _battleWorkPointer;
+    extern void* get_ptr(void);
     extern void* BattleGetMarioPtr(void*);
     extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
     extern void* effStarStoneEntry(f32, f32, f32, f32, s32);
@@ -494,10 +496,16 @@ void main_star(void) {
     extern void BattleAudienceSoundCallKind(s32);
     extern void BattleAudienceSoundWhistleKind(s32);
     extern void psndSFXOn(const char*);
+    extern const char str_SFX_BTL_SAC_DOKKAN5_80300ffc[];
+    extern f32 float_5_804283f8;
+    extern f32 float_neg0p5_80428464;
+    extern f32 float_40_80428400;
+    extern f32 float_255_80428430;
     u8* work = get_ptr();
     u8* mario = BattleGetMarioPtr(_battleWorkPointer);
     s32 timer;
-    s32 audience;
+    s32 audience = BattleAudience_GetAudienceNum();
+    u8 alpha = 0xFF;
 
     switch (*(s32*)(work + 0x3F0)) {
     case 1:
@@ -561,7 +569,6 @@ void main_star(void) {
         *(f32*)(work + 0x444) = *(f32*)(work + 0x42C);
         *(f32*)(work + 0x448) = *(f32*)(work + 0x42C) + 1.0f;
         psndSFXOn("SFX_BTL_SAC_DOKKAN4");
-        audience = BattleAudience_GetAudienceNum();
         if (audience > 0 && audience < 50) {
             BattleAudienceSoundCallKind(1);
         }
@@ -595,6 +602,76 @@ void main_star(void) {
             *(f32*)(work + 0x434) = *(f32*)(work + 0x448);
         }
         break;
+    case 8:
+        *(s32*)(work + 0x3F0) = 9;
+        *(s32*)(work + 0x3F4) = 0;
+        *(f32*)(work + 0x444) = *(f32*)(work + 0x42C);
+        *(f32*)(work + 0x448) = 2.0f;
+        /* fallthrough */
+    case 9:
+        timer = ++*(s32*)(work + 0x3F4);
+        *(f32*)(work + 0x42C) = (f32)intplGetValue(
+            *(f32*)(work + 0x444), *(f32*)(work + 0x448), 4,
+            timer >> 2, 5);
+        *(f32*)(work + 0x430) = *(f32*)(work + 0x42C);
+        *(f32*)(work + 0x434) = *(f32*)(work + 0x42C);
+        *(f32*)(work + 0x400) =
+            12.5f * (*(f32*)(work + 0x430) - 2.0f) + 30.0f;
+        if (timer > 42) {
+            *(s32*)(work + 0x3F0) = 5;
+            *(s32*)(work + 0x3F4) = 0;
+            *(f32*)(work + 0x42C) = *(f32*)(work + 0x448);
+            *(f32*)(work + 0x430) = *(f32*)(work + 0x448);
+            *(f32*)(work + 0x434) = *(f32*)(work + 0x448);
+        }
+        break;
+    case 10:
+        *(s32*)(work + 0x3F0) = 11;
+        *(f32*)(work + 0x418) = *(f32*)(work + 0x400);
+        *(f32*)(work + 0x424) = float_5_804283f8;
+        *(s32*)(work + 0x3F4) = 0;
+        *(s32*)(work + 0x3F8) = 0;
+        /* fallthrough */
+    case 11:
+        *(f32*)(work + 0x400) += *(f32*)(work + 0x424);
+        *(f32*)(work + 0x424) += float_neg0p5_80428464;
+        if (*(f32*)(work + 0x400) < *(f32*)(work + 0x418)) {
+            *(s32*)(work + 0x3F8) += 1;
+            psndSFXOn(str_SFX_BTL_SAC_DOKKAN5_80300ffc);
+            if (*(s32*)(work + 0x3F8) < 6) {
+                *(f32*)(work + 0x400) = *(f32*)(work + 0x418);
+                *(f32*)(work + 0x424) = (f32)*(s32*)(work + 0x3F8) + float_5_804283f8;
+            } else {
+                *(s32*)(work + 0x3F0) = 12;
+                *(s32*)(work + 0x3F4) = 30;
+                *(f32*)(work + 0x414) = *(f32*)(work + 0x3FC);
+                *(f32*)(work + 0x418) = *(f32*)(work + 0x400);
+                *(f32*)(work + 0x41C) = *(f32*)(work + 0x404);
+                *(f32*)(work + 0x408) = *(f32*)(work + 0x414);
+                *(f32*)(work + 0x40C) = *(f32*)(work + 0x418);
+                *(f32*)(work + 0x410) = *(f32*)(work + 0x41C);
+                *(f32*)(work + 0x418) += float_40_80428400;
+            }
+        }
+        break;
+    case 12:
+        timer = --*(s32*)(work + 0x3F4);
+        *(f32*)(work + 0x400) = (f32)intplGetValue(
+            *(f32*)(work + 0x40C), *(f32*)(work + 0x418), 4,
+            30 - timer, 30);
+        if (timer < 1) {
+            *(s32*)(work + 0x3F0) = 13;
+            *(s32*)(work + 0x3F4) = 0;
+        }
+        break;
+    case 13:
+        timer = ++*(s32*)(work + 0x3F4);
+        if (timer > 30) {
+            timer = 30;
+            *(s32*)(work + 0x3F4) = timer;
+        }
+        alpha = (u8)(s32)intplGetValue(float_255_80428430, 0.0, 0, timer, 30);
+        break;
     }
     if (*(void**)(work + 0x44C) != 0) {
         u8* ew = *(u8**)((u8*)*(void**)(work + 0x44C) + 0xC);
@@ -602,7 +679,10 @@ void main_star(void) {
         *(f32*)(ew + 0xC) = *(f32*)(work + 0x400);
         *(f32*)(ew + 0x10) = *(f32*)(work + 0x404);
         *(f32*)(ew + 0x14) = *(f32*)(work + 0x42C) * 1.5f;
+        *(f32*)(ew + 0x18) = *(f32*)(work + 0x438);
         *(f32*)(ew + 0x1C) = *(f32*)(work + 0x43C);
+        *(f32*)(ew + 0x20) = *(f32*)(work + 0x440);
+        *(u8*)(ew + 0x5F) = alpha;
     }
 }
 

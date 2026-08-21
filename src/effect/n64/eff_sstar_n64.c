@@ -113,7 +113,7 @@ u8 effSstarMain(int* effect) {
     extern f32 dispCalcZ(void*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effSstarDisp(void);
-    extern f64 sqrt(f64);
+    extern f64 __frsqrte(f64);
     extern f32 angleABf(f32, f32, f32, f32);
     extern f32 float_0p01_80426118;
     extern f32 float_1_80426114;
@@ -126,9 +126,12 @@ u8 effSstarMain(int* effect) {
     extern f32 float_neg0p5_80426138;
     extern f32 float_300_8042613c;
     extern f32 float_neg300_80426140;
+    extern f64 double_0p5_802fbff0;
+    extern f64 double_3_802fbff8;
     u8* work = *(u8**)((u8*)effect + 0xC);
     u8* mario = marioGetPtr();
     f32 oldPos[3];
+    f32 displayPos[3];
     f32 length;
     f32 inverse;
     f32 nx;
@@ -145,6 +148,9 @@ u8 effSstarMain(int* effect) {
     oldPos[0] = *(f32*)(work + 4);
     oldPos[1] = *(f32*)(work + 8);
     oldPos[2] = *(f32*)(work + 0xC);
+    displayPos[0] = oldPos[0];
+    displayPos[1] = oldPos[1];
+    displayPos[2] = oldPos[2];
     if (*(s32*)(work + 0x38) > 1) {
         nx = *(f32*)(work + 0x10);
         ny = *(f32*)(work + 0x14);
@@ -152,7 +158,15 @@ u8 effSstarMain(int* effect) {
         length = nx * nx + ny * ny + nz * nz;
         inverse = length;
         if (length > float_0p01_80426118) {
-            inverse = float_1_80426114 / (f32)sqrt((f64)length);
+            f64 value = (f64)length;
+            f64 estimate = __frsqrte(value);
+            estimate = double_0p5_802fbff0 * estimate *
+                       (double_3_802fbff8 - value * estimate * estimate);
+            estimate = double_0p5_802fbff0 * estimate *
+                       (double_3_802fbff8 - value * estimate * estimate);
+            estimate = double_0p5_802fbff0 * estimate *
+                       (double_3_802fbff8 - value * estimate * estimate);
+            inverse = float_1_80426114 / (f32)(value * estimate);
         }
         nx *= inverse;
         ny *= inverse;
@@ -196,7 +210,7 @@ u8 effSstarMain(int* effect) {
     if (*(s32*)(work + 0x30) < 0) {
         effDelete(effect);
     } else {
-        dispEntry(4, 2, effSstarDisp, effect, dispCalcZ(oldPos));
+        dispEntry(4, 2, effSstarDisp, effect, dispCalcZ(displayPos));
     }
     return 0;
 }

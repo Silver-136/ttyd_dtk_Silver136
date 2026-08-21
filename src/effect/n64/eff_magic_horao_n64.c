@@ -149,8 +149,8 @@ void effMagicHoraoMain(void* effect) {
 
 void effMagicHoraoDisp(s32 cameraId, void* effect) {
     extern void* camGetPtr(s32);
+    extern void* smartAlloc(u32, s32);
     extern void PSMTXTrans(void*, f32, f32, f32);
-    extern void PSMTXRotRad(void*, s32, f32);
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXConcat(void*, void*, void*);
     extern void GXSetNumChans(s32);
@@ -163,7 +163,6 @@ void effMagicHoraoDisp(s32 cameraId, void* effect) {
     extern void GXSetTevColor(s32, void*);
     extern void GXSetNumTexGens(s32);
     extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
-    extern void GXSetCullMode(s32);
     extern void effGetTexObjN64(s32, void*);
     extern void GXLoadTexObj(void*, s32);
     extern void GXLoadTexMtxImm(void*, s32, s32);
@@ -171,24 +170,37 @@ void effMagicHoraoDisp(s32 cameraId, void* effect) {
     extern void GXSetCurrentMtx(s32);
     extern void effSetVtxDescN64(void*);
     extern void GXBegin(s32, s32, s32);
-    extern void tri2(s32, s32, s32, s32, s32, s32, s32, s32);
+    extern void tri2(s32, s32, s32, s32, s32, s32, s32);
+    extern void DCFlushRange(void*, u32);
+    extern void GXInvalidateVtxCache(void);
     extern f64 sin(f64);
-    extern f32 float_deg2rad_80425ae4;
-    extern f32 float_0p015625_80425aec;
-    extern f32 float_0p01_80425af0;
+    extern f64 double_to_int_802fb4c8;
+    extern const f32 float_0p01_80425acc;
+    extern const f32 float_100_80425ad0;
+    extern const f32 float_6p2832_80425ad4;
+    extern const f32 float_360_80425ad8;
+    extern const f32 float_225_80425adc;
+    extern const f32 float_25_80425ae0;
+    extern const f32 float_0p015625_80425ae4;
+    extern f32 float_0_80425ae8;
+    extern const f32 float_500_80425aec;
+    extern const f32 float_200_80425af0;
     u8* work = *(u8**)((s32)effect + 0xC);
     void* camera = camGetPtr(cameraId);
-    f32 trans[3][4], rot[3][4], scale[3][4], model[3][4];
+    f32 scale[3][4];
+    f32 trans[3][4];
     u8 texObj[0x20];
     u32 color;
     s32 state = *(s32*)(work + 0x2C);
-    s32 texture;
+    s32 angle = *(s32*)(work + 0x38);
+    s32 alpha = *(s32*)(work + 0x3C);
+    s32 timer = *(s32*)(work + 0x44);
     s32 pulse;
 
-    PSMTXScale(scale, float_0p01_80425af0, float_0p01_80425af0, float_0p01_80425af0);
-    PSMTXTrans(trans, *(f32*)(work + 4) * 100.0f,
-                      *(f32*)(work + 8) * 100.0f,
-                      *(f32*)(work + 0xC) * 100.0f);
+    PSMTXScale(scale, float_0p01_80425acc, float_0p01_80425acc, float_0p01_80425acc);
+    PSMTXTrans(trans, *(f32*)(work + 4) * float_100_80425ad0,
+                      *(f32*)(work + 8) * float_100_80425ad0,
+                      *(f32*)(work + 0xC) * float_100_80425ad0);
     PSMTXConcat(scale, trans, trans);
     PSMTXScale(scale, *(f32*)(work + 0x24), *(f32*)(work + 0x24), *(f32*)(work + 0x24));
     PSMTXConcat(trans, scale, trans);
@@ -196,37 +208,97 @@ void effMagicHoraoDisp(s32 cameraId, void* effect) {
     GXLoadPosMtxImm(trans, 0);
     GXSetCurrentMtx(0);
 
-    pulse = (s32)(225.0f + 25.0f * (f32)sin((6.2832f * (f32)(*(s32*)(work + 0x44) * 30)) / 360.0f));
-    color = (pulse << 24) | (pulse << 16) | (pulse << 8) | (*(s32*)(work + 0x3C) & 0xFF);
+    pulse = (s32)(float_25_80425ae0 * (f32)sin((double)((float_6p2832_80425ad4 *
+              (f32)(timer * 30)) / float_360_80425ad8)) + float_225_80425adc);
+    color = ((u32)(u8)pulse << 24) | ((u32)(u8)pulse << 16) |
+            ((u32)(u8)pulse << 8) | (u8)alpha;
     GXSetTevColor(1, &color);
     GXSetNumChans(0);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-    PSMTXScale(scale, float_0p015625_80425aec, float_0p015625_80425aec, float_0_80425ae8);
+    PSMTXScale(scale, float_0p015625_80425ae4, float_0p015625_80425ae4, float_0_80425ae8);
     GXLoadTexMtxImm(scale, 0x1E, 1);
     effSetVtxDescN64((void*)0x803A5DC8);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(0, 0, 0, 0xFF);
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(0, 0, 2, 8, 0);
-    GXSetTevAlphaIn(0, 0, 1, 7, 7);
-    GXSetCullMode(0);
-
-    texture = state < 1 ? 0x56 : 0x57;
-    effGetTexObjN64(texture, texObj);
-    GXLoadTexObj(texObj, 0);
-    GXBegin(0x90, 0, 6);
-    tri2(0, 1, 2, 0, 0, 2, 3, 0);
 
     if (state == 1) {
-        color = 0xFFFFFF00 | ((10 - *(s32*)(work + 0x30)) * 25);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 0, 0, 0, 8);
+        GXSetTevAlphaIn(0, 0, 4, 5, 7);
+        effGetTexObjN64(0x56, texObj);
+        GXLoadTexObj(texObj, 0);
+        GXBegin(0x90, 0, 6);
+        tri2(0, 1, 2, 0, 0, 2, 3);
+
+        alpha = ((30 - *(s32*)(work + 0x30)) * 255) / 30;
+        color = 0xFFFFFF00 | (u8)alpha;
         GXSetTevColor(1, &color);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 0, 0, 0, 8);
+        GXSetTevAlphaIn(0, 0, 4, 5, 7);
         effGetTexObjN64(0x57, texObj);
         GXLoadTexObj(texObj, 0);
-        PSMTXRotRad(rot, 0x7A, float_deg2rad_80425ae4 * (f32)*(s32*)(work + 0x38));
         GXBegin(0x90, 0, 6);
-        tri2(0, 1, 2, 0, 0, 2, 3, 0);
+        tri2(0, 1, 2, 0, 0, 2, 3);
+    } else {
+        s16* vertices;
+        s16* v;
+        s16 texS = 0;
+        s16 yBase = 0;
+        s32 i;
+        s32 phase = timer * 10;
+
+        GXSetNumTevStages(1);
+        GXSetTevOrder(0, 0, 0, 0xFF);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        if (state < 1) {
+            GXSetTevColorIn(0, 0, 0, 0, 8);
+            GXSetTevAlphaIn(0, 0, 4, 5, 7);
+            effGetTexObjN64(0x56, texObj);
+        } else {
+            GXSetTevColorIn(0, 0, 0, 0, 1);
+            GXSetTevAlphaIn(0, 0, 4, 5, 7);
+            effGetTexObjN64(0x57, texObj);
+        }
+        GXLoadTexObj(texObj, 0);
+        vertices = (s16*)smartAlloc(0x1C0, 3);
+        v = vertices;
+        for (i = 0; i < 16; i++, v += 14) {
+            s32 x = (s32)(*(f32*)(work + 0x34) * float_500_80425aec *
+                    (f32)sin((double)((float_6p2832_80425ad4 *
+                    (f32)(angle + phase)) / float_360_80425ad8)));
+            s32 y = (s32)(*(f32*)(work + 0x34) * float_200_80425af0 *
+                    (f32)sin((double)((float_6p2832_80425ad4 *
+                    (f32)(angle + phase)) / float_360_80425ad8)));
+            v[0] = (s16)x - 0xC80;
+            v[1] = (s16)y + yBase;
+            v[2] = 0;
+            v[3] = 0;
+            v[4] = texS;
+            v[7] = (s16)x + 0xC80;
+            v[8] = (s16)y + yBase;
+            v[9] = 0;
+            v[10] = 0x800;
+            v[11] = texS;
+            phase += 60;
+            yBase += 400;
+            texS += 0x80;
+        }
+        DCFlushRange(vertices, 0x1C0);
+        GXInvalidateVtxCache();
+        effSetVtxDescN64(vertices);
+        for (i = 0; i < 15; i++) {
+            s32 n = i * 2;
+            GXBegin(0x90, 0, 6);
+            tri2((s16)n, (s16)n + 2, (s16)n + 1, n,
+                 (s16)n + 1, (s16)n + 2, (s16)n + 3);
+        }
     }
 }
 
@@ -239,3 +311,14 @@ u8 size64x64_tex64x64_vtx[56] = {
 
 const f32 vec3_802fb4b8[3] = { 0.0f, 0.0f, 0.0f };
 const char str_MagicHoraoN64_802fb4d0[] = "MagicHoraoN64";
+
+/* Target-owned renderer constants; late definitions preserve external-load codegen. */
+const f32 float_0p01_80425acc = 0.01f;
+const f32 float_100_80425ad0 = 100.0f;
+const f32 float_6p2832_80425ad4 = 6.2831855f;
+const f32 float_360_80425ad8 = 360.0f;
+const f32 float_225_80425adc = 225.0f;
+const f32 float_25_80425ae0 = 25.0f;
+const f32 float_0p015625_80425ae4 = 0.015625f;
+const f32 float_500_80425aec = 500.0f;
+const f32 float_200_80425af0 = 200.0f;

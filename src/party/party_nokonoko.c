@@ -464,9 +464,28 @@ void nokotaro_hold_cancel(void* party) {
     *(u8*)((s32)party + 0x39) = 0x14;
 }
 
+extern f32 __fabsf(f32 value);
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* ccwall(void* party, s32 mode) {
+    typedef struct CcwallStack {
+        f32 backCos3;
+        f32 backSin3;
+        f32 backCos2;
+        f32 backSin2;
+        f32 backCos1;
+        f32 backSin1;
+        f32 normalZ;
+        f32 normalY;
+        f32 normalX;
+        f32 hitZ;
+        f32 hitY;
+        f32 hitX;
+        f32 limit;
+        f32 cosv;
+        f32 sinv;
+    } CcwallStack;
+
     extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
     extern void* hitCheckFilter(f64, f64, f64, f64, f64, f64, s32,
                                 void*, void*, void*, void*, void*, void*, void*);
@@ -478,151 +497,343 @@ void* ccwall(void* party, s32 mode) {
     extern f32 float_30_80421660;
     extern f32 float_100_80421664;
 
-    f32* pos;
+    CcwallStack s;
+    f32 verticalOffset;
     f32 height;
-    f32 width;
-    f32 direction;
-    f32 velocity;
-    f32 limit;
-    f32 hitX;
-    f32 hitY;
-    f32 hitZ;
-    f32 normalX;
-    f32 normalY;
-    f32 normalZ;
-    f32 sinv;
-    f32 cosv;
-    f32 backSin;
-    f32 backCos;
+    f32 currentY;
+    f32 probeX;
+    f32 probeY;
+    f32 probeZ;
     f32 sideScale;
     f32 angle;
-    f32 startX;
-    f32 startZ;
-    f32 ground;
-    f32 current;
-    f32 delta;
+    f32 angleCos;
+    f32 angleSin;
     f32 pushX;
     f32 pushZ;
     f32 dot;
     void* hit;
 
-    pos = (f32*)((s32)party + 0x58);
+    verticalOffset = float_10_8042165c;
     height = *(f32*)((s32)party + 0xF0);
-    width = *(f32*)((s32)party + 0xF4);
-    direction = *(f32*)((s32)party + 0x100);
-    velocity = *(f32*)((s32)party + 0x104);
 
-    limit = height + float_30_80421660;
-    hit = hitCheckFilter(pos[0], pos[1] + height + float_10_8042165c, pos[2],
-                         float_0_80421644, float_neg1_80421648, float_0_80421644,
-                         0, &hitX, &hitY, &hitZ, &limit, &normalX, &normalY, &normalZ);
-    if (((hitGetAttr(hit) >> 9) & 1) != 0) {
+    s.limit = height + float_30_80421660;
+    hit = hitCheckFilter(
+        *(f32*)((s32)party + 0x58),
+        verticalOffset + *(f32*)((s32)party + 0x5C) + height,
+        *(f32*)((s32)party + 0x60),
+        float_0_80421644,
+        float_neg1_80421648,
+        float_0_80421644,
+        0,
+        &s.hitX,
+        &s.hitY,
+        &s.hitZ,
+        &s.limit,
+        &s.normalX,
+        &s.normalY,
+        &s.normalZ);
+
+    if (((hitGetAttr(hit) >> 9) & 1) == 1) {
         hit = 0;
     }
+
     *(void**)((s32)party + 0x138) = hit;
     if (hit != 0) {
-        ground = (f32)(s32)(hitY * float_100_80421664 + float_0p5_80421658) / float_100_80421664;
-        current = (f32)(s32)(pos[1] * float_100_80421664 + float_0p5_80421658) / float_100_80421664;
-        delta = current - ground;
-        if (delta < float_0_80421644) {
-            delta = -delta;
-        }
-        if (delta <= float_11_80421668) {
-            if (ground < current) {
-                if (((*(u16*)((s32)party + 0x12E) & 2) != 0) && mode == 1) {
-                    pos[1] = ground;
+        s.hitY =
+            (f32)(s32)(float_100_80421664 * s.hitY +
+                       float_0p5_80421658) /
+            float_100_80421664;
+
+        currentY =
+            (f32)(s32)(float_100_80421664 *
+                           *(f32*)((s32)party + 0x5C) +
+                       float_0p5_80421658) /
+            float_100_80421664;
+
+        if (__fabsf(currentY - s.hitY) <= float_11_80421668) {
+            if (s.hitY < currentY) {
+                if (((*(s16*)((s32)party + 0x17E) & 2) != 0) &&
+                    mode == 1) {
+                    *(f32*)((s32)party + 0x5C) = s.hitY;
                 }
-                if (delta <= float_6_8042166c) {
-                    pos[1] = ground;
+
+                if (__fabsf(currentY - s.hitY) <= float_6_8042166c) {
+                    *(f32*)((s32)party + 0x5C) = s.hitY;
                 }
             } else if (mode == 0) {
-                pos[1] = ground;
-                if (float_1_80421670 <= delta) {
-                    *(u16*)((s32)party + 0x12E) = *(u16*)((s32)party + 0x12E) | 2;
+                *(f32*)((s32)party + 0x5C) = s.hitY;
+                if (float_1_80421670 <= __fabsf(currentY - s.hitY)) {
+                    *(s16*)((s32)party + 0x17E) =
+                        *(s16*)((s32)party + 0x17E) | 2;
                 }
             }
         }
     }
 
-    *(void**)((s32)party + 0x134) = 0;
-    *(void**)((s32)party + 0x13C) = 0;
+    *(void**)((s32)party + 0x130) = 0;
+    *(void**)((s32)party + 0x12C) = 0;
 
-    sincosf(direction, &sinv, &cosv);
-    limit = float_0p5_80421658 * width + velocity;
-    hit = hitCheckFilter(pos[0], pos[1] + float_10_8042165c + float_1_80421670, pos[2],
-                         sinv, float_0_80421644, cosv, 0,
-                         &hitX, &hitY, &hitZ, &limit, &normalX, &normalY, &normalZ);
-    if ((hit == 0) || ((hitGetAttr(hit) & 5) != 0)) {
-        sideScale = float_0p4_80421674 * width;
-        angle = (float_3p1416_80421638 * (direction - float_90_80421654)) / float_180_8042163c;
-        startX = sideScale * (f32)sin(angle) + pos[0];
-        startZ = sideScale * (f32)cos(angle) + pos[2];
-        sincosf(direction, &sinv, &cosv);
-        limit = float_0p4_80421674 * width + velocity;
-        hit = hitCheckFilter(startX, pos[1] + float_10_8042165c + float_1_80421670, startZ,
-                             sinv, float_0_80421644, cosv, 0,
-                             &hitX, &hitY, &hitZ, &limit, &normalX, &normalY, &normalZ);
-        if ((hit == 0) || ((hitGetAttr(hit) & 5) != 0)) {
-            sideScale = float_0p4_80421674 * width;
-            angle = (float_3p1416_80421638 * (float_90_80421654 + direction)) / float_180_8042163c;
-            startX = sideScale * (f32)sin(angle) + pos[0];
-            startZ = sideScale * (f32)cos(angle) + pos[2];
-            sincosf(direction, &sinv, &cosv);
-            limit = float_0p4_80421674 * width + velocity;
-            hit = hitCheckFilter(startX, pos[1] + float_10_8042165c + float_1_80421670, startZ,
-                                 sinv, float_0_80421644, cosv, 0,
-                                 &hitX, &hitY, &hitZ, &limit, &normalX, &normalY, &normalZ);
-            if ((hit == 0) || ((hitGetAttr(hit) & 5) != 0)) {
-                hit = 0;
-            } else {
-                sincosf(float_180_8042163c + direction, &backSin, &backCos);
-                pos[0] = float_0p5_80421658 * backSin * width + hitX;
-                pos[2] = float_0p5_80421658 * backCos * width + hitZ;
-                angle = (float_3p1416_80421638 * (float_90_80421654 + direction)) / float_180_8042163c;
-                pos[2] = -(sideScale * (f32)cos(angle) - pos[2]);
-                pos[0] = -(sideScale * (f32)sin(angle) - pos[0]);
-                pushZ = cosv * velocity;
-                pushX = sinv * velocity;
-                dot = pushX * normalX + pushZ * normalZ;
-                pos[0] = float_0p5_80421658 * -(dot * normalX - pushX) + pos[0];
-                pos[2] = float_0p5_80421658 * -(dot * normalZ - pushZ) + pos[2];
-                if (*(s16*)((s32)party + 0x12C) != 0 || mode == 0) {
-                    *(void**)((s32)party + 0x134) = hit;
-                }
-                *(void**)((s32)party + 0x13C) = hit;
-                pos[0] = hitX;
-            }
-        } else {
-            sincosf(float_180_8042163c + direction, &backSin, &backCos);
-            pos[0] = float_0p5_80421658 * backSin * width + hitX;
-            pos[2] = float_0p5_80421658 * backCos * width + hitZ;
-            angle = (float_3p1416_80421638 * (direction - float_90_80421654)) / float_180_8042163c;
-            pos[2] = -(sideScale * (f32)cos(angle) - pos[2]);
-            pos[0] = -(sideScale * (f32)sin(angle) - pos[0]);
-            pushZ = cosv * velocity;
-            pushX = sinv * velocity;
-            dot = pushX * normalX + pushZ * normalZ;
-            pos[0] = float_0p5_80421658 * -(dot * normalX - pushX) + pos[0];
-            pos[2] = float_0p5_80421658 * -(dot * normalZ - pushZ) + pos[2];
-            if (*(s16*)((s32)party + 0x12C) != 0 || mode == 0) {
-                *(void**)((s32)party + 0x134) = hit;
-            }
-            *(void**)((s32)party + 0x13C) = hit;
+    verticalOffset += float_1_80421670;
+
+    s.limit =
+        float_0p5_80421658 * *(f32*)((s32)party + 0xF4) +
+        *(f32*)((s32)party + 0x104);
+    probeX = *(f32*)((s32)party + 0x58);
+    probeZ = *(f32*)((s32)party + 0x60);
+    probeY = *(f32*)((s32)party + 0x5C) + verticalOffset;
+
+    sincosf(
+        *(f32*)((s32)party + 0x100),
+        &s.sinv,
+        &s.cosv);
+
+    hit = hitCheckFilter(
+        probeX,
+        probeY,
+        probeZ,
+        s.sinv,
+        float_0_80421644,
+        s.cosv,
+        0,
+        &s.hitX,
+        &s.hitY,
+        &s.hitZ,
+        &s.limit,
+        &s.normalX,
+        &s.normalY,
+        &s.normalZ);
+
+    if (hit != 0 && (hitGetAttr(hit) & 5) == 0) {
+        sincosf(
+            float_180_8042163c + *(f32*)((s32)party + 0x100),
+            &s.backSin1,
+            &s.backCos1);
+
+        *(f32*)((s32)party + 0x58) =
+            float_0p5_80421658 * s.backSin1 *
+                *(f32*)((s32)party + 0xF4) +
+            s.hitX;
+        *(f32*)((s32)party + 0x60) =
+            float_0p5_80421658 * s.backCos1 *
+                *(f32*)((s32)party + 0xF4) +
+            s.hitZ;
+
+        pushZ = s.cosv * *(f32*)((s32)party + 0x104);
+        pushX = s.sinv * *(f32*)((s32)party + 0x104);
+        dot = pushX * s.normalX + pushZ * s.normalZ;
+
+        *(f32*)((s32)party + 0x58) =
+            float_0p5_80421658 *
+                -(dot * s.normalX - pushX) +
+            *(f32*)((s32)party + 0x58);
+        *(f32*)((s32)party + 0x60) =
+            float_0p5_80421658 *
+                -(dot * s.normalZ - pushZ) +
+            *(f32*)((s32)party + 0x60);
+
+        if (*(s16*)((s32)party + 0x17C) != 0 || mode == 0) {
+            *(void**)((s32)party + 0x130) = hit;
         }
-    } else {
-        sincosf(float_180_8042163c + direction, &backSin, &backCos);
-        pos[0] = float_0p5_80421658 * backSin * width + hitX;
-        pos[2] = float_0p5_80421658 * backCos * width + hitZ;
-        pushZ = cosv * velocity;
-        pushX = sinv * velocity;
-        dot = pushX * normalX + pushZ * normalZ;
-        pos[0] = float_0p5_80421658 * -(dot * normalX - pushX) + pos[0];
-        pos[2] = float_0p5_80421658 * -(dot * normalZ - pushZ) + pos[2];
-        if (*(s16*)((s32)party + 0x12C) != 0 || mode == 0) {
-            *(void**)((s32)party + 0x134) = hit;
-        }
-        *(void**)((s32)party + 0x13C) = hit;
+        *(void**)((s32)party + 0x12C) = hit;
+        return hit;
     }
+
+    sideScale =
+        float_0p4_80421674 * *(f32*)((s32)party + 0xF4);
+    angle =
+        (float_3p1416_80421638 *
+         (*(f32*)((s32)party + 0x100) - float_90_80421654)) /
+        float_180_8042163c;
+
+    angleCos = (f32)cos((f64)angle);
+    probeZ = sideScale * angleCos + *(f32*)((s32)party + 0x60);
+
+    angle =
+        (float_3p1416_80421638 *
+         (*(f32*)((s32)party + 0x100) - float_90_80421654)) /
+        float_180_8042163c;
+    angleSin = (f32)sin((f64)angle);
+    probeX = sideScale * angleSin + *(f32*)((s32)party + 0x58);
+
+    s.limit =
+        float_0p4_80421674 * *(f32*)((s32)party + 0xF4) +
+        *(f32*)((s32)party + 0x104);
+    probeY = *(f32*)((s32)party + 0x5C) + verticalOffset;
+
+    sincosf(
+        *(f32*)((s32)party + 0x100),
+        &s.sinv,
+        &s.cosv);
+
+    hit = hitCheckFilter(
+        probeX,
+        probeY,
+        probeZ,
+        s.sinv,
+        float_0_80421644,
+        s.cosv,
+        0,
+        &s.hitX,
+        &s.hitY,
+        &s.hitZ,
+        &s.limit,
+        &s.normalX,
+        &s.normalY,
+        &s.normalZ);
+
+    if (hit != 0 && (hitGetAttr(hit) & 5) == 0) {
+        sincosf(
+            float_180_8042163c + *(f32*)((s32)party + 0x100),
+            &s.backSin2,
+            &s.backCos2);
+
+        *(f32*)((s32)party + 0x58) =
+            float_0p5_80421658 * s.backSin2 *
+                *(f32*)((s32)party + 0xF4) +
+            s.hitX;
+        *(f32*)((s32)party + 0x60) =
+            float_0p5_80421658 * s.backCos2 *
+                *(f32*)((s32)party + 0xF4) +
+            s.hitZ;
+
+        angle =
+            (float_3p1416_80421638 *
+             (*(f32*)((s32)party + 0x100) - float_90_80421654)) /
+            float_180_8042163c;
+        angleCos = (f32)cos((f64)angle);
+        *(f32*)((s32)party + 0x60) =
+            -(sideScale * angleCos -
+              *(f32*)((s32)party + 0x60));
+
+        angle =
+            (float_3p1416_80421638 *
+             (*(f32*)((s32)party + 0x100) - float_90_80421654)) /
+            float_180_8042163c;
+        angleSin = (f32)sin((f64)angle);
+        *(f32*)((s32)party + 0x58) =
+            -(sideScale * angleSin -
+              *(f32*)((s32)party + 0x58));
+
+        pushZ = s.cosv * *(f32*)((s32)party + 0x104);
+        pushX = s.sinv * *(f32*)((s32)party + 0x104);
+        dot = pushX * s.normalX + pushZ * s.normalZ;
+
+        *(f32*)((s32)party + 0x58) =
+            float_0p5_80421658 *
+                -(dot * s.normalX - pushX) +
+            *(f32*)((s32)party + 0x58);
+        *(f32*)((s32)party + 0x60) =
+            float_0p5_80421658 *
+                -(dot * s.normalZ - pushZ) +
+            *(f32*)((s32)party + 0x60);
+
+        if (*(s16*)((s32)party + 0x17C) != 0 || mode == 0) {
+            *(void**)((s32)party + 0x130) = hit;
+        }
+        *(void**)((s32)party + 0x12C) = hit;
+
+        *(f32*)((s32)party + 0x58) = s.hitX;
+        return hit;
+    }
+
+    sideScale =
+        float_0p4_80421674 * *(f32*)((s32)party + 0xF4);
+    angle =
+        (float_3p1416_80421638 *
+         (float_90_80421654 + *(f32*)((s32)party + 0x100))) /
+        float_180_8042163c;
+
+    angleCos = (f32)cos((f64)angle);
+    probeZ = sideScale * angleCos + *(f32*)((s32)party + 0x60);
+
+    angle =
+        (float_3p1416_80421638 *
+         (float_90_80421654 + *(f32*)((s32)party + 0x100))) /
+        float_180_8042163c;
+    angleSin = (f32)sin((f64)angle);
+    probeX = sideScale * angleSin + *(f32*)((s32)party + 0x58);
+
+    s.limit =
+        float_0p4_80421674 * *(f32*)((s32)party + 0xF4) +
+        *(f32*)((s32)party + 0x104);
+    probeY = *(f32*)((s32)party + 0x5C) + verticalOffset;
+
+    sincosf(
+        *(f32*)((s32)party + 0x100),
+        &s.sinv,
+        &s.cosv);
+
+    hit = hitCheckFilter(
+        probeX,
+        probeY,
+        probeZ,
+        s.sinv,
+        float_0_80421644,
+        s.cosv,
+        0,
+        &s.hitX,
+        &s.hitY,
+        &s.hitZ,
+        &s.limit,
+        &s.normalX,
+        &s.normalY,
+        &s.normalZ);
+
+    if (hit == 0 || (hitGetAttr(hit) & 5) != 0) {
+        return 0;
+    }
+
+    sincosf(
+        float_180_8042163c + *(f32*)((s32)party + 0x100),
+        &s.backSin3,
+        &s.backCos3);
+
+    *(f32*)((s32)party + 0x58) =
+        float_0p5_80421658 * s.backSin3 *
+            *(f32*)((s32)party + 0xF4) +
+        s.hitX;
+    *(f32*)((s32)party + 0x60) =
+        float_0p5_80421658 * s.backCos3 *
+            *(f32*)((s32)party + 0xF4) +
+        s.hitZ;
+
+    angle =
+        (float_3p1416_80421638 *
+         (float_90_80421654 + *(f32*)((s32)party + 0x100))) /
+        float_180_8042163c;
+    angleCos = (f32)cos((f64)angle);
+    *(f32*)((s32)party + 0x60) =
+        -(sideScale * angleCos -
+          *(f32*)((s32)party + 0x60));
+
+    angle =
+        (float_3p1416_80421638 *
+         (float_90_80421654 + *(f32*)((s32)party + 0x100))) /
+        float_180_8042163c;
+    angleSin = (f32)sin((f64)angle);
+    *(f32*)((s32)party + 0x58) =
+        -(sideScale * angleSin -
+          *(f32*)((s32)party + 0x58));
+
+    pushZ = s.cosv * *(f32*)((s32)party + 0x104);
+    pushX = s.sinv * *(f32*)((s32)party + 0x104);
+    dot = pushX * s.normalX + pushZ * s.normalZ;
+
+    *(f32*)((s32)party + 0x58) =
+        float_0p5_80421658 *
+            -(dot * s.normalX - pushX) +
+        *(f32*)((s32)party + 0x58);
+    *(f32*)((s32)party + 0x60) =
+        float_0p5_80421658 *
+            -(dot * s.normalZ - pushZ) +
+        *(f32*)((s32)party + 0x60);
+
+    if (*(s16*)((s32)party + 0x17C) != 0 || mode == 0) {
+        *(void**)((s32)party + 0x130) = hit;
+    }
+    *(void**)((s32)party + 0x12C) = hit;
+
+    *(f32*)((s32)party + 0x58) = s.hitX;
     return hit;
 }
 #pragma no_register_save_helpers off
@@ -638,107 +849,91 @@ u32 lookupSafetyPos(f32 height, f32* inPos, f32* outPos) {
                               void* out1, void* out2, void* out3, void* out4,
                               void* out5, void* out6, void* out7);
     extern f32 float_0p1_80421640;
-
     void* player;
-    f32 radius;
-    f32 dir;
-    f32 rad;
-    f32 limit;
-    f32 p0[3];
-    f32 p1[3];
-    f32 p2[3];
-    f32 p3[3];
-    s32 outA;
-    s32 outB;
-    s32 outC;
-    s32 outD;
-    s32 outE;
-    s32 outF;
-    s32 h0;
-    s32 h1;
-    s32 h2;
-    s32 h3;
+    f32 radius, dir, rad, limit;
+    f32 x, y, z;
+    volatile f32 p0[3], p1[3], p2[3], p3[3];
+    s32 outA, outB, outC, outD, outE, outF;
+    u32 h0, h1, h2, h3;
     u32 mask;
 
     player = marioGetPtr();
     radius = *(f32*)((s32)player + 0x1B8);
     limit = height + float_0p1_80421640;
-
     dir = revise360(toMovedir(*(f32*)((s32)player + 0x1B0)) - float_180_8042163c);
     rad = float_3p1416_80421638 * dir / float_180_8042163c;
-    p0[0] = inPos[0] + radius * (f32)sin(rad);
-    p0[1] = inPos[1];
-    p0[2] = inPos[2] + radius * -(f32)cos(rad);
-    h0 = hitCheckFilter(p0[0], p0[1] + height, p0[2],
+    x = inPos[0] + radius * (f32)sin(rad);
+    p0[0] = x;
+    y = inPos[1];
+    p0[1] = y;
+    z = inPos[2] + radius * -(f32)cos(rad);
+    p0[2] = z;
+    h0 = hitCheckFilter(x, y + height, z,
                         float_0_80421644, float_neg1_80421648, float_0_80421644,
                         0, &outF, &outE, &outD, &limit, &outC, &outB, &outA);
 
     dir = revise360(toMovedir(*(f32*)((s32)player + 0x1B0)) - float_90_80421654);
     rad = float_3p1416_80421638 * dir / float_180_8042163c;
-    p1[0] = inPos[0] + radius * (f32)sin(rad);
-    p1[1] = inPos[1];
-    p1[2] = inPos[2] + radius * -(f32)cos(rad);
+    x = inPos[0] + radius * (f32)sin(rad);
+    p1[0] = x;
+    y = inPos[1];
+    p1[1] = y;
+    z = inPos[2] + radius * -(f32)cos(rad);
+    p1[2] = z;
     limit = height + float_0p1_80421640;
-    h1 = hitCheckFilter(p1[0], p1[1] + height, p1[2],
+    h1 = hitCheckFilter(x, y + height, z,
                         float_0_80421644, float_neg1_80421648, float_0_80421644,
                         0, &outF, &outE, &outD, &limit, &outC, &outB, &outA);
 
     dir = revise360(float_90_80421654 + toMovedir(*(f32*)((s32)player + 0x1B0)));
     rad = float_3p1416_80421638 * dir / float_180_8042163c;
-    p2[0] = inPos[0] + radius * (f32)sin(rad);
-    p2[1] = inPos[1];
-    p2[2] = inPos[2] + radius * -(f32)cos(rad);
+    x = inPos[0] + radius * (f32)sin(rad);
+    p2[0] = x;
+    y = inPos[1];
+    p2[1] = y;
+    z = inPos[2] + radius * -(f32)cos(rad);
+    p2[2] = z;
     limit = height + float_0p1_80421640;
-    h2 = hitCheckFilter(p2[0], p2[1] + height, p2[2],
+    h2 = hitCheckFilter(x, y + height, z,
                         float_0_80421644, float_neg1_80421648, float_0_80421644,
                         0, &outF, &outE, &outD, &limit, &outC, &outB, &outA);
 
     dir = revise360(toMovedir(*(f32*)((s32)player + 0x1B0)));
     rad = float_3p1416_80421638 * dir / float_180_8042163c;
-    p3[0] = inPos[0] + radius * (f32)sin(rad);
-    p3[1] = inPos[1];
-    p3[2] = inPos[2] + radius * -(f32)cos(rad);
+    x = inPos[0] + radius * (f32)sin(rad);
+    p3[0] = x;
+    y = inPos[1];
+    p3[1] = y;
+    z = inPos[2] + radius * -(f32)cos(rad);
+    p3[2] = z;
     limit = height + float_0p1_80421640;
-    h3 = hitCheckFilter(p3[0], p3[1] + height, p3[2],
+    h3 = hitCheckFilter(x, y + height, z,
                         float_0_80421644, float_neg1_80421648, float_0_80421644,
                         0, &outF, &outE, &outD, &limit, &outC, &outB, &outA);
 
     mask = 0;
-    if (h2 != 0) {
-        mask |= 4;
-    }
-    if (h3 != 0) {
-        mask |= 8;
-    }
-    if (h0 != 0) {
-        mask |= 1;
-    }
-    if (h1 != 0) {
-        mask |= 2;
-    }
-
+    if (h2 != 0) mask |= 4;
+    if (h3 != 0) mask |= 8;
+    if (h0 != 0) mask |= 1;
+    if (h1 != 0) mask |= 2;
     if (h0 == 0) {
         if (h3 == 0) {
             if (h1 != 0) {
-                outPos[0] = p1[0]; outPos[1] = p1[1]; outPos[2] = p1[2];
-                return mask;
+                outPos[0] = p1[0]; outPos[1] = p1[1]; outPos[2] = p1[2]; return mask;
             }
             if (h2 != 0) {
-                outPos[0] = p2[0]; outPos[1] = p2[1]; outPos[2] = p2[2];
-                return mask;
+                outPos[0] = p2[0]; outPos[1] = p2[1]; outPos[2] = p2[2]; return mask;
             }
         } else {
             if (h1 != 0) {
                 outPos[0] = float_0p5_80421658 * (p3[0] + p1[0]);
                 outPos[1] = p3[1];
-                outPos[2] = float_0p5_80421658 * (p3[2] + p1[2]);
-                return mask;
+                outPos[2] = float_0p5_80421658 * (p3[2] + p1[2]); return mask;
             }
             if (h2 != 0) {
                 outPos[0] = float_0p5_80421658 * (p2[0] + p1[0]);
                 outPos[1] = p2[1];
-                outPos[2] = float_0p5_80421658 * (p2[2] + p1[2]);
-                return mask;
+                outPos[2] = float_0p5_80421658 * (p2[2] + p1[2]); return mask;
             }
             outPos[0] = p3[0]; outPos[1] = p3[1]; outPos[2] = p3[2];
         }
@@ -746,34 +941,29 @@ u32 lookupSafetyPos(f32 height, f32* inPos, f32* outPos) {
         if ((h1 != 0) && (h2 != 0) && (h3 != 0)) {
             outPos[0] = float_0p5_80421658 * (p0[0] + p2[0]);
             outPos[1] = p0[1];
-            outPos[2] = float_0p5_80421658 * (p0[2] + p2[2]);
-            return mask;
+            outPos[2] = float_0p5_80421658 * (p0[2] + p2[2]); return mask;
         }
         if (h1 != 0) {
             outPos[0] = float_0p5_80421658 * (p0[0] + p1[0]);
             outPos[1] = inPos[1];
-            outPos[2] = float_0p5_80421658 * (p0[2] + p1[2]);
-            return mask;
+            outPos[2] = float_0p5_80421658 * (p0[2] + p1[2]); return mask;
         }
         if (h2 != 0) {
             outPos[0] = float_0p5_80421658 * (p0[0] + p2[0]);
             outPos[1] = p0[1];
-            outPos[2] = float_0p5_80421658 * (p0[2] + p2[2]);
-            return mask;
+            outPos[2] = float_0p5_80421658 * (p0[2] + p2[2]); return mask;
         }
         if (h3 != 0) {
             outPos[0] = float_0p5_80421658 * (p0[0] + p3[0]);
             outPos[1] = p0[1];
-            outPos[2] = float_0p5_80421658 * (p0[2] + p3[2]);
-            return mask;
+            outPos[2] = float_0p5_80421658 * (p0[2] + p3[2]); return mask;
         }
         outPos[0] = p0[0]; outPos[1] = p0[1]; outPos[2] = p0[2];
     }
-    outPos[0] = inPos[0];
-    outPos[1] = inPos[1];
-    outPos[2] = inPos[2];
+    outPos[0] = inPos[0]; outPos[1] = inPos[1]; outPos[2] = inPos[2];
     return mask;
 }
+
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 

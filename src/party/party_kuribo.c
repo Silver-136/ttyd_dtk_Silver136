@@ -30,6 +30,7 @@ s32 pre_kurio_use(void* pEvt) {
     extern s32 pouchGetHammerLv(void);
     extern s32 pouchGetJumpLv(void);
     extern s32 mobjCheckItemboxOpen(void* mobj);
+    extern const u64 double_to_int_802cb8e8;
     extern const char str_msg_kuri_map_802cb8f0[];
     extern const char str_MOBJ_Lv1Block_802cb900[], str_MOBJ_Lv1BigBlock_802cb938[];
     extern const char str_MOBJ_Lv1BigBigBlock_802cb94c[], str_MOBJ_Lv2Block_802cb988[];
@@ -62,81 +63,119 @@ s32 pre_kurio_use(void* pEvt) {
     extern const char str_obj_hlp_hip_attack_802cbf00[], str_obj_hlp_hip_attack_1_802cbf14[];
     extern const char str_obj_hlp_bomb_rock_802cbf3c[], str_obj_hlp_kanban_802cbf60[];
     extern const char str_obj_hlp_yajirushi_802cbf7c[], str_obj_hlp_lock_802cbf9c[];
+    const char* strings = (const char*)&double_to_int_802cb8e8;
     void* party = partyGetPtr(marioGetPartyId());
+    void* player;
     s32* work = (s32*)((s32)pEvt + 0x9C);
-    const char* message = str_msg_kuri_map_802cb8f0;
+    const char* message = 0;
 
-    if (party == 0 || (*(u32*)((s32)party + 4) & 0x100) != 0) {
+    if (party == 0) {
+        return 2;
+    }
+    if ((*(u32*)((s32)party + 4) & 0x04000000) != 0) {
         return 2;
     }
     psndSetFlag(0x80);
-    *(u32*)party |= 0x20400000;
-    if (work[0] == 0) {
-        void* player = *(void**)((s32)party + 0x160);
-        void* hit = *(void**)((s32)player + 0x1E0);
-        if (hit == 0 || (hitGetAttr(hit) & 0x80000000) == 0) hit = *(void**)((s32)player + 0x1E4);
-        if (hit == 0 || (hitGetAttr(hit) & 0x80000000) == 0) hit = *(void**)((s32)player + 0x1E8);
-        if (hit != 0 && (hitGetAttr(hit) & 0x80000000) != 0) {
+    *(u32*)party |= 0x4000000;
+    *(u32*)party |= 0x2000000;
+    player = *(void**)((s32)party + 0x160);
+    if (work[0] != 0) {
+        work[0] += 8;
+        return 2;
+    }
+    {
+        void* hit = *(void**)((s32)player + 0x1F0);
+        if ((hit == 0 || (hitGetAttr(hit) & 0x80000000) == 0) &&
+            (hit = *(void**)((s32)player + 0x1E4),
+             hit == 0 || (hitGetAttr(hit) & 0x80000000) == 0) &&
+            (hit = *(void**)((s32)player + 0x1E8),
+             hit == 0 || (hitGetAttr(hit) & 0x80000000) == 0)) {
+            work[0] = (s32)(strings + 0x8);
+        } else {
             void* mobj = mobjHitObjPtrToPtr(hit);
             char* name = (char*)mobj + 0x15;
-            s32 hammer = pouchGetHammerLv();
-            if (!strcmp(name, str_MOBJ_Lv1Block_802cb900) || !strcmp(name, str_MOBJ_Lv1BigBlock_802cb938)) {
-                message = hammer < 1 ? str_obj_hlp_block_y_0_802cb910 : str_obj_hlp_block_y_1_802cb924;
-            } else if (!strcmp(name, str_MOBJ_Lv1BigBigBlock_802cb94c)) {
-                message = hammer < 1 ? str_obj_hlp_block_y_0_802cb910 :
-                          hammer < 2 ? str_obj_hlp_block_y_2_802cb960 : str_obj_hlp_block_y_3_802cb974;
-            } else if (!strcmp(name, str_MOBJ_Lv2Block_802cb988) || !strcmp(name, str_MOBJ_Lv2BigBlock_802cb998)) {
-                message = hammer < 1 ? str_obj_hlp_block_s_0_802cb9ac :
-                          hammer < 3 ? str_obj_hlp_block_s_1_802cb9c0 : str_obj_hlp_block_s_2_802cb9d4;
-            } else if (!strcmp(name, str_MOBJ_Lv2BigBigBlock_802cb9e8)) {
-                message = hammer < 1 ? str_obj_hlp_block_s_0_802cb9ac :
-                          hammer < 3 ? str_obj_hlp_block_s_1_802cb9c0 : str_obj_hlp_block_s_3_802cb9fc;
-            } else if (!strcmp(name, str_MOBJ_Lv3BigBigBlock_802cba10) ||
-                       !strcmp(name, str_MOBJ_Lv3BigBlock_802cba24) || !strcmp(name, str_MOBJ_Lv3Block_802cba38)) {
-                message = str_obj_hlp_redyellow_bl_802cba48;
-            } else if (!strcmp(name, str_MOBJ_Block_802cba60) || !strcmp(name, str_MOBJ_PinkBlock_802cba6c)) {
-                message = str_obj_hlp_su_block_802cba7c;
-            } else if (!strcmp(name, str_MOBJ_PowerUpBlock_802cba90)) {
-                message = str_obj_hlp_shine_802cbaa4;
-            } else if (!strcmp(name, str_MOBJ_HatenaBlock_802cbab4)) {
-                message = str_obj_hlp_hatena_802cbac8;
-            } else if (!strcmp(name, str_MOBJ_BadgeBlock_802cbad8)) {
-                message = str_obj_hlp_badge_hatena_802cbae8;
-            } else if (!strcmp(name, str_MOBJ_TreasureBox_802cbccc) ||
-                       !strcmp(name, str_MOBJ_GrayTreasureBox_802cbce0) ||
-                       !strcmp(name, str_MOBJ_BigTreasureBox_802cbcf8)) {
-                message = mobjCheckItemboxOpen(mobj) == 2 ? str_obj_hlp_takara_1_802cbd0c : str_obj_hlp_takara_0_802cbd20;
-            } else if (!strcmp(name, str_MOBJ_BlackTreasureBo_802cbd34)) {
-                message = mobjCheckItemboxOpen(mobj) == 2 ? str_obj_hlp_blackbox_1_802cbd4c : str_obj_hlp_blackbox_0_802cbd60;
-            } else if (!strcmp(name, str_MOBJ_RedJumpStand_802cbd74) ||
-                       !strcmp(name, str_MOBJ_RedJumpStand2_802cbd88) ||
-                       !strcmp(name, str_MOBJ_BlueJumpStand_802cbd9c) ||
-                       !strcmp(name, str_MOBJ_BlueJumpStand2_802cbdb0) ||
-                       !strcmp(name, str_MOBJ_MapJumpStand_802cbdc4)) {
-                message = str_obj_hlp_jump_802cbdd8;
-            } else if (!strcmp(name, str_MOBJ_RedTimerSwitch_802cbde8) || !strcmp(name, str_MOBJ_BlueTimerSwitch_802cbdfc)) {
-                message = str_obj_hlp_timer_switch_802cbe14;
-            } else if (!strcmp(name, str_MOBJ_RedSwitch_802cbe2c) || !strcmp(name, str_MOBJ_BlueSwitch_802cbe3c) ||
-                       !strcmp(name, str_MOBJ_WhiteSwitch_802cbe4c) || !strcmp(name, str_MOBJ_BlackSwitch_802cbe60)) {
-                message = str_obj_hlp_switch_802cbe74;
-            } else if (!strcmp(name, str_MOBJ_BreakingFloor_802cbed4) || !strcmp(name, str_MOBJ_BlackBreakingFl_802cbee8)) {
-                message = pouchGetJumpLv() > 1 ? str_obj_hlp_hip_attack_1_802cbf14 : str_obj_hlp_hip_attack_802cbf00;
-            } else if (!strcmp(name, str_MOBJ_BombRock_802cbf2c)) {
-                message = str_obj_hlp_bomb_rock_802cbf3c;
-            } else if (!strcmp(name, str_MOBJ_Signboard_802cbf50)) {
-                message = str_obj_hlp_kanban_802cbf60;
-            } else if (!strcmp(name, str_MOBJ_Arrow_802cbf70)) {
-                message = str_obj_hlp_yajirushi_802cbf7c;
-            } else if (!strcmp(name, str_MOBJ_Lock_802cbf90)) {
-                message = str_obj_hlp_lock_802cbf9c;
+            if (!strcmp(name, (strings + 0x18))) {
+                message = pouchGetHammerLv() < 1 ? (strings + 0x28) : (strings + 0x3C);
+            } else if (!strcmp(name, (strings + 0x50))) {
+                message = pouchGetHammerLv() < 1 ? (strings + 0x28) : (strings + 0x3C);
+            } else if (!strcmp(name, (strings + 0x64))) {
+                message = pouchGetHammerLv() < 1 ? (strings + 0x28) :
+                          pouchGetHammerLv() < 2 ? (strings + 0x78) : (strings + 0x8C);
+            } else if (!strcmp(name, (strings + 0xA0)) || !strcmp(name, (strings + 0xB0))) {
+                message = pouchGetHammerLv() < 1 ? (strings + 0xC4) :
+                          pouchGetHammerLv() < 3 ? (strings + 0xD8) : (strings + 0xEC);
+            } else if (!strcmp(name, (strings + 0x100))) {
+                message = pouchGetHammerLv() < 1 ? (strings + 0xC4) :
+                          pouchGetHammerLv() < 3 ? (strings + 0xD8) : (strings + 0x114);
+            } else if (!strcmp(name, (strings + 0x128)) ||
+                       !strcmp(name, (strings + 0x13C)) || !strcmp(name, (strings + 0x150))) {
+                message = (strings + 0x160);
+            } else if (!strcmp(name, (strings + 0x178)) || !strcmp(name, (strings + 0x184))) {
+                message = (strings + 0x194);
+            } else if (!strcmp(name, (strings + 0x1A8))) {
+                message = (strings + 0x1BC);
+            } else if (!strcmp(name, (strings + 0x1CC))) {
+                message = (strings + 0x1E0);
+            } else if (!strcmp(name, (strings + 0x1F0))) {
+                message = (strings + 0x200);
+            } else if (!strcmp(name, strings + 0x218) ||
+                       !strcmp(name, strings + 0x230) ||
+                       !strcmp(name, strings + 0x24C) ||
+                       !strcmp(name, strings + 0x268) ||
+                       !strcmp(name, strings + 0x280) ||
+                       !strcmp(name, strings + 0x29C) ||
+                       !strcmp(name, strings + 0x2B8) ||
+                       !strcmp(name, strings + 0x2D0) ||
+                       !strcmp(name, strings + 0x2EC)) {
+                message = strings + 0x308;
+            } else if (!strcmp(name, strings + 0x318) ||
+                       !strcmp(name, strings + 0x334) ||
+                       !strcmp(name, strings + 0x350)) {
+                message = strings + 0x36C;
+            } else if (!strcmp(name, strings + 0x384) ||
+                       !strcmp(name, strings + 0x39C)) {
+                message = pouchGetJumpLv() < 2 ? strings + 0x3B4 : strings + 0x3CC;
+            } else if (!strcmp(name, (strings + 0x3E4)) ||
+                       !strcmp(name, (strings + 0x3F8)) ||
+                       !strcmp(name, (strings + 0x410))) {
+                message = mobjCheckItemboxOpen(mobj) == 2 ? (strings + 0x424) : (strings + 0x438);
+            } else if (!strcmp(name, (strings + 0x44C))) {
+                message = mobjCheckItemboxOpen(mobj) == 2 ? (strings + 0x464) : (strings + 0x478);
+            } else if (!strcmp(name, (strings + 0x48C)) ||
+                       !strcmp(name, (strings + 0x4A0)) ||
+                       !strcmp(name, (strings + 0x4B4)) ||
+                       !strcmp(name, (strings + 0x4C8)) ||
+                       !strcmp(name, (strings + 0x4DC))) {
+                message = (strings + 0x4F0);
+            } else if (!strcmp(name, (strings + 0x500)) || !strcmp(name, (strings + 0x514))) {
+                message = (strings + 0x52C);
+            } else if (!strcmp(name, (strings + 0x544)) || !strcmp(name, (strings + 0x554)) ||
+                       !strcmp(name, (strings + 0x564)) || !strcmp(name, (strings + 0x578))) {
+                message = (strings + 0x58C);
+            } else if (!strcmp(name, strings + 0x59C) ||
+                       !strcmp(name, strings + 0x5B0) ||
+                       !strcmp(name, strings + 0x5C4)) {
+                message = strings + 0x5D8;
+            } else if (!strcmp(name, (strings + 0x5EC)) || !strcmp(name, (strings + 0x600))) {
+                message = pouchGetJumpLv() > 1 ? (strings + 0x62C) : (strings + 0x618);
+            } else if (!strcmp(name, (strings + 0x644))) {
+                message = (strings + 0x654);
+            } else if (!strcmp(name, (strings + 0x668))) {
+                message = (strings + 0x678);
+            } else if (!strcmp(name, (strings + 0x688))) {
+                message = (strings + 0x694);
+            } else if (!strcmp(name, (strings + 0x6A8))) {
+                message = (strings + 0x6B4);
+            } else if (!strcmp(name, strings + 0x6C4)) {
+                message = strings + 0x8;
+            } else {
+                message = strings + 0x8;
             }
-            work[0] = (s32)message;
-            partyChgPoseId(party, 7);
-        } else {
-            work[0] = (s32)message;
+            if (message != 0) {
+                work[0] = (s32)message;
+                partyChgPoseId(party, 7);
+            }
         }
-    } else {
-        work[0] += 8;
     }
     return 2;
 }

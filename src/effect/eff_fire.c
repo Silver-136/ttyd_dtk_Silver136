@@ -319,6 +319,13 @@ void effFireDisp(int camId, int effect) {
     extern void GXSetTevAlphaOp(s32, u32, u32, u32, u32, u32);
     extern void GXSetTevKColorSel(u32, u32);
     extern void GXSetTevKAlphaSel(u32, u32);
+    extern void GXSetTevKColor(s32, void*);
+    extern void GXSetTevColor(s32, void*);
+    extern u32 dat_8042442c;
+    extern u32 dat_80424430;
+    extern u32 dat_80424434;
+    extern u32 dat_80424438;
+    extern u32 dat_8042443c;
     s32* work = *(s32**)(effect + 0xC);
     char* cam = camGetPtr(camId);
     GXTexObj tex;
@@ -329,6 +336,7 @@ void effFireDisp(int camId, int effect) {
     s32 frame;
     f32 size;
     f32 halfWidth;
+    u32 tevColor;
 
     GXSetBlendMode(1, 4, 5, 0);
     GXSetZCompLoc(1);
@@ -383,6 +391,10 @@ void effFireDisp(int camId, int effect) {
     GXSetTevAlphaIn(0, 4, 5, 6, 7);
     GXSetTevKColorSel(0, 0xC);
     GXSetTevKAlphaSel(0, 0x1C);
+    tevColor = dat_8042442c;
+    GXSetTevKColor(0, &tevColor);
+    tevColor = dat_80424430;
+    GXSetTevColor(1, &tevColor);
     GXBegin(0x80, 0, 4);
     halfWidth = (f32)width * 0.5f;
     *(volatile f32*)0xCC008000 = -halfWidth;
@@ -409,18 +421,97 @@ void effFireDisp(int camId, int effect) {
     *(volatile u32*)0xCC008000 = 0x000000FF;
     *(volatile f32*)0xCC008000 = 0.0f;
     *(volatile f32*)0xCC008000 = 1.0f;
+
+    GXLoadPosMtxImm(model, 0);
+    GXSetNumTevStages(4);
+    GXSetTevOrder(0, 0xFF, 0xFF, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 1);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 1);
+    GXSetTevColorIn(0, 14, 8, 10, 15);
+    GXSetTevAlphaIn(0, 7, 7, 7, 7);
+    GXSetTevKColorSel(0, 0xC);
+    tevColor = dat_80424434;
+    GXSetTevKColor(0, &tevColor);
+    GXSetTevOrder(1, 0xFF, 0xFF, 4);
+    GXSetTevColorOp(1, 0, 0, 0, 1, 2);
+    GXSetTevAlphaOp(1, 0, 0, 0, 1, 2);
+    GXSetTevColorIn(1, 14, 8, 10, 15);
+    GXSetTevAlphaIn(1, 7, 7, 7, 7);
+    GXSetTevKColorSel(1, 0xD);
+    tevColor = dat_80424438;
+    GXSetTevKColor(1, &tevColor);
+    GXSetTevOrder(2, 0, 0, -1);
+    GXSetTevColorOp(2, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(2, 0xE, 0, 0, 1, 0);
+    GXSetTevColorIn(2, 15, 15, 15, 2);
+    GXSetTevAlphaIn(2, 4, 2, 6, 7);
+    GXSetTevKAlphaSel(2, 0);
+    tevColor = dat_8042443c;
+    GXSetTevColor(3, &tevColor);
+    GXSetTevOrder(3, 0, 0, -1);
+    GXSetTevColorOp(3, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(3, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(3, 2, 0, 1, 15);
+    GXSetTevAlphaIn(3, 4, 7, 0, 0);
+    GXBegin(0x80, 0, 4);
+    *(volatile f32*)0xCC008000 = -halfWidth;
+    *(volatile f32*)0xCC008000 = (f32)height;
+    *(volatile f32*)0xCC008000 = 0.0f;
+    *(volatile u32*)0xCC008000 = 0xFFFFFFFF;
+    *(volatile f32*)0xCC008000 = 0.0f;
+    *(volatile f32*)0xCC008000 = 0.0f;
+    *(volatile f32*)0xCC008000 = halfWidth;
+    *(volatile f32*)0xCC008000 = (f32)height;
+    *(volatile f32*)0xCC008000 = 0.0f;
+    *(volatile u32*)0xCC008000 = 0xFFFFFFFF;
+    *(volatile f32*)0xCC008000 = 1.0f;
+    *(volatile f32*)0xCC008000 = 0.0f;
+    *(volatile f32*)0xCC008000 = halfWidth;
+    *(volatile f32*)0xCC008000 = 0.0f;
+    *(volatile f32*)0xCC008000 = 0.0f;
+    *(volatile u32*)0xCC008000 = 0x000000FF;
+    *(volatile f32*)0xCC008000 = 1.0f;
+    *(volatile f32*)0xCC008000 = 1.0f;
+    *(volatile f32*)0xCC008000 = -halfWidth;
+    *(volatile f32*)0xCC008000 = 0.0f;
+    *(volatile f32*)0xCC008000 = 0.0f;
+    *(volatile u32*)0xCC008000 = 0x000000FF;
+    *(volatile f32*)0xCC008000 = 0.0f;
+    *(volatile f32*)0xCC008000 = 1.0f;
 }
 
-u8 effFireDisp2(s32 camId, s32 effect) {
+void effFireDisp2(s32 camId, s32 effect) {
     typedef struct GXTexObj { u32 data[8]; } GXTexObj;
+    extern void GXSetTevColor(s32, void*);
+    extern void GXSetTevKAlphaSel(u32, u32);
+    extern void GXSetTevKColor(s32, void*);
+    extern void GXSetChanMatColor(s32, void*);
+    extern void GXSetTevOp(s32, s32);
+    extern f32 float_deg2rad_80424468;
+    extern f32 float_0p5_80424474;
+    extern f32 float_32_80424488;
+    extern f32 float_16_8042449c;
+    extern f32 float_40_804244a0;
+    extern f32 float_24_804244a4;
+    extern f32 float_12_804244a8;
+    extern f32 float_20_804244ac;
+    extern f32 float_25_804244b0;
+    extern f32 float_0p7854_804244b4;
+    extern f32 float_2_804244b8;
+    extern const u32 dat_80424440, dat_80424444, dat_80424448, dat_8042444c;
+    extern const u32 dat_80424450, dat_80424454, dat_80424458;
+    extern u32 unk_80429604;
     s32* work = *(s32**)(effect + 0xC);
     char* cam = camGetPtr(camId);
     GXTexObj tex;
     Mtx trans, rot, scale, model;
-    f32 width = 32.0f;
-    f32 height = 64.0f;
-    s32 pass;
-    s32 i;
+    f32 baseScale;
+    f32 texScale;
+    f32 halfWidth;
+    f32 texBottom;
+    u32 color;
+    u8 alpha;
+    s32 type = work[0];
 
     effGetTexObj(0x48, &tex);
     GXLoadTexObj(&tex, 0);
@@ -429,62 +520,166 @@ u8 effFireDisp2(s32 camId, s32 effect) {
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
     GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
-    PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
-    PSMTXTrans(trans, 0.0f, *(f32*)&work[0x1A], 0.0f);
+    texScale = float_1_80424470 / (f32)work[0xD];
+    PSMTXScale(scale, texScale, float_1_80424470, float_1_80424470);
+    PSMTXTrans(trans, (f32)work[10], float_0_80424478, float_0_80424478);
     PSMTXConcat(scale, trans, trans);
     GXLoadTexMtxImm(trans, 0x1E, 1);
-    PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
-    PSMTXTrans(trans, *(f32*)&work[0x1B], 0.0f, 0.0f);
+    PSMTXScale(scale, texScale, float_1_80424470, float_1_80424470);
+    PSMTXTrans(trans, (f32)work[11], float_0_80424478, float_0_80424478);
     PSMTXConcat(scale, trans, trans);
     GXLoadTexMtxImm(trans, 0x21, 1);
     PSMTXTrans(trans, *(f32*)&work[1], *(f32*)&work[2], *(f32*)&work[3]);
-    PSMTXRotRad(rot, -0.017453292f * *(f32*)(cam + 0x114), 'y');
-    PSMTXScale(scale, *(f32*)&work[0x1E], *(f32*)&work[0x1F], 1.0f);
+    PSMTXRotRad(rot, float_deg2rad_80424468 * -*(f32*)((char*)camGetPtr(camId) + 0x114), 'y');
+    baseScale = *(f32*)&work[9];
+    PSMTXScale(scale, baseScale * *(f32*)&work[0x1E],
+               baseScale * *(f32*)&work[0x1F], baseScale);
     PSMTXConcat(trans, rot, model);
     PSMTXConcat(model, scale, model);
     PSMTXConcat(cam + 0x118, model, model);
     GXLoadPosMtxImm(model, 0);
+    GXSetCurrentMtx(0);
     GXClearVtxDesc();
     GXSetVtxDesc(9, 1);
     GXSetVtxDesc(11, 1);
     GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
     GXSetNumTevStages(3);
     GXSetTevOrder(0, 0, 0, 4);
     GXSetTevColorOp(0, 0, 0, 0, 1, 0);
     GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
     GXSetTevColorIn(0, 2, 0, 10, 15);
     GXSetTevAlphaIn(0, 7, 7, 7, 4);
+    if (type == 8) {
+        color = dat_80424448;
+        GXSetTevColor(1, &color);
+        color = dat_8042444c;
+        GXSetTevColor(2, &color);
+    } else if (type == 3 || type == 4) {
+        color = dat_80424440;
+        GXSetTevColor(1, &color);
+        color = dat_80424444;
+        GXSetTevColor(2, &color);
+    }
     GXSetTevOrder(1, 1, 0, -1);
     GXSetTevColorOp(1, 0, 0, 0, 1, 0);
     GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
     GXSetTevColorIn(1, 15, 15, 15, 0);
     GXSetTevAlphaIn(1, 0, 4, 2, 7);
+    alpha = (u8)work[0xE];
+    color = alpha | alpha << 8 | alpha << 16 | alpha << 24;
+    GXSetTevColor(3, &color);
     GXSetTevOrder(2, 0xFF, 0xFF, -1);
     GXSetTevColorOp(2, 0, 0, 0, 1, 0);
     GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
     GXSetTevColorIn(2, 15, 15, 15, 0);
     GXSetTevAlphaIn(2, 7, 0, 6, 7);
+    GXSetTevKAlphaSel(2, 0x1C);
+    color = (unk_80429604 & 0xFFFFFF00) | *(u8*)&work[4];
+    GXSetTevKColor(0, &color);
+
+    GXBegin(0x80, 0, 4);
+    halfWidth = -float_24_804244a4 * float_0p5_80424474;
+    *(volatile f32*)0xCC008000 = halfWidth;
+    *(volatile f32*)0xCC008000 = float_40_804244a0;
+    *(volatile f32*)0xCC008000 = float_0_80424478;
+    *(volatile u8*)0xCC008000 = 0xFF; *(volatile u8*)0xCC008000 = 0xFF;
+    *(volatile u8*)0xCC008000 = 0xFF; *(volatile u8*)0xCC008000 = 0xFF;
+    *(volatile f32*)0xCC008000 = float_0_80424478;
+    *(volatile f32*)0xCC008000 = float_0_80424478;
+    *(volatile f32*)0xCC008000 = float_12_804244a8;
+    *(volatile f32*)0xCC008000 = float_40_804244a0;
+    *(volatile f32*)0xCC008000 = float_0_80424478;
+    *(volatile u8*)0xCC008000 = 0xFF; *(volatile u8*)0xCC008000 = 0xFF;
+    *(volatile u8*)0xCC008000 = 0xFF; *(volatile u8*)0xCC008000 = 0xFF;
+    *(volatile f32*)0xCC008000 = float_1_80424470;
+    *(volatile f32*)0xCC008000 = float_0_80424478;
+    *(volatile f32*)0xCC008000 = float_12_804244a8;
+    *(volatile f32*)0xCC008000 = float_0_80424478;
+    *(volatile f32*)0xCC008000 = float_0_80424478;
+    *(volatile u8*)0xCC008000 = 0; *(volatile u8*)0xCC008000 = 0;
+    *(volatile u8*)0xCC008000 = 0; *(volatile u8*)0xCC008000 = 0xFF;
+    *(volatile f32*)0xCC008000 = float_1_80424470;
+    *(volatile f32*)0xCC008000 = float_1_80424470;
+    *(volatile f32*)0xCC008000 = halfWidth;
+    *(volatile f32*)0xCC008000 = float_0_80424478;
+    *(volatile f32*)0xCC008000 = float_0_80424478;
+    *(volatile u8*)0xCC008000 = 0; *(volatile u8*)0xCC008000 = 0;
+    *(volatile u8*)0xCC008000 = 0; *(volatile u8*)0xCC008000 = 0xFF;
+    *(volatile f32*)0xCC008000 = float_0_80424478;
+    *(volatile f32*)0xCC008000 = float_1_80424470;
+
+    if (type == 4) {
+        PSMTXTrans(trans, float_0_80424478, float_25_804244b0, float_0_80424478);
+    } else if (type == 3 || type == 8) {
+        PSMTXTrans(trans, float_0_80424478, float_20_804244ac, float_0_80424478);
+    }
+    baseScale = *(f32*)&work[0x11];
+    PSMTXScale(scale, baseScale, baseScale, baseScale);
+    PSMTXConcat(trans, scale, trans);
+    if (type == 4) {
+        PSMTXRotRad(rot, float_0p7854_804244b4, 'z');
+        PSMTXConcat(trans, rot, trans);
+    }
+    PSMTXConcat(model, trans, trans);
+    GXLoadPosMtxImm(trans, 0);
+    GXSetCurrentMtx(0);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    if (type == 4) {
+        color = dat_80424454;
+        GXSetChanMatColor(4, &color);
+    } else if (type == 3) {
+        color = dat_80424450;
+        GXSetChanMatColor(4, &color);
+    } else if (type == 8) {
+        color = dat_80424458;
+        GXSetChanMatColor(4, &color);
+    }
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(13, 1);
     GXSetVtxAttrFmt(0, 9, 1, 4, 0);
-    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
     GXSetVtxAttrFmt(0, 13, 1, 4, 0);
-    if (work[0] == 3 || work[0] == 4) {
-        height = 48.0f;
-    } else if (work[0] == 8) {
-        width = 40.0f;
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevOp(0, 0);
+    GXSetTevColorIn(0, 15, 15, 15, 10);
+    if (type == 4) {
+        effGetTexObj(0x60, &tex);
+        GXLoadTexObj(&tex, 0);
+    } else if (type == 3 || type == 8) {
+        effGetTexObj(0x5F, &tex);
+        GXLoadTexObj(&tex, 0);
     }
-    for (pass = 0; pass < 2; pass++) {
-        GXBegin(0x80, 0, 4);
-        for (i = 0; i < 4; i++) {
-            *(volatile f32*)0xCC008000 = (i & 1) ? width : -width;
-            *(volatile f32*)0xCC008000 = (i & 2) ? 0.0f : height;
-            *(volatile f32*)0xCC008000 = (f32)pass;
-            *(volatile u32*)0xCC008000 = 0xFFFFFFFF;
-            *(volatile f32*)0xCC008000 = (f32)(i & 1);
-            *(volatile f32*)0xCC008000 = (f32)((i >> 1) & 1);
-        }
-    }
-    return 0;
+    GXBegin(0x80, 0, 4);
+    texBottom = (type == 3 || type == 8) ? float_1_80424470 : float_2_804244b8;
+    halfWidth = -float_32_80424488 * float_0p5_80424474;
+    *(volatile f32*)0xCC008000 = halfWidth; *(volatile f32*)0xCC008000 = float_16_8042449c;
+    *(volatile f32*)0xCC008000 = float_0_80424478; *(volatile f32*)0xCC008000 = float_0_80424478;
+    *(volatile f32*)0xCC008000 = float_0_80424478;
+    *(volatile f32*)0xCC008000 = float_16_8042449c; *(volatile f32*)0xCC008000 = float_16_8042449c;
+    *(volatile f32*)0xCC008000 = float_0_80424478; *(volatile f32*)0xCC008000 = float_2_804244b8;
+    *(volatile f32*)0xCC008000 = float_0_80424478;
+    *(volatile f32*)0xCC008000 = float_16_8042449c; *(volatile f32*)0xCC008000 = halfWidth;
+    *(volatile f32*)0xCC008000 = float_0_80424478; *(volatile f32*)0xCC008000 = float_2_804244b8;
+    *(volatile f32*)0xCC008000 = texBottom;
+    *(volatile f32*)0xCC008000 = halfWidth; *(volatile f32*)0xCC008000 = halfWidth;
+    *(volatile f32*)0xCC008000 = float_0_80424478; *(volatile f32*)0xCC008000 = float_0_80424478;
+    *(volatile f32*)0xCC008000 = texBottom;
 }
+
+const u32 dat_80424440 = 0xFFCD15FF;
+const u32 dat_80424444 = 0xFF5100FF;
+const u32 dat_80424448 = 0x593359FF;
+const u32 dat_8042444c = 0x000000FF;
+const u32 dat_80424450 = 0xFFEA5D4C;
+const u32 dat_80424454 = 0xFFEA5D26;
+const u32 dat_80424458 = 0x0000004C;
 
 
 static u8 col_tbl[0x60] = {

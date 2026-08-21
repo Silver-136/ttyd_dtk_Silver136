@@ -3,6 +3,12 @@
 void actionCommandDisp(s32 unused, f32 x, f32 y);
 
 s32 battleAcMain_StickKeepLeft(void* battleWork) {
+    typedef struct StickKeepLeftExtra {
+        s32 timer;
+        s32 index;
+        s32 wait;
+        s32 sound[12];
+    } StickKeepLeftExtra;
     extern s32 irand(s32 max);
     extern u32 BattlePadCheckNow(u32 buttons);
     extern s32 psndSFXOn(const char* name);
@@ -11,7 +17,7 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
     extern char str_SFX_AC_PI1_802f01a8[];
     extern char str_SFX_AC_PONE1_802f01b4[];
 
-    void* extra;
+    StickKeepLeftExtra* extra;
     void* disp;
     s32 autoCommand;
     s32 done;
@@ -21,8 +27,10 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
     s32 timer;
     s32 difficulty;
     s32 i;
+    char* sfxPi;
+    char* sfxPone;
 
-    extra = (void*)((s32)battleWork + 0x1F4C);
+    extra = (StickKeepLeftExtra*)((s32)battleWork + 0x1F4C);
     disp = (void*)((s32)battleWork + 0x1F20);
     autoCommand = *(u8*)((s32)*(void**)((s32)battleWork + 0x1C90) + 0x307) != 0;
 
@@ -35,6 +43,9 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
         }
     }
 
+    sfxPi = str_SFX_AC_PI1_802f01a8;
+    sfxPone = str_SFX_AC_PONE1_802f01b4;
+
     while (1) {
         done = 0;
         if (*(s32*)((s32)battleWork + 0x1CD4) != 0) {
@@ -44,7 +55,7 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
         state = *(s32*)((s32)battleWork + 0x1C9C);
         if (state == 0) {
             *(s32*)((s32)battleWork + 0x1CB8) = 1;
-            *(s32*)((s32)extra + 4) = 0;
+            extra->index = 0;
             memset(disp, 0, 0x2C);
             *(f32*)((s32)disp + 0x14) = -300.0f;
             *(f32*)((s32)disp + 0x18) = 0.0f;
@@ -55,14 +66,14 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
             *(s32*)((s32)battleWork + 0x1CD8) = 0;
             *(s32*)((s32)battleWork + 0x1CF0) = 0;
             for (i = 0; i < 12; i++) {
-                *(s32*)((s32)extra + 0xC + i * 4) = -1;
+                extra->sound[i] = -1;
             }
             *(s32*)((s32)battleWork + 0x1C9C) = 99;
         } else if (state == 99) {
             /* wait */
         } else if (state >= 100 && state < 1000) {
             if (state <= 100) {
-                *(s32*)extra = 0x78;
+                extra->timer = 0x78;
                 *(s32*)((s32)battleWork + 0x1C9C) = 1000;
             }
             if (((*(u32*)((s32)battleWork + 0x1C94) & 1) == 0) ||
@@ -70,12 +81,12 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
                 if (BattlePadCheckNow(0x40000) != 0 || *(s16*)((s32)battleWork + 0x1D18) > 0 || autoCommand) {
                     *(s32*)((s32)battleWork + 0x1CE8) = 1;
                     *(s32*)((s32)battleWork + 0x1C9C) = 1001;
-                    *(s32*)extra = 1;
-                    *(s32*)((s32)extra + 4) = 1;
+                    extra->timer = 1;
+                    extra->index = 1;
                     *(s32*)((s32)battleWork + 0x1CEC) = 0;
                 } else {
-                    timer = *(s32*)extra - 1;
-                    *(s32*)extra = timer;
+                    timer = extra->timer - 1;
+                    extra->timer = timer;
                     if (timer < 1) {
                         *(s32*)((s32)battleWork + 0x1CB8) = 0;
                         done = 1;
@@ -99,21 +110,21 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
                 *(s32*)((s32)battleWork + 0x1C9C) = 1003;
                 done = 1;
             }
-            *(s32*)extra = *(s32*)extra - 1;
-            if (*(s32*)extra < 0) {
-                *(s32*)((s32)extra + 4) = *(s32*)((s32)extra + 4) + 1;
+            extra->timer = extra->timer - 1;
+            if (extra->timer < 0) {
+                extra->index = extra->index + 1;
                 *(s32*)((s32)battleWork + 0x1CEC) = *(s32*)((s32)battleWork + 0x1CEC) + 1;
-                index = *(s32*)((s32)extra + 4);
+                index = extra->index;
                 if (index < *(s32*)((s32)battleWork + 0x1CC8) + 2) {
                     if ((u32)(index - 2) < (u32)(*(s32*)((s32)battleWork + 0x1CC8) - 1)) {
-                        if (*(s32*)((s32)extra + 4 + index * 4) == -1) {
-                            *(s32*)((s32)extra + 4 + index * 4) = psndSFXOn(str_SFX_AC_PI1_802f01a8);
+                        if (extra->sound[index - 2] == -1) {
+                            extra->sound[index - 2] = psndSFXOn(sfxPi);
                         }
-                    } else if (*(s32*)((s32)extra + 4 + index * 4) == -1) {
-                        *(s32*)((s32)extra + 4 + index * 4) = psndSFXOn(str_SFX_AC_PONE1_802f01b4);
+                    } else if (extra->sound[index - 2] == -1) {
+                        extra->sound[index - 2] = psndSFXOn(sfxPone);
                         *(s32*)((s32)battleWork + 0x1CD8) = 1;
                     }
-                    *(s32*)extra = *(s32*)((s32)battleWork + 0x1CCC);
+                    extra->timer = *(s32*)((s32)battleWork + 0x1CCC);
                 } else {
                     *(s32*)((s32)battleWork + 0x1CB8) &= ~1;
                     *(s32*)((s32)battleWork + 0x1C9C) = 1003;
@@ -126,9 +137,9 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
                 }
             } else if (BattlePadCheckNow(0x40000) == 0 || autoCommand) {
                 success = 0;
-                if (*(s32*)((s32)extra + 4) == *(s32*)((s32)battleWork + 0x1CC8) + 1) {
+                if (extra->index == *(s32*)((s32)battleWork + 0x1CC8) + 1) {
                     difficulty = BattleActionCommandGetDifficulty(battleWork);
-                    if (ac_stickkeepleft_ok_frame[difficulty] < *(s32*)((s32)battleWork + 0x1CCC) - *(s32*)extra) {
+                    if (ac_stickkeepleft_ok_frame[difficulty] < *(s32*)((s32)battleWork + 0x1CCC) - extra->timer) {
                         if ((*(u32*)((s32)battleWork + 0x1CC4) & 2) == 0) {
                             *(s32*)((s32)battleWork + 0x1CF0) = 1;
                         }
@@ -151,7 +162,7 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
                 }
             }
         } else if (state == 1003) {
-            index = *(s32*)((s32)extra + 4);
+            index = extra->index;
             if (index - 2 >= 0) {
                 index--;
                 if (index - 1 >= 0) {
@@ -162,11 +173,11 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
             }
             *(s32*)((s32)battleWork + 0x1C9C) = 1004;
         } else if (state == 1005) {
-            *(s32*)((s32)extra + 8) = 0x3C;
+            extra->wait = 0x3C;
             *(s32*)((s32)battleWork + 0x1C9C) = 1006;
         } else if (state == 1006) {
-            *(s32*)((s32)extra + 8) = *(s32*)((s32)extra + 8) - 1;
-            if (*(s32*)((s32)extra + 8) < 1) {
+            extra->wait = extra->wait - 1;
+            if (extra->wait < 1) {
                 *(s32*)((s32)battleWork + 0x1C9C) = 1007;
             }
         } else if (state == 1007) {

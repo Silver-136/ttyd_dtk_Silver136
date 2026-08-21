@@ -70,6 +70,9 @@ void* effReleaseN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale)
 #pragma no_register_save_helpers off
 
 
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effReleaseMain(void* effect) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
     extern void effDelete(void*);
@@ -79,83 +82,218 @@ void effReleaseMain(void* effect) {
     extern f64 sin(f64);
     extern f64 cos(f64);
     extern Vec3 vec3_802fbe18;
+    extern u16 anime_data[];
+    extern u16 anime_data_2[];
     u8* work = *(u8**)((s32)effect + 0xC);
     Vec3 pos;
+    s32 color;
     s32 timer;
     s32 frame;
     s32 mode;
-    f32 phase;
-    f32 pulse;
+    s32 stateTimer;
+    s32 index;
+    u16 animValue;
+    f32 value;
 
     pos = vec3_802fbe18;
     pos.x = *(f32*)(work + 8);
     pos.y = *(f32*)(work + 0xC);
     pos.z = *(f32*)(work + 0x10);
+    color = *(s32*)(work + 4);
+
     if (*(s32*)effect & 4) {
         *(s32*)effect &= ~4;
         *(s32*)(work + 0x14) = 0x10;
     }
-    if (*(s32*)(work + 0x14) < 1000) *(s32*)(work + 0x14) -= 1;
-    *(s32*)(work + 0x18) += 1;
-    timer = *(s32*)(work + 0x14);
-    frame = *(s32*)(work + 0x18);
-    if (timer < 0) { effDelete(effect); return; }
-    if (timer < 0x10) *(s32*)(work + 0x28) = timer << 4;
 
-    phase = (6.2832f * (f32)(frame * 12)) / 360.0f;
-    pulse = 0.5f + 0.5f * (f32)sin(phase);
+    if (*(s32*)(work + 0x14) < 1000) {
+        *(s32*)(work + 0x14) -= 1;
+    }
+    *(s32*)(work + 0x18) += 1;
+
+    timer = *(s32*)(work + 0x14);
+    if (timer < 0) {
+        effDelete(effect);
+        return;
+    }
+
+    frame = *(s32*)(work + 0x18);
+    if (timer < 0x10) {
+        *(s32*)(work + 0x28) = timer << 4;
+    }
+
     mode = *(s32*)(work + 0x70);
     if (mode == 0) {
-        s32 stateTimer = *(s32*)(work + 0x74) + 1;
+        stateTimer = *(s32*)(work + 0x74) + 1;
         *(s32*)(work + 0x74) = stateTimer;
         *(s32*)(work + 0x50) = (frame & 3) * 0x1E + 200;
-        *(f32*)(work + 0x40) = 0.04f * (f32)sin((6.2832f * (f32)(frame * 20)) / 360.0f) + 0.5f;
+        *(f32*)(work + 0x40) =
+            0.04f * (f32)sin((6.2831855f * (f32)(frame * 20)) / 360.0f) + 0.5f;
+
         if (*(s32*)work != 0) {
-            *(f32*)(work + 8) += (f32)sin((6.2832f * (f32)frame) / 360.0f);
-            *(f32*)(work + 0xC) += (f32)cos((6.2832f * 1.2356f * (f32)frame) / 360.0f);
-            if (stateTimer > 0x32) {
+            *(f32*)(work + 8) +=
+                (f32)sin((6.2831855f * (f32)frame) / 360.0f);
+            *(f32*)(work + 0xC) +=
+                (f32)cos((6.2831855f * 1.235631f * (f32)frame) / 360.0f);
+
+            if (*(s32*)(work + 0x74) > 0x32) {
                 *(s32*)(work + 0x74) = 0;
-                *(s32*)(work + 0x70) = *(s32*)(work + 4) == 3 ? 100 : 1;
+                if (color == 3) {
+                    *(s32*)(work + 0x70) = 100;
+                } else {
+                    *(s32*)(work + 0x70) = 1;
+                }
             }
         }
+    } else if (mode == 100) {
+        stateTimer = *(s32*)(work + 0x74);
+
+        if (stateTimer == 0) {
+            *(f32*)(work + 0x4C) = 4.0f;
+            *(s32*)(work + 0x5C) = 0xFF;
+        } else if (stateTimer == 1) {
+            *(f32*)(work + 0x4C) = 8.0f;
+            *(s32*)(work + 0x5C) = 0xFF;
+        } else {
+            *(f32*)(work + 0x4C) = 0.0f;
+            *(s32*)(work + 0x5C) = 0;
+        }
+
+        if (stateTimer < 0x1E) {
+            value =
+                0.3f * (f32)stateTimer +
+                0.01f * (f32)anime_data[stateTimer * 2];
+            animValue = anime_data[stateTimer * 2 + 1];
+        } else {
+            value =
+                0.01f * (f32)anime_data[0x3A] +
+                0.3f * (f32)stateTimer;
+            animValue = anime_data[0x3B];
+        }
+
+        *(s32*)(work + 0x50) = 0;
+        *(f32*)(work + 0x40) = 0.0f;
+        *(s32*)(work + 0x54) = animValue & 0xFF;
+        *(s32*)(work + 0x58) = animValue & 0xFF;
+        *(f32*)(work + 0x44) = value;
+        *(f32*)(work + 0x48) = 0.6f + value;
+        *(s32*)(work + 0x74) = stateTimer + 1;
     } else if (mode == 1) {
-        *(f32*)(work + 0x40) = 0.5f + 0.04f * (f32)frame;
-        *(f32*)(work + 0x44) = 1.2f * *(f32*)(work + 0x40) + 4.0f;
-        *(f32*)(work + 0x48) = pulse;
-        *(f32*)(work + 0x4C) = 0.0f;
-        *(s32*)(work + 0x50) = *(s32*)(work + 0x28);
-        *(s32*)(work + 0x54) = *(s32*)(work + 0x28);
-        *(s32*)(work + 0x58) = 0;
+        stateTimer = *(s32*)(work + 0x74);
+
+        if (stateTimer == 0) {
+            *(f32*)(work + 0x4C) = 4.0f;
+            *(s32*)(work + 0x5C) = 0xFF;
+        } else if (stateTimer == 1) {
+            *(f32*)(work + 0x4C) = 8.0f;
+            *(s32*)(work + 0x5C) = 0xFF;
+        } else {
+            *(f32*)(work + 0x4C) = 0.0f;
+            *(s32*)(work + 0x5C) = 0;
+        }
+
+        index = stateTimer * 2;
+        value = 0.01f * (f32)anime_data[index];
+        animValue = anime_data[index + 1];
+        *(s32*)(work + 0x50) = 0;
+        *(f32*)(work + 0x40) = 0.0f;
+        *(s32*)(work + 0x54) = animValue & 0xFF;
+        *(s32*)(work + 0x58) = animValue & 0xFF;
+        *(f32*)(work + 0x44) = value;
+        *(f32*)(work + 0x48) = 1.2f * value + 4.0f;
+        *(s32*)(work + 0x74) = stateTimer + 1;
+
+        if (*(s32*)(work + 0x74) > 0x1D) {
+            *(s32*)(work + 0x74) = 0;
+            *(s32*)(work + 0x70) = 4;
+        }
     } else if (mode == 4) {
-        *(f32*)(work + 0x40) = frame < 2 ? 8.0f : (frame == 2 ? 4.0f : 0.0f);
-        *(f32*)(work + 0x44) = pulse;
-        *(f32*)(work + 0x48) = pulse * 0.75f;
-        *(s32*)(work + 0x50) = *(s32*)(work + 0x28);
-        *(s32*)(work + 0x54) = *(s32*)(work + 0x28);
+        stateTimer = *(s32*)(work + 0x74);
+        index = 0x1D - stateTimer;
+
+        if (index == 0) {
+            *(f32*)(work + 0x4C) = 4.0f;
+            *(s32*)(work + 0x5C) = 0xFF;
+        } else if (index == 1) {
+            *(f32*)(work + 0x4C) = 8.0f;
+            *(s32*)(work + 0x5C) = 0xFF;
+        } else {
+            *(f32*)(work + 0x4C) = 0.0f;
+            *(s32*)(work + 0x5C) = 0;
+        }
+
+        index = stateTimer * 2;
+        value = 0.01f * (f32)anime_data_2[index];
+        animValue = anime_data_2[index + 1];
+        *(s32*)(work + 0x50) = 0;
+        *(f32*)(work + 0x40) = 0.0f;
+        *(s32*)(work + 0x54) = animValue & 0xFF;
+        *(s32*)(work + 0x58) = 0;
+        *(f32*)(work + 0x44) = value;
+        *(f32*)(work + 0x48) = 0.0f;
+        *(s32*)(work + 0x74) = stateTimer + 1;
+
+        if (*(s32*)(work + 0x74) > 0x1D) {
+            *(s32*)(work + 0x74) = 0;
+            *(s32*)(work + 0x70) = 5;
+        }
     } else {
-        *(f32*)(work + 0x40) = pulse;
-        *(f32*)(work + 0x44) = 1.0f - pulse;
-        *(f32*)(work + 0x48) = pulse * 0.5f;
-        *(f32*)(work + 0x4C) = pulse * 0.25f;
-        *(s32*)(work + 0x50) = *(s32*)(work + 0x28);
-        *(s32*)(work + 0x54) = *(s32*)(work + 0x28);
-        *(s32*)(work + 0x58) = *(s32*)(work + 0x28);
-        *(s32*)(work + 0x5C) = *(s32*)(work + 0x28);
+        *(f32*)(work + 0x40) = 0.0f;
+        *(f32*)(work + 0x44) = 0.0f;
+        *(f32*)(work + 0x48) = 0.0f;
+        *(s32*)(work + 0x50) = 0;
+        *(s32*)(work + 0x54) = 0;
+        *(s32*)(work + 0x58) = 0;
+        *(f32*)(work + 0x4C) = 0.0f;
+        *(s32*)(work + 0x5C) = 0;
+        *(f32*)(work + 0x4C) = 0.0f;
+        *(s32*)(work + 0x74) += 1;
     }
-    if (*(s32*)(work + 0x50) > 0xFF) *(s32*)(work + 0x50) = 0xFF;
-    if (*(s32*)(work + 0x50) < 0) *(s32*)(work + 0x50) = 0;
-    if (*(f32*)(work + 0x40) < 0.0f) *(f32*)(work + 0x40) = 0.0f;
-    if (*(s32*)(work + 0x54) > 0xFF) *(s32*)(work + 0x54) = 0xFF;
-    if (*(s32*)(work + 0x54) < 0) *(s32*)(work + 0x54) = 0;
-    if (*(f32*)(work + 0x44) < 0.0f) *(f32*)(work + 0x44) = 0.0f;
-    if (*(s32*)(work + 0x58) > 0xFF) *(s32*)(work + 0x58) = 0xFF;
-    if (*(s32*)(work + 0x58) < 0) *(s32*)(work + 0x58) = 0;
-    if (*(f32*)(work + 0x48) < 0.0f) *(f32*)(work + 0x48) = 0.0f;
-    if (*(s32*)(work + 0x5C) > 0xFF) *(s32*)(work + 0x5C) = 0xFF;
-    if (*(s32*)(work + 0x5C) < 0) *(s32*)(work + 0x5C) = 0;
-    if (*(f32*)(work + 0x4C) < 0.0f) *(f32*)(work + 0x4C) = 0.0f;
+
+    if (*(s32*)(work + 0x50) > 0xFF) {
+        *(s32*)(work + 0x50) = 0xFF;
+    }
+    if (*(s32*)(work + 0x50) < 0) {
+        *(s32*)(work + 0x50) = 0;
+    }
+    if (*(f32*)(work + 0x40) < 0.0f) {
+        *(f32*)(work + 0x40) = 0.0f;
+    }
+
+    if (*(s32*)(work + 0x54) > 0xFF) {
+        *(s32*)(work + 0x54) = 0xFF;
+    }
+    if (*(s32*)(work + 0x54) < 0) {
+        *(s32*)(work + 0x54) = 0;
+    }
+    if (*(f32*)(work + 0x44) < 0.0f) {
+        *(f32*)(work + 0x44) = 0.0f;
+    }
+
+    if (*(s32*)(work + 0x58) > 0xFF) {
+        *(s32*)(work + 0x58) = 0xFF;
+    }
+    if (*(s32*)(work + 0x58) < 0) {
+        *(s32*)(work + 0x58) = 0;
+    }
+    if (*(f32*)(work + 0x48) < 0.0f) {
+        *(f32*)(work + 0x48) = 0.0f;
+    }
+
+    if (*(s32*)(work + 0x5C) > 0xFF) {
+        *(s32*)(work + 0x5C) = 0xFF;
+    }
+    if (*(s32*)(work + 0x5C) < 0) {
+        *(s32*)(work + 0x5C) = 0;
+    }
+    if (*(f32*)(work + 0x4C) < 0.0f) {
+        *(f32*)(work + 0x4C) = 0.0f;
+    }
+
     dispEntry(4, 2, effReleaseDisp, effect, dispCalcZ(&pos));
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 
 void effReleaseDisp(s32 cameraId, void* effect) {
     extern void* camGetPtr(s32);

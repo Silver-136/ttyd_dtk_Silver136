@@ -58,10 +58,16 @@ void effOpukuJetwrainMain(void* effect) {
     extern Vec3 vec3_802fbb70;
     u8* work = *(u8**)((s32)effect + 0xC);
     Vec3 pos;
-    s32 row, col, index;
+    s8* cell;
+    s8* point;
+    s16* velocity;
+    f32 alpha;
+    f32 center4;
+    s32 row;
+    s32 col;
+    s32 age;
     s32 timer;
-    s16* heights = (s16*)(work + 0x11A);
-    s16 next;
+    s32 value;
 
     pos = vec3_802fbb70;
     pos.x = *(f32*)(work + 4);
@@ -80,36 +86,59 @@ void effOpukuJetwrainMain(void* effect) {
         effDelete(effect);
         return;
     }
-    *(u8*)(work + 0x1F) = 0xFF;
-    if (timer < 0x20) *(u8*)(work + 0x1F) = (u8)(timer << 3);
-    if (*(s32*)(work + 0x14) < 0x10)
-        *(u8*)(work + 0x1F) = (u8)((*(s32*)(work + 0x14) << 4) + 0xF);
 
-    for (row = 1; row < 18; row++) {
-        index = row * 13;
-        *(u8*)(work + 0x24 + index + 6) =
-            (u8)(32.0f * (f32)sin((6.2832f * (f32)(*(s32*)(work + 0x14) * 8 + row * 12)) / 360.0f));
+    age = *(s32*)(work + 0x14);
+    value = 0xFF;
+    if (timer < 0x20) {
+        value = timer << 3;
     }
+    if (age < 0x10) {
+        value = age * 0x10 + 0xF;
+    }
+    *(u8*)(work + 0x1F) = value;
+    alpha = (f32)value / 255.0f;
+
+    cell = (s8*)(work + 0x36);
+    for (row = 1; row < 18; row++, cell += 13) {
+        *cell = (s8)(alpha * -64.0f *
+                     (f32)sin((6.2832f * (f32)((age - row) * -20)) / 360.0f));
+    }
+
+    cell = (s8*)(work + 0xE);
+    velocity = (s16*)(work + 0x136);
     for (row = 1; row < 18; row++) {
-        for (col = 1; col < 12; col++) {
-            index = row * 13 + col;
-            next = (s16)(((heights[index - 13] + heights[index + 13] +
-                           heights[index - 1] + heights[index + 1]) >> 1) - heights[index]);
-            next = (s16)((f32)next * 0.98f);
-            if (timer < 0x20) {
-                next = (s16)((f32)next * 0.7f);
+        for (col = 0; col < 11; col++, cell++, velocity++) {
+            point = cell + 0x23;
+            center4 = 4.0f * (f32)*point;
+            *velocity = (s16)((f32)*velocity -
+                (0.7f * center4 -
+                 0.5f * (f32)(cell[0x15] + cell[0x2F] +
+                                             cell[0x31] + cell[0x17]) +
+                 ((f32)(cell[0x22] + cell[0x24] + cell[0x30] + cell[0x16]) - center4)));
+            *velocity = (s16)((f32)*velocity * 0.98f);
+            if (*(s32*)(work + 0x10) < 0x20) {
+                *point = (s8)((f32)*point * alpha);
             }
-            heights[index] = next;
-            *(u8*)(work + 0x24 + index) = (u8)(next >> 4);
         }
+        cell += 2;
+        velocity += 2;
     }
+
+    cell = (s8*)(work + 0xE);
+    velocity = (s16*)(work + 0x136);
     for (row = 1; row < 18; row++) {
-        for (col = 1; col < 12; col++) {
-            index = row * 13 + col;
-            *(s8*)(work + 0x24 + index) =
-                (s8)(0.02f * (f32)heights[index] +
-                     (f32)*(s8*)(work + 0x24 + index));
+        for (col = 0; col < 2; col++) {
+            cell[0x23] = (s8)(0.02f * (f32)velocity[0] + (f32)cell[0x23]);
+            cell[0x24] = (s8)(0.02f * (f32)velocity[1] + (f32)cell[0x24]);
+            cell[0x25] = (s8)(0.02f * (f32)velocity[2] + (f32)cell[0x25]);
+            cell[0x26] = (s8)(0.02f * (f32)velocity[3] + (f32)cell[0x26]);
+            cell[0x27] = (s8)(0.02f * (f32)velocity[4] + (f32)cell[0x27]);
+            cell += 5;
+            velocity += 5;
         }
+        cell[0x23] = (s8)(0.02f * (f32)*velocity + (f32)cell[0x23]);
+        cell += 3;
+        velocity += 3;
     }
     dispEntry(4, 2, effOpukuJetwrainDisp, effect, dispCalcZ(&pos));
 }

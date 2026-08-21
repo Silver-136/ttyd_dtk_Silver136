@@ -21,6 +21,7 @@ void* effWhirlwindN64Entry(f32 scale, s32 type, void* follow, s32 lifetime) {
 
     void* eff;
     s32* work;
+    f32* fwork;
     s32 i;
     s32 y;
     s32 yRot;
@@ -34,16 +35,17 @@ void* effWhirlwindN64Entry(f32 scale, s32 type, void* follow, s32 lifetime) {
     *(const char**)((s32)eff + 0x14) = str_WhirlwindN64_802faa90;
     *(s32*)((s32)eff + 8) = 5;
     work = __memAlloc(3, 0x168);
+    fwork = (f32*)work;
     *(s32**)((s32)eff + 0xC) = work;
     *(void**)((s32)eff + 0x10) = effWhirlwindMain;
 
     work[0] = type;
     work[1] = (s32)follow;
-    work[5] = (s32)(float_1p2_80424c04 * scale);
-    work[6] = (s32)(float_1p2_80424c04 * scale);
-    work[7] = 0;
+    fwork[5] = float_1p2_80424c04 * scale;
+    fwork[6] = float_1p2_80424c04 * scale;
     work[8] = lifetime;
     work[9] = lifetime;
+    work[7] = 0;
     work[10] = 0;
 
     i = 1;
@@ -58,48 +60,48 @@ void* effWhirlwindN64Entry(f32 scale, s32 type, void* follow, s32 lifetime) {
             case 2:
             case 4:
             case 6:
-                work[0x14] = (s32)zero;
-                work[0x15] = y;
-                work[0x16] = (s32)zero;
-                work[0x20] = (s32)zero;
-                work[0x21] = (s32)float_60_80424c08;
-                work[0x22] = (s32)zero;
-                work[0x1D] = (s32)zero;
-                work[0x1E] = yRot;
-                work[0x1F] = (s32)zero;
-                work[0x17] = (s32)float_1_80424c0c;
+                fwork[0x14] = zero;
+                fwork[0x15] = (f32)y;
+                fwork[0x16] = zero;
+                fwork[0x20] = zero;
+                fwork[0x21] = float_60_80424c08;
+                fwork[0x22] = zero;
+                fwork[0x1D] = zero;
+                fwork[0x1E] = (f32)yRot;
+                fwork[0x1F] = zero;
+                fwork[0x17] = float_1_80424c0c;
                 break;
             case 1:
             case 3:
             case 5:
             case 7:
-                work[0x14] = (s32)zero;
-                work[0x15] = y;
-                work[0x16] = (s32)zero;
-                work[0x20] = (s32)zero;
-                work[0x21] = (s32)float_neg60_80424c10;
-                work[0x22] = (s32)zero;
-                work[0x1D] = (s32)zero;
-                work[0x1E] = yRot;
-                work[0x1F] = (s32)zero;
-                work[0x17] = (s32)float_1_80424c0c;
+                fwork[0x14] = zero;
+                fwork[0x15] = (f32)y;
+                fwork[0x16] = zero;
+                fwork[0x20] = zero;
+                fwork[0x21] = float_neg60_80424c10;
+                fwork[0x22] = zero;
+                fwork[0x1D] = zero;
+                fwork[0x1E] = (f32)yRot;
+                fwork[0x1F] = zero;
+                fwork[0x17] = float_1_80424c0c;
                 *(u8*)((s32)work + 0x8C) = 0xFF;
                 *(u8*)((s32)work + 0x8D) = 0xFF;
                 *(u8*)((s32)work + 0x8E) = 0xFF;
                 break;
             default:
-                work[0x14] = (s32)zero;
-                work[0x15] = (s32)(float_0p5_80424c14 * *(f32*)((s32)follow + 0x1BC));
-                work[0x16] = (s32)zero;
-                randBit = ((rand() & 1) * 2) - 1;
-                work[0x20] = randBit * 4;
-                work[0x21] = (s32)zero;
-                randBit = ((rand() & 1) * 2) - 1;
-                work[0x22] = randBit * 4;
-                work[0x17] = (s32)((float_0p5_80424c14 * (f32)(i - 1) * float_0p25_80424c18) + float_0p5_80424c14);
-                work[0x1D] = xRot;
-                work[0x1E] = ((i - 1) * 0x168) >> 2;
-                work[0x1F] = 0x168 - zSeed;
+                fwork[0x14] = zero;
+                fwork[0x15] = float_0p5_80424c14 * *(f32*)((s32)follow + 0x1BC);
+                fwork[0x16] = zero;
+                randBit = ((rand() % 2) * 2) - 1;
+                fwork[0x20] = (f32)(randBit * 4);
+                fwork[0x21] = zero;
+                randBit = ((rand() % 2) * 2) - 1;
+                fwork[0x22] = (f32)(randBit * 4);
+                fwork[0x17] = (float_0p5_80424c14 * (f32)(i - 1) * float_0p25_80424c18) + float_0p5_80424c14;
+                fwork[0x1D] = (f32)xRot;
+                fwork[0x1E] = (f32)(((i - 1) * 0x168) >> 2);
+                fwork[0x1F] = (f32)(0x168 - zSeed);
                 break;
         }
 
@@ -119,16 +121,16 @@ void* effWhirlwindN64Entry(f32 scale, s32 type, void* follow, s32 lifetime) {
             colorIndex = 0;
         }
 
-        *(u8*)((s32)work + 0x8C) = col_r[colorIndex];
-        *(u8*)((s32)work + 0x8D) = col_g[colorIndex];
-        *(u8*)((s32)work + 0x8E) = col_b[colorIndex];
-
         i++;
+        *(u8*)((s32)work + 0x8C) = col_r[colorIndex];
         y += 7;
         yRot += 0x78;
         xRot += 0x19;
         zSeed += 0x26;
+        *(u8*)((s32)work + 0x8D) = col_g[colorIndex];
+        *(u8*)((s32)work + 0x8E) = col_b[colorIndex];
         work += 0x12;
+        fwork += 0x12;
     } while (i <= 4);
 
     return eff;

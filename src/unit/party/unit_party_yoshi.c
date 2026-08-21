@@ -206,11 +206,18 @@ u8 btl_yoshi_yoroyoro_jump_calc_param(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 btl_yoshi_yoroyoro_jump_move(void* evt, s32 first) {
+    extern void* _battleWorkPointer;
+    extern s32 evtGetValue(void* evt, s32 arg);
+    extern f32 evtGetFloat(void* evt, s32 arg);
+    extern s32 BattleTransID(void* evt, s32 id);
+    extern void* BattleGetUnitPtr(void* battleWork, s32 id);
     extern f64 sinfd(f64 angle);
     extern void* BtlUnit_GetPartsPtr(void* unit, s32 partId);
     extern void BtlUnit_SetPos(f32 x, f32 y, f32 z, void* unit);
     extern s32 BtlUnit_GetHeight(void* unit);
     extern s32 effSweatN64Entry(f32 x, f32 y, f32 z, f32 scale, f32 xOffset, s32 a, s32 b);
+    extern f32 float_0_804240b4;
+    extern f32 float_5_804240e0;
     extern f32 float_10_804240e8;
     extern f32 float_180_804240ec;
     extern f32 float_360_804240f0;
@@ -232,6 +239,7 @@ u8 btl_yoshi_yoroyoro_jump_move(void* evt, s32 first) {
     f32 speed;
     f32 jumpFrames;
     f32 height;
+    f32 nextSpeedY;
     s32 effect;
 
     args = *(s32**)((s32)evt + 0x18);
@@ -252,48 +260,45 @@ u8 btl_yoshi_yoroyoro_jump_move(void* evt, s32 first) {
     cur = *(f32*)((s32)unit + 0x154);
     target = *(f32*)((s32)unit + 0x160);
     if (cur != target) {
-        diff = target - cur;
-        if (diff < float_0_804240b4) {
-            diff = -diff;
-        }
+        diff = __fabs(target - cur);
         speed = *(f32*)((s32)unit + 0x170);
-        if (speed <= diff) {
-            *(f32*)((s32)unit + 0x154) = cur + speed * (f32)*(s8*)((s32)unit + 0x188);
-        } else {
+        if (diff < speed) {
             *(f32*)((s32)unit + 0x154) = target;
+        } else {
+            *(f32*)((s32)unit + 0x154) = cur + speed * (f32)*(s8*)((s32)unit + 0x188);
         }
     }
 
     cur = *(f32*)((s32)unit + 0x15C);
     target = *(f32*)((s32)unit + 0x168);
     if (cur != target) {
-        diff = target - cur;
-        if (diff < float_0_804240b4) {
-            diff = -diff;
-        }
+        diff = __fabs(target - cur);
         speed = *(f32*)((s32)unit + 0x170);
-        if (speed <= diff) {
+        if (diff < speed) {
+            *(f32*)((s32)unit + 0x15C) = target;
+        } else {
             if (target - *(f32*)((s32)unit + 0x150) <= float_0_804240b4) {
                 *(f32*)((s32)unit + 0x15C) = cur - speed;
             } else {
                 *(f32*)((s32)unit + 0x15C) = cur + speed;
             }
-        } else {
-            *(f32*)((s32)unit + 0x15C) = target;
         }
     }
 
     frame = *(s32*)((s32)unit + 0x16C);
     phase = frame % 90;
     jumpFrames = *(f32*)((s32)unit + 0x184);
+    nextSpeedY =
+        float_10_804240e8 *
+        (f32)sinfd(float_180_804240ec +
+                   (float_360_804240f0 * (jumpFrames - (f32)phase)) / float_90_804240f4);
+
+    BtlUnit_GetPartsPtr(unit, 1);
     *(f32*)((s32)unit + 0x158) =
         *(f32*)((s32)unit + 0x178) + *(f32*)((s32)unit + 0x14C) +
         ((*(f32*)((s32)unit + 0x164) - *(f32*)((s32)unit + 0x14C)) *
          (jumpFrames - (f32)frame)) / jumpFrames;
-    *(f32*)((s32)unit + 0x178) =
-        float_10_804240e8 *
-        (f32)sinfd(float_180_804240ec +
-                   (float_360_804240f0 * (jumpFrames - (f32)phase)) / float_90_804240f4);
+    *(f32*)((s32)unit + 0x178) = nextSpeedY;
 
     phase = *(s32*)((s32)unit + 0x16C) % 90;
     *(s32*)((s32)unit + 0x1C + 5 * 4) =
@@ -301,7 +306,6 @@ u8 btl_yoshi_yoroyoro_jump_move(void* evt, s32 first) {
                       (f32)sinfd((float_360_804240f0 * (jumpFrames - (f32)phase)) /
                                  float_90_804240f4) -
                       float_75_804240f8);
-    BtlUnit_GetPartsPtr(unit, 1);
     BtlUnit_SetPos(*(f32*)((s32)unit + 0x154), *(f32*)((s32)unit + 0x158),
                    *(f32*)((s32)unit + 0x15C), unit);
 
@@ -340,6 +344,7 @@ u8 btl_yoshi_yoroyoro_jump_move(void* evt, s32 first) {
     }
     return 0;
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

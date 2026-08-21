@@ -548,6 +548,7 @@ void flyMain(void) {
     extern f32 float_3p1416_80420d50;
     extern f32 float_neg0p001_80420d58;
     extern f32 float_neg22_80420d68;
+    extern f32 float_neg80_80420d64;
 
     void* player = marioGetPtr();
     void* work = *(void**)((s32)player + 0x294);
@@ -747,13 +748,82 @@ check_flying:
             PF(0x180) = float_0_80420d1c;
         }
     } else {
-        WU32(0x00) &= ~0x10U;
-        WF(0x10) = planeData[0x0A] *
-                   (f32)sin((float_3p1416_80420d50 * planeData[0x09] * -WF(0x04)) / float_180_80420d54);
-        PF(0x180) += WF(0x10);
-        WF(0x24) = float_neg22_80420d68;
-        if (WF(0x04) <= WF(0x24)) {
-            WF(0x04) = WF(0x24);
+        if (WF(0x04) >= float_neg80_80420d64) {
+            f32 absPitch;
+            f32 sinPitchA;
+            f32 sinSpeed;
+            s32 blocked;
+
+            WU32(0x00) &= ~0x10U;
+
+            absPitch = WF(0x04);
+            if (absPitch <= float_0_80420d1c) {
+                absPitch = -absPitch;
+            }
+
+            WF(0x10) = planeData[0x0A] *
+                       (f32)sin((float_3p1416_80420d50 * planeData[0x09] * absPitch) /
+                                float_180_80420d54);
+            PF(0x180) += WF(0x10);
+
+            absPitch = WF(0x04);
+            if (absPitch <= float_0_80420d1c) {
+                absPitch = -absPitch;
+            }
+
+            sinPitchA = (f32)sin((float_3p1416_80420d50 * planeData[0x0C] * absPitch) /
+                                 float_180_80420d54);
+            sinSpeed = (f32)sin((float_3p1416_80420d50 * PF(0x180) * planeData[0x0B]) /
+                                float_180_80420d54);
+            WF(0x14) += planeData[0x0D] * sinSpeed * sinPitchA;
+
+            stick = PS8(0x252);
+            if (stick != 0) {
+                if ((WU32(0x00) & 1) == 0) {
+                    if (stick > 0 && WF(0x14) >= float_1_80420d2c) {
+                        WF(0x14) = float_1_80420d2c;
+                    }
+                } else {
+                    if (stick < 0 && WF(0x14) >= float_1_80420d2c) {
+                        WF(0x14) = float_1_80420d2c;
+                    }
+                }
+
+                blocked = 0;
+                player = marioGetPtr();
+                hit = *(void**)((s32)player + 0x1FC);
+                if (hit != 0 && (hitGetAttr(hit) & 0x38) != 0) {
+                    blocked = 1;
+                }
+                if (blocked == 0) {
+                    work = *(void**)((s32)player + 0x294);
+                    WF(0x1C) += float_0p1_80420d40 * (float_1_80420d2c - WF(0x1C));
+                    if (WF(0x1C) >= float_0_80420d1c) {
+                        WF(0x1C) = float_0_80420d1c;
+                    }
+                }
+            }
+
+            blocked = 0;
+            player = marioGetPtr();
+            hit = *(void**)((s32)player + 0x1FC);
+            if (hit != 0 && (hitGetAttr(hit) & 0x38) != 0) {
+                blocked = 1;
+            }
+
+            work = *(void**)((s32)player + 0x294);
+            if (blocked != 0) {
+                WF(0x24) = float_neg22_80420d68;
+            } else {
+                WF(0x24) += float_0p1_80420d40 * (planeData[0x04] - WF(0x24));
+            }
+
+            WF(0x04) += WF(0x14);
+            if (WF(0x04) <= WF(0x24)) {
+                WF(0x04) = WF(0x24);
+            }
+
+            WF(0x18) += float_0p1_80420d40 * -WF(0x18);
         }
     }
 

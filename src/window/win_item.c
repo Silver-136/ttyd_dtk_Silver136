@@ -21,7 +21,7 @@ extern void* winGetPtr(void);
 extern u16 menu_skip_list[18];
 void winMsgEntry(void* pWin, s32 param_2, char* msg, s32 param_4);
 u16 pouchKeyItem(s32 index);
-void item_disp(double x, double y, void* pWin);
+void item_disp(f32 x, f32 y, void* pWin);
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void winMakeSkipList(void* pWin) {
@@ -523,28 +523,33 @@ u8 winItemDisp(s32 param_1, void* pWin, s32 param_3) {
 
     for (i = 0, yOffset = 0; i < 2; i++, yOffset += 0x32) {
         if (i == *(s32*)((s32)pWin + 0x210)) {
+            LocalVec rawPos;
             LocalVec pos;
             LocalVec size;
             u32 color;
+            LocalVec rawPos2;
             LocalVec pos2;
             LocalVec size2;
 
             winTexInit(*(void**)(*(s32*)(*(s32*)((s32)pWin + 0x28) + 0xA0)));
             color = dat_8042374c;
             size = vec3_802f5acc;
-            pos.x = x - float_215_80423840;
-            pos.y = float_20_804237e8 + (baseY - (f32)yOffset);
-            pos.z = vec3_802f5ac0.z;
+            rawPos.x = x - float_215_80423840;
+            rawPos.y = float_20_804237e8 + (baseY - (f32)yOffset);
+            rawPos.z = vec3_802f5ac0.z;
+            pos = rawPos;
             winTexSet(0xB3, &pos, &size, &color);
 
             winTexInit_x2(*(void**)(*(s32*)(*(s32*)((s32)pWin + 0x28) + 0xA0)));
             color = selectedColor;
             size2 = vec3_802f5ae4;
-            pos2.x = selectedX;
-            pos2.y = float_20_804237e8 + (selectedY - (f32)yOffset);
-            pos2.z = vec3_802f5ad8.z;
+            rawPos2.x = selectedX;
+            rawPos2.y = float_20_804237e8 + (selectedY - (f32)yOffset);
+            rawPos2.z = vec3_802f5ad8.z;
+            pos2 = rawPos2;
             winTexSet_x2(i + 0x18, 0xB3, &pos2, &size2, &color);
         } else {
+            LocalVec rawPos;
             LocalVec pos;
             LocalVec size;
             u32 color;
@@ -552,89 +557,270 @@ u8 winItemDisp(s32 param_1, void* pWin, s32 param_3) {
             winTexInit_x2(*(void**)(*(s32*)(*(s32*)((s32)pWin + 0x28) + 0xA0)));
             color = dat_80423750;
             size = vec3_802f5afc;
-            pos.x = x - float_215_80423840;
-            pos.y = float_20_804237e8 + (baseY - (f32)yOffset);
-            pos.z = vec3_802f5af0.z;
+            rawPos.x = x - float_215_80423840;
+            rawPos.y = float_20_804237e8 + (baseY - (f32)yOffset);
+            rawPos.z = vec3_802f5af0.z;
+            pos = rawPos;
             winTexSet_x2(i + 0x18, 0xB3, &pos, &size, &color);
         }
     }
 
-    item_disp((s64)x, (s64)y, pWin);
+    item_disp(x, y, pWin);
     return 0;
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+void item_disp(f32 x, f32 y, void* pWin) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
 
-
-void item_disp(double x, double y, void* pWin) {
-    typedef struct Vec3 { f32 x,y,z; } Vec3;
-    extern void GXSetScissor(s32,s32,s32,s32);
-    extern void winIconSet(s32,Vec3*,Vec3*,void*);
-    extern void winFontSet(Vec3*,Vec3*,void*,char*);
+    extern void GXSetScissor(s32, s32, s32, s32);
+    extern void winIconSet(s32, Vec3*, Vec3*, void*);
+    extern void winFontSet(Vec3*, Vec3*, void*, char*, ...);
+    extern void winFontSetWidth(Vec3*, Vec3*, void*, f32, char*, ...);
     extern u16 FontGetMessageWidth(char*);
     extern void winTexSet(s32, Vec3*, Vec3*, void*);
     extern void winBookGX(double, double, void*, s32);
-    extern char str_msg_menu_sort_narabi_802f5e2c[];
-    extern u32 dat_80423758, dat_8042375c;
-    s32 sub = *(s32*)((s32)pWin + 0x210);
-    s32 count = sub ? *(u16*)((s32)pWin + 0x3DA) : pouchGetHaveItemCnt();
-    f32 scroll = *(f32*)((s32)pWin + 0x224 + sub * 4);
+    extern char str_msg_luigi_book1_txt1_802f5520[];
+    extern u32 dat_80423754;
+    extern u32 dat_80423758;
+    extern u32 dat_8042375c;
+    extern f32 float_125_804237f8;
+
+    u8* catalog;
+    s32 count;
     s32 i;
-    u32 color = dat_80423758;
-    Vec3 pos, scale;
-    GXSetScissor(0,0x6D,0x260,0xC0);
-    scale.x=1.0f; scale.y=1.0f; scale.z=1.0f;
-    for (i=0; i<count; i++) {
-        s32 item = sub ? *(u16*)((s32)pWin + 0x2E8 + i*2) : pouchHaveItem(i);
-        f32 rowY = (f32)y + 100.0f - (f32)(i/2)*38.0f;
-        f32 drawY = scroll + 20.0f + (rowY - 10.0f);
-        if (drawY > 240.0f) continue;
-        if (drawY < -240.0f) break;
-        if (sub == 0 && ((*(u16*)(itemDataTable + item*0x28 + 6) & 1) == 0)) winIconGrayInit();
-        else winIconInit();
-        pos.x = (f32)x + 20.0f + (f32)(i&1)*190.0f;
-        pos.y = drawY; pos.z = 0.0f;
-        winIconSet(*(s16*)(itemDataTable + item*0x28), &pos, &scale, &color);
-        winFontInit();
-        pos.x += 28.0f; pos.y -= 4.0f;
-        winFontSet(&pos, &scale, &color, msgSearch(*(char**)(itemDataTable + item*0x28 + 0x10)));
+    s32 item;
+    s32 enabled;
+    s32 disabled;
+    s32 row;
+    s32 column;
+    u8* keyItemPtr;
+    f32 scroll;
+    f32 rowY;
+    f32 drawY;
+    f32 px;
+    f32 py;
+    f32 width;
+    char* text;
+
+    u32 normalColor;
+    u32 disabledColor;
+    u32 iconColor0;
+    u32 iconColor1;
+    u32 iconColor2;
+    u32 iconColor3;
+    u32 fontColor;
+    u32* fontColorPtr;
+    u32 sortColor;
+    u32 sortIconColor;
+
+    Vec3 itemScaleNormal;
+    Vec3 itemScaleKey;
+    Vec3 itemScale;
+    Vec3 itemPos;
+    Vec3 itemFontScale;
+    Vec3 itemFontPos;
+    Vec3 upTexScale;
+    Vec3 upTexPos;
+    Vec3 upIconScale;
+    Vec3 upIconPos;
+    Vec3 downTexScale;
+    Vec3 downTexPos;
+    Vec3 downIconScale;
+    Vec3 downIconPos;
+    Vec3 sortFontScale;
+    Vec3 sortFontPos;
+    Vec3 sortIconScale;
+    Vec3 sortIconPos;
+
+    normalColor = dat_80423758;
+    disabledColor = dat_8042375c;
+    iconColor0 = dat_80423754;
+    iconColor1 = dat_80423754;
+    iconColor2 = dat_80423754;
+
+    if (*(s32*)((u8*)pWin + 0x210) == 0) {
+        count = pouchGetHaveItemCnt();
+    } else {
+        count = *(s16*)((u8*)pWin + 0x3DA);
     }
-    GXSetScissor(0,0,0x280,0x1E0);
-    {
-        s32 page = *(s32*)((s32)pWin + 0x21C + sub * 4);
-        s32 visibleStart = page * 10;
-        if (page > 0) {
-            winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
-            pos.x = (f32)x + 250.0f;
-            pos.y = (f32)y + 130.0f;
-            winTexSet(0x17, &pos, &scale, &color);
-            winIconInit();
-            winIconSet(0x86, &pos, &scale, &color);
+
+    GXSetScissor(0, 0x6D, 0x260, 0xC0);
+
+    catalog = (u8*)str_msg_luigi_book1_txt1_802f5520;
+    keyItemPtr = (u8*)pWin;
+
+    for (i = 0; i < count; i++, keyItemPtr += 2) {
+        /*
+         * Match the target schedule: quotient/remainder are formed before
+         * item selection.  The remainder stays live and becomes the 0xCC
+         * column offset later.
+         */
+        row = i / 2;
+        column = i % 2;
+
+        if (*(s32*)((u8*)pWin + 0x210) == 0) {
+            item = pouchHaveItem(i);
+        } else {
+            item = *(s16*)(keyItemPtr + 0x2E8);
         }
-        if (visibleStart + 10 < count) {
-            winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
-            pos.x = (f32)x + 250.0f;
-            pos.y = (f32)y - 105.0f;
-            winTexSet(0x17, &pos, &scale, &color);
-            winIconInit();
-            winIconSet(0x88, &pos, &scale, &color);
+
+        enabled = 0;
+        scroll = *(f32*)((u8*)pWin + 0x224 +
+                         *(s32*)((u8*)pWin + 0x210) * 4);
+
+        if (*(s32*)((u8*)pWin + 0x210) != 0) {
+            enabled = 1;
+        } else if ((*(u16*)(itemDataTable + item * 0x28 + 0x10) & 4) != 0) {
+            enabled = 1;
         }
+
+        rowY = y + 100.0f - (f32)(row * 0x26);
+        disabled = enabled == 0;
+        drawY = scroll + 20.0f + (rowY - 10.0f);
+
+        if (drawY > 240.0f) {
+            continue;
+        }
+        if (drawY < -240.0f) {
+            break;
+        }
+
+
+            if (disabled != 0) {
+                winIconGrayInit();
+            } else {
+                winIconInit();
+            }
+
+            if (*(s32*)((u8*)pWin + 0x210) == 0) {
+                itemScaleNormal = *(Vec3*)(catalog + 0x5F4);
+                itemScale = itemScaleNormal;
+            } else {
+                itemScaleKey = *(Vec3*)(catalog + 0x600);
+                itemScale = itemScaleKey;
+            }
+
+            column *= 0xCC;
+            itemPos.x = x - float_125_804237f8 + (f32)column;
+            itemPos.y = drawY;
+            itemPos.z = ((Vec3*)(catalog + 0x5E8))->z;
+
+            iconColor3 = iconColor2;
+            winIconSet(
+                *(s16*)(itemDataTable + item * 0x28 + 0x20),
+                &itemPos,
+                &itemScale,
+                &iconColor3);
+
+            winFontInit();
+
+            fontColorPtr = &normalColor;
+            if (disabled != 0) {
+                fontColorPtr = &disabledColor;
+            }
+            fontColor = *fontColorPtr;
+
+            itemFontPos.x = x - 105.0f + (f32)column;
+            itemFontPos.y = scroll + 20.0f + rowY;
+            itemFontPos.z = ((Vec3*)(catalog + 0x60C))->z;
+            itemFontScale = *(Vec3*)(catalog + 0x618);
+
+            winFontSetWidth(
+                &itemFontPos,
+                &itemFontScale,
+                &fontColor,
+                155.0f,
+                msgSearch(*(char**)(itemDataTable + item * 0x28 + 0x4)));
     }
-    {
-        char* sortText = msgSearch(str_msg_menu_sort_narabi_802f5e2c);
-        f32 width = 0.7f * (f32)FontGetMessageWidth(sortText);
-        winFontInit();
-        pos.x = (f32)x + 220.0f - width;
-        pos.y = (f32)y - 82.0f;
-        winFontSet(&pos, &scale, &color, sortText);
+
+    GXSetScissor(0, 0, 0x260, 0x1E0);
+
+    if (*(s32*)((u8*)pWin + 0x21C +
+                *(s32*)((u8*)pWin + 0x210) * 4) > 0) {
+        winTexInit(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
+
+        px = x + 250.0f;
+        py = y + 110.0f;
+        py = 18.0f + py;
+        py = 20.0f + py;
+
+        upTexPos.x = px;
+        upTexPos.y = py;
+        upTexPos.z = ((Vec3*)(catalog + 0x624))->z;
+        upTexScale = *(Vec3*)(catalog + 0x630);
+        winTexSet(0x17, &upTexPos, &upTexScale, &iconColor0);
+
         winIconInit();
-        pos.x -= 30.0f;
-        pos.y -= 8.0f;
-        winIconSet(0x219, &pos, &scale, &color);
+
+        upIconPos.x = px;
+        upIconPos.y = 20.0f + (y + 113.0f);
+        upIconPos.z = ((Vec3*)(catalog + 0x63C))->z;
+        upIconScale = *(Vec3*)(catalog + 0x648);
+        winIconSet(0x86, &upIconPos, &upIconScale, &iconColor1);
     }
-    if (*(f32*)((s32)pWin + 0x234) < 320.0f &&
-        *(f32*)((s32)pWin + 0x23C) > -240.0f) {
-        winBookGX(*(f32*)((s32)pWin + 0x234), *(f32*)((s32)pWin + 0x23C), pWin, 0);
+
+    if (*(s32*)((u8*)pWin + 0x21C +
+                *(s32*)((u8*)pWin + 0x210) * 4) * 10 + 10 < count) {
+        winTexInit(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
+
+        px = x + 250.0f;
+        py = 20.0f + ((y - 90.0f) - 15.0f);
+
+        downTexPos.x = px;
+        downTexPos.y = py;
+        downTexPos.z = ((Vec3*)(catalog + 0x654))->z;
+        downTexScale = *(Vec3*)(catalog + 0x660);
+        winTexSet(0x17, &downTexPos, &downTexScale, &iconColor2);
+
+        winIconInit();
+
+        downIconPos.x = px;
+        downIconPos.y = 20.0f + (y - 90.0f);
+        downIconPos.z = ((Vec3*)(catalog + 0x66C))->z;
+        downIconScale = *(Vec3*)(catalog + 0x678);
+        winIconSet(0x88, &downIconPos, &downIconScale, &iconColor2);
+    }
+
+    text = msgSearch((char*)(catalog + 0x90C));
+    width = 0.7f * (f32)FontGetMessageWidth(text);
+
+    winFontInit();
+
+    px = x + (220.0f - width);
+    sortFontPos.x = px;
+    sortFontPos.y = 20.0f + ((y - 92.0f) - 10.0f);
+    sortFontPos.z = ((Vec3*)(catalog + 0x684))->z;
+    sortFontScale = *(Vec3*)(catalog + 0x690);
+    sortColor = normalColor;
+
+    winFontSet(
+        &sortFontPos,
+        &sortFontScale,
+        &sortColor,
+        msgSearch((char*)(catalog + 0x90C)));
+
+    winIconInit();
+
+    sortIconPos.x = px - 30.0f;
+    sortIconPos.y = 20.0f + ((y - 100.0f) - 10.0f);
+    sortIconPos.z = ((Vec3*)(catalog + 0x69C))->z;
+    sortIconScale = *(Vec3*)(catalog + 0x6A8);
+    sortIconColor = dat_80423754;
+
+    winIconSet(0x219, &sortIconPos, &sortIconScale, &sortIconColor);
+
+    if (*(f32*)((u8*)pWin + 0x234) < 320.0f &&
+        *(f32*)((u8*)pWin + 0x23C) > -240.0f) {
+        winBookGX(
+            *(f32*)((u8*)pWin + 0x234),
+            *(f32*)((u8*)pWin + 0x23C),
+            pWin,
+            0);
     }
 }
 
@@ -762,14 +948,18 @@ void itemUseDisp(void* pWinMgr) {
     winTexSet(0, &pos, &scale, &white);
 }
 
-u8 itemUseDisp2(void* pWinMgr) {
+void itemUseDisp2(void* pWinMgr) {
     typedef struct LocalVec {
         f32 x;
         f32 y;
         f32 z;
     } LocalVec;
-    extern void FontGetMessageWidthLine(char* msg, u16* width);
+    extern void* winGetPtr(void);
+    extern s32 winMgrAction(s32 entryId);
+    extern char* msgSearch(char* msg);
+    extern u32 FontGetMessageWidthLine(char* msg, u16* width);
     extern void winMgrSetSize(s32 entryId, s32 x, s32 y, s32 width, s32 height);
+    extern void winFontInit(void);
     extern void winFontSetPitch(LocalVec* position, LocalVec* scale, u32* color, char* msg, f32 pitch);
     extern u32 dat_804237b0;
     extern LocalVec vec3_802f5df0;
@@ -782,6 +972,7 @@ u8 itemUseDisp2(void* pWinMgr) {
     u32 color;
     LocalVec scale;
     LocalVec position;
+    u32 measuredWidth;
     f32 msgWidth;
     f32 maxWidth;
 
@@ -789,8 +980,8 @@ u8 itemUseDisp2(void* pWinMgr) {
     color = dat_804237b0;
     if (winMgrAction(*(s32*)((s32)win + 0x1214)) == 0) {
         msg = msgSearch(str_msg_window_select_5_802f5dfc);
-        FontGetMessageWidthLine(msg, width);
-        msgWidth = (f32)width[0];
+        measuredWidth = FontGetMessageWidthLine(msg, width);
+        msgWidth = (f32)(u16)measuredWidth;
         winMgrSetSize(
             *(s32*)((s32)win + 0x1214),
             *(s32*)((s32)pWinMgr + 0x18),
@@ -813,7 +1004,6 @@ u8 itemUseDisp2(void* pWinMgr) {
         position.z = vec3_802f5de4.z;
         winFontSetPitch(&position, &scale, &color, msg, maxWidth);
     }
-    return 0;
 }
 
 u16 menu_skip_list[18] = {

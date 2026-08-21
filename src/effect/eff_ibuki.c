@@ -221,6 +221,8 @@ void effIbukiDisp(s32 cameraId, void* effect) {
     extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
     extern void GXSetArray(s32,void*,s32);
     extern void GXCallDisplayList(void*,u32);
+    extern void GXSetChanMatColor(s32,void*);
+    extern void GXBegin(s32,s32,s16);
     extern u8 ibuki_vertex_tbl[];
     extern u8 ibuki_texcoord0_tbl[];
     extern u8 ibuki_texcoord1_tbl[];
@@ -228,6 +230,14 @@ void effIbukiDisp(s32 cameraId, void* effect) {
     extern u8 ibuki_dl_0_size_tbl[];
     extern u8 dat_8041de80[];
     extern u8 dat_8041dea0[];
+    extern u32 dat_8042849c;
+    extern f32 float_0_804284a0;
+    extern f32 float_0p02_804284a4;
+    extern f32 float_deg2rad_804284a8;
+    extern f32 float_16_804284ac;
+    extern f32 float_0p5_804284b0;
+    extern f32 float_8_804284b4;
+    extern f32 float_2_804284b8;
 
     s32* work = *(s32**)((u8*)effect + 0xC);
     u8* camera = camGetPtr(cameraId);
@@ -306,6 +316,70 @@ void effIbukiDisp(s32 cameraId, void* effect) {
     for (i=0;i<4;i++) {
         GXCallDisplayList(ibuki_dl_0_tbl[i],
                           (u32)ibuki_dl_0_size_tbl[i] << 5);
+    }
+
+    GXSetNumChans(1);
+    GXSetChanCtrl(4,0,0,0,0,0,2);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0,1,4,0x3C,0,0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0,0,0,4);
+    GXSetTevColorOp(0,0,0,0,1,0);
+    GXSetTevAlphaOp(0,0,0,0,1,0);
+    GXSetTevColorIn(0,15,15,15,10);
+    GXSetTevAlphaIn(0,7,5,4,7);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9,1);
+    GXSetVtxDesc(13,1);
+    GXSetVtxAttrFmt(0,9,1,4,0);
+    GXSetVtxAttrFmt(0,13,1,4,0);
+    effGetTexObj(99,texture);
+    GXLoadTexObj(texture,0);
+
+    {
+        f32 halfWidth = -float_16_804284ac * float_0p5_804284b0;
+        s32* particle = work;
+
+        for (i = 1; i < *(s32*)((u8*)effect + 8); i++, particle += 0x15) {
+            s32 particleAlpha = particle[0x23] * alpha;
+            particleAlpha = particleAlpha / 255 + (particleAlpha >> 31);
+            if (particle[0x29] == 0) {
+                PSMTXTrans(trans,(f32)particle[0x16],(f32)particle[0x17],(f32)particle[0x18]);
+                PSMTXRotRad(rotate,'x',float_deg2rad_804284a8 * (f32)particle[0x1C]);
+                PSMTXConcat(trans,rotate,trans);
+                PSMTXRotRad(rotate,'y',float_deg2rad_804284a8 * (f32)particle[0x1D]);
+                PSMTXConcat(trans,rotate,trans);
+                PSMTXScale(scale,(f32)particle[0x20],(f32)particle[0x20],(f32)particle[0x20]);
+                PSMTXConcat(trans,scale,trans);
+                PSMTXConcat(model,trans,trans);
+                GXLoadPosMtxImm(trans,0);
+                GXSetCurrentMtx(0);
+                color = (dat_8042849c & 0xFFFFFF00) |
+                        (u8)(particleAlpha - (particleAlpha >> 31));
+                GXSetChanMatColor(4,&color);
+                GXBegin(0x80,0,4);
+                *(volatile f32*)0xCC008000 = halfWidth;
+                *(volatile f32*)0xCC008000 = float_8_804284b4;
+                *(volatile f32*)0xCC008000 = float_0_804284a0;
+                *(volatile f32*)0xCC008000 = float_0_804284a0;
+                *(volatile f32*)0xCC008000 = float_0_804284a0;
+                *(volatile f32*)0xCC008000 = float_8_804284b4;
+                *(volatile f32*)0xCC008000 = float_8_804284b4;
+                *(volatile f32*)0xCC008000 = float_0_804284a0;
+                *(volatile f32*)0xCC008000 = float_2_804284b8;
+                *(volatile f32*)0xCC008000 = float_0_804284a0;
+                *(volatile f32*)0xCC008000 = float_8_804284b4;
+                *(volatile f32*)0xCC008000 = halfWidth;
+                *(volatile f32*)0xCC008000 = float_0_804284a0;
+                *(volatile f32*)0xCC008000 = float_2_804284b8;
+                *(volatile f32*)0xCC008000 = float_2_804284b8;
+                *(volatile f32*)0xCC008000 = halfWidth;
+                *(volatile f32*)0xCC008000 = halfWidth;
+                *(volatile f32*)0xCC008000 = float_0_804284a0;
+                *(volatile f32*)0xCC008000 = float_0_804284a0;
+                *(volatile f32*)0xCC008000 = float_2_804284b8;
+            }
+        }
     }
 }
 

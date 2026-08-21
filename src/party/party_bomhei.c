@@ -909,16 +909,27 @@ void* check_front(void* pParty) {
     f32 movedir;
     f32 angle;
     f32 limit;
-    s32 i;
+    s32 angleOffsets[8];
+    s32* anglePtr;
+    u32 i;
     s32 valid;
 
     base = vec3_802cb398;
     height = float_0p8_804212d8 * *(f32*)((s32)pParty + 0xF0);
+    angleOffsets[0] = base[6];
+    angleOffsets[1] = base[7];
+    angleOffsets[2] = base[8];
+    angleOffsets[3] = base[9];
+    angleOffsets[4] = base[10];
+    angleOffsets[5] = base[11];
+    angleOffsets[6] = base[12];
+    angleOffsets[7] = base[13];
     movedir = partyToMovedir(*(f32*)((s32)pParty + 0x10C), pParty);
     savedHit = 0;
+    anglePtr = angleOffsets;
 
     for (i = 0; i < 8; i++) {
-        angle = movedir + (f32)((s32)base[i + 6]);
+        angle = movedir + (f32)*anglePtr;
         sincosf(angle, &probe.dir.x, &probe.dir.z);
         probe.dir.y = float_0_804212dc;
         probe.pos.x = *(f32*)((s32)pParty + 0x58);
@@ -928,7 +939,7 @@ void* check_front(void* pParty) {
         hit = hitCheckVecFilter(&probe, 0);
         if (hit != 0) {
             camera = camGetPtr(0);
-            angle = revise360(angle - *(f32*)((s32)camera + 0x114));
+            angle = revise360((movedir + (f32)*anglePtr) - *(f32*)((s32)camera + 0x114));
             limit = float_50_804212f4;
             if (((angle < float_60_804212e4) || (float_120_804212e8 < angle)) &&
                 ((angle < float_240_804212ec) || (float_300_804212f0 < angle))) {
@@ -952,6 +963,7 @@ void* check_front(void* pParty) {
                 }
             }
         }
+        anglePtr++;
     }
 
     probe.pos.x = *(f32*)((s32)pParty + 0x58);
@@ -1002,6 +1014,7 @@ void* check_front(void* pParty) {
 
     return savedHit;
 }
+
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 

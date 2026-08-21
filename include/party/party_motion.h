@@ -2,7 +2,9 @@
 
 #include <dolphin/types.h>
 
+void unk_80151d20(void);
 void N_partyFollowCloseOn(void* party);
+void N_partyFollowCloseOff(void* party);
 u8 party_motion_stay(s32 pParty);
 u8 party_motion_homing_walk(s32 pParty);
 u8 party_motion_homing_fly(s32 pParty);

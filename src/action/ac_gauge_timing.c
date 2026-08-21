@@ -69,31 +69,10 @@ s32 battleAcMain_GaugeTiming(void* battleWork) {
         *(s32*)(bw + 0x1C9C) = *(u8*)(extra + 0x16) == 0 ? 1000 : 1001;
     }
     state = *(s32*)(bw + 0x1C9C);
-    if (state == 1002) {
-        if (--*(s32*)(bw + 0x1C98) > -1) return 1;
-        if (*(u8*)(extra + 0x14) == 0) *(s32*)(bw + 0x1CB8) = 0;
-        else { *(s32*)(bw + 0x1CB8) = 2; (*(s32*)(bw + 0x1CB4))++; }
-        *(u32*)(bw + 0x1CC0) |= 1;
-        return 0;
-    }
-    if (state == 1003 || state == 1004) {
-        if (state == 1003) {
-            *(u32*)(bw + 0x1CC0) |= 1;
-            *(s32*)(extra + 0x28) = 0x3C;
-            *(s32*)(bw + 0x1C9C) = 1004;
-            if (*(s32*)(extra + 0x24) != -1) psndSFXOff(*(s32*)(extra + 0x24));
-        }
-        if (--*(s32*)(extra + 0x28) > 0) return 1;
-        *(s32*)(bw + 0x1C9C) = 1005;
-        return 1;
-    }
-    if (state == 1005) {
-        *(s32*)(bw + 0x1CA0) = 0;
-        *(s32*)(bw + 0x1CA8) = 0;
-        *(s32*)(bw + 0x1CA4) = 0;
-        *(s32*)(bw + 0x1CAC) = 0;
-        return 0;
-    }
+    if (state == 1002) goto state_1002;
+    if (state == 1003 || state == 1004) goto state_1003_1004;
+    if (state == 1005) goto state_1005;
+    if (state != 1000 && state != 1001) return 1;
     (*(s32*)extra)++;
     if (*(u8*)(extra + 0x15) == 1) {
         if (*(u8*)(extra + 0x16) == 0) {
@@ -133,16 +112,50 @@ s32 battleAcMain_GaugeTiming(void* battleWork) {
         else if (angle <= 180.0f) *(f32*)(extra + 4) = (f32)intplGetValue(100.0, 0.0, 2, (s32)(angle - 90.0f), 90);
         else if (angle <= 270.0f) *(f32*)(extra + 4) = (f32)intplGetValue(0.0, 100.0, 5, (s32)(angle - 180.0f), 90);
         else *(f32*)(extra + 4) = (f32)intplGetValue(100.0, 0.0, 2, (s32)(angle - 270.0f), 90);
+        if (*(s32*)(extra + 0x1C) < 1) {
+            if ((*(u32*)(bw + 0x1C94) & 2) && (s32)*(f32*)(extra + 4) < 1) {
+                (*(s32*)(extra + 0x20))++;
+                *(f32*)(extra + 4) = 0.0f;
+                *(s32*)(extra + 0x10) = 0;
+                *(s32*)(extra + 0x1C) = (*(u32*)(bw + 0x1C94) & 2) ? 15 : 30;
+                goto input_done;
+            }
+        } else {
+            (*(s32*)(extra + 0x1C))--;
+            if (*(s32*)(extra + 0x1C) > 0) {
+                *(f32*)(extra + 4) = 0.0f;
+                *(s32*)(extra + 0x10) = 0;
+                goto input_done;
+            }
+        }
         *(s32*)(extra + 0x10) = *(f32*)(extra + 4) >= (f32)params[3];
     } else {
-        *(f32*)(extra + 4) = ((f32)params[4] / 100.0f) * (f32)*(s32*)(extra + 8) + 50.0f;
-        if (*(u32*)(bw + 0x1C94) & 1) *(f32*)(extra + 4) = (f32)((s32)*(f32*)(extra + 4) % 100);
+        if (*(s32*)(extra + 0x1C) < 1 || --*(s32*)(extra + 0x1C) < 1) {
+            s32 value;
+            *(f32*)(extra + 4) = ((f32)params[4] / 100.0f) * (f32)*(s32*)(extra + 8) + 50.0f;
+            if (*(u32*)(bw + 0x1C94) & 1) {
+                value = (s32)*(f32*)(extra + 4);
+                if ((*(u32*)(bw + 0x1C94) & 2) && *(s32*)(extra + 0x20) < value / 100) {
+                    *(s32*)(extra + 0x20) = value / 100;
+                    *(f32*)(extra + 4) = 0.0f;
+                    *(s32*)(extra + 0x10) = 0;
+                    *(s32*)(extra + 0x1C) = (*(u32*)(bw + 0x1C94) & 2) ? 15 : 30;
+                    goto input_done;
+                }
+                *(f32*)(extra + 4) = (f32)(value % 100);
+            }
+        } else {
+            *(f32*)(extra + 4) = 0.0f;
+            *(s32*)(extra + 0x10) = 0;
+            goto input_done;
+        }
         {
             f32 distance = *(f32*)(extra + 4) - 50.0f;
             if (distance < 0.0f) distance = -distance;
             *(s32*)(extra + 0x10) = distance <= 12.0f;
         }
     }
+input_done:
     if (autoCommand != 0 && *(s32*)(extra + 0x10) != 0) *(u8*)(extra + 0x15) = 2;
     if (*(u8*)(extra + 0x15) == 2) {
         if (*(s32*)(extra + 0x10) == 0) *(s32*)(bw + 0x1CB8) = 0;
@@ -150,6 +163,31 @@ s32 battleAcMain_GaugeTiming(void* battleWork) {
         *(s32*)(bw + 0x1C9C) = 1003;
     }
     return 1;
+
+state_1002:
+    if (--*(s32*)(bw + 0x1C98) > -1) return 1;
+    if (*(u8*)(extra + 0x14) == 0) *(s32*)(bw + 0x1CB8) = 0;
+    else { *(s32*)(bw + 0x1CB8) = 2; (*(s32*)(bw + 0x1CB4))++; }
+    *(u32*)(bw + 0x1CC0) |= 1;
+    return 0;
+
+state_1003_1004:
+    if (state == 1003) {
+        *(u32*)(bw + 0x1CC0) |= 1;
+        *(s32*)(extra + 0x28) = 0x3C;
+        *(s32*)(bw + 0x1C9C) = 1004;
+        if (*(s32*)(extra + 0x24) != -1) psndSFXOff(*(s32*)(extra + 0x24));
+    }
+    if (--*(s32*)(extra + 0x28) > 0) return 1;
+    *(s32*)(bw + 0x1C9C) = 1005;
+    return 1;
+
+state_1005:
+    *(s32*)(bw + 0x1CA0) = 0;
+    *(s32*)(bw + 0x1CA8) = 0;
+    *(s32*)(bw + 0x1CA4) = 0;
+    *(s32*)(bw + 0x1CAC) = 0;
+    return 0;
 }
 
 s32 battleAcResult_GaugeTiming(void* wp) {

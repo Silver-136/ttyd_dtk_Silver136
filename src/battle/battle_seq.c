@@ -1427,7 +1427,7 @@ void _rule_disp(void) {
     extern s32 evtGetValue(void*, s32);
     extern char* msgSearch(char*);
     extern s32 sprintf(char*, const char*, ...);
-    extern u32 FontGetMessageWidthLine(char*, s16*);
+    extern u32 FontGetMessageWidthLine(char*, u16*);
     extern void windowDispGX_Waku_col(f32, f32, f32, f32, f32, u16, u32*);
     extern void FontDrawStart(void);
     extern void FontDrawMessage(u32, u32, char*);
@@ -1435,39 +1435,39 @@ void _rule_disp(void) {
     extern char* _rule_msg_table_2bu[];
     extern char* _rule_msg_table_after[];
     extern const u32 dat_80422554;
-    char buffer[256];
     void* information;
-    char* message;
-    s16 lines[2];
+    u16 lines[2];
     u32 color;
+    char buffer[256];
     u32 dimensions;
-    u32 width;
     f32 x;
-    u8 condition;
-    u8 parameter;
 
     information = *(void**)((s32)_battleWorkPointer + 0x2738);
-    condition = *(u8*)((s32)information + 0x18);
-    parameter = *(u8*)((s32)information + 0x1A);
-    if (evtGetValue(0, -170000000) < 172) {
-        if (evtGetValue(0, -170000444) < 11) {
-            message = msgSearch(_rule_msg_table_1bu[condition]);
+    if (evtGetValue(0, -170000000) < 0xAC) {
+        if (evtGetValue(0, -170000444) < 0xB) {
+            sprintf(buffer,
+                    msgSearch(_rule_msg_table_1bu[*(u8*)((s32)information + 0x18)]),
+                    *(u8*)((s32)information + 0x1A));
         } else {
-            message = msgSearch(_rule_msg_table_2bu[condition]);
+            sprintf(buffer,
+                    msgSearch(_rule_msg_table_2bu[*(u8*)((s32)information + 0x18)]),
+                    *(u8*)((s32)information + 0x1A));
         }
     } else {
-        message = msgSearch(_rule_msg_table_after[condition]);
+        sprintf(buffer,
+                msgSearch(_rule_msg_table_after[*(u8*)((s32)information + 0x18)]),
+                *(u8*)((s32)information + 0x1A));
     }
-    sprintf(buffer, message, parameter);
     dimensions = FontGetMessageWidthLine(buffer, lines);
     lines[0]++;
-    width = dimensions & 0xFFFF;
     x = 0.0f - (f32)((dimensions >> 1) & 0x7FFF);
     color = dat_80422554;
-    windowDispGX_Waku_col(x - 10.0f, 94.0f, (f32)(width + 20),
-                          (f32)(lines[0] * 29 + 3), 10.0f, 0, &color);
+    windowDispGX_Waku_col(x - 10.0f, 94.0f,
+                          (f32)((dimensions & 0xFFFF) + 0x14),
+                          (f32)(lines[0] * 0x1D + 3),
+                          10.0f, 0, &color);
     FontDrawStart();
-    FontDrawMessage((u32)x, (u32)(120.0f - 29.0f), buffer);
+    FontDrawMessage((u32)x, (u32)120.0f - 0x1D, buffer);
 }
 
 void btlseqPhase(void* battleWork) {
@@ -1692,6 +1692,11 @@ void btlseqAct(void* battleWork) {
     extern s32 BattleStatusChangeAnnouceMain(void*);
     extern void BattleStatusChangeMsgAdjust(void*);
     extern void BtlUnit_SetStatus(void*, s32, s32, s32);
+    extern void BattleConsumeReserveItem(void);
+    extern void BattleAudience_PerAct(void);
+    extern u32 BattleAudience_CheckReaction(void);
+    extern u32 BattleBreakSlot_CheckReaction(void);
+    extern s32 evtCheckID(s32);
     extern u8 btldefaultevt_BiribiriMove[];
     extern u8 btldefaultevt_CantMoveZeroGravity[];
     void* unit;
@@ -1822,7 +1827,58 @@ void btlseqAct(void* battleWork) {
                     }
                 }
             }
+            BattleConsumeReserveItem();
+            *(u32*)((s32)battleWork + 0xEF4) &= ~4;
+            BattleAudience_PerAct();
             BattleIncSeq(battleWork, 6);
+        case 0x600000A:
+            if ((BattleAudience_CheckReaction() & 0xFF) == 0 &&
+                (BattleCheckConcluded(battleWork) ||
+                 (BattleBreakSlot_CheckReaction() & 0xFF) == 0)) {
+                BattleIncSeq(battleWork, 6);
+            } else {
+                break;
+            }
+        case 0x600000B:
+            messageBusy = BattleStatusChangeMsgMain(battleWork);
+            announceBusy = BattleStatusChangeAnnouceMain(battleWork);
+            if (messageBusy != 0 || announceBusy != 0) {
+                break;
+            }
+            BattleIncSeq(battleWork, 6);
+        case 0x600000C:
+            if (!BattleWaitAllActiveEvtEnd(battleWork)) {
+                break;
+            }
+            unit = BattleGetUnitPtr(battleWork, id);
+            if (unit != NULL) {
+                *(s32*)((s32)unit + 0x2CC) = 0;
+                if (*(void**)((s32)unit + 0x2C8) != NULL) {
+                    event = evtEntry(*(void**)((s32)unit + 0x2C8), 10, 0);
+                    if (event != NULL) {
+                        *(s32*)((s32)unit + 0x2CC) = *(s32*)((s32)event + 0x15C);
+                        *(s32*)((s32)event + 0x160) = *(s32*)unit;
+                        if (*(s32*)((s32)unit + 0x290) != 0) {
+                            evtDeleteID(*(s32*)((s32)unit + 0x290));
+                            *(s32*)((s32)unit + 0x290) = 0;
+                        }
+                    }
+                }
+            }
+            BattleIncSeq(battleWork, 6);
+        case 0x600000D:
+            unit = BattleGetUnitPtr(battleWork, id);
+            if (unit != NULL && *(s32*)((s32)unit + 0x2CC) != 0) {
+                if (evtCheckID(*(s32*)((s32)unit + 0x2CC))) {
+                    break;
+                }
+                *(s32*)((s32)unit + 0x2CC) = 0;
+            }
+            BattleIncSeq(battleWork, 6);
+        case 0x600000E:
+            if (BattleWaitAllActiveEvtEnd(battleWork)) {
+                BattleIncSeq(battleWork, 5);
+            }
             break;
     }
 }

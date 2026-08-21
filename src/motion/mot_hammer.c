@@ -18,8 +18,13 @@ s32 marioGetHammerLevel(void) {
 u8 mot_hammer(void) {
     extern void* hitEstimate(s32* kind);
     extern u32 hitGetAttr(void* hit);
+    extern void* mobjHitObjPtrToPtr(void* hit);
+    extern s32 strcmp(const char*, const char*);
     extern f32 toMovedir(f32 angle);
     extern f32 toMovedir2(f32 angle, f32 offset);
+    extern void movePos(f32*, f32*, f32, f32);
+    extern void* effKemuTestEntry(f64, f64, f64, f64, u32);
+    extern s32 pouchEquipCheckBadge(s32);
     extern void* evtEntry(void* code, s32 priority, s32 flags);
     extern void marioChgMot(s32 motion);
     extern f32 float_0_80420ab8;
@@ -27,30 +32,60 @@ u8 mot_hammer(void) {
     extern f32 float_270_80420ac4;
     extern f32 float_180_80420ac8;
     extern f32 float_30_80420ae4;
+    extern f32 float_5_80420adc;
+    extern f32 float_36_80420aec;
+    extern f32 float_20_80420af0;
+    extern f32 float_37_80420af8;
+    extern f32 float_neg2_80420b08;
+    extern f32 float_1_80420b48;
     extern const f32 float_neg30_80420b7c;
+    extern f32 float_16_80420bb0;
+    extern f32 float_53_80420bb4;
+    extern f32 float_25_80420bb8;
+    extern f32 float_neg3_80420bbc;
+    extern f32 float_31_80420bc0;
+    extern f32 float_neg6_80420bc4;
+    extern f32 float_28_80420bc8;
     extern char str_M_H_1_80420b88;
     extern char str_M_H_2_80420b80;
     extern char str_M_H_4_80420b98;
     extern char str_M_H_5_80420b90;
     extern char str_M_H_7_80420ba8;
     extern char str_M_H_8_80420ba0;
+    extern const char str_MOBJ_Lv1Block_802c3f04[];
+    extern const char str_MOBJ_Lv1BigBlock_802c3f14[];
+    extern const char str_MOBJ_Lv2Block_802c3f28[];
+    extern const char str_MOBJ_Lv2BigBlock_802c3f38[];
+    extern const char str_MOBJ_Lv3Block_802c3f4c[];
+    extern const char str_MOBJ_Lv3BigBlock_802c3f5c[];
+    extern s32 se_data[];
     extern s32 lv1quake_evt;
     extern s32 lv2quake_evt;
     extern s32 lv3quake_evt;
 
     void* player = marioGetPtr();
     void* hit;
+    void* mobj;
     f32 angle;
     f32 side;
+    f32 effectX;
+    f32 effectY;
+    f32 effectZ;
     s32 kind[2];
     s32 hammerLevel;
     s32 frame;
     s32 impact;
+    s32 effectType;
+    s32 soundId;
+    s32 tries;
+    s32 value;
+    char* objectName;
 
 #define FLAGS (*(u32*)((s32)player + 0x0))
 #define DISP_FLAGS (*(u32*)((s32)player + 0x4))
 #define TRIG_FLAGS (*(u32*)((s32)player + 0xC))
 #define POSE_TIME (*(u16*)((s32)player + 0x28))
+#define HAMMER_SFX (*(s8*)((s32)player + 0x3A))
 #define SUBMOTION (*(s32*)((s32)player + 0x44))
 #define TIMER (*(s32*)((s32)player + 0x48))
 #define AIR_TIMER (*(s16*)((s32)player + 0x50))
@@ -71,14 +106,10 @@ u8 mot_hammer(void) {
         TRIG_FLAGS &= ~1;
         FLAGS &= ~0xF0000;
         FLAGS |= 0x80;
-
         angle = float_0_80420ab8;
         if ((DISP_FLAGS & 0x80000000) != 0) {
-            if (DISP_DIR >= float_90_80420ac0 && DISP_DIR <= float_270_80420ac4) {
-                angle = float_30_80420ae4;
-            } else {
-                angle = float_neg30_80420b7c;
-            }
+            angle = (DISP_DIR >= float_90_80420ac0 && DISP_DIR <= float_270_80420ac4)
+                        ? float_30_80420ae4 : float_neg30_80420b7c;
         }
         if (DISP_DIR >= float_90_80420ac0 && DISP_DIR <= float_270_80420ac4) {
             angle = revise360(float_180_80420ac8 + angle);
@@ -91,16 +122,32 @@ u8 mot_hammer(void) {
         SUBMOTION = 0;
         BASE_SPEED = float_0_80420ab8;
         HAMMER_HIT = 0;
-
         hit = hitEstimate(kind);
         HAMMER_HIT = hit;
         if (hit != 0) {
             side = (DISP_FLAGS & 0x80000000) != 0 ? float_neg30_80420b7c : float_0_80420ab8;
-            if (DISP_DIR >= float_90_80420ac0 && DISP_DIR <= float_270_80420ac4) {
-                VIEW_DIR = toMovedir2(float_180_80420ac8, side);
-            } else {
-                VIEW_DIR = toMovedir2(float_0_80420ab8, side);
+            VIEW_DIR = toMovedir2((DISP_DIR >= float_90_80420ac0 && DISP_DIR <= float_270_80420ac4)
+                                      ? float_180_80420ac8 : float_0_80420ab8,
+                                  side);
+            HAMMER_ANGLE = revise360((DISP_DIR >= float_90_80420ac0 && DISP_DIR <= float_270_80420ac4)
+                                         ? float_180_80420ac8 + side : side);
+        }
+
+        if (hit != 0 && (hitGetAttr(hit) & 0x80000000) != 0) {
+            mobj = mobjHitObjPtrToPtr(hit);
+            objectName = (char*)((s32)mobj + 0x15);
+            value = 0;
+            if (strcmp(objectName, str_MOBJ_Lv1Block_802c3f04) == 0 ||
+                strcmp(objectName, str_MOBJ_Lv1BigBlock_802c3f14) == 0) {
+                value = (*(s8*)((s32)pouchGetPtr() + 0x99) > 0);
+            } else if (strcmp(objectName, str_MOBJ_Lv2Block_802c3f28) == 0 ||
+                       strcmp(objectName, str_MOBJ_Lv2BigBlock_802c3f38) == 0) {
+                value = (*(s8*)((s32)pouchGetPtr() + 0x99) > 1);
+            } else if (strcmp(objectName, str_MOBJ_Lv3Block_802c3f4c) == 0 ||
+                       strcmp(objectName, str_MOBJ_Lv3BigBlock_802c3f5c) == 0) {
+                value = (*(s8*)((s32)pouchGetPtr() + 0x99) > 2);
             }
+            if (value != 0) kind[0] = 0;
         }
 
         hammerLevel = pouchGetHammerLv();
@@ -111,7 +158,6 @@ u8 mot_hammer(void) {
         } else if (hammerLevel == 3) {
             marioChgPose(kind[0] == 7 ? &str_M_H_8_80420ba0 : &str_M_H_7_80420ba8);
         }
-
         if (kind[0] == 0) {
             FLAGS &= ~0x800;
         } else {
@@ -122,42 +168,80 @@ u8 mot_hammer(void) {
         HIT_KIND = kind[0];
     }
 
-    if (HAMMER_ANGLE >= float_90_80420ac0 && HAMMER_ANGLE <= float_270_80420ac4) {
-        DISP_DIR = float_180_80420ac8;
-    } else {
-        DISP_DIR = float_0_80420ab8;
-    }
+    DISP_DIR = (HAMMER_ANGLE >= float_90_80420ac0 && HAMMER_ANGLE <= float_270_80420ac4)
+                   ? float_180_80420ac8 : float_0_80420ab8;
     DISP_TARGET = DISP_DIR;
     WORLD_DIR = toMovedir(HAMMER_ANGLE);
     VIEW_DIR = WORLD_DIR;
-
     impact = 0;
     if ((FLAGS & 0x800) != 0) {
         frame = TIMER <= HIT_TIME ? TIMER : HIT_TIME;
-        if (TIMER == HIT_TIME) {
-            impact = 1;
-        }
+        if (TIMER == HIT_TIME) impact = 1;
     } else {
         frame = TIMER <= 10 ? TIMER : 10;
-        if (TIMER == 10) {
-            impact = 1;
-        }
+        if (TIMER == 10) impact = 1;
     }
     POSE_TIME = frame;
     animPoseSetLocalTime((f32)frame, POSE_IDS[marioAnimeId()]);
 
     if (impact) {
         hammerLevel = *(s8*)((s32)pouchGetPtr() + 0x99);
-        if (hammerLevel == 1) {
-            evtEntry(&lv1quake_evt, 0, 0);
-        } else if (hammerLevel == 2) {
-            evtEntry(&lv2quake_evt, 0, 0);
-        } else if (hammerLevel == 3) {
-            evtEntry(&lv3quake_evt, 0, 0);
-        }
+        if (hammerLevel == 1) evtEntry(&lv1quake_evt, 0, 0);
+        else if (hammerLevel == 2) evtEntry(&lv2quake_evt, 0, 0);
+        else if (hammerLevel == 3) evtEntry(&lv3quake_evt, 0, 0);
         SUBMOTION = 1;
         INTERACT = HAMMER_HIT;
-        psndSFXOn_3D(0x15E + hammerLevel, POS);
+
+        effectX = POS[0];
+        effectY = POS[1];
+        effectZ = POS[2];
+        effectType = -1;
+        if ((DISP_FLAGS & 0x80000000) == 0) {
+            if (HIT_KIND == 5) {
+                movePos(&effectX, &effectZ, float_31_80420bc0, toMovedir2(DISP_TARGET, float_0_80420ab8));
+                effectY += float_5_80420adc; effectType = 0x15;
+            } else if (HIT_KIND == 7) {
+                movePos(&effectX, &effectZ, float_16_80420bb0, toMovedir2(DISP_TARGET, float_0_80420ab8));
+                effectY += float_53_80420bb4; effectType = 0x16;
+            } else if (HIT_KIND == 4) {
+                movePos(&effectX, &effectZ, float_30_80420ae4, toMovedir2(DISP_TARGET, float_0_80420ab8));
+                effectY += float_30_80420ae4; effectType = 0x16;
+            } else if (HIT_KIND == 0 || HIT_KIND == 6) {
+                movePos(&effectX, &effectZ, float_25_80420bb8, toMovedir2(DISP_TARGET, float_0_80420ab8));
+                effectY += float_neg3_80420bbc; effectType = 0x15;
+            }
+        } else {
+            if (HIT_KIND == 5) {
+                movePos(&effectX, &effectZ, float_36_80420aec, toMovedir2(DISP_TARGET, float_neg6_80420bc4));
+                effectY += float_20_80420af0; effectType = 0x16;
+            } else if (HIT_KIND == 7) {
+                movePos(&effectX, &effectZ, float_16_80420bb0, toMovedir2(DISP_TARGET, float_neg2_80420b08));
+                effectY += float_53_80420bb4; effectType = 0x16;
+            } else if (HIT_KIND == 4) {
+                movePos(&effectX, &effectZ, float_37_80420af8, toMovedir2(DISP_TARGET, float_neg6_80420bc4));
+                effectY += float_28_80420bc8; effectType = 0x16;
+            } else if (HIT_KIND == 0 || HIT_KIND == 6) {
+                movePos(&effectX, &effectZ, float_30_80420ae4, toMovedir2(DISP_TARGET, float_neg6_80420bc4));
+                effectY += float_neg3_80420bbc; effectType = 0x15;
+            }
+        }
+        if (effectType > 0) {
+            effKemuTestEntry(effectX, effectY, effectZ, float_1_80420b48, effectType);
+        }
+
+        psndSFXOn_3D(0x15D + hammerLevel, POS);
+        soundId = 0x161;
+        for (tries = 0; tries < 10; tries++) {
+            if (pouchEquipCheckBadge(se_data[HAMMER_SFX]) != 0) {
+                soundId = se_data[HAMMER_SFX + 1];
+                HAMMER_SFX += 2;
+                if (HAMMER_SFX > 9) HAMMER_SFX -= 10;
+                break;
+            }
+            HAMMER_SFX += 2;
+            if (HAMMER_SFX > 9) HAMMER_SFX -= 10;
+        }
+        psndSFXOn_3D(soundId, POS);
     }
 
     TIMER++;
@@ -165,26 +249,6 @@ u8 mot_hammer(void) {
         FLAGS &= ~0x80;
         marioChgMot(0);
     }
-
-#undef HIT_KIND
-#undef HAMMER_ANGLE
-#undef HIT_TIME
-#undef POSE_IDS
-#undef HAMMER_HIT
-#undef INTERACT
-#undef DISP_TARGET
-#undef DISP_DIR
-#undef VIEW_DIR
-#undef WORLD_DIR
-#undef BASE_SPEED
-#undef POS
-#undef AIR_TIMER
-#undef TIMER
-#undef SUBMOTION
-#undef POSE_TIME
-#undef TRIG_FLAGS
-#undef DISP_FLAGS
-#undef FLAGS
     return 0;
 }
 
@@ -608,12 +672,17 @@ void* hitEstimate(s32* outKind) {
 
     typedef struct Vec { f32 x, y, z; } Vec;
     typedef struct Probe {
-        Vec base;
-        Vec pos;
-        Vec dir;
-        u8 pad[0x18];
+        u8 pad[0xC];
+        Vec start;
+        Vec end;
+        Vec normal;
+        Vec hitPos;
         f32 radius;
     } Probe;
+    extern const Vec vec3_802c3ed4;
+    extern const Vec vec3_802c3ee0;
+    extern const Vec vec3_802c3eec;
+    extern const Vec vec3_802c3ef8;
 
     void* mario;
     void* hit;
@@ -625,6 +694,11 @@ void* hitEstimate(s32* outKind) {
     f32 height;
     f32 dist;
     s32 i;
+    Vec direction1;
+    Vec direction2;
+    Vec direction3;
+    Vec direction4;
+    Vec position;
 
     mario = marioGetPtr();
     *outKind = 0;
@@ -643,15 +717,15 @@ void* hitEstimate(s32* outKind) {
     sincosf(angle, &cosv, &sinv);
 
     height = *(f32*)((s32)mario + 0x1BC);
-    probe.base.x = float_0_80420ab8;
-    probe.base.y = -(f32)cos(float_3p1416_80420acc);
-    probe.base.z = float_0_80420ab8;
-    probe.pos.x = *(f32*)((s32)mario + 0x8C);
-    probe.pos.y = *(f32*)((s32)mario + 0x90) + height + float_4_80420ad0;
-    probe.pos.z = *(f32*)((s32)mario + 0x94);
-    probe.dir.x = cosv;
-    probe.dir.y = probe.base.y;
-    probe.dir.z = sinv;
+    direction1 = vec3_802c3ed4;
+    direction1.x = cosv;
+    direction1.y = -(f32)cos(float_3p1416_80420acc);
+    direction1.z = sinv;
+    position.x = *(f32*)((s32)mario + 0x8C);
+    position.y = *(f32*)((s32)mario + 0x90) + height + float_4_80420ad0;
+    position.z = *(f32*)((s32)mario + 0x94);
+    probe.start = position;
+    probe.end = direction1;
     probe.radius = float_14_80420ad4;
     hit = hitCheckVecFilter(&probe, 0);
     if (hit != 0 && (hitGetAttr(hit) & 0x800005) == 0) {
@@ -659,13 +733,15 @@ void* hitEstimate(s32* outKind) {
         return hit;
     }
 
-    probe.base.y = -(f32)cos(float_1p2217_80420ad8);
-    probe.pos.x = cosv * float_5_80420adc + *(f32*)((s32)mario + 0x8C);
-    probe.pos.y = *(f32*)((s32)mario + 0x90) + height;
-    probe.pos.z = sinv * float_5_80420adc + *(f32*)((s32)mario + 0x94);
-    probe.dir.x = cosv;
-    probe.dir.y = probe.base.y;
-    probe.dir.z = sinv;
+    direction2 = vec3_802c3ee0;
+    direction2.x = cosv;
+    direction2.y = -(f32)cos(float_1p2217_80420ad8);
+    direction2.z = sinv;
+    position.x = cosv * float_5_80420adc + *(f32*)((s32)mario + 0x8C);
+    position.y = *(f32*)((s32)mario + 0x90) + height;
+    position.z = sinv * float_5_80420adc + *(f32*)((s32)mario + 0x94);
+    probe.start = position;
+    probe.end = direction2;
     probe.radius = float_26_80420ae0;
     hit = hitCheckVecFilter(&probe, 0);
     if (hit != 0 && (hitGetAttr(hit) & 0x800005) == 0) {
@@ -677,13 +753,15 @@ void* hitEstimate(s32* outKind) {
         return hit;
     }
 
-    probe.base.y = -(f32)cos(float_0p7854_80420ae8);
-    probe.pos.x = cosv * float_5_80420adc + *(f32*)((s32)mario + 0x8C);
-    probe.pos.y = *(f32*)((s32)mario + 0x90) + height;
-    probe.pos.z = sinv * float_5_80420adc + *(f32*)((s32)mario + 0x94);
-    probe.dir.x = cosv;
-    probe.dir.y = probe.base.y;
-    probe.dir.z = sinv;
+    direction3 = vec3_802c3eec;
+    direction3.x = cosv;
+    direction3.y = -(f32)cos(float_0p7854_80420ae8);
+    direction3.z = sinv;
+    position.x = cosv * float_5_80420adc + *(f32*)((s32)mario + 0x8C);
+    position.y = *(f32*)((s32)mario + 0x90) + height;
+    position.z = sinv * float_5_80420adc + *(f32*)((s32)mario + 0x94);
+    probe.start = position;
+    probe.end = direction3;
     hit = hitCheckVecFilter(&probe, 0);
     if (hit != 0 && (hitGetAttr(hit) & 0x800005) == 0) {
         if (*(f32*)((s32)&probe + 0x28) - *(f32*)((s32)mario + 0x90) <= float_30_80420ae4) {
@@ -694,12 +772,9 @@ void* hitEstimate(s32* outKind) {
         return hit;
     }
 
-    probe.base.x = float_0_80420ab8;
-    probe.base.y = -(f32)cos(float_0_80420ab8);
-    probe.base.z = float_0_80420ab8;
-    probe.dir.x = float_0_80420ab8;
-    probe.dir.y = probe.base.y;
-    probe.dir.z = float_0_80420ab8;
+    direction4 = vec3_802c3ef8;
+    direction4.y = -(f32)cos(float_0_80420ab8);
+    probe.end = direction4;
     for (i = 0; i < 2; i++) {
         dist = float_20_80420af0;
         if (i != 0) {
@@ -708,9 +783,10 @@ void* hitEstimate(s32* outKind) {
                 dist = float_37_80420af8;
             }
         }
-        probe.pos.x = cosv * dist + *(f32*)((s32)mario + 0x8C);
-        probe.pos.y = *(f32*)((s32)mario + 0x90) + height;
-        probe.pos.z = sinv * dist + *(f32*)((s32)mario + 0x94);
+        position.x = cosv * dist + *(f32*)((s32)mario + 0x8C);
+        position.y = *(f32*)((s32)mario + 0x90) + height;
+        position.z = sinv * dist + *(f32*)((s32)mario + 0x94);
+        probe.start = position;
         hit = hitCheckVecFilter(&probe, 0);
         if (hit != 0 && (hitGetAttr(hit) & 0x800005) == 0) {
             if (*(f32*)((s32)&probe + 0x28) - *(f32*)((s32)mario + 0x90) <= float_13_80420afc) {

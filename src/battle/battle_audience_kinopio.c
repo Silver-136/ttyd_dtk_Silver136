@@ -180,13 +180,22 @@ void BattleAudienceCtrlProcessKinopioWait(s32 audienceId, u8 front) {
     extern char* BattleAudienceBaseGetPtr(void);
     extern char* BattleAudienceGetPtr(s32);
     extern void* pouchGetPtr(void);
+    extern s32 BattleBreakSlot_GetBreakTurn(void);
+    extern s32 BattleAudience_GetAudienceNoFromOffset(s32 audienceId, s32 x, s32 y);
+    extern s32 BattleAudience_GetExist(s32 audienceId);
     char* base = BattleAudienceBaseGetPtr();
     char* member = BattleAudienceGetPtr(audienceId);
+    char* item;
     f32 ratio;
     f32 period;
     f32 amount;
+    f32 chance;
+    f32 neighborChance;
     f32 split;
     s32 timer;
+    s32 threshold;
+    s32 neighbor;
+    u32 flags;
 
     pouchGetPtr();
     BattleAudience_SetAnim(audienceId, front == 1 ? 0 : 1, 0);
@@ -195,6 +204,11 @@ void BattleAudienceCtrlProcessKinopioWait(s32 audienceId, u8 front) {
     else if (ratio >= 0.5f) { period = 2.0f; amount = 0.5f; }
     else if (ratio >= 0.25f) { period = 4.0f; amount = 0.25f; }
     else { period = 4.0f; amount = 0.0f; }
+    if (ratio >= 1.75f) { chance = 4.0f; neighborChance = 10.0f; }
+    else if (ratio >= 1.5f) { chance = 2.0f; neighborChance = 5.0f; }
+    else if (ratio >= 1.25f) { chance = 1.0f; neighborChance = 2.0f; }
+    else if (ratio >= 1.0f) { chance = 0.0f; neighborChance = 1.0f; }
+    else { chance = 0.0f; neighborChance = 0.0f; }
     timer = *(s32*)(member + 0x30);
     switch (*(u8*)(member + 0x1B)) {
         default:
@@ -206,9 +220,35 @@ void BattleAudienceCtrlProcessKinopioWait(s32 audienceId, u8 front) {
             if ((f32)timer > split) *(f32*)(member + 0x64) -= 0.0025f * amount;
             else *(f32*)(member + 0x64) += 0.0025f * amount;
             break;
-        case 1:
-            break;
         case 2:
+            break;
+        case 4:
+            if (timer > 180) {
+                if (timer < 189) {
+                    *(f32*)(member + 0x64) += 0.005f * amount;
+                }
+                else if ((f32)timer > 188.0f + 40.0f * period) {
+                    *(f32*)(member + 0x64) = 1.0f;
+                    timer = 0;
+                }
+                else if ((f32)timer > 188.0f + 32.0f * period) {
+                    *(f32*)(member + 0x64) -= 0.005f * amount;
+                }
+                else if ((f32)timer > 188.0f + 24.0f * period) {
+                    *(f32*)(member + 0x64) += 0.005f * amount;
+                }
+                else if ((f32)timer > 188.0f + 16.0f * period) {
+                    *(f32*)(member + 0x64) -= 0.005f * amount;
+                }
+                else if ((f32)timer > 188.0f + 8.0f * period) {
+                    *(f32*)(member + 0x64) += 0.005f * amount;
+                }
+                else {
+                    *(f32*)(member + 0x64) -= 0.005f * amount;
+                }
+            }
+            break;
+        case 6:
             if ((f32)timer >= 36.0f * period) {
                 *(f32*)(member + 0x64) = 1.0f;
                 timer = 0;
@@ -216,7 +256,7 @@ void BattleAudienceCtrlProcessKinopioWait(s32 audienceId, u8 front) {
             if ((f32)timer > 17.0f * period) *(f32*)(member + 0x64) -= 0.00175f * amount;
             else *(f32*)(member + 0x64) += 0.00175f * amount;
             break;
-        case 3:
+        case 7:
             if ((f32)timer >= 22.0f * period) {
                 *(f32*)(member + 0x64) = 1.0f;
                 timer = 0;
@@ -224,7 +264,7 @@ void BattleAudienceCtrlProcessKinopioWait(s32 audienceId, u8 front) {
             if ((f32)timer > 10.0f * period) *(f32*)(member + 0x64) -= 0.00375f * amount;
             else *(f32*)(member + 0x64) += 0.00375f * amount;
             break;
-        case 4:
+        case 9:
             if ((f32)timer >= 64.0f * period) {
                 *(f32*)(member + 0x64) = 1.0f;
                 timer = 0;
@@ -234,11 +274,38 @@ void BattleAudienceCtrlProcessKinopioWait(s32 audienceId, u8 front) {
             break;
     }
     *(s32*)(member + 0x30) = timer + 1;
-    if ((*(u32*)member & 0x60) == 0 && *(s16*)(member + 0x1C) == -1) {
+    flags = *(u32*)member;
+    if (flags & 0x40) {
+        *(u32*)member = flags & ~0x60;
+        BattleAudience_ChangeStatus(audienceId, 10);
+        item = BattleAudienceItemGetPtr(0);
+        if (*(s32*)(item + 0x10) < 0xEC || *(s32*)(item + 0x10) > 0xEF) {
+            base = BattleAudienceBaseGetPtr();
+            BattleAudienceAddTargetNum(*(f32*)(base + 0x13778) * float_neg0p15_80424570, 0.0f);
+        }
+    }
+    else if ((flags & 0x20) == 0 && *(s16*)(member + 0x1C) == -1) {
         timer = irand(360000);
         if (timer < 10) BattleAudience_ChangeStatus(audienceId, 1);
         else if (timer < 20) BattleAudience_ChangeStatus(audienceId, 2);
-        else if (timer < (s32)(10.0f * ratio)) BattleAudience_ChangeStatus(audienceId, 4);
+        else {
+            threshold = (s32)(10.0f * neighborChance);
+            if (timer < threshold) {
+                BattleAudience_ChangeStatus(audienceId, 4);
+            }
+            else if (BattleBreakSlot_GetBreakTurn() < 1 && *(s32*)(base + 0x13910) != 1) {
+                if (timer < threshold + (s32)(10.0f * chance)) {
+                    neighbor = BattleAudience_GetAudienceNoFromOffset(audienceId, 0, 1);
+                    if (neighbor != -1 && *(u8*)(member + 0x1B) != 11 &&
+                        (BattleAudience_GetExist(neighbor) & 0xFF) == 1) {
+                        BattleAudience_ChangeStatus(audienceId, 3);
+                    }
+                }
+            }
+            else if (timer < threshold + 300 && *(u8*)(member + 0x1B) != 11) {
+                BattleAudience_ChangeStatus(audienceId, 3);
+            }
+        }
     }
 }
 
@@ -913,15 +980,34 @@ u8 BattleAudienceCtrlProcessKinopioTransEvt(int audienceId) {
 
 
 void BattleAudienceCtrlProcessKinopioIntrude(s32 audienceId) {
+    typedef struct VecLocal { f32 x; f32 y; f32 z; } VecLocal;
+    extern void* BattleAudienceBaseGetPtr(void);
     extern char* BattleAudienceGetPtr(s32);
     extern char* pouchGetPtr(void);
+    extern void BattleAudience_SetAnim(s32, s32, s32);
+    extern s32 irand(s32);
+    extern f64 sqrt(f64);
     extern s32 psndSFXOn(char*);
     extern void psndSFXOff(s32);
     extern void btl_camera_set_mode(s32, s32);
     extern void btl_camera_set_moveto(f32, f32, f32, f32, f32, f32, s32, s32, s32);
     extern void btl_camera_set_moveSpeedLv(s32, s32);
+    extern void* camGetPtr(s32);
+    extern void effSmallStarEntry(s32, s32, f32, f32, f32, f32, f32, f32);
+    extern s32 BattleStage_ObjectFallCheck(void);
+    extern void BattleStage_NozzleWorkCheck(s32);
+    extern s32 evtCheckID(s32);
+    extern void BattleAudience_ChangeStatus(s32, s32);
+    extern f64 fabs(f64);
     extern char str_SFX_AUDIENCE_HEIHO_M_802f9618[];
     extern s32 intrudeSound;
+    extern VecLocal vec3_802f9534;
+    extern VecLocal vec3_802f9540;
+    extern f32 float_185_80424538;
+    extern f32 float_20_8042453c;
+    extern f32 float_40_80424540;
+    extern f64 double_450_802f9638;
+    extern f64 double_300_802f9640;
     char* member;
     char* pouch;
     f32 dx;
@@ -980,28 +1066,53 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 audienceId) {
                 intrudeSound = psndSFXOn(str_SFX_AUDIENCE_HEIHO_M_802f9618);
             }
             break;
+        case 0xF: {
+            u8* camera = camGetPtr(4);
+            *(f32*)(member + 0xA0) = *(f32*)(camera + 0x114);
+            if (fabs(*(f32*)(member + 0x48)) >= double_450_802f9638) {
+                *(s32*)(member + 4) = 0x10;
+                *(s32*)(member + 8) = 0x23;
+                *(f32*)(member + 0x78) = vec3_802f9534.x;
+                *(f32*)(member + 0x7C) = vec3_802f9534.y;
+                *(f32*)(member + 0x80) = vec3_802f9534.z;
+            }
+            break;
+        }
         case 0x10:
+            if (--*(s32*)(member + 8) < 1) {
+                *(s32*)(member + 4) = 0x12;
+                *(s32*)(member + 8) = 0x19;
+                btl_camera_set_mode(0, 0);
+                btl_camera_set_moveSpeedLv(0, 2);
+                psndSFXOff(intrudeSound);
+            }
+            break;
         case 0x12:
+            if (--*(s32*)(member + 8) < 1) {
+                *(s32*)(member + 4) = 0x13;
+                *(s32*)(member + 8) = 0x3C;
+                btl_camera_set_moveSpeedLv(0, 1);
+                effSmallStarEntry(0, 4, float_185_80424538 * *(f32*)(member + 0xC),
+                                  float_20_8042453c, float_40_80424540,
+                                  0.0f, -1.0f, 0.0f);
+            }
+            break;
         case 0x13:
             if (--*(s32*)(member + 8) < 1) {
-                if (*(s32*)(member + 4) == 0x10) {
-                    *(s32*)(member + 4) = 0x12;
-                    *(s32*)(member + 8) = 0x19;
-                    btl_camera_set_mode(0, 0);
-                    btl_camera_set_moveSpeedLv(0, 2);
-                    psndSFXOff(intrudeSound);
-                } else if (*(s32*)(member + 4) == 0x12) {
-                    *(s32*)(member + 4) = 0x13;
-                    *(s32*)(member + 8) = 0x3C;
-                    btl_camera_set_moveSpeedLv(0, 1);
-                } else {
-                    *(s32*)(member + 4) = 0x14;
-                    btl_camera_set_moveSpeedLv(0, 1);
-                }
+                *(s32*)(member + 4) = 0x14;
+                btl_camera_set_moveSpeedLv(0, 1);
+            }
+        case 0x14:
+            *(s32*)(member + 0x12C) = BattleStage_ObjectFallCheck();
+            *(s32*)(member + 4) = 0x19;
+            break;
+        case 0x19:
+            if (!evtCheckID(*(s32*)(member + 0x12C))) {
+                *(s32*)(member + 4) = 0x1E;
+                *(f32*)(member + 0xA0) = 0.0f;
             }
             break;
         case 0x1E:
-        case 0x55:
             BattleAudience_ChangeStatus(audienceId, 0xB);
             break;
         case 0x3C:
@@ -1029,8 +1140,37 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 audienceId) {
                 *(s32*)(member + 8) = 0;
             }
             break;
+        case 0x46:
+            BattleStage_NozzleWorkCheck(1);
+            *(s32*)(member + 0x12C) = *(s32*)((u8*)_battleWorkPointer + 0x182B4);
+            *(s32*)(member + 4) = 0x4B;
+            dz = -*(f32*)(member + 0x50);
+            dx = 300.0f * *(f32*)(member + 0xC) - *(f32*)(member + 0x48);
+            length = (f32)sqrt(dx * dx + dz * dz);
+            *(f32*)(member + 0x78) = 5.0f * dx / length;
+            *(f32*)(member + 0x7C) = 0.0f;
+            *(f32*)(member + 0x80) = 5.0f * dz / length;
+            break;
+        case 0x4B:
+            if (fabs(*(f32*)(member + 0x48)) >= double_300_802f9640) {
+                *(s32*)(member + 4) = 0x50;
+                *(f32*)(member + 0x78) = vec3_802f9540.x;
+                *(f32*)(member + 0x7C) = vec3_802f9540.y;
+                *(f32*)(member + 0x80) = vec3_802f9540.z;
+                psndSFXOff(intrudeSound);
+            }
+            break;
+        case 0x50:
+            if (!evtCheckID(*(s32*)(member + 0x12C))) {
+                *(s32*)(member + 4) = 0x55;
+            }
+            break;
+        case 0x55:
+            BattleAudience_ChangeStatus(audienceId, 0xB);
+            break;
     }
 }
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 BattleAudienceCtrlProcessKinopioSing(int audienceId) {

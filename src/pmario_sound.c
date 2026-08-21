@@ -271,9 +271,11 @@ void psndInit(void) {
     extern void SoundInit(void);
     extern void SoundLoadDVD2(const char* path);
     extern void SoundSLibLoadDVD(const char* path);
+    extern char* strcpy(char* dst, const char* src);
+    extern const f32 float_0_804218d0;
     extern const char str__802e3c78[];
     extern const char str_sound_proj_pmario_802e3c80[];
-    u8* buf;
+    register u8* buf;
     u8* sfx;
     u8* env;
     u8* work;
@@ -293,8 +295,7 @@ void psndInit(void) {
     *(u8*)(work + 0x58) = zero;
 
     sfx = buf + 0x320;
-    i = 5;
-    do {
+    for (i = 0; i < 5; i++) {
         *(s32*)(sfx + 0x0) = neg;
         *(s32*)(sfx + 0x18) = neg;
         *(u16*)(sfx + 0x6) = zero;
@@ -320,8 +321,7 @@ void psndInit(void) {
         *(s32*)(sfx + 0x130) = neg;
         *(u16*)(sfx + 0x11E) = zero;
         sfx += 0x140;
-        i--;
-    } while (i != 0);
+    }
 
     env = buf + 0xE0;
     work = buf + 0x80;
@@ -876,7 +876,7 @@ void unk_800db778(s32 id, s32 a2, s32 a3, s32 a4) {
     psndBGMOn_f_d(id, a2, a3, 750, a4);
 }
 
-void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
+s32 psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
     extern s32 strcmp(const char* a, const char* b);
     extern void SoundSetFadeTime(s16 in, s16 out);
     extern void SoundSongContinueCh(s32 ch);
@@ -901,7 +901,7 @@ void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
     (void)unused;
 
     if ((*(u16*)((s32)&psnd + 0x56) & 1) != 0) {
-        return;
+        return 0;
     }
     if (a2 < 0) {
         for (i = 0; i < 0x106; i++) {
@@ -942,13 +942,13 @@ void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
             a2 = 0xA4;
         }
         if (a2 == 0x7B || a2 == 0x7D || a2 == 0x7E) {
-            return;
+            return 0;
         }
         if (channel == 0 && (id & 0x20) != 0 && *(u8*)((s32)&psbgm[0] + 0x20) != 4) {
-            return;
+            return 0;
         }
         if ((a2 == 0x90 || a2 == 0x91) && *(s32*)&psbgm[0] == 0xA4) {
-            return;
+            return 0;
         }
         if (a2 == 0x92 && *(s32*)&psbgm[0] == 0xA4) {
             psndBGMOff_f_d(0x400, 0x2EE, 1);
@@ -958,13 +958,13 @@ void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
     story = evtGetValue(0, -170000000);
     if (story > 0x7E && evtGetValue(0, -170000000) < 0xB2) {
         if (a2 == 0x8C) {
-            return;
+            return 0;
         }
         if ((a2 == 0x90 || a2 == 0x91) && *(s32*)&psbgm[0] == 0xC3) {
-            return;
+            return 0;
         }
         if (a2 == 0 && *(s32*)&psbgm[0] == 0xC3 && (id & 0x20) == 0) {
-            return;
+            return 0;
         }
         if (a2 == 0x92 && *(s32*)&psbgm[0] == 0xC3) {
             psndBGMOff_f_d(0x400, 0x2EE, 1);
@@ -979,14 +979,14 @@ void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
     if (a2 == 0x90 || a2 == 0x91) {
         s32 bgm1 = *(s32*)&psbgm[1];
         if (bgm1 == 0x80 || (u32)(bgm1 - 0x81) < 0xC || bgm1 == 0x8E || bgm1 == 0x8D) {
-            return;
+            return 0;
         }
     }
 
     list = psbgmlist + a2 * 0x10;
     flags = *(u32*)(list + 4);
     if (flags == 0 && (id & 0x20) == 0) {
-        return;
+        return 0;
     }
     SoundSetFadeTime((s16)fade, (s16)fade);
     old = *(s32*)bgm;
@@ -1014,15 +1014,15 @@ void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
                 }
             }
             psndBGMMain();
-            return;
+            return 1;
         }
         if ((id & 0x10) == 0 && old == a2 && *(u8*)(bgm + 0x20) != 2) {
             psndBGMMain();
-            return;
+            return 1;
         }
         if ((id & 0x10) == 0 && *(u8*)(list + 0xE) != 0 && *(u8*)(list + 0xE) == *(u8*)(bgm + 0xD)) {
             psndBGMMain();
-            return;
+            return 1;
         }
         if ((*(u32*)(psbgmlist + old * 0x10 + 4) & 0x80000000) == 0) {
             SoundSetFadeTime(0, (s16)fadeOut);
@@ -1033,7 +1033,7 @@ void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
         }
     }
     if (a2 == 0) {
-        return;
+        return 0;
     }
 
     *(s32*)bgm = a2;
@@ -1049,7 +1049,7 @@ void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
         }
         if (i == 4) {
             *(s32*)bgm = -1;
-            return;
+            return 0;
         }
         *(s32*)(bgm + 4) = i;
         SoundSongPlayCh(i, flags & 0x0FFFFFFF);
@@ -1068,7 +1068,7 @@ void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
         }
         if (i == 3) {
             *(s32*)bgm = -1;
-            return;
+            return 0;
         }
         *(s32*)(bgm + 4) = i;
         SoundSSPlayCh(i, *(char**)(list + 8));
@@ -1084,6 +1084,7 @@ void psndBGMOn_f_d(s32 id, s32 a2, s32 fade, s32 fadeOut, s32 unused) {
     *(u16*)(bgm + 0x28) = 1;
     *(u16*)(bgm + 0x2A) = 1;
     psndBGMMain();
+    return 1;
 }
 
 void psndBGMOff(s32 id) {

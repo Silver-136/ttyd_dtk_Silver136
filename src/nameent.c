@@ -432,7 +432,7 @@ void nameEntDisp(void) {
 }
 
 /* stub-fill: nameBG | missing_definition | ghidra_signature */
-void nameBG(void)  {
+void nameBG(void) {
     extern void GXSetBlendMode(s32,s32,s32,s32);
     extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);
     extern void GXSetZMode(s32,s32,s32);
@@ -452,82 +452,38 @@ void nameBG(void)  {
     extern void PSMTXScale(void*,f32,f32,f32);
     extern void GXLoadTexMtxImm(void*,s32,s32);
     extern void GXBegin(s32,s32,s32);
-    f32 texMtx[3][4];
-    u8 texObj[0x20];
+    f32 m0[3][4], m1[3][4], m2[3][4];
+    u8 t0[0x20], t1[0x20], t2[0x20];
     u32 fog=0;
     void* camera;
     void* palette;
     volatile f32* fifo=(volatile f32*)0xCC008000;
-    f32 left[3]= {
-        -304.0f,-272.0f,272.0f
-    }
-    ;
-    f32 right[3]= {
-        -272.0f,272.0f,304.0f
-    }
-    ;
-    s32 indices[3]= {
-        0x22,0x21,0x23
-    }
-    ;
-    f32 widths[3]= {
-        32.0f,544.0f,32.0f
-    }
-    ;
-    s32 i;
+    f32 left[3]={-304.0f,-272.0f,272.0f};
+    f32 right[3]={-272.0f,272.0f,304.0f};
+    s32 indices[3]={0x22,0x21,0x23};
+    f32 widths[3]={32.0f,544.0f,32.0f};
     f32 sx,sy;
-    GXSetBlendMode(0,1,0,0);
-    GXSetZCompLoc(0);
-    GXSetAlphaCompare(6,0x80,1,0,0);
-    GXSetZMode(0,7,0);
-    GXSetFog(0,0.0f,0.0f,0.0f,0.0f,&fog);
-    GXSetNumChans(0);
-    GXSetChanCtrl(4,0,0,0,0,0,2);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(0,0,0,0xFF);
-    GXSetTevOp(0,3);
-    GXSetCullMode(0);
-    GXClearVtxDesc();
-    GXSetVtxDesc(9,1);
-    GXSetVtxDesc(13,1);
-    GXSetVtxAttrFmt(0,9,1,4,0);
-    GXSetVtxAttrFmt(0,13,1,4,0);
-    camera=camGetPtr(1);
-    GXLoadPosMtxImm((u8*)camera+0x11C,0);
-    GXSetCurrentMtx(0);
+#define DRAW_PANEL(obj,mtx,id,width,left,right) \
+    TEXGetGXTexObjFromPalette(palette,obj,id); \
+    GXInitTexObjLOD(obj,1,1,0.0f,0.0f,0.0f,0,0,0); \
+    GXLoadTexObj(obj,0); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D); \
+    sx=width/(f32)(GXGetTexObjWidth(obj)&0xFFFF); sy=480.0f/(f32)(GXGetTexObjHeight(obj)&0xFFFF); \
+    PSMTXScale(mtx,sx,sy,1.0f); GXLoadTexMtxImm(mtx,0x1E,1); GXBegin(0x80,0,4); \
+    *fifo=left; *fifo=240.0f; *fifo=0.0f; *fifo=0.0f; *fifo=0.0f; \
+    *fifo=left; *fifo=-240.0f; *fifo=0.0f; *fifo=0.0f; *fifo=1.0f; \
+    *fifo=right; *fifo=-240.0f; *fifo=0.0f; *fifo=1.0f; *fifo=1.0f; \
+    *fifo=right; *fifo=240.0f; *fifo=0.0f; *fifo=1.0f; *fifo=0.0f
+    GXSetBlendMode(0,1,0,0); GXSetZCompLoc(0); GXSetAlphaCompare(6,0x80,1,0,0);
+    GXSetZMode(0,7,0); GXSetFog(0,0.0f,0.0f,0.0f,0.0f,&fog); GXSetNumChans(0);
+    GXSetChanCtrl(4,0,0,0,0,0,2); GXSetNumTevStages(1); GXSetTevOrder(0,0,0,0xFF);
+    GXSetTevOp(0,3); GXSetCullMode(0); GXClearVtxDesc(); GXSetVtxDesc(9,1); GXSetVtxDesc(13,1);
+    GXSetVtxAttrFmt(0,9,1,4,0); GXSetVtxAttrFmt(0,13,1,4,0);
+    camera=camGetPtr(1); GXLoadPosMtxImm((u8*)camera+0x11C,0); GXSetCurrentMtx(0);
     palette=*(void**)(*(s32*)((s32)wp+0x60));
-    for(i=0;i<3;i++) {
-        TEXGetGXTexObjFromPalette(palette,texObj,indices[i]);
-        GXInitTexObjLOD(texObj,1,1,0.0f,0.0f,0.0f,0,0,0);
-        GXLoadTexObj(texObj,0);
-        GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
-        sx=widths[i]/(f32)(GXGetTexObjWidth(texObj)&0xFFFF);
-        sy=480.0f/(f32)(GXGetTexObjHeight(texObj)&0xFFFF);
-        PSMTXScale(texMtx,sx,sy,1.0f);
-        GXLoadTexMtxImm(texMtx,0x1E,1);
-        GXBegin(0x80,0,4);
-        *fifo=left[i];
-        *fifo=240.0f;
-        *fifo=0.0f;
-        *fifo=0.0f;
-        *fifo=0.0f;
-        *fifo=left[i];
-        *fifo=-240.0f;
-        *fifo=0.0f;
-        *fifo=0.0f;
-        *fifo=1.0f;
-        *fifo=right[i];
-        *fifo=-240.0f;
-        *fifo=0.0f;
-        *fifo=1.0f;
-        *fifo=1.0f;
-        *fifo=right[i];
-        *fifo=240.0f;
-        *fifo=0.0f;
-        *fifo=1.0f;
-        *fifo=0.0f;
-    }
+    DRAW_PANEL(t0,m0,indices[0],widths[0],left[0],right[0]);
+    DRAW_PANEL(t1,m1,indices[1],widths[1],left[1],right[1]);
+    DRAW_PANEL(t2,m2,indices[2],widths[2],left[2],right[2]);
+#undef DRAW_PANEL
 }
 
 /* stub-fill: nameKirinukiGX | missing_definition | ghidra_signature */

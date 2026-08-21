@@ -166,31 +166,28 @@ s32 marioRollCancel(void) {
 }
 
 void mot_roll_post(void) {
+    typedef struct RollVecLocal { f32 x, y, z; } RollVecLocal;
     extern void marioChgPose(char*);
     extern char str_M_S_1_80420e4c;
-    extern f32 vec3_802c41bc;
-    extern f32 DAT_802c41c0;
-    extern f32 DAT_802c41c4;
-    extern f32 vec3_802c41c8;
-    extern f32 DAT_802c41cc;
-    extern f32 DAT_802c41d0;
-    extern f32 vec3_802c41d4;
-    extern f32 DAT_802c41d8;
-    extern f32 DAT_802c41dc;
+    extern const RollVecLocal vec3_802c41b0;
 
     void* mario = marioGetPtr();
     void* tmp;
+    const u32* vectors = (const u32*)&vec3_802c41b0;
     f32 angle;
+    s32 soundId;
 
     marioGetPtr();
     tmp = marioGetPtr();
     if (*(void**)((s32)tmp + 0x294) != 0) {
         tmp = marioGetPtr();
-        if (*(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14) != -1) {
+        soundId = *(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14);
+        if ((u32)(soundId + 0x10000) != 0xFFFF) {
             tmp = marioGetPtr();
             psndSFXOff(*(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14));
+            soundId = -1;
             tmp = marioGetPtr();
-            *(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14) = -1;
+            *(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14) = soundId;
         }
     }
     tmp = marioGetPtr();
@@ -198,28 +195,28 @@ void mot_roll_post(void) {
     *(f32*)((s32)tmp + 0x158) = float_0p004_80420e48;
 
     angle = revise360(*(f32*)((s32)mario + 0x1A4) - *(f32*)((s32)mario + 0x19C));
-    if (angle < float_180_80420de0) {
-        *(f32*)((s32)mario + 0x1AC) = float_180_80420de0;
-        *(f32*)((s32)mario + 0x1B0) = float_180_80420de0;
-        *(f32*)((s32)mario + 0x1A0) = float_90_80420df0;
-        *(f32*)((s32)mario + 0x1A4) = float_90_80420df0;
-    } else {
+    if (angle >= float_180_80420de0) {
         *(f32*)((s32)mario + 0x1AC) = float_0_80420dd4;
         *(f32*)((s32)mario + 0x1B0) = float_0_80420dd4;
         *(f32*)((s32)mario + 0x1A0) = float_270_80420df4;
         *(f32*)((s32)mario + 0x1A4) = float_270_80420df4;
+    } else {
+        *(f32*)((s32)mario + 0x1AC) = float_180_80420de0;
+        *(f32*)((s32)mario + 0x1B0) = float_180_80420de0;
+        *(f32*)((s32)mario + 0x1A0) = float_90_80420df0;
+        *(f32*)((s32)mario + 0x1A4) = float_90_80420df0;
     }
     marioSetSpec();
     *(u32*)((s32)mario + 0x8) = 0;
-    *(f32*)((s32)mario + 0xB0) = vec3_802c41bc;
-    *(f32*)((s32)mario + 0xB4) = DAT_802c41c0;
-    *(f32*)((s32)mario + 0xB8) = DAT_802c41c4;
-    *(f32*)((s32)mario + 0x98) = vec3_802c41c8;
-    *(f32*)((s32)mario + 0x9C) = DAT_802c41cc;
-    *(f32*)((s32)mario + 0xA0) = DAT_802c41d0;
-    *(f32*)((s32)mario + 0xBC) = vec3_802c41d4;
-    *(f32*)((s32)mario + 0xC0) = DAT_802c41d8;
-    *(f32*)((s32)mario + 0xC4) = DAT_802c41dc;
+    *(u32*)((s32)mario + 0xB0) = vectors[3];
+    *(u32*)((s32)mario + 0xB4) = vectors[4];
+    *(u32*)((s32)mario + 0xB8) = vectors[5];
+    *(u32*)((s32)mario + 0x98) = vectors[6];
+    *(u32*)((s32)mario + 0x9C) = vectors[7];
+    *(u32*)((s32)mario + 0xA0) = vectors[8];
+    *(u32*)((s32)mario + 0xBC) = vectors[9];
+    *(u32*)((s32)mario + 0xC0) = vectors[10];
+    *(u32*)((s32)mario + 0xC4) = vectors[11];
     *(u32*)((s32)mario + 0x4) &= ~0x100;
     *(u32*)((s32)mario + 0x4) &= ~0x8;
     *(u32*)mario &= ~0x1000000;
@@ -230,8 +227,9 @@ void mot_roll_post(void) {
     if (*(void**)((s32)tmp + 0x294) != 0) {
         tmp = marioGetPtr();
         __memFree(0, *(void**)((s32)tmp + 0x294));
+        soundId = 0;
         tmp = marioGetPtr();
-        *(void**)((s32)tmp + 0x294) = 0;
+        *(void**)((s32)tmp + 0x294) = (void*)soundId;
     }
     allPartyRideOff();
 }
@@ -239,19 +237,13 @@ void mot_roll_post(void) {
 void marioRollForceCancel(void) {
     extern void marioChgPose(char*);
     extern char str_M_S_1_80420e4c;
-    extern f32 vec3_802c41bc;
-    extern f32 DAT_802c41c0;
-    extern f32 DAT_802c41c4;
-    extern f32 vec3_802c41c8;
-    extern f32 DAT_802c41cc;
-    extern f32 DAT_802c41d0;
-    extern f32 vec3_802c41d4;
-    extern f32 DAT_802c41d8;
-    extern f32 DAT_802c41dc;
+    extern u8 vec3_802c41b0[];
 
+    u8* data = vec3_802c41b0;
     void* mario = marioGetPtr();
     void* tmp;
     f32 angle;
+    s32 minusOne = -1;
 
     if (*(u16*)((s32)mario + 0x2E) != 0x16) {
         return;
@@ -260,11 +252,11 @@ void marioRollForceCancel(void) {
     tmp = marioGetPtr();
     if (*(void**)((s32)tmp + 0x294) != 0) {
         tmp = marioGetPtr();
-        if (*(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14) != -1) {
+        if (*(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14) != minusOne) {
             tmp = marioGetPtr();
             psndSFXOff(*(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14));
             tmp = marioGetPtr();
-            *(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14) = -1;
+            *(s32*)(*(s32*)((s32)tmp + 0x294) + 0x14) = minusOne;
         }
     }
     tmp = marioGetPtr();
@@ -272,28 +264,28 @@ void marioRollForceCancel(void) {
     *(f32*)((s32)tmp + 0x158) = float_0p004_80420e48;
 
     angle = revise360(*(f32*)((s32)mario + 0x1A4) - *(f32*)((s32)mario + 0x19C));
-    if (angle < float_180_80420de0) {
-        *(f32*)((s32)mario + 0x1AC) = float_180_80420de0;
-        *(f32*)((s32)mario + 0x1B0) = float_180_80420de0;
-        *(f32*)((s32)mario + 0x1A0) = float_90_80420df0;
-        *(f32*)((s32)mario + 0x1A4) = float_90_80420df0;
-    } else {
+    if (angle >= float_180_80420de0) {
         *(f32*)((s32)mario + 0x1AC) = float_0_80420dd4;
         *(f32*)((s32)mario + 0x1B0) = float_0_80420dd4;
         *(f32*)((s32)mario + 0x1A0) = float_270_80420df4;
         *(f32*)((s32)mario + 0x1A4) = float_270_80420df4;
+    } else {
+        *(f32*)((s32)mario + 0x1AC) = float_180_80420de0;
+        *(f32*)((s32)mario + 0x1B0) = float_180_80420de0;
+        *(f32*)((s32)mario + 0x1A0) = float_90_80420df0;
+        *(f32*)((s32)mario + 0x1A4) = float_90_80420df0;
     }
     marioSetSpec();
     *(u32*)((s32)mario + 0x8) = 0;
-    *(f32*)((s32)mario + 0xB0) = vec3_802c41bc;
-    *(f32*)((s32)mario + 0xB4) = DAT_802c41c0;
-    *(f32*)((s32)mario + 0xB8) = DAT_802c41c4;
-    *(f32*)((s32)mario + 0x98) = vec3_802c41c8;
-    *(f32*)((s32)mario + 0x9C) = DAT_802c41cc;
-    *(f32*)((s32)mario + 0xA0) = DAT_802c41d0;
-    *(f32*)((s32)mario + 0xBC) = vec3_802c41d4;
-    *(f32*)((s32)mario + 0xC0) = DAT_802c41d8;
-    *(f32*)((s32)mario + 0xC4) = DAT_802c41dc;
+    *(u32*)((s32)mario + 0xB0) = *(u32*)(data + 0x30);
+    *(u32*)((s32)mario + 0xB4) = *(u32*)(data + 0x34);
+    *(u32*)((s32)mario + 0xB8) = *(u32*)(data + 0x38);
+    *(u32*)((s32)mario + 0x98) = *(u32*)(data + 0x3C);
+    *(u32*)((s32)mario + 0x9C) = *(u32*)(data + 0x40);
+    *(u32*)((s32)mario + 0xA0) = *(u32*)(data + 0x44);
+    *(u32*)((s32)mario + 0xBC) = *(u32*)(data + 0x48);
+    *(u32*)((s32)mario + 0xC0) = *(u32*)(data + 0x4C);
+    *(u32*)((s32)mario + 0xC4) = *(u32*)(data + 0x50);
     *(u32*)((s32)mario + 0x4) &= ~0x100;
     *(u32*)((s32)mario + 0x4) &= ~0x8;
     *(u32*)mario &= ~0x1000000;
@@ -310,6 +302,7 @@ void marioRollForceCancel(void) {
     allPartyRideOff();
     marioChgMotSub(0, 0);
 }
+
 void marioSetRollDispDir(void) {
     extern f32 float_170_80420ea8;
     extern f32 float_200_80420ea4;

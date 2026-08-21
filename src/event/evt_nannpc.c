@@ -259,29 +259,39 @@ u8 nannpc_ext_shadow_disp(void) {
     extLoadShadowTev();
     return extDrawShadow();
 }
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void nannpc_ext_init(void) {
     extern void* extGetPosePtr(void);
+    extern s32 extGetPoseNum(void);
     extern void PSMTXIdentity(void* matrix);
     extern f32 float_0_80422870;
     extern f32 float_neg1000_80422874;
-    char* pose;
-    void* matrix;
     s32 count;
+    char* pose;
+    s32 type;
+    f32 offscreen;
+    f32 zero;
 
     pose = (char*)extGetPosePtr();
-    count = extGetPoseNum();
-    while (--count >= 0) {
-        *(s32*)(pose + 0x00) = 3;
-        *(f32*)(pose + 0x04) = float_0_80422870;
-        matrix = *(void**)(pose + 0x0C);
-        PSMTXIdentity(matrix);
-        *(f32*)((char*)matrix + 0x0C) = float_0_80422870;
-        *(f32*)((char*)matrix + 0x1C) = float_neg1000_80422874;
-        *(f32*)((char*)matrix + 0x2C) = float_0_80422870;
+    count = extGetPoseNum() - 1;
+    zero = float_0_80422870;
+    offscreen = float_neg1000_80422874;
+    type = 3;
+    while (count >= 0) {
+        *(s32*)(pose + 0x00) = type;
+        *(f32*)(pose + 0x04) = zero;
+        PSMTXIdentity(*(void**)(pose + 0x0C));
+        *(f32*)((char*)*(void**)(pose + 0x0C) + 0x0C) = zero;
+        count--;
+        *(f32*)((char*)*(void**)(pose + 0x0C) + 0x1C) = offscreen;
+        *(f32*)((char*)*(void**)(pose + 0x0C) + 0x2C) = zero;
         pose += 0x20;
     }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
 void nannpc_ext_main_sub(void) {
     s32* work;
     char* entry;
@@ -367,6 +377,10 @@ s32 evt_nannpc_init(void* event, s32 firstCall) {
     extern void nannpc_ext_main(void);
     extern void nannpc_ext_main_sub(void);
     extern void nannpc_ext_dispent(void);
+    extern u32 vec3_802f35f8[3];
+    extern u32 vec3_802f3604[3];
+    extern u32 vec3_802f3610[3];
+    extern u32 dat_80422854;
     s32* args = *(s32**)((u8*)event + 0x18);
     void* poseData = (void*)evtGetValue(event, args[0]);
     s16* table = (s16*)evtGetValue(event, args[1]);
@@ -400,15 +414,15 @@ s32 evt_nannpc_init(void* event, s32 firstCall) {
             entry[0] = 0;
             *(s32*)(entry + 0x10) = 0;
             *(u32*)(entry + 0x14) = 0;
-            *(f32*)(entry + 0x18) = 0.0f;
-            *(f32*)(entry + 0x1C) = 0.0f;
-            *(f32*)(entry + 0x20) = 0.0f;
-            *(f32*)(entry + 0x24) = 1.0f;
-            *(f32*)(entry + 0x28) = 1.0f;
-            *(f32*)(entry + 0x2C) = 1.0f;
-            *(f32*)(entry + 0x30) = 0.0f;
-            *(f32*)(entry + 0x34) = 0.0f;
-            *(f32*)(entry + 0x38) = 0.0f;
+            *(u32*)(entry + 0x18) = vec3_802f35f8[0];
+            *(u32*)(entry + 0x1C) = vec3_802f35f8[1];
+            *(u32*)(entry + 0x20) = vec3_802f35f8[2];
+            *(u32*)(entry + 0x30) = vec3_802f3604[0];
+            *(u32*)(entry + 0x34) = vec3_802f3604[1];
+            *(u32*)(entry + 0x38) = vec3_802f3604[2];
+            *(u32*)(entry + 0x24) = vec3_802f3610[0];
+            *(u32*)(entry + 0x28) = vec3_802f3610[1];
+            *(u32*)(entry + 0x2C) = vec3_802f3610[2];
             *(f32*)(entry + 0x48) = 32.0f;
             *(f32*)(entry + 0x4C) = 32.0f;
             *(u32*)(entry + 0x50) = 0;
@@ -417,6 +431,7 @@ s32 evt_nannpc_init(void* event, s32 firstCall) {
             *(u32*)(entry + 0x5C) = 0;
             *(f32*)(entry + 0x60) = 0.0f;
             *(u32*)(entry + 0x64) = 0;
+            *(u32*)(entry + 0xBC) = dat_80422854;
         }
         if (table != 0) {
             for (i = 0; i < 5 && table[i * 2] != -1; i++) {

@@ -330,6 +330,11 @@ s32 winBadgeMain(void* pWin) {
     extern u8 mario_change(void*);
     extern void winSortEntry(f32,f32,void*,s32);
     extern s32 winSortWait(void*);
+    extern void winMsgEntry(void*, s32, char*, s32);
+    extern u8 itemDataTable[];
+    extern char str_msg_menu_badge_all_802f54c0[];
+    extern char str_msg_menu_badge_equip_802f54d4[];
+    void* pouch = pouchGetPtr();
     s32 state = *(s32*)((s32)pWin + 0x3DC);
     s32 sub = *(s32*)((s32)pWin + 0x3E0);
     u32 pressed = *(u32*)((s32)pWin + 4);
@@ -346,6 +351,64 @@ s32 winBadgeMain(void* pWin) {
             sub = 1 - sub;
             *(s32*)((s32)pWin + 0x3E0) = sub;
             psndSFXOn(0x20005);
+            if (sub != 0) {
+                s32 countEquipped = 0;
+                s32 badgeIndex = 0;
+                s32 group;
+                u8* pouchEntry = (u8*)pouchGetPtr();
+                u8* out = (u8*)pWin;
+                s32 one = 1;
+                s32 badge;
+                for (group = 0; group < 0x28; group++) {
+                    badge = *(s16*)(pouchEntry + 0x38A);
+                    if (badge != 0) {
+                        *(s32*)(out + 0x404) = one;
+                        countEquipped++;
+                        *(s32*)(out + 0x408) = badgeIndex;
+                        *(s32*)(out + 0x40C) = *(s16*)(pouchEntry + 0x38A);
+                        out += 0xC;
+                    }
+                    badge = *(s16*)(pouchEntry + 0x38C);
+                    badgeIndex++;
+                    if (badge != 0) {
+                        *(s32*)(out + 0x404) = one;
+                        countEquipped++;
+                        *(s32*)(out + 0x408) = badgeIndex;
+                        *(s32*)(out + 0x40C) = *(s16*)(pouchEntry + 0x38C);
+                        out += 0xC;
+                    }
+                    badge = *(s16*)(pouchEntry + 0x38E);
+                    badgeIndex++;
+                    if (badge != 0) {
+                        *(s32*)(out + 0x404) = one;
+                        countEquipped++;
+                        *(s32*)(out + 0x408) = badgeIndex;
+                        *(s32*)(out + 0x40C) = *(s16*)(pouchEntry + 0x38E);
+                        out += 0xC;
+                    }
+                    badge = *(s16*)(pouchEntry + 0x390);
+                    badgeIndex++;
+                    if (badge != 0) {
+                        *(s32*)(out + 0x404) = one;
+                        countEquipped++;
+                        *(s32*)(out + 0x408) = badgeIndex;
+                        *(s32*)(out + 0x40C) = *(s16*)(pouchEntry + 0x390);
+                        out += 0xC;
+                    }
+                    badge = *(s16*)(pouchEntry + 0x392);
+                    badgeIndex++;
+                    if (badge != 0) {
+                        *(s32*)(out + 0x404) = one;
+                        countEquipped++;
+                        *(s32*)(out + 0x408) = badgeIndex;
+                        *(s32*)(out + 0x40C) = *(s16*)(pouchEntry + 0x392);
+                        out += 0xC;
+                    }
+                    pouchEntry += 0xA;
+                    badgeIndex++;
+                }
+                *(s32*)((s32)pWin + 0xD64) = countEquipped;
+            }
         } else if ((pressed & 0x100) != 0) {
             if ((sub == 0 && count == 0) || (sub == 1 && *(s32*)((s32)pWin + 0xD64) == 0)) return 0;
             psndSFXOn(0x20012);
@@ -359,17 +422,44 @@ s32 winBadgeMain(void* pWin) {
         }
         *(f32*)((s32)pWin + 0x158) = -270.0f;
         *(f32*)((s32)pWin + 0x15C) = (f32)(130 - sub * 45);
+        winMsgEntry(pWin, 0, sub == 0 ? str_msg_menu_badge_all_802f54c0 : str_msg_menu_badge_equip_802f54d4, 0);
     } else if (state == 10) {
         if (pressed & 0x100) {
             s32 index = *cursor;
             if (sub == 0) {
                 if (pouchEquipCheckBadgeIndex(index) == 0) {
-                    psndSFXOn(0x20038); pouchEquipBadgeIndex(index);
+                    s32 badge = pouchHaveBadge(index);
+                    if (*(s16*)((s32)pouch + 0x92) < *(s8*)(itemDataTable + badge * 0x28 + 0x1C)) {
+                        psndSFXOn(0x20014);
+                    } else {
+                        psndSFXOn(0x20038);
+                        pouchEquipBadgeIndex(index);
+                    }
                 } else {
                     psndSFXOn(0x20039); pouchUnEquipBadgeIndex(index);
                 }
+                pouchReviseMarioParam();
+                pouchRevisePartyParam();
+                ((u8 (*)(void*, s32))mario_change)(pWin, pouchHaveBadge(index));
+            } else {
+                u8* entry = (u8*)pWin + 0x404 + index * 0xC;
+                s32 badgeIndex = *(s32*)(entry + 4);
+                if (*(s32*)entry == 0) {
+                    s32 badge = pouchHaveBadge(badgeIndex);
+                    if (*(s16*)((s32)pouch + 0x92) >= *(s8*)(itemDataTable + badge * 0x28 + 0x1C)) {
+                        psndSFXOn(0x20038);
+                        pouchEquipBadgeIndex(badgeIndex);
+                        *(s32*)entry = 1;
+                    }
+                } else {
+                    psndSFXOn(0x20039);
+                    pouchUnEquipBadgeIndex(badgeIndex);
+                    *(s32*)entry = 0;
+                }
+                pouchReviseMarioParam();
+                pouchRevisePartyParam();
+                ((u8 (*)(void*, s32))mario_change)(pWin, pouchHaveBadge(badgeIndex));
             }
-            pouchReviseMarioParam(); pouchRevisePartyParam(); pouchHaveBadge(index); mario_change(pWin);
         } else if (pressed & 0x200) {
             psndSFXOn(0x20013); *(s32*)((s32)pWin + 0x3DC) = 0;
         } else if (pressed & 0x1000) return -2;
@@ -380,6 +470,13 @@ s32 winBadgeMain(void* pWin) {
         if (count > 0) { if (*cursor < 0) *cursor = count - 1; if (*cursor >= count) *cursor = 0; *page = *cursor / 8; }
         *(f32*)((s32)pWin + 0x158) = -110.0f;
         *(f32*)((s32)pWin + 0x15C) = (f32)(110 - (*cursor & 7) * 23);
+        if (sub == 0) {
+            s32 badge = pouchHaveBadge(*cursor);
+            winMsgEntry(pWin, badge, *(char**)(itemDataTable + badge * 0x28 + 8), 0);
+        } else {
+            s32 badge = *(s32*)((s32)pWin + 0x40C + *cursor * 0xC);
+            winMsgEntry(pWin, badge, *(char**)(itemDataTable + badge * 0x28 + 8), 0);
+        }
     } else if (state == 1000) {
         if (winSortWait(pWin) == 0) *(s32*)((s32)pWin + 0x3DC) = *(s32*)((s32)pWin + 0x124);
         if (pressed & 0x1000) return -2;

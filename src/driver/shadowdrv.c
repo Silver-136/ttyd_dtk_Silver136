@@ -939,6 +939,7 @@ void shadowEntry(double x, double y, double z, double size) {
     extern f32 float_0p4_8041f9f0;
     u8* work;
     u8* entry;
+    f32 pos[3];
 
     work = cswp;
     entry = *(u8**)(work + 0x108) + *(s32*)(work + 0x104) * 0x5C;
@@ -946,9 +947,12 @@ void shadowEntry(double x, double y, double z, double size) {
     if (*(s32*)(work + 0x118) != 0) {
         *(u16*)entry |= 1;
     }
-    *(f32*)(entry + 4) = (f32)x;
-    *(f32*)(entry + 8) = (f32)y;
-    *(f32*)(entry + 0xC) = (f32)z;
+    pos[0] = (f32)x;
+    pos[1] = (f32)y;
+    pos[2] = (f32)z;
+    *(u32*)(entry + 4) = *(u32*)&pos[0];
+    *(u32*)(entry + 8) = *(u32*)&pos[1];
+    *(u32*)(entry + 0xC) = *(u32*)&pos[2];
     *(f32*)(entry + 0x10) = (f32)size;
     *(u32*)(entry + 0x14) = *(u32*)(work + 0x114);
     entry[2] = *(u8*)(work + 0x110);
@@ -963,13 +967,20 @@ void shadowEntry(double x, double y, double z, double size) {
 }
 
 s32 shadowEntryMode(double x, double y, double z, double size, u8 mode) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
     extern void* cswp;
+    extern const Vec3 vec3_802bfd64;
     extern f32 float_1_8041f9e4;
     extern f32 float_0p2_8041f9ec;
     extern f32 float_0p4_8041f9f0;
     u8* work;
     u8* entry;
     s32 index;
+    Vec3 pos;
 
     work = cswp;
     index = *(s32*)(work + 0x104);
@@ -978,9 +989,13 @@ s32 shadowEntryMode(double x, double y, double z, double size, u8 mode) {
     if (*(s32*)(work + 0x118) != 0) {
         *(u16*)entry |= 1;
     }
-    *(f32*)(entry + 4) = (f32)x;
-    *(f32*)(entry + 8) = (f32)y;
-    *(f32*)(entry + 0xC) = (f32)z;
+    pos = vec3_802bfd64;
+    pos.x = (f32)x;
+    pos.y = (f32)y;
+    pos.z = (f32)z;
+    *(u32*)(entry + 4) = *(u32*)&pos.x;
+    *(u32*)(entry + 8) = *(u32*)&pos.y;
+    *(u32*)(entry + 0xC) = *(u32*)&pos.z;
     *(f32*)(entry + 0x10) = (f32)size;
     *(u32*)(entry + 0x14) = *(u32*)(work + 0x114);
     entry[2] = mode;

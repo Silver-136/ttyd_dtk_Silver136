@@ -33,3 +33,7 @@ void npcClearDeadInfo(void);
 void npcKoopaModeEncountCheck(void);
 s32 npcKoopaModeMobjBoundDeadCheck(void* hit);
 s32 npcCalcScore(void* npc);
+void fbatHitCheckAll(void);
+void* fbatHitCheck(u32 flags, void* hitInfo);
+s32 _npcHitCheckSphere(f64 x, f64 y, f64 z, f64 radius, s32 npc, f32* outDist);
+s32 _npcHitCheckHammerAllMotion(f64 radius, f64 angle, s32 npc, f32* outDist);
