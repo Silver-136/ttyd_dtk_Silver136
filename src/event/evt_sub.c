@@ -614,18 +614,18 @@ s32 evt_sub_load_progresstime(void* event) {
     extern void evtSetValue(void* event, s32 id, s32 value);
     s32* args = *(s32**)((s32)event + 0x18);
     s32 base = args[0];
-    u32 time[2];
+    u8 time[8];
     u32 bus;
     u32 ticks;
     s32 value;
-    time[0] = (swByteGet(base + 0xA220000 - 0x180) << 24) |
-              (swByteGet(base + 0xA220000 - 0x17F) << 16) |
-              (swByteGet(base + 0xA220000 - 0x17E) << 8) |
-              swByteGet(base + 0xA220000 - 0x17D);
-    time[1] = (swByteGet(base + 0xA220000 - 0x17C) << 24) |
-              (swByteGet(base + 0xA220000 - 0x17B) << 16) |
-              (swByteGet(base + 0xA220000 - 0x17A) << 8) |
-              swByteGet(base + 0xA220000 - 0x179);
+    time[0] = swByteGet(base + 0xA220000 - 0x180);
+    time[1] = swByteGet(base + 0xA220000 - 0x17F);
+    time[2] = swByteGet(base + 0xA220000 - 0x17E);
+    time[3] = swByteGet(base + 0xA220000 - 0x17D);
+    time[4] = swByteGet(base + 0xA220000 - 0x17C);
+    time[5] = swByteGet(base + 0xA220000 - 0x17B);
+    time[6] = swByteGet(base + 0xA220000 - 0x17A);
+    time[7] = swByteGet(base + 0xA220000 - 0x179);
     bus = *(u32*)0x800000F8 >> 2;
     ticks = ((u64)bus * 0x10624DD3U) >> 38;
     value = (s32)((*(s64*)((s32)gp + 0x20) - *(s64*)time) / ticks);
@@ -635,6 +635,7 @@ s32 evt_sub_load_progresstime(void* event) {
     evtSetValue(event, args[1], value);
     return 2;
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -649,13 +650,15 @@ s32 evt_sub_animgroup_async(int param_1) {
     extern s32 animGroupBaseAsync(s32 name, s32 mode, s32 flags);
     extern s32 gp;
     s32 name = evtGetValue((void*)param_1, **(s32**)(param_1 + 0x18));
-    s32 mode = (*(s32*)(gp + 0x14) != 0);
+    s32 mode = *(s32*)(gp + 0x14);
+    mode = (u32)(-mode | mode) >> 31;
 
     if (animGroupBaseAsync(name, mode, 0) == 0) {
         return 0;
     }
     return 2;
 }
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_sub_countdown_start) {
@@ -786,12 +789,16 @@ s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
     extern f32 float_4p7124_8041fe64;
     extern f32 float_0p03705_8041fe6c;
     extern f32 float_0p4967_8041fe70;
+    extern f32 float_62_8041fe74;
+    typedef struct LocalVec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } LocalVec;
     s32 coins;
     void* mario;
     void* cam;
-    f32 x;
-    f32 y;
-    f32 z;
+    LocalVec positions[2];
     f32 angle;
     f32 sx;
     f32 cz;
@@ -803,10 +810,9 @@ s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
 
     coins = evtGetValue(event, event->args[0]);
     mario = marioGetPtr();
-    x = *(f32*)((s32)mario + 0x8C);
-    y = *(f32*)((s32)mario + 0x90) + float_52_8041fe78;
-    z = *(f32*)((s32)mario + 0x94);
-    cam = camGetPtr(0);
+    positions[0] = *(LocalVec*)((s32)mario + 0x8C);
+    positions[1] = positions[0];
+    cam = camGetPtr(4);
     angle = reviseAngle((float_100_8041fe44 * *(f32*)((s32)cam + 0x114) + float_5_8041fe40) / float_100_8041fe44);
     angle = float_6p2832_8041fe48 * angle / float_360_8041fe4c;
     if (angle <= float_3p1416_8041fe5c) {
@@ -845,6 +851,12 @@ s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
         }
     }
     cz *= float_10_8041fe68;
+    positions[0].x += sx;
+    positions[0].y += float_62_8041fe74;
+    positions[0].z -= cz;
+    positions[1].x += sx;
+    positions[1].y += float_52_8041fe78;
+    positions[1].z -= cz;
     if (isFirstCall != 0) {
         *(s32*)((s32)event + 0x78) = 0;
         *(void**)((s32)event + 0x7C) = effItemGetEntry(7);
@@ -857,7 +869,7 @@ s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
     param = *(s32**)((s32)event + 0x88);
     if (state == 0) {
         iconEntry(str_iraiCoin_802c1868, 0x193);
-        iconSetPos(x + sx, y, z - cz, str_iraiCoin_802c1868);
+        iconSetPos(positions[1].x, positions[1].y, positions[1].z, str_iraiCoin_802c1868);
         iconFlagOn(str_iraiCoin_802c1868, 0x102);
         *(s32*)((s32)*(void**)((s32)eff + 0xC) + 0x38) = 5;
         marioChgGetItemMotion();
@@ -919,8 +931,10 @@ s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
     }
     return 2;
 }
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+#pragma optimize_for_size off
 s32 stone_ry(void* event) {
     extern s32 evtGetValue(void* event, s32 value);
     extern void* itemNameToPtr(s32 name);
@@ -935,6 +949,7 @@ s32 stone_ry(void* event) {
     *(f32*)((s32)b + 0x1C) = (f32)(angle % 360);
     return 2;
 }
+#pragma optimize_for_size on
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -1016,6 +1031,8 @@ s32 unk_80053f10(void* event) {
     f32 x;
     f32 y;
     f32 scale;
+    volatile f32 scaledX;
+    volatile f32 scaledY;
 
     args = *(s32**)((s32)event + 0x18);
     xArg = args[0];
@@ -1023,8 +1040,10 @@ s32 unk_80053f10(void* event) {
     x = evtGetFloat(event, xArg);
     y = evtGetFloat(event, yArg);
     scale = float_60_8041fe3c / (f32)*(s32*)((s32)gp + 4);
-    evtSetFloat(event, xArg, x * scale);
-    evtSetFloat(event, yArg, y * scale);
+    scaledX = x * scale;
+    scaledY = y * scale;
+    evtSetFloat(event, xArg, scaledX);
+    evtSetFloat(event, yArg, scaledY);
     return 2;
 }
 

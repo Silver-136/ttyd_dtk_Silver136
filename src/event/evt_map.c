@@ -108,17 +108,25 @@ s32 evt_map_set_fog(void* pEvt) {
     s32 mode;
     f32 start;
     f32 end;
-    unsigned char color[4];
+    s32 red;
+    s32 green;
+    s32 blue;
+    u32 scratch;
+    u32 color;
 
     args = *(s32**)((s32)pEvt + 0x18);
     mode = evtGetValue(pEvt, args[0]);
     start = evtGetFloat(pEvt, args[1]);
     end = evtGetFloat(pEvt, args[2]);
-    color[0] = evtGetValue(pEvt, args[3]);
-    color[1] = evtGetValue(pEvt, args[4]);
-    color[2] = evtGetValue(pEvt, args[5]);
-    color[3] = 0;
-    mapSetFog(mode, start, end, color);
+    red = evtGetValue(pEvt, args[3]);
+    green = evtGetValue(pEvt, args[4]);
+    blue = evtGetValue(pEvt, args[5]);
+    scratch = dat_8041fa38;
+    ((u8*)&scratch)[0] = red;
+    ((u8*)&scratch)[1] = green;
+    ((u8*)&scratch)[2] = blue;
+    color = scratch;
+    mapSetFog(mode, start, end, (u8*)&color);
     return 2;
 }
 
@@ -292,22 +300,41 @@ s32 evt_map_blend_set_mobj_flag(void* pEvt) {
 s32 evt_mapobj_color(void* pEvt) {
     extern void mapObjSetColor(s32, u8*);
     extern void mapGrpSetColor(s32, u8*);
+    extern u32 unk_80429558;
+    extern u32 unk_8042955c;
     s32* args;
     s32 group;
     s32 id;
-    u8 color[4];
+    s32 red;
+    s32 green;
+    s32 blue;
+    s32 alpha;
 
     args = *(s32**)((s32)pEvt + 0x18);
     group = evtGetValue(pEvt, args[0]);
     id = evtGetValue(pEvt, args[1]);
-    color[0] = evtGetValue(pEvt, args[2]);
-    color[1] = evtGetValue(pEvt, args[3]);
-    color[2] = evtGetValue(pEvt, args[4]);
-    color[3] = evtGetValue(pEvt, args[5]);
+    red = evtGetValue(pEvt, args[2]);
+    green = evtGetValue(pEvt, args[3]);
+    blue = evtGetValue(pEvt, args[4]);
+    alpha = evtGetValue(pEvt, args[5]);
     if (group == 0) {
-        mapObjSetColor(id, color);
+        u32 scratch = unk_80429558;
+        u32 color;
+        ((u8*)&scratch)[0] = red;
+        ((u8*)&scratch)[1] = green;
+        ((u8*)&scratch)[2] = blue;
+        ((u8*)&scratch)[3] = alpha;
+        color = scratch;
+        mapObjSetColor(id, (u8*)&color);
     } else {
-        mapGrpSetColor(id, color);
+        u32 scratch = unk_8042955c;
+        u32 color;
+        ((u8*)&scratch)[0] = red;
+        ((u8*)&scratch)[1] = green;
+        ((u8*)&scratch)[2] = blue;
+        ((u8*)&scratch)[3] = alpha;
+        color = scratch;
+        mapGrpSetColor(id, (u8*)&color);
     }
     return 2;
 }

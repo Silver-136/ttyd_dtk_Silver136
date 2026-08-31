@@ -14,6 +14,7 @@ u32 parsePush(char* tagName) {
     extern char buf_405[128];
     extern s32 strcmp(const char*, const char*);
     s32 depth = *(s32*)(parse + 0x54);
+    char* input = *(char**)parse;
     s32* starts = (s32*)(parse + 4);
     s32* ends = (s32*)(parse + 0x2C);
     s32 begin = starts[depth];
@@ -25,44 +26,66 @@ u32 parsePush(char* tagName) {
     s32 i;
 
     for (i = begin; i < end; i++) {
-        if (parse[i] != '<') {
-            continue;
-        }
-        if (parse[i + 1] == '/') {
-            nesting--;
-            if (state == 1 && nesting == 0) {
-                childEnd = i;
-                while (i < end && parse[i] != '>') {
-                    i++;
+        char* scan = input + i;
+        if (*scan == '<') {
+            if (scan[1] == '/') {
+                nesting--;
+                if (state == 1 && nesting == 0) {
+                    s32 remain = end - i;
+                    childEnd = i;
+                    if (i < end) {
+                        do {
+                            if (*scan == '>') {
+                                childEnd = i + 1;
+                                break;
+                            }
+                            i++;
+                            scan++;
+                            remain--;
+                        } while (remain != 0);
+                    }
+                    state = 2;
+                    break;
                 }
-                childEnd = i + 1;
-                state = 2;
-                break;
+            } else {
+                if (state == 0 && nesting == 0) {
+                    s32 remain = end - i;
+                    char* dst = buf_405;
+                    s32 length = 0;
+                    if (i < end) {
+                        do {
+                            s8 c = (s8)*scan;
+                            if (c != ' ' && c != '\t' && c != '\n' && c != '\r') {
+                                *dst++ = c;
+                                length++;
+                            }
+                            if (length >= 0x7F || *scan == '>') {
+                                break;
+                            }
+                            scan++;
+                            remain--;
+                        } while (remain != 0);
+                    }
+                    buf_405[length] = 0;
+                    if (strcmp(buf_405, tagName) == 0) {
+                        remain = end - i;
+                        scan = input + i;
+                        if (i < end) {
+                            do {
+                                if (*scan == '>') {
+                                    break;
+                                }
+                                i++;
+                                scan++;
+                                remain--;
+                            } while (remain != 0);
+                        }
+                        state = 1;
+                        childStart = i + 1;
+                    }
+                }
+                nesting++;
             }
-        } else {
-            if (state == 0 && nesting == 0) {
-                s32 length = 0;
-                s32 j = i;
-                while (j < end) {
-                    char c = parse[j];
-                    if (c != ' ' && c != '\t' && c != '\n' && c != '\r') {
-                        buf_405[length++] = c;
-                    }
-                    if (length > 0x7E || c == '>') {
-                        break;
-                    }
-                    j++;
-                }
-                buf_405[length] = 0;
-                if (strcmp(buf_405, tagName) == 0) {
-                    while (i < end && parse[i] != '>') {
-                        i++;
-                    }
-                    state = 1;
-                    childStart = i + 1;
-                }
-            }
-            nesting++;
         }
     }
     if (state == 2) {

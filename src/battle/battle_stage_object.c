@@ -73,85 +73,401 @@ void* BattleSearchObjectPtr(const char* name) {
 void BattleStageObjectInit(void) {
     extern void* pouchGetPtr(void);
     extern void* mapGetWork(void);
-    extern void mapPlayAnimationLv(char*,s32,s32);
+    extern void mapPlayAnimationLv(char*, s32, s32);
     extern void* mapGetMapObj(char*);
-    extern void mapGrpFlagOn(char*,s32);
-    extern void mapGrpFlagOff(char*,s32);
+    extern void mapGrpFlagOn(char*, s32);
+    extern void mapGrpFlagOff(char*, s32);
+    extern void* BattleStageGetPtr(void);
+    extern void* BtlUnit_Entry(void*);
+    extern void BtlUnit_SetPos(void*, f32, f32, f32);
+    extern void BtlUnit_SetHomePos(void*, f32, f32, f32);
     extern s32 str_A1_80423028;
     extern s32 str_A2_8042302c;
     extern s32 str_B_80423030;
     extern s32 str_C_80423034;
-    extern char str_den_80423038[];
-    extern char str_escape_wall_802f439c[];
-    extern u8 battle_stage_nozzle_data[];
-    extern u8 battle_stage_fall_object_data[];
-    char* battle;
-    char* info;
-    char* stageInfo;
-    char* objectData;
-    char* objectWork;
-    char* slot;
-    char* pouch;
-    char* mapWork;
-    char* rootName;
+    extern s32 str_den_80423038;
+    extern char lbl_80373E38[];
+    extern char vec3_802f42b8[];
+    extern s32 _object_wall_data;
+    extern s32 _object_spot_light_data;
+    extern s32 _entry_tree_data;
+    extern s32 _entry_switch_data;
+
+    u8* battle;
+    u8* stageInfo;
+    u8* objectData;
+    u8* objectWork;
+    u8* slot;
+    u8* pouch;
+    u8* mapWork;
+    u8* dataBase;
+    u8* vecBase;
+    u8* stage;
+    void* unit;
+    void* event;
     s32 objectCount;
-    s32 rank;
     s32 id;
+    s32 layerA1;
+    s32 layerA2;
+    s32 layerB;
+    s32 layerBRotate;
+    s32 hasIronFrame;
     s32 i;
     s32 j;
+    s32 offset;
+    u16 layer;
+    u16 spawnType;
+    f32 zero;
 
-    battle=(char*)_battleWorkPointer;
-    info=*(char**)(battle+0x2738);
-    info=*(char**)(info+0x0C);
-    stageInfo=*(char**)info;
-    objectCount=*(s32*)(stageInfo+8);
-    objectData=*(char**)(stageInfo+0x0C);
-    objectWork=battle+0x1715C;
-    memset(objectWork,0,0xF80);
-    pouch=(char*)pouchGetPtr();
-    rank=*(s16*)(pouch+0x88);
-    if (rank<4 && rank>0) mapPlayAnimationLv(str_den_80423038,1,0);
-    pouch=(char*)pouchGetPtr(); rank=*(s16*)(pouch+0x88);
-    if (rank<4 && rank>0) {
-        pouch=(char*)pouchGetPtr();
-        *(void**)(battle+0x18110)=battle_stage_nozzle_data+*(s16*)(pouch+0x88)*0x310;
-    } else {
-        *(void**)(battle+0x18110)=0;
+    battle = (u8*)_battleWorkPointer;
+    dataBase = (u8*)lbl_80373E38;
+    vecBase = (u8*)vec3_802f42b8;
+
+    layerA1 = 0;
+    layerA2 = 0;
+    layerB = 0;
+    layerBRotate = 0;
+    hasIronFrame = 0;
+
+    stageInfo = *(u8**)(battle + 0x2738);
+    stageInfo = *(u8**)(stageInfo + 0x0C);
+    stageInfo = *(u8**)stageInfo;
+    objectCount = *(s32*)(stageInfo + 0x08);
+    objectData = *(u8**)(stageInfo + 0x0C);
+
+    objectWork = battle + 0x1715C;
+    memset(objectWork, 0, 0xF80);
+
+    pouch = (u8*)pouchGetPtr();
+    if (*(s16*)(pouch + 0x88) < 4 && *(s16*)(pouch + 0x88) >= 1) {
+        mapPlayAnimationLv((char*)&str_den_80423038, 1, 0);
     }
-    pouch=(char*)pouchGetPtr();
-    *(void**)(battle+0x18114)=battle_stage_fall_object_data+*(s16*)(pouch+0x88)*0x78C;
-    *(s8*)(battle+0x182A6)=-1;
-    *(s32*)(battle+0x182B8)=0;
-    *(s32*)(battle+0x182BC)=0;
-    mapWork=(char*)mapGetWork();
-    rootName=*(char**)(mapWork+0xA8);
-    rootName=*(char**)(rootName+8);
-    rootName=*(char**)rootName;
-    mapGrpFlagOff(rootName,2);
-    if(mapGetMapObj((char*)&str_A1_80423028)){mapGrpFlagOn((char*)&str_A1_80423028,1);mapGrpFlagOff((char*)&str_A1_80423028,2);}
-    if(mapGetMapObj((char*)&str_A2_8042302c)){mapGrpFlagOn((char*)&str_A2_8042302c,1);mapGrpFlagOff((char*)&str_A2_8042302c,2);}
-    if(mapGetMapObj((char*)&str_B_80423030)){mapGrpFlagOn((char*)&str_B_80423030,1);mapGrpFlagOff((char*)&str_B_80423030,2);}
-    if(mapGetMapObj((char*)&str_C_80423034)){mapGrpFlagOn((char*)&str_C_80423034,1);mapGrpFlagOff((char*)&str_C_80423034,2);}
-    mapGrpFlagOn(str_escape_wall_802f439c,1);
 
-    id=1;
-    while(objectData!=0 && objectCount--!=0){
-        slot=objectWork;
-        for(j=0;j<32;j++,slot+=0x7C){
-            if(*(s32*)slot<1) break;
+    pouch = (u8*)pouchGetPtr();
+    if (*(s16*)(pouch + 0x88) < 4 && *(s16*)(pouch + 0x88) >= 1) {
+        pouch = (u8*)pouchGetPtr();
+        *(void**)(battle + 0x18110) =
+            dataBase + 0x1C0 + *(s16*)(pouch + 0x88) * 0x310;
+    } else {
+        *(void**)(battle + 0x18110) = 0;
+    }
+
+    pouch = (u8*)pouchGetPtr();
+    *(void**)(battle + 0x18114) =
+        dataBase + 0xE00 + *(s16*)(pouch + 0x88) * 0x78C;
+    *(s8*)(battle + 0x182A6) = -1;
+    *(s32*)(battle + 0x182B8) = 0;
+    *(s32*)(battle + 0x182BC) = 0;
+
+    mapWork = (u8*)mapGetWork();
+    mapWork = *(u8**)(mapWork + 0xA8);
+    mapWork = *(u8**)(mapWork + 0x08);
+    mapGrpFlagOff(*(char**)mapWork, 2);
+
+    if (mapGetMapObj((char*)&str_A1_80423028) != 0) {
+        mapGrpFlagOn((char*)&str_A1_80423028, 1);
+        mapGrpFlagOff((char*)&str_A1_80423028, 2);
+    }
+    if (mapGetMapObj((char*)&str_A2_8042302c) != 0) {
+        mapGrpFlagOn((char*)&str_A2_8042302c, 1);
+        mapGrpFlagOff((char*)&str_A2_8042302c, 2);
+    }
+    if (mapGetMapObj((char*)&str_B_80423030) != 0) {
+        mapGrpFlagOn((char*)&str_B_80423030, 1);
+        mapGrpFlagOff((char*)&str_B_80423030, 2);
+    }
+    if (mapGetMapObj((char*)&str_C_80423034) != 0) {
+        mapGrpFlagOn((char*)&str_C_80423034, 1);
+        mapGrpFlagOff((char*)&str_C_80423034, 2);
+    }
+    mapGrpFlagOn((char*)(vecBase + 0xE4), 1);
+
+    zero = 0.0f;
+    id = 1;
+
+    if (objectData != 0) {
+        while (objectCount != 0) {
+            offset = 0;
+            for (j = 0; j < 0x20; j++, offset += 0x7C) {
+                slot = objectWork + offset;
+                if (*(s32*)slot < 1) {
+                    break;
+                }
+            }
+            if (j >= 0x20) {
+                break;
+            }
+
+            *(void**)(slot + 0x64) = objectData;
+            *(s32*)(slot + 0x00) = id;
+            *(s32*)(slot + 0x6C) = -1;
+
+            layer = *(u16*)(objectData + 0x06);
+            switch (layer) {
+                case 0:
+                    layerA1++;
+                    break;
+                case 1:
+                    layerA2++;
+                    break;
+                case 2:
+                    layerB++;
+                    break;
+                case 3:
+                    layerBRotate++;
+                    break;
+                case 6:
+                    hasIronFrame = 1;
+                    break;
+            }
+
+            if (layer < 4) {
+                if (layer < 2) {
+                    *(u32*)(slot + 0x04) = *(u32*)(objectData + 0x08);
+                    *(u32*)(slot + 0x08) = *(u32*)(objectData + 0x0C);
+                    *(u32*)(slot + 0x0C) = *(u32*)(objectData + 0x10);
+                } else {
+                    *(u32*)(slot + 0x04) = *(u32*)(objectData + 0x08);
+                    *(u32*)(slot + 0x08) = *(u32*)(objectData + 0x0C);
+                    *(u32*)(slot + 0x0C) = *(u32*)(objectData + 0x10);
+                }
+            } else if (layer < 8 && layer >= 6) {
+                *(u32*)(slot + 0x04) = *(u32*)(objectData + 0x08);
+                *(u32*)(slot + 0x08) = *(u32*)(objectData + 0x0C);
+                *(u32*)(slot + 0x0C) = *(u32*)(objectData + 0x10);
+            }
+
+            *(f32*)(slot + 0x24) = zero;
+            *(f32*)(slot + 0x20) = zero;
+            *(f32*)(slot + 0x1C) = zero;
+
+            *(u32*)(slot + 0x34) = *(u32*)(vecBase + 0x00);
+            *(u32*)(slot + 0x38) = *(u32*)(vecBase + 0x04);
+            *(u32*)(slot + 0x3C) = *(u32*)(vecBase + 0x08);
+            *(u32*)(slot + 0x40) = *(u32*)(vecBase + 0x0C);
+            *(u32*)(slot + 0x44) = *(u32*)(vecBase + 0x10);
+            *(u32*)(slot + 0x48) = *(u32*)(vecBase + 0x14);
+            *(u32*)(slot + 0x4C) = *(u32*)(vecBase + 0x18);
+            *(u32*)(slot + 0x50) = *(u32*)(vecBase + 0x1C);
+            *(u32*)(slot + 0x54) = *(u32*)(vecBase + 0x20);
+            *(u32*)(slot + 0x58) = *(u32*)(vecBase + 0x24);
+            *(u32*)(slot + 0x5C) = *(u32*)(vecBase + 0x28);
+            *(u32*)(slot + 0x60) = *(u32*)(vecBase + 0x2C);
+
+            mapGrpFlagOff(*(char**)(*(u8**)(slot + 0x64)), 1);
+
+            spawnType = *(u16*)(*(u8**)(slot + 0x64) + 0x04);
+            if (spawnType == 1) {
+                unit = BtlUnit_Entry(&_entry_switch_data);
+                *(s32*)((u8*)unit + 0xB30) = *(s32*)slot;
+                *(s32*)(slot + 0x6C) = *(s32*)unit;
+                BtlUnit_SetPos(unit,
+                               *(f32*)(slot + 0x04),
+                               *(f32*)(slot + 0x08),
+                               *(f32*)(slot + 0x0C));
+                BtlUnit_SetHomePos(unit,
+                                   *(f32*)(slot + 0x04),
+                                   *(f32*)(slot + 0x08),
+                                   *(f32*)(slot + 0x0C));
+            } else if (spawnType == 0) {
+                unit = BtlUnit_Entry(&_entry_tree_data);
+                *(s32*)((u8*)unit + 0xB30) = *(s32*)slot;
+                *(s32*)(slot + 0x6C) = *(s32*)unit;
+                BtlUnit_SetPos(unit,
+                               *(f32*)(slot + 0x04),
+                               *(f32*)(slot + 0x08),
+                               *(f32*)(slot + 0x0C));
+                BtlUnit_SetHomePos(unit,
+                                   *(f32*)(slot + 0x04),
+                                   *(f32*)(slot + 0x08),
+                                   *(f32*)(slot + 0x0C));
+            }
+
+            id++;
+            objectCount--;
+            objectData += 0x18;
         }
-        if(j>=32) break;
-        *(void**)(slot+0x64)=objectData;
-        *(s32*)(slot+0x00)=id++;
-        *(s32*)(slot+0x6C)=-1;
-        *(f32*)(slot+0x04)=*(f32*)(objectData+8);
-        *(f32*)(slot+0x08)=*(f32*)(objectData+0xC);
-        *(f32*)(slot+0x0C)=*(f32*)(objectData+0x10);
-        *(f32*)(slot+0x10)=0.0f;
-        *(f32*)(slot+0x14)=0.0f;
-        *(f32*)(slot+0x18)=0.0f;
-        mapGrpFlagOff(*(char**)objectData, 1);
-        objectData+=0x68;
+    }
+
+    pouch = (u8*)pouchGetPtr();
+    if (*(s16*)(pouch + 0x88) > 0) {
+        objectData = dataBase + 0x2C30;
+        zero = 0.0f;
+
+        for (i = 0; i < 3; i++, objectData += 0x18) {
+            offset = 0;
+            for (j = 0; j < 0x20; j++, offset += 0x7C) {
+                slot = objectWork + offset;
+                if (*(s32*)slot < 1) {
+                    break;
+                }
+            }
+            if (j >= 0x20) {
+                break;
+            }
+
+            *(void**)(slot + 0x64) = objectData;
+            *(s32*)(slot + 0x00) = id;
+            *(s32*)(slot + 0x6C) = -1;
+
+            *(u32*)(slot + 0x04) = *(u32*)(objectData + 0x08);
+            *(u32*)(slot + 0x08) = *(u32*)(objectData + 0x0C);
+            *(u32*)(slot + 0x0C) = *(u32*)(objectData + 0x10);
+
+            *(f32*)(slot + 0x24) = zero;
+            *(f32*)(slot + 0x20) = zero;
+            *(f32*)(slot + 0x1C) = zero;
+
+            *(u32*)(slot + 0x34) = *(u32*)(vecBase + 0x30);
+            *(u32*)(slot + 0x38) = *(u32*)(vecBase + 0x34);
+            *(u32*)(slot + 0x3C) = *(u32*)(vecBase + 0x38);
+            *(u32*)(slot + 0x40) = *(u32*)(vecBase + 0x3C);
+            *(u32*)(slot + 0x44) = *(u32*)(vecBase + 0x40);
+            *(u32*)(slot + 0x48) = *(u32*)(vecBase + 0x44);
+            *(u32*)(slot + 0x4C) = *(u32*)(vecBase + 0x48);
+            *(u32*)(slot + 0x50) = *(u32*)(vecBase + 0x4C);
+            *(u32*)(slot + 0x54) = *(u32*)(vecBase + 0x50);
+            *(u32*)(slot + 0x58) = *(u32*)(vecBase + 0x54);
+            *(u32*)(slot + 0x5C) = *(u32*)(vecBase + 0x58);
+            *(u32*)(slot + 0x60) = *(u32*)(vecBase + 0x5C);
+
+            mapGrpFlagOff(*(char**)(*(u8**)(slot + 0x64)), 1);
+            id++;
+        }
+    }
+
+    offset = 0;
+    for (j = 0; j < 0x20; j++, offset += 0x7C) {
+        slot = objectWork + offset;
+        if (*(s32*)slot < 1) {
+            break;
+        }
+    }
+
+    objectData = (u8*)&_object_wall_data;
+    *(void**)(slot + 0x64) = objectData;
+    *(s32*)(slot + 0x00) = id;
+    *(s32*)(slot + 0x6C) = -1;
+    *(u32*)(slot + 0x04) = *(u32*)(objectData + 0x08);
+    *(u32*)(slot + 0x08) = *(u32*)(objectData + 0x0C);
+    *(u32*)(slot + 0x0C) = *(u32*)(objectData + 0x10);
+
+    stage = (u8*)BattleStageGetPtr();
+    *(f32*)(slot + 0x08) = *(f32*)(stage + 0xB28);
+
+    zero = 0.0f;
+    *(f32*)(slot + 0x24) = zero;
+    *(f32*)(slot + 0x20) = zero;
+    *(f32*)(slot + 0x1C) = zero;
+
+    *(u32*)(slot + 0x34) = *(u32*)(vecBase + 0x60);
+    *(u32*)(slot + 0x38) = *(u32*)(vecBase + 0x64);
+    *(u32*)(slot + 0x3C) = *(u32*)(vecBase + 0x68);
+    *(u32*)(slot + 0x40) = *(u32*)(vecBase + 0x6C);
+    *(u32*)(slot + 0x44) = *(u32*)(vecBase + 0x70);
+    *(u32*)(slot + 0x48) = *(u32*)(vecBase + 0x74);
+    *(u32*)(slot + 0x4C) = *(u32*)(vecBase + 0x78);
+    *(u32*)(slot + 0x50) = *(u32*)(vecBase + 0x7C);
+    *(u32*)(slot + 0x54) = *(u32*)(vecBase + 0x80);
+    *(u32*)(slot + 0x58) = *(u32*)(vecBase + 0x84);
+    *(u32*)(slot + 0x5C) = *(u32*)(vecBase + 0x88);
+    *(u32*)(slot + 0x60) = *(u32*)(vecBase + 0x8C);
+
+    mapGrpFlagOn(*(char**)(*(u8**)(slot + 0x64)), 1);
+    *(u32*)(slot + 0x68) |= 1;
+
+    id++;
+
+    zero = 0.0f;
+    offset = 0;
+    while (*(char**)((u8*)&_object_spot_light_data + offset) != 0) {
+        objectData = (u8*)&_object_spot_light_data + offset;
+
+        i = 0;
+        for (j = 0; j < 0x20; j++, i += 0x7C) {
+            slot = objectWork + i;
+            if (*(s32*)slot < 1) {
+                break;
+            }
+        }
+
+        *(void**)(slot + 0x64) = objectData;
+        *(s32*)(slot + 0x00) = id;
+        *(s32*)(slot + 0x6C) = -1;
+
+        *(u32*)(slot + 0x04) = *(u32*)(objectData + 0x08);
+        *(u32*)(slot + 0x08) = *(u32*)(objectData + 0x0C);
+        *(u32*)(slot + 0x0C) = *(u32*)(objectData + 0x10);
+
+        *(f32*)(slot + 0x24) = zero;
+        *(f32*)(slot + 0x20) = zero;
+        *(f32*)(slot + 0x1C) = zero;
+
+        *(u32*)(slot + 0x34) = *(u32*)(vecBase + 0x90);
+        *(u32*)(slot + 0x38) = *(u32*)(vecBase + 0x94);
+        *(u32*)(slot + 0x3C) = *(u32*)(vecBase + 0x98);
+        *(u32*)(slot + 0x40) = *(u32*)(vecBase + 0x9C);
+        *(u32*)(slot + 0x44) = *(u32*)(vecBase + 0xA0);
+        *(u32*)(slot + 0x48) = *(u32*)(vecBase + 0xA4);
+        *(u32*)(slot + 0x4C) = *(u32*)(vecBase + 0xA8);
+        *(u32*)(slot + 0x50) = *(u32*)(vecBase + 0xAC);
+        *(u32*)(slot + 0x54) = *(u32*)(vecBase + 0xB0);
+        *(u32*)(slot + 0x58) = *(u32*)(vecBase + 0xB4);
+        *(u32*)(slot + 0x5C) = *(u32*)(vecBase + 0xB8);
+        *(u32*)(slot + 0x60) = *(u32*)(vecBase + 0xBC);
+
+        mapGrpFlagOn(*(char**)(*(u8**)(slot + 0x64)), 1);
+        *(u32*)(slot + 0x68) |= 1;
+
+        id++;
+        offset += 0x18;
+    }
+
+    if (*(void**)(stageInfo + 0x190) != 0) {
+        evtEntry(*(void**)(stageInfo + 0x190), 10, 0);
+    }
+
+    if (layerA1 != 0 && *(void**)(stageInfo + 0x1A0) != 0) {
+        event = evtEntry(*(void**)(stageInfo + 0x1A0), 10, 0);
+        *(s32*)(battle + 0x18100) = *(s32*)((u8*)event + 0x15C);
+    }
+    if (layerA2 != 0 && *(void**)(stageInfo + 0x1A4) != 0) {
+        event = evtEntry(*(void**)(stageInfo + 0x1A4), 10, 0);
+        *(s32*)(battle + 0x18104) = *(s32*)((u8*)event + 0x15C);
+    }
+    if (layerB != 0 && *(void**)(stageInfo + 0x1A8) != 0) {
+        event = evtEntry(*(void**)(stageInfo + 0x1A8), 10, 0);
+        *(s32*)(battle + 0x18108) = *(s32*)((u8*)event + 0x15C);
+    }
+    if (layerBRotate != 0 && *(void**)(stageInfo + 0x1AC) != 0) {
+        event = evtEntry(*(void**)(stageInfo + 0x1AC), 10, 0);
+        *(s32*)(battle + 0x1810C) = *(s32*)((u8*)event + 0x15C);
+    }
+
+    if (layerA1 == 0) {
+        *(u8*)(battle + 0x180F8) |= 2;
+    }
+    if (layerA2 == 0) {
+        *(u8*)(battle + 0x180F8) |= 4;
+    }
+    if (layerB == 0) {
+        *(u8*)(battle + 0x180F8) |= 8;
+    }
+
+    if (*(s8*)(stageInfo + 0x1B1) != 0) {
+        *(u8*)(battle + 0x180F8) |= 2;
+    }
+    if (*(s8*)(stageInfo + 0x1B2) != 0) {
+        *(u8*)(battle + 0x180F8) |= 4;
+    }
+    if (*(s8*)(stageInfo + 0x1B3) != 0) {
+        *(u8*)(battle + 0x180F8) |= 8;
+    }
+
+    if (hasIronFrame == 0) {
+        *(u8*)(battle + 0x180F8) |= 0x20;
+        mapGrpFlagOn((char*)(vecBase + 0x1CC), 1);
+        mapGrpFlagOn((char*)(vecBase + 0x288), 1);
     }
 }
 
@@ -1544,86 +1860,182 @@ s32 _object_fall_wait(void) {
 }
 
 s32 _object_fall_attack(void* evt, s32 firstCall) {
-    extern void* g_BattleWork;
     extern void* BattleAlloc(s32 size);
     extern void BattleFree(void* ptr);
-    extern void* memset(void* ptr, s32 value, u32 size);
     extern s32 BattleCheckConcluded(void* battle);
-    extern void evtSetValue(void* evt, s32 arg, s32 value);
     extern s32 irand(s32 limit);
     extern void* pouchGetPtr(void);
-    extern void* BattleAudienceBaseGetPtr(void);
     extern s32 BattleAudience_HaitiRandForFallObject(void);
     extern void* BattleGetSystemPtr(void* battle);
     extern s32 BattleSamplingEnemy(void* targetWork, void* weapon, s32 attackerIdx,
                                    s32 enemyBelong, u32 targetClassFlags,
                                    u32 targetPropertyFlags, s32 direction);
-    char* battle;
-    char* fallData;
+    extern void BattleChoiceSamplingEnemy(void* targetWork, u32 weighting, s32* unitIdx,
+                                          s32* partIdx);
+    extern void* BattleGetUnitPartsPtr(s32 unitId, s32 partId);
+    extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
+    extern s32 BattlePreCheckDamage(void* attacker, void* target, void* part, void* weapon,
+                                    u32 flags);
+    extern void BtlUnit_GetHitPos(void* unit, void* part, f32* x, f32* y, f32* z);
+    extern s32 BtlUnit_GetWidth(void* unit);
+    extern void* BattleStageGetPtr(void);
+    extern void btl_camera_set_mode(s32 priority, s32 mode);
+    extern void btl_camera_set_moveSpeedLv(s32 priority, s32 level);
+    extern f32 BattleGetFloorHeight(void* battleWork, f32 x, f32 y, f32 z);
+    extern s32 effFallEntry(s32 type, s32 count, s32 time, f32 x, f32 y, f32 z,
+                            f32 width, f32 deltaY, f32 angle);
+    extern s32 BtlUnit_GetBelong(void* unit);
+    extern s32 effFallCheckHit(s32 effect);
+    extern void BattleAudience_Case_FallObject_Aud(s32 memberIdx, u8 objectType);
+    extern void psndSFXOff(s32 id);
+    extern void BattleAudience_GetHomePosition(s32 index, f32* x, f32* y, f32* z);
+    extern s32 psndSFXOn_3D(char* id, void* pos);
+    extern void BattleAudience_Case_FallObject_Stage(void);
+    extern s32 BtlUnit_GetACPossibility(void* unit);
+    extern void BattleActionCommandCheckDefence(void* unit, void* weapon);
+    extern s32 BattleCheckDamage(void* attacker, void* target, void* part, void* weapon,
+                                 u32 flags);
+    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
+    extern u8* effNiceEntry(s32 type, f32 x, f32 y, f32 z);
+    extern s32 BattleRunHitEvent(void* unit, u32 eventId);
+    extern void* BattleAudienceBaseGetPtr(void);
+    extern u8 vec3_802f42b8[];
+    extern f32 float_0p1_80422fcc;
+    extern f32 float_0_80422fd0;
+    extern f32 float_90_80422fd4;
+    extern f32 float_270_80422fd8;
+    extern f32 float_5_80422fdc;
+    extern f32 float_neg300_80422fe0;
+    extern f32 float_15_80422fe4;
+    extern f32 float_300_80422fe8;
+    extern f32 float_85_80422fec;
+    extern f32 float_50_80422ff0;
+    extern f32 float_neg50_80422ff4;
+    extern f32 float_45_80422ff8;
+    extern f32 float_0p75_80422ffc;
+
+    s32 partChoice;
+    s32 unitChoice;
+    f32 niceX;
+    f32 niceY;
+    f32 niceZ;
+    f32 hitX;
+    f32 hitY;
+    f32 hitZ;
+    f32 posX;
+    f32 posY;
+    f32 posZ;
+    f32 fallX;
+    f32 fallY;
+    f32 fallZ;
+    u8 runtimeTargets[0xACC];
+    u8 initialTargets[0xACC];
+    u32 convA[2];
+    u32 convB[2];
+    u32 convC[2];
+    u8* battle;
+    u8* fallData;
     u8* work;
     u8* entry;
-    u8* source;
-    u32* copyDst;
-    u32* copySrc;
-    u8* pouch;
+    u8* other;
+    u8* weapon;
+    u8* rodata;
     u8* audience;
+    u8* pouch;
+    u8* targetRec;
     void* systemUnit;
-    u8 targetWork[0xB64];
-    s32* args;
-    s32 total;
-    s32 random;
-    s32 slot;
+    void* unit;
+    void* parts;
+    void* stage;
+    u8* nice;
+    char* sfxDamage;
+    char* sfxDamageAlt;
+    char* sfxRest;
+    s32 resultArg;
     s32 i;
     s32 j;
+    s32 slot;
+    s32 total;
+    s32 random;
     s32 active;
+    s32 flags;
+    s32 precheck;
+    s32 delay;
+    s32 guardCount;
+    s32 targetIndex;
+    s32 type;
+    s32 mode;
+    s32 effect;
+    s32 done;
+    s32 widthInt;
+    f32 width;
+    f32 angle;
 
-    battle = (char*)g_BattleWork;
-    fallData = *(char**)(battle + 0x18114);
-    args = *(s32**)((char*)evt + 0x18);
+    battle = (u8*)_battleWorkPointer;
+    fallData = *(u8**)(battle + 0x18114);
+    resultArg = (*(s32**)((u8*)evt + 0x18))[0];
+    rodata = vec3_802f42b8;
+    active = 0;
+
     if (firstCall != 0) {
         work = (u8*)BattleAlloc(0xEC);
-        *(u8**)((char*)evt + 0x70) = work;
-        *(s32*)((char*)evt + 0x74) = 0;
+        *(u8**)((u8*)evt + 0x78) = work;
+        *(s32*)((u8*)evt + 0x7C) = 0;
         memset(work, 0, 0xEC);
         work[4] = 0xFF;
-        for (i = 1; i < 4; i++) {
-            work[i] = 0xFF;
+        for (i = 0; i < 3; i++) {
+            work[i + 1] = 0xFF;
         }
-        if (BattleCheckConcluded(g_BattleWork) != 0) {
-            evtSetValue(evt, args[0], *(s32*)((char*)evt + 0x74));
+
+        if (BattleCheckConcluded(battle) != 0) {
+            evtSetValue(evt, resultArg, *(s32*)((u8*)evt + 0x7C));
             return 2;
         }
+
         work[0] = 1;
-        active = 0;
-        for (i = 0; i < work[0]; i++) {
+        for (i = 0; i < (s32)(u8)work[0]; i++) {
             entry = work + 4 + i * 0xE8;
-            entry[0] = i;
-            for (slot = 0; slot < 3 && work[slot + 1] != 0xFF; slot++) {}
+            entry[0] = (u8)i;
+
+            for (slot = 0; slot < 3; slot++) {
+                if ((s8)work[slot + 1] == -1) {
+                    break;
+                }
+            }
+
             if (slot < 3) {
                 total = 0;
                 for (j = 0; j < 9; j++) {
-                    total += (u8)fallData[j];
+                    total += (u8)fallData[0xC0 + j];
                 }
                 random = irand(total);
                 entry[1] = 0;
-                while (entry[1] < 8) {
-                    random -= (u8)fallData[entry[1]];
-                    if (random < 0) break;
-                    entry[1] += 1;
+                while ((s8)entry[1] < 8) {
+                    random -= (u8)fallData[0xC0 + (s8)entry[1]];
+                    if (random < 0) {
+                        break;
+                    }
+                    entry[1]++;
                 }
                 work[slot + 1] = entry[1];
             } else {
                 entry[1] = work[irand(3) + 1];
             }
-            copyDst = (u32*)(entry + 0x24);
-            copySrc = (u32*)((u8*)fallData + entry[1] * 0xC0 + 8);
-            for (j = 0; j < 24; j++) {
-                copyDst[0] = copySrc[0];
-                copyDst[1] = copySrc[1];
-                copyDst += 2;
-                copySrc += 2;
+
+            {
+                u32* dst;
+                u32* src;
+                dst = (u32*)(entry + 0x28);
+                src = (u32*)(fallData + (s8)entry[1] * 0xC0 + 0xCC);
+                for (j = 0; j < 24; j++) {
+                    dst[0] = src[0];
+                    dst[1] = src[1];
+                    dst += 2;
+                    src += 2;
+                }
             }
-            if (entry[1] == 6) {
+
+            if ((s8)entry[1] == 6) {
                 if (irand(100) < 50) {
                     *(u32*)(entry + 0x8C) |= 0x100;
                     *(u32*)(entry + 0x8C) &= ~0x200;
@@ -1632,50 +2044,320 @@ s32 _object_fall_attack(void* evt, s32 firstCall) {
                     *(u32*)(entry + 0x8C) |= 0x200;
                 }
             }
+
             *(s32*)(entry + 4) = 0;
             pouch = (u8*)pouchGetPtr();
             if (*(u16*)(pouch + 0x8C) != 0) {
                 audience = (u8*)BattleAudienceBaseGetPtr();
-                if ((*(u32*)audience & 0x4000) == 0 && entry[1] != 6 && entry[1] != 7 &&
-                    irand(100) < 10) {
+                if ((*(u32*)audience & 0x4000) == 0 && (s8)entry[1] != 6 &&
+                    (s8)entry[1] != 7 &&
+                    ((*(u32*)(battle + 0x19078) & 2) != 0 || irand(100) < 10)) {
                     *(s32*)(entry + 4) = 1;
                     *(s32*)(entry + 0x0C) = -1;
                     *(s32*)(entry + 8) = BattleAudience_HaitiRandForFallObject();
                     active = 1;
-                    *(s32*)((char*)evt + 0x74) = 1;
+                    *(s32*)((u8*)evt + 0x7C) = 1;
                 }
             }
+
             if (*(s32*)(entry + 4) == 0) {
-                systemUnit = BattleGetSystemPtr(g_BattleWork);
-                BattleSamplingEnemy(targetWork, entry + 0x28, *(s32*)systemUnit, 1,
-                                    *(u32*)(entry + 0x8C), *(u32*)(entry + 0x90), 0);
-                entry[0x14] = 1;
+                systemUnit = BattleGetSystemPtr(battle);
+                BattleSamplingEnemy(initialTargets, entry + 0x28, *(s32*)systemUnit, 1,
+                                    *(u32*)(entry + 0x8C), *(u32*)(entry + 0x90),
+                                    (s8)(-(s32)battle[0x12]));
+                if (*(s8*)(initialTargets + 0xA6C) <= 0) {
+                    evtSetValue(evt, resultArg, *(s32*)((u8*)evt + 0x7C));
+                    return 2;
+                }
+
+                BattleChoiceSamplingEnemy(initialTargets, *(u32*)(entry + 0xA4),
+                                          &unitChoice, &partChoice);
                 active = 1;
+                *(s32*)(entry + 8) = unitChoice;
+                *(s32*)(entry + 0x0C) = partChoice;
+                entry[0x14] = 1;
+
+                for (j = i; j >= 0; j--) {
+                    other = work + 4 + j * 0xE8;
+                    if (other != entry && *(s32*)(other + 4) == 0 &&
+                        *(s32*)(other + 8) == *(s32*)(entry + 8)) {
+                        other[0x14] = 0;
+                    }
+                }
             }
         }
+
         if (!active) {
-            evtSetValue(evt, args[0], *(s32*)((char*)evt + 0x74));
+            evtSetValue(evt, resultArg, *(s32*)((u8*)evt + 0x7C));
             return 2;
+        }
+
+        for (i = 0; i < (s32)(u8)work[0]; i++) {
+            entry = work + 4 + i * 0xE8;
+            weapon = entry + 0x28;
+            if (*(s32*)(entry + 4) == 0) {
+                flags = 0;
+                if (entry[0x14] != 0) {
+                    flags |= 0x100;
+                }
+                if (entry[0x15] != 0) {
+                    flags |= 0x100000;
+                }
+
+                parts = BattleGetUnitPartsPtr(*(s32*)(entry + 8), *(s32*)(entry + 0x0C));
+                unit = BattleGetUnitPtr(battle, *(s32*)(entry + 8));
+                systemUnit = BattleGetSystemPtr(battle);
+                precheck = BattlePreCheckDamage(systemUnit, unit, parts, weapon, flags);
+                *(s32*)(entry + 0x1C) = precheck;
+
+                if (precheck == 1 && entry[0x14] == 0) {
+                    delay = (s16)irand(0);
+                    for (j = 0; j < i; j++) {
+                        other = work + 4 + j * 0xE8;
+                        if (*(s32*)(entry + 8) == *(s32*)(other + 8)) {
+                            *(s16*)(other + 0x10) = (s16)delay;
+                            delay = (s16)(delay + irand(0x16) + 0x14);
+                            if (other[0x14] != 0) {
+                                other[0x15] = 1;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
-    work = *(u8**)((char*)evt + 0x70);
-    active = 0;
-    for (i = 0; i < work[0]; i++) {
+    work = *(u8**)((u8*)evt + 0x78);
+    sfxDamage = (char*)(rodata + 0x130);
+    sfxDamageAlt = (char*)(rodata + 0x14C);
+    sfxRest = (char*)(rodata + 0x16C);
+    done = 1;
+
+    for (i = 0; i < (s32)(u8)work[0]; i++) {
         entry = work + 4 + i * 0xE8;
-        if (entry[0] != 0xFF) {
-            active = 1;
+        if ((s8)entry[0] == -1) {
+            continue;
+        }
+
+        guardCount = 0;
+        done = 0;
+        unit = 0;
+        parts = 0;
+        weapon = entry + 0x28;
+
+        if (*(s32*)(entry + 4) == 0) {
+            unit = BattleGetUnitPtr(battle, *(s32*)(entry + 8));
+            parts = BattleGetUnitPartsPtr(*(s32*)(entry + 8), *(s32*)(entry + 0x0C));
+        }
+
+        effect = *(s32*)(entry + 0x24);
+        if (effect == 0 || *(s16*)(entry + 0x10) > 0) {
+            *(s16*)(entry + 0x10) -= 1;
             if (*(s16*)(entry + 0x10) > 0) {
-                *(s16*)(entry + 0x10) -= 1;
+                continue;
+            }
+
+            mode = *(s32*)(entry + 4);
+            if (mode == 0) {
+                BtlUnit_GetHitPos(unit, parts, &posX, &posY, &posZ);
+                widthInt = BtlUnit_GetWidth(unit);
+                convA[1] = ((u32)widthInt) ^ 0x80000000;
+                convA[0] = 0x43300000;
+                width = (f32)(*(f64*)convA - *(f64*)(rodata + 0x180));
+            } else if (mode == 1) {
+                unitChoice = *(s32*)(entry + 8);
+                convA[0] = 0x43300000;
+                convA[1] = ((u32)((unitChoice % 20) * 25 - 230)) ^ 0x80000000;
+                posX = (f32)(*(f64*)convA - *(f64*)(rodata + 0x180));
+
+                stage = BattleStageGetPtr();
+                posY = *(f32*)((u8*)stage + 0xB34);
+
+                convB[0] = 0x43300000;
+                convC[0] = 0x43300000;
+                convB[1] = ((u32)(unitChoice % 20)) ^ 0x80000000;
+                convC[1] = ((u32)((unitChoice / 20) * 30 + 115)) ^ 0x80000000;
+                posZ = float_0p1_80422fcc *
+                           (f32)(*(f64*)convB - *(f64*)(rodata + 0x180)) +
+                       (f32)(*(f64*)convC - *(f64*)(rodata + 0x180));
+
+                btl_camera_set_mode(0, 6);
+                btl_camera_set_moveSpeedLv(0, 2);
+                width = float_0_80422fd0;
             } else {
-                entry[0] = 0xFF;
+                *(u32*)&posX = *(u32*)(rodata + 0x124);
+                *(u32*)&posY = *(u32*)(rodata + 0x128);
+                *(u32*)&posZ = *(u32*)(rodata + 0x12C);
+                width = float_0_80422fd0;
+            }
+
+            *(u32*)&fallX = *(u32*)&posX;
+            *(u32*)&fallY = *(u32*)&posY;
+            *(u32*)&fallZ = *(u32*)&posZ;
+            fallY = BattleGetFloorHeight(battle, posX, posY, posZ);
+            angle = (posX >= float_0_80422fd0) ? float_90_80422fd4 : float_270_80422fd8;
+
+            precheck = *(s32*)(entry + 0x1C);
+            if ((precheck >= 2 && precheck < 5) || precheck == 6) {
+                posY = fallY;
+            }
+
+            *(s32*)(entry + 0x20) = -1;
+            *(s16*)(entry + 0x12) = 0;
+            type = (s8)entry[1];
+            switch (type) {
+                case 0:
+                    *(s32*)(entry + 0x24) = effFallEntry(4, 1, 90, fallX, fallY, fallZ,
+                                                        width, posY - fallY, angle);
+                    break;
+                case 1:
+                    *(s32*)(entry + 0x24) = effFallEntry(5, 1, 90, fallX, fallY, fallZ,
+                                                        width, posY - fallY, angle);
+                    break;
+                case 2:
+                    *(s32*)(entry + 0x24) = effFallEntry(0, 100, 90, fallX, fallY, fallZ,
+                                                        width, posY - fallY, angle);
+                    break;
+                case 3:
+                    *(s32*)(entry + 0x24) = effFallEntry(1, 1, 90, fallX, fallY, fallZ,
+                                                        width, posY - fallY, angle);
+                    break;
+                case 4:
+                    *(s32*)(entry + 0x24) = effFallEntry(2, 1, 90, fallX, fallY,
+                                                        fallZ + float_5_80422fdc, width,
+                                                        posY - fallY, angle);
+                    break;
+                case 8:
+                    *(s32*)(entry + 0x24) = effFallEntry(8, 1, 90, fallX, fallY, fallZ,
+                                                        width, posY - fallY, angle);
+                    break;
+                case 5:
+                    *(s32*)(entry + 0x24) = effFallEntry(3, 1, 90, fallX, fallY, fallZ,
+                                                        width, posY - fallY, angle);
+                    break;
+                case 6:
+                    if ((s8)BtlUnit_GetBelong(unit) == 0) {
+                        *(s32*)(entry + 0x24) = effFallEntry(
+                            6, 1, 180, float_neg300_80422fe0, fallY,
+                            fallZ + float_15_80422fe4, float_0_80422fd0,
+                            float_0_80422fd0, angle);
+                    } else {
+                        *(s32*)(entry + 0x24) = effFallEntry(
+                            6, 1, 180, float_300_80422fe8, fallY,
+                            fallZ + float_15_80422fe4, float_0_80422fd0,
+                            float_0_80422fd0, angle);
+                    }
+                    break;
+                case 7:
+                    *(s32*)(entry + 0x24) = effFallEntry(7, 1, 180, fallX, fallY,
+                                                        fallZ + float_5_80422fdc, width,
+                                                        posY - fallY, angle);
+                    break;
+            }
+            continue;
+        }
+
+        if (effFallCheckHit(effect) == 0) {
+            continue;
+        }
+
+        if (*(s32*)(entry + 4) == 1) {
+            BattleAudience_Case_FallObject_Aud(*(s32*)(entry + 8), entry[1]);
+            psndSFXOff(*(s32*)(entry + 0x20));
+            BattleAudience_GetHomePosition(*(s32*)(entry + 8), &hitX, &hitY, &hitZ);
+            type = (s8)entry[1];
+            if (type != 5) {
+                if (type >= 0 && type < 2) {
+                    psndSFXOn_3D(sfxDamage, &hitX);
+                } else {
+                    psndSFXOn_3D(sfxDamageAlt, &hitX);
+                }
+            }
+        } else {
+            BattleAudience_Case_FallObject_Stage();
+            if ((*(u32*)(weapon + 0x64) & 0x01000000) != 0) {
+                BtlUnit_GetHitPos(unit, parts, &hitX, &hitY, &hitZ);
+                flags = 0;
+                if (entry[0x14] != 0) {
+                    flags |= 0x100;
+                }
+                psndSFXOff(*(s32*)(entry + 0x20));
+                precheck = *(s32*)(entry + 0x1C);
+
+                if (precheck == 1) {
+                    type = (s8)entry[1];
+                    if (type == 5) {
+                        psndSFXOn_3D(sfxRest, &hitX);
+                    } else if (type >= 0 && type < 2) {
+                        psndSFXOn_3D(sfxDamage, &hitX);
+                    } else {
+                        psndSFXOn_3D(sfxDamageAlt, &hitX);
+                    }
+                    if (BtlUnit_GetACPossibility(unit) != 0) {
+                        BattleActionCommandCheckDefence(unit, weapon);
+                    }
+                    BattleCheckDamage(BattleGetSystemPtr(battle), unit, parts, weapon, flags);
+                } else if ((precheck >= 2 && precheck < 5) || precheck == 6) {
+                    type = (s8)entry[1];
+                    if (type >= 0 && type < 2) {
+                        psndSFXOn_3D(sfxDamage, &hitX);
+                    }
+                }
+            } else {
+                psndSFXOff(*(s32*)(entry + 0x20));
+                systemUnit = BattleGetSystemPtr(battle);
+                BattleSamplingEnemy(runtimeTargets, weapon, *(s32*)systemUnit, 1,
+                                    *(u32*)(weapon + 0x64), *(u32*)(weapon + 0x68),
+                                    (s8)(-(s32)battle[0x12]));
+
+                while (*(s8*)(runtimeTargets + 0xA6C) > 0 &&
+                       *(s8*)(runtimeTargets + 0xAB7) < *(s8*)(runtimeTargets + 0xA6C)) {
+                    targetIndex = (s8)runtimeTargets[0xA6D + *(s8*)(runtimeTargets + 0xAB7)];
+                    targetRec = runtimeTargets + 4 + targetIndex * 0x24;
+                    unit = BattleGetUnitPtr(battle, *(s16*)(targetRec + 0));
+                    parts = BattleGetUnitPartsPtr(*(s16*)(targetRec + 0),
+                                                  *(s16*)(targetRec + 2));
+                    precheck = BattlePreCheckDamage(BattleGetSystemPtr(battle), unit, parts,
+                                                    weapon, 0x100);
+
+                    if (precheck == 3) {
+                        BtlUnit_GetPos(unit, &niceX, &niceY, &niceZ);
+                        if (niceY < float_85_80422fec) {
+                            niceY += float_50_80422ff0;
+                        } else {
+                            niceY += float_neg50_80422ff4;
+                        }
+                        niceX -= float_45_80422ff8;
+                        nice = effNiceEntry(6, niceX, niceY, niceZ);
+                        *(f32*)(*(u8**)(nice + 0x0C) + 0x1C) = float_0p75_80422ffc;
+                        *(s32*)((u8*)unit + 0x274) = 0;
+                        BattleRunHitEvent(unit, 0x126);
+                    } else if (precheck == 6) {
+                        *(s32*)((u8*)unit + 0x274) = 0;
+                        BattleRunHitEvent(unit, 0x127);
+                    } else if (precheck == 1) {
+                        if (BtlUnit_GetACPossibility(unit) != 0 && guardCount < 1) {
+                            BattleActionCommandCheckDefence(unit, weapon);
+                            guardCount++;
+                        }
+                        parts = BattleGetUnitPartsPtr(*(s16*)(targetRec + 0),
+                                                      *(s16*)(targetRec + 2));
+                        BattleCheckDamage(BattleGetSystemPtr(battle), unit, parts, weapon, 0x100);
+                    }
+
+                    (*(s8*)(runtimeTargets + 0xAB7))++;
+                }
             }
         }
+
+        entry[0] = 0xFF;
     }
-    if (!active) {
+
+    if (done) {
         BattleFree(work);
-        evtSetValue(evt, args[0], *(s32*)((char*)evt + 0x74));
+        evtSetValue(evt, resultArg, *(s32*)((u8*)evt + 0x7C));
         return 2;
     }
     return 0;
 }
+

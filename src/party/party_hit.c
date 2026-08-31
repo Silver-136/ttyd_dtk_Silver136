@@ -208,70 +208,64 @@ extern f64 __frsqrte(f64 value);
 
 
 u8 partyNrmToAngle(float* normal) {
+    typedef struct VecBits {
+        u32 x;
+        u32 y;
+        u32 z;
+    } VecBits;
     extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
     extern f32 float_0_80421508;
     extern f32 __float_nan[];
+    extern const VecBits vec3_802cb770;
     union FloatBits {
         f32 value;
         u32 bits;
     } view;
+    f32 normalX;
+    f32 normalZ;
     f32 square;
     f32 length;
     f64 value;
     f64 inv;
     u32 exponent;
     s32 kind;
+    register const u8* constants;
 
-    square = normal[0] * normal[0] + normal[2] * normal[2];
+    normalX = normal[0];
+    constants = (const u8*)&vec3_802cb770;
+    normalZ = normal[2];
+    square = normalX * normalX + normalZ * normalZ;
     value = (f64)square;
 
     if (value > (f64)float_0_80421508) {
         inv = __frsqrte(value);
-        inv = 0.5 * inv * -((value * inv * inv) - 3.0);
-        inv = 0.5 * inv * -((value * inv * inv) - 3.0);
-        length = (f32)(value * 0.5 * inv *
-                       -((value * inv * inv) - 3.0));
+        inv = *(const f64*)(constants + 0x110) * inv *
+              -((value * inv * inv) - *(const f64*)(constants + 0x118));
+        inv = *(const f64*)(constants + 0x110) * inv *
+              -((value * inv * inv) - *(const f64*)(constants + 0x118));
+        length = (f32)(value * *(const f64*)(constants + 0x110) * inv *
+                       -((value * inv * inv) - *(const f64*)(constants + 0x118)));
         goto have_length;
     }
 
-    if (value < 0.0) {
+    if (value < *(const f64*)(constants + 0x120)) {
         length = __float_nan[0];
         goto have_length;
     }
 
     view.value = square;
     exponent = view.bits & 0x7F800000;
+    length = square;
 
     if (exponent == 0x7F800000) {
-        if ((view.bits & 0x7FFFFF) == 0) {
-            kind = 2;
-        } else {
-            kind = 1;
-        }
-        goto classified;
-    }
-
-    if (exponent >= 0x7F800000) {
+        kind = (view.bits & 0x7FFFFF) != 0 ? 1 : 2;
+    } else if (exponent < 0x7F800000 && exponent == 0) {
+        kind = (view.bits & 0x7FFFFF) != 0 ? 5 : 3;
+    } else {
         kind = 4;
-        goto classified;
     }
-
-    if (exponent == 0) {
-        if ((view.bits & 0x7FFFFF) == 0) {
-            kind = 3;
-        } else {
-            kind = 5;
-        }
-        goto classified;
-    }
-
-    kind = 4;
-
-classified:
     if (kind == 1) {
         length = __float_nan[0];
-    } else {
-        length = square;
     }
 
 have_length:
@@ -281,6 +275,7 @@ have_length:
         length,
         -normal[1]);
 }
+
 u8 partyChkGnd(void* pParty) {
     extern s32 partySearchGround(f32 rise, f32 fall, void* party);
     extern u32 hitGetAttr(s32 hit);
@@ -751,9 +746,8 @@ s32 partyChkFrontStep(f32 heightAdd, void* pParty, f32* outY, f32* outDiff, f32*
     *(f32*)((u8*)pParty + 0xE0) = float_0_80421508;
 
     partyHeight = partyGetHeight(pParty);
-    partyX = *(f32*)((u8*)pParty + 0x58);
     partyY = *(f32*)((u8*)pParty + 0x5C);
-    partyZ = *(f32*)((u8*)pParty + 0x60);
+    partyX = *(f32*)((u8*)pParty + 0x58);
     *outY = partyY;
     *outDiff = float_neg1_8042153c;
 
@@ -768,6 +762,7 @@ s32 partyChkFrontStep(f32 heightAdd, void* pParty, f32* outY, f32* outDiff, f32*
     widthOffset = float_0p265_8042154c * *(f32*)((u8*)pParty + 0xF4);
     sinDir = (f32)sin(radians);
     cosDir = (f32)cos(radians);
+    partyZ = *(f32*)((u8*)pParty + 0x60);
 
     *(VecBits*)&startPos = vecCatalog[3];
     startPos.x = partyX + widthOffset * sinDir;
@@ -884,6 +879,7 @@ s32 partyChkFrontStep(f32 heightAdd, void* pParty, f32* outY, f32* outDiff, f32*
         work.hitPos.z);
     return (s32)hit;
 }
+
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
@@ -936,6 +932,7 @@ void* partySearchWallFront(f32 distance, f32 direction, void* pParty, f32* pos) 
     s32 count;
     s32 i;
     void* sideHit;
+    void* secondSideHit;
 
     *(VecBits*)&push = vecCatalog[6];
     sincosf(direction, &dirX, &dirZ);
@@ -969,10 +966,8 @@ void* partySearchWallFront(f32 distance, f32 direction, void* pParty, f32* pos) 
     height = heights;
     for (i = 0; i < count; i++, height++) {
         posWork.y = pos[1] + *height;
-        callPos = posWork;
-        callDir = dir;
         dist = width + distance;
-        hit = marioHitCheckVec(&callPos, &callDir, &hitPos, &normal, &dist);
+        hit = marioHitCheckVec(&posWork, &dir, &hitPos, &normal, &dist);
         if (hit != 0) {
             if (bestHit == 0) {
                 bestDist = dist;
@@ -986,9 +981,10 @@ void* partySearchWallFront(f32 distance, f32 direction, void* pParty, f32* pos) 
         }
     }
     if (bestHit != 0) {
-        dot = (distance * dir.x) * bestNormal.x + (distance * dir.z) * bestNormal.z;
-        push.x = float_0p5_80421504 * -(dot * bestNormal.x - (distance * dir.x));
-        push.z = float_0p5_80421504 * -(dot * bestNormal.z - (distance * dir.z));
+        normal = bestNormal;
+        dot = (distance * dir.x) * normal.x + (distance * dir.z) * normal.z;
+        push.x += float_0p5_80421504 * -(dot * normal.x - (distance * dir.x));
+        push.z += float_0p5_80421504 * -(dot * normal.z - (distance * dir.z));
     }
 
     sideHit = 0;
@@ -1010,31 +1006,31 @@ void* partySearchWallFront(f32 distance, f32 direction, void* pParty, f32* pos) 
             break;
         }
     }
+    secondSideHit = 0;
     if (sideHit != 0) {
         sincosf(direction - float_45_80421538, &dirX, &dirZ);
-        *(VecBits*)&sideDir = vecCatalog[9];
-        sideDir.x = dirX;
-        sideDir.z = dirZ;
-        sideHit = 0;
         height = heights;
         for (i = 0; i < count; i++, height++) {
+            *(VecBits*)&sideDir = vecCatalog[9];
+            sideDir.x = dirX;
+            sideDir.z = dirZ;
             posWork.y = pos[1] + *height;
             callPos = posWork;
             callDir = sideDir;
             dist = width;
-            sideHit = marioHitCheckVec(&callPos, &callDir, 0, 0, &dist);
+            secondSideHit = marioHitCheckVec(&callPos, &callDir, 0, 0, &dist);
         }
     }
 
     if (bestHit != 0) {
-        if (sideHit == 0) {
+        if (secondSideHit == 0) {
             pos[0] += push.x;
             pos[2] += push.z;
         }
         return bestHit;
     }
 
-    if (sideHit == 0) {
+    if (secondSideHit == 0) {
         pos[0] += distance * dir.x;
         pos[2] += distance * dir.z;
     }
@@ -1094,8 +1090,8 @@ s32 partySearchFrontWall(f32 distance, f32 angle, void* pParty, f32* pos) {
     Vec3 direction;
     Vec3 response1;
     Vec3 response2;
-    f32 s;
     f32 c;
+    f32 s;
     f32 radius;
     f32 roundedDist;
     f32 bias;
@@ -1145,6 +1141,16 @@ s32 partySearchFrontWall(f32 distance, f32 angle, void* pParty, f32* pos) {
         rounded = (s32)(float_1000_80421530 * work1.dist + bias);
         roundedDist = (f32)rounded / float_1000_80421530;
         normal = *(Vec3*)work1.normal;
+
+        *(f32*)((u8*)pParty + 0xEC) = roundedDist;
+        response1 = normal;
+        dot = (distance * c) * response1.x +
+              (distance * s) * response1.z;
+        pos[0] += float_0p5_80421504 *
+                  -(dot * response1.x - distance * c);
+        pos[2] += float_0p5_80421504 *
+                  -(dot * response1.z - distance * s);
+        return hit;
     }
 
     if (hit == 0) {
@@ -1236,14 +1242,6 @@ s32 partySearchFrontWall(f32 distance, f32 angle, void* pParty, f32* pos) {
         return 0;
     }
 
-    *(f32*)((u8*)pParty + 0xEC) = roundedDist;
-    response1 = normal;
-    dot = (distance * c) * response1.x +
-          (distance * s) * response1.z;
-    pos[0] += float_0p5_80421504 *
-              -(dot * response1.x - distance * c);
-    pos[2] += float_0p5_80421504 *
-              -(dot * response1.z - distance * s);
     return hit;
 }
 
@@ -1282,9 +1280,11 @@ void partySearchHead(f32 angle, void* pParty, f32* pos, f32* dist) {
     Vec3 probe1;
     Vec3 probe2;
     Vec3 probe3;
-    f32 c;
-    f32 s;
-    Vec3 original;
+    volatile struct {
+        Vec3 original;
+        f32 s;
+        f32 c;
+    } local;
 
     f32 d0;
     f32 o06;
@@ -1332,20 +1332,20 @@ void partySearchHead(f32 angle, void* pParty, f32* pos, f32* dist) {
     catalog = vec3_802cb770;
     width = float_0p3_80421524 * width;
 
-    sincosf(angle, &c, &s);
+    sincosf(angle, (f32*)&local.c, (f32*)&local.s);
 
-    original.x = pos[0];
-    original.y = pos[1];
-    original.z = pos[2];
+    local.original.x = pos[0];
+    local.original.y = pos[1];
+    local.original.z = pos[2];
 
     best = *dist;
-    dx = width * c;
-    dz = -width * s;
+    dx = width * local.c;
+    dz = -width * local.s;
 
     probe0 = catalog[12];
-    x = original.x + dx;
-    y = original.y;
-    z = original.z + dz;
+    x = local.original.x + dx;
+    y = local.original.y;
+    z = local.original.z + dz;
     probe0.x = x;
     probe0.y = y;
     probe0.z = z;
@@ -1363,9 +1363,9 @@ void partySearchHead(f32 angle, void* pParty, f32* pos, f32* dist) {
     }
 
     probe1 = catalog[13];
-    x = original.x - dx;
-    y = original.y;
-    z = original.z - dz;
+    x = local.original.x - dx;
+    y = local.original.y;
+    z = local.original.z - dz;
     probe1.x = x;
     probe1.y = y;
     probe1.z = z;
@@ -1383,9 +1383,9 @@ void partySearchHead(f32 angle, void* pParty, f32* pos, f32* dist) {
     }
 
     probe2 = catalog[14];
-    x = original.x + dz;
-    y = original.y;
-    z = original.z + dx;
+    x = local.original.x + dz;
+    y = local.original.y;
+    z = local.original.z + dx;
     probe2.x = x;
     probe2.y = y;
     probe2.z = z;
@@ -1403,9 +1403,9 @@ void partySearchHead(f32 angle, void* pParty, f32* pos, f32* dist) {
     }
 
     probe3 = catalog[15];
-    x = original.x - dz;
-    y = original.y;
-    z = original.z - dx;
+    x = local.original.x - dz;
+    y = local.original.y;
+    z = local.original.z - dx;
     probe3.x = x;
     probe3.y = y;
     probe3.z = z;
@@ -1433,6 +1433,7 @@ done:
         *dist = float_0_80421508;
     }
 }
+
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 

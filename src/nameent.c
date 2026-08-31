@@ -70,8 +70,6 @@ void nameEntOn(int param_1) {
     extern char* strcpy(char* dst, const char* src);
     extern char* strcat(char* dst, const char* src);
     extern char lbl_803AE790[];
-    extern char str___80426910[];
-    extern char str__80426d80[];
     extern char str_p_80426c8c[];
     extern char float_0_80426e94[];
     extern f32 float_neg106_80426e90;
@@ -234,78 +232,476 @@ void nameEntMain(void) {
     }
 }
 
-/* stub-fill: nameMain | prototype_only | source_prototype */
 void nameMain(void) {
-    extern void* gp;
-    extern f64 distABf(f64, f64, f64, f64);
+    typedef struct NameEntWork {
+        u16 flags;
+        u16 pad02;
+        s32 field04;
+        s32 state;
+        s32 lookupKey;
+        s32 currentCursorCol;
+        s32 currentCursorRow;
+        s32 currentCharIndex;
+        f32 currentCursorX;
+        f32 currentCursorY;
+        f32 targetCursorX;
+        f32 targetCursorY;
+        f32 currentNameX;
+        f32 currentNameY;
+        f32 targetNameX;
+        f32 targetNameY;
+        char nameStr[0x14];
+        char** charTbl;
+        f32 fade;
+        s32 field58;
+        s32 confirmChoice;
+        void* file;
+    } NameEntWork;
+
+    extern f32 distABf(f32, f32, f32, f32);
     extern u32 keyGetButtonTrg(s32);
     extern u32 keyGetDirRep(s32);
-    extern void psndSFXOn(void*);
+    extern s32 psndSFXOn(s32);
+    extern u32 strlen(const char*);
+    extern char* strcpy(char*, const char*);
+    extern char* msgSearch(const char*);
     extern f64 sin(f64);
+    extern char* hiragana_tbl[];
+    extern char* katakana_tbl[];
+    extern char str_name_party3_802fe4a0[];
+    extern char str___80426910[];
+    extern char str__80426d80[];
+    extern f32 float_1_80426de4;
     extern f32 float_2_80426e1c;
     extern f32 float_4_80426e80;
+    extern f32 float_6_80426e70;
+    extern f32 float_12_80426e74;
+    extern f32 float_16_80426de0;
+    extern f32 float_40_80426e34;
     extern f32 float_60_80426e84;
+    extern f32 float_100_80426e50;
+    extern f32 float_135_80426e8c;
+    extern f32 float_neg60_80426e6c;
     extern f32 float_0p125_80426e88;
-    u8* work = wp;
-    f32 dist = (f32)distABf(*(f32*)(work + 0x24), *(f32*)(work + 0x28),
-                            *(f32*)(work + 0x1C), *(f32*)(work + 0x20));
-    s32 state = *(s32*)(work + 8);
 
-    if (state == 100) {
-        if ((keyGetButtonTrg(0) & 0x100) != 0) {
-            if (*(s32*)(work + 0x5C) == 0) {
-                (*(s32*)(work + 8))++;
-                psndSFXOn((void*)0x20012);
-            } else {
-                *(s32*)(work + 8) = 0;
-                psndSFXOn((void*)0x20013);
+    f32 dist;
+    s32 col;
+    s32 row;
+    s32 limit;
+    s32 i;
+    s32 count;
+    s32 offset;
+    u32 len;
+    char* text;
+
+    dist = distABf(((NameEntWork*)wp)->targetCursorX,
+                   ((NameEntWork*)wp)->targetCursorY,
+                   ((NameEntWork*)wp)->currentCursorX,
+                   ((NameEntWork*)wp)->currentCursorY);
+
+    switch (((NameEntWork*)wp)->state) {
+        case 0:
+            if ((((NameEntWork*)wp)->flags & 1) != 0 && *(s32*)((u8*)gp + 8) == 0) {
+                if ((keyGetButtonTrg(0) & 0x100) != 0) {
+                    col = ((NameEntWork*)wp)->currentCursorCol;
+                    if (col >= 10) {
+                        limit = 6;
+                        if (*(u32*)((u8*)gp + 0x16C) == 0) {
+                            limit = 4;
+                        }
+
+                        row = ((NameEntWork*)wp)->currentCursorRow;
+                        if (row >= limit) {
+                            switch (row) {
+                                case 4:
+                                    ((NameEntWork*)wp)->charTbl = hiragana_tbl;
+                                    psndSFXOn(0x2000C);
+                                    goto cursor_target_update;
+
+                                case 5:
+                                    ((NameEntWork*)wp)->charTbl = katakana_tbl;
+                                    psndSFXOn(0x2000C);
+                                    goto cursor_target_update;
+
+                                case 6:
+                                    if (((NameEntWork*)wp)->currentCharIndex > 0) {
+                                        ((NameEntWork*)wp)->currentCharIndex--;
+                                        psndSFXOn(0x2000B);
+                                    }
+                                    goto cursor_target_update;
+
+                                case 7:
+                                    if (*(u32*)((u8*)gp + 0x16C) == 0) {
+                                        len = strlen(((NameEntWork*)wp)->nameStr) >> 1;
+                                        count = 0;
+                                        offset = 0;
+                                        while (count < (s32)len) {
+                                            if (strncmp(((NameEntWork*)wp)->nameStr + offset,
+                                                        str___80426910, 2) != 0) {
+                                                break;
+                                            }
+                                            offset += 2;
+                                            count++;
+                                        }
+
+                                        if (count < (s32)len || ((NameEntWork*)wp)->lookupKey != 0) {
+                                            ((NameEntWork*)wp)->confirmChoice = 1;
+                                            ((NameEntWork*)wp)->state = 100;
+                                            psndSFXOn(0x20012);
+                                            if (((NameEntWork*)wp)->lookupKey == 1 &&
+                                                count >= (s32)len) {
+                                                text = msgSearch(str_name_party3_802fe4a0);
+                                                strcpy(((NameEntWork*)wp)->nameStr, text);
+                                                ((NameEntWork*)wp)->currentCharIndex =
+                                                    strlen(((NameEntWork*)wp)->nameStr) >> 1;
+                                            }
+                                        } else {
+                                            psndSFXOn(0x20014);
+                                        }
+                                    } else {
+                                        len = strlen(((NameEntWork*)wp)->nameStr);
+                                        count = 0;
+                                        while (count < (s32)len) {
+                                            if (strncmp(((NameEntWork*)wp)->nameStr + count,
+                                                        str__80426d80, 1) != 0) {
+                                                break;
+                                            }
+                                            count++;
+                                        }
+
+                                        if (count < (s32)len || ((NameEntWork*)wp)->lookupKey != 0) {
+                                            ((NameEntWork*)wp)->confirmChoice = 1;
+                                            ((NameEntWork*)wp)->state = 100;
+                                            psndSFXOn(0x20012);
+                                            if (((NameEntWork*)wp)->lookupKey == 1 &&
+                                                count >= (s32)len) {
+                                                text = msgSearch(str_name_party3_802fe4a0);
+                                                strcpy(((NameEntWork*)wp)->nameStr, text);
+                                                ((NameEntWork*)wp)->currentCharIndex =
+                                                    strlen(((NameEntWork*)wp)->nameStr);
+                                            }
+                                        } else {
+                                            psndSFXOn(0x20014);
+                                        }
+                                    }
+                                    goto cursor_target_update;
+
+                                default:
+                                    goto cursor_target_update;
+                            }
+                        }
+                    }
+
+                    i = ((NameEntWork*)wp)->currentCharIndex;
+                    if (i < 8) {
+                        if (*(u32*)((u8*)gp + 0x16C) == 0) {
+                            *(u16*)(((NameEntWork*)wp)->nameStr + i * 2) =
+                                *(u16*)((NameEntWork*)wp)->charTbl[
+                                    col + ((NameEntWork*)wp)->currentCursorRow * 14];
+                        } else {
+                            ((NameEntWork*)wp)->nameStr[i] =
+                                *((NameEntWork*)wp)->charTbl[
+                                    col + ((NameEntWork*)wp)->currentCursorRow * 14];
+                        }
+
+                        ((NameEntWork*)wp)->currentCharIndex++;
+                        if (((NameEntWork*)wp)->currentCharIndex >= 8) {
+                            ((NameEntWork*)wp)->currentCharIndex = 7;
+                            ((NameEntWork*)wp)->currentCursorCol = 10;
+                            ((NameEntWork*)wp)->currentCursorRow = 7;
+                        }
+                        psndSFXOn(0xA);
+                    } else if (i == 8) {
+                        ((NameEntWork*)wp)->currentCharIndex = 7;
+                        if (*(u32*)((u8*)gp + 0x16C) == 0) {
+                            *(u16*)(((NameEntWork*)wp)->nameStr +
+                                    ((NameEntWork*)wp)->currentCharIndex * 2) =
+                                *(u16*)((NameEntWork*)wp)->charTbl[
+                                    ((NameEntWork*)wp)->currentCursorCol +
+                                    ((NameEntWork*)wp)->currentCursorRow * 14];
+                        } else {
+                            ((NameEntWork*)wp)->nameStr[
+                                ((NameEntWork*)wp)->currentCharIndex] =
+                                *((NameEntWork*)wp)->charTbl[
+                                    ((NameEntWork*)wp)->currentCursorCol +
+                                    ((NameEntWork*)wp)->currentCursorRow * 14];
+                        }
+                        ((NameEntWork*)wp)->currentCursorCol = 10;
+                        ((NameEntWork*)wp)->currentCursorRow = 7;
+                        psndSFXOn(0xA);
+                    }
+                } else if ((keyGetButtonTrg(0) & 0x1000) != 0) {
+                    if (*(u32*)((u8*)gp + 0x16C) == 0) {
+                        len = strlen(((NameEntWork*)wp)->nameStr) >> 1;
+                        count = 0;
+                        offset = 0;
+                        while (count < (s32)len) {
+                            if (strncmp(((NameEntWork*)wp)->nameStr + offset,
+                                        str___80426910, 2) != 0) {
+                                break;
+                            }
+                            offset += 2;
+                            count++;
+                        }
+
+                        if (count < (s32)len || ((NameEntWork*)wp)->lookupKey != 0) {
+                            ((NameEntWork*)wp)->confirmChoice = 1;
+                            ((NameEntWork*)wp)->state = 100;
+                            psndSFXOn(0x12);
+                            if (((NameEntWork*)wp)->lookupKey == 1 &&
+                                count >= (s32)len) {
+                                text = msgSearch(str_name_party3_802fe4a0);
+                                strcpy(((NameEntWork*)wp)->nameStr, text);
+                                ((NameEntWork*)wp)->currentCharIndex =
+                                    strlen(((NameEntWork*)wp)->nameStr) >> 1;
+                            }
+                        } else {
+                            psndSFXOn(0x20014);
+                        }
+                    } else {
+                        len = strlen(((NameEntWork*)wp)->nameStr);
+                        count = 0;
+                        while (count < (s32)len) {
+                            if (strncmp(((NameEntWork*)wp)->nameStr + count,
+                                        str__80426d80, 1) != 0) {
+                                break;
+                            }
+                            count++;
+                        }
+
+                        if (count < (s32)len || ((NameEntWork*)wp)->lookupKey != 0) {
+                            ((NameEntWork*)wp)->confirmChoice = 1;
+                            ((NameEntWork*)wp)->state = 100;
+                            psndSFXOn(0x12);
+                            if (((NameEntWork*)wp)->lookupKey == 1 &&
+                                count >= (s32)len) {
+                                text = msgSearch(str_name_party3_802fe4a0);
+                                strcpy(((NameEntWork*)wp)->nameStr, text);
+                                ((NameEntWork*)wp)->currentCharIndex =
+                                    strlen(((NameEntWork*)wp)->nameStr);
+                            }
+                        } else {
+                            psndSFXOn(0x20014);
+                        }
+                    }
+                } else if ((keyGetButtonTrg(0) & 0x200) != 0) {
+                    if (*(u32*)((u8*)gp + 0x16C) == 0) {
+                        if (((NameEntWork*)wp)->currentCharIndex == 0 &&
+                            ((NameEntWork*)wp)->lookupKey == 0 &&
+                            strncmp(((NameEntWork*)wp)->nameStr, str___80426910, 2) == 0) {
+                            psndSFXOn(0x13);
+                            ((NameEntWork*)wp)->state = 0x65;
+                            ((NameEntWork*)wp)->flags |= 2;
+                        } else {
+                            *(u16*)(((NameEntWork*)wp)->nameStr +
+                                    ((NameEntWork*)wp)->currentCharIndex * 2) =
+                                *(u16*)str___80426910;
+                            ((NameEntWork*)wp)->currentCharIndex--;
+                            if (((NameEntWork*)wp)->currentCharIndex < 0) {
+                                ((NameEntWork*)wp)->currentCharIndex = 0;
+                            }
+                            psndSFXOn(0xB);
+                        }
+                    } else {
+                        if (((NameEntWork*)wp)->currentCharIndex == 0 &&
+                            ((NameEntWork*)wp)->lookupKey == 0 &&
+                            strncmp(((NameEntWork*)wp)->nameStr, str__80426d80, 1) == 0) {
+                            psndSFXOn(0x13);
+                            ((NameEntWork*)wp)->state = 0x65;
+                            ((NameEntWork*)wp)->flags |= 2;
+                        } else {
+                            ((NameEntWork*)wp)->nameStr[
+                                ((NameEntWork*)wp)->currentCharIndex] = *str__80426d80;
+                            ((NameEntWork*)wp)->currentCharIndex--;
+                            if (((NameEntWork*)wp)->currentCharIndex < 0) {
+                                ((NameEntWork*)wp)->currentCharIndex = 0;
+                            }
+                            psndSFXOn(0xB);
+                        }
+                    }
+                } else if ((keyGetDirRep(0) & 0x4000) != 0) {
+                    if (dist < 10.0f) {
+                        ((NameEntWork*)wp)->currentCursorCol--;
+                        limit = 5;
+                        if (*(u32*)((u8*)gp + 0x16C) == 0) {
+                            limit = 3;
+                        }
+
+                        if (((NameEntWork*)wp)->currentCursorRow > limit) {
+                            if (((NameEntWork*)wp)->currentCursorCol < 0) {
+                                ((NameEntWork*)wp)->currentCursorCol = 10;
+                                if (((NameEntWork*)wp)->currentCursorRow > 7) {
+                                    ((NameEntWork*)wp)->currentCursorRow = 7;
+                                }
+                            }
+                        } else if (((NameEntWork*)wp)->currentCursorCol < 0) {
+                            ((NameEntWork*)wp)->currentCursorCol = 13;
+                        }
+                        psndSFXOn(5);
+                    }
+                } else if ((keyGetDirRep(0) & 0x8000) != 0) {
+                    if (dist < 10.0f) {
+                        ((NameEntWork*)wp)->currentCursorCol++;
+                        limit = 5;
+                        if (*(u32*)((u8*)gp + 0x16C) == 0) {
+                            limit = 3;
+                        }
+
+                        if (((NameEntWork*)wp)->currentCursorRow > limit) {
+                            if (((NameEntWork*)wp)->currentCursorCol > 9 &&
+                                ((NameEntWork*)wp)->currentCursorRow > 7) {
+                                ((NameEntWork*)wp)->currentCursorRow = 7;
+                            }
+                            if (((NameEntWork*)wp)->currentCursorCol > 10) {
+                                ((NameEntWork*)wp)->currentCursorCol = 0;
+                            }
+                        } else if (((NameEntWork*)wp)->currentCursorCol > 13) {
+                            ((NameEntWork*)wp)->currentCursorCol = 0;
+                        }
+                        psndSFXOn(5);
+                    }
+                } else if ((keyGetDirRep(0) & 0x1000) != 0) {
+                    if (dist < 10.0f) {
+                        ((NameEntWork*)wp)->currentCursorRow--;
+                        if (((NameEntWork*)wp)->currentCursorRow < 0) {
+                            if (((NameEntWork*)wp)->currentCursorCol < 10) {
+                                ((NameEntWork*)wp)->currentCursorRow = 8;
+                            } else {
+                                ((NameEntWork*)wp)->currentCursorRow = 7;
+                                ((NameEntWork*)wp)->currentCursorCol = 10;
+                            }
+                        }
+                        psndSFXOn(5);
+                    }
+                } else if ((keyGetDirRep(0) & 0x2000) != 0) {
+                    if (dist < 10.0f) {
+                        ((NameEntWork*)wp)->currentCursorRow++;
+                        if (((NameEntWork*)wp)->currentCursorCol < 10) {
+                            if (((NameEntWork*)wp)->currentCursorRow > 8) {
+                                ((NameEntWork*)wp)->currentCursorRow = 0;
+                            }
+                        } else {
+                            limit = 6;
+                            if (*(u32*)((u8*)gp + 0x16C) == 0) {
+                                limit = 4;
+                            }
+                            if (((NameEntWork*)wp)->currentCursorRow >= limit) {
+                                ((NameEntWork*)wp)->currentCursorCol = 10;
+                            }
+                            if (((NameEntWork*)wp)->currentCursorRow > 7) {
+                                ((NameEntWork*)wp)->currentCursorRow = 0;
+                            }
+                        }
+                        psndSFXOn(5);
+                    }
+                }
             }
-        } else if ((keyGetButtonTrg(0) & 0x200) != 0) {
-            *(s32*)(work + 8) = 0;
-            psndSFXOn((void*)0x20013);
-        } else {
-            if ((keyGetDirRep(0) & 0x3000) != 0) {
-                *(s32*)(work + 0x5C) = 1 - *(s32*)(work + 0x5C);
-                psndSFXOn((void*)0x20005);
+
+cursor_target_update:
+            col = ((NameEntWork*)wp)->currentCursorCol;
+            if (col > 9) {
+                limit = 5;
+                if (*(u32*)((u8*)gp + 0x16C) == 0) {
+                    limit = 3;
+                }
+
+                if (((NameEntWork*)wp)->currentCursorRow > limit) {
+                    ((NameEntWork*)wp)->targetCursorX = float_100_80426e50;
+                    ((NameEntWork*)wp)->targetCursorY =
+                        (f32)(-20 - (((NameEntWork*)wp)->currentCursorRow - 4) * 34);
+                    ((NameEntWork*)wp)->targetCursorX -= float_6_80426e70;
+                    ((NameEntWork*)wp)->targetCursorY += float_6_80426e70;
+                    goto cursor_fade;
+                }
             }
-        }
-        *(f32*)(work + 0x24) = -60.0f;
-        *(f32*)(work + 0x28) = 30.0f - 40.0f * (f32)*(s32*)(work + 0x5C);
-        *(f32*)(work + 0x54) += 0.05f;
-        if (*(f32*)(work + 0x54) > 1.0f) *(f32*)(work + 0x54) = 1.0f;
-    } else if (state == 0 && (*(u16*)work & 1) != 0 && *(s32*)((u8*)gp + 8) == 0) {
-        if ((keyGetButtonTrg(0) & 0x100) != 0 || (keyGetButtonTrg(0) & 0x1000) != 0) {
-            *(s32*)(work + 8) = 100;
-            *(s32*)(work + 0x5C) = 0;
-            psndSFXOn((void*)0x20012);
-        } else if ((keyGetButtonTrg(0) & 0x200) != 0) {
-            *(s32*)(work + 8) = 100;
-            *(s32*)(work + 0x5C) = 1;
-            psndSFXOn((void*)0x20013);
-        } else if ((keyGetDirRep(0) & 0x4000) != 0 && dist < 10.0f) {
-            (*(s32*)(work + 0x14))--;
-            if (*(s32*)(work + 0x14) < 0) *(s32*)(work + 0x14) = 8;
-            psndSFXOn((void*)0x20005);
-        } else if ((keyGetDirRep(0) & 0x8000) != 0 && dist < 10.0f) {
-            (*(s32*)(work + 0x14))++;
-            if (*(s32*)(work + 0x14) > 8) *(s32*)(work + 0x14) = 0;
-            psndSFXOn((void*)0x20005);
-        } else if ((keyGetDirRep(0) & 0x1000) != 0 && dist < 10.0f) {
-            (*(s32*)(work + 0x18))--;
-            if (*(s32*)(work + 0x18) < 0) *(s32*)(work + 0x18) = 13;
-            psndSFXOn((void*)0x20005);
-        } else if ((keyGetDirRep(0) & 0x2000) != 0 && dist < 10.0f) {
-            (*(s32*)(work + 0x18))++;
-            if (*(s32*)(work + 0x18) > 13) *(s32*)(work + 0x18) = 0;
-            psndSFXOn((void*)0x20005);
-        }
+
+            ((NameEntWork*)wp)->targetCursorX =
+                (f32)(col * 24 + (col / 5) * 30 - 190);
+            ((NameEntWork*)wp)->targetCursorY =
+                (f32)(112 - ((NameEntWork*)wp)->currentCursorRow * 28);
+            ((NameEntWork*)wp)->targetCursorX -= float_16_80426de0;
+            ((NameEntWork*)wp)->targetCursorY -= float_12_80426e74;
+
+cursor_fade:
+            ((NameEntWork*)wp)->fade -= 0.05f;
+            if (((NameEntWork*)wp)->fade <= float_0_80426ddc) {
+                ((NameEntWork*)wp)->fade = float_0_80426ddc;
+            }
+            break;
+
+        case 100:
+            if ((keyGetButtonTrg(0) & 0x100) != 0) {
+                if (((NameEntWork*)wp)->confirmChoice == 0) {
+                    ((NameEntWork*)wp)->state++;
+                    psndSFXOn(0x12);
+                } else {
+                    ((NameEntWork*)wp)->state = 0;
+                    psndSFXOn(0x13);
+                }
+            } else if ((keyGetButtonTrg(0) & 0x200) != 0) {
+                ((NameEntWork*)wp)->state = 0;
+                psndSFXOn(0x13);
+            } else if ((keyGetDirRep(0) & 0x3000) != 0) {
+                ((NameEntWork*)wp)->confirmChoice =
+                    1 - ((NameEntWork*)wp)->confirmChoice;
+                psndSFXOn(5);
+            }
+
+            ((NameEntWork*)wp)->targetCursorX = float_neg60_80426e6c;
+            ((NameEntWork*)wp)->targetCursorY =
+                (float_0_80426ddc - 30.0f) -
+                float_40_80426e34 * (f32)((NameEntWork*)wp)->confirmChoice;
+            ((NameEntWork*)wp)->fade += 0.05f;
+            if (((NameEntWork*)wp)->fade >= float_1_80426de4) {
+                ((NameEntWork*)wp)->fade = float_1_80426de4;
+            }
+            break;
+
+        default:
+            break;
     }
-    {
-        f32 smooth = (float_4_80426e80 * (f32)*(u32*)((u8*)gp + 4)) / float_60_80426e84;
-        *(f32*)(work + 0x1C) += (*(f32*)(work + 0x24) - *(f32*)(work + 0x1C)) / smooth;
-        *(f32*)(work + 0x20) += (*(f32*)(work + 0x28) - *(f32*)(work + 0x20)) / smooth;
-        *(f32*)(work + 0x1C) += __fabs(float_2_80426e1c * (f32)sin((f64)((f32)*(u32*)((u8*)gp + 0x1C) * float_0p125_80426e88)));
+
+    ((NameEntWork*)wp)->currentCursorX +=
+        (((NameEntWork*)wp)->targetCursorX -
+         ((NameEntWork*)wp)->currentCursorX) /
+        ((float_4_80426e80 * (f32)*(u32*)((u8*)gp + 4)) /
+         float_60_80426e84);
+
+    ((NameEntWork*)wp)->currentCursorY +=
+        (((NameEntWork*)wp)->targetCursorY -
+         ((NameEntWork*)wp)->currentCursorY) /
+        ((float_4_80426e80 * (f32)*(u32*)((u8*)gp + 4)) /
+         float_60_80426e84);
+
+    ((NameEntWork*)wp)->currentCursorX +=
+        __fabs(float_2_80426e1c *
+               (f32)sin((f64)((f32)*(u32*)((u8*)gp + 0x1C) *
+                              float_0p125_80426e88)));
+
+    i = ((NameEntWork*)wp)->currentCharIndex;
+    if (i > 7) {
+        i--;
     }
+
+    ((NameEntWork*)wp)->targetNameX = (f32)(i * 32 - 106);
+    ((NameEntWork*)wp)->targetNameY = float_135_80426e8c;
+
+    ((NameEntWork*)wp)->currentNameX +=
+        (((NameEntWork*)wp)->targetNameX -
+         ((NameEntWork*)wp)->currentNameX) /
+        ((float_4_80426e80 * (f32)*(u32*)((u8*)gp + 4)) /
+         float_60_80426e84);
+
+    ((NameEntWork*)wp)->currentNameY +=
+        (((NameEntWork*)wp)->targetNameY -
+         ((NameEntWork*)wp)->currentNameY) /
+        ((float_4_80426e80 * (f32)*(u32*)((u8*)gp + 4)) /
+         float_60_80426e84);
+
+    ((NameEntWork*)wp)->currentNameY +=
+        __fabs(float_2_80426e1c *
+               (f32)sin((f64)((f32)*(u32*)((u8*)gp + 0x1C) *
+                              float_0p125_80426e88)));
 }
 
 /* stub-fill: nameEntDisp | prototype_only | source_prototype */
@@ -486,23 +882,58 @@ void nameBG(void) {
 #undef DRAW_PANEL
 }
 
-/* stub-fill: nameKirinukiGX | missing_definition | ghidra_signature */
-u8 nameKirinukiGX(f64 x, f64 y, f64 width, f64 height) {
+void nameKirinukiGX(f64 x, f64 y, f64 width, f64 height) {
     typedef f32 Mtx[3][4];
-    extern void GXSetTevOp(s32, s32);
-    extern void PSMTXScale(Mtx, f32, f32, f32);
-    extern void GXLoadTexMtxImm(Mtx, s32, s32);
-    u8 texObj[0x20];
-    Mtx texMtx;
+    extern void GXSetTevOp(s32 stage, s32 mode);
+    extern void GXSetFog(s32 type, f32 startz, f32 endz, f32 nearz, f32 farz, void* color);
+    extern void PSMTXScale(Mtx mtx, f32 x, f32 y, f32 z);
+    extern void GXLoadTexMtxImm(Mtx mtx, s32 id, s32 type);
+    extern u32 dat_80426dcc;
+    extern f32 float_1_80426de4;
+    extern f32 float_8_80426df4;
+    extern f64 double_8_802fe430;
+
+    u32 fogColor;
+    u8 tex0[0x20];
+    u8 tex1[0x20];
+    u8 tex2[0x20];
+    u8 tex3[0x20];
+    u8 tex4[0x20];
+    u8 tex5[0x20];
+    u8 tex6[0x20];
+    u8 tex7[0x20];
+    Mtx mtx0;
+    Mtx mtx1;
+    Mtx mtx2;
+    Mtx mtx3;
+    Mtx mtx4;
+    Mtx mtx5;
+    Mtx mtx6;
+    Mtx mtx7;
+    s32 textureIds[8] = {
+        0x2F, 0x2D, 0x31, 0x2E, 0x32, 0x30, 0x34, 0x33
+    };
     volatile f32* fifo = (volatile f32*)0xCC008000;
-    s32 textureIds[8] = { 0x2F, 0x2D, 0x31, 0x2E, 0x32, 0x30, 0x34, 0x33 };
-    s32 palette = ***(s32***)((u8*)wp + 0x60);
-    s32 i;
+    f32 texWidth;
+    f32 texHeight;
+    f32 innerWidth;
+    f32 innerHeight;
+    f32 x8;
+    f32 xRight8;
+    f32 xRight;
+    f32 y8;
+    f32 yBottom8;
+    f32 yBottom;
 
     GXSetBlendMode(0, 1, 0, 0);
     GXSetZCompLoc(0);
     GXSetAlphaCompare(6, 0x80, 1, 0, 0);
     GXSetZMode(0, 7, 0);
+
+    fogColor = dat_80426dcc;
+    GXSetFog(0, float_0_80426ddc, float_0_80426ddc,
+             float_0_80426ddc, float_0_80426ddc, &fogColor);
+
     GXSetNumChans(0);
     GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
     GXSetNumTevStages(1);
@@ -514,30 +945,169 @@ u8 nameKirinukiGX(f64 x, f64 y, f64 width, f64 height) {
     GXSetVtxDesc(13, 1);
     GXSetVtxAttrFmt(0, 9, 1, 4, 0);
     GXSetVtxAttrFmt(0, 13, 1, 4, 0);
-    GXLoadPosMtxImm((u8*)camGetPtr(1) + 0x118, 0);
+    GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0);
     GXSetCurrentMtx(0);
 
-    for (i = 0; i < 8; i++) {
-        f32 left = (f32)x + ((i & 1) ? (f32)width - 8.0f : 0.0f);
-        f32 top = (f32)y - ((i & 2) ? (f32)height - 8.0f : 0.0f);
-        f32 right = left + ((i & 1) ? 8.0f : (f32)width - 8.0f);
-        f32 bottom = top - ((i & 2) ? 8.0f : (f32)height - 8.0f);
-        TEXGetGXTexObjFromPalette(palette, texObj, textureIds[i]);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
-        GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   __fabs(right - left) / (f32)GXGetTexObjWidth(texObj),
-                   __fabs(top - bottom) / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        *fifo = left; *fifo = top; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
-        *fifo = left; *fifo = bottom; *fifo = 0.0f; *fifo = 0.0f; *fifo = 1.0f;
-        *fifo = right; *fifo = bottom; *fifo = 0.0f; *fifo = 1.0f; *fifo = 1.0f;
-        *fifo = right; *fifo = top; *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
-    }
-    return 0;
+    innerWidth = (f32)((f64)(f32)(width - (f64)float_8_80426df4) -
+                       (f64)float_8_80426df4);
+    innerHeight = (f32)((f64)(f32)(height - (f64)float_8_80426df4) -
+                        (f64)float_8_80426df4);
+    x8 = (f32)x + 8.0f;
+    xRight8 = (f32)((f64)(f32)(x + width) - (f64)float_8_80426df4);
+    xRight = (f32)((f64)xRight8 + (f64)float_8_80426df4);
+    y8 = (f32)(y - (f64)float_8_80426df4);
+    yBottom8 = y8 - innerHeight;
+    yBottom = (f32)((f64)yBottom8 - (f64)float_8_80426df4);
+
+    TEXGetGXTexObjFromPalette(
+        *(s32*)(*(s32*)(*(s32*)((s32)wp + 0x60) + 0xA0)), tex0, textureIds[0]);
+    GXInitTexObjLOD(tex0, 1, 1, float_0_80426ddc, float_0_80426ddc,
+                    float_0_80426ddc, 0, 0, 0);
+    GXLoadTexObj(tex0, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    texHeight = (f32)GXGetTexObjHeight(tex0);
+    texWidth = (f32)GXGetTexObjWidth(tex0);
+    PSMTXScale(mtx0, (f32)__fabs(double_8_802fe430) / texWidth,
+               (f32)__fabs(double_8_802fe430) / texHeight,
+               float_1_80426de4);
+    GXLoadTexMtxImm(mtx0, 0x1E, 1);
+    GXBegin(0x80, 0, 4);
+    *fifo = (f32)x; *fifo = (f32)y; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc;
+    *fifo = (f32)x; *fifo = y8;     *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_1_80426de4;
+    *fifo = x8;     *fifo = y8;     *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_1_80426de4;
+    *fifo = x8;     *fifo = (f32)y; *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_0_80426ddc;
+
+    TEXGetGXTexObjFromPalette(
+        *(s32*)(*(s32*)(*(s32*)((s32)wp + 0x60) + 0xA0)), tex1, textureIds[1]);
+    GXInitTexObjLOD(tex1, 1, 1, float_0_80426ddc, float_0_80426ddc,
+                    float_0_80426ddc, 0, 0, 0);
+    GXLoadTexObj(tex1, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    texHeight = (f32)GXGetTexObjHeight(tex1);
+    texWidth = (f32)GXGetTexObjWidth(tex1);
+    PSMTXScale(mtx1, __fabs(innerWidth) / texWidth,
+               (f32)__fabs(double_8_802fe430) / texHeight,
+               float_1_80426de4);
+    GXLoadTexMtxImm(mtx1, 0x1E, 1);
+    GXBegin(0x80, 0, 4);
+    *fifo = x8;      *fifo = (f32)y; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc;
+    *fifo = x8;      *fifo = y8;     *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_1_80426de4;
+    *fifo = x8 + innerWidth; *fifo = y8;     *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_1_80426de4;
+    *fifo = x8 + innerWidth; *fifo = (f32)y; *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_0_80426ddc;
+
+    TEXGetGXTexObjFromPalette(
+        *(s32*)(*(s32*)(*(s32*)((s32)wp + 0x60) + 0xA0)), tex2, textureIds[2]);
+    GXInitTexObjLOD(tex2, 1, 1, float_0_80426ddc, float_0_80426ddc,
+                    float_0_80426ddc, 0, 0, 0);
+    GXLoadTexObj(tex2, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    texHeight = (f32)GXGetTexObjHeight(tex2);
+    texWidth = (f32)GXGetTexObjWidth(tex2);
+    PSMTXScale(mtx2, (f32)__fabs(double_8_802fe430) / texWidth,
+               (f32)__fabs(double_8_802fe430) / texHeight,
+               float_1_80426de4);
+    GXLoadTexMtxImm(mtx2, 0x1E, 1);
+    GXBegin(0x80, 0, 4);
+    *fifo = xRight8; *fifo = (f32)y; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc;
+    *fifo = xRight8; *fifo = y8;     *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_1_80426de4;
+    *fifo = xRight;  *fifo = y8;     *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_1_80426de4;
+    *fifo = xRight;  *fifo = (f32)y; *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_0_80426ddc;
+
+    TEXGetGXTexObjFromPalette(
+        *(s32*)(*(s32*)(*(s32*)((s32)wp + 0x60) + 0xA0)), tex3, textureIds[3]);
+    GXInitTexObjLOD(tex3, 1, 1, float_0_80426ddc, float_0_80426ddc,
+                    float_0_80426ddc, 0, 0, 0);
+    GXLoadTexObj(tex3, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    texHeight = (f32)GXGetTexObjHeight(tex3);
+    texWidth = (f32)GXGetTexObjWidth(tex3);
+    PSMTXScale(mtx3, (f32)__fabs(double_8_802fe430) / texWidth,
+               __fabs(innerHeight) / texHeight, float_1_80426de4);
+    GXLoadTexMtxImm(mtx3, 0x1E, 1);
+    GXBegin(0x80, 0, 4);
+    *fifo = (f32)x; *fifo = y8;       *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc;
+    *fifo = (f32)x; *fifo = yBottom8; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_1_80426de4;
+    *fifo = x8;     *fifo = yBottom8; *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_1_80426de4;
+    *fifo = x8;     *fifo = y8;       *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_0_80426ddc;
+
+    TEXGetGXTexObjFromPalette(
+        *(s32*)(*(s32*)(*(s32*)((s32)wp + 0x60) + 0xA0)), tex4, 0x2C);
+    GXInitTexObjLOD(tex4, 1, 1, float_0_80426ddc, float_0_80426ddc,
+                    float_0_80426ddc, 0, 0, 0);
+    GXLoadTexObj(tex4, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    texHeight = (f32)GXGetTexObjHeight(tex4);
+    texWidth = (f32)GXGetTexObjWidth(tex4);
+    PSMTXScale(mtx4, __fabs((f32)(width - (f64)float_8_80426df4)) / texWidth,
+               __fabs(innerHeight) / texHeight, float_1_80426de4);
+    GXLoadTexMtxImm(mtx4, 0x1E, 1);
+    GXBegin(0x80, 0, 4);
+    *fifo = x8; *fifo = y8;       *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc;
+    *fifo = x8; *fifo = yBottom8; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_1_80426de4;
+    *fifo = x8 + (f32)(width - (f64)float_8_80426df4); *fifo = yBottom8; *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_1_80426de4;
+    *fifo = x8 + (f32)(width - (f64)float_8_80426df4); *fifo = y8;       *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_0_80426ddc;
+
+    TEXGetGXTexObjFromPalette(
+        *(s32*)(*(s32*)(*(s32*)((s32)wp + 0x60) + 0xA0)), tex5, 0x30);
+    GXInitTexObjLOD(tex5, 1, 1, float_0_80426ddc, float_0_80426ddc,
+                    float_0_80426ddc, 0, 0, 0);
+    GXLoadTexObj(tex5, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    texHeight = (f32)GXGetTexObjHeight(tex5);
+    texWidth = (f32)GXGetTexObjWidth(tex5);
+    PSMTXScale(mtx5, (f32)__fabs(double_8_802fe430) / texWidth,
+               (f32)__fabs(double_8_802fe430) / texHeight,
+               float_1_80426de4);
+    GXLoadTexMtxImm(mtx5, 0x1E, 1);
+    GXBegin(0x80, 0, 4);
+    *fifo = (f32)x; *fifo = yBottom8; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc;
+    *fifo = (f32)x; *fifo = yBottom;  *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_1_80426de4;
+    *fifo = x8;     *fifo = yBottom;  *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_1_80426de4;
+    *fifo = x8;     *fifo = yBottom8; *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_0_80426ddc;
+
+    TEXGetGXTexObjFromPalette(
+        *(s32*)(*(s32*)(*(s32*)((s32)wp + 0x60) + 0xA0)), tex6, 0x2C);
+    GXInitTexObjLOD(tex6, 1, 1, float_0_80426ddc, float_0_80426ddc,
+                    float_0_80426ddc, 0, 0, 0);
+    GXLoadTexObj(tex6, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    texHeight = (f32)GXGetTexObjHeight(tex6);
+    texWidth = (f32)GXGetTexObjWidth(tex6);
+    PSMTXScale(mtx6, __fabs(innerWidth) / texWidth,
+               (f32)__fabs(double_8_802fe430) / texHeight,
+               float_1_80426de4);
+    GXLoadTexMtxImm(mtx6, 0x1E, 1);
+    GXBegin(0x80, 0, 4);
+    *fifo = x8;      *fifo = yBottom8; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc;
+    *fifo = x8;      *fifo = yBottom;  *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_1_80426de4;
+    *fifo = x8 + innerWidth; *fifo = yBottom;  *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_1_80426de4;
+    *fifo = x8 + innerWidth; *fifo = yBottom8; *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_0_80426ddc;
+
+    TEXGetGXTexObjFromPalette(
+        *(s32*)(*(s32*)(*(s32*)((s32)wp + 0x60) + 0xA0)), tex7, 0x32);
+    GXInitTexObjLOD(tex7, 1, 1, float_0_80426ddc, float_0_80426ddc,
+                    float_0_80426ddc, 0, 0, 0);
+    GXLoadTexObj(tex7, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    texHeight = (f32)GXGetTexObjHeight(tex7);
+    texWidth = (f32)GXGetTexObjWidth(tex7);
+    PSMTXScale(mtx7, (f32)__fabs(double_8_802fe430) / texWidth,
+               (f32)__fabs(double_8_802fe430) / texHeight,
+               float_1_80426de4);
+    GXLoadTexMtxImm(mtx7, 0x1E, 1);
+    GXBegin(0x80, 0, 4);
+    *fifo = xRight8; *fifo = yBottom8; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_0_80426ddc;
+    *fifo = xRight8; *fifo = yBottom;  *fifo = float_0_80426ddc; *fifo = float_0_80426ddc; *fifo = float_1_80426de4;
+    *fifo = xRight;  *fifo = yBottom;  *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_1_80426de4;
+    *fifo = xRight;  *fifo = yBottom8; *fifo = float_0_80426ddc; *fifo = float_1_80426de4; *fifo = float_0_80426ddc;
 }
 
 void nameMaskGX(f32 scale) {

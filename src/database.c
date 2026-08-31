@@ -180,22 +180,69 @@ void setupDataBase(char* area, char* map) {
     }
 
     if (index > 0) {
-        DeadInfo saved = *(DeadInfo*)(dead + index * 0x14);
+        DeadInfo* entry = (DeadInfo*)(dead + index * 0x14);
+        DeadInfo saved;
+        saved.word0 = entry->word0;
+        saved.word1 = entry->word1;
+        saved.word2 = entry->word2;
+        saved.word3 = entry->word3;
+        saved.word4 = entry->word4;
+        while (index >= 4) {
+            entry->word0 = (entry - 1)->word0;
+            entry->word1 = (entry - 1)->word1;
+            entry->word2 = (entry - 1)->word2;
+            entry->word3 = (entry - 1)->word3;
+            entry->word4 = (entry - 1)->word4;
+            entry--;
+            entry->word0 = (entry - 1)->word0;
+            entry->word1 = (entry - 1)->word1;
+            entry->word2 = (entry - 1)->word2;
+            entry->word3 = (entry - 1)->word3;
+            entry->word4 = (entry - 1)->word4;
+            entry--;
+            entry->word0 = (entry - 1)->word0;
+            entry->word1 = (entry - 1)->word1;
+            entry->word2 = (entry - 1)->word2;
+            entry->word3 = (entry - 1)->word3;
+            entry->word4 = (entry - 1)->word4;
+            entry--;
+            entry->word0 = (entry - 1)->word0;
+            entry->word1 = (entry - 1)->word1;
+            entry->word2 = (entry - 1)->word2;
+            entry->word3 = (entry - 1)->word3;
+            entry->word4 = (entry - 1)->word4;
+            entry--;
+            index -= 4;
+        }
         while (index > 0) {
-            *(DeadInfo*)(dead + index * 0x14) = *(DeadInfo*)(dead + (index - 1) * 0x14);
+            entry->word0 = (entry - 1)->word0;
+            entry->word1 = (entry - 1)->word1;
+            entry->word2 = (entry - 1)->word2;
+            entry->word3 = (entry - 1)->word3;
+            entry->word4 = (entry - 1)->word4;
+            entry--;
             index--;
         }
-        *(DeadInfo*)dead = saved;
+        ((DeadInfo*)dead)->word0 = saved.word0;
+        ((DeadInfo*)dead)->word1 = saved.word1;
+        ((DeadInfo*)dead)->word2 = saved.word2;
+        ((DeadInfo*)dead)->word3 = saved.word3;
+        ((DeadInfo*)dead)->word4 = saved.word4;
     }
 
     attrFlags = (u32)currentAttr[2];
     if (attrFlags & 1) {
+        void** checkAttr = _map_attr_data;
+        while (checkAttr[0] != 0 &&
+               strcmp((char*)checkAttr[0], map) != 0) {
+            checkAttr += 3;
+        }
         previousAttr = _map_attr_data;
         while (previousAttr[0] != 0 &&
                strcmp((char*)previousAttr[0], (char*)(dead + 0x14)) != 0) {
             previousAttr += 3;
         }
-        if (currentAttr[1] == previousAttr[1]) {
+        if (checkAttr[1] == previousAttr[1]) {
             if ((attrFlags & 2) == 0 && (attrFlags & 4)) {
                 memset(dead + 0x28, 0, 0x4D8);
             }

@@ -377,6 +377,7 @@ USER_FUNC(get_noclip_map) {
 
 void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void* out0, void* out1, s32 useMarioPos) {
     typedef struct Vec { f32 x; f32 y; f32 z; } Vec;
+    typedef struct RawVec { u32 x; u32 y; u32 z; } RawVec;
     extern void PSMTXInverse(void* in, void* out);
     extern void PSMTXConcat(void* a, void* b, void* out);
     extern void PSMTXMultVec(void* mtx, void* in, void* out);
@@ -427,17 +428,13 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
     if (kind == 2) {
         if (hit1 == NULL) {
             mario = marioGetPtr();
-            ((Vec*)out1)->x = *(f32*)(mario + 0x8C);
-            ((Vec*)out1)->y = *(f32*)(mario + 0x90);
-            ((Vec*)out1)->z = *(f32*)(mario + 0x94);
+            *(RawVec*)out1 = *(const RawVec*)(mario + 0x8C);
         } else {
             if (useMarioPos == 0) {
                 hitObjGetPos(hit1, &pos);
             } else {
                 mario = marioGetPtr();
-                pos.x = *(f32*)(mario + 0x8C);
-                pos.y = *(f32*)(mario + 0x90);
-                pos.z = *(f32*)(mario + 0x94);
+                *(RawVec*)&pos = *(const RawVec*)(mario + 0x8C);
             }
             hitObjGetNormal(hit1, &normal);
             ((Vec*)out1)->x = normal.z * inset + normal.x * side + pos.x;
@@ -446,17 +443,13 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
 
         if (hit0 == NULL) {
             mario = marioGetPtr();
-            ((Vec*)out0)->x = *(f32*)(mario + 0x8C);
-            ((Vec*)out0)->y = *(f32*)(mario + 0x90);
-            ((Vec*)out0)->z = *(f32*)(mario + 0x94);
+            *(RawVec*)out0 = *(const RawVec*)(mario + 0x8C);
         } else {
             if (useMarioPos == 0) {
                 hitObjGetPos(hit0, &pos);
             } else {
                 mario = marioGetPtr();
-                pos.x = *(f32*)(mario + 0x8C);
-                pos.y = *(f32*)(mario + 0x90);
-                pos.z = *(f32*)(mario + 0x94);
+                *(RawVec*)&pos = *(const RawVec*)(mario + 0x8C);
             }
             hitObjGetNormal(hit0, &normal);
             ((Vec*)out0)->x = normal.x * front + pos.x;
@@ -465,17 +458,13 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
     } else if (kind >= 0 && kind < 2) {
         if (hit1 == NULL) {
             mario = marioGetPtr();
-            ((Vec*)out1)->x = *(f32*)(mario + 0x8C);
-            ((Vec*)out1)->y = *(f32*)(mario + 0x90);
-            ((Vec*)out1)->z = *(f32*)(mario + 0x94);
+            *(RawVec*)out1 = *(const RawVec*)(mario + 0x8C);
         } else {
             if (useMarioPos == 0) {
                 hitObjGetPos(hit1, &pos);
             } else {
                 mario = marioGetPtr();
-                pos.x = *(f32*)(mario + 0x8C);
-                pos.y = *(f32*)(mario + 0x90);
-                pos.z = *(f32*)(mario + 0x94);
+                *(RawVec*)&pos = *(const RawVec*)(mario + 0x8C);
             }
             hitObjGetNormal(hit1, &normal);
             ((Vec*)out1)->x = -(normal.z * inset - (normal.x * side + pos.x));
@@ -484,17 +473,13 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
 
         if (hit0 == NULL) {
             mario = marioGetPtr();
-            ((Vec*)out0)->x = *(f32*)(mario + 0x8C);
-            ((Vec*)out0)->y = *(f32*)(mario + 0x90);
-            ((Vec*)out0)->z = *(f32*)(mario + 0x94);
+            *(RawVec*)out0 = *(const RawVec*)(mario + 0x8C);
         } else {
             if (useMarioPos == 0) {
                 hitObjGetPos(hit0, &pos);
             } else {
                 mario = marioGetPtr();
-                pos.x = *(f32*)(mario + 0x8C);
-                pos.y = *(f32*)(mario + 0x90);
-                pos.z = *(f32*)(mario + 0x94);
+                *(RawVec*)&pos = *(const RawVec*)(mario + 0x8C);
             }
             hitObjGetNormal(hit0, &normal);
             ((Vec*)out0)->x = normal.x * front + pos.x;
@@ -503,17 +488,13 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
     } else if (kind < 4) {
         if (hit1 == NULL) {
             mario = marioGetPtr();
-            ((Vec*)out1)->x = *(f32*)(mario + 0x8C);
-            ((Vec*)out1)->y = *(f32*)(mario + 0x90);
-            ((Vec*)out1)->z = *(f32*)(mario + 0x94);
+            *(RawVec*)out1 = *(const RawVec*)(mario + 0x8C);
         } else {
             if (useMarioPos == 0) {
                 hitObjGetPos(hit1, &pos);
             } else {
                 mario = marioGetPtr();
-                pos.x = *(f32*)(mario + 0x8C);
-                pos.y = *(f32*)(mario + 0x90);
-                pos.z = *(f32*)(mario + 0x94);
+                *(RawVec*)&pos = *(const RawVec*)(mario + 0x8C);
             }
             hitObjGetNormal(hit1, &normal);
             ((Vec*)out1)->x = normal.x * side + pos.x;
@@ -522,17 +503,13 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
 
         if (hit0 == NULL) {
             mario = marioGetPtr();
-            ((Vec*)out0)->x = *(f32*)(mario + 0x8C);
-            ((Vec*)out0)->y = *(f32*)(mario + 0x90);
-            ((Vec*)out0)->z = *(f32*)(mario + 0x94);
+            *(RawVec*)out0 = *(const RawVec*)(mario + 0x8C);
         } else {
             if (useMarioPos == 0) {
                 hitObjGetPos(hit0, &pos);
             } else {
                 mario = marioGetPtr();
-                pos.x = *(f32*)(mario + 0x8C);
-                pos.y = *(f32*)(mario + 0x90);
-                pos.z = *(f32*)(mario + 0x94);
+                *(RawVec*)&pos = *(const RawVec*)(mario + 0x8C);
             }
             hitObjGetNormal(hit0, &normal);
             ((Vec*)out0)->x = normal.x * side + pos.x;
@@ -823,7 +800,16 @@ USER_FUNC(evt_door_set_param) {
 
 
 s32 evt_door_end_wait(void) {
-    return DoorFLAG ? 0 : 2;
+    register s32 flag = DoorFLAG;
+    register s32 result = 2;
+    register s32 mask;
+    asm {
+        neg mask, flag
+        or mask, mask, flag
+        srawi mask, mask, 31
+        andc result, result, mask
+    }
+    return result;
 }
 
 const char str_SFX_DOOR_OPEN1_802e3f00[] = "SFX_DOOR_OPEN1";

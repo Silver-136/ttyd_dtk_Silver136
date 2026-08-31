@@ -164,6 +164,7 @@ u8 cardInit(void) {
     u8* save;
     u32 sum;
     s32 offset;
+    s32 checksumOffset;
     s32 count;
     s32 slot;
 
@@ -187,9 +188,10 @@ u8 cardInit(void) {
     memcpy(header + 0x40, _mariost_banner_tex, 0x1800);
     memcpy(header + 0x1840, _mariost_icon_tex, 0x400);
     memcpy(header + 0x1C40, _mariost_icon_tlut, 0x200);
-    *(u16*)(header + 0x1E40) = (*(s32*)((s32)gp + 0x1294) != 0);
-    *(u16*)(header + 0x1E42) = *(u16*)((s32)gp + 0x1274);
-    *(u16*)(header + 0x1E44) = *(u16*)((s32)gp + 0x11B8);
+    *(u16*)(header + 0x1E40) = ((u32)(-*(s32*)((s32)gp + 0x1294)) |
+                                      (u32)*(s32*)((s32)gp + 0x1294)) >> 31;
+    *(s16*)(header + 0x1E42) = *(s32*)((s32)gp + 0x1274);
+    *(s16*)(header + 0x1E44) = *(s32*)((s32)gp + 0x11B8);
     *(u32*)(header + 0x1FF8) = 0;
     *(u32*)(header + 0x1FFC) = 0xFFFFFFFF;
     sum = 0;
@@ -198,8 +200,22 @@ u8 cardInit(void) {
     do {
         u8* p = header + offset;
         offset += 0x10;
-        sum += p[0] + p[1] + p[2] + p[3] + p[4] + p[5] + p[6] + p[7]
-             + p[8] + p[9] + p[10] + p[11] + p[12] + p[13] + p[14] + p[15];
+        sum += p[0];
+        sum += p[1];
+        sum += p[2];
+        sum += p[3];
+        sum += p[4];
+        sum += p[5];
+        sum += p[6];
+        sum += p[7];
+        sum += p[8];
+        sum += p[9];
+        sum += p[10];
+        sum += p[11];
+        sum += p[12];
+        sum += p[13];
+        sum += p[14];
+        sum += p[15];
     } while (--count != 0);
     if (offset < 0x1E46) {
         count = 0x1E46 - offset;
@@ -224,9 +240,20 @@ u8 cardInit(void) {
         *(u32*)(save + 0x3FF8) = 0;
         *(u32*)(save + 0x3FFC) = 0xFFFFFFFF;
         sum = 0;
-        for (count = 0; count < 0x2260; count++) {
-            sum += save[count];
-        }
+        checksumOffset = 0;
+        count = 0x226;
+        do {
+            u8* p = save + checksumOffset;
+            checksumOffset += 8;
+            sum += p[0];
+            sum += p[1];
+            sum += p[2];
+            sum += p[3];
+            sum += p[4];
+            sum += p[5];
+            sum += p[6];
+            sum += p[7];
+        } while (--count != 0);
         *(u32*)(save + 0x3FF8) = sum;
         *(u32*)(save + 0x3FFC) = ~sum;
     }
@@ -332,8 +359,11 @@ u8 cardMain(void) {
             create_main();
             break;
         case 6:
-            if (*(s32*)((s32)wp + 0x9C) == 0) {
-                if ((*(u16*)wp & 1) == 0) {
+            if (*(s32*)((s32)wp + 0x9C) != 0) {
+                *(s32*)((s32)wp + 0xE0) = 8;
+                *(u16*)wp |= 0x200;
+                *(u16*)wp &= ~2;
+            } else if ((*(u16*)wp & 1) == 0) {
                     switch (*(s32*)((s32)wp + 0xD8)) {
                         case 0:
                             *(u16*)wp |= 1;
@@ -400,11 +430,6 @@ u8 cardMain(void) {
                         *(s32*)((s32)wp + 0x9C) = CARDGetResultCode(*(s32*)((s32)wp + 8));
                         *(u16*)wp &= ~1;
                     }
-                }
-            } else {
-                *(s32*)((s32)wp + 0xE0) = 8;
-                *(u16*)wp |= 0x200;
-                *(u16*)wp &= ~2;
             }
             break;
         case 7:
@@ -1199,6 +1224,34 @@ void cardWriteHeader(void) {
 #pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw off
+
+
 u8 write_header_main(void) {
     extern s32 CARDProbeEx(s32 chan, u32* memSize, s32* sectorSize);
     extern s32 CARDSetFastMode(s32 enable);
@@ -1258,11 +1311,11 @@ u8 write_header_main(void) {
             case 1:
                 CARDSetFastMode(1);
                 *(u16*)wp |= 1;
-                CARDMountAsync(*(s32*)((s32)wp + 4), *(s32*)((s32)wp + 8), mountDetachCallback, mountAttachCallback);
+                CARDMountAsync(*(s32*)((s32)wp + 8), *(s32*)((s32)wp + 4), mountDetachCallback, mountAttachCallback);
                 break;
             case 2:
                 *(u16*)wp |= 1;
-                CARDCheckAsync(*(s32*)((s32)wp + 4), checkCallback);
+                CARDCheckAsync(*(s32*)((s32)wp + 8), checkCallback);
                 break;
             case 3:
                 memcard_open();
@@ -1274,7 +1327,7 @@ u8 write_header_main(void) {
             case 5:
                 *(u16*)wp |= 1;
                 for (retry = 0; retry <= 1000000; retry++) {
-                    result = CARDGetSerialNo(*(s32*)((s32)wp + 4), (u32*)((s32)wp + 0x10));
+                    result = CARDGetSerialNo(*(s32*)((s32)wp + 8), (u32*)((s32)wp + 0x10));
                     if (result != -1) {
                         break;
                     }
@@ -1302,7 +1355,7 @@ u8 write_header_main(void) {
             case 7:
                 *(u16*)wp |= 1;
                 for (retry = 0; retry <= 1000000; retry++) {
-                    result = CARDUnmount(*(s32*)((s32)wp + 4));
+                    result = CARDUnmount(*(s32*)((s32)wp + 8));
                     if (result != -1) {
                         break;
                     }
@@ -1322,15 +1375,18 @@ u8 write_header_main(void) {
         }
         *(s32*)((s32)wp + 0xD8) += 1;
     } else {
-        result = CARDGetResultCode(*(s32*)((s32)wp + 4));
-        if ((result != -1) && (*(s32*)((s32)wp + 0x9C) != CARDGetResultCode(*(s32*)((s32)wp + 4)))) {
-            *(s32*)((s32)wp + 0x9C) = CARDGetResultCode(*(s32*)((s32)wp + 4));
+        result = CARDGetResultCode(*(s32*)((s32)wp + 8));
+        if ((result != -1) && (*(s32*)((s32)wp + 0x9C) != CARDGetResultCode(*(s32*)((s32)wp + 8)))) {
+            *(s32*)((s32)wp + 0x9C) = CARDGetResultCode(*(s32*)((s32)wp + 8));
             *(u16*)wp &= ~1;
         }
     }
 
     return 0;
 }
+
+#pragma use_lmw_stmw on
+
 u8 read_main(void) {
     extern s32 CARDProbeEx(s32, u32*, s32*);
     extern s32 CARDSetFastMode(s32);
@@ -1605,10 +1661,6 @@ void read_all_main(void) {
     s32 slot;
     u32 memSize;
     u32 sum;
-    u32 hi0;
-    u32 hi1;
-    u32 lo0;
-    u32 lo1;
     u8* buffer;
     u8* p;
     u8* q;
@@ -1792,12 +1844,7 @@ void read_all_main(void) {
     case 10:
         choice = *(s32*)((s32)wp + 0xB4);
         if (choice != 0 && *(s32*)((s32)wp + 0xB8) != 0) {
-            hi0 = *(u32*)((s32)wp + 0xC8);
-            lo0 = *(u32*)((s32)wp + 0xCC);
-            hi1 = *(u32*)((s32)wp + 0xD0);
-            lo1 = *(u32*)((s32)wp + 0xD4);
-            if ((hi1 ^ 0x80000000U) < (hi0 ^ 0x80000000U) ||
-                ((hi1 ^ 0x80000000U) == (hi0 ^ 0x80000000U) && lo1 < lo0)) {
+            if (*(s64*)((s32)wp + 0xC8) > *(s64*)((s32)wp + 0xD0)) {
                 choice = 0;
             } else {
                 choice = 1;
@@ -2363,7 +2410,6 @@ void statusCallback(s32 chan, s32 result) {
     *(s32*)((s32)wp + 0x9C) = result;
     *(u16*)wp &= ~1;
 }
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void memcard_open(void) {
@@ -2402,14 +2448,12 @@ void memcard_open(void) {
     *(u16*)wp |= 1;
 
     if ((*(u16*)wp & 0x2000) != 0) {
-        for (retry = 0; retry <= 1000000; retry++) {
-            result = CARDGetSerialNo(*(s32*)((s32)wp + 8), &serial);
-            if (result != -1) {
+        retry = 0;
+        while ((result = CARDGetSerialNo(*(s32*)((s32)wp + 8), &serial)) == -1) {
+            if (++retry > 1000000) {
+                result = -0x80;
                 break;
             }
-        }
-        if (retry > 1000000) {
-            result = -0x80;
         }
         if (result != 0) {
             *(s32*)((s32)wp + 0x9C) = result;
@@ -2425,14 +2469,12 @@ void memcard_open(void) {
     }
 
     for (fileNo = 0; fileNo < 0x7F; fileNo++) {
-        for (retry = 0; retry <= 1000000; retry++) {
-            result = CARDGetStatus(*(s32*)((s32)wp + 8), fileNo, &stat);
-            if (result != -1) {
+        retry = 0;
+        while ((result = CARDGetStatus(*(s32*)((s32)wp + 8), fileNo, &stat)) == -1) {
+            if (++retry > 1000000) {
+                result = -0x80;
                 break;
             }
-        }
-        if (retry > 1000000) {
-            result = -0x80;
         }
         if ((result == -4) || (result == -10)) {
             continue;
@@ -2457,41 +2499,44 @@ void memcard_open(void) {
         }
     }
 
-    if (fileNo < 0x7F) {
-        for (retry = 0; retry <= 1000000; retry++) {
-            result = CARDOpen(*(s32*)((s32)wp + 8), str_mariost_save_file_802cb0e0, (void*)((s32)wp + 0x1C));
-            if (result != -1) {
+    if (fileNo >= 0x7F) {
+        retry = 0;
+        while ((result = CARDFreeBlocks(*(s32*)((s32)wp + 8), &bytesNotUsed, &filesNotUsed)) == -1) {
+            if (++retry > 1000000) {
+                result = -0x80;
                 break;
             }
         }
-        if (retry > 1000000) {
-            result = -0x80;
-        }
-        *(s32*)((s32)wp + 0x9C) = result;
-        *(u16*)wp &= ~1;
-    } else {
-        for (retry = 0; retry <= 1000000; retry++) {
-            result = CARDFreeBlocks(*(s32*)((s32)wp + 8), &bytesNotUsed, &filesNotUsed);
-            if (result != -1) {
-                break;
-            }
-        }
-        if (retry > 1000000) {
-            result = -0x80;
-        }
-        if (result == 0) {
-            if (bytesNotUsed < 0x22000) {
-                *(s32*)((s32)wp + 0x9C) = -9;
-            } else if (filesNotUsed < 1) {
-                *(s32*)((s32)wp + 0x9C) = -8;
-            } else {
-                *(s32*)((s32)wp + 0x9C) = -4;
-            }
-        } else {
+        if (result != 0) {
             *(s32*)((s32)wp + 0x9C) = result;
+            *(u16*)wp &= ~1;
+            return;
         }
+        if (bytesNotUsed < 0x22000) {
+            *(s32*)((s32)wp + 0x9C) = -9;
+            *(u16*)wp &= ~1;
+            return;
+        }
+        if (filesNotUsed < 1) {
+            *(s32*)((s32)wp + 0x9C) = -8;
+            *(u16*)wp &= ~1;
+            return;
+        }
+        *(s32*)((s32)wp + 0x9C) = -4;
         *(u16*)wp &= ~1;
+        return;
     }
+
+    retry = 0;
+    while ((result = CARDOpen(*(s32*)((s32)wp + 8), str_mariost_save_file_802cb0e0,
+                              (void*)((s32)wp + 0x1C))) == -1) {
+        if (++retry > 1000000) {
+            result = -0x80;
+            break;
+        }
+    }
+    *(s32*)((s32)wp + 0x9C) = result;
+    *(u16*)wp &= ~1;
 }
 
 #pragma no_register_save_helpers off

@@ -271,7 +271,7 @@ s32 N_itemPickUpFromFieldCheck(void) {
     return 0;
 }
 
-u8 itemMain(void) {
+void itemMain(void) {
     extern void* gp;
     extern void* marioGetPtr(void);
     extern void* itemHitCheck(f64, f64, f64, f64);
@@ -358,6 +358,7 @@ u8 itemMain(void) {
                                      hitWork, &nextY, &normalX, &distance, &normalY, 0, &normalZ);
             }
             if (hit == 0) {
+                nextY = oldY + float_neg1_804210c4;
                 *(u16*)(item + 0x24) = 3;
                 *(u16*)(item + 0x26) = 0;
             } else {
@@ -438,7 +439,6 @@ u8 itemMain(void) {
             *(u32*)(item + 0x6C) = *(u32*)((s32)gp + 0x3C);
         }
     }
-    return 0;
 }
 
 void itemModeChange(void* item, u16 mode) {
@@ -714,9 +714,9 @@ void* itemHitCheck(f64 posX, f64 posY, f64 posZ, f64 radius) {
             ((*(u16*)item & 2) == 0) &&
             ((*(u32*)((s32)item + 0x38) & 0x1000) == 0) &&
             (*(u16*)((s32)item + 0x24) != 2)) {
-            dx = (f32)(posX - (f64)*(f32*)((s32)item + 0x3C));
-            dz = (f32)(posZ - (f64)*(f32*)((s32)item + 0x44));
-            dy = (f32)(posY - (f64)*(f32*)((s32)item + 0x40));
+            dx = (f32)posX - *(f32*)((s32)item + 0x3C);
+            dz = (f32)posZ - *(f32*)((s32)item + 0x44);
+            dy = (f32)posY - *(f32*)((s32)item + 0x40);
             {
                 f32 value = dx * dx + dz * dz;
                 if (value > float_0_804210b4) {
@@ -1122,14 +1122,14 @@ void itemseq_GetItem(void* item, s32 p2, s32 p3, s32 p4, u32* p5, u32 p6) {
     switch (*mode) {
     case 0:
         *status &= ~0x10000;
-        if ((*flags & 0x100) == 0) {
-            *status &= ~0x4000000;
-        } else {
+        if ((*flags & 0x100) != 0) {
             *status |= 0x4000000;
+        } else {
+            *status &= ~0x4000000;
         }
         *flags &= ~0x100;
 
-        if ((*flags & 0x200) != 0) {
+        if ((*flags & 4) != 0) {
             itemId = *(s32*)((s32)item + 4);
 
             if (pouchGetItem(itemId) != 0) {
@@ -1831,6 +1831,12 @@ u8 itemseq_Bound(void* item) {
     extern void effStardustEntry(f64, f64, f64, f64, f64, s32, s32, s32);
     extern f64 sin(f64);
     extern f64 cos(f64);
+    extern const f64 double_neg1_802c92d8;
+    extern f32 float_0p5_804210d0;
+    extern f32 float_0p7_8042110c;
+    extern f32 float_8_80421110;
+    extern f32 float_1E06_804210f4;
+    extern f32 float_neg1000_80421108;
     f32* pos = (f32*)((s32)item + 0x3C);
     u32* status = (u32*)((s32)item + 0x38);
     u32* flags = (u32*)((s32)item + 0x34);
@@ -1842,6 +1848,8 @@ u8 itemseq_Bound(void* item) {
     s32 nextAngle;
     void* hit;
     f32 radians, dx, dz, dy;
+    s64 now, deltaCycles, accumulatedCycles;
+    f32 deltaTime, accumulatedTime, totalTime;
 
     marioGetPtr();
     camGetPtr(4);
@@ -1889,6 +1897,8 @@ u8 itemseq_Bound(void* item) {
             *status |= 0x24;
             break;
         }
+        *status &= ~0x10;
+        return 0;
     }
     if (*(u16*)((s32)item + 0x26) != 1) {
         return 0;
@@ -1897,11 +1907,24 @@ u8 itemseq_Bound(void* item) {
     angle = *(s32*)((s32)item + 0x54);
     gravity = *(f32*)((s32)item + 0x58);
     jump = *(f32*)((s32)item + 0x5C);
+    now = *(s64*)((s32)gp + 0x38);
+    deltaCycles = now - *(s64*)((s32)item + 0x68);
+    accumulatedCycles = *(s64*)((s32)item + 0x60);
+    deltaTime = (f32)((deltaCycles * 8) / (*(u32*)0x800000F8 / 500000)) /
+                float_1E06_804210f4;
+    accumulatedTime = (f32)((accumulatedCycles * 8) /
+                      (*(u32*)0x800000F8 / 500000)) / float_1E06_804210f4;
+    totalTime = (f32)(((accumulatedCycles + deltaCycles) * 8) /
+                (*(u32*)0x800000F8 / 500000)) / float_1E06_804210f4;
     nextAngle = angle;
     radians = 6.2832f * (f32)angle / 360.0f;
-    dx = speed * (f32)sin(radians);
-    dz = -speed * (f32)cos(radians);
-    dy = jump - gravity * 0.98f;
+    dx = deltaTime * speed * (f32)sin(radians);
+    dz = deltaTime * speed * -(f32)cos(radians);
+    if ((*status & 0x8000) != 0) {
+        dz = 0.0f;
+    }
+    dy = jump * deltaTime + float_neg1000_80421108 * gravity * 0.98f *
+         -(accumulatedTime * accumulatedTime - totalTime * totalTime);
     if ((*status & 4) != 0 && (*(s32*)((s32)item + 0x8C) != 0 || dy < 0.0f)) *status &= ~4;
     if ((*status & 8) != 0 && *(s32*)((s32)item + 0x8C) != 0) *status &= ~8;
     if ((*status & 0x20) != 0 && dy < 0.0f) {
@@ -1944,7 +1967,17 @@ u8 itemseq_Bound(void* item) {
             *(u32*)((s32)item + 0x6C) = *(u32*)((s32)item + 0x74);
         }
     }
-    if (hit == 0) {
+    if (hit == 0 && dy < 0.0f && (*status & 0x100000) == 0) {
+        distance = 20.0f - dy;
+        hit = hitCheckFilter(pos[0], pos[1] + 20.0f, pos[2],
+                             0.0, double_neg1_802c92d8, 0.0, 0,
+                             0, &floorY, 0, &distance, 0, 0, 0);
+        if (hit != 0) {
+            pos[1] = floorY;
+        } else {
+            pos[1] += dy;
+        }
+    } else if (hit == 0) {
         pos[1] += dy;
     }
     if ((*status & 0x100000) != 0 && pos[1] <= -1000.0f) {
@@ -1954,6 +1987,9 @@ u8 itemseq_Bound(void* item) {
         *status |= 0x10000;
         *flags |= 0x100;
         return 0;
+    } else if (hit != 0) {
+        *status |= 0x100000;
+        *flags |= 2;
     }
     if (hit != 0 && (hitGetAttr(hit) & 0x600) == 0) {
         s32 bounds = ++*(s32*)((s32)item + 0x8C);
@@ -1963,10 +1999,37 @@ u8 itemseq_Bound(void* item) {
             *(u16*)((s32)item + 0x26) = 0;
             *status &= ~(4 | 8 | 0x4000);
         } else {
-            *(f32*)((s32)item + 0x5C) = -jump * 0.25f;
-            psndSFXOn_3D(0x1D0, pos);
+            f32 accel = float_neg1000_80421108 * 0.98f * gravity;
+            f32 nextJump;
+            f32 bounceTime;
+
+            nextJump = float_0p7_8042110c * *(f32*)((s32)item + 0x80) *
+                       (-(jump * deltaTime + accel *
+                          ((totalTime + deltaTime) * (totalTime + deltaTime) -
+                           totalTime * totalTime)) / deltaTime);
+            *(f32*)((s32)item + 0x5C) = nextJump;
+            bounceTime = float_0p5_804210d0 * (nextJump / accel);
+            if (bounceTime < 0.0f) {
+                bounceTime = -bounceTime;
+            }
+            if (nextJump * bounceTime + bounceTime * accel * bounceTime <=
+                float_8_80421110) {
+                *(u16*)((s32)item + 0x24) = 1;
+                *(u16*)((s32)item + 0x26) = 0;
+                *status &= ~(4 | 8 | 0x4000);
+            }
+            if ((*flags & 0x200) != 0 && bounds < 2) {
+                *(s32*)((s32)item + 0x54) = *(s32*)((s32)item + 0x90);
+                *(f32*)((s32)item + 0x50) = *(f32*)((s32)item + 0x94);
+                *flags &= ~0x200;
+            }
+            *(s64*)((s32)item + 0x60) = 0;
+            *(s64*)((s32)item + 0x68) = now;
         }
     }
+    *(s64*)((s32)item + 0x60) = accumulatedCycles + deltaCycles;
+    *(s64*)((s32)item + 0x68) = *(s64*)((s32)item + 0x70);
+    *status &= ~0x10;
     return 0;
 }
 

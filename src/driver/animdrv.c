@@ -67,15 +67,51 @@ int testAlloc(u32 size) {
                 data = *(s32*)(data + 0xA0);
                 data = *(s32*)data;
                 *(s32*)(pose + 0x48) = testAlloc(*(s32*)(data + 0xF0) * 0xC);
+
+                file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
+                data = *(s32*)(file + 8);
+                data = *(s32*)(data + 0xA0);
+                data = *(s32*)data;
                 *(s32*)(pose + 0x4C) = testAlloc(*(s32*)(data + 0xF0) * 0xC);
+
+                file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
+                data = *(s32*)(file + 8);
+                data = *(s32*)(data + 0xA0);
+                data = *(s32*)data;
                 *(s32*)(pose + 0x50) = testAlloc(*(s32*)(data + 0xF8) * 0xC);
+
+                file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
+                data = *(s32*)(file + 8);
+                data = *(s32*)(data + 0xA0);
+                data = *(s32*)data;
                 *(s32*)(pose + 0x54) = testAlloc(*(s32*)(data + 0xF8) * 0xC);
+
+                file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
+                data = *(s32*)(file + 8);
+                data = *(s32*)(data + 0xA0);
+                data = *(s32*)data;
                 *(s32*)(pose + 0x58) = testAlloc(*(s32*)(data + 0x13C));
                 *(s32*)(pose + 0x5C) = *(s32*)(pose + 0x58);
+
+                file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
+                data = *(s32*)(file + 8);
+                data = *(s32*)(data + 0xA0);
+                data = *(s32*)data;
                 *(s32*)(pose + 0x60) = testAlloc(*(s32*)(data + 0x140) << 2);
+
+                file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
+                data = *(s32*)(file + 8);
+                data = *(s32*)(data + 0xA0);
+                data = *(s32*)data;
                 *(s32*)(pose + 0x64) = testAlloc(*(s32*)(data + 0x140) << 2);
+
+                file = *(s32*)wp + (*(s32*)(pose + 0x10) << 4);
+                data = *(s32*)(file + 8);
+                data = *(s32*)(data + 0xA0);
+                data = *(s32*)data;
                 *(s32*)(pose + 0x68) = testAlloc(*(s32*)(data + 0x12C) * 0x18);
                 *(s32*)(pose + 0x6C) = *(s32*)(pose + 0x68);
+                *(s32*)(pose + 0x3C) = -1;
                 *(s32*)(pose + 0x3C) = -1;
             }
             offset += 0x170;
@@ -509,7 +545,7 @@ file_done:
     return poseIdx;
 }
 
-void animPaperPoseEntry(s32 name, s32 flag) {
+s32 animPaperPoseEntry(s32 name, s32 flag) {
     extern s32 strcmp(const char*, const char*);
     extern s32 animPoseEntry(char*, u32);
     extern s32 wp;
@@ -533,7 +569,10 @@ void animPaperPoseEntry(s32 name, s32 flag) {
         index++;
     }
     if (index == *(s32*)(wp + 0x14)) index = -1;
-    if (index < 0) {
+    if (index >= 0) {
+        pose = *(s32*)(wp + 0x10) + index * 0x170;
+        *(s32*)(pose + 8) += 1;
+    } else {
         index = animPoseEntry((char*)name, flag);
         if (index != -2) {
             pose = *(s32*)(wp + 0x10) + index * 0x170;
@@ -541,10 +580,8 @@ void animPaperPoseEntry(s32 name, s32 flag) {
             *(s32*)(pose + 8) = 0;
             *(u32*)pose |= 1;
         }
-    } else {
-        pose = *(s32*)(wp + 0x10) + index * 0x170;
-        *(s32*)(pose + 8) += 1;
     }
+    return index;
 }
 
 s32 animEffectAsync(void* name, s32 mode) {
@@ -1212,13 +1249,14 @@ u8 animPoseMain(s32 poseIdx) {
     s32 visCount;
     s32 nodeCount;
     s32 texCount;
-    u32 i;
-    u32 j;
+    s32 i;
+    s32 j;
     s32 count;
     s32 idx;
-    u8* upd;
+    register u8* upd;
     u8* updEnd;
-    Vec3Local* vtx;
+    u8* vis;
+    register Vec3Local* vtx;
     f32* node;
     s32 tex;
     s32 outPos;
@@ -1231,7 +1269,7 @@ u8 animPoseMain(s32 poseIdx) {
     f32 end;
     f32 duration;
     f32 blend;
-    f32 scale;
+    register f32 scale;
     f32 ftmp;
     f32 angle;
     f32 delta;
@@ -1244,6 +1282,21 @@ u8 animPoseMain(s32 poseIdx) {
     poseData = **(s32**)(file + 0xA0);
     animEntry = *(s32*)(poseData + 0x1AC) + (*(s32*)(pose + 0x14) << 6);
     animData = *(s32*)(animEntry + 0x3C);
+
+    asm {
+        li r3, 4
+        oris r3, r3, 4
+        mtspr GQR2, r3
+        li r3, 5
+        oris r3, r3, 5
+        mtspr GQR3, r3
+        li r3, 6
+        oris r3, r3, 6
+        mtspr GQR4, r3
+        li r3, 7
+        oris r3, r3, 7
+        mtspr GQR5, r3
+    }
 
     if (*(s32*)(work + 0xE8) == 0) {
         outPos = *(s32*)(pose + 0x4C);
@@ -1258,7 +1311,7 @@ u8 animPoseMain(s32 poseIdx) {
     }
 
     if (animData == 0) {
-        return 0;
+        return;
     }
 
     loopData = *(s32*)(animData + 0x24);
@@ -1381,61 +1434,169 @@ u8 animPoseMain(s32 poseIdx) {
         if (visCount != 0) memcpy(*(void**)(pose + 0x58), *(void**)(poseData + 0x1A0), visCount);
         if (nodeCount != 0) memcpy_as4(*(void**)(pose + 0x60), *(void**)(poseData + 0x1A4), nodeCount << 2);
         if (texCount != 0) memcpy_as4(*(void**)(pose + 0x68), *(void**)(poseData + 0x190), texCount * 0x18);
-        *(s32*)(pose + 0x3C) = 0;
-        oldAnim0 = -1;
-    }
 
-    frameEnd = anim0;
-    if (oldAnim0 >= 0 && oldAnim0 < anim0) {
-        i = oldAnim0 + 1;
-    } else {
-        i = 0;
-    }
-
-    for (; i <= frameEnd; i++) {
-        frame = frameData + i * 0x2C;
-        scale = float_0p0625_8041fbac;
-
-        upd = (u8*)(*(s32*)(animData + 0x2C) + *(s32*)(frame + 4) * 4);
-        for (j = 0; j < *(s32*)(frame + 8); j++, upd += 4) {
-            vtx = (Vec3Local*)*(s32*)(pose + 0x48);
-            vtx += upd[0];
-            vtx->x += scale * (f32)(s8)upd[1];
-            vtx->y += scale * (f32)(s8)upd[2];
-            vtx->z += scale * (f32)(s8)upd[3];
+        if (*(s32*)(pose + 0x3C) == -1) {
+            *(s32*)(pose + 0x3C) = 0;
         }
 
-        upd = (u8*)(*(s32*)(animData + 0x30) + *(s32*)(frame + 0xC) * 4);
-        for (j = 0; j < *(s32*)(frame + 0x10); j++, upd += 4) {
-            vtx = (Vec3Local*)*(s32*)(pose + 0x50);
-            vtx += upd[0];
-            vtx->x += scale * (f32)(s8)upd[1];
-            vtx->y += scale * (f32)(s8)upd[2];
-            vtx->z += scale * (f32)(s8)upd[3];
-        }
+        frame = frameData;
+        frameEnd = frameData + (anim0 + 1) * 0x2C;
+        while (frame < frameEnd) {
+                    scale = float_0p0625_8041fbac;
 
-        upd = (u8*)(*(s32*)(animData + 0x38) + *(s32*)(frame + 0x1C) * 2);
-        updEnd = upd + *(s32*)(frame + 0x20) * 2;
-        idx = 0;
-        while (upd < updEnd) {
-            idx += upd[0];
-            *(u8*)(*(s32*)(pose + 0x58) + idx) += upd[1];
-            upd += 2;
-        }
+                    vtx = (Vec3Local*)*(s32*)(pose + 0x48);
+                    upd = (u8*)(*(s32*)(animData + 0x2C) + *(s32*)(frame + 4) * 4);
+                    updEnd = upd + *(s32*)(frame + 8) * 4;
+                    while (upd < updEnd) {
+                        vtx += upd[0];
+                        asm {
+                            psq_l f1, 1(upd), 1, 4
+                            psq_l f3, 2(upd), 1, 4
+                            psq_l f4, 3(upd), 1, 4
+                            lfs f0, 0(vtx)
+                            fmadds f0, scale, f1, f0
+                            stfs f0, 0(vtx)
+                            lfs f0, 4(vtx)
+                            fmadds f0, scale, f3, f0
+                            stfs f0, 4(vtx)
+                            lfs f0, 8(vtx)
+                            fmadds f0, scale, f4, f0
+                            stfs f0, 8(vtx)
+                        }
+                        upd += 4;
+                    }
 
-        upd = (u8*)(*(s32*)(animData + 0x3C) + *(s32*)(frame + 0x24) * 4);
-        for (j = 0; j < *(s32*)(frame + 0x28); j++, upd += 4) {
-            node = (f32*)*(s32*)(pose + 0x60);
-            node += upd[0];
-            *node += scale * (f32)(s8)upd[1];
-        }
+                    vtx = (Vec3Local*)*(s32*)(pose + 0x50);
+                    upd = (u8*)(*(s32*)(animData + 0x30) + *(s32*)(frame + 0xC) * 4);
+                    updEnd = upd + *(s32*)(frame + 0x10) * 4;
+                    while (upd < updEnd) {
+                        vtx += upd[0];
+                        asm {
+                            psq_l f1, 1(upd), 1, 4
+                            psq_l f3, 2(upd), 1, 4
+                            psq_l f4, 3(upd), 1, 4
+                            lfs f0, 0(vtx)
+                            fmadds f0, scale, f1, f0
+                            stfs f0, 0(vtx)
+                            lfs f0, 4(vtx)
+                            fmadds f0, scale, f3, f0
+                            stfs f0, 4(vtx)
+                            lfs f0, 8(vtx)
+                            fmadds f0, scale, f4, f0
+                            stfs f0, 8(vtx)
+                        }
+                        upd += 4;
+                    }
 
-        upd = (u8*)(*(s32*)(animData + 0x34) + *(s32*)(frame + 0x14) * 0xC);
-        for (j = 0; j < *(s32*)(frame + 0x18); j++, upd += 0xC) {
-            tex = *(s32*)(pose + 0x68) + upd[0] * 0x18;
-            *(u8*)tex += upd[1];
-            *(f32*)(tex + 4) += *(f32*)(upd + 4);
-            *(f32*)(tex + 8) += *(f32*)(upd + 8);
+                    vis = (u8*)*(s32*)(pose + 0x58);
+                    upd = (u8*)(*(s32*)(animData + 0x38) + *(s32*)(frame + 0x1C) * 2);
+                    updEnd = upd + *(s32*)(frame + 0x20) * 2;
+                    while (upd < updEnd) {
+                        vis += upd[0];
+                        *vis += upd[1];
+                        upd += 2;
+                    }
+
+                    node = (f32*)*(s32*)(pose + 0x60);
+                    upd = (u8*)(*(s32*)(animData + 0x3C) + *(s32*)(frame + 0x24) * 4);
+                    updEnd = upd + *(s32*)(frame + 0x28) * 4;
+                    while (upd < updEnd) {
+                        node += upd[0];
+                        *node += scale * (f32)(s8)upd[1];
+                        upd += 4;
+                    }
+
+                    tex = *(s32*)(pose + 0x68);
+                    upd = (u8*)(*(s32*)(animData + 0x34) + *(s32*)(frame + 0x14) * 0xC);
+                    updEnd = upd + *(s32*)(frame + 0x18) * 0xC;
+                    while (upd < updEnd) {
+                        tex += upd[0] * 0x18;
+                        *(u8*)tex += upd[1];
+                        *(f32*)(tex + 4) += *(f32*)(upd + 4);
+                        *(f32*)(tex + 8) += *(f32*)(upd + 8);
+                        upd += 0xC;
+                    }
+            frame += 0x2C;
+        }
+    } else if (oldAnim0 < anim0) {
+        frame = frameData + (oldAnim0 + 1) * 0x2C;
+        frameEnd = frameData + (anim0 + 1) * 0x2C;
+        while (frame < frameEnd) {
+                    scale = float_0p0625_8041fbac;
+
+                    vtx = (Vec3Local*)*(s32*)(pose + 0x48);
+                    upd = (u8*)(*(s32*)(animData + 0x2C) + *(s32*)(frame + 4) * 4);
+                    updEnd = upd + *(s32*)(frame + 8) * 4;
+                    while (upd < updEnd) {
+                        vtx += upd[0];
+                        asm {
+                            psq_l f1, 1(upd), 1, 4
+                            psq_l f3, 2(upd), 1, 4
+                            psq_l f4, 3(upd), 1, 4
+                            lfs f0, 0(vtx)
+                            fmadds f0, scale, f1, f0
+                            stfs f0, 0(vtx)
+                            lfs f0, 4(vtx)
+                            fmadds f0, scale, f3, f0
+                            stfs f0, 4(vtx)
+                            lfs f0, 8(vtx)
+                            fmadds f0, scale, f4, f0
+                            stfs f0, 8(vtx)
+                        }
+                        upd += 4;
+                    }
+
+                    vtx = (Vec3Local*)*(s32*)(pose + 0x50);
+                    upd = (u8*)(*(s32*)(animData + 0x30) + *(s32*)(frame + 0xC) * 4);
+                    updEnd = upd + *(s32*)(frame + 0x10) * 4;
+                    while (upd < updEnd) {
+                        vtx += upd[0];
+                        asm {
+                            psq_l f1, 1(upd), 1, 4
+                            psq_l f3, 2(upd), 1, 4
+                            psq_l f4, 3(upd), 1, 4
+                            lfs f0, 0(vtx)
+                            fmadds f0, scale, f1, f0
+                            stfs f0, 0(vtx)
+                            lfs f0, 4(vtx)
+                            fmadds f0, scale, f3, f0
+                            stfs f0, 4(vtx)
+                            lfs f0, 8(vtx)
+                            fmadds f0, scale, f4, f0
+                            stfs f0, 8(vtx)
+                        }
+                        upd += 4;
+                    }
+
+                    vis = (u8*)*(s32*)(pose + 0x58);
+                    upd = (u8*)(*(s32*)(animData + 0x38) + *(s32*)(frame + 0x1C) * 2);
+                    updEnd = upd + *(s32*)(frame + 0x20) * 2;
+                    while (upd < updEnd) {
+                        vis += upd[0];
+                        *vis += upd[1];
+                        upd += 2;
+                    }
+
+                    node = (f32*)*(s32*)(pose + 0x60);
+                    upd = (u8*)(*(s32*)(animData + 0x3C) + *(s32*)(frame + 0x24) * 4);
+                    updEnd = upd + *(s32*)(frame + 0x28) * 4;
+                    while (upd < updEnd) {
+                        node += upd[0];
+                        *node += scale * (f32)(s8)upd[1];
+                        upd += 4;
+                    }
+
+                    tex = *(s32*)(pose + 0x68);
+                    upd = (u8*)(*(s32*)(animData + 0x34) + *(s32*)(frame + 0x14) * 0xC);
+                    updEnd = upd + *(s32*)(frame + 0x18) * 0xC;
+                    while (upd < updEnd) {
+                        tex += upd[0] * 0x18;
+                        *(u8*)tex += upd[1];
+                        *(f32*)(tex + 4) += *(f32*)(upd + 4);
+                        *(f32*)(tex + 8) += *(f32*)(upd + 8);
+                        upd += 0xC;
+                    }
+            frame += 0x2C;
         }
     }
 
@@ -1450,32 +1611,59 @@ u8 animPoseMain(s32 poseIdx) {
         scale = float_0p0625_8041fbac * blend;
 
         if (posCount != 0) memcpy_as4((void*)outPos, *(void**)(pose + 0x48), posCount * 0xC);
+        vtx = (Vec3Local*)outPos;
         upd = (u8*)(*(s32*)(animData + 0x2C) + *(s32*)(frame + 4) * 4);
-        for (j = 0; j < *(s32*)(frame + 8); j++, upd += 4) {
-            vtx = (Vec3Local*)outPos;
+        updEnd = upd + *(s32*)(frame + 8) * 4;
+        while (upd < updEnd) {
             vtx += upd[0];
-            vtx->x += scale * (f32)(s8)upd[1];
-            vtx->y += scale * (f32)(s8)upd[2];
-            vtx->z += scale * (f32)(s8)upd[3];
+            asm {
+                psq_l f1, 1(upd), 1, 4
+                psq_l f3, 2(upd), 1, 4
+                psq_l f4, 3(upd), 1, 4
+                lfs f0, 0(vtx)
+                fmadds f0, scale, f1, f0
+                stfs f0, 0(vtx)
+                lfs f0, 4(vtx)
+                fmadds f0, scale, f3, f0
+                stfs f0, 4(vtx)
+                lfs f0, 8(vtx)
+                fmadds f0, scale, f4, f0
+                stfs f0, 8(vtx)
+            }
+            upd += 4;
         }
 
         if (nrmCount != 0) memcpy_as4((void*)outNrm, *(void**)(pose + 0x50), nrmCount * 0xC);
+        vtx = (Vec3Local*)outNrm;
         upd = (u8*)(*(s32*)(animData + 0x30) + *(s32*)(frame + 0xC) * 4);
-        for (j = 0; j < *(s32*)(frame + 0x10); j++, upd += 4) {
-            vtx = (Vec3Local*)outNrm;
+        updEnd = upd + *(s32*)(frame + 0x10) * 4;
+        while (upd < updEnd) {
             vtx += upd[0];
-            vtx->x += scale * (f32)(s8)upd[1];
-            vtx->y += scale * (f32)(s8)upd[2];
-            vtx->z += scale * (f32)(s8)upd[3];
+            asm {
+                psq_l f1, 1(upd), 1, 4
+                psq_l f3, 2(upd), 1, 4
+                psq_l f4, 3(upd), 1, 4
+                lfs f0, 0(vtx)
+                fmadds f0, scale, f1, f0
+                stfs f0, 0(vtx)
+                lfs f0, 4(vtx)
+                fmadds f0, scale, f3, f0
+                stfs f0, 4(vtx)
+                lfs f0, 8(vtx)
+                fmadds f0, scale, f4, f0
+                stfs f0, 8(vtx)
+            }
+            upd += 4;
         }
 
         if (nodeCount != 0) memcpy_as4(*(void**)(pose + 0x64), *(void**)(pose + 0x60), nodeCount << 2);
         upd = (u8*)(*(s32*)(animData + 0x3C) + *(s32*)(frame + 0x24) * 4);
         duration = *(f32*)(frameData + anim1 * 0x2C) - *(f32*)(frameData + anim0 * 0x2C);
         ftmp = blend * blend;
-        for (j = 0; j < *(s32*)(frame + 0x28); j++, upd += 4) {
+        node = (f32*)*(s32*)(pose + 0x64);
+        updEnd = upd + *(s32*)(frame + 0x28) * 4;
+        while (upd < updEnd) {
             s32 a = (s8)upd[3];
-            node = (f32*)*(s32*)(pose + 0x64);
             node += upd[0];
             if (a < 0x59 && a > -0x59) {
                 f32 t3 = blend * ftmp;
@@ -1485,6 +1673,7 @@ u8 animPoseMain(s32 poseIdx) {
             } else {
                 *node += scale * (f32)(s8)upd[1];
             }
+            upd += 4;
         }
 
         if (visCount != 0) memcpy(*(void**)(pose + 0x5C), *(void**)(pose + 0x58), visCount);
@@ -1494,6 +1683,8 @@ u8 animPoseMain(s32 poseIdx) {
     *(s32*)(pose + 0x3C) = anim0;
     *(f32*)(pose + 0x40) = blend;
 
+    work = wp;
+    pose = *(s32*)(work + 0x10) + poseIdx * 0x170;
     if ((*(u32*)pose & 8U) != 0) {
         cam = camGetPtr(4);
         angle = float_rad2deg_8041fb74 * (f32)atan2((double)-(*(f32*)((s32)cam + 0x18) - *(f32*)((s32)cam + 0xC)),
@@ -1902,26 +2093,19 @@ u8 animSetMaterial_Texture(s32 texCount, int* pTexIdRemap, void* pTexEntries, vo
         bind = (s32)pTexBinds + bindIdx * 0x40;
         texId = *(s32*)(bind + 4);
         if (*(s32*)(bind + 8) == 0) {
-            tex = (s32)TEXGet(**(s32**)(*(s32*)((s32)pTexFile + 8) + 0xA0), texId);
-            texHeader = *(s32*)tex;
-            tlut = *(s32*)(tex + 4);
-            wrapS = *(u32*)(texHeader + 0xC);
-            wrapT = *(u32*)(texHeader + 0x10);
-            if ((s32)wrapFlags >= 0) {
-                wrapS = (wrapFlags & 4) ? 2 : (wrapFlags & 1);
-                wrapT = (wrapFlags & 8) ? 2 : ((wrapFlags >> 1) & 1);
-            }
-            minLod = *(u8*)(texHeader + 0x21);
-            maxLod = *(u8*)(texHeader + 0x22);
-            hasMipmap = (u8)(minLod != maxLod);
-            if (tlut == 0) {
-                GXInitTexObj(texObj, *(void**)(texHeader + 8), *(u16*)(texHeader + 2), *(u16*)texHeader,
-                             *(u32*)(texHeader + 4), wrapS, wrapT, hasMipmap);
-                GXInitTexObjLOD(texObj, *(s32*)(texHeader + 0x14), *(s32*)(texHeader + 0x18),
-                                (double)(f32)minLod, (double)(f32)maxLod, (double)*(f32*)(texHeader + 0x1C),
-                                0, *(u8*)(texHeader + 0x20), 0);
-                GXLoadTexObj(texObj, i);
-            } else {
+            if (*(s32*)((s32)TEXGet(**(s32**)(*(s32*)((s32)pTexFile + 8) + 0xA0), texId) + 4) != 0) {
+                tex = (s32)TEXGet(**(s32**)(*(s32*)((s32)pTexFile + 8) + 0xA0), texId);
+                texHeader = *(s32*)tex;
+                tlut = *(s32*)(tex + 4);
+                wrapS = *(u32*)(texHeader + 0xC);
+                wrapT = *(u32*)(texHeader + 0x10);
+                if ((s32)wrapFlags >= 0) {
+                    wrapS = (wrapFlags & 4) ? 2 : (wrapFlags & 1);
+                    wrapT = (wrapFlags & 8) ? 2 : ((wrapFlags >> 1) & 1);
+                }
+                minLod = *(u8*)(texHeader + 0x21);
+                maxLod = *(u8*)(texHeader + 0x22);
+                hasMipmap = (u8)(minLod != maxLod);
                 GXInitTlutObj(tlutObj, *(u32*)(tlut + 8), *(u32*)(tlut + 4), *(u16*)tlut);
                 GXInitTexObjCI(texObj, (u32)*(void**)(texHeader + 8), *(u16*)(texHeader + 2), *(u16*)texHeader,
                                *(u32*)(texHeader + 4), wrapS, wrapT, hasMipmap, 0);
@@ -1929,6 +2113,24 @@ u8 animSetMaterial_Texture(s32 texCount, int* pTexIdRemap, void* pTexEntries, vo
                                 (double)(f32)minLod, (double)(f32)maxLod, (double)*(f32*)(texHeader + 0x1C),
                                 0, *(u8*)(texHeader + 0x20), 0);
                 GXLoadTlut(tlutObj, 0);
+                GXLoadTexObj(texObj, i);
+            } else {
+                tex = (s32)TEXGet(**(s32**)(*(s32*)((s32)pTexFile + 8) + 0xA0), texId);
+                texHeader = *(s32*)tex;
+                wrapS = *(u32*)(texHeader + 0xC);
+                wrapT = *(u32*)(texHeader + 0x10);
+                if ((s32)wrapFlags >= 0) {
+                    wrapS = (wrapFlags & 4) ? 2 : (wrapFlags & 1);
+                    wrapT = (wrapFlags & 8) ? 2 : ((wrapFlags >> 1) & 1);
+                }
+                minLod = *(u8*)(texHeader + 0x21);
+                maxLod = *(u8*)(texHeader + 0x22);
+                hasMipmap = (u8)(minLod != maxLod);
+                GXInitTexObj(texObj, *(void**)(texHeader + 8), *(u16*)(texHeader + 2), *(u16*)texHeader,
+                             *(u32*)(texHeader + 4), wrapS, wrapT, hasMipmap);
+                GXInitTexObjLOD(texObj, *(s32*)(texHeader + 0x14), *(s32*)(texHeader + 0x18),
+                                (double)(f32)minLod, (double)(f32)maxLod, (double)*(f32*)(texHeader + 0x1C),
+                                0, *(u8*)(texHeader + 0x20), 0);
                 GXLoadTexObj(texObj, i);
             }
         }
@@ -2274,6 +2476,11 @@ void materialProc(int shapeIdx) {
 
 void renderProc(int shapeIdx, int animFrame0) {
     typedef f32 Mtx[3][4];
+    typedef struct RenderRawVec {
+        u32 x;
+        u32 y;
+        u32 z;
+    } RenderRawVec;
     extern s32 wp;
     extern s32 g_modeling_mtx;
     extern void* camGetCurPtr(void);
@@ -2288,7 +2495,28 @@ void renderProc(int shapeIdx, int animFrame0) {
     extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
     extern void GXSetArray(s32, void*, s32);
     extern void GXBegin(s32, s32, s32);
-    extern void materialProc(s32);
+    extern const RenderRawVec vec3_802c103c;
+    extern char str_Error_animSetMateria_802c1078[];
+    extern void* camGetPtr(s32 cameraId);
+    extern void PSMTXMultVec(void* mtx, void* src, void* dst);
+    extern void mapSetMaterialLight(u32 materialLightFlag, void* pPos);
+    extern u8 animSetMaterial_Texture(s32 texCount, int* pTexIdRemap, void* pTexEntries,
+                                      void* pAnimEntries, s32 texBindsCapacity,
+                                      void* pTexBinds, void* pTexFile);
+    extern void mapSetMaterialLastStageBlend(u32 flags, void* pEvtColor, void* pEvtColor2);
+    extern void mapSetMaterialFog(void);
+    extern void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx);
+    extern int printf(const char* fmt, ...);
+    extern void* smartTexObj(void* texObj, void** data);
+    extern void GXLoadTexObj(void* texObj, s32 mapId);
+    extern void GXLoadTexMtxImm(void* mtx, u32 id, s32 type);
+    extern void GXSetTexCoordGen2(s32 dstCoord, s32 func, s32 srcParam, u32 mtx,
+                                  u32 normalize, s32 postMtx);
+    extern void GXSetZMode(s32 enable, s32 func, s32 update);
+    extern void GXSetBlendMode(s32 type, s32 src, s32 dst, s32 op);
+    extern void GXSetZCompLoc(s32 beforeTex);
+    extern void GXSetAlphaCompare(s32 comp0, s32 ref0, s32 op, s32 comp1, s32 ref1);
+    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
     s32 work;
     s32 pose;
     s32 poseData;
@@ -2308,8 +2536,6 @@ void renderProc(int shapeIdx, int animFrame0) {
     if (shapeIdx == -1) {
         return;
     }
-    materialProc(shapeIdx);
-
     PSMTXConcat((u8*)camGetCurPtr() + 0x11C, (void*)g_modeling_mtx, posMtx);
     GXLoadPosMtxImm(posMtx, 0);
     PSMTXInvXpose(posMtx, nrmMtx);
@@ -2317,10 +2543,14 @@ void renderProc(int shapeIdx, int animFrame0) {
     GXSetCurrentMtx(0);
 
     work = wp;
-    pose = *(s32*)(work + 0x18);
     poseData = *(s32*)(work + 0x20);
     shape = *(s32*)(poseData + 0x14C) + shapeIdx * 0xA8;
+    draw = *(s32*)(poseData + 0x19C) + *(s32*)(shape + 0x98) * 0x6C;
     drawCount = *(s32*)(shape + 0x9C);
+    firstVtxPos = *(s32*)(shape + 0x40) * 0xC;
+    firstVtxNrm = *(s32*)(shape + 0x48) * 0xC;
+    firstVtxClr = *(s32*)(shape + 0x50) * 4;
+    pose = *(s32*)(work + 0x18);
 
     if (!((*(s32*)(shape + 0xA0) == 0 && *(s32*)(work + 0xE0) == 2) ||
           (*(s32*)(shape + 0xA0) == *(s32*)(work + 0xE0)) ||
@@ -2330,62 +2560,419 @@ void renderProc(int shapeIdx, int animFrame0) {
     }
 
     GXSetCullMode(*(s32*)(shape + 0xA4));
-    firstVtxPos = *(s32*)(shape + 0x40);
-    firstVtxNrm = *(s32*)(shape + 0x48);
-    firstVtxClr = *(s32*)(shape + 0x50);
-    for (drawIdx = 0; drawIdx < 8; drawIdx++) {
-        texArrays[drawIdx] = *(s32*)(poseData + 0x18C) +
-                             *(s32*)(shape + 0x58 + drawIdx * 8) * 8;
-    }
+    texArrays[0] = *(s32*)(poseData + 0x18C) + *(s32*)(shape + 0x58) * 8;
+    texArrays[1] = *(s32*)(poseData + 0x18C) + *(s32*)(shape + 0x60) * 8;
+    texArrays[2] = *(s32*)(poseData + 0x18C) + *(s32*)(shape + 0x68) * 8;
+    texArrays[3] = *(s32*)(poseData + 0x18C) + *(s32*)(shape + 0x70) * 8;
+    texArrays[4] = *(s32*)(poseData + 0x18C) + *(s32*)(shape + 0x78) * 8;
+    texArrays[5] = *(s32*)(poseData + 0x18C) + *(s32*)(shape + 0x80) * 8;
+    texArrays[6] = *(s32*)(poseData + 0x18C) + *(s32*)(shape + 0x88) * 8;
+    texArrays[7] = *(s32*)(poseData + 0x18C) + *(s32*)(shape + 0x90) * 8;
 
-    draw = *(s32*)(poseData + 0x19C) + *(s32*)(shape + 0x98) * 0x6C;
     for (drawIdx = 0; drawIdx < drawCount; drawIdx++, draw += 0x6C) {
         s32 texCount = *(s32*)draw;
-        s32 firstDrawCall = *(s32*)(draw + 0x38);
-        s32 callCount = *(s32*)(draw + 0x3C);
-        s32 firstIdxPos = *(s32*)(draw + 0x40);
-        s32 firstIdxNrm = *(s32*)(draw + 0x44);
-        s32 firstIdxClr = *(s32*)(draw + 0x48);
-        s32 drawCall = *(s32*)(poseData + 0x164) + firstDrawCall * 8;
+        s32 firstDrawCall;
+        s32 callCount;
+        s32 firstIdxPos;
+        s32 firstIdxNrm;
+        s32 firstIdxClr;
+        s32 drawCall;
+        s8* texIdBase;
+        s32* firstTexBase;
         s32 i;
 
-        GXClearVtxDesc();
-        GXSetVtxDesc(9, 3);
-        GXSetVtxAttrFmt(0, 9, 1, 4, 0);
-        GXSetArray(9, (void*)(*(s32*)(pose + 0x4C) + firstVtxPos * 0xC), 0xC);
-        GXSetVtxDesc(10, 3);
-        GXSetVtxAttrFmt(0, 10, 0, 4, 0);
-        GXSetArray(10, (void*)(*(s32*)(pose + 0x54) + firstVtxNrm * 0xC), 0xC);
-        GXSetVtxDesc(11, 3);
-        GXSetVtxAttrFmt(0, 11, 1, 5, 0);
-        GXSetArray(11, (void*)(*(s32*)(poseData + 0x150) + firstVtxClr * 4), 4);
+        if (*(s32*)(pose + 0xE4) == 0) {
+            RenderRawVec tmpVec;
+            RenderRawVec lightVec;
+            u32 color0;
+            u32 color1;
+            void* cam4;
 
-        for (i = 0; i < texCount; i++) {
-            s32 texId = *(s8*)(draw + 0x30 + (texCount - i - 1));
-            GXSetVtxDesc(13 + i, 3);
-            GXSetVtxAttrFmt(0, 13 + i, 1, 4, 0);
-            GXSetArray(13 + i, (void*)texArrays[texId], 8);
+            tmpVec = vec3_802c103c;
+            PSMTXMultVec((void*)g_modeling_mtx, &tmpVec, &tmpVec);
+            lightVec = tmpVec;
+            mapSetMaterialLight(*(u32*)(pose + 0xEC), &lightVec);
+
+            poseData = *(s32*)(work + 0x20);
+            animSetMaterial_Texture(texCount,
+                                    (int*)(draw + 0x10),
+                                    (void*)*(s32*)(poseData + 0x194),
+                                    (void*)*(s32*)(pose + 0x6C),
+                                    *(s32*)(poseData + 0x134),
+                                    (void*)*(s32*)(poseData + 0x198),
+                                    (void*)(*(s32*)(work + 0x8) +
+                                            (*(s32*)(*(s32*)work +
+                                                     (*(s32*)(pose + 0x10) * 0x10) + 0xC) * 0xC)));
+
+            color1 = *(u32*)(pose + 0xF4);
+            color0 = *(u32*)(pose + 0xF0);
+            mapSetMaterialLastStageBlend(*(u32*)(pose + 0xE8), &color0, &color1);
+            cam4 = camGetPtr(4);
+            if (camGetCurPtr() == cam4) {
+                mapSetMaterialFog();
+            }
+            mapSetMaterialTev(texCount, *(s32*)(draw + 8), *(u32*)(pose + 0xE8),
+                              g_modeling_mtx);
         }
 
-        for (i = 0; i < callCount; i++, drawCall += 8) {
-            s32 firstIdx = *(s32*)drawCall;
-            s32 count = *(u16*)(drawCall + 6);
-            s32 v;
-            GXBegin(0xA0, 0, count);
-            for (v = 0; v < count; v++) {
-                s32 index = firstIdx + v;
-                s32 t;
-                *fifo = *(u16*)(*(s32*)(poseData + 0x158) +
-                                 (index + firstIdxPos) * 4 + 2);
-                *fifo = *(u16*)(*(s32*)(poseData + 0x160) +
-                                 (index + firstIdxNrm) * 4 + 2);
-                *fifo = *(u16*)(*(s32*)(poseData + 0x168) +
-                                 (index + firstIdxClr) * 4 + 2);
-                for (t = 0; t < texCount; t++) {
-                    s32 texId = *(s8*)(draw + 0x30 + (texCount - t - 1));
-                    s32 firstTex = *(s32*)(draw + 0x4C + texId * 4);
-                    *fifo = *(u16*)(*(s32*)(poseData + 0x16C + texId * 4) +
-                                     (index + firstTex) * 4 + 2);
+        {
+            s32 foundFirst = 0;
+            s32 foundSecond = 0;
+            s32 foundAny = 0;
+            s32 j;
+            void* texObj;
+            void** texData;
+            void* texMtx;
+            s32 texBindCount;
+            s32 texBinds;
+            s32 texEntries;
+            s32 texAnims;
+
+            work = wp;
+            pose = *(s32*)(work + 0x18);
+            if (*(u32*)(pose + 4) != 0) {
+                poseData = *(s32*)(work + 0x20);
+                texMtx = *(void**)(work + 0xCC);
+                texData = *(void***)(work + 0x24);
+                texObj = *(void**)(work + 0x30);
+                texBinds = *(s32*)(poseData + 0x198);
+                texBindCount = *(s32*)(poseData + 0x134);
+                texEntries = *(s32*)(poseData + 0x194);
+                texAnims = *(s32*)(pose + 0x6C);
+
+                for (j = 0; j < texCount; j++) {
+                    s32 texId = *(s32*)(draw + ((texCount - j - 1) * 4) + 0x10);
+                    s32 bindIdx = *(s32*)(texEntries + texId * 8) +
+                                  *(u8*)(texAnims + texId * 0x18);
+                    if (bindIdx < 0 || bindIdx >= texBindCount) {
+                        bindIdx = 0;
+                        printf(str_Error_animSetMateria_802c1078);
+                    }
+                    if (*(s32*)(texBinds + bindIdx * 0x40 + 8) == 1) {
+                        if (texObj != 0) {
+                            texObj = smartTexObj(texObj, texData);
+                            GXLoadTexObj(texObj, j);
+                            if (texMtx != 0) {
+                                s32 mtxId = j * 3 + 0x1E;
+                                GXLoadTexMtxImm(texMtx, mtxId, 1);
+                                GXSetTexCoordGen2(j, 1, j + 4, mtxId, 0, 0x7D);
+                            } else {
+                                GXSetTexCoordGen2(j, 1, j + 4, 0x3C, 0, 0x7D);
+                            }
+                        }
+                        foundFirst = 1;
+                        foundAny = 1;
+                        break;
+                    }
+                }
+
+                if (!foundFirst) {
+                    poseData = *(s32*)(work + 0x20);
+                    texMtx = *(void**)(work + 0xD0);
+                    texData = *(void***)(work + 0x28);
+                    texObj = *(void**)(work + 0x34);
+                    texBinds = *(s32*)(poseData + 0x198);
+                    texBindCount = *(s32*)(poseData + 0x134);
+                    texEntries = *(s32*)(poseData + 0x194);
+                    texAnims = *(s32*)(pose + 0x6C);
+
+                    for (j = 0; j < texCount; j++) {
+                        s32 texId = *(s32*)(draw + ((texCount - j - 1) * 4) + 0x10);
+                        s32 bindIdx = *(s32*)(texEntries + texId * 8) +
+                                      *(u8*)(texAnims + texId * 0x18);
+                        if (bindIdx < 0 || bindIdx >= texBindCount) {
+                            bindIdx = 0;
+                            printf(str_Error_animSetMateria_802c1078);
+                        }
+                        if (*(s32*)(texBinds + bindIdx * 0x40 + 8) == 2) {
+                            if (texObj != 0) {
+                                texObj = smartTexObj(texObj, texData);
+                                GXLoadTexObj(texObj, j);
+                                if (texMtx != 0) {
+                                    s32 mtxId = j * 3 + 0x1E;
+                                    GXLoadTexMtxImm(texMtx, mtxId, 1);
+                                    GXSetTexCoordGen2(j, 1, j + 4, mtxId, 0, 0x7D);
+                                } else {
+                                    GXSetTexCoordGen2(j, 1, j + 4, 0x3C, 0, 0x7D);
+                                }
+                            }
+                            foundSecond = 1;
+                            foundAny = 1;
+                            break;
+                        }
+                    }
+                }
+
+                if (foundAny &&
+                    (((foundFirst && *(s32*)(work + 0xD8) == 0) ||
+                      (foundSecond && *(s32*)(work + 0xDC) == 0)) &&
+                     *(s32*)(draw + 8) == 0)) {
+                    GXSetTevAlphaIn(0, 0, 0, 0, 5);
+                }
+
+                if (foundAny && *(s32*)(draw + 8) == 0) {
+                    texObj = *(void**)(work + 0x38);
+                    if (texObj != 0) {
+                        smartTexObj(texObj, *(void***)(work + 0x2C));
+                        if (*(s32*)(work + 0xE0) != 3) {
+                            GXSetZMode(1, 3, 1);
+                            GXSetBlendMode(0, 4, 5, 0);
+                            GXSetZCompLoc(0);
+                            GXSetAlphaCompare(6, 0x80, 1, 0, 0);
+                        }
+                        if (foundFirst) {
+                            if (*(s32*)(work + 0x30) != 0) {
+                                GXLoadTexObj(*(void**)(work + 0x30), 0);
+                                GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+                                GXLoadTexMtxImm(*(void**)(work + 0xCC), 0x1E, 1);
+                            }
+                        } else if (*(s32*)(work + 0x34) != 0) {
+                            GXLoadTexObj(*(void**)(work + 0x34), 0);
+                            GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+                            GXLoadTexMtxImm(*(void**)(work + 0xD0), 0x1E, 1);
+                        }
+                        GXLoadTexObj(texObj, 1);
+                        GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
+                        GXLoadTexMtxImm(*(void**)(work + 0xD4), 0x21, 1);
+                        pose = *(s32*)(work + 0x18);
+                        mapSetMaterialTev(2, 0xC, *(u32*)(pose + 0xE8), g_modeling_mtx);
+                    }
+                }
+            }
+        }
+
+        work = wp;
+        pose = *(s32*)(work + 0x18);
+        if ((*(u32*)pose & 0x10) != 0 && *(s32*)(work + 0x30) != 0 &&
+            *(s32*)(work + 0xCC) != 0) {
+            s32 j;
+            void* texObj;
+            void** texData;
+            void* texMtx;
+            s32 texBindCount;
+            s32 texBinds;
+            s32 texEntries;
+            s32 texAnims;
+
+            poseData = *(s32*)(work + 0x20);
+            texMtx = *(void**)(work + 0xCC);
+            texData = *(void***)(work + 0x24);
+            texObj = *(void**)(work + 0x30);
+            texBinds = *(s32*)(poseData + 0x198);
+            texBindCount = *(s32*)(poseData + 0x134);
+            texEntries = *(s32*)(poseData + 0x194);
+            texAnims = *(s32*)(pose + 0x6C);
+            for (j = 0; j < texCount; j++) {
+                s32 texId = *(s32*)(draw + ((texCount - j - 1) * 4) + 0x10);
+                s32 bindIdx = *(s32*)(texEntries + texId * 8) +
+                              *(u8*)(texAnims + texId * 0x18);
+                if (bindIdx < 0 || bindIdx >= texBindCount) {
+                    bindIdx = 0;
+                    printf(str_Error_animSetMateria_802c1078);
+                }
+                if (*(s32*)(texBinds + bindIdx * 0x40 + 8) == 1) {
+                    texObj = smartTexObj(texObj, texData);
+                    GXLoadTexObj(texObj, j);
+                    if (texMtx != 0) {
+                        s32 mtxId = j * 3 + 0x1E;
+                        GXLoadTexMtxImm(texMtx, mtxId, 1);
+                        GXSetTexCoordGen2(j, 1, j + 4, mtxId, 0, 0x7D);
+                    } else {
+                        GXSetTexCoordGen2(j, 1, j + 4, 0x3C, 0, 0x7D);
+                    }
+                    break;
+                }
+            }
+        }
+
+        texIdBase = (s8*)(draw + 0x30);
+        firstTexBase = (s32*)(draw + 0x4C);
+        firstDrawCall = *(s32*)(draw + 0x38);
+        callCount = *(s32*)(draw + 0x3C);
+        firstIdxPos = *(s32*)(draw + 0x40);
+        firstIdxNrm = *(s32*)(draw + 0x44);
+        firstIdxClr = *(s32*)(draw + 0x48);
+        poseData = *(s32*)(wp + 0x20);
+        drawCall = *(s32*)(poseData + 0x150) + firstDrawCall * 8;
+
+        {
+            s32 posArray;
+            s32 nrmArray;
+
+            work = wp;
+            pose = *(s32*)(work + 0x18);
+            poseData = *(s32*)(work + 0x20);
+
+            if (*(s32*)(work + 0xE8) == 0) {
+                posArray = *(s32*)(pose + 0x4C) + firstVtxPos;
+                nrmArray = *(s32*)(pose + 0x54) + firstVtxNrm;
+            } else {
+                posArray = *(s32*)(work + 0xF8) + firstVtxPos;
+                nrmArray = *(s32*)(work + 0xFC) + firstVtxNrm;
+            }
+
+            GXClearVtxDesc();
+            GXSetVtxDesc(9, 3);
+            GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+            GXSetArray(9, (void*)posArray, 0xC);
+            GXSetVtxDesc(10, 3);
+            GXSetVtxAttrFmt(0, 10, 0, 4, 0);
+            GXSetArray(10, (void*)nrmArray, 0xC);
+            GXSetVtxDesc(11, 3);
+            GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+            GXSetArray(11, (void*)(*(s32*)(poseData + 0x164) + firstVtxClr), 4);
+        }
+
+        if (texCount == 1) {
+            s32 texId = texIdBase[0];
+            GXSetVtxDesc(13, 3);
+            GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+            GXSetArray(13, (void*)texArrays[texId], 8);
+            for (i = 0; i < callCount; i++, drawCall += 8) {
+                s32 firstIdx = *(s32*)drawCall;
+                u32 countWord = *(u32*)(drawCall + 4);
+                s32 count = (u16)countWord;
+                s32 callPoseData = *(s32*)(wp + 0x20);
+                u16* posIndex = (u16*)(*(s32*)(callPoseData + 0x158) +
+                                       (firstIdx + firstIdxPos) * 4 + 2);
+                u16* nrmIndex = (u16*)(*(s32*)(callPoseData + 0x160) +
+                                       (firstIdx + firstIdxNrm) * 4 + 2);
+                u16* clrIndex = (u16*)(*(s32*)(callPoseData + 0x168) +
+                                       (firstIdx + firstIdxClr) * 4 + 2);
+                u16* texIndex = (u16*)(*(s32*)(callPoseData + 0x16C + texId * 4) +
+                                       (firstIdx + firstTexBase[texId]) * 4 + 2);
+                s32 chunks;
+                s32 rem;
+
+                GXBegin(0xA0, 0, count);
+
+                chunks = count >> 2;
+                if (chunks != 0) {
+                    do {
+                        *fifo = posIndex[0];
+                        *fifo = nrmIndex[0];
+                        *fifo = clrIndex[0];
+                        *fifo = texIndex[0];
+
+                        *fifo = posIndex[2];
+                        *fifo = nrmIndex[2];
+                        *fifo = clrIndex[2];
+                        *fifo = texIndex[2];
+
+                        *fifo = posIndex[4];
+                        *fifo = nrmIndex[4];
+                        *fifo = clrIndex[4];
+                        *fifo = texIndex[4];
+
+                        *fifo = posIndex[6];
+                        *fifo = nrmIndex[6];
+                        *fifo = clrIndex[6];
+                        *fifo = texIndex[6];
+
+                        posIndex += 8;
+                        nrmIndex += 8;
+                        clrIndex += 8;
+                        texIndex += 8;
+                        chunks--;
+                    } while (chunks != 0);
+                }
+
+                rem = count & 3;
+                if (rem != 0) {
+                    do {
+                        *fifo = *posIndex;
+                        posIndex += 2;
+                        *fifo = *nrmIndex;
+                        nrmIndex += 2;
+                        *fifo = *clrIndex;
+                        clrIndex += 2;
+                        *fifo = *texIndex;
+                        texIndex += 2;
+                        rem--;
+                    } while (rem != 0);
+                }
+            }
+        } else {
+            for (i = 0; i < texCount; i++) {
+                s32 texId = texIdBase[texCount - i - 1];
+                GXSetVtxDesc(13 + i, 3);
+                GXSetVtxAttrFmt(0, 13 + i, 1, 4, 0);
+                GXSetArray(13 + i, (void*)texArrays[texId], 8);
+            }
+
+            for (i = 0; i < callCount; i++, drawCall += 8) {
+                s32 firstIdx = *(s32*)drawCall;
+                u32 countWord = *(u32*)(drawCall + 4);
+                s32 count = (u16)countWord;
+                s32 callPoseData = *(s32*)(wp + 0x20);
+                u16* posIndex = (u16*)(*(s32*)(callPoseData + 0x158) +
+                                       (firstIdx + firstIdxPos) * 4 + 2);
+                u16* nrmIndex = (u16*)(*(s32*)(callPoseData + 0x160) +
+                                       (firstIdx + firstIdxNrm) * 4 + 2);
+                u16* clrIndex = (u16*)(*(s32*)(callPoseData + 0x168) +
+                                       (firstIdx + firstIdxClr) * 4 + 2);
+                s32 v;
+                s32 idxOffs = 0;
+
+                GXBegin(0xA0, 0, count);
+
+                for (v = 0; v < count; v++) {
+                    s32 t = 0;
+                    s32 chunks = texCount >> 2;
+                    s32 rem = texCount;
+
+                    *fifo = *posIndex;
+                    *fifo = *nrmIndex;
+                    *fifo = *clrIndex;
+
+                    if (texCount > 0) {
+                        if (chunks != 0) {
+                            do {
+                                s32 texId;
+                                s32 firstTex;
+
+                                texId = texIdBase[texCount - t - 1];
+                                firstTex = firstTexBase[texId];
+                                *fifo = *(u16*)(*(s32*)(callPoseData + 0x16C + texId * 4) +
+                                                 (firstIdx + firstTex) * 4 + 2 + idxOffs);
+
+                                texId = texIdBase[texCount - (t + 1) - 1];
+                                firstTex = firstTexBase[texId];
+                                *fifo = *(u16*)(*(s32*)(callPoseData + 0x16C + texId * 4) +
+                                                 (firstIdx + firstTex) * 4 + 2 + idxOffs);
+
+                                texId = texIdBase[texCount - (t + 2) - 1];
+                                firstTex = firstTexBase[texId];
+                                *fifo = *(u16*)(*(s32*)(callPoseData + 0x16C + texId * 4) +
+                                                 (firstIdx + firstTex) * 4 + 2 + idxOffs);
+
+                                texId = texIdBase[texCount - (t + 3) - 1];
+                                firstTex = firstTexBase[texId];
+                                *fifo = *(u16*)(*(s32*)(callPoseData + 0x16C + texId * 4) +
+                                                 (firstIdx + firstTex) * 4 + 2 + idxOffs);
+
+                                t += 4;
+                                chunks--;
+                            } while (chunks != 0);
+                        }
+
+                        rem = texCount & 3;
+                        if (rem != 0) {
+                            do {
+                                s32 texId = texIdBase[texCount - t - 1];
+                                s32 firstTex = firstTexBase[texId];
+                                *fifo = *(u16*)(*(s32*)(callPoseData + 0x16C + texId * 4) +
+                                                 (firstIdx + firstTex) * 4 + 2 + idxOffs);
+                                t++;
+                                rem--;
+                            } while (rem != 0);
+                        }
+                    }
+
+                    idxOffs += 4;
+                    posIndex += 2;
+                    nrmIndex += 2;
+                    clrIndex += 2;
                 }
             }
         }
@@ -2402,11 +2989,19 @@ void dispProc(int parentGroupIdx, int groupIdx, int animFrame0, int animFrame1, 
     extern void PSMTXCopy(void* src, void* dst);
     extern void pushGXModelMtx_JointNode__(void* pJoint, double sx, double sy, double sz);
     extern u8 pushGXModelMtx_TransformNode__(void* pNode);
+    extern void materialProc(s32 shapeIdx);
+    extern void vivihimo(double x, double y, double z, double w, void* current, void* old);
     extern void renderProc(int shapeIdx, int animFrame0);
     extern void* g_modeling_mtx;
     extern s32 g_modeling_mtx_lv;
     extern u8 g_modeling_mtx_stack[];
     extern const Vec3 vec3_802c1054;
+    extern s32 vivihimoData;
+    extern f32 float_0p5_8041fb44;
+    extern f32 float_neg1_8041fb6c;
+    extern f32 float_neg2_8041fb98;
+    extern f32 float_neg3_8041fb9c;
+    extern f32 float_0p04_8041fba0;
     s32 work;
     s32 pose;
     s32 poseData;
@@ -2421,6 +3016,12 @@ void dispProc(int parentGroupIdx, int groupIdx, int animFrame0, int animFrame1, 
     f32 sx;
     f32 sy;
     f32 sz;
+    f32* himoData;
+    f32* currentMtx;
+    f32* oldMtx;
+    f32 himoZ;
+    f32 himoW;
+    s32 vivianType;
     s32 mtxTop;
 
     if (groupIdx != -1) {
@@ -2473,9 +3074,44 @@ void dispProc(int parentGroupIdx, int groupIdx, int animFrame0, int animFrame1, 
             work = wp;
             pose = *(s32*)(work + 0x18);
             flags = *(s32*)pose;
-            if ((flags & 0x20) == 0 || groupIdx != **(s32**)(pose + 0x120)) {
-                renderProc(*(s32*)(group + 0x44), animFrame0);
-                dispProc(groupIdx, *(s32*)(group + 0x48), animFrame0, animFrame1, blend);
+            if ((flags & 0x20) != 0 && groupIdx == **(s32**)(pose + 0x120)) {
+                vivianType = *(s32*)(pose + 0x11C);
+                himoZ = 0.0f;
+                himoW = 0.0f;
+                himoData = (f32*)(*((s32*)&vivihimoData + vivianType) +
+                                  *(s32*)(pose + 0x14) * 8);
+                if (vivianType == 2) {
+                    himoZ = float_neg3_8041fb9c;
+                    himoW = float_0p5_8041fb44;
+                } else if (vivianType == 1) {
+                    himoZ = float_neg2_8041fb98;
+                    himoW = float_0p5_8041fb44;
+                } else if (vivianType == 3) {
+                    himoZ = float_neg1_8041fb6c;
+                    himoW = float_0p5_8041fb44;
+                }
+                currentMtx = (f32*)g_modeling_mtx;
+                oldMtx = (f32*)(pose + 0x124);
+                materialProc(*(s32*)(group + 0x48));
+                vivihimo((double)himoData[0], (double)himoData[1],
+                          (double)himoZ, (double)himoW, currentMtx, oldMtx);
+                *(s32*)pose &= ~0x20;
+                oldMtx[0] = float_0p04_8041fba0 * (currentMtx[0] - oldMtx[0]) + oldMtx[0];
+                oldMtx[1] = float_0p04_8041fba0 * (currentMtx[1] - oldMtx[1]) + oldMtx[1];
+                oldMtx[2] = float_0p04_8041fba0 * (currentMtx[2] - oldMtx[2]) + oldMtx[2];
+                oldMtx[4] = float_0p04_8041fba0 * (currentMtx[4] - oldMtx[4]) + oldMtx[4];
+                oldMtx[5] = float_0p04_8041fba0 * (currentMtx[5] - oldMtx[5]) + oldMtx[5];
+                oldMtx[6] = float_0p04_8041fba0 * (currentMtx[6] - oldMtx[6]) + oldMtx[6];
+                oldMtx[8] = float_0p04_8041fba0 * (currentMtx[8] - oldMtx[8]) + oldMtx[8];
+                oldMtx[9] = float_0p04_8041fba0 * (currentMtx[9] - oldMtx[9]) + oldMtx[9];
+                oldMtx[10] = float_0p04_8041fba0 * (currentMtx[10] - oldMtx[10]) + oldMtx[10];
+            } else {
+                if (*(void**)(pose + 0x154) != 0) {
+                    ((void (*)(void*, s32, void*))*(void**)(pose + 0x154))(
+                        *(void**)(pose + 0x158), groupIdx, g_modeling_mtx);
+                }
+                renderProc(*(s32*)(group + 0x48), animFrame0);
+                dispProc(groupIdx, *(s32*)(group + 0x44), animFrame0, animFrame1, blend);
             }
             mtxTop = g_modeling_mtx_lv - 1;
             g_modeling_mtx_lv = mtxTop;
@@ -2756,7 +3392,9 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double sc
     extern u8 g_modeling_mtx_stack[];
     extern f32 float_0_8041fb28;
     extern f32 float_0p5_8041fb44;
+    extern f32 float_neg0p5_8041fb68;
     extern f32 float_1_8041fb24;
+    extern f32 float_neg1_8041fb6c;
     extern f32 float_deg2rad_8041fb2c;
     s32 work;
     s32 poses;
@@ -2890,14 +3528,22 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double sc
         animPoseMain(effectId);
     }
 
-    *(s32*)(work + 0x30) = *(s32*)(pose + 0x98) == 0 ? 0 : pose + 0xA0;
-    *(s32*)(work + 0x34) = *(s32*)(pose + 0x9C) == 0 ? 0 : pose + 0xC0;
-    *(s32*)(work + 0x38) = 0;
-    *(s32*)(work + 0x24) = *(s32*)(pose + 0x98);
-    *(s32*)(work + 0x28) = *(s32*)(pose + 0x9C);
-    *(s32*)(work + 0x2C) = 0;
-    *(s32*)(work + 0xD8) = 1;
-    *(s32*)(work + 0xDC) = 1;
+    if (*(s32*)(pose + 0x98) != 0) {
+        *(s32*)(wp + 0x30) = pose + 0xA0;
+    } else {
+        *(s32*)(wp + 0x30) = 0;
+    }
+    if (*(s32*)(pose + 0x9C) != 0) {
+        *(s32*)(wp + 0x34) = pose + 0xC0;
+    } else {
+        *(s32*)(wp + 0x34) = 0;
+    }
+    *(s32*)(wp + 0x38) = 0;
+    *(s32*)(wp + 0x24) = *(s32*)(pose + 0x98);
+    *(s32*)(wp + 0x28) = *(s32*)(pose + 0x9C);
+    *(s32*)(wp + 0x2C) = 0;
+    *(s32*)(wp + 0xD8) = 1;
+    *(s32*)(wp + 0xDC) = 1;
     *(s32*)(drawPose + 0xE8) = *(s32*)(pose + 0xE8);
     *(s32*)(drawPose + 0xEC) = *(s32*)(pose + 0xEC);
     *(s32*)(drawPose + 0xF0) = *(s32*)(pose + 0xF0);
@@ -2915,11 +3561,15 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double sc
         PSMTXScale(workMtx, float_1_8041fb24 / *(f32*)(pose + 0xF8),
                    float_1_8041fb24 / *(f32*)(pose + 0xFC), float_1_8041fb24);
         PSMTXConcat(paperMtx, workMtx, paperMtx);
-        PSMTXTrans(workMtx, (double)-float_0p5_8041fb44, (double)-float_1_8041fb24,
+        PSMTXTrans(workMtx, (double)float_neg0p5_8041fb68, (double)float_neg1_8041fb6c,
                    (double)float_0_8041fb28);
         PSMTXConcat(paperMtx, workMtx, paperMtx);
-        PSMTXCopy(paperMtx, (void*)(work + 0x3C));
-        *(s32*)(work + 0xCC) = work + 0x3C;
+        if (paperMtx == 0) {
+            *(s32*)(work + 0xCC) = 0;
+        } else {
+            PSMTXCopy(paperMtx, (void*)(work + 0x3C));
+            *(s32*)(work + 0xCC) = work + 0x3C;
+        }
         *(s32*)(work + 0xD0) = 0;
         *(s32*)(work + 0xD4) = 0;
     } else {

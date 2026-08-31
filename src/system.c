@@ -429,294 +429,217 @@ f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end) {
     }
 }
 
-void fsort(void** base, u32 count) {
+void fsort(void** base, u32 n) {
     static void** lo;
     static void** hi;
     static void** gt;
     static void** tail;
     static void* p;
-
-    s32 cmpResult;
-    s32 half;
-    s32 shift;
-    s32 bits;
+    void** end;   /* r30 */
+    void** mid;   /* r29 */
+    void** start; /* r28 */
+    void** pv;    /* r27 */
+    int c;
+    int s;
+    int b;
+    int half;
+    u32 g;
+    u32 t;
+    u32 k;
+    int step;
     u32 mask;
-    u32 bitCount;
-    u32 stepCount;
-    u32 stride;
-    u32 dist;
-    u32 leftSize;
-    u32 rightSize;
-    void** pivot;
-    void** work;
-    void** saveTail;
 
     do {
-        tail = base + (count - 1);
+        end = &base[n - 1];
+        tail = end;
 
-        if (count == 2) {
-            cmpResult = FSORT_COMP(*base, *tail);
-            if (cmpResult <= 0) {
-                return;
+        if (n == 2) {
+            if (comp(base[0], *tail) > 0) {
+                p = base[0];
+                base[0] = *tail;
+                *tail = p;
             }
-
-            p = *base;
-            *base = *tail;
-            *tail = p;
             return;
         }
 
-        if (count == 4) {
+        if (n == 4) {
+            lo = base;
+            mid = tail;
             gt = tail;
             hi = tail - 1;
-            lo = base;
-            pivot = tail;
-        } else if (count < 0x28) {
-            pivot = (void**)((s32)base + ((count & 0x7FFFFFFE) * 2));
-
-            cmpResult = FSORT_COMP(*base, *tail);
-            if (cmpResult > 0) {
-                cmpResult = FSORT_COMP(*base, *pivot);
-                if (cmpResult < 0) {
+        } else if (n < 40) {
+            mid = &base[n >> 1];
+            if (comp(base[0], *tail) > 0) {
+                if (comp(base[0], *mid) < 0) {
                     p = *tail;
-                    *tail = *pivot;
-                    *pivot = *base;
-                    *base = p;
+                    *tail = *mid;
+                    *mid = base[0];
+                    base[0] = p;
+                } else if (comp(*mid, *tail) < 0) {
+                    p = base[0];
+                    base[0] = *mid;
+                    *mid = *tail;
+                    *tail = p;
                 } else {
-                    cmpResult = FSORT_COMP(*pivot, *tail);
-                    if (cmpResult < 0) {
-                        p = *base;
-                        *base = *pivot;
-                        *pivot = *tail;
-                        *tail = p;
-                    } else {
-                        p = *base;
-                        *base = *tail;
-                        *tail = p;
-                    }
+                    p = base[0];
+                    base[0] = *tail;
+                    *tail = p;
                 }
             } else {
-                cmpResult = FSORT_COMP(*base, *pivot);
-                if (cmpResult > 0) {
-                    p = *base;
-                    *base = *pivot;
-                    *pivot = p;
-                } else {
-                    cmpResult = FSORT_COMP(*pivot, *tail);
-                    if (cmpResult > 0) {
-                        p = *pivot;
-                        *pivot = *tail;
-                        *tail = p;
-                    }
+                if (comp(base[0], *mid) > 0) {
+                    p = base[0];
+                    base[0] = *mid;
+                    *mid = p;
+                } else if (comp(*mid, *tail) > 0) {
+                    p = *mid;
+                    *mid = *tail;
+                    *tail = p;
                 }
             }
-
-            if (count == 3) {
+            if (n == 3) {
                 return;
             }
-
+            lo = base + 1;
             gt = tail;
             hi = tail - 1;
-            lo = base + 1;
         } else {
+            /* bit length of n */
             mask = 0xFFFFFFFF;
-            bitCount = 0x3F;
-            shift = 0x20;
-
+            step = 32;
+            k = 63;
             while (mask != 0) {
-                half = shift >> 1;
-                bits = mask & count;
+                t = mask & n;
+                half = step >> 1;
+                mask &= mask << ((half == 0) ? 1 : half);
+                if (t != 0)
+                    k -= step;
+                if (t == 0)
+                    mask >>= step;
+                step = half;
+            }
+            b = (k > 32) ? 0 : 32 - k;
 
-                if (half != 0) {
-                    mask = mask & (mask << half);
-                } else {
-                    mask = mask & (mask << 1);
-                }
-
-                if (bits == 0) {
-                    mask = mask >> shift;
-                    shift = half;
-                } else {
-                    bitCount -= shift;
-                    shift = half;
-                }
+            /* s ~ sqrt(n) */
+            if (b & 1) {
+                s = 1 << (b >> 1);
+            } else {
+                s = n >> (b >> 1);
             }
 
-            stepCount = (0x20 - bitCount) & ~-(u32)(bitCount > 0x20);
-            bitCount = (s32)stepCount >> 1;
+            g = n / s;
+            mid = &base[(s / 2) * g];
+            tail = &base[(s - 1) * g];
+            start = base;
 
-            stride = count >> (bitCount & 0x3F);
-            if ((stepCount & 1) != 0) {
-                stride = 1 << (bitCount & 0x3F);
-            }
-
-            stepCount = count / stride;
-            tail = base + (stride - 1) * stepCount;
-            pivot = base + ((s32)stride / 2) * stepCount;
-
-            work = base;
-            do {
-                dist = (s32)tail - (s32)work;
-
+            /* quickselect the median of the strided sample to *mid */
+            for (;;) {
+                lo = start;
                 gt = tail;
                 hi = tail;
-                lo = work;
+                pv = &start[(tail - start) / 2 / g * g];
 
-                pivot = work + (stepCount *
-                ((u32)(((s32)dist >> 2) + ((s32)dist < 0 && (dist & 3) != 0)) / 2)) /
-                stepCount;
-
-                while (lo <= hi) {
-                    cmpResult = FSORT_COMP(*hi, *pivot);
-                    if (cmpResult <= 0) {
-                        if (cmpResult >= 0) {
-                            hi -= stepCount;
-                        } else {
-                            while (1) {
-                                if (hi <= lo) {
-                                    goto large_partition_done;
-                                }
-
-                                cmpResult = FSORT_COMP(*lo, *pivot);
-                                if (cmpResult >= 0) {
-                                    break;
-                                }
-
-                                lo += stepCount;
-                            }
-
-                            p = *lo;
-                            *lo = *hi;
-                            *hi = p;
-
-                            if (cmpResult > 0) {
-                                gt = hi;
-                            }
-
-                            if ((s32)(-cmpResult & ~cmpResult) >= 0) {
-                                pivot = hi;
-                            }
-
-                            lo += stepCount;
-                            hi -= stepCount;
-                        }
-                    } else {
+            sel_scan:
+                while (hi >= lo) {
+                    c = comp(*hi, *pv);
+                    if (c > 0)
                         gt = hi;
-                        hi -= stepCount;
-                    }
+                    else if (c < 0)
+                        goto sel_lscan;
+                    hi -= g;
                 }
-
-large_partition_done:
-                if (gt < pivot) {
+                goto sel_done;
+            sel_lscan:
+                while (lo < hi) {
+                    c = comp(*lo, *pv);
+                    if (c >= 0) {
+                        p = *lo;
+                        *lo = *hi;
+                        *hi = p;
+                        if (c > 0)
+                            gt = hi;
+                        if (!(c > 0))
+                            pv = hi;
+                        lo += g;
+                        hi -= g;
+                        goto sel_scan;
+                    }
+                    lo += g;
+                }
+            sel_done:
+                if (gt < pv) {
                     p = *gt;
-                    *gt = *pivot;
-                    *pivot = p;
-                    gt += stepCount;
+                    *gt = *pv;
+                    *pv = p;
+                    gt += g;
                 }
 
-                saveTail = tail;
-
-                if (pivot < gt) {
-                    gt = tail;
-                    lo = base;
-
-                    if (hi < pivot) {
-                        break;
-                    }
-
+                if (gt <= mid)
+                    start = gt;
+                else if (hi >= mid)
                     tail = hi;
-                    gt = work;
-                }
+                else
+                    break;
 
-                work = gt;
-                gt = saveTail;
-                lo = base;
-            } while (work < tail);
+                if (start >= tail)
+                    break;
+            }
 
-            pivot = saveTail;
+            lo = base;
+            tail = end;
+            gt = end;
+            hi = end;
         }
 
-partition_again:
-        if (lo <= hi) {
-            cmpResult = FSORT_COMP(*hi, *pivot);
-            if (cmpResult <= 0) {
-                if (cmpResult >= 0) {
-                    hi -= 1;
-                    goto partition_again;
-                }
-
-                while (1) {
-                    if (hi <= lo) {
-                        goto partition_done;
-                    }
-
-                    cmpResult = FSORT_COMP(*lo, *pivot);
-                    if (cmpResult >= 0) {
-                        break;
-                    }
-
-                    lo += 1;
-                }
-
+        /* main partition around *mid */
+    scan:
+        while (hi >= lo) {
+            c = comp(*hi, *mid);
+            if (c > 0)
+                gt = hi;
+            else if (c < 0)
+                goto lscan;
+            hi--;
+        }
+        goto done;
+    lscan:
+        while (lo < hi) {
+            c = comp(*lo, *mid);
+            if (c >= 0) {
                 p = *lo;
                 *lo = *hi;
                 *hi = p;
-
-                if (cmpResult > 0) {
+                if (c > 0)
                     gt = hi;
-                }
-
-                if ((s32)(-cmpResult & ~cmpResult) >= 0) {
-                    pivot = hi;
-                }
-
-                hi -= 1;
-                lo += 1;
-            } else {
-                gt = hi;
-                hi -= 1;
+                if (!(c > 0))
+                    mid = hi;
+                lo++;
+                hi--;
+                goto scan;
             }
-
-            goto partition_again;
+            lo++;
         }
-
-    partition_done:
-        if (gt < pivot) {
+    done:
+        if (gt < mid) {
             p = *gt;
-            *gt = *pivot;
-            gt += 1;
-            *pivot = p;
+            *gt++ = *mid;
+            *mid = p;
         }
 
-        leftSize = (s32)hi - (s32)base;
-        rightSize = (s32)tail - (s32)gt;
-
-        if ((s32)(((s32)leftSize >> 2) + ((s32)leftSize < 0 && (leftSize & 3) != 0)) <
-        (s32)(((s32)rightSize >> 2) + ((s32)rightSize < 0 && (rightSize & 3) != 0))) {
+        /* recurse smaller side, iterate larger side */
+        if (hi - base < tail - gt) {
             lo = hi;
-            saveTail = gt;
             hi = base;
+            base = gt;
         } else {
             lo = tail;
             tail = hi;
             hi = gt;
-            saveTail = base;
         }
-
-        dist = (s32)tail - (s32)saveTail;
-        count = ((s32)dist >> 2) + ((s32)dist < 0 && (dist & 3) != 0) + 1;
-
-        if (hi < lo) {
-            dist = (s32)lo - (s32)hi;
-            fsort(hi, ((s32)dist >> 2) + ((s32)dist < 0 && (dist & 3) != 0) + 1);
+        n = (tail - base) + 1;
+        if (lo > hi) {
+            fsort(hi, (lo - hi) + 1);
         }
-
-        base = saveTail;
-
-        if (count < 2) {
-            return;
-        }
-    } while (1);
+    } while (n > 1);
 }
 
 void qqsort(void* base, u32 count, u32 size, QSortCompareFunc compare) {
@@ -814,6 +737,7 @@ void qqsort(void* base, u32 count, u32 size, QSortCompareFunc compare) {
     }
 }
 
+#pragma optimize_for_size off
 void makeKey(void) {
     s32 padOfs;
     s32 wordOfs;
@@ -822,8 +746,6 @@ void makeKey(void) {
     s32 slow;
     s32 status;
     u32 value;
-    u32 old;
-    u32 trigger;
     u32 rumbleIndex;
     u8 rumbleStatus;
 
@@ -834,15 +756,13 @@ void makeKey(void) {
     for (count = 0; count < 4; count++) {
         value = *(u16*)(DemoPad + padOfs + 0x10);
 
-        old = *(u32*)(gp + wordOfs + 0x1378);
-        trigger = value & (value ^ old);
-        *(u32*)(gp + wordOfs + 0x1388) = trigger;
-        *(u32*)(gp + wordOfs + 0x1398) = trigger;
+        *(u32*)(gp + wordOfs + 0x1388) =
+            value & (value ^ *(u32*)(gp + wordOfs + 0x1378));
+        *(u32*)(gp + wordOfs + 0x1398) =
+            *(u32*)(gp + wordOfs + 0x1388);
 
         if ((value == 0) || (value != *(u32*)(gp + wordOfs + 0x1378))) {
-            slow = *(s32*)(gp + 4) * 0x18;
-            slow = slow / 0x3C + (slow >> 31);
-            slow = slow - (slow >> 31);
+            slow = *(s32*)(gp + 4) * 0x18 / 0x3C;
             *(s32*)(gp + wordOfs + 0x13A8) = slow;
         } else {
             slow = *(s32*)(gp + wordOfs + 0x13A8) - 1;
@@ -851,9 +771,7 @@ void makeKey(void) {
             if (slow == 0) {
                 *(u32*)(gp + wordOfs + 0x1398) = value;
 
-                slow = *(s32*)(gp + 4) * 6;
-                slow = slow / 0x3C + (slow >> 31);
-                slow = slow - (slow >> 31);
+                slow = *(s32*)(gp + 4) * 6 / 0x3C;
                 *(s32*)(gp + wordOfs + 0x13A8) = slow;
             }
         }
@@ -869,15 +787,13 @@ void makeKey(void) {
     for (count = 0; count < 4; count++) {
         value = *(u16*)(DemoPad + padOfs + 0x0);
 
-        old = *(u32*)(gp + wordOfs + 0x1328);
-        trigger = value & (value ^ old);
-        *(u32*)(gp + wordOfs + 0x1338) = trigger;
-        *(u32*)(gp + wordOfs + 0x1348) = trigger;
+        *(u32*)(gp + wordOfs + 0x1338) =
+            value & (value ^ *(u32*)(gp + wordOfs + 0x1328));
+        *(u32*)(gp + wordOfs + 0x1348) =
+            *(u32*)(gp + wordOfs + 0x1338);
 
         if ((value == 0) || (value != *(u32*)(gp + wordOfs + 0x1328))) {
-            slow = *(s32*)(gp + 4) * 0x18;
-            slow = slow / 0x3C + (slow >> 31);
-            slow = slow - (slow >> 31);
+            slow = *(s32*)(gp + 4) * 0x18 / 0x3C;
             *(s32*)(gp + wordOfs + 0x1358) = slow;
         } else {
             slow = *(s32*)(gp + wordOfs + 0x1358) - 1;
@@ -886,9 +802,7 @@ void makeKey(void) {
             if (slow == 0) {
                 *(u32*)(gp + wordOfs + 0x1348) = value;
 
-                slow = *(s32*)(gp + 4) * 6;
-                slow = slow / 0x3C + (slow >> 31);
-                slow = slow - (slow >> 31);
+                slow = *(s32*)(gp + 4) * 6 / 0x3C;
                 *(s32*)(gp + wordOfs + 0x1358) = slow;
             }
         }
@@ -931,9 +845,7 @@ void makeKey(void) {
             *(u32*)(gp + wordOfs + 0x1338) = 0;
             *(u32*)(gp + wordOfs + 0x1348) = 0;
 
-            slow = *(s32*)(gp + 4) * 0x18;
-            slow = slow / 0x3C + (slow >> 31);
-            slow = slow - (slow >> 31);
+            slow = *(s32*)(gp + 4) * 0x18 / 0x3C;
             *(s32*)(gp + wordOfs + 0x1358) = slow;
 
             *(u32*)(gp + wordOfs + 0x1368) = 0;
@@ -941,9 +853,7 @@ void makeKey(void) {
             *(u32*)(gp + wordOfs + 0x1388) = 0;
             *(u32*)(gp + wordOfs + 0x1398) = 0;
 
-            slow = *(s32*)(gp + 4) * 0x18;
-            slow = slow / 0x3C + (slow >> 31);
-            slow = slow - (slow >> 31);
+            slow = *(s32*)(gp + 4) * 0x18 / 0x3C;
             *(s32*)(gp + wordOfs + 0x13A8) = slow;
 
             *(u8*)(gp + byteOfs + 0x13B8) = 0;
@@ -989,6 +899,7 @@ void makeKey(void) {
 
     *(s32*)(gp + 0x1324) = 1;
 }
+#pragma optimize_for_size on
 
 u32 keyGetDir(s32 controller) {
     controller = gp + controller * 4;
@@ -1413,16 +1324,17 @@ done:
 #pragma use_lmw_stmw on
 
 
-void memcpy_as4(void* dst, void* src, u32 size) {
-    dst = (void*)((s32)dst - 4);
-    src = (void*)((s32)src - 4);
-    size >>= 2;
-    do {
-        dst = (void*)((s32)dst + 4);
-        src = (void*)((s32)src + 4);
-        *(u32*)dst = *(u32*)src;
-        size--;
-    } while (size != 0);
+asm void memcpy_as4(void* dst, void* src, u32 size) {
+    nofralloc
+    addi r3, r3, -4
+    srwi r5, r5, 2
+    addi r4, r4, -4
+    mtctr r5
+@loop:
+    lwzu r11, 4(r4)
+    stwu r11, 4(r3)
+    bdnz @loop
+    blr
 }
 
 const u32 dat_8041f440 = 0x81;

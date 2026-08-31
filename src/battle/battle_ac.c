@@ -450,8 +450,8 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
     f32 right;
     f32 top;
     f32 bottom;
-    s32 filled;
-    s32 segmentEnd;
+    f32 filled;
+    f32 segmentEnd;
 
     color = dat_80422180;
     work = _battleWorkPointer;
@@ -461,11 +461,11 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
     position.z = 0.0f;
     iconDispGx(1.0f, &position, 0x10, 0x94);
 
-    top = y + 32;
-    bottom = y + 50;
     if (param_5 > 1) {
         left = x - 289;
         right = x + innerBarWidth * bar1EndPercent / 100 - 289;
+        top = y + 32;
+        bottom = y + 50;
         if (left <= right) {
             btlDispGXInit2DRasta();
             GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
@@ -475,6 +475,8 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
         if (bar2EndPercent - bar1EndPercent > 0) {
             left = right;
             right = x + innerBarWidth * bar2EndPercent / 100 - 289;
+            top = y + 32;
+            bottom = y + 50;
             if (left <= right) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
@@ -485,6 +487,8 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
         if (bar3EndPercent - bar2EndPercent > 0) {
             left = x + innerBarWidth * bar2EndPercent / 100 - 289;
             right = x + innerBarWidth * bar3EndPercent / 100 - 289;
+            top = y + 32;
+            bottom = y + 50;
             if (left <= right) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
@@ -495,6 +499,8 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
         if (100 - bar3EndPercent > 0) {
             left = x + innerBarWidth * bar3EndPercent / 100 - 289;
             right = x + innerBarWidth - 289;
+            top = y + 32;
+            bottom = y + 50;
             if (left <= right) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
@@ -509,12 +515,16 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
         right = x + innerBarWidth - 289;
         btlDispGXInit2DRasta();
         GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
+        top = y + 32;
+        bottom = y + 50;
         btlDispGXQuads2DRasta(left, top, right, bottom,
                               0x2D, 0x38, 0xD2, 0xFF);
 
         if (bar1EndPercent > 0) {
             right = x + innerBarWidth * bar1EndPercent / 100 - 289;
             left = right - 2.0f;
+            top = y + 32;
+            bottom = y + 50;
             if (left <= right) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
@@ -525,6 +535,8 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
         if (bar2EndPercent - bar1EndPercent > 0) {
             right = x + innerBarWidth * bar2EndPercent / 100 - 289;
             left = right - 2.0f;
+            top = y + 32;
+            bottom = y + 50;
             if (left <= right) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
@@ -535,6 +547,8 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
         if (bar3EndPercent - bar2EndPercent > 0) {
             right = x + innerBarWidth * bar3EndPercent / 100 - 289;
             left = right - 2.0f;
+            top = y + 32;
+            bottom = y + 50;
             if (left <= right) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
@@ -582,12 +596,14 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
     }
 
     if (ratioFilled > float_0_80422188) {
-        filled = (s32)(float_100_8042218c * ratioFilled);
+        filled = float_100_8042218c * ratioFilled;
 
         segmentEnd = filled < bar1EndPercent ? filled : bar1EndPercent;
         if (segmentEnd > float_0_80422188) {
             left = x - 289;
-            right = left + innerBarWidth * segmentEnd / 100;
+            right = left + innerBarWidth * segmentEnd / float_100_8042218c;
+            top = y + 32;
+            bottom = y + 50;
             if (left <= right) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
@@ -596,9 +612,11 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
         }
 
         segmentEnd = filled < bar2EndPercent ? filled : bar2EndPercent;
-        if (segmentEnd > bar1EndPercent) {
+        if (segmentEnd - bar1EndPercent > float_0_80422188) {
             left = x + innerBarWidth * bar1EndPercent / 100 - 289;
-            right = x + innerBarWidth * segmentEnd / 100 - 289;
+            right = (x - 289) + innerBarWidth * segmentEnd / float_100_8042218c;
+            top = y + 32;
+            bottom = y + 50;
             if (left <= right) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
@@ -607,9 +625,11 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
         }
 
         segmentEnd = filled < bar3EndPercent ? filled : bar3EndPercent;
-        if (segmentEnd > bar2EndPercent) {
+        if (segmentEnd - bar2EndPercent > float_0_80422188) {
             left = x + innerBarWidth * bar2EndPercent / 100 - 289;
-            right = x + innerBarWidth * segmentEnd / 100 - 289;
+            right = (x - 289) + innerBarWidth * segmentEnd / float_100_8042218c;
+            top = y + 32;
+            bottom = y + 50;
             if (left <= right) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
@@ -620,9 +640,11 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
         if (filled > float_100_8042218c) {
             filled = float_100_8042218c;
         }
-        if (filled > bar3EndPercent) {
+        if (filled - bar3EndPercent > float_0_80422188) {
             left = x + innerBarWidth * bar3EndPercent / 100 - 289;
-            right = x + innerBarWidth * filled / 100 - 289;
+            right = (x - 289) + innerBarWidth * filled / float_100_8042218c;
+            top = y + 32;
+            bottom = y + 50;
             if (left <= right) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);

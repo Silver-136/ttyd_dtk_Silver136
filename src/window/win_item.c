@@ -22,6 +22,82 @@ extern u16 menu_skip_list[18];
 void winMsgEntry(void* pWin, s32 param_2, char* msg, s32 param_4);
 u16 pouchKeyItem(s32 index);
 void item_disp(f32 x, f32 y, void* pWin);
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec3;
+
+/* Target-named item-use renderer data. */
+const Vec3 vec3_802f5bd4 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5be0 = { 0.65f, 0.65f, 0.65f };
+const Vec3 vec3_802f5bec = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5bf8 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f5c04 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5c10 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f5c1c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5c28 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f5c34 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5c40 = { 0.9f, 0.9f, 0.9f };
+const Vec3 vec3_802f5c4c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5c58 = { 0.9f, 0.9f, 0.9f };
+const Vec3 vec3_802f5c64 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5c70 = { 0.8f, 0.8f, 0.8f };
+const Vec3 vec3_802f5c7c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5c88 = { 0.8f, 0.8f, 0.8f };
+const Vec3 vec3_802f5c94 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5ca0 = { 0.9f, 0.9f, 0.9f };
+const Vec3 vec3_802f5cac = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5cb8 = { 0.9f, 0.9f, 0.9f };
+const Vec3 vec3_802f5cc4 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5cd0 = { 0.8f, 0.8f, 0.8f };
+const Vec3 vec3_802f5cdc = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5ce8 = { 0.8f, 0.8f, 0.8f };
+const Vec3 vec3_802f5cf4 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5d00 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f5d0c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5d18 = { 0.65f, 0.65f, 0.65f };
+const Vec3 vec3_802f5d24 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5d30 = { 0.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f5d3c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5d48 = { 0.9f, 0.9f, 0.9f };
+const Vec3 vec3_802f5d54 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5d60 = { 0.9f, 0.9f, 0.9f };
+const Vec3 vec3_802f5d6c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5d78 = { 0.8f, 0.8f, 0.8f };
+const Vec3 vec3_802f5d84 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5d90 = { 0.8f, 0.8f, 0.8f };
+const Vec3 vec3_802f5d9c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5da8 = { 0.15f, 0.15f, 0.15f };
+const Vec3 vec3_802f5db4 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5dc0 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f5dcc = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f5dd8 = { 1.0f, 1.0f, 1.0f };
+
+const u32 dat_8042378c[1] = { 0x000000FF };
+const u32 dat_80423790[1] = { 0xFFFFFFFF };
+const u32 dat_80423794[1] = { 0x000000FF };
+const u32 dat_80423798[1] = { 0x808080FF };
+const u32 dat_8042379c[1] = { 0xCB8CA2FE };
+const u32 dat_804237a0[1] = { 0xCBBE89FE };
+const u32 dat_804237a4[1] = { 0x000000FF };
+const u32 dat_804237a8[1] = { 0xCB8CA2F4 };
+const u32 dat_804237ac[1] = { 0x00000080 };
+const u32 dat_804237b0[1] = { 0x000000FF };
+const f32 float_0p5_804237b4[1] = { 0.5f };
+const f32 float_0_804237b8[1] = { 0.0f };
+const f32 float_neg16_804237bc[1] = { -16.0f };
+const f32 float_neg28_804237c0[1] = { -28.0f };
+const f32 float_0p9_804237c4[1] = { 0.9f };
+const char str_PCTd_804237c8[3] = "%d";
+const char str__804237cc[2] = "/";
+const f32 float_14_804237d4[1] = { 14.0f };
+const f32 float_1_804237d8[1] = { 1.0f };
+const f32 float_160_804237dc[1] = { 160.0f };
+const f32 float_2_804237e0[1] = { 2.0f };
+
+const char str_name_mario_802f5e20[11] = "name_mario";
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void winMakeSkipList(void* pWin) {
@@ -77,11 +153,11 @@ void winMakeSkipList(void* pWin) {
         i++;
     }
 }
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 u8 winItemInit(void* pWin) {
-    extern f32 float_0_804237b8;
+    extern const f32 float_0_804237b8[1];
     extern void* window_desc;
     extern void* gp;
     extern char str_jp_80423870[];
@@ -127,8 +203,8 @@ u8 winItemInit(void* pWin) {
     *(s32*)((s32)pWin + 0x254) = pouchReceiveMailCount();
     *(s32*)((s32)pWin + 0x258) = 0;
     *(s32*)((s32)pWin + 0x25C) = 0;
-    *(f32*)((s32)pWin + 0x264) = float_0_804237b8;
-    *(f32*)((s32)pWin + 0x260) = float_0_804237b8;
+    *(f32*)((s32)pWin + 0x264) = float_0_804237b8[0];
+    *(f32*)((s32)pWin + 0x260) = float_0_804237b8[0];
 
     out = pWin;
     i = 0;
@@ -232,8 +308,8 @@ void winItemInit2(void* pWin) {
     *(s32*)((s32)pWin + 0x2D4) = 0;
 }
 
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 void winItemExit(void* work) {
     extern void winMgrDelete(void* window);
@@ -247,174 +323,647 @@ s32 winItemMain(void* pWin) {
     extern s32 pouchHaveItem(s32 index);
     extern void winMsgEntry(void* win, s32 item, char* text, s32 type);
     extern void winSortEntry(f32 x, f32 y, void* win, s32 type);
-    extern char* msgSearch(char* key);
-    extern u8 itemDataTable[];
+    extern s32 winSortWait(void* win);
     extern void psndSFXOn(s32 id);
-    extern char str_msg_menu_mochi_item_802f5e44[];
-    extern char str_msg_menu_mochi_daiji_802f5e58[];
-    u8* w = (u8*)pWin;
-    s32 state = *(s32*)(w + 0x20C);
-    u32 sub = *(u32*)(w + 0x210);
+    extern u8 itemDataTable[];
+    extern char str_msg_luigi_book1_txt1_802f5520[];
+    extern void* luigi_book_list[5];
+    extern void* winMgrGetPtr(s32 id);
+    extern void winMgrSetSize(s32 id, s32 x, s32 y, s32 width, s32 height);
+    extern void winMgrOpen(s32 id);
+    extern void winMgrClose(s32 id);
+    extern s32 pouchReceiveMailCount(void);
+    extern s32 pouchCheckMail(s32 id);
+    extern void pouchOpenMail(s32 id);
+    extern void swSet(s32 flag);
+    extern void* mailGetPtr(s32 id);
+    extern char* msgSearch(char* key);
+    extern u32 FontGetMessageWidthLine(char* msg, u16* width);
+    extern s32 getMarioStDvdRoot(void);
+    extern u32 fileAsyncf(s32, s32, char*, s32, char*);
+    extern void* fileAllocf(s32 id, const char* fmt, ...);
+    extern void fileFree(void* file);
+    extern u32 keyGetDirRep(s32 controller);
+    extern void* gp;
+    extern char str_jp_80423870[];
+    extern char str_us_80423874[];
+    extern void* marioGetPtr(void);
+    extern s32 unk_JP_US_EU_05_800a1748(void);
+    extern s32 U_marioSlitContinueChk(void);
+    extern s32 marioBgmodeChk(void);
+    extern s32 marioGetParty(void);
+    extern u8 winPartyDt[];
+    extern s32 pouchGetHP(void);
+    extern void pouchSetHP(u16 hp);
+    extern s32 pouchGetFP(void);
+    extern void pouchSetFP(u16 fp);
+    extern s32 pouchGetAP(void);
+    extern void pouchSetAP(s16 ap);
+    extern s32 pouchGetPartyHP(s32 party);
+    extern void pouchSetPartyHP(s32 party, u16 hp);
+    extern s32 pouchRemoveItemIndex(s32 item, s32 index);
+
+    extern const f32 float_160_804237dc[1];
+    extern f32 float_neg144_80423860;
+    extern f32 float_180_80423864;
+    extern f32 float_320_8042382c;
+    extern f32 float_neg240_804237f4;
+    extern f32 float_60_80423868;
+    extern f32 float_neg96_8042386c;
+    extern f32 float_120_80423834;
+    extern f32 float_neg80_80423878;
+    extern const f32 float_0_804237b8[1];
+    extern const f32 float_neg16_804237bc[1];
+    extern const f32 float_neg28_804237c0[1];
+    extern f32 float_28_80423880;
+    extern f32 float_130_8042387c;
+
+    typedef union {
+        f64 d;
+        struct {
+            u32 hi;
+            u32 lo;
+        } w;
+    } IntDouble;
+
+    u8* rodata = (u8*)str_msg_luigi_book1_txt1_802f5520;
+    s32 state = *(s32*)((u8*)pWin + 0x20C);
+    s32 sub;
     s32 count;
     s32 pages;
     s32 cursor;
     s32 page;
     s32 item;
-    u32 pressed = *(u32*)(w + 4);
-    u32 repeat = *(u32*)(w + 8);
-    u32 dirs = *(u32*)(w + 0x10);
+    s32 old;
+    s32 i;
+    s32 party;
+    s32 invalid;
+    s32 id;
+    s32 lines;
+    u32 tmp;
+    u8* mail;
+    char* lang;
+    char* msg;
+    void* mgr;
+    IntDouble cvt1;
+    IntDouble cvt2;
+    void* partyOrder[8];
+    f32 adjust;
 
-    if (state == 0) {
-        if ((pressed & 0x200) != 0) {
+
+    switch (state) {
+    case 0: {
+        if ((*(u32*)((u8*)pWin + 4)) & 0x200) {
             psndSFXOn(0x20013);
             return -1;
         }
-        if ((pressed & 0x1000) != 0) {
+        if ((*(u32*)((u8*)pWin + 4)) & 0x1000) {
             return -2;
         }
-        if ((dirs & 0x3000) != 0) {
-            sub = 1 - sub;
-            *(s32*)(w + 0x210) = sub;
+        if ((*(u32*)((u8*)pWin + 0x10)) & 0x3000) {
+            *(s32*)((u8*)pWin + 0x210) = 1 - *(s32*)((u8*)pWin + 0x210);
             psndSFXOn(0x20005);
-        } else if ((pressed & 0x100) != 0) {
-            if (sub == 0) {
-                if (pouchGetHaveItemCnt() == 0) {
+        } else if ((*(u32*)((u8*)pWin + 4)) & 0x100) {
+            if (*(s32*)((u8*)pWin + 0x210) == 0) {
+                if (pouchGetHaveItemCnt() == 0)
                     return 0;
-                }
-            } else if (*(s16*)(w + 0x3DA) == 0) {
+            } else if (*(s16*)((u8*)pWin + 0x3DA) == 0) {
                 return 0;
             }
-            *(s32*)(w + 0x20C) = 10;
+            *(s32*)((u8*)pWin + 0x20C) = 10;
             psndSFXOn(0x20012);
             return 0;
-        } else if ((pressed & 0x10) != 0) {
+        } else if ((*(u32*)((u8*)pWin + 4)) & 0x10) {
+            sub = *(s32*)((u8*)pWin + 0x210);
             winSortEntry(-310.0f, 150.0f, pWin, sub != 0);
-            *(s32*)(w + 0x124) = state;
+            *(s32*)((u8*)pWin + 0x124) = *(s32*)((u8*)pWin + 0x20C);
             psndSFXOn(0x20012);
-            *(s32*)(w + 0x20C) = 1000;
+            *(s32*)((u8*)pWin + 0x20C) = 1000;
         }
-        *(f32*)(w + 0x158) = -275.0f;
-        *(f32*)(w + 0x15C) = (f32)(125 - sub * 50);
-        winMsgEntry(pWin, 0,
-                    sub == 0 ? str_msg_menu_mochi_item_802f5e44
-                             : str_msg_menu_mochi_daiji_802f5e58,
-                    0);
+
+        cvt1.w.hi = 0x43300000;
+        cvt1.w.lo = (u32)(125 - *(s32*)((u8*)pWin + 0x210) * 50) ^ 0x80000000U;
+        *(f32*)((u8*)pWin + 0x158) = -275.0f;
+        *(f32*)((u8*)pWin + 0x15C) =
+            (f32)(cvt1.d - *(f64*)(rodata + 0x8F8));
+        msg = (char*)(rodata + 0x938);
+        if (*(s32*)((u8*)pWin + 0x210) == 0)
+            msg = (char*)(rodata + 0x924);
+        winMsgEntry(pWin, 0, msg, 0);
         return 0;
     }
 
-    if (state == 10) {
-        if (sub == 0) {
+    case 10: {
+        if (*(s32*)((u8*)pWin + 0x210) == 0) {
             count = pouchGetHaveItemCnt();
         } else {
-            count = *(s16*)(w + 0x3DA);
+            count = *(s16*)((u8*)pWin + 0x3DA);
         }
-        pages = (count + 9) / 10;
-        cursor = *(s32*)(w + 0x214 + sub * 4);
-        page = *(s32*)(w + 0x21C + sub * 4);
 
-        if ((pressed & 0x200) != 0) {
+        sub = *(s32*)((u8*)pWin + 0x210);
+        pages = (count + 9) / 10;
+
+        if ((*(u32*)((u8*)pWin + 4)) & 0x200) {
             psndSFXOn(0x20013);
-            *(s32*)(w + 0x20C) = 0;
-        } else if ((pressed & 0x100) == 0) {
-            if ((repeat & 0x40) != 0) {
-                page--;
-                if (page < 0) page = 0;
-                cursor = page * 10;
-                psndSFXOn(0x20035);
-            } else if ((repeat & 0x20) != 0) {
-                page++;
-                if (page >= pages) page = pages - 1;
-                cursor = page * 10;
-                psndSFXOn(0x20035);
-            } else if ((dirs & 0xC000) != 0) {
-                if ((cursor & 1) == 0) {
-                    if (cursor + 1 < count) cursor++;
-                } else if (cursor - 1 >= 0) {
-                    cursor--;
+            *(s32*)((u8*)pWin + 0x20C) = 0;
+        }
+
+        tmp = *(u32*)((u8*)pWin + 4);
+        if (tmp & 0x100) {
+            if (*(s32*)((u8*)pWin + 0x210) == 0) {
+                cursor = *(s32*)((u8*)pWin + 0x214);
+                item = pouchHaveItem(cursor);
+                if ((*(u16*)(itemDataTable + item * 0x28 + 0x10) & 4) != 0) {
+                    *(s32*)((u8*)pWin + 0x2D4) = item;
+                    *(s32*)((u8*)pWin + 0x2D8) = cursor;
+                    *(s32*)((u8*)pWin + 0x20C) = 300;
+                    *(s32*)((u8*)pWin + 0x2DC) = 0;
+                    *(s32*)((u8*)pWin + 0x2E0) = 0;
+                    psndSFXOn(0x20012);
+
+                    mgr = winMgrGetPtr(*(s32*)((u8*)pWin + 0x1210));
+                    winMgrSetSize(*(s32*)((u8*)pWin + 0x1210),
+                                  *(s32*)((u8*)mgr + 0x18),
+                                  *(s32*)((u8*)mgr + 0x1C),
+                                  *(s32*)((u8*)mgr + 0x20),
+                                  *(s32*)((u8*)pWin + 0x1E0) * 0x1C + 0x44);
+                    winMgrOpen(*(s32*)((u8*)pWin + 0x1210));
+                    winMgrOpen(*(s32*)((u8*)pWin + 0x1214));
+                }
+            } else {
+                item = *(s16*)((u8*)pWin + 0x2E8 +
+                               *(s32*)((u8*)pWin + 0x218) * 2);
+
+                if ((u32)(item - 0x37) < 4 || item == 0x3B) {
+                    *(s32*)((u8*)pWin + 0x20C) = 100;
+                    *(f32*)((u8*)pWin + 0x238) = -170.0f;
+                    *(f32*)((u8*)pWin + 0x240) = float_160_804237dc[0];
+                    *(u16*)pWin |= 0x8000;
+
+                    msg = (char*)luigi_book_list[item - 0x37];
+                    *(s32*)((u8*)pWin + 0x2C8) = item - 0x37;
+                    *(s32*)((u8*)pWin + 0x2D0) = 0;
+                    *(s32*)((u8*)pWin + 0x2CC) = 0;
+                    while (((void**)msg)[*(s32*)((u8*)pWin + 0x2CC)] != 0) {
+                        *(s32*)((u8*)pWin + 0x2CC) += 1;
+                    }
+                    *(s32*)((u8*)pWin + 0x2CC) =
+                        (*(s32*)((u8*)pWin + 0x2CC) + 1) / 2;
+                    psndSFXOn(0x20012);
+                } else if (item == 0x36 &&
+                           pouchReceiveMailCount() != 0) {
+                    *(s32*)((u8*)pWin + 0x20C) = 200;
+                    *(f32*)((u8*)pWin + 0x248) = float_neg144_80423860;
+                    *(f32*)((u8*)pWin + 0x250) = float_180_80423864;
+                    psndSFXOn(0x20012);
+                } else if (item == 0x4E) {
+                    *(s32*)((u8*)pWin + 0x2D4) = 0x4E;
+                    psndSFXOn(0x20012);
+                    return -2;
+                }
+            }
+        } else if ((*(u32*)((u8*)pWin + 8)) & 0x40) {
+            *(s32*)((u8*)pWin + 0x21C + sub * 4) =
+                *(s32*)((u8*)pWin + 0x21C + sub * 4) - 1;
+            if (*(s32*)((u8*)pWin + 0x21C + sub * 4) < 0) {
+                *(s32*)((u8*)pWin + 0x21C + sub * 4) = 0;
+            }
+            *(s32*)((u8*)pWin + 0x214 + sub * 4) =
+                *(s32*)((u8*)pWin + 0x21C + sub * 4) * 10;
+            psndSFXOn(0x20035);
+        } else if ((*(u32*)((u8*)pWin + 8)) & 0x20) {
+            *(s32*)((u8*)pWin + 0x21C + sub * 4) =
+                *(s32*)((u8*)pWin + 0x21C + sub * 4) + 1;
+            if (pages <= *(s32*)((u8*)pWin + 0x21C + sub * 4)) {
+                *(s32*)((u8*)pWin + 0x21C + sub * 4) = pages - 1;
+            }
+            *(s32*)((u8*)pWin + 0x214 + sub * 4) =
+                *(s32*)((u8*)pWin + 0x21C + sub * 4) * 10;
+            psndSFXOn(0x20035);
+        } else {
+            old = *(s32*)((u8*)pWin + 0x10);
+            if (old & 0xC000) {
+                tmp = (u32)*(s32*)((u8*)pWin + 0x214 + sub * 4);
+                if (((tmp & 1) ^ (tmp >> 31)) == (tmp >> 31)) {
+                    if ((s32)(tmp + 1) > -1 &&
+                        (s32)(tmp + 1) < count) {
+                        *(s32*)((u8*)pWin + 0x214 + sub * 4) =
+                            (s32)tmp + 1;
+                    }
+                } else if ((s32)(tmp - 1) > -1 &&
+                           (s32)(tmp - 1) < count) {
+                    *(s32*)((u8*)pWin + 0x214 + sub * 4) =
+                        (s32)tmp - 1;
                 }
                 psndSFXOn(0x20035);
-            } else if ((dirs & 0x1000) != 0) {
-                if (cursor - 2 >= 0) cursor -= 2;
-                page = cursor / 10;
-                psndSFXOn(0x20035);
-            } else if ((dirs & 0x2000) != 0) {
-                if (cursor + 2 < count) {
-                    cursor += 2;
-                } else if (cursor + (cursor & 1) < count) {
-                    cursor = count - 1;
+            } else if (old & 0x1000) {
+                cursor = *(s32*)((u8*)pWin + 0x214 + sub * 4) - 2;
+                if (cursor > -1 && cursor < count) {
+                    *(s32*)((u8*)pWin + 0x214 + sub * 4) =
+                        *(s32*)((u8*)pWin + 0x214 + sub * 4) - 2;
                 }
-                page = cursor / 10;
+
+                cursor = *(s32*)((u8*)pWin + 0x214 + sub * 4);
+                *(s32*)((u8*)pWin + 0x21C + sub * 4) = cursor / 10;
                 psndSFXOn(0x20035);
-            } else if ((pressed & 0x10) != 0) {
-                winSortEntry(-310.0f, 150.0f, pWin, sub != 0);
-                *(s32*)(w + 0x124) = state;
+            } else if (old & 0x2000) {
+                cursor = *(s32*)((u8*)pWin + 0x214 + sub * 4);
+                if ((cursor + 2 < 0) || (count <= cursor + 2)) {
+                    if (cursor + (cursor & 1) < count) {
+                        *(s32*)((u8*)pWin + 0x214 + sub * 4) = count - 1;
+                    }
+                } else {
+                    *(s32*)((u8*)pWin + 0x214 + sub * 4) = cursor + 2;
+                }
+
+                cursor = *(s32*)((u8*)pWin + 0x214 + sub * 4);
+                *(s32*)((u8*)pWin + 0x21C + sub * 4) = cursor / 10;
+                psndSFXOn(0x20035);
+            } else if (tmp & 0x10) {
+                winSortEntry(-310.0f, 150.0f,
+                             pWin,
+                             *(s32*)((u8*)pWin + 0x210) != 0);
+                *(s32*)((u8*)pWin + 0x124) = *(s32*)((u8*)pWin + 0x20C);
                 psndSFXOn(0x20012);
-                *(s32*)(w + 0x20C) = 1000;
-            } else if ((pressed & 0x1000) != 0) {
+                *(s32*)((u8*)pWin + 0x20C) = 1000;
+            } else if (tmp & 0x1000) {
                 return -2;
             }
-        } else if (sub == 0 && count != 0) {
-            item = pouchHaveItem(cursor);
-            *(s32*)(w + 0x2D4) = item;
-            *(s32*)(w + 0x2D8) = cursor;
-            *(s32*)(w + 0x20C) = 300;
-            *(s32*)(w + 0x2DC) = 0;
-            *(s32*)(w + 0x2E0) = 0;
-            psndSFXOn(0x20012);
         }
 
-        *(s32*)(w + 0x214 + sub * 4) = cursor;
-        *(s32*)(w + 0x21C + sub * 4) = page;
-        *(f32*)(w + 0x158) = (f32)((cursor & 1) * 204 - 155);
-        *(f32*)(w + 0x15C) = (f32)(110 - ((cursor % 10) / 2) * 38);
-        if (sub == 0) {
-            item = pouchHaveItem(cursor);
+        tmp = (u32)*(s32*)((u8*)pWin + 0x214 + sub * 4);
+        old = (s32)tmp / 10 + ((s32)tmp >> 31);
+        cursor = (s32)(tmp + (old - (old >> 31)) * -10);
+        pages = cursor >> 31;
+
+        cvt1.w.hi = 0x43300000;
+        cvt2.w.hi = 0x43300000;
+        cvt1.w.lo =
+            (u32)(((cursor & 1) ^ -pages) + pages) * 0xCC -
+            0x9B ^ 0x80000000U;
+
+        tmp = (u32)*(s32*)((u8*)pWin + 0x214 + sub * 4);
+        old = (s32)tmp / 10 + ((s32)tmp >> 31);
+        cursor = (s32)(tmp + (old - (old >> 31)) * -10);
+        cvt2.w.lo =
+            (u32)((cursor / 2) * -0x26 + 0x6E) ^
+            0x80000000U;
+
+        *(f32*)((u8*)pWin + 0x158) =
+            (f32)(cvt1.d - *(f64*)(rodata + 0x8F8));
+        *(f32*)((u8*)pWin + 0x15C) =
+            (f32)(cvt2.d - *(f64*)(rodata + 0x8F8));
+
+        if (*(s32*)((u8*)pWin + 0x210) == 0) {
+            item = pouchHaveItem(
+                *(s32*)((u8*)pWin + 0x214));
         } else {
-            item = *(s16*)(w + 0x2E8 + cursor * 2);
+            item = *(s16*)((u8*)pWin + 0x2E8 +
+                           *(s32*)((u8*)pWin + 0x218) * 2);
         }
+
         winMsgEntry(pWin, item,
-                    *(char**)(itemDataTable + item * 0x28 + 0xC), 0);
+                    *(char**)(itemDataTable + item * 0x28 + 0x0C), 0);
         return 0;
     }
 
-    if (state == 100) {
-        if ((pressed & 0x100) != 0) {
+    case 100: {
+        tmp = *(u32*)((u8*)pWin + 4);
+
+        if (tmp & 0x100) {
             psndSFXOn(0x20012);
-            *(s32*)(w + 0x2D0) += 1;
-            if (*(s32*)(w + 0x2D0) >= *(s32*)(w + 0x2CC)) {
-                *(s32*)(w + 0x2D0) = *(s32*)(w + 0x2CC) - 1;
-                *(s32*)(w + 0x20C) = 10;
-                *(f32*)(w + 0x238) = 320.0f;
-                *(f32*)(w + 0x240) = -240.0f;
-                *(u16*)w &= 0x7FFF;
-                *(f32*)(w + 0x150) = *(f32*)(w + 0x158);
-                *(f32*)(w + 0x154) = *(f32*)(w + 0x15C);
+            *(s32*)((u8*)pWin + 0x2D0) += 1;
+
+            if (*(s32*)((u8*)pWin + 0x2D0) >=
+                *(s32*)((u8*)pWin + 0x2CC)) {
+                *(s32*)((u8*)pWin + 0x2D0) =
+                    *(s32*)((u8*)pWin + 0x2CC) - 1;
+                *(s32*)((u8*)pWin + 0x20C) = 10;
+                *(f32*)((u8*)pWin + 0x238) = float_320_8042382c;
+                *(f32*)((u8*)pWin + 0x240) = float_neg240_804237f4;
+                *(u16*)pWin &= 0x7FFF;
+                *(f32*)((u8*)pWin + 0x150) =
+                    *(f32*)((u8*)pWin + 0x158);
+                *(f32*)((u8*)pWin + 0x154) =
+                    *(f32*)((u8*)pWin + 0x15C);
             }
-        } else if ((pressed & 0x200) != 0) {
+        } else if (tmp & 0x200) {
             psndSFXOn(0x20013);
-            *(s32*)(w + 0x2D0) -= 1;
-            if (*(s32*)(w + 0x2D0) < 0) {
-                *(s32*)(w + 0x2D0) = 0;
-                *(s32*)(w + 0x20C) = 10;
-                *(f32*)(w + 0x238) = 320.0f;
-                *(f32*)(w + 0x240) = -240.0f;
-                *(u16*)w &= 0x7FFF;
-                *(f32*)(w + 0x150) = *(f32*)(w + 0x158);
-                *(f32*)(w + 0x154) = *(f32*)(w + 0x15C);
+            *(s32*)((u8*)pWin + 0x2D0) -= 1;
+
+            if (*(s32*)((u8*)pWin + 0x2D0) < 0) {
+                *(s32*)((u8*)pWin + 0x2D0) = 0;
+                *(s32*)((u8*)pWin + 0x20C) = 10;
+                *(f32*)((u8*)pWin + 0x238) = float_320_8042382c;
+                *(f32*)((u8*)pWin + 0x240) = float_neg240_804237f4;
+                *(u16*)pWin &= 0x7FFF;
+                *(f32*)((u8*)pWin + 0x150) =
+                    *(f32*)((u8*)pWin + 0x158);
+                *(f32*)((u8*)pWin + 0x154) =
+                    *(f32*)((u8*)pWin + 0x15C);
             }
-        } else if ((pressed & 0x1000) != 0) {
-            *(f32*)(w + 0x238) = 320.0f;
-            *(f32*)(w + 0x240) = -240.0f;
-            *(u16*)w &= 0x7FFF;
-            *(f32*)(w + 0x150) = *(f32*)(w + 0x158);
-            *(f32*)(w + 0x154) = *(f32*)(w + 0x15C);
+        } else if (tmp & 0x1000) {
+            *(f32*)((u8*)pWin + 0x238) = float_320_8042382c;
+            *(f32*)((u8*)pWin + 0x240) = float_neg240_804237f4;
+            *(u16*)pWin &= 0x7FFF;
+            *(f32*)((u8*)pWin + 0x150) =
+                *(f32*)((u8*)pWin + 0x158);
+            *(f32*)((u8*)pWin + 0x154) =
+                *(f32*)((u8*)pWin + 0x15C);
             return -2;
         }
-        *(f32*)(w + 0x158) = -170.0f;
-        *(f32*)(w + 0x15C) = 150.0f;
-    } else if (state == 1000) {
-        *(s32*)(w + 0x20C) = *(s32*)(w + 0x124);
+
+        *(f32*)((u8*)pWin + 0x158) = -170.0f;
+        *(f32*)((u8*)pWin + 0x15C) = 150.0f;
+        return 0;
     }
+
+    case 200: {
+        if ((*(u32*)((u8*)pWin + 4)) & 0x100) {
+            id = *(u8*)((u8*)pWin + 0x26F + *(s32*)((u8*)pWin + 0x258) * 2);
+            if (pouchCheckMail(id) == 1)
+                pouchOpenMail(id);
+            swSet(0x26);
+            psndSFXOn(0x20036);
+            *(s32*)((u8*)pWin + 0x20C) = 201;
+            mail = (u8*)mailGetPtr(id);
+            msg = msgSearch(*(char**)(mail + 0x0C));
+            FontGetMessageWidthLine(msg, (u16*)((u8*)pWin + 0x26C));
+            *(u16*)((u8*)pWin + 0x26C) += 1;
+            *(s32*)((u8*)pWin + 0x268) = 0;
+            if ((*(u16*)mail & 0x1000) != 0)
+                *(u16*)((u8*)pWin + 0x26C) += 10;
+        } else if ((*(u32*)((u8*)pWin + 4)) & 0x200) {
+            psndSFXOn(0x20013);
+            *(s32*)((u8*)pWin + 0x20C) = 10;
+            *(f32*)((u8*)pWin + 0x248) = float_320_8042382c;
+            *(f32*)((u8*)pWin + 0x250) = float_neg240_804237f4;
+        } else if ((*(u32*)((u8*)pWin + 0x10)) & 0x1000) {
+            old = *(s32*)((u8*)pWin + 0x258);
+            *(s32*)((u8*)pWin + 0x258) = old - 1;
+            if (*(s32*)((u8*)pWin + 0x258) < 0)
+                *(s32*)((u8*)pWin + 0x258) = 0;
+            *(s32*)((u8*)pWin + 0x25C) = *(s32*)((u8*)pWin + 0x258) / 5;
+            *(s32*)((u8*)pWin + 0x268) = 0;
+            if (old != *(s32*)((u8*)pWin + 0x258))
+                psndSFXOn(0x20036);
+        } else if ((*(u32*)((u8*)pWin + 0x10)) & 0x2000) {
+            old = *(s32*)((u8*)pWin + 0x258);
+            *(s32*)((u8*)pWin + 0x258) = old + 1;
+            if (*(s32*)((u8*)pWin + 0x258) >= *(s32*)((u8*)pWin + 0x254))
+                *(s32*)((u8*)pWin + 0x258) = *(s32*)((u8*)pWin + 0x254) - 1;
+            *(s32*)((u8*)pWin + 0x25C) = *(s32*)((u8*)pWin + 0x258) / 5;
+            *(s32*)((u8*)pWin + 0x268) = 0;
+            if (old != *(s32*)((u8*)pWin + 0x258))
+                psndSFXOn(0x20036);
+        } else if ((*(u32*)((u8*)pWin + 8)) & 0x40) {
+            old = *(s32*)((u8*)pWin + 0x25C);
+            *(s32*)((u8*)pWin + 0x25C) = old - 1;
+            if (*(s32*)((u8*)pWin + 0x25C) < 0)
+                *(s32*)((u8*)pWin + 0x25C) = 0;
+            *(s32*)((u8*)pWin + 0x258) = *(s32*)((u8*)pWin + 0x25C) * 5;
+            if (old != *(s32*)((u8*)pWin + 0x25C))
+                psndSFXOn(0x20036);
+        } else if ((*(u32*)((u8*)pWin + 8)) & 0x20) {
+            old = *(s32*)((u8*)pWin + 0x25C);
+            pages = (*(s32*)((u8*)pWin + 0x254) + 4) / 5;
+            *(s32*)((u8*)pWin + 0x25C) = old + 1;
+            if (*(s32*)((u8*)pWin + 0x25C) >= pages)
+                *(s32*)((u8*)pWin + 0x25C) = pages - 1;
+            *(s32*)((u8*)pWin + 0x258) = *(s32*)((u8*)pWin + 0x25C) * 5;
+            if (old != *(s32*)((u8*)pWin + 0x25C))
+                psndSFXOn(0x20036);
+        } else if ((*(u32*)((u8*)pWin + 4)) & 0x10) {
+            winSortEntry(*(f32*)((u8*)pWin + 0x248),
+                         *(f32*)((u8*)pWin + 0x250) - float_60_80423868,
+                         pWin, 7);
+            *(s32*)((u8*)pWin + 0x124) = *(s32*)((u8*)pWin + 0x20C);
+            psndSFXOn(0x20012);
+            *(s32*)((u8*)pWin + 0x20C) = 1000;
+        } else if ((*(u32*)((u8*)pWin + 4)) & 0x1000) {
+            *(f32*)((u8*)pWin + 0x248) = float_320_8042382c;
+            *(f32*)((u8*)pWin + 0x250) = float_neg240_804237f4;
+            return -2;
+        }
+
+        cursor = *(s32*)((u8*)pWin + 0x258);
+        cvt1.w.hi = 0x43300000;
+        cvt1.w.lo = (u32)((cursor % 5) * 40) ^ 0x80000000U;
+        *(f32*)((u8*)pWin + 0x158) = float_neg96_8042386c;
+        *(f32*)((u8*)pWin + 0x15C) =
+            float_120_80423834 -
+            (f32)(cvt1.d - *(f64*)(rodata + 0x8F8));
+        return 0;
+    }
+
+    case 201: {
+        id = *(u8*)((u8*)pWin + 0x26F + *(s32*)((u8*)pWin + 0x258) * 2);
+        mail = (u8*)mailGetPtr(id);
+        if ((*(u16*)mail & 0x1000) == 0) {
+            *(void**)((u8*)pWin + 0x2C) = 0;
+            *(s32*)((u8*)pWin + 0x20C) += 1;
+        } else {
+            lang = str_us_80423874;
+            if (*(u32*)((u8*)gp + 0x16C) == 0)
+                lang = str_jp_80423870;
+            *(void**)((u8*)pWin + 0x2C) =
+                (void*)fileAsyncf(4, 0, (char*)(rodata + 0x950),
+                                  getMarioStDvdRoot(), lang);
+            if (*(void**)((u8*)pWin + 0x2C) != 0) {
+                lang = str_us_80423874;
+                if (*(u32*)((u8*)gp + 0x16C) == 0)
+                    lang = str_jp_80423870;
+                *(void**)((u8*)pWin + 0x2C) =
+                    fileAllocf(4, (char*)(rodata + 0x950),
+                               getMarioStDvdRoot(), lang);
+                *(s32*)((u8*)pWin + 0x20C) += 1;
+            }
+        }
+        return 0;
+    }
+
+    case 202: {
+        if (*(u16*)((u8*)pWin + 0x26C) > 8) {
+            tmp = keyGetDirRep(0);
+            if (tmp & 0x100) {
+                if (*(s32*)((u8*)pWin + 0x268) > 0)
+                    *(s32*)((u8*)pWin + 0x268) -= 1;
+            } else {
+                tmp = keyGetDirRep(0);
+                if ((tmp & 0x200) &&
+                    *(s32*)((u8*)pWin + 0x268) + 6 < (s32)*(u16*)((u8*)pWin + 0x26C))
+                    *(s32*)((u8*)pWin + 0x268) += 1;
+            }
+        }
+        if ((*(u32*)((u8*)pWin + 4)) & 0x200) {
+            psndSFXOn(0x20036);
+            if (*(void**)((u8*)pWin + 0x2C) != 0)
+                fileFree(*(void**)((u8*)pWin + 0x2C));
+            *(s32*)((u8*)pWin + 0x20C) = 200;
+        } else if ((*(u32*)((u8*)pWin + 4)) & 0x1000) {
+            if (*(void**)((u8*)pWin + 0x2C) != 0)
+                fileFree(*(void**)((u8*)pWin + 0x2C));
+            *(f32*)((u8*)pWin + 0x248) = float_320_8042382c;
+            *(f32*)((u8*)pWin + 0x250) = float_neg240_804237f4;
+            return -2;
+        }
+        *(f32*)((u8*)pWin + 0x158) = float_neg96_8042386c;
+        *(f32*)((u8*)pWin + 0x15C) = float_120_80423834;
+        return 0;
+    }
+
+    case 300: {
+        if ((*(u32*)((u8*)pWin + 4)) & 0x200) {
+            psndSFXOn(0x20013);
+            *(s32*)((u8*)pWin + 0x20C) = 10;
+            *(s32*)((u8*)pWin + 0x2D4) = 0;
+            winMgrClose(*(s32*)((u8*)pWin + 0x1210));
+            winMgrClose(*(s32*)((u8*)pWin + 0x1214));
+        } else if ((*(u32*)((u8*)pWin + 4)) & 0x100) {
+            void* player = marioGetPtr();
+            invalid = 0;
+            psndSFXOn(0x20012);
+            if (*(u16*)((u8*)player + 0x2E) == 0x19 ||
+                *(u16*)((u8*)player + 0x2E) == 0x18)
+                invalid = 1;
+            if (unk_JP_US_EU_05_800a1748() != 0 ||
+                U_marioSlitContinueChk() != 0)
+                invalid = 1;
+            if (*(s32*)((u8*)pWin + 0x2DC) > 0 && marioBgmodeChk() != 0)
+                invalid = 1;
+            if (*(s32*)((u8*)pWin + 0x2DC) > 1 && marioBgmodeChk() == 0)
+                invalid = 1;
+
+            if (invalid) {
+                if (marioBgmodeChk() == 0)
+                    party = marioGetParty();
+                else
+                    party = *(s8*)((u8*)marioGetPtr() + 0x247);
+
+                count = 0;
+                if (*(s32*)(winPartyDt + 0x00) == party)
+                    partyOrder[count++] = winPartyDt + 0x00;
+                if (*(s32*)(winPartyDt + 0x24) == party)
+                    partyOrder[count++] = winPartyDt + 0x24;
+                if (*(s32*)(winPartyDt + 0x48) == party)
+                    partyOrder[count++] = winPartyDt + 0x48;
+                if (*(s32*)(winPartyDt + 0x6C) == party)
+                    partyOrder[count++] = winPartyDt + 0x6C;
+                if (*(s32*)(winPartyDt + 0x90) == party)
+                    partyOrder[count++] = winPartyDt + 0x90;
+                if (*(s32*)(winPartyDt + 0xB4) == party)
+                    partyOrder[count++] = winPartyDt + 0xB4;
+                if (*(s32*)(winPartyDt + 0xD8) == party)
+                    partyOrder[count++] = winPartyDt + 0xD8;
+
+                if (*(s32*)(winPartyDt + 0x00) != party)
+                    partyOrder[count++] = winPartyDt + 0x00;
+                if (*(s32*)(winPartyDt + 0x24) != party)
+                    partyOrder[count++] = winPartyDt + 0x24;
+                if (*(s32*)(winPartyDt + 0x48) != party)
+                    partyOrder[count++] = winPartyDt + 0x48;
+                if (*(s32*)(winPartyDt + 0x6C) != party)
+                    partyOrder[count++] = winPartyDt + 0x6C;
+                if (*(s32*)(winPartyDt + 0x90) != party)
+                    partyOrder[count++] = winPartyDt + 0x90;
+                if (*(s32*)(winPartyDt + 0xB4) != party)
+                    partyOrder[count++] = winPartyDt + 0xB4;
+                if (*(s32*)(winPartyDt + 0xD8) != party)
+                    partyOrder[count++] = winPartyDt + 0xD8;
+
+                item = *(s32*)((u8*)pWin + 0x2D4);
+                if (*(s32*)((u8*)pWin + 0x2DC) < 1) {
+                    pouchSetHP((u16)(pouchGetHP() +
+                               *(u8*)(itemDataTable + item * 0x28 + 0x1D)));
+                    pouchSetFP((u16)(pouchGetFP() +
+                               *(u8*)(itemDataTable + item * 0x28 + 0x1E)));
+                    pouchSetAP((s16)(pouchGetAP() +
+                               *(u8*)(itemDataTable + item * 0x28 + 0x1F)));
+                } else {
+                    id = *(s32*)partyOrder[
+                        *(s32*)((u8*)pWin + 0x2DC) - 1];
+                    pouchSetPartyHP(id, (u16)(pouchGetPartyHP(id) +
+                               *(u8*)(itemDataTable + item * 0x28 + 0x1D)));
+                    pouchSetFP((u16)(pouchGetFP() +
+                               *(u8*)(itemDataTable + item * 0x28 + 0x1E)));
+                    pouchSetAP((s16)(pouchGetAP() +
+                               *(u8*)(itemDataTable + item * 0x28 + 0x1F)));
+                }
+                *(s32*)((u8*)pWin + 0x2E0) = 0;
+                *(s32*)((u8*)pWin + 0x20C) = 301;
+                return 0;
+            }
+
+            winMgrClose(*(s32*)((u8*)pWin + 0x1210));
+            winMgrClose(*(s32*)((u8*)pWin + 0x1214));
+            return -2;
+        } else if ((*(u32*)((u8*)pWin + 0x10)) & 0x1000) {
+            old = *(s32*)((u8*)pWin + 0x2DC);
+            *(s32*)((u8*)pWin + 0x2DC) = old - 1;
+            if (*(s32*)((u8*)pWin + 0x2DC) < 0)
+                *(s32*)((u8*)pWin + 0x2DC) = *(s32*)((u8*)pWin + 0x1E0);
+            if (old != *(s32*)((u8*)pWin + 0x2DC))
+                psndSFXOn(0x20005);
+        } else if ((*(u32*)((u8*)pWin + 0x10)) & 0x2000) {
+            old = *(s32*)((u8*)pWin + 0x2DC);
+            *(s32*)((u8*)pWin + 0x2DC) = old + 1;
+            if (*(s32*)((u8*)pWin + 0x2DC) >= *(s32*)((u8*)pWin + 0x1E0) + 1)
+                *(s32*)((u8*)pWin + 0x2DC) = 0;
+            if (old != *(s32*)((u8*)pWin + 0x2DC))
+                psndSFXOn(0x20005);
+        } else if ((*(u32*)((u8*)pWin + 4)) & 0x1000) {
+            *(s32*)((u8*)pWin + 0x2D4) = 0;
+            winMgrClose(*(s32*)((u8*)pWin + 0x1210));
+            winMgrClose(*(s32*)((u8*)pWin + 0x1214));
+            return -2;
+        }
+
+        *(f32*)((u8*)pWin + 0x158) = float_neg80_80423878;
+        adjust = float_0_804237b8[0];
+        cursor = *(s32*)((u8*)pWin + 0x2DC);
+        if (cursor != 0) {
+            adjust = float_neg28_804237c0[0];
+            if (cursor == 1)
+                adjust = float_neg16_804237bc[0];
+        }
+        cvt1.w.hi = 0x43300000;
+        cvt1.w.lo = (u32)cursor ^ 0x80000000U;
+        *(f32*)((u8*)pWin + 0x15C) =
+            -(float_28_80423880 *
+              (f32)(cvt1.d - *(f64*)(rodata + 0x8F8)) -
+              float_130_8042387c) + adjust;
+        return 0;
+    }
+
+    case 301: {
+        *(s32*)((u8*)pWin + 0x2E0) += 1;
+        if (*(s32*)((u8*)pWin + 0x2E0) > (*(s32*)((u8*)gp + 4) << 1)) {
+            *(s32*)((u8*)pWin + 0x2E0) = 0;
+            pouchRemoveItemIndex(*(s32*)((u8*)pWin + 0x2D4), *(s32*)((u8*)pWin + 0x2D8));
+            *(s32*)((u8*)pWin + 0x20C) = 10;
+            *(s32*)((u8*)pWin + 0x2D4) = 0;
+            if (pouchGetHaveItemCnt() == 0) {
+                *(s32*)((u8*)pWin + 0x20C) = 0;
+            } else if (*(s32*)((u8*)pWin + 0x214) >= pouchGetHaveItemCnt()) {
+                *(s32*)((u8*)pWin + 0x214) = pouchGetHaveItemCnt() - 1;
+            }
+            winMgrClose(*(s32*)((u8*)pWin + 0x1210));
+            winMgrClose(*(s32*)((u8*)pWin + 0x1214));
+        }
+        return 0;
+    }
+
+    case 1000: {
+        if (winSortWait(pWin) == 0)
+            *(s32*)((u8*)pWin + 0x20C) = *(s32*)((u8*)pWin + 0x124);
+        if (*(u32*)((u8*)pWin + 4) & 0x1000)
+            return -2;
+        break;
+    }
+    default:
+        break;
+    }
+
     return 0;
 }
 
@@ -568,8 +1117,9 @@ u8 winItemDisp(s32 param_1, void* pWin, s32 param_3) {
     item_disp(x, y, pWin);
     return 0;
 }
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
+
 void item_disp(f32 x, f32 y, void* pWin) {
     typedef struct Vec3 {
         f32 x;
@@ -826,35 +1376,142 @@ void item_disp(f32 x, f32 y, void* pWin) {
 
 
 void itemUseDisp(void* pWinMgr) {
-    typedef struct Vec3 { f32 x, y, z; } Vec3;
     extern s32 pouchGetHP(void);
     extern s32 pouchGetMaxHP(void);
     extern s32 pouchGetFP(void);
     extern s32 pouchGetMaxFP(void);
-    extern void winTexSet(s32 id, Vec3* pos, Vec3* scale, void* color);
-    extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
-    extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
-    extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* format, ...);
-    extern void winFontSetR(Vec3* pos, Vec3* scale, void* color, char* format, ...);
+    extern char* pouchGetYoshiName(void);
+    extern void* pouchGetPtr(void);
+    extern u16 FontGetMessageWidth(const char*);
+    extern void winTexSet(s32, Vec3*, Vec3*, void*);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void winIconSet(s32, Vec3*, Vec3*, void*);
+    extern void winFontSet(Vec3*, Vec3*, void*, const char*, ...);
+    extern void winFontSetR(Vec3*, Vec3*, void*, const char*, ...);
     extern s32 marioBgmodeChk(void);
     extern s32 marioGetParty(void);
     extern void* marioGetPtr(void);
     extern u8 winPartyDt[];
-    Vec3 pos;
-    Vec3 scale;
-    u32 white = 0xFFFFFFFF;
-    u32 gray = 0x7F7F7FFF;
-    u8* w = (u8*)winGetPtr();
-    s32 x = *(s32*)((u8*)pWinMgr + 0x18);
-    s32 y = *(s32*)((u8*)pWinMgr + 0x1C);
-    s32 count = *(s32*)(w + 0x1E0) + 1;
-    s32 cursor = *(s32*)(w + 0x2DC);
-    s32 timer = *(s32*)(w + 0x2E0);
-    void* partyOrder[11];
+    extern u8 itemDataTable[];
+    extern void* winGetPtr(void);
+
+    extern char str_slash_jp_804237d0[3];
+    extern char* lbl_803776B4[];
+    extern void* gp;
+
+
+    u8* w;
     s32 currentParty;
     s32 partyCount;
+    u8* partyOrder[11];
+    s32 row22;
+    s32 row28;
     s32 i;
+    s32 partnerId;
+    s32 j;
+    f32 rowAdjust;
+    f32 nameScale;
+    const char* text;
+    u32 currentColor;
+    u32 baseWhite;
+    u32 tailWhite;
+    u32 marioIconColor;
+    u32 marioHpTexColor;
+    u32 marioFpTexColor;
+    u32 marioNameColor;
+    u32 marioHpLabelColor;
+    u32 marioHpCurrentColor;
+    u32 marioHpSlashColor;
+    u32 marioHpMaxColor;
+    u32 marioFpLabelColor;
+    u32 marioFpCurrentColor;
+    u32 marioFpSlashColor;
+    u32 marioFpMaxColor;
+    u32 partnerTexColor;
+    u32 partnerIconColor;
+    u32 partnerNameColor;
+    u32 partnerHpLabelColor;
+    u32 partnerHpCurrentColor;
+    u32 partnerHpSlashColor;
+    u32 partnerHpMaxColor;
+    u32 markerColor;
+    u32 cursorColorA;
+    u32 cursorColorB;
+
+    Vec3 marioIconScale;
+    Vec3 marioIconPos;
+    Vec3 marioIconPosWork;
+    Vec3 marioHpTexScale;
+    Vec3 marioHpTexPos;
+    Vec3 marioHpTexPosWork;
+    Vec3 marioFpTexScale;
+    Vec3 marioFpTexPos;
+    Vec3 marioFpTexPosWork;
+    Vec3 marioNameScale;
+    Vec3 marioNamePos;
+    Vec3 marioNamePosWork;
+    Vec3 marioHpLabelScale;
+    Vec3 marioHpLabelPos;
+    Vec3 marioHpLabelPosWork;
+    Vec3 marioHpCurrentScale;
+    Vec3 marioHpCurrentPos;
+    Vec3 marioHpCurrentPosWork;
+    Vec3 marioHpSlashScale;
+    Vec3 marioHpSlashPos;
+    Vec3 marioHpSlashPosWork;
+    Vec3 marioHpMaxScale;
+    Vec3 marioHpMaxPos;
+    Vec3 marioHpMaxPosWork;
+    Vec3 marioFpLabelScale;
+    Vec3 marioFpLabelPos;
+    Vec3 marioFpLabelPosWork;
+    Vec3 marioFpCurrentScale;
+    Vec3 marioFpCurrentPos;
+    Vec3 marioFpCurrentPosWork;
+    Vec3 marioFpSlashScale;
+    Vec3 marioFpSlashPos;
+    Vec3 marioFpSlashPosWork;
+    Vec3 marioFpMaxScale;
+    Vec3 marioFpMaxPos;
+    Vec3 marioFpMaxPosWork;
+
+    Vec3 partnerTexScale;
+    Vec3 partnerTexPos;
+    Vec3 partnerTexPosWork;
+    Vec3 partnerIconScale;
+    Vec3 partnerIconPos;
+    Vec3 partnerIconPosWork;
+    Vec3 partnerNameScale;
+    Vec3 partnerNamePos;
+    Vec3 partnerNamePosWork;
+    Vec3 partnerHpLabelScale;
+    Vec3 partnerHpLabelPos;
+    Vec3 partnerHpLabelPosWork;
+    Vec3 partnerHpCurrentScale;
+    Vec3 partnerHpCurrentPos;
+    Vec3 partnerHpCurrentPosWork;
+    Vec3 partnerHpSlashScale;
+    Vec3 partnerHpSlashPos;
+    Vec3 partnerHpSlashPosWork;
+    Vec3 partnerHpMaxScale;
+    Vec3 partnerHpMaxPos;
+    Vec3 partnerHpMaxPosWork;
+
+    Vec3 markerScale;
+    Vec3 markerPos;
+    Vec3 markerPosWork;
+    Vec3 cursorScaleA;
+    Vec3 cursorPosA;
+    Vec3 cursorPosAWork;
+    Vec3 cursorScaleB;
+    Vec3 cursorPosB;
+    Vec3 cursorPosBWork;
+
+    w = (u8*)winGetPtr();
+    currentColor = dat_8042378c[0];
+    baseWhite = dat_80423790[0];
+    tailWhite = dat_80423790[0];
 
     if (winMgrAction(*(s32*)(w + 0x1210)) == 0) {
         if (marioBgmodeChk() == 0) {
@@ -862,6 +1519,7 @@ void itemUseDisp(void* pWinMgr) {
         } else {
             currentParty = *(s8*)((u8*)marioGetPtr() + 0x247);
         }
+
         partyCount = 0;
         if (*(s32*)(winPartyDt + 0x00) == currentParty)
             partyOrder[partyCount++] = winPartyDt + 0x00;
@@ -877,6 +1535,7 @@ void itemUseDisp(void* pWinMgr) {
             partyOrder[partyCount++] = winPartyDt + 0xB4;
         if (*(s32*)(winPartyDt + 0xD8) == currentParty)
             partyOrder[partyCount++] = winPartyDt + 0xD8;
+
         if (*(s32*)(winPartyDt + 0x00) != currentParty)
             partyOrder[partyCount++] = winPartyDt + 0x00;
         if (*(s32*)(winPartyDt + 0x24) != currentParty)
@@ -891,61 +1550,287 @@ void itemUseDisp(void* pWinMgr) {
             partyOrder[partyCount++] = winPartyDt + 0xB4;
         if (*(s32*)(winPartyDt + 0xD8) != currentParty)
             partyOrder[partyCount++] = winPartyDt + 0xD8;
-        scale.x = scale.y = scale.z = 1.0f;
-        pos.z = 0.0f;
-        for (i = 0; i < count; i++) {
-            s32 rowOffset;
-            if (i == 0) {
-                rowOffset = 0;
-            } else if (i == 1) {
-                rowOffset = 44;
-            } else {
-                rowOffset = (i + 1) * 28;
-            }
-            if (timer != 0 && i != cursor) {
-                winIconGrayInit();
-            } else {
-                winIconInit();
-            }
-            pos.x = (f32)(x + 30);
-            pos.y = (f32)(y - 20 - rowOffset);
-            winIconSet(i == 0 ? 0x1A6 : *(s16*)((u8*)partyOrder[i - 1] + 4), &pos, &scale,
-                       timer != 0 && i != cursor ? &gray : &white);
 
-            winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
-            GXSetTevColorIn(0, 0, 0, 0, 2);
-            GXSetTevAlphaIn(0, 0, 4, 5, 7);
-            pos.x = (f32)(x + 220);
-            pos.y = (f32)(y - 19 - rowOffset);
-            winTexSet(0xAF, &pos, &scale, &white);
-            pos.y -= 22.0f;
-            winTexSet(0xAF, &pos, &scale, &white);
+        row22 = 0;
+        row28 = 0;
 
-            winFontInit();
-            pos.x = (f32)(x + 50);
-            pos.y = (f32)(y - 8 - rowOffset);
-            if (i == 0) {
-                winFontSet(&pos, &scale, &white, msgSearch("name_mario"));
-                pos.x = (f32)(x + 110);
-                pos.y -= 22.0f;
-                winFontSetR(&pos, &scale, &white, "%d/%d", pouchGetHP(), pouchGetMaxHP());
-                pos.x += 95.0f;
-                winFontSetR(&pos, &scale, &white, "%d/%d", pouchGetFP(), pouchGetMaxFP());
-            } else {
-                winFontSet(&pos, &scale, &white, msgSearch("msg_menu_party_name"));
+        for (i = 0; i < *(s32*)(w + 0x1E0) + 1; i++) {
+            rowAdjust = float_0_804237b8[0];
+            if (i != 0) {
+                rowAdjust = float_neg28_804237c0[0];
+                if (i == 1)
+                    rowAdjust = float_neg16_804237bc[0];
             }
+
+            if (*(s32*)(w + 0x2E0) != 0) {
+                if (i == *(s32*)(w + 0x2DC)) {
+                    currentColor = dat_80423794[0];
+                } else {
+                    currentColor = dat_80423798[0];
+                }
+            }
+
+            if (i == 0) {
+                if (((*(s32*)(w + 0x2E0)) % 20) < 16 || (*(s32*)(w + 0x2DC)) != 0) {
+                    if ((*(s32*)(w + 0x2E0)) != 0 && i != (*(s32*)(w + 0x2DC)))
+                        winIconGrayInit();
+                    else
+                        winIconInit();
+
+                    marioIconColor = baseWhite;
+                    marioIconScale = vec3_802f5be0;
+                    marioIconPosWork = vec3_802f5bd4;
+                    marioIconPosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 30);
+                    marioIconPosWork.y = (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 20 - row22);
+                    marioIconPos = marioIconPosWork;
+                    winIconSet(0x1A6, &marioIconPos, &marioIconScale, &marioIconColor);
+
+                    winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
+                    GXSetTevColorIn(0, 15, 15, 15, 2);
+                    GXSetTevAlphaIn(0, 7, 1, 4, 7);
+
+                    marioHpTexColor = dat_8042379c[0];
+                    marioHpTexScale = vec3_802f5bf8;
+                    marioHpTexPosWork = vec3_802f5bec;
+                    marioHpTexPosWork.x =
+                        float_0p9_804237c4[0] *
+                        (f32)(u16)FontGetMessageWidth(lbl_803776B4[(*(s32*)((u8*)gp + 0x16C)) * 2]) *
+                        float_0p5_804237b4[0] + (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 220);
+                    marioHpTexPosWork.y = (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 19 - row22);
+                    marioHpTexPos = marioHpTexPosWork;
+                    winTexSet(0xAF, &marioHpTexPos, &marioHpTexScale, &marioHpTexColor);
+
+                    marioFpTexColor = dat_804237a0[0];
+                    marioFpTexScale = vec3_802f5c10;
+                    marioFpTexPosWork = vec3_802f5c04;
+                    marioFpTexPosWork.x =
+                        float_0p9_804237c4[0] *
+                        (f32)(u16)FontGetMessageWidth(lbl_803776B4[(*(s32*)((u8*)gp + 0x16C)) * 2]) *
+                        float_0p5_804237b4[0] + (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 220);
+                    marioFpTexPosWork.y = (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 41);
+                    marioFpTexPos = marioFpTexPosWork;
+                    winTexSet(0xAF, &marioFpTexPos, &marioFpTexScale, &marioFpTexColor);
+
+                    winFontInit();
+
+                    marioNameColor = currentColor;
+                    marioNameScale = vec3_802f5c28;
+                    marioNamePosWork = vec3_802f5c1c;
+                    marioNamePosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 50);
+                    marioNamePosWork.y = (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 8 - row22);
+                    text = msgSearch((char*)str_name_mario_802f5e20);
+                    marioNamePos = marioNamePosWork;
+                    winFontSet(&marioNamePos, &marioNameScale, &marioNameColor, text);
+
+                    marioHpLabelColor = currentColor;
+                    marioHpLabelScale = vec3_802f5c40;
+                    marioHpLabelPosWork = vec3_802f5c34;
+                    marioHpLabelPosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 220);
+                    marioHpLabelPosWork.y = (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 8 - row22);
+                    marioHpLabelPos = marioHpLabelPosWork;
+                    winFontSet(&marioHpLabelPos, &marioHpLabelScale, &marioHpLabelColor, lbl_803776B4[(*(s32*)((u8*)gp + 0x16C)) * 2]);
+
+                    marioHpCurrentColor = currentColor;
+                    marioHpCurrentScale = vec3_802f5c58;
+                    marioHpCurrentPosWork = vec3_802f5c4c;
+                    marioHpCurrentPosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 245);
+                    marioHpCurrentPosWork.y = (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 8 - row22);
+                    marioHpCurrentPos = marioHpCurrentPosWork;
+                    winFontSetR(&marioHpCurrentPos, &marioHpCurrentScale, &marioHpCurrentColor,
+                                str_PCTd_804237c8, pouchGetHP());
+
+                    text = (*(s32*)((u8*)gp + 0x16C)) == 0 ? str_slash_jp_804237d0 : str__804237cc;
+                    marioHpSlashColor = currentColor;
+                    marioHpSlashScale = vec3_802f5c70;
+                    marioHpSlashPosWork = vec3_802f5c64;
+                    marioHpSlashPosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 267);
+                    marioHpSlashPosWork.y = (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 8 - row22);
+                    marioHpSlashPos = marioHpSlashPosWork;
+                    winFontSetR(&marioHpSlashPos, &marioHpSlashScale, &marioHpSlashColor, text);
+
+                    marioHpMaxColor = currentColor;
+                    marioHpMaxScale = vec3_802f5c88;
+                    marioHpMaxPosWork = vec3_802f5c7c;
+                    marioHpMaxPosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 310);
+                    marioHpMaxPosWork.y = (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 10 - row22);
+                    marioHpMaxPos = marioHpMaxPosWork;
+                    winFontSet(&marioHpMaxPos, &marioHpMaxScale, &marioHpMaxColor,
+                               str_PCTd_804237c8, pouchGetMaxHP());
+
+                    if (*(u8*)(itemDataTable + *(s32*)(w + 0x2D4) * 0x28 + 0x26) != 0) {
+                        if (((*(s32*)(w + 0x2E0)) % 20) > 15)
+                            goto item_use_row_done;
+                        currentColor = dat_804237a4[0];
+                    }
+
+                    winFontInit();
+
+                    marioFpLabelColor = currentColor;
+                    marioFpLabelScale = vec3_802f5ca0;
+                    marioFpLabelPosWork = vec3_802f5c94;
+                    marioFpLabelPosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 220);
+                    marioFpLabelPosWork.y = (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 30);
+                    marioFpLabelPos = marioFpLabelPosWork;
+                    winFontSet(&marioFpLabelPos, &marioFpLabelScale, &marioFpLabelColor, lbl_803776B4[(*(s32*)((u8*)gp + 0x16C)) * 2 + 1]);
+
+                    marioFpCurrentColor = currentColor;
+                    marioFpCurrentScale = vec3_802f5cb8;
+                    marioFpCurrentPosWork = vec3_802f5cac;
+                    marioFpCurrentPosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 245);
+                    marioFpCurrentPosWork.y = (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 30);
+                    marioFpCurrentPos = marioFpCurrentPosWork;
+                    winFontSetR(&marioFpCurrentPos, &marioFpCurrentScale, &marioFpCurrentColor,
+                                str_PCTd_804237c8, pouchGetFP());
+
+                    text = (*(s32*)((u8*)gp + 0x16C)) == 0 ? str_slash_jp_804237d0 : str__804237cc;
+                    marioFpSlashColor = currentColor;
+                    marioFpSlashScale = vec3_802f5cd0;
+                    marioFpSlashPosWork = vec3_802f5cc4;
+                    marioFpSlashPosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 267);
+                    marioFpSlashPosWork.y = (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 30);
+                    marioFpSlashPos = marioFpSlashPosWork;
+                    winFontSetR(&marioFpSlashPos, &marioFpSlashScale, &marioFpSlashColor, text);
+
+                    marioFpMaxColor = currentColor;
+                    marioFpMaxScale = vec3_802f5ce8;
+                    marioFpMaxPosWork = vec3_802f5cdc;
+                    marioFpMaxPosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 310);
+                    marioFpMaxPosWork.y = (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 32);
+                    marioFpMaxPos = marioFpMaxPosWork;
+                    winFontSet(&marioFpMaxPos, &marioFpMaxScale, &marioFpMaxColor,
+                               str_PCTd_804237c8, pouchGetMaxFP());
+                }
+            } else {
+                partnerId = *(s32*)partyOrder[i - 1];
+                if (partnerId == 4)
+                    text = pouchGetYoshiName();
+                else
+                    text = msgSearch(*(char**)(partyOrder[i - 1] + 8));
+
+                if (((*(s32*)(w + 0x2E0)) % 20) < 16 || i != (*(s32*)(w + 0x2DC))) {
+                    winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
+                    GXSetTevColorIn(0, 15, 15, 15, 2);
+                    GXSetTevAlphaIn(0, 7, 1, 4, 7);
+
+                    partnerTexColor = dat_804237a8[0];
+                    partnerTexScale = vec3_802f5d00;
+                    partnerTexPosWork = vec3_802f5cf4;
+                    partnerTexPosWork.x =
+                        float_0p9_804237c4[0] *
+                        (f32)(u16)FontGetMessageWidth(lbl_803776B4[0]) *
+                        float_0p5_804237b4[0] + (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 220);
+                    partnerTexPosWork.y = rowAdjust + (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 8 - row28) - float_14_804237d4[0];
+                    partnerTexPos = partnerTexPosWork;
+                    winTexSet(0xAF, &partnerTexPos, &partnerTexScale, &partnerTexColor);
+
+                    if ((*(s32*)(w + 0x2E0)) != 0 && i != (*(s32*)(w + 0x2DC)))
+                        winIconGrayInit();
+                    else
+                        winIconInit();
+
+                    partnerIconColor = baseWhite;
+                    partnerIconScale = vec3_802f5d18;
+                    partnerIconPosWork = vec3_802f5d0c;
+                    partnerIconPosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 30);
+                    partnerIconPosWork.y = rowAdjust + (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 20 - row28);
+                    partnerIconPos = partnerIconPosWork;
+                    winIconSet(*(s16*)(partyOrder[i - 1] + 4),
+                               &partnerIconPos, &partnerIconScale, &partnerIconColor);
+
+                    winFontInit();
+
+                    partnerNameColor = currentColor;
+                    partnerNameScale = vec3_802f5d30;
+                    nameScale = float_1_804237d8[0];
+                    if (float_160_804237dc[0] <= (f32)(u16)FontGetMessageWidth(text))
+                        nameScale = float_160_804237dc[0] / (f32)(u16)FontGetMessageWidth(text);
+                    partnerNameScale.x = nameScale;
+                    partnerNamePosWork = vec3_802f5d24;
+                    partnerNamePosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 50);
+                    partnerNamePosWork.y = rowAdjust + (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 8 - row28);
+                    partnerNamePos = partnerNamePosWork;
+                    winFontSet(&partnerNamePos, &partnerNameScale, &partnerNameColor, text);
+
+                    partnerHpLabelColor = currentColor;
+                    partnerHpLabelScale = vec3_802f5d48;
+                    partnerHpLabelPosWork = vec3_802f5d3c;
+                    partnerHpLabelPosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 220);
+                    partnerHpLabelPosWork.y = rowAdjust + (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 8 - row28);
+                    partnerHpLabelPos = partnerHpLabelPosWork;
+                    winFontSet(&partnerHpLabelPos, &partnerHpLabelScale, &partnerHpLabelColor, lbl_803776B4[(*(s32*)((u8*)gp + 0x16C)) * 2]);
+
+                    partnerHpCurrentColor = currentColor;
+                    partnerHpCurrentScale = vec3_802f5d60;
+                    partnerHpCurrentPosWork = vec3_802f5d54;
+                    partnerHpCurrentPosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 245);
+                    partnerHpCurrentPosWork.y = rowAdjust + (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 8 - row28);
+                    partnerHpCurrentPos = partnerHpCurrentPosWork;
+                    winFontSetR(
+                        &partnerHpCurrentPos, &partnerHpCurrentScale, &partnerHpCurrentColor,
+                        str_PCTd_804237c8,
+                        *(s16*)((u8*)pouchGetPtr() + partnerId * 14 + 6));
+
+                    text = (*(s32*)((u8*)gp + 0x16C)) == 0 ? str_slash_jp_804237d0 : str__804237cc;
+                    partnerHpSlashColor = currentColor;
+                    partnerHpSlashScale = vec3_802f5d78;
+                    partnerHpSlashPosWork = vec3_802f5d6c;
+                    partnerHpSlashPosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 267);
+                    partnerHpSlashPosWork.y = rowAdjust + (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 8 - row28);
+                    partnerHpSlashPos = partnerHpSlashPosWork;
+                    winFontSetR(&partnerHpSlashPos, &partnerHpSlashScale, &partnerHpSlashColor, text);
+
+                    partnerHpMaxColor = currentColor;
+                    partnerHpMaxScale = vec3_802f5d90;
+                    partnerHpMaxPosWork = vec3_802f5d84;
+                    partnerHpMaxPosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + 310);
+                    partnerHpMaxPosWork.y =
+                        rowAdjust + (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 8 - row28) - float_2_804237e0[0];
+                    partnerHpMaxPos = partnerHpMaxPosWork;
+                    winFontSet(
+                        &partnerHpMaxPos, &partnerHpMaxScale, &partnerHpMaxColor,
+                        str_PCTd_804237c8,
+                        *(s16*)((u8*)pouchGetPtr() + partnerId * 14 + 2));
+                }
+            }
+
+item_use_row_done:
+            row22 += 22;
+            row28 += 28;
+        }
+
+        if (*(s32*)(w + 0x1E0) > 1) {
+            winIconInit();
+            j = 2;
+            do {
+                markerColor = currentColor;
+                markerScale = vec3_802f5da8;
+                markerPosWork = vec3_802f5d9c;
+                markerPosWork.x = (f32)((*(s32*)((u8*)pWinMgr + 0x18)) + ((*(s32*)((u8*)pWinMgr + 0x20)) / 31) * j);
+                markerPosWork.y = (f32)((*(s32*)((u8*)pWinMgr + 0x1C)) - 84);
+                markerPos = markerPosWork;
+                winIconSet(0x1BF, &markerPos, &markerScale, &markerColor);
+                j++;
+            } while (j < 30);
         }
     }
 
     winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
-    pos.x = *(f32*)(w + 0x150) + 20.0f;
-    pos.y = *(f32*)(w + 0x154) - 20.0f;
-    pos.z = 0.0f;
-    scale.x = scale.y = scale.z = 1.0f;
-    winTexSet(0, &pos, &scale, &white);
-    pos.x = *(f32*)(w + 0x150);
-    pos.y = *(f32*)(w + 0x154);
-    winTexSet(0, &pos, &scale, &white);
+
+    cursorColorA = dat_804237ac[0];
+    cursorScaleA = vec3_802f5dc0;
+    cursorPosAWork = vec3_802f5db4;
+    cursorPosAWork.x = float_2_804237e0[0] + *(f32*)(w + 0x150);
+    cursorPosAWork.y = *(f32*)(w + 0x154) - float_2_804237e0[0];
+    cursorPosA = cursorPosAWork;
+    winTexSet(0, &cursorPosA, &cursorScaleA, &cursorColorA);
+
+    cursorColorB = tailWhite;
+    cursorScaleB = vec3_802f5dd8;
+    cursorPosBWork = vec3_802f5dcc;
+    cursorPosBWork.x = *(f32*)(w + 0x150);
+    cursorPosBWork.y = *(f32*)(w + 0x154);
+    cursorPosB = cursorPosBWork;
+    winTexSet(0, &cursorPosB, &cursorScaleB, &cursorColorB);
 }
 
 void itemUseDisp2(void* pWinMgr) {
@@ -961,11 +1846,11 @@ void itemUseDisp2(void* pWinMgr) {
     extern void winMgrSetSize(s32 entryId, s32 x, s32 y, s32 width, s32 height);
     extern void winFontInit(void);
     extern void winFontSetPitch(LocalVec* position, LocalVec* scale, u32* color, char* msg, f32 pitch);
-    extern u32 dat_804237b0;
+    extern const u32 dat_804237b0[1];
     extern LocalVec vec3_802f5df0;
     extern LocalVec vec3_802f5de4;
     extern char str_msg_window_select_5_802f5dfc[];
-    extern f32 float_0p5_804237b4;
+    extern const f32 float_0p5_804237b4[1];
     void* win;
     char* msg;
     u16 width[2];
@@ -977,7 +1862,7 @@ void itemUseDisp2(void* pWinMgr) {
     f32 maxWidth;
 
     win = winGetPtr();
-    color = dat_804237b0;
+    color = dat_804237b0[0];
     if (winMgrAction(*(s32*)((s32)win + 0x1214)) == 0) {
         msg = msgSearch(str_msg_window_select_5_802f5dfc);
         measuredWidth = FontGetMessageWidthLine(msg, width);
@@ -994,11 +1879,11 @@ void itemUseDisp2(void* pWinMgr) {
         if (maxWidth < msgWidth) {
             msgWidth = maxWidth;
         }
-        color = dat_804237b0;
+        color = dat_804237b0[0];
         scale.x = vec3_802f5df0.x;
         scale.y = vec3_802f5df0.y;
         scale.z = vec3_802f5df0.z;
-        position.x = ((f32)*(s32*)((s32)pWinMgr + 0x20) - msgWidth) * float_0p5_804237b4
+        position.x = ((f32)*(s32*)((s32)pWinMgr + 0x20) - msgWidth) * float_0p5_804237b4[0]
             + (f32)*(s32*)((s32)pWinMgr + 0x18);
         position.y = vec3_802f5de4.y;
         position.z = vec3_802f5de4.z;

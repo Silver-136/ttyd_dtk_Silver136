@@ -582,148 +582,600 @@ void winMgrHelpDraw(void* win) {
 }
 
 s32* winMgrSelectEntry(u32 selectType, s32 newItem, s32 isCancellable) {
-    extern void* wp;
+    typedef struct WinMgrDescLocal {
+        s32 fadeMode;
+        s32 headingType;
+        s32 cameraId;
+        s32 x;
+        s32 y;
+        s32 width;
+        s32 height;
+        u32 color;
+        void* mainFunc;
+        void* dispFunc;
+    } WinMgrDescLocal;
+
+    typedef struct WinMgrSelectDescListLocal {
+        s16 numDescs;
+        u16 pad;
+        WinMgrDescLocal* descs;
+    } WinMgrSelectDescListLocal;
+
+    typedef struct WinMgrEntryLocal {
+        u32 flags;
+        s32 fadeState;
+        s32 fadeFrameCounter;
+        u32 windowColAlpha;
+        f32 scale;
+        f32 zRotDeg;
+        s32 x;
+        s32 y;
+        s32 width;
+        s32 height;
+        WinMgrDescLocal* desc;
+        void* param;
+        u32 priority;
+        char* helpMsg;
+        s32 helpLineCursorIndex;
+        s32 helpLineCount;
+        u32 unk40;
+    } WinMgrEntryLocal;
+
+    typedef struct WinMgrWorkLocal {
+        u32 numEntries;
+        WinMgrEntryLocal* entries;
+    } WinMgrWorkLocal;
+
+    typedef struct WinMgrSelectRowLocal {
+        u16 flags;
+        u16 value;
+    } WinMgrSelectRowLocal;
+
+    typedef struct WinMgrSelectLocal {
+        u16 flags;
+        u16 pad;
+        u32 selectType;
+        s32 state;
+        s32 cursorIndex;
+        s32 listRowOffset;
+        f32 cursorX;
+        f32 cursorY;
+        f32 listYOffset;
+        u32 numEntries;
+        s32 entryIndices[3];
+        WinMgrSelectRowLocal* rowData;
+        s32 rowCount;
+        s32 newItem;
+    } WinMgrSelectLocal;
+
+    typedef struct ItemDataMini {
+        char* stringId;
+        char* nameMsg;
+        char* descMsg;
+        char* menuDescMsg;
+        u8 pad10[4];
+        u16 buyPrice;
+        u16 discountPrice;
+        u16 starPiecePrice;
+        u16 sellPrice;
+        s8 bpCost;
+        u8 pad1D[0x0B];
+    } ItemDataMini;
+
     extern u8 select_desc_tbl[];
-    extern void* pouchGetPtr(void);
-    extern void* __memAlloc(s32, u32);
-    extern void memset(void*, s32, u32);
-    extern s32 pouchKeyItem(s32);
-    extern s32 pouchHaveItem(s32);
-    extern s32 pouchHaveBadge(s32);
-    extern s32 pouchKeepItem(s32);
-    extern s32 partyChkJoin(s32);
-    extern s32 evtGetValue(void*,s32);
+    extern s16 L_pouchEquipBadge(s32);
+    extern u32 partyChkJoin(s32);
+    extern s32 evtGetValue(void*, s32);
     extern u16 party_id_table[];
-    extern s32 DAT_803ad0c4; extern u8 DAT_803ad0e1,DAT_803ad0ee,_jdt[];
-    extern s32 johoya_get(s32,s32);
-    extern u16 badge_bottakuru_table[];
-    extern s32 getBadgeBottakuru100TableMaxCount(void); extern u16 badge_bottakuru100_table[];
-    u8* select;
-    u8* descList;
-    u8* desc;
-    u8* entries;
-    u8* rows;
+    extern u16 menu_skip_list[];
+    extern s16* mario_status_point_table[];
+    extern s32 mario_status_henka_table[];
+    extern s32 mario_status_max_table[];
+    extern u8* bdsw;
+    extern s32 badgeShop_get(void*, s16);
+    extern s32 badgeShop_ThrowCheck(s32);
+    extern void qqsort(void*, u32, u32, s32 (*)(void*, void*));
+    extern s32 getBadgeStarmaniacTableMaxCount(void);
+    extern s32 getBadgeBteresaTableMaxCount(void);
+    extern s32 unk_8023d59c(void*, void*);
+    extern s32 unk_8023d5e4(void*, void*);
+    extern s32 unk_8023d524(void*, void*);
+    extern u32 badge_bottakuru_table[];
+    extern u32 badge_bottakuru100_table[];
+    extern s32 DAT_803ad0c4;
+    extern u8 DAT_803ad0e1;
+    extern u8 DAT_803ad0ee;
+    extern u8 _jdt[];
+    extern s32 johoya_get(s32, s32);
+    extern const f32 float_0_80428018;
+
+    PouchData* pouch;
+    u8* jdt;
+    WinMgrSelectLocal* select;
+    WinMgrSelectLocal* selectIter;
+    WinMgrSelectDescListLocal* descList;
+    WinMgrDescLocal* desc;
+    WinMgrDescLocal* firstDesc;
+    WinMgrEntryLocal* entry;
+    WinMgrSelectRowLocal* rows;
     s32 descIndex;
-    s32 descCount;
     s32 i;
-    s32 count = 0;
-    u8* pouch;
+    u16 newItem16;
 
     pouch = pouchGetPtr();
-    select = __memAlloc(0, 0x3C);
+    jdt = _jdt;
+    select = (WinMgrSelectLocal*)__memAlloc(0, 0x3C);
     memset(select, 0, 0x3C);
-    *(u32*)(select + 4) = selectType;
-    *(s32*)(select + 0xC) = 0;
-    *(s32*)(select + 0x10) = 0;
-    *(f32*)(select + 0x14) = 0.0f;
-    *(f32*)(select + 0x18) = 0.0f;
-    *(f32*)(select + 0x1C) = 0.0f;
-    *(s32*)(select + 0x38) = newItem;
+    select->selectType = selectType;
+    select->cursorIndex = 0;
+    select->listRowOffset = 0;
+    select->cursorY = float_0_80428018;
+    select->cursorX = float_0_80428018;
+    select->listYOffset = float_0_80428018;
+    select->newItem = newItem;
     if (isCancellable != 0) {
-        *(u16*)select |= 0x100;
+        select->flags |= 0x100;
     }
-    descIndex = (s32)selectType < 0 ? 0 : (s32)selectType;
-    descList = select_desc_tbl + descIndex * 8;
-    descCount = *(u16*)descList;
-    desc = *(u8**)(descList + 4);
-    *(s32*)(select + 0x20) = descCount;
-    for (i = 0; i < descCount; i++, desc += 0x24) {
-        s32 id = 0;
-        s32 left = *(s32*)wp;
-        u8* entry = *(u8**)((u8*)wp + 4);
-        while (left > 0 && (*(u32*)entry & 1) != 0) {
-            id++;
-            entry += 0x44;
-            left--;
-        }
-        *(u32*)entry = 1;
-        *(s32*)(entry + 4) = 0;
-        *(s32*)(entry + 8) = 0;
-        *(u8**)(entry + 0xC) = desc;
-        *(s32*)(entry + 0x18) = *(s32*)(desc + 0xC);
-        *(s32*)(entry + 0x1C) = *(s32*)(desc + 0x10);
-        *(s32*)(entry + 0x20) = *(s32*)(desc + 0x14);
-        *(s32*)(entry + 0x24) = *(s32*)(desc + 0x18);
-        *(s32*)(entry + 0x28) = 0;
-        *(void**)(entry + 0x2C) = 0;
-        *(s32*)(entry + 0x38) = 0;
-        *(s32*)(entry + 0x3C) = 0;
-        *(s32*)(select + 0x2C + i * 4) = id;
-        entries = *(u8**)((u8*)wp + 4);
-        if ((*(u32*)(entries + id * 0x44) & 1) != 0) {
-            *(u8**)(entries + id * 0x44 + 0x2C) = select;
-        }
-    }
-    *(f32*)(select + 0x14) = (f32)*(s32*)(desc + 0xC - descCount * 0x24);
-    *(f32*)(select + 0x18) = (f32)*(s32*)(desc + 0x10 - descCount * 0x24);
 
-    if (selectType == 0) descCount = 0x1E8;
-    else if (selectType == 1 || selectType == 3 || selectType == 4) descCount = 0x54;
-    else if (selectType == 2 || selectType == 0xC) descCount = 0x324;
-    else if (selectType == 5) descCount = 0x84;
-    else if (selectType == 6 || selectType == 7 || selectType == 8) descCount = 0x1C;
-    else if (selectType == 0x11 || selectType == 0x12) descCount = (DAT_803ad0c4 + 1) * 4;
-    else if (selectType == 0xE) descCount = 0x10;
-    else if (selectType == 0xF) descCount = getBadgeBottakuru100TableMaxCount() * 4;
-    else descCount = 0x324;
-    rows = __memAlloc(0, descCount);
-    memset(rows, 0, descCount);
-    *(u8**)(select + 0x30) = rows;
-    if (newItem != 0) {
-        *(u16*)(rows + 2) = (u16)newItem;
-        count = 1;
+    descIndex = (s32)selectType < 0 ? 0 : (s32)selectType;
+    descList = &((WinMgrSelectDescListLocal*)select_desc_tbl)[descIndex];
+    desc = descList->descs;
+    select->numEntries = (u16)descList->numDescs;
+    selectIter = select;
+
+    for (i = 0; i < (s32)select->numEntries; i++) {
+        u32 left;
+        s32 entryIndex;
+
+        entryIndex = 0;
+        left = ((WinMgrWorkLocal*)wp)->numEntries;
+        entry = ((WinMgrWorkLocal*)wp)->entries;
+        if ((s32)left > 0) {
+            do {
+                if ((entry->flags & 1) == 0) {
+                    break;
+                }
+                entryIndex++;
+                entry++;
+                left--;
+            } while (left != 0);
+        }
+
+        entry->flags = 0;
+        entry->flags |= 1;
+        entry->fadeState = 0;
+        entry->fadeFrameCounter = 0;
+        entry->desc = desc;
+        entry->x = entry->desc->x;
+        entry->y = entry->desc->y;
+        entry->width = entry->desc->width;
+        entry->height = entry->desc->height;
+        entry->priority = 0;
+        entry->param = 0;
+        entry->helpLineCursorIndex = 0;
+        entry->helpLineCount = 0;
+
+        selectIter->entryIndices[0] = entryIndex;
+        entry = &((WinMgrWorkLocal*)wp)->entries[selectIter->entryIndices[0]];
+        if ((entry->flags & 1) != 0) {
+            entry->param = select;
+        }
+
+        selectIter = (WinMgrSelectLocal*)&selectIter->selectType;
+        desc++;
     }
-    if (selectType == 0) {
-        for (i = 0; i < 0x79; i++) {
-            s32 item = pouchKeyItem(i);
-            if (item != 0) { *(u16*)(rows + count++ * 4 + 2) = (u16)item; }
+
+    firstDesc = descList->descs;
+    select->cursorX = (f32)firstDesc->x;
+    select->cursorY = (f32)(firstDesc->y - 0x36);
+    newItem16 = (u16)newItem;
+
+    switch (select->selectType) {
+    case 0:
+        select->rowData = (WinMgrSelectRowLocal*)__memAlloc(0, 0x1E8);
+        memset(select->rowData, 0, 0x1E8);
+        select->rowCount = 0;
+        if (newItem != 0) {
+            i = select->rowCount;
+            select->rowCount = i + 1;
+            select->rowData[i].value = newItem16;
         }
-    } else if (selectType == 1 || selectType == 3 || selectType == 4) {
-        for (i = 0; i < 0x14; i++) {
-            s32 item = pouchHaveItem(i);
-            if (item != 0) { *(u16*)(rows + count++ * 4 + 2) = (u16)item; }
+
+        i = 0;
+        do {
+            s16 item = pouchKeyItem(i);
+            if (item != 0) {
+                u16* skip = menu_skip_list;
+                s32 skipIndex = 0;
+                s32 skipLeft = 0x13;
+
+                do {
+                    if ((u16)item == *skip) {
+                        break;
+                    }
+                    skip++;
+                    skipIndex++;
+                    skipLeft--;
+                } while (skipLeft != 0);
+
+                if (skipIndex > 0x12) {
+                    s32 row = select->rowCount;
+                    select->rowCount = row + 1;
+                    select->rowData[row].value = (u16)item;
+                }
+            }
+            i++;
+        } while (i < 0x79);
+        break;
+
+    case 1:
+    case 3:
+    case 4:
+        select->rowData = (WinMgrSelectRowLocal*)__memAlloc(0, 0x54);
+        memset(select->rowData, 0, 0x54);
+        select->rowCount = 0;
+        if (newItem != 0) {
+            i = select->rowCount;
+            select->rowCount = i + 1;
+            select->rowData[i].value = newItem16;
         }
-    } else if (selectType == 2 || selectType == 0xC) {
-        for (i = 0; i < 0x78; i++) {
-            s32 item = pouchHaveBadge(i);
-            if (item != 0) { *(u16*)(rows + count++ * 4 + 2) = (u16)item; }
+
+        i = 0;
+        do {
+            s16 item = pouchHaveItem(i);
+            if (item != 0) {
+                s32 row = select->rowCount;
+                select->rowCount = row + 1;
+                select->rowData[row].value = (u16)item;
+            }
+            i++;
+        } while (i < 0x14);
+        break;
+
+    case 2:
+    case 0xC:
+        select->rowData = (WinMgrSelectRowLocal*)__memAlloc(0, 0x324);
+        memset(select->rowData, 0, 0x324);
+        select->rowCount = 0;
+        if (newItem != 0) {
+            i = select->rowCount;
+            select->rowCount = i + 1;
+            select->rowData[i].value = newItem16;
         }
-    } else if (selectType == 5) {
-        for (i = 0; i < 0x20; i++) {
-            s32 item = pouchKeepItem(i);
-            if (item != 0) { *(u16*)(rows + count++ * 4 + 2) = (u16)item; }
+
+        i = 0;
+        do {
+            s16 item = pouchHaveBadge(i);
+            if (item != 0) {
+                if (select->selectType == 0xC && item == L_pouchEquipBadge(i)) {
+                    select->rowData[select->rowCount].flags |= 8;
+                }
+                {
+                    s32 row = select->rowCount;
+                    select->rowCount = row + 1;
+                    select->rowData[row].value = (u16)item;
+                }
+            }
+            i++;
+        } while (i < 200);
+        break;
+
+    case 5:
+        select->rowData = (WinMgrSelectRowLocal*)__memAlloc(0, 0x84);
+        memset(select->rowData, 0, 0x84);
+        select->rowCount = 0;
+        if (newItem != 0) {
+            i = select->rowCount;
+            select->rowCount = i + 1;
+            select->rowData[i].value = newItem16;
         }
-    } else if (selectType == 6 || selectType == 7 || selectType == 8) {
-        for (i = 0; party_id_table[i] != 0; i++) {
-            s32 party = party_id_table[i];
-            if (partyChkJoin(party) != 0) {
-                if (selectType != 8 || *(s16*)(pouch + party * 14 + 0xC) != 0) {
-                    *(u16*)(rows + count * 4 + 2) = (u16)i;
-                    if (selectType == 8 && *(s16*)(pouch + party * 14 + 0xC) == 0)
-                        *(u16*)(rows + count * 4) |= 3;
-                    count++;
+
+        i = 0;
+        do {
+            u16 item = (u16)pouchKeepItem(i);
+            if (item != 0) {
+                s32 row = select->rowCount;
+                select->rowCount = row + 1;
+                select->rowData[row].value = item;
+            }
+            i++;
+        } while (i < 0x20);
+        break;
+
+    case 6:
+    case 7:
+        select->rowData = (WinMgrSelectRowLocal*)__memAlloc(0, 0x1C);
+        memset(select->rowData, 0, 0x1C);
+        select->rowCount = 0;
+        {
+            u16 partyIndex = 0;
+            u16* party = party_id_table;
+
+            while (*party != 0) {
+                if (partyChkJoin(*party) != 0) {
+                    select->rowData[select->rowCount].value = partyIndex;
+                    if (evtGetValue(0, 0xF8406022) == 0) {
+                        if (pouch->partyData[*party].techLevel > 0) {
+                            select->rowData[select->rowCount].flags |= 3;
+                        }
+                    } else if (pouch->partyData[*party].techLevel > 1) {
+                        select->rowData[select->rowCount].flags |= 3;
+                    }
+                    select->rowCount++;
+                }
+                partyIndex++;
+                party++;
+            }
+        }
+        break;
+
+    case 8:
+        select->rowData = (WinMgrSelectRowLocal*)__memAlloc(0, 0x1C);
+        memset(select->rowData, 0, 0x1C);
+        select->rowCount = 0;
+        {
+            u16 partyIndex = 0;
+            u16* party = party_id_table;
+
+            while (*party != 0) {
+                if (partyChkJoin(*party) != 0 &&
+                    *party != (u16)evtGetValue(0, -49999999)) {
+                    select->rowData[select->rowCount].value = partyIndex;
+                    if (pouch->partyData[*party].techLevel == 0) {
+                        select->rowData[select->rowCount].flags |= 3;
+                    }
+                    select->rowCount++;
+                }
+                partyIndex++;
+                party++;
+            }
+        }
+        break;
+
+    case 9:
+        mario_status_point_table[0] = &pouchGetPtr()->baseMaxHP;
+        mario_status_point_table[1] = &pouchGetPtr()->baseMaxFP;
+        mario_status_point_table[2] = &pouchGetPtr()->totalBP;
+
+        select->rowData = (WinMgrSelectRowLocal*)__memAlloc(0, 0xC);
+        memset(select->rowData, 0, 0xC);
+        select->rowCount = 0;
+
+        i = 0;
+        do {
+            s32 unavailable = 0;
+            s32 aboveMax = 0;
+
+            select->rowData[i].value = (u16)i;
+
+            if (select->rowData[i].value == 0) {
+                if (mario_status_max_table[0] <
+                    *mario_status_point_table[0] + mario_status_henka_table[0]) {
+                    aboveMax = 1;
+                }
+            } else if (*mario_status_point_table[0] - mario_status_henka_table[0] < 1) {
+                unavailable++;
+            }
+
+            if (select->rowData[i].value == 1) {
+                if (mario_status_max_table[1] <
+                    *mario_status_point_table[1] + mario_status_henka_table[1]) {
+                    aboveMax = 1;
+                }
+            } else if (*mario_status_point_table[1] - mario_status_henka_table[1] < 1) {
+                unavailable++;
+            }
+
+            if (select->rowData[i].value == 2) {
+                if (mario_status_max_table[2] <
+                    *mario_status_point_table[2] + mario_status_henka_table[2]) {
+                    aboveMax = 1;
+                }
+            } else if (*mario_status_point_table[2] - mario_status_henka_table[2] < 1) {
+                unavailable++;
+            }
+
+            if (unavailable == 2 || aboveMax != 0) {
+                if (aboveMax != 0) {
+                    select->rowData[i].flags |= 7;
+                } else {
+                    select->rowData[i].flags |= 3;
+                }
+            }
+            i++;
+        } while (i < 3);
+        select->rowCount = 3;
+        break;
+
+    case 10:
+        mario_status_point_table[0] = &pouchGetPtr()->baseMaxHP;
+        mario_status_point_table[1] = &pouchGetPtr()->baseMaxFP;
+        mario_status_point_table[2] = &pouchGetPtr()->totalBP;
+
+        select->rowData = (WinMgrSelectRowLocal*)__memAlloc(0, 8);
+        memset(select->rowData, 0, 8);
+        select->rowCount = 0;
+
+        i = 0;
+        do {
+            if (i != evtGetValue(0, -49999999)) {
+                s32 row = select->rowCount;
+                select->rowData[row].value = (u16)i;
+                if (*mario_status_point_table[i] - mario_status_henka_table[i] < 1) {
+                    select->rowData[row].flags |= 3;
+                }
+                select->rowCount = row + 1;
+            }
+            i++;
+        } while (i < 3);
+        break;
+
+    case 0xB:
+        select->rowData = (WinMgrSelectRowLocal*)__memAlloc(0, 0x18C);
+        memset(select->rowData, 0, 0x18C);
+        select->rowCount = 0;
+
+        i = 0;
+        do {
+            s32 stock = badgeShop_get(bdsw + 0x19, (s16)(i + 0xF0));
+            s32 thrown = badgeShop_ThrowCheck(i + 0xF0);
+            if ((s16)stock - thrown > 0) {
+                s32 row = select->rowCount;
+                select->rowCount = row + 1;
+                select->rowData[row].value = (u16)(i + 0xF0);
+            }
+            i++;
+        } while (i < 99);
+
+        qqsort(select->rowData, select->rowCount, 4, unk_8023d59c);
+        break;
+
+    case 0xD:
+        {
+            s32 maxCount = getBadgeStarmaniacTableMaxCount();
+            ItemDataMini* itemData = (ItemDataMini*)itemDataTable;
+
+            select->rowData = (WinMgrSelectRowLocal*)__memAlloc(0, maxCount << 2);
+            memset(select->rowData, 0, maxCount << 2);
+            select->rowCount = 0;
+
+            i = 0;
+            do {
+                s32 stock = badgeShop_get(bdsw + 0x32, (s16)(i + 0xF0));
+                s32 thrown = badgeShop_ThrowCheck(i + 0xF0);
+                if ((s16)stock - thrown > 0) {
+                    s32 row = select->rowCount;
+                    select->rowData[row].value = (u16)(i + 0xF0);
+                    if (pouchGetStarPiece() < (s32)itemData[i + 0xF0].starPiecePrice) {
+                        select->rowData[row].flags |= 3;
+                    }
+                    select->rowCount = row + 1;
+                }
+                i++;
+            } while (i < 99);
+
+            qqsort(select->rowData, select->rowCount, 4, unk_8023d5e4);
+        }
+        break;
+
+    case 0xE:
+        select->rowData = (WinMgrSelectRowLocal*)__memAlloc(0, 0x10);
+        memset(select->rowData, 0, 0x10);
+        select->rowCount = 0;
+
+        i = 0;
+        do {
+            u32 item = badge_bottakuru_table[evtGetValue(0, i - 0xA21FE0A)];
+            if (item != 0) {
+                s32 row = select->rowCount;
+                select->rowCount = row + 1;
+                select->rowData[row].value = (u16)item;
+            }
+            i++;
+        } while (i < 4);
+        break;
+
+    case 0xF:
+        {
+            s32 maxCount = getBadgeBottakuru100TableMaxCount();
+
+            select->rowData = (WinMgrSelectRowLocal*)__memAlloc(0, maxCount << 2);
+            memset(select->rowData, 0, maxCount << 2);
+            select->rowCount = 0;
+
+            i = 0;
+            while (i < maxCount) {
+                s32 row = select->rowCount;
+                select->rowCount = row + 1;
+                select->rowData[row].value = (u16)badge_bottakuru100_table[i];
+                i++;
+            }
+        }
+        break;
+
+    case 0x10:
+        {
+            s32 maxCount = getBadgeBteresaTableMaxCount();
+
+            select->rowData = (WinMgrSelectRowLocal*)__memAlloc(0, maxCount << 2);
+            memset(select->rowData, 0, maxCount << 2);
+            select->rowCount = 0;
+
+            i = 0;
+            do {
+                s32 stock = badgeShop_get(bdsw + 0xA0, (s16)(i + 1));
+                if ((s16)stock > 0) {
+                    s32 row = select->rowCount;
+                    select->rowCount = row + 1;
+                    select->rowData[row].value = (u16)(i + 1);
+                }
+                i++;
+            } while (i < 0x152);
+
+            qqsort(select->rowData, select->rowCount, 4, unk_8023d524);
+        }
+        break;
+
+    case 0x11:
+    case 0x12:
+        {
+            u8* check = select->selectType == 0x11 ? &DAT_803ad0e1 : &DAT_803ad0ee;
+
+            select->rowCount = DAT_803ad0c4;
+            select->rowData =
+                (WinMgrSelectRowLocal*)__memAlloc(0, (select->rowCount + 1) << 2);
+            memset(select->rowData, 0, (select->rowCount + 1) << 2);
+
+            for (i = 0; i < select->rowCount; i++) {
+                select->rowData[i].value = (u16)i;
+                if ((s16)johoya_get((s32)check, *(s16*)(jdt + i * 0x10 + 0xC)) != 0) {
+                    select->rowData[i].flags |= 1;
                 }
             }
         }
-    } else if (selectType == 0x11 || selectType == 0x12) {
-        u8* check = selectType == 0x11 ? &DAT_803ad0e1 : &DAT_803ad0ee;
-        count = DAT_803ad0c4;
-        for (i = 0; i < count; i++) {
-            *(u16*)(rows + i * 4 + 2) = (u16)i;
-            if ((s16)johoya_get((s32)check, *(s16*)(_jdt + i * 0x10 + 0xC)) != 0)
-                *(u16*)(rows + i * 4) |= 1;
+        break;
+
+    default:
+        if ((s32)selectType < 0) {
+            s32* list = (s32*)selectType;
+            s32 listCount = 0;
+
+            while (list[listCount] != -1) {
+                listCount++;
+            }
+
+            select->rowData =
+                (WinMgrSelectRowLocal*)__memAlloc(0, (listCount + 1) << 2);
+            memset(select->rowData, 0, (listCount + 1) << 2);
+            select->rowCount = 0;
+
+            if (newItem != 0) {
+                i = select->rowCount;
+                select->rowCount = i + 1;
+                select->rowData[i].value = newItem16;
+            }
+
+            i = 0;
+            while (list[i] != -1) {
+                s32 row = select->rowCount;
+                select->rowCount = row + 1;
+                select->rowData[row].value = (u16)list[i];
+                i++;
+            }
         }
-    } else if (selectType == 0xE) {
-        for (i = 0; i < 4; i++) {
-            s32 item = badge_bottakuru_table[evtGetValue(0, i - 0xA21FE0A)];
-            if (item != 0) *(u16*)(rows + count++ * 4 + 2) = (u16)item;
-        }
-    } else if (selectType == 0xF) {
-        s32 shopCount = getBadgeBottakuru100TableMaxCount();
-        for (i = 0; i < shopCount; i++)
-            *(u16*)(rows + count++ * 4 + 2) = badge_bottakuru100_table[i];
+        break;
     }
-    *(s32*)(select + 0x34) = count;
+
+    if (select->rowCount < 8) {
+        entry = &((WinMgrWorkLocal*)wp)->entries[select->entryIndices[0]];
+        if ((entry->flags & 1) != 0) {
+            entry->x = firstDesc->x;
+            entry->y = firstDesc->y;
+            entry->width = firstDesc->width;
+            entry->height = firstDesc->height + (8 - select->rowCount) * -0x18;
+        }
+    }
+
     return (s32*)select;
 }
 

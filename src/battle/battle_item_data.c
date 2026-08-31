@@ -300,6 +300,16 @@ u8 _throw_item_icon(void* event, s32 isFirstCall) {
         f32 y;
         f32 z;
     } Vec;
+    typedef struct ThrowItemWork {
+        Vec start;
+        Vec current;
+        Vec end;
+        s32 frames;
+        f32 moveDist;
+        f32 gravity;
+        f32 velocity;
+        u8 padding[0x48];
+    } ThrowItemWork;
 
     extern s32 evtGetValue(void* event, s32 arg);
     extern f32 evtGetFloat(void* event, s32 arg);
@@ -322,7 +332,7 @@ u8 _throw_item_icon(void* event, s32 isFirstCall) {
     f32 endX;
     f32 endY;
     f32 endZ;
-    f32* work;
+    ThrowItemWork* work;
     f32 dist;
     Vec pos;
 
@@ -337,43 +347,41 @@ u8 _throw_item_icon(void* event, s32 isFirstCall) {
 
     if (isFirstCall != 0) {
         work = BattleAlloc(0x7C);
-        *(void**)((s32)event + 0x78) = work;
-        work[6] = endX;
-        work[7] = endY;
-        work[8] = endZ;
-        work[3] = startX;
-        work[4] = startY;
-        work[5] = startZ;
-        work[0] = startX;
-        work[1] = startY;
-        work[2] = startZ;
+        *(ThrowItemWork**)((s32)event + 0x78) = work;
+        work->end.x = endX;
+        work->end.y = endY;
+        work->end.z = endZ;
         pos.x = startX;
         pos.y = startY;
         pos.z = startZ;
-        dist = distABf(work[0], work[2], work[6], work[8]);
-        work[9] = (f32)((s32)(dist / 15.0f) + 30);
-        work[11] = 0.5f;
-        work[12] = work[11] * -work[9] * 0.5f + (work[7] - work[1]) / -work[9];
-        work[10] = distABf(work[0], work[2], work[6], work[8]) / -work[9];
+        work->current = pos;
+        work->start = pos;
+        dist = distABf(work->start.x, work->start.z, work->end.x, work->end.z);
+        work->frames = (s32)(dist / 15.0f) + 30;
+        work->gravity = 0.5f;
+        work->velocity = work->gravity * (f32)-work->frames * 0.5f +
+                         (work->end.y - work->start.y) / (f32)-work->frames;
+        work->moveDist = distABf(work->start.x, work->start.z, work->end.x, work->end.z) /
+                         (f32)-work->frames;
         *(s32*)((s32)event + 0x7C) = item;
         *(s32*)((s32)event + 0x80) = 0;
         *(s32*)((s32)event + 0x84) = psndSFXOn_3D(str_SFX_ITEM_COOKING_THR_802f0730, &pos);
     }
 
-    work = *(f32**)((s32)event + 0x78);
+    work = *(ThrowItemWork**)((s32)event + 0x78);
     if (*(s32*)((s32)event + 0x80) == 0) {
-        work[4] += work[12];
-        work[12] -= work[11];
-        if (work[12] < 0.0f && work[4] < work[7]) {
-            work[4] = work[7];
+        work->current.y += work->velocity;
+        work->velocity -= work->gravity;
+        if (work->velocity < 0.0f && work->current.y < work->end.y) {
+            work->current.y = work->end.y;
         }
-        btlMovePos(work[10], angleABf(work[0], work[2], work[6], work[8]), &work[3], &work[5]);
-        work[9] = (f32)((s32)work[9] - 1);
-        if ((s32)work[9] < 1) {
-            *(s32*)((s32)event + 0x80) = 0x01000000;
-            work[3] = work[6];
-            work[4] = work[7];
-            work[5] = work[8];
+        btlMovePos(work->moveDist,
+                   angleABf(work->start.x, work->start.z, work->end.x, work->end.z),
+                   &work->current.x, &work->current.z);
+        work->frames--;
+        if (work->frames < 1) {
+            *(s32*)((s32)event + 0x80) = 1;
+            work->current = work->end;
         }
         dispEntry(4, 1, _disp_item_icon, event, 900.0f);
         return 0;

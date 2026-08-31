@@ -166,6 +166,7 @@ USER_FUNC(evt_party_set_camid) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_party_force_reset_outofscreen(EventEntry* event) {
+    typedef struct RawVec { u32 x; u32 y; u32 z; } RawVec;
     extern void marioGetScreenPos(float* pos, float* x, float* y, float* z);
     extern s32 marioChkInScreen(s32 x, s32 y);
     extern void partyClearFootmark(void);
@@ -177,9 +178,11 @@ s32 evt_party_force_reset_outofscreen(EventEntry* event) {
     extern f32 float_100_80421d64;
     extern f32 float_50_80421d68;
 
-    s32* args = event->args;
     void* party;
     void* work;
+    s32* args = event->args;
+    f32 initialPos[3];
+    f32 screenPos[3];
     f32 pos[3];
     f32 dir[3];
     f32 hitPos[3];
@@ -197,23 +200,17 @@ s32 evt_party_force_reset_outofscreen(EventEntry* event) {
     if (party == NULL) {
         return 2;
     }
-    pos[0] = *(f32*)((s32)party + 0x58);
-    pos[1] = *(f32*)((s32)party + 0x5C);
-    pos[2] = *(f32*)((s32)party + 0x60);
-    marioGetScreenPos(pos, &sx, &sy, &sz);
+    *(RawVec*)initialPos = *(RawVec*)((s32)party + 0x58);
+    marioGetScreenPos(initialPos, &sx, &sy, &sz);
     if (marioChkInScreen((s32)sy, (s32)sx) != 0) {
         return 2;
     }
     partyClearFootmark();
     work = *(void**)((s32)party + 0x160);
-    dir[0] = vec3_802e7bf0[0];
-    dir[1] = vec3_802e7bf0[1];
-    dir[2] = vec3_802e7bf0[2];
+    *(RawVec*)dir = *(RawVec*)vec3_802e7bf0;
     do {
-        pos[0] = *(f32*)((s32)party + 0x58);
-        pos[1] = *(f32*)((s32)party + 0x5C);
-        pos[2] = *(f32*)((s32)party + 0x60);
-        marioGetScreenPos(pos, &sx, &sy, &sz);
+        *(RawVec*)screenPos = *(RawVec*)((s32)party + 0x58);
+        marioGetScreenPos(screenPos, &sx, &sy, &sz);
         if (marioChkInScreen((s32)sy, (s32)sx) != 0) {
             break;
         }
@@ -221,9 +218,8 @@ s32 evt_party_force_reset_outofscreen(EventEntry* event) {
                 angleABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60),
                          *(f32*)((s32)work + 0x8C), *(f32*)((s32)work + 0x94)));
         dist = float_100_80421d64;
-        hitPos[0] = *(f32*)((s32)party + 0x58);
-        hitPos[1] = *(f32*)((s32)party + 0x5C) + float_50_80421d68;
-        hitPos[2] = *(f32*)((s32)party + 0x60);
+        *(RawVec*)hitPos = *(RawVec*)((s32)party + 0x58);
+        hitPos[1] += float_50_80421d68;
         if (partyHitCheck(party, hitPos, dir, out, pos, &dist) != NULL) {
             *(f32*)((s32)party + 0x5C) = out[1];
         } else {

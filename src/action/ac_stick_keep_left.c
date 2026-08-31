@@ -17,6 +17,8 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
     extern char str_SFX_AC_PI1_802f01a8[];
     extern char str_SFX_AC_PONE1_802f01b4[];
 
+    register char* sfxPi;
+    register char* sfxPone;
     StickKeepLeftExtra* extra;
     void* disp;
     s32 autoCommand;
@@ -27,12 +29,13 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
     s32 timer;
     s32 difficulty;
     s32 i;
-    char* sfxPi;
-    char* sfxPone;
 
     extra = (StickKeepLeftExtra*)((s32)battleWork + 0x1F4C);
     disp = (void*)((s32)battleWork + 0x1F20);
-    autoCommand = *(u8*)((s32)*(void**)((s32)battleWork + 0x1C90) + 0x307) != 0;
+    autoCommand = 0;
+    if (*(u8*)((s32)*(void**)((s32)battleWork + 0x1C90) + 0x307) != 0) {
+        autoCommand = 1;
+    }
 
     *(s32*)((s32)battleWork + 0x1CD4) = 0;
     if (*(s32*)((s32)battleWork + 0x1C9C) != 0) {
@@ -53,7 +56,29 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
         }
 
         state = *(s32*)((s32)battleWork + 0x1C9C);
-        if (state == 0) {
+        switch (state) {
+            case 0:
+                goto state_0;
+            case 99:
+                goto state_done;
+            case 100:
+                goto state_100;
+            case 1001:
+                goto state_1001;
+            case 1003:
+                goto state_1003;
+            case 1005:
+                goto state_1005;
+            case 1006:
+                goto state_1006;
+            case 1007:
+                goto state_1007;
+            default:
+                goto state_done;
+        }
+
+state_0:
+        {
             *(s32*)((s32)battleWork + 0x1CB8) = 1;
             extra->index = 0;
             memset(disp, 0, 0x2C);
@@ -69,41 +94,47 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
                 extra->sound[i] = -1;
             }
             *(s32*)((s32)battleWork + 0x1C9C) = 99;
-        } else if (state == 99) {
-            /* wait */
-        } else if (state >= 100 && state < 1000) {
-            if (state <= 100) {
-                extra->timer = 0x78;
-                *(s32*)((s32)battleWork + 0x1C9C) = 1000;
-            }
-            if (((*(u32*)((s32)battleWork + 0x1C94) & 1) == 0) ||
-                ((*(u32*)((s32)*(void**)((s32)battleWork + 0x1C90) + 0x27C) & 0x10) == 0)) {
-                if (BattlePadCheckNow(0x40000) != 0 || *(s16*)((s32)battleWork + 0x1D18) > 0 || autoCommand) {
-                    *(s32*)((s32)battleWork + 0x1CE8) = 1;
-                    *(s32*)((s32)battleWork + 0x1C9C) = 1001;
-                    extra->timer = 1;
-                    extra->index = 1;
-                    *(s32*)((s32)battleWork + 0x1CEC) = 0;
-                } else {
-                    timer = extra->timer - 1;
-                    extra->timer = timer;
-                    if (timer < 1) {
+        }
+        goto state_done;
+
+state_100:
+        {
+            extra->timer = 0x78;
+            *(s32*)((s32)battleWork + 0x1C9C) = 1000;
+            if (((*(u32*)((s32)battleWork + 0x1C94) & 1) != 0) &&
+                ((*(u32*)((s32)*(void**)((s32)battleWork + 0x1C90) + 0x27C) & 0x10) != 0)) {
+                if (((*(u32*)((s32)battleWork + 0x1C94) & 2) == 0) ||
+                    (--*(s32*)((s32)battleWork + 0x1C98) < 0)) {
+                    if (irand(100) < 0) {
+                        *(s32*)((s32)battleWork + 0x1CB8) = 2;
+                        *(s32*)((s32)battleWork + 0x1CB4) = *(s32*)((s32)battleWork + 0x1CB4) + 1;
+                    } else {
                         *(s32*)((s32)battleWork + 0x1CB8) = 0;
-                        done = 1;
-                        *(s32*)((s32)battleWork + 0x1C9C) = 1003;
                     }
+                    return 0;
                 }
-            } else if (((*(u32*)((s32)battleWork + 0x1C94) & 2) == 0) ||
-                       (--*(s32*)((s32)battleWork + 0x1C98) < 0)) {
-                if (irand(100) < 0) {
-                    *(s32*)((s32)battleWork + 0x1CB8) = 2;
-                    *(s32*)((s32)battleWork + 0x1CB4) = *(s32*)((s32)battleWork + 0x1CB4) + 1;
-                } else {
+            } else if (BattlePadCheckNow(0x40000) == 0 &&
+                       *(s16*)((s32)battleWork + 0x1D18) <= 0 &&
+                       !autoCommand) {
+                timer = extra->timer - 1;
+                extra->timer = timer;
+                if (timer < 1) {
                     *(s32*)((s32)battleWork + 0x1CB8) = 0;
+                    done = 1;
+                    *(s32*)((s32)battleWork + 0x1C9C) = 1003;
                 }
-                return 0;
+            } else {
+                *(s32*)((s32)battleWork + 0x1CE8) = 1;
+                *(s32*)((s32)battleWork + 0x1C9C) = 1001;
+                extra->timer = 1;
+                extra->index = 1;
+                *(s32*)((s32)battleWork + 0x1CEC) = 0;
             }
-        } else if (state == 1001) {
+        }
+        goto state_done;
+
+state_1001:
+        {
             if (*(s16*)((s32)battleWork + 0x1D18) > 0) {
                 *(s16*)((s32)battleWork + 0x1D18) = *(s16*)((s32)battleWork + 0x1D18) - 1;
                 *(s32*)((s32)battleWork + 0x1CB8) = 2;
@@ -161,7 +192,11 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
                     *(s32*)((s32)battleWork + 0x1C9C) = 1003;
                 }
             }
-        } else if (state == 1003) {
+        }
+        goto state_done;
+
+state_1003:
+        {
             index = extra->index;
             if (index - 2 >= 0) {
                 index--;
@@ -172,21 +207,34 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
                 }
             }
             *(s32*)((s32)battleWork + 0x1C9C) = 1004;
-        } else if (state == 1005) {
+        }
+        goto state_done;
+
+state_1005:
+        {
             extra->wait = 0x3C;
             *(s32*)((s32)battleWork + 0x1C9C) = 1006;
-        } else if (state == 1006) {
+        }
+        goto state_done;
+
+state_1006:
+        {
             extra->wait = extra->wait - 1;
             if (extra->wait < 1) {
                 *(s32*)((s32)battleWork + 0x1C9C) = 1007;
             }
-        } else if (state == 1007) {
+        }
+        goto state_done;
+
+state_1007:
+        {
             *(void**)((s32)battleWork + 0x1CA0) = 0;
             *(void**)((s32)battleWork + 0x1CA4) = 0;
             *(void**)((s32)battleWork + 0x1CAC) = 0;
             *(void**)((s32)battleWork + 0x1CA8) = 0;
         }
 
+state_done:
         if (!done) {
             return 1;
         }
@@ -198,53 +246,88 @@ s32 battleAcResult_StickKeepLeft(void* obj) {
 }
 
 void battleAcDisp_StickKeepLeft(s32 param_1, void* battleWork) {
+    typedef struct AcDisp {
+        char pad_00[0x14];
+        f32 x;
+        f32 y;
+        char pad_1C[4];
+        s32 timer;
+        s32 icon;
+    } AcDisp;
+    typedef struct AcData {
+        s32 unk0;
+        s32 count;
+    } AcData;
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
 
-    void* data;
-    void* disp;
-    s32 state;
+    AcData* data = (AcData*)((s32)battleWork + 0x1F4C);
+    register AcDisp* disp = (AcDisp*)((s32)battleWork + 0x1F20);
+    s32 state = *(s32*)((s32)battleWork + 0x1C9C);
     s32 timer;
 
-    data = (void*)((s32)battleWork + 0x1F4C);
-    disp = (void*)((s32)battleWork + 0x1F20);
-    state = *(s32*)((s32)battleWork + 0x1C9C);
+    if (state == 1001) {
+        goto selected;
+    }
+    if (state >= 1001) {
+        if (state >= 1007) {
+            return;
+        }
+        if (state >= 1005) {
+            goto closing;
+        }
+        goto static_disp;
+    }
+    if (state >= 101) {
+        if (state >= 1000) {
+            goto opening;
+        }
+        return;
+    }
+    if (state < 99) {
+        return;
+    }
 
-    if (state >= 99 && state < 1001) {
-        *(s32*)((s32)disp + 0x24) = -1;
-        *(f32*)((s32)disp + 0x14) = intplGetValue(4, 20 - *(s32*)((s32)disp + 0x20), 20, -300.0f, 30.0f);
-        actionCommandDisp(*(s32*)((s32)disp + 0x24), *(f32*)((s32)disp + 0x14), *(f32*)((s32)disp + 0x18));
-        if (*(s32*)((s32)battleWork + 0x1CD4) == 0) {
-            timer = *(s32*)((s32)disp + 0x20);
-            if (timer > 0) {
-                *(s32*)((s32)disp + 0x20) = timer - 1;
-            }
+opening:
+    disp->icon = -1;
+    disp->x = intplGetValue(4, 20 - disp->timer, 20, -300.0f, 30.0f);
+    actionCommandDisp(disp->icon, disp->x, disp->y);
+    if (*(s32*)((s32)battleWork + 0x1CD4) == 0) {
+        timer = disp->timer;
+        if (timer > 0) {
+            disp->timer = timer - 1;
         }
-    } else if (state == 1001) {
-        *(s32*)((s32)disp + 0x24) = *(s32*)((s32)data + 4) - 1;
-        *(f32*)((s32)disp + 0x14) = intplGetValue(4, 20 - *(s32*)((s32)disp + 0x20), 20, -300.0f, 30.0f);
-        actionCommandDisp(*(s32*)((s32)disp + 0x24), *(f32*)((s32)disp + 0x14), *(f32*)((s32)disp + 0x18));
-        if (*(s32*)((s32)battleWork + 0x1CD4) == 0) {
-            timer = *(s32*)((s32)disp + 0x20);
-            if (timer > 0) {
-                *(s32*)((s32)disp + 0x20) = timer - 1;
-            }
+    }
+    return;
+
+selected:
+    disp->icon = data->count - 1;
+    disp->x = intplGetValue(4, 20 - disp->timer, 20, -300.0f, 30.0f);
+    actionCommandDisp(disp->icon, disp->x, disp->y);
+    if (*(s32*)((s32)battleWork + 0x1CD4) == 0) {
+        timer = disp->timer;
+        if (timer > 0) {
+            disp->timer = timer - 1;
         }
-    } else if (state >= 1005 && state < 1007) {
-        timer = *(s32*)((s32)disp + 0x20);
-        if (timer >= 40) {
-            *(f32*)((s32)disp + 0x14) = intplGetValue(4, timer - 40, 20, 30.0f, -300.0f);
-        } else {
-            *(f32*)((s32)disp + 0x14) = 30.0f;
+    }
+    return;
+
+static_disp:
+    actionCommandDisp(disp->icon, 30.0f, 0.0f);
+    return;
+
+closing:
+    timer = disp->timer;
+    if (timer >= 40) {
+        disp->x = intplGetValue(4, timer - 40, 20, 30.0f, -300.0f);
+    } else {
+        disp->x = 30.0f;
+    }
+    actionCommandDisp(disp->icon, disp->x, disp->y);
+    if (*(s32*)((s32)battleWork + 0x1CD4) == 0) {
+        timer = disp->timer;
+        if (timer < 60) {
+            disp->timer = timer + 1;
         }
-        actionCommandDisp(*(s32*)((s32)disp + 0x24), *(f32*)((s32)disp + 0x14), *(f32*)((s32)disp + 0x18));
-        if (*(s32*)((s32)battleWork + 0x1CD4) == 0) {
-            timer = *(s32*)((s32)disp + 0x20);
-            if (timer < 60) {
-                *(s32*)((s32)disp + 0x20) = timer + 1;
-            }
-        }
-    } else if (state >= 1002 && state < 1005) {
-        actionCommandDisp(*(s32*)((s32)disp + 0x24), 30.0f, 0.0f);
     }
 }
 

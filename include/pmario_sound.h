@@ -70,7 +70,7 @@ s32 psndSFXOn_(s32 lookup);
 s32 psndSFXOn(s32 lookup);
 s32 psndSFXOnVol(s32 lookup, u8 volume);
 u32 psndSFXOn_3D(s32 lookup, Vec* position);
-s32 psndSFXOnEx_3D(s32 lookup, u8 volume, u8 pan, u16 pitch, Vec* position, u16 distance);
+s32 psndSFXOnEx_3D(s32 lookup, Vec* position, u8 volume, u8 pan, u16 pitch, u16 distance);
 void psndSFX_vol(u32 index, u8 volume);
 void psndSFX_pit(u32 index, u32 pitch);
 void psndSFX_pos(u32 index, Vec* pos);

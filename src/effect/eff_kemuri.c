@@ -40,15 +40,19 @@ void* effKemuriEntry(s32 kind, f32 x, f32 y, f32 z) {
     void* child;
     s32 count;
     s32 i;
+    f32 one;
+    f32 zero;
 
     entry = effEntry();
     count = 1;
-    if (kind == 0) {
-        count = 3;
-    } else if (kind == 1) {
-        count = 2;
-    } else if (kind == 2) {
-        count = 2;
+    switch (kind) {
+        case 0:
+            count = 3;
+            break;
+        case 1:
+        case 2:
+            count = 2;
+            break;
     }
 
     *(char**)((s32)entry + 0x14) = str_Kemuri_802f3728;
@@ -57,43 +61,49 @@ void* effKemuriEntry(s32 kind, f32 x, f32 y, f32 z) {
     *(void**)((s32)entry + 0xC) = work;
     *(void**)((s32)entry + 0x10) = effKemuriMain;
 
+    one = float_1_80422998;
+    zero = float_0_804229a4;
     *(s32*)((s32)work + 0x0) = kind;
     *(f32*)((s32)work + 0x4) = x;
     *(f32*)((s32)work + 0x8) = y;
     *(f32*)((s32)work + 0xC) = z;
     *(s32*)((s32)work + 0x40) = 0;
-    *(f32*)((s32)work + 0x44) = float_1_80422998;
-    *(f32*)((s32)work + 0x48) = float_1_80422998;
-    *(f32*)((s32)work + 0x74) = float_1_80422998;
+    *(f32*)((s32)work + 0x44) = one;
+    *(f32*)((s32)work + 0x48) = one;
+    *(f32*)((s32)work + 0x74) = one;
 
     child = (void*)((s32)work + 0x8C);
     i = 1;
     while (i < *(s32*)((s32)entry + 0x8)) {
-        *(f32*)((s32)child + 0x4) = float_0_804229a4;
-        *(f32*)((s32)child + 0x8) = float_0_804229a4;
-        *(f32*)((s32)child + 0xC) = float_0_804229a4;
-        *(f32*)((s32)child + 0x44) = float_1_80422998;
-        *(f32*)((s32)child + 0x48) = float_1_80422998;
-        *(f32*)((s32)child + 0x74) = float_1_80422998;
-        *(f32*)((s32)child + 0x58) = float_0_804229a4;
-        *(f32*)((s32)child + 0x5C) = float_0_804229a4;
+        *(f32*)((s32)child + 0x4) = zero;
+        *(f32*)((s32)child + 0x8) = zero;
+        *(f32*)((s32)child + 0xC) = zero;
+        *(f32*)((s32)child + 0x44) = one;
+        *(f32*)((s32)child + 0x48) = one;
+        *(f32*)((s32)child + 0x74) = one;
+        *(f32*)((s32)child + 0x58) = zero;
+        *(f32*)((s32)child + 0x5C) = zero;
         *(s32*)((s32)child + 0x40) = 0;
         *(s32*)((s32)child + 0x80) = 0;
         *(s32*)((s32)child + 0x84) = 0;
 
-        if (kind == 0) {
-            if ((i & 1) != 0) {
-                *(f32*)((s32)child + 0x4C) = float_3_80422a0c;
-            } else {
-                *(f32*)((s32)child + 0x4C) = float_neg3_80422a10;
-            }
-            *(s32*)((s32)child + 0x88) = 0x20;
-        } else if (kind == 1) {
-            *(f32*)((s32)child + 0x4C) = float_0_804229a4;
-            *(s32*)((s32)child + 0x88) = 0x20;
-        } else if (kind == 2) {
-            *(f32*)((s32)child + 0x4C) = float_0_804229a4;
-            *(s32*)((s32)child + 0x88) = 0x40;
+        switch (kind) {
+            case 0:
+                if ((i & 1) != 0) {
+                    *(f32*)((s32)child + 0x4C) = float_3_80422a0c;
+                } else {
+                    *(f32*)((s32)child + 0x4C) = float_neg3_80422a10;
+                }
+                *(s32*)((s32)child + 0x88) = 0x20;
+                break;
+            case 1:
+                *(f32*)((s32)child + 0x4C) = zero;
+                *(s32*)((s32)child + 0x88) = 0x20;
+                break;
+            case 2:
+                *(f32*)((s32)child + 0x4C) = zero;
+                *(s32*)((s32)child + 0x88) = 0x40;
+                break;
         }
 
         i++;
@@ -160,7 +170,7 @@ u8 effKemuri2Entry(f32 x, f32 y, f32 z, f32 vx, f32 vz) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-u8 effKemuriMain(void* effEntry) {
+void effKemuriMain(void* effEntry) {
     typedef struct Vec {
         f32 x;
         f32 y;
@@ -181,65 +191,73 @@ u8 effKemuriMain(void* effEntry) {
 
     void* work;
     void* cur;
+    Vec pos;
     Vec dispPos;
     s32 type;
-    s32 frame;
-    s32 duration;
     s32 i;
 
     work = *(void**)((s32)effEntry + 0xC);
-    dispPos = vec3_802f36f8;
-    dispPos.x = *(f32*)((s32)work + 4);
-    dispPos.y = *(f32*)((s32)work + 8);
-    dispPos.z = *(f32*)((s32)work + 0xC);
+    pos = vec3_802f36f8;
+    pos.x = *(f32*)((s32)work + 4);
+    pos.y = *(f32*)((s32)work + 8);
+    pos.z = *(f32*)((s32)work + 0xC);
+    dispPos = pos;
 
     type = *(s32*)work;
     cur = (void*)((s32)work + 0x8C);
     i = 1;
     while (i < *(s32*)((s32)effEntry + 8)) {
-        frame = *(s32*)((s32)cur + 0x40);
-        duration = *(s32*)((s32)cur + 0x88);
-
-        *(s32*)((s32)cur + 0x80) = (s32)((float_16_804229dc * (f32)frame) / (f32)duration);
-        *(s32*)((s32)cur + 0x84) = (s32)((float_16_804229dc * (f32)(frame + 1)) / (f32)duration);
+        *(s32*)((s32)cur + 0x80) =
+            (s32)((float_16_804229dc * (f32)*(s32*)((s32)cur + 0x40)) /
+                  (f32)*(s32*)((s32)cur + 0x88));
+        *(s32*)((s32)cur + 0x84) =
+            (s32)((float_16_804229dc * (f32)(*(s32*)((s32)cur + 0x40) + 1)) /
+                  (f32)*(s32*)((s32)cur + 0x88));
         if (*(s32*)((s32)cur + 0x84) > 0xF) {
             *(s32*)((s32)cur + 0x84) = 0xF;
         }
 
-        if (type == 1) {
-            *(s32*)((s32)cur + 0x40) = frame + 1;
-        } else if (type == 0) {
-            if (frame < 0x1E) {
-                *(f32*)((s32)cur + 0x44) = (f32)touchdown_scale[frame * 2] * float_0p0078125_804229e0;
-                *(f32*)((s32)cur + 0x48) = (f32)touchdown_scale[frame * 2 + 1] * float_0p0078125_804229e0;
-            } else {
-                *(f32*)((s32)cur + 0x44) = float_1p5_804229e4;
-                *(f32*)((s32)cur + 0x48) = float_0p8_804229d8;
-            }
-            *(f32*)((s32)cur + 0x4C) *= float_0p85_804229e8;
-            *(f32*)((s32)cur + 0x58) += *(f32*)((s32)cur + 0x4C);
-            *(s32*)((s32)cur + 0x40) = frame + 1;
-        } else if (type < 3) {
-            if (frame < 0x1E) {
-                *(f32*)((s32)cur + 0x44) = (f32)heavy_scale[frame * 2] * float_0p0078125_804229e0;
-                *(f32*)((s32)cur + 0x48) = (f32)heavy_scale[frame * 2 + 1] * float_0p0078125_804229e0;
-            } else {
-                *(f32*)((s32)cur + 0x44) = float_2_804229ec;
-                *(f32*)((s32)cur + 0x48) = float_1p2_804229f0;
-            }
-            *(s32*)((s32)cur + 0x40) = frame + 1;
+        switch (type) {
+            case 0:
+                if (*(s32*)((s32)cur + 0x40) < 0x1E) {
+                    *(f32*)((s32)cur + 0x44) =
+                        (f32)touchdown_scale[*(s32*)((s32)cur + 0x40) * 2] * float_0p0078125_804229e0;
+                    *(f32*)((s32)cur + 0x48) =
+                        (f32)touchdown_scale[*(s32*)((s32)cur + 0x40) * 2 + 1] * float_0p0078125_804229e0;
+                } else {
+                    *(f32*)((s32)cur + 0x44) = float_1p5_804229e4;
+                    *(f32*)((s32)cur + 0x48) = float_0p8_804229d8;
+                }
+                *(f32*)((s32)cur + 0x4C) *= float_0p85_804229e8;
+                *(f32*)((s32)cur + 0x58) += *(f32*)((s32)cur + 0x4C);
+                *(s32*)((s32)cur + 0x40) += 1;
+                break;
+            case 1:
+                *(s32*)((s32)cur + 0x40) += 1;
+                break;
+            case 2:
+                if (*(s32*)((s32)cur + 0x40) < 0x1E) {
+                    *(f32*)((s32)cur + 0x44) =
+                        (f32)heavy_scale[*(s32*)((s32)cur + 0x40) * 2] * float_0p0078125_804229e0;
+                    *(f32*)((s32)cur + 0x48) =
+                        (f32)heavy_scale[*(s32*)((s32)cur + 0x40) * 2 + 1] * float_0p0078125_804229e0;
+                } else {
+                    *(f32*)((s32)cur + 0x44) = float_2_804229ec;
+                    *(f32*)((s32)cur + 0x48) = float_1p2_804229f0;
+                }
+                *(s32*)((s32)cur + 0x40) += 1;
+                break;
         }
 
-        if (*(s32*)((s32)cur + 0x88) <= *(s32*)((s32)cur + 0x40)) {
+        if (*(s32*)((s32)cur + 0x40) >= *(s32*)((s32)cur + 0x88)) {
             effDelete(effEntry);
-            return 0;
+            return;
         }
         i++;
         cur = (void*)((s32)cur + 0x8C);
     }
 
     dispEntry(4, 2, effKemuriDisp, effEntry, dispCalcZ(&dispPos));
-    return 0;
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on

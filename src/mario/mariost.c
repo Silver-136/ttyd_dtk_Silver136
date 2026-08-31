@@ -576,65 +576,81 @@ void gcDvdCheckThread(void) {
 }
 
 u8 gcRumbleCheck(void) {
+    extern s64 OSGetTime(void);
     extern u32 padGetRumbleStatus(s32);
     s32 local_flags[4];
     static s32 off_trg[4] = { 0 };
     static s64 off_time[4] = { 0 };
     s64 now;
+    s32* flag;
+    s32* trg;
+    s64* time;
     s32 i;
+    s32 timeOffset;
 
-    local_flags[0] = 0;
-    local_flags[1] = 0;
-    local_flags[2] = 0;
-    local_flags[3] = 0;
+    local_flags[0] = ((const u32*)vec3_802c2a70)[0];
+    local_flags[1] = ((const u32*)vec3_802c2a70)[1];
+    local_flags[2] = ((const u32*)vec3_802c2a70)[2];
+    local_flags[3] = ((const u32*)vec3_802c2a70)[3];
     now = OSGetTime();
-    for (i = 0; i < 4; i++) {
+    flag = local_flags;
+    i = 0;
+    timeOffset = 0;
+    trg = off_trg;
+    time = off_time;
+    do {
         if (*(u8*)((s32)gp + 0x12E8 + i) == 0) {
             if ((padGetRumbleStatus(i) & 0xFF) == 1) {
                 if (*(u8*)((s32)gp + 0x12C0 + i) == 0) {
                     *(u8*)((s32)gp + 0x12C0 + i) = 1;
-                    *(s64*)((s32)gp + 0x12C8 + i * 8) = now;
+                    *(s64*)((s32)gp + 0x12C8 + timeOffset) = now;
                 }
-                if (((now - *(s64*)((s32)gp + 0x12C8 + i * 8)) /
-                     (*(u32*)0x800000F8 / 4000) > 30000) &&
+                if (((now - *(s64*)((s32)gp + 0x12C8 + timeOffset)) /
+                     (u32)(((u64)(*(u32*)0x800000F8 >> 2) * 0x10624DD3U) >> 38) > 30000) &&
                     *(u8*)((s32)gp + 0x12EC + i) == 0) {
                     *(u8*)((s32)gp + 0x12EC + i) = 1;
                     *(u8*)((s32)gp + 0x12E8 + i) = 1;
-                    *(s64*)((s32)gp + 0x12F0 + i * 8) = now;
+                    *(s64*)((s32)gp + 0x12F0 + timeOffset) = now;
                 }
-                off_trg[i] = 0;
+                *trg = 0;
             } else if (*(u8*)((s32)gp + 0x12C0 + i) != 0) {
-                if (off_trg[i] == 0) {
-                    off_time[i] = now;
-                    off_trg[i] = 1;
+                if (*trg == 0) {
+                    *time = now;
+                    *trg = 1;
                 }
-                if (off_trg[i] != 0 &&
-                    (now - off_time[i]) / (*(u32*)0x800000F8 / 4000) > 100) {
-                    off_trg[i] = 0;
+                if (*trg != 0 &&
+                    (now - *time) /
+                        (u32)(((u64)(*(u32*)0x800000F8 >> 2) * 0x10624DD3U) >> 38) > 100) {
+                    *trg = 0;
                     *(u8*)((s32)gp + 0x12C0 + i) = 0;
                 }
             }
         } else {
-            if ((now - *(s64*)((s32)gp + 0x12F0 + i * 8)) /
-                (*(u32*)0x800000F8 / 4000) > 30000) {
+            if ((now - *(s64*)((s32)gp + 0x12F0 + timeOffset)) /
+                (u32)(((u64)(*(u32*)0x800000F8 >> 2) * 0x10624DD3U) >> 38) > 30000) {
                 *(u8*)((s32)gp + 0x12EC + i) = 0;
                 *(u8*)((s32)gp + 0x12E8 + i) = 0;
                 *(u8*)((s32)gp + 0x12C0 + i) = 0;
             }
-            local_flags[i] = 1;
+            *flag = 1;
         }
         if (*(s32*)((s32)gp + 0x10) != 0) {
-            local_flags[i] = 1;
+            *flag = 1;
         }
         if (*(s32*)((s32)gp + 0x18) != 0) {
-            local_flags[i] = 1;
+            *flag = 1;
         }
-        if (local_flags[i] == 0) {
+        if (*flag == 0) {
             *(u8*)((s32)gp + 0x1310 + i) = 0;
         } else {
             *(u8*)((s32)gp + 0x1310 + i) = 1;
         }
-    }
+        i++;
+        trg++;
+        time++;
+        flag++;
+        timeOffset += 8;
+    } while (i < 4);
     return 0;
 }
 

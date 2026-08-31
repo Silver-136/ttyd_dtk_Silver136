@@ -186,7 +186,7 @@ void mot_jumpSw(void) {
     f32 dist;
     f32 sx;
     f32 sz;
-    f32 dir;
+    f64 value;
 
     if ((*(u32*)((s32)mario + 0xC) & 1) != 0) {
         *(u32*)((s32)mario + 0xC) &= ~1;
@@ -206,7 +206,7 @@ void mot_jumpSw(void) {
         *(u32*)((s32)work + 0x124) = *(u32*)((s32)work + 0x94);
         *(f32*)((s32)work + 0x190) = *(f32*)((s32)work + 0x180);
 
-        if ((*(u32*)((s32)mario + 0x0) & 0x10000000) == 0 && *(s8*)((s32)mario + 0x3C) == 0) {
+        if ((*(u32*)((s32)mario + 0x0) & 0x2000) == 0 && *(s8*)((s32)mario + 0x3C) == 0) {
             marioChgPose(&str_M_J_1B_802c40c8);
         }
         if (*(void**)((s32)mario + 0x1EC) != 0) {
@@ -225,27 +225,29 @@ void mot_jumpSw(void) {
                               &dist, &hitPos) != 0 &&
                 dist >= float_0_80420cc8 &&
                 dist <= (*(f32*)((s32)mario + 0x1B8) * float_0p5_80420cf0 + float_30_80420cf8)) {
-                dir = revise360(float_180_80420cfc + *(f32*)((s32)mario + 0x1A4));
-                *(f32*)((s32)mario + 0x1A4) = dir;
-                *(f32*)((s32)mario + 0x1A0) = dir;
+                value = revise360(float_180_80420cfc + *(f32*)((s32)mario + 0x1A4));
+                *(f32*)((s32)mario + 0x1A4) = (f32)value;
+                *(f32*)((s32)mario + 0x1A0) = (f32)value;
             }
             sincosf(*(f32*)((s32)mario + 0x1A4), &sx, &sz);
             sx *= float_30_80420cf8;
             *(s32*)((s32)mario + 0x48) = 0x14;
-            dist = (f32)distABf(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x94),
-                                sx + *(f32*)((s32)work + 0x38),
-                                sz * float_30_80420cf8 + *(f32*)((s32)work + 0x40));
-            *(f32*)((s32)mario + 0x180) = dist / (f32)*(s32*)((s32)mario + 0x48);
+            value = distABf(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x94),
+                            sx + *(f32*)((s32)work + 0x38),
+                            sz * float_30_80420cf8 + *(f32*)((s32)work + 0x40));
+            *(f32*)((s32)mario + 0x180) =
+                (f32)(value / (f64)(f32)*(s32*)((s32)mario + 0x48));
         } else {
-            dir = revise360(float_180_80420cfc + *(f32*)((s32)mario + 0x1A4));
-            sincosf(dir, &sx, &sz);
-            *(f32*)((s32)mario + 0x1A4) = dir;
-            *(f32*)((s32)mario + 0x1A0) = dir;
+            value = revise360(float_180_80420cfc + *(f32*)((s32)mario + 0x1A4));
+            sincosf((f32)value, &sx, &sz);
+            *(f32*)((s32)mario + 0x1A4) = (f32)value;
+            *(f32*)((s32)mario + 0x1A0) = (f32)value;
             *(s32*)((s32)mario + 0x48) = 0x14;
-            dist = (f32)distABf(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x94),
-                                sx * float_30_80420cf8 + *(f32*)((s32)mario + 0x8C),
-                                sz * float_30_80420cf8 + *(f32*)((s32)mario + 0x94));
-            *(f32*)((s32)mario + 0x180) = dist / (f32)*(s32*)((s32)mario + 0x48);
+            value = distABf(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x94),
+                            sx * float_30_80420cf8 + *(f32*)((s32)mario + 0x8C),
+                            sz * float_30_80420cf8 + *(f32*)((s32)mario + 0x94));
+            *(f32*)((s32)mario + 0x180) =
+                (f32)(value / (f64)(f32)*(s32*)((s32)mario + 0x48));
         }
 jump_setup_done:
         *(s32*)((s32)mario + 0x44) = 0;
@@ -261,7 +263,7 @@ jump_setup_done:
         *(s32*)((s32)mario + 0x48) -= 1;
         marioMakeJumpPara();
         if (*(f32*)((s32)mario + 0x7C) <= float_0_80420cc8) {
-            if ((*(u32*)((s32)mario + 0x0) & 0x10000000) == 0 && *(s8*)((s32)mario + 0x3C) == 0) {
+            if ((*(u32*)((s32)mario + 0x0) & 0x2000) == 0 && *(s8*)((s32)mario + 0x3C) == 0) {
                 marioChgPose(&str_M_J_1C_802c40b8);
             }
             marioSetPeakYpos();
@@ -277,7 +279,6 @@ jump_setup_done:
     }
     *(s16*)((s32)mario + 0x50) += 1;
 }
-
 
 void mot_jumpNpc(void) {
     extern f32 float_0_80420cc8;
@@ -608,7 +609,7 @@ void mot_fall(void) {
     extern void kpaChgPose(char*, char*);
     extern s32 marioBgmodeChk(void);
     extern s32 marioPriCheckJabara(void);
-    extern f32 marioGetCamFollowRate(void);
+    extern f64 marioGetCamFollowRate(void);
     extern void marioSetCamFollowRate(double);
     extern f32 float_0p1_80420ccc;
     extern f32 float_0p8_80420cd0;
@@ -671,10 +672,10 @@ void mot_fall(void) {
         }
     }
     if ((s32)*(f32*)((s32)mario + 0x16C) > 0x1AD) {
-        f32 rate = marioGetCamFollowRate();
-        rate += float_0p1_80420ccc;
-        if (rate >= float_0p8_80420cd0) {
-            rate = float_0p8_80420cd0;
+        f64 currentRate = marioGetCamFollowRate();
+        f64 rate = (f32)(currentRate + (f64)float_0p1_80420ccc);
+        if ((f64)float_0p8_80420cd0 <= (f64)(f32)(currentRate + (f64)float_0p1_80420ccc)) {
+            rate = (f64)float_0p8_80420cd0;
         }
         marioSetCamFollowRate(rate);
     }

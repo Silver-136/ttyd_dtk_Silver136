@@ -13,6 +13,14 @@ extern void* gp;
 extern const f32 float_0p01_80421040;
 extern const f32 float_0_80421044;
 extern const f32 float_100_80421048;
+typedef struct EvtCamVec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} EvtCamVec3;
+extern const EvtCamVec3 vec3_802c4438;
+extern const EvtCamVec3 vec3_802c4420;
+extern const EvtCamVec3 vec3_802c442c;
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_cam_ctrl_onoff) {
@@ -67,7 +75,10 @@ u8 evt_cam_shake(s32 pEvt, s32 param_2) {
     extern void PSMTX44Trans(void* mtx, f32 x, f32 y, f32 z);
     extern void padRumbleOn(s32 controller);
     extern void padRumbleOff(s32 controller);
-    extern double sqrt(double value);
+    extern f32 __float_nan;
+    extern const f64 double_0p5_802c4480;
+    extern const f64 double_3_802c4488;
+    extern const f64 double_0_802c4490;
     extern f32 float_13000_80421050;
     extern f32 float_50_80421054;
     extern f32 float_1_80421058;
@@ -78,7 +89,6 @@ u8 evt_cam_shake(s32 pEvt, s32 param_2) {
     f32 y = evtGetFloat((void*)pEvt, args[2]);
     s32 duration = evtGetValue((void*)pEvt, args[3]);
     u64 now = *(u64*)pEvt;
-    s32 ticks = (*(s32*)0x800000F8) / 4000;
     void* cam;
     f32 len;
     s32 onTime;
@@ -105,27 +115,66 @@ u8 evt_cam_shake(s32 pEvt, s32 param_2) {
     *(u16*)cam |= 8;
 
     elapsed = now - *(u64*)(pEvt + 0x7C);
-    if ((duration != 0) && ((u32)(elapsed / ticks) > (u32)duration)) {
+    if ((duration != 0) &&
+        ((elapsed /
+              (__mulhwu(0x10624DD3, *(volatile u32*)0x800000F8 >> 2) >> 6)) >
+         duration)) {
         cam = camGetPtr(camId);
         *(u16*)cam &= ~8;
         padRumbleOff(0);
         return 2;
     }
 
-    len = (f32)sqrt((double)((x * x) + (y * y)));
+    {
+        union {
+            f32 f;
+            u32 u;
+        } value;
+        f64 square;
+        f64 inv;
+        f64 half = double_0p5_802c4480;
+        f64 three = double_3_802c4488;
+        s32 exponent;
+        s32 type;
+
+        value.f = (x * x) + (y * y);
+        square = value.f;
+        if (square > (f64)float_0_80421044) {
+            inv = __frsqrte(square);
+            inv = half * inv * (three - square * inv * inv);
+            inv = half * inv * (three - square * inv * inv);
+            len = (f32)(square * half * inv * (three - square * inv * inv));
+        } else if (square < double_0_802c4490) {
+            len = __float_nan;
+        } else {
+            exponent = value.u & 0x7F800000;
+            if (exponent == 0x7F800000) {
+                type = (value.u & 0x007FFFFF) != 0 ? 1 : 2;
+            } else if (exponent == 0) {
+                type = (value.u & 0x007FFFFF) != 0 ? 5 : 3;
+            } else {
+                type = 4;
+            }
+            len = type == 1 ? __float_nan : value.f;
+        }
+    }
     onTime = (s32)(float_13000_80421050 * len);
     offTime = (s32)(float_50_80421054 * (float_1_80421058 - len));
     if ((onTime != 0) && (offTime != 0)) {
         elapsed = now - *(u64*)(pEvt + 0x88);
         if (*(s32*)(pEvt + 0x84) == 0) {
             padRumbleOn(0);
-            if ((u32)(elapsed / ticks) > onTime) {
+            if ((elapsed /
+                     (__mulhwu(0x10624DD3, *(volatile u32*)0x800000F8 >> 2) >> 6)) >
+                onTime) {
                 *(s32*)(pEvt + 0x84) = 1 - *(s32*)(pEvt + 0x84);
                 *(u64*)(pEvt + 0x88) = now;
             }
         } else {
             padRumbleOff(0);
-            if ((u32)(elapsed / ticks) > offTime) {
+            if ((elapsed /
+                     (__mulhwu(0x10624DD3, *(volatile u32*)0x800000F8 >> 2) >> 6)) >
+                offTime) {
                 *(s32*)(pEvt + 0x84) = 1 - *(s32*)(pEvt + 0x84);
                 *(u64*)(pEvt + 0x88) = now;
             }
@@ -471,6 +520,8 @@ u8 evt_cam3d_evt_set_rel_dir(s32 pEvt) {
     return 2;
 }
 
+#pragma use_lmw_stmw off
+
 s32 evt_cam3d_evt_off(void* pEvt) {
 
     s32* args = *(s32**)((s32)pEvt + 0x18);
@@ -487,11 +538,14 @@ s32 evt_cam3d_evt_off(void* pEvt) {
     *(u32*)((s32)cam + 0x70) = *(u32*)((s32)gp + 0x38);
     *(u32*)((s32)cam + 0x74) = *(u32*)((s32)gp + 0x3C);
     *(u32*)((s32)cam + 0x78) = 0;
-    *(u32*)((s32)cam + 0x7C) = time * ((*(u32*)0x800000F8) / 4000);
+    *(u32*)((s32)cam + 0x7C) =
+        time * (__mulhwu(0x10624DD3, *(volatile u32*)0x800000F8 >> 2) >> 6);
     *(u16*)((s32)cam + 0x04) = 1;
     *(u8*)((s32)cam + 0x80) = type;
     return 2;
 }
+
+#pragma use_lmw_stmw on
 
 USER_FUNC(evt_cam3d_road_shift_onoff) {
     s32 onoff = evtGetValue(event, event->args[0]);
@@ -521,8 +575,8 @@ s32 evt_cam3d_evt_set_xyz(void* pEvt) {
     s32 time = evtGetValue(pEvt, args[4]);
     s32 type = evtGetValue(pEvt, args[5]);
     void* cam = camGetPtr(4);
-    Vec3 old;
-    Vec3 next;
+    EvtCamVec3 old = vec3_802c4420;
+    EvtCamVec3 next = vec3_802c442c;
 
     old.x = *(f32*)((s32)cam + 0x88);
     old.y = *(f32*)((s32)cam + 0x8C);
@@ -543,26 +597,21 @@ s32 evt_cam3d_evt_set_xyz(void* pEvt) {
     *(u32*)((s32)cam + 0xD0) = *(u32*)((s32)gp + 0x38);
     *(u32*)((s32)cam + 0xD4) = *(u32*)((s32)gp + 0x3C);
     *(u32*)((s32)cam + 0xD8) = 0;
-    *(u32*)((s32)cam + 0xDC) = time * ((*(u32*)0x800000F8) / 4000);
+    *(u32*)((s32)cam + 0xDC) = time * (((*(u32*)0x800000F8 >> 2) / 1000));
     *(u16*)((s32)cam + 0x82) = 3;
     *(u8*)((s32)cam + 0xE0) = type;
 
     return 2;
 }
 
+#pragma use_lmw_stmw off
+
 s32 evt_cam3d_evt_xyz_off(void* pEvt) {
-    typedef struct Vec3 {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec3;
-
-
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 time = evtGetValue(pEvt, args[0]);
     s32 type = evtGetValue(pEvt, args[1]);
     void* cam = camGetPtr(4);
-    Vec3 old;
+    EvtCamVec3 old = vec3_802c4438;
 
     old.x = *(f32*)((s32)cam + 0x88);
     old.y = *(f32*)((s32)cam + 0x8C);
@@ -574,11 +623,13 @@ s32 evt_cam3d_evt_xyz_off(void* pEvt) {
     *(u32*)((s32)cam + 0xD0) = *(u32*)((s32)gp + 0x38);
     *(u32*)((s32)cam + 0xD4) = *(u32*)((s32)gp + 0x3C);
     *(u32*)((s32)cam + 0xD8) = 0;
-    *(u32*)((s32)cam + 0xDC) = time * ((*(u32*)0x800000F8) / 4000);
+    *(u32*)((s32)cam + 0xDC) = time * (((*(u32*)0x800000F8 >> 2) / 1000));
     *(u16*)((s32)cam + 0x82) = 1;
     *(u8*)((s32)cam + 0xE0) = type;
     return 2;
 }
+
+#pragma use_lmw_stmw on
 
 s32 evt_cam3d_get_shift(void* pEvt) {
     typedef struct Vec3 {
@@ -680,6 +731,8 @@ USER_FUNC(evt_cam_road_reset) {
     return 2;
 }
 
+#pragma use_lmw_stmw off
+
 s32 evt_cam_road_reset2(void* pEvt) {
     typedef struct Vec3 {
         f32 x;
@@ -721,9 +774,11 @@ s32 evt_cam_road_reset2(void* pEvt) {
     *(u32*)((s32)mario + 0x100) = *(u32*)&b.z;
 
     camRoadReset();
-    camShiftReset(cam);
+    ((void (*)(void))camShiftReset)();
     return 2;
 }
+
+#pragma use_lmw_stmw on
 
 USER_FUNC(evt_cam_shift_reset) {
     marioGetPtr();
@@ -802,6 +857,13 @@ s32 evt_cam_letter_box_camid(void* pEvt) {
     *(s32*)((s32)camGetPtr(8) + 0x1E8) = id;
     return 2;
 }
+
+const EvtCamVec3 vec3_802c4420 = { 0.0f, 0.0f, 0.0f };
+const EvtCamVec3 vec3_802c442c = { 0.0f, 0.0f, 0.0f };
+const EvtCamVec3 vec3_802c4438 = { 0.0f, 0.0f, 0.0f };
+const f64 double_0p5_802c4480 = 0.5;
+const f64 double_3_802c4488 = 3.0;
+const f64 double_0_802c4490 = 0.0;
 
 const f32 float_0p01_80421040 = 0.01f;
 const f32 float_0_80421044 = 0.0f;

@@ -86,6 +86,22 @@ typedef struct CurveResult {
     u32 flags;   // +0x28
 } CurveResult;
 
+const char vec3_802bf540[12] = {
+    0x00, 0x00, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+const char vec3_802bf54c[12] = {
+    0x42, 0xB4, 0x00, 0x00, 0x42, 0xDC, 0x00, 0x00, 0x41, 0x50, 0x00, 0x00,
+};
+const char vec3_802bf558[12] = {
+    0xC2, 0xDC, 0x00, 0x00, 0xC2, 0x8C, 0x00, 0x00, 0xC3, 0x3E, 0x00, 0x00,
+};
+const Vec3 vec3_802bf564 = {0.0f, -1.0f, 0.0f};
+const f64 double_1_802bf570 = 1.0;
+const f64 double_0p5_802bf578 = 0.5;
+const f64 double_3_802bf580 = 3.0;
+const f64 double_0_802bf588 = 0.0;
+const f64 double_to_int_802bf590 = 4503601774854144.0;
+
 extern s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e);
 extern s32 collisionCurve(s32 type, void* road, void* pos, void* result);
 extern f32 PSVECMag(void* vec);
@@ -361,6 +377,16 @@ void calcCurrentCamState(void* out) {
 #pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw on
+
+
 s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
     extern const Vec3 vec3_802bf564;
     extern const f32 float_0_8041f62c;
@@ -422,39 +448,39 @@ s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
     dir1 = dirPtr[1];
     dir2 = dirPtr[2];
 
-    tmp = ((scratch[13] = (v00)), (*(volatile f32*)&scratch[13])) - ((scratch[10] = (v10)), (*(volatile f32*)&scratch[10]));
+    tmp = ((scratch[207] = (v00)), (*(volatile f32*)&scratch[207])) - ((scratch[204] = (v10)), (*(volatile f32*)&scratch[204]));
     (*(volatile f32*)&scratch[0]) = (tmp);
     e01[0] = scratch[0];
 
-    tmp = ((scratch[14] = (v01)), (*(volatile f32*)&scratch[14])) - ((scratch[11] = (v11)), (*(volatile f32*)&scratch[11]));
+    tmp = ((scratch[208] = (v01)), (*(volatile f32*)&scratch[208])) - ((scratch[205] = (v11)), (*(volatile f32*)&scratch[205]));
     (*(volatile f32*)&scratch[1]) = (tmp);
     e01[1] = scratch[1];
 
-    tmp = ((scratch[15] = (v02)), (*(volatile f32*)&scratch[15])) - ((scratch[12] = (v12)), (*(volatile f32*)&scratch[12]));
+    tmp = ((scratch[209] = (v02)), (*(volatile f32*)&scratch[209])) - ((scratch[206] = (v12)), (*(volatile f32*)&scratch[206]));
     (*(volatile f32*)&scratch[2]) = (tmp);
     e01[2] = scratch[2];
 
-    tmp = ((scratch[16] = (v20)), (*(volatile f32*)&scratch[16])) - ((scratch[13] = (v00)), (*(volatile f32*)&scratch[13]));
+    tmp = ((scratch[213] = (v20)), (*(volatile f32*)&scratch[213])) - ((scratch[207] = (v00)), (*(volatile f32*)&scratch[207]));
     (*(volatile f32*)&scratch[3]) = (tmp);
     e20[0] = scratch[3];
 
-    tmp = ((scratch[17] = (v21)), (*(volatile f32*)&scratch[17])) - ((scratch[14] = (v01)), (*(volatile f32*)&scratch[14]));
+    tmp = ((scratch[214] = (v21)), (*(volatile f32*)&scratch[214])) - ((scratch[208] = (v01)), (*(volatile f32*)&scratch[208]));
     (*(volatile f32*)&scratch[4]) = (tmp);
     e20[1] = scratch[4];
 
-    tmp = ((scratch[18] = (v22)), (*(volatile f32*)&scratch[18])) - ((scratch[15] = (v02)), (*(volatile f32*)&scratch[15]));
+    tmp = ((scratch[215] = (v22)), (*(volatile f32*)&scratch[215])) - ((scratch[209] = (v02)), (*(volatile f32*)&scratch[209]));
     (*(volatile f32*)&scratch[5]) = (tmp);
     e20[2] = scratch[5];
 
-    tmp = ((scratch[10] = (v10)), (*(volatile f32*)&scratch[10])) - ((scratch[16] = (v20)), (*(volatile f32*)&scratch[16]));
+    tmp = ((scratch[204] = (v10)), (*(volatile f32*)&scratch[204])) - ((scratch[213] = (v20)), (*(volatile f32*)&scratch[213]));
     (*(volatile f32*)&scratch[6]) = (tmp);
     e12[0] = scratch[6];
 
-    tmp = ((scratch[11] = (v11)), (*(volatile f32*)&scratch[11])) - ((scratch[17] = (v21)), (*(volatile f32*)&scratch[17]));
+    tmp = ((scratch[205] = (v11)), (*(volatile f32*)&scratch[205])) - ((scratch[214] = (v21)), (*(volatile f32*)&scratch[214]));
     (*(volatile f32*)&scratch[7]) = (tmp);
     e12[1] = scratch[7];
 
-    tmp = ((scratch[12] = (v12)), (*(volatile f32*)&scratch[12])) - ((scratch[18] = (v22)), (*(volatile f32*)&scratch[18]));
+    tmp = ((scratch[206] = (v12)), (*(volatile f32*)&scratch[206])) - ((scratch[215] = (v22)), (*(volatile f32*)&scratch[215]));
     (*(volatile f32*)&scratch[8]) = (tmp);
     e12[2] = scratch[8];
 
@@ -479,15 +505,15 @@ s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
         return 0;
     }
 
-    tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[13] = (v00)), (*(volatile f32*)&scratch[13]));
+    tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[207] = (v00)), (*(volatile f32*)&scratch[207]));
     (*(volatile f32*)&scratch[23]) = (tmp);
     diff[0] = scratch[23];
 
-    tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[14] = (v01)), (*(volatile f32*)&scratch[14]));
+    tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[208] = (v01)), (*(volatile f32*)&scratch[208]));
     (*(volatile f32*)&scratch[24]) = (tmp);
     diff[1] = scratch[24];
 
-    tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[15] = (v02)), (*(volatile f32*)&scratch[15]));
+    tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[209] = (v02)), (*(volatile f32*)&scratch[209]));
     (*(volatile f32*)&scratch[25]) = (tmp);
     diff[2] = scratch[25];
 
@@ -497,9 +523,9 @@ s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
     (*(volatile f32*)&scratch[26]) = (dist);
     distBits = scratch[26];
 
-    denom = ((*(volatile f32*)&normal[2]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))) +
-            ((*(volatile f32*)&normal[0]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))) +
-            ((*(volatile f32*)&normal[1]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])));
+    denom = ((*(volatile f32*)&normal[2]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))) +
+            ((*(volatile f32*)&normal[0]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))) +
+            ((*(volatile f32*)&normal[1]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])));
     (*(volatile f32*)&scratch[27]) = (denom);
     denomBits = scratch[27];
 
@@ -508,57 +534,57 @@ s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
             return 0;
         }
 
-        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[15] = (v02)), (*(volatile f32*)&scratch[15]));
+        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[209] = (v02)), (*(volatile f32*)&scratch[209]));
         (*(volatile f32*)&scratch[40]) = (tmp);
         tmpVec[2] = scratch[40];
-        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[13] = (v00)), (*(volatile f32*)&scratch[13]));
+        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[207] = (v00)), (*(volatile f32*)&scratch[207]));
         (*(volatile f32*)&scratch[38]) = (tmp);
         tmpVec[0] = scratch[38];
-        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[14] = (v01)), (*(volatile f32*)&scratch[14]));
+        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[208] = (v01)), (*(volatile f32*)&scratch[208]));
         (*(volatile f32*)&scratch[39]) = (tmp);
         tmpVec[1] = scratch[39];
 
-        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e20[0]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))) - ((*(volatile f32*)&e20[1]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))))) +
-               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e20[1]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34]))) - ((*(volatile f32*)&e20[2]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))))) +
-               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e20[2]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))) - ((*(volatile f32*)&e20[0]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])))));
+        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e20[0]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))) - ((*(volatile f32*)&e20[1]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))))) +
+               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e20[1]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223]))) - ((*(volatile f32*)&e20[2]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))))) +
+               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e20[2]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))) - ((*(volatile f32*)&e20[0]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])))));
         (*(volatile f32*)&scratch[28]) = (side);
         sideBits = scratch[28];
         if ((f64)(*(volatile f32*)&sideBits) < double_0_802bf588) {
             return 0;
         }
 
-        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[12] = (v12)), (*(volatile f32*)&scratch[12]));
+        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[206] = (v12)), (*(volatile f32*)&scratch[206]));
         (*(volatile f32*)&scratch[40]) = (tmp);
         tmpVec[2] = scratch[40];
-        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[10] = (v10)), (*(volatile f32*)&scratch[10]));
+        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[204] = (v10)), (*(volatile f32*)&scratch[204]));
         (*(volatile f32*)&scratch[38]) = (tmp);
         tmpVec[0] = scratch[38];
-        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[11] = (v11)), (*(volatile f32*)&scratch[11]));
+        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[205] = (v11)), (*(volatile f32*)&scratch[205]));
         (*(volatile f32*)&scratch[39]) = (tmp);
         tmpVec[1] = scratch[39];
 
-        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e01[0]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))) - ((*(volatile f32*)&e01[1]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))))) +
-               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e01[1]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34]))) - ((*(volatile f32*)&e01[2]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))))) +
-               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e01[2]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))) - ((*(volatile f32*)&e01[0]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])))));
+        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e01[0]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))) - ((*(volatile f32*)&e01[1]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))))) +
+               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e01[1]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223]))) - ((*(volatile f32*)&e01[2]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))))) +
+               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e01[2]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))) - ((*(volatile f32*)&e01[0]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])))));
         (*(volatile f32*)&scratch[28]) = (side);
         sideBits = scratch[28];
         if ((f64)(*(volatile f32*)&sideBits) < double_0_802bf588) {
             return 0;
         }
 
-        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[18] = (v22)), (*(volatile f32*)&scratch[18]));
+        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[215] = (v22)), (*(volatile f32*)&scratch[215]));
         (*(volatile f32*)&scratch[40]) = (tmp);
         tmpVec[2] = scratch[40];
-        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[16] = (v20)), (*(volatile f32*)&scratch[16]));
+        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[213] = (v20)), (*(volatile f32*)&scratch[213]));
         (*(volatile f32*)&scratch[38]) = (tmp);
         tmpVec[0] = scratch[38];
-        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[17] = (v21)), (*(volatile f32*)&scratch[17]));
+        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[214] = (v21)), (*(volatile f32*)&scratch[214]));
         (*(volatile f32*)&scratch[39]) = (tmp);
         tmpVec[1] = scratch[39];
 
-        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e12[0]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))) - ((*(volatile f32*)&e12[1]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))))) +
-               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e12[1]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34]))) - ((*(volatile f32*)&e12[2]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))))) +
-               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e12[2]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))) - ((*(volatile f32*)&e12[0]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])))));
+        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e12[0]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))) - ((*(volatile f32*)&e12[1]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))))) +
+               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e12[1]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223]))) - ((*(volatile f32*)&e12[2]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))))) +
+               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e12[2]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))) - ((*(volatile f32*)&e12[0]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])))));
         (*(volatile f32*)&scratch[28]) = (side);
         sideBits = scratch[28];
         if ((f64)(*(volatile f32*)&sideBits) < double_0_802bf588) {
@@ -569,57 +595,57 @@ s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
             return 0;
         }
 
-        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[15] = (v02)), (*(volatile f32*)&scratch[15]));
+        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[209] = (v02)), (*(volatile f32*)&scratch[209]));
         (*(volatile f32*)&scratch[40]) = (tmp);
         tmpVec[2] = scratch[40];
-        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[13] = (v00)), (*(volatile f32*)&scratch[13]));
+        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[207] = (v00)), (*(volatile f32*)&scratch[207]));
         (*(volatile f32*)&scratch[38]) = (tmp);
         tmpVec[0] = scratch[38];
-        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[14] = (v01)), (*(volatile f32*)&scratch[14]));
+        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[208] = (v01)), (*(volatile f32*)&scratch[208]));
         (*(volatile f32*)&scratch[39]) = (tmp);
         tmpVec[1] = scratch[39];
 
-        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e20[0]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))) - ((*(volatile f32*)&e20[1]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))))) +
-               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e20[1]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34]))) - ((*(volatile f32*)&e20[2]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))))) +
-               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e20[2]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))) - ((*(volatile f32*)&e20[0]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])))));
+        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e20[0]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))) - ((*(volatile f32*)&e20[1]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))))) +
+               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e20[1]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223]))) - ((*(volatile f32*)&e20[2]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))))) +
+               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e20[2]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))) - ((*(volatile f32*)&e20[0]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])))));
         (*(volatile f32*)&scratch[28]) = (side);
         sideBits = scratch[28];
         if (double_0_802bf588 < (f64)(*(volatile f32*)&sideBits)) {
             return 0;
         }
 
-        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[12] = (v12)), (*(volatile f32*)&scratch[12]));
+        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[206] = (v12)), (*(volatile f32*)&scratch[206]));
         (*(volatile f32*)&scratch[40]) = (tmp);
         tmpVec[2] = scratch[40];
-        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[10] = (v10)), (*(volatile f32*)&scratch[10]));
+        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[204] = (v10)), (*(volatile f32*)&scratch[204]));
         (*(volatile f32*)&scratch[38]) = (tmp);
         tmpVec[0] = scratch[38];
-        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[11] = (v11)), (*(volatile f32*)&scratch[11]));
+        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[205] = (v11)), (*(volatile f32*)&scratch[205]));
         (*(volatile f32*)&scratch[39]) = (tmp);
         tmpVec[1] = scratch[39];
 
-        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e01[0]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))) - ((*(volatile f32*)&e01[1]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))))) +
-               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e01[1]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34]))) - ((*(volatile f32*)&e01[2]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))))) +
-               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e01[2]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))) - ((*(volatile f32*)&e01[0]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])))));
+        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e01[0]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))) - ((*(volatile f32*)&e01[1]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))))) +
+               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e01[1]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223]))) - ((*(volatile f32*)&e01[2]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))))) +
+               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e01[2]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))) - ((*(volatile f32*)&e01[0]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])))));
         (*(volatile f32*)&scratch[28]) = (side);
         sideBits = scratch[28];
         if (double_0_802bf588 < (f64)(*(volatile f32*)&sideBits)) {
             return 0;
         }
 
-        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[18] = (v22)), (*(volatile f32*)&scratch[18]));
+        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[215] = (v22)), (*(volatile f32*)&scratch[215]));
         (*(volatile f32*)&scratch[40]) = (tmp);
         tmpVec[2] = scratch[40];
-        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[16] = (v20)), (*(volatile f32*)&scratch[16]));
+        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[213] = (v20)), (*(volatile f32*)&scratch[213]));
         (*(volatile f32*)&scratch[38]) = (tmp);
         tmpVec[0] = scratch[38];
-        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[17] = (v21)), (*(volatile f32*)&scratch[17]));
+        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[214] = (v21)), (*(volatile f32*)&scratch[214]));
         (*(volatile f32*)&scratch[39]) = (tmp);
         tmpVec[1] = scratch[39];
 
-        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e12[0]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))) - ((*(volatile f32*)&e12[1]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))))) +
-               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e12[1]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34]))) - ((*(volatile f32*)&e12[2]) * ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35]))))) +
-               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e12[2]) * ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33]))) - ((*(volatile f32*)&e12[0]) * ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])))));
+        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e12[0]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))) - ((*(volatile f32*)&e12[1]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))))) +
+               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e12[1]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223]))) - ((*(volatile f32*)&e12[2]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))))) +
+               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e12[2]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))) - ((*(volatile f32*)&e12[0]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])))));
         (*(volatile f32*)&scratch[28]) = (side);
         sideBits = scratch[28];
         if (double_0_802bf588 < (f64)(*(volatile f32*)&sideBits)) {
@@ -629,15 +655,15 @@ s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
 
     scale = -(*(volatile f32*)&distBits) / (*(volatile f32*)&denomBits);
 
-    tmp = ((scratch[33] = (dir0)), (*(volatile f32*)&scratch[33])) * scale;
+    tmp = ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222])) * scale;
     (*(volatile f32*)&scratch[50]) = (((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) + tmp);
     hit[0] = scratch[50];
 
-    tmp = ((scratch[34] = (dir1)), (*(volatile f32*)&scratch[34])) * scale;
+    tmp = ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])) * scale;
     (*(volatile f32*)&scratch[51]) = (((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) + tmp);
     hit[1] = scratch[51];
 
-    tmp = ((scratch[35] = (dir2)), (*(volatile f32*)&scratch[35])) * scale;
+    tmp = ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224])) * scale;
     (*(volatile f32*)&scratch[52]) = (((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) + tmp);
     hit[2] = scratch[52];
 
@@ -650,6 +676,14 @@ s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
     return oldY <= hitY;
 }
 
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset

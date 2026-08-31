@@ -872,11 +872,21 @@ void marioLandOn(void) {
     extern s32 kpaFireAttackCheck(void);
     extern void marioChgMot(s32 motion);
     extern void set_damage_root_ypos(f32 y);
+    extern void N_marioSlitSetAfterLand(void);
+    extern s32 marioChkSlitEnd(void);
+    extern void motSlitCancel(void);
+    extern void unk_JP_US_EU_06_800a6ac8(void);
+    extern void* mobjHitObjPtrToPtr(void* hitObj);
+    extern s32 strcmp(const char* lhs, const char* rhs);
+    extern void effKemuriEntry(double x, double y, double z, double unk, s32 type);
+    extern void yoshi_jumpStand(void);
+    extern f32 float_100_804209b8;
+    extern char str_MOBJ_RedSwitch_802c3e78[];
+    extern char str_MOBJ_BlueJumpStand_802c3e88[];
 
     void* player = marioGetPtr();
-    void* hit = *(void**)((s32)player + 0x1E8);
-    u32 attr = hitGetAttr(hit);
     Vec pos;
+    void* mobj;
     s32 sound;
     s32 motion;
 
@@ -901,7 +911,7 @@ void marioLandOn(void) {
         } \
     } while (0)
 
-    if ((attr & 0x200) == 0) {
+    if ((hitGetAttr(*(void**)((s32)player + 0x1E8)) & 0x200) == 0) {
         *(f32*)((s32)player + 0x7C) = float_0_804209a0;
         *(f32*)((s32)player + 0x80) = float_0_804209a0;
         *(f32*)((s32)player + 0x84) = float_0_804209a0;
@@ -918,7 +928,8 @@ void marioLandOn(void) {
     }
 
     pos = *(Vec*)((s32)player + 0x8C);
-    if (hit != 0) {
+    if (*(void**)((s32)player + 0x1E8) != 0) {
+        u32 attr = hitGetAttr(*(void**)((s32)player + 0x1E8));
         if ((attr & 0x100) != 0) {
             sound = 0x150;
         } else if ((attr & 0x200000) != 0) {
@@ -945,52 +956,109 @@ void marioLandOn(void) {
         *(f32*)((s32)player + 0x8C), *(f32*)((s32)player + 0x94),
         *(f32*)((s32)player + 0x11C), *(f32*)((s32)player + 0x124));
 
-    if ((attr & 0x200) != 0 && *(u16*)((s32)player + 0x2E) != 0x1F) {
+    if (*(u16*)((s32)player + 0x2E) != 0x1F &&
+        (hitGetAttr(*(void**)((s32)player + 0x1E8)) & 0x200) != 0) {
         set_damage_root_ypos(*(f32*)((s32)player + 0x90));
         CHANGE_MOTION(0x1F);
         return;
     }
-    if ((attr & 0x800) != 0 && *(u16*)((s32)player + 0x2E) != 0x20) {
+    if (*(u16*)((s32)player + 0x2E) != 0x20 &&
+        (hitGetAttr(*(void**)((s32)player + 0x1E8)) & 0x800) != 0) {
         set_damage_root_ypos(*(f32*)((s32)player + 0x90));
         CHANGE_MOTION(0x20);
         return;
     }
 
-    if ((attr & 1) != 0) {
-        CHANGE_MOTION(0x0B);
-        return;
-    }
-
-    if (*(s8*)((s32)player + 0x3C) == 2) {
-        if (kpaFireAttackCheck() == 0) {
-            motion = 1;
-        } else {
-            motion = 0;
-        }
-        CHANGE_MOTION(motion);
-        quake_kpaLandOn();
-        return;
-    }
-
-    if (*(f32*)((s32)player + 0x180) > float_0_804209a0 &&
-        (*(u32*)((s32)player + 0xC) & 0x100) == 0 &&
-        (*(u32*)player & 0x2000000) == 0) {
-        if (marioPriCheckJabara() == 0) {
+    if ((hitGetAttr(*(void**)((s32)player + 0x1E8)) & 0x80000000) == 0) {
+        if (*(f32*)((s32)player + 0x180) > float_0_804209a0 &&
+            (*(u32*)((s32)player + 0xC) & 0x100) == 0 &&
+            (*(u32*)player & 0x2000000) == 0) {
+            if (*(s8*)((s32)player + 0x3C) == 2) {
+                motion = kpaFireAttackCheck() == 0 ? 1 : 0;
+                CHANGE_MOTION(motion);
+                quake_kpaLandOn();
+                return;
+            }
+            if ((*(u32*)((s32)player + 4) & 0x00100000) != 0) {
+                N_marioSlitSetAfterLand();
+                return;
+            }
+            if (marioPriCheckJabara() == 0) {
+                CHANGE_MOTION(1);
+                return;
+            }
+            if ((*(u32*)((s32)player + 0x14) & 0x100) != 0) {
+                CHANGE_MOTION(0);
+                return;
+            }
             CHANGE_MOTION(1);
-        } else if ((*(u32*)((s32)player + 0x14) & 0x100) != 0) {
-            CHANGE_MOTION(0);
-        } else {
-            CHANGE_MOTION(1);
+            return;
         }
-    } else if ((*(u32*)player & 0x2000000) != 0) {
-        motion = *(f32*)((s32)player + 0x180) <= *(f32*)((s32)player + 0x184) ? 1 : 2;
-        CHANGE_MOTION(motion);
+
+        if ((*(u32*)player & 0x01000000) == 0) {
+            if (*(s8*)((s32)player + 0x3C) == 2) {
+                CHANGE_MOTION(0);
+                quake_kpaLandOn();
+            } else if (*(u16*)((s32)player + 0x2E) == 0x15) {
+                if ((*(u32*)player & 0x00100000) == 0) {
+                    if ((*(u32*)((s32)player + 4) & 0x00100000) != 0 &&
+                        marioChkSlitEnd() == 0) {
+                        motSlitCancel();
+                    }
+                } else {
+                    unk_JP_US_EU_06_800a6ac8();
+                }
+            } else if ((*(u32*)player & 0x02000000) == 0) {
+                CHANGE_MOTION(0);
+            } else {
+                motion = *(f32*)((s32)player + 0x180) <= *(f32*)((s32)player + 0x184) ? 1 : 2;
+                CHANGE_MOTION(motion);
+            }
+        } else {
+            *(s32*)((s32)player + 0x44) = 0x32;
+            *(u16*)((s32)player + 0x2E) = 0x0B;
+        }
     } else {
-        CHANGE_MOTION(0);
+        mobj = mobjHitObjPtrToPtr(*(void**)((s32)player + 0x1E8));
+        if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_RedSwitch_802c3e78) == 0) {
+            CHANGE_MOTION(5);
+        } else if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_BlueJumpStand_802c3e88) == 0) {
+            player = marioGetPtr();
+            camFollowYOn();
+            if (marioChkSts(0x10) != 0) {
+                *(f32*)((s32)player + 0x2D0) = float_100_804209b8;
+                effKemuriEntry(*(f32*)((s32)player + 0x8C),
+                               *(f32*)((s32)player + 0x90),
+                               *(f32*)((s32)player + 0x94),
+                               float_0_804209a0, 0);
+                CHANGE_MOTION(6);
+            } else if (*(u16*)((s32)player + 0x2E) == 0x1A) {
+                *(f32*)((s32)player + 0x2D0) = float_100_804209b8;
+                yoshi_jumpStand();
+            } else {
+                *(f32*)((s32)player + 0x2D0) = float_100_804209b8;
+                CHANGE_MOTION(6);
+            }
+        } else if (*(s8*)((s32)player + 0x3C) == 2) {
+            CHANGE_MOTION(0);
+            quake_kpaLandOn();
+        } else if (*(u16*)((s32)player + 0x2E) == 0x15) {
+            if ((*(u32*)player & 0x00100000) == 0) {
+                if ((*(u32*)((s32)player + 4) & 0x00100000) != 0 &&
+                    marioChkSlitEnd() == 0) {
+                    motSlitCancel();
+                }
+            } else {
+                unk_JP_US_EU_06_800a6ac8();
+            }
+        } else {
+            CHANGE_MOTION(0);
+        }
     }
 
 #undef CHANGE_MOTION
 }
+
 void mot_talk(void) {
     extern void peach_talk(void);
     extern void* marioGetTouchNpcPtr(void);

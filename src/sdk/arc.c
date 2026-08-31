@@ -65,8 +65,8 @@ u32 ARCConvertPathToEntrynum(int param_1, char* param_2) {
     } ARCEntry;
     extern u8 __lower_map[];
     ARCHandle* handle = (ARCHandle*)param_1;
-    ARCEntry* entries = (ARCEntry*)handle->FSTStart;
     u32 entryNum = handle->currDir;
+    ARCEntry* entries = (ARCEntry*)handle->FSTStart;
     u8* path = (u8*)param_2;
     u8 c;
 
@@ -185,6 +185,7 @@ u32 ARCConvertPathToEntrynum(int param_1, char* param_2) {
         }
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 

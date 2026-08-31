@@ -247,12 +247,9 @@ USER_FUNC(bakuGameBombEntry) {
     return 2;
 }
 
-/* stub-fill: bakuGameMain | missing_definition | ghidra_signature */
 s32 bakuGameMain(void* event, s32 isFirstCall) {
-    extern void* GetBakuGamePtr(void);
-    extern void* g_BattleWork;
+    extern BattleWork* _battleWorkPointer;
     extern s32 BattleTransID(void*, s32);
-    extern void* BattleGetUnitPtr(void*, s32);
     extern s32 BattleAudience_GetWaiting(s32);
     extern s32 irand(s32);
     extern u16 keyGetButtonTrg(s32 channel);
@@ -267,6 +264,7 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
     extern void evtSetFloat(void*, s32, f32);
     extern u8 weapon[];
     extern const u32 dat_802ff408[3];
+    extern const char str_btl_wn_sac_bakugame_802ff3a0[];
     extern f32 float_1p5_80427ba0;
     extern f32 float_neg0p3_80427ba4;
     extern f32 float_110_80427ba8;
@@ -274,23 +272,50 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
     extern s32 psndSFXChk(u32 id);
     extern void psndSFXOff(s32 id);
     extern s32 psndSFXOn(const char* name);
-    extern f64 intplGetValue(f64, f64, s32, s32, s32);
-    u32* work = GetBakuGamePtr();
-    s32* args = *(s32**)((u8*)event + 8);
+    extern f32 intplGetValue(f32 start, f32 end, s32 type, s32 current, s32 total);
+    u32* work;
+    const u32* rodata = (const u32*)str_btl_wn_sac_bakugame_802ff3a0;
+    void* evt = event;
+    s32* args;
     u32 buttonMasks[3];
-    void* mario;
-    void* party;
+    BattleWork* battle;
+    BattleWorkUnit* mario;
+    BattleWorkUnit* party;
+    typedef struct BakuVec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } BakuVec;
+    BakuVec vec20;
+    BakuVec vec2C;
+    BakuVec vec38;
+    BakuVec vec44;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 hx;
+    f32 hy;
+    f32 hz;
     s32 i;
 
-    mario = BattleGetUnitPtr(g_BattleWork, BattleTransID(event, -3));
-    party = BattleGetUnitPtr(g_BattleWork, BattleTransID(event, -4));
-    buttonMasks[0] = dat_802ff408[0];
-    buttonMasks[1] = dat_802ff408[1];
-    buttonMasks[2] = dat_802ff408[2];
+    work = (u32*)GetBakuGamePtr();
+    battle = _battleWorkPointer;
+    mario = BattleGetUnitPtr(battle, BattleTransID(evt, -3));
+    party = BattleGetUnitPtr(battle, BattleTransID(evt, -4));
+    buttonMasks[0] = rodata[0x68 / 4];
+    buttonMasks[1] = rodata[0x6C / 4];
+    buttonMasks[2] = rodata[0x70 / 4];
+    args = *(s32**)((u8*)evt + 0x18);
+    x = float_0_80427b70;
+    y = float_0_80427b70;
+    z = float_0_80427b70;
+    hx = float_0_80427b70;
+    hy = float_0_80427b70;
+    hz = float_0_80427b70;
     if (isFirstCall != 0) {
         s32 canThrow = 0;
         s32 ceilingSafe = 1;
-        void* unit;
+        BattleWorkUnit* unit;
         work[1] = 0;
         bakuGameDecideButton(1);
         for (i = 0; i < 3; i++) {
@@ -302,13 +327,13 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
         }
         memcpy(work + 0x3E, weapon, 0xC0);
         for (i = 0; i < 0x40; i++) {
-            unit = BattleGetUnitPtr(g_BattleWork, i);
-            if (unit != 0 && *(s8*)((u8*)unit + 0xC) == 1) {
-                if (*(s16*)((u8*)unit + 0xCC) >= 100) {
+            unit = BattleGetUnitPtr(battle, i);
+            if (unit != 0 && unit->alliance == 1) {
+                if ((f32)unit->width >= float_100_80427b78) {
                     ceilingSafe = 1;
                     break;
                 }
-                if ((*(u32*)((u8*)unit + 0x104) & 0x20000) == 0) {
+                if ((unit->attributes & 2) == 0) {
                     ceilingSafe = 0;
                 }
             }
@@ -402,8 +427,8 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
         case 30:
             animPoseRelease(work[0x3B]);
             work[0x3B] = -1;
-            evtSetValue(event, args[0], *(u8*)((u8*)work + 0xCC));
-            evtSetFloat(event, args[1], *(f32*)((u8*)work + 0xD0));
+            evtSetValue(evt, args[0], *(u8*)((u8*)work + 0xCC));
+            evtSetFloat(evt, args[1], *(f32*)((u8*)work + 0xD0));
             {
                 f32 value = *(f32*)((u8*)work + 0xD0);
                 s32 result = -1;
@@ -411,7 +436,7 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
                 if (value >= 33.0f && value < 66.0f) result = 3;
                 if (value >= 66.0f) result = 4;
                 if (result > 4) result = 4;
-                evtSetValue(event, args[2], result);
+                evtSetValue(evt, args[2], result);
             }
             return 2;
     }
@@ -424,16 +449,20 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
             *(s32*)slot = 15;
             *(f32*)(slot + 0x20) = float_1_80427b60;
         } else if (state == 12) {
-            *(f32*)(slot + 0x20) = (f32)intplGetValue(
+            *(f32*)(slot + 0x20) = intplGetValue(
                 float_0_80427b70, float_1_80427b60, 4,
                 *(s32*)(slot + 4), 30);
             if (++*(s32*)(slot + 4) > 30) {
                 *(s32*)slot = 15;
             }
-        } else if (state == 15 &&
-                   (*(u32*)(slot + 8) & keyGetButtonTrg(0)) != 0 &&
-                   work[0x3D] == 0) {
-            *(f32*)(slot + 0x10) -= float_100_80427b78;
+        } else if (state == 15) {
+            if ((*(u32*)(slot + 8) & keyGetButtonTrg(0)) != 0 &&
+                work[0x3D] == 0) {
+                *(f32*)(slot + 0x10) -= float_100_80427b78;
+            }
+        } else if (state == 20) {
+            *(BakuVec*)(slot + 0x14) =
+                *(const BakuVec*)((const u8*)rodata + 0x74);
         }
     }
     switch (work[0x70]) {
@@ -450,13 +479,19 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
             break;
         }
     case 2:
-        *(f32*)(work + 0x74) = (f32)intplGetValue(
+        *(f32*)(work + 0x74) = intplGetValue(
             *(f32*)(work + 0x77), *(f32*)(work + 0x7A), 0,
             work[0x71], work[0x72]);
-        i = work[0x71] % 12;
-        if (i < 4) work[0x80] = 0x5A;
-        else if (i < 8) work[0x80] = 0x5B;
-        else work[0x80] = 0x5C;
+        i = (s32)work[0x71] % 12;
+        if (i >= 0 && i <= 3) {
+            work[0x80] = 0x5A;
+        }
+        if (i >= 4 && i <= 7) {
+            work[0x80] = 0x5B;
+        }
+        if (i >= 8 && i <= 11) {
+            work[0x80] = 0x5C;
+        }
         work[0x71]++;
         if ((s32)work[0x71] > (s32)work[0x72]) {
             work[0x70] = 5;
@@ -472,44 +507,850 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
         work[0x80] = 0x54;
         break;
     }
+
+    {
+        extern void bakuGameMarioSurprise(void*, void*);
+        extern void bakuGameEnemySurprise(void);
+        extern void bakuGameAudienceSurprise(void);
+        extern void BtlUnit_GetHomePos(BattleWorkUnit*, f32*, f32*, f32*);
+        extern void BtlUnit_SetBodyAnim(BattleWorkUnit*, const char*);
+        extern void BtlUnit_SetBodyAnimType(BattleWorkUnit*, s32);
+        extern s32 BtlUnit_GetBodyPartsId(BattleWorkUnit*);
+        extern BattleWorkUnitPart* BtlUnit_GetPartsPtr(BattleWorkUnit*, s32);
+        extern s32 BattleAudience_GetExist(s32);
+        extern void BattleAudience_GetHomePosition(s32, f32*, f32*, f32*);
+        extern void BattleAudienceSoundBooing(void);
+        extern void BattleAudienceSoundCallKind(s32);
+        extern void BattleAudienceSoundWhistleKind(s32);
+        extern void BattleAudienceSoundBooingKind(s32);
+        extern void* effSandarsEntry(s32, f32, f32, f32, f32);
+        extern void psndSFX_pit(u32 id, s32 pitch);
+
+        extern f32 float_4096_80427bac;
+        extern f32 float_0p25_80427bb0;
+        extern f32 float_2_80427bb4;
+        extern f32 float_3_80427bb8;
+        extern f32 float_4_80427bbc;
+        extern f32 float_5_80427bc0;
+        extern f32 float_6_80427bc4;
+        extern f32 float_50_80427bd4;
+        extern f32 float_neg1000_80427bd8;
+        extern f32 float_neg800_80427bdc;
+        extern f32 float_80_80427be0;
+        extern f32 float_neg0p5_80427be4;
+        extern f32 float_70_80427be8;
+        extern f32 float_neg200_80427bec;
+        extern f32 float_20_80427b74;
+        extern f32 float_0p1_80427bf0;
+        extern f32 float_neg2_80427b8c;
+        extern f32 float_7_80427bf4;
+        extern f32 float_30_80427c08;
+        extern f32 float_neg100_80427c0c;
+        extern f32 float_26_80427c10;
+        extern f32 float_40_80427b6c;
+
+        extern const u32 vec3_802ff444[3];
+        extern const u32 vec3_802ff450[3];
+        extern const u32 vec3_802ff45c[3];
+        extern const u32 vec3_802ff480[3];
+        extern const u32 vec3_802ff48c[3];
+        extern const u32 vec3_802ff498[3];
+        extern const u32 vec3_802ff4a4[3];
+        extern const u32 vec3_802ff4b0[3];
+        extern const u32 vec3_802ff4bc[3];
+        extern const u32 vec3_802ff4c8[3];
+        extern const u32 vec3_802ff4d4[3];
+
+        extern const char str_SFX_BTL_SAC_TIME4_802ff63c[];
+        extern const char str_SFX_BTL_SAC_TIME2_802ff650[];
+        extern const char str_SFX_VOICE_MARIO_SURP_802ff664[];
+        extern const char str_SFX_BTL_SAC_TIME3_802ff680[];
+        extern const char str_SFX_BTL_SAC_TIME5_802ff6a0[];
+        extern const char str_S_1_80427bc8[];
+        extern const char str_S_2_80427bcc[];
+        extern const char str_S_3_80427bd0[];
+        extern const char str_M_W_1_80427bf8[];
+        extern const char str_M_U_2_80427c00[];
+        extern const char str_M_C_1_80427c14[];
+
+        BattleWorkUnit* unit;
+        f32 factor;
+        f32 ceilingGravity;
+        f32 div;
+        s32 state;
+
     if ((s32)work[0x1F] > 9 && (s32)work[0x1F] < 21 &&
-        (s32)work[0x3C] < 1) {
-        work[1] = 20;
-        if (*(u8*)((u8*)work + 0xCC) == 1) {
-            bakuGameEnemySurpriseReset();
-        } else if (*(u8*)((u8*)work + 0xCC) == 0) {
-            bakuGameMarioSurpriseReset(mario, party);
-        } else if (*(u8*)((u8*)work + 0xCC) < 3) {
-            bakuGameAudienceSurpriseReset();
-        }
-    }
-    if ((s32)work[0x1F] > 9 && (s32)work[0x1F] < 31) {
-        if ((keyGetButtonTrg(0) & 0x700) != 0) {
-            *(f32*)(work + 0x35) = float_1p5_80427ba0;
-        }
-        *(f32*)(work + 0x36) = float_neg0p3_80427ba4;
-        *(f32*)(work + 0x34) += *(f32*)(work + 0x35);
-        *(f32*)(work + 0x34) += *(f32*)(work + 0x36);
-        if (*(f32*)(work + 0x34) > float_110_80427ba8) {
-            *(f32*)(work + 0x34) = float_110_80427ba8;
-        }
-        if (*(f32*)(work + 0x34) < float_0_80427b70) {
-            *(f32*)(work + 0x34) = float_0_80427b70;
-            if (psndSFXChk(work[0x6E]) == 0) {
-                psndSFXOff(work[0x6E]);
+            (s32)work[0x3C] < 1) {
+            work[1] = 20;
+            if (*(u8*)((u8*)work + 0xCC) == 1) {
+                bakuGameEnemySurpriseReset();
+            } else if (*(u8*)((u8*)work + 0xCC) == 0) {
+                bakuGameMarioSurpriseReset(mario, party);
+            } else if (*(u8*)((u8*)work + 0xCC) < 3) {
+                bakuGameAudienceSurpriseReset();
             }
         }
-        if (*(f32*)(work + 0x34) > float_0_80427b70 &&
-            psndSFXChk(work[0x6E]) == -1) {
-            work[0x6E] = psndSFXOn(str_SFX_BTL_SAC_TIME1_802ff628);
+
+        if ((s32)work[0x1F] > 9 && (s32)work[0x1F] < 31) {
+            if ((keyGetButtonTrg(0) & 0x700) != 0) {
+                *(f32*)(work + 0x35) = float_1p5_80427ba0;
+            }
+
+            *(f32*)(work + 0x36) = float_neg0p3_80427ba4;
+            *(f32*)(work + 0x34) += *(f32*)(work + 0x35);
+            *(f32*)(work + 0x34) += *(f32*)(work + 0x36);
+
+            if (*(f32*)(work + 0x34) > float_110_80427ba8) {
+                *(f32*)(work + 0x34) = float_110_80427ba8;
+            }
+
+            if (*(f32*)(work + 0x34) < float_0_80427b70) {
+                *(f32*)(work + 0x34) = float_0_80427b70;
+                if (psndSFXChk(work[0x6E]) == 0) {
+                    psndSFXOff(work[0x6E]);
+                }
+            }
+
+            if (*(f32*)(work + 0x34) > float_0_80427b70 &&
+                psndSFXChk(work[0x6E]) == -1) {
+                work[0x6E] = psndSFXOn(((const char*)rodata + 0x288));
+            }
+
+            if (psndSFXChk(work[0x6E]) == 0) {
+                s32 pitch = (s32)((float_4096_80427bac *
+                                   *(f32*)(work + 0x34)) /
+                                  float_100_80427b78);
+                psndSFX_pit(work[0x6E], pitch);
+            }
+
+            *(f32*)(work + 0x35) -= float_0p25_80427bb0;
+            if (*(f32*)(work + 0x35) < float_0_80427b70) {
+                *(f32*)(work + 0x35) = float_0_80427b70;
+            }
+
+            factor = float_1_80427b60;
+            if (*(f32*)(work + 0x34) < float_100_80427b78) {
+                factor = *(f32*)(work + 0x34) / float_100_80427b78;
+            }
+            *(f32*)(work + 0x3A) = factor;
+
+            work[0x3C]--;
+            work[0x3D]--;
+            if ((s32)work[0x3D] < 0) {
+                work[0x3D] = 0;
+            }
+
+            if (work[0x3C] == 0x1E0) {
+                psndSFXOn(((const char*)rodata + 0x29C));
+            }
+            if ((s32)work[0x3C] > 0x1DF && (s32)work[0x3C] < 0x1EA) {
+                factor = intplGetValue(
+                    float_2_80427bb4, float_3_80427bb8, 0,
+                    0x1E9 - work[0x3C], 10);
+                *(f32*)(work + 0x31) = factor;
+                *(f32*)(work + 0x32) = factor;
+            }
+
+            if (work[0x3C] == 0x168) {
+                psndSFXOn(((const char*)rodata + 0x29C));
+            }
+            if ((s32)work[0x3C] > 0x167 && (s32)work[0x3C] < 0x172) {
+                factor = intplGetValue(
+                    float_3_80427bb8, float_4_80427bbc, 0,
+                    0x171 - work[0x3C], 10);
+                *(f32*)(work + 0x31) = factor;
+                *(f32*)(work + 0x32) = factor;
+            }
+
+            if (work[0x3C] == 0xF0) {
+                psndSFXOn(((const char*)rodata + 0x29C));
+            }
+            if ((s32)work[0x3C] > 0xEF && (s32)work[0x3C] < 0xFA) {
+                factor = intplGetValue(
+                    float_4_80427bbc, float_5_80427bc0, 0,
+                    0xF9 - work[0x3C], 10);
+                *(f32*)(work + 0x31) = factor;
+                *(f32*)(work + 0x32) = factor;
+            }
+
+            if (work[0x3C] == 0x78) {
+                psndSFXOn(((const char*)rodata + 0x29C));
+            }
+            if ((s32)work[0x3C] > 0x77 && (s32)work[0x3C] < 0x82) {
+                factor = intplGetValue(
+                    float_5_80427bc0, float_6_80427bc4, 0,
+                    0x81 - work[0x3C], 10);
+                *(f32*)(work + 0x31) = factor;
+                *(f32*)(work + 0x32) = factor;
+            }
+
+            if (work[0x3C] == 599) {
+                animPoseSetAnim(work[0x3B], str_S_1_80427bc8, 0);
+            }
+            if (work[0x3C] == 400) {
+                animPoseSetAnim(work[0x3B], str_S_2_80427bcc, 0);
+            }
+            if (work[0x3C] == 200) {
+                animPoseSetAnim(work[0x3B], str_S_3_80427bd0, 0);
+            }
         }
+
+        /*
+         * Target uses a jump table for this gameplay-state dispatch.  Keep the
+         * semantic blocks intact but use an explicit branch chain for this first
+         * reconstruction so the body can be evaluated without creating a new
+         * target-first anonymous .data table.
+         */
+        state = (s32)work[0x1F];
+
+        if (state == 0) goto bg_state_0;
+        if (state == 2) goto bg_state_2;
+        if (state == 4) goto bg_state_4;
+        if (state == 5) goto bg_state_5;
+        if (state == 10) goto bg_state_10;
+        if (state == 11) goto bg_state_11;
+        if (state == 20) goto bg_state_20;
+        if (state == 22) goto bg_state_22;
+        if (state == 25) goto bg_state_25;
+        if (state == 30) goto bg_state_30;
+        if (state == 40) goto bg_state_40;
+        goto bg_state_done;
+
+    bg_state_0:
+        work[0x1F] = 2;
+        *(f32*)(work + 0x38) = float_50_80427bd4;
+        work[0x20] = 0;
+        work[0x22] = rodata[0xA4 / 4];
+        work[0x23] = rodata[0xA8 / 4];
+        work[0x24] = rodata[0xAC / 4];
+        work[0x3C] = 0xFFFFFFFF;
+        *(f32*)(work + 0x31) = float_2_80427bb4;
+        *(f32*)(work + 0x32) = float_2_80427bb4;
+        *(f32*)(work + 0x30) = float_90_80427b7c;
+        goto bg_state_2;
+
+    bg_state_2:
+        *(f32*)(work + 0x37) = intplGetValue(
+            float_neg1000_80427bd8, float_50_80427bd4, 4,
+            work[0x20], 30);
+        work[0x20]++;
+        if ((s32)work[0x20] > 30) {
+            work[0x1F] = 4;
+        }
+        goto bg_state_done;
+
+    bg_state_4:
+        work[0x1F] = 5;
+        work[0x22] = rodata[0xB0 / 4];
+        work[0x23] = rodata[0xB4 / 4];
+        work[0x24] = rodata[0xB8 / 4];
+        work[0x25] = work[0x22];
+        work[0x26] = work[0x23];
+        work[0x27] = work[0x24];
+        work[0x28] = rodata[0xBC / 4];
+        work[0x29] = rodata[0xC0 / 4];
+        work[0x2A] = rodata[0xC4 / 4];
+        *(f32*)(work + 0x2C) =
+            (float_2_80427bb4 *
+                 (*(f32*)(work + 0x29) - *(f32*)(work + 0x26)) -
+             float_neg800_80427bdc) /
+            float_80_80427be0;
+        work[0x20] = 40;
+        work[0x21] = 40;
+        goto bg_state_5;
+
+    bg_state_5:
+        *(f32*)(work + 0x23) += *(f32*)(work + 0x2C);
+        *(f32*)(work + 0x2C) += float_neg0p5_80427be4;
+        work[0x20]--;
+        if ((s32)work[0x20] < 0) {
+            work[0x1F] = 8;
+            work[0x23] = work[0x29];
+            *(u8*)((u8*)work + 0xCC) = 0;
+            bakuGameMarioSurprise(mario, party);
+            btl_camera_shake_h(0, float_4_80427bbc,
+                               float_0_80427b70, 10, 4);
+            psndSFXOn(((const char*)rodata + 0x2B0));
+            BtlUnit_snd_se_pos(
+                mario, (s32)((const char*)rodata + 0x2C4),
+                0x7F, 0, &mario->position);
+        }
+        goto bg_state_done;
+
+    bg_state_10:
+        work[0x1F] = 11;
+        work[0x20] = 0;
+        *(f32*)(work + 0x30) = float_70_80427be8;
+        goto bg_state_11;
+
+    bg_state_11:
+        for (i = 0; i < 3; i++) {
+            u8* slot = (u8*)work + 0xC + i * 0x24;
+            if (*(f32*)(slot + 0x10) <= float_0_80427b70) {
+                work[0x1F] = 20;
+                work[0x20] = 0;
+                *(u8*)((u8*)work + 0xCD) = (u8)*(s32*)(slot + 0xC);
+                if (*(u8*)((u8*)work + 0xCC) ==
+                    *(u8*)((u8*)work + 0xCD)) {
+                    work[0x1F] = 30;
+                }
+                break;
+            }
+        }
+
+        if (*(u8*)((u8*)work + 0xCC) == 0) {
+            BtlUnit_GetPos(mario, &x, &y, &z);
+            BtlUnit_GetHomePos(mario, &hx, &hy, &hz);
+            mario->faceDirection = -1;
+
+            if (y == hy) {
+                if (irand(0x50) == 0) {
+                    *(f32*)(work + 0x9D) =
+                        -float_neg200_80427bec / float_20_80427b74;
+                    BtlUnit_SetPos(mario, x,
+                        y + float_0p1_80427bf0, z);
+                }
+            } else {
+                y += *(f32*)(work + 0x9D);
+                *(f32*)(work + 0x9D) += float_neg2_80427b8c;
+                if (y < hy) {
+                    y = hy;
+                }
+                BtlUnit_SetPos(mario, x, y, z);
+            }
+
+            if (bakuGamePartyExist(party) == 1) {
+                BtlUnit_GetPos(party, &x, &y, &z);
+                BtlUnit_GetHomePos(party, &hx, &hy, &hz);
+                if (y == hy) {
+                    if (irand(0x50) == 0) {
+                        *(f32*)(work + 0xA6) =
+                            -float_neg200_80427bec / float_20_80427b74;
+                        BtlUnit_SetPos(party, x,
+                            y + float_0p1_80427bf0, z);
+                    }
+                } else {
+                    y += *(f32*)(work + 0xA6);
+                    *(f32*)(work + 0xA6) += float_neg2_80427b8c;
+                    if (y < hy) {
+                        y = hy;
+                    }
+                    BtlUnit_SetPos(party, x, y, z);
+                }
+            }
+        }
+        goto bg_state_done;
+
+    bg_state_20:
+        switch (*(u8*)((u8*)work + 0xCC)) {
+        case 0:
+            if ((s32)work[0x20] == 0) {
+                vec44 = *(const BakuVec*)((const u8*)rodata + 0xC8);
+                vec38 = *(const BakuVec*)((const u8*)rodata + 0xD4);
+
+                BtlUnit_GetPos(mario, &x, &y, &z);
+                BtlUnit_GetHomePos(mario, &hx, &hy, &hz);
+                BtlUnit_SetPos(mario, hx, hy, hz);
+
+                vec44.x = x;
+                vec44.y = hy;
+                vec44.z = z;
+                *(BakuVec*)(work + 0x96) = vec44;
+
+                vec38.x = *(f32*)(work + 0x22);
+                vec38.y = hy;
+                vec38.z = float_7_80427bf4 + *(f32*)(work + 0x24);
+                *(BakuVec*)(work + 0x99) = vec38;
+
+                mario->faceDirection = -1;
+
+                if (bakuGamePartyExist(party) == 1) {
+                    BtlUnit_GetPos(party, &x, &y, &z);
+                    BtlUnit_GetHomePos(party, &hx, &hy, &hz);
+                    BtlUnit_SetPos(party, hx, hy, hz);
+                }
+
+                BtlUnit_SetBodyAnim(mario, str_M_W_1_80427bf8);
+            }
+
+            if ((s32)work[0x20] >= 0 && (s32)work[0x20] < 8) {
+                x = intplGetValue(
+                    *(f32*)(work + 0x96), *(f32*)(work + 0x99),
+                    0, work[0x20], 7);
+                y = *(f32*)(work + 0x97);
+                z = intplGetValue(
+                    *(f32*)(work + 0x98), *(f32*)(work + 0x9B),
+                    0, work[0x20], 7);
+                BtlUnit_SetPos(mario, x, y, z);
+            }
+
+            if ((s32)work[0x20] == 8) {
+                BtlUnit_SetBodyAnim(mario, str_M_U_2_80427c00);
+                mario->faceDirection = 1;
+
+                work[0x28] = work[0x22];
+                work[0x29] = work[0x23];
+                work[0x2A] = work[0x24];
+                work[0x25] = work[0x28];
+                work[0x26] = work[0x29];
+                work[0x27] = work[0x2A];
+                *(f32*)(work + 0x29) +=
+                    float_30_80427c08 * mario->sizeMultiplier;
+            }
+
+            if ((s32)work[0x20] > 7 && (s32)work[0x20] < 13) {
+                *(f32*)(work + 0x23) = intplGetValue(
+                    *(f32*)(work + 0x26), *(f32*)(work + 0x29),
+                    4, work[0x20] - 8, 4);
+            }
+
+            if ((s32)work[0x20] > 15) {
+                work[0x1F] = 22;
+            }
+                    break;
+        case 1:
+            if ((*work & 1) == 0) {
+                if ((s32)work[0x20] == 26) {
+                    *(f32*)(work + 0x7E) =
+                        -float_neg100_80427c0c / float_20_80427b74;
+                    *(f32*)(work + 0x75) = float_0_80427b70;
+                }
+
+                if ((s32)work[0x20] > 25) {
+                    *(f32*)(work + 0x75) += *(f32*)(work + 0x7E);
+                    *(f32*)(work + 0x7E) += float_neg1_80427b5c;
+                }
+
+                if ((s32)work[0x20] > 30) {
+                    work[0x1F] = 22;
+                }
+
+                for (i = 0; i < 0x40; i++) {
+                    unit = BattleGetUnitPtr(battle, i);
+                    if (unit != 0 &&
+                        (unit->attributes & 0x20000) == 0 &&
+                        BtlUnit_CheckStatus(unit, STATUS_INSTAKILL) == 0 &&
+                        unit->alliance == 1 &&
+                        BtlUnit_CanActStatus(unit) != 0) {
+
+                        if ((s32)work[0x20] == 0) {
+                            BtlUnit_SetBodyAnimType(unit, 0x41);
+                        }
+
+                        if ((s32)work[0x20] == 26) {
+                            btlDispPoseAnime(
+                                BtlUnit_GetPartsPtr(
+                                    unit, BtlUnit_GetBodyPartsId(unit)));
+
+                            if ((unit->attributes & 4) == 0 &&
+                                (unit->attributes & 2) == 0) {
+                                BtlUnit_GetHomePos(unit, &hx, &hy, &hz);
+                                BtlUnit_SetPos(unit, hx, hy, hz);
+                            }
+                        }
+
+                        if ((s32)work[0x20] > 25 &&
+                            (unit->attributes & 4) == 0 &&
+                            (unit->attributes & 2) == 0) {
+                            BtlUnit_GetHomePos(unit, &hx, &hy, &hz);
+                            BtlUnit_SetPos(unit, hx,
+                                hy + *(f32*)(work + 0x75), hz);
+                        }
+                    }
+                }
+            } else {
+                work[0x70] = 15;
+
+                if ((s32)work[0x20] == 26) {
+                    ceilingGravity = float_neg2_80427b8c;
+                    *(f32*)(work + 0x7E) =
+                        -float_neg200_80427bec / float_20_80427b74;
+                }
+
+                if ((s32)work[0x20] >= 26) {
+                    *(f32*)(work + 0x75) += *(f32*)(work + 0x7E);
+                    *(f32*)(work + 0x7E) += ceilingGravity;
+                    *(f32*)(work + 0x23) =
+                        float_30_80427c08 + *(f32*)(work + 0x75);
+                }
+
+                if ((s32)work[0x20] > 30) {
+                    work[0x1F] = 22;
+                }
+            }
+                    break;
+        case 2:
+            div = float_1_80427b60;
+            if (*(u8*)((u8*)work + 0xCD) == 1) {
+                div = float_2_80427bb4;
+            }
+
+            if ((*work & 2) != 0) {
+                work[0x1F] = 30;
+                goto bg_state_done;
+            }
+
+            factor = float_26_80427c10 / div;
+
+            if ((f32)(s32)work[0x20] == factor) {
+                *(f32*)(work + 0xA9) = float_0_80427b70;
+                *(f32*)(work + 0xAC) =
+                    -float_neg200_80427bec / float_20_80427b74;
+            }
+
+            if ((f32)(s32)work[0x20] >= factor) {
+                *(f32*)(work + 0xA9) += *(f32*)(work + 0xAC);
+                *(f32*)(work + 0xAC) += float_neg2_80427b8c;
+            }
+
+            if ((f32)(s32)work[0x20] >
+                float_30_80427c08 / div) {
+                work[0x1F] = 22;
+            }
+
+            for (i = 0; i < 200; i++) {
+                u8* audience = (u8*)BattleAudienceGetPtr(i);
+                if (bakuGameAudienceCanThrowPos(i) == 1 &&
+                    BattleAudience_GetExist(i) != 0 &&
+                    (*(u32*)audience & 0x10) != 0) {
+                    BattleAudience_GetHomePosition(i, &x, &y, &z);
+                    BattleAudience_SetPosition(
+                        i, x, y + *(f32*)(work + 0xA9), z);
+                    *(f32*)(work + 0x23) =
+                        float_20_80427b74 + y +
+                        *(f32*)(work + 0xA9);
+                }
+            }
+                    break;
+        }
+
+        work[0x20]++;
+
+        if ((keyGetButtonTrg(0) & 0x400) != 0) {
+            *(u8*)((u8*)work + 0xCD) =
+                (u8)work[0x18];
+        }
+        if ((keyGetButtonTrg(0) & 0x200) != 0) {
+            *(u8*)((u8*)work + 0xCD) =
+                (u8)work[0x0F];
+        }
+        if ((keyGetButtonTrg(0) & 0x100) != 0) {
+            *(u8*)((u8*)work + 0xCD) =
+                (u8)work[0x06];
+        }
+        goto bg_state_done;
+
+    bg_state_22:
+        if (*(u8*)((u8*)work + 0xCC) == 1) {
+            work[0x22] = rodata[0xEC / 4];
+            work[0x23] = rodata[0xF0 / 4];
+            work[0x24] = rodata[0xF4 / 4];
+            work[0x25] = work[0x22];
+            work[0x26] = work[0x23];
+            work[0x27] = work[0x24];
+
+            if ((*work & 1) != 0) {
+                work[0x22] = work[0x74];
+                work[0x23] = work[0x75];
+                work[0x24] = work[0x76];
+                work[0x25] = work[0x22];
+                work[0x26] = work[0x23];
+                work[0x27] = work[0x24];
+                *(f32*)(work + 0x23) =
+                    float_30_80427c08 + *(f32*)(work + 0x75);
+                *(f32*)(work + 0x26) =
+                    float_30_80427c08 + *(f32*)(work + 0x75);
+            }
+            bakuGameEnemySurpriseReset();
+        } else if (*(u8*)((u8*)work + 0xCC) == 0) {
+            work[0x22] = rodata[0xE0 / 4];
+            work[0x23] = rodata[0xE4 / 4];
+            work[0x24] = rodata[0xE8 / 4];
+            work[0x25] = work[0x22];
+            work[0x26] = work[0x23];
+            work[0x27] = work[0x24];
+            *(f32*)(work + 0x26) += float_30_80427c08;
+            *(f32*)(work + 0x23) += float_30_80427c08;
+            bakuGameMarioSurpriseReset(mario, party);
+            BtlUnit_SetBodyAnim(mario, str_M_C_1_80427c14);
+        } else if (*(u8*)((u8*)work + 0xCC) < 3) {
+            work[0x22] = rodata[0xF8 / 4];
+            work[0x23] = rodata[0xFC / 4];
+            work[0x24] = rodata[0x100 / 4];
+            work[0x25] = work[0x22];
+            work[0x26] = work[0x23];
+            work[0x27] = work[0x24];
+            *(f32*)(work + 0x26) += float_30_80427c08;
+            *(f32*)(work + 0x23) += float_20_80427b74;
+            bakuGameAudienceSurpriseReset();
+        }
+
+        if (*(u8*)((u8*)work + 0xCD) == 1) {
+            work[0x28] = rodata[0x110 / 4];
+            work[0x29] = rodata[0x114 / 4];
+            work[0x2A] = rodata[0x118 / 4];
+
+            if ((*work & 1) != 0) {
+                work[0x28] = rodata[0x11C / 4];
+                work[0x29] = rodata[0x120 / 4];
+                work[0x2A] = rodata[0x124 / 4];
+                *(f32*)(work + 0x29) += float_30_80427c08;
+            }
+            bakuGameEnemySurprise();
+        } else if (*(u8*)((u8*)work + 0xCD) == 0) {
+            work[0x28] = rodata[0x104 / 4];
+            work[0x29] = rodata[0x108 / 4];
+            work[0x2A] = rodata[0x10C / 4];
+            bakuGameMarioSurprise(mario, party);
+        } else if (*(u8*)((u8*)work + 0xCD) < 3) {
+            if ((*work & 2) == 0) {
+                work[0x28] = rodata[0x134 / 4];
+                work[0x29] = rodata[0x138 / 4];
+                work[0x2A] = rodata[0x13C / 4];
+                *(f32*)(work + 0x29) += float_20_80427b74;
+            } else {
+                work[0x28] = rodata[0x128 / 4];
+                work[0x29] = rodata[0x12C / 4];
+                work[0x2A] = rodata[0x130 / 4];
+            }
+            bakuGameAudienceSurprise();
+        }
+
+        work[0x1F] = 25;
+        work[0x20] = (s32)float_40_80427b6c;
+        work[0x21] = (s32)float_40_80427b6c;
+        *(f32*)(work + 0x2C) =
+            (float_2_80427bb4 *
+                 (*(f32*)(work + 0x29) -
+                  *(f32*)(work + 0x26)) -
+             float_neg800_80427bdc) /
+            float_80_80427be0;
+
+        if (*(u8*)((u8*)work + 0xCC) == 0) {
+            BtlUnit_GetPos(mario, &x, &y, &z);
+
+            vec2C = *(const BakuVec*)((const u8*)rodata + 0x140);
+            vec2C.x = x;
+            vec2C.y = y;
+            vec2C.z = z;
+            *(BakuVec*)(work + 0x96) = vec2C;
+
+            BtlUnit_GetHomePos(mario, &x, &y, &z);
+
+            vec20 = *(const BakuVec*)((const u8*)rodata + 0x14C);
+            vec20.x = x;
+            vec20.y = y;
+            vec20.z = z;
+            *(BakuVec*)(work + 0x99) = vec20;
+        }
+
+        work[0x6F] = psndSFXOn(((const char*)rodata + 0x2E0));
+
+        i = BattleAudience_GetAudienceNum();
+        if (*(u8*)((u8*)work + 0xCD) == 1) {
+            if (i > 0 && i < 50) {
+                BattleAudienceSoundCallKind(1);
+            }
+            if (i > 49 && i < 100) {
+                BattleAudienceSoundCallKind(1);
+                BattleAudienceSoundWhistleKind(1);
+            }
+            if (i > 99 && i < 150) {
+                BattleAudienceSoundCallKind(2);
+                BattleAudienceSoundWhistleKind(2);
+            }
+            if (i > 149) {
+                BattleAudienceSoundCallKind(2);
+                BattleAudienceSoundWhistleKind(3);
+            }
+        } else if (*(u8*)((u8*)work + 0xCD) == 0) {
+            BattleAudienceSoundBooing();
+        } else if (*(u8*)((u8*)work + 0xCD) < 3) {
+            if (i > 0 && i < 50) {
+                BattleAudienceSoundBooingKind(5);
+            }
+            if (i > 49 && i < 100) {
+                BattleAudienceSoundBooingKind(6);
+            }
+            if (i > 99 && i < 150) {
+                BattleAudienceSoundBooingKind(7);
+            }
+            if (i > 149) {
+                BattleAudienceSoundBooingKind(8);
+            }
+        }
+        goto bg_state_25;
+
+    bg_state_25:
+        *(f32*)(work + 0x22) = intplGetValue(
+            *(f32*)(work + 0x25), *(f32*)(work + 0x28), 0,
+            work[0x21] - work[0x20], work[0x21]);
+        *(f32*)(work + 0x24) = intplGetValue(
+            *(f32*)(work + 0x27), *(f32*)(work + 0x2A), 0,
+            work[0x21] - work[0x20], work[0x21]);
+        *(f32*)(work + 0x23) += *(f32*)(work + 0x2C);
+        *(f32*)(work + 0x2C) += float_neg0p5_80427be4;
+
+        if (*(u8*)((u8*)work + 0xCC) == 1) {
+            if (*(f32*)(work + 0x75) != float_0_80427b70) {
+                *(f32*)(work + 0x75) += *(f32*)(work + 0x7E);
+                *(f32*)(work + 0x7E) += float_neg1_80427b5c;
+            }
+
+            if (*(f32*)(work + 0x75) < float_0_80427b70) {
+                *(f32*)(work + 0x75) = float_0_80427b70;
+            }
+
+            if ((*work & 1) == 0) {
+                for (i = 0; i < 0x40; i++) {
+                    unit = BattleGetUnitPtr(battle, i);
+                    if (unit != 0 &&
+                        unit->alliance == 1 &&
+                        BtlUnit_CanActStatus(unit) != 0 &&
+                        (unit->attributes & 0x20000) == 0 &&
+                        BtlUnit_CheckStatus(unit, STATUS_INSTAKILL) == 0 &&
+                        (unit->attributes & 4) == 0 &&
+                        (unit->attributes & 2) == 0) {
+                        BtlUnit_GetHomePos(unit, &hx, &hy, &hz);
+                        BtlUnit_SetPos(unit, hx,
+                            hy + *(f32*)(work + 0x75), hz);
+                    }
+                }
+            } else {
+                work[0x70] = 15;
+
+                if (*(f32*)(work + 0x75) != float_0_80427b70) {
+                    *(f32*)(work + 0x75) += *(f32*)(work + 0x7E);
+                    *(f32*)(work + 0x7E) += float_neg2_80427b8c;
+                }
+
+                if (*(f32*)(work + 0x75) <= float_0_80427b70) {
+                    *(f32*)(work + 0x75) = float_0_80427b70;
+                    work[0x70] = 5;
+                }
+            }
+        } else if (*(u8*)((u8*)work + 0xCC) == 0) {
+            if (work[0x21] - work[0x20] == 20) {
+                BtlUnit_SetBodyAnim(mario, str_M_W_1_80427bf8);
+            }
+
+            i = work[0x21] - work[0x20];
+            if (i > 19 && i < 35) {
+                x = intplGetValue(
+                    *(f32*)(work + 0x96), *(f32*)(work + 0x99),
+                    0, i - 20, 14);
+                y = *(f32*)(work + 0x97);
+                z = intplGetValue(
+                    *(f32*)(work + 0x98), *(f32*)(work + 0x9B),
+                    0, i - 20, 14);
+                BtlUnit_SetPos(mario, x, y, z);
+            }
+
+            if (work[0x21] - work[0x20] == 34) {
+                btlDispPoseAnime(
+                    BtlUnit_GetPartsPtr(
+                        mario, BtlUnit_GetBodyPartsId(mario)));
+            }
+        } else if (*(u8*)((u8*)work + 0xCC) < 3) {
+            if (*(f32*)(work + 0xA9) != float_0_80427b70) {
+                *(f32*)(work + 0xA9) += *(f32*)(work + 0xAC);
+                *(f32*)(work + 0xAC) += float_neg2_80427b8c;
+            }
+
+            if (*(f32*)(work + 0xA9) <= float_0_80427b70) {
+                *(f32*)(work + 0xA9) = float_0_80427b70;
+            }
+
+            for (i = 0; i < 200; i++) {
+                u8* audience = (u8*)BattleAudienceGetPtr(i);
+                if (bakuGameAudienceCanThrowPos(i) == 1 &&
+                    BattleAudience_GetExist(i) != 0 &&
+                    (*(u32*)audience & 0x10) != 0) {
+                    BattleAudience_GetHomePosition(i, &x, &y, &z);
+                    BattleAudience_SetPosition(
+                        i, x, y + *(f32*)(work + 0xA9), z);
+                }
+            }
+        }
+
+        work[0x20]--;
+        if ((s32)work[0x20] < 0) {
+            work[0x1F] = 30;
+            work[0x22] = work[0x28];
+            work[0x23] = work[0x29];
+            work[0x24] = work[0x2A];
+            *(u8*)((u8*)work + 0xCC) =
+                *(u8*)((u8*)work + 0xCD);
+
+            btl_camera_shake_h(0, *(f32*)(work + 0x31),
+                               float_0_80427b70, 10, 4);
+            psndSFXOn(((const char*)rodata + 0x2B0));
+
+            if (psndSFXChk(work[0x6F]) == 0) {
+                psndSFXOff(work[0x6F]);
+            }
+        }
+        goto bg_state_done;
+
+    bg_state_30:
+        work[0x1F] = 10;
+        for (i = 0; i < 3; i++) {
+            *(f32*)((u8*)work + 0x1C + i * 0x24) =
+                float_100_80427b78;
+        }
+
+        if (*(u8*)((u8*)work + 0xCC) == 1 &&
+            (*work & 1) != 0) {
+            work[0x70] = 10;
+        }
+
+        if (*(u8*)((u8*)work + 0xCD) == 0) {
+            BtlUnit_snd_se_pos(
+                mario, (s32)((const char*)rodata + 0x2C4),
+                0x7F, 0, &mario->position);
+        }
+        goto bg_state_done;
+
+    bg_state_40:
+        effSandarsEntry(3,
+            *(f32*)(work + 0x22),
+            *(f32*)(work + 0x23),
+            *(f32*)(work + 0x24),
+            float_0_80427b70);
+
+        btl_camera_shake_h(0, *(f32*)(work + 0x31),
+                           float_0_80427b70, 30, 4);
+
+        psndSFXOn(((const char*)rodata + 0x300));
+
+        if (psndSFXChk(work[0x6E]) == 0) {
+            psndSFXOff(work[0x6E]);
+        }
+        if (psndSFXChk(work[0x6F]) == 0) {
+            psndSFXOff(work[0x6F]);
+        }
+
+        work[0x1F] = 50;
+
+        for (i = 0; i < 200; i++) {
+            u32* audience = (u32*)BattleAudienceGetPtr(i);
+            *audience &= ~0x10U;
+
+            if (bakuGameAudienceCanThrowPos(i) == 1) {
+                BattleAudience_GetHomePosition(i, &x, &y, &z);
+                BattleAudience_SetPosition(i, x, y, z);
+            }
+        }
+
+    bg_state_done:
+        if ((s32)work[0x3B] != -1) {
+            animPoseMain();
+        }
+
+        dispEntry(8, 1, bakuGameDisp2D, 0, 900.0f);
+        dispEntry(4, 1, bakuGameDisp3D, 0, float_0_80427b70);
+        return 0;
     }
-    if ((s32)work[0x3B] != -1) {
-        animPoseMain();
-    }
-    dispEntry(1, 1, bakuGameDisp2D, 0, 900.0f);
-    dispEntry(4, 1, bakuGameDisp3D, 0, 0.0f);
-    return 0;
 }
 
 /* stub-fill: bakuGameHeihoReturn | missing_definition | ghidra_signature */

@@ -9,7 +9,7 @@ void main_icon(s32 index);
 void main_star(void);
 void disp_2D(void);
 void disp_3D(void);
-void disp_3D_alpha(void);
+static void disp_3D_alpha(void);
 
 extern void* _battleWorkPointer;
 void effDelete(void* effect);
@@ -871,66 +871,168 @@ void disp_3D(void) {
 }
 
 
-/* CHATGPT STUB FILL: main/action/star/sac_muki 20260624_184929 */
+static void disp_3D_alpha(void) {
+    typedef f32 Mtx[3][4];
+    typedef struct {
+        s32 state;
+        s32 timer;
+        s32 type;
+        f32 x;
+        f32 y;
+        f32 z;
+        f32 scaleX;
+        f32 scaleY;
+        f32 scaleZ;
+        f32 unk24;
+        f32 angle;
+        f32 unk2C;
+        f32 unk30;
+        u8 alpha;
+        u8 pad35[3];
+    } MukiIcon;
 
-/* stub-fill: disp_3D_alpha | prototype_only | source_prototype */
-void disp_3D_alpha(void) {
-    extern void* get_ptr(void);
-    extern void PSMTXRotRad(f32 matrix[3][4], s32 axis, f32 radians);
-    extern void PSMTXScaleApply(f32 src[3][4], f32 dst[3][4], f32 x, f32 y, f32 z);
-    extern void PSMTXTransApply(f32 src[3][4], f32 dst[3][4], f32 x, f32 y, f32 z);
+    extern void PSMTXRotRad(Mtx matrix, s32 axis, f32 radians);
+    extern void PSMTXScaleApply(Mtx src, Mtx dst, f32 x, f32 y, f32 z);
+    extern void PSMTXTransApply(Mtx src, Mtx dst, f32 x, f32 y, f32 z);
     extern f64 cos(f64 angle);
     extern f64 sin(f64 angle);
-    extern void btlDispTexPlane2(f32 matrix[3][4], s32 texture, u32* color);
-    extern void btlDispTexPlane3(f32 matrix[3][4], s32 texture,
+    extern void btlDispTexPlane2(Mtx matrix, s32 texture, u32* color);
+    extern void btlDispTexPlane3(Mtx matrix, s32 texture,
                                  u32* color0, u32* color1,
                                  u32* color2, u32* color3);
 
-    u8* work = get_ptr();
+    void* work;
+    MukiIcon* icon;
     s32 i;
     s32 offset;
+    f64 angle;
+    f32 cosine;
+    u32 local_b4;
+    u32 local_b0;
+    u32 local_ac;
+    u32 local_a8;
+    u32 local_a4;
+    u32 local_a0;
+    u32 local_9c;
+    u32 local_98;
+    u32 local_94;
+    u32 local_90;
+    u32 local_8c;
+    u32 local_88;
+    u32 local_84;
+    u32 local_80;
+    u32 local_7c;
+    u32 local_78;
+    u32 local_74;
+    u32 local_70;
+    Mtx matrix;
 
-    for (i = 0, offset = 0; i < 9; i++, offset += 0x38) {
-        s32* icon = (s32*)(work + 0x1BC + offset);
+    work = get_ptr();
+    i = 0;
+    offset = 0;
+    do {
+        icon = (MukiIcon*)((u8*)work + 0x1BC + offset);
 
-        if (icon[0] > 0 && icon[0] < 10 && icon[2] >= 0 && icon[2] < 3) {
-            f32 matrix[3][4];
-            f32 angle;
-            f32 xOffset;
-            f32 zOffset;
-            f32 scaleX = (f32)icon[6];
-            f32 scaleY = (f32)icon[7];
-            u8 alpha = *(u8*)((u8*)icon + 0x34);
+        if (icon->state >= 1 && icon->state <= 9) {
+                        switch (icon->type) {
+            case 0:
+                PSMTXRotRad(matrix, 'y', 0.017453292f * icon->angle);
+                PSMTXScaleApply(matrix, matrix,
+                                2.0f * icon->scaleX,
+                                2.0f * icon->scaleY,
+                                icon->scaleZ);
+                PSMTXTransApply(matrix, matrix, icon->x, icon->y, icon->z);
 
-            PSMTXRotRad(matrix, 'y', 0.017453292f * (f32)icon[10]);
-            if (icon[2] < 2) {
-                scaleX *= 2.0f;
-                scaleY *= 2.0f;
-            }
-            PSMTXScaleApply(matrix, matrix, scaleX, scaleY, (f32)icon[8]);
-            PSMTXTransApply(matrix, matrix, (f32)icon[3], (f32)icon[4], (f32)icon[5]);
+                angle = (f64)((2.0f * icon->angle * 3.141592f) / 360.0f);
+                local_80 = 0xE94A3F00;
+                local_84 = 0xFEE63E00;
 
-            angle = (2.0f * (f32)icon[10] * 3.141592f) / 360.0f;
-            zOffset = 15.0f * (f32)cos((f64)angle);
-            xOffset = 15.0f * (f32)sin((f64)angle);
-            PSMTXTransApply(matrix, matrix, xOffset, 0.0f, zOffset);
+                cosine = (f32)cos(angle);
+                PSMTXTransApply(
+                    matrix, matrix,
+                    15.0f * (f32)sin(angle),
+                    float_0_8042854c,
+                    15.0f * cosine);
 
-            if (icon[2] == 0) {
-                u32 bright = 0xE94A3F00 | alpha;
-                u32 dark = 0xFEE63E00 | alpha;
+                ((u8*)&local_80)[3] = icon->alpha;
+                ((u8*)&local_84)[3] = icon->alpha;
+                local_78 = local_80;
+                local_7c = local_80;
+                local_70 = local_84;
+                local_74 = local_84;
+                local_94 = local_84;
+                local_90 = local_84;
+                local_8c = local_80;
+                local_88 = local_80;
+
                 btlDispTexPlane3(matrix, 0x5B,
-                                 &bright, &bright, &dark, &dark);
-            } else if (icon[2] == 1) {
-                u32 bright = 0x3F3FE900 | alpha;
-                u32 dark = 0x74C9FF00 | alpha;
+                                 &local_88, &local_8c,
+                                 &local_90, &local_94);
+                break;
+            case 1:
+                PSMTXRotRad(matrix, 'y', 0.017453292f * icon->angle);
+                PSMTXScaleApply(matrix, matrix,
+                                2.0f * icon->scaleX,
+                                2.0f * icon->scaleY,
+                                icon->scaleZ);
+                PSMTXTransApply(matrix, matrix, icon->x, icon->y, icon->z);
+
+                angle = (f64)((2.0f * icon->angle * 3.141592f) / 360.0f);
+                local_98 = 0x3F3FE900;
+                local_9c = 0x74C9FF00;
+
+                cosine = (f32)cos(angle);
+                PSMTXTransApply(
+                    matrix, matrix,
+                    15.0f * (f32)sin(angle),
+                    float_0_8042854c,
+                    15.0f * cosine);
+
+                ((u8*)&local_98)[3] = icon->alpha;
+                ((u8*)&local_9c)[3] = icon->alpha;
+                local_78 = local_98;
+                local_7c = local_98;
+                local_70 = local_9c;
+                local_74 = local_9c;
+                local_ac = local_9c;
+                local_a8 = local_9c;
+                local_a4 = local_98;
+                local_a0 = local_98;
+
                 btlDispTexPlane3(matrix, 0x5B,
-                                 &bright, &bright, &dark, &dark);
-            } else {
-                u32 color = 0xFFFFFF00 | alpha;
-                btlDispTexPlane2(matrix, 0x47, &color);
+                                 &local_a0, &local_a4,
+                                 &local_a8, &local_ac);
+                break;
+            case 2:
+                PSMTXRotRad(matrix, 'y', 0.017453292f * icon->angle);
+                PSMTXScaleApply(matrix, matrix,
+                                icon->scaleX, icon->scaleY, icon->scaleZ);
+                PSMTXTransApply(matrix, matrix, icon->x, icon->y, icon->z);
+
+                angle = (f64)((2.0f * icon->angle * 3.141592f) / 360.0f);
+                local_b0 = 0xFFFFFF00;
+
+                cosine = (f32)cos(angle);
+                PSMTXTransApply(
+                    matrix, matrix,
+                    15.0f * (f32)sin(angle),
+                    float_0_8042854c,
+                    15.0f * cosine);
+
+                ((u8*)&local_b0)[3] = icon->alpha;
+                local_7c = local_b0;
+                local_b4 = local_b0;
+
+                btlDispTexPlane2(matrix, 0x47, &local_b4);
+                break;
+            default:
+                break;
             }
         }
-    }
+
+        i++;
+        offset += 0x38;
+    } while (i < 9);
 }
 
 void* get_ptr(void) {

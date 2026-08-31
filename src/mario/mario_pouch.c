@@ -42,21 +42,21 @@ void pouchInit(void) {
     i = 0;
     offset = 0;
     for (count = 0; count < 0xF; count++) {
-        *(s16*)(mpp + 0xA0 + offset) = 0;
-        *(s16*)(mpp + 0xA2 + offset) = 0;
-        *(s16*)(mpp + 0xA4 + offset) = 0;
-        *(s16*)(mpp + 0xA6 + offset) = 0;
-        *(s16*)(mpp + 0xA8 + offset) = 0;
-        *(s16*)(mpp + 0xAA + offset) = 0;
-        *(s16*)(mpp + 0xAC + offset) = 0;
-        *(s16*)(mpp + 0xAE + offset) = 0;
+        *(s16*)((u8*)mpp + 0xA0 + offset) = 0;
+        *(s16*)((u8*)mpp + 0xA2 + offset) = 0;
+        *(s16*)((u8*)mpp + 0xA4 + offset) = 0;
+        *(s16*)((u8*)mpp + 0xA6 + offset) = 0;
+        *(s16*)((u8*)mpp + 0xA8 + offset) = 0;
+        *(s16*)((u8*)mpp + 0xAA + offset) = 0;
+        *(s16*)((u8*)mpp + 0xAC + offset) = 0;
+        *(s16*)((u8*)mpp + 0xAE + offset) = 0;
         i += 8;
         offset += 0x10;
     }
     count = 0x79 - i;
     if (i < 0x79) {
         do {
-            *(s16*)(mpp + 0xA0 + offset) = 0;
+            *(s16*)((u8*)mpp + 0xA0 + offset) = 0;
             offset += 2;
             count--;
         } while (count != 0);
@@ -83,48 +83,48 @@ void pouchInit(void) {
     *(s16*)(mpp + 0x1B8) = 0;
     offset = 0;
     for (count = 0; count < 2; count++) {
-        *(s16*)(mpp + 0x1BA + offset) = 0;
-        *(s16*)(mpp + 0x1BC + offset) = 0;
-        *(s16*)(mpp + 0x1BE + offset) = 0;
-        *(s16*)(mpp + 0x1C0 + offset) = 0;
-        *(s16*)(mpp + 0x1C2 + offset) = 0;
-        *(s16*)(mpp + 0x1C4 + offset) = 0;
-        *(s16*)(mpp + 0x1C6 + offset) = 0;
-        *(s16*)(mpp + 0x1C8 + offset) = 0;
-        *(s16*)(mpp + 0x1CA + offset) = 0;
-        *(s16*)(mpp + 0x1CC + offset) = 0;
-        *(s16*)(mpp + 0x1CE + offset) = 0;
-        *(s16*)(mpp + 0x1D0 + offset) = 0;
-        *(s16*)(mpp + 0x1D2 + offset) = 0;
-        *(s16*)(mpp + 0x1D4 + offset) = 0;
-        *(s16*)(mpp + 0x1D6 + offset) = 0;
-        *(s16*)(mpp + 0x1D8 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1BA + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1BC + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1BE + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1C0 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1C2 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1C4 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1C6 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1C8 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1CA + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1CC + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1CE + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1D0 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1D2 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1D4 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1D6 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1D8 + offset) = 0;
         offset += 0x20;
     }
 
     offset = 0;
     for (count = 0; count < 0x19; count++) {
-        *(s16*)(mpp + 0x1FA + offset) = 0;
-        *(s16*)(mpp + 0x1FC + offset) = 0;
-        *(s16*)(mpp + 0x1FE + offset) = 0;
-        *(s16*)(mpp + 0x200 + offset) = 0;
-        *(s16*)(mpp + 0x202 + offset) = 0;
-        *(s16*)(mpp + 0x204 + offset) = 0;
-        *(s16*)(mpp + 0x206 + offset) = 0;
-        *(s16*)(mpp + 0x208 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1FA + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1FC + offset) = 0;
+        *(s16*)((u8*)mpp + 0x1FE + offset) = 0;
+        *(s16*)((u8*)mpp + 0x200 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x202 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x204 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x206 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x208 + offset) = 0;
         offset += 0x10;
     }
 
     offset = 0;
     for (count = 0; count < 0x19; count++) {
-        *(s16*)(mpp + 0x38A + offset) = 0;
-        *(s16*)(mpp + 0x38C + offset) = 0;
-        *(s16*)(mpp + 0x38E + offset) = 0;
-        *(s16*)(mpp + 0x390 + offset) = 0;
-        *(s16*)(mpp + 0x392 + offset) = 0;
-        *(s16*)(mpp + 0x394 + offset) = 0;
-        *(s16*)(mpp + 0x396 + offset) = 0;
-        *(s16*)(mpp + 0x398 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x38A + offset) = 0;
+        *(s16*)((u8*)mpp + 0x38C + offset) = 0;
+        *(s16*)((u8*)mpp + 0x38E + offset) = 0;
+        *(s16*)((u8*)mpp + 0x390 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x392 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x394 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x396 + offset) = 0;
+        *(s16*)((u8*)mpp + 0x398 + offset) = 0;
         offset += 0x10;
     }
 
@@ -148,7 +148,7 @@ void pouchInit(void) {
 
     offset = 0;
     i = 0;
-    for (count = 0; count < 4; count++) {
+    for (count = 0; count < 2; count++) {
         party = (PouchPartyData*)(mpp + offset);
         if (i != 0) {
             party->flags = 0;
@@ -160,6 +160,30 @@ void pouchInit(void) {
         }
         i++;
         offset += 0xE;
+        party = (PouchPartyData*)(mpp + offset);
+        if (i != 0) {
+            party->flags = 0;
+            party->baseMaxHP = 10;
+            party->currentMaxHP = party->baseMaxHP;
+            party->currentHP = party->baseMaxHP;
+            party->attackLevel = 0;
+            party->techLevel = 0;
+        }
+        i++;
+        offset += 0xE;
+
+        party = (PouchPartyData*)(mpp + offset);
+        if (i != 0) {
+            party->flags = 0;
+            party->baseMaxHP = 10;
+            party->currentMaxHP = party->baseMaxHP;
+            party->currentHP = party->baseMaxHP;
+            party->attackLevel = 0;
+            party->techLevel = 0;
+        }
+        i++;
+        offset += 0xE;
+
         party = (PouchPartyData*)(mpp + offset);
         if (i != 0) {
             party->flags = 0;
@@ -492,11 +516,28 @@ s32 pouchGetItem(s32 itemNo) {
         return 1;
     }
 
-    if (itemNo == 6 || itemNo == 7 || itemNo == 8) {
-        *(s8*)(mpp + 0x98) = itemNo - 5;
-    } else if (itemNo == 9 || itemNo == 10 || itemNo == 11) {
-        *(s8*)(mpp + 0x99) = itemNo - 8;
-    } else if (itemNo == 0x59) {
+    switch (itemNo) {
+    case 6:
+        *(s8*)(mpp + 0x98) = 1;
+        break;
+    case 7:
+        *(s8*)(mpp + 0x98) = 2;
+        break;
+    case 8:
+        *(s8*)(mpp + 0x98) = 3;
+        break;
+    case 9:
+        *(s8*)(mpp + 0x99) = 1;
+        break;
+    case 10:
+        *(s8*)(mpp + 0x99) = 2;
+        break;
+    case 11:
+        *(s8*)(mpp + 0x99) = 3;
+        break;
+    }
+
+    if (itemNo == 0x59) {
         return 1;
     } else if (itemNo >= 0xF0 && itemNo < 0x153) {
         swSet(itemNo - 0x70);
@@ -507,8 +548,9 @@ s32 pouchGetItem(s32 itemNo) {
     count = 0;
     if (itemNo >= 0x79 && itemNo < 0xEC) {
         list = (s16*)(mpp + 0x192);
-        count = 10;
-        if (pouchCheckItem(1) != 0) {
+        if (pouchCheckItem(1) == 0) {
+            count = 10;
+        } else {
             count = 20;
         }
     } else if (itemNo >= 1 && itemNo < 0x79) {
@@ -540,6 +582,7 @@ s32 pouchGetItem(s32 itemNo) {
 
     return 0;
 }
+
 s32 pouchCheckItem(s32 itemId) {
     s32 count;
     s32 loops;
@@ -665,30 +708,26 @@ s32 pouchRemoveItem(s32 item) {
     count = 0;
     list = NULL;
     equipped = NULL;
-    if (item < 0x79 || item > 0xEB) {
-        if (item < 1 || item > 0x78) {
-            if (item < 0xF0 || item > 0x152) {
-                valid = FALSE;
-            } else {
-                count = 200;
-                valid = TRUE;
-                list = (s16*)(mpp + 0x1FA);
-                equipped = (s16*)(mpp + 0x38A);
-            }
-        } else {
-            equipped = NULL;
-            count = 0x79;
-            valid = TRUE;
-            list = (s16*)(mpp + 0xA0);
-        }
-    } else {
+    if (item >= 0x79 && item < 0xEC) {
         equipped = NULL;
         list = (s16*)(mpp + 0x192);
         count = 10;
-        if (pouchCheckItem(0x80) != 0) {
+        if (pouchCheckItem(ITEM_STRANGE_SACK) != 0) {
             count = 20;
         }
         valid = TRUE;
+    } else if (item >= 1 && item < 0x79) {
+        equipped = NULL;
+        count = 0x79;
+        valid = TRUE;
+        list = (s16*)(mpp + 0xA0);
+    } else if (item >= 0xF0 && item < 0x153) {
+        count = 200;
+        valid = TRUE;
+        list = (s16*)(mpp + 0x1FA);
+        equipped = (s16*)(mpp + 0x38A);
+    } else {
+        valid = FALSE;
     }
 
     if (valid) {
@@ -1056,8 +1095,9 @@ void pouchSortItem(u32 sortType) {
     s32 i;
     s32 j;
     s32 remain;
+    s32 type = (s32)sortType;
 
-    if (sortType < 2 || sortType == 7 || sortType == 8) {
+    if (type < 2 || type == 7 || type == 8) {
         src = (s16*)(mpp + 0x192);
         dst = items;
         count = 0;
@@ -1078,19 +1118,19 @@ void pouchSortItem(u32 sortType) {
         while (remain-- != 0) {
             *dst++ = 0;
         }
-        if (sortType == 0) {
+        if (type == 0) {
             qqsort(items, count, 2, comp_aiueo);
-        } else if (sortType == 1) {
+        } else if (type == 1) {
             qqsort(items, count, 2, comp_kind);
-        } else if (sortType == 7) {
+        } else if (type == 7) {
             qqsort(items, count, 2, comp_aiueo_r);
-        } else if (sortType == 8) {
+        } else if (type == 8) {
             qqsort(items, count, 2, comp_kind_r);
         }
         memcpy((void*)(mpp + 0x192), items, 0x28);
     }
 
-    if ((sortType - 2) < 2 || sortType == 9 || sortType == 10) {
+    if ((u32)(type - 2) < 2 || type == 9 || type == 10) {
         src = (s16*)(mpp + 0xA0);
         dst = keys;
         count = 0;
@@ -1110,19 +1150,19 @@ void pouchSortItem(u32 sortType) {
         while (remain-- != 0) {
             *dst++ = 0;
         }
-        if (sortType == 2) {
+        if (type == 2) {
             qqsort(keys, count, 2, comp_aiueo);
-        } else if (sortType == 3) {
+        } else if (type == 3) {
             qqsort(keys, count, 2, comp_kind);
-        } else if (sortType == 9) {
+        } else if (type == 9) {
             qqsort(keys, count, 2, comp_aiueo_r);
-        } else if (sortType == 10) {
+        } else if (type == 10) {
             qqsort(keys, count, 2, comp_kind_r);
         }
         memcpy((void*)(mpp + 0xA0), keys, 0xF2);
     }
 
-    if ((sortType - 4) > 2 && (sortType - 11) > 1 && sortType != 13) {
+    if ((u32)(type - 4) > 2 && (u32)(type - 11) > 1 && type != 13) {
         return;
     }
     src = (s16*)(mpp + 0x1FA);
@@ -1165,19 +1205,19 @@ void pouchSortItem(u32 sortType) {
             s32 orderA = *(s32*)(itemDataTable + a * 0x28 + 0x20);
             s32 orderB = *(s32*)(itemDataTable + b * 0x28 + 0x20);
             s32 swap = 0;
-            if (sortType == 4) {
+            if (type == 4) {
                 swap = strcmp(msgSearch(*(char**)(itemDataTable + a * 0x28 + 4)),
                               msgSearch(*(char**)(itemDataTable + b * 0x28 + 4))) > 0;
-            } else if (sortType == 11) {
+            } else if (type == 11) {
                 swap = strcmp(msgSearch(*(char**)(itemDataTable + a * 0x28 + 4)),
                               msgSearch(*(char**)(itemDataTable + b * 0x28 + 4))) < 0;
-            } else if (sortType == 5) {
+            } else if (type == 5) {
                 swap = orderB < orderA;
-            } else if (sortType == 12) {
+            } else if (type == 12) {
                 swap = orderA < orderB;
-            } else if (sortType == 6) {
+            } else if (type == 6) {
                 swap = bpB < bpA || (bpA == bpB && orderB < orderA);
-            } else if (sortType == 13) {
+            } else if (type == 13) {
                 swap = bpA < bpB || (bpA == bpB && orderA < orderB);
             }
             if (swap) {
@@ -1516,20 +1556,21 @@ s32 pouchRemoveKeepItem(s32 item, s32 index) {
     s32 nextOffset;
     u32 remaining;
     u32 chunks;
+    s16* items = ((PouchData*)mpp)->mStoredItems;
 
-    if ((s16)((PouchData*)mpp)->mStoredItems[index] != item) {
+    if (items[index] != item) {
         return 0;
     }
 
     count = 0x20 - index;
-    scan = &((PouchData*)mpp)->partyData[0].flags + index;
+    scan = (s16*)(mpp + index * 2);
 
     if (index < 0x20) {
-        do {
+        for (; count != 0; count--) {
             if ((s16)scan[0xDD] == item) {
                 offset = index * 2;
 
-                ((PouchData*)mpp)->mStoredItems[index] = 0;
+                items[index] = 0;
 
                 remaining = 0x1F - index;
 
@@ -1537,7 +1578,7 @@ s32 pouchRemoveKeepItem(s32 item, s32 index) {
                     chunks = remaining >> 2;
 
                     if (chunks != 0) {
-                        do {
+                        for (; chunks != 0; chunks--) {
                             *(s16*)((s32)mpp + offset + 0x1BA) =
                                 *(s16*)((s32)mpp + offset + 0x1BC);
                             *(s16*)((s32)mpp + offset + 0x1BC) = 0;
@@ -1556,9 +1597,8 @@ s32 pouchRemoveKeepItem(s32 item, s32 index) {
                                 *(s16*)((s32)mpp + offset + 0x1C2);
                             *(s16*)((s32)mpp + offset + 0x1C2) = 0;
 
-                            chunks--;
                             offset = nextOffset;
-                        } while (chunks != 0);
+                        }
 
                         remaining = remaining & 3;
 
@@ -1567,14 +1607,13 @@ s32 pouchRemoveKeepItem(s32 item, s32 index) {
                         }
                     }
 
-                    do {
+                    for (; remaining != 0; remaining--) {
                         *(s16*)((s32)mpp + offset + 0x1BA) =
                             *(s16*)((s32)mpp + offset + 0x1BC);
                         *(s16*)((s32)mpp + offset + 0x1BC) = 0;
 
                         offset += 2;
-                        remaining--;
-                    } while (remaining != 0);
+                    }
                 }
 
                 return 1;
@@ -1582,12 +1621,12 @@ s32 pouchRemoveKeepItem(s32 item, s32 index) {
 
             scan++;
             index++;
-            count--;
-        } while (count != 0);
+        }
     }
 
     return 0;
 }
+
 void pouchReviseMarioParam(void) {
     PouchData* pouch;
     s32 offset;
@@ -2094,31 +2133,35 @@ int pouchReceiveMailCount(void) {
 }
 
 void pouchReceiveMail(s32 mail) {
+    typedef struct MailPouchView {
+        u8 pad[0x51A];
+        u8 mailIds[0x66];
+        u32 received[4];
+    } MailPouchView;
+    MailPouchView* pouch = (MailPouchView*)mpp;
     s32 word = mail / 32;
     s32 bit = mail % 32;
     s32 count = 0;
     s32 i = 0;
-    s32 loops = 0x21;
-    u32* received = (u32*)(mpp + 0x580);
+    s32 loops;
 
-    do {
-        if (received[i / 32] & (1 << (i % 32))) {
+    for (loops = 0x21; loops != 0; loops--) {
+        if (pouch->received[i / 32] & (1 << (i % 32))) {
             count++;
         }
         i++;
-        if (received[i / 32] & (1 << (i % 32))) {
+        if (pouch->received[i / 32] & (1 << (i % 32))) {
             count++;
         }
         i++;
-        if (received[i / 32] & (1 << (i % 32))) {
+        if (pouch->received[i / 32] & (1 << (i % 32))) {
             count++;
         }
         i++;
-        loops--;
-    } while (loops != 0);
+    }
 
-    received[word] |= 1 << bit;
-    *(u8*)(mpp + 0x51A + count) = mail;
+    pouch->received[word] |= 1 << bit;
+    pouch->mailIds[count] = mail;
 }
 
 void pouchOpenMail(s32 mail) {
@@ -2145,9 +2188,12 @@ s32 pouchGetPartyColor(s32 partyId) {
 }
 
 void pouchSetPartyColor(int partyId, int color) {
-    u16* flags = (u16*)(mpp + partyId * sizeof(PouchPartyData));
+    u16* flags = (u16*)&((PouchData*)mpp)->partyData[partyId].flags;
+    u16 value = *flags;
 
-    *flags = (*flags & 0x1FFF) | (color << 13);
+    value &= 0x1FFF;
+    value |= color << 13;
+    *flags = value;
 }
 
 void pouchSetYoshiName(char* name) {

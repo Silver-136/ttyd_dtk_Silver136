@@ -114,6 +114,9 @@ void mot_plane(void) {
     extern void animPoseSetLocalTime(f64, s32);
     extern s32 marioAnimeId(void);
     extern void* evtEntry(void*, s32, s32);
+    extern s32 strcmp(const char*, const char*);
+    extern f32 __fabsf(f32);
+    extern void* gp;
     extern s32 sound_evt[];
     extern char* paper_plane[];
     extern u8 str_SFX_MARIO_AIRPLANE1_802c40d8[];
@@ -122,6 +125,13 @@ void mot_plane(void) {
     extern char str_PM_P_1B_802c4180[];
     extern char str_M_J_1C_802c41a8[];
     extern char str_M_Z_1_80420d88[];
+    extern char str_tik_01_802c4188[];
+    extern char str_tik_19_802c4190[];
+    extern char str_mri_19_802c4198[];
+    extern char str_las_25_802c41a0[];
+    extern f32 float_30_80420d7c;
+    extern f32 float_neg510_80420db0;
+    extern f32 float_neg230_80420db4;
 
     typedef struct VecBits {
         u32 x;
@@ -246,11 +256,11 @@ void mot_plane(void) {
             WF(0x14) = float_0_80420d1c;
             WF(0x10) = float_0_80420d1c;
             if ((WU32(0x00) & 1) == 0) {
-                PF(0xB0) = *(f32*)(data + 0x3C);
-                PF(0xBC) = *(f32*)(data + 0x40);
+                PF(0xB0) = planeData[0x23];
+                PF(0xBC) = planeData[0x24];
             } else {
-                PF(0xB0) = *(f32*)(data + 0x34);
-                PF(0xBC) = *(f32*)(data + 0x38);
+                PF(0xB0) = planeData[0x21];
+                PF(0xBC) = planeData[0x22];
             }
             PF(0x1B8) = 20.0f;
             PF(0x1BC) = 12.333333f;
@@ -267,7 +277,32 @@ void mot_plane(void) {
         }
     }
 
+    target = float_90_80420d14;
+    if (strcmp((char*)((s32)gp + 0x12C), str_tik_01_802c4188) == 0) {
+        target = float_30_80420d7c;
+    } else if (strcmp((char*)((s32)gp + 0x12C), str_tik_19_802c4190) == 0) {
+        target = float_neg510_80420db0;
+    } else if (strcmp((char*)((s32)gp + 0x12C), str_mri_19_802c4198) == 0) {
+        target = float_neg230_80420db4;
+    } else if (strcmp((char*)((s32)gp + 0x12C), str_las_25_802c41a0) == 0) {
+        target = float_neg510_80420db0;
+    }
+    if (PF(0x90) < target) {
+        PF(0x140) = __fabsf(planeData[0x26]);
+        camFollowYOff();
+    }
+
     flyMain();
+
+    if (marioKeyOffChk() != 0 && (PU32(0x0C) & 0x4) == 0) {
+        void* keyPlayer = marioGetPtr();
+        state = *(s32*)((s32)keyPlayer + 0x44);
+        if (*(u16*)((s32)keyPlayer + 0x2E) == 0x18 && state >= 0x0C && state < 0x14) {
+            *(s32*)((s32)keyPlayer + 0x44) = 0x32;
+            *(f32*)((s32)keyPlayer + 0x2C4) = *(f32*)((s32)keyPlayer + 0x90);
+            return;
+        }
+    }
 
     state = P32(0x44);
     if (state == 0x14 || state == 0x1E) {
@@ -578,19 +613,18 @@ void flyMain(void) {
 #define WF(o) (*(f32*)((s32)work + (o)))
 
     state = P32(0x44);
-    if (state == 0x0D) {
-        goto check_flying;
-    }
-    if (state >= 0x0D) {
-        if (state >= 0x0F) {
+    if (state != 0x0D) {
+        if (state < 0x0D) {
+            if (state < 0x0C) {
+                goto check_flying;
+            }
+            goto state_0c;
+        }
+        if (state > 0x0E) {
             goto check_flying;
         }
-        goto state_0e;
     }
-    if (state >= 0x0C) {
-        goto state_0c;
-    }
-    goto check_flying;
+    goto state_0e;
 
 state_0c:
     if (PF(0x2C0) >= PF(0x90)) {
@@ -601,8 +635,6 @@ state_0c:
     if ((u32)(W32(0x28) + 0x10000) == 0xFFFFU) {
         W32(0x28) = psndSFXOn_3D(0x17F, (void*)((s32)player + 0x8C));
     }
-    goto check_flying;
-
 state_0e:
     if (PF(0x9C) <= planeData[0x26]) {
         P32(0x44) = 0x0F;
@@ -713,7 +745,7 @@ check_flying:
                 lift = planeData[0x1C];
             }
             player = marioGetPtr();
-            hit = *(void**)((s32)player + 0x1F4);
+            hit = *(void**)((s32)player + 0x1FC);
             if (hit != 0 && (hitGetAttr(hit) & 0x38) != 0) {
                 work = *(void**)((s32)player + 0x294);
                 WF(0x04) += float_neg0p001_80420d58;
@@ -747,6 +779,52 @@ check_flying:
         if (PF(0x180) < float_0_80420d1c) {
             PF(0x180) = float_0_80420d1c;
         }
+        stick = PS8(0x252);
+        if (stick == 0) {
+            if (PF(0x180) >= planeData[0x14]) {
+                WF(0x14) = planeData[0x16];
+            } else {
+                WF(0x14) += (planeData[0] - PF(0x180)) * planeData[0x15] *
+                            (f32)sin((float_3p1416_80420d50 * WF(0x04)) /
+                                     float_180_80420d54);
+            }
+            WF(0x04) += WF(0x14);
+            if (WF(0x14) <= float_0_80420d1c &&
+                PF(0x180) <= planeData[0] * planeData[0x17]) {
+                s32 blocked = 0;
+                speed = planeData[0] - PF(0x180) * planeData[0x18];
+                if (speed < float_0_80420d1c) {
+                    speed = float_0_80420d1c;
+                }
+                player = marioGetPtr();
+                hit = *(void**)((s32)player + 0x1FC);
+                if (hit != 0 && (hitGetAttr(hit) & 0x38) != 0) {
+                    blocked = 1;
+                }
+                if (blocked == 0) {
+                    work = *(void**)((s32)player + 0x294);
+                    lift = planeData[0x19] *
+                           (f32)sin((float_3p1416_80420d50 * speed *
+                                    (float_90_80420d14 / planeData[0])) /
+                                    float_180_80420d54);
+                    if (lift <= planeData[0x1A]) {
+                        lift = float_2_80420d28 * planeData[0x1A];
+                    }
+                    WF(0x1C) = lift;
+                }
+            }
+            WF(0x04) += WF(0x1C);
+            WF(0x18) += float_0p1_80420d40 * -WF(0x18);
+        } else {
+            WF(0x18) += planeData[0x12] *
+                        (f32)sin((float_3p1416_80420d50 *
+                                 (planeData[0] - PF(0x180))) /
+                                 float_180_80420d54);
+            if (WF(0x18) <= planeData[0x13]) {
+                WF(0x18) = planeData[0x13];
+            }
+        }
+        WF(0x04) += WF(0x18);
     } else {
         if (WF(0x04) >= float_neg80_80420d64) {
             f32 absPitch;
@@ -873,13 +951,13 @@ check_flying:
     }
 
     hit = marioSearchUnder();
-    *(void**)((s32)player + 0x1F4) = hit;
+    *(void**)((s32)player + 0x1FC) = hit;
     if (chkCollision((s32*)((s32)player + 0x2C4)) != 0) {
-        if (*(void**)((s32)player + 0x1F0) != 0) {
+        if (*(void**)((s32)player + 0x1F8) != 0) {
             P32(0x44) = 0x28;
         } else {
             P32(0x44) = 0x32;
-            hit = *(void**)((s32)player + 0x200);
+            hit = *(void**)((s32)player + 0x1E4);
             if (hit == 0) {
                 hit = *(void**)((s32)player + 0x1E8);
             }
@@ -969,9 +1047,11 @@ s32 chkCollision(s32* outAttr) {
     f32 sx2, cx2;
     f32 sx3, cx3;
     f32 radius;
-    f32 scratchA[3];
-    f32 scratchB[3];
-    f32 scratchC[3];
+    f32 scratchA;
+    f32 scratchB;
+    f32 scratchC;
+    f32 scratchD;
+    f32 scratchE;
     s32 attr;
     s32 hitAny;
     f32 x0;
@@ -988,10 +1068,10 @@ s32 chkCollision(s32* outAttr) {
 
     sincosf(float_90_80420d14 + *(f32*)((s32)plane + 4), &sx1, &cx1);
     sincosf(*(f32*)((s32)plane + 8), &sx2, &cx2);
-    end.x = float_4_80420d10 * sx2 * cx1 + *(f32*)((s32)mario + 0x8C) +
-            *(f32*)((s32)mario + 0x98) + *(f32*)((s32)mario + 0xB0);
     end.y = -sx1 * float_4_80420d10 + *(f32*)((s32)mario + 0x90) +
             *(f32*)((s32)mario + 0x9C) + *(f32*)((s32)mario + 0xB4);
+    end.x = float_4_80420d10 * sx2 * cx1 + *(f32*)((s32)mario + 0x8C) +
+            *(f32*)((s32)mario + 0x98) + *(f32*)((s32)mario + 0xB0);
     end.z = float_4_80420d10 * cx2 * cx1 + *(f32*)((s32)mario + 0x94) +
             *(f32*)((s32)mario + 0xA0) + *(f32*)((s32)mario + 0xB8);
     *(Vec*)((s32)plane + 0x3C) = end;
@@ -1011,10 +1091,11 @@ s32 chkCollision(s32* outAttr) {
     *(Vec*)((s32)plane + 0x30) = start;
 
     radius = float_10_80420d18 + *(f32*)((s32)mario + 0x180);
-    hit = marioHitCheck(-(float_10_80420d18 * sx2 - start.x), start.y,
-                        -(float_10_80420d18 * cx2 - start.z), sx2,
-                        float_0_80420d1c, cx2, scratchA, &attr, scratchB,
-                        &radius, scratchC, scratchA, scratchB);
+    hit = marioHitCheck(-(float_10_80420d18 * sx2 - (*(Vec*)((s32)plane + 0x30)).x),
+                        (*(Vec*)((s32)plane + 0x30)).y,
+                        -(float_10_80420d18 * cx2 - (*(Vec*)((s32)plane + 0x30)).z), sx2,
+                        float_0_80420d1c, cx2, &scratchA, &attr, &scratchB,
+                        &radius, &scratchC, &scratchD, &scratchE);
     if (hit != 0) {
         *(void**)((s32)mario + 0x1E4) = hit;
         *outAttr = attr;
@@ -1022,8 +1103,10 @@ s32 chkCollision(s32* outAttr) {
     }
 
     radius = *(f32*)((s32)mario + 0x180);
-    hit = marioHitCheck(end.x, end.y, end.z, sx2, float_0_80420d1c, cx2,
-                        scratchA, &attr, scratchB, &radius, scratchC, scratchA, scratchB);
+    hit = marioHitCheck((*(Vec*)((s32)plane + 0x3C)).x,
+                        (*(Vec*)((s32)plane + 0x3C)).y,
+                        (*(Vec*)((s32)plane + 0x3C)).z, sx2, float_0_80420d1c, cx2,
+                        &scratchA, &attr, &scratchB, &radius, &scratchC, &scratchD, &scratchE);
     if (hit != 0) {
         *(void**)((s32)mario + 0x1E4) = hit;
         *outAttr = attr;
@@ -1032,18 +1115,22 @@ s32 chkCollision(s32* outAttr) {
 
     *(void**)((s32)mario + 0x1E8) = 0;
     radius = float_10p1_80420d20;
-    hit = marioHitCheck(start.x, start.y + float_10_80420d18, start.z,
+    hit = marioHitCheck((*(Vec*)((s32)plane + 0x30)).x,
+                        (*(Vec*)((s32)plane + 0x30)).y + float_10_80420d18,
+                        (*(Vec*)((s32)plane + 0x30)).z,
                         float_0_80420d1c, float_neg1_80420d24, float_0_80420d1c,
-                        scratchA, &attr, scratchB, &radius, scratchC, scratchA, scratchB);
+                        &scratchA, &attr, &scratchB, &radius, &scratchC, &scratchD, &scratchE);
     if (hit != 0) {
         *(void**)((s32)mario + 0x1E8) = hit;
         *outAttr = attr;
         hitAny = 1;
     } else if (!hitAny) {
         radius = float_10p1_80420d20;
-        hit = marioHitCheck(end.x, end.y + float_10_80420d18, end.z,
+        hit = marioHitCheck((*(Vec*)((s32)plane + 0x3C)).x,
+                            (*(Vec*)((s32)plane + 0x3C)).y + float_10_80420d18,
+                            (*(Vec*)((s32)plane + 0x3C)).z,
                             float_0_80420d1c, float_neg1_80420d24, float_0_80420d1c,
-                            scratchA, &attr, scratchB, &radius, scratchC, scratchA, scratchB);
+                            &scratchA, &attr, &scratchB, &radius, &scratchC, &scratchD, &scratchE);
         if (hit != 0) {
             *(void**)((s32)mario + 0x1E8) = hit;
             *outAttr = attr;
@@ -1052,10 +1139,10 @@ s32 chkCollision(s32* outAttr) {
     }
 
     if (!hitAny) {
-        PSVECSubtract(&end, &start, &delta);
+        PSVECSubtract((Vec*)((s32)plane + 0x3C), (Vec*)((s32)plane + 0x30), &delta);
         radius = PSVECMag(&delta);
         PSVECNormalize(&delta, &delta);
-        hit = marioHitCheckVec(&start, &delta, &x0, 0, &radius);
+        hit = marioHitCheckVec((Vec*)((s32)plane + 0x30), &delta, &x0, 0, &radius);
         if (hit != 0) {
             *(void**)((s32)mario + 0x1E8) = hit;
             *outAttr = *(s32*)((s32)&x0 - 4);
@@ -1066,9 +1153,11 @@ s32 chkCollision(s32* outAttr) {
     *(void**)((s32)mario + 0x1F0) = 0;
     if (*(void**)((s32)mario + 0x1E8) == 0) {
         radius = float_2_80420d28;
-        hit = marioHitCheck(start.x, start.y, start.z,
+        hit = marioHitCheck((*(Vec*)((s32)plane + 0x30)).x,
+                            (*(Vec*)((s32)plane + 0x30)).y,
+                            (*(Vec*)((s32)plane + 0x30)).z,
                             float_0_80420d1c, float_1_80420d2c, float_0_80420d1c,
-                            scratchA, &attr, scratchB, &radius, scratchC, scratchA, scratchB);
+                            &scratchA, &attr, &scratchB, &radius, &scratchC, &scratchD, &scratchE);
         if (hit != 0) {
             *(void**)((s32)mario + 0x1F0) = hit;
             *outAttr = attr;

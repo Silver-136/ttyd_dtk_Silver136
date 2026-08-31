@@ -116,7 +116,7 @@ void mot_jabara(void) {
     extern s32 marioGetRub(s32 type, void* dir, void* count, void* scratch);
     extern f64 marioChkOverheadJabara(s32* side, f32* height);
     extern f64 marioChkOverhead(void);
-    extern s32 marioSearchHead(f64 height, void* position, f32* outHeight);
+    extern void* marioSearchHead(f32 height, void* position, f32* outHeight);
     extern void* marioSearchHead_jabara(f64 height, void* position, f32* outHeight, void* scratch);
     extern void camFollowYOn(void);
     extern void camFollowYOff(void);
@@ -404,7 +404,7 @@ void mot_jabara(void) {
             localPos[2] = POS[2];
             landY = float_25_80420c30;
             timedOut = 0;
-            if (marioSearchHead((f64)float_200_80420c34, localPos, &landY) != 0) {
+            if (marioSearchHead(float_200_80420c34, localPos, &landY) != 0) {
                 if ((BUTTON_HELD & 0x100) == 0) {
                     work = MOT_WORK;
                     W32(0x1C)++;
@@ -720,7 +720,7 @@ start_crawl:
             HEAD_HIT = marioSearchHead_jabara((f64)float_0_80420bd4, localPos, &landY, &localScratch0);
             if (HEAD_HIT == 0) {
                 landY = float_5_80420be8 + COLL[1];
-                HEAD_HIT = (void*)marioSearchHead((f64)float_0_80420bd4, localPos, &landY);
+                HEAD_HIT = marioSearchHead(float_0_80420bd4, localPos, &landY);
             }
             if (STICK_SENS != float_0_80420bd4) {
                 marioChgPose(&str_M_W_6_80420ca8);
@@ -908,49 +908,49 @@ void mot_jabara_post(void) {
     }
 }
 u8 swingMain(void) {
-    extern f32 float_0_80420bd4;
-    extern f32 float_0p1_80420bd8;
-    extern f32 float_180_80420bdc;
-    extern f32 float_1p4_80420be0;
-    extern f32 float_0p8_80420be4;
-    extern f32 float_5_80420be8;
+    extern void* marioGetPtr(void);
     extern f64 revise360(f64 angle);
     extern f64 __fabs(f64 value);
+    extern f32 float_0_80420bd4;
+    extern f32 float_0p1_80420bd8;
+    extern f32 float_0p8_80420be4;
+    extern f32 float_1p4_80420be0;
+    extern f32 float_5_80420be8;
     extern f32 float_40_80420bd0;
+    extern f32 float_180_80420bdc;
 
     void* player = marioGetPtr();
-    void* mot = *(void**)((s32)player + 0x294);
     f32 previous;
     s16 timer;
-    s8 state;
 
 #define ROT (*(f32*)((s32)player + 0xBC))
 #define SPEED (*(f32*)((s32)player + 0x2C8))
 #define ACCEL (*(f32*)((s32)player + 0x2CC))
 #define TIMER (*(s16*)((s32)player + 0x2D0))
 #define STATE (*(s8*)((s32)player + 0x2D2))
+#define MOT (*(void**)((s32)marioGetPtr() + 0x294))
 
-    if (mot == 0) {
+    if (MOT == 0) {
         return 0;
     }
 
     if (*(s32*)((s32)player + 0x44) < 0x5A &&
         (*(u16*)((s32)player + 0x24C) & 0x300) != 0 &&
-        ((*(u32*)mot & 1) == 0)) {
+        ((*(u32*)MOT & 1) == 0)) {
         TIMER = 0;
-        *(u32*)mot |= 1;
+        *(u32*)MOT |= 1;
     }
 
     if (STATE == 1) {
         timer = TIMER;
         if (timer > 0) {
             TIMER = timer - 1;
-            SPEED += *(f32*)((s32)mot + 4);
+            SPEED += *(f32*)((s32)MOT + 4);
             if (SPEED >= float_40_80420bd0) {
                 SPEED = float_40_80420bd0;
             }
         } else if (timer == 0) {
-            SPEED += *(f32*)((s32)mot + 8);
+            SPEED += *(f32*)((s32)MOT + 8);
             if (SPEED <= float_0_80420bd4) {
                 SPEED = float_0_80420bd4;
                 ACCEL = float_0p1_80420bd8;
@@ -958,7 +958,7 @@ u8 swingMain(void) {
             }
         }
 
-        if ((*(u32*)mot & 1) == 0) {
+        if ((*(u32*)MOT & 1) == 0) {
             ROT = (f32)revise360(ROT + SPEED);
         } else {
             previous = ROT;
@@ -971,55 +971,59 @@ u8 swingMain(void) {
         }
     }
 
-    state = STATE;
-    if (state == 4) {
+    switch (STATE) {
+    case 4:
         SPEED -= ACCEL;
         ROT = (f32)revise360(ROT + SPEED);
         if (ROT > float_180_80420bdc) {
             STATE = 5;
-            ACCEL += *(f32*)((s32)mot + 0x10);
+            ACCEL += *(f32*)((s32)MOT + 0x10);
         }
-    } else if (state == 2) {
+        break;
+    case 2:
         SPEED += ACCEL;
         ROT = (f32)revise360(ROT + SPEED);
         if (ROT < float_180_80420bdc) {
             STATE = 3;
-            ACCEL += *(f32*)((s32)mot + 0x10);
+            ACCEL += *(f32*)((s32)MOT + 0x10);
         }
-    } else if (state == 3) {
+        break;
+    case 3:
         SPEED -= ACCEL;
         if (SPEED <= float_0_80420bd4) {
             SPEED = float_0_80420bd4;
             STATE = 4;
-            ACCEL -= *(f32*)((s32)mot + 0x10);
+            ACCEL -= *(f32*)((s32)MOT + 0x10);
             if (__fabs(ROT) < float_0p8_80420be4) {
                 STATE = 0;
             }
         }
         ROT = (f32)revise360(ROT + SPEED);
-    } else if (state == 5) {
+        break;
+    case 5:
         SPEED += ACCEL;
         if (SPEED >= float_0_80420bd4) {
             SPEED = float_0_80420bd4;
             STATE = 2;
-            ACCEL -= *(f32*)((s32)mot + 0x10);
+            ACCEL -= *(f32*)((s32)MOT + 0x10);
             if (__fabs(ROT) < float_0p8_80420be4) {
                 STATE = 0;
             }
         }
         ROT = (f32)revise360(ROT + SPEED);
+        break;
     }
 
     if (STATE == 11) {
         timer = TIMER;
         if (timer > 0) {
             TIMER = timer - 1;
-            SPEED += *(f32*)((s32)mot + 4);
+            SPEED += *(f32*)((s32)MOT + 4);
             if (SPEED >= float_40_80420bd0) {
                 SPEED = float_40_80420bd0;
             }
         } else if (timer == 0) {
-            SPEED += *(f32*)((s32)mot + 8);
+            SPEED += *(f32*)((s32)MOT + 8);
             if (SPEED <= float_0_80420bd4) {
                 SPEED = float_1p4_80420be0;
                 ACCEL = float_0p1_80420bd8;
@@ -1027,7 +1031,7 @@ u8 swingMain(void) {
             }
         }
 
-        if ((*(u32*)mot & 1) == 0) {
+        if ((*(u32*)MOT & 1) == 0) {
             ROT = (f32)revise360(ROT - SPEED);
         } else {
             previous = ROT;
@@ -1040,43 +1044,47 @@ u8 swingMain(void) {
         }
     }
 
-    state = STATE;
-    if (state == 14) {
+    switch (STATE) {
+    case 14:
         SPEED -= ACCEL;
         ROT = (f32)revise360(ROT - SPEED);
         if (ROT < float_180_80420bdc) {
             STATE = 15;
-            ACCEL += *(f32*)((s32)mot + 0x10);
+            ACCEL += *(f32*)((s32)MOT + 0x10);
         }
-    } else if (state == 12) {
+        break;
+    case 12:
         SPEED += ACCEL;
         ROT = (f32)revise360(ROT - SPEED);
         if (ROT > float_180_80420bdc) {
             STATE = 13;
-            ACCEL += *(f32*)((s32)mot + 0x10);
+            ACCEL += *(f32*)((s32)MOT + 0x10);
         }
-    } else if (state == 13) {
+        break;
+    case 13:
         SPEED -= ACCEL;
         if (SPEED <= float_0_80420bd4) {
             SPEED = float_0_80420bd4;
             STATE = 14;
-            ACCEL -= *(f32*)((s32)mot + 0x10);
+            ACCEL -= *(f32*)((s32)MOT + 0x10);
             if (__fabs(ROT) < float_0p8_80420be4) {
                 STATE = 0;
             }
         }
         ROT = (f32)revise360(ROT - SPEED);
-    } else if (state == 15) {
+        break;
+    case 15:
         SPEED += ACCEL;
         if (SPEED >= float_0_80420bd4) {
             SPEED = float_0_80420bd4;
             STATE = 12;
-            ACCEL -= *(f32*)((s32)mot + 0x10);
+            ACCEL -= *(f32*)((s32)MOT + 0x10);
             if (__fabs(ROT) < float_0p8_80420be4) {
                 STATE = 10;
             }
         }
         ROT = (f32)revise360(ROT - SPEED);
+        break;
     }
 
 #undef STATE
@@ -1084,6 +1092,7 @@ u8 swingMain(void) {
 #undef ACCEL
 #undef SPEED
 #undef ROT
+#undef MOT
     return 0;
 }
 

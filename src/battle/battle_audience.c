@@ -3421,16 +3421,70 @@ void BattleAudienceAddTargetNum(f32 added, f32 carry) {
 }
 
 void BattleAudienceAddTargetNumSub(f32 amount) {
-    void* audience = BattleAudienceBaseGetPtr();
-    f32 remaining = amount;
+    extern const f32 float_neg1_804249d4;
+    extern const f32 float_0p25_804249ac;
+    u8* audience;
     f32 step;
+    s32 count;
 
-    if (remaining == float_0_80424988) {
-        return;
-    }
-    if (remaining > float_0_80424988) {
-        step = float_1_80424990;
-        *(f32*)((u8*)audience + 0x1377C) += step;
+    audience = BattleAudienceBaseGetPtr();
+
+    for (;;) {
+        if (float_0_80424988 == amount) {
+            return;
+        }
+
+        if (float_0_80424988 < amount) {
+            step = float_1_80424990;
+            if (amount < float_1_80424990) {
+                step = amount;
+            }
+
+            amount -= step;
+            if (amount < float_0_80424988) {
+                amount = float_0_80424988;
+            }
+        }
+
+        if (amount < float_0_80424988) {
+            step = float_neg1_804249d4;
+            if (float_neg1_804249d4 < amount) {
+                step = amount;
+            }
+
+            amount -= step;
+            if (float_0_80424988 < amount) {
+                amount = float_0_80424988;
+            }
+        }
+
+        if (float_0_80424988 < step) {
+            count = (s32)(((*(f32*)(audience + 0x1377C) /
+                            *(f32*)(audience + 0x13778)) -
+                           float_1_80424990) /
+                          float_0p25_804249ac);
+
+            if (count > 0) {
+                count++;
+                *(f32*)(audience + 0x1377C) += step / (f32)count;
+                continue;
+            }
+        }
+
+        if (step < float_0_80424988) {
+            count = (s32)(((*(f32*)(audience + 0x1377C) /
+                            *(f32*)(audience + 0x13778)) -
+                           float_1_80424990) /
+                          float_0p25_804249ac);
+
+            if (count <= -1) {
+                count--;
+                *(f32*)(audience + 0x1377C) -= step / (f32)count;
+                continue;
+            }
+        }
+
+        *(f32*)(audience + 0x1377C) += step;
     }
 }
 

@@ -64,6 +64,7 @@ u8 mot_hammer(void) {
     extern s32 lv3quake_evt;
 
     void* player = marioGetPtr();
+    void* current;
     void* hit;
     void* mobj;
     f32 angle;
@@ -106,12 +107,15 @@ u8 mot_hammer(void) {
         TRIG_FLAGS &= ~1;
         FLAGS &= ~0xF0000;
         FLAGS |= 0x80;
+        side = DISP_DIR;
+        current = marioGetPtr();
         angle = float_0_80420ab8;
-        if ((DISP_FLAGS & 0x80000000) != 0) {
-            angle = (DISP_DIR >= float_90_80420ac0 && DISP_DIR <= float_270_80420ac4)
+        if ((*(u32*)((s32)current + 4) & 0x80000000) != 0) {
+            angle = (*(f32*)((s32)current + 0x1AC) >= float_90_80420ac0 &&
+                     *(f32*)((s32)current + 0x1AC) <= float_270_80420ac4)
                         ? float_30_80420ae4 : float_neg30_80420b7c;
         }
-        if (DISP_DIR >= float_90_80420ac0 && DISP_DIR <= float_270_80420ac4) {
+        if (side >= float_90_80420ac0 && side <= float_270_80420ac4) {
             angle = revise360(float_180_80420ac8 + angle);
         } else {
             angle = revise360(angle);
@@ -125,15 +129,26 @@ u8 mot_hammer(void) {
         hit = hitEstimate(kind);
         HAMMER_HIT = hit;
         if (hit != 0) {
-            side = (DISP_FLAGS & 0x80000000) != 0 ? float_neg30_80420b7c : float_0_80420ab8;
-            VIEW_DIR = toMovedir2((DISP_DIR >= float_90_80420ac0 && DISP_DIR <= float_270_80420ac4)
+            angle = DISP_DIR;
+            current = marioGetPtr();
+            side = (*(u32*)((s32)current + 4) & 0x80000000) != 0
+                       ? float_neg30_80420b7c : float_0_80420ab8;
+            VIEW_DIR = toMovedir2((angle >= float_90_80420ac0 && angle <= float_270_80420ac4)
                                       ? float_180_80420ac8 : float_0_80420ab8,
                                   side);
-            HAMMER_ANGLE = revise360((DISP_DIR >= float_90_80420ac0 && DISP_DIR <= float_270_80420ac4)
+            angle = DISP_DIR;
+            current = marioGetPtr();
+            side = float_0_80420ab8;
+            if ((*(u32*)((s32)current + 4) & 0x80000000) != 0) {
+                side = (*(f32*)((s32)current + 0x1AC) >= float_90_80420ac0 &&
+                        *(f32*)((s32)current + 0x1AC) <= float_270_80420ac4)
+                           ? float_30_80420ae4 : float_neg30_80420b7c;
+            }
+            HAMMER_ANGLE = revise360((angle >= float_90_80420ac0 && angle <= float_270_80420ac4)
                                          ? float_180_80420ac8 + side : side);
         }
 
-        if (hit != 0 && (hitGetAttr(hit) & 0x80000000) != 0) {
+        if ((hitGetAttr(hit) & 0x80000000) != 0) {
             mobj = mobjHitObjPtrToPtr(hit);
             objectName = (char*)((s32)mobj + 0x15);
             value = 0;
@@ -164,7 +179,15 @@ u8 mot_hammer(void) {
             HIT_TIME = kind[0] == 7 ? 3 : kind[0];
             FLAGS |= 0x800;
         }
-        psndSFXOn_3D(0x15A + hammerLevel, POS);
+        current = marioGetPtr();
+        soundId = 0x15B;
+        hammerLevel = pouchGetHammerLv();
+        if (hammerLevel == 2) {
+            soundId = 0x15C;
+        } else if (hammerLevel == 3) {
+            soundId = 0x15D;
+        }
+        psndSFXOn_3D(soundId, (f32*)((s32)current + 0x8C));
         HIT_KIND = kind[0];
     }
 
@@ -229,7 +252,15 @@ u8 mot_hammer(void) {
             effKemuTestEntry(effectX, effectY, effectZ, float_1_80420b48, effectType);
         }
 
-        psndSFXOn_3D(0x15D + hammerLevel, POS);
+        current = marioGetPtr();
+        hammerLevel = pouchGetHammerLv();
+        if (hammerLevel == 1) {
+            psndSFXOn_3D(0x15E, (f32*)((s32)current + 0x8C));
+        } else if (hammerLevel == 2) {
+            psndSFXOn_3D(0x15F, (f32*)((s32)current + 0x8C));
+        } else if (hammerLevel == 3) {
+            psndSFXOn_3D(0x160, (f32*)((s32)current + 0x8C));
+        }
         soundId = 0x161;
         for (tries = 0; tries < 10; tries++) {
             if (pouchEquipCheckBadge(se_data[HAMMER_SFX]) != 0) {
@@ -331,6 +362,10 @@ void mot_hammer2(void) {
     extern void marioChgMotSub(s32 motion, s32 param);
     extern s32 sysMsec2Frame(s32 msec);
     extern void* effUltraHammerEntry(f32, f32, f32, f32, s32, s32);
+    extern void sincosf(f64 angle, f32* outSin, f32* outCos);
+    extern void* hitCheckFilter(f64, f64, f64, f64, f64, f64, s32,
+                                void*, void*, void*, void*, void*, void*, void*);
+    extern u32 hitGetAttr(void* hit);
     extern char str_M_H_3_80420b18;
     extern char str_M_H_6_80420b20;
     extern char str_M_H_9_80420b28;
@@ -353,6 +388,8 @@ void mot_hammer2(void) {
     extern f32 float_72_80420b34;
     extern f32 float_180_80420ac8;
     extern f32 float_270_80420ac4;
+    extern f32 float_2_80420ab0;
+    extern f32 float_0p5_80420ab4;
     extern f32 float_38_80420b0c;
     extern f32 float_15_80420b10;
     extern f32 float_10_80420b14;
@@ -371,8 +408,22 @@ void mot_hammer2(void) {
     f32 high;
     f32 threshold;
     f32 direction;
+    f32 collisionBase;
+    f32 collisionDelta;
+    f64 collisionAngle;
     s32 level;
     s32 rub;
+    u32 hitOut6;
+    u32 hitOut5;
+    u32 hitOut4;
+    f32 hitRadius;
+    u32 hitOut2;
+    u32 hitOut1;
+    u32 hitOut0;
+    f32 hitCos;
+    f32 hitSin;
+    void* collisionPlayer;
+    void* hit;
 
 #define FLAGS (*(u32*)((s32)player + 0x0))
 #define DISP_FLAGS (*(u32*)((s32)player + 0x4))
@@ -393,7 +444,7 @@ void mot_hammer2(void) {
 #define CHARGE_ANGLE (*(f32*)((s32)player + 0x2C8))
 #define CHARGE_FLAGS (*(u16*)((s32)player + 0x2CC))
 #define SOUND_ID (*(s32*)((s32)player + 0x2D0))
-#define HIT_COUNT (*(s16*)((s32)player + 0x2C4))
+#define HIT_COUNT (*(s16*)((s32)player + 0x2BC))
 
     if ((TRIG_FLAGS & 1) != 0) {
         TRIG_FLAGS &= ~1;
@@ -445,7 +496,13 @@ void mot_hammer2(void) {
             TIMER = 30;
         case 10:
             rub = marioGetRub(0x200, dir, count, scratch);
-            if (rub == 1 && ++MOTION_COUNT > 20) MOTION_COUNT = 20;
+            if (rub == 1) {
+                CHARGE_FLAGS &= ~1;
+                MOTION_COUNT++;
+                if (MOTION_COUNT > 19) {
+                    MOTION_COUNT = 20;
+                }
+            }
             if (MOTION_COUNT < 2) {
                 low = float_18_80420b58;
                 high = float_24_80420b64;
@@ -533,10 +590,28 @@ void mot_hammer2(void) {
             break;
         case 20:
             direction = DISP_DIR;
+            collisionBase = float_270_80420ac4;
             HIT_COUNT = 10;
-            DISP_FLAGS |= 0x20000000;
+            DISP_FLAGS |= 0x100;
+            collisionDelta = collisionBase - DISP_DIR;
+            collisionAngle = revise360(collisionDelta);
+            collisionPlayer = marioGetPtr();
+            sincosf(collisionAngle, &hitSin, &hitCos);
+            hitRadius = float_2_80420ab0 * *(f32*)((s32)collisionPlayer + 0x1B8);
+            hit = hitCheckFilter(
+                (f64)*(f32*)((s32)collisionPlayer + 0x8C),
+                (f64)(float_0p5_80420ab4 * *(f32*)((s32)collisionPlayer + 0x1BC) +
+                      *(f32*)((s32)collisionPlayer + 0x90)),
+                (f64)*(f32*)((s32)collisionPlayer + 0x94),
+                (f64)hitSin, (f64)float_0_80420ab8, (f64)hitCos, 0,
+                &hitOut0, &hitOut1, &hitOut2, &hitRadius, &hitOut4, &hitOut5, &hitOut6);
+            if (hit != 0) {
+                if ((hitGetAttr(hit) & 0x800005) != 0) {
+                }
+                *(void**)((s32)player + 0x200) = hit;
+            }
             DISP_DIR += CHARGE_RATE * (*(s8*)((s32)player + 0x43) ? -1.0f : 1.0f);
-            if ((s32)(direction / 360.0f) != (s32)(DISP_DIR / 360.0f)) {
+            if ((s32)direction / 360 != (s32)DISP_DIR / 360) {
                 psndSFXOn_3D(0x163, POS);
             }
             if (HIT_COUNT == 1) psndSFXOn_3D(0x163, POS);
@@ -544,7 +619,9 @@ void mot_hammer2(void) {
             if (CHARGE > 2 && TIMER == 10) {
                 marioPaperOff();
                 marioChgPose(&str_M_S_1_80420b6c);
-                DISP_FLAGS &= ~0xA0000004;
+                DISP_FLAGS &= ~4;
+                DISP_FLAGS &= ~8;
+                DISP_FLAGS &= ~0x10;
             }
             if (TIMER <= 0) {
                 if (CHARGE < 3) {
@@ -562,11 +639,13 @@ void mot_hammer2(void) {
                 if (CHARGE < 3) {
                     marioPaperOff();
                     marioChgPose(&str_M_S_1_80420b6c);
-                    DISP_FLAGS &= ~0xA0000004;
+                    DISP_FLAGS &= ~4;
+                    DISP_FLAGS &= ~8;
+                    DISP_FLAGS &= ~0x10;
                     DISP_DIR = (f32)revise360(DISP_DIR);
                     marioAdjustMoveDir();
                 }
-                DISP_FLAGS &= ~0x20000000;
+                DISP_FLAGS &= ~0x100;
                 SUBMOTION = 23;
                 TIMER = 1;
                 TIMER--;
@@ -679,6 +758,7 @@ void* hitEstimate(s32* outKind) {
         Vec hitPos;
         f32 radius;
     } Probe;
+    extern const Vec vec3_802c3ec8;
     extern const Vec vec3_802c3ed4;
     extern const Vec vec3_802c3ee0;
     extern const Vec vec3_802c3eec;
@@ -699,12 +779,13 @@ void* hitEstimate(s32* outKind) {
     Vec direction3;
     Vec direction4;
     Vec position;
+    const Vec* directions = &vec3_802c3ec8;
 
     mario = marioGetPtr();
     *outKind = 0;
 
     side = float_0_80420ab8;
-    if ((*(u32*)((s32)marioGetPtr() + 0x4) & 1) != 0) {
+    if ((*(u32*)((s32)marioGetPtr() + 0x4) & 0x80000000) != 0) {
         side = float_neg20_80420abc;
     }
 
@@ -717,7 +798,7 @@ void* hitEstimate(s32* outKind) {
     sincosf(angle, &cosv, &sinv);
 
     height = *(f32*)((s32)mario + 0x1BC);
-    direction1 = vec3_802c3ed4;
+    direction1 = directions[1];
     direction1.x = cosv;
     direction1.y = -(f32)cos(float_3p1416_80420acc);
     direction1.z = sinv;
@@ -733,7 +814,7 @@ void* hitEstimate(s32* outKind) {
         return hit;
     }
 
-    direction2 = vec3_802c3ee0;
+    direction2 = directions[2];
     direction2.x = cosv;
     direction2.y = -(f32)cos(float_1p2217_80420ad8);
     direction2.z = sinv;
@@ -753,7 +834,7 @@ void* hitEstimate(s32* outKind) {
         return hit;
     }
 
-    direction3 = vec3_802c3eec;
+    direction3 = directions[3];
     direction3.x = cosv;
     direction3.y = -(f32)cos(float_0p7854_80420ae8);
     direction3.z = sinv;
@@ -772,14 +853,14 @@ void* hitEstimate(s32* outKind) {
         return hit;
     }
 
-    direction4 = vec3_802c3ef8;
+    direction4 = directions[4];
     direction4.y = -(f32)cos(float_0_80420ab8);
     probe.end = direction4;
     for (i = 0; i < 2; i++) {
         dist = float_20_80420af0;
         if (i != 0) {
             dist = float_34_80420af4;
-            if ((*(u32*)((s32)mario + 0x4) & 1) != 0) {
+            if ((*(u32*)((s32)mario + 0x4) & 0x80000000) != 0) {
                 dist = float_37_80420af8;
             }
         }

@@ -13,6 +13,7 @@
 ###
 
 import argparse
+import json
 import sys
 from pathlib import Path
 from typing import Any, Dict, List
@@ -258,6 +259,95 @@ def Rel(lib_name: str, src_dir: str, objects: List[Object]) -> Dict[str, Any]:
 Matching = True
 NonMatching = False
 
+
+def load_nontext_symbol_mappings(path: Path) -> Dict[str, Dict[str, str]]:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        sys.exit(f"Failed to load non-text symbol mappings from {path}: {exc}")
+
+    if data.get("schema_version") != 1 or data.get("component") != "main.dol":
+        sys.exit(f"Unsupported non-text symbol mapping manifest: {path}")
+    units = data.get("units")
+    if not isinstance(units, dict):
+        sys.exit(f"Invalid non-text symbol mapping units in {path}")
+
+    normalized: Dict[str, Dict[str, str]] = {}
+    mapping_count = 0
+    for unit_name, mappings in units.items():
+        if not isinstance(unit_name, str) or not unit_name.startswith("main/"):
+            sys.exit(f"Invalid non-text symbol mapping unit {unit_name!r} in {path}")
+        if not isinstance(mappings, dict) or not mappings:
+            sys.exit(f"Invalid non-text symbol mappings for {unit_name} in {path}")
+        rebuilt_owners: Dict[str, str] = {}
+        normalized_mappings: Dict[str, str] = {}
+        for target_symbol, rebuilt_symbol in mappings.items():
+            if not isinstance(target_symbol, str) or not target_symbol:
+                sys.exit(f"Invalid target symbol for {unit_name} in {path}")
+            if not isinstance(rebuilt_symbol, str) or not rebuilt_symbol:
+                sys.exit(f"Invalid rebuilt symbol for {unit_name} in {path}")
+            previous_target = rebuilt_owners.get(rebuilt_symbol)
+            if previous_target is not None:
+                sys.exit(
+                    f"Non-text mapping collision in {unit_name}: {previous_target} and "
+                    f"{target_symbol} both claim {rebuilt_symbol}"
+                )
+            rebuilt_owners[rebuilt_symbol] = target_symbol
+            normalized_mappings[target_symbol] = rebuilt_symbol
+            mapping_count += 1
+        normalized[unit_name] = normalized_mappings
+
+    if data.get("mapping_count") != mapping_count:
+        sys.exit(
+            f"Non-text mapping count mismatch in {path}: "
+            f"declared {data.get('mapping_count')}, found {mapping_count}"
+        )
+    return normalized
+
+
+def apply_nontext_symbol_mappings(
+    project_config: ProjectConfig, manifest_path: Path
+) -> None:
+    manifest_units = load_nontext_symbol_mappings(manifest_path)
+    applied_units = set()
+
+    for lib in project_config.libs or []:
+        src_dir = Path(lib.get("src_dir", project_config.src_dir))
+        if src_dir != project_config.src_dir:
+            continue
+        for obj in lib["objects"]:
+            unit_name = f"main/{obj.base_name.as_posix()}"
+            new_mappings = manifest_units.get(unit_name)
+            if new_mappings is None:
+                continue
+            if unit_name in applied_units:
+                sys.exit(f"Duplicate configured object for non-text mapping unit {unit_name}")
+
+            existing = dict(obj.options.get("symbol_mappings") or {})
+            rebuilt_owners = {rebuilt: target for target, rebuilt in existing.items()}
+            for target_symbol, rebuilt_symbol in new_mappings.items():
+                if target_symbol in existing:
+                    sys.exit(
+                        f"Non-text mapping target conflict in {unit_name}: {target_symbol}"
+                    )
+                previous_target = rebuilt_owners.get(rebuilt_symbol)
+                if previous_target is not None:
+                    sys.exit(
+                        f"Non-text mapping rebuilt collision in {unit_name}: "
+                        f"{previous_target} and {target_symbol} both claim {rebuilt_symbol}"
+                    )
+                existing[target_symbol] = rebuilt_symbol
+                rebuilt_owners[rebuilt_symbol] = target_symbol
+            obj.options["symbol_mappings"] = existing
+            applied_units.add(unit_name)
+
+    missing_units = sorted(set(manifest_units) - applied_units)
+    if missing_units:
+        sys.exit(
+            "Non-text mapping units are absent or non-main in configure.py: "
+            + ", ".join(missing_units)
+        )
+
 config.warn_missing_config = False
 config.warn_missing_source = False
 config.libs = [
@@ -288,7 +378,17 @@ config.libs = [
             Object(NonMatching, "mapdata.c"),
             Object(NonMatching, "memory.c"),
             Object(NonMatching, "nameent.c"),
-            Object(NonMatching, "npc_data.c"),
+            Object(
+                NonMatching,
+                "npc_data.c",
+                symbol_mappings={
+                    "str_キノピオ子_802e4440": "str_00000270_rodata",
+                    "str_クリスチーヌ_802e41d0": "str_00000000_rodata",
+                    "str_ノコノコ_802e427c": "str_000000ac_rodata",
+                    "str_ボッタクール_802e4740": "str_00000570_rodata",
+                    "str_ボムへい_802e733c": "str_0000316c_rodata",
+                },
+            ),
             Object(NonMatching, "npc_event.c"),
             Object(NonMatching, "parse.c"),
             Object(NonMatching, "peach.c"),
@@ -403,11 +503,38 @@ config.libs = [
             Object(NonMatching, "battle/battle_monosiri.c"),
             Object(NonMatching, "battle/battle_pad.c"),
             Object(NonMatching, "battle/battle_party.c"),
-            Object(NonMatching, "battle/battle_seq.c"),
-            Object(NonMatching, "battle/battle_seq_command.c"),
+            Object(
+                NonMatching,
+                "battle/battle_seq.c",
+                symbol_mappings={
+                    "jumptable_80363C50": "@2067",
+                    "jumptable_80363C8C": "@2192",
+                    "jumptable_80363CC8": "@2995",
+                    "jumptable_80363E00": "@3160",
+                    "jumptable_80363E3C": "@3172",
+                },
+            ),
+            Object(
+                NonMatching,
+                "battle/battle_seq_command.c",
+                symbol_mappings={
+                    "jumptable_8036403C": "@2121",
+                    "jumptable_80363FA0": "@1455",
+                    "jumptable_80363FC4": "@1669",
+                    "jumptable_80363FE0": "@1668",
+                    "jumptable_80364004": "@1667",
+                    "jumptable_80364074": "@2235",
+                    "jumptable_803640EC": "@2317",
+                    "jumptable_80364108": "@2627",
+                },
+            ),
             Object(NonMatching, "battle/battle_seq_end.c"),
             Object(NonMatching, "battle/battle_stage.c"),
-            Object(NonMatching, "battle/battle_stage_object.c"),
+            Object(
+                NonMatching,
+                "battle/battle_stage_object.c",
+                symbol_mappings={"jumptable_803771F0": "@1067"},
+            ),
             Object(NonMatching, "battle/battle_status_effect.c"),
             Object(NonMatching, "battle/battle_status_icon.c"),
             Object(NonMatching, "battle/battle_sub.c"),
@@ -809,7 +936,11 @@ config.libs = [
             Object(NonMatching, "sequence/seq_load.c"),
             Object(NonMatching, "sequence/seq_logo.c"),
             Object(NonMatching, "sequence/seq_mapchange.c"),
-            Object(NonMatching, "sequence/seq_title.c"),
+            Object(
+                NonMatching,
+                "sequence/seq_title.c",
+                symbol_mappings={"pressStartGX_80008888": "pressStartGX"},
+            ),
         ],
     },
     {
@@ -849,7 +980,15 @@ config.libs = [
         "objects": [
             Object(NonMatching, "window/win_badge.c"),
             Object(NonMatching, "window/win_item.c"),
-            Object(NonMatching, "window/win_log.c"),
+            Object(
+                NonMatching,
+                "window/win_log.c",
+                symbol_mappings={
+                    "help$764": "help",
+                    "name$763": "name",
+                    "msg_help$506": "msg_help",
+                },
+            ),
             Object(NonMatching, "window/win_main.c"),
             Object(NonMatching, "window/win_mario.c"),
             Object(NonMatching, "window/win_party.c"),
@@ -1627,6 +1766,14 @@ config.libs = [
         ],
     ),
 ]
+
+nontext_symbol_mappings_path = (
+    Path("config") / config.version / "nontext_symbol_mappings.json"
+)
+apply_nontext_symbol_mappings(config, nontext_symbol_mappings_path)
+if config.reconfig_deps is None:
+    config.reconfig_deps = []
+config.reconfig_deps.append(nontext_symbol_mappings_path)
 
 if args.mode == "configure":
     # Write build.ninja and objdiff.json

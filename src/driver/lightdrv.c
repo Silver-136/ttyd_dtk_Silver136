@@ -35,6 +35,7 @@ void lightInit(void) {
     extern f32 float_0_8041f8cc;
     extern f32 float_1_8041f8d0;
     extern f32 float_3_8041f8d4;
+    extern f32 float_10_8041f8d8;
     extern LightEntry booLight;
     f32 scaleMtx[3][4];
 
@@ -75,7 +76,7 @@ void lightInit(void) {
     booLight.rotation = vec3_802bf8c4;
     booLight.color = dat_8041f8bc;
     booLight.spotAngle = float_0_8041f8cc;
-    booLight.attenAngle = float_0_8041f8cc;
+    booLight.attenAngle = float_10_8041f8d8;
 }
 
 void lightReInit(void) {

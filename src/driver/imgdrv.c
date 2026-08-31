@@ -515,25 +515,7 @@ u8 imgCapture_Prim(int param_1, int param_2) {
         *part |= 0x10;
         if (id != -1) {
             storageType = part[0x10];
-            if (storageType == 0) {
-                offscreenGetTexObj(id, &texObj, &imagePtr);
-                if (texObj != 0) {
-                    part[7] = texObj[0];
-                    part[8] = texObj[1];
-                    part[9] = texObj[2];
-                    part[10] = texObj[3];
-                    part[11] = texObj[4];
-                    part[12] = texObj[5];
-                    part[13] = texObj[6];
-                    part[14] = texObj[7];
-                    part[15] = (u32)imagePtr;
-                    offscreenGetBoundingBox(id, (void*)((s32)part + 8), (void*)((s32)part + 10),
-                                            (void*)((s32)part + 12), (void*)((s32)part + 14));
-                    *(u16*)((s32)part + 12) = *(u16*)((s32)part + 12) - *(u16*)((s32)part + 8);
-                    *(u16*)((s32)part + 14) = *(u16*)((s32)part + 14) - *(u16*)((s32)part + 10);
-                    *part &= ~0x10;
-                }
-            } else {
+            if (storageType != 0) {
                 if ((*part & 0x100) != 0) {
                     offscreenGetTexObj(id, &texObj, &imagePtr);
                     if (texObj != 0) {
@@ -555,18 +537,55 @@ u8 imgCapture_Prim(int param_1, int param_2) {
                                         float_0_80420370, 0, 0, 0);
                         offscreenGetBoundingBox(id, (void*)((s32)part + 8), (void*)((s32)part + 10),
                                                 (void*)((s32)part + 12), (void*)((s32)part + 14));
-                        *(u16*)((s32)part + 12) = *(u16*)((s32)part + 12) - *(u16*)((s32)part + 8);
-                        *(u16*)((s32)part + 14) = *(u16*)((s32)part + 14) - *(u16*)((s32)part + 10);
+                        *(u16*)((s32)part + 12) -= *(u16*)((s32)part + 8);
+                        *(u16*)((s32)part + 14) -= *(u16*)((s32)part + 10);
                         *part &= ~0x100;
                     }
                 }
                 if ((*part & 0x100) == 0) {
                     *part &= ~0x10;
                 }
+            } else {
+                offscreenGetTexObj(id, &texObj, &imagePtr);
+                if (texObj != 0) {
+                    part[7] = texObj[0];
+                    part[8] = texObj[1];
+                    part[9] = texObj[2];
+                    part[10] = texObj[3];
+                    part[11] = texObj[4];
+                    part[12] = texObj[5];
+                    part[13] = texObj[6];
+                    part[14] = texObj[7];
+                    part[15] = (u32)imagePtr;
+                    offscreenGetBoundingBox(id, (void*)((s32)part + 8), (void*)((s32)part + 10),
+                                            (void*)((s32)part + 12), (void*)((s32)part + 14));
+                    *(u16*)((s32)part + 12) -= *(u16*)((s32)part + 8);
+                    *(u16*)((s32)part + 14) -= *(u16*)((s32)part + 10);
+                    *part &= ~0x10;
+                }
             }
+        } else if (part[0x10] == 0) {
+            *(u16*)((s32)part + 8) = *(u16*)((s32)part + 4);
+            *(u16*)((s32)part + 10) = *(u16*)((s32)part + 6);
+            *(u16*)((s32)part + 12) = *(u16*)(param_1 + 0xE4);
+            *(u16*)((s32)part + 14) = *(u16*)(param_1 + 0xE6);
+            height = *(u16*)((s32)part + 14);
+            width = *(u16*)((s32)part + 12);
+            fmt = part[6];
+            GXSetTexCopySrc(*(u16*)((s32)part + 8), *(u16*)((s32)part + 10), width, height);
+            GXSetTexCopyDst(width, height, part[5], 0);
+            size = GXGetTexBufferSize(width, height, fmt, 0, 0);
+            alloc = smartAlloc(size, 3);
+            GXSetZMode(1, 3, 1);
+            GXCopyTex(*(void**)alloc, 0);
+            GXPixModeSync();
+            GXInitTexObj(part + 7, *(void**)alloc, width, height, fmt, 0, 0, 0);
+            GXInitTexObjLOD(part + 7, 0, 0, float_0_80420370, float_0_80420370,
+                            float_0_80420370, 0, 0, 0);
+            part[15] = (u32)alloc;
+            *part &= ~0x10;
         } else {
-            storageType = part[0x10];
-            if (storageType == 0 || (*part & 0x100) != 0) {
+            if ((*part & 0x100) != 0) {
                 *(u16*)((s32)part + 8) = *(u16*)((s32)part + 4);
                 *(u16*)((s32)part + 10) = *(u16*)((s32)part + 6);
                 *(u16*)((s32)part + 12) = *(u16*)(param_1 + 0xE4);
@@ -574,16 +593,16 @@ u8 imgCapture_Prim(int param_1, int param_2) {
                 height = *(u16*)((s32)part + 14);
                 width = *(u16*)((s32)part + 12);
                 fmt = part[6];
+                GXSetTexCopySrc(*(u16*)((s32)part + 8), *(u16*)((s32)part + 10), width, height);
+                GXSetTexCopyDst(width, height, part[5], 0);
                 size = GXGetTexBufferSize(width, height, fmt, 0, 0);
-                if (storageType == 1) {
+                if (part[0x10] == 1) {
                     alloc = smartAlloc(size, 1);
-                } else if (storageType == 2) {
+                } else if (part[0x10] == 2) {
                     alloc = smartAlloc(size, 0);
                 } else {
                     alloc = smartAlloc(size, 3);
                 }
-                GXSetTexCopySrc(*(u16*)((s32)part + 8), *(u16*)((s32)part + 10), width, height);
-                GXSetTexCopyDst(width, height, part[5], 0);
                 GXSetZMode(1, 3, 1);
                 GXCopyTex(*(void**)alloc, 0);
                 GXPixModeSync();
@@ -591,11 +610,7 @@ u8 imgCapture_Prim(int param_1, int param_2) {
                 GXInitTexObjLOD(part + 7, 0, 0, float_0_80420370, float_0_80420370,
                                 float_0_80420370, 0, 0, 0);
                 part[15] = (u32)alloc;
-                if (storageType == 0) {
-                    *part &= ~0x10;
-                } else {
-                    *part &= ~0x100;
-                }
+                *part &= ~0x100;
             }
             if ((*part & 0x100) == 0) {
                 *part &= ~0x10;

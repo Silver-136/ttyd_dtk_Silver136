@@ -713,6 +713,9 @@ s32 evt_npc_move_position(EventEntry* event, s32 isFirstCall) {
 
 s32 evt_npc_jump_position(EventEntry* event, s32 isFirstCall) {
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
+    extern f64 __frsqrte(f64 x);
+    extern f32 __float_nan;
+    extern const u8 vec3_802c1470[];
     extern u32 animPoseGetMaterialFlag(s32 poseId);
     extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
     extern f32 float_0_8041fd84;
@@ -747,7 +750,14 @@ s32 evt_npc_jump_position(EventEntry* event, s32 isFirstCall) {
     s32 sfx;
     f32 zero;
     f32 one;
+    const u8* constBase;
+    f64 sqrtD;
+    f64 inv;
+    u32 bits;
+    s32 cls;
+    union { f32 f; u32 u; } bitsView;
 
+    constBase = vec3_802c1470;
     args = event->args;
     npcName = evtGetValue(event, args[0]);
     targetX = evtGetFloat(event, args[1]);
@@ -781,7 +791,42 @@ s32 evt_npc_jump_position(EventEntry* event, s32 isFirstCall) {
         *(s32*)((s32)npc + 0x160) = *(s32*)((s32)npc + 0x94);
 
         PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x158), diff);
-        dist = sqrtf(diff[0] * diff[0] + diff[2] * diff[2]);
+        dist = diff[0] * diff[0] + diff[2] * diff[2];
+        sqrtD = (f64)dist;
+        if (sqrtD > (f64)zero) {
+            inv = __frsqrte(sqrtD);
+            inv = *(const f64*)(constBase + 0x48) * inv *
+                  -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50));
+            inv = *(const f64*)(constBase + 0x48) * inv *
+                  -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50));
+            dist = (f32)(sqrtD * *(const f64*)(constBase + 0x48) * inv *
+                         -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50)));
+        } else {
+            if (*(const f64*)(constBase + 0x58) <= sqrtD) {
+                bitsView.f = dist;
+                bits = bitsView.u & 0x7F800000;
+                if (bits == 0x7F800000) {
+                    if ((bitsView.u & 0x7FFFFF) == 0) {
+                        cls = 2;
+                    } else {
+                        cls = 1;
+                    }
+                } else if ((bits < 0x7F800000) && (bits == 0)) {
+                    if ((bitsView.u & 0x7FFFFF) == 0) {
+                        cls = 3;
+                    } else {
+                        cls = 5;
+                    }
+                } else {
+                    cls = 4;
+                }
+                if (cls == 1) {
+                    dist = __float_nan;
+                }
+            } else {
+                dist = __float_nan;
+            }
+        }
         *(f32*)((s32)npc + 0x1AC) = angleABf(zero, zero, diff[0], diff[2]);
 
         *(f32*)((s32)npc + 0x1B0) = speed;
@@ -803,74 +848,76 @@ s32 evt_npc_jump_position(EventEntry* event, s32 isFirstCall) {
         *(f32*)((s32)npc + 0x1C8) = one;
 
         dy = targetY - *(f32*)((s32)npc + 0x15C);
-        if (height == zero) {
-            if (zero <= dy) {
-                return 1;
-            }
-            if (mode != 1) {
-                if (mode != 0) {
-                    return 1;
-                }
-                if (*(f32*)((s32)npc + 0x1B0) <= float_0p1_8041fd98) {
-                    if (zero < duration) {
-                        *(f32*)((s32)npc + 0x1CC) = (dy / (duration * duration)) / float_neg980_8041fe00;
-                    }
-                } else {
-                    if (duration <= zero) {
-                        duration = dist / *(f32*)((s32)npc + 0x1B0);
-                    }
-                    if (duration <= zero) {
-                        *(f32*)((s32)npc + 0x1C8) = one;
-                    } else {
-                        denom = duration * (float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * duration);
-                        if (denom != zero) {
-                            *(f32*)((s32)npc + 0x1C8) = dy / denom;
-                        }
-                    }
-                }
-            }
-        } else {
+        if (height != zero) {
             if (zero < dy) {
                 height += dy;
             }
             *(f32*)((s32)npc + 0x1C4) = zero;
-            if (mode == 1) {
-                if (duration == zero) {
-                    *(f32*)((s32)npc + 0x1C4) = height;
-                } else {
-                    halfTime = float_0p5_8041fd90 * duration;
-                    *(f32*)((s32)npc + 0x1C4) = -(duration * (float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * duration)) / duration;
-                    denom = *(f32*)((s32)npc + 0x1C4) * halfTime + halfTime * float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * halfTime;
-                    if (denom != zero) {
-                        *(f32*)((s32)npc + 0x1C8) = height / denom;
-                    }
-                }
-            } else {
-                if (mode != 0) {
-                    return 1;
-                }
-                if (duration == zero) {
-                    *(f32*)((s32)npc + 0x1C4) = height;
-                } else {
-                    if (*(f32*)((s32)npc + 0x1B0) <= float_0p1_8041fd98) {
-                        *(f32*)((s32)npc + 0x1B0) = dist / duration;
-                        denom = duration;
+            switch (mode) {
+                case 0:
+                    if (duration == zero) {
+                        *(f32*)((s32)npc + 0x1C4) = height;
                     } else {
-                        denom = dist / *(f32*)((s32)npc + 0x1B0);
-                        if (denom == zero) {
+                        if (*(f32*)((s32)npc + 0x1B0) > float_0p1_8041fd98) {
+                            denom = dist / *(f32*)((s32)npc + 0x1B0);
+                            if (denom == zero) {
+                                denom = duration;
+                            }
+                        } else {
+                            *(f32*)((s32)npc + 0x1B0) = dist / duration;
                             denom = duration;
                         }
+                        if (denom == zero) {
+                            denom = one;
+                        }
+                        halfTime = float_0p5_8041fd90 * denom;
+                        *(f32*)((s32)npc + 0x1C4) = -(denom * (float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * denom)) / denom;
+                        denom = *(f32*)((s32)npc + 0x1C4) * halfTime + halfTime * float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * halfTime;
+                        if (denom != zero) {
+                            *(f32*)((s32)npc + 0x1C8) = height / denom;
+                        }
                     }
-                    if (denom == zero) {
-                        denom = one;
+                    break;
+                case 1:
+                    if (duration == zero) {
+                        *(f32*)((s32)npc + 0x1C4) = height;
+                    } else {
+                        halfTime = float_0p5_8041fd90 * duration;
+                        *(f32*)((s32)npc + 0x1C4) = -(duration * (float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * duration)) / duration;
+                        denom = *(f32*)((s32)npc + 0x1C4) * halfTime + halfTime * float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * halfTime;
+                        if (denom != zero) {
+                            *(f32*)((s32)npc + 0x1C8) = height / denom;
+                        }
                     }
-                    halfTime = float_0p5_8041fd90 * denom;
-                    *(f32*)((s32)npc + 0x1C4) = -(denom * (float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * denom)) / denom;
-                    denom = *(f32*)((s32)npc + 0x1C4) * halfTime + halfTime * float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * halfTime;
-                    if (denom != zero) {
-                        *(f32*)((s32)npc + 0x1C8) = height / denom;
+                    break;
+                default:
+                    return 1;
+            }
+        } else {
+            if (dy >= zero) {
+                return 1;
+            }
+            switch (mode) {
+                case 0:
+                    if (*(f32*)((s32)npc + 0x1B0) > float_0p1_8041fd98) {
+                        if (duration > zero) {
+                            denom = duration;
+                        } else {
+                            denom = dist / *(f32*)((s32)npc + 0x1B0);
+                        }
+                        if (denom > zero) {
+                            *(f32*)((s32)npc + 0x1C8) = dy / (float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * denom * denom);
+                        } else {
+                            *(f32*)((s32)npc + 0x1C8) = one;
+                        }
+                    } else if (duration > zero) {
+                        *(f32*)((s32)npc + 0x1CC) = (dy / (duration * duration)) / float_neg980_8041fe00;
                     }
-                }
+                    break;
+                case 1:
+                    break;
+                default:
+                    return 1;
             }
         }
         return 0;
@@ -989,7 +1036,9 @@ s32 evt_npc_glide_position(EventEntry* event, s32 isFirstCall) {
     extern f32 _intplGetFloat(f32 value, s32 kind);
     extern u32 animPoseGetMaterialFlag(s32 poseId);
     extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
-    extern f64 sqrt(f64);
+    extern f64 __frsqrte(f64);
+    extern f32 __float_nan;
+    extern const u8 vec3_802c1470[];
     extern f32 float_0_8041fd84;
     extern f32 float_0p1_8041fd98;
     extern f32 float_1000_8041fd94;
@@ -1016,7 +1065,14 @@ s32 evt_npc_glide_position(EventEntry* event, s32 isFirstCall) {
     f32 dz;
     s32 soundMask;
     s32 sfx;
+    const u8* constBase;
+    f64 sqrtD;
+    f64 inv;
+    u32 bits;
+    s32 cls;
+    union { f32 f; u32 u; } bitsView;
 
+    constBase = vec3_802c1470;
     args = event->args;
     name = evtGetValue(event, args[0]);
     targetX = evtGetFloat(event, args[1]);
@@ -1044,7 +1100,42 @@ s32 evt_npc_glide_position(EventEntry* event, s32 isFirstCall) {
         *(s32*)((s32)npc + 0x15C) = *(s32*)((s32)npc + 0x90);
         *(s32*)((s32)npc + 0x160) = *(s32*)((s32)npc + 0x94);
         PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x158), delta);
-        dist = (f32)sqrt((double)(delta[0] * delta[0] + delta[1] * delta[1] + delta[2] * delta[2]));
+        dist = delta[0] * delta[0] + delta[1] * delta[1] + delta[2] * delta[2];
+        sqrtD = (f64)dist;
+        if (sqrtD > (f64)float_0_8041fd84) {
+            inv = __frsqrte(sqrtD);
+            inv = *(const f64*)(constBase + 0x48) * inv *
+                  -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50));
+            inv = *(const f64*)(constBase + 0x48) * inv *
+                  -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50));
+            dist = (f32)(sqrtD * *(const f64*)(constBase + 0x48) * inv *
+                         -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50)));
+        } else {
+            if (*(const f64*)(constBase + 0x58) <= sqrtD) {
+                bitsView.f = dist;
+                bits = bitsView.u & 0x7F800000;
+                if (bits == 0x7F800000) {
+                    if ((bitsView.u & 0x7FFFFF) == 0) {
+                        cls = 2;
+                    } else {
+                        cls = 1;
+                    }
+                } else if ((bits < 0x7F800000) && (bits == 0)) {
+                    if ((bitsView.u & 0x7FFFFF) == 0) {
+                        cls = 3;
+                    } else {
+                        cls = 5;
+                    }
+                } else {
+                    cls = 4;
+                }
+                if (cls == 1) {
+                    dist = __float_nan;
+                }
+            } else {
+                dist = __float_nan;
+            }
+        }
         if (durationMs <= float_0_8041fd84) {
             if (speed == float_0_8041fd84) {
                 return 1;
@@ -1089,7 +1180,7 @@ s32 evt_npc_glide_position(EventEntry* event, s32 isFirstCall) {
     *(f32*)((s32)npc + 0x184) += dz * dt;
     if ((*(u32*)((s32)npc + 0x1D4) & 2) != 0 && (dx != float_0_8041fd84 || dz != float_0_8041fd84)) {
         fbat = fbatGetPointer();
-        if (npc != *(void**)((s32)fbat + 0x48) || (*(s16*)fbat != 5 && *(s16*)fbat != 6)) {
+        if (npc != *(void**)((s32)fbat + 8) || (*(s16*)fbat != 5 && *(s16*)fbat != 6)) {
             npcTuningRy(npc, angleABf(float_0_8041fd84, float_0_8041fd84, dx, dz));
         }
     }
@@ -1136,6 +1227,8 @@ s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern f32 compAngle(f32 a, f32 b);
     extern f32 reviseAngle(f32 a);
+    extern f64 __frsqrte(f64 x);
+    extern f32 __float_nan;
     extern u32 animPoseGetMaterialFlag(s32 poseId);
     extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
     extern f32 float_0_8041fd84;
@@ -1144,6 +1237,7 @@ s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
     extern f32 float_6p2832_8041fda0;
     extern f32 float_360_8041fda4;
     extern char str_mario_8041fdd4[];
+    extern const u8 vec3_802c1470[];
 
     s32* args;
     s32 npcName;
@@ -1166,7 +1260,14 @@ s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
     s32 soundMask;
     s32 sfx;
     s32 userBase;
+    const u8* constBase;
+    f64 sqrtD;
+    f64 inv;
+    u32 bits;
+    s32 cls;
+    union { f32 f; u32 u; } bitsView;
 
+    constBase = vec3_802c1470;
     args = event->args;
     npcName = evtGetValue(event, args[0]);
     targetName = evtGetValue(event, args[1]);
@@ -1231,7 +1332,42 @@ s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
         *(s32*)((s32)npc + 0x160) = *(s32*)((s32)npc + 0x94);
 
         PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x158), delta);
-        dist = sqrtf(delta[0] * delta[0] + delta[2] * delta[2]);
+        dist = delta[0] * delta[0] + delta[2] * delta[2];
+        sqrtD = (f64)dist;
+        if (sqrtD > (f64)float_0_8041fd84) {
+            inv = __frsqrte(sqrtD);
+            inv = *(const f64*)(constBase + 0x48) * inv *
+                  -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50));
+            inv = *(const f64*)(constBase + 0x48) * inv *
+                  -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50));
+            dist = (f32)(sqrtD * *(const f64*)(constBase + 0x48) * inv *
+                         -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50)));
+        } else {
+            if (*(const f64*)(constBase + 0x58) <= sqrtD) {
+                bitsView.f = dist;
+                bits = bitsView.u & 0x7F800000;
+                if (bits == 0x7F800000) {
+                    if ((bitsView.u & 0x7FFFFF) == 0) {
+                        cls = 2;
+                    } else {
+                        cls = 1;
+                    }
+                } else if ((bits < 0x7F800000) && (bits == 0)) {
+                    if ((bitsView.u & 0x7FFFFF) == 0) {
+                        cls = 3;
+                    } else {
+                        cls = 5;
+                    }
+                } else {
+                    cls = 4;
+                }
+                if (cls == 1) {
+                    dist = __float_nan;
+                }
+            } else {
+                dist = __float_nan;
+            }
+        }
         targetAngle = angleABf(float_0_8041fd84, float_0_8041fd84, delta[0], delta[2]);
         angleDiff = compAngle(*(f32*)((s32)npc + 0x1AC), targetAngle);
         turnAmount = float_60_8041fdf8 * turnScale * *(f32*)((s32)npc + 0x1B0);
@@ -1261,7 +1397,7 @@ s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
     dz = delta[2];
 
     if (((*(f32*)((s32)npc + 0x1C0) != float_0_8041fd84) && (*(f32*)((s32)npc + 0x1A0) >= *(f32*)((s32)npc + 0x1C0))) ||
-        ((stopDist > float_0_8041fd84) && (sqrtf(dx * dx + dz * dz) < stopDist)) ||
+        ((stopDist > float_0_8041fd84) && (dist < stopDist)) ||
         (((flags & 4) != 0) && (*(s32*)((s32)npc + 0x2FC) != 0))) {
         *(f32*)((s32)npc + 0x1B0) = float_0_8041fd84;
         return 1;
@@ -2062,9 +2198,10 @@ s32 evt_npc_facedirection_add(void* pEvt) {
 void* evtNpcNameToPtr(void* event, s32 name) {
     extern void* npcNameToPtr(void*);
     extern char vec3_802c1470[];
-    extern char str_me_8041fd80[];
-    extern char str_party_8041fdcc[];
-    extern char str_mario_8041fdd4[];
+    extern char str_me_8041fd80[3];
+    extern char str_party_8041fdcc[6];
+    extern char str_mario_8041fdd4[6];
+    char* names = vec3_802c1470;
 
     if (strcmp((char*)name, str_me_8041fd80) == 0) {
         return *(void**)((s32)event + 0x170);
@@ -2072,39 +2209,40 @@ void* evtNpcNameToPtr(void* event, s32 name) {
     if (strcmp((char*)name, str_party_8041fdcc) == 0) {
         return (void*)-1;
     }
-    if (strcmp((char*)name, vec3_802c1470 + 0x80) == 0) {
+    if (strcmp((char*)name, names + 0x80) == 0) {
         return (void*)-1;
     }
-    if (strcmp((char*)name, vec3_802c1470 + 0x8C) == 0) {
+    if (strcmp((char*)name, names + 0x8C) == 0) {
         return (void*)-2;
     }
     if (strcmp((char*)name, str_mario_8041fdd4) == 0) {
         return (void*)-3;
     }
-    if (strcmp((char*)name, vec3_802c1470 + 0x98) == 0) {
+    if (strcmp((char*)name, names + 0x98) == 0) {
         return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x32C);
     }
-    if (strcmp((char*)name, vec3_802c1470 + 0xA0) == 0) {
+    if (strcmp((char*)name, names + 0xA0) == 0) {
         return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x330);
     }
-    if (strcmp((char*)name, vec3_802c1470 + 0xA8) == 0) {
+    if (strcmp((char*)name, names + 0xA8) == 0) {
         return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x334);
     }
-    if (strcmp((char*)name, vec3_802c1470 + 0xB0) == 0) {
+    if (strcmp((char*)name, names + 0xB0) == 0) {
         return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x338);
     }
-    if (strcmp((char*)name, vec3_802c1470 + 0xB8) == 0) {
-        return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x33C);
+    if (strcmp((char*)name, names + 0xB8) != 0) {
+        return npcNameToPtr((void*)name);
     }
-    return npcNameToPtr((void*)name);
+    return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x33C);
 }
 
 void* evtNpcNameToPtr_NoAssert(void* event, s32 name) {
     extern void* npcNameToPtr_NoAssert(void*);
     extern char vec3_802c1470[];
-    extern char str_me_8041fd80[];
-    extern char str_party_8041fdcc[];
-    extern char str_mario_8041fdd4[];
+    extern char str_me_8041fd80[3];
+    extern char str_party_8041fdcc[6];
+    extern char str_mario_8041fdd4[6];
+    char* names = vec3_802c1470;
 
     if (strcmp((char*)name, str_me_8041fd80) == 0) {
         return *(void**)((s32)event + 0x170);
@@ -2112,31 +2250,31 @@ void* evtNpcNameToPtr_NoAssert(void* event, s32 name) {
     if (strcmp((char*)name, str_party_8041fdcc) == 0) {
         return (void*)-1;
     }
-    if (strcmp((char*)name, vec3_802c1470 + 0x80) == 0) {
+    if (strcmp((char*)name, names + 0x80) == 0) {
         return (void*)-1;
     }
-    if (strcmp((char*)name, vec3_802c1470 + 0x8C) == 0) {
+    if (strcmp((char*)name, names + 0x8C) == 0) {
         return (void*)-2;
     }
     if (strcmp((char*)name, str_mario_8041fdd4) == 0) {
         return (void*)-3;
     }
-    if (strcmp((char*)name, vec3_802c1470 + 0x98) == 0) {
+    if (strcmp((char*)name, names + 0x98) == 0) {
         return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x32C);
     }
-    if (strcmp((char*)name, vec3_802c1470 + 0xA0) == 0) {
+    if (strcmp((char*)name, names + 0xA0) == 0) {
         return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x330);
     }
-    if (strcmp((char*)name, vec3_802c1470 + 0xA8) == 0) {
+    if (strcmp((char*)name, names + 0xA8) == 0) {
         return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x334);
     }
-    if (strcmp((char*)name, vec3_802c1470 + 0xB0) == 0) {
+    if (strcmp((char*)name, names + 0xB0) == 0) {
         return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x338);
     }
-    if (strcmp((char*)name, vec3_802c1470 + 0xB8) == 0) {
-        return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x33C);
+    if (strcmp((char*)name, names + 0xB8) != 0) {
+        return npcNameToPtr_NoAssert((void*)name);
     }
-    return npcNameToPtr_NoAssert((void*)name);
+    return *(void**)((s32)*(void**)((s32)event + 0x170) + 0x33C);
 }
 
 USER_FUNC(evt_npc_stop_for_event) {
@@ -2883,7 +3021,7 @@ s32 evt_npc_calc_score(void* pEvt) {
 void _kamek_houki_kemuri(s32 npc, s32 mode) {
     extern void* gp;
     extern void* effKemuri10N64Entry(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, s32 type);
-    extern s32 cnt_1369;
+    extern u8 cnt_1369;
     extern f32 float_0_8041fd84;
     extern f32 float_1_8041fd88;
     extern f32 float_neg1_8041fd8c;
@@ -2891,24 +3029,31 @@ void _kamek_houki_kemuri(s32 npc, s32 mode) {
     extern f32 float_36_8041fdb4;
     extern f32 float_18_8041fdb8;
     extern char str_kpa_01_802c14d0[];
-    s32 mask;
     f32 x;
     f32 direction;
+    u8 mask;
     void* effect;
 
     cnt_1369++;
-    if (mode == 3) mask = 7;
-    else if (mode == 2) mask = 0xF;
-    else return;
+    switch (mode) {
+        case 3:
+            mask = 7;
+            break;
+        case 2:
+            mask = 0xF;
+            break;
+        default:
+            return;
+    }
     if ((cnt_1369 & mask) != 0) return;
 
-    if (*(f32*)(npc + 0x144) <= float_0_8041fd84 ||
-        *(f32*)(npc + 0x144) >= float_180_8041fdb0) {
-        x = *(f32*)(npc + 0x8C) + float_36_8041fdb4 * *(f32*)(npc + 0xE0);
-        direction = float_neg1_8041fd8c;
-    } else {
-        x = *(f32*)(npc + 0x8C) - float_36_8041fdb4 * *(f32*)(npc + 0xE0);
+    if (float_0_8041fd84 < *(f32*)(npc + 0x144) &&
+        *(f32*)(npc + 0x144) < float_180_8041fdb0) {
         direction = float_1_8041fd88;
+        x = -((float_36_8041fdb4 * *(f32*)(npc + 0xE0)) - *(f32*)(npc + 0x8C));
+    } else {
+        direction = float_neg1_8041fd8c;
+        x = (float_36_8041fdb4 * *(f32*)(npc + 0xE0)) + *(f32*)(npc + 0x8C);
     }
     effect = effKemuri10N64Entry(x,
                                  *(f32*)(npc + 0x90) + float_18_8041fdb8 * *(f32*)(npc + 0xE0),
@@ -2919,10 +3064,12 @@ void _kamek_houki_kemuri(s32 npc, s32 mode) {
     }
 }
 
-
 s32 evt_npc_kamek_move_position(EventEntry* event, s32 isFirstCall) {
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern u8 _kamek_houki_kemuri(s32 npc, s32 animState);
+    extern f64 __frsqrte(f64 x);
+    extern f32 __float_nan;
+    extern const u8 vec3_802c1470[];
     extern f32 float_0_8041fd84;
     extern f32 float_1_8041fd88;
     extern f32 float_0p1_8041fd98;
@@ -2945,16 +3092,20 @@ s32 evt_npc_kamek_move_position(EventEntry* event, s32 isFirstCall) {
     f32 delta[3];
     f32 totalDist;
     f32 remainDist;
+    f32 distSq;
+    f64 sqrtD;
+    f64 inv;
+    u32 bits;
+    s32 cls;
+    union { f32 f; u32 u; } bitsView;
     f32 movedDist;
-    f32 angle;
-    f32 speed;
-    f32 phase0;
-    f32 phase1;
     f32 s0;
     f32 s1;
-    f32 c0;
+    f32 temp;
     f32 zero;
+    const u8* constBase;
 
+    constBase = vec3_802c1470;
     args = event->args;
     name = evtGetValue(event, args[0]);
     targetX = evtGetFloat(event, args[1]);
@@ -2985,7 +3136,44 @@ s32 evt_npc_kamek_move_position(EventEntry* event, s32 isFirstCall) {
         *(s32*)((s32)npc + 0x160) = *(s32*)((s32)npc + 0x94);
 
         PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x158), delta);
-        totalDist = sqrtf(delta[0] * delta[0] + delta[2] * delta[2]);
+        distSq = delta[0] * delta[0] + delta[2] * delta[2];
+        sqrtD = (f64)distSq;
+        if (sqrtD > (f64)float_0_8041fd84) {
+            inv = __frsqrte(sqrtD);
+            inv = *(const f64*)(constBase + 0x48) * inv *
+                  -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50));
+            inv = *(const f64*)(constBase + 0x48) * inv *
+                  -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50));
+            totalDist = (f32)(sqrtD * *(const f64*)(constBase + 0x48) * inv *
+                              -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50)));
+        } else {
+            if (*(const f64*)(constBase + 0x58) <= sqrtD) {
+                bitsView.f = distSq;
+                bits = bitsView.u & 0x7F800000;
+                if (bits == 0x7F800000) {
+                    if ((bitsView.u & 0x7FFFFF) == 0) {
+                        cls = 2;
+                    } else {
+                        cls = 1;
+                    }
+                } else if ((bits < 0x7F800000) && (bits == 0)) {
+                    if ((bitsView.u & 0x7FFFFF) == 0) {
+                        cls = 3;
+                    } else {
+                        cls = 5;
+                    }
+                } else {
+                    cls = 4;
+                }
+                if (cls == 1) {
+                    totalDist = __float_nan;
+                } else {
+                    totalDist = distSq;
+                }
+            } else {
+                totalDist = __float_nan;
+            }
+        }
         *(f32*)((s32)npc + 0x1AC) = angleABf(zero, zero, delta[0], delta[2]);
         *(f32*)((s32)npc + 0x1B0) = step;
         *(f32*)((s32)npc + 0x1C0) = duration;
@@ -3000,12 +3188,85 @@ s32 evt_npc_kamek_move_position(EventEntry* event, s32 isFirstCall) {
         }
     }
 
-    if (((flags & 4) == 0) || (*(s32*)((s32)npc + 0x2FC) == 0)) {
+    if (((flags & 4) != 0) && (*(s32*)((s32)npc + 0x2FC) != 0)) {
+        return 2;
+    }
         PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x158), delta);
-        totalDist = sqrtf(delta[0] * delta[0] + delta[2] * delta[2]);
+        distSq = delta[0] * delta[0] + delta[2] * delta[2];
+        sqrtD = (f64)distSq;
+        if (sqrtD > (f64)float_0_8041fd84) {
+            inv = __frsqrte(sqrtD);
+            inv = *(const f64*)(constBase + 0x48) * inv *
+                  -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50));
+            inv = *(const f64*)(constBase + 0x48) * inv *
+                  -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50));
+            totalDist = (f32)(sqrtD * *(const f64*)(constBase + 0x48) * inv *
+                              -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50)));
+        } else {
+            if (*(const f64*)(constBase + 0x58) <= sqrtD) {
+                bitsView.f = distSq;
+                bits = bitsView.u & 0x7F800000;
+                if (bits == 0x7F800000) {
+                    if ((bitsView.u & 0x7FFFFF) == 0) {
+                        cls = 2;
+                    } else {
+                        cls = 1;
+                    }
+                } else if ((bits < 0x7F800000) && (bits == 0)) {
+                    if ((bitsView.u & 0x7FFFFF) == 0) {
+                        cls = 3;
+                    } else {
+                        cls = 5;
+                    }
+                } else {
+                    cls = 4;
+                }
+                if (cls == 1) {
+                    totalDist = __float_nan;
+                } else {
+                    totalDist = distSq;
+                }
+            } else {
+                totalDist = __float_nan;
+            }
+        }
 
         PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x8C), delta);
-        remainDist = sqrtf(delta[0] * delta[0] + delta[2] * delta[2]);
+        distSq = delta[0] * delta[0] + delta[2] * delta[2];
+        sqrtD = (f64)distSq;
+        if (sqrtD > (f64)float_0_8041fd84) {
+            inv = __frsqrte(sqrtD);
+            inv = 0.5 * inv * -((sqrtD * inv * inv) - 3.0);
+            inv = 0.5 * inv * -((sqrtD * inv * inv) - 3.0);
+            remainDist = (f32)(sqrtD * 0.5 * inv * -((sqrtD * inv * inv) - 3.0));
+        } else {
+            if (*(const f64*)(constBase + 0x58) <= sqrtD) {
+                bitsView.f = distSq;
+                bits = bitsView.u & 0x7F800000;
+                if (bits == 0x7F800000) {
+                    if ((bitsView.u & 0x7FFFFF) == 0) {
+                        cls = 2;
+                    } else {
+                        cls = 1;
+                    }
+                } else if ((bits < 0x7F800000) && (bits == 0)) {
+                    if ((bitsView.u & 0x7FFFFF) == 0) {
+                        cls = 3;
+                    } else {
+                        cls = 5;
+                    }
+                } else {
+                    cls = 4;
+                }
+                if (cls == 1) {
+                    remainDist = __float_nan;
+                } else {
+                    remainDist = distSq;
+                }
+            } else {
+                remainDist = __float_nan;
+            }
+        }
 
         if (*(f32*)((s32)npc + 0x1C0) == zero) {
             if (remainDist <= (float_20_8041fd9c * *(f32*)((s32)npc + 0x1B0)) / float_1000_8041fd94) {
@@ -3041,26 +3302,29 @@ s32 evt_npc_kamek_move_position(EventEntry* event, s32 isFirstCall) {
             }
         }
 
-        angle = *(f32*)((s32)npc + 0x1AC);
-        speed = *(f32*)((s32)npc + 0x1B0);
-        s0 = (f32)sin((f64)((float_6p2832_8041fda0 * angle) / float_360_8041fda4));
-        *(f32*)((s32)npc + 0x1B4) += *(f32*)((s32)npc + 0x1A4) * (speed * s0);
-        c0 = (f32)cos((f64)((float_6p2832_8041fda0 * angle) / float_360_8041fda4));
-        *(f32*)((s32)npc + 0x1BC) += *(f32*)((s32)npc + 0x1A4) * (speed * -c0);
+        temp = (f32)sin((f64)((float_6p2832_8041fda0 * *(f32*)((s32)npc + 0x1AC)) /
+                              float_360_8041fda4));
+        *(f32*)((s32)npc + 0x1B4) +=
+            *(f32*)((s32)npc + 0x1A4) * (*(f32*)((s32)npc + 0x1B0) * temp);
+        temp = (f32)cos((f64)((float_6p2832_8041fda0 * *(f32*)((s32)npc + 0x1AC)) /
+                              float_360_8041fda4));
+        *(f32*)((s32)npc + 0x1BC) +=
+            *(f32*)((s32)npc + 0x1A4) * (*(f32*)((s32)npc + 0x1B0) * -temp);
 
         movedDist = totalDist - remainDist;
-        phase0 = float_3p1416_8041fda8 * (float_2_8041fdac * (movedDist / totalDist));
-        s0 = (f32)sin((f64)phase0);
-        phase1 = float_3p1416_8041fda8 * (float_2_8041fdac * (((speed * *(f32*)((s32)npc + 0x1A4)) + movedDist) / totalDist));
-        s1 = (f32)sin((f64)phase1);
+        s0 = (f32)sin((f64)(float_3p1416_8041fda8 *
+                            (float_2_8041fdac * (movedDist / totalDist))));
+        s1 = (f32)sin((f64)(float_3p1416_8041fda8 *
+                            (float_2_8041fdac *
+                             (((*(f32*)((s32)npc + 0x1B0) * *(f32*)((s32)npc + 0x1A4)) +
+                               movedDist) /
+                              totalDist))));
         *(f32*)((s32)npc + 0x1B8) += arc * s1 - arc * s0;
 
         if ((flags & 8) == 0) {
             _kamek_houki_kemuri((s32)npc, *(s32*)((s32)npc + 0x108));
         }
-        return 0;
-    }
-    return 2;
+    return 0;
 }
 
 s32 evt_npc_kamek_kemuri1(void* pEvt, s32 isFirstCall) {
@@ -3096,20 +3360,20 @@ s32 evt_npc_kamek_kemuri2(void* pEvt, s32 isFirstCall) {
     s32 type = evtGetValue(pEvt, args[2]);
     u8* npc = npcNameToPtr(name);
 
-    if (isFirstCall == 0) {
-        if (*(f32*)(npc + 0x1A0) < *(f32*)(npc + 0x1C0)) {
-            _kamek_houki_kemuri((s32)npc, 3 - (type == 0));
-            return 0;
+    if (isFirstCall != 0) {
+        if (duration <= float_0_8041fd84) {
+            return 2;
         }
-        return 2;
-    }
-    if (duration > float_0_8041fd84) {
-        *(u32*)(npc + 0x188) = 0;
         *(u32*)(npc + 0x18C) = 0;
+        *(u32*)(npc + 0x188) = 0;
         *(f32*)(npc + 0x1C0) = duration;
         return 0;
     }
-    return 2;
+    if (*(f32*)(npc + 0x1C0) <= *(f32*)(npc + 0x1A0)) {
+        return 2;
+    }
+    _kamek_houki_kemuri((s32)npc, (type != 0) + 2);
+    return 0;
 }
 
 s32 evt_fbat_trans_floor_position(void* pEvt) {

@@ -4,6 +4,7 @@
 
 void _btlSamplingEnemy(void* targetWork) {
     extern void* BtlUnit_GetPartsPtr(void*, s32);
+    extern void* BattleGetUnitPartsPtr(s32, s32);
     extern void BtlUnit_GetPartsWorldPos(void*, f32*, f32*, f32*);
     extern s32 BtlCompForwardLv(f32, s32);
     extern void* battleGetUnitMonosiriPtr(s32);
@@ -16,7 +17,7 @@ void _btlSamplingEnemy(void* targetWork) {
     s32 partIdx;
     s32 filterIdx;
     s32 propertyIdx;
-    s32 count;
+    s8 count;
     u8* target;
     void* unit;
     void* part;
@@ -28,12 +29,18 @@ void _btlSamplingEnemy(void* targetWork) {
     f32 cursorX;
     f32 cursorY;
     f32 cursorZ;
+    void* battleWork;
 
+    battleWork = _battleWorkPointer;
     count = 0;
     target = (u8*)((s32)targetWork + 4);
-    if ((*(u32*)((s32)targetWork + 0xAC0) & 0x80000000) == 0) {
+    if ((*(u32*)((s32)targetWork + 0xAC0) & 0x80000000) != 0) {
+        *(s8*)((s32)targetWork + 0xA6C) = -1;
+        return;
+    }
+    {
         for (unitIdx = 0; unitIdx < 64; unitIdx++) {
-            unit = BattleGetUnitPtr(_battleWorkPointer, unitIdx);
+            unit = BattleGetUnitPtr(battleWork, unitIdx);
             if (unit == 0 || BtlUnit_CheckStatus(unit, 0x19) != 0 ||
                 (*(u32*)((s32)unit + 0x104) & 0x40) != 0) {
                 continue;
@@ -49,7 +56,6 @@ void _btlSamplingEnemy(void* targetWork) {
                 {
                 s32 faceDirection = *(s8*)((s32)part + 0xBC);
                 s32 attackDirection = *(s8*)((s32)targetWork + 0xAC8);
-                s32 offsetX = 0;
                 s32 finalX;
                 BtlUnit_GetPartsWorldPos(part, &x, &y, &z);
                 if ((*(u32*)((s32)unit + 0x104) & 4) == 0) {
@@ -66,28 +72,31 @@ void _btlSamplingEnemy(void* targetWork) {
                 *(s16*)(entry + 4) = (s32)cursorX;
                 *(s16*)(entry + 6) = (s32)cursorY;
                 *(s16*)(entry + 8) = (s32)cursorZ;
+                *(s32*)(entry + 0x18) = 0;
+                *(s32*)(entry + 0x20) = -1;
                 if ((*(u32*)((s32)unit + 0x104) & 1) != 0 &&
                     (*(u32*)((s32)part + 0x1AC) & 0x20000) == 0) {
-                    offsetX += attackDirection * 300;
+                    *(s32*)(entry + 0x18) += attackDirection * 300;
                 }
-                offsetX += *(s16*)((s32)part + 0x1A0) * faceDirection;
-                finalX = (s16)(x + (f32)offsetX);
+                *(s32*)(entry + 0x18) +=
+                    *(s16*)((s32)part + 0x1A0) * faceDirection;
+                finalX = (s16)(x + (f32)*(s32*)(entry + 0x18));
                 *(s32*)(entry + 0xC) = finalX;
                 *(s32*)(entry + 0x10) = (s16)y;
                 *(s32*)(entry + 0x14) = (s16)(z + 5.0f);
-                *(s32*)(entry + 0x18) = BtlCompForwardLv((f32)finalX, attackDirection);
-                *(s8*)(entry + 0x1C) = offsetX;
+                *(s8*)(entry + 0x1C) = BtlCompForwardLv((f32)finalX, attackDirection);
                 *(u8*)(entry + 0x1D) = z >= -30.0f;
-                *(s32*)(entry + 0x20) = -1;
                 }
                 count++;
             }
         }
     }
+    *(u8*)((s32)targetWork + 0xAB7) = 0;
+    *(s8*)((s32)targetWork + 0xA6C) = count;
     for (filterIdx = 0; filterIdx < count; filterIdx++) {
         u8* filterEntry = (u8*)((s32)targetWork + 4 + filterIdx * 0x24);
         s32 filterUnitIdx = *(s16*)(filterEntry + 0);
-        void* filterUnit = BattleGetUnitPtr(_battleWorkPointer, filterUnitIdx);
+        void* filterUnit = BattleGetUnitPtr(battleWork, filterUnitIdx);
         void* filterPart = BtlUnit_GetPartsPtr(filterUnit, *(s16*)(filterEntry + 2));
         u32 partAttrs = *(u32*)((s32)filterPart + 0x1AC);
         s32 kind = *(s32*)((s32)filterUnit + 8);
@@ -130,7 +139,7 @@ void _btlSamplingEnemy(void* targetWork) {
             valid = 0;
         }
         if ((classFlags & 0x2000) != 0 && attackerIdx != filterUnitIdx) {
-            void* attacker = BattleGetUnitPtr(_battleWorkPointer, attackerIdx);
+            void* attacker = BattleGetUnitPtr(battleWork, attackerIdx);
             if (*(s32*)((s32)attacker + 8) == kind) {
                 valid = 0;
             }
@@ -162,7 +171,7 @@ void _btlSamplingEnemy(void* targetWork) {
     for (propertyIdx = 0; propertyIdx < count; propertyIdx++) {
         u8* propertyEntry = (u8*)((s32)targetWork + 4 + propertyIdx * 0x24);
         void* propertyUnit = BattleGetUnitPtr(
-            _battleWorkPointer, *(s16*)(propertyEntry + 0));
+            battleWork, *(s16*)(propertyEntry + 0));
         void* propertyPart = BtlUnit_GetPartsPtr(
             propertyUnit, *(s16*)(propertyEntry + 2));
         u32 propertyFlags = *(u32*)((s32)targetWork + 0xAC4);
@@ -235,7 +244,7 @@ void _btlSamplingEnemy(void* targetWork) {
             u8* currentEntry =
                 (u8*)((s32)targetWork + 4 + filterIdx * 0x24);
             void* currentUnit = BattleGetUnitPtr(
-                _battleWorkPointer, *(s16*)(currentEntry + 0));
+                battleWork, *(s16*)(currentEntry + 0));
             void* currentPart = BtlUnit_GetPartsPtr(
                 currentUnit, *(s16*)(currentEntry + 2));
             s32 valid = 1;
@@ -249,7 +258,7 @@ void _btlSamplingEnemy(void* targetWork) {
                         *(s16*)(currentEntry + 0) ==
                             *(s16*)(otherEntry + 0)) {
                         void* otherUnit = BattleGetUnitPtr(
-                            _battleWorkPointer, *(s16*)(otherEntry + 0));
+                            battleWork, *(s16*)(otherEntry + 0));
                         void* otherPart = BtlUnit_GetPartsPtr(
                             otherUnit, *(s16*)(otherEntry + 2));
 
@@ -268,6 +277,64 @@ void _btlSamplingEnemy(void* targetWork) {
                                          moveIdx * 0x24) =
                         *(TargetRecordRaw*)((s32)targetWork + 4 +
                                              (moveIdx + 1) * 0x24);
+                }
+                count--;
+                filterIdx--;
+            }
+        }
+    }
+
+    if ((*(u32*)((s32)targetWork + 0xAC4) & 0x1000000) != 0) {
+        for (filterIdx = 0; filterIdx < count; filterIdx++) {
+            u8* currentEntry = target + filterIdx * 0x24;
+            void* currentUnit = BattleGetUnitPtr(
+                battleWork, *(s16*)(currentEntry + 0));
+            void* currentPart = BtlUnit_GetPartsPtr(
+                currentUnit, *(s16*)(currentEntry + 2));
+            s32 valid = 1;
+
+            if ((*(u32*)((s32)currentPart + 0x1AC) & 0x40) == 0) {
+                for (propertyIdx = 0; propertyIdx < count; propertyIdx++) {
+                    u8* otherEntry = target + propertyIdx * 0x24;
+                    s32 currentX;
+                    s32 otherX;
+
+                    if (currentEntry == otherEntry ||
+                        *(u8*)(currentEntry + 0x1D) !=
+                            *(u8*)(otherEntry + 0x1D)) {
+                        continue;
+                    }
+                    currentX = *(s32*)(currentEntry + 0xC);
+                    otherX = *(s32*)(otherEntry + 0xC);
+                    if (*(s8*)((s32)targetWork + 0xAC8) < 0) {
+                        currentX = -currentX;
+                        otherX = -otherX;
+                    }
+                    if (otherX < currentX) {
+                        void* otherPart = BattleGetUnitPartsPtr(
+                            *(s16*)(otherEntry + 0),
+                            *(s16*)(otherEntry + 2));
+                        if ((*(u32*)((s32)otherPart + 0x1AC) & 0x40) == 0 &&
+                            (*(u32*)((s32)otherPart + 0x1AC) & 0x400000) == 0) {
+                            void* attacker = BattleGetUnitPtr(
+                                battleWork,
+                                *(s32*)((s32)targetWork + 0xAB8));
+                            void* otherUnit = BattleGetUnitPtr(
+                                battleWork, *(s16*)(otherEntry + 0));
+                            if ((*(u32*)((s32)attacker + 0x27C) & 0x10) == 0 ||
+                                attacker != otherUnit) {
+                                valid = 0;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if (!valid) {
+                s32 moveIdx;
+                for (moveIdx = filterIdx; moveIdx < count - 1; moveIdx++) {
+                    *(TargetRecordRaw*)(target + moveIdx * 0x24) =
+                        *(TargetRecordRaw*)(target + (moveIdx + 1) * 0x24);
                 }
                 count--;
                 filterIdx--;
@@ -375,25 +442,25 @@ void BattleChoiceSamplingEnemy(void* targetWork, u32 weighting, int* unitIdx, in
     extern u8 itemDataTable[];
     u32 weights[74];
     s8* order;
-    u8 count;
+    s8 count;
     s32 i;
     s32 index;
     s32 itemId;
     s32 maxWeight;
     s32 selected;
     s32 total;
+    void* battleWork;
     void* attacker;
     void* unit;
     void* weapon;
 
+    battleWork = _battleWorkPointer;
     *unitIdx = -1;
     *partIdx = 0;
     count = *(u8*)((s32)targetWork + 0xA6C);
-    if (count == 0) {
-        return;
-    }
+    if (count > 0) {
 
-    attacker = BattleGetUnitPtr(_battleWorkPointer, *(s32*)((s32)targetWork + 0xAB8));
+    attacker = BattleGetUnitPtr(battleWork, *(s32*)((s32)targetWork + 0xAB8));
     order = (s8*)((s32)targetWork + 0xA6D);
     *unitIdx = *(s16*)((s32)targetWork + 4 + order[0] * 0x24);
     *partIdx = *(s16*)((s32)targetWork + 6 + order[0] * 0x24);
@@ -405,7 +472,7 @@ void BattleChoiceSamplingEnemy(void* targetWork, u32 weighting, int* unitIdx, in
 
     for (i = 0; i < count; i++) {
         index = order[i];
-        unit = BattleGetUnitPtr(_battleWorkPointer,
+        unit = BattleGetUnitPtr(battleWork,
                                 *(s16*)((s32)targetWork + 4 + index * 0x24));
         weights[index] += 100;
 
@@ -535,6 +602,7 @@ void BattleChoiceSamplingEnemy(void* targetWork, u32 weighting, int* unitIdx, in
     }
     *unitIdx = *(s16*)((s32)targetWork + 4 + selected * 0x24);
     *partIdx = *(s16*)((s32)targetWork + 6 + selected * 0x24);
+    }
 }
 
 void BattleGetFirstAttackUnit(void* battleWork, void** part, void** unit) {

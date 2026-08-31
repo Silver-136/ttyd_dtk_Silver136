@@ -236,27 +236,31 @@ s32 marioHitCheck(f64 x0, f64 y0, f64 z0, f64 x1, f64 y1, f64 z1, f32* outNx, f3
         f32 radius;
     } HitCheckArg;
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern Vec vec3_802c3b78;
-    extern Vec vec3_802c3b84;
+    extern const Vec vec3_802c3b78;
+    extern const Vec vec3_802c3b84;
     extern f32 float_0_804208ac;
     extern f32 float_1000_804208a8;
     extern f32 float_0p5_804208cc;
     extern f32 float_neg0p5_804208d0;
 
     HitCheckArg hit;
+    Vec roundedNormal;
     Vec roundedHit;
+    Vec start;
+    Vec end;
     f32 r;
-    f32 roundBias;
     s32 result;
 
-    hit.start = vec3_802c3b78;
-    hit.end = vec3_802c3b84;
-    hit.start.x = (f32)x0;
-    hit.start.y = (f32)y0;
-    hit.start.z = (f32)z0;
-    hit.end.x = (f32)x1;
-    hit.end.y = (f32)y1;
-    hit.end.z = (f32)z1;
+    start = vec3_802c3b78;
+    end = vec3_802c3b84;
+    start.x = (f32)x0;
+    start.y = (f32)y0;
+    start.z = (f32)z0;
+    end.x = (f32)x1;
+    end.y = (f32)y1;
+    end.z = (f32)z1;
+    hit.start = start;
+    hit.end = end;
     r = *radius;
     hit.radius = r;
 
@@ -268,37 +272,35 @@ s32 marioHitCheck(f64 x0, f64 y0, f64 z0, f64 x1, f64 y1, f64 z1, f32* outNx, f3
         result = hitCheckVecFilter(&hit, chkfilterVec);
     }
 
-    if (result != 0) {
-        roundBias = float_neg0p5_804208d0;
-        if (r >= float_0_804208ac) {
-            roundBias = float_0p5_804208cc;
-        }
-        r = (f32)(s32)(r * float_1000_804208a8 + roundBias) / float_1000_804208a8;
+    if (result == 0) {
+        result = 0;
+    } else {
+        roundedNormal = hit.normal;
 
-        roundBias = float_neg0p5_804208d0;
-        if (hit.normal.x >= float_0_804208ac) {
-            roundBias = float_0p5_804208cc;
+        r = (f32)(s32)(r * float_1000_804208a8 +
+                      (r >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0)) /
+            float_1000_804208a8;
+        roundedNormal.x =
+            (f32)(s32)(roundedNormal.x * float_1000_804208a8 +
+                       (roundedNormal.x >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0)) /
+            float_1000_804208a8;
+        roundedNormal.y =
+            (f32)(s32)(roundedNormal.y * float_1000_804208a8 +
+                       (roundedNormal.y >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0)) /
+            float_1000_804208a8;
+        roundedNormal.z =
+            (f32)(s32)(roundedNormal.z * float_1000_804208a8 +
+                       (roundedNormal.z >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0)) /
+            float_1000_804208a8;
+        if ((s32)&roundedHit != 0) {
+            roundedHit = hit.hitPos;
         }
-        hit.normal.x = (f32)(s32)(hit.normal.x * float_1000_804208a8 + roundBias) / float_1000_804208a8;
-
-        roundBias = float_neg0p5_804208d0;
-        if (hit.normal.y >= float_0_804208ac) {
-            roundBias = float_0p5_804208cc;
-        }
-        hit.normal.y = (f32)(s32)(hit.normal.y * float_1000_804208a8 + roundBias) / float_1000_804208a8;
-
-        roundBias = float_neg0p5_804208d0;
-        if (hit.normal.z >= float_0_804208ac) {
-            roundBias = float_0p5_804208cc;
-        }
-        hit.normal.z = (f32)(s32)(hit.normal.z * float_1000_804208a8 + roundBias) / float_1000_804208a8;
-        roundedHit = hit.hitPos;
     }
 
     *radius = r;
-    *outNx = hit.normal.x;
-    *outNy = hit.normal.y;
-    *outNz = hit.normal.z;
+    *outNx = roundedNormal.x;
+    *outNy = roundedNormal.y;
+    *outNz = roundedNormal.z;
     *outHx = roundedHit.x;
     *outHy = roundedHit.y;
     *outHz = roundedHit.z;
@@ -481,7 +483,7 @@ u8 marioSearchUnder(void) {
         f32 radius;
     } HitCheckArg;
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern Vec vec3_802c3b9c;
+    extern const Vec vec3_802c3b9c;
     extern f32 float_0p5_804208cc;
     extern f32 float_1000_804208a8;
     extern f32 float_neg0p5_804208d0;
@@ -491,6 +493,8 @@ u8 marioSearchUnder(void) {
     f32 height = *(f32*)((s32)mario + 0x1BC);
     HitCheckArg hit;
     Vec pos;
+    Vec roundedNormal;
+    Vec hitPos;
     s32 result;
 
     if ((*(u32*)mario & 0x01000000) != 0) {
@@ -512,17 +516,27 @@ u8 marioSearchUnder(void) {
         result = hitCheckVecFilter(&hit, chkfilterVec);
     }
 
-    if (result != 0) {
-        f32 x = hit.normal.x;
-        f32 y = hit.normal.y;
-        f32 z = hit.normal.z;
+    if (result == 0) {
+        result = 0;
+    } else {
+        f32 x;
+        f32 y;
+        f32 z;
 
-        hit.normal.x = (f32)(s32)(x * float_1000_804208a8 + (x >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
-        hit.normal.y = (f32)(s32)(y * float_1000_804208a8 + (y >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
-        hit.normal.z = (f32)(s32)(z * float_1000_804208a8 + (z >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+        roundedNormal = hit.normal;
+        x = roundedNormal.x;
+        y = roundedNormal.y;
+        z = roundedNormal.z;
+
+        roundedNormal.x = (f32)(s32)(x * float_1000_804208a8 + (x >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+        roundedNormal.y = (f32)(s32)(y * float_1000_804208a8 + (y >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+        roundedNormal.z = (f32)(s32)(z * float_1000_804208a8 + (z >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+        if ((s32)&hitPos != 0) {
+            hitPos = hit.hitPos;
+        }
     }
 
-    *(f32*)((s32)mario + 0x1C4) = result != 0 ? hit.normal.y : float_neg3000_80420980;
+    *(f32*)((s32)mario + 0x1C4) = result != 0 ? roundedNormal.y : float_neg3000_80420980;
     return result;
 }
 
@@ -541,8 +555,8 @@ u8 searchUnder2(double param_1, double param_2, double param_3, float* param_4) 
         f32 radius;
     } HitCheckArg;
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern Vec vec3_802c3ba8;
-    extern Vec vec3_802c3bb4;
+    extern const Vec vec3_802c3ba8;
+    extern const Vec vec3_802c3bb4;
     extern f32 float_37_8042097c;
     extern f32 float_1037_80420998;
     extern f32 float_0p5_804208cc;
@@ -551,6 +565,8 @@ u8 searchUnder2(double param_1, double param_2, double param_3, float* param_4) 
     extern f32 float_neg1_804208e4;
 
     Vec pos = vec3_802c3ba8;
+    Vec roundedNormal;
+    Vec hitPos;
     HitCheckArg hit;
     s32 result;
 
@@ -570,24 +586,33 @@ u8 searchUnder2(double param_1, double param_2, double param_3, float* param_4) 
         result = hitCheckVecFilter(&hit, chkfilterVec);
     }
 
-    if (result != 0) {
-        f32 x = hit.normal.x;
-        f32 y = hit.normal.y;
-        f32 z = hit.normal.z;
+    if (result == 0) {
+        result = 0;
+    } else {
+        f32 x;
+        f32 y;
+        f32 z;
 
-        hit.normal.x = (f32)(s32)(x * float_1000_804208a8 + (x >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
-        hit.normal.y = (f32)(s32)(y * float_1000_804208a8 + (y >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
-        hit.normal.z = (f32)(s32)(z * float_1000_804208a8 + (z >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+        roundedNormal = hit.normal;
+        x = roundedNormal.x;
+        y = roundedNormal.y;
+        z = roundedNormal.z;
+
+        roundedNormal.x = (f32)(s32)(x * float_1000_804208a8 + (x >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+        roundedNormal.y = (f32)(s32)(y * float_1000_804208a8 + (y >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+        roundedNormal.z = (f32)(s32)(z * float_1000_804208a8 + (z >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0)) / float_1000_804208a8;
+        if ((s32)&hitPos != 0) {
+            hitPos = hit.hitPos;
+        }
     }
 
     if (result != 0) {
-        *param_4 = hit.normal.y;
+        *param_4 = roundedNormal.y;
     } else {
         *param_4 = float_neg1_804208e4;
     }
     return result;
 }
-
 
 void marioChkGnd(void) {
     typedef struct Vec {
@@ -659,8 +684,8 @@ void marioChkGnd(void) {
     Vec tubeRoundedNormal;
     Vec tubeHitPos;
 
-    f32 groundY;
     f32 drop;
+    f32 groundY;
     f32 angle;
     f32 stepY;
     f32 collisionHeight;
@@ -1265,12 +1290,11 @@ s32 marioSearchGround(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f32* 
     extern f64 cos(f64);
     extern f64 __frsqrte(f64);
     extern f32 __float_nan;
-    extern f64 __fabs(f64);
     extern f64 angleABf(f64, f64, f64, f64);
     extern f64 revise360(f64);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
     extern void marioUpdateCamCollision(Vec*);
-    extern Vec vec3_802c3b78;
+    extern const Vec vec3_802c3b78;
     extern f32 float_0_804208ac;
     extern f32 float_0p01_80420964;
     extern f32 float_0p375_80420978;
@@ -1289,7 +1313,7 @@ s32 marioSearchGround(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f32* 
     extern f32 float_1000_804208a8;
     extern f32 float_neg10000_80420968;
 
-    Vec* vecBase = &vec3_802c3b78;
+    const Vec* vecBase = &vec3_802c3b78;
     void* player = marioGetPtr();
     void* orientPlayer;
     HitCheckArg hit;
@@ -1307,7 +1331,7 @@ s32 marioSearchGround(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f32* 
     f32 dropBase;
     f32 startY;
     f32 hitRadius;
-    f32 direction;
+    f64 direction;
     f32 sideX;
     f32 sideZ;
     f32 negSideX;
@@ -1316,23 +1340,22 @@ s32 marioSearchGround(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f32* 
     f32 offsetZ;
     f32 bestY;
     f32 bias;
-    f32 nx;
-    f32 ny;
-    f32 nz;
     f32 threshold;
     f32 lengthSq;
     f32 flatLength;
     f32 slope;
     f32 hitY;
     f32 angleValue;
+    f32 zero;
     s32 result;
     s32 bestResult;
     s32 i;
 
-    *(f32*)((s32)player + 0x21C) = float_0_804208ac;
-    *(f32*)((s32)player + 0x220) = float_0_804208ac;
-    *(f32*)((s32)player + 0x224) = float_0_804208ac;
-    *(f32*)((s32)player + 0x218) = float_0_804208ac;
+    zero = float_0_804208ac;
+    *(f32*)((s32)player + 0x21C) = zero;
+    *(f32*)((s32)player + 0x220) = zero;
+    *(f32*)((s32)player + 0x224) = zero;
+    *(f32*)((s32)player + 0x218) = zero;
 
     if ((*(u32*)player & 0x200) != 0) {
         *outY = *(f32*)((s32)player + 0x90);
@@ -1344,16 +1367,17 @@ s32 marioSearchGround(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f32* 
     }
 
     currentY = *(f32*)((s32)player + 0x90);
-    velocityPad = (f32)__fabs(velocityY) + float_0p01_80420964;
-    dropBase = float_5_804208c0 + (f32)__fabs(maxDrop);
-
+    velocityPad = (f32)__fabs(velocityY);
+    dropBase = (f32)__fabs(maxDrop);
     *outY = currentY;
     *outDrop = float_neg1_804208e4;
+    velocityPad += float_0p01_80420964;
+    dropBase += float_5_804208c0;
 
     if (*(u16*)((s32)player + 0x2E) == 0x13) {
         direction = toMovedir(*(f32*)((s32)player + 0x1B4));
-    } else if (*(f32*)((s32)player + 0x180) != float_0_804208ac) {
-        direction = (f32)revise360(
+    } else if (*(f32*)((s32)player + 0x180) != zero) {
+        direction = revise360(
             *(f32*)((s32)player + 0x1A4) -
             *(f32*)((s32)player + 0x19C));
     } else {
@@ -1435,17 +1459,17 @@ s32 marioSearchGround(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f32* 
 
         bias = normalPos.x >= float_0_804208ac ?
                float_0p5_804208cc : float_neg0p5_804208d0;
-        nx = (f32)(s32)(float_1000_804208a8 * normalPos.x + bias) /
+        normalPos.x = (f32)(s32)(float_1000_804208a8 * normalPos.x + bias) /
              float_1000_804208a8;
 
         bias = normalPos.y >= float_0_804208ac ?
                float_0p5_804208cc : float_neg0p5_804208d0;
-        ny = (f32)(s32)(float_1000_804208a8 * normalPos.y + bias) /
+        normalPos.y = (f32)(s32)(float_1000_804208a8 * normalPos.y + bias) /
              float_1000_804208a8;
 
         bias = normalPos.z >= float_0_804208ac ?
                float_0p5_804208cc : float_neg0p5_804208d0;
-        nz = (f32)(s32)(float_1000_804208a8 * normalPos.z + bias) /
+        normalPos.z = (f32)(s32)(float_1000_804208a8 * normalPos.z + bias) /
              float_1000_804208a8;
 
         hitPos = hit.hitPos;
@@ -1469,8 +1493,8 @@ s32 marioSearchGround(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f32* 
 
         angleValue = (f32)(angleABf(
             float_0_804208ac, float_0_804208ac,
-            float_100_80420900 * nz,
-            float_100_80420900 * ny) - float_180_804208d4);
+            float_100_80420900 * normalPos.z,
+            float_100_80420900 * normalPos.y) - float_180_804208d4);
         angleValue =
             (f32)(s32)(float_100_80420900 * angleValue +
                        float_0p5_804208cc) /
@@ -1480,15 +1504,15 @@ s32 marioSearchGround(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f32* 
 
         angleValue = (f32)(angleABf(
             float_0_804208ac, float_0_804208ac,
-            float_100_80420900 * nx,
-            float_100_80420900 * ny) - float_180_804208d4);
+            float_100_80420900 * normalPos.x,
+            float_100_80420900 * normalPos.y) - float_180_804208d4);
         angleValue =
             (f32)(s32)(float_100_80420900 * angleValue +
                        float_0p5_804208cc) /
             float_100_80420900;
         *(f32*)((s32)orientPlayer + 0x224) = angleValue;
 
-        lengthSq = nx * nx + nz * nz;
+        lengthSq = normalPos.x * normalPos.x + normalPos.z * normalPos.z;
         {
             if (lengthSq > float_0_804208ac) {
                 f64 d;
@@ -1549,7 +1573,7 @@ s32 marioSearchGround(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f32* 
 
         slope = angleABf(
             float_0_804208ac, float_0_804208ac,
-            flatLength, -ny);
+            flatLength, -normalPos.y);
         if (slope >= threshold) {
             result = 0;
         }
@@ -1562,8 +1586,8 @@ s32 marioSearchGround(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f32* 
 
         angleValue = (f32)(angleABf(
             float_0_804208ac, float_0_804208ac,
-            float_100_80420900 * nz,
-            float_100_80420900 * ny) - float_180_804208d4);
+            float_100_80420900 * normalPos.z,
+            float_100_80420900 * normalPos.y) - float_180_804208d4);
         angleValue =
             (f32)(s32)(float_100_80420900 * angleValue +
                        float_0p5_804208cc) /
@@ -1573,15 +1597,15 @@ s32 marioSearchGround(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f32* 
 
         angleValue = (f32)(angleABf(
             float_0_804208ac, float_0_804208ac,
-            float_100_80420900 * nx,
-            float_100_80420900 * ny) - float_180_804208d4);
+            float_100_80420900 * normalPos.x,
+            float_100_80420900 * normalPos.y) - float_180_804208d4);
         angleValue =
             (f32)(s32)(float_100_80420900 * angleValue +
                        float_0p5_804208cc) /
             float_100_80420900;
         *(f32*)((s32)orientPlayer + 0x224) = angleValue;
 
-        lengthSq = nx * nx + nz * nz;
+        lengthSq = normalPos.x * normalPos.x + normalPos.z * normalPos.z;
         {
             if (lengthSq > float_0_804208ac) {
                 f64 d;
@@ -1642,7 +1666,7 @@ s32 marioSearchGround(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f32* 
 
         slope = angleABf(
             float_0_804208ac, float_0_804208ac,
-            flatLength, -ny);
+            flatLength, -normalPos.y);
         *(f32*)((s32)player + 0x218) = slope;
 
         hitY = hitPos.y;
@@ -1697,7 +1721,7 @@ s32 marioSearchGroundRoll(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f
     } HitCheckArg;
 
     extern s32 hitCheckVecFilter(HitCheckArg* hit, void* filter);
-    extern Vec vec3_802c3b78;
+    extern const Vec vec3_802c3b78;
     extern Vec vec3_802c3bd8;
     extern f32 float_0_804208ac;
     extern f32 float_0p01_80420964;
@@ -1721,14 +1745,15 @@ s32 marioSearchGroundRoll(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f
     extern f64 cos(f64);
     extern void movePos(f32* x, f32* z, f32 distance, f32 angle);
 
-    Vec* vecBase = &vec3_802c3b78;
+    const Vec* vecBase = &vec3_802c3b78;
     void* player = marioGetPtr();
     HitCheckArg hit;
     Vec startPos;
     Vec endPos;
+    Vec normal;
+    Vec hitPos;
     f32 offsetX;
     f32 offsetZ;
-    f32 angle;
     f32 currentY;
     f32 playerX;
     f32 playerZ;
@@ -1737,9 +1762,6 @@ s32 marioSearchGroundRoll(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f
     f32 tolerance;
     f32 bestY;
     f32 bias;
-    f32 nx;
-    f32 ny;
-    f32 nz;
     f32 flatLength;
     f32 slope;
     f32 hitY;
@@ -1762,13 +1784,15 @@ s32 marioSearchGroundRoll(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f
     }
 
     collisionY = *(f32*)((s32)player + 0x1BC);
+    hitRadius = collisionY + (f32)__fabs(velocityY) + float_0p01_80420964;
     currentY = *(f32*)((s32)player + 0x90);
-    playerX = *(f32*)((s32)player + 0x8C);
-    playerZ = *(f32*)((s32)player + 0x94);
+    bestResult = 0;
     *outY = currentY;
     *outDrop = float_neg1_804208e4;
-    hitRadius = collisionY + (f32)__fabs(velocityY) + float_0p01_80420964;
+    bestY = float_neg10000_80420968;
     endPos = *(Vec*)((u8*)vecBase + 0x60);
+    playerX = *(f32*)((s32)player + 0x8C);
+    playerZ = *(f32*)((s32)player + 0x94);
 
     if (__fabs(*(f32*)((s32)player + 0x218)) >= float_0p01_80420964) {
         first = 4;
@@ -1780,8 +1804,6 @@ s32 marioSearchGroundRoll(f64 velocityY, f64 maxDrop, f32* outY, f32* outDrop, f
         tolerance = float_2_804208f0;
     }
 
-    bestY = float_neg10000_80420968;
-    bestResult = 0;
     for (i = first; i < last; i++) {
         if (i == 0) goto probe0;
         if (i == 1) goto probe1;
@@ -1795,18 +1817,18 @@ probe0:
         offsetZ = float_0_804208ac;
         goto probe_ready;
 probe1:
-        angle = float_3p1416_804208e8 *
+        velocityY = float_3p1416_804208e8 *
                 (float_90_80420924 + *(f32*)((s32)player + 0x1A4)) /
                 float_180_804208d4;
-        offsetX = float_8p64_8042096c * (f32)sin(angle);
-        offsetZ = -float_8p64_8042096c * (f32)cos(angle);
+        offsetX = float_8p64_8042096c * (f32)sin(velocityY);
+        offsetZ = -float_8p64_8042096c * (f32)cos(velocityY);
         goto probe_ready;
 probe2:
-        angle = float_3p1416_804208e8 *
+        velocityY = float_3p1416_804208e8 *
                 (*(f32*)((s32)player + 0x1A4) - float_90_80420924) /
                 float_180_804208d4;
-        offsetX = float_8p64_8042096c * (f32)sin(angle);
-        offsetZ = -float_8p64_8042096c * (f32)cos(angle);
+        offsetX = float_8p64_8042096c * (f32)sin(velocityY);
+        offsetZ = -float_8p64_8042096c * (f32)cos(velocityY);
         goto probe_ready;
 probe3:
         offsetX = float_0_804208ac;
@@ -1819,20 +1841,20 @@ probe4:
         offsetZ = float_0_804208ac;
         goto probe_ready;
 probe5:
-        angle = float_3p1416_804208e8 *
+        velocityY = float_3p1416_804208e8 *
                 (float_90_80420924 + *(f32*)((s32)player + 0x1A4)) /
                 float_180_804208d4;
-        offsetX = float_8p64_8042096c * (f32)sin(angle);
-        offsetZ = -float_8p64_8042096c * (f32)cos(angle);
+        offsetX = float_8p64_8042096c * (f32)sin(velocityY);
+        offsetZ = -float_8p64_8042096c * (f32)cos(velocityY);
         movePos(&offsetX, &offsetZ, float_3_804208f8,
                 *(f32*)((s32)player + 0x1A4));
         goto probe_ready;
 probe6:
-        angle = float_3p1416_804208e8 *
+        velocityY = float_3p1416_804208e8 *
                 (*(f32*)((s32)player + 0x1A4) - float_90_80420924) /
                 float_180_804208d4;
-        offsetX = float_8p64_8042096c * (f32)sin(angle);
-        offsetZ = -float_8p64_8042096c * (f32)cos(angle);
+        offsetX = float_8p64_8042096c * (f32)sin(velocityY);
+        offsetZ = -float_8p64_8042096c * (f32)cos(velocityY);
         movePos(&offsetX, &offsetZ, float_3_804208f8,
                 *(f32*)((s32)player + 0x1A4));
 probe_ready:
@@ -1855,32 +1877,34 @@ probe_ready:
             continue;
         }
 
-        bias = hit.normal.x >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0;
-        nx = (f32)(s32)(hit.normal.x * float_1000_804208a8 + bias) / float_1000_804208a8;
-        bias = hit.normal.y >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0;
-        ny = (f32)(s32)(hit.normal.y * float_1000_804208a8 + bias) / float_1000_804208a8;
-        bias = hit.normal.z >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0;
-        nz = (f32)(s32)(hit.normal.z * float_1000_804208a8 + bias) / float_1000_804208a8;
+        normal = hit.normal;
+        bias = normal.x >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0;
+        normal.x = (f32)(s32)(normal.x * float_1000_804208a8 + bias) / float_1000_804208a8;
+        bias = normal.y >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0;
+        normal.y = (f32)(s32)(normal.y * float_1000_804208a8 + bias) / float_1000_804208a8;
+        bias = normal.z >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0;
+        normal.z = (f32)(s32)(normal.z * float_1000_804208a8 + bias) / float_1000_804208a8;
+        hitPos = hit.hitPos;
 
         *(f32*)((s32)player + 0x21C) =
-            (f32)(angleABf(0.0, 0.0, float_100_80420900 * nz,
-                           float_100_80420900 * ny) - float_180_804208d4);
+            (f32)(angleABf(0.0, 0.0, float_100_80420900 * normal.z,
+                           float_100_80420900 * normal.y) - float_180_804208d4);
         *(f32*)((s32)player + 0x220) = 0.0f;
         *(f32*)((s32)player + 0x224) =
-            (f32)(angleABf(0.0, 0.0, float_100_80420900 * nx,
-                           float_100_80420900 * ny) - float_180_804208d4);
-        flatLength = (f32)sqrt(nx * nx + nz * nz);
-        slope = (f32)angleABf(0.0, 0.0, flatLength, -ny);
+            (f32)(angleABf(0.0, 0.0, float_100_80420900 * normal.x,
+                           float_100_80420900 * normal.y) - float_180_804208d4);
+        flatLength = (f32)sqrt(normal.x * normal.x + normal.z * normal.z);
+        slope = (f32)angleABf(0.0, 0.0, flatLength, -normal.y);
 
         if (slope > float_105_80420970 || slope < float_75_80420950) {
             *(f32*)((s32)player + 0x218) = slope;
-            hitY = hit.hitPos.y;
+            hitY = hitPos.y;
             if (currentY <= hitY || __fabs(hitY - currentY) < tolerance) {
                 if (__fabs(hitY - currentY) <= float_11_804208b4 && hitY > bestY) {
                     *outY = hitY;
                     *outDrop = float_0_804208ac;
                     *outAngle = (f32)angleABf(playerX, playerZ,
-                                              hit.hitPos.x, hit.hitPos.z);
+                                              hitPos.x, hitPos.z);
                     bestY = hitY;
                     bestResult = result;
                 }
@@ -1889,14 +1913,14 @@ probe_ready:
                     *outY = hitY;
                     *outDrop = float_0_804208ac;
                     *outAngle = (f32)angleABf(playerX, playerZ,
-                                              hit.hitPos.x, hit.hitPos.z);
+                                              hitPos.x, hitPos.z);
                     bestY = hitY;
                     bestResult = result;
                 }
             } else {
                 *outDrop = (f32)__fabs(currentY - hitY);
                 *outAngle = (f32)angleABf(playerX, playerZ,
-                                          hit.hitPos.x, hit.hitPos.z);
+                                          hitPos.x, hitPos.z);
             }
         }
     }
@@ -1991,8 +2015,8 @@ s32 marioLandonChk_old(f64 velocityY, f32* outY) {
     extern f64 __fabs(f64 value);
     extern f64 angleABf(f64 x1, f64 y1, f64 x2, f64 y2);
     extern s32 hitCheckVecFilter(HitCheckArg* hit, void* filter);
-    extern Vec vec3_802c3b78;
-    extern Vec vec3_802c3b84;
+    extern const Vec vec3_802c3b78;
+    extern const Vec vec3_802c3b84;
     extern f32 float_0_804208ac;
     extern f32 float_0p1_804208ec;
     extern f32 float_0p01_80420964;
@@ -2011,6 +2035,7 @@ s32 marioLandonChk_old(f64 velocityY, f32* outY) {
     extern f64 double_0_802c3d80;
     extern f32 __float_nan;
 
+    u8* vecBase = (u8*)&vec3_802c3b78;
     void* player = marioGetPtr();
     HitCheckArg hit;
     f32 groundY;
@@ -2020,6 +2045,9 @@ s32 marioLandonChk_old(f64 velocityY, f32* outY) {
     f32 radians;
     f32 sideX;
     f32 sideZ;
+    f32 playerX;
+    f32 playerY;
+    f32 playerZ;
     f32 offsetX;
     f32 offsetZ;
     f32 height;
@@ -2036,7 +2064,7 @@ s32 marioLandonChk_old(f64 velocityY, f32* outY) {
     } classifiedLength;
     f32 vertical;
     f32 bias;
-    s32 result;
+    u32 result;
     s32 i;
 
     *(f32*)((s32)player + 0x21C) = float_0_804208ac;
@@ -2063,6 +2091,9 @@ s32 marioLandonChk_old(f64 velocityY, f32* outY) {
     radians = (float_3p1416_804208e8 * direction) / float_180_804208d4;
     sideX = float_0p25_804208dc * *(f32*)((s32)player + 0x1B8) * (f32)sin(radians);
     sideZ = float_0p25_804208dc * *(f32*)((s32)player + 0x1B8) * -(f32)cos(radians);
+    playerX = *(f32*)((s32)player + 0x8C);
+    playerY = *(f32*)((s32)player + 0x90) + height;
+    playerZ = *(f32*)((s32)player + 0x94);
 
     if (*(s8*)((s32)player + 0x3C) == 2) {
         result = kpaSearchGround(float_11_804208b4, &groundY, scratchA, scratchB);
@@ -2080,7 +2111,7 @@ s32 marioLandonChk_old(f64 velocityY, f32* outY) {
             offsetZ = sideZ;
         } else if (i == 2) {
             offsetX = -sideZ;
-            offsetZ = sideX;
+            offsetZ = sideZ;
         } else if (i == 3) {
             offsetX = sideZ;
             offsetZ = -sideX;
@@ -2089,11 +2120,11 @@ s32 marioLandonChk_old(f64 velocityY, f32* outY) {
             offsetZ = -sideZ;
         }
 
-        hit.start = vec3_802c3b78;
-        hit.end = vec3_802c3b84;
-        hit.start.x = *(f32*)((s32)player + 0x8C) + offsetX;
-        hit.start.y = *(f32*)((s32)player + 0x90) + height;
-        hit.start.z = *(f32*)((s32)player + 0x94) + offsetZ;
+        hit.start = *(Vec*)(vecBase + 0x0);
+        hit.end = *(Vec*)(vecBase + 0xC);
+        hit.start.x = playerX + offsetX;
+        hit.start.y = playerY;
+        hit.start.z = playerZ + offsetZ;
         hit.end.x = float_0_804208ac;
         hit.end.y = float_neg1_804208e4;
         hit.end.z = float_0_804208ac;
@@ -2107,21 +2138,22 @@ s32 marioLandonChk_old(f64 velocityY, f32* outY) {
             result = hitCheckVecFilter(&hit, chkfilterVec);
         }
         if (result == 0) {
-            continue;
+            roundedRadius = radius;
+        } else {
+            bias = hit.radius >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0;
+            roundedRadius = (f32)(s32)(hit.radius * float_1000_804208a8 + bias) / float_1000_804208a8;
+            bias = hit.normal.x >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0;
+            normal[0] = (f32)(s32)(hit.normal.x * float_1000_804208a8 + bias) / float_1000_804208a8;
+            bias = hit.normal.y >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0;
+            normal[1] = (f32)(s32)(hit.normal.y * float_1000_804208a8 + bias) / float_1000_804208a8;
+            bias = hit.normal.z >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0;
+            normal[2] = (f32)(s32)(hit.normal.z * float_1000_804208a8 + bias) / float_1000_804208a8;
+            hitPos[0] = hit.hitPos.x;
+            hitPos[1] = hit.hitPos.y;
+            hitPos[2] = hit.hitPos.z;
         }
 
-        bias = hit.radius >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0;
-        roundedRadius = (f32)(s32)(hit.radius * float_1000_804208a8 + bias) / float_1000_804208a8;
-        bias = hit.normal.x >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0;
-        normal[0] = (f32)(s32)(hit.normal.x * float_1000_804208a8 + bias) / float_1000_804208a8;
-        bias = hit.normal.y >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0;
-        normal[1] = (f32)(s32)(hit.normal.y * float_1000_804208a8 + bias) / float_1000_804208a8;
-        bias = hit.normal.z >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0;
-        normal[2] = (f32)(s32)(hit.normal.z * float_1000_804208a8 + bias) / float_1000_804208a8;
-        hitPos[0] = hit.hitPos.x;
-        hitPos[1] = hit.hitPos.y;
-        hitPos[2] = hit.hitPos.z;
-
+        if (result != 0) {
         *(f32*)((s32)player + 0x21C) =
             (f32)(s32)(float_100_80420900 * (f32)(angleABf(0.0, 0.0,
                 float_100_80420900 * hitPos[2], float_100_80420900 * hitPos[1]) - float_180_804208d4)
@@ -2162,6 +2194,7 @@ s32 marioLandonChk_old(f64 velocityY, f32* outY) {
                 float_100_80420900;
             return result;
         }
+        }
     }
 
     return 0;
@@ -2190,7 +2223,7 @@ s32 marioChkLandon2(f64 velocityY, f64 yOffset, f32* outY) {
     extern f64 __fabs(f64 value);
     extern f64 angleABf(f64 x1, f64 y1, f64 x2, f64 y2);
     extern s32 hitCheckVecFilter(HitCheckArg* hit, void* filter);
-    extern Vec vec3_802c3bf0;
+    extern Vec vec3_802c3b78;
     extern f32 float_0_804208ac;
     extern f32 float_0p1_804208ec;
     extern f32 float_0p25_804208dc;
@@ -2207,17 +2240,20 @@ s32 marioChkLandon2(f64 velocityY, f64 yOffset, f32* outY) {
 
     void* player = marioGetPtr();
     HitCheckArg hit;
+    Vec normal;
+    Vec hitPos;
+    Vec endTemplate;
     f32 dir;
     f32 radians;
     f32 sideX;
     f32 sideZ;
+    f32 playerX;
+    f32 playerY;
+    f32 playerZ;
     f32 height;
     f32 probeRadius;
-    f32 reach;
+    f32 roundedRadius;
     f32 bias;
-    f32 nx;
-    f32 ny;
-    f32 nz;
     f32 flatLength;
     f32 lengthSqF;
     f64 lengthSq;
@@ -2227,34 +2263,38 @@ s32 marioChkLandon2(f64 velocityY, f64 yOffset, f32* outY) {
     s32 lengthKind;
     f32 hitY;
     f32 angle;
-    s32 result;
+    u32 result;
     s32 i;
 
-    *(f32*)((s32)player + 0x218) = float_0_804208ac;
     *(f32*)((s32)player + 0x21C) = float_0_804208ac;
     *(f32*)((s32)player + 0x220) = float_0_804208ac;
     *(f32*)((s32)player + 0x224) = float_0_804208ac;
+    *(f32*)((s32)player + 0x218) = float_0_804208ac;
 
-    if (*(u32*)player & 0x100) {
-        *outY = *(f32*)((s32)player + 0x90);
-        return 0;
-    }
     if (*(u32*)player & 0x200) {
         *outY = *(f32*)((s32)player + 0x90);
         return 0;
     }
+    if (*(u32*)player & 0x100) {
+        *outY = *(f32*)((s32)player + 0x90);
+        return 0;
+    }
 
+    probeRadius = (f32)__fabs(velocityY) + float_0p1_804208ec;
     height = float_0p5_804208cc * *(f32*)((s32)player + 0x1BC);
-    probeRadius = height + (f32)__fabs(velocityY) + float_0p1_804208ec;
+    probeRadius += height;
     if (*(f32*)((s32)player + 0x180) == float_0_804208ac) {
         dir = toMovedir(*(f32*)((s32)player + 0x1AC));
     } else {
         dir = *(f32*)((s32)player + 0x1A4);
     }
     radians = (float_3p1416_804208e8 * dir) / float_180_804208d4;
-    reach = float_0p25_804208dc * *(f32*)((s32)player + 0x1B8);
-    sideX = reach * (f32)sin(radians);
-    sideZ = reach * -(f32)cos(radians);
+    sideX = float_0p25_804208dc * *(f32*)((s32)player + 0x1B8) * (f32)sin(radians);
+    sideZ = float_0p25_804208dc * *(f32*)((s32)player + 0x1B8) * -(f32)cos(radians);
+    playerY = *(f32*)((s32)player + 0x90) + yOffset + height;
+    endTemplate = *(Vec*)((u8*)&vec3_802c3b78 + 0x78);
+    playerX = *(f32*)((s32)player + 0x8C);
+    playerZ = *(f32*)((s32)player + 0x94);
 
     for (i = 0; i < 5; i++) {
         f32 offsetX;
@@ -2267,18 +2307,18 @@ s32 marioChkLandon2(f64 velocityY, f64 yOffset, f32* outY) {
             offsetZ = sideZ;
         } else if (i == 2) {
             offsetX = -sideZ;
-            offsetZ = -sideX;
+            offsetZ = sideZ;
         } else if (i == 3) {
             offsetX = sideZ;
             offsetZ = -sideX;
         } else {
-            offsetX = -sideZ;
-            offsetZ = -sideX;
+            offsetX = -sideX;
+            offsetZ = -sideZ;
         }
-        hit.start.x = *(f32*)((s32)player + 0x8C) + offsetX;
-        hit.start.y = *(f32*)((s32)player + 0x90) + (f32)yOffset + height;
-        hit.start.z = *(f32*)((s32)player + 0x94) + offsetZ;
-        hit.end = vec3_802c3bf0;
+        hit.start.x = playerX + offsetX;
+        hit.start.y = playerY;
+        hit.start.z = playerZ + offsetZ;
+        hit.end = endTemplate;
         hit.radius = probeRadius;
 
         if (*(u16*)((s32)marioGetPtr() + 0x2E) == 0x1C) {
@@ -2289,79 +2329,83 @@ s32 marioChkLandon2(f64 velocityY, f64 yOffset, f32* outY) {
             result = hitCheckVecFilter(&hit, chkfilterVec);
         }
         if (result == 0) {
-            continue;
+            roundedRadius = probeRadius;
+        } else {
+            bias = hit.radius >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0;
+            roundedRadius = (f32)(s32)(hit.radius * float_1000_804208a8 + bias) / float_1000_804208a8;
+            normal = hit.normal;
+            bias = normal.x >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0;
+            normal.x = (f32)(s32)(normal.x * float_1000_804208a8 + bias) / float_1000_804208a8;
+            bias = normal.y >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0;
+            normal.y = (f32)(s32)(normal.y * float_1000_804208a8 + bias) / float_1000_804208a8;
+            bias = normal.z >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0;
+            normal.z = (f32)(s32)(normal.z * float_1000_804208a8 + bias) / float_1000_804208a8;
+            hitPos = hit.hitPos;
         }
 
-        bias = hit.radius >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0;
-        hit.radius = (f32)(s32)(hit.radius * float_1000_804208a8 + bias) / float_1000_804208a8;
-        bias = hit.normal.x >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0;
-        nx = (f32)(s32)(hit.normal.x * float_1000_804208a8 + bias) / float_1000_804208a8;
-        bias = hit.normal.y >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0;
-        ny = (f32)(s32)(hit.normal.y * float_1000_804208a8 + bias) / float_1000_804208a8;
-        bias = hit.normal.z >= 0.0f ? float_0p5_804208cc : float_neg0p5_804208d0;
-        nz = (f32)(s32)(hit.normal.z * float_1000_804208a8 + bias) / float_1000_804208a8;
+        if (result != 0) {
+            angle = (f32)(angleABf(0.0, 0.0, float_100_80420900 * normal.z,
+                                  float_100_80420900 * normal.y) - float_180_804208d4);
+            *(f32*)((s32)player + 0x21C) =
+                (f32)(s32)(float_100_80420900 * angle + float_0p5_804208cc) /
+                float_100_80420900;
+            *(f32*)((s32)player + 0x220) = 0.0f;
+            angle = (f32)(angleABf(0.0, 0.0, float_100_80420900 * normal.x,
+                                  float_100_80420900 * normal.y) - float_180_804208d4);
+            *(f32*)((s32)player + 0x224) =
+                (f32)(s32)(float_100_80420900 * angle + float_0p5_804208cc) /
+                float_100_80420900;
+            lengthSqF = normal.x * normal.x + normal.z * normal.z;
+            lengthSq = lengthSqF;
+            if (lengthSqF > float_0_804208ac) {
+                invLength = __frsqrte(lengthSq);
+                invLength = double_0p5_802c3d70 * invLength *
+                    -(lengthSq * invLength * invLength - double_3_802c3d78);
+                invLength = double_0p5_802c3d70 * invLength *
+                    -(lengthSq * invLength * invLength - double_3_802c3d78);
+                flatLength = (f32)(lengthSq * double_0p5_802c3d70 * invLength *
+                    -(lengthSq * invLength * invLength - double_3_802c3d78));
+            } else if (lengthSq < double_0_802c3d80) {
+                flatLength = __float_nan[0];
+            } else {
+                lengthBits = *(u32*)&lengthSqF;
+                lengthExp = (s32)(lengthBits & 0x7F800000);
 
-        angle = (f32)(angleABf(0.0, 0.0, float_100_80420900 * nz,
-                              float_100_80420900 * ny) - float_180_804208d4);
-        *(f32*)((s32)player + 0x21C) =
-            (f32)(s32)(float_100_80420900 * angle + float_0p5_804208cc) /
-            float_100_80420900;
-        *(f32*)((s32)player + 0x220) = 0.0f;
-        angle = (f32)(angleABf(0.0, 0.0, float_100_80420900 * nx,
-                              float_100_80420900 * ny) - float_180_804208d4);
-        *(f32*)((s32)player + 0x224) =
-            (f32)(s32)(float_100_80420900 * angle + float_0p5_804208cc) /
-            float_100_80420900;
-        lengthSqF = nx * nx + nz * nz;
-        lengthSq = lengthSqF;
-        if (lengthSqF > float_0_804208ac) {
-            invLength = __frsqrte(lengthSq);
-            invLength = double_0p5_802c3d70 * invLength *
-                -(lengthSq * invLength * invLength - double_3_802c3d78);
-            invLength = double_0p5_802c3d70 * invLength *
-                -(lengthSq * invLength * invLength - double_3_802c3d78);
-            flatLength = (f32)(lengthSq * double_0p5_802c3d70 * invLength *
-                -(lengthSq * invLength * invLength - double_3_802c3d78));
-        } else if (lengthSq < double_0_802c3d80) {
-            flatLength = __float_nan[0];
-        } else {
-            lengthBits = *(u32*)&lengthSqF;
-            lengthExp = (s32)(lengthBits & 0x7F800000);
-
-            if (lengthExp >= 0x7F800000) {
-                if (lengthExp == 0x7F800000) {
-                    if ((lengthBits & 0x7FFFFF) != 0) {
-                        lengthKind = 1;
+                if (lengthExp >= 0x7F800000) {
+                    if (lengthExp == 0x7F800000) {
+                        if ((lengthBits & 0x7FFFFF) != 0) {
+                            lengthKind = 1;
+                        } else {
+                            lengthKind = 2;
+                        }
                     } else {
-                        lengthKind = 2;
+                        lengthKind = 4;
+                    }
+                } else if (lengthExp == 0) {
+                    if ((lengthBits & 0x7FFFFF) != 0) {
+                        lengthKind = 5;
+                    } else {
+                        lengthKind = 3;
                     }
                 } else {
                     lengthKind = 4;
                 }
-            } else if (lengthExp == 0) {
-                if ((lengthBits & 0x7FFFFF) != 0) {
-                    lengthKind = 5;
+
+                if (lengthKind == 1) {
+                    flatLength = __float_nan[0];
                 } else {
-                    lengthKind = 3;
+                    flatLength = lengthSqF;
                 }
-            } else {
-                lengthKind = 4;
             }
 
-            if (lengthKind == 1) {
-                flatLength = __float_nan[0];
-            } else {
-                flatLength = lengthSqF;
+            *(f32*)((s32)player + 0x218) =
+                (f32)angleABf(0.0, 0.0, flatLength, -normal.y);
+
+            hitY = hit.start.y - roundedRadius;
+            if (__fabs(hitY - hitPos.y) < float_0p1_804208ec) {
+                *outY = hitPos.y;
+                return result;
             }
-        }
-
-        *(f32*)((s32)player + 0x218) =
-            (f32)angleABf(0.0, 0.0, flatLength, -ny);
-
-        hitY = hit.start.y - hit.radius;
-        if (__fabs(hitY - hit.hitPos.y) < float_0p1_804208ec) {
-            *outY = hit.hitPos.y;
-            return result;
         }
     }
 
@@ -2457,7 +2501,72 @@ f64 marioChkOverhead(void) {
 
     *(f32*)((s32)player + 0x8C) = pos.x;
     hit = *(void**)((s32)player + 0x1F8);
-    if (hit == 0) {
+    if (hit != 0) {
+        powerBlock = 0;
+        if (hitGetAttr(hit) & 0x80000000) {
+            mobj = mobjHitObjPtrToPtr((s32)hit);
+            if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_PowerUpBlock_802c3d98) == 0 ||
+                strcmp((char*)((s32)mobj + 0x15), str_MOBJ_SaveBlock_802c3dac) == 0 ||
+                strcmp((char*)((s32)mobj + 0x15), str_MOBJ_RecoveryBlock_802c3dbc) == 0 ||
+                strcmp((char*)((s32)mobj + 0x15), str_MOBJ_CoinTakenRecove_802c3dd0) == 0) {
+                powerBlock = 1;
+            }
+        }
+        if (powerBlock) {
+            *(f32*)((s32)player + 0x180) = float_0_804208ac;
+            *(u32*)player |= 0x80;
+        }
+        *(u32*)player |= 0x08000000;
+
+        if (*(s8*)((s32)player + 0x3C) == 2) {
+            marioItemGetDisable();
+            if (kpaGetBodyStatus() == 0) {
+                marioClearJumpPara();
+            }
+        }
+
+        player = marioGetPtr();
+        height = *(f32*)((s32)player + 0x1BC);
+        if (*(u16*)((s32)player + 0x2E) == 0x1A) {
+            party = partyGetPtr(marioGetPartyId());
+            if (party != 0) {
+                height = (f32)partyGetHeight(party);
+            }
+        }
+        newY = (f32)(s32)((pos.y - height) * float_10_80420904 + float_0p5_804208cc) / float_10_80420904 - float_1_804208c4;
+        if (!(*(u32*)player & 0x20000) && newY < *(f32*)((s32)player + 0x120)) {
+            newY = *(f32*)((s32)player + 0x120);
+            if (!(*(u32*)player & 0x01000000) && *(u16*)((s32)player + 0x2E) != 0x19 &&
+                *(u16*)((s32)player + 0x2E) != 0x18 && *(u16*)((s32)player + 0x2E) != 0x1C &&
+                *(s8*)((s32)player + 0x3C) != 2 && marioChkSlitEnd() == 0) {
+                if (*(f32*)((s32)player + 0x180) == float_0_804208ac) {
+                    if (*(u16*)((s32)player + 0x2E) != 0) {
+                        marioChgStayMotion();
+                    }
+                } else {
+                    if (*(f32*)((s32)player + 0x180) <= *(f32*)((s32)player + 0x184)) {
+                        motion = 1;
+                    } else {
+                        motion = 2;
+                    }
+                    if (motion != *(u16*)((s32)player + 0x30)) {
+                        marioChgMot(motion);
+                    }
+                }
+            }
+        }
+        pos.y = newY;
+        if (*(u16*)((s32)player + 0x2E) == 3 || *(u16*)((s32)player + 0x2E) == 6) {
+            psndSFXOn_3D(0x156, (void*)((s32)player + 0x8C));
+            marioClearJumpPara();
+            *(u32*)player &= 0xF87FFFFF;
+            if (*(s8*)((s32)player + 0x3C) != 2) {
+                marioChgMot(10);
+                marioSetFallPara();
+            }
+            *(f32*)((s32)player + 0x90) = newY;
+        }
+    } else {
         if (!(*(u32*)player & 0x01000000)) {
             if (height >= float_0_804208ac && height <= float_5_804208c0) {
                 *(u32*)player |= 0x08000000;
@@ -2470,73 +2579,8 @@ f64 marioChkOverhead(void) {
         } else {
             *(u32*)player &= ~0x08000000;
         }
-        return pos.y;
     }
-
-    powerBlock = 0;
-    if (hitGetAttr(hit) & 0x80000000) {
-        mobj = mobjHitObjPtrToPtr((s32)hit);
-        if (strcmp((char*)((s32)mobj + 0x15), str_MOBJ_PowerUpBlock_802c3d98) == 0 ||
-            strcmp((char*)((s32)mobj + 0x15), str_MOBJ_SaveBlock_802c3dac) == 0 ||
-            strcmp((char*)((s32)mobj + 0x15), str_MOBJ_RecoveryBlock_802c3dbc) == 0 ||
-            strcmp((char*)((s32)mobj + 0x15), str_MOBJ_CoinTakenRecove_802c3dd0) == 0) {
-            powerBlock = 1;
-        }
-    }
-    if (powerBlock) {
-        *(f32*)((s32)player + 0x180) = float_0_804208ac;
-        *(u32*)player |= 0x80;
-    }
-    *(u32*)player |= 0x08000000;
-
-    if (*(s8*)((s32)player + 0x3C) == 2) {
-        marioItemGetDisable();
-        if (kpaGetBodyStatus() == 0) {
-            marioClearJumpPara();
-        }
-    }
-
-    player = marioGetPtr();
-    height = *(f32*)((s32)player + 0x1BC);
-    if (*(u16*)((s32)player + 0x2E) == 0x1A) {
-        party = partyGetPtr(marioGetPartyId());
-        if (party != 0) {
-            height = (f32)partyGetHeight(party);
-        }
-    }
-    newY = (f32)(s32)((pos.y - height) * float_10_80420904 + float_0p5_804208cc) / float_10_80420904 - float_1_804208c4;
-    if (!(*(u32*)player & 0x20000) && newY < *(f32*)((s32)player + 0x120)) {
-        newY = *(f32*)((s32)player + 0x120);
-        if (!(*(u32*)player & 0x01000000) && *(u16*)((s32)player + 0x2E) != 0x19 &&
-            *(u16*)((s32)player + 0x2E) != 0x18 && *(u16*)((s32)player + 0x2E) != 0x1C &&
-            *(s8*)((s32)player + 0x3C) != 2 && marioChkSlitEnd() == 0) {
-            if (*(f32*)((s32)player + 0x180) == float_0_804208ac) {
-                if (*(u16*)((s32)player + 0x2E) != 0) {
-                    marioChgStayMotion();
-                }
-            } else {
-                if (*(f32*)((s32)player + 0x180) <= *(f32*)((s32)player + 0x184)) {
-                    motion = 1;
-                } else {
-                    motion = 2;
-                }
-                if (motion != *(u16*)((s32)player + 0x30)) {
-                    marioChgMot(motion);
-                }
-            }
-        }
-    }
-    if (*(u16*)((s32)player + 0x2E) == 3 || *(u16*)((s32)player + 0x2E) == 6) {
-        psndSFXOn_3D(0x156, (void*)((s32)player + 0x8C));
-        marioClearJumpPara();
-        *(u32*)player &= 0xF87FFFFF;
-        if (*(s8*)((s32)player + 0x3C) != 2) {
-            marioChgMot(10);
-            marioSetFallPara();
-        }
-        *(f32*)((s32)player + 0x90) = newY;
-    }
-    return newY;
+    return pos.y;
 }
 
 #pragma no_register_save_helpers on
@@ -2575,24 +2619,25 @@ double marioChkOverheadJabara(void* param_1, float* param_2) {
             }
         }
         *(f32*)(player + 0x8C) = pos.x;
-        if (*(void**)(player + 0x1F8) == 0) {
-            if (height <= float_0_804208ac) {
-                *(u32*)player &= ~0x08000000;
-            } else {
-                *param_2 = height;
-                *(u32*)player |= 0x08000000;
-            }
-        } else {
+        if (*(void**)(player + 0x1F8) != 0) {
             f32 adjust = float_0p1_804208ec;
             *(u32*)player |= 0x08000000;
             pos.y = (pos.y - *(f32*)(player + 0x1BC)) - adjust;
             if (*(u16*)(player + 0x2E) == 3) {
                 marioChgMot(0);
             }
+        } else {
+            if (height <= float_0_804208ac) {
+                *(u32*)player &= ~0x08000000;
+            } else {
+                *param_2 = height;
+                *(u32*)player |= 0x08000000;
+            }
         }
     }
     return (double)pos.y;
 }
+
 extern f64 __frsqrte(f64 value);
 #pragma use_lmw_stmw on
 #pragma no_register_save_helpers off
@@ -2607,15 +2652,6 @@ void* marioSearchHead(f32 velocityY, f32* pos, f32* outHeight) {
         f32 f;
         u32 u;
     } FloatBits;
-    typedef struct HeadProbe {
-        f32 radius;
-        Vec temp;
-        Vec normal;
-        Vec hitPos;
-        Vec end;
-        Vec start;
-    } HeadProbe;
-
     extern void* marioGetPtr(void);
     extern u8 marioHitCheck2(void);
     extern Vec vec3_802c3b78;
@@ -2635,8 +2671,13 @@ void* marioSearchHead(f32 velocityY, f32* pos, f32* outHeight) {
     void* angleMario;
     void* hit;
     u8* vecBase;
-    HeadProbe probe;
     FloatBits classifiedLength;
+    f32 radius;
+    Vec temp;
+    Vec normal;
+    Vec hitPos;
+    Vec end;
+    Vec start;
     f32 height;
     f32 dir;
     f32 rad;
@@ -2676,7 +2717,7 @@ void* marioSearchHead(f32 velocityY, f32* pos, f32* outHeight) {
 
     sideZ = (f32)cos(rad);
     height = *outHeight;
-    probe.radius = height + velocityY;
+    radius = height + velocityY;
     sideZ = float_0p5_804208cc *
         ((*(f32*)((s32)mario + 0x1B8) - float_0p5_804208cc) * -sideZ);
 
@@ -2701,20 +2742,20 @@ void* marioSearchHead(f32 velocityY, f32* pos, f32* outHeight) {
             offZ = -sideZ;
         }
 
-        probe.temp = *(Vec*)(vecBase + 0xC0);
-        probe.temp.x = pos[0] + offX;
-        probe.temp.y = pos[1] + yHalf;
-        probe.temp.z = pos[2] + offZ;
-        probe.start = probe.temp;
-        probe.end = *(Vec*)(vecBase + 0xCC);
+        temp = *(Vec*)(vecBase + 0xC0);
+        temp.x = pos[0] + offX;
+        temp.y = pos[1] + yHalf;
+        temp.z = pos[2] + offZ;
+        start = temp;
+        end = *(Vec*)(vecBase + 0xCC);
 
         hit = ((void* (*)(void*, void*, void*, void*, void*))marioHitCheck2)(
-            &probe.start, &probe.end, &probe.hitPos, &probe.normal, &probe.radius);
+            &start, &end, &hitPos, &normal, &radius);
 
         if (hit != 0) {
-            nx = probe.normal.x;
-            ny = probe.normal.y;
-            nz = probe.normal.z;
+            nx = normal.x;
+            ny = normal.y;
+            nz = normal.z;
 
             angleMario = marioGetPtr();
             normalY100 = float_100_80420900 * ny;
@@ -2808,7 +2849,7 @@ void* marioSearchHead(f32 velocityY, f32* pos, f32* outHeight) {
             if (hit != 0) {
                 hitY = -((float_0p05_80420958 * height) -
                     (f32)(s32)(
-                        float_100_80420900 * probe.hitPos.y + yHalf) /
+                        float_100_80420900 * hitPos.y + yHalf) /
                     float_100_80420900);
 
                 if (hitY <= pos[1] + height) {
@@ -2822,7 +2863,7 @@ void* marioSearchHead(f32 velocityY, f32* pos, f32* outHeight) {
             }
         } else if (hit != 0) {
             hitY = (f32)(s32)(
-                float_100_80420900 * probe.hitPos.y + yHalf) /
+                float_100_80420900 * hitPos.y + yHalf) /
                 float_100_80420900;
 
             if (*(f32*)((s32)mario + 0x7C) < float_neg10_8042090c) {
@@ -2883,16 +2924,18 @@ s32 marioSearchHead_roll(f64 heightAdd, f32* pos, f32* outHeight) {
     void* mario;
     HitCheckArg hit;
     Vec start;
+    Vec end;
     Vec offset;
-    Vec normal;
+    volatile Vec normal;
     Vec hitPos;
     f32 playerHeight;
     f32 maxY;
     f32 delta;
     f32 bias;
+    f32 zero;
     f64 rad;
     s32 i;
-    s32 result;
+    u32 result;
 
     mario = marioGetPtr();
     *outHeight = float_neg1_804208e4;
@@ -2927,11 +2970,13 @@ s32 marioSearchHead_roll(f64 heightAdd, f32* pos, f32* outHeight) {
             movePos(float_3_804208f8, float_180_804208d4 + *(f32*)((s32)mario + 0x1A4), &offset.x, &offset.z);
         }
 
+        start = vec3_802c3c50;
         start.x = pos[0] + offset.x;
         start.y = pos[1] + float_1_804208c4;
         start.z = pos[2] + offset.z;
+        end = vec3_802c3c5c;
         hit.start = start;
-        hit.end = vec3_802c3c5c;
+        hit.end = end;
         hit.radius = maxY;
 
         if (*(u16*)((s32)marioGetPtr() + 0x2E) == 0x1C) {
@@ -2942,7 +2987,10 @@ s32 marioSearchHead_roll(f64 heightAdd, f32* pos, f32* outHeight) {
             result = hitCheckVecFilter(&hit, chkfilterVec);
         }
 
-        if (result != 0) {
+        zero = float_0_804208ac;
+        if (result == 0) {
+            result = 0;
+        } else {
             bias = hit.normal.x >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0;
             normal.x = (f32)(s32)(hit.normal.x * float_1000_804208a8 + bias) / float_1000_804208a8;
             bias = hit.normal.y >= float_0_804208ac ? float_0p5_804208cc : float_neg0p5_804208d0;
@@ -2952,9 +3000,11 @@ s32 marioSearchHead_roll(f64 heightAdd, f32* pos, f32* outHeight) {
             if (&hitPos != NULL) {
                 hitPos = hit.hitPos;
             }
+        }
+        if (result != 0) {
             if (normal.y <= pos[1] + playerHeight) {
                 pos[1] = (normal.y - playerHeight) - float_1_804208c4;
-                *outHeight = float_0_804208ac;
+                *outHeight = zero;
                 return result;
             }
             delta = (normal.y - pos[1]) - playerHeight;
@@ -2973,7 +3023,7 @@ s32 marioSearchHead_roll(f64 heightAdd, f32* pos, f32* outHeight) {
 void* marioSearchHead_jabara(f64 height, f32* position, f32* distance, s32* side) {
     typedef struct Vec { f32 x, y, z; } Vec;
     extern s32 marioHitCheck2(void*, void*, f32*, void*, f32*);
-    extern Vec vec3_802c3c68;
+    extern const Vec vec3_802c3c68;
     extern f32 float_0_804208ac;
     extern f32 float_0p5_804208cc;
     extern f32 float_neg1_804208e4;
@@ -2987,23 +3037,24 @@ void* marioSearchHead_jabara(f64 height, f32* position, f32* distance, s32* side
     Vec normal;
     Vec hitPos;
     void* hit;
-    f32 offset = float_neg23p7_80420944;
-    f32 baseDistance = *distance;
-    f32 step = float_5p8_80420948;
-    f32 pi = float_3p1416_804208e8;
-    f32 divisor = float_180_804208d4;
-    f32 half = float_0p5_804208cc;
+    f32 offset;
+    f64 baseDistance;
+    f32 step;
+    f32 pi;
+    f32 divisor;
+    f32 half;
     s32 i;
 
     *side = 0;
-    *distance = float_neg1_804208e4;
-    {
-        Vec* src = &vec3_802c3c68;
-        end.x = src->x;
-        end.y = src->y;
-        end.z = src->z;
-    }
+    offset = float_neg23p7_80420944;
+    baseDistance = *distance;
     i = 0;
+    *distance = float_neg1_804208e4;
+    step = float_5p8_80420948;
+    pi = float_3p1416_804208e8;
+    divisor = float_180_804208d4;
+    half = float_0p5_804208cc;
+    end = vec3_802c3c68;
     do {
         f32 radius = (f32)((f64)baseDistance + height);
         start.x = position[0] + offset * (f32)sin(pi * *(f32*)(player + 0x19C) / divisor);
@@ -3052,6 +3103,7 @@ void marioCheckWall(f64 speed, f64 angle) {
     u8* player = marioGetPtr();
     Vec pos;
     void* hit;
+    u8* current;
     u32 attr;
     f32 distance;
     s32 limit;
@@ -3087,9 +3139,17 @@ void marioCheckWall(f64 speed, f64 angle) {
         *(void**)(player + 0x1E4) = *(void**)(player + 0x210) != 0 ?
                                     *(void**)(player + 0x210) : hit;
         attr = hitGetAttr(hit);
-        if (((attr & 0x80000) != 0 && (*(u32*)player & 0x01000000) == 0) ||
-            ((attr & 0x80) != 0 && *(u16*)(player + 0x2E) != 0x19) ||
-            ((attr & 0x80) == 0 && ((attr >> 23) & 1) == 0)) {
+        current = marioGetPtr();
+        if ((attr & 0x80000) == 0 || (*(u32*)current & 0x01000000) != 0) {
+            if ((attr & 0x80) == 0) {
+                attr = (attr >> 23) & 1;
+            } else {
+                attr = *(u16*)(current + 0x2E) == 0x19;
+            }
+        } else {
+            attr = 0;
+        }
+        if (attr != 0) {
             if (speed != float_0_804208ac) {
                 *(void**)(player + 0x1F0) = hit;
                 *(void**)(player + 0x1F4) = hit;
@@ -3201,10 +3261,10 @@ void marioCheckWall_roll(f64 speed, f64 angle) {
     } HitCheckArg;
 
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
-    extern u8 marioSearchFrontWall_staying(void);
-    extern u8 searchFrontWall(s64, s64, s64, void*, s32);
+    extern void marioSearchFrontWall_staying(f64);
+    extern void* searchFrontWall(f64, f64, f64, void*, f32*);
     extern void movePos(f64, f64, void*, void*);
-    extern s32 marioChkWallAround(void*, s32, f32, f32, f32);
+    extern s32 marioChkWallAround(f64, f64, f64, f64, void*, s32);
     extern Vec vec3_802c3c74;
     extern f32 float_0_804208ac;
     extern f32 float_1000_804208a8;
@@ -3217,6 +3277,8 @@ void marioCheckWall_roll(f64 speed, f64 angle) {
     void* hit;
     HitCheckArg check;
     Vec pos;
+    Vec roundedNormal;
+    Vec hitPosition;
     f32 rounded;
     f32 bias;
     u32 attr;
@@ -3263,23 +3325,27 @@ void marioCheckWall_roll(f64 speed, f64 angle) {
             }
             rounded = (f32)(s32)(check.radius * float_1000_804208a8 + bias) / float_1000_804208a8;
 
+            roundedNormal = check.normal;
             bias = float_neg0p5_804208d0;
-            if (check.normal.x >= float_0_804208ac) {
+            if (roundedNormal.x >= float_0_804208ac) {
                 bias = float_0p5_804208cc;
             }
-            check.normal.x = (f32)(s32)(check.normal.x * float_1000_804208a8 + bias) / float_1000_804208a8;
+            roundedNormal.x = (f32)(s32)(roundedNormal.x * float_1000_804208a8 + bias) / float_1000_804208a8;
 
             bias = float_neg0p5_804208d0;
-            if (check.normal.y >= float_0_804208ac) {
+            if (roundedNormal.y >= float_0_804208ac) {
                 bias = float_0p5_804208cc;
             }
-            check.normal.y = (f32)(s32)(check.normal.y * float_1000_804208a8 + bias) / float_1000_804208a8;
+            roundedNormal.y = (f32)(s32)(roundedNormal.y * float_1000_804208a8 + bias) / float_1000_804208a8;
 
             bias = float_neg0p5_804208d0;
-            if (check.normal.z >= float_0_804208ac) {
+            if (roundedNormal.z >= float_0_804208ac) {
                 bias = float_0p5_804208cc;
             }
-            check.normal.z = (f32)(s32)(check.normal.z * float_1000_804208a8 + bias) / float_1000_804208a8;
+            roundedNormal.z = (f32)(s32)(roundedNormal.z * float_1000_804208a8 + bias) / float_1000_804208a8;
+            if (&hitPosition != 0) {
+                hitPosition = check.hitPos;
+            }
 
             if (rounded > float_16p8_80420938) {
                 hit = 0;
@@ -3288,12 +3354,12 @@ void marioCheckWall_roll(f64 speed, f64 angle) {
 
         *(void**)((s32)mario + 0x1F8) = hit;
         if (hit != 0) {
-            *(f32*)((s32)mario + 0x90) = check.normal.y - *(f32*)((s32)mario + 0x1BC);
+            *(f32*)((s32)mario + 0x90) = roundedNormal.y - *(f32*)((s32)mario + 0x1BC);
         }
     }
 
     if (speed == float_0_804208ac) {
-        ((void (*)(f64))marioSearchFrontWall_staying)(angle);
+        marioSearchFrontWall_staying(angle);
         return;
     }
 
@@ -3308,7 +3374,7 @@ void marioCheckWall_roll(f64 speed, f64 angle) {
 
     pos = *(Vec*)((s32)mario + 0x8C);
     rounded = float_0_804208ac;
-    hit = ((void* (*)(f64, f64, f64, void*, void*))searchFrontWall)(speed, angle, angle, &pos, &rounded);
+    hit = searchFrontWall(speed, angle, *(f32*)((s32)mario + 0x1C0), &pos, &rounded);
     if (hit == 0) {
         *(Vec*)((s32)mario + 0x8C) = pos;
     } else {
@@ -3346,7 +3412,8 @@ void marioCheckWall_roll(f64 speed, f64 angle) {
     }
 
     pos = *(Vec*)((s32)mario + 0x8C);
-    ((s32 (*)(f64, f64, f64, f64, void*, s32))marioChkWallAround)(speed, angle, speed, angle, &pos, 0);
+    marioChkWallAround(speed, angle, *(f32*)((s32)mario + 0x1C0),
+                       *(f32*)((s32)mario + 0x1BC), &pos, 0);
     *(f32*)((s32)mario + 0x8C) = pos.x;
     *(f32*)((s32)mario + 0x94) = pos.z;
 }
@@ -3367,7 +3434,7 @@ s32 marioChkFront(f64 angle, f64 maxDist, f32* outDist, f32* pos) {
     } HitCheckArg;
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
     extern f64 distABf(f64, f64, f64, f64);
-    extern Vec vec3_802c3c80;
+    extern const Vec vec3_802c3c80;
     extern f32 float_0_804208ac;
     extern f32 float_1000_804208a8;
     extern f32 float_0p5_804208cc;
@@ -3375,6 +3442,9 @@ s32 marioChkFront(f64 angle, f64 maxDist, f32* outDist, f32* pos) {
     extern f32 float_neg1_804208e4;
 
     HitCheckArg hit;
+    Vec start;
+    Vec direction;
+    Vec roundedNormal;
     Vec hitPos;
     f32 s;
     f32 c;
@@ -3383,10 +3453,12 @@ s32 marioChkFront(f64 angle, f64 maxDist, f32* outDist, f32* pos) {
     s32 result;
 
     sincosf((f32)angle, &c, &s);
-    hit.start = *(Vec*)pos;
-    hit.end = vec3_802c3c80;
-    hit.end.x = c;
-    hit.end.z = s;
+    start = *(Vec*)pos;
+    direction = vec3_802c3c80;
+    direction.x = c;
+    direction.z = s;
+    hit.start = start;
+    hit.end = direction;
     hit.radius = (f32)maxDist;
 
     if (*(u16*)((s32)marioGetPtr() + 0x2E) == 0x1C) {
@@ -3405,33 +3477,36 @@ s32 marioChkFront(f64 angle, f64 maxDist, f32* outDist, f32* pos) {
         }
         roundedDist = (f32)(s32)(roundedDist * float_1000_804208a8 + roundBias) / float_1000_804208a8;
 
+        roundedNormal = hit.normal;
         roundBias = float_neg0p5_804208d0;
-        if (hit.normal.x >= float_0_804208ac) {
+        if (roundedNormal.x >= float_0_804208ac) {
             roundBias = float_0p5_804208cc;
         }
-        hit.normal.x = (f32)(s32)(hit.normal.x * float_1000_804208a8 + roundBias) / float_1000_804208a8;
+        roundedNormal.x = (f32)(s32)(roundedNormal.x * float_1000_804208a8 + roundBias) / float_1000_804208a8;
 
         roundBias = float_neg0p5_804208d0;
-        if (hit.normal.y >= float_0_804208ac) {
+        if (roundedNormal.y >= float_0_804208ac) {
             roundBias = float_0p5_804208cc;
         }
-        hit.normal.y = (f32)(s32)(hit.normal.y * float_1000_804208a8 + roundBias) / float_1000_804208a8;
+        roundedNormal.y = (f32)(s32)(roundedNormal.y * float_1000_804208a8 + roundBias) / float_1000_804208a8;
 
         roundBias = float_neg0p5_804208d0;
-        if (hit.normal.z >= float_0_804208ac) {
+        if (roundedNormal.z >= float_0_804208ac) {
             roundBias = float_0p5_804208cc;
         }
-        hit.normal.z = (f32)(s32)(hit.normal.z * float_1000_804208a8 + roundBias) / float_1000_804208a8;
-        hitPos = hit.hitPos;
+        roundedNormal.z = (f32)(s32)(roundedNormal.z * float_1000_804208a8 + roundBias) / float_1000_804208a8;
+        if (&hitPos != 0) {
+            hitPos = hit.hitPos;
+        }
     }
 
-    if (result == 0 || maxDist < roundedDist) {
-        *outDist = float_neg1_804208e4;
-        return 0;
+    if (result != 0 && roundedDist <= maxDist) {
+        *outDist = (f32)distABf(pos[0], pos[2], roundedNormal.x, roundedNormal.z);
+        return result;
     }
 
-    *outDist = (f32)distABf(pos[0], pos[2], hit.normal.x, hit.normal.z);
-    return result;
+    *outDist = float_neg1_804208e4;
+    return 0;
 }
 
 void* searchFrontWall(f64 speed, f64 angle, f64 radius, void* position, s32 outParam) {
@@ -3476,6 +3551,7 @@ void* searchFrontWall(f64 speed, f64 angle, f64 radius, void* position, s32 outP
     u8* player = marioGetPtr();
     Vec* pos = position;
     HitCheckArg check;
+    Vec hitPosition;
     f32 heights[4];
     f32 sinv;
     f32 cosv;
@@ -3535,18 +3611,18 @@ void* searchFrontWall(f64 speed, f64 angle, f64 radius, void* position, s32 outP
         }
         heights[0] = float_0p75_804208e0 * height;
         heights[1] = float_11_804208b4;
-    } else if ((*(u32*)player & 0x01000000) != 0) {
-        heights[0] = float_12_80420930;
-        heights[1] = float_11_804208b4;
-        if (*(s16*)(player + 0x50) != 0) {
-            heights[2] = float_7_80420934;
-            count = 3;
-        }
-    } else {
+    } else if ((*(u32*)player & 0x01000000) == 0) {
         heights[0] = float_26p64_8042092c;
         heights[1] = float_11_804208b4;
         if (*(s16*)(player + 0x50) != 0) {
             heights[2] = float_0p1_804208ec;
+            count = 3;
+        }
+    } else {
+        heights[0] = float_12_80420930;
+        heights[1] = float_11_804208b4;
+        if (*(s16*)(player + 0x50) != 0) {
+            heights[2] = float_7_80420934;
             count = 3;
         }
     }
@@ -3584,6 +3660,9 @@ void* searchFrontWall(f64 speed, f64 angle, f64 radius, void* position, s32 outP
                    float_0p5_804208cc : float_neg0p5_804208d0;
             check.normal.z = (f32)(s32)(check.normal.z * float_1000_804208a8 + bias) /
                              float_1000_804208a8;
+            if (&hitPosition != 0) {
+                hitPosition = check.hitPos;
+            }
             if (chkBalloon(hit) != 0) {
                 *(void**)(player + 0x210) = hit;
             }
@@ -3591,11 +3670,11 @@ void* searchFrontWall(f64 speed, f64 angle, f64 radius, void* position, s32 outP
                 bestHit = hit;
                 bestDistance = distance;
                 correctionX = float_0p5_804208cc *
-                    -((speed * sinv * check.hitPos.x + speed * cosv * check.hitPos.z) *
-                      check.hitPos.x - speed * sinv);
+                    -((speed * sinv * hitPosition.x + speed * cosv * hitPosition.z) *
+                      hitPosition.x - speed * sinv);
                 correctionZ = float_0p5_804208cc *
-                    -((speed * sinv * check.hitPos.x + speed * cosv * check.hitPos.z) *
-                      check.hitPos.z - speed * cosv);
+                    -((speed * sinv * hitPosition.x + speed * cosv * hitPosition.z) *
+                      hitPosition.z - speed * cosv);
             }
         }
     }
@@ -3639,6 +3718,15 @@ void* searchFrontWall(f64 speed, f64 angle, f64 radius, void* position, s32 outP
                 leftBlocked = hitCheckVecFilter(&check, chkfilterVecRoll);
             } else {
                 leftBlocked = hitCheckVecFilter(&check, chkfilterVec);
+            }
+            if (leftBlocked == 0) {
+                leftBlocked = 0;
+                sideDistance = probeRadius;
+            } else {
+                f32 bias = check.radius >= float_0_804208ac ?
+                           float_0p5_804208cc : float_neg0p5_804208d0;
+                sideDistance = (f32)(s32)(check.radius * float_1000_804208a8 + bias) /
+                               float_1000_804208a8;
             }
         }
     }
@@ -3687,12 +3775,18 @@ void* dou10_yoko_yari(float* outSpeed) {
     extern f32 float_270_80420920;
     extern f32 float_90_80420924;
     extern f32 float_0_804208ac;
+    extern f32 float_0p5_804208cc;
+    extern f32 float_neg0p5_804208d0;
+    extern f32 float_1000_804208a8;
 
     void* mario;
     void* hit;
     HitCheckArg check;
     Vec pos;
+    Vec roundedNormal;
+    Vec hitPosition;
     f32 sideOffset;
+    f32 bias;
     u8 temp[4];
 
     mario = marioGetPtr();
@@ -3730,6 +3824,36 @@ void* dou10_yoko_yari(float* outSpeed) {
         hit = (void*)hitCheckVecFilter(&check, chkfilterVecRoll);
     } else {
         hit = (void*)hitCheckVecFilter(&check, chkfilterVec);
+    }
+    if (hit == 0) {
+        hit = 0;
+    } else {
+        roundedNormal = check.normal;
+
+        bias = float_neg0p5_804208d0;
+        if (roundedNormal.x >= float_0_804208ac) {
+            bias = float_0p5_804208cc;
+        }
+        roundedNormal.x = (f32)(s32)(roundedNormal.x * float_1000_804208a8 + bias) /
+                          float_1000_804208a8;
+
+        bias = float_neg0p5_804208d0;
+        if (roundedNormal.y >= float_0_804208ac) {
+            bias = float_0p5_804208cc;
+        }
+        roundedNormal.y = (f32)(s32)(roundedNormal.y * float_1000_804208a8 + bias) /
+                          float_1000_804208a8;
+
+        bias = float_neg0p5_804208d0;
+        if (roundedNormal.z >= float_0_804208ac) {
+            bias = float_0p5_804208cc;
+        }
+        roundedNormal.z = (f32)(s32)(roundedNormal.z * float_1000_804208a8 + bias) /
+                          float_1000_804208a8;
+
+        if (&hitPosition != 0) {
+            hitPosition = check.hitPos;
+        }
     }
     if (hit != 0 && (hitGetAttr(hit) & 0x800)) {
         *(void**)((s32)mario + 0x1E4) = hit;
@@ -3790,11 +3914,17 @@ int dou10_yoko_yari2(float* outSpeed) {
     extern f32 float_270_80420920;
     extern f32 float_90_80420924;
     extern f32 float_0_804208ac;
+    extern f32 float_0p5_804208cc;
+    extern f32 float_neg0p5_804208d0;
+    extern f32 float_1000_804208a8;
 
     void* mario;
     void* hit;
     HitCheckArg check;
     Vec pos;
+    Vec roundedNormal;
+    Vec hitPosition;
+    f32 bias;
     u8 temp[4];
 
     mario = marioGetPtr();
@@ -3815,6 +3945,36 @@ int dou10_yoko_yari2(float* outSpeed) {
         hit = (void*)hitCheckVecFilter(&check, chkfilterVecRoll);
     } else {
         hit = (void*)hitCheckVecFilter(&check, chkfilterVec);
+    }
+    if (hit == 0) {
+        hit = 0;
+    } else {
+        roundedNormal = check.normal;
+
+        bias = float_neg0p5_804208d0;
+        if (roundedNormal.x >= float_0_804208ac) {
+            bias = float_0p5_804208cc;
+        }
+        roundedNormal.x = (f32)(s32)(roundedNormal.x * float_1000_804208a8 + bias) /
+                          float_1000_804208a8;
+
+        bias = float_neg0p5_804208d0;
+        if (roundedNormal.y >= float_0_804208ac) {
+            bias = float_0p5_804208cc;
+        }
+        roundedNormal.y = (f32)(s32)(roundedNormal.y * float_1000_804208a8 + bias) /
+                          float_1000_804208a8;
+
+        bias = float_neg0p5_804208d0;
+        if (roundedNormal.z >= float_0_804208ac) {
+            bias = float_0p5_804208cc;
+        }
+        roundedNormal.z = (f32)(s32)(roundedNormal.z * float_1000_804208a8 + bias) /
+                          float_1000_804208a8;
+
+        if (&hitPosition != 0) {
+            hitPosition = check.hitPos;
+        }
     }
     if (hit != 0 && (hitGetAttr(hit) & 0x800)) {
         *(void**)((s32)mario + 0x1E4) = hit;
@@ -3893,8 +4053,8 @@ void* N_dou10_yoko_yari3(void) {
     start1.y = y + float_5_804208c0;
     start1.z = z;
     check.start = start1;
-    end1 = *(const VecLocal*)(catalog + 0x15C);
     sincosf(float_0_804208ac, &sinv, &cosv);
+    end1 = *(const VecLocal*)(catalog + 0x15C);
     end1.x = sinv;
     end1.z = cosv;
     check.end = end1;
@@ -3909,15 +4069,17 @@ void* N_dou10_yoko_yari3(void) {
         start2.y = y + float_5_804208c0;
         start2.z = z;
         check.start = start2;
-        end2 = *(const VecLocal*)(catalog + 0x174);
         sincosf(float_0_804208ac, &sinv, &cosv);
+        end2 = *(const VecLocal*)(catalog + 0x174);
         end2.x = sinv;
         end2.z = cosv;
         check.end = end2;
         check.radius = float_40_80420908;
         hit = hitCheckVecFilter(&check, 0);
-    }
-    if (hit != 0) {
+        if (hit != 0) {
+            *(void**)(player + 0x1E4) = hit;
+        }
+    } else {
         *(void**)(player + 0x1E4) = hit;
     }
     return hit;
@@ -3965,22 +4127,22 @@ s32 marioChkFrontStep(f32* outY, f32* outDrop, f32* outAngle) {
     void* player;
     u8* vecBase;
     HitCheckArg hit;
+    Vec roundedNormal;
+    Vec hitPosition;
     f32 height;
     f32 reach;
     f32 dir;
     f32 rad;
     f32 sx;
     f32 cz;
+    f32 playerX;
+    f32 playerY;
+    f32 playerZ;
     f32 bias;
-    f32 nx;
-    f32 ny;
-    f32 nz;
-    f32 hx;
-    f32 hy;
-    f32 hz;
-    f32 flatLen;
+    f32 lengthSqF;
     f64 lengthSq;
     f64 invLength;
+    s32 lengthKind;
     union {
         f32 f;
         u32 u;
@@ -4023,10 +4185,13 @@ s32 marioChkFrontStep(f32* outY, f32* outDrop, f32* outAngle) {
     sx = (f32)sin(rad);
     cz = (f32)cos(rad);
 
+    playerY = *(f32*)((s32)player + 0x90);
+    playerX = *(f32*)((s32)player + 0x8C);
+    playerZ = *(f32*)((s32)player + 0x94);
     hit.start = *(Vec*)(vecBase + 0x180);
-    hit.start.x = *(f32*)((s32)player + 0x8C) + reach * sx;
-    hit.start.y = *(f32*)((s32)player + 0x90) + height;
-    hit.start.z = *(f32*)((s32)player + 0x94) + reach * -cz;
+    hit.start.x = playerX + reach * sx;
+    hit.start.y = playerY + height;
+    hit.start.z = playerZ + reach * -cz;
     hit.end = *(Vec*)(vecBase + 0x18C);
     hit.radius = float_0p1_804208ec + float_11_804208b4 + height;
 
@@ -4048,37 +4213,37 @@ s32 marioChkFrontStep(f32* outY, f32* outDrop, f32* outAngle) {
     }
     hit.radius = (f32)(s32)(hit.radius * float_1000_804208a8 + bias) / float_1000_804208a8;
 
+    roundedNormal = hit.normal;
     bias = float_neg0p5_804208d0;
-    if (hit.normal.x >= float_0_804208ac) {
+    if (roundedNormal.x >= float_0_804208ac) {
         bias = float_0p5_804208cc;
     }
-    nx = (f32)(s32)(hit.normal.x * float_1000_804208a8 + bias) / float_1000_804208a8;
+    roundedNormal.x = (f32)(s32)(roundedNormal.x * float_1000_804208a8 + bias) / float_1000_804208a8;
 
     bias = float_neg0p5_804208d0;
-    if (hit.normal.y >= float_0_804208ac) {
+    if (roundedNormal.y >= float_0_804208ac) {
         bias = float_0p5_804208cc;
     }
-    ny = (f32)(s32)(hit.normal.y * float_1000_804208a8 + bias) / float_1000_804208a8;
+    roundedNormal.y = (f32)(s32)(roundedNormal.y * float_1000_804208a8 + bias) / float_1000_804208a8;
 
     bias = float_neg0p5_804208d0;
-    if (hit.normal.z >= float_0_804208ac) {
+    if (roundedNormal.z >= float_0_804208ac) {
         bias = float_0p5_804208cc;
     }
-    nz = (f32)(s32)(hit.normal.z * float_1000_804208a8 + bias) / float_1000_804208a8;
+    roundedNormal.z = (f32)(s32)(roundedNormal.z * float_1000_804208a8 + bias) / float_1000_804208a8;
 
-    hx = hit.hitPos.x;
-    hy = hit.hitPos.y;
-    hz = hit.hitPos.z;
+    hitPosition = hit.hitPos;
 
     *(f32*)((s32)player + 0x21C) = (f32)(s32)(float_100_80420900 *
-        ((f32)angleABf(float_0_804208ac, float_0_804208ac, float_100_80420900 * hz, float_100_80420900 * hy) - float_180_804208d4) +
+        ((f32)angleABf(float_0_804208ac, float_0_804208ac, float_100_80420900 * hitPosition.z, float_100_80420900 * hitPosition.y) - float_180_804208d4) +
         float_0p5_804208cc) / float_100_80420900;
     *(f32*)((s32)player + 0x220) = float_0_804208ac;
     *(f32*)((s32)player + 0x224) = (f32)(s32)(float_100_80420900 *
-        ((f32)angleABf(float_0_804208ac, float_0_804208ac, float_100_80420900 * hx, float_100_80420900 * hy) - float_180_804208d4) +
+        ((f32)angleABf(float_0_804208ac, float_0_804208ac, float_100_80420900 * hitPosition.x, float_100_80420900 * hitPosition.y) - float_180_804208d4) +
         float_0p5_804208cc) / float_100_80420900;
 
-    lengthSq = hx * hx + hz * hz;
+    lengthSqF = hitPosition.x * hitPosition.x + hitPosition.z * hitPosition.z;
+    lengthSq = (f64)lengthSqF;
     if (lengthSq > *(f64*)(vecBase + 0x208)) {
         invLength = __frsqrte(lengthSq);
         invLength = *(f64*)(vecBase + 0x1F8) * invLength *
@@ -4087,31 +4252,43 @@ s32 marioChkFrontStep(f32* outY, f32* outDrop, f32* outAngle) {
             (*(f64*)(vecBase + 0x200) - lengthSq * invLength * invLength);
         invLength = *(f64*)(vecBase + 0x1F8) * invLength *
             (*(f64*)(vecBase + 0x200) - lengthSq * invLength * invLength);
-        flatLen = (f32)(lengthSq * invLength);
+        lengthSq = (f64)(f32)(lengthSq * invLength);
     } else if (lengthSq < *(f64*)(vecBase + 0x208)) {
-        flatLen = __float_nan;
+        lengthSq = (f64)__float_nan;
     } else {
-        classifiedLength.f = (f32)lengthSq;
-        if ((classifiedLength.u & 0x7F800000) == 0x7F800000 &&
-            (classifiedLength.u & 0x007FFFFF) != 0) {
-            flatLen = __float_nan;
+        classifiedLength.f = lengthSqF;
+        if ((classifiedLength.u & 0x7F800000) == 0x7F800000) {
+            if ((classifiedLength.u & 0x007FFFFF) == 0) {
+                lengthKind = 2;
+            } else {
+                lengthKind = 1;
+            }
+        } else if ((classifiedLength.u & 0x7F800000) == 0) {
+            if ((classifiedLength.u & 0x007FFFFF) == 0) {
+                lengthKind = 3;
+            } else {
+                lengthKind = 5;
+            }
         } else {
-            flatLen = classifiedLength.f;
+            lengthKind = 4;
+        }
+        if (lengthKind == 1) {
+            lengthSq = (f64)__float_nan;
         }
     }
-    *(f32*)((s32)player + 0x218) = (f32)angleABf(float_0_804208ac, float_0_804208ac, flatLen, -hy);
+    *(f32*)((s32)player + 0x218) = (f32)angleABf(float_0_804208ac, float_0_804208ac, lengthSq, -hitPosition.y);
 
-    if (*(f32*)((s32)player + 0x90) <= ny ||
-        ((ny - *(f32*)((s32)player + 0x90) < float_2_804208f0) &&
-         (*(f32*)((s32)player + 0x90) - ny < float_2_804208f0))) {
-        *outY = ny;
+    if (playerY <= roundedNormal.y ||
+        ((roundedNormal.y - playerY < float_2_804208f0) &&
+         (playerY - roundedNormal.y < float_2_804208f0))) {
+        *outY = roundedNormal.y;
         *outDrop = float_0_804208ac;
-        *outAngle = (f32)angleABf(*(f32*)((s32)player + 0x8C), *(f32*)((s32)player + 0x94), nx, nz);
+        *outAngle = (f32)angleABf(playerX, playerZ, roundedNormal.x, roundedNormal.z);
         return result;
     }
 
-    *outDrop = *(f32*)((s32)player + 0x90) - ny;
-    *outAngle = (f32)angleABf(*(f32*)((s32)player + 0x8C), *(f32*)((s32)player + 0x94), nx, nz);
+    *outDrop = playerY - roundedNormal.y;
+    *outAngle = (f32)angleABf(playerX, playerZ, roundedNormal.x, roundedNormal.z);
     return 0;
 }
 
@@ -4146,6 +4323,8 @@ s32 marioChkWallAround(f64 speed, f64 angle, f64 radius, f64 height,
     VecLocal correction = { 0.0f, 0.0f, 0.0f };
     VecLocal firstCorrection;
     VecLocal secondPos;
+    VecLocal lowDirection;
+    VecLocal highDirection;
     HitCheckArgLocal low;
     HitCheckArgLocal high;
     void* lowHit;
@@ -4158,7 +4337,7 @@ s32 marioChkWallAround(f64 speed, f64 angle, f64 radius, f64 height,
     f32 probeRadius;
     f32 limit;
     s32 count;
-    s32 collided = 0;
+    u8 collided = 0;
     s32 i;
 
     count = kpaGetStageViewType() == 0 ? 2 : 8;
@@ -4171,12 +4350,19 @@ s32 marioChkWallAround(f64 speed, f64 angle, f64 radius, f64 height,
         low.start.x = pos->x;
         low.start.y = pos->y + (f32)angle - float_1_804208c4;
         low.start.z = pos->z;
-        low.end.x = sinv;
-        low.end.y = float_0_804208ac;
-        low.end.z = cosv;
+        lowDirection.x = sinv;
+        lowDirection.y = float_0_804208ac;
+        lowDirection.z = cosv;
+        low.end = lowDirection;
         low.radius = probeRadius;
-        high = low;
+        high.start.x = pos->x;
         high.start.y = pos->y + float_11_804208b4;
+        high.start.z = pos->z;
+        highDirection.x = sinv;
+        highDirection.y = float_0_804208ac;
+        highDirection.z = cosv;
+        high.end = highDirection;
+        high.radius = probeRadius;
 
         if (*(u16*)((u8*)marioGetPtr() + 0x2E) == 0x1C) {
             lowHit = hitCheckVecFilter(&low, chkfilterVecVivian);
@@ -4284,12 +4470,19 @@ s32 marioChkWallAround(f64 speed, f64 angle, f64 radius, f64 height,
         low.start.x = secondPos.x;
         low.start.y = secondPos.y + (f32)angle - float_1_804208c4;
         low.start.z = secondPos.z;
-        low.end.x = sinv;
-        low.end.y = float_0_804208ac;
-        low.end.z = cosv;
+        lowDirection.x = sinv;
+        lowDirection.y = float_0_804208ac;
+        lowDirection.z = cosv;
+        low.end = lowDirection;
         low.radius = probeRadius;
-        high = low;
+        high.start.x = secondPos.x;
         high.start.y = secondPos.y + float_11_804208b4;
+        high.start.z = secondPos.z;
+        highDirection.x = sinv;
+        highDirection.y = float_0_804208ac;
+        highDirection.z = cosv;
+        high.end = highDirection;
+        high.radius = probeRadius;
         if (*(u16*)((u8*)marioGetPtr() + 0x2E) == 0x1C) {
             lowHit = hitCheckVecFilter(&low, chkfilterVecVivian);
             highHit = hitCheckVecFilter(&high, chkfilterVecVivian);
@@ -4381,7 +4574,13 @@ s32 marioSlitChkWallAround(void) {
         f32 radius;
     } HitCheckArg;
 
+    extern void* marioGetPtr(void);
+    extern void sincosf(f32, f32*, f32*);
     extern s32 hitCheckVecFilter(HitCheckArg*, void*);
+    extern s32 chkfilterVecVivian(s32, int);
+    extern s32 chkfilterVecRoll(s32, int);
+    extern s32 chkfilterVec(s32, int);
+    extern u32 hitGetAttr(void*);
     extern Vec vec3_802c3b78;
     extern f32 float_0_804208ac;
     extern f32 float_1_804208c4;
@@ -4392,6 +4591,9 @@ s32 marioSlitChkWallAround(void) {
 
     void* player;
     HitCheckArg check;
+    Vec direction1;
+    Vec direction2;
+    Vec direction3;
     s32 blocked[8];
     f32 s;
     f32 c;
@@ -4400,6 +4602,7 @@ s32 marioSlitChkWallAround(void) {
     f32 y;
     f32 z;
     void* hit;
+    u8* checkPlayer;
     u32 attr;
     s32 i;
 
@@ -4415,9 +4618,10 @@ s32 marioSlitChkWallAround(void) {
         check.start.x = x;
         check.start.y = y;
         check.start.z = z;
-        check.end = vec3_802c3b78;
-        check.end.x = s;
-        check.end.z = c;
+        direction1 = vec3_802c3b78;
+        direction1.x = s;
+        direction1.z = c;
+        check.end = direction1;
         check.radius = float_13_804208b8;
 
         if (*(u16*)((s32)marioGetPtr() + 0x2E) == 0x1C) {
@@ -4428,13 +4632,17 @@ s32 marioSlitChkWallAround(void) {
             hit = (void*)hitCheckVecFilter(&check, chkfilterVec);
         }
 
+        if (hit == 0) {
+            hit = 0;
+        }
         if (hit != 0) {
             attr = hitGetAttr(hit);
-            if ((attr & 0x80000) == 0 || (*(u32*)marioGetPtr() & 0x01000000) != 0) {
+            checkPlayer = marioGetPtr();
+            if ((attr & 0x80000) == 0 || (*(u32*)checkPlayer & 0x01000000) != 0) {
                 if ((attr & 0x80) == 0) {
                     attr = (attr >> 0x17) & 1;
                 } else {
-                    attr = (*(u16*)((s32)marioGetPtr() + 0x2E) == 0x19);
+                    attr = (*(u16*)(checkPlayer + 0x2E) == 0x19);
                 }
             } else {
                 attr = 0;
@@ -4448,14 +4656,15 @@ s32 marioSlitChkWallAround(void) {
     y = *(f32*)((s32)player + 0x90) + float_5_804208c0;
     angle = float_0_804208ac;
     for (i = 0; i < 8; i++, angle += float_45_804208bc) {
-        if (blocked[i] == 0) {
+        if (blocked[i] != 1) {
             sincosf(angle, &s, &c);
             check.start.x = x;
             check.start.y = y;
             check.start.z = z;
-            check.end = vec3_802c3b78;
-            check.end.x = s;
-            check.end.z = c;
+            direction2 = vec3_802c3b78;
+            direction2.x = s;
+            direction2.z = c;
+            check.end = direction2;
             check.radius = float_13_804208b8;
 
             if (*(u16*)((s32)marioGetPtr() + 0x2E) == 0x1C) {
@@ -4466,13 +4675,17 @@ s32 marioSlitChkWallAround(void) {
                 hit = (void*)hitCheckVecFilter(&check, chkfilterVec);
             }
 
+            if (hit == 0) {
+                hit = 0;
+            }
             if (hit != 0) {
                 attr = hitGetAttr(hit);
-                if ((attr & 0x80000) == 0 || (*(u32*)marioGetPtr() & 0x01000000) != 0) {
+                checkPlayer = marioGetPtr();
+                if ((attr & 0x80000) == 0 || (*(u32*)checkPlayer & 0x01000000) != 0) {
                     if ((attr & 0x80) == 0) {
                         attr = (attr >> 0x17) & 1;
                     } else {
-                        attr = (*(u16*)((s32)marioGetPtr() + 0x2E) == 0x19);
+                        attr = (*(u16*)(checkPlayer + 0x2E) == 0x19);
                     }
                 } else {
                     attr = 0;
@@ -4487,14 +4700,15 @@ s32 marioSlitChkWallAround(void) {
     y = *(f32*)((s32)player + 0x90) + (*(f32*)((s32)player + 0x1BC) - float_1_804208c4);
     angle = float_0_804208ac;
     for (i = 0; i < 8; i++, angle += float_45_804208bc) {
-        if (blocked[i] == 0) {
+        if (blocked[i] != 1) {
             sincosf(angle, &s, &c);
             check.start.x = x;
             check.start.y = y;
             check.start.z = z;
-            check.end = vec3_802c3b78;
-            check.end.x = s;
-            check.end.z = c;
+            direction3 = vec3_802c3b78;
+            direction3.x = s;
+            direction3.z = c;
+            check.end = direction3;
             check.radius = float_13_804208b8;
 
             if (*(u16*)((s32)marioGetPtr() + 0x2E) == 0x1C) {
@@ -4505,13 +4719,17 @@ s32 marioSlitChkWallAround(void) {
                 hit = (void*)hitCheckVecFilter(&check, chkfilterVec);
             }
 
+            if (hit == 0) {
+                hit = 0;
+            }
             if (hit != 0) {
                 attr = hitGetAttr(hit);
-                if ((attr & 0x80000) == 0 || (*(u32*)marioGetPtr() & 0x01000000) != 0) {
+                checkPlayer = marioGetPtr();
+                if ((attr & 0x80000) == 0 || (*(u32*)checkPlayer & 0x01000000) != 0) {
                     if ((attr & 0x80) == 0) {
                         attr = (attr >> 0x17) & 1;
                     } else {
-                        attr = (*(u16*)((s32)marioGetPtr() + 0x2E) == 0x19);
+                        attr = (*(u16*)(checkPlayer + 0x2E) == 0x19);
                     }
                 } else {
                     attr = 0;
@@ -4536,7 +4754,10 @@ s32 marioSlitChkWallAround(void) {
 
 void marioCheckWallShip(f64 speed, f64 angle) {
     typedef struct VecLocal { f32 x, y, z; } VecLocal;
+    extern void* marioGetPtr(void);
+    extern void marioSearchFrontWall_staying(f64);
     extern void* searchFrontWall(f64, f64, f64, void*, f32*);
+    extern u32 hitGetAttr(void*);
     extern void movePos(f64, f64, f32*, f32*);
     extern s32 marioChkWallAround(f64, f64, f64, f64, void*, s32);
     extern void PSVECSubtract(void*, void*, void*);
@@ -4550,6 +4771,7 @@ void marioCheckWallShip(f64 speed, f64 angle) {
     VecLocal delta;
     f32 wallDistance;
     void* hit;
+    u8* current;
     u32 attr;
     s32 passable;
 
@@ -4581,8 +4803,9 @@ void marioCheckWallShip(f64 speed, f64 angle) {
     if (hit != 0) {
         *(void**)(player + 0x1E4) = hit;
         attr = hitGetAttr(hit);
+        current = marioGetPtr();
         passable = 0;
-        if ((attr & 0x80000) == 0 || (*(u32*)player & 0x01000000) != 0) {
+        if ((attr & 0x80000) == 0 || (*(u32*)current & 0x01000000) != 0) {
             if ((attr & 0x80) == 0) {
                 passable = (attr >> 23) & 1;
             } else {
@@ -4605,7 +4828,7 @@ void marioCheckWallShip(f64 speed, f64 angle) {
             if (*(s8*)(player + 0x3F) > 19) {
                 *(s8*)(player + 0x3F) = 20;
                 attr = hitGetAttr(hit);
-                if ((attr & 0x80) == 0 || *(u16*)(player + 0x2E) == 0x19) {
+                if ((attr & 0x80) == 0 || *(u16*)((u8*)marioGetPtr() + 0x2E) == 0x19) {
                     *(void**)(player + 0x1F0) = hit;
                 }
             }

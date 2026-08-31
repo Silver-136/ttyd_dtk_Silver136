@@ -356,30 +356,33 @@ u8 kemuri(void) {
     if (--ct_552 > 0) {
         return 0;
     }
-    sincosf((float_6p2832_80422a24 * reviseAngle(-*(f32*)((s32)mario + 0x1A4))) / float_360_80422a28, &s, &c);
     if (kpaGetStageViewType() == 0) {
-        toMovedirSimple(float_180_80422a40 + *(f32*)((s32)mario + 0x1B0));
+        sincosf(toMovedirSimple(float_180_80422a40 + *(f32*)((s32)mario + 0x1B0)), &s, &c);
     } else {
-        toMovedirSimple(float_180_80422a40 + *(f32*)((s32)mario + 0x1AC));
+        sincosf(toMovedirSimple(float_180_80422a40 + *(f32*)((s32)mario + 0x1AC)), &s, &c);
     }
-    sincosf((float_6p2832_80422a24 * reviseAngle(-*(f32*)((s32)mario + 0x1A4))) / float_360_80422a28, &s, &c);
     level = kpaGetLevel();
-    dist = float_10_80422a34;
-    scale = float_0p5_80422a44;
-    if (level == 1) {
+    switch (level) {
+    case 0:
+        ct_552 = 4;
+        dist = float_10_80422a34;
+        scale = float_0p5_80422a44;
+        break;
+    case 1:
         ct_552 = 7;
         dist = float_15_80422a48;
         scale = float_1_80422a4c;
-    } else if (level == 2) {
+        break;
+    case 2:
         ct_552 = 10;
         dist = float_20_80422a50;
         scale = 2.0f;
-    } else if (level == 3) {
+        break;
+    case 3:
         ct_552 = 10;
         dist = float_50_80422a54;
         scale = float_4_80422a58;
-    } else {
-        ct_552 = 4;
+        break;
     }
     effect = effKemuri2Entry(0,
                              *(f32*)((s32)mario + 0x8C) + dist * s,

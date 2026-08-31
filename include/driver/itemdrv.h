@@ -6,7 +6,7 @@ void itemInit(void);
 void itemReInit(void);
 void itemCoinDrop(float* position);
 s32 N_itemPickUpFromFieldCheck(void);
-u8 itemMain(void);
+void itemMain(void);
 void itemModeChange(void* item, u16 mode);
 s32 itemEntry(s32 name, s32 itemId, s32 mode, s32 collectExpr, s32 script, f32 x, f32 y, f32 z);
 void itemDelete(void* name);

@@ -41,127 +41,185 @@ void BattlePadManager(void) {
 }
 
 void BtlPad_WorkInit(void* work) {
+    typedef struct PadData {
+        u16 button;
+        s8 stickX;
+        s8 stickY;
+        s8 substickX;
+        s8 substickY;
+        u8 triggerLeft;
+        u8 triggerRight;
+        u8 analogA;
+        u8 analogB;
+        s8 err;
+        u8 pad_B;
+    } PadData;
+    typedef struct BattleWorkPadLocal {
+        PadData padData[2];
+        u32 buttonsPressedHistory[30];
+        u32 buttonsHeldHistory[30];
+        u32 buttonsHistory[30];
+        u32 buttonsReleasedHistory[30];
+        u8 holdRepeatState;
+        u8 holdRepeatFrameCounter;
+    } BattleWorkPadLocal;
+    BattleWorkPadLocal* pad = (BattleWorkPadLocal*)work;
     s32 i;
-    s32 offset;
-    void* entry;
 
-    offset = 0;
     for (i = 0; i < 2; i++) {
-        entry = (void*)((s32)work + offset);
-        *(u16*)((s32)entry + 0) = 0;
-        *(u8*)((s32)entry + 2) = 0;
-        *(u8*)((s32)entry + 3) = 0;
-        *(u8*)((s32)entry + 4) = 0;
-        *(u8*)((s32)entry + 5) = 0;
-        *(u8*)((s32)entry + 6) = 0;
-        *(u8*)((s32)entry + 7) = 0;
-        *(u8*)((s32)entry + 8) = 0;
-        *(u8*)((s32)entry + 9) = 0;
-        *(u8*)((s32)entry + 0xA) = 0;
-        offset += 0xC;
+        pad->padData[i].button = 0;
+        pad->padData[i].stickX = 0;
+        pad->padData[i].stickY = 0;
+        pad->padData[i].substickX = 0;
+        pad->padData[i].substickY = 0;
+        pad->padData[i].triggerLeft = 0;
+        pad->padData[i].triggerRight = 0;
+        pad->padData[i].analogA = 0;
+        pad->padData[i].analogB = 0;
+        pad->padData[i].err = 0;
     }
 
-    offset = 0;
     for (i = 0; i < 30; i++) {
-        entry = (void*)((s32)work + offset);
-        *(s32*)((s32)entry + 0x18) = 0;
-        *(s32*)((s32)entry + 0x90) = 0;
-        *(s32*)((s32)entry + 0x108) = 0;
-        offset += 4;
+        pad->buttonsPressedHistory[i] = 0;
+        pad->buttonsHeldHistory[i] = 0;
+        pad->buttonsHistory[i] = 0;
     }
 
-    *(u8*)((s32)work + 0x1F8) = 0;
-    *(u8*)((s32)work + 0x1F9) = 0;
+    pad->holdRepeatState = 0;
+    pad->holdRepeatFrameCounter = 0;
 }
 
-void BtlPad_WorkUpdate(void* work, s32 flags) {
-    extern void* gp;
-    void* pad;
+void BtlPad_WorkUpdate(void* work, s32 chan) {
+    typedef struct PadData {
+        u16 button;
+        s8 stickX;
+        s8 stickY;
+        s8 substickX;
+        s8 substickY;
+        u8 triggerLeft;
+        u8 triggerRight;
+        u8 analogA;
+        u8 analogB;
+        s8 err;
+        u8 pad_B;
+    } PadData;
+    typedef struct BattleWorkPadLocal {
+        PadData padData[2];
+        u32 buttonsPressedHistory[30];
+        u32 buttonsHeldHistory[30];
+        u32 buttonsHistory[30];
+        u32 buttonsReleasedHistory[30];
+        u8 holdRepeatState;
+        u8 holdRepeatFrameCounter;
+    } BattleWorkPadLocal;
+    typedef struct GamePadLocal {
+        u8 pad_0[0x1328];
+        u32 button[4];
+        u32 buttonNew[4];
+        u32 buttonRepeat[4];
+        u8 pad_1358[0x10];
+        u32 buttonUp[4];
+        u8 pad_1378[0x40];
+        s8 stickX[4];
+        s8 stickY[4];
+        s8 substickX[4];
+        s8 substickY[4];
+        u8 triggerLeft[4];
+        u8 triggerRight[4];
+    } GamePadLocal;
+    extern GamePadLocal* gp;
+    BattleWorkPadLocal* pad = (BattleWorkPadLocal*)work;
     s32 i;
-    s32 offset;
-    s32 now;
-    s32 previous;
     s32 repeat;
-    s32 trigger;
 
-    *(s32*)((s32)work + 0xC) = *(s32*)work;
-    *(s32*)((s32)work + 0x10) = *(s32*)((s32)work + 4);
-    *(s32*)((s32)work + 0x14) = *(s32*)((s32)work + 8);
+    *(u32*)((u32)&pad->padData[1] + 0) =
+        *(u32*)((u32)&pad->padData[0] + 0);
+    *(u32*)((u32)&pad->padData[1] + 4) =
+        *(u32*)((u32)&pad->padData[0] + 4);
+    *(u32*)((u32)&pad->padData[1] + 8) =
+        *(u32*)((u32)&pad->padData[0] + 8);
 
-    offset = 0x70;
     for (i = 0; i < 29; i++) {
-        pad = (void*)((s32)work + offset);
-        offset -= 4;
-        *(s32*)((s32)pad + 0x1C) = *(s32*)((s32)pad + 0x18);
-        *(s32*)((s32)pad + 0x94) = *(s32*)((s32)pad + 0x90);
-        *(s32*)((s32)pad + 0x10C) = *(s32*)((s32)pad + 0x108);
+        pad->buttonsPressedHistory[30 - i - 1] =
+            pad->buttonsPressedHistory[30 - i];
+        pad->buttonsHeldHistory[30 - i - 1] =
+            pad->buttonsHeldHistory[30 - i];
+        pad->buttonsHistory[30 - i - 1] =
+            pad->buttonsHistory[30 - i];
     }
 
-    *(u16*)work = *(s32*)((s32)gp + flags * 4 + 0x1328);
-    *(u8*)((s32)work + 2) = *(u8*)((s32)gp + flags + 0x13B8);
-    *(u8*)((s32)work + 3) = *(u8*)((s32)gp + flags + 0x13BC);
-    *(u8*)((s32)work + 4) = *(u8*)((s32)gp + flags + 0x13C0);
-    *(u8*)((s32)work + 5) = *(u8*)((s32)gp + flags + 0x13C4);
-    *(u8*)((s32)work + 6) = *(u8*)((s32)gp + flags + 0x13C8);
-    *(u8*)((s32)work + 7) = *(u8*)((s32)gp + flags + 0x13CC);
-    *(u8*)((s32)work + 8) = 0;
-    *(u8*)((s32)work + 9) = 0;
+    pad->padData[0].button = (u16)gp->button[chan];
+    pad->padData[0].stickX = gp->stickX[chan];
+    pad->padData[0].stickY = gp->stickY[chan];
+    pad->padData[0].substickX = gp->substickX[chan];
+    pad->padData[0].substickY = gp->substickY[chan];
+    pad->padData[0].triggerLeft = gp->triggerLeft[chan];
+    pad->padData[0].triggerRight = gp->triggerRight[chan];
+    pad->padData[0].analogA = 0;
+    pad->padData[0].analogB = 0;
+    pad->buttonsHistory[0] = pad->padData[0].button;
+    pad->buttonsHeldHistory[0] = gp->buttonRepeat[chan];
+    pad->buttonsPressedHistory[0] = gp->buttonNew[chan];
+    pad->buttonsReleasedHistory[0] = gp->buttonUp[chan];
 
-    *(s32*)((s32)work + 0x108) = *(u16*)work;
-    *(s32*)((s32)work + 0x90) = *(s32*)((s32)gp + flags * 4 + 0x1348);
-    *(s32*)((s32)work + 0x18) = *(s32*)((s32)gp + flags * 4 + 0x1338);
-    *(s32*)((s32)work + 0x180) = *(s32*)((s32)gp + flags * 4 + 0x1368);
-
-    if (*(s8*)((s32)work + 3) >= 30) {
-        *(s32*)((s32)work + 0x108) |= 0x10000;
+    if (pad->padData[0].stickY >= 30) {
+        pad->buttonsHistory[0] |= 1 << 16;
     }
-    if (*(s8*)((s32)work + 3) <= -30) {
-        *(s32*)((s32)work + 0x108) |= 0x20000;
+    if (pad->padData[0].stickY <= -30) {
+        pad->buttonsHistory[0] |= 1 << 17;
     }
-    if (*(s8*)((s32)work + 2) <= -30) {
-        *(s32*)((s32)work + 0x108) |= 0x40000;
+    if (pad->padData[0].stickX <= -30) {
+        pad->buttonsHistory[0] |= 1 << 18;
     }
-    if (*(s8*)((s32)work + 2) >= 30) {
-        *(s32*)((s32)work + 0x108) |= 0x80000;
+    if (pad->padData[0].stickX >= 30) {
+        pad->buttonsHistory[0] |= 1 << 19;
     }
-    if (*(s8*)((s32)work + 5) >= 30) {
-        *(s32*)((s32)work + 0x108) |= 0x100000;
+    if (pad->padData[0].substickY >= 30) {
+        pad->buttonsHistory[0] |= 1 << 20;
     }
-    if (*(s8*)((s32)work + 5) <= -30) {
-        *(s32*)((s32)work + 0x108) |= 0x200000;
+    if (pad->padData[0].substickY <= -30) {
+        pad->buttonsHistory[0] |= 1 << 21;
     }
-    if (*(s8*)((s32)work + 4) <= -30) {
-        *(s32*)((s32)work + 0x108) |= 0x400000;
+    if (pad->padData[0].substickX <= -30) {
+        pad->buttonsHistory[0] |= 1 << 22;
     }
-    if (*(s8*)((s32)work + 4) >= 30) {
-        *(s32*)((s32)work + 0x108) |= 0x800000;
+    if (pad->padData[0].substickX >= 30) {
+        pad->buttonsHistory[0] |= 1 << 23;
     }
 
-    now = *(s32*)((s32)work + 0x108);
-    previous = *(s32*)((s32)work + 0x10C);
-    *(s32*)((s32)work + 0x18) |= (now & ~previous) & 0xFFFF0000;
+    pad->buttonsPressedHistory[0] |=
+        pad->buttonsHistory[0] & ~pad->buttonsHistory[1] & 0xFFFF0000;
 
-    if (now == 0) {
-        *(s32*)((s32)work + 0x90) = 0;
-        *(u8*)((s32)work + 0x1F8) = 0;
-        *(u8*)((s32)work + 0x1F9) = 0;
-    } else if (now != previous) {
-        repeat = *(s32*)((s32)work + 0x90);
-        *(s32*)((s32)work + 0x90) = repeat | (now & 0xFFFF0000);
-        trigger = *(s32*)((s32)work + 0x18) & 0xFFFF0000;
-        *(s32*)((s32)work + 0x90) &= trigger | 0xFFFF;
-        *(u8*)((s32)work + 0x1F8) = 1;
-        *(u8*)((s32)work + 0x1F9) = 0;
-    } else {
-        *(u8*)((s32)work + 0x1F9) += 1;
-        if (*(s8*)((s32)work + 0x1F9) >= (*(s8*)((s32)work + 0x1F8) == 1 ? 16 : 8)) {
-            *(s32*)((s32)work + 0x90) |= now & 0xFFFF0000;
-            *(u8*)((s32)work + 0x1F8) = 2;
-            *(u8*)((s32)work + 0x1F9) = 0;
+    if (pad->buttonsHistory[0]) {
+        if (pad->buttonsHistory[0] == pad->buttonsHistory[1]) {
+            repeat = 8;
+            pad->holdRepeatFrameCounter++;
+            if (pad->holdRepeatState == 1) {
+                repeat = 16;
+            }
+            if ((s8)pad->holdRepeatFrameCounter >= repeat) {
+                pad->buttonsHeldHistory[0] |=
+                    pad->buttonsHistory[0] & 0xFFFF0000;
+                pad->holdRepeatState = 2;
+                pad->holdRepeatFrameCounter = 0;
+            }
+        } else {
+            pad->buttonsHeldHistory[0] |=
+                pad->buttonsHistory[0] & 0xFFFF0000;
+            pad->buttonsHeldHistory[0] &=
+                pad->buttonsPressedHistory[0] & 0xFFFF0000 | 0xFFFF;
+            pad->holdRepeatState = 1;
+            pad->holdRepeatFrameCounter = 0;
         }
+    } else {
+        pad->buttonsHeldHistory[0] = 0;
+        pad->holdRepeatState = 0;
+        pad->holdRepeatFrameCounter = 0;
     }
 
-    *(s32*)((s32)work + 0x180) |= (previous & (previous ^ now)) & 0xFFFF0000;
+    pad->buttonsReleasedHistory[0] |=
+        pad->buttonsHistory[1] &
+        (pad->buttonsHistory[1] ^ pad->buttonsHistory[0]) & 0xFFFF0000;
 }
 
 s32 BattlePadGetTrigger(void) {

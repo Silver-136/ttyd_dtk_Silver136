@@ -26,6 +26,6 @@ void FontDrawStringCenterMtx(void* mtx, char* msg);
 void FontDrawStringShake(double xIn, double yIn, char* str);
 void FontDrawMessage(s32 x0, s32 y0, char* msg);
 void FontDrawMessageMtx(f32 mtx[3][4], char* msg);
-f32 FontGetMessageWidthLine(const char* msg, s32 line);
-f32 FontGetMessageWidth(const char* msg);
+u16 FontGetMessageWidthLine(const char* msg, s16* lines);
+u16 FontGetMessageWidth(const char* msg);
 u32 HSV2RGB(u8* hsv);

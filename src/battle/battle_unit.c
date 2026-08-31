@@ -49,6 +49,10 @@ BattleWorkUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     extern void BtlUnit_SetPartsBaseRotate(BattleWorkUnitPart*, f32, f32, f32);
     extern void BtlUnit_SetPartsRotate(BattleWorkUnitPart*, f32, f32, f32);
     extern void BtlUnit_SetPartsRotateOffset(BattleWorkUnitPart*, f32, f32, f32);
+    extern s32 BtlUnit_GetBodyPartsId(BattleWorkUnit*);
+    extern BattleWorkUnitPart* BtlUnit_GetPartsPtr(BattleWorkUnit*, s32);
+    extern const char* BtlUnit_GetPoseNameFromType(BattleWorkUnitPart*, BattlePoseType);
+    extern void BtlUnit_SetParamFromPouch(BattleWorkUnit*);
     BattleWork* wp = _battleWorkPointer;
     BattleWorkUnit* unit;
     BattleWorkUnitPart* part;
@@ -97,6 +101,9 @@ BattleWorkUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     *(s32*)((s32)unit + 0x290) = 0;
     *(void**)((s32)unit + 0x294) = NULL;
     *(s32*)((s32)unit + 0x298) = 0;
+    *(void**)((s32)unit + 0x29C) = NULL;
+    *(s32*)((s32)unit + 0x2A0) = 0;
+    *(s32*)((s32)unit + 0x2A8) = 0;
 
     BtlUnit_SetPos(unit, setup->position.x, setup->position.y, setup->position.z);
     BtlUnit_SetOffsetPos(unit, setup->position.x, setup->position.y, setup->position.z);
@@ -106,6 +113,11 @@ BattleWorkUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     BtlUnit_SetRotateOffset(unit, 0.0f, 0.0f, 0.0f);
     BtlUnit_SetScale(unit, 1.0f, 1.0f, 1.0f);
     BtlUnit_SetBaseScale(unit, 1.0f, 1.0f, 1.0f);
+
+    *(Vec*)((u8*)unit + 0x84) = *(Vec*)((u8*)unit->data + 0x20);
+    *(Vec*)((u8*)unit + 0xB4) = *(Vec*)((u8*)unit->data + 0x3C);
+    *(Vec*)((u8*)unit + 0xEC) = *(Vec*)((u8*)unit->data + 0x5C);
+    *(Vec*)((u8*)unit + 0xF8) = *(Vec*)((u8*)unit->data + 0x68);
 
     unit->baseMaxHP = unit->data->maxHP;
     unit->currentMaxHP = unit->baseMaxHP;
@@ -118,7 +130,20 @@ BattleWorkUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     unit->statusFlags = 0;
     *(u32*)((s32)unit + 0x140) = (u32)-1;
     BtlUnit_HpGaugeInit(unit);
+    unit->width = *(s16*)((u8*)unit->data + 0x16);
+    unit->height = *(s16*)((u8*)unit->data + 0x18);
+    *(s16*)((u8*)unit + 0xD0) = *(s16*)((u8*)unit->data + 0x1A);
+    *(s16*)((u8*)unit + 0xD2) = *(s16*)((u8*)unit->data + 0x1C);
+    *(s16*)((u8*)unit + 0xD4) = *(s16*)((u8*)unit->data + 0x2C);
+    *(s16*)((u8*)unit + 0xD6) = *(s16*)((u8*)unit->data + 0x2E);
+    *(Vec*)((u8*)unit + 0xC0) = *(Vec*)((u8*)unit->data + 0x74);
+    *(f32*)((u8*)unit + 0xD8) = *(f32*)((u8*)unit->data + 0x80);
+    *(f32*)((u8*)unit + 0xDC) = *(f32*)((u8*)unit->data + 0x84);
+    *(s8*)((u8*)unit + 0xE0) = *(s8*)((u8*)unit->data + 0x8A);
+    *(s8*)((u8*)unit + 0xE1) = *(s8*)((u8*)unit->data + 0x8B);
     BtlUnit_ClearStatus(unit);
+    unit->attributes = *(u32*)((u8*)unit->data + 0xAC);
+    *(void**)((u8*)unit + 0x144) = *(void**)((u8*)unit->data + 0xB0);
     unit->maxMoveCount = 1;
     unit->movesRemaining = 1;
     unit->faceDirection = wp->allianceInfo[unit->alliance].attackDirection;
@@ -188,6 +213,12 @@ BattleWorkUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
         part++;
     }
     part->nextPart = NULL;
+    i = BtlUnit_GetBodyPartsId(unit);
+    part = BtlUnit_GetPartsPtr(unit, i);
+    unit->talkPoseName = BtlUnit_GetPoseNameFromType(part, 0x41);
+    unit->stayPoseName = BtlUnit_GetPoseNameFromType(part, 0x2B);
+    btlDispEntAnime(unit);
+    BtlUnit_SetParamFromPouch(unit);
     return unit;
 }
 

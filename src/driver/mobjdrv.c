@@ -57,7 +57,6 @@ void mobjKoopaOn(void) {
         memset(set->entries, 0, set->count * 0x23C);
     }
 }
-
 void mobjDispXLU(s32 param_1, void* entry) {
     extern void animSetPaperTexMtx(void* mtx, s32 a, s32 b);
     extern void animSetPaperTexObj(void* texObj, s32 a, s32 b, s32 texMap, s32 d, s32 e, s32 f, s32 g);
@@ -216,6 +215,7 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
     extern char cubeDJ[];
     extern char frontDJ[];
     extern char front2DJ[];
+    extern char cubeDVP[];
     VecLocal min;
     VecLocal max;
     VecLocal pos;
@@ -240,8 +240,11 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
     void* scan;
     s32 i;
     f32 diff;
+    char* dataBase = cubeDVP - 0x20;
 
     poseData = animPoseGetAnimBaseDataPtr(*(s32*)((s32)pMobj + 0x70));
+    min = *(VecLocal*)vec3_802c1f58;
+    max.x = *(f32*)vec3_802c1f64;
     min.x = *(f32*)((s32)poseData + 0xD0);
     min.y = *(f32*)((s32)poseData + 0xD4);
     min.z = *(f32*)((s32)poseData + 0xD8);
@@ -280,7 +283,8 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
         *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * float_2p5_804201d8 * *(f32*)((s32)pMobj + 0x4C);
     }
 
-    if (param_2 == 1) {
+    switch (param_2) {
+    case 1: {
         PSVECAdd((VecLocal*)((s32)pMobj + 0x38), (VecLocal*)((s32)pMobj + 0x190), &pos);
         PSMTXTrans(trans1, (double)pos.x, (double)pos.y, (double)pos.z);
         PSMTXScale(scale1, *(f32*)((s32)pMobj + 0x184), *(f32*)((s32)pMobj + 0x188), *(f32*)((s32)pMobj + 0x18C));
@@ -291,14 +295,16 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
         PSMTXConcat(trans1, yrot1, trans1);
         PSMTXConcat(trans1, xrot1, trans1);
         PSMTXConcat(trans1, scale1, result);
-        memcpy((void*)((s32)pMobj + 0x90), headDJ, 0x68);
+        memcpy((void*)((s32)pMobj + 0x90), dataBase + 0x1758, 0x68);
         strcpy((char*)((s32)pMobj + 0x78), str_MOBJ_804201f4);
         strcat((char*)((s32)pMobj + 0x78), (char*)((s32)pMobj + 5));
         *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
         hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
         *(void**)((s32)pMobj + 0x74) = hit;
         *(void**)((s32)hit + 0xD0) = pMobj;
-    } else if (param_2 == 0) {
+        break;
+    }
+    case 0: {
         PSVECAdd((VecLocal*)((s32)pMobj + 0x38), (VecLocal*)((s32)pMobj + 0x190), &pos);
         PSMTXTrans(trans0, (double)pos.x, (double)pos.y, (double)pos.z);
         PSMTXScale(scale0, *(f32*)((s32)pMobj + 0x184), *(f32*)((s32)pMobj + 0x188), *(f32*)((s32)pMobj + 0x18C));
@@ -309,14 +315,16 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
         PSMTXConcat(trans0, yrot0, trans0);
         PSMTXConcat(trans0, xrot0, trans0);
         PSMTXConcat(trans0, scale0, result);
-        memcpy((void*)((s32)pMobj + 0x90), cubeDJ, 0x68);
+        memcpy((void*)((s32)pMobj + 0x90), dataBase + 0x16A4, 0x68);
         strcpy((char*)((s32)pMobj + 0x78), str_MOBJ_804201f4);
         strcat((char*)((s32)pMobj + 0x78), (char*)((s32)pMobj + 5));
         *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
         hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
         *(void**)((s32)pMobj + 0x74) = hit;
         *(void**)((s32)hit + 0xD0) = pMobj;
-    } else if (param_2 == 2) {
+        break;
+    }
+    case 2: {
         PSVECAdd((VecLocal*)((s32)pMobj + 0x38), (VecLocal*)((s32)pMobj + 0x190), &pos);
         PSMTXTrans(trans2, (double)pos.x, (double)pos.y, (double)pos.z);
         PSMTXScale(scale2, *(f32*)((s32)pMobj + 0x184), *(f32*)((s32)pMobj + 0x188), *(f32*)((s32)pMobj + 0x18C));
@@ -327,20 +335,24 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
         PSMTXConcat(trans2, yrot2, trans2);
         PSMTXConcat(trans2, xrot2, trans2);
         PSMTXConcat(trans2, scale2, result);
-        memcpy((void*)((s32)pMobj + 0x90), frontDJ, 0x68);
+        memcpy((void*)((s32)pMobj + 0x90), dataBase + 0x180C, 0x68);
         strcpy((char*)((s32)pMobj + 0x78), str_MOBJ_804201f4);
         strcat((char*)((s32)pMobj + 0x78), (char*)((s32)pMobj + 5));
         *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
         hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
         *(void**)((s32)pMobj + 0x74) = hit;
         *(void**)((s32)hit + 0xD0) = pMobj;
-        memcpy((void*)((s32)pMobj + 0x118), front2DJ, 0x68);
+        memcpy((void*)((s32)pMobj + 0x118), dataBase + 0x18C0, 0x68);
         strcpy((char*)((s32)pMobj + 0x100), str_MOBJ_804201fc);
         strcat((char*)((s32)pMobj + 0x100), (char*)((s32)pMobj + 5));
         *(char**)((s32)pMobj + 0x118) = (char*)((s32)pMobj + 0x100);
         hit = hitEntryMOBJ((void*)((s32)pMobj + 0x118), result);
         *(void**)((s32)pMobj + 0xFC) = hit;
         *(void**)((s32)hit + 0xD0) = pMobj;
+        break;
+    }
+    default:
+        break;
     }
     return 0;
 }
@@ -868,7 +880,48 @@ void mobjMain(void) {
                     s32 activated = 0;
                     u32 activation = 0;
 
-                    if (*(s8*)((s32)player + 0x3C) == 2) {
+                    if (*(s8*)((s32)player + 0x3C) != 2) {
+                        if ((flags & 0x00010000) != 0 && *(void**)((s32)player + 0x200) == hit &&
+                            *(f32*)((s32)marioGetPtr() + 0x90) <= float_5_804201dc + *(f32*)((s32)entry + 0x3C)) {
+                            activated = 1;
+                            activation = 0x00010000;
+                        } else if ((flags & 0x00400000) != 0 && newHeadHit == hit) {
+                            activated = 1;
+                            activation = 0x00400000;
+                        } else if ((flags & 0x00200000) != 0 && *(void**)((s32)player + 0x1E8) == hit) {
+                            activated = 1;
+                            activation = 0x00200000;
+                        } else if ((flags & 0x01000000) != 0 && *(void**)((s32)player + 0x1E8) == hit && marioChkHipBump() != 0) {
+                            activated = 1;
+                            activation = 0x01000000;
+                        } else if (unk_8005ca2c() != 0 && (flags & 0x00040000) != 0 && *(void**)((s32)player + 0x1E4) == hit &&
+                                   (*(u16*)((s32)player + 0x24C) & 0x100) != 0 && partyUsing == 0) {
+                            activated = 1;
+                            activation = 0x00040000;
+                        } else if ((flags & 0x00800000) != 0 && party != 0) {
+                            void* partyHit = *(void**)((s32)party + 0x130);
+                            if (partyHit == hit) {
+                                activated = 1;
+                                activation = 0x00800000;
+                            } else if (partyHit != 0 && *(u8*)((s32)party + 0x31) == 3 &&
+                                       PSVECDistance((void*)((s32)party + 0x58), (void*)((s32)entry + 0x38)) <
+                                           *(f32*)((s32)*(void**)((s32)entry + 0x74) + 0xCC) + *(f32*)((s32)party + 0xF4)) {
+                                activated = 1;
+                                activation = 0x00800000;
+                            }
+                        } else if ((flags & 0x02000000) != 0 && party != 0 && *(u8*)((s32)party + 0x31) == 3) {
+                            void* partyHit = *(void**)((s32)party + 0x130);
+                            if (partyHit == hit) {
+                                activated = 1;
+                                activation = 0x02000000;
+                            } else if (partyHit != 0 &&
+                                       PSVECDistance((void*)((s32)party + 0x58), (void*)((s32)entry + 0x38)) <
+                                           *(f32*)((s32)*(void**)((s32)entry + 0x74) + 0xCC) + *(f32*)((s32)party + 0xF4)) {
+                                activated = 1;
+                                activation = 0x00800000;
+                            }
+                        }
+                    } else {
                         s32 j;
                         if ((flags & 0x04000000) != 0) {
                             for (j = 0; j < 10; j++) {
@@ -900,45 +953,6 @@ void mobjMain(void) {
                         } else if (!activated && (flags & 0x00200000) != 0 && *(void**)((s32)player + 0x1E8) == hit) {
                             activated = 1;
                             activation = 0x00200000;
-                        }
-                    } else if ((flags & 0x00010000) != 0 && *(void**)((s32)player + 0x200) == hit &&
-                               *(f32*)((s32)marioGetPtr() + 0x90) <= float_5_804201dc + *(f32*)((s32)entry + 0x3C)) {
-                        activated = 1;
-                        activation = 0x00010000;
-                    } else if ((flags & 0x00400000) != 0 && newHeadHit == hit) {
-                        activated = 1;
-                        activation = 0x00400000;
-                    } else if ((flags & 0x00200000) != 0 && *(void**)((s32)player + 0x1E8) == hit) {
-                        activated = 1;
-                        activation = 0x00200000;
-                    } else if ((flags & 0x01000000) != 0 && *(void**)((s32)player + 0x1E8) == hit && marioChkHipBump() != 0) {
-                        activated = 1;
-                        activation = 0x01000000;
-                    } else if (unk_8005ca2c() != 0 && (flags & 0x00040000) != 0 && *(void**)((s32)player + 0x1E4) == hit &&
-                               (*(u16*)((s32)player + 0x24C) & 0x100) != 0 && partyUsing == 0) {
-                        activated = 1;
-                        activation = 0x00040000;
-                    } else if ((flags & 0x00800000) != 0 && party != 0) {
-                        void* partyHit = *(void**)((s32)party + 0x130);
-                        if (partyHit == hit) {
-                            activated = 1;
-                            activation = 0x00800000;
-                        } else if (partyHit != 0 && *(u8*)((s32)party + 0x31) == 3 &&
-                                   PSVECDistance((void*)((s32)party + 0x58), (void*)((s32)entry + 0x38)) <
-                                       *(f32*)((s32)*(void**)((s32)entry + 0x74) + 0xCC) + *(f32*)((s32)party + 0xF4)) {
-                            activated = 1;
-                            activation = 0x00800000;
-                        }
-                    } else if ((flags & 0x02000000) != 0 && party != 0 && *(u8*)((s32)party + 0x31) == 3) {
-                        void* partyHit = *(void**)((s32)party + 0x130);
-                        if (partyHit == hit) {
-                            activated = 1;
-                            activation = 0x02000000;
-                        } else if (partyHit != 0 &&
-                                   PSVECDistance((void*)((s32)party + 0x58), (void*)((s32)entry + 0x38)) <
-                                       *(f32*)((s32)*(void**)((s32)entry + 0x74) + 0xCC) + *(f32*)((s32)party + 0xF4)) {
-                            activated = 1;
-                            activation = 0x00800000;
                         }
                     }
 
@@ -1041,6 +1055,7 @@ void mobjMain(void) {
         }
     }
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -1169,13 +1184,15 @@ void mobjCalcMtx(void* pMobj) {
     extern void PSMTXRotRad(Mtx34 m, char axis, f32 rad);
     extern void PSMTXConcat(Mtx34 a, Mtx34 b, Mtx34 out);
     extern void hitReCalcMatrix(void* hitEntry, Mtx34 mtx);
-    extern f32 __fabsf(f32 value);
+    extern f64 __fabs(f64 value);
     extern f32 float_10_804201bc;
     extern f32 float_0_804201b8;
     extern f32 float_2p5_804201d8;
     extern f32 float_deg2rad_804201cc;
     extern const char str_HOBJ_804201d0[];
     Vec3 trans;
+    Vec3 bboxMin;
+    Vec3 bboxMax;
     Mtx34 transMtx;
     Mtx34 scaleMtx;
     Mtx34 rotXMtx;
@@ -1187,9 +1204,13 @@ void mobjCalcMtx(void* pMobj) {
 
     PSVECAdd((Vec3*)((s32)pMobj + 0x38), (Vec3*)((s32)pMobj + 0x190), &trans);
     base = animPoseGetAnimBaseDataPtr(*(s32*)((s32)pMobj + 0x70));
-    *(f32*)((s32)pMobj + 0x184) = float_10_804201bc * *(f32*)((s32)pMobj + 0x44) * __fabsf(base->bboxMax.x - base->bboxMin.x);
-    *(f32*)((s32)pMobj + 0x188) = float_10_804201bc * *(f32*)((s32)pMobj + 0x48) * __fabsf(base->bboxMax.y);
-    *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * *(f32*)((s32)pMobj + 0x4C) * __fabsf(base->bboxMax.z - base->bboxMin.z);
+    bboxMin = *(Vec3*)vec3_802c1fa0;
+    bboxMax = *(Vec3*)vec3_802c1fac;
+    bboxMin = base->bboxMin;
+    bboxMax = base->bboxMax;
+    *(f32*)((s32)pMobj + 0x184) = float_10_804201bc * *(f32*)((s32)pMobj + 0x44) * (f32)__fabs((f64)(bboxMax.x - bboxMin.x));
+    *(f32*)((s32)pMobj + 0x188) = float_10_804201bc * *(f32*)((s32)pMobj + 0x48) * (f32)__fabs((f64)bboxMax.y);
+    *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * *(f32*)((s32)pMobj + 0x4C) * (f32)__fabs((f64)(bboxMax.z - bboxMin.z));
 
     if (strncmp(base->fileName, str_HOBJ_804201d0, strlen(str_HOBJ_804201d0)) == 0) {
         *(f32*)((s32)pMobj + 0x198) = float_0_804201b8;
@@ -1303,6 +1324,19 @@ u32* mobjNearDistCheck2(double param_1, double param_2, double param_3, double p
         f32 y;
         f32 z;
     } Vec3;
+    typedef struct Entry {
+        u32 flags;
+        u8 camId;
+        char name[16];
+        char animName[16];
+        u8 pad25[0x13];
+        Vec3 position;
+        u8 pad44[0x198];
+        u32 itemStatus;
+        u8 pad1e0[4];
+        s32 eventValue;
+        u8 pad1e8[0x54];
+    } Entry;
     extern MobjWork work;
     extern void* gp;
     extern s32 koopaRunFlag;
@@ -1314,16 +1348,19 @@ u32* mobjNearDistCheck2(double param_1, double param_2, double param_3, double p
     MobjSet* set;
     s32 i;
     s32 count;
-    u32* entry;
+    Entry* entry;
     u32* best;
     char** list;
     Vec3 pos;
+    Vec3 temp;
     Vec3 diff;
+    u8* rodata;
     f32 dist;
     s32 check;
     void* item;
     u32 value;
 
+    rodata = (u8*)vec3_802c1f58;
     if (koopaRunFlag != 0) {
         set = &work.koopa;
     } else {
@@ -1336,21 +1373,24 @@ u32* mobjNearDistCheck2(double param_1, double param_2, double param_3, double p
     best = 0;
     i = 0;
     count = set->count;
-    entry = (u32*)set->entries;
-    pos.x = (f32)param_1;
-    pos.y = (f32)param_2;
-    pos.z = (f32)param_3;
+    entry = (Entry*)set->entries;
+    temp = *(Vec3*)(rodata + 0x6C);
+    temp.x = (f32)param_1;
+    temp.y = (f32)param_2;
+    temp.z = (f32)param_3;
+    pos = temp;
 
     while (i < count) {
-        if ((*entry & 1) != 0) {
+        if ((entry->flags & 1) != 0) {
             list = param_5;
             while (*list != 0) {
-                if (strcmp((char*)((s32)entry + 0x15), *list) == 0) {
-                    if (strcmp((char*)((s32)entry + 0x15), str_MOBJ_TreasureBox_802c1fe4) == 0 ||
-                        strcmp((char*)((s32)entry + 0x15), str_MOBJ_BigTreasureBox_802c1ff8) == 0 ||
-                        strcmp((char*)((s32)entry + 0x15), str_MOBJ_GrayTreasureBox_802c200c) == 0 ||
-                        strcmp((char*)((s32)entry + 0x15), str_MOBJ_BlackTreasureBo_802c2024) == 0) {
-                        if (*(u32*)((s32)entry + 0x1DC) == 99) {
+                if (strcmp(entry->animName, *list) == 0) {
+                    if (strcmp(entry->animName, (char*)(rodata + 0x8C)) == 0 ||
+                        strcmp(entry->animName, (char*)(rodata + 0xA0)) == 0 ||
+                        strcmp(entry->animName, (char*)(rodata + 0xB4)) == 0 ||
+                        strcmp(entry->animName, (char*)(rodata + 0xCC)) == 0) {
+                        strcmp(entry->animName, (char*)(rodata + 0x8C));
+                        if (entry->itemStatus == 99) {
                             check = 2;
                         } else {
                             check = 1;
@@ -1359,12 +1399,12 @@ u32* mobjNearDistCheck2(double param_1, double param_2, double param_3, double p
                             list++;
                             continue;
                         }
-                    } else if (strcmp((char*)((s32)entry + 0x15), str_MOBJ_KururinFloor_802c1fd0) == 0) {
+                    } else if (strcmp(entry->animName, (char*)(rodata + 0x78)) == 0) {
                         check = 0;
-                        if (strcmp((char*)((s32)entry + 0x15), str_MOBJ_KururinFloor_802c1fd0) == 0) {
-                            item = itemNameToPtr((char*)((s32)entry + 5));
-                            if (item == 0 || ((*(u16*)item & 1) == 0) || evtGetValue(0, *(s32*)((s32)entry + 0x1E4)) != 0) {
-                                value = evtGetValue(0, *(s32*)((s32)entry + 0x1E4));
+                        if (strcmp(entry->animName, (char*)(rodata + 0x78)) == 0) {
+                            item = itemNameToPtr(entry->name);
+                            if (item == 0 || ((*(u16*)item & 1) == 0) || evtGetValue(0, entry->eventValue) != 0) {
+                                value = evtGetValue(0, entry->eventValue);
                                 if (value == 0) {
                                     check = 2;
                                 } else {
@@ -1380,10 +1420,10 @@ u32* mobjNearDistCheck2(double param_1, double param_2, double param_3, double p
                         }
                     }
 
-                    PSVECSubtract((Vec3*)((s32)entry + 0x38), &pos, &diff);
+                    PSVECSubtract(&entry->position, &pos, &diff);
                     dist = PSVECMag(&diff);
                     if ((double)dist < param_4) {
-                        best = entry;
+                        best = (u32*)entry;
                         param_4 = (double)dist;
                     }
                     break;
@@ -1392,7 +1432,7 @@ u32* mobjNearDistCheck2(double param_1, double param_2, double param_3, double p
             }
         }
         i++;
-        entry = (u32*)((s32)entry + 0x23C);
+        entry++;
     }
     return best;
 }

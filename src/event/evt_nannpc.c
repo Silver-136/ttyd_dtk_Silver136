@@ -174,6 +174,23 @@ s32 nannpc_zcompare(NanNpcSortEntry* param_1, NanNpcSortEntry* param_2) {
 }
 
 void nannpc_ext_disp(void) {
+    typedef struct NpcEntry {
+        u8 pad00[0x20];
+        f32 z;
+        u8 pad24[0x98];
+        u32 color;
+    } NpcEntry;
+    typedef struct SortEntry {
+        s32 pose;
+        f32 z;
+    } SortEntry;
+    typedef struct Work {
+        NpcEntry* entries;
+        SortEntry* sort;
+        void* unk8;
+        s32 count;
+        u32 flags;
+    } Work;
     extern void extLoadRenderMode(void);
     extern void extLoadVertex(void);
     extern void extLoadTexture(void);
@@ -195,54 +212,104 @@ void nannpc_ext_disp(void) {
     extern void GXSetNumTevStages(s32);
     extern void GXSetTevColor(s32, void*);
     extern u32 dat_80422850;
-    s32* work;
-    s32* sortEntry;
-    char* npc;
+    extern f32 float_0_80422870;
+    Work* work;
     u32 color;
     s32 count;
     s32 i;
+    s32 blocks;
+    s32 remainder;
+    s32 npcOffset;
+    s32 sortOffset;
+    SortEntry* sort;
+    NpcEntry* npc;
     s32 pose;
 
-    work = (s32*)nanNPCWork;
-    if ((work[4] & 1) == 0) {
+    work = (Work*)nanNPCWork;
+    if ((work->flags & 1) != 0) {
+        extLoadVertex();
+        extLoadTexture();
+        GXSetTevOrder(0, 0, 0, 4);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 15, 8, 2, 15);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaIn(0, 7, 4, 1, 7);
+        GXSetNumChans(0);
+        GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+        color = dat_80422850;
+        GXSetFog(0, float_0_80422870, float_0_80422870,
+                 float_0_80422870, float_0_80422870, &color);
+        GXSetNumTexGens(1);
+        GXSetNumTevStages(1);
+
+        count = extGetPoseNum();
+        i = count - 1;
+        npcOffset = i * sizeof(NpcEntry);
+        sortOffset = i * sizeof(SortEntry);
+        if (i >= 0) {
+            blocks = count >> 2;
+            if (blocks != 0) {
+                do {
+                    sort = (SortEntry*)((u8*)work->sort + sortOffset);
+                    sortOffset -= sizeof(SortEntry);
+                    sort->pose = i;
+                    npc = (NpcEntry*)((u8*)work->entries + npcOffset);
+                    i--;
+                    npcOffset -= sizeof(NpcEntry);
+                    sort->z = npc->z;
+                    sort = (SortEntry*)((u8*)work->sort + sortOffset);
+                    sortOffset -= sizeof(SortEntry);
+                    sort->pose = i;
+                    npc = (NpcEntry*)((u8*)work->entries + npcOffset);
+                    i--;
+                    npcOffset -= sizeof(NpcEntry);
+                    sort->z = npc->z;
+                    sort = (SortEntry*)((u8*)work->sort + sortOffset);
+                    sortOffset -= sizeof(SortEntry);
+                    sort->pose = i;
+                    npc = (NpcEntry*)((u8*)work->entries + npcOffset);
+                    i--;
+                    npcOffset -= sizeof(NpcEntry);
+                    sort->z = npc->z;
+                    sort = (SortEntry*)((u8*)work->sort + sortOffset);
+                    sortOffset -= sizeof(SortEntry);
+                    sort->pose = i;
+                    npc = (NpcEntry*)((u8*)work->entries + npcOffset);
+                    i--;
+                    npcOffset -= sizeof(NpcEntry);
+                    sort->z = npc->z;
+                    blocks--;
+                } while (blocks != 0);
+            }
+            remainder = count & 3;
+            while (remainder != 0) {
+                sort = (SortEntry*)((u8*)work->sort + sortOffset);
+                sortOffset -= sizeof(SortEntry);
+                sort->pose = i;
+                npc = (NpcEntry*)((u8*)work->entries + npcOffset);
+                i--;
+                npcOffset -= sizeof(NpcEntry);
+                sort->z = npc->z;
+                remainder--;
+            }
+        }
+        qqsort(work->sort, work->count, sizeof(SortEntry), nannpc_zcompare);
+        count = extGetPoseNum();
+        for (i = count - 1; i >= 0; i--) {
+            pose = work->sort[i].pose;
+            color = work->entries[pose].color;
+            GXSetTevColor(1, &color);
+            extPoseDraw(pose);
+        }
+        extLoadTextureExit();
+    } else {
         extLoadRenderMode();
         extLoadVertex();
         extLoadTexture();
         extLoadTev();
         extDraw();
         extLoadTextureExit();
-        return;
     }
-
-    extLoadVertex();
-    extLoadTexture();
-    GXSetTevOrder(0, 0, 0, 4);
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(0, 15, 8, 2, 15);
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevAlphaIn(0, 7, 4, 1, 7);
-    GXSetNumChans(0);
-    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
-    color = dat_80422850;
-    GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &color);
-    GXSetNumTexGens(1);
-    GXSetNumTevStages(1);
-
-    count = extGetPoseNum();
-    for (i = count - 1; i >= 0; i--) {
-        sortEntry = (s32*)work[1] + i * 2;
-        npc = (char*)work[0] + i * 0xC0;
-        sortEntry[0] = i;
-        sortEntry[1] = *(s32*)(npc + 0x20);
-    }
-    qqsort((void*)work[1], work[3], 8, nannpc_zcompare);
-    for (i = count - 1; i >= 0; i--) {
-        pose = *(s32*)(work[1] + i * 8);
-        color = *(u32*)(work[0] + pose * 0xC0 + 0xBC);
-        GXSetTevColor(1, &color);
-        extPoseDraw(pose);
-    }
-    extLoadTextureExit();
 }
 
 
@@ -311,37 +378,38 @@ void nannpc_ext_main_sub(void) {
 }
 
 void nannpc_ext_main_sub_fast(void) {
-    s32* work = (s32*)nanNPCWork;
-    char* entry;
-    s32 pose;
+    extern void* gp;
+    s32* work;
+    s8* entry;
     s32 frame;
     s32 count;
     s32 i;
 
+    work = (s32*)nanNPCWork;
     count = extGetPoseNum();
     for (i = count - 1; i >= 0; i--) {
-        entry = (char*)work[0] + i * 0xC0;
-        if (entry[0] == 0) continue;
+        entry = (s8*)work[0] + i * 0xC0;
+        if (entry[0] == 0) {
+            continue;
+        }
         if (*(void**)(entry + 0x64) != 0) {
             ((void (*)(void*))*(void**)(entry + 0x64))(entry);
         }
         if (*(s32*)(entry + 0x58) != 0) {
-            frame = *(u32*)(gpGlobals + 0x34) + i * i;
-            frame %= *(s16*)(entry + 0x5C);
+            frame = *(u32*)((u8*)gp + 0x1C) + i * i;
+            frame = (u32)frame % (u32)*(s16*)(entry + 0x5C);
             *(s16*)(entry + 0x5E) = *(s16*)(*(s32*)(entry + 0x58) + frame * 2);
         }
-        pose = *(s32*)(entry + 0x10);
-        *(s32*)(pose + 0x10) = *(s16*)(entry + 0x5E);
-        *(f32*)(pose + 4) = -*(f32*)(entry + 0x60);
-        pose = *(s32*)(pose + 0xC);
-        if ((*(u16*)(entry + 0x14) & 2) == 0) {
-            *(f32*)(pose + 0x0C) = *(f32*)(entry + 0x18);
-            *(f32*)(pose + 0x1C) = *(f32*)(entry + 0x1C);
-            *(f32*)(pose + 0x2C) = *(f32*)(entry + 0x20);
+        *(s32*)(*(s32*)(entry + 0x10) + 0x10) = *(s16*)(entry + 0x5E);
+        *(f32*)(*(s32*)(entry + 0x10) + 4) = -*(f32*)(entry + 0x60);
+        if ((*(u16*)(entry + 0x14) & 2) != 0) {
+            *(f32*)(*(s32*)(*(s32*)(entry + 0x10) + 0xC) + 0x0C) = 0.0f;
+            *(f32*)(*(s32*)(*(s32*)(entry + 0x10) + 0xC) + 0x1C) = -1000.0f;
+            *(f32*)(*(s32*)(*(s32*)(entry + 0x10) + 0xC) + 0x2C) = 0.0f;
         } else {
-            *(f32*)(pose + 0x0C) = 0.0f;
-            *(f32*)(pose + 0x1C) = -1000.0f;
-            *(f32*)(pose + 0x2C) = 0.0f;
+            *(f32*)(*(s32*)(*(s32*)(entry + 0x10) + 0xC) + 0x0C) = *(f32*)(entry + 0x18);
+            *(f32*)(*(s32*)(*(s32*)(entry + 0x10) + 0xC) + 0x1C) = *(f32*)(entry + 0x1C);
+            *(f32*)(*(s32*)(*(s32*)(entry + 0x10) + 0xC) + 0x2C) = *(f32*)(entry + 0x20);
         }
     }
 }
@@ -446,16 +514,22 @@ s32 evt_nannpc_init(void* event, s32 firstCall) {
 
 s32 evt_nannpc_set_subfunc(void* pEvt) {
     s32* args;
+    s32* work;
     s32 type;
 
     args = *(s32**)((s32)pEvt + 0x18);
     type = evtGetValue(pEvt, args[0]);
-    if (type == 0) {
-        *(u32*)((s32)nanNPCWork + 0x14) = evtGetValue(pEvt, args[1]);
-    } else if (type == 1) {
-        *(u32*)((s32)nanNPCWork + 0x18) = evtGetValue(pEvt, args[1]);
-    } else if (type == 2) {
-        *(u32*)((s32)nanNPCWork + 0x1C) = evtGetValue(pEvt, args[1]);
+    work = (s32*)nanNPCWork;
+    switch (type) {
+        case 0:
+            work[5] = evtGetValue(pEvt, args[1]);
+            break;
+        case 1:
+            work[6] = evtGetValue(pEvt, args[1]);
+            break;
+        case 2:
+            work[7] = evtGetValue(pEvt, args[1]);
+            break;
     }
     return 2;
 }
@@ -465,17 +539,28 @@ s32 evt_nannpc_entry(void* event) {
     extern s32 sprintf(char*, const char*, ...);
     extern s32 strcmp(const char*, const char*);
     extern char* strcpy(char*, const char*);
-    s32* args = *(s32**)((u8*)event + 0x18);
-    s32* work = (s32*)nanNPCWork;
-    char* name = (char*)evtGetValue(event, args[0]);
+    extern u32 vec3_802f35f8[];
+    extern u32 dat_80422858;
+    extern f32 float_32_8042286c;
+    extern f32 float_0_80422870;
+    s32* args;
+    s32* work;
+    u32* defaults;
+    char* name;
     char* lookup;
     char* entry;
     s32 poseBase;
     s32 i;
+    s32 offset;
 
+    defaults = vec3_802f35f8;
+    args = *(s32**)((u8*)event + 0x18);
     poseBase = extGetPosePtr();
-    for (i = 0; i < work[3]; i++) {
-        entry = (char*)work[0] + i * 0xC0;
+    name = (char*)evtGetValue(event, args[0]);
+    work = (s32*)nanNPCWork;
+    offset = 0;
+    for (i = 0; i < work[3]; i++, offset += 0xC0) {
+        entry = (char*)work[0] + offset;
         lookup = name;
         if (((u32)name & 0x80000000) == 0) {
             sprintf(makestring, str_PCT06x_8042285c, name);
@@ -485,25 +570,26 @@ s32 evt_nannpc_entry(void* event) {
         if (*(s32*)(entry + 0x10) == 0) {
             strcpy(entry, lookup);
             *(s32*)(entry + 0x10) = poseBase + i * 0x20;
-            *(u32*)(entry + 0x14) = 0;
-            *(f32*)(entry + 0x18) = 0.0f;
-            *(f32*)(entry + 0x1C) = 0.0f;
-            *(f32*)(entry + 0x20) = 0.0f;
-            *(f32*)(entry + 0x24) = 1.0f;
-            *(f32*)(entry + 0x28) = 1.0f;
-            *(f32*)(entry + 0x2C) = 1.0f;
-            *(f32*)(entry + 0x30) = 0.0f;
-            *(f32*)(entry + 0x34) = 0.0f;
-            *(f32*)(entry + 0x38) = 0.0f;
-            *(f32*)(entry + 0x48) = 32.0f;
-            *(f32*)(entry + 0x4C) = 32.0f;
-            *(u32*)(entry + 0x50) = 0;
+            *(u16*)(entry + 0x14) = 0;
+            *(u16*)(entry + 0x16) = 0;
+            *(u32*)(entry + 0x18) = defaults[9];
+            *(u32*)(entry + 0x1C) = defaults[10];
+            *(u32*)(entry + 0x20) = defaults[11];
+            *(u32*)(entry + 0x30) = defaults[12];
+            *(u32*)(entry + 0x34) = defaults[13];
+            *(u32*)(entry + 0x38) = defaults[14];
+            *(u32*)(entry + 0x24) = defaults[15];
+            *(u32*)(entry + 0x28) = defaults[16];
+            *(u32*)(entry + 0x2C) = defaults[17];
+            *(f32*)(entry + 0x48) = float_32_8042286c;
+            *(f32*)(entry + 0x4C) = float_32_8042286c;
             *(u32*)(entry + 0x54) = 0;
-            *(u32*)(entry + 0x58) = 0;
+            *(u32*)(entry + 0x50) = 0;
             *(u16*)(entry + 0x5C) = 0;
-            *(f32*)(entry + 0x60) = 0.0f;
+            *(f32*)(entry + 0x60) = float_0_80422870;
             *(f32*)(*(s32*)(entry + 0x10) + 4) = -*(f32*)(entry + 0x60);
-            return 2;
+            *(u32*)(entry + 0xBC) = dat_80422858;
+            break;
         }
     }
     return 2;
@@ -516,9 +602,6 @@ s32 evt_nannpc_set_position(void* pEvt) {
     s32* work;
     char* name;
     char* entry;
-    f32 x;
-    f32 y;
-    f32 z;
     s32 i;
     s32 offset;
 
@@ -526,28 +609,28 @@ s32 evt_nannpc_set_position(void* pEvt) {
     name = (char*)evtGetValue(pEvt, args[0]);
     work = (s32*)nanNPCWork;
     offset = 0;
-    entry = NULL;
     for (i = 0; i < work[3]; i++, offset += 0xC0) {
         entry = (char*)(work[0] + offset);
-        if ((s32)name >= 0) {
+        if (((u32)name & 0x80000000) == 0) {
             sprintf(makestring, str_PCT06x_8042285c, name);
             name = makestring;
         }
-        if (strcmp(entry, name) == 0) {
-            break;
+        if (strcmp(entry, name) != 0) {
+            goto next;
         }
-        entry = NULL;
+        goto found;
+next:
+        ;
     }
+    entry = NULL;
 
-    x = evtGetFloat(pEvt, args[1]);
-    y = evtGetFloat(pEvt, args[2]);
-    z = evtGetFloat(pEvt, args[3]);
-    *(f32*)(entry + 0x18) = x;
-    *(f32*)(entry + 0x30) = x;
-    *(f32*)(entry + 0x1C) = y;
-    *(f32*)(entry + 0x34) = y;
-    *(f32*)(entry + 0x20) = z;
-    *(f32*)(entry + 0x38) = z;
+found:
+    *(f32*)(entry + 0x18) = evtGetFloat(pEvt, args[1]);
+    *(f32*)(entry + 0x30) = *(f32*)(entry + 0x18);
+    *(f32*)(entry + 0x1C) = evtGetFloat(pEvt, args[2]);
+    *(f32*)(entry + 0x34) = *(f32*)(entry + 0x1C);
+    *(f32*)(entry + 0x20) = evtGetFloat(pEvt, args[3]);
+    *(f32*)(entry + 0x38) = *(f32*)(entry + 0x20);
     return 2;
 }
 
@@ -684,26 +767,33 @@ s32 evt_nannpc_set_animtbl(void* pEvt) {
     name = (char*)evtGetValue(pEvt, args[0]);
     work = (s32*)nanNPCWork;
     offset = 0;
-    entry = NULL;
     for (i = 0; i < work[3]; i++, offset += 0xC0) {
         entry = (char*)(work[0] + offset);
-        if ((s32)name >= 0) {
+        if (((u32)name & 0x80000000) == 0) {
             sprintf(makestring, str_PCT06x_8042285c, name);
             name = makestring;
         }
-        if (strcmp(entry, name) == 0) {
-            break;
+        if (strcmp(entry, name) != 0) {
+            goto next;
         }
-        entry = NULL;
+        goto found;
+next:
+        ;
     }
+    entry = NULL;
 
+found:
     tbl = (s16*)evtGetValue(pEvt, args[1]);
     *(s16**)(entry + 0x58) = tbl;
     count = 0;
-    while (*tbl != -1) {
-        tbl++;
-        count++;
+loop:
+    if (*tbl == -1) {
+        goto done;
     }
+    tbl++;
+    count++;
+    goto loop;
+done:
     *(s16*)(entry + 0x5C) = count;
     if (*(s16*)(entry + 0x5C) == 0) {
         *(s32*)(entry + 0x58) = 0;
@@ -749,6 +839,7 @@ s32 evt_nannpc_set_work(void* pEvt) {
     s32* work;
     char* name;
     char* entry;
+    char* slot;
     s32 idx;
     s32 i;
     s32 offset;
@@ -757,21 +848,25 @@ s32 evt_nannpc_set_work(void* pEvt) {
     name = (char*)evtGetValue(pEvt, args[0]);
     work = (s32*)nanNPCWork;
     offset = 0;
-    entry = NULL;
     for (i = 0; i < work[3]; i++, offset += 0xC0) {
         entry = (char*)(work[0] + offset);
-        if ((s32)name >= 0) {
+        if (((u32)name & 0x80000000) == 0) {
             sprintf(makestring, str_PCT06x_8042285c, name);
             name = makestring;
         }
-        if (strcmp(entry, name) == 0) {
-            break;
+        if (strcmp(entry, name) != 0) {
+            goto next;
         }
-        entry = NULL;
+        goto found;
+next:
+        ;
     }
+    entry = NULL;
 
+found:
     idx = evtGetValue(pEvt, args[1]);
-    *(s32*)(entry + idx * 4 + 0xA4) = evtGetValue(pEvt, args[2]);
+    slot = entry + idx * 4;
+    *(s32*)(slot + 0xA4) = evtGetValue(pEvt, args[2]);
     return 2;
 }
 
@@ -817,47 +912,62 @@ s32 evt_nannpc_move_position2(void* event, s32 firstCall) {
     extern f32 PSVECMag(Vec3f*);
     extern void PSVECScale(Vec3f*, f32, Vec3f*);
     extern void PSVECAdd(Vec3f*, Vec3f*, Vec3f*);
-    s32* args = *(s32**)((u8*)event + 0x18);
-    s32* work = (s32*)nanNPCWork;
-    char* name = (char*)evtGetValue(event, args[0]);
-    char* entry = 0;
-    char* lookup;
+    extern void* gp;
+    s32* args;
+    s32* work;
+    char* name;
+    char* entry;
     Vec3f target;
     Vec3f delta;
     Vec3f movement;
     f32 speed;
     f32 distance;
-    u32 now;
+    u64 now;
     u32 elapsed;
     u32 duration;
     s32 i;
+    s32 offset;
 
-    for (i = 0; i < work[3]; i++) {
-        entry = (char*)work[0] + i * 0xC0;
-        lookup = name;
+    args = *(s32**)((u8*)event + 0x18);
+    name = (char*)evtGetValue(event, args[0]);
+    work = (s32*)nanNPCWork;
+    offset = 0;
+    for (i = 0; i < work[3]; i++, offset += 0xC0) {
+        entry = (char*)(work[0] + offset);
         if (((u32)name & 0x80000000) == 0) {
             sprintf(makestring, str_PCT06x_8042285c, name);
-            lookup = makestring;
+            name = makestring;
         }
-        if (strcmp(entry, lookup) == 0) break;
-        entry = 0;
+        if (strcmp(entry, name) != 0) {
+            goto next;
+        }
+        goto found;
+next:
+        ;
     }
-    if (entry == 0) return 2;
-    now = *(u32*)(gpGlobals + (*(u8*)(gpGlobals + 0x10) ? 0x28 : 0x20));
+    entry = NULL;
+
+found:
+    if (*(s32*)((u8*)gp + 0x14) != 0) {
+        now = *(u64*)((u8*)gp + 0x38);
+    } else {
+        now = *(u64*)((u8*)gp + 0x40);
+    }
     target.x = (f32)evtGetValue(event, args[1]);
     target.y = (f32)evtGetValue(event, args[2]);
     target.z = (f32)evtGetValue(event, args[3]);
     speed = evtGetFloat(event, args[4]);
-    if (firstCall) {
-        *(u32*)((u8*)event + 0xC0) = now;
+    if (firstCall != 0) {
+        *(u64*)((u8*)event + 0x198) = now;
         *(Vec3f*)(entry + 0x88) = *(Vec3f*)(entry + 0x18);
     }
     PSVECSubtract(&target, (Vec3f*)(entry + 0x88), &delta);
     distance = PSVECMag(&delta);
     duration = (u32)(1000.0f * distance / speed);
-    elapsed = (now - *(u32*)((u8*)event + 0xC0)) / 1000;
+    elapsed = (u32)(now - *(u64*)((u8*)event + 0x198)) /
+              ((*(u32*)0x800000F8 >> 2) / 1000);
+    PSVECScale(&delta, (f32)elapsed / (f32)duration, &movement);
     if (elapsed < duration) {
-        PSVECScale(&delta, (f32)elapsed / (f32)duration, &movement);
         PSVECAdd((Vec3f*)(entry + 0x88), &movement, (Vec3f*)(entry + 0x18));
         return 0;
     }
@@ -949,27 +1059,30 @@ s32 evt_nannpc_flag_onoff(void* pEvt) {
 
     args = *(s32**)((s32)pEvt + 0x18);
     name = (char*)evtGetValue(pEvt, args[0]);
+    onoff = evtGetValue(pEvt, args[1]);
     work = (s32*)nanNPCWork;
     offset = 0;
-    entry = NULL;
     for (i = 0; i < work[3]; i++, offset += 0xC0) {
         entry = (char*)(work[0] + offset);
-        if ((s32)name >= 0) {
+        if (((u32)name & 0x80000000) == 0) {
             sprintf(makestring, str_PCT06x_8042285c, name);
             name = makestring;
         }
-        if (strcmp(entry, name) == 0) {
-            break;
+        if (strcmp(entry, name) != 0) {
+            goto next;
         }
-        entry = NULL;
+        goto found;
+next:
+        ;
     }
+    entry = NULL;
 
-    onoff = evtGetValue(pEvt, args[1]);
+found:
     mask = (u16)evtGetValue(pEvt, args[2]);
-    if (onoff == 0) {
-        *(u16*)(entry + 0x14) |= mask;
-    } else {
+    if (onoff != 0) {
         *(u16*)(entry + 0x14) &= ~mask;
+    } else {
+        *(u16*)(entry + 0x14) |= mask;
     }
     return 2;
 }
@@ -988,27 +1101,30 @@ s32 evt_nannpc_ppflag_onoff(void* pEvt) {
 
     args = *(s32**)((s32)pEvt + 0x18);
     name = (char*)evtGetValue(pEvt, args[0]);
+    onoff = evtGetValue(pEvt, args[1]);
     work = (s32*)nanNPCWork;
     offset = 0;
-    entry = NULL;
     for (i = 0; i < work[3]; i++, offset += 0xC0) {
         entry = (char*)(work[0] + offset);
-        if ((s32)name >= 0) {
+        if (((u32)name & 0x80000000) == 0) {
             sprintf(makestring, str_PCT06x_8042285c, name);
             name = makestring;
         }
-        if (strcmp(entry, name) == 0) {
-            break;
+        if (strcmp(entry, name) != 0) {
+            goto next;
         }
-        entry = NULL;
+        goto found;
+next:
+        ;
     }
+    entry = NULL;
 
-    onoff = evtGetValue(pEvt, args[1]);
+found:
     mask = (u16)evtGetValue(pEvt, args[2]);
-    if (onoff == 0) {
-        **(u32**)(entry + 0x10) |= mask;
-    } else {
+    if (onoff != 0) {
         **(u32**)(entry + 0x10) &= ~mask;
+    } else {
+        **(u32**)(entry + 0x10) |= mask;
     }
     return 2;
 }
@@ -1062,7 +1178,7 @@ s32 evt_nannpc_set_shadow_position(void* pEvt) {
     entry = NULL;
     for (i = 0; i < work[3]; i++, offset += 0xC0) {
         entry = (char*)(work[0] + offset);
-        if ((s32)name >= 0) {
+        if (((u32)name & 0x80000000) == 0) {
             sprintf(makestring, str_PCT06x_8042285c, name);
             name = makestring;
         }

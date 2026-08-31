@@ -371,9 +371,13 @@ void* _mapEnt(void* jointRaw, void* parent, void* parentMtx, int entryIdx) {
     entry = (u8*)(mapWork + activeGroup * 0x2F4 + entryIdx * 0x178);
     remaining = *(s32*)(entry + 0x150);
     object = *(u8**)(entry + 0x154);
-    while (remaining > 0 && *(void**)(object + 8) != 0) {
-        object += 0x134;
-        remaining--;
+    if (remaining > 0) {
+        do {
+            if (*(void**)(object + 8) == 0) {
+                break;
+            }
+            object += 0x134;
+        } while (--remaining != 0);
     }
     *(u32*)object = 0;
     *(void**)(object + 8) = joint;
@@ -619,6 +623,20 @@ u8 makeDisplayList(int entryIdx) {
         for (objectIndex = 0; objectIndex < *(s32*)(entry + 0x150); objectIndex++, object += 0x134) {
             *(void**)(object + 0xF4) = 0;
             *(u32*)(object + 0x114) = 0;
+            *(void**)(object + 0xF8) = 0;
+            *(u32*)(object + 0x118) = 0;
+            *(void**)(object + 0xFC) = 0;
+            *(u32*)(object + 0x11C) = 0;
+            *(void**)(object + 0x100) = 0;
+            *(u32*)(object + 0x120) = 0;
+            *(void**)(object + 0x104) = 0;
+            *(u32*)(object + 0x124) = 0;
+            *(void**)(object + 0x108) = 0;
+            *(u32*)(object + 0x128) = 0;
+            *(void**)(object + 0x10C) = 0;
+            *(u32*)(object + 0x12C) = 0;
+            *(void**)(object + 0x110) = 0;
+            *(u32*)(object + 0x130) = 0;
             joint = *(u8**)(object + 8);
             if (*(s32*)(joint + 0x5C) > 0 && *(s32*)(joint + 0x5C) < 9 &&
                 ((*(u8*)(*(u8**)(joint + 0x58) + 2) & 8) == 0) &&
@@ -693,6 +711,7 @@ void* mapSearchAnmObj(char* name) {
 }
 
 void mapCheckAnimation(s32 nameValue, s32* outDone, f32* outFrame) {
+    extern void* gp;
     u8* group;
     u8* entry;
     u8* anim;
@@ -726,13 +745,16 @@ found:
         if ((*(u16*)anim & 2) != 0) {
             *outDone = 1;
         }
-        *outFrame = *(f32*)(anim + 0x10);
+        *outFrame = (float_1000_8041f954 *
+                     (*(f32*)(*(u8**)(anim + 0x18) + 8) - *(f32*)(anim + 0x10))) /
+                    (f32)*(s32*)((u8*)gp + 4);
     }
 }
 
 u8 mapPlayAnimationLv(char* name, int mode, int level) {
     extern void* gp;
     extern s64 __div2i(s64, s64);
+    extern const f32 mapdrv_float_1000_owned;
     u8* group;
     u8* entry;
     u8* anim;
@@ -763,14 +785,19 @@ u8 mapPlayAnimationLv(char* name, int mode, int level) {
 
     if (found) {
         *(u16*)anim = 0;
-        if (level == 1) {
+        switch (level) {
+        case 1:
             *(u16*)anim |= 0x100;
-        } else if (level == 2) {
+            break;
+        case 2:
             *(u16*)anim |= 0x200;
-        } else if (level == 3) {
+            break;
+        case 3:
             *(u16*)anim |= 0x400;
-        } else if (level == 4) {
+            break;
+        case 4:
             *(u16*)anim |= 0x800;
+            break;
         }
         if ((*(u16*)anim & 0x100) != 0) {
             clock = (u64*)((u8*)gp + 0x48);
@@ -793,10 +820,14 @@ u8 mapPlayAnimationLv(char* name, int mode, int level) {
         if (mode == 1) {
             *(u16*)anim |= 4;
         }
+        if (mode == 2) {
+            *(u64*)(anim + 8) -= (u64)(mapdrv_float_1000_owned *
+                                      *(f32*)(*(u8**)(anim + 0x18) + 8) /
+                                      (f32)*(s32*)((u8*)gp + 4));
+        }
     }
     return 0;
 }
-
 
 void mapPauseAnimation(char* name) {
     void* work;
@@ -946,6 +977,7 @@ found:
 
 
 void _mapLoad(void* pWork, int idx, char* pMapName) {
+    struct MapLoadCorner { f32 x; f32 y; f32 z; };
     extern void arcOpen(char*, void*, void*);
     extern void* DVDMgrOpen(char*, s32, s32);
     extern s32 DVDMgrGetLength(void*);
@@ -1002,6 +1034,7 @@ void _mapLoad(void* pWork, int idx, char* pMapName) {
     f32 matrix[3][4];
     f32 min[3];
     f32 max[3];
+    struct MapLoadCorner corners[8];
 
     error_flag = 0;
     error_count = 0;
@@ -1189,30 +1222,22 @@ void _mapLoad(void* pWork, int idx, char* pMapName) {
     camSetTypePersp(4);
     mapBuildTexture(*(void**)(entry + 0xA8), (s32)*(void**)(entry + 0x84), *(int**)(entry + 0x94));
     mapGetBoundingBox(min, max);
-    *(f32*)(entry + 0xB0) = max[0];
-    *(f32*)(entry + 0xB4) = max[1];
-    *(f32*)(entry + 0xB8) = max[2];
-    *(f32*)(entry + 0xBC) = min[0];
-    *(f32*)(entry + 0xC0) = max[1];
-    *(f32*)(entry + 0xC4) = max[2];
-    *(f32*)(entry + 0xC8) = max[0];
-    *(f32*)(entry + 0xCC) = min[1];
-    *(f32*)(entry + 0xD0) = max[2];
-    *(f32*)(entry + 0xD4) = max[0];
-    *(f32*)(entry + 0xD8) = max[1];
-    *(f32*)(entry + 0xDC) = min[2];
-    *(f32*)(entry + 0xE0) = min[0];
-    *(f32*)(entry + 0xE4) = min[1];
-    *(f32*)(entry + 0xE8) = max[2];
-    *(f32*)(entry + 0xEC) = max[0];
-    *(f32*)(entry + 0xF0) = min[1];
-    *(f32*)(entry + 0xF4) = min[2];
-    *(f32*)(entry + 0xF8) = min[0];
-    *(f32*)(entry + 0xFC) = max[1];
-    *(f32*)(entry + 0x100) = min[2];
-    *(f32*)(entry + 0x104) = min[0];
-    *(f32*)(entry + 0x108) = min[1];
-    *(f32*)(entry + 0x10C) = min[2];
+    corners[0].x = max[0]; corners[0].y = max[1]; corners[0].z = max[2];
+    corners[1].x = min[0]; corners[1].y = max[1]; corners[1].z = max[2];
+    corners[2].x = max[0]; corners[2].y = min[1]; corners[2].z = max[2];
+    corners[3].x = max[0]; corners[3].y = max[1]; corners[3].z = min[2];
+    corners[4].x = min[0]; corners[4].y = min[1]; corners[4].z = max[2];
+    corners[5].x = max[0]; corners[5].y = min[1]; corners[5].z = min[2];
+    corners[6].x = min[0]; corners[6].y = max[1]; corners[6].z = min[2];
+    corners[7].x = min[0]; corners[7].y = min[1]; corners[7].z = min[2];
+    *(struct MapLoadCorner*)(entry + 0xB0) = corners[0];
+    *(struct MapLoadCorner*)(entry + 0xBC) = corners[1];
+    *(struct MapLoadCorner*)(entry + 0xC8) = corners[2];
+    *(struct MapLoadCorner*)(entry + 0xD4) = corners[3];
+    *(struct MapLoadCorner*)(entry + 0xE0) = corners[4];
+    *(struct MapLoadCorner*)(entry + 0xEC) = corners[5];
+    *(struct MapLoadCorner*)(entry + 0xF8) = corners[6];
+    *(struct MapLoadCorner*)(entry + 0x104) = corners[7];
 
     animTable = 0;
     for (i = 0; i < *(u32*)(entry + 0x48); i++) {
@@ -2240,6 +2265,7 @@ void mapMain(void) {
                                 B(light, 0x49) = (u8)(s32)(scale255 * lightColor[1]);
                                 B(light, 0x4A) = (u8)(s32)(scale255 * lightColor[2]);
                                 B(light, 0x4B) = 0xFF;
+                                *(f32*)((s32)light + 0x4C) = lightColor[4];
                                 *(f32*)((s32)light + 0x50) = lightColor[3];
                                 break;
                             }
@@ -2287,6 +2313,7 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
     extern void GXSetZMode(s32, s32, s32);
     extern void GXGetProjectionv(f32*);
     extern void GXSetProjectionv(f32*);
+    extern void GXSetProjection(void*, s32);
     extern void GXGetCullMode(s32*);
     extern void GXSetCullMode(s32);
     extern s32 activeGroup;
@@ -2327,6 +2354,8 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
     u32 fogColor;
     Color tevColor;
     Color outputColor;
+    Color tevColor2;
+    Color outputColor2;
     Color* objectColor;
     Color* materialColor;
     Color* blendColor;
@@ -2459,50 +2488,89 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
             && ((flags & 1) == 0 || (flags & 0x80) != 0)
             && ((flags & 0x40) == 0 || obj[0x0F] != 0))) {
         count = *(s32*)(joint + 0x5C);
-        for (i = 0; i < count; i++) {
-            material = *(void**)(joint + 0x60 + i * 8);
-            mesh = *(u8**)(joint + 0x64 + i * 8);
-            mapSetTextureMatrix(material);
-            *(u32*)&tevColor = dat_8041f8fc;
-            objectColor = (Color*)(obj + 0x0C);
-            materialColor = (Color*)((u8*)material + 0x10C);
-            if ((flags & 0x40) != 0) {
-                tevColor.r = (tevColor.r * objectColor->r) / 0xFF;
-                tevColor.g = (tevColor.g * objectColor->g) / 0xFF;
-                tevColor.b = (tevColor.b * objectColor->b) / 0xFF;
-                tevColor.a = (tevColor.a * objectColor->a) / 0xFF;
-            }
-            if (materialColor->r != 0xFF) {
-                tevColor.a = (tevColor.a * materialColor->r) / 0xFF;
-            }
-            if (((groupFlags & 2) != 0) && ((flags & 0x800) == 0)) {
-                blendColor = (Color*)(group + 0x16);
-                tevColor.r = (tevColor.r * blendColor->r) / 0xFF;
-                tevColor.g = (tevColor.g * blendColor->g) / 0xFF;
-                tevColor.b = (tevColor.b * blendColor->b) / 0xFF;
-                tevColor.a = (tevColor.a * blendColor->a) / 0xFF;
-            }
-            if (((groupFlags & 4) != 0) && ((flags & 0x1000) == 0)) {
-                blendColor = (Color*)(group + 0x1A);
-                tevColor.r = (tevColor.r * blendColor->r) / 0xFF;
-                tevColor.g = (tevColor.g * blendColor->g) / 0xFF;
-                tevColor.b = (tevColor.b * blendColor->b) / 0xFF;
-                tevColor.a = (tevColor.a * blendColor->a) / 0xFF;
-            }
-            if (((groupFlags & 8) != 0) && ((flags & 0x800) == 0)) {
-                blendColor = (Color*)(group + 0x1E);
-                tevColor.r = (tevColor.r * blendColor->r) / 0xFF;
-                tevColor.g = (tevColor.g * blendColor->g) / 0xFF;
-                tevColor.b = (tevColor.b * blendColor->b) / 0xFF;
-                tevColor.a = (tevColor.a * blendColor->a) / 0xFF;
-            }
-            outputColor = tevColor;
-            GXSetTevKColor(0, &outputColor);
-
-            if ((flags & 0x100) == 0) {
+        if ((flags & 0x100) == 0) {
+            for (i = 0; i < count; i++) {
+                material = *(void**)(joint + 0x60 + i * 8);
+                mesh = *(u8**)(joint + 0x64 + i * 8);
+                mapSetTextureMatrix(material);
+                *(u32*)&tevColor = dat_8041f8fc;
+                objectColor = (Color*)(obj + 0x0C);
+                materialColor = (Color*)((u8*)material + 0x10C);
+                if ((flags & 0x40) != 0) {
+                    tevColor.r = (tevColor.r * objectColor->r) / 0xFF;
+                    tevColor.g = (tevColor.g * objectColor->g) / 0xFF;
+                    tevColor.b = (tevColor.b * objectColor->b) / 0xFF;
+                    tevColor.a = (tevColor.a * objectColor->a) / 0xFF;
+                }
+                if (materialColor->r != 0xFF) {
+                    tevColor.a = (tevColor.a * materialColor->r) / 0xFF;
+                }
+                if (((groupFlags & 2) != 0) && ((flags & 0x800) == 0)) {
+                    blendColor = (Color*)(group + 0x16);
+                    tevColor.r = (tevColor.r * blendColor->r) / 0xFF;
+                    tevColor.g = (tevColor.g * blendColor->g) / 0xFF;
+                    tevColor.b = (tevColor.b * blendColor->b) / 0xFF;
+                    tevColor.a = (tevColor.a * blendColor->a) / 0xFF;
+                }
+                if (((groupFlags & 4) != 0) && ((flags & 0x1000) == 0)) {
+                    blendColor = (Color*)(group + 0x1A);
+                    tevColor.r = (tevColor.r * blendColor->r) / 0xFF;
+                    tevColor.g = (tevColor.g * blendColor->g) / 0xFF;
+                    tevColor.b = (tevColor.b * blendColor->b) / 0xFF;
+                    tevColor.a = (tevColor.a * blendColor->a) / 0xFF;
+                }
+                if (((groupFlags & 8) != 0) && ((flags & 0x800) == 0)) {
+                    blendColor = (Color*)(group + 0x1E);
+                    tevColor.r = (tevColor.r * blendColor->r) / 0xFF;
+                    tevColor.g = (tevColor.g * blendColor->g) / 0xFF;
+                    tevColor.b = (tevColor.b * blendColor->b) / 0xFF;
+                    tevColor.a = (tevColor.a * blendColor->a) / 0xFF;
+                }
+                outputColor = tevColor;
+                GXSetTevKColor(0, &outputColor);
                 mapSetMaterial(obj, material);
                 mapSetPolygon((s32)obj, (s32)mesh);
-            } else {
+            }
+        } else {
+            for (i = 0; i < count; i++) {
+                material = *(void**)(joint + 0x60 + i * 8);
+                mesh = *(u8**)(joint + 0x64 + i * 8);
+                mapSetTextureMatrix(material);
+                *(u32*)&tevColor2 = dat_8041f8fc;
+                objectColor = (Color*)(obj + 0x0C);
+                materialColor = (Color*)((u8*)material + 0x10C);
+                if ((flags & 0x40) != 0) {
+                    tevColor2.r = (tevColor2.r * objectColor->r) / 0xFF;
+                    tevColor2.g = (tevColor2.g * objectColor->g) / 0xFF;
+                    tevColor2.b = (tevColor2.b * objectColor->b) / 0xFF;
+                    tevColor2.a = (tevColor2.a * objectColor->a) / 0xFF;
+                }
+                if (materialColor->r != 0xFF) {
+                    tevColor2.a = (tevColor2.a * materialColor->r) / 0xFF;
+                }
+                if (((groupFlags & 2) != 0) && ((flags & 0x800) == 0)) {
+                    blendColor = (Color*)(group + 0x16);
+                    tevColor2.r = (tevColor2.r * blendColor->r) / 0xFF;
+                    tevColor2.g = (tevColor2.g * blendColor->g) / 0xFF;
+                    tevColor2.b = (tevColor2.b * blendColor->b) / 0xFF;
+                    tevColor2.a = (tevColor2.a * blendColor->a) / 0xFF;
+                }
+                if (((groupFlags & 4) != 0) && ((flags & 0x1000) == 0)) {
+                    blendColor = (Color*)(group + 0x1A);
+                    tevColor2.r = (tevColor2.r * blendColor->r) / 0xFF;
+                    tevColor2.g = (tevColor2.g * blendColor->g) / 0xFF;
+                    tevColor2.b = (tevColor2.b * blendColor->b) / 0xFF;
+                    tevColor2.a = (tevColor2.a * blendColor->a) / 0xFF;
+                }
+                if (((groupFlags & 8) != 0) && ((flags & 0x800) == 0)) {
+                    blendColor = (Color*)(group + 0x1E);
+                    tevColor2.r = (tevColor2.r * blendColor->r) / 0xFF;
+                    tevColor2.g = (tevColor2.g * blendColor->g) / 0xFF;
+                    tevColor2.b = (tevColor2.b * blendColor->b) / 0xFF;
+                    tevColor2.a = (tevColor2.a * blendColor->a) / 0xFF;
+                }
+                outputColor2 = tevColor2;
+                GXSetTevKColor(0, &outputColor2);
                 mapSetPolygonVtxDesc((s32)obj, (s32)mesh);
                 GXCallDisplayList(*(void**)(obj + 0xF4), *(u32*)(obj + 0x114));
                 for (j = 0; j < *(s32*)(mesh + 4); j++) {
@@ -2513,6 +2581,10 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
                 }
             }
         }
+    }
+
+    if ((flags & 0x8000) != 0) {
+        GXSetProjection(camera + 0x15C, *(s32*)(camera + 0x19C));
     }
 
     if ((flags & 0x0F000000) != 0) {
@@ -3264,6 +3336,7 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
     extern void GXSetTevSwapMode(s32, s32, s32);
     extern void GXSetTevKColorSel(s32, s32);
     extern void GXSetTevKAlphaSel(s32, s32);
+    extern void GXSetNumIndStages(s32);
     extern void PSMTXTrans(void*, f32, f32, f32);
     extern void GXLoadTexMtxImm(void*, s32, s32);
     extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
@@ -3277,6 +3350,12 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
     extern u32 unk_80429528;
     extern void* gpGlobals;
     extern f64 sin(f64);
+    extern f64 cos(f64);
+    extern void* current_mp;
+    extern f32 float_1p5708_8041f96c;
+    extern f32 float_20_8041f970;
+    extern f32 float_64_8041f974;
+    extern u32 dat_8041f8f4;
     extern void GXSetTevColor(s32, void*);
     extern void GXSetTevKColor(s32, void*);
     extern void PSMTXConcat(void*, void*, void*);
@@ -3295,8 +3374,15 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
     extern u32 dat_8041f8e4;
     extern void* shadowGetDepthShadowTexObj(void);
     extern void* shadowGetDepthShadowDepthMtx(void);
+    extern void* shadowGetDepthShadowProjTexMtx(void);
+    extern u32 shadowGetDepthShadowColor(void);
     extern void* shadowGetDepthShadowConfig(void);
     extern void* shadowGetRamp8TexObj(void);
+    extern void* shadowGetRamp16TexObj(void);
+    extern void* shadowGetProjShadowTexObj(void);
+    extern void* shadowGetProjShadowProjTexMtx(void);
+    extern u32 shadowGetProjShadowColor(void);
+    extern void* shadowGetProjShadowConfig(void);
     u32 stages;
     s32 i;
     f32 texMtx[3][4];
@@ -3642,7 +3728,55 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
 
     if ((materialFlag & 0x10000) != 0 && shadowGetDepthShadowTexObj() != 0) {
         u8* depthConfig = (u8*)shadowGetDepthShadowConfig();
-        if (*(s32*)(depthConfig + 0x3C) == 1) {
+        s32 depthMode = *(s32*)(depthConfig + 0x3C);
+        if (depthMode == 3) {
+            void* depthTexObj = shadowGetDepthShadowTexObj();
+            void* depthMtxPtr = shadowGetDepthShadowDepthMtx();
+            void* depthProjMtx = shadowGetDepthShadowProjTexMtx();
+            u32 depthColor = shadowGetDepthShadowColor();
+            s32 nextStage;
+            s32 nextTex;
+
+            GXSetTevColorOp(stages - 1, 0, 0, 0, 1, 1);
+            GXSetTevAlphaOp(stages - 1, 0, 0, 0, 1, 1);
+            GXSetTevSwapModeTable(1, 0, 3, 2, 3);
+            GXSetTevSwapModeTable(2, 3, 1, 2, 3);
+            GXSetTevOrder(stages, texCount, texCount, 0xFF);
+            GXSetTevColorIn(stages, 0xF, 0xF, 0xF, 8);
+            GXSetTevColorOp(stages, 0, 0, 0, 1, 0);
+            GXSetTevAlphaIn(stages, 7, 7, 7, 7);
+            GXSetTevAlphaOp(stages, 0, 0, 0, 1, 0);
+            GXSetTevSwapMode(stages, 0, 1);
+            GXSetTexCoordGen2(texCount, 0, 0, texmtx_tbl[texCount], 0, 0x7D);
+            GXLoadTexObj(shadowGetRamp16TexObj(), texCount);
+            PSMTXConcat(depthMtxPtr, (void*)pMtx, depthMtx);
+            GXLoadTexMtxImm(depthMtx, texmtx_tbl[texCount], 0);
+
+            nextStage = stages + 1;
+            nextTex = texCount + 1;
+            GXSetTevOrder(nextStage, nextTex, nextTex, 0xFF);
+            GXSetTevColorIn(nextStage, 0, 8, 0xC, 0xF);
+            GXSetTevColorOp(nextStage, 10, 0, 0, 0, 0);
+            GXSetTevAlphaIn(nextStage, 7, 7, 7, 7);
+            GXSetTevAlphaOp(nextStage, 0, 0, 0, 1, 0);
+            GXSetTevSwapMode(nextStage, 0, 2);
+            GXSetTexCoordGen2(nextTex, 0, 0, texmtx_tbl[nextTex], 0, 0x7D);
+            GXLoadTexObj(depthTexObj, nextTex);
+            PSMTXConcat(depthProjMtx, (void*)pMtx, depthMtx);
+            GXLoadTexMtxImm(depthMtx, texmtx_tbl[nextTex], 0);
+
+            nextStage = stages + 2;
+            GXSetTevOrder(nextStage, 0xFF, 0xFF, 0);
+            GXSetTevColorIn(nextStage, 0xF, 0xE, 0, 2);
+            GXSetTevColorOp(nextStage, 1, 0, 0, 1, 0);
+            GXSetTevKColor(1, &depthColor);
+            GXSetTevKColorSel(nextStage, 0xD);
+            GXSetTevAlphaIn(nextStage, 7, 7, 7, 1);
+            GXSetTevAlphaOp(nextStage, 0, 0, 0, 1, 0);
+            GXSetTevSwapMode(nextStage, 0, 0);
+            stages += 3;
+            texCount += 2;
+        } else if (depthMode == 1) {
             u32 rampColor = dat_8041f8e4;
             GXSetTevColor(2, &rampColor);
             GXSetTevOrder(stages, texCount, texCount, 0xFF);
@@ -3660,8 +3794,168 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
         }
     }
 
-    GXSetNumTevStages(stages);
+    if ((materialFlag & 0x20000) != 0 && shadowGetProjShadowTexObj() != 0) {
+        void* shadowTexObj = shadowGetProjShadowTexObj();
+        void* shadowProjMtx = shadowGetProjShadowProjTexMtx();
+        u32 shadowColor = shadowGetProjShadowColor();
+        shadowGetProjShadowConfig();
+        GXSetTevOrder(stages, texCount, texCount, 0xFF);
+        GXSetTevColorIn(stages, 0, 0xE, 4, 0xF);
+        GXSetTevColorOp(stages, 0, 0, 0, 1, 0);
+        GXSetTevAlphaIn(stages, 7, 6, 4, 0);
+        GXSetTevAlphaOp(stages, 0, 0, 0, 1, 0);
+        GXSetTevSwapMode(stages, 0, 0);
+        GXSetTexCoordGen2(texCount, 0, 0, texmtx_tbl[texCount], 0, 0x7D);
+        GXLoadTexObj(shadowTexObj, texCount);
+        PSMTXConcat(shadowProjMtx, (void*)pMtx, depthMtx);
+        GXLoadTexMtxImm(depthMtx, texmtx_tbl[texCount], 0);
+        GXSetTevKColor(1, &shadowColor);
+        GXSetTevKColorSel(stages, 0xD);
+        GXSetTevKAlphaSel(stages, 0x1D);
+        stages++;
+        texCount++;
+    }
+
+    if ((materialFlag & 0x40000) != 0 && shadowGetDepthShadowTexObj() != 0) {
+        u8* depthConfig = (u8*)shadowGetDepthShadowConfig();
+        s32 depthMode = *(s32*)(depthConfig + 0x3C);
+        if (depthMode == 3) {
+            void* depthTexObj = shadowGetDepthShadowTexObj();
+            void* depthMtxPtr = shadowGetDepthShadowDepthMtx();
+            void* depthProjMtx = shadowGetDepthShadowProjTexMtx();
+            u32 depthColor = shadowGetDepthShadowColor();
+            s32 nextStage;
+            s32 nextTex;
+
+            GXSetTevColorOp(stages - 1, 0, 0, 0, 1, 1);
+            GXSetTevAlphaOp(stages - 1, 0, 0, 0, 1, 1);
+            GXSetTevSwapModeTable(1, 0, 3, 2, 3);
+            GXSetTevSwapModeTable(2, 3, 1, 2, 3);
+            GXSetTevOrder(stages, texCount, texCount, 0xFF);
+            GXSetTevColorIn(stages, 0xF, 0xF, 0xF, 8);
+            GXSetTevColorOp(stages, 0, 0, 0, 1, 0);
+            GXSetTevAlphaIn(stages, 7, 7, 7, 7);
+            GXSetTevAlphaOp(stages, 0, 0, 0, 1, 0);
+            GXSetTevSwapMode(stages, 0, 1);
+            GXSetTexCoordGen2(texCount, 0, 0, texmtx_tbl[texCount], 0, 0x7D);
+            GXLoadTexObj(shadowGetRamp16TexObj(), texCount);
+            PSMTXConcat(depthMtxPtr, (void*)pMtx, depthMtx);
+            GXLoadTexMtxImm(depthMtx, texmtx_tbl[texCount], 0);
+
+            nextStage = stages + 1;
+            nextTex = texCount + 1;
+            GXSetTevOrder(nextStage, nextTex, nextTex, 0xFF);
+            GXSetTevColorIn(nextStage, 0, 8, 0xC, 0xF);
+            GXSetTevColorOp(nextStage, 10, 0, 0, 0, 0);
+            GXSetTevAlphaIn(nextStage, 7, 7, 7, 7);
+            GXSetTevAlphaOp(nextStage, 0, 0, 0, 1, 0);
+            GXSetTevSwapMode(nextStage, 0, 2);
+            GXSetTexCoordGen2(nextTex, 0, 0, texmtx_tbl[nextTex], 0, 0x7D);
+            GXLoadTexObj(depthTexObj, nextTex);
+            PSMTXConcat(depthProjMtx, (void*)pMtx, depthMtx);
+            GXLoadTexMtxImm(depthMtx, texmtx_tbl[nextTex], 0);
+
+            nextStage = stages + 2;
+            GXSetTevOrder(nextStage, 0xFF, 0xFF, 0);
+            GXSetTevColorIn(nextStage, 2, 0xE, 0, 0xF);
+            GXSetTevColorOp(nextStage, 0, 0, 0, 1, 0);
+            GXSetTevAlphaIn(nextStage, 7, 7, 7, 6);
+            GXSetTevAlphaOp(nextStage, 0, 0, 0, 1, 0);
+            GXSetTevSwapMode(nextStage, 0, 0);
+            GXSetTevKColor(1, &depthColor);
+            GXSetTevKColorSel(nextStage, 0xD);
+            GXSetTevKAlphaSel(nextStage, 0x1D);
+            stages += 3;
+            texCount += 2;
+        } else if (depthMode == 0) {
+            void* depthTexObj = shadowGetDepthShadowTexObj();
+            void* depthMtxPtr = shadowGetDepthShadowDepthMtx();
+            void* depthProjMtx = shadowGetDepthShadowProjTexMtx();
+            u32 depthColor = shadowGetDepthShadowColor();
+            s32 nextStage;
+            s32 nextTex;
+
+            GXSetTevColorOp(stages - 1, 0, 0, 0, 1, 1);
+            GXSetTevAlphaOp(stages - 1, 0, 0, 0, 1, 1);
+            GXSetTevOrder(stages, texCount, texCount, 0xFF);
+            GXSetTevColorIn(stages, 0xF, 0xF, 0xF, 8);
+            GXSetTevColorOp(stages, 0, 0, 0, 1, 0);
+            GXSetTevAlphaIn(stages, 7, 7, 7, 7);
+            GXSetTevAlphaOp(stages, 0, 0, 0, 1, 0);
+            GXSetTevSwapMode(stages, 0, 0);
+            GXSetTexCoordGen2(texCount, 0, 0, texmtx_tbl[texCount], 0, 0x7D);
+            GXLoadTexObj(shadowGetRamp8TexObj(), texCount);
+            PSMTXConcat(depthMtxPtr, (void*)pMtx, depthMtx);
+            GXLoadTexMtxImm(depthMtx, texmtx_tbl[texCount], 0);
+
+            nextStage = stages + 1;
+            nextTex = texCount + 1;
+            GXSetTevOrder(nextStage, nextTex, nextTex, 0xFF);
+            GXSetTevColorIn(nextStage, 0, 8, 0xC, 0xF);
+            GXSetTevColorOp(nextStage, 8, 0, 0, 0, 0);
+            GXSetTevAlphaIn(nextStage, 7, 7, 7, 7);
+            GXSetTevAlphaOp(nextStage, 0, 0, 0, 1, 0);
+            GXSetTevSwapMode(nextStage, 0, 0);
+            GXSetTexCoordGen2(nextTex, 0, 0, texmtx_tbl[nextTex], 0, 0x7D);
+            GXLoadTexObj(depthTexObj, nextTex);
+            PSMTXConcat(depthProjMtx, (void*)pMtx, depthMtx);
+            GXLoadTexMtxImm(depthMtx, texmtx_tbl[nextTex], 0);
+
+            nextStage = stages + 2;
+            GXSetTevOrder(nextStage, 0xFF, 0xFF, 0);
+            GXSetTevColorIn(nextStage, 2, 0xE, 0, 0xF);
+            GXSetTevColorOp(nextStage, 0, 0, 0, 1, 0);
+            GXSetTevAlphaIn(nextStage, 7, 7, 7, 6);
+            GXSetTevAlphaOp(nextStage, 0, 0, 0, 1, 0);
+            GXSetTevSwapMode(nextStage, 0, 0);
+            GXSetTevKColor(1, &depthColor);
+            GXSetTevKColorSel(nextStage, 0xD);
+            GXSetTevKAlphaSel(nextStage, 0x1D);
+            stages += 3;
+            texCount += 2;
+        }
+    }
+
+    if ((materialFlag & 0x80100000) != 0) {
+        u32 red;
+        u32 green;
+        u32 blue;
+        u32 intensity;
+        u8 tevColor[4];
+
+        if ((materialFlag & 0x100000) == 0) {
+            red = 0xF0;
+            green = 0xF0;
+            blue = 100;
+            intensity = (u32)(float_64_8041f974 *
+                (1.0f - (f32)cos((f64)((float_1p5708_8041f96c *
+                (f32)(*(u32*)((s32)gpGlobals + 0x1C))) / float_20_8041f970))) *
+                0.5f + float_64_8041f974) & 0xFF;
+        } else {
+            red = *(u8*)((s32)current_mp + 0xC);
+            green = *(u8*)((s32)current_mp + 0xD);
+            blue = *(u8*)((s32)current_mp + 0xE);
+            intensity = *(u8*)((s32)current_mp + 0xF);
+        }
+
+        GXSetTevOrder(stages, 0xFF, 0xFF, 0xFF);
+        GXSetTevColorOp(stages, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(stages, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(stages, 0, 0xF, 0xF, 0xE);
+        GXSetTevAlphaIn(stages, 7, 7, 7, 0);
+        GXSetTevSwapMode(stages, 0, 0);
+        tevColor[0] = (u8)((red * intensity) / 0xFF);
+        tevColor[1] = (u8)((green * intensity) / 0xFF);
+        tevColor[2] = (u8)((blue * intensity) / 0xFF);
+        tevColor[3] = (u8)dat_8041f8f4;
+        GXSetTevKColor(1, tevColor);
+        GXSetTevKColorSel(stages, 0xD);
+        stages++;
+    }
+
     GXSetNumTexGens(texCount);
+    GXSetNumTevStages(stages);
+    GXSetNumIndStages(0);
     for (i = 0; i < (s32)texCount && i < 8; i++) {
         GXSetTexCoordGen2(i, 1, 4, 0x1E + i * 3, 0, 0x7D);
     }
@@ -3966,7 +4260,10 @@ void mapSetMaterial(void* param_1, void* param_2) {
     void* texHeader;
     s32 mipmap;
 
-        for (lightIndex = 0; lightIndex < lightCount; lightIndex++) {
+    lightCount = mapSetLight(param_1, lightList);
+    lightMask = 0;
+
+    for (lightIndex = 0; lightIndex < lightCount; lightIndex++) {
         light = lightList[lightIndex];
         lightFlags = *(u16*)light;
 
@@ -6707,9 +7004,9 @@ void mapSetProjMtx(void* mtx) {
 }
 
 void spline_maketable(s32 count, f32* points, f32* table, f32* out) {
-    extern f32 sqrtf(f32);
+    extern f64 __frsqrte(f64);
     extern f32 __float_nan;
-
+    extern u8 vec3_802bf958[];
     f32* h;
     f32* work;
     f32 total;
@@ -6730,10 +7027,52 @@ void spline_maketable(s32 count, f32* points, f32* table, f32* out) {
         dy = points[i * 3 + 1] - points[(i - 1) * 3 + 1];
         dz = points[i * 3 + 2] - points[(i - 1) * 3 + 2];
         len = dx * dx + dy * dy + dz * dz;
-        if (len > 0.0f) {
-            len = sqrtf(len);
-        } else if (len < 0.0f) {
-            len = __float_nan;
+        {
+            f64 value;
+            f64 estimate;
+            f64 square;
+            f64 half;
+            f64 three;
+            u32 bits;
+            u32 exponent;
+            s32 valueClass;
+
+            value = (f64)len;
+            if (len > 0.0f) {
+                half = *(f64*)(vec3_802bf958 + 0x2A8);
+                three = *(f64*)(vec3_802bf958 + 0x2B0);
+                estimate = __frsqrte(value);
+                square = estimate * estimate;
+                estimate = half * estimate * (three - value * square);
+                square = estimate * estimate;
+                estimate = half * estimate * (three - value * square);
+                square = estimate * estimate;
+                estimate = half * estimate * (three - value * square);
+                len = (f32)(value * estimate);
+            } else if (value < *(f64*)(vec3_802bf958 + 0x2B8)) {
+                len = __float_nan;
+            } else {
+                bits = *(u32*)&len;
+                exponent = bits & 0x7F800000;
+                if (exponent == 0x7F800000) {
+                    if ((bits & 0x007FFFFF) == 0) {
+                        valueClass = 2;
+                    } else {
+                        valueClass = 1;
+                    }
+                } else if (exponent < 0x7F800000 && exponent == 0) {
+                    if ((bits & 0x007FFFFF) == 0) {
+                        valueClass = 3;
+                    } else {
+                        valueClass = 5;
+                    }
+                } else {
+                    valueClass = 4;
+                }
+                if (valueClass == 1) {
+                    len = __float_nan;
+                }
+            }
         }
         table[i] = table[i - 1] + len;
     }
@@ -6769,26 +7108,47 @@ void spline_maketable(s32 count, f32* points, f32* table, f32* out) {
     work[4] = 2.0f * (table[2] - table[0]);
     work[5] = 2.0f * (table[2] - table[0]);
 
-    for (i = 1; i < count - 2; i++) {
-        f32 step;
-        f32 ratio0;
-        f32 ratio1;
-        f32 ratio2;
-        f32 span;
+    {
+        f32* workPos;
+        f32* hPos;
+        f32* outPos;
+        f32* tablePos;
+        s32 remaining;
 
-        step = h[i];
-        ratio0 = step / work[i * 3 + 0];
-        ratio1 = step / work[i * 3 + 1];
-        ratio2 = step / work[i * 3 + 2];
-        span = 2.0f * (table[i + 2] - table[i]);
+        workPos = work;
+        hPos = h;
+        outPos = out;
+        tablePos = table;
+        remaining = count - 3;
+        if (count - 2 > 1) {
+            do {
+                f32 step;
+                f32 ratio0;
+                f32 ratio1;
+                f32 ratio2;
+                f32 span;
 
-        out[(i + 1) * 3 + 0] = (work[(i + 2) * 3 + 0] - work[(i + 1) * 3 + 0]) - ratio0 * out[i * 3 + 0];
-        out[(i + 1) * 3 + 1] = (work[(i + 2) * 3 + 1] - work[(i + 1) * 3 + 1]) - ratio1 * out[i * 3 + 1];
-        out[(i + 1) * 3 + 2] = (work[(i + 2) * 3 + 2] - work[(i + 1) * 3 + 2]) - ratio2 * out[i * 3 + 2];
+                hPos++;
+                tablePos++;
+                step = *hPos;
+                ratio0 = step / workPos[3];
+                ratio1 = step / workPos[4];
+                ratio2 = step / workPos[5];
+                span = 2.0f * (tablePos[2] - tablePos[0]);
 
-        work[(i + 1) * 3 + 0] = span - ratio0 * h[i];
-        work[(i + 1) * 3 + 1] = span - ratio1 * h[i];
-        work[(i + 1) * 3 + 2] = span - ratio2 * h[i];
+                outPos[6] = (workPos[9] - workPos[6]) - ratio0 * outPos[3];
+                outPos[7] = (workPos[10] - workPos[7]) - ratio1 * outPos[4];
+                outPos[8] = (workPos[11] - workPos[8]) - ratio2 * outPos[5];
+
+                workPos[6] = span - ratio0 * *hPos;
+                workPos[7] = span - ratio1 * *hPos;
+                workPos[8] = span - ratio2 * *hPos;
+
+                workPos += 3;
+                outPos += 3;
+                remaining--;
+            } while (remaining != 0);
+        }
     }
 
     i = count - 2;
@@ -6806,7 +7166,7 @@ void spline_maketable(s32 count, f32* points, f32* table, f32* out) {
     _mapFree(mapalloc_base_ptr, h);
 }
 
-void spline_getvalue(double time, float* out, int count, float* values, int timesRaw, int slopesRaw) {
+void spline_getvalue(float time, float* out, int count, float* values, int timesRaw, int slopesRaw) {
     f32* times;
     f32* slopes;
     s32 low;
@@ -6825,9 +7185,9 @@ void spline_getvalue(double time, float* out, int count, float* values, int time
     slopes = (f32*)slopesRaw;
 
     if (count == 2) {
-        out[0] = (f32)(time * (double)(values[3] - values[0]) + values[0]);
-        out[1] = (f32)(time * (double)(values[4] - values[1]) + values[1]);
-        out[2] = (f32)(time * (double)(values[5] - values[2]) + values[2]);
+        out[0] = time * (values[3] - values[0]) + values[0];
+        out[1] = time * (values[4] - values[1]) + values[1];
+        out[2] = time * (values[5] - values[2]) + values[2];
         return;
     }
 
@@ -6835,7 +7195,7 @@ void spline_getvalue(double time, float* out, int count, float* values, int time
     high = count - 1;
     while (low < high) {
         middle = (low + high) / 2;
-        if ((double)times[middle] < time) {
+        if (times[middle] < time) {
             low = middle + 1;
         } else {
             high = middle;
@@ -6846,7 +7206,7 @@ void spline_getvalue(double time, float* out, int count, float* values, int time
         index--;
     }
 
-    localTime = (f32)(time - (double)times[index]);
+    localTime = time - times[index];
     span = times[index + 1] - times[index];
     for (axis = 0; axis < 3; axis++) {
         slope0 = slopes[index * 3 + axis];

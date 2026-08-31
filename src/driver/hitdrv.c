@@ -211,33 +211,57 @@ void* hitEntrySub(void* joint, s32 parent, void* parentMtx, s32 rootOnly, s32 gr
         if (grand != NULL) {
             hitGrand = _hitEnt(grand, (s32)hitChild, (s32)hitChild + 0x0C, groupIndex);
             if (*(void**)((s32)grand + 0x0C) != NULL) {
-                hitEntrySub(*(void**)((s32)grand + 0x0C), (s32)hitGrand, (void*)((s32)hitGrand + 0x0C), 0, groupIndex);
+                *(void**)((s32)hitGrand + 0xD8) = hitEntrySub(*(void**)((s32)grand + 0x0C), (s32)hitGrand, (void*)((s32)hitGrand + 0x0C), 0, groupIndex);
             }
             if (*(void**)((s32)grand + 0x10) != NULL) {
-                hitEntrySub(*(void**)((s32)grand + 0x10), (s32)hitChild, (void*)((s32)hitChild + 0x0C), 0, groupIndex);
+                *(void**)((s32)hitGrand + 0xDC) = hitEntrySub(*(void**)((s32)grand + 0x10), (s32)hitChild, (void*)((s32)hitChild + 0x0C), 0, groupIndex);
             }
             *(void**)((s32)hitChild + 0xD8) = hitGrand;
         }
         child = *(void**)((s32)child + 0x10);
         if (child != NULL) {
             hitGrand = _hitEnt(child, (s32)root, (s32)root + 0x0C, groupIndex);
-            if (*(void**)((s32)child + 0x0C) != NULL)
-                hitEntrySub(*(void**)((s32)child + 0x0C), (s32)hitGrand, (void*)((s32)hitGrand + 0x0C), 0, groupIndex);
-            if (*(void**)((s32)child + 0x10) != NULL)
-                hitEntrySub(*(void**)((s32)child + 0x10), (s32)root, (void*)((s32)root + 0x0C), 0, groupIndex);
+            if (*(void**)((s32)child + 0x0C) != NULL) {
+                *(void**)((s32)hitGrand + 0xD8) = hitEntrySub(*(void**)((s32)child + 0x0C), (s32)hitGrand, (void*)((s32)hitGrand + 0x0C), 0, groupIndex);
+            }
+            if (*(void**)((s32)child + 0x10) != NULL) {
+                *(void**)((s32)hitGrand + 0xDC) = hitEntrySub(*(void**)((s32)child + 0x10), (s32)root, (void*)((s32)root + 0x0C), 0, groupIndex);
+            }
             *(void**)((s32)hitChild + 0xDC) = hitGrand;
         }
         *(void**)((s32)root + 0xD8) = hitChild;
     }
-    if (rootOnly == 0 && *(void**)((s32)joint + 0x10) != NULL) {
+    if (rootOnly == 0) {
         child = *(void**)((s32)joint + 0x10);
-        hitChild = _hitEnt(child, parent, (s32)parentMtx, groupIndex);
-        *(void**)((s32)root + 0xDC) = hitChild;
+        if (child != NULL) {
+            hitChild = _hitEnt(child, parent, (s32)parentMtx, groupIndex);
+            grand = *(void**)((s32)child + 0x0C);
+            if (grand != NULL) {
+                hitGrand = _hitEnt(grand, (s32)hitChild, (s32)hitChild + 0x0C, groupIndex);
+                if (*(void**)((s32)grand + 0x0C) != NULL) {
+                    *(void**)((s32)hitGrand + 0xD8) = hitEntrySub(*(void**)((s32)grand + 0x0C), (s32)hitGrand, (void*)((s32)hitGrand + 0x0C), 0, groupIndex);
+                }
+                if (*(void**)((s32)grand + 0x10) != NULL) {
+                    *(void**)((s32)hitGrand + 0xDC) = hitEntrySub(*(void**)((s32)grand + 0x10), (s32)hitChild, (void*)((s32)hitChild + 0x0C), 0, groupIndex);
+                }
+                *(void**)((s32)hitChild + 0xD8) = hitGrand;
+            }
+            child = *(void**)((s32)child + 0x10);
+            if (child != NULL) {
+                hitGrand = _hitEnt(child, parent, (s32)parentMtx, groupIndex);
+                if (*(void**)((s32)child + 0x0C) != NULL) {
+                    *(void**)((s32)hitGrand + 0xD8) = hitEntrySub(*(void**)((s32)child + 0x0C), (s32)hitGrand, (void*)((s32)hitGrand + 0x0C), 0, groupIndex);
+                }
+                if (*(void**)((s32)child + 0x10) != NULL) {
+                    *(void**)((s32)hitGrand + 0xDC) = hitEntrySub(*(void**)((s32)child + 0x10), parent, parentMtx, 0, groupIndex);
+                }
+                *(void**)((s32)hitChild + 0xDC) = hitGrand;
+            }
+            *(void**)((s32)root + 0xDC) = hitChild;
+        }
     }
-
     return root;
 }
-
 
 void* hitEntry(void* mapObj, void* arg, s32 idx) {
     extern void* mapGetWork(void);
@@ -1508,7 +1532,6 @@ s32 hitCalcVtxPosition(void* hit) {
     extern void PSMTXMultVec(void*, void*, void*);
     extern void PSVECSubtract(void*, void*, void*);
     extern void PSVECCrossProduct(void*, void*, void*);
-    void* model;
     void* joint;
     void* shape;
     s32* poly;
@@ -1519,34 +1542,34 @@ s32 hitCalcVtxPosition(void* hit) {
     s32 shapeIndex;
     s32 triIndex;
     s32 triOffset;
-    s32 vertexCount;
-    s32 index0;
-    s32 index1;
-    s32 index2;
-    s32 temp;
 
     if (*(s32*)((s32)hit + 0xAC) == 0) {
         return 0;
     }
-    model = *(void**)((s32)hit + 8);
     jointOffset = 0;
-    for (jointIndex = 0; jointIndex < *(s32*)((s32)model + 0x5C); jointIndex++) {
-        joint = *(void**)((s32)model + jointOffset + 0x64);
+    for (jointIndex = 0; jointIndex < *(s32*)(*(s32*)((s32)hit + 8) + 0x5C); jointIndex++) {
+        joint = *(void**)(*(s32*)((s32)hit + 8) + jointOffset + 0x64);
         if (joint != 0) {
             if (*(u8*)((s32)joint + 3) == 0) {
+                s32 index0;
+                s32 index1;
+                s32 index2;
+                s32 temp;
+                s32* polyIter;
                 shape = joint;
                 for (shapeIndex = 0; shapeIndex < *(s32*)((s32)joint + 4); shapeIndex++) {
                     poly = *(s32**)((s32)shape + 0x10);
+                    polyIter = poly;
                     triOffset = count * 0x54;
                     for (triIndex = 0; triIndex < *poly - 2; triIndex++) {
                         tri = (void*)(*(s32*)((s32)hit + 0xAC) + triOffset);
-                        index0 = *(s16*)((s32)poly + triIndex * 0x18 + 4);
-                        index1 = *(s16*)((s32)poly + (triIndex + 1) * 0x18 + 4);
-                        index2 = *(s16*)((s32)poly + (triIndex + 2) * 0x18 + 4);
+                        index1 = *(s16*)((s32)polyIter + 0x1C);
+                        index2 = *(s16*)((s32)polyIter + 0x34);
                         count++;
                         triOffset += 0x54;
                         PSMTXMultVec((void*)((s32)hit + 0xC),
-                                     (void*)(**(s32**)((s32)joint + 0xC) + 4 + index0 * 0xC), tri);
+                                     (void*)(**(s32**)((s32)joint + 0xC) + 4 +
+                                             *(s16*)((s32)polyIter + 4) * 0xC), tri);
                         temp = index1;
                         if ((triIndex & 1) == 0) temp = index2;
                         PSMTXMultVec((void*)((s32)hit + 0xC),
@@ -1561,10 +1584,16 @@ s32 hitCalcVtxPosition(void* hit) {
                         PSVECSubtract(tri, (void*)((s32)tri + 0xC), (void*)((s32)tri + 0x30));
                         PSVECSubtract((void*)((s32)tri + 0xC), (void*)((s32)tri + 0x18), (void*)((s32)tri + 0x3C));
                         PSVECCrossProduct((void*)((s32)tri + 0x24), (void*)((s32)tri + 0x30), (void*)((s32)tri + 0x48));
+                        polyIter += 6;
                     }
                     shape = (void*)((s32)shape + 4);
                 }
             } else {
+                s32 vertexCount;
+                s32 index0;
+                s32 index1;
+                s32 index2;
+                s32 temp;
                 void* map = mapGetWork();
                 u32 flags = *(u32*)((s32)joint + 8);
                 s32 bits = 0;
@@ -1656,444 +1685,458 @@ s32 hitCalcVtxPosition(void* hit) {
     return count;
 }
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw on
-s32 hitCheckVecFilter(s32* work, void* filter) {
-    typedef s32 (*HitVecFilterFunc)(s32*, void*);
 
-    extern void* mapGetWork(void);
-    extern void* unk_8041e628;
-    extern const f32 float_0_8041f838;
-    extern const f32 float_1_8041f844;
-    extern const f32 float_neg1_8041f848;
-    extern const f32 float_0p5_8041f84c;
-    extern f32 PSVECSquareMag(void* v);
-    extern void PSVECScale(void* src, void* dst, f32 scale);
-    extern void PSVECAdd(void* a, void* b, void* out);
-    extern void PSVECSubtract(void* a, void* b, void* out);
-    extern f32 PSVECDistance(void* a, void* b);
-    extern f32 PSVECDotProduct(void* a, void* b);
-    extern void PSVECCrossProduct(void* a, void* b, void* out);
-    extern void PSVECNormalize(void* src, void* dst);
-    extern u8 checkTriVec_xz(void* ray, void* tri);
+typedef struct HitVecLocal {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec;
 
-    f32* fwork;
-    s32* iwork;
-    void* hit;
-    void* tri;
-    s32 triIndex;
-    s32 oneSided;
-    s32 hitFound;
-    s32 bestHit;
-    f32 halfLen;
-    f32 bestT;
-    f32 dirY;
-    f32 dot;
-    f32 denom;
-    f32 t;
-    f32 side;
-    f32 zero;
-    f32 scanPos[3];
-    f32 diff0[3];
-    f32 diff1[3];
-    f32 diff2[3];
-    f32 cross0[3];
-    f32 cross1[3];
-    f32 cross2[3];
-    f32 scaled[3];
-    s32 bestPos[3];
-    s32 bestNormal[3];
-    f32 norm[3];
+typedef struct HitVector {
+    Vec v0;
+    Vec v1;
+    Vec v2;
+    Vec edge0;
+    Vec edge1;
+    Vec edge2;
+    Vec normal;
+} HitVector;
 
-    fwork = (f32*)work;
-    iwork = work;
+typedef struct HitDrawModeLocal {
+    u8 unk0;
+    u8 cullMode;
+} HitDrawModeLocal;
 
-    mapGetWork();
+typedef struct HitJointLocal {
+    u8 unk0[0x58];
+    HitDrawModeLocal* drawMode;
+} HitJointLocal;
 
-    if (PSVECSquareMag((void*)(work + 6)) == float_0_8041f838) {
-        return 0;
-    }
+struct HitCheckQuery {
+    BOOL singleSided;
+    s32 user0;
+    s32 user1;
+    Vec targetPos;
+    Vec targetDir;
+    Vec hitPos;
+    Vec hitNormal;
+    f32 targetDistance;
+};
 
-    zero = float_0_8041f838;
-    hitFound = 0;
-    bestHit = 0;
-    bestT = float_neg1_8041f848;
-    halfLen = fwork[15] * float_0p5_8041f84c;
+struct HitEntry {
+    u16 flags;
+    u8 unk2[2];
+    s32 attributes;
+    HitJointLocal* joint;
+    u8 unkC[0x9C - 0xC];
+    Vec centerLocal;
+    s16 unkA8;
+    s16 mapIndex;
+    HitVector* vectors;
+    void* damage;
+    u8 unkB4[0xC0 - 0xB4];
+    Vec centerWorld;
+    f32 radius;
+    void* mapObj;
+    struct HitEntry* parent;
+    struct HitEntry* child;
+    struct HitEntry* sibling;
+    struct HitEntry* siblingActive;
+};
 
-    PSVECScale((void*)(work + 6), scanPos, halfLen);
-    PSVECAdd((void*)(work + 3), scanPos, scanPos);
+extern void* unk_8041e628;
+extern const f32 float_0_8041f838;
+extern const f32 float_1_8041f844;
+extern const f32 float_neg1_8041f848;
+extern const f32 float_0p5_8041f84c;
+extern f32 PSVECSquareMag(void* v);
+extern void PSVECScale(void* src, void* dst, f32 scale);
+extern void PSVECAdd(void* a, void* b, void* out);
+extern void PSVECSubtract(void* a, void* b, void* out);
+extern f32 PSVECDistance(void* a, void* b);
+extern f32 PSVECDotProduct(void* a, void* b);
+extern void PSVECCrossProduct(void* a, void* b, void* out);
+extern void PSVECNormalize(void* src, void* dst);
+extern u8 checkTriVec_xz(void* ray, void* tri);
+inline BOOL tempfunc(HitCheckQuery* query, HitVector* vector) {
+    Vec sp80;
+    Vec sp8C;
+    Vec sp98;
+    f32 dotProduct;
+    f32 temp_f2;
 
-    dirY = fwork[7];
-
-    hit = unk_8041e628;
-    if (dirY == zero) {
-        while (hit != NULL) {
-            if ((filter == NULL || ((HitVecFilterFunc)filter)(work, hit) != 0) &&
-                PSVECDistance(scanPos, (void*)((s32)hit + 0xC0)) <= halfLen + *(f32*)((s32)hit + 0xCC)) {
-                if (*(u8*)(*(s32*)(*(s32*)((s32)hit + 0x08) + 0x58) + 1) == 1) {
-                    iwork[0] = 1;
-                } else {
-                    iwork[0] = 0;
-                }
-
-                tri = *(void**)((s32)hit + 0xAC);
-                triIndex = 0;
-                while (triIndex < *(s16*)((s32)hit + 0xA8)) {
-                    if ((iwork[0] == 0 ||
-                         PSVECDotProduct((void*)((s32)tri + 0x48), (void*)(work + 6)) < zero) &&
-                        checkTriVec_xz(work, tri) != 0) {
-                        if (bestT < zero || fwork[15] < bestT) {
-                            bestT = fwork[15];
-                            bestHit = (s32)hit;
-                            hitFound = 1;
-                            bestPos[0] = iwork[9];
-                            bestPos[1] = iwork[10];
-                            bestPos[2] = iwork[11];
-                            bestNormal[0] = iwork[12];
-                            bestNormal[1] = iwork[13];
-                            bestNormal[2] = iwork[14];
-                        }
-                    }
-                    triIndex++;
-                    tri = (void*)((s32)tri + 0x54);
-                }
-            }
-            hit = *(void**)((s32)hit + 0xE0);
+    PSVECSubtract(&query->targetPos, &vector->v0, &sp80);
+    dotProduct = PSVECDotProduct(&vector->normal, &sp80);
+    if (query->singleSided) {
+        if (dotProduct < float_0_8041f838) {
+            return 0;
         }
-    } else if (fwork[6] == zero && fwork[8] == zero && dirY == float_neg1_8041f848) {
-        while (hit != NULL) {
-            if ((filter == NULL || ((HitVecFilterFunc)filter)(work, hit) != 0) &&
-                PSVECDistance(scanPos, (void*)((s32)hit + 0xC0)) <= halfLen + *(f32*)((s32)hit + 0xCC)) {
-                if (*(u8*)(*(s32*)(*(s32*)((s32)hit + 0x08) + 0x58) + 1) == 1) {
-                    iwork[0] = 1;
-                } else {
-                    iwork[0] = 0;
-                }
-
-                tri = *(void**)((s32)hit + 0xAC);
-                triIndex = 0;
-                while (triIndex < *(s16*)((s32)hit + 0xA8)) {
-                    if (iwork[0] == 0 || *(f32*)((s32)tri + 0x4C) > zero) {
-                        PSVECSubtract((void*)(work + 3), tri, diff0);
-                        dot = PSVECDotProduct((void*)((s32)tri + 0x48), diff0);
-                        hitFound = 0;
-
-                        if (iwork[0] == 0) {
-                            if (*(f32*)((s32)tri + 0x4C) * dot > zero) {
-                                side = dot * (diff0[2] * *(f32*)((s32)tri + 0x24) -
-                                              diff0[0] * *(f32*)((s32)tri + 0x2C));
-                                if (side >= zero) {
-                                    PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x0C), diff1);
-                                    side = dot * (diff1[2] * *(f32*)((s32)tri + 0x30) -
-                                                  diff1[0] * *(f32*)((s32)tri + 0x38));
-                                    if (side >= zero) {
-                                        PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x18), diff2);
-                                        side = dot * (diff2[2] * *(f32*)((s32)tri + 0x3C) -
-                                                      diff2[0] * *(f32*)((s32)tri + 0x44));
-                                        if (side >= zero) {
-                                            hitFound = 1;
-                                        }
-                                    }
-                                }
-                            }
-                        } else if (dot >= zero) {
-                            side = diff0[2] * *(f32*)((s32)tri + 0x24) -
-                                   diff0[0] * *(f32*)((s32)tri + 0x2C);
-                            if (side >= zero) {
-                                PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x0C), diff1);
-                                side = diff1[2] * *(f32*)((s32)tri + 0x30) -
-                                       diff1[0] * *(f32*)((s32)tri + 0x38);
-                                if (side >= zero) {
-                                    PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x18), diff2);
-                                    side = diff2[2] * *(f32*)((s32)tri + 0x3C) -
-                                           diff2[0] * *(f32*)((s32)tri + 0x44);
-                                    if (side >= zero) {
-                                        hitFound = 1;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (hitFound != 0) {
-                            t = -dot / -*(f32*)((s32)tri + 0x4C);
-                            if (fwork[15] < zero || t < fwork[15]) {
-                                fwork[15] = t;
-                                fwork[9] = fwork[3];
-                                fwork[10] = fwork[4] - t;
-                                fwork[11] = fwork[5];
-                                if (dot < zero) {
-                                    PSVECScale((void*)((s32)tri + 0x48), (void*)(work + 12), float_neg1_8041f848);
-                                } else {
-                                    iwork[12] = *(s32*)((s32)tri + 0x48);
-                                    iwork[13] = *(s32*)((s32)tri + 0x4C);
-                                    iwork[14] = *(s32*)((s32)tri + 0x50);
-                                }
-                                if (bestT < zero || fwork[15] < bestT) {
-                                    bestT = fwork[15];
-                                    bestHit = (s32)hit;
-                                    bestPos[0] = iwork[9];
-                                    bestPos[1] = iwork[10];
-                                    bestPos[2] = iwork[11];
-                                    bestNormal[0] = iwork[12];
-                                    bestNormal[1] = iwork[13];
-                                    bestNormal[2] = iwork[14];
-                                }
-                            }
-                        }
-                    }
-                    triIndex++;
-                    tri = (void*)((s32)tri + 0x54);
-                }
-            }
-            hit = *(void**)((s32)hit + 0xE0);
+        if (((sp80.z * vector->edge0.x) - (sp80.x * vector->edge0.z)) < float_0_8041f838) {
+            return 0;
         }
-    } else if (fwork[6] == zero && fwork[8] == zero && dirY == float_1_8041f844) {
-        while (hit != NULL) {
-            if ((filter == NULL || ((HitVecFilterFunc)filter)(work, hit) != 0) &&
-                PSVECDistance(scanPos, (void*)((s32)hit + 0xC0)) <= halfLen + *(f32*)((s32)hit + 0xCC)) {
-                if (*(u8*)(*(s32*)(*(s32*)((s32)hit + 0x08) + 0x58) + 1) == 1) {
-                    iwork[0] = 1;
-                } else {
-                    iwork[0] = 0;
-                }
-
-                tri = *(void**)((s32)hit + 0xAC);
-                triIndex = 0;
-                while (triIndex < *(s16*)((s32)hit + 0xA8)) {
-                    if (iwork[0] == 0 || *(f32*)((s32)tri + 0x4C) < zero) {
-                        PSVECSubtract((void*)(work + 3), tri, diff0);
-                        dot = PSVECDotProduct((void*)((s32)tri + 0x48), diff0);
-                        hitFound = 0;
-
-                        if (iwork[0] == 0) {
-                            if (*(f32*)((s32)tri + 0x4C) * dot < zero) {
-                                side = dot * (diff0[2] * *(f32*)((s32)tri + 0x24) -
-                                              diff0[0] * *(f32*)((s32)tri + 0x2C));
-                                if (side <= zero) {
-                                    PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x0C), diff1);
-                                    side = dot * (diff1[2] * *(f32*)((s32)tri + 0x30) -
-                                                  diff1[0] * *(f32*)((s32)tri + 0x38));
-                                    if (side <= zero) {
-                                        PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x18), diff2);
-                                        side = dot * (diff2[2] * *(f32*)((s32)tri + 0x3C) -
-                                                      diff2[0] * *(f32*)((s32)tri + 0x44));
-                                        if (side <= zero) {
-                                            hitFound = 1;
-                                        }
-                                    }
-                                }
-                            }
-                        } else if (dot >= zero) {
-                            side = diff0[2] * *(f32*)((s32)tri + 0x24) -
-                                   diff0[0] * *(f32*)((s32)tri + 0x2C);
-                            if (side <= zero) {
-                                PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x0C), diff1);
-                                side = diff1[2] * *(f32*)((s32)tri + 0x30) -
-                                       diff1[0] * *(f32*)((s32)tri + 0x38);
-                                if (side <= zero) {
-                                    PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x18), diff2);
-                                    side = diff2[2] * *(f32*)((s32)tri + 0x3C) -
-                                           diff2[0] * *(f32*)((s32)tri + 0x44);
-                                    if (side <= zero) {
-                                        hitFound = 1;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (hitFound != 0) {
-                            t = -dot / *(f32*)((s32)tri + 0x4C);
-                            if (fwork[15] < zero || t < fwork[15]) {
-                                fwork[15] = t;
-                                fwork[9] = fwork[3];
-                                fwork[10] = fwork[4] + t;
-                                fwork[11] = fwork[5];
-                                if (dot < zero) {
-                                    PSVECScale((void*)((s32)tri + 0x48), (void*)(work + 12), float_neg1_8041f848);
-                                } else {
-                                    iwork[12] = *(s32*)((s32)tri + 0x48);
-                                    iwork[13] = *(s32*)((s32)tri + 0x4C);
-                                    iwork[14] = *(s32*)((s32)tri + 0x50);
-                                }
-                                if (bestT < zero || fwork[15] < bestT) {
-                                    bestT = fwork[15];
-                                    bestHit = (s32)hit;
-                                    bestPos[0] = iwork[9];
-                                    bestPos[1] = iwork[10];
-                                    bestPos[2] = iwork[11];
-                                    bestNormal[0] = iwork[12];
-                                    bestNormal[1] = iwork[13];
-                                    bestNormal[2] = iwork[14];
-                                }
-                            }
-                        }
-                    }
-                    triIndex++;
-                    tri = (void*)((s32)tri + 0x54);
-                }
-            }
-            hit = *(void**)((s32)hit + 0xE0);
+        PSVECSubtract(&query->targetPos, &vector->v1, &sp8C);
+        if (((sp8C.z * vector->edge1.x) - (sp8C.x * vector->edge1.z)) < float_0_8041f838) {
+            return 0;
+        }
+        PSVECSubtract(&query->targetPos, &vector->v2, &sp98);
+        if (((sp98.z * vector->edge2.x) - (sp98.x * vector->edge2.z)) < float_0_8041f838) {
+            return 0;
         }
     } else {
-        while (hit != NULL) {
-            if ((filter == NULL || ((HitVecFilterFunc)filter)(work, hit) != 0) &&
-                PSVECDistance(scanPos, (void*)((s32)hit + 0xC0)) <= halfLen + *(f32*)((s32)hit + 0xCC)) {
-                if (*(u8*)(*(s32*)(*(s32*)((s32)hit + 0x08) + 0x58) + 1) == 1) {
-                    iwork[0] = 1;
-                } else {
-                    iwork[0] = 0;
-                }
+        if ((vector->normal.y * dotProduct) <= float_0_8041f838) {
+            return 0;
+        }
+        if ((dotProduct * ((sp80.z * vector->edge0.x) - (sp80.x * vector->edge0.z))) < float_0_8041f838) {
+            return 0;
+        }
+        PSVECSubtract(&query->targetPos, &vector->v1, &sp8C);
+        if ((dotProduct * ((sp8C.z * vector->edge1.x) - (sp8C.x * vector->edge1.z))) < float_0_8041f838) {
+            return 0;
+        }
+        PSVECSubtract(&query->targetPos, &vector->v2, &sp98);
+        if ((dotProduct * ((sp98.z * vector->edge2.x) - (sp98.x * vector->edge2.z))) < float_0_8041f838) {
+            return 0;
+        }
+    }
+    temp_f2 = -vector->normal.y;
+    if ((query->targetDistance >= float_0_8041f838) && ((-dotProduct / temp_f2) >= query->targetDistance)) {
+        return 0;
+    }
+    query->targetDistance = -dotProduct / temp_f2;
+    query->hitPos.x = query->targetPos.x;
+    query->hitPos.y = query->targetPos.y - query->targetDistance;
+    query->hitPos.z = query->targetPos.z;
+    if (dotProduct >= float_0_8041f838) {
+        query->hitNormal = vector->normal;
+    } else {
+        PSVECScale(&vector->normal, &query->hitNormal, float_neg1_8041f848);
+    }
+    return 1;
+}
 
-                tri = *(void**)((s32)hit + 0xAC);
-                triIndex = 0;
-                while (triIndex < *(s16*)((s32)hit + 0xA8)) {
-                    if (iwork[0] == 0 ||
-                        PSVECDotProduct((void*)((s32)tri + 0x48), (void*)(work + 6)) < zero) {
-                        PSVECSubtract((void*)(work + 3), tri, diff0);
-                        dot = PSVECDotProduct((void*)((s32)tri + 0x48), diff0);
-                        hitFound = 0;
+inline BOOL tempfunc2(HitCheckQuery* query, HitVector* vector) {
+    Vec sp5C;
+    Vec sp68;
+    Vec sp74;
+    f32 dotProduct;
+    f32 temp_f2;
 
-                        if (iwork[0] == 0) {
-                            denom = PSVECDotProduct((void*)((s32)tri + 0x48), (void*)(work + 6));
-                            if (denom * dot < zero) {
-                                PSVECCrossProduct((void*)(work + 6), (void*)((s32)tri + 0x24), cross0);
-                                side = dot * PSVECDotProduct(diff0, cross0);
-                                if (side >= zero) {
-                                    PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x0C), diff1);
-                                    PSVECCrossProduct((void*)(work + 6), (void*)((s32)tri + 0x30), cross1);
-                                    side = dot * PSVECDotProduct(diff1, cross1);
-                                    if (side >= zero) {
-                                        PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x18), diff2);
-                                        PSVECCrossProduct((void*)(work + 6), (void*)((s32)tri + 0x3C), cross2);
-                                        side = dot * PSVECDotProduct(diff2, cross2);
-                                        if (side >= zero) {
-                                            hitFound = 1;
-                                        }
-                                    }
-                                }
-                            }
-                        } else if (dot >= zero) {
-                            PSVECCrossProduct((void*)(work + 6), (void*)((s32)tri + 0x24), cross0);
-                            side = PSVECDotProduct(diff0, cross0);
-                            if (side >= zero) {
-                                PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x0C), diff1);
-                                PSVECCrossProduct((void*)(work + 6), (void*)((s32)tri + 0x30), cross1);
-                                side = PSVECDotProduct(diff1, cross1);
-                                if (side >= zero) {
-                                    PSVECSubtract((void*)(work + 3), (void*)((s32)tri + 0x18), diff2);
-                                    PSVECCrossProduct((void*)(work + 6), (void*)((s32)tri + 0x3C), cross2);
-                                    side = PSVECDotProduct(diff2, cross2);
-                                    if (side >= zero) {
-                                        denom = PSVECDotProduct((void*)((s32)tri + 0x48), (void*)(work + 6));
-                                        hitFound = 1;
-                                    }
-                                }
+    PSVECSubtract(&query->targetPos, &vector->v0, &sp5C);
+    dotProduct = PSVECDotProduct(&vector->normal, &sp5C);
+    if (query->singleSided) {
+        if (dotProduct < float_0_8041f838) {
+            return 0;
+        }
+        if (((sp5C.z * vector->edge0.x) - (sp5C.x * vector->edge0.z)) > float_0_8041f838) {
+            return 0;
+        }
+        PSVECSubtract(&query->targetPos, &vector->v1, &sp68);
+        if (((sp68.z * vector->edge1.x) - (sp68.x * vector->edge1.z)) > float_0_8041f838) {
+            return 0;
+        }
+        PSVECSubtract(&query->targetPos, &vector->v2, &sp74);
+        if (((sp74.z * vector->edge2.x) - (sp74.x * vector->edge2.z)) > float_0_8041f838) {
+            return 0;
+        }
+    } else {
+        if ((vector->normal.y * dotProduct) >= float_0_8041f838) {
+            return 0;
+        }
+        if ((dotProduct * ((sp5C.z * vector->edge0.x) - (sp5C.x * vector->edge0.z))) > float_0_8041f838) {
+            return 0;
+        }
+        PSVECSubtract(&query->targetPos, &vector->v1, &sp68);
+        if ((dotProduct * ((sp68.z * vector->edge1.x) - (sp68.x * vector->edge1.z))) > float_0_8041f838) {
+            return 0;
+        }
+        PSVECSubtract(&query->targetPos, &vector->v2, &sp74);
+        if ((dotProduct * ((sp74.z * vector->edge2.x) - (sp74.x * vector->edge2.z))) > float_0_8041f838) {
+            return 0;
+        }
+    }
+    temp_f2 = vector->normal.y;
+    if ((query->targetDistance >= float_0_8041f838) && ((-dotProduct / temp_f2) >= query->targetDistance)) {
+        return 0;
+    }
+    query->targetDistance = -dotProduct / temp_f2;
+    query->hitPos.x = query->targetPos.x;
+    query->hitPos.y = query->targetPos.y + query->targetDistance;
+    query->hitPos.z = query->targetPos.z;
+    if (dotProduct >= float_0_8041f838) {
+        query->hitNormal = vector->normal;
+    } else {
+        PSVECScale(&vector->normal, &query->hitNormal, float_neg1_8041f848);
+    }
+    return 1;
+}
+
+inline BOOL tempfunc3(HitCheckQuery* query, HitVector* vector) {
+    Vec sp8;
+    Vec sp14;
+    Vec sp20;
+    Vec sp2C;
+    Vec sp38;
+    Vec sp44;
+    Vec sp50;
+    f32 dotProduct;
+    f32 var_f27;
+
+    PSVECSubtract(&query->targetPos, &vector->v0, &sp8);
+    dotProduct = PSVECDotProduct(&vector->normal, &sp8);
+    if (query->singleSided) {
+        if (dotProduct < float_0_8041f838) {
+            return 0;
+        }
+        PSVECCrossProduct(&query->targetDir, &vector->edge0, &sp2C);
+        if (PSVECDotProduct(&sp8, &sp2C) < float_0_8041f838) {
+            return 0;
+        }
+        PSVECSubtract(&query->targetPos, &vector->v1, &sp14);
+        PSVECCrossProduct(&query->targetDir, &vector->edge1, &sp38);
+        if (PSVECDotProduct(&sp14, &sp38) < float_0_8041f838) {
+            return 0;
+        }
+        PSVECSubtract(&query->targetPos, &vector->v2, &sp20);
+        PSVECCrossProduct(&query->targetDir, &vector->edge2, &sp44);
+        if (PSVECDotProduct(&sp20, &sp44) < float_0_8041f838) {
+            return 0;
+        }
+        var_f27 = PSVECDotProduct(&vector->normal, &query->targetDir);
+    } else {
+        var_f27 = PSVECDotProduct(&vector->normal, &query->targetDir);
+        if ((var_f27 * dotProduct) >= float_0_8041f838) {
+            return 0;
+        }
+        PSVECCrossProduct(&query->targetDir, &vector->edge0, &sp2C);
+        if ((dotProduct * PSVECDotProduct(&sp8, &sp2C)) < float_0_8041f838) {
+            return 0;
+        }
+        PSVECSubtract(&query->targetPos, &vector->v1, &sp14);
+        PSVECCrossProduct(&query->targetDir, &vector->edge1, &sp38);
+        if ((dotProduct * PSVECDotProduct(&sp14, &sp38)) < float_0_8041f838) {
+            return 0;
+        }
+        PSVECSubtract(&query->targetPos, &vector->v2, &sp20);
+        PSVECCrossProduct(&query->targetDir, &vector->edge2, &sp44);
+        if ((dotProduct * PSVECDotProduct(&sp20, &sp44)) < float_0_8041f838) {
+            return 0;
+        }
+    }
+
+    if ((query->targetDistance >= float_0_8041f838) && ((-dotProduct / var_f27) >= query->targetDistance)) {
+        return 0;
+    }
+    query->targetDistance = -dotProduct / var_f27;
+    PSVECScale(&query->targetDir, &sp50, query->targetDistance);
+    PSVECAdd(&query->targetPos, &sp50, &query->hitPos);
+    if (dotProduct >= float_0_8041f838) {
+        query->hitNormal = vector->normal;
+    } else {
+        PSVECScale(&vector->normal, &query->hitNormal, float_neg1_8041f848);
+    }
+    return 1;
+}
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw on
+HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
+    f32 temp;
+    HitVector* vector;
+    Vec position;
+    Vec spBC;
+    Vec normal;
+    Vec spA4;
+    HitEntry* var_r29;
+    HitEntry* var_r28;
+    int i;
+    f32 distance;
+    f32 var_f29;
+    HitVector* var_r31;
+    f32 temp_f28;
+
+    mapGetWork();
+    var_r28 = NULL;
+    if (!PSVECSquareMag(&query->targetDir)) {
+        return NULL;
+    }
+    var_f29 = float_neg1_8041f848;
+    temp = float_0p5_8041f84c;
+    temp_f28 = query->targetDistance * temp;
+    PSVECScale(&query->targetDir, &spA4, temp_f28);
+    PSVECAdd(&query->targetPos, &spA4, &spA4);
+    var_r29 = (HitEntry*)unk_8041e628;
+    if (query->targetDir.y == float_0_8041f838) {
+        while (var_r29 != NULL) {
+            if (callback == NULL || callback(query, var_r29)) {
+                if (!(PSVECDistance(&spA4, &var_r29->centerWorld) > temp_f28 + var_r29->radius)) {
+                    if (var_r29->joint->drawMode->cullMode == 1) {
+                        query->singleSided = 1;
+                    } else {
+                        query->singleSided = 0;
+                    }
+                    var_r31 = var_r29->vectors;
+                    for (i = 0; i < var_r29->unkA8; i++, var_r31++) {
+                        if ((query->singleSided == 0) ||
+                            !(PSVECDotProduct(&var_r31->normal, &query->targetDir) >= float_0_8041f838)) {
+                            if (checkTriVec_xz(query, var_r31) && (var_f29 < float_0_8041f838 || var_f29 > query->targetDistance)) {
+                                var_f29 = query->targetDistance;
+                                var_r28 = var_r29;
+                                distance = var_f29;
+                                position = query->hitPos;
+                                spBC = query->hitNormal;
                             }
                         }
-
-                        if (hitFound != 0) {
-                            t = -dot / denom;
-                            if (fwork[15] < zero || t < fwork[15]) {
-                                fwork[15] = t;
-                                PSVECScale((void*)(work + 6), scaled, t);
-                                PSVECAdd((void*)(work + 3), scaled, (void*)(work + 9));
-                                if (dot < zero) {
-                                    PSVECScale((void*)((s32)tri + 0x48), (void*)(work + 12), float_neg1_8041f848);
-                                } else {
-                                    iwork[12] = *(s32*)((s32)tri + 0x48);
-                                    iwork[13] = *(s32*)((s32)tri + 0x4C);
-                                    iwork[14] = *(s32*)((s32)tri + 0x50);
-                                }
-                                if (bestT < zero || fwork[15] < bestT) {
-                                    bestT = fwork[15];
-                                    bestHit = (s32)hit;
-                                    bestPos[0] = iwork[9];
-                                    bestPos[1] = iwork[10];
-                                    bestPos[2] = iwork[11];
-                                    bestNormal[0] = iwork[12];
-                                    bestNormal[1] = iwork[13];
-                                    bestNormal[2] = iwork[14];
+                    }
+                }
+            }
+            var_r29 = var_r29->siblingActive;
+        }
+    } else if (query->targetDir.x == float_0_8041f838 && query->targetDir.z == float_0_8041f838) {
+        if (query->targetDir.y == float_neg1_8041f848) {
+            while (var_r29 != NULL) {
+                if (callback == NULL || callback(query, var_r29)) {
+                    if (!(PSVECDistance(&spA4, &var_r29->centerWorld) > temp_f28 + var_r29->radius)) {
+                        if (var_r29->joint->drawMode->cullMode == 1) {
+                            query->singleSided = 1;
+                        } else {
+                            query->singleSided = 0;
+                        }
+                        vector = var_r29->vectors;
+                        for (i = 0; i < var_r29->unkA8; i++, vector++) {
+                            if (query->singleSided == 0 || !(vector->normal.y <= float_0_8041f838)) {
+                                if (tempfunc(query, vector) && (var_f29 < float_0_8041f838 || var_f29 > query->targetDistance)) {
+                                    var_f29 = query->targetDistance;
+                                    var_r28 = var_r29;
+                                    distance = var_f29;
+                                    position = query->hitPos;
+                                    spBC = query->hitNormal;
                                 }
                             }
                         }
                     }
-                    triIndex++;
-                    tri = (void*)((s32)tri + 0x54);
+                }
+                var_r29 = var_r29->siblingActive;
+            }
+        } else if (query->targetDir.y == float_1_8041f844) {
+            while (var_r29 != NULL) {
+                if (callback == NULL || callback(query, var_r29)) {
+                    if (!(PSVECDistance(&spA4, &var_r29->centerWorld) > temp_f28 + var_r29->radius)) {
+                        if (var_r29->joint->drawMode->cullMode == 1) {
+                            query->singleSided = 1;
+                        } else {
+                            query->singleSided = 0;
+                        }
+                        vector = var_r29->vectors;
+                        for (i = 0; i < var_r29->unkA8; i++, vector++) {
+                            if (query->singleSided == 0 || !(vector->normal.y >= float_0_8041f838)) {
+                                if (tempfunc2(query, vector) && (var_f29 < float_0_8041f838 || var_f29 > query->targetDistance)) {
+                                    var_f29 = query->targetDistance;
+                                    var_r28 = var_r29;
+                                    distance = var_f29;
+                                    position = query->hitPos;
+                                    spBC = query->hitNormal;
+                                }
+                            }
+                        }
+                    }
+                }
+                var_r29 = var_r29->siblingActive;
+            }
+        } else {
+            goto label_235;
+        }
+    } else {
+    label_235:
+        while (var_r29 != NULL) {
+            if (callback == NULL || callback(query, var_r29)) {
+                if (!(PSVECDistance(&spA4, &var_r29->centerWorld) > (temp_f28 + var_r29->radius))) {
+                    if (var_r29->joint->drawMode->cullMode == 1) {
+                        query->singleSided = 1;
+                    } else {
+                        query->singleSided = 0;
+                    }
+                    vector = var_r29->vectors;
+                    for (i = 0; i < var_r29->unkA8; i++, vector++) {
+                        if (query->singleSided == 0 || !(PSVECDotProduct(&vector->normal, &query->targetDir) >= float_0_8041f838)) {
+                            if (tempfunc3(query, vector) && (var_f29 < float_0_8041f838 || var_f29 > query->targetDistance)) {
+                                var_f29 = query->targetDistance;
+                                var_r28 = var_r29;
+                                distance = var_f29;
+                                position = query->hitPos;
+                                spBC = query->hitNormal;
+                            }
+                        }
+                    }
                 }
             }
-            hit = *(void**)((s32)hit + 0xE0);
+            var_r29 = var_r29->siblingActive;
         }
     }
-
-    if (bestHit != 0) {
-        PSVECNormalize(bestNormal, norm);
-        fwork[15] = bestT;
-        iwork[9] = bestPos[0];
-        iwork[10] = bestPos[1];
-        iwork[11] = bestPos[2];
-        iwork[12] = ((s32*)norm)[0];
-        iwork[13] = ((s32*)norm)[1];
-        iwork[14] = ((s32*)norm)[2];
+    if (var_r28 == NULL) {
+        return NULL;
     }
-
-    return bestHit;
+    PSVECNormalize(&spBC, &normal);
+    query->targetDistance = distance;
+    query->hitPos = position;
+    query->hitNormal = normal;
+    return var_r28;
 }
-
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw on
-s32 hitCheckFilter(f64 x, f64 y, f64 z, f64 vx, f64 vy, f64 vz, s32 filter,
-                   f32* outX, f32* outY, f32* outZ, f32* outDist,
-                   f32* outNX, f32* outNY, f32* outNZ) {
-    typedef struct HitVec {
+void* hitCheckFilter(void* filter, f32* outX, f32* outY, f32* outZ,
+                     f32* outDist, f32* outNX, f32* outNY, f32* outNZ,
+                     f32 x, f32 y, f32 z, f32 vx, f32 vy, f32 vz) {
+    typedef struct VecLocal {
         f32 x;
         f32 y;
         f32 z;
-    } HitVec;
-    typedef struct HitCheckWork {
-        s32 unk0;
-        s32 unk4;
-        s32 unk8;
-        HitVec position;
-        HitVec direction;
-        HitVec hitPosition;
-        HitVec hitNormal;
-        f32 distance;
-    } HitCheckWork;
+    } VecLocal;
+    typedef struct HitCheckQueryLocal {
+        s32 singleSided;
+        s32 user0;
+        s32 user1;
+        VecLocal targetPos;
+        VecLocal targetDir;
+        VecLocal hitPos;
+        VecLocal hitNormal;
+        f32 targetDistance;
+    } HitCheckQueryLocal;
 
     extern const f32 vec3_802bf7b8[3];
     extern const f32 vec3_802bf7c4[3];
-    HitVec position = *(const HitVec*)vec3_802bf7b8;
-    HitVec direction = *(const HitVec*)vec3_802bf7c4;
-    HitCheckWork work;
-    s32 result;
 
-    position.x = (f32)x;
-    position.y = (f32)y;
-    position.z = (f32)z;
-    direction.x = (f32)vx;
-    direction.y = (f32)vy;
-    direction.z = (f32)vz;
-    work.position = position;
-    work.direction = direction;
-    work.distance = *outDist;
+    HitCheckQueryLocal temp;
+    HitCheckQueryLocal* query = &temp;
+    VecLocal targetPos = *(VecLocal*)vec3_802bf7b8;
+    VecLocal targetDir = *(VecLocal*)vec3_802bf7c4;
+    void* entry;
 
-    result = hitCheckVecFilter((s32*)&work, (void*)filter);
-    if (result == 0) {
-        return 0;
+    targetPos.x = x;
+    targetPos.y = y;
+    targetPos.z = z;
+    targetDir.x = vx;
+    targetDir.y = vy;
+    targetDir.z = vz;
+    query->targetPos = targetPos;
+    query->targetDir = targetDir;
+    query->targetDistance = *outDist;
+    entry = (void*)hitCheckVecFilter((HitCheckQuery*)query, (HitFilterCallback)filter);
+    if (entry == NULL) {
+        return NULL;
     }
 
-    *outDist = work.distance;
-    *outX = work.hitPosition.x;
-    *outY = work.hitPosition.y;
-    *outZ = work.hitPosition.z;
-    *outNX = work.hitNormal.x;
-    *outNY = work.hitNormal.y;
-    *outNZ = work.hitNormal.z;
-    return result;
+    *outDist = query->targetDistance;
+    *outX = query->hitPos.x;
+    *outY = query->hitPos.y;
+    *outZ = query->hitPos.z;
+    *outNX = query->hitNormal.x;
+    *outNY = query->hitNormal.y;
+    *outNZ = query->hitNormal.z;
+    return entry;
 }
 
 #pragma use_lmw_stmw reset
@@ -2106,8 +2149,8 @@ u8 checkTriVec_xz(void* ray, void* tri) {
     extern void PSVECSubtract(void* a, void* b, void* out);
     extern f32 PSVECDotProduct(void* a, void* b);
     extern void PSVECScale(void* src, void* dst, f32 scale);
-    extern f32 float_0_8041f838;
-    extern f32 float_neg1_8041f848;
+    extern const f32 float_0_8041f838;
+    extern const f32 float_neg1_8041f848;
 
     f32 vec0[3];
     f32 vec1[3];
@@ -2227,34 +2270,58 @@ s32 chkFilterAttr(void* a, void* b) {
     return ((*(u32*)((s32)b + 0x4) & *(u32*)((s32)a + 0x4)) == 0);
 }
 
-s32 hitCheckAttr(f64 x, f64 y, f64 z, f64 vx, f64 vy, f64 vz, s32 flags,
-                 f32* outX, f32* outY, f32* outZ, f32* outDist,
-                 f32* outNX, f32* outNY, f32* outNZ) {
-    s32 work[16];
-    f32* values = (f32*)work;
-    s32 result;
+void* hitCheckAttr(s32 flags, f32* outX, f32* outY, f32* outZ, f32* outDist,
+                   f32* outNX, f32* outNY, f32* outNZ,
+                   f32 x, f32 y, f32 z, f32 vx, f32 vy, f32 vz) {
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+    typedef struct HitCheckQueryLocal {
+        s32 singleSided;
+        s32 user0;
+        s32 user1;
+        VecLocal targetPos;
+        VecLocal targetDir;
+        VecLocal hitPos;
+        VecLocal hitNormal;
+        f32 targetDistance;
+    } HitCheckQueryLocal;
 
-    values[3] = (f32)x;
-    values[4] = (f32)y;
-    values[5] = (f32)z;
-    values[6] = (f32)vx;
-    values[7] = (f32)vy;
-    values[8] = (f32)vz;
-    values[15] = *outDist;
-    work[1] = flags;
+    extern const f32 vec3_802bf7d0[3];
+    extern const f32 vec3_802bf7dc[3];
 
-    result = hitCheckVecFilter(work, chkFilterAttr);
-    if (result != 0) {
-        *outDist = values[15];
-        *outX = values[9];
-        *outY = values[10];
-        *outZ = values[11];
-        *outNX = values[12];
-        *outNY = values[13];
-        *outNZ = values[14];
+    HitCheckQueryLocal temp;
+    HitCheckQueryLocal* query = &temp;
+    VecLocal targetPos = *(VecLocal*)vec3_802bf7d0;
+    VecLocal targetDir = *(VecLocal*)vec3_802bf7dc;
+    void* entry;
+
+    targetPos.x = x;
+    targetPos.y = y;
+    targetPos.z = z;
+    targetDir.x = vx;
+    targetDir.y = vy;
+    targetDir.z = vz;
+    query->targetPos = targetPos;
+    query->targetDir = targetDir;
+    query->targetDistance = *outDist;
+    query->user0 = flags;
+    entry = (void*)hitCheckVecFilter((HitCheckQuery*)query, (HitFilterCallback)chkFilterAttr);
+    if (entry == NULL) {
+        return NULL;
     }
-    return result;
+    *outDist = query->targetDistance;
+    *outX = query->hitPos.x;
+    *outY = query->hitPos.y;
+    *outZ = query->hitPos.z;
+    *outNX = query->hitNormal.x;
+    *outNY = query->hitNormal.y;
+    *outNZ = query->hitNormal.z;
+    return entry;
 }
+
 void* hitCheckSphereFilter(void* filter, f32 x, f32 y, f32 z, f32 radius) {
     extern void* mapGetWork(void);
     extern f32 PSVECDistance(void* a, void* b);
@@ -2527,13 +2594,13 @@ next_hit:
     return NULL;
 }
 
-u8 hitObjGetPosSub(int param_1, s32 param_2, int* param_3, int param_4) {
+void hitObjGetPosSub(u32 param_1, u32 param_2, s32* param_3, BOOL param_4) {
   typedef struct { f32 x; f32 y; f32 z; } HitVec;
   extern void PSMTXMultVec(void* mtx, void* src, void* dst);
   extern void PSVECAdd(void* a, void* b, void* out);
-int iVar1;
-  int iVar2;
-  int iVar3;
+  u32 iVar1;
+  u32 iVar2;
+  u32 iVar3;
   HitVec VStack_d8;
   HitVec VStack_cc;
   HitVec VStack_c0;
@@ -2551,12 +2618,7 @@ int iVar1;
   HitVec VStack_30;
 
   iVar3 = *(int *)(param_1 + 0xd8);
-  if (iVar3 == 0) {
-    PSMTXMultVec((void*)(param_1 + 0xc), (void*)(param_1 + 0x9c), &VStack_30);
-    PSVECAdd((void*)param_2, &VStack_30, (void*)param_2);
-    *param_3 = *param_3 + 1;
-  }
-  else {
+  if (iVar3 != 0) {
     iVar2 = *(int *)(iVar3 + 0xd8);
     if (iVar2 == 0) {
       PSMTXMultVec((void*)(iVar3 + 0xc), (void*)(iVar3 + 0x9c), &VStack_3c);
@@ -2634,6 +2696,11 @@ int iVar1;
         }
       }
     }
+  }
+  else {
+    PSMTXMultVec((void*)(param_1 + 0xc), (void*)(param_1 + 0x9c), &VStack_30);
+    PSVECAdd((void*)param_2, &VStack_30, (void*)param_2);
+    *param_3 = *param_3 + 1;
   }
   if ((param_4 != 0) && (iVar3 = *(int *)(param_1 + 0xdc), iVar3 != 0)) {
     iVar2 = *(int *)(iVar3 + 0xd8);
@@ -2714,7 +2781,6 @@ int iVar1;
       }
     }
   }
-  return 0;
 }
 
 void hitObjGetPos(char* name, f32* out) {

@@ -7,16 +7,19 @@ extern void* __memAlloc();
 extern s32 strcmp(const char* a, const char* b);
 
 void offscreenInit(void) {
-    void* base = &work;
+    void* base;
 
-    *(s32*)base = 10;
-    *(void**)((s32)base + 4) = __memAlloc(0, *(s32*)base * 0x50);
-    memset(*(void**)((s32)base + 4), 0, *(s32*)base * 0x50);
+    *(s32*)&work = 10;
+    *(void**)((s32)&work + 4) =
+        __memAlloc(0, *(s32*)&work * 0x50);
+    memset(*(void**)((s32)&work + 4), 0, *(s32*)&work * 0x50);
+
+    base = &work;
     *(s32*)((s32)base + 8) = 10;
-    *(void**)((s32)base + 0xC) = __memAlloc(0, *(s32*)((s32)base + 8) * 0x50);
-    memset(*(void**)((s32)base + 0xC), 0, *(s32*)((s32)base + 8) * 0x50);
+    *(void**)((s32)base + 0xC) =
+        __memAlloc(0, *(s32*)((s32)base + 8) * 0x50);
+    memset(*(void**)((s32)base + 0xC), 0, 0x320);
 }
-
 
 void offscreenReset(s32 value) {
     void* wp = &work;

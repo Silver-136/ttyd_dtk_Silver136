@@ -98,6 +98,7 @@ s32 pressCheck(int param_1) {
 #pragma no_register_save_helpers reset
 
 
+#pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _2d_dead_jump(EventEntry* event, s32 first) {
     extern void* evtNpcNameToPtr(EventEntry* event, const void* name);
@@ -111,7 +112,7 @@ s32 _2d_dead_jump(EventEntry* event, s32 first) {
     extern f32 float_0p5_80421fd4;
     extern f32 float_neg980_80421fd8;
     s32* args = event->args;
-    void* name = (void*)evtGetValue(event, args[0]);
+    s32 name = evtGetValue(event, args[0]);
     f32 x = evtGetFloat(event, args[1]);
     f32 y = evtGetFloat(event, args[2]);
     f32 z = evtGetFloat(event, args[3]);
@@ -119,25 +120,17 @@ s32 _2d_dead_jump(EventEntry* event, s32 first) {
     f32 speed = evtGetFloat(event, args[5]);
     f32 height = evtGetFloat(event, args[6]);
     f32 floorY = (f32)evtGetValue(event, args[7]);
-    void* npc = evtNpcNameToPtr(event, name);
+    void* npc = evtNpcNameToPtr(event, (void*)name);
     f32 h = height;
-    s32 ret = 0;
 
     *(u32*)((s32)npc + 0x1D4) |= 0x10;
     *(u32*)((s32)npc + 0x1D4) |= 0x1000;
 
     if (first == 0) {
-        f32 angle = (float_6p2832_80421fdc * *(f32*)((s32)npc + 0x1AC)) / float_360_80421fe0;
-        *(f32*)((s32)npc + 0x1C0) += *(f32*)((s32)npc + 0x21C) * *(f32*)((s32)npc + 0x1B0) * (f32)sin(angle);
-        *(f32*)((s32)npc + 0x1C4) += *(f32*)((s32)npc + 0x21C) * *(f32*)((s32)npc + 0x1B0) * -(f32)cos(angle);
-        if (*(f32*)((s32)npc + 0x90) < floorY) {
-            *(f32*)((s32)npc + 0x1B0) = float_0_80421f8c;
-            *(f32*)((s32)npc + 0x1B8) = float_0_80421f8c;
-            *(f32*)((s32)npc + 0x1C8) = float_1_80421f88;
-            *(f32*)((s32)npc + 0x1C4) = float_1_80421f88;
-            ret = 1;
-        }
-    } else {
+        goto update;
+    }
+
+    {
         f32 diff[3];
         f32 dy;
 
@@ -148,7 +141,6 @@ s32 _2d_dead_jump(EventEntry* event, s32 first) {
         *(s32*)((s32)npc + 0x17C) = 0;
         *(s32*)((s32)npc + 0x178) = 0;
         *(s32*)((s32)npc + 0x108) = 0;
-
         *(f32*)((s32)npc + 0x164) = x;
         *(f32*)((s32)npc + 0x168) = y;
         *(f32*)((s32)npc + 0x16C) = z;
@@ -166,7 +158,6 @@ s32 _2d_dead_jump(EventEntry* event, s32 first) {
             }
             *(f32*)((s32)npc + 0x1B0) = dx / time;
         }
-
         *(f32*)((s32)npc + 0x1C0) = float_0_80421f8c;
         *(f32*)((s32)npc + 0x1B8) = float_0_80421f8c;
         *(f32*)((s32)npc + 0x1C4) = float_0_80421f8c;
@@ -180,23 +171,38 @@ s32 _2d_dead_jump(EventEntry* event, s32 first) {
             if (float_0_80421f8c < dy) {
                 h = height + dy;
             }
-            *(f32*)((s32)npc + 0x1B8) = float_0_80421f8c;
+            *(f32*)((s32)npc + 0x1C4) = float_0_80421f8c;
             if (time == float_0_80421f8c) {
-                *(f32*)((s32)npc + 0x1B8) = height;
+                *(f32*)((s32)npc + 0x1C4) = height;
             } else {
                 f32 half = float_0p5_80421fd4 * time;
-                f32 accel = -(time * float_neg980_80421fd8 * *(f32*)((s32)npc + 0x1C4) * time) / time;
+                f32 accel = -(time * float_neg980_80421fd8 * *(f32*)((s32)npc + 0x1CC) * time) / time;
                 f32 denom;
-                *(f32*)((s32)npc + 0x1B8) = accel;
-                denom = accel * half + half * float_neg980_80421fd8 * *(f32*)((s32)npc + 0x1C4) * half;
+                *(f32*)((s32)npc + 0x1C4) = accel;
+                denom = accel * half + half * float_neg980_80421fd8 * *(f32*)((s32)npc + 0x1CC) * half;
                 if (float_0_80421f8c != denom) {
                     *(f32*)((s32)npc + 0x1C8) = h / denom;
                 }
             }
         }
+        return 0;
     }
-    return ret;
+
+update:
+    *(f32*)((s32)npc + 0x1B4) += *(f32*)((s32)npc + 0x1A4) * *(f32*)((s32)npc + 0x1B0) *
+                                     (f32)sin((float_6p2832_80421fdc * *(f32*)((s32)npc + 0x1AC)) / float_360_80421fe0);
+    *(f32*)((s32)npc + 0x1BC) += *(f32*)((s32)npc + 0x1A4) * *(f32*)((s32)npc + 0x1B0) *
+                                     -(f32)cos((float_6p2832_80421fdc * *(f32*)((s32)npc + 0x1AC)) / float_360_80421fe0);
+    if (*(f32*)((s32)npc + 0x90) < floorY) {
+        *(f32*)((s32)npc + 0x1B0) = float_0_80421f8c;
+        *(f32*)((s32)npc + 0x1C4) = float_0_80421f8c;
+        *(f32*)((s32)npc + 0x1C8) = float_1_80421f88;
+        *(f32*)((s32)npc + 0x1CC) = float_1_80421f88;
+        return 1;
+    }
+    return 0;
 }
+#pragma no_register_save_helpers reset
 #pragma use_lmw_stmw reset
 
 #pragma no_register_save_helpers on
@@ -470,36 +476,36 @@ s32 cliffCheck(int param_1) {
     f32 a;
     f32 b;
     f32 c;
-    f32 radius = float_5_80421f84;
+    f32 radius;
     f32 d;
     f32 e;
     f32 f;
     void* down;
     void* ahead;
-    s32 result;
 
     if (npcTransRytoFaceDir(npc) == float_90_80421fbc) {
         dir = float_1_80421f88;
     } else {
         dir = float_neg1_80421f90;
     }
+    radius = float_5_80421f84;
     down = hitCheckFilter(0, *(f32*)((s32)npc + 0x8C),
                           *(f32*)((s32)npc + 0x90) + float_1_80421f88,
                           *(f32*)((s32)npc + 0x94), float_0_80421f8c,
                           float_neg1_80421f90, float_0_80421f8c,
                           &a, &b, &c, &radius, &d, &e, &f);
+    radius = float_5_80421f84;
     ahead = hitCheckFilter(0, *(f32*)((s32)npc + 0x8C),
                            *(f32*)((s32)npc + 0x90) + float_1_80421f88,
                            *(f32*)((s32)npc + 0x94), dir, float_neg1_80421f90,
                            float_0_80421f8c, &a, &b, &c, &radius, &d, &e, &f);
     if (down != NULL && ahead != NULL) {
-        result = 0;
+        evtSetValue((void*)param_1, args[0], 0);
     } else if (down != NULL && ahead == NULL) {
-        result = 1;
+        evtSetValue((void*)param_1, args[0], 1);
     } else {
-        result = 2;
+        evtSetValue((void*)param_1, args[0], 2);
     }
-    evtSetValue((void*)param_1, args[0], result);
     return 2;
 }
 
@@ -581,36 +587,38 @@ s32 zakoEntryDokan(EventEntry* event) {
     char mobjName[32];
     char names[56];
     char* name;
+    char* strings;
     void* mario;
     s32 i;
 
+    strings = str_kemuri_test_802ed438;
     owner = evtNpcNameToPtr(event, str_me_80421f30);
-    if (strcmp((char*)owner + 8, str_kemuri_test_802ed438 + 0x690) == 0) {
-        strcpy(names, str_kemuri_test_802ed438 + 0x6C8);
-        strcpy(names + 0x10, str_kemuri_test_802ed438 + 0x6D8);
-        strcpy(names + 0x20, str_kemuri_test_802ed438 + 0x6E8);
-        strcpy(mobjName, str_kemuri_test_802ed438 + 0x6F8);
+    if (strcmp((char*)owner + 8, strings + 0x690) == 0) {
+        strcpy(names, strings + 0x6C8);
+        strcpy(names + 0x10, strings + 0x6D8);
+        strcpy(names + 0x20, strings + 0x6E8);
+        strcpy(mobjName, strings + 0x6F8);
     }
-    if (strcmp((char*)owner + 8, str_kemuri_test_802ed438 + 0x6A8) == 0) {
-        strcpy(names, str_kemuri_test_802ed438 + 0x704);
-        strcpy(names + 0x10, str_kemuri_test_802ed438 + 0x714);
-        strcpy(names + 0x20, str_kemuri_test_802ed438 + 0x724);
-        strcpy(mobjName, str_kemuri_test_802ed438 + 0x734);
+    if (strcmp((char*)owner + 8, strings + 0x6A8) == 0) {
+        strcpy(names, strings + 0x704);
+        strcpy(names + 0x10, strings + 0x714);
+        strcpy(names + 0x20, strings + 0x724);
+        strcpy(mobjName, strings + 0x734);
     }
 
     mario = marioGetPtr();
-    if (*(void**)((s32)mario + 0x1E8) != NULL &&
-        strcmp(hitGetName(*(void**)((s32)mario + 0x1E8)), mobjName) == 0) {
+    name = hitGetName(*(void**)((s32)mario + 0x1E8));
+    if (name != NULL && strcmp(name, mobjName) == 0) {
         return 2;
     }
     mario = marioGetPtr();
-    if (*(void**)((s32)mario + 0x1EC) != NULL &&
-        strcmp(hitGetName(*(void**)((s32)mario + 0x1EC)), mobjName) == 0) {
+    name = hitGetName(*(void**)((s32)mario + 0x1EC));
+    if (name != NULL && strcmp(name, mobjName) == 0) {
         return 2;
     }
     mario = marioGetPtr();
-    if (*(void**)((s32)mario + 0x1E4) != NULL &&
-        strcmp(hitGetName(*(void**)((s32)mario + 0x1E4)), mobjName) == 0) {
+    name = hitGetName(*(void**)((s32)mario + 0x1E4));
+    if (name != NULL && strcmp(name, mobjName) == 0) {
         return 2;
     }
 
@@ -648,19 +656,22 @@ s32 zakoEntryDokan(EventEntry* event) {
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 dokanCheck(int param_1) {
     extern void* mobjNameToPtrNoAssert(char* name);
     extern char str_mobj9_80421fa4[];
     char name[32];
+    char* strings = str_kemuri_test_802ed438;
     s32* args = *(s32**)(param_1 + 0x18);
     void* npc = evtNpcNameToPtr((void*)param_1, str_me_80421f30);
     void* mobj;
 
-    if (strcmp((char*)((s32)npc + 8), str_kemuri_test_802ed438 + 0x690) == 0) {
+    if (strcmp((char*)npc + 8, strings + 0x690) == 0) {
         strcpy(name, str_mobj9_80421fa4);
     }
-    if (strcmp((char*)((s32)npc + 8), str_kemuri_test_802ed438 + 0x6A8) == 0) {
-        strcpy(name, str_kemuri_test_802ed438 + 0x6C0);
+    if (strcmp((char*)npc + 8, strings + 0x6A8) == 0) {
+        strcpy(name, strings + 0x6C0);
     }
     mobj = mobjNameToPtrNoAssert(name);
     if (mobj != NULL) {
@@ -670,6 +681,8 @@ s32 dokanCheck(int param_1) {
     }
     return 2;
 }
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -677,28 +690,31 @@ s32 zakoEntryFall(EventEntry* event) {
     extern void* npcNameToPtr_NoAssert(const char* name);
     extern void* evtEntry(void* script, s32 order, u32 flags);
     extern u32 vec3_802ed9c0[];
+    extern const char str_none_80421f98[];
     void* owner;
     void* npc;
     void* child;
     char names[56];
     char* name;
+    char* strings;
     s32 i;
 
+    strings = str_kemuri_test_802ed438;
     owner = evtNpcNameToPtr(event, str_me_80421f30);
-    if (strcmp((char*)owner + 8, str_kemuri_test_802ed438 + 0x5EC) == 0) {
-        strcpy(names, str_kemuri_test_802ed438 + 0x600);
-        strcpy(names + 0x10, "");
-        strcpy(names + 0x20, "");
+    if (strcmp((char*)owner + 8, strings + 0x5EC) == 0) {
+        strcpy(names, strings + 0x600);
+        strcpy(names + 0x10, str_none_80421f98);
+        strcpy(names + 0x20, str_none_80421f98);
     }
-    if (strcmp((char*)owner + 8, str_kemuri_test_802ed438 + 0x610) == 0) {
-        strcpy(names, str_kemuri_test_802ed438 + 0x600);
-        strcpy(names + 0x10, str_kemuri_test_802ed438 + 0x628);
-        strcpy(names + 0x20, str_kemuri_test_802ed438 + 0x638);
+    if (strcmp((char*)owner + 8, strings + 0x610) == 0) {
+        strcpy(names, strings + 0x600);
+        strcpy(names + 0x10, strings + 0x628);
+        strcpy(names + 0x20, strings + 0x638);
     }
-    if (strcmp((char*)owner + 8, str_kemuri_test_802ed438 + 0x648) == 0) {
-        strcpy(names, str_kemuri_test_802ed438 + 0x660);
-        strcpy(names + 0x10, str_kemuri_test_802ed438 + 0x670);
-        strcpy(names + 0x20, str_kemuri_test_802ed438 + 0x680);
+    if (strcmp((char*)owner + 8, strings + 0x648) == 0) {
+        strcpy(names, strings + 0x660);
+        strcpy(names + 0x10, strings + 0x670);
+        strcpy(names + 0x20, strings + 0x680);
     }
 
     name = names;
@@ -716,16 +732,15 @@ s32 zakoEntryFall(EventEntry* event) {
             *(u32*)((s32)npc + 0xF0) = vec3_802ed9c0[1];
             *(u32*)((s32)npc + 0xF4) = vec3_802ed9c0[2];
             *(s32*)((s32)npc + 0x304) = 2;
-            if (*(void**)((s32)npc + 0x124) == NULL) {
-                return 2;
+            if (*(void**)((s32)npc + 0x124) != NULL) {
+                if (*(s32*)((s32)npc + 0x11C) != 0) {
+                    evtDeleteID(*(s32*)((s32)npc + 0x11C));
+                }
+                child = evtEntry(*(void**)((s32)npc + 0x124), 0, 0x20);
+                *(s8*)((s32)child + 0x10) = 1;
+                *(void**)((s32)child + 0x170) = npc;
+                *(s32*)((s32)npc + 0x11C) = *(s32*)((s32)child + 0x15C);
             }
-            if (*(s32*)((s32)npc + 0x11C) != 0) {
-                evtDeleteID(*(s32*)((s32)npc + 0x11C));
-            }
-            child = evtEntry(*(void**)((s32)npc + 0x124), 0, 0x20);
-            *(s8*)((s32)child + 0x10) = 1;
-            *(void**)((s32)child + 0x170) = npc;
-            *(s32*)((s32)npc + 0x11C) = *(s32*)((s32)child + 0x15C);
             return 2;
         }
     }

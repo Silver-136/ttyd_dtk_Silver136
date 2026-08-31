@@ -85,6 +85,8 @@ u8 mot_stay(void) {
     s32 hp;
     s32 moving;
     s32 submotion;
+    s32 stayFrames;
+    s32 freshStart = 0;
 
 #define FLAGS (*(u32*)((s32)player + 0x0))
 #define DISP_FLAGS (*(u32*)((s32)player + 0x4))
@@ -121,13 +123,15 @@ u8 mot_stay(void) {
     }
 
     if ((PAUSE_BUTTONS & 0x100) == 0) {
-        TRIG_FLAGS &= ~0x00300000;
+        TRIG_FLAGS &= ~0x00100000;
+        TRIG_FLAGS &= ~0x00200000;
     }
 
     if ((TRIG_FLAGS & 1) != 0) {
         TRIG_FLAGS &= ~1;
         FLAGS &= ~0xF0000;
         marioClearJumpPara();
+        freshStart = 1;
         AIR_TIMER = 0;
         TIMER = 0;
         SUBMOTION = 0;
@@ -162,7 +166,7 @@ u8 mot_stay(void) {
                 if (hp == 0) {
                     marioChgPose(&str_M_I_S_80421014);
                     psndSFXOn_3D(0x173, POS);
-                } else if (hp >= 6 && marioChkKey() != 0) {
+                } else if (pouchGetHP() >= 6 && marioChkKey() != 0) {
                     DISP_FLAGS |= 0x4000000;
                     marioChgPose(&str_M_S_3_8042101c);
                     LOW_HP_TIMER = 0;
@@ -192,10 +196,14 @@ u8 mot_stay(void) {
         return 0;
     }
 
+    stayFrames = sysMsec2Frame(1000);
     STAY_TIMER++;
-    if (STAY_TIMER > sysMsec2Frame(1000) && (FLAGS & 0x400000) == 0 && marioChkKey() != 0) {
+    if (STAY_TIMER > stayFrames && (FLAGS & 0x400000) == 0 && marioChkKey() != 0) {
         hp = pouchGetHP();
         if (hp >= 6) {
+            if (strcmp(ANIM_NAME, &str_M_S_3_8042101c) != 0) {
+                LOW_HP_TIMER = 0;
+            }
             DISP_FLAGS |= 0x4000000;
             marioChgPose(&str_M_S_3_8042101c);
         } else if (SUBMOTION == 0 && strcmp(ANIM_NAME, &str_M_I_Y_80421024) != 0) {
@@ -211,7 +219,7 @@ u8 mot_stay(void) {
         return 0;
     }
 
-    if (marioChkItemMotion() == 0) {
+    if (freshStart || marioChkItemMotion() == 0) {
         if (marioGetHammerLevel() < 2) {
             moving = PRESSED_BUTTONS & 0x200;
         } else {

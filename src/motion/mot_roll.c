@@ -549,6 +549,11 @@ void mot_roll(void) {
     extern f32 distABf(f32, f32, f32, f32);
     extern f64 sin(f64);
     extern f64 cos(f64);
+    extern f64 sqrt(f64);
+    extern void sincosf(f32, f32*, f32*);
+    extern s32 marioHitCheckVec(void*, void*, f32*, void*, f32*);
+    extern s32 strcmp(const char*, const char*);
+    extern void* gpGlobals;
 
     extern char str_PM_R_1A_802c4250[];
     extern char str_p_roll_802c4248[];
@@ -556,6 +561,7 @@ void mot_roll(void) {
     extern char str_PM_R_1C_802c4260[];
     extern char str_M_I_U_80420e1c[];
     extern char str_M_S_1_80420e4c[];
+    extern char str_eki_04_802c4268[];
 
     extern f32 vec3_802c41b0;
     extern f32 DAT_802c41b4;
@@ -569,6 +575,9 @@ void mot_roll(void) {
     extern f32 vec3_802c41d4;
     extern f32 DAT_802c41d8;
     extern f32 DAT_802c41dc;
+    extern f32 vec3_802c4204;
+    extern f32 DAT_802c4208;
+    extern f32 DAT_802c420c;
     extern f32 rollData;
 
     extern f32 float_0p5_80420dd8;
@@ -597,6 +606,12 @@ void mot_roll(void) {
     extern f32 float_6p4_80420e94;
     extern f32 float_0p025_80420e98;
     extern f32 float_neg1_80420e9c;
+    extern f32 float_neg180_80420ea0;
+    extern f32 float_200_80420ea4;
+    extern f32 float_170_80420ea8;
+    extern f32 float_100_80420dd0;
+    extern f64 double_45_802c4238;
+    extern f32 float_40_80420e68;
 
     typedef struct VecBits {
         u32 x;
@@ -622,6 +637,25 @@ void mot_roll(void) {
     f32 scale;
     f32 oldScale;
     f32 ftmp;
+    f32 checkPos[3];
+    f32 checkDir[3];
+    f32 hitPos[3];
+    f32 hitNormal[3];
+    f32 radius;
+    f32 flatNormal;
+    f32 wallAngle;
+    f32 sin90;
+    f32 cos90;
+    f32 view;
+    f32 world;
+    f32 center;
+    f32 lo;
+    f32 hi;
+    f32 diff;
+    f32 movedir;
+    f32 bias;
+    s32 wrap;
+    s32 outside;
 
 #define P32(o) (*(s32*)((s32)player + (o)))
 #define PU32(o) (*(u32*)((s32)player + (o)))
@@ -958,7 +992,10 @@ state_transition_done:
     }
 
     if (PVOID(0x1E8) != 0) {
-        if (((hitGetAttr(PVOID(0x1E8)) & 0xA00U) == 0) && (PH16(0x24C) & 0x100) != 0 && PH16(0x50) == 0) {
+        if (((hitGetAttr(PVOID(0x1E8)) & 0xA00U) == 0) && PH16(0x50) == 0 &&
+            (PH16(0x24C) & 0x100) != 0 &&
+            (strcmp((const char*)((s32)gpGlobals + 0x12C), str_eki_04_802c4268) != 0 ||
+             __fabsf(PF(0x218)) < float_40_80420e68)) {
             camFollowYOff();
             PF(0x148) = float_2p85_80420e6c;
             PF(0x158) = float_neg0p14_80420e70;
@@ -975,6 +1012,7 @@ state_transition_done:
             PF(0x210) = PF(0x8C);
             PF(0x214) = PF(0x90);
             PF(0x218) = PF(0x94);
+            camFollowYOff();
         } else {
             PH16(0x50) = 0;
         }
@@ -1062,7 +1100,126 @@ state_transition_done:
     }
 
     PF(0xBC) = revise360(PF(0xBC) + PF(0x180) * ((PF(0x1AC) < float_180_80420de0) ? float_1_80420e2c : float_neg1_80420e9c));
-    marioSetRollDispDir();
+    view = PF(0x1A4);
+    world = PF(0x1A0);
+    center = (f32)(s32)(world * float_10_80420dfc) / float_10_80420dfc;
+    lo = center - float_135_80420e00;
+    wrap = 0;
+    if (lo < float_0_80420dd4) {
+        lo += float_360_80420df8;
+        wrap = 1;
+    }
+    hi = center + float_135_80420e00;
+    if (hi > float_360_80420df8) {
+        hi -= float_360_80420df8;
+        wrap = 2;
+    }
+    outside = 0;
+    if (wrap == 1) {
+        if (hi < view && view < lo) {
+            outside = 1;
+        }
+    } else if (wrap == 2) {
+        if (hi < view && view < lo) {
+            outside = 1;
+        }
+    } else if (view < lo || hi < view) {
+        outside = 1;
+    }
+    if (outside) {
+        world = revise360(float_180_80420de0 + world);
+    }
+
+    diff = revise360(((f32)(s32)(world * float_10_80420dfc) / float_10_80420dfc) -
+                     ((f32)(s32)(PF(0x19C) * float_10_80420dfc) / float_10_80420dfc));
+    if (diff >= float_180_80420de0) {
+        if (__fabsf(world - view) > float_90_80420df0 && view < world) {
+            view += float_360_80420df8;
+        }
+    } else if (__fabsf(world - view) > float_90_80420df0 && world < view) {
+        world += float_360_80420df8;
+    }
+
+    center = (f32)(s32)(world * float_10_80420dfc) / float_10_80420dfc;
+    lo = center - float_90_80420df0;
+    wrap = 0;
+    if (lo < float_0_80420dd4) {
+        lo += float_360_80420df8;
+        wrap = 1;
+    }
+    hi = center + float_90_80420df0;
+    if (hi > float_360_80420df8) {
+        hi -= float_360_80420df8;
+        wrap = 2;
+    }
+    outside = 0;
+    if (wrap == 1) {
+        if (hi < view && view < lo) {
+            outside = 1;
+        }
+    } else if (wrap == 2) {
+        if (hi < view && view < lo) {
+            outside = 1;
+        }
+    } else if (view < lo || hi < view) {
+        outside = 1;
+    }
+    if (!outside && __fabsf(world - view) > float_180_80420de0) {
+        if (world <= view) {
+            view -= float_360_80420df8;
+        } else {
+            world -= float_360_80420df8;
+        }
+    }
+
+    world = revise360((view - world) * float_1p2_80420e04 + world);
+    movedir = toMovedir(PF(0x1AC));
+    if (PS8(0x43) != 0) {
+        movedir = revise360(float_180_80420de0 + movedir);
+    }
+    center = (f32)(s32)(world * float_10_80420dfc) / float_10_80420dfc;
+    lo = center - float_135_80420e00;
+    wrap = 0;
+    if (lo < float_0_80420dd4) {
+        lo += float_360_80420df8;
+        wrap = 1;
+    }
+    hi = center + float_135_80420e00;
+    if (hi > float_360_80420df8) {
+        hi -= float_360_80420df8;
+        wrap = 2;
+    }
+    outside = 0;
+    if (wrap == 1) {
+        if (hi < movedir && movedir < lo) {
+            outside = 1;
+        }
+    } else if (wrap == 2) {
+        if (hi < movedir && movedir < lo) {
+            outside = 1;
+        }
+    } else if (movedir < lo || hi < movedir) {
+        outside = 1;
+    }
+    if (outside) {
+        PU8(0x43) = (PU8(0x43) + 1) & 1;
+    }
+
+    bias = float_0_80420dd4;
+    if (PS8(0x43) != 0) {
+        bias = float_neg180_80420ea0;
+    }
+    PF(0x1AC) = revise360((float_270_80420df4 + PF(0x19C)) - world + bias);
+    if (PF(0x1AC) >= float_200_80420ea4) {
+        bias = (PS8(0x43) != 0) ? float_neg180_80420ea0 : float_0_80420dd4;
+        PF(0x1AC) = revise360((float_270_80420df4 + PF(0x19C)) - world + bias);
+    }
+    if (PF(0x1AC) < float_170_80420ea8) {
+        bias = (PS8(0x43) != 0) ? float_neg180_80420ea0 : float_0_80420dd4;
+        PF(0x1AC) = revise360((float_270_80420df4 + PF(0x19C)) - world + bias);
+    }
+    PF(0x1A4) = world;
+    PF(0x1A0) = world;
 
     if (PS8(0x252) != 0 || PS8(0x253) != 0) {
         PU32(0x2BC) |= 0x4000;
@@ -1071,6 +1228,35 @@ state_transition_done:
     if (PF(0x180) != float_0_80420dd4) {
         PF(0x148) = float_0_80420dd4;
         PF(0x158) = float_0p004_80420e48;
+    }
+
+    checkPos[0] = PF(0x8C);
+    checkPos[1] = PF(0x90) + PF(0x1BC);
+    checkPos[2] = PF(0x94);
+    checkDir[0] = vec3_802c4204;
+    checkDir[1] = DAT_802c4208;
+    checkDir[2] = DAT_802c420c;
+    radius = float_100_80420dd0;
+    if (marioHitCheckVec(checkPos, checkDir, hitPos, hitNormal, &radius) != 0) {
+        flatNormal = (f32)sqrt((f64)(hitNormal[0] * hitNormal[0] + hitNormal[2] * hitNormal[2]));
+        wallAngle = (f32)angleABf(float_0_80420dd4, float_0_80420dd4,
+                                  flatNormal, -hitNormal[1]);
+        wallAngle = (f32)(s32)(wallAngle + float_0p5_80420dd8);
+        if ((f64)__fabsf(wallAngle) < double_45_802c4238) {
+            angle = (float_3p1416_80420ddc * wallAngle) / float_180_80420de0;
+            PF(0x98) = float_6_80420de4 + float_5_80420de8 * (f32)sin(angle);
+            PF(0x9C) = float_neg4_80420dec + float_5_80420de8 * (f32)cos(angle);
+        } else {
+            sincosf(float_90_80420df0, &sin90, &cos90);
+            checkDir[0] = sin90;
+            checkDir[1] = DAT_802c4208;
+            checkDir[2] = cos90;
+            checkPos[0] = PF(0x8C);
+            checkPos[1] = PF(0x90);
+            checkPos[2] = PF(0x94);
+            radius = float_100_80420dd0;
+            marioHitCheckVec(checkPos, checkDir, hitPos, hitNormal, &radius);
+        }
     }
 
 #undef P32

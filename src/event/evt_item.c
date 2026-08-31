@@ -396,13 +396,15 @@ s32 evt_item_get_important_item(s32 pEvt, s32 param_2) {
     f32 t;
     f32 t2;
     f32 value;
+    volatile f32 half = float_0p5_80421070;
+    f32 sinA;
 
     if (param_2 != 0) {
-        t = distABf(marioX, marioZ, *(f32*)((s32)item + 0x3C), *(f32*)((s32)item + 0x44)) / float_0p5_80421070;
+        t = distABf(marioX, marioZ, *(f32*)((s32)item + 0x3C), *(f32*)((s32)item + 0x44)) / half;
         *(f32*)(pEvt + 0x78) = t;
-        *(f32*)(pEvt + 0x7C) = (float_0p1_80421074 * t) * float_0p5_80421070
+        *(f32*)(pEvt + 0x7C) = (float_0p1_80421074 * t) * half
             + (marioY - *(f32*)((s32)item + 0x40)) / t;
-        *(f32*)(pEvt + 0x80) = float_0p5_80421070;
+        *(f32*)(pEvt + 0x80) = half;
         *(s32*)(pEvt + 0x84) = 0;
     }
 
@@ -410,25 +412,26 @@ s32 evt_item_get_important_item(s32 pEvt, s32 param_2) {
                                                 *(f32*)((s32)item + 0x44),
                                                 marioX,
                                                 marioZ)) / float_360_8042107c;
+    sinA = float_0p00761_80421080;
 
     if (angle <= float_3p1416_8042108c) {
         if (angle <= float_1p5708_80421090) {
             t = angle;
             t2 = t * t;
-            value = ((float_0p00761_80421080 * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t;
+            value = ((sinA * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t;
         } else {
             t = float_1p5708_80421090 - (angle - float_1p5708_80421090);
             t2 = t * t;
-            value = ((float_0p00761_80421080 * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t;
+            value = ((sinA * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t;
         }
     } else if (angle >= float_4p7124_80421094) {
         t = float_1p5708_80421090 - (angle - float_4p7124_80421094);
         t2 = t * t;
-        value = -(((float_0p00761_80421080 * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t);
+        value = -(((sinA * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t);
     } else {
         t = angle - float_3p1416_8042108c;
         t2 = t * t;
-        value = -(((float_0p00761_80421080 * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t);
+        value = -(((sinA * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t);
     }
 
     *(f32*)((s32)item + 0x3C) += *(f32*)(pEvt + 0x80) * value;

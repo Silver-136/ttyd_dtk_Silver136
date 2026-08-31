@@ -30,57 +30,38 @@ void SelectedItemCoordinateColorUpDate(void) {
     extern s8 seq_510;
     extern u8 seleItemCoordCol[4];
 
-    if (seq_510 == 3) {
-        seleItemCoordCol[1]--;
-        if (seleItemCoordCol[1] != 0xC0) {
-            return;
-        }
-        seq_510 = 4;
-        return;
-    }
-    if (seq_510 > 2) {
-        if (seq_510 == 5) {
-            seleItemCoordCol[2]--;
-            if (seleItemCoordCol[2] != 0xC0) {
-                return;
+    switch (seq_510) {
+        case 0:
+            if (++seleItemCoordCol[1] == 0xFF) {
+                seq_510 = 1;
             }
-            seq_510 = 0;
-            return;
-        }
-        if (seq_510 > 4) {
-            return;
-        }
-        seleItemCoordCol[0]++;
-        if (seleItemCoordCol[0] != 0xFF) {
-            return;
-        }
-        seq_510 = 5;
-        return;
+            break;
+        case 1:
+            if (--seleItemCoordCol[0] == 0xC0) {
+                seq_510 = 2;
+            }
+            break;
+        case 2:
+            if (++seleItemCoordCol[2] == 0xFF) {
+                seq_510 = 3;
+            }
+            break;
+        case 3:
+            if (--seleItemCoordCol[1] == 0xC0) {
+                seq_510 = 4;
+            }
+            break;
+        case 4:
+            if (++seleItemCoordCol[0] == 0xFF) {
+                seq_510 = 5;
+            }
+            break;
+        case 5:
+            if (--seleItemCoordCol[2] == 0xC0) {
+                seq_510 = 0;
+            }
+            break;
     }
-    if (seq_510 == 1) {
-        seleItemCoordCol[0]--;
-        if (seleItemCoordCol[0] != 0xC0) {
-            return;
-        }
-        seq_510 = 2;
-        return;
-    }
-    if (seq_510 < 1) {
-        if (seq_510 < 0) {
-            return;
-        }
-        seleItemCoordCol[1]++;
-        if (seleItemCoordCol[1] != 0xFF) {
-            return;
-        }
-        seq_510 = 1;
-        return;
-    }
-    seleItemCoordCol[2]++;
-    if (seleItemCoordCol[2] != 0xFF) {
-        return;
-    }
-    seq_510 = 3;
 }
 
 s32 BattleMenuKeyOKInACT(void* work) {
@@ -530,6 +511,8 @@ void DrawSubIconSub(void* menu, s32 phase, f32 baseMtx[3][4], s32 enabled,
     extern char str_btl_cost_disp_FP_802ef7c0[];
     extern char str_btl_cost_disp_AP_802ef7d4[];
     extern char str_btl_disp_HP_802ef7e8[];
+    extern const u32 dat_80422418;
+    extern const u32 dat_8042241c;
     extern char str_btl_disp_slash_802ef7f4[];
     void* battleWork;
     void* camera;
@@ -541,8 +524,8 @@ void DrawSubIconSub(void* menu, s32 phase, f32 baseMtx[3][4], s32 enabled,
     f32 fraction;
     f32 textScale;
     u32 color;
-    u32 alpha;
-    u32 shade;
+    s32 alpha;
+    s32 shade;
     u8 red;
     u8 green;
     u8 blue;
@@ -562,14 +545,15 @@ void DrawSubIconSub(void* menu, s32 phase, f32 baseMtx[3][4], s32 enabled,
     base = (s32)scroll;
     fraction = scroll - (f32)base;
     alpha = 0xFF;
-    if (phase == 0) alpha = (u32)(255.0f * (1.0f - fraction));
-    if (phase == 6) alpha = (u32)(255.0f * fraction);
+    if (phase == 0) alpha = (s32)(255.0f * (1.0f - fraction));
+    if (phase == 6) alpha = (s32)(255.0f * fraction);
     shade = alpha;
-    red = seleItemCoordCol[0];
-    green = seleItemCoordCol[1];
-    blue = seleItemCoordCol[2];
-    if (base + phase != *(s32*)*(void**)menu) {
-        shade = (u32)(144.0f * (f32)(alpha & 0xFF) / 255.0f);
+    if (base + phase == *(s32*)*(void**)menu) {
+        red = seleItemCoordCol[0];
+        green = seleItemCoordCol[1];
+        blue = seleItemCoordCol[2];
+    } else {
+        shade = (s32)(144.0f * (f32)(alpha & 0xFF) / 255.0f);
         red = 0xFF;
         green = 0xFF;
         blue = 0xFF;
@@ -591,8 +575,15 @@ void DrawSubIconSub(void* menu, s32 phase, f32 baseMtx[3][4], s32 enabled,
     PSMTXConcat(baseMtx, trans, draw);
     PSMTXConcat(draw, scale, draw);
     if (iconId == 0) iconId = 0x193;
-    color = enabled == 1 ? (0xFFFFFF00 | (alpha & 0xFF)) : (0x80808000 | (alpha & 0xFF));
-    iconDispGxCol(draw, enabled == 1 ? 0x10 : 0x30, iconId, &color);
+    if (enabled == 1) {
+        color = dat_80422418;
+        ((u8*)&color)[3] = alpha;
+        iconDispGxCol(draw, 0x10, iconId, &color);
+    } else {
+        color = dat_8042241c;
+        ((u8*)&color)[3] = alpha;
+        iconDispGxCol(draw, 0x30, iconId, &color);
+    }
 
     FontDrawStart();
     color = enabled == 1 ? (0x00000000 | (alpha & 0xFF)) : (0x80808000 | (alpha & 0xFF));
@@ -736,11 +727,12 @@ void DrawMenuPartyChangeButton(void) {
     f32 itemY;
     f32 itemZ;
     f32 centerX;
+    f32 centerY;
     s32 itemId;
 
     battleWork = _battleWorkPointer;
     window = *(void**)((s32)battleWork + 0x1C78);
-    camGetPtr(4);
+    camGetPtr(8);
     mario = BattleGetMarioPtr(battleWork);
     party = BattleGetPartyPtr(battleWork);
     if (party == 0) {
@@ -748,10 +740,10 @@ void DrawMenuPartyChangeButton(void) {
         if (itemId == -1) {
             *(f32*)((s32)window + 0x120) = 90.0f;
         } else {
-            if (*(f32*)((s32)window + 0x120) <= 0.0f) {
-                *(f32*)((s32)window + 0x120) = 0.0f;
-            } else {
+            if (*(f32*)((s32)window + 0x120) > 0.0f) {
                 *(f32*)((s32)window + 0x120) -= 5.0f;
+            } else {
+                *(f32*)((s32)window + 0x120) = 0.0f;
             }
             btlGetScreenPoint((f32*)((s32)mario + 0x3C), marioScreen);
             DrawMenuPartyChangeButton_Sub(marioScreen[0], marioScreen[1] - 20.0f,
@@ -760,23 +752,24 @@ void DrawMenuPartyChangeButton(void) {
     } else {
         btlGetScreenPoint((f32*)((s32)mario + 0x3C), marioScreen);
         btlGetScreenPoint((f32*)((s32)party + 0x3C), partyScreen);
+        centerY = marioScreen[1];
         centerX = (marioScreen[0] + partyScreen[0]) * 0.5f;
         BattleAudience_GetItemOn(&itemId, &itemX, &itemY, &itemZ, 0);
         if (itemId == -1) {
             *(f32*)((s32)window + 0x120) = 90.0f;
             if (BattleCommandCheckChangePositionEnable(battleWork)) {
-                DrawMenuPartyChangeButton_Sub(centerX, marioScreen[1] - 20.0f, 0.0f, 4);
+                DrawMenuPartyChangeButton_Sub(centerX, centerY - 20.0f, 0.0f, 4);
             }
         } else {
             if (*(f32*)((s32)window + 0x120) == 90.0f) {
                 psndSFXOn(str_SFX_BTL_SYS_CAUTION_802ef7a4);
             }
-            if (*(f32*)((s32)window + 0x120) <= 0.0f) {
-                *(f32*)((s32)window + 0x120) = 0.0f;
-            } else {
+            if (*(f32*)((s32)window + 0x120) > 0.0f) {
                 *(f32*)((s32)window + 0x120) -= 5.0f;
+            } else {
+                *(f32*)((s32)window + 0x120) = 0.0f;
             }
-            DrawMenuPartyChangeButton_Sub(centerX, marioScreen[1] - 20.0f,
+            DrawMenuPartyChangeButton_Sub(centerX, centerY - 20.0f,
                                           *(f32*)((s32)window + 0x120), 5);
         }
     }
@@ -1053,6 +1046,7 @@ void InitSubMenuCommonProcess(void* outWindow_, void* outCursor_, void* cursor) 
     void* window;
     void* unit;
     s32 i;
+    s32 offset;
 
     outWindow = outWindow_;
     outCursor = outCursor_;
@@ -1061,26 +1055,25 @@ void InitSubMenuCommonProcess(void* outWindow_, void* outCursor_, void* cursor) 
     if (window != 0) {
         BattleFree(window);
     }
-    window = BattleAlloc(0x124);
-    *(void**)((s32)battleWork + 0x1C78) = window;
-    *outWindow = window;
-    *(void**)window = cursor;
-    *(s32*)((s32)window + 0xC) = 0;
-    *(s32*)((s32)window + 0x10) = 0;
-    *(s32*)((s32)window + 0x14) = 0;
-    *(s32*)((s32)window + 0x18) = *(s32*)cursor;
+    *(void**)((s32)battleWork + 0x1C78) = BattleAlloc(0x124);
+    *outWindow = *(void**)((s32)battleWork + 0x1C78);
+    *(void**)*outWindow = cursor;
+    *(s32*)((s32)*outWindow + 0xC) = 0;
+    *(s32*)((s32)*outWindow + 0x10) = 0;
+    *(u8*)((s32)*outWindow + 0x14) = 0;
+    *(s32*)((s32)*outWindow + 0x18) = *(s32*)cursor;
     unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
     if (*(s32*)((s32)unit + 8) == 0xDE) {
         *outCursor = (void*)((s32)battleWork + 0x1BB4);
     } else {
         *outCursor = (void*)((s32)battleWork + 0x1BC0);
     }
-    *(f32*)((s32)window + 0x98) = 0.0f;
-    for (i = 0; i < 7; i++) {
-        *(s32*)((s32)window + 0xA4 + i * 4) = 0;
-        *(s32*)((s32)window + 0xC0 + i * 4) = 1;
-        *(s32*)((s32)window + 0xDC + i * 4) = -i;
-        *(s32*)((s32)window + 0xF8 + i * 4) = 0;
+    *(f32*)((s32)*outWindow + 0x98) = 0.0f;
+    for (i = 0, offset = 0; i < 7; i++, offset += 4) {
+        *(s32*)((s32)*outWindow + 0xA4 + offset) = 0;
+        *(s32*)((s32)*outWindow + 0xC0 + offset) = 1;
+        *(s32*)((s32)*outWindow + 0xDC + offset) = -i;
+        *(s32*)((s32)*outWindow + 0xF8 + offset) = 0;
     }
 }
 
@@ -1148,7 +1141,7 @@ void InitSubMenuCommonProcess3(void* proc, void* common) {
     }
 }
 
-u8 DrawSubMenuCommonProcessSub1(void* windowWork, void* cursor, u32 relativePos, int numOptions) {
+void DrawSubMenuCommonProcessSub1(void* windowWork, void* cursor, u32 relativePos, int numOptions) {
     s32 count;
     s32 current;
     s32 value;
@@ -1156,8 +1149,8 @@ u8 DrawSubMenuCommonProcessSub1(void* windowWork, void* cursor, u32 relativePos,
 
     if (numOptions == 6) {
         count = *(s32*)((s32)cursor + 8);
-        if (count > 6 && relativePos == count - 6 && *(s32*)((s32)cursor + 4) == 0 &&
-            *(s32*)cursor != 1) {
+        if (count > 6 && relativePos == count - 6 &&
+            *(s32*)((s32)cursor + 4) == 0 && *(s32*)cursor != 1) {
             *(s32*)((s32)windowWork + 0xC) = 0x1E;
             *(s32*)((s32)windowWork + 0x10) = 0;
             *(f32*)((s32)windowWork + 0x9C) = count - 6;
@@ -1166,8 +1159,13 @@ u8 DrawSubMenuCommonProcessSub1(void* windowWork, void* cursor, u32 relativePos,
                 *(s32*)((s32)windowWork + 0xC0 + i * 4) = 0x1E;
                 *(s32*)((s32)windowWork + 0xDC + i * 4) = 0;
             }
-        } else if (count > 6 && relativePos == 0 && *(s32*)((s32)cursor + 4) == count - 6 &&
-                   *(s32*)cursor != 5) {
+            return;
+        }
+    }
+    if (numOptions == 6) {
+        count = *(s32*)((s32)cursor + 8);
+        if (count > 6 && relativePos == 0 &&
+            *(s32*)((s32)cursor + 4) == count - 6 && *(s32*)cursor != 5) {
             *(s32*)((s32)windowWork + 0xC) = 0x28;
             *(s32*)((s32)windowWork + 0x10) = 0;
             *(f32*)((s32)windowWork + 0x9C) = 0.0f;
@@ -1176,6 +1174,7 @@ u8 DrawSubMenuCommonProcessSub1(void* windowWork, void* cursor, u32 relativePos,
                 *(s32*)((s32)windowWork + 0xC0 + i * 4) = 0x28;
                 *(s32*)((s32)windowWork + 0xDC + i * 4) = 0;
             }
+            return;
         }
     }
 
@@ -1239,6 +1238,9 @@ void DrawSubMenuCommonProcess(f32* outX, f32* outY, void* matrices,
     s32 settled;
     s32 duration;
     s32 i;
+    s32 matrixOffset;
+    s32 positionOffset;
+    s32 itemOffset;
 
     battleWork = _battleWorkPointer;
     window = *(void**)((s32)battleWork + 0x1C78);
@@ -1306,48 +1308,50 @@ void DrawSubMenuCommonProcess(f32* outX, f32* outY, void* matrices,
 
     *(s32*)((s32)window + 0x1C) = 0;
     count = *(s32*)((s32)menuCursor + 8);
-    for (i = 0; i < count; i++) {
-        state = *(s32*)((s32)window + 0x34 + i * 4);
-        pos = (f32*)(positions + i * 12);
+    for (i = 0, matrixOffset = 0, positionOffset = 0, itemOffset = 0;
+         i < count;
+         i++, matrixOffset += 0x30, positionOffset += 0xC, itemOffset += 4) {
+        state = *(s32*)((s32)window + 0x34 + itemOffset);
+        pos = (f32*)(positions + positionOffset);
         if (state == 10) {
-            *(u32*)((s32)window + 0x20 + i * 4) |= 1;
-            *(u32*)((s32)window + 0x20 + i * 4) &= ~2;
+            *(u32*)((s32)window + 0x20 + itemOffset) |= 1;
+            *(u32*)((s32)window + 0x20 + itemOffset) &= ~2;
             GetRingCenter(pos);
             GetRingOffset(3.1416f * *(f32*)(0x8036359C + count * 20 +
-                          *(s32*)((s32)window + 0x84 + i * 4) * 4) / 180.0f,
+                          *(s32*)((s32)window + 0x84 + itemOffset) * 4) / 180.0f,
                           &offsetX, &offsetY);
             pos[0] += offsetX;
             pos[1] += offsetY;
             pos[2] = offsetY;
-            value = 1.0f - 0.1f * *(s32*)((s32)window + 0x48 + i * 4);
-            if (value <= 0.0f) *(s32*)((s32)window + 0x34 + i * 4) = 11;
+            value = 1.0f - 0.1f * *(s32*)((s32)window + 0x48 + itemOffset);
+            if (value <= 0.0f) *(s32*)((s32)window + 0x34 + itemOffset) = 11;
             PSMTXScale(scaleMtx, value, value, 1.0f);
             PSMTXTrans(transMtx, pos[0], pos[1], pos[2]);
-            PSMTXConcat(transMtx, scaleMtx, (void*)((s32)matrices + i * 0x30));
-            *(f32*)(angles + i * 4) = 0.0f;
-            *(s32*)((s32)window + 0x48 + i * 4) += 1;
+            PSMTXConcat(transMtx, scaleMtx, (void*)((s32)matrices + matrixOffset));
+            *(f32*)(angles + itemOffset) = 0.0f;
+            *(s32*)((s32)window + 0x48 + itemOffset) += 1;
         } else if (state == 1) {
-            *(u32*)((s32)window + 0x20 + i * 4) |= 3;
-            PSMTXTrans((void*)((s32)matrices + i * 0x30), -40.0f, 55.0f, 0.0f);
-            *(f32*)(angles + i * 4) = 360.0f;
+            *(u32*)((s32)window + 0x20 + itemOffset) |= 3;
+            PSMTXTrans((void*)((s32)matrices + matrixOffset), -40.0f, 55.0f, 0.0f);
+            *(f32*)(angles + itemOffset) = 360.0f;
             *(s32*)((s32)window + 0x1C) = 1;
         } else if (state == 0) {
-            *(u32*)((s32)window + 0x20 + i * 4) |= 3;
+            *(u32*)((s32)window + 0x20 + itemOffset) |= 3;
             GetRingCenter(pos);
             duration = *(s32*)((s32)gp + 4) * 12 / 60;
             pos[0] = (f32)intplGetValue(pos[0], -60.0, 4,
-                                       *(s32*)((s32)window + 0x48 + i * 4), duration);
+                                       *(s32*)((s32)window + 0x48 + itemOffset), duration);
             pos[1] = (f32)intplGetValue(pos[1], 55.0, 4,
-                                       *(s32*)((s32)window + 0x48 + i * 4), duration);
-            PSMTXTrans((void*)((s32)matrices + i * 0x30), pos[0] + 20.0f, pos[1], pos[2]);
-            *(f32*)(angles + i * 4) = (f32)intplGetValue(0.0, 360.0, 0,
-                                       *(s32*)((s32)window + 0x48 + i * 4), duration);
-            if (*(s32*)((s32)window + 0x48 + i * 4) > 2)
+                                       *(s32*)((s32)window + 0x48 + itemOffset), duration);
+            PSMTXTrans((void*)((s32)matrices + matrixOffset), pos[0] + 20.0f, pos[1], pos[2]);
+            *(f32*)(angles + itemOffset) = (f32)intplGetValue(0.0, 360.0, 0,
+                                       *(s32*)((s32)window + 0x48 + itemOffset), duration);
+            if (*(s32*)((s32)window + 0x48 + itemOffset) > 2)
                 *(s32*)((s32)window + 0x1C) = 1;
-            if (++*(s32*)((s32)window + 0x48 + i * 4) > duration)
-                *(s32*)((s32)window + 0x34 + i * 4) = 1;
+            if (++*(s32*)((s32)window + 0x48 + itemOffset) > duration)
+                *(s32*)((s32)window + 0x34 + itemOffset) = 1;
         } else if (state == 11) {
-            *(u32*)((s32)window + 0x20 + i * 4) &= ~1;
+            *(u32*)((s32)window + 0x20 + itemOffset) &= ~1;
         }
     }
 
@@ -1518,14 +1522,16 @@ void DrawMainMenu(void) {
     cursor = *(void**)window;
     camGetPtr(8);
     state = *(s32*)((s32)window + 0xC);
-    if (state == 2 || state == 0) {
+    switch (state) {
+    case 0:
         settled = 0;
         count = *(s32*)((s32)cursor + 8);
         for (i = 0; i < count; i++) {
             if (*(s32*)((s32)window + 0x34 + i * 4) == 3) settled++;
         }
         if (settled == count) *(s32*)((s32)window + 0xC) = 1;
-    } else if (state == 1) {
+        break;
+    case 1:
         *(u8*)((s32)window + 0x14) = 1;
         current = *(s32*)cursor;
         previous = *(s32*)((s32)window + 0x18);
@@ -1556,9 +1562,19 @@ void DrawMainMenu(void) {
                     *(s32*)((s32)window + 0x84 + i * 4) = 0;
             }
         }
-    } else if (state == 10) {
+        break;
+    case 2:
+        settled = 0;
+        count = *(s32*)((s32)cursor + 8);
+        for (i = 0; i < count; i++) {
+            if (*(s32*)((s32)window + 0x34 + i * 4) == 3) settled++;
+        }
+        if (settled == count) *(s32*)((s32)window + 0xC) = 1;
+        break;
+    case 10:
         *(s32*)((s32)window + 0xC) = 1;
         *(u8*)((s32)window + 0x14) = 1;
+        break;
     }
 
     *(s32*)((s32)window + 0x1C) = 0;
@@ -1766,15 +1782,13 @@ void DrawWeaponWin(void) {
     u8* weaponTable = (u8*)battleWork + 0x171C;
     u8* entries = *(u8**)(window + 0x8);
     void* unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
-    f32 outY, outX, cursorPos[3];
+    f32 outX, outY, cursorPos[3];
     u16 icons[8];
     u32 spCosts[7], costs[7];
     char* names[7];
     u32 enabled[7];
     u8 angles[20], positions[60], mainMatrices[5 * 48], subMatrices[7 * 48];
     s32 i, index;
-    u8* entry;
-    void* weapon;
     void* selectedWeapon = *(void**)(entries + cursor[0] * 0x1C);
     char* helpMsg;
 
@@ -1782,32 +1796,38 @@ void DrawWeaponWin(void) {
     for (i = 0; i < 7; i++) {
         index = (s32)*(f32*)(window + 0x98) + i;
         if (index < cursor[2]) {
-            entry = entries + index * 0x1C;
-            weapon = *(void**)entry;
-            enabled[i] = *(u32*)(entry + 0x4);
+            enabled[i] = *(u32*)(entries + index * 0x1C + 0x4);
             icons[i] = *(u16*)(weaponTable + index * 0x1C + 0x8C);
-            names[i] = *(char**)(entry + 0x8);
-            costs[i] = weapon != NULL ? BtlUnit_GetWeaponCost(unit, weapon) : 0;
-            spCosts[i] = weapon != NULL ? *(u8*)((s32)weapon + 0x12) : 0;
+            names[i] = *(char**)(entries + index * 0x1C + 0x8);
+            if (*(void**)(entries + index * 0x1C) != NULL) {
+                costs[i] = BtlUnit_GetWeaponCost(unit, *(void**)(entries + index * 0x1C));
+            } else {
+                costs[i] = 0;
+            }
+            if (*(void**)(entries + index * 0x1C) != NULL) {
+                spCosts[i] = *(u8*)(*(s32*)(entries + index * 0x1C) + 0x12);
+            } else {
+                spCosts[i] = 0;
+            }
         }
     }
     DrawMainIcon((s32)window, (s32)battleWork + 0x1724, (s32)mainMatrices, (s32)positions, (s32)angles);
     DrawSubIcon(window, subMatrices, enabled, icons, names, costs, spCosts, NULL, 0);
     cursorPos[0] = vec3_802ef750[0]; cursorPos[1] = vec3_802ef750[1]; cursorPos[2] = vec3_802ef750[2];
     DrawMenuCursorAndScrollArrow(cursorPos);
-    entry = entries + cursor[0] * 0x1C;
-    if (selectedWeapon == NULL) {
-        index = *(s32*)(entry + 0x14);
-        helpMsg = *(char**)(itemDataTable + index * 0x28 + 8);
-    } else if (*(s32*)((s32)selectedWeapon + 8) == 0) {
+    if (selectedWeapon != NULL) {
+        index = *(s32*)((s32)selectedWeapon + 8);
+        if (index != 0) {
+            helpMsg = *(char**)(itemDataTable + index * 0x28 + 8);
+        } else
         if (selectedWeapon == ItemWeaponData_CookingItem) {
-            index = *(s32*)(entry + 0x14);
+            index = *(s32*)(entries + cursor[0] * 0x1C + 0x14);
             helpMsg = *(char**)(itemDataTable + index * 0x28 + 8);
         } else {
             helpMsg = *(char**)((s32)selectedWeapon + 0xC);
         }
     } else {
-        index = *(s32*)((s32)selectedWeapon + 8);
+        index = *(s32*)(entries + cursor[0] * 0x1C + 0x14);
         helpMsg = *(char**)(itemDataTable + index * 0x28 + 8);
     }
     if (helpMsg != NULL) {

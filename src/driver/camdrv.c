@@ -1006,318 +1006,275 @@ void camSetCurNo(s32 camNo) {
 }
 
 void cam3dMain(void* cam) {
-    void* mario;
-    void* cam4;
-    void* cam1;
-    u16 mode;
-    u16 state;
-    f32 rate;
-    f32 t;
-    f32 inv;
-    f32 value;
-    f32 orthoY;
-    f32 orthoX;
-    s32 interpTime;
-    f32 shiftValue;
-    volatile f32 base[9];
-    f32 work[9];
+    typedef struct CameraEntryLocal {
+        u16 flags;
+        u16 mode;
+        u16 stateA;
+        u8 align_6[2];
+        f32 progressA;
+        Vec3 cameraPos;
+        Vec3 cameraAt;
+        Vec3 cameraUp;
+        f32 near;
+        f32 far;
+        f32 fovY;
+        f32 aspect;
+        Vec3 storedPos;
+        Vec3 storedAt;
+        Vec3 presetPos;
+        Vec3 presetAt;
+        s64 startTimeA;
+        s64 durationA;
+        u8 curveA;
+        u8 align_81[1];
+        u16 stateB;
+        f32 progressB;
+        Vec3 blendPos;
+        Vec3 marioPos;
+        Vec3 blendAt;
+        Vec3 marioAt;
+        Vec3 anchor;
+        Vec3 anchorPrev;
+        s64 startTimeB;
+        s64 durationB;
+        u8 curveB;
+        u8 align_E1[3];
+        f32 dollyPercent;
+        f32 dollyStart;
+        f32 dollyEnd;
+        f32 dollyStartAlt;
+        u16 scissor[4];
+        f32 viewport[6];
+        f32 viewYaw;
+        f32 viewDistance;
+        f32 view[3][4];
+        f32 rollAngle;
+        Vec3 viewOffset;
+        f32 projection[4][4];
+        s32 projType;
+    } CameraEntryLocal;
+    typedef struct CameraParamsLocal {
+        f32 fovY;
+        f32 aspect;
+        f32 far;
+        Vec3 pos;
+        Vec3 at;
+    } CameraParamsLocal;
+    typedef struct MarioWorkLocal {
+        u8 pad_00[0xEC];
+        Vec3 field_EC;
+        Vec3 field_F8;
+    } MarioWorkLocal;
+    CameraEntryLocal* camera = cam;
 
-    if ((*(u16*)cam & 2) != 0) {
+    if (camera->flags & 2) {
         return;
     }
 
-    mode = *(u16*)((s32)cam + 0x2);
-
-    mode = *(u16*)((s32)cam + 0x2);
-
-    if (mode == 2) {
-        goto battle_mode;
-    }
-
-    if (mode >= 2) {
-        goto copy_to_cam1;
-    }
-
-    if (mode == 0) {
-        goto copy_to_cam1;
-    }
-
-    if ((mode >= 2) || (mode == 0)) {
-        goto copy_to_cam1;
-    }
-
-    state = *(u16*)((s32)cam + 0x4);
-    if (state == 1) {
-        if (*(s64*)((s32)cam + 0x78) != 0) {
-            rate = (f32)((*(s64*)((s32)gp + 0x38) - *(s64*)((s32)cam + 0x70))) /
-                (f32)(*(s64*)((s32)cam + 0x78));
-            *(f32*)((s32)cam + 0x8) = float_1_8041f6c0 - rate;
-
-            if (*(f32*)((s32)cam + 0x8) < float_0_8041f6b4) {
-                *(f32*)((s32)cam + 0x8) = float_0_8041f6b4;
-                *(u16*)((s32)cam + 0x4) = 0;
+    switch (camera->mode) {
+        case 1:
+            switch (camera->stateA) {
+                case 1:
+                    if (camera->durationA > 0) {
+                        camera->progressA = float_1_8041f6c0 - (f32)(*(s64*)((s32)gp + 0x38) - camera->startTimeA) /
+                            (f32)camera->durationA;
+                        if (camera->progressA < float_0_8041f6b4) {
+                            camera->progressA = float_0_8041f6b4;
+                            camera->stateA = 0;
+                        }
+                    } else {
+                        camera->progressA = float_0_8041f6b4;
+                        camera->stateA = 0;
+                    }
+                    break;
+                case 2:
+                case 3:
+                    if (camera->durationA > 0) {
+                        camera->progressA = (f32)(*(s64*)((s32)gp + 0x38) - camera->startTimeA) /
+                            (f32)camera->durationA;
+                        if (camera->progressA > float_1_8041f6c0) {
+                            camera->progressA = float_1_8041f6c0;
+                            camera->stateA = 0;
+                        }
+                    } else {
+                        camera->progressA = float_1_8041f6c0;
+                        camera->stateA = 0;
+                    }
+                    break;
+                case 0:
+                    break;
             }
-        } else {
-            *(f32*)((s32)cam + 0x8) = float_0_8041f6b4;
-            *(u16*)((s32)cam + 0x4) = 0;
-        }
-    } else if ((state != 0) && (state < 4)) {
-        if (*(s64*)((s32)cam + 0x78) != 0) {
-            rate = (f32)((*(s64*)((s32)gp + 0x38) - *(s64*)((s32)cam + 0x70))) /
-                (f32)(*(s64*)((s32)cam + 0x78));
-            *(f32*)((s32)cam + 0x8) = rate;
 
-            if (float_1_8041f6c0 < *(f32*)((s32)cam + 0x8)) {
-                *(f32*)((s32)cam + 0x8) = float_1_8041f6c0;
-                *(u16*)((s32)cam + 0x4) = 0;
+            switch (camera->stateB) {
+                case 1:
+                    if (camera->durationB > 0) {
+                        camera->progressB = float_1_8041f6c0 - (f32)(*(s64*)((s32)gp + 0x38) - camera->startTimeB) /
+                            (f32)camera->durationB;
+                        if (camera->progressB < float_0_8041f6b4) {
+                            camera->progressB = float_0_8041f6b4;
+                            camera->stateB = 0;
+                        }
+                    } else {
+                        camera->progressB = float_0_8041f6b4;
+                        camera->stateB = 0;
+                    }
+                    break;
+                case 2:
+                case 3:
+                    if (camera->durationB > 0) {
+                        camera->progressB = (f32)(*(s64*)((s32)gp + 0x38) - camera->startTimeB) /
+                            (f32)camera->durationB;
+                        if (camera->progressB > float_1_8041f6c0) {
+                            camera->progressB = float_1_8041f6c0;
+                            camera->stateB = 0;
+                        }
+                    } else {
+                        camera->progressB = float_1_8041f6c0;
+                        camera->stateB = 0;
+                    }
+                    break;
+                case 0:
+                    break;
             }
-        } else {
-            *(f32*)((s32)cam + 0x8) = float_1_8041f6c0;
-            *(u16*)((s32)cam + 0x4) = 0;
-        }
-    }
 
-    state = *(u16*)((s32)cam + 0x82);
-    if (state == 1) {
-        if (*(s64*)((s32)cam + 0xD8) != 0) {
-            rate = (f32)((*(s64*)((s32)gp + 0x38) - *(s64*)((s32)cam + 0xD0))) /
-                (f32)(*(s64*)((s32)cam + 0xD8));
-            *(f32*)((s32)cam + 0x84) = float_1_8041f6c0 - rate;
-
-            if (*(f32*)((s32)cam + 0x84) < float_0_8041f6b4) {
-                *(f32*)((s32)cam + 0x84) = float_0_8041f6b4;
-                *(u16*)((s32)cam + 0x82) = 0;
+            if (!(camera->flags & 0x10)) {
+                MarioWorkLocal* mario = marioGetPtr();
+                camera->marioPos.y += ((float_1_8041f6c0 + mario->field_EC.y - camera->marioPos.y) * marioGetCamFollowRate());
             }
-        } else {
-            *(f32*)((s32)cam + 0x84) = float_0_8041f6b4;
-            *(u16*)((s32)cam + 0x82) = 0;
-        }
-    } else if ((state != 0) && (state < 4)) {
-        if (*(s64*)((s32)cam + 0xD8) != 0) {
-            rate = (f32)((*(s64*)((s32)gp + 0x38) - *(s64*)((s32)cam + 0xD0))) /
-                (f32)(*(s64*)((s32)cam + 0xD8));
-            *(f32*)((s32)cam + 0x84) = rate;
-
-            if (float_1_8041f6c0 < *(f32*)((s32)cam + 0x84)) {
-                *(f32*)((s32)cam + 0x84) = float_1_8041f6c0;
-                *(u16*)((s32)cam + 0x82) = 0;
+            {
+                MarioWorkLocal* mario = marioGetPtr();
+                camera->marioPos.x = float_0p01_8041f6c4 + mario->field_EC.x;
+                camera->marioPos.z = mario->field_EC.z;
+                camera->dollyStart = float_0_8041f6b4;
+                camera->marioAt.x = mario->field_F8.x;
+                camera->marioAt.y = float_1_8041f6c0 + mario->field_F8.y;
+                camera->marioAt.z = mario->field_F8.z;
             }
-        } else {
-            *(f32*)((s32)cam + 0x84) = float_1_8041f6c0;
-            *(u16*)((s32)cam + 0x82) = 0;
-        }
+
+            {
+                f32 t, it;
+                t = intplGetValue(float_0_8041f6b4, float_1_8041f6c0, camera->curveB,
+                    (s32)(float_1E05_8041f6c8 * camera->progressB), 100000);
+                it = float_1_8041f6c0 - t;
+                switch (camera->stateB) {
+                    case 0:
+                    case 1:
+                    case 2:
+                        camera->blendPos.x = (camera->anchor.x * t) + (camera->marioPos.x * it);
+                        camera->blendPos.y = (camera->anchor.y * t) + (camera->marioPos.y * it);
+                        camera->blendPos.z = (camera->anchor.z * t) + (camera->marioPos.z * it);
+                        camera->blendAt.x = (camera->anchor.x * t) + (camera->marioAt.x * it);
+                        camera->blendAt.y = (camera->anchor.y * t) + (camera->marioAt.y * it);
+                        camera->blendAt.z = (camera->anchor.z * t) + (camera->marioAt.z * it);
+                        camera->dollyPercent = (camera->dollyEnd * t) + (camera->dollyStart * it);
+                        break;
+                    case 3:
+                        camera->blendPos.x = (camera->anchor.x * t) + (camera->anchorPrev.x * it);
+                        camera->blendPos.y = (camera->anchor.y * t) + (camera->anchorPrev.y * it);
+                        camera->blendPos.z = (camera->anchor.z * t) + (camera->anchorPrev.z * it);
+                        camera->blendAt = camera->blendPos;
+                        camera->dollyPercent = (camera->dollyEnd * t) + (camera->dollyStartAlt * it);
+                        break;
+                }
+            }
+
+            {
+                CameraParamsLocal work;
+                CameraParamsLocal work2;
+                work.fovY = float_25_8041f6cc;
+                work.aspect = float_1_8041f6c0;
+                work.far = float_32768_8041f6d0;
+                work.pos = camera->storedPos;
+                work.at = camera->storedAt;
+
+                switch (camera->stateA) {
+                    case 0:
+                    case 1:
+                    case 2:
+                        if (camera->flags & 4) {
+                            MarioWorkLocal* mario = marioGetPtr();
+                            f32 bank = float_0_8041f6b4;
+                            f32 dolly;
+                            f32 oldx, oldy, oldz;
+                            camShiftMain(camera, mario, &bank);
+                            camRoadMain(camera->blendPos.x, camera->blendPos.y, camera->blendPos.z,
+                                camera->blendAt.x, camera->blendAt.y, camera->blendAt.z, &work2);
+                            dolly = camera->dollyPercent;
+                            oldx = work2.pos.x;
+                            oldy = work2.pos.y;
+                            oldz = work2.pos.z;
+                            work2.pos.x = oldx + (work2.at.x - oldx) * dolly / float_100_8041f6d4;
+                            work2.pos.y = oldy + (work2.at.y - oldy) * dolly / float_100_8041f6d4;
+                            work2.pos.z = oldz + (work2.at.z - oldz) * dolly / float_100_8041f6d4;
+                        } else {
+                            work2 = work;
+                        }
+                        break;
+                    case 3:
+                        work2.fovY = work.fovY;
+                        work2.aspect = work.aspect;
+                        work2.far = work.far;
+                        work2.pos = camera->presetPos;
+                        work2.at = camera->presetAt;
+                        break;
+                }
+
+                camShiftPostMain();
+                {
+                    f32 t, it;
+                    t = intplGetValue(float_0_8041f6b4, float_1_8041f6c0, camera->curveA,
+                        (s32)(float_1E05_8041f6c8 * (float_1_8041f6c0 - camera->progressA)), 100000);
+                    it = float_1_8041f6c0 - t;
+                    camera->cameraAt.x = (work.at.x * it) + (work2.at.x * t);
+                    camera->cameraAt.y = (work.at.y * it) + (work2.at.y * t);
+                    camera->cameraAt.z = (work.at.z * it) + (work2.at.z * t);
+                    camera->cameraPos.x = (work.pos.x * it) + (work2.pos.x * t);
+                    camera->cameraPos.y = (work.pos.y * it) + (work2.pos.y * t);
+                    camera->cameraPos.z = (work.pos.z * it) + (work2.pos.z * t);
+                }
+            }
+
+            camera->viewDistance = PSVECDistance(&camera->cameraPos, &camera->cameraAt);
+            camera->viewYaw = angleABf(camera->cameraPos.x, camera->cameraPos.z,
+                camera->cameraAt.x, camera->cameraAt.z);
+            if (camera->projType == 0) {
+                C_MTXPerspective(camera->projection, camera->fovY, float_1p2667_8041f6d8, camera->near, camera->far);
+            } else {
+                f32 h, w;
+                h = camera->viewDistance * (f32)tan(double_0p21817_802bf638);
+                w = float_608_8041f6dc * h / float_480_8041f6e0;
+                C_MTXOrtho(camera->projection, h, -h, -w, w, camera->near, camera->far);
+            }
+            break;
+
+        case 2:
+            if (*(s32*)((s32)gp + 0x14)) {
+                battleCameraMain();
+                camera->viewDistance = PSVECDistance(&camera->cameraPos, &camera->cameraAt);
+                camera->viewYaw = angleABf(camera->cameraPos.x, camera->cameraPos.z,
+                    camera->cameraAt.x, camera->cameraAt.z);
+                if (camera->projType == 0) {
+                    C_MTXPerspective(camera->projection, camera->fovY, float_1p2667_8041f6d8, camera->near, camera->far);
+                } else {
+                    f32 h, w;
+                    h = camera->viewDistance * (f32)tan(double_0p21817_802bf638);
+                    w = float_608_8041f6dc * h / float_480_8041f6e0;
+                    C_MTXOrtho(camera->projection, h, -h, -w, w, camera->near, camera->far);
+                }
+            }
+            break;
+        case 0:
+        case 3:
+            break;
     }
 
-    if ((*(u16*)cam & 0x10) == 0) {
-        rate = marioGetCamFollowRate();
-        mario = marioGetPtr();
-        *(f32*)((s32)cam + 0x98) =
-            *(f32*)((s32)cam + 0x98) +
-            ((float_1_8041f6c0 + *(f32*)((s32)mario + 0xF0)) -
-            *(f32*)((s32)cam + 0x98)) * rate;
+    {
+        CameraEntryLocal* camera3D = camGetPtr(4);
+        CameraEntryLocal* offscreen2 = camGetPtr(1);
+        PSMTXCopy(camera3D->view, offscreen2->view);
+        PSMTX44Copy(camera3D->projection, offscreen2->projection);
+        offscreen2->projType = camera3D->projType;
     }
-
-    mario = marioGetPtr();
-    *(f32*)((s32)cam + 0x94) = float_0p01_8041f6c4 + *(f32*)((s32)mario + 0xEC);
-
-    mario = marioGetPtr();
-    *(f32*)((s32)cam + 0x9C) = *(f32*)((s32)mario + 0xF4);
-    *(f32*)((s32)cam + 0xE8) = float_0_8041f6b4;
-
-    mario = marioGetPtr();
-    *(f32*)((s32)cam + 0xAC) = *(f32*)((s32)mario + 0xF8);
-
-    mario = marioGetPtr();
-    *(f32*)((s32)cam + 0xB0) = float_1_8041f6c0 + *(f32*)((s32)mario + 0xFC);
-
-    mario = marioGetPtr();
-    *(f32*)((s32)cam + 0xB4) = *(f32*)((s32)mario + 0x100);
-
-    interpTime = (s32)(float_1E05_8041f6c8 * *(f32*)((s32)cam + 0x84));
-    t = intplGetValue(
-        float_0_8041f6b4,
-        float_1_8041f6c0,
-        *(u8*)((s32)cam + 0xE0),
-        interpTime,
-        100000
-    );
-    inv = float_1_8041f6c0 - t;
-
-    state = *(u16*)((s32)cam + 0x82);
-    if (state == 3) {
-        *(f32*)((s32)cam + 0x88) = (*(f32*)((s32)cam + 0xC4) * inv) + (*(f32*)((s32)cam + 0xB8) * t);
-        *(f32*)((s32)cam + 0x8C) = (*(f32*)((s32)cam + 0xC8) * inv) + (*(f32*)((s32)cam + 0xBC) * t);
-        *(f32*)((s32)cam + 0x90) = (*(f32*)((s32)cam + 0xCC) * inv) + (*(f32*)((s32)cam + 0xC0) * t);
-
-        *(u32*)((s32)cam + 0xA0) = *(u32*)((s32)cam + 0x88);
-        *(u32*)((s32)cam + 0xA4) = *(u32*)((s32)cam + 0x8C);
-        *(u32*)((s32)cam + 0xA8) = *(u32*)((s32)cam + 0x90);
-
-        *(f32*)((s32)cam + 0xE4) = (*(f32*)((s32)cam + 0xF0) * inv) + (*(f32*)((s32)cam + 0xEC) * t);
-    } else if (state < 3) {
-        *(f32*)((s32)cam + 0x88) = (*(f32*)((s32)cam + 0x94) * inv) + (*(f32*)((s32)cam + 0xB8) * t);
-        *(f32*)((s32)cam + 0x8C) = (*(f32*)((s32)cam + 0x98) * inv) + (*(f32*)((s32)cam + 0xBC) * t);
-        *(f32*)((s32)cam + 0x90) = (*(f32*)((s32)cam + 0x9C) * inv) + (*(f32*)((s32)cam + 0xC0) * t);
-
-        *(f32*)((s32)cam + 0xA0) = (*(f32*)((s32)cam + 0xAC) * inv) + (*(f32*)((s32)cam + 0xB8) * t);
-        *(f32*)((s32)cam + 0xA4) = (*(f32*)((s32)cam + 0xB0) * inv) + (*(f32*)((s32)cam + 0xBC) * t);
-        *(f32*)((s32)cam + 0xA8) = (*(f32*)((s32)cam + 0xB4) * inv) + (*(f32*)((s32)cam + 0xC0) * t);
-
-        *(f32*)((s32)cam + 0xE4) = (*(f32*)((s32)cam + 0xE8) * inv) + (*(f32*)((s32)cam + 0xEC) * t);
-    }
-
-    base[0] = float_25_8041f6cc;
-    base[1] = float_1_8041f6c0;
-    base[2] = float_32768_8041f6d0;
-    base[3] = *(f32*)((s32)cam + 0x40);
-    base[4] = *(f32*)((s32)cam + 0x44);
-    base[5] = *(f32*)((s32)cam + 0x48);
-    base[6] = *(f32*)((s32)cam + 0x4C);
-    base[7] = *(f32*)((s32)cam + 0x50);
-    base[8] = *(f32*)((s32)cam + 0x54);
-
-    state = *(u16*)((s32)cam + 0x4);
-    if (state == 3) {
-        work[0] = float_25_8041f6cc;
-        work[1] = float_1_8041f6c0;
-        work[2] = float_32768_8041f6d0;
-        work[3] = *(f32*)((s32)cam + 0x58);
-        work[4] = *(f32*)((s32)cam + 0x5C);
-        work[5] = *(f32*)((s32)cam + 0x60);
-        work[6] = *(f32*)((s32)cam + 0x64);
-        work[7] = *(f32*)((s32)cam + 0x68);
-        work[8] = *(f32*)((s32)cam + 0x6C);
-    } else if (state < 3) {
-        if ((*(u16*)cam & 4) == 0) {
-            work[0] = base[0];
-            work[1] = base[1];
-            work[2] = base[2];
-            work[3] = base[3];
-            work[4] = base[4];
-            work[5] = base[5];
-            work[6] = base[6];
-            work[7] = base[7];
-            work[8] = base[8];
-        } else {
-            mario = marioGetPtr();
-            shiftValue = float_0_8041f6b4;
-            camShiftMain(cam, mario, &shiftValue);
-
-            camRoadMain(
-                *(f32*)((s32)cam + 0x88),
-                *(f32*)((s32)cam + 0x8C),
-                *(f32*)((s32)cam + 0x90),
-                *(f32*)((s32)cam + 0xA0),
-                *(f32*)((s32)cam + 0xA4),
-                *(f32*)((s32)cam + 0xA8),
-                work
-            );
-
-            value = *(f32*)((s32)cam + 0xE4);
-            work[3] = work[3] + ((value * (work[6] - work[3])) / float_100_8041f6d4);
-            work[4] = work[4] + ((value * (work[7] - work[4])) / float_100_8041f6d4);
-            work[5] = work[5] + ((value * (work[8] - work[5])) / float_100_8041f6d4);
-        }
-    }
-
-    camShiftPostMain();
-
-    interpTime = (s32)(float_1E05_8041f6c8 * (float_1_8041f6c0 - *(f32*)((s32)cam + 0x8)));
-    t = intplGetValue(
-        float_0_8041f6b4,
-        float_1_8041f6c0,
-        *(u8*)((s32)cam + 0x80),
-        interpTime,
-        100000
-    );
-    inv = float_1_8041f6c0 - t;
-
-    *(f32*)((s32)cam + 0x18) = (base[6] * inv) + (work[6] * t);
-    *(f32*)((s32)cam + 0x1C) = (base[7] * inv) + (work[7] * t);
-    *(f32*)((s32)cam + 0x20) = (base[8] * inv) + (work[8] * t);
-
-    *(f32*)((s32)cam + 0x0C) = (base[3] * inv) + (work[3] * t);
-    *(f32*)((s32)cam + 0x10) = (base[4] * inv) + (work[4] * t);
-    *(f32*)((s32)cam + 0x14) = (base[5] * inv) + (work[5] * t);
-
-    *(f32*)((s32)cam + 0x118) =
-        PSVECDistance((void*)((s32)cam + 0x0C), (void*)((s32)cam + 0x18));
-
-    *(f32*)((s32)cam + 0x114) = angleABf(
-        *(f32*)((s32)cam + 0x0C),
-        *(f32*)((s32)cam + 0x14),
-        *(f32*)((s32)cam + 0x18),
-        *(f32*)((s32)cam + 0x20)
-    );
-
-    if (*(s32*)((s32)cam + 0x19C) == 0) {
-        C_MTXPerspective(
-            (void*)((s32)cam + 0x15C),
-            *(f32*)((s32)cam + 0x38),
-            float_1p2667_8041f6d8,
-            *(f32*)((s32)cam + 0x30),
-            *(f32*)((s32)cam + 0x34)
-        );
-    } else {
-        value = *(f32*)((s32)cam + 0x118) * (f32)tan(double_0p21817_802bf638);
-        orthoY = (float_608_8041f6dc * value) / float_480_8041f6e0;
-
-        C_MTXOrtho(
-            (void*)((s32)cam + 0x15C),
-            value,
-            -value,
-            -orthoY,
-            orthoY,
-            *(f32*)((s32)cam + 0x30),
-            *(f32*)((s32)cam + 0x34)
-        );
-    }
-
-battle_mode:
-    if (*(s32*)((s32)gp + 0x14) != 0) {
-        battleCameraMain();
-
-        *(f32*)((s32)cam + 0x118) =
-            PSVECDistance((void*)((s32)cam + 0x0C), (void*)((s32)cam + 0x18));
-
-        *(f32*)((s32)cam + 0x114) = angleABf(
-            *(f32*)((s32)cam + 0x0C),
-            *(f32*)((s32)cam + 0x14),
-            *(f32*)((s32)cam + 0x18),
-            *(f32*)((s32)cam + 0x20)
-        );
-
-        if (*(s32*)((s32)cam + 0x19C) == 0) {
-            C_MTXPerspective(
-                (void*)((s32)cam + 0x15C),
-                *(f32*)((s32)cam + 0x38),
-                float_1p2667_8041f6d8,
-                *(f32*)((s32)cam + 0x30),
-                *(f32*)((s32)cam + 0x34)
-            );
-        } else {
-            value = *(f32*)((s32)cam + 0x118) * (f32)tan(double_0p21817_802bf638);
-            orthoY = (float_608_8041f6dc * value) / float_480_8041f6e0;
-
-            C_MTXOrtho(
-                (void*)((s32)cam + 0x15C),
-                value,
-                -value,
-                -orthoY,
-                orthoY,
-                *(f32*)((s32)cam + 0x30),
-                *(f32*)((s32)cam + 0x34)
-            );
-        }
-    }
-
-copy_to_cam1:
-    cam4 = camPtrTbl[4];
-    cam1 = camPtrTbl[1];
-
-    PSMTXCopy((void*)((s32)cam4 + 0x11C), (void*)((s32)cam1 + 0x11C));
-    PSMTX44Copy((void*)((s32)cam4 + 0x15C), (void*)((s32)cam1 + 0x15C));
-    *(s32*)((s32)cam1 + 0x19C) = *(s32*)((s32)cam4 + 0x19C);
 }
 
 void cam3dImgMain(CamWorkRaw* cam) {

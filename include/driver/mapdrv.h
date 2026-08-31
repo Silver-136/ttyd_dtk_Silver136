@@ -57,7 +57,7 @@ void mapBlendOff2(void);
 u8 mapObjSetColor(char* name, void* color);
 void mapGrpSetColor(s32 group, void* color);
 void spline_maketable(s32 count, f32* points, f32* table, f32* out);
-void spline_getvalue(double time, float* out, int count, float* values, int times, int slopes);
+void spline_getvalue(float time, float* out, int count, float* values, int times, int slopes);
 s32 mapTestXLU(u32 materialFlag, void* value1, void* value2);
 void mapSetTevCallback(s32 index, void* callback);
 u8 mapObjFlushOn(char* name);

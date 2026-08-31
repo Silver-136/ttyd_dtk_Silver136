@@ -825,10 +825,10 @@ void iconDispGxCol(s32 mtx, s16 someBitfield, u16 iconId, void* color) {
     void* cam;
     void* entry;
     void* bin;
-    f32 concatMtx[3][4];
     u16 icon[0x1C];
-    u32 count;
-    u32 id;
+    f32 concatMtx[3][4];
+    s32 count;
+    s32 id;
     s32 total;
     s32 used;
     s32 i;
@@ -872,7 +872,7 @@ void iconDispGxCol(s32 mtx, s16 someBitfield, u16 iconId, void* color) {
             total = 0;
             used = 0;
             if (count != 0) {
-                if (count > 8 && (s32)(count - 8) > 0) {
+                if (count > 8 && (count - 8) > 0) {
                     scan = entry;
                     i = (count - 1) >> 3;
                     do {
@@ -892,7 +892,7 @@ void iconDispGxCol(s32 mtx, s16 someBitfield, u16 iconId, void* color) {
 
                 scan = (void*)((s32)entry + (used * 4));
                 i = count - used;
-                if (used < (s32)count) {
+                if (used < count) {
                     do {
                         total += *(u16*)((s32)scan + 0xA);
                         scan = (void*)((s32)scan + 4);
@@ -1501,8 +1501,8 @@ u32 iconNumberDispGx(void* mtx, s32 number, s32 small, u32* color) {
     extern f32 float_0_8041f87c;
     extern f32 float_16_8041f884;
     extern f32 float_20_8041f880;
-    extern u16 suuji[];
-    extern u16 suuji_s[];
+    extern u16 suuji[10];
+    extern u16 suuji_s[10];
     s32 digits[5];
     s32 count;
     s32 tenThousands;
@@ -1511,110 +1511,30 @@ u32 iconNumberDispGx(void* mtx, s32 number, s32 small, u32* color) {
     s32 tens;
     s32 hundredThousands;
     s32 i;
-    u32 x;
+    s32 x;
     f32 step;
     f32 trans[3][4];
-    f32 concat[3][4];
     u32 localColor;
     u16 iconId;
+    s32 isLarge;
 
+    isLarge = small == 0;
     step = float_16_8041f884;
-    if (small == 0) {
+    if (isLarge) {
         step = float_20_8041f880;
     }
 
     hundredThousands = number / 100000;
-    number = number - (hundredThousands * 100000);
+    number %= 100000;
     tenThousands = number / 10000;
     digits[4] = tenThousands;
-    number = number - (tenThousands * 10000);
+    number %= 10000;
     thousands = number / 1000;
     digits[3] = thousands;
-    number = number - (thousands * 1000);
+    number %= 1000;
     hundreds = number / 100;
     digits[2] = hundreds;
-    number = number - (hundreds * 100);
-    tens = number / 10;
-    digits[1] = tens;
-    digits[0] = number - (tens * 10);
-
-    if (hundredThousands == 0) {
-        if (digits[4] == 0) {
-            if (digits[3] == 0) {
-                if (digits[2] == 0) {
-                    if (digits[1] == 0) {
-                        count = 1;
-                    } else {
-                        count = 2;
-                    }
-                } else {
-                    count = 3;
-                }
-            } else {
-                count = 4;
-            }
-        } else {
-            count = 5;
-        }
-    } else {
-        count = 5;
-    }
-
-    x = 0;
-    for (i = 0; i < count; i++) {
-        PSMTXTrans(trans, (f32)(-i) * step, float_0_8041f87c, float_0_8041f87c);
-        PSMTXConcat(mtx, trans, concat);
-        localColor = *color;
-        if (small != 0) {
-            iconId = suuji_s[digits[i]];
-        } else {
-            iconId = suuji[digits[i]];
-        }
-        iconDispGxCol((s32)concat, 0x10, iconId, &localColor);
-        x = (u32)((f32)x + step);
-    }
-
-    return x;
-}
-
-u32 iconNumberDispGx3D(void* mtx, s32 number, s32 small, u32* color) {
-    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
-    extern void iconDispGxCol(s32 mtx, s16 someBitfield, u16 iconId, void* color);
-    extern f32 float_0_8041f87c;
-    extern f32 float_8_8041f878;
-    extern f32 float_10_8041f874;
-    extern u16 suuji[];
-    extern u16 suuji_s[];
-    s32 digits[5];
-    s32 count;
-    s32 tenThousands;
-    s32 thousands;
-    s32 hundreds;
-    s32 tens;
-    s32 hundredThousands;
-    s32 i;
-    u32 x;
-    f32 step;
-    f32 trans[3][4];
-    u32 localColor;
-    u16 iconId;
-
-    step = float_8_8041f878;
-    if (small == 0) {
-        step = float_10_8041f874;
-    }
-
-    hundredThousands = number / 100000;
-    number = number - (hundredThousands * 100000);
-    tenThousands = number / 10000;
-    digits[4] = tenThousands;
-    number = number - (tenThousands * 10000);
-    thousands = number / 1000;
-    digits[3] = thousands;
-    number = number - (thousands * 1000);
-    hundreds = number / 100;
-    digits[2] = hundreds;
-    number = number - (hundreds * 100);
+    number %= 100;
     tens = number / 10;
     digits[1] = tens;
     digits[0] = number - (tens * 10);
@@ -1646,13 +1566,96 @@ u32 iconNumberDispGx3D(void* mtx, s32 number, s32 small, u32* color) {
         PSMTXTrans(trans, (f32)(-i) * step, float_0_8041f87c, float_0_8041f87c);
         PSMTXConcat(mtx, trans, trans);
         localColor = *color;
-        if (small != 0) {
-            iconId = suuji_s[digits[i]];
-        } else {
+        if (isLarge) {
             iconId = suuji[digits[i]];
+        } else {
+            iconId = suuji_s[digits[i]];
+        }
+        iconDispGxCol((s32)trans, 0x10, iconId, &localColor);
+        x = (s32)((f32)x + step);
+    }
+
+    return x;
+}
+
+u32 iconNumberDispGx3D(void* mtx, s32 number, s32 small, u32* color) {
+    extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
+    extern void iconDispGxCol(s32 mtx, s16 someBitfield, u16 iconId, void* color);
+    extern f32 float_0_8041f87c;
+    extern f32 float_8_8041f878;
+    extern f32 float_10_8041f874;
+    extern u16 suuji[10];
+    extern u16 suuji_s[10];
+    s32 digits[5];
+    s32 count;
+    s32 tenThousands;
+    s32 thousands;
+    s32 hundreds;
+    s32 tens;
+    s32 hundredThousands;
+    s32 i;
+    s32 x;
+    f32 step;
+    f32 trans[3][4];
+    u32 localColor;
+    u16 iconId;
+    s32 isLarge;
+
+    isLarge = small == 0;
+    step = float_8_8041f878;
+    if (isLarge) {
+        step = float_10_8041f874;
+    }
+
+    hundredThousands = number / 100000;
+    number %= 100000;
+    tenThousands = number / 10000;
+    digits[4] = tenThousands;
+    number %= 10000;
+    thousands = number / 1000;
+    digits[3] = thousands;
+    number %= 1000;
+    hundreds = number / 100;
+    digits[2] = hundreds;
+    number %= 100;
+    tens = number / 10;
+    digits[1] = tens;
+    digits[0] = number - (tens * 10);
+
+    if (hundredThousands == 0) {
+        if (digits[4] == 0) {
+            if (digits[3] == 0) {
+                if (digits[2] == 0) {
+                    if (digits[1] == 0) {
+                        count = 1;
+                    } else {
+                        count = 2;
+                    }
+                } else {
+                    count = 3;
+                }
+            } else {
+                count = 4;
+            }
+        } else {
+            count = 5;
+        }
+    } else {
+        count = 5;
+    }
+
+    x = 0;
+    for (i = 0; i < count; i++) {
+        PSMTXTrans(trans, (f32)(-i) * step, float_0_8041f87c, float_0_8041f87c);
+        PSMTXConcat(mtx, trans, trans);
+        localColor = *color;
+        if (isLarge) {
+            iconId = suuji[digits[i]];
+        } else {
+            iconId = suuji_s[digits[i]];
         }
         iconDispGxCol((s32)trans, 0, iconId, &localColor);
-        x = (u32)((f32)x + step);
+        x = (s32)((f32)x + step);
     }
 
     return x;

@@ -378,7 +378,10 @@ void logoDisp(void) {
     GXGetProjectionv(projection);
     GXGetViewportv(viewport);
     GXGetScissor(&scissorX, &scissorY, &scissorW, &scissorH);
-    mode = OSGetProgressiveMode() == 1 ? sRMObjHReso_prog : sRMObjHReso;
+    mode = sRMObjHReso_prog;
+    if (OSGetProgressiveMode() != 1) {
+        mode = sRMObjHReso;
+    }
     GXSetPixelFmt(0, 0);
     GXSetDispCopySrc(0, 0, *(u16*)(mode + 4), *(u16*)(mode + 6));
     GXSetDispCopyDst(*(u16*)(mode + 4), *(u16*)(mode + 8));
@@ -395,9 +398,14 @@ void logoDisp(void) {
         GXLoadTexObj(texObj, 0);
         GXSetNumChans(0);
         color0 = dat_804207f0;
-        color1 = (*(s32*)((s32)gp + 0xD8) == 0) ? dat_804207f4 : dat_804207f8;
         GXSetTevColor(1, &color0);
-        GXSetTevColor(2, &color1);
+        if (*(s32*)((s32)gp + 0xD8) == 0) {
+            color1 = dat_804207f4;
+            GXSetTevColor(2, &color1);
+        } else {
+            color1 = dat_804207f8;
+            GXSetTevColor(2, &color1);
+        }
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
         GXSetNumTevStages(1);

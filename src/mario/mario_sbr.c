@@ -686,23 +686,17 @@ s32 chkRevolveDir(int* param_1, int* param_2) {
         while (idx < 0) {
             idx += 20;
         }
-        idx %= 20;
         prev = DAT_803dc234 + offset - 1;
         while (prev < 0) {
             prev += 20;
         }
-        prev %= 20;
         offset--;
         a = DAT_803dc264[idx];
         b = DAT_803dc264[prev];
         if (i != 0 || a != b) {
             diff = a - b;
             if (__fabsf((f32)diff) > float_180_80420a70) {
-                if (diff > 0) {
-                    a += 0x168;
-                } else {
-                    a -= 0x168;
-                }
+                a += diff > 0 ? 0x168 : -0x168;
                 diff = a - b;
             }
             if (diff > -0x5A && diff < 0) {
@@ -713,13 +707,13 @@ s32 chkRevolveDir(int* param_1, int* param_2) {
             }
         }
     }
-    if (left == 0 && right > 3) {
+    if (left == 0 && right >= 4) {
         int32_t_803dc248 = 0;
         *param_1 = 0;
         *param_2 = right;
         return 0;
     }
-    if (right == 0 && left > 3) {
+    if (right == 0 && left >= 4) {
         int32_t_803dc248 = 1;
         *param_1 = left;
         *param_2 = 0;
@@ -842,10 +836,14 @@ s32 marioGetRub(s32 buttonFlags, s32* outDir, s32* outCount, f32* outMove) {
     } else {
         s32 stickX = *(s8*)((s32)player + 0x252);
         s32 stickY;
+        s32 disableStickY = 0;
         f32 dist;
         f32 angle;
 
         if ((*(u32*)((s32)player + 0x0) & 0x02000000) != 0 || kpaGetStageViewType() == 0) {
+            disableStickY = 1;
+        }
+        if (disableStickY != 0) {
             stickY = 0;
         } else {
             stickY = -*(s8*)((s32)player + 0x253);
@@ -903,12 +901,11 @@ s32 marioGetRub(s32 buttonFlags, s32* outDir, s32* outCount, f32* outMove) {
         }
         *(s32*)(rubwork + 0x1C) = 0;
         *(s32*)(rubwork + 0x8) += 1;
-        ret = checkOneRevolution(0);
-        if (ret == 1) {
+        if (checkOneRevolution(0) == 1) {
+            ret = 1;
             *(s32*)(rubwork + 0x4) += 1;
             FILL_RUB_DIRECTIONS(*(s16*)(rubwork + 0x14));
         }
-        ret = (ret == 1);
         *(s32*)(rubwork + 0x10) = 1;
     } else if (state == 1) {
         if (*(s32*)(rubwork + 0x10) == 1) {
@@ -921,12 +918,11 @@ s32 marioGetRub(s32 buttonFlags, s32* outDir, s32* outCount, f32* outMove) {
         }
         *(s32*)(rubwork + 0x1C) = 0;
         *(s32*)(rubwork + 0x8) += 1;
-        ret = checkOneRevolution(1);
-        if (ret == 1) {
+        if (checkOneRevolution(1) == 1) {
+            ret = 1;
             *(s32*)(rubwork + 0x4) += 1;
             FILL_RUB_DIRECTIONS(*(s16*)(rubwork + 0x14));
         }
-        ret = (ret == 1);
         *(s32*)(rubwork + 0x10) = 2;
     } else {
         *(s32*)(rubwork + 0xC) = next;

@@ -8,7 +8,7 @@ void animInit(void);
 void animMain(void);
 void animPoseBattleInit(void);
 s32 animPoseEntry(void* name, s32 mode);
-void animPaperPoseEntry(s32 name, s32 flag);
+s32 animPaperPoseEntry(s32 name, s32 flag);
 s32 animEffectAsync(void* name, s32 mode);
 void animPosePeraOn(s32 poseId);
 void animPosePeraOff(s32 poseId);

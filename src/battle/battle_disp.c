@@ -388,6 +388,16 @@ void btlDispMain(void) {
     extern void statusPoseControl(void*);
     extern void BtlUnit_GetPartsWorldPos(void*, f32*, f32*, f32*);
     extern s32 animPoseTestXLU(s32);
+    extern f32 dispCalcZ(void* pos);
+    extern void* BattleGetPartnerPtr(void* battleWork, void* unit);
+    extern void shadowEntry(f64 x, f64 y, f64 z, f64 size);
+    extern void animPoseVivianMain(s32 poseId, f32* values);
+    extern void BtlUnit_ControlPoseSoundMain(void* part);
+    extern f32 float_100_80422270;
+    extern f32 float_0p1_80422274;
+    extern f32 float_16_80422230;
+    extern f32 float_10_80422228;
+    extern f32 float_8_80422278;
     extern s32 _GetStatusPoseType(void*);
     extern s32 BtlUnit_CheckStatus(void*, s32);
     extern s32 BtlUnit_CheckStatusFlag(void*, u32);
@@ -407,6 +417,9 @@ void btlDispMain(void) {
     extern void BattleCommandDisplay(void*);
     extern void BattleAudience_Disp(void);
     extern void BattleBreakSlot_Disp(void);
+    extern void btlUnitItemDisp2(s32 cameraId, void* unit);
+    extern void btlUnitItemDisp(s32 cameraId, void* unit);
+    extern void btlUnitStolenItemDisp(s32 cameraId, void* unit);
     void* battleWork = _battleWorkPointer;
     u8* unit;
     u8* owner;
@@ -421,6 +434,12 @@ void btlDispMain(void) {
     s8 turns, strength;
     f32 x, y, z, ox, oy, oz, floor;
     f32 worldX, worldY, worldZ;
+    Vec dispPos;
+    f32 shadowX, shadowY, shadowZ;
+    f32 partnerX, partnerY, partnerZ;
+    f32 shadowFloor, shadowScale, shadowSize;
+    u8* partner;
+    Vec vivianWork;
 
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(battleWork, i);
@@ -547,18 +566,101 @@ void btlDispMain(void) {
                 statusPoseControl(part);
                 BtlUnit_GetPartsWorldPos(part, &worldX, &worldY, &worldZ);
                 animPoseMain(*(s32*)(part + 0x1C0));
+                dispPos.x = worldX;
+                dispPos.y = worldY;
+                dispPos.z = worldZ + *(f32*)(part + 0x4F8);
+                part[0x4F7] = *(s16*)(*(u8**)(part + 4) + 0x34);
+                if (BtlUnit_CheckStatus(unit, 0x12) ||
+                    (*(u32*)(unit + 0x104) & 8) != 0) {
+                    part[0x4F7] = (part[0x4F7] << 7) / 0xFF;
+                }
+                part[0x4F7] = (part[0x4F7] * part[0x4F3]) / 0xFF;
+                part[0x4F4] = part[0x4F0];
+                part[0x4F5] = part[0x4F1];
+                part[0x4F6] = part[0x4F2];
                 if ((*(u32*)(unit + 0x104) & 0x1000000) == 0 &&
-                    (*(u32*)(part + 0x1AC) & 0x1000000) == 0 &&
-                    (*(u32*)(part + 0x204) & 0x100) == 0) {
-                    if (part[0x1F3] == 0xFF && animPoseTestXLU(*(s32*)(part + 0x1C0)) == 0) {
-                        dispEntry(1, 1, btlUnitPartsDisp, 0.0f, part);
-                    } else {
-                        dispEntry(1, 2, btlUnitPartsDisp, 0.0f, part);
+                    (*(u32*)(part + 0x1AC) & 0x1000000) == 0) {
+                    if ((*(u32*)(part + 0x1AC) & 1) == 0 ||
+                        (*(u32*)(unit + 0x104) & 0x10) == 0) {
+                        if (part[0x4F7] == 0xFF &&
+                            animPoseTestXLU(*(s32*)(part + 0x1C0)) == 0) {
+                            if ((*(u32*)(part + 0x204) & 0x100) == 0) {
+                                dispEntry(4, 1, btlUnitPartsDisp,
+                                          dispCalcZ(&dispPos), part);
+                            }
+                        } else if ((*(u32*)(part + 0x204) & 0x100) == 0) {
+                            dispEntry(4, 2, btlUnitPartsDisp,
+                                      dispCalcZ(&dispPos), part);
+                        }
+                    }
+                    if ((*(u32*)(part + 0x1AC) & 0x4000000) != 0) {
+                        dispEntry(4, 2, btlUnitPartsBlurDisp, worldZ, part);
                     }
                 }
-                if ((*(u32*)(part + 0x1AC) & 0x4000000) != 0) {
-                    dispEntry(1, 2, btlUnitPartsBlurDisp, 0.0f, part);
+                if ((*(u32*)(unit + 0x104) & 0x20000000) == 0 &&
+                    (*(u32*)(part + 0x1AC) & 0x02000000) == 0) {
+                    BtlUnit_GetPartsWorldPos(part, &shadowX, &shadowY, &shadowZ);
+                    if ((*(u32*)(unit + 0x1C) & 0x10000) != 0) {
+                        partner = BattleGetPartnerPtr(battleWork, unit);
+                        if (partner != NULL) {
+                            BtlUnit_GetPos(partner, &partnerX, &partnerY, &partnerZ);
+                            shadowX = (shadowX + partnerX) * float_0p5_80422234;
+                            shadowY = (shadowY + partnerY) * float_0p5_80422234;
+                            shadowZ = (shadowZ + partnerZ) * float_0p5_80422234;
+                        }
+                    }
+                    shadowFloor = BattleGetFloorHeight(battleWork, shadowX, shadowY,
+                                                       shadowZ);
+                    shadowScale = float_1_8042224c;
+                    if (shadowFloor < worldY) {
+                        shadowScale = (float_100_80422270 - (worldY - shadowFloor)) /
+                                      float_100_80422270;
+                    }
+                    if (shadowScale > float_1_8042224c) {
+                        shadowScale = float_1_8042224c;
+                    }
+                    if (shadowScale < float_0p1_80422274) {
+                        shadowScale = float_0p1_80422274;
+                    }
+                    shadowSize = shadowScale * *(f32*)(unit + 0x114) *
+                                 *(f32*)(part + 0x60) *
+                                 (f32)*(s16*)(*(u8**)(part + 4) + 0x30) *
+                                 *(f32*)(unit + 0x90) * *(f32*)(part + 0x78);
+                    if ((*(u32*)(unit + 0x1C) & 0x10000) != 0 &&
+                        shadowSize < float_16_80422230) {
+                        shadowSize = float_16_80422230;
+                    }
+                    if (shadowSize < float_10_80422228) {
+                        shadowSize = float_8_80422278;
+                    }
+                    shadowEntry(shadowX, shadowFloor + float_10_80422228,
+                                shadowZ, shadowSize);
                 }
+                unitKind = *(s32*)(unit + 8);
+                if (unitKind == 0xE4 || unitKind == 0x8D || unitKind == 0x86 ||
+                    (u32)(unitKind - 0x1F) <= 2 ||
+                    (u32)(unitKind - 0xBD) <= 4 || unitKind == 0x85) {
+                    vivianWork.x = (f32)*(s32*)(unit + 0x218);
+                    vivianWork.y = (f32)*(s32*)(unit + 0x21C);
+                    vivianWork.z = (f32)*(s32*)(unit + 0x220);
+                    animPoseVivianMain(*(s32*)(part + 0x1C0), &vivianWork.x);
+                }
+                BtlUnit_ControlPoseSoundMain(part);
+            }
+        }
+        if (*(s32*)(unit + 0x308) == 0) {
+            if ((*(u32*)battleWork & 0x20000) != 0) {
+                dispEntry(4, 2, btlUnitItemDisp2, 0.0f, unit);
+            }
+        } else {
+            flags = *(u32*)(unit + 0x1C);
+            if ((flags & 0x40000000) == 0 || (flags & 0x08000000) != 0) {
+                if (((flags & 0x04000000) == 0 || (flags & 0x02000000) != 0) &&
+                    (flags & 0x08000000) == 0) {
+                    dispEntry(4, 2, btlUnitItemDisp, 0.0f, unit);
+                }
+            } else {
+                dispEntry(4, 2, btlUnitStolenItemDisp, 0.0f, unit);
             }
         }
     }

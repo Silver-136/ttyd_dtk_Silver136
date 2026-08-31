@@ -123,14 +123,14 @@ void extMakeTexture(s32 unused, s32* texInfo) {
     s32 tex;
     s32 i;
     s32 vtxBase;
+    s32 vtxOffset;
     s32 displayOffset;
     s32 sizeOffset;
     u32 left;
-    u32 right;
     s32 top;
+    u32 right;
     s32 bottom;
     f32 uvSave[4];
-    f32* vtx;
     volatile u16* fifo;
 
     wp = (s32)work;
@@ -147,26 +147,26 @@ void extMakeTexture(s32 unused, s32* texInfo) {
     queen_uv[3] = float_neg1_804218b8 / (f32)*(s32*)(wp + 4);
 
     vtxBase = 0;
+    vtxOffset = 0;
     displayOffset = 0;
     sizeOffset = 0;
     fifo = (volatile u16*)0xCC008000;
     for (i = 0; i < *(s32*)(wp + 4); i++) {
-        animPoseDisp_MakeExtTexture((f64)(f32)texInfo[2], (f64)float_4_804218bc,
+        animPoseDisp_MakeExtTexture((f64)*(f32*)&texInfo[2], (f64)float_4_804218bc,
                                     texInfo[0], texInfo[1], (s32*)(tex + 4),
                                     (s32*)tex, &left, &top, &right, &bottom);
-        vtx = (f32*)(*(s32*)(wp + 0x14) + vtxBase);
-        vtx[0] = (f32)(s32)left * float_0p5_804218c0;
-        vtx[1] = (f32)-top * float_0p5_804218c0;
-        vtx[2] = float_0_80421888;
-        vtx[3] = (f32)(s32)right * float_0p5_804218c0;
-        vtx[4] = (f32)-top * float_0p5_804218c0;
-        vtx[5] = float_0_80421888;
-        vtx[6] = (f32)(s32)right * float_0p5_804218c0;
-        vtx[7] = (f32)-bottom * float_0p5_804218c0;
-        vtx[8] = float_0_80421888;
-        vtx[9] = (f32)(s32)left * float_0p5_804218c0;
-        vtx[10] = (f32)-bottom * float_0p5_804218c0;
-        vtx[11] = float_0_80421888;
+        *(f32*)(*(s32*)(wp + 0x14) + vtxOffset) = (f32)(s32)left * float_0p5_804218c0;
+        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 1] = (f32)-top * float_0p5_804218c0;
+        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 2] = float_0_80421888;
+        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 3] = (f32)(s32)right * float_0p5_804218c0;
+        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 4] = (f32)-top * float_0p5_804218c0;
+        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 5] = float_0_80421888;
+        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 6] = (f32)(s32)right * float_0p5_804218c0;
+        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 7] = (f32)-bottom * float_0p5_804218c0;
+        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 8] = float_0_80421888;
+        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 9] = (f32)(s32)left * float_0p5_804218c0;
+        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 10] = (f32)-bottom * float_0p5_804218c0;
+        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 11] = float_0_80421888;
 
         GXBeginDisplayList((void*)(*(s32*)(wp + 0x28) + displayOffset), 0x80);
         GXBegin(0x80, 0, 4);
@@ -182,7 +182,8 @@ void extMakeTexture(s32 unused, s32* texInfo) {
 
         texInfo += 3;
         tex += 0x34;
-        vtxBase += 0x30;
+        vtxBase += 12;
+        vtxOffset += 0x30;
         displayOffset += 0x80;
         sizeOffset += 4;
     }

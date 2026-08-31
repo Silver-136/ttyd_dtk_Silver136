@@ -159,13 +159,61 @@ void SoundInit(void) {
         }
     }
     entry = *(u8**)(sound + 0xF4);
-    for (i = 0; i < 0x28; i++, entry += 0x88) {
+    i = 4;
+    do {
         *(u16*)entry = 0;
         *(s32*)(entry + 0xC) = -1;
         *(u16*)(entry + 2) = 0;
         *(u16*)(entry + 4) = 0x7F;
         *(u16*)(entry + 6) = 0x40;
-    }
+        *(u16*)(entry + 0x88) = 0;
+        *(s32*)(entry + 0x94) = -1;
+        *(u16*)(entry + 0x8A) = 0;
+        *(u16*)(entry + 0x8C) = 0x7F;
+        *(u16*)(entry + 0x8E) = 0x40;
+        *(u16*)(entry + 0x110) = 0;
+        *(s32*)(entry + 0x11C) = -1;
+        *(u16*)(entry + 0x112) = 0;
+        *(u16*)(entry + 0x114) = 0x7F;
+        *(u16*)(entry + 0x116) = 0x40;
+        *(u16*)(entry + 0x198) = 0;
+        *(s32*)(entry + 0x1A4) = -1;
+        *(u16*)(entry + 0x19A) = 0;
+        *(u16*)(entry + 0x19C) = 0x7F;
+        *(u16*)(entry + 0x19E) = 0x40;
+        *(u16*)(entry + 0x220) = 0;
+        *(s32*)(entry + 0x22C) = -1;
+        *(u16*)(entry + 0x222) = 0;
+        *(u16*)(entry + 0x224) = 0x7F;
+        *(u16*)(entry + 0x226) = 0x40;
+        *(u16*)(entry + 0x2A8) = 0;
+        *(s32*)(entry + 0x2B4) = -1;
+        *(u16*)(entry + 0x2AA) = 0;
+        *(u16*)(entry + 0x2AC) = 0x7F;
+        *(u16*)(entry + 0x2AE) = 0x40;
+        *(u16*)(entry + 0x330) = 0;
+        *(s32*)(entry + 0x33C) = -1;
+        *(u16*)(entry + 0x332) = 0;
+        *(u16*)(entry + 0x334) = 0x7F;
+        *(u16*)(entry + 0x336) = 0x40;
+        *(u16*)(entry + 0x3B8) = 0;
+        *(s32*)(entry + 0x3C4) = -1;
+        *(u16*)(entry + 0x3BA) = 0;
+        *(u16*)(entry + 0x3BC) = 0x7F;
+        *(u16*)(entry + 0x3BE) = 0x40;
+        *(u16*)(entry + 0x440) = 0;
+        *(s32*)(entry + 0x44C) = -1;
+        *(u16*)(entry + 0x442) = 0;
+        *(u16*)(entry + 0x444) = 0x7F;
+        *(u16*)(entry + 0x446) = 0x40;
+        *(u16*)(entry + 0x4C8) = 0;
+        *(s32*)(entry + 0x4D4) = -1;
+        *(u16*)(entry + 0x4CA) = 0;
+        *(u16*)(entry + 0x4CC) = 0x7F;
+        *(u16*)(entry + 0x4CE) = 0x40;
+        entry += 0x550;
+        i--;
+    } while (i != 0);
 
     *(void**)(sound + 0xF8) = __memAlloc(0, 0x2A8);
     if (*(void**)(sound + 0xF8) == NULL) {
@@ -991,16 +1039,64 @@ u32 SoundEfxPlayEx(s32 id, u16 priority, u32 volume, u32 pan) {
     void* entry;
     u16 flags;
     u32 voice;
+    s32 count;
 
     i = 0;
+    count = 4;
     entry = *(void**)(sound + 0xF4);
-    while (i < 0x28) {
+    do {
         if (*(u16*)entry == 0) {
             break;
         }
         i++;
         entry = (void*)((s32)entry + 0x88);
-    }
+        if (*(u16*)entry == 0) {
+            break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x88);
+        if (*(u16*)entry == 0) {
+            break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x88);
+        if (*(u16*)entry == 0) {
+            break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x88);
+        if (*(u16*)entry == 0) {
+            break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x88);
+        if (*(u16*)entry == 0) {
+            break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x88);
+        if (*(u16*)entry == 0) {
+            break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x88);
+        if (*(u16*)entry == 0) {
+            break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x88);
+        if (*(u16*)entry == 0) {
+            break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x88);
+        if (*(u16*)entry == 0) {
+            break;
+        }
+        i++;
+        entry = (void*)((s32)entry + 0x88);
+        count--;
+    } while (count != 0);
     if (i > 0x27) {
         i = 0;
         entry = *(void**)(sound + 0xF4);
@@ -1320,12 +1416,16 @@ void SoundEfxMain(void) {
     f32 oldY;
     f32 oldZ;
     f32 angle;
+    f32 dirX;
+    f32 dirZ;
+    f32 zero;
     u8* entry;
     s32 i;
 
     oldX = *(f32*)(sound + 0x1C4);
     oldY = *(f32*)(sound + 0x1C8);
     oldZ = *(f32*)(sound + 0x1CC);
+    zero = float_0_80421908;
     angle = (float_6p2832_80421924 * *(f32*)(sound + 0x1F4)) / float_360_80421928;
 
     *(f32*)(sound + 0x1C4) = *(f32*)(sound + 0x1B8);
@@ -1335,12 +1435,14 @@ void SoundEfxMain(void) {
     *(f32*)(sound + 0x1D4) = *(f32*)(sound + 0x1BC) - oldY;
     *(f32*)(sound + 0x1D8) = *(f32*)(sound + 0x1C0) - oldZ;
 
-    *(f32*)(sound + 0x1DC) = float_0_80421908 + float_1_80421914 * (f32)sin(angle);
-    *(f32*)(sound + 0x1E0) = float_0_80421908;
-    *(f32*)(sound + 0x1E4) = -(float_1_80421914 * (f32)cos(angle) - float_0_80421908);
-    *(f32*)(sound + 0x1E8) = float_0_80421908;
+    dirX = zero + float_1_80421914 * (f32)sin(angle);
+    dirZ = -(float_1_80421914 * (f32)cos(angle) - zero);
+    *(f32*)(sound + 0x1DC) = dirX;
+    *(f32*)(sound + 0x1E0) = zero;
+    *(f32*)(sound + 0x1E4) = dirZ;
+    *(f32*)(sound + 0x1E8) = zero;
     *(f32*)(sound + 0x1EC) = float_1_80421914;
-    *(f32*)(sound + 0x1F0) = float_0_80421908;
+    *(f32*)(sound + 0x1F0) = zero;
 
     sndUpdateListener(sound + 0x128, sound + 0x1B8, sound + 0x1D0, sound + 0x1DC,
                       sound + 0x1E8, *(u16*)(sound + 0x204) & 0xFF);
@@ -1746,11 +1848,13 @@ void _ssDVDReadAsync_cache_aram(int param_1) {
             DVDMgrReadAsync(*(void**)work, *(void**)(work + (1 - *(u16*)(entry + 0x74)) * 4 + 0x2C),
                             readSize, *(u16*)(entry + 4) + pos, _ssDVDReadAsync_activeChk);
         } else {
-            s32 aramBase = *(s32*)(sound + 0x21C + *(u16*)(entry + 2) * 4);
-            void* dst = *(void**)(work + (1 - *(u16*)(entry + 0x74)) * 4 + 0x2C);
-            DCInvalidateRange(dst, 0x8000);
-            ARQPostRequest(entry + 0x2C, work, 1, 0, *(u16*)(entry + 4) + pos + aramBase,
-                           dst, readSize, cache_flush);
+            s32 aramAddress = *(u16*)(entry + 4) + pos +
+                              *(s32*)(sound + 0x21C + *(u16*)(entry + 2) * 4);
+            DCInvalidateRange(*(void**)(work + (1 - *(u16*)(entry + 0x74)) * 4 + 0x2C),
+                              0x8000);
+            ARQPostRequest(entry + 0x2C, work, 1, 0, aramAddress,
+                           *(void**)(work + (1 - *(u16*)(entry + 0x74)) * 4 + 0x2C),
+                           readSize, cache_flush);
         }
         *(s32*)(entry + 0x70) = chunk;
 
@@ -1784,11 +1888,13 @@ void _ssDVDReadAsync_cache_aram(int param_1) {
                 DVDMgrReadAsync(*(void**)work, *(void**)(work + (1 - *(u16*)(entry + 0xFC)) * 4 + 0x2C),
                                 readSize, *(u16*)(entry + 4) + pos + add, _ssDVDReadAsync_activeChk);
             } else {
-                s32 aramBase = *(s32*)(sound + 0x21C + *(u16*)(entry + 2) * 4);
-                void* dst = *(void**)(work + (1 - *(u16*)(entry + 0xFC)) * 4 + 0x2C);
-                DCInvalidateRange(dst, 0x8000);
-                ARQPostRequest(entry + 0xB4, work, 1, 0, *(u16*)(entry + 4) + pos + add + aramBase,
-                               dst, readSize, cache_flush);
+                s32 aramAddress = *(u16*)(entry + 4) + pos + add +
+                                  *(s32*)(sound + 0x21C + *(u16*)(entry + 2) * 4);
+                DCInvalidateRange(*(void**)(work + (1 - *(u16*)(entry + 0xFC)) * 4 + 0x2C),
+                                  0x8000);
+                ARQPostRequest(entry + 0xB4, work, 1, 0, aramAddress,
+                               *(void**)(work + (1 - *(u16*)(entry + 0xFC)) * 4 + 0x2C),
+                               readSize, cache_flush);
             }
             *(s32*)(entry + 0xF8) = chunk;
         }
@@ -1954,14 +2060,16 @@ s32 _sscallback(void* outA, u32 countA, void* outB, u32 countB, u32 streamId) {
             }
         } else {
             dst16 = outA;
-            for (i = 0; i < countA; i++) {
-                dst16[i] = 0;
+            while (countA != 0) {
+                *dst16++ = 0;
                 *(u32*)(entry + 0x24) += 1;
+                countA--;
             }
             dst16 = outB;
-            for (i = 0; i < countB; i++) {
-                dst16[i] = 0;
+            while (countB != 0) {
+                *dst16++ = 0;
                 *(u32*)(entry + 0x24) += 1;
+                countB--;
             }
         }
         return *(s32*)(entry + 0x24);
@@ -1977,16 +2085,25 @@ s32 _sscallback(void* outA, u32 countA, void* outB, u32 countB, u32 streamId) {
         src16 = (u16*)(*(s32*)(work + *(u16*)(work + 0x4C) * 4 + 0x2C) +
                            (*(u32*)(work + 0x44) & ~1));
         dst16 = outA;
-        for (i = 0; i < countA; i++) {
-            dst16[i] = *src16++;
+        while (countA != 0) {
+            *dst16++ = *src16++;
+            countA--;
             *(u32*)(entry + 0x24) += 1;
             *(u32*)(work + 0x44) += 2;
-            *(u32*)(work + 0x38) += 2;
             if (*(u32*)(work + 0x44) >= *(u32*)(work + *(u16*)(work + 0x4C) * 4 + 0x3C)) {
+                if (*(s16*)(work + 0x54) == 0 &&
+                    ((*(u16*)entry & 0x4000) == 0)) {
+                    *(u32*)(work + 0x38) -= *(u32*)(work + 0x44);
+                    *(u32*)(work + 0x44) = 0;
+                    src16 = *(u16**)(work + *(u16*)(work + 0x4C) * 4 + 0x2C);
+                    continue;
+                }
+                *(s16*)(work + 0x54) = 0;
                 *(u32*)(work + 0x44) = 0;
                 *(u16*)(work + 0x4C) = 1 - *(u16*)(work + 0x4C);
                 src16 = *(u16**)(work + *(u16*)(work + 0x4C) * 4 + 0x2C);
             }
+            *(u32*)(work + 0x38) += 2;
             if (*(u32*)(work + 0x38) >= *(u32*)(entry + 0x1C)) {
                 *(u32*)(work + 0x38) = *(u32*)(entry + 0x20);
                 if ((*(u16*)entry & 0x200) == 0) {
@@ -1996,16 +2113,25 @@ s32 _sscallback(void* outA, u32 countA, void* outB, u32 countB, u32 streamId) {
             }
         }
         dst16 = outB;
-        for (i = 0; i < countB; i++) {
-            dst16[i] = *src16++;
+        while (countB != 0) {
+            *dst16++ = *src16++;
+            countB--;
             *(u32*)(entry + 0x24) += 1;
             *(u32*)(work + 0x44) += 2;
-            *(u32*)(work + 0x38) += 2;
             if (*(u32*)(work + 0x44) >= *(u32*)(work + *(u16*)(work + 0x4C) * 4 + 0x3C)) {
+                if (*(s16*)(work + 0x54) == 0 &&
+                    ((*(u16*)entry & 0x4000) == 0)) {
+                    *(u32*)(work + 0x38) -= *(u32*)(work + 0x44);
+                    *(u32*)(work + 0x44) = 0;
+                    src16 = *(u16**)(work + *(u16*)(work + 0x4C) * 4 + 0x2C);
+                    continue;
+                }
+                *(s16*)(work + 0x54) = 0;
                 *(u32*)(work + 0x44) = 0;
                 *(u16*)(work + 0x4C) = 1 - *(u16*)(work + 0x4C);
                 src16 = *(u16**)(work + *(u16*)(work + 0x4C) * 4 + 0x2C);
             }
+            *(u32*)(work + 0x38) += 2;
             if (*(u32*)(work + 0x38) >= *(u32*)(entry + 0x1C)) {
                 *(u32*)(work + 0x38) = *(u32*)(entry + 0x20);
                 if ((*(u16*)entry & 0x200) == 0) {
@@ -2019,7 +2145,7 @@ s32 _sscallback(void* outA, u32 countA, void* outB, u32 countB, u32 streamId) {
         u32 copyCount;
 
         src8 = *(u8**)(work + *(u16*)(work + 0x4C) * 4 + 0x2C) + *(u32*)(work + 0x44);
-        copyCount = ((countA + 13) / 14) * 8;
+        copyCount = ((countA + 13) / 14) & ~7;
         dst8 = (u8*)outA;
         while (copyCount != 0) {
             *dst8++ = *src8++;
@@ -2052,7 +2178,7 @@ s32 _sscallback(void* outA, u32 countA, void* outB, u32 countB, u32 streamId) {
             }
         }
 
-        copyCount = ((countB + 13) / 14) * 8;
+        copyCount = ((countB + 13) / 14) & ~7;
         dst8 = (u8*)outB;
         while (copyCount != 0) {
             *dst8++ = *src8++;
@@ -2208,6 +2334,9 @@ void SoundSSPlayChEx_main(s32 result, s32 userData) {
     extern void DCInvalidateRange(void*, u32);
     extern void ARQPostRequest(void*, void*, u32, u32, u32, void*, u32, void*);
     extern void _ssDVDReadAsync_activeChk(s32, void*);
+    extern void cache_flush(void);
+    extern void _ssDVDReadAsync_cache_next(s32, void*);
+    extern u32 DVDMgrGetLength(void*);
     extern u32 sndStreamAllocLength(u32, u32);
     extern u32 sndStreamAllocEx(u32, void*, u32, u32, u32, u32, u32, u32, u32, u32, u32, void*, u32, void*);
     extern void sndStreamMixParameter(void*, u32, u32, u32, u32);
@@ -2221,6 +2350,12 @@ void SoundSSPlayChEx_main(s32 result, s32 userData) {
     u32 amount;
     u32 pos;
     u32 total;
+    u32 aligned;
+    u32 divisor;
+    u32 threshold;
+    u32 secondBase;
+    u32 aramAddress;
+    u8* io;
     s32 i;
 
     if (result < 0) {
@@ -2331,22 +2466,80 @@ void SoundSSPlayChEx_main(s32 result, s32 userData) {
 
     if ((*(u16*)entry & 0x400) == 0) {
         *(u16*)(entry + 0x74) = 1;
+        io = entry + 0x28;
         pos = *(u32*)(entry + 0x5C);
         total = *(u32*)(entry + 0x88);
         amount = 0x8000;
         if (total < pos + 0x8000) {
             amount = total - pos;
+        } else {
+            threshold = 0x10000;
+            divisor = 2;
+            for (i = 0; i < 4; i++, divisor++, threshold += 0x8000) {
+                if (total < pos + threshold) {
+                    amount = 0x8000 -
+                        (0x8000 - (total - (pos + (divisor - 1) * 0x8000))) / divisor;
+                    amount += 0x20 - (amount & 0x1F);
+                    break;
+                }
+            }
         }
-        amount = (amount + 0x1F) & ~0x1F;
-        DVDMgrReadAsync(*(void**)(entry + 0x28), *(void**)(entry + 0x50), amount,
-                        *(u16*)(entry + 4) + pos, _ssDVDReadAsync_activeChk);
+        aligned = (amount + 0x1F) & ~0x1F;
+        if ((*(u16*)entry & 0x400) == 0) {
+            DVDMgrReadAsync(*(void**)io,
+                            *(void**)(io + 0x2C + (1 - *(u16*)(entry + 0x74)) * 4),
+                            aligned, *(u16*)(entry + 4) + pos,
+                            _ssDVDReadAsync_activeChk);
+        } else {
+            aramAddress = *(u32*)(sound + 0x21C + *(u16*)(entry + 2) * 4) +
+                          *(u16*)(entry + 4) + pos;
+            DCInvalidateRange(*(void**)(io + 0x2C +
+                                        (1 - *(u16*)(entry + 0x74)) * 4), 0x8000);
+            ARQPostRequest(io + 4, io, 1, 0, aramAddress,
+                           *(void**)(io + 0x2C + (1 - *(u16*)(entry + 0x74)) * 4),
+                           aligned, cache_flush);
+        }
         *(u32*)(entry + 0x70) = amount;
         *(u16*)entry |= 0x1000;
-    } else {
-        DCInvalidateRange(*(void**)(entry + 0x50), 0x8000);
-        ARQPostRequest(entry + 0x2C, entry + 0x28, 1, 0,
-                       *(u16*)(entry + 4) + *(u32*)(entry + 0x5C),
-                       *(void**)(entry + 0x50), 0x8000, _ssDVDReadAsync_activeChk);
+        if (*(u16*)(entry + 0x1A) == 2) {
+            *(u16*)(entry + 0xFC) = 1;
+            io = entry + 0xB0;
+            pos = *(u32*)(entry + 0xE4);
+            total = *(u32*)(entry + 0x110);
+            secondBase = total + (0x20 - (total & 0x1F));
+            amount = 0x8000;
+            if (total < pos + 0x8000) {
+                amount = total - pos;
+            } else {
+                threshold = 0x10000;
+                divisor = 2;
+                for (i = 0; i < 4; i++, divisor++, threshold += 0x8000) {
+                    if (total < pos + threshold) {
+                        amount = 0x8000 -
+                            (0x8000 - (total - (pos + (divisor - 1) * 0x8000))) / divisor;
+                        amount += 0x20 - (amount & 0x1F);
+                        break;
+                    }
+                }
+            }
+            aligned = (amount + 0x1F) & ~0x1F;
+            if ((*(u16*)entry & 0x400) == 0) {
+                DVDMgrReadAsync(*(void**)io,
+                                *(void**)(io + 0x2C + (1 - *(u16*)(entry + 0xFC)) * 4),
+                                aligned, *(u16*)(entry + 4) + pos + secondBase,
+                                _ssDVDReadAsync_activeChk);
+            } else {
+                aramAddress = *(u32*)(sound + 0x21C + *(u16*)(entry + 2) * 4) +
+                              *(u16*)(entry + 4) + pos + secondBase;
+                DCInvalidateRange(*(void**)(io + 0x2C +
+                                            (1 - *(u16*)(entry + 0xFC)) * 4), 0x8000);
+                ARQPostRequest(io + 4, io, 1, 0, aramAddress,
+                               *(void**)(io + 0x2C + (1 - *(u16*)(entry + 0xFC)) * 4),
+                               aligned, cache_flush);
+            }
+            *(u32*)(entry + 0xF8) = amount;
+            *(u16*)entry |= 0x2000;
+        }
     }
 
     length = sndStreamAllocLength(0xE00, 0);
@@ -2405,6 +2598,18 @@ void SoundSSPlayChEx_main(s32 result, s32 userData) {
                     *(u16*)(mixEntry + 8) & 0xFF, 0);
             }
         }
+    }
+
+    if ((*(u16*)entry & 0x400) != 0) {
+        total = DVDMgrGetLength(*(void**)(entry + 0x28));
+        pos = *(u32*)(entry + 0x5C);
+        amount = 0x8000;
+        if (total <= pos + 0x8000) {
+            amount = total - pos;
+        }
+        DVDMgrReadAsync(*(void**)(entry + 0x28), *(void**)(entry + 0x54),
+                        (amount + 0x1F) & ~0x1F, pos, _ssDVDReadAsync_cache_next);
+        *(u32*)(entry + 0x70) = amount;
     }
 }
 
@@ -2711,11 +2916,14 @@ void SoundSSMain(void) {
     extern const f32 float_0_80421908;
     extern const f32 float_63_8042190c;
     u8* entry;
+    u8* mixEntry;
     s32 i;
     s32 offset;
+    s32 mixOffset;
 
+    mixOffset = 0;
     offset = 0;
-    for (i = 0; i < 3; i++, offset += 0x138) {
+    for (i = 0; i < 3; i++, mixOffset += 0x138, offset += 0x138) {
         f32 left;
         f32 right;
         u32 pan;
@@ -2758,6 +2966,29 @@ void SoundSSMain(void) {
             if (*(f32*)(entry + 0x10) <= float_0_80421908) {
                 *(f32*)(entry + 0x10) = float_0_80421908;
             }
+            mixEntry = (u8*)(*(s32*)(sound + 0x100) + mixOffset);
+            pan = *(u16*)(entry + 6) & 0xFF;
+            if ((*(u16*)mixEntry & 8) != 0) {
+                *(u16*)(mixEntry + 6) = pan;
+                if (*(u16*)(mixEntry + 0x1A) == 1) {
+                    sndStreamMixParameter(*(void**)(mixEntry + 0x4C),
+                                          (s32)*(f32*)(mixEntry + 0x10), pan,
+                                          *(u16*)(mixEntry + 8) & 0xFF, 0);
+                } else {
+                    left = *(f32*)(mixEntry + 0x10);
+                    right = left;
+                    if (pan < 0x40) {
+                        right = ((f32)pan * right) / float_63_8042190c;
+                    }
+                    if ((s32)(pan - 0x40) >= 0) {
+                        left = ((f32)(0x7F - pan) * left) / float_63_8042190c;
+                    }
+                    sndStreamMixParameter(*(void**)(mixEntry + 0x4C), (s32)left, 0,
+                                          *(u16*)(mixEntry + 8) & 0xFF, 0);
+                    sndStreamMixParameter(*(void**)(mixEntry + 0xD4), (s32)right, 0x7F,
+                                          *(u16*)(mixEntry + 8) & 0xFF, 0);
+                }
+            }
         }
         if ((*(u16*)entry & 0x20) != 0) {
             if (*(f32*)(entry + 0x10) == float_0_80421908) {
@@ -2789,6 +3020,29 @@ void SoundSSMain(void) {
             if (*(f32*)(entry + 0x10) <= float_0_80421908) {
                 *(f32*)(entry + 0x10) = float_0_80421908;
             }
+            mixEntry = (u8*)(*(s32*)(sound + 0x100) + mixOffset);
+            pan = *(u16*)(entry + 6) & 0xFF;
+            if ((*(u16*)mixEntry & 8) != 0) {
+                *(u16*)(mixEntry + 6) = pan;
+                if (*(u16*)(mixEntry + 0x1A) == 1) {
+                    sndStreamMixParameter(*(void**)(mixEntry + 0x4C),
+                                          (s32)*(f32*)(mixEntry + 0x10), pan,
+                                          *(u16*)(mixEntry + 8) & 0xFF, 0);
+                } else {
+                    left = *(f32*)(mixEntry + 0x10);
+                    right = left;
+                    if (pan < 0x40) {
+                        right = ((f32)pan * right) / float_63_8042190c;
+                    }
+                    if ((s32)(pan - 0x40) >= 0) {
+                        left = ((f32)(0x7F - pan) * left) / float_63_8042190c;
+                    }
+                    sndStreamMixParameter(*(void**)(mixEntry + 0x4C), (s32)left, 0,
+                                          *(u16*)(mixEntry + 8) & 0xFF, 0);
+                    sndStreamMixParameter(*(void**)(mixEntry + 0xD4), (s32)right, 0x7F,
+                                          *(u16*)(mixEntry + 8) & 0xFF, 0);
+                }
+            }
         }
         if ((*(u16*)entry & 0x10) != 0) {
             *(f32*)(entry + 0x10) += *(f32*)(entry + 0x14);
@@ -2797,22 +3051,29 @@ void SoundSSMain(void) {
                 *(f32*)(entry + 0x14) = float_0_80421908;
                 *(u16*)entry &= ~0x10;
             }
-        }
-        pan = *(u16*)(entry + 6) & 0xFF;
-        if (*(u16*)(entry + 0x1A) == 1) {
-            sndStreamMixParameter(*(void**)(entry + 0x4C), (s32)*(f32*)(entry + 0x10),
-                                  pan, *(u16*)(entry + 8) & 0xFF, 0);
-        } else {
-            left = right = *(f32*)(entry + 0x10);
-            if (pan < 0x40) {
-                right = ((f32)pan * right) / float_63_8042190c;
-            } else {
-                left = ((f32)(0x7F - pan) * left) / float_63_8042190c;
+            mixEntry = (u8*)(*(s32*)(sound + 0x100) + mixOffset);
+            pan = *(u16*)(entry + 6) & 0xFF;
+            if ((*(u16*)mixEntry & 8) != 0) {
+                *(u16*)(mixEntry + 6) = pan;
+                if (*(u16*)(mixEntry + 0x1A) == 1) {
+                    sndStreamMixParameter(*(void**)(mixEntry + 0x4C),
+                                          (s32)*(f32*)(mixEntry + 0x10), pan,
+                                          *(u16*)(mixEntry + 8) & 0xFF, 0);
+                } else {
+                    left = *(f32*)(mixEntry + 0x10);
+                    right = left;
+                    if (pan < 0x40) {
+                        right = ((f32)pan * right) / float_63_8042190c;
+                    }
+                    if ((s32)(pan - 0x40) >= 0) {
+                        left = ((f32)(0x7F - pan) * left) / float_63_8042190c;
+                    }
+                    sndStreamMixParameter(*(void**)(mixEntry + 0x4C), (s32)left, 0,
+                                          *(u16*)(mixEntry + 8) & 0xFF, 0);
+                    sndStreamMixParameter(*(void**)(mixEntry + 0xD4), (s32)right, 0x7F,
+                                          *(u16*)(mixEntry + 8) & 0xFF, 0);
+                }
             }
-            sndStreamMixParameter(*(void**)(entry + 0x4C), (s32)left, 0,
-                                  *(u16*)(entry + 8) & 0xFF, 0);
-            sndStreamMixParameter(*(void**)(entry + 0xD4), (s32)right, 0x7F,
-                                  *(u16*)(entry + 8) & 0xFF, 0);
         }
     }
 }

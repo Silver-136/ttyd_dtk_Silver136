@@ -187,20 +187,22 @@ void BattleSequenceManager(void) {
     s32 sequence;
 
     battleWork = _battleWorkPointer;
-    sequence = BattleGetSeq(battleWork, 0);
-    if (sequence == 2) {
-        BattleCheckAllPinchStatus(battleWork, 0);
-        btlseqTurn(battleWork);
-    } else if (sequence < 2) {
-        if (sequence == 0) {
+    switch (BattleGetSeq(battleWork, 0)) {
+        case 0:
             btlseqInit(battleWork);
             BattleCheckAllPinchStatus(battleWork, 1);
-        } else if (sequence > -1) {
+            break;
+        case 1:
             BattleCheckAllPinchStatus(battleWork, 0);
             btlseqFirstAct(battleWork);
-        }
-    } else if (sequence != 4 && sequence < 4) {
-        btlseqEnd(battleWork);
+            break;
+        case 2:
+            BattleCheckAllPinchStatus(battleWork, 0);
+            btlseqTurn(battleWork);
+            break;
+        case 3:
+            btlseqEnd(battleWork);
+            break;
     }
 }
 
@@ -214,11 +216,9 @@ void BattleCheckAllPinchStatus(void* battleWork, s32 firstCheck) {
     extern char str_SFX_BTL_DANGER1_802efc04[];
     extern char str_SFX_BTL_PINCH1_802efc14[];
     void* unit;
-    void* mario;
     s32 i;
     s32 kind;
-    u32 statusFlag;
-    const char* sound;
+    s32 found;
 
     for (i = 0; i < 0x40; i++) {
         unit = BattleGetUnitPtr(battleWork, i);
@@ -227,41 +227,59 @@ void BattleCheckAllPinchStatus(void* battleWork, s32 firstCheck) {
         }
     }
 
-    statusFlag = 0x20000000;
-    sound = str_SFX_BTL_DANGER1_802efc04;
-check_status:
+    found = 0;
     for (i = 0; i < 0x40; i++) {
         unit = BattleGetUnitPtr(battleWork, i);
-        if (unit == 0 || (*(u32*)((s32)unit + 0x138) & statusFlag) == 0) {
-            continue;
+        if (unit != 0 && (*(u32*)((s32)unit + 0x138) & 0x20000000) != 0 &&
+            BtlUnit_CheckStatus(unit, 0x1B) == 0 && BtlUnit_GetBelong(unit) == 0) {
+            kind = *(s32*)((s32)unit + 8);
+            if ((kind == 0xDE || (kind > 0xDF && kind < 0xE7)) &&
+                *(s16*)((s32)unit + 0x10C) > 0) {
+                found = 1;
+                break;
+            }
         }
-        if (BtlUnit_CheckStatus(unit, 0x1B) != 0 || BtlUnit_GetBelong(unit) != 0) {
-            continue;
+    }
+
+    if (found) {
+        (*(s8*)((s32)battleWork + 0x18FF8))--;
+        if (*(s8*)((s32)battleWork + 0x18FF8) < 1) {
+            *(s8*)((s32)battleWork + 0x18FF8) = 60;
+            if ((*(u32*)((s32)battleWork + 0x1720) & 1) != 0) {
+                psndSFXOn(str_SFX_BTL_DANGER1_802efc04);
+            }
         }
-        kind = *(s32*)((s32)unit + 8);
-        if ((kind == 0xDE || (kind > 0xDF && kind < 0xE7)) &&
-            *(s16*)((s32)unit + 0x10C) > 0) {
+    } else {
+        found = 0;
+        for (i = 0; i < 0x40; i++) {
+            unit = BattleGetUnitPtr(battleWork, i);
+            if (unit != 0 && (*(u32*)((s32)unit + 0x138) & 0x10000000) != 0 &&
+                BtlUnit_CheckStatus(unit, 0x1B) == 0 && BtlUnit_GetBelong(unit) == 0) {
+                kind = *(s32*)((s32)unit + 8);
+                if ((kind == 0xDE || (kind > 0xDF && kind < 0xE7)) &&
+                    *(s16*)((s32)unit + 0x10C) > 0) {
+                    found = 1;
+                    break;
+                }
+            }
+        }
+
+        if (found) {
             (*(s8*)((s32)battleWork + 0x18FF8))--;
             if (*(s8*)((s32)battleWork + 0x18FF8) < 1) {
                 *(s8*)((s32)battleWork + 0x18FF8) = 60;
                 if ((*(u32*)((s32)battleWork + 0x1720) & 1) != 0) {
-                    psndSFXOn(sound);
+                    psndSFXOn(str_SFX_BTL_PINCH1_802efc14);
                 }
             }
-            return;
+        } else {
+            unit = BattleGetMarioPtr(battleWork);
+            if (unit != 0) {
+                *(s32*)((s32)unit + 0x2D0) = 0;
+            }
+            *(s8*)((s32)battleWork + 0x18FF8) = 0;
         }
     }
-    if (statusFlag == 0x20000000) {
-        statusFlag = 0x10000000;
-        sound = str_SFX_BTL_PINCH1_802efc14;
-        goto check_status;
-    }
-
-    mario = BattleGetMarioPtr(battleWork);
-    if (mario != 0) {
-        *(s32*)((s32)mario + 0x2D0) = 0;
-    }
-    *(s8*)((s32)battleWork + 0x18FF8) = 0;
 }
 
 void btlseqInit(void* battleWork) {
@@ -572,6 +590,7 @@ s32 _set_effect_luck(void) {
     u8 weapon[0xC0];
     u32* source;
     u32* destination;
+    void* battleWork;
     void* unit;
     void* part;
     void* effect;
@@ -582,43 +601,70 @@ s32 _set_effect_luck(void) {
     f32 y;
     f32 z;
 
+    battleWork = _battleWorkPointer;
     source = (u32*)0x802EF834;
     destination = (u32*)weapon;
-    for (i = 0; i < 0x30; i++) {
-        destination[i] = source[i];
+    for (i = 0; i < 0x18; i++) {
+        destination[0] = source[0];
+        destination[1] = source[1];
+        source += 2;
+        destination += 2;
     }
     for (i = 0; i < 0x40; i++) {
-        unit = BattleGetUnitPtr(_battleWorkPointer, i);
+        unit = BattleGetUnitPtr(battleWork, i);
         if (unit == 0 || *(u8*)((s32)unit + 0x304) == 0 ||
             BtlUnit_CheckStatus(unit, 0x1B) != 0) {
             continue;
         }
         random = irand(4);
-        if (random != 1) {
-            weapon[0x8B] = 0;
-            weapon[0x8C] = 0;
-        }
-        if (random != 0) {
-            weapon[0x8D] = 0;
-            weapon[0x8E] = 0;
-        }
-        if (random != 2) {
-            weapon[0xAA] = 0;
-            weapon[0xAB] = 0;
-        }
-        if (random == 0 || random == 1 || random > 2) {
-            weapon[0xAC] = 0;
-            weapon[0xAD] = 0;
+        switch (random) {
+            case 0:
+                weapon[0x8D] = 0;
+                weapon[0x8E] = 0;
+                weapon[0xAA] = 0;
+                weapon[0xAB] = 0;
+                weapon[0xAC] = 0;
+                weapon[0xAD] = 0;
+                break;
+            case 1:
+                weapon[0x8B] = 0;
+                weapon[0x8C] = 0;
+                weapon[0xAA] = 0;
+                weapon[0xAB] = 0;
+                weapon[0xAC] = 0;
+                weapon[0xAD] = 0;
+                break;
+            case 2:
+                weapon[0x8B] = 0;
+                weapon[0x8C] = 0;
+                weapon[0x8D] = 0;
+                weapon[0x8E] = 0;
+                weapon[0xAC] = 0;
+                weapon[0xAD] = 0;
+                break;
+            default:
+                weapon[0x8B] = 0;
+                weapon[0x8C] = 0;
+                weapon[0x8D] = 0;
+                weapon[0x8E] = 0;
+                weapon[0xAA] = 0;
+                weapon[0xAB] = 0;
+                break;
         }
         partId = BtlUnit_GetBodyPartsId(unit);
         part = BtlUnit_GetPartsPtr(unit, partId);
-        BattleSetStatusDamageFromWeapon(BattleGetSystemPtr(_battleWorkPointer),
+        BattleSetStatusDamageFromWeapon(BattleGetSystemPtr(battleWork),
                                         unit, part, weapon, 0x100);
         BtlUnit_GetPos(unit, &x, &y, &z);
         psndSFXOn(str_SFX_SYSTEM_LUCKY1_802efbb0);
         effect = effNiceEntry(x - 45.0f, y + 60.0f, z, 6);
         *(f32*)(*(s32*)((s32)effect + 0xC) + 0x1C) = 0.75f;
     }
+ordinal_pad_1:
+ordinal_pad_2:
+ordinal_pad_3:
+ordinal_pad_4:
+ordinal_pad_5:
     return 2;
 }
 
@@ -1435,9 +1481,11 @@ void _rule_disp(void) {
     extern char* _rule_msg_table_2bu[];
     extern char* _rule_msg_table_after[];
     extern const u32 dat_80422554;
+    extern const f32 float_0_80422568;
+    extern const f32 float_120_80422590;
     void* information;
-    u16 lines[2];
     u32 color;
+    u16 lines[2];
     char buffer[256];
     u32 dimensions;
     f32 x;
@@ -1460,14 +1508,14 @@ void _rule_disp(void) {
     }
     dimensions = FontGetMessageWidthLine(buffer, lines);
     lines[0]++;
-    x = 0.0f - (f32)((dimensions >> 1) & 0x7FFF);
+    x = float_0_80422568 - (f32)((dimensions >> 1) & 0x7FFF);
     color = dat_80422554;
     windowDispGX_Waku_col(x - 10.0f, 94.0f,
                           (f32)((dimensions & 0xFFFF) + 0x14),
-                          (f32)(lines[0] * 0x1D + 3),
+                          (f32)(s32)(lines[0] * 0x1D + 3),
                           10.0f, 0, &color);
     FontDrawStart();
-    FontDrawMessage((u32)x, (u32)120.0f - 0x1D, buffer);
+    FontDrawMessage((s32)x, (s32)float_120_80422590 - 0x1D, buffer);
 }
 
 void btlseqPhase(void* battleWork) {
@@ -1478,16 +1526,22 @@ void btlseqPhase(void* battleWork) {
     s32 seq;
 
     seq = BattleGetSeq(battleWork, 4);
-    if (seq == 0x4000006) {
-        BattleIncSeq(battleWork, 3);
-        BattleSetSeq(battleWork, 4, 0x4000000);
-    } else if (seq < 0x4000006) {
-        if (seq == 0x4000000) {
+    switch (seq) {
+        case 0x4000000:
             BattleIncSeq(battleWork, 4);
             BattleSetSeq(battleWork, 5, 0x5000000);
-        } else if (seq > 0x3FFFFFF) {
+            break;
+        case 0x4000001:
+        case 0x4000002:
+        case 0x4000003:
+        case 0x4000004:
+        case 0x4000005:
             btlseqMove(battleWork);
-        }
+            break;
+        case 0x4000006:
+            BattleIncSeq(battleWork, 3);
+            BattleSetSeq(battleWork, 4, 0x4000000);
+            break;
     }
 }
 
@@ -1697,43 +1751,65 @@ void btlseqAct(void* battleWork) {
     extern u32 BattleAudience_CheckReaction(void);
     extern u32 BattleBreakSlot_CheckReaction(void);
     extern s32 evtCheckID(s32);
+    extern void* BattleGetMarioPtr(void*);
+    extern u32 BtlUnit_CheckStatusFlag(void*, u32);
+    extern void BtlUnit_OffStatusFlag(void*, u32);
+    extern u32 BtlUnit_GetBelong(void*);
+    extern u32 BattlePhaseEndCheck(void);
+    extern s32 irand(s32);
     extern u8 btldefaultevt_BiribiriMove[];
     extern u8 btldefaultevt_CantMoveZeroGravity[];
+    s32 unable;
     void* unit;
+    void* mario;
     void* event;
     s32 seq;
-    s32 id;
-    s32 kind;
     s32 messageBusy;
     s32 announceBusy;
-    s32 unable;
+    u8 moveState;
 
     seq = BattleGetSeq(battleWork, 6);
-    id = *(s32*)((s32)battleWork + 0x420);
     switch (seq) {
         case 0x6000000:
-            unit = BattleGetUnitPtr(battleWork, id);
+            unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
             effNiceAsync(1);
-            *(s32*)((s32)unit + 0x258) = 0;
-            *(void**)((s32)unit + 0x25C) = NULL;
+            *(s32*)((s32)unit + 0x284) = 0;
+            *(void**)((s32)unit + 0x2D0) = NULL;
             BattleAudience_ActInit();
-            kind = *(s32*)((s32)unit + 8);
             unable = 1;
-            if (kind == 0xDE || (kind > 0xDF && kind < 0xE7)) {
-                if (!BtlUnit_CheckStatus(unit, 1) &&
-                    !BtlUnit_CheckStatus(unit, 2) &&
-                    !BtlUnit_CheckStatus(unit, 9) &&
-                    !BtlUnit_CheckStatus(unit, 0x1B)) {
-                    unable = 0;
-                }
+            switch (*(s32*)((s32)unit + 8)) {
+                case 0xDE:
+                    if (!BtlUnit_CheckStatus(unit, 1) &&
+                        !BtlUnit_CheckStatus(unit, 2) &&
+                        !BtlUnit_CheckStatus(unit, 9) &&
+                        !BtlUnit_CheckStatus(unit, 0x1B)) {
+                        unable = 0;
+                    }
+                    break;
+                default:
+                    if (*(s32*)((s32)unit + 8) >= 0xE0 &&
+                        *(s32*)((s32)unit + 8) < 0xE7 &&
+                        !BtlUnit_CheckStatus(unit, 1) &&
+                        !BtlUnit_CheckStatus(unit, 2) &&
+                        !BtlUnit_CheckStatus(unit, 9) &&
+                        !BtlUnit_CheckStatus(unit, 0x1B)) {
+                        unable = 0;
+                    }
+                    break;
             }
             if (unable) {
                 BattleSetSeq(battleWork, 6, 0x6000003);
-            } else if (*(s8*)((s32)unit + 0x12B) == 0) {
+            } else if ((*(u32*)((s32)unit + 0x104) & 0x10) != 0) {
+                BattleSetSeq(battleWork, 6, 0x6000004);
+            } else if (*(s32*)((s32)unit + 8) == 0xE4 &&
+                       (mario = BattleGetMarioPtr(battleWork),
+                        (*(u32*)((s32)mario + 0x104) & 0x10) != 0)) {
+                BattleSetSeq(battleWork, 6, 0x6000004);
+            } else if (*(s8*)((s32)unit + 0x12B) != 0) {
+                BattleSetSeq(battleWork, 6, 0x6000005);
+            } else {
                 BattleCommandInit(battleWork);
                 BattleSetSeq(battleWork, 6, 0x6000001);
-            } else {
-                BattleSetSeq(battleWork, 6, 0x6000005);
             }
             break;
         case 0x6000001:
@@ -1745,29 +1821,30 @@ void btlseqAct(void* battleWork) {
                 BattleSetSeq(battleWork, 6, 0x6000006);
             }
             break;
+        case 0x6000005:
+            unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
+            *(void**)((s32)unit + 0x2A0) = BtlUnit_GetData(unit, 2);
+            *(s32*)((s32)unit + 0x2AC) = 1;
+            BattleSetSeq(battleWork, 6, 0x6000006);
+            break;
         case 0x6000003:
-            unit = BattleGetUnitPtr(battleWork, id);
+            unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
             *(s32*)((s32)unit + 0x2AC) = 1;
             *(u32*)((s32)unit + 0x1C) |= 0x04000000;
             BattleSetSeq(battleWork, 6, 0x6000006);
             break;
         case 0x6000004:
-            unit = BattleGetUnitPtr(battleWork, id);
+            unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
             *(void**)((s32)unit + 0x2A0) = BtlUnit_GetData(unit, 3);
             *(s32*)((s32)unit + 0x2AC) = 0x1B;
             BattleSetSeq(battleWork, 6, 0x6000006);
             break;
-        case 0x6000005:
-            unit = BattleGetUnitPtr(battleWork, id);
-            *(void**)((s32)unit + 0x2A0) = BtlUnit_GetData(unit, 2);
-            *(s32*)((s32)unit + 0x2AC) = 1;
-            BattleSetSeq(battleWork, 6, 0x6000006);
-            break;
         case 0x6000006:
-            unit = BattleGetUnitPtr(battleWork, id);
+            unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
             if ((*(u32*)((s32)unit + 0x2AC) & 1) == 0) {
                 BattleStatusWindowSystemOff();
             }
+            unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
             event = NULL;
             if ((*(u32*)((s32)battleWork + 0xEF4) & 0x40000000) != 0 &&
                 (*(u32*)((s32)unit + 0x104) & 0x2000) == 0 &&
@@ -1782,8 +1859,18 @@ void btlseqAct(void* battleWork) {
             } else if (!BtlUnit_CheckStatus(unit, 1) &&
                        !BtlUnit_CheckStatus(unit, 2) &&
                        !BtlUnit_CheckStatus(unit, 9) &&
-                       !BtlUnit_CheckStatus(unit, 0x1B)) {
-                event = evtEntry(*(void**)((s32)unit + 0x2A0), 10, 0);
+                       (!BtlUnit_CheckStatus(unit, 0x1B) ||
+                        (*(u32*)((s32)unit + 0x104) & 0x10000) != 0)) {
+                if (!BtlUnit_CheckStatus(unit, 5) || irand(100) > -1) {
+                    if (!BtlUnit_CheckStatus(unit, 3) || irand(100) > 0x31) {
+                        event = evtEntry(*(void**)((s32)unit + 0x2A0), 10, 0);
+                    } else {
+                        *(u32*)((s32)unit + 0x27C) |= 0x10;
+                        event = evtEntry(*(void**)((s32)unit + 0x2A4), 10, 0);
+                    }
+                } else {
+                    event = evtEntry(btldefaultevt_BiribiriMove, 10, 0);
+                }
             }
             if (event != NULL) {
                 *(s32*)((s32)unit + 0x2A8) = *(s32*)((s32)event + 0x15C);
@@ -1809,22 +1896,53 @@ void btlseqAct(void* battleWork) {
             if ((*(u32*)((s32)battleWork + 0x1720) & 0x30) == 0) {
                 BattleStatusWindowSystemOn();
             }
-            unit = BattleGetUnitPtr(battleWork, id);
+            unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
             if (unit != NULL) {
                 *(u32*)((s32)unit + 0x1C) &= 0xFBFFFFFF;
                 if ((*(u32*)((s32)unit + 0x27C) & 8) != 0) {
                     BtlUnit_SetStatus(unit, 0x10, 1, -99);
                     *(u32*)((s32)unit + 0x27C) &= ~8;
                 }
-                if (*(u8*)((s32)unit + 0x20) == 0) {
+                if (*(s8*)((s32)battleWork + 0x18FF9) == 1) {
+                    *(s8*)((s32)battleWork + 0x18FF9) = 0;
+                }
+                *(s32*)((s32)unit + 0x25C) = 0;
+                moveState = *(u8*)((s32)unit + 0x20);
+                if (moveState == 7 || moveState == 9) {
+                    *(u8*)((s32)unit + 0x20) = 0;
+                } else if (moveState == 5) {
+                    *(u8*)((s32)unit + 0x20) = 6;
+                } else if (moveState == 6) {
+                    *(u8*)((s32)unit + 0x20) = 7;
+                } else if (moveState == 8) {
+                    *(u8*)((s32)unit + 0x20) = 9;
+                }
+                moveState = *(u8*)((s32)unit + 0x20);
+                if (moveState == 0) {
+                    if (!BtlUnit_CheckStatusFlag(unit, 0x02000000)) {
+                        (*(s8*)((s32)unit + 0x22))--;
+                    } else {
+                        BtlUnit_OffStatusFlag(unit, 0x02000000);
+                    }
                     if ((*(u32*)((s32)battleWork + 0x1720) & 0x2000) != 0) {
                         *(s8*)((s32)unit + 0x22) = 0;
-                    } else {
-                        (*(s8*)((s32)unit + 0x22))--;
                     }
                     if (*(s8*)((s32)unit + 0x22) < 1) {
                         *(u8*)((s32)unit + 0x20) = 10;
+                        if ((*(u32*)((s32)unit + 0x27C) & 0x100) == 0) {
+                            *(u8*)((s32)unit + 0x24) = 0;
+                        } else {
+                            *(u32*)((s32)unit + 0x27C) &= ~0x100;
+                        }
+                        if ((s8)BtlUnit_GetBelong(unit) == 0 &&
+                            *(s32*)((s32)unit + 0x2C) == 0x4000002 &&
+                            !BattlePhaseEndCheck() &&
+                            (*(u32*)((s32)battleWork + 0x1720) & 0x2000) == 0) {
+                            *(u8*)((s32)unit + 0x311) = 0x60;
+                        }
                     }
+                } else if (moveState == 3 || moveState == 4) {
+                    *(u8*)((s32)unit + 0x20) = 0;
                 }
             }
             BattleConsumeReserveItem();
@@ -1850,7 +1968,7 @@ void btlseqAct(void* battleWork) {
             if (!BattleWaitAllActiveEvtEnd(battleWork)) {
                 break;
             }
-            unit = BattleGetUnitPtr(battleWork, id);
+            unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
             if (unit != NULL) {
                 *(s32*)((s32)unit + 0x2CC) = 0;
                 if (*(void**)((s32)unit + 0x2C8) != NULL) {
@@ -1867,7 +1985,7 @@ void btlseqAct(void* battleWork) {
             }
             BattleIncSeq(battleWork, 6);
         case 0x600000D:
-            unit = BattleGetUnitPtr(battleWork, id);
+            unit = BattleGetUnitPtr(battleWork, *(s32*)((s32)battleWork + 0x420));
             if (unit != NULL && *(s32*)((s32)unit + 0x2CC) != 0) {
                 if (evtCheckID(*(s32*)((s32)unit + 0x2CC))) {
                     break;

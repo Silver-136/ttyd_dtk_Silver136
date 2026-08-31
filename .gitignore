@@ -7,6 +7,8 @@ __pycache__
 build
 build.ninja
 objdiff.json
+# Candidate artifacts belong to the workspace-level tools/objdiff/candidates store.
+/tools/objdiff/candidates/
 orig/*/*
 !orig/*/.gitkeep
 /*.txt

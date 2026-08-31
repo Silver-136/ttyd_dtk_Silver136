@@ -39,200 +39,312 @@ s32 evt_while(void* event) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
 s32 evt_wait_msec(void* event) {
     extern s32 evtGetValue(void*, s32);
-    extern unsigned int __OSBusClock;
-    unsigned int now_hi;
-    unsigned int now_lo;
-    unsigned int old_lo;
-    unsigned int diff;
-    unsigned int ticks_per_msec;
-    unsigned int elapsed;
+    s32* args = *(s32**)((u8*)event + 0x18);
+    u64 time = *(u64*)event;
     s32 wait;
+    u64 tickDiff;
+    s32 msecDiff;
 
-    now_hi = *(unsigned int*)event;
-    now_lo = *(unsigned int*)((int)event + 4);
-    if (*(unsigned char*)((int)event + 0xD) == 0) {
-        wait = evtGetValue(event, **(s32**)((int)event + 0x18));
-        *(s32*)((int)event + 0x78) = wait;
-        *(unsigned int*)((int)event + 0x7C) = now_hi;
-        *(unsigned int*)((int)event + 0x80) = now_lo;
-        *(unsigned char*)((int)event + 0xD) = 1;
+    switch (*(s8*)((u8*)event + 0xD)) {
+        case 0:
+            wait = evtGetValue(event, args[0]);
+            *(s32*)((u8*)event + 0x78) = wait;
+            *(s32*)((u8*)event + 0x7C) = (s32)((time >> 32) & 0xFFFFFFFF);
+            *(s32*)((u8*)event + 0x80) = (s32)(time & 0xFFFFFFFF);
+            *(u8*)((u8*)event + 0xD) = 1;
+            break;
     }
 
-    wait = *(s32*)((int)event + 0x78);
+    wait = *(s32*)((u8*)event + 0x78);
     if (wait == 0) {
         return 2;
     }
 
-    old_lo = *(unsigned int*)((int)event + 0x80);
-    ticks_per_msec = (__OSBusClock >> 2) / 1000;
-    diff = now_lo - old_lo;
-    elapsed = diff / ticks_per_msec;
-    return elapsed >= (unsigned int)wait;
+    tickDiff = (s32)time - *(s32*)((u8*)event + 0x80);
+    msecDiff = (s32)(tickDiff / ((*(u32*)0x800000F8 >> 2) / 1000));
+    return msecDiff >= wait;
 }
 
-int evt_if_str_equal(void* param_1) {
-    u8* event = param_1;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+int evt_if_str_equal(void* pEvt) {
+    u8* event = pEvt;
     s32* args = *(s32**)(event + 0x18);
-    char* left = (char*)evtGetValue(param_1, args[0]);
-    char* right = (char*)evtGetValue(param_1, args[1]);
-    s32 result;
+    char* left = (char*)evtGetValue(pEvt, args[0]);
+    char* right = (char*)evtGetValue(pEvt, args[1]);
 
     if (left == 0) left = "";
     if (right == 0) right = "";
-    result = strcmp(left, right);
-    if (result != 0) {
-        u32* current = *(u32**)(event + 0x14);
-        u32 opcode;
+    if (strcmp(left, right)) {
         s32 depth = 0;
-        do {
-            opcode = *current & 0xFFFF;
-            current += ((s32)*current >> 16) + 1;
-            if (opcode == 0x20 && depth == 0) break;
-            if (opcode < 0x20) {
-                if (opcode != 0 && opcode > 0xB) depth++;
-            } else if (opcode <= 0x21) depth--;
-        } while (depth > -1);
-        *(u32**)(event + 0x14) = current;
+        s32* current = *(s32**)(event + 0x14);
+        while (1) {
+            s32 command = *current++;
+            s32 opcode = command & 0xFFFF;
+            current += command >> 16;
+
+            if (opcode == 0x20) {
+                if (depth == 0) {
+                    break;
+                }
+            } else if (opcode < 0x20) {
+                if (opcode == 1) {
+                    if (--depth < 0) {
+                        break;
+                    }
+                } else if (opcode >= 0xC) {
+                    depth++;
+                }
+            } else if (opcode < 0x22) {
+                if (--depth < 0) {
+                    break;
+                }
+            }
+        }
+        *(s32**)(event + 0x14) = current;
     }
     return 2;
 }
 
-int evt_if_str_not_equal(void* param_1) {
-    u8* event = param_1;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+int evt_if_str_not_equal(void* pEvt) {
+    u8* event = pEvt;
     s32* args = *(s32**)(event + 0x18);
-    char* left = (char*)evtGetValue(param_1, args[0]);
-    char* right = (char*)evtGetValue(param_1, args[1]);
-    s32 result;
+    char* left = (char*)evtGetValue(pEvt, args[0]);
+    char* right = (char*)evtGetValue(pEvt, args[1]);
 
     if (left == 0) left = "";
     if (right == 0) right = "";
-    result = strcmp(left, right);
-    if (result == 0) {
-        u32* current = *(u32**)(event + 0x14);
-        u32 opcode;
+    if (!strcmp(left, right)) {
         s32 depth = 0;
-        do {
-            opcode = *current & 0xFFFF;
-            current += ((s32)*current >> 16) + 1;
-            if (opcode == 0x20 && depth == 0) break;
-            if (opcode < 0x20) {
-                if (opcode != 0 && opcode > 0xB) depth++;
-            } else if (opcode <= 0x21) depth--;
-        } while (depth > -1);
-        *(u32**)(event + 0x14) = current;
+        s32* current = *(s32**)(event + 0x14);
+        while (1) {
+            s32 command = *current++;
+            s32 opcode = command & 0xFFFF;
+            current += command >> 16;
+
+            if (opcode == 0x20) {
+                if (depth == 0) {
+                    break;
+                }
+            } else if (opcode < 0x20) {
+                if (opcode == 1) {
+                    if (--depth < 0) {
+                        break;
+                    }
+                } else if (opcode >= 0xC) {
+                    depth++;
+                }
+            } else if (opcode < 0x22) {
+                if (--depth < 0) {
+                    break;
+                }
+            }
+        }
+        *(s32**)(event + 0x14) = current;
     }
     return 2;
 }
 
-int evt_if_str_small(void* param_1) {
-    u8* event = param_1;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+int evt_if_str_small(void* pEvt) {
+    u8* event = pEvt;
     s32* args = *(s32**)(event + 0x18);
-    char* left = (char*)evtGetValue(param_1, args[0]);
-    char* right = (char*)evtGetValue(param_1, args[1]);
-    s32 result;
+    char* left = (char*)evtGetValue(pEvt, args[0]);
+    char* right = (char*)evtGetValue(pEvt, args[1]);
 
     if (left == 0) left = "";
     if (right == 0) right = "";
-    result = strcmp(left, right);
-    if (result > -1) {
-        u32* current = *(u32**)(event + 0x14);
-        u32 opcode;
+    if (strcmp(left, right) >= 0) {
         s32 depth = 0;
-        do {
-            opcode = *current & 0xFFFF;
-            current += ((s32)*current >> 16) + 1;
-            if (opcode == 0x20 && depth == 0) break;
-            if (opcode < 0x20) {
-                if (opcode != 0 && opcode > 0xB) depth++;
-            } else if (opcode <= 0x21) depth--;
-        } while (depth > -1);
-        *(u32**)(event + 0x14) = current;
+        s32* current = *(s32**)(event + 0x14);
+        while (1) {
+            s32 command = *current++;
+            s32 opcode = command & 0xFFFF;
+            current += command >> 16;
+
+            if (opcode == 0x20) {
+                if (depth == 0) {
+                    break;
+                }
+            } else if (opcode < 0x20) {
+                if (opcode == 1) {
+                    if (--depth < 0) {
+                        break;
+                    }
+                } else if (opcode >= 0xC) {
+                    depth++;
+                }
+            } else if (opcode < 0x22) {
+                if (--depth < 0) {
+                    break;
+                }
+            }
+        }
+        *(s32**)(event + 0x14) = current;
     }
     return 2;
 }
 
-int evt_if_str_large(void* param_1) {
-    u8* event = param_1;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+int evt_if_str_large(void* pEvt) {
+    u8* event = pEvt;
     s32* args = *(s32**)(event + 0x18);
-    char* left = (char*)evtGetValue(param_1, args[0]);
-    char* right = (char*)evtGetValue(param_1, args[1]);
-    s32 result;
+    char* left = (char*)evtGetValue(pEvt, args[0]);
+    char* right = (char*)evtGetValue(pEvt, args[1]);
 
     if (left == 0) left = "";
     if (right == 0) right = "";
-    result = strcmp(left, right);
-    if (result < 1) {
-        u32* current = *(u32**)(event + 0x14);
-        u32 opcode;
+    if (strcmp(left, right) <= 0) {
         s32 depth = 0;
-        do {
-            opcode = *current & 0xFFFF;
-            current += ((s32)*current >> 16) + 1;
-            if (opcode == 0x20 && depth == 0) break;
-            if (opcode < 0x20) {
-                if (opcode != 0 && opcode > 0xB) depth++;
-            } else if (opcode <= 0x21) depth--;
-        } while (depth > -1);
-        *(u32**)(event + 0x14) = current;
+        s32* current = *(s32**)(event + 0x14);
+        while (1) {
+            s32 command = *current++;
+            s32 opcode = command & 0xFFFF;
+            current += command >> 16;
+
+            if (opcode == 0x20) {
+                if (depth == 0) {
+                    break;
+                }
+            } else if (opcode < 0x20) {
+                if (opcode == 1) {
+                    if (--depth < 0) {
+                        break;
+                    }
+                } else if (opcode >= 0xC) {
+                    depth++;
+                }
+            } else if (opcode < 0x22) {
+                if (--depth < 0) {
+                    break;
+                }
+            }
+        }
+        *(s32**)(event + 0x14) = current;
     }
     return 2;
 }
 
-int evt_if_str_small_equal(void* param_1) {
-    u8* event = param_1;
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
+int evt_if_str_small_equal(void* pEvt) {
+    u8* event = pEvt;
     s32* args = *(s32**)(event + 0x18);
-    char* left = (char*)evtGetValue(param_1, args[0]);
-    char* right = (char*)evtGetValue(param_1, args[1]);
-    s32 result;
+    char* left = (char*)evtGetValue(pEvt, args[0]);
+    char* right = (char*)evtGetValue(pEvt, args[1]);
 
     if (left == 0) left = "";
     if (right == 0) right = "";
-    result = strcmp(left, right);
-    if (result > 0) {
-        u32* current = *(u32**)(event + 0x14);
-        u32 opcode;
+    if (strcmp(left, right) > 0) {
         s32 depth = 0;
-        do {
-            opcode = *current & 0xFFFF;
-            current += ((s32)*current >> 16) + 1;
-            if (opcode == 0x20 && depth == 0) break;
-            if (opcode < 0x20) {
-                if (opcode != 0 && opcode > 0xB) depth++;
-            } else if (opcode <= 0x21) depth--;
-        } while (depth > -1);
-        *(u32**)(event + 0x14) = current;
+        s32* current = *(s32**)(event + 0x14);
+        while (1) {
+            s32 command = *current++;
+            s32 opcode = command & 0xFFFF;
+            current += command >> 16;
+
+            if (opcode == 0x20) {
+                if (depth == 0) {
+                    break;
+                }
+            } else if (opcode < 0x20) {
+                if (opcode == 1) {
+                    if (--depth < 0) {
+                        break;
+                    }
+                } else if (opcode >= 0xC) {
+                    depth++;
+                }
+            } else if (opcode < 0x22) {
+                if (--depth < 0) {
+                    break;
+                }
+            }
+        }
+        *(s32**)(event + 0x14) = current;
     }
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 int evt_if_str_large_equal(void* pEvt) {
     u8* event = pEvt;
     s32* args = *(s32**)(event + 0x18);
     char* left = (char*)evtGetValue(pEvt, args[0]);
     char* right = (char*)evtGetValue(pEvt, args[1]);
-    s32 result;
 
     if (left == 0) left = "";
     if (right == 0) right = "";
-    result = strcmp(left, right);
-    if (result < 0) {
-        u32* current = *(u32**)(event + 0x14);
-        u32 opcode;
+    if (strcmp(left, right) < 0) {
         s32 depth = 0;
-        do {
-            opcode = *current & 0xFFFF;
-            current += ((s32)*current >> 16) + 1;
-            if (opcode == 0x20 && depth == 0) break;
-            if (opcode < 0x20) {
-                if (opcode != 0 && opcode > 0xB) depth++;
-            } else if (opcode <= 0x21) depth--;
-        } while (depth > -1);
-        *(u32**)(event + 0x14) = current;
+        s32* current = *(s32**)(event + 0x14);
+        while (1) {
+            s32 command = *current++;
+            s32 opcode = command & 0xFFFF;
+            current += command >> 16;
+
+            if (opcode == 0x20) {
+                if (depth == 0) {
+                    break;
+                }
+            } else if (opcode < 0x20) {
+                if (opcode == 1) {
+                    if (--depth < 0) {
+                        break;
+                    }
+                } else if (opcode >= 0xC) {
+                    depth++;
+                }
+            } else if (opcode < 0x22) {
+                if (--depth < 0) {
+                    break;
+                }
+            }
+        }
+        *(s32**)(event + 0x14) = current;
     }
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 int evt_iff_equal(void* param_1) {
     u8* event = param_1;
@@ -241,23 +353,41 @@ int evt_iff_equal(void* param_1) {
     f32 right = evtGetFloat(param_1, args[1]);
 
     if (left != right) {
-        u32* current = *(u32**)(event + 0x14);
-        u32 opcode;
         s32 depth = 0;
-        do {
-            opcode = *current & 0xFFFF;
-            current += ((s32)*current >> 16) + 1;
-            if (opcode == 0x20 && depth == 0) break;
-            if (opcode < 0x20) {
-                if (opcode != 0 && opcode > 0xB) depth++;
-            } else if (opcode <= 0x21) {
-                depth--;
+        s32* current = *(s32**)(event + 0x14);
+        while (1) {
+            s32 command = *current++;
+            s32 opcode = command & 0xFFFF;
+            current += command >> 16;
+
+            if (opcode == 0x20) {
+                if (depth == 0) {
+                    break;
+                }
+            } else if (opcode < 0x20) {
+                if (opcode == 1) {
+                    if (--depth < 0) {
+                        break;
+                    }
+                } else if (opcode >= 0xC) {
+                    depth++;
+                }
+            } else if (opcode < 0x22) {
+                if (--depth < 0) {
+                    break;
+                }
             }
-        } while (depth > -1);
-        *(u32**)(event + 0x14) = current;
+        }
+        *(s32**)(event + 0x14) = current;
     }
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 int evt_iff_not_equal(void* param_1) {
     u8* event = param_1;
@@ -266,23 +396,41 @@ int evt_iff_not_equal(void* param_1) {
     f32 right = evtGetFloat(param_1, args[1]);
 
     if (left == right) {
-        u32* current = *(u32**)(event + 0x14);
-        u32 opcode;
         s32 depth = 0;
-        do {
-            opcode = *current & 0xFFFF;
-            current += ((s32)*current >> 16) + 1;
-            if (opcode == 0x20 && depth == 0) break;
-            if (opcode < 0x20) {
-                if (opcode != 0 && opcode > 0xB) depth++;
-            } else if (opcode <= 0x21) {
-                depth--;
+        s32* current = *(s32**)(event + 0x14);
+        while (1) {
+            s32 command = *current++;
+            s32 opcode = command & 0xFFFF;
+            current += command >> 16;
+
+            if (opcode == 0x20) {
+                if (depth == 0) {
+                    break;
+                }
+            } else if (opcode < 0x20) {
+                if (opcode == 1) {
+                    if (--depth < 0) {
+                        break;
+                    }
+                } else if (opcode >= 0xC) {
+                    depth++;
+                }
+            } else if (opcode < 0x22) {
+                if (--depth < 0) {
+                    break;
+                }
             }
-        } while (depth > -1);
-        *(u32**)(event + 0x14) = current;
+        }
+        *(s32**)(event + 0x14) = current;
     }
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 int evt_iff_small(void* param_1) {
     u8* event = param_1;
@@ -290,24 +438,42 @@ int evt_iff_small(void* param_1) {
     f32 left = evtGetFloat(param_1, args[0]);
     f32 right = evtGetFloat(param_1, args[1]);
 
-    if (right <= left) {
-        u32* current = *(u32**)(event + 0x14);
-        u32 opcode;
+    if (left >= right) {
         s32 depth = 0;
-        do {
-            opcode = *current & 0xFFFF;
-            current += ((s32)*current >> 16) + 1;
-            if (opcode == 0x20 && depth == 0) break;
-            if (opcode < 0x20) {
-                if (opcode != 0 && opcode > 0xB) depth++;
-            } else if (opcode <= 0x21) {
-                depth--;
+        s32* current = *(s32**)(event + 0x14);
+        while (1) {
+            s32 command = *current++;
+            s32 opcode = command & 0xFFFF;
+            current += command >> 16;
+
+            if (opcode == 0x20) {
+                if (depth == 0) {
+                    break;
+                }
+            } else if (opcode < 0x20) {
+                if (opcode == 1) {
+                    if (--depth < 0) {
+                        break;
+                    }
+                } else if (opcode >= 0xC) {
+                    depth++;
+                }
+            } else if (opcode < 0x22) {
+                if (--depth < 0) {
+                    break;
+                }
             }
-        } while (depth > -1);
-        *(u32**)(event + 0x14) = current;
+        }
+        *(s32**)(event + 0x14) = current;
     }
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 s32 evt_iff_large(int param_1) {
     u8* event = (u8*)param_1;
@@ -316,23 +482,41 @@ s32 evt_iff_large(int param_1) {
     f32 right = evtGetFloat((void*)param_1, args[1]);
 
     if (left <= right) {
-        u32* current = *(u32**)(event + 0x14);
-        u32 opcode;
         s32 depth = 0;
-        do {
-            opcode = *current & 0xFFFF;
-            current += ((s32)*current >> 16) + 1;
-            if (opcode == 0x20 && depth == 0) break;
-            if (opcode < 0x20) {
-                if (opcode != 0 && opcode > 0xB) depth++;
-            } else if (opcode <= 0x21) {
-                depth--;
+        s32* current = *(s32**)(event + 0x14);
+        while (1) {
+            s32 command = *current++;
+            s32 opcode = command & 0xFFFF;
+            current += command >> 16;
+
+            if (opcode == 0x20) {
+                if (depth == 0) {
+                    break;
+                }
+            } else if (opcode < 0x20) {
+                if (opcode == 1) {
+                    if (--depth < 0) {
+                        break;
+                    }
+                } else if (opcode >= 0xC) {
+                    depth++;
+                }
+            } else if (opcode < 0x22) {
+                if (--depth < 0) {
+                    break;
+                }
             }
-        } while (depth > -1);
-        *(u32**)(event + 0x14) = current;
+        }
+        *(s32**)(event + 0x14) = current;
     }
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 s32 evt_iff_small_equal(int param_1) {
     u8* event = (u8*)param_1;
@@ -340,24 +524,42 @@ s32 evt_iff_small_equal(int param_1) {
     f32 left = evtGetFloat((void*)param_1, args[0]);
     f32 right = evtGetFloat((void*)param_1, args[1]);
 
-    if (right < left) {
-        u32* current = *(u32**)(event + 0x14);
-        u32 opcode;
+    if (left > right) {
         s32 depth = 0;
-        do {
-            opcode = *current & 0xFFFF;
-            current += ((s32)*current >> 16) + 1;
-            if (opcode == 0x20 && depth == 0) break;
-            if (opcode < 0x20) {
-                if (opcode != 0 && opcode > 0xB) depth++;
-            } else if (opcode <= 0x21) {
-                depth--;
+        s32* current = *(s32**)(event + 0x14);
+        while (1) {
+            s32 command = *current++;
+            s32 opcode = command & 0xFFFF;
+            current += command >> 16;
+
+            if (opcode == 0x20) {
+                if (depth == 0) {
+                    break;
+                }
+            } else if (opcode < 0x20) {
+                if (opcode == 1) {
+                    if (--depth < 0) {
+                        break;
+                    }
+                } else if (opcode >= 0xC) {
+                    depth++;
+                }
+            } else if (opcode < 0x22) {
+                if (--depth < 0) {
+                    break;
+                }
             }
-        } while (depth > -1);
-        *(u32**)(event + 0x14) = current;
+        }
+        *(s32**)(event + 0x14) = current;
     }
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 s32 evt_iff_large_equal(int param_1) {
     u8* event = (u8*)param_1;
@@ -367,12 +569,13 @@ s32 evt_iff_large_equal(int param_1) {
 
     if (left < right) {
         u32* current = *(u32**)(event + 0x14);
-        u32 opcode;
+        s32 opcode;
         s32 depth = 0;
 
         do {
             opcode = *current & 0xFFFF;
-            current += ((s32)*current >> 16) + 1;
+            current++;
+            current += (s32)current[-1] >> 16;
             if (opcode == 0x20 && depth == 0) {
                 break;
             }
@@ -388,6 +591,9 @@ s32 evt_iff_large_equal(int param_1) {
     }
     return 2;
 }
+
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 s32 evt_if_equal(void* event) {
     extern s32 evtGetValue(void*, s32);
@@ -675,7 +881,7 @@ s32 evt_case_equal(void* pEvt) {
     u8* event = pEvt;
     s32 index;
     s32 value;
-    s32 state;
+    s8 state;
     s32 inputValue;
     s32 depth;
     u32 *current, *command;
@@ -691,7 +897,8 @@ s32 evt_case_equal(void* pEvt) {
         do {
             command = current;
             opcode = *command & 0xFFFF;
-            current = command + ((s32)*command >> 16) + 1;
+            current = command + 1;
+            current += (s32)*command >> 16;
             if (opcode == 0x22) {
                 depth++;
             } else if (opcode >= 0x22) {
@@ -712,7 +919,8 @@ s32 evt_case_equal(void* pEvt) {
             do {
                 command = current;
                 opcode = *command & 0xFFFF;
-                current = command + ((s32)*command >> 16) + 1;
+                current = command + 1;
+                current += (s32)*command >> 16;
             } while (opcode == 0x23);
             if (opcode <= 0x22) {
                 if (opcode == 1 || opcode == 0x22) {
@@ -735,33 +943,39 @@ s32 evt_case_equal(void* pEvt) {
 #pragma use_lmw_stmw off
 s32 evt_case_not_equal(void* param_1) {
     u8* event = param_1;
-    s8 index;
+    s32 index;
     u32 value;
+    s8 state;
+    u32 inputValue;
     s32 depth;
     u32 *current, *command;
     s32 opcode;
 
     index = *(s8*)(event + 0xF);
     value = evtGetValue(param_1, **(s32**)(event + 0x18));
-    if (*(s8*)(event + index + 0x128) < 1) {
+    state = *(s8*)(event + index + 0x128);
+    inputValue = *(u32*)(event + index * 4 + 0x130);
+    if (state < 1) {
         depth = 1;
         current = *(u32**)(event + 0x14);
         do {
             command = current;
             opcode = *command & 0xFFFF;
-            current = command + ((s32)*command >> 16) + 1;
+            current = command + 1;
+            current += (s32)*command >> 16;
             if (opcode == 0x22 || opcode == 1) depth++;
             else if (opcode == 0x31) depth--;
         } while (depth != 0);
         *(u32**)(event + 0x14) = command;
-    } else if (value == *(u32*)(event + index * 4 + 0x130)) {
+    } else if (value == inputValue) {
         depth = 1;
         current = *(u32**)(event + 0x14);
         for (;;) {
             do {
                 command = current;
                 opcode = *command & 0xFFFF;
-                current = command + ((s32)*command >> 16) + 1;
+                current = command + 1;
+                current += (s32)*command >> 16;
             } while (opcode == 0x23);
             if (opcode <= 0x22) {
                 if (opcode == 1 || opcode == 0x22) depth++;
@@ -775,6 +989,7 @@ s32 evt_case_not_equal(void* param_1) {
     }
     return 2;
 }
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -782,11 +997,11 @@ s32 evt_case_small(void* param_1) {
     u8* event = param_1;
     s32 index;
     u32 value;
-    s32 state;
+    s8 state;
     s32 inputValue;
     s32 depth;
     u32 *current, *command;
-    u32 opcode;
+    s32 opcode;
 
     index = (s32)*(s8*)(event + 0xF);
     value = evtGetValue(param_1, **(s32**)(event + 0x18));
@@ -798,12 +1013,13 @@ s32 evt_case_small(void* param_1) {
         do {
             command = current;
             opcode = *command & 0xFFFF;
-            current = command + ((s32)*command >> 16) + 1;
+            current = command + 1;
+            current += (s32)*command >> 16;
             if (opcode == 0x22 || opcode == 1) depth++;
             else if (opcode == 0x31) depth--;
         } while (depth != 0);
         *(u32**)(event + 0x14) = command;
-    } else if (inputValue < (s32)value) {
+    } else if ((s32)value > inputValue) {
         *(s8*)(event + index + 0x128) = 0;
     } else {
         depth = 1;
@@ -812,7 +1028,8 @@ s32 evt_case_small(void* param_1) {
             do {
                 command = current;
                 opcode = *command & 0xFFFF;
-                current = command + ((s32)*command >> 16) + 1;
+                current = command + 1;
+                current += (s32)*command >> 16;
             } while (opcode == 0x23);
             if (opcode <= 0x22) {
                 if (opcode == 1 || opcode == 0x22) depth++;
@@ -825,9 +1042,14 @@ s32 evt_case_small(void* param_1) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
 s32 evt_case_small_equal(int param_1) {
-    s8 index;
+    s32 index;
     u32 value;
+    s8 state;
+    s32 expected;
     s32 depth;
     u32* current;
     u32* command;
@@ -836,13 +1058,16 @@ s32 evt_case_small_equal(int param_1) {
     index = *(s8*)(param_1 + 0xF);
     value = evtGetValue((void*)param_1, **(s32**)(param_1 + 0x18));
     depth = param_1 + index;
-    if (*(s8*)(depth + 0x128) < 1) {
+    state = *(s8*)(depth + 0x128);
+    expected = *(s32*)(param_1 + index * 4 + 0x130);
+    if (state < 1) {
         depth = 1;
         current = *(u32**)(param_1 + 0x14);
 first_read:
         command = current;
         opcode = *command & 0xFFFF;
-        current = command + ((s32)*command >> 16) + 1;
+        current = command + 1;
+        current += (s32)*command >> 16;
         if (opcode == 0x22) {
             goto first_increment;
         }
@@ -861,14 +1086,15 @@ first_increment:
             goto first_read;
         }
         *(u32**)(param_1 + 0x14) = command;
-    } else if ((s32)value < *(s32*)(param_1 + index * 4 + 0x130)) {
+    } else if ((s32)value < expected) {
         depth = 1;
         current = *(u32**)(param_1 + 0x14);
 second_read:
         do {
             command = current;
             opcode = *command & 0xFFFF;
-            current = command + ((s32)*command >> 16) + 1;
+            current = command + 1;
+            current += (s32)*command >> 16;
         } while (opcode == 0x23);
         if (opcode <= 0x22) {
             if (opcode == 1 || (opcode != 0 && opcode > 0x21)) {
@@ -894,6 +1120,12 @@ second_done:
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
 s32 evt_case_large(void* param_1) {
     u8* event = param_1;
     s32 index;
@@ -902,7 +1134,7 @@ s32 evt_case_large(void* param_1) {
     s32 inputValue;
     s32 depth;
     u32 *current, *command;
-    u32 opcode;
+    s32 opcode;
 
     index = (s32)*(s8*)(event + 0xF);
     value = evtGetValue(param_1, **(s32**)(event + 0x18));
@@ -914,7 +1146,8 @@ s32 evt_case_large(void* param_1) {
         do {
             command = current;
             opcode = *command & 0xFFFF;
-            current = command + ((s32)*command >> 16) + 1;
+            current = command + 1;
+            current += (s32)*command >> 16;
             if (opcode == 0x22 || opcode == 1) depth++;
             else if (opcode == 0x31) depth--;
         } while (depth != 0);
@@ -928,7 +1161,8 @@ s32 evt_case_large(void* param_1) {
             do {
                 command = current;
                 opcode = *command & 0xFFFF;
-                current = command + ((s32)*command >> 16) + 1;
+                current = command + 1;
+                current += (s32)*command >> 16;
             } while (opcode == 0x23);
             if (opcode <= 0x22) {
                 if (opcode == 1 || opcode == 0x22) depth++;
@@ -941,9 +1175,17 @@ s32 evt_case_large(void* param_1) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
 s32 evt_case_large_equal(int param_1) {
-    s8 index;
+    s32 index;
     u32 value;
+    s32 expected;
+    s32 state;
     s32 depth;
     u32* current;
     u32* command;
@@ -952,16 +1194,17 @@ s32 evt_case_large_equal(int param_1) {
     index = *(s8*)(param_1 + 0xF);
     value = evtGetValue((void*)param_1, **(s32**)(param_1 + 0x18));
     depth = param_1 + index;
-    if (*(s8*)(depth + 0x128) < 1) {
+    state = *(s8*)(depth + 0x128);
+    expected = *(s32*)(param_1 + index * 4 + 0x130);
+    if (state < 1) {
         depth = 1;
         current = *(u32**)(param_1 + 0x14);
 first_read:
         command = current;
         opcode = *command & 0xFFFF;
-        current = command + ((s32)*command >> 16) + 1;
-        if (opcode == 0x22) {
-            goto first_increment;
-        }
+        current = command + 1;
+        current += (s32)*command >> 16;
+        if (opcode == 0x22) goto first_increment;
         if (opcode < 0x22) {
             if (opcode == 1) {
 first_increment:
@@ -969,39 +1212,30 @@ first_increment:
             }
             goto first_read;
         }
-        if (opcode != 0x31) {
-            goto first_read;
-        }
+        if (opcode != 0x31) goto first_read;
         depth--;
-        if (depth != 0) {
-            goto first_read;
-        }
+        if (depth != 0) goto first_read;
         *(u32**)(param_1 + 0x14) = command;
-    } else if (*(s32*)(param_1 + index * 4 + 0x130) < (s32)value) {
+    } else if (expected < (s32)value) {
         depth = 1;
         current = *(u32**)(param_1 + 0x14);
 second_read:
         do {
             command = current;
             opcode = *command & 0xFFFF;
-            current = command + ((s32)*command >> 16) + 1;
+            current = command + 1;
+            current += (s32)*command >> 16;
         } while (opcode == 0x23);
         if (opcode <= 0x22) {
-            if (opcode == 1 || (opcode != 0 && opcode > 0x21)) {
-                depth++;
-            }
+            if (opcode == 1 || (opcode != 0 && opcode > 0x21)) depth++;
             goto second_read;
         }
         if (opcode == 0x31) {
             depth--;
-            if (depth == 0) {
-                goto second_done;
-            }
+            if (depth == 0) goto second_done;
             goto second_read;
         }
-        if (opcode > 0x30 || opcode > 0x2F || depth != 1) {
-            goto second_read;
-        }
+        if (opcode > 0x30 || opcode > 0x2F || depth != 1) goto second_read;
 second_done:
         *(u32**)(param_1 + 0x14) = command;
     } else {
@@ -1009,6 +1243,9 @@ second_done:
     }
     return 2;
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_case_between(int param_1) {
     u8* event = (u8*)param_1;
@@ -1020,42 +1257,53 @@ s32 evt_case_between(int param_1) {
     s32 expected = *(s32*)(event + index * 4 + 0x130);
     u32* current;
     u32* command;
-    u32 opcode;
+    s32 opcode;
     s32 depth;
 
     if (*(s8*)(entry + 0x128) < 1) {
         depth = 1;
         current = *(u32**)(event + 0x14);
-        do {
-            command = current;
-            opcode = *command & 0xFFFF;
-            current = command + ((s32)*command >> 16) + 1;
-            if (opcode == 0x22 || opcode == 1) depth++;
-            else if (opcode == 0x31) depth--;
-        } while (depth != 0);
+scan_end:
+        command = current;
+        opcode = *command & 0xFFFF;
+        current = command + 1;
+        current += (s32)*command >> 16;
+        if (opcode == 0x22) goto end_open;
+        if (opcode < 0x22) {
+            if (opcode == 1) goto end_open;
+            goto scan_end;
+        }
+        if (opcode != 0x31) goto scan_end;
+        if (--depth != 0) goto scan_end;
         *(u32**)(event + 0x14) = command;
+        goto finished;
+end_open:
+        depth++;
+        goto scan_end;
     } else if (expected >= lower && expected <= upper) {
         *(s8*)(entry + 0x128) = 0;
     } else {
         depth = 1;
         current = *(u32**)(event + 0x14);
-        for (;;) {
-            command = current;
-            opcode = *command & 0xFFFF;
-            current = command + ((s32)*command >> 16) + 1;
-            if (opcode == 0x23) continue;
-            if (opcode <= 0x22) {
-                if (opcode == 1 || opcode == 0x22) depth++;
-                continue;
-            }
-            if (opcode == 0x31) {
-                if (--depth == 0) break;
-                continue;
-            }
-            if (opcode < 0x30 && depth == 1) break;
+scan_case:
+        command = current;
+        opcode = *command & 0xFFFF;
+        current = command + 1;
+        current += (s32)*command >> 16;
+        if (opcode == 0x23) goto scan_case;
+        if (opcode < 0x23) {
+            if (opcode == 1 || (opcode != 0 && opcode > 0x21)) depth++;
+            goto scan_case;
         }
+        if (opcode == 0x31) {
+            if (--depth == 0) goto case_done;
+            goto scan_case;
+        }
+        if (opcode >= 0x30 || depth != 1) goto scan_case;
+case_done:
         *(u32**)(event + 0x14) = command;
     }
+finished:
     return 2;
 }
 
@@ -1193,60 +1441,66 @@ done:
 
 s32 evt_case_or(void* param_1) {
     u8* event = param_1;
-    s8 index = *(s8*)(event + 0xF);
-    u8* entry = event + index;
-    s32* args = *(s32**)(event + 0x18);
-    s32 expected = *(s32*)(event + index * 4 + 0x130);
-    s32 value = evtGetValue(param_1, args[0]);
+    s8 index;
+    u8* entry;
+    s32* args;
+    s32 expected;
+    s32 value;
     u32* current;
     u32* command;
-    u32 opcode;
+    s32 opcode;
     s32 depth;
+
+    args = *(s32**)(event + 0x18);
+    index = *(s8*)(event + 0xF);
+    value = evtGetValue(param_1, args[0]);
+    entry = event + index;
+    expected = *(s32*)(event + index * 4 + 0x130);
 
     if (*(s8*)(entry + 0x128) == 0) {
         depth = 1;
         current = *(u32**)(event + 0x14);
-        do {
-            command = current;
-            opcode = *command & 0xFFFF;
-            current = command + ((s32)*command >> 16) + 1;
-            if (opcode == 0x22 || opcode == 1) {
-                depth++;
-            } else if (opcode == 0x31) {
-                depth--;
-            }
-        } while (depth != 0);
+scan_end:
+        command = current;
+        opcode = *command & 0xFFFF;
+        current = command + 1;
+        current += (s32)*command >> 16;
+        if (opcode == 0x22) goto end_open;
+        if (opcode < 0x22) {
+            if (opcode == 1) goto end_open;
+            goto scan_end;
+        }
+        if (opcode != 0x31) goto scan_end;
+        if (--depth != 0) goto scan_end;
         *(u32**)(event + 0x14) = command;
+        goto finished;
+end_open:
+        depth++;
+        goto scan_end;
     } else if (value == expected) {
         *(s8*)(entry + 0x128) = -1;
     } else if (*(s8*)(entry + 0x128) != -1) {
         depth = 1;
         current = *(u32**)(event + 0x14);
-        for (;;) {
-            command = current;
-            opcode = *command & 0xFFFF;
-            current = command + ((s32)*command >> 16) + 1;
-            if (opcode == 0x23) {
-                continue;
-            }
-            if (opcode <= 0x22) {
-                if (opcode == 1 || opcode == 0x22) {
-                    depth++;
-                }
-                continue;
-            }
-            if (opcode == 0x31) {
-                if (--depth == 0) {
-                    break;
-                }
-                continue;
-            }
-            if (opcode < 0x30 && depth == 1) {
-                break;
-            }
+scan_case:
+        command = current;
+        opcode = *command & 0xFFFF;
+        current = command + 1;
+        current += (s32)*command >> 16;
+        if (opcode == 0x23) goto scan_case;
+        if (opcode < 0x23) {
+            if (opcode == 1 || (opcode != 0 && opcode > 0x21)) depth++;
+            goto scan_case;
         }
+        if (opcode == 0x31) {
+            if (--depth == 0) goto case_done;
+            goto scan_case;
+        }
+        if (opcode >= 0x30 || depth != 1) goto scan_case;
+case_done:
         *(u32**)(event + 0x14) = command;
     }
+finished:
     return 2;
 }
 
@@ -1388,7 +1642,7 @@ setpos2:
 #pragma use_lmw_stmw on
 
 s32 evt_case_end(int event) {
-    u32 opcode;
+    s32 opcode;
     s32 depth;
     u8* entry;
     u32* command;
@@ -1401,22 +1655,15 @@ s32 evt_case_end(int event) {
 scan_normal:
         command = next;
         opcode = *command & 0xFFFF;
-        next = command + ((s32)*command >> 16) + 1;
-        if (opcode == 0x22) {
-            goto normal_open;
-        }
+        next = command + 1;
+        next += (s32)*command >> 16;
+        if (opcode == 0x22) goto normal_open;
         if (opcode < 0x22) {
-            if (opcode == 1) {
-                goto normal_open;
-            }
+            if (opcode == 1) goto normal_open;
             goto scan_normal;
         }
-        if (opcode != 0x31) {
-            goto scan_normal;
-        }
-        if (--depth != 0) {
-            goto scan_normal;
-        }
+        if (opcode != 0x31) goto scan_normal;
+        if (--depth != 0) goto scan_normal;
         *(u32**)(event + 0x14) = command;
         return 2;
 normal_open:
@@ -1431,22 +1678,15 @@ normal_open:
 scan_minus_one:
         command = next;
         opcode = *command & 0xFFFF;
-        next = command + ((s32)*command >> 16) + 1;
-        if (opcode == 0x22) {
-            goto minus_one_open;
-        }
+        next = command + 1;
+        next += (s32)*command >> 16;
+        if (opcode == 0x22) goto minus_one_open;
         if (opcode < 0x22) {
-            if (opcode == 1) {
-                goto minus_one_open;
-            }
+            if (opcode == 1) goto minus_one_open;
             goto scan_minus_one;
         }
-        if (opcode != 0x31) {
-            goto scan_minus_one;
-        }
-        if (--depth != 0) {
-            goto scan_minus_one;
-        }
+        if (opcode != 0x31) goto scan_minus_one;
+        if (--depth != 0) goto scan_minus_one;
         *(u32**)(event + 0x14) = command;
         return 2;
 minus_one_open:
@@ -1460,25 +1700,20 @@ minus_one_open:
 scan_case:
     command = next;
     opcode = *command & 0xFFFF;
-    next = command + ((s32)*command >> 16) + 1;
-    if (opcode == 0x23) {
-        goto scan_case;
-    }
+    next = command + 1;
+    next += (s32)*command >> 16;
+    if (opcode == 0x23) goto scan_case;
     if (opcode < 0x23) {
-        if (opcode == 1 || opcode >= 0x22) {
+        if (opcode == 1 || (opcode != 0 && opcode > 0x21)) {
             depth++;
         }
         goto scan_case;
     }
     if (opcode == 0x31) {
-        if (--depth == 0) {
-            goto case_done;
-        }
+        if (--depth == 0) goto case_done;
         goto scan_case;
     }
-    if (opcode >= 0x30 || depth != 1) {
-        goto scan_case;
-    }
+    if (opcode >= 0x30 || depth != 1) goto scan_case;
 case_done:
     *(u32**)(event + 0x14) = command;
     return 2;
@@ -1742,114 +1977,103 @@ int evt_debug_put_reg(void* param_1) {
     extern s32 _swGet(s32 index);
 
     static char str[256];
-
-    u8* e;
     s32* args;
     u8* work;
-    s32 value;
-    s32 idx;
-    s32 fetched;
-    s32 q;
-    s32 bit;
-    u32 mask;
+    u8* entry;
+    s32 reg;
+    s32 mask;
+    s32 data;
+    s32 val;
     f32 fvalue;
 
-    e = (u8*)param_1;
-    args = *(s32**)(e + 0x18);
-    work = (u8*)evtGetWork();
-    value = args[0];
+    entry = param_1;
+    args = *(s32**)(entry + 0x18);
+    work = evtGetWork();
+    reg = args[0];
 
-    if (value <= -270000000) {
-        sprintf(str, str_ADDR_PCT08X_802bffb8, value);
-    } else if (value <= -220000000) {
-        fvalue = (f32)(value + 230000000) * 0.0009765625f;
+    if (reg <= -270000000) {
+        sprintf(str, str_ADDR_PCT08X_802bffb8, reg);
+    } else if (reg <= -220000000) {
+        fvalue = (f32)(reg + 230000000) * 0.0009765625f;
         sprintf(str, str_FLOAT_PCT4_2f_802bffc8, (f64)fvalue);
-    } else if (value <= -200000000) {
-        idx = value + 210000000;
-        q = idx >> 5;
-        bit = idx & 31;
-        mask = 1U << bit;
-        fetched = *(s32*)(*(s32*)(e + 0x158) + q * 4) & mask;
-        sprintf(str, str_UF_PCT3d_PCTd_802bffdc, idx, fetched);
-    } else if (value <= -180000000) {
-        idx = value + 190000000;
-        fetched = *(s32*)(*(s32*)(e + 0x154) + idx * 4);
-        if (fetched <= -270000000) {
-            sprintf(str, str_UW_PCT3d_PCT08X_802bffec, fetched);
-        } else if (fetched <= -220000000) {
-            fvalue = (f32)(fetched + 230000000) * 0.0009765625f;
-            sprintf(str, str_UW_PCT3d_PCT4_2f_802bfffc, idx, (f64)fvalue);
+    } else if (reg <= -200000000) {
+        reg += 210000000;
+        mask = 1 << (reg % 32);
+        data = *(s32*)(*(s32*)(entry + 0x158) + (reg / 32) * 4);
+        sprintf(str, str_UF_PCT3d_PCTd_802bffdc, reg, mask & data);
+    } else if (reg <= -180000000) {
+        reg += 190000000;
+        val = *(s32*)(*(s32*)(entry + 0x154) + reg * 4);
+        if (val <= -270000000) {
+            sprintf(str, str_UW_PCT3d_PCT08X_802bffec, val, val);
+        } else if (val <= -220000000) {
+            fvalue = (f32)(val + 230000000) * 0.0009765625f;
+            sprintf(str, str_UW_PCT3d_PCT4_2f_802bfffc, reg, (f64)fvalue);
         } else {
-            sprintf(str, str_UW_PCT3d_PCTd_802c0010, idx, fetched);
+            sprintf(str, str_UW_PCT3d_PCTd_802c0010, reg, val);
         }
-    } else if (value <= -160000000) {
-        idx = value + 170000000;
-        fetched = swByteGet(idx);
-        if (fetched <= -270000000) {
-            sprintf(str, str_GSW_PCT3d_PCT08X_802c0020, fetched);
-        } else if (fetched <= -220000000) {
-            fvalue = (f32)(fetched + 230000000) * 0.0009765625f;
-            sprintf(str, str_GSW_PCT3d_PCT4_2f_802c0030, idx, (f64)fvalue);
+    } else if (reg <= -160000000) {
+        reg += 170000000;
+        val = swByteGet(reg);
+        if (val <= -270000000) {
+            sprintf(str, str_GSW_PCT3d_PCT08X_802c0020, val);
+        } else if (val <= -220000000) {
+            fvalue = (f32)(val + 230000000) * 0.0009765625f;
+            sprintf(str, str_GSW_PCT3d_PCT4_2f_802c0030, reg, (f64)fvalue);
         } else {
-            sprintf(str, str_GSW_PCT3d_PCTd_802c0044, idx, fetched);
+            sprintf(str, str_GSW_PCT3d_PCTd_802c0044, reg, val);
         }
-    } else if (value <= -140000000) {
-        idx = value + 150000000;
-        fetched = _swByteGet(idx);
-        if (fetched <= -270000000) {
-            sprintf(str, str_LSW_PCT3d_PCT08X_802c0054, fetched);
-        } else if (fetched <= -220000000) {
-            fvalue = (f32)(fetched + 230000000) * 0.0009765625f;
-            sprintf(str, str_LSW_PCT3d_PCT4_2f_802c0064, idx, (f64)fvalue);
+    } else if (reg <= -140000000) {
+        reg += 150000000;
+        val = _swByteGet(reg);
+        if (val <= -270000000) {
+            sprintf(str, str_LSW_PCT3d_PCT08X_802c0054, val);
+        } else if (val <= -220000000) {
+            fvalue = (f32)(val + 230000000) * 0.0009765625f;
+            sprintf(str, str_LSW_PCT3d_PCT4_2f_802c0064, reg, (f64)fvalue);
         } else {
-            sprintf(str, str_LSW_PCT3d_PCTd_802c0078, idx, fetched);
+            sprintf(str, str_LSW_PCT3d_PCTd_802c0078, reg, val);
         }
-    } else if (value <= -120000000) {
-        idx = value + 130000000;
-        fetched = swGet(idx);
-        sprintf(str, str_GSWF_PCT3d_PCTd_802c0088, idx, fetched);
-    } else if (value <= -100000000) {
-        idx = value + 110000000;
-        fetched = _swGet(idx);
-        sprintf(str, str_LSWF_PCT3d_PCTd_802c0098, idx, fetched);
-    } else if (value <= -80000000) {
-        idx = value + 90000000;
-        q = idx >> 5;
-        bit = idx & 31;
-        mask = 1U << bit;
-        fetched = *(s32*)(work + 0x84 + q * 4) & mask;
-        sprintf(str, str_GF_PCT3d_PCTd_802c00a8, idx, fetched);
-    } else if (value <= -60000000) {
-        idx = value + 70000000;
-        q = idx >> 5;
-        bit = idx & 31;
-        mask = 1U << bit;
-        fetched = *(s32*)(e + 0xDC + q * 4) & mask;
-        sprintf(str, str_LF_PCT3d_PCTd_802c00b8, idx, fetched);
-    } else if (value <= -40000000) {
-        idx = value + 50000000;
-        fetched = *(s32*)(work + 0x4 + idx * 4);
-        if (fetched <= -270000000) {
-            sprintf(str, str_GW_PCT3d_PCT08X_802c00c8, idx, fetched);
-        } else if (fetched <= -220000000) {
-            fvalue = (f32)(fetched + 230000000) * 0.0009765625f;
-            sprintf(str, str_GW_PCT3d_PCT4_2f_802c00d8, idx, (f64)fvalue);
+    } else if (reg <= -120000000) {
+        reg += 130000000;
+        sprintf(str, str_GSWF_PCT3d_PCTd_802c0088, reg, swGet(reg));
+    } else if (reg <= -100000000) {
+        reg += 110000000;
+        sprintf(str, str_LSWF_PCT3d_PCTd_802c0098, reg, _swGet(reg));
+    } else if (reg <= -80000000) {
+        reg += 90000000;
+        mask = 1 << (reg % 32);
+        data = *(s32*)(work + 0x84 + (reg / 32) * 4);
+        sprintf(str, str_GF_PCT3d_PCTd_802c00a8, reg, data & mask);
+    } else if (reg <= -60000000) {
+        reg += 70000000;
+        mask = 1 << (reg % 32);
+        data = *(s32*)(entry + 0xDC + (reg / 32) * 4);
+        sprintf(str, str_LF_PCT3d_PCTd_802c00b8, reg, data & mask);
+    } else if (reg <= -40000000) {
+        reg += 50000000;
+        val = *(s32*)(work + 0x4 + reg * 4);
+        if (val <= -270000000) {
+            sprintf(str, str_GW_PCT3d_PCT08X_802c00c8, reg, val);
+        } else if (val <= -220000000) {
+            fvalue = (f32)(val + 230000000) * 0.0009765625f;
+            sprintf(str, str_GW_PCT3d_PCT4_2f_802c00d8, reg, (f64)fvalue);
         } else {
-            sprintf(str, str_GW_PCT3d_PCTd_802c00ec, idx, fetched);
+            sprintf(str, str_GW_PCT3d_PCTd_802c00ec, reg, val);
         }
-    } else if (value <= -20000000) {
-        idx = value + 30000000;
-        fetched = *(s32*)(e + 0x9C + idx * 4);
-        if (fetched <= -270000000) {
-            sprintf(str, str_LW_PCT3d_PCT08X_802c00fc, idx, fetched);
-        } else if (fetched <= -220000000) {
-            fvalue = (f32)(fetched + 230000000) * 0.0009765625f;
-            sprintf(str, str_LW_PCT3d_PCT4_2f_802c010c, idx, (f64)fvalue);
+    } else if (reg <= -20000000) {
+        reg += 30000000;
+        val = *(s32*)(entry + 0x9C + reg * 4);
+        if (val <= -270000000) {
+            sprintf(str, str_LW_PCT3d_PCT08X_802c00fc, reg, val);
+        } else if (val <= -220000000) {
+            fvalue = (f32)(val + 230000000) * 0.0009765625f;
+            sprintf(str, str_LW_PCT3d_PCT4_2f_802c010c, reg, (f64)fvalue);
         } else {
-            sprintf(str, str_LW_PCT3d_PCTd_802c0120, idx, fetched);
+            sprintf(str, str_LW_PCT3d_PCTd_802c0120, reg, val);
         }
     } else {
-        sprintf(str, str_PCTd_802c0130, value);
+        sprintf(str, str_PCTd_802c0130, reg);
     }
 
     return 2;
@@ -1972,11 +2196,12 @@ restart:
             state = 3;
             *(s32*)(e + 0x1A8) = *(s32*)(e + 0x14);
             args = *(s32**)(e + 0x14);
-            cmd = (u32)args[0];
-            *(u8*)(e + 0x0A) = (u8)cmd;
-            *(u8*)(e + 0x09) = (s8)(cmd >> 16);
-            *(s32*)(e + 0x18) = (s32)(args + 1);
-            *(s32*)(e + 0x14) = (s32)(args + 1 + ((s32)cmd >> 16));
+            *(u8*)(e + 0x0A) = (u8)*args;
+            i = *args++ >> 16;
+            *(u8*)(e + 0x09) = (u8)i;
+            *(s32*)(e + 0x18) = (s32)args;
+            args += i;
+            *(s32*)(e + 0x14) = (s32)args;
             *(u8*)(e + 0x0D) = 0;
             break;
 
@@ -2007,10 +2232,11 @@ restart:
 
         case 0x04:
             args = *(s32**)(e + 0x18);
+            v0 = *args++;
             *(u8*)(e + 0x0E) = *(u8*)(e + 0x0E) + 1;
             i = (s8)*(u8*)(e + 0x0E);
-            *(s32*)(e + 0xE8 + i * 4) = (s32)(args + 1);
-            *(s32*)(e + 0x108 + i * 4) = args[0];
+            *(s32*)(e + 0xE8 + i * 4) = (s32)args;
+            *(s32*)(e + 0x108 + i * 4) = v0;
             state = 2;
             break;
 
@@ -2064,9 +2290,13 @@ scan_loop_break:
             }
             if (*(s32*)(e + 0x78) == 0) {
                 state = 2;
+                break;
+            }
+            *(s32*)(e + 0x78) = *(s32*)(e + 0x78) - 1;
+            if (*(s32*)(e + 0x78) != 0) {
+                state = 0;
             } else {
-                *(s32*)(e + 0x78) = *(s32*)(e + 0x78) - 1;
-                state = (*(s32*)(e + 0x78) == 0) ? 1 : 0;
+                state = 1;
             }
             break;
 
@@ -2786,186 +3016,246 @@ s32 evtSetValue(struct EventEntry* entry, s32 index, s32 value) {
     extern s32 _swGet(s32);
     extern void _swSet(s32);
     extern void _swClear(s32);
-
     void* work = evtGetWork();
-    s32 old = value;
-    u32 bitIndex;
-    u32 mask;
-    s32* ptr;
+    s32 result;
+    s32 shift;
+    s32* data;
 
     if (index <= -270000000) {
         return value;
     }
-    if (index < -220000000) {
-        if (value < -220000000) {
-            value = (s32)((f32)(value + 230000000) * 0.0009765625f);
+    if (index <= -220000000) {
+        if (value <= -220000000) {
+            return (s32)((f32)(value + 230000000) * 0.0009765625f);
         }
-    } else if (index < -200000000) {
-        bitIndex = index + 210000000;
-        mask = 1 << (bitIndex & 0x1F);
-        ptr = (s32*)(*(s32*)((s32)entry + 0x158) + ((bitIndex >> 5) * 4));
-        if (value == 0) {
-            *ptr = *ptr & ~mask;
+        return value;
+    }
+    if (index <= -200000000) {
+        index += 210000000;
+        shift = index % 32;
+        data = (s32*)(*(s32*)((s32)entry + 0x158) + (index / 32) * 4);
+        if (value != 0) {
+            *data |= 1 << shift;
         } else {
-            *ptr = *ptr | mask;
+            *data &= ~(1 << shift);
         }
-    } else if (index < -180000000) {
-        ptr = (s32*)(*(s32*)((s32)entry + 0x154) + ((index + 190000000) * 4));
-        old = *ptr;
-        *ptr = value;
-        value = old;
-    } else if (index < -160000000) {
-        old = swByteGet(index + 170000000);
-        swByteSet(index + 170000000, value);
-        value = old;
-    } else if (index < -140000000) {
-        old = _swByteGet(index + 150000000);
-        _swByteSet(index + 150000000, value & 0xFF);
-        value = old;
-    } else if (index < -120000000) {
-        old = swGet(index + 130000000);
-        if (value == 0) {
-            swClear(index + 130000000);
+        return value;
+    }
+    if (index <= -180000000) {
+        index += 190000000;
+        data = (s32*)(*(s32*)((s32)entry + 0x154) + index * 4);
+        result = *data;
+        *data = value;
+        return result;
+    }
+    if (index <= -160000000) {
+        index += 170000000;
+        result = swByteGet(index);
+        swByteSet(index, value);
+        return result;
+    }
+    if (index <= -140000000) {
+        index += 150000000;
+        result = _swByteGet(index);
+        _swByteSet(index, (u8)value);
+        return result;
+    }
+    if (index <= -120000000) {
+        index += 130000000;
+        result = swGet(index);
+        if (value != 0) {
+            swSet(index);
         } else {
-            swSet(index + 130000000);
+            swClear(index);
         }
-        value = old;
-    } else if (index < -100000000) {
-        old = _swGet(index + 110000000);
-        if (value == 0) {
-            _swClear(index + 110000000);
+        return result;
+    }
+    if (index <= -100000000) {
+        index += 110000000;
+        result = _swGet(index);
+        if (value != 0) {
+            _swSet(index);
         } else {
-            _swSet(index + 110000000);
+            _swClear(index);
         }
-        value = old;
-    } else if (index < -80000000) {
-        bitIndex = index + 90000000;
-        mask = 1 << (bitIndex & 0x1F);
-        ptr = (s32*)((s32)work + 0x84 + ((bitIndex >> 5) * 4));
-        if (value == 0) {
-            *ptr = *ptr & ~mask;
+        return result;
+    }
+    if (index <= -80000000) {
+        index += 90000000;
+        shift = index % 32;
+        data = (s32*)((s32)work + 0x84 + (index / 32) * 4);
+        if (value != 0) {
+            *data |= 1 << shift;
         } else {
-            *ptr = *ptr | mask;
+            *data &= ~(1 << shift);
         }
-    } else if (index < -60000000) {
-        bitIndex = index + 70000000;
-        mask = 1 << (bitIndex & 0x1F);
-        ptr = (s32*)((s32)entry + 0xE8 + (((bitIndex >> 5) - 3) * 4));
-        if (value == 0) {
-            *ptr = *ptr & ~mask;
+        return value;
+    }
+    if (index <= -60000000) {
+        index += 70000000;
+        shift = index % 32;
+        data = (s32*)((s32)entry + 0xE8 + ((index / 32) - 3) * 4);
+        if (value != 0) {
+            *data |= 1 << shift;
         } else {
-            *ptr = *ptr | mask;
+            *data &= ~(1 << shift);
         }
-    } else if (index < -40000000) {
-        ptr = (s32*)((s32)work + 4 + ((index + 50000000) * 4));
-        old = *ptr;
-        *ptr = value;
-        value = old;
-    } else if (index < -20000000) {
-        ptr = (s32*)((s32)entry + 0x9C + ((index + 30000000) * 4));
-        old = *ptr;
-        *ptr = value;
-        value = old;
+        return value;
+    }
+    if (index <= -40000000) {
+        index += 50000000;
+        data = (s32*)((s32)work + 4 + index * 4);
+        result = *data;
+        *data = value;
+        return result;
+    }
+    if (index <= -20000000) {
+        index += 30000000;
+        data = (s32*)((s32)entry + 0x9C + index * 4);
+        result = *data;
+        *data = value;
+        return result;
     }
     return value;
 }
+
 f32 evtGetFloat(struct EventEntry* entry, s32 index) {
     extern s32 swByteGet(s32);
     extern s32 _swByteGet(s32);
-
     void* work = evtGetWork();
-    s32 value = index;
-    u32 bitIndex;
-    u32 mask;
 
-    if (index < -270000000) {
+    if (index <= -270000000) {
         return (f32)index;
     }
-    if (index < -250000000) {
+    if (index <= -250000000) {
         return (f32)index;
     }
-    if (index < -220000000) {
+    if (index <= -220000000) {
         return (f32)(index + 230000000) * 0.0009765625f;
     }
-    if (index < -180000000) {
-        value = *(s32*)(*(s32*)((s32)entry + 0x154) + ((index + 190000000) * 4));
-    } else if (index < -160000000) {
-        value = swByteGet(index + 170000000);
-    } else if (index < -140000000) {
-        value = _swByteGet(index + 150000000);
-    } else if (index < -80000000) {
-        bitIndex = index + 90000000;
-        mask = 1 << (bitIndex & 0x1F);
-        return (*(u32*)((s32)work + 0x84 + ((bitIndex >> 5) * 4)) & mask) ? 1.0f : 0.0f;
-    } else if (index < -60000000) {
-        bitIndex = index + 70000000;
-        mask = 1 << (bitIndex & 0x1F);
-        return (*(u32*)((s32)entry + 0xE8 + (((bitIndex >> 5) - 3) * 4)) & mask) ? 1.0f : 0.0f;
-    } else if (index < -40000000) {
-        value = *(s32*)((s32)work + 4 + ((index + 50000000) * 4));
-    } else if (index < -20000000) {
-        value = *(s32*)((s32)entry + 0x9C + ((index + 30000000) * 4));
+    if (index <= -180000000) {
+        index += 190000000;
+        index = *(s32*)(*(s32*)((s32)entry + 0x154) + index * 4);
+        if (index <= -220000000) {
+            return (f32)(index + 230000000) * 0.0009765625f;
+        }
+        return (f32)index;
     }
-
-    if (value < -220000000) {
-        return (f32)(value + 230000000) * 0.0009765625f;
+    if (index <= -160000000) {
+        index += 170000000;
+        index = swByteGet(index);
+        if (index <= -220000000) {
+            return (f32)(index + 230000000) * 0.0009765625f;
+        }
+        return (f32)index;
     }
-    return (f32)value;
+    if (index <= -140000000) {
+        index += 150000000;
+        index = _swByteGet(index);
+        if (index <= -220000000) {
+            return (f32)(index + 230000000) * 0.0009765625f;
+        }
+        return (f32)index;
+    }
+    if (index <= -80000000) {
+        index += 90000000;
+        if (*(u32*)((s32)work + 0x84 + (index / 32) * 4) & (1 << (index % 32))) {
+            return 1.0f;
+        }
+        return 0.0f;
+    }
+    if (index <= -60000000) {
+        index += 70000000;
+        if (*(u32*)((s32)entry + 0xE8 + ((index / 32) - 3) * 4) & (1 << (index % 32))) {
+            return 1.0f;
+        }
+        return 0.0f;
+    }
+    if (index <= -40000000) {
+        index += 50000000;
+        index = *(s32*)((s32)work + 4 + index * 4);
+        if (index <= -220000000) {
+            return (f32)(index + 230000000) * 0.0009765625f;
+        }
+        return (f32)index;
+    }
+    if (index <= -20000000) {
+        index += 30000000;
+        index = *(s32*)((s32)entry + 0x9C + index * 4);
+        if (index <= -220000000) {
+            return (f32)(index + 230000000) * 0.0009765625f;
+        }
+        return (f32)index;
+    }
+    if (index <= -220000000) {
+        return (f32)(index + 230000000) * 0.0009765625f;
+    }
+    return (f32)index;
 }
 
 f32 evtSetFloat(struct EventEntry* entry, s32 index, f32 value) {
-
     void* work = evtGetWork();
-    s32 stored = (s32)(value * 1024.0f) - 230000000;
-    s32 old;
-    u32 bitIndex;
-    u32 mask;
-    s32* ptr;
+    s32 result;
+    s32 shift;
+    s32* data;
 
-    if (index > -270000000 && index > -220000000) {
-        if (index < -180000000) {
-            ptr = (s32*)(*(s32*)((s32)entry + 0x154) + ((index + 190000000) * 4));
-            old = *ptr;
-            *ptr = stored;
-            if (old <= -220000000) {
-                return (f32)(old + 230000000) * 0.0009765625f;
-            }
-            return (f32)old;
-        } else if (index < -80000000) {
-            bitIndex = index + 90000000;
-            mask = 1 << (bitIndex & 0x1F);
-            ptr = (s32*)((s32)work + 0x84 + ((bitIndex >> 5) * 4));
-            if (value == 0.0f) {
-                *ptr = *ptr & ~mask;
-            } else {
-                *ptr = *ptr | mask;
-            }
-        } else if (index < -60000000) {
-            bitIndex = index + 70000000;
-            mask = 1 << (bitIndex & 0x1F);
-            ptr = (s32*)((s32)entry + 0xE8 + (((bitIndex >> 5) - 3) * 4));
-            if (value == 0.0f) {
-                *ptr = *ptr & ~mask;
-            } else {
-                *ptr = *ptr | mask;
-            }
-        } else if (index < -40000000) {
-            ptr = (s32*)((s32)work + 4 + ((index + 50000000) * 4));
-            old = *ptr;
-            *ptr = stored;
-            if (old <= -220000000) {
-                return (f32)(old + 230000000) * 0.0009765625f;
-            }
-            return (f32)old;
-        } else if (index < -20000000) {
-            ptr = (s32*)((s32)entry + 0x9C + ((index + 30000000) * 4));
-            old = *ptr;
-            *ptr = stored;
-            if (old <= -220000000) {
-                return (f32)(old + 230000000) * 0.0009765625f;
-            }
-            return (f32)old;
+    if (index <= -270000000) {
+        return value;
+    }
+    if (index <= -220000000) {
+        return value;
+    }
+    if (index <= -180000000) {
+        index += 190000000;
+        data = (s32*)(*(s32*)((s32)entry + 0x154) + index * 4);
+        result = *data;
+        *data = (s32)(value * 1024.0f) - 230000000;
+        if (result <= -220000000) {
+            return (f32)(result + 230000000) * 0.0009765625f;
         }
+        return (f32)result;
+    }
+    if (index <= -80000000) {
+        index += 90000000;
+        shift = index % 32;
+        data = (s32*)((s32)work + 0x84 + (index / 32) * 4);
+        if (value) {
+            *data |= 1 << shift;
+        } else {
+            *data &= ~(1 << shift);
+        }
+        return value;
+    }
+    if (index <= -60000000) {
+        index += 70000000;
+        shift = index % 32;
+        data = (s32*)((s32)entry + 0xE8 + ((index / 32) - 3) * 4);
+        if (value) {
+            *data |= 1 << shift;
+        } else {
+            *data &= ~(1 << shift);
+        }
+        return value;
+    }
+    if (index <= -40000000) {
+        index += 50000000;
+        data = (s32*)((s32)work + 4 + index * 4);
+        result = *data;
+        *data = (s32)(value * 1024.0f) - 230000000;
+        if (result <= -220000000) {
+            return (f32)(result + 230000000) * 0.0009765625f;
+        }
+        return (f32)result;
+    }
+    if (index <= -20000000) {
+        index += 30000000;
+        data = (s32*)((s32)entry + 0x9C + index * 4);
+        result = *data;
+        *data = (s32)(value * 1024.0f) - 230000000;
+        if (result <= -220000000) {
+            return (f32)(result + 230000000) * 0.0009765625f;
+        }
+        return (f32)result;
     }
     return value;
 }

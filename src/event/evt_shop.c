@@ -237,12 +237,14 @@ void list_disp(u32* win) {
     u32 color;
     u32 labelColorOn;
     u32 labelColorOff;
+    u32 pointColorOn;
+    u32 pointColorOff;
+    u32 itemColorOn;
+    u32 itemColorOff;
     f32 trans[3][4];
     f32 scale[3][4];
     f32 width;
     f32 scaledWidth;
-    f32 availableWidth;
-    f32 x;
     s32 row;
     s32 index;
 
@@ -256,12 +258,11 @@ void list_disp(u32* win) {
     FontDrawEdge();
     color = dat_80421e88;
     FontDrawColor(&color);
-    x = (f32)(win[6] + 10);
     if (width > 80.0f) {
-        PSMTXTrans(trans, x, (f32)(win[7] + 13), 0.0f);
+        PSMTXTrans(trans, (f32)(win[6] + 10), (f32)(win[7] + 13), 0.0f);
         PSMTXScale(scale, 80.0f / width, 1.0f, 1.0f);
     } else {
-        PSMTXTrans(trans, x + (100.0f - width) * 0.5f,
+        PSMTXTrans(trans, (f32)(win[6] + 10) + (100.0f - width) * 0.5f,
                    (f32)(win[7] + 13), 0.0f);
         PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
     }
@@ -275,12 +276,14 @@ void list_disp(u32* win) {
     FontDrawEdge();
     color = dat_80421e8c;
     FontDrawColor(&color);
-    x = (f32)(win[6] + (s32)win[8] / 2 - 10);
     if (width > 80.0f) {
-        PSMTXTrans(trans, x, (f32)(win[7] + 13), 0.0f);
+        PSMTXTrans(trans, (f32)(win[6] + (s32)win[8] / 2 - 10),
+                   (f32)(win[7] + 13), 0.0f);
         PSMTXScale(scale, 80.0f / width, 1.0f, 1.0f);
     } else {
-        PSMTXTrans(trans, x + (100.0f - width) * 0.5f,
+        PSMTXTrans(trans,
+                   (f32)(win[6] + (s32)win[8] / 2 - 10) +
+                       (100.0f - width) * 0.5f,
                    (f32)(win[7] + 13), 0.0f);
         PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
     }
@@ -288,14 +291,20 @@ void list_disp(u32* win) {
     FontDrawMessageMtx(trans, text);
     FontDrawEdgeOff();
 
+    FontDrawStart();
     row = 0;
     index = 0;
     for (list = shopPointList; list[0] != -1; list += 2, index++) {
         u32 bit = 1 << (index & 0x3F);
         s32 item = list[1];
         FontDrawStart();
-        color = (*(u32*)((s32)pouch + 0x5B4) & bit) ? dat_80421e90 : dat_80421e94;
-        FontDrawColor(&color);
+        if ((*(u32*)((s32)pouch + 0x5B4) & bit) != 0) {
+            pointColorOn = dat_80421e90;
+            FontDrawColor(&pointColorOn);
+        } else {
+            pointColorOff = dat_80421e94;
+            FontDrawColor(&pointColorOff);
+        }
         sprintf(buffer, "%s", winZenkakuStr(list[0]));
         FontDrawMessage(win[6] + ((s32)win[8] / 2 - (FontGetMessageWidth(buffer) & 0xFFFF)) - 90,
                         win[7] - 20 - row, buffer);
@@ -328,14 +337,20 @@ void list_disp(u32* win) {
 
         text = msgSearch(*(char**)(itemDataTable + item * 0x28 + 4));
         FontDrawStart();
-        color = (*(u32*)((s32)pouch + 0x5B4) & bit) ? dat_80421ea0 : dat_80421ea4;
-        FontDrawColor(&color);
+        if ((*(u32*)((s32)pouch + 0x5B4) & bit) != 0) {
+            itemColorOn = dat_80421ea0;
+            FontDrawColor(&itemColorOn);
+        } else {
+            itemColorOff = dat_80421ea4;
+            FontDrawColor(&itemColorOff);
+        }
         PSMTXTrans(trans, (f32)(win[6] + (s32)win[8] / 2 - 10),
                    (f32)(win[7] - 20 - row), 0.0f);
-        availableWidth = (f32)((s32)win[8] / 2 - 10);
-        width = (f32)(u16)FontGetMessageWidth(text);
-        if (availableWidth < width) {
-            PSMTXScale(scale, availableWidth / width, 1.0f, 1.0f);
+        if ((u16)FontGetMessageWidth(text) > (s32)win[8] / 2 - 10) {
+            PSMTXScale(scale,
+                       (f32)((s32)win[8] / 2 - 10) /
+                           (f32)(u16)FontGetMessageWidth(text),
+                       1.0f, 1.0f);
         } else {
             PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
         }
@@ -438,12 +453,22 @@ s32 evt_shop_setup(void* event) {
         iconSetPos(pos.x, pos.y + float_6_80421ebc, pos.z, name);
         iconFlagOn(name, 0x40);
         *(u16*)((s32)work + 0x14 + i * 2) = 0;
-        if ((item == 0x33 && pouchCheckItem(0x33) != 0) ||
-            (item == 0x37 && pouchCheckItem(0x37) != 0) ||
-            (item == 0x38 && pouchCheckItem(0x38) != 0) ||
-            (item == 0x39 && pouchCheckItem(0x39) != 0) ||
-            (item == 0x3A && pouchCheckItem(0x3A) != 0) ||
-            (item == 0x3B && pouchCheckItem(0x3B) != 0)) {
+        if (item == 0x33 && pouchCheckItem(0x33) != 0) {
+            *(u16*)((s32)work + 0x14 + i * 2) |= 1;
+        }
+        if (item == 0x37 && pouchCheckItem(0x37) != 0) {
+            *(u16*)((s32)work + 0x14 + i * 2) |= 1;
+        }
+        if (item == 0x38 && pouchCheckItem(0x38) != 0) {
+            *(u16*)((s32)work + 0x14 + i * 2) |= 1;
+        }
+        if (item == 0x39 && pouchCheckItem(0x39) != 0) {
+            *(u16*)((s32)work + 0x14 + i * 2) |= 1;
+        }
+        if (item == 0x3A && pouchCheckItem(0x3A) != 0) {
+            *(u16*)((s32)work + 0x14 + i * 2) |= 1;
+        }
+        if (item == 0x3B && pouchCheckItem(0x3B) != 0) {
             *(u16*)((s32)work + 0x14 + i * 2) |= 1;
         }
     }

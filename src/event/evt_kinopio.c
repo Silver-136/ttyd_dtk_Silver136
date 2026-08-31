@@ -219,11 +219,12 @@ u8 paper_on(s32 pEvt, s32 isFirstCall) {
         *(s32*)(pEvt + 0x78) = 0;
     }
     if (*(s32*)(pEvt + 0x78) < 30) {
-        rad = (float_6p2832_80421f18 * angle) / float_360_80421f20;
         if (strcmp((void*)((s32)gp + 0x12C), str_BGM_FF_GO_SLEEPING1_802ed368 + 0x60) == 0) {
+            rad = (float_6p2832_80421f18 * angle) / float_360_80421f20;
             *(f32*)((s32)mario + 0x8C) -= float_0p2_80421f2c * (f32)cos(rad);
             *(f32*)((s32)mario + 0x94) -= float_0p2_80421f2c * (f32)sin(rad);
         } else {
+            rad = (float_6p2832_80421f18 * angle) / float_360_80421f20;
             *(f32*)((s32)mario + 0x8C) += float_0p2_80421f2c * (f32)cos(rad);
             *(f32*)((s32)mario + 0x94) += float_0p2_80421f2c * (f32)sin(rad);
         }

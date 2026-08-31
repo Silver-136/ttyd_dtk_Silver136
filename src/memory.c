@@ -32,100 +32,61 @@ OSHeapHandle heapHandle[5];
 
 #pragma optimize_for_size off
 void memInit(void) {
-    extern void* OSGetArenaLo(void);
-    extern void* OSGetArenaHi(void);
-    extern void* OSInitAlloc(void* lo, void* hi, s32 count);
-    extern void OSSetArenaLo(void* lo);
-    extern OSHeapHandle OSCreateHeap(void* start, void* end);
-    extern void OSDestroyHeap(OSHeapHandle heap);
-    u32 lo;
-    u32 hi;
-    u32 alloc;
-    u32 address;
-    u32 arenaEnd;
+    void* entry;
+    void* arenaLo;
+    void* arenaHi;
     u32 remaining;
-    u32 chunk;
     s32 i;
-    s32 (*size)[2];
-    void** start;
-    void** end;
-    OSHeapHandle* handle;
-    void* ptr;
+    s32 size;
+    u32 address;
 
-    lo = (u32)OSGetArenaLo();
-    hi = (u32)OSGetArenaHi();
-    alloc = (u32)OSInitAlloc((void*)lo, (void*)hi, 5);
-    OSSetArenaLo((void*)alloc);
+    arenaLo = OSGetArenaLo();
+    arenaHi = OSGetArenaHi();
+    arenaLo = OSInitAlloc(arenaLo, arenaHi, 5);
+    OSSetArenaLo(arenaLo);
+    arenaLo = (void*)(((u32)arenaLo + 0x1F) & ~0x1F);
+    arenaHi = (void*)((u32)arenaHi & ~0x1F);
+    address = (u32)arenaLo;
 
-    size = size_table;
-    address = (alloc + 0x1F) & ~0x1F;
-    arenaEnd = hi & ~0x1F;
-    start = heapStart;
-    end = heapEnd;
-
-    if (size_table[0][0] == 1) {
-        heapStart[0] = (void*)address;
-        address += size_table[0][1] << 10;
-        heapEnd[0] = (void*)address;
-    }
-    if (size_table[1][0] == 1) {
-        heapStart[1] = (void*)address;
-        address += size_table[1][1] << 10;
-        heapEnd[1] = (void*)address;
-    }
-    if (size_table[2][0] == 1) {
-        heapStart[2] = (void*)address;
-        address += size_table[2][1] << 10;
-        heapEnd[2] = (void*)address;
-    }
-    if (size_table[3][0] == 1) {
-        heapStart[3] = (void*)address;
-        address += size_table[3][1] << 10;
-        heapEnd[3] = (void*)address;
-    }
-    if (size_table[4][0] == 1) {
-        heapStart[4] = (void*)address;
-        address += size_table[4][1] << 10;
-        heapEnd[4] = (void*)address;
-    }
-
-    remaining = arenaEnd - address;
-    for (i = 0; i < 5; i++, size++, start++, end++) {
-        if ((*size)[0] == 0) {
-            chunk = (u32)(((u64)remaining * (u32)(*size)[1]) / 100);
-            chunk -= chunk & 0x1F;
-            *start = (void*)address;
-            *end = (void*)(address + chunk);
-            address += chunk;
+    for (i = 0; i < 5; i++) {
+        if (size_table[i][0] == 1) {
+            heapStart[i] = (void*)address;
+            size = size_table[i][1] << 10;
+            heapEnd[i] = (void*)(address + size);
+            address += size;
         }
     }
 
-    handle = heapHandle;
-    start = heapStart;
-    end = heapEnd;
-    for (i = 0; i < 5; i++, start++, end++, handle++) {
-        *handle = OSCreateHeap(*start, *end);
+    remaining = (u32)arenaHi - address;
+    for (i = 0; i < 5; i++) {
+        if (size_table[i][0] == 0) {
+            size = (size_table[i][1] * (u64)remaining) / 100ULL;
+            heapStart[i] = (void*)address;
+            size -= size & 0x1F;
+            heapEnd[i] = (void*)(address + size);
+            address += size;
+        }
     }
 
-    OSSetArenaLo((void*)arenaEnd);
-
-    handle = heapHandle;
-    start = heapStart;
-    end = heapEnd;
-    for (i = 0; i < 5; i++, start++, end++, handle++) {
-        OSDestroyHeap(*handle);
-        OSCreateHeap(*start, *end);
+    for (i = 0; i < 5; i++) {
+        heapHandle[i] = OSCreateHeap(heapStart[i], heapEnd[i]);
+    }
+    OSSetArenaLo(arenaHi);
+    for (i = 0; i < 5; i++) {
+        OSDestroyHeap(heapHandle[i]);
+        OSCreateHeap(heapStart[i], heapEnd[i]);
         if (i == 1) {
-            mapalloc_size = (u32)heapEnd[1] - (u32)heapStart[1] - 0x20;
-            ptr = OSAllocFromHeap(heapHandle[1], mapalloc_size);
-            if (ptr != 0) {
-                memset(ptr, 0, mapalloc_size);
-                DCFlushRange(ptr, mapalloc_size);
+            size = (u32)heapEnd[1] - (u32)heapStart[1] - 0x20;
+            entry = OSAllocFromHeap(heapHandle[1], size);
+            if (entry != 0) {
+                memset(entry, 0, size);
+                DCFlushRange(entry, size);
             }
-            mapalloc_base_ptr = ptr;
-            *(u32*)ptr = 0;
-            *(u32*)((u32)ptr + 4) = mapalloc_size - 0x20;
-            *(u16*)((u32)ptr + 8) = 0;
+            *(u32*)entry = 0;
+            *(u32*)((u32)entry + 4) = size - 0x20;
+            *(u16*)((u32)entry + 8) = 0;
+            mapalloc_base_ptr = entry;
+            mapalloc_size = size;
         }
     }
 }

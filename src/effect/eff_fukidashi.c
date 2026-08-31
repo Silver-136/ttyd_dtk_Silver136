@@ -25,8 +25,8 @@ u8 calc_pos(void* work, s32 flag) {
     void* cam;
     void* base;
     Vec axis;
+    Vec rotAxis;
     f32 mtx[3][4];
-    f32 distance;
     s32 target;
     s32 offset;
 
@@ -35,39 +35,54 @@ u8 calc_pos(void* work, s32 flag) {
     axis.x = (f32)sin(float_deg2rad_804228c4 * *(f32*)((s32)cam + 0x114));
     axis.z = -(f32)cos(float_deg2rad_804228c4 * *(f32*)((s32)cam + 0x114));
     offset = flag * 0x14;
-    PSMTXRotAxisRad(mtx, &axis,
+    rotAxis = axis;
+    PSMTXRotAxisRad(mtx, &rotAxis,
                     float_deg2rad_804228c4 *
                         -((*(f32*)((s32)work + 0x1C) - float_20_80422950) + (f32)offset));
 
     target = *(s32*)((s32)work + 0x44);
-    distance = float_16_804228e0 + *(f32*)((s32)work + 0x20);
     if (target == -1) {
         base = marioGetPtr();
-        *(f32*)((s32)work + 4) = mtx[0][1] * distance + *(f32*)((s32)base + 0x8C) + *(f32*)((s32)work + 0x10);
-        *(f32*)((s32)work + 8) = mtx[1][1] * distance + *(f32*)((s32)base + 0x90) + *(f32*)((s32)work + 0x14);
-        *(f32*)((s32)work + 0xC) = mtx[2][1] * distance + *(f32*)((s32)base + 0x94) + *(f32*)((s32)work + 0x18);
+        *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                  (*(f32*)((s32)base + 0x8C) + *(f32*)((s32)work + 0x10));
+        *(f32*)((s32)work + 8) = mtx[1][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                  (*(f32*)((s32)base + 0x90) + *(f32*)((s32)work + 0x14));
+        *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                    (*(f32*)((s32)base + 0x94) + *(f32*)((s32)work + 0x18));
     } else if (target == -2) {
         base = partyGetPtr(marioGetPartyId());
         if (base != 0) {
-            *(f32*)((s32)work + 4) = mtx[0][1] * distance + *(f32*)((s32)base + 0x58) + *(f32*)((s32)work + 0x10);
-            *(f32*)((s32)work + 8) = mtx[1][1] * distance + *(f32*)((s32)base + 0x5C) + *(f32*)((s32)work + 0x14);
-            *(f32*)((s32)work + 0xC) = mtx[2][1] * distance + *(f32*)((s32)base + 0x60) + *(f32*)((s32)work + 0x18);
+            *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                      (*(f32*)((s32)base + 0x58) + *(f32*)((s32)work + 0x10));
+            *(f32*)((s32)work + 8) = mtx[1][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                      (*(f32*)((s32)base + 0x5C) + *(f32*)((s32)work + 0x14));
+            *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                        (*(f32*)((s32)base + 0x60) + *(f32*)((s32)work + 0x18));
         }
     } else if (target == -3) {
         base = partyGetPtr(marioGetExtraPartyId());
         if (base != 0) {
-            *(f32*)((s32)work + 4) = mtx[0][1] * distance + *(f32*)((s32)base + 0x58) + *(f32*)((s32)work + 0x10);
-            *(f32*)((s32)work + 8) = mtx[1][1] * distance + *(f32*)((s32)base + 0x5C) + *(f32*)((s32)work + 0x14);
-            *(f32*)((s32)work + 0xC) = mtx[2][1] * distance + *(f32*)((s32)base + 0x60) + *(f32*)((s32)work + 0x18);
+            *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                      (*(f32*)((s32)base + 0x58) + *(f32*)((s32)work + 0x10));
+            *(f32*)((s32)work + 8) = mtx[1][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                      (*(f32*)((s32)base + 0x5C) + *(f32*)((s32)work + 0x14));
+            *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                        (*(f32*)((s32)base + 0x60) + *(f32*)((s32)work + 0x18));
         }
     } else if (target == 0) {
-        *(f32*)((s32)work + 4) = mtx[0][1] * distance + *(f32*)((s32)work + 0x10);
-        *(f32*)((s32)work + 8) = mtx[1][1] * distance + *(f32*)((s32)work + 0x14);
-        *(f32*)((s32)work + 0xC) = mtx[2][1] * distance + *(f32*)((s32)work + 0x18);
+        *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                  *(f32*)((s32)work + 0x10);
+        *(f32*)((s32)work + 8) = mtx[1][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                  *(f32*)((s32)work + 0x14);
+        *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                    *(f32*)((s32)work + 0x18);
     } else {
-        *(f32*)((s32)work + 4) = mtx[0][1] * distance + *(f32*)(target + 0x8C) + *(f32*)((s32)work + 0x10);
-        *(f32*)((s32)work + 8) = mtx[1][1] * distance + *(f32*)(target + 0x90) + *(f32*)((s32)work + 0x14);
-        *(f32*)((s32)work + 0xC) = mtx[2][1] * distance + *(f32*)(target + 0x94) + *(f32*)((s32)work + 0x18);
+        *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                  (*(f32*)(target + 0x8C) + *(f32*)((s32)work + 0x10));
+        *(f32*)((s32)work + 8) = mtx[1][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                  (*(f32*)(target + 0x90) + *(f32*)((s32)work + 0x14));
+        *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                    (*(f32*)(target + 0x94) + *(f32*)((s32)work + 0x18));
     }
 
     *(f32*)((s32)work + 0x28) = (*(f32*)((s32)work + 0x1C) - float_20_80422950) + (f32)offset;
@@ -93,6 +108,10 @@ void* effFukidashiEntry(f32 x, f32 y, f32 z, f32 scale, f32 angle, s32 kind, s32
     extern s32 marioGetExtraPartyId(void);
     extern void* partyGetPtr(s32 id);
     extern u32 psndSFXOn_3D(char* id, Vec* pos);
+    extern Vec vec3_802f3654;
+    extern Vec vec3_802f3660;
+    extern Vec vec3_802f366c;
+    extern Vec vec3_802f3678;
     extern char str_Fukidashi_802f36b0[];
     extern char str_SFX_EVT_NPC_BIKKURI__802f36bc[];
     extern char str_SFX_EVT_NPC_QUESTION_802f36d8[];
@@ -104,9 +123,6 @@ void* effFukidashiEntry(f32 x, f32 y, f32 z, f32 scale, f32 angle, s32 kind, s32
     void* work;
     void* base;
     Vec soundPos;
-    f32 soundX;
-    f32 soundY;
-    f32 soundZ;
 
     effect = effEntry();
     *(char**)((s32)effect + 0x14) = str_Fukidashi_802f36b0;
@@ -139,56 +155,57 @@ void* effFukidashiEntry(f32 x, f32 y, f32 z, f32 scale, f32 angle, s32 kind, s32
         *(f32*)((s32)work + 0x24) = float_neg450_8042294c;
     }
 
-    soundX = x;
-    soundY = y;
-    soundZ = z;
     if (target == -1) {
         base = marioGetPtr();
-        soundX = x + *(f32*)((s32)base + 0x8C);
-        soundY = y + *(f32*)((s32)base + 0x90);
-        soundZ = z + *(f32*)((s32)base + 0x94);
+        x += *(f32*)((s32)base + 0x8C);
+        y += *(f32*)((s32)base + 0x90);
+        z += *(f32*)((s32)base + 0x94);
     } else if (target == -2) {
         base = partyGetPtr(marioGetPartyId());
         if (base != 0) {
-            soundX = x + *(f32*)((s32)base + 0x58);
-            soundY = y + *(f32*)((s32)base + 0x5C);
-            soundZ = z + *(f32*)((s32)base + 0x60);
+            x += *(f32*)((s32)base + 0x58);
+            y += *(f32*)((s32)base + 0x5C);
+            z += *(f32*)((s32)base + 0x60);
         }
     } else if (target == -3) {
         base = partyGetPtr(marioGetExtraPartyId());
         if (base != 0) {
-            soundX = x + *(f32*)((s32)base + 0x58);
-            soundY = y + *(f32*)((s32)base + 0x5C);
-            soundZ = z + *(f32*)((s32)base + 0x60);
+            x += *(f32*)((s32)base + 0x58);
+            y += *(f32*)((s32)base + 0x5C);
+            z += *(f32*)((s32)base + 0x60);
         }
     } else if (target != 0) {
-        soundX = *(f32*)(target + 0x8C);
-        soundY = *(f32*)(target + 0x90);
-        soundZ = *(f32*)(target + 0x94);
+        x = *(f32*)(target + 0x8C);
+        y = *(f32*)(target + 0x90);
+        z = *(f32*)(target + 0x94);
     }
 
     if ((target == -2) || (target == -3)) {
         if (kind == 1) {
-            soundPos.x = soundX;
-            soundPos.y = soundY;
-            soundPos.z = soundZ;
+            soundPos = vec3_802f3660;
+            soundPos.x = x;
+            soundPos.y = y;
+            soundPos.z = z;
             psndSFXOn_3D((char*)0x5E, &soundPos);
         } else if (kind == 0) {
-            soundPos.x = soundX;
-            soundPos.y = soundY;
-            soundPos.z = soundZ;
+            soundPos = vec3_802f3654;
+            soundPos.x = x;
+            soundPos.y = y;
+            soundPos.z = z;
             psndSFXOn_3D((char*)0x5D, &soundPos);
         }
     } else if ((target != 0) && (target != -1)) {
         if (kind == 1) {
-            soundPos.x = soundX;
-            soundPos.y = soundY;
-            soundPos.z = soundZ;
+            soundPos = vec3_802f3678;
+            soundPos.x = x;
+            soundPos.y = y;
+            soundPos.z = z;
             psndSFXOn_3D(str_SFX_EVT_NPC_QUESTION_802f36d8, &soundPos);
         } else if (kind == 0) {
-            soundPos.x = soundX;
-            soundPos.y = soundY;
-            soundPos.z = soundZ;
+            soundPos = vec3_802f366c;
+            soundPos.x = x;
+            soundPos.y = y;
+            soundPos.z = z;
             psndSFXOn_3D(str_SFX_EVT_NPC_BIKKURI__802f36bc, &soundPos);
         }
     }
@@ -211,7 +228,7 @@ u8 effFukidashiMain(void* effect) {
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern u8 effFukidashiDisp(s32 camera, void* effect);
     extern u8 calc_pos(void* work, s32 flag);
-    extern LocalVec3 vec3_802f3684;
+    extern const LocalVec3 vec3_802f3684;
     extern s8* anim_data_table[];
     extern s8* anim_data_table_2[];
     extern f32 float_22p5_80422940;
@@ -221,7 +238,6 @@ u8 effFukidashiMain(void* effect) {
     void* work;
     LocalVec3 dispPos;
     LocalVec3 pos;
-    s8* anim;
     s32 value;
     s32 frame;
     s32 kind;
@@ -234,13 +250,12 @@ u8 effFukidashiMain(void* effect) {
     dispPos = pos;
     kind = *(s32*)work;
 
-    if (*(s32*)((s32)work + 0x40) == 0) {
-        anim = anim_data_table[kind];
-    } else {
-        anim = anim_data_table_2[kind];
-    }
     frame = *(s32*)((s32)work + 0x34);
-    value = anim[frame / 2];
+    if (*(s32*)((s32)work + 0x40) == 0) {
+        value = anim_data_table[kind][frame / 2];
+    } else {
+        value = anim_data_table_2[kind][frame / 2];
+    }
     *(s32*)((s32)work + 0x34) = frame + 1;
     *(s32*)((s32)work + 0x38) = value;
 
@@ -249,14 +264,13 @@ u8 effFukidashiMain(void* effect) {
             effDelete(effect);
             return 0;
         }
-        *(s32*)((s32)work + 0x34) = (-10 - value) * 2;
+        frame = (-10 - value) * 2;
+        *(s32*)((s32)work + 0x34) = frame;
         if (*(s32*)((s32)work + 0x40) == 0) {
-            anim = anim_data_table[kind];
+            value = anim_data_table[kind][frame / 2];
         } else {
-            anim = anim_data_table_2[kind];
+            value = anim_data_table_2[kind][frame / 2];
         }
-        frame = *(s32*)((s32)work + 0x34);
-        value = anim[frame / 2];
         *(s32*)((s32)work + 0x34) = frame + 1;
         *(s32*)((s32)work + 0x38) = value;
     }

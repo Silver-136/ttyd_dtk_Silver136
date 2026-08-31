@@ -88,7 +88,6 @@ s32 evt_mobj_entry(void* evt) {
     mobjEntry(name, kind);
     return 2;
 }
-
 s32 evt_mobj_delete(void* evt) {
     s32* args = *(s32**)((s32)evt + 0x18);
     mobjDelete(evtGetValue(evt, args[0]));
@@ -1029,7 +1028,10 @@ s32 mobj_rideswitch_lightblue(void* pMobj) {
     f32 radius;
     void* anim;
     void* mario;
-    u32 vec[3];
+    u32 down[3];
+    u32 animVec[3];
+    u32 magVec[3];
+    u32 up[3];
 
     switch (action) {
         case 0:
@@ -1049,26 +1051,29 @@ s32 mobj_rideswitch_lightblue(void* pMobj) {
                 *(u32*)mobj &= ~8;
                 sy = float_0p2_8042028c;
             }
-            vec[0] = vec3_802c20d4[0];
-            vec[1] = vec3_802c20d4[1];
-            vec[2] = vec3_802c20d4[2];
-            *(f32*)&vec[0] = sx;
-            *(f32*)&vec[1] = sy;
-            *(f32*)&vec[2] = sz;
-            *(u32*)((s32)mobj + 0x184) = vec[0];
-            *(u32*)((s32)mobj + 0x188) = vec[1];
-            *(u32*)((s32)mobj + 0x18C) = vec[2];
+            down[0] = vec3_802c20d4[0];
+            down[1] = vec3_802c20d4[1];
+            down[2] = vec3_802c20d4[2];
+            *(f32*)&down[0] = sx;
+            *(f32*)&down[1] = sy;
+            *(f32*)&down[2] = sz;
+            *(u32*)((s32)mobj + 0x184) = down[0];
+            *(u32*)((s32)mobj + 0x188) = down[1];
+            *(u32*)((s32)mobj + 0x18C) = down[2];
             mobjCalcMtx2(mobj);
             break;
         case 2:
             anim = animPoseGetAnimBaseDataPtr(*(s32*)((s32)mobj + 0x70));
-            vec[0] = vec3_802c2058[0];
-            vec[1] = vec3_802c2058[1];
-            vec[2] = vec3_802c2058[2];
-            *(f32*)&vec[0] = float_0p8_804202a0 * float_10_80420294 * *(f32*)((s32)anim + 0xDC);
-            *(f32*)&vec[1] = float_10_80420294 * *(f32*)((s32)anim + 0xE0);
-            *(f32*)&vec[2] = float_0p8_804202a0 * float_10_80420294 * *(f32*)((s32)anim + 0xE4);
-            radius = PSVECMag(vec);
+            animVec[0] = vec3_802c2058[0];
+            animVec[1] = vec3_802c2058[1];
+            animVec[2] = vec3_802c2058[2];
+            *(f32*)&animVec[0] = float_0p8_804202a0 * float_10_80420294 * *(f32*)((s32)anim + 0xDC);
+            *(f32*)&animVec[1] = float_10_80420294 * *(f32*)((s32)anim + 0xE0);
+            *(f32*)&animVec[2] = float_0p8_804202a0 * float_10_80420294 * *(f32*)((s32)anim + 0xE4);
+            magVec[0] = animVec[0];
+            magVec[1] = animVec[1];
+            magVec[2] = animVec[2];
+            radius = PSVECMag(magVec);
             mario = marioGetPtr();
             if (PSVECDistance((void*)((s32)mobj + 0x38), (void*)((s32)mario + 0x8C)) > radius) {
                 if ((*(u32*)mobj & 8) == 0) {
@@ -1089,15 +1094,15 @@ s32 mobj_rideswitch_lightblue(void* pMobj) {
                 *(s32*)((s32)mobj + 0x1DC) = 0;
                 sy = float_15_8042031c;
             }
-            vec[0] = vec3_802c20ec[0];
-            vec[1] = vec3_802c20ec[1];
-            vec[2] = vec3_802c20ec[2];
-            *(f32*)&vec[0] = sx;
-            *(f32*)&vec[1] = sy;
-            *(f32*)&vec[2] = sz;
-            *(u32*)((s32)mobj + 0x184) = vec[0];
-            *(u32*)((s32)mobj + 0x188) = vec[1];
-            *(u32*)((s32)mobj + 0x18C) = vec[2];
+            up[0] = vec3_802c20ec[0];
+            up[1] = vec3_802c20ec[1];
+            up[2] = vec3_802c20ec[2];
+            *(f32*)&up[0] = sx;
+            *(f32*)&up[1] = sy;
+            *(f32*)&up[2] = sz;
+            *(u32*)((s32)mobj + 0x184) = up[0];
+            *(u32*)((s32)mobj + 0x188) = up[1];
+            *(u32*)((s32)mobj + 0x18C) = up[2];
             mobjCalcMtx2(mobj);
             *(u32*)mobj &= ~8;
             break;
@@ -1248,6 +1253,8 @@ s32 mobj_jumpstand_red(void* pMobj) {
     return 0;
 }
 
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
 s32 evt_mobj_jumpstand_red(void* evt) {
     extern s32 animGroupBaseAsync(const char* name, s32 mode, s32 flags);
     extern void mobjEntry(s32 name, const char* kind);
@@ -1283,6 +1290,8 @@ s32 evt_mobj_jumpstand_red(void* evt) {
     mobjCalcMtx(mobj);
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 mobj_jumpstand_blue(void* pMobj) {
     extern void* marioGetPtr(void);
@@ -1439,118 +1448,144 @@ s32 mobj_lv_blk_evt(void* pMobj) {
     extern const char str_MOBJ_Lv2Block_802c293c[];
     extern const char str_MOBJ_Lv2BigBlock_802c294c[];
     extern const char str_MOBJ_Lv2BigBigBlock_802c2960[];
-    extern f32 vec3_802c2178;
-    extern f32 DAT_802c217c;
-    extern f32 DAT_802c2180;
-    char offName[32];
-    char imgName[32];
+    extern const u32 vec3_802c2178[];
+    extern const u8 vec3_802c2058[];
+    u32 offName[4];
+    u32 imgName[4];
     char evtA[0x1B0];
     char evtB[0x1B0];
     void* argsA[8];
     void* argsB[8];
     void* img;
     void* player;
-    s32 heapType = *(s32*)((s32)gp + 0x14) != 0;
-    u32 action = *(u32*)((s32)pMobj + 0x1DC);
+    s32 heapType;
+    u32 action;
+    const u8* base = vec3_802c2058;
 
-    offName[0] = 0;
-    imgName[0] = 0;
-    strcat(offName, str_o_802c2158);
-    strcat(imgName, str_i_802c2168);
-    strcat(offName, (char*)((s32)pMobj + 5));
-    strcat(imgName, (char*)((s32)pMobj + 5));
-    if (action == 0) {
-        animGroupBaseAsync(str_P_box_y_802c2618, heapType, 0);
-        if ((*(u32*)pMobj & 8) != 0) {
-            player = marioGetPtr();
-            if ((strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_Lv1Block_802c2904) != 0) &&
-                (strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_Lv1BigBlock_802c2914) != 0)) {
-                if (strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_Lv1BigBigBlock_802c2928) == 0) {
-                    if ((pouchGetHammerLv() < 2) || (*(s16*)((s32)player + 0x3C) != 0x13)) {
+    heapType = ((u32)(-*(s32*)((s32)gp + 0x14)) | (u32)*(s32*)((s32)gp + 0x14)) >> 31;
+    {
+        u32 o0 = *(const u32*)(base + 0x100);
+        u32 o1 = *(const u32*)(base + 0x104);
+        u32 o2 = *(const u32*)(base + 0x108);
+        u32 o3 = *(const u32*)(base + 0x10C);
+        u32 i0 = *(const u32*)(base + 0x110);
+        u32 i1 = *(const u32*)(base + 0x114);
+        u32 i2 = *(const u32*)(base + 0x118);
+        u32 i3 = *(const u32*)(base + 0x11C);
+        offName[0] = o0;
+        offName[1] = o1;
+        offName[2] = o2;
+        offName[3] = o3;
+        imgName[0] = i0;
+        imgName[1] = i1;
+        imgName[2] = i2;
+        imgName[3] = i3;
+    }
+    player = marioGetPtr();
+    strcat((char*)offName, (char*)((s32)pMobj + 5));
+    strcat((char*)imgName, (char*)((s32)pMobj + 5));
+    action = *(u32*)((s32)pMobj + 0x1DC);
+
+    switch (action) {
+        case 0:
+            animGroupBaseAsync((const char*)(base + 0x5C0), heapType, 0);
+            if ((*(u32*)pMobj & 8) != 0) {
+                if ((strcmp((char*)((s32)pMobj + 0x15), (const char*)(base + 0x8AC)) != 0) &&
+                    (strcmp((char*)((s32)pMobj + 0x15), (const char*)(base + 0x8BC)) != 0)) {
+                    if (strcmp((char*)((s32)pMobj + 0x15), (const char*)(base + 0x8D0)) == 0) {
+                        if ((pouchGetHammerLv() < 2) || (*(u16*)((s32)player + 0x2E) != 0x13)) {
+                            *(u32*)pMobj &= ~8;
+                            return 0;
+                        }
+                    } else if ((strcmp((char*)((s32)pMobj + 0x15), (const char*)(base + 0x8E4)) == 0) ||
+                               (strcmp((char*)((s32)pMobj + 0x15), (const char*)(base + 0x8F4)) == 0)) {
+                        if (pouchGetHammerLv() < 3) {
+                            *(u32*)pMobj &= ~8;
+                            return 0;
+                        }
+                    } else if (strcmp((char*)((s32)pMobj + 0x15), (const char*)(base + 0x908)) == 0) {
+                        if ((pouchGetHammerLv() < 3) || (*(u16*)((s32)player + 0x2E) != 0x13)) {
+                            *(u32*)pMobj &= ~8;
+                            return 0;
+                        }
+                    } else {
                         *(u32*)pMobj &= ~8;
                         return 0;
                     }
-                } else if ((strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_Lv2Block_802c293c) == 0) ||
-                           (strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_Lv2BigBlock_802c294c) == 0)) {
-                    if (pouchGetHammerLv() < 3) {
-                        *(u32*)pMobj &= ~8;
-                        return 0;
-                    }
-                } else if (strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_Lv2BigBigBlock_802c2960) == 0) {
-                    if ((pouchGetHammerLv() < 3) || (*(s16*)((s32)player + 0x3C) != 0x13)) {
-                        *(u32*)pMobj &= ~8;
-                        return 0;
-                    }
-                } else {
-                    *(u32*)pMobj &= ~8;
-                    return 0;
                 }
+                mobjRunEvent(pMobj, *(void**)((s32)pMobj + 0x1D4));
+                evtSetValue(0, *(s32*)((s32)pMobj + 0x1E4), 1);
+                *(s32*)((s32)pMobj + 0x1DC) = 10;
             }
-            mobjRunEvent(pMobj, *(void**)((s32)pMobj + 0x1D4));
-            evtSetValue(0, *(s32*)((s32)pMobj + 0x1E4), 1);
-            *(s32*)((s32)pMobj + 0x1DC) = 10;
-        }
-    } else if ((s32)action > 9 && (s32)action < 11) {
-        animPaperPoseEntry(str_P_box_y_802c2618, heapType);
-        offscreenEntry(offName);
-        imgEntry(imgName, heapType);
-        *(s32*)((s32)pMobj + 0x19C) = offscreenNameToId(offName);
-        argsA[0] = imgName;
-        argsA[1] = offName;
-        argsA[2] = 0;
-        argsA[3] = (void*)1;
-        argsA[4] = 0;
-        argsA[5] = 0;
-        argsA[6] = 0;
-        argsA[7] = 0;
-        *(void**)(evtA + 0x18) = argsA;
-        evt_img_alloc_capture(evtA);
-        argsB[0] = imgName;
-        argsB[1] = offName;
-        argsB[2] = (void*)1;
-        argsB[3] = (void*)1;
-        argsB[4] = 0;
-        argsB[5] = 0;
-        argsB[6] = 0;
-        argsB[7] = 0;
-        *(void**)(evtB + 0x18) = argsB;
-        evt_img_alloc_capture(evtB);
-        img = imgNameToPtr(imgName, heapType);
-        *(s32*)((s32)img + 0x70) = animPaperPoseGetId(str_P_box_y_802c2618, heapType);
-        *(const char**)((s32)img + 0x108) = str_A_1_80420208;
-        *(f64*)((s32)img + 0x110) = animTimeGetTime(heapType);
-        imgSetShadow(img, 2);
-        if ((strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_Lv1Block_802c2904) == 0) ||
-            (strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_Lv2Block_802c293c) == 0)) {
-            psndSFXOn_3D(0x1C7, (void*)((s32)pMobj + 0x38));
-        } else if ((strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_Lv1BigBlock_802c2914) == 0) ||
-                   (strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_Lv2BigBlock_802c294c) == 0)) {
-            psndSFXOn_3D(0x1C8, (void*)((s32)pMobj + 0x38));
-        } else {
-            psndSFXOn_3D(0x1C9, (void*)((s32)pMobj + 0x38));
-        }
-        *(s32*)((s32)pMobj + 0x1DC) = 0xB;
-    } else if (action == 0xB) {
-        img = imgNameToPtr(imgName, heapType);
-        if (*(f32*)((s32)img + 0x118) >= 1.0f || (*(u32*)img & 0x10000000) != 0) {
-            *(s32*)((s32)pMobj + 0x1DC) = 0xC;
-        }
-        *(f32*)((s32)pMobj + 0x38) = vec3_802c2178;
-        *(f32*)((s32)pMobj + 0x3C) = DAT_802c217c;
-        *(f32*)((s32)pMobj + 0x40) = DAT_802c2180;
-        *(u32*)pMobj |= 4;
-        *(u32*)pMobj |= 8;
-    } else if ((s32)action < 99 && (s32)action < 0xD) {
-        img = imgNameToPtr(imgName, heapType);
-        imgFreeCapture(img, 0);
-        imgFreeCapture(img, 1);
-        imgSetShadow(img, 0);
-        imgRelease(img);
-        offscreenDelete(offName);
-        *(s32*)((s32)pMobj + 0x19C) = -1;
-        *(s32*)((s32)pMobj + 0x1DC) = 99;
-    } else if (action == 99) {
-        mobjDelete((char*)((s32)pMobj + 5));
+            break;
+        case 10:
+            animPaperPoseEntry((const char*)(base + 0x5C0), heapType);
+            offscreenEntry((char*)offName);
+            imgEntry((char*)imgName, heapType);
+            *(s32*)((s32)pMobj + 0x19C) = offscreenNameToId((char*)offName);
+            argsA[0] = imgName;
+            argsA[1] = offName;
+            argsA[2] = 0;
+            argsA[3] = (void*)1;
+            argsA[4] = 0;
+            argsA[5] = 0;
+            argsA[6] = 0;
+            argsA[7] = 0;
+            *(void**)(evtA + 0x18) = argsA;
+            evt_img_alloc_capture(evtA);
+            argsB[0] = imgName;
+            argsB[1] = offName;
+            argsB[2] = (void*)1;
+            argsB[3] = (void*)1;
+            argsB[4] = 0;
+            argsB[5] = 0;
+            argsB[6] = 0;
+            argsB[7] = 0;
+            *(void**)(evtB + 0x18) = argsB;
+            evt_img_alloc_capture(evtB);
+            img = imgNameToPtr((char*)imgName, heapType);
+            *(s32*)((s32)img + 0x104) = animPaperPoseGetId((const char*)(base + 0x5C0), heapType);
+            *(const char**)((s32)img + 0x108) = str_A_1_80420208;
+            *(f64*)((s32)img + 0x110) = animTimeGetTime(heapType);
+            imgSetShadow(img, 2);
+            if ((strcmp((char*)((s32)pMobj + 0x15), (const char*)(base + 0x8AC)) == 0) ||
+                (strcmp((char*)((s32)pMobj + 0x15), (const char*)(base + 0x8E4)) == 0)) {
+                psndSFXOn_3D(0x1C7, (void*)((s32)pMobj + 0x38));
+            } else if ((strcmp((char*)((s32)pMobj + 0x15), (const char*)(base + 0x8BC)) == 0) ||
+                       (strcmp((char*)((s32)pMobj + 0x15), (const char*)(base + 0x8F4)) == 0)) {
+                psndSFXOn_3D(0x1C8, (void*)((s32)pMobj + 0x38));
+            } else if ((strcmp((char*)((s32)pMobj + 0x15), (const char*)(base + 0x8D0)) == 0) ||
+                       (strcmp((char*)((s32)pMobj + 0x15), (const char*)(base + 0x908)) == 0)) {
+                psndSFXOn_3D(0x1C9, (void*)((s32)pMobj + 0x38));
+            }
+            *(s32*)((s32)pMobj + 0x1DC) = 11;
+            break;
+        case 11:
+            img = imgNameToPtr((char*)imgName, heapType);
+            if (*(f32*)((s32)img + 0x118) >= 1.0f || (*(u32*)((s32)img + 0xCC) & 0x10000000) != 0) {
+                *(s32*)((s32)pMobj + 0x1DC) = 12;
+            }
+            *(u32*)((s32)pMobj + 0x38) = *(const u32*)(base + 0x120);
+            *(u32*)((s32)pMobj + 0x3C) = *(const u32*)(base + 0x124);
+            *(u32*)((s32)pMobj + 0x40) = *(const u32*)(base + 0x128);
+            *(u32*)pMobj |= 4;
+            *(u32*)pMobj |= 8;
+            break;
+        case 12:
+            img = imgNameToPtr((char*)imgName, heapType);
+            imgFreeCapture(img, 0);
+            imgFreeCapture(img, 1);
+            imgSetShadow(img, 0);
+            imgRelease(img);
+            offscreenDelete((char*)offName);
+            *(s32*)((s32)pMobj + 0x19C) = -1;
+            *(s32*)((s32)pMobj + 0x1DC) = 99;
+            break;
+        case 99:
+            mobjDelete((char*)((s32)pMobj + 5));
+            break;
+        default:
+            break;
     }
     return 0;
 }
@@ -2135,7 +2170,7 @@ s32 mobj_lock(void* pMobj) {
     extern void* evtEntryType(void*, s8, u32, u32);
     extern f64 animPoseGetLoopTimes(s32);
     extern void evtSetValue(void*, s32, s32);
-    extern s32 hitCheckFilter(f32, f32, f32, f32, f32, f32, s32, void*, void*, void*, void*, void*, void*, void*);
+    extern u32 hitCheckFilter(f32, f32, f32, f32, f32, f32, s32, void*, void*, void*, void*, void*, void*, void*);
     extern u32 psndSFXOn_3D(s32, void*);
     extern void mobjDelete(char*);
     extern void* evt_lock_sound;
@@ -2150,13 +2185,16 @@ s32 mobj_lock(void* pMobj) {
     u32 action = *(u32*)((s32)pMobj + 0x1DC);
     s32 item;
     s32 i;
+    s32 offset;
+    s32* items;
     s32 found;
     void* evt;
     f32 hitY;
     f32 hitDist;
     s32 out0, out2, out3, out4, out5, out6;
 
-    if (action == 0) {
+    switch (action) {
+    case 0:
         if ((*(u32*)pMobj & 8) != 0) {
             marioKeyOff();
             partyKeyOff();
@@ -2164,13 +2202,14 @@ s32 mobj_lock(void* pMobj) {
             mobjRunEvent(pMobj, *(void**)((s32)pMobj + 0x1D4));
             *(s32*)((s32)pMobj + 0x1DC) += 1;
         }
-    } else if (action == 1) {
-        if (evtCheckID(*(s32*)((s32)pMobj + 0x1CC)) == 0) {
-            if ((*(u32*)pMobj & 0x20) == 0) {
+        break;
+    case 1:
+        if (evtCheckID(*(s32*)((s32)pMobj + 0x1CC)) != 1) {
+            if ((*(u32*)pMobj & 0x1000) == 0) {
                 *(s32*)((s32)pMobj + 0x1CC) = 0;
                 *(s32*)((s32)pMobj + 0x1DC) += 1;
             } else {
-                *(u32*)pMobj &= ~0x20;
+                *(u32*)pMobj &= ~0x1000;
                 *(u32*)pMobj &= ~8;
                 marioKeyOn();
                 partyKeyOn();
@@ -2179,40 +2218,47 @@ s32 mobj_lock(void* pMobj) {
                 *(s32*)((s32)pMobj + 0x1DC) = 0;
             }
         }
-    } else if (action == 2) {
+        break;
+    case 2:
         item = *(s32*)((s32)pMobj + 0x1A0);
-        found = -1;
-        if (item < 0) {
+        found = 0;
+        if ((item & ~1) != 0) {
+            i = 0;
+            offset = 0;
+            items = *(s32**)((s32)pMobj + 0x1A0);
+            for (;;) {
+                if (*(s32*)((s32)items + offset) == -1) {
+                    break;
+                }
+                if (pouchCheckItem(*(s32*)((s32)items + offset)) != 0) {
+                    found = items[i];
+                    break;
+                }
+                offset += 4;
+                i++;
+            }
+        } else {
             if (pouchCheckItem(item) != 0) {
                 found = item;
             }
-        } else {
-            for (i = 0; ; i++) {
-                item = *(s32*)(*(s32*)((s32)pMobj + 0x1A0) + i * 4);
-                if (item == -1) {
-                    break;
-                }
-                if (pouchCheckItem(item) != 0) {
-                    found = item;
-                    break;
-                }
-            }
         }
-        if (found == -1) {
+        if (found == 0) {
             *(s32*)((s32)pMobj + 0x1A8) = msgWindow_Entry(msgSearch(str_sys_no_key_802c277c), 0, 0);
             *(s32*)((s32)pMobj + 0x1DC) = 10;
         } else {
             pouchRemoveItem(found);
             *(s32*)((s32)pMobj + 0x1DC) += 1;
         }
-    } else if (action == 3) {
+        break;
+    case 3:
         evt = evtEntryType(&evt_lock_sound, 0, 0, 0);
-        *(s32*)((s32)evt + 0x18) = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x38)) - 230000000;
-        *(s32*)((s32)evt + 0x1C) = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x3C)) - 230000000;
-        *(s32*)((s32)evt + 0x20) = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x40)) - 230000000;
+        *(s32*)((s32)evt + 0x9C) = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x38)) - 230000000;
+        *(s32*)((s32)evt + 0xA0) = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x3C)) - 230000000;
+        *(s32*)((s32)evt + 0xA4) = (s32)(float_1024_80420290 * *(f32*)((s32)pMobj + 0x40)) - 230000000;
         animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_S_1_8042021c, 1);
         *(s32*)((s32)pMobj + 0x1DC) += 1;
-    } else if (action == 4) {
+        break;
+    case 4:
         if (animPoseGetLoopTimes(*(s32*)((s32)pMobj + 0x70)) >= (double)float_1_80420250) {
             *(f32*)((s32)pMobj + 0x60) = float_0_80420240;
             *(f32*)((s32)pMobj + 0x68) = float_0p5_8042024c;
@@ -2221,8 +2267,9 @@ s32 mobj_lock(void* pMobj) {
             mobjRunEvent(pMobj, *(void**)((s32)pMobj + 0x1D8));
             *(s32*)((s32)pMobj + 0x1DC) += 1;
         }
-    } else if (action == 5) {
-        hitDist = float_1_80420250 + (*(f32*)((s32)pMobj + 0x60) < 0.0f ? -*(f32*)((s32)pMobj + 0x60) : *(f32*)((s32)pMobj + 0x60));
+        break;
+    case 5:
+        hitDist = float_1_80420250 + __fabs(*(f32*)((s32)pMobj + 0x60));
         if (hitCheckFilter(*(f32*)((s32)pMobj + 0x38), float_1_80420250 + *(f32*)((s32)pMobj + 0x3C),
                            *(f32*)((s32)pMobj + 0x40), float_0_80420240, *(f32*)((s32)pMobj + 0x60),
                            float_0_80420240, 0, &out0, &hitY, &out2, &hitDist, &out3, &out4, &out5) == 0) {
@@ -2236,11 +2283,12 @@ s32 mobj_lock(void* pMobj) {
                 psndSFXOn_3D(0x1E6, (void*)((s32)pMobj + 0x38));
             }
         }
-        if ((*(f32*)((s32)pMobj + 0x6C) >= float_4_80420314) && (evtCheckID(*(s32*)((s32)pMobj + 0x1CC)) == 0)) {
+        if ((*(f32*)((s32)pMobj + 0x6C) >= float_4_80420314) && (evtCheckID(*(s32*)((s32)pMobj + 0x1CC)) != 1)) {
             *(s32*)((s32)pMobj + 0x1DC) += 1;
             *(s32*)((s32)pMobj + 0x1B0) = 0x14;
         }
-    } else if (action == 6) {
+        break;
+    case 6:
         *(s32*)((s32)pMobj + 0x1B0) -= 1;
         if ((*(s32*)((s32)pMobj + 0x1B0) & 2) == 0) {
             *(u32*)pMobj &= ~0x10;
@@ -2250,7 +2298,8 @@ s32 mobj_lock(void* pMobj) {
         if (*(s32*)((s32)pMobj + 0x1B0) == 0) {
             *(s32*)((s32)pMobj + 0x1DC) = 99;
         }
-    } else if (action == 10) {
+        break;
+    case 10:
         if (windowCheckID(*(s32*)((s32)pMobj + 0x1A8)) == 0) {
             *(u32*)pMobj &= ~8;
             marioKeyOn();
@@ -2258,11 +2307,13 @@ s32 mobj_lock(void* pMobj) {
             marioStSystemLevel(0);
             *(s32*)((s32)pMobj + 0x1DC) = 0;
         }
-    } else if (action == 99) {
+        break;
+    case 99:
         marioKeyOn();
         partyKeyOn();
         marioStSystemLevel(0);
         mobjDelete((char*)((s32)pMobj + 5));
+        break;
     }
     return 0;
 }
@@ -2342,6 +2393,7 @@ s32 mobj_itembox(void* pMobj) {
     extern void* evt_box_sound1;
     extern void* evt_box_sound2;
     extern void* evt_box_sound3;
+    extern const u32 vec3_802c2058[];
     extern const char str_MOBJ_TreasureBox_802c26f8[];
     extern const char str_MOBJ_GrayTreasureBox_802c2720[];
     extern const char str_MOBJ_BlackTreasureBo_802c2738[];
@@ -2358,13 +2410,16 @@ s32 mobj_itembox(void* pMobj) {
     u32 action = *(u32*)((s32)pMobj + 0x1DC);
     void* evt;
     void* pose;
-    f32 min[3];
-    f32 max[3];
+    u32 minRaw[3];
+    u32 maxRaw[3];
+    u32 min[3];
+    u32 max[3];
     s32 ix;
     s32 iy;
     s32 iz;
 
-    if (action == 0) {
+    switch (action) {
+      case 0:
         if ((*(u32*)pMobj & 8) != 0) {
             marioKeyOff();
             partyKeyOff();
@@ -2373,13 +2428,14 @@ s32 mobj_itembox(void* pMobj) {
             mobjRunEvent(pMobj, *(void**)((s32)pMobj + 0x1D4));
             *(s32*)((s32)pMobj + 0x1DC) += 1;
         }
-    } else if (action == 1) {
+        break;
+      case 1:
         if (*(s32*)((s32)pMobj + 0x1CC) != 0) {
             if (evtCheckID(*(s32*)((s32)pMobj + 0x1CC)) != 0) {
                 return 0;
             }
-            if ((*(u32*)pMobj & 0x20) != 0) {
-                *(u32*)pMobj &= ~0x20;
+            if ((*(u32*)pMobj & 0x1000) != 0) {
+                *(u32*)pMobj &= ~0x1000;
                 *(u32*)pMobj &= ~8;
                 marioKeyOn();
                 partyKeyOn();
@@ -2390,7 +2446,8 @@ s32 mobj_itembox(void* pMobj) {
             }
         }
         *(s32*)((s32)pMobj + 0x1DC) += 1;
-    } else if (action == 2) {
+        break;
+      case 2:
         if (strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_TreasureBox_802c26f8) == 0 ||
             strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_GrayTreasureBox_802c2720) == 0) {
             evt = evtEntryType(&evt_box_sound1, 0, 0, 0);
@@ -2421,24 +2478,41 @@ s32 mobj_itembox(void* pMobj) {
         *(s32*)((s32)pMobj + 0x1CC) = 0;
         mobjRunEvent(pMobj, *(void**)((s32)pMobj + 0x1D8));
         *(s32*)((s32)pMobj + 0x1DC) += 1;
-    } else if (action == 3) {
+        break;
+      case 3:
         if (animPoseGetLoopTimes(*(s32*)((s32)pMobj + 0x70)) >= (double)float_1_80420250 &&
             (*(s32*)((s32)pMobj + 0x1CC) == 0 || evtCheckID(*(s32*)((s32)pMobj + 0x1CC)) == 0)) {
             *(u32*)pMobj &= ~0x20;
             pose = animPoseGetAnimBaseDataPtr(*(s32*)((s32)pMobj + 0x70));
-            min[0] = *(f32*)((s32)pose + 0x20);
-            min[1] = *(f32*)((s32)pose + 0x24);
-            min[2] = *(f32*)((s32)pose + 0x28);
-            max[0] = *(f32*)((s32)pose + 0x2C);
-            max[1] = *(f32*)((s32)pose + 0x30);
-            max[2] = *(f32*)((s32)pose + 0x34);
-            min[2] = (f32)-(double_0p2_802c2768 * ((max[1] - min[1]) < 0.0f ? -(max[1] - min[1]) : (max[1] - min[1])) - (double)min[2]);
-            PSVECAdd(max, min, (void*)((s32)pMobj + 0x184));
-            PSVECScale(float_0p5_8042024c, (void*)((s32)pMobj + 0x184), (void*)((s32)pMobj + 0x184));
-            PSVECScale(10.0f, (void*)((s32)pMobj + 0x184), (void*)((s32)pMobj + 0x184));
+            minRaw[0] = vec3_802c2058[0x210 / 4];
+            minRaw[1] = vec3_802c2058[0x214 / 4];
+            minRaw[2] = vec3_802c2058[0x218 / 4];
+            *(f32*)&minRaw[0] = *(f32*)((s32)pose + 0xD0);
+            *(f32*)&minRaw[1] = *(f32*)((s32)pose + 0xD4);
+            *(f32*)&minRaw[2] = *(f32*)((s32)pose + 0xD8);
+            min[0] = minRaw[0];
+            min[1] = minRaw[1];
+            min[2] = minRaw[2];
+            maxRaw[0] = vec3_802c2058[0x21C / 4];
+            maxRaw[1] = vec3_802c2058[0x220 / 4];
+            maxRaw[2] = vec3_802c2058[0x224 / 4];
+            *(f32*)&maxRaw[0] = *(f32*)((s32)pose + 0xDC);
+            *(f32*)&maxRaw[1] = *(f32*)((s32)pose + 0xE0);
+            *(f32*)&maxRaw[2] = *(f32*)((s32)pose + 0xE4);
+            max[0] = maxRaw[0];
+            max[1] = maxRaw[1];
+            max[2] = maxRaw[2];
+            *(f32*)&min[2] = (f32)-(double_0p2_802c2768 *
+                ((*(f32*)&max[1] - *(f32*)&min[1]) < 0.0f
+                     ? -(*(f32*)&max[1] - *(f32*)&min[1])
+                     : (*(f32*)&max[1] - *(f32*)&min[1])) -
+                (double)*(f32*)&min[2]);
+            PSVECAdd(max, min, (void*)((s32)pMobj + 0x190));
+            PSVECScale(float_0p5_8042024c, (void*)((s32)pMobj + 0x190), (void*)((s32)pMobj + 0x190));
+            PSVECScale(10.0f, (void*)((s32)pMobj + 0x190), (void*)((s32)pMobj + 0x190));
             *(f32*)((s32)pMobj + 0x194) = float_0_80420240;
-            *(f32*)((s32)pMobj + 0x48) *= float_1p4_804202f8;
-            *(f32*)((s32)pMobj + 0x4C) *= float_1p2_804202fc;
+            *(f32*)((s32)pMobj + 0x188) *= float_1p4_804202f8;
+            *(f32*)((s32)pMobj + 0x18C) *= float_1p2_804202fc;
             mobjCalcMtx2(pMobj);
             marioKeyOn();
             partyKeyOn();
@@ -2446,7 +2520,8 @@ s32 mobj_itembox(void* pMobj) {
             *(s32*)((s32)pMobj + 0x1CC) = 0;
             *(s32*)((s32)pMobj + 0x1DC) = 99;
         }
-    } else if (action == 99) {
+        break;
+      case 99:
         evtSetValue(0, *(s32*)((s32)pMobj + 0x1E4), 1);
         *(u32*)pMobj |= 8;
         *(u32*)pMobj &= ~0x20;
@@ -2455,6 +2530,7 @@ s32 mobj_itembox(void* pMobj) {
         } else {
             animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_S_2_804202b0, 1);
         }
+        break;
     }
     return 0;
 }
@@ -2472,6 +2548,7 @@ s32 evt_mobj_itembox(void* pEvt) {
     extern void PSVECScale(f32, void*, void*);
     extern s32 hitCheckFilter(f32, f32, f32, f32, f32, f32, s32, void*, void*, void*, void*, void*, void*, void*);
     extern void* gp;
+    extern const u32 vec3_802c2058[];
     extern const char str_MOBJ_TreasureBox_802c26f8[];
     extern const char str_MOBJ_BigTreasureBox_802c270c[];
     extern const char str_MOBJ_GrayTreasureBox_802c2720[];
@@ -2483,13 +2560,14 @@ s32 evt_mobj_itembox(void* pEvt) {
     extern f32 float_1_80420250;
     extern f32 float_1p4_804202f8;
     extern f32 float_1p2_804202fc;
+    extern f32 float_10_80420294;
     extern f32 float_5_80420300;
     extern f32 float_neg1_80420304;
     extern void mobj_itembox(void);
     s32* args = *(s32**)((s32)pEvt + 0x18);
     char* name = (char*)evtGetValue(pEvt, args[0]);
-    f32 y = evtGetFloat(pEvt, args[1]);
-    f32 x = evtGetFloat(pEvt, args[2]);
+    f32 x = evtGetFloat(pEvt, args[1]);
+    f32 y = evtGetFloat(pEvt, args[2]);
     f32 z = evtGetFloat(pEvt, args[3]);
     s32 kind = evtGetValue(pEvt, args[4]);
     void* evtCode = (void*)evtGetValue(pEvt, args[5]);
@@ -2499,23 +2577,30 @@ s32 evt_mobj_itembox(void* pEvt) {
     const char* poseName;
     void* mobj;
     void* pose;
-    f32 min[3];
-    f32 max[3];
-    f32 out[3];
+    u32 minRaw[3];
+    u32 maxRaw[3];
+    u32 min[3];
+    u32 max[3];
     f32 hitDist;
     s32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
 
     inBattle = ((u32)(-inBattle) | (u32)inBattle) >> 31;
-    if (kind == 0) {
-        poseName = str_MOBJ_TreasureBox_802c26f8;
-    } else if (kind == 1) {
-        poseName = str_MOBJ_BigTreasureBox_802c270c;
-    } else if (kind == 2) {
-        poseName = str_MOBJ_GrayTreasureBox_802c2720;
-    } else if (kind == 3) {
-        poseName = str_MOBJ_BlackTreasureBo_802c2738;
-    } else {
-        poseName = str_MOBJ_GoldenTreasureB_802c2750;
+    switch (kind) {
+        case 0:
+            poseName = str_MOBJ_TreasureBox_802c26f8;
+            break;
+        case 1:
+            poseName = str_MOBJ_BigTreasureBox_802c270c;
+            break;
+        case 2:
+            poseName = str_MOBJ_GrayTreasureBox_802c2720;
+            break;
+        case 3:
+            poseName = str_MOBJ_BlackTreasureBo_802c2738;
+            break;
+        default:
+            poseName = str_MOBJ_GoldenTreasureB_802c2750;
+            break;
     }
     if (animGroupBaseAsync(poseName, inBattle, 0) == 0) {
         return 0;
@@ -2534,28 +2619,41 @@ s32 evt_mobj_itembox(void* pEvt) {
     mobjCalcMtx(mobj);
     if (evtGetValue(pEvt, swSet) != 0) {
         pose = animPoseGetAnimBaseDataPtr(*(s32*)((s32)mobj + 0x70));
-        min[0] = *(f32*)((s32)pose + 0x20);
-        min[1] = *(f32*)((s32)pose + 0x24);
-        min[2] = *(f32*)((s32)pose + 0x28);
-        max[0] = *(f32*)((s32)pose + 0x2C);
-        max[1] = *(f32*)((s32)pose + 0x30);
-        max[2] = *(f32*)((s32)pose + 0x34);
-        min[2] = (f32)-(double_0p2_802c2768 * ((max[1] - min[1]) < 0.0f ? -(max[1] - min[1]) : (max[1] - min[1])) - (double)min[2]);
-        PSVECAdd(max, min, (void*)((s32)mobj + 0x184));
-        PSVECScale(float_0p5_8042024c, (void*)((s32)mobj + 0x184), (void*)((s32)mobj + 0x184));
-        PSVECScale(10.0f, (void*)((s32)mobj + 0x184), (void*)((s32)mobj + 0x184));
+        minRaw[0] = vec3_802c2058[0x210 / 4];
+        minRaw[1] = vec3_802c2058[0x214 / 4];
+        minRaw[2] = vec3_802c2058[0x218 / 4];
+        *(f32*)&minRaw[0] = *(f32*)((s32)pose + 0xD0);
+        *(f32*)&minRaw[1] = *(f32*)((s32)pose + 0xD4);
+        *(f32*)&minRaw[2] = *(f32*)((s32)pose + 0xD8);
+        min[0] = minRaw[0];
+        min[1] = minRaw[1];
+        min[2] = minRaw[2];
+        maxRaw[0] = vec3_802c2058[0x21C / 4];
+        maxRaw[1] = vec3_802c2058[0x220 / 4];
+        maxRaw[2] = vec3_802c2058[0x224 / 4];
+        *(f32*)&maxRaw[0] = *(f32*)((s32)pose + 0xDC);
+        *(f32*)&maxRaw[1] = *(f32*)((s32)pose + 0xE0);
+        *(f32*)&maxRaw[2] = *(f32*)((s32)pose + 0xE4);
+        max[0] = maxRaw[0];
+        max[1] = maxRaw[1];
+        max[2] = maxRaw[2];
+        *(f32*)&min[2] = (f32)-(double_0p2_802c2768 *
+            __fabs(*(f32*)&max[1] - *(f32*)&min[1]) - (double)*(f32*)&min[2]);
+        PSVECAdd(max, min, (void*)((s32)mobj + 0x190));
+        PSVECScale(float_0p5_8042024c, (void*)((s32)mobj + 0x190), (void*)((s32)mobj + 0x190));
+        PSVECScale(float_10_80420294, (void*)((s32)mobj + 0x190), (void*)((s32)mobj + 0x190));
         *(f32*)((s32)mobj + 0x194) = float_0_80420240;
-        *(f32*)((s32)mobj + 0x48) *= float_1p4_804202f8;
-        *(f32*)((s32)mobj + 0x4C) *= float_1p2_804202fc;
+        *(f32*)((s32)mobj + 0x188) *= float_1p4_804202f8;
+        *(f32*)((s32)mobj + 0x18C) *= float_1p2_804202fc;
         mobjCalcMtx2(mobj);
         *(s32*)((s32)mobj + 0x1DC) = 99;
     }
-    hitDist = float_5_80420300 + (*(f32*)((s32)mobj + 0x60) < 0.0f ? -*(f32*)((s32)mobj + 0x60) : *(f32*)((s32)mobj + 0x60));
+    hitDist = float_5_80420300 + __fabs(*(f32*)((s32)mobj + 0x60));
     if (hitCheckFilter(*(f32*)((s32)mobj + 0x38), float_1_80420250 + *(f32*)((s32)mobj + 0x3C),
                        *(f32*)((s32)mobj + 0x40), float_0_80420240, float_neg1_80420304,
                        float_0_80420240, 0, &tmp0, &tmp1, &tmp2, &hitDist, &tmp3, &tmp4, &tmp5) != 0) {
         *(u32*)mobj |= 2;
-        *(u32*)mobj &= ~0x20;
+        *(u32*)mobj &= ~0x40;
     }
     return 2;
 }
@@ -2641,6 +2739,7 @@ s32 mobj_recovery_blk(void* pMobj) {
     extern void swSet(s32);
     extern s32 pouchGetCoin(void);
     extern void effSoftDelete(void*);
+    extern void animPoseSetAnim(s32, const char*, s32);
     extern void statusWinForceOpen(void);
     extern void statusWinForceOff(void);
     extern void effStardustEntry(f64, f64, f64, f64, f64, s32, s32, s32);
@@ -2648,6 +2747,9 @@ s32 mobj_recovery_blk(void* pMobj) {
     extern void* pouchGetPtr(void);
     extern void marioChgPose(const char*);
     extern s32 pouchAddCoin(s16);
+    extern char* msgSearch(const char*);
+    extern s32 msgWindow_Entry(char*, s32, s32);
+    extern s32 windowCheckID(s32);
     extern void* effCoinFukidashiEntry(f64, f64, f64, s32, s32, s32);
     extern f64 animPoseGetLoopTimes(s32);
     extern const char str_A_1_80420208[];
@@ -2679,13 +2781,13 @@ s32 mobj_recovery_blk(void* pMobj) {
                 return 0;
             }
             marioKeyOff();
-            cam = camGetPtr(1);
+            cam = camGetPtr(8);
             *(u16*)cam |= 0x200;
             psndSFXOn_3D(0x1D9, (void*)((s32)pMobj + 0x38));
             *(s32*)((s32)pMobj + 0x1DC) += 1;
             /* fallthrough */
         case 1:
-            if (((*(u32*)((s32)gp + 0x18) & 0x1000) == 0) && (swGet(0xEA) == 0)) {
+            if (((*(u32*)gp & 0x1000) == 0) && (swGet(0xEA) == 0)) {
                 swSet(0xEA);
                 *(s32*)((s32)pMobj + 0x1DC) = 0x14;
                 break;
@@ -2712,6 +2814,33 @@ s32 mobj_recovery_blk(void* pMobj) {
             *(s32*)((s32)pMobj + 0x1B0) = 0x78;
             break;
         case 3:
+            if (*(s32*)((s32)pMobj + 0x1B0) == 100) {
+                effStardustEntry(*(f32*)((s32)pMobj + 0x38),
+                                  float_45_804202e4 + *(f32*)((s32)pMobj + 0x3C),
+                                  *(f32*)((s32)pMobj + 0x40), float_50_8042023c,
+                                  float_50_8042023c, 1, 0x1E, 0x3C);
+                psndSFXOn_3D(0x1DB, (void*)((s32)pMobj + 0x38));
+                mario = marioGetPtr();
+                pouch = pouchGetPtr();
+                effStardustEntry(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x90),
+                                  *(f32*)((s32)mario + 0x94), float_50_8042023c,
+                                  float_50_8042023c, 2, 0x32, 100);
+                marioChgPose(str_M_I_1_804202e8);
+                *(s16*)((s32)pouch + 0x2) = *(s16*)((s32)pouch + 0x0);
+                *(s16*)((s32)pouch + 0x6) = *(s16*)((s32)pouch + 0x4);
+                for (i = 0; i < 8; i++) {
+                    flags = *(u16*)((s32)pouch + 0x68 + i * 0x14);
+                    if (((flags & 1) != 0) && ((flags & 2) == 0)) {
+                        *(s16*)((s32)pouch + 0x70 + i * 0x14) = *(s16*)((s32)pouch + 0x72 + i * 0x14);
+                    }
+                }
+                pouchAddCoin(0);
+            }
+            *(s32*)((s32)pMobj + 0x1B0) -= 1;
+            if (*(s32*)((s32)pMobj + 0x1B0) < 1) {
+                *(s32*)((s32)pMobj + 0x1DC) = 5;
+            }
+            break;
         case 4:
             if (*(s32*)((s32)pMobj + 0x1B0) == 100) {
                 effStardustEntry(*(f32*)((s32)pMobj + 0x38),
@@ -2733,11 +2862,7 @@ s32 mobj_recovery_blk(void* pMobj) {
                         *(s16*)((s32)pouch + 0x70 + i * 0x14) = *(s16*)((s32)pouch + 0x72 + i * 0x14);
                     }
                 }
-                if (action == 3) {
-                    pouchAddCoin(0);
-                } else {
-                    pouchAddCoin(-(s16)*(s32*)((s32)pMobj + 0x1A4));
-                }
+                pouchAddCoin(-(s16)*(s32*)((s32)pMobj + 0x1A4));
             }
             *(s32*)((s32)pMobj + 0x1B0) -= 1;
             if (*(s32*)((s32)pMobj + 0x1B0) < 1) {
@@ -2750,7 +2875,7 @@ s32 mobj_recovery_blk(void* pMobj) {
                 marioChgPose(str_M_S_1_804202f0);
                 marioKeyOn();
                 statusWinForceOff();
-                cam = camGetPtr(1);
+                cam = camGetPtr(8);
                 *(u16*)cam &= ~0x200;
                 *(s32*)((s32)pMobj + 0x1DC) += 1;
             }
@@ -2777,7 +2902,7 @@ s32 mobj_recovery_blk(void* pMobj) {
         case 11:
             if (windowCheckID(*(s32*)((s32)pMobj + 0x1A8)) == 0) {
                 marioKeyOn();
-                cam = camGetPtr(1);
+                cam = camGetPtr(8);
                 *(u16*)cam &= ~0x200;
                 *(u32*)pMobj &= ~8;
                 *(s32*)((s32)pMobj + 0x1DC) = 0;
@@ -2791,7 +2916,7 @@ s32 mobj_recovery_blk(void* pMobj) {
         case 0x15:
             if (windowCheckID(*(s32*)((s32)pMobj + 0x1A8)) == 0) {
                 marioKeyOn();
-                cam = camGetPtr(1);
+                cam = camGetPtr(8);
                 *(u16*)cam &= ~0x200;
                 *(u32*)pMobj &= ~8;
                 *(s32*)((s32)pMobj + 0x1DC) = 0;
@@ -3044,21 +3169,22 @@ s32 mobj_blk(void* mobj) {
     }
     return 0;
 }
-
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_blk(void* pEvt) {
-    extern u32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
+    extern f32 evtGetFloat(void* evt, s32 value);
+    extern s32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
     extern void mobjSetPosition(f32 x, f32 y, f32 z, char* name);
     extern void mobjCalcMtx(void* mobj);
+    extern void animPoseSetAnim(s32 poseId, const char* name, s32 flags);
     extern void* gp;
-    extern const u32 vec3_802c2058[3];
+    extern const char str_MOBJ_Block_802c24a8[];
+    extern const char str_MOBJ_PinkBlock_802c2620[];
     extern const char str_S_1_8042021c[4];
     extern void mobj_blk(void);
     s32* args = *(s32**)((s32)pEvt + 0x18);
-    const u32* base;
     char* name;
     f32 x;
     f32 y;
@@ -3070,26 +3196,24 @@ s32 evt_mobj_blk(void* pEvt) {
     void* mobj;
     s32 inBattle;
 
-    base = vec3_802c2058;
     name = (char*)evtGetValue(pEvt, args[0]);
     x = evtGetFloat(pEvt, args[1]);
     y = evtGetFloat(pEvt, args[2]);
     z = evtGetFloat(pEvt, args[3]);
     kind = args[4];
     evtCode = (void*)evtGetValue(pEvt, args[5]);
-    poseName = (char*)((s32)base + 0x450);
     swSet = args[6];
-    if (kind == 1) {
-        poseName = (char*)((s32)base + 0x5C8);
-    } else if (kind < 1) {
-        if (kind <= -1) {
-            poseName = (char*)((s32)base + 0x450);
-        }
-    } else {
-        poseName = (char*)((s32)base + 0x450);
-    }
     inBattle = *(s32*)((s32)gp + 0x14);
     inBattle = ((u32)(-inBattle) | (u32)inBattle) >> 31;
+    if (kind == 1) {
+        poseName = (char*)str_MOBJ_PinkBlock_802c2620;
+    } else if (kind >= 1) {
+        poseName = (char*)str_MOBJ_Block_802c24a8;
+    } else if (kind >= 0) {
+        poseName = (char*)str_MOBJ_Block_802c24a8;
+    } else {
+        poseName = (char*)str_MOBJ_Block_802c24a8;
+    }
     if (animGroupBaseAsync(poseName, inBattle, 0) == 0) {
         return 0;
     }
@@ -3109,50 +3233,48 @@ s32 evt_mobj_blk(void* pEvt) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
-
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 mobj_badgeblk(void* pMobj) {
+    extern s32 strcmp(const char*, const char*);
+    extern char* strcpy(char*, const char*);
+    extern void animPoseSetAnim(s32, const char*, s32);
     extern f64 animPoseGetLoopTimes(s32);
     extern u32 psndSFXOn_3D(s32, void*);
+    extern void* mobjRunEvent(void*, void*);
     extern s32 pouchAddCoin(s16);
     extern void* itemEntry(char*, s32, u32, s32, void*, f32, f32, f32);
     extern void* itemNameToPtr(char*);
     extern void itemFlagOn(void*, u16);
     extern void evtSetValue(void*, s32, s32);
-    extern const char str_MOBJ_BadgeBlock_802c266c[];
-    extern const char str_MOBJ_BrickBadgeBlock_802c25bc[];
-    extern const char str_MOBJ_HiddenBadgeBloc_802c25e8[];
-    extern const char str_MOBJ_Block_802c24a8[];
-    extern const char str_MOBJ_PinkBlock_802c2620[];
+    extern char vec3_802c2058[];
     extern const char str_A_1_80420208[];
     extern const char str_A_2_8042020c[];
     extern const char str_S_2_804202b0[];
     extern f32 float_1_80420250;
     extern f32 float_40_804202dc;
     extern f32 float_0p7_804202b8;
+    char* base = vec3_802c2058;
     void* item;
     u32 action = *(u32*)((s32)pMobj + 0x1DC);
 
-    switch (action) { case 0:
-        if ((*(u32*)pMobj & 8) != 0) {
-            if (strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_BadgeBlock_802c266c) == 0 ||
-                strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_BrickBadgeBlock_802c25bc) == 0 ||
-                strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_HiddenBadgeBloc_802c25e8) == 0) {
-                psndSFXOn_3D(0x1BB, (void*)((s32)pMobj + 0x38));
-            } else {
-                psndSFXOn_3D(0x1BA, (void*)((s32)pMobj + 0x38));
-            }
-            if ((*(u32*)pMobj & 0x800) != 0) {
-                *(u32*)pMobj &= ~0x800;
-            }
-            animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_A_1_80420208, 1);
-            if (*(void**)((s32)pMobj + 0x1D4) == 0) {
-                if (*(s32*)((s32)pMobj + 0x1A0) == 0x79) {
-                    pouchAddCoin(1);
-                    itemEntry(0, 0x79, 0xF, -1, 0, *(f32*)((s32)pMobj + 0x38),
-                              *(f32*)((s32)pMobj + 0x3C), *(f32*)((s32)pMobj + 0x40));
-                    evtSetValue(0, *(s32*)((s32)pMobj + 0x1E4), 1);
-                    psndSFXOn_3D(0x5B, (void*)((s32)pMobj + 0x38));
+    switch (action) {
+        case 0:
+            if ((*(u32*)pMobj & 8) != 0) {
+                if (strcmp((char*)((s32)pMobj + 0x15), base + 0x614) == 0 ||
+                    strcmp((char*)((s32)pMobj + 0x15), base + 0x564) == 0 ||
+                    strcmp((char*)((s32)pMobj + 0x15), base + 0x590) == 0) {
+                    psndSFXOn_3D(0x1BB, (void*)((s32)pMobj + 0x38));
                 } else {
+                    psndSFXOn_3D(0x1BA, (void*)((s32)pMobj + 0x38));
+                }
+                if ((*(u32*)pMobj & 0x800) != 0) {
+                    *(u32*)pMobj &= ~0x800;
+                }
+                animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_A_1_80420208, 1);
+                if (*(void**)((s32)pMobj + 0x1D4) != 0) {
+                    mobjRunEvent(pMobj, *(void**)((s32)pMobj + 0x1D4));
+                } else if (*(s32*)((s32)pMobj + 0x1A0) != 0x79) {
                     itemEntry((char*)((s32)pMobj + 5), *(s32*)((s32)pMobj + 0x1A0), 4,
                               *(s32*)((s32)pMobj + 0x1E4), 0,
                               *(f32*)((s32)pMobj + 0x38),
@@ -3160,47 +3282,65 @@ s32 mobj_badgeblk(void* pMobj) {
                               *(f32*)((s32)pMobj + 0x40));
                     item = itemNameToPtr((char*)((s32)pMobj + 5));
                     itemFlagOn(item, 0x10);
-                    *(f32*)((s32)item + 0x34) = float_0p7_804202b8;
-                    *(f32*)((s32)item + 0x38) = float_1_80420250;
-                    *(s32*)((s32)item + 0x3C) = 0;
-                    *(f32*)((s32)item + 0x40) = 360.0f;
+                    *(f32*)((s32)item + 0x80) = float_0p7_804202b8;
+                    *(f32*)((s32)item + 0x84) = float_1_80420250;
+                    *(s32*)((s32)item + 0x88) = 0;
+                    *(f32*)((s32)item + 0x58) = 360.0f;
                     psndSFXOn_3D(0x1BC, (void*)((s32)pMobj + 0x38));
+                } else {
+                    pouchAddCoin(1);
+                    itemEntry(0, 0x79, 0xF, -1, 0,
+                              *(f32*)((s32)pMobj + 0x38),
+                              *(f32*)((s32)pMobj + 0x3C),
+                              *(f32*)((s32)pMobj + 0x40));
+                    evtSetValue(0, *(s32*)((s32)pMobj + 0x1E4), 1);
+                    psndSFXOn_3D(0x5B, (void*)((s32)pMobj + 0x38));
                 }
-            } else {
-                mobjRunEvent(pMobj, *(void**)((s32)pMobj + 0x1D4));
+                *(s32*)((s32)pMobj + 0x1DC) += 1;
             }
-            *(s32*)((s32)pMobj + 0x1DC) += 1;
-        }
-        break; case 1:
-        if (animPoseGetLoopTimes(*(s32*)((s32)pMobj + 0x70)) >= (double)float_1_80420250) {
+            break;
+        case 1:
+            if (animPoseGetLoopTimes(*(s32*)((s32)pMobj + 0x70)) < (double)float_1_80420250) {
+                break;
+            }
             animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_S_2_804202b0, 1);
             *(u32*)pMobj &= ~8;
             *(s32*)((s32)pMobj + 0x1DC) = 0x5A;
-            if (strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_BrickBadgeBlock_802c25bc) == 0 ||
-                strcmp((char*)((s32)pMobj + 0x15), str_MOBJ_HiddenBadgeBloc_802c25e8) == 0) {
-                strcpy((char*)((s32)pMobj + 0x15), str_MOBJ_PinkBlock_802c2620);
+            if (strcmp((char*)((s32)pMobj + 0x15), base + 0x474) == 0 ||
+                strcmp((char*)((s32)pMobj + 0x15), base + 0x54C) == 0 ||
+                strcmp((char*)((s32)pMobj + 0x15), base + 0x45C) == 0) {
+                strcpy((char*)((s32)pMobj + 0x15), base + 0x450);
             } else {
-                strcpy((char*)((s32)pMobj + 0x15), str_MOBJ_Block_802c24a8);
+                strcpy((char*)((s32)pMobj + 0x15), base + 0x5C8);
             }
-        }
-        break; case 0x5A:
-        if ((*(u32*)pMobj & 8) != 0) {
-            *(u32*)pMobj &= ~8;
-            animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_A_2_8042020c, 1);
-            psndSFXOn_3D(0x1B7, (void*)((s32)pMobj + 0x38));
-            *(s32*)((s32)pMobj + 0x1DC) += 1;
-        }
-        break; case 0x5B:
-        if ((*(u32*)pMobj & 8) == 0) {
-            *(s32*)((s32)pMobj + 0x1DC) = 0x5A;
-        } else if (animPoseGetLoopTimes(*(s32*)((s32)pMobj + 0x70)) >= (double)float_1_80420250) {
-            animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_S_2_804202b0, 1);
-            *(s32*)((s32)pMobj + 0x1DC) = 0x5A;
-            *(u32*)pMobj &= ~8;
-        }
-        break; }
+            break;
+        case 0x5A:
+            if ((*(u32*)pMobj & 8) != 0) {
+                *(u32*)pMobj &= ~8;
+                animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_A_2_8042020c, 1);
+                psndSFXOn_3D(0x1B7, (void*)((s32)pMobj + 0x38));
+                *(s32*)((s32)pMobj + 0x1DC) += 1;
+            }
+            break;
+        case 0x5B:
+            if ((*(u32*)pMobj & 8) == 0) {
+                *(s32*)((s32)pMobj + 0x1DC) = 0x5A;
+            } else if (animPoseGetLoopTimes(*(s32*)((s32)pMobj + 0x70)) >= (double)float_1_80420250) {
+                animPoseSetAnim(*(s32*)((s32)pMobj + 0x70), str_S_2_804202b0, 1);
+                *(s32*)((s32)pMobj + 0x1DC) = 0x5A;
+                *(u32*)pMobj &= ~8;
+            }
+            break;
+    }
     return 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw on
 s32 evt_mobj_badgeblk(void* pEvt) {
     extern u32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
@@ -3208,14 +3348,12 @@ s32 evt_mobj_badgeblk(void* pEvt) {
     extern void mobjSetPosition(f32 x, f32 y, f32 z, char* name);
     extern void mobjCalcMtx(void* mobj);
     extern void* gp;
-    extern const char str_MOBJ_HatenaBlock_802c24cc[];
-    extern const char str_MOBJ_BadgeBlock_802c266c[];
-    extern const char str_MOBJ_Block_802c24a8[];
-    extern const char str_MOBJ_PinkBlock_802c2620[];
+    extern char vec3_802c2058[];
     extern const char str_S_1_8042021c[];
     extern const char str_S_2_804202b0[];
     extern void mobj_badgeblk(void);
     s32* args = *(s32**)((s32)pEvt + 0x18);
+    char* base;
     char* name;
     f32 y;
     f32 x;
@@ -3229,6 +3367,7 @@ s32 evt_mobj_badgeblk(void* pEvt) {
     void* mobj;
     s32 inBattle;
 
+    base = vec3_802c2058;
     name = (char*)evtGetValue(pEvt, args[0]);
     y = evtGetFloat(pEvt, args[1]);
     x = evtGetFloat(pEvt, args[2]);
@@ -3236,18 +3375,18 @@ s32 evt_mobj_badgeblk(void* pEvt) {
     item = evtGetValue(pEvt, args[4]);
     evtCode = (void*)evtGetValue(pEvt, args[5]);
     pink = args[7];
-    poseName = str_MOBJ_HatenaBlock_802c24cc;
-    swSet = args[6];
-    if (pink != 0) {
-        poseName = str_MOBJ_BadgeBlock_802c266c;
-    }
+    poseName = base + 0x474;
     inBattle = ((u32)(-*(s32*)((s32)gp + 0x14)) | (u32)*(s32*)((s32)gp + 0x14)) >> 31;
+    if (pink != 0) {
+        poseName = base + 0x614;
+    }
+    swSet = args[6];
     if (animGroupBaseAsync(poseName, inBattle, 0) == 0) {
         return 0;
     }
     mobjEntry(name, poseName);
     mobj = mobjNameToPtr(name);
-    mobjSetPosition(x, y, z, name);
+    mobjSetPosition(y, x, z, name);
     *(void**)((s32)mobj + 0x1D0) = mobj_badgeblk;
     *(void**)((s32)mobj + 0x1D4) = evtCode;
     *(u32*)mobj |= 4;
@@ -3260,14 +3399,16 @@ s32 evt_mobj_badgeblk(void* pEvt) {
     if (evtGetValue(pEvt, swSet) != 0) {
         *(s32*)((s32)mobj + 0x1DC) = 0x5A;
         animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_2_804202b0, 1);
-        blockName = str_MOBJ_Block_802c24a8;
+        blockName = base + 0x450;
         if (pink != 0) {
-            blockName = str_MOBJ_PinkBlock_802c2620;
+            blockName = base + 0x5C8;
         }
         strcpy((char*)((s32)mobj + 0x15), blockName);
     }
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -3395,8 +3536,21 @@ s32 evt_mobj_powerupblk(void* evt) {
 s32 mobj_brickblk(void* pMobj) {
     extern char* strcat(char*, const char*);
     extern u32 animGroupBaseAsync(const char*, s32, s32);
+    extern void* mobjRunEvent(void*, void*);
     extern void evtSetValue(void*, s32, s32);
+    extern s32 animPaperPoseEntry(const char*, s32);
+    extern s32 offscreenEntry(char*);
+    extern s32 imgEntry(char*, s32);
+    extern s32 offscreenNameToId(char*);
+    extern s32 evt_img_alloc_capture(void*);
+    extern void* imgNameToPtr(char*, s32);
+    extern s32 animPaperPoseGetId(const char*, s32);
+    extern f64 animTimeGetTime(s32);
+    extern void imgSetShadow(void*, s32);
     extern u32 psndSFXOn_3D(s32, void*);
+    extern void imgFreeCapture(void*, s32);
+    extern void imgRelease(void*);
+    extern void offscreenDelete(char*);
     extern void mobjDelete(char*);
     extern void* gp;
     extern const char str_o_802c2290[];
@@ -3406,8 +3560,8 @@ s32 mobj_brickblk(void* pMobj) {
     extern f32 vec3_802c22b0;
     extern f32 DAT_802c22b4;
     extern f32 DAT_802c22b8;
-    char offName[32];
-    char imgName[32];
+    u32 offName[4];
+    u32 imgName[4];
     char evtA[0x1B0];
     char evtB[0x1B0];
     void* argsA[8];
@@ -3417,78 +3571,100 @@ s32 mobj_brickblk(void* pMobj) {
     u32 action;
 
     heapType = *(s32*)((s32)gp + 0x14) != 0;
-    offName[0] = 0;
-    imgName[0] = 0;
-    strcat(offName, str_o_802c2290);
-    strcat(imgName, str_i_802c22a0);
-    strcat(offName, (char*)((s32)pMobj + 5));
-    strcat(imgName, (char*)((s32)pMobj + 5));
+    {
+        u32 o0 = ((const u32*)str_o_802c2290)[0];
+        u32 o1 = ((const u32*)str_o_802c2290)[1];
+        u32 o2 = ((const u32*)str_o_802c2290)[2];
+        u32 o3 = ((const u32*)str_o_802c2290)[3];
+        u32 i0 = ((const u32*)str_i_802c22a0)[0];
+        u32 i1 = ((const u32*)str_i_802c22a0)[1];
+        u32 i2 = ((const u32*)str_i_802c22a0)[2];
+        u32 i3 = ((const u32*)str_i_802c22a0)[3];
+        offName[0] = o0;
+        offName[1] = o1;
+        offName[2] = o2;
+        offName[3] = o3;
+        imgName[0] = i0;
+        imgName[1] = i1;
+        imgName[2] = i2;
+        imgName[3] = i3;
+    }
+    strcat((char*)offName, (char*)((s32)pMobj + 5));
+    strcat((char*)imgName, (char*)((s32)pMobj + 5));
     action = *(u32*)((s32)pMobj + 0x1DC);
 
-    if (action == 0) {
-        animGroupBaseAsync(str_P_box_y_802c2618, heapType, 0);
-        if ((*(u32*)pMobj & 8) != 0) {
-            mobjRunEvent(pMobj, *(void**)((s32)pMobj + 0x1D4));
-            evtSetValue(0, *(s32*)((s32)pMobj + 0x1E4), 1);
-            *(s32*)((s32)pMobj + 0x1DC) = 10;
-        }
-    } else if ((s32)action > 9 && (s32)action < 11) {
-        animPaperPoseEntry(str_P_box_y_802c2618, heapType);
-        offscreenEntry(offName);
-        imgEntry(imgName, heapType);
-        *(s32*)((s32)pMobj + 0x19C) = offscreenNameToId(offName);
+    switch (action) {
+        case 0:
+            animGroupBaseAsync(str_P_box_y_802c2618, heapType, 0);
+            if ((*(u32*)pMobj & 8) != 0) {
+                mobjRunEvent(pMobj, *(void**)((s32)pMobj + 0x1D4));
+                evtSetValue(0, *(s32*)((s32)pMobj + 0x1E4), 1);
+                *(s32*)((s32)pMobj + 0x1DC) = 10;
+            }
+            break;
+        case 10:
+            animPaperPoseEntry(str_P_box_y_802c2618, heapType);
+            offscreenEntry((char*)offName);
+            imgEntry((char*)imgName, heapType);
+            *(s32*)((s32)pMobj + 0x19C) = offscreenNameToId((char*)offName);
 
-        argsA[0] = imgName;
-        argsA[1] = offName;
-        argsA[2] = 0;
-        argsA[3] = (void*)1;
-        argsA[4] = 0;
-        argsA[5] = 0;
-        argsA[6] = 0;
-        argsA[7] = 0;
-        *(void**)(evtA + 0x18) = argsA;
-        evt_img_alloc_capture(evtA);
+            argsA[0] = imgName;
+            argsA[1] = offName;
+            argsA[2] = 0;
+            argsA[3] = (void*)1;
+            argsA[4] = 0;
+            argsA[5] = 0;
+            argsA[6] = 0;
+            argsA[7] = 0;
+            *(void**)(evtA + 0x18) = argsA;
+            evt_img_alloc_capture(evtA);
 
-        argsB[0] = imgName;
-        argsB[1] = offName;
-        argsB[2] = (void*)1;
-        argsB[3] = (void*)1;
-        argsB[4] = 0;
-        argsB[5] = 0;
-        argsB[6] = 0;
-        argsB[7] = 0;
-        *(void**)(evtB + 0x18) = argsB;
-        evt_img_alloc_capture(evtB);
+            argsB[0] = imgName;
+            argsB[1] = offName;
+            argsB[2] = (void*)1;
+            argsB[3] = (void*)1;
+            argsB[4] = 0;
+            argsB[5] = 0;
+            argsB[6] = 0;
+            argsB[7] = 0;
+            *(void**)(evtB + 0x18) = argsB;
+            evt_img_alloc_capture(evtB);
 
-        img = imgNameToPtr(imgName, heapType);
-        *(s32*)((s32)img + 0x104) = animPaperPoseGetId(str_P_box_y_802c2618, heapType);
-        *(const char**)((s32)img + 0x108) = str_A_1_80420208;
-        *(f64*)((s32)img + 0x110) = animTimeGetTime(heapType);
-        imgSetShadow(img, 2);
-        psndSFXOn_3D(0x1B8, (void*)((s32)pMobj + 0x38));
-        *(s32*)((s32)pMobj + 0x1DC) = 11;
-    } else if (action == 11) {
-        img = imgNameToPtr(imgName, heapType);
-        if (*(f32*)((s32)img + 0x118) >= 1.0f ||
-            (*(u32*)img & 0x10000000) != 0) {
-            *(s32*)((s32)pMobj + 0x1DC) = 12;
-        }
-        *(f32*)((s32)pMobj + 0x38) = vec3_802c22b0;
-        *(f32*)((s32)pMobj + 0x3C) = DAT_802c22b4;
-        *(f32*)((s32)pMobj + 0x40) = DAT_802c22b8;
-        *(u32*)pMobj |= 4;
-        *(u32*)pMobj |= 8;
-    } else if ((s32)action < 99 && (s32)action < 13) {
-        img = imgNameToPtr(imgName, heapType);
-        imgFreeCapture(img, 0);
-        imgFreeCapture(img, 1);
-        imgSetShadow(img, 0);
-        imgRelease(img);
-        offscreenDelete(offName);
-        *(s32*)((s32)pMobj + 0x19C) = -1;
-        *(s32*)((s32)pMobj + 0x1DC) = 99;
-    } else if (action == 99) {
-        mobjDelete((char*)((s32)pMobj + 5));
+            img = imgNameToPtr((char*)imgName, heapType);
+            *(s32*)((s32)img + 0x104) = animPaperPoseGetId(str_P_box_y_802c2618, heapType);
+            *(const char**)((s32)img + 0x108) = str_A_1_80420208;
+            *(f64*)((s32)img + 0x110) = animTimeGetTime(heapType);
+            imgSetShadow(img, 2);
+            psndSFXOn_3D(0x1B8, (void*)((s32)pMobj + 0x38));
+            *(s32*)((s32)pMobj + 0x1DC) = 11;
+            break;
+        case 11:
+            img = imgNameToPtr((char*)imgName, heapType);
+            if (*(f32*)((s32)img + 0x118) >= 1.0f ||
+                (*(u32*)img & 0x10000000) != 0) {
+                *(s32*)((s32)pMobj + 0x1DC) = 12;
+            }
+            *(f32*)((s32)pMobj + 0x38) = vec3_802c22b0;
+            *(f32*)((s32)pMobj + 0x3C) = DAT_802c22b4;
+            *(f32*)((s32)pMobj + 0x40) = DAT_802c22b8;
+            *(u32*)pMobj |= 4;
+            *(u32*)pMobj |= 8;
+            break;
+        case 12:
+            img = imgNameToPtr((char*)imgName, heapType);
+            imgFreeCapture(img, 0);
+            imgFreeCapture(img, 1);
+            imgSetShadow(img, 0);
+            imgRelease(img);
+            offscreenDelete((char*)offName);
+            *(s32*)((s32)pMobj + 0x19C) = -1;
+            *(s32*)((s32)pMobj + 0x1DC) = 99;
+            break;
+        case 99:
+            mobjDelete((char*)((s32)pMobj + 5));
+            break;
+        default:
+            break;
     }
     return 0;
 }
@@ -3598,14 +3774,14 @@ s32 evt_mobj_brick(void* pEvt) {
     extern const char str_P_box_y_802c2618[];
     extern const char str_S_1_8042021c[];
     extern const char str_S_2_804202b0[];
-    extern const char str_S_3_80420214[];
+    extern const char str_S_3_804202d8[];
     extern void mobj_brickblk(void);
     extern void mobj_badgeblk(void);
     extern void mobj_10countblk(void);
     s32* args = *(s32**)((s32)pEvt + 0x18);
     char* name = (char*)evtGetValue(pEvt, args[0]);
-    f32 y = evtGetFloat(pEvt, args[1]);
-    f32 x = evtGetFloat(pEvt, args[2]);
+    f32 x = evtGetFloat(pEvt, args[1]);
+    f32 y = evtGetFloat(pEvt, args[2]);
     f32 z = evtGetFloat(pEvt, args[3]);
     s32 item = evtGetValue(pEvt, args[4]);
     s32 kind = args[5];
@@ -3684,7 +3860,7 @@ s32 evt_mobj_brick(void* pEvt) {
     if (kind < 10) {
         animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_1_8042021c, 1);
     } else if (kind == 13) {
-        animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_3_80420214, 1);
+        animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_3_804202d8, 1);
     } else {
         animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_1_8042021c, 1);
     }
@@ -3852,7 +4028,8 @@ s32 evt_mobj_breaking_floor(void* pEvt) {
 #pragma use_lmw_stmw on
 
 
-u8 kururing_capture(s32 camId, void* mobj) {
+void kururing_capture(s32 camId, void* mobj) {
+    typedef struct Vec { f32 x, y, z; } Vec;
     extern void* camGetPtr(s32);
     extern void* memcpy(void*, const void*, u32);
     extern void* animPoseGetAnimBaseDataPtr(s32);
@@ -3877,41 +4054,35 @@ u8 kururing_capture(s32 camId, void* mobj) {
     extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, s32, s32, s32);
     extern void PSMTXIdentity(void*);
     extern char vec3_802c2058[];
-    extern f32 float_0_80420240;
-    extern f32 float_0p5_8042024c;
-    extern f32 float_1_80420250;
-    extern f32 float_10_80420294;
-    extern f32 float_25_80420230;
-    extern f32 float_32767_804202d4;
+    extern f32 float_0_80420240, float_0p5_8042024c, float_1_80420250;
+    extern f32 float_10_80420294, float_25_80420230, float_32767_804202d4;
     u8 camCopy[0x260];
     char* base = vec3_802c2058;
     void* cam;
     void* pose;
-    s32 w;
-    s32 h;
-    u32 width;
-    u32 height;
-    u16 texW;
-    u16 texH;
-    f32 aspect;
-    f32 tanv;
+    Vec bboxMin;
+    Vec bboxMax;
+    s32 w, h;
+    u32 width, height;
+    u16 texW, texH;
+    f32 aspect, tanv;
     s32 size;
 
     cam = camGetPtr(camId);
     memcpy(camCopy, cam, 0x260);
     pose = animPoseGetAnimBaseDataPtr(*(s32*)((s32)mobj + 0x70));
-    w = (s32)(float_10_80420294 * (*(f32*)((s32)pose + 0xD4) - *(f32*)((s32)pose + 0xD0)));
-    h = (s32)(float_10_80420294 * (*(f32*)((s32)pose + 0xE0) - *(f32*)((s32)pose + 0xDC)));
+    bboxMin = *(Vec*)(base + 0x264);
+    bboxMax = *(Vec*)(base + 0x270);
+    bboxMin.x = *(f32*)((s32)pose + 0xD0);
+    bboxMin.z = *(f32*)((s32)pose + 0xD8);
+    bboxMax.x = *(f32*)((s32)pose + 0xDC);
+    bboxMax.z = *(f32*)((s32)pose + 0xE4);
+    w = (s32)(float_10_80420294 * (bboxMax.x - bboxMin.x));
+    h = (s32)(float_10_80420294 * (bboxMax.z - bboxMin.z));
     cam = camGetPtr(camId);
-    *(u32*)((s32)cam + 0x24) = *(u32*)(base + 0x27C);
-    *(u32*)((s32)cam + 0x28) = *(u32*)(base + 0x280);
-    *(u32*)((s32)cam + 0x2C) = *(u32*)(base + 0x284);
-    *(u32*)((s32)cam + 0x18) = *(u32*)((s32)mobj + 0x38);
-    *(u32*)((s32)cam + 0x1C) = *(u32*)((s32)mobj + 0x3C);
-    *(u32*)((s32)cam + 0x20) = *(u32*)((s32)mobj + 0x40);
-    *(u32*)((s32)cam + 0x0C) = *(u32*)((s32)mobj + 0x38);
-    *(u32*)((s32)cam + 0x10) = *(u32*)((s32)mobj + 0x3C);
-    *(u32*)((s32)cam + 0x14) = *(u32*)((s32)mobj + 0x40);
+    *(Vec*)((s32)cam + 0x24) = *(Vec*)(base + 0x27C);
+    *(Vec*)((s32)cam + 0x18) = *(Vec*)((s32)mobj + 0x38);
+    *(Vec*)((s32)cam + 0x0C) = *(Vec*)((s32)mobj + 0x38);
     tanv = (f32)tan(*(f64*)(base + 0x510));
     height = (u32)(h + 1) & 0xFFFFFFFE;
     width = (u32)(w + 1) & 0xFFFFFFFE;
@@ -3941,7 +4112,6 @@ u8 kururing_capture(s32 camId, void* mobj) {
     PSMTXIdentity((void*)((s32)mobj + 0x20C));
     cam = camGetPtr(camId);
     memcpy(cam, camCopy, 0x260);
-    return 0;
 }
 
 #pragma no_register_save_helpers on
@@ -4642,13 +4812,10 @@ s32 evt_mobj_koopa_brick(void* pEvt) {
     extern void mobjSetPosition(f32 x, f32 y, f32 z, s32 name);
     extern void mobjCalcMtx(void* mobj);
     extern void* gpGlobals;
-    extern const char str_MOBJ_FlowBrickBlock_802c24e0[];
-    extern const char str_MOBJ_block_ky_802c24f4[];
-    extern const char str_MOBJ_bigblock_01_802c2504[];
-    extern const char str_MOBJ_bigblock_02_802c2518[];
+    extern const char vec3_802c2058[];
     extern const char str_S_1_8042021c[];
     extern void mobj_koopa_brickblk(void);
-    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32* args;
     char* name;
     f32 x;
     f32 y;
@@ -4657,32 +4824,36 @@ s32 evt_mobj_koopa_brick(void* pEvt) {
     s32 kind;
     void* evtCode;
     s32 swSet;
+    s32 inBattle;
     const char* poseName;
     void* mobj;
-    s32 inBattle;
 
+    args = *(s32**)((s32)pEvt + 0x18);
     name = (char*)evtGetValue(pEvt, args[0]);
-    y = evtGetFloat(pEvt, args[1]);
-    x = evtGetFloat(pEvt, args[2]);
+    x = evtGetFloat(pEvt, args[1]);
+    y = evtGetFloat(pEvt, args[2]);
     z = evtGetFloat(pEvt, args[3]);
     item = evtGetValue(pEvt, args[4]);
     kind = args[5];
     evtCode = (void*)evtGetValue(pEvt, args[6]);
     swSet = args[7];
+    inBattle = ((u32)(-*(s32*)((s32)gpGlobals + 0x14)) |
+                (u32)*(s32*)((s32)gpGlobals + 0x14)) >> 31;
 
     if (kind == 2) {
-        poseName = str_MOBJ_bigblock_01_802c2504;
+        poseName = &vec3_802c2058[0x4AC];
     } else if (kind < 2) {
         if (kind == 0) {
-            poseName = str_MOBJ_FlowBrickBlock_802c24e0;
+            poseName = &vec3_802c2058[0x488];
         } else if (kind > -1) {
-            poseName = str_MOBJ_block_ky_802c24f4;
+            poseName = &vec3_802c2058[0x49C];
+        } else {
+            poseName = &vec3_802c2058[0x4C0];
         }
     } else {
-        poseName = str_MOBJ_bigblock_02_802c2518;
+        poseName = &vec3_802c2058[0x4C0];
     }
 
-    inBattle = ((u32)(-*(s32*)((s32)gpGlobals + 0x14)) | (u32)*(s32*)((s32)gpGlobals + 0x14)) >> 31;
     if (animGroupBaseAsync(poseName, inBattle, 0) == 0) {
         return 0;
     }
@@ -4705,18 +4876,20 @@ s32 evt_mobj_koopa_brick(void* pEvt) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 mobj_koopa_badgeblk(u32* mobj) {
     typedef struct ItemWork {
-        u8 pad0[0x34];
+        u8 pad0[0x50];
+        f32 field50;
+        s32 field54;
+        f32 jumpPower;
+        u8 pad5C[0x1C];
+        s32 timerA;
+        s32 timerB;
         f32 boundRate;
         f32 gravity;
         f32 boundLimit;
-        f32 jumpPower;
-        u8 pad44[4];
-        s32 timerA;
-        s32 timerB;
-        f32 field50;
-        s32 field54;
     } ItemWork;
     extern void* marioGetPtr(void);
     extern void mobjHitEntry(void*, s32);
@@ -4731,9 +4904,9 @@ s32 mobj_koopa_badgeblk(u32* mobj) {
     extern void effMObjBrokenEntry(double, double, double, s32);
     extern void mobjDelete(char*);
     extern void* kpa_powerup_evt;
-    extern const char str_A_1_80420208[];
-    extern const char str_S_2_804202b0[];
-    extern const char str_MOBJ_Block_802c24a8[];
+    extern const char str_A_1_80420208[4];
+    extern const char str_S_2_804202b0[4];
+    extern const char str_MOBJ_Block_802c24a8[11];
     extern f32 float_1_80420250;
     extern f32 float_12p5_80420268;
     extern f32 float_0p45_804202b4;
@@ -4741,80 +4914,91 @@ s32 mobj_koopa_badgeblk(u32* mobj) {
     extern f32 float_500_804202bc;
     extern f32 float_120_804202c0;
     ItemWork* item;
-    u32 action;
 
     marioGetPtr();
-    action = mobj[0x77];
-    if (action == 0) {
-        if ((*mobj & 8) != 0) {
-            if (mobj[0x78] == 0x4000000) {
-                if ((*mobj & 0x800) != 0) {
-                    mobjHitEntry(mobj, 0);
-                }
-                animPoseSetAnim(mobj[0x1C], str_A_1_80420208, 1);
-                if ((void*)mobj[0x75] == 0) {
-                    if (mobj[0x68] == 0x59) {
-                        itemEntry((char*)((s32)mobj + 5), 0x59, 4, -1, &kpa_powerup_evt,
-                                  (f32)mobj[0xE], float_12p5_80420268 + (f32)mobj[0xF], (f32)mobj[0x10]);
-                        item = itemNameToPtr((char*)((s32)mobj + 5));
-                        itemStatusOn(item, 0x10);
-                        itemFlagOn(item, 0x14);
-                        item->timerB = 10000;
-                        item->timerA = 0;
-                        item->boundRate = float_0p45_804202b4;
-                        item->gravity = float_0p7_804202b8;
-                        item->boundLimit = 0.0f;
-                        item->jumpPower = float_500_804202bc;
-                        item->field50 = float_120_804202c0;
-                        item->field54 = 0x5A;
-                        psndSFXOn_3D(0x836, mobj + 0xE);
-                    } else {
-                        kpaAddCoin(1);
-                        itemEntry(0, 0x79, 0xF, -1, 0, (f32)mobj[0xE], (f32)mobj[0xF], (f32)mobj[0x10]);
-                        evtSetValue(0, mobj[0x79], 1);
-                        psndSFXOn_3D(0x5B, mobj + 0xE);
-                    }
-                } else {
-                    mobjRunEvent(mobj, (void*)mobj[0x75]);
-                }
-                npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
-                mobj[0x77]++;
-            } else {
-                *mobj &= ~8;
-            }
-        }
-    } else if (action == 1) {
-        if (animPoseGetLoopTimes(mobj[0x1C]) >= (double)float_1_80420250) {
-            animPoseSetAnim(mobj[0x1C], str_S_2_804202b0, 1);
-            *mobj &= ~8;
-            mobj[0x77] = 0x5A;
-            strcpy((char*)((s32)mobj + 0x15), str_MOBJ_Block_802c24a8);
-        }
-    } else if (action == 0x5A) {
-        if ((*mobj & 8) != 0) {
-            if (kpaGetLevel() == 3) {
+    switch ((s32)mobj[0x77]) {
+        case 0:
+            if ((*mobj & 8) != 0) {
                 if (mobj[0x78] == 0x4000000) {
-                    npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
+                    if ((*mobj & 0x800) != 0) {
+                        mobjHitEntry(mobj, 0);
+                    }
+                    animPoseSetAnim(mobj[0x1C], str_A_1_80420208, 1);
+                    if ((void*)mobj[0x75] == 0) {
+                        if (mobj[0x68] == 0x59) {
+                            itemEntry((char*)((s32)mobj + 5), 0x59, 4, -1, &kpa_powerup_evt,
+                                      *(f32*)&mobj[0xE], float_12p5_80420268 + *(f32*)&mobj[0xF],
+                                      *(f32*)&mobj[0x10]);
+                            item = itemNameToPtr((char*)((s32)mobj + 5));
+                            itemStatusOn(item, 0x10);
+                            itemFlagOn(item, 0x14);
+                            item->timerB = 10000;
+                            item->timerA = 0;
+                            item->boundRate = float_0p45_804202b4;
+                            item->gravity = float_0p7_804202b8;
+                            item->boundLimit = 0.0f;
+                            item->jumpPower = float_500_804202bc;
+                            item->field50 = float_120_804202c0;
+                            item->field54 = 0x5A;
+                            psndSFXOn_3D(0x836, mobj + 0xE);
+                        } else {
+                            kpaAddCoin(1);
+                            itemEntry(0, 0x79, 0xF, -1, 0, *(f32*)&mobj[0xE], *(f32*)&mobj[0xF],
+                                      *(f32*)&mobj[0x10]);
+                            evtSetValue(0, mobj[0x79], 1);
+                            psndSFXOn_3D(0x5B, mobj + 0xE);
+                        }
+                    } else {
+                        mobjRunEvent(mobj, (void*)mobj[0x75]);
+                    }
+                    if (mobj[0x78] == 0x4000000) {
+                        npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
+                    }
+                    mobj[0x77]++;
+                } else {
+                    *mobj &= ~8;
                 }
-                if ((void*)mobj[0x1D] != 0) {
-                    *(u16*)mobj[0x1D] |= 1;
-                }
-                *mobj |= 2;
-                mobj[0x77]++;
-            } else {
-                *mobj &= ~8;
             }
-        }
-    } else if (action == 99) {
-        mobjDelete((char*)((s32)mobj + 5));
-    } else if ((s32)action < 0x5C) {
-        psndSFXOn_3D(0x1B8, mobj + 0xE);
-        effMObjBrokenEntry((double)(f32)mobj[0xE], (double)(float_12p5_80420268 + (f32)mobj[0xF]),
-                           (double)(float_12p5_80420268 + (f32)mobj[0x10]), 2);
-        mobj[0x77] = 99;
+            break;
+        case 1:
+            if (animPoseGetLoopTimes(mobj[0x1C]) >= (double)float_1_80420250) {
+                animPoseSetAnim(mobj[0x1C], str_S_2_804202b0, 1);
+                *mobj &= ~8;
+                mobj[0x77] = 0x5A;
+                strcpy((char*)((s32)mobj + 0x15), str_MOBJ_Block_802c24a8);
+            }
+            break;
+        case 0x5A:
+            if ((*mobj & 8) != 0) {
+                if (kpaGetLevel() == 3) {
+                    if (mobj[0x78] == 0x4000000) {
+                        npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
+                    }
+                    if ((void*)mobj[0x1D] != 0) {
+                        *(u16*)mobj[0x1D] |= 1;
+                    }
+                    *mobj |= 2;
+                    mobj[0x77]++;
+                } else {
+                    *mobj &= ~8;
+                }
+            }
+            break;
+        case 0x5B:
+            psndSFXOn_3D(0x1B8, mobj + 0xE);
+            effMObjBrokenEntry((double)*(f32*)&mobj[0xE],
+                               (double)(float_12p5_80420268 + *(f32*)&mobj[0xF]),
+                               (double)(float_12p5_80420268 + *(f32*)&mobj[0x10]), 2);
+            mobj[0x77] = 99;
+            break;
+        case 99:
+            mobjDelete((char*)((s32)mobj + 5));
+            break;
     }
     return 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_mobj_koopa_badgeblk(void* pEvt) {
     extern u32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
@@ -4932,6 +5116,7 @@ s32 mobj_koopa_blk(u32* mobj) {
     extern void effMObjBrokenEntry(double, double, double, s32);
     extern void mobjDelete(char*);
     extern f32 float_12p5_80420268;
+    s32 accepted = 0;
     u16* hit;
 
     switch (mobj[0x77]) {
@@ -4939,7 +5124,10 @@ s32 mobj_koopa_blk(u32* mobj) {
             if ((*mobj & 8) == 0) {
                 break;
             }
-            if (kpaGetLevel() != 3) {
+            if (kpaGetLevel() == 3) {
+                accepted = 1;
+            }
+            if (!accepted) {
                 *mobj &= ~8;
                 break;
             }
@@ -4957,11 +5145,10 @@ s32 mobj_koopa_blk(u32* mobj) {
             break;
         case 10:
             psndSFXOn_3D(0x1B8, mobj + 0xE);
-            effMObjBrokenEntry((double)(f32)mobj[0xE],
-                               (double)(float_12p5_80420268 + (f32)mobj[0xF]),
-                               (double)(float_12p5_80420268 + (f32)mobj[0x10]), 2);
+            effMObjBrokenEntry((double)((f32*)mobj)[0xE],
+                               (double)(float_12p5_80420268 + ((f32*)mobj)[0xF]),
+                               (double)(float_12p5_80420268 + ((f32*)mobj)[0x10]), 2);
             mobj[0x77] = 99;
-            break;
         case 99:
             mobjDelete((char*)((s32)mobj + 5));
             break;
@@ -5076,17 +5263,17 @@ s32 mobj_koopa_dokan_evt(u32* mobj) {
     return 0;
 }
 
+#pragma no_register_save_helpers on
 s32 evt_mobj_koopa_dokan(void* pEvt) {
     extern u32 animGroupBaseAsync(const char* name, s32 inBattle, s32 unused);
     extern s32 mobjEntry(char* name, const char* poseName);
     extern void* mobjNameToPtr(char* name);
     extern void mobjCalcMtx(void* mobj);
     extern void* gpGlobals;
-    extern const char str_MOBJ_GreenPipe_ks_802c246c[];
-    extern const char str_MOBJ_GreenPipe_kl_802c2480[];
-    extern const char str_MOBJ_GreenPipe_ky_802c2494[];
+    extern const u8 vec3_802c2058[];
     extern const char str_S_1_8042021c[];
     extern void mobj_koopa_dokan_evt(void);
+    const u8* data = vec3_802c2058;
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 kind;
     char* name;
@@ -5095,9 +5282,10 @@ s32 evt_mobj_koopa_dokan(void* pEvt) {
     f32 z;
     void* evtCode;
     s32 swSet;
+    s32 inBattle;
     const char* poseName;
     void* mobj;
-    s32 inBattle;
+    u32 position[3];
 
     kind = evtGetValue(pEvt, args[0]);
     name = (char*)evtGetValue(pEvt, args[1]);
@@ -5106,18 +5294,18 @@ s32 evt_mobj_koopa_dokan(void* pEvt) {
     z = evtGetFloat(pEvt, args[4]);
     evtCode = (void*)evtGetValue(pEvt, args[5]);
     swSet = args[6];
+    inBattle = ((u32)(-*(s32*)((s32)gpGlobals + 0x14)) | (u32)*(s32*)((s32)gpGlobals + 0x14)) >> 31;
 
     if (kind == 1) {
-        poseName = str_MOBJ_GreenPipe_kl_802c2480;
+        poseName = (const char*)(data + 0x428);
     } else if (kind < 1) {
         if (kind > -1) {
-            poseName = str_MOBJ_GreenPipe_ks_802c246c;
+            poseName = (const char*)(data + 0x414);
         }
     } else if (kind < 3) {
-        poseName = str_MOBJ_GreenPipe_ky_802c2494;
+        poseName = (const char*)(data + 0x43C);
     }
 
-    inBattle = ((u32)(-*(s32*)((s32)gpGlobals + 0x14)) | (u32)*(s32*)((s32)gpGlobals + 0x14)) >> 31;
     if (animGroupBaseAsync(poseName, inBattle, 0) == 0) {
         return 0;
     }
@@ -5125,9 +5313,15 @@ s32 evt_mobj_koopa_dokan(void* pEvt) {
     mobjEntry(name, poseName);
     mobj = mobjNameToPtr(name);
     *(u32*)mobj |= 6;
-    *(f32*)((s32)mobj + 0x38) = x;
-    *(f32*)((s32)mobj + 0x3C) = y;
-    *(f32*)((s32)mobj + 0x40) = z;
+    position[0] = *(const u32*)(data + 0x2F0);
+    position[1] = *(const u32*)(data + 0x2F4);
+    position[2] = *(const u32*)(data + 0x2F8);
+    *(f32*)&position[0] = x;
+    *(f32*)&position[1] = y;
+    *(f32*)&position[2] = z;
+    *(u32*)((s32)mobj + 0x38) = position[0];
+    *(u32*)((s32)mobj + 0x3C) = position[1];
+    *(u32*)((s32)mobj + 0x40) = position[2];
     *(void**)((s32)mobj + 0x1D0) = mobj_koopa_dokan_evt;
     *(void**)((s32)mobj + 0x1D4) = evtCode;
     *(void**)((s32)mobj + 0x1D8) = 0;
@@ -5141,6 +5335,7 @@ s32 evt_mobj_koopa_dokan(void* pEvt) {
     }
     return 2;
 }
+#pragma no_register_save_helpers off
 
 s32 fire_func(void* evt, s32 init) {
     extern s32 irand(s32 max);
@@ -5204,64 +5399,85 @@ s32 mobj_koopa_sango_evt(u32* mobj) {
     void* evt;
     s32 level;
     s32 score;
+    s32 accepted = 0;
     u32 action = mobj[0x77];
 
-    if (action == 0) {
-        if ((*mobj & 8) == 0) return 0;
-        level = kpaGetLevel();
-        if (!(level == 3 || (level > -1 && level < 3 && mobj[0x78] == 0x20000000))) {
-            *mobj &= ~8;
+    switch (action) {
+        case 0:
+            if ((*mobj & 8) == 0) {
+                return 0;
+            }
+            level = kpaGetLevel();
+            if (level == 3) {
+                accepted = 1;
+            } else if (level < 3 && level > -1 && mobj[0x78] == 0x20000000) {
+                accepted = 1;
+            }
+            if (!accepted) {
+                *mobj &= ~8;
+                return 0;
+            }
+            mobjRunEvent(mobj, (void*)mobj[0x75]);
+            evtSetValue(0, mobj[0x79], 1);
+            if (mobj[0x78] == 0x4000000) {
+                npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
+            }
+            if ((void*)mobj[0x1D] != 0) {
+                *(u16*)mobj[0x1D] |= 1;
+            }
+            *mobj |= 2;
+            score = 400;
+            if (kpaMutekiCheck() != 0) {
+                score = 500;
+            }
+            kpaAddScore(score);
+            mobj[0x77] = 10;
             return 0;
-        }
-        mobjRunEvent(mobj, (void*)mobj[0x75]);
-        evtSetValue(0, mobj[0x79], 1);
-        if (mobj[0x78] == 0x4000000) npcKoopaModeMobjBoundDeadCheck((void*)mobj[0x1D]);
-        if ((void*)mobj[0x1D] != 0) *(u16*)mobj[0x1D] |= 1;
-        *mobj |= 2;
-        score = kpaMutekiCheck() != 0 ? 500 : 400;
-        kpaAddScore(score);
-        mobj[0x77] = 10;
-        return 0;
+
+        case 10:
+            if (mobj[0x78] == 0x20000000) {
+                psndSFXOn_3D(0xB67, mobj + 0xE);
+            }
+            evt = evtEntry(&evt_fire, 0, 0);
+            *(s32*)((s32)evt + 0x9C) = (s32)(float_1024_80420290 * ((f32*)mobj)[0xE]) - 230000000;
+            *(s32*)((s32)evt + 0xA0) = (s32)(float_1024_80420290 * ((f32*)mobj)[0xF]) - 230000000;
+            *(s32*)((s32)evt + 0xA4) = (s32)(float_1024_80420290 * (float_10_80420294 + ((f32*)mobj)[0x10])) - 230000000;
+            *(s32*)((s32)evt + 0xA8) = 0x5A;
+            mobj[0x77]++;
+            return 0;
+
+        case 0x14:
+            evt = evtEntry(&evt_fire, 0, 0);
+            *(s32*)((s32)evt + 0x9C) = (s32)(float_1024_80420290 * (float_10_80420294 + ((f32*)mobj)[0xE])) - 230000000;
+            *(s32*)((s32)evt + 0xA0) = (s32)(float_1024_80420290 * (float_30_80420298 + ((f32*)mobj)[0xF])) - 230000000;
+            *(s32*)((s32)evt + 0xA4) = (s32)(float_1024_80420290 * (float_10_80420294 + ((f32*)mobj)[0x10])) - 230000000;
+            *(s32*)((s32)evt + 0xA8) = 0x50;
+            mobj[0x77]++;
+            return 0;
+
+        case 0x1E:
+            evt = evtEntry(&evt_fire, 0, 0);
+            *(s32*)((s32)evt + 0x9C) = (s32)(float_1024_80420290 * (((f32*)mobj)[0xE] - float_10_80420294)) - 230000000;
+            *(s32*)((s32)evt + 0xA0) = (s32)(float_1024_80420290 * (float_60_8042029c + ((f32*)mobj)[0xF])) - 230000000;
+            *(s32*)((s32)evt + 0xA4) = (s32)(float_1024_80420290 * (float_10_80420294 + ((f32*)mobj)[0x10])) - 230000000;
+            *(s32*)((s32)evt + 0xA8) = 0x46;
+            mobj[0x77]++;
+            return 0;
+
+        case 0x62:
+            effMObjBrokenEntry((double)((f32*)mobj)[0xE], (double)((f32*)mobj)[0xF],
+                                (double)(float_10_80420294 + ((f32*)mobj)[0x10]), 7);
+            mobj[0x77]++;
+            return 0;
+
+        default:
+            if ((s32)action < 100) {
+                mobj[0x77]++;
+            } else {
+                mobjDelete((char*)((s32)mobj + 5));
+            }
+            return 0;
     }
-    if (action == 10) {
-        if (mobj[0x78] == 0x20000000) psndSFXOn_3D(0xB67, mobj + 0xE);
-        evt = evtEntry(&evt_fire, 0, 0);
-        *(s32*)((s32)evt + 0x9C) = (s32)(float_1024_80420290 * ((f32*)mobj)[0xE]) - 230000000;
-        *(s32*)((s32)evt + 0xA0) = (s32)(float_1024_80420290 * ((f32*)mobj)[0xF]) - 230000000;
-        *(s32*)((s32)evt + 0xA4) = (s32)(float_1024_80420290 * (float_10_80420294 + ((f32*)mobj)[0x10])) - 230000000;
-        *(s32*)((s32)evt + 0xA8) = 0x5A;
-        mobj[0x77]++;
-        return 0;
-    }
-    if (action == 0x14) {
-        evt = evtEntry(&evt_fire, 0, 0);
-        *(s32*)((s32)evt + 0x9C) = (s32)(float_1024_80420290 * (float_10_80420294 + ((f32*)mobj)[0xE])) - 230000000;
-        *(s32*)((s32)evt + 0xA0) = (s32)(float_1024_80420290 * (float_30_80420298 + ((f32*)mobj)[0xF])) - 230000000;
-        *(s32*)((s32)evt + 0xA4) = (s32)(float_1024_80420290 * (float_10_80420294 + ((f32*)mobj)[0x10])) - 230000000;
-        *(s32*)((s32)evt + 0xA8) = 0x50;
-        mobj[0x77]++;
-        return 0;
-    }
-    if (action == 0x1E) {
-        evt = evtEntry(&evt_fire, 0, 0);
-        *(s32*)((s32)evt + 0x9C) = (s32)(float_1024_80420290 * (((f32*)mobj)[0xE] - float_10_80420294)) - 230000000;
-        *(s32*)((s32)evt + 0xA0) = (s32)(float_1024_80420290 * (float_60_8042029c + ((f32*)mobj)[0xF])) - 230000000;
-        *(s32*)((s32)evt + 0xA4) = (s32)(float_1024_80420290 * (float_10_80420294 + ((f32*)mobj)[0x10])) - 230000000;
-        *(s32*)((s32)evt + 0xA8) = 0x46;
-        mobj[0x77]++;
-        return 0;
-    }
-    if (action == 0x62) {
-        effMObjBrokenEntry((double)((f32*)mobj)[0xE], (double)((f32*)mobj)[0xF], (double)(float_10_80420294 + ((f32*)mobj)[0x10]), 7);
-        mobj[0x77]++;
-        return 0;
-    }
-    if ((s32)action < 100 && (s32)action >= 0) {
-        mobj[0x77]++;
-        return 0;
-    }
-    mobjDelete((char*)((s32)mobj + 5));
-    return 0;
 }
 
 s32 evt_mobj_koopa_sango(void* pEvt) {
@@ -5448,14 +5664,14 @@ u8 evt_mobj_koopa_fireber_dodai(s32 pEvt) {
     extern s32 sprintf(char*, const char*, ...);
     extern s32 npcEntry(char*, const char*);
     extern void* gp;
-    extern const char str_MOBJ_fire_dodai_802c2430[];
-    extern const char str_c_fireber_802c2440[];
-    extern const char str_FRB_S_1_802c244c[];
+    extern const u32 vec3_802c2058[];
     extern const char str_PCTsPCT2x_80420258[];
     extern f32 float_0_80420240;
     extern f32 float_1_80420250;
     extern f32 float_25_80420230;
     extern f32 float_175_80420254;
+    extern f32 __fabsf(f32);
+    const u32* data = vec3_802c2058;
     s32* args = *(s32**)(pEvt + 0x18);
     s32 dir = evtGetValue((void*)pEvt, args[0]);
     char* name = (char*)evtGetValue((void*)pEvt, args[1]);
@@ -5469,25 +5685,32 @@ u8 evt_mobj_koopa_fireber_dodai(s32 pEvt) {
     s32 inBattle = *(s32*)((s32)gp + 0x14) != 0;
     void* mobj;
     void* npc;
+    u32 pos[3];
     char buf[36];
     s32 i;
 
-    if (animGroupBaseAsync(str_MOBJ_fire_dodai_802c2430, inBattle, 0) == 0) {
+    if (animGroupBaseAsync((const char*)((const u8*)data + 0x3D8), inBattle, 0) == 0) {
         return 0;
     }
-    if (animGroupBaseAsync(str_c_fireber_802c2440, inBattle, 0) == 0) {
+    if (animGroupBaseAsync((const char*)((const u8*)data + 0x3E8), inBattle, 0) == 0) {
         return 0;
     }
-    mobjEntry(name, str_MOBJ_fire_dodai_802c2430);
+    mobjEntry(name, (const char*)((const u8*)data + 0x3D8));
     mobj = mobjNameToPtr(name);
     *(u32*)mobj |= 4;
-    *(f32*)((s32)mobj + 0x38) = x;
-    *(f32*)((s32)mobj + 0x3C) = y;
-    *(f32*)((s32)mobj + 0x40) = z;
-    *(void**)((s32)mobj + 0x68) = mobj_koopa_fireber_dodai_evt;
+    pos[0] = data[0x308 / 4];
+    pos[1] = data[0x30C / 4];
+    pos[2] = data[0x310 / 4];
+    ((f32*)pos)[0] = x;
+    ((f32*)pos)[1] = y;
+    ((f32*)pos)[2] = z;
+    *(u32*)((s32)mobj + 0x38) = pos[0];
+    *(u32*)((s32)mobj + 0x3C) = pos[1];
+    *(u32*)((s32)mobj + 0x40) = pos[2];
+    *(void**)((s32)mobj + 0x1D0) = mobj_koopa_fireber_dodai_evt;
     *(void**)((s32)mobj + 0x1D4) = evtCode;
     *(void**)((s32)mobj + 0x1D8) = 0;
-    *(u32*)mobj |= 0x9C0000;
+    *(u32*)mobj |= 0x3C0000;
     *(s32*)((s32)mobj + 0x1E4) = sw;
     *(s32*)((s32)mobj + 0x1DC) = 0;
     if (evtGetValue((void*)pEvt, sw) != 0) {
@@ -5497,24 +5720,29 @@ u8 evt_mobj_koopa_fireber_dodai(s32 pEvt) {
         step = float_1_80420250;
     }
     *(s32*)((s32)mobj + 0x1A4) = count;
-    if (dir == 0) {
-        if (step > 0.0f) step = -step;
-    } else if (step < 0.0f) {
-        step = -step;
+    if (dir != 0) {
+        step = __fabsf(step);
+    } else {
+        step = -__fabsf(step);
     }
     *(f32*)((s32)mobj + 0x1AC) = step;
     *(s32*)((s32)mobj + 0x1B4) = 0;
+    {
+        f32 spacing = float_25_80420230;
+        step = float_175_80420254 + z;
+        y += spacing;
     for (i = 0; i < count; i++) {
         sprintf(buf, str_PCTsPCT2x_80420258, name, i);
-        npcEntry(buf, str_c_fireber_802c2440);
+        npcEntry(buf, (const char*)((const u8*)data + 0x3E8));
         npc = npcNameToPtr(buf);
         *(u32*)npc |= 0x8000000;
-        *(u32*)((s32)npc + 0x2B8) |= 0xF;
+        *(u16*)((s32)npc + 0x31E) |= 0xF;
         *(f32*)((s32)npc + 0x8C) = x;
-        *(f32*)((s32)npc + 0x90) = float_25_80420230 * (f32)i + float_25_80420230 + y;
-        *(f32*)((s32)npc + 0x94) = float_175_80420254 + z + (f32)i;
-        animPoseSetAnim(*(s32*)((s32)npc + 0xB0), str_FRB_S_1_802c244c, 1);
+        *(f32*)((s32)npc + 0x90) = spacing * (f32)i + y;
+        *(f32*)((s32)npc + 0x94) = step + (f32)i;
+        animPoseSetAnim(*(s32*)((s32)npc + 0x104), (const char*)((const u8*)data + 0x3F4), 1);
         *(u32*)npc |= 0x40000;
+    }
     }
     return 2;
 }
@@ -5571,14 +5799,18 @@ s32 kpa_score_to_str(void* evt) {
     s32 hundreds;
     s32 tens;
     s32 ones;
+    s32 high;
     s32 pos = 0;
 
-    thousands = score / 1000;
-    rest = score % 1000;
-    hundreds = rest / 100;
-    rest = rest % 100;
-    tens = rest / 10;
-    ones = rest % 10;
+    high = __mulhw(0x10624DD3, score);
+    thousands = (high >> 6) + ((u32)(high >> 6) >> 31);
+    rest = score - (((high >> 6) + ((u32)(high >> 6) >> 31)) * 1000);
+    high = __mulhw(0x51EB851F, rest);
+    hundreds = (high >> 5) + ((u32)(high >> 5) >> 31);
+    rest -= ((high >> 5) + ((u32)(high >> 5) >> 31)) * 100;
+    high = __mulhw(0x66666667, rest);
+    tens = (high >> 2) + ((u32)(high >> 2) >> 31);
+    ones = rest - (((high >> 2) + ((u32)(high >> 2) >> 31)) * 10);
 
     if (pos != 0 || thousands != 0) {
         *(u8*)((s32)psw + pos) = thousands + '0';
@@ -5674,33 +5906,39 @@ s32 mobj_koopa_pole_evt(void* pMobj) {
     extern f32 float_100_80420238;
     extern f32 float_170_80420234;
     void* player = marioGetPtr();
-    u32 action = *(u32*)((s32)pMobj + 0x1DC);
+    s32 action = *(s32*)((s32)pMobj + 0x1DC);
     s32 score = 0;
     s32 level;
     s32 i;
     s32 npcOff;
+    u32 nextAction = 0;
     void* npcWork;
     void* npc;
 
-    if (action == 0x33) goto action_33;
-    if ((s32)action >= 0x33) {
-        if (action == 0x5D) goto action_5D;
-        if ((s32)action >= 0x5D) {
-            if (action >= 0x5F) goto done;
+    switch (action) {
+        case 0:
+            goto action_0;
+        case 10:
+            goto action_10;
+        case 11:
+            goto action_11;
+        case 0x32:
+            goto action_32;
+        case 0x33:
+            goto action_33;
+        case 0x5A:
+            goto action_5A;
+        case 0x5B:
+            goto action_5B;
+        case 0x5C:
+            goto action_5C;
+        case 0x5D:
+            goto action_5D;
+        case 0x5E:
             goto action_5E;
-        }
-        if (action == 0x5B) goto action_5B;
-        if ((s32)action >= 0x5B) goto action_5C;
-        if ((s32)action >= 0x5A) goto action_5A;
-        goto done;
+        default:
+            goto done;
     }
-    if (action == 10) goto action_10;
-    if ((s32)action >= 10) {
-        if ((s32)action >= 0x32) goto action_32;
-        if ((s32)action < 0xC) goto action_11;
-        goto done;
-    }
-    if (action != 0) goto done;
 
 action_0:
         if ((*(u32*)pMobj & 8) != 0) {
@@ -5708,18 +5946,18 @@ action_0:
                 level = kpaGetLevel();
                 if (level >= 0 && level < 2) {
                     if (*(f32*)((s32)player + 0x90) >= float_25_80420230) {
-                        *(u32*)((s32)pMobj + 0x1DC) = 10;
+                        nextAction = 10;
                     } else {
                         *(u32*)pMobj &= ~8;
                     }
                 } else if (level >= 2 && level < 4) {
-                    *(u32*)((s32)pMobj + 0x1DC) = 0x32;
+                    nextAction = 0x32;
                 }
-                if (*(u32*)((s32)pMobj + 0x1DC) != 0) {
+                if (nextAction != 0) {
                     npcOff = 0;
-                    for (i = 0, npcWork = npcGetWorkPtr(); i < *(s32*)((s32)npcWork + 0x10); i++, npcOff += 0x340) {
+                    for (i = 0; i < *(s32*)((s32)npcGetWorkPtr() + 0x10); i++, npcOff += 0x340) {
                         npcWork = npcGetWorkPtr();
-                        npc = (void*)(*(s32*)(*(s32*)npcWork + 0) + npcOff);
+                        npc = (void*)(*(s32*)((s32)npcWork + 0xC) + npcOff);
                         if (((*(u32*)npc & 1) != 0) && ((*(u32*)((s32)npc + 0x2B4) & 4) == 0) &&
                             ((*(u32*)npc & 0x8000000) != 0) && ((*(u32*)npc & 8) != 0)) {
                             npcGroupDead(npc, 0x20);
@@ -5728,6 +5966,7 @@ action_0:
                     marioKeyOff();
                     evtSetValue(0, *(s32*)((s32)pMobj + 0x1E4), 1);
                     *(s32*)((s32)player + 0x78) = 0;
+                    *(u32*)((s32)pMobj + 0x1DC) = nextAction;
                 }
             } else {
                 *(u32*)pMobj &= ~8;
@@ -5740,19 +5979,22 @@ action_10:
         level = kpaGetLevel();
         if (level == 3) {
             kpaAddScore(2000);
-        } else if (level < 2) {
-            if (*(f32*)((s32)player + 0x90) < float_170_80420234) {
-                if (*(f32*)((s32)player + 0x90) < float_100_80420238) {
-                    score = (*(f32*)((s32)player + 0x90) < float_50_8042023c) ? 100 : 200;
-                } else {
-                    score = 500;
-                }
-            } else {
-                score = 1000;
-            }
-            kpaAddScore(score);
         } else {
-            kpaAddScore(1000);
+            level = kpaGetLevel();
+            if (level < 2) {
+                if (float_170_80420234 <= *(f32*)((s32)player + 0x90)) {
+                    score = 1000;
+                } else if (float_100_80420238 <= *(f32*)((s32)player + 0x90)) {
+                    score = 500;
+                } else if (float_50_8042023c <= *(f32*)((s32)player + 0x90)) {
+                    score = 200;
+                } else {
+                    score = 100;
+                }
+                kpaAddScore(score);
+            } else {
+                kpaAddScore(1000);
+            }
         }
         player = mobjRunEvent(pMobj, &kpa_pole);
         *(s32*)((s32)player + 0x15C) = score;
@@ -5768,19 +6010,22 @@ action_32:
         level = kpaGetLevel();
         if (level == 3) {
             kpaAddScore(2000);
-        } else if (level < 2) {
-            if (*(f32*)((s32)player + 0x90) < float_170_80420234) {
-                if (*(f32*)((s32)player + 0x90) < float_100_80420238) {
-                    score = (*(f32*)((s32)player + 0x90) < float_50_8042023c) ? 100 : 200;
-                } else {
-                    score = 500;
-                }
-            } else {
-                score = 1000;
-            }
-            kpaAddScore(score);
         } else {
-            kpaAddScore(1000);
+            level = kpaGetLevel();
+            if (level < 2) {
+                if (float_170_80420234 <= *(f32*)((s32)player + 0x90)) {
+                    score = 1000;
+                } else if (float_100_80420238 <= *(f32*)((s32)player + 0x90)) {
+                    score = 500;
+                } else if (float_50_8042023c <= *(f32*)((s32)player + 0x90)) {
+                    score = 200;
+                } else {
+                    score = 100;
+                }
+                kpaAddScore(score);
+            } else {
+                kpaAddScore(1000);
+            }
         }
         mobjRunEvent(pMobj, &kpa_pole_move);
         *(u32*)((s32)pMobj + 0x1DC) += 1;
@@ -5828,6 +6073,7 @@ s32 evt_mobj_koopa_pole(void* pEvt) {
     extern const char str_MOBJ_goal_pole_802c2410[];
     extern const char str_MOBJ_goal_hata_802c2420[];
     extern const char str_h_80420228[];
+    extern const u32 vec3_802c2058[];
     extern f32 float_180_8042022c;
     extern void mobj_koopa_pole_evt(void);
     s32* args = *(s32**)((s32)pEvt + 0x18);
@@ -5842,6 +6088,9 @@ s32 evt_mobj_koopa_pole(void* pEvt) {
     void* mobj;
     void* hata;
     s32 swValue;
+    u32 polePos[3];
+    u32 hataPos[3];
+    const u32* vecBase = vec3_802c2058;
 
     name = (char*)evtGetValue(pEvt, args[0]);
     x = evtGetFloat(pEvt, args[1]);
@@ -5862,9 +6111,15 @@ s32 evt_mobj_koopa_pole(void* pEvt) {
     mobjEntry(name, str_MOBJ_goal_pole_802c2410);
     mobj = mobjNameToPtr(name);
     *(u32*)mobj |= 0x84;
-    *(f32*)((s32)mobj + 0x38) = x;
-    *(f32*)((s32)mobj + 0x3C) = y;
-    *(f32*)((s32)mobj + 0x40) = z;
+    polePos[0] = vecBase[0x3A0 / 4];
+    polePos[1] = vecBase[0x3A4 / 4];
+    polePos[2] = vecBase[0x3A8 / 4];
+    ((f32*)polePos)[0] = x;
+    ((f32*)polePos)[1] = y;
+    ((f32*)polePos)[2] = z;
+    *(u32*)((s32)mobj + 0x38) = polePos[0];
+    *(u32*)((s32)mobj + 0x3C) = polePos[1];
+    *(u32*)((s32)mobj + 0x40) = polePos[2];
     *(void**)((s32)mobj + 0x1D0) = mobj_koopa_pole_evt;
     *(void**)((s32)mobj + 0x1D4) = evtCode;
     *(void**)((s32)mobj + 0x1D8) = evtCode2;
@@ -5880,9 +6135,15 @@ s32 evt_mobj_koopa_pole(void* pEvt) {
 
     mobjEntry((char*)((s32)mobj + 0x1B8), str_MOBJ_goal_hata_802c2420);
     hata = mobjNameToPtr((char*)((s32)mobj + 0x1B8));
-    *(f32*)((s32)hata + 0x38) = x;
-    *(f32*)((s32)hata + 0x3C) = y + float_180_8042022c;
-    *(f32*)((s32)hata + 0x40) = z;
+    hataPos[0] = vecBase[0x3AC / 4];
+    hataPos[1] = vecBase[0x3B0 / 4];
+    hataPos[2] = vecBase[0x3B4 / 4];
+    ((f32*)hataPos)[0] = x;
+    ((f32*)hataPos)[1] = y + float_180_8042022c;
+    ((f32*)hataPos)[2] = z;
+    *(u32*)((s32)hata + 0x38) = hataPos[0];
+    *(u32*)((s32)hata + 0x3C) = hataPos[1];
+    *(u32*)((s32)hata + 0x40) = hataPos[2];
     *(void**)((s32)hata + 0x1D0) = 0;
     *(void**)((s32)hata + 0x1D4) = 0;
     *(void**)((s32)hata + 0x1D8) = 0;

@@ -81,13 +81,13 @@ set_same:
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-s32 battleAcMain_Repeatedly(void* battleWork) {
+s32 battleAcMain_Repeatedly(register void* battleWork) {
     extern u32 BattleActionCommandGetDifficulty(void* battleWork);
-    extern u32 BattlePadCheckNow(u32 buttons);
+    extern s32 BattlePadCheckNow(u32 buttons);
     extern void BattleAcGaugeSeInit(void);
     extern u32 OSGetResetButtonState(void);
     extern s32 SIProbe(u32 chan);
-    extern u32 BattlePadCheckTrigger(u32 buttons);
+    extern s32 BattlePadCheckTrigger(u32 buttons);
     extern void BattleAcGaugeSeUpdate(f32 value);
     extern s32 _power_table[];
     extern u32 dat_80422a90;
@@ -97,104 +97,133 @@ s32 battleAcMain_Repeatedly(void* battleWork) {
     extern f32 float_neg1_80422ac8;
     extern f32 float_100_80422aa4;
 
-    void* disp;
-    void* extra;
+    register void* disp;
+    register void* extra;
     void* unit;
-    u32 difficulty;
-    s32 pressed;
+    register u32 difficulty;
+    register s32 forced;
+    register s32 pressed;
     s32 state;
     s32 acParam;
     s16 count;
 
+    extra = (void*)((s32)battleWork + 0x1F4C);
+    disp = (void*)((s32)battleWork + 0x1F20);
     difficulty = BattleActionCommandGetDifficulty(battleWork);
     unit = *(void**)((s32)battleWork + 0x1C90);
-    pressed = 0;
+    forced = 0;
     if (*(u8*)((s32)unit + 0x307) != 0) {
-        pressed = 1;
+        forced = 1;
     }
-    disp = (void*)((s32)battleWork + 0x1F20);
-    extra = (void*)((s32)battleWork + 0x1F4C);
     state = *(s32*)((s32)battleWork + 0x1C9C);
+    pressed = 0;
 
-    switch (state) {
-        case 0:
+    if (state == 1000) {
+        goto state_1000;
+    }
+    if (state >= 1000) {
+        if (state == 1003) {
+            goto state_1003;
+        }
+        if (state >= 1003) {
+            if (state >= 1005) {
+                goto done;
+            }
+            goto state_1004;
+        }
+        if (state >= 1002) {
+            goto state_1002;
+        }
+        goto done;
+    }
+    if (state == 99) {
+        goto done;
+    }
+    if (state >= 99) {
+        if (state >= 101) {
+            goto done;
+        }
+        goto state_100;
+    }
+    if (state != 0) {
+        goto done;
+    }
+
+state_0:
             memset(disp, 0, 0x2C);
             *(f32*)((s32)disp + 0x14) = float_neg300_80422ab8;
             *(f32*)((s32)disp + 0x18) = float_0_80422ac0;
             *(s32*)((s32)disp + 0x20) = 0x14;
             *(u32*)((s32)disp + 0x0C) = dat_80422a90;
             *(u8*)((s32)disp + 0x10) = 0;
-            *(u8*)((s32)disp + 0x11) = -0x10;
-            *(u8*)((s32)disp + 0x12) = -0x10;
+            *(s8*)((s32)disp + 0x11) = -0x10;
+            *(s8*)((s32)disp + 0x12) = -0x10;
             *(u8*)((s32)disp + 0x13) = 0;
             *(f32*)((s32)disp + 0x28) = float_0_80422ac0;
             *(s32*)((s32)battleWork + 0x1CB8) = 1;
             *(s16*)((s32)extra + 0x28) = 0;
             _init_param(battleWork);
             *(s32*)((s32)battleWork + 0x1C9C) = 99;
-            return 1;
-        case 99:
-            return 1;
-        case 100:
+            goto done;
+state_100:
             if (((*(u32*)((s32)battleWork + 0x1C94) & 1) == 0 ||
                  (*(u32*)((s32)unit + 0x27C) & 0x10) == 0) &&
                 *(u32*)((s32)extra + 0x0C) != 0 &&
                 BattlePadCheckNow(*(u32*)((s32)extra + 0x0C)) == 0) {
-                return 1;
+                goto done;
             }
             BattleAcGaugeSeInit();
             *(s32*)((s32)battleWork + 0x1C9C) = 1000;
             *(s32*)((s32)battleWork + 0x1CE8) = 1;
-            break;
-        case 1002:
+            goto state_1000;
+state_1002:
             *(s32*)((s32)extra + 0x30) = 0x3C;
             *(s32*)((s32)battleWork + 0x1C9C) = 1003;
-            return 1;
-        case 1003:
+            goto done;
+state_1003:
             *(s32*)((s32)extra + 0x30) -= 1;
             if (*(s32*)((s32)extra + 0x30) <= 0) {
                 *(s32*)((s32)battleWork + 0x1C9C) = 1004;
             }
-            return 1;
-        case 1004:
+            goto done;
+state_1004:
             *(void**)((s32)battleWork + 0x1CA0) = 0;
             *(void**)((s32)battleWork + 0x1CA4) = 0;
             *(void**)((s32)battleWork + 0x1CA8) = 0;
             *(void**)((s32)battleWork + 0x1CAC) = 0;
-            return 1;
-        default:
-            if (state != 1000) {
-                return 1;
-            }
-            break;
-    }
+            goto done;
 
+state_1000:
     acParam = *(s32*)((s32)battleWork + 0x1CC8);
-    if (acParam == 10) {
-        if (*(u8*)((s32)extra + 0x2C) == 0) {
-            if (OSGetResetButtonState() != 0) {
+    switch (acParam) {
+    case 10:
+        if (*(u8*)((s32)extra + 0x2C) != 0) {
+            if (OSGetResetButtonState() == 0) {
                 pressed = 1;
-                *(u8*)((s32)extra + 0x2C) = 1;
+                *(u8*)((s32)extra + 0x2C) = 0;
                 *(s16*)((s32)extra + 0x20) += 1;
             }
-        } else if (OSGetResetButtonState() == 0) {
+        } else if (OSGetResetButtonState() != 0) {
             pressed = 1;
-            *(u8*)((s32)extra + 0x2C) = 0;
+            *(u8*)((s32)extra + 0x2C) = 1;
             *(s16*)((s32)extra + 0x20) += 1;
         }
-    } else if (acParam == 9) {
-        if (*(u8*)((s32)extra + 0x2C) == 0) {
-            if ((SIProbe(0) != 8) && (SIProbe(0) != 0x80)) {
+        break;
+    case 9:
+        if (*(u8*)((s32)extra + 0x2C) != 0) {
+            if (SIProbe(0) == 8) {
                 pressed = 1;
-                *(u8*)((s32)extra + 0x2C) = 1;
+                *(u8*)((s32)extra + 0x2C) = 0;
                 *(s16*)((s32)extra + 0x20) += 1;
             }
-        } else if (SIProbe(0) == 8) {
+        } else if ((SIProbe(0) != 8) && (SIProbe(0) != 0x80)) {
             pressed = 1;
-            *(u8*)((s32)extra + 0x2C) = 0;
+            *(u8*)((s32)extra + 0x2C) = 1;
             *(s16*)((s32)extra + 0x20) += 1;
         }
-    } else if ((acParam >= 11) && (acParam < 13)) {
+        break;
+    case 11:
+    case 12:
         if ((*(u16*)((s32)extra + 0x20) & 1) == 0) {
             *(u32*)extra = *(u32*)((s32)extra + 4);
         } else {
@@ -204,10 +233,11 @@ s32 battleAcMain_Repeatedly(void* battleWork) {
             pressed = 1;
             *(s16*)((s32)extra + 0x20) += 1;
         }
-    } else if (acParam == 0x10) {
-        *(s16*)((s32)extra + 0x22) -= 1;
-        if (*(s16*)((s32)extra + 0x22) == 0) {
-            *(s16*)((s32)extra + 0x22) = (s16)irand(0x1E) + 0x3C;
+        break;
+    case 0x10:
+        *(u16*)((s32)extra + 0x22) -= 1;
+        if (*(u16*)((s32)extra + 0x22) == 0) {
+            *(u16*)((s32)extra + 0x22) = (u16)irand(0x1E) + 0x3C;
             if (*(u32*)extra == *(u32*)((s32)extra + 4)) {
                 *(u32*)extra = *(u32*)((s32)extra + 8);
             } else {
@@ -218,12 +248,16 @@ s32 battleAcMain_Repeatedly(void* battleWork) {
             pressed = 1;
             *(s16*)((s32)extra + 0x20) += 1;
         }
-    } else if (BattlePadCheckTrigger(*(u32*)extra) != 0) {
-        pressed = 1;
-        *(s16*)((s32)extra + 0x20) += 1;
+        break;
+    default:
+        if (BattlePadCheckTrigger(*(u32*)extra) != 0) {
+            pressed = 1;
+            *(s16*)((s32)extra + 0x20) += 1;
+        }
+        break;
     }
 
-    if ((*(u8*)((s32)unit + 0x307) != 0) && !pressed) {
+    if (forced && !pressed) {
         pressed = 1;
         *(s16*)((s32)extra + 0x20) += 1;
     }
@@ -272,6 +306,7 @@ s32 battleAcMain_Repeatedly(void* battleWork) {
     } else {
         *(s16*)((s32)extra + 0x28) = count - 1;
     }
+done:
     return 1;
 }
 #pragma no_register_save_helpers off
@@ -395,7 +430,8 @@ static void actionCommandDisp(f32 x, f32 y) {
     extern f32 float_176_80422ab0;
     extern f32 float_45_80422ab4;
 
-    void* battleWork;
+    register void* battleWork;
+    register Vec* templates;
     void* disp;
     void* extra;
     Vec gaugePos;
@@ -405,13 +441,17 @@ static void actionCommandDisp(f32 x, f32 y) {
     Vec onPos;
     f32 target;
     f32 ratio;
+    f32 baseX;
+    f32 baseY;
     s32 iconOn;
     s32 iconOff;
     s32 flags;
     s32 percent;
     s32 i;
+    s32 offset;
     s32 selected;
 
+    templates = vec3_802f3760;
     battleWork = _battleWorkPointer;
     camGetPtr(8);
     disp = (void*)((s32)battleWork + 0x1F20);
@@ -440,19 +480,22 @@ static void actionCommandDisp(f32 x, f32 y) {
                 iconOff = 0x81;
                 break;
         }
-        if (((*(s32*)disp / 7) & 1) != 0) {
+        if (((*(s32*)disp / 7) & 1) == 1) {
+            onPos = templates[0];
             onPos.x = float_neg200_80422a94 + x;
             onPos.y = float_70_80422a98 + y;
-            onPos.z = vec3_802f3760[0].z;
             iconDispGx(&onPos, 0x10, iconOff, float_1_80422a9c);
         } else {
+            offPos = templates[1];
             offPos.x = float_neg200_80422a94 + x;
             offPos.y = float_70_80422a98 + y;
-            offPos.z = vec3_802f3760[1].z;
             iconDispGx(&offPos, 0x10, iconOn, float_1_80422a9c);
         }
     } else {
         i = 0;
+        baseX = float_neg200_80422a94 + x;
+        baseY = float_70_80422a98 + y;
+        offset = 0;
         while (i < 2) {
             if (i == 0) {
                 iconOn = 0x6D;
@@ -464,20 +507,21 @@ static void actionCommandDisp(f32 x, f32 y) {
                 selected = (*(s32*)extra == *(s32*)((s32)extra + 8));
             }
             if (selected) {
-                if (((*(s32*)disp / 7) & 1) != 0) {
+                if (((*(s32*)disp / 7) & 1) == 1) {
                     iconOn = iconOff;
                 }
-                selectedPos.x = (float_neg200_80422a94 + x) + (f32)(i * 0x28);
-                selectedPos.y = float_70_80422a98 + y;
-                selectedPos.z = vec3_802f3760[2].z;
+                selectedPos = templates[2];
+                selectedPos.x = baseX + (f32)offset;
+                selectedPos.y = baseY;
                 iconDispGx(&selectedPos, 0x10, iconOn, float_1_80422a9c);
             } else {
-                dimPos.x = (float_neg200_80422a94 + x) + (f32)(i * 0x28);
-                dimPos.y = float_70_80422a98 + y;
-                dimPos.z = vec3_802f3760[3].z;
+                dimPos = templates[3];
+                dimPos.x = baseX + (f32)offset;
+                dimPos.y = baseY;
                 iconDispGx(&dimPos, 0x10, iconOff, float_0p5_80422aa0);
             }
             i++;
+            offset += 0x28;
         }
     }
 
@@ -514,17 +558,17 @@ static void actionCommandDisp(f32 x, f32 y) {
         flags |= 2;
     }
 
-    if ((*(u32*)((s32)battleWork + 0x1C94) & 2) == 0) {
+    if ((*(u32*)((s32)battleWork + 0x1CC4) & 2) == 0) {
         percent = (s32)*(f32*)((s32)extra + 0x10);
     } else {
         percent = 100;
     }
     BattleAcDrawGauge(ratio, (s32)x, (s32)y, *(u8*)((s32)extra + 0x2A), 2, percent, 100, 100, flags);
 
+    gaugePos = templates[4];
     gaugePos.x = (float_neg288_80422aac + x) +
             (float_176_80422ab0 * *(f32*)((s32)extra + 0x10)) / float_100_80422aa4;
     gaugePos.y = float_45_80422ab4 + y;
-    gaugePos.z = vec3_802f3760[4].z;
     iconDispGx(&gaugePos, 0x10, 0x9E, float_1_80422a9c);
 
     *(s32*)disp += 1;

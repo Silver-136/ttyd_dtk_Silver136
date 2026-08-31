@@ -848,13 +848,15 @@ void batSpotInit(void) {
 
     for (i = 0; i < 5; i++) {
         void* spot = batSpotEntry();
-        BattleStageVec pos;
+        u32 pos[3];
 
-        pos.x = *(f32*)&data[0x30 / 4];
-        pos.y = *(f32*)&data[0x34 / 4];
-        pos.z = *(f32*)&data[0x38 / 4];
-        pos.x = float_neg100_80422b18 + (float_50_80422b1c * i);
-        *(BattleStageVec*)((s32)spot + 0x4) = pos;
+        pos[0] = data[0x30 / 4];
+        pos[1] = data[0x34 / 4];
+        pos[2] = data[0x38 / 4];
+        *(f32*)&pos[0] = float_neg100_80422b18 + (float_50_80422b1c * i);
+        *(u32*)((s32)spot + 0x4) = pos[0];
+        *(u32*)((s32)spot + 0x8) = pos[1];
+        *(u32*)((s32)spot + 0xC) = pos[2];
         *(u32*)((s32)spot + 0x10) = data[0x3C / 4];
         *(u32*)((s32)spot + 0x14) = data[0x40 / 4];
         *(u32*)((s32)spot + 0x18) = data[0x44 / 4];
@@ -1189,9 +1191,9 @@ u8 tou_gamen_screen_tev(void* tevWork) {
     if (*(s32*)((s32)sw + 4) != 0) {
         mode = *(s32*)((s32)sw + 0x24);
         if (mode == 0) {
-            GXInitTexObj(&texObj, *(void**)sw, 0x130, 0xF0, 4, 0, 0, 0);
-            GXInitTexObjLOD(&texObj, 0, 0, float_0_80422ad8, float_0_80422ad8, float_0_80422ad8, 0, 0, 0);
-        } else {
+            goto simple_texture;
+        }
+        {
             data = *(void**)sw;
             row = 0;
             while (row < 0x40) {
@@ -1220,6 +1222,11 @@ u8 tou_gamen_screen_tev(void* tevWork) {
             GXInitTexObjLOD(&texObj, 0, 0, float_0_80422ad8, float_0_80422ad8, float_0_80422ad8, 0, 0, 0);
             GXLoadTexObj(&texObj, 0);
         }
+        goto texture_ready;
+simple_texture:
+        GXInitTexObj(&texObj, *(void**)sw, 0x130, 0xF0, 4, 0, 0, 0);
+        GXInitTexObjLOD(&texObj, 0, 0, float_0_80422ad8, float_0_80422ad8, float_0_80422ad8, 0, 0, 0);
+texture_ready:
         GXLoadTexObj(&texObj, 0);
         GXInitTexObj(&texObj, inta_tex, 4, 8, 0, 1, 1, 0);
         GXInitTexObjLOD(&texObj, 1, 1, float_0_80422ad8, float_0_80422ad8, float_0_80422ad8, 0, 0, 0);

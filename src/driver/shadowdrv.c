@@ -84,7 +84,6 @@ void shadowInit(void) {
     u16* tex16;
     u32 size;
     u32 i;
-    u32 v;
 
     *(u32*)((s32)cswp + 0x0) = 0;
     *(u32*)((s32)cswp + 0x4) = 0;
@@ -105,52 +104,18 @@ void shadowInit(void) {
     *(u32*)((s32)dswp + 0x100) = dat_8041f9cc;
 
     size = GXGetTexBufferSize(0x10, 0x10, 1, 0, 0);
-    tex8 = __memAlloc(0, size);
-    i = 0;
-    while (i < 0x100) {
-        v = i;
-        tex8[(v & 0xC) * 0x10 + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
-        v = i + 1;
-        tex8[((v * 8) & 0x18) + ((v * 0x10) & 0xC0) + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
-        v = i + 2;
-        tex8[((v * 8) & 0x18) + ((v * 0x10) & 0xC0) + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
-        v = i + 3;
-        tex8[((v * 8) & 0x18) + ((v * 0x10) & 0xC0) + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
-        v = i + 4;
-        tex8[((v * 0x10) & 0xC0) + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
-        v = i + 5;
-        tex8[((v * 8) & 0x18) + ((v * 0x10) & 0xC0) + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
-        v = i + 6;
-        tex8[((v * 8) & 0x18) + ((v * 0x10) & 0xC0) + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
-        v = i + 7;
-        tex8[((v * 8) & 0x18) + ((v * 0x10) & 0xC0) + ((v >> 2) & 0x20) + ((v >> 4) & 7)] = v;
-        i += 8;
+    tex8 = __memAlloc(0, GXGetTexBufferSize(0x10, 0x10, 1, 0, 0));
+    for (i = 0; i < 0x100; i++) {
+        tex8[((i & 3) * 8) + ((i & 0xC) * 0x10) + ((i & 0x80) / 4) + ((i & 0x70) / 0x10)] = i;
     }
     GXInitTexObj(rampTex8, tex8, 0x10, 0x10, 1, 0, 1, 0);
     GXInitTexObjLOD(rampTex8, 0, 0, float_0_8041f9d4, float_0_8041f9d4, float_0_8041f9d4, 0, 0, 0);
     DCFlushRange(tex8, size);
 
     size = GXGetTexBufferSize(0x100, 0x100, 3, 0, 0);
-    tex16 = __memAlloc(0, size);
-    i = 0;
-    while (i < 0x10000) {
-        v = i;
-        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v & 0xFC) * 0x100)] = v;
-        v = i + 1;
-        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v * 0x100) & 0xFC00) + ((v * 4) & 0xC)] = v;
-        v = i + 2;
-        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v * 0x100) & 0xFC00) + ((v * 4) & 0xC)] = v;
-        v = i + 3;
-        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v * 0x100) & 0xFC00) + ((v * 4) & 0xC)] = v;
-        v = i + 4;
-        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v * 0x100) & 0xFC00)] = v;
-        v = i + 5;
-        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v * 0x100) & 0xFC00) + ((v * 4) & 0xC)] = v;
-        v = i + 6;
-        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v * 0x100) & 0xFC00) + ((v * 4) & 0xC)] = v;
-        v = i + 7;
-        tex16[((v >> 6) & 0x3F0) + ((v >> 8) & 3) + ((v * 0x100) & 0xFC00) + ((v * 4) & 0xC)] = v;
-        i += 8;
+    tex16 = __memAlloc(0, GXGetTexBufferSize(0x100, 0x100, 3, 0, 0));
+    for (i = 0; i < 0x10000; i++) {
+        tex16[((i & 3) * 4) + ((i & 0xFC) * 0x100) + ((i & 0xFC00) / 0x40) + ((i & 0x300) / 0x100)] = i;
     }
     GXInitTexObj(rampTex16, tex16, 0x100, 0x100, 3, 0, 1, 0);
     GXInitTexObjLOD(rampTex16, 0, 0, float_0_8041f9d4, float_0_8041f9d4, float_0_8041f9d4, 0, 0, 0);
@@ -425,13 +390,7 @@ void shadowCharShadowDisp_Collision(void) {
     while (i < *(s32*)((s32)cswp + 0x104)) {
         mtx = entry + 0x16;
         if (*(f32*)(entry + 8) != zero && (*entry & 2) == 0) {
-            if (*(u8*)(entry + 1) == 3 || (*entry & 1) == 0) {
-                PSMTXTrans(mtx, *(f32*)(entry + 2), float_1p5_8041fa04 + *(f32*)(entry + 4),
-                           *(f32*)(entry + 6));
-                *(f32*)(entry + 0x2A) = *(f32*)(entry + 8);
-                *(f32*)(entry + 0x16) = *(f32*)(entry + 8);
-                *(u32*)(entry + 0x20) = *(u32*)(entry + 10);
-            } else {
+            if (*(u8*)(entry + 1) != 3 && (*entry & 1) != 0) {
                 *(u32*)(data + 0x0C) = *(u32*)(entry + 2);
                 *(f32*)(data + 0x10) = *(f32*)(entry + 4) + float_1_8041f9e4;
                 *(u32*)(data + 0x14) = *(u32*)(entry + 6);
@@ -458,6 +417,12 @@ void shadowCharShadowDisp_Collision(void) {
                      *(f32*)(data + 0x38) * *(f32*)(data + 0x38));
                 *(f32*)(entry + 0x18) = size * *(f32*)(data + 0x30) * *(f32*)(data + 0x34);
                 *(f32*)(entry + 0x1A) = size * *(f32*)(data + 0x30) * *(f32*)(data + 0x38);
+            } else {
+                PSMTXTrans(mtx, *(f32*)(entry + 2), float_1p5_8041fa04 + *(f32*)(entry + 4),
+                           *(f32*)(entry + 6));
+                *(f32*)(entry + 0x2A) = *(f32*)(entry + 8);
+                *(f32*)(entry + 0x16) = *(f32*)(entry + 8);
+                *(u32*)(entry + 0x20) = *(u32*)(entry + 10);
             }
             *entry |= 2;
         }
@@ -933,37 +898,51 @@ void cylinderShadowDraw(s32 param_1) {
 }
 
 void shadowEntry(double x, double y, double z, double size) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
     extern void* cswp;
+    extern const Vec3 vec3_802bfd4c;
     extern f32 float_1_8041f9e4;
     extern f32 float_0p2_8041f9ec;
     extern f32 float_0p4_8041f9f0;
-    u8* work;
     u8* entry;
-    f32 pos[3];
+    Vec3 pos;
+    f32 volume0;
+    f32 volume1;
+    f32 volume2;
 
-    work = cswp;
-    entry = *(u8**)(work + 0x108) + *(s32*)(work + 0x104) * 0x5C;
+    {
+        u8* work = cswp;
+        entry = *(u8**)(work + 0x108) + *(s32*)(work + 0x104) * 0x5C;
+    }
     *(u16*)entry = 0;
-    if (*(s32*)(work + 0x118) != 0) {
+    if (*(s32*)((u8*)cswp + 0x118) != 0) {
         *(u16*)entry |= 1;
     }
-    pos[0] = (f32)x;
-    pos[1] = (f32)y;
-    pos[2] = (f32)z;
-    *(u32*)(entry + 4) = *(u32*)&pos[0];
-    *(u32*)(entry + 8) = *(u32*)&pos[1];
-    *(u32*)(entry + 0xC) = *(u32*)&pos[2];
-    *(f32*)(entry + 0x10) = (f32)size;
-    *(u32*)(entry + 0x14) = *(u32*)(work + 0x114);
-    entry[2] = *(u8*)(work + 0x110);
+    pos = vec3_802bfd4c;
+    volume0 = float_1_8041f9e4;
+    volume1 = float_0p2_8041f9ec;
+    volume2 = float_0p4_8041f9f0;
+    pos.x = x;
+    pos.y = y;
+    pos.z = z;
+    *(u32*)(entry + 4) = *(u32*)&pos.x;
+    *(u32*)(entry + 8) = *(u32*)&pos.y;
+    *(u32*)(entry + 0xC) = *(u32*)&pos.z;
+    *(f32*)(entry + 0x10) = size;
+    *(f32*)(entry + 0x14) = *(f32*)((u8*)cswp + 0x114);
+    entry[2] = *(u8*)((u8*)cswp + 0x110);
     entry[3] = 0;
     *(u16*)(entry + 0x18) = 0xFFFF;
     *(u16*)(entry + 0x1A) = 4;
-    *(f32*)(entry + 0x1C) = float_1_8041f9e4;
-    *(f32*)(entry + 0x20) = float_0p2_8041f9ec;
-    *(f32*)(entry + 0x24) = float_0p4_8041f9f0;
+    *(f32*)(entry + 0x1C) = volume0;
+    *(f32*)(entry + 0x20) = volume1;
+    *(f32*)(entry + 0x24) = volume2;
     entry[0x28] = 0xFF;
-    (*(s32*)(work + 0x104))++;
+    *(s32*)((u8*)cswp + 0x104) = *(s32*)((u8*)cswp + 0x104) + 1;
 }
 
 s32 shadowEntryMode(double x, double y, double z, double size, u8 mode) {
@@ -977,27 +956,28 @@ s32 shadowEntryMode(double x, double y, double z, double size, u8 mode) {
     extern f32 float_1_8041f9e4;
     extern f32 float_0p2_8041f9ec;
     extern f32 float_0p4_8041f9f0;
-    u8* work;
     u8* entry;
     s32 index;
     Vec3 pos;
 
-    work = cswp;
-    index = *(s32*)(work + 0x104);
-    entry = *(u8**)(work + 0x108) + index * 0x5C;
+    {
+        u8* work = cswp;
+        index = *(s32*)(work + 0x104);
+        entry = *(u8**)(work + 0x108) + index * 0x5C;
+    }
     *(u16*)entry = 0;
-    if (*(s32*)(work + 0x118) != 0) {
+    if (*(s32*)((u8*)cswp + 0x118) != 0) {
         *(u16*)entry |= 1;
     }
     pos = vec3_802bfd64;
-    pos.x = (f32)x;
-    pos.y = (f32)y;
-    pos.z = (f32)z;
+    pos.x = x;
+    pos.y = y;
+    pos.z = z;
     *(u32*)(entry + 4) = *(u32*)&pos.x;
     *(u32*)(entry + 8) = *(u32*)&pos.y;
     *(u32*)(entry + 0xC) = *(u32*)&pos.z;
-    *(f32*)(entry + 0x10) = (f32)size;
-    *(u32*)(entry + 0x14) = *(u32*)(work + 0x114);
+    *(f32*)(entry + 0x10) = size;
+    *(f32*)(entry + 0x14) = *(f32*)((u8*)cswp + 0x114);
     entry[2] = mode;
     entry[3] = 0;
     *(u16*)(entry + 0x18) = 0xFFFF;
@@ -1006,7 +986,7 @@ s32 shadowEntryMode(double x, double y, double z, double size, u8 mode) {
     *(f32*)(entry + 0x20) = float_0p2_8041f9ec;
     *(f32*)(entry + 0x24) = float_0p4_8041f9f0;
     entry[0x28] = 0xFF;
-    *(s32*)(work + 0x104) = index + 1;
+    *(s32*)((u8*)cswp + 0x104) = *(s32*)((u8*)cswp + 0x104) + 1;
     return index;
 }
 
@@ -1197,6 +1177,7 @@ void projShadowEnd(s32 param_1, u32* param_2) {
     }
 }
 
+#pragma no_register_save_helpers on
 void depthShadowEnd(s32 param_1, u32* param_2) {
     extern void GXSetZMode(u32 enable, u32 func, u32 update_enable);
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
@@ -1211,16 +1192,19 @@ void depthShadowEnd(s32 param_1, u32* param_2) {
     extern f32 float_neg1_8041f9e8;
     extern f32 float_16_8041f9e0;
     extern f32 float_256_8041f9dc;
-    f32 projTexMtx[3][4];
     f32 depthMtx[3][4];
+    f32 projTexMtx[3][4];
     void* cam;
     u8* config;
     u16 width;
     u32 copyFmt;
     u32 texFmt;
     u32 shadowType;
+    u32 isType2;
     f32 nearz;
     f32 farz;
+    f32 range;
+    f32 depthScale;
 
     cam = camGetCurPtr();
     PSMTXCopy(tmp_view, (void*)((s32)cam + 0x11C));
@@ -1238,8 +1222,8 @@ void depthShadowEnd(s32 param_1, u32* param_2) {
             copyFmt = 0x13;
             texFmt = 3;
         }
-        width = ShadowSizeTbl[*(s32*)(config + 0x40)];
         if ((param_2[0] & 2) != 0) {
+            width = ShadowSizeTbl[*(s32*)(config + 0x40)];
             param_2[0x3F] = (u32)smartAlloc(GXGetTexBufferSize(width, width, texFmt, 0, 0), 3);
         }
         GXSetTexCopySrc(0, 0, width, width);
@@ -1250,6 +1234,9 @@ void depthShadowEnd(s32 param_1, u32* param_2) {
         GXInitTexObj((void*)((s32)param_2 + 0xDC), *(void**)param_2[0x3F], width, width, texFmt, 0, 0, 0);
         GXInitTexObjLOD((void*)((s32)param_2 + 0xDC), 0, 0, float_0_8041f9d4, float_0_8041f9d4, float_0_8041f9d4, 0, 0, 0);
 
+        config = shadowConfig + param_2[2] * 0x48;
+        shadowType = *(u32*)(config + 0x3C);
+        isType2 = shadowType == 2;
         if ((void*)((s32)param_2 + 0x7C) != 0) {
             if (*(s32*)(config + 0x38) == 0) {
                 C_MTXLightFrustum(-*(f32*)(config + 0x2C), *(f32*)(config + 0x2C), *(f32*)(config + 0x28), -*(f32*)(config + 0x28), *(f32*)(config + 0x30), float_0p5_8041f9d8, float_0p5_8041f9d8, float_0p5_8041f9d8, projTexMtx, float_0p5_8041f9d8);
@@ -1262,30 +1249,33 @@ void depthShadowEnd(s32 param_1, u32* param_2) {
         if ((void*)((s32)param_2 + 0xAC) != 0) {
             nearz = *(f32*)(config + 0x30);
             farz = *(f32*)(config + 0x34);
+            range = farz - nearz;
             PSMTXScale(depthMtx, float_0_8041f9d4, float_0_8041f9d4, float_0_8041f9d4);
-            depthMtx[1][2] = float_16_8041f9e0;
-            if (shadowType == 2) {
-                depthMtx[1][2] = float_256_8041f9dc;
+            if (isType2) {
+                depthScale = float_256_8041f9dc;
+            } else {
+                depthScale = float_16_8041f9e0;
             }
             if (*(s32*)(config + 0x38) == 0) {
-                depthMtx[0][3] = farz * nearz;
-                depthMtx[2][3] = *(f32*)(config + 0x44);
                 depthMtx[2][2] = float_1_8041f9e4;
-                depthMtx[0][2] = farz;
+                depthMtx[2][3] = *(f32*)(config + 0x44);
+                depthMtx[0][2] = farz / range;
+                depthMtx[0][3] = (farz * nearz) / range;
+                depthMtx[1][2] = depthMtx[0][2] * depthScale;
+                depthMtx[1][3] = depthMtx[0][3] * depthScale;
             } else {
-                depthMtx[0][3] = -nearz;
+                depthMtx[0][2] = float_neg1_8041f9e8 / range;
+                depthMtx[0][3] = -nearz / range;
+                depthMtx[1][2] = depthMtx[0][2] * depthScale;
+                depthMtx[1][3] = depthMtx[0][3] * depthScale;
                 depthMtx[2][3] = float_1_8041f9e4 + *(f32*)(config + 0x44);
-                depthMtx[0][2] = float_neg1_8041f9e8;
             }
-            depthMtx[0][3] = depthMtx[0][3] / (farz - nearz);
-            depthMtx[0][2] = depthMtx[0][2] / (farz - nearz);
-            depthMtx[1][3] = depthMtx[0][3] * depthMtx[1][2];
-            depthMtx[1][2] = depthMtx[0][2] * depthMtx[1][2];
             PSMTXConcat(depthMtx, (void*)((s32)param_2 + 0xC), (void*)((s32)param_2 + 0xAC));
         }
         param_2[0] |= 1;
     }
 }
+#pragma no_register_save_helpers off
 
 const f32 vec3_802bfd10[3] = { 0.0f, -1.0f, 0.0f };
 const f32 vec3_802bfd1c[3] = { 0.0f, 1000.0f, 0.0f };

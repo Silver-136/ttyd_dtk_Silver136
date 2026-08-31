@@ -285,6 +285,31 @@ void fadeEntry(s32 type, s32 time, void* data) {
     s32 slot;
     s32 pose;
     void* image;
+#define RESET_SELECTED_ENTRY() do { \
+    pose = *(s32*)(reset + 0x6C); \
+    if (pose >= 0) { \
+        animPoseRelease(pose); \
+    } \
+    pose = *(s32*)(reset + 0x70); \
+    if (pose >= 0) { \
+        animPaperPoseRelease(pose); \
+    } \
+    image = *(void**)(reset + 0x8C); \
+    if (image != 0) { \
+        imgRelease((s32)image, (void*)*(s32*)(reset + 0x68)); \
+    } \
+    memset((void*)reset, 0, 0xA8); \
+    *(s32*)(reset + 0x6C) = -1; \
+    *(s32*)(reset + 0x70) = -1; \
+    *(f32*)(reset + 0x1C) = float_0_8041f7a8; \
+    *(f32*)(reset + 0x20) = float_0_8041f7a8; \
+    *(f32*)(reset + 0x78) = float_0_8041f7a8; \
+    *(f32*)(reset + 0x7C) = float_0_8041f7a8; \
+    *(f32*)(reset + 0x90) = float_1_8041f7ac; \
+    if ((slot == 0) && (type <= 14) && (time != 0)) { \
+        *(s32*)(work + 0xAC) = 2; \
+    } \
+} while (0)
 
     if (type == 0) {
         return;
@@ -328,53 +353,61 @@ void fadeEntry(s32 type, s32 time, void* data) {
 
     work = (s32)wp;
     reset = 0;
-    if (type < 0x16) {
+    if (type < 0x29) {
+        if (type < 9) {
+            if ((type > 6) || (type < 1)) {
+                return;
+            }
+        } else {
+            if (type > 0x15) {
+                slot = 1;
+                entry = work + 0xB0;
+                goto entry_selected;
+            }
+            if (type > 0xF) {
+                return;
+            }
+        }
         slot = 0;
         reset = work + 0x158;
-    } else if ((type < 0x29) || (type == 0x33)) {
-        slot = 1;
-    } else if (type < 0x31) {
-        slot = 2;
-        reset = work + 8;
-    } else if (type < 0x3F) {
-        slot = 3;
+        entry = work + 8;
+        RESET_SELECTED_ENTRY();
+    } else {
+        if (type == 0x33) {
+            slot = 1;
+            entry = work + 0xB0;
+            goto entry_selected;
+        }
+        if (type < 0x33) {
+            if (type < 0x31) {
+                slot = 2;
+                reset = work + 8;
+                entry = work + 0x158;
+                RESET_SELECTED_ENTRY();
+            } else {
+                slot = 3;
+                entry = work + 0x200;
+            }
+        } else {
+            if (type >= 0x41) {
+                return;
+            }
+            if (type >= 0x3F) {
+                slot = 4;
+                entry = work + 0x2A8;
+                goto entry_selected;
+            }
+            slot = 3;
+            entry = work + 0x200;
+        }
         if ((type == 0x32) || (type == 0x35) || (type == 0x36) ||
             (type == 0x38) || (type == 0x3A)) {
             reset = work + 8;
-        }
-    } else if (type < 0x41) {
-        slot = 4;
-    } else {
-        return;
-    }
-
-    entry = work + 8 + slot * 0xA8;
-    if (reset != 0) {
-        pose = *(s32*)(reset + 0x6C);
-        if (pose >= 0) {
-            animPoseRelease(pose);
-        }
-        pose = *(s32*)(reset + 0x70);
-        if (pose >= 0) {
-            animPaperPoseRelease(pose);
-        }
-        image = *(void**)(reset + 0x8C);
-        if (image != 0) {
-            imgRelease((s32)image, (void*)(reset + 0x68));
-        }
-        memset((void*)reset, 0, 0xA8);
-        *(s32*)(reset + 0x6C) = -1;
-        *(s32*)(reset + 0x70) = -1;
-        *(f32*)(reset + 0x1C) = float_0_8041f7a8;
-        *(f32*)(reset + 0x20) = float_0_8041f7a8;
-        *(f32*)(reset + 0x78) = float_0_8041f7a8;
-        *(f32*)(reset + 0x7C) = float_0_8041f7a8;
-        *(f32*)(reset + 0x90) = float_1_8041f7ac;
-        if ((slot == 0) && (type <= 14) && (time != 0)) {
-            *(s32*)(work + 0xAC) = 2;
+            RESET_SELECTED_ENTRY();
         }
     }
 
+entry_selected:
     *(u16*)entry = 0;
     *(u16*)entry |= 1;
     *(s32*)(entry + 4) = type;
@@ -569,6 +602,7 @@ void fadeEntry(s32 type, s32 time, void* data) {
 #undef str_OFF_f_in_out_mario_802bf760
 #undef str_OFF_f_in_out_peach_802bf774
 #undef str_OFF_f_in_out_kuppa_802bf788
+#undef RESET_SELECTED_ENTRY
 }
 
 void fadeTecOn(void) {

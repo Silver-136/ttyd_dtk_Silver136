@@ -52,118 +52,531 @@ struct MonosiriWork {
     void* buffer;
     s32 flags;
 };
+extern const char str_msg_menu_kiroku_ston_802f671c[];
+extern const char str_msg_menu_kiroku_badg_802f6734[];
+extern const char str_msg_menu_kiroku_ryor_802f674c[];
+extern const char str_msg_menu_kiroku_mono_802f6764[];
+
+const char* msg_help[] = {
+    str_msg_menu_kiroku_map_802f6708,
+    str_msg_menu_kiroku_ston_802f671c,
+    str_msg_menu_kiroku_badg_802f6734,
+    str_msg_menu_kiroku_ryor_802f674c,
+    str_msg_menu_kiroku_mono_802f6764,
+};
+
 void winLogInit(void* pWin) {
     extern s32 pouchCheckItem(s32 item);
     extern void qqsort(void* base, s32 count, s32 size, void* compare);
     extern s32 compare_func5_2(void* a, void* b);
     extern s32 compare_func6_2(void* a, void* b);
-    s32 i;
-    s32 badgeCount = 0;
-    s32 recipeCount = 0;
-    s32 tattleCount = 0;
-    s32 submenuCount = 0;
-    u8* submenu;
-    u16* badgeIds = (u16*)((s32)pWin + 0xEBC);
-    u16* recipeIds = (u16*)((s32)pWin + 0xFBC);
-    u16* tattleIds = (u16*)((s32)pWin + 0x1058);
+    extern void* effStarStoneEntry(f32 x, f32 y, f32 z, f32 scale, s32 type);
+    extern s32 strcmp(const char* a, const char* b);
+    extern s32 strncmp(const char* a, const char* b, u32 n);
+    extern s32 evtGetValue(void* evt, s32 value);
+    extern s32 stone_tbl[7];
+    extern u8 itemDataTable[];
+    extern u8 enemy_monoshiri_sort_table[];
 
-    *(s32*)((s32)pWin + 0xD74) = 0;
-    *(s32*)((s32)pWin + 0xD70) = 0;
-    *(s32*)((s32)pWin + 0xD6C) = 0;
-    submenu = (u8*)pWin + 0xD7C;
-    *(s32*)(submenu + submenuCount * 0x1C) = 0;
-    submenuCount++;
-    for (i = 0; i < submenuCount; i++) {
-        u8* item = submenu + i * 0x1C;
-        *(f32*)(item + 4) = 0.0f;
-        *(f32*)(item + 0xC) = 0.0f;
-        *(f32*)(item + 8) = 45.0f * (f32)submenuCount * 0.5f - 45.0f * (f32)i;
-        *(f32*)(item + 0x10) = *(f32*)(item + 8);
+    extern f32 float_0_80423aec;
+    extern f32 float_neg1000_80423c9c;
+    extern f32 float_2_80423bd8;
+    extern f32 float_neg480_80423bf8;
+    extern f32 float_304_80423bd0;
+    extern f32 float_240_80423bb4;
+    extern f32 float_230_80423bd4;
+    extern f32 float_120_80423bcc;
+    extern f32 float_neg148_80423bf4;
+    extern f32 float_51p429_80423c04;
+
+    extern char str_sin_80423a90[4];
+    extern char str_hou_80423a6c[4];
+    extern char str_gor_80423a50[4];
+    extern char str_eki_80423a88[4];
+    extern char str_pik_80423a8c[4];
+    extern char str_tik_80423a54[4];
+    extern char str_jin_80423a7c[4];
+    extern char str_dou_80423a84[4];
+    extern char str_rsh_80423ca0[4];
+    extern char str_hom_80423ca4[4];
+    extern char str_jon_80423ca8[4];
+
+    u8* entry;
+    u8* eff;
+    u8* effWork;
+    u8* item;
+    u8* tattle;
+    s16* area;
+    s32* stone;
+    u8* starSlot;
+    u8* sortPtr;
+    u8* sortOuter;
+    u8* sortInner;
+    char* areaName;
+
+    const char* catalog = str_msg_menu_kiroku_map_802f6708;
+    s32 i;
+    s32 j;
+    s32 count;
+    s32 unit;
+    s32 chapter;
+    s32 itemId;
+    s32 tmpi;
+    s16 sx;
+    s16 sy;
+    u16 tmp16;
+    f32 pos;
+    f32 fZero;
+    f32 fStep;
+    f32 fHalf;
+    f64 dMagic;
+    union {
+        f64 d;
+        struct {
+            u32 hi;
+            u32 lo;
+        } w;
+    } cvtX, cvtY;
+
+    /* Log submenu state and the always-present map entry. */
+    fStep = float_45_80423bdc;
+    fHalf = float_0p5_80423af8;
+    fZero = float_0_80423aec;
+    dMagic = *(const f64*)(catalog + 0x468);
+
+    *(s32*)((u8*)pWin + 0xD68) = 0;
+    *(s32*)((u8*)pWin + 0xD6C) = 0;
+    *(s32*)((u8*)pWin + 0xD70) = 0;
+
+    entry = (u8*)pWin +
+            *(s32*)((u8*)pWin + 0xD70) * 0x20 + 0xD74;
+    *(s32*)(entry + 0x00) = 0;
+    *(s32*)(entry + 0x18) = 0;
+    *(s32*)(entry + 0x14) = 0;
+    *(const char**)(entry + 0x1C) = msg_help[0];
+    *(s32*)((u8*)pWin + 0xD70) =
+        *(s32*)((u8*)pWin + 0xD70) + 1;
+
+    entry = (u8*)pWin;
+    for (i = 0; i < *(s32*)((u8*)pWin + 0xD70);
+         i++, entry += 0x20) {
+        *(f32*)(entry + 0xD78) = fZero;
+        *(f32*)(entry + 0xD80) = fZero;
+        cvtX.w.hi = 0x43300000;
+        cvtX.w.lo =
+            ((u32)*(s32*)((u8*)pWin + 0xD70)) ^ 0x80000000U;
+        cvtY.w.hi = 0x43300000;
+        cvtY.w.lo = ((u32)i) ^ 0x80000000U;
+        pos = fStep * (f32)(cvtX.d - dMagic) * fHalf -
+              fStep * (f32)(cvtY.d - dMagic);
+        *(f32*)(entry + 0xD7C) = pos;
+        *(f32*)(entry + 0xD84) = pos;
     }
-    if (swByteGet(0) > 0x12) {
-        *(s32*)(submenu + submenuCount * 0x1C) = 1;
-        submenuCount++;
-        for (i = 0; i < submenuCount; i++) {
-            u8* item = submenu + i * 0x1C;
-            *(f32*)(item + 4) = 0.0f;
-            *(f32*)(item + 0xC) = 0.0f;
-            *(f32*)(item + 8) = 45.0f * (f32)submenuCount * 0.5f - 45.0f * (f32)i;
-            *(f32*)(item + 0x10) = *(f32*)(item + 8);
+
+    tmpi = swByteGet(0);
+    fStep = float_45_80423bdc;
+    fZero = float_0_80423aec;
+    dMagic = *(const f64*)(catalog + 0x468);
+    if (tmpi >= 0x13) {
+        fHalf = float_0p5_80423af8;
+        entry = (u8*)pWin +
+                *(s32*)((u8*)pWin + 0xD70) * 0x20 + 0xD74;
+        *(s32*)(entry + 0x00) = 1;
+        *(s32*)(entry + 0x18) = 0;
+        *(s32*)(entry + 0x14) = 0;
+        *(const char**)(entry + 0x1C) = msg_help[1];
+        *(s32*)((u8*)pWin + 0xD70) =
+            *(s32*)((u8*)pWin + 0xD70) + 1;
+
+        entry = (u8*)pWin;
+        for (i = 0; i < *(s32*)((u8*)pWin + 0xD70);
+             i++, entry += 0x20) {
+            *(f32*)(entry + 0xD78) = fZero;
+            *(f32*)(entry + 0xD80) = fZero;
+            cvtX.w.hi = 0x43300000;
+            cvtX.w.lo =
+                ((u32)*(s32*)((u8*)pWin + 0xD70)) ^ 0x80000000U;
+            cvtY.w.hi = 0x43300000;
+            cvtY.w.lo = ((u32)i) ^ 0x80000000U;
+            pos = fStep * (f32)(cvtX.d - dMagic) * fHalf -
+                  fStep * (f32)(cvtY.d - dMagic);
+            *(f32*)(entry + 0xD7C) = pos;
+            *(f32*)(entry + 0xD84) = pos;
         }
     }
-    if (swByteGet(0) > 6) {
-        *(s32*)(submenu + submenuCount * 0x1C) = 4;
-        submenuCount++;
-        for (i = 0; i < submenuCount; i++) {
-            u8* item = submenu + i * 0x1C;
-            *(f32*)(item + 4) = 0.0f;
-            *(f32*)(item + 0xC) = 0.0f;
-            *(f32*)(item + 8) = 45.0f * (f32)submenuCount * 0.5f - 45.0f * (f32)i;
-            *(f32*)(item + 0x10) = *(f32*)(item + 8);
+
+    tmpi = swByteGet(0);
+    fStep = float_45_80423bdc;
+    fZero = float_0_80423aec;
+    dMagic = *(const f64*)(catalog + 0x468);
+    if (tmpi >= 7) {
+        fHalf = float_0p5_80423af8;
+        entry = (u8*)pWin +
+                *(s32*)((u8*)pWin + 0xD70) * 0x20 + 0xD74;
+        *(s32*)(entry + 0x00) = 4;
+        *(s32*)(entry + 0x18) = 0;
+        *(s32*)(entry + 0x14) = 0;
+        *(const char**)(entry + 0x1C) = msg_help[4];
+        *(s32*)((u8*)pWin + 0xD70) =
+            *(s32*)((u8*)pWin + 0xD70) + 1;
+
+        entry = (u8*)pWin;
+        for (i = 0; i < *(s32*)((u8*)pWin + 0xD70);
+             i++, entry += 0x20) {
+            *(f32*)(entry + 0xD78) = fZero;
+            *(f32*)(entry + 0xD80) = fZero;
+            cvtX.w.hi = 0x43300000;
+            cvtX.w.lo =
+                ((u32)*(s32*)((u8*)pWin + 0xD70)) ^ 0x80000000U;
+            cvtY.w.hi = 0x43300000;
+            cvtY.w.lo = ((u32)i) ^ 0x80000000U;
+            pos = fStep * (f32)(cvtX.d - dMagic) * fHalf -
+                  fStep * (f32)(cvtY.d - dMagic);
+            *(f32*)(entry + 0xD7C) = pos;
+            *(f32*)(entry + 0xD84) = pos;
         }
     }
-    if (swByteGet(0) > 0x13) {
-        *(s32*)(submenu + submenuCount * 0x1C) = 2;
-        submenuCount++;
-        for (i = 0; i < submenuCount; i++) {
-            u8* item = submenu + i * 0x1C;
-            *(f32*)(item + 4) = 0.0f;
-            *(f32*)(item + 0xC) = 0.0f;
-            *(f32*)(item + 8) = 45.0f * (f32)submenuCount * 0.5f - 45.0f * (f32)i;
-            *(f32*)(item + 0x10) = *(f32*)(item + 8);
+
+    tmpi = swByteGet(0);
+    fStep = float_45_80423bdc;
+    fZero = float_0_80423aec;
+    dMagic = *(const f64*)(catalog + 0x468);
+    if (tmpi >= 0x14) {
+        fHalf = float_0p5_80423af8;
+        entry = (u8*)pWin +
+                *(s32*)((u8*)pWin + 0xD70) * 0x20 + 0xD74;
+        *(s32*)(entry + 0x00) = 2;
+        *(s32*)(entry + 0x18) = 0;
+        *(s32*)(entry + 0x14) = 0;
+        *(const char**)(entry + 0x1C) = msg_help[2];
+        *(s32*)((u8*)pWin + 0xD70) =
+            *(s32*)((u8*)pWin + 0xD70) + 1;
+
+        entry = (u8*)pWin;
+        for (i = 0; i < *(s32*)((u8*)pWin + 0xD70);
+             i++, entry += 0x20) {
+            *(f32*)(entry + 0xD78) = fZero;
+            *(f32*)(entry + 0xD80) = fZero;
+            cvtX.w.hi = 0x43300000;
+            cvtX.w.lo =
+                ((u32)*(s32*)((u8*)pWin + 0xD70)) ^ 0x80000000U;
+            cvtY.w.hi = 0x43300000;
+            cvtY.w.lo = ((u32)i) ^ 0x80000000U;
+            pos = fStep * (f32)(cvtX.d - dMagic) * fHalf -
+                  fStep * (f32)(cvtY.d - dMagic);
+            *(f32*)(entry + 0xD7C) = pos;
+            *(f32*)(entry + 0xD84) = pos;
         }
     }
-    if (swGet(0x40) != 0) {
-        *(s32*)(submenu + submenuCount * 0x1C) = 3;
-        submenuCount++;
-        for (i = 0; i < submenuCount; i++) {
-            u8* item = submenu + i * 0x1C;
-            *(f32*)(item + 4) = 0.0f;
-            *(f32*)(item + 0xC) = 0.0f;
-            *(f32*)(item + 8) = 45.0f * (f32)submenuCount * 0.5f - 45.0f * (f32)i;
-            *(f32*)(item + 0x10) = *(f32*)(item + 8);
+
+    tmpi = swGet(0x40);
+    fStep = float_45_80423bdc;
+    fZero = float_0_80423aec;
+    dMagic = *(const f64*)(catalog + 0x468);
+    if (tmpi != 0) {
+        fHalf = float_0p5_80423af8;
+        entry = (u8*)pWin +
+                *(s32*)((u8*)pWin + 0xD70) * 0x20 + 0xD74;
+        *(s32*)(entry + 0x00) = 3;
+        *(s32*)(entry + 0x18) = 0;
+        *(s32*)(entry + 0x14) = 0;
+        *(const char**)(entry + 0x1C) = msg_help[3];
+        *(s32*)((u8*)pWin + 0xD70) =
+            *(s32*)((u8*)pWin + 0xD70) + 1;
+
+        entry = (u8*)pWin;
+        for (i = 0; i < *(s32*)((u8*)pWin + 0xD70);
+             i++, entry += 0x20) {
+            *(f32*)(entry + 0xD78) = fZero;
+            *(f32*)(entry + 0xD80) = fZero;
+            cvtX.w.hi = 0x43300000;
+            cvtX.w.lo =
+                ((u32)*(s32*)((u8*)pWin + 0xD70)) ^ 0x80000000U;
+            cvtY.w.hi = 0x43300000;
+            cvtY.w.lo = ((u32)i) ^ 0x80000000U;
+            pos = fStep * (f32)(cvtX.d - dMagic) * fHalf -
+                  45.0f * (f32)(cvtY.d - dMagic);
+            *(f32*)(entry + 0xD7C) = pos;
+            *(f32*)(entry + 0xD84) = pos;
         }
     }
-    *(s32*)((s32)pWin + 0xD78) = submenuCount;
-    for (i = 0; i < submenuCount; i++) {
-        u8* item = submenu + i * 0x1C;
-        *(f32*)(item + 4) = 0.0f;
-        *(f32*)(item + 0xC) = 0.0f;
-        *(f32*)(item + 8) = 45.0f * (f32)submenuCount * 0.5f - 45.0f * (f32)i;
-        *(f32*)(item + 0x10) = *(f32*)(item + 8);
-        *(s32*)(item + 0x14) = 0;
-        *(s32*)(item + 0x18) = 0;
-    }
-    for (i = 0; i < 0x153; i++) {
-        if (swGet(i + 0x80) != 0) badgeIds[badgeCount++] = (u16)i;
-    }
-    for (i = 0; i < 0xEC; i++) {
-        if (swGet(i + 0x41) != 0) recipeIds[recipeCount++] = (u16)i;
-    }
-    for (i = 0; i < 0xD8; i++) {
-        void* data = battleGetUnitMonosiriPtr(i);
-        if (*(void**)((s32)data + 8) != 0) {
-            tattleIds[tattleCount] = (u16)i;
-            tattleCount++;
+
+    /* Crystal-star count and seven persistent star-stone effects. */
+    *(s32*)((u8*)pWin + 0xE40) = 0;
+    stone = stone_tbl;
+    for (i = 0; i < 7; i++, stone++) {
+        if (pouchCheckItem(*stone) != 0) {
+            *(s32*)((u8*)pWin + 0xE40) += 1;
         }
     }
-    for (i = 0; i < 7; i++) if (pouchCheckItem(0x70 + i) != 0) (*(s32*)((s32)pWin + 0xDA0))++;
-    *(s32*)((s32)pWin + 0xE94) = badgeCount;
-    *(s32*)((s32)pWin + 0xF94) = recipeCount;
-    *(s32*)((s32)pWin + 0x1040) = tattleCount;
-    *(s32*)((s32)pWin + 0x1044) = 0;
-    for (i = 0; i < tattleCount; i++) {
-        if (swGet((tattleIds[i] & 0xFF) + 0x117A) != 0) {
-            *(s32*)((s32)pWin + 0x1044) += 1;
+
+    starSlot = (u8*)pWin;
+    for (i = 0; i < 7; i++, starSlot += 4) {
+        if (i < *(s32*)((u8*)pWin + 0xE40)) {
+            eff = (u8*)effStarStoneEntry(float_0_80423aec, float_neg1000_80423c9c,
+                                         float_0_80423aec, float_2_80423bd8, i);
+        } else {
+            eff = (u8*)effStarStoneEntry(float_0_80423aec, float_neg1000_80423c9c,
+                                         float_0_80423aec, float_2_80423bd8, i + 7);
+            effWork = *(u8**)(eff + 0x0C);
+            effWork[0x5C] = 0x20;
+            effWork = *(u8**)(eff + 0x0C);
+            effWork[0x5D] = 0x20;
+            effWork = *(u8**)(eff + 0x0C);
+            effWork[0x5E] = 0x20;
+        }
+        *(u8**)(starSlot + 0xE44) = eff;
+        effWork = *(u8**)(eff + 0x0C);
+        *(s32*)(effWork + 0x38) = 8;
+        effWork = *(u8**)(eff + 0x0C);
+        *(u16*)(effWork + 0x04) &= (u16)~4;
+        effWork = *(u8**)(eff + 0x0C);
+        *(u16*)(effWork + 0x04) |= 0x20;
+    }
+
+    /* Map-log initial state and the area corresponding to the current map. */
+    *(void**)((u8*)pWin + 0x30) = 0;
+    *(s32*)((u8*)pWin + 0xE1C) = -1;
+    *(s32*)((u8*)pWin + 0xE14) = -1;
+    *(s32*)((u8*)pWin + 0xE18) = 0;
+    *(f32*)((u8*)pWin + 0xE24) = float_0_80423aec;
+    *(f32*)((u8*)pWin + 0xE20) = float_0_80423aec;
+    *(f32*)((u8*)pWin + 0xE2C) = float_0_80423aec;
+    *(f32*)((u8*)pWin + 0xE28) = float_0_80423aec;
+    *(f32*)((u8*)pWin + 0xE34) = float_neg480_80423bf8;
+    *(f32*)((u8*)pWin + 0xE30) = float_neg480_80423bf8;
+    *(f32*)((u8*)pWin + 0xE3C) = float_0_80423aec;
+    *(f32*)((u8*)pWin + 0xE38) = float_0_80423aec;
+
+    areaName = (char*)gp + 0x13C;
+    if (strcmp((char*)gp + 0x12C, catalog + 0x600) == 0 ||
+        strcmp((char*)gp + 0x12C, catalog + 0x608) == 0) {
+        areaName = str_sin_80423a90;
+    }
+    if (strcmp((char*)gp + 0x12C, catalog + 0x610) == 0 ||
+        strcmp((char*)gp + 0x12C, catalog + 0x618) == 0) {
+        areaName = str_hou_80423a6c;
+    }
+    if (strncmp((char*)gp + 0x12C, str_rsh_80423ca0, 3) == 0) {
+        if (swByteGet(0) < 0x136) {
+            areaName = str_gor_80423a50;
+        } else if (swByteGet(0) < 0x14E || swGet(0xDFB) != 0) {
+            areaName = str_eki_80423a88;
+        } else if (swGet(0xDFC) != 0) {
+            areaName = str_pik_80423a8c;
+        } else {
+            tmpi = swByteGet(0x366);
+            if (tmpi == 2) {
+                areaName = str_pik_80423a8c;
+            } else if (tmpi < 2) {
+                if (tmpi == 0) {
+                    areaName = str_gor_80423a50;
+                } else if (tmpi > -1) {
+                    areaName = str_eki_80423a88;
+                }
+            } else if (tmpi < 4) {
+                areaName = str_gor_80423a50;
+            }
         }
     }
-    *(void**)((s32)pWin + 0x30) = 0;
-    *(s32*)((s32)pWin + 0xE1C) = -1;
-    *(s32*)((s32)pWin + 0xE14) = -1;
-    *(f32*)((s32)pWin + 0xE38) = 0.0f;
-    *(f32*)((s32)pWin + 0xE3C) = 0.0f;
-    qqsort(badgeIds, badgeCount, 2, compare_func5_2);
-    qqsort(recipeIds, recipeCount, 2, compare_func6_2);
+    if (strncmp((char*)gp + 0x12C, str_hom_80423ca4, 3) == 0) {
+        areaName = str_eki_80423a88;
+    }
+    if (strncmp((char*)gp + 0x12C, str_jon_80423ca8, 3) == 0) {
+        areaName = str_tik_80423a54;
+    }
+    if (strcmp((char*)gp + 0x12C, catalog + 0x620) == 0) {
+        areaName = str_jin_80423a7c;
+    }
+    if (strcmp((char*)gp + 0x12C, catalog + 0x628) == 0 ||
+        strcmp((char*)gp + 0x12C, catalog + 0x630) == 0 ||
+        strcmp((char*)gp + 0x12C, catalog + 0x638) == 0) {
+        areaName = str_dou_80423a84;
+    }
+
+    area = (s16*)tubuDt;
+    for (i = 0; i < 0x5D; i++, area += 6) {
+        if (areaName == 0 || strcmp(areaName, *(char**)((u8*)area + 0x08)) == 0) {
+            break;
+        }
+    }
+    if (i < 0x5D) {
+        *(s32*)((u8*)pWin + 0xE18) = i;
+    }
+
+    area = (s16*)tubuDt + *(s32*)((u8*)pWin + 0xE18) * 6;
+    sx = area[0];
+    sy = area[1];
+    cvtX.w.hi = 0x43300000;
+    cvtX.w.lo = ((u32)(s32)sx) ^ 0x80000000U;
+    cvtY.w.hi = 0x43300000;
+    cvtY.w.lo = ((u32)(s32)sy) ^ 0x80000000U;
+    *(f32*)((u8*)pWin + 0xE20) =
+        float_304_80423bd0 +
+        (f32)(cvtX.d - *(const f64*)(catalog + 0x468));
+    *(f32*)((u8*)pWin + 0xE24) =
+        float_240_80423bb4 +
+        (f32)(cvtY.d - *(const f64*)(catalog + 0x468));
+    *(f32*)((u8*)pWin + 0xE38) -= (f32)(s32)((*(f32*)((u8*)pWin + 0xE20) + *(f32*)((u8*)pWin + 0xE38)) - float_230_80423bd4);
+    *(f32*)((u8*)pWin + 0xE3C) -= (f32)(s32)((*(f32*)((u8*)pWin + 0xE24) + *(f32*)((u8*)pWin + 0xE3C)) - float_120_80423bcc);
+    if (*(f32*)((u8*)pWin + 0xE38) > float_0_80423aec) {
+        *(f32*)((u8*)pWin + 0xE38) = float_0_80423aec;
+    }
+    if (*(f32*)((u8*)pWin + 0xE3C) > float_0_80423aec) {
+        *(f32*)((u8*)pWin + 0xE3C) = float_0_80423aec;
+    }
+    if (*(f32*)((u8*)pWin + 0xE38) < float_neg148_80423bf4) {
+        *(f32*)((u8*)pWin + 0xE38) = float_neg148_80423bf4;
+    }
+    if (*(f32*)((u8*)pWin + 0xE3C) < float_neg240_80423bf0) {
+        *(f32*)((u8*)pWin + 0xE3C) = float_neg240_80423bf0;
+    }
+
+    /* Crystal-star selector/window animation state. */
+    *(s32*)((u8*)pWin + 0xE60) = 0;
+    pos = float_51p429_80423c04 * (f32)*(s32*)((u8*)pWin + 0xE60);
+    *(f32*)((u8*)pWin + 0xE7C) = pos;
+    *(f32*)((u8*)pWin + 0xE80) = pos;
+    *(f32*)((u8*)pWin + 0xE68) = float_0_80423aec;
+    *(f32*)((u8*)pWin + 0xE64) = float_0_80423aec;
+    *(f32*)((u8*)pWin + 0xE70) = float_neg480_80423bf8;
+    *(f32*)((u8*)pWin + 0xE6C) = float_neg480_80423bf8;
+    *(f32*)((u8*)pWin + 0xE78) = float_0_80423aec;
+    *(f32*)((u8*)pWin + 0xE74) = float_0_80423aec;
+
+    /* Badge log: include only real item-table rows and count obtained badges separately. */
+    *(s32*)((u8*)pWin + 0xE94) = 0;
+    *(s32*)((u8*)pWin + 0xE98) = 0;
+    item = itemDataTable + 0xF0 * 0x28;
+    for (itemId = 0xF0; itemId < 0x153; itemId++, item += 0x28) {
+        if (*(s16*)(item + 0x12) != -1) {
+            count = *(s32*)((u8*)pWin + 0xE94);
+            *(u16*)((u8*)pWin + 0xEBC + count * 2) = (u16)(itemId - 0xF0);
+            *(s32*)((u8*)pWin + 0xE94) = count + 1;
+            if (swGet(itemId - 0x70) != 0) {
+                *(s32*)((u8*)pWin + 0xE98) += 1;
+            }
+        }
+    }
+    qqsort((u8*)pWin + 0xEBC, *(s32*)((u8*)pWin + 0xE94), 2, compare_func5_2);
+    *(s32*)((u8*)pWin + 0xE9C) = 0;
+    fStep = float_320_80423c0c;
+    fHalf = float_neg240_80423bf0;
+    fZero = float_0_80423aec;
+    pos = float_neg200_80423c30;
+    *(f32*)((u8*)pWin + 0xE88) = fStep;
+    *(f32*)((u8*)pWin + 0xE84) = fStep;
+    *(f32*)((u8*)pWin + 0xE90) = fHalf;
+    *(f32*)((u8*)pWin + 0xE8C) = fHalf;
+    *(s32*)((u8*)pWin + 0xEA0) = 0;
+    *(f32*)((u8*)pWin + 0xEA8) = fZero;
+    *(f32*)((u8*)pWin + 0xEA4) = fZero;
+    *(f32*)((u8*)pWin + 0xEB0) = pos;
+    *(f32*)((u8*)pWin + 0xEAC) = pos;
+    fStep = float_neg300_80423b44;
+    *(f32*)((u8*)pWin + 0xEB8) = fStep;
+    *(f32*)((u8*)pWin + 0xEB4) = fStep;
+
+    /* Recipe log. */
+    *(s32*)((u8*)pWin + 0xF94) = 0;
+    *(s32*)((u8*)pWin + 0xF98) = 0;
+    item = itemDataTable + 0xB3 * 0x28;
+    for (itemId = 0xB3; itemId < 0xEC; itemId++, item += 0x28) {
+        if (*(s16*)(item + 0x12) != -1) {
+            count = *(s32*)((u8*)pWin + 0xF94);
+            *(u16*)((u8*)pWin + 0xFBC + count * 2) = (u16)(itemId - 0xB3);
+            *(s32*)((u8*)pWin + 0xF94) = count + 1;
+            if (swGet(itemId - 0x72) != 0) {
+                *(s32*)((u8*)pWin + 0xF98) += 1;
+            }
+        }
+    }
+    qqsort((u8*)pWin + 0xFBC, *(s32*)((u8*)pWin + 0xF94), 2, compare_func6_2);
+    *(s32*)((u8*)pWin + 0xF9C) = 0;
+    fStep = float_320_80423c0c;
+    fHalf = float_neg240_80423bf0;
+    fZero = float_0_80423aec;
+    pos = float_neg200_80423c30;
+    *(f32*)((u8*)pWin + 0xF88) = fStep;
+    *(f32*)((u8*)pWin + 0xF84) = fStep;
+    *(f32*)((u8*)pWin + 0xF90) = fHalf;
+    *(f32*)((u8*)pWin + 0xF8C) = fHalf;
+    *(s32*)((u8*)pWin + 0xFA0) = 0;
+    *(f32*)((u8*)pWin + 0xFA8) = fZero;
+    *(f32*)((u8*)pWin + 0xFA4) = fZero;
+    *(f32*)((u8*)pWin + 0xFB0) = pos;
+    *(f32*)((u8*)pWin + 0xFAC) = pos;
+    fStep = float_neg300_80423b44;
+    *(f32*)((u8*)pWin + 0xFB8) = fStep;
+    *(f32*)((u8*)pWin + 0xFB4) = fStep;
+
+    /* Tattle log list.  The first byte is target sort order, the second is unit id. */
+    *(s32*)((u8*)pWin + 0x1040) = 0;
+    sortPtr = enemy_monoshiri_sort_table + 1;
+    for (unit = 1; unit < 0xD8; unit++, sortPtr++) {
+        if (*(void**)((u8*)battleGetUnitMonosiriPtr(unit) + 0x08) == 0) {
+            continue;
+        }
+
+        chapter = evtGetValue(0, -170000000);
+        if (chapter < 0x187) {
+            if ((u32)(unit - 0x85) <= 1 || unit == 0x87) {
+                continue;
+            }
+        } else {
+            if ((u32)(unit - 0x1F) <= 1 || unit == 0x4D) {
+                continue;
+            }
+        }
+
+        chapter = evtGetValue(0, -170000000);
+        if (chapter < 0x190) {
+            if (unit == 0x90) {
+                continue;
+            }
+        } else if (unit == 0x3F) {
+            continue;
+        }
+
+        *(u8*)((u8*)pWin + 0x1058 +
+               *(s32*)((u8*)pWin + 0x1040) * 2) = *sortPtr;
+        count = *(s32*)((u8*)pWin + 0x1040);
+        *(s32*)((u8*)pWin + 0x1040) = count + 1;
+        *(u8*)((u8*)pWin + 0x1059 + count * 2) = (u8)unit;
+    }
+
+    sortOuter = (u8*)pWin + 0x1058;
+    for (i = 0; i < *(s32*)((u8*)pWin + 0x1040) - 1;
+         i++, sortOuter += 2) {
+        sortInner = sortOuter + 2;
+        for (j = i + 1; j < *(s32*)((u8*)pWin + 0x1040);
+             j++, sortInner += 2) {
+            if (sortOuter[0] > sortInner[0]) {
+                tmp16 = *(u16*)sortOuter;
+                *(u16*)sortOuter = *(u16*)sortInner;
+                *(u16*)sortInner = tmp16;
+            }
+        }
+    }
+
+    *(s32*)((u8*)pWin + 0x1048) = 0;
+    fZero = float_0_80423aec;
+    *(f32*)((u8*)pWin + 0x1034) = fZero;
+    *(f32*)((u8*)pWin + 0x1030) = fZero;
+    *(f32*)((u8*)pWin + 0x103C) = fZero;
+    *(f32*)((u8*)pWin + 0x1038) = fZero;
+    *(s32*)((u8*)pWin + 0x104C) = 0;
+    *(f32*)((u8*)pWin + 0x1054) = fZero;
+    *(f32*)((u8*)pWin + 0x1050) = fZero;
+    *(s32*)((u8*)pWin + 0x1044) = 0;
+
+    for (unit = 1; unit < 0xD8; unit++) {
+        if (*(void**)((u8*)battleGetUnitMonosiriPtr(unit) + 0x08) != 0 &&
+            (u32)(unit - 0x1F) > 1 && unit != 0x4D && unit != 0x3F &&
+            swGet(unit + 0x117A) != 0) {
+            *(s32*)((u8*)pWin + 0x1044) += 1;
+        }
+    }
 }
 
 void winLogInit2(void* pWin) {
@@ -237,190 +650,1048 @@ u8 winLogExit(void* pWin) {
         pWin = (void*)((s32)pWin + 4);
     }
 }
+
+char name[64];
+char help[64];
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
 
 
 s32 winLogMain(void* pWin) {
+    typedef union WinLogI2D {
+        f64 value;
+        struct {
+            u32 hi;
+            u32 lo;
+        } words;
+    } WinLogI2D;
+
     extern void psndSFXOn(s32 id);
     extern void winMsgEntry(void* win, s32 item, char* msg, s32 type);
     extern void winSortEntry(f32 x, f32 y, void* win, s32 type);
     extern s32 winSortWait(void* win);
-    extern void* monosiriInit(s32 enemy, f32 x, f32 y);
-    extern s32 monosiriMain(void* work);
     extern u32 keyGetButton(s32 channel);
-    extern f32 float_255_80423c28;
-    extern f32 float_120_80423bcc;
-    extern f32 float_neg130_80423c2c;
-    extern f32 float_20_80423c08;
-    s32 state = *(s32*)((s32)pWin + 0xD68);
-    s32 cursor = *(s32*)((s32)pWin + 0xD6C);
-    s32 page = *(s32*)((s32)pWin + 0x104C);
-    s32 count = *(s32*)((s32)pWin + 0xD70);
-    u32 pressed = *(u32*)((s32)pWin + 4);
-    u32 repeat = *(u32*)((s32)pWin + 0x10);
-    u32 directions = *(u32*)((s32)pWin + 0xC);
-    s32 i;
+    extern u32 keyGetStickX(s32 channel);
+    extern u32 keyGetStickY(s32 channel);
+    extern f64 distABf(f64 ax, f64 ay, f64 bx, f64 by);
+    extern s32 getMarioStDvdRoot(void);
+    extern s32 fileAsyncf(s32 kind, s32 unused, char* fmt, s32 root, char* lang, ...);
+    extern void* fileAllocf(s32 kind, char* fmt, s32 root, char* lang, ...);
+    extern s32 marioGetColor(void);
+    extern s32 animPoseEntry(char* name, s32 battle);
+    extern void animPoseSetAnim(s32 poseId, char* anim, s32 loop);
+    extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
+    extern u8 itemDataTable[];
+    extern s32 stone_tbl[];
+    extern char str_us_80423ad0[];
+    extern char str_jp_80423acc[];
+    extern char str_W_1_80423c38[];
+    extern char str_W_15_80423c3c[];
+    extern char str_W_17_80423c44[];
+    extern char str_W_18_80423c4c[];
+    extern char str_M_W_1_80423c54[];
 
+    extern f32 float_0_80423aec;
+    extern f32 float_0p125_80423bec;
+    extern f32 float_0p2_80423c6c;
+    extern f32 float_0p5_80423af8;
+    extern f32 float_10000_80423c5c;
+    extern f32 float_120_80423bcc;
+    extern f32 float_150_80423c7c;
+    extern f32 float_166_80423b70;
+    extern f32 float_16_80423b14;
+    extern f32 float_20_80423c08;
+    extern f32 float_230_80423bd4;
+    extern f32 float_240_80423bb4;
+    extern f32 float_24_80423b80;
+    extern f32 float_255_80423c28;
+    extern f32 float_304_80423bd0;
+    extern f32 float_320_80423c0c;
+    extern f32 float_330_80423c8c;
+    extern f32 float_360_80423c84;
+    extern f32 float_45_80423bdc;
+    extern f32 float_468_80423c74;
+    extern f32 float_500_80423b40;
+    extern f32 float_50_80423b64;
+    extern f32 float_51p429_80423c04;
+    extern f32 float_604_80423c70;
+    extern f32 float_60_80423b58;
+    extern f32 float_74_80423bc8;
+    extern f32 float_80_80423b68;
+    extern f32 float_8_80423b04;
+    extern f32 float_neg120_80423c64;
+    extern f32 float_neg128_80423c34;
+    extern f32 float_neg130_80423c2c;
+    extern f32 float_neg148_80423bf4;
+    extern f32 float_neg150_80423c78;
+    extern f32 float_neg200_80423c30;
+    extern f32 float_neg230_80423c60;
+    extern f32 float_neg240_80423bf0;
+    extern f32 float_neg250_80423c90;
+    extern f32 float_neg300_80423b44;
+    extern f32 float_neg310_80423c94;
+    extern f32 float_neg480_80423bf8;
+    extern f32 float_neg50_80423c88;
+    extern f32 float_neg60_80423c98;
+    extern f32 float_neg80_80423c80;
+    extern f32 float_neg8_80423c68;
+
+    u8* catalog = (u8*)str_msg_menu_kiroku_map_802f6708;
+    s32 state = *(s32*)((u8*)pWin + 0xD68);
+    s32 i;
+    s32 j;
+    s32 count;
+    s32 cursor;
+    s32 page;
+    s32 pages;
+    s32 oldCursor;
+    s32 selected;
+    s32 nearest;
+    s32 areaX;
+    s32 areaY;
+    s32 tmpi;
+    u32 pressed;
+    u32 buttonsRep;
+    u32 dpad;
+    u32 flags;
+    u32 progress;
+    u32 kind;
+    u32 unlocked;
+    s16* area;
+    u8* rawArea;
+    char* lang;
+    char* mapName;
+    char* poseName;
+    void* work;
+    void* data;
+    f32 moveX;
+    f32 moveY;
+    f32 dist;
+    f32 bestDist;
+    f32 targetX;
+    f32 targetY;
+    f32 currentRot;
+    f32 targetRot;
+    f32 ftmp;
+    WinLogI2D cvt0;
+    WinLogI2D cvt1;
+
+#define W_S32(off) (*(s32*)((u8*)pWin + (off)))
+#define W_U32(off) (*(u32*)((u8*)pWin + (off)))
+#define W_F32(off) (*(f32*)((u8*)pWin + (off)))
+#define W_PTR(off) (*(void**)((u8*)pWin + (off)))
+#define W_U8(off) (*(u8*)((u8*)pWin + (off)))
+#define W_S16(off) (*(s16*)((u8*)pWin + (off)))
+#define SUB_TYPE(idx) W_S32(0xD74 + (idx) * 0x20)
+#define SUB_STATE(idx) W_S32(0xD88 + (idx) * 0x20)
+#define SUB_HELP(idx) (*(char**)((u8*)pWin + 0xD90 + (idx) * 0x20))
+#define MAKE_FLOAT(dst, value_) \
+    do { \
+        cvt0.words.hi = 0x43300000; \
+        cvt0.words.lo = ((u32)(s32)(value_)) ^ 0x80000000; \
+        (dst) = (f32)(cvt0.value - double_to_int_802f6b70); \
+    } while (0)
+#define CLOSE_SUBMENU_STATES() \
+    do { \
+        for (i = 0; i < W_S32(0xD70); i++) { \
+            SUB_STATE(i) = 40; \
+        } \
+        SUB_STATE(W_S32(0xD6C)) = 20; \
+    } while (0)
+#define FREE_MONOSIRI_WORK(ptr_) \
+    do { \
+        struct MonosiriWork* _mw = (struct MonosiriWork*)(ptr_); \
+        if (_mw != NULL) { \
+            if (_mw->file0 != NULL) { \
+                fileFree(_mw->file0); \
+                _mw->file0 = NULL; \
+            } \
+            if (_mw->file1 != NULL) { \
+                fileFree(_mw->file1); \
+                _mw->file1 = NULL; \
+            } \
+            if (_mw->pose0 != -1) { \
+                animPoseRelease(_mw->pose0); \
+                _mw->pose0 = -1; \
+            } \
+            if (_mw->pose1 != -1) { \
+                animPoseRelease(_mw->pose1); \
+                _mw->pose1 = -1; \
+            } \
+            if (_mw->buffer != NULL) { \
+                smartFree(_mw->buffer); \
+                _mw->buffer = NULL; \
+            } \
+            _mapFree(mapalloc_base_ptr, _mw); \
+        } \
+    } while (0)
+
+    /*
+     * Target dispatch begins with state 14, then the 0/10/11/12/13 family,
+     * then tattle-detail states 21/22, and finally sort wait 1000/1001.
+     */
+        /*
+     * A2: reproduce the target's initial decision tree and physical case order.
+     * The target dispatches first, then lays out bodies as
+     * 0, 10, 11, 12, 13, 14, 21, 22, 1000/1001.
+     */
+    if (state == 14) {
+        goto winlog_state_14;
+    }
+    if (state >= 14) {
+        if (state == 22) {
+            goto winlog_state_22;
+        }
+        if (state >= 22) {
+            if (state >= 1002) {
+                goto winlog_end;
+            }
+            if (state >= 1000) {
+                goto winlog_state_sort;
+            }
+            goto winlog_end;
+        }
+        if (state >= 21) {
+            goto winlog_state_21;
+        }
+        goto winlog_end;
+    }
+
+    if (state == 10) {
+        goto winlog_state_10;
+    }
+    if (state >= 10) {
+        if (state == 12) {
+            goto winlog_state_12;
+        }
+        if (state >= 12) {
+            goto winlog_state_13;
+        }
+        goto winlog_state_11;
+    }
     if (state == 0) {
-        s32 oldCursor = cursor;
+        goto winlog_state_0;
+    }
+    goto winlog_end;
+
+winlog_state_0:
+    pressed = W_U32(0x4);
+    oldCursor = W_S32(0xD6C);
+    if ((pressed & 0x200) != 0) {
+        psndSFXOn(0x20013);
+        return -1;
+    }
+    if ((pressed & 0x1000) != 0) {
+        return -2;
+    }
+
+    dpad = W_U32(0x10);
+    if ((dpad & 0x2000) != 0) {
+        W_S32(0xD6C)++;
+        if (W_S32(0xD6C) >= W_S32(0xD70))
+            W_S32(0xD6C) = 0;
+        if (oldCursor != W_S32(0xD6C))
+            psndSFXOn(0x20005);
+    } else if ((dpad & 0x1000) != 0) {
+        W_S32(0xD6C)--;
+        if (W_S32(0xD6C) < 0)
+            W_S32(0xD6C) = W_S32(0xD70) - 1;
+        if (oldCursor != W_S32(0xD6C))
+            psndSFXOn(0x20005);
+    } else if ((pressed & 0x100) != 0) {
+        count = W_S32(0xD70);
+        for (i = 0; i < count; i++) {
+            SUB_STATE(i) = 30;
+        }
+        SUB_STATE(W_S32(0xD6C)) = 10;
+        state = SUB_TYPE(W_S32(0xD6C)) + 10;
+        W_S32(0xD68) = state;
+
+        selected = SUB_TYPE(W_S32(0xD6C));
+        if (selected == 2) {
+            W_F32(0xE88) = float_neg130_80423c2c;
+            W_F32(0xE90) = float_120_80423bcc;
+            W_F32(0xEB0) = float_neg200_80423c30;
+            W_F32(0xEB8) = float_60_80423b58;
+        } else if (selected < 2) {
+            if (selected == 0) {
+                W_F32(0xE30) = float_20_80423c08;
+            } else if (selected > -1) {
+                W_F32(0xE6C) = float_20_80423c08;
+                W_F32(0xE74) = float_255_80423c28;
+            }
+        } else if (selected != 4 && selected < 4) {
+            W_F32(0xF88) = float_neg130_80423c2c;
+            W_F32(0xF90) = float_120_80423bcc;
+            W_F32(0xFB0) = float_neg200_80423c30;
+            W_F32(0xFB8) = float_60_80423b58;
+        }
+        psndSFXOn(0x20012);
+    }
+
+    W_F32(0x158) = float_neg128_80423c34;
+    cvt0.words.hi = 0x43300000;
+    cvt0.words.lo = ((u32)W_S32(0xD70)) ^ 0x80000000;
+    targetX = (f32)(cvt0.value - double_to_int_802f6b70);
+    cvt1.words.hi = 0x43300000;
+    cvt1.words.lo = ((u32)W_S32(0xD6C)) ^ 0x80000000;
+    targetY = (f32)(cvt1.value - double_to_int_802f6b70);
+    W_F32(0x15C) =
+        float_8_80423b04 +
+        (float_45_80423bdc * targetX * float_0p5_80423af8 -
+         float_45_80423bdc * targetY);
+    winMsgEntry(pWin, 0, SUB_HELP(W_S32(0xD6C)), 0);
+
+    goto winlog_end;
+
+winlog_state_10:
+    lang = str_us_80423ad0;
+    if (*(u32*)((u8*)gp + 0x16C) == 0) {
+        lang = str_jp_80423acc;
+    }
+
+    progress = swByteGet(0);
+    if ((s32)progress < 0x13) {
+        mapName = (char*)(catalog + 0x4F0);
+    } else if ((s32)swByteGet(0) < 0x41) {
+        mapName = (char*)(catalog + 0x4FC);
+    } else if ((s32)swByteGet(0) < 0x79) {
+        mapName = (char*)(catalog + 0x508);
+    } else if ((s32)swByteGet(0) < 0xAF) {
+        mapName = (char*)(catalog + 0x514);
+    } else if ((s32)swByteGet(0) < 0xDE) {
+        mapName = (char*)(catalog + 0x520);
+    } else if ((s32)swByteGet(0) < 0x110) {
+        mapName = (char*)(catalog + 0x52C);
+    } else if ((s32)swByteGet(0) < 0x15C) {
+        mapName = (char*)(catalog + 0x538);
+    } else {
+        mapName = (char*)(catalog + 0x544);
+    }
+
+    if (fileAsyncf(4, 0, (char*)(catalog + 0x550),
+                   getMarioStDvdRoot(), lang, mapName) != 0) {
+        if (W_PTR(0x30) == NULL) {
+            lang = str_us_80423ad0;
+            if (*(u32*)((u8*)gp + 0x16C) == 0) {
+                lang = str_jp_80423acc;
+            }
+
+            progress = swByteGet(0);
+            if ((s32)progress < 0x13) {
+                mapName = (char*)(catalog + 0x4F0);
+            } else if ((s32)swByteGet(0) < 0x41) {
+                mapName = (char*)(catalog + 0x4FC);
+            } else if ((s32)swByteGet(0) < 0x79) {
+                mapName = (char*)(catalog + 0x508);
+            } else if ((s32)swByteGet(0) < 0xAF) {
+                mapName = (char*)(catalog + 0x514);
+            } else if ((s32)swByteGet(0) < 0xDE) {
+                mapName = (char*)(catalog + 0x520);
+            } else if ((s32)swByteGet(0) < 0x110) {
+                mapName = (char*)(catalog + 0x52C);
+            } else if ((s32)swByteGet(0) < 0x15C) {
+                mapName = (char*)(catalog + 0x538);
+            } else {
+                mapName = (char*)(catalog + 0x544);
+            }
+
+            W_PTR(0x30) = fileAllocf(4, (char*)(catalog + 0x550),
+                                    getMarioStDvdRoot(), lang, mapName);
+        }
+
+        if (W_S32(0xE1C) == -1) {
+            if ((*(u16*)pWin & 0x2000) != 0) {
+                poseName = str_W_1_80423c38;
+                W_S32(0xE1C) = animPoseEntry((char*)(catalog + 0x55C), 0);
+
+                tmpi = marioGetColor();
+                if (tmpi == 2) {
+                    goto winlog_pose_w17;
+                }
+                if (tmpi >= 2) {
+                    if (tmpi >= 4) {
+                        goto winlog_pose_w_done;
+                    }
+                    goto winlog_pose_w18;
+                }
+                if (tmpi == 0) {
+                    goto winlog_pose_w1;
+                }
+                if (tmpi >= 0) {
+                    goto winlog_pose_w15;
+                }
+                goto winlog_pose_w_done;
+
+winlog_pose_w1:
+                poseName = str_W_1_80423c38;
+                goto winlog_pose_w_done;
+winlog_pose_w15:
+                poseName = str_W_15_80423c3c;
+                goto winlog_pose_w_done;
+winlog_pose_w17:
+                poseName = str_W_17_80423c44;
+                goto winlog_pose_w_done;
+winlog_pose_w18:
+                poseName = str_W_18_80423c4c;
+winlog_pose_w_done:
+                animPoseSetAnim(W_S32(0xE1C), poseName, 1);
+                goto winlog_pose_material;
+            }
+
+            poseName = (char*)(catalog + 0x564);
+            tmpi = marioGetColor();
+            if (tmpi == 2) {
+                goto winlog_pose_mario_w;
+            }
+            if (tmpi >= 2) {
+                if (tmpi >= 4) {
+                    goto winlog_pose_mario_done;
+                }
+                goto winlog_pose_mario_wl;
+            }
+            if (tmpi == 0) {
+                goto winlog_pose_mario_done;
+            }
+            if (tmpi >= 0) {
+                goto winlog_pose_mario_l;
+            }
+            goto winlog_pose_mario_done;
+
+winlog_pose_mario_l:
+            poseName = (char*)(catalog + 0x56C);
+            goto winlog_pose_mario_done;
+winlog_pose_mario_w:
+            poseName = (char*)(catalog + 0x578);
+            goto winlog_pose_mario_done;
+winlog_pose_mario_wl:
+            poseName = (char*)(catalog + 0x584);
+winlog_pose_mario_done:
+            W_S32(0xE1C) = animPoseEntry(poseName, 0);
+            animPoseSetAnim(W_S32(0xE1C), str_M_W_1_80423c54, 1);
+
+winlog_pose_material:
+            animPoseSetMaterialFlagOn(W_S32(0xE1C), 0x1800);
+        }
+
+        pressed = W_U32(0x4);
         if ((pressed & 0x200) != 0) {
             psndSFXOn(0x20013);
-            return -1;
-        }
-        if ((pressed & 0x1000) != 0) return -2;
-        if ((repeat & 0x2000) != 0) {
-            cursor++;
-            if (cursor >= count) cursor = 0;
-        } else if ((repeat & 0x1000) != 0) {
-            cursor--;
-            if (cursor < 0) cursor = count - 1;
-        }
-        *(s32*)((s32)pWin + 0xD6C) = cursor;
-        if (oldCursor != cursor) psndSFXOn(0x20005);
-        if ((pressed & 0x100) != 0) {
-            for (i = 0; i < count; i++) {
-                *(s32*)((s32)pWin + 0xD88 + i * 0x20) = 30;
+
+            data = pWin;
+            for (i = 0; i < W_S32(0xD70); i++) {
+                *(s32*)((u8*)data + 0xD88) = 40;
+                data = (u8*)data + 0x20;
             }
-            *(s32*)((s32)pWin + 0xD88 + cursor * 0x20) = 10;
-            state = *(s32*)((s32)pWin + 0xD74 + cursor * 0x20) + 10;
-            *(s32*)((s32)pWin + 0xD68) = state;
-            switch (*(s32*)((s32)pWin + 0xD7C + cursor * 0x1C)) {
-            case 0:
-                *(f32*)((s32)pWin + 0xE3C) = float_20_80423c08;
-                break;
-            case 1:
-                *(f32*)((s32)pWin + 0xE68) = float_20_80423c08;
-                *(f32*)((s32)pWin + 0xE70) = float_255_80423c28;
-                break;
-            case 2:
-                *(f32*)((s32)pWin + 0xE88) = float_neg130_80423c2c;
-                *(f32*)((s32)pWin + 0xE90) = float_120_80423bcc;
-                *(f32*)((s32)pWin + 0xEB0) = float_neg200_80423c30;
-                *(f32*)((s32)pWin + 0xEB8) = float_60_80423b58;
-                break;
-            case 3:
-                *(f32*)((s32)pWin + 0xF88) = float_neg130_80423c2c;
-                *(f32*)((s32)pWin + 0xF90) = float_120_80423bcc;
-                *(f32*)((s32)pWin + 0xFB0) = float_neg200_80423c30;
-                *(f32*)((s32)pWin + 0xFB8) = float_60_80423b58;
-                break;
+
+            SUB_STATE(W_S32(0xD6C)) = 20;
+            W_S32(0xD68) = 0;
+            W_F32(0xE30) = float_neg480_80423bf8;
+
+            fileFree(W_PTR(0x30));
+            W_PTR(0x30) = NULL;
+
+            if (W_S32(0xE1C) != -1) {
+                animPoseRelease(W_S32(0xE1C));
             }
-            psndSFXOn(0x20012);
+            W_S32(0xE1C) = -1;
+        } else if ((pressed & 0x1000) != 0) {
+            return -2;
         }
-        *(f32*)((s32)pWin + 0x158) = float_neg128_80423c34;
-        *(f32*)((s32)pWin + 0x15C) =
-            float_8_80423b04 + float_45_80423bdc * (f32)count *
-            float_0p5_80423af8 - float_45_80423bdc * (f32)cursor;
-    } else if (state == 10) {
-        f32 moveX = 0.0f;
-        f32 moveY = 0.0f;
-        if ((keyGetButton(0) & 1) != 0) moveX = -8.0f;
-        if ((keyGetButton(0) & 2) != 0) moveX = 8.0f;
-        if ((keyGetButton(0) & 4) != 0) moveY = 8.0f;
-        if ((keyGetButton(0) & 8) != 0) moveY = -8.0f;
-        if (moveX == 0.0f && moveY == 0.0f &&
-            *(s32*)((s32)pWin + 0xE14) != -1) {
-            s32 area = *(s32*)((s32)pWin + 0xE14);
-            moveX = (304.0f + (f32)tubuDt[area * 6] -
-                     *(f32*)((s32)pWin + 0xE20)) * 0.2f;
-            moveY = (240.0f + (f32)tubuDt[area * 6 + 1] -
-                     *(f32*)((s32)pWin + 0xE24)) * 0.2f;
-        }
-        *(f32*)((s32)pWin + 0xE20) += moveX;
-        *(f32*)((s32)pWin + 0xE24) += moveY;
-        if (*(f32*)((s32)pWin + 0xE20) < 16.0f)
-            *(f32*)((s32)pWin + 0xE20) = 16.0f;
-        if (*(f32*)((s32)pWin + 0xE24) < 8.0f)
-            *(f32*)((s32)pWin + 0xE24) = 8.0f;
-        if (*(f32*)((s32)pWin + 0xE20) >= 604.0f)
-            *(f32*)((s32)pWin + 0xE20) = 604.0f;
-        if (*(f32*)((s32)pWin + 0xE24) >= 468.0f)
-            *(f32*)((s32)pWin + 0xE24) = 468.0f;
-    } else if (state == 11 || state == 12 || state == 13) {
-        if ((pressed & 0x200) != 0) {
-            for (i = 0; i < count; i++) {
-                *(s32*)((s32)pWin + 0xD88 + i * 0x20) = 40;
+
+        area = tubuDt;
+        nearest = 0;
+        bestDist = float_10000_80423c5c;
+        for (i = 0; i < 93; i++, area += 6) {
+            rawArea = (u8*)area;
+            progress = swByteGet(0);
+            flags = 0;
+
+            if ((s32)progress < (s32)(u16)area[3]) {
+                kind = rawArea[5];
+                if (kind == 2) {
+                    if (swGet(0xFE) != 0) flags = 1;
+                } else if (kind < 2) {
+                    if (kind == 1 && swGet(0xFD) != 0) flags = 1;
+                } else if (kind == 4) {
+                    if (swGet(0x100) != 0) flags = 1;
+                } else if (kind < 4) {
+                    if (swGet(0xFF) != 0) flags = 1;
+                }
+                if (flags == 0) {
+                    continue;
+                }
             }
-            *(s32*)((s32)pWin + 0xD88 + cursor * 0x20) = 20;
-            *(s32*)((s32)pWin + 0xD68) = 0;
-            *(f32*)((s32)pWin + 0x1034) = float_320_80423c0c;
-            *(f32*)((s32)pWin + 0x103C) = float_neg240_80423bf0;
-            psndSFXOn(0x20013);
-        } else if ((repeat & 0x1000) != 0 && cursor > 0) {
-            *(s32*)((s32)pWin + 0xD6C) = cursor - 1;
-        } else if ((repeat & 0x2000) != 0 && cursor + 1 < count) {
-            *(s32*)((s32)pWin + 0xD6C) = cursor + 1;
-        } else if ((pressed & 0x400) != 0) {
-            *(s32*)((s32)pWin + 0x14) = state;
-            winSortEntry(-310.0f, 150.0f, pWin, state - 7);
-            psndSFXOn(0x20012);
-            *(s32*)((s32)pWin + 0xD68) = 1000;
+
+            if (rawArea[4] == 0) {
+                continue;
+            }
+
+            MAKE_FLOAT(targetX, (s32)area[0]);
+            MAKE_FLOAT(targetY, (s32)area[1]);
+            dist = (f32)distABf(
+                (f64)(float_74_80423bc8 + W_F32(0xE38) + targetX),
+                (f64)(float_120_80423bcc + W_F32(0xE3C) + targetY),
+                (f64)(float_neg230_80423c60 + W_F32(0xE38) + W_F32(0xE20)),
+                (f64)(float_neg120_80423c64 + W_F32(0xE3C) + W_F32(0xE24)));
+
+            if (dist < bestDist) {
+                nearest = i;
+                bestDist = dist;
+            }
         }
-    } else if (state == 14) {
-        if ((pressed & 0x200) != 0) {
-            *(s32*)((s32)pWin + 0xD68) = 0;
-        } else if ((repeat & 0x40) != 0) {
-            page--;
-            if (page < 0) page = 0;
-            cursor = page << 4;
-            *(s32*)((s32)pWin + 0xD6C) = page;
-            *(s32*)((s32)pWin + 0xD70) = cursor;
-            psndSFXOn(0x20035);
-        } else if ((repeat & 0x20) != 0) {
-            page++;
-            if ((page << 4) >= count) page--;
-            cursor = page << 4;
-            *(s32*)((s32)pWin + 0xD6C) = page;
-            *(s32*)((s32)pWin + 0xD70) = cursor;
-            psndSFXOn(0x20035);
-        } else if ((directions & 0xC000) != 0) {
-            if ((cursor & 0xF) < 8) cursor += 8;
-            else cursor -= 8;
-            if (cursor >= count) cursor = count - 1;
-            if (cursor < 0) cursor = 0;
-            *(s32*)((s32)pWin + 0xD70) = cursor;
-            psndSFXOn(0x20035);
-        } else if ((directions & 0x1000) != 0) {
-            cursor = ((cursor & 7) == 0) ? cursor - 9 : cursor - 1;
-            if (cursor < 0) cursor = 0;
-            *(s32*)((s32)pWin + 0xD70) = cursor;
-            *(s32*)((s32)pWin + 0xD6C) = cursor >> 4;
-            psndSFXOn(0x20035);
-        } else if ((directions & 0x2000) != 0) {
-            cursor = ((cursor & 7) == 7) ? cursor + 9 : cursor + 1;
-            if (cursor >= count) cursor = count - 1;
-            *(s32*)((s32)pWin + 0xD70) = cursor;
-            *(s32*)((s32)pWin + 0xD6C) = cursor >> 4;
-            psndSFXOn(0x20035);
-        } else if ((pressed & 0x100) != 0 && count > 0 &&
-                   swGet(*(u8*)((s32)pWin + 0x1000 + cursor * 2 + 1) + 0x117A) != 0) {
-            psndSFXOn(0x20012);
-            *(void**)((s32)pWin + 0x102C) =
-                monosiriInit(*(u8*)((s32)pWin + 0x1000 + cursor * 2 + 1),
-                             500.0f, -300.0f);
-            *(s32*)((s32)pWin + 0xD68) = 21;
-        }
-    } else if (state == 21) {
-        monosiriMain(*(void**)((s32)pWin + 0x1208));
-    } else if (state == 22) {
-        void* work = *(void**)((s32)pWin + 0x1208);
-        if (work == 0 ||
-            (*(f32*)((s32)work + 0x10) > 500.0f &&
-             *(f32*)((s32)work + 0x14) < -300.0f)) {
-            *(s32*)((s32)pWin + 0xD68) = 14;
+
+        if (bestDist >= float_50_80423b64) {
+            W_S32(0xE14) = -1;
+            winMsgEntry(pWin, 0, (char*)catalog, 0);
         } else {
-            monosiriMain(work);
+            rawArea = (u8*)&tubuDt[nearest * 6];
+
+            sprintf(name, (char*)(catalog + 0x590),
+                    *(s32*)(rawArea += 8));
+            sprintf(help, (char*)(catalog + 0x5A4),
+                    *(s32*)rawArea);
+
+            if (W_S32(0xE14) != nearest) {
+                psndSFXOn(0x20035);
+            }
+            W_S32(0xE14) = nearest;
+            winMsgEntry(pWin, 0, help, (s32)name);
         }
-    } else if (state == 1000 || state == 1001) {
-        if (winSortWait(pWin) == 0) {
-            *(s32*)((s32)pWin + 0xD68) = *(s32*)((s32)pWin + 0x124);
+
+        cvt0.words.hi = 0x43300000;
+        cvt0.words.lo = ((u32)(s32)(s8)keyGetStickX(0)) ^ 0x80000000;
+        moveX = (f32)(cvt0.value - double_to_int_802f6b70) *
+                float_0p125_80423bec;
+
+        cvt1.words.hi = 0x43300000;
+        cvt1.words.lo = ((u32)(s32)(s8)keyGetStickY(0)) ^ 0x80000000;
+        moveY = (f32)(cvt1.value - double_to_int_802f6b70) *
+                float_0p125_80423bec;
+
+        if (moveX == float_0_80423aec &&
+            moveY == float_0_80423aec) {
+            if ((keyGetButton(0) & 1) != 0) {
+                moveX = -8.0f;
+            } else if ((keyGetButton(0) & 2) != 0) {
+                moveX = float_8_80423b04;
+            }
+
+            if ((keyGetButton(0) & 8) != 0) {
+                moveY = float_8_80423b04;
+            } else if ((keyGetButton(0) & 4) != 0) {
+                moveY = -8.0f;
+            }
         }
-        if ((pressed & 0x1000) != 0) {
+
+        if (moveX == float_0_80423aec &&
+            moveY == float_0_80423aec &&
+            W_S32(0xE14) != -1) {
+            area = &tubuDt[W_S32(0xE14) * 6];
+
+            cvt0.words.hi = 0x43300000;
+            cvt0.words.lo = ((u32)(s32)area[0]) ^ 0x80000000;
+            targetX = (f32)(cvt0.value - double_to_int_802f6b70);
+
+            cvt1.words.hi = 0x43300000;
+            cvt1.words.lo = ((u32)(s32)area[1]) ^ 0x80000000;
+            targetY = (f32)(cvt1.value - double_to_int_802f6b70);
+
+            moveX = ((304.0f + targetX) - W_F32(0xE20)) *
+                    0.2f;
+            moveY = ((float_240_80423bb4 + targetY) - W_F32(0xE24)) *
+                    0.2f;
+        }
+
+        W_F32(0xE20) += moveX;
+        W_F32(0xE24) += moveY;
+
+        if (W_F32(0xE20) < float_16_80423b14)
+            W_F32(0xE20) = float_16_80423b14;
+        if (W_F32(0xE24) < float_8_80423b04)
+            W_F32(0xE24) = float_8_80423b04;
+        if (W_F32(0xE20) >= 604.0f)
+            W_F32(0xE20) = 604.0f;
+        if (W_F32(0xE24) >= 468.0f)
+            W_F32(0xE24) = 468.0f;
+
+        areaX = (s32)((W_F32(0xE20) + W_F32(0xE38)) - float_230_80423bd4);
+        areaY = (s32)((W_F32(0xE24) + W_F32(0xE3C)) - float_120_80423bcc);
+
+        MAKE_FLOAT(ftmp, areaX);
+        if (float_166_80423b70 <= ftmp)
+            W_F32(0xE38) -= ftmp - float_166_80423b70;
+
+        MAKE_FLOAT(ftmp, areaX);
+        if (ftmp <= float_neg150_80423c78)
+            W_F32(0xE38) -= float_150_80423c7c + ftmp;
+
+        MAKE_FLOAT(ftmp, areaY);
+        if (float_80_80423b68 <= ftmp)
+            W_F32(0xE3C) -= ftmp - float_80_80423b68;
+
+        MAKE_FLOAT(ftmp, areaY);
+        if (ftmp <= float_neg80_80423c80)
+            W_F32(0xE3C) -= float_80_80423b68 + ftmp;
+
+        if (float_0_80423aec < W_F32(0xE38))
+            W_F32(0xE38) = float_0_80423aec;
+        if (float_0_80423aec < W_F32(0xE3C))
+            W_F32(0xE3C) = float_0_80423aec;
+        if (W_F32(0xE38) < float_neg148_80423bf4)
+            W_F32(0xE38) = float_neg148_80423bf4;
+        if (W_F32(0xE3C) < float_neg240_80423bf0)
+            W_F32(0xE3C) = float_neg240_80423bf0;
+
+        W_F32(0x158) =
+            float_neg230_80423c60 + W_F32(0xE38) + W_F32(0xE20);
+        W_F32(0x15C) =
+            float_neg120_80423c64 + W_F32(0xE3C) + W_F32(0xE24);
+        W_F32(0x158) -= float_24_80423b80;
+        W_F32(0x15C) += float_20_80423c08;
+    }
+
+    goto winlog_end;
+
+winlog_state_11:
+    pressed = W_U32(0x4);
+
+    if ((pressed & 0x200) != 0) {
+        psndSFXOn(0x20013);
+
+        data = pWin;
+        for (i = 0; i < W_S32(0xD70); i++) {
+            *(s32*)((u8*)data + 0xD88) = 40;
+            data = (u8*)data + 0x20;
+        }
+        SUB_STATE(W_S32(0xD6C)) = 20;
+        W_S32(0xD68) = 0;
+        W_F32(0xE6C) = float_neg480_80423bf8;
+        W_F32(0xE74) = float_0_80423aec;
+    } else {
+        dpad = W_U32(0x10);
+
+        if ((dpad & 0x4000) != 0) {
+            W_S32(0xE60)--;
+            while (W_S32(0xE60) < 0) {
+                W_S32(0xE60) += 7;
+            }
+
+            MAKE_FLOAT(ftmp, W_S32(0xE60));
+            W_F32(0xE7C) = float_51p429_80423c04 * ftmp;
+
+            while (W_F32(0xE80) < W_F32(0xE7C)) {
+                W_F32(0xE80) += float_360_80423c84;
+            }
+
+            psndSFXOn(0x209D6);
+            psndSFXOn(0x20037);
+        } else if ((dpad & 0x8000) != 0) {
+            W_S32(0xE60)++;
+            while (W_S32(0xE60) > 6) {
+                W_S32(0xE60) -= 7;
+            }
+
+            MAKE_FLOAT(ftmp, W_S32(0xE60));
+            W_F32(0xE7C) = float_51p429_80423c04 * ftmp;
+
+            while (W_F32(0xE7C) < W_F32(0xE80)) {
+                W_F32(0xE80) -= float_360_80423c84;
+            }
+
+            psndSFXOn(0x209D6);
+            psndSFXOn(0x20037);
+        } else if ((pressed & 0x1000) != 0) {
             return -2;
         }
     }
+
+    W_F32(0x158) = float_neg50_80423c88;
+    W_F32(0x15C) = float_neg50_80423c88;
+
+    if (W_S32(0xE60) < W_S32(0xE40)) {
+        tmpi = stone_tbl[W_S32(0xE60)] * 0x28;
+        winMsgEntry(pWin, -1,
+                    *(char**)(itemDataTable + tmpi + 8),
+                    (s32)*(char**)(itemDataTable + tmpi + 4));
+    } else {
+        winMsgEntry(pWin, -1, (char*)(catalog + 0x5B0),
+                    (s32)(catalog + 0x5CC));
+    }
+
+    goto winlog_end;
+
+winlog_state_12:
+    count = W_S32(0xE94);
+    pages = (count + 27) / 28;
+    pressed = W_U32(0x4);
+
+    if ((pressed & 0x200) != 0) {
+        psndSFXOn(0x20013);
+        CLOSE_SUBMENU_STATES();
+        W_S32(0xD68) = 0;
+        W_F32(0xE88) = float_330_80423c8c;
+        W_F32(0xE90) = float_neg250_80423c90;
+        W_F32(0xEB0) = float_neg200_80423c30;
+        W_F32(0xEB8) = float_neg300_80423b44;
+    } else {
+        buttonsRep = W_U32(0x8);
+        if ((buttonsRep & 0x40) != 0) {
+            W_S32(0xEA0)--;
+            if (W_S32(0xEA0) < 0) {
+                W_S32(0xEA0) = 0;
+            }
+            W_S32(0xE9C) = W_S32(0xEA0) * 28;
+            psndSFXOn(0x20035);
+        } else if ((buttonsRep & 0x20) != 0) {
+            W_S32(0xEA0)++;
+            if (W_S32(0xEA0) >= pages) {
+                W_S32(0xEA0) = pages - 1;
+            }
+            W_S32(0xE9C) = W_S32(0xEA0) * 28;
+            psndSFXOn(0x20035);
+        } else {
+            dpad = W_U32(0x10);
+            if ((dpad & 0x8000) != 0) {
+                cursor = W_S32(0xE9C);
+                if ((cursor % 7) < 6 && cursor + 1 < count) {
+                    W_S32(0xE9C) = cursor + 1;
+                }
+                psndSFXOn(0x20035);
+            } else if ((dpad & 0x4000) != 0) {
+                cursor = W_S32(0xE9C);
+                if ((cursor % 7) > 0) {
+                    W_S32(0xE9C) = cursor - 1;
+                }
+                psndSFXOn(0x20035);
+            } else if ((dpad & 0x1000) != 0) {
+                cursor = W_S32(0xE9C);
+                tmpi = cursor - 7;
+                if (tmpi >= 0 && tmpi < count) {
+                    W_S32(0xE9C) = cursor - 7;
+                }
+                W_S32(0xEA0) = W_S32(0xE9C) / 28;
+                psndSFXOn(0x20035);
+            } else if ((dpad & 0x2000) != 0) {
+                cursor = W_S32(0xE9C);
+                tmpi = cursor + 7;
+                if (tmpi >= 0 && tmpi < count) {
+                    W_S32(0xE9C) = cursor + 7;
+                } else {
+                    j = cursor % 7;
+                    if (cursor + (7 - j) < count) {
+                        W_S32(0xE9C) = count - 1;
+                    }
+                }
+                W_S32(0xEA0) = W_S32(0xE9C) / 28;
+                psndSFXOn(0x20035);
+            } else if ((pressed & 0x10) != 0) {
+                winSortEntry(-310.0f, 150.0f, pWin, 4);
+                W_S32(0x124) = W_S32(0xD68);
+                psndSFXOn(0x20012);
+                W_S32(0xD68) = 1000;
+            } else if ((pressed & 0x1000) != 0) {
+                return -2;
+            }
+        }
+    }
+
+    cursor = W_S32(0xE9C);
+    tmpi = cursor % 28;
+    MAKE_FLOAT(targetX, (tmpi % 7) * 56 - 140);
+    W_F32(0x158) = targetX;
+    MAKE_FLOAT(targetY, 90 - (tmpi / 7) * 56);
+    W_F32(0x15C) = targetY;
+
+    tmpi = (s32)W_S16(0xEBC + cursor * 2);
+    if (swGet(tmpi + 0x80) != 0) {
+        tmpi = (tmpi + 0xF0) * 0x28;
+        winMsgEntry(pWin, -2,
+                    *(char**)(itemDataTable + tmpi + 8),
+                    (s32)*(char**)(itemDataTable + tmpi + 4));
+    } else {
+        winMsgEntry(pWin, -2, (char*)(catalog + 0x5B0),
+                    (s32)(catalog + 0x5CC));
+    }
+
+    goto winlog_end;
+
+winlog_state_13:
+    count = W_S32(0xF94);
+    pages = (count + 27) / 28;
+    pressed = W_U32(0x4);
+
+    if ((pressed & 0x200) != 0) {
+        psndSFXOn(0x20013);
+        CLOSE_SUBMENU_STATES();
+        W_S32(0xD68) = 0;
+        W_F32(0xF88) = float_330_80423c8c;
+        W_F32(0xF90) = float_neg250_80423c90;
+        W_F32(0xFB0) = float_neg200_80423c30;
+        W_F32(0xFB8) = float_neg300_80423b44;
+    } else {
+        buttonsRep = W_U32(0x8);
+        if ((buttonsRep & 0x40) != 0) {
+            W_S32(0xFA0)--;
+            if (W_S32(0xFA0) < 0) {
+                W_S32(0xFA0) = 0;
+            }
+            W_S32(0xF9C) = W_S32(0xFA0) * 28;
+            psndSFXOn(0x20035);
+        } else if ((buttonsRep & 0x20) != 0) {
+            W_S32(0xFA0)++;
+            if (W_S32(0xFA0) >= pages) {
+                W_S32(0xFA0) = pages - 1;
+            }
+            W_S32(0xF9C) = W_S32(0xFA0) * 28;
+            psndSFXOn(0x20035);
+        } else {
+            dpad = W_U32(0x10);
+            if ((dpad & 0x8000) != 0) {
+                cursor = W_S32(0xF9C);
+                if ((cursor % 7) < 6 && cursor + 1 < count) {
+                    W_S32(0xF9C) = cursor + 1;
+                }
+                psndSFXOn(0x20035);
+            } else if ((dpad & 0x4000) != 0) {
+                cursor = W_S32(0xF9C);
+                if ((cursor % 7) > 0) {
+                    W_S32(0xF9C) = cursor - 1;
+                }
+                psndSFXOn(0x20035);
+            } else if ((dpad & 0x1000) != 0) {
+                cursor = W_S32(0xF9C);
+                tmpi = cursor - 7;
+                if (tmpi >= 0 && tmpi < count) {
+                    W_S32(0xF9C) = cursor - 7;
+                }
+                W_S32(0xFA0) = W_S32(0xF9C) / 28;
+                psndSFXOn(0x20035);
+            } else if ((dpad & 0x2000) != 0) {
+                cursor = W_S32(0xF9C);
+                tmpi = cursor + 7;
+                if (tmpi >= 0 && tmpi < count) {
+                    W_S32(0xF9C) = cursor + 7;
+                } else {
+                    j = cursor % 7;
+                    if (cursor + (7 - j) < count) {
+                        W_S32(0xF9C) = count - 1;
+                    }
+                }
+                W_S32(0xFA0) = W_S32(0xF9C) / 28;
+                psndSFXOn(0x20035);
+            } else if ((pressed & 0x10) != 0) {
+                winSortEntry(float_neg310_80423c94,
+                             float_150_80423c7c,
+                             pWin, 5);
+                W_S32(0x124) = W_S32(0xD68);
+                psndSFXOn(0x20012);
+                W_S32(0xD68) = 1000;
+            } else if ((pressed & 0x1000) != 0) {
+                return -2;
+            }
+        }
+    }
+
+    cursor = W_S32(0xF9C);
+    tmpi = cursor % 28;
+    MAKE_FLOAT(targetX, (tmpi % 7) * 56 - 140);
+    W_F32(0x158) = targetX;
+    MAKE_FLOAT(targetY, 90 - (tmpi / 7) * 56);
+    W_F32(0x15C) = targetY;
+
+    tmpi = (s32)W_S16(0xFBC + cursor * 2);
+    if (swGet(tmpi + 0x41) != 0) {
+        tmpi = (tmpi + 0xB3) * 0x28;
+        winMsgEntry(pWin, -2,
+                    *(char**)(itemDataTable + tmpi + 8),
+                    (s32)*(char**)(itemDataTable + tmpi + 4));
+    } else {
+        winMsgEntry(pWin, -2, (char*)(catalog + 0x5B0),
+                    (s32)(catalog + 0x5CC));
+    }
+
+    goto winlog_end;
+
+winlog_state_14:
+    count = W_S32(0x1040);
+    pressed = W_U32(0x4);
+    pages = (count + 15) / 16;
+
+    if ((pressed & 0x200) != 0) {
+        psndSFXOn(0x20013);
+        CLOSE_SUBMENU_STATES();
+        W_S32(0xD68) = 0;
+        W_F32(0x1034) = float_320_80423c0c;
+        W_F32(0x103C) = float_neg240_80423bf0;
+    } else if ((W_U32(0x8) & 0x40) != 0) {
+        page = W_S32(0x104C) - 1;
+        if (page < 0) {
+            page = 0;
+        }
+        W_S32(0x104C) = page;
+        W_S32(0x1048) = page << 4;
+        psndSFXOn(0x20035);
+    } else if ((W_U32(0x8) & 0x20) != 0) {
+        page = W_S32(0x104C) + 1;
+        if (page >= pages) {
+            page = pages - 1;
+        }
+        W_S32(0x104C) = page;
+        W_S32(0x1048) = page << 4;
+        psndSFXOn(0x20035);
+    } else if ((W_U32(0x10) & 0xC000) != 0) {
+        cursor = W_S32(0x1048);
+        if ((cursor % 16) < 8) {
+            W_S32(0x1048) = cursor + 8;
+        } else {
+            W_S32(0x1048) = cursor - 8;
+        }
+        if (W_S32(0x1048) >= count) {
+            W_S32(0x1048) = count - 1;
+        }
+        if (W_S32(0x1048) < 0) {
+            W_S32(0x1048) = 0;
+        }
+        psndSFXOn(0x20035);
+    } else if ((W_U32(0x10) & 0x1000) != 0) {
+        cursor = W_S32(0x1048);
+        if ((cursor % 8) == 0) {
+            W_S32(0x1048) = cursor - 9;
+        } else {
+            W_S32(0x1048) = cursor - 1;
+        }
+        if (W_S32(0x1048) < 0) {
+            W_S32(0x1048) = 0;
+        }
+        W_S32(0x104C) = W_S32(0x1048) / 16;
+        psndSFXOn(0x20035);
+    } else if ((W_U32(0x10) & 0x2000) != 0) {
+        cursor = W_S32(0x1048);
+        if ((cursor % 8) == 7) {
+            W_S32(0x1048) = cursor + 9;
+        } else {
+            W_S32(0x1048) = cursor + 1;
+        }
+        if (W_S32(0x1048) >= count) {
+            W_S32(0x1048) = count - 1;
+        }
+        W_S32(0x104C) = W_S32(0x1048) / 16;
+        psndSFXOn(0x20035);
+    } else if ((pressed & 0x100) != 0) {
+        cursor = W_S32(0x1048);
+        if (swGet((s32)W_U8(0x1059 + cursor * 2) + 0x117A) != 0) {
+            psndSFXOn(0x20012);
+            W_S32(0xD68) = 21;
+
+            cursor = W_S32(0x1048);
+            kind = W_U8(0x1059 + cursor * 2);
+            work = _mapAlloc(mapalloc_base_ptr, 0x30);
+            memset(work, 0, 0x30);
+
+            *(s32*)((u8*)work + 0x0) = 0;
+            *(s32*)((u8*)work + 0x4) = (s32)kind;
+            *(f32*)((u8*)work + 0x18) = float_neg60_80423c98;
+            *(f32*)((u8*)work + 0x1C) = float_150_80423c7c;
+            *(f32*)((u8*)work + 0x10) = 500.0f;
+            *(f32*)((u8*)work + 0x14) = -300.0f;
+            *(s32*)((u8*)work + 0x2C) = 0;
+            *(s32*)((u8*)work + 0x20) = -1;
+            *(s32*)((u8*)work + 0x24) = -1;
+            W_PTR(0x1208) = work;
+        }
+    } else if ((pressed & 0x10) != 0) {
+        winSortEntry(float_neg310_80423c94,
+                     float_150_80423c7c,
+                     pWin, 6);
+        W_S32(0x124) = W_S32(0xD68);
+        psndSFXOn(0x20012);
+        W_S32(0xD68) = 1001;
+    } else if ((pressed & 0x1000) != 0) {
+        return -2;
+    }
+
+    cursor = W_S32(0x1048);
+    tmpi = cursor % 16;
+    MAKE_FLOAT(targetX, (tmpi / 8) * 216 - 180);
+    W_F32(0x158) = targetX;
+
+    tmpi = cursor % 16;
+    MAKE_FLOAT(targetY, 106 - (tmpi % 8) * 24);
+    W_F32(0x15C) = targetY;
+
+    cursor = W_S32(0x1048);
+    kind = W_U8(0x1059 + cursor * 2);
+    if (swGet((s32)kind + 0x117A) != 0) {
+        data = battleGetUnitMonosiriPtr((s32)kind);
+        winMsgEntry(pWin, 0, *(char**)((u8*)data + 8), 0);
+    } else {
+        winMsgEntry(pWin, 0, (char*)(catalog + 0x5E8), 0);
+    }
+
+    goto winlog_end;
+
+winlog_state_21:
+    pressed = W_U32(0x4);
+    if ((pressed & 0x200) != 0) {
+        psndSFXOn(0x20013);
+        W_S32(0xD68) = 22;
+        work = W_PTR(0x1208);
+        if (work != NULL) {
+            *(s32*)((u8*)work + 0x0) = 2;
+        }
+    } else if ((pressed & 0x1000) != 0) {
+        work = W_PTR(0x1208);
+        FREE_MONOSIRI_WORK(work);
+        return -2;
+    } else {
+        monosiriMain(W_PTR(0x1208));
+    }
+
+    goto winlog_end;
+
+winlog_state_22:
+    work = W_PTR(0x1208);
+    if (work == NULL ||
+        (*(f32*)((u8*)work + 0x10) > 500.0f &&
+         *(f32*)((u8*)work + 0x14) < -300.0f)) {
+        W_S32(0xD68) = 14;
+        work = W_PTR(0x1208);
+        FREE_MONOSIRI_WORK(work);
+    } else {
+        monosiriMain(work);
+    }
+
+    goto winlog_end;
+
+winlog_state_sort:
+    if (winSortWait(pWin) == 0) {
+        W_S32(0xD68) = W_S32(0x124);
+    }
+    if ((W_U32(0x4) & 0x1000) != 0) {
+        return -2;
+    }
+
+    goto winlog_end;
+
+winlog_end:
+
+
+#undef FREE_MONOSIRI_WORK
+#undef CLOSE_SUBMENU_STATES
+#undef MAKE_FLOAT
+#undef SUB_HELP
+#undef SUB_STATE
+#undef SUB_TYPE
+#undef W_S16
+#undef W_U8
+#undef W_PTR
+#undef W_F32
+#undef W_U32
+#undef W_S32
+
     return 0;
 }
 
